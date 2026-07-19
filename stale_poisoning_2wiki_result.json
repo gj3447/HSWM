@@ -1,0 +1,113 @@
+{
+ "dataset": "2wiki",
+ "n_poisoned_queries": 200,
+ "per_dose": {
+  "0.5": {
+   "a": {
+    "stale": 0.85,
+    "cur": 0.6338,
+    "audit": 1.0,
+    "audit_rank": 2.015
+   },
+   "b": {
+    "stale": 0.0,
+    "cur": 0.64,
+    "audit": 1.0,
+    "audit_rank": 1.0
+   },
+   "c": {
+    "stale": 0.785,
+    "cur": 0.5775,
+    "audit": 0.635,
+    "audit_rank": 10.5
+   },
+   "d": {
+    "stale": 0.79,
+    "cur": 0.5825,
+    "audit": 0.635,
+    "audit_rank": 10.53
+   },
+   "_n": 200,
+   "_cos_err_max": 0.0028
+  },
+  "0.25": {
+   "a": {
+    "stale": 0.205,
+    "cur": 0.6375,
+    "audit": 1.0,
+    "audit_rank": 2.12
+   },
+   "b": {
+    "stale": 0.0,
+    "cur": 0.64,
+    "audit": 1.0,
+    "audit_rank": 1.0
+   },
+   "c": {
+    "stale": 0.195,
+    "cur": 0.58,
+    "audit": 0.63,
+    "audit_rank": 14.595
+   },
+   "d": {
+    "stale": 0.185,
+    "cur": 0.5875,
+    "audit": 0.63,
+    "audit_rank": 14.415
+   },
+   "_n": 200,
+   "_cos_err_max": 0.0028
+  },
+  "0.1": {
+   "a": {
+    "stale": 0.0,
+    "cur": 0.64,
+    "audit": 0.99,
+    "audit_rank": 2.65
+   },
+   "b": {
+    "stale": 0.0,
+    "cur": 0.64,
+    "audit": 1.0,
+    "audit_rank": 1.0
+   },
+   "c": {
+    "stale": 0.04,
+    "cur": 0.5837,
+    "audit": 0.625,
+    "audit_rank": 25.06
+   },
+   "d": {
+    "stale": 0.035,
+    "cur": 0.59,
+    "audit": 0.635,
+    "audit_rank": 24.74
+   },
+   "_n": 200,
+   "_cos_err_max": 0.0028
+  }
+ },
+ "dose_response_spearman(dose→rank, graded arms should be ρ<0 or >0 monotone)": {
+  "a": -0.93,
+  "b": 0.0,
+  "c": -0.8525,
+  "d": -0.8575
+ },
+ "kill_i": {
+  "survives": false,
+  "mean_stale_suppression_d_vs_c": 0.005,
+  "2se": 0.01,
+  "meaning": "KILL(i): supersession-in-traversal adds nothing over kappa=0"
+ },
+ "kill_ii": {
+  "fires": false,
+  "meaning": "kill(ii) does not fire (graded arm keeps a metric the filter cannot express)"
+ },
+ "kill_iii": "DEFERRED (arm (e) separated-graded not implemented — OPEN)",
+ "collateral_H_T3b_current_recall_after_WRONG_supersede": {
+  "0.5": 0.5825,
+  "0.25": 0.5025,
+  "0.1": 0.48
+ },
+ "scope": "traversal arms are FORCED-μ probes (deployment refused μ>0 in T5); pointwise arm (a) is the deployed readout"
+}

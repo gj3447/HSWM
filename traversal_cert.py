@@ -216,7 +216,13 @@ def _embed_batch(texts: list[str], batch: int = 32) -> np.ndarray:
     return np.asarray(out, dtype=np.float64)
 
 
-def run_real(dataset: str, cache_dir: str = ".ab_p5_cache", n_rows: int | None = 200) -> dict:
+def build_real_world(dataset: str, cache_dir: str = ".ab_p5_cache",
+                     n_rows: int | None = 200) -> tuple[wb.BuiltWorld, np.ndarray]:
+    """Fetch + hop-stratified sample + build + real embeddings (cache-first).
+
+    Returns (world, query_embeddings). Reused by T4 stale-poisoning, which
+    synthesizes injected-edge embeddings FROM cached gold embeddings — so T4
+    runs fully offline once T5 has populated the cache."""
     import hashlib
 
     import ab_p5_full as ab
@@ -255,6 +261,11 @@ def run_real(dataset: str, cache_dir: str = ".ab_p5_cache", n_rows: int | None =
     calls = iter([ent_e, unit_e])
     world = wb.build(rows, embed_fn=lambda ts: next(calls))
     world.stats["embedder"] = f"{EMBED_MODEL} (dgx ollama)"
+    return world, q_e
+
+
+def run_real(dataset: str, cache_dir: str = ".ab_p5_cache", n_rows: int | None = 200) -> dict:
+    world, q_e = build_real_world(dataset, cache_dir, n_rows)
     print("STATS(선행 보고):", json.dumps(world.stats, ensure_ascii=False))
 
     field = make_field(world)
@@ -280,7 +291,7 @@ def run_real(dataset: str, cache_dir: str = ".ab_p5_cache", n_rows: int | None =
         per_hop.setdefault(world.queries[qi].hop, []).append(float(dep[j] - base[j]))
         probe_hop.setdefault(world.queries[qi].hop, []).append(float(dep_probe[j] - base[j]))
     report = {
-        "dataset": dataset, "n_rows": len(rows), "chosen_mu": mu, "cert_diag": diag,
+        "dataset": dataset, "n_rows": len(world.queries), "chosen_mu": mu, "cert_diag": diag,
         "test_mean_ndcg_pointwise": round(float(base.mean()), 4),
         "test_mean_ndcg_deployed": round(float(dep.mean()), 4),
         "delta_by_hop": {h: {"n": len(v), "mean": round(float(np.mean(v)), 4)}

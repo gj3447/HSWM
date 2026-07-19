@@ -1,0 +1,113 @@
+{
+ "dataset": "fixture",
+ "n_poisoned_queries": 12,
+ "per_dose": {
+  "0.5": {
+   "a": {
+    "stale": 0.0,
+    "cur": 0.4167,
+    "audit": 0.0,
+    "audit_rank": 13.0
+   },
+   "b": {
+    "stale": 0.0,
+    "cur": 0.4167,
+    "audit": 1.0,
+    "audit_rank": 1.0
+   },
+   "c": {
+    "stale": 0.0,
+    "cur": 0.4167,
+    "audit": 0.0,
+    "audit_rank": 13.0
+   },
+   "d": {
+    "stale": 0.0,
+    "cur": 0.4167,
+    "audit": 0.0,
+    "audit_rank": 13.0
+   },
+   "_n": 12,
+   "_cos_err_max": 0.0036
+  },
+  "0.25": {
+   "a": {
+    "stale": 0.0,
+    "cur": 0.4167,
+    "audit": 0.0,
+    "audit_rank": 13.0
+   },
+   "b": {
+    "stale": 0.0,
+    "cur": 0.4167,
+    "audit": 1.0,
+    "audit_rank": 1.0
+   },
+   "c": {
+    "stale": 0.8333,
+    "cur": 0.0,
+    "audit": 0.0,
+    "audit_rank": 12.0
+   },
+   "d": {
+    "stale": 0.0,
+    "cur": 0.4167,
+    "audit": 0.0,
+    "audit_rank": 13.0
+   },
+   "_n": 12,
+   "_cos_err_max": 0.0036
+  },
+  "0.1": {
+   "a": {
+    "stale": 0.0,
+    "cur": 0.4167,
+    "audit": 0.0,
+    "audit_rank": 13.0
+   },
+   "b": {
+    "stale": 0.0,
+    "cur": 0.4167,
+    "audit": 1.0,
+    "audit_rank": 1.0
+   },
+   "c": {
+    "stale": 0.8333,
+    "cur": 0.0,
+    "audit": 0.0,
+    "audit_rank": 12.0
+   },
+   "d": {
+    "stale": 0.0,
+    "cur": 0.4167,
+    "audit": 0.0,
+    "audit_rank": 25.0
+   },
+   "_n": 12,
+   "_cos_err_max": 0.0036
+  }
+ },
+ "dose_response_spearman(dose→rank, graded arms should be ρ<0 or >0 monotone)": {
+  "a": 0.0,
+  "b": 0.0,
+  "c": 0.5,
+  "d": -1.0
+ },
+ "kill_i": {
+  "survives": true,
+  "mean_stale_suppression_d_vs_c": 0.8333,
+  "2se": 0.2247,
+  "meaning": "novelty tooth ALIVE (d beats c)"
+ },
+ "kill_ii": {
+  "fires": false,
+  "meaning": "kill(ii) does not fire (graded arm keeps a metric the filter cannot express)"
+ },
+ "kill_iii": "DEFERRED (arm (e) separated-graded not implemented — OPEN)",
+ "collateral_H_T3b_current_recall_after_WRONG_supersede": {
+  "0.5": 0.4167,
+  "0.25": 0.4167,
+  "0.1": 0.4167
+ },
+ "scope": "traversal arms are FORCED-μ probes (deployment refused μ>0 in T5); pointwise arm (a) is the deployed readout"
+}

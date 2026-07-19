@@ -1,0 +1,104 @@
+{
+ "dataset": "2wiki",
+ "n_rows": 200,
+ "chosen_mu": 0.0,
+ "cert_diag": {
+  "val_mean_mu0": 0.7172,
+  "val_mean_mu0.1": 0.6913,
+  "val_mean_mu0.2": 0.6412,
+  "val_mean_mu0.4": 0.633,
+  "val_mean_mu0.8": 0.633,
+  "best_mu": 0.0,
+  "certified": false,
+  "chosen_mu": 0.0
+ },
+ "test_mean_ndcg_pointwise": 0.6536,
+ "test_mean_ndcg_deployed": 0.6536,
+ "delta_by_hop": {
+  "2": {
+   "n": 43,
+   "mean": 0.0
+  },
+  "4": {
+   "n": 57,
+   "mean": 0.0
+  }
+ },
+ "probe_delta_by_hop_EXPLORATORY": {
+  "2": {
+   "n": 43,
+   "mean": -0.0608
+  },
+  "4": {
+   "n": 57,
+   "mean": -0.0442
+  }
+ },
+ "verdict": "TRAVERSAL_OFF (certified floor)",
+ "scope": "0-LLM field (lambda_j=0, b==1) — judgment/supersession arms NOT exercised (T4)",
+ "trip_rate_probe_arm": {
+  "probe_mu": 0.4,
+  "entropy blowup (oversmoothing onset)": 0.68,
+  "n_eff 1.00 < 1.5 (single uncorroborated chain)": 0.24,
+  "n_eff 1.23 < 1.5 (single uncorroborated chain)": 0.01,
+  "no_abstain": 0.07
+ },
+ "embed_hash_fallbacks": [
+  "Harry Johnson (wrestler) :: Harry Johnson( 1903- date of death unknown) was an E",
+  "Battle in Outer Space :: The film was released theatrically in the United States",
+  "William Adams (wrestler) :: William Adams was a British wrestler. He competed in",
+  "Gaius Julius Aquila :: Gaius Julius Aquila was the name of a number of people wh",
+  "The Scars of Ages :: The Scars of Ages is an EP from Through the Eyes of the Dea",
+  "Are North Marion High School (Oregon) and Seoul High School both located in the ",
+  "Do both films Payment On Demand and My Cousin From Warsaw have the directors fro",
+  "Are director of film Nights On The Road and director of film Swann In Love (Film",
+  "Do both films, Dial M For Murder and Marius (1931 Film), have the directors who ",
+  "Are both directors of films The Princess Bride (Film) and I Never Sang For My Fa",
+  "Are both directors of films The Slayer (Film) and Moscow Heat from the same coun",
+  "Are Simonds Catholic College and Saginaw High School (Texas) both located in the",
+  "Are both Kaufland and Otrag located in the same country?",
+  "Are the directors of both films The Fall Of A Saint and Fighting Through from th",
+  "Are both Nikolsk Airport and Svobodny Airport located in the same country?",
+  "Are both businesses, Telus and Ztr Control Systems, located in the same country?",
+  "Are the directors of films The Swordsman (Upcoming Film) and Shopworn both from ",
+  "Which film has the director who is older than the other, Judy Berlin or Tonight ",
+  "Are both director of film Germany, Year Zero and director of film Cross Shot fro",
+  "Which film has the director who is older than the other, One Down, Two To Go or ",
+  "Are the movies About A Wife, A Dream And Another... and The Doolins Of Oklahoma,",
+  "Are the directors of films Scuola Di Ladri and Pensione Paura both from the same",
+  "Are the directors of films The Edifying And Joyous Story Of Colinot and Cold Moo",
+  "Are both directors of films Breslin And Hamill: Deadline Artists and Jean The Te",
+  "Are Little Sachigo Lake and Holden Lake located in the same country?"
+ ],
+ "stats": {
+  "n_edges": 1505,
+  "n_nodes": 3045,
+  "nnz": 8294,
+  "arity": {
+   "mean": 5.51,
+   "p50": 4,
+   "p90": 10,
+   "max": 34
+  },
+  "node_degree": {
+   "mean": 2.72,
+   "p90": 5,
+   "max": 320
+  },
+  "top_hubs": [
+   "american",
+   "french",
+   "british",
+   "german",
+   "italian"
+  ],
+  "density_mean_deg_over_M": 0.0018,
+  "queries_per_hop": {
+   "2": 100,
+   "4": 100
+  },
+  "gold_recall_structural": 1.0,
+  "mention_misses_df_gate": 7055,
+  "embedder": "bge-m3 (dgx ollama)"
+ }
+}

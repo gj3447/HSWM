@@ -67,12 +67,22 @@ def _full_wtrav(field: WeightField, q_emb: np.ndarray, mu: float,
 
 def eval_queries(field: WeightField, world: wb.BuiltWorld, q_ids: list[int],
                  q_embs: np.ndarray, mu: float, index: tv.TraversalIndex,
-                 seed: int = 0) -> np.ndarray:
-    """Per-query nDCG@K_EVAL over the full edge pool (paired across arms by query)."""
+                 seed: int = 0, trips: dict | None = None) -> np.ndarray:
+    """Per-query nDCG@K_EVAL over the full edge pool (paired across arms by query).
+
+    trips (optional dict) accumulates abstain reasons — spec §5 mandates
+    publishing the trip 발화율 (a guard firing on 40% of queries must be
+    visible, not silently eating the treatment)."""
     edges = np.arange(world.hg.M)
     out = np.empty(len(q_ids))
     for i, qi in enumerate(q_ids):
-        w = _full_wtrav(field, q_embs[qi], mu, index)
+        M = field.hg.M
+        ids, scores, rc = tv.traverse(field, q_embs[qi], k=M, mu=mu, index=index)
+        w = np.empty(M)
+        w[ids] = scores
+        if trips is not None and mu > 0:
+            key = rc.abstain_reason or "no_abstain"
+            trips[key] = trips.get(key, 0) + 1
         out[i] = metrics.ndcg_at_k(w, world.queries[qi].gold, edges, k=K_EVAL, seed=seed)
     return out
 
@@ -151,12 +161,18 @@ def null_gate(world: wb.BuiltWorld, q_embs: np.ndarray, seeds=SEEDS) -> dict:
 
 # ---------- T5: real-data first pass ----------
 
+EMBED_FALLBACKS: list[str] = []   # items that needed hash fallback (reported in stats)
+
+
 def _embed_call(inputs: list[str]) -> list[list[float]]:
     payload = json.dumps({"model": EMBED_MODEL, "input": inputs}).encode()
     req = urllib.request.Request(f"{OLLAMA}/api/embed", data=payload,
                                  headers={"Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=600) as r:
-        return json.loads(r.read().decode())["embeddings"]
+        embs = json.loads(r.read().decode())["embeddings"]
+    if not np.isfinite(np.asarray(embs)).all():
+        raise RuntimeError("non-finite embedding returned")
+    return embs
 
 
 def _embed_batch(texts: list[str], batch: int = 32) -> np.ndarray:
@@ -180,25 +196,50 @@ def _embed_batch(texts: list[str], batch: int = 32) -> np.ndarray:
                     time.sleep(2 + 3 * attempt)
                     continue
                 for item in chunk:          # isolate the poison item
-                    try:
-                        out.extend(_embed_call([item]))
-                    except Exception as e:
-                        raise RuntimeError(f"embed failed for item {item[:80]!r}: {e}") from e
+                    emb = None
+                    # observed live: bge-m3 emits NaN for certain plain inputs
+                    # (ollama log: 'json: unsupported value: NaN') — perturb
+                    # tokenization first, hash fallback last (counted, loud).
+                    for variant in (item, item + ".", "passage: " + item):
+                        try:
+                            emb = _embed_call([variant])
+                            break
+                        except Exception:
+                            continue
+                    if emb is None:
+                        print(f"  !! hash-fallback embed for {item[:60]!r}", flush=True)
+                        EMBED_FALLBACKS.append(item[:80])
+                        emb = [wb.hash_embed([item], 1024)[0].tolist()]
+                    out.extend(emb)
         if (i // batch) % 10 == 0 or i + batch >= len(clean):
             print(f"  embedded {min(i + batch, len(clean))}/{len(clean)}", flush=True)
     return np.asarray(out, dtype=np.float64)
 
 
 def run_real(dataset: str, cache_dir: str = ".ab_p5_cache", n_rows: int | None = 200) -> dict:
+    import hashlib
+
     import ab_p5_full as ab
     os.makedirs(cache_dir, exist_ok=True)
-    rows = ab.load_pool(dataset, cache_dir)
-    if n_rows:
-        rows = rows[:n_rows]
-    print(f"[{dataset}] rows={len(rows)}")
+    all_rows = ab.load_pool(dataset, cache_dir)
+    # hop-STRATIFIED round-robin sampling — head-truncation destroyed the hop
+    # mix live (musique first 200 rows were ALL 2-hop; offsets are hop-ordered)
+    by_hop: dict[int, list[dict]] = {}
+    for r in all_rows:
+        by_hop.setdefault(wb.parse_hop(r), []).append(r)
+    rows: list[dict] = []
+    i = 0
+    while (n_rows is None or len(rows) < n_rows) and any(i < len(v) for v in by_hop.values()):
+        for h in sorted(by_hop):
+            if i < len(by_hop[h]) and (n_rows is None or len(rows) < n_rows):
+                rows.append(by_hop[h][i])
+        i += 1
+    print(f"[{dataset}] rows={len(rows)} (stratified from {len(all_rows)})")
 
-    embed_cache = os.path.join(cache_dir, f"cert_embed_{dataset}_{n_rows}.npz")
     world = wb.build(rows, embed_fn=lambda ts: np.zeros((len(ts), 8)))  # shape-only pass for texts
+    vocab_sha = hashlib.sha256(("\n".join(world.entities) + f"|u{len(world.unit_texts)}"
+                                ).encode()).hexdigest()[:12]
+    embed_cache = os.path.join(cache_dir, f"cert_embed_{dataset}_{vocab_sha}.npz")
     ent_texts, unit_texts = world.entities, world.unit_texts
     q_texts = [q.question for q in world.queries]
     if os.path.exists(embed_cache):
@@ -226,19 +267,30 @@ def run_real(dataset: str, cache_dir: str = ".ab_p5_cache", n_rows: int | None =
     mu, diag = select_mu(field, world, val_ids, q_e, index, seed=0)
     print("CERT:", json.dumps(diag))
 
+    # trip 발화율은 항상 측정 (μ=0로 인증돼도 순회 arm이 왜 죽었는지 보여야 함)
+    trips: dict[str, int] = {}
     base = eval_queries(field, world, test_ids, q_e, 0.0, index, seed=1)
-    dep = eval_queries(field, world, test_ids, q_e, mu, index, seed=1) if mu > 0 else base
+    probe_mu = mu if mu > 0 else 0.4
+    dep_probe = eval_queries(field, world, test_ids, q_e, probe_mu, index, seed=1, trips=trips)
+    dep = dep_probe if mu > 0 else base
+    trip_rate = {k: round(v / max(len(test_ids), 1), 3) for k, v in sorted(trips.items())}
     per_hop: dict[int, list[float]] = {}
+    probe_hop: dict[int, list[float]] = {}
     for j, qi in enumerate(test_ids):
         per_hop.setdefault(world.queries[qi].hop, []).append(float(dep[j] - base[j]))
+        probe_hop.setdefault(world.queries[qi].hop, []).append(float(dep_probe[j] - base[j]))
     report = {
         "dataset": dataset, "n_rows": len(rows), "chosen_mu": mu, "cert_diag": diag,
         "test_mean_ndcg_pointwise": round(float(base.mean()), 4),
         "test_mean_ndcg_deployed": round(float(dep.mean()), 4),
         "delta_by_hop": {h: {"n": len(v), "mean": round(float(np.mean(v)), 4)}
                          for h, v in sorted(per_hop.items())},
+        "probe_delta_by_hop_EXPLORATORY": {h: {"n": len(v), "mean": round(float(np.mean(v)), 4)}
+                                           for h, v in sorted(probe_hop.items())},
         "verdict": "TRAVERSAL_CERTIFIED" if mu > 0 else "TRAVERSAL_OFF (certified floor)",
         "scope": "0-LLM field (lambda_j=0, b==1) — judgment/supersession arms NOT exercised (T4)",
+        "trip_rate_probe_arm": {"probe_mu": probe_mu, **trip_rate},
+        "embed_hash_fallbacks": list(EMBED_FALLBACKS),
         "stats": world.stats,
     }
     out = f"cert_{dataset}_result.json"

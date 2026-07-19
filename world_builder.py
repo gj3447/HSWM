@@ -45,6 +45,21 @@ DEFAULT_DIM = 256
 _CAP_RE = re.compile(r"\b[A-Z][a-zA-Z0-9']*(?:\s+[A-Z][a-zA-Z0-9']*)*")
 _HOP_RE = re.compile(r"(\d+)")
 
+# single-word mention blocklist — sentence-initial capitalization turns function
+# words/months into MEGA-HUB fake entities (live musique run: 'the' deg=1130,
+# 'she', 'september' in top hubs → the dense low-pass regime traversal dies in).
+# Multi-word phrases are never blocked ('The United States' survives via strip).
+_MENTION_BLOCK = frozenset("""
+the a an and or but if then else of to in on at by for with from as is are was
+were be been being it its this that these those he she they them his her their
+i you we me my your our us what which who whom when where why how all any both
+each few more most other some such only own same so than too very can will
+just should now there here after before while during january february march
+april may june july august september october november december monday tuesday
+wednesday thursday friday saturday sunday one two three four five six seven
+eight nine ten first second third
+""".split())
+
 
 def _norm_ent(s: str) -> str:
     """lowercase + whitespace-collapse + leading-article strip ('The Ember Dragon'
@@ -55,17 +70,36 @@ def _norm_ent(s: str) -> str:
 
 
 def extract_mentions(text: str) -> list[str]:
-    """Capitalized-phrase mentions (heuristic, sentence-initial noise included —
-    filtered later by the ≥MIN_ENTITY_COUNT document-frequency gate)."""
-    return [_norm_ent(m.group(0)) for m in _CAP_RE.finditer(text) if len(m.group(0)) >= 3]
+    """Capitalized-phrase mentions. Single-word mentions in _MENTION_BLOCK are
+    dropped (df gate alone does NOT stop them — they pass ≥2 docs trivially and
+    become fake hubs); multi-word phrases always survive."""
+    out = []
+    for m in _CAP_RE.finditer(text):
+        if len(m.group(0)) < 3:
+            continue
+        e = _norm_ent(m.group(0))
+        if " " not in e and e in _MENTION_BLOCK:
+            continue
+        out.append(e)
+    return out
+
+
+_HOPWORD_RE = re.compile(r"(\d+)\s*hop")
+_2WIKI_TYPE_HOPS = {"comparison": 2, "inference": 2, "compositional": 2,
+                    "bridge comparison": 4, "bridge_comparison": 4}
 
 
 def parse_hop(row: dict) -> int:
-    """Hop label: leading int of row['hop'] / row['id']; fallback = #supporting."""
+    """Hop label: '<N>hop' pattern in hop/id → N; 2wiki type string → mapped;
+    fallback = #supporting paragraphs. (A bare digit-grab pulled hex noise out
+    of 2wiki ids — hop '87154' — caught live by the stats 선행보고.)"""
     for key in ("hop", "id"):
-        m = _HOP_RE.search(str(row.get(key, "")))
+        m = _HOPWORD_RE.search(str(row.get(key, "")).lower())
         if m:
             return int(m.group(1))
+    t = str(row.get("hop", "")).strip().lower()
+    if t in _2WIKI_TYPE_HOPS:
+        return _2WIKI_TYPE_HOPS[t]
     return sum(1 for p in row["paragraphs"] if p.get("is_supporting"))
 
 

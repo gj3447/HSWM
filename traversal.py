@@ -39,7 +39,12 @@ PRUNE_M = 1024           # per-hop frontier keep (compute guard, NOT semantics)
 MU_GRID = (0.0, 0.1, 0.2, 0.4, 0.8)   # provisional until T3/T5 lock; 0 admissible
 SELECT_Z_ADJ = 2.5       # μ certification gate (multiplicity-corrected; used in T3, not here)
 ENTROPY_BLOWUP = float(np.log(4.0))   # H(a_K) − H(a_0) beyond this ⇒ abstain
-NEFF_MIN = 1.5           # min 1-hop parent-contribution n_eff over top-k ⇒ abstain
+NEFF_MIN = 1.5           # min 1-hop parent-contribution n_eff over top results ⇒ abstain
+NEFF_TOPK = 10           # n_eff evaluated over top-NEFF_TOPK edges REGARDLESS of caller k —
+                         # spec §3 defines it over the retrieval top-k (10); callers that ask
+                         # for k=M (full-score reconstruction) must not distort the trip-wire
+                         # (live musique: k=M made min-n_eff≈1 on 50% of queries = plumbing
+                         # artifact, not world signal)
 KEPT_MASS_ABSTAIN = 0.95  # real-world abstain threshold (synthetic worlds hard-assert ≥0.99)
 
 
@@ -176,7 +181,7 @@ def traverse(field: WeightField, query_emb: np.ndarray, k: int = 10,
         return _pointwise(W, k, rc, "entropy blowup (oversmoothing onset)")
     if rc.kept_mass and min(rc.kept_mass) < KEPT_MASS_ABSTAIN:
         return _pointwise(W, k, rc, f"kept_mass {min(rc.kept_mass):.3f} < {KEPT_MASS_ABSTAIN}")
-    top_pre = np.argsort(-a, kind="stable")[:k]
+    top_pre = np.argsort(-a, kind="stable")[:min(NEFF_TOPK, a.size)]
     neffs = []
     for e in top_pre:
         mem = idx.node_idx[idx.edge_idx == e]

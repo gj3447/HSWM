@@ -12,6 +12,12 @@ All three call the SAME WeightField.value — that shared call IS the 4-fold
 identification (the 4th fold, provenance/binding-first, lives in the substrate
 = Longinus incidence, and is out of scope for this minimal prototype).
 
+  (iv)  traversal (T1/T2 2026-07-19) -> traverse(): certified damped-restart
+        hypergraph walk over the SAME field (traversal.py). Deployment default
+        mu=0 = OFF; one write gives three effects — FOUR where traversal is
+        certified (unconditional "four effects" would be an overclaim,
+        PROM_TRAVERSAL_DESIGN §3).
+
 Honesty note: identifying three roles in one field is an ARCHITECTURAL claim,
 not proof it is *better* (falsifier axis A tests whether the learned field even
 beats heuristics). This module only demonstrates the identification is
@@ -55,6 +61,18 @@ def dispatch(field: WeightField, query_emb: np.ndarray,
     """The concrete realization of the plan: argmax over the same field."""
     e, p = plan(field, query_emb, edges=edges)
     return int(e[int(np.argmax(p))])
+
+
+def traverse(field: WeightField, query_emb: np.ndarray, k: int = 10,
+             mu: float = 0.0, **kw):
+    """(iv) Traversal readout: K-hop damped-restart walk reading the SAME field.
+
+    Thin delegation to traversal.traverse (kernel + receipts + trip-wires live
+    there). mu=0 (default) or gamma=0 returns the pointwise ranking bit-for-bit
+    — traversal is refusable by construction and OFF until certified.
+    """
+    import traversal as _t
+    return _t.traverse(field, query_emb, k=k, mu=mu, **kw)
 
 
 def supersede(field: WeightField, edge_id: int, decay: float = 0.5) -> None:

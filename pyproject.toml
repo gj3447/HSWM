@@ -1,0 +1,38 @@
+[project]
+name = "hswm"
+version = "0.1.0"
+description = "HSWM — Hypergraph Semantic Weight Map: retrieval=plan=supersession over one shared hyperedge weight field, construction-guaranteed cosine floor (additive-j), LLM-judgment weight loop, honest prereg falsifier harness. Efficacy UNMEASURED (operational-not-cognitive prior)."
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+kg = ["neo4j>=5.20"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = [
+  "synth",
+  "hypergraph",
+  "weight_field",
+  "readouts",
+  "learned",
+  "metrics",
+  "falsifier",
+  "neo4j_loader",
+  "real_run",
+  "learned_v2",
+  "diagnose",
+  "llm_judgment_loop",
+  "learned_v3_additive",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+pythonpath = ["."]

@@ -1,0 +1,43 @@
+[aboutness] BOTH — delta grows with unit length (mechanism-sufficiency for the owner's premise) AND the injected CHAIN_FOLLOW conditional-relevance failure reproduces the hop collapse (demonstration, not attribution).
+    arm_definition: additive_j = cosine + λ·simulated-judge-bits (D1 design; NOT the full HSWM field)
+    world_premise: {'n_topics': 60, 'gold_units_per_topic': 3, 'regime': 'aboutness'}
+    lambda_per_seed: [0.8, 0.8, 0.8, 0.8, 0.8]
+    trend_slope: 0.0526
+    trend_p: 0.0002
+    gap_chapter_minus_sentence: 0.1687
+    gap_cluster_ci95: [0.0917, 0.2468]
+    rise_paragraph_minus_sentence: 0.1287
+    delta_by_level_h0: {'sentence': 0.3539, 'paragraph': 0.4827, 'section': 0.5028, 'chapter': 0.5227}
+    delta_by_hop_fixed_level: {0: 0.4827, 1: 0.196, 2: 0.171}
+    delta_by_hop_spread_arm: {0: 0.0063, 1: 0.3317, 2: 0.2878}
+    hop_drop_additive_j: 0.3117
+    hop_drop_cluster_ci95: [0.2551, 0.3728]
+    hop_drop_expected_mechanical: 0.3137
+    hop_drop_spread: -0.2815
+    spread_null_offset_note: spread arm carries a measured null bias (see null-run numbers); reported, not gated
+    seed_slope_report: {'per_seed': [0.0182, 0.0456, 0.0441, 0.0747, 0.0804], 'mean': 0.0526, 'std': 0.0253, 'n_seeds': 5}
+    seed_hop_drop_report: {'per_seed': [0.3874, 0.2492, 0.3024, 0.2666, 0.3691], 'mean': 0.3149, 'std': 0.0612, 'n_seeds': 5}
+    required_n_for_MARGIN: 794
+    overall_mean_delta_h0: 0.4655
+[null] NO_GAIN — null regime shows no additive_j gain on H1 or H2 paths; harness has teeth (spread-arm null bias measured and reported, not gated).
+    arm_definition: additive_j = cosine + λ·simulated-judge-bits (D1 design; NOT the full HSWM field)
+    world_premise: {'n_topics': 60, 'gold_units_per_topic': 3, 'regime': 'null'}
+    lambda_per_seed: [0.0, 0.0, 0.0, 0.0, 0.0]
+    trend_slope: 0.0
+    trend_p: 1.0
+    gap_chapter_minus_sentence: 0.0
+    gap_cluster_ci95: [0.0, 0.0]
+    rise_paragraph_minus_sentence: 0.0
+    delta_by_level_h0: {'sentence': 0.0, 'paragraph': 0.0, 'section': 0.0, 'chapter': 0.0}
+    delta_by_hop_fixed_level: {0: 0.0, 1: 0.0, 2: 0.0}
+    delta_by_hop_spread_arm: {0: 0.0003, 1: 0.0267, 2: -0.0127}
+    hop_drop_additive_j: 0.0
+    hop_drop_cluster_ci95: [0.0, 0.0]
+    hop_drop_expected_mechanical: 0.0
+    hop_drop_spread: 0.013
+    spread_null_offset_note: spread arm carries a measured null bias (see null-run numbers); reported, not gated
+    seed_slope_report: {'per_seed': [0.0, 0.0, 0.0, 0.0, 0.0], 'mean': 0.0, 'std': 0.0, 'n_seeds': 5}
+    seed_hop_drop_report: {'per_seed': [0.0, 0.0, 0.0, 0.0, 0.0], 'mean': 0.0, 'std': 0.0, 'n_seeds': 5}
+    required_n_for_MARGIN: 1
+    overall_mean_delta_h0: 0.0
+    null_spread_measured_bias: {0: 0.0003, 1: 0.0267, 2: -0.0127}

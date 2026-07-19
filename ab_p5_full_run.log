@@ -1,0 +1,376 @@
+[data] loading musique pool ...
+[data] pool=800 train=100 eval=100 hops(eval)=['2hop', '3hop1', '3hop2', '4hop1', '4hop3']
+[embed] paragraph+query embeddings (shared substrate) ...
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[embed] eval warm 25/100
+[embed] eval warm 50/100
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[embed] eval warm 75/100
+[embed] eval warm 100/100
+[hswm] spending budget B=100 offline on train judgments ...
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[hswm] judge quality vs gold: {'judge_label_f1_vs_gold': 0.8645, 'cosine_top3_f1_vs_gold': 0.5159, 'judge_beats_cosine_labels': True, 'n_rows': 100}
+[hswm] trained: {'val_ndcg_by_lambda': {'0.0': 0.7619, '0.25': 0.7493, '0.5': 0.7559, '1.0': 0.7664, '2.0': 0.7931, '4.0': 0.7944}, 'selected_lambda': 4.0, 'n_train_labeled_used': 70, 'n_val': 30}
+[eval 5/100] cosine:em=0 hswm:em=0 direct:em=1
+[eval 10/100] cosine:em=0 hswm:em=0 direct:em=0
+[eval 15/100] cosine:em=0 hswm:em=1 direct:em=1
+[eval 20/100] cosine:em=0 hswm:em=0 direct:em=1
+[eval 25/100] cosine:em=0 hswm:em=0 direct:em=0
+[eval 30/100] cosine:em=0 hswm:em=0 direct:em=1
+[eval 35/100] cosine:em=0 hswm:em=0 direct:em=1
+[eval 40/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 45/100] cosine:em=0 hswm:em=0 direct:em=0
+[eval 50/100] cosine:em=0 hswm:em=0 direct:em=1
+[eval 55/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 60/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 65/100] cosine:em=0 hswm:em=0 direct:em=1
+[eval 70/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 75/100] cosine:em=0 hswm:em=1 direct:em=0
+[eval 80/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 85/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 90/100] cosine:em=0 hswm:em=0 direct:em=0
+[eval 95/100] cosine:em=1 hswm:em=0 direct:em=1
+[eval 100/100] cosine:em=1 hswm:em=1 direct:em=1
+{
+ "llm_call_parity": {
+  "hswm_judgment_calls": 100,
+  "direct_rerank_calls": 100,
+  "reader_calls": {
+   "cosine": 100,
+   "hswm": 100,
+   "direct": 100
+  },
+  "parity_ok": true
+ },
+ "hswm_training": {
+  "judgment_calls": 100,
+  "parse_failures": 0,
+  "val_ndcg_by_lambda": {
+   "0.0": 0.7619,
+   "0.25": 0.7493,
+   "0.5": 0.7559,
+   "1.0": 0.7664,
+   "2.0": 0.7931,
+   "4.0": 0.7944
+  },
+  "selected_lambda": 4.0,
+  "n_train_labeled_used": 70,
+  "n_val": 30
+ },
+ "judge_quality": {
+  "judge_label_f1_vs_gold": 0.8645,
+  "cosine_top3_f1_vs_gold": 0.5159,
+  "judge_beats_cosine_labels": true,
+  "n_rows": 100
+ },
+ "aggregate": {
+  "cosine": {
+   "em": 0.32,
+   "f1": 0.4096,
+   "hit_at_k": 0.97,
+   "sup_recall_at_k": 0.5967,
+   "ndcg10_vs_gold": 0.7469
+  },
+  "hswm": {
+   "em": 0.36,
+   "f1": 0.4443,
+   "hit_at_k": 0.95,
+   "sup_recall_at_k": 0.6075,
+   "ndcg10_vs_gold": 0.7698
+  },
+  "direct": {
+   "em": 0.62,
+   "f1": 0.7009,
+   "hit_at_k": 1.0,
+   "sup_recall_at_k": 0.8367,
+   "ndcg10_vs_gold": 0.9137
+  }
+ },
+ "delta": {
+  "em_hswm_minus_direct": -0.26,
+  "f1_hswm_minus_direct": -0.2566,
+  "ndcg_hswm_minus_direct": -0.1439,
+  "p_hswm_gt_direct_em": 1.0,
+  "p_direct_gt_hswm_em": 0.0,
+  "p_hswm_gt_direct_f1": 1.0,
+  "p_direct_gt_hswm_f1": 0.0
+ }
+}
+[done] results -> ab_p5_full_musique_s7.json
+[data] loading musique pool ...
+[data] pool=800 train=100 eval=100 hops(eval)=['2hop', '3hop1', '3hop2', '4hop1', '4hop3']
+[embed] paragraph+query embeddings (shared substrate) ...
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[embed] eval warm 25/100
+[embed] eval warm 50/100
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[embed] eval warm 75/100
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[embed] eval warm 100/100
+[hswm] spending budget B=100 offline on train judgments ...
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[hswm] judge quality vs gold: {'judge_label_f1_vs_gold': 0.7773, 'cosine_top3_f1_vs_gold': 0.4961, 'judge_beats_cosine_labels': True, 'n_rows': 100}
+[hswm] trained: {'val_ndcg_by_lambda': {'0.0': 0.7595, '0.25': 0.7669, '0.5': 0.7661, '1.0': 0.7789, '2.0': 0.794, '4.0': 0.7781}, 'selected_lambda': 2.0, 'n_train_labeled_used': 70, 'n_val': 30}
+[eval 5/100] cosine:em=0 hswm:em=0 direct:em=0
+[eval 10/100] cosine:em=0 hswm:em=0 direct:em=0
+[eval 15/100] cosine:em=0 hswm:em=1 direct:em=1
+[eval 20/100] cosine:em=0 hswm:em=0 direct:em=0
+[eval 25/100] cosine:em=0 hswm:em=0 direct:em=0
+[eval 30/100] cosine:em=0 hswm:em=0 direct:em=1
+[eval 35/100] cosine:em=0 hswm:em=0 direct:em=0
+[eval 40/100] cosine:em=0 hswm:em=0 direct:em=0
+[eval 45/100] cosine:em=1 hswm:em=0 direct:em=1
+[eval 50/100] cosine:em=0 hswm:em=0 direct:em=1
+[eval 55/100] cosine:em=0 hswm:em=0 direct:em=1
+[eval 60/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 65/100] cosine:em=0 hswm:em=0 direct:em=1
+[eval 70/100] cosine:em=0 hswm:em=1 direct:em=1
+[eval 75/100] cosine:em=1 hswm:em=0 direct:em=1
+[eval 80/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 85/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 90/100] cosine:em=1 hswm:em=1 direct:em=0
+[eval 95/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 100/100] cosine:em=0 hswm:em=0 direct:em=0
+{
+ "llm_call_parity": {
+  "hswm_judgment_calls": 100,
+  "direct_rerank_calls": 100,
+  "reader_calls": {
+   "cosine": 100,
+   "hswm": 100,
+   "direct": 100
+  },
+  "parity_ok": true
+ },
+ "hswm_training": {
+  "judgment_calls": 100,
+  "parse_failures": 0,
+  "val_ndcg_by_lambda": {
+   "0.0": 0.7595,
+   "0.25": 0.7669,
+   "0.5": 0.7661,
+   "1.0": 0.7789,
+   "2.0": 0.794,
+   "4.0": 0.7781
+  },
+  "selected_lambda": 2.0,
+  "n_train_labeled_used": 70,
+  "n_val": 30
+ },
+ "judge_quality": {
+  "judge_label_f1_vs_gold": 0.7773,
+  "cosine_top3_f1_vs_gold": 0.4961,
+  "judge_beats_cosine_labels": true,
+  "n_rows": 100
+ },
+ "aggregate": {
+  "cosine": {
+   "em": 0.27,
+   "f1": 0.3387,
+   "hit_at_k": 0.96,
+   "sup_recall_at_k": 0.57,
+   "ndcg10_vs_gold": 0.7416
+  },
+  "hswm": {
+   "em": 0.38,
+   "f1": 0.459,
+   "hit_at_k": 0.97,
+   "sup_recall_at_k": 0.6308,
+   "ndcg10_vs_gold": 0.781
+  },
+  "direct": {
+   "em": 0.61,
+   "f1": 0.6907,
+   "hit_at_k": 1.0,
+   "sup_recall_at_k": 0.8567,
+   "ndcg10_vs_gold": 0.9285
+  }
+ },
+ "delta": {
+  "em_hswm_minus_direct": -0.23,
+  "f1_hswm_minus_direct": -0.2317,
+  "ndcg_hswm_minus_direct": -0.1475,
+  "p_hswm_gt_direct_em": 1.0,
+  "p_direct_gt_hswm_em": 0.0,
+  "p_hswm_gt_direct_f1": 1.0,
+  "p_direct_gt_hswm_f1": 0.0
+ }
+}
+[done] results -> ab_p5_full_musique_s13.json
+[data] loading 2wiki pool ...
+[data] pool=500 train=100 eval=100 hops(eval)=['bridge_comparison', 'comparison', 'compositional', 'inference']
+[embed] paragraph+query embeddings (shared substrate) ...
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[embed] eval warm 25/100
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[embed] eval warm 50/100
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[embed] eval warm 75/100
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[embed] eval warm 100/100
+[hswm] spending budget B=100 offline on train judgments ...
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[retry] embed failed (HTTP Error 500: Internal Server Error); retry 1/1 in 2s
+[hswm] judge quality vs gold: {'judge_label_f1_vs_gold': 0.969, 'cosine_top3_f1_vs_gold': 0.6526, 'judge_beats_cosine_labels': True, 'n_rows': 100}
+[hswm] trained: {'val_ndcg_by_lambda': {'0.0': 0.9367, '0.25': 0.9365, '0.5': 0.9362, '1.0': 0.9457, '2.0': 0.9438, '4.0': 0.9484}, 'selected_lambda': 4.0, 'n_train_labeled_used': 70, 'n_val': 30}
+[eval 5/100] cosine:em=1 hswm:em=1 direct:em=0
+[eval 10/100] cosine:em=0 hswm:em=1 direct:em=1
+[data] loading 2wiki pool ...
+[data] pool=500 train=100 eval=100 hops(eval)=['bridge_comparison', 'comparison', 'compositional', 'inference']
+[embed] paragraph+query embeddings (shared substrate) ...
+[embed] eval warm 25/100
+[embed] eval warm 50/100
+[embed] eval warm 75/100
+[embed] eval warm 100/100
+[hswm] spending budget B=100 offline on train judgments ...
+[hswm] judge quality vs gold: {'judge_label_f1_vs_gold': 0.969, 'cosine_top3_f1_vs_gold': 0.6526, 'judge_beats_cosine_labels': True, 'n_rows': 100}
+[hswm] trained: {'val_ndcg_by_lambda': {'0.0': 0.9367, '0.25': 0.9365, '0.5': 0.9362, '1.0': 0.9457, '2.0': 0.9438, '4.0': 0.9484}, 'selected_lambda': 4.0, 'n_train_labeled_used': 70, 'n_val': 30}
+[eval 5/100] cosine:em=1 hswm:em=1 direct:em=0
+[eval 10/100] cosine:em=0 hswm:em=1 direct:em=1
+[eval 15/100] cosine:em=1 hswm:em=1 direct:em=0
+[eval 20/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 25/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 30/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 35/100] cosine:em=0 hswm:em=0 direct:em=0
+[eval 40/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 45/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 50/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 55/100] cosine:em=0 hswm:em=0 direct:em=0
+[eval 60/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 65/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 70/100] cosine:em=0 hswm:em=0 direct:em=0
+[eval 75/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 80/100] cosine:em=0 hswm:em=1 direct:em=1
+[eval 85/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 90/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 95/100] cosine:em=1 hswm:em=1 direct:em=1
+[eval 100/100] cosine:em=1 hswm:em=1 direct:em=1
+{
+ "llm_call_parity": {
+  "hswm_judgment_calls": 100,
+  "direct_rerank_calls": 100,
+  "reader_calls": {
+   "cosine": 100,
+   "hswm": 100,
+   "direct": 100
+  },
+  "parity_ok": true
+ },
+ "hswm_training": {
+  "judgment_calls": 100,
+  "parse_failures": 0,
+  "val_ndcg_by_lambda": {
+   "0.0": 0.9367,
+   "0.25": 0.9365,
+   "0.5": 0.9362,
+   "1.0": 0.9457,
+   "2.0": 0.9438,
+   "4.0": 0.9484
+  },
+  "selected_lambda": 4.0,
+  "n_train_labeled_used": 70,
+  "n_val": 30
+ },
+ "judge_quality": {
+  "judge_label_f1_vs_gold": 0.969,
+  "cosine_top3_f1_vs_gold": 0.6526,
+  "judge_beats_cosine_labels": true,
+  "n_rows": 100
+ },
+ "aggregate": {
+  "cosine": {
+   "em": 0.65,
+   "f1": 0.6572,
+   "hit_at_k": 1.0,
+   "sup_recall_at_k": 0.8425,
+   "ndcg10_vs_gold": 0.9501
+  },
+  "hswm": {
+   "em": 0.74,
+   "f1": 0.7208,
+   "hit_at_k": 1.0,
+   "sup_recall_at_k": 0.88,
+   "ndcg10_vs_gold": 0.9654
+  },
+  "direct": {
+   "em": 0.71,
+   "f1": 0.6794,
+   "hit_at_k": 1.0,
+   "sup_recall_at_k": 0.945,
+   "ndcg10_vs_gold": 0.9953
+  }
+ },
+ "delta": {
+  "em_hswm_minus_direct": 0.03,
+  "f1_hswm_minus_direct": 0.0414,
+  "ndcg_hswm_minus_direct": -0.0299,
+  "p_hswm_gt_direct_em": 0.2197,
+  "p_direct_gt_hswm_em": 0.8621,
+  "p_hswm_gt_direct_f1": 0.084,
+  "p_direct_gt_hswm_f1": 0.9176
+ }
+}
+[done] results -> ab_p5_full_2wiki_s7.json
+ALL_RUNS_DONE

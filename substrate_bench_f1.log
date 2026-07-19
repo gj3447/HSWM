@@ -1,0 +1,72 @@
+[retrieval] musique_s7: rebuilding HSWM field (cached judgments) ...
+[retrieval] musique_s7: HSWM rebuild check {'rebuilt_mean_sup_recall_at_3': 0.6075, 'stored_mean_sup_recall_at_k': 0.6075, 'match': True}
+[retrieval] musique_s13: rebuilding HSWM field (cached judgments) ...
+[retrieval] musique_s13: HSWM rebuild check {'rebuilt_mean_sup_recall_at_3': 0.6308, 'stored_mean_sup_recall_at_k': 0.6308, 'match': True}
+[retrieval] 2wiki_s7: rebuilding HSWM field (cached judgments) ...
+[retrieval] 2wiki_s7: HSWM rebuild check {'rebuilt_mean_sup_recall_at_3': 0.88, 'stored_mean_sup_recall_at_k': 0.88, 'match': True}
+
+[f1] computing downstream F1 for new arms (reader on 18001) ...
+
+==============================================================================
+SUBSTRATE RETRIEVAL METRICS (mean; 300 queries = 3 runs x 100)
+==============================================================================
+arm      sup_recall_at_3          ndcg10        hit_at_3             mrr
+cosine            0.6697          0.8129          0.9767          0.9271
+bm25              0.5386          0.6993          0.8933          0.8216
+ppr               0.3733          0.5180          0.6033          0.5328
+rrf               0.6181          0.7804          0.9700          0.9160
+hswm              0.7061          0.8388          0.9733          0.9231
+
+-- 2wiki (n=100) --
+arm      sup_recall_at_3          ndcg10        hit_at_3             mrr
+cosine            0.8425          0.9501          1.0000          0.9900
+bm25              0.7425          0.8842          0.9900          0.9325
+ppr               0.6950          0.8401          0.9100          0.8216
+rrf               0.7925          0.9237          1.0000          0.9750
+hswm              0.8800          0.9654          1.0000          0.9933
+
+-- musique (n=200) --
+arm      sup_recall_at_3          ndcg10        hit_at_3             mrr
+cosine            0.5833          0.7443          0.9650          0.8956
+bm25              0.4367          0.6069          0.8450          0.7662
+ppr               0.2125          0.3570          0.4500          0.3884
+rrf               0.5308          0.7088          0.9550          0.8865
+hswm              0.6192          0.7754          0.9600          0.8880
+
+==============================================================================
+RANKING (overall)
+==============================================================================
+sup_recall_at_3 : hswm=0.7061  >  cosine=0.6697  >  rrf=0.6181  >  bm25=0.5386  >  ppr=0.3733
+ndcg10          : hswm=0.8388  >  cosine=0.8129  >  rrf=0.7804  >  bm25=0.6993  >  ppr=0.5180
+hit_at_3        : cosine=0.9767  >  hswm=0.9733  >  rrf=0.9700  >  bm25=0.8933  >  ppr=0.6033
+mrr             : cosine=0.9271  >  hswm=0.9231  >  rrf=0.9160  >  bm25=0.8216  >  ppr=0.5328
+
+==============================================================================
+HSWM (100 offline LLM) vs each substrate — paired bootstrap
+==============================================================================
+[sup_recall_at_3]
+  hswm_vs_cosine   diff=+0.0364  p(hswm>arm)=0.000  p(arm>hswm)=1.000  -> HSWM>
+  hswm_vs_bm25     diff=+0.1675  p(hswm>arm)=0.000  p(arm>hswm)=1.000  -> HSWM>
+  hswm_vs_ppr      diff=+0.3328  p(hswm>arm)=0.000  p(arm>hswm)=1.000  -> HSWM>
+  hswm_vs_rrf      diff=+0.0881  p(hswm>arm)=0.000  p(arm>hswm)=1.000  -> HSWM>
+[ndcg10]
+  hswm_vs_cosine   diff=+0.0259  p(hswm>arm)=0.000  p(arm>hswm)=1.000  -> HSWM>
+  hswm_vs_bm25     diff=+0.1394  p(hswm>arm)=0.000  p(arm>hswm)=1.000  -> HSWM>
+  hswm_vs_ppr      diff=+0.3207  p(hswm>arm)=0.000  p(arm>hswm)=1.000  -> HSWM>
+  hswm_vs_rrf      diff=+0.0583  p(hswm>arm)=0.000  p(arm>hswm)=1.000  -> HSWM>
+
+==============================================================================
+DOWNSTREAM F1 (frozen reader, top-3)  [direct = reasoner ceiling, not substrate]
+==============================================================================
+  cosine   F1= 0.4685  EM= 0.4133  n=300
+  hswm     F1= 0.5414  EM= 0.4933  n=300
+  bm25     F1=  0.337  EM= 0.2867  n=300
+  ppr      F1=   0.32  EM= 0.2933  n=300
+  rrf      F1=  0.409  EM= 0.3467  n=300
+  direct   F1= 0.6903  EM= 0.6467  n=300  (reasoner-ceiling)
+  new reader calls issued: 599  coverage(new arms): {'bm25': 300, 'ppr': 300, 'rrf': 300}  capped=False
+
+==============================================================================
+HSWM rank among 5 substrates on sup_recall@3: #1 (hswm > cosine > rrf > bm25 > ppr)
+pure-structure PPR (0 LLM) matches/beats HSWM (100 offline LLM) on: []
+[done] -> substrate_bench_results.json  (1081.7s)

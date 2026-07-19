@@ -1,0 +1,987 @@
+{
+ "label": "EXPLORATORY_PILOT — not the prereg P5 run; do not judge prediction-p5-cognitive-uplift-vs-directllm with this",
+ "tree": "LakatosTree_HSWM_20260719",
+ "prereg_ref": "prediction-p5-cognitive-uplift-vs-directllm",
+ "config": {
+  "n_train": 60,
+  "n_eval": 30,
+  "budget": 60,
+  "top_k": 3,
+  "proj_dim": 96,
+  "seed": 7,
+  "chat_model": "gemma3:4b",
+  "embed_model": "bge-m3"
+ },
+ "data": {
+  "dataset": "MuSiQue (answerable) validation subset via HF datasets-server",
+  "pool_size": 400,
+  "eval_hops": {
+   "2hop": 15,
+   "3hop1": 10,
+   "4hop1": 3,
+   "4hop3": 2
+  }
+ },
+ "llm_call_parity": {
+  "hswm_judgment_calls": 60,
+  "direct_rerank_calls": 60,
+  "reader_calls": {
+   "cosine": 30,
+   "hswm": 30,
+   "direct": 30
+  },
+  "parity_ok": true
+ },
+ "hswm_training": {
+  "judgment_calls": 60,
+  "parse_failures": 0,
+  "val_ndcg_by_lambda": {
+   "0.0": 0.647,
+   "0.25": 0.6616,
+   "0.5": 0.6847,
+   "1.0": 0.6939,
+   "2.0": 0.6878,
+   "4.0": 0.6975
+  },
+  "selected_lambda": 4.0,
+  "n_train_labeled_used": 42,
+  "n_val": 18
+ },
+ "direct_parse_fallbacks": 0,
+ "embed_split_fallbacks": 3,
+ "aggregate": {
+  "cosine": {
+   "em": 0.3,
+   "f1": 0.45,
+   "hit_at_k": 1.0,
+   "sup_recall_at_k": 0.6306,
+   "ndcg10_vs_gold": 0.7699
+  },
+  "hswm": {
+   "em": 0.2333,
+   "f1": 0.3442,
+   "hit_at_k": 0.9333,
+   "sup_recall_at_k": 0.5583,
+   "ndcg10_vs_gold": 0.758
+  },
+  "direct": {
+   "em": 0.1667,
+   "f1": 0.3839,
+   "hit_at_k": 0.9,
+   "sup_recall_at_k": 0.5083,
+   "ndcg10_vs_gold": 0.6891
+  }
+ },
+ "delta": {
+  "em_hswm_minus_direct": 0.0666,
+  "f1_hswm_minus_direct": -0.0397,
+  "p_hswm_gt_direct_em": 0.1196,
+  "p_direct_gt_hswm_em": 1.0,
+  "p_hswm_gt_direct_f1": 0.7072,
+  "p_direct_gt_hswm_f1": 0.2929
+ },
+ "wall_clock_s": 689.8,
+ "llm_wall_s": 389.1,
+ "per_query": [
+  {
+   "id": "2hop__701895_752697",
+   "hop": "2hop",
+   "question": "What administrative territorial entity is the owner of Ciudad Deportiva located?",
+   "answer": "Tamaulipas",
+   "cosine": {
+    "pred": "Nuevo Laredo",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8316
+   },
+   "hswm": {
+    "pred": "Nuevo Laredo",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8316
+   },
+   "direct": {
+    "pred": "Nuevo Laredo Municipality",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop3__15567_29339_508306_70744",
+   "hop": "4hop3",
+   "question": "Edwards won a primary in a state excluding the state where a jury sentenced Demarcus Sears to death. Who has more national championships between that state's university and Fort Hill's city's university?",
+   "answer": "University of South Carolina",
+   "cosine": {
+    "pred": "Kerry",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7246
+   },
+   "hswm": {
+    "pred": "None",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7668
+   },
+   "direct": {
+    "pred": "5",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 0.8319
+   }
+  },
+  {
+   "id": "2hop__198459_61845",
+   "hop": "2hop",
+   "question": "Who has played for both West Ham Ajax and the team that Adam Hammill is on?",
+   "answer": "Mido",
+   "cosine": {
+    "pred": "Mido",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "Peter Carli",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7977
+   },
+   "direct": {
+    "pred": "Gerry Gazzard",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 0.0,
+    "sup_recall_at_k": 0.0,
+    "ndcg10_vs_gold": 0.3956
+   }
+  },
+  {
+   "id": "3hop1__210639_147339_51423",
+   "hop": "3hop1",
+   "question": "What is the name of the castle in the city where the creator of Scene in the Northwest: Portrait of John Henry Lefroy died?",
+   "answer": "Casa Loma",
+   "cosine": {
+    "pred": "New Castle Northwest",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.8072
+   },
+   "hswm": {
+    "pred": "Henry Chapman Mercer",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.6049
+   },
+   "direct": {
+    "pred": "Fonthill",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.6508
+   }
+  },
+  {
+   "id": "2hop__29367_29376",
+   "hop": "2hop",
+   "question": "What event caused the Liberal Party of Australia's longest-serving leader to become Prime Minister?",
+   "answer": "Lyons' death in 1939",
+   "cosine": {
+    "pred": "1939",
+    "em": 0.0,
+    "f1": 0.4,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.6934
+   },
+   "hswm": {
+    "pred": "Robert Menzies",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6509
+   },
+   "direct": {
+    "pred": "1939",
+    "em": 0.0,
+    "f1": 0.4,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.6934
+   }
+  },
+  {
+   "id": "2hop__551235_310309",
+   "hop": "2hop",
+   "question": "Who is the child of the creator of A Distinguished Member of the Humane Society?",
+   "answer": "Edwin Landseer Lutyens",
+   "cosine": {
+    "pred": "Dieter Laser",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "Sir Edwin Henry Landseer",
+    "em": 0.0,
+    "f1": 0.75,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8066
+   },
+   "direct": {
+    "pred": "Sir Edwin Henry Landseer",
+    "em": 0.0,
+    "f1": 0.75,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6053
+   }
+  },
+  {
+   "id": "2hop__109131_343058",
+   "hop": "2hop",
+   "question": "Who is the spouse of the creator of Absolutely Fabulous?",
+   "answer": "Adrian Edmondson",
+   "cosine": {
+    "pred": "Dawn French",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "Jennifer Saunders",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "Dawn French",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   }
+  },
+  {
+   "id": "4hop1__777217_32392_823060_610794",
+   "hop": "4hop1",
+   "question": "What county is the city that shares a border with the state capital of the state where Andrew Deveaux was born located in?",
+   "answer": "Richland County",
+   "cosine": {
+    "pred": "Leon",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.3904
+   },
+   "hswm": {
+    "pred": "Leon",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.5925
+   },
+   "direct": {
+    "pred": "Richland",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7877
+   }
+  },
+  {
+   "id": "3hop1__38738_73181_68042",
+   "hop": "3hop1",
+   "question": "When did the party that is the current majority in the political assembly that passed a bill giving regulators discretion to prohibit proprietary trades, gain control of the House?",
+   "answer": "the 2010 election",
+   "cosine": {
+    "pred": "2010",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.6653
+   },
+   "hswm": {
+    "pred": "2010",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.7328
+   },
+   "direct": {
+    "pred": "2010",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8711
+   }
+  },
+  {
+   "id": "3hop1__210639_147339_47686",
+   "hop": "3hop1",
+   "question": "Where do Greyhound buses leave from in the city where the creator of Scene in the Northwest: Portrait of John Henry Lefroy lived when he died?",
+   "answer": "Toronto Coach Terminal",
+   "cosine": {
+    "pred": "Philadelphia Greyhound Terminal",
+    "em": 0.0,
+    "f1": 0.3333,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8711
+   },
+   "hswm": {
+    "pred": "Philadelphia",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.7929
+   },
+   "direct": {
+    "pred": "Toronto",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8855
+   }
+  },
+  {
+   "id": "3hop1__401538_132457_51423",
+   "hop": "3hop1",
+   "question": "What is the name of the castle in the city where the performer of We Sweat Blood formed?",
+   "answer": "Casa Loma",
+   "cosine": {
+    "pred": "Canada",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.4693
+   },
+   "hswm": {
+    "pred": "New York City",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 0.0,
+    "sup_recall_at_k": 0.0,
+    "ndcg10_vs_gold": 0.1815
+   },
+   "direct": {
+    "pred": "Osaka",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.634
+   }
+  },
+  {
+   "id": "3hop1__761225_831637_91775",
+   "hop": "3hop1",
+   "question": "What does seal stand for in the branch of the U.S. military that operates a list of destroyer classes, as well as containing the rank O-1?",
+   "answer": "Sea, Air, and Land",
+   "cosine": {
+    "pred": "Sea, Air, and Land",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "Sea, Air, and Land",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.906
+   },
+   "direct": {
+    "pred": "Sea, Air, and Land",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.5307
+   }
+  },
+  {
+   "id": "3hop1__346416_831637_91775",
+   "hop": "3hop1",
+   "question": "What does seal stand for in the U.S. military branch that operates a list of destroyer classes, and also operates NC?",
+   "answer": "Sea, Air, and Land",
+   "cosine": {
+    "pred": "Sea, Air, and Land",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9469
+   },
+   "hswm": {
+    "pred": "Sea, Air, and Land",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8603
+   },
+   "direct": {
+    "pred": "Sea, Air, and Land",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.4693
+   }
+  },
+  {
+   "id": "2hop__77775_162341",
+   "hop": "2hop",
+   "question": "What recognition did the actor of Truman Capote from Capote receive?",
+   "answer": "nominated for an Academy Award for Best Supporting Actor",
+   "cosine": {
+    "pred": "Academy Award",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8066
+   },
+   "hswm": {
+    "pred": "Academy Award for Best Actor",
+    "em": 0.0,
+    "f1": 0.9091,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6509
+   },
+   "direct": {
+    "pred": "Capote",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 0.0,
+    "sup_recall_at_k": 0.0,
+    "ndcg10_vs_gold": 0.4416
+   }
+  },
+  {
+   "id": "2hop__668407_683671",
+   "hop": "2hop",
+   "question": "Who is the father of Empress Wang's husband?",
+   "answer": "Yang Xingmi",
+   "cosine": {
+    "pred": "Yang Pu",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "Yang Pu",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "Yang Pu",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8772
+   }
+  },
+  {
+   "id": "2hop__485221_544917",
+   "hop": "2hop",
+   "question": "What body of water includes the terrain feature where Coffee Swamp is located?",
+   "answer": "Lake Superior",
+   "cosine": {
+    "pred": "Freshwater swamp",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "Freshwater swamp",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "Washington Island",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.3869
+   }
+  },
+  {
+   "id": "3hop1__36497_78276_68042",
+   "hop": "3hop1",
+   "question": "When did the majority party of the branch of government that the President calls to support appointments to the USAF gain control in the House?",
+   "answer": "the 2010 election",
+   "cosine": {
+    "pred": "1995",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.4373
+   },
+   "hswm": {
+    "pred": "1931",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 0.0,
+    "sup_recall_at_k": 0.0,
+    "ndcg10_vs_gold": 0.2837
+   },
+   "direct": {
+    "pred": "2010",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.5726
+   }
+  },
+  {
+   "id": "2hop__79875_84469",
+   "hop": "2hop",
+   "question": "In the movie A League of their Own, who played the husband of the person who also played Thelma in the movie Thelma and Louise?",
+   "answer": "Bill Pullman",
+   "cosine": {
+    "pred": "Bill Pullman",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "Bill Pullman",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "direct": {
+    "pred": "Tom Hanks",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8066
+   }
+  },
+  {
+   "id": "2hop__258940_135844",
+   "hop": "2hop",
+   "question": "Who is the city where Lesnoye Sanatorium is located named after?",
+   "answer": "Palmiro Togliatti",
+   "cosine": {
+    "pred": "Tolyatti",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8503
+   },
+   "hswm": {
+    "pred": "Tolyatti",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8503
+   },
+   "direct": {
+    "pred": "Tolyatti",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8772
+   }
+  },
+  {
+   "id": "4hop3__827497_354093_254885_76356",
+   "hop": "4hop3",
+   "question": "The Pee Dee River leads to a bay which leads to an ocean. Who led an attempt to link that ocean with the Pacific via a canal through the continental region containing the El Valle volcano?",
+   "answer": "Ferdinand de Lesseps",
+   "cosine": {
+    "pred": "Ferdinand de Lesseps",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.9439
+   },
+   "hswm": {
+    "pred": "Ferdinand de Lesseps",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 0.9709
+   },
+   "direct": {
+    "pred": "Ferdinand de Lesseps",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 0.962
+   }
+  },
+  {
+   "id": "4hop1__408432_32392_823060_610794",
+   "hop": "4hop1",
+   "question": "In which county is the city sharing a border with the capitol of the state where WYFG is located?",
+   "answer": "Richland County",
+   "cosine": {
+    "pred": "Spartanburg",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.3904
+   },
+   "hswm": {
+    "pred": "Spartanburg",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.9349
+   },
+   "direct": {
+    "pred": "Richland",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.5805
+   }
+  },
+  {
+   "id": "3hop1__617062_127905_54974",
+   "hop": "3hop1",
+   "question": "What is the farthest home run ever hit in the league where the team that Jim Wilson plays for?",
+   "answer": "about 575 feet",
+   "cosine": {
+    "pred": "575 feet",
+    "em": 0.0,
+    "f1": 0.8,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8711
+   },
+   "hswm": {
+    "pred": "Sammy Sosa",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9134
+   },
+   "direct": {
+    "pred": "1989",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.818
+   }
+  },
+  {
+   "id": "2hop__861157_135481",
+   "hop": "2hop",
+   "question": "What is the competition the 1972 Federation Cup is part of named after?",
+   "answer": "International Tennis Federation",
+   "cosine": {
+    "pred": "Fed Cup",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "Fed Cup",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "Women's tennis",
+    "em": 0.0,
+    "f1": 0.4,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6509
+   }
+  },
+  {
+   "id": "2hop__865961_159109",
+   "hop": "2hop",
+   "question": "Where is the country with ISO code ISO 3166-2:CV located?",
+   "answer": "central Atlantic Ocean",
+   "cosine": {
+    "pred": "Cabo Verde",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "Cabo Verde",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "Cabo Verde",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8316
+   }
+  },
+  {
+   "id": "3hop1__92788_648104_13493",
+   "hop": "3hop1",
+   "question": "What series of wins did the sports team that the all time highest goal scorer in spain national team was a member or achieve in 2009?",
+   "answer": "continental treble",
+   "cosine": {
+    "pred": "Continental treble",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.7654
+   },
+   "hswm": {
+    "pred": "2009",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.4982
+   },
+   "direct": {
+    "pred": "2010 FIFA World Cup",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 0.0,
+    "sup_recall_at_k": 0.0,
+    "ndcg10_vs_gold": 0.1672
+   }
+  },
+  {
+   "id": "3hop1__324448_831637_91775",
+   "hop": "3hop1",
+   "question": "What does SEAL stand for in the military branch that operates USS Prevail?",
+   "answer": "Sea, Air, and Land",
+   "cosine": {
+    "pred": "Sea, Air, and Land",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8711
+   },
+   "hswm": {
+    "pred": "Sea, Air, and Land",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.8194
+   },
+   "direct": {
+    "pred": "Sea, Air, and Land",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.4982
+   }
+  },
+  {
+   "id": "4hop1__819901_32392_823060_610794",
+   "hop": "4hop1",
+   "question": "In which county is the city sharing a border with the capitol of the state where Johnson Hagood died?",
+   "answer": "Richland County",
+   "cosine": {
+    "pred": "Baranya County",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.3904
+   },
+   "hswm": {
+    "pred": "Leon County",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7366
+   },
+   "direct": {
+    "pred": "Leon County",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.6207
+   }
+  },
+  {
+   "id": "2hop__528263_865831",
+   "hop": "2hop",
+   "question": "In which county is Kimbrough Memorial Stadium located?",
+   "answer": "Randall County",
+   "cosine": {
+    "pred": "Randall County",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "hswm": {
+    "pred": "Randall County",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "Randall County",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__85713_84469",
+   "hop": "2hop",
+   "question": "In A League of Their Own, who played the husband of the actress who played Thelma in Thelma and Louise?",
+   "answer": "Bill Pullman",
+   "cosine": {
+    "pred": "Bill Pullman",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "Bill Pullman",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "direct": {
+    "pred": "Tom Selleck",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   }
+  },
+  {
+   "id": "2hop__153573_44085",
+   "hop": "2hop",
+   "question": "What was the show named after the character featured in the video game Mickey's Safari in Letterland?",
+   "answer": "The Mickey Mouse Club",
+   "cosine": {
+    "pred": "Mickey Mouse",
+    "em": 0.0,
+    "f1": 0.8,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "Mickey's Safari in Letterland",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8772
+   },
+   "direct": {
+    "pred": "Mickey Mouse",
+    "em": 0.0,
+    "f1": 0.8,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  }
+ ]
+}

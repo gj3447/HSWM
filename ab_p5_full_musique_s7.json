@@ -1,0 +1,3100 @@
+{
+ "label": "PREREG_CANDIDATE",
+ "note": "full P5 run, single dataset+seed; combine across runs for the prereg judgment; parent verifies before any LakatoTree submit_result",
+ "tree": "LakatosTree_HSWM_20260719",
+ "prereg_ref": "prediction-p5-cognitive-uplift-vs-directllm",
+ "dataset": "musique",
+ "config": {
+  "n_train": 100,
+  "n_eval": 100,
+  "budget": 100,
+  "top_k": 3,
+  "proj_dim": 96,
+  "seed": 7,
+  "chat_backend": "openai",
+  "chat_model": "qwen3.6-27b",
+  "embed_model": "bge-m3",
+  "think": false,
+  "parallel": 4
+ },
+ "data": {
+  "pool_size": 800,
+  "eval_hops": {
+   "2hop": 56,
+   "3hop1": 16,
+   "3hop2": 10,
+   "4hop1": 12,
+   "4hop3": 6
+  }
+ },
+ "llm_call_parity": {
+  "hswm_judgment_calls": 100,
+  "direct_rerank_calls": 100,
+  "reader_calls": {
+   "cosine": 100,
+   "hswm": 100,
+   "direct": 100
+  },
+  "parity_ok": true
+ },
+ "hswm_training": {
+  "judgment_calls": 100,
+  "parse_failures": 0,
+  "val_ndcg_by_lambda": {
+   "0.0": 0.7619,
+   "0.25": 0.7493,
+   "0.5": 0.7559,
+   "1.0": 0.7664,
+   "2.0": 0.7931,
+   "4.0": 0.7944
+  },
+  "selected_lambda": 4.0,
+  "n_train_labeled_used": 70,
+  "n_val": 30
+ },
+ "judge_quality": {
+  "judge_label_f1_vs_gold": 0.8645,
+  "cosine_top3_f1_vs_gold": 0.5159,
+  "judge_beats_cosine_labels": true,
+  "n_rows": 100
+ },
+ "direct_parse_fallbacks": 0,
+ "llm_empty_content": 0,
+ "embed_split_fallbacks": 8,
+ "aggregate": {
+  "cosine": {
+   "em": 0.32,
+   "f1": 0.4096,
+   "hit_at_k": 0.97,
+   "sup_recall_at_k": 0.5967,
+   "ndcg10_vs_gold": 0.7469
+  },
+  "hswm": {
+   "em": 0.36,
+   "f1": 0.4443,
+   "hit_at_k": 0.95,
+   "sup_recall_at_k": 0.6075,
+   "ndcg10_vs_gold": 0.7698
+  },
+  "direct": {
+   "em": 0.62,
+   "f1": 0.7009,
+   "hit_at_k": 1.0,
+   "sup_recall_at_k": 0.8367,
+   "ndcg10_vs_gold": 0.9137
+  }
+ },
+ "delta": {
+  "em_hswm_minus_direct": -0.26,
+  "f1_hswm_minus_direct": -0.2566,
+  "ndcg_hswm_minus_direct": -0.1439,
+  "p_hswm_gt_direct_em": 1.0,
+  "p_direct_gt_hswm_em": 0.0,
+  "p_hswm_gt_direct_f1": 1.0,
+  "p_direct_gt_hswm_f1": 0.0
+ },
+ "wall_clock_s": 1754.7,
+ "llm_wall_s": 6169.7,
+ "per_query": [
+  {
+   "id": "3hop2__38326_92991_76291",
+   "hop": "3hop2",
+   "question": "When did the political party of Stewart and Harlan take control of the body that has Standing Rules derived from Article One that do not apply to the House?",
+   "answer": "January 2015",
+   "cosine": {
+    "pred": "The context does not provide an answer to this question.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.6364
+   },
+   "hswm": {
+    "pred": "January 2015",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.5307
+   },
+   "direct": {
+    "pred": "January 2015",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__766973_770570",
+   "hop": "2hop",
+   "question": "What county is Erik Hort's birthplace a part of?",
+   "answer": "Rockland County",
+   "cosine": {
+    "pred": "Montebello, New York",
+    "em": 0.0,
+    "f1": 0.5714,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "Montebello, New York",
+    "em": 0.0,
+    "f1": 0.5714,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8175
+   },
+   "direct": {
+    "pred": "Rockland County",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__71034_343058",
+   "hop": "2hop",
+   "question": "Who is the spouse of the person who sang holding out for a hero in shrek 2?",
+   "answer": "Adrian Edmondson",
+   "cosine": {
+    "pred": "John Cleese",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "Jennifer Saunders",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "John Cleese",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   }
+  },
+  {
+   "id": "2hop__274110_413723",
+   "hop": "2hop",
+   "question": "In which district was Ernie Watts born?",
+   "answer": "West Berkshire",
+   "cosine": {
+    "pred": "Berkshire",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "Berkshire",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "direct": {
+    "pred": "Berkshire",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop1__617062_127905_87812",
+   "hop": "3hop1",
+   "question": "When is the opening day of the league that Jim Wilson plays for?",
+   "answer": "Thursday, March 29",
+   "cosine": {
+    "pred": "late March / early April",
+    "em": 0.0,
+    "f1": 0.2857,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9066
+   },
+   "hswm": {
+    "pred": "late March / early April",
+    "em": 0.0,
+    "f1": 0.2857,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9066
+   },
+   "direct": {
+    "pred": "Thursday, March 29",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__335899_124498",
+   "hop": "2hop",
+   "question": "Who is the father of the performer of Qui de noux deux?",
+   "answer": "Louis Chedid",
+   "cosine": {
+    "pred": "Louis Chedid",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "Louis Chedid",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "Louis Chedid",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__43283_86694",
+   "hop": "2hop",
+   "question": "Who has the most wins in the league that wins the All Star Game more often?",
+   "answer": "New York Yankees",
+   "cosine": {
+    "pred": "American League",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8772
+   },
+   "hswm": {
+    "pred": "American League",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8772
+   },
+   "direct": {
+    "pred": "New York Yankees",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop1__93661_59747_211319_557671",
+   "hop": "4hop1",
+   "question": "Which county shares a border with the county where the most populous city in the state where season 8 of The Walking Dead was filmed is located?",
+   "answer": "Presque Isle County",
+   "cosine": {
+    "pred": "The provided context does not contain information about counties or their borders.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7031
+   },
+   "hswm": {
+    "pred": "The context does not provide this information.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.5102
+   },
+   "direct": {
+    "pred": "The provided context does not contain information about counties or their borders.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.9558
+   }
+  },
+  {
+   "id": "2hop__62311_62279",
+   "hop": "2hop",
+   "question": "When did Germany launch an air attack on the country the U.S. fought during the American Revolution?",
+   "answer": "10 July -- 31 October 1940",
+   "cosine": {
+    "pred": "Not mentioned in the context",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.511
+   },
+   "hswm": {
+    "pred": "Not mentioned in the context",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.5803
+   },
+   "direct": {
+    "pred": "10 July -- 31 October 1940",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop1__370129_621192_10659_59955",
+   "hop": "4hop1",
+   "question": "What country is between Lithuania and the country many expelled French Jews relocated to, along with the country of citizenship of Marie Antoinette's mother?",
+   "answer": "Kaliningrad Oblast",
+   "cosine": {
+    "pred": "Poland",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7537
+   },
+   "hswm": {
+    "pred": "Poland",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7157
+   },
+   "direct": {
+    "pred": "Poland",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 0.8319
+   }
+  },
+  {
+   "id": "3hop2__38242_92991_76291",
+   "hop": "3hop2",
+   "question": "When did the party with majorities in Congress prior to the 1954 elections gain control of the body which determines rules of the US House and US Senate?",
+   "answer": "January 2015",
+   "cosine": {
+    "pred": "January 3, 2009",
+    "em": 0.0,
+    "f1": 0.4,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.6045
+   },
+   "hswm": {
+    "pred": "January 3, 2009",
+    "em": 0.0,
+    "f1": 0.4,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.6508
+   },
+   "direct": {
+    "pred": "1870",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8452
+   }
+  },
+  {
+   "id": "2hop__370564_71701",
+   "hop": "2hop",
+   "question": "What year did the japanese get to the current administrative territorial entity of the Century Lotus Stadium and the rest of the guangdong province?",
+   "answer": "November 5",
+   "cosine": {
+    "pred": "1938",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "1938",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "1938",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop1__140345_2053_5289",
+   "hop": "3hop1",
+   "question": "What label was bought by the company which, along with ABC and the network which aired Law of the Plainsman, is the other major broadcaster based in NY?",
+   "answer": "Oriole Records.",
+   "cosine": {
+    "pred": "CBS",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9469
+   },
+   "hswm": {
+    "pred": "Oriole Records",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "Oriole Records",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop2__132957_76377_40768",
+   "hop": "3hop2",
+   "question": "When did Nissan, the Acura Legend maker and the top selling car brand open US assembly plants?",
+   "answer": "1981",
+   "cosine": {
+    "pred": "A decade after the 1973 oil crisis",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.906
+   },
+   "hswm": {
+    "pred": "A decade after the 1973 oil crisis",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.906
+   },
+   "direct": {
+    "pred": "The provided context does not contain the answer to this question.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.6714
+   }
+  },
+  {
+   "id": "2hop__29367_29376",
+   "hop": "2hop",
+   "question": "What event caused the Liberal Party of Australia's longest-serving leader to become Prime Minister?",
+   "answer": "Lyons' death in 1939",
+   "cosine": {
+    "pred": "Lyons' death in 1939",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.6934
+   },
+   "hswm": {
+    "pred": "Lyons' death in 1939",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "direct": {
+    "pred": "defeating the Labor government of Ben Chifley in 1949",
+    "em": 0.0,
+    "f1": 0.1667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.5706
+   }
+  },
+  {
+   "id": "3hop2__565959_223623_162182",
+   "hop": "3hop2",
+   "question": "In what region of the country containing Mount Can is the birthplace of John Phan located?",
+   "answer": "South Central Coast",
+   "cosine": {
+    "pred": "northern Vietnam",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.7654
+   },
+   "hswm": {
+    "pred": "South Central Coast",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "South Central Coast",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__88906_55840",
+   "hop": "2hop",
+   "question": "In the King's Speech, who played the person who was the King of England in 1950?",
+   "answer": "Colin Firth",
+   "cosine": {
+    "pred": "Colin Firth",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8772
+   },
+   "hswm": {
+    "pred": "Colin Firth",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "direct": {
+    "pred": "Colin Firth",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop3__129318_29339_508306_70744",
+   "hop": "4hop3",
+   "question": "University of the state having Fort Hill or university of the state whose primary was won by Edwards besides the state having James B. Simmons House has more national championships?",
+   "answer": "University of South Carolina",
+   "cosine": {
+    "pred": "University of South Carolina",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "University of South Carolina",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "University of South Carolina",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__267938_92763",
+   "hop": "2hop",
+   "question": "What is the enrollment at Jack Clay's employer?",
+   "answer": "16,801",
+   "cosine": {
+    "pred": "not mentioned",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "not mentioned",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "16,801",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__58939_189318",
+   "hop": "2hop",
+   "question": "Where was Obama's opponent in his first election educated?",
+   "answer": "National War College",
+   "cosine": {
+    "pred": "The context does not provide this information.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 0.0,
+    "sup_recall_at_k": 0.0,
+    "ndcg10_vs_gold": 0.2184
+   },
+   "hswm": {
+    "pred": "The provided context does not contain this information.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 0.0,
+    "sup_recall_at_k": 0.0,
+    "ndcg10_vs_gold": 0.4218
+   },
+   "direct": {
+    "pred": "National War College",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.6934
+   }
+  },
+  {
+   "id": "2hop__257831_123283",
+   "hop": "2hop",
+   "question": "Where did the producer of Julius Caesar study or work?",
+   "answer": "Clifton College",
+   "cosine": {
+    "pred": "John Houseman",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "John Houseman",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7904
+   },
+   "direct": {
+    "pred": "Clifton College",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__34734_92852",
+   "hop": "2hop",
+   "question": "When did the U.S. stop trading with the country that started hostilities?",
+   "answer": "1940",
+   "cosine": {
+    "pred": "1939",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6509
+   },
+   "hswm": {
+    "pred": "1938",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "direct": {
+    "pred": "1938",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__39954_80940",
+   "hop": "2hop",
+   "question": "What is the largest national park in the country where hunters are estimated to spend fifty to one hundred times that of the average ecotourist?",
+   "answer": "Ruaha National Park",
+   "cosine": {
+    "pred": "Ruaha National Park",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "hswm": {
+    "pred": "Ruaha National Park",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "Ruaha National Park",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__496961_554601",
+   "hop": "2hop",
+   "question": "What's the place of birth of the former member of The Sunnyboys?",
+   "answer": "Kingscliff",
+   "cosine": {
+    "pred": "Kingscliff, New South Wales",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "Kingscliff, New South Wales",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "Kingscliff, New South Wales",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop2__222979_132536_40768",
+   "hop": "3hop2",
+   "question": "When did Nissan, the HPD ARX-03 maker and the Scion owner open US assembly plants?",
+   "answer": "1981",
+   "cosine": {
+    "pred": "The provided context does not contain the answer to this question.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9675
+   },
+   "hswm": {
+    "pred": "by the early 1980s",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8603
+   },
+   "direct": {
+    "pred": "by the early 1980s",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.6788
+   }
+  },
+  {
+   "id": "2hop__24441_36630",
+   "hop": "2hop",
+   "question": "What countries found their economic growth in the period young boys were employed in the glass making industries?",
+   "answer": "United Kingdom and Prussia",
+   "cosine": {
+    "pred": "Not mentioned in the context",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8316
+   },
+   "hswm": {
+    "pred": "Not mentioned in the context",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6509
+   },
+   "direct": {
+    "pred": "Botswana and Greece",
+    "em": 0.0,
+    "f1": 0.2857,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7904
+   }
+  },
+  {
+   "id": "2hop__131275_72870",
+   "hop": "2hop",
+   "question": "Who did the state where Christian Science Pleasant View Home was located vote for in 2016?",
+   "answer": "Hillary Clinton",
+   "cosine": {
+    "pred": "Hillary Clinton",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7904
+   },
+   "hswm": {
+    "pred": "Hillary Clinton",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7977
+   },
+   "direct": {
+    "pred": "Hillary Clinton",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__256336_714772",
+   "hop": "2hop",
+   "question": "Who is the spouse of a cast member from King of the Mountain?",
+   "answer": "Lisa Rinna",
+   "cosine": {
+    "pred": "Lisa Rinna",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "hswm": {
+    "pred": "Tina",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8772
+   },
+   "direct": {
+    "pred": "Lisa Rinna",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__207476_625987",
+   "hop": "2hop",
+   "question": "Who is the grandmother of Philippe, Duke of Orléans?",
+   "answer": "Marie de' Medici",
+   "cosine": {
+    "pred": "Anne of Austria",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "Anne of Austria",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "Anne of Austria",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8772
+   }
+  },
+  {
+   "id": "2hop__82270_177869",
+   "hop": "2hop",
+   "question": "Who is the spouse of the first nominated African American presidential candidate?",
+   "answer": "Helen Pitts Douglass",
+   "cosine": {
+    "pred": "Frederick Douglass",
+    "em": 0.0,
+    "f1": 0.4,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7977
+   },
+   "hswm": {
+    "pred": "Context does not provide this information",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.3869
+   },
+   "direct": {
+    "pred": "Helen Pitts Douglass",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__42578_55840",
+   "hop": "2hop",
+   "question": "Who played the monarch at the end of WW2 in The King's Speech?",
+   "answer": "Colin Firth",
+   "cosine": {
+    "pred": "Colin Firth",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "Colin Firth",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "direct": {
+    "pred": "Colin Firth",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop3__130404_29339_508306_70744",
+   "hop": "4hop3",
+   "question": "Who has more national championships, the university where Fort Hill is, or the university in the state where Edwards won the primary, along with winning in the state containing WDXQ?",
+   "answer": "University of South Carolina",
+   "cosine": {
+    "pred": "Clemson University",
+    "em": 0.0,
+    "f1": 0.3333,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 0.962
+   },
+   "hswm": {
+    "pred": "University of South Carolina",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 0.9829
+   },
+   "direct": {
+    "pred": "University of South Carolina",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop1__433767_32392_823060_610794",
+   "hop": "4hop1",
+   "question": "In what county is located the city that shares a border with the capital of the state where Mike Dow was born?",
+   "answer": "Richland County",
+   "cosine": {
+    "pred": "Crawford County",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.3904
+   },
+   "hswm": {
+    "pred": "Richland County",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.9268
+   },
+   "direct": {
+    "pred": "Richland County",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop1__241001_568433_51423",
+   "hop": "3hop1",
+   "question": "What is the name of the castle in the headquarters of the company that employs Arna Selznick?",
+   "answer": "Casa Loma",
+   "cosine": {
+    "pred": "Dancingmonkeys",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.4693
+   },
+   "hswm": {
+    "pred": "The context does not provide this information.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.7654
+   },
+   "direct": {
+    "pred": "The question cannot be answered from the context.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.4693
+   }
+  },
+  {
+   "id": "2hop__135651_669373",
+   "hop": "2hop",
+   "question": "Which university employed the person that Mach bands are named after?",
+   "answer": "Charles University",
+   "cosine": {
+    "pred": "The provided context does not contain this information.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7977
+   },
+   "hswm": {
+    "pred": "The provided context does not contain the answer.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "Charles University in Prague",
+    "em": 1.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop1__545624_2053_5289",
+   "hop": "3hop1",
+   "question": "What UK label was bought by the company which, along with ABC and the network which broadcasted Here and Now, is the other major broadcaster based in NY?",
+   "answer": "Oriole Records.",
+   "cosine": {
+    "pred": "Oriole Records",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9469
+   },
+   "hswm": {
+    "pred": "Oriole Records",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9675
+   },
+   "direct": {
+    "pred": "Oriole Records",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop3__324979_836463_161616_77103",
+   "hop": "4hop3",
+   "question": "When did the birthplace of Ah Via Musicom's performer become the capital of the state Knowles is from?",
+   "answer": "1839",
+   "cosine": {
+    "pred": "Houston",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.4518
+   },
+   "hswm": {
+    "pred": "Houston",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.5646
+   },
+   "direct": {
+    "pred": "1839",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7668
+   }
+  },
+  {
+   "id": "3hop2__781093_223623_162182",
+   "hop": "3hop2",
+   "question": "In what region of the country where Lam Thao is located is John Phan's birthplace?",
+   "answer": "South Central Coast",
+   "cosine": {
+    "pred": "Northeast region",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9218
+   },
+   "hswm": {
+    "pred": "Northeast region",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9675
+   },
+   "direct": {
+    "pred": "South Central Coast",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop1__39871_314549_131976_44528",
+   "hop": "4hop1",
+   "question": "Williamsburg, Main Street station and another station share a track in a state bounded by an ocean. Where does that ocean meet the Gulf of Mexico?",
+   "answer": "Florida Straits",
+   "cosine": {
+    "pred": "Florida Straits",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 0.9829
+   },
+   "hswm": {
+    "pred": "Florida Straits",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "Florida Straits",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.9558
+   }
+  },
+  {
+   "id": "3hop1__540585_568433_51423",
+   "hop": "3hop1",
+   "question": "What is the name of the castle in the city where the headquarters of the production company of Miss Spider's Sunny Patch Kids is located?",
+   "answer": "Casa Loma",
+   "cosine": {
+    "pred": "The context does not provide the location of the production company's headquarters or the name of a castle in that city.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.2961
+   },
+   "hswm": {
+    "pred": "The context does not provide this information.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.4776
+   },
+   "direct": {
+    "pred": "Casa Loma",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__554145_88622",
+   "hop": "2hop",
+   "question": "Who is the head of the main subject of NSA in popular culture?",
+   "answer": "ADM Michael S. Rogers",
+   "cosine": {
+    "pred": "Michael S. Rogers",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "Michael S. Rogers",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "Michael S. Rogers",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop1__131632_32392_823060_610794",
+   "hop": "4hop1",
+   "question": "What county contains the city with a radio station that broadcasts to the capital city of the state where the Peace center is located?",
+   "answer": "Richland County",
+   "cosine": {
+    "pred": "Leon County",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.2463
+   },
+   "hswm": {
+    "pred": "Richland County",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 0.9829
+   },
+   "direct": {
+    "pred": "Richland County",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop1__617062_127905_54974",
+   "hop": "3hop1",
+   "question": "What is the farthest home run ever hit in the league where the team that Jim Wilson plays for?",
+   "answer": "about 575 feet",
+   "cosine": {
+    "pred": "575 feet",
+    "em": 0.0,
+    "f1": 0.8,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8711
+   },
+   "hswm": {
+    "pred": "575 feet",
+    "em": 0.0,
+    "f1": 0.8,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8711
+   },
+   "direct": {
+    "pred": "575 feet",
+    "em": 0.0,
+    "f1": 0.8,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__40697_46621",
+   "hop": "2hop",
+   "question": "When was the celestial object that eluded efforts to measure oxygen discovered to be the center of the solar system?",
+   "answer": "as early as the 3rd century BC",
+   "cosine": {
+    "pred": "The question cannot be answered from the context.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8503
+   },
+   "hswm": {
+    "pred": "3rd century BC",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8316
+   },
+   "direct": {
+    "pred": "3rd century BC",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__150866_11402",
+   "hop": "2hop",
+   "question": "According to the agency that published U.S. and World Population Clock, what is the total area in square miles?",
+   "answer": "17.037 square miles",
+   "cosine": {
+    "pred": "3.7 million square miles",
+    "em": 0.0,
+    "f1": 0.5714,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8066
+   },
+   "hswm": {
+    "pred": "3.7 million square miles",
+    "em": 0.0,
+    "f1": 0.5714,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8066
+   },
+   "direct": {
+    "pred": "3.7 million square miles",
+    "em": 0.0,
+    "f1": 0.5714,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7904
+   }
+  },
+  {
+   "id": "3hop1__83970_685536_47686",
+   "hop": "3hop1",
+   "question": "Where do greyhound buses leave from in where the headquarters is located of who owns the hard rock hotel in las vegas?",
+   "answer": "Toronto Coach Terminal",
+   "cosine": {
+    "pred": "Brookfield Asset Management",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.4693
+   },
+   "hswm": {
+    "pred": "Brookfield Asset Management",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.4441
+   },
+   "direct": {
+    "pred": "Toronto Coach Terminal",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop1__568951_567566_84283",
+   "hop": "3hop1",
+   "question": "Who owns the record label of the Every Turn of the World performer?",
+   "answer": "Warner Music Group",
+   "cosine": {
+    "pred": "Warner Music Group",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8603
+   },
+   "hswm": {
+    "pred": "Warner Music Group",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8452
+   },
+   "direct": {
+    "pred": "Warner Music Group",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__135652_669373",
+   "hop": "2hop",
+   "question": "Who is the employer of the physicist who Mach number is named after?",
+   "answer": "Charles University",
+   "cosine": {
+    "pred": "Not mentioned in the context",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "Not mentioned in the context",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "Vinko Dvořák",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__822965_165304",
+   "hop": "2hop",
+   "question": "Who is the child of the actor who is a cast member of Love in Pawn?",
+   "answer": "Kim Braden",
+   "cosine": {
+    "pred": "Frances Bean Cobain",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "Frances Bean Cobain",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "Kim Braden",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop1__726561_132457_47686",
+   "hop": "3hop1",
+   "question": "Where do greyhound buses leave from in the city the performer of Born a Lion formed in?",
+   "answer": "Toronto Coach Terminal",
+   "cosine": {
+    "pred": "Toronto Coach Terminal",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.7654
+   },
+   "hswm": {
+    "pred": "Toronto Coach Terminal",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "Toronto Coach Terminal",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__30390_92972",
+   "hop": "2hop",
+   "question": "What was an economic effect of the war during which Hayek started working on Abuse of Reason?",
+   "answer": "much of the European industrial infrastructure had been destroyed",
+   "cosine": {
+    "pred": "capital misallocation",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "No information provided",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "the European economy had collapsed",
+    "em": 0.0,
+    "f1": 0.3333,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__677929_696450",
+   "hop": "2hop",
+   "question": "Who founded the publisher of The Final Testament of the Holy Bible?",
+   "answer": "Larry Gagosian",
+   "cosine": {
+    "pred": "not mentioned in the context",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "not mentioned in the context",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "Larry Gagosian",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__669160_139339",
+   "hop": "2hop",
+   "question": "What was the director of Addicted to Love nominated for?",
+   "answer": "Academy Award for Best Live Action Short Film",
+   "cosine": {
+    "pred": "not mentioned in the context",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8316
+   },
+   "hswm": {
+    "pred": "None",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8175
+   },
+   "direct": {
+    "pred": "Academy Award for Best Live Action Short Film",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop3__524186_219173_548463_72134",
+   "hop": "4hop3",
+   "question": "When did the city where Superior Drill Company is located become capitol of the state where the screenwriter of The Poor Boob was born?",
+   "answer": "1839",
+   "cosine": {
+    "pred": "1832",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 0.9494
+   },
+   "hswm": {
+    "pred": "1832",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 0.9447
+   },
+   "direct": {
+    "pred": "The question cannot be answered from the context.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__130404_59180",
+   "hop": "2hop",
+   "question": "What date saw the writing of the song where the devil went down to the state where WDXQ is located?",
+   "answer": "May 21, 1979",
+   "cosine": {
+    "pred": "May 21, 1979",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "May 21, 1979",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "direct": {
+    "pred": "May 21, 1979",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop1__90327_78276_68042",
+   "hop": "3hop1",
+   "question": "When did the majority party in the body which approves members of the American Cabinet gain control of the House?",
+   "answer": "the 2010 election",
+   "cosine": {
+    "pred": "The context does not provide this information.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.6105
+   },
+   "hswm": {
+    "pred": "110th United States Congress",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.6797
+   },
+   "direct": {
+    "pred": "2010",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop1__151903_5274_458768_33677",
+   "hop": "4hop1",
+   "question": "When was the most recent BFC award given to the city where the only record music group larger than the recording label for The Lost Trident Sessions is located?",
+   "answer": "2013",
+   "cosine": {
+    "pred": "The provided text does not contain information about BFC awards or the location of a record music group larger than Sony Music Entertainment.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7157
+   },
+   "hswm": {
+    "pred": "The provided text does not contain information about BFC awards or the location of a record music group larger than Sony Music Entertainment.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7246
+   },
+   "direct": {
+    "pred": "2013",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 0.9709
+   }
+  },
+  {
+   "id": "3hop1__617062_127905_92225",
+   "hop": "3hop1",
+   "question": "When is the opening day of the season of the league that Jim Wilson's team plays for?",
+   "answer": "March 29, 2018",
+   "cosine": {
+    "pred": "late March / early April",
+    "em": 0.0,
+    "f1": 0.2857,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.4982
+   },
+   "hswm": {
+    "pred": "late March / early April",
+    "em": 0.0,
+    "f1": 0.2857,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.4982
+   },
+   "direct": {
+    "pred": "late March / early April",
+    "em": 0.0,
+    "f1": 0.2857,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9675
+   }
+  },
+  {
+   "id": "3hop1__816887_127905_80286",
+   "hop": "3hop1",
+   "question": "Who has the most hits in the league of the team that Dick Aylward plays for?",
+   "answer": "Pete Rose",
+   "cosine": {
+    "pred": "Pete Rose",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9675
+   },
+   "hswm": {
+    "pred": "Pete Rose",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9675
+   },
+   "direct": {
+    "pred": "Pete Rose",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__817096_15463",
+   "hop": "2hop",
+   "question": "What company merged in 2002 with the CEMM developer?",
+   "answer": "Hewlett Packard",
+   "cosine": {
+    "pred": "Hewlett Packard",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "Hewlett Packard",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "Hewlett Packard",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop1__131113_59747_211319_557671",
+   "hop": "4hop1",
+   "question": "Which county shares a border with the county where the most populous city in the state where Washington State Prison can be found is located?",
+   "answer": "Presque Isle County",
+   "cosine": {
+    "pred": "Washington County",
+    "em": 0.0,
+    "f1": 0.4,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.5032
+   },
+   "hswm": {
+    "pred": "Washington County",
+    "em": 0.0,
+    "f1": 0.4,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.3904
+   },
+   "direct": {
+    "pred": "Fulton County",
+    "em": 0.0,
+    "f1": 0.4,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6367
+   }
+  },
+  {
+   "id": "2hop__53433_59035",
+   "hop": "2hop",
+   "question": "The beautiful country used as a backdrop for the movie The Lord of the Rings was founded on what date?",
+   "answer": "6 February 1840",
+   "cosine": {
+    "pred": "Not answerable",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 0.0,
+    "sup_recall_at_k": 0.0,
+    "ndcg10_vs_gold": 0.2372
+   },
+   "hswm": {
+    "pred": "Not mentioned in the context",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 0.0,
+    "sup_recall_at_k": 0.0,
+    "ndcg10_vs_gold": 0.2641
+   },
+   "direct": {
+    "pred": "6 February 1840",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8772
+   }
+  },
+  {
+   "id": "2hop__159902_362941",
+   "hop": "2hop",
+   "question": "Where was the person featured on the Chester Arthur coin born?",
+   "answer": "Mount Laurel Township",
+   "cosine": {
+    "pred": "Alice Paul",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.3869
+   },
+   "hswm": {
+    "pred": "Princeton University",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 0.0,
+    "sup_recall_at_k": 0.0,
+    "ndcg10_vs_gold": 0.2641
+   },
+   "direct": {
+    "pred": "Alice Paul",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.3066
+   }
+  },
+  {
+   "id": "2hop__85753_64503",
+   "hop": "2hop",
+   "question": "How deep is the Riverwalk in San Antonio in the state that still uses electric chair?",
+   "answer": "one level down from the automobile street",
+   "cosine": {
+    "pred": "one story",
+    "em": 0.0,
+    "f1": 0.25,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.5
+   },
+   "hswm": {
+    "pred": "one story beneath the streets",
+    "em": 0.0,
+    "f1": 0.2,
+    "hit_at_k": 0.0,
+    "sup_recall_at_k": 0.0,
+    "ndcg10_vs_gold": 0.4413
+   },
+   "direct": {
+    "pred": "one story",
+    "em": 0.0,
+    "f1": 0.25,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.5438
+   }
+  },
+  {
+   "id": "4hop1__455862_508773_85832_745702",
+   "hop": "4hop1",
+   "question": "Whose navigator father explored the east coast of the region where Ignacio Esparza was later born?",
+   "answer": "Sebastian Cabot",
+   "cosine": {
+    "pred": "Vicente Yáñez Pinzón",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.7095
+   },
+   "hswm": {
+    "pred": "John Cabot",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.7095
+   },
+   "direct": {
+    "pred": "Sebastian Cabot",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 0.8319
+   }
+  },
+  {
+   "id": "2hop__80070_89752",
+   "hop": "2hop",
+   "question": "What is the largest state in the region where the Handmaid's Tale takes place?",
+   "answer": "Maine",
+   "cosine": {
+    "pred": "New England",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.3066
+   },
+   "hswm": {
+    "pred": "New England",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.3869
+   },
+   "direct": {
+    "pred": "Maine",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6509
+   }
+  },
+  {
+   "id": "2hop__329676_119915",
+   "hop": "2hop",
+   "question": "In which year did Taifa of Francisco Giner de los Rios' birthplace cease to exist?",
+   "answer": "1065",
+   "cosine": {
+    "pred": "1065",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "hswm": {
+    "pred": "1065",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "1065",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__129721_40482",
+   "hop": "2hop",
+   "question": "From whom did the Huguenots in the state encompassing Zubly Cemetery purchase land from?",
+   "answer": "Edmund Bellinger",
+   "cosine": {
+    "pred": "Edmund Bellinger",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "hswm": {
+    "pred": "Edmund Bellinger",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "Edmund Bellinger",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__765678_310556",
+   "hop": "2hop",
+   "question": "Who was married to the star of No Escape?",
+   "answer": "John Profumo",
+   "cosine": {
+    "pred": "Not answerable",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8503
+   },
+   "hswm": {
+    "pred": "Not answerable",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6241
+   },
+   "direct": {
+    "pred": "John Profumo",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop1__140345_2053_52946",
+   "hop": "3hop1",
+   "question": "When is Celebrity Big Brother coming to the network which, along with ABC and the network which aired Law of the Plainsman, is the other major broadcaster based in NY?",
+   "answer": "February 7, 2018",
+   "cosine": {
+    "pred": "February 7, 2018",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.8385
+   },
+   "hswm": {
+    "pred": "February 7, 2018",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9325
+   },
+   "direct": {
+    "pred": "February 7, 2018",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.906
+   }
+  },
+  {
+   "id": "4hop1__271272_508773_85832_745702",
+   "hop": "4hop1",
+   "question": "What is the name of the child of the Italian navigator who sailed for England and explored the east coast of the continent Francisco Vázquez' birthplace is located?",
+   "answer": "Sebastian Cabot",
+   "cosine": {
+    "pred": "Sebastian Cabot",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6367
+   },
+   "hswm": {
+    "pred": "Sebastian Cabot",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6367
+   },
+   "direct": {
+    "pred": "Sebastian Cabot",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 0.8319
+   }
+  },
+  {
+   "id": "2hop__208602_11402",
+   "hop": "2hop",
+   "question": "According to the developer of Topologically Integrated Geographic Encoding and Referencing, what is the total area of Atlantic City in square miles?",
+   "answer": "17.037 square miles",
+   "cosine": {
+    "pred": "17.037",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "17.037",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "direct": {
+    "pred": "17.037",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__36747_18974",
+   "hop": "2hop",
+   "question": "Who led the military expedition in the place where the fight between Ming loyalists and Manchus occurred?",
+   "answer": "Chen Zheng",
+   "cosine": {
+    "pred": "Han Bannermen",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.4838
+   },
+   "hswm": {
+    "pred": "Han Bannermen",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.4911
+   },
+   "direct": {
+    "pred": "Zheng Jing",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   }
+  },
+  {
+   "id": "3hop1__222979_40769_64047",
+   "hop": "3hop1",
+   "question": "When did the RX 350 from the Scion owner's luxury division change body style?",
+   "answer": "Sales began worldwide in April 2012",
+   "cosine": {
+    "pred": "April 2012",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.7654
+   },
+   "hswm": {
+    "pred": "April 2012",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9066
+   },
+   "direct": {
+    "pred": "April 2012",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.7654
+   }
+  },
+  {
+   "id": "2hop__28287_89399",
+   "hop": "2hop",
+   "question": "Who is the voice of the character in Spongebob Squarepants with the same name as the creature that annelid larvae live like?",
+   "answer": "Mr. Lawrence",
+   "cosine": {
+    "pred": "Tom Kenny",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 0.0,
+    "sup_recall_at_k": 0.0,
+    "ndcg10_vs_gold": 0.4416
+   },
+   "hswm": {
+    "pred": "Mr. Lawrence",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 0.0,
+    "sup_recall_at_k": 0.0,
+    "ndcg10_vs_gold": 0.1934
+   },
+   "direct": {
+    "pred": "Tom Kenny",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__17854_17873",
+   "hop": "2hop",
+   "question": "What happened to Buckingham Palace after the first monarch to reside there left?",
+   "answer": "palace was seldom used, even neglected",
+   "cosine": {
+    "pred": "it was seldom used, even neglected",
+    "em": 0.0,
+    "f1": 0.8333,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "The context does not provide this information.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8772
+   },
+   "direct": {
+    "pred": "it was seldom used, even neglected",
+    "em": 0.0,
+    "f1": 0.8333,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__362107_652514",
+   "hop": "2hop",
+   "question": "In which borough was Callum McManaman born?",
+   "answer": "Knowsley",
+   "cosine": {
+    "pred": "Whiston",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "Whiston",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "Knowsley",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__865961_159109",
+   "hop": "2hop",
+   "question": "Where is the country with ISO code ISO 3166-2:CV located?",
+   "answer": "central Atlantic Ocean",
+   "cosine": {
+    "pred": "Cabo Verde",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "Cabo Verde",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "central Atlantic Ocean",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__623501_297043",
+   "hop": "2hop",
+   "question": "What watercourse is the river on which the Lostock Dam is located the mouth of?",
+   "answer": "Hunter River",
+   "cosine": {
+    "pred": "Paterson River",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "Paterson River",
+    "em": 0.0,
+    "f1": 0.5,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "Hunter River",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__581084_828685",
+   "hop": "2hop",
+   "question": "Who employs the author of \"Ravenswood: The Steelworkers' Victory and the Revival of American Labor\"?",
+   "answer": "Cornell University",
+   "cosine": {
+    "pred": "Cornell University",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8772
+   },
+   "hswm": {
+    "pred": "Cornell University School of Industrial and Labor Relations",
+    "em": 1.0,
+    "f1": 0.4,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "Cornell University School of Industrial and Labor Relations",
+    "em": 1.0,
+    "f1": 0.4,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop1__58323_375563_161848_20546",
+   "hop": "4hop1",
+   "question": "Who discovered the country near the country of citizenship of the author of The Book Thief for the Dutch?",
+   "answer": "Abel Tasman",
+   "cosine": {
+    "pred": "Abel Tasman",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.6714
+   },
+   "hswm": {
+    "pred": "Abel Tasman",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.5414
+   },
+   "direct": {
+    "pred": "The context does not provide this information.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7397
+   }
+  },
+  {
+   "id": "2hop__481349_302087",
+   "hop": "2hop",
+   "question": "Which company owns the manufacturer of Learjet 60?",
+   "answer": "Bombardier Inc.",
+   "cosine": {
+    "pred": "Bombardier Inc.",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "hswm": {
+    "pred": "Bombardier Aerospace",
+    "em": 1.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8772
+   },
+   "direct": {
+    "pred": "Bombardier Inc.",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__726892_131968",
+   "hop": "2hop",
+   "question": "Which is the body of water by Leo Bennett's place of death?",
+   "answer": "River Thames",
+   "cosine": {
+    "pred": "Thames",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "Thames",
+    "em": 0.0,
+    "f1": 0.6667,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "River Thames",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__145282_21711",
+   "hop": "2hop",
+   "question": "When was the Palau de la Generalitat constructed in the location where Paco Godia was born?",
+   "answer": "built in the 15th century",
+   "cosine": {
+    "pred": "15th century",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.6934
+   },
+   "hswm": {
+    "pred": "Not mentioned in the context",
+    "em": 0.0,
+    "f1": 0.25,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7977
+   },
+   "direct": {
+    "pred": "The provided text does not contain information about the construction date of the Palau de la Generalitat.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7904
+   }
+  },
+  {
+   "id": "2hop__455392_40315",
+   "hop": "2hop",
+   "question": "How many campuses are there in the institution that Desert Studies Center is a part of?",
+   "answer": "12",
+   "cosine": {
+    "pred": "12",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "12",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "7",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7904
+   }
+  },
+  {
+   "id": "2hop__32254_84601",
+   "hop": "2hop",
+   "question": "When did the spacecraft that detected storms on Neptune leave our solar system?",
+   "answer": "August 30, 2007",
+   "cosine": {
+    "pred": "Not answerable",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.5641
+   },
+   "hswm": {
+    "pred": "The context does not provide this information.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.5641
+   },
+   "direct": {
+    "pred": "August 30, 2007",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.6934
+   }
+  },
+  {
+   "id": "3hop1__652852_2053_5289",
+   "hop": "3hop1",
+   "question": "What UK label was purchased by the company that, along with the distributor of The Cube, and ABC, is the other major New York-based broadcaster?",
+   "answer": "Oriole Records.",
+   "cosine": {
+    "pred": "Oriole Records",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9066
+   },
+   "hswm": {
+    "pred": "Oriole Records",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9675
+   },
+   "direct": {
+    "pred": "Oriole Records",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop2__92991_27069_76291",
+   "hop": "3hop2",
+   "question": "When did the party Oklahoma's US Senators come from take control of the body determining the rules of the US House and US Senate?",
+   "answer": "January 2015",
+   "cosine": {
+    "pred": "2014",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8603
+   },
+   "hswm": {
+    "pred": "January 3, 2015",
+    "em": 0.0,
+    "f1": 0.8,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.7123
+   },
+   "direct": {
+    "pred": "January 3, 2015",
+    "em": 0.0,
+    "f1": 0.8,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9469
+   }
+  },
+  {
+   "id": "2hop__143650_152023",
+   "hop": "2hop",
+   "question": "What label was responsible for who sang or played Delta Hardware?",
+   "answer": "Kicking Mule Records",
+   "cosine": {
+    "pred": "Real World Records",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8503
+   },
+   "hswm": {
+    "pred": "Real World Records",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "direct": {
+    "pred": "Real World Records",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "2hop__415518_616002",
+   "hop": "2hop",
+   "question": "What award did the author of The Happy Journey to Trenton and Camden receive?",
+   "answer": "Pulitzer Prize for Drama",
+   "cosine": {
+    "pred": "The provided context does not contain this information.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "hswm": {
+    "pred": "The provided context does not contain the answer.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6131
+   },
+   "direct": {
+    "pred": "Pulitzer Prize for Drama",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop3__800262_466199_695123_72134",
+   "hop": "4hop3",
+   "question": "When did the town WIZE is licensed in become capitol of the state where Green Township is located?",
+   "answer": "1839",
+   "cosine": {
+    "pred": "1809",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "1809",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "1809",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop1__140786_2053_52946",
+   "hop": "3hop1",
+   "question": "When is Celebrity Big Brother coming to the broadcast company that, along with the network of Just Men!?, and ABC, is one of the major broadcasters based in New York?",
+   "answer": "February 7, 2018",
+   "cosine": {
+    "pred": "February 7, 2018",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.3333,
+    "ndcg10_vs_gold": 0.8385
+   },
+   "hswm": {
+    "pred": "February 7, 2018",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.8603
+   },
+   "direct": {
+    "pred": "February 7, 2018",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.7328
+   }
+  },
+  {
+   "id": "4hop3__312119_132409_146285_35031",
+   "hop": "4hop3",
+   "question": "Among the top five largest urban areas in the state where Getting Away with Murder's performer was formed, where does city in which Alexander Golitzen died rank?",
+   "answer": "third-largest",
+   "cosine": {
+    "pred": "not mentioned in the context",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.6367
+   },
+   "hswm": {
+    "pred": "third",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7087
+   },
+   "direct": {
+    "pred": "third",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop1__51465_53706_795904_580996",
+   "hop": "4hop1",
+   "question": "What shares a border with the city where the person who went to the state where most billionaires in America live during the gold rush works?",
+   "answer": "Rio Linda",
+   "cosine": {
+    "pred": "The context does not provide information about a specific person, their workplace, or their travel history during a gold rush. Therefore, the question cannot be answered using ONLY the provided contex",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.25,
+    "ndcg10_vs_gold": 0.5585
+   },
+   "hswm": {
+    "pred": "The provided context does not contain information about billionaires, the state where most billionaires live, or the person's current workplace. Therefore, the question cannot be answered using ONLY t",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7877
+   },
+   "direct": {
+    "pred": "American and Sacramento Rivers",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.9047
+   }
+  },
+  {
+   "id": "3hop2__89854_38738_76291",
+   "hop": "3hop2",
+   "question": "When did the party that holds the majority in the House of Representatives take control of the branch that gives regulators discretion to prohibit proprietary trades?",
+   "answer": "January 2015",
+   "cosine": {
+    "pred": "May 2010",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.6788
+   },
+   "hswm": {
+    "pred": "January 3, 2015",
+    "em": 0.0,
+    "f1": 0.8,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.9675
+   },
+   "direct": {
+    "pred": "January 3, 2015",
+    "em": 0.0,
+    "f1": 0.8,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.672
+   }
+  },
+  {
+   "id": "2hop__153573_45901",
+   "hop": "2hop",
+   "question": "Who did the original voice for the character whose series Mickey's safari in Letterland is from?",
+   "answer": "Walt Disney",
+   "cosine": {
+    "pred": "Walt Disney",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "The context does not provide this information.",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8316
+   },
+   "direct": {
+    "pred": "Walt Disney",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop2__132957_593597_40768",
+   "hop": "3hop2",
+   "question": "When did the maker of Acura Legend, the manufacturer of Scion Fuse and Nissan open US assembly plants?",
+   "answer": "1981",
+   "cosine": {
+    "pred": "A decade after the 1973 oil crisis",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "hswm": {
+    "pred": "by the early 1980s",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.906
+   },
+   "direct": {
+    "pred": "by the early 1980s",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.6871
+   }
+  },
+  {
+   "id": "2hop__557411_652060",
+   "hop": "2hop",
+   "question": "Who is the spouse of the creator of The Nanny Reunion: A Nosh to Remember?",
+   "answer": "Peter Marc Jacobson",
+   "cosine": {
+    "pred": "Peter Marc Jacobson",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 0.9197
+   },
+   "hswm": {
+    "pred": "Information not provided in context",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.8772
+   },
+   "direct": {
+    "pred": "Peter Marc Jacobson",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "3hop2__607269_467331_162182",
+   "hop": "3hop2",
+   "question": "In what region of the country where Ha Hoa is located is the city where Zone 5 Military Museum is found?",
+   "answer": "South Central Coast",
+   "cosine": {
+    "pred": "Northeast region",
+    "em": 0.0,
+    "f1": 0.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.6667,
+    "ndcg10_vs_gold": 0.906
+   },
+   "hswm": {
+    "pred": "South Central Coast",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   },
+   "direct": {
+    "pred": "South Central Coast",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 1.0,
+    "ndcg10_vs_gold": 1.0
+   }
+  },
+  {
+   "id": "4hop1__151650_5274_458768_33677",
+   "hop": "4hop1",
+   "question": "When was the most recent Bicycle Friendly Community Award given to the city where the only group larger than the record label of Desde El Principio is headquartered?",
+   "answer": "2013",
+   "cosine": {
+    "pred": "2013",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7877
+   },
+   "hswm": {
+    "pred": "2013",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.5,
+    "ndcg10_vs_gold": 0.7877
+   },
+   "direct": {
+    "pred": "2013",
+    "em": 1.0,
+    "f1": 1.0,
+    "hit_at_k": 1.0,
+    "sup_recall_at_k": 0.75,
+    "ndcg10_vs_gold": 1.0
+   }
+  }
+ ]
+}

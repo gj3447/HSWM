@@ -1,0 +1,78 @@
+{
+  "schema_version": "engine-decision/v1",
+  "name": "hswm-exploratory-cli-provider-transport",
+  "verdict": "module",
+  "purpose": "Adapt one bounded Claude, Grok, or Codex headless invocation to the existing HSWM OpenAI-compatible transport seam while preserving process identity, isolation strength, exact output, and a tamper-evident terminal receipt.",
+  "current_consumers": [
+    "recorded_llm_extractor.Transport exploratory arm"
+  ],
+  "planned_consumers": [
+    "HSWM development-set extraction comparisons",
+    "operator-selected second-opinion probes",
+    "future local broker only after measured multi-client demand"
+  ],
+  "rationale": [
+    "One current callable consumer does not justify a queue, scheduler, HTTP daemon, or authoritative mutable-state owner.",
+    "The installed CLIs already own authentication, quota, session mechanics, and provider-specific execution; HSWM should not impersonate those control planes.",
+    "A stateless adapter provides the useful API-shaped seam now without moving live calls into the deterministic world compiler.",
+    "Provider-managed CLI model identity is weaker than a content-attested local deployment, so it must remain a separately labelled exploratory arm."
+  ],
+  "boundary": {
+    "owns": "Request validation, provider-specific isolated command construction, bounded subprocess lifecycle, structured-output validation, OpenAI-compatible envelope adaptation, and immutable CLI invocation receipts",
+    "mechanism": "Execute exactly one direct CLI child with shell disabled, a temporary HOME containing only provider authentication, provider-specific capability denial, bounded output and retention, process-group cancellation, provider-native JSON schema, and local exact schema validation",
+    "policy_outside": [
+      "Which exploratory questions or datasets may call a subscription-backed CLI",
+      "Provider account selection, authentication, quota, billing, and terms",
+      "Retries, scheduling, durable queues, HTTP exposure, and multi-tenant admission",
+      "Promotion of any CLI output into a frozen HSWM observation bundle",
+      "Confirmatory H3-B3 model selection and deployment attestation"
+    ],
+    "non_goals": [
+      "Replacing OpenAI, Anthropic, xAI, or local-vLLM APIs",
+      "Serving a network API or retaining long-lived sessions",
+      "Running write-capable agents, MCP servers, web search, repository tools, or subagents",
+      "Claiming content-attested model identity from a provider-managed CLI alias",
+      "Feeding CLI output into the pinned Qwen H3-B3 confirmatory manifest"
+    ],
+    "state_authority": "The module owns no durable mutable state. One in-process instance temporarily owns active child handles and terminal receipts; the caller owns persistence and publication."
+  },
+  "contract": "make_cli_transport(CLIProviderConfigV1, OutputContract) -> CLIProviderTransport; transport(OpenAIRequestV1) -> TransportResponseV1 | CLITransportError(receipt)",
+  "invariants": [
+    "The shell is never invoked and user prompt content never becomes a command-line argument.",
+    "Claude exposes no tools; Grok runs with no configured external capability and a deny-all rule but honestly labels its inert MCP meta-tool surface; Codex is refused unless the caller explicitly accepts soft read-only isolation.",
+    "Every terminal path records provider, requested model, identity strength, executable hash, CLI version, public argv, exact stdout bytes, stderr hash, input and schema hashes, timing, and a self-hash.",
+    "Only a zero-exit, exact UTF-8 JSON result that passes the selected local contract becomes an OpenAI-compatible success envelope.",
+    "Timeout, cancellation, output limit, nonzero exit, duplicate JSON keys, and schema rejection terminate fail closed.",
+    "No credential or environment value is serialized into a receipt; only the names of inherited variables are recorded.",
+    "Each provider inherits only its own credential class; HOME and provider config directories are temporary and transport-controlled.",
+    "Temperature, seed, top-p, message-role priority, and max-token parity are requested but explicitly recorded as not CLI-enforced.",
+    "The executable content hash is rechecked immediately before every spawn, and in-memory receipt retention is bounded.",
+    "The module never mutates compiler, manifest, preflight, falsifier, or H3 result artifacts."
+  ],
+  "failure_model": [
+    "Missing executable or failed version probe rejects transport construction.",
+    "Queue wait and child execution share one caller-visible deadline.",
+    "Cancellation and timeout signal the entire child process group TERM then KILL after a bounded grace period.",
+    "Stdout or stderr overflow immediately terminates the group and publishes an OUTPUT_LIMIT receipt.",
+    "All non-success terminal states raise CLITransportError carrying the validated receipt; no partial result is returned."
+  ],
+  "verification": [
+    "Fake CLI contract tests cover Claude, Grok, and opt-in Codex command shapes and OpenAI envelope mapping.",
+    "Tests cover duplicate keys and non-finite JSON numbers, invalid schema, nonzero exit, timeout, explicit cancellation, parent-interrupt, descendant, and unexpected-capture cleanup, stdout and stderr limits, concurrency and retention bounds, receipt tampering, executable drift, provider-specific credentials, ephemeral homes, and secret non-recording.",
+    "An integration test exercises the unchanged recorded_llm_extractor.Transport callable seam.",
+    "The engine-decision validator checks this module verdict artifact."
+  ],
+  "promotion_gates": [
+    "At least two independent current clients require one stable remote protocol rather than an in-process callable.",
+    "Measured operations require durable jobs, idempotency keys, bounded queues, restart recovery, and explicit backpressure.",
+    "A real service owner, authentication policy, bind policy, quota policy, and schema migration obligation exist.",
+    "Provider terms and supported automation surfaces have been reviewed for the intended deployment context.",
+    "A producer-identity contract separates CLI provenance from hswm-recorded-openai-compatible/v1 without invalidating confirmatory artifacts."
+  ],
+  "falsifiers": [
+    "If a provider cannot maintain the documented no-tool isolation, disable that provider rather than weakening the receipt label.",
+    "If CLI output or model identity cannot be reproduced well enough for an exploratory comparison, use the provider's official API instead.",
+    "If no HSWM consumer uses the callable seam after one development cycle, keep the module unpromoted or archive it.",
+    "If a network broker would merely wrap one local caller, do not manufacture an engine boundary."
+  ]
+}

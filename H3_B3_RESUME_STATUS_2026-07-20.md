@@ -2,11 +2,11 @@
 
 ## Verdict
 
-H3-B3's corrected segment/preflight side is ready for the remaining PRE_RUN
-attestations, not yet for a manifest freeze or fresh evaluation. The
-implementation and nine preflight mechanism gates pass, but no current
-schema-v2 manifest binds a live Qwen deployment to the corrected segments.
-There is no H3-B3 efficacy result.
+H3-B3's corrected segments, PRE_RUN attestations, and pinned Qwen35 deployment
+are now bound by a current schema-v2 manifest. Development extraction is
+OPEN and running under that manifest. Fresh production remains forbidden until both
+development certificates pass and the transition receipt is frozen. There is
+still no H3-B3 efficacy result.
 
 The checked-in `H3_B3_RUN_MANIFEST_2026-07-20.json` and
 `H3_B3_RUN_MANIFEST_V2_2026-07-20.json` are historical receipts. The current
@@ -49,6 +49,7 @@ before freezing a new manifest.
 | `development_embedding_input_v4.jsonl` (3,999) | `99e44c8fd5b7d3935ab4299e0510d620643dd82a4e0ee47a389d078d739b44f4` |
 | `fresh_extraction_input_v4.jsonl` (5,449) | `9bccc338c1d1c8738ab1ea78f6283a462a278516c96b7b9d6832902041892942` |
 | `fresh_embedding_input_v4.jsonl` (5,999) | `4b744d61a571d5cee122ad031a27535c529ab4c40703bfebda9b8c5a446a23bd` |
+| `QWEN35_DEPLOYMENT_RECEIPT_V2_2026-07-20_RETRY1.json` | `15d3880b211c5e21a4087caa55f008d4474323a3d220e05bb47343bcd1f1c0a6` |
 
 Post-fix preflight:
 
@@ -71,31 +72,69 @@ BGE-M3 snapshot attestation:
 
 ## Remote model status
 
-The isolated Precision 7960 launch of
+The guarded Precision 7960 retry `hswm-qwen35-serve-20260720-r1` is serving
 `Qwen/Qwen3.6-35B-A3B-FP8@95a723d08a9490559dae23d0cff1d9466213d989`
-loaded the model but did not become a serving endpoint. vLLM rejected default
-`max_num_seqs=1024` because only 630 Mamba cache blocks were available. The job
-exited with `rc=1`; `dt ls` reports no running HSWM jobs. A retry should set
-`--max-num-seqs 32`, then generate the deployment receipt against the exact
-endpoint used by the extractor.
+with `--max-num-seqs 32` at remote `127.0.0.1:18002`. The Mac tunnel exposes
+the byte-identical endpoint as `http://127.0.0.1:18002/v1`. `/v1/models`
+advertises exactly the pinned alias, and a local `temperature=0`, `seed=0`,
+thinking-disabled probe returned exactly `OK`.
 
-No live Qwen deployment receipt exists yet. Therefore a new confirmatory
-manifest must not be frozen and extraction must not start.
+Deployment receipt:
+
+- ID
+  `hswm:model_deployment:v2:708f23ed73ed15bc5f9e3e8e9440c5d5c2b006bdc191c972516a2c4d1f9a0340`;
+- local ignored path
+  `.ab_p5_cache/h3_b3/QWEN35_DEPLOYMENT_RECEIPT_V2_2026-07-20_RETRY1.json`;
+- file SHA
+  `15d3880b211c5e21a4087caa55f008d4474323a3d220e05bb47343bcd1f1c0a6`.
+
+## Current frozen manifest
+
+`H3_B3_RUN_MANIFEST_V3_2026-07-20.json` is the exclusive-created current
+manifest. It has status `PRE_RUN_FROZEN`, file SHA
+`7f9ec247afbdd11066706837a921159da6480d1c013995dea23b7c3907c284bb`,
+and unused output prefix
+`.ab_p5_cache/h3_b3/runs/qwen35-r1-schema-v2-20260720`. It binds:
+
+- the corrected v4 development and fresh segments;
+- the V3 9/9 preflight receipt and BGE-M3 snapshot attestation;
+- the live Qwen35 deployment receipt and pinned revision;
+- batch-size-1 extraction with concurrency 2; and
+- all development/fresh future paths before any output existed.
+
+## Current development production (in progress)
+
+At `2026-07-20 18:17:37 KST`, development extraction was live with 25 of
+3,599 paragraph attempt rows durably appended. This is progress evidence, not
+an efficacy result or a completed artifact.
+
+- OMD production lease: `orb-b7fdc1537193`, fence `131`, covering only the
+  three committed development extraction lifecycle paths;
+- OPEN receipt ID
+  `hswm:h3_artifact_open:v1:5b5c1dc49467f428c469f64c578157099d0dea7e5caa61a250b60b089fa85eb3`;
+- OPEN receipt file SHA
+  `a5c008974bcdc56ced1702d9d23f909d96f6d49aa7731917afb9ac718bad6b63`;
+- reserved extraction inode `410657328`;
+- local supervisor: tmux session `hswm-h3-dev-extract`, pane PID `59080`;
+- completion log: `/tmp/hswm-h3-b3-dev-extraction-20260720-tmux.log`.
+
+The producer is resumable. A process interruption leaves completed fsynced
+attempt rows on the same reserved inode. Re-running the byte-identical command
+uses terminal rows as cache hits and retries only ERROR/nonterminal sources.
+Do not first-write `extractions.close.json` until the producer exits 0 and the
+full 3,599-source domain loader succeeds.
 
 ## Valid next sequence
 
-1. If any frozen H3 implementation module changes, issue a new exclusive-create
-   preflight receipt; never overwrite the V3 receipt.
-2. Start the pinned Qwen35 revision with `--max-num-seqs 32` inside the guarded
-   remote cgroup and verify `/v1/models` plus one deterministic request.
-3. Generate the deployment receipt from the byte-identical extractor endpoint.
-4. Build a new root-level schema-v2 manifest from the v4 segments, v2 fresh
-   manifests, post-fix preflight, BGE attestation, and Qwen receipt. Use a wholly
-   unused output prefix and batch size 1.
-5. OPEN, produce, domain-validate, and CLOSE development extraction and
-   embeddings through `h3_artifact_lifecycle.py`.
-6. Run `h3_b3_falsifier.py --phase development` only.
-7. If either development certificate refuses, record the refusal and stop.
+1. Preserve the frozen code, preflight, deployment receipt, manifest, OPEN
+   receipt, reserved inode, and output prefix. Any drift requires a new
+   exclusive-created evidence chain.
+2. Let the current development extraction finish. On exit 2 or interruption,
+   rerun the identical producer command; do not replace the JSONL.
+3. Domain-validate and CLOSE extraction, then separately OPEN, produce,
+   domain-validate, and CLOSE the guarded Precision BGE-M3 embedding bundle.
+4. Run `h3_b3_falsifier.py --phase development` only.
+5. If either development certificate refuses, record the refusal and stop.
    Fresh production is allowed only after both development certificates pass
    and a transition receipt is frozen.
 

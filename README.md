@@ -6,7 +6,8 @@
 > legacy layout rather than being confused with positional numpy indices.
 
 Standalone extraction of the `semantic_weight_mapper_prototype` from the SYMPOSIUM
-research programme. Numpy-only, no heavy ML deps.
+research programme. The compiler/field/readout core is NumPy-only; reproducing
+H3 artifact production is a separately attested GPU/LLM workflow.
 
 ## Honest status (read first)
 
@@ -27,12 +28,26 @@ reasoner or a proven production runtime. What is real as of 2026-07-20:
   tuple and otherwise returns a payload-free typed refusal before scoring.
 - ✅ **Field experiments:** additive-j, traversal certification, and stale
   poisoning remain measured research paths with their checked-in receipts.
+- ✅ **Measured efficacy:** the static additive-j field beats the listed cosine,
+  BM25, PPR, and RRF arms on support recall@3, nDCG@10, and downstream F1 in the
+  checked-in 300-row ladder. HSWM alone uses 100 offline LLM judgments per run.
 - ⚠️ **Traversal:** real MuSiQue and 2Wiki certification selected μ=0. It is
   implemented but deployment-OFF on those worlds; S3 therefore falls back to
   the same snapshot's static field instead of claiming a smart graph win.
+- ❌ **Cognitive uplift:** the preregistered cross-dataset claim over direct LLM
+  reranking failed (MuSiQue deltas −0.2566/−0.2317; 2Wiki +0.0414,
+  paired-bootstrap p=0.084; pooled delta −0.1489).
+- ⚠️ **H3:** B1 title-anchor composition is refuted/inconclusive. B3 is
+  implemented and preregistered but confirmatory efficacy is unmeasured; the
+  checked-in run manifests are historical and rejected by the current loader.
 - ❌ **S4 durable revision runtime:** event-folded supersession, as-of replay,
   compensation, concurrent publication, signatures, and external trust
   distribution are not present-tense claims.
+
+See [`EFFICACY.md`](EFFICACY.md) for the full claim ledger, budgets, negative
+results, and reproduction boundaries. `verify_efficacy_claims.py` reconstructs
+the selected numeric headline directly from checked-in JSON receipts and fails
+closed when one of those declared metrics or boundaries drifts.
 
 Score-floor language is layered: the positive semantic residual is per-edge
 `S_sem >= cosine`; temporal decay may intentionally go below cosine, and a
@@ -48,8 +63,10 @@ positive traversal residual does not guarantee ranking/nDCG improvement.
 | `EPWC_IMPLEMENTATION_S0_S2_2026-07-20.md` | implemented-scope, validation, falsifier result, and S3 boundary receipt |
 | `field_snapshot.py` | immutable float64 material, component receipts, and exact field hydration |
 | `certified_readout.py` | certificate-bound retrieve / selection / dispatch / traversal admission |
-| `certified_cut_compare.py` | independent-oracle controls, 10×40 scope checks, and 8 mutant attacks |
+| `certified_cut_compare.py` | independent-oracle controls, 10×40 scope checks, and 9 mutant attacks |
 | `EPWC_IMPLEMENTATION_S3_2026-07-20.md` | S3 implementation and comparison receipt; smart-hypergraph boundary |
+| `EFFICACY.md` / `verify_efficacy_claims.py` | human and machine-readable current efficacy ledger |
+| `H3_B3_RESUME_STATUS_2026-07-20.md` | corrected PRE_RUN boundary, local receipt hashes, and exact next sequence |
 | `world_builder.py` | legacy corpus builder retained as the parity oracle |
 | `hypergraph.py` | reified hypergraph (nodes+embeddings, incidence = field support) |
 | `weight_field.py` | `W(e|c)` = cosine ⊕ base-salience; heuristic scorers |
@@ -68,10 +85,18 @@ positive traversal residual does not guarantee ranking/nDCG improvement.
 
 ```bash
 uv sync --extra dev
+uv run python verify_efficacy_claims.py --pretty
 uv run pytest -q
 uv run python certified_cut_compare.py
-uv run python learned_v3_additive.py   # D1 floor + dev1 efficacy
 ```
+
+The commands above need the core NumPy dependency plus the pytest development
+extra; they need no model endpoint. The real-KG additive-j experiment is a
+separate cache/Neo4j tier:
+`uv run --extra kg python learned_v3_additive.py`. H3 production additionally needs
+PyArrow for 2Wiki decoding, PyTorch/Transformers plus the frozen BGE-M3
+snapshot, and an attested OpenAI-compatible LLM endpoint; source-tree tests do
+not substitute for those runtime receipts.
 
 Real-KG (needs Neo4j): `uv sync --extra kg && NEO4J_URI=bolt://127.0.0.1:7687 uv run --extra kg python neo4j_loader.py`.
 

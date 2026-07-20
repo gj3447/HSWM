@@ -1,5 +1,9 @@
 # EPWC implementation receipt — S0 through S2 (2026-07-20)
 
+> Historical slice receipt. “S3 pending,” test counts, and repository-state
+> statements below describe this exact S0-S2 cut, not current HEAD. See
+> `EPWC_IMPLEMENTATION_S3_2026-07-20.md` and `EFFICACY.md` for the later state.
+
 ## Verdict
 
 HSWM now has an implemented **Evidence-Preserving World Compiler** boundary and

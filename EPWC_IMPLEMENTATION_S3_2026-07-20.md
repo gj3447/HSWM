@@ -1,5 +1,9 @@
 # EPWC implementation receipt — S3 certified cut (2026-07-20)
 
+> Historical slice receipt. Test counts and repository-state statements below
+> are preserved for this exact S3 cut. See `EFFICACY.md` for the current claim
+> boundary and verification command.
+
 ## Verdict
 
 S3 is implemented as two pure modules, not promoted to a durable engine:

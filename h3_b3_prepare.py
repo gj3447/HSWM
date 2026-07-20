@@ -49,6 +49,12 @@ def paragraph_source_id(dataset: str, title: str, text: str) -> str:
     })
 
 
+def _normalized_question(value: Any, *, qid: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"row {qid} lacks a question")
+    return " ".join(value.split())
+
+
 def _normalized_paragraphs(
     dataset: str, row: Mapping[str, Any],
 ) -> tuple[fresh.CompilerParagraphV1, ...]:
@@ -95,7 +101,7 @@ def prepare_development_segment(
             if existing is not None and existing != paragraph:
                 raise ValueError("stable paragraph ID collision")
             paragraphs[paragraph.source_id] = paragraph
-        gold_ids = []
+        gold_id_set: set[str] = set()
         paragraph_ids = []
         seen_paragraph_ids: set[str] = set()
         raw_paragraphs = tuple(row["paragraphs"])
@@ -109,14 +115,17 @@ def prepare_development_segment(
                 seen_paragraph_ids.add(source_id)
                 paragraph_ids.append(source_id)
             if bool(raw.get("is_supporting")):
-                gold_ids.append(source_id)
-        question = row.get("question")
-        if not isinstance(question, str) or not question.strip() or not gold_ids:
-            raise ValueError(f"development row {qid} lacks question or gold evidence")
+                gold_id_set.add(source_id)
+        gold_ids = tuple(
+            source_id for source_id in paragraph_ids if source_id in gold_id_set
+        )
+        question = _normalized_question(row.get("question"), qid=qid)
+        if not gold_ids:
+            raise ValueError(f"development row {qid} lacks gold evidence")
         evaluation.append(EvaluationRowV1(
             dataset=dataset, split="development", qid=qid, question=question,
             paragraph_source_ids=tuple(paragraph_ids),
-            gold_source_ids=tuple(sorted(set(gold_ids))), hop=wb.parse_hop(dict(row)),
+            gold_source_ids=gold_ids, hop=wb.parse_hop(dict(row)),
         ))
     return PreparedSegmentV1(
         dataset=dataset, split="development",
@@ -184,10 +193,15 @@ def prepare_fresh_segment(
         paragraph_ids = tuple(paragraph_ids_list)
         if any(source_id not in paragraph_by_id for source_id in paragraph_ids):
             raise ValueError(f"manifest/raw paragraph identity mismatch for {qid}")
-        gold_ids = tuple(sorted(gold_id_set))
-        question = row.get("question")
-        if not isinstance(question, str) or not question.strip() or not gold_ids:
-            raise ValueError(f"fresh row {qid} lacks question or gold evidence")
+        # Gold evidence is ordered by its first candidate occurrence.  The
+        # evaluator provenance uses the same candidate-order contract; sorting
+        # content hashes here would silently reverse many multi-support chains.
+        gold_ids = tuple(
+            source_id for source_id in paragraph_ids if source_id in gold_id_set
+        )
+        question = _normalized_question(row.get("question"), qid=qid)
+        if not gold_ids:
+            raise ValueError(f"fresh row {qid} lacks gold evidence")
         evaluation.append(EvaluationRowV1(
             dataset=dataset, split="fresh", qid=qid, question=question,
             paragraph_source_ids=paragraph_ids, gold_source_ids=gold_ids,

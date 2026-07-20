@@ -57,3 +57,78 @@ def test_duplicate_paragraph_occurrence_keeps_gold_binding_after_dedup():
     assert len(segment.evaluation_rows[0].paragraph_source_ids) == 2
     assert len(set(segment.evaluation_rows[0].paragraph_source_ids)) == 2
     assert len(segment.evaluation_rows[0].gold_source_ids) == 1
+
+
+def test_development_gold_preserves_candidate_order_not_content_hash_order():
+    supporting = [
+        {"title": title, "paragraph_text": f"Evidence {title}.",
+         "is_supporting": True}
+        for title in ("Alpha", "Beta", "Gamma")
+    ]
+    supporting.sort(
+        key=lambda item: prep.paragraph_source_id(
+            "musique", item["title"], item["paragraph_text"],
+        ),
+        reverse=True,
+    )
+    row = _row("ordered")
+    row["paragraphs"] = supporting
+
+    segment = prep.prepare_development_segment("musique", [row], n_rows=1)
+    evaluation = segment.evaluation_rows[0]
+
+    assert evaluation.gold_source_ids == evaluation.paragraph_source_ids
+    assert evaluation.gold_source_ids != tuple(sorted(evaluation.gold_source_ids))
+
+
+def test_development_question_matches_normalized_provenance_text():
+    row = _row("whitespace")
+    row["question"] = "  Which   evidence\ncomes first?  "
+
+    segment = prep.prepare_development_segment("musique", [row], n_rows=1)
+
+    assert segment.evaluation_rows[0].question == "Which evidence comes first?"
+
+
+def test_fresh_gold_preserves_candidate_order_not_content_hash_order():
+    supporting = [
+        {"title": title, "text": f"Evidence {title}."}
+        for title in ("Delta", "Epsilon", "Zeta")
+    ]
+    supporting.sort(
+        key=lambda item: prep.paragraph_source_id(
+            "2wiki", item["title"], item["text"],
+        ),
+        reverse=True,
+    )
+    paragraphs = [
+        {
+            "source_id": prep.paragraph_source_id("2wiki", item["title"], item["text"]),
+            "title": item["title"],
+            "text": item["text"],
+        }
+        for item in supporting
+    ]
+    raw_row = {
+        "id": "fresh-ordered",
+        "question": "What follows the evidence chain?",
+        "type": "compositional",
+        "context": [
+            [item["title"], [item["text"]]] for item in supporting
+        ],
+        "supporting_facts": [
+            [item["title"], 0] for item in supporting
+        ],
+    }
+    segment = prep.prepare_fresh_segment(
+        {
+            "dataset": "2wiki",
+            "selected_qids": ["fresh-ordered"],
+            "compiler_paragraphs": paragraphs,
+        },
+        [raw_row],
+    )
+    evaluation = segment.evaluation_rows[0]
+
+    assert evaluation.gold_source_ids == evaluation.paragraph_source_ids
+    assert evaluation.gold_source_ids != tuple(sorted(evaluation.gold_source_ids))

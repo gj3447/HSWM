@@ -40,10 +40,11 @@ reasoner or a proven production runtime. What is real as of 2026-07-20:
 - ⚠️ **H3:** B1 title-anchor composition is refuted/inconclusive. B3 is
   implemented and preregistered but confirmatory efficacy is unmeasured; the
   checked-in run manifests are historical and rejected by the current loader.
-- ⚠️ **QKV structure:** exact ordered evidence routing passes 64/64 synthetic
-  teeth, but the no-label B1-QKV development gate fails. K2 loses nDCG to
-  matched K1 on both datasets, so recurrent-query reasoning uplift is not
-  established.
+- ⚠️ **QKV / semantic layers:** exact ordered routing passes 64/64 and the
+  heterogeneous typed branch/map/reduce/lookup kernel passes 128/128 synthetic
+  namespace cases over four templates. The no-label B1 recurrence gate still
+  fails. A 132/132 2Wiki comparison result uses evaluator-supplied facts/path
+  and is executor coverage, not HSWM reasoning efficacy.
 - ❌ **S4 durable revision runtime:** event-folded supersession, as-of replay,
   compensation, concurrent publication, signatures, and external trust
   distribution are not present-tense claims.
@@ -73,6 +74,9 @@ positive traversal residual does not guarantee ranking/nDCG improvement.
 | `H3_B3_RESUME_STATUS_2026-07-20.md` | corrected PRE_RUN boundary, local receipt hashes, and exact next sequence |
 | `QKV_STRUCTURE_EXPERIMENT_PLAN_2026-07-20.md` / `QKV_STRUCTURE_RESULTS_2026-07-20.md` | ordered-routing and B1-QKV development protocol, results, and claim boundary |
 | `qkv_routing.py` / `qkv_b1_probe.py` | exact symbolic QKV routing and no-label dense B1 value-read research kernels |
+| `SEMANTIC_QKV_EXPERIMENT_PLAN_2026-07-20.md` / `SEMANTIC_QKV_RESULTS_2026-07-20.md` | heterogeneous typed-layer protocol, synthetic result, 2Wiki oracle boundary, and next decisive test |
+| `semantic_layer_routing.py` / `semantic_layer_falsifier.py` | common evidence-bound branch/map/reduce/lookup kernel and its exhaustive four-template matrix |
+| `semantic_2wiki_oracle.py` | evaluator-supplied-memory development executor; explicitly not the common kernel or efficacy |
 | `world_builder.py` | legacy corpus builder retained as the parity oracle |
 | `hypergraph.py` | reified hypergraph (nodes+embeddings, incidence = field support) |
 | `weight_field.py` | `W(e|c)` = cosine ⊕ base-salience; heuristic scorers |
@@ -94,6 +98,7 @@ uv sync --extra dev
 uv run python verify_efficacy_claims.py --pretty
 uv run pytest -q
 uv run python certified_cut_compare.py
+uv run python semantic_layer_falsifier.py --pretty
 ```
 
 The commands above need the core NumPy dependency plus the pytest development

@@ -22,7 +22,7 @@ The broader claims do not pass:
 | long-document advantage | **synthetic mechanism only** | no real NoCha/QASPER/NarrativeQA/book-scale result |
 | EPWC + certified readout | **local conformance, not efficacy** | deterministic compiler and fail-closed admission tests |
 | H3 relation composition | **not established** | B1 title-anchor result is refuted/inconclusive; B3 confirmatory efficacy is unmeasured |
-| QKV-style recurrent query state | **synthetic mechanism passes; B1 real-data gate fails** | 64/64 ordered-routing teeth; K2 loses nDCG to matched K1 on both development datasets |
+| QKV / semantic-layer query state | **heterogeneous supplied-program mechanism passes; deployable uplift unproved** | 128/128 synthetic namespace cases over 4 templates; B1 recurrence fails; 2Wiki 132/132 uses evaluator-supplied facts/path |
 | S4 durable revision runtime | **absent** | no replay/WAL/concurrent publication/signature system |
 
 Run `python verify_efficacy_claims.py --pretty` to reconstruct the selected
@@ -171,6 +171,47 @@ Sources: `QKV_STRUCTURE_EXPERIMENT_PLAN_2026-07-20.md`,
 `QKV_STRUCTURE_RESULTS_2026-07-20.md`, `qkv_routing_result.json`, and
 `qkv_b1_development_result.json`.
 
+### Heterogeneous semantic layers
+
+The failed B1 probe stacked homogeneous paragraph-vector reads. The corrected
+mechanism changes state type, arity, and operator:
+
+```text
+Person -> BranchSet[Person] -> BranchSet[(Person, Date)]
+       -> Selected[Person] -> City
+```
+
+The common synthetic kernel passes all 128 registered namespace cases, which
+are four unique semantic templates replicated across 32 content-addressed
+world IDs. A matched fixed-state control preserves reducer, types, keys, and
+Value multiset but erases branch associations; it reaches 64/128 terminals.
+An explicit association-erased typed state passed to the common reducer refuses
+128/128 without inventing a pairing. Type/order/integrity mutations fail closed,
+and the treatment receipts are deterministic and hash-chained.
+
+This establishes a narrow supplied-program mechanism. It does not establish
+learning, raw-language program induction, or real-data uplift.
+
+A separate 2Wiki development executor reproduces 132/132 selected comparison
+and bridge-comparison terminals; with 68 out-of-family rows counted as refusals,
+coverage/exactness is 132/200 (66%). That result is evaluator-oracle-shaped:
+evidence triples supply facts and path schema, can contain the answer, and use
+triple hashes instead of exact paragraph selectors. It is also a bespoke
+dataset executor rather than the common synthetic kernel. Type erasure reaches
+80/132 and strict entity resolution 109/132, useful development teeth but not
+HSWM efficacy.
+
+The corrected verdict is: **heterogeneous semantic layering is now an
+implemented narrow mechanism, while deployable no-label reasoning remains
+unmeasured.** The next valid test needs complete current-manifest B3 development
+memory plus an independently frozen raw-question program compiler. The
+historical partial cache has zero queries with all required gold facts usable,
+so no gold-conditioned subset is allowed.
+
+Sources: `SEMANTIC_QKV_EXPERIMENT_PLAN_2026-07-20.md`,
+`SEMANTIC_QKV_RESULTS_2026-07-20.md`, `semantic_layer_result.json`, and
+`semantic_2wiki_oracle_result.json`.
+
 ## 4. Graded supersession: useful behavior, narrower novelty
 
 At full dose `b=0.1`, a non-destructive supersede write reduces the maximally
@@ -244,5 +285,6 @@ receipts.
 - no real book-scale advantage;
 - no H3-B3 confirmatory efficacy result;
 - no real-data reasoning uplift from the current QKV-style recurrent query state;
+- no deployable reasoning uplift from the supplied heterogeneous semantic program;
 - no state-of-the-art retrieval comparison;
 - no production durability, external trust, or cryptographic certificate claim.

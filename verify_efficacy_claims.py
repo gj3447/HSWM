@@ -44,6 +44,28 @@ def _verify_result_self_hash(value: Mapping[str, Any], *, label: str) -> None:
     _require(declared == actual, f"{label} result self-hash drifted")
 
 
+def _verify_source_bindings(
+    root: Path, value: Mapping[str, Any], *, label: str,
+) -> None:
+    bindings = value.get("source_bindings")
+    _require(
+        isinstance(bindings, Mapping) and bool(bindings),
+        f"{label} source bindings are absent",
+    )
+    for name, declared in bindings.items():
+        path = root / str(name)
+        try:
+            actual = sha256(path.read_bytes()).hexdigest()
+        except OSError as exc:
+            raise EfficacyClaimError(
+                f"{label} cannot read source-bound file {name}: {exc}"
+            ) from exc
+        _require(
+            declared == actual,
+            f"{label} source binding drifted for {name}",
+        )
+
+
 def _require(condition: bool, message: str) -> None:
     if not condition:
         raise EfficacyClaimError(message)
@@ -96,6 +118,8 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
     title_anchor = _load(repo, "h3_title_anchor_result.json")
     qkv_routing = _load(repo, "qkv_routing_result.json")
     qkv_b1 = _load(repo, "qkv_b1_development_result.json")
+    semantic_layer = _load(repo, "semantic_layer_result.json")
+    semantic_2wiki = _load(repo, "semantic_2wiki_oracle_result.json")
 
     overall = substrate.get("aggregate", {}).get("overall", {})
     downstream = substrate.get("downstream_f1", {}).get("aggregate_f1_em", {})
@@ -347,6 +371,72 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
             ),
         }
 
+    _verify_result_self_hash(semantic_layer, label="semantic-layer synthetic")
+    _verify_source_bindings(repo, semantic_layer, label="semantic-layer synthetic")
+    semantic_counts = semantic_layer.get("counts", {})
+    _require(
+        semantic_layer.get("verdict")
+        == "SYNTHETIC_HETEROGENEOUS_TYPED_LAYER_MECHANISM_PASS"
+        and semantic_layer.get("all_gates_pass") is True
+        and semantic_layer.get("n_cases") == 128
+        and semantic_layer.get("n_unique_semantic_templates") == 4
+        and semantic_counts.get("typed_exact") == 128
+        and semantic_counts.get("homogeneous_repeat_exact") == 64
+        and semantic_counts.get("branch_erasure_atomic_refused") == 128
+        and semantic_counts.get("receipt_envelope_hash_chain_valid") == 128
+        and all(semantic_layer.get("gates", {}).values()),
+        "heterogeneous semantic-layer synthetic gates drifted",
+    )
+
+    _verify_result_self_hash(semantic_2wiki, label="2Wiki semantic executor")
+    _verify_source_bindings(repo, semantic_2wiki, label="2Wiki semantic executor")
+    semantic_cohort = semantic_2wiki.get("cohort", {})
+    semantic_primary = semantic_2wiki.get("primary", {})
+    semantic_full = semantic_2wiki.get("full_development_refusal_counted", {})
+    semantic_controls = semantic_2wiki.get("controls", {})
+    _require(
+        semantic_2wiki.get("status") == "DEVELOPMENT_EXECUTOR_COVERAGE_PROBE"
+        and semantic_cohort.get("segment_qids") == 200
+        and semantic_cohort.get("eligible") == 132
+        and semantic_cohort.get("excluded") == 68
+        and semantic_cohort.get("operator_counts") == {
+            "ARGMAX_DATE": 30,
+            "ARGMIN_DATE": 75,
+            "LIFESPAN_ARGMAX": 2,
+            "SET_OVERLAP_BOOL": 25,
+        }
+        and semantic_primary == {
+            "exact": 132, "n": 132, "refused": 0, "supported": 132,
+        }
+        and semantic_full.get("n") == 200
+        and semantic_full.get("exact") == 132
+        and math.isclose(
+            float(semantic_full.get("exact_rate", math.nan)),
+            0.66, rel_tol=0.0, abs_tol=1e-12,
+        ),
+        "2Wiki evaluator-supplied semantic executor primary accounting drifted",
+    )
+    for control, expected_exact, expected_refused in (
+        ("REDUCER_INVERT", 0, 0),
+        ("TYPE_ERASED", 80, 2),
+        ("RESOLVE_OFF", 109, 23),
+        ("BRANCH_ERASURE", 0, 132),
+        ("TYPE_NULL", 0, 132),
+        ("EVIDENCE_NULL", 0, 132),
+        ("K1_TRUNCATE", 0, 132),
+    ):
+        row = semantic_controls.get(control, {})
+        _require(
+            row.get("exact") == expected_exact
+            and row.get("refused") == expected_refused,
+            f"2Wiki semantic control {control} drifted",
+        )
+    _require(
+        semantic_2wiki.get("boundary", {}).get("answer_join_claim")
+        == "ordering_check_only_not_information_isolation",
+        "2Wiki semantic answer-information boundary drifted",
+    )
+
     return {
         "schema_version": SCHEMA_VERSION,
         "retrieval_substrate": {
@@ -430,9 +520,30 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
             "synthetic_ordered_routing": "PASS_64_OF_64",
             "b1_real_data_development": "CROSS_DATASET_GATE_FAILED",
             "k2_minus_matched_k1": qkv_deltas,
+            "heterogeneous_semantic_fixture": {
+                "status": "PASS_128_NAMESPACE_CASES_4_UNIQUE_TEMPLATES",
+                "typed_exact": semantic_counts["typed_exact"],
+                "homogeneous_association_erased_exact": semantic_counts[
+                    "homogeneous_repeat_exact"
+                ],
+                "branch_erasure_atomic_refused": semantic_counts[
+                    "branch_erasure_atomic_refused"
+                ],
+            },
+            "2wiki_evaluator_supplied_memory": {
+                "status": "EXECUTOR_COVERAGE_NOT_EFFICACY",
+                "conditional_exact": semantic_primary["exact"],
+                "conditional_n": semantic_primary["n"],
+                "full_development_refusal_counted_exact_rate": semantic_full[
+                    "exact_rate"
+                ],
+                "type_erased_exact": semantic_controls["TYPE_ERASED"]["exact"],
+                "resolver_off_exact": semantic_controls["RESOLVE_OFF"]["exact"],
+            },
             "boundary": (
-                "QKV routing is mechanically coherent; current title-value "
-                "recurrence does not establish real-data reasoning uplift"
+                "Supplied heterogeneous typed programs execute coherently, but "
+                "the deployable no-label arm remains absent and current "
+                "title-value recurrence does not establish reasoning uplift"
             ),
         },
     }

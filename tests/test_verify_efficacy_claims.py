@@ -60,9 +60,24 @@ def test_checked_in_efficacy_snapshot_matches_public_claims() -> None:
                 "asr10_k2_minus_k1": 0.010204,
             },
         },
+        "heterogeneous_semantic_fixture": {
+            "status": "PASS_128_NAMESPACE_CASES_4_UNIQUE_TEMPLATES",
+            "typed_exact": 128,
+            "homogeneous_association_erased_exact": 64,
+            "branch_erasure_atomic_refused": 128,
+        },
+        "2wiki_evaluator_supplied_memory": {
+            "status": "EXECUTOR_COVERAGE_NOT_EFFICACY",
+            "conditional_exact": 132,
+            "conditional_n": 132,
+            "full_development_refusal_counted_exact_rate": 0.66,
+            "type_erased_exact": 80,
+            "resolver_off_exact": 109,
+        },
         "boundary": (
-            "QKV routing is mechanically coherent; current title-value "
-            "recurrence does not establish real-data reasoning uplift"
+            "Supplied heterogeneous typed programs execute coherently, but "
+            "the deployable no-label arm remains absent and current "
+            "title-value recurrence does not establish reasoning uplift"
         ),
     }
 
@@ -83,6 +98,13 @@ def test_headline_drift_fails_closed(tmp_path: Path) -> None:
         "h3_title_anchor_result.json",
         "qkv_routing_result.json",
         "qkv_b1_development_result.json",
+        "semantic_layer_result.json",
+        "semantic_2wiki_oracle_result.json",
+        "SEMANTIC_QKV_EXPERIMENT_PLAN_2026-07-20.md",
+        "semantic_layer_falsifier.py",
+        "semantic_layer_fixture_manifest.json",
+        "semantic_layer_routing.py",
+        "semantic_2wiki_oracle.py",
     )
     for name in names:
         (tmp_path / name).write_bytes((REPO_ROOT / name).read_bytes())

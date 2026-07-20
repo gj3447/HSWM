@@ -1,97 +1,181 @@
 {
  "dataset": "musique",
  "n_poisoned_queries": 200,
+ "metric_population": {
+  "primary": "hop in {2,3} (preregistered current-fact/H-T3b population)",
+  "n_primary_hop2_3": 134,
+  "n_all_hops": 200,
+  "hop_composition_all": {
+   "2": 67,
+   "3": 67,
+   "4": 66
+  },
+  "cur_alias": "cur == cur_hop2_3; cur_all_hops is reported separately"
+ },
  "per_dose": {
   "0.5": {
    "a": {
     "stale": 0.565,
-    "cur": 0.5367,
+    "cur_hop2_3": 0.6182,
+    "cur_all_hops": 0.5367,
     "audit": 1.0,
-    "audit_rank": 2.005
+    "audit_rank": 2.005,
+    "cur": 0.6182
    },
    "b": {
     "stale": 0.0,
-    "cur": 0.5475,
+    "cur_hop2_3": 0.6306,
+    "cur_all_hops": 0.5475,
     "audit": 1.0,
-    "audit_rank": 1.0
+    "audit_rank": 1.0,
+    "cur": 0.6306
    },
    "c": {
     "stale": 0.515,
-    "cur": 0.4767,
+    "cur_hop2_3": 0.5286,
+    "cur_all_hops": 0.4767,
     "audit": 0.87,
-    "audit_rank": 4.32
+    "audit_rank": 4.32,
+    "cur": 0.5286
    },
    "d": {
     "stale": 0.515,
-    "cur": 0.4767,
+    "cur_hop2_3": 0.5286,
+    "cur_all_hops": 0.4767,
     "audit": 0.945,
-    "audit_rank": 3.515
+    "audit_rank": 3.515,
+    "cur": 0.5286
+   },
+   "e": {
+    "stale": 0.565,
+    "cur_hop2_3": 0.6182,
+    "cur_all_hops": 0.5367,
+    "audit": 1.0,
+    "audit_rank": 2.005,
+    "cur": 0.6182
    },
    "_n": 200,
-   "_cos_err_max": 0.0028
+   "_n_all_hops": 200,
+   "_n_primary_hop2_3": 134,
+   "_cos_err_max": 0.0028,
+   "_a_e_equivalence": {
+    "current_max_abs": 0.0,
+    "audit_max_abs": 0.0,
+    "current_rank_bit_exact": true,
+    "audit_rank_bit_exact": true
+   }
   },
   "0.25": {
    "a": {
     "stale": 0.145,
-    "cur": 0.5475,
+    "cur_hop2_3": 0.6306,
+    "cur_all_hops": 0.5475,
     "audit": 1.0,
-    "audit_rank": 2.03
+    "audit_rank": 2.03,
+    "cur": 0.6306
    },
    "b": {
     "stale": 0.0,
-    "cur": 0.5475,
+    "cur_hop2_3": 0.6306,
+    "cur_all_hops": 0.5475,
     "audit": 1.0,
-    "audit_rank": 1.0
+    "audit_rank": 1.0,
+    "cur": 0.6306
    },
    "c": {
     "stale": 0.15,
-    "cur": 0.4858,
+    "cur_hop2_3": 0.5386,
+    "cur_all_hops": 0.4858,
     "audit": 0.865,
-    "audit_rank": 4.88
+    "audit_rank": 4.88,
+    "cur": 0.5386
    },
    "d": {
     "stale": 0.155,
-    "cur": 0.4879,
+    "cur_hop2_3": 0.5435,
+    "cur_all_hops": 0.4879,
     "audit": 0.875,
-    "audit_rank": 4.605
+    "audit_rank": 4.605,
+    "cur": 0.5435
+   },
+   "e": {
+    "stale": 0.145,
+    "cur_hop2_3": 0.6306,
+    "cur_all_hops": 0.5475,
+    "audit": 1.0,
+    "audit_rank": 2.03,
+    "cur": 0.6306
    },
    "_n": 200,
-   "_cos_err_max": 0.0028
+   "_n_all_hops": 200,
+   "_n_primary_hop2_3": 134,
+   "_cos_err_max": 0.0028,
+   "_a_e_equivalence": {
+    "current_max_abs": 0.0,
+    "audit_max_abs": 0.0,
+    "current_rank_bit_exact": true,
+    "audit_rank_bit_exact": true
+   }
   },
   "0.1": {
    "a": {
     "stale": 0.0,
-    "cur": 0.5475,
+    "cur_hop2_3": 0.6306,
+    "cur_all_hops": 0.5475,
     "audit": 1.0,
-    "audit_rank": 2.46
+    "audit_rank": 2.46,
+    "cur": 0.6306
    },
    "b": {
     "stale": 0.0,
-    "cur": 0.5475,
+    "cur_hop2_3": 0.6306,
+    "cur_all_hops": 0.5475,
     "audit": 1.0,
-    "audit_rank": 1.0
+    "audit_rank": 1.0,
+    "cur": 0.6306
    },
    "c": {
     "stale": 0.045,
-    "cur": 0.4975,
+    "cur_hop2_3": 0.556,
+    "cur_all_hops": 0.4975,
     "audit": 0.88,
-    "audit_rank": 7.495
+    "audit_rank": 7.495,
+    "cur": 0.556
    },
    "d": {
     "stale": 0.045,
-    "cur": 0.4963,
+    "cur_hop2_3": 0.556,
+    "cur_all_hops": 0.4963,
     "audit": 0.92,
-    "audit_rank": 5.915
+    "audit_rank": 5.915,
+    "cur": 0.556
+   },
+   "e": {
+    "stale": 0.0,
+    "cur_hop2_3": 0.6306,
+    "cur_all_hops": 0.5475,
+    "audit": 1.0,
+    "audit_rank": 2.46,
+    "cur": 0.6306
    },
    "_n": 200,
-   "_cos_err_max": 0.0028
+   "_n_all_hops": 200,
+   "_n_primary_hop2_3": 134,
+   "_cos_err_max": 0.0028,
+   "_a_e_equivalence": {
+    "current_max_abs": 0.0,
+    "audit_max_abs": 0.0,
+    "current_rank_bit_exact": true,
+    "audit_rank_bit_exact": true
+   }
   }
  },
- "dose_response_spearman(dose→rank, graded arms should be ρ<0 or >0 monotone)": {
-  "a": -0.99,
+ "dose_response_spearman_midrank(dose→rank; graded expected rho<0)": {
+  "a": -0.9853,
   "b": 0.0,
-  "c": -0.89,
-  "d": -0.8825
+  "c": -0.8805,
+  "d": -0.8748,
+  "e": -0.9853
  },
  "kill_i": {
   "survives": false,
@@ -101,13 +185,623 @@
  },
  "kill_ii": {
   "fires": false,
+  "current_population": "hop2-3",
+  "n_current": 134,
   "meaning": "kill(ii) does not fire (graded arm keeps a metric the filter cannot express)"
  },
- "kill_iii": "DEFERRED (arm (e) separated-graded not implemented — OPEN)",
+ "kill_iii": {
+  "fires": true,
+  "primary_dose": 0.1,
+  "current_population": "hop2-3",
+  "metrics": {
+   "stale_suppression": {
+    "n": 200,
+    "mean_advantage_d_vs_e": -0.045,
+    "2se": 0.0294,
+    "beats_over_2se": false
+   },
+   "current_recall": {
+    "n": 134,
+    "mean_advantage_d_vs_e": -0.0746,
+    "2se": 0.0389,
+    "beats_over_2se": false
+   },
+   "historical_audit_recall": {
+    "n": 200,
+    "mean_advantage_d_vs_e": -0.08,
+    "2se": 0.0385,
+    "beats_over_2se": false
+   },
+   "dose_response": {
+    "n": 200,
+    "mean_advantage_d_vs_e": -0.1105,
+    "2se": 0.0565,
+    "beats_over_2se": false
+   }
+  },
+  "arm_a_vs_e_bit_exact": true,
+  "meaning": "KILL(iii): separated-graded arm (e) is not beaten on any prereg metric by >2se; one-field-only retrieval capability retracts"
+ },
+ "arm_a_vs_e_equivalence_receipt": {
+  "0.5": {
+   "current_max_abs": 0.0,
+   "audit_max_abs": 0.0,
+   "current_rank_bit_exact": true,
+   "audit_rank_bit_exact": true
+  },
+  "0.25": {
+   "current_max_abs": 0.0,
+   "audit_max_abs": 0.0,
+   "current_rank_bit_exact": true,
+   "audit_rank_bit_exact": true
+  },
+  "0.1": {
+   "current_max_abs": 0.0,
+   "audit_max_abs": 0.0,
+   "current_rank_bit_exact": true,
+   "audit_rank_bit_exact": true
+  }
+ },
+ "pointwise_current_recall_delta_vs_hard_filter": {
+  "0.5": -0.0124,
+  "0.25": 0.0,
+  "0.1": 0.0
+ },
+ "pointwise_current_recall_delta_vs_hard_filter_all_hops": {
+  "0.5": -0.0108,
+  "0.25": 0.0,
+  "0.1": 0.0
+ },
  "collateral_H_T3b_current_recall_after_WRONG_supersede": {
+  "0.5": 0.5299,
+  "0.25": 0.5037,
+  "0.1": 0.5037
+ },
+ "collateral_H_T3b_current_recall_after_WRONG_supersede_all_hops": {
   "0.5": 0.48,
   "0.25": 0.4625,
   "0.1": 0.4625
  },
- "scope": "traversal arms are FORCED-μ probes (deployment refused μ>0 in T5); pointwise arm (a) is the deployed readout"
+ "actual_supersede_write_receipts": {
+  "injected_stale": {
+   "0.5": {
+    "count": 200,
+    "write_path": "readouts.supersede",
+    "all_applied_exactly": true,
+    "sha256": "06c0ec0ba01e022839ee386161b7308d7c8d0b8923c12ce2f0a222270e9aabb2"
+   },
+   "0.25": {
+    "count": 200,
+    "write_path": "readouts.supersede",
+    "all_applied_exactly": true,
+    "sha256": "7a8dfcdbc9209646d23c1b966ffe5a71624ac47983ea428ce809181194829875"
+   },
+   "0.1": {
+    "count": 200,
+    "write_path": "readouts.supersede",
+    "all_applied_exactly": true,
+    "sha256": "1c4849be5415339855cf146d2bb5d2df488eb2320d0b8e549f5f405c58248e58"
+   }
+  },
+  "wrong_supersede_collateral": {
+   "0.5": {
+    "count": 200,
+    "write_path": "readouts.supersede",
+    "all_applied_exactly": true,
+    "sha256": "df235a9e80a3d5c963e0d959c19b0826fdf0536639d8d79a772b8d5830912df6"
+   },
+   "0.25": {
+    "count": 200,
+    "write_path": "readouts.supersede",
+    "all_applied_exactly": true,
+    "sha256": "3027e6294901b183ca49ded932cb098ecf302630e0a6a469721a06fb8e11d8d9"
+   },
+   "0.1": {
+    "count": 200,
+    "write_path": "readouts.supersede",
+    "all_applied_exactly": true,
+    "sha256": "33a7cf621ea4fba80cca182d643472816125c65cec0ef68dbbe9350d4f9f9e3d"
+   }
+  },
+  "collateral_trial_reset": "direct restore after measurement; not a production write"
+ },
+ "traversal_trip_receipts": {
+  "0.5": {
+   "c": {
+    "current": {
+     "calls": 200,
+     "trips": 182,
+     "trip_rate": 0.91,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 73,
+      "kept_mass 0.909 < 0.95": 1,
+      "kept_mass 0.913 < 0.95": 1,
+      "kept_mass 0.919 < 0.95": 1,
+      "kept_mass 0.920 < 0.95": 1,
+      "kept_mass 0.922 < 0.95": 1,
+      "kept_mass 0.923 < 0.95": 2,
+      "kept_mass 0.925 < 0.95": 1,
+      "kept_mass 0.927 < 0.95": 2,
+      "kept_mass 0.928 < 0.95": 1,
+      "kept_mass 0.929 < 0.95": 2,
+      "kept_mass 0.930 < 0.95": 2,
+      "kept_mass 0.931 < 0.95": 2,
+      "kept_mass 0.933 < 0.95": 5,
+      "kept_mass 0.934 < 0.95": 3,
+      "kept_mass 0.935 < 0.95": 3,
+      "kept_mass 0.936 < 0.95": 4,
+      "kept_mass 0.937 < 0.95": 2,
+      "kept_mass 0.938 < 0.95": 1,
+      "kept_mass 0.939 < 0.95": 3,
+      "kept_mass 0.940 < 0.95": 1,
+      "kept_mass 0.941 < 0.95": 2,
+      "kept_mass 0.942 < 0.95": 1,
+      "kept_mass 0.943 < 0.95": 2,
+      "kept_mass 0.944 < 0.95": 1,
+      "kept_mass 0.945 < 0.95": 1,
+      "kept_mass 0.946 < 0.95": 2,
+      "kept_mass 0.947 < 0.95": 4,
+      "kept_mass 0.948 < 0.95": 1,
+      "kept_mass 0.949 < 0.95": 3,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 52,
+      "n_eff 1.27 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.477,
+     "greedy_path_entries": 3200
+    },
+    "audit": {
+     "calls": 200,
+     "trips": 166,
+     "trip_rate": 0.83,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 36,
+      "kept_mass 0.919 < 0.95": 1,
+      "kept_mass 0.923 < 0.95": 1,
+      "kept_mass 0.924 < 0.95": 1,
+      "kept_mass 0.925 < 0.95": 1,
+      "kept_mass 0.927 < 0.95": 1,
+      "kept_mass 0.928 < 0.95": 2,
+      "kept_mass 0.929 < 0.95": 1,
+      "kept_mass 0.930 < 0.95": 1,
+      "kept_mass 0.931 < 0.95": 3,
+      "kept_mass 0.932 < 0.95": 1,
+      "kept_mass 0.933 < 0.95": 2,
+      "kept_mass 0.934 < 0.95": 2,
+      "kept_mass 0.936 < 0.95": 2,
+      "kept_mass 0.938 < 0.95": 2,
+      "kept_mass 0.940 < 0.95": 1,
+      "kept_mass 0.942 < 0.95": 1,
+      "kept_mass 0.943 < 0.95": 2,
+      "kept_mass 0.944 < 0.95": 3,
+      "kept_mass 0.945 < 0.95": 3,
+      "kept_mass 0.946 < 0.95": 3,
+      "kept_mass 0.947 < 0.95": 5,
+      "kept_mass 0.948 < 0.95": 3,
+      "kept_mass 0.949 < 0.95": 4,
+      "kept_mass 0.950 < 0.95": 1,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 79,
+      "n_eff 1.14 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.28 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.33 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.38 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.6652,
+     "greedy_path_entries": 3200
+    }
+   },
+   "d": {
+    "current": {
+     "calls": 200,
+     "trips": 182,
+     "trip_rate": 0.91,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 72,
+      "kept_mass 0.909 < 0.95": 1,
+      "kept_mass 0.912 < 0.95": 2,
+      "kept_mass 0.919 < 0.95": 1,
+      "kept_mass 0.920 < 0.95": 1,
+      "kept_mass 0.922 < 0.95": 3,
+      "kept_mass 0.926 < 0.95": 1,
+      "kept_mass 0.927 < 0.95": 2,
+      "kept_mass 0.928 < 0.95": 4,
+      "kept_mass 0.930 < 0.95": 2,
+      "kept_mass 0.931 < 0.95": 2,
+      "kept_mass 0.932 < 0.95": 2,
+      "kept_mass 0.933 < 0.95": 5,
+      "kept_mass 0.934 < 0.95": 4,
+      "kept_mass 0.935 < 0.95": 1,
+      "kept_mass 0.936 < 0.95": 1,
+      "kept_mass 0.937 < 0.95": 1,
+      "kept_mass 0.938 < 0.95": 2,
+      "kept_mass 0.939 < 0.95": 3,
+      "kept_mass 0.940 < 0.95": 1,
+      "kept_mass 0.941 < 0.95": 3,
+      "kept_mass 0.942 < 0.95": 1,
+      "kept_mass 0.943 < 0.95": 1,
+      "kept_mass 0.944 < 0.95": 2,
+      "kept_mass 0.945 < 0.95": 2,
+      "kept_mass 0.946 < 0.95": 1,
+      "kept_mass 0.947 < 0.95": 2,
+      "kept_mass 0.948 < 0.95": 3,
+      "kept_mass 0.949 < 0.95": 3,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 52,
+      "n_eff 1.27 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.3962,
+     "greedy_path_entries": 3200
+    },
+    "audit": {
+     "calls": 200,
+     "trips": 175,
+     "trip_rate": 0.875,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 37,
+      "kept_mass 0.918 < 0.95": 1,
+      "kept_mass 0.920 < 0.95": 1,
+      "kept_mass 0.923 < 0.95": 1,
+      "kept_mass 0.924 < 0.95": 1,
+      "kept_mass 0.925 < 0.95": 1,
+      "kept_mass 0.926 < 0.95": 1,
+      "kept_mass 0.927 < 0.95": 3,
+      "kept_mass 0.928 < 0.95": 2,
+      "kept_mass 0.931 < 0.95": 1,
+      "kept_mass 0.933 < 0.95": 2,
+      "kept_mass 0.934 < 0.95": 1,
+      "kept_mass 0.935 < 0.95": 1,
+      "kept_mass 0.936 < 0.95": 2,
+      "kept_mass 0.937 < 0.95": 2,
+      "kept_mass 0.938 < 0.95": 1,
+      "kept_mass 0.939 < 0.95": 1,
+      "kept_mass 0.940 < 0.95": 1,
+      "kept_mass 0.941 < 0.95": 3,
+      "kept_mass 0.943 < 0.95": 10,
+      "kept_mass 0.944 < 0.95": 2,
+      "kept_mass 0.945 < 0.95": 5,
+      "kept_mass 0.946 < 0.95": 1,
+      "kept_mass 0.947 < 0.95": 4,
+      "kept_mass 0.948 < 0.95": 4,
+      "kept_mass 0.949 < 0.95": 1,
+      "kept_mass 0.950 < 0.95": 1,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 80,
+      "n_eff 1.13 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.28 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.33 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.35 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.2947,
+     "greedy_path_entries": 3200
+    }
+   }
+  },
+  "0.25": {
+   "c": {
+    "current": {
+     "calls": 200,
+     "trips": 182,
+     "trip_rate": 0.91,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 76,
+      "kept_mass 0.909 < 0.95": 1,
+      "kept_mass 0.913 < 0.95": 1,
+      "kept_mass 0.919 < 0.95": 2,
+      "kept_mass 0.921 < 0.95": 2,
+      "kept_mass 0.922 < 0.95": 1,
+      "kept_mass 0.925 < 0.95": 1,
+      "kept_mass 0.926 < 0.95": 1,
+      "kept_mass 0.927 < 0.95": 3,
+      "kept_mass 0.928 < 0.95": 1,
+      "kept_mass 0.929 < 0.95": 3,
+      "kept_mass 0.930 < 0.95": 2,
+      "kept_mass 0.931 < 0.95": 2,
+      "kept_mass 0.933 < 0.95": 5,
+      "kept_mass 0.934 < 0.95": 2,
+      "kept_mass 0.935 < 0.95": 4,
+      "kept_mass 0.937 < 0.95": 3,
+      "kept_mass 0.938 < 0.95": 2,
+      "kept_mass 0.939 < 0.95": 2,
+      "kept_mass 0.940 < 0.95": 1,
+      "kept_mass 0.941 < 0.95": 1,
+      "kept_mass 0.942 < 0.95": 3,
+      "kept_mass 0.944 < 0.95": 1,
+      "kept_mass 0.945 < 0.95": 1,
+      "kept_mass 0.946 < 0.95": 2,
+      "kept_mass 0.947 < 0.95": 2,
+      "kept_mass 0.948 < 0.95": 3,
+      "kept_mass 0.949 < 0.95": 2,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 51,
+      "n_eff 1.27 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.408,
+     "greedy_path_entries": 3200
+    },
+    "audit": {
+     "calls": 200,
+     "trips": 173,
+     "trip_rate": 0.865,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 35,
+      "kept_mass 0.919 < 0.95": 1,
+      "kept_mass 0.923 < 0.95": 1,
+      "kept_mass 0.924 < 0.95": 1,
+      "kept_mass 0.925 < 0.95": 1,
+      "kept_mass 0.927 < 0.95": 1,
+      "kept_mass 0.928 < 0.95": 3,
+      "kept_mass 0.930 < 0.95": 2,
+      "kept_mass 0.931 < 0.95": 3,
+      "kept_mass 0.933 < 0.95": 2,
+      "kept_mass 0.934 < 0.95": 3,
+      "kept_mass 0.935 < 0.95": 1,
+      "kept_mass 0.936 < 0.95": 4,
+      "kept_mass 0.937 < 0.95": 1,
+      "kept_mass 0.940 < 0.95": 1,
+      "kept_mass 0.943 < 0.95": 3,
+      "kept_mass 0.944 < 0.95": 2,
+      "kept_mass 0.945 < 0.95": 4,
+      "kept_mass 0.946 < 0.95": 1,
+      "kept_mass 0.947 < 0.95": 3,
+      "kept_mass 0.948 < 0.95": 9,
+      "kept_mass 0.949 < 0.95": 3,
+      "kept_mass 0.950 < 0.95": 5,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 79,
+      "n_eff 1.14 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.28 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.33 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.38 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.3678,
+     "greedy_path_entries": 3200
+    }
+   },
+   "d": {
+    "current": {
+     "calls": 200,
+     "trips": 182,
+     "trip_rate": 0.91,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 74,
+      "kept_mass 0.903 < 0.95": 1,
+      "kept_mass 0.909 < 0.95": 1,
+      "kept_mass 0.912 < 0.95": 1,
+      "kept_mass 0.913 < 0.95": 1,
+      "kept_mass 0.918 < 0.95": 1,
+      "kept_mass 0.920 < 0.95": 1,
+      "kept_mass 0.921 < 0.95": 1,
+      "kept_mass 0.922 < 0.95": 1,
+      "kept_mass 0.923 < 0.95": 1,
+      "kept_mass 0.924 < 0.95": 2,
+      "kept_mass 0.926 < 0.95": 1,
+      "kept_mass 0.927 < 0.95": 1,
+      "kept_mass 0.928 < 0.95": 4,
+      "kept_mass 0.929 < 0.95": 1,
+      "kept_mass 0.930 < 0.95": 2,
+      "kept_mass 0.931 < 0.95": 2,
+      "kept_mass 0.932 < 0.95": 2,
+      "kept_mass 0.933 < 0.95": 2,
+      "kept_mass 0.934 < 0.95": 1,
+      "kept_mass 0.935 < 0.95": 1,
+      "kept_mass 0.936 < 0.95": 4,
+      "kept_mass 0.937 < 0.95": 1,
+      "kept_mass 0.938 < 0.95": 2,
+      "kept_mass 0.939 < 0.95": 4,
+      "kept_mass 0.940 < 0.95": 1,
+      "kept_mass 0.941 < 0.95": 2,
+      "kept_mass 0.942 < 0.95": 1,
+      "kept_mass 0.944 < 0.95": 3,
+      "kept_mass 0.946 < 0.95": 1,
+      "kept_mass 0.947 < 0.95": 1,
+      "kept_mass 0.948 < 0.95": 3,
+      "kept_mass 0.949 < 0.95": 4,
+      "kept_mass 0.950 < 0.95": 1,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 51,
+      "n_eff 1.27 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.3861,
+     "greedy_path_entries": 3200
+    },
+    "audit": {
+     "calls": 200,
+     "trips": 175,
+     "trip_rate": 0.875,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 38,
+      "kept_mass 0.916 < 0.95": 1,
+      "kept_mass 0.918 < 0.95": 1,
+      "kept_mass 0.919 < 0.95": 1,
+      "kept_mass 0.922 < 0.95": 1,
+      "kept_mass 0.923 < 0.95": 1,
+      "kept_mass 0.925 < 0.95": 1,
+      "kept_mass 0.927 < 0.95": 1,
+      "kept_mass 0.928 < 0.95": 2,
+      "kept_mass 0.931 < 0.95": 1,
+      "kept_mass 0.932 < 0.95": 1,
+      "kept_mass 0.933 < 0.95": 3,
+      "kept_mass 0.934 < 0.95": 2,
+      "kept_mass 0.936 < 0.95": 2,
+      "kept_mass 0.937 < 0.95": 6,
+      "kept_mass 0.939 < 0.95": 3,
+      "kept_mass 0.940 < 0.95": 5,
+      "kept_mass 0.941 < 0.95": 1,
+      "kept_mass 0.942 < 0.95": 1,
+      "kept_mass 0.943 < 0.95": 4,
+      "kept_mass 0.945 < 0.95": 2,
+      "kept_mass 0.946 < 0.95": 3,
+      "kept_mass 0.947 < 0.95": 2,
+      "kept_mass 0.948 < 0.95": 6,
+      "kept_mass 0.949 < 0.95": 2,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 80,
+      "n_eff 1.13 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.28 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.33 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.35 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.2929,
+     "greedy_path_entries": 3200
+    }
+   }
+  },
+  "0.1": {
+   "c": {
+    "current": {
+     "calls": 200,
+     "trips": 185,
+     "trip_rate": 0.925,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 81,
+      "kept_mass 0.913 < 0.95": 1,
+      "kept_mass 0.919 < 0.95": 2,
+      "kept_mass 0.921 < 0.95": 2,
+      "kept_mass 0.922 < 0.95": 1,
+      "kept_mass 0.925 < 0.95": 1,
+      "kept_mass 0.926 < 0.95": 1,
+      "kept_mass 0.927 < 0.95": 3,
+      "kept_mass 0.928 < 0.95": 1,
+      "kept_mass 0.929 < 0.95": 5,
+      "kept_mass 0.930 < 0.95": 1,
+      "kept_mass 0.932 < 0.95": 2,
+      "kept_mass 0.933 < 0.95": 4,
+      "kept_mass 0.935 < 0.95": 4,
+      "kept_mass 0.937 < 0.95": 2,
+      "kept_mass 0.938 < 0.95": 3,
+      "kept_mass 0.939 < 0.95": 2,
+      "kept_mass 0.940 < 0.95": 2,
+      "kept_mass 0.941 < 0.95": 1,
+      "kept_mass 0.942 < 0.95": 2,
+      "kept_mass 0.944 < 0.95": 2,
+      "kept_mass 0.946 < 0.95": 2,
+      "kept_mass 0.947 < 0.95": 1,
+      "kept_mass 0.948 < 0.95": 4,
+      "kept_mass 0.949 < 0.95": 3,
+      "kept_mass 0.950 < 0.95": 1,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 50,
+      "n_eff 1.27 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.34,
+     "greedy_path_entries": 3200
+    },
+    "audit": {
+     "calls": 200,
+     "trips": 176,
+     "trip_rate": 0.88,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 35,
+      "kept_mass 0.918 < 0.95": 1,
+      "kept_mass 0.919 < 0.95": 1,
+      "kept_mass 0.923 < 0.95": 1,
+      "kept_mass 0.924 < 0.95": 1,
+      "kept_mass 0.925 < 0.95": 1,
+      "kept_mass 0.927 < 0.95": 3,
+      "kept_mass 0.928 < 0.95": 1,
+      "kept_mass 0.929 < 0.95": 1,
+      "kept_mass 0.930 < 0.95": 4,
+      "kept_mass 0.933 < 0.95": 3,
+      "kept_mass 0.934 < 0.95": 2,
+      "kept_mass 0.935 < 0.95": 2,
+      "kept_mass 0.936 < 0.95": 3,
+      "kept_mass 0.937 < 0.95": 1,
+      "kept_mass 0.940 < 0.95": 1,
+      "kept_mass 0.943 < 0.95": 3,
+      "kept_mass 0.944 < 0.95": 4,
+      "kept_mass 0.945 < 0.95": 2,
+      "kept_mass 0.946 < 0.95": 1,
+      "kept_mass 0.947 < 0.95": 6,
+      "kept_mass 0.948 < 0.95": 9,
+      "kept_mass 0.949 < 0.95": 5,
+      "kept_mass 0.950 < 0.95": 1,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 80,
+      "n_eff 1.14 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.28 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.33 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.35 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.2858,
+     "greedy_path_entries": 3200
+    }
+   },
+   "d": {
+    "current": {
+     "calls": 200,
+     "trips": 184,
+     "trip_rate": 0.92,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 77,
+      "kept_mass 0.903 < 0.95": 1,
+      "kept_mass 0.912 < 0.95": 1,
+      "kept_mass 0.913 < 0.95": 1,
+      "kept_mass 0.919 < 0.95": 1,
+      "kept_mass 0.920 < 0.95": 1,
+      "kept_mass 0.921 < 0.95": 1,
+      "kept_mass 0.922 < 0.95": 2,
+      "kept_mass 0.924 < 0.95": 1,
+      "kept_mass 0.926 < 0.95": 1,
+      "kept_mass 0.928 < 0.95": 1,
+      "kept_mass 0.929 < 0.95": 5,
+      "kept_mass 0.930 < 0.95": 2,
+      "kept_mass 0.931 < 0.95": 2,
+      "kept_mass 0.932 < 0.95": 1,
+      "kept_mass 0.933 < 0.95": 2,
+      "kept_mass 0.934 < 0.95": 1,
+      "kept_mass 0.935 < 0.95": 1,
+      "kept_mass 0.936 < 0.95": 4,
+      "kept_mass 0.937 < 0.95": 2,
+      "kept_mass 0.938 < 0.95": 4,
+      "kept_mass 0.939 < 0.95": 1,
+      "kept_mass 0.940 < 0.95": 3,
+      "kept_mass 0.941 < 0.95": 2,
+      "kept_mass 0.942 < 0.95": 1,
+      "kept_mass 0.944 < 0.95": 2,
+      "kept_mass 0.945 < 0.95": 2,
+      "kept_mass 0.948 < 0.95": 3,
+      "kept_mass 0.949 < 0.95": 4,
+      "kept_mass 0.950 < 0.95": 2,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 51,
+      "n_eff 1.27 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.3331,
+     "greedy_path_entries": 3200
+    },
+    "audit": {
+     "calls": 200,
+     "trips": 184,
+     "trip_rate": 0.92,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 38,
+      "kept_mass 0.916 < 0.95": 1,
+      "kept_mass 0.917 < 0.95": 1,
+      "kept_mass 0.919 < 0.95": 1,
+      "kept_mass 0.922 < 0.95": 1,
+      "kept_mass 0.923 < 0.95": 1,
+      "kept_mass 0.925 < 0.95": 1,
+      "kept_mass 0.927 < 0.95": 1,
+      "kept_mass 0.928 < 0.95": 2,
+      "kept_mass 0.932 < 0.95": 2,
+      "kept_mass 0.933 < 0.95": 2,
+      "kept_mass 0.934 < 0.95": 3,
+      "kept_mass 0.936 < 0.95": 4,
+      "kept_mass 0.937 < 0.95": 4,
+      "kept_mass 0.938 < 0.95": 3,
+      "kept_mass 0.939 < 0.95": 4,
+      "kept_mass 0.940 < 0.95": 2,
+      "kept_mass 0.942 < 0.95": 1,
+      "kept_mass 0.943 < 0.95": 3,
+      "kept_mass 0.944 < 0.95": 1,
+      "kept_mass 0.945 < 0.95": 3,
+      "kept_mass 0.946 < 0.95": 2,
+      "kept_mass 0.947 < 0.95": 1,
+      "kept_mass 0.948 < 0.95": 7,
+      "kept_mass 0.949 < 0.95": 2,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 81,
+      "n_eff 1.13 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.28 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.32 < 1.5 (single uncorroborated chain)": 7,
+      "n_eff 1.33 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.34 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.35 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.2382,
+     "greedy_path_entries": 3200
+    }
+   }
+  }
+ },
+ "scope": "traversal arms are FORCED-μ probes (deployment refused μ>0 in T5); pointwise arm (a) is the deployed readout; arm (e) is the external-state control"
 }

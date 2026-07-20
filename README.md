@@ -1,38 +1,61 @@
-# HSWM — Hypergraph Semantic Weight Map
+# HSWM — Evidence-Preserving World Compiler + Field Substrate
 
-> A hypergraph knowledge-graph weight field where **retrieval, plan, and non-destructive
-> supersession are readouts of one shared field**, `W(e|c) = cosine(α) + λ_b·log(b) + λ_j·j`,
-> with a **construction-guaranteed cosine floor** (never worse than cosine) and an
-> **LLM-judgment loop** as the weight-adjustment mechanism.
+> Frozen sources and recorded observations compile deterministically into an
+> immutable, evidence-addressable `WorldArtifactV1`. Stable IDs are projected
+> into the existing hypergraph field/readout prototype through an explicit
+> legacy layout rather than being confused with positional numpy indices.
 
 Standalone extraction of the `semantic_weight_mapper_prototype` from the SYMPOSIUM
 research programme. Numpy-only, no heavy ML deps.
 
 ## Honest status (read first)
 
-This is a **design draft + measurement harness**, not a proven system. What is real:
+This is an implemented compiler boundary plus a measurement prototype, not a
+reasoner or a proven production runtime. What is real as of 2026-07-20:
 
-- ✅ **Substrate + readouts** (incidence, pooling, retrieve/plan/dispatch, non-destructive
-  supersede) — implemented, 17 tests.
-- ✅ **Cosine floor (D1)** — `additive-j` design (`W = cosine + λ·ReLU(residual)`, λ chosen on
-  validation incl. 0) provably never underperforms cosine; on real KG λ→0, synthetic dev1 gain +0.116.
-- ⚠️ **LLM-judgment "learning"** — the weight adjustment is done by an LLM's judgment feedback
-  loop, **not SGD**. Current judge is a *simulated oracle* (mechanism only).
-- ❌ **System efficacy — UNMEASURED.** The matched-budget A/B vs `direct-LLM-rerank` on
-  downstream answer EM/F1 has **not been run**. Honest prior: **operational-not-cognitive**
-  (the field is a *geometry cache of LLM judgment*, so by the data-processing inequality its
-  cognitive ceiling is ≤ direct-LLM). Do **not** cite the directional-judge probe (0.872 vs
-  0.5) as HSWM efficacy — that measures the *LLM ingredient*, not the field (attribution error).
+- ✅ **S0 falsifier repair:** separated-graded arm (e), actual
+  `readouts.supersede()` writes, kill(iii), write/trip receipts, and corrected
+  current-recall costs are implemented with regenerated result artifacts.
+- ✅ **S1 evidence compiler:** exact source selectors, content-addressed IDs,
+  immutable records, deterministic manifests, and typed fail-closed rejection.
+- ✅ **S2 legacy parity:** evaluation labels are separated from world inputs;
+  old paragraph ordering lives only in `LegacyProjectionLayoutV1`; valid legacy
+  field/retrieve/selection/μ=0 behavior remains bit-identical.
+- ✅ **S3 certified cut:** immutable byte-addressed `FieldSnapshotV1` records
+  bind world, dense layout, embeddings, topology, revision cut, kernel, field
+  policy, and candidates. `read_certified(...)` admits only the exact certified
+  tuple and otherwise returns a payload-free typed refusal before scoring.
+- ✅ **Field experiments:** additive-j, traversal certification, and stale
+  poisoning remain measured research paths with their checked-in receipts.
+- ⚠️ **Traversal:** real MuSiQue and 2Wiki certification selected μ=0. It is
+  implemented but deployment-OFF on those worlds; S3 therefore falls back to
+  the same snapshot's static field instead of claiming a smart graph win.
+- ❌ **S4 durable revision runtime:** event-folded supersession, as-of replay,
+  compensation, concurrent publication, signatures, and external trust
+  distribution are not present-tense claims.
 
-Full canon: SYMPOSIUM `THEORY/재배맨/HSWM_STANDARD.md`, `WHY_NO_COGNITIVE_UPLIFT_2026-07-19.md`.
+Score-floor language is layered: the positive semantic residual is per-edge
+`S_sem >= cosine`; temporal decay may intentionally go below cosine, and a
+positive traversal residual does not guarantee ranking/nDCG improvement.
 
 ## Layout
 
 | file | role |
 |---|---|
+| `world_ir.py` | immutable source/evidence/observation/entity/target records and stable IDs |
+| `world_compiler.py` | pure `compile_world(...) -> WorldArtifactV1 | CompileRejectionV1` |
+| `legacy_adapter.py` | QA-label split, two-call embed protocol, stable-ID ↔ dense-ID parity seam |
+| `EPWC_IMPLEMENTATION_S0_S2_2026-07-20.md` | implemented-scope, validation, falsifier result, and S3 boundary receipt |
+| `field_snapshot.py` | immutable float64 material, component receipts, and exact field hydration |
+| `certified_readout.py` | certificate-bound retrieve / selection / dispatch / traversal admission |
+| `certified_cut_compare.py` | independent-oracle controls, 10×40 scope checks, and 8 mutant attacks |
+| `EPWC_IMPLEMENTATION_S3_2026-07-20.md` | S3 implementation and comparison receipt; smart-hypergraph boundary |
+| `world_builder.py` | legacy corpus builder retained as the parity oracle |
 | `hypergraph.py` | reified hypergraph (nodes+embeddings, incidence = field support) |
 | `weight_field.py` | `W(e|c)` = cosine ⊕ base-salience; heuristic scorers |
-| `readouts.py` | retrieve / plan·dispatch / supersede (one shared field) |
+| `readouts.py` | retrieve / selection distribution / dispatch / supersede prototype |
+| `traversal.py` / `traversal_cert.py` | optional traversal kernel, trip receipts, empirical μ gate |
+| `stale_poisoning.py` | five-arm temporal falsifier and wrong-write collateral |
 | `learned_v3_additive.py` | **D1**: additive-j on frozen cosine — the cosine-floor fix |
 | `llm_judgment_loop.py` | LLM-judgment weight loop (learning = judgment feedback, not SGD) |
 | `falsifier.py` | prereg falsifier harness (learned vs heuristic + null-head + gates) |
@@ -45,7 +68,8 @@ Full canon: SYMPOSIUM `THEORY/재배맨/HSWM_STANDARD.md`, `WHY_NO_COGNITIVE_UPL
 
 ```bash
 uv sync --extra dev
-uv run pytest -q          # 17 passed
+uv run pytest -q
+uv run python certified_cut_compare.py
 uv run python learned_v3_additive.py   # D1 floor + dev1 efficacy
 ```
 
@@ -56,9 +80,10 @@ Real-KG (needs Neo4j): `uv sync --extra kg && NEO4J_URI=bolt://127.0.0.1:7687 uv
 - **ooptdd** (measurement): every behavioral claim carries an executable receipt with a
   pre-run locked trace gate, real-code execution, positive readback, source binding, and an
   injected negative oracle. See `receipts/`.
-- **OMD** (parallel-agent coordination): **deliberately NOT applied.** OMD coordinates *N agents
-  in parallel on one repo*; HSWM is a single-track prototype, so OMD adds only its orphan-server /
-  stale-lock fragility with no benefit. Re-introduce only if parallel-agent development starts.
+- **Deployment claims:** a passing source-tree test is not a production
+  certificate. S3 implements exact local scope/admission and fail-closed
+  refusal, but its trusted certificate-ID allowlist is not a signature system;
+  durable event replay and external trust remain S4+ work.
 
 ## License
 

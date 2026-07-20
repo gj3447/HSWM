@@ -1,0 +1,41 @@
+{
+  "schema_version": "hswm-h3-b3-run-manifest-amendment/v1",
+  "status_at_freeze": "PRE_RUN_REFROZEN_AFTER_REPORTED_PILOT_FAILURE",
+  "supersedes_manifest_sha256": "620fbc80e0db8d14efbd0307d0008dedc372b2fa09874f846f3b1f8ef56a0b25",
+  "unchanged": [
+    "protocol",
+    "code",
+    "fresh holdout",
+    "development rows",
+    "extraction preimages",
+    "embedding preimages and artifact",
+    "model and revision",
+    "prompt",
+    "temperature",
+    "thinking mode",
+    "batch size",
+    "concurrency",
+    "max claims",
+    "all metrics, nulls, thresholds, and kill conditions"
+  ],
+  "failed_pilot": {
+    "cache_path": ".ab_p5_cache/h3_b3/all_extractions_spark1.jsonl",
+    "attempted_records": 24,
+    "attempted_batches": 3,
+    "status_counts": {"success": 7, "partial": 4, "quarantined": 13},
+    "accepted_claims": 17,
+    "exact_span_paragraph_coverage": 0.4583333333333333,
+    "invalid_json_records": 8,
+    "cause": "one 8-paragraph response reached the 2048 completion-token cap and was truncated",
+    "disposition": "pilot stopped before evaluation; cache retained as negative receipt and never merged into v2"
+  },
+  "single_authorized_change": {
+    "field": "extractor.max_tokens",
+    "before": 2048,
+    "after": 4096,
+    "reason": "transport completeness only; prevents structurally invalid truncated JSON",
+    "new_config_sha256": "ba5d489167e22bcb1ea94590d80a05bd9ce7048c8d0738c25208481113c5db75"
+  },
+  "v2_cache_path": ".ab_p5_cache/h3_b3/all_extractions_spark1_v2.jsonl",
+  "claim_effect": "none; the amendment was frozen before any B3 graph or retrieval metric was computed"
+}

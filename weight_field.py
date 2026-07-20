@@ -104,11 +104,28 @@ class WeightField:
     theta = M (bilinear map, learned by learned.py). base_salience = slow b(e).
     """
 
-    def __init__(self, hg: Hypergraph, M: np.ndarray | None = None, lam: float = 0.15):
+    def __init__(self, hg: Hypergraph, M: np.ndarray | None = None, lam: float = 0.15,
+                 target_emb: np.ndarray | None = None):
         self.hg = hg
-        self.M = M
-        self.lam = lam
-        self._pooled = hg.pooled_emb("mean")
+        self.M = None if M is None else np.asarray(M, dtype=np.float64)
+        self.lam = float(lam)
+        if self.M is not None and self.M.shape != (hg.d, hg.d):
+            raise ValueError(f"M shape {self.M.shape} != ({hg.d}, {hg.d})")
+        if not np.isfinite(self.lam) or self.lam < 0:
+            raise ValueError("lam must be finite and >= 0")
+        if self.M is not None and not np.isfinite(self.M).all():
+            raise ValueError("M must be finite")
+        if target_emb is None:
+            self._pooled = hg.pooled_emb("mean")
+        else:
+            explicit = np.asarray(target_emb, dtype=np.float64)
+            if explicit.shape != (hg.M, hg.d):
+                raise ValueError(
+                    f"target_emb shape {explicit.shape} != ({hg.M}, {hg.d})"
+                )
+            if not np.isfinite(explicit).all():
+                raise ValueError("target_emb must be finite")
+            self._pooled = explicit
 
     def value(self, query_emb: np.ndarray, edges: np.ndarray | None = None) -> np.ndarray:
         """W(e | c) for the given context over the given candidate edges (default: all)."""

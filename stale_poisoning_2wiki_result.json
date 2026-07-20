@@ -1,97 +1,180 @@
 {
  "dataset": "2wiki",
  "n_poisoned_queries": 200,
+ "metric_population": {
+  "primary": "hop in {2,3} (preregistered current-fact/H-T3b population)",
+  "n_primary_hop2_3": 100,
+  "n_all_hops": 200,
+  "hop_composition_all": {
+   "2": 100,
+   "4": 100
+  },
+  "cur_alias": "cur == cur_hop2_3; cur_all_hops is reported separately"
+ },
  "per_dose": {
   "0.5": {
    "a": {
     "stale": 0.85,
-    "cur": 0.6338,
+    "cur_hop2_3": 0.775,
+    "cur_all_hops": 0.6338,
     "audit": 1.0,
-    "audit_rank": 2.015
+    "audit_rank": 2.015,
+    "cur": 0.775
    },
    "b": {
     "stale": 0.0,
-    "cur": 0.64,
+    "cur_hop2_3": 0.78,
+    "cur_all_hops": 0.64,
     "audit": 1.0,
-    "audit_rank": 1.0
+    "audit_rank": 1.0,
+    "cur": 0.78
    },
    "c": {
     "stale": 0.785,
-    "cur": 0.5775,
+    "cur_hop2_3": 0.675,
+    "cur_all_hops": 0.5775,
     "audit": 0.635,
-    "audit_rank": 10.5
+    "audit_rank": 10.5,
+    "cur": 0.675
    },
    "d": {
     "stale": 0.79,
-    "cur": 0.5825,
+    "cur_hop2_3": 0.685,
+    "cur_all_hops": 0.5825,
     "audit": 0.635,
-    "audit_rank": 10.53
+    "audit_rank": 10.53,
+    "cur": 0.685
+   },
+   "e": {
+    "stale": 0.85,
+    "cur_hop2_3": 0.775,
+    "cur_all_hops": 0.6338,
+    "audit": 1.0,
+    "audit_rank": 2.015,
+    "cur": 0.775
    },
    "_n": 200,
-   "_cos_err_max": 0.0028
+   "_n_all_hops": 200,
+   "_n_primary_hop2_3": 100,
+   "_cos_err_max": 0.0028,
+   "_a_e_equivalence": {
+    "current_max_abs": 0.0,
+    "audit_max_abs": 0.0,
+    "current_rank_bit_exact": true,
+    "audit_rank_bit_exact": true
+   }
   },
   "0.25": {
    "a": {
     "stale": 0.205,
-    "cur": 0.6375,
+    "cur_hop2_3": 0.775,
+    "cur_all_hops": 0.6375,
     "audit": 1.0,
-    "audit_rank": 2.12
+    "audit_rank": 2.12,
+    "cur": 0.775
    },
    "b": {
     "stale": 0.0,
-    "cur": 0.64,
+    "cur_hop2_3": 0.78,
+    "cur_all_hops": 0.64,
     "audit": 1.0,
-    "audit_rank": 1.0
+    "audit_rank": 1.0,
+    "cur": 0.78
    },
    "c": {
     "stale": 0.195,
-    "cur": 0.58,
+    "cur_hop2_3": 0.675,
+    "cur_all_hops": 0.58,
     "audit": 0.63,
-    "audit_rank": 14.595
+    "audit_rank": 14.595,
+    "cur": 0.675
    },
    "d": {
     "stale": 0.185,
-    "cur": 0.5875,
+    "cur_hop2_3": 0.685,
+    "cur_all_hops": 0.5875,
     "audit": 0.63,
-    "audit_rank": 14.415
+    "audit_rank": 14.415,
+    "cur": 0.685
+   },
+   "e": {
+    "stale": 0.205,
+    "cur_hop2_3": 0.775,
+    "cur_all_hops": 0.6375,
+    "audit": 1.0,
+    "audit_rank": 2.12,
+    "cur": 0.775
    },
    "_n": 200,
-   "_cos_err_max": 0.0028
+   "_n_all_hops": 200,
+   "_n_primary_hop2_3": 100,
+   "_cos_err_max": 0.0028,
+   "_a_e_equivalence": {
+    "current_max_abs": 0.0,
+    "audit_max_abs": 0.0,
+    "current_rank_bit_exact": true,
+    "audit_rank_bit_exact": true
+   }
   },
   "0.1": {
    "a": {
     "stale": 0.0,
-    "cur": 0.64,
+    "cur_hop2_3": 0.78,
+    "cur_all_hops": 0.64,
     "audit": 0.99,
-    "audit_rank": 2.65
+    "audit_rank": 2.65,
+    "cur": 0.78
    },
    "b": {
     "stale": 0.0,
-    "cur": 0.64,
+    "cur_hop2_3": 0.78,
+    "cur_all_hops": 0.64,
     "audit": 1.0,
-    "audit_rank": 1.0
+    "audit_rank": 1.0,
+    "cur": 0.78
    },
    "c": {
     "stale": 0.04,
-    "cur": 0.5837,
+    "cur_hop2_3": 0.68,
+    "cur_all_hops": 0.5837,
     "audit": 0.625,
-    "audit_rank": 25.06
+    "audit_rank": 25.06,
+    "cur": 0.68
    },
    "d": {
     "stale": 0.035,
-    "cur": 0.59,
+    "cur_hop2_3": 0.69,
+    "cur_all_hops": 0.59,
     "audit": 0.635,
-    "audit_rank": 24.74
+    "audit_rank": 24.74,
+    "cur": 0.69
+   },
+   "e": {
+    "stale": 0.0,
+    "cur_hop2_3": 0.78,
+    "cur_all_hops": 0.64,
+    "audit": 0.99,
+    "audit_rank": 2.65,
+    "cur": 0.78
    },
    "_n": 200,
-   "_cos_err_max": 0.0028
+   "_n_all_hops": 200,
+   "_n_primary_hop2_3": 100,
+   "_cos_err_max": 0.0028,
+   "_a_e_equivalence": {
+    "current_max_abs": 0.0,
+    "audit_max_abs": 0.0,
+    "current_rank_bit_exact": true,
+    "audit_rank_bit_exact": true
+   }
   }
  },
- "dose_response_spearman(dose→rank, graded arms should be ρ<0 or >0 monotone)": {
-  "a": -0.93,
+ "dose_response_spearman_midrank(dose→rank; graded expected rho<0)": {
+  "a": -0.9233,
   "b": 0.0,
-  "c": -0.8525,
-  "d": -0.8575
+  "c": -0.8446,
+  "d": -0.8515,
+  "e": -0.9233
  },
  "kill_i": {
   "survives": false,
@@ -101,13 +184,352 @@
  },
  "kill_ii": {
   "fires": false,
+  "current_population": "hop2-3",
+  "n_current": 100,
   "meaning": "kill(ii) does not fire (graded arm keeps a metric the filter cannot express)"
  },
- "kill_iii": "DEFERRED (arm (e) separated-graded not implemented — OPEN)",
+ "kill_iii": {
+  "fires": true,
+  "primary_dose": 0.1,
+  "current_population": "hop2-3",
+  "metrics": {
+   "stale_suppression": {
+    "n": 200,
+    "mean_advantage_d_vs_e": -0.035,
+    "2se": 0.0261,
+    "beats_over_2se": false
+   },
+   "current_recall": {
+    "n": 100,
+    "mean_advantage_d_vs_e": -0.09,
+    "2se": 0.0557,
+    "beats_over_2se": false
+   },
+   "historical_audit_recall": {
+    "n": 200,
+    "mean_advantage_d_vs_e": -0.355,
+    "2se": 0.0678,
+    "beats_over_2se": false
+   },
+   "dose_response": {
+    "n": 200,
+    "mean_advantage_d_vs_e": -0.0718,
+    "2se": 0.0441,
+    "beats_over_2se": false
+   }
+  },
+  "arm_a_vs_e_bit_exact": true,
+  "meaning": "KILL(iii): separated-graded arm (e) is not beaten on any prereg metric by >2se; one-field-only retrieval capability retracts"
+ },
+ "arm_a_vs_e_equivalence_receipt": {
+  "0.5": {
+   "current_max_abs": 0.0,
+   "audit_max_abs": 0.0,
+   "current_rank_bit_exact": true,
+   "audit_rank_bit_exact": true
+  },
+  "0.25": {
+   "current_max_abs": 0.0,
+   "audit_max_abs": 0.0,
+   "current_rank_bit_exact": true,
+   "audit_rank_bit_exact": true
+  },
+  "0.1": {
+   "current_max_abs": 0.0,
+   "audit_max_abs": 0.0,
+   "current_rank_bit_exact": true,
+   "audit_rank_bit_exact": true
+  }
+ },
+ "pointwise_current_recall_delta_vs_hard_filter": {
+  "0.5": -0.005,
+  "0.25": -0.005,
+  "0.1": 0.0
+ },
+ "pointwise_current_recall_delta_vs_hard_filter_all_hops": {
+  "0.5": -0.0062,
+  "0.25": -0.0025,
+  "0.1": 0.0
+ },
  "collateral_H_T3b_current_recall_after_WRONG_supersede": {
+  "0.5": 0.675,
+  "0.25": 0.515,
+  "0.1": 0.47
+ },
+ "collateral_H_T3b_current_recall_after_WRONG_supersede_all_hops": {
   "0.5": 0.5825,
   "0.25": 0.5025,
   "0.1": 0.48
  },
- "scope": "traversal arms are FORCED-μ probes (deployment refused μ>0 in T5); pointwise arm (a) is the deployed readout"
+ "actual_supersede_write_receipts": {
+  "injected_stale": {
+   "0.5": {
+    "count": 200,
+    "write_path": "readouts.supersede",
+    "all_applied_exactly": true,
+    "sha256": "0dbcec4049cb1deceb5a85318138acc53b641f76c441187e155ace50051645ec"
+   },
+   "0.25": {
+    "count": 200,
+    "write_path": "readouts.supersede",
+    "all_applied_exactly": true,
+    "sha256": "8bd78133690798adc83c9f3f96576acb6f2f34c603137e98643cf194d017bb6d"
+   },
+   "0.1": {
+    "count": 200,
+    "write_path": "readouts.supersede",
+    "all_applied_exactly": true,
+    "sha256": "5d2ea31880b76763cc608da60fe7a1c28687be792a3e42e80e6ce5b19b51ee66"
+   }
+  },
+  "wrong_supersede_collateral": {
+   "0.5": {
+    "count": 200,
+    "write_path": "readouts.supersede",
+    "all_applied_exactly": true,
+    "sha256": "bb40afa4f65f0331af3f15ff6c39863825c6a13bccbfc69f4ef25ed10480d515"
+   },
+   "0.25": {
+    "count": 200,
+    "write_path": "readouts.supersede",
+    "all_applied_exactly": true,
+    "sha256": "331d08d5eb1c00037f435a9d412cca01e6ea9821d38cf64097f7e397dfa56fc5"
+   },
+   "0.1": {
+    "count": 200,
+    "write_path": "readouts.supersede",
+    "all_applied_exactly": true,
+    "sha256": "81218073d6704d5552d748112595455f5f16364028a2cc74a19bb734d6a6fda6"
+   }
+  },
+  "collateral_trial_reset": "direct restore after measurement; not a production write"
+ },
+ "traversal_trip_receipts": {
+  "0.5": {
+   "c": {
+    "current": {
+     "calls": 200,
+     "trips": 187,
+     "trip_rate": 0.935,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 148,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 38,
+      "n_eff 1.30 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.4143,
+     "greedy_path_entries": 3200
+    },
+    "audit": {
+     "calls": 200,
+     "trips": 124,
+     "trip_rate": 0.62,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 46,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 64,
+      "n_eff 1.07 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.12 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.13 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.16 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.17 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.22 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.23 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.28 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.43 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.45 < 1.5 (single uncorroborated chain)": 2,
+      "n_eff 1.46 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.47 < 1.5 (single uncorroborated chain)": 2
+     },
+     "mean_n_eff_when_measured": 1.8446,
+     "greedy_path_entries": 3200
+    }
+   },
+   "d": {
+    "current": {
+     "calls": 200,
+     "trips": 188,
+     "trip_rate": 0.94,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 148,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 39,
+      "n_eff 1.33 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.383,
+     "greedy_path_entries": 3200
+    },
+    "audit": {
+     "calls": 200,
+     "trips": 123,
+     "trip_rate": 0.615,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 46,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 64,
+      "n_eff 1.07 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.16 < 1.5 (single uncorroborated chain)": 2,
+      "n_eff 1.22 < 1.5 (single uncorroborated chain)": 2,
+      "n_eff 1.25 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.35 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.41 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.43 < 1.5 (single uncorroborated chain)": 2,
+      "n_eff 1.44 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.46 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.47 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.8694,
+     "greedy_path_entries": 3200
+    }
+   }
+  },
+  "0.25": {
+   "c": {
+    "current": {
+     "calls": 200,
+     "trips": 187,
+     "trip_rate": 0.935,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 148,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 39
+     },
+     "mean_n_eff_when_measured": 1.3913,
+     "greedy_path_entries": 3200
+    },
+    "audit": {
+     "calls": 200,
+     "trips": 126,
+     "trip_rate": 0.63,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 47,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 65,
+      "n_eff 1.07 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.13 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.14 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.18 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.23 < 1.5 (single uncorroborated chain)": 2,
+      "n_eff 1.26 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.29 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.43 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.45 < 1.5 (single uncorroborated chain)": 2,
+      "n_eff 1.46 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.47 < 1.5 (single uncorroborated chain)": 2
+     },
+     "mean_n_eff_when_measured": 1.8115,
+     "greedy_path_entries": 3200
+    }
+   },
+   "d": {
+    "current": {
+     "calls": 200,
+     "trips": 189,
+     "trip_rate": 0.945,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 147,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 41,
+      "n_eff 1.41 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.3161,
+     "greedy_path_entries": 3200
+    },
+    "audit": {
+     "calls": 200,
+     "trips": 126,
+     "trip_rate": 0.63,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 45,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 66,
+      "n_eff 1.07 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.16 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.19 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.22 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.24 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.25 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.32 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.38 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.40 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.42 < 1.5 (single uncorroborated chain)": 2,
+      "n_eff 1.43 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.46 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.47 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.49 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.8337,
+     "greedy_path_entries": 3200
+    }
+   }
+  },
+  "0.1": {
+   "c": {
+    "current": {
+     "calls": 200,
+     "trips": 187,
+     "trip_rate": 0.935,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 150,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 37
+     },
+     "mean_n_eff_when_measured": 1.4069,
+     "greedy_path_entries": 3200
+    },
+    "audit": {
+     "calls": 200,
+     "trips": 125,
+     "trip_rate": 0.625,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 47,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 65,
+      "n_eff 1.07 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.13 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.14 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.19 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.23 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.26 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.30 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.43 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.44 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.45 < 1.5 (single uncorroborated chain)": 2,
+      "n_eff 1.47 < 1.5 (single uncorroborated chain)": 2
+     },
+     "mean_n_eff_when_measured": 1.8147,
+     "greedy_path_entries": 3200
+    }
+   },
+   "d": {
+    "current": {
+     "calls": 200,
+     "trips": 189,
+     "trip_rate": 0.945,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 147,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 41,
+      "n_eff 1.41 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.2983,
+     "greedy_path_entries": 3200
+    },
+    "audit": {
+     "calls": 200,
+     "trips": 127,
+     "trip_rate": 0.635,
+     "reasons": {
+      "entropy blowup (oversmoothing onset)": 45,
+      "n_eff 1.00 < 1.5 (single uncorroborated chain)": 67,
+      "n_eff 1.07 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.16 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.21 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.22 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.23 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.32 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.37 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.39 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.41 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.42 < 1.5 (single uncorroborated chain)": 2,
+      "n_eff 1.46 < 1.5 (single uncorroborated chain)": 2,
+      "n_eff 1.49 < 1.5 (single uncorroborated chain)": 1,
+      "n_eff 1.50 < 1.5 (single uncorroborated chain)": 1
+     },
+     "mean_n_eff_when_measured": 1.7973,
+     "greedy_path_entries": 3200
+    }
+   }
+  }
+ },
+ "scope": "traversal arms are FORCED-μ probes (deployment refused μ>0 in T5); pointwise arm (a) is the deployed readout; arm (e) is the external-state control"
 }

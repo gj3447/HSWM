@@ -1,0 +1,224 @@
+{
+  "claim_scope": "local scope-check conformance and pre-kernel refusal",
+  "experiment_version": "hswm-s3-certified-cut-comparison/v2",
+  "fixture": {
+    "policies": 5,
+    "queries": 8,
+    "scope_fault_classes": 10,
+    "targets": 5,
+    "unique_adversarial_attacks": 9
+  },
+  "non_claim": "does not measure smart-hypergraph retrieval or reasoning efficacy",
+  "scope_fault_conformance": {
+    "attempts": 400,
+    "cre_payloads": 0,
+    "cre_pre_kernel_refusals": 400,
+    "cre_typed_refusals": 400,
+    "expected_codes_exact": true,
+    "observed_zero_kernel_calls": 400,
+    "unbound_not_deployable_probe_payloads": 400
+  },
+  "scope_faults": {
+    "F10_expired_certificate": {
+      "attempts": 40,
+      "cre_payloads": 0,
+      "expected_refusal": "certificate_expired",
+      "observed_refusals": {
+        "certificate_expired": 40
+      },
+      "observed_zero_kernel_calls": 40,
+      "pre_kernel_refusals": 40,
+      "probe_payloads": 40,
+      "typed_refusals": 40
+    },
+    "F1_foreign_world": {
+      "attempts": 40,
+      "cre_payloads": 0,
+      "expected_refusal": "world_field_mismatch",
+      "observed_refusals": {
+        "world_field_mismatch": 40
+      },
+      "observed_zero_kernel_calls": 40,
+      "pre_kernel_refusals": 40,
+      "probe_payloads": 40,
+      "typed_refusals": 40
+    },
+    "F2_reversed_dense_layout": {
+      "attempts": 40,
+      "cre_payloads": 0,
+      "expected_refusal": "field_snapshot_mismatch",
+      "observed_refusals": {
+        "field_snapshot_mismatch": 40
+      },
+      "observed_zero_kernel_calls": 40,
+      "pre_kernel_refusals": 40,
+      "probe_payloads": 40,
+      "typed_refusals": 40
+    },
+    "F3_model_revision": {
+      "attempts": 40,
+      "cre_payloads": 0,
+      "expected_refusal": "model_revision_mismatch",
+      "observed_refusals": {
+        "model_revision_mismatch": 40
+      },
+      "observed_zero_kernel_calls": 40,
+      "pre_kernel_refusals": 40,
+      "probe_payloads": 40,
+      "typed_refusals": 40
+    },
+    "F4_model_config": {
+      "attempts": 40,
+      "cre_payloads": 0,
+      "expected_refusal": "model_config_mismatch",
+      "observed_refusals": {
+        "model_config_mismatch": 40
+      },
+      "observed_zero_kernel_calls": 40,
+      "pre_kernel_refusals": 40,
+      "probe_payloads": 40,
+      "typed_refusals": 40
+    },
+    "F5_field_policy": {
+      "attempts": 40,
+      "cre_payloads": 0,
+      "expected_refusal": "field_policy_mismatch",
+      "observed_refusals": {
+        "field_policy_mismatch": 40
+      },
+      "observed_zero_kernel_calls": 40,
+      "pre_kernel_refusals": 40,
+      "probe_payloads": 40,
+      "typed_refusals": 40
+    },
+    "F6_readout_policy": {
+      "attempts": 40,
+      "cre_payloads": 0,
+      "expected_refusal": "readout_policy_mismatch",
+      "observed_refusals": {
+        "readout_policy_mismatch": 40
+      },
+      "observed_zero_kernel_calls": 40,
+      "pre_kernel_refusals": 40,
+      "probe_payloads": 40,
+      "typed_refusals": 40
+    },
+    "F7_revision_cut": {
+      "attempts": 40,
+      "cre_payloads": 0,
+      "expected_refusal": "revision_cut_mismatch",
+      "observed_refusals": {
+        "revision_cut_mismatch": 40
+      },
+      "observed_zero_kernel_calls": 40,
+      "pre_kernel_refusals": 40,
+      "probe_payloads": 40,
+      "typed_refusals": 40
+    },
+    "F8_torn_revision_fold": {
+      "attempts": 40,
+      "cre_payloads": 0,
+      "expected_refusal": "revision_fold_mismatch",
+      "observed_refusals": {
+        "revision_fold_mismatch": 40
+      },
+      "observed_zero_kernel_calls": 40,
+      "pre_kernel_refusals": 40,
+      "probe_payloads": 40,
+      "typed_refusals": 40
+    },
+    "F9_untrusted_certificate": {
+      "attempts": 40,
+      "cre_payloads": 0,
+      "expected_refusal": "invalid_certificate",
+      "observed_refusals": {
+        "invalid_certificate": 40
+      },
+      "observed_zero_kernel_calls": 40,
+      "pre_kernel_refusals": 40,
+      "probe_payloads": 40,
+      "typed_refusals": 40
+    }
+  },
+  "smart_traversal_safety_controls": {
+    "certificate_off_fallback": {
+      "action": "fallback_current_static",
+      "executed_mu": 0.0
+    },
+    "mu_positive_apply": {
+      "action": "apply",
+      "nonzero_traversal_residuals": 16,
+      "payload_component_bit_exact": true
+    },
+    "query_trip_fallback": {
+      "action": "fallback_current_static",
+      "reason": "n_eff 1.00 < 1.5 (single uncorroborated chain)"
+    }
+  },
+  "unique_adversarial_attacks": {
+    "A1_malformed_bilinear": {
+      "expected_refusal": "kernel_mismatch",
+      "kernel_calls": 0,
+      "observed_refusal": "kernel_mismatch",
+      "payload": false
+    },
+    "A2_unknown_certificate_status": {
+      "expected_refusal": "invalid_certificate",
+      "kernel_calls": 0,
+      "observed_refusal": "invalid_certificate",
+      "payload": false
+    },
+    "A3_nan_generation": {
+      "expected_refusal": "invalid_request",
+      "kernel_calls": 0,
+      "observed_refusal": "invalid_request",
+      "payload": false
+    },
+    "A4_malformed_query": {
+      "expected_refusal": "invalid_request",
+      "kernel_calls": 0,
+      "observed_refusal": "invalid_request",
+      "payload": false
+    },
+    "A5_unsupported_field_policy": {
+      "expected_refusal": "snapshot_broken",
+      "kernel_calls": 0,
+      "observed_refusal": "snapshot_broken",
+      "payload": false
+    },
+    "A6_negative_revision": {
+      "expected_refusal": "revision_cut_mismatch",
+      "kernel_calls": 0,
+      "observed_refusal": "revision_cut_mismatch",
+      "payload": false
+    },
+    "A7_static_kernel_mutation": {
+      "expected_refusal": "kernel_mismatch",
+      "kernel_calls": 0,
+      "observed_refusal": "kernel_mismatch",
+      "payload": false
+    },
+    "A8_traversal_kernel_mutation": {
+      "expected_refusal": "kernel_mismatch",
+      "kernel_calls": 0,
+      "observed_refusal": "kernel_mismatch",
+      "payload": false
+    },
+    "A9_internal_compute_mutation": {
+      "expected_refusal": "kernel_mismatch",
+      "kernel_calls": 0,
+      "observed_refusal": "kernel_mismatch",
+      "payload": false
+    }
+  },
+  "valid_controls": {
+    "attempts": 40,
+    "cre_admitted": 40,
+    "cre_oracle_bit_exact": 40,
+    "false_refusals": 0,
+    "golden_matches": true,
+    "golden_sha256": "477d77ac75a1031e6fb68c92223b34b9fce958635c86818e69082d9f16f54cad",
+    "probe_oracle_bit_exact": 40
+  },
+  "verdict": "PASS"
+}

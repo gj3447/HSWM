@@ -1,8 +1,8 @@
-"""The 4-fold identification: retrieval = plan = supersession read ONE field.
+"""Legacy readout coherence without planning or uniqueness overclaims.
 
-This is the structural crux of PROM_16 §미개척 triple — the identification itself.
-These tests prove the three readouts are coherent views of the same W(e|c), and
-that supersession is non-destructive (down-weight, never delete).
+These tests prove retrieval and the selection distribution read the same
+W(e|c), the ``plan`` compatibility alias is bit-exact, and the current
+supersession write is non-destructive (down-weight, never delete).
 """
 import numpy as np
 
@@ -43,6 +43,15 @@ def test_plan_is_a_distribution():
     _, probs = readouts.plan(field, hg.node_emb[1])
     assert np.isclose(probs.sum(), 1.0)
     assert (probs >= 0).all()
+
+
+def test_plan_is_bit_exact_compatibility_alias_for_selection_distribution():
+    hg, field = _field()
+    q = hg.node_emb[1]
+    plan_edges, plan_probs = readouts.plan(field, q)
+    selection_edges, selection_probs = readouts.selection_distribution(field, q)
+    assert np.array_equal(plan_edges, selection_edges)
+    assert np.array_equal(plan_probs, selection_probs)
 
 
 def test_supersede_is_nondestructive_and_lowers_rank():

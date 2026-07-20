@@ -18,3 +18,10 @@ def test_h3_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "h3_b3_preflight",
         "h3_title_anchor_falsifier",
     } <= shipped
+
+    assert {
+        "qkv_routing",
+        "qkv_routing_falsifier",
+        "qkv_b1_probe",
+        "qkv_b1_development_falsifier",
+    } <= shipped

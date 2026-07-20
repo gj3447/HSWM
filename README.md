@@ -40,6 +40,10 @@ reasoner or a proven production runtime. What is real as of 2026-07-20:
 - ⚠️ **H3:** B1 title-anchor composition is refuted/inconclusive. B3 is
   implemented and preregistered but confirmatory efficacy is unmeasured; the
   checked-in run manifests are historical and rejected by the current loader.
+- ⚠️ **QKV structure:** exact ordered evidence routing passes 64/64 synthetic
+  teeth, but the no-label B1-QKV development gate fails. K2 loses nDCG to
+  matched K1 on both datasets, so recurrent-query reasoning uplift is not
+  established.
 - ❌ **S4 durable revision runtime:** event-folded supersession, as-of replay,
   compensation, concurrent publication, signatures, and external trust
   distribution are not present-tense claims.
@@ -67,6 +71,8 @@ positive traversal residual does not guarantee ranking/nDCG improvement.
 | `EPWC_IMPLEMENTATION_S3_2026-07-20.md` | S3 implementation and comparison receipt; smart-hypergraph boundary |
 | `EFFICACY.md` / `verify_efficacy_claims.py` | human and machine-readable current efficacy ledger |
 | `H3_B3_RESUME_STATUS_2026-07-20.md` | corrected PRE_RUN boundary, local receipt hashes, and exact next sequence |
+| `QKV_STRUCTURE_EXPERIMENT_PLAN_2026-07-20.md` / `QKV_STRUCTURE_RESULTS_2026-07-20.md` | ordered-routing and B1-QKV development protocol, results, and claim boundary |
+| `qkv_routing.py` / `qkv_b1_probe.py` | exact symbolic QKV routing and no-label dense B1 value-read research kernels |
 | `world_builder.py` | legacy corpus builder retained as the parity oracle |
 | `hypergraph.py` | reified hypergraph (nodes+embeddings, incidence = field support) |
 | `weight_field.py` | `W(e|c)` = cosine ⊕ base-salience; heuristic scorers |

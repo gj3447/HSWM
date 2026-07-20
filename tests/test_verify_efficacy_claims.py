@@ -47,6 +47,24 @@ def test_checked_in_efficacy_snapshot_matches_public_claims() -> None:
     assert snapshot["compiler_and_certified_readout"]["status"] == (
         "LOCAL_CONFORMANCE_PASS_NOT_EFFICACY"
     )
+    assert snapshot["qkv_structure"] == {
+        "synthetic_ordered_routing": "PASS_64_OF_64",
+        "b1_real_data_development": "CROSS_DATASET_GATE_FAILED",
+        "k2_minus_matched_k1": {
+            "musique": {
+                "ndcg10_k2_minus_k1": -0.015238,
+                "asr10_k2_minus_k1": -0.04,
+            },
+            "2wiki": {
+                "ndcg10_k2_minus_k1": -0.035466,
+                "asr10_k2_minus_k1": 0.010204,
+            },
+        },
+        "boundary": (
+            "QKV routing is mechanically coherent; current title-value "
+            "recurrence does not establish real-data reasoning uplift"
+        ),
+    }
 
 
 def test_headline_drift_fails_closed(tmp_path: Path) -> None:
@@ -63,6 +81,8 @@ def test_headline_drift_fails_closed(tmp_path: Path) -> None:
         "stale_poisoning_2wiki_result.json",
         "certified_cut_comparison_result.json",
         "h3_title_anchor_result.json",
+        "qkv_routing_result.json",
+        "qkv_b1_development_result.json",
     )
     for name in names:
         (tmp_path / name).write_bytes((REPO_ROOT / name).read_bytes())

@@ -1,0 +1,60 @@
+{
+  "allowed_claim": "synthetic evidence-bound ordered key-value routing mechanism",
+  "counts": {
+    "ambiguous_key_refused": 64,
+    "input_order_and_repeat_deterministic": 64,
+    "k1_route_invariant_under_second_step_nulls": 64,
+    "key_null_exact": 0,
+    "matched_k1_reaches_k2_target": 0,
+    "ordered_k2_exact": 64,
+    "refusal_static_payload_bit_identical": 64,
+    "unordered_bag_exact": 32,
+    "unseen_relation_refused": 64,
+    "value_null_exact": 0,
+    "value_to_next_query_receipt_valid": 64
+  },
+  "experiment_scope": "synthetic_ordered_qkv_routing_only",
+  "forbidden_claims": [
+    "neural attention",
+    "raw natural-language reasoning",
+    "real-data retrieval uplift",
+    "HSWM cognitive uplift"
+  ],
+  "gates": {
+    "ambiguous_key_atomic_refusal": true,
+    "deterministic_receipts": true,
+    "matched_k1_cannot_reach_terminal": true,
+    "matched_k1_route_invariant": true,
+    "ordered_k2_exact": true,
+    "refusal_static_identity": true,
+    "second_step_key_null_kills": true,
+    "second_step_value_null_kills": true,
+    "unordered_bag_cannot_discriminate_both_orders": true,
+    "unseen_relation_atomic_refusal": true,
+    "value_to_next_query_receipts": true
+  },
+  "implementation": {
+    "qkv_routing.py": "20257a820a9000858638be58afa42678424c1bf1fc471abf872355430d249c84",
+    "qkv_routing_falsifier.py": "d9678ea842989133a72f0f30a4c878bd8500d016c9b683f05c79df803a3b7b32"
+  },
+  "n_programs": 64,
+  "n_worlds": 32,
+  "rates": {
+    "ambiguous_key_refused": 1.0,
+    "input_order_and_repeat_deterministic": 1.0,
+    "k1_route_invariant_under_second_step_nulls": 1.0,
+    "key_null_exact": 0.0,
+    "matched_k1_reaches_k2_target": 0.0,
+    "ordered_k2_exact": 1.0,
+    "refusal_static_payload_bit_identical": 1.0,
+    "unordered_bag_exact": 0.5,
+    "unseen_relation_refused": 1.0,
+    "value_null_exact": 0.0,
+    "value_to_next_query_receipt_valid": 1.0
+  },
+  "receipt_root_sha256": "853ade860497d97fa3337b4e091eb077957e2a915eb3d96c3715b8dd0f261f3d",
+  "research_only": true,
+  "result_sha256": "4004a0a455a7bdff05b5e65875111718f9601b34cf458864948ff376ae6cada0",
+  "schema_version": "hswm-qkv-routing-falsifier/v1",
+  "status": "PASS"
+}

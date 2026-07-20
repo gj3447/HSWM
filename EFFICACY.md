@@ -22,6 +22,7 @@ The broader claims do not pass:
 | long-document advantage | **synthetic mechanism only** | no real NoCha/QASPER/NarrativeQA/book-scale result |
 | EPWC + certified readout | **local conformance, not efficacy** | deterministic compiler and fail-closed admission tests |
 | H3 relation composition | **not established** | B1 title-anchor result is refuted/inconclusive; B3 confirmatory efficacy is unmeasured |
+| QKV-style recurrent query state | **synthetic mechanism passes; B1 real-data gate fails** | 64/64 ordered-routing teeth; K2 loses nDCG to matched K1 on both development datasets |
 | S4 durable revision runtime | **absent** | no replay/WAL/concurrent publication/signature system |
 
 Run `python verify_efficacy_claims.py --pretty` to reconstruct the selected
@@ -139,6 +140,37 @@ Sources: `traversal_bench_results.json`, `cert_musique_result.json`,
 `cert_2wiki_result.json`, `h3_title_anchor_result.json`, and
 `H3_B3_COMPOSITION_PREREG_2026-07-20.md`.
 
+### QKV structure probe
+
+The QKV hypothesis has now been separated from the neural-network analogy. An
+exact research kernel treats the current frontier and ordered relation as Q,
+the source frontier/predicate as K, and the evidenced target frontier as V.
+Selected V becomes the next Q frontier. It passes 64/64 synthetic
+order-collision cases; matched K1 and second-edge key/value nulls reach 0/64
+depth-two terminals. This establishes a deterministic ordered-routing
+mechanism, not real-data intelligence.
+
+The stronger no-label B1 development probe uses the existing BGE query vector
+as Q, paragraph vectors as K, and only exact-title-linked paragraph vectors as
+V. A relation/evidence-disjoint validation half selected one K2 policy per
+dataset before evaluation on the held development-test half.
+
+| dataset | cosine nDCG / ASR | QKV K1 | QKV K2 | K2 - K1 nDCG / ASR |
+|---|---:|---:|---:|---:|
+| 2Wiki | .678094 / .091837 | **.763328 / .204082** | .727862 / **.214286** | **-.035466 / +.010204** |
+| MuSiQue | **.585216** / .160000 | .582733 / **.210000** | .567494 / .170000 | **-.015238 / -.040000** |
+
+2Wiki K2 beats cosine and five degree-preserving Value shuffles, but its second
+layer is worse than matched K1 on nDCG. MuSiQue K2 is worse than K1 and cosine,
+fails the null comparisons, and has only 0.40 full-depth apply coverage. Thus
+the cross-dataset real-data gate fails. The correct current statement is:
+**HSWM has a coherent evidence-bound Q/K/V routing algebra, but stacking the
+available B1 reads does not establish reasoning uplift.**
+
+Sources: `QKV_STRUCTURE_EXPERIMENT_PLAN_2026-07-20.md`,
+`QKV_STRUCTURE_RESULTS_2026-07-20.md`, `qkv_routing_result.json`, and
+`qkv_b1_development_result.json`.
+
 ## 4. Graded supersession: useful behavior, narrower novelty
 
 At full dose `b=0.1`, a non-destructive supersede write reduces the maximally
@@ -211,5 +243,6 @@ receipts.
 - no successful query-time graph reasoning on the two certified worlds;
 - no real book-scale advantage;
 - no H3-B3 confirmatory efficacy result;
+- no real-data reasoning uplift from the current QKV-style recurrent query state;
 - no state-of-the-art retrieval comparison;
 - no production durability, external trust, or cryptographic certificate claim.

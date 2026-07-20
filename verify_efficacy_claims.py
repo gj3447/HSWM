@@ -8,6 +8,7 @@ artifacts used by ``EFFICACY.md``.
 from __future__ import annotations
 
 import argparse
+from hashlib import sha256
 import json
 import math
 from pathlib import Path
@@ -31,6 +32,16 @@ def _load(root: Path, name: str) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise EfficacyClaimError(f"{name} must contain a JSON object")
     return value
+
+
+def _verify_result_self_hash(value: Mapping[str, Any], *, label: str) -> None:
+    declared = value.get("result_sha256")
+    payload = dict(value)
+    payload.pop("result_sha256", None)
+    actual = sha256(json.dumps(
+        payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+    ).encode("utf-8")).hexdigest()
+    _require(declared == actual, f"{label} result self-hash drifted")
 
 
 def _require(condition: bool, message: str) -> None:
@@ -83,6 +94,8 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
     stale_2wiki = _load(repo, "stale_poisoning_2wiki_result.json")
     certified_cut = _load(repo, "certified_cut_comparison_result.json")
     title_anchor = _load(repo, "h3_title_anchor_result.json")
+    qkv_routing = _load(repo, "qkv_routing_result.json")
+    qkv_b1 = _load(repo, "qkv_b1_development_result.json")
 
     overall = substrate.get("aggregate", {}).get("overall", {})
     downstream = substrate.get("downstream_f1", {}).get("aggregate_f1_em", {})
@@ -286,6 +299,54 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
     _require(title_anchor.get("verdict") == "H3_REFUTED_OR_INCONCLUSIVE",
              "B1 title-anchor H3 verdict drifted")
 
+    _verify_result_self_hash(qkv_routing, label="QKV routing")
+    _require(
+        qkv_routing.get("status") == "PASS"
+        and qkv_routing.get("n_programs") == 64
+        and qkv_routing.get("counts", {}).get("ordered_k2_exact") == 64
+        and qkv_routing.get("counts", {}).get(
+            "matched_k1_reaches_k2_target"
+        ) == 0
+        and all(qkv_routing.get("gates", {}).values()),
+        "synthetic ordered QKV routing teeth drifted",
+    )
+    _verify_result_self_hash(qkv_b1, label="B1-QKV development")
+    _require(
+        qkv_b1.get("status") == "B1_QKV_REAL_DATA_GATE_FAILED",
+        "B1-QKV real-data development verdict drifted",
+    )
+    qkv_datasets = {
+        str(item.get("dataset")): item for item in qkv_b1.get("datasets", ())
+        if isinstance(item, Mapping)
+    }
+    _require(
+        set(qkv_datasets) == {"musique", "2wiki"}
+        and all(item.get("verdict") == "FAIL" for item in qkv_datasets.values()),
+        "B1-QKV must retain both failed dataset gates",
+    )
+    qkv_deltas: dict[str, dict[str, float]] = {}
+    for dataset, expected_ndcg, expected_asr in (
+        ("musique", -0.015238, -0.04),
+        ("2wiki", -0.035466, 0.010204),
+    ):
+        comparisons = qkv_datasets[dataset].get("qkv_k2_minus", {})
+        qkv_deltas[dataset] = {
+            "ndcg10_k2_minus_k1": _close(
+                comparisons.get("matched_k1", {}).get("ndcg10", {}).get(
+                    "mean_delta"
+                ),
+                expected_ndcg,
+                label=f"{dataset} B1-QKV K2-minus-K1 nDCG",
+            ),
+            "asr10_k2_minus_k1": _close(
+                comparisons.get("matched_k1", {}).get("asr10", {}).get(
+                    "mean_delta"
+                ),
+                expected_asr,
+                label=f"{dataset} B1-QKV K2-minus-K1 ASR",
+            ),
+        }
+
     return {
         "schema_version": SCHEMA_VERSION,
         "retrieval_substrate": {
@@ -364,6 +425,15 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
         "h3_relational_composition": {
             "b1_title_anchor": "REFUTED_OR_INCONCLUSIVE",
             "b3_evidence_bound": "NOT_YET_MEASURED",
+        },
+        "qkv_structure": {
+            "synthetic_ordered_routing": "PASS_64_OF_64",
+            "b1_real_data_development": "CROSS_DATASET_GATE_FAILED",
+            "k2_minus_matched_k1": qkv_deltas,
+            "boundary": (
+                "QKV routing is mechanically coherent; current title-value "
+                "recurrence does not establish real-data reasoning uplift"
+            ),
         },
     }
 

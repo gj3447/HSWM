@@ -1,0 +1,93 @@
+{
+  "experiment": "hswm_publishable_ml10",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML10-hswm-publishable",
+  "setup": {
+    "n_queries": 26,
+    "metric": "alpha-nDCG@20 (alpha=0.5, subtopic=chapter, blind-proof)",
+    "seeds": [
+      333,
+      7,
+      91
+    ],
+    "gold": "anchor-string presence (scope: string-level, crude)",
+    "corpus": "ai-agent-book 1425 chunks",
+    "tree": "RAPTOR-style KMeans branch=6, minsize=6, maxlvl=8",
+    "edges": "embedding cross-chapter top-3 beta=0.85"
+  },
+  "method_alpha_ndcg@20 (mean over seeds ± std)": {
+    "flat": {
+      "mean": 0.3209,
+      "std": 0.0
+    },
+    "flat_mmr": {
+      "mean": 0.2552,
+      "std": 0.0
+    },
+    "tree_full": {
+      "mean": 0.3188,
+      "std": 0.0006
+    },
+    "tree_edges": {
+      "mean": 0.3162,
+      "std": 0.0007
+    }
+  },
+  "Q1_depth_ablation_alpha_ndcg@20": {
+    "0": {
+      "mean": 0.3209,
+      "std": 0.0
+    },
+    "1": {
+      "mean": 0.3209,
+      "std": 0.0
+    },
+    "2": {
+      "mean": 0.3203,
+      "std": 0.0021
+    },
+    "3": {
+      "mean": 0.3179,
+      "std": 0.0002
+    },
+    "4": {
+      "mean": 0.3189,
+      "std": 0.0014
+    },
+    "5": {
+      "mean": 0.3188,
+      "std": 0.0006
+    }
+  },
+  "Q1_depth_optimum_D": 0,
+  "Q1_verdict": "flat best",
+  "Q2_split_benefit_full_minus_coarse (per seed)": [
+    -0.0016,
+    -0.0017,
+    -0.003
+  ],
+  "Q2_split_benefit_mean": -0.0021,
+  "bootstrap_95CI": {
+    "tree_full_minus_flat": {
+      "mean": -0.0016,
+      "CI": [
+        -0.0071,
+        0.0054
+      ]
+    },
+    "edges_minus_tree": {
+      "mean": -0.004,
+      "CI": [
+        -0.0149,
+        0.0054
+      ]
+    }
+  },
+  "conclusion": {
+    "deeper_helps": false,
+    "split_bloated_helps": false,
+    "tree_beats_flat_sig": false,
+    "embedding_edges_help_sig": false,
+    "best_method": "flat"
+  }
+}

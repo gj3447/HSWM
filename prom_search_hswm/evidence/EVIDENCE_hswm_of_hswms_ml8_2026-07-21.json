@@ -1,0 +1,168 @@
+{
+  "experiment": "hswm_of_hswms_ml8",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML8-hswm-of-hswms",
+  "structure": {
+    "L1_chapters": 10,
+    "L2_chunks": 1425,
+    "concepts": 8,
+    "corpus": "ai-agent-book"
+  },
+  "metric_note": "chapter_coverage@k = 개념이 흩어진 章 중 top-k에 대표된 비율 = 문맥. recall@k도 병기.",
+  "means": {
+    "flat": {
+      "20": {
+        "recall": 0.1273,
+        "coverage": 0.3482
+      },
+      "40": {
+        "recall": 0.2222,
+        "coverage": 0.4536
+      }
+    },
+    "hier_weighted": {
+      "20": {
+        "recall": 0.0579,
+        "coverage": 0.4607
+      },
+      "40": {
+        "recall": 0.1148,
+        "coverage": 0.5946
+      }
+    },
+    "hier_blind": {
+      "20": {
+        "recall": 0.0569,
+        "coverage": 0.4786
+      },
+      "40": {
+        "recall": 0.111,
+        "coverage": 0.6125
+      }
+    },
+    "hier_sibling": {
+      "20": {
+        "recall": 0.0579,
+        "coverage": 0.4607
+      },
+      "40": {
+        "recall": 0.1148,
+        "coverage": 0.5946
+      }
+    }
+  },
+  "per_concept": [
+    {
+      "concept": "harness",
+      "gold_chunks": 52,
+      "gold_chapters": 7,
+      "flat_cov@20": 0.429,
+      "flat_cov@40": 0.429,
+      "hier_weighted_cov@20": 0.429,
+      "hier_weighted_cov@40": 0.429,
+      "hier_blind_cov@20": 0.429,
+      "hier_blind_cov@40": 0.571,
+      "hier_sibling_cov@20": 0.429,
+      "hier_sibling_cov@40": 0.429
+    },
+    {
+      "concept": "RAG",
+      "gold_chunks": 56,
+      "gold_chapters": 7,
+      "flat_cov@20": 0.286,
+      "flat_cov@40": 0.286,
+      "hier_weighted_cov@20": 0.143,
+      "hier_weighted_cov@40": 0.286,
+      "hier_blind_cov@20": 0.143,
+      "hier_blind_cov@40": 0.286,
+      "hier_sibling_cov@20": 0.143,
+      "hier_sibling_cov@40": 0.286
+    },
+    {
+      "concept": "多 Agent",
+      "gold_chunks": 44,
+      "gold_chapters": 7,
+      "flat_cov@20": 0.286,
+      "flat_cov@40": 0.429,
+      "hier_weighted_cov@20": 0.286,
+      "hier_weighted_cov@40": 0.429,
+      "hier_blind_cov@20": 0.286,
+      "hier_blind_cov@40": 0.429,
+      "hier_sibling_cov@20": 0.286,
+      "hier_sibling_cov@40": 0.429
+    },
+    {
+      "concept": "KV Cache",
+      "gold_chunks": 51,
+      "gold_chapters": 5,
+      "flat_cov@20": 0.6,
+      "flat_cov@40": 1.0,
+      "hier_weighted_cov@20": 1.0,
+      "hier_weighted_cov@40": 1.0,
+      "hier_blind_cov@20": 1.0,
+      "hier_blind_cov@40": 1.0,
+      "hier_sibling_cov@20": 1.0,
+      "hier_sibling_cov@40": 1.0
+    },
+    {
+      "concept": "Coding Agent",
+      "gold_chunks": 52,
+      "gold_chapters": 7,
+      "flat_cov@20": 0.286,
+      "flat_cov@40": 0.286,
+      "hier_weighted_cov@20": 0.429,
+      "hier_weighted_cov@40": 0.714,
+      "hier_blind_cov@20": 0.571,
+      "hier_blind_cov@40": 0.714,
+      "hier_sibling_cov@20": 0.429,
+      "hier_sibling_cov@40": 0.714
+    },
+    {
+      "concept": "评估",
+      "gold_chunks": 136,
+      "gold_chapters": 10,
+      "flat_cov@20": 0.2,
+      "flat_cov@40": 0.4,
+      "hier_weighted_cov@20": 0.4,
+      "hier_weighted_cov@40": 0.8,
+      "hier_blind_cov@20": 0.4,
+      "hier_blind_cov@40": 0.8,
+      "hier_sibling_cov@20": 0.4,
+      "hier_sibling_cov@40": 0.8
+    },
+    {
+      "concept": "上下文",
+      "gold_chunks": 323,
+      "gold_chapters": 10,
+      "flat_cov@20": 0.5,
+      "flat_cov@40": 0.5,
+      "hier_weighted_cov@20": 0.5,
+      "hier_weighted_cov@40": 0.5,
+      "hier_blind_cov@20": 0.5,
+      "hier_blind_cov@40": 0.5,
+      "hier_sibling_cov@20": 0.5,
+      "hier_sibling_cov@40": 0.5
+    },
+    {
+      "concept": "记忆",
+      "gold_chunks": 132,
+      "gold_chapters": 10,
+      "flat_cov@20": 0.2,
+      "flat_cov@40": 0.3,
+      "hier_weighted_cov@20": 0.5,
+      "hier_weighted_cov@40": 0.6,
+      "hier_blind_cov@20": 0.5,
+      "hier_blind_cov@40": 0.6,
+      "hier_sibling_cov@20": 0.5,
+      "hier_sibling_cov@40": 0.6
+    }
+  ],
+  "hypothesis_test": {
+    "hier_weighted_cov_gt_flat@20": true,
+    "hier_sibling_cov_gt_flat@20": true,
+    "weighted_cov_gt_blind@20": false,
+    "cov_gain_weighted_over_flat@20": 0.1125,
+    "cov_gain_sibling_over_flat@20": 0.1125
+  },
+  "verdict_note": "hier가 flat보다 coverage 높으면 'HSWM-of-HSWMs가 문맥 높인다' 지지. weighted>blind면 가중규칙 재확인. gold=anchor-string(crude), recall은 낮게 나옴(비교는 상대)."
+}

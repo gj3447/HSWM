@@ -1,0 +1,115 @@
+{
+  "experiment": "hswm_entity_bench_ml15",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML15-entity-graph-bench",
+  "setup": {
+    "benchmark": "MuSiQue-ans dev",
+    "n_questions": 300,
+    "corpus_paragraphs": 4702,
+    "model": "all-MiniLM-L6-v2",
+    "entity_edges": "regex proper-noun NER, shared-entity graph, df 2..40",
+    "gold": "official is_supporting"
+  },
+  "recall_by_method": {
+    "flat": {
+      "r@2": 0.3872,
+      "r@5": 0.5125,
+      "r@10": 0.6064
+    },
+    "emb_ppr": {
+      "r@2": 0.2889,
+      "r@5": 0.4042,
+      "r@10": 0.4983
+    },
+    "ent_ppr": {
+      "r@2": 0.1114,
+      "r@5": 0.2456,
+      "r@10": 0.3894
+    },
+    "ent_ppr_idf": {
+      "r@2": 0.1042,
+      "r@5": 0.2497,
+      "r@10": 0.3733
+    },
+    "ent_qseed": {
+      "r@2": 0.1822,
+      "r@5": 0.2931,
+      "r@10": 0.4033
+    },
+    "hybrid_ppr": {
+      "r@2": 0.3244,
+      "r@5": 0.4567,
+      "r@10": 0.5539
+    },
+    "ent_rerank": {
+      "r@2": 0.1075,
+      "r@5": 0.2625,
+      "r@10": 0.4297
+    },
+    "fuse_flat_ent": {
+      "r@2": 0.2944,
+      "r@5": 0.4625,
+      "r@10": 0.5886
+    }
+  },
+  "bootstrap_95CI_vs_flat_r@10": {
+    "emb_ppr": {
+      "mean": -0.1081,
+      "CI": [
+        -0.1331,
+        -0.0833
+      ]
+    },
+    "ent_ppr": {
+      "mean": -0.2169,
+      "CI": [
+        -0.2514,
+        -0.1819
+      ]
+    },
+    "ent_ppr_idf": {
+      "mean": -0.2331,
+      "CI": [
+        -0.2664,
+        -0.1978
+      ]
+    },
+    "ent_qseed": {
+      "mean": -0.2031,
+      "CI": [
+        -0.2511,
+        -0.1575
+      ]
+    },
+    "hybrid_ppr": {
+      "mean": -0.0525,
+      "CI": [
+        -0.0728,
+        -0.0317
+      ]
+    },
+    "ent_rerank": {
+      "mean": -0.1767,
+      "CI": [
+        -0.2108,
+        -0.1431
+      ]
+    },
+    "fuse_flat_ent": {
+      "mean": -0.0178,
+      "CI": [
+        -0.0386,
+        0.0025
+      ]
+    }
+  },
+  "conclusion": {
+    "best_method": "flat",
+    "best_r@10": 0.6064,
+    "flat_r@10": 0.6064,
+    "best_gain_over_flat": 0.0,
+    "any_entity_beats_flat_sig": false,
+    "entity_beats_embedding_ppr": true
+  },
+  "note": "롱기누스 엔티티엣지 재판정. flat=강baseline. CI하한>0=유의개선. emb_ppr=ML14 실패 참조."
+}

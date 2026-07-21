@@ -1,0 +1,127 @@
+{
+  "experiment": "hswm_deep_gnn_ml11",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML11-hswm-deep-gnn",
+  "setup": {
+    "n_queries": 26,
+    "graph": "kNN=10 cosine-weighted sym-norm",
+    "modes": [
+      "pure ÂX",
+      "appnp (1-β)ÂX+βX0 β=0.1"
+    ],
+    "metrics": "alpha-nDCG@20 + multihop_hardgold_recall@40 + oversmooth_meancos",
+    "corpus": "ai-agent-book 1425 chunks"
+  },
+  "pure_stacking_by_depth": {
+    "0": {
+      "alpha_ndcg@20": 0.3154,
+      "multihop_hardgold_recall@40": 0.0,
+      "oversmooth_meancos": 0.3738
+    },
+    "1": {
+      "alpha_ndcg@20": 0.2656,
+      "multihop_hardgold_recall@40": 0.0118,
+      "oversmooth_meancos": 0.6301
+    },
+    "2": {
+      "alpha_ndcg@20": 0.2443,
+      "multihop_hardgold_recall@40": 0.0212,
+      "oversmooth_meancos": 0.7539
+    },
+    "3": {
+      "alpha_ndcg@20": 0.235,
+      "multihop_hardgold_recall@40": 0.0223,
+      "oversmooth_meancos": 0.8277
+    },
+    "4": {
+      "alpha_ndcg@20": 0.218,
+      "multihop_hardgold_recall@40": 0.0233,
+      "oversmooth_meancos": 0.8752
+    },
+    "5": {
+      "alpha_ndcg@20": 0.2064,
+      "multihop_hardgold_recall@40": 0.0269,
+      "oversmooth_meancos": 0.9074
+    },
+    "6": {
+      "alpha_ndcg@20": 0.204,
+      "multihop_hardgold_recall@40": 0.0275,
+      "oversmooth_meancos": 0.9299
+    },
+    "8": {
+      "alpha_ndcg@20": 0.1805,
+      "multihop_hardgold_recall@40": 0.0298,
+      "oversmooth_meancos": 0.9581
+    },
+    "10": {
+      "alpha_ndcg@20": 0.173,
+      "multihop_hardgold_recall@40": 0.0331,
+      "oversmooth_meancos": 0.9739
+    }
+  },
+  "appnp_stacking_by_depth": {
+    "0": {
+      "alpha_ndcg@20": 0.3154,
+      "multihop_hardgold_recall@40": 0.0,
+      "oversmooth_meancos": 0.3738
+    },
+    "1": {
+      "alpha_ndcg@20": 0.2795,
+      "multihop_hardgold_recall@40": 0.0085,
+      "oversmooth_meancos": 0.6073
+    },
+    "2": {
+      "alpha_ndcg@20": 0.2618,
+      "multihop_hardgold_recall@40": 0.0113,
+      "oversmooth_meancos": 0.7088
+    },
+    "3": {
+      "alpha_ndcg@20": 0.255,
+      "multihop_hardgold_recall@40": 0.0142,
+      "oversmooth_meancos": 0.7669
+    },
+    "4": {
+      "alpha_ndcg@20": 0.2425,
+      "multihop_hardgold_recall@40": 0.0159,
+      "oversmooth_meancos": 0.8025
+    },
+    "5": {
+      "alpha_ndcg@20": 0.2382,
+      "multihop_hardgold_recall@40": 0.0159,
+      "oversmooth_meancos": 0.8257
+    },
+    "6": {
+      "alpha_ndcg@20": 0.237,
+      "multihop_hardgold_recall@40": 0.015,
+      "oversmooth_meancos": 0.8414
+    },
+    "8": {
+      "alpha_ndcg@20": 0.2394,
+      "multihop_hardgold_recall@40": 0.0134,
+      "oversmooth_meancos": 0.8601
+    },
+    "10": {
+      "alpha_ndcg@20": 0.2422,
+      "multihop_hardgold_recall@40": 0.0134,
+      "oversmooth_meancos": 0.8699
+    }
+  },
+  "conclusion": {
+    "pure_alpha_ndcg_optimum_L": 0,
+    "appnp_alpha_ndcg_optimum_L": 0,
+    "pure_multihop_optimum_L": 10,
+    "appnp_multihop_optimum_L": 4,
+    "pure_oversmooth_L0_to_L10": [
+      0.3738,
+      0.9739
+    ],
+    "appnp_oversmooth_L0_to_L10": [
+      0.3738,
+      0.8699
+    ],
+    "deep_stacking_helps_singlelookup": false,
+    "deep_stacking_helps_multihop": false,
+    "pure_oversmooths": true
+  },
+  "note": "딥러닝식 깊이=GNN message-passing 층수(트리깊이 아님). hard gold=직접유사도 낮은 gold=multi-hop 프록시. gold=anchor-string(crude)."
+}

@@ -1,0 +1,48 @@
+{
+  "experiment": "prom_multilayer_profile_badiou24",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML3-multilayer-profile-badiou",
+  "method": "layer-profile vector cosine (continuous, threshold-free AUC) — ML2 binary co-activation 과활성 수정",
+  "a_priori": {
+    "k_blind": 10,
+    "seed": 333
+  },
+  "gold": {
+    "n_rf": 24,
+    "same_pairs": 84,
+    "diff_pairs": 192,
+    "axes": "role(3)xtopic(7)"
+  },
+  "arm_A_single_layer": {
+    "auc": 0.6431,
+    "separation": 0.08,
+    "auc_null_z": 3.717,
+    "auc_null_mean": 0.4997
+  },
+  "arm_B_multi_blind_profile": {
+    "auc": 0.5946,
+    "separation": 0.018,
+    "auc_null_z": 2.48,
+    "auc_null_mean": 0.4999
+  },
+  "arm_C_multi_structured_profile": {
+    "auc": 0.5549,
+    "separation": 0.0004,
+    "auc_null_z": 1.41,
+    "auc_null_mean": 0.5006
+  },
+  "hypothesis_test": {
+    "B_auc_gt_A_auc": false,
+    "C_auc_gt_A_auc": false,
+    "B_separation_gt_A": false,
+    "best_multi_above_null_z3": false
+  },
+  "caveat": "C 층=gold축 유래(상한). 공정 판정=B(blind) AUC > A(single) AUC 인가. AUC=threshold-free 분리력.",
+  "prereg": {
+    "metric": "blind_multilayer_auc",
+    "baseline_single_layer_auc": null,
+    "novel_metric": "B_auc_minus_A_auc",
+    "novel_threshold": 0.0,
+    "direction": "higher"
+  }
+}

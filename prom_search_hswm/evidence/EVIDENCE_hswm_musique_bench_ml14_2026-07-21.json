@@ -1,0 +1,76 @@
+{
+  "experiment": "hswm_musique_bench_ml14",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML14-musique-bench",
+  "setup": {
+    "benchmark": "MuSiQue-ans dev (Trivedi 2022)",
+    "n_questions": 300,
+    "corpus_paragraphs": 4702,
+    "model": "all-MiniLM-L6-v2",
+    "graph": "kNN=10",
+    "gold": "official is_supporting (multi-hop chain, >=2 docs)"
+  },
+  "recall_by_method": {
+    "flat": {
+      "r@2": 0.3872,
+      "r@5": 0.5125,
+      "r@10": 0.6064,
+      "chain@10": 0.23
+    },
+    "iterative": {
+      "r@2": 0.3531,
+      "r@5": 0.4625,
+      "r@10": 0.5539,
+      "chain@10": 0.2267
+    },
+    "ppr_a0.15": {
+      "r@2": 0.1889,
+      "r@5": 0.285,
+      "r@10": 0.3975,
+      "chain@10": 0.1033
+    },
+    "ppr_a0.3": {
+      "r@2": 0.2889,
+      "r@5": 0.4042,
+      "r@10": 0.4983,
+      "chain@10": 0.1667
+    },
+    "ppr_a0.5": {
+      "r@2": 0.3319,
+      "r@5": 0.4567,
+      "r@10": 0.5675,
+      "chain@10": 0.2167
+    },
+    "ppr_rerank_a0.3": {
+      "r@2": 0.2889,
+      "r@5": 0.405,
+      "r@10": 0.4992,
+      "chain@10": 0.1667
+    }
+  },
+  "bootstrap_95CI": {
+    "ppr_rerank_minus_flat_r@10": {
+      "mean": -0.1072,
+      "CI": [
+        -0.1319,
+        -0.0822
+      ]
+    },
+    "ppr_rerank_minus_iterative_r@10": {
+      "mean": -0.0547,
+      "CI": [
+        -0.0828,
+        -0.0267
+      ]
+    }
+  },
+  "conclusion": {
+    "best_method": "flat",
+    "best_ppr_r@10": 0.5675,
+    "flat_r@10": 0.6064,
+    "ppr_beats_flat_significant": false,
+    "ppr_beats_iterative_significant": false,
+    "ppr_gain_over_flat_r@10": -0.0389
+  },
+  "note": "실 벤치 MuSiQue. gold=공식 supporting(진짜 multi-hop). CI 하한>0 = 유의. Agent3 사전확률 +3~5pp 단일책; 벤치는 더 클수도."
+}

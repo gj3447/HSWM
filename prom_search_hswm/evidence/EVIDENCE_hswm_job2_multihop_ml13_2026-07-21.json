@@ -1,0 +1,89 @@
+{
+  "experiment": "hswm_job2_multihop_ml13",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML13-job2-multihop",
+  "prior": "단일책 스케일 그래프 이득 사전확률 +3~5pp or null (Agent3 문헌). >이면 가짜multi-hop/약baseline 의심.",
+  "task": {
+    "n_real_multihop_pairs": 10,
+    "gold": "A·B 동시포함 bridge청크(≥2 章)",
+    "metric": "bridge recall@20",
+    "pairs": [
+      {
+        "A": "harness",
+        "B": "评估",
+        "n_bridge": 9,
+        "n_chap": 3
+      },
+      {
+        "A": "工具",
+        "B": "Coding Agent",
+        "n_bridge": 17,
+        "n_chap": 6
+      },
+      {
+        "A": "RAG",
+        "B": "上下文",
+        "n_bridge": 26,
+        "n_chap": 6
+      },
+      {
+        "A": "强化学习",
+        "B": "评估",
+        "n_bridge": 4,
+        "n_chap": 3
+      },
+      {
+        "A": "提示",
+        "B": "安全",
+        "n_bridge": 21,
+        "n_chap": 8
+      },
+      {
+        "A": "多模态",
+        "B": "工具",
+        "n_bridge": 16,
+        "n_chap": 8
+      },
+      {
+        "A": "记忆",
+        "B": "检索",
+        "n_bridge": 36,
+        "n_chap": 7
+      },
+      {
+        "A": "KV Cache",
+        "B": "推理",
+        "n_bridge": 9,
+        "n_chap": 3
+      },
+      {
+        "A": "知识",
+        "B": "检索",
+        "n_bridge": 67,
+        "n_chap": 9
+      },
+      {
+        "A": "编排",
+        "B": "多 Agent",
+        "n_bridge": 3,
+        "n_chap": 2
+      }
+    ]
+  },
+  "recall@20_by_method": {
+    "flat": 0.1361,
+    "iterative": 0.1131,
+    "ppr_a0.15": 0.1368,
+    "ppr_a0.3": 0.1744,
+    "ppr_a0.5": 0.1844,
+    "ppr_rerank_a0.3": 0.1941
+  },
+  "conclusion": {
+    "best_method": "ppr_rerank_a0.3",
+    "best_ppr_beats_flat": true,
+    "ppr_gain_over_flat": 0.058,
+    "iterative_vs_flat": -0.023,
+    "ppr_beats_iterative": true
+  },
+  "note": "진짜 multi-hop(bridge≥2章). ppr=APPNP teleport K=10. gold=anchor-string 교집합(crude)."
+}

@@ -1,0 +1,46 @@
+{
+  "experiment": "prom_fieldoffields_badiou24",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML4-fieldoffields-badiou",
+  "kg_structure_finding": "이 KG는 RF마다 비-consensus 이웃 균일(SubagentTaskSpec:3+Lesson:1) = 판별 구조場 부재. 엔티티場은 텍스트서 lexical 추출한 최소 독립-모달리티 프록시.",
+  "gold": {
+    "n_rf": 24,
+    "same_pairs": 84,
+    "diff_pairs": 192
+  },
+  "entity_layer": {
+    "lexicon_size": 42,
+    "mean_entities_per_rf": 4.17,
+    "rfs_with_zero_entities": 2
+  },
+  "arm_A_text_field": {
+    "auc": 0.6431,
+    "separation": 0.08
+  },
+  "arm_E_entity_field": {
+    "auc": 0.7078,
+    "separation": 0.1455
+  },
+  "arm_F_fused_RRF": {
+    "auc": 0.6972,
+    "separation": 0.0057
+  },
+  "fused_weighted_sweep": {
+    "alpha_0.00_text": 0.7078,
+    "alpha_0.25_text": 0.6899,
+    "alpha_0.50_text": 0.6991,
+    "alpha_0.75_text": 0.6789,
+    "alpha_1.00_text": 0.6431
+  },
+  "best_fused": {
+    "auc": 0.7078,
+    "alpha_text_weight": 0.0
+  },
+  "hypothesis_test": {
+    "entity_alone_beats_null": true,
+    "RRF_fusion_beats_text": true,
+    "any_fusion_beats_text": true,
+    "fusion_gain_over_text": 0.0647
+  },
+  "verdict_note": "F_auc > A_auc 면 USER field-of-fields 가설 이 프록시서 지지. <= 면 이 데이터/모달리티선 독립場도 무익."
+}

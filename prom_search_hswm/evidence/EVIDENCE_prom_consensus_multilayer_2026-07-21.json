@@ -1,0 +1,44 @@
+{
+  "experiment": "prom_consensus_multilayer_gfs",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML1-multilayer-hypothesis",
+  "a_priori": {
+    "tau": 0.5,
+    "layer_t": 0.35,
+    "null_perms": 2000,
+    "seed": 333
+  },
+  "gold": {
+    "n_rf": 13,
+    "overlapping": true,
+    "gold_same_pairs": 68,
+    "gold_diff_pairs": 10,
+    "n_layers": 8
+  },
+  "single_layer_P2b": {
+    "recall": 0.4412,
+    "precision": 0.8824,
+    "separation_same_minus_diff": -0.0381
+  },
+  "multi_layer": {
+    "recall": 0.8235,
+    "precision": 0.8485,
+    "separation_same_minus_diff": -0.0517,
+    "mc_null_z": -0.945,
+    "null_mean": 0.8461
+  },
+  "hypothesis_test": {
+    "separation_flipped_positive": false,
+    "multi_sep_gt_single_sep": false,
+    "multi_above_null_z3": false
+  },
+  "caveat": "층 앵커=gold thesis 유래=feasibility/upper-bound. 통과=multi-layer 원리 성립→차기 blind 층 발견(internet+KG 유래). 미통과=multi-layer도 안 됨.",
+  "prereg": {
+    "metric": "multilayer_consensus_recall",
+    "baseline_single_layer_z": 0.19,
+    "novel_metric": "multilayer_separation_same_minus_diff",
+    "novel_threshold": 0.0,
+    "direction": "higher",
+    "single_layer_separation": -0.0381
+  }
+}

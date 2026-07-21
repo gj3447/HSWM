@@ -1,0 +1,40 @@
+{
+  "experiment": "vunione_readout_ab_stepB",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "T5-vunione-firstclass-readout",
+  "design": "entity-only graph (leakage-free), gold=topic co-membership held-out, leave-one-out, finding-level aggregation (candidate-inflation neutral)",
+  "graph": {
+    "V_entity": 40,
+    "E_findings": 24
+  },
+  "arms": {
+    "node_only": {
+      "recall_at_5": 0.3426,
+      "mrr": 0.4135,
+      "n_queries": 18
+    },
+    "edge_only": {
+      "recall_at_5": 0.6435,
+      "mrr": 0.6479,
+      "n_queries": 18
+    },
+    "v_union_e": {
+      "recall_at_5": 0.6157,
+      "mrr": 0.6461,
+      "n_queries": 18
+    }
+  },
+  "preregistered_metric": "vunione_minus_edgeonly_recall_gap",
+  "gap_vunione_minus_edgeonly": -0.0278,
+  "gap_vunione_minus_nodeonly": 0.2731,
+  "mc_null": {
+    "perms": 200,
+    "null_mean_recall": 0.2128,
+    "null_sd": 0.0758,
+    "z": 5.318,
+    "novel_metric": "vunione_recall_above_mc_null_z",
+    "threshold": 3.0
+  },
+  "verdict": "degenerating",
+  "honest_note": "candidate inflation 중화(세 arm 같은 23 findings 랭킹). gap<=0.02면 V정점이 findings-only에 못 더함(equivalent) = 정직한 null 가능. 판정은 사전등록 대조 — eureka 자기채점 아님."
+}

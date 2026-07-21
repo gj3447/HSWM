@@ -1,0 +1,122 @@
+{
+  "experiment": "hswm_solid_scaffold_ml18",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML18-solid-scaffold-depth",
+  "canon": "SOLID_SCAFFOLD_DEPTH.md — 깊이 두 종류. 전파깊이=over-smooth, 구조깊이=solid발판. USER: solid해야 방향수정·붙이기·이식.",
+  "setup": {
+    "benchmark": "MuSiQue-ans dev",
+    "n_questions": 300,
+    "corpus": 4702,
+    "hyperedges": 5253,
+    "model": "all-MiniLM-L6-v2",
+    "flat_recall@10": 0.6064
+  },
+  "S_solidity": {
+    "depth_sweep": {
+      "naive_deep": {
+        "recall@10": [
+          0.3103,
+          0.2514,
+          0.1317,
+          0.0492,
+          0.0139,
+          0.0039
+        ],
+        "collapse": [
+          0.6687,
+          0.7935,
+          0.907,
+          0.9704,
+          0.9891,
+          0.9935
+        ]
+      },
+      "solid_appnp": {
+        "recall@10": [
+          0.4047,
+          0.4172,
+          0.3583,
+          0.3597,
+          0.3722,
+          0.3739
+        ],
+        "collapse": [
+          0.6436,
+          0.7245,
+          0.7988,
+          0.8346,
+          0.8425,
+          0.843
+        ]
+      },
+      "solid_gcnii": {
+        "recall@10": [
+          0.6269,
+          0.5033,
+          0.3761,
+          0.3586,
+          0.3722,
+          0.3739
+        ],
+        "collapse": [
+          0.5129,
+          0.644,
+          0.764,
+          0.8274,
+          0.842,
+          0.843
+        ]
+      }
+    },
+    "depths": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
+    "naive_collapse_rise_K1to32": 0.3248,
+    "solid_appnp_collapse_rise_K1to32": 0.1994,
+    "naive_recall_drop_K1to32": 0.3064,
+    "solid_recall_drop_K1to32": 0.0308,
+    "verdict_solid_holds": true
+  },
+  "P_portability": {
+    "dev_by_alpha": {
+      "0.05": 0.1539,
+      "0.15": 0.3544,
+      "0.3": 0.5306,
+      "0.5": 0.5994
+    },
+    "test_by_alpha": {
+      "0.05": 0.1428,
+      "0.15": 0.3867,
+      "0.3": 0.5472,
+      "0.5": 0.6272
+    },
+    "alpha_tuned_on_dev": 0.5,
+    "alpha_oracle_on_test": 0.5,
+    "port_gap(oracle-tuned)": 0.0,
+    "test_r10_tuned": 0.6272,
+    "test_r10_flat": 0.6322,
+    "verdict_portable": true
+  },
+  "A_incremental_attach": {
+    "recall@10": {
+      "base_only": 0.2922,
+      "incremental": 0.3706,
+      "full_rebuild": 0.3706
+    },
+    "hardhop@10": {
+      "base_only": 0.1967,
+      "incremental": 0.2233,
+      "full_rebuild": 0.2233,
+      "flat": 0.23
+    },
+    "attach_lossless(|inc-full|)": 0.0,
+    "attach_recovers(inc-base)": 0.0266,
+    "verdict_attach_works": true
+  },
+  "note": "S=solidity(residual vs naive) P=이식성(config transfer) A=모듈성(증분attach). recall@10 아닌 solid/이식/붙이기 축 실측."
+}

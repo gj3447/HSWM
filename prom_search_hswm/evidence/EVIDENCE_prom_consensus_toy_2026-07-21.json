@@ -1,0 +1,71 @@
+{
+  "experiment": "prom_consensus_bench_toy",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "P2-semantic-consensus-recall",
+  "a_priori": {
+    "tau": 0.5,
+    "null_perms": 2000,
+    "seed": 333
+  },
+  "gold": {
+    "n_findings": 12,
+    "n_clusters": 4,
+    "toy": true,
+    "note": "hand-built paraphrase set, not real KG RF"
+  },
+  "lexical_current_prom": {
+    "recall": 0.0,
+    "precision": 0.0
+  },
+  "semantic": {
+    "recall": 0.6667,
+    "precision": 0.2162,
+    "tau": 0.5
+  },
+  "novel_gap_semantic_minus_lexical": 0.6667,
+  "mc_null": {
+    "null_mean_recall": 0.5596,
+    "null_std": 0.0708,
+    "z": 1.512,
+    "perms": 2000
+  },
+  "cosine_separation": {
+    "matched_mean": 0.4806,
+    "mismatched_mean": 0.394,
+    "separation": 0.0866
+  },
+  "tau_sweep": {
+    "0.30": {
+      "recall": 1.0,
+      "precision": 0.1818
+    },
+    "0.40": {
+      "recall": 1.0,
+      "precision": 0.1818
+    },
+    "0.50": {
+      "recall": 0.6667,
+      "precision": 0.2162
+    },
+    "0.60": {
+      "recall": 0.3333,
+      "precision": 0.25
+    },
+    "0.70": {
+      "recall": 0.1667,
+      "precision": 0.2857
+    }
+  },
+  "prereg": {
+    "metric": "consensus_recall_goldset",
+    "baseline": 0.4,
+    "novel_metric": "semantic_minus_lexical_consensus_recall_gap",
+    "novel_threshold": 0.15,
+    "direction": "higher"
+  },
+  "_facts": {
+    "novel_gap_ge_threshold": true,
+    "semantic_above_null": false,
+    "precision_not_collapsed": true
+  }
+}

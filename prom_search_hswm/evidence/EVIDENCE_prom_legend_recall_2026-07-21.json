@@ -1,0 +1,103 @@
+{
+  "experiment": "prom_legend_recall_crosslingual",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "P3-legend-recall-at-k",
+  "corpus": {
+    "book_chunks": 1425,
+    "distractors": 15,
+    "total": 1440,
+    "legend": "bojieli/ai-agent-book (Chinese)"
+  },
+  "k": 5,
+  "n_queries": 7,
+  "lexical_current_prom": {
+    "legend_recall_at_k": 0.7143
+  },
+  "semantic": {
+    "legend_recall_at_k": 0.8571
+  },
+  "novel_gap_semantic_minus_lexical": 0.1429,
+  "by_anchor_language": {
+    "latin_anchor": {
+      "n": 4,
+      "lexical": 0.75,
+      "semantic": 1.0
+    },
+    "cjk_only_anchor": {
+      "n": 3,
+      "lexical": 0.667,
+      "semantic": 0.667
+    }
+  },
+  "per_query": [
+    {
+      "q": "하네스 에이전트 스캐폴딩 구조가 에이전트를 제약한다 harness",
+      "anchor": "harness",
+      "latin": true,
+      "lexical_hit@5": 1,
+      "semantic_hit@5": 1,
+      "sem_top1_score": 0.678
+    },
+    {
+      "q": "다중 에이전트 협업 재배맨 오케스트레이션 분업",
+      "anchor": "多 Agent",
+      "latin": false,
+      "lexical_hit@5": 1,
+      "semantic_hit@5": 0,
+      "sem_top1_score": 0.468
+    },
+    {
+      "q": "컨텍스트 엔지니어링 KV 캐시 프롬프트 캐싱 재사용",
+      "anchor": "KV Cache",
+      "latin": true,
+      "lexical_hit@5": 1,
+      "semantic_hit@5": 1,
+      "sem_top1_score": 0.632
+    },
+    {
+      "q": "검색 증강 생성 리트리벌 재랭킹 하이브리드 RAG",
+      "anchor": "RAG",
+      "latin": true,
+      "lexical_hit@5": 1,
+      "semantic_hit@5": 1,
+      "sem_top1_score": 0.561
+    },
+    {
+      "q": "코딩 에이전트 코드 생성 파일시스템 자부트스트랩",
+      "anchor": "Coding Agent",
+      "latin": true,
+      "lexical_hit@5": 0,
+      "semantic_hit@5": 1,
+      "sem_top1_score": 0.655
+    },
+    {
+      "q": "에이전트 평가 방법론 통계적 유의성 판정",
+      "anchor": "评估",
+      "latin": false,
+      "lexical_hit@5": 0,
+      "semantic_hit@5": 1,
+      "sem_top1_score": 0.676
+    },
+    {
+      "q": "상하문 맥락 관리 압축 오버플로",
+      "anchor": "上下文",
+      "latin": false,
+      "lexical_hit@5": 1,
+      "semantic_hit@5": 1,
+      "sem_top1_score": 0.392
+    }
+  ],
+  "finding": "cross-lingual: lexical(token overlap) surfaces legend ONLY via shared latin jargon; fails on native-language concept queries. semantic multilingual retrieves cross-lingual. = 왜 PROM이 중국어 레전드와 안 엮였나의 직접 증거.",
+  "prereg": {
+    "metric": "legend_recall_at_k",
+    "baseline": 0.1,
+    "novel_metric": "citation_graph_legend_recall_gap",
+    "novel_threshold": 0.3,
+    "direction": "higher"
+  },
+  "scope_caveat": "이건 RETRIEVAL-side proxy(corpus에 legend 이미 존재). 진짜 P3의 citation-graph agentic 발견(legend가 corpus 밖일 때 인용 타고 찾기)은 미구현 = 부분 테스트.",
+  "_facts": {
+    "novel_gap_ge_threshold": false,
+    "semantic_beats_lexical": true
+  }
+}

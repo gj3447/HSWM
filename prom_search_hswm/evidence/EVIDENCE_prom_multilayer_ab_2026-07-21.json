@@ -1,0 +1,54 @@
+{
+  "experiment": "prom_multilayer_ab_badiou24",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML2-multilayer-ab-badiou",
+  "a_priori": {
+    "tau": 0.5,
+    "layer_t": 0.35,
+    "k_blind": 10,
+    "seed": 333
+  },
+  "gold": {
+    "n_rf": 24,
+    "gold_same_pairs": 84,
+    "gold_diff_pairs": 192,
+    "same_frac": 0.304,
+    "axes": "role(3) x topic(7)",
+    "balanced_vs_gfs": "GFS same_frac 0.87 → badiou 확인값 아래"
+  },
+  "arm_A_single_layer": {
+    "recall": 0.4643,
+    "precision": 0.4643,
+    "separation_same_minus_diff": 0.08,
+    "mc_null_z": 3.755,
+    "null_mean": 0.3048
+  },
+  "arm_B_multi_blind_kmeans": {
+    "recall": 1.0,
+    "precision": 0.3043,
+    "separation_same_minus_diff": 0.0683,
+    "mc_null_z": 0.0,
+    "null_mean": 1.0
+  },
+  "arm_C_multi_structured_goldaxis": {
+    "recall": 0.7857,
+    "precision": 0.296,
+    "separation_same_minus_diff": 0.0224,
+    "mc_null_z": -0.602,
+    "null_mean": 0.8077
+  },
+  "hypothesis_test": {
+    "B_beats_A_separation": false,
+    "B_beats_A_null_z": false,
+    "C_beats_A_separation": false,
+    "any_multi_above_null_z3": false
+  },
+  "caveat": "C 층=gold축 유래(상한). 진짜 USER 가설 판정=B(blind) 가 A(single) 이기나. C는 '여러 층이 원리상 성립하면 얼마나 되나' 천장.",
+  "prereg": {
+    "metric": "blind_multilayer_null_z",
+    "baseline_single_layer_null_z": null,
+    "novel_metric": "B_separation_minus_A_separation",
+    "novel_threshold": 0.0,
+    "direction": "higher"
+  }
+}

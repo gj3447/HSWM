@@ -1,0 +1,79 @@
+{
+  "experiment": "hswm_integrated_payoff_ml19",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML19-integrated-payoff",
+  "canon": "INDEX.md §4-A. 확증조각(ML16 n-ary + ML17 sem-seed + ML18 solid) 합체를 multi-hop payoff 지표로.",
+  "setup": {
+    "benchmark": "MuSiQue-ans dev",
+    "n_questions": 300,
+    "n_multihop(|gold|>=2)": 300,
+    "corpus": 4702,
+    "hyperedges": 5253,
+    "model": "all-MiniLM-L6-v2"
+  },
+  "metrics_by_method": {
+    "flat": {
+      "recall@10": 0.6064,
+      "hardhop@10": 0.23,
+      "fullchain@10": 0.23,
+      "fullchain@20": 0.3433
+    },
+    "binary_ppr": {
+      "recall@10": 0.4033,
+      "hardhop@10": 0.2533,
+      "fullchain@10": 0.14,
+      "fullchain@20": 0.2633
+    },
+    "hypergraph": {
+      "recall@10": 0.5389,
+      "hardhop@10": 0.29,
+      "fullchain@10": 0.2467,
+      "fullchain@20": 0.3867
+    },
+    "hypergraph_soliddeep": {
+      "recall@10": 0.3586,
+      "hardhop@10": 0.2167,
+      "fullchain@10": 0.13,
+      "fullchain@20": 0.24
+    },
+    "hyper_fuse": {
+      "recall@10": 0.6122,
+      "hardhop@10": 0.2767,
+      "fullchain@10": 0.2733,
+      "fullchain@20": 0.39
+    }
+  },
+  "payoff_CI": {
+    "P1_fullchain@10_hypergraph_minus_flat": {
+      "mean": 0.0167,
+      "CI": [
+        -0.0267,
+        0.06
+      ]
+    },
+    "P2_hardhop@10_hypergraph_minus_binary": {
+      "mean": 0.0367,
+      "CI": [
+        -0.03,
+        0.1033
+      ]
+    }
+  },
+  "P3_domain_robustness": {
+    "domA_fullchain_diff": 0.0733,
+    "nA": 150,
+    "domB_fullchain_diff": -0.04,
+    "nB": 150,
+    "sign_consistent": false
+  },
+  "verdict": {
+    "P1_hyper_beats_flat_fullchain": true,
+    "P1_sig": false,
+    "P2_hyper_beats_binary_hardhop": true,
+    "P2_sig": false,
+    "P3_domain_robust": false,
+    "best_fullchain@10": "hyper_fuse",
+    "best_hardhop@10": "hypergraph"
+  },
+  "note": "다방면: 다baseline(flat/binary/hyper/soliddeep/fuse) × 다지표(recall/hardhop/fullchain) × 도메인강건. fullchain=진짜 multi-hop성공(gold전부)."
+}

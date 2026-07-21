@@ -1,0 +1,249 @@
+{
+  "experiment": "hswm_comprehensive_ml9",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML9-hswm-comprehensive",
+  "structure": {
+    "chunks": 1425,
+    "tree_nodes": 897,
+    "tree_max_depth": 10,
+    "xref_edges": {
+      "1": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "10": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8,
+        9
+      ],
+      "2": [
+        1,
+        3,
+        4,
+        5,
+        7,
+        8,
+        10
+      ],
+      "3": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8,
+        9
+      ],
+      "4": [
+        1,
+        2,
+        5,
+        8,
+        9,
+        10
+      ],
+      "5": [
+        1,
+        2,
+        3,
+        4,
+        7,
+        8,
+        9,
+        10
+      ],
+      "6": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        9
+      ],
+      "7": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        9
+      ],
+      "8": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        7
+      ],
+      "9": [
+        2,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    "concepts": 10
+  },
+  "F1_depth_sweep": {
+    "1": {
+      "n_frontier": 2,
+      "coverage@40": 0.5071,
+      "recall@40": 0.1981
+    },
+    "2": {
+      "n_frontier": 4,
+      "coverage@40": 0.5214,
+      "recall@40": 0.1906
+    },
+    "3": {
+      "n_frontier": 8,
+      "coverage@40": 0.5557,
+      "recall@40": 0.1611
+    },
+    "4": {
+      "n_frontier": 16,
+      "coverage@40": 0.6025,
+      "recall@40": 0.1539
+    },
+    "5": {
+      "n_frontier": 32,
+      "coverage@40": 0.5682,
+      "recall@40": 0.127
+    },
+    "6": {
+      "n_frontier": 64,
+      "coverage@40": 0.4714,
+      "recall@40": 0.1224
+    },
+    "7": {
+      "n_frontier": 123,
+      "coverage@40": 0.1907,
+      "recall@40": 0.0333
+    },
+    "8": {
+      "n_frontier": 222,
+      "coverage@40": 0.02,
+      "recall@40": 0.0039
+    },
+    "9": {
+      "n_frontier": 341,
+      "coverage@40": 0.02,
+      "recall@40": 0.002
+    },
+    "10": {
+      "n_frontier": 449,
+      "coverage@40": 0.0,
+      "recall@40": 0.0
+    }
+  },
+  "F2F3_methods": {
+    "flat": {
+      "20": {
+        "recall": 0.1365,
+        "precision": 0.54,
+        "coverage": 0.3261,
+        "diverse": 0.1774
+      },
+      "40": {
+        "recall": 0.2279,
+        "precision": 0.46,
+        "coverage": 0.5114,
+        "diverse": 0.2911
+      }
+    },
+    "two_level_weighted": {
+      "20": {
+        "recall": 0.0748,
+        "precision": 0.34,
+        "coverage": 0.5671,
+        "diverse": 0.127
+      },
+      "40": {
+        "recall": 0.1261,
+        "precision": 0.285,
+        "coverage": 0.6525,
+        "diverse": 0.2039
+      }
+    },
+    "two_level_blind": {
+      "20": {
+        "recall": 0.0696,
+        "precision": 0.325,
+        "coverage": 0.5671,
+        "diverse": 0.1201
+      },
+      "40": {
+        "recall": 0.1248,
+        "precision": 0.2825,
+        "coverage": 0.6793,
+        "diverse": 0.2047
+      }
+    },
+    "raptor_deep_weighted": {
+      "20": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "coverage": 0.0,
+        "diverse": 0.0
+      },
+      "40": {
+        "recall": 0.0,
+        "precision": 0.0,
+        "coverage": 0.0,
+        "diverse": 0.0
+      }
+    },
+    "raptor_deep_blind": {
+      "20": {
+        "recall": 0.1223,
+        "precision": 0.485,
+        "coverage": 0.4129,
+        "diverse": 0.1781
+      },
+      "40": {
+        "recall": 0.1825,
+        "precision": 0.3825,
+        "coverage": 0.5339,
+        "diverse": 0.2561
+      }
+    },
+    "two_level_weighted_xref": {
+      "20": {
+        "recall": 0.0623,
+        "precision": 0.28,
+        "coverage": 0.5471,
+        "diverse": 0.1081
+      },
+      "40": {
+        "recall": 0.1126,
+        "precision": 0.255,
+        "coverage": 0.6382,
+        "diverse": 0.1849
+      }
+    }
+  },
+  "conclusion": {
+    "depth_helps": false,
+    "depth_optimum_L": 4,
+    "raptor_deep_cov_gt_two_level@20": false,
+    "raptor_deep_diverse_gt_flat@20": false,
+    "xref_diverse_gt_two_level@20": false,
+    "weighted_diverse_gt_blind@20_twolevel": true,
+    "best_method_by_diverse@40": "flat"
+  },
+  "caveats": "gold=anchor-string(crude). coverage 단독은 blind가 trivially 유리→diverse_recall(rec+cov 결합)이 정직지표. 수평엣지=실제 第X章 참조."
+}

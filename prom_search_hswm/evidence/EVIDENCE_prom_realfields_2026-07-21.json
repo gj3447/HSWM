@@ -1,0 +1,112 @@
+{
+  "experiment": "prom_realfields_ab",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML5-real-fields-ab",
+  "sources": {
+    "web": "WebSearch 2026-07-21 (real internet)",
+    "kg": "Neo4j home canon 0.25 (real internal KG)",
+    "corpus": "ai-agent-book chapters (Chinese)",
+    "n_book_chunks": 1425,
+    "n_concepts": 6
+  },
+  "mean_MRR": {
+    "raw": 0.9167,
+    "web": 0.8667,
+    "kg": 0.6389,
+    "fused": 0.9167
+  },
+  "recall_at_10": {
+    "raw": "6/6",
+    "web": "6/6",
+    "kg": "6/6",
+    "fused": "6/6"
+  },
+  "per_concept": [
+    {
+      "concept": "harness",
+      "anchor": "harness",
+      "gold_chunks": 52,
+      "raw_mrr": 1.0,
+      "raw_rec@10": 1,
+      "web_mrr": 1.0,
+      "web_rec@10": 1,
+      "kg_mrr": 1.0,
+      "kg_rec@10": 1,
+      "fused_mrr": 1.0,
+      "fused_rec@10": 1
+    },
+    {
+      "concept": "rag",
+      "anchor": "RAG",
+      "gold_chunks": 56,
+      "raw_mrr": 1.0,
+      "raw_rec@10": 1,
+      "web_mrr": 1.0,
+      "web_rec@10": 1,
+      "kg_mrr": 0.25,
+      "kg_rec@10": 1,
+      "fused_mrr": 1.0,
+      "fused_rec@10": 1
+    },
+    {
+      "concept": "multi-agent",
+      "anchor": "多 Agent",
+      "gold_chunks": 44,
+      "raw_mrr": 0.5,
+      "raw_rec@10": 1,
+      "web_mrr": 1.0,
+      "web_rec@10": 1,
+      "kg_mrr": 0.3333,
+      "kg_rec@10": 1,
+      "fused_mrr": 1.0,
+      "fused_rec@10": 1
+    },
+    {
+      "concept": "kv-cache",
+      "anchor": "KV Cache",
+      "gold_chunks": 51,
+      "raw_mrr": 1.0,
+      "raw_rec@10": 1,
+      "web_mrr": 1.0,
+      "web_rec@10": 1,
+      "kg_mrr": 1.0,
+      "kg_rec@10": 1,
+      "fused_mrr": 1.0,
+      "fused_rec@10": 1
+    },
+    {
+      "concept": "coding-agent",
+      "anchor": "Coding Agent",
+      "gold_chunks": 52,
+      "raw_mrr": 1.0,
+      "raw_rec@10": 1,
+      "web_mrr": 0.2,
+      "web_rec@10": 1,
+      "kg_mrr": 1.0,
+      "kg_rec@10": 1,
+      "fused_mrr": 0.5,
+      "fused_rec@10": 1
+    },
+    {
+      "concept": "evaluation",
+      "anchor": "评估",
+      "gold_chunks": 136,
+      "raw_mrr": 1.0,
+      "raw_rec@10": 1,
+      "web_mrr": 1.0,
+      "web_rec@10": 1,
+      "kg_mrr": 0.25,
+      "kg_rec@10": 1,
+      "fused_mrr": 1.0,
+      "fused_rec@10": 1
+    }
+  ],
+  "hypothesis_test": {
+    "web_beats_raw": false,
+    "kg_beats_raw": false,
+    "fused_beats_raw": false,
+    "fused_beats_best_single": true,
+    "fused_gain_over_raw": 0.0
+  },
+  "verdict_note": "fused_mrr > raw_mrr = USER field-of-fields(인터넷場+KG場) REAL 지지. per_concept로 어느 소스가 어디서 돕는지 분해."
+}

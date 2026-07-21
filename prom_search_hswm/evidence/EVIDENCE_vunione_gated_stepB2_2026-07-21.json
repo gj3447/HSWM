@@ -1,0 +1,41 @@
+{
+  "experiment": "vunione_gated_readout_ab_stepB2",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "T5c-vunione-gated",
+  "design": "measurement-driven entity gating (idf hub-suppression + edge-dominant bonus). entity-only graph, gold=topic held-out, leave-one-out, LAMBDA=0.3 fixed (untuned).",
+  "arms": {
+    "node_only": {
+      "recall_at_5": 0.3426,
+      "mrr": 0.4135,
+      "n_queries": 18
+    },
+    "edge_only": {
+      "recall_at_5": 0.6435,
+      "mrr": 0.6479,
+      "n_queries": 18
+    },
+    "v_union_e_blind": {
+      "recall_at_5": 0.6157,
+      "mrr": 0.6461,
+      "n_queries": 18
+    },
+    "v_union_e_gated": {
+      "recall_at_5": 0.6019,
+      "mrr": 0.6335,
+      "n_queries": 18
+    }
+  },
+  "preregistered_metric": "vunione_gated_minus_edgeonly_recall_gap",
+  "gap_gated_minus_edgeonly": -0.0416,
+  "gap_blind_minus_edgeonly": -0.0278,
+  "mc_null": {
+    "perms": 200,
+    "null_mean_recall": 0.2136,
+    "null_sd": 0.0737,
+    "z": 5.27,
+    "novel_metric": "vunione_gated_recall_above_mc_null_z",
+    "threshold": 3.0
+  },
+  "verdict": "degenerating",
+  "honest_note": "T5b blind(-0.028)와 직접 대조. gated>edge_only면 hub억제가 fix(단 λ untuned=down-payment). gated≈edge_only(|gap|≤0.02)면 entity 채널은 이 task/데이터서 무익 확정(정직 null). 판정=결정론 사전등록 대조, eureka 자기채점 아님."
+}

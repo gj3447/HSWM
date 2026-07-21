@@ -1,0 +1,188 @@
+{
+  "experiment": "hswm_llm_judge_ml7",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML7-hswm-llm-judge",
+  "method": "DAT-style LLM-judge per-field top-1 relevance → external-weighted RRF (qwen3.6-27b, thinking off)",
+  "sources": {
+    "web": "real WebSearch",
+    "kg": "real Neo4j",
+    "judge": "dgx vLLM qwen3.6-27b",
+    "corpus_chunks": 1425
+  },
+  "mean_MRR": {
+    "raw": 0.9167,
+    "blind": 0.9167,
+    "llm_judge": 0.8889
+  },
+  "per_concept": [
+    {
+      "concept": "harness",
+      "raw_mrr": 1.0,
+      "blind_mrr": 1.0,
+      "llm_judge_mrr": 1.0,
+      "llm_weights": {
+        "raw": 0.8,
+        "web": 0.2,
+        "kg": 0.0
+      },
+      "dropped": [
+        "kg"
+      ],
+      "judged": {
+        "raw": {
+          "top1_score_0_10": 8,
+          "top1_preview": "能不能稳定运行，往往不取决于用了多强的模型，而取决于围绕 Agent 搭建的基础设施有多扎实。第一章将 Harness "
+        },
+        "web": {
+          "top1_score_0_10": 2,
+          "top1_preview": "编排模式是 Harness 中“上下文与工具”层面的组织方式——它决定了上下文如何在 LLM 调用之间流动、工具如何被调"
+        },
+        "kg": {
+          "top1_score_0_10": 0,
+          "top1_preview": "前面讨论的编排模式解决了 Harness 中上下文与工具的组织问题——如何把 LLM 调用、工具和数据流串联起来。但光能"
+        }
+      }
+    },
+    {
+      "concept": "rag",
+      "raw_mrr": 1.0,
+      "blind_mrr": 1.0,
+      "llm_judge_mrr": 1.0,
+      "llm_weights": {
+        "raw": 0.0,
+        "web": 0.8,
+        "kg": 0.0
+      },
+      "dropped": [
+        "kg"
+      ],
+      "judged": {
+        "raw": {
+          "top1_score_0_10": 0,
+          "top1_preview": "一个更形象的说法是：**上下文窗口是一台只有一半的检索引擎**。它“检索”的这一半非常强——你问什么，注意力就能从成千上"
+        },
+        "web": {
+          "top1_score_0_10": 8,
+          "top1_preview": "> **实验 3-11 ★★：上下文感知检索：解决 RAG 的上下文丢失问题** > > `contextual-ret"
+        },
+        "kg": {
+          "top1_score_0_10": 0,
+          "top1_preview": "在**用户记忆**层面，我们探索了从原子化事实（Simple Notes）到情境化知识管理（Advanced JSON "
+        }
+      }
+    },
+    {
+      "concept": "multi-agent",
+      "raw_mrr": 0.5,
+      "blind_mrr": 1.0,
+      "llm_judge_mrr": 1.0,
+      "llm_weights": {
+        "raw": 0.8,
+        "web": 1.0,
+        "kg": 0.8
+      },
+      "dropped": [],
+      "judged": {
+        "raw": {
+          "top1_score_0_10": 8,
+          "top1_preview": "**灵台（Lingtai）：管理者模式的一个产品化实例。** 灵台是一个本地运行、以文件为本的长期 Agent 居所[^"
+        },
+        "web": {
+          "top1_score_0_10": 10,
+          "top1_preview": "不共享上下文代表真正的多 Agent 协作。在这种架构下，每个 Agent 都是独立的实体，拥有自己的上下文、轨迹和状态"
+        },
+        "kg": {
+          "top1_score_0_10": 8,
+          "top1_preview": "对等协作通常涉及 2-3 个平等身份的 Agent，通过多轮迭代互相提供反馈。核心价值在于引入认知多样性——不同 Age"
+        }
+      }
+    },
+    {
+      "concept": "kv-cache",
+      "raw_mrr": 1.0,
+      "blind_mrr": 1.0,
+      "llm_judge_mrr": 1.0,
+      "llm_weights": {
+        "raw": 1.0,
+        "web": 0.9,
+        "kg": 0.9
+      },
+      "dropped": [],
+      "judged": {
+        "raw": {
+          "top1_score_0_10": 10,
+          "top1_preview": "[^ch2-2]: Li, Bojie. *Models Take Notes at Prefill: KV Cache"
+        },
+        "web": {
+          "top1_score_0_10": 9,
+          "top1_preview": "使用 KV Cache 时，A、B、C、D 的 K、V 向量算过一次后就缓存起来。生成 E 时，只需要计算 E 自身的 "
+        },
+        "kg": {
+          "top1_score_0_10": 9,
+          "top1_preview": "使用 KV Cache 时，A、B、C、D 的 K、V 向量算过一次后就缓存起来。生成 E 时，只需要计算 E 自身的 "
+        }
+      }
+    },
+    {
+      "concept": "coding-agent",
+      "raw_mrr": 1.0,
+      "blind_mrr": 0.5,
+      "llm_judge_mrr": 0.333,
+      "llm_weights": {
+        "raw": 0.8,
+        "web": 0.8,
+        "kg": 0.2
+      },
+      "dropped": [],
+      "judged": {
+        "raw": {
+          "top1_score_0_10": 8,
+          "top1_preview": "如何自动实现？关键在于引入 Coding Agent。系统提示词和工具描述本身就是文档和代码，分散在多个文件中。发现边界"
+        },
+        "web": {
+          "top1_score_0_10": 8,
+          "top1_preview": "Claude Code 的 `CLAUDE.md` 机制展示了类似能力：首次接触代码仓库时主动通读代码库，生成包含架构设"
+        },
+        "kg": {
+          "top1_score_0_10": 2,
+          "top1_preview": "自主 Agent 特别适用于开放式的问题——这类问题难以或不可能预测所需的步骤数量。典型的应用场景包括：Coding A"
+        }
+      }
+    },
+    {
+      "concept": "evaluation",
+      "raw_mrr": 1.0,
+      "blind_mrr": 1.0,
+      "llm_judge_mrr": 1.0,
+      "llm_weights": {
+        "raw": 0.0,
+        "web": 0.0,
+        "kg": 0.0
+      },
+      "dropped": [
+        "web",
+        "kg"
+      ],
+      "judged": {
+        "raw": {
+          "top1_score_0_10": 0,
+          "top1_preview": "确定了“在什么任务上评估”之后，还要回答“该度量哪些维度”。本节把 Agent 评估常用的指标汇总成一部可查阅的“指标词"
+        },
+        "web": {
+          "top1_score_0_10": 0,
+          "top1_preview": "为什么需要 LLM-as-a-Judge？对于开放式任务（如生成报告、处理客户投诉、创意内容），没有标准答案可以自动对比"
+        },
+        "kg": {
+          "top1_score_0_10": 0,
+          "top1_preview": "在循环的每一轮中，模型需要在截图中准确定位目标元素——“搜索框在哪里？”“提交按钮的坐标是什么？”这就是视觉定位（Gro"
+        }
+      }
+    }
+  ],
+  "hypothesis_test": {
+    "llm_judge_beats_blind": false,
+    "llm_judge_beats_raw": false,
+    "gain_over_blind": -0.0278
+  },
+  "caveat": "gold=anchor-string presence(crude, 52+ gold/concept, ceiling). LLM 판정은 top-1 청크 대상(DAT식). n=6 concept. 6*3=18 vLLM calls 캐시됨."
+}

@@ -1,0 +1,65 @@
+{
+  "experiment": "hswm_semantic_ablation_ml17",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML17-semantic-weight-ablation",
+  "setup": {
+    "benchmark": "MuSiQue-ans dev",
+    "n_questions": 300,
+    "corpus": 4702,
+    "hyperedges": 5253,
+    "model": "all-MiniLM-L6-v2"
+  },
+  "recall_and_hardhop": {
+    "flat": {
+      "recall@10": 0.6064,
+      "hardhop@10": 0.23
+    },
+    "hyper_struct_semseed": {
+      "recall@10": 0.5389,
+      "hardhop@10": 0.29
+    },
+    "hyper_struct_entseed": {
+      "recall@10": 0.4261,
+      "hardhop@10": 0.2867
+    },
+    "hyper_semedge": {
+      "recall@10": 0.5081,
+      "hardhop@10": 0.2767
+    },
+    "hyper_fuse": {
+      "recall@10": 0.6122,
+      "hardhop@10": 0.2767
+    }
+  },
+  "ablation_CI": {
+    "semantic_SEED_effect(semseed−entseed)": {
+      "mean": 0.1128,
+      "CI": [
+        0.065,
+        0.1614
+      ]
+    },
+    "semantic_EDGE_effect(semedge−struct)": {
+      "mean": -0.0308,
+      "CI": [
+        -0.0553,
+        -0.0047
+      ]
+    },
+    "fuse_vs_flat": {
+      "mean": 0.0058,
+      "CI": [
+        -0.0144,
+        0.0264
+      ]
+    }
+  },
+  "conclusion": {
+    "semantic_seed_helps": true,
+    "semantic_edge_helps_recall": false,
+    "semantic_edge_hardhop_delta": -0.0133,
+    "best_method": "hyper_fuse",
+    "best_hardhop": "hyper_struct_semseed"
+  },
+  "note": "Semantic Weight Mapper 유의성. semantic_seed=의미시드효과, semantic_edge=의미엣지가중효과. 멀티홉 다리(hard-hop)는 의미-이질이라 semantic edge가 죽일 수 있음 = 예측검증."
+}

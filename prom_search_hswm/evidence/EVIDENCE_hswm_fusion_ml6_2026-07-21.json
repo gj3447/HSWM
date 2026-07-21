@@ -1,0 +1,119 @@
+{
+  "experiment": "hswm_fusion_impl_ml6",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML6-hswm-fusion-impl",
+  "engine": "hswm_fusion.py (PROM Step3/4 primitive)",
+  "sources": {
+    "web": "real WebSearch 2026-07-21",
+    "kg": "real Neo4j home canon",
+    "corpus_chunks": 1425
+  },
+  "mean_MRR": {
+    "raw_only": 0.9167,
+    "blind": 0.9167,
+    "confidence": 0.8333,
+    "agreement": 0.8889,
+    "gated_agreement": 0.8333
+  },
+  "per_concept": [
+    {
+      "concept": "harness",
+      "raw_only_mrr": 1.0,
+      "blind_mrr": 1.0,
+      "confidence_mrr": 1.0,
+      "agreement_mrr": 1.0,
+      "gated_agreement_mrr": 1.0,
+      "gated_dropped": [
+        "web",
+        "kg"
+      ],
+      "agree_weights": {
+        "raw": 0.83,
+        "web": 0.08,
+        "kg": 0.08
+      }
+    },
+    {
+      "concept": "rag",
+      "raw_only_mrr": 1.0,
+      "blind_mrr": 1.0,
+      "confidence_mrr": 1.0,
+      "agreement_mrr": 1.0,
+      "gated_agreement_mrr": 1.0,
+      "gated_dropped": [
+        "kg"
+      ],
+      "agree_weights": {
+        "raw": 0.67,
+        "web": 0.33,
+        "kg": 0.0
+      }
+    },
+    {
+      "concept": "multi-agent",
+      "raw_only_mrr": 0.5,
+      "blind_mrr": 1.0,
+      "confidence_mrr": 1.0,
+      "agreement_mrr": 1.0,
+      "gated_agreement_mrr": 1.0,
+      "gated_dropped": [],
+      "agree_weights": {
+        "raw": 0.67,
+        "web": 0.2,
+        "kg": 0.13
+      }
+    },
+    {
+      "concept": "kv-cache",
+      "raw_only_mrr": 1.0,
+      "blind_mrr": 1.0,
+      "confidence_mrr": 1.0,
+      "agreement_mrr": 1.0,
+      "gated_agreement_mrr": 1.0,
+      "gated_dropped": [],
+      "agree_weights": {
+        "raw": 0.48,
+        "web": 0.29,
+        "kg": 0.24
+      }
+    },
+    {
+      "concept": "coding-agent",
+      "raw_only_mrr": 1.0,
+      "blind_mrr": 0.5,
+      "confidence_mrr": 0.5,
+      "agreement_mrr": 0.333,
+      "gated_agreement_mrr": 0.5,
+      "gated_dropped": [],
+      "agree_weights": {
+        "raw": 0.59,
+        "web": 0.29,
+        "kg": 0.12
+      }
+    },
+    {
+      "concept": "evaluation",
+      "raw_only_mrr": 1.0,
+      "blind_mrr": 1.0,
+      "confidence_mrr": 0.5,
+      "agreement_mrr": 1.0,
+      "gated_agreement_mrr": 0.5,
+      "gated_dropped": [
+        "kg"
+      ],
+      "agree_weights": {
+        "raw": 0.83,
+        "web": 0.17,
+        "kg": 0.0
+      }
+    }
+  ],
+  "hypothesis_test": {
+    "gated_beats_blind": false,
+    "agreement_beats_blind": false,
+    "best_strategy": "blind",
+    "gated_gain_over_blind": -0.0834,
+    "gated_vs_raw_only": -0.0834
+  },
+  "note": "blind=ML5 재현(net-zero). gated/agreement가 노이즈場 배제/down-weight로 blind 이기면 HSWM fix 실증. anchor=raw 신뢰기준."
+}

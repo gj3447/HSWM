@@ -1,0 +1,74 @@
+{
+  "experiment": "hswm_true_hypergraph_ml16",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "ML16-true-hypergraph",
+  "correction": "ML13-15는 pairwise(이진)=HippoRAG식. 이번이 진짜 n-ary 하이퍼그래프(Zhou 2006 정규화).",
+  "setup": {
+    "benchmark": "MuSiQue-ans dev",
+    "n_questions": 300,
+    "corpus_paragraphs": 4702,
+    "n_hyperedges(entities)": 5253,
+    "model": "all-MiniLM-L6-v2"
+  },
+  "recall_by_method": {
+    "flat": {
+      "r@2": 0.3872,
+      "r@5": 0.5125,
+      "r@10": 0.6064,
+      "hardhop_r@10": 0.23
+    },
+    "binary_clique": {
+      "r@2": 0.2361,
+      "r@5": 0.3811,
+      "r@10": 0.5044,
+      "hardhop_r@10": 0.2333
+    },
+    "hypergraph_zhou": {
+      "r@2": 0.2444,
+      "r@5": 0.4056,
+      "r@10": 0.5389,
+      "hardhop_r@10": 0.29
+    },
+    "hyper_rerank": {
+      "r@2": 0.2522,
+      "r@5": 0.4197,
+      "r@10": 0.5592,
+      "hardhop_r@10": 0.29
+    },
+    "hyper_fuse": {
+      "r@2": 0.3394,
+      "r@5": 0.5003,
+      "r@10": 0.6122,
+      "hardhop_r@10": 0.2767
+    }
+  },
+  "CI_hypergraph_vs_flat_r@10": {
+    "mean": -0.0675,
+    "CI": [
+      -0.0967,
+      -0.0353
+    ]
+  },
+  "CI_hypergraph_vs_binary_r@10": {
+    "mean": 0.0344,
+    "CI": [
+      0.0119,
+      0.0569
+    ]
+  },
+  "CI_hyperfuse_vs_flat_r@10": {
+    "mean": 0.0058,
+    "CI": [
+      -0.0144,
+      0.0264
+    ]
+  },
+  "conclusion": {
+    "best_method": "hyper_fuse",
+    "hypergraph_beats_binary": true,
+    "hypergraph_beats_flat_sig": false,
+    "hyperfuse_beats_flat_sig": false,
+    "hypergraph_hardhop_vs_flat": 0.06
+  },
+  "note": "De^-1=하이퍼엣지 크기 정규화=n-ary 핵심. hypergraph>binary면 n-ary 구조가 값 더함. >flat면 USER 주장 실증."
+}

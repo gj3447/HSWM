@@ -9,10 +9,13 @@ Standalone extraction of the `semantic_weight_mapper_prototype` from the SYMPOSI
 research programme. The compiler/field/readout core is NumPy-only; reproducing
 H3 artifact production is a separately attested GPU/LLM workflow.
 
+The repository-wide research map, including the 2026-07-22 open self-similar
+composition work, is in [`INDEX.md`](INDEX.md).
+
 ## Honest status (read first)
 
 This is an implemented compiler boundary plus a measurement prototype, not a
-reasoner or a proven production runtime. What is real as of 2026-07-20:
+reasoner or a proven production runtime. What is real as of 2026-07-22:
 
 - ✅ **S0 falsifier repair:** separated-graded arm (e), actual
   `readouts.supersede()` writes, kill(iii), write/trip receipts, and corrected
@@ -28,6 +31,14 @@ reasoner or a proven production runtime. What is real as of 2026-07-20:
   tuple and otherwise returns a payload-free typed refusal before scoring.
 - ✅ **Field experiments:** additive-j, traversal certification, and stale
   poisoning remain measured research paths with their checked-in receipts.
+- ✅ **Open self-similar composition kernel:** fixed layer numbers were removed
+  from the composition contract. Atomic and composed HSWMs share one
+  mount/typed-port/n-ary-connector type; v2r3 passes the 78-test expanded
+  structural regression and two injected-negative checks.
+- ⚠️ **Open-kernel claim boundary:** LakatoTree judged the receipt chain
+  `partial` and `certified=false`. Learned CONNECT/SEPARATE/SPECIALIZE,
+  bounded cyclic readout, multi-agent transfer, and retrieval uplift remain
+  unimplemented or unmeasured.
 - ✅ **Measured efficacy:** the static additive-j field beats the listed cosine,
   BM25, PPR, and RRF arms on support recall@3, nDCG@10, and downstream F1 in the
   checked-in 300-row ladder. HSWM alone uses 100 offline LLM judgments per run.
@@ -71,6 +82,10 @@ positive traversal residual does not guarantee ranking/nDCG improvement.
 | `certified_cut_compare.py` | independent-oracle controls, 10×40 scope checks, and 9 mutant attacks |
 | `EPWC_IMPLEMENTATION_S3_2026-07-20.md` | S3 implementation and comparison receipt; smart-hypergraph boundary |
 | `EFFICACY.md` / `verify_efficacy_claims.py` | human and machine-readable current efficacy ledger |
+| `INDEX.md` | public research map, 2026-07-22 result ledger, and next frontier |
+| `SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md` | fixed-layer-free open weighted-hypergraph contract |
+| `AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md` | v2r3 counterexamples, repairs, tests, and claim boundary |
+| `prom_search_hswm/hswm_open_kernel.py` | deterministic open-composition v2r3 kernel |
 | `H3_B3_RESUME_STATUS_2026-07-20.md` | corrected PRE_RUN boundary, local receipt hashes, and exact next sequence |
 | `QKV_STRUCTURE_EXPERIMENT_PLAN_2026-07-20.md` / `QKV_STRUCTURE_RESULTS_2026-07-20.md` | ordered-routing and B1-QKV development protocol, results, and claim boundary |
 | `qkv_routing.py` / `qkv_b1_probe.py` | exact symbolic QKV routing and no-label dense B1 value-read research kernels |

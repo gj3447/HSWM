@@ -1,0 +1,90 @@
+{
+  "schema": "hswm-evidence-audit/v1",
+  "evidence_path": "EVIDENCE_b21_learned_router_20260723.json",
+  "evidence_sha256": "3dbff4f1db5f40aeeaf87e6803b257b6c9b13a473175b661806e75ccd9f6e1bc",
+  "audited_at": "2026-07-22T18:20:14Z",
+  "audit": "PASS",
+  "checks": {
+    "schema_and_tree_identity": true,
+    "prediction_receipt_and_script_sha": true,
+    "registration_precedes_run": true,
+    "standard_cell_cartesian_product_54_of_54": true,
+    "private_entity_cells_6_of_6": true,
+    "per_cell_action_totals": true,
+    "per_cell_gate_recomputation": true,
+    "shuffled_alias_and_split_identity": true,
+    "aggregate_count_recomputation": true,
+    "literal_prereg_conclusion_recomputation": true,
+    "frozen_b2_exact_reproduction": true,
+    "scorepack_compressed_sha256_9_of_9": true,
+    "scorepack_payload_sha256_9_of_9": true
+  },
+  "recomputed": {
+    "standard_cells": 54,
+    "standard_joint_pass_n": 0,
+    "shuffled_joint_pass_n": 0,
+    "cells_with_single_field_acceptance": 0,
+    "overall_delta_range": [
+      0.0,
+      0.0
+    ],
+    "gate_pass_counts": {
+      "overall_ci_lower_gt_0": 0,
+      "cross_gain_vs_best_single": 54,
+      "cross_preserved_vs_merged": 54,
+      "infield_no_harm_vs_best_single": 3,
+      "infield_recovery_vs_merged": 0,
+      "nontrivial_acceptance": 0,
+      "joint_pass": 0
+    },
+    "primary_metric": 0.0,
+    "primary_prediction_gt_0_02": false,
+    "novel_metric": -0.035088,
+    "novel_ge_minus_0_02": false,
+    "literal_conclusion": "REJECTED"
+  },
+  "primary_cells": {
+    "2wiki": {
+      "test_queries": 92,
+      "actions": {
+        "A": 0,
+        "B": 0,
+        "ABSTAIN": 92
+      },
+      "overall_router_minus_merged": 0.0,
+      "infield_router_minus_best_single": -0.029412,
+      "calibrated_advantage_radius": 0.36728501
+    },
+    "musique": {
+      "test_queries": 140,
+      "independent_test_components": 54,
+      "actions": {
+        "A": 0,
+        "B": 0,
+        "ABSTAIN": 140
+      },
+      "overall_router_minus_merged": 0.0,
+      "infield_router_minus_best_single": -0.035088,
+      "calibrated_advantage_radius": 0.47294903
+    }
+  },
+  "frozen_b2_reproduction": {
+    "n_queries": 400,
+    "n_arm_rankings": 1600,
+    "n_score_comparisons": 32000,
+    "mismatched_qids": 0,
+    "mismatched_ranked_id_lists": 0,
+    "max_abs_score_error": 3.552713678800501e-15,
+    "tolerance": 1e-09,
+    "vectorized_digest": "9303687dbd17c4bf21a428328fd2dd5dae9d9899ab0caac7af3bad4794cae3bf",
+    "frozen_reference_digest": "9303687dbd17c4bf21a428328fd2dd5dae9d9899ab0caac7af3bad4794cae3bf"
+  },
+  "run": {
+    "git_head": "acb661629c996253dd85617df033aa29244ebdb8",
+    "started_at": "2026-07-22T17:30:29.348649+00:00",
+    "finished_at": "2026-07-22T18:17:13.818293+00:00",
+    "duration_seconds": 2804.469644,
+    "scorepack_cache": ".ab_p5_cache/b21_20260723/r1/scorepacks",
+    "scorepack_cache_committed": false
+  }
+}

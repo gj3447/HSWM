@@ -1,0 +1,47 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "T1-entrance-reach-c3",
+  "question": "Q-t1-seeds-reach-woven-entrances",
+  "conjecture": "On the woven C3 graph, frozen top-3 cosine seeds reach at least one admissible chain entrance for >=1 development query on BOTH datasets, and the unmodified typed kernel reaches a legal depth-two target for >=1 query on BOTH datasets (published frozen baseline: 0/200 on each).",
+  "prediction": {
+    "metric": "min_over_datasets_c3_t1_seed_reaches_entrance",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0,
+    "success_threshold": 1,
+    "novel_metric": "min_over_datasets_c3_kernel_legal_depth2_queries",
+    "novel_direction": "higher",
+    "novel_threshold": 0,
+    "credence": 0.4
+  },
+  "already_public_before_registration": {
+    "note": "H3-C0 gate waterfall published: legal claim-continuous second hop = 0/200 (both datasets) on frozen graph; certificate top-3 seeds reached 3 C1-style chain entrances on 2Wiki with 0 predicate matches. B1 published C3 T0 chain counts (MuSiQue 6 / 2Wiki 25) and full chain ledgers; entrance sets are derivable from the published B1 receipts, but no seed-reachability or kernel run on the woven graph has been computed or inspected before this registration."
+  },
+  "kill_conditions": [
+    "t1_min = 0 -> woven chains are unreachable from frozen seeds; B1 unlock is judged idle spin for the deterministic lane.",
+    "novel (kernel legal depth-2) min = 0 while t1_min > 0 -> entrances reachable but predicate/role gates kill continuation; the bottleneck moves to T2 and must be re-diagnosed before any further weave work.",
+    "Any gold_source_ids consumption in scoring or seeding -> measurement void.",
+    "Any new embedding/LLM/network call -> budget-discipline violation, measurement void."
+  ],
+  "scope_boundary": {
+    "splits": "development n=200 per dataset only; certificate halves untouched",
+    "t3_full": "K2-vs-K1 score digest change + second-edge null deferred to a separate rung",
+    "efficacy_recall_claims": "none"
+  },
+  "locked_parameters": {
+    "seed_k": 3,
+    "kernel": "compose_typed_scores unmodified, mode=typed, TypedCompositionPolicyV1 defaults except seed_k",
+    "arms": ["C0", "C3"]
+  },
+  "module_sha256": {
+    "chain_viability.py": "b70739a4091967dce150c6a6a281ec800bd44096ca93ba72025eacf88a680662",
+    "claim_weave.py": "b36df9272d97fa20a229de90c0172a6a04b07c8462ec0b86877bbc0fd47bead1",
+    "t1_entrance_reach.py": "7b344bb7c4c51c167ea56fccae0b19bf4b0a5f99a79f526fec9a2e7a9ce8a1b6"
+  },
+  "embedding_npz_sha256": "f0410cd2637233a04c126088d9772b35cd8278a0900ff025379832676956d291",
+  "journal_sha256": "7cb1dcf65548ac9aeace33277478e0cda0dc540cfc0ae77933921a1e06899192",
+  "prediction_receipt_sha256": "e3cc80aa31212529a03700ad5af47eab0c25e53277c2a99d3f20897b278a5376",
+  "registered_before_measurement": true,
+  "registered_at": "2026-07-22T07:19:13.164901+00:00"
+}

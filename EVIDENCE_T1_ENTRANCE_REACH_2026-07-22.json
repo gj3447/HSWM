@@ -1,0 +1,70 @@
+{
+ "schema": "hswm-t1-entrance-reach-evidence/v1",
+ "programme": "LakatosTree_PromSearchHSWM_20260721",
+ "branch": "T1-entrance-reach-c3",
+ "preregistration": {
+  "path": "PREREG_T1_ENTRANCE_REACH_2026-07-22.json",
+  "sha256": "67d36540ef7e9c2d33e91e9d1663e7e63aad9bd2a728bda2b9cad700385c227e",
+  "prediction_receipt_sha256": "e3cc80aa31212529a03700ad5af47eab0c25e53277c2a99d3f20897b278a5376"
+ },
+ "measurement": {
+  "metric": "min_over_datasets_c3_t1_seed_reaches_entrance",
+  "value": 0,
+  "novel_metric": "min_over_datasets_c3_kernel_legal_depth2_queries",
+  "novel_value": 0,
+  "published_frozen_baseline": {
+   "kernel_legal_second_hop": {
+    "musique": 0,
+    "2wiki": 0
+   },
+   "source": "H3_C0_CHAIN_VIABILITY_DIAGNOSIS_2026-07-20.md gate waterfall (n=200)"
+  },
+  "per_dataset": {
+   "2wiki": {
+    "C0": {
+     "entrance_paragraphs": 0,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 0,
+     "kernel_legal_depth2_queries": 0
+    },
+    "C3": {
+     "entrance_paragraphs": 10,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 5,
+     "kernel_legal_depth2_queries": 0
+    }
+   },
+   "musique": {
+    "C0": {
+     "entrance_paragraphs": 0,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 0,
+     "kernel_legal_depth2_queries": 0
+    },
+    "C3": {
+     "entrance_paragraphs": 5,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 0,
+     "kernel_legal_depth2_queries": 0
+    }
+   }
+  },
+  "policy": {
+   "seed_k": 3,
+   "mode": "typed",
+   "kernel": "compose_typed_scores (unmodified)"
+  }
+ },
+ "budget": {
+  "llm_calls": 0,
+  "network_calls": 0,
+  "new_embedding_calls": 0,
+  "note": "frozen V5 development embedding store reused"
+ },
+ "gold_labels_consumed": false,
+ "limitations": [
+  "Development split, frozen top-3 cosine seeds; certificate halves untouched.",
+  "kernel_legal_depth2 conflates T1+T2+structural T3 reachability; the K2-vs-K1 score-digest change and second-edge null (full T3) remain a separate rung.",
+  "No retrieval-quality claim: reaching a legal second hop says nothing yet about answering queries better."
+ ]
+}

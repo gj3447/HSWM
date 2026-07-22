@@ -21,6 +21,9 @@
 - learned `CONNECT / SEPARATE / SPECIALIZE` 정책은 아직 구현되지 않았다. 현재 구현은
   결정론적 커널이며, 2026-07-23에 weight·routing·topology를 분리한 가소성 의미론과
   fail-closed loop 계약까지 설계됐다.
+- B2.1에서 frozen `A / B / MERGED` 위 shared-ridge router를 실제 학습했지만, 표준
+  54셀 전부 `ABSTAIN -> MERGED`로 붕괴해 `REJECTED`됐다. primary gold oracle의
+  최소 headroom도 `+0.010870 < +0.02`라 router-only 행동공간 자체가 부족하다.
 
 정본 설계는
 [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md),
@@ -35,8 +38,8 @@
 
 - 종합 보고서: [`PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md`](PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md)
 - 실행 루프 계약: [`hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json)
-- 첫 실험: topology를 건드리기 전 B2.1 `A / B / MERGED / ABSTAIN` router-only 학습
-- 경계: `SECONDARY_AI_RESEARCH_AND_DESIGN`; 새 성능 실험이나 LakatoTree 판정이 아니다.
+- 첫 실험 결과: [`B21_LEARNED_ROUTER_RESULTS_2026-07-23.md`](prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) — B2.1 router-only `REJECTED`; 다음은 sparse semantic-weight delta
+- 경계: 설계 수식은 `SECONDARY_AI_RESEARCH_AND_DESIGN`; B2.1 수치는 별도 prereg·실측·감사·LakatoTree receipt에 근거한다.
 
 ## 2026-07-22 연구 장부
 
@@ -50,6 +53,7 @@
 | Phase B field algebra | immutable content-addressed Field, merge/split/compose, L1–L4 10/10 | [design](DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md) |
 | B1 identity material | MuSiQue legal chain 0→6, 2Wiki 0→25; 후속 T1/T2 공통 성공은 미달 | [B1](B1_IDENTITY_UNLOCK_RESULTS_2026-07-22.md) · [T1](T1_ENTRANCE_REACH_RESULTS_2026-07-22.md) |
 | B2 federated merge | cross-field +0.2137, seam +0.0342, `progressive`; in-field −0.0648로 no-harm 위반 | [result](prom_search_hswm/docs/B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md) |
+| B2.1 learned router | 2벤치 × 3 partition × 3 k × 3 seed = 54셀 전부 abstain; primary Δ0, oracle ceiling min +0.01087로 router-only `REJECTED / degenerating` | [result](prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) |
 | PROM-8 / R1 | dynamic two-lane 처방. R1 T1 minimum 0→2, 2Wiki depth-2 0→4, MuSiQue 0 | [PROM-8](PROM_8_DYNAMIC_TWO_LANES_2026-07-22.md) · [R1](R1_T1_RETRY_RESULTS_2026-07-22.md) |
 | open composition v2r3 | target 59/59, expanded 78/78, injected negative 2/2. 구조 closure는 통과했지만 LakatoTree는 `partial`, certificate=false | [amendment](AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md) · [judgment](prom_search_hswm/judgments/OPEN_COMPOSITION_20260722/V2_JUDGMENT.md) |
 
@@ -64,12 +68,13 @@
 | [`prom_search_hswm/`](prom_search_hswm/) | PROM→HSWM, field algebra, federated merge, open-composition 연구 코드와 영수증 |
 | [`prom_search_hswm/hswm_open_kernel.py`](prom_search_hswm/hswm_open_kernel.py) | v2r3 open self-similar deterministic kernel |
 | [`prom_search_hswm/test_hswm_open_kernel.py`](prom_search_hswm/test_hswm_open_kernel.py) | v2r3 반례·불변식 테스트 |
+| [`prom_search_hswm/prom_b21_learned_router.py`](prom_search_hswm/prom_b21_learned_router.py) | frozen HSWM arm 위 B2.1 learned router·conformal abstention harness |
 | [`prom_search_hswm/fsm/hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json) | weight→routing→topology 후보의 bounded proposal/evaluation/activation 계약 |
 | [`prom_search_hswm/evidence/`](prom_search_hswm/evidence/) | preregistration, evidence, neutral judge packet, injected negative |
 
 ## 검증·판정 경계
 
-재현 가능한 현재 구조 테스트:
+재현 가능한 현재 구조·가소성 관련 회귀:
 
 ```bash
 python3 -m pytest \
@@ -77,12 +82,15 @@ python3 -m pytest \
   prom_search_hswm/test_hswm_open_composition.py \
   prom_search_hswm/test_hswm_field_algebra.py \
   prom_search_hswm/test_hswm_b2_crossfield.py \
-  prom_search_hswm/test_hswm_hypergraph.py \
-  prom_search_hswm/test_hswm_true_hypergraph.py -q
+  prom_search_hswm/test_hswm_absorption_fsm.py \
+  prom_search_hswm/test_hswm_b21_learned_router.py \
+  tests/test_additive_floor.py \
+  tests/test_supersede_confluence.py \
+  tests/test_field_snapshot.py -q
 ```
 
-마지막 동결 결과는 `78 passed`다. 이는 구조·회귀의 engineering closure이지 learned routing,
-multi-agent transfer, retrieval uplift 또는 scientific progress 증명이 아니다.
+2026-07-23 재실행 결과는 `113 passed`다.
+테스트 통과는 harness/불변식 closure이고, 성능 판정은 별도 evidence와 receipt를 따른다.
 
 LakatoTree `LakatosTree_HSWM_SolidMultiAgent_20260722 /
 ENG-open-composition-kernel-v2r3`의 receipt-chain verdict는 `partial`이고 receipt는
@@ -95,7 +103,7 @@ certificate가 닫히지 않아 `certified=false`다.
 1. relation/type/role compatibility와 adapter registry
 2. cyclic connector graph의 budgeted readout
 3. `hswm_plasticity_loop.v1.json`의 durable reducer·event log·typed proposal compiler 구현
-4. B2.1 learned interference gate와 conformal abstention
+4. B2.2 sparse semantic-weight `Delta ell` 학습; B2.1 router-only 반복·threshold sweep은 중단
 5. 두 번째 benchmark 및 Agent-A-write → Agent-B transfer
 6. 올바른 `python3 -m pytest` replay를 쓰는 server-owned certification
 

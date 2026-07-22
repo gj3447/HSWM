@@ -10,12 +10,13 @@ research programme. The compiler/field/readout core is NumPy-only; reproducing
 H3 artifact production is a separately attested GPU/LLM workflow.
 
 The repository-wide research map, including the 2026-07-22 open self-similar
-composition work, is in [`INDEX.md`](INDEX.md).
+composition work and the 2026-07-23 learned-router result, is in
+[`INDEX.md`](INDEX.md).
 
 ## Honest status (read first)
 
 This is an implemented compiler boundary plus a measurement prototype, not a
-reasoner or a proven production runtime. What is real as of 2026-07-22:
+reasoner or a proven production runtime. What is real as of 2026-07-23:
 
 - ✅ **S0 falsifier repair:** separated-graded arm (e), actual
   `readouts.supersede()` writes, kill(iii), write/trip receipts, and corrected
@@ -35,10 +36,16 @@ reasoner or a proven production runtime. What is real as of 2026-07-22:
   from the composition contract. Atomic and composed HSWMs share one
   mount/typed-port/n-ary-connector type; v2r3 passes the 78-test expanded
   structural regression and two injected-negative checks.
-- ⚠️ **Open-kernel claim boundary:** LakatoTree judged the receipt chain
-  `partial` and `certified=false`. Learned CONNECT/SEPARATE/SPECIALIZE,
-  bounded cyclic readout, multi-agent transfer, and retrieval uplift remain
-  unimplemented or unmeasured.
+- ❌ **B2.1 learned router:** a preregistered shared-ridge/conformal router over
+  frozen A/B/MERGED arms failed all 54 standard cells and reduced to
+  `ABSTAIN→MERGED` everywhere. Primary delta was 0 on both datasets; even the
+  posthoc gold oracle's minimum frozen-action headroom was only +0.01087, below
+  the registered >+0.02 target. This rejects router-only, not semantic-weight or
+  topology learning.
+- ⚠️ **Open-kernel claim boundary:** LakatoTree judged the composition receipt
+  chain `partial` and `certified=false`. Learned semantic-weight deltas and
+  CONNECT/SEPARATE/SPECIALIZE topology edits, bounded cyclic readout,
+  multi-agent transfer, and retrieval uplift remain unimplemented or unmeasured.
 - ✅ **Measured efficacy:** the static additive-j field beats the listed cosine,
   BM25, PPR, and RRF arms on support recall@3, nDCG@10, and downstream F1 in the
   checked-in 300-row ladder. HSWM alone uses 100 offline LLM judgments per run.
@@ -86,6 +93,8 @@ positive traversal residual does not guarantee ranking/nDCG improvement.
 | `SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md` | fixed-layer-free open weighted-hypergraph contract |
 | `AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md` | v2r3 counterexamples, repairs, tests, and claim boundary |
 | `prom_search_hswm/hswm_open_kernel.py` | deterministic open-composition v2r3 kernel |
+| `prom_search_hswm/prom_b21_learned_router.py` | B2.1 frozen-arm learned router and conformal-abstention harness |
+| `prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md` | 54-cell result, oracle ceiling diagnosis, LakatoTree disposition, and B2.2 direction |
 | `H3_B3_RESUME_STATUS_2026-07-20.md` | corrected PRE_RUN boundary, local receipt hashes, and exact next sequence |
 | `QKV_STRUCTURE_EXPERIMENT_PLAN_2026-07-20.md` / `QKV_STRUCTURE_RESULTS_2026-07-20.md` | ordered-routing and B1-QKV development protocol, results, and claim boundary |
 | `qkv_routing.py` / `qkv_b1_probe.py` | exact symbolic QKV routing and no-label dense B1 value-read research kernels |

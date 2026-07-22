@@ -33,6 +33,7 @@
 | **P5** | `prom_p5_multiview_hardhop.py` | `EVIDENCE_p5_multiview_hardhop_20260722.json` + `judgments/P5_multiview_hardhop/` | metric **equivalent** / Lakatos **degenerating**, node `REJECTED` | equal-compute fixed late RRF: hard-4 Δ0, full-chain −0.0125, 2-support −0.015625. cheap query routing만 폐기; learned specialist는 미검. |
 | **P6** | `prom_p6_continual_absorption_fsm.py` + `hswm_absorption_fsm.py` + `fsm/` | `EVIDENCE_p6_continual_absorption_fsm_20260722.json` + `judgments/P6_continual_absorption_fsm/` | metric **equivalent** / Lakatos **degenerating** (node `-r2`) | Phase A 의미 KV residual 흡수: 3라운드 전부 fresh unseen 해침(R1 −0.060, R3 −0.058, CI 음수) → FSM 게이트 전부 기각 → sealed Δ=0, novel −1. 가드레일은 작동(손해 0 실림). 재도전은 Phase B topology 흡수로만. |
 | **B2** | `prom_b2_crossfield_merge.py` + `hswm_field_algebra.py` | `EVIDENCE_b2_crossfield_merge_20260722.json` | **progressive** (eureka true BF 6.0) / L5 위반 lemma 편입 | ★ federated merge: cross-field +0.2137 CI[.183,.244] + seam 유의 +0.034 / in-field −0.065 간섭비용. 첫 완전 progressive. `docs/B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md` |
+| **B2.1** | `prom_b21_learned_router.py` | `EVIDENCE_b21_learned_router_20260723.json` + `AUDIT_*` + `judgments/B21_learned_router/` | scientific **REJECTED** / metric **equivalent** / Lakatos **degenerating** | 2벤치×3 partition×3 k×3 seed=54셀 전부 `ABSTAIN->MERGED`; primary Δ0, in-field min −0.0351. gold oracle도 primary min headroom +0.01087로 목표 >+.02 불가능. router-only 폐기, semantic-weight/topology 행동공간으로 이동. [`result`](docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) |
 | — | `prom_vunione_ab.py` / `_gated_ab.py` | `EVIDENCE_vunione_*` | 종결 | V=V∪E readout, entity 정점추가 blind+gated 兩 RED |
 
 보조 모듈: `hswm_fusion.py`(fusion primitive) · `hswm_hypergraph.py` / `_readout.py`(하이퍼그래프 빌더) · `hswm_field_algebra.py`(**B0 field 대수** — merge/split/compose, L1–L4 법칙 10/10, `test_hswm_field_algebra.py`. 설계=`../DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md`).
@@ -64,6 +65,7 @@ venv=fatal crash, CLAUDE.md GM 정전). 벤치(musique)도 `/Volumes/GM/bench/` 
 - **임베딩 kNN 엣지 / hand-built 유사도 그래프** = flat 못 이김 (ML14/15).
 - **구조가 single-lookup recall 개선** = null (ML10 α-nDCG). 구조는 multi-hop 합성서만 room 있음.
 - **의미 KV residual 흡수(continual absorption Phase A)** = REJECTED (P6). unseen 전이 0, fresh는 오히려 해침. 흡수는 topology(Phase B)에서만 재시험.
+- **frozen A/B/MERGED router-only로 B2 간섭 해결** = REJECTED (B2.1). 54/54 all-abstain이고 primary oracle ceiling도 prereg threshold 미달. threshold 완화 반복 금지.
 
 ## 4. 열린 로드맵 (다방면 — 하나에 갇히지 말 것)
 
@@ -73,8 +75,8 @@ venv=fatal crash, CLAUDE.md GM 정전). 벤치(musique)도 `/Volumes/GM/bench/` 
 - **D. learning-while-using**: 스트리밍 질의로 Hebbian 엣지강화 + supersession, *일반화 vs 암기* 분리 (HippoRAG 2 대비).
 - **E. 이식성 payoff**: 도메인 A 구조 → B 전이 이득 (ML18은 config만 확인, 실제 전이 payoff 미측).
 - **F. P6 완료 → Phase B가 다음**: P6(Phase A 의미 residual 흡수)은 REJECTED. USER 원문 "구조나 fsm 을 개선시키면서"의 진짜 시험대 = **Phase B: n-ary ADD/SPLIT/MERGE/SUPERSEDE topology 흡수** (P6 prereg scope_boundary에 deferred로 명시). FSM 게이트·CAS receipt 규율은 재사용. **큰판 설계 착지 (2026-07-22): `../DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md`** — 한 대수 두 스케일, staging B0(field 대수, 착지)→B1(identity material, **착지 GREEN**: MuSiQue 0→6·2Wiki 0→25 chain 해금, metric progressive, `../../GIT/HSWM/B1_IDENTITY_UNLOCK_RESULTS_2026-07-22.md`)→B2(cross-field merge, `Q-federated-hswm-merge-crossfield` 신설)→B3(continual topology 2벤치×3seed). B1 다음 rung=T1–T3 별도 prereg.
-- **G. learned gate**: `Q-learned-gate-privateid-hardhop` (P5가 열어둠, next_directions 2위) — train-only learned hop/role gate + private-ID/direct-edge deletion + 2벤치×3 seeds. frozen harness 전이라 prediction 미등록.
+- **G. learned plasticity**: B2.1 shared-ridge gate-only는 `REJECTED`; 질문 자체는 OPEN. 다음 최소 rung은 frozen embedding 위 sparse semantic-weight `Delta ell` 후보를 학습하고 P6의 immutable candidate/replay/no-harm/CAS gate를 재사용하는 B2.2. 그 뒤에만 bounded typed `CONNECT / SEPARATE / SPECIALIZE` topology proposal을 연다.
 
 ---
 
-*갱신 2026-07-22 (2차): P6 continual absorption FSM RED 착지 — Phase A 의미 residual 흡수는 unseen 전이 실패(3라운드 전부 게이트 기각, sealed Δ=0), FSM 가드레일은 설계대로 작동. amendment 이력(크래시 sha → r2 재등록) 포함 완전 packet. 다음 = Phase B topology 흡수 또는 learned gate.*
+*갱신 2026-07-23: B2.1 multi-case learned router RED 착지 — 54 standard + 54 shuffled + 6 private cells, primary Δ0. posthoc gold oracle로 frozen router action-space ceiling까지 확인. 다음 = B2.2 sparse semantic-weight delta; 이후 bounded topology proposal.*

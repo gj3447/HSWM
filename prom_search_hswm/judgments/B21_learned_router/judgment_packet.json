@@ -1,0 +1,103 @@
+{
+  "schema_version": "symposium-lakatotree-judgment/v1",
+  "template_only": false,
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "B2.1r1-query-byte-equivalence-repair",
+  "question": "Q-b21-learned-router-interference-control",
+  "conjecture": "A shared capacity-bounded A/B-equivariant router over frozen A, B, and MERGED readouts can preserve cross-field gain, restore in-field performance, and beat MERGED overall on both datasets.",
+  "scope_boundary": "Router parameters phi only; embeddings, semantic edge weights, topology, scorer, and frozen arm outputs were not learned.",
+  "roles": {
+    "implementer": "codex_root_hswm_b21",
+    "evidence_auditor": "codex_explorer_b21_evidence_audit",
+    "official_judge": "lakatotree_scripted_submit_result",
+    "independent_progress_judge": "unavailable_global_agent_thread_limit"
+  },
+  "preregistration": {
+    "path": "prom_search_hswm/evidence/PREREG_b21r1_query_byte_repair_20260723.json",
+    "sha256": "b0fdb7870a7904bf92277af8edd8698def601ed3e167e91a13ac772a96584f01",
+    "prediction_receipt_sha256": "27fb71d548ca91a757ce524b94b9cfdba90453333f40bbd0ddcbe25085a6d1ee",
+    "registered_at": "2026-07-22T17:26:41.694655+00:00",
+    "registered_before_measurement": true,
+    "prediction": {
+      "metric": "min_over_datasets_primary_router_minus_merged_recall10",
+      "direction": "higher",
+      "baseline": 0.0,
+      "noise_band": 0.02,
+      "success_rule": "strictly greater than +0.02"
+    },
+    "novel_target": {
+      "metric": "min_over_datasets_primary_infield_router_minus_best_single_recall10",
+      "direction": "higher",
+      "threshold": -0.02
+    },
+    "judge_script_path": "prom_search_hswm/prom_b21_learned_router.py",
+    "judge_script_sha256": "76af6dd849416e9410bc01f635047da0a1418902a1541c7ea0e516fcf7d31f88",
+    "test_sha256": "b7190659fbc60326dccdafba241cccb67272a91e39012416ea8c4cd1f47dd859"
+  },
+  "measurement": {
+    "run_git_head": "acb661629c996253dd85617df033aa29244ebdb8",
+    "started_at": "2026-07-22T17:30:29.348649+00:00",
+    "finished_at": "2026-07-22T18:17:13.818293+00:00",
+    "duration_seconds": 2804.469644,
+    "evidence_path": "prom_search_hswm/evidence/EVIDENCE_b21_learned_router_20260723.json",
+    "evidence_sha256": "3dbff4f1db5f40aeeaf87e6803b257b6c9b13a473175b661806e75ccd9f6e1bc",
+    "audit_path": "prom_search_hswm/evidence/AUDIT_b21_learned_router_20260723.json",
+    "audit_sha256": "71488f8e512de1db51265c670c079339297332e0f3319651de321db9dc2ba233",
+    "evidence_freeze_commit": "a02be496082bbdfb671befd71052b6fcee635e61",
+    "scientific_conclusion": "REJECTED",
+    "primary_metric_value": 0.0,
+    "novel_metric_value": -0.035088,
+    "standard_cells": 54,
+    "standard_joint_passes": 0,
+    "shuffled_joint_passes": 0,
+    "private_cells": 6,
+    "private_joint_passes": 0
+  },
+  "posthoc_diagnostic": {
+    "status": "DIAGNOSTIC_NO_CLAIM",
+    "path": "prom_search_hswm/evidence/DIAG_b21_router_headroom_20260723.json",
+    "sha256": "c254d4ca85397d3beaf621d44a4f8ad11e3fcd7ab3621d5651994c40fd940d1d",
+    "primary_oracle_headroom_min": 0.01087,
+    "registered_threshold_reachable_by_any_router_over_frozen_actions": false
+  },
+  "judge": {
+    "submit_request_path": "prom_search_hswm/judgments/B21_learned_router/submit_request.json",
+    "submit_request_sha256": "7087f0dbbdbbcd215c0e7b669b52a6d32419369e98b385b5c7c5487dfb25a6eb",
+    "submit_response_path": "prom_search_hswm/judgments/B21_learned_router/submit_response.json",
+    "submit_response_sha256": "1856f8affa394005ce2862442d7bba4c54c6463051c3a4214ec984815b563d27",
+    "verdict": "degenerating",
+    "metric_verdict": "equivalent",
+    "node_state": "REJECTED",
+    "question_status": "OPEN",
+    "verdict_receipt_sha256": "5843898b353b6b388acf61640bba8d7ea8ac47b120835db014c94776ea5fd7b7",
+    "prev_receipt_sha256": "27fb71d548ca91a757ce524b94b9cfdba90453333f40bbd0ddcbe25085a6d1ee",
+    "judged_at": "2026-07-22T18:26:18.175212+00:00"
+  },
+  "verification": {
+    "receipt_chain_path": "prom_search_hswm/judgments/B21_learned_router/node_receipts.json",
+    "receipt_chain_sha256": "420d4ec7771b16162f685eef834328981c0d123a2505a3c3f9bc7582b2272d60",
+    "verify_output_path": "prom_search_hswm/judgments/B21_learned_router/verify_verdict.json",
+    "verify_output_sha256": "55a1dd2b6190b64b7b59e5217ce7109ccb0b6434fc7daf9a390206454f03d229",
+    "node_readback_path": "prom_search_hswm/judgments/B21_learned_router/node_readback_summary.json",
+    "node_readback_sha256": "773e34fefa70a4298c35fc84ae92421ba74000464cee087add22230a018dedbc",
+    "ok": true,
+    "from_receipt": true,
+    "scripted_source_confirmed": true
+  },
+  "certification": {
+    "path": "prom_search_hswm/judgments/B21_learned_router/certificate.json",
+    "sha256": "8db54026fae61fbdf2ab9bd54d59cd6789f3ac37dd7fbda8542ce1d38c31572b",
+    "certified": false,
+    "measurement_grade": "client_asserted",
+    "replay_status": "mismatch",
+    "missing": [
+      "reproducible",
+      "calibrated",
+      "measurement_owned"
+    ]
+  },
+  "report": {
+    "path": "prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md",
+    "sha256": "98b4b2afd9d0a338399bef0866dc0e700b4c4c9ec74111075494e307a8229a45"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "claim_id": "LakatosTree_PromSearchHSWM_20260721/B2.1r1-query-byte-equivalence-repair",
+  "certified": false,
+  "missing": [
+    "reproducible",
+    "calibrated",
+    "measurement_owned"
+  ],
+  "checks": [
+    {
+      "gate": "preregistered",
+      "passed": true,
+      "evidence_ref": "/Users/lagyeongjun/CD/HSWM/prom_search_hswm/prom_b21_learned_router.py:76af6dd84941",
+      "note": ""
+    },
+    {
+      "gate": "reproducible",
+      "passed": false,
+      "evidence_ref": "",
+      "note": "계보 미기록 — 인증은 기록을 요구"
+    },
+    {
+      "gate": "stands",
+      "passed": true,
+      "evidence_ref": "verdict:B2.1r1-query-byte-equivalence-repair",
+      "note": ""
+    },
+    {
+      "gate": "calibrated",
+      "passed": false,
+      "evidence_ref": "",
+      "note": "ECE=0.1771>0.1(과신/과소보정)"
+    },
+    {
+      "gate": "grounded",
+      "passed": true,
+      "evidence_ref": "lakatos/grounding.py GROUNDED tier registry",
+      "note": "시스템 수준 불변식 — 채점 상수 전부 tier 공개(노드별 아님)"
+    },
+    {
+      "gate": "measurement_owned",
+      "passed": false,
+      "evidence_ref": "",
+      "note": "측정값 grade=client_asserted — 값소유(server_regenerated: replay 재유도) 또는 attested(트리 attestor_dids 선언 allow-list 신원 서명) 필요; authored(자기서명)는 authorship 증명일 뿐 권위 아님(jp5)"
+    }
+  ],
+  "evidence_window": {
+    "as_of": "2026-07-22T18:26:43.108514+00:00",
+    "engine_rule_sha": {
+      "sealed": "28c0bd68fec2ac7c8007981efcda9a897366f604748151ea1aceb759e1f22eec",
+      "current": "28c0bd68fec2ac7c8007981efcda9a897366f604748151ea1aceb759e1f22eec"
+    },
+    "shas": {
+      "/Users/lagyeongjun/CD/HSWM/prom_search_hswm/prom_b21_learned_router.py": "76af6dd849416e9410bc01f635047da0a1418902a1541c7ea0e516fcf7d31f88"
+    }
+  },
+  "limits": "인증은 evidence_window 시점의 검증가능 계보 묶음 — 새 반박 증거가 standing 을 깨면 효력 상실 (절대 보증 아님)",
+  "next_actions": [
+    {
+      "gate": "reproducible",
+      "action": "DatasetManifest 작성 + manifest-verify (lakatos manifest-verify)"
+    },
+    {
+      "gate": "calibrated",
+      "action": "발급자 예측 이력의 ECE≤정책상한(GROUNDED.ece_gate_max) 확인 (calibrate; n≥min_n. PASS=고정-bin 해상도서 miscalibration 미검출일 뿐 보정 증명 아님, Kumar 2019)"
+    },
+    {
+      "gate": "measurement_owned",
+      "action": "측정값 소유 — replay 재유도 활성화(LAKATOS_REPLAY_EXEC → server_regenerated) 또는 write-cert 서명(allow-list 신원 → attested). client float 봉인은 인증 불가."
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "schema": "hswm-diagnostic/v1",
+  "status": "DIAGNOSTIC_NO_CLAIM",
+  "generated_at": "2026-07-22T18:23:31Z",
+  "source_evidence": {
+    "path": "EVIDENCE_b21_learned_router_20260723.json",
+    "sha256": "3dbff4f1db5f40aeeaf87e6803b257b6c9b13a473175b661806e75ccd9f6e1bc"
+  },
+  "purpose": "Post-result diagnosis separating conservative calibration failure from the utility model and the frozen A/B/MERGED action-space ceiling. This was not preregistered and does not alter the REJECTED result.",
+  "primary_action_space_oracle": {
+    "definition": "Per query, take the maximum recall@10 among A, B, and MERGED using gold. This is an evaluation-only upper bound and is never executable.",
+    "2wiki": {
+      "merged_recall": 0.758152,
+      "oracle_recall": 0.769022,
+      "oracle_headroom": 0.01087
+    },
+    "musique": {
+      "merged_recall": 0.67381,
+      "oracle_recall": 0.693452,
+      "oracle_headroom": 0.019642
+    },
+    "min_over_datasets": 0.01087,
+    "registered_success_threshold": 0.02,
+    "threshold_reachable_by_any_router_over_frozen_actions": false
+  },
+  "standard_matrix_action_space_oracle": {
+    "n_cells": 54,
+    "headroom_min": 0.002718,
+    "headroom_max": 0.059524,
+    "headroom_gt_0_02_n": 42,
+    "note": "Some non-primary partition/k/seed cells have more oracle room, but the frozen primary min-over-datasets prediction is mathematically unreachable."
+  },
+  "threshold_diagnostics": {
+    "2wiki": {
+      "test_queries": 92,
+      "registered_radius": 0.3672850114807409,
+      "maximum_predicted_single_advantage": 0.212014,
+      "maximum_advantage_minus_radius": -0.155271,
+      "registered": {
+        "actions": {
+          "A": 0,
+          "B": 0,
+          "ABSTAIN": 92
+        },
+        "overall_delta": 0.0
+      },
+      "radius_zero_exploratory": {
+        "actions": {
+          "A": 4,
+          "B": 9,
+          "ABSTAIN": 79
+        },
+        "accepted_true_advantage_positive": 0,
+        "accepted_true_advantage_negative": 0,
+        "accepted_true_advantage_tie": 13,
+        "overall_delta": 0.0,
+        "infield_vs_merged": 0.0
+      },
+      "force_predicted_single_exploratory": {
+        "overall_delta": -0.179348,
+        "cross_vs_merged": -0.25,
+        "infield_vs_merged": -0.058824
+      }
+    },
+    "musique": {
+      "test_queries": 140,
+      "registered_radius": 0.47294903384028186,
+      "maximum_predicted_single_advantage": 0.203406,
+      "maximum_advantage_minus_radius": -0.269543,
+      "registered": {
+        "actions": {
+          "A": 0,
+          "B": 0,
+          "ABSTAIN": 140
+        },
+        "overall_delta": 0.0
+      },
+      "radius_zero_exploratory": {
+        "actions": {
+          "A": 5,
+          "B": 10,
+          "ABSTAIN": 125
+        },
+        "accepted_true_advantage_positive": 1,
+        "accepted_true_advantage_negative": 1,
+        "accepted_true_advantage_tie": 13,
+        "overall_delta": 0.0,
+        "cross_vs_merged": -0.006024,
+        "infield_vs_merged": 0.008772
+      },
+      "force_predicted_single_exploratory": {
+        "overall_delta": -0.117262,
+        "cross_vs_merged": -0.209839,
+        "infield_vs_merged": 0.017544
+      }
+    }
+  },
+  "diagnostic_conclusion": [
+    "The conformal radius is larger than every predicted test advantage, so the registered router correctly abstains everywhere.",
+    "Removing the radius does not improve overall recall on either dataset; selected positive-advantage cases are almost entirely recall ties.",
+    "The failure is therefore not fixed by merely loosening abstention.",
+    "On the fixed primary cohorts, even a gold oracle over A/B/MERGED cannot clear the registered +0.02 min-over-datasets threshold.",
+    "The next confirmatory branch must expand the action space through learned semantic weights or bounded topology/connectivity proposals rather than repeat a router-only threshold sweep."
+  ]
+}

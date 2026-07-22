@@ -1,0 +1,51 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "B2-crossfield-merge-payoff",
+  "question": "Q-federated-hswm-merge-crossfield",
+  "conjecture": "On 2Wiki (n_q=400, title-parity two-field split), the seam-bound merged field beats per-query best-single on cross-field queries (recall@10 delta > noise band 0.02 with bootstrap95 lower > 0), does not harm in-field queries beyond the noise band (L5), and the gain vanishes without seam arcs (F-B2c ablation, delta > 0).",
+  "prediction": {
+    "metric": "crossfield_merged_minus_best_single_recall10",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0.02,
+    "novel_metric": "crossfield_merged_minus_no_seam_recall10",
+    "novel_direction": "higher",
+    "novel_threshold": 0,
+    "credence": 0.35
+  },
+  "already_public_before_registration": {
+    "note": "Input stratification stats only were inspected before registration: 500 rows all usable, cross_field 298 / in_field 202. No arm output (recall, delta, CI, seam count effect) was computed or inspected. ML8 hswm-of-hswms coverage win is NOT evidence here (ML10 proved it a metric artifact) — hence paired bootstrap + simultaneous no-harm requirement.",
+    "harness_provenance": "built by subagent under no-measurement constraint; parent re-verified 18 tests green and determinism"
+  },
+  "kill_conditions": [
+    "f_b2a bootstrap95 lower <= 0 or delta <= noise_band -> cross-field merge payoff unconfirmed; federated network claim stays open at best.",
+    "f_b2b in-field delta < -0.02 -> L5 no-harm violated; merge interferes (ML15 noise-bridge recurrence), network claim REJECTED regardless of f_b2a.",
+    "f_b2c delta <= 0 -> gain (if any) is not carried by seam binding; the 'connection' mechanism claim dies even if merged wins.",
+    "usable rows < n_q or any gold consumption during field construction -> measurement void."
+  ],
+  "scope_boundary": {
+    "dataset": "2Wiki 500-row frozen sidecar only; second benchmark and seeds sweep deferred",
+    "embedding": "all-MiniLM-L6-v2 frozen st_cache; no fine-tuning",
+    "claims": "field-level merge payoff only; no reasoner or kernel-traversal claim"
+  },
+  "locked_parameters": {
+    "n_q": 400,
+    "seed": 7332,
+    "top_k": 10,
+    "bootstrap_reps": 2000,
+    "lam_v": 0.1,
+    "lam_b": 0.3,
+    "noise_band": 0.02,
+    "model": "all-MiniLM-L6-v2"
+  },
+  "script_sha256": "40069b91ae630c9e58466898b4a4df4e0b19be0dd152152cc6dd4a59b56c6311",
+  "dataset_sha256": "212c43c5116d114e73d0b02e5fcd28580043ae306d3303fea0d76276715047ed",
+  "hswm_field_algebra.py_sha256": "573de075728aca74965acd945228233e9f736ee96f97dfb7aaa5fee3761cb9ca",
+  "hswm_hypergraph.py_sha256": "af902f614d9c3bb665c14ac7baa7c2a1570e58cc9aaf1353811d485c544d2c6a",
+  "hswm_hypergraph_readout.py_sha256": "139bc94b54bb09fd6024c8e14b2c72c92a6229c2f57fa39d2f1139bed357b5f5",
+  "prediction_receipt_sha256": "ba0c3718ebb33642b289c1afdf7aa783f787a3ef4bbbc843a3568f1ce8fcfbdf",
+  "server_registered_at": "2026-07-22T07:25:35.611118+00:00",
+  "registered_before_measurement": true,
+  "user_canon_seed": "USER 2026-07-22 'SOLID 한 여러개 HSWM 의 연결로 큰 HSWM 망' (KG user-canon-federated-hswm-network-2026-07-22)"
+}

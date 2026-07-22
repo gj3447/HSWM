@@ -1,0 +1,125 @@
+{
+  "schema": "lakato-evidence-record/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "B2-crossfield-merge-payoff",
+  "question": "Q-federated-hswm-merge-crossfield",
+  "conjecture": "On 2Wiki, merging two provenance fields with seam identity arcs beats the best single field on cross-field queries (F-B2a) without harming in-field queries beyond the noise band (F-B2b, L5), and the gain vanishes without seams (F-B2c).",
+  "preregistration": {
+    "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_b2_crossfield_merge_20260722.json",
+    "registered_at": "2026-07-22T07:25:35.611118+00:00",
+    "registered_before_measurement": true,
+    "prediction_receipt_sha256": "ba0c3718ebb33642b289c1afdf7aa783f787a3ef4bbbc843a3568f1ce8fcfbdf",
+    "script_sha256": "40069b91ae630c9e58466898b4a4df4e0b19be0dd152152cc6dd4a59b56c6311"
+  },
+  "measurement": {
+    "metric": "crossfield_merged_minus_best_single_recall10",
+    "value": 0.213675,
+    "per_class": {
+      "cross_field": {
+        "n": 234,
+        "merged_recall10": 0.688034,
+        "best_single_recall10": 0.474359,
+        "merged_no_seam_recall10": 0.653846
+      },
+      "in_field": {
+        "n": 166,
+        "merged_recall10": 0.75753,
+        "best_single_recall10": 0.822289,
+        "merged_no_seam_recall10": 0.774096
+      }
+    },
+    "f_b2a": {
+      "description": "cross-field: merged - best_single",
+      "delta": 0.213675,
+      "bootstrap95": [
+        0.182692,
+        0.24359
+      ],
+      "check_lower_gt_0": true
+    },
+    "f_b2b": {
+      "description": "in-field no-harm (L5): merged - best_single",
+      "delta": -0.064759,
+      "bootstrap95": [
+        -0.091867,
+        -0.040663
+      ],
+      "noise_band": 0.02,
+      "check_no_harm": false
+    },
+    "f_b2c": {
+      "description": "cross-field seam ablation: merged - merged_no_seam",
+      "delta": 0.034188,
+      "bootstrap95": [
+        0.017094,
+        0.05235
+      ],
+      "check_lower_gt_0": true
+    }
+  },
+  "fields": {
+    "field_id_a": "727716997cab7991e0e601b8d9e56ee512ffee26a24cd0526129d489ee361290",
+    "field_id_b": "cf156a58987539f8da698fb9cf69e6302d531f7923b151a6b3e5918d9693259a",
+    "field_id_merged": "a15b36fb0f1b1dfcb7c3fe34af08985b93313e19b849476ac7acbef15d052c2b",
+    "field_id_merged_no_seam": "7e483df30cab94c736c534c1196a82e47f2a86de6282ed037966ff8ee0958cee",
+    "n_seam_arcs": 2355
+  },
+  "sample": {
+    "seed": 7332,
+    "n_rows_used": 400,
+    "n_paragraphs": 2753,
+    "row_ids_sha256": "ff8984b4c48385bbb140da7f17cd59232437c8e7fe7c8c74cfb0faea48886c72",
+    "class_counts": {
+      "cross_field": 234,
+      "in_field": 166
+    }
+  },
+  "provenance": {
+    "grounded": true,
+    "inputs": [
+      {
+        "kind": "source",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/.ab_p5_cache/h3_relation_raw_2wiki.json",
+        "sha256": "212c43c5116d114e73d0b02e5fcd28580043ae306d3303fea0d76276715047ed"
+      },
+      {
+        "kind": "harness",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/prom_b2_crossfield_merge.py",
+        "sha256": "40069b91ae630c9e58466898b4a4df4e0b19be0dd152152cc6dd4a59b56c6311"
+      },
+      {
+        "kind": "preregistration",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_b2_crossfield_merge_20260722.json",
+        "sha256": "7840398fede780bebdc7c11416e7e91b02ef0b10ef0b8254917286ad47668d67"
+      },
+      {
+        "kind": "frozen_module",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/hswm_field_algebra.py",
+        "sha256": "573de075728aca74965acd945228233e9f736ee96f97dfb7aaa5fee3761cb9ca"
+      },
+      {
+        "kind": "frozen_module",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/hswm_hypergraph.py",
+        "sha256": "af902f614d9c3bb665c14ac7baa7c2a1570e58cc9aaf1353811d485c544d2c6a"
+      },
+      {
+        "kind": "frozen_module",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/hswm_hypergraph_readout.py",
+        "sha256": "139bc94b54bb09fd6024c8e14b2c72c92a6229c2f57fa39d2f1139bed357b5f5"
+      }
+    ]
+  },
+  "harness": {
+    "command": "/Users/lagyeongjun/CD/bhgman_tool/.venv/bin/python HSWM/prom_search_hswm/prom_b2_crossfield_merge.py --data /Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/.ab_p5_cache/h3_relation_raw_2wiki.json",
+    "git_head": "8e0bfa779521ad7a1d58a6e9b4e96df5943957ee",
+    "environment": {
+      "python": "3.14.6",
+      "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+      "sentence_transformers": "5.5.1",
+      "model": "all-MiniLM-L6-v2"
+    },
+    "started_at": "2026-07-22T07:26:27.906047+00:00",
+    "finished_at": "2026-07-22T07:37:25.790426+00:00",
+    "exit_code": 0
+  }
+}

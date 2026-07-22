@@ -1,0 +1,57 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "R1-t1-retry-alias-soft-hipposeed",
+  "question": "Q-r1-t1-retry-alias-soft-seed",
+  "prom8_ref": "HSWM/PROM_8_DYNAMIC_TWO_LANES_2026-07-22.md §4 R1 / C2",
+  "conjecture": "PROM-8 R1 package (offline predicate alias-closure + soft edge-weight demotion + HippoRAG2-style cosine∪lexical seed fusion) raises min_over_datasets T1 entrance reach and/or kernel legal depth-2 on woven C3 above the frozen T1 baseline (A0 mirrors prior T1: depth2 min=0).",
+  "prediction": {
+    "metric": "min_over_datasets_A4_t1_seed_reaches_entrance",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0,
+    "success_threshold": 1,
+    "novel_metric": "min_over_datasets_A4_kernel_legal_depth2_queries",
+    "novel_direction": "higher",
+    "novel_threshold": 0,
+    "credence": 0.45
+  },
+  "arms": [
+    "A0_baseline",
+    "A1_alias",
+    "A2_soft",
+    "A3_alias_soft",
+    "A4_r1_full"
+  ],
+  "kill_conditions": [
+    "A4 t1_min == 0 AND A4 depth2_min == 0 with no arm beating A0 on either metric -> R1 package fails; bottleneck not fixed by alias/soft/seed on this substrate.",
+    "A4 t1_min > 0 AND A4 depth2_min == 0 -> seed path helped but T2/structure still kills continuation (OQ1: vocab vs structure).",
+    "A0 does not approximately reproduce frozen T1 regime (depth2_min should be 0) -> measurement void (walker fork bug).",
+    "Any gold_source_ids consumption or new embedding/LLM/network call -> void."
+  ],
+  "scope_boundary": {
+    "splits": "development n=200 per dataset; certificate halves untouched",
+    "alias": "local family/morphology offline — not live Wikidata SPARQL",
+    "soft_gate": "quality>0 required; not free untyped walk",
+    "hippo_seed": "cosine∪title/entity lexical RRF — not true query-triple embeddings",
+    "efficacy_recall_claims": "none"
+  },
+  "locked_parameters": {
+    "seed_k": 3,
+    "min_typed_match": 0.20,
+    "kernel_fork": "r1_t1_retry.walk_depth2 max-product K<=2",
+    "embedding_store": "frozen V5 development embeddings.npz"
+  },
+  "module_sha256": {
+    "r1_t1_retry.py": "7747edbdb2db1b0820ef220fa319db5a7e204f45b86aed7bc32329890491085a",
+    "r1_predicate_alias.py": "037e8f01ea3b8eb6634d08a1c5d9c4488d3d9b8efeb8f0219bf4352c91977d32",
+    "chain_viability.py": "b70739a4091967dce150c6a6a281ec800bd44096ca93ba72025eacf88a680662",
+    "claim_weave.py": "b36df9272d97fa20a229de90c0172a6a04b07c8462ec0b86877bbc0fd47bead1",
+    "typed_composition.py": "f353a26af304cdfaa5f7c1e5b477a31c43405c86c5784798b2ee4e77924d4f6b"
+  },
+  "embedding_npz_sha256": "f0410cd2637233a04c126088d9772b35cd8278a0900ff025379832676956d291",
+  "journal_sha256": "7cb1dcf65548ac9aeace33277478e0cda0dc540cfc0ae77933921a1e06899192",
+  "prediction_receipt_sha256": "f52d881b17d4f3de51a56ce14b6bfecdecfa720899b7fd0f5ed62d3831f2ad87",
+  "registered_before_measurement": true,
+  "registered_at": "2026-07-22T08:32:25.434829+00:00"
+}

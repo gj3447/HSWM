@@ -1,0 +1,223 @@
+{
+ "schema": "hswm-r1-t1-retry-evidence/v1",
+ "programme": "LakatosTree_PromSearchHSWM_20260721",
+ "branch": "R1-t1-retry-alias-soft-hipposeed",
+ "prom8_ref": "HSWM/PROM_8_DYNAMIC_TWO_LANES_2026-07-22.md §4 R1",
+ "preregistration": {
+  "path": "PREREG_R1_T1_RETRY_2026-07-22.json",
+  "sha256": "41845c27c8b0713fab75670caeac3cdfdf5b1007b7ed7d3743af68755f25415b",
+  "prediction_receipt_sha256": "f52d881b17d4f3de51a56ce14b6bfecdecfa720899b7fd0f5ed62d3831f2ad87"
+ },
+ "measurement": {
+  "metric": "min_over_datasets_A4_t1_seed_reaches_entrance",
+  "value": 2,
+  "novel_metric": "min_over_datasets_A4_kernel_legal_depth2_queries",
+  "novel_value": 0,
+  "baseline_A0": {
+   "t1_min": 0,
+   "depth2_min": 0
+  },
+  "delta_vs_A0": {
+   "t1": 2,
+   "depth2": 0
+  },
+  "decomposition": {
+   "A0_baseline": {
+    "t1_min": 0,
+    "depth2_min": 0,
+    "delta_t1_vs_A0": 0,
+    "delta_depth2_vs_A0": 0
+   },
+   "A1_alias": {
+    "t1_min": 0,
+    "depth2_min": 0,
+    "delta_t1_vs_A0": 0,
+    "delta_depth2_vs_A0": 0
+   },
+   "A2_soft": {
+    "t1_min": 0,
+    "depth2_min": 0,
+    "delta_t1_vs_A0": 0,
+    "delta_depth2_vs_A0": 0
+   },
+   "A3_alias_soft": {
+    "t1_min": 0,
+    "depth2_min": 0,
+    "delta_t1_vs_A0": 0,
+    "delta_depth2_vs_A0": 0
+   },
+   "A4_r1_full": {
+    "t1_min": 2,
+    "depth2_min": 0,
+    "delta_t1_vs_A0": 2,
+    "delta_depth2_vs_A0": 0
+   }
+  },
+  "per_dataset": {
+   "2wiki": {
+    "A0_baseline": {
+     "entrance_paragraphs": 10,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 5,
+     "kernel_legal_depth2_queries": 0,
+     "depth2_targets_sum": 0,
+     "config": {
+      "use_alias": false,
+      "soft_gate": false,
+      "hippo_seed": false,
+      "min_typed_match": 0.2,
+      "seed_k": 3
+     }
+    },
+    "A1_alias": {
+     "entrance_paragraphs": 10,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 5,
+     "kernel_legal_depth2_queries": 2,
+     "depth2_targets_sum": 2,
+     "config": {
+      "use_alias": true,
+      "soft_gate": false,
+      "hippo_seed": false,
+      "min_typed_match": 0.2,
+      "seed_k": 3
+     }
+    },
+    "A2_soft": {
+     "entrance_paragraphs": 10,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 5,
+     "kernel_legal_depth2_queries": 0,
+     "depth2_targets_sum": 0,
+     "config": {
+      "use_alias": false,
+      "soft_gate": true,
+      "hippo_seed": false,
+      "min_typed_match": 0.2,
+      "seed_k": 3
+     }
+    },
+    "A3_alias_soft": {
+     "entrance_paragraphs": 10,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 5,
+     "kernel_legal_depth2_queries": 3,
+     "depth2_targets_sum": 4,
+     "config": {
+      "use_alias": true,
+      "soft_gate": true,
+      "hippo_seed": false,
+      "min_typed_match": 0.2,
+      "seed_k": 3
+     }
+    },
+    "A4_r1_full": {
+     "entrance_paragraphs": 10,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 7,
+     "kernel_legal_depth2_queries": 4,
+     "depth2_targets_sum": 5,
+     "config": {
+      "use_alias": true,
+      "soft_gate": true,
+      "hippo_seed": true,
+      "min_typed_match": 0.2,
+      "seed_k": 3
+     }
+    }
+   },
+   "musique": {
+    "A0_baseline": {
+     "entrance_paragraphs": 5,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 0,
+     "kernel_legal_depth2_queries": 0,
+     "depth2_targets_sum": 0,
+     "config": {
+      "use_alias": false,
+      "soft_gate": false,
+      "hippo_seed": false,
+      "min_typed_match": 0.2,
+      "seed_k": 3
+     }
+    },
+    "A1_alias": {
+     "entrance_paragraphs": 5,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 0,
+     "kernel_legal_depth2_queries": 0,
+     "depth2_targets_sum": 0,
+     "config": {
+      "use_alias": true,
+      "soft_gate": false,
+      "hippo_seed": false,
+      "min_typed_match": 0.2,
+      "seed_k": 3
+     }
+    },
+    "A2_soft": {
+     "entrance_paragraphs": 5,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 0,
+     "kernel_legal_depth2_queries": 0,
+     "depth2_targets_sum": 0,
+     "config": {
+      "use_alias": false,
+      "soft_gate": true,
+      "hippo_seed": false,
+      "min_typed_match": 0.2,
+      "seed_k": 3
+     }
+    },
+    "A3_alias_soft": {
+     "entrance_paragraphs": 5,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 0,
+     "kernel_legal_depth2_queries": 0,
+     "depth2_targets_sum": 0,
+     "config": {
+      "use_alias": true,
+      "soft_gate": true,
+      "hippo_seed": false,
+      "min_typed_match": 0.2,
+      "seed_k": 3
+     }
+    },
+    "A4_r1_full": {
+     "entrance_paragraphs": 5,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 2,
+     "kernel_legal_depth2_queries": 0,
+     "depth2_targets_sum": 0,
+     "config": {
+      "use_alias": true,
+      "soft_gate": true,
+      "hippo_seed": true,
+      "min_typed_match": 0.2,
+      "seed_k": 3
+     }
+    }
+   }
+  },
+  "alias_predicates_indexed": 287
+ },
+ "budget": {
+  "llm_calls": 0,
+  "network_calls": 0,
+  "new_embedding_calls": 0,
+  "note": "frozen V5 development embeddings; offline alias families only"
+ },
+ "gold_labels_consumed": false,
+ "kill_evaluation": {
+  "kill1_t1_still_zero_both": false,
+  "kill2_t1_up_but_depth2_zero": true,
+  "kill3_no_gain_vs_A0": false
+ },
+ "limitations": [
+  "Alias map is local family/morphology, not live Wikidata SPARQL dump.",
+  "Soft gate still requires quality>0 (not free untyped walk).",
+  "Hippo seed is cosine∪title/entity lexical RRF, not true query-triple embeddings.",
+  "Research walker fork — not a change to frozen typed_composition.py.",
+  "No answer-F1 / retrieval-quality claim."
+ ]
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "hswm-invalidated-run/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "B2.1-learned-router-interference-control",
+  "prediction_receipt_sha256": "d9a1d32723fb9120632a39504197ec16c35e488df8ac5f4329542570093d8fbd",
+  "git_head": "fc71b93c01e06076606a70acf557c98469967a23",
+  "script_sha256": "5080576f7814c6fb80cb69d2d629f508ebeb29f940da8004fe284f65a925a8b9",
+  "runner": "airobotics-Precision-7960-Tower",
+  "started_at": "2026-07-22T16:35:21+00:00",
+  "finished_at": "2026-07-22T17:21:58+00:00",
+  "exit_code": 1,
+  "stage": "frozen_b2_preflight_before_router_evaluation",
+  "performance_measurement_started": false,
+  "reason": "The vectorized and frozen scorers produced identical aggregate checks and ranked IDs, but the preregistered 1e-9 score tolerance was exceeded.",
+  "observed": {
+    "aggregate_checks_passed": 5,
+    "aggregate_checks_total": 5,
+    "n_queries": 400,
+    "n_arm_rankings": 1600,
+    "n_score_comparisons": 32000,
+    "mismatched_qids": 0,
+    "mismatched_ranked_id_lists": 0,
+    "max_abs_score_error": 1.7797851370460194e-07,
+    "tolerance": 1e-09,
+    "vectorized_digest": "9303687dbd17c4bf21a428328fd2dd5dae9d9899ab0caac7af3bad4794cae3bf",
+    "frozen_reference_digest": "34ebe3fe745e2d8bfdfae7980ed2a28fc70085cf1c25076f781f8e788c79c08b"
+  },
+  "diagnosis": {
+    "cause": "normalize_rows stripped trailing whitespace from three 2Wiki questions while the frozen B2 scorer preserved the source strings. This created three extra embedding-cache keys evaluated in a different GPU batch; tokenization and rankings stayed identical but float32-scale score drift resulted.",
+    "vectorized_text_set_size": 19163,
+    "frozen_text_set_size": 19163,
+    "vectorized_only_texts": 3,
+    "frozen_only_texts": 3,
+    "repair": "Preserve exact non-empty source question strings instead of stripping them; keep the original 1e-9 tolerance unchanged."
+  },
+  "scorepack": {
+    "path": "/data/kjra/PROJECT/HSWM-b21-20260723/output/scorepacks/b21_2wiki_base_legacy_b2repro.json.gz",
+    "sha256": "c11a9fd69f9221752b2d7ef528d6dc4ec949a47cd0a508c56896e15cde33f479",
+    "bytes": 431517
+  },
+  "scientific_status": "VOID_PRE_MEASUREMENT_HARNESS_FAILURE",
+  "result_submission_allowed": false
+}

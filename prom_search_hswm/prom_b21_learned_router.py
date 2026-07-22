@@ -56,9 +56,9 @@ from prom_b2_crossfield_merge import (  # noqa: E402
 )
 
 TREE = "LakatosTree_PromSearchHSWM_20260721"
-BRANCH = "B2.1-learned-router-interference-control"
+BRANCH = "B2.1r1-query-byte-equivalence-repair"
 QUESTION = "Q-b21-learned-router-interference-control"
-PREREG = HERE / "evidence" / "PREREG_b21_learned_router_20260723.json"
+PREREG = HERE / "evidence" / "PREREG_b21r1_query_byte_repair_20260723.json"
 DEFAULT_OUTPUT = HERE / "evidence" / "EVIDENCE_b21_learned_router_20260723.json"
 
 PARTITION_SALTS = ("legacy", "b21-field-v1", "b21-field-v2")
@@ -138,8 +138,12 @@ def normalize_rows(raw: object, dataset: str) -> tuple[list[Query], dict[str, Pa
     pool: dict[str, Paragraph] = {}
     for row_no, row in enumerate(rows):
         qid = str(row.get("id", f"row-{row_no}"))
-        question = str(row.get("question", "")).strip()
-        if not question:
+        # Preserve the source bytes used by the frozen B2 scorer.  In particular,
+        # three 2Wiki questions end in a space.  Stripping them creates a second
+        # embedding-cache key whose different GPU batch can drift at float32 ulp
+        # scale even though tokenization and ranked IDs are unchanged.
+        question = str(row.get("question", ""))
+        if not question.strip():
             continue
         gold: set[str] = set()
         if dataset == "2wiki":

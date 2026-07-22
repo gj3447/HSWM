@@ -1,0 +1,146 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "B2.1r1-query-byte-equivalence-repair",
+  "parent_branch": "B2.1-learned-router-interference-control",
+  "question": "Q-b21-learned-router-interference-control",
+  "conjecture": "A single shared, capacity-bounded, A/B-equivariant router can learn when to execute field A, field B, or conservatively ABSTAIN to MERGED. It must preserve B2's cross-field benefit, restore in-field performance, beat always-MERGED overall on both 2Wiki and MuSiQue, survive field partitions and top-k variation, and fail closed under shuffled targets.",
+  "repair_lineage": {
+    "parent_prediction_receipt_sha256": "d9a1d32723fb9120632a39504197ec16c35e488df8ac5f4329542570093d8fbd",
+    "invalidated_run": "INVALIDATED_b21_preflight_numeric_equivalence_20260723.json",
+    "invalidated_before_performance_measurement": true,
+    "failure": "All 400 x 4 ranked-ID lists and five frozen B2 aggregates matched, but max score drift 1.7797851370460194e-07 exceeded the locked 1e-9 tolerance.",
+    "root_cause": "The adapter stripped source trailing whitespace from three 2Wiki questions, creating distinct embedding-cache keys evaluated in a different GPU batch.",
+    "repair": "Preserve exact non-empty source question strings. The 1e-9 tolerance and every scientific parameter remain unchanged.",
+    "post_repair_text_set_check": {
+      "vectorized_texts": 19163,
+      "frozen_texts": 19163,
+      "vectorized_only": 0,
+      "frozen_only": 0,
+      "exact_match": true
+    }
+  },
+  "prediction": {
+    "metric": "min_over_datasets_primary_router_minus_merged_recall10",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0.02,
+    "judge_success_rule": "strictly greater than +0.02",
+    "novel_metric": "min_over_datasets_primary_infield_router_minus_best_single_recall10",
+    "novel_direction": "higher",
+    "novel_threshold": -0.02,
+    "credence": 0.25
+  },
+  "already_public_before_registration": {
+    "note": "Only the original frozen B2 aggregate, input inventory, split sizes, and the failed numeric-equivalence preflight were inspected. The failed preflight stopped before router evaluation. No B2.1r1 arm outputs, router metrics, shuffled-control outcomes, private-entity outcomes, or benchmark conclusion were computed or inspected before this registration.",
+    "router_performance_measurement_started": false,
+    "no_performance_measurement_before_registration": true
+  },
+  "primary_cell": {
+    "partition_salt": "legacy",
+    "top_k": 10,
+    "split_seed": 7332,
+    "datasets": [
+      "2wiki",
+      "musique"
+    ]
+  },
+  "per_cell_joint_gates": {
+    "overall_router_minus_merged": "gold-component cluster-bootstrap 95% lower bound > 0",
+    "cross_router_minus_best_single": "delta > +0.02 and gold-component cluster-bootstrap 95% lower bound > 0",
+    "cross_router_minus_merged": "delta >= -0.02",
+    "infield_router_minus_best_single": "delta >= -0.02",
+    "infield_router_minus_merged": "delta > 0",
+    "nontrivial_acceptance": "at least one executed A or B action on the fixed test split"
+  },
+  "controls": {
+    "always_merged": "executable baseline",
+    "best_single": "gold oracle for evaluation only; never an executable fallback",
+    "shuffled_target": "capacity-matched router in every one of the 54 standard cells; any joint pass forces REJECTED_CONTROL_FAILURE",
+    "private_entity_surface": "opaque entity replacement preserving equality and topology; tests entity-surface dependence only and is not an answer mask",
+    "exact_frozen_b2_reproduction": "all 400 queries x 4 arm ranked ID lists and scores must match the unmodified B2 scorer at tolerance 1e-9, and published B2 aggregates must match"
+  },
+  "matrix": {
+    "standard_cells": "2 datasets x 3 partition salts x 3 top-k values x 3 split seeds = 54",
+    "private_entity_cells": "2 datasets x legacy salt x top-k 10 x 3 split seeds = 6"
+  },
+  "conclusion_rules_in_priority_order": [
+    "REJECTED_CONTROL_FAILURE: one or more shuffled-target cells jointly passes",
+    "SUPPORTED_GENERAL: both primary dataset cells pass, at least 44/54 standard cells pass, no shuffled cell passes, and both primary private-entity cells jointly pass",
+    "SUPPORTED_NARROW: both primary dataset cells pass, at least 27/54 standard cells pass, no shuffled cell passes, and private-entity primary deltas versus MERGED are each >= -0.02",
+    "SURFACE_DEPENDENT: both primary dataset cells pass, at least 27/54 standard cells pass, and private-entity no-harm fails",
+    "DOMAIN_CONDITIONAL: exactly one dataset has a passing primary cell, at least 14/27 passing cells within that dataset, zero shuffled passes within that dataset, and private-entity no-harm for that dataset",
+    "REJECTED: every other outcome"
+  ],
+  "scope_boundary": {
+    "learned_state": "router parameters phi only",
+    "frozen_state": "MiniLM embeddings, B2 semantic edge weights, A/B topology, seam construction, scoring formula, candidate budget, and test cohorts",
+    "allowed_claim": "learned conservative routing among existing A, B, and MERGED HSWM readouts on the two frozen datasets",
+    "disallowed_claims": [
+      "semantic edge-weight learning",
+      "embedding learning",
+      "connector or topology learning",
+      "full CONNECT/SEPARATE agent learning",
+      "typed direct-answer-edge robustness",
+      "general hard-hop superiority"
+    ]
+  },
+  "locked_parameters": {
+    "bootstrap_reps": 5000,
+    "bootstrap_unit": "gold_component",
+    "calibration_alpha": 0.1,
+    "calibration_unit": "worst_error_per_gold_component",
+    "lam_b": 0.3,
+    "lam_v": 0.1,
+    "model": "all-MiniLM-L6-v2",
+    "noise_band": 0.02,
+    "partition_salts": [
+      "legacy",
+      "b21-field-v1",
+      "b21-field-v2"
+    ],
+    "primary_k": 10,
+    "primary_salt": "legacy",
+    "primary_seed": 7332,
+    "private_control": "entity_surface_only_not_answer_mask",
+    "private_entity_cells": 6,
+    "ridge_lambda": 1.0,
+    "split_scheme": "fixed_test_gold_component_disjoint_v1",
+    "split_seeds": [
+      7332,
+      7333,
+      7334
+    ],
+    "standard_cells": 54,
+    "top_ks": [
+      5,
+      10,
+      20
+    ],
+    "training_weight": "inverse_gold_component_size"
+  },
+  "script_sha256": "76af6dd849416e9410bc01f635047da0a1418902a1541c7ea0e516fcf7d31f88",
+  "dataset_2wiki_sha256": "212c43c5116d114e73d0b02e5fcd28580043ae306d3303fea0d76276715047ed",
+  "dataset_musique_sha256": "c44453d2534cd326000f65dfa7d3f02b879f4390cd0fbc067617ad84e0a6bd9e",
+  "model_snapshot": {
+    "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "files": 11,
+    "bytes": 91578415
+  },
+  "model_snapshot_sha256": "a505d33be7223cfc86d31cf5f26914d756ec21448b6ca202da5dc50d74a9bc96",
+  "prom_b2_crossfield_merge.py_sha256": "40069b91ae630c9e58466898b4a4df4e0b19be0dd152152cc6dd4a59b56c6311",
+  "hswm_field_algebra.py_sha256": "573de075728aca74965acd945228233e9f736ee96f97dfb7aaa5fee3761cb9ca",
+  "hswm_hypergraph.py_sha256": "af902f614d9c3bb665c14ac7baa7c2a1570e58cc9aaf1353811d485c544d2c6a",
+  "hswm_hypergraph_readout.py_sha256": "139bc94b54bb09fd6024c8e14b2c72c92a6229c2f57fa39d2f1139bed357b5f5",
+  "prediction_receipt_sha256": "27fb71d548ca91a757ce524b94b9cfdba90453333f40bbd0ddcbe25085a6d1ee",
+  "server_registered_at": "2026-07-22T17:26:41.694655+00:00",
+  "registered_before_measurement": true,
+  "node_created_at": "2026-07-22T17:26:21.586437+00:00",
+  "pre_measurement_certificate": {
+    "certified": false,
+    "expected_reason": "No result or scripted judgment exists before execution; reproducibility lineage is also not yet available.",
+    "as_of": "2026-07-22T17:26:57.970784+00:00",
+    "engine_rule_sha256": "28c0bd68fec2ac7c8007981efcda9a897366f604748151ea1aceb759e1f22eec"
+  },
+  "user_canon_seed": "USER 2026-07-23: multiple SOLID HSWM maps should connect, separate, and specialize MoE-style without a fixed first layer; the agent completes the semantic neural network by learning HSWM weight adjustment."
+}

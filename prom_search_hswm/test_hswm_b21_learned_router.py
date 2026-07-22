@@ -138,6 +138,16 @@ def test_vectorized_score_compiler_matches_frozen_b2(raw_rows):
     assert exact["pass"] and exact["mismatched_ranked_id_lists"] == 0
 
 
+def test_adapter_preserves_query_bytes_for_frozen_b2_equivalence(raw_rows):
+    rows = [dict(raw_rows[0], question=raw_rows[0]["question"] + " ")]
+    queries, pool = normalize_rows(rows, "2wiki")
+    assert queries[0].question == rows[0]["question"]
+    pack = compile_scorepack(queries, pool, hash_embed, dataset="2wiki",
+                             salt="legacy", top_k=20)
+    exact = compare_b2_rankings(pack, frozen_b2_reference(rows, hash_embed))
+    assert exact["pass"]
+
+
 def test_feature_schema_excludes_gold_private_and_ids(raw_rows):
     queries, pool = normalize_rows(raw_rows, "2wiki")
     record = compile_scorepack(queries, pool, hash_embed, dataset="2wiki",

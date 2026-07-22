@@ -1,0 +1,49 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "T3-score-digest-null",
+  "question": "Q-t3-k2-digest-and-null",
+  "conjecture": "On the A5 ML-woven graph with strict kernel-canonical claim continuity (no lenient fallback), K2 changes the K1 score digest for >=1 query on BOTH datasets, and the continuity-destroying null (deterministic target_claim_id shuffle, seed 4242) collapses those changes (real minus null sum > 0). Simultaneously the strict re-audit either sustains R2's depth-2 thaw or exposes it as lenient-fallback overcounting.",
+  "prediction": {
+    "metric": "min_over_datasets_real_k2_digest_changed_queries",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0,
+    "success_threshold": 1,
+    "novel_metric": "sum_real_minus_null_k2_digest_changed_queries",
+    "novel_direction": "higher",
+    "novel_threshold": 0,
+    "credence": 0.4
+  },
+  "self_audit_commitment": {
+    "issue": "R1/R2 walker hop-2 contains a lenient fallback (any outgoing arc when no claim-continuous arc exists) that is NOT kernel-canonical.",
+    "commitment": "strict and lenient depth-2 counts are both published; if strict_depth2_min = 0, R2's progressive metric verdict is treated as overcounted and a correction fan-out (R2 results doc + LakatoTree annotation + INDEX) is executed regardless of T3's own outcome."
+  },
+  "kill_conditions": [
+    "primary = 0 -> depth-2 walks exist structurally but never move scores; walking lane dies on this substrate, R3 only.",
+    "novel <= 0 -> digest changes are not carried by claim continuity (artifact); mechanism claim dies.",
+    "strict_depth2_min = 0 -> R2 correction fan-out (see self_audit_commitment).",
+    "Any gold consumption or new model/network/embedding call -> void."
+  ],
+  "locked_parameters": {
+    "mu": 0.1, "seed_k": 3, "null_seed": 4242,
+    "arm": "A5 ML-woven; alias+soft(quality>0 floor)+hippo seed fixed",
+    "continuity": "strict for scores; lenient counted for diagnostics only"
+  },
+  "module_sha256": {
+    "claim_weave.py": "b36df9272d97fa20a229de90c0172a6a04b07c8462ec0b86877bbc0fd47bead1",
+    "claim_weave_ml.py": "eebc01d8fa497da579eb30366e48ec61cda8b938e5fbb02f447b50e0e66b6f66",
+    "r1_predicate_alias.py": "037e8f01ea3b8eb6634d08a1c5d9c4488d3d9b8efeb8f0219bf4352c91977d32",
+    "r1_t1_retry.py": "7747edbdb2db1b0820ef220fa319db5a7e204f45b86aed7bc32329890491085a",
+    "t3_score_null.py": "ee51b3c955e3360ca20f8cb5b6cbb680f23f2b7ad3179524496b29b5e30883aa"
+  },
+  "material_sha256": {
+    "musique_link": "33522c064a422b072d541c2aed0d2cb3fdacf8db47bfa21a550440b34bea3651",
+    "musique_coref": "bdadef16dc2db42684e62a277c1c1f19ab4a553feb3e7a6c0f77a27925b418ad",
+    "2wiki_link": "8973aff4040deb038a37198021a8f9b860005b3d7830d181a679862f80f5ba23",
+    "2wiki_coref": "c6e5fc314ee268ffb8ad56e695f4eb0de817f9a79333550fb241bb3d917d28cb"
+  },
+  "embedding_npz_sha256": "f0410cd2637233a04c126088d9772b35cd8278a0900ff025379832676956d291",
+  "prediction_receipt_sha256": "47fffa24332888d50ccf314ad2f719c774909bdd587308bc27694adeed9adec7",
+  "registered_before_measurement": true
+}

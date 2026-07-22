@@ -1,0 +1,61 @@
+{
+ "schema": "hswm-t3-score-null-evidence/v1",
+ "programme": "LakatosTree_PromSearchHSWM_20260721",
+ "branch": "T3-score-digest-null",
+ "preregistration": {
+  "path": "PREREG_T3_SCORE_NULL_2026-07-23.json",
+  "sha256": "62b253ecd410f9ee99dde256966636b24baa3bc3397f771f02d81b7aaaee442b",
+  "prediction_receipt_sha256": "47fffa24332888d50ccf314ad2f719c774909bdd587308bc27694adeed9adec7"
+ },
+ "measurement": {
+  "metric": "min_over_datasets_real_k2_digest_changed_queries",
+  "value": 1,
+  "novel_metric": "sum_real_minus_null_k2_digest_changed_queries",
+  "novel_value": 3,
+  "strict_reaudit": {
+   "strict_depth2_min": 2,
+   "note": "R1/R2 워커의 lenient fallback 재감사 — lenient 병기"
+  },
+  "per_dataset": {
+   "2wiki": {
+    "real": {
+     "digest_changed": 2,
+     "strict_d2": 3,
+     "lenient_d2": 6
+    },
+    "null": {
+     "digest_changed": 0,
+     "strict_d2": 0
+    }
+   },
+   "musique": {
+    "real": {
+     "digest_changed": 1,
+     "strict_d2": 2,
+     "lenient_d2": 3
+    },
+    "null": {
+     "digest_changed": 0,
+     "strict_d2": 0
+    }
+   }
+  },
+  "config": {
+   "mu": 0.1,
+   "seed_k": 3,
+   "null_seed": 4242,
+   "arm": "A5 ML-woven, alias+soft(hard floor quality>0)+hippo seed",
+   "continuity": "strict (kernel-canonical), lenient diagnostics only"
+  }
+ },
+ "budget": {
+  "query_time_llm": 0,
+  "network": 0,
+  "new_embedding": 0
+ },
+ "gold_labels_consumed": false,
+ "limitations": [
+  "Score semantics are the research walker's (max-product + mu-add), not the frozen kernel's exact arithmetic; digest change is a mechanism check, not a retrieval-quality claim.",
+  "Null breaks continuity only; selector/predicate text untouched, so lexical-quality artifacts are not nulled (that would need a predicate-shuffle null, deferred)."
+ ]
+}

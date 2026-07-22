@@ -43,3 +43,9 @@ ML weave 규모: arcs 2Wiki 286 / MuSiQue 634. 역할 해소 direct 4,880+5,778 
 - **T3 rung**: A5 그래프에서 K2가 K1 score digest를 실제로 바꾸고 second-edge null이 그걸 죽이는지 — 걷기 lane의 최종 관문.
 - **R3**: 2Wiki full-corpus pool (걷기 승리 regime) + PhantomWiki density-dial.
 - ML lane 확장: ReFinED candidates(top-5 저장돼 있음) 활용한 soft-QID, HippoRAG2식 query-time 필터.
+
+---
+
+## 정정 주석 (2026-07-23, T3 strict 재감사)
+
+본 문서의 depth-2 수치는 R1 계열 워커의 **lenient fallback**(hop-2에서 연속 arc 부재 시 임의 arc 허용 — 커널 정본 아님) 하의 집계였다. strict(커널 정본) 재감사 결과: 2Wiki 6→**3**, MuSiQue 3→**2**. **min>0은 유지되므로 핵심 주장(depth-2 해빙)은 생존**하나 절대값은 위 표보다 작다. 정본 수치·상세 = `T3_SCORE_NULL_RESULTS_2026-07-23.md`. 이후 걷기 실험은 strict 워커를 정본으로 한다.

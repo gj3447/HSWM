@@ -19,12 +19,24 @@
 - `compose`는 구조를 연결하고, `materialize`만 legacy `Field` quotient를 만든다.
 - MoE는 고정 top router가 아니라 query-time bounded expert coalition으로 해석한다.
 - learned `CONNECT / SEPARATE / SPECIALIZE` 정책은 아직 구현되지 않았다. 현재 구현은
-  결정론적 커널이다.
+  결정론적 커널이며, 2026-07-23에 weight·routing·topology를 분리한 가소성 의미론과
+  fail-closed loop 계약까지 설계됐다.
 
 정본 설계는
 [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md),
 반례 기반 수리는
 [`AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md`](AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md)에 있다.
+
+## 2026-07-23 가소성 PROM
+
+학습은 weight 조절을 포함하지만 그것으로 끝나지 않는다. 기존 bond의 중요도는 weight가,
+무엇이 실제로 묶이는지는 topology가, 지금 어떤 HSWM coalition을 실행할지는 routing policy가
+학습한다. query activation은 휘발 상태이며 durable learning으로 세지 않는다.
+
+- 종합 보고서: [`PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md`](PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md)
+- 실행 루프 계약: [`hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json)
+- 첫 실험: topology를 건드리기 전 B2.1 `A / B / MERGED / ABSTAIN` router-only 학습
+- 경계: `SECONDARY_AI_RESEARCH_AND_DESIGN`; 새 성능 실험이나 LakatoTree 판정이 아니다.
 
 ## 2026-07-22 연구 장부
 
@@ -52,6 +64,7 @@
 | [`prom_search_hswm/`](prom_search_hswm/) | PROM→HSWM, field algebra, federated merge, open-composition 연구 코드와 영수증 |
 | [`prom_search_hswm/hswm_open_kernel.py`](prom_search_hswm/hswm_open_kernel.py) | v2r3 open self-similar deterministic kernel |
 | [`prom_search_hswm/test_hswm_open_kernel.py`](prom_search_hswm/test_hswm_open_kernel.py) | v2r3 반례·불변식 테스트 |
+| [`prom_search_hswm/fsm/hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json) | weight→routing→topology 후보의 bounded proposal/evaluation/activation 계약 |
 | [`prom_search_hswm/evidence/`](prom_search_hswm/evidence/) | preregistration, evidence, neutral judge packet, injected negative |
 
 ## 검증·판정 경계
@@ -81,7 +94,7 @@ certificate가 닫히지 않아 `certified=false`다.
 
 1. relation/type/role compatibility와 adapter registry
 2. cyclic connector graph의 budgeted readout
-3. durable event log를 가진 learned `CONNECT / SEPARATE / SPECIALIZE` agent loop
+3. `hswm_plasticity_loop.v1.json`의 durable reducer·event log·typed proposal compiler 구현
 4. B2.1 learned interference gate와 conformal abstention
 5. 두 번째 benchmark 및 Agent-A-write → Agent-B transfer
 6. 올바른 `python3 -m pytest` replay를 쓰는 server-owned certification

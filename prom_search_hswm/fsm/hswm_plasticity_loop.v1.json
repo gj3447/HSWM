@@ -1,0 +1,193 @@
+{
+  "schema_version": "loop-contract/v1",
+  "name": "hswm-weight-routing-topology-plasticity",
+  "tier": "L_RT",
+  "workflow_version": "0.1.0",
+  "state_schema_version": "0.1.0",
+  "control_owner": {
+    "continuation": "deterministic plasticity workflow runner",
+    "budgets": "external budget governor",
+    "authorization": "typed compiler policy plus operator activation approval",
+    "success_verdict": "independent sealed evaluator plus activation receipt verifier",
+    "checkpoint": "fenced transactional candidate store",
+    "effects": "outbox dispatcher with CAS activation and reconciliation"
+  },
+  "initial": "INIT",
+  "states": [
+    "INIT", "SENSE", "CREDIT", "DECIDE", "PROPOSE", "COMPILE", "FREEZE",
+    "EVALUATE", "CANARY", "READY_FOR_REVIEW", "WAIT_HUMAN", "ACTIVATION_INTENT",
+    "ACTIVATE", "RECONCILE", "HUMAN_RECONCILIATION", "HONOR_PENDING_INTERRUPT",
+    "SUCCEEDED", "REJECTED", "QUARANTINED", "SATURATED", "FAILED_PERMANENT", "RETRY_EXHAUSTED",
+    "BUDGET_EXHAUSTED", "TIMED_OUT", "CANCELED"
+  ],
+  "terminal_states": {
+    "SUCCEEDED": "success",
+    "REJECTED": "permanent_failure",
+    "QUARANTINED": "pathology",
+    "SATURATED": "saturated",
+    "FAILED_PERMANENT": "permanent_failure",
+    "RETRY_EXHAUSTED": "retry_exhausted",
+    "BUDGET_EXHAUSTED": "budget_exhausted",
+    "TIMED_OUT": "timeout",
+    "CANCELED": "canceled"
+  },
+  "action_types": {
+    "RecordEligibility": {
+      "risk": "append-only local trace from untrusted observations",
+      "effect_class": "idempotent_external",
+      "approval_required": false
+    },
+    "BuildCandidate": {
+      "risk": "reversible immutable candidate creation outside the active snapshot",
+      "effect_class": "reversible",
+      "approval_required": false
+    },
+    "RunSealedEvaluation": {
+      "risk": "read-only evaluation over frozen artifacts and holdout",
+      "effect_class": "read_only",
+      "approval_required": false
+    },
+    "ActivateSnapshot": {
+      "risk": "externally visible active topology or policy epoch change",
+      "effect_class": "high_risk_external",
+      "approval_required": true,
+      "approval_state": "WAIT_HUMAN",
+      "authorization_state": "ACTIVATION_INTENT",
+      "reconciliation_state": "RECONCILE",
+      "unknown_outcome_state": "HUMAN_RECONCILIATION",
+      "post_reconciliation_state": "HONOR_PENDING_INTERRUPT"
+    }
+  },
+  "transitions": [
+    {"id": "initialize", "from": "INIT", "event": "START", "to": "SENSE", "actor": "runner", "evidence": "validated loop and active-snapshot contracts"},
+    {"id": "sense", "from": "SENSE", "event": "OBSERVATION_READY", "to": "CREDIT", "actor": "runner", "evidence": "query, route, contribution, provenance, and outcome envelope"},
+    {"id": "record-credit", "from": "CREDIT", "event": "ELIGIBILITY_RECORDED", "to": "DECIDE", "actor": "eligibility ledger", "evidence": "idempotent eligibility receipt with delayed outcome binding", "action": "RecordEligibility"},
+    {"id": "safe-no-change", "from": "DECIDE", "event": "NO_CHANGE", "to": "SUCCEEDED", "actor": "conservative policy", "evidence": "insufficient support, zero advantage, ambiguity, or explicit abstention"},
+    {"id": "no-progress", "from": "DECIDE", "event": "PLATEAU", "to": "SATURATED", "actor": "no-progress detector", "evidence": "three diversified candidates below the preregistered marginal-gain threshold"},
+    {"id": "select-proposal", "from": "DECIDE", "event": "PROPOSAL_SELECTED", "to": "PROPOSE", "actor": "bounded proposal policy", "evidence": "one mutation plane, expected gain, uncertainty, and mutation budget", "action": "BuildCandidate"},
+    {"id": "candidate-built", "from": "PROPOSE", "event": "CANDIDATE_BUILT", "to": "COMPILE", "actor": "candidate builder", "evidence": "base epoch, candidate hash, mutation class, and source evidence hashes"},
+    {"id": "compile-pass", "from": "COMPILE", "event": "COMPILE_PASSED", "to": "FREEZE", "actor": "deterministic HSWM compiler", "evidence": "typed incidence, provenance, visibility, identity, cycle, cache, and budget checks"},
+    {"id": "compile-reject", "from": "COMPILE", "event": "COMPILE_REJECTED", "to": "REJECTED", "actor": "deterministic HSWM compiler", "evidence": "typed rejection receipt"},
+    {"id": "compile-quarantine", "from": "COMPILE", "event": "PROVENANCE_INVALID", "to": "QUARANTINED", "actor": "provenance verifier", "evidence": "missing, conflicting, or tampered evidence"},
+    {"id": "fatal-candidate-error", "from": "PROPOSE", "event": "FATAL_ERROR", "to": "FAILED_PERMANENT", "actor": "runner", "evidence": "non-correctable candidate construction failure"},
+    {"id": "start-evaluation", "from": "FREEZE", "event": "EVALUATION_STARTED", "to": "EVALUATE", "actor": "independent evaluator", "evidence": "fresh query-disjoint sealed split and equal-budget manifest", "action": "RunSealedEvaluation"},
+    {"id": "evaluation-pass", "from": "EVALUATE", "event": "EVALUATION_PASSED", "to": "CANARY", "actor": "independent evaluator", "evidence": "positive lower confidence bound plus retention, replay, and control gates"},
+    {"id": "evaluation-reject", "from": "EVALUATE", "event": "EVALUATION_FAILED", "to": "REJECTED", "actor": "independent evaluator", "evidence": "failed efficacy, retention, replay, calibration, or equal-budget gate"},
+    {"id": "canary-pass", "from": "CANARY", "event": "CANARY_PASSED", "to": "READY_FOR_REVIEW", "actor": "canary verifier", "evidence": "required no-harm windows and affected-neighborhood checks passed"},
+    {"id": "canary-reject", "from": "CANARY", "event": "CANARY_FAILED", "to": "REJECTED", "actor": "canary verifier", "evidence": "regression or policy-bound violation"},
+    {"id": "request-activation", "from": "READY_FOR_REVIEW", "event": "ACTIVATION_READY", "to": "WAIT_HUMAN", "actor": "runner", "evidence": "candidate, active-base, destination, visibility, and diff hashes"},
+    {"id": "approve-activation", "from": "WAIT_HUMAN", "event": "APPROVED", "to": "ACTIVATION_INTENT", "actor": "operator approver", "evidence": "one-time approval bound to exact candidate and active base"},
+    {"id": "approval-expired", "from": "WAIT_HUMAN", "event": "APPROVAL_EXPIRED", "to": "READY_FOR_REVIEW", "actor": "external timer", "evidence": "approval expiry or active-base drift"},
+    {"id": "activate", "from": "ACTIVATION_INTENT", "event": "INTENT_COMMITTED", "to": "ACTIVATE", "actor": "outbox dispatcher", "evidence": "atomic activation intent, checkpoint, and CAS precondition", "action": "ActivateSnapshot"},
+    {"id": "reconcile", "from": "ACTIVATE", "event": "ATTEMPT_RECORDED", "to": "RECONCILE", "actor": "outbox dispatcher", "evidence": "activation attempt, response, and active-epoch observation"},
+    {"id": "activation-receipt", "from": "RECONCILE", "event": "RECEIPT_CONFIRMED", "to": "HONOR_PENDING_INTERRUPT", "actor": "independent receipt verifier", "evidence": "candidate hash, old/new epoch, and CAS receipt match"},
+    {"id": "activation-unknown", "from": "RECONCILE", "event": "OUTCOME_UNKNOWN", "to": "HUMAN_RECONCILIATION", "actor": "reconciler", "evidence": "ambiguous active epoch; blind retry forbidden"},
+    {"id": "human-confirmed", "from": "HUMAN_RECONCILIATION", "event": "RECEIPT_CONFIRMED", "to": "HONOR_PENDING_INTERRUPT", "actor": "human reconciler", "evidence": "verified active-epoch receipt and pending-interrupt snapshot"},
+    {"id": "human-abandoned", "from": "HUMAN_RECONCILIATION", "event": "ABANDON", "to": "HONOR_PENDING_INTERRUPT", "actor": "human reconciler", "evidence": "typed permanent failure and pending-interrupt snapshot"},
+    {"id": "activation-complete", "from": "HONOR_PENDING_INTERRUPT", "event": "NO_PENDING_INTERRUPT_SUCCESS", "to": "SUCCEEDED", "actor": "interrupt reconciler", "evidence": "reconciled activation success and handoff to absorption rollback monitor"},
+    {"id": "activation-failed", "from": "HONOR_PENDING_INTERRUPT", "event": "NO_PENDING_INTERRUPT_FAILURE", "to": "FAILED_PERMANENT", "actor": "interrupt reconciler", "evidence": "reconciled permanent activation failure"},
+    {"id": "activate-then-cancel", "from": "HONOR_PENDING_INTERRUPT", "event": "PENDING_CANCEL", "to": "CANCELED", "actor": "interrupt reconciler", "evidence": "durable pending cancellation"},
+    {"id": "activate-then-timeout", "from": "HONOR_PENDING_INTERRUPT", "event": "PENDING_TIMEOUT", "to": "TIMED_OUT", "actor": "interrupt reconciler", "evidence": "durable pending timeout"},
+    {"id": "activate-then-budget", "from": "HONOR_PENDING_INTERRUPT", "event": "PENDING_BUDGET_EXHAUSTED", "to": "BUDGET_EXHAUSTED", "actor": "interrupt reconciler", "evidence": "durable pending budget exhaustion"},
+    {"id": "proposal-retry-exhausted", "from": "PROPOSE", "event": "RETRIES_EXHAUSTED", "to": "RETRY_EXHAUSTED", "actor": "retry controller", "evidence": "candidate construction attempt ledger"}
+  ],
+  "global_interrupts": [
+    {"event": "CANCEL", "to": "CANCELED", "owner": "authorized external requester", "applies_to": "all-safe-nonterminal", "deferred_in_states": ["ACTIVATION_INTENT", "ACTIVATE", "RECONCILE", "HUMAN_RECONCILIATION", "HONOR_PENDING_INTERRUPT"], "deferred_behavior": "record pending cancel, reconcile the activation attempt, then honor cancellation"},
+    {"event": "TIMEOUT", "to": "TIMED_OUT", "owner": "external deadline controller", "applies_to": "all-safe-nonterminal", "deferred_in_states": ["ACTIVATION_INTENT", "ACTIVATE", "RECONCILE", "HUMAN_RECONCILIATION", "HONOR_PENDING_INTERRUPT"], "deferred_behavior": "record pending timeout, reconcile the activation attempt, then terminate"},
+    {"event": "BUDGET_EXHAUSTED", "to": "BUDGET_EXHAUSTED", "owner": "external budget governor", "applies_to": "all-safe-nonterminal", "deferred_in_states": ["ACTIVATION_INTENT", "ACTIVATE", "RECONCILE", "HUMAN_RECONCILIATION", "HONOR_PENDING_INTERRUPT"], "deferred_behavior": "block new work, reconcile the activation attempt, then terminate"}
+  ],
+  "budgets": {
+    "max_steps": 64,
+    "max_tool_calls": 40,
+    "max_retries_per_transition": 3,
+    "max_wall_seconds": 3600,
+    "max_suspended_seconds": 86400,
+    "max_tokens": 200000,
+    "max_cost": 50.0,
+    "max_recursion_depth": 4,
+    "max_parallelism": 4,
+    "soft_boundary": "freeze the current candidate and prepare an evidence-complete handoff at 80 percent",
+    "hard_boundary_owner": "external budget governor",
+    "aggregate_descendants": true
+  },
+  "no_progress": {
+    "fingerprint": "hash of base epoch, mutation class, candidate semantic digest, evaluator result, and unresolved gaps",
+    "gain_metric": "positive fresh lower-bound gain plus retained capability minus interference and cost under deduplicated evidence",
+    "calibration": "versioned thresholds on frozen production-like train, validation, and sealed splits",
+    "scope": "proposal and correction subloop only; the outer run still freezes or rejects the candidate",
+    "threshold": 3,
+    "gain_components": {"fresh_gain": 2.0, "transfer_gain": 2.0, "retention": 1.0, "resolved_interference": 1.0},
+    "aggregation": "weighted-sum",
+    "epsilon": 0.01,
+    "window_rounds": 3,
+    "plateau_comparator": "each diversified candidate in the window fails to improve the preregistered vector gate",
+    "outcome_state": "SATURATED"
+  },
+  "retry": {
+    "retryable_class": "transient",
+    "backoff": "bounded exponential backoff with jitter; candidate semantics and idempotency key remain fixed",
+    "exhausted_outcome": "RETRY_EXHAUSTED"
+  },
+  "effects": {
+    "persist_intent_before_execution": true,
+    "atomic_with_checkpoint_and_outbox": true,
+    "delivery_semantics": "at-least-once with idempotent eligibility/candidate writes and CAS activation receipts",
+    "idempotency_key": "run_id, base_epoch, mutation_class, candidate_hash, transition_id, effect_sequence, tool_version",
+    "durable_ledger": "eligibility, proposal, compile verdict, approval consumption, activation intent, attempt, response, receipt, and rollback handoff",
+    "high_risk_gate": "ActivateSnapshot is reachable only after sealed evaluation, canary, exact approval, and ACTIVATION_INTENT",
+    "unknown_outcome": "enter HUMAN_RECONCILIATION; observe active epoch and receipt before any retry",
+    "effect_critical_states": ["ACTIVATION_INTENT", "ACTIVATE", "RECONCILE", "HUMAN_RECONCILIATION", "HONOR_PENDING_INTERRUPT"]
+  },
+  "checkpoint": {
+    "boundaries": ["every transition", "candidate freeze", "atomically before activation", "after receipt or unknown outcome"],
+    "persisted_fields": ["state", "active base epoch", "candidate", "eligibility", "pending effects", "pending interrupts", "budgets", "retries", "approvals", "inputs", "results", "evaluator state", "versions"],
+    "compatibility": "resume only the same immutable workflow, state schema, compiler, scorer, and evaluator versions",
+    "migration": "explicit state-schema migration that cannot alter frozen candidate or evidence hashes",
+    "fencing": "single-runner lease token checked on every state and outbox commit",
+    "monotonic_sequence": "checkpoint sequence and topology or policy epoch increase monotonically",
+    "integrity": "checksum state, candidate, pending effects, approvals, interrupts, and version envelope",
+    "corruption_outcome": "quarantine candidate and require recovery review"
+  },
+  "approval": {
+    "binding_fields": ["run_id", "workflow_version", "action_hash", "artifact_hash", "destination_hash", "visibility", "scope", "actor", "expiry", "nonce", "rationale"],
+    "one_time": true,
+    "revocation": "revocation before activation-intent commit invalidates the approval",
+    "stale_outcome": "return to READY_FOR_REVIEW and reevaluate against the new active base"
+  },
+  "verification": {
+    "success_predicate": "CAS receipt proves the approved candidate hash became the active epoch and the existing absorption FSM owns rollback monitoring",
+    "invariant_checks": ["one mutation plane per initial candidate", "no active mutation before compile and sealed gates", "no provenance-free topology", "budgets and epochs are monotonic", "terminal states have no outgoing transitions"],
+    "environment_evidence": "frozen manifests, query-disjoint split hashes, evaluator receipts, replay output, canary observations, and active-epoch receipt",
+    "evaluator_independence": "the proposer cannot issue the promotion verdict; Agent A self-rating is not third-factor evidence",
+    "human_gray_band": "ambiguous semantics, unsupported actions, tied routes, or unknown activation outcomes suspend or select NO_CHANGE",
+    "calibration": "report false accepts, false rejects, coverage, abstention, subgroup retention, and threshold drift on frozen holdout",
+    "fault_tests": ["duplicate and reordered events", "crash before and after activation", "stale base CAS", "expired or replayed approval", "corrupt checkpoint", "budget and timeout interrupt", "evaluator disagreement", "route collapse", "rollback handoff receipt mismatch"]
+  },
+  "replay": {
+    "resume": "continue from compatible durable state under a fresh fenced lease",
+    "trajectory_replay": "rerun proposal or evaluation and allow model or environment divergence into a new candidate ID",
+    "deterministic_replay_requirements": ["frozen workflow, compiler, scorer, evaluator, and model versions", "captured clock, random, and ID inputs", "recorded model and tool responses", "read-only sandbox and fixed manifests"]
+  },
+  "security": {
+    "untrusted_content": "queries, retrieved text, model proposals, and cited web content are data, never control instructions",
+    "tool_least_privilege": "proposal tools write only shadow candidates; activation credentials exist only in the gated dispatcher",
+    "provenance_snapshots": "store source path or URL, retrieval time, content hash, parser version, actor, and evidence role",
+    "secret_isolation": "models, retrieved content, and candidate compilers never receive activation credentials"
+  },
+  "trace": {
+    "transition_fields": ["run_id", "cycle_id", "workflow_version", "state_schema_version", "transition_id", "source_state", "target_state", "trigger", "actor", "evidence_hashes", "budget_delta", "timestamp", "trace_id", "span_id", "checkpoint_id"],
+    "redaction": "secrets and sensitive source payloads are excluded or encrypted; hashes and typed metadata remain"
+  },
+  "commander_dispatch": {
+    "mode": "measured-need",
+    "fixed_uses_edges": false,
+    "commanders": ["Prometheus", "Longinus", "Eureka", "Occam", "Naesengmoon", "JaebaeMan", "Harness=Hades"],
+    "canon_verdict": "verdict-bihaenggiman-7commander-unify-2026-06-07"
+  },
+  "icvc": {
+    "inform": "user canon, active HSWM snapshot, evidence provenance, prior negative results, and primary research",
+    "constrain": "one-plane candidates, typed compiler, budgets, abstention, immutable freeze, approval, and CAS",
+    "verify": "independent sealed evaluator, retention/canary vector gate, replay, controls, and activation receipt",
+    "correct": "bounded new-candidate iteration before activation and handoff to the existing rollback/supersession FSM"
+  }
+}

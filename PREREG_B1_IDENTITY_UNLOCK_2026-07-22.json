@@ -1,0 +1,51 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "B1-identity-material-unlock-t0",
+  "question": "Q-identity-material-unlocks-legal-chains",
+  "conjecture": "Deterministic identity weave (C1 exact title-subject, C2 canonical-entity via parenthetical-stripped title anchors, C3 sibling-subject handoff) layered over the frozen V5 typed graph unlocks at least one admissible T0 depth-two chain on BOTH MuSiQue and 2Wiki development graphs, and the C3-minus-C1 margin is positive (identity material adds chains beyond the already-published title counterfactual).",
+  "prediction": {
+    "metric": "min_over_datasets_c3_admissible_depth2_chains",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0,
+    "success_threshold": 1,
+    "novel_metric": "sum_c3_minus_c1_admissible_depth2_chains",
+    "novel_direction": "higher",
+    "novel_threshold": 0,
+    "credence": 0.5
+  },
+  "already_public_before_registration": {
+    "note": "H3_C0_CHAIN_VIABILITY_DIAGNOSIS_2026-07-20.md published: C0 chains = 0 on both datasets; C1-style exact title-subject counterfactual = 0 added chains (MuSiQue) and 15 non-cyclic structural chains pre-bounds (2Wiki). The novel claim is therefore carried by the C3-minus-C1 margin, not by C1.",
+    "frozen_arc_counts": {"musique": 81, "2wiki": 308},
+    "loader_smoke_before_freeze": "arc/claim/paragraph counts only (81/308, 4254/3100, 2094/1505) — no weave or ledger output was computed or inspected before this registration."
+  },
+  "kill_conditions": [
+    "C3 admissible chain count is 0 on any dataset -> PRECOMPUTE_NOOP_DEPTH2; the deterministic identity lane of Phase B dies here and no T1-T3 or efficacy budget may be spent on it.",
+    "sum(C3) - sum(C1) <= 0 -> canonical identity material adds nothing beyond the published title weave; only the ML lane (ReFinED/fastcoref) remains.",
+    "strip_weave does not restore the frozen topology bit-exactly on any dataset -> abort, no measurement is valid.",
+    "Any woven arc lacking a weave receipt with both exact spans, or any ambiguous canonical anchor admitted -> audit failure.",
+    "Any LLM, network, or embedding call during the run -> budget-discipline violation, measurement void."
+  ],
+  "scope_boundary": {
+    "lane": "deterministic-weave-only",
+    "ml_lane_refined_fastcoref": "not implemented, deferred",
+    "t1_t2_t3": "deferred to a separate preregistration",
+    "efficacy_recall_claims": "none; T0 is structural viability only",
+    "splits": "development only; fresh/certificate untouched"
+  },
+  "module_sha256": {
+    "chain_viability.py": "b70739a4091967dce150c6a6a281ec800bd44096ca93ba72025eacf88a680662",
+    "claim_weave.py": "b36df9272d97fa20a229de90c0172a6a04b07c8462ec0b86877bbc0fd47bead1",
+    "b1_identity_unlock.py": "e2fccf43742f889758f567c960e3d864769988b1559847cdb173eb8b66bbf7b2"
+  },
+  "segment_sha256": {
+    "musique": "de481a3307d8e04f17895b6c125f06a2299a821fc9254b67066058476b0b94e2",
+    "2wiki": "10439ba55f0741fb2a092ce1dfb1fd0643cf1d0c5f42ff81dc001519608fd9fa"
+  },
+  "journal_sha256": "7cb1dcf65548ac9aeace33277478e0cda0dc540cfc0ae77933921a1e06899192",
+  "prediction_receipt_sha256": "3373440da87a52e0eccc69df0d8a79c1b2917b0942a739f157f24d36b38c955f",
+  "registered_before_measurement": true,
+  "registered_at": "2026-07-22T07:09:40.733184+00:00",
+  "user_canon_seed": "USER 2026-07-22: Phase B 지시 + 'SOLID 한 여러개 HSWM 의 연결로 큰 HSWM 망' (KG user-canon-federated-hswm-network-2026-07-22); design SECONDARY_AI_PROPOSAL"
+}

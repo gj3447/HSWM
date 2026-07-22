@@ -1,0 +1,674 @@
+{
+ "schema": "hswm-b1-identity-unlock-evidence/v1",
+ "programme": "LakatosTree_PromSearchHSWM_20260721",
+ "branch": "B1-identity-material-unlock-t0",
+ "preregistration": {
+  "path": "PREREG_B1_IDENTITY_UNLOCK_2026-07-22.json",
+  "sha256": "ff94f54b7ada530cd596e87b8ac38249a2dfd52766749e4dc5091b1c3bf12188",
+  "prediction_receipt_sha256": "3373440da87a52e0eccc69df0d8a79c1b2917b0942a739f157f24d36b38c955f"
+ },
+ "measurement": {
+  "metric": "min_over_datasets_c3_admissible_depth2_chains",
+  "value": 6,
+  "novel_metric": "sum_c3_minus_c1_admissible_depth2_chains",
+  "novel_value": 23,
+  "per_dataset": {
+   "2wiki": {
+    "frozen_arc_count": 308,
+    "claims": 3100,
+    "arms": {
+     "C0": {
+      "schema": "hswm-chain-ledger/v1",
+      "topology_sha256": "cbf898f1ff13d77233f0c50787de0757223dc18b0e0b6ee19db4c7d26d813deb",
+      "policy_sha256": "43659f10b53752136b3837166f28abe917f8005338b40ccba5f6f83c7ed2b3ff",
+      "arc_count": 308,
+      "nonterminal_arc_count": 39,
+      "continuity_pair_count": 2,
+      "admissible_chain_count": 0,
+      "verdict": "PRECOMPUTE_NOOP_DEPTH2",
+      "ledger_sha256": "241dc55d555b16b138b60e50eb2d41a33042e6dcde3b0f6612adfa9a0001395d",
+      "woven_arc_count": 0,
+      "chains_sample": []
+     },
+     "C1": {
+      "schema": "hswm-chain-ledger/v1",
+      "topology_sha256": "0e86f23436a2cb9f17c43c3c065d52c04840adf7c94f3b763703f6cd12e8531a",
+      "policy_sha256": "43659f10b53752136b3837166f28abe917f8005338b40ccba5f6f83c7ed2b3ff",
+      "arc_count": 458,
+      "nonterminal_arc_count": 189,
+      "continuity_pair_count": 22,
+      "admissible_chain_count": 8,
+      "verdict": "T0_PASS",
+      "ledger_sha256": "27274dd69c29707958b82d679cf64ed683d3a453e25ece868e9d1f1121d913bb",
+      "woven_arc_count": 150,
+      "chains_sample": [
+       {
+        "first_arc_id": "woven:c1_title_subject:1d6ad08574c28cfe01ef2f0f",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:69ee388c2aea8f088f13634a0390f87ccd749136a407f32727ca9f6161e5ac62",
+        "source_target": 778,
+        "middle_target": 512,
+        "final_target": 440,
+        "shared_claim_id": "hswm:nary_claim:v1:b0f517fa65fdfbb9eaac55169533677456bf335eef4bb5795e48e23f434ab577",
+        "first_join_entity_id": "canonical:maria luisa of savoy",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:c6f541085139f65b8b7053785632c421711959a3609dfdc8a7470be707964a12"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:284cc9c30fe9538bd9953231",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:a9bdb7250f7181e349c95fb6302deacb678eb682d8258791959e288bd25726b7",
+        "source_target": 757,
+        "middle_target": 247,
+        "final_target": 957,
+        "shared_claim_id": "hswm:nary_claim:v1:53e8a38573f91b6b702fa33ba38907696f4cb68a022ca916944aa4c9bab55f83",
+        "first_join_entity_id": "canonical:prince nikolaus wilhelm of nassau",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:4508f590bf48575f2cc5f350171eca98ef18b08a4b1870ff9137f5bece4ef229"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:5567cb19dd3200412842e00d",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:96b4d75c8478ba7dca29610f078099aaad9a970bfd967a745886bf0ed01a5789",
+        "source_target": 816,
+        "middle_target": 122,
+        "final_target": 367,
+        "shared_claim_id": "hswm:nary_claim:v1:65f3679204d352d729c88203819a83e357ca3c8f26b37bbb30afb64696adb73e",
+        "first_join_entity_id": "canonical:moscow heat",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:e23e38bf56b500775a03438e2c40963908ad4b55838a06122c059d9c258920e9"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:5567cb19dd3200412842e00d",
+        "second_arc_id": "woven:c1_title_subject:5775de8ffc251f64586e185f",
+        "source_target": 816,
+        "middle_target": 122,
+        "final_target": 367,
+        "shared_claim_id": "hswm:nary_claim:v1:65f3679204d352d729c88203819a83e357ca3c8f26b37bbb30afb64696adb73e",
+        "first_join_entity_id": "canonical:moscow heat",
+        "second_join_entity_id": "canonical:jeff celentano"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:bc504205eef39ed5acde2e2d",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:cf29572e41aedbfefcb4b3a67b2c0565ea3a3e30df4b206056822a4422a2e55f",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:41eb7b9c5abe76d840a131867e0aa986981dac2f4059bc695aab7db2629e26aa"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:bc504205eef39ed5acde2e2d",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:fc2855640d767ccd88352485e066bc8691e517665a5b065f12a1a0d343937290",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:8fe21d78e47dc6492f2ed45721657d945e764f0b426b19ec2efd2a5504e0f990"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:bc504205eef39ed5acde2e2d",
+        "second_arc_id": "woven:c1_title_subject:cba255d038f8143eeece9157",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "canonical:geojilmi of geumgwan gaya"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:f519a4161b6bed010038a151",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:aac70c73866b1ee6d5d1a4d77f7b64212e2a9f989f5762e64061e6c37787fc69",
+        "source_target": 232,
+        "middle_target": 777,
+        "final_target": 903,
+        "shared_claim_id": "hswm:nary_claim:v1:2397176ffd26b3cb6bbb08f20ec24c81388e23d449f1dcffc79f26bcadcf4682",
+        "first_join_entity_id": "canonical:bad day at black rock",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:b56a197e4ddd0d64b13f21770ae466a30004863c978a9d978a48adffa9f1e2a3"
+       }
+      ]
+     },
+     "C2": {
+      "schema": "hswm-chain-ledger/v1",
+      "topology_sha256": "48a852c6cb3e0a765286474e385d70be0af022d60182c4caabcb3bda08c189aa",
+      "policy_sha256": "43659f10b53752136b3837166f28abe917f8005338b40ccba5f6f83c7ed2b3ff",
+      "arc_count": 461,
+      "nonterminal_arc_count": 192,
+      "continuity_pair_count": 23,
+      "admissible_chain_count": 9,
+      "verdict": "T0_PASS",
+      "ledger_sha256": "4af7ca39ae3eb5f4dcf628a9f0f4f54f6c9f2d07044fefda69f35f70f3ec9926",
+      "woven_arc_count": 153,
+      "chains_sample": [
+       {
+        "first_arc_id": "woven:c2_canonical_entity:240b8f55b4f3051307969955",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:96b4d75c8478ba7dca29610f078099aaad9a970bfd967a745886bf0ed01a5789",
+        "source_target": 816,
+        "middle_target": 122,
+        "final_target": 367,
+        "shared_claim_id": "hswm:nary_claim:v1:65f3679204d352d729c88203819a83e357ca3c8f26b37bbb30afb64696adb73e",
+        "first_join_entity_id": "canonical:moscow heat",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:e23e38bf56b500775a03438e2c40963908ad4b55838a06122c059d9c258920e9"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:240b8f55b4f3051307969955",
+        "second_arc_id": "woven:c2_canonical_entity:23d379fee72eb390b74b546e",
+        "source_target": 816,
+        "middle_target": 122,
+        "final_target": 367,
+        "shared_claim_id": "hswm:nary_claim:v1:65f3679204d352d729c88203819a83e357ca3c8f26b37bbb30afb64696adb73e",
+        "first_join_entity_id": "canonical:moscow heat",
+        "second_join_entity_id": "canonical:jeff celentano"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:5a9bce9564489e959905204d",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:aac70c73866b1ee6d5d1a4d77f7b64212e2a9f989f5762e64061e6c37787fc69",
+        "source_target": 232,
+        "middle_target": 777,
+        "final_target": 903,
+        "shared_claim_id": "hswm:nary_claim:v1:2397176ffd26b3cb6bbb08f20ec24c81388e23d449f1dcffc79f26bcadcf4682",
+        "first_join_entity_id": "canonical:bad day at black rock",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:b56a197e4ddd0d64b13f21770ae466a30004863c978a9d978a48adffa9f1e2a3"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:7fb0fa29f288994b66f3d8e6",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:858f31b122fdcbcb516f756d29716bcab1e82bd7c2842140bfad53cc304a6608",
+        "source_target": 966,
+        "middle_target": 1266,
+        "final_target": 151,
+        "shared_claim_id": "hswm:nary_claim:v1:9d201f23c8cd89a7dd9d90a933440f2575d99f04ef2ccdc52528e0feb5e94d1d",
+        "first_join_entity_id": "canonical:kiliaen van rensselaer",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:4541424fa3b2d93c753ea13af124da805b6682375bbab2097c99642688c6d6a2"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:b5ba600efcc2f3522aede8f2",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:cf29572e41aedbfefcb4b3a67b2c0565ea3a3e30df4b206056822a4422a2e55f",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:41eb7b9c5abe76d840a131867e0aa986981dac2f4059bc695aab7db2629e26aa"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:b5ba600efcc2f3522aede8f2",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:fc2855640d767ccd88352485e066bc8691e517665a5b065f12a1a0d343937290",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:8fe21d78e47dc6492f2ed45721657d945e764f0b426b19ec2efd2a5504e0f990"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:b5ba600efcc2f3522aede8f2",
+        "second_arc_id": "woven:c2_canonical_entity:2b6f74781a39fe3d22d10c74",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "canonical:geojilmi of geumgwan gaya"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:b7ac150aaf2cb2b9a69f92aa",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:a9bdb7250f7181e349c95fb6302deacb678eb682d8258791959e288bd25726b7",
+        "source_target": 757,
+        "middle_target": 247,
+        "final_target": 957,
+        "shared_claim_id": "hswm:nary_claim:v1:53e8a38573f91b6b702fa33ba38907696f4cb68a022ca916944aa4c9bab55f83",
+        "first_join_entity_id": "canonical:prince nikolaus wilhelm of nassau",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:4508f590bf48575f2cc5f350171eca98ef18b08a4b1870ff9137f5bece4ef229"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:d952b0f1d96110c69ea63f60",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:bacb2279a07250b044f3c7eab0ff7d1ec4c71b908bfec54991a816dfeff98392",
+        "source_target": 81,
+        "middle_target": 894,
+        "final_target": 671,
+        "shared_claim_id": "hswm:nary_claim:v1:116141279ecc64a9ec0dfdadd1356ee2350c368f24b09a5d4b1874d683274d40",
+        "first_join_entity_id": "canonical:roberto rossellini",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:dbe32e1eac992763238eb7b65774b9c6eae8d4b5398852fdd62f57a5ddfd260a"
+       }
+      ]
+     },
+     "C3": {
+      "schema": "hswm-chain-ledger/v1",
+      "topology_sha256": "06d7dd4197b537035ee6f2ec66feac9e856060d08e8c6a6ba51ece36bb4fbf9f",
+      "policy_sha256": "43659f10b53752136b3837166f28abe917f8005338b40ccba5f6f83c7ed2b3ff",
+      "arc_count": 635,
+      "nonterminal_arc_count": 366,
+      "continuity_pair_count": 127,
+      "admissible_chain_count": 25,
+      "verdict": "T0_PASS",
+      "ledger_sha256": "3090c09eae229053e4f9a367b21ba89e26caba87450e4f764e3903ec1d43f5ca",
+      "woven_arc_count": 327,
+      "chains_sample": [
+       {
+        "first_arc_id": "woven:c1_title_subject:1d6ad08574c28cfe01ef2f0f",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:69ee388c2aea8f088f13634a0390f87ccd749136a407f32727ca9f6161e5ac62",
+        "source_target": 778,
+        "middle_target": 512,
+        "final_target": 440,
+        "shared_claim_id": "hswm:nary_claim:v1:b0f517fa65fdfbb9eaac55169533677456bf335eef4bb5795e48e23f434ab577",
+        "first_join_entity_id": "canonical:maria luisa of savoy",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:c6f541085139f65b8b7053785632c421711959a3609dfdc8a7470be707964a12"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:284cc9c30fe9538bd9953231",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:a9bdb7250f7181e349c95fb6302deacb678eb682d8258791959e288bd25726b7",
+        "source_target": 757,
+        "middle_target": 247,
+        "final_target": 957,
+        "shared_claim_id": "hswm:nary_claim:v1:53e8a38573f91b6b702fa33ba38907696f4cb68a022ca916944aa4c9bab55f83",
+        "first_join_entity_id": "canonical:prince nikolaus wilhelm of nassau",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:4508f590bf48575f2cc5f350171eca98ef18b08a4b1870ff9137f5bece4ef229"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:5567cb19dd3200412842e00d",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:96b4d75c8478ba7dca29610f078099aaad9a970bfd967a745886bf0ed01a5789",
+        "source_target": 816,
+        "middle_target": 122,
+        "final_target": 367,
+        "shared_claim_id": "hswm:nary_claim:v1:65f3679204d352d729c88203819a83e357ca3c8f26b37bbb30afb64696adb73e",
+        "first_join_entity_id": "canonical:moscow heat",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:e23e38bf56b500775a03438e2c40963908ad4b55838a06122c059d9c258920e9"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:5567cb19dd3200412842e00d",
+        "second_arc_id": "woven:c1_title_subject:5775de8ffc251f64586e185f",
+        "source_target": 816,
+        "middle_target": 122,
+        "final_target": 367,
+        "shared_claim_id": "hswm:nary_claim:v1:65f3679204d352d729c88203819a83e357ca3c8f26b37bbb30afb64696adb73e",
+        "first_join_entity_id": "canonical:moscow heat",
+        "second_join_entity_id": "canonical:jeff celentano"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:5567cb19dd3200412842e00d",
+        "second_arc_id": "woven:c2_canonical_entity:23d379fee72eb390b74b546e",
+        "source_target": 816,
+        "middle_target": 122,
+        "final_target": 367,
+        "shared_claim_id": "hswm:nary_claim:v1:65f3679204d352d729c88203819a83e357ca3c8f26b37bbb30afb64696adb73e",
+        "first_join_entity_id": "canonical:moscow heat",
+        "second_join_entity_id": "canonical:jeff celentano"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:bc504205eef39ed5acde2e2d",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:cf29572e41aedbfefcb4b3a67b2c0565ea3a3e30df4b206056822a4422a2e55f",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:41eb7b9c5abe76d840a131867e0aa986981dac2f4059bc695aab7db2629e26aa"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:bc504205eef39ed5acde2e2d",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:fc2855640d767ccd88352485e066bc8691e517665a5b065f12a1a0d343937290",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:8fe21d78e47dc6492f2ed45721657d945e764f0b426b19ec2efd2a5504e0f990"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:bc504205eef39ed5acde2e2d",
+        "second_arc_id": "woven:c1_title_subject:cba255d038f8143eeece9157",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "canonical:geojilmi of geumgwan gaya"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:bc504205eef39ed5acde2e2d",
+        "second_arc_id": "woven:c2_canonical_entity:2b6f74781a39fe3d22d10c74",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "canonical:geojilmi of geumgwan gaya"
+       },
+       {
+        "first_arc_id": "woven:c1_title_subject:f519a4161b6bed010038a151",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:aac70c73866b1ee6d5d1a4d77f7b64212e2a9f989f5762e64061e6c37787fc69",
+        "source_target": 232,
+        "middle_target": 777,
+        "final_target": 903,
+        "shared_claim_id": "hswm:nary_claim:v1:2397176ffd26b3cb6bbb08f20ec24c81388e23d449f1dcffc79f26bcadcf4682",
+        "first_join_entity_id": "canonical:bad day at black rock",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:b56a197e4ddd0d64b13f21770ae466a30004863c978a9d978a48adffa9f1e2a3"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:240b8f55b4f3051307969955",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:96b4d75c8478ba7dca29610f078099aaad9a970bfd967a745886bf0ed01a5789",
+        "source_target": 816,
+        "middle_target": 122,
+        "final_target": 367,
+        "shared_claim_id": "hswm:nary_claim:v1:65f3679204d352d729c88203819a83e357ca3c8f26b37bbb30afb64696adb73e",
+        "first_join_entity_id": "canonical:moscow heat",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:e23e38bf56b500775a03438e2c40963908ad4b55838a06122c059d9c258920e9"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:240b8f55b4f3051307969955",
+        "second_arc_id": "woven:c1_title_subject:5775de8ffc251f64586e185f",
+        "source_target": 816,
+        "middle_target": 122,
+        "final_target": 367,
+        "shared_claim_id": "hswm:nary_claim:v1:65f3679204d352d729c88203819a83e357ca3c8f26b37bbb30afb64696adb73e",
+        "first_join_entity_id": "canonical:moscow heat",
+        "second_join_entity_id": "canonical:jeff celentano"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:240b8f55b4f3051307969955",
+        "second_arc_id": "woven:c2_canonical_entity:23d379fee72eb390b74b546e",
+        "source_target": 816,
+        "middle_target": 122,
+        "final_target": 367,
+        "shared_claim_id": "hswm:nary_claim:v1:65f3679204d352d729c88203819a83e357ca3c8f26b37bbb30afb64696adb73e",
+        "first_join_entity_id": "canonical:moscow heat",
+        "second_join_entity_id": "canonical:jeff celentano"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:5a9bce9564489e959905204d",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:aac70c73866b1ee6d5d1a4d77f7b64212e2a9f989f5762e64061e6c37787fc69",
+        "source_target": 232,
+        "middle_target": 777,
+        "final_target": 903,
+        "shared_claim_id": "hswm:nary_claim:v1:2397176ffd26b3cb6bbb08f20ec24c81388e23d449f1dcffc79f26bcadcf4682",
+        "first_join_entity_id": "canonical:bad day at black rock",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:b56a197e4ddd0d64b13f21770ae466a30004863c978a9d978a48adffa9f1e2a3"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:7fb0fa29f288994b66f3d8e6",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:858f31b122fdcbcb516f756d29716bcab1e82bd7c2842140bfad53cc304a6608",
+        "source_target": 966,
+        "middle_target": 1266,
+        "final_target": 151,
+        "shared_claim_id": "hswm:nary_claim:v1:9d201f23c8cd89a7dd9d90a933440f2575d99f04ef2ccdc52528e0feb5e94d1d",
+        "first_join_entity_id": "canonical:kiliaen van rensselaer",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:4541424fa3b2d93c753ea13af124da805b6682375bbab2097c99642688c6d6a2"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:b5ba600efcc2f3522aede8f2",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:cf29572e41aedbfefcb4b3a67b2c0565ea3a3e30df4b206056822a4422a2e55f",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:41eb7b9c5abe76d840a131867e0aa986981dac2f4059bc695aab7db2629e26aa"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:b5ba600efcc2f3522aede8f2",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:fc2855640d767ccd88352485e066bc8691e517665a5b065f12a1a0d343937290",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:8fe21d78e47dc6492f2ed45721657d945e764f0b426b19ec2efd2a5504e0f990"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:b5ba600efcc2f3522aede8f2",
+        "second_arc_id": "woven:c1_title_subject:cba255d038f8143eeece9157",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "canonical:geojilmi of geumgwan gaya"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:b5ba600efcc2f3522aede8f2",
+        "second_arc_id": "woven:c2_canonical_entity:2b6f74781a39fe3d22d10c74",
+        "source_target": 1175,
+        "middle_target": 129,
+        "final_target": 1002,
+        "shared_claim_id": "hswm:nary_claim:v1:aec66545e369580f43eb7ab0fb1966987c1e92f59294404c8d24c7741db06cb7",
+        "first_join_entity_id": "canonical:queen hogu",
+        "second_join_entity_id": "canonical:geojilmi of geumgwan gaya"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:b7ac150aaf2cb2b9a69f92aa",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:a9bdb7250f7181e349c95fb6302deacb678eb682d8258791959e288bd25726b7",
+        "source_target": 757,
+        "middle_target": 247,
+        "final_target": 957,
+        "shared_claim_id": "hswm:nary_claim:v1:53e8a38573f91b6b702fa33ba38907696f4cb68a022ca916944aa4c9bab55f83",
+        "first_join_entity_id": "canonical:prince nikolaus wilhelm of nassau",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:4508f590bf48575f2cc5f350171eca98ef18b08a4b1870ff9137f5bece4ef229"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:d952b0f1d96110c69ea63f60",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:bacb2279a07250b044f3c7eab0ff7d1ec4c71b908bfec54991a816dfeff98392",
+        "source_target": 81,
+        "middle_target": 894,
+        "final_target": 671,
+        "shared_claim_id": "hswm:nary_claim:v1:116141279ecc64a9ec0dfdadd1356ee2350c368f24b09a5d4b1874d683274d40",
+        "first_join_entity_id": "canonical:roberto rossellini",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:dbe32e1eac992763238eb7b65774b9c6eae8d4b5398852fdd62f57a5ddfd260a"
+       },
+       {
+        "first_arc_id": "woven:c3_sibling_subject_handoff:2f3d7eddbe7aa0ee53751b75",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:f3f4f10ff35fee5b5a6189a7b31284f19bd76f0a5ad1d123192176a5af0cd428",
+        "source_target": 532,
+        "middle_target": 950,
+        "final_target": 180,
+        "shared_claim_id": "hswm:nary_claim:v1:97babcae9d5a24b0d410bc3da811063e843a553c5a5cb39eda5d67e3e1e4afd4",
+        "first_join_entity_id": "canonical:queen mojong",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:a4fec5536d009a5b6b4b915e98624399eaa6f9a480b6742d4bc1e9549254ae51"
+       },
+       {
+        "first_arc_id": "woven:c3_sibling_subject_handoff:35505bd9efa89b3ac44454f7",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:69ee388c2aea8f088f13634a0390f87ccd749136a407f32727ca9f6161e5ac62",
+        "source_target": 778,
+        "middle_target": 512,
+        "final_target": 440,
+        "shared_claim_id": "hswm:nary_claim:v1:b0f517fa65fdfbb9eaac55169533677456bf335eef4bb5795e48e23f434ab577",
+        "first_join_entity_id": "canonical:maria luisa of savoy",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:c6f541085139f65b8b7053785632c421711959a3609dfdc8a7470be707964a12"
+       },
+       {
+        "first_arc_id": "woven:c3_sibling_subject_handoff:b5e3c7a6226746cdcd246cf0",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:26c04191b9246193cd5b82fe15cbbd4a35c21ef0e1b1363e9e654e3f50656631",
+        "source_target": 950,
+        "middle_target": 532,
+        "final_target": 180,
+        "shared_claim_id": "hswm:nary_claim:v1:8822aa4101c38800bc220f5450a97c62b8adfd58169032b480ea61329c6003df",
+        "first_join_entity_id": "canonical:queen mojong",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:a4fec5536d009a5b6b4b915e98624399eaa6f9a480b6742d4bc1e9549254ae51"
+       },
+       {
+        "first_arc_id": "woven:c3_sibling_subject_handoff:e9a95941bf467ad35f6bd7f7",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:56a1c920f741538dc19f9063d8a0ad9b319b54eb6eac150541803b66bda9170f",
+        "source_target": 180,
+        "middle_target": 950,
+        "final_target": 532,
+        "shared_claim_id": "hswm:nary_claim:v1:97babcae9d5a24b0d410bc3da811063e843a553c5a5cb39eda5d67e3e1e4afd4",
+        "first_join_entity_id": "canonical:queen mojong",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:2b72689caa2849f9525c86dafe3b7234caf4eda0014e98a30334eabec6519387"
+       }
+      ]
+     }
+    }
+   },
+   "musique": {
+    "frozen_arc_count": 81,
+    "claims": 4254,
+    "arms": {
+     "C0": {
+      "schema": "hswm-chain-ledger/v1",
+      "topology_sha256": "ce0a561ecd3bbec357373f4589434c2666bb54eed7e41e249c15e3ade369b191",
+      "policy_sha256": "43659f10b53752136b3837166f28abe917f8005338b40ccba5f6f83c7ed2b3ff",
+      "arc_count": 81,
+      "nonterminal_arc_count": 36,
+      "continuity_pair_count": 0,
+      "admissible_chain_count": 0,
+      "verdict": "PRECOMPUTE_NOOP_DEPTH2",
+      "ledger_sha256": "efecb1db3eebddc4a74d47e3adf753aa558ed09f43c7e4ddeb939928f24af0af",
+      "woven_arc_count": 0,
+      "chains_sample": []
+     },
+     "C1": {
+      "schema": "hswm-chain-ledger/v1",
+      "topology_sha256": "596a82f549e5f15f87763f154101c6fc2a6212ed421f225b513ab9567c6cae7a",
+      "policy_sha256": "43659f10b53752136b3837166f28abe917f8005338b40ccba5f6f83c7ed2b3ff",
+      "arc_count": 88,
+      "nonterminal_arc_count": 43,
+      "continuity_pair_count": 0,
+      "admissible_chain_count": 0,
+      "verdict": "PRECOMPUTE_NOOP_DEPTH2",
+      "ledger_sha256": "a626dfa13c19d40884d7a7cdeaf132d9f790b21a6545b29e33e782c85ec43fef",
+      "woven_arc_count": 7,
+      "chains_sample": []
+     },
+     "C2": {
+      "schema": "hswm-chain-ledger/v1",
+      "topology_sha256": "3ba12a07b2769bce5ed0bc921ebbbd6045fd2ceab1338878f37886306fb58df8",
+      "policy_sha256": "43659f10b53752136b3837166f28abe917f8005338b40ccba5f6f83c7ed2b3ff",
+      "arc_count": 93,
+      "nonterminal_arc_count": 48,
+      "continuity_pair_count": 4,
+      "admissible_chain_count": 4,
+      "verdict": "T0_PASS",
+      "ledger_sha256": "60c1250dc225ed0b72cd7dab9209ac43a501c4483645cfa52767c99226008e0a",
+      "woven_arc_count": 12,
+      "chains_sample": [
+       {
+        "first_arc_id": "woven:c2_canonical_entity:2171f00f24a8041c3f093ded",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:080d6fa5007ea7b17f6c95df30e9b52cb6e703959f2e52a3c99c8f39b27cbdc8",
+        "source_target": 1703,
+        "middle_target": 461,
+        "final_target": 352,
+        "shared_claim_id": "hswm:nary_claim:v1:f7f8bdede4cc4b8985a04ac94b26692e9cfcbcd3205de5dd2d6e116cd9ee4299",
+        "first_join_entity_id": "canonical:national hockey league",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:0ddc3793a33805714b9652dc12134dc3bf56699257269db27aa5b204ebd6f6f9"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:9c502217394cacdd5a76f705",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:a1866221f6ef67966e52bd4501e79f460b6d2f3f1fda55b710f424e4fc40e9c6",
+        "source_target": 1768,
+        "middle_target": 294,
+        "final_target": 1301,
+        "shared_claim_id": "hswm:nary_claim:v1:903c291a169d05135a84926019d8d3d9aa0a69134b8313a06bc10bf8ee4dd7d4",
+        "first_join_entity_id": "canonical:cleveland browns",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:48a2d578bac9b7d65e86f6b3a1519614493c527750aca8adc78c9d01219a4713"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:a3d19c97d486983dfab154af",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:70a0fe2bb9e7dee2618f501c0589c1a2a2d58497c1027252b15f260caf1f81d2",
+        "source_target": 2067,
+        "middle_target": 1665,
+        "final_target": 473,
+        "shared_claim_id": "hswm:nary_claim:v1:69682d7717cf8102c7d11b8d9455a2a30221c64a8cb136c82596174d24bfe572",
+        "first_join_entity_id": "canonical:cleveland indians",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:8a5dfa92b5f23da3d9aa9f894c43856cbf2f267db70309cf84aeaa5e431b068b"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:b26e6fb0c0c94d5d24369b77",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:c8dbeb62c4d9b31f334e53ac280829cf1ea18a095a233f62839e78d03c920ff3",
+        "source_target": 1703,
+        "middle_target": 375,
+        "final_target": 352,
+        "shared_claim_id": "hswm:nary_claim:v1:f4c6869d4c7115500c277ba2c7a2cd4488fc4ef4fa715ba7f85e8b89a7756962",
+        "first_join_entity_id": "canonical:national hockey league",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:0ddc3793a33805714b9652dc12134dc3bf56699257269db27aa5b204ebd6f6f9"
+       }
+      ]
+     },
+     "C3": {
+      "schema": "hswm-chain-ledger/v1",
+      "topology_sha256": "0f8bca2ecb58aa4813968803f900055ebfc4fa4b6ad48f1d5663ac666ca57919",
+      "policy_sha256": "43659f10b53752136b3837166f28abe917f8005338b40ccba5f6f83c7ed2b3ff",
+      "arc_count": 102,
+      "nonterminal_arc_count": 57,
+      "continuity_pair_count": 10,
+      "admissible_chain_count": 6,
+      "verdict": "T0_PASS",
+      "ledger_sha256": "d94aab1a1b62a03b1b407659f877fd5e4d19ab2685f699e49b2eccdc9ca5708c",
+      "woven_arc_count": 21,
+      "chains_sample": [
+       {
+        "first_arc_id": "woven:c2_canonical_entity:2171f00f24a8041c3f093ded",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:080d6fa5007ea7b17f6c95df30e9b52cb6e703959f2e52a3c99c8f39b27cbdc8",
+        "source_target": 1703,
+        "middle_target": 461,
+        "final_target": 352,
+        "shared_claim_id": "hswm:nary_claim:v1:f7f8bdede4cc4b8985a04ac94b26692e9cfcbcd3205de5dd2d6e116cd9ee4299",
+        "first_join_entity_id": "canonical:national hockey league",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:0ddc3793a33805714b9652dc12134dc3bf56699257269db27aa5b204ebd6f6f9"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:9c502217394cacdd5a76f705",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:a1866221f6ef67966e52bd4501e79f460b6d2f3f1fda55b710f424e4fc40e9c6",
+        "source_target": 1768,
+        "middle_target": 294,
+        "final_target": 1301,
+        "shared_claim_id": "hswm:nary_claim:v1:903c291a169d05135a84926019d8d3d9aa0a69134b8313a06bc10bf8ee4dd7d4",
+        "first_join_entity_id": "canonical:cleveland browns",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:48a2d578bac9b7d65e86f6b3a1519614493c527750aca8adc78c9d01219a4713"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:a3d19c97d486983dfab154af",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:70a0fe2bb9e7dee2618f501c0589c1a2a2d58497c1027252b15f260caf1f81d2",
+        "source_target": 2067,
+        "middle_target": 1665,
+        "final_target": 473,
+        "shared_claim_id": "hswm:nary_claim:v1:69682d7717cf8102c7d11b8d9455a2a30221c64a8cb136c82596174d24bfe572",
+        "first_join_entity_id": "canonical:cleveland indians",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:8a5dfa92b5f23da3d9aa9f894c43856cbf2f267db70309cf84aeaa5e431b068b"
+       },
+       {
+        "first_arc_id": "woven:c2_canonical_entity:b26e6fb0c0c94d5d24369b77",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:c8dbeb62c4d9b31f334e53ac280829cf1ea18a095a233f62839e78d03c920ff3",
+        "source_target": 1703,
+        "middle_target": 375,
+        "final_target": 352,
+        "shared_claim_id": "hswm:nary_claim:v1:f4c6869d4c7115500c277ba2c7a2cd4488fc4ef4fa715ba7f85e8b89a7756962",
+        "first_join_entity_id": "canonical:national hockey league",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:0ddc3793a33805714b9652dc12134dc3bf56699257269db27aa5b204ebd6f6f9"
+       },
+       {
+        "first_arc_id": "woven:c3_sibling_subject_handoff:a0e2b137b0cd24d517da9715",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:080d6fa5007ea7b17f6c95df30e9b52cb6e703959f2e52a3c99c8f39b27cbdc8",
+        "source_target": 375,
+        "middle_target": 461,
+        "final_target": 352,
+        "shared_claim_id": "hswm:nary_claim:v1:f7f8bdede4cc4b8985a04ac94b26692e9cfcbcd3205de5dd2d6e116cd9ee4299",
+        "first_join_entity_id": "canonical:national hockey league",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:0ddc3793a33805714b9652dc12134dc3bf56699257269db27aa5b204ebd6f6f9"
+       },
+       {
+        "first_arc_id": "woven:c3_sibling_subject_handoff:c52763d68448ce92df51fcfe",
+        "second_arc_id": "hswm:claim_paragraph_arc:v1:c8dbeb62c4d9b31f334e53ac280829cf1ea18a095a233f62839e78d03c920ff3",
+        "source_target": 461,
+        "middle_target": 375,
+        "final_target": 352,
+        "shared_claim_id": "hswm:nary_claim:v1:f4c6869d4c7115500c277ba2c7a2cd4488fc4ef4fa715ba7f85e8b89a7756962",
+        "first_join_entity_id": "canonical:national hockey league",
+        "second_join_entity_id": "hswm:claim_join_entity:v1:0ddc3793a33805714b9652dc12134dc3bf56699257269db27aa5b204ebd6f6f9"
+       }
+      ]
+     }
+    }
+   }
+  }
+ },
+ "budget": {
+  "llm_calls": 0,
+  "network_calls": 0,
+  "embedding_calls": 0,
+  "note": "T0 material gate only, per H3-C0 waterfall discipline"
+ },
+ "receipts_file": {
+  "path": "RECEIPTS_B1_IDENTITY_UNLOCK_2026-07-22.json",
+  "sha256": "7cf3cfa0cd3156fc6443728484fb6d212e3edc5cb75616a39600f836b723e1e1"
+ },
+ "limitations": [
+  "Deterministic weave sub-lane only: exact/normalized surface and title-anchor identity; the ReFinED-QID and fastcoref ML lanes are not implemented.",
+  "T0 is structural viability, not retrieval efficacy; T1-T3 and any recall claim require a separate preregistration.",
+  "Development split only; fresh/certificate splits untouched."
+ ]
+}

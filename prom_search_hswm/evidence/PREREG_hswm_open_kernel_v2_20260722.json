@@ -1,0 +1,51 @@
+{
+  "schema": "hswm-engineering-prereg/v2",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "frozen_at": "2026-07-22T10:04:12Z",
+  "cycle_id": "apt-hswm-open-self-similar-v2-2026-07-22",
+  "tree": "LakatosTree_HSWM_SolidMultiAgent_20260722",
+  "parent_tag": "ENG-open-composition-kernel-v1",
+  "implementation_tag": "ENG-open-composition-kernel-v2",
+  "question": "Q-open-composition-kernel-counterexamples-v2",
+  "claim_class": "engineering_counterexample_repair_not_scientific_progress",
+  "hypothesis": "A factory-sealed OpenHSWM with immutable field snapshots, injective mount-qualified interfaces, structured separation receipts, and a safe explicit materializer closes the five frozen-v1 counterexamples without regressing v1 or B0 laws.",
+  "command": "python3 -m pytest HSWM/prom_search_hswm/test_hswm_open_kernel.py HSWM/prom_search_hswm/test_hswm_open_composition.py HSWM/prom_search_hswm/test_hswm_field_algebra.py -q",
+  "acceptance": {
+    "exit_code": 0,
+    "failures": 0,
+    "minimum_new_cases": 16,
+    "required_repairs": [
+      "local_port_name_closure",
+      "raw_constructor_sealed",
+      "non_exposed_connector_rejected",
+      "immutable_field_snapshot",
+      "operand_order_alias_independence",
+      "structured_separation_roundtrip",
+      "isolated_vertex_preservation",
+      "conflicting_vertex_order_independence",
+      "nonempty_provenance",
+      "explicit_shared_edge_capability",
+      "shared_edge_payload_and_weight_equality",
+      "compose_materialize_separation",
+      "v1_and_legacy_regression"
+    ]
+  },
+  "falsifiers": [
+    "Two valid mounts with the same local port ID fail composition.",
+    "Public raw OpenHSWM construction succeeds.",
+    "A connector can address a non-exposed operand port.",
+    "Mutating the caller's legacy Field after capture changes canonical or materialized state.",
+    "Separation depends on delimiter-concatenated synthetic boundary IDs.",
+    "An isolated vertex is lost or a vertex conflict becomes grouping-dependent.",
+    "Empty provenance is accepted by snapshot capture.",
+    "An overlapping edge collapses without an explicit shared-edge capability.",
+    "compose invokes legacy or v2 materialization.",
+    "Any frozen v1 or legacy B0 regression fails."
+  ],
+  "non_claims": [
+    "No retrieval-quality improvement is claimed.",
+    "No relation compatibility registry is implemented.",
+    "No cyclic query readout or learned agent loop is implemented.",
+    "No scientific progressive verdict may be inferred from the property tests."
+  ]
+}

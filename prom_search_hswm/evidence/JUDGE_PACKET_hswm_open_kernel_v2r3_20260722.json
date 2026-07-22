@@ -1,0 +1,95 @@
+{
+  "schema": "hswm-neutral-judge-packet/v1",
+  "status": "FROZEN_FACT_PACKET",
+  "recorded_at": "2026-07-22T10:48:30Z",
+  "facts_only": true,
+  "tree": "LakatosTree_HSWM_SolidMultiAgent_20260722",
+  "tag": "ENG-open-composition-kernel-v2r3",
+  "question": "Q-open-composition-kernel-counterexamples-v2",
+  "scope_class": "deterministic_engineering_properties_only",
+  "registered_prediction": {
+    "metric": "v2r3_remaining_semantic_boundary_repairs_pass_rate",
+    "baseline": 0.0,
+    "direction": "higher",
+    "noise_band": 0.0,
+    "credence": 0.9,
+    "registered_at": "2026-07-22T10:36:45.561282Z",
+    "script_path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/test_hswm_open_kernel.py",
+    "script_sha256": "bb1005916616f61af542fc5c0bfea4f229be5df4b43e0b1265184667d4d7f32c",
+    "prediction_receipt_sha256": "6fbcf64f46b2037e505027b5928238659ce080cad7f67bb1a01dfb480cd3a278",
+    "timing_disclosure": "The two v2r3 counterexamples were observed before this repair prediction. The script hash was registered before implementation repair. This is post-red engineering TDD, not a blind scientific prediction."
+  },
+  "v2r3_specific_falsifiers": [
+    "Snapshot capture retains or accepts a nested mutable edge member or cluster atom.",
+    "Distinct left-right port assignments that resolve to one legacy vertex are silently lowered rather than rejected.",
+    "Any previously green v2r2, v1, B0, B2, or adjacent hypergraph case regresses."
+  ],
+  "artifacts": {
+    "implementation": {
+      "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/hswm_open_kernel.py",
+      "sha256": "d916148a6320c08bce0bd45e272efff9df88aab889f53687745732ba3654ede3"
+    },
+    "test_script": {
+      "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/test_hswm_open_kernel.py",
+      "sha256": "bb1005916616f61af542fc5c0bfea4f229be5df4b43e0b1265184667d4d7f32c"
+    },
+    "v2_preregistration": {
+      "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_hswm_open_kernel_v2_20260722.json",
+      "sha256": "9ea1c6756e3352cc91988cb316c629b22fabdefebc620162a1595d2dcd0fb9d1"
+    },
+    "engineering_history": {
+      "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/EVIDENCE_hswm_open_kernel_v2_20260722.json",
+      "sha256": "d47aa1427c7ecc78c083ffd808bb62861658d6be570a11fcf09f27ab10c40c66",
+      "boundary_note": "This history contains implementer interpretations. Only commands, outputs, hashes, and disclosed timing are imported into this fact packet."
+    },
+    "injected_negative_receipt": {
+      "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/INJECTED_NEGATIVE_hswm_open_kernel_v2r3_20260722.json",
+      "sha256": "1f9aa36aa3ecbcc1a61ab1de00e956cca608673516bc9f9386c990eed419950d"
+    }
+  },
+  "executions": [
+    {
+      "kind": "registered_target_replay",
+      "command": "python3 -m pytest HSWM/prom_search_hswm/test_hswm_open_kernel.py HSWM/prom_search_hswm/test_hswm_open_composition.py HSWM/prom_search_hswm/test_hswm_field_algebra.py -q",
+      "working_directory": "/Users/lagyeongjun/CD/SYMPOSIUM",
+      "exit_code": 0,
+      "stdout": "59 passed in 0.05s",
+      "observed_metric_value": 1.0
+    },
+    {
+      "kind": "expanded_replay",
+      "command": "python3 -m pytest HSWM/prom_search_hswm/test_hswm_open_kernel.py HSWM/prom_search_hswm/test_hswm_open_composition.py HSWM/prom_search_hswm/test_hswm_field_algebra.py HSWM/prom_search_hswm/test_hswm_b2_crossfield.py HSWM/prom_search_hswm/test_hswm_hypergraph.py HSWM/prom_search_hswm/test_hswm_true_hypergraph.py -q",
+      "working_directory": "/Users/lagyeongjun/CD/SYMPOSIUM",
+      "exit_code": 0,
+      "stdout": "78 passed in 0.17s"
+    },
+    {
+      "kind": "injected_negative_replay",
+      "command": "python3 -m pytest HSWM/prom_search_hswm/test_hswm_open_kernel.py::test_snapshot_rejects_mutable_nested_edge_cluster HSWM/prom_search_hswm/test_hswm_open_kernel.py::test_identity_materialization_rejects_distinct_ports_on_same_vertex -q",
+      "working_directory": "/Users/lagyeongjun/CD/SYMPOSIUM",
+      "exit_code": 0,
+      "stdout": "2 passed in 0.02s",
+      "receipt_sha256": "1f9aa36aa3ecbcc1a61ab1de00e956cca608673516bc9f9386c990eed419950d"
+    }
+  ],
+  "independent_read_only_replay": {
+    "target_stdout": "59 passed in 0.05s",
+    "expanded_stdout": "78 passed in 0.17s",
+    "direct_probe_outputs": [
+      "mutable_member ValueError",
+      "mutable_cluster ValueError",
+      "same_vertex_roles ('left', 'right') UnsupportedMaterialization",
+      "same_vertex_roles ('right', 'left') UnsupportedMaterialization",
+      "type_hints_checked 38 failures []",
+      "seam_source_mutation_safe True"
+    ],
+    "files_edited_by_reviewer": 0
+  },
+  "out_of_scope_facts": [
+    "No learned relation adapter registry is implemented.",
+    "No bounded cyclic query readout is implemented.",
+    "No agent learning, persistence, concurrency, retry, rollback, or reward assignment is implemented.",
+    "No retrieval-quality, B2.1 gating, or multi-agent-transfer measurement is introduced by v2r3.",
+    "The Python 3.9 type-hint check is runtime-specific and would require a version matrix to remain effective if Python 3.9 is removed."
+  ]
+}

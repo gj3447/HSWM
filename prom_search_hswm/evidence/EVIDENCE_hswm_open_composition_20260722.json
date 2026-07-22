@@ -1,0 +1,125 @@
+{
+  "schema": "hswm-engineering-evidence/v1",
+  "status": "FROZEN_AFTER_EXECUTION",
+  "cycle_id": "apt-hswm-open-self-similar-2026-07-22",
+  "tree": "LakatosTree_HSWM_SolidMultiAgent_20260722",
+  "theory_tag": "theory-open-self-similar-hswm-20260722",
+  "implementation_tag": "ENG-open-composition-kernel-v1",
+  "question": "Q-open-composition-kernel-closure",
+  "recorded_at": "2026-07-22T09:50:13Z",
+  "claim_class": "engineering_property_proof_not_scientific_progress",
+  "git": {
+    "head": "6f69cae08570c104d12e1a5e38150930cfb1b804",
+    "worktree_dirty": true,
+    "scope_note": "The shared worktree contained unrelated user/session changes. Only the four OMD-declared new HSWM paths and this receipt were written; no broad commit was made."
+  },
+  "omd": {
+    "task": "hswm-open-selfsimilar-composition-20260722",
+    "agent": "codex-root-hswm-open-20260722",
+    "orbit_id": "orb-2f3d6ff1e668",
+    "fence": 7,
+    "bail_epoch": 0,
+    "lease_state_at_execution": "HELD"
+  },
+  "environment": {
+    "os": "Darwin 27.0.0 arm64",
+    "host": "lagyeongjun-ui-Macmini.local",
+    "python3": "3.9.6",
+    "pytest": "8.4.2"
+  },
+  "artifacts": {
+    "spec": {
+      "path": "HSWM/SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md",
+      "sha256": "b49c5d2faa15de11c5e718e1da6d1423a621d09ea68ffc9c5b90b5336aa7af70"
+    },
+    "prereg": {
+      "path": "HSWM/prom_search_hswm/evidence/PREREG_hswm_open_composition_20260722.json",
+      "sha256": "b5ab3345a041b6263fde2d900186cdeab82c7235fcb021d5ac96e74a5ddfa642"
+    },
+    "implementation": {
+      "path": "HSWM/prom_search_hswm/hswm_open_composition.py",
+      "sha256": "ba92caafc992b2cd22913ba835b61726f9dad730cfd9ac640a2843603bdf866a"
+    },
+    "test": {
+      "path": "HSWM/prom_search_hswm/test_hswm_open_composition.py",
+      "sha256": "f86a7316e57ca41325e586148a6b8cb884559413f0531a59368716deb406e498"
+    },
+    "legacy_implementation": {
+      "path": "HSWM/prom_search_hswm/hswm_field_algebra.py",
+      "sha256": "573de075728aca74965acd945228233e9f736ee96f97dfb7aaa5fee3761cb9ca"
+    },
+    "legacy_test": {
+      "path": "HSWM/prom_search_hswm/test_hswm_field_algebra.py",
+      "sha256": "a7956c000f74f7a74be7495957635f803d5c2bde73d983eab62d44f497c25ffb"
+    }
+  },
+  "executions": [
+    {
+      "command": "python -m pytest HSWM/prom_search_hswm/test_hswm_open_composition.py HSWM/prom_search_hswm/test_hswm_field_algebra.py -q",
+      "exit_code": 127,
+      "stdout": "",
+      "stderr": "zsh:1: command not found: python",
+      "classification": "environment_command_unavailable_before_test_collection"
+    },
+    {
+      "command": "python3 -m pytest HSWM/prom_search_hswm/test_hswm_open_composition.py HSWM/prom_search_hswm/test_hswm_field_algebra.py -q",
+      "exit_code": 0,
+      "stdout": "31 passed in 0.04s",
+      "stderr": "",
+      "wall_time_seconds": 0.0687165,
+      "classification": "environment-equivalent interpreter retry"
+    }
+  ],
+  "post_acceptance_validation": [
+    {
+      "command": "jq empty HSWM/prom_search_hswm/evidence/PREREG_hswm_open_composition_20260722.json HSWM/prom_search_hswm/evidence/EVIDENCE_hswm_open_composition_20260722.json",
+      "exit_code": 0,
+      "result": "both JSON documents parsed"
+    },
+    {
+      "command": "python3 -m pytest HSWM/prom_search_hswm/test_hswm_b2_crossfield.py HSWM/prom_search_hswm/test_hswm_hypergraph.py HSWM/prom_search_hswm/test_hswm_true_hypergraph.py -q",
+      "exit_code": 0,
+      "stdout": "19 passed in 0.33s",
+      "classification": "adjacent B2 and hypergraph regression"
+    }
+  ],
+  "counts": {
+    "new_test_functions": 18,
+    "new_collected_cases": 21,
+    "legacy_collected_cases": 10,
+    "total_passed": 31,
+    "total_failed": 0,
+    "required_open_composition_laws_passed": 13,
+    "required_open_composition_laws_total": 13,
+    "required_open_composition_laws_pass_rate": 1.0
+  },
+  "invariant_test_map": {
+    "closure": ["test_closure_composite_can_compose_again"],
+    "regrouping": ["test_regrouping_normalizes_to_one_digest"],
+    "empty_identity": ["test_empty_identity", "test_legacy_empty_identity_gap_fails_explicitly"],
+    "no_fixed_depth": ["test_canonical_state_has_no_fixed_layer_or_recursive_children"],
+    "mount_multiplicity": ["test_same_field_may_have_two_distinct_mounts"],
+    "intent_idempotence": ["test_same_mount_same_intent_is_idempotent"],
+    "same_id_conflict_rejection": ["test_same_mount_different_payload_fails_closed", "test_conflicting_connector_intent_fails_closed"],
+    "exported_port_safety": ["test_connector_must_use_an_operand_export"],
+    "finite_nonpositive_weight_domain": ["test_semantic_weight_domain_rejects_noncanonical_values"],
+    "state_preservation": ["test_weights_and_provenance_survive_composition_and_materialization"],
+    "non_mutating_specialization": ["test_specialization_is_non_mutating_and_still_composable"],
+    "separation_recomposition_roundtrip": ["test_separation_recomposition_is_digest_exact"],
+    "compose_materialize_separation": ["test_compose_never_materializes", "test_nary_connector_is_valid_open_state_but_not_silently_materialized", "test_supported_identity_materialization_matches_legacy_quotient"],
+    "mounted_content_drift_rejection": ["test_mounted_field_drift_is_detected"],
+    "legacy_field_algebra_regression": ["HSWM/prom_search_hswm/test_hswm_field_algebra.py: 10 passed"]
+  },
+  "result": {
+    "engineering_acceptance": "PASS",
+    "scientific_progress_verdict": null,
+    "interpretation": "The fixed-depth-free manifest satisfies the preregistered structural laws in this deterministic fixture. This does not establish retrieval improvement, learned MoE routing, or multi-agent transfer."
+  },
+  "unresolved_gates": [
+    "Relation-specific semantic type, role, and polarity compatibility/adaptor registry is not implemented.",
+    "Bounded query readout over cyclic connector graphs is specified but not implemented.",
+    "Agent CONNECT/SEPARATE/SPECIALIZE learning, reward assignment, persistence, retry, and rollback are not implemented.",
+    "B2.1 learned gating and a second-benchmark interference-control measurement remain open.",
+    "Independent LakatoTree progress judgment is pending at receipt freeze time."
+  ]
+}

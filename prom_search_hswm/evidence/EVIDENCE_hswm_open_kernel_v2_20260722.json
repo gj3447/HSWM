@@ -1,0 +1,236 @@
+{
+  "schema": "hswm-engineering-evidence/v2",
+  "status": "FROZEN_AFTER_EXECUTION",
+  "cycle_id": "apt-hswm-open-self-similar-v2-2026-07-22",
+  "tree": "LakatosTree_HSWM_SolidMultiAgent_20260722",
+  "theory_tag": "theory-open-self-similar-hswm-20260722",
+  "implementation_lineage": [
+    "ENG-open-composition-kernel-v2",
+    "ENG-open-composition-kernel-v2r1",
+    "ENG-open-composition-kernel-v2r2",
+    "ENG-open-composition-kernel-v2r3"
+  ],
+  "final_implementation_tag": "ENG-open-composition-kernel-v2r3",
+  "question": "Q-open-composition-kernel-counterexamples-v2",
+  "recorded_at": "2026-07-22T10:39:27Z",
+  "claim_class": "counterexample_repaired_engineering_property_proof_not_scientific_progress",
+  "git": {
+    "head": "6f69cae08570c104d12e1a5e38150930cfb1b804",
+    "worktree_dirty": true,
+    "scope_note": "The shared worktree contains extensive unrelated user/session changes. This receipt covers only the OMD-leased HSWM v2 paths; no broad commit or cleanup was performed."
+  },
+  "omd": {
+    "task": "hswm-open-selfsimilar-composition-v2-20260722",
+    "agent": "codex-root-hswm-open-v2-20260722",
+    "orbit_id": "orb-42ba38915645",
+    "fence": 8,
+    "bail_epoch": 0,
+    "lease_state_at_freeze": "HELD"
+  },
+  "environment": {
+    "os": "Darwin 27.0.0 arm64",
+    "host": "lagyeongjun-ui-Macmini.local",
+    "python3": "3.9.6",
+    "pytest": "8.4.2"
+  },
+  "artifacts": {
+    "spec": {
+      "path": "HSWM/SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md",
+      "sha256": "b49c5d2faa15de11c5e718e1da6d1423a621d09ea68ffc9c5b90b5336aa7af70"
+    },
+    "amendment": {
+      "path": "HSWM/AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md",
+      "sha256": "2de5cd5f6a3d75d84862f1ce757ea415c68773d262c7258a3e1dbb25cd3036fc"
+    },
+    "prereg_v2": {
+      "path": "HSWM/prom_search_hswm/evidence/PREREG_hswm_open_kernel_v2_20260722.json",
+      "sha256": "9ea1c6756e3352cc91988cb316c629b22fabdefebc620162a1595d2dcd0fb9d1"
+    },
+    "implementation": {
+      "path": "HSWM/prom_search_hswm/hswm_open_kernel.py",
+      "sha256": "d916148a6320c08bce0bd45e272efff9df88aab889f53687745732ba3654ede3"
+    },
+    "test": {
+      "path": "HSWM/prom_search_hswm/test_hswm_open_kernel.py",
+      "sha256": "bb1005916616f61af542fc5c0bfea4f229be5df4b43e0b1265184667d4d7f32c"
+    },
+    "v1_implementation": {
+      "path": "HSWM/prom_search_hswm/hswm_open_composition.py",
+      "sha256": "ba92caafc992b2cd22913ba835b61726f9dad730cfd9ac640a2843603bdf866a"
+    },
+    "v1_test": {
+      "path": "HSWM/prom_search_hswm/test_hswm_open_composition.py",
+      "sha256": "f86a7316e57ca41325e586148a6b8cb884559413f0531a59368716deb406e498"
+    },
+    "legacy_implementation": {
+      "path": "HSWM/prom_search_hswm/hswm_field_algebra.py",
+      "sha256": "573de075728aca74965acd945228233e9f736ee96f97dfb7aaa5fee3761cb9ca"
+    },
+    "legacy_test": {
+      "path": "HSWM/prom_search_hswm/test_hswm_field_algebra.py",
+      "sha256": "a7956c000f74f7a74be7495957635f803d5c2bde73d983eab62d44f497c25ffb"
+    }
+  },
+  "prediction_receipts": [
+    {
+      "tag": "ENG-open-composition-kernel-v2",
+      "test_sha": "86e7dcd9ad72d01e41937d4ca36fb287148e6901820a5aa8f677412006925473",
+      "receipt_sha": "f9586196491970898337a918bd57bfc165ca600696875f209474ede5acd2076d",
+      "timing": "registered before first v2 execution"
+    },
+    {
+      "tag": "ENG-open-composition-kernel-v2r1",
+      "test_sha": "1bed5de49681c27d0434591054d05ee4a92ea54c57954c7fb096a4e70569112b",
+      "receipt_sha": "f5edc6b04e1b233c040c0f549f757bff74acbeed932ef452fc17c9fd3fc8dda6",
+      "timing": "registered after an oracle-only correction and before rerun"
+    },
+    {
+      "tag": "ENG-open-composition-kernel-v2r2",
+      "test_sha": "1d06be9035aa2a1cc6c2df19faa48f38aa68cadfe4b49a521753e633ee118ad7",
+      "receipt_sha": "cae3efc26ea60541650609fa0484878623595c4e3aab84aafcad65c77c5cf3ba",
+      "timing": "registered before red and repair execution"
+    },
+    {
+      "tag": "ENG-open-composition-kernel-v2r3",
+      "test_sha": "bb1005916616f61af542fc5c0bfea4f229be5df4b43e0b1265184667d4d7f32c",
+      "receipt_sha": "6fbcf64f46b2037e505027b5928238659ce080cad7f67bb1a01dfb480cd3a278",
+      "timing": "registered after independent red observation but before implementation repair; engineering TDD only, not blind scientific preregistration"
+    }
+  ],
+  "executions": [
+    {
+      "stage": "v2_first_run",
+      "exit_code": 1,
+      "result": "1 failed, 51 passed",
+      "classification": "test oracle contradicted the preregistered mount-multiplicity fail-closed law"
+    },
+    {
+      "stage": "v2r1_oracle_corrected",
+      "exit_code": 0,
+      "result": "52 passed in 0.06s",
+      "classification": "oracle-only correction; no implementation semantic relaxed"
+    },
+    {
+      "stage": "v2r2_frozen_red",
+      "exit_code": 1,
+      "result": "5 failed, 52 passed in 0.11s",
+      "classification": "independent counterexamples reproduced before repair"
+    },
+    {
+      "stage": "v2r2_target_green",
+      "exit_code": 0,
+      "result": "57 passed in 0.05s"
+    },
+    {
+      "stage": "v2r2_expanded_green",
+      "exit_code": 0,
+      "result": "76 passed in 0.22s"
+    },
+    {
+      "stage": "v2r3_independent_red",
+      "exit_code": 1,
+      "result": "2 failed, 76 passed in 0.19s",
+      "classification": "observed before repair prediction; disclosed post-red engineering TDD"
+    },
+    {
+      "stage": "v2r3_target_green",
+      "command": "python3 -m pytest HSWM/prom_search_hswm/test_hswm_open_kernel.py HSWM/prom_search_hswm/test_hswm_open_composition.py HSWM/prom_search_hswm/test_hswm_field_algebra.py -q",
+      "exit_code": 0,
+      "result": "59 passed in 0.05s"
+    },
+    {
+      "stage": "v2r3_expanded_green",
+      "command": "python3 -m pytest HSWM/prom_search_hswm/test_hswm_open_kernel.py HSWM/prom_search_hswm/test_hswm_open_composition.py HSWM/prom_search_hswm/test_hswm_field_algebra.py HSWM/prom_search_hswm/test_hswm_b2_crossfield.py HSWM/prom_search_hswm/test_hswm_hypergraph.py HSWM/prom_search_hswm/test_hswm_true_hypergraph.py -q",
+      "exit_code": 0,
+      "result": "78 passed in 0.16s"
+    },
+    {
+      "stage": "v2r3_independent_post_fix",
+      "exit_code": 0,
+      "target_result": "59 passed in 0.05s",
+      "expanded_result": "78 passed in 0.17s",
+      "classification": "read-only independent counterexample and non-vacuity audit; no blocker found"
+    }
+  ],
+  "counts": {
+    "v2_test_functions": 28,
+    "v1_test_functions": 18,
+    "legacy_test_functions": 10,
+    "target_collected_cases": 59,
+    "expanded_collected_cases": 78,
+    "target_passed": 59,
+    "expanded_passed": 78,
+    "failed": 0
+  },
+  "repair_map": {
+    "injective_mount_qualified_interfaces": [
+      "test_same_local_port_name_is_closed_under_composition",
+      "test_interface_encoding_is_injective_for_delimiter_heavy_ids"
+    ],
+    "factory_and_admission_boundary": [
+      "test_raw_open_hswm_constructor_is_sealed",
+      "test_raw_separation_receipt_constructor_is_sealed",
+      "test_non_exposed_public_port_cannot_admit_connector"
+    ],
+    "deep_immutable_snapshot": [
+      "test_caller_field_mutation_cannot_change_snapshot",
+      "test_snapshot_rejects_mutable_nested_seam_payload",
+      "test_snapshot_rejects_mutable_nested_edge_cluster",
+      "test_snapshot_defensively_copies_valid_seam_records",
+      "test_operand_order_never_selects_a_live_mutable_alias"
+    ],
+    "structured_separation_and_isolated_vertices": [
+      "test_separation_uses_structured_receipt_not_synthetic_boundary_ids",
+      "test_materializer_preserves_isolated_vertices",
+      "test_vertex_conflict_is_grouping_and_order_independent"
+    ],
+    "provenance_and_shared_edge_capabilities": [
+      "test_empty_edge_provenance_is_rejected_at_capture",
+      "test_edge_overlap_requires_explicit_shared_capability",
+      "test_declared_shared_edge_requires_equal_weight",
+      "test_declared_shared_edge_requires_equal_payload"
+    ],
+    "role_preserving_safe_materialization": [
+      "test_supported_identity_materialization_matches_legacy",
+      "test_identity_materialization_rejects_unadapted_endpoint_roles",
+      "test_identity_materialization_maps_vertices_by_endpoint_role",
+      "test_identity_materialization_rejects_distinct_ports_on_same_vertex",
+      "test_nary_connector_never_silently_binary_materializes"
+    ],
+    "runtime_compatibility": [
+      "test_public_api_type_hints_resolve_on_python39"
+    ],
+    "open_normal_form_boundary": [
+      "test_composite_can_compose_again_and_regroup",
+      "test_mount_multiplicity_is_preserved_but_legacy_quotient_rejects",
+      "test_specialization_is_immutable_and_recomposable",
+      "test_compose_does_not_call_any_materializer",
+      "test_empty_is_identity_but_has_no_legacy_materialization"
+    ]
+  },
+  "independent_review": {
+    "reviewer": "hswm_v2_review",
+    "mode": "read_only_counterexample_audit",
+    "final_verdict": "no blocker found in v2r3 audit scope",
+    "direct_probes": [
+      "mutable member rejected",
+      "mutable cluster rejected",
+      "both same-vertex role assignments rejected",
+      "38 public type-hint targets resolved on Python 3.9.6",
+      "source seam mutation did not alter snapshot or fresh outputs"
+    ],
+    "portability_caveat": "The get_type_hints regression is proven on Python 3.9.6; a future matrix containing only Python 3.10+ would not exercise the same parser/evaluator behavior."
+  },
+  "result": {
+    "engineering_acceptance": "PASS",
+    "scientific_progress_verdict": null,
+    "interpretation": "The v2r3 deterministic kernel closes the discovered structural, immutability, identity-role, and runtime-compatibility counterexamples while preserving v1, B0, B2, and adjacent hypergraph fixtures. This does not establish learned routing, retrieval gain, or multi-agent transfer."
+  },
+  "unresolved_gates": [
+    "Relation-specific semantic type, role, polarity compatibility and adapter registry remain unimplemented beyond the exact legacy canonical_identity left/right subset.",
+    "Bounded query readout over cyclic connector graphs remains specified but unimplemented.",
+    "Agent CONNECT/SEPARATE/SPECIALIZE learning, reward assignment, persistence, concurrency, retry, and rollback remain unimplemented.",
+    "B2.1 learned gating, interference control, and second-benchmark multi-agent transfer measurement remain open.",
+    "Independent LakatoTree progress judgment is pending at evidence freeze time."
+  ]
+}

@@ -1,0 +1,41 @@
+{
+ "schema": "hswm-diagnostic/v1",
+ "kind": "DIAGNOSTIC_NO_CLAIM",
+ "purpose": "PROM-8 R4 oracle headroom precondition for the L5 gate experiment",
+ "base_experiment": "EVIDENCE_b2_crossfield_merge_20260722.json (seed/params identical)",
+ "per_class": {
+  "cross_field": {
+   "n": 234,
+   "merged": 0.688034,
+   "best_single": 0.474359,
+   "oracle": 0.696581,
+   "route_pref": {
+    "merged": 123,
+    "single": 7,
+    "tie": 104
+   }
+  },
+  "in_field": {
+   "n": 166,
+   "merged": 0.75753,
+   "best_single": 0.822289,
+   "oracle": 0.822289,
+   "route_pref": {
+    "merged": 0,
+    "single": 23,
+    "tie": 143
+   }
+  }
+ },
+ "oracle_headroom": {
+  "in_field_recovery_vs_merged": 0.064759,
+  "in_field_oracle_vs_best_single": 0.0,
+  "cross_field_retention_vs_merged": 0.008547
+ },
+ "signal_check": {
+  "auc_affinity_margin_single_vs_merged_pref": 0.5377,
+  "auc_top1_gap_single_vs_merged_pref": 0.5707,
+  "a4_kill_threshold_note": "A4 조사 kill: AUC<0.75면 무학습 신호 약함 → 학습형(B안)행"
+ },
+ "note": "oracle=질의별 사후 최적 route. 정의상 in-field는 best_single 이상, cross-field는 merged 이상 — 관건은 실현가능 신호의 분리도(AUC)."
+}

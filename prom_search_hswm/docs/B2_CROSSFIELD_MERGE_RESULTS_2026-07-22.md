@@ -32,3 +32,11 @@
 - **B2.1 간섭 통제**: merged 큰 場 + in-field 질의 손해 복구 (learned gate / certified per-query field 선택). L5 회복이 망 배포의 관문.
 - **B2.2 외부 타당도**: 2번째 벤치 + seed sweep (prereg scope에 명시 유보).
 - **B3**: continual topology 흡수 재도전은 T1 RED 이후 ML lane 선결.
+
+## 부록: R4 oracle headroom 진단 (2026-07-22, DIAGNOSTIC_NO_CLAIM)
+
+`b2_oracle_headroom.py` — 판정 하니스 무수정, 동일 seed 결정론 재계산. 영수증 `evidence/DIAG_b2_oracle_headroom_20260722.json`.
+
+1. **merge는 결함이 아니다 — 완벽 게이트는 L5를 전액 복구**: oracle(질의별 최적 route)은 in-field 0.822(=best_single 그대로, −6.5pt 전액 회복) + cross-field 0.697(merged 0.688보다 오히려 +0.009). 게이트 방향 생존 확정.
+2. **결정 구조가 극도로 유리**: in-field에서 merged가 이기는 질의 **0/166** (single 23승, tie 143) / cross-field에선 merged 123승 vs single 7승. 즉 게이트는 질의별 승자가 아니라 **"이 질의 gold가 두 場에 걸치나"(class)만 맞히면 사실상 oracle 도달**.
+3. **단 값싼 신호 2종은 사망**: top-1 기반 affinity-margin AUC 0.538 / top1-gap AUC 0.571 — A4 kill 기준(0.75) 크게 미달. A안(무학습)의 crude 신호는 기각. 남은 순서 = ReDDE/CORI식 top-k 분포 affinity 1회 시도 → 미달 시 **B안(train-only 학습형 + Mondrian conformal, leave-field-out 전이 증명)** 직행.

@@ -1,0 +1,49 @@
+{
+  "schema": "hswm-engineering-prereg/v1",
+  "status": "FROZEN_BEFORE_EXECUTION",
+  "cycle_id": "apt-hswm-open-self-similar-2026-07-22",
+  "tree": "LakatosTree_HSWM_SolidMultiAgent_20260722",
+  "theory_tag": "theory-open-self-similar-hswm-20260722",
+  "implementation_tag": "ENG-open-composition-kernel-v1",
+  "question": "Q-open-composition-kernel-closure",
+  "frozen_at": "2026-07-22T00:00:00+09:00",
+  "claim_class": "engineering_property_proof_not_scientific_progress",
+  "hypothesis": "A fixed-depth-free OpenHSWM value is closed under finite composition; regrouping normalizes to one digest; compose preserves mount, port, connector, weight, provenance, and identity state without materializing a legacy Field.",
+  "command": "python -m pytest HSWM/prom_search_hswm/test_hswm_open_composition.py HSWM/prom_search_hswm/test_hswm_field_algebra.py -q",
+  "acceptance": {
+    "minimum_new_tests": 10,
+    "exit_code": 0,
+    "failures": 0,
+    "required_laws": [
+      "closure",
+      "regrouping",
+      "empty_identity",
+      "no_fixed_depth",
+      "mount_multiplicity",
+      "intent_idempotence",
+      "same_id_conflict_rejection",
+      "exported_port_safety",
+      "finite_nonpositive_weight_domain",
+      "non_mutating_specialization",
+      "separation_recomposition_roundtrip",
+      "compose_materialize_separation",
+      "legacy_field_algebra_regression"
+    ]
+  },
+  "falsifiers": [
+    "Regrouping changes semantic_digest.",
+    "A composite cannot be composed again through the same OpenHSWM API.",
+    "compose invokes or returns the legacy materialized Field.",
+    "Two mount ids for one field digest collapse to one mount.",
+    "A connector can address a non-exported or missing port.",
+    "NaN, infinity, or positive log-salience is accepted.",
+    "Separation plus recomposition does not recover the source digest.",
+    "Unsupported n-ary materialization silently loses endpoints.",
+    "Existing B0 field algebra tests regress."
+  ],
+  "non_claims": [
+    "No retrieval-quality improvement is claimed.",
+    "No learned routing or agent policy is implemented.",
+    "No Lakatos progressive verdict may be inferred from property-test success."
+  ]
+}

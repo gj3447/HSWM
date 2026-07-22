@@ -1,0 +1,39 @@
+{
+  "schema": "hswm-injected-negative-execution/v1",
+  "status": "FROZEN_AFTER_EXECUTION",
+  "recorded_at": "2026-07-22T10:48:30Z",
+  "tree": "LakatosTree_HSWM_SolidMultiAgent_20260722",
+  "tag": "ENG-open-composition-kernel-v2r3",
+  "working_directory": "/Users/lagyeongjun/CD/SYMPOSIUM",
+  "command": "python3 -m pytest HSWM/prom_search_hswm/test_hswm_open_kernel.py::test_snapshot_rejects_mutable_nested_edge_cluster HSWM/prom_search_hswm/test_hswm_open_kernel.py::test_identity_materialization_rejects_distinct_ports_on_same_vertex -q",
+  "exit_code": 0,
+  "stdout": "2 passed in 0.02s",
+  "stderr": "",
+  "wall_time_seconds": 0.005595334,
+  "runtime": {
+    "python3": "3.9.6",
+    "pytest": "8.4.2"
+  },
+  "injections": [
+    {
+      "test": "test_snapshot_rejects_mutable_nested_edge_cluster",
+      "input": "A legacy Hyperedge cluster contains a caller-owned nested mutable list.",
+      "required_response": "Frozen snapshot capture raises ValueError before retaining the nested value."
+    },
+    {
+      "test": "test_identity_materialization_rejects_distinct_ports_on_same_vertex",
+      "input": "Two distinct role-bearing PortAddress values resolve to one legacy vertex under both left-right assignments.",
+      "required_response": "Legacy materialization raises UnsupportedMaterialization for both assignments."
+    }
+  ],
+  "artifacts": {
+    "test_script": {
+      "path": "HSWM/prom_search_hswm/test_hswm_open_kernel.py",
+      "sha256": "bb1005916616f61af542fc5c0bfea4f229be5df4b43e0b1265184667d4d7f32c"
+    },
+    "implementation": {
+      "path": "HSWM/prom_search_hswm/hswm_open_kernel.py",
+      "sha256": "d916148a6320c08bce0bd45e272efff9df88aab889f53687745732ba3654ede3"
+    }
+  }
+}

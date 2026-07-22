@@ -1,0 +1,84 @@
+{
+  "schema": "lakato-evidence-record/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "P5-onefield-vs-multiview-hardhop",
+  "node_tag": "P5-onefield-vs-multiview-hardhop",
+  "conjecture": "On 2Wiki questions with four supporting passages, preserving anchor, evidence, and bridge scores as separate views until late readout beats an equal-compute single scalar without materially regressing two-support questions.",
+  "preregistration": {
+    "registered_before_measurement": true,
+    "registered_at": "2026-07-22T04:45:48.222181+00:00",
+    "direction": "higher",
+    "noise_band": 0.02,
+    "predicted": {
+      "metric": "hard4_recall10_multiview_minus_early",
+      "value": 0.0,
+      "unit": "paired proportion delta"
+    },
+    "novel_target": {
+      "metric": "joint_pass_margin",
+      "direction": "higher",
+      "threshold": 0.0
+    },
+    "kill_condition": "hard4 recall@10 gain <= 0, or two-support recall@10 gain < -0.01",
+    "prediction_receipt_sha256": "6d53bf5e9c9d29af8875110d80ca0418ce4edff4e4b003d6058d5a80e119dd67"
+  },
+  "measurement": {
+    "metric": "hard4_recall10_multiview_minus_early",
+    "value": 0.0,
+    "unit": "paired proportion delta",
+    "scope": "2Wiki held-out deterministic sample; four-support rows n=80",
+    "derived": {
+      "joint_pass_margin": -0.0325,
+      "hard4_fullchain20_gain": -0.0125,
+      "support2_recall10_gain": -0.015625,
+      "hard4_bootstrap95_lower": -0.015625,
+      "hard4_bootstrap95_upper": 0.015625
+    },
+    "raw_record_path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/EVIDENCE_p5_multiview_hardhop_20260722.json",
+    "raw_record_sha256": "b09137494b3d2b07f2a3a589dccc17e77a04359f27fa751ad4bc124a0dcc08b6"
+  },
+  "provenance": {
+    "grounded": true,
+    "inputs": [
+      {
+        "name": "2WikiMultihopQA validation JSONL",
+        "source": "/Volumes/GM/bench/2wiki_dev.jsonl",
+        "sha256": "c219e4bff85c2722bb03cb94b33653646e8f944473e1da800c5883d5ead5d8e7"
+      },
+      {
+        "name": "frozen measurement harness",
+        "source": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/prom_p5_multiview_hardhop.py",
+        "sha256": "225b7467ff0ca2cfe26e248a234af1e6022cd9d1b8eb6cef74640d54339f12aa"
+      },
+      {
+        "name": "raw evidence record",
+        "source": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/EVIDENCE_p5_multiview_hardhop_20260722.json",
+        "sha256": "b09137494b3d2b07f2a3a589dccc17e77a04359f27fa751ad4bc124a0dcc08b6"
+      }
+    ],
+    "data_manifest": {
+      "selected_rows": 400,
+      "selected_ids_sha256": "5cb76c9944b053718d26f1eaa080603cdbe3c29b2d8cb837d6ce8f992f10146e",
+      "seed": 7331,
+      "equal_compute_verified": true
+    }
+  },
+  "harness": {
+    "script": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/prom_p5_multiview_hardhop.py",
+    "script_sha256": "225b7467ff0ca2cfe26e248a234af1e6022cd9d1b8eb6cef74640d54339f12aa",
+    "command": "/Users/lagyeongjun/CD/bhgman_tool/.venv/bin/python HSWM/prom_search_hswm/prom_p5_multiview_hardhop.py",
+    "cwd": "/Users/lagyeongjun/CD/SYMPOSIUM",
+    "git_head": "f67e64c21a53c3f71a3ef89ad72a04f061a67607",
+    "started_at": "2026-07-22T04:47:12.122737+00:00",
+    "finished_at": "2026-07-22T04:47:33.482483+00:00",
+    "exit_code": 0
+  },
+  "findings": [
+    {
+      "proposal": "The fixed cheap query-routing late-fusion arm should not replace the equal-compute early scalar."
+    },
+    {
+      "proposal": "A learned multi-view gate, direct-edge deletion, and private-ID stress test remain distinct untested mechanisms."
+    }
+  ]
+}

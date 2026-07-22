@@ -1,0 +1,27 @@
+{
+  "schema": "lakato-preregister-response/v1",
+  "register_result": {
+    "ok": true,
+    "note": "예측 사전등록 완료 — 이제 실험을 실행하고 test_result 를 스크립트로 제출"
+  },
+  "authoritative_readback": {
+    "head": "047823fa05ea4b3ed521c449728654f112584ea1ce792b6bd0f0ac6f34e6d943",
+    "receipt_kind": "prediction",
+    "receipt_sha": "047823fa05ea4b3ed521c449728654f112584ea1ce792b6bd0f0ac6f34e6d943",
+    "prev_receipt_sha": null,
+    "metric_name": "sealed_final_unseen_query_recall10_active_minus_frozen",
+    "direction": "higher",
+    "baseline_value": 0.0,
+    "noise_band": 0.01,
+    "scale_type": "ratio",
+    "novel_metric": "joint_promotion_and_final_gain_margin",
+    "novel_direction": "higher",
+    "novel_threshold": 0.0,
+    "judge_script_sha": "43055692a19140e47d872595cae42a78ed1b2956da771733984d0179e6a65123",
+    "closes_question": "Q-continual-absorption-fsm-unseen",
+    "credence": 0.35,
+    "registered_at": "2026-07-22T06:35:50.482965+00:00",
+    "tree": "LakatosTree_PromSearchHSWM_20260721",
+    "tag": "P6-continual-absorption-fsm-unseen-r2"
+  }
+}

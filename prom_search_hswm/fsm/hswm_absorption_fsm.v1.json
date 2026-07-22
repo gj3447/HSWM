@@ -1,0 +1,136 @@
+{
+  "schema_version": "fsm-spec/v1",
+  "name": "hswm-immutable-absorption-candidate",
+  "execution": {
+    "step_interface": "step(configuration, typed_event) -> next_configuration, effect_commands",
+    "event_queue": "One durable FIFO stream per immutable candidate; a single sequencer assigns seq and retries missing events.",
+    "run_to_completion": "One event envelope is checked, one transition is selected, context is reduced, and commands are emitted before the next event.",
+    "action_order": "Validate envelope and deduplicate, select the lowest-priority enabled transition, compute the next immutable configuration, then emit typed commands."
+  },
+  "context_schema": {
+    "candidate_id": {"type": "string"},
+    "candidate_hash": {"type": "string"},
+    "evaluated_candidate_hash": {"type": "string"},
+    "base_version": {"type": "string"},
+    "rollback_target_hash": {"type": "string"},
+    "absorbed_count": {"type": "non-negative integer"},
+    "expected_seq": {"type": "non-negative integer"},
+    "canary_windows_passed": {"type": "non-negative integer"},
+    "required_canary_windows": {"type": "positive integer"},
+    "policy_min_unseen_gain": {"type": "number"},
+    "policy_max_retention_drop": {"type": "number"},
+    "implementer_id": {"type": "actor-id"},
+    "evaluator_id": {"type": "actor-id"}
+  },
+  "event_schemas": {
+    "ABSORB": {"type": "object", "required": ["candidate_id", "actor", "event_id", "seq", "source_manifest_hash"], "properties": {"candidate_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}, "seq": {"type": "non-negative integer"}, "source_manifest_hash": {"type": "string"}}},
+    "FREEZE": {"type": "object", "required": ["candidate_id", "actor", "event_id", "seq", "candidate_hash", "prereg_hash", "split_manifest_hash"], "properties": {"candidate_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}, "seq": {"type": "non-negative integer"}, "candidate_hash": {"type": "string"}, "prereg_hash": {"type": "string"}, "split_manifest_hash": {"type": "string"}}},
+    "START_EVALUATION": {"type": "object", "required": ["candidate_id", "actor", "event_id", "seq", "candidate_hash", "holdout_epoch", "fresh_holdout", "evaluator_id"], "properties": {"candidate_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}, "seq": {"type": "non-negative integer"}, "candidate_hash": {"type": "string"}, "holdout_epoch": {"type": "string"}, "fresh_holdout": {"type": "boolean"}, "evaluator_id": {"type": "actor-id"}}},
+    "EVALUATION_RECORDED": {"type": "object", "required": ["candidate_id", "actor", "event_id", "seq", "candidate_hash", "evidence_hash", "evidence_replayed", "equal_budget", "no_overlap", "unseen_delta", "unseen_ci_low", "retention_delta", "independent_evaluator", "reason"], "properties": {"candidate_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}, "seq": {"type": "non-negative integer"}, "candidate_hash": {"type": "string"}, "evidence_hash": {"type": "string"}, "evidence_replayed": {"type": "boolean"}, "equal_budget": {"type": "boolean"}, "no_overlap": {"type": "boolean"}, "unseen_delta": {"type": "number"}, "unseen_ci_low": {"type": "number"}, "retention_delta": {"type": "number"}, "independent_evaluator": {"type": "boolean"}, "reason": {"type": "string"}}},
+    "CANARY_OBSERVATION": {"type": "object", "required": ["candidate_id", "actor", "event_id", "seq", "window_id", "no_regression", "equal_budget"], "properties": {"candidate_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}, "seq": {"type": "non-negative integer"}, "window_id": {"type": "string"}, "no_regression": {"type": "boolean"}, "equal_budget": {"type": "boolean"}}},
+    "CANARY_FAILED": {"type": "object", "required": ["candidate_id", "actor", "event_id", "seq", "reason"], "properties": {"candidate_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}, "seq": {"type": "non-negative integer"}, "reason": {"type": "string"}}},
+    "REQUEST_PROMOTION": {"type": "object", "required": ["candidate_id", "actor", "event_id", "seq", "request_id"], "properties": {"candidate_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}, "seq": {"type": "non-negative integer"}, "request_id": {"type": "string"}}},
+    "ACTIVATION_COMMITTED": {"type": "object", "required": ["candidate_id", "actor", "event_id", "seq", "candidate_hash", "base_version", "receipt_hash"], "properties": {"candidate_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}, "seq": {"type": "non-negative integer"}, "candidate_hash": {"type": "string"}, "base_version": {"type": "string"}, "receipt_hash": {"type": "string"}}},
+    "ACTIVATION_FAILED": {"type": "object", "required": ["candidate_id", "actor", "event_id", "seq", "failure_class", "reason"], "properties": {"candidate_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}, "seq": {"type": "non-negative integer"}, "failure_class": {"type": "string"}, "reason": {"type": "string"}}},
+    "REGRESSION_DETECTED": {"type": "object", "required": ["candidate_id", "actor", "event_id", "seq", "confirmed", "reason"], "properties": {"candidate_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}, "seq": {"type": "non-negative integer"}, "confirmed": {"type": "boolean"}, "reason": {"type": "string"}}},
+    "ROLLBACK_COMMITTED": {"type": "object", "required": ["candidate_id", "actor", "event_id", "seq", "rollback_target_hash", "receipt_hash"], "properties": {"candidate_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}, "seq": {"type": "non-negative integer"}, "rollback_target_hash": {"type": "string"}, "receipt_hash": {"type": "string"}}},
+    "ROLLBACK_FAILED": {"type": "object", "required": ["candidate_id", "actor", "event_id", "seq", "reason"], "properties": {"candidate_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}, "seq": {"type": "non-negative integer"}, "reason": {"type": "string"}}},
+    "SUPERSESSION_COMMITTED": {"type": "object", "required": ["candidate_id", "actor", "event_id", "seq", "successor_hash", "receipt_hash"], "properties": {"candidate_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}, "seq": {"type": "non-negative integer"}, "successor_hash": {"type": "string"}, "receipt_hash": {"type": "string"}}}
+  },
+  "guards": {
+    "freeze_allowed": {"reads": ["absorbed_count"], "event_reads": ["candidate_hash", "prereg_hash", "split_manifest_hash"], "pure": true, "synchronous": true},
+    "evaluation_allowed": {"reads": ["candidate_hash", "implementer_id"], "event_reads": ["candidate_hash", "fresh_holdout", "evaluator_id"], "pure": true, "synchronous": true},
+    "evidence_invalid": {"reads": ["candidate_hash"], "event_reads": ["candidate_hash", "evidence_hash", "evidence_replayed", "equal_budget", "no_overlap", "independent_evaluator"], "pure": true, "synchronous": true},
+    "promotion_allowed": {"reads": ["candidate_hash", "policy_min_unseen_gain", "policy_max_retention_drop"], "event_reads": ["candidate_hash", "evidence_replayed", "equal_budget", "no_overlap", "unseen_delta", "unseen_ci_low", "retention_delta", "independent_evaluator"], "pure": true, "synchronous": true},
+    "evaluation_rejected": {"reads": ["candidate_hash", "policy_min_unseen_gain", "policy_max_retention_drop"], "event_reads": ["candidate_hash", "evidence_replayed", "equal_budget", "no_overlap", "unseen_delta", "unseen_ci_low", "retention_delta", "independent_evaluator"], "pure": true, "synchronous": true},
+    "canary_observation_pass": {"reads": [], "event_reads": ["no_regression", "equal_budget"], "pure": true, "synchronous": true},
+    "canary_complete": {"reads": ["canary_windows_passed", "required_canary_windows"], "event_reads": [], "pure": true, "synchronous": true},
+    "activation_receipt_matches": {"reads": ["candidate_hash", "base_version"], "event_reads": ["candidate_hash", "base_version", "receipt_hash"], "pure": true, "synchronous": true},
+    "activation_transient": {"reads": [], "event_reads": ["failure_class"], "pure": true, "synchronous": true},
+    "activation_stale": {"reads": [], "event_reads": ["failure_class"], "pure": true, "synchronous": true},
+    "regression_confirmed": {"reads": [], "event_reads": ["confirmed"], "pure": true, "synchronous": true},
+    "rollback_receipt_matches": {"reads": ["rollback_target_hash"], "event_reads": ["rollback_target_hash", "receipt_hash"], "pure": true, "synchronous": true},
+    "supersession_receipt_matches": {"reads": [], "event_reads": ["successor_hash", "receipt_hash"], "pure": true, "synchronous": true}
+  },
+  "effects": {
+    "RecordAbsorption": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "event_id", "source_manifest_hash"], "properties": {"candidate_id": {"type": "string"}, "event_id": {"type": "string"}, "source_manifest_hash": {"type": "string"}}}},
+    "FreezeCandidate": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "candidate_hash"], "properties": {"candidate_id": {"type": "string"}, "candidate_hash": {"type": "string"}}}},
+    "RunEvaluation": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "candidate_hash", "holdout_epoch"], "properties": {"candidate_id": {"type": "string"}, "candidate_hash": {"type": "string"}, "holdout_epoch": {"type": "string"}}}},
+    "RecordEvaluationPass": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "evidence_hash"], "properties": {"candidate_id": {"type": "string"}, "evidence_hash": {"type": "string"}}}},
+    "RecordRejection": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "reason"], "properties": {"candidate_id": {"type": "string"}, "reason": {"type": "string"}}}},
+    "QuarantineCandidate": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "reason"], "properties": {"candidate_id": {"type": "string"}, "reason": {"type": "string"}}}},
+    "RecordCanary": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "window_id"], "properties": {"candidate_id": {"type": "string"}, "window_id": {"type": "string"}}}},
+    "RequestActivation": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "request_id"], "properties": {"candidate_id": {"type": "string"}, "request_id": {"type": "string"}}}},
+    "RecordActivation": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "receipt_hash"], "properties": {"candidate_id": {"type": "string"}, "receipt_hash": {"type": "string"}}}},
+    "RecordActivationFailure": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "reason"], "properties": {"candidate_id": {"type": "string"}, "reason": {"type": "string"}}}},
+    "RequestRollback": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "reason"], "properties": {"candidate_id": {"type": "string"}, "reason": {"type": "string"}}}},
+    "RecordRollback": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "receipt_hash"], "properties": {"candidate_id": {"type": "string"}, "receipt_hash": {"type": "string"}}}},
+    "RecordRollbackFailure": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "reason"], "properties": {"candidate_id": {"type": "string"}, "reason": {"type": "string"}}}},
+    "RecordSupersession": {"kind": "command", "payload_schema": {"type": "object", "required": ["candidate_id", "receipt_hash"], "properties": {"candidate_id": {"type": "string"}, "receipt_hash": {"type": "string"}}}},
+    "AuditInvalidTransition": {"kind": "audit", "payload_schema": {"type": "object", "required": ["state", "event", "actor", "reason", "event_id"], "properties": {"state": {"type": "string"}, "event": {"type": "string"}, "actor": {"type": "actor-id"}, "reason": {"type": "string"}, "event_id": {"type": "string"}}}}
+  },
+  "machines": [
+    {
+      "id": "candidate_lifecycle",
+      "initial": "collecting",
+      "states": [
+        {"id": "collecting", "kind": "atomic"},
+        {"id": "frozen", "kind": "atomic"},
+        {"id": "evaluating", "kind": "atomic"},
+        {"id": "canary", "kind": "atomic"},
+        {"id": "promotion_pending", "kind": "atomic"},
+        {"id": "active", "kind": "atomic"},
+        {"id": "rollback_pending", "kind": "atomic"},
+        {"id": "rejected", "kind": "final"},
+        {"id": "quarantined", "kind": "final"},
+        {"id": "rolled_back", "kind": "final"},
+        {"id": "superseded", "kind": "final"}
+      ],
+      "events": ["ABSORB", "FREEZE", "START_EVALUATION", "EVALUATION_RECORDED", "CANARY_OBSERVATION", "CANARY_FAILED", "REQUEST_PROMOTION", "ACTIVATION_COMMITTED", "ACTIVATION_FAILED", "REGRESSION_DETECTED", "ROLLBACK_COMMITTED", "ROLLBACK_FAILED", "SUPERSESSION_COMMITTED"],
+      "invalid_event_policy": {
+        "mode": "reject-and-audit",
+        "guard_false": "reject-and-audit",
+        "state_change": "none",
+        "effect": "AuditInvalidTransition",
+        "effect_binding": {"state": "configuration.state", "event": "event.type", "actor": "event.actor", "reason": "rejection.reason", "event_id": "event.event_id"}
+      },
+      "transitions": [
+        {"id": "absorb", "from": "collecting", "event": "ABSORB", "to": "collecting", "effects": ["RecordAbsorption"], "effect_bindings": {"RecordAbsorption": {"candidate_id": "event.candidate_id", "event_id": "event.event_id", "source_manifest_hash": "event.source_manifest_hash"}}},
+        {"id": "freeze", "from": "collecting", "event": "FREEZE", "to": "frozen", "guard": "freeze_allowed", "effects": ["FreezeCandidate"], "effect_bindings": {"FreezeCandidate": {"candidate_id": "event.candidate_id", "candidate_hash": "event.candidate_hash"}}},
+        {"id": "start_evaluation", "from": "frozen", "event": "START_EVALUATION", "to": "evaluating", "guard": "evaluation_allowed", "effects": ["RunEvaluation"], "effect_bindings": {"RunEvaluation": {"candidate_id": "event.candidate_id", "candidate_hash": "event.candidate_hash", "holdout_epoch": "event.holdout_epoch"}}},
+        {"id": "quarantine_invalid_evidence", "from": "evaluating", "event": "EVALUATION_RECORDED", "to": "quarantined", "guard": "evidence_invalid", "priority": 1, "effects": ["QuarantineCandidate"], "effect_bindings": {"QuarantineCandidate": {"candidate_id": "event.candidate_id", "reason": "event.reason"}}},
+        {"id": "evaluation_pass", "from": "evaluating", "event": "EVALUATION_RECORDED", "to": "canary", "guard": "promotion_allowed", "priority": 2, "effects": ["RecordEvaluationPass"], "effect_bindings": {"RecordEvaluationPass": {"candidate_id": "event.candidate_id", "evidence_hash": "event.evidence_hash"}}},
+        {"id": "evaluation_reject", "from": "evaluating", "event": "EVALUATION_RECORDED", "to": "rejected", "guard": "evaluation_rejected", "priority": 3, "effects": ["RecordRejection"], "effect_bindings": {"RecordRejection": {"candidate_id": "event.candidate_id", "reason": "event.reason"}}},
+        {"id": "canary_observation", "from": "canary", "event": "CANARY_OBSERVATION", "to": "canary", "guard": "canary_observation_pass", "effects": ["RecordCanary"], "effect_bindings": {"RecordCanary": {"candidate_id": "event.candidate_id", "window_id": "event.window_id"}}},
+        {"id": "canary_failed", "from": "canary", "event": "CANARY_FAILED", "to": "rejected", "effects": ["RecordRejection"], "effect_bindings": {"RecordRejection": {"candidate_id": "event.candidate_id", "reason": "event.reason"}}},
+        {"id": "request_promotion", "from": "canary", "event": "REQUEST_PROMOTION", "to": "promotion_pending", "guard": "canary_complete", "effects": ["RequestActivation"], "effect_bindings": {"RequestActivation": {"candidate_id": "event.candidate_id", "request_id": "event.request_id"}}},
+        {"id": "activation_committed", "from": "promotion_pending", "event": "ACTIVATION_COMMITTED", "to": "active", "guard": "activation_receipt_matches", "effects": ["RecordActivation"], "effect_bindings": {"RecordActivation": {"candidate_id": "event.candidate_id", "receipt_hash": "event.receipt_hash"}}},
+        {"id": "activation_retry", "from": "promotion_pending", "event": "ACTIVATION_FAILED", "to": "canary", "guard": "activation_transient", "priority": 1, "effects": ["RecordActivationFailure"], "effect_bindings": {"RecordActivationFailure": {"candidate_id": "event.candidate_id", "reason": "event.reason"}}},
+        {"id": "activation_stale_reject", "from": "promotion_pending", "event": "ACTIVATION_FAILED", "to": "rejected", "guard": "activation_stale", "priority": 2, "effects": ["RecordRejection"], "effect_bindings": {"RecordRejection": {"candidate_id": "event.candidate_id", "reason": "event.reason"}}},
+        {"id": "regression_to_rollback", "from": "active", "event": "REGRESSION_DETECTED", "to": "rollback_pending", "guard": "regression_confirmed", "effects": ["RequestRollback"], "effect_bindings": {"RequestRollback": {"candidate_id": "event.candidate_id", "reason": "event.reason"}}},
+        {"id": "active_superseded", "from": "active", "event": "SUPERSESSION_COMMITTED", "to": "superseded", "guard": "supersession_receipt_matches", "effects": ["RecordSupersession"], "effect_bindings": {"RecordSupersession": {"candidate_id": "event.candidate_id", "receipt_hash": "event.receipt_hash"}}},
+        {"id": "rollback_committed", "from": "rollback_pending", "event": "ROLLBACK_COMMITTED", "to": "rolled_back", "guard": "rollback_receipt_matches", "effects": ["RecordRollback"], "effect_bindings": {"RecordRollback": {"candidate_id": "event.candidate_id", "receipt_hash": "event.receipt_hash"}}},
+        {"id": "rollback_retry", "from": "rollback_pending", "event": "ROLLBACK_FAILED", "to": "rollback_pending", "effects": ["RecordRollbackFailure"], "effect_bindings": {"RecordRollbackFailure": {"candidate_id": "event.candidate_id", "reason": "event.reason"}}},
+        {"id": "rollback_superseded", "from": "rollback_pending", "event": "SUPERSESSION_COMMITTED", "to": "superseded", "guard": "supersession_receipt_matches", "effects": ["RecordSupersession"], "effect_bindings": {"RecordSupersession": {"candidate_id": "event.candidate_id", "receipt_hash": "event.receipt_hash"}}}
+      ]
+    }
+  ],
+  "safety_properties": [
+    {"id": "immutable-after-freeze", "statement": "A frozen or evaluated candidate hash never changes; all later observations create a new candidate.", "verification": "Reducer immutability tests and candidate-hash differential replay."},
+    {"id": "no-promotion-without-unseen-gain", "statement": "A candidate cannot reach active unless fresh unseen-query gain clears the preregistered floor with CI lower greater than zero and retention/evidence guards pass.", "verification": "Guard truth table, memorization-only trace, and production reducer conformance tests."},
+    {"id": "idempotent-ordered-events", "statement": "Exact duplicate, conflicting duplicate, and reordered events never mutate candidate state or apply an effect twice.", "verification": "Fault-injection tests over event_id, payload hash, and seq."},
+    {"id": "exact-rollback", "statement": "Rollback is a CAS to a prior immutable content-addressed artifact, never an inverse weight mutation.", "verification": "Rollback receipt matching and stale-successor trace."},
+    {"id": "old-fsm-authorizes-fsm-change", "statement": "A candidate whose change class is fsm is evaluated and activated by the currently active FSM, never by itself.", "verification": "Shadow differential replay and activation authority integration test before any FSM-class deployment."}
+  ],
+  "liveness_properties": [
+    {"id": "eventual-candidate-decision", "statement": "A valid frozen candidate eventually reaches canary, rejected, or quarantined.", "assumptions": ["The external evaluator eventually returns one evidence receipt and the durable sequencer retransmits missing events."], "verification": "Bounded trace exploration over evaluation outcomes."},
+    {"id": "eventual-activation-outcome", "statement": "An eligible canary eventually becomes active or records an explicit activation failure.", "assumptions": ["The active-pointer registry eventually returns a CAS receipt or typed failure."], "verification": "Activation success, transient failure, and stale-base traces."},
+    {"id": "eventual-safe-rollback", "statement": "A confirmed active regression eventually becomes rolled_back or superseded.", "assumptions": ["A prior known-good artifact exists and the registry eventually answers rollback or successor CAS requests."], "verification": "Rollback retry, success, and concurrent supersession traces."}
+  ],
+  "trace_fixtures": ["fsm/hswm_absorption_fsm.traces.json"],
+  "conformance": {
+    "implementation_step": "HSWM/prom_search_hswm/hswm_absorption_fsm.py:step binds the declared pure guards and command names.",
+    "model_trace_runner": "fsm-design/scripts/run_fsm_traces.py executes the abstract fixtures with explicit guard outcomes.",
+    "contract_tests": "test_hswm_absorption_fsm.py runs each production transition plus guard-false, invalid, duplicate, tamper, reorder, promotion, and rollback properties."
+  }
+}

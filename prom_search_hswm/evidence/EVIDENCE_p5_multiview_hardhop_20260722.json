@@ -1,0 +1,168 @@
+{
+  "schema": "lakato-evidence-record/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "P5-onefield-vs-multiview-hardhop",
+  "conjecture": "On 2Wiki questions with four supporting passages, preserving anchor, evidence, and bridge scores as separate views until late readout beats an equal-compute single scalar without materially regressing two-support questions.",
+  "preregistration": {
+    "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_p5_multiview_hardhop_20260722.json",
+    "registered_at": "2026-07-22T04:45:48.222181+00:00",
+    "registered_before_measurement": true,
+    "prediction_receipt_sha256": "6d53bf5e9c9d29af8875110d80ca0418ce4edff4e4b003d6058d5a80e119dd67",
+    "script_sha256": "225b7467ff0ca2cfe26e248a234af1e6022cd9d1b8eb6cef74640d54339f12aa"
+  },
+  "measurement": {
+    "metric": "hard4_recall10_multiview_minus_early",
+    "value": 0.0,
+    "unit": "paired proportion delta",
+    "scope": "2Wiki held-out deterministic sample; four-support rows n=80",
+    "noise_band": 0.02,
+    "novel_metric": "joint_pass_margin",
+    "novel_value": -0.0325,
+    "subgroups": {
+      "hard4": {
+        "n": 80,
+        "early_recall10": 0.478125,
+        "late_recall10": 0.478125,
+        "recall10_gain": 0.0,
+        "recall10_gain_bootstrap95": [
+          -0.015625,
+          0.015625
+        ],
+        "early_fullchain20": 0.0125,
+        "late_fullchain20": 0.0,
+        "fullchain20_gain": -0.0125
+      },
+      "support2_guardrail": {
+        "n": 320,
+        "early_recall10": 0.795312,
+        "late_recall10": 0.779687,
+        "recall10_gain": -0.015625,
+        "recall10_gain_bootstrap95": [
+          -0.029687,
+          -0.003125
+        ]
+      },
+      "by_dataset_hop_label": {
+        "bridge_comparison": {
+          "n": 80,
+          "early_recall10": 0.478125,
+          "late_recall10": 0.478125,
+          "late_minus_early_recall10": 0.0
+        },
+        "comparison": {
+          "n": 105,
+          "early_recall10": 0.952381,
+          "late_recall10": 0.928571,
+          "late_minus_early_recall10": -0.02381
+        },
+        "compositional": {
+          "n": 173,
+          "early_recall10": 0.705202,
+          "late_recall10": 0.690751,
+          "late_minus_early_recall10": -0.014451
+        },
+        "inference": {
+          "n": 42,
+          "early_recall10": 0.77381,
+          "late_recall10": 0.77381,
+          "late_minus_early_recall10": 0.0
+        }
+      }
+    },
+    "pre_registered_checks": {
+      "hard4_recall_gain_ge_0_03": false,
+      "hard4_fullchain_gain_ge_0_02": false,
+      "support2_regression_ge_minus_0_01": false,
+      "hard4_bootstrap_lower_gt_0": false
+    }
+  },
+  "provenance": {
+    "grounded": true,
+    "inputs": [
+      {
+        "kind": "source",
+        "path": "/Volumes/GM/bench/2wiki_dev.jsonl",
+        "sha256": "c219e4bff85c2722bb03cb94b33653646e8f944473e1da800c5883d5ead5d8e7"
+      },
+      {
+        "kind": "harness",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/prom_p5_multiview_hardhop.py",
+        "sha256": "225b7467ff0ca2cfe26e248a234af1e6022cd9d1b8eb6cef74640d54339f12aa"
+      },
+      {
+        "kind": "preregistration",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_p5_multiview_hardhop_20260722.json",
+        "sha256": "ff4be953e19f9989bbc5117dc32635fae8eac51dd61655bc9cf9f4017c874558"
+      }
+    ],
+    "data_manifest": {
+      "dataset": "2WikiMultihopQA validation JSONL",
+      "dataset_rows": 12576,
+      "selected_rows": 400,
+      "selected_ids_sha256": "5cb76c9944b053718d26f1eaa080603cdbe3c29b2d8cb837d6ce8f992f10146e",
+      "seed": 7331,
+      "pool_documents": 2746,
+      "four_support_rows": 80,
+      "two_support_rows": 320
+    },
+    "equal_compute": {
+      "verified": true,
+      "shared_views": [
+        "title_cosine",
+        "body_cosine",
+        "nary_entity_appnp"
+      ],
+      "scored_query_document_pairs_per_arm": 3295200,
+      "difference_only": "early normalized scalar sum vs weighted reciprocal-rank late readout",
+      "reader_calls": 0
+    }
+  },
+  "harness": {
+    "command": "/Users/lagyeongjun/CD/bhgman_tool/.venv/bin/python HSWM/prom_search_hswm/prom_p5_multiview_hardhop.py",
+    "cwd": "/Users/lagyeongjun/CD/SYMPOSIUM",
+    "git_head": "f67e64c21a53c3f71a3ef89ad72a04f061a67607",
+    "environment": {
+      "python": "3.14.6",
+      "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+      "numpy": "2.4.6",
+      "sentence_transformers": "5.5.1",
+      "model": "all-MiniLM-L6-v2",
+      "model_cache": "/Volumes/GM/hswm_lab/st_cache",
+      "hf_home": "/Volumes/GM/hswm_lab/hf_cache"
+    },
+    "started_at": "2026-07-22T04:47:12.122737+00:00",
+    "finished_at": "2026-07-22T04:47:33.482483+00:00",
+    "exit_code": 0
+  },
+  "findings": [
+    {
+      "proposal": "Keep anchor/evidence/bridge fields separate until readout only if the hard4 preregistered margin is positive.",
+      "supported_by": [
+        "measurement.hard4",
+        "provenance.equal_compute"
+      ]
+    },
+    {
+      "proposal": "Treat any benefit limited to one 2Wiki stratum as domain-conditional rather than a general HSWM upgrade.",
+      "supported_by": [
+        "measurement.by_dataset_hop_label"
+      ]
+    }
+  ],
+  "limitations": [
+    "One benchmark and one deterministic sample; no answer generator is used.",
+    "Query routing is fixed lexical patterning, not a learned ParallaxRAG-style gate.",
+    "Entity extraction is capitalization-based and English-specific.",
+    "Direct-edge deletion and private-ID anti-memorization remain a separate falsifier."
+  ],
+  "diagnostics": {
+    "route_counts": {
+      "comparison": 182,
+      "composition": 142,
+      "default": 76
+    },
+    "hyperedges": 3410,
+    "top_k": 10,
+    "fullchain_k": 20
+  }
+}

@@ -1,5 +1,7 @@
 # PROM 검색 → HSWM 레이어 빌더 연구 (2026-07-21)
 
+> ⚠️ **정직 한 줄 (Wave 1 판정, 2026-07-22)**: semantic weave 이득은 equal-compute control을 이기지 못함(LakatoTree partial) — 전체 프로그램 degenerating, 이후 모든 semantic weave 주장은 이 한계 하에서만 유효. (P4 verdict 원문 = §1 판정 블록. P1 binding density 자체는 progressive — lexical CONTAINS 0.0 대비 gap 0.2121, MC-null z 6.56. 단 P4에서 1패스 Jaccard 0.4242가 semantic 0.2121을 이김.)
+
 > **한 줄**: 프로메테우스(PROM)의 검색을 "맹목 웹검색"에서 "인터넷+내부KG를 가중 시멘틱 하이퍼엣지로 엮어 HSWM 레이어를 적층하는 것"으로 승격시키려는 연구. **자가비판 우선** — 순진한 해법은 실측으로 반증하고, 살아남은 구조만 남긴다.
 >
 > - **LakatoTree**: `LakatosTree_PromSearchHSWM_20260721` (예측 사전등록 + Dung 자기공격)
@@ -41,6 +43,34 @@
 6. citation-graph / agentic-RAG 반복탐색 전무
 
 → haiku N개가 각 axis 셀 1회 맹목 웹검색만. **인용 그래프를 타고 레전드repo(예: `bojieli/ai-agent-book`)로 엮여 들어갈 경로 자체가 구조적으로 없다.** 우리 인식론층(LakatoTree/나생문/placebo A/B)은 깊은데 **object-level 검색만 얕은 비대칭.**
+
+### 판정 (Wave 1, 2026-07-22) — P1/P4 LakatoTree 원문
+
+> 실험: `prom_p1_binding_density.py` → `evidence/EVIDENCE_p1_binding_density_2026-07-22.json` / `prom_p4_equalcompute_ab.py` → `evidence/EVIDENCE_p4_equalcompute_2026-07-22.json`. gold = `data/binding_gold_p1.json` (n=66, calibration 33 / eval 33, 후보풀 113 = 35 target + 78 distractor), τ = 0.592758 (calibration-only MC-null). 사전등록 metric 무변경.
+
+**P1-binding-density → verdict `progressive`** (judged_at `2026-07-22T01:33:10.052334+00:00`)
+
+- value = held_out_binding_density(semantic) = **0.2121** (7/33; baseline 0.05 + noise 0.03 초과, delta 0.1621) / novel_measured = semantic_minus_lexical_binding_gap = **0.2121 ≥ 0.2** / **MC-null z = 6.56** (perms 2000, null_mean 0.0279, null_std 0.0281)
+- lexical(현 Step 2.5 정규화 CONTAINS 재현) binding_density = **0.0** (0/33, any_contains_match 0) — **D1 lexical-shallow 진단 실측 재확인**
+- Goodhart 가드 precision = 0.4667 (fires 15 / correct 7 — τ-fire의 절반가량이 비gold top-1, 한계 투명 기록)
+- 서버 verdict 원문:
+
+```json
+{"ok": true, "freshen": false, "verdict": "progressive", "delta": 0.1621, "novel": true, "lakatos": "progressive", "metric_verdict": "progressive", "requires_human": false, "script_sha_server_verified": false, "judge_script_sha": "ec0d3bf03985406f5aefcb3d3594de6db3f02808263f73ee191fcf0fd2870e57", "attested_by": null, "eureka": {"felt": true, "true": true, "hallucinated": false, "reasons": [], "bf": 6.0}, "rule": "improved=True, novel=True, noise_band=0.03, novelty_sense=zahar_use_novelty", "replay": "python /Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/prom_p1_binding_density.py /Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/EVIDENCE_p1_binding_density_2026-07-22.json"}
+```
+
+**P4-equal-compute-control → verdict `partial` / lakatos `degenerating`** (judged_at `2026-07-22T01:47:20.063251+00:00`) — **프로그램 존폐 게이트(tree hard core 불변식 iii)가 null**
+
+- value = semantic_minus_equalcompute_binding_gain = 0.2121 − 0.1818 = **0.0303** (baseline 0.0 + noise 0.03을 0.0003 차로 초과 → improved=True) / novel_measured = semantic_layer_over_more_blind_search_gap = **0.0303 < 0.1 → novel 미달** / **MC-null z = 1.0** (perms 2000, null_mean −0.009, null_std 0.0393 — gap이 null과 통계적으로 구분 안 됨)
+- 3-arm (동일 gold·pool·τ; equal-compute 토큰예산 13438976 vs semantic 3090702 = 4.35×, equal_compute_verified=true): semantic_weave **0.2121** / equalcompute_lexical(변형 429개 blind-RRF control) **0.1818** / lexical_1x(Jaccard 1패스) **0.4242**
+- 추가 정직 anomaly (판정 불사용): 단순 1패스 Jaccard(0.4242)가 τ-게이트 semantic(0.2121)과 equal-compute RRF control(0.1818) **양쪽을 이김** — D1 "lexical-shallow" 진단은 CONTAINS(0.0)에 한정 유효하며, Jaccard 수준의 lexical만으로도 semantic 초과. 변형다발+RRF는 오히려 1패스 Jaccard보다 나쁨(변형 희석).
+- 서버 verdict 원문:
+
+```json
+{"ok": true, "freshen": false, "verdict": "partial", "delta": 0.0303, "novel": false, "lakatos": "degenerating", "metric_verdict": "partial", "requires_human": false, "script_sha_server_verified": false, "judge_script_sha": "29e797e881b65ef0ed40ffca0be12ee7e15d726f8595f657ad0846b7dba46045", "attested_by": null, "eureka": {"felt": true, "true": false, "hallucinated": true, "reasons": ["novel_unconfirmed", "bf_marginal:1.000<=3.162"], "bf": 1.0}, "rule": "improved=True, novel=False, noise_band=0.03, novelty_sense=zahar_use_novelty", "replay": "python /Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/prom_p4_equalcompute_ab.py /Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/EVIDENCE_p4_equalcompute_2026-07-22.json"}
+```
+
+**축소 (사전 고정 해석 그대로, 재해석 없음)**: 예측 "semantic weave가 equal-compute control을 이긴다"는 novel 수준 확증 실패 — tree hard_core 불변식 (iii)이 이 노드 자체이므로 **전체 프로그램 degenerating**. semantic weave 이득은 equal-compute control을 이기지 못함(LakatoTree partial) — 전체 프로그램 degenerating, 이후 모든 semantic weave 주장은 이 한계 하에서만 유효. 아래 ML5–ML19·T5 서술은 그대로 보존하되 이 조건 하에서 읽어야 한다 (축소는 삭제가 아님 — Eilu va-Eilu).
 
 ---
 

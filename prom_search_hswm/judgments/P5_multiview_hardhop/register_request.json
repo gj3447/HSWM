@@ -1,0 +1,45 @@
+{
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "P5-onefield-vs-multiview-hardhop",
+  "parent": "ML19-integrated-payoff",
+  "question": "Q-onefield-vs-multiview-hardhop",
+  "prepared_at": "2026-07-22T04:45:17Z",
+  "prediction": {
+    "metric": "hard4_recall10_multiview_minus_early",
+    "baseline": 0.0,
+    "noise_band": 0.02,
+    "direction": "higher",
+    "scale_type": "ratio",
+    "credence": 0.45
+  },
+  "novel_target": {
+    "metric": "joint_pass_margin",
+    "direction": "higher",
+    "threshold": 0.0
+  },
+  "kill_condition": "hard4 recall@10 gain <= 0, or two-support recall@10 gain < -0.01",
+  "conjecture": "On 2Wiki questions with four supporting passages, preserving anchor, evidence, and bridge scores as separate views until late readout beats an equal-compute single scalar without materially regressing two-support questions.",
+  "script": {
+    "path": "HSWM/prom_search_hswm/prom_p5_multiview_hardhop.py",
+    "sha256": "225b7467ff0ca2cfe26e248a234af1e6022cd9d1b8eb6cef74640d54339f12aa"
+  },
+  "dataset": {
+    "path": "/Volumes/GM/bench/2wiki_dev.jsonl",
+    "sha256": "c219e4bff85c2722bb03cb94b33653646e8f944473e1da800c5883d5ead5d8e7",
+    "rows": 12576
+  },
+  "locked_parameters": {
+    "n_q": 400,
+    "seed": 7331,
+    "top_k": 10,
+    "fullchain_k": 20,
+    "bootstrap_reps": 2000,
+    "df_min": 2,
+    "df_max": 40,
+    "appnp_alpha": 0.3,
+    "appnp_steps": 10,
+    "rrf_k": 60
+  },
+  "equal_compute_contract": "Both arms consume the identical title-cosine, body-cosine, and n-ary APPNP bridge score matrices with the same query-only routing weights; only early scalar sum versus late reciprocal-rank readout differs.",
+  "measurement_started": false
+}

@@ -1,0 +1,118 @@
+{
+  "experiment": "prom_p1_binding_density",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "P1-binding-density",
+  "a_priori": {
+    "seed": 333,
+    "null_perms": 2000,
+    "model": "paraphrase-multilingual-MiniLM-L12-v2",
+    "tau_rule": "calibration mismatched-pair null_mean + 3*null_std",
+    "tau_k_sigma": 3.0
+  },
+  "prereg": {
+    "metric": "held_out_binding_density",
+    "baseline": 0.05,
+    "noise_band": 0.03,
+    "direction": "higher",
+    "scale_type": "ratio",
+    "novel_metric": "semantic_minus_lexical_binding_gap",
+    "novel_direction": "higher",
+    "novel_threshold": 0.2,
+    "closes": "Q-binding-density",
+    "registered_at": "2026-07-21T03:59:44.351379+00:00"
+  },
+  "gold": {
+    "path": "data/binding_gold_p1.json",
+    "sha256": "8d7f5b989a639a22f851af7d7c218e17ba12890771190e3444c5075de69f5481",
+    "n_findings": 66,
+    "n_calibration": 33,
+    "n_eval": 33,
+    "n_candidates": 113,
+    "n_targets": 35,
+    "n_distractors": 78,
+    "split_seed": 333,
+    "overlapping": true
+  },
+  "tau_calibration": {
+    "tau": 0.592758,
+    "null_mean": 0.193614,
+    "null_std": 0.133048,
+    "n_null_pairs": 3668,
+    "n_findings": 33,
+    "n_candidates": 113,
+    "k_sigma": 3.0,
+    "model": "paraphrase-multilingual-MiniLM-L12-v2",
+    "seed": 333,
+    "subset": "calibration"
+  },
+  "lexical_current_prom": {
+    "binding_density": 0.0,
+    "bound": 0,
+    "any_contains_match": 0,
+    "nongold_contains_matches": 0,
+    "note": "정규화 CONTAINS (PROM Step 2.5 재현), gold target 매치 = bound"
+  },
+  "semantic": {
+    "binding_density": 0.2121,
+    "precision": 0.4667,
+    "fires": 15,
+    "correct": 7,
+    "tau": 0.592758,
+    "rule": "top-1 cosine >= tau AND top-1 in gold targets"
+  },
+  "value_held_out_binding_density": 0.2121,
+  "novel_semantic_minus_lexical_binding_gap": 0.2121,
+  "mc_null": {
+    "null_mean_density": 0.0279,
+    "null_std": 0.0281,
+    "z": 6.56,
+    "perms": 2000,
+    "null": "eval gold 배정 순열 (top-1/τ 고정)"
+  },
+  "tau_sweep": {
+    "0.3000": {
+      "density": 0.2727,
+      "precision": 0.2727,
+      "fires": 33
+    },
+    "0.4000": {
+      "density": 0.2727,
+      "precision": 0.2727,
+      "fires": 33
+    },
+    "0.5000": {
+      "density": 0.2727,
+      "precision": 0.2903,
+      "fires": 31
+    },
+    "0.6000": {
+      "density": 0.1818,
+      "precision": 0.4615,
+      "fires": 13
+    },
+    "0.7000": {
+      "density": 0.0303,
+      "precision": 0.25,
+      "fires": 4
+    },
+    "0.5928": {
+      "density": 0.2121,
+      "precision": 0.4667,
+      "fires": 15
+    }
+  },
+  "_facts": {
+    "n_eval": 33,
+    "n_calibration": 33,
+    "seed": 333,
+    "tau": 0.592758,
+    "value": 0.2121,
+    "novel_gap": 0.2121,
+    "mc_null_z": 6.56,
+    "value_above_baseline_plus_noise": true,
+    "novel_gap_ge_threshold": true,
+    "semantic_above_null": true,
+    "precision": 0.4667,
+    "precision_not_collapsed": true
+  }
+}

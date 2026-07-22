@@ -1,0 +1,93 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "P6-continual-absorption-fsm-unseen",
+  "question": "Q-continual-absorption-fsm-unseen",
+  "conjecture": "Three immutable, FSM-gated absorption rounds over semantic key-value residuals improve sealed unseen-query 2Wiki recall@10 by at least 0.03 versus a frozen equal-budget HSWM readout, without retention regression or exact-ID lookup.",
+  "prediction": {
+    "metric": "sealed_final_unseen_query_recall10_active_minus_frozen",
+    "baseline": 0.0,
+    "direction": "higher",
+    "noise_band": 0.01,
+    "success_threshold": 0.03,
+    "required_bootstrap95_lower": 0.0,
+    "novel_metric": "joint_promotion_and_final_gain_margin",
+    "novel_direction": "higher",
+    "novel_threshold": 0.0,
+    "credence": 0.35
+  },
+  "promotion_policy": {
+    "per_round_fresh_validation_gain_min": 0.01,
+    "per_round_bootstrap95_lower_strictly_gt": 0.0,
+    "retention_delta_min": -0.01,
+    "canary_fullchain_delta_min": -0.01,
+    "evidence_replay_required": true,
+    "equal_budget_required": true,
+    "exact_normalized_query_overlap_required": 0,
+    "active_mutation": "forbidden; immutable candidate + CAS receipt only"
+  },
+  "kill_conditions": [
+    "No candidate passes a fresh unseen-query promotion gate.",
+    "Final sealed holdout recall@10 delta is below +0.03 or its paired-bootstrap 95% lower bound is not positive.",
+    "Any accepted candidate regresses retained validation recall@10 by more than 0.01 or canary full-chain@20 by more than 0.01.",
+    "Any exact normalized query overlap, evidence replay mismatch, unequal fixed query-time budget, or use of query ID as a model feature is detected.",
+    "Observed gains are confined to the exact-ID cache diagnostic rather than sealed unseen queries."
+  ],
+  "scope_boundary": {
+    "phase": "A-semantic-associative-residual",
+    "topology_learning_claimed": false,
+    "production_pointer_claimed": false,
+    "deferred": [
+      "n-ary ADD/SPLIT/MERGE/SUPERSEDE",
+      "private-ID",
+      "direct-answer-edge deletion",
+      "second benchmark",
+      "three seeds"
+    ]
+  },
+  "locked_parameters": {
+    "n_q": 900,
+    "seed": 8217,
+    "absorption_rounds": 3,
+    "train_batch_size": 120,
+    "validation_epoch_size": 120,
+    "final_holdout_size": 180,
+    "memory_cap": 360,
+    "memory_k": 8,
+    "memory_temperature": 0.08,
+    "memory_lambda": 0.35,
+    "top_k": 10,
+    "fullchain_k": 20,
+    "bootstrap_reps": 2000,
+    "promotion_min_gain": 0.01,
+    "final_success_min_gain": 0.03,
+    "max_retention_drop": -0.01,
+    "max_fullchain_drop": -0.01,
+    "canary_windows": 1
+  },
+  "script_sha256": "43055692a19140e47d872595cae42a78ed1b2956da771733984d0179e6a65123",
+  "dataset_sha256": "c219e4bff85c2722bb03cb94b33653646e8f944473e1da800c5883d5ead5d8e7",
+  "fsm_spec_sha256": "2ec599ed6ac283eb624aa0aaddbfca368a8af919565c45025083d93638300a13",
+  "fsm_traces_sha256": "9c7c534f1971016d82dfd1c18f065afaaf312d264969351916519b0950acf56a",
+  "fsm_reducer_sha256": "23947d16b396f95b7ec14f99e2d11e1a02d8e6ed1c1fe8a22a53085a822b4573",
+  "p5_dependency_sha256": "225b7467ff0ca2cfe26e248a234af1e6022cd9d1b8eb6cef74640d54339f12aa",
+  "server_registered_at": "2026-07-22T05:32:34.103461+00:00",
+  "registered_before_measurement": true,
+  "prediction_receipt_sha256": "047823fa05ea4b3ed521c449728654f112584ea1ce792b6bd0f0ac6f34e6d943",
+  "register_request_path": "HSWM/prom_search_hswm/judgments/P6_continual_absorption_fsm/register-request.json",
+  "register_response_path": "HSWM/prom_search_hswm/judgments/P6_continual_absorption_fsm/register-response.json",
+  "lakatotree_tag": "P6-continual-absorption-fsm-unseen-r2",
+  "amendments": [
+    {
+      "at": "2026-07-22T06:35:50Z",
+      "kind": "harness_crash_fix_before_any_observation",
+      "old_script_sha256": "bc60170457eb4fd7b6bb8a77d6397cb882674c7672d7f53c71b900f5530d736d",
+      "new_script_sha256": "43055692a19140e47d872595cae42a78ed1b2956da771733984d0179e6a65123",
+      "old_prediction_receipt_sha256": "5b1d2f7526a9037fb4a854926695132e332772a0658f66479f8f683f3047b014",
+      "new_prediction_receipt_sha256": "047823fa05ea4b3ed521c449728654f112584ea1ce792b6bd0f0ac6f34e6d943",
+      "old_tag": "P6-continual-absorption-fsm-unseen",
+      "new_tag": "P6-continual-absorption-fsm-unseen-r2",
+      "reason": "Locked script crashed deterministically in compact_metric (TypeError: int not iterable) before emitting any metric; zero results observed under old sha. Fix is type-handling only (int passthrough, list rounding). No locked parameter, split, seed, threshold, or FSM artifact changed. Original tag prediction is unreachable; identical prediction re-registered on child node r2."
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+{
+  "experiment": "prom_p4_equalcompute_ab",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "node": "P4-equal-compute-control",
+  "a_priori": {
+    "seed": 333,
+    "null_perms": 2000,
+    "model": "paraphrase-multilingual-MiniLM-L12-v2",
+    "tau_rule": "calibration mismatched-pair null_mean + 3*null_std (P1 공유)",
+    "tau_k_sigma": 3.0,
+    "compute_budget_primary": "스코어링 처리 (query토큰수×후보토큰수) 총량 — 토큰수 = _TOK 매치 수(비유니크)",
+    "compute_budget_secondary": "wall-clock CPU초 (robustness, 비결정론)",
+    "variant_params": {
+      "ngram_window": 6,
+      "ngram_stride": 3,
+      "n_keywords": 8,
+      "n_head": 10
+    }
+  },
+  "prereg": {
+    "metric": "semantic_minus_equalcompute_binding_gain",
+    "baseline": 0.0,
+    "noise_band": 0.03,
+    "direction": "higher",
+    "scale_type": "ratio",
+    "novel_metric": "semantic_layer_over_more_blind_search_gap",
+    "novel_direction": "higher",
+    "novel_threshold": 0.1,
+    "closes": "Q-real-gain-vs-compute",
+    "registered_at": "2026-07-21T03:59:52.782999+00:00"
+  },
+  "gold": {
+    "path": "data/binding_gold_p1.json",
+    "sha256": "8d7f5b989a639a22f851af7d7c218e17ba12890771190e3444c5075de69f5481",
+    "n_findings": 66,
+    "n_calibration": 33,
+    "n_eval": 33,
+    "n_candidates": 113,
+    "n_targets": 35,
+    "n_distractors": 78,
+    "split_seed": 333,
+    "shared_with_p1": true
+  },
+  "tau_calibration": {
+    "tau": 0.592758,
+    "null_mean": 0.193614,
+    "null_std": 0.133048,
+    "n_null_pairs": 3668,
+    "n_findings": 33,
+    "n_candidates": 113,
+    "k_sigma": 3.0,
+    "model": "paraphrase-multilingual-MiniLM-L12-v2",
+    "seed": 333,
+    "subset": "calibration"
+  },
+  "arm1_lexical_1x": {
+    "binding_density": 0.4242,
+    "bound": 14,
+    "top1_nonzero": 33,
+    "rule": "Jaccard top-1 in gold AND jaccard>0 (1패스)",
+    "contains_crossref_density": 0.0,
+    "contains_crossref_bound": 0
+  },
+  "arm2_equalcompute_lexical": {
+    "binding_density": 0.1818,
+    "bound": 6,
+    "top1_supported": 27,
+    "n_variants_total": 429,
+    "mean_variants_per_finding": 13.0,
+    "scan_depth_k": 113,
+    "rule": "blind-RRF rank-union top-1 in gold AND top-1 has jaccard>0 in >=1 variant"
+  },
+  "arm3_semantic_weave": {
+    "binding_density": 0.2121,
+    "precision": 0.4667,
+    "fires": 15,
+    "correct": 7,
+    "tau": 0.592758,
+    "rule": "top-1 cosine >= tau AND top-1 in gold targets (P1 동일)"
+  },
+  "compute_budget": {
+    "primary_unit": "query_tokens x candidate_tokens scored (total)",
+    "semantic_budget_tokens": 3090702,
+    "equalcompute_budget_tokens": 13438976,
+    "lexical_1x_budget_tokens": 3090702,
+    "equalcompute_over_semantic_ratio": 4.348,
+    "equal_compute_verified": true,
+    "secondary_unit": "process CPU seconds (비결정론 — 참고용)",
+    "semantic_cpu_s": 3.62,
+    "equalcompute_cpu_s": 0.08,
+    "lexical_1x_cpu_s": 0.01,
+    "secondary_note": "semantic CPU에는 임베딩 비용 포함 — primary(토큰곱) 단위가 사전선언 회계 (prereg '같은 토큰예산'); secondary는 투명성 기록"
+  },
+  "value_semantic_minus_equalcompute_binding_gain": 0.0303,
+  "novel_semantic_layer_over_more_blind_search_gap": 0.0303,
+  "mc_null": {
+    "null_mean_gap": -0.009,
+    "null_std": 0.0393,
+    "z": 1.0,
+    "perms": 2000,
+    "null": "eval gold 배정 순열 (양 arm top-1/게이트 고정)"
+  },
+  "_facts": {
+    "n_eval": 33,
+    "n_calibration": 33,
+    "seed": 333,
+    "tau": 0.592758,
+    "semantic_binding_density": 0.2121,
+    "equalcompute_binding_density": 0.1818,
+    "lexical_1x_binding_density": 0.4242,
+    "value": 0.0303,
+    "novel_gap": 0.0303,
+    "mc_null_z": 1.0,
+    "semantic_budget_tokens": 3090702,
+    "equalcompute_budget_tokens": 13438976,
+    "equal_compute_verified": true,
+    "value_above_baseline_plus_noise": true,
+    "novel_gap_ge_threshold": false,
+    "gap_above_null": false,
+    "semantic_precision": 0.4667
+  }
+}

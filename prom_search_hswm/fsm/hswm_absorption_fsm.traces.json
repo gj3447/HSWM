@@ -1,0 +1,178 @@
+{
+  "cases": [
+    {
+      "id": "happy-promotion",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "ABSORB", "guard_results": {}, "expected_state": "collecting", "expected_effects": ["RecordAbsorption"]},
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": true}, "expected_state": "frozen", "expected_effects": ["FreezeCandidate"]},
+        {"event": "START_EVALUATION", "guard_results": {"evaluation_allowed": true}, "expected_state": "evaluating", "expected_effects": ["RunEvaluation"]},
+        {"event": "EVALUATION_RECORDED", "guard_results": {"evidence_invalid": false, "promotion_allowed": true, "evaluation_rejected": false}, "expected_state": "canary", "expected_effects": ["RecordEvaluationPass"]},
+        {"event": "CANARY_OBSERVATION", "guard_results": {"canary_observation_pass": true}, "expected_state": "canary", "expected_effects": ["RecordCanary"]},
+        {"event": "REQUEST_PROMOTION", "guard_results": {"canary_complete": true}, "expected_state": "promotion_pending", "expected_effects": ["RequestActivation"]},
+        {"event": "ACTIVATION_COMMITTED", "guard_results": {"activation_receipt_matches": true}, "expected_state": "active", "expected_effects": ["RecordActivation"]}
+      ]
+    },
+    {
+      "id": "evaluation-reject-memorization",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "ABSORB", "guard_results": {}, "expected_state": "collecting", "expected_effects": ["RecordAbsorption"]},
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": true}, "expected_state": "frozen", "expected_effects": ["FreezeCandidate"]},
+        {"event": "START_EVALUATION", "guard_results": {"evaluation_allowed": true}, "expected_state": "evaluating", "expected_effects": ["RunEvaluation"]},
+        {"event": "EVALUATION_RECORDED", "guard_results": {"evidence_invalid": false, "promotion_allowed": false, "evaluation_rejected": true}, "expected_state": "rejected", "expected_effects": ["RecordRejection"]}
+      ]
+    },
+    {
+      "id": "evidence-quarantine",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "ABSORB", "guard_results": {}, "expected_state": "collecting", "expected_effects": ["RecordAbsorption"]},
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": true}, "expected_state": "frozen", "expected_effects": ["FreezeCandidate"]},
+        {"event": "START_EVALUATION", "guard_results": {"evaluation_allowed": true}, "expected_state": "evaluating", "expected_effects": ["RunEvaluation"]},
+        {"event": "EVALUATION_RECORDED", "guard_results": {"evidence_invalid": true, "promotion_allowed": false, "evaluation_rejected": false}, "expected_state": "quarantined", "expected_effects": ["QuarantineCandidate"]}
+      ]
+    },
+    {
+      "id": "canary-failure",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "ABSORB", "guard_results": {}, "expected_state": "collecting", "expected_effects": ["RecordAbsorption"]},
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": true}, "expected_state": "frozen", "expected_effects": ["FreezeCandidate"]},
+        {"event": "START_EVALUATION", "guard_results": {"evaluation_allowed": true}, "expected_state": "evaluating", "expected_effects": ["RunEvaluation"]},
+        {"event": "EVALUATION_RECORDED", "guard_results": {"evidence_invalid": false, "promotion_allowed": true, "evaluation_rejected": false}, "expected_state": "canary", "expected_effects": ["RecordEvaluationPass"]},
+        {"event": "CANARY_FAILED", "guard_results": {}, "expected_state": "rejected", "expected_effects": ["RecordRejection"]}
+      ]
+    },
+    {
+      "id": "activation-transient-retry",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "ABSORB", "guard_results": {}, "expected_state": "collecting", "expected_effects": ["RecordAbsorption"]},
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": true}, "expected_state": "frozen", "expected_effects": ["FreezeCandidate"]},
+        {"event": "START_EVALUATION", "guard_results": {"evaluation_allowed": true}, "expected_state": "evaluating", "expected_effects": ["RunEvaluation"]},
+        {"event": "EVALUATION_RECORDED", "guard_results": {"evidence_invalid": false, "promotion_allowed": true, "evaluation_rejected": false}, "expected_state": "canary", "expected_effects": ["RecordEvaluationPass"]},
+        {"event": "CANARY_OBSERVATION", "guard_results": {"canary_observation_pass": true}, "expected_state": "canary", "expected_effects": ["RecordCanary"]},
+        {"event": "REQUEST_PROMOTION", "guard_results": {"canary_complete": true}, "expected_state": "promotion_pending", "expected_effects": ["RequestActivation"]},
+        {"event": "ACTIVATION_FAILED", "guard_results": {"activation_transient": true, "activation_stale": false}, "expected_state": "canary", "expected_effects": ["RecordActivationFailure"]}
+      ]
+    },
+    {
+      "id": "activation-stale-reject",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "ABSORB", "guard_results": {}, "expected_state": "collecting", "expected_effects": ["RecordAbsorption"]},
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": true}, "expected_state": "frozen", "expected_effects": ["FreezeCandidate"]},
+        {"event": "START_EVALUATION", "guard_results": {"evaluation_allowed": true}, "expected_state": "evaluating", "expected_effects": ["RunEvaluation"]},
+        {"event": "EVALUATION_RECORDED", "guard_results": {"evidence_invalid": false, "promotion_allowed": true, "evaluation_rejected": false}, "expected_state": "canary", "expected_effects": ["RecordEvaluationPass"]},
+        {"event": "CANARY_OBSERVATION", "guard_results": {"canary_observation_pass": true}, "expected_state": "canary", "expected_effects": ["RecordCanary"]},
+        {"event": "REQUEST_PROMOTION", "guard_results": {"canary_complete": true}, "expected_state": "promotion_pending", "expected_effects": ["RequestActivation"]},
+        {"event": "ACTIVATION_FAILED", "guard_results": {"activation_transient": false, "activation_stale": true}, "expected_state": "rejected", "expected_effects": ["RecordRejection"]}
+      ]
+    },
+    {
+      "id": "active-rollback-retry-success",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "ABSORB", "guard_results": {}, "expected_state": "collecting", "expected_effects": ["RecordAbsorption"]},
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": true}, "expected_state": "frozen", "expected_effects": ["FreezeCandidate"]},
+        {"event": "START_EVALUATION", "guard_results": {"evaluation_allowed": true}, "expected_state": "evaluating", "expected_effects": ["RunEvaluation"]},
+        {"event": "EVALUATION_RECORDED", "guard_results": {"evidence_invalid": false, "promotion_allowed": true, "evaluation_rejected": false}, "expected_state": "canary", "expected_effects": ["RecordEvaluationPass"]},
+        {"event": "CANARY_OBSERVATION", "guard_results": {"canary_observation_pass": true}, "expected_state": "canary", "expected_effects": ["RecordCanary"]},
+        {"event": "REQUEST_PROMOTION", "guard_results": {"canary_complete": true}, "expected_state": "promotion_pending", "expected_effects": ["RequestActivation"]},
+        {"event": "ACTIVATION_COMMITTED", "guard_results": {"activation_receipt_matches": true}, "expected_state": "active", "expected_effects": ["RecordActivation"]},
+        {"event": "REGRESSION_DETECTED", "guard_results": {"regression_confirmed": true}, "expected_state": "rollback_pending", "expected_effects": ["RequestRollback"]},
+        {"event": "ROLLBACK_FAILED", "guard_results": {}, "expected_state": "rollback_pending", "expected_effects": ["RecordRollbackFailure"]},
+        {"event": "ROLLBACK_COMMITTED", "guard_results": {"rollback_receipt_matches": true}, "expected_state": "rolled_back", "expected_effects": ["RecordRollback"]}
+      ]
+    },
+    {
+      "id": "active-superseded",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "ABSORB", "guard_results": {}, "expected_state": "collecting", "expected_effects": ["RecordAbsorption"]},
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": true}, "expected_state": "frozen", "expected_effects": ["FreezeCandidate"]},
+        {"event": "START_EVALUATION", "guard_results": {"evaluation_allowed": true}, "expected_state": "evaluating", "expected_effects": ["RunEvaluation"]},
+        {"event": "EVALUATION_RECORDED", "guard_results": {"evidence_invalid": false, "promotion_allowed": true, "evaluation_rejected": false}, "expected_state": "canary", "expected_effects": ["RecordEvaluationPass"]},
+        {"event": "CANARY_OBSERVATION", "guard_results": {"canary_observation_pass": true}, "expected_state": "canary", "expected_effects": ["RecordCanary"]},
+        {"event": "REQUEST_PROMOTION", "guard_results": {"canary_complete": true}, "expected_state": "promotion_pending", "expected_effects": ["RequestActivation"]},
+        {"event": "ACTIVATION_COMMITTED", "guard_results": {"activation_receipt_matches": true}, "expected_state": "active", "expected_effects": ["RecordActivation"]},
+        {"event": "SUPERSESSION_COMMITTED", "guard_results": {"supersession_receipt_matches": true}, "expected_state": "superseded", "expected_effects": ["RecordSupersession"]}
+      ]
+    },
+    {
+      "id": "rollback-concurrent-supersession",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "ABSORB", "guard_results": {}, "expected_state": "collecting", "expected_effects": ["RecordAbsorption"]},
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": true}, "expected_state": "frozen", "expected_effects": ["FreezeCandidate"]},
+        {"event": "START_EVALUATION", "guard_results": {"evaluation_allowed": true}, "expected_state": "evaluating", "expected_effects": ["RunEvaluation"]},
+        {"event": "EVALUATION_RECORDED", "guard_results": {"evidence_invalid": false, "promotion_allowed": true, "evaluation_rejected": false}, "expected_state": "canary", "expected_effects": ["RecordEvaluationPass"]},
+        {"event": "CANARY_OBSERVATION", "guard_results": {"canary_observation_pass": true}, "expected_state": "canary", "expected_effects": ["RecordCanary"]},
+        {"event": "REQUEST_PROMOTION", "guard_results": {"canary_complete": true}, "expected_state": "promotion_pending", "expected_effects": ["RequestActivation"]},
+        {"event": "ACTIVATION_COMMITTED", "guard_results": {"activation_receipt_matches": true}, "expected_state": "active", "expected_effects": ["RecordActivation"]},
+        {"event": "REGRESSION_DETECTED", "guard_results": {"regression_confirmed": true}, "expected_state": "rollback_pending", "expected_effects": ["RequestRollback"]},
+        {"event": "SUPERSESSION_COMMITTED", "guard_results": {"supersession_receipt_matches": true}, "expected_state": "superseded", "expected_effects": ["RecordSupersession"]}
+      ]
+    },
+    {
+      "id": "guard-false-boundaries",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": false}, "expected_state": "collecting", "expected_effects": ["AuditInvalidTransition"]},
+        {"event": "ABSORB", "guard_results": {}, "expected_state": "collecting", "expected_effects": ["RecordAbsorption"]},
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": true}, "expected_state": "frozen", "expected_effects": ["FreezeCandidate"]},
+        {"event": "START_EVALUATION", "guard_results": {"evaluation_allowed": false}, "expected_state": "frozen", "expected_effects": ["AuditInvalidTransition"]}
+      ]
+    },
+    {
+      "id": "post-evaluation-guard-false-boundaries",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "ABSORB", "guard_results": {}, "expected_state": "collecting", "expected_effects": ["RecordAbsorption"]},
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": true}, "expected_state": "frozen", "expected_effects": ["FreezeCandidate"]},
+        {"event": "START_EVALUATION", "guard_results": {"evaluation_allowed": true}, "expected_state": "evaluating", "expected_effects": ["RunEvaluation"]},
+        {"event": "EVALUATION_RECORDED", "guard_results": {"evidence_invalid": false, "promotion_allowed": true, "evaluation_rejected": false}, "expected_state": "canary", "expected_effects": ["RecordEvaluationPass"]},
+        {"event": "CANARY_OBSERVATION", "guard_results": {"canary_observation_pass": false}, "expected_state": "canary", "expected_effects": ["AuditInvalidTransition"]},
+        {"event": "REQUEST_PROMOTION", "guard_results": {"canary_complete": false}, "expected_state": "canary", "expected_effects": ["AuditInvalidTransition"]}
+      ]
+    },
+    {
+      "id": "receipt-guard-false-boundaries",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "ABSORB", "guard_results": {}, "expected_state": "collecting", "expected_effects": ["RecordAbsorption"]},
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": true}, "expected_state": "frozen", "expected_effects": ["FreezeCandidate"]},
+        {"event": "START_EVALUATION", "guard_results": {"evaluation_allowed": true}, "expected_state": "evaluating", "expected_effects": ["RunEvaluation"]},
+        {"event": "EVALUATION_RECORDED", "guard_results": {"evidence_invalid": false, "promotion_allowed": true, "evaluation_rejected": false}, "expected_state": "canary", "expected_effects": ["RecordEvaluationPass"]},
+        {"event": "CANARY_OBSERVATION", "guard_results": {"canary_observation_pass": true}, "expected_state": "canary", "expected_effects": ["RecordCanary"]},
+        {"event": "REQUEST_PROMOTION", "guard_results": {"canary_complete": true}, "expected_state": "promotion_pending", "expected_effects": ["RequestActivation"]},
+        {"event": "ACTIVATION_COMMITTED", "guard_results": {"activation_receipt_matches": false}, "expected_state": "promotion_pending", "expected_effects": ["AuditInvalidTransition"]}
+      ]
+    },
+    {
+      "id": "rollback-guard-false-boundaries",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "ABSORB", "guard_results": {}, "expected_state": "collecting", "expected_effects": ["RecordAbsorption"]},
+        {"event": "FREEZE", "guard_results": {"freeze_allowed": true}, "expected_state": "frozen", "expected_effects": ["FreezeCandidate"]},
+        {"event": "START_EVALUATION", "guard_results": {"evaluation_allowed": true}, "expected_state": "evaluating", "expected_effects": ["RunEvaluation"]},
+        {"event": "EVALUATION_RECORDED", "guard_results": {"evidence_invalid": false, "promotion_allowed": true, "evaluation_rejected": false}, "expected_state": "canary", "expected_effects": ["RecordEvaluationPass"]},
+        {"event": "CANARY_OBSERVATION", "guard_results": {"canary_observation_pass": true}, "expected_state": "canary", "expected_effects": ["RecordCanary"]},
+        {"event": "REQUEST_PROMOTION", "guard_results": {"canary_complete": true}, "expected_state": "promotion_pending", "expected_effects": ["RequestActivation"]},
+        {"event": "ACTIVATION_COMMITTED", "guard_results": {"activation_receipt_matches": true}, "expected_state": "active", "expected_effects": ["RecordActivation"]},
+        {"event": "REGRESSION_DETECTED", "guard_results": {"regression_confirmed": false}, "expected_state": "active", "expected_effects": ["AuditInvalidTransition"]},
+        {"event": "SUPERSESSION_COMMITTED", "guard_results": {"supersession_receipt_matches": false}, "expected_state": "active", "expected_effects": ["AuditInvalidTransition"]},
+        {"event": "REGRESSION_DETECTED", "guard_results": {"regression_confirmed": true}, "expected_state": "rollback_pending", "expected_effects": ["RequestRollback"]},
+        {"event": "ROLLBACK_COMMITTED", "guard_results": {"rollback_receipt_matches": false}, "expected_state": "rollback_pending", "expected_effects": ["AuditInvalidTransition"]}
+      ]
+    },
+    {
+      "id": "invalid-event-policy",
+      "machine": "candidate_lifecycle",
+      "steps": [
+        {"event": "ACTIVATION_COMMITTED", "guard_results": {"activation_receipt_matches": true}, "expected_state": "collecting", "expected_effects": ["AuditInvalidTransition"]}
+      ]
+    }
+  ]
+}

@@ -30,6 +30,8 @@
 | **ML16** | `test_hswm_true_hypergraph.py` | `EVIDENCE_hswm_true_hypergraph_ml16_*` | **progressive** BF 4.69 | ★ 진짜 n-ary 하이퍼그래프(Zhou 2006) > 이진 CI[+.012,+.057], hard-hop +6pp |
 | **ML17** | `test_hswm_semantic_ablation.py` | `EVIDENCE_hswm_semantic_ablation_ml17_*` | **progressive** BF 6.0 | ★ semantic SEED +0.113 도움 / semantic EDGE −0.031 해침 → 의미=시딩·구조=엣지 |
 | **ML18** | `test_hswm_solid_scaffold.py` | `EVIDENCE_hswm_solid_scaffold_ml18_*` | metric prog / lakatos **degen** BF 0.167 | ★ 구조깊이≠전파깊이. residual=solid 붕괴막음(S)·config 이식(P)·attach 무손실(A) — but flat 못이김 (engineering virtue) |
+| **P5** | `prom_p5_multiview_hardhop.py` | `EVIDENCE_p5_multiview_hardhop_20260722.json` + `judgments/P5_multiview_hardhop/` | metric **equivalent** / Lakatos **degenerating**, node `REJECTED` | equal-compute fixed late RRF: hard-4 Δ0, full-chain −0.0125, 2-support −0.015625. cheap query routing만 폐기; learned specialist는 미검. |
+| **P6** | `prom_p6_continual_absorption_fsm.py` + `hswm_absorption_fsm.py` + `fsm/` | `EVIDENCE_p6_continual_absorption_fsm_20260722.json` + `judgments/P6_continual_absorption_fsm/` | metric **equivalent** / Lakatos **degenerating** (node `-r2`) | Phase A 의미 KV residual 흡수: 3라운드 전부 fresh unseen 해침(R1 −0.060, R3 −0.058, CI 음수) → FSM 게이트 전부 기각 → sealed Δ=0, novel −1. 가드레일은 작동(손해 0 실림). 재도전은 Phase B topology 흡수로만. |
 | — | `prom_vunione_ab.py` / `_gated_ab.py` | `EVIDENCE_vunione_*` | 종결 | V=V∪E readout, entity 정점추가 blind+gated 兩 RED |
 
 보조 모듈: `hswm_fusion.py`(fusion primitive) · `hswm_hypergraph.py` / `_readout.py`(하이퍼그래프 빌더).
@@ -60,15 +62,18 @@ venv=fatal crash, CLAUDE.md GM 정전). 벤치(musique)도 `/Volumes/GM/bench/` 
 - **깊게 = 검색 이득** = REJECTED (전파깊이 over-smooth: ML9/11/12). *단 구조깊이는 별개(ML18)*.
 - **임베딩 kNN 엣지 / hand-built 유사도 그래프** = flat 못 이김 (ML14/15).
 - **구조가 single-lookup recall 개선** = null (ML10 α-nDCG). 구조는 multi-hop 합성서만 room 있음.
+- **의미 KV residual 흡수(continual absorption Phase A)** = REJECTED (P6). unseen 전이 0, fresh는 오히려 해침. 흡수는 topology(Phase B)에서만 재시험.
 
 ## 4. 열린 로드맵 (다방면 — 하나에 갇히지 말 것)
 
-- **A. 통합 payoff 테스트** (다음 ML19): 확증조각(ML16+17+18) 합체 HSWM vs flat vs HippoRAG식 binary-PPR — **multi-hop payoff 지표**(hard-hop, full-chain)로. 구조가 room 있는 판.
-- **B. 외부 타당도**: 2nd 벤치(2WikiMultihopQA/HotpotQA) — MuSiQue-특이성 배제. *현재 GM에 MuSiQue만, disk/net 제약으로 보류-플래그.*
+- **A. 통합 payoff 테스트**: ML19로 완료. `hyper_fuse`만 실 deliverable이었고 domain robustness는 실패.
+- **B. 외부 타당도**: 2Wiki P5까지 진행. 단 fixed lexical routing+late RRF는 `REJECTED`; HotpotQA/MuSiQue 교차부호는 아직 미측.
 - **C. 다운스트림 지표**: retrieval → 실제 답 생성(dgx vLLM) 성공률. recall≠answerability.
 - **D. learning-while-using**: 스트리밍 질의로 Hebbian 엣지강화 + supersession, *일반화 vs 암기* 분리 (HippoRAG 2 대비).
 - **E. 이식성 payoff**: 도메인 A 구조 → B 전이 이득 (ML18은 config만 확인, 실제 전이 payoff 미측).
+- **F. P6 완료 → Phase B가 다음**: P6(Phase A 의미 residual 흡수)은 REJECTED. USER 원문 "구조나 fsm 을 개선시키면서"의 진짜 시험대 = **Phase B: n-ary ADD/SPLIT/MERGE/SUPERSEDE topology 흡수** (P6 prereg scope_boundary에 deferred로 명시). FSM 게이트·CAS receipt 규율은 재사용.
+- **G. learned gate**: `Q-learned-gate-privateid-hardhop` (P5가 열어둠, next_directions 2위) — train-only learned hop/role gate + private-ID/direct-edge deletion + 2벤치×3 seeds. frozen harness 전이라 prediction 미등록.
 
 ---
 
-*정리 2026-07-21: 로그/pycache cruft 제거(root gitignore 커버), 파일 제자리 유지(LakatoTree 앵커 보존), 본 INDEX 신설.*
+*갱신 2026-07-22 (2차): P6 continual absorption FSM RED 착지 — Phase A 의미 residual 흡수는 unseen 전이 실패(3라운드 전부 게이트 기각, sealed Δ=0), FSM 가드레일은 설계대로 작동. amendment 이력(크래시 sha → r2 재등록) 포함 완전 packet. 다음 = Phase B topology 흡수 또는 learned gate.*

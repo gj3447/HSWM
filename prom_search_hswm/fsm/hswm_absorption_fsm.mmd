@@ -1,0 +1,23 @@
+stateDiagram-v2
+    [*] --> collecting
+    collecting --> collecting: ABSORB
+    collecting --> frozen: FREEZE [freeze_allowed]
+    frozen --> evaluating: START_EVALUATION [evaluation_allowed]
+    evaluating --> quarantined: EVALUATION_RECORDED [evidence_invalid]
+    evaluating --> canary: EVALUATION_RECORDED [promotion_allowed]
+    evaluating --> rejected: EVALUATION_RECORDED [evaluation_rejected]
+    canary --> canary: CANARY_OBSERVATION [pass]
+    canary --> rejected: CANARY_FAILED
+    canary --> promotion_pending: REQUEST_PROMOTION [canary_complete]
+    promotion_pending --> active: ACTIVATION_COMMITTED [receipt_matches]
+    promotion_pending --> canary: ACTIVATION_FAILED [transient]
+    promotion_pending --> rejected: ACTIVATION_FAILED [stale_base]
+    active --> rollback_pending: REGRESSION_DETECTED [confirmed]
+    active --> superseded: SUPERSESSION_COMMITTED
+    rollback_pending --> rollback_pending: ROLLBACK_FAILED
+    rollback_pending --> rolled_back: ROLLBACK_COMMITTED [receipt_matches]
+    rollback_pending --> superseded: SUPERSESSION_COMMITTED
+    rejected --> [*]
+    quarantined --> [*]
+    rolled_back --> [*]
+    superseded --> [*]

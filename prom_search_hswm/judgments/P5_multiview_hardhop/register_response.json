@@ -1,0 +1,27 @@
+{
+  "mcp_transport_response": {
+    "error": 500,
+    "detail": "Internal Server Error"
+  },
+  "authoritative_readback": {
+    "observed_after_transport_error": true,
+    "tree": "LakatosTree_PromSearchHSWM_20260721",
+    "tag": "P5-onefield-vs-multiview-hardhop",
+    "node_state": "PREDICTED",
+    "metric": "hard4_recall10_multiview_minus_early",
+    "baseline": 0.0,
+    "noise_band": 0.02,
+    "direction": "higher",
+    "novel_metric": "joint_pass_margin",
+    "novel_direction": "higher",
+    "novel_threshold": 0.0,
+    "credence": 0.45,
+    "closes_question": "Q-onefield-vs-multiview-hardhop",
+    "script_sha256": "225b7467ff0ca2cfe26e248a234af1e6022cd9d1b8eb6cef74640d54339f12aa",
+    "registered_at": "2026-07-22T04:45:48.222181+00:00",
+    "prediction_receipt_sha256": "6d53bf5e9c9d29af8875110d80ca0418ce4edff4e4b003d6058d5a80e119dd67",
+    "receipt_kind": "prediction",
+    "receipt_prev": null
+  },
+  "interpretation": "The write committed and the content-addressed prediction receipt is readable even though the MCP transport returned 500. Measurement remains gated on this readback, not on the failed transport envelope."
+}

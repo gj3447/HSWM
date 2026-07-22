@@ -1,0 +1,359 @@
+{
+  "schema": "lakato-evidence-record/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "P6-continual-absorption-fsm-unseen",
+  "question": "Q-continual-absorption-fsm-unseen",
+  "conjecture": "Three immutable, FSM-gated absorption rounds over semantic key-value residuals improve sealed unseen-query 2Wiki recall@10 by at least 0.03 versus a frozen equal-budget HSWM readout, without retention regression or exact-ID lookup.",
+  "preregistration": {
+    "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_p6_continual_absorption_fsm_20260722.json",
+    "registered_at": "2026-07-22T05:32:34.103461+00:00",
+    "registered_before_measurement": true,
+    "prediction_receipt_sha256": "047823fa05ea4b3ed521c449728654f112584ea1ce792b6bd0f0ac6f34e6d943",
+    "script_sha256": "43055692a19140e47d872595cae42a78ed1b2956da771733984d0179e6a65123",
+    "fsm_spec_sha256": "2ec599ed6ac283eb624aa0aaddbfca368a8af919565c45025083d93638300a13"
+  },
+  "measurement": {
+    "metric": "sealed_final_unseen_query_recall10_active_minus_frozen",
+    "value": 0.0,
+    "unit": "paired proportion delta",
+    "scope": "2Wiki final sealed holdout n=180; exact normalized query-disjoint",
+    "noise_band": 0.01,
+    "novel_metric": "joint_promotion_and_final_gain_margin",
+    "novel_value": -1.0,
+    "final_holdout": {
+      "n": 180,
+      "control_recall10": 0.716667,
+      "candidate_recall10": 0.716667,
+      "recall10_delta": 0.0,
+      "recall10_delta_bootstrap95": [
+        0.0,
+        0.0
+      ],
+      "control_fullchain20": 0.516667,
+      "candidate_fullchain20": 0.516667,
+      "fullchain20_delta": 0.0
+    },
+    "strata": {
+      "gold_document_seen_during_accepted_absorption": {
+        "n": 0,
+        "recall10_delta": null
+      },
+      "all_gold_documents_unseen_during_accepted_absorption": {
+        "n": 180,
+        "recall10_delta": 0.0
+      }
+    },
+    "rounds": [
+      {
+        "round": 1,
+        "batch_n": 120,
+        "active_memory_before": 0,
+        "candidate_memory": 120,
+        "candidate_hash": "cc0bf851e6f53e9029f322bd90a0efedba97bae7c265a7b8d3d394cb4e89ec86",
+        "fresh_validation": {
+          "n": 120,
+          "control_recall10": 0.647917,
+          "candidate_recall10": 0.5875,
+          "recall10_delta": -0.060417,
+          "recall10_delta_bootstrap95": [
+            -0.09375,
+            -0.029167
+          ],
+          "control_fullchain20": 0.35,
+          "candidate_fullchain20": 0.333333,
+          "fullchain20_delta": -0.016667,
+          "retention_delta": 0.0
+        },
+        "replay_verified": true,
+        "fsm_final_state": "rejected",
+        "promoted": false,
+        "transcript": [
+          {
+            "event": "ABSORB",
+            "before": "collecting",
+            "after": "collecting",
+            "commands": [
+              "RecordAbsorption"
+            ],
+            "seq": 0
+          },
+          {
+            "event": "FREEZE",
+            "before": "collecting",
+            "after": "frozen",
+            "commands": [
+              "FreezeCandidate"
+            ],
+            "seq": 1
+          },
+          {
+            "event": "START_EVALUATION",
+            "before": "frozen",
+            "after": "evaluating",
+            "commands": [
+              "RunEvaluation"
+            ],
+            "seq": 2
+          },
+          {
+            "event": "EVALUATION_RECORDED",
+            "before": "evaluating",
+            "after": "rejected",
+            "commands": [
+              "RecordRejection"
+            ],
+            "seq": 3
+          }
+        ]
+      },
+      {
+        "round": 2,
+        "batch_n": 120,
+        "active_memory_before": 0,
+        "candidate_memory": 120,
+        "candidate_hash": "efc171902e95b27f2de6bfdd9038908b48562879a64ccb2319b3c55bfddb95dd",
+        "fresh_validation": {
+          "n": 120,
+          "control_recall10": 0.641667,
+          "candidate_recall10": 0.622917,
+          "recall10_delta": -0.01875,
+          "recall10_delta_bootstrap95": [
+            -0.041667,
+            0.00625
+          ],
+          "control_fullchain20": 0.383333,
+          "candidate_fullchain20": 0.358333,
+          "fullchain20_delta": -0.025,
+          "retention_delta": -0.047917
+        },
+        "replay_verified": true,
+        "fsm_final_state": "rejected",
+        "promoted": false,
+        "transcript": [
+          {
+            "event": "ABSORB",
+            "before": "collecting",
+            "after": "collecting",
+            "commands": [
+              "RecordAbsorption"
+            ],
+            "seq": 0
+          },
+          {
+            "event": "FREEZE",
+            "before": "collecting",
+            "after": "frozen",
+            "commands": [
+              "FreezeCandidate"
+            ],
+            "seq": 1
+          },
+          {
+            "event": "START_EVALUATION",
+            "before": "frozen",
+            "after": "evaluating",
+            "commands": [
+              "RunEvaluation"
+            ],
+            "seq": 2
+          },
+          {
+            "event": "EVALUATION_RECORDED",
+            "before": "evaluating",
+            "after": "rejected",
+            "commands": [
+              "RecordRejection"
+            ],
+            "seq": 3
+          }
+        ]
+      },
+      {
+        "round": 3,
+        "batch_n": 120,
+        "active_memory_before": 0,
+        "candidate_memory": 120,
+        "candidate_hash": "4712a24f48dcc4523a18e7317bccd6bf62cbe66f3ab4c90c7cf785f71b0747ea",
+        "fresh_validation": {
+          "n": 120,
+          "control_recall10": 0.685417,
+          "candidate_recall10": 0.627083,
+          "recall10_delta": -0.058333,
+          "recall10_delta_bootstrap95": [
+            -0.0875,
+            -0.033333
+          ],
+          "control_fullchain20": 0.425,
+          "candidate_fullchain20": 0.383333,
+          "fullchain20_delta": -0.041667,
+          "retention_delta": -0.047917
+        },
+        "replay_verified": true,
+        "fsm_final_state": "rejected",
+        "promoted": false,
+        "transcript": [
+          {
+            "event": "ABSORB",
+            "before": "collecting",
+            "after": "collecting",
+            "commands": [
+              "RecordAbsorption"
+            ],
+            "seq": 0
+          },
+          {
+            "event": "FREEZE",
+            "before": "collecting",
+            "after": "frozen",
+            "commands": [
+              "FreezeCandidate"
+            ],
+            "seq": 1
+          },
+          {
+            "event": "START_EVALUATION",
+            "before": "frozen",
+            "after": "evaluating",
+            "commands": [
+              "RunEvaluation"
+            ],
+            "seq": 2
+          },
+          {
+            "event": "EVALUATION_RECORDED",
+            "before": "evaluating",
+            "after": "rejected",
+            "commands": [
+              "RecordRejection"
+            ],
+            "seq": 3
+          }
+        ]
+      }
+    ],
+    "pre_registered_checks": {
+      "final_unseen_query_recall_gain_ge_0_03": false,
+      "final_bootstrap_lower_gt_0": false,
+      "at_least_one_candidate_promoted": false,
+      "all_round_replays_verified": true,
+      "exact_query_id_not_used": true,
+      "fixed_query_compute_budget": true
+    }
+  },
+  "anti_memorization": {
+    "query_id_used_by_model": false,
+    "exact_normalized_query_overlap": 0,
+    "exact_id_cache_seen_recall10": 1.0,
+    "exact_id_cache_final_unseen_recall10": 0.716667,
+    "exact_id_cache_final_unseen_delta": 0.0,
+    "note": "The exact-ID cache is a diagnostic control only. It is perfect on stored IDs and identical to frozen retrieval on every sealed unseen ID, so it cannot satisfy the FSM promotion guard."
+  },
+  "provenance": {
+    "grounded": true,
+    "inputs": [
+      {
+        "kind": "source",
+        "path": "/Volumes/GM/bench/2wiki_dev.jsonl",
+        "sha256": "c219e4bff85c2722bb03cb94b33653646e8f944473e1da800c5883d5ead5d8e7"
+      },
+      {
+        "kind": "harness",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/prom_p6_continual_absorption_fsm.py",
+        "sha256": "43055692a19140e47d872595cae42a78ed1b2956da771733984d0179e6a65123"
+      },
+      {
+        "kind": "fsm_spec",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/fsm/hswm_absorption_fsm.v1.json",
+        "sha256": "2ec599ed6ac283eb624aa0aaddbfca368a8af919565c45025083d93638300a13"
+      },
+      {
+        "kind": "fsm_reducer",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/hswm_absorption_fsm.py",
+        "sha256": "23947d16b396f95b7ec14f99e2d11e1a02d8e6ed1c1fe8a22a53085a822b4573"
+      },
+      {
+        "kind": "preregistration",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_p6_continual_absorption_fsm_20260722.json",
+        "sha256": "e79137a7c13c315b1e93ea2764f984bfbf23986b2354424c5b4dba1c55d4f616"
+      }
+    ],
+    "data_manifest": {
+      "dataset": "2WikiMultihopQA validation JSONL",
+      "dataset_rows": 12576,
+      "selected_rows": 900,
+      "selected_ids_sha256": "ae44966e7f2dd16dcc351d4b5f6f610e126a5287564ef675ac194f8c55fa1e57",
+      "question_split_hashes": {
+        "train_1": "9758bda78d2dc5e491337c556667d52f7cd1f8bccdfdc7db9605be1c38632185",
+        "train_2": "ea0e2f8f46db07822ab84573ceffb52f8aee5f1488e3d24a0e6bbb893ae41cd5",
+        "train_3": "b4c838e6d8f066883b3fb5be1c169aac6333ba760aaac2b0eeee734abe7c641d",
+        "validation_1": "dea878d40f3f3a0681de3583d861351b45ce3d48b5229dfd5e6abb3db8f33d08",
+        "validation_2": "d42c084328c9ecf75509b70b7e5e7c01295522047d430b1edfcf155e2a9be308",
+        "validation_3": "a93b678772a6a1a1ddc6a6a0982b4cc3137aae5790bf56c04d9f8152f278bae8",
+        "final_holdout": "62bec970ec5b1b8aa80c8ae25aab30a211ffd2e10e96f446b9605c7045174528"
+      },
+      "split_manifest_sha256": "386dd59bd10b71103de6328ad56f2132dfc79bca7a3011257ede84eaaaaf972b",
+      "seed": 8217,
+      "pool_documents": 5815,
+      "hyperedges": 7084
+    },
+    "equal_compute": {
+      "verified": true,
+      "per_query_memory_slots_scored_each_arm": 360,
+      "per_query_document_views_each_arm": 3,
+      "same_encoder": true,
+      "same_document_pool": true,
+      "same_top_k": 10,
+      "learning_compute_reported_separately": true,
+      "difference_only": "which immutable semantic association slots are unmasked and whether the fixed residual lambda is applied"
+    }
+  },
+  "harness": {
+    "command": "/Users/lagyeongjun/CD/bhgman_tool/.venv/bin/python HSWM/prom_search_hswm/prom_p6_continual_absorption_fsm.py",
+    "cwd": "/Users/lagyeongjun/CD/SYMPOSIUM",
+    "git_head": "72203bf3b0143a57a6895e7853def9c37f4bf44d",
+    "environment": {
+      "python": "3.14.6",
+      "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+      "numpy": "2.4.6",
+      "sentence_transformers": "5.5.1",
+      "model": "all-MiniLM-L6-v2",
+      "model_cache": "/Volumes/GM/hswm_lab/st_cache",
+      "hf_home": "/Volumes/GM/hswm_lab/hf_cache"
+    },
+    "started_at": "2026-07-22T06:36:42.246737+00:00",
+    "finished_at": "2026-07-22T06:37:12.489059+00:00",
+    "exit_code": 0
+  },
+  "findings": [
+    {
+      "proposal": "Keep ACTIVE immutable and admit only candidate snapshots that improve a fresh unseen-query epoch with a positive confidence lower bound.",
+      "supported_by": [
+        "measurement.rounds",
+        "fsm_spec"
+      ]
+    },
+    {
+      "proposal": "Treat exact-ID gains as cache diagnostics, never as evidence that HSWM learned a transferable structure.",
+      "supported_by": [
+        "anti_memorization",
+        "measurement.strata"
+      ]
+    }
+  ],
+  "limitations": [
+    "One English benchmark, one encoder, and one deterministic split; the final LakatoTree judge must not generalize beyond this scope.",
+    "Phase A absorbs semantic key-value associations but does not yet modify n-ary topology or run ADD/SPLIT/MERGE/SUPERSEDE fact arbitration.",
+    "The CAS registry and canary are deterministic offline adapters, not a production active-pointer service.",
+    "Private-ID and direct-answer-edge deletion are deferred to the topology phase; the current anti-memorization controls are query-disjoint splits, no ID feature, exact-cache control, and unseen-document stratification.",
+    "Training interactions use gold supporting passages; this is supervised learning-while-using, not label-free ingestion."
+  ],
+  "diagnostics": {
+    "active_memory_slots_final": 0,
+    "active_version_final": "frozen-base-v0",
+    "promoted_rounds": [],
+    "memory_cap": 360,
+    "memory_k": 8,
+    "memory_temperature": 0.08,
+    "memory_lambda": 0.35
+  }
+}

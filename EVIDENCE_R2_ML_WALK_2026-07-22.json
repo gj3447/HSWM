@@ -1,0 +1,89 @@
+{
+ "schema": "hswm-r2-ml-walk-evidence/v1",
+ "programme": "LakatosTree_PromSearchHSWM_20260721",
+ "branch": "R2-ml-material-walk",
+ "preregistration": {
+  "path": "PREREG_R2_ML_WALK_2026-07-22.json",
+  "sha256": "563e80fc6c6504c466bc3f7a58b5b1469f208413dee3f91970b16f98fff00af2",
+  "prediction_receipt_sha256": "a8f0c7177633e5dd2fcd799ed33a9328821b028b2dc153ef261d2aa39f053f3f"
+ },
+ "measurement": {
+  "metric": "min_over_datasets_A5_kernel_legal_depth2_queries",
+  "value": 3,
+  "novel_metric": "sum_A5_minus_A4_kernel_legal_depth2_queries",
+  "novel_value": 5,
+  "per_dataset": {
+   "2wiki": {
+    "A4_r1_full": {
+     "t0_admissible_chains": 25,
+     "entrance_paragraphs": 10,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 7,
+     "kernel_legal_depth2_queries": 4,
+     "depth2_targets_sum": 5
+    },
+    "A5_ml_full": {
+     "t0_admissible_chains": 70,
+     "entrance_paragraphs": 17,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 8,
+     "kernel_legal_depth2_queries": 6,
+     "depth2_targets_sum": 9
+    }
+   },
+   "musique": {
+    "A4_r1_full": {
+     "t0_admissible_chains": 6,
+     "entrance_paragraphs": 5,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 2,
+     "kernel_legal_depth2_queries": 0,
+     "depth2_targets_sum": 0
+    },
+    "A5_ml_full": {
+     "t0_admissible_chains": 23,
+     "entrance_paragraphs": 14,
+     "queries": 200,
+     "t1_seed_reaches_entrance": 4,
+     "kernel_legal_depth2_queries": 3,
+     "depth2_targets_sum": 18
+    }
+   }
+  },
+  "ml_weave_stats": {
+   "2wiki": {
+    "ml_arcs": 286,
+    "paragraphs_sha_mismatch": 0,
+    "clusters_conflicted": 419,
+    "qids_fan_capped": 0,
+    "roles_resolved_direct": 4880,
+    "roles_resolved_coref": 256
+   },
+   "musique": {
+    "ml_arcs": 634,
+    "paragraphs_sha_mismatch": 0,
+    "clusters_conflicted": 759,
+    "qids_fan_capped": 0,
+    "roles_resolved_direct": 5778,
+    "roles_resolved_coref": 284
+   }
+  },
+  "config": {
+   "walker": "r1_t1_retry.walk_depth2 (unchanged)",
+   "arm_fixed": "alias+soft+hippo seed (R1 A4)",
+   "single_variable": "graph material only"
+  }
+ },
+ "budget": {
+  "query_time_llm": 0,
+  "network": 0,
+  "new_embedding": 0,
+  "build_time_models": "ReFinED wikipedia_model_with_numbers + fastcoref FCoref (attestation in r2_material receipts)"
+ },
+ "gold_labels_consumed": false,
+ "limitations": [
+  "Same dev substrate as R1/T1 — the C4 regime critique (dense/small pool) still applies; a full-pool trial is R3, not this.",
+  "ML lane here is build-time only; HippoRAG2-style query-time LLM filter not used.",
+  "No retrieval-quality claim; waterfall structural metrics only."
+ ]
+}

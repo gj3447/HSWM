@@ -1,0 +1,59 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "R2-ml-material-walk",
+  "question": "Q-r2-ml-material-depth2",
+  "conjecture": "Layering receipt-bound ML identity material (ReFinED QID direct + fastcoref-propagated) over the deterministic woven graph, with the R1 A4 walker configuration held fixed (alias+soft+hippo seed; single variable = graph material), moves min_over_datasets kernel-legal depth-2 queries off 0, and adds depth-2 walks beyond the deterministic-material control (A5 - A4 sum > 0).",
+  "prediction": {
+    "metric": "min_over_datasets_A5_kernel_legal_depth2_queries",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0,
+    "success_threshold": 1,
+    "novel_metric": "sum_A5_minus_A4_kernel_legal_depth2_queries",
+    "novel_direction": "higher",
+    "novel_threshold": 0,
+    "credence": 0.45
+  },
+  "already_public_before_registration": {
+    "note": "R1 published: A4 on deterministic material = t1_min 2, depth2_min 0 (2Wiki d2 4 / MuSiQue d2 0). Extraction receipts were produced before registration but no weave, chain count, or walk on ML material has been computed or inspected. Extraction summary counts only (span/cluster totals) were observed — they carry no arm outcome information.",
+    "user_canon_seed": "USER 2026-07-22 '공짜는 중요한게 아니엿거든 연산 많이해도 똑똑해지면 돼는거야' (memory feedback-hswm-compute-over-frugality)"
+  },
+  "kill_conditions": [
+    "A5 depth2_min = 0 -> ML lane also fails on this substrate; only R3 (regime swap: 2Wiki full-pool / PhantomWiki) remains for the walking lane.",
+    "A4 arm fails to reproduce R1 receipts (t1_min 2, 2Wiki d2 4, MuSiQue d2 0) -> harness fork drift, measurement void.",
+    "ml_weave sha-mismatch paragraphs > 5% of corpus -> material/text-basis misalignment, measurement void.",
+    "Any gold/question consumption at build time, or any query-time LLM/network call -> void."
+  ],
+  "scope_boundary": {
+    "substrate": "frozen V5 development only — C4 regime critique (dense/small pool) applies; full-pool trial is R3, explicitly not claimed here",
+    "ml_lane": "build-time extraction only; HippoRAG2-style query-time LLM filter not used",
+    "claims": "waterfall structural metrics only; no retrieval-quality claim"
+  },
+  "locked_parameters": {
+    "walker": "r1_t1_retry.walk_depth2 unchanged (sha frozen below)",
+    "arm_config": "alias+soft+hippo seed fixed for both arms",
+    "seed_k": 3,
+    "ml_max_fan": 32,
+    "arms": ["A4_r1_full", "A5_ml_full"]
+  },
+  "module_sha256": {
+    "chain_viability.py": "b70739a4091967dce150c6a6a281ec800bd44096ca93ba72025eacf88a680662",
+    "claim_weave.py": "b36df9272d97fa20a229de90c0172a6a04b07c8462ec0b86877bbc0fd47bead1",
+    "claim_weave_ml.py": "eebc01d8fa497da579eb30366e48ec61cda8b938e5fbb02f447b50e0e66b6f66",
+    "r1_predicate_alias.py": "037e8f01ea3b8eb6634d08a1c5d9c4488d3d9b8efeb8f0219bf4352c91977d32",
+    "r1_t1_retry.py": "7747edbdb2db1b0820ef220fa319db5a7e204f45b86aed7bc32329890491085a",
+    "r2_ml_walk.py": "6f9a6b1b84f8259f89f7821ac1eb1280ba19aa66d32dcfc275a689c8daed9978"
+  },
+  "material_sha256": {
+    "musique_link": "33522c064a422b072d541c2aed0d2cb3fdacf8db47bfa21a550440b34bea3651",
+    "musique_coref": "bdadef16dc2db42684e62a277c1c1f19ab4a553feb3e7a6c0f77a27925b418ad",
+    "2wiki_link": "8973aff4040deb038a37198021a8f9b860005b3d7830d181a679862f80f5ba23",
+    "2wiki_coref": "c6e5fc314ee268ffb8ad56e695f4eb0de817f9a79333550fb241bb3d917d28cb"
+  },
+  "embedding_npz_sha256": "f0410cd2637233a04c126088d9772b35cd8278a0900ff025379832676956d291",
+  "journal_sha256": "7cb1dcf65548ac9aeace33277478e0cda0dc540cfc0ae77933921a1e06899192",
+  "prediction_receipt_sha256": "a8f0c7177633e5dd2fcd799ed33a9328821b028b2dc153ef261d2aa39f053f3f",
+  "registered_before_measurement": true,
+  "registered_at": "2026-07-22T16:40:44.370644+00:00"
+}

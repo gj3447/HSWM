@@ -60,7 +60,7 @@
 
 ## HSWM 정전과의 바인딩
 
-- **HSWM "weight-semantic map"의 weight = 場-품질/관련도 가중** — DAT/weighted-RRF가 실측 지지. 균일 융합(현 PROM 암묵)은 weakest-link에 취약.
+- **HSWM의 W(정전상 Semantic Weight Map = macro-synapse 가중·활성·라우팅)는 이 검색 축에 국소화되면 場-품질/관련도 가중으로 나타난다** — DAT/weighted-RRF가 실측 지지. 균일 융합(현 PROM 암묵)은 weakest-link에 취약.
 - **정전 `7cmd-measurement-driven-conditional-dispatch`** = per-source measurement→threshold gate. **구조적으로 per-query adaptive fusion과 동형**. 단 MoE의 *학습된* 게이트와 구별: 우리 것은 "MoE-inspired hand-tuned reliability gate."
 - **롱기누스 weight-semantic 바인딩** = 場 간 엣지에 관련도 가중을 싣는 것 — 이 문헌들이 "그 가중이 measured여야 한다"를 요구.
 

@@ -1,7 +1,6 @@
 # HSWM — public repository index
 
-> HSWM = Hypergraph Semantic Weight Map. 현재 방어 가능한 역할은 **reasoner가 아니라
-> evidence-preserving memory substrate**다. 이 인덱스는 공개 저장소의 코드·설계·실험
+> HSWM = Hypergraph Semantic Weight Map. 지향 정체성은 함수 단위가 LLM으로 실행되는 하이퍼그래프 시멘틱 신경망이며(가소성 학습 루프는 아직 미실행), 현재 측정으로 방어 가능한 범위는 **evidence-preserving memory substrate**까지다. 이 인덱스는 공개 저장소의 코드·설계·실험
 > 영수증만 가리킨다.
 
 ## 현재 설계 결론

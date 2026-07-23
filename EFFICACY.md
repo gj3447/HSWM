@@ -58,7 +58,7 @@ ranking win.
   (300 across the three runs). The listed cosine/BM25/PPR/RRF retrieval arms use
   zero LLM calls.
 - The direct reference arm uses 100 LLM rerank calls **at inference** per run;
-  it is a reasoner/reference ceiling, not a like-for-like substrate.
+  it is an inference-time LLM reference ceiling, not a like-for-like comparison arm.
 - Current traversal certificates select `mu=0`. The positive result is therefore
   a static learned field result. It is not evidence that query-time graph
   propagation caused the lift.
@@ -142,7 +142,7 @@ Sources: `traversal_bench_results.json`, `cert_musique_result.json`,
 
 ### QKV structure probe
 
-The QKV hypothesis has now been separated from the neural-network analogy. An
+The QKV hypothesis is stated here as an exact deterministic routing kernel, independently of any claim about the LLM-executed function network. An
 exact research kernel treats the current frontier and ordered relation as Q,
 the source frontier/predicate as K, and the evidenced target frontier as V.
 Selected V becomes the next Q frontier. It passes 64/64 synthetic

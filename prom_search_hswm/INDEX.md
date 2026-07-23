@@ -1,7 +1,7 @@
 # PROM Search HSWM — 실험 레지스트리 (INDEX)
 
 > **질문**: PROM(프로메테우스) 검색을 더 성능 좋게 — "인터넷 + 내부 KG의 HSWM 레이어를 쌓는 연구".
-> **HSWM** = Hypergraph Semantic Weight Map (재배맨 v3 canon, 場-of-場, weight-semantic 롱기누스 엣지).
+> **HSWM** = Hypergraph Semantic Weight Map — 정전상 **함수 단위가 LLM으로 실행되는 하이퍼그래프 기반 시멘틱 신경망**(지향 정체성이며, 학습 루프는 아직 미완). 본 레지스트리는 그중 검색·구조 축 실험을 다룬다. (재배맨 v3 canon, 場-of-場, weight-semantic 롱기누스 엣지).
 > **방법**: 자가비판 LakatoTree(`LakatosTree_PromSearchHSWM_20260721`) — 예측 사전등록 → 실측 → 판정.
 > **정본 문서**: [`docs/USER_CANON_AND_ROADMAP.md`](docs/USER_CANON_AND_ROADMAP.md) (마스터) · [`docs/CONCLUSION.md`](docs/CONCLUSION.md) · [`docs/THEORY_GROUNDING.md`](docs/THEORY_GROUNDING.md) · [`docs/SOLID_SCAFFOLD_DEPTH.md`](docs/SOLID_SCAFFOLD_DEPTH.md) · [`README.md`](README.md)
 >

@@ -51,7 +51,7 @@ def test_recorded_answer_replays_once_and_has_no_evaluator_channel(tmp_path):
     with RecordedP1V2Answerer(
         tmp_path / "p1v2.sqlite3",
         config=_config(),
-        count_user_prompt_tokens=lambda text: len(text.encode("utf-8")),
+        count_user_prompt_tokens=lambda _text: 20,
         tokenizer_identity="fixture-byte-tokenizer:v1",
         transport=transport,
     ) as answerer:
@@ -75,7 +75,7 @@ def test_answer_rejects_prompt_cut_drift_and_unknown_support(tmp_path):
     with RecordedP1V2Answerer(
         tmp_path / "p1v2.sqlite3",
         config=_config(),
-        count_user_prompt_tokens=len,
+        count_user_prompt_tokens=lambda _text: 20,
         tokenizer_identity="fixture-character-tokenizer:v1",
         transport=transport,
     ) as answerer:
@@ -103,7 +103,7 @@ def test_answer_rejects_noncanonical_prompt_and_model_drift(tmp_path):
     with RecordedP1V2Answerer(
         tmp_path / "p1v2.sqlite3",
         config=_config(),
-        count_user_prompt_tokens=len,
+        count_user_prompt_tokens=lambda _text: 20,
         tokenizer_identity="fixture-character-tokenizer:v1",
         transport=lambda *_args: _response(
             {"answers": ["Alice"], "support_source_ids": ["source:1"]},

@@ -177,10 +177,20 @@ class RecordedP1V2Answerer:
                 raise P1V2AnswerError("answer response did not finish with stop")
             content = choice["message"]["content"]
             response_model = response["model"]
+            usage = response["usage"]
         except (KeyError, TypeError, AttributeError) as error:
             raise P1V2AnswerError("OpenAI response schema mismatch") from error
         if not isinstance(content, str) or response_model != self.config.model:
             raise P1V2AnswerError("answer response content or model drifted")
+        if (
+            not isinstance(usage, Mapping)
+            or not isinstance(usage.get("prompt_tokens"), int)
+            or isinstance(usage.get("prompt_tokens"), bool)
+            or usage["prompt_tokens"] != user_prompt_tokens
+        ):
+            raise P1V2AnswerError(
+                "server prompt-token usage differs from the frozen tokenizer count"
+            )
         payload = _strict_loads(content, "answer content")
         if not isinstance(payload, dict) or set(payload) != {
             "answers", "support_source_ids"

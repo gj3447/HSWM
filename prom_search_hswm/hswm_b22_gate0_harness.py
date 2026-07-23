@@ -47,6 +47,7 @@ from prom_b2_crossfield_merge import (  # noqa: E402
     finding_text,
 )
 from prom_b21_learned_router import (  # noqa: E402
+    FROZEN_MODULES as B21_FROZEN_MODULES,
     PARTITION_SALTS,
     Paragraph,
     Query,
@@ -54,6 +55,8 @@ from prom_b21_learned_router import (  # noqa: E402
     field_label,
     frozen_b2_reference,
     normalize_rows,
+    opaque_entity,
+    privatize_text,
     read_scorepack,
     sha256_file,
     stable_pid,
@@ -66,6 +69,9 @@ LOCK_SCHEMA = "hswm-b22-gate0-acceptance-lock/v1"
 ACCEPTANCE_SCHEMA = "hswm-b22-gate0-acceptance-receipt/v1"
 FEATURE_SCHEMA = "hswm-b22-feature-view/v1"
 SUPERVISION_SCHEMA = "hswm-b22-supervision-sidecar/v1"
+CACHE_HISTORY_SCHEMA = "hswm-b21-shared-cache-history/v1"
+CACHE_HISTORY_PROFILE = "b21-r1-exact-prefix-through-target"
+CACHE_HISTORY_SCOPE = "prefix_through_role_target"
 ACCEPTANCE_CLAIM_BOUNDARY = (
     "mechanical full-candidate replay only; no retrieval-gain claim"
 )
@@ -81,6 +87,22 @@ ACCEPTANCE_ROLES = {
                                   "requires_frozen_b2": False, "queries": 500, "edges": 3452},
     "musique_full_closed_corpus": {"dataset": "musique", "cohort": "full_closed_corpus",
                                     "requires_frozen_b2": False, "queries": 800, "edges": 8893},
+}
+
+EXPECTED_B21_CACHE_HISTORY = {
+    "b2_reproduction400": (),
+    "2wiki_full_closed_corpus": (
+        "2wiki/b2_reproduction400/base/legacy",
+        "2wiki/b2_reproduction400/frozen_reference",
+    ),
+    "musique_full_closed_corpus": (
+        "2wiki/b2_reproduction400/base/legacy",
+        "2wiki/b2_reproduction400/frozen_reference",
+        "2wiki/full_closed_corpus/base/legacy",
+        "2wiki/full_closed_corpus/base/b21-field-v1",
+        "2wiki/full_closed_corpus/base/b21-field-v2",
+        "2wiki/full_closed_corpus/private_entity/legacy",
+    ),
 }
 
 ARRAY_FILES = {
@@ -1121,6 +1143,24 @@ def compare_b21_scorepack(pack_dir: Path, scorepack: dict, *,
     for key in ("dataset_sha256", "model_snapshot_sha256"):
         if scorepack_provenance.get(key) != manifest["provenance"][key]:
             raise ReplayMismatch(f"B2.1 scorepack provenance mismatch: {key}")
+    producer_sha256 = manifest["provenance"]["producer_sha256"]
+    expected_script_sha256 = producer_sha256.get("prom_b21_learned_router.py")
+    if not _is_sha256(expected_script_sha256):
+        raise ReplayMismatch(
+            "B2.1 pack producer lineage lacks prom_b21_learned_router.py"
+        )
+    if scorepack_provenance.get("script_sha256") != expected_script_sha256:
+        raise ReplayMismatch("B2.1 scorepack provenance mismatch: script_sha256")
+    expected_frozen_modules: dict[str, str] = {}
+    for name in B21_FROZEN_MODULES:
+        digest = producer_sha256.get(name)
+        if not _is_sha256(digest):
+            raise ReplayMismatch(f"B2.1 pack producer lineage lacks frozen module: {name}")
+        expected_frozen_modules[name] = digest
+    if scorepack_provenance.get("frozen_modules_sha256") != expected_frozen_modules:
+        raise ReplayMismatch(
+            "B2.1 scorepack provenance mismatch: frozen_modules_sha256"
+        )
     records = scorepack.get("records")
     if not isinstance(records, list) or len(records) != len(queries):
         raise ReplayMismatch("B2.1 scorepack row count mismatch")
@@ -1215,6 +1255,222 @@ def _select_cohort(raw: object, dataset: str, cohort: str) -> tuple[list[dict], 
         queries, pool = normalize_rows(raw, dataset)
         return rows, queries, pool
     raise PackIntegrityError(f"unknown cohort: {cohort}")
+
+
+def _raw_rows(raw: object, label: str) -> list[dict]:
+    rows = raw.get("rows") if isinstance(raw, dict) else raw
+    if not isinstance(rows, list) or not all(isinstance(row, dict) for row in rows):
+        raise PackIntegrityError(f"{label} must contain a row-object list")
+    return rows
+
+
+def _b21_reproduction_view(
+    raw_2wiki: object,
+    *,
+    query_count: int | None = None,
+) -> tuple[Sequence[Query], Mapping[str, Paragraph]]:
+    """Reconstruct the exact B2.1 r1 reproduction request, including row order."""
+    import random
+
+    all_queries, _ = normalize_rows(raw_2wiki, "2wiki")
+    source_rows = _raw_rows(raw_2wiki, "B2.1 history 2Wiki source")
+    count = (ACCEPTANCE_ROLES["b2_reproduction400"]["queries"]
+             if query_count is None else query_count)
+    order = list(range(len(all_queries)))
+    random.Random(B2_SEED).shuffle(order)
+    if len(order) < count:
+        raise PackIntegrityError(
+            f"B2.1 history source has fewer than {count} usable 2Wiki queries"
+        )
+    selected = [source_rows[index] for index in order[:count]]
+    return normalize_rows(selected, "2wiki")
+
+
+def _b21_requested_texts(
+    queries: Sequence[Query],
+    pool: Mapping[str, Paragraph],
+    *,
+    private_entities: bool,
+) -> tuple[str, ...]:
+    """Mirror B2.1's sorted unique encoder request without computing scores."""
+    edge_ids = sorted(pool)
+    if private_entities:
+        edge_texts = [
+            privatize_text(
+                finding_text(pool[edge_id].title, pool[edge_id].body),
+                pool[edge_id].entities,
+            )
+            for edge_id in edge_ids
+        ]
+        vertex_texts = [
+            opaque_entity(entity)
+            for entity in sorted({entity for edge_id in edge_ids
+                                  for entity in pool[edge_id].entities})
+        ]
+        query_texts = [
+            privatize_text(query.question, base_entities(query.question))
+            for query in queries
+        ]
+    else:
+        edge_texts = [
+            finding_text(pool[edge_id].title, pool[edge_id].body)
+            for edge_id in edge_ids
+        ]
+        vertex_texts = sorted({entity for edge_id in edge_ids
+                               for entity in pool[edge_id].entities})
+        query_texts = [query.question for query in queries]
+    return tuple(sorted(set(edge_texts) | set(vertex_texts) | set(query_texts)))
+
+
+def _embedding_cache_plan(
+    role: str,
+    *,
+    target_raw: object,
+    two_wiki_raw: object,
+    reproduction_queries: int | None = None,
+) -> dict:
+    if role not in EXPECTED_B21_CACHE_HISTORY:
+        raise PackIntegrityError(f"unknown B2.1 cache-history role: {role}")
+    repro_queries, repro_pool = _b21_reproduction_view(
+        two_wiki_raw, query_count=reproduction_queries)
+    full_queries, full_pool = normalize_rows(two_wiki_raw, "2wiki")
+    repro_base = _b21_requested_texts(
+        repro_queries, repro_pool, private_entities=False)
+    full_base = _b21_requested_texts(
+        full_queries, full_pool, private_entities=False)
+    full_private = _b21_requested_texts(
+        full_queries, full_pool, private_entities=True)
+    steps = {
+        "2wiki/b2_reproduction400/base/legacy": repro_base,
+        "2wiki/b2_reproduction400/frozen_reference": repro_base,
+        "2wiki/full_closed_corpus/base/legacy": full_base,
+        "2wiki/full_closed_corpus/base/b21-field-v1": full_base,
+        "2wiki/full_closed_corpus/base/b21-field-v2": full_base,
+        "2wiki/full_closed_corpus/private_entity/legacy": full_private,
+    }
+    if role == "b2_reproduction400":
+        target_name = "2wiki/b2_reproduction400/base/legacy"
+        target_texts = repro_base
+    elif role == "2wiki_full_closed_corpus":
+        target_name = "2wiki/full_closed_corpus/base/legacy"
+        target_texts = full_base
+    else:
+        target_queries, target_pool = normalize_rows(target_raw, "musique")
+        target_name = "musique/full_closed_corpus/base/legacy"
+        target_texts = _b21_requested_texts(
+            target_queries, target_pool, private_entities=False)
+    return {
+        "prewarm": tuple(
+            (name, steps[name]) for name in EXPECTED_B21_CACHE_HISTORY[role]
+        ),
+        "target": (target_name, target_texts),
+    }
+
+
+def _text_sequence_sha256(texts: Sequence[str]) -> str:
+    return _json_sha256([
+        hashlib.sha256(text.encode("utf-8")).hexdigest() for text in texts
+    ])
+
+
+def _trace_cache_step(name: str, texts: Sequence[str], cache: set[str]) -> dict:
+    requested = tuple(texts)
+    missing = tuple(text for text in requested if text not in cache)
+    cache.update(missing)
+    return {
+        "name": name,
+        "requested_count": len(requested),
+        "requested_sha256": _text_sequence_sha256(requested),
+        "missing_count": len(missing),
+        "missing_sha256": _text_sequence_sha256(missing),
+        "cache_after_count": len(cache),
+        "cache_after_sha256": _text_sequence_sha256(tuple(sorted(cache))),
+    }
+
+
+class _ObservedEmbeddingSchedule:
+    """Record only calls that actually execute in the sealed B2.1 prefix."""
+
+    def __init__(self, embedder: Callable[[list[str]], Sequence[Sequence[float]]]) -> None:
+        self._embedder = embedder
+        self._logical_cache: set[str] = set()
+        self._steps: list[dict] = []
+
+    def encode(self, name: str, texts: Sequence[str]) -> Sequence[Sequence[float]]:
+        next_cache = set(self._logical_cache)
+        step = _trace_cache_step(name, texts, next_cache)
+        values = self._embedder(list(texts))
+        self._logical_cache = next_cache
+        self._steps.append(step)
+        return values
+
+    @property
+    def steps(self) -> tuple[dict, ...]:
+        return tuple(dict(step) for step in self._steps)
+
+
+def _make_embedding_cache_history(
+    role: str,
+    *,
+    target_raw: object,
+    two_wiki_raw: object,
+    two_wiki_path: Path,
+    two_wiki_sha256: str,
+    model_snapshot_sha256: str,
+    target_embedding_table_sha256: str,
+    device: str,
+    batch_size: int,
+    reproduction_queries: int | None = None,
+    observed_steps: Sequence[Mapping[str, object]] | None = None,
+) -> dict:
+    plan = _embedding_cache_plan(
+        role, target_raw=target_raw, two_wiki_raw=two_wiki_raw,
+        reproduction_queries=reproduction_queries)
+    logical_cache: set[str] = set()
+    prewarm_steps = [
+        _trace_cache_step(name, texts, logical_cache)
+        for name, texts in plan["prewarm"]
+    ]
+    target_name, target_texts = plan["target"]
+    target_step = _trace_cache_step(target_name, target_texts, logical_cache)
+    expected_steps = [*prewarm_steps, target_step]
+    if observed_steps is not None and list(observed_steps) != expected_steps:
+        raise ReplayMismatch(
+            "observed embedding calls differ from the exact B2.1 prefix")
+    core = {
+        "schema": CACHE_HISTORY_SCHEMA,
+        "profile": CACHE_HISTORY_PROFILE,
+        "scope": CACHE_HISTORY_SCOPE,
+        "role": role,
+        "encoder": {
+            "batch_size": batch_size,
+            "device": device,
+            "normalize_embeddings": True,
+            "model_snapshot_sha256": model_snapshot_sha256,
+        },
+        "two_wiki_source": {
+            "path": str(Path(two_wiki_path).absolute()),
+            "sha256": two_wiki_sha256,
+        },
+        "prewarm_steps": prewarm_steps,
+        "target_step": target_step,
+        "target_embedding_binding": {
+            "sha256": target_embedding_table_sha256,
+            "scope": "producer_attested_manifest_binding",
+            "model_free_rederived": False,
+        },
+    }
+    return {**core, "history_sha256": _json_sha256(core)}
+
+
+def _execute_embedding_cache_prewarm(
+    embedder: Callable[[list[str]], Sequence[Sequence[float]]],
+    plan: Mapping[str, object],
+) -> _ObservedEmbeddingSchedule:
+    observed = _ObservedEmbeddingSchedule(embedder)
+    for name, texts in plan["prewarm"]:
+        observed.encode(name, texts)
+    return observed
 
 
 def _producer_hashes() -> dict[str, str]:
@@ -1339,8 +1595,94 @@ def _pack_semantic_sha256(pack_path: Path, manifest: dict) -> str:
     return _compiled_semantic_sha256(compiled)
 
 
+def _validate_embedding_cache_history(
+    receipt: Mapping[str, object],
+    manifest: Mapping[str, object],
+    role: str,
+    inputs: Mapping[str, object],
+) -> dict:
+    history = receipt.get("embedding_cache_history")
+    if not isinstance(history, dict):
+        raise PackIntegrityError("compile receipt lacks embedding cache history")
+    _strict_keys(history, {
+        "schema", "profile", "scope", "role", "encoder", "two_wiki_source",
+        "prewarm_steps", "target_step", "target_embedding_binding",
+        "history_sha256",
+    }, "embedding cache history")
+    if (history["schema"] != CACHE_HISTORY_SCHEMA
+            or history["profile"] != CACHE_HISTORY_PROFILE
+            or history["scope"] != CACHE_HISTORY_SCOPE
+            or history["role"] != role):
+        raise PackIntegrityError("embedding cache history profile/role mismatch")
+    encoder = history["encoder"]
+    if not isinstance(encoder, dict):
+        raise PackIntegrityError("embedding cache history encoder is missing")
+    _strict_keys(encoder, {
+        "batch_size", "device", "normalize_embeddings",
+        "model_snapshot_sha256",
+    }, "embedding cache history encoder")
+    if encoder != {
+        "batch_size": 128,
+        "device": "cuda",
+        "normalize_embeddings": True,
+        "model_snapshot_sha256": manifest["provenance"]["model_snapshot_sha256"],
+    }:
+        raise PackIntegrityError("embedding cache history encoder contract mismatch")
+    source = history["two_wiki_source"]
+    if not isinstance(source, dict):
+        raise PackIntegrityError("embedding cache history 2Wiki source is missing")
+    _strict_keys(source, {"path", "sha256"}, "embedding cache history 2Wiki source")
+    source_path = _require_path(source["path"], "embedding cache history 2Wiki path")
+    if not source_path.is_absolute() or not _is_sha256(source["sha256"]):
+        raise PackIntegrityError("embedding cache history 2Wiki source is not pinned")
+    if not source_path.is_file() or sha256_file(source_path) != source["sha256"]:
+        raise PackIntegrityError("embedding cache history 2Wiki source bytes differ")
+    if (role in {"b2_reproduction400", "2wiki_full_closed_corpus"}
+            and source["sha256"] != inputs["data_sha256"]):
+        raise PackIntegrityError("2Wiki target/history source hashes differ")
+    target_binding = history["target_embedding_binding"]
+    if not isinstance(target_binding, dict):
+        raise PackIntegrityError("target embedding binding is missing")
+    _strict_keys(target_binding, {
+        "sha256", "scope", "model_free_rederived",
+    }, "target embedding binding")
+    if target_binding != {
+        "sha256": manifest["embedding_table_sha256"],
+        "scope": "producer_attested_manifest_binding",
+        "model_free_rederived": False,
+    }:
+        raise PackIntegrityError("target embedding binding contract mismatch")
+    target_path = _require_path(inputs["data"], "compile receipt dataset path")
+    expected = _make_embedding_cache_history(
+        role,
+        target_raw=_read_json(target_path),
+        two_wiki_raw=_read_json(source_path),
+        two_wiki_path=source_path,
+        two_wiki_sha256=source["sha256"],
+        model_snapshot_sha256=manifest["provenance"]["model_snapshot_sha256"],
+        target_embedding_table_sha256=manifest["embedding_table_sha256"],
+        device="cuda",
+        batch_size=128,
+    )
+    if history != expected:
+        raise PackIntegrityError("embedding cache history differs from reconstructed plan")
+    return history
+
+
+def _cache_history_lock_summary(history: Mapping[str, object]) -> dict:
+    return {
+        "profile": history["profile"],
+        "scope": history["scope"],
+        "history_sha256": history["history_sha256"],
+        "two_wiki_source_sha256": history["two_wiki_source"]["sha256"],
+        "prewarm_step_names": [step["name"] for step in history["prewarm_steps"]],
+        "target_step_name": history["target_step"]["name"],
+        "target_embedding_binding": history["target_embedding_binding"],
+    }
+
+
 def _validate_compile_receipt(receipt: dict, manifest: dict, role: str,
-                              pack_path: Path) -> dict:
+                              pack_path: Path) -> tuple[dict, dict]:
     if (receipt.get("schema") != RECEIPT_SCHEMA
             or receipt.get("status") != "PACK_SELF_CHECK_PASS"
             or receipt.get("pass") is not True
@@ -1414,6 +1756,8 @@ def _validate_compile_receipt(receipt: dict, manifest: dict, role: str,
         raise PackIntegrityError("B2.1 reference bytes differ from compile receipt")
     if inputs["producer_sha256"] != _producer_hashes():
         raise PackIntegrityError("producer source differs from compile receipt")
+    cache_history = _validate_embedding_cache_history(
+        receipt, manifest, role, inputs)
     edges, _, _ = _load_sidecars(pack_path, manifest)
     field_a = sum(record["field_label"] == "A" for record in edges)
     field_b = len(edges) - field_a
@@ -1453,7 +1797,7 @@ def _validate_compile_receipt(receipt: dict, manifest: dict, role: str,
             "frozen_b2_reference", "frozen_b2_reference_sha256",
             "frozen_b2_payload_sha256")):
         raise PackIntegrityError("full-corpus role unexpectedly carries frozen-B2 reference")
-    return inputs
+    return inputs, cache_history
 
 
 def _build_lock_entry(role: str, pack_path: Path, receipt_path: Path) -> dict:
@@ -1476,7 +1820,8 @@ def _build_lock_entry(role: str, pack_path: Path, receipt_path: Path) -> dict:
     for key in ("queries", "edges"):
         if manifest["counts"].get(key) != expected_identity[key]:
             raise PackIntegrityError(f"acceptance role count mismatch: {role}/{key}")
-    inputs = _validate_compile_receipt(receipt, manifest, role, pack_path)
+    inputs, cache_history = _validate_compile_receipt(
+        receipt, manifest, role, pack_path)
     return {
         "role": role,
         "pack_path": str(pack_path),
@@ -1488,6 +1833,7 @@ def _build_lock_entry(role: str, pack_path: Path, receipt_path: Path) -> dict:
         "candidate_set_sha256": manifest["candidate_set_sha256"],
         "query_set_sha256": manifest["query_set_sha256"],
         "provenance": manifest["provenance"],
+        "embedding_cache_history": _cache_history_lock_summary(cache_history),
         "b21_reference": {
             "gzip_sha256": inputs["b21_scorepack_sha256"],
             "payload_sha256": inputs["b21_payload_sha256"],
@@ -1551,6 +1897,14 @@ def _validate_cross_role_entries(entries: Mapping[str, dict]) -> None:
         raise PackIntegrityError("Gate-0 roles do not share one frozen model")
     if len(producer_sets) != 1:
         raise PackIntegrityError("Gate-0 roles do not share one producer set")
+    histories = [entry["embedding_cache_history"] for entry in entries.values()]
+    if {history["profile"] for history in histories} != {CACHE_HISTORY_PROFILE}:
+        raise PackIntegrityError("Gate-0 roles do not share the exact B2.1 cache profile")
+    if {history["scope"] for history in histories} != {CACHE_HISTORY_SCOPE}:
+        raise PackIntegrityError("Gate-0 roles do not share one cache-prefix scope")
+    history_sources = {history["two_wiki_source_sha256"] for history in histories}
+    if history_sources != {reproduction["provenance"]["dataset_sha256"]}:
+        raise PackIntegrityError("Gate-0 cache histories do not share the pinned 2Wiki source")
 
 
 def _validate_acceptance_lock(
@@ -1595,7 +1949,7 @@ def _validate_acceptance_lock(
             "role", "pack_path", "compile_receipt_path", "compile_receipt_sha256",
             "pack_root_sha256", "identity", "counts", "candidate_set_sha256",
             "query_set_sha256", "provenance", "b21_reference",
-            "frozen_b2_reference",
+            "frozen_b2_reference", "embedding_cache_history",
         }
         _strict_keys(entry, expected_keys, f"acceptance lock entry {role}")
         if (not _is_sha256(entry["compile_receipt_sha256"])
@@ -1621,6 +1975,7 @@ def _accepted_entries(entries: Mapping[str, dict]) -> dict[str, dict]:
             "counts": entry["counts"],
             "candidate_set_sha256": entry["candidate_set_sha256"],
             "query_set_sha256": entry["query_set_sha256"],
+            "embedding_cache_history": entry["embedding_cache_history"],
             "determinism_replay": compile_receipt["determinism_replay"],
             "b21_topk_continuity": compile_receipt["b21_topk_continuity"],
             "frozen_b2_replay": compile_receipt.get("frozen_b2_replay"),
@@ -1705,9 +2060,37 @@ def load_feature_view(pack_dir: Path, *, acceptance_receipt: Path, role: str) ->
     return view
 
 
+def _compile_role(dataset: str, cohort: str) -> str:
+    matches = [
+        role for role, contract in ACCEPTANCE_ROLES.items()
+        if contract["dataset"] == dataset and contract["cohort"] == cohort
+    ]
+    if len(matches) != 1:
+        raise PackIntegrityError(
+            f"dataset/cohort is not a Gate-0 acceptance role: {dataset}/{cohort}")
+    return matches[0]
+
+
 def _compile_cli(args: argparse.Namespace) -> int:
     started_at = _utc_now()
     data_path = Path(args.data).resolve()
+    role = _compile_role(args.dataset, args.cohort)
+    if args.salt != "legacy":
+        raise PackIntegrityError("Gate-0 acceptance compilation requires salt=legacy")
+    if args.device != "cuda" or args.batch_size != 128:
+        raise PackIntegrityError(
+            "Gate-0 exact B2.1 cache replay requires device=cuda and batch-size=128")
+    history_argument = getattr(args, "b21_history_2wiki_data", None)
+    if role == "musique_full_closed_corpus":
+        if not history_argument:
+            raise PackIntegrityError(
+                "MuSiQue Gate-0 compilation requires --b21-history-2wiki-data")
+        two_wiki_path = Path(history_argument).resolve()
+    else:
+        two_wiki_path = data_path
+        if history_argument and Path(history_argument).resolve() != data_path:
+            raise PackIntegrityError(
+                "2Wiki Gate-0 history source must be the target --data bytes")
     model_input = Path(args.model_path).absolute()
     model_manifest = _strict_model_manifest(model_input)
     model_path = model_input.resolve()
@@ -1727,9 +2110,11 @@ def _compile_cli(args: argparse.Namespace) -> int:
         output_paths["frozen_b2_reference"] = frozen_reference_path
     _reject_artifact_overlap(output_paths)
     raw = _read_json(data_path)
+    two_wiki_raw = raw if two_wiki_path == data_path else _read_json(two_wiki_path)
     selected_rows, queries, pool = _select_cohort(raw, args.dataset, args.cohort)
     producer_hashes = _producer_hashes()
     data_sha256 = sha256_file(data_path)
+    two_wiki_sha256 = sha256_file(two_wiki_path)
     provenance = {
         "dataset_sha256": data_sha256,
         "model_snapshot_sha256": model_manifest["sha256"],
@@ -1737,9 +2122,36 @@ def _compile_cli(args: argparse.Namespace) -> int:
     }
     embedder = SentenceEmbedder(str(model_path), device=args.device,
                                 batch_size=args.batch_size)
+    cache_plan = _embedding_cache_plan(
+        role, target_raw=raw, two_wiki_raw=two_wiki_raw)
+    observed_schedule = _execute_embedding_cache_prewarm(embedder, cache_plan)
+    target_name, target_texts = cache_plan["target"]
+
+    def encode_target(texts: list[str]) -> Sequence[Sequence[float]]:
+        if tuple(texts) != tuple(target_texts):
+            raise ReplayMismatch(
+                f"compiled target request differs from B2.1 prefix: {target_name}")
+        return observed_schedule.encode(target_name, texts)
+
     compiled = compile_full_candidate_pack(
-        queries, pool, embedder, dataset=args.dataset, salt=args.salt,
+        queries, pool, encode_target, dataset=args.dataset, salt=args.salt,
         cohort=args.cohort, model_id=args.model_id, provenance=provenance,
+    )
+    if (compiled.manifest_seed["text_table_sha256"]
+            != _text_sequence_sha256(target_texts)):
+        raise ReplayMismatch(f"cache-history target text table drift: {target_name}")
+    cache_history = _make_embedding_cache_history(
+        role,
+        target_raw=raw,
+        two_wiki_raw=two_wiki_raw,
+        two_wiki_path=two_wiki_path,
+        two_wiki_sha256=two_wiki_sha256,
+        model_snapshot_sha256=model_manifest["sha256"],
+        target_embedding_table_sha256=compiled.manifest_seed[
+            "embedding_table_sha256"],
+        device=args.device,
+        batch_size=args.batch_size,
+        observed_steps=observed_schedule.steps,
     )
     repeated = compile_full_candidate_pack(
         queries, pool, embedder, dataset=args.dataset, salt=args.salt,
@@ -1765,8 +2177,12 @@ def _compile_cli(args: argparse.Namespace) -> int:
     b21 = read_scorepack(b21_path) if b21_path else None
     if _strict_model_manifest(model_path) != model_manifest:
         raise PackIntegrityError("model snapshot changed during compilation")
+    if (sha256_file(data_path) != data_sha256
+            or sha256_file(two_wiki_path) != two_wiki_sha256):
+        raise PackIntegrityError("dataset/cache-history source changed during compilation")
     receipt = write_pack(output, compiled, frozen_b2=reference, b21_scorepack=b21)
     receipt.update({
+        "embedding_cache_history": cache_history,
         "determinism_replay": {
             "pass": True,
             "same_embedding_table": True,
@@ -1842,6 +2258,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     compile_parser.add_argument("--device", default="cuda")
     compile_parser.add_argument("--batch-size", type=int, default=128)
     compile_parser.add_argument("--b21-scorepack")
+    compile_parser.add_argument(
+        "--b21-history-2wiki-data",
+        help="pinned 2Wiki source needed to reconstruct B2.1 shared-cache history",
+    )
     compile_parser.add_argument("--frozen-b2-reference")
     compile_parser.add_argument("--output", required=True)
     compile_parser.add_argument("--receipt", required=True)

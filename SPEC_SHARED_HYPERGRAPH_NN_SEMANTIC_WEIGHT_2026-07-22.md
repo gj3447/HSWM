@@ -1,4 +1,4 @@
-# HSWM — Shared Hypergraph Neural Memory + Semantic Weight layers
+# HSWM — Shared Hypergraph Neural Network + Semantic Weight layers
 
 > **status**: SECONDARY_AI crystallisation of USER dialogue 2026-07-22
 > **USER intent**: HSWM should get smarter; the hypergraph hosts a neural substrate multi-agents use.
@@ -7,7 +7,7 @@
 
 ## 0. One-line hard-core candidate (protective-belt promotion pending measurement)
 
-> **HSWM = multi-agents' shared external neural memory**: hypergraph circuit × semantic weights \(W\) × embedding seeds × activation \(a\). LLM = external reasoner/writer/judge, not the net itself.
+> **HSWM = a hypergraph-based giant semantic neural network whose function units are executed by LLMs**: hypergraph circuit × semantic weights \(W\) × embedding seeds × activation \(a\). LLM = the execution substrate of the net's own function units \(f_i\), not an external reasoner bolted onto a passive memory.
 
 ## 1. Layer table (corrected — semantic weight is first-class)
 
@@ -17,7 +17,7 @@
 | **Hypergraph topology** | Who is n-ary bound with whom = circuit | Discrete structural meaning (relations/propositions) | ADD / SPLIT / MERGE |
 | **Semantic weight \(W\)** | Strength of those bindings | **Canonical Semantic Weight** — not missing; this *is* it | Use · judgment · supersede |
 | **Activation \(a\)** | Currently lit meaning pattern | Momentary activation over the weight map | Volatile per run |
-| **LLM** | External reasoner / writer / judge | Hands on the net; model need not be trained | Optional freeze |
+| **LLM** | Executor of each local function \(f_i\) | Runs the net's neural computation over \(H\) and \(W\); model need not be trained | Optional freeze |
 
 **Name recovery**: prior table labeled \(W\) as "synapses" only; that row **is** the Semantic Weight. HSWM without explicit \(W\) collapses to "Semantic Graph" (structure only), not Weight Map.
 

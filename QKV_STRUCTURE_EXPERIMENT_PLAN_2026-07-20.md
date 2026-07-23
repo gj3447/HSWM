@@ -7,7 +7,7 @@ was written. No B1-QKV development outcome had been computed at freeze time.
 
 ## Question
 
-The narrow hypothesis is not that HSWM is a neural network. It is that an
+The narrow hypothesis does not depend on the HSWM target identity as an LLM-executed function network. It is that an
 evidence-preserving memory can expose a Q/K/V-like operator:
 
 ```text

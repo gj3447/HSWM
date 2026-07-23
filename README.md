@@ -141,8 +141,7 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
   recovery. It is an operational mechanism, not a live outer dispatcher,
   LakatoTree dependency, scientific verdict, or external exactly-once claim.
 
-These engineering mechanisms do not establish that HSWM is an intelligent
-neural substrate or continual learner. That stronger claim still requires a
+These engineering mechanisms do not establish that the HSWM function network is intelligent or already learns continually; its plasticity loop is not yet closed. That stronger claim still requires a
 preregistered frozen-model comparison of no memory, transcript/vector memory,
 dynamic KG/event-log memory, full HSWM, and causal-rewrite ablation under equal
 compute, held-out behavior, rejection controls, forgetting bounds, and receipt
@@ -173,7 +172,7 @@ roles, requires exact A/B parity, keeps C/D as explicitly different controls,
 and refuses missing shared immutable components or replay-counter drift. The
 retrieval fixture, executable model arms, frozen confirmatory inputs, numeric
 thresholds, and G4 preregistration remain unresolved; therefore no efficacy run
-is authorized. No winner, production, neural-substrate, or novelty claim follows
+is authorized. No winner, production, closed-learning, or novelty claim follows
 from these engineering receipts. The longer user direction and SECONDARY_AI
 formalization remain in
 [`SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md`](SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md).

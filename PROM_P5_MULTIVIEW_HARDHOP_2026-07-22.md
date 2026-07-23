@@ -8,7 +8,7 @@
 
 ## 1. 먼저 복구한 현재 상태
 
-HSWM은 여기서 일반적인 world model이 아니라 **Hypergraph Semantic Weight Map**이며, 현재 방어 가능한 역할은 reasoner가 아니라 memory substrate다. 기존 연구의 살아 있는 핵은 다음 세 가지다.
+HSWM은 여기서 일반적인 world model이 아니라 **Hypergraph Semantic Weight Map**이며, 현재 측정으로 방어 가능한 범위는 evidence-preserving 필드 층까지이고, 지향 정체성은 LLM으로 실행되는 함수망 자체다. 기존 연구의 살아 있는 핵은 다음 세 가지다.
 
 1. n-ary 하이퍼엣지는 이진 분해보다 multi-hop에서 유리했다(ML16).
 2. semantic은 `SEED`, 구조는 `EDGE`로 분리해야 했다(ML17).

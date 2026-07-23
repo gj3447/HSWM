@@ -23,6 +23,22 @@ if [ -n "$HITS" ]; then
   echo "ERROR: 시크릿 의심 패턴 발견 — 발행 중단:" >&2; echo "$HITS" >&2; exit 2
 fi
 
+# 미러 역행 가드 (2026-07-23 신설) — 공개 미러에만 있는 파일이 있으면 아래 --delete 가 그것들을 지운다.
+# 실제 사고 직전까지 감: 공개 repo 쪽 agent 워크트리(GIT/hswm_*)가 직접 커밋하면서
+# B2.1 router evidence·shadow-gate 코드/테스트·judgments 등 37 파일이 미러에만 존재했다.
+if [ -d "$PUB" ]; then
+  FIND_FILES='find . -type f -not -path "*/__pycache__/*" -not -path "./.pytest_cache/*"'
+  ONLY_IN_PUB=$(diff <(cd "$PUB" && eval "$FIND_FILES" | sort) <(cd "$SYM" && eval "$FIND_FILES" | sort) | grep '^<' || true)
+  if [ -n "$ONLY_IN_PUB" ] && [ "$2" != "--force" ]; then
+    echo "ERROR: 공개 미러에만 있는 파일 발견 — rsync --delete 가 이것들을 지운다. 발행 중단:" >&2
+    echo "$ONLY_IN_PUB" >&2
+    echo "먼저 작업처로 백포트해라:" >&2
+    echo "  rsync -a --exclude=__pycache__ --exclude=.pytest_cache \"$PUB/\" \"$SYM/\"" >&2
+    echo "(정말 삭제가 의도라면: ./publish.sh \"메시지\" --force)" >&2
+    exit 3
+  fi
+fi
+
 echo "[publish] rsync $SYM → $PUB" >&2
 rsync -a --delete --exclude='__pycache__' --exclude='*.log' --exclude='.DS_Store' "$SYM/" "$PUB/"
 

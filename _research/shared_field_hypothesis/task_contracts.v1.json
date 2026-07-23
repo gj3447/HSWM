@@ -1,0 +1,299 @@
+{
+  "schema": "hswm-g2-task-contracts/v1",
+  "status": "G2_FIXTURES_IMPLEMENTED_ARMS_PENDING",
+  "scope": {
+    "question": "Can one field support retrieval, independent cost/risk selection, and evolving revision under a later equal-budget experiment?",
+    "artifact_role": "Design and fixture contract only",
+    "gold_labels_are_architecture_independent": true,
+    "shared_scalar_implemented_or_measured_here": false,
+    "model_arms_implemented_or_measured_here": false
+  },
+  "independent_gold_labels": {
+    "multihop_cross_document": {
+      "label_authority": [
+        "frozen evidence membership",
+        "frozen support chains",
+        "frozen downstream answer labels"
+      ],
+      "forbidden_gold_sources": [
+        "retrieval score",
+        "candidate rank emitted by an evaluated arm",
+        "shared-field value"
+      ]
+    },
+    "independent_selection_action": {
+      "label_authority": [
+        "frozen outcome acceptability",
+        "frozen reward",
+        "frozen action cost",
+        "frozen action risk",
+        "registered hard constraints"
+      ],
+      "forbidden_gold_sources": [
+        "retrieval argmax",
+        "relevance argmax",
+        "selection_distribution",
+        "shared-field value"
+      ],
+      "required_separation_case": "The unique relevance argmax is unsafe, constraint-invalid, or cost-suboptimal under the same evidence state."
+    },
+    "evolving_knowledge": {
+      "label_authority": [
+        "KEEP, SUPERSEDE, CONTRADICT, and COMPENSATE source labels",
+        "valid_time and observed_at",
+        "fact, revision, event, evidence, and source identities",
+        "registered branch confluence expectation or non-confluence reason"
+      ],
+      "forbidden_gold_sources": [
+        "semantic similarity",
+        "retrieval rank",
+        "arm-selected write location",
+        "shared-field value"
+      ]
+    }
+  },
+  "task_schemas": {
+    "multihop_cross_document": {
+      "source_schema": "hswm-multihop-evidence-source/v1",
+      "oracle_schema": "hswm-multihop-evidence-oracle/v1",
+      "required_fields": [
+        "query_id",
+        "evidence_ids",
+        "support_chain_ids",
+        "answer_label",
+        "source_ids",
+        "source_digests"
+      ],
+      "implementation_status": "INTERFACE_ONLY_NOT_IMPLEMENTED_IN_THIS_SLICE"
+    },
+    "independent_selection_action": {
+      "source_schema": "hswm-cost-risk-selection-source/v1",
+      "compiled_schema": "hswm-cost-risk-selection-fixture/v1",
+      "compiler_path": "_research/shared_field_hypothesis/selection_fixture.py",
+      "required_source_fields": [
+        "fixture_id",
+        "evidence_state",
+        "actions",
+        "constraints",
+        "commitment_sha256"
+      ],
+      "required_oracle_fields": [
+        "gold_action_id",
+        "gold_utility",
+        "action_oracle",
+        "regret",
+        "refusal_reasons",
+        "source_sha256",
+        "evidence_state_sha256",
+        "oracle_sha256"
+      ],
+      "arithmetic": "exact integer utility and regret",
+      "implementation_status": "FIXTURE_COMPILER_IMPLEMENTED_NO_MODEL_ARM"
+    },
+    "evolving_knowledge": {
+      "source_schema": "hswm-revision-source/v1",
+      "compiled_schema": "hswm-revision-stream/v1",
+      "compiler_path": "_research/shared_field_hypothesis/revision_stream_compiler.py",
+      "required_source_fields": [
+        "stream_id",
+        "events",
+        "query_times",
+        "branches"
+      ],
+      "required_event_bindings": [
+        "event_id and event_sha256",
+        "revision_id and revision_sha256",
+        "fact_id and fact_sha256",
+        "evidence IDs and digests",
+        "source ID and digest",
+        "valid_time",
+        "observed_at",
+        "global sequence",
+        "per-fact revision_sequence"
+      ],
+      "required_oracles": [
+        "current cut for every registered query time",
+        "as-of cut for every registered query time",
+        "stale revision IDs",
+        "contradiction history",
+        "branch permutation outcomes",
+        "stream and oracle digests"
+      ],
+      "implementation_status": "FIXTURE_COMPILER_IMPLEMENTED_NO_MODEL_ARM"
+    }
+  },
+  "source_and_contamination_boundary": {
+    "development_only": {
+      "multihop_cross_document": [
+        "previously inspected 2WikiMultiHopQA and MuSiQue cohorts"
+      ],
+      "independent_selection_action": [
+        "generated TextWorld or ALFWorld development worlds"
+      ],
+      "evolving_knowledge": [
+        "EvolvingQA development blocks"
+      ]
+    },
+    "confirmatory_candidates_not_claimed_sealed": {
+      "multihop_cross_document": [
+        "fresh PhantomWiki worlds generated after seed commitment",
+        "frozen unseen public split with contamination audit"
+      ],
+      "independent_selection_action": [
+        "held-out generated worlds and seeds after commitment"
+      ],
+      "evolving_knowledge": [
+        "frozen EvolvingQA, StreamingQA, or SituatedQA blocks",
+        "unreleased synthetic revision blocks generated after commitment"
+      ]
+    },
+    "robustness_only": {
+      "evolving_knowledge": [
+        "LongMemEval knowledge-update cases"
+      ]
+    },
+    "rules": [
+      "Public benchmark labels are never described as technically sealed.",
+      "Every frozen split, source block, query set, candidate set, evaluator, and oracle is commit- and byte-hash-bound before measurement.",
+      "Contamination audit records prior exposure, generation seed commitment, source license, and excluded overlap.",
+      "Only server-generated fresh worlds or unreleased blocks created after the G4 commitment may be called sealed.",
+      "Development labels and confirmatory labels cannot share examples, generated worlds, seeds, or revision blocks."
+    ]
+  },
+  "arm_interface_expectations": [
+    {
+      "role": "A",
+      "id": "one_field",
+      "purpose": "Primary shared-field treatment interface",
+      "mutable_state": "Exactly one B-scalar field and one registered update rule across retrieve, select, and revise.",
+      "must": [
+        "Read one versioned field cut and provenance through three registered typed ports.",
+        "Use byte-identical task adapters, candidate transforms, and decoders to role B.",
+        "Expose parameter and serialized-state inventories to the G3 verifier."
+      ],
+      "must_not": [
+        "Use task ID or head ID as a feature.",
+        "Hide task lookup tables, constants, routers, optimizers, or mutable state outside the B-scalar inventory."
+      ],
+      "implementation_status": "EXPECTED_INTERFACE_NOT_IMPLEMENTED_HERE"
+    },
+    {
+      "role": "B",
+      "id": "separate_heads",
+      "purpose": "Primary equal-budget control interface",
+      "mutable_state": "Registered retrieve, select, and revise heads whose total mutable scalar count is exactly B.",
+      "must": [
+        "Share byte-identical graph, embeddings, candidates, runtime, training labels, task adapters, transforms, and decoders with role A.",
+        "Select the registered head only through the typed port.",
+        "Expose per-head and total parameter and serialized-state inventories to the G3 verifier."
+      ],
+      "must_not": [
+        "Use a hidden shared router or additional optimizer state.",
+        "Use 3B capacity as the confirmatory comparator; a 3B variant is diagnostic only."
+      ],
+      "implementation_status": "EXPECTED_INTERFACE_NOT_IMPLEMENTED_HERE"
+    },
+    {
+      "role": "C",
+      "id": "hard_versioned_revision_comparator",
+      "purpose": "Calibration control for revision correctness without learned shared-field attribution",
+      "mutable_state": "No learned revision scalar; deterministic version and temporal filter state only.",
+      "must": [
+        "Consume the exact same compiled revision events, query times, evidence, and source bindings as roles A and B.",
+        "Return current and as-of answers by hard revision ID, valid_time, observed_at, and operation semantics.",
+        "Preserve contradiction and compensation history and reject tampered or ambiguous cuts."
+      ],
+      "must_not": [
+        "Choose revision labels using similarity or retrieval rank.",
+        "Compete as evidence that a learned shared field is effective."
+      ],
+      "implementation_status": "INTERFACE_BACKED_BY_GOLD_COMPILER_NOT_A_MODEL_ARM"
+    },
+    {
+      "role": "D",
+      "id": "unversioned_negative_control",
+      "purpose": "Load-bearing negative control for temporal/versioning tests",
+      "mutable_state": "No versioned revision state; intentionally collapses revisions to an unversioned latest-value interface.",
+      "must": [
+        "Use the same input/output envelope and evaluator path as roles A, B, and C.",
+        "Be evaluated on stale, current, as-of, repeated-revision, contradiction, and compensation cases.",
+        "Remain labelled as a negative control regardless of observed score."
+      ],
+      "must_not": [
+        "Receive valid_time, observed_at, revision ID, or supersession metadata through a hidden side channel.",
+        "Serve as the primary confirmatory winner or support a public efficacy claim."
+      ],
+      "implementation_status": "EXPECTED_INTERFACE_NOT_IMPLEMENTED_HERE"
+    }
+  ],
+  "exact_g2_exit_gates": {
+    "all_gates_required": true,
+    "overall_status": "NOT_EXITED",
+    "gates": [
+      {
+        "id": "G2-01-INDEPENDENT-LABELS",
+        "requirement": "All three task gold labels derive from frozen task outcomes/evidence/operations and never from evaluated-arm scores or field values.",
+        "required_evidence": "Schema validation plus injected score/rank mutations that leave gold labels unchanged.",
+        "current_state": "PARTIAL_SELECTION_AND_REVISION_IMPLEMENTED_RETRIEVAL_PENDING"
+      },
+      {
+        "id": "G2-02-SELECTION-SEPARATION",
+        "requirement": "At least one same-evidence state has a unique relevance argmax that is unsafe, constraint-invalid, or cost-suboptimal; the oracle returns a unique gold action, exact regret, and explicit unsafe refusal.",
+        "required_evidence": "Deterministic replay, relevance-mutation, unsafe-refusal, no-feasible, tie, and commitment-tamper tests.",
+        "current_state": "FIXTURE_GATE_IMPLEMENTED"
+      },
+      {
+        "id": "G2-03-REVISION-STREAM",
+        "requirement": "The compiler emits KEEP, SUPERSEDE, CONTRADICT, and COMPENSATE events with stable identity/digest bindings, valid_time, observed_at, and repeated per-fact revision sequence.",
+        "required_evidence": "Byte-identical recompilation and event-binding tests.",
+        "current_state": "FIXTURE_GATE_IMPLEMENTED"
+      },
+      {
+        "id": "G2-04-TEMPORAL-ORACLE",
+        "requirement": "Every registered query time has deterministic current and as-of cuts with stale/current status, contradiction history, and compensation-preserved history.",
+        "required_evidence": "Delayed-observation, stale/current/as-of, contradiction, resolution, and compensation tests.",
+        "current_state": "FIXTURE_GATE_IMPLEMENTED"
+      },
+      {
+        "id": "G2-05-BRANCH-CONFLUENCE",
+        "requirement": "All registered branch permutations are generated; declared commutative branches have one valid semantic outcome, while non-confluent branches have divergent outcomes and a non-empty registered reason.",
+        "required_evidence": "Positive commutative permutation test plus misdeclared confluence and missing/false reason refusals.",
+        "current_state": "FIXTURE_GATE_IMPLEMENTED"
+      },
+      {
+        "id": "G2-06-FAIL-CLOSED",
+        "requirement": "Duplicate IDs with differing payloads, missing evidence/time, bad operations, invalid or cyclic supersession, ambiguous current cuts, noncanonical JSON, unknown evidence, oracle ties, and commitment tamper are rejected.",
+        "required_evidence": "Injected negative tests covering every listed refusal class.",
+        "current_state": "FIXTURE_GATE_IMPLEMENTED"
+      },
+      {
+        "id": "G2-07-ARM-INTERFACES",
+        "requirement": "Roles A, B, C, and D implement the frozen interfaces above; A and B pass executable hidden-head and exact-B inventory checks, while C and D remain controls.",
+        "required_evidence": "Executable arm entrypoints, parameter inventory, serialized-state inventory, and hidden-head attack receipt.",
+        "current_state": "PENDING_NOT_IMPLEMENTED_IN_THIS_SLICE"
+      },
+      {
+        "id": "G2-08-FROZEN-CONTAMINATION-BOUNDARY",
+        "requirement": "Development and confirmatory sources are disjoint, byte-hash-bound, contamination-audited, and public labels are not called sealed.",
+        "required_evidence": "Frozen source/split manifests and contamination audit created before G4 measurement admission.",
+        "current_state": "CONTRACT_DECLARED_ARTIFACTS_PENDING"
+      },
+      {
+        "id": "G2-09-NO-PREMATURE-RESULT",
+        "requirement": "G2 artifacts implement tasks and interfaces only; no winner, efficacy, production, shared-scalar, or public benchmark result is asserted.",
+        "required_evidence": "Claim-boundary validation and absence of result payloads.",
+        "current_state": "SATISFIED_BY_THIS_ARTIFACT"
+      }
+    ]
+  },
+  "claim_boundary": {
+    "shared_scalar_result_claimed": false,
+    "public_benchmark_result_claimed": false,
+    "winner_claimed": false,
+    "efficacy_claimed": false,
+    "production_claimed": false,
+    "novelty_claimed": false,
+    "g2_exit_claimed": false,
+    "statement": "These task fixtures and interface expectations do not implement evaluated model arms and are not evidence for or against the shared-field hypothesis."
+  }
+}

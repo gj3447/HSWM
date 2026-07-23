@@ -1,0 +1,32 @@
+{
+  "dataset_files": {
+    "articles.json": "a1a87620817897f02b9ded566ecf3cfae47caaa9589cc4418d5ff1e060305196",
+    "questions/type6.json": "bae37c85aebd1dfc99231a297935455510cbb85979210606ece44511e7989a89"
+  },
+  "eligibility_repair": {
+    "change": "increase public questions per type from 30 to 200 on a new seed",
+    "prior_gold_inspected": false,
+    "prior_public_single_match_candidates": 3,
+    "prior_seed": 4,
+    "unchanged": "single-match eligibility, deterministic selection, split 1/3/6, scoring"
+  },
+  "flags": {
+    "article_format": "json",
+    "friendship_k": 1,
+    "friendship_seed": 5,
+    "num_family_trees": 200,
+    "num_questions_per_type": 200,
+    "question_depth": 10,
+    "question_format": "json",
+    "seed": 5
+  },
+  "generation_receipt_sha256": "ce1a8835f5d2c50eb32fbe34a1aac6f39bb6af8d48efae76d7c08a59ae1768b1",
+  "generator": {
+    "package": "phantom-wiki",
+    "swi_prolog_version": "SWI-Prolog version 9.2.9 for x86_64-linux",
+    "version": "1.0.3"
+  },
+  "overwrite_policy": "fail_if_frozen_target_exists",
+  "schema_version": "hswm-p1v4-phantom-generation-receipt/v1",
+  "universe": "sparse_t200_fk1_seed5_q200"
+}

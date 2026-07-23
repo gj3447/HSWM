@@ -27,6 +27,7 @@ def _inventories(
     *,
     parameters: int = 7,
     serialized_bytes: int = 64,
+    shared_artifact_sha256: str = "c" * 64,
 ) -> tuple[dict, dict]:
     parameter_inventory = {
         "schema": ledger.PARAMETER_INVENTORY_SCHEMA,
@@ -53,6 +54,16 @@ def _inventories(
                 "learned": True,
                 "mutable": True,
                 "learned_block_id": "primary-block",
+            },
+            {
+                "state_id": "shared-decoder",
+                "allocation_id": f"{arm_id}:shared-decoder-allocation",
+                "role": "immutable_decoder_component",
+                "byte_length": 32,
+                "learned": False,
+                "mutable": False,
+                "learned_block_id": None,
+                "shared_artifact_sha256": shared_artifact_sha256,
             }
         ],
     }
@@ -64,9 +75,11 @@ def _arm_artifacts(
     *,
     training_examples: int = 4,
     wall_seconds: int = 10,
+    parameters: int = 7,
     serialized_bytes: int = 64,
     seed_sha256: str = "a" * 64,
-    update_packets: int = 2,
+    shared_artifact_sha256: str = "c" * 64,
+    update_packets: int = 1,
     dispatch_count: int = 3,
     evaluation_cadence: int = 1,
 ) -> dict:
@@ -113,7 +126,10 @@ def _arm_artifacts(
         )
     )
     parameters, states = _inventories(
-        arm_id, parameters=7, serialized_bytes=serialized_bytes
+        arm_id,
+        parameters=parameters,
+        serialized_bytes=serialized_bytes,
+        shared_artifact_sha256=shared_artifact_sha256,
     )
     return {
         "usage_events": usage,
@@ -177,7 +193,7 @@ def test_exact_budget_mismatch_cannot_be_overridden_by_forged_self_report() -> N
     ("dimension", "one_kwargs", "separate_kwargs"),
     [
         ("serialized_mutable_bytes", {"serialized_bytes": 64}, {"serialized_bytes": 65}),
-        ("update_packets", {"update_packets": 2}, {"update_packets": 3}),
+        ("update_packets", {"update_packets": 1}, {"update_packets": 2}),
         ("dispatch_count", {"dispatch_count": 3}, {"dispatch_count": 4}),
         ("evaluation_cadence", {"evaluation_cadence": 1}, {"evaluation_cadence": 2}),
     ],
@@ -278,6 +294,43 @@ def test_seed_and_serialized_state_are_artifact_parity_guards() -> None:
     }
 
 
+def test_shared_immutable_state_compares_semantics_and_hash_not_allocation_namespace() -> None:
+    matched = _compare(
+        _arm_artifacts("one_field", shared_artifact_sha256="c" * 64),
+        _arm_artifacts("separate_heads", shared_artifact_sha256="c" * 64),
+    )
+    assert matched["engineering_budget_valid"] is True
+    one_binding = matched["projections"]["one_field"]["inventory"][
+        "shared_immutable_state_bindings"
+    ][0]
+    separate_binding = matched["projections"]["separate_heads"]["inventory"][
+        "shared_immutable_state_bindings"
+    ][0]
+    assert one_binding == separate_binding
+    assert "allocation_id" not in one_binding
+
+    mismatched = _compare(
+        _arm_artifacts("one_field", shared_artifact_sha256="c" * 64),
+        _arm_artifacts("separate_heads", shared_artifact_sha256="d" * 64),
+    )
+    assert mismatched["engineering_budget_valid"] is False
+    assert "BUDGET_INVALID_SHARED_ARTIFACT" in {
+        mismatch["code"] for mismatch in mismatched["mismatches"]
+    }
+
+
+def test_hash_shared_state_must_really_be_immutable() -> None:
+    parameters, states = _inventories("one_field")
+    states["entries"][1]["mutable"] = True
+    with pytest.raises(ledger.BudgetViolation) as caught:
+        ledger.inspect_inventories(
+            arm_id="one_field",
+            parameter_inventory=parameters,
+            serialized_state_inventory=states,
+        )
+    assert caught.value.code == "SHARED_ARTIFACT_STATE_INVALID"
+
+
 def test_padding_usage_is_rejected() -> None:
     artifacts = _arm_artifacts("one_field")
     artifacts["usage_events"][0]["padding"] = True
@@ -374,17 +427,24 @@ def test_budget_events_are_bound_to_verified_harness_event_hashes() -> None:
 def _receipt_fixture(*, separate_training_examples: int = 4):
     experiment = harness.ExperimentHarness(
         {"cut_id": "frozen-cut", "weights": {"edge": 1}, "history": []},
-        ["one_field", "separate_heads"],
+        harness.CANONICAL_ARM_IDS,
         experiment_id="e1-receipt",
         run_names={
             "one_field": "receipt-one-field",
             "separate_heads": "receipt-separate-heads",
+            "hard_versioned_revision_comparator": "receipt-hard-versioned",
+            "unversioned_negative_control": "receipt-unversioned-control",
         },
     )
     inventory_artifacts = {}
-    for arm_id, training_examples in (
-        ("one_field", 4),
-        ("separate_heads", separate_training_examples),
+    # C/D are intentionally structurally and numerically different controls.
+    # Their projections remain source-complete and guarded, but only A/B are an
+    # exact-equality cohort.
+    for arm_id, training_examples, parameters, serialized_bytes in (
+        ("one_field", 4, 7, 64),
+        ("separate_heads", separate_training_examples, 7, 64),
+        ("hard_versioned_revision_comparator", 2, 0, 0),
+        ("unversioned_negative_control", 9, 3, 16),
     ):
         run = experiment.arm(arm_id)
         run.append_event(
@@ -416,7 +476,13 @@ def _receipt_fixture(*, separate_training_examples: int = 4):
             payload={"task_id": "independent_selection_action", "split_id": "development"},
         )
         artifacts = _arm_artifacts(
-            arm_id, training_examples=training_examples, wall_seconds=10
+            arm_id,
+            training_examples=training_examples,
+            wall_seconds=10,
+            parameters=parameters,
+            serialized_bytes=serialized_bytes,
+            update_packets=1,
+            evaluation_cadence=1,
         )
         for index, raw_usage in enumerate(artifacts["usage_events"]):
             usage = copy.deepcopy(raw_usage)
@@ -443,7 +509,7 @@ def test_engineering_receipt_joins_verified_replay_budget_inventory_and_code() -
     experiment, inventories = _receipt_fixture()
     receipt = harness.build_engineering_receipt(
         experiment=experiment,
-        required_arms=["one_field", "separate_heads"],
+        required_arms=harness.CANONICAL_ARM_IDS,
         arm_inventories=inventories,
         evaluator_sha256="e" * 64,
         analysis_code_sha256="d" * 64,
@@ -453,7 +519,28 @@ def test_engineering_receipt_joins_verified_replay_budget_inventory_and_code() -
     assert receipt["authority"] == "ENGINEERING_ONLY"
     assert receipt["scientific_verdict"] is None
     assert receipt["budget"]["engineering_budget_valid"] is True
-    assert set(receipt["arm_replays"]) == {"one_field", "separate_heads"}
+    assert receipt["required_arms"] == list(harness.CANONICAL_ARM_IDS)
+    assert list(receipt["arm_replays"]) == list(harness.CANONICAL_ARM_IDS)
+    assert receipt["arm_roles"] == [
+        {"arm_id": arm_id, "role_id": harness.ARM_ROLE_IDS[arm_id]}
+        for arm_id in harness.CANONICAL_ARM_IDS
+    ]
+    assert receipt["budget"]["exact_parity_cohort"] == list(
+        harness.EXACT_PARITY_COHORT
+    )
+    assert receipt["budget"]["control_arm_policy"] == {
+        "policy_code": harness.CONTROL_BUDGET_POLICY_CODE,
+        "arms": list(harness.CONTROL_ARM_IDS),
+        "exact_equality_exempt": True,
+        "required_guards": [
+            "canonical_participation_and_role_binding",
+            "complete_source_backed_projection",
+            "inventory_validation",
+            "numeric_caps",
+            "shared_immutable_state_identity",
+            "replay_counter_consistency",
+        ],
+    }
     for arm in receipt["arm_replays"].values():
         assert arm["event_count"] > 0
         assert len(arm["event_root_sha256"]) == 64
@@ -461,10 +548,13 @@ def test_engineering_receipt_joins_verified_replay_budget_inventory_and_code() -
         assert len(arm["usage_events_sha256"]) == 64
         assert len(arm["parameter_inventory_sha256"]) == 64
         assert len(arm["serialized_state_inventory_sha256"]) == 64
+        assert len(arm["event_topology_sha256"]) == 64
+        assert arm["event_topology"]["scopes"][0]["update_packets"] == 1
+        assert arm["event_topology"]["scopes"][0]["evaluation_cadence"] == 1
 
     reversed_receipt = harness.build_engineering_receipt(
         experiment=experiment,
-        required_arms=["separate_heads", "one_field"],
+        required_arms=list(reversed(harness.CANONICAL_ARM_IDS)),
         arm_inventories=inventories,
         evaluator_sha256="e" * 64,
         analysis_code_sha256="d" * 64,
@@ -475,7 +565,7 @@ def test_engineering_receipt_joins_verified_replay_budget_inventory_and_code() -
     verified = harness.verify_engineering_receipt(
         receipt=receipt,
         experiment=experiment,
-        required_arms=["separate_heads", "one_field"],
+        required_arms=list(reversed(harness.CANONICAL_ARM_IDS)),
         arm_inventories=inventories,
         evaluator_sha256="e" * 64,
         analysis_code_sha256="d" * 64,
@@ -485,12 +575,84 @@ def test_engineering_receipt_joins_verified_replay_budget_inventory_and_code() -
 
 
 @pytest.mark.parametrize(
+    "required_arms",
+    [
+        harness.CANONICAL_ARM_IDS[:-1],
+        (*harness.CANONICAL_ARM_IDS[:-1], "renamed_control"),
+        (*harness.CANONICAL_ARM_IDS, "extra_arm"),
+    ],
+)
+def test_receipt_rejects_missing_renamed_or_extra_required_arm_ids(
+    required_arms,
+) -> None:
+    experiment, inventories = _receipt_fixture()
+    with pytest.raises(harness.HarnessViolation) as caught:
+        harness.build_engineering_receipt(
+            experiment=experiment,
+            required_arms=required_arms,
+            arm_inventories=inventories,
+            evaluator_sha256="e" * 64,
+            analysis_code_sha256="d" * 64,
+        )
+    assert caught.value.code == "RECEIPT_ARM_SET_INVALID"
+
+
+@pytest.mark.parametrize("extra_event_type", ["update", "evaluation"])
+def test_receipt_rejects_replay_topology_not_backed_by_usage_counter(
+    extra_event_type: str,
+) -> None:
+    experiment, inventories = _receipt_fixture()
+    run = experiment.arm("one_field")
+    kwargs = {
+        "request_id": f"extra-noop-{extra_event_type}",
+        "event_type": extra_event_type,
+        "payload": {
+            "task_id": "independent_selection_action",
+            "split_id": "development",
+        },
+    }
+    if extra_event_type == "update":
+        kwargs["state_after"] = run.state
+    run.append_event(**kwargs)
+
+    with pytest.raises(harness.HarnessViolation) as caught:
+        harness.build_engineering_receipt(
+            experiment=experiment,
+            required_arms=harness.CANONICAL_ARM_IDS,
+            arm_inventories=inventories,
+            evaluator_sha256="e" * 64,
+            analysis_code_sha256="d" * 64,
+        )
+    assert caught.value.code == "BUDGET_EVENT_TOPOLOGY_MISMATCH"
+
+
+def test_receipt_compares_shared_immutable_state_across_all_four_arms() -> None:
+    experiment, inventories = _receipt_fixture()
+    inventories["hard_versioned_revision_comparator"][
+        "serialized_state_inventory"
+    ]["entries"][1]["shared_artifact_sha256"] = "d" * 64
+    with pytest.raises(harness.HarnessViolation) as caught:
+        harness.build_engineering_receipt(
+            experiment=experiment,
+            required_arms=harness.CANONICAL_ARM_IDS,
+            arm_inventories=inventories,
+            evaluator_sha256="e" * 64,
+            analysis_code_sha256="d" * 64,
+        )
+    assert caught.value.code == "BUDGET_INVALID"
+    assert "BUDGET_INVALID_SHARED_ARTIFACT" in str(caught.value)
+
+
+@pytest.mark.parametrize(
     "mutation",
     [
         lambda receipt: receipt["arm_replays"]["one_field"].update(
             {"replay_sha256": "0" * 64}
         ),
         lambda receipt: receipt["budget"].update({"parity_sha256": "0" * 64}),
+        lambda receipt: receipt["arm_replays"]["one_field"]["event_topology"][
+            "scopes"
+        ][0].update({"update_packets": 2}),
         lambda receipt: receipt["code_bindings"].update(
             {"analysis_code_sha256": "0" * 64}
         ),
@@ -501,7 +663,7 @@ def test_altered_receipt_facts_cannot_reverify(mutation) -> None:
     experiment, inventories = _receipt_fixture()
     receipt = harness.build_engineering_receipt(
         experiment=experiment,
-        required_arms=["one_field", "separate_heads"],
+        required_arms=harness.CANONICAL_ARM_IDS,
         arm_inventories=inventories,
         evaluator_sha256="e" * 64,
         analysis_code_sha256="d" * 64,
@@ -512,7 +674,7 @@ def test_altered_receipt_facts_cannot_reverify(mutation) -> None:
         harness.verify_engineering_receipt(
             receipt=receipt,
             experiment=experiment,
-            required_arms=["one_field", "separate_heads"],
+            required_arms=harness.CANONICAL_ARM_IDS,
             arm_inventories=inventories,
             evaluator_sha256="e" * 64,
             analysis_code_sha256="d" * 64,
@@ -526,7 +688,7 @@ def test_receipt_refuses_missing_arm_direct_usage_and_invalid_budget() -> None:
     with pytest.raises(harness.HarnessViolation) as caught:
         harness.build_engineering_receipt(
             experiment=experiment,
-            required_arms=["one_field", "separate_heads"],
+            required_arms=harness.CANONICAL_ARM_IDS,
             arm_inventories=missing,
             evaluator_sha256="e" * 64,
             analysis_code_sha256="d" * 64,
@@ -538,7 +700,7 @@ def test_receipt_refuses_missing_arm_direct_usage_and_invalid_budget() -> None:
     with pytest.raises(harness.HarnessViolation) as caught:
         harness.build_engineering_receipt(
             experiment=experiment,
-            required_arms=["one_field", "separate_heads"],
+            required_arms=harness.CANONICAL_ARM_IDS,
             arm_inventories=direct,
             evaluator_sha256="e" * 64,
             analysis_code_sha256="d" * 64,
@@ -551,7 +713,7 @@ def test_receipt_refuses_missing_arm_direct_usage_and_invalid_budget() -> None:
     with pytest.raises(harness.HarnessViolation) as caught:
         harness.build_engineering_receipt(
             experiment=unequal_experiment,
-            required_arms=["one_field", "separate_heads"],
+            required_arms=harness.CANONICAL_ARM_IDS,
             arm_inventories=unequal_inventories,
             evaluator_sha256="e" * 64,
             analysis_code_sha256="d" * 64,
@@ -570,6 +732,24 @@ def test_e1_contract_is_engineering_only_and_exposes_future_falsifiers() -> None
     )
     assert contract["budget_authority"]["e1_exact_dimensions"] == list(
         ledger.E1_EXACT_DIMENSIONS
+    )
+    assert contract["arm_registry"]["receipt_requires_exact_id_set"] == list(
+        harness.CANONICAL_ARM_IDS
+    )
+    assert contract["budget_authority"]["exact_parity_cohort"] == list(
+        harness.EXACT_PARITY_COHORT
+    )
+    assert contract["budget_authority"]["control_arm_policy"][
+        "policy_code"
+    ] == harness.CONTROL_BUDGET_POLICY_CODE
+    assert contract["budget_authority"]["replay_derivable_counter_scope"] == list(
+        harness.REPLAY_DERIVED_USAGE_COUNTERS
+    )
+    assert "RAW_USAGE_ONLY_NOT_REPLAY_DERIVABLE" in contract["budget_authority"][
+        "counter_sources"
+    ]["dispatch_count"]
+    assert [arm["id"] for arm in contract["minimum_arm_roles"]] == list(
+        harness.CANONICAL_ARM_IDS
     )
     assert {arm["role"] for arm in contract["minimum_arm_roles"]} == {
         "A_ONE_FIELD",

@@ -22,6 +22,26 @@ REPLAY_SCHEMA = "hswm-experiment-replay/v1"
 EVENT_TYPES = frozenset({"input", "score", "update", "evaluation", "budget"})
 RECEIPT_SCHEMA = "hswm-experiment-harness-receipt/v1"
 EXPERIMENT_HARNESS_PASS = "EXPERIMENT_HARNESS_PASS"
+EVENT_TOPOLOGY_SCHEMA = "hswm-replay-event-topology/v1"
+CANONICAL_ARM_IDS = (
+    "one_field",
+    "separate_heads",
+    "hard_versioned_revision_comparator",
+    "unversioned_negative_control",
+)
+EXACT_PARITY_COHORT = ("one_field", "separate_heads")
+CONTROL_ARM_IDS = (
+    "hard_versioned_revision_comparator",
+    "unversioned_negative_control",
+)
+ARM_ROLE_IDS = {
+    "one_field": "A_ONE_FIELD",
+    "separate_heads": "B_SHARED_SUBSTRATE_SEPARATE_HEADS",
+    "hard_versioned_revision_comparator": "C_HARD_REVISION_THEN_SCORING",
+    "unversioned_negative_control": "D_UNVERSIONED_SHARED_NEGATIVE_CONTROL",
+}
+CONTROL_BUDGET_POLICY_CODE = "CONTROL_ARCHITECTURE_EXACT_PARITY_EXEMPT"
+REPLAY_DERIVED_USAGE_COUNTERS = ("update_packets", "evaluation_cadence")
 _UNCHANGED = object()
 _HEX = frozenset("0123456789abcdef")
 
@@ -588,6 +608,93 @@ def _receipt_sha256(receipt: Mapping[str, Any]) -> str:
     return canonical_sha256(unsigned)
 
 
+def _derive_event_topology(
+    *, arm_id: str, events: Sequence[Mapping[str, Any]]
+) -> dict[str, Any]:
+    """Count only counters that canonical replay events can independently prove.
+
+    In this E1 slice one ``update`` envelope is one update packet, while
+    ``evaluation_cadence`` is the count of evaluation envelopes per task/split.
+    Ordered event sequence numbers are bound so the receipt exposes the observed
+    cadence topology without claiming wall-clock interval evidence.
+    """
+
+    scopes: dict[tuple[str, str], dict[str, Any]] = {}
+    for index, event in enumerate(events):
+        event_type = event.get("event_type")
+        if event_type not in {"update", "evaluation"}:
+            continue
+        payload = event.get("payload")
+        if not isinstance(payload, Mapping):
+            raise HarnessViolation(
+                "BUDGET_EVENT_TOPOLOGY_SCOPE_INVALID",
+                f"arm {arm_id!r} event {index} lacks a scope payload",
+            )
+        task_id = _nonempty_text(payload.get("task_id"), "topology task_id")
+        split_id = _nonempty_text(payload.get("split_id"), "topology split_id")
+        key = (task_id, split_id)
+        if key not in scopes:
+            scopes[key] = {
+                "task_id": task_id,
+                "split_id": split_id,
+                "update_packets": 0,
+                "evaluation_cadence": 0,
+                "update_event_seqs": [],
+                "evaluation_event_seqs": [],
+            }
+        if event_type == "update":
+            scopes[key]["update_packets"] += 1
+            scopes[key]["update_event_seqs"].append(event["seq"])
+        else:
+            scopes[key]["evaluation_cadence"] += 1
+            scopes[key]["evaluation_event_seqs"].append(event["seq"])
+
+    topology: dict[str, Any] = {
+        "schema": EVENT_TOPOLOGY_SCHEMA,
+        "arm_id": arm_id,
+        "derivable_counters": list(REPLAY_DERIVED_USAGE_COUNTERS),
+        "counter_semantics": {
+            "update_packets": "count(update events) per task_id/split_id",
+            "evaluation_cadence": (
+                "count(evaluation events) per task_id/split_id; ordered seqs are "
+                "bound, wall-clock intervals are not proved"
+            ),
+        },
+        "scopes": [scopes[key] for key in sorted(scopes)],
+    }
+    topology["topology_sha256"] = canonical_sha256(topology)
+    return topology
+
+
+def _require_projection_matches_event_topology(
+    *, arm_id: str, projection: Mapping[str, Any], topology: Mapping[str, Any]
+) -> None:
+    projection_scopes = {
+        (scope["task_id"], scope["split_id"]): scope
+        for scope in projection["scopes"]
+    }
+    topology_scopes = {
+        (scope["task_id"], scope["split_id"]): scope
+        for scope in topology["scopes"]
+    }
+    for key in sorted(set(projection_scopes) | set(topology_scopes)):
+        projection_scope = projection_scopes.get(key)
+        topology_scope = topology_scopes.get(key)
+        for dimension in REPLAY_DERIVED_USAGE_COUNTERS:
+            asserted = (
+                projection_scope["exact"][dimension]
+                if projection_scope is not None
+                else None
+            )
+            derived = topology_scope[dimension] if topology_scope is not None else 0
+            if asserted != derived:
+                raise HarnessViolation(
+                    "BUDGET_EVENT_TOPOLOGY_MISMATCH",
+                    f"arm {arm_id!r} {key[0]}/{key[1]} {dimension}: "
+                    f"usage asserted {asserted!r}, replay derived {derived!r}",
+                )
+
+
 def build_engineering_receipt(
     *,
     experiment: ExperimentHarness,
@@ -607,22 +714,28 @@ def build_engineering_receipt(
     if not isinstance(experiment, ExperimentHarness):
         raise HarnessViolation("HARNESS_INVALID", "experiment must be an ExperimentHarness")
     supplied_arms = list(required_arms)
-    if len(supplied_arms) < 2:
-        raise HarnessViolation("RECEIPT_ARM_SET_INVALID", "at least two arms are required")
     for arm_id in supplied_arms:
         _nonempty_text(arm_id, "required arm")
-    if len(supplied_arms) != len(set(supplied_arms)):
-        raise HarnessViolation("RECEIPT_ARM_SET_INVALID", "required arms must be unique")
-    arms = sorted(supplied_arms)
+    if (
+        len(supplied_arms) != len(set(supplied_arms))
+        or set(supplied_arms) != set(CANONICAL_ARM_IDS)
+    ):
+        raise HarnessViolation(
+            "RECEIPT_ARM_SET_INVALID",
+            "required arms must be exactly the canonical A/B/C/D arm IDs",
+        )
+    arms = list(CANONICAL_ARM_IDS)
     if not _is_sha256(evaluator_sha256) or not _is_sha256(analysis_code_sha256):
         raise HarnessViolation(
             "CODE_HASH_INVALID", "evaluator and analysis bindings must be lowercase SHA-256"
         )
     missing_harness_arms = sorted(set(arms) - set(experiment.arm_ids))
-    if missing_harness_arms:
+    extra_harness_arms = sorted(set(experiment.arm_ids) - set(arms))
+    if missing_harness_arms or extra_harness_arms:
         raise HarnessViolation(
-            "RECEIPT_ARM_MISSING",
-            f"harness lacks required arms {','.join(missing_harness_arms)}",
+            "RECEIPT_ARM_SET_INVALID",
+            "harness arms must exactly match canonical A/B/C/D; "
+            f"missing={missing_harness_arms}, extra={extra_harness_arms}",
         )
     if not isinstance(arm_inventories, Mapping):
         raise HarnessViolation("INVENTORY_SET_INVALID", "arm_inventories must be an object")
@@ -641,6 +754,7 @@ def build_engineering_receipt(
         raise HarnessViolation("BUDGET_LEDGER_UNAVAILABLE", str(exc)) from exc
 
     verified_replays: dict[str, ReplayResult] = {}
+    verified_event_logs: dict[str, tuple[dict[str, Any], ...]] = {}
     derived_artifacts: dict[str, dict[str, Any]] = {}
     inventory_hashes: dict[str, dict[str, str]] = {}
     mutable_id_sets: list[set[int]] = []
@@ -657,6 +771,7 @@ def build_engineering_receipt(
             )
         replay = run.replay(events)
         verified_replays[arm_id] = replay
+        verified_event_logs[arm_id] = events
         if run.run_id in run_ids:
             raise HarnessViolation("CROSS_ARM_RUN_ID", "arm runs must have unique run ids")
         run_ids.add(run.run_id)
@@ -704,7 +819,8 @@ def build_engineering_receipt(
     try:
         parity = budget.compare_budget_parity(
             arm_artifacts=derived_artifacts,
-            compared_arms=arms,
+            compared_arms=EXACT_PARITY_COHORT,
+            shared_artifact_arms=CANONICAL_ARM_IDS,
             numeric_caps=numeric_caps,
         )
     except budget.BudgetViolation as exc:
@@ -714,6 +830,18 @@ def build_engineering_receipt(
         raise HarnessViolation(
             "BUDGET_INVALID", f"artifact parity failed with {','.join(codes)}"
         )
+
+    event_topologies: dict[str, dict[str, Any]] = {}
+    for arm_id in arms:
+        topology = _derive_event_topology(
+            arm_id=arm_id, events=verified_event_logs[arm_id]
+        )
+        _require_projection_matches_event_topology(
+            arm_id=arm_id,
+            projection=parity["projections"][arm_id],
+            topology=topology,
+        )
+        event_topologies[arm_id] = topology
 
     arm_replays: dict[str, dict[str, Any]] = {}
     for arm_id in arms:
@@ -735,6 +863,15 @@ def build_engineering_receipt(
             ],
             "inventory_sha256": projection["source"]["inventory_sha256"],
             "budget_projection_sha256": projection["projection_sha256"],
+            "shared_immutable_state_bindings_sha256": canonical_sha256(
+                projection["inventory"]["shared_immutable_state_bindings"]
+            ),
+            "event_topology": {
+                key: value
+                for key, value in event_topologies[arm_id].items()
+                if key != "topology_sha256"
+            },
+            "event_topology_sha256": event_topologies[arm_id]["topology_sha256"],
         }
 
     receipt: dict[str, Any] = {
@@ -745,6 +882,10 @@ def build_engineering_receipt(
         "experiment_id": experiment.experiment_id,
         "starting_artifact_sha256": experiment.frozen_artifact.sha256,
         "required_arms": arms,
+        "arm_roles": [
+            {"arm_id": arm_id, "role_id": ARM_ROLE_IDS[arm_id]}
+            for arm_id in arms
+        ],
         "arm_replays": arm_replays,
         "isolation": {
             "unique_run_ids": True,
@@ -754,6 +895,26 @@ def build_engineering_receipt(
         "budget": {
             "engineering_budget_valid": True,
             "equal_measured_budget": True,
+            "exact_parity_cohort": list(EXACT_PARITY_COHORT),
+            "shared_immutable_state_cohort": list(CANONICAL_ARM_IDS),
+            "control_arm_policy": {
+                "policy_code": CONTROL_BUDGET_POLICY_CODE,
+                "arms": list(CONTROL_ARM_IDS),
+                "exact_equality_exempt": True,
+                "required_guards": [
+                    "canonical_participation_and_role_binding",
+                    "complete_source_backed_projection",
+                    "inventory_validation",
+                    "numeric_caps",
+                    "shared_immutable_state_identity",
+                    "replay_counter_consistency",
+                ],
+            },
+            "replay_derived_usage_counters": list(
+                REPLAY_DERIVED_USAGE_COUNTERS
+            ),
+            "raw_usage_only_not_replay_derivable": ["dispatch_count"],
+            "event_topology_consistent_with_usage": True,
             "parity_sha256": parity["parity_sha256"],
             "capped_resources_within_limits": parity[
                 "capped_resources_within_limits"
@@ -810,14 +971,21 @@ def verify_engineering_receipt(
 
 
 __all__ = [
+    "ARM_ROLE_IDS",
     "ArmRun",
+    "CANONICAL_ARM_IDS",
+    "CONTROL_ARM_IDS",
+    "CONTROL_BUDGET_POLICY_CODE",
     "EVENT_SCHEMA",
+    "EVENT_TOPOLOGY_SCHEMA",
     "EVENT_TYPES",
+    "EXACT_PARITY_COHORT",
     "EXPERIMENT_HARNESS_PASS",
     "ExperimentHarness",
     "FrozenArtifact",
     "HarnessViolation",
     "ReplayResult",
+    "REPLAY_DERIVED_USAGE_COUNTERS",
     "RECEIPT_SCHEMA",
     "build_engineering_receipt",
     "canonical_json_bytes",

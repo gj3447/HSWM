@@ -374,6 +374,7 @@ def inspect_inventories(
     serialized_learned_bytes = 0
     serialized_mutable_bytes = 0
     normalized_entries: list[dict[str, Any]] = []
+    shared_immutable_bindings: list[dict[str, Any]] = []
     for index, raw_entry in enumerate(entries):
         if not isinstance(raw_entry, Mapping):
             raise BudgetViolation("STATE_ENTRY_INVALID", f"state entry {index} is not an object")
@@ -391,6 +392,18 @@ def inspect_inventories(
         block_id = entry.get("learned_block_id")
         if block_id is not None:
             block_id = _text(block_id, f"state entry {index} learned_block_id")
+        shared_hash = entry.get("shared_artifact_sha256")
+        if shared_hash is not None:
+            if not _is_sha256(shared_hash):
+                raise BudgetViolation(
+                    "SHARED_ARTIFACT_HASH_INVALID",
+                    f"state entry {index} shared_artifact_sha256 is not lowercase SHA-256",
+                )
+            if learned or mutable or block_id is not None:
+                raise BudgetViolation(
+                    "SHARED_ARTIFACT_STATE_INVALID",
+                    f"state {state_id!r} claims hash-sharing but is learned or mutable",
+                )
         if state_id in seen_state_ids:
             raise BudgetViolation("DUPLICATE_STATE_ID", f"state id {state_id!r} is listed twice")
         if allocation_id in state_allocations:
@@ -407,7 +420,6 @@ def inspect_inventories(
                 "HIDDEN_HEAD_DETECTED", f"learned state {state_id!r} has no registered block"
             )
         if _role_looks_head_like(role) and block_id is None:
-            shared_hash = entry.get("shared_artifact_sha256")
             if learned or mutable or not _is_sha256(shared_hash):
                 raise BudgetViolation(
                     "HIDDEN_HEAD_DETECTED",
@@ -428,12 +440,29 @@ def inspect_inventories(
                 "learned": learned,
                 "mutable": mutable,
                 "learned_block_id": block_id,
-                "shared_artifact_sha256": entry.get("shared_artifact_sha256"),
+                "shared_artifact_sha256": shared_hash,
             }
         )
+        if shared_hash is not None:
+            # allocation_id is deliberately absent: allocation namespaces are
+            # arm-local.  Semantic identity and content must still be identical.
+            shared_immutable_bindings.append(
+                {
+                    "state_id": state_id,
+                    "role": role,
+                    "byte_length": byte_length,
+                    "learned": learned,
+                    "mutable": mutable,
+                    "learned_block_id": block_id,
+                    "shared_artifact_sha256": shared_hash,
+                }
+            )
 
     normalized_blocks.sort(key=lambda item: item["learned_block_id"])
     normalized_entries.sort(key=lambda item: item["state_id"])
+    shared_immutable_bindings.sort(
+        key=lambda item: (item["state_id"], item["role"])
+    )
     report = {
         "arm_id": arm_id,
         "learned_block_ids": sorted(seen_block_ids),
@@ -442,6 +471,7 @@ def inspect_inventories(
         "serialized_learned_state_bytes": serialized_learned_bytes,
         "parameter_allocations": normalized_blocks,
         "state_allocations": normalized_entries,
+        "shared_immutable_state_bindings": shared_immutable_bindings,
     }
     report["inventory_sha256"] = _digest(report)
     return report
@@ -646,18 +676,37 @@ def compare_budget_parity(
     *,
     arm_artifacts: Mapping[str, Mapping[str, Any]],
     compared_arms: Sequence[str],
+    shared_artifact_arms: Sequence[str] | None = None,
     numeric_caps: Mapping[str, int | float] | None = None,
     self_report: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Compare artifact projections; caller self-reports are recorded as ignored."""
+    """Compare one exact cohort and immutable shared state across audited arms.
+
+    ``compared_arms`` is the cohort whose task/split counters must be equal.
+    ``shared_artifact_arms`` may be wider (for example, structurally different
+    controls); every listed arm is still projected, cap-checked, and required to
+    expose the same immutable shared-component semantic identities and hashes.
+    """
 
     arms = list(compared_arms)
     if len(arms) < 2 or len(arms) != len(set(arms)):
         raise BudgetViolation(
             "COMPARED_ARMS_INVALID", "compared_arms must contain at least two unique arms"
         )
+    shared_arms = list(shared_artifact_arms) if shared_artifact_arms is not None else list(arms)
+    if not shared_arms or len(shared_arms) != len(set(shared_arms)):
+        raise BudgetViolation(
+            "SHARED_ARTIFACT_ARMS_INVALID",
+            "shared_artifact_arms must contain unique arms",
+        )
+    if not set(arms).issubset(shared_arms):
+        raise BudgetViolation(
+            "SHARED_ARTIFACT_ARMS_INVALID",
+            "shared_artifact_arms must include every compared arm",
+        )
+    projected_arms = list(dict.fromkeys([*arms, *shared_arms]))
     projections: dict[str, dict[str, Any]] = {}
-    for arm_id in arms:
+    for arm_id in projected_arms:
         artifacts = arm_artifacts.get(arm_id)
         if not isinstance(artifacts, Mapping):
             raise BudgetViolation("ARM_ARTIFACT_MISSING", f"missing artifacts for {arm_id!r}")
@@ -742,6 +791,25 @@ def compare_budget_parity(
                     }
                 )
 
+    shared_baseline_id = shared_arms[0]
+    shared_baseline = projections[shared_baseline_id]["inventory"][
+        "shared_immutable_state_bindings"
+    ]
+    for arm_id in shared_arms[1:]:
+        observed = projections[arm_id]["inventory"][
+            "shared_immutable_state_bindings"
+        ]
+        if observed != shared_baseline:
+            mismatches.append(
+                {
+                    "code": "BUDGET_INVALID_SHARED_ARTIFACT",
+                    "arm_id": arm_id,
+                    "baseline_arm_id": shared_baseline_id,
+                    "expected": shared_baseline,
+                    "observed": observed,
+                }
+            )
+
     caps = dict(numeric_caps or {})
     unknown_caps = sorted(set(caps) - set(CAPPED_DIMENSIONS))
     if unknown_caps:
@@ -749,7 +817,7 @@ def compare_budget_parity(
     for dimension, value in list(caps.items()):
         caps[dimension] = _resource(value, f"numeric cap {dimension}")
     capped_totals: dict[str, dict[str, int | float]] = {}
-    for arm_id in arms:
+    for arm_id in projected_arms:
         totals = {dimension: 0 for dimension in CAPPED_DIMENSIONS}
         for scope in projections[arm_id]["scopes"]:
             for dimension in CAPPED_DIMENSIONS:
@@ -790,6 +858,7 @@ def compare_budget_parity(
         "BUDGET_INVALID_EXACT_DIMENSION",
         "BUDGET_INVALID_ARTIFACT_GUARD",
         "BUDGET_INVALID_SEED_BINDING",
+        "BUDGET_INVALID_SHARED_ARTIFACT",
     }
     cap_failure = any(item["code"] == "CAPPED_RESOURCE_EXCEEDED" for item in mismatches)
     equal_measured_budget = not any(
@@ -799,6 +868,8 @@ def compare_budget_parity(
         "schema": PARITY_SCHEMA,
         "boundary": "ENGINEERING_ONLY_NO_SCIENTIFIC_VERDICT",
         "compared_arms": arms,
+        "projected_arms": projected_arms,
+        "shared_artifact_arms": shared_arms,
         "projections": projections,
         "equal_measured_budget": equal_measured_budget,
         "capped_resources_within_limits": not cap_failure,

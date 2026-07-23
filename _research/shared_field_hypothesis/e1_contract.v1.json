@@ -10,24 +10,35 @@
   },
   "minimum_arm_roles": [
     {
+      "id": "one_field",
       "role": "A_ONE_FIELD",
       "mechanism": "One versioned field supplies retrieval, independent selection, and revision readouts."
     },
     {
+      "id": "separate_heads",
       "role": "B_SHARED_SUBSTRATE_SEPARATE_HEADS",
       "mechanism": "The substrate is shared while retrieval, selection, and revision learned blocks allocate the same total mutable capacity separately."
     },
     {
+      "id": "hard_versioned_revision_comparator",
       "role": "C_HARD_REVISION_THEN_SCORING",
       "mechanism": "A keyed or bitemporal hard revision filter precedes retrieval and dispatch scoring."
     },
     {
+      "id": "unversioned_negative_control",
       "role": "D_UNVERSIONED_SHARED_NEGATIVE_CONTROL",
       "mechanism": "An unversioned shared-field control isolates the contribution of the version ledger."
     }
   ],
   "arm_registry": {
-    "extensible": true,
+    "extensible": false,
+    "receipt_requires_exact_id_set": [
+      "one_field",
+      "separate_heads",
+      "hard_versioned_revision_comparator",
+      "unversioned_negative_control"
+    ],
+    "receipt_order": "canonical A/B/C/D role order independent of caller input order",
     "all_arms_use_identical_harness": true,
     "allowed_primary_difference": "score and update architecture",
     "shared_starting_artifact_required": true,
@@ -54,6 +65,32 @@
   },
   "budget_authority": {
     "parity_scope": "PER_TASK_PER_SPLIT",
+    "exact_parity_cohort": [
+      "one_field",
+      "separate_heads"
+    ],
+    "shared_immutable_state_cohort": [
+      "one_field",
+      "separate_heads",
+      "hard_versioned_revision_comparator",
+      "unversioned_negative_control"
+    ],
+    "control_arm_policy": {
+      "policy_code": "CONTROL_ARCHITECTURE_EXACT_PARITY_EXEMPT",
+      "arms": [
+        "hard_versioned_revision_comparator",
+        "unversioned_negative_control"
+      ],
+      "exact_equality_exempt": true,
+      "required_guards": [
+        "canonical_participation_and_role_binding",
+        "complete_source_backed_projection",
+        "inventory_validation",
+        "numeric_caps",
+        "shared_immutable_state_identity",
+        "replay_counter_consistency"
+      ]
+    },
     "legacy_v1_exact_dimensions": [
       "unique_trainable_parameters",
       "optimizer_steps",
@@ -100,9 +137,16 @@
       "serialized_mutable_bytes": "serialized_state_inventory",
       "serialized_learned_state_bytes": "serialized_state_inventory",
       "replay_bytes": "canonical_normalized_usage_event_bytes",
-      "all_other_discrete_counters": "hash-bound raw usage events",
+      "update_packets": "hash-bound raw usage assertion cross-checked against count(update events) per task_id/split_id",
+      "evaluation_cadence": "hash-bound raw usage assertion cross-checked against count(evaluation events) per task_id/split_id; ordered event seqs are bound but wall-clock intervals are not proved",
+      "dispatch_count": "RAW_USAGE_ONLY_NOT_REPLAY_DERIVABLE because this event protocol has no dispatch event type",
+      "other_discrete_counters": "hash-bound raw usage events; not claimed as replay-topology-derived",
       "seed_bindings": "hash-bound raw seed events"
     },
+    "replay_derivable_counter_scope": [
+      "update_packets",
+      "evaluation_cadence"
+    ],
     "every_usage_dimension_requires_explicit_source_event": true,
     "explicit_zero_event_allowed": true,
     "missing_dimension_defaults_to_zero": false,
@@ -114,7 +158,17 @@
     "unique_parameter_allocations": true,
     "unique_serialized_state_allocations": true,
     "unregistered_learned_or_head_like_state": "HIDDEN_HEAD_DETECTED",
-    "immutable_head_like_component_exception": "allowed only with a byte-identical shared_artifact_sha256",
+    "immutable_head_like_component_exception": "allowed only when learned=false, mutable=false, and every required arm has byte-identical semantic identity plus shared_artifact_sha256",
+    "shared_component_semantic_identity": [
+      "state_id",
+      "role",
+      "byte_length",
+      "learned",
+      "mutable",
+      "learned_block_id",
+      "shared_artifact_sha256"
+    ],
+    "allocation_id_cross_arm_comparison": "ignored because allocation namespaces are arm-local",
     "duplicate_allocation": "DUPLICATE_ALLOCATION"
   },
   "mismatch_codes": [
@@ -131,6 +185,10 @@
     "BUDGET_INVALID_EXACT_DIMENSION",
     "BUDGET_INVALID_ARTIFACT_GUARD",
     "BUDGET_INVALID_SEED_BINDING",
+    "BUDGET_INVALID_SHARED_ARTIFACT",
+    "BUDGET_EVENT_TOPOLOGY_SCOPE_INVALID",
+    "BUDGET_EVENT_TOPOLOGY_MISMATCH",
+    "RECEIPT_ARM_SET_INVALID",
     "CAPPED_RESOURCE_EXCEEDED",
     "HIDDEN_HEAD_DETECTED",
     "DUPLICATE_ALLOCATION",
@@ -141,9 +199,13 @@
     "pass_code": "EXPERIMENT_HARNESS_PASS",
     "requirements": [
       "frozen starting artifact clones are isolated",
+      "the exact canonical A/B/C/D ID set and role bindings participate in canonical order",
       "all canonical event types replay deterministically",
       "missing, reordered, tampered, duplicate-conflict, and cross-arm injections fail closed",
-      "all E1 exact dimensions and prior-artifact guards are artifact-derived and equal per task and split",
+      "all E1 exact dimensions and prior-artifact guards are source-complete; exact equality is required only for the A/B exact parity cohort",
+      "C/D control projections are bound and guarded under CONTROL_ARCHITECTURE_EXACT_PARITY_EXEMPT",
+      "shared immutable component semantic identity and content hashes match across all A/B/C/D arms while allocation namespaces are ignored",
+      "update and evaluation event counts independently match their per-task/per-split usage assertions",
       "capped resources are separately reported and within numeric caps when caps are supplied",
       "parameter and state inventories reject hidden heads and duplicate allocations",
       "evaluator and analysis code hashes are bound before any future run"
@@ -171,12 +233,18 @@
   },
   "limitations": [
     "evaluator_sha256 and analysis_code_sha256 are content bindings supplied to the receipt builder; this slice does not open files or prove how those hashes were produced",
+    "replay topology independently proves only update_packets and the event-count meaning of evaluation_cadence; dispatch_count and other usage dimensions remain hash-bound raw assertions",
+    "evaluation event sequence numbers are bound, but wall-clock cadence intervals are not proved",
     "the receipt proves engineering replay, isolation, accounting, and binding only; it does not authorize dataset generation, outcome access, or an efficacy run"
   ],
   "falsifiers": [
     "An exact retry appends a second event or a conflicting retry is accepted.",
     "Replay accepts a missing, reordered, tampered, or cross-arm event/reference.",
-    "Two arms pass when any required E1 exact dimension or source usage event is missing or unequal.",
+    "The receipt accepts any arm set other than the canonical A/B/C/D IDs, or caller order changes canonical receipt bytes.",
+    "A/B pass when any required E1 exact dimension or source usage event is missing or unequal.",
+    "C/D are forced into A/B parameter equality instead of being explicitly projected and guarded controls.",
+    "A shared immutable component changes semantic identity or content hash in any required arm while parity still passes.",
+    "An extra update or evaluation event disagrees with its usage counter while the receipt still passes.",
     "A learned block, mutable head-like state, or duplicate allocation escapes inventory accounting.",
     "Unequal capped resources are treated as exact-dimension failure despite remaining within declared caps.",
     "EXPERIMENT_HARNESS_PASS is interpreted as preregistration, efficacy, winner, production, or novelty evidence."

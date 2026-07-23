@@ -42,13 +42,12 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
   posthoc gold oracle's minimum frozen-action headroom was only +0.01087, below
   the registered >+0.02 target. This rejects router-only, not semantic-weight or
   topology learning.
-- 🧪 **B2.2 bond-weight groundwork:** the manifest's previously inert slow
-  `SemanticWeight` and a separate volatile query-bond potential now have a pure,
-  fail-closed combination kernel with 19 conformance tests; the B2/OpenHSWM
-  adapter and full score pack remain next. A development-only
-  top-20 oracle has +0.0489/+0.0833 room, while one conservative static sparse
-  edge-ID patch transfers exactly 0 on all six calibration/test cells. No B2.2
-  efficacy claim has been registered or made.
+- 🧪 **B2.2 Gate-0 metrology:** the full-candidate component-pack compiler,
+  exact neutral replay, frozen-B2 reproduction, pinned B2.1 continuity,
+  three-role acceptance lock, and detached learner view are implemented with
+  fail-closed synthetic/attack tests. The real 2Wiki/MuSiQue packs have not been
+  built; no learner has been fitted and no B2.2 efficacy claim has been
+  registered or made.
 - ⚠️ **Open-kernel claim boundary:** LakatoTree judged the composition receipt
   chain `partial` and `certified=false`. Learned semantic-weight deltas and
   CONNECT/SEPARATE/SPECIALIZE topology edits, bounded cyclic readout,
@@ -73,6 +72,18 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
 - ❌ **S4 durable revision runtime:** event-folded supersession, as-of replay,
   compensation, concurrent publication, signatures, and external trust
   distribution are not present-tense claims.
+- 🧰 **Generic feedback runtime:** a capability-separated, SQLite-backed
+  `ATTACH → PROPOSE → OBSERVE → JUDGE → COMMIT → DISPATCH` kernel now provides
+  canonical replay, request conflict refusal, verdict-bound cuts, and restart
+  recovery. It is an operational mechanism, not a live outer dispatcher,
+  LakatoTree dependency, scientific verdict, or external exactly-once claim.
+
+These engineering mechanisms do not establish that HSWM is an intelligent
+neural substrate or continual learner. That stronger claim still requires a
+preregistered frozen-model comparison of no memory, transcript/vector memory,
+dynamic KG/event-log memory, full HSWM, and causal-rewrite ablation under equal
+compute, held-out behavior, rejection controls, forgetting bounds, and receipt
+replay.
 
 See [`EFFICACY.md`](EFFICACY.md) for the full claim ledger, budgets, negative
 results, and reproduction boundaries. `verify_efficacy_claims.py` reconstructs
@@ -92,16 +103,16 @@ The current repository implements shared scoring only. `plan()` remains a
 compatibility alias, `supersede()` receives an externally chosen write, and a
 separated revision-metadata arm can reproduce the graded scores bit-exactly.
 
-The repository-local [equal-budget design lock](_research/shared_field_hypothesis/)
-locks a candidate eight-arm/task/metric comparison surface. Executable arm and
-task definitions, artifact-derived budgets, numeric thresholds, and statistics
-remain unresolved. It is deliberately `DESIGN_LOCKED_NOT_PREREGISTERED`:
-protocol v1 refuses every run until an artifact-derived verifier exists.
-Promotion is blocked pending an external LakatoTree prediction receipt,
-neutral-replay and full-candidate score-pack receipts, frozen input hashes,
-numeric resource caps, and a complete statistical plan. No winner, efficacy,
-production, or novelty claim follows from the protocol itself. The longer user
-direction and SECONDARY_AI formalization remain in
+The repository-local [shared-field research nest](_research/shared_field_hypothesis/)
+now contains independent selection and versioned-revision fixtures plus an E1
+replay, isolation, inventory, and budget verifier. It binds the canonical A/B/C/D
+roles, requires exact A/B parity, keeps C/D as explicitly different controls,
+and refuses missing shared immutable components or replay-counter drift. The
+retrieval fixture, executable model arms, frozen confirmatory inputs, numeric
+thresholds, and G4 preregistration remain unresolved; therefore no efficacy run
+is authorized. No winner, production, neural-substrate, or novelty claim follows
+from these engineering receipts. The longer user direction and SECONDARY_AI
+formalization remain in
 [`SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md`](SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md).
 
 ## Layout
@@ -117,6 +128,7 @@ direction and SECONDARY_AI formalization remain in
 | `certified_cut_compare.py` | independent-oracle controls, 10×40 scope checks, and 9 mutant attacks |
 | `EPWC_IMPLEMENTATION_S3_2026-07-20.md` | S3 implementation and comparison receipt; smart-hypergraph boundary |
 | `EFFICACY.md` / `verify_efficacy_claims.py` | human and machine-readable current efficacy ledger |
+| `GENERIC_FEEDBACK_RUNTIME_ACCEPTANCE.md` / `feedback_runtime.py` / `feedback_store.py` | generic authority-separated feedback kernel, durable replay, and explicit non-claims |
 | `INDEX.md` | public research map, 2026-07-22 result ledger, and next frontier |
 | `SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md` | fixed-layer-free open weighted-hypergraph contract |
 | `AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md` | v2r3 counterexamples, repairs, tests, and claim boundary |
@@ -125,6 +137,9 @@ direction and SECONDARY_AI formalization remain in
 | `prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md` | 54-cell result, oracle ceiling diagnosis, LakatoTree disposition, and B2.2 direction |
 | `prom_search_hswm/hswm_bond_readout.py` | pure slow-salience + volatile query-bond potential application and deterministic ranking |
 | `prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md` | refined B2.2 design, action-space diagnostics, full-score-pack requirement, and fresh confirmation boundary |
+| `prom_search_hswm/hswm_b22_gate0_harness.py` / `prom_search_hswm/docs/B22_GATE0_HARNESS_CONTRACT_20260723.md` | full-candidate Gate-0 compiler, replay, locked acceptance, and trusted-ingestion boundary |
+| `_research/shared_field_hypothesis/task_contracts.v1.json` / `e1_contract.v1.json` | independent task/control roles and engineering-only replay/budget receipt contracts |
+| `prom_search_hswm/docs/PROM_HSWM_REMAINING_ISSUES_RESOLUTION_20260723.md` | evidence-backed dependency graph from implemented gates to G4 preregistration |
 | `H3_B3_RESUME_STATUS_2026-07-20.md` | corrected PRE_RUN boundary, local receipt hashes, and exact next sequence |
 | `QKV_STRUCTURE_EXPERIMENT_PLAN_2026-07-20.md` / `QKV_STRUCTURE_RESULTS_2026-07-20.md` | ordered-routing and B1-QKV development protocol, results, and claim boundary |
 | `qkv_routing.py` / `qkv_b1_probe.py` | exact symbolic QKV routing and no-label dense B1 value-read research kernels |

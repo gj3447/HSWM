@@ -1,0 +1,279 @@
+{
+  "schema": "hswm-e1-experiment-harness-contract/v1",
+  "status": "ENGINEERING_CONTRACT_NOT_PREREGISTRATION",
+  "purpose": "Provide one deterministic, byte-identical harness and artifact-derived budget authority for every shared-field comparison arm.",
+  "scope": {
+    "lane": "ENGINEERING",
+    "independent_of_g1_product_runtime": true,
+    "protocol_v1_unchanged": true,
+    "actual_efficacy_run_authorized": false
+  },
+  "minimum_arm_roles": [
+    {
+      "id": "one_field",
+      "role": "A_ONE_FIELD",
+      "mechanism": "One versioned field supplies retrieval, independent selection, and revision readouts."
+    },
+    {
+      "id": "separate_heads",
+      "role": "B_SHARED_SUBSTRATE_SEPARATE_HEADS",
+      "mechanism": "The substrate is shared while retrieval, selection, and revision learned blocks allocate the same total mutable capacity separately."
+    },
+    {
+      "id": "hard_versioned_revision_comparator",
+      "role": "C_HARD_REVISION_THEN_SCORING",
+      "mechanism": "A keyed or bitemporal hard revision filter precedes retrieval and dispatch scoring."
+    },
+    {
+      "id": "unversioned_negative_control",
+      "role": "D_UNVERSIONED_SHARED_NEGATIVE_CONTROL",
+      "mechanism": "An unversioned shared-field control isolates the contribution of the version ledger."
+    }
+  ],
+  "arm_registry": {
+    "extensible": false,
+    "receipt_requires_exact_id_set": [
+      "one_field",
+      "separate_heads",
+      "hard_versioned_revision_comparator",
+      "unversioned_negative_control"
+    ],
+    "receipt_order": "canonical A/B/C/D role order independent of caller input order",
+    "all_arms_use_identical_harness": true,
+    "allowed_primary_difference": "score and update architecture",
+    "shared_starting_artifact_required": true,
+    "shared_evaluator_and_analysis_hashes_required": true
+  },
+  "event_protocol": {
+    "schema": "hswm-experiment-event/v1",
+    "types": [
+      "input",
+      "score",
+      "update",
+      "evaluation",
+      "budget"
+    ],
+    "append_only": true,
+    "per_arm_hash_chain": true,
+    "request_idempotency": "same request and intent returns the committed event; same request with different intent is rejected",
+    "replay": "ordered canonical events deterministically derive the terminal arm-namespaced state digest",
+    "isolation": [
+      "mutable state is cloned independently per named arm run",
+      "cross-arm event, parent, and state references are rejected",
+      "cache, state, and random-stream sharing is forbidden unless represented by an immutable hash-shared artifact"
+    ]
+  },
+  "budget_authority": {
+    "parity_scope": "PER_TASK_PER_SPLIT",
+    "exact_parity_cohort": [
+      "one_field",
+      "separate_heads"
+    ],
+    "shared_immutable_state_cohort": [
+      "one_field",
+      "separate_heads",
+      "hard_versioned_revision_comparator",
+      "unversioned_negative_control"
+    ],
+    "control_arm_policy": {
+      "policy_code": "CONTROL_ARCHITECTURE_EXACT_PARITY_EXEMPT",
+      "arms": [
+        "hard_versioned_revision_comparator",
+        "unversioned_negative_control"
+      ],
+      "exact_equality_exempt": true,
+      "required_guards": [
+        "canonical_participation_and_role_binding",
+        "complete_source_backed_projection",
+        "inventory_validation",
+        "numeric_caps",
+        "shared_immutable_state_identity",
+        "replay_counter_consistency"
+      ]
+    },
+    "legacy_v1_exact_dimensions": [
+      "unique_trainable_parameters",
+      "optimizer_steps",
+      "training_examples",
+      "embedding_calls",
+      "offline_model_calls",
+      "online_model_calls",
+      "input_tokens",
+      "output_tokens",
+      "candidate_edge_scores",
+      "revision_events_consumed"
+    ],
+    "e1_exact_dimensions": [
+      "unique_trainable_parameters",
+      "optimizer_steps",
+      "training_examples",
+      "embedding_calls",
+      "offline_model_calls",
+      "online_model_calls",
+      "input_tokens",
+      "output_tokens",
+      "candidate_edge_scores",
+      "revision_events_consumed",
+      "serialized_mutable_bytes",
+      "update_packets",
+      "dispatch_count",
+      "evaluation_cadence"
+    ],
+    "prior_artifact_parity_guards": [
+      "serialized_learned_state_bytes",
+      "scorer_flops",
+      "judge_calls",
+      "replay_bytes",
+      "seed_bindings"
+    ],
+    "capped_dimensions": [
+      "wall_seconds",
+      "peak_bytes",
+      "monetary_cost"
+    ],
+    "capped_dimensions_require_exact_equality": false,
+    "counter_sources": {
+      "unique_trainable_parameters": "parameter_inventory",
+      "serialized_mutable_bytes": "serialized_state_inventory",
+      "serialized_learned_state_bytes": "serialized_state_inventory",
+      "replay_bytes": "canonical_normalized_usage_event_bytes",
+      "update_packets": "hash-bound raw usage assertion cross-checked against count(update events) per task_id/split_id",
+      "evaluation_cadence": "hash-bound raw usage assertion cross-checked against count(evaluation events) per task_id/split_id; ordered event seqs are bound but wall-clock intervals are not proved",
+      "dispatch_count": "RAW_USAGE_ONLY_NOT_REPLAY_DERIVABLE because this event protocol has no dispatch event type",
+      "other_discrete_counters": "hash-bound raw usage events; not claimed as replay-topology-derived",
+      "seed_bindings": "hash-bound raw seed events"
+    },
+    "replay_derivable_counter_scope": [
+      "update_packets",
+      "evaluation_cadence"
+    ],
+    "every_usage_dimension_requires_explicit_source_event": true,
+    "explicit_zero_event_allowed": true,
+    "missing_dimension_defaults_to_zero": false,
+    "self_report_equal_budget_authoritative": false,
+    "padding_events_allowed": false
+  },
+  "inventory_contract": {
+    "unique_learned_block_ids": true,
+    "unique_parameter_allocations": true,
+    "unique_serialized_state_allocations": true,
+    "required_shared_immutable_component_registry": [
+      {
+        "state_id": "task_adapter",
+        "role": "immutable_task_adapter"
+      },
+      {
+        "state_id": "candidate_transform",
+        "role": "immutable_candidate_transform"
+      },
+      {
+        "state_id": "shared_decoder",
+        "role": "immutable_decoder_component"
+      }
+    ],
+    "required_shared_registry_frozen_for_receipt_schema": true,
+    "required_shared_registry_presence": "every canonical A/B/C/D state inventory must contain the exact state_id/role set with learned=false, mutable=false, learned_block_id=null, and valid shared_artifact_sha256",
+    "registry_outside_immutable_state": "allowed only as arm-local state without shared_artifact_sha256",
+    "registry_outside_shared_hash_claim": "UNREGISTERED_SHARED_ARTIFACT",
+    "unregistered_learned_or_head_like_state": "HIDDEN_HEAD_DETECTED",
+    "immutable_head_like_component_exception": "required shared components are authorized only by the frozen registry; other immutable head-like state may be arm-local but may not claim shared_artifact_sha256",
+    "shared_component_semantic_identity": [
+      "state_id",
+      "role",
+      "byte_length",
+      "learned",
+      "mutable",
+      "learned_block_id",
+      "shared_artifact_sha256"
+    ],
+    "allocation_id_cross_arm_comparison": "ignored because allocation namespaces are arm-local",
+    "duplicate_allocation": "DUPLICATE_ALLOCATION"
+  },
+  "mismatch_codes": [
+    "EVENT_MISSING_FIELDS",
+    "EVENT_SEQUENCE_MISMATCH",
+    "EVENT_PARENT_MISMATCH",
+    "EVENT_HASH_MISMATCH",
+    "CROSS_ARM_EVENT",
+    "CROSS_ARM_STATE_REFERENCE",
+    "REQUEST_ID_CONFLICT",
+    "PADDING_EVENT_FORBIDDEN",
+    "BUDGET_DIMENSION_MISSING",
+    "BUDGET_INVALID_SCOPE_MISMATCH",
+    "BUDGET_INVALID_EXACT_DIMENSION",
+    "BUDGET_INVALID_ARTIFACT_GUARD",
+    "BUDGET_INVALID_SEED_BINDING",
+    "BUDGET_INVALID_SHARED_ARTIFACT",
+    "BUDGET_EVENT_TOPOLOGY_SCOPE_INVALID",
+    "BUDGET_EVENT_TOPOLOGY_MISMATCH",
+    "RECEIPT_ARM_SET_INVALID",
+    "REQUIRED_SHARED_COMPONENT_MISSING",
+    "REQUIRED_SHARED_COMPONENT_ROLE_MISMATCH",
+    "REQUIRED_SHARED_COMPONENT_STATE_INVALID",
+    "REQUIRED_SHARED_COMPONENT_HASH_MISSING",
+    "REQUIRED_SHARED_COMPONENT_REGISTRY_MISMATCH",
+    "UNREGISTERED_SHARED_ARTIFACT",
+    "CAPPED_RESOURCE_EXCEEDED",
+    "HIDDEN_HEAD_DETECTED",
+    "DUPLICATE_ALLOCATION",
+    "FORGED_SELF_REPORT_FIELD"
+  ],
+  "exit_boundary": {
+    "authority": "ENGINEERING_ONLY",
+    "pass_code": "EXPERIMENT_HARNESS_PASS",
+    "requirements": [
+      "frozen starting artifact clones are isolated",
+      "the exact canonical A/B/C/D ID set and role bindings participate in canonical order",
+      "all canonical event types replay deterministically",
+      "missing, reordered, tampered, duplicate-conflict, and cross-arm injections fail closed",
+      "all E1 exact dimensions and prior-artifact guards are source-complete; exact equality is required only for the A/B exact parity cohort",
+      "C/D control projections are bound and guarded under CONTROL_ARCHITECTURE_EXACT_PARITY_EXEMPT",
+      "every A/B/C/D inventory contains the frozen task_adapter, candidate_transform, and shared_decoder registry with exact roles and immutable hash bindings",
+      "shared immutable component semantic identity and content hashes match across all A/B/C/D arms while allocation namespaces are ignored",
+      "update and evaluation event counts independently match their per-task/per-split usage assertions",
+      "capped resources are separately reported and within numeric caps when caps are supplied",
+      "parameter and state inventories reject hidden heads and duplicate allocations",
+      "evaluator and analysis code hashes are bound before any future run"
+    ],
+    "scientific_verdict": null,
+    "preregistration_claimed": false,
+    "efficacy_claimed": false,
+    "winner_claimed": false
+  },
+  "future_scientific_join_inputs": {
+    "status": "EXPOSED_NOT_EVALUATED",
+    "high_conflict_regime": true,
+    "per_task_noninferiority": null,
+    "stale_leakage_ceiling": null,
+    "quality_or_coherence_verdict": null,
+    "owner": "future reviewed protocol and LakatoTree registration"
+  },
+  "prohibitions": {
+    "efficacy_run": true,
+    "protocol_v1_promotion": true,
+    "self_reported_budget_parity": true,
+    "padding_for_parity": true,
+    "scientific_verdict": true,
+    "preregistration_claim": true
+  },
+  "limitations": [
+    "evaluator_sha256 and analysis_code_sha256 are content bindings supplied to the receipt builder; this slice does not open files or prove how those hashes were produced",
+    "replay topology independently proves only update_packets and the event-count meaning of evaluation_cadence; dispatch_count and other usage dimensions remain hash-bound raw assertions",
+    "evaluation event sequence numbers are bound, but wall-clock cadence intervals are not proved",
+    "the receipt proves engineering replay, isolation, accounting, and binding only; it does not authorize dataset generation, outcome access, or an efficacy run"
+  ],
+  "falsifiers": [
+    "An exact retry appends a second event or a conflicting retry is accepted.",
+    "Replay accepts a missing, reordered, tampered, or cross-arm event/reference.",
+    "The receipt accepts any arm set other than the canonical A/B/C/D IDs, or caller order changes canonical receipt bytes.",
+    "A/B pass when any required E1 exact dimension or source usage event is missing or unequal.",
+    "C/D are forced into A/B parameter equality instead of being explicitly projected and guarded controls.",
+    "All arms omit or rename required shared components so empty shared-binding lists compare equal and still receive EXPERIMENT_HARNESS_PASS.",
+    "A required shared component spoofs its role, omits its hash, becomes learned or mutable, or references a learned block while the receipt still passes.",
+    "A shared immutable component changes semantic identity or content hash in any required arm while parity still passes.",
+    "An extra update or evaluation event disagrees with its usage counter while the receipt still passes.",
+    "A learned block, mutable head-like state, or duplicate allocation escapes inventory accounting.",
+    "Unequal capped resources are treated as exact-dimension failure despite remaining within declared caps.",
+    "EXPERIMENT_HARNESS_PASS is interpreted as preregistration, efficacy, winner, production, or novelty evidence."
+  ]
+}

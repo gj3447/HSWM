@@ -56,29 +56,56 @@ def _file_sha256_and_stat(
     *,
     expected_identity: tuple[int, int] | None = None,
 ) -> tuple[str, os.stat_result]:
-    no_follow = getattr(os, "O_NOFOLLOW", None)
-    if no_follow is None:
-        raise ArtifactLifecycleError("O_NOFOLLOW is required for artifact hashing")
     candidate = Path(path)
     try:
-        descriptor = os.open(candidate, os.O_RDONLY | no_follow)
+        path_before = candidate.lstat()
+    except OSError as exc:
+        raise ArtifactLifecycleError(f"cannot inspect artifact: {candidate}") from exc
+    if not stat.S_ISREG(path_before.st_mode):
+        raise ArtifactLifecycleError(f"artifact is not a regular file: {candidate}")
+    flags = os.O_RDONLY | int(getattr(os, "O_NOFOLLOW", 0))
+    try:
+        descriptor = os.open(candidate, flags)
     except OSError as exc:
         raise ArtifactLifecycleError(
             f"cannot open artifact without following links: {candidate}"
         ) from exc
     digest = sha256()
     try:
-        observed = os.fstat(descriptor)
-        if not stat.S_ISREG(observed.st_mode):
+        opened = os.fstat(descriptor)
+        if not stat.S_ISREG(opened.st_mode):
             raise ArtifactLifecycleError(f"artifact is not a regular file: {candidate}")
-        identity = (int(observed.st_dev), int(observed.st_ino))
+        identity = (int(opened.st_dev), int(opened.st_ino))
+        path_identity = (int(path_before.st_dev), int(path_before.st_ino))
+        if identity != path_identity:
+            raise ArtifactLifecycleError(f"artifact changed while opening: {candidate}")
         if expected_identity is not None and identity != expected_identity:
             raise ArtifactLifecycleError("reserved path inode/device changed")
         for chunk in iter(lambda: os.read(descriptor, 1024 * 1024), b""):
             digest.update(chunk)
+        closed = os.fstat(descriptor)
+        try:
+            path_after = candidate.lstat()
+        except OSError as exc:
+            raise ArtifactLifecycleError(
+                f"artifact changed while hashing: {candidate}"
+            ) from exc
+        before_fingerprint = (
+            int(opened.st_dev), int(opened.st_ino), int(opened.st_mode),
+            int(opened.st_size), int(opened.st_mtime_ns), int(opened.st_ctime_ns),
+        )
+        if before_fingerprint != (
+            int(closed.st_dev), int(closed.st_ino), int(closed.st_mode),
+            int(closed.st_size), int(closed.st_mtime_ns), int(closed.st_ctime_ns),
+        ) or before_fingerprint != (
+            int(path_after.st_dev), int(path_after.st_ino), int(path_after.st_mode),
+            int(path_after.st_size), int(path_after.st_mtime_ns),
+            int(path_after.st_ctime_ns),
+        ):
+            raise ArtifactLifecycleError(f"artifact changed while hashing: {candidate}")
     finally:
         os.close(descriptor)
-    return digest.hexdigest(), observed
+    return digest.hexdigest(), closed
 
 
 def file_sha256(path: str | Path) -> str:
@@ -517,6 +544,7 @@ def close_append_log(
         path,
         expected_identity=(reservation["device"], reservation["inode"]),
     )
+    _validate_live_reservation(opened)
     size = observed.st_size
     if size <= 0:
         raise ArtifactLifecycleError("append log cannot CLOSE empty")
@@ -529,7 +557,9 @@ def close_append_log(
         validation=validation,
     )
     _write_once(close_receipt_path, receipt)
-    return receipt
+    return load_close_receipt(
+        close_receipt_path, open_receipt_path=open_receipt_path,
+    )
 
 
 def close_exclusive_bundle(
@@ -548,21 +578,27 @@ def close_exclusive_bundle(
     ):
         path = Path(path_value)
         try:
-            observed = path.stat()
+            observed = path.lstat()
         except OSError as exc:
             raise ArtifactLifecycleError(f"bundle output missing: {key}") from exc
         if not stat.S_ISREG(observed.st_mode) or observed.st_size <= 0:
             raise ArtifactLifecycleError(f"bundle output invalid: {key}")
+        output_sha256, hashed = _file_sha256_and_stat(
+            path,
+            expected_identity=(int(observed.st_dev), int(observed.st_ino)),
+        )
         outputs[str(key)] = {
-            "path": str(path), "sha256": file_sha256(path),
-            "byte_count": int(observed.st_size),
+            "path": str(path), "sha256": output_sha256,
+            "byte_count": int(hashed.st_size),
         }
     receipt = _base_close(
         opened, open_receipt_path=open_receipt_path,
         outputs=outputs, validation=validation,
     )
     _write_once(close_receipt_path, receipt)
-    return receipt
+    return load_close_receipt(
+        close_receipt_path, open_receipt_path=open_receipt_path,
+    )
 
 
 def load_close_receipt(
@@ -612,11 +648,12 @@ def load_close_receipt(
         for key, path_value in expected.items():
             output = value["outputs"][key]
             path = Path(path_value)
+            output_sha256, observed = _file_sha256_and_stat(path)
             if (not isinstance(output, Mapping)
                     or set(output) != {"path", "sha256", "byte_count"}
                     or output["path"] != str(path)
-                    or output["sha256"] != file_sha256(path)
-                    or output["byte_count"] != path.stat().st_size):
+                    or output["sha256"] != output_sha256
+                    or output["byte_count"] != observed.st_size):
                 raise ArtifactLifecycleError(f"bundle CLOSE output changed: {key}")
     return value
 

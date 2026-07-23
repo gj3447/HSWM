@@ -1,6 +1,6 @@
 # HSWM efficacy status
 
-Last reconciled: 2026-07-20.
+Last reconciled: 2026-07-23.
 
 ## Bottom line
 
@@ -10,6 +10,9 @@ listed cosine/BM25/PPR/RRF retrieval arms on support recall, nDCG, and
 downstream answer F1. That result is useful but narrow. HSWM alone receives 100
 offline LLM judgments per run, query-time traversal is certified OFF, and no
 strong late-interaction or production graph-retrieval baseline was tested.
+The P1 closed macro-weight loop is now an engineering result, not an efficacy
+result: it executed end to end, but all 12 staged candidates were rejected and
+the learned active state never changed.
 
 The broader claims do not pass:
 
@@ -17,13 +20,14 @@ The broader claims do not pass:
 |---|---|---|
 | static retrieval substrate | **measured positive, budget caveat** | 300 evaluation rows across three checked-in runs |
 | cognitive uplift over direct LLM reranking | **preregistered cross-dataset claim failed** | two negative MuSiQue runs; one small, non-significant positive 2Wiki run |
+| P1 outcome→credit→slow-weight loop | **engineering complete; causal efficacy rejected** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations |
 | query-time graph traversal | **OFF** | `mu=0` selected on both real datasets; every tested traversal grid setting had worse hop-drop than static |
 | graded supersession | **pointwise capability survives; architectural novelty retracted** | stale suppression succeeds, but an external graded revision arm is bit-exact |
 | long-document advantage | **synthetic mechanism only** | no real NoCha/QASPER/NarrativeQA/book-scale result |
 | EPWC + certified readout | **local conformance, not efficacy** | deterministic compiler and fail-closed admission tests |
 | H3 relation composition | **not established** | B1 title-anchor result is refuted/inconclusive; B3 confirmatory efficacy is unmeasured |
 | QKV / semantic-layer query state | **heterogeneous supplied-program mechanism passes; deployable uplift unproved** | 128/128 synthetic namespace cases over 4 templates; B1 recurrence fails; 2Wiki 132/132 uses evaluator-supplied facts/path |
-| S4 durable revision runtime | **absent** | no replay/WAL/concurrent publication/signature system |
+| durable learned-state publication | **partial mechanism only** | P1 has immutable snapshots, WAL/FULL staging, epoch CAS, and activation receipts; broader S4 replay/signature runtime remains absent |
 
 Run `python verify_efficacy_claims.py --pretty` to reconstruct the selected
 machine-readable headline from the checked-in JSON receipts. The command fails
@@ -89,7 +93,45 @@ runs are materially negative. The safe statement is therefore: **HSWM improves
 retrieval over the listed lightweight baselines on this ladder, but does not
 establish general cognitive uplift over direct LLM reranking.**
 
-## 3. Traversal and relational composition
+## 3. P1 closed macro-weight loop: implemented, efficacy rejected
+
+P1 ran the preregistered four-arm PhantomWiki experiment through the full
+`outcome → eligibility → M → ΔW candidate → fresh/canary → CAS` path. The
+runtime includes immutable content-addressed weight snapshots, durable SQLite
+WAL/FULL candidate staging, epoch compare-and-swap activation, weighted
+retrieval traces, a receipt-bound Qwen answer function, post-answer sealed-gold
+evaluation, and isolated A1/A2/A3/A4 arms.
+
+The causal result is negative:
+
+| metric | checked-in result |
+|---|---:|
+| A1−A2 mean paired recall@10, episodes 2–5 | `0.0` |
+| paired-bootstrap 95% lower bound | `0.0` |
+| A1 episode slope | `-0.0270833` |
+| staged candidates | `12` |
+| fresh-gate passes / active publications | `0 / 0` |
+
+All four arms have the same later mean recall@10 (`0.1651042`) and finish on
+their starting snapshot. A retrieval-only posthoc replay of the frozen staged
+bytes and frozen fresh split reports `unseen_delta=0.0` for all 12 candidates.
+It is explicitly diagnostic, not a new arm outcome. The failure occurs before
+canary or CAS: the proposed edge-weight changes did not move any fresh top-10
+rank.
+
+The preregistered K1 commitment therefore fires. The same three-factor
+slow-weight path must not be rescued by tuning eta or relaxing the gate on this
+substrate. The next admissible learning experiment is a parity-controlled,
+typed text-lesson baseline. Agent transfer, learned topology rewiring, and
+sleep/consolidation remain deferred because there is no surviving causal state
+to transfer, rewire, or consolidate.
+
+Sources: `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`,
+`EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`,
+`P1_GATE_DIAGNOSTIC_R2_2026-07-23.json`, and
+`P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md`.
+
+## 4. Traversal and relational composition
 
 ### Current traversal: certified OFF
 
@@ -212,7 +254,7 @@ Sources: `SEMANTIC_QKV_EXPERIMENT_PLAN_2026-07-20.md`,
 `SEMANTIC_QKV_RESULTS_2026-07-20.md`, `semantic_layer_result.json`, and
 `semantic_2wiki_oracle_result.json`.
 
-## 4. Graded supersession: useful behavior, narrower novelty
+## 5. Graded supersession: useful behavior, narrower novelty
 
 At full dose `b=0.1`, a non-destructive supersede write reduces the maximally
 confusable stale fact's top-10 presence to zero on both datasets while retaining
@@ -235,7 +277,7 @@ provenance next to the positive behavior.
 Source: `STALE_POISONING_RESULTS_2026-07-19.md` and the two real-data stale
 poisoning JSON receipts.
 
-## 5. Long documents: mechanism sufficiency only
+## 6. Long documents: mechanism sufficiency only
 
 The synthetic aboutness experiment shows that, when a judge-readable aboutness
 signal is explicitly preserved while a single-vector embedding dilutes, the
@@ -245,7 +287,7 @@ the premise. No real NoCha, QASPER, NarrativeQA, or book-scale run has landed.
 
 Source: `EXPB_LONGDOC_RESULTS_2026-07-19.md`.
 
-## 6. Compiler and certified readout: conformance, not quality
+## 7. Compiler and certified readout: conformance, not quality
 
 The Evidence-Preserving World Compiler and certified readout have strong local
 conformance receipts:

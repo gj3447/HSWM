@@ -685,14 +685,23 @@ class FeedbackRuntime:
             causal_parent_ids=tuple(command.causal_parent_ids),
             payload_sha256=payload_sha,
         )
-        existing = self.store.lookup_request(command.stream_id, command.request_id)
-        if existing is not None:
-            stored_request_sha, stored_event = existing
-            if not hmac.compare_digest(stored_request_sha, command_request_sha):
-                raise IdempotencyConflict("same request_id carries different intent")
-            return stored_event
-        event, computed_request_sha = decide(self.state(), command, self.authority)
-        stored, _inserted = self.store.append(event, computed_request_sha)
+        def decide_event(events: tuple[EventEnvelope, ...]) -> EventEnvelope:
+            state = fold(
+                events,
+                stream_id=self.stream_id,
+                initial_cut_id=self.initial_cut_id,
+            )
+            event, computed_request_sha = decide(state, command, self.authority)
+            if not hmac.compare_digest(computed_request_sha, command_request_sha):
+                raise IntegrityError("command request digest changed during decision")
+            return event
+
+        stored, _inserted = self.store.transact(
+            stream_id=command.stream_id,
+            request_id=command.request_id,
+            request_sha256=command_request_sha,
+            decide_event=decide_event,
+        )
         return stored
 
     def commit_command(

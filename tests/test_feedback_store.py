@@ -303,6 +303,40 @@ def test_two_writers_same_request_insert_once(tmp_path):
         store2.close()
 
 
+def test_same_request_race_is_stable_across_repeated_fresh_streams(tmp_path):
+    for attempt in range(64):
+        path = tmp_path / f"same-{attempt}.db"
+        runtime1, store1, caps1 = open_runtime(path)
+        runtime2, store2, caps2 = open_runtime(path)
+        commands = [
+            runtime1.command(
+                EventKind.ATTACH,
+                request_id="shared",
+                capability=caps1[CapabilityRole.PROPOSER],
+                payload={"attachment_id": "a"},
+            ),
+            runtime2.command(
+                EventKind.ATTACH,
+                request_id="shared",
+                capability=caps2[CapabilityRole.PROPOSER],
+                payload={"attachment_id": "a"},
+            ),
+        ]
+        try:
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                results = list(
+                    pool.map(
+                        lambda item: item[0].submit(item[1]),
+                        [(runtime1, commands[0]), (runtime2, commands[1])],
+                    )
+                )
+            assert results[0].event_sha256 == results[1].event_sha256
+            assert len(store1.events(STREAM)) == 1
+        finally:
+            store1.close()
+            store2.close()
+
+
 def test_two_writers_conflicting_intent_first_write_wins(tmp_path):
     path = tmp_path / "conflict.db"
     runtime1, store1, caps1 = open_runtime(path)

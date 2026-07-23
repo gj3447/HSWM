@@ -50,12 +50,13 @@ feasibility verdict, failure modes, and decisive P1–P4 experiments are in
 
 That paragraph is a target identity, not a present-tense efficacy claim. The
 repository currently has a mature evidence/compiler/replay substrate and several
-measured field mechanisms, but the causal learning loop is not closed:
+measured field mechanisms. The P1 engineering loop is now closed, but its first
+causal efficacy trial was rejected:
 
 | phase | repository state | completion gate |
 |---|---|---|
 | P0 — identity and metrics | **specified** in the [canonical direction](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md): neural functions are LLM-executed; `H` and `W` form their macro-network | target identity, claim boundary, and learning metric are explicit |
-| P1 — closed weight-learning loop | **preregistered, not implemented or run** ([preregistration](PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json)) | `outcome → eligibility/credit → ΔW → changed next dispatch`, with canary and causal controls |
+| P1 — closed weight-learning loop | **implemented and measured RED** ([result](P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md), [evidence](EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json)): 12/12 candidates had fresh Δ=0 and were rejected; A1−A2=0 | per prereg K1, stop this slow-weight route and test the typed text-lesson fallback |
 | P2 — shared-network transfer | **not implemented or measured** | Agent A writes; frozen Agent B gains on sealed unseen work under equal compute |
 | P3 — structural plasticity | deterministic edits and a shadow gate exist; the first candidate policy was **rejected** | a learned candidate policy passes fresh, target, and canary gates |
 | P4 — federation and sleep | field federation is partial; consolidation/homeostasis remain design work | recover in-field interference and demonstrate stable long-horizon learning |
@@ -72,7 +73,7 @@ intelligence or production claim.
 | [E1 conditional traversal](E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md) | bridge −13.89pp, CI95 [−19.44, −8.33]; factoid −7.27pp | **rejected**; traversal remains deployment-OFF |
 | [shadow-gated topology absorption](SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md) | 0/3 rounds accepted, 100% canary preservation, sealed Δ=0 | **rejected for no target gain**; the gate was safe, the candidate generator was ineffective |
 | cognitive-uplift reranking | pooled F1 Δ=−0.1489 | **rejected** |
-| P1 eligibility/judgment learning | no modules frozen and no outcome inspected | **preregistered-unrun**; this is the next causal experiment |
+| [P1 eligibility/judgment learning](P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md) | loop/runtime implemented; 12 candidates proposed, 0 fresh-gate passes, A1−A2=0, slope −0.0271 | **rejected for no behavioral movement**; canary/CAS safety held, ExpeL-style typed lesson is the preregistered fallback |
 
 The [Phasor Agents prior-art tribunal](TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md)
 also narrows novelty: generic graph three-factor plasticity and sleep-staged
@@ -196,7 +197,7 @@ formalization remain in
 | `EFFICACY.md` / `verify_efficacy_claims.py` | human and machine-readable current efficacy ledger |
 | `CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md` | target identity: a hypergraph Semantic Weight Map whose neural functions are executed by LLMs |
 | `HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md` | precise LLM-function contract, runtime semantics, current code mapping, feasibility verdict, risks, and decisive gates |
-| `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` | frozen-before-measurement P1 arms, thresholds, kill/void conditions, and pending module hashes |
+| `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` / `P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md` / `EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` | frozen P1 contract, implementation/result closeout, and measured RED receipt |
 | `B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md` / `b2_routing_signal.py` | oracle routing-signal audit and deterministic evidence generator |
 | `E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md` / `e1_conditional_traversal.py` | bridge/factoid traversal falsifier and evidence generator |
 | `SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md` / `prom_search_hswm/hswm_shadow_gate.py` | topology-candidate shadow-gate result, reducer, preregistration, and receipt |

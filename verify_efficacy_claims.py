@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 
-SCHEMA_VERSION = "hswm-efficacy-snapshot/v1"
+SCHEMA_VERSION = "hswm-efficacy-snapshot/v2"
 DEFAULT_ROOT = Path(__file__).resolve().parent
 
 
@@ -32,6 +32,13 @@ def _load(root: Path, name: str) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise EfficacyClaimError(f"{name} must contain a JSON object")
     return value
+
+
+def _file_sha256(path: Path, *, label: str) -> str:
+    try:
+        return sha256(path.read_bytes()).hexdigest()
+    except OSError as exc:
+        raise EfficacyClaimError(f"cannot read {label}: {exc}") from exc
 
 
 def _verify_result_self_hash(value: Mapping[str, Any], *, label: str) -> None:
@@ -120,6 +127,8 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
     qkv_b1 = _load(repo, "qkv_b1_development_result.json")
     semantic_layer = _load(repo, "semantic_layer_result.json")
     semantic_2wiki = _load(repo, "semantic_2wiki_oracle_result.json")
+    p1 = _load(repo, "EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json")
+    p1_gate = _load(repo, "P1_GATE_DIAGNOSTIC_R2_2026-07-23.json")
 
     overall = substrate.get("aggregate", {}).get("overall", {})
     downstream = substrate.get("downstream_f1", {}).get("aggregate_f1_em", {})
@@ -437,6 +446,168 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
         "2Wiki semantic answer-information boundary drifted",
     )
 
+    _require(
+        p1.get("schema_version") == "hswm-p1-closed-loop-evidence/v1"
+        and p1.get("verdict") == "FAIL",
+        "P1 closed-loop verdict boundary drifted",
+    )
+    p1_measurement = p1.get("measurement", {})
+    p1_primary = _close(
+        p1_measurement.get("value"), 0.0, label="P1 A1-minus-A2 recall@10",
+    )
+    p1_lower = _close(
+        p1_measurement.get("bootstrap95_lower"), 0.0,
+        label="P1 paired bootstrap lower bound",
+    )
+    p1_slope = _close(
+        p1_measurement.get("secondary_a1_linear_slope"), -0.02708333333333333,
+        label="P1 A1 recall@10 slope",
+    )
+    expected_later = {
+        "A1_tagged_commit": 0.16510416666666666,
+        "A2_no_commit": 0.16510416666666666,
+        "A3_shuffled_M": 0.16510416666666666,
+        "A4_uniform_commit": 0.16510416666666666,
+    }
+    p1_later = p1_measurement.get("later_episode_mean_recall10", {})
+    for arm_id, expected in expected_later.items():
+        _close(p1_later.get(arm_id), expected, label=f"P1 {arm_id} later recall@10")
+    _require(
+        p1.get("kill_conditions") == {
+            "K1_primary_failed": True,
+            "K2_shuffled_not_worse": True,
+            "K3_uniform_not_worse": True,
+            "K4_canary_regression": False,
+            "K5_tag_utility_nonpositive": True,
+        },
+        "P1 kill-condition ledger drifted",
+    )
+    _require(
+        p1.get("budget") == {
+            "logical_answer_calls": 800,
+            "answer_cache": {"COMPLETE": 200, "ERROR": 0, "STARTED": 0},
+            "fresh_gate_llm_calls": 0,
+            "graph_construction_llm_calls": 0,
+        },
+        "P1 answer-call budget ledger drifted",
+    )
+    _require(
+        p1.get("gold_boundary") == {
+            "gold_sent_to_answer_model": False,
+            "gold_opened_only_post_answer": True,
+            "per_question_gold_values_published": False,
+        },
+        "P1 sealed-gold boundary drifted",
+    )
+
+    p1_prereg = p1.get("preregistration", {})
+    p1_prereg_path = str(p1_prereg.get("path", ""))
+    _require(
+        p1_prereg_path == "PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json",
+        "P1 preregistration path drifted",
+    )
+    p1_prereg_sha = _file_sha256(repo / p1_prereg_path, label=p1_prereg_path)
+    _require(
+        p1_prereg.get("sha256") == p1_prereg_sha,
+        "P1 preregistration file binding drifted",
+    )
+
+    p1_split = p1.get("split_manifest")
+    _require(isinstance(p1_split, Mapping), "P1 split manifest is absent")
+    p1_split_sha = sha256(json.dumps(
+        p1_split, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+    ).encode("utf-8")).hexdigest()
+    _require(
+        p1.get("split_manifest_sha256") == p1_split_sha,
+        "P1 split-manifest self-binding drifted",
+    )
+
+    p1_receipt = p1.get("experiment_receipt")
+    _require(isinstance(p1_receipt, Mapping), "P1 experiment receipt is absent")
+    p1_unsigned = dict(p1_receipt)
+    p1_receipt_id = p1_unsigned.pop("receipt_id", None)
+    p1_actual_receipt_id = sha256(json.dumps(
+        p1_unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+    ).encode("utf-8")).hexdigest()
+    _require(
+        p1_receipt_id == p1_actual_receipt_id,
+        "P1 experiment receipt self-hash drifted",
+    )
+    _require(
+        p1_receipt.get("preregistration_sha256") == p1_prereg_sha
+        and p1_receipt.get("split_manifest_sha256") == p1_split_sha,
+        "P1 experiment receipt provenance binding drifted",
+    )
+    p1_arms = p1_receipt.get("arms")
+    _require(isinstance(p1_arms, list) and len(p1_arms) == 4,
+             "P1 four-arm receipt is incomplete")
+    expected_arm_ids = {
+        "A1_tagged_commit", "A2_no_commit", "A3_shuffled_M", "A4_uniform_commit",
+    }
+    _require(
+        {str(arm.get("arm_id")) for arm in p1_arms if isinstance(arm, Mapping)}
+        == expected_arm_ids,
+        "P1 arm identities drifted",
+    )
+    candidate_count = 0
+    activation_count = 0
+    for arm in p1_arms:
+        _require(isinstance(arm, Mapping), "P1 arm receipt is malformed")
+        _require(
+            arm.get("starting_snapshot_id") == arm.get("final_snapshot_id"),
+            f"P1 arm {arm.get('arm_id')} unexpectedly activated learned state",
+        )
+        episodes = arm.get("episodes")
+        _require(isinstance(episodes, list) and len(episodes) == 5,
+                 f"P1 arm {arm.get('arm_id')} episode ledger drifted")
+        for episode in episodes:
+            _require(isinstance(episode, Mapping), "P1 episode receipt is malformed")
+            if episode.get("candidate_id") is not None:
+                candidate_count += 1
+                _require(
+                    episode.get("fsm_final_state") == "rejected",
+                    "P1 candidate is no longer recorded as rejected",
+                )
+            if episode.get("activation_receipt_id") is not None:
+                activation_count += 1
+    _require(
+        candidate_count == 12 and activation_count == 0,
+        "P1 candidate or activation count drifted",
+    )
+
+    p1_evidence_sha = _file_sha256(
+        repo / "EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json",
+        label="P1 evidence",
+    )
+    _require(
+        p1_gate.get("schema_version") == "hswm-p1-posthoc-gate-diagnostic/v1"
+        and p1_gate.get("scientific_status")
+        == "POSTHOC_DIAGNOSTIC_NOT_A_NEW_ARM_OUTCOME",
+        "P1 posthoc diagnostic boundary drifted",
+    )
+    p1_gate_unsigned = dict(p1_gate)
+    p1_gate_declared_sha = p1_gate_unsigned.pop("diagnostic_sha256", None)
+    p1_gate_actual_sha = sha256(json.dumps(
+        p1_gate_unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+    ).encode("utf-8")).hexdigest()
+    _require(
+        p1_gate_declared_sha == p1_gate_actual_sha,
+        "P1 gate diagnostic self-hash drifted",
+    )
+    _require(
+        p1_gate.get("source_evidence_sha256") == p1_evidence_sha
+        and p1_gate.get("frozen_split_manifest_sha256") == p1_split_sha,
+        "P1 gate diagnostic provenance binding drifted",
+    )
+    _require(
+        p1_gate.get("summary") == {
+            "candidates": 12,
+            "fresh_gate_passes": 0,
+            "nonzero_unseen_delta": 0,
+        },
+        "P1 gate diagnostic summary drifted",
+    )
+
     return {
         "schema_version": SCHEMA_VERSION,
         "retrieval_substrate": {
@@ -497,6 +668,22 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
                 "selected_traversal": traversal_hop_drop,
             },
             "any_grid_configuration_beats_static_hopdrop": False,
+        },
+        "p1_closed_macro_weight_loop": {
+            "status": "ENGINEERING_COMPLETE_CAUSAL_EFFICACY_REJECTED",
+            "verdict": "FAIL",
+            "a1_minus_a2_mean_paired_recall10": p1_primary,
+            "bootstrap95_lower": p1_lower,
+            "a1_linear_slope": p1_slope,
+            "later_episode_mean_recall10": expected_later,
+            "candidates_staged": candidate_count,
+            "fresh_gate_passes": 0,
+            "activations": activation_count,
+            "experiment_receipt_id": p1_receipt_id,
+            "boundary": (
+                "The outcome-to-credit-to-candidate loop executed, but no "
+                "candidate changed fresh top-10 retrieval or became active"
+            ),
         },
         "graded_supersession": {
             "status": "POINTWISE_CAPABILITY_SURVIVES_ONE_FIELD_NOVELTY_RETRACTED",

@@ -1,0 +1,210 @@
+{
+  "schema": "hswm-shared-field-experiment/v1",
+  "status": "DESIGN_LOCKED_NOT_PREREGISTERED",
+  "question": "Can one versioned semantic weight field serve retrieval, independent selection, and knowledge revision better than separate task-specific heads under the same measured budget?",
+  "registration": {
+    "authority": "repository-local design lock only",
+    "locked_at": "2026-07-23",
+    "registered_before_measurement": false,
+    "prediction_receipt_sha256": null,
+    "run_admission": "BLOCKED"
+  },
+  "mechanism_baseline": {
+    "reference_commit": "5085642a98a1eb58d65d7c8449a571b5c21f30d2",
+    "source_hashes": {
+      "ab_p5_full.py": "2fb1b9e024cea8a457fd6c89b8e2e7049fd4fd1b284477b35f1f561bbc3fef61",
+      "doc_builder.py": "52c5ccee2487f62f6b6021ed6438477b7cdac8e84ffadd5f7fe031303adc79fc",
+      "hypergraph.py": "3b72f7948196a4c865d5e35e78a2ac1ff9447b205bb07096fe9472a6462e8c34",
+      "metrics.py": "de2d3339fd5feb11ea58bb865c5d713a27af2457e61d393fc0dd0f783574c9d0",
+      "readouts.py": "62835b20877e696567d322ebade107db123273487e34ed66eb63bec8f3adc4ae",
+      "field_snapshot.py": "17cd7251d6d0ff066b70dff89945cc46dac468040ceae0b9483f8b3e015b72f2",
+      "stale_poisoning.py": "f5fd4b13dd263a5355324d67774bbd097d8368a92ec9aec96bdfc8a4b55ca36d",
+      "traversal.py": "f6e82099315cf3504d08f8d488f0092e071c3d614ee556a865dc0d11f8140b1c",
+      "traversal_cert.py": "d26cd1ab86e7bbf8f614fa917658440b58204784bde79674f857527be2f5638a",
+      "weight_field.py": "29c9b95d4c8ec31c894c9aa74135b5cedbc55a471f21a4a47a6a62139aad542c",
+      "world_builder.py": "a1082dbc4609df819f6395188897b6849d8d40854c993b9fb93882bb0f8fc40f",
+      "world_compiler.py": "d11ed5c0e00567170e555cc773055fb58b67c0260dd945574e18ba71d52bcdc7",
+      "world_ir.py": "89354d117d41c45e3ed0ee9390eb780950c2a7bb5ac0d7b63dba618854fe4f78",
+      "prom_search_hswm/hswm_bond_readout.py": "41bca84d284f82f52a966c03c06e8b83debe30388dc41d8ce425f57ff61221f1",
+      "prom_search_hswm/hswm_field_algebra.py": "573de075728aca74965acd945228233e9f736ee96f97dfb7aaa5fee3761cb9ca",
+      "prom_search_hswm/hswm_hypergraph.py": "af902f614d9c3bb665c14ac7baa7c2a1570e58cc9aaf1353811d485c544d2c6a",
+      "prom_search_hswm/hswm_open_composition.py": "ba92caafc992b2cd22913ba835b61726f9dad730cfd9ac640a2843603bdf866a",
+      "prom_search_hswm/fsm/hswm_plasticity_loop.v1.json": "fec06c9c74952062acd8febab35039718094b79f0df522eb1b2e50ceafea8954"
+    }
+  },
+  "protocol_implementation": {
+    "verifier_path": "_research/shared_field_hypothesis/verify_contract.py",
+    "verifier_sha256": "5cb99dca4c1cac2e948502454a092747a31a45ed03f43d3b1f8d4445b5738604",
+    "semantic_lock_sha256": "af78b90a0ff2ac0211ec169bfd34b723d5f7edb9159b924055bf6eba6bad1ac5",
+    "run_verifier_capability": "UNIMPLEMENTED_ARTIFACT_DERIVATION"
+  },
+  "predecessors": {
+    "neutral_replay_receipt_sha256": null,
+    "full_candidate_scorepack_sha256": null
+  },
+  "frozen_inputs": {
+    "dataset_manifest_sha256": null,
+    "split_manifest_sha256": null,
+    "query_manifest_sha256": null,
+    "candidate_manifest_sha256": null,
+    "model_manifest_sha256": null,
+    "topology_manifest_sha256": null,
+    "revision_stream_sha256": null,
+    "evaluator_sha256": null
+  },
+  "arms": [
+    {
+      "id": "frozen_cosine",
+      "family": "retrieval_baseline",
+      "uses_shared_field": false,
+      "task_specific_parameter_blocks": [],
+      "disabled_components": ["slow_weight", "query_weight", "topology", "supersession"]
+    },
+    {
+      "id": "strong_graph_hypergraph",
+      "family": "graph_baseline",
+      "uses_shared_field": false,
+      "task_specific_parameter_blocks": ["graph_retrieval_head"],
+      "disabled_components": []
+    },
+    {
+      "id": "separate_heads",
+      "family": "primary_control",
+      "uses_shared_field": false,
+      "task_specific_parameter_blocks": ["retrieve_head", "select_head", "revise_head"],
+      "disabled_components": []
+    },
+    {
+      "id": "shared_field",
+      "family": "primary_treatment",
+      "uses_shared_field": true,
+      "task_specific_parameter_blocks": ["shared_field"],
+      "disabled_components": []
+    },
+    {
+      "id": "shared_no_slow_weight",
+      "family": "ablation",
+      "uses_shared_field": true,
+      "task_specific_parameter_blocks": ["shared_field"],
+      "disabled_components": ["slow_weight"]
+    },
+    {
+      "id": "shared_no_query_weight",
+      "family": "ablation",
+      "uses_shared_field": true,
+      "task_specific_parameter_blocks": ["shared_field"],
+      "disabled_components": ["query_weight"]
+    },
+    {
+      "id": "shared_no_topology",
+      "family": "ablation",
+      "uses_shared_field": true,
+      "task_specific_parameter_blocks": ["shared_field"],
+      "disabled_components": ["topology"]
+    },
+    {
+      "id": "shared_no_supersession",
+      "family": "ablation",
+      "uses_shared_field": true,
+      "task_specific_parameter_blocks": ["shared_field"],
+      "disabled_components": ["supersession"]
+    }
+  ],
+  "budget_contract": {
+    "primary_pair": ["separate_heads", "shared_field"],
+    "parity_scope": "PER_TASK_PER_SPLIT",
+    "exact_dimensions": [
+      "unique_trainable_parameters",
+      "optimizer_steps",
+      "training_examples",
+      "embedding_calls",
+      "offline_model_calls",
+      "online_model_calls",
+      "input_tokens",
+      "output_tokens",
+      "candidate_edge_scores",
+      "revision_events_consumed"
+    ],
+    "capped_dimensions": ["wall_seconds", "peak_bytes", "monetary_cost"],
+    "numeric_caps": null,
+    "no_padding_calls": true,
+    "counter_authority": "UNIMPLEMENTED_EVENT_LEDGER_AND_PARAMETER_INVENTORY"
+  },
+  "tasks": [
+    {
+      "id": "multihop_cross_document",
+      "purpose": "Measure graph-eligible retrieval and downstream answer quality across documents."
+    },
+    {
+      "id": "evolving_knowledge",
+      "purpose": "Measure contradictions, stale facts, as-of reads, repeated revisions, and confluence."
+    },
+    {
+      "id": "independent_selection_action",
+      "purpose": "Require a cost/risk-sensitive action not reducible to selection_distribution or retrieval argmax."
+    }
+  ],
+  "metrics": [
+    {"id": "recall_at_10", "direction": "higher", "task": "multihop_cross_document"},
+    {"id": "ndcg_at_10", "direction": "higher", "task": "multihop_cross_document"},
+    {"id": "downstream_answer_quality", "direction": "higher", "task": "multihop_cross_document"},
+    {"id": "selection_quality", "direction": "higher", "task": "independent_selection_action"},
+    {"id": "selection_regret", "direction": "lower", "task": "independent_selection_action"},
+    {"id": "stale_fact_suppression", "direction": "higher", "task": "evolving_knowledge"},
+    {"id": "current_fact_preservation", "direction": "higher", "task": "evolving_knowledge"},
+    {"id": "as_of_correctness", "direction": "higher", "task": "evolving_knowledge"},
+    {"id": "revision_confluence", "direction": "higher", "task": "evolving_knowledge"},
+    {"id": "cross_port_inconsistency", "direction": "lower", "task": "all"},
+    {"id": "replay_success", "direction": "higher", "task": "all"},
+    {"id": "audit_success", "direction": "higher", "task": "all"},
+    {"id": "injected_drift_detection", "direction": "higher", "task": "all"},
+    {"id": "wall_seconds", "direction": "lower", "task": "cost"},
+    {"id": "peak_bytes", "direction": "lower", "task": "cost"},
+    {"id": "model_calls", "direction": "lower", "task": "cost"},
+    {"id": "offline_judgment_cost", "direction": "lower", "task": "cost"}
+  ],
+  "success_boundary": {
+    "status": "BLOCKED_PENDING_STATISTICAL_DESIGN",
+    "invalid_contract": "VOID",
+    "quality_path": {
+      "candidate_verdict": "SUPPORTED_QUALITY",
+      "co_primary_metrics": ["downstream_answer_quality", "as_of_correctness", "selection_quality"],
+      "require_equal_measured_budget": true,
+      "require_positive_paired_lower_bounds": true,
+      "require_no_harm_on_remaining_quality_metrics": true
+    },
+    "coherence_path": {
+      "candidate_verdict": "SUPPORTED_COHERENCE",
+      "require_quality_noninferiority": true,
+      "improvement_metrics": ["cross_port_inconsistency", "replay_success", "audit_success", "injected_drift_detection"],
+      "require_material_positive_lower_bounds": true
+    },
+    "otherwise": "REJECTED_OR_NARROWED",
+    "unresolved_statistics": ["sample_sizes", "seeds", "aggregation_units", "paired_resampling_procedure", "multiplicity_control", "numeric_thresholds"]
+  },
+  "governance": {
+    "experiment_registration_and_verdict": "LakatoTree",
+    "mechanism_under_test": "HSWM",
+    "attribution": "LakatoTree owns preregistration, receipt, and scientific verdict; HSWM owns only the field mechanism under test."
+  },
+  "claim_boundary": {
+    "result_claimed": false,
+    "winner_claimed": false,
+    "efficacy_claimed": false,
+    "production_claimed": false,
+    "novelty_claimed": false,
+    "statement": "This design lock fixes the comparison surface. It is neither a preregistration nor evidence for the shared-field hypothesis."
+  },
+  "unresolved_before_preregistration": [
+    "external LakatoTree prediction receipt binding the final manifest bytes and registration time",
+    "neutral replay and full-candidate score-pack artifacts with verified schemas and hashes",
+    "frozen input artifacts with verified schemas and hashes",
+    "event-ledger-derived call/token/candidate/revision counters",
+    "executable parameter inventory for unique trainable parameter counts and hidden-head detection",
+    "executable arm entrypoints, architecture and loss definitions, training policy, and task routing",
+    "independent selection and revision implementations that are not aliases or externally chosen writes",
+    "per-task/per-split budget parity plus numeric resource caps",
+    "explicit cost-equivalence or cost-noninferiority rules for capped resource dimensions",
+    "sample sizes, seeds, aggregation units, resampling procedure, multiplicity control, and numeric thresholds"
+  ]
+}

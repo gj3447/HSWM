@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: core-tests
+            command: uv run --extra dev pytest -q tests
+          - name: prom-and-research-tests
+            command: uv run --extra dev pytest -q prom_search_hswm _research/shared_field_hypothesis
+          - name: efficacy-ledger
+            command: uv run python verify_efficacy_claims.py --pretty
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          python-version: "3.11"
+      - run: ${{ matrix.command }}
+
+  source-distribution:
+    name: source-distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          python-version: "3.11"
+      - run: uv build --sdist --out-dir dist
+      - run: mkdir sdist && tar -xzf dist/*.tar.gz -C sdist --strip-components=1
+      - run: uv run --extra dev pytest -q
+        working-directory: sdist
+      - run: uv run python verify_efficacy_claims.py --pretty
+        working-directory: sdist

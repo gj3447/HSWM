@@ -83,6 +83,27 @@ Score-floor language is layered: the positive semantic residual is per-edge
 `S_sem >= cosine`; temporal decay may intentionally go below cosine, and a
 positive traversal residual does not guarantee ranking/nDCG improvement.
 
+## Falsifiable shared-field hypothesis
+
+The next discriminating question is narrower than “a new Hypergraph RAG”: can one
+versioned semantic field serve retrieval, independent selection, and knowledge
+revision better than three task-specific heads under the same measured budget?
+The current repository implements shared scoring only. `plan()` remains a
+compatibility alias, `supersede()` receives an externally chosen write, and a
+separated revision-metadata arm can reproduce the graded scores bit-exactly.
+
+The repository-local [equal-budget design lock](_research/shared_field_hypothesis/)
+locks a candidate eight-arm/task/metric comparison surface. Executable arm and
+task definitions, artifact-derived budgets, numeric thresholds, and statistics
+remain unresolved. It is deliberately `DESIGN_LOCKED_NOT_PREREGISTERED`:
+protocol v1 refuses every run until an artifact-derived verifier exists.
+Promotion is blocked pending an external LakatoTree prediction receipt,
+neutral-replay and full-candidate score-pack receipts, frozen input hashes,
+numeric resource caps, and a complete statistical plan. No winner, efficacy,
+production, or novelty claim follows from the protocol itself. The longer user
+direction and SECONDARY_AI formalization remain in
+[`SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md`](SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md).
+
 ## Layout
 
 | file | role |
@@ -124,19 +145,31 @@ positive traversal residual does not guarantee ranking/nDCG improvement.
 | `metrics.py` | fair-tie nDCG@k, answer-EM, paired bootstrap |
 | `receipts/` | ooptdd behavior receipts (executable, source-bound, negative-oracle) |
 
-## Run
+## Verification tiers
+
+Tier 1 is the fresh-clone/CI boundary. The default pytest command collects the
+core suite, the PROM research suite, and the shared-field contract suite. Its
+only PROM data dependency is the tracked, content-addressed Badiou structure
+fixture.
 
 ```bash
 uv sync --extra dev
+uv run --extra dev pytest -q
 uv run python verify_efficacy_claims.py --pretty
-uv run pytest -q
+```
+
+Tier 2 is deterministic extended verification over checked-in artifacts:
+
+```bash
 uv run python certified_cut_compare.py
 uv run python semantic_layer_falsifier.py --pretty
 ```
 
-The commands above need the core NumPy dependency plus the pytest development
-extra; they need no model endpoint. The real-KG additive-j experiment is a
-separate cache/Neo4j tier:
+Tiers 1 and 2 need the core NumPy dependency plus the pytest development extra;
+they need no model endpoint, Neo4j, or untracked benchmark corpus. Tier 3 is the
+external/live research boundary: ignored benchmark inputs, the real-KG
+additive-j experiment, H3 model snapshots, GPU/LLM execution, and their runtime
+receipts. The real-KG entrypoint is:
 `uv run --extra kg python learned_v3_additive.py`. H3 production additionally needs
 PyArrow for 2Wiki decoding, PyTorch/Transformers plus the frozen BGE-M3
 snapshot, and an attested OpenAI-compatible LLM endpoint; source-tree tests do

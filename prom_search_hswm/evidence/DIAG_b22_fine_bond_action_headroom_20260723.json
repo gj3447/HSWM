@@ -1,0 +1,170 @@
+{
+  "schema": "hswm-diagnostic/v1",
+  "status": "DIAGNOSTIC_NO_CLAIM",
+  "generated_at": "2026-07-23T09:02:14+09:00",
+  "purpose": "Determine whether fine query-by-hyperedge reweighting has a larger viable action space than the rejected B2.1 whole-map router, and whether a conservative train-only static sparse suppression patch transfers at all. These are posthoc development diagnostics, not preregistered results.",
+  "source_evidence": {
+    "path": "EVIDENCE_b21_learned_router_20260723.json",
+    "sha256": "3dbff4f1db5f40aeeaf87e6803b257b6c9b13a473175b661806e75ccd9f6e1bc"
+  },
+  "diagnostic_script": {
+    "path": "prom_search_hswm/diag_b22_weight_action_space.py",
+    "sha256": "b599c038327101af74e64a7a83df7240b545acec940940cb11468bf9a03aeed8"
+  },
+  "engineering_boundary": {
+    "module_path": "prom_search_hswm/hswm_bond_readout.py",
+    "module_sha256": "41bca84d284f82f52a966c03c06e8b83debe30388dc41d8ce425f57ff61221f1",
+    "test_path": "prom_search_hswm/test_hswm_bond_readout.py",
+    "test_sha256": "ece0e8b5c7e0c5ddaf6e39909dbdb7b59a6fe0af725bbcbe648228d68e9d583a",
+    "conformance_tests": 19,
+    "efficacy_claim": false
+  },
+  "scorepacks": {
+    "2wiki": {
+      "path": ".ab_p5_cache/b21_20260723/r1/scorepacks/b21_2wiki_base_legacy.json.gz",
+      "sha256": "71ec153c7e65636080b03f753164eb5b8db1a7f81d185e4171130c99d7004acf",
+      "payload_sha256": "04ea40d1f3c249fec659177b1a3a8e255c357228c080a419d441dd65c9b52669"
+    },
+    "musique": {
+      "path": ".ab_p5_cache/b21_20260723/r1/scorepacks/b21_musique_base_legacy.json.gz",
+      "sha256": "7f7e6081f70ee00a078c249a416ca709819704fbde59b20db31d0b0fddc8c1d8",
+      "payload_sha256": "d90a44650263631c322f27e539d367d7d61bc823fa5b9be0ee1195169fa83bec"
+    }
+  },
+  "oracle_definition": "For each query, keep the frozen MERGED top-20 candidate set and permit a gold oracle to reorder it before recall@10. Headroom equals oracle recall@10 minus frozen MERGED recall@10. No candidate outside top-20 can enter, so this is a lower bound on the full-candidate gold reranking ceiling and an upper bound on any executable policy restricted to the same top-20.",
+  "results": {
+    "2wiki": {
+      "train": {
+        "n": 298,
+        "split_id_sha256": "dcf9343a15fa79bc4c436c29c87db6a78fbe893e1bc798a6c5494fbfb40203d4",
+        "merged_recall10": 0.708054,
+        "top20_rerank_gold_oracle_recall10": 0.751678,
+        "oracle_headroom": 0.043624,
+        "queries_with_gold_in_ranks_11_20": 31
+      },
+      "calibration": {
+        "n": 102,
+        "split_id_sha256": "5a1612ddb2819ee546bea92fca661113e078554bb61e1dbb8b36560c365e1f74",
+        "merged_recall10": 0.715686,
+        "top20_rerank_gold_oracle_recall10": 0.754902,
+        "oracle_headroom": 0.039216,
+        "queries_with_gold_in_ranks_11_20": 9
+      },
+      "test": {
+        "n": 92,
+        "split_id_sha256": "4a4496bdba8682405c2783308147233d4341b5e2e1b6ecfafbcf149913e4d495",
+        "merged_recall10": 0.758152,
+        "top20_rerank_gold_oracle_recall10": 0.807065,
+        "oracle_headroom": 0.048913,
+        "queries_with_gold_in_ranks_11_20": 11
+      }
+    },
+    "musique": {
+      "train": {
+        "n": 490,
+        "split_id_sha256": "a64de7b95a1d79cb38ae26c77ffd2ebf8909eecab80f07f8efb6be61ff43b591",
+        "merged_recall10": 0.565136,
+        "top20_rerank_gold_oracle_recall10": 0.639796,
+        "oracle_headroom": 0.07466,
+        "queries_with_gold_in_ranks_11_20": 93
+      },
+      "calibration": {
+        "n": 170,
+        "split_id_sha256": "ca55171c124d626fb83ae54d4dd186537bedb70dcc6c3b076662c115b7a407e5",
+        "merged_recall10": 0.596569,
+        "top20_rerank_gold_oracle_recall10": 0.658824,
+        "oracle_headroom": 0.062255,
+        "queries_with_gold_in_ranks_11_20": 29
+      },
+      "test": {
+        "n": 140,
+        "split_id_sha256": "95e186c2437e42f2d0f1793272562f817ffe10f5e8b293904c077eae0715a8d3",
+        "merged_recall10": 0.67381,
+        "top20_rerank_gold_oracle_recall10": 0.757143,
+        "oracle_headroom": 0.083333,
+        "queries_with_gold_in_ranks_11_20": 29
+      }
+    }
+  },
+  "comparison_to_b21": {
+    "b21_primary_gold_oracle_min_headroom": 0.01087,
+    "b21_registered_threshold": 0.02,
+    "b21_threshold_reachable": false,
+    "b22_top20_rerank_primary_gold_oracle_min_headroom": 0.048913,
+    "same_threshold_has_action_space_headroom": true
+  },
+  "train_only_static_sparse_suppression_probe": {
+    "definition": "Fit at most 32 query-independent edge-ID attenuations on train only. An edge is eligible when it appears as non-gold in the frozen MERGED top-20 for at least three independent train components and is never train gold. Levels are log(0.9), log(0.7), and log(0.5), applied with slow_scale=0.15. Greedy selection maximizes train recall@10 with deterministic least-magnitude and lexical tie breaks; the unchanged patch is then read on calibration and test.",
+    "2wiki": [
+      {
+        "seed": 7332,
+        "eligible_edges": 486,
+        "edited_edges": 2,
+        "train_delta": 0.001678,
+        "calibration_delta": 0.0,
+        "test_delta": 0.0,
+        "patch_sha256": "0d14de5ed15ecb2c8526d715f3605cbbaa0a8a8a42819f525d62c9abbb6c53e8"
+      },
+      {
+        "seed": 7333,
+        "eligible_edges": 454,
+        "edited_edges": 0,
+        "train_delta": 0.0,
+        "calibration_delta": 0.0,
+        "test_delta": 0.0,
+        "patch_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      {
+        "seed": 7334,
+        "eligible_edges": 452,
+        "edited_edges": 0,
+        "train_delta": 0.0,
+        "calibration_delta": 0.0,
+        "test_delta": 0.0,
+        "patch_sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    ],
+    "musique": [
+      {
+        "seed": 7332,
+        "eligible_edges": 352,
+        "edited_edges": 7,
+        "train_delta": 0.006633,
+        "calibration_delta": 0.0,
+        "test_delta": 0.0,
+        "patch_sha256": "27a764cc81fd47ecc1fb5b48e1c662a432f5f36d9af935edf4b459c49f1f28d5"
+      },
+      {
+        "seed": 7333,
+        "eligible_edges": 385,
+        "edited_edges": 9,
+        "train_delta": 0.006364,
+        "calibration_delta": 0.0,
+        "test_delta": 0.0,
+        "patch_sha256": "a4b117ff9a5a22376ec914b710b2cadaf428f923e320143590c3a42f488462a2"
+      },
+      {
+        "seed": 7334,
+        "eligible_edges": 379,
+        "edited_edges": 7,
+        "train_delta": 0.006653,
+        "calibration_delta": 0.0,
+        "test_delta": 0.0,
+        "patch_sha256": "9b7094f15f599dc2894b97d182ac16c6ca639a3d5aaaa1f35414dcb8f9bad76a"
+      }
+    ],
+    "summary": "All six calibration and all six test deltas are exactly 0.0. This rejects only this edge-identity greedy transfer rule as a useful next confirmatory learner; it does not reject all possible slow salience learning."
+  },
+  "limitations": [
+    "The B2.1 train, calibration, and test cohorts have already been inspected and are development-only for B2.2; none is a fresh confirmatory holdout.",
+    "Gold-oracle headroom does not show that observable features can identify the useful edge-level reordering.",
+    "The v1 scorepacks retain only top-20 IDs and final scores, not full edge-query score components, so they cannot prove exact full-candidate SemanticWeight reranking.",
+    "The static probe is one conservative edge-identity learner over a truncated top-20 buffer; its zero transfer is not a global oracle for every query-independent salience function."
+  ],
+  "diagnostic_conclusion": [
+    "The failure of B2.1 is specific to coarse whole-map routing; fine bond-level reordering has more than the +0.02 target headroom on both primary development cohorts.",
+    "A conservative static edge-ID suppression rule produces small train gains but exactly zero calibration/test gain in all six seed-dataset cells, so it should not be promoted into a full confirmatory branch.",
+    "The next development variable should be a learned query-conditioned bond potential over a frozen candidate set, with durable slow salience kept separate and distilled only after repeated cross-query evidence.",
+    "Before confirmation, compile a full-candidate score-component pack and prove neutral-weight exact reproduction; then freeze the learner and evaluate on a newly sealed benchmark such as a fresh PhantomWiki universe."
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "hswm-engineering-receipt/v1",
+  "status": "ENGINEERING_GROUNDWORK_ONLY",
+  "generated_at": "2026-07-23T09:11:14+09:00",
+  "base_git_head": "3c68c4d9ea0ada6a024de37415d3f13a3a6b48d7",
+  "claim_boundary": "The pure slow/fast bond-potential application module and its development diagnostics are implemented and locally verified. No B2.2 learner, fresh benchmark result, LakatoTree prediction, scientific progress verdict, or production activation exists.",
+  "artifacts": [
+    {
+      "role": "deterministic_module",
+      "path": "prom_search_hswm/hswm_bond_readout.py",
+      "sha256": "41bca84d284f82f52a966c03c06e8b83debe30388dc41d8ce425f57ff61221f1"
+    },
+    {
+      "role": "conformance_tests",
+      "path": "prom_search_hswm/test_hswm_bond_readout.py",
+      "sha256": "ece0e8b5c7e0c5ddaf6e39909dbdb7b59a6fe0af725bbcbe648228d68e9d583a"
+    },
+    {
+      "role": "diagnostic_script",
+      "path": "prom_search_hswm/diag_b22_weight_action_space.py",
+      "sha256": "b599c038327101af74e64a7a83df7240b545acec940940cb11468bf9a03aeed8"
+    },
+    {
+      "role": "diagnostic_evidence",
+      "path": "prom_search_hswm/evidence/DIAG_b22_fine_bond_action_headroom_20260723.json",
+      "sha256": "86da4186b4e4ac3edf50d89389299439a90bc8904f2882254439e4f1a188cd5d"
+    },
+    {
+      "role": "design",
+      "path": "prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md",
+      "sha256": "10092b016ddb45b2c939cdfddf800e2c3dbc89056cf114f4f79b53ee7f80d55d"
+    },
+    {
+      "role": "module_decision",
+      "path": "prom_search_hswm/docs/B22_BOND_WEIGHTING_MODULE_DECISION_20260723.json",
+      "sha256": "643bcea2bc8e8d1ff60120bcc6905dd12b59a69db6c7e9fac9fd2650bd72e97e"
+    }
+  ],
+  "verification": {
+    "module_tests": "19 passed in 0.02s",
+    "relevant_regression": "132 passed in 0.51s",
+    "engine_decision_validator": "OK with 0 warnings",
+    "json_parse": true,
+    "diagnostic_replay": "completed against both frozen legacy base scorepacks",
+    "git_diff_check": true
+  },
+  "next_gate": "Compile a full-candidate score-component pack with neutral exact B2 reproduction before fitting or preregistering the fast query-bond learner."
+}

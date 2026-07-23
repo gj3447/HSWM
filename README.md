@@ -42,6 +42,13 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
   posthoc gold oracle's minimum frozen-action headroom was only +0.01087, below
   the registered >+0.02 target. This rejects router-only, not semantic-weight or
   topology learning.
+- 🧪 **B2.2 bond-weight groundwork:** the manifest's previously inert slow
+  `SemanticWeight` and a separate volatile query-bond potential now have a pure,
+  fail-closed combination kernel with 19 conformance tests; the B2/OpenHSWM
+  adapter and full score pack remain next. A development-only
+  top-20 oracle has +0.0489/+0.0833 room, while one conservative static sparse
+  edge-ID patch transfers exactly 0 on all six calibration/test cells. No B2.2
+  efficacy claim has been registered or made.
 - ⚠️ **Open-kernel claim boundary:** LakatoTree judged the composition receipt
   chain `partial` and `certified=false`. Learned semantic-weight deltas and
   CONNECT/SEPARATE/SPECIALIZE topology edits, bounded cyclic readout,
@@ -95,6 +102,8 @@ positive traversal residual does not guarantee ranking/nDCG improvement.
 | `prom_search_hswm/hswm_open_kernel.py` | deterministic open-composition v2r3 kernel |
 | `prom_search_hswm/prom_b21_learned_router.py` | B2.1 frozen-arm learned router and conformal-abstention harness |
 | `prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md` | 54-cell result, oracle ceiling diagnosis, LakatoTree disposition, and B2.2 direction |
+| `prom_search_hswm/hswm_bond_readout.py` | pure slow-salience + volatile query-bond potential application and deterministic ranking |
+| `prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md` | refined B2.2 design, action-space diagnostics, full-score-pack requirement, and fresh confirmation boundary |
 | `H3_B3_RESUME_STATUS_2026-07-20.md` | corrected PRE_RUN boundary, local receipt hashes, and exact next sequence |
 | `QKV_STRUCTURE_EXPERIMENT_PLAN_2026-07-20.md` / `QKV_STRUCTURE_RESULTS_2026-07-20.md` | ordered-routing and B1-QKV development protocol, results, and claim boundary |
 | `qkv_routing.py` / `qkv_b1_probe.py` | exact symbolic QKV routing and no-label dense B1 value-read research kernels |

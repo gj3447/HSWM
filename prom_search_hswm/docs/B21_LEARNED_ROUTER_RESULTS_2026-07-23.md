@@ -217,15 +217,25 @@ or arbitrary rewiring is automatically useful.
 
 ### Next falsifiable rung: B2.2
 
-1. Freeze embeddings and the B2 scorer again.
-2. Add a sparse `Delta ell` action that may reweight evidence-bearing seam and
-   in-field hyperedges; do not yet add unrestricted topology creation.
-3. Compare `MERGED`, the rejected B2.1 router, learned `Delta ell`, shuffled-target
-   `Delta ell`, and a gold-oracle diagnostic under equal compute.
-4. Require positive overall CI, cross-field retention, in-field no-harm, sparse edit
-   budget, private-entity robustness, two datasets, three seeds, and exact replay.
-5. Only if weight learning leaves irreducible cases, unlock bounded typed
-   `CONNECT / SEPARATE / SPECIALIZE` proposals as the following rung.
+Follow-up code tracing refined this rung without changing the B2.1 judgment:
+`SemanticWeight` was present in the open manifest but inert in the B2 scorer, and
+a development-only static edge-ID suppression probe transferred `0.0` on every
+one of six calibration/test cells. Fine per-query top-20 reranking still has
+`+0.048913/+0.083333` gold-oracle room.
+
+1. Bind slow salience and volatile query-bond potential to the frozen scorer with
+   neutral exact parity.
+2. Compile a full-candidate score-component pack; v1 top-20 scorepacks are
+   insufficient for exact suppression reranking.
+3. Learn a small query-conditioned bond potential with `lambda=0`, shuffled,
+   private-surface, and rejected B2.1 controls.
+4. Distill only repeated cross-component effects into sparse slow `Delta ell`
+   candidates; keep one-off relevance in the volatile plane.
+5. Require fresh confirmation before unlocking bounded typed
+   `CONNECT / SEPARATE / SPECIALIZE` proposals.
+
+The detailed refinement is in
+`B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md`.
 
 This ordering tests the smallest internal change first while preserving the user's
 larger target: an agent-completed semantic neural network whose maps can be combined,

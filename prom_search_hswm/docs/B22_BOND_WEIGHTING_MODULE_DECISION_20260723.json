@@ -1,0 +1,65 @@
+{
+  "schema_version": "engine-decision/v1",
+  "name": "hswm-bond-weighted-readout",
+  "verdict": "module",
+  "purpose": "Deterministically bind durable semantic salience and volatile query-bond potentials to an existing HSWM base scorer without learning, mutation, promotion, or judgment.",
+  "current_consumers": [
+    "B2.2 query-bond weighting development harness"
+  ],
+  "planned_consumers": [
+    "OpenHSWM materialized readout adapter",
+    "HSWM plasticity candidate evaluator"
+  ],
+  "rationale": [
+    "The current OpenHSWM manifest stores SemanticWeight but B2 readout does not consume it.",
+    "Weight application is a pure deterministic formula with one current call path and no state ownership, scheduling, durability, retry, or external effects.",
+    "The existing hswm_plasticity_loop contract already owns candidate lifecycle, sealed evaluation, approval, CAS activation, and rollback handoff; duplicating those concerns would create a second authority."
+  ],
+  "boundary": {
+    "owns": "Exact candidate coverage validation, canonical query-logit normalization, additive slow and fast bond-potential application, and deterministic ranking",
+    "mechanism": "Compute score(e|q)=base(e|q)+lambda_s*ell(e)+lambda_q*a(e|q), where ell and max-normalized a are finite and <=0",
+    "policy_outside": [
+      "Feature choice and learner architecture",
+      "Training labels and optimizer",
+      "Candidate promotion thresholds",
+      "Topology mutation",
+      "Activation and rollback"
+    ],
+    "non_goals": [
+      "Learning weights",
+      "Persisting weights or model parameters",
+      "Declaring retrieval improvement",
+      "Changing provenance or topology",
+      "Owning the plasticity FSM"
+    ],
+    "state_authority": "The caller owns base scores and learned state; this module owns no mutable state"
+  },
+  "contract": "rank_bonds(base_scores, exact slow SemanticWeight coverage, optional exact QueryBondWeight coverage, nonnegative scales) -> immutable score-desc/id-asc RankedBond tuple | ValueError",
+  "invariants": [
+    "Identical inputs produce identical ranked output.",
+    "Neutral slow and query weights preserve base scores and base ranking exactly, including edge-ID tie breaking.",
+    "Neither canonical weight plane may raise a bond above its base score because both relative-potential domains are <=0 and scales are nonnegative.",
+    "Slow and query weight inputs cover the candidate edge set exactly; missing, extra, or duplicate identities fail closed.",
+    "Query-logit normalization is invariant to an additive constant.",
+    "The function does not mutate the graph, weights, base-score mapping, provenance, or topology."
+  ],
+  "failure_model": [
+    "Empty candidates, blank IDs, nonnumeric or nonfinite values, positive canonical potentials, negative or nonfinite scales, and coverage mismatch yield ValueError before ranking.",
+    "No missing weight silently defaults during an explicit weighted call; only an omitted volatile query plane is defined as neutral."
+  ],
+  "verification": [
+    "Unit tests cover neutral parity, monotone suppression, query-logit shift invariance, reranking, exact coverage, nonfinite inputs, invalid scales, positive-potential rejection, and input-order determinism.",
+    "B2.2 must add an exact frozen-B2 full-candidate reproduction gate before any benchmark claim.",
+    "A future OpenHSWM adapter must prove embeddings, incidence, seams, provenance, and topology are unchanged when only weights differ."
+  ],
+  "promotion_gates": [
+    "Two or more production consumers require one authority for durable weight revisions rather than sharing the existing plasticity loop.",
+    "Weight application itself acquires queues, scheduling, concurrency control, persistence, recovery, or external effects that cannot remain in the caller or plasticity runtime.",
+    "A stable versioned command/event protocol is demonstrated by real consumers rather than anticipated."
+  ],
+  "falsifiers": [
+    "If B2 and OpenHSWM require incompatible score semantics, keep scorer-specific adapters around this pure potential-combination kernel rather than broadening it into a policy engine.",
+    "If a learner requires query relevance, provenance truth, and slow salience to be collapsed into one scalar, reject that learner contract rather than weakening the plane separation.",
+    "If neutral weights do not reproduce the frozen scorer exactly, the module is not an admissible B2.2 boundary."
+  ]
+}

@@ -24,6 +24,9 @@
 - B2.1에서 frozen `A / B / MERGED` 위 shared-ridge router를 실제 학습했지만, 표준
   54셀 전부 `ABSTAIN -> MERGED`로 붕괴해 `REJECTED`됐다. primary gold oracle의
   최소 headroom도 `+0.010870 < +0.02`라 router-only 행동공간 자체가 부족하다.
+- B2.2 사전 진단에서 manifest의 `SemanticWeight`가 B2 readout에는 아직 inert였음이
+  확인됐다. pure bond-readout binding을 추가했고, fine query-edge 상한은
+  `+0.048913/+0.083333`이지만 static edge-ID suppression은 6/6 validation/test Δ0였다.
 
 정본 설계는
 [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md),
@@ -38,7 +41,8 @@
 
 - 종합 보고서: [`PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md`](PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md)
 - 실행 루프 계약: [`hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json)
-- 첫 실험 결과: [`B21_LEARNED_ROUTER_RESULTS_2026-07-23.md`](prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) — B2.1 router-only `REJECTED`; 다음은 sparse semantic-weight delta
+- 첫 실험 결과: [`B21_LEARNED_ROUTER_RESULTS_2026-07-23.md`](prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) — B2.1 router-only `REJECTED`
+- 다음 설계: [`B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md`](prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md) — fast query-bond attention을 먼저 검증하고 반복 효과만 slow `Delta ell`로 증류
 - 경계: 설계 수식은 `SECONDARY_AI_RESEARCH_AND_DESIGN`; B2.1 수치는 별도 prereg·실측·감사·LakatoTree receipt에 근거한다.
 
 ## 2026-07-22 연구 장부
@@ -54,6 +58,7 @@
 | B1 identity material | MuSiQue legal chain 0→6, 2Wiki 0→25; 후속 T1/T2 공통 성공은 미달 | [B1](B1_IDENTITY_UNLOCK_RESULTS_2026-07-22.md) · [T1](T1_ENTRANCE_REACH_RESULTS_2026-07-22.md) |
 | B2 federated merge | cross-field +0.2137, seam +0.0342, `progressive`; in-field −0.0648로 no-harm 위반 | [result](prom_search_hswm/docs/B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md) |
 | B2.1 learned router | 2벤치 × 3 partition × 3 k × 3 seed = 54셀 전부 abstain; primary Δ0, oracle ceiling min +0.01087로 router-only `REJECTED / degenerating` | [result](prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) |
+| B2.2 bond weighting 진단 | fine top-20 oracle +0.0489/+0.0833; train-only static sparse patch는 6/6 calibration·test Δ0. query-bond 쪽 room만 확인, confirmatory claim 아님 | [design](prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md) · [diagnostic](prom_search_hswm/evidence/DIAG_b22_fine_bond_action_headroom_20260723.json) |
 | PROM-8 / R1 | dynamic two-lane 처방. R1 T1 minimum 0→2, 2Wiki depth-2 0→4, MuSiQue 0 | [PROM-8](PROM_8_DYNAMIC_TWO_LANES_2026-07-22.md) · [R1](R1_T1_RETRY_RESULTS_2026-07-22.md) |
 | open composition v2r3 | target 59/59, expanded 78/78, injected negative 2/2. 구조 closure는 통과했지만 LakatoTree는 `partial`, certificate=false | [amendment](AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md) · [judgment](prom_search_hswm/judgments/OPEN_COMPOSITION_20260722/V2_JUDGMENT.md) |
 
@@ -69,6 +74,8 @@
 | [`prom_search_hswm/hswm_open_kernel.py`](prom_search_hswm/hswm_open_kernel.py) | v2r3 open self-similar deterministic kernel |
 | [`prom_search_hswm/test_hswm_open_kernel.py`](prom_search_hswm/test_hswm_open_kernel.py) | v2r3 반례·불변식 테스트 |
 | [`prom_search_hswm/prom_b21_learned_router.py`](prom_search_hswm/prom_b21_learned_router.py) | frozen HSWM arm 위 B2.1 learned router·conformal abstention harness |
+| [`prom_search_hswm/hswm_bond_readout.py`](prom_search_hswm/hswm_bond_readout.py) | slow `ell`과 volatile query-bond potential을 분리 적용하는 pure deterministic module |
+| [`prom_search_hswm/test_hswm_bond_readout.py`](prom_search_hswm/test_hswm_bond_readout.py) | neutral parity·coverage·monotonic suppression·shift invariance 19 tests |
 | [`prom_search_hswm/fsm/hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json) | weight→routing→topology 후보의 bounded proposal/evaluation/activation 계약 |
 | [`prom_search_hswm/evidence/`](prom_search_hswm/evidence/) | preregistration, evidence, neutral judge packet, injected negative |
 
@@ -84,12 +91,13 @@ python3 -m pytest \
   prom_search_hswm/test_hswm_b2_crossfield.py \
   prom_search_hswm/test_hswm_absorption_fsm.py \
   prom_search_hswm/test_hswm_b21_learned_router.py \
+  prom_search_hswm/test_hswm_bond_readout.py \
   tests/test_additive_floor.py \
   tests/test_supersede_confluence.py \
   tests/test_field_snapshot.py -q
 ```
 
-2026-07-23 재실행 결과는 `113 passed`다.
+2026-07-23 재실행 결과는 `132 passed`다.
 테스트 통과는 harness/불변식 closure이고, 성능 판정은 별도 evidence와 receipt를 따른다.
 
 LakatoTree `LakatosTree_HSWM_SolidMultiAgent_20260722 /
@@ -103,7 +111,7 @@ certificate가 닫히지 않아 `certified=false`다.
 1. relation/type/role compatibility와 adapter registry
 2. cyclic connector graph의 budgeted readout
 3. `hswm_plasticity_loop.v1.json`의 durable reducer·event log·typed proposal compiler 구현
-4. B2.2 sparse semantic-weight `Delta ell` 학습; B2.1 router-only 반복·threshold sweep은 중단
+4. B2.2 full score-component pack + fast query-bond learner; 반복된 효과만 slow `Delta ell`로 증류
 5. 두 번째 benchmark 및 Agent-A-write → Agent-B transfer
 6. 올바른 `python3 -m pytest` replay를 쓰는 server-owned certification
 

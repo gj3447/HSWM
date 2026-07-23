@@ -1,0 +1,87 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_HSWM_20260719",
+  "branch": "canon-direction-neural-cognitive-entity-20260723 / P1-closed-learning-loop",
+  "question": "Q-p1-closed-loop-causal-weight-learning",
+  "conjecture": "On PhantomWiki universes, an agent whose retrievals leave episode-ID-indexed eligibility tags, and whose edge slow-weights receive candidate commits Delta_ell = eta * (r_e - r_hat_e) * tag_strength gated by the existing absorption FSM (freeze -> fresh-eval -> canary -> CAS), shows improving sealed retrieval behavior over episodes on fresh unseen questions, while (A2) no-commit, (A3) timestamp-shuffled M, and (A4) uniform untagged commit controls do not. This is the minimal cell of the canon claim: outcome -> judgment -> DeltaW -> next behavior differs, with the environment (sealed answers) as critic to avoid the free-label trap that voided llm_judgment_loop.py.",
+  "learning_rule": {
+    "tag": "every hyperedge in a winning trace of episode e gets tag_strength = its normalized contribution in the best trace; tags are indexed by episode ID, no wall-clock decay (verdict delay regime, tribunal sec.3)",
+    "reward": "r_e = set-match answer accuracy of episode e against sealed PhantomWiki gold (post-hoc, never visible during walk)",
+    "baseline": "r_hat_e = expanding mean of r_1..r_{e-1} within arm A1; episode 1 has M = 0 (no commit)",
+    "commit": "candidate Delta_ell(b) = clip(eta * M_e * tag_strength(b), keeps ell <= 0 open-kernel contract; positive M moves toward 0, negative M moves down) through hswm_absorption_fsm: FREEZE -> EVALUATE on fresh questions -> CANARY regression probe (previously-correct questions must not break beyond epsilon_c) -> CAS ACTIVATE or REJECT/ROLLBACK",
+    "plane_scope": "weight-plane (slow ell) only. Topology, router, embeddings frozen. Single agent."
+  },
+  "arms": {
+    "A1_tagged_commit": "the learning rule above",
+    "A2_no_commit": "identical walk, weights frozen after episode 1 (ablation: does removing the loop remove the behavior change)",
+    "A3_shuffled_M": "identical tags and update budget, but the M sequence is permuted across episodes (same multiset; tribunal-imported timestamp-shuffle falsifier for M causality)",
+    "A4_uniform_commit": "identical total update L1 budget per episode, spread uniformly over all edges touched that episode regardless of tag strength (controls that credit assignment, not update magnitude, drives any gain)"
+  },
+  "prediction": {
+    "metric": "mean_paired_recall10_gain_A1_minus_A2_episodes_2_to_E",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0.01,
+    "success_threshold": 0.01,
+    "required_bootstrap95_lower": 0.0,
+    "secondary": "linear slope of A1 sealed recall@10 across episodes > 0",
+    "novel_metric": "tag_utility_spearman: correlation between sign of committed Delta_ell on an edge and that edge's re-use in winning traces in later episodes",
+    "novel_direction": "higher",
+    "novel_threshold": 0,
+    "credence": 0.35,
+    "credence_note": "first ever closed loop on this substrate; the only prior judgment-loop measurement was -0.012 (harmful). credence is deliberately below 0.5."
+  },
+  "abandon_signal_disclosure": {
+    "fired_at_registration": true,
+    "server_reason": "예산 5노드 소진, 예측 적중 0 (branch leaf canon-direction-neural-cognitive-entity-20260723)",
+    "policy_warning": "ABANDON_SIGNAL_IGNORED",
+    "justification": "This prereg IS the cure the signal demands: the next judged node on this branch will carry a preregistered prediction and a measured verdict, converting a theory-only branch into a judged one. No further theory nodes will be added before this measurement.",
+    "commitment": "If A1 fails K1 below, the three-factor weight-learning line on this substrate is abandoned and the programme falls back to the ExpeL-style text-lesson baseline, per canon K1. Recorded before measurement."
+  },
+  "already_public_before_registration": {
+    "note": "Only structural facts were observed on PhantomWiki universes (article/fact/question counts, hop distributions from R3 groundwork). No arm outcome, recall, or delta for THIS experiment has been computed or inspected. Learning-loop modules do not exist yet; no measurement is possible before implementation freeze.",
+    "prior_context": "R3 groundwork 2026-07-23 (deterministic ingest, density dial, sealed answers); tribunal 2026-07-23 (dual-timescale eligibility, shuffle falsifier, stability budget imports); plasticity PROM 2026-07-23 (eligibility/commit contract sec.7, FSM reuse sec.9)."
+  },
+  "kill_conditions": [
+    "K1: mean paired recall@10 gain (A1 - A2) <= 0.01 or bootstrap95 lower <= 0 -> three-factor weight learning on this substrate fails; fall back to text-lesson baseline per canon K1.",
+    "K2: A3_shuffled_M >= A1 -> the M signal is not causal; stop learning runs and invest in verdict quality before any retry (canon K2 analog).",
+    "K3: A4_uniform_commit >= A1 -> tag-based credit assignment is worthless on this substrate; the eligibility mechanism (not the loop) is rejected.",
+    "K4: canary regressions exceed epsilon_c in any episode -> halt, fix homeostasis/gate first; no further commits until canary holds.",
+    "K5: tag_utility_spearman <= 0 -> committed updates do not track subsequent utility; credit assignment signal-to-noise insufficient (do not scale up)."
+  ],
+  "void_conditions": [
+    "any gold consumption during graph construction or walk",
+    "any LLM/network call during graph construction (deterministic ingest only)",
+    "inspecting any arm outcome before module sha freeze is appended to this file",
+    "any wall-clock decay on tags (regime violation: verdicts arrive at episode granularity)"
+  ],
+  "scope_boundary": {
+    "corpus": "synthetic PhantomWiki only; real-prose transfer is not claimed",
+    "headline_metric": "retrieval-side best-trace recall@10 on fresh questions; answer accuracy is the reward input, not the headline claim",
+    "claim": "a causal closed loop exists (outcome -> DeltaW -> changed next-episode behavior). NOT claimed: answer-quality uplift, multi-agent transfer (P2), topology learning (P3), sleep/consolidation (P4)",
+    "llm_role": "the walker/reasoner function only (where used); the critic in P1 is the environment's sealed answers, deliberately not an LLM judge, to avoid the free-label/self-judgment trap"
+  },
+  "locked_parameters": {
+    "episodes_E": 5,
+    "questions_per_episode": 40,
+    "episode_question_sets": "disjoint, fresh, sealed",
+    "eta": 0.05,
+    "canary_epsilon_c": 0.02,
+    "walker": "strict T3 walker (mu-additive, max-product K<=2), identical across arms",
+    "mu": 0.1,
+    "top_k": 10,
+    "seed_k": 3,
+    "bootstrap_reps": 2000,
+    "boot_seed": 9173,
+    "universe": "large sparse PhantomWiki (t200, friendship-k 1, question-depth 10), same generation flags as R3"
+  },
+  "module_sha256": {
+    "status": "PENDING — modules (p1_eligibility_tag, p1_m_commit, p1_loop_harness) do not exist yet. sha256 must be appended at implementation freeze, before any measurement. Any outcome inspected before freeze voids the experiment."
+  },
+  "universe_generation": {
+    "tool": "phantom-wiki 1.0.3 (PyPI), SWI-Prolog 10.0.2",
+    "flags": "--num-family-trees 200 --friendship-k 1 --num-questions-per-type 30 --question-depth 10 --seed 1 --friendship-seed 1 --article-format json",
+    "root": "/Volumes/GM/hswm_lab/phantomwiki_r3"
+  },
+  "registered_before_measurement": true
+}

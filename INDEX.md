@@ -45,6 +45,30 @@
 - 다음 설계: [`B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md`](prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md) — fast query-bond attention을 먼저 검증하고 반복 효과만 slow `Delta ell`로 증류
 - 경계: 설계 수식은 `SECONDARY_AI_RESEARCH_AND_DESIGN`; B2.1 수치는 별도 prereg·실측·감사·LakatoTree receipt에 근거한다.
 
+## 2026-07-23 paper–code absorption gate
+
+11개 외부 시스템을 이름이 아니라 paper–code pair로 고정했다. 현재 상태는
+`SOURCE-LOCKED / NOT ACTIVATED`이며, 외부 성능 수치를 HSWM 성과로 간주하지 않는다.
+
+- 배포 경계: [`ABSORB_CONTRACT_v1.md`](ABSORB_CONTRACT_v1.md)
+- 흡수 판단·우선순위·falsifier: [`PAPER_CODE_ABSORPTION_LEDGER_2026-07-23.md`](PAPER_CODE_ABSORPTION_LEDGER_2026-07-23.md)
+- 기계 판독 게이트: [`manifest.v1.json`](_research/competitor_absorption/manifest.v1.json) · [`verify_sources.py`](_research/competitor_absorption/verify_sources.py)
+- 재현 provenance: [`source_locks/`](_research/competitor_absorption/source_locks/)
+
+제3자 clone·PDF·추출문은 저장소에 vendor하지 않는다. 공개 저장소에는 upstream commit,
+paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔다.
+
+## 복구된 미게시 연구 묶음
+
+최신 `main`보다 뒤처진 별도 작업 미러에서 아래 묶음을 원래 provenance와 함께 복구했다.
+기존 `main`을 미러로 덮지 않고, 현재 정본 위에 독립 산출물로 이식했다.
+
+| 묶음 | 공개 경계 | 산출물 |
+|---|---|---|
+| H3-B3 V5 재현성 | 이미 공개된 V5 run manifest가 고정한 source/prereg/test를 복구. 기존 refusal·효능 판정은 변경하지 않음 | [V5 prereg](H3_B3_V5_RESTART_PREREG_2026-07-20.md) · [C0 diagnosis](H3_C0_CHAIN_VIABILITY_DIAGNOSIS_2026-07-20.md) |
+| World Compiler S4.0 | 가역적 entity binding 수직 slice와 OSS 비교. `claim_weave`·`chain_viability`는 미구현 | [receipt](S4_0_REVERSIBLE_ENTITY_BINDING_2026-07-21.md) · [PROM](WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md) |
+| R3 walk-regime density dial | PhantomWiki regime-swap 사전등록과 실행 코드. 결과·성능 주장은 아직 없음 | [prereg](PREREG_R3_WALK_REGIME_2026-07-23.json) · [`r3_walk_regime.py`](r3_walk_regime.py) |
+
 ## 2026-07-22 연구 장부
 
 | 갈래 | 결과 | 산출물 |
@@ -78,6 +102,7 @@
 | [`prom_search_hswm/test_hswm_bond_readout.py`](prom_search_hswm/test_hswm_bond_readout.py) | neutral parity·coverage·monotonic suppression·shift invariance 19 tests |
 | [`prom_search_hswm/fsm/hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json) | weight→routing→topology 후보의 bounded proposal/evaluation/activation 계약 |
 | [`prom_search_hswm/evidence/`](prom_search_hswm/evidence/) | preregistration, evidence, neutral judge packet, injected negative |
+| [`_research/competitor_absorption/`](_research/competitor_absorption/) | 외부 paper–code source lock, license gate, default-off absorption manifest |
 
 ## 검증·판정 경계
 

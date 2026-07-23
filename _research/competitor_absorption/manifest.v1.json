@@ -1,0 +1,224 @@
+{
+  "schema": "hswm-paper-code-absorption/v1",
+  "generated_at": "2026-07-23T03:45:00Z",
+  "status": "source_locked_not_activated",
+  "hswm_baseline": {
+    "repository": ".",
+    "commit": "6328de66e5bbfb22905532da2e6ddf1088c9f179",
+    "deployment_contract": "ABSORB_CONTRACT_v1.md",
+    "defaults": {
+      "admission": "flat",
+      "expansion": "gated_optional",
+      "governance": "late",
+      "traversal": "off",
+      "fuse_weight_may_be_zero": true
+    },
+    "mandatory_predecessor_gate": "B2.2 neutral exact replay plus full-candidate score-component pack"
+  },
+  "locks": {
+    "repositories": "_research/competitor_absorption/source_locks/repos.lock.tsv",
+    "papers": "_research/competitor_absorption/source_locks/papers.lock.tsv"
+  },
+  "code_sources": {
+    "HyperGraphRAG": {"license": "MIT", "implementation_policy": "clean_room_reimplementation", "notice_required_if_reused": true},
+    "HGRAG": {"license": "NO-LICENSE", "implementation_policy": "reference_only_clean_room", "notice_required_if_reused": false},
+    "SiReRAG": {"license": "CC-BY-NC-4.0", "implementation_policy": "reference_only_clean_room", "notice_required_if_reused": true},
+    "HippoRAG": {"license": "MIT", "implementation_policy": "clean_room_reimplementation", "notice_required_if_reused": true},
+    "graphiti": {"license": "Apache-2.0", "implementation_policy": "clean_room_reimplementation", "notice_required_if_reused": true},
+    "zep": {"license": "Apache-2.0", "implementation_policy": "interface_schema_only", "notice_required_if_reused": true},
+    "T-GRAG": {"license": "NO-LICENSE", "implementation_policy": "reference_only_clean_room", "notice_required_if_reused": false},
+    "gfm-rag": {"license": "Apache-2.0", "implementation_policy": "clean_room_reimplementation", "notice_required_if_reused": true},
+    "AriGraph": {"license": "MIT", "implementation_policy": "evaluation_schema_only", "notice_required_if_reused": true},
+    "Tiermem": {"license": "MIT", "implementation_policy": "clean_room_reimplementation_vendor_audit", "notice_required_if_reused": true},
+    "ProveRAG": {"license": "MIT", "implementation_policy": "evaluation_schema_only", "notice_required_if_reused": true}
+  },
+  "candidates": [
+    {
+      "id": "dual-node-hyperedge-retrieval",
+      "paper_keys": ["hypergraphrag"],
+      "code_clones": ["HyperGraphRAG"],
+      "mechanism": "Separate query-conditioned entity and n-ary relation lanes followed by bounded bidirectional incidence expansion.",
+      "code_refs": [
+        {"clone": "HyperGraphRAG", "path": "hypergraphrag/operate.py", "line": 115, "anchor": "async def _handle_single_hyperrelation_extraction"}
+      ],
+      "paper_code_drift": ["dense chunk VDB is populated but absent from public query", "non-hybrid query modes and delete schema contain broken paths"],
+      "hswm_surface": "A2 optional dual V/E retrieval branch",
+      "priority": "P2",
+      "disposition": "experiment_only",
+      "deployment_default": "off",
+      "implementation_policy": "clean_room_reimplementation",
+      "falsifier": "Under matched embeddings, candidates, and tokens, V-union-E must beat E-only and shuffled incidence on arity>=3 items."
+    },
+    {
+      "id": "normalized-incidence-diffusion",
+      "paper_keys": ["hgrag"],
+      "code_clones": ["HGRAG"],
+      "mechanism": "Query-weighted normalized entity-to-passage hypergraph diffusion plus dense residual and structural range filter.",
+      "code_refs": [
+        {"clone": "HGRAG", "path": "src/modules/hgraph.py", "line": 80, "anchor": "def hg_diffusion"},
+        {"clone": "HGRAG", "path": "src/modules/hgraph.py", "line": 95, "anchor": "def struct_enhance"}
+      ],
+      "paper_code_drift": ["public default discards entity similarity via multihot seeds", "public parameters differ from paper table", "no license or paper-run manifest"],
+      "hswm_surface": "A2 normalized V-to-E-to-V traversal falsifier behind mu=0",
+      "priority": "P2",
+      "disposition": "clean_room_experiment",
+      "deployment_default": "off",
+      "implementation_policy": "reference_only_clean_room",
+      "falsifier": "Real incidence must beat degree-preserving shuffled incidence without harming the simple-factual control."
+    },
+    {
+      "id": "dual-recursive-evidence-mount",
+      "paper_keys": ["sirerag"],
+      "code_clones": ["SiReRAG"],
+      "mechanism": "Similarity and shared-entity relatedness trees materialized as two evidence-preserving mounts and a typed union.",
+      "code_refs": [
+        {"clone": "SiReRAG", "path": "base.py", "line": 105, "anchor": "class RaptorRetriever"}
+      ],
+      "paper_code_drift": ["trees flatten into a cosine pool rather than persistent horizontal edges", "training pipeline absent", "persist and traversal paths drift"],
+      "hswm_surface": "OpenHSWM dual-index mount branch",
+      "priority": "P2",
+      "disposition": "clean_room_experiment",
+      "deployment_default": "off",
+      "implementation_policy": "reference_only_clean_room",
+      "falsifier": "The union must beat the best single mount and shuffled entity membership under equal calls, nodes, and tokens."
+    },
+    {
+      "id": "typed-associative-ppr-seeds",
+      "paper_keys": ["hipporag1", "hipporag2"],
+      "code_clones": ["HippoRAG"],
+      "mechanism": "Compile fact-member and dense evidence-unit seeds separately, then optionally run certified associative PPR.",
+      "code_refs": [
+        {"clone": "HippoRAG", "path": "src/hipporag/HippoRAG.py", "line": 1716, "anchor": "def run_ppr"}
+      ],
+      "paper_code_drift": ["current main is v2 plus later platform work", "pairwise topology drops predicate semantics", "incremental synonym update searches all entities"],
+      "hswm_surface": "A2 typed seed compiler plus optional PPR",
+      "priority": "P2",
+      "disposition": "experiment_only",
+      "deployment_default": "off",
+      "implementation_policy": "clean_room_reimplementation",
+      "falsifier": "Associative gain must survive predicate-preserving n-ary topology, vanish under shuffled membership, and not lower simple factual recall."
+    },
+    {
+      "id": "bitemporal-supersession-record",
+      "paper_keys": ["zep_graphiti"],
+      "code_clones": ["graphiti"],
+      "mechanism": "History-preserving fact validity interval plus ingestion observation time and episode provenance.",
+      "code_refs": [
+        {"clone": "graphiti", "path": "graphiti_core/edges.py", "line": 263, "anchor": "class EntityEdge"},
+        {"clone": "graphiti", "path": "graphiti_core/graphiti.py", "line": 980, "anchor": "async def add_episode"}
+      ],
+      "paper_code_drift": ["current OSS is broader than paper evaluation", "hosted Zep results are not Graphiti-only results", "timestamp and contradiction extraction are partly LLM-derived"],
+      "hswm_surface": "A3 governance event plus L0 evidence reference",
+      "priority": "P0",
+      "disposition": "absorb_contract",
+      "deployment_default": "schema_only",
+      "implementation_policy": "clean_room_reimplementation",
+      "falsifier": "Temporal-QA CI lower bound must be positive versus the current late filter while non-temporal retention loss is <=1 percentage point."
+    },
+    {
+      "id": "zep-memory-facade",
+      "paper_keys": ["zep_graphiti"],
+      "code_clones": ["zep"],
+      "mechanism": "Integration facade and benchmark receipt shape for a hosted temporal memory service.",
+      "code_refs": [
+        {"clone": "zep", "path": "integrations/langgraph/python/src/zep_langgraph/store.py", "line": 86, "anchor": "class ZepStore"}
+      ],
+      "paper_code_drift": ["repository is examples and integrations, not the evaluated product engine", "cloud API is required for product claims"],
+      "hswm_surface": "L3 facade and benchmark adapter",
+      "priority": "P3",
+      "disposition": "facade_only",
+      "deployment_default": "off",
+      "implementation_policy": "interface_schema_only",
+      "falsifier": "A wrapper and direct HSWM call must be bit-identical apart from transport metadata; wrapper behavior is not memory uplift."
+    },
+    {
+      "id": "temporal-revision-cut-view",
+      "paper_keys": ["t_grag"],
+      "code_clones": ["T-GRAG"],
+      "mechanism": "Deterministic candidate view constrained to a requested revision or time slice.",
+      "code_refs": [
+        {"clone": "T-GRAG", "path": "T_GRAG/graphrag.py", "line": 210, "anchor": "async def asearch"}
+      ],
+      "paper_code_drift": ["multi-time dispatch references undefined symbols", "multiple modes route through single-time query", "node and edge state are mixed", "no license"],
+      "hswm_surface": "L1 revision-cut candidate view",
+      "priority": "P3",
+      "disposition": "concept_only",
+      "deployment_default": "off",
+      "implementation_policy": "reference_only_clean_room",
+      "falsifier": "Gain must disappear under shuffled timestamps and all dual/multi-time paths must execute without undefined symbols."
+    },
+    {
+      "id": "learned-graph-residual-scorer",
+      "paper_keys": ["gfm_rag"],
+      "code_clones": ["gfm-rag"],
+      "mechanism": "Small query-conditioned graph scorer used only as an optional residual over the admitted flat score.",
+      "code_refs": [
+        {"clone": "gfm-rag", "path": "gfmrag/gfmrag_retriever.py", "line": 26, "anchor": "class GFMRetriever"}
+      ],
+      "paper_code_drift": ["repository mixes paper model with later G-reasoner work", "paper-scale pretraining is heavy and offline"],
+      "hswm_surface": "A1 optional learned residual",
+      "priority": "P3",
+      "disposition": "remote_experiment_only",
+      "deployment_default": "off",
+      "implementation_policy": "clean_room_reimplementation",
+      "falsifier": "Gain must survive unseen held-out graphs and collapse under edge permutation versus flat cosine and the current B2 scorer."
+    },
+    {
+      "id": "closed-loop-world-memory-receipt",
+      "paper_keys": ["arigraph"],
+      "code_clones": ["AriGraph"],
+      "mechanism": "Receipt binding observation, extracted facts, invalidations, retrieved memory, plan, action, and reward.",
+      "code_refs": [
+        {"clone": "AriGraph", "path": "graphs/contriever_graph.py", "line": 13, "anchor": "class ContrieverGraph"}
+      ],
+      "paper_code_drift": ["main pipeline is triplet graph", "n-ary Hypergraph class is orphaned", "outdated facts are destructively deleted"],
+      "hswm_surface": "Interactive world-state memory evaluation branch",
+      "priority": "P1",
+      "disposition": "absorb_evaluation_schema",
+      "deployment_default": "receipt_only",
+      "implementation_policy": "evaluation_schema_only",
+      "falsifier": "Under fixed model and tokens, reward must beat full-history and flat controls and collapse when action-outcome links are shuffled."
+    },
+    {
+      "id": "source-linked-summary-raw-router",
+      "paper_keys": ["tiermem"],
+      "code_clones": ["Tiermem"],
+      "mechanism": "Summary-first answer path with fail-closed escalation to source-linked raw evidence and optional verified write-back.",
+      "code_refs": [
+        {"clone": "Tiermem", "path": "src/linked_view/summary_index.py", "line": 32, "anchor": "class SummaryHit"},
+        {"clone": "Tiermem", "path": "src/memory/linked_view_system.py", "line": 325, "anchor": "class LinkedViewSystem"}
+      ],
+      "paper_code_drift": ["raw store is not cryptographically immutable", "simple and full routers differ", "verified write-back defaults off", "vendored mem0 needs separate notice audit"],
+      "hswm_surface": "L3 evidence allocator plus L0 source receipt",
+      "priority": "P0",
+      "disposition": "absorb_contract",
+      "deployment_default": "schema_only",
+      "implementation_policy": "clean_room_reimplementation_vendor_audit",
+      "falsifier": "Versus raw-only, accuracy loss <=2.2 points with token or latency gain; broken raw pointers must refuse; router must beat random at matched escalation."
+    },
+    {
+      "id": "claim-evidence-evaluation-packet",
+      "paper_keys": ["proverag"],
+      "code_clones": ["ProveRAG"],
+      "mechanism": "Independent TP/FP/FN claim packet with rationale and frozen-source byte spans.",
+      "code_refs": [
+        {"clone": "ProveRAG", "path": "evaluation.py", "line": 21, "anchor": "class Evaluation"}
+      ],
+      "paper_code_drift": ["generation-time source identity is lost", "post-hoc mutable web retrieval", "same-model evaluation", "similarity is mislabeled as provenance quality"],
+      "hswm_surface": "L4 evaluation receipt",
+      "priority": "P1",
+      "disposition": "absorb_evaluation_schema",
+      "deployment_default": "receipt_only",
+      "implementation_policy": "evaluation_schema_only",
+      "falsifier": "Injected unsupported and omitted claims must be caught, spans must byte-match frozen source, and shuffled response-context pairs must collapse the score."
+    }
+  ],
+  "prohibitions": [
+    "No candidate may become active from source presence alone.",
+    "Do not copy code from NO-LICENSE or CC-BY-NC sources.",
+    "Do not attribute hosted Zep results to the Graphiti or zep clone alone.",
+    "Do not enable traversal or deep GNN by default.",
+    "Do not call post-hoc similarity or same-model critique proof.",
+    "Do not delete superseded source evidence."
+  ]
+}

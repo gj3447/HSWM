@@ -1,0 +1,66 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "R3-walk-regime-density-dial",
+  "question": "Q-r3-walk-regime-density-dial",
+  "conjecture": "On a large, bridge-sparse PhantomWiki universe (5057 articles, friendship-k 1), strict max-product K<=2 walking beats flat cosine on hard-hop (difficulty >= 6) best-trace recall@10 by more than the 0.01 noise band with a positive bootstrap95 lower bound, and the advantage responds monotonically to bridge density (sparse fk1 delta > dense fk9 delta).",
+  "prediction": {
+    "metric": "sparse_hardhop_walk_minus_flat_recall10",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0.01,
+    "success_threshold": 0.01,
+    "required_bootstrap95_lower": 0.0,
+    "novel_metric": "density_monotonicity_sparse_minus_dense_delta",
+    "novel_direction": "higher",
+    "novel_threshold": 0,
+    "credence": 0.5
+  },
+  "abandon_signal_disclosure": {
+    "fired_at_registration": true,
+    "server_reason": "연속 비진보 3 >= 3 (branch leaf T3-score-digest-null, consecutive_nonprogressive 3, prediction_hits 0)",
+    "policy_warning": "ABANDON_SIGNAL_IGNORED",
+    "justification": "R3 is not another attempt on the same substrate — it is the designated regime swap the signal implies (PROM-8 C4: every prior walking trial ran on dense/small pools, i.e. flat-favouring conditions). The heuristic changes, not the protective belt.",
+    "commitment": "If R3 also lands non-progressive at the programme level, the walking lane is abandoned per the signal and the programme reallocates to the federated/field lane (B2 line). This commitment is recorded before measurement."
+  },
+  "already_public_before_registration": {
+    "note": "Ingest smoke was run before registration and observed structural counts only: facts_bound/unbound (0 unbound on all inspected universes), person_arcs (sparse 25606 / dense 66076 / small 348), and gold set sizes. No recall, delta, ranking, or arm outcome was computed or inspected.",
+    "prior_context": "PROM-8 C4 published the walking-win conditions; C8 recorded that no prior work dials bridge density as an independent variable."
+  },
+  "kill_conditions": [
+    "sparse hard-hop delta <= 0.01 or bootstrap95 lower <= 0 -> walking does not win even in its own best regime; walking lane abandoned per the abandon signal.",
+    "density monotonicity <= 0 -> the density dial does not govern the advantage; the C4 regime story is refuted as stated.",
+    "facts_unbound > 0 on any universe -> ingest fidelity broken, measurement void.",
+    "Any LLM/network call or gold consumption during graph construction -> void."
+  ],
+  "scope_boundary": {
+    "corpus": "synthetic PhantomWiki only; real-prose transfer is not claimed",
+    "metric": "retrieval-side best-trace recall@10; no answer-accuracy claim",
+    "walker": "strict T3 walker with mu-additive scoring, not the frozen kernel arithmetic"
+  },
+  "locked_parameters": {
+    "model": "all-MiniLM-L6-v2",
+    "top_k": 10,
+    "seed_k": 3,
+    "mu": 0.1,
+    "hard_hop": 6,
+    "max_traces": 20,
+    "max_trace_entities": 8,
+    "bootstrap_reps": 2000,
+    "boot_seed": 9317,
+    "universes": ["dense_t200_fk9", "large_t200_fk3", "mid_t20_fk3", "small_t2_fk3", "sparse_t200_fk1"]
+  },
+  "module_sha256": {
+    "r3_phantom_ingest.py": "9d001369abad6fa857aa4e86a6152b2740fe9f48c50f05820565c97a281acb88",
+    "r3_walk_regime.py": "8b7f0923687b99e694265c5abd5ab7328978141cad36c2d33a9028c68d3f8a72",
+    "t3_score_null.py": "ee51b3c955e3360ca20f8cb5b6cbb680f23f2b7ad3179524496b29b5e30883aa",
+    "r1_predicate_alias.py": "037e8f01ea3b8eb6634d08a1c5d9c4488d3d9b8efeb8f0219bf4352c91977d32"
+  },
+  "universe_generation": {
+    "tool": "phantom-wiki 1.0.3 (PyPI), SWI-Prolog 10.0.2",
+    "flags": "--num-family-trees {2,20,200} --friendship-k {1,3,9} --num-questions-per-type 30 --question-depth 10 --seed 1 --friendship-seed 1 --article-format json",
+    "root": "/Volumes/GM/hswm_lab/phantomwiki_r3"
+  },
+  "prediction_receipt_sha256": "51e6b0837a8393a5ea36dc67dd5731518b48e5305db930a3c1044761844a2af0",
+  "registered_before_measurement": true
+}

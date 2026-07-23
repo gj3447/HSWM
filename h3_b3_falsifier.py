@@ -17,8 +17,9 @@ This is a research falsifier, not a deployment certificate.  Even PASS permits
 only the narrow phrase "evidence-bound relational composition retrieval
 intelligence"; it does not establish answer reasoning or a general reasoner.
 
-Longinus ReferenceSite: ``H3_B3_COMPOSITION_PREREG_2026-07-20.md`` and
-``H3_B3_RUN_MANIFEST_2026-07-20.json``.
+Longinus ReferenceSite: ``H3_B3_COMPOSITION_PREREG_2026-07-20.md``,
+``H3_B3_V5_RESTART_PREREG_2026-07-20.md``, and the current first-write run
+manifest.
 """
 from __future__ import annotations
 
@@ -55,7 +56,7 @@ from world_ir import canonical_json
 
 
 SCHEMA_VERSION = "hswm-h3-b3-falsifier/v1"
-MANIFEST_SCHEMA_VERSION = "hswm-h3-b3-run-manifest/v2"
+MANIFEST_SCHEMA_VERSION = "hswm-h3-b3-run-manifest/v3"
 DEVELOPMENT_REPORT_SCHEMA_VERSION = "hswm-h3-b3-development-report/v1"
 CERTIFICATE_TRANSITION_SCHEMA_VERSION = "hswm-h3-b3-certificate-transition/v1"
 FRESH_ARTIFACT_SEAL_SCHEMA_VERSION = "hswm-h3-b3-fresh-artifact-seal/v1"
@@ -128,6 +129,8 @@ POLICY_GRID = tuple(
 )
 NULL_SEEDS = (0, 1, 2, 3, 4)
 PRIMARY_THRESHOLDS = {"ndcg10": 0.02, "asr10": 0.03}
+MAX_ATTEMPT_CAP_TERMINAL_RATE = 0.005
+MAX_ATTEMPT_CAP_TERMINAL_RATE_BY_DATASET = 0.01
 ARC_AUDIT_SEED = "HSWM-H3-B3-ARC-AUDIT-2026-07-20-v1"
 ARC_AUDIT_MODEL_REVISION = arca.FROZEN_MODEL_REVISION
 RESAMPLING_SEED = 20_260_720
@@ -138,13 +141,126 @@ FROZEN_EVALUATION_CONFIG = {
     "null_seeds": list(NULL_SEEDS),
     "resampling_seed": RESAMPLING_SEED,
 }
+FROZEN_BGE_DIMENSION = 1024
 EMBEDDING_MANIFEST_KEYS = {
     "model", "snapshot", "dimension", "pooling", "max_length", "dtype",
     "batch_size", "producer_code_sha256", "model_attestation",
     "model_attestation_receipt", "config_sha256",
 }
 EXTRACTOR_MANIFEST_KEYS = {
-    "model", "model_revision", "prompt_sha256", "config_sha256", "batch_size",
+    "endpoint", "model", "model_revision", "max_concurrency",
+    "timeout_seconds", "max_tokens", "max_attempts", "prompt_sha256",
+    "config_sha256", "batch_size",
+}
+FROZEN_V5_PROTOCOL_BINDING = {
+    "path": "H3_B3_V5_RESTART_PREREG_2026-07-20.md",
+    "sha256": "253ffd9e2550b30f6aa3c2d3144d4524a6f6c18ed9849f795553218e03e7eebb",
+}
+FROZEN_V5_MANIFEST_PATH = "H3_B3_RUN_MANIFEST_V5_2026-07-20.json"
+FROZEN_V5_PARENT_EVIDENCE = (
+    {
+        "path": "H3_B3_COMPOSITION_PREREG_2026-07-20.md",
+        "sha256": "338a8859a7e2eebbea9c804d75f6b8e0db09d7ddf6b91db939cb30bae9f59a31",
+    },
+    {
+        "path": "H3_B3_V3_REFUSAL_2026-07-20.md",
+        "sha256": "da68371a21a54b1789779453581e2aee6fc5cc1f237b43d5dde24e78cd92f4a9",
+    },
+    {
+        "path": "H3_B3_V4_RESTART_PREREG_2026-07-20.md",
+        "sha256": "01f130c683d016a2f235500acae9fb3b4242e40dbe0afa2376310d938d5db9f4",
+    },
+    {
+        "path": "H3_B3_V4_PREOUTPUT_REFUSAL_2026-07-20.md",
+        "sha256": "9cf599b18e49d9342576f5a201a7d3312465c6a71a0ed6946b155ea9294042d7",
+    },
+)
+FROZEN_V5_PREFLIGHT_PATH = (
+    ".ab_p5_cache/h3_b3/H3_B3_PREFLIGHT_RECEIPT_V5_2026-07-20.json"
+)
+FROZEN_V5_GATE_SOURCE_CODE_ROOT_SHA256 = (
+    "2218428e2767689ebd538d99aad54031c8dcefdfc2913b43ed5e843f3513ddf5"
+)
+FROZEN_V5_OUTPUT_PREFIX = (
+    ".ab_p5_cache/h3_b3/runs/qwen35-r3-schema-v4-20260720"
+)
+FROZEN_V5_QWEN35_DEPLOYMENT = {
+    "path": ".ab_p5_cache/h3_b3/QWEN35_DEPLOYMENT_RECEIPT_V2_2026-07-20_RETRY1.json",
+    "sha256": "15d3880b211c5e21a4087caa55f008d4474323a3d220e05bb47343bcd1f1c0a6",
+}
+FROZEN_V5_BGE_RECEIPT = {
+    "path": ".ab_p5_cache/h3_b3/BGE_M3_ATTESTATION_V2_2026-07-20.json",
+    "sha256": "430ea4606b734d97ee8e07fe7a079ce8fcd18e77f6457a9f4cb95c3340824212",
+}
+FROZEN_V5_EXTRACTOR = {
+    "endpoint": "http://127.0.0.1:18002/v1",
+    "model": "Qwen/Qwen3.6-35B-A3B-FP8",
+    "model_revision": "95a723d08a9490559dae23d0cff1d9466213d989",
+    "max_concurrency": 2,
+    "timeout_seconds": 180.0,
+    "max_tokens": 1024,
+    "max_attempts": 2,
+    "prompt_sha256": "bebcbaf01be3d0a05c7edc4284ec18e244da951f243a124bd558b39aba34fc0c",
+    "config_sha256": "185a15214301633f3353b80636438a4e5e1744633392753201256bf37267d2c0",
+    "batch_size": 1,
+}
+FROZEN_V5_STAGE_SEGMENTS = {
+    "development": {
+        "musique": {
+            "path": ".ab_p5_cache/h3_b3/musique_development_v4_segment.json",
+            "sha256": "de481a3307d8e04f17895b6c125f06a2299a821fc9254b67066058476b0b94e2",
+        },
+        "2wiki": {
+            "path": ".ab_p5_cache/h3_b3/2wiki_development_v4_segment.json",
+            "sha256": "10439ba55f0741fb2a092ce1dfb1fd0643cf1d0c5f42ff81dc001519608fd9fa",
+        },
+    },
+    "fresh": {
+        "musique": {
+            "path": ".ab_p5_cache/h3_b3/musique_fresh_v4_segment.json",
+            "sha256": "214d5594e6b7437f3f7a95b1bd86656f2052c0badfe2815ccff222c3eaa545c8",
+        },
+        "2wiki": {
+            "path": ".ab_p5_cache/h3_b3/2wiki_fresh_v4_segment.json",
+            "sha256": "0b6b7f58abcce938ee4ed8e0e437d23af8b7d65399b8c8ff7075279206a01b97",
+        },
+    },
+}
+FROZEN_V5_STAGE_PREIMAGES = {
+    "development": {
+        "extraction_records": 3_599,
+        "extraction_jsonl_sha256": "53d827704e530d91a7847a193735718ea9df36f8fe421feaaa61393f3193d114",
+        "embedding_records": 3_999,
+        "embedding_jsonl_sha256": "99e44c8fd5b7d3935ab4299e0510d620643dd82a4e0ee47a389d078d739b44f4",
+    },
+    "fresh": {
+        "extraction_records": 5_449,
+        "extraction_jsonl_sha256": "9bccc338c1d1c8738ab1ea78f6283a462a278516c96b7b9d6832902041892942",
+        "embedding_records": 5_999,
+        "embedding_jsonl_sha256": "4b744d61a571d5cee122ad031a27535c529ab4c40703bfebda9b8c5a446a23bd",
+    },
+}
+FROZEN_V5_DEVELOPMENT_SIDECARS = {
+    "musique": {
+        "path": ".ab_p5_cache/h3_relation_raw_musique.json",
+        "file_sha256": "c44453d2534cd326000f65dfa7d3f02b879f4390cd0fbc067617ad84e0a6bd9e",
+    },
+    "2wiki": {
+        "path": ".ab_p5_cache/h3_relation_raw_2wiki.json",
+        "file_sha256": "212c43c5116d114e73d0b02e5fcd28580043ae306d3303fea0d76276715047ed",
+    },
+}
+FROZEN_V5_FRESH_HOLDOUT = {
+    "musique": {
+        "path": ".ab_p5_cache/h3_b3/musique_fresh_manifest_v2.json",
+        "manifest_file_sha256": "12bffedbce50be64019727f3a39309af0676e76ce3ef30e74bcb38932bea991c",
+        "selected_manifest_id": "8aafec838c80d136ebea0dc8f084b7a3a088027f3876fa5ffab63ff1f7851537",
+    },
+    "2wiki": {
+        "path": ".ab_p5_cache/h3_b3/2wiki_fresh_manifest_v2.json",
+        "manifest_file_sha256": "2c1bed2236b0127209cae5f009dacfe41c03a2b38c401f993cb8f3aab1edc343",
+        "selected_manifest_id": "4b0f41685aabb62cabf67497baf0a31776c3c9bd5195bef801dc9ae047998b47",
+    },
 }
 TOKEN_RE = re.compile(r"(?u)\b\w\w+\b")
 
@@ -155,6 +271,26 @@ class ArtifactIntegrityError(RuntimeError):
 
 class HarnessInvariantError(RuntimeError):
     """The evaluator or a causal control cannot express its declared test."""
+
+
+class _DuplicateJSONKey(ValueError):
+    """A JSON object repeated a key and therefore has ambiguous meaning."""
+
+
+def _strict_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    value: dict[str, Any] = {}
+    for key, child in pairs:
+        if key in value:
+            raise _DuplicateJSONKey(f"duplicate JSON key: {key}")
+        value[key] = child
+    return value
+
+
+def _strict_json_loads(raw: str, *, label: str) -> Any:
+    try:
+        return json.loads(raw, object_pairs_hook=_strict_json_object)
+    except (json.JSONDecodeError, _DuplicateJSONKey) as exc:
+        raise ArtifactIntegrityError(f"invalid {label}: {exc}") from exc
 
 
 @dataclass(frozen=True)
@@ -205,6 +341,7 @@ class EmbeddingArtifactV1:
 class ExtractionArtifactV1:
     path: str
     file_sha256: str
+    journal: rex.AttemptJournalV1
     records: tuple[rex.RecordedExtractionV1, ...]
     frozen_by_source: Mapping[str, cb.FrozenExtractionV1]
     accounting: Mapping[str, Any]
@@ -618,7 +755,7 @@ def _validate_embedding_manifest(
             or embedding["dtype"] != bge.FROZEN_DTYPE
             or embedding["batch_size"] != bge.FROZEN_BATCH_SIZE
             or type(embedding["dimension"]) is not int
-            or embedding["dimension"] <= 0):
+            or embedding["dimension"] != FROZEN_BGE_DIMENSION):
         raise ArtifactIntegrityError("embedding frozen execution contract mismatch")
     if embedding["producer_code_sha256"] != _file_sha256(Path(bge.__file__)):
         raise ArtifactIntegrityError("embedding producer code hash mismatch")
@@ -652,11 +789,148 @@ def _validate_embedding_manifest(
     return embedding
 
 
-def load_run_manifest(path: str | Path) -> dict[str, Any]:
+def _v5_stage_output_paths(stage: str) -> dict[str, str]:
+    base = f"{FROZEN_V5_OUTPUT_PREFIX}/{stage}"
+    embedding = f"{base}/embedding"
+    return {
+        "extraction_jsonl": f"{base}/extractions.jsonl",
+        "extraction_open_receipt": f"{base}/extractions.open.json",
+        "extraction_close_receipt": f"{base}/extractions.close.json",
+        "embedding_run_directory": embedding,
+        "embedding_npz": f"{embedding}/embeddings.npz",
+        "embedding_receipt": f"{embedding}/embedding.receipt.json",
+        "embedding_open_receipt": f"{base}/embedding.open.json",
+        "embedding_close_receipt": f"{base}/embedding.close.json",
+    }
+
+
+def _v5_arc_paths(dataset: str) -> dict[str, str]:
+    base = f"{FROZEN_V5_OUTPUT_PREFIX}/fresh/arc/{dataset}"
+    return {
+        "packet": f"{base}.packet.json",
+        "packet_seal": f"{base}.packet-seal.json",
+        "ledger": f"{base}.ledger.jsonl",
+        "adjudication": f"{base}.adjudication.json",
+        "adjudication_close": f"{base}.adjudication-close.json",
+    }
+
+
+def _require_frozen_v5_manifest_contract(
+    *,
+    manifest_path: Path,
+    allow_unpublished_candidate: bool,
+    protocol: Mapping[str, Any],
+    preflight_binding: Mapping[str, Any],
+    preflight_receipt: preflight.PreflightReceiptV1,
+    extractor: Mapping[str, Any],
+    embedding: Mapping[str, Any],
+    stages: Mapping[str, Any],
+    phase_paths: Mapping[str, Any],
+    sidecars: Mapping[str, Any],
+    holdouts: Mapping[str, Any],
+    arc_config: Mapping[str, Any],
+) -> None:
+    """Reject self-consistent PRE_RUN drift from the exact V5 amendment."""
+
+    repository_root = Path(__file__).resolve().parent
+    try:
+        parent = manifest_path.parent.resolve(strict=True)
+    except OSError as exc:
+        raise ArtifactIntegrityError("V5 manifest parent cannot be resolved") from exc
+    if parent != repository_root:
+        raise ArtifactIntegrityError("V5 manifest must be at repository root")
+    if allow_unpublished_candidate:
+        if not manifest_path.name.startswith(".h3-b3-manifest-validate-"):
+            raise ArtifactIntegrityError("invalid unpublished V5 manifest candidate")
+    elif manifest_path.name != FROZEN_V5_MANIFEST_PATH:
+        raise ArtifactIntegrityError("V5 manifest path differs from preregistration")
+    for binding in FROZEN_V5_PARENT_EVIDENCE:
+        evidence_path = repository_root / binding["path"]
+        if (not evidence_path.is_file()
+                or _file_sha256(evidence_path) != binding["sha256"]):
+            raise ArtifactIntegrityError(
+                f"V5 parent evidence hash mismatch: {binding['path']}"
+            )
+
+    expected_phase_paths = {
+        "development_report": (
+            f"{FROZEN_V5_OUTPUT_PREFIX}/phases/development-report.json"
+        ),
+        "certificate_transition": (
+            f"{FROZEN_V5_OUTPUT_PREFIX}/phases/certificate-transition.json"
+        ),
+        "fresh_artifact_seal": (
+            f"{FROZEN_V5_OUTPUT_PREFIX}/phases/fresh-artifact-seal.json"
+        ),
+        "final_report": f"{FROZEN_V5_OUTPUT_PREFIX}/phases/final-report.json",
+    }
+    expected_arc = {
+        "endpoint": "http://127.0.0.1:18001/v1",
+        "model": arca.FROZEN_MODEL,
+        "model_revision": arca.FROZEN_MODEL_REVISION,
+        "max_concurrency": 2,
+        "timeout_seconds": 180.0,
+        "max_tokens": 96,
+        "config_sha256": (
+            "b771d2a8e90502344454b55a8f7076d4b16dbf57dab33c8af3e109522598153d"
+        ),
+    }
+    if dict(protocol) != FROZEN_V5_PROTOCOL_BINDING:
+        raise ArtifactIntegrityError("protocol differs from frozen V5 amendment")
+    if preflight_binding["path"] != FROZEN_V5_PREFLIGHT_PATH:
+        raise ArtifactIntegrityError("preflight path differs from frozen V5 amendment")
+    if (preflight_receipt.gate_source_code_root_sha256
+            != FROZEN_V5_GATE_SOURCE_CODE_ROOT_SHA256):
+        raise ArtifactIntegrityError("preflight gate source root differs from V5")
+    if (rex.SCHEMA_VERSION != "hswm-recorded-llm-extractor/v4"
+            or rex.JOURNAL_SCHEMA_VERSION
+            != "hswm-recorded-llm-attempt-journal/v1"
+            or (rex.START_EVENT, rex.FINALIZE_EVENT) != ("START", "FINALIZE")):
+        raise ArtifactIntegrityError("extractor/journal schema differs from V5")
+    if dict(extractor) != FROZEN_V5_EXTRACTOR:
+        raise ArtifactIntegrityError("extractor differs from frozen V5 amendment")
+    if (embedding["model_attestation_receipt"] != FROZEN_V5_BGE_RECEIPT):
+        raise ArtifactIntegrityError("BGE attestation receipt differs from V5")
+    for stage in STAGES:
+        if (stages[stage]["segments"] != FROZEN_V5_STAGE_SEGMENTS[stage]
+                or stages[stage]["preimages"] != FROZEN_V5_STAGE_PREIMAGES[stage]
+                or stages[stage]["output_paths"] != _v5_stage_output_paths(stage)
+                or stages[stage]["extraction_deployment_receipt"]
+                != FROZEN_V5_QWEN35_DEPLOYMENT):
+            raise ArtifactIntegrityError(
+                f"{stage} artifacts differ from frozen V5 amendment"
+            )
+    fresh_arc_deployment = stages["fresh"]["arc_deployment_receipt"]
+    if fresh_arc_deployment != {
+        "path": f"{FROZEN_V5_OUTPUT_PREFIX}/fresh/qwen27-deployment-v2.json",
+        "endpoint": "http://127.0.0.1:18001/v1",
+        "model": arca.FROZEN_MODEL,
+        "model_revision": arca.FROZEN_MODEL_REVISION,
+    }:
+        raise ArtifactIntegrityError("fresh ARC deployment differs from V5")
+    if stages["fresh"]["arc_paths"] != {
+        dataset: _v5_arc_paths(dataset) for dataset in DATASETS
+    }:
+        raise ArtifactIntegrityError("fresh ARC paths differ from V5")
+    if dict(phase_paths) != expected_phase_paths:
+        raise ArtifactIntegrityError("phase paths differ from frozen V5 amendment")
+    if dict(sidecars) != FROZEN_V5_DEVELOPMENT_SIDECARS:
+        raise ArtifactIntegrityError("development sidecars differ from V5")
+    if dict(holdouts) != FROZEN_V5_FRESH_HOLDOUT:
+        raise ArtifactIntegrityError("fresh holdouts differ from V5")
+    if dict(arc_config) != expected_arc:
+        raise ArtifactIntegrityError("ARC execution differs from frozen V5 amendment")
+
+
+def load_run_manifest(
+    path: str | Path, *, _allow_unpublished_candidate: bool = False,
+) -> dict[str, Any]:
     manifest_path = Path(path)
     try:
-        value = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        value = _strict_json_loads(
+            manifest_path.read_text(encoding="utf-8"), label="run manifest",
+        )
+    except OSError as exc:
         raise ArtifactIntegrityError(f"invalid run manifest: {exc}") from exc
     _strict_root(value, MANIFEST_ROOT_KEYS, label="run manifest")
     if value.get("schema_version") != MANIFEST_SCHEMA_VERSION:
@@ -733,18 +1007,38 @@ def load_run_manifest(path: str | Path) -> dict[str, Any]:
         raise ArtifactIntegrityError("extractor model/revision are required")
     for key in ("prompt_sha256", "config_sha256"):
         _require_sha256(extractor[key], label=f"extractor.{key}")
-    _validate_embedding_manifest(manifest_path, value.get("embedding"))
+    try:
+        extractor_config = rex.ExtractorConfigV1(
+            endpoint=extractor["endpoint"],
+            model=extractor["model"],
+            model_revision=extractor["model_revision"],
+            max_concurrency=extractor["max_concurrency"],
+            timeout_seconds=extractor["timeout_seconds"],
+            max_tokens=extractor["max_tokens"],
+            max_attempts=extractor["max_attempts"],
+            batch_size=extractor["batch_size"],
+        )
+    except (TypeError, ValueError) as exc:
+        raise ArtifactIntegrityError(f"extractor config invalid: {exc}") from exc
+    if (extractor["prompt_sha256"] != rex.prompt_sha256()
+            or extractor["config_sha256"] != rex.config_sha256(extractor_config)):
+        raise ArtifactIntegrityError("extractor execution commitment mismatch")
+    embedding = _validate_embedding_manifest(manifest_path, value.get("embedding"))
     stages = _validate_stage_artifact_receipts(value.get("stage_artifacts"))
     for stage in STAGES:
         deployment_path = _resolve_hashed_path(
             manifest_path, stages[stage]["extraction_deployment_receipt"],
             label=f"stage_artifacts.{stage}.extraction_deployment_receipt",
         )
-        _validate_deployment_attestation(
+        deployment = _validate_deployment_attestation(
             deployment_path, expected_model=extractor["model"],
             expected_revision=extractor["model_revision"],
             label=f"{stage} extraction deployment attestation",
         )
+        if deployment.get("endpoint") != extractor["endpoint"]:
+            raise ArtifactIntegrityError(
+                f"{stage} extraction deployment endpoint mismatch"
+            )
     if "preimages" in value:
         raise ArtifactIntegrityError(
             "flat preimages are forbidden; use exact stage_artifacts receipts"
@@ -821,6 +1115,21 @@ def load_run_manifest(path: str | Path) -> dict[str, Any]:
             or arc_config["config_sha256"]
             != sha256(canonical_json(frozen_config_commitment).encode("utf-8")).hexdigest()):
         raise ArtifactIntegrityError("arc adjudicator config commitment mismatch")
+
+    _require_frozen_v5_manifest_contract(
+        manifest_path=manifest_path,
+        allow_unpublished_candidate=_allow_unpublished_candidate,
+        protocol=protocol,
+        preflight_binding=preflight_binding,
+        preflight_receipt=preflight_receipt,
+        extractor=extractor,
+        embedding=embedding,
+        stages=stages,
+        phase_paths=phase_paths,
+        sidecars=sidecars,
+        holdouts=holdouts,
+        arc_config=arc_config,
+    )
 
     committed_paths = list(phase_paths.values())
     for stage in STAGES:
@@ -1066,7 +1375,7 @@ def _usage_totals(records: Sequence[rex.RecordedExtractionV1]) -> dict[str, Any]
         total += int(usage.get("total_tokens", 0) or 0)
         latencies.append(record.latency_ms)
     return {
-        "endpoint_calls": len(by_attempt),
+        "finalized_endpoint_calls": len(by_attempt),
         "unique_batch_request_ids": len({
             record.batch_request_id for record in by_attempt.values()
         }),
@@ -1089,27 +1398,51 @@ def load_extraction_artifact(
     expected_config_sha256: str | None = None,
 ) -> ExtractionArtifactV1:
     source = Path(path)
-    raw_records: list[rex.RecordedExtractionV1] = []
     try:
-        with source.open(encoding="utf-8") as handle:
-            for line_number, line in enumerate(handle, 1):
-                if not line.strip():
-                    continue
-                try:
-                    value = json.loads(line)
-                    raw_records.append(rex._record_from_dict(value))
-                except (json.JSONDecodeError, rex.CacheCorruptionError) as exc:
-                    raise ArtifactIntegrityError(
-                        f"invalid extraction JSONL line {line_number}: {exc}"
-                    ) from exc
-    except OSError as exc:
-        raise ArtifactIntegrityError(f"cannot read extraction JSONL: {exc}") from exc
-    expected_sources = {
+        journal = rex.load_attempt_journal_strict(source)
+    except (OSError, rex.CacheCorruptionError) as exc:
+        raise ArtifactIntegrityError(f"invalid extraction journal: {exc}") from exc
+    if journal.unmatched_starts:
+        raise ArtifactIntegrityError(
+            "extraction journal has "
+            f"{len(journal.unmatched_starts)} unmatched durable START events"
+        )
+    raw_records = list(journal.records)
+    expected_source_order = [
         paragraph.source_id for segment in segments for paragraph in segment.paragraphs
+    ]
+    expected_sources = set(expected_source_order)
+    if len(expected_source_order) != len(expected_sources):
+        raise ArtifactIntegrityError(
+            "prepared segments contain duplicate extraction source IDs"
+        )
+    dataset_by_source = {
+        paragraph.source_id: segment.dataset
+        for segment in segments
+        for paragraph in segment.paragraphs
     }
+    source_count_by_dataset = Counter(dataset_by_source.values())
     paragraph_by_source = {
         item.source_id: item for segment in segments for item in segment.paragraphs
     }
+    starts_by_source: dict[str, list[rex.AttemptStartV1]] = defaultdict(list)
+    for start in journal.starts:
+        if start.batch_size != 1 or len(start.source_ids) != 1:
+            raise ArtifactIntegrityError(
+                "confirmatory extraction START is not batch_size=1"
+            )
+        source_id = start.source_ids[0]
+        if source_id not in expected_sources:
+            raise ArtifactIntegrityError(
+                f"extraction START for unknown source {source_id}"
+            )
+        if (expected_prompt_sha256 is not None
+                and start.prompt_sha256 != expected_prompt_sha256):
+            raise ArtifactIntegrityError("extraction START prompt hash mismatch")
+        if (expected_config_sha256 is not None
+                and start.config_sha256 != expected_config_sha256):
+            raise ArtifactIntegrityError("extraction START config hash mismatch")
+        starts_by_source[source_id].append(start)
     attempts_by_source: dict[str, list[rex.RecordedExtractionV1]] = defaultdict(list)
     for record in raw_records:
         if record.batch_size != 1:
@@ -1129,82 +1462,118 @@ def load_extraction_artifact(
             raise ArtifactIntegrityError(
                 f"recorded extraction source preimage mismatch: {record.source_id}"
             )
+        if (expected_model_revision is not None
+                and record.model_revision != expected_model_revision):
+            raise ArtifactIntegrityError("recorded extraction model revision mismatch")
+        if (expected_prompt_sha256 is not None
+                and record.prompt_sha256 != expected_prompt_sha256):
+            raise ArtifactIntegrityError("recorded extraction prompt hash mismatch")
+        if (expected_config_sha256 is not None
+                and record.config_sha256 != expected_config_sha256):
+            raise ArtifactIntegrityError("recorded extraction config hash mismatch")
         attempts_by_source[record.source_id].append(record)
-    batches: dict[str, list[rex.RecordedExtractionV1]] = defaultdict(list)
-    closed_attempts: set[str] = set()
-    active_attempt: str | None = None
-    for record in raw_records:
-        if record.attempt_id != active_attempt:
-            if record.attempt_id in closed_attempts:
-                raise ArtifactIntegrityError(
-                    "recorded extraction attempt rows are not contiguous"
-                )
-            if active_attempt is not None:
-                closed_attempts.add(active_attempt)
-            active_attempt = record.attempt_id
-        batches[record.attempt_id].append(record)
-    ordinals_by_request: dict[str, set[int]] = defaultdict(set)
-    for attempt_id, records in batches.items():
-        sizes = {record.batch_size for record in records}
-        batch_ids = {record.batch_request_id for record in records}
-        ordinals = {record.attempt_ordinal for record in records}
-        responses = {record.raw_response_sha256 for record in records}
-        configs = {record.config_sha256 for record in records}
-        prompts = {record.prompt_sha256 for record in records}
-        if (len(sizes) != 1 or len(batch_ids) != 1 or len(ordinals) != 1
-                or len(responses) != 1 or len(configs) != 1 or len(prompts) != 1
-                or len(records) != next(iter(sizes))
-                or len({record.source_id for record in records}) != len(records)):
-            raise ArtifactIntegrityError(
-                f"recorded batch attempt membership mismatch: {attempt_id}"
-            )
-        batch_id = next(iter(batch_ids))
-        ordinal = next(iter(ordinals))
-        if attempt_id != rex._attempt_id(batch_id, ordinal):
-            raise ArtifactIntegrityError("recorded extraction attempt identity mismatch")
-        ordinals_by_request[batch_id].add(ordinal)
-    for batch_id, ordinals in ordinals_by_request.items():
-        if sorted(ordinals) != list(range(1, max(ordinals) + 1)):
-            raise ArtifactIntegrityError(
-                f"recorded extraction attempt ordinal gap: {batch_id}"
-            )
-    missing = sorted(expected_sources - set(attempts_by_source))
+    missing = sorted(
+        expected_sources - set(attempts_by_source),
+    )
     if missing:
         raise ArtifactIntegrityError(
             f"recorded extraction artifact incomplete: {len(missing)} missing; first={missing[:3]}"
         )
     frozen: dict[str, cb.FrozenExtractionV1] = {}
-    status_counts: Counter[str] = Counter()
-    quarantine_reasons: Counter[str] = Counter()
+    attempt_status_counts: Counter[str] = Counter(
+        record.status.value for record in raw_records
+    )
+    attempt_quarantine_reasons: Counter[str] = Counter(
+        quarantine.reason.value
+        for record in raw_records
+        for quarantine in record.quarantines
+    )
+    terminal_status_counts: Counter[str] = Counter()
+    terminal_quarantine_reasons: Counter[str] = Counter()
     retry_sources = 0
+    attempt_cap_terminal_sources = 0
+    attempt_cap_terminal_by_dataset: Counter[str] = Counter()
     for source_id, attempts in attempts_by_source.items():
-        retry_sources += len(attempts) > 1
+        starts = starts_by_source.get(source_id, [])
+        if not starts:
+            raise ArtifactIntegrityError(
+                f"source {source_id} has records without durable START"
+            )
+        retry_sources += len(starts) > 1
+        if len({record.batch_request_id for record in attempts}) != 1:
+            raise ArtifactIntegrityError(
+                f"source {source_id} spans multiple extraction request IDs"
+            )
         terminal = [record for record in attempts if record.frozen_extraction is not None]
         if len(terminal) != 1:
             raise ArtifactIntegrityError(
                 f"source {source_id} has {len(terminal)} compiler-admissible terminal records"
             )
         record = terminal[0]
-        status_counts[record.status.value] += 1
-        quarantine_reasons.update(item.reason.value for item in record.quarantines)
-        if expected_model_revision is not None and record.model_revision != expected_model_revision:
-            raise ArtifactIntegrityError("recorded extraction model revision mismatch")
-        if expected_prompt_sha256 is not None and record.prompt_sha256 != expected_prompt_sha256:
-            raise ArtifactIntegrityError("recorded extraction prompt hash mismatch")
-        if expected_config_sha256 is not None and record.config_sha256 != expected_config_sha256:
-            raise ArtifactIntegrityError("recorded extraction config hash mismatch")
+        if (len({start.batch_request_id for start in starts}) != 1
+                or starts[0].batch_request_id != record.batch_request_id):
+            raise ArtifactIntegrityError(
+                f"source {source_id} spans multiple START request IDs"
+            )
+        if record.attempt_ordinal != max(item.attempt_ordinal for item in starts):
+            raise ArtifactIntegrityError(
+                f"source {source_id} terminal record is not the final START"
+            )
+        terminal_status_counts[record.status.value] += 1
+        terminal_quarantine_reasons.update(
+            item.reason.value for item in record.quarantines
+        )
+        capped = any(
+            item.reason
+            == rex.QuoteRejectCode.TRUNCATED_RESPONSE_AT_ATTEMPT_CAP
+            for item in record.quarantines
+        )
+        attempt_cap_terminal_sources += capped
+        if capped:
+            attempt_cap_terminal_by_dataset[dataset_by_source[source_id]] += 1
         assert record.frozen_extraction is not None
         frozen[source_id] = record.frozen_extraction
     accounting = {
+        "physical_journal_rows": len(journal.events),
+        "attempt_start_rows": len(journal.starts),
+        "attempt_finalize_rows": len(journal.finalizes),
         "paragraph_records": len(raw_records),
-        "status_counts": dict(sorted(status_counts.items())),
+        "endpoint_calls": len(journal.starts),
+        "endpoint_call_upper_bound": len(journal.starts),
+        "unmatched_attempt_starts": len(journal.unmatched_starts),
+        "status_counts": dict(sorted(attempt_status_counts.items())),
+        "terminal_status_counts": dict(sorted(terminal_status_counts.items())),
         "retry_sources": retry_sources,
-        "quote_quarantine_reasons": dict(sorted(quarantine_reasons.items())),
+        "max_attempt_ordinal": max(
+            (start.attempt_ordinal for start in journal.starts), default=0,
+        ),
+        "attempt_cap_terminal_sources": attempt_cap_terminal_sources,
+        "attempt_cap_terminal_rate": round(
+            attempt_cap_terminal_sources / max(len(expected_sources), 1), 8,
+        ),
+        "attempt_cap_terminal_by_dataset": {
+            dataset: attempt_cap_terminal_by_dataset[dataset]
+            for dataset in sorted(source_count_by_dataset)
+        },
+        "attempt_cap_terminal_rate_by_dataset": {
+            dataset: round(
+                attempt_cap_terminal_by_dataset[dataset]
+                / source_count_by_dataset[dataset],
+                8,
+            )
+            for dataset in sorted(source_count_by_dataset)
+        },
+        "quote_quarantine_reasons": dict(
+            sorted(attempt_quarantine_reasons.items())
+        ),
+        "terminal_quote_quarantine_reasons": dict(
+            sorted(terminal_quarantine_reasons.items())
+        ),
         **_usage_totals(raw_records),
     }
     return ExtractionArtifactV1(
         path=str(source), file_sha256=_file_sha256(source),
-        records=tuple(raw_records), frozen_by_source=frozen,
+        journal=journal, records=tuple(raw_records), frozen_by_source=frozen,
         accounting=accounting,
     )
 
@@ -2428,13 +2797,14 @@ def _stage_authorization(
 def extraction_close_validation(
     artifact: ExtractionArtifactV1,
 ) -> dict[str, Any]:
+    accounting_json = canonical_json(dict(artifact.accounting))
+    accounting = json.loads(accounting_json)
     return {
-        "schema_version": "hswm-h3-extraction-close-validation/v1",
+        "schema_version": "hswm-h3-extraction-close-validation/v3",
         "file_sha256": artifact.file_sha256,
         "record_rows": len(artifact.records),
-        "accounting_sha256": sha256(
-            canonical_json(dict(artifact.accounting)).encode("utf-8")
-        ).hexdigest(),
+        "accounting": accounting,
+        "accounting_sha256": sha256(accounting_json.encode("utf-8")).hexdigest(),
     }
 
 
@@ -2532,6 +2902,19 @@ def _load_stage_artifacts(
         expected_prompt_sha256=expected_extractor["prompt_sha256"],
         expected_config_sha256=expected_extractor["config_sha256"],
     )
+    if (
+        extractions.accounting["attempt_cap_terminal_rate"]
+        > MAX_ATTEMPT_CAP_TERMINAL_RATE
+        or any(
+            rate > MAX_ATTEMPT_CAP_TERMINAL_RATE_BY_DATASET
+            for rate in extractions.accounting[
+                "attempt_cap_terminal_rate_by_dataset"
+            ].values()
+        )
+    ):
+        raise ArtifactIntegrityError(
+            "attempt-cap truncation trip rate exceeds frozen safety ceiling"
+        )
     if (extraction_close["outputs"]["output_sha256"]
             != extractions.file_sha256
             or extraction_close["validation"]

@@ -1,0 +1,145 @@
+{
+  "label": "E1_CONDITIONAL_TRAVERSAL",
+  "date": "2026-07-23",
+  "input_file": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/traversal_bench_results.json",
+  "input_sha256": "5ead7a7e5143df4cfb4e1f58f98e92f7d7cd41969bf9056cc758220cc9998698",
+  "metric": "sup_recall_at_3",
+  "static_arm": "hswm_static",
+  "traversal_arms": [
+    "hswm_traversal",
+    "ppr_pure",
+    "traversal_wseed"
+  ],
+  "baseline_arms_reported_only": [
+    "cosine"
+  ],
+  "split_rule": {
+    "bridge": "gold hop (n_gold) >= 3",
+    "factoid": "gold hop (n_gold) <= 2"
+  },
+  "join_coverage": {
+    "hop_label_source": "per-query n_gold field inside traversal_bench_results.json (gold evidence doc count; consistent with file's own test_per_hop strata)",
+    "n_test_total": 179,
+    "n_test_with_hop": 179,
+    "coverage": 1.0,
+    "n_excluded_no_hop": 0
+  },
+  "bootstrap": {
+    "type": "paired percentile",
+    "n_resamples": 10000,
+    "seed": 20260723
+  },
+  "results": {
+    "bridge": {
+      "n": 69,
+      "split_rule": "n_gold >= 3",
+      "arm_means": {
+        "cosine": 0.4951695652173913,
+        "hswm_static": 0.5785072463768116,
+        "hswm_traversal": 0.3574855072463768,
+        "ppr_pure": 0.26448985507246375,
+        "traversal_wseed": 0.4396144927536232
+      },
+      "best_traversal_arm": "traversal_wseed",
+      "delta_best_trav_minus_static_pp": -13.88927536231884,
+      "ci95_pp": [
+        -19.44492753623188,
+        -8.333619565217392
+      ],
+      "per_arm_delta_vs_static_pp": {
+        "hswm_traversal": {
+          "delta_pp": -22.10217391304348,
+          "ci95_pp": [
+            -27.295221014492753,
+            -16.909130434782607
+          ]
+        },
+        "ppr_pure": {
+          "delta_pp": -31.40173913043478,
+          "ci95_pp": [
+            -38.16550724637681,
+            -24.638833333333334
+          ]
+        },
+        "traversal_wseed": {
+          "delta_pp": -13.88927536231884,
+          "ci95_pp": [
+            -19.565652173913044,
+            -8.333188405797102
+          ]
+        },
+        "cosine": {
+          "delta_pp": -8.333768115942028,
+          "ci95_pp": [
+            -12.68159420289855,
+            -4.106811594202898
+          ]
+        }
+      }
+    },
+    "factoid": {
+      "n": 110,
+      "split_rule": "n_gold <= 2",
+      "arm_means": {
+        "cosine": 0.7727272727272727,
+        "hswm_static": 0.7909090909090909,
+        "hswm_traversal": 0.6681818181818182,
+        "ppr_pure": 0.4636363636363636,
+        "traversal_wseed": 0.7181818181818181
+      },
+      "best_traversal_arm": "traversal_wseed",
+      "delta_best_trav_minus_static_pp": -7.2727272727272725,
+      "ci95_pp": [
+        -10.909090909090908,
+        -3.6363636363636362
+      ],
+      "per_arm_delta_vs_static_pp": {
+        "hswm_traversal": {
+          "delta_pp": -12.272727272727273,
+          "ci95_pp": [
+            -16.818181818181817,
+            -7.7272727272727275
+          ]
+        },
+        "ppr_pure": {
+          "delta_pp": -32.72727272727273,
+          "ci95_pp": [
+            -39.54545454545455,
+            -25.90909090909091
+          ]
+        },
+        "traversal_wseed": {
+          "delta_pp": -7.2727272727272725,
+          "ci95_pp": [
+            -10.909090909090908,
+            -4.090909090909091
+          ]
+        },
+        "cosine": {
+          "delta_pp": -1.8181818181818181,
+          "ci95_pp": [
+            -5.454545454545454,
+            1.8181818181818181
+          ]
+        }
+      }
+    }
+  },
+  "prereg_verdict": {
+    "bridge_prediction": "delta >= +2.0pp (prior expectation: low)",
+    "bridge_observed_pp": -13.88927536231884,
+    "bridge_ci95_pp": [
+      -19.44492753623188,
+      -8.333619565217392
+    ],
+    "bridge_prediction_confirmed": false,
+    "novel_factoid_prediction": "delta < 0pp (traversal hurts factoid)",
+    "novel_factoid_observed_pp": -7.2727272727272725,
+    "novel_factoid_ci95_pp": [
+      -10.909090909090908,
+      -3.6363636363636362
+    ],
+    "novel_factoid_prediction_confirmed": true,
+    "prereg_call": "full TRAVERSAL_OFF verdict stands"
+  }
+}

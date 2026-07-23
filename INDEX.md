@@ -27,6 +27,19 @@
 반례 기반 수리는
 [`AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md`](AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md)에 있다.
 
+## 2026-07-23 방향 정전
+
+HSWM의 목표 형태는 Transformer 대체가 아니라, LLM에 결합된 채 판정으로 가소성을 얻는 하나의
+공유 외부 회로다. 신경망 = three-factor rule(eligibility × judgment) + associative readout +
+stochastic structural plasticity. 인지체 metric = sealed unseen 누적 곡선 slope. 로드맵
+P0(주장 고정)→P1(루프 닫기)→P2(전이 증명)→P3(구조 가소성)→P4(연합/수면).
+
+- 정전: [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md)
+  (`CANONICAL_USER_DIRECTION`, USER ratify 2026-07-23)
+- 원본 4축 PROM: SYMPOSIUM 둥지 `HSWM/PROM_MACRO_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`
+- 선행 재판: [`TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md`](TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md)
+  — Phasor Agents 재판 완료. novelty kill 아님, 일반 청구(three-factor+sleep) 사망, HSWM 특유 슬롯 4 생존
+
 ## 2026-07-23 가소성 PROM
 
 학습은 weight 조절을 포함하지만 그것으로 끝나지 않는다. 기존 bond의 중요도는 weight가,

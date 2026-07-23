@@ -1,0 +1,122 @@
+{
+  "schema_version": "hswm-world-compiler-oss-lock/v1",
+  "as_of": "2026-07-21",
+  "materialization": {
+    "mode": "remote-source-and-license-pinned-no-checkout",
+    "observed_workspace_free_mib": 369,
+    "reason": "The host data volume was at 100% capacity. Persisting multiple research repositories or model weights would be unsafe; exact upstream commits and license-file digests were locked instead.",
+    "delltower_or_dgx_used": false
+  },
+  "sources": [
+    {
+      "name": "spaCy",
+      "upstream": "https://github.com/explosion/spaCy",
+      "default_branch": "master",
+      "commit": "e67199550e365dacee28b109210c3a43e1477638",
+      "license": "MIT",
+      "license_path": "LICENSE",
+      "license_sha256": "3f4378e67708fecacd3e27651c8bc0f977cf20789e19da0d81a2840e7cf573a2",
+      "decision": "adopt_interface_pattern",
+      "role": "exact mention-span and receipt substrate; not an identity oracle"
+    },
+    {
+      "name": "ReFinED",
+      "upstream": "https://github.com/amazon-science/ReFinED",
+      "default_branch": "main",
+      "commit": "7f57bd2348bc023793dd1cb93818757a7f33cc4a",
+      "license": "Apache-2.0",
+      "license_path": "LICENSE",
+      "license_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "decision": "candidate_dependency_c2",
+      "role": "bake-time top-k Wikidata QID candidate linker; never hard-merge authority"
+    },
+    {
+      "name": "fastcoref",
+      "upstream": "https://github.com/shon-otmazgin/fastcoref",
+      "default_branch": "main",
+      "commit": "ae224139196d122b225af5a7e73b5fc0b6e1076d",
+      "license": "MIT",
+      "license_path": "LICENSE",
+      "license_sha256": "da448985c79336220a2b7ba816dbc818a193665120278770f4ea616a38789746",
+      "decision": "candidate_dependency_c3",
+      "role": "intra-paragraph coreference candidates with source spans; accepted weave requires HSWM gates"
+    },
+    {
+      "name": "GLiNER2",
+      "upstream": "https://github.com/fastino-ai/GLiNER2",
+      "default_branch": "main",
+      "commit": "31c8abaa4a6d88ae8bb6f2e63cfea9926956497c",
+      "license": "Apache-2.0",
+      "license_path": "LICENSE",
+      "license_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "decision": "proposal_engine_and_counterfactual_arm",
+      "role": "local exact-span NER and structured extraction proposals; binary relations are not HSWM claims"
+    },
+    {
+      "name": "Text2NKG",
+      "upstream": "https://github.com/LHRLAB/Text2NKG",
+      "default_branch": "main",
+      "commit": "f538a9919ca0e997187f5890f1d953ee5934f461",
+      "license": "MIT",
+      "license_path": "LICENSE",
+      "license_sha256": "936072d21703b91d88242b316590cc5a1a57f6417ac63ba23acc976aaf6ea7f9",
+      "decision": "schema_reference_only",
+      "role": "role-bearing n-ary and qualifier design reference; do not import its legacy runtime"
+    },
+    {
+      "name": "HippoRAG",
+      "upstream": "https://github.com/OSU-NLP-Group/HippoRAG",
+      "default_branch": "main",
+      "commit": "1e8f60981bf760b64003aa5bf5668126d0c106b3",
+      "license": "MIT",
+      "license_path": "LICENSE",
+      "license_sha256": "93b43d692b033b76129504448695bfe76ef22d18b11e51352bfab4b5622e5aaa",
+      "decision": "external_baseline_and_pattern_source",
+      "role": "OpenIE plus passage-entity incidence and PPR baseline; no hard synonym import"
+    },
+    {
+      "name": "HyperGraphRAG",
+      "upstream": "https://github.com/LHRLAB/HyperGraphRAG",
+      "default_branch": "main",
+      "commit": "d587cdf8c3fe2be7719557f845324cb3a321f5e2",
+      "license": "MIT",
+      "license_path": "LICENSE",
+      "license_sha256": "b54ba7ea027e607f865b42c7d617a4cbe03344e2a7e8f64b4fab3e8bf58a339e",
+      "decision": "external_baseline_only",
+      "role": "incidence-hypergraph baseline; segment hyperedges lack role and exact-selector semantics"
+    },
+    {
+      "name": "HyperRAG",
+      "upstream": "https://github.com/Vincent-Lien/HyperRAG",
+      "default_branch": "main",
+      "commit": "6d5a9033353c516a9220d78591f2c666f19ee0b1",
+      "license": "MIT",
+      "license_path": "LICENSE",
+      "license_sha256": "dbaa8ec3dbcc189c0db6df5305f111eff09e39109573619f4b2ac2969766874f",
+      "decision": "external_baseline_only",
+      "role": "supervised/query-LLM hypergraph retrieval baseline; not a zero-call compiler dependency"
+    },
+    {
+      "name": "Graphiti",
+      "upstream": "https://github.com/getzep/graphiti",
+      "default_branch": "main",
+      "commit": "ca4d5e9d8c5d25d45917427b63daec17603a0d3a",
+      "license": "Apache-2.0",
+      "license_path": "LICENSE",
+      "license_sha256": "2825300b20d7b951209835a4a331f29e24725a39d65168e4b831df53aa372650",
+      "decision": "temporal_pattern_reference_only",
+      "role": "episode and bi-temporal lifecycle patterns; binary paraphrased facts do not replace HSWM evidence"
+    },
+    {
+      "name": "KGGen",
+      "upstream": "https://github.com/stair-lab/kg-gen",
+      "default_branch": "main",
+      "commit": "6259b4c71523ceae75dafb4acec2eb833bef8f8e",
+      "license": "unresolved_in_pinned_source",
+      "license_path": null,
+      "license_sha256": null,
+      "decision": "do_not_vendor",
+      "role": "LLM clustering is an optional research comparator only; no license file was found at the pinned commit"
+    }
+  ]
+}

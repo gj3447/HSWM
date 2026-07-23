@@ -1,0 +1,56 @@
+{
+  "prereg_id": "c1_prelude_bookscale_20260723",
+  "created": "2026-07-23",
+  "title": "C-1: PRELUDE book-scale — HSWM vs dense vs clique-reduction ablation (first book-scale measurement)",
+  "lakatos_prereg": {
+    "primary_prediction": "macroF1(HSWM) - macroF1(dense) >= +3.0pp",
+    "novel_cross_metric": "macroF1(HSWM) - macroF1(clique_reduction) > 0pp (hypergraph-native beats its own pairwise clique expansion)",
+    "kill_condition": "macroF1(HSWM)-macroF1(dense) < +2.0pp OR macroF1(HSWM) <= macroF1(clique_reduction)",
+    "power_note": "n=262 pooled over 4 books is the primary unit (prereg); CI ~ +/-6pt on macro-F1 — if the observed delta CI straddles the +3.0pp threshold the verdict MUST be labeled low_power."
+  },
+  "benchmark": {
+    "name": "PRELUDE (arXiv 2508.09848), public split",
+    "source": "https://huggingface.co/datasets/ttchungc/PRELUDE (public.parquet)",
+    "n_instances": 262,
+    "books": {
+      "The Count of Monte Cristo": {"n": 54, "lang": "en", "text_source": "Project Gutenberg #1184", "license": "public domain (Gutenberg)"},
+      "In Search of the Castaways": {"n": 86, "lang": "en", "text_source": "Project Gutenberg #2083", "license": "public domain (Gutenberg)"},
+      "封神演义": {"n": 94, "lang": "zh", "text_source": "github.com/xp44mm/hanchuancaolu (封神演义/, simplified)", "license": "underlying text public domain (Ming dynasty)"},
+      "三国演义": {"n": 28, "lang": "zh", "text_source": "github.com/xp44mm/hanchuancaolu (三國演義/, traditional)", "license": "underlying text public domain (Ming/Qing)"}
+    },
+    "label_schema": "binary consistent/contradict (as given in public.parquet)",
+    "evidence_annotations": "ABSENT in public split — evidence recall@k NOT computable; explicitly out of scope for C-1"
+  },
+  "data_sha256": {
+    "public.parquet": "760363991d2e52e6951cd4d5099b91806289ddec53c7de150386280888cdd337",
+    "montecristo.txt": "64f8d5cfa51fcecb904abf7312d395d512a71817e7359b91288beb50517c3836",
+    "castaways.txt": "df5da6648b41f3e2498e6b048a8aa051932d73b70a9d76596177e5a9eec3e8c1",
+    "fengshen.txt": "182c62503fcf9912a899078198b52f4e7545d352d1ff17b10955e241e6424c93",
+    "sanguo.txt": "6299a0d16533c23cde92462c92aab8720e109dbb48425c3642eb484ffdbd3e07"
+  },
+  "arms": {
+    "dense": "bge-m3 cosine top-20 over 500-token-ish chunks (no structural walk). This is the PRELUDE-paper RAG retrieval shape (paper: 500-tok chunk, top-40, ~20k tok) adapted to the judge's 24576-token context (top-20, see deviation note).",
+    "hswm": "repo HSWM: hypergraph(nodes=salient terms, one hyperedge per chunk binding its top-8 tf.idf terms) + traversal.py star-expansion damped-restart walk (K=2, gamma=0.5, kappa=1, mu=0.4) on the SAME cosine seed W; trip-wire abstentions fall back to pointwise per query and are counted.",
+    "clique": "REDUCTION ABLATION: same chunks, same term extraction, same cosine seed; hypergraph reduced to pairwise chunk-chunk graph (edge weight = sum of idf over shared terms = clique expansion), same walk shape (K=2, gamma=0.5, mu=0.4) and same support-restricted z-norm combine as traversal.py."
+  },
+  "fixed_constants": {
+    "chunking": {"en": "500 whitespace words, no overlap", "zh": "750 chars, no overlap"},
+    "terms": {"en": "lowercase alpha tokens len>=3, stopword-filtered", "zh": "jieba posseg words flagged n/nr/ns/nt/nz len>=2 (fallback: char bigrams)", "df_filter": "3 <= df <= 0.5*M_chunks", "terms_per_chunk": 8, "idf": "log((1+M)/(1+df))+1"},
+    "retrieval": {"top_k_judge": 20, "seed_m": 64, "prune_m": 1024, "gamma": 0.5, "K_hops": 2, "kappa": 1, "mu": 0.4, "tau_seed": 1.0},
+    "embedding": {"model": "bge-m3 (ollama, dgx 192.168.0.23:11434 via ssh forward)", "dim": 1024, "normalize": "L2 (client-side)"},
+    "judge": {"model": "qwen3.6-27b (vLLM, dgx:8000 via ssh forward 127.0.0.1:18000)", "temperature": 0.0, "enable_thinking": false, "max_tokens": 16, "prompt_fixed_across_arms": true, "context_budget": "top-20 chunks + prequel < ~14k tok, fits 24576 window"},
+    "stats": {"bootstrap": "paired, instance-level resample, macro-F1 recomputed per resample", "n_boot": 10000, "seed": 20260723, "ci": "95% percentile"}
+  },
+  "deviations_from_paper_setting": [
+    "top-40 -> top-20: judge context window is 24576 tok (dgx vLLM), 40x500tok would overflow; chunk size/embedding/judge-free retrieval identical in spirit.",
+    "PRELUDE paper's judge/reader is not reused; our judge is a fixed qwen3.6-27b zero-shot binary prompt, IDENTICAL for all 3 arms (arm comparison is retrieval-only by construction)."
+  ],
+  "metrics": {
+    "primary": "macro-F1 over {consistent, contradict}, per arm, pooled n=262",
+    "secondary": ["per-book macro-F1", "ingest cost (chunks, wall_s, embedding calls)", "LLM tokens/calls", "hswm abstain rate"],
+    "not_available": "evidence recall@k (no annotations in public split)"
+  },
+  "out_of_scope": ["full 5-book / human-study set", "evidence-span supervision", "learned M (bilinear) training — M=None representation-parity control"],
+  "runner": "c1_prelude_bookscale.py (repo .venv python)",
+  "no_commit": true
+}

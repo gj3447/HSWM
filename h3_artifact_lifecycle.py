@@ -2,9 +2,11 @@
 
 An output hash written only after production does not rule out cherry-picking.
 This module therefore commits the destination *before* production and closes
-the same inode or exclusive run directory afterwards.  Development opens are
-authorized by the frozen manifest and preflight receipt.  Fresh opens require
-the additional certificate-transition hash.
+the same durably anchored inode or exclusive run directory afterwards.  An
+append log keeps a same-directory hard-link anchor so unlink/recreate cannot be
+hidden by filesystem inode reuse.  Development opens are authorized by the
+frozen manifest and preflight receipt.  Fresh opens require the additional
+certificate-transition hash.
 
 The helpers are intentionally storage-level.  Domain loaders still have to
 revalidate extraction rows or embedding receipts before supplying the close
@@ -24,8 +26,8 @@ from typing import Any
 from world_ir import canonical_json
 
 
-OPEN_SCHEMA_VERSION = "hswm-h3-artifact-open/v1"
-CLOSE_SCHEMA_VERSION = "hswm-h3-artifact-close/v1"
+OPEN_SCHEMA_VERSION = "hswm-h3-artifact-open/v2"
+CLOSE_SCHEMA_VERSION = "hswm-h3-artifact-close/v2"
 STAGES = ("development", "fresh")
 MODES = ("append_log", "exclusive_bundle")
 PARENT_KEYS = frozenset({
@@ -49,12 +51,66 @@ class ArtifactLifecycleError(RuntimeError):
     """An output was not produced inside its committed first-write boundary."""
 
 
-def file_sha256(path: str | Path) -> str:
+def _file_sha256_and_stat(
+    path: str | Path,
+    *,
+    expected_identity: tuple[int, int] | None = None,
+) -> tuple[str, os.stat_result]:
+    candidate = Path(path)
+    try:
+        path_before = candidate.lstat()
+    except OSError as exc:
+        raise ArtifactLifecycleError(f"cannot inspect artifact: {candidate}") from exc
+    if not stat.S_ISREG(path_before.st_mode):
+        raise ArtifactLifecycleError(f"artifact is not a regular file: {candidate}")
+    flags = os.O_RDONLY | int(getattr(os, "O_NOFOLLOW", 0))
+    try:
+        descriptor = os.open(candidate, flags)
+    except OSError as exc:
+        raise ArtifactLifecycleError(
+            f"cannot open artifact without following links: {candidate}"
+        ) from exc
     digest = sha256()
-    with Path(path).open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+    try:
+        opened = os.fstat(descriptor)
+        if not stat.S_ISREG(opened.st_mode):
+            raise ArtifactLifecycleError(f"artifact is not a regular file: {candidate}")
+        identity = (int(opened.st_dev), int(opened.st_ino))
+        path_identity = (int(path_before.st_dev), int(path_before.st_ino))
+        if identity != path_identity:
+            raise ArtifactLifecycleError(f"artifact changed while opening: {candidate}")
+        if expected_identity is not None and identity != expected_identity:
+            raise ArtifactLifecycleError("reserved path inode/device changed")
+        for chunk in iter(lambda: os.read(descriptor, 1024 * 1024), b""):
             digest.update(chunk)
-    return digest.hexdigest()
+        closed = os.fstat(descriptor)
+        try:
+            path_after = candidate.lstat()
+        except OSError as exc:
+            raise ArtifactLifecycleError(
+                f"artifact changed while hashing: {candidate}"
+            ) from exc
+        before_fingerprint = (
+            int(opened.st_dev), int(opened.st_ino), int(opened.st_mode),
+            int(opened.st_size), int(opened.st_mtime_ns), int(opened.st_ctime_ns),
+        )
+        if before_fingerprint != (
+            int(closed.st_dev), int(closed.st_ino), int(closed.st_mode),
+            int(closed.st_size), int(closed.st_mtime_ns), int(closed.st_ctime_ns),
+        ) or before_fingerprint != (
+            int(path_after.st_dev), int(path_after.st_ino), int(path_after.st_mode),
+            int(path_after.st_size), int(path_after.st_mtime_ns),
+            int(path_after.st_ctime_ns),
+        ):
+            raise ArtifactLifecycleError(f"artifact changed while hashing: {candidate}")
+    finally:
+        os.close(descriptor)
+    return digest.hexdigest(), closed
+
+
+def file_sha256(path: str | Path) -> str:
+    digest, _ = _file_sha256_and_stat(path)
+    return digest
 
 
 def _sha(value: Any, *, label: str) -> str:
@@ -68,6 +124,12 @@ def _canonical_path(path: str | Path) -> str:
     if not value.is_absolute():
         value = Path.cwd() / value
     return str(value.resolve(strict=False))
+
+
+def _append_anchor_path(output: Path) -> Path:
+    """Return the durable same-filesystem identity anchor for an append log."""
+
+    return output.with_name(f".{output.name}.hswm-open-anchor")
 
 
 def _receipt_id(prefix: str, value: Mapping[str, Any]) -> str:
@@ -155,7 +217,7 @@ def _base_open(
         ),
         "reservation": dict(reservation),
     }
-    value["receipt_id"] = _receipt_id("hswm:h3_artifact_open:v1:", value)
+    value["receipt_id"] = _receipt_id("hswm:h3_artifact_open:v2:", value)
     return value
 
 
@@ -180,11 +242,12 @@ def open_append_log(
         deployment_attestation_sha256=deployment_attestation_sha256,
         producer_code_sha256=producer_code_sha256,
         reservation={
-            "output_path": "/preflight", "device": 0, "inode": 0,
-            "initial_size": 0,
+            "output_path": "/preflight", "anchor_path": "/preflight.anchor",
+            "device": 0, "inode": 0, "initial_size": 0,
         },
     )
     output = Path(_canonical_path(output_path))
+    anchor = _append_anchor_path(output)
     output.parent.mkdir(parents=True, exist_ok=True)
     try:
         descriptor = os.open(
@@ -195,14 +258,50 @@ def open_append_log(
         raise ArtifactLifecycleError(
             f"append output must be nonexistent before OPEN: {output}"
         ) from exc
+    anchor_created = False
     try:
         os.fsync(descriptor)
         opened = os.fstat(descriptor)
+        try:
+            os.link(output, anchor, follow_symlinks=False)
+        except FileExistsError as exc:
+            raise ArtifactLifecycleError(
+                f"append identity anchor must be nonexistent before OPEN: {anchor}"
+            ) from exc
+        except OSError as exc:
+            raise ArtifactLifecycleError(
+                f"cannot create append identity anchor: {anchor}"
+            ) from exc
+        anchor_created = True
+        observed = output.lstat()
+        anchored = anchor.lstat()
+        expected_identity = (int(opened.st_dev), int(opened.st_ino))
+        if (
+            not stat.S_ISREG(observed.st_mode)
+            or not stat.S_ISREG(anchored.st_mode)
+            or (int(observed.st_dev), int(observed.st_ino)) != expected_identity
+            or (int(anchored.st_dev), int(anchored.st_ino)) != expected_identity
+            or observed.st_nlink < 2
+            or anchored.st_nlink < 2
+        ):
+            raise ArtifactLifecycleError("append identity changed during OPEN")
+    except BaseException:
+        if anchor_created:
+            try:
+                anchor.unlink()
+            except OSError:
+                pass
+        try:
+            output.unlink()
+        except OSError:
+            pass
+        raise
     finally:
         os.close(descriptor)
     _fsync_directory(output.parent)
     reservation = {
         "output_path": str(output),
+        "anchor_path": str(anchor),
         "device": int(opened.st_dev),
         "inode": int(opened.st_ino),
         "initial_size": int(opened.st_size),
@@ -219,6 +318,10 @@ def open_append_log(
     try:
         _write_once(open_receipt_path, receipt)
     except BaseException:
+        try:
+            anchor.unlink()
+        except OSError:
+            pass
         try:
             output.unlink()
         except OSError:
@@ -326,11 +429,11 @@ def load_open_receipt(path: str | Path) -> dict[str, Any]:
     except (OSError, json.JSONDecodeError) as exc:
         raise ArtifactLifecycleError(f"invalid OPEN receipt: {exc}") from exc
     if not isinstance(value, Mapping) or set(value) != OPEN_KEYS:
-        raise ArtifactLifecycleError("OPEN receipt keys do not match v1")
+        raise ArtifactLifecycleError("OPEN receipt keys do not match v2")
     value = dict(value)
     if value["schema_version"] != OPEN_SCHEMA_VERSION:
         raise ArtifactLifecycleError("OPEN receipt schema mismatch")
-    if value.get("receipt_id") != _receipt_id("hswm:h3_artifact_open:v1:", value):
+    if value.get("receipt_id") != _receipt_id("hswm:h3_artifact_open:v2:", value):
         raise ArtifactLifecycleError("OPEN receipt self-hash mismatch")
     stage, mode = value.get("stage"), value.get("mode")
     if stage not in STAGES or mode not in MODES or not value.get("artifact_kind"):
@@ -345,8 +448,12 @@ def load_open_receipt(path: str | Path) -> dict[str, Any]:
     if not isinstance(reservation, Mapping):
         raise ArtifactLifecycleError("OPEN reservation must be an object")
     if mode == "append_log":
-        expected = {"output_path", "device", "inode", "initial_size"}
+        expected = {
+            "output_path", "anchor_path", "device", "inode", "initial_size",
+        }
         if (set(reservation) != expected or reservation.get("initial_size") != 0
+                or not isinstance(reservation.get("output_path"), str)
+                or not isinstance(reservation.get("anchor_path"), str)
                 or type(reservation.get("device")) is not int
                 or type(reservation.get("inode")) is not int):
             raise ArtifactLifecycleError("append OPEN reservation is malformed")
@@ -368,7 +475,7 @@ def _validate_live_reservation(open_receipt: Mapping[str, Any]) -> None:
     else:
         path = Path(reservation["run_directory"])
     try:
-        observed = path.stat()
+        observed = path.lstat()
     except OSError as exc:
         raise ArtifactLifecycleError("reserved artifact disappeared") from exc
     if (int(observed.st_dev), int(observed.st_ino)) != (
@@ -377,6 +484,22 @@ def _validate_live_reservation(open_receipt: Mapping[str, Any]) -> None:
         raise ArtifactLifecycleError("reserved path inode/device changed")
     if open_receipt["mode"] == "append_log" and not stat.S_ISREG(observed.st_mode):
         raise ArtifactLifecycleError("reserved append output is not a regular file")
+    if open_receipt["mode"] == "append_log":
+        anchor = Path(reservation["anchor_path"])
+        try:
+            anchored = anchor.lstat()
+        except OSError as exc:
+            raise ArtifactLifecycleError(
+                "reserved append identity anchor disappeared"
+            ) from exc
+        if (
+            not stat.S_ISREG(anchored.st_mode)
+            or (int(anchored.st_dev), int(anchored.st_ino))
+            != (reservation["device"], reservation["inode"])
+            or observed.st_nlink < 2
+            or anchored.st_nlink < 2
+        ):
+            raise ArtifactLifecycleError("reserved append identity anchor changed")
     if open_receipt["mode"] == "exclusive_bundle" and not stat.S_ISDIR(observed.st_mode):
         raise ArtifactLifecycleError("reserved bundle path is not a directory")
 
@@ -401,7 +524,7 @@ def _base_close(
         "outputs": dict(outputs),
         "validation": dict(validation),
     }
-    value["receipt_id"] = _receipt_id("hswm:h3_artifact_close:v1:", value)
+    value["receipt_id"] = _receipt_id("hswm:h3_artifact_close:v2:", value)
     return value
 
 
@@ -415,20 +538,28 @@ def close_append_log(
     if opened["mode"] != "append_log":
         raise ArtifactLifecycleError("OPEN receipt is not an append log")
     _validate_live_reservation(opened)
-    path = Path(opened["reservation"]["output_path"])
-    size = path.stat().st_size
+    reservation = opened["reservation"]
+    path = Path(reservation["output_path"])
+    output_sha256, observed = _file_sha256_and_stat(
+        path,
+        expected_identity=(reservation["device"], reservation["inode"]),
+    )
+    _validate_live_reservation(opened)
+    size = observed.st_size
     if size <= 0:
         raise ArtifactLifecycleError("append log cannot CLOSE empty")
     receipt = _base_close(
         opened, open_receipt_path=open_receipt_path,
         outputs={
-            "output_path": str(path), "output_sha256": file_sha256(path),
+            "output_path": str(path), "output_sha256": output_sha256,
             "byte_count": int(size),
         },
         validation=validation,
     )
     _write_once(close_receipt_path, receipt)
-    return receipt
+    return load_close_receipt(
+        close_receipt_path, open_receipt_path=open_receipt_path,
+    )
 
 
 def close_exclusive_bundle(
@@ -447,21 +578,27 @@ def close_exclusive_bundle(
     ):
         path = Path(path_value)
         try:
-            observed = path.stat()
+            observed = path.lstat()
         except OSError as exc:
             raise ArtifactLifecycleError(f"bundle output missing: {key}") from exc
         if not stat.S_ISREG(observed.st_mode) or observed.st_size <= 0:
             raise ArtifactLifecycleError(f"bundle output invalid: {key}")
+        output_sha256, hashed = _file_sha256_and_stat(
+            path,
+            expected_identity=(int(observed.st_dev), int(observed.st_ino)),
+        )
         outputs[str(key)] = {
-            "path": str(path), "sha256": file_sha256(path),
-            "byte_count": int(observed.st_size),
+            "path": str(path), "sha256": output_sha256,
+            "byte_count": int(hashed.st_size),
         }
     receipt = _base_close(
         opened, open_receipt_path=open_receipt_path,
         outputs=outputs, validation=validation,
     )
     _write_once(close_receipt_path, receipt)
-    return receipt
+    return load_close_receipt(
+        close_receipt_path, open_receipt_path=open_receipt_path,
+    )
 
 
 def load_close_receipt(
@@ -475,11 +612,11 @@ def load_close_receipt(
     except (OSError, json.JSONDecodeError) as exc:
         raise ArtifactLifecycleError(f"invalid CLOSE receipt: {exc}") from exc
     if not isinstance(value, Mapping) or set(value) != CLOSE_KEYS:
-        raise ArtifactLifecycleError("CLOSE receipt keys do not match v1")
+        raise ArtifactLifecycleError("CLOSE receipt keys do not match v2")
     value = dict(value)
     if value["schema_version"] != CLOSE_SCHEMA_VERSION:
         raise ArtifactLifecycleError("CLOSE receipt schema mismatch")
-    if value.get("receipt_id") != _receipt_id("hswm:h3_artifact_close:v1:", value):
+    if value.get("receipt_id") != _receipt_id("hswm:h3_artifact_close:v2:", value):
         raise ArtifactLifecycleError("CLOSE receipt self-hash mismatch")
     if (value.get("open_receipt_sha256") != file_sha256(open_receipt_path)
             or value.get("open_receipt_id") != opened["receipt_id"]
@@ -491,13 +628,18 @@ def load_close_receipt(
         raise ArtifactLifecycleError("CLOSE receipt does not bind OPEN")
     _validate_live_reservation(opened)
     if opened["mode"] == "append_log":
-        path = Path(opened["reservation"]["output_path"])
+        reservation = opened["reservation"]
+        path = Path(reservation["output_path"])
         outputs = value["outputs"]
         if set(outputs) != {"output_path", "output_sha256", "byte_count"}:
             raise ArtifactLifecycleError("append CLOSE outputs malformed")
+        output_sha256, observed = _file_sha256_and_stat(
+            path,
+            expected_identity=(reservation["device"], reservation["inode"]),
+        )
         if (outputs["output_path"] != str(path)
-                or outputs["output_sha256"] != file_sha256(path)
-                or outputs["byte_count"] != path.stat().st_size):
+                or outputs["output_sha256"] != output_sha256
+                or outputs["byte_count"] != observed.st_size):
             raise ArtifactLifecycleError("append CLOSE output changed")
     else:
         expected = opened["reservation"]["expected_outputs"]
@@ -506,11 +648,12 @@ def load_close_receipt(
         for key, path_value in expected.items():
             output = value["outputs"][key]
             path = Path(path_value)
+            output_sha256, observed = _file_sha256_and_stat(path)
             if (not isinstance(output, Mapping)
                     or set(output) != {"path", "sha256", "byte_count"}
                     or output["path"] != str(path)
-                    or output["sha256"] != file_sha256(path)
-                    or output["byte_count"] != path.stat().st_size):
+                    or output["sha256"] != output_sha256
+                    or output["byte_count"] != observed.st_size):
                 raise ArtifactLifecycleError(f"bundle CLOSE output changed: {key}")
     return value
 

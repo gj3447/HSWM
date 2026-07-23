@@ -15,6 +15,7 @@ def test_comparison_preregistered_counts_and_verdict():
         "false_refusals": 0,
         "golden_sha256": comparison.VALID_GOLDEN_SHA256,
         "golden_matches": True,
+        "golden_profile": comparison.GOLDEN_PROFILE,
     }
     assert result["scope_fault_conformance"] == {
         "attempts": 400,
@@ -55,3 +56,12 @@ def test_smart_traversal_apply_trip_and_off_receipts_are_honest():
 
 def test_comparison_is_deterministic():
     assert comparison.run_comparison() == comparison.run_comparison()
+
+
+def test_portable_golden_ignores_only_substantive_irrelevant_float_tail():
+    left = comparison._portable_golden_value({"score": 0.12345678901230001})
+    same_at_profile = comparison._portable_golden_value({"score": 0.12345678901230002})
+    meaningfully_different = comparison._portable_golden_value({"score": 0.1234567990123})
+
+    assert left == same_at_profile
+    assert left != meaningfully_different

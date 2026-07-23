@@ -1,0 +1,10 @@
+include *.json
+include *.md
+include *.py
+recursive-include tests *.py
+recursive-include receipts *.py
+recursive-include prom_search_hswm *.py *.json *.md *.mmd
+recursive-exclude prom_search_hswm/data *
+include prom_search_hswm/data/README.md
+include prom_search_hswm/data/gold_badiou24.json
+recursive-include _research/shared_field_hypothesis *.py *.json *.md

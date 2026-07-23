@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import argparse
 from copy import deepcopy
-from dataclasses import replace
+from dataclasses import asdict, is_dataclass, replace
 from hashlib import sha256
 import json
 from pathlib import Path
@@ -26,8 +26,10 @@ import world_builder as wb
 from world_ir import canonical_json
 
 
-EXPERIMENT_VERSION = "hswm-s3-certified-cut-comparison/v2"
-VALID_GOLDEN_SHA256 = "477d77ac75a1031e6fb68c92223b34b9fce958635c86818e69082d9f16f54cad"
+EXPERIMENT_VERSION = "hswm-s3-certified-cut-comparison/v3"
+GOLDEN_NUMERIC_SIGNIFICANT_DIGITS = 12
+GOLDEN_PROFILE = "semantic-json-float-12sig-v1"
+VALID_GOLDEN_SHA256 = "c4a909713df70065a31ae7fa8ca802e0797d594705becb0d545f73cec78f33a7"
 
 
 def fixture_rows() -> list[dict[str, Any]]:
@@ -158,10 +160,46 @@ def _payload_signature(
     }
 
 
-def _legacy_oracle_signature(
+def _portable_golden_value(value: Any) -> Any:
+    """Canonicalize numerical evidence above platform-specific float noise."""
+    if is_dataclass(value):
+        return _portable_golden_value(asdict(value))
+    if isinstance(value, dict):
+        return {
+            str(key): _portable_golden_value(item)
+            for key, item in sorted(value.items(), key=lambda pair: str(pair[0]))
+        }
+    if isinstance(value, (tuple, list)):
+        return tuple(_portable_golden_value(item) for item in value)
+    if isinstance(value, float):
+        rendered = format(value, f".{GOLDEN_NUMERIC_SIGNIFICANT_DIGITS}g")
+        return "0" if rendered == "-0" else rendered
+    if value is None or isinstance(value, (str, int, bool)):
+        return value
+    raise TypeError(f"unsupported golden value: {type(value).__name__}")
+
+
+def _portable_golden_signature(
+    payload: cr.ReadoutPayloadV1,
+    action: cr.ReadoutAction,
+) -> dict[str, Any]:
+    return _portable_golden_value({
+        "kind": payload.kind,
+        "action": action,
+        "target_ordinals": payload.target_ordinals,
+        "target_ids": payload.target_ids,
+        "scores": payload.scores,
+        "probabilities": payload.probabilities,
+        "dispatch_target_ordinal": payload.dispatch_target_ordinal,
+        "dispatch_target_id": payload.dispatch_target_id,
+        "traversal_receipt": payload.traversal_receipt,
+    })
+
+
+def _legacy_oracle_signatures(
     bundle: fs.FieldSnapshotBundleV1,
     request: cr.ReadoutRequestV1,
-) -> dict[str, Any]:
+) -> tuple[dict[str, Any], dict[str, Any]]:
     """Direct legacy oracle, independent of certified_readout._compute_read."""
     policy = request.policy
     query = np.asarray(request.query.vector, dtype=np.float64)
@@ -221,7 +259,10 @@ def _legacy_oracle_signature(
         score_components=fs.score_components(bundle, query),
         payload_sha256="oracle-not-used",
     )
-    return _payload_signature(provisional, action)
+    return (
+        _payload_signature(provisional, action),
+        _portable_golden_signature(provisional, action),
+    )
 
 
 def _rehash_snapshot(snapshot: fs.FieldSnapshotV1) -> fs.FieldSnapshotV1:
@@ -320,7 +361,7 @@ def run_comparison() -> dict[str, Any]:
             certificate = certificates[name]
             request = cr.make_request(base, certificate, policy, query)
             context = cr.AdmissionContextV1((certificate.certificate_id,), 0)
-            oracle = _legacy_oracle_signature(base, request)
+            oracle, portable_oracle = _legacy_oracle_signatures(base, request)
             probe = cr.research_probe(base, request)
             certified = cr.read_certified(base, certificate, request, context)
             valid_attempts += 1
@@ -332,7 +373,7 @@ def run_comparison() -> dict[str, Any]:
                 cre_oracle_exact += int(
                     _payload_signature(certified.payload, certified.receipt.action) == oracle
                 )
-            golden_records.append((query_index, name, oracle))
+            golden_records.append((query_index, name, portable_oracle))
     valid_golden_sha256 = sha256(
         canonical_json(tuple(golden_records)).encode("utf-8")
     ).hexdigest()
@@ -711,6 +752,7 @@ def run_comparison() -> dict[str, Any]:
             "false_refusals": valid_attempts - valid_admitted,
             "golden_sha256": valid_golden_sha256,
             "golden_matches": golden_matches,
+            "golden_profile": GOLDEN_PROFILE,
         },
         "scope_fault_conformance": {
             "attempts": fault_attempts,

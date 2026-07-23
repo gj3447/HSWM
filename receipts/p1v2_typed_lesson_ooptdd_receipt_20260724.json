@@ -1,0 +1,76 @@
+{
+  "schema_version": "symposium-ooptdd-receipt/v1",
+  "template_only": false,
+  "receipt_id": "hswm-p1v2-typed-lesson-boundary-v1",
+  "cycle_id": "hswm-p1v2-typed-lesson-slice-20260724",
+  "requirement_group": "P1V2-TYPED-LESSON-PREMEASUREMENT",
+  "spec": {
+    "path": "_research/p1v2_typed_lesson/ooptdd_requirements.v1.json",
+    "sha256": "459c4de6fddd2dc4b831ec8cc667b0f4a8c2bfe6a924f465ced926e720b02033",
+    "locked_before_positive_run": true
+  },
+  "producer": {
+    "command": "uv run python p1v2_ooptdd_receipt.py --output receipts/p1v2_typed_lesson_positive_restored_20260724.json",
+    "cwd": "/Users/lagyeongjun/CD/HSWM",
+    "git_head": "8dd9b3b9eaf29bed26275cfa3de363e22f7f1b2e",
+    "entrypoint": "p1v2_ooptdd_receipt:run_gate",
+    "source_path": "p1v2_ooptdd_receipt.py",
+    "source_symbol": "run_gate",
+    "real_code_path": true,
+    "exit_code": 0
+  },
+  "correlation": {
+    "cid": "hswm-p1v2-typed-lesson-boundary-v1"
+  },
+  "requirements": [
+    {
+      "id": "P1V2-DEFECT-LEAKAGE",
+      "role": "guard_defect",
+      "event": "future_or_gold_lesson_rejected"
+    },
+    {
+      "id": "P1V2-MECHANISM-PARITY",
+      "role": "guard_mechanism",
+      "event": "four_arm_prompt_parity_verified"
+    },
+    {
+      "id": "P1V2-MECHANISM-EVIDENCE",
+      "role": "guard_mechanism",
+      "event": "verdict_free_evidence_verified"
+    }
+  ],
+  "positive": {
+    "observed_verdict": "green",
+    "receipt_path": "receipts/p1v2_typed_lesson_positive_restored_20260724.json",
+    "receipt_sha256": "33c4f38987c7b07575fe0968f137306e966c79fa58f3cb5aee2c5802333bdbdf",
+    "evidence_tier": "arrived",
+    "charge_ratio": 1.0,
+    "forbidden_events_passed": true,
+    "loop": {
+      "complete": true,
+      "methodology_ok": true,
+      "done": 3,
+      "total": 3
+    }
+  },
+  "negative_oracle": {
+    "spec_sha256": "459c4de6fddd2dc4b831ec8cc667b0f4a8c2bfe6a924f465ced926e720b02033",
+    "technique": "fault_injection",
+    "injection": "Add a scientific verdict field after evidence construction while preserving the pre-injection evidence hash; require the real readback verifier to reject it.",
+    "observed_verdict": "red",
+    "receipt_path": "receipts/p1v2_typed_lesson_injected_negative_20260724.json",
+    "receipt_sha256": "4e435cadfaa95c58c8e52e3a7f162e18b55ceb5b42509dada7cda4863e23400d",
+    "restored": true
+  },
+  "oracle": {
+    "separate_source": false,
+    "corroborated": false,
+    "emit_identity": "process://p1v2_ooptdd_receipt",
+    "read_identity": "file-sha256://HSWM/receipts"
+  },
+  "source_binding": {
+    "path": "p1v2_ooptdd_receipt.py",
+    "symbol": "run_gate",
+    "sha256": "dc963ac4fe0ba718ce5e24866b9ffcf653734f2aa6e650adf0e737bdd0c32892"
+  }
+}

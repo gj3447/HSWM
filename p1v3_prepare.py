@@ -26,7 +26,8 @@ from p1v3_policy_environment import (
 
 
 PUBLIC_SCHEMA_VERSION = "hswm-p1v3-policy-public-manifest/v1"
-SEALED_SCHEMA_VERSION = "hswm-p1v3-policy-sealed-sidecar/v1"
+DEVELOPMENT_SCHEMA_VERSION = "hswm-p1v3-policy-development-sidecar/v1"
+HELDOUT_SCHEMA_VERSION = "hswm-p1v3-policy-heldout-sidecar/v1"
 DEFAULT_SELECTION_SEED = 20260724
 DEFAULT_SPLITS = {"training": 1, "calibration": 3, "heldout": 6}
 
@@ -89,7 +90,7 @@ def build_policy_manifests(
     generation_receipt_sha256: str,
     selection_seed: int = DEFAULT_SELECTION_SEED,
     split_sizes: Mapping[str, int] = DEFAULT_SPLITS,
-) -> tuple[dict[str, object], dict[str, object]]:
+) -> tuple[dict[str, object], dict[str, object], dict[str, object]]:
     if set(split_sizes) != {"training", "calibration", "heldout"}:
         raise P1V3PreparationError("split_sizes must contain the P1v3 split cut")
     if any(
@@ -155,17 +156,35 @@ def build_policy_manifests(
         public_splits[split] = public_rows
         cursor += split_sizes[split]
 
-    sealed: dict[str, object] = {
-        "schema_version": SEALED_SCHEMA_VERSION,
-        "universe": universe,
-        "source_policy": {
-            "trusted_class": DEFAULT_TRUSTED_CLASS,
-            "distractor_class": DEFAULT_DISTRACTOR_CLASS,
-            "global_within_universe": True,
-        },
-        "cases": sealed_cases,
+    source_policy = {
+        "trusted_class": DEFAULT_TRUSTED_CLASS,
+        "distractor_class": DEFAULT_DISTRACTOR_CLASS,
+        "global_within_universe": True,
     }
-    sealed["sealed_sidecar_sha256"] = canonical_sha256(sealed)
+    development_cases = {
+        case_id: row for case_id, row in sealed_cases.items()
+        if row["split"] in {"training", "calibration"}
+    }
+    heldout_cases = {
+        case_id: row for case_id, row in sealed_cases.items()
+        if row["split"] == "heldout"
+    }
+    development: dict[str, object] = {
+        "schema_version": DEVELOPMENT_SCHEMA_VERSION,
+        "universe": universe,
+        "source_policy": source_policy,
+        "allowed_splits": ["training", "calibration"],
+        "cases": development_cases,
+    }
+    development["development_sidecar_sha256"] = canonical_sha256(development)
+    heldout: dict[str, object] = {
+        "schema_version": HELDOUT_SCHEMA_VERSION,
+        "universe": universe,
+        "source_policy": source_policy,
+        "allowed_splits": ["heldout"],
+        "cases": heldout_cases,
+    }
+    heldout["heldout_sidecar_sha256"] = canonical_sha256(heldout)
     public: dict[str, object] = {
         "schema_version": PUBLIC_SCHEMA_VERSION,
         "universe": universe,
@@ -185,7 +204,8 @@ def build_policy_manifests(
         "source_policy_semantics_published": False,
         "dataset_file_sha256": dict(sorted(hashes.items())),
         "generation_receipt_sha256": generation_receipt_sha256,
-        "sealed_sidecar_sha256": sealed["sealed_sidecar_sha256"],
+        "development_sidecar_sha256": development["development_sidecar_sha256"],
+        "heldout_sidecar_sha256": heldout["heldout_sidecar_sha256"],
         "splits": public_splits,
     }
     forbidden = {
@@ -196,31 +216,51 @@ def build_policy_manifests(
     if forbidden & {key.casefold() for key in _recursive_keys(public)}:
         raise P1V3PreparationError("public manifest crossed the sealed boundary")
     public["public_manifest_sha256"] = canonical_sha256(public)
-    verify_policy_manifests(public, sealed)
-    return public, sealed
+    verify_policy_manifests(public, development, heldout)
+    return public, development, heldout
 
 
 def verify_policy_manifests(
-    public: Mapping[str, object], sealed: Mapping[str, object]
+    public: Mapping[str, object],
+    development: Mapping[str, object],
+    heldout: Mapping[str, object],
 ) -> None:
     if public.get("schema_version") != PUBLIC_SCHEMA_VERSION:
         raise P1V3PreparationError("public manifest schema drifted")
-    if sealed.get("schema_version") != SEALED_SCHEMA_VERSION:
-        raise P1V3PreparationError("sealed sidecar schema drifted")
+    if development.get("schema_version") != DEVELOPMENT_SCHEMA_VERSION:
+        raise P1V3PreparationError("development sidecar schema drifted")
+    if heldout.get("schema_version") != HELDOUT_SCHEMA_VERSION:
+        raise P1V3PreparationError("heldout sidecar schema drifted")
     public_unsigned = dict(public)
     public_sha = public_unsigned.pop("public_manifest_sha256", None)
-    sealed_unsigned = dict(sealed)
-    sealed_sha = sealed_unsigned.pop("sealed_sidecar_sha256", None)
+    development_unsigned = dict(development)
+    development_sha = development_unsigned.pop("development_sidecar_sha256", None)
+    heldout_unsigned = dict(heldout)
+    heldout_sha = heldout_unsigned.pop("heldout_sidecar_sha256", None)
     if not isinstance(public_sha, str) or canonical_sha256(public_unsigned) != public_sha:
         raise P1V3PreparationError("public manifest self-hash drifted")
-    if not isinstance(sealed_sha, str) or canonical_sha256(sealed_unsigned) != sealed_sha:
-        raise P1V3PreparationError("sealed sidecar self-hash drifted")
-    if public.get("sealed_sidecar_sha256") != sealed_sha:
-        raise P1V3PreparationError("public manifest does not bind the sidecar")
+    if (
+        not isinstance(development_sha, str)
+        or canonical_sha256(development_unsigned) != development_sha
+    ):
+        raise P1V3PreparationError("development sidecar self-hash drifted")
+    if not isinstance(heldout_sha, str) or canonical_sha256(heldout_unsigned) != heldout_sha:
+        raise P1V3PreparationError("heldout sidecar self-hash drifted")
+    if public.get("development_sidecar_sha256") != development_sha:
+        raise P1V3PreparationError("public manifest does not bind development")
+    if public.get("heldout_sidecar_sha256") != heldout_sha:
+        raise P1V3PreparationError("public manifest does not bind heldout")
     public_splits = public.get("splits")
-    sealed_cases = sealed.get("cases")
-    if not isinstance(public_splits, Mapping) or not isinstance(sealed_cases, Mapping):
+    development_cases = development.get("cases")
+    heldout_cases = heldout.get("cases")
+    if (
+        not isinstance(public_splits, Mapping)
+        or not isinstance(development_cases, Mapping)
+        or not isinstance(heldout_cases, Mapping)
+    ):
         raise P1V3PreparationError("manifest split schema drifted")
+    if set(development_cases) & set(heldout_cases):
+        raise P1V3PreparationError("development and heldout sidecars overlap")
     public_ids: list[str] = []
     for split in ("training", "calibration", "heldout"):
         rows = public_splits.get(split)
@@ -233,12 +273,14 @@ def verify_policy_manifests(
             if not isinstance(case_id, str):
                 raise P1V3PreparationError("public case ID drifted")
             public_ids.append(case_id)
-            sealed_row = sealed_cases.get(case_id)
+            sidecar = development_cases if split in {"training", "calibration"} else heldout_cases
+            sealed_row = sidecar.get(case_id)
             if not isinstance(sealed_row, Mapping) or sealed_row.get("split") != split:
                 raise P1V3PreparationError("public and sealed splits disagree")
             if sealed_row.get("derivation_sha256") != row.get("derivation_sha256"):
                 raise P1V3PreparationError("public and sealed derivations disagree")
-    if len(public_ids) != len(set(public_ids)) or set(public_ids) != set(sealed_cases):
+    sealed_ids = set(development_cases) | set(heldout_cases)
+    if len(public_ids) != len(set(public_ids)) or set(public_ids) != sealed_ids:
         raise P1V3PreparationError("manifest case cuts disagree")
     forbidden = {
         "expected_answers", "trusted_source_ids", "distractor_source_ids",
@@ -254,7 +296,7 @@ def load_and_build(
     generation_receipt_path: Path,
     *,
     selection_seed: int = DEFAULT_SELECTION_SEED,
-) -> tuple[dict[str, object], dict[str, object]]:
+) -> tuple[dict[str, object], dict[str, object], dict[str, object]]:
     articles_path = universe_path / "articles.json"
     questions_path = universe_path / "questions" / "type6.json"
     if not articles_path.is_file() or not questions_path.is_file():
@@ -312,26 +354,31 @@ def main() -> int:
     parser.add_argument("--universe-path", type=Path, required=True)
     parser.add_argument("--generation-receipt", type=Path, required=True)
     parser.add_argument("--public-output", type=Path, required=True)
-    parser.add_argument("--sealed-output", type=Path, required=True)
+    parser.add_argument("--development-output", type=Path, required=True)
+    parser.add_argument("--heldout-output", type=Path, required=True)
     parser.add_argument("--selection-seed", type=int, default=DEFAULT_SELECTION_SEED)
     args = parser.parse_args()
-    public, sealed = load_and_build(
+    public, development, heldout = load_and_build(
         args.universe_path,
         args.generation_receipt,
         selection_seed=args.selection_seed,
     )
-    _atomic_write(args.sealed_output, sealed)
+    _atomic_write(args.development_output, development)
+    _atomic_write(args.heldout_output, heldout)
     _atomic_write(args.public_output, public)
     verify_policy_manifests(
         json.loads(args.public_output.read_text(encoding="utf-8")),
-        json.loads(args.sealed_output.read_text(encoding="utf-8")),
+        json.loads(args.development_output.read_text(encoding="utf-8")),
+        json.loads(args.heldout_output.read_text(encoding="utf-8")),
     )
     print(json.dumps({
         "public_manifest_sha256": public["public_manifest_sha256"],
-        "sealed_sidecar_sha256": sealed["sealed_sidecar_sha256"],
+        "development_sidecar_sha256": development["development_sidecar_sha256"],
+        "heldout_sidecar_sha256": heldout["heldout_sidecar_sha256"],
         "split_sizes": {key: len(value) for key, value in public["splits"].items()},
         "public_output": str(args.public_output),
-        "sealed_output": str(args.sealed_output),
+        "development_output": str(args.development_output),
+        "heldout_output": str(args.heldout_output),
     }, sort_keys=True))
     return 0
 

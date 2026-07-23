@@ -42,9 +42,9 @@ def _build():
 
 
 def test_policy_manifests_are_deterministic_disjoint_and_public_blind():
-    public, sealed = _build()
+    public, development, heldout = _build()
     questions, articles = _fixture()
-    reversed_public, reversed_sealed = build_policy_manifests(
+    reversed_public, reversed_development, reversed_heldout = build_policy_manifests(
         list(reversed(questions)),
         list(reversed(articles)),
         universe="fixture-seed3",
@@ -53,7 +53,13 @@ def test_policy_manifests_are_deterministic_disjoint_and_public_blind():
     )
 
     assert public == reversed_public
-    assert sealed == reversed_sealed
+    assert development == reversed_development
+    assert heldout == reversed_heldout
+    assert set(development["cases"]).isdisjoint(heldout["cases"])
+    assert {row["split"] for row in development["cases"].values()} == {
+        "training", "calibration"
+    }
+    assert {row["split"] for row in heldout["cases"].values()} == {"heldout"}
     assert {key: len(rows) for key, rows in public["splits"].items()} == {
         "training": 1,
         "calibration": 3,
@@ -71,16 +77,16 @@ def test_policy_manifests_are_deterministic_disjoint_and_public_blind():
 
 
 def test_manifest_verifier_rejects_public_private_key_or_hash_tamper():
-    public, sealed = _build()
+    public, development, heldout = _build()
     leaked = deepcopy(public)
     leaked["splits"]["heldout"][0]["expected_answers"] = ["Person0"]
     with pytest.raises(P1V3PreparationError, match="self-hash|sealed boundary"):
-        verify_policy_manifests(leaked, sealed)
+        verify_policy_manifests(leaked, development, heldout)
 
-    tampered = deepcopy(sealed)
+    tampered = deepcopy(development)
     tampered["cases"][next(iter(tampered["cases"]))]["expected_answers"] = ["wrong"]
     with pytest.raises(P1V3PreparationError, match="self-hash"):
-        verify_policy_manifests(public, tampered)
+        verify_policy_manifests(public, tampered, heldout)
 
 
 def test_prepare_refuses_insufficient_single_match_candidates():

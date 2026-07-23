@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 
-SCHEMA_VERSION = "hswm-efficacy-snapshot/v2"
+SCHEMA_VERSION = "hswm-efficacy-snapshot/v3"
 DEFAULT_ROOT = Path(__file__).resolve().parent
 
 
@@ -78,12 +78,18 @@ def _require(condition: bool, message: str) -> None:
         raise EfficacyClaimError(message)
 
 
-def _close(observed: Any, expected: float, *, label: str) -> float:
+def _close(
+    observed: Any,
+    expected: float,
+    *,
+    label: str,
+    abs_tol: float = 5e-5,
+) -> float:
     try:
         value = float(observed)
     except (TypeError, ValueError) as exc:
         raise EfficacyClaimError(f"{label} is not numeric") from exc
-    if not math.isclose(value, expected, rel_tol=0.0, abs_tol=5e-5):
+    if not math.isclose(value, expected, rel_tol=0.0, abs_tol=abs_tol):
         raise EfficacyClaimError(
             f"{label} drifted: expected {expected}, observed {value}"
         )
@@ -129,6 +135,7 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
     semantic_2wiki = _load(repo, "semantic_2wiki_oracle_result.json")
     p1 = _load(repo, "EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json")
     p1_gate = _load(repo, "P1_GATE_DIAGNOSTIC_R2_2026-07-23.json")
+    p1_rank = _load(repo, "P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json")
 
     overall = substrate.get("aggregate", {}).get("overall", {})
     downstream = substrate.get("downstream_f1", {}).get("aggregate_f1_em", {})
@@ -449,7 +456,7 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
     _require(
         p1.get("schema_version") == "hswm-p1-closed-loop-evidence/v1"
         and p1.get("verdict") == "FAIL",
-        "P1 closed-loop verdict boundary drifted",
+        "P1 historical measurement self-verdict boundary drifted",
     )
     p1_measurement = p1.get("measurement", {})
     p1_primary = _close(
@@ -608,6 +615,54 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
         "P1 gate diagnostic summary drifted",
     )
 
+    _require(
+        p1_rank.get("schema_version")
+        == "hswm-p1-posthoc-rank-invariance/v1"
+        and p1_rank.get("scientific_status")
+        == "POSTHOC_MECHANISM_DIAGNOSTIC_NOT_A_NEW_ARM_OUTCOME",
+        "P1 rank diagnostic boundary drifted",
+    )
+    p1_rank_unsigned = dict(p1_rank)
+    p1_rank_declared_sha = p1_rank_unsigned.pop("diagnostic_sha256", None)
+    p1_rank_actual_sha = sha256(json.dumps(
+        p1_rank_unsigned, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
+    ).encode("utf-8")).hexdigest()
+    _require(
+        p1_rank_declared_sha == p1_rank_actual_sha,
+        "P1 rank diagnostic self-hash drifted",
+    )
+    _require(
+        p1_rank.get("source_evidence_sha256") == p1_evidence_sha
+        and p1_rank.get("frozen_split_manifest_sha256") == p1_split_sha,
+        "P1 rank diagnostic provenance binding drifted",
+    )
+    p1_rank_summary = p1_rank.get("summary", {})
+    expected_rank_summary = {
+        "candidates": 12,
+        "fresh_query_evaluations": 456,
+        "touched_selected_path_evaluations": 21,
+        "score_change_evaluations": 21,
+        "top10_order_changes": 0,
+        "top10_membership_changes": 0,
+    }
+    for key, expected in expected_rank_summary.items():
+        _require(
+            p1_rank_summary.get(key) == expected,
+            f"P1 rank diagnostic {key} drifted",
+        )
+    p1_rank_max_delta = _close(
+        p1_rank_summary.get("max_abs_score_delta"),
+        3.235855457806025e-05,
+        label="P1 maximum rank-replay score delta",
+        abs_tol=1e-12,
+    )
+    p1_rank_max_gap_ratio = _close(
+        p1_rank_summary.get("max_delta_to_boundary_gap"),
+        0.10269710791092374,
+        label="P1 maximum delta-to-boundary ratio",
+        abs_tol=1e-12,
+    )
+
     return {
         "schema_version": SCHEMA_VERSION,
         "retrieval_substrate": {
@@ -670,8 +725,10 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
             "any_grid_configuration_beats_static_hopdrop": False,
         },
         "p1_closed_macro_weight_loop": {
-            "status": "ENGINEERING_COMPLETE_CAUSAL_EFFICACY_REJECTED",
-            "verdict": "FAIL",
+            "status": "ENGINEERING_COMPLETE_SCIENTIFIC_RED_LAKATOTREE_UNJUDGED",
+            "scientific_domain_status": "CAUSAL_EFFICACY_REJECTED",
+            "lakatotree_kernel_status": "UNJUDGED_PROCEDURAL_BLOCK",
+            "historical_measurement_self_verdict": "FAIL",
             "a1_minus_a2_mean_paired_recall10": p1_primary,
             "bootstrap95_lower": p1_lower,
             "a1_linear_slope": p1_slope,
@@ -679,10 +736,17 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
             "candidates_staged": candidate_count,
             "fresh_gate_passes": 0,
             "activations": activation_count,
+            "rank_replay": {
+                **expected_rank_summary,
+                "max_abs_score_delta": p1_rank_max_delta,
+                "max_delta_to_boundary_gap": p1_rank_max_gap_ratio,
+            },
             "experiment_receipt_id": p1_receipt_id,
             "boundary": (
                 "The outcome-to-credit-to-candidate loop executed, but no "
-                "candidate changed fresh top-10 retrieval or became active"
+                "candidate changed fresh top-10 retrieval or became active. "
+                "The historical evidence self-wrote FAIL, so the scientific "
+                "RED is not a valid server-owned LakatoTree verdict."
             ),
         },
         "graded_supersession": {

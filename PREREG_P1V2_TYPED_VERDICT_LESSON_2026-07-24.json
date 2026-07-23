@@ -1,0 +1,147 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_HSWM_20260719",
+  "branch": "P1v2-typed-verdict-lesson",
+  "question": "Q-p1v2-do-evidence-bound-typed-lessons-causally-improve-heldout-behavior",
+  "registration_state": "LOCAL_DRAFT_UNREGISTERED_MEASUREMENT_FORBIDDEN",
+  "registered_before_measurement": false,
+  "draft_reason": "The hypothesis, arms, metrics, and kill conditions are fixed locally, but a server-owned LakatoTree prediction receipt, frozen outcome-module hashes, untouched split hash, exact token-budget manifest, neutral judge receipt, and injected-negative judge receipt do not yet exist.",
+  "hard_core_continuity": [
+    "HSWM learning is judgment feedback that produces evidence-bound semantic state and changes later heldout behavior.",
+    "Promotion is immutable, gated, replayable, and non-destructive.",
+    "Efficacy requires equal-budget causal ablation; engineering execution alone is insufficient."
+  ],
+  "protective_belt_mutation": {
+    "retired": "global exact-answer scalar -> normalized winning-path credit -> tiny query-global slow-edge update",
+    "candidate": "outcome evidence -> typed verdict -> evidence-bound lesson -> retrieved lesson context -> later model action",
+    "prohibited_rescue": "Do not rerun P1 by changing eta, mu, top-k, or the promotion threshold alone."
+  },
+  "conjecture": "On a newly generated untouched PhantomWiki universe, a frozen answer model receiving evidence-bound typed lessons compiled only from prior training episodes improves heldout exact answer-set match over both equal-budget no-memory and raw-transcript memory arms. The gain disappears when lesson bindings are shuffled or lessons are removed, without exceeding the retention-loss cap.",
+  "stages": {
+    "L0_oracle_actuation_precondition": {
+      "purpose": "Prove that the proposed lesson action space can change heldout behavior before training a compiler.",
+      "pass": "At least one valid, training-evidence-derived oracle lesson changes a heldout model decision and improves exact set-match under exact call/token parity, while a contradicted injected lesson is refused or measurably harms the targeted item.",
+      "kill": "If no valid oracle lesson changes any heldout decision, stop. The answer interface or retrieval binding is inert; L1 is forbidden."
+    },
+    "L1_causal_learning": {
+      "purpose": "Test whether learned typed lessons add causal value beyond transcript access and token budget.",
+      "depends_on": "L0_oracle_actuation_precondition PASS"
+    },
+    "L2_agent_transfer": {
+      "purpose": "Expose Agent A's immutable lesson artifact to frozen Agent B on disjoint tasks.",
+      "depends_on": "L1 passes both typed-minus-no-memory and typed-minus-raw-transcript primary margins.",
+      "claim_boundary": "Not authorized by this preregistration; requires a separate server registration."
+    }
+  },
+  "arms": {
+    "T1_typed_lesson": "Prior training outcomes are compiled into schema-valid verdict and lesson records with evidence IDs, scope, polarity, confidence, supersession target, and forbidden-use constraints. Only admitted lessons are retrieved.",
+    "T2_raw_transcript": "Same prior episode evidence in minimally transformed transcript form, retrieved under the same retrieval budget and padded to exact input-token parity.",
+    "T3_no_memory": "No prior episode information. Inert tokens with no task semantics preserve exact input-token and model-call parity.",
+    "T4_shuffled_or_removed": "Half the evaluation blocks use lesson-to-task bindings shuffled within the frozen split; half remove admitted lessons and replace them with inert parity padding."
+  },
+  "lesson_schema_required_fields": [
+    "lesson_id",
+    "source_episode_ids",
+    "evidence_ids",
+    "verdict_type",
+    "scope_predicate",
+    "instruction",
+    "polarity",
+    "confidence",
+    "supersedes",
+    "forbidden_uses",
+    "compiler_receipt_sha256"
+  ],
+  "prediction": {
+    "primary_metric": "min(mean_paired_exact_set_match_T1_minus_T3, mean_paired_exact_set_match_T1_minus_T2)",
+    "success_threshold": 0.03,
+    "required_bootstrap95_lower_for_each_primary_contrast": 0.0,
+    "causal_ablation_metric": "mean_paired_exact_set_match_T1_minus_T4",
+    "causal_ablation_threshold": 0.02,
+    "secondary_metrics": [
+      "support_recall_at_10",
+      "lesson_retrieval_precision",
+      "lesson_acceptance_rate",
+      "contradiction_refusal_rate",
+      "per-episode improvement slope"
+    ],
+    "retention_loss_cap": 0.02,
+    "bootstrap_reps": 10000,
+    "bootstrap_seed": 9173,
+    "credence": 0.3,
+    "credence_note": "The action space is supported by prior agent-memory literature, but no HSWM typed-lesson causal result exists and P1's prior scalar belt was null."
+  },
+  "comparison_interpretation": {
+    "T1_beats_T3_but_not_T2": "Operational compression only. Do not claim HSWM-specific learning and keep P2 closed.",
+    "T1_beats_T3_and_T2_and_T4": "P1v2 causal lesson-learning result; permits a separate P2 transfer preregistration.",
+    "T1_fails_T3_and_T2": "Retain compiler plus safe graph-memory claim; stop P2, P3, and P4.",
+    "T4_not_worse_than_T1": "Lesson binding is non-causal or leaks task identity; reject the lesson mechanism."
+  },
+  "equal_compute_lock": {
+    "model": "same frozen model ID, revision, serving arguments, temperature, seed policy, and maximum output tokens in every arm",
+    "calls": "exact same logical and physical model-call count in every arm",
+    "input_tokens": "exact per-item tokenizer-count parity via inert non-semantic padding; arm labels are hidden from the model",
+    "output_tokens": "same maximum and stop policy; actual output-token counts are reported by arm",
+    "retrieval": "same candidate count, top-k, embedding model/revision, and retrieval-call count",
+    "latency": "reported but not a success metric",
+    "gold": "heldout gold is opened only by the environment after the answer is sealed"
+  },
+  "data_lock": {
+    "universe": "new PhantomWiki universe; the seed-1 P1 universe and all 390 previously inspected eligible questions are forbidden",
+    "proposed_generation": "phantom-wiki 1.0.3, same scale flags as P1, seed 2, friendship-seed 2",
+    "preflight": "eligibility counts and schema validity only; no arm answer, reward, recall, delta, or verdict may be inspected",
+    "split": "training, lesson-calibration, heldout target, and retention canary IDs are disjoint and content-addressed",
+    "future_information_refusal": "lesson compiler and retriever must reject future episode IDs, heldout answer values, evaluation labels, and gold-derived strings"
+  },
+  "judge_lock": {
+    "measurement_artifact": "must contain observations and provenance but no verdict field",
+    "judge": "separate pure deterministic LakatoTree judge, not imported by or callable from the measurement harness",
+    "required_receipts": [
+      "server-owned prediction receipt and live experiment tag",
+      "judge script SHA-256",
+      "positive fixture receipt",
+      "injected-negative fixture receipt",
+      "exact measured command, cwd, git commit, module hashes, split hash, model deployment hash, and budget hash"
+    ],
+    "publication": "Only the judge output may say progressive, equivalent, rejected, or degenerating."
+  },
+  "kill_conditions": [
+    "K1: L0 oracle actuation precondition fails -> stop before compiler learning.",
+    "K2: either primary contrast is <= 0.03 or its paired-bootstrap 95% lower bound is <= 0 -> no P1v2 causal-learning claim.",
+    "K3: T1-T4 < 0.02 -> lesson content or binding is not causal.",
+    "K4: retention loss > 0.02 -> stop and repair admission/supersession before retry.",
+    "K5: any model/call/token/retrieval/split/gold parity violation -> void the run.",
+    "K6: any future ID, heldout answer, evaluation label, or gold-derived string enters a lesson -> void the run and quarantine all outputs.",
+    "K7: T1 beats T3 but not T2 -> classify as compression only and keep transfer/topology/consolidation closed."
+  ],
+  "void_conditions": [
+    "measurement begins before registration_state becomes SERVER_REGISTERED_FROZEN_UNRUN",
+    "measurement code emits or imports a scientific verdict",
+    "the neutral judge cannot reject the injected-negative fixture",
+    "any outcome-affecting module, split, prompt, budget, or deployment hash changes after registration",
+    "any previously inspected P1 heldout question is reused"
+  ],
+  "scope_boundary": {
+    "claimed_if_passed": "causal heldout improvement from an evidence-bound typed lesson plane on one synthetic universe",
+    "not_claimed": [
+      "foundation-model parameter learning",
+      "general intelligence",
+      "real-prose transfer",
+      "Agent A to Agent B transfer",
+      "learned topology rewiring",
+      "sleep or long-term consolidation"
+    ]
+  },
+  "measurement_forbidden_until": [
+    "server experiment tag and prediction receipt are retrievable",
+    "all outcome-affecting module hashes are frozen",
+    "new universe and disjoint split manifests are frozen",
+    "exact parity budget manifest is frozen",
+    "deployment receipt is frozen",
+    "neutral judge and injected-negative receipts pass"
+  ],
+  "module_sha256": null,
+  "split_manifest_sha256": null,
+  "prediction_receipt_sha256": null,
+  "judge_script_sha256": null
+}

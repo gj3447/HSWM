@@ -20,7 +20,7 @@ The broader claims do not pass:
 |---|---|---|
 | static retrieval substrate | **measured positive, budget caveat** | 300 evaluation rows across three checked-in runs |
 | cognitive uplift over direct LLM reranking | **preregistered cross-dataset claim failed** | two negative MuSiQue runs; one small, non-significant positive 2Wiki run |
-| P1 outcome→credit→slow-weight loop | **engineering complete; causal efficacy rejected** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations |
+| P1 outcome→credit→slow-weight loop | **engineering complete; scientific RED; LakatoTree unjudged** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations. Historical measurement self-wrote `FAIL`, so no valid server-owned kernel verdict exists |
 | query-time graph traversal | **OFF** | `mu=0` selected on both real datasets; every tested traversal grid setting had worse hop-drop than static |
 | graded supersession | **pointwise capability survives; architectural novelty retracted** | stale suppression succeeds, but an external graded revision arm is bit-exact |
 | long-document advantage | **synthetic mechanism only** | no real NoCha/QASPER/NarrativeQA/book-scale result |
@@ -93,7 +93,7 @@ runs are materially negative. The safe statement is therefore: **HSWM improves
 retrieval over the listed lightweight baselines on this ladder, but does not
 establish general cognitive uplift over direct LLM reranking.**
 
-## 3. P1 closed macro-weight loop: implemented, efficacy rejected
+## 3. P1 closed macro-weight loop: implemented, scientific RED, kernel unjudged
 
 P1 ran the preregistered four-arm PhantomWiki experiment through the full
 `outcome → eligibility → M → ΔW candidate → fresh/canary → CAS` path. The
@@ -102,7 +102,7 @@ WAL/FULL candidate staging, epoch compare-and-swap activation, weighted
 retrieval traces, a receipt-bound Qwen answer function, post-answer sealed-gold
 evaluation, and isolated A1/A2/A3/A4 arms.
 
-The causal result is negative:
+The domain-scientific causal result is negative:
 
 | metric | checked-in result |
 |---|---:|
@@ -115,9 +115,20 @@ The causal result is negative:
 All four arms have the same later mean recall@10 (`0.1651042`) and finish on
 their starting snapshot. A retrieval-only posthoc replay of the frozen staged
 bytes and frozen fresh split reports `unseen_delta=0.0` for all 12 candidates.
-It is explicitly diagnostic, not a new arm outcome. The failure occurs before
-canary or CAS: the proposed edge-weight changes did not move any fresh top-10
-rank.
+A second score/rank replay covers `456` candidate/query cells: only `21` touch
+an updated selected-path edge, `21` have any score movement, and **zero** change
+top-10 order or membership. Maximum score delta is `3.2359e-5`, at most
+`0.102697` of the observed rank-10/11 boundary gap. Both replays are explicitly
+diagnostic, not new arm outcomes. The failure occurs before canary or CAS: the
+proposed edge-weight changes did not actuate fresh retrieval behavior.
+
+There is a separate LakatoTree procedure boundary. The historical measurement
+artifact contains a `verdict: FAIL` written by the measurement harness itself,
+and the run lacks a resolvable server experiment tag plus neutral judge and
+injected-negative judge receipts. Therefore its **scientific protective-belt
+status is RED**, but the valid LakatoTree kernel status is **unjudged due to a
+procedural block**, not `rejected`. A post-hoc conversion cannot repair the
+missing chronology or judge separation.
 
 The preregistered K1 commitment therefore fires. The same three-factor
 slow-weight path must not be rescued by tuning eta or relaxing the gate on this
@@ -129,7 +140,9 @@ to transfer, rewire, or consolidate.
 Sources: `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`,
 `EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`,
 `P1_GATE_DIAGNOSTIC_R2_2026-07-23.json`, and
-`P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md`.
+`P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json`. The causal analysis and
+next falsifier are in `RESEARCH_P1_FAILURE_LAKATOTREE_2026-07-24.md` and
+`PREREG_P1V2_TYPED_VERDICT_LESSON_2026-07-24.json`.
 
 ## 4. Traversal and relational composition
 

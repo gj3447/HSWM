@@ -156,4 +156,5 @@ Real-KG (needs Neo4j): `uv sync --extra kg && NEO4J_URI=bolt://127.0.0.1:7687 uv
 
 ## License
 
-Apache-2.0. See `LICENSE`.
+Dual-licensed under AGPL-3.0-or-later or a separate commercial license. See
+[`LICENSING.md`](LICENSING.md) and `LICENSE`.

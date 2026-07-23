@@ -11,7 +11,8 @@ No producer output hash appears in PRE_RUN.  Development/fresh OPEN and CLOSE
 paths, phase receipts, and future Qwen27 adjudication paths are commitments to
 currently nonexistent artifacts.
 
-Longinus ReferenceSite: ``H3_B3_COMPOSITION_PREREG_2026-07-20.md`` and
+Longinus ReferenceSite: ``H3_B3_COMPOSITION_PREREG_2026-07-20.md``,
+``H3_B3_V5_RESTART_PREREG_2026-07-20.md``, and
 ``h3_b3_falsifier.load_run_manifest``.
 """
 from __future__ import annotations
@@ -39,7 +40,117 @@ from world_ir import canonical_json
 
 REPO_ROOT = Path(__file__).resolve().parent
 FROZEN_BGE_DIMENSION = 1024
-MANIFEST_BUILDER_SCHEMA_VERSION = "hswm-h3-b3-manifest-builder/v1"
+MANIFEST_BUILDER_SCHEMA_VERSION = "hswm-h3-b3-manifest-builder/v3"
+FROZEN_V5_MANIFEST_PATH = "H3_B3_RUN_MANIFEST_V5_2026-07-20.json"
+
+# V5 is a single preregistered confirmatory run, not a parameterized manifest
+# template.  These bindings are intentionally independent of the supplied
+# files so a caller cannot alter an input and merely recompute a self-consistent
+# manifest around it.
+FROZEN_V5_PROTOCOL_BINDING = {
+    "path": "H3_B3_V5_RESTART_PREREG_2026-07-20.md",
+    "sha256": "253ffd9e2550b30f6aa3c2d3144d4524a6f6c18ed9849f795553218e03e7eebb",
+}
+FROZEN_V5_PARENT_EVIDENCE = (
+    {
+        "path": "H3_B3_COMPOSITION_PREREG_2026-07-20.md",
+        "sha256": "338a8859a7e2eebbea9c804d75f6b8e0db09d7ddf6b91db939cb30bae9f59a31",
+    },
+    {
+        "path": "H3_B3_V3_REFUSAL_2026-07-20.md",
+        "sha256": "da68371a21a54b1789779453581e2aee6fc5cc1f237b43d5dde24e78cd92f4a9",
+    },
+    {
+        "path": "H3_B3_V4_RESTART_PREREG_2026-07-20.md",
+        "sha256": "01f130c683d016a2f235500acae9fb3b4242e40dbe0afa2376310d938d5db9f4",
+    },
+    {
+        "path": "H3_B3_V4_PREOUTPUT_REFUSAL_2026-07-20.md",
+        "sha256": "9cf599b18e49d9342576f5a201a7d3312465c6a71a0ed6946b155ea9294042d7",
+    },
+)
+FROZEN_V5_OUTPUT_PREFIX = (
+    ".ab_p5_cache/h3_b3/runs/qwen35-r3-schema-v4-20260720"
+)
+FROZEN_V5_PREFLIGHT_PATH = (
+    ".ab_p5_cache/h3_b3/H3_B3_PREFLIGHT_RECEIPT_V5_2026-07-20.json"
+)
+FROZEN_V5_QWEN35_DEPLOYMENT = {
+    "path": ".ab_p5_cache/h3_b3/QWEN35_DEPLOYMENT_RECEIPT_V2_2026-07-20_RETRY1.json",
+    "sha256": "15d3880b211c5e21a4087caa55f008d4474323a3d220e05bb47343bcd1f1c0a6",
+}
+FROZEN_V5_GATE_SOURCE_CODE_ROOT_SHA256 = (
+    "2218428e2767689ebd538d99aad54031c8dcefdfc2913b43ed5e843f3513ddf5"
+)
+FROZEN_V5_EXTRACTOR_SCHEMA_VERSION = "hswm-recorded-llm-extractor/v4"
+FROZEN_V5_ATTEMPT_JOURNAL_SCHEMA_VERSION = (
+    "hswm-recorded-llm-attempt-journal/v1"
+)
+FROZEN_V5_ATTEMPT_JOURNAL_EVENTS = ("START", "FINALIZE")
+FROZEN_V5_EXTRACTOR_PROMPT_SHA256 = (
+    "bebcbaf01be3d0a05c7edc4284ec18e244da951f243a124bd558b39aba34fc0c"
+)
+FROZEN_V5_EXTRACTOR_CONFIG_SHA256 = (
+    "185a15214301633f3353b80636438a4e5e1744633392753201256bf37267d2c0"
+)
+FROZEN_V5_STAGE_SEGMENTS = {
+    "development": {
+        "musique": {
+            "path": ".ab_p5_cache/h3_b3/musique_development_v4_segment.json",
+            "sha256": "de481a3307d8e04f17895b6c125f06a2299a821fc9254b67066058476b0b94e2",
+        },
+        "2wiki": {
+            "path": ".ab_p5_cache/h3_b3/2wiki_development_v4_segment.json",
+            "sha256": "10439ba55f0741fb2a092ce1dfb1fd0643cf1d0c5f42ff81dc001519608fd9fa",
+        },
+    },
+    "fresh": {
+        "musique": {
+            "path": ".ab_p5_cache/h3_b3/musique_fresh_v4_segment.json",
+            "sha256": "214d5594e6b7437f3f7a95b1bd86656f2052c0badfe2815ccff222c3eaa545c8",
+        },
+        "2wiki": {
+            "path": ".ab_p5_cache/h3_b3/2wiki_fresh_v4_segment.json",
+            "sha256": "0b6b7f58abcce938ee4ed8e0e437d23af8b7d65399b8c8ff7075279206a01b97",
+        },
+    },
+}
+FROZEN_V5_STAGE_PREIMAGES = {
+    "development": {
+        "extraction_records": 3_599,
+        "extraction_jsonl_sha256": "53d827704e530d91a7847a193735718ea9df36f8fe421feaaa61393f3193d114",
+        "embedding_records": 3_999,
+        "embedding_jsonl_sha256": "99e44c8fd5b7d3935ab4299e0510d620643dd82a4e0ee47a389d078d739b44f4",
+    },
+    "fresh": {
+        "extraction_records": 5_449,
+        "extraction_jsonl_sha256": "9bccc338c1d1c8738ab1ea78f6283a462a278516c96b7b9d6832902041892942",
+        "embedding_records": 5_999,
+        "embedding_jsonl_sha256": "4b744d61a571d5cee122ad031a27535c529ab4c40703bfebda9b8c5a446a23bd",
+    },
+}
+FROZEN_V5_DEVELOPMENT_SIDECARS = {
+    "musique": {
+        "path": ".ab_p5_cache/h3_relation_raw_musique.json",
+        "file_sha256": "c44453d2534cd326000f65dfa7d3f02b879f4390cd0fbc067617ad84e0a6bd9e",
+    },
+    "2wiki": {
+        "path": ".ab_p5_cache/h3_relation_raw_2wiki.json",
+        "file_sha256": "212c43c5116d114e73d0b02e5fcd28580043ae306d3303fea0d76276715047ed",
+    },
+}
+FROZEN_V5_FRESH_HOLDOUT = {
+    "musique": {
+        "path": ".ab_p5_cache/h3_b3/musique_fresh_manifest_v2.json",
+        "manifest_file_sha256": "12bffedbce50be64019727f3a39309af0676e76ce3ef30e74bcb38932bea991c",
+        "selected_manifest_id": "8aafec838c80d136ebea0dc8f084b7a3a088027f3876fa5ffab63ff1f7851537",
+    },
+    "2wiki": {
+        "path": ".ab_p5_cache/h3_b3/2wiki_fresh_manifest_v2.json",
+        "manifest_file_sha256": "2c1bed2236b0127209cae5f009dacfe41c03a2b38c401f993cb8f3aab1edc343",
+        "selected_manifest_id": "4b0f41685aabb62cabf67497baf0a31776c3c9bd5195bef801dc9ae047998b47",
+    },
+}
 
 
 class ManifestBuildError(ValueError):
@@ -53,7 +164,19 @@ class ExtractorExecutionV1:
     model_revision: str
     max_concurrency: int = 2
     timeout_seconds: float = 180.0
-    max_tokens: int = 512
+    max_tokens: int = 1024
+    max_attempts: int = 2
+
+
+FROZEN_V5_EXTRACTOR_EXECUTION = ExtractorExecutionV1(
+    endpoint="http://127.0.0.1:18002/v1",
+    model="Qwen/Qwen3.6-35B-A3B-FP8",
+    model_revision="95a723d08a9490559dae23d0cff1d9466213d989",
+    max_concurrency=2,
+    timeout_seconds=180.0,
+    max_tokens=1024,
+    max_attempts=2,
+)
 
 
 @dataclass(frozen=True)
@@ -70,6 +193,27 @@ def file_sha256(path: str | Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def _require_frozen_v5(actual: Any, expected: Any, *, label: str) -> None:
+    """Reject a self-consistent value that differs from the V5 prereg."""
+
+    if actual != expected:
+        raise ManifestBuildError(f"{label} differs from frozen V5 preregistration")
+
+
+def _validate_parent_evidence() -> None:
+    """Require the exact parent protocols and refusals named by V5."""
+
+    for binding in FROZEN_V5_PARENT_EVIDENCE:
+        evidence_file, relative = _existing_root_file(
+            REPO_ROOT / binding["path"], label="V5 parent evidence",
+        )
+        _require_frozen_v5(
+            {"path": relative, "sha256": file_sha256(evidence_file)},
+            binding,
+            label=f"V5 parent evidence {binding['path']}",
+        )
 
 
 def _fsync_directory(path: Path) -> None:
@@ -157,6 +301,10 @@ def _output_manifest_path(path: str | Path) -> Path:
         raise ManifestBuildError("manifest output parent does not exist") from exc
     if parent != REPO_ROOT.resolve(strict=True):
         raise ManifestBuildError("PRE_RUN manifest must be written at repository root")
+    if absolute.name != FROZEN_V5_MANIFEST_PATH:
+        raise ManifestBuildError(
+            "PRE_RUN manifest filename differs from frozen V5 preregistration"
+        )
     return parent / absolute.name
 
 
@@ -341,14 +489,29 @@ def build_manifest(
     protocol_file, protocol_relative = _existing_root_file(
         protocol_path, label="protocol",
     )
+    _require_frozen_v5(
+        {"path": protocol_relative, "sha256": file_sha256(protocol_file)},
+        FROZEN_V5_PROTOCOL_BINDING,
+        label="protocol binding",
+    )
+    _validate_parent_evidence()
     preflight_file, preflight_relative = _existing_root_file(
         preflight_path, label="preflight receipt",
+    )
+    _require_frozen_v5(
+        preflight_relative, FROZEN_V5_PREFLIGHT_PATH,
+        label="preflight receipt path",
     )
     bge_file, bge_relative = _existing_root_file(
         bge_attestation_path, label="BGE model attestation",
     )
     qwen35_file, qwen35_relative = _existing_root_file(
         qwen35_deployment_path, label="Qwen35 deployment receipt",
+    )
+    _require_frozen_v5(
+        {"path": qwen35_relative, "sha256": file_sha256(qwen35_file)},
+        FROZEN_V5_QWEN35_DEPLOYMENT,
+        label="Qwen35 deployment receipt",
     )
 
     prefix_path = Path(output_prefix)
@@ -359,6 +522,9 @@ def build_manifest(
             "output prefix must be canonical repository-root-relative"
         )
     prefix = prefix_path.as_posix().rstrip("/")
+    _require_frozen_v5(
+        prefix, FROZEN_V5_OUTPUT_PREFIX, label="output prefix",
+    )
     qwen27_absolute, qwen27_relative = _future_root_path(
         qwen27_deployment_path, label="future Qwen27 deployment receipt",
     )
@@ -382,6 +548,26 @@ def build_manifest(
     fresh_preimages = h3._preimage_receipt(tuple(
         fresh_segments_loaded[dataset] for dataset in h3.DATASETS
     ))
+    _require_frozen_v5(
+        development_bindings,
+        FROZEN_V5_STAGE_SEGMENTS["development"],
+        label="development segment bindings",
+    )
+    _require_frozen_v5(
+        fresh_bindings,
+        FROZEN_V5_STAGE_SEGMENTS["fresh"],
+        label="fresh segment bindings",
+    )
+    _require_frozen_v5(
+        development_preimages,
+        FROZEN_V5_STAGE_PREIMAGES["development"],
+        label="development preimages",
+    )
+    _require_frozen_v5(
+        fresh_preimages,
+        FROZEN_V5_STAGE_PREIMAGES["fresh"],
+        label="fresh preimages",
+    )
 
     sidecar_bindings: dict[str, dict[str, str]] = {}
     holdout_bindings: dict[str, dict[str, str]] = {}
@@ -406,6 +592,16 @@ def build_manifest(
             "manifest_file_sha256": file_sha256(manifest_file),
             "selected_manifest_id": selected_id,
         }
+    _require_frozen_v5(
+        sidecar_bindings,
+        FROZEN_V5_DEVELOPMENT_SIDECARS,
+        label="development sidecar bindings",
+    )
+    _require_frozen_v5(
+        holdout_bindings,
+        FROZEN_V5_FRESH_HOLDOUT,
+        label="fresh holdout bindings",
+    )
 
     try:
         preflight_receipt = h3.preflight.load_preflight_receipt(preflight_file)
@@ -423,6 +619,11 @@ def build_manifest(
         raise ManifestBuildError(
             "preflight implementation snapshot differs from current code"
         )
+    _require_frozen_v5(
+        getattr(preflight_receipt, "gate_source_code_root_sha256", None),
+        FROZEN_V5_GATE_SOURCE_CODE_ROOT_SHA256,
+        label="preflight gate-source code root",
+    )
 
     bge_raw = bge_file.read_bytes()
     bge_value = _strict_json_file(bge_file, label="BGE model attestation")
@@ -450,15 +651,47 @@ def build_manifest(
             "extractor config differs from Qwen35 deployment receipt"
         )
     try:
+        _require_frozen_v5(
+            extractor,
+            FROZEN_V5_EXTRACTOR_EXECUTION,
+            label="extractor execution",
+        )
+        _require_frozen_v5(
+            rex.SCHEMA_VERSION,
+            FROZEN_V5_EXTRACTOR_SCHEMA_VERSION,
+            label="extractor schema",
+        )
+        _require_frozen_v5(
+            getattr(rex, "JOURNAL_SCHEMA_VERSION", None),
+            FROZEN_V5_ATTEMPT_JOURNAL_SCHEMA_VERSION,
+            label="attempt journal schema",
+        )
+        _require_frozen_v5(
+            (getattr(rex, "START_EVENT", None), getattr(rex, "FINALIZE_EVENT", None)),
+            FROZEN_V5_ATTEMPT_JOURNAL_EVENTS,
+            label="attempt journal event types",
+        )
         extractor_config = rex.ExtractorConfigV1(
             endpoint=extractor.endpoint, model=extractor.model,
             model_revision=extractor.model_revision,
             max_concurrency=extractor.max_concurrency,
             timeout_seconds=extractor.timeout_seconds,
-            max_tokens=extractor.max_tokens, batch_size=1,
+            max_tokens=extractor.max_tokens,
+            max_attempts=extractor.max_attempts,
+            batch_size=1,
         )
     except (TypeError, ValueError) as exc:
         raise ManifestBuildError(f"extractor config is invalid: {exc}") from exc
+    _require_frozen_v5(
+        rex.prompt_sha256(),
+        FROZEN_V5_EXTRACTOR_PROMPT_SHA256,
+        label="extractor prompt SHA-256",
+    )
+    _require_frozen_v5(
+        rex.config_sha256(extractor_config),
+        FROZEN_V5_EXTRACTOR_CONFIG_SHA256,
+        label="extractor config SHA-256",
+    )
 
     embedding_execution = {
         "model": bge.FROZEN_MODEL_ID,
@@ -545,8 +778,13 @@ def build_manifest(
         },
         "evaluation_config": dict(h3.FROZEN_EVALUATION_CONFIG),
         "extractor": {
+            "endpoint": extractor_config.endpoint,
             "model": extractor_config.model,
             "model_revision": extractor_config.model_revision,
+            "max_concurrency": extractor_config.max_concurrency,
+            "timeout_seconds": extractor_config.timeout_seconds,
+            "max_tokens": extractor_config.max_tokens,
+            "max_attempts": extractor_config.max_attempts,
             "prompt_sha256": rex.prompt_sha256(),
             "config_sha256": rex.config_sha256(extractor_config),
             "batch_size": 1,
@@ -602,7 +840,9 @@ def publish_manifest(path: str | Path, manifest: Mapping[str, Any]) -> str:
         temporary_inode = temporary.stat().st_ino
         _fsync_directory(REPO_ROOT)
         try:
-            loaded = h3.load_run_manifest(temporary)
+            loaded = h3.load_run_manifest(
+                temporary, _allow_unpublished_candidate=True,
+            )
         except (OSError, ValueError, h3.ArtifactIntegrityError) as exc:
             raise ManifestBuildError(
                 f"candidate manifest failed frozen loader validation: {exc}"
@@ -657,7 +897,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--extractor-model-revision", required=True)
     parser.add_argument("--extractor-max-concurrency", type=int, default=2)
     parser.add_argument("--extractor-timeout-seconds", type=float, default=180.0)
-    parser.add_argument("--extractor-max-tokens", type=int, default=512)
+    parser.add_argument("--extractor-max-tokens", type=int, default=1024)
+    parser.add_argument("--extractor-max-attempts", type=int, default=2)
     parser.add_argument("--qwen27-deployment-path", required=True)
     parser.add_argument("--qwen27-endpoint", required=True)
     parser.add_argument("--arc-max-concurrency", type=int, default=2)
@@ -691,6 +932,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             max_concurrency=args.extractor_max_concurrency,
             timeout_seconds=args.extractor_timeout_seconds,
             max_tokens=args.extractor_max_tokens,
+            max_attempts=args.extractor_max_attempts,
         ),
         qwen27_deployment_path=args.qwen27_deployment_path,
         arc=ArcExecutionV1(

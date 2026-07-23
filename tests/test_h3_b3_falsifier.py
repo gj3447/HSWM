@@ -216,7 +216,8 @@ def test_recorded_extraction_is_complete_identity_checked_and_accounted(tmp_path
     segment = _segment()
     record, config = _record()
     path = tmp_path / "records.jsonl"
-    path.write_text(rex._record_to_json(record) + "\n", encoding="utf-8")
+    cache = rex.JSONLExtractionCache(path)
+    record = cache.append_attempt((record,))[0]
 
     artifact = h3.load_extraction_artifact(
         path, (segment,), expected_model_revision=config.model_revision,
@@ -225,17 +226,89 @@ def test_recorded_extraction_is_complete_identity_checked_and_accounted(tmp_path
     )
     assert tuple(artifact.frozen_by_source) == (segment.paragraphs[0].source_id,)
     assert artifact.accounting["endpoint_calls"] == 1
+    assert artifact.accounting["physical_journal_rows"] == 2
+    assert artifact.accounting["attempt_start_rows"] == 1
+    assert artifact.accounting["attempt_finalize_rows"] == 1
     assert artifact.accounting["total_tokens"] == 15
+    assert artifact.accounting["max_attempt_ordinal"] == 1
+    assert artifact.accounting["attempt_cap_terminal_sources"] == 0
+    assert artifact.accounting["status_counts"] == {"success": 1}
+    assert artifact.accounting["terminal_status_counts"] == {"success": 1}
 
     batch_two = replace(record, record_id="", batch_size=2)
     batch_two = replace(batch_two, record_id=rex._record_id(batch_two))
-    path.write_text(rex._record_to_json(batch_two) + "\n", encoding="utf-8")
-    with pytest.raises(h3.ArtifactIntegrityError, match="batch_size"):
-        h3.load_extraction_artifact(path, (segment,))
+    invalid_path = tmp_path / "invalid-batch.jsonl"
+    with pytest.raises(ValueError, match="complete batch call"):
+        rex.JSONLExtractionCache(invalid_path).append_attempt((batch_two,))
 
     path.write_text("", encoding="utf-8")
     with pytest.raises(h3.ArtifactIntegrityError, match="incomplete"):
         h3.load_extraction_artifact(path, (segment,))
+
+
+def test_extraction_close_v3_publishes_and_hashes_full_canonical_accounting(
+    tmp_path,
+):
+    segment = _segment()
+    record, config = _record()
+    path = tmp_path / "records.jsonl"
+    rex.JSONLExtractionCache(path).append_attempt((record,))
+    artifact = h3.load_extraction_artifact(
+        path, (segment,), expected_model_revision=config.model_revision,
+        expected_prompt_sha256=record.prompt_sha256,
+        expected_config_sha256=record.config_sha256,
+    )
+
+    validation = h3.extraction_close_validation(artifact)
+    mandatory_accounting_fields = {
+        "physical_journal_rows", "attempt_start_rows",
+        "attempt_finalize_rows", "paragraph_records", "endpoint_calls",
+        "endpoint_call_upper_bound", "unmatched_attempt_starts",
+        "status_counts", "terminal_status_counts", "retry_sources",
+        "max_attempt_ordinal", "attempt_cap_terminal_sources",
+        "attempt_cap_terminal_rate", "attempt_cap_terminal_by_dataset",
+        "attempt_cap_terminal_rate_by_dataset", "quote_quarantine_reasons",
+        "terminal_quote_quarantine_reasons", "finalized_endpoint_calls",
+        "unique_batch_request_ids", "recorded_paragraph_attempt_rows",
+        "prompt_tokens", "completion_tokens", "total_tokens",
+        "summed_call_latency_ms", "mean_call_latency_ms",
+        "max_call_latency_ms",
+    }
+    assert validation["schema_version"] == (
+        "hswm-h3-extraction-close-validation/v3"
+    )
+    assert set(validation) == {
+        "schema_version", "file_sha256", "record_rows", "accounting",
+        "accounting_sha256",
+    }
+    assert set(validation["accounting"]) == mandatory_accounting_fields
+    assert validation["accounting"] == dict(artifact.accounting)
+    assert validation["accounting_sha256"] == sha256(
+        h3.canonical_json(validation["accounting"]).encode("utf-8")
+    ).hexdigest()
+
+
+def test_extraction_close_validation_equality_rejects_body_or_hash_tamper(
+    tmp_path,
+):
+    segment = _segment()
+    record, config = _record()
+    path = tmp_path / "records.jsonl"
+    rex.JSONLExtractionCache(path).append_attempt((record,))
+    artifact = h3.load_extraction_artifact(
+        path, (segment,), expected_model_revision=config.model_revision,
+        expected_prompt_sha256=record.prompt_sha256,
+        expected_config_sha256=record.config_sha256,
+    )
+    expected = h3.extraction_close_validation(artifact)
+
+    body_tamper = json.loads(h3.canonical_json(expected))
+    body_tamper["accounting"]["endpoint_calls"] += 1
+    assert body_tamper != h3.extraction_close_validation(artifact)
+
+    hash_tamper = json.loads(h3.canonical_json(expected))
+    hash_tamper["accounting_sha256"] = "0" * 64
+    assert hash_tamper != h3.extraction_close_validation(artifact)
 
 
 def test_loader_accepts_deterministic_error_then_success_as_two_attempts(tmp_path):
@@ -269,8 +342,117 @@ def test_loader_accepts_deterministic_error_then_success_as_two_attempts(tmp_pat
 
     assert artifact.accounting["retry_sources"] == 1
     assert artifact.accounting["endpoint_calls"] == 2
+    assert artifact.accounting["status_counts"] == {
+        "error": 1, "success": 1,
+    }
+    assert artifact.accounting["terminal_status_counts"] == {"success": 1}
+    assert artifact.accounting["quote_quarantine_reasons"] == {
+        "transport_error": 1,
+    }
+    assert artifact.accounting["terminal_quote_quarantine_reasons"] == {}
     assert artifact.accounting["unique_batch_request_ids"] == 1
     assert tuple(artifact.frozen_by_source) == (paragraph.source_id,)
+
+
+def test_loader_refuses_unmatched_durable_start_even_when_attempt_remains(
+    tmp_path,
+):
+    segment = _segment()
+    _recorded, config = _record()
+    paragraph = ParagraphInputV1(
+        segment.paragraphs[0].source_id,
+        segment.paragraphs[0].title,
+        segment.paragraphs[0].text,
+    )
+    path = tmp_path / "unmatched-start.jsonl"
+    cache = rex.JSONLExtractionCache(path)
+    cache.reserve_attempt(
+        (paragraph,), config, rex.make_openai_request(paragraph, config),
+    )
+
+    with pytest.raises(h3.ArtifactIntegrityError, match="unmatched durable START"):
+        h3.load_extraction_artifact(
+            path, (segment,), expected_model_revision=config.model_revision,
+            expected_prompt_sha256=rex.prompt_sha256(),
+            expected_config_sha256=rex.config_sha256(config),
+        )
+
+
+def test_loader_rejects_nonterminal_attempt_from_another_config(tmp_path):
+    segment = _segment()
+    success, config = _record()
+    paragraph = ParagraphInputV1(
+        segment.paragraphs[0].source_id,
+        segment.paragraphs[0].title,
+        segment.paragraphs[0].text,
+    )
+    other_config = replace(config, timeout_seconds=config.timeout_seconds + 1)
+    failed = rex.extract_paragraph(
+        paragraph, other_config,
+        lambda _request: (_ for _ in ()).throw(TimeoutError("wrong config")),
+    )
+    path = tmp_path / "mixed-config.jsonl"
+    cache = rex.JSONLExtractionCache(path)
+    cache.append_attempt((failed,))
+    cache.append_attempt((success,))
+
+    with pytest.raises(h3.ArtifactIntegrityError, match="config hash mismatch"):
+        h3.load_extraction_artifact(
+            path, (segment,),
+            expected_model_revision=config.model_revision,
+            expected_prompt_sha256=success.prompt_sha256,
+            expected_config_sha256=success.config_sha256,
+        )
+
+
+def test_loader_accounts_attempt_cap_truncation_as_empty_terminal(tmp_path):
+    segment = _segment()
+    paragraph = ParagraphInputV1(
+        segment.paragraphs[0].source_id,
+        segment.paragraphs[0].title,
+        segment.paragraphs[0].text,
+    )
+    config = rex.ExtractorConfigV1(
+        endpoint="http://example.invalid/v1",
+        model="fixture-model",
+        model_revision="fixture-revision",
+        max_attempts=2,
+    )
+    raw = json.dumps({
+        "model": config.model,
+        "choices": [{
+            "message": {"content": '{"claims":['},
+            "finish_reason": "length",
+        }],
+        "usage": {"completion_tokens": config.max_tokens},
+    })
+    path = tmp_path / "capped.jsonl"
+    rex.run_extraction_batch(
+        (paragraph,), config, cache_path=path, transport=lambda _request: raw,
+    )
+    second = rex.run_extraction_batch(
+        (paragraph,), config, cache_path=path, transport=lambda _request: raw,
+    )
+    terminal = second.records[0]
+    assert terminal.status == rex.ExtractionStatus.QUARANTINED
+
+    artifact = h3.load_extraction_artifact(
+        path, (segment,), expected_model_revision=config.model_revision,
+        expected_prompt_sha256=terminal.prompt_sha256,
+        expected_config_sha256=terminal.config_sha256,
+    )
+    assert artifact.accounting["max_attempt_ordinal"] == 2
+    assert artifact.accounting["attempt_cap_terminal_sources"] == 1
+    assert artifact.accounting["attempt_cap_terminal_rate"] == 1.0
+    assert artifact.accounting["attempt_cap_terminal_by_dataset"] == {
+        "musique": 1,
+    }
+    assert artifact.accounting["attempt_cap_terminal_rate_by_dataset"] == {
+        "musique": 1.0,
+    }
+    assert json.loads(
+        artifact.frozen_by_source[paragraph.source_id].payload_json
+    )["claims"] == []
 
 
 def test_cluster_inference_resamples_and_signflips_whole_components():

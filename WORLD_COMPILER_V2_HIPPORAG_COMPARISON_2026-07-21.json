@@ -1,0 +1,66 @@
+{
+  "schema_version": "hswm-oss-extraction-comparison/v1",
+  "as_of": "2026-07-21",
+  "comparison_script": "oss_extraction_compare.py",
+  "comparison_script_sha256": "91378e62c6f421128a8aff5c57c649c394d9052f39ddb29a91b218f13bdb69a6",
+  "scope": "exact NFKC-casefold-whitespace-normalized title+body multiset intersection only",
+  "hipporag_url": "https://raw.githubusercontent.com/OSU-NLP-Group/HippoRAG/main/outputs/musique/openie_results_ner_gpt-4o-mini.json",
+  "hipporag_commit_observed": "1e8f60981bf760b64003aa5bf5668126d0c106b3",
+  "hipporag_sha256": "8540fb7f20bc38ee037e285411b73d9be910e7304f4a4585daee369238040f54",
+  "v5_journal": "external:frozen-v5-development/extractions.jsonl",
+  "v5_journal_included": false,
+  "v5_journal_sha256": "7cb1dcf65548ac9aeace33277478e0cda0dc540cfc0ae77933921a1e06899192",
+  "hipporag_total_docs": 11656,
+  "v5_unique_sources": 3599,
+  "aligned_docs": 1290,
+  "v5_global_status": {
+    "partial": 1392,
+    "quarantined": 536,
+    "success": 1671
+  },
+  "aligned_counts": {
+    "hippo_docs_with_output": 1290,
+    "hippo_endpoint_body_exact": 25389,
+    "hippo_endpoint_passage_exact": 26888,
+    "hippo_endpoints": 28230,
+    "hippo_entities": 12819,
+    "hippo_entity_body_exact": 9996,
+    "hippo_entity_passage_exact": 10220,
+    "hippo_predicate_body_exact": 5533,
+    "hippo_triples": 14115,
+    "v5_claims": 2593,
+    "v5_docs_with_claims": 1051,
+    "v5_nary_2plus_args": 336,
+    "v5_offset_exact": 8218,
+    "v5_quarantines": 1777,
+    "v5_role_spans": 8218
+  },
+  "aligned_rates_pct": {
+    "hippo_endpoint_body_exact": 89.9362,
+    "hippo_endpoint_title_plus_body_exact": 95.2462,
+    "hippo_entity_body_exact": 77.978,
+    "hippo_entity_title_plus_body_exact": 79.7254,
+    "hippo_predicate_body_exact": 39.1994,
+    "v5_claims_with_2plus_arguments": 12.958,
+    "v5_offset_exact": 100.0
+  },
+  "raw_surface_connectivity_not_h3_legal_chain": {
+    "hipporag": {
+      "directed_edges": 14115,
+      "nonself_nonbacktrack_pairs": 16771,
+      "raw_composable_pairs": 17180
+    },
+    "v5": {
+      "directed_edges": 3032,
+      "nonself_nonbacktrack_pairs": 164,
+      "raw_composable_pairs": 271
+    }
+  },
+  "interpretation_limits": [
+    "substring exactness is not factual correctness",
+    "raw surface pairs do not apply H3 claim-continuity, role, query, fanout, or cycle gates",
+    "public HippoRAG output and V5 use different extractors; this is a schema/coverage comparison, not downstream efficacy"
+  ],
+  "delltower_or_dgx_used": false,
+  "new_model_calls": 0
+}

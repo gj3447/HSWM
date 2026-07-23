@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from io import BytesIO
 import json
+import multiprocessing
 from pathlib import Path
 import threading
 import time
@@ -85,6 +87,27 @@ def test_request_is_query_blind_and_decoding_controls_are_frozen():
         _config(temperature=1)
     with pytest.raises(ValueError, match="disable_thinking"):
         _config(disable_thinking=False)
+    with pytest.raises(ValueError, match="max_attempts"):
+        _config(max_attempts=True)
+
+
+def test_execution_controls_are_bound_into_config_and_request_identity():
+    base = _config()
+    assert rx.ExtractorConfigV1(
+        endpoint="http://example.invalid/v1",
+        model="fixture-model",
+        model_revision="fixture-revision",
+    ).max_tokens == 1024
+    base_sha = rx.config_sha256(base)
+    base_request = rx.make_openai_request(_paragraph(), base).request_id
+
+    for changed in (
+        _config(max_concurrency=3),
+        _config(timeout_seconds=181.0),
+        _config(max_attempts=3),
+    ):
+        assert rx.config_sha256(changed) != base_sha
+        assert rx.make_openai_request(_paragraph(), changed).request_id != base_request
 
 
 def test_nfkc_binder_maps_compatibility_quote_to_original_codepoint_span():
@@ -260,13 +283,182 @@ def test_jsonl_cache_resumes_and_repairs_only_incomplete_tail(tmp_path: Path):
     assert first.endpoint_calls == 1 and first.cache_hits == 0
     assert second.endpoint_calls == 0 and second.cache_hits == 1
     assert first.records[0].record_id == second.records[0].record_id
-    assert len(cache_path.read_text(encoding="utf-8").splitlines()) == 1
+    physical = [
+        json.loads(line)
+        for line in cache_path.read_text(encoding="utf-8").splitlines()
+    ]
+    assert [item["event_type"] for item in physical] == [
+        rx.START_EVENT, rx.FINALIZE_EVENT,
+    ]
 
     with cache_path.open("ab") as handle:
         handle.write(b'{"interrupted"')
+    before = cache_path.read_bytes()
+    with pytest.raises(rx.CacheCorruptionError, match="incomplete final line"):
+        rx.load_attempt_journal_strict(cache_path)
+    assert cache_path.read_bytes() == before
     records = rx.JSONLExtractionCache(cache_path).records()
     assert [item.record_id for item in records] == [first.records[0].record_id]
     assert cache_path.read_bytes().endswith(b"\n")
+
+
+def test_start_is_fsynced_and_strictly_visible_before_transport(tmp_path: Path):
+    cache_path = tmp_path / "pre-call-start.jsonl"
+    observed = []
+
+    def transport(_request):
+        journal = rx.load_attempt_journal_strict(cache_path)
+        observed.append(journal)
+        assert len(journal.starts) == 1
+        assert journal.starts[0].attempt_ordinal == 1
+        assert journal.finalizes == ()
+        assert journal.unmatched_starts == journal.starts
+        return _response()
+
+    result = rx.run_extraction_batch(
+        (_paragraph(),), _config(), cache_path=cache_path, transport=transport,
+    )
+    assert result.endpoint_calls == 1
+    assert len(observed) == 1
+    journal = rx.load_attempt_journal_strict(cache_path)
+    assert len(journal.starts) == len(journal.finalizes) == 1
+    assert journal.unmatched_starts == ()
+    assert journal.records[0].raw_response == _response()
+
+
+def test_crash_after_start_consumes_ordinal_and_cap_blocks_third_call(
+    tmp_path: Path,
+):
+    cache_path = tmp_path / "crash-gap.jsonl"
+    calls = 0
+
+    def crash_after_start(_request):
+        nonlocal calls
+        calls += 1
+        raise KeyboardInterrupt("synthetic crash before FINALIZE")
+
+    for expected_ordinal in (1, 2):
+        with pytest.raises(KeyboardInterrupt, match="synthetic crash"):
+            rx.run_extraction_batch(
+                (_paragraph(),), _config(max_attempts=2),
+                cache_path=cache_path, transport=crash_after_start,
+            )
+        journal = rx.load_attempt_journal_strict(cache_path)
+        assert [item.attempt_ordinal for item in journal.starts] == list(
+            range(1, expected_ordinal + 1)
+        )
+        assert journal.records == ()
+
+    with pytest.raises(rx.AttemptCapExhaustedError, match="unmatched START"):
+        rx.run_extraction_batch(
+            (_paragraph(),), _config(max_attempts=2),
+            cache_path=cache_path, transport=crash_after_start,
+        )
+    assert calls == 2
+
+
+def test_nonblocking_run_lock_prevents_concurrent_speculative_retry(
+    tmp_path: Path,
+):
+    cache_path = tmp_path / "concurrent-run.jsonl"
+    entered = threading.Event()
+    release = threading.Event()
+    calls = 0
+    call_lock = threading.Lock()
+    raw = _response('{"claims":[', finish_reason="length")
+    outcome = []
+
+    def transport(_request):
+        nonlocal calls
+        with call_lock:
+            calls += 1
+            call_number = calls
+        if call_number == 1:
+            entered.set()
+            assert release.wait(timeout=5)
+        return raw
+
+    def first_run():
+        try:
+            outcome.append(rx.run_extraction_batch(
+                (_paragraph(),), _config(max_attempts=2),
+                cache_path=cache_path, transport=transport,
+            ))
+        except BaseException as exc:  # test thread must report every failure
+            outcome.append(exc)
+
+    thread = threading.Thread(target=first_run)
+    thread.start()
+    assert entered.wait(timeout=5)
+    with pytest.raises(rx.CacheRunLockedError, match="already active"):
+        rx.run_extraction_batch(
+            (_paragraph(),), _config(max_attempts=2),
+            cache_path=cache_path, transport=transport,
+        )
+    assert calls == 1
+    release.set()
+    thread.join(timeout=5)
+    assert not thread.is_alive()
+    assert len(outcome) == 1 and isinstance(outcome[0], rx.ExtractionBatchV1)
+
+    second = rx.run_extraction_batch(
+        (_paragraph(),), _config(max_attempts=2),
+        cache_path=cache_path, transport=transport,
+    )
+    third = rx.run_extraction_batch(
+        (_paragraph(),), _config(max_attempts=2),
+        cache_path=cache_path, transport=transport,
+    )
+    assert calls == 2
+    assert second.records[0].status == rx.ExtractionStatus.QUARANTINED
+    assert third.endpoint_calls == 0 and third.cache_hits == 1
+
+
+def test_nonblocking_run_lock_is_process_wide_before_endpoint_start(
+    tmp_path: Path,
+):
+    context = multiprocessing.get_context("fork")
+    cache_path = tmp_path / "process-run.jsonl"
+    entered = context.Event()
+    release = context.Event()
+    calls = context.Value("i", 0)
+    outcomes = context.Queue()
+    raw = _response('{"claims":[', finish_reason="length")
+
+    def transport(_request):
+        with calls.get_lock():
+            calls.value += 1
+        entered.set()
+        assert release.wait(timeout=5)
+        return raw
+
+    def worker():
+        try:
+            rx.run_extraction_batch(
+                (_paragraph(),), _config(max_attempts=2),
+                cache_path=cache_path, transport=transport,
+            )
+            outcomes.put("completed")
+        except rx.CacheRunLockedError:
+            outcomes.put("locked")
+        except BaseException as exc:
+            outcomes.put(f"error:{type(exc).__name__}:{exc}")
+
+    owner = context.Process(target=worker)
+    owner.start()
+    assert entered.wait(timeout=5)
+    contender = context.Process(target=worker)
+    contender.start()
+    contender.join(timeout=5)
+    assert not contender.is_alive() and contender.exitcode == 0
+    assert outcomes.get(timeout=2) == "locked"
+    with calls.get_lock():
+        assert calls.value == 1
+
+    release.set()
+    owner.join(timeout=5)
+    assert not owner.is_alive() and owner.exitcode == 0
+    assert outcomes.get(timeout=2) == "completed"
 
 
 @pytest.mark.parametrize(
@@ -397,6 +589,90 @@ def test_invalid_response_receipt_is_nonterminal_and_retried(
     ]
 
 
+def test_final_length_attempt_terminalizes_as_empty_typed_quarantine(tmp_path: Path):
+    cache_path = tmp_path / "length-cap.jsonl"
+    calls = 0
+    raw = _response('{"claims":[', finish_reason="length")
+
+    def transport(request):
+        nonlocal calls
+        calls += 1
+        return raw
+
+    config = _config(max_attempts=2)
+    first = rx.run_extraction_batch(
+        (_paragraph(),), config, cache_path=cache_path, transport=transport,
+    )
+    second = rx.run_extraction_batch(
+        (_paragraph(),), config, cache_path=cache_path, transport=transport,
+    )
+    third = rx.run_extraction_batch(
+        (_paragraph(),), config, cache_path=cache_path, transport=transport,
+    )
+
+    assert first.records[0].status == rx.ExtractionStatus.ERROR
+    capped = second.records[0]
+    assert capped.status == rx.ExtractionStatus.QUARANTINED
+    assert capped.raw_response == raw and capped.finish_reason == "length"
+    assert capped.error_type is None and capped.frozen_extraction is not None
+    assert json.loads(capped.frozen_extraction.payload_json)["claims"] == []
+    assert [item.reason for item in capped.quarantines] == [
+        rx.QuoteRejectCode.TRUNCATED_RESPONSE_AT_ATTEMPT_CAP,
+    ]
+    assert third.endpoint_calls == 0 and third.cache_hits == 1
+    assert calls == 2
+    assert len(rx.JSONLExtractionCache(cache_path).records()) == 2
+
+    bad_quarantine = replace(
+        capped.quarantines[0], reason=rx.QuoteRejectCode.INVALID_JSON,
+    )
+    provisional = replace(
+        capped, quarantines=(bad_quarantine,), record_id="",
+    )
+    tampered = replace(provisional, record_id=rx._record_id(provisional))
+    with pytest.raises(rx.CacheCorruptionError, match="quarantines differ"):
+        rx._validate_record_preimages(tampered)
+
+
+def test_length_at_cap_from_wrong_model_remains_error_and_never_calls_again(
+    tmp_path: Path,
+):
+    cache_path = tmp_path / "wrong-model-length-cap.jsonl"
+    calls = 0
+    raw = _response(
+        '{"claims":[', finish_reason="length", model="wrong-model",
+    )
+
+    def transport(_request):
+        nonlocal calls
+        calls += 1
+        return raw
+
+    config = _config(max_attempts=2)
+    first = rx.run_extraction_batch(
+        (_paragraph(),), config, cache_path=cache_path, transport=transport,
+    )
+    second = rx.run_extraction_batch(
+        (_paragraph(),), config, cache_path=cache_path, transport=transport,
+    )
+    third = rx.run_extraction_batch(
+        (_paragraph(),), config, cache_path=cache_path, transport=transport,
+    )
+
+    assert first.records[0].status == rx.ExtractionStatus.ERROR
+    assert second.records[0].status == rx.ExtractionStatus.ERROR
+    assert second.attempt_cap_exhausted == 1
+    assert second.records[0].frozen_extraction is None
+    assert all(
+        item.reason != rx.QuoteRejectCode.TRUNCATED_RESPONSE_AT_ATTEMPT_CAP
+        for item in second.records[0].quarantines
+    )
+    assert third.endpoint_calls == 0
+    assert third.attempt_cap_exhausted == 1
+    assert calls == 2
+    assert len(rx.JSONLExtractionCache(cache_path).records()) == 2
+
+
 def test_batch_concurrency_is_bounded_and_return_order_is_input_order(tmp_path: Path):
     paragraphs = tuple(
         ParagraphInputV1(
@@ -463,6 +739,75 @@ def test_transport_errors_are_recorded_but_not_terminal_cache_hits(tmp_path: Pat
     assert calls == 2
 
 
+def test_urllib_http_error_preserves_raw_outcome_without_salvaging_claims(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+):
+    """A valid-looking model envelope on non-2xx is evidence, never output."""
+
+    cache_path = tmp_path / "http-error-outcome.jsonl"
+    raw_body = _response()
+    response_headers = {
+        "Retry-After": "7",
+        "X-Model-Revision": "fixture-model@server",
+    }
+    calls = 0
+
+    def fail_with_http_response(request, *, timeout):
+        nonlocal calls
+        calls += 1
+        raise rx.urllib_error.HTTPError(
+            request.full_url,
+            503,
+            "Service Unavailable",
+            response_headers,
+            BytesIO(raw_body.encode("utf-8")),
+        )
+
+    monkeypatch.setattr(rx.urllib_request, "urlopen", fail_with_http_response)
+    config = _config(max_attempts=2)
+    transport = rx.openai_compatible_transport()
+
+    first = rx.run_extraction_batch(
+        (_paragraph(),), config, cache_path=cache_path, transport=transport,
+    )
+    second = rx.run_extraction_batch(
+        (_paragraph(),), config, cache_path=cache_path, transport=transport,
+    )
+    third = rx.run_extraction_batch(
+        (_paragraph(),), config, cache_path=cache_path, transport=transport,
+    )
+
+    assert calls == 2
+    assert [first.endpoint_calls, second.endpoint_calls, third.endpoint_calls] == [
+        1, 1, 0,
+    ]
+    assert second.attempt_cap_exhausted == third.attempt_cap_exhausted == 1
+    journal = rx.load_attempt_journal_strict(cache_path)
+    assert len(journal.starts) == len(journal.finalizes) == 2
+    assert journal.unmatched_starts == ()
+    assert [record.attempt_ordinal for record in journal.records] == [1, 2]
+    for record in journal.records:
+        assert record.status == rx.ExtractionStatus.ERROR
+        assert record.error_type == "HTTPStatusError"
+        assert record.http_status == 503
+        assert record.raw_response == raw_body
+        assert record.raw_response_sha256 == sha256_text(raw_body)
+        assert json.loads(record.response_headers_json) == [
+            ["Retry-After", "7"],
+            ["X-Model-Revision", "fixture-model@server"],
+        ]
+        assert record.response_model == ""
+        assert record.finish_reason == ""
+        assert json.loads(record.usage_json) == {}
+        assert record.response_content_sha256 == sha256_text("")
+        assert record.frozen_extraction is None
+        assert record.output_sha256 == ""
+        assert [item.reason for item in record.quarantines] == [
+            rx.QuoteRejectCode.TRANSPORT_ERROR,
+        ]
+    assert third.records[0] == journal.records[-1]
+
+
 def test_two_identical_empty_transport_failures_are_two_locked_attempts(tmp_path: Path):
     cache_path = tmp_path / "identical-errors.jsonl"
     calls = 0
@@ -478,10 +823,14 @@ def test_two_identical_empty_transport_failures_are_two_locked_attempts(tmp_path
     second = rx.run_extraction_batch(
         (_paragraph(),), _config(), cache_path=cache_path, transport=transport,
     )
+    third = rx.run_extraction_batch(
+        (_paragraph(),), _config(), cache_path=cache_path, transport=transport,
+    )
     attempts = rx.JSONLExtractionCache(cache_path).records()
 
     assert calls == 2
     assert first.endpoint_calls == second.endpoint_calls == 1
+    assert second.attempt_cap_exhausted == 1
     assert [item.attempt_ordinal for item in attempts] == [1, 2]
     assert len({item.attempt_id for item in attempts}) == 2
     assert len({item.record_id for item in attempts}) == 2
@@ -489,6 +838,9 @@ def test_two_identical_empty_transport_failures_are_two_locked_attempts(tmp_path
     assert len({item.usage_json for item in attempts}) == 1
     assert first.records[0].attempt_id == attempts[0].attempt_id
     assert second.records[0].attempt_id == attempts[1].attempt_id
+    assert third.endpoint_calls == 0
+    assert third.attempt_cap_exhausted == 1
+    assert third.records[0].status == rx.ExtractionStatus.ERROR
 
 
 def test_cache_rejects_attempt_ordinal_gap(tmp_path: Path):
@@ -504,10 +856,83 @@ def test_cache_rejects_attempt_ordinal_gap(tmp_path: Path):
         (_paragraph(),), _config(), cache_path=cache_path, transport=transport,
     )
     lines = cache_path.read_text(encoding="utf-8").splitlines()
-    cache_path.write_text(lines[1] + "\n", encoding="utf-8")
+    cache_path.write_text("\n".join(lines[2:]) + "\n", encoding="utf-8")
 
-    with pytest.raises(rx.CacheCorruptionError, match="ordinals are not contiguous"):
+    with pytest.raises(rx.CacheCorruptionError, match="physical order"):
         rx.JSONLExtractionCache(cache_path).records()
+
+
+def _record_bound_to_start(
+    start: rx.AttemptStartV1,
+    record: rx.RecordedExtractionV1,
+) -> rx.RecordedExtractionV1:
+    provisional = replace(
+        record,
+        attempt_id=start.attempt_id,
+        attempt_ordinal=start.attempt_ordinal,
+        record_id="",
+    )
+    return replace(provisional, record_id=rx._record_id(provisional))
+
+
+def test_journal_rejects_finalize_without_start_and_duplicate_result(
+    tmp_path: Path,
+):
+    config = _config()
+    paragraph = _paragraph()
+    request = rx.make_openai_request(paragraph, config)
+    start = rx._make_start((paragraph,), config, request, 1)
+    record = _record_bound_to_start(
+        start, rx.extract_paragraph(paragraph, config, lambda _: _response()),
+    )
+    finalize = rx._make_finalize(start, (record,))
+    path = tmp_path / "journal-order.jsonl"
+
+    path.write_text(rx._finalize_to_json(finalize) + "\n", encoding="utf-8")
+    with pytest.raises(rx.CacheCorruptionError, match="no prior START"):
+        rx.load_attempt_journal_strict(path)
+
+    path.write_text(
+        "\n".join((
+            rx._start_to_json(start),
+            rx._finalize_to_json(finalize),
+            rx._finalize_to_json(finalize),
+        )) + "\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(rx.CacheCorruptionError, match="duplicated"):
+        rx.load_attempt_journal_strict(path)
+
+
+def test_journal_rejects_reverse_finalize_order_and_duplicate_root_key(
+    tmp_path: Path,
+):
+    config = _config()
+    paragraph = _paragraph()
+    request = rx.make_openai_request(paragraph, config)
+    first = rx._make_start((paragraph,), config, request, 1)
+    second = rx._make_start((paragraph,), config, request, 2)
+    record = _record_bound_to_start(
+        first, rx.extract_paragraph(paragraph, config, lambda _: _response()),
+    )
+    finalize_first = rx._make_finalize(first, (record,))
+    path = tmp_path / "reverse.jsonl"
+    path.write_text(
+        "\n".join((
+            rx._start_to_json(first),
+            rx._start_to_json(second),
+            rx._finalize_to_json(finalize_first),
+        )) + "\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(rx.CacheCorruptionError, match="reverse physical"):
+        rx.load_attempt_journal_strict(path)
+
+    raw_start = rx._start_to_json(first)
+    duplicate_root = raw_start[:-1] + ',"event_type":"START"}'
+    path.write_text(duplicate_root + "\n", encoding="utf-8")
+    with pytest.raises(rx.CacheCorruptionError, match="duplicate JSON key"):
+        rx.load_attempt_journal_strict(path)
 
 
 def test_batch_request_and_mixed_binding_preserve_per_source_receipts():

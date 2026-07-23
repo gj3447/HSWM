@@ -18,7 +18,7 @@ def _inner_evidence():
         "branch": "p1v3-nonredundant-policy-actuation",
         "conjecture": "old seed-3 wording",
         "preregistration_sha256": "1" * 64,
-        "observations": [{"case_id": "fresh-seed4-case"}],
+        "observations": [{"case_id": "fresh-seed5-r2-case"}],
         "scientific_judgment_emitted": False,
     }
     value["evidence_sha256"] = canonical_sha256(value)
@@ -52,7 +52,7 @@ def test_evidence_bridge_replaces_seed3_claim_and_preserves_inner_binding():
     declared = unsigned.pop("evidence_sha256")
 
     assert bridged["schema_version"] == "hswm-p1v4-policy-heldout-evidence/v1"
-    assert "seed-4" in bridged["conjecture"]
+    assert "seed-5 R2" in bridged["conjecture"]
     assert "seed-3" not in bridged["conjecture"]
     assert bridged["preregistration_sha256"] == "2" * 64
     assert bridged["compatibility_execution"]["inner_evidence_sha256"] == (

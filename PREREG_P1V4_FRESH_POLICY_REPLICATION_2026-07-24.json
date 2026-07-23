@@ -1,0 +1,70 @@
+{
+  "claim_boundary": {
+    "excluded": [
+      "learned compiler efficacy over raw transcript",
+      "Agent A to Agent B transfer",
+      "parameter delta-W learning",
+      "topology rewiring",
+      "long-term consolidation"
+    ],
+    "included": "fresh replication of L0 frozen-model answer-interface actuation by a training-derived typed source policy, with server replay of the deterministic judge"
+  },
+  "conjecture": "The previously successful training-derived typed source-policy mechanism replicates on the fresh seed-5 R2 conflict cut, improving at least three of six frozen-model heldout answers versus no memory.",
+  "judge": {
+    "frozen_scorer_contract_sha256": "3390d0da21adc7f94830c4a130c5378e3209f7e9c9a37ea0b73923d0d91dfa11",
+    "independent_from_measurement": true,
+    "script": "p1v4_replay_judge.py",
+    "script_sha256": "792ecadfb21fcb7f719a7884cf95f9c4b5370a989ab8592ab66c5e2a8636e43b",
+    "server_replay_required": true,
+    "type": "deterministic_non_llm"
+  },
+  "locks": {
+    "budget_manifest_sha256": "e7a81a294aea7c9a14f6dc13e9b63a4ce02915384d71200f6a03005541653895",
+    "calibration_evidence_sha256": "41a8c6e89230e31adc66457c57a18651c9f175f5f03a259c9b3e6ba6085cba27",
+    "deployment_file_sha256": "b8a451279cf835b2ba16902c489f4f13413901a89b0b885bf39ab82dba5bba19",
+    "development_sidecar_sha256": "41d6c1f28bea68c527bcb912f3194412305909d848fd2af7df6d40eadfbf3217",
+    "git_commit": "7bb7d39b9f59f9359af51fcb80f11d833ee7b038",
+    "heldout_sidecar_sha256": "d0c9a1bbee9a5f4fe2b6a7728495219a94e09a0b0ffc281e7f9cd92f79fac319",
+    "prediction_receipt_file_sha256": "02075683dd68366dd2bd6f8623b17aa9c85ef4dd5252057c1ed2fc6c8b2abd7e",
+    "public_manifest_sha256": "ba510ceee0a3ab129fed97f22983fb3123293b6a4eb810c9cd6c31708d3712c6"
+  },
+  "module_sha256": {
+    "hswm_weight_snapshot.py": "53a2e1cea7c57d7b7d3b13321e560ef25581b299ff443dcc80791f777bce24f1",
+    "p1_llm_answerer.py": "69b392ba4e833cca600e54950a90bd8b49cd093fba9e9b45ef664f43a63b7335",
+    "p1v2_l0_harness.py": "77c7ea65f92275a5917d8d0657e71c1251d9ca35b9c402600d70d6a346aeb0d9",
+    "p1v2_l0_preflight.py": "89f645e88625ddf7d8c06f2f0ac6448dc7b0b378f1f910f7f2956566ab3c6f40",
+    "p1v2_llm_answerer.py": "c18463d1d3752b2a81d9cfcc383ab7a9c8ca15e7cf24eb60fabbdfba122d8244",
+    "p1v2_prompt_parity.py": "d2d1184e06f2ac1b01502347cdc5276bee96db352c49c271a6086c53948463d0",
+    "p1v2_tokenizer_adapter.py": "03ae29db84678ef507b6dc6f4e9da1271449db800baadfd5f5817845745031d5",
+    "p1v2_typed_lesson.py": "61a506b1181ccb15a7e9e15477ad4cc98b4f1e058688720e1d617866e1652f24",
+    "p1v3_calibration_gate.py": "3f77e4e07c5aa2c445520d2ee9ff08bfa0f3779851b0b0d257904299ce858eec",
+    "p1v3_calibration_preflight.py": "a565188f7519be4074ec0a389e7c46e2729f0c26a24fd46eae42d811432ac777",
+    "p1v3_heldout_judge.py": "3390d0da21adc7f94830c4a130c5378e3209f7e9c9a37ea0b73923d0d91dfa11",
+    "p1v3_heldout_measure.py": "b1901b8ef0f2e9d6ea2b4f270635bb91c89453d6bb3a6577eaa9eab7ee1f8294",
+    "p1v3_heldout_preflight.py": "f70332aaeda34530bb261c52ed1b1083b4561a3a2da355fe73d069c415a1eed4",
+    "p1v3_policy_environment.py": "1d43c073a84939c4888afc124c721984420821a5d4d13f0f5b4e5af52506fd62",
+    "p1v3_prepare.py": "44148dd327282c1af2c871d32524121aa1cfdb29eb43871cdca53ad90f22e6d8"
+  },
+  "p1v4_module_sha256": {
+    "p1v4_heldout_measure.py": "7308bada9a557d83977188478143ad13dc0b017e8e2c600ead3717aa1f15b3d9",
+    "p1v4_replay_bundle.py": "9a7ed6f89f52613902b5d4182bf4583f87008b5b87123851b67e57742ed2a618",
+    "p1v4_replay_judge.py": "792ecadfb21fcb7f719a7884cf95f9c4b5370a989ab8592ab66c5e2a8636e43b"
+  },
+  "prediction": {
+    "baseline": 0,
+    "credence": 0.8,
+    "direction": "higher",
+    "metric": "typed_improvement_count_vs_no_memory",
+    "minimum_typed_improvements_for_pass": 3,
+    "prediction_receipt_sha256": "4a9d8b579f076d4aeaf2fafb9b29ef58bfab70baa0081fd9d02e564ffebdf98c"
+  },
+  "preregistration_sha256": "4dfbb6cbbd4f7d6e3951f44bd75500f5fcaaf12d71cbf972094b9b51b979c8ae",
+  "prior_outcome_artifacts": [],
+  "prior_outcome_reuse": false,
+  "programme": "LakatosTree_HSWM_20260719",
+  "registered_at": "2026-07-24T03:55:54+09:00",
+  "registered_before_measurement": true,
+  "registration_state": "SERVER_REGISTERED_FROZEN_UNRUN",
+  "schema_version": "hswm-p1v4-preregistration/v1",
+  "tag": "p1v4-fresh-policy-replication-seed5-r2-20260724"
+}

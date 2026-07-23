@@ -26,7 +26,7 @@ EVIDENCE_SCHEMA_VERSION = "hswm-p1v4-policy-heldout-evidence/v1"
 COMPAT_PREREG_SCHEMA_VERSION = "hswm-p1v3-preregistration/v1"
 CONJECTURE = (
     "The previously successful training-derived typed source-policy mechanism "
-    "replicates on the fresh seed-4 conflict cut, improving at least three of "
+    "replicates on the fresh seed-5 R2 conflict cut, improving at least three of "
     "six frozen-model heldout answers versus no memory."
 )
 

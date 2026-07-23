@@ -1,0 +1,42 @@
+{
+  "schema_version": "hswm-p1v2-ooptdd-requirements/v1",
+  "cycle_id": "hswm-p1v2-typed-lesson-slice-20260724",
+  "correlation_id": "hswm-p1v2-typed-lesson-boundary-v1",
+  "requirement_group": "P1V2-TYPED-LESSON-PREMEASUREMENT",
+  "entrypoint": "p1v2_ooptdd_receipt:run_gate",
+  "requirements": [
+    {
+      "id": "P1V2-DEFECT-LEAKAGE",
+      "role": "guard_defect",
+      "event": "future_or_gold_lesson_rejected",
+      "check": "A recorded verdict containing a forbidden future identifier or heldout gold-derived string must fail before a lesson is emitted."
+    },
+    {
+      "id": "P1V2-MECHANISM-PARITY",
+      "role": "guard_mechanism",
+      "event": "four_arm_prompt_parity_verified",
+      "check": "The real parity planner must bind all four arm prompts to one exact token count and a content-addressed receipt."
+    },
+    {
+      "id": "P1V2-MECHANISM-EVIDENCE",
+      "role": "guard_mechanism",
+      "event": "verdict_free_evidence_verified",
+      "check": "The real evidence builder and readback verifier must accept grounded observations with provenance and no scientific verdict field."
+    }
+  ],
+  "forbidden_events": [
+    "future_or_gold_lesson_accepted",
+    "unequal_prompt_tokens_accepted",
+    "scientific_self_verdict_accepted"
+  ],
+  "positive_acceptance": {
+    "required_event_count": 3,
+    "forbidden_event_count": 0,
+    "measurement_or_model_claim": false
+  },
+  "negative_oracle": {
+    "injection": "Add a scientific verdict field after evidence construction, preserve the old evidence hash, and require the real readback verifier to reject it.",
+    "required_event": "scientific_self_verdict_rejected",
+    "forbidden_event": "scientific_self_verdict_accepted"
+  }
+}

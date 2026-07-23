@@ -197,6 +197,74 @@ Until the acceptance tests and completion receipt pass, defer:
 Existing research artifacts remain valid within their stated boundaries, but
 they do not close this gate.
 
+## Intelligence and neural-substrate claim boundary
+
+Passing the vertical slice would establish a durable causal feedback mechanism.
+It would not by itself establish that HSWM is an intelligent neural network.
+
+The strongest presently defensible target is narrower: HSWM may become an
+external recurrent, neuro-symbolic world-model and continual-learning substrate
+for a frozen foundation model.  The foundation model may still propose or
+interpret transitions, while persistent computational state, evidence-bearing
+plasticity, and later action selection occur through the evolving HSWM cut.
+This is materially different from claiming that HSWM already replaces a
+Transformer or independently supplies general intelligence.
+
+The boundary is causal:
+
+- if the LLM performs the relevant reasoning and HSWM merely stores its output,
+  HSWM is a structured memory or dynamic knowledge graph;
+- if a verdict changes the next action only because orchestration code inserts
+  verdict text into a prompt, the result is an agent workflow rather than an
+  HSWM learning result;
+- if accepted experience rewrites the shared cut and later computation reads
+  that changed cut such that removing the rewrite removes the behavioral
+  change, HSWM has demonstrated substrate-level plasticity;
+- if that plasticity improves held-out behavior or transfer with the base model
+  frozen, under an equal-compute control, HSWM has demonstrated a bounded form
+  of continual learning.
+
+### Post-gate neural-substrate falsifier
+
+After the generic runtime gate passes, freeze the base model, tools, initial
+cut, prompts, task distribution, and compute budget.  Compare:
+
+| arm | system |
+|---|---|
+| N0 | frozen model with no persistent memory |
+| N1 | transcript or vector memory |
+| N2 | append-only event log or dynamic KG without verdict-driven causal rewrite |
+| N3 | full HSWM feedback runtime |
+| N4 | HSWM ablation with the accepted rewrite removed, shuffled, or made unreadable to dispatch |
+
+Agent A must act and create an externally receipted observation.  LakatoTree
+must judge it independently.  Agent A on a held-out task, or Agent B without a
+parameter update, must then receive a measurable benefit from the committed
+HSWM cut.  The treatment claim survives only if:
+
+1. N3 beats the strongest of N1 and N2 by a preregistered margin under equal
+   compute;
+2. N4 removes or materially reduces that gain, identifying the committed HSWM
+   rewrite as the causal mediator;
+3. the gain transfers beyond exact replay of the training episode;
+4. false or rejected experience does not improve the target metric and is
+   appropriately refused, compensated, or routed away;
+5. retention on previously supported behavior stays within a preregistered
+   forgetting bound;
+6. the complete transition and readout are independently replayable from
+   receipts.
+
+Primary metrics should include held-out task success or next-action quality per
+unit compute.  Transfer rate, adaptation latency after refutation, false-memory
+rate, retention loss, and replay integrity are diagnostics.  A retrieval gain
+alone is insufficient for the neural-substrate claim.
+
+Failure has a useful interpretation.  If N3 does not beat N2, the current HSWM
+mechanism is not yet more than a dynamic KG plus audit.  If N3 beats N2 but N4
+does not remove the gain, the claimed HSWM rewrite is not the identified cause.
+If the mechanism test passes but held-out transfer fails, HSWM remains a valid
+feedback runtime without having established continual intelligence.
+
 ## Definition of done
 
 The gate is complete only when all statements below are true:

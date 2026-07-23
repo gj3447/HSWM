@@ -52,6 +52,7 @@ def test_h3_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "p1v3_heldout_judge",
         "p1v3_ooptdd_receipt",
         "p1v3_prepare",
+        "p1v4_replay_judge",
     } <= shipped
 
 

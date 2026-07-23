@@ -47,6 +47,9 @@ def test_h3_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "p1v3_calibration_gate",
         "p1v3_calibration_preflight",
         "p1v3_calibration_measure",
+        "p1v3_heldout_preflight",
+        "p1v3_heldout_measure",
+        "p1v3_heldout_judge",
         "p1v3_ooptdd_receipt",
         "p1v3_prepare",
     } <= shipped

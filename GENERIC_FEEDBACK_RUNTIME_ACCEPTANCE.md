@@ -202,13 +202,19 @@ they do not close this gate.
 Passing the vertical slice would establish a durable causal feedback mechanism.
 It would not by itself establish that HSWM is an intelligent neural network.
 
-The strongest presently defensible target is narrower: HSWM may become an
-external recurrent, neuro-symbolic world-model and continual-learning substrate
-for a frozen foundation model.  The foundation model may still propose or
-interpret transitions, while persistent computational state, evidence-bearing
-plasticity, and later action selection occur through the evolving HSWM cut.
-This is materially different from claiming that HSWM already replaces a
-Transformer or independently supplies general intelligence.
+The narrowing is evidential, not architectural.  The target identity remains the
+canonical one: HSWM's neural functional units are themselves LLM-executed, and
+the hypergraph topology together with the Semantic Weight Map is the macro-network
+that connects, routes, and reweights them (see
+[`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md)).
+HSWM is therefore not an external store attached to a separate brain, and the LLM
+is not one optional operator among the others; one frozen foundation model may
+realize many such functions, which is an implementation economy rather than a
+demotion.  What is presently defensible is only the measured part: persistent
+computational state, evidence-bearing plasticity, and later action selection
+occurring through the evolving HSWM cut.  That is materially different from
+claiming that HSWM already replaces a Transformer or independently supplies
+general intelligence.
 
 The boundary is causal:
 

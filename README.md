@@ -101,8 +101,11 @@ ports, connectors, activation, and rewrite vocabulary must account for
 retrieval, dispatch, planning, revision, specialization, separation, and
 multi-agent transfer wherever the evidence permits it.
 
-An LLM may propose, interpret, or judge a transition, but accepted persistent
-state must be materialized in `H` with provenance. A new subsystem must justify
+An LLM is how a functional unit of this network executes, not an operator bolted
+onto it; a transition it proposes, interprets, or judges becomes persistent only
+when materialized in `H` with provenance. CAS, CRDT, replay, and validation
+gates are the deterministic safety/control plane around those LLM-executed
+functions, not neurons of the network themselves. A new subsystem must justify
 why it cannot be expressed as activation, readout, composition, or typed
 rewrite of that shared substrate. Elegance here is an engineering and
 scientific constraint: fewer independent mechanisms mean stronger ablations,

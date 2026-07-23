@@ -1,0 +1,63 @@
+{
+  "artifacts": {
+    "bundle_file_sha256": "fac5195d59dfd42d3ecc0124b3e37211a4a26897e98c2a099cd0876669e4d098",
+    "bundle_sha256": "ec640b90730d2b9f9d20cc5c1723d7e51407768d3bc1bdf442752fa392cad6f3",
+    "evidence_file_sha256": "9b60a5a2f8ae14c5eec3694d45a26ec742a9f595a71ed40ac894556c5a910a4d",
+    "evidence_sha256": "334e2fde156d51269b929f5e392647c5e8c37f03a142dc2147aaefd6b664b61b",
+    "judge_file_sha256": "9f2ad214835fd5d7f54a5171b12ceaa2d120c32d3ca0c1362b251133ed115973",
+    "judge_receipt_sha256": "649b926b81f2cd439b7e181c1b94abd202ae397daec01783fb907733dc3c3db2"
+  },
+  "claim_boundary": "Fresh L0 answer-interface source-policy replication and deterministic server replay only; no result-to-credit-to-deltaW, Agent A-to-B transfer, learned topology rewiring, or consolidation claim.",
+  "measurement": {
+    "answer_db_complete": 24,
+    "no_memory_exact_set_match_count": 2,
+    "physical_model_calls": 24,
+    "prior_outcome_reuse": false,
+    "raw_transcript_exact_set_match_count": 4,
+    "removed_exact_set_match_count": 2,
+    "typed_exact_set_match_count": 6,
+    "typed_improvement_count_vs_no_memory": 4,
+    "valid_case_count": 6,
+    "verdict": "PASS"
+  },
+  "node_receipt": {
+    "cache_verdict": "partial",
+    "head_receipt_sha256": "9307a019d95cf65b815094bf474ba89924cd75330ed38caac744d4b68058aff6",
+    "rederived_from_receipt": true,
+    "verdict_chain_verified": true
+  },
+  "persistent_replay": {
+    "adapter_sha256": "792ecadfb21fcb7f719a7884cf95f9c4b5370a989ab8592ab66c5e2a8636e43b",
+    "bundle_path": "/opt/lakatotree/.runtime/HSWM/receipts/p1v4_policy_replay_bundle_seed5_r2_20260724.json",
+    "git_commit": "7b3fb899a73cf528128124442c206471eca0cf7c",
+    "judge_path": "/opt/lakatotree/.runtime/HSWM/p1v4_replay_judge.py",
+    "local_isolated_output": "metric=4",
+    "measurement_grade": "server_regenerated",
+    "replay_status": "verified",
+    "script_sha_server_verified": true
+  },
+  "prediction": {
+    "baseline": 0,
+    "credence": 0.8,
+    "direction": "higher",
+    "metric": "typed_improvement_count_vs_no_memory",
+    "minimum_typed_improvements_for_pass": 3,
+    "prediction_receipt_sha256": "4a9d8b579f076d4aeaf2fafb9b29ef58bfab70baa0081fd9d02e564ffebdf98c"
+  },
+  "question": {
+    "closed_by": "p1v4-fresh-policy-replication-seed5-r2-20260724",
+    "name": "Q-p1v4-server-replay-compatible-judge-seam",
+    "status": "CLOSED"
+  },
+  "result_receipt_sha256": "66c27da5e371d863aa94f654a23a784e915f4e233e92c25e7800d1c904c9280c",
+  "schema_version": "hswm-p1v4-lakatotree-result/v1",
+  "server_result": {
+    "assurance": 2,
+    "delta": 4,
+    "lakatos": "progressive",
+    "novel": false,
+    "verdict_display": "partial@L2(replay_verified)"
+  },
+  "tag": "p1v4-fresh-policy-replication-seed5-r2-20260724",
+  "tree": "LakatosTree_HSWM_20260719"
+}

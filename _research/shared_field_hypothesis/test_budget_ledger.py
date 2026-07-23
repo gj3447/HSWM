@@ -29,6 +29,19 @@ def _inventories(
     serialized_bytes: int = 64,
     shared_artifact_sha256: str = "c" * 64,
 ) -> tuple[dict, dict]:
+    required_shared_entries = [
+        {
+            "state_id": state_id,
+            "allocation_id": f"{arm_id}:{state_id}-allocation",
+            "role": role,
+            "byte_length": 32,
+            "learned": False,
+            "mutable": False,
+            "learned_block_id": None,
+            "shared_artifact_sha256": shared_artifact_sha256,
+        }
+        for state_id, role in ledger.REQUIRED_SHARED_IMMUTABLE_COMPONENT_REGISTRY
+    ]
     parameter_inventory = {
         "schema": ledger.PARAMETER_INVENTORY_SCHEMA,
         "arm_id": arm_id,
@@ -55,19 +68,18 @@ def _inventories(
                 "mutable": True,
                 "learned_block_id": "primary-block",
             },
-            {
-                "state_id": "shared-decoder",
-                "allocation_id": f"{arm_id}:shared-decoder-allocation",
-                "role": "immutable_decoder_component",
-                "byte_length": 32,
-                "learned": False,
-                "mutable": False,
-                "learned_block_id": None,
-                "shared_artifact_sha256": shared_artifact_sha256,
-            }
+            *required_shared_entries,
         ],
     }
     return parameter_inventory, state_inventory
+
+
+def _state_entry(state_inventory: dict, state_id: str) -> dict:
+    return next(
+        entry
+        for entry in state_inventory["entries"]
+        if entry["state_id"] == state_id
+    )
 
 
 def _arm_artifacts(
@@ -321,14 +333,112 @@ def test_shared_immutable_state_compares_semantics_and_hash_not_allocation_names
 
 def test_hash_shared_state_must_really_be_immutable() -> None:
     parameters, states = _inventories("one_field")
-    states["entries"][1]["mutable"] = True
+    _state_entry(states, "task_adapter")["mutable"] = True
     with pytest.raises(ledger.BudgetViolation) as caught:
         ledger.inspect_inventories(
             arm_id="one_field",
             parameter_inventory=parameters,
             serialized_state_inventory=states,
         )
-    assert caught.value.code == "SHARED_ARTIFACT_STATE_INVALID"
+    assert caught.value.code == "REQUIRED_SHARED_COMPONENT_STATE_INVALID"
+
+
+@pytest.mark.parametrize(
+    ("mutation", "expected_code"),
+    [
+        ("missing", "REQUIRED_SHARED_COMPONENT_MISSING"),
+        ("renamed", "UNREGISTERED_SHARED_ARTIFACT"),
+        ("role_spoof", "REQUIRED_SHARED_COMPONENT_ROLE_MISMATCH"),
+        ("hash_omitted", "REQUIRED_SHARED_COMPONENT_HASH_MISSING"),
+    ],
+)
+def test_required_shared_registry_fails_closed(
+    mutation: str, expected_code: str
+) -> None:
+    parameters, states = _inventories("one_field")
+    target = _state_entry(states, "task_adapter")
+    if mutation == "missing":
+        states["entries"].remove(target)
+    elif mutation == "renamed":
+        target["state_id"] = "common_component_task_adapter"
+    elif mutation == "role_spoof":
+        target["role"] = "common_component_task_adapter"
+    else:
+        target.pop("shared_artifact_sha256")
+
+    with pytest.raises(ledger.BudgetViolation) as caught:
+        ledger.inspect_inventories(
+            arm_id="one_field",
+            parameter_inventory=parameters,
+            serialized_state_inventory=states,
+        )
+    assert caught.value.code == expected_code
+
+
+def test_empty_shared_binding_marker_bypass_and_unregistered_sharing_are_rejected() -> None:
+    parameters, states = _inventories("one_field")
+    for index, (state_id, _role) in enumerate(
+        ledger.REQUIRED_SHARED_IMMUTABLE_COMPONENT_REGISTRY
+    ):
+        target = _state_entry(states, state_id)
+        target["state_id"] = f"common_component_{index}"
+        target["role"] = f"common_component_role_{index}"
+        target.pop("shared_artifact_sha256")
+    with pytest.raises(ledger.BudgetViolation) as caught:
+        ledger.inspect_inventories(
+            arm_id="one_field",
+            parameter_inventory=parameters,
+            serialized_state_inventory=states,
+        )
+    assert caught.value.code == "REQUIRED_SHARED_COMPONENT_MISSING"
+
+    parameters, states = _inventories("one_field")
+    states["entries"].append(
+        {
+            "state_id": "arm_local_cache",
+            "allocation_id": "arm-local-cache-allocation",
+            "role": "immutable_arm_local_cache",
+            "byte_length": 8,
+            "learned": False,
+            "mutable": False,
+            "learned_block_id": None,
+            "shared_artifact_sha256": "f" * 64,
+        }
+    )
+    with pytest.raises(ledger.BudgetViolation) as caught:
+        ledger.inspect_inventories(
+            arm_id="one_field",
+            parameter_inventory=parameters,
+            serialized_state_inventory=states,
+        )
+    assert caught.value.code == "UNREGISTERED_SHARED_ARTIFACT"
+
+
+def test_arm_local_immutable_state_is_allowed_without_claiming_shared() -> None:
+    parameters, states = _inventories("one_field")
+    states["entries"].append(
+        {
+            "state_id": "arm_local_decoder_cache",
+            "allocation_id": "arm-local-decoder-cache-allocation",
+            "role": "immutable_arm_local_decoder_cache",
+            "byte_length": 8,
+            "learned": False,
+            "mutable": False,
+            "learned_block_id": None,
+        }
+    )
+    report = ledger.inspect_inventories(
+        arm_id="one_field",
+        parameter_inventory=parameters,
+        serialized_state_inventory=states,
+    )
+    assert [
+        binding["state_id"]
+        for binding in report["shared_immutable_state_bindings"]
+    ] == [
+        state_id
+        for state_id, _role in ledger.REQUIRED_SHARED_IMMUTABLE_COMPONENT_REGISTRY
+    ]
 
 
 def test_padding_usage_is_rejected() -> None:
@@ -525,6 +635,18 @@ def test_engineering_receipt_joins_verified_replay_budget_inventory_and_code() -
         {"arm_id": arm_id, "role_id": harness.ARM_ROLE_IDS[arm_id]}
         for arm_id in harness.CANONICAL_ARM_IDS
     ]
+    required_shared_registry = [
+        {"state_id": state_id, "role": role}
+        for state_id, role in ledger.REQUIRED_SHARED_IMMUTABLE_COMPONENT_REGISTRY
+    ]
+    registry_binding = receipt["shared_immutable_component_registry"]
+    assert registry_binding["required_components"] == required_shared_registry
+    assert registry_binding["registry_sha256"] == harness.canonical_sha256(
+        required_shared_registry
+    )
+    assert registry_binding["verified_on_arms"] == list(harness.CANONICAL_ARM_IDS)
+    assert registry_binding["allocation_id_cross_arm_authoritative"] is False
+    assert registry_binding["complete"] is True
     assert receipt["budget"]["exact_parity_cohort"] == list(
         harness.EXACT_PARITY_COHORT
     )
@@ -548,6 +670,9 @@ def test_engineering_receipt_joins_verified_replay_budget_inventory_and_code() -
         assert len(arm["usage_events_sha256"]) == 64
         assert len(arm["parameter_inventory_sha256"]) == 64
         assert len(arm["serialized_state_inventory_sha256"]) == 64
+        assert arm[
+            "required_shared_immutable_component_registry_sha256"
+        ] == registry_binding["registry_sha256"]
         assert len(arm["event_topology_sha256"]) == 64
         assert arm["event_topology"]["scopes"][0]["update_packets"] == 1
         assert arm["event_topology"]["scopes"][0]["evaluation_cadence"] == 1
@@ -628,9 +753,12 @@ def test_receipt_rejects_replay_topology_not_backed_by_usage_counter(
 
 def test_receipt_compares_shared_immutable_state_across_all_four_arms() -> None:
     experiment, inventories = _receipt_fixture()
-    inventories["hard_versioned_revision_comparator"][
-        "serialized_state_inventory"
-    ]["entries"][1]["shared_artifact_sha256"] = "d" * 64
+    _state_entry(
+        inventories["hard_versioned_revision_comparator"][
+            "serialized_state_inventory"
+        ],
+        "shared_decoder",
+    )["shared_artifact_sha256"] = "d" * 64
     with pytest.raises(harness.HarnessViolation) as caught:
         harness.build_engineering_receipt(
             experiment=experiment,
@@ -641,6 +769,29 @@ def test_receipt_compares_shared_immutable_state_across_all_four_arms() -> None:
         )
     assert caught.value.code == "BUDGET_INVALID"
     assert "BUDGET_INVALID_SHARED_ARTIFACT" in str(caught.value)
+
+
+def test_receipt_rejects_empty_shared_binding_marker_bypass() -> None:
+    experiment, inventories = _receipt_fixture()
+    states = inventories["unversioned_negative_control"][
+        "serialized_state_inventory"
+    ]
+    for index, (state_id, _role) in enumerate(
+        ledger.REQUIRED_SHARED_IMMUTABLE_COMPONENT_REGISTRY
+    ):
+        target = _state_entry(states, state_id)
+        target["state_id"] = f"common_component_{index}"
+        target["role"] = f"common_component_role_{index}"
+        target.pop("shared_artifact_sha256")
+    with pytest.raises(harness.HarnessViolation) as caught:
+        harness.build_engineering_receipt(
+            experiment=experiment,
+            required_arms=harness.CANONICAL_ARM_IDS,
+            arm_inventories=inventories,
+            evaluator_sha256="e" * 64,
+            analysis_code_sha256="d" * 64,
+        )
+    assert caught.value.code == "REQUIRED_SHARED_COMPONENT_MISSING"
 
 
 @pytest.mark.parametrize(
@@ -745,6 +896,22 @@ def test_e1_contract_is_engineering_only_and_exposes_future_falsifiers() -> None
     assert contract["budget_authority"]["replay_derivable_counter_scope"] == list(
         harness.REPLAY_DERIVED_USAGE_COUNTERS
     )
+    required_shared_registry = [
+        {"state_id": state_id, "role": role}
+        for state_id, role in ledger.REQUIRED_SHARED_IMMUTABLE_COMPONENT_REGISTRY
+    ]
+    assert contract["inventory_contract"][
+        "required_shared_immutable_component_registry"
+    ] == required_shared_registry
+    assert contract["inventory_contract"][
+        "required_shared_registry_frozen_for_receipt_schema"
+    ] is True
+    assert {
+        "REQUIRED_SHARED_COMPONENT_MISSING",
+        "REQUIRED_SHARED_COMPONENT_ROLE_MISMATCH",
+        "REQUIRED_SHARED_COMPONENT_HASH_MISSING",
+        "UNREGISTERED_SHARED_ARTIFACT",
+    }.issubset(contract["mismatch_codes"])
     assert "RAW_USAGE_ONLY_NOT_REPLAY_DERIVABLE" in contract["budget_authority"][
         "counter_sources"
     ]["dispatch_count"]

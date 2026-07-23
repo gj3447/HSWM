@@ -58,6 +58,15 @@ ARTIFACT_PARITY_GUARDS = (
 )
 SEED_DIMENSION = "seed_binding"
 
+# E1 receipts are comparable only when every arm exposes this frozen common
+# interface.  Inventory authors cannot satisfy the requirement by inventing a
+# new role marker: state_id and role are both registry authority.
+REQUIRED_SHARED_IMMUTABLE_COMPONENT_REGISTRY = (
+    ("task_adapter", "immutable_task_adapter"),
+    ("candidate_transform", "immutable_candidate_transform"),
+    ("shared_decoder", "immutable_decoder_component"),
+)
+
 _INVENTORY_DERIVED = {
     "unique_trainable_parameters",
     "serialized_mutable_bytes",
@@ -374,7 +383,8 @@ def inspect_inventories(
     serialized_learned_bytes = 0
     serialized_mutable_bytes = 0
     normalized_entries: list[dict[str, Any]] = []
-    shared_immutable_bindings: list[dict[str, Any]] = []
+    shared_immutable_bindings_by_id: dict[str, dict[str, Any]] = {}
+    required_shared_roles = dict(REQUIRED_SHARED_IMMUTABLE_COMPONENT_REGISTRY)
     for index, raw_entry in enumerate(entries):
         if not isinstance(raw_entry, Mapping):
             raise BudgetViolation("STATE_ENTRY_INVALID", f"state entry {index} is not an object")
@@ -393,6 +403,23 @@ def inspect_inventories(
         if block_id is not None:
             block_id = _text(block_id, f"state entry {index} learned_block_id")
         shared_hash = entry.get("shared_artifact_sha256")
+        required_role = required_shared_roles.get(state_id)
+        if required_role is not None and role != required_role:
+            raise BudgetViolation(
+                "REQUIRED_SHARED_COMPONENT_ROLE_MISMATCH",
+                f"state {state_id!r} must have role {required_role!r}, observed {role!r}",
+            )
+        if required_role is not None:
+            if learned or mutable or block_id is not None:
+                raise BudgetViolation(
+                    "REQUIRED_SHARED_COMPONENT_STATE_INVALID",
+                    f"required shared state {state_id!r} must be immutable and non-learned",
+                )
+            if shared_hash is None:
+                raise BudgetViolation(
+                    "REQUIRED_SHARED_COMPONENT_HASH_MISSING",
+                    f"required shared state {state_id!r} lacks shared_artifact_sha256",
+                )
         if shared_hash is not None:
             if not _is_sha256(shared_hash):
                 raise BudgetViolation(
@@ -403,6 +430,11 @@ def inspect_inventories(
                 raise BudgetViolation(
                     "SHARED_ARTIFACT_STATE_INVALID",
                     f"state {state_id!r} claims hash-sharing but is learned or mutable",
+                )
+            if required_role is None:
+                raise BudgetViolation(
+                    "UNREGISTERED_SHARED_ARTIFACT",
+                    f"state {state_id!r} claims sharing outside the frozen registry",
                 )
         if state_id in seen_state_ids:
             raise BudgetViolation("DUPLICATE_STATE_ID", f"state id {state_id!r} is listed twice")
@@ -420,10 +452,10 @@ def inspect_inventories(
                 "HIDDEN_HEAD_DETECTED", f"learned state {state_id!r} has no registered block"
             )
         if _role_looks_head_like(role) and block_id is None:
-            if learned or mutable or not _is_sha256(shared_hash):
+            if learned or mutable:
                 raise BudgetViolation(
                     "HIDDEN_HEAD_DETECTED",
-                    f"head-like state {state_id!r} is neither registered nor immutable hash-shared",
+                    f"head-like state {state_id!r} is mutable or learned but unregistered",
                 )
         if block_id is not None:
             serialized_learned_bytes += byte_length
@@ -446,23 +478,38 @@ def inspect_inventories(
         if shared_hash is not None:
             # allocation_id is deliberately absent: allocation namespaces are
             # arm-local.  Semantic identity and content must still be identical.
-            shared_immutable_bindings.append(
-                {
-                    "state_id": state_id,
-                    "role": role,
-                    "byte_length": byte_length,
-                    "learned": learned,
-                    "mutable": mutable,
-                    "learned_block_id": block_id,
-                    "shared_artifact_sha256": shared_hash,
-                }
-            )
+            shared_immutable_bindings_by_id[state_id] = {
+                "state_id": state_id,
+                "role": role,
+                "byte_length": byte_length,
+                "learned": learned,
+                "mutable": mutable,
+                "learned_block_id": block_id,
+                "shared_artifact_sha256": shared_hash,
+            }
+
+    missing_required_shared = [
+        state_id
+        for state_id, _role in REQUIRED_SHARED_IMMUTABLE_COMPONENT_REGISTRY
+        if state_id not in seen_state_ids
+    ]
+    if missing_required_shared:
+        raise BudgetViolation(
+            "REQUIRED_SHARED_COMPONENT_MISSING",
+            "state inventory lacks frozen shared components: "
+            + ",".join(missing_required_shared),
+        )
 
     normalized_blocks.sort(key=lambda item: item["learned_block_id"])
     normalized_entries.sort(key=lambda item: item["state_id"])
-    shared_immutable_bindings.sort(
-        key=lambda item: (item["state_id"], item["role"])
-    )
+    required_registry = [
+        {"state_id": state_id, "role": role}
+        for state_id, role in REQUIRED_SHARED_IMMUTABLE_COMPONENT_REGISTRY
+    ]
+    shared_immutable_bindings = [
+        shared_immutable_bindings_by_id[state_id]
+        for state_id, _role in REQUIRED_SHARED_IMMUTABLE_COMPONENT_REGISTRY
+    ]
     report = {
         "arm_id": arm_id,
         "learned_block_ids": sorted(seen_block_ids),
@@ -471,6 +518,10 @@ def inspect_inventories(
         "serialized_learned_state_bytes": serialized_learned_bytes,
         "parameter_allocations": normalized_blocks,
         "state_allocations": normalized_entries,
+        "required_shared_immutable_component_registry": required_registry,
+        "required_shared_immutable_component_registry_sha256": _digest(
+            required_registry
+        ),
         "shared_immutable_state_bindings": shared_immutable_bindings,
     }
     report["inventory_sha256"] = _digest(report)
@@ -902,6 +953,7 @@ __all__ = [
     "PARAMETER_INVENTORY_SCHEMA",
     "PARITY_SCHEMA",
     "PROJECTION_SCHEMA",
+    "REQUIRED_SHARED_IMMUTABLE_COMPONENT_REGISTRY",
     "SEED_DIMENSION",
     "STATE_INVENTORY_SCHEMA",
     "USAGE_SCHEMA",

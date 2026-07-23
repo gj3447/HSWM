@@ -752,6 +752,11 @@ def build_engineering_receipt(
         import budget_ledger as budget
     except ImportError as exc:  # pragma: no cover - installation failure, not policy
         raise HarnessViolation("BUDGET_LEDGER_UNAVAILABLE", str(exc)) from exc
+    required_shared_registry = [
+        {"state_id": state_id, "role": role}
+        for state_id, role in budget.REQUIRED_SHARED_IMMUTABLE_COMPONENT_REGISTRY
+    ]
+    required_shared_registry_sha256 = canonical_sha256(required_shared_registry)
 
     verified_replays: dict[str, ReplayResult] = {}
     verified_event_logs: dict[str, tuple[dict[str, Any], ...]] = {}
@@ -847,6 +852,14 @@ def build_engineering_receipt(
     for arm_id in arms:
         replay = verified_replays[arm_id]
         projection = parity["projections"][arm_id]
+        registry_digest = projection["inventory"][
+            "required_shared_immutable_component_registry_sha256"
+        ]
+        if registry_digest != required_shared_registry_sha256:
+            raise HarnessViolation(
+                "REQUIRED_SHARED_COMPONENT_REGISTRY_MISMATCH",
+                f"arm {arm_id!r} was checked against another shared registry",
+            )
         arm_replays[arm_id] = {
             "run_id": replay.run_id,
             "event_count": replay.event_count,
@@ -866,6 +879,7 @@ def build_engineering_receipt(
             "shared_immutable_state_bindings_sha256": canonical_sha256(
                 projection["inventory"]["shared_immutable_state_bindings"]
             ),
+            "required_shared_immutable_component_registry_sha256": registry_digest,
             "event_topology": {
                 key: value
                 for key, value in event_topologies[arm_id].items()
@@ -887,6 +901,13 @@ def build_engineering_receipt(
             for arm_id in arms
         ],
         "arm_replays": arm_replays,
+        "shared_immutable_component_registry": {
+            "required_components": required_shared_registry,
+            "registry_sha256": required_shared_registry_sha256,
+            "verified_on_arms": list(CANONICAL_ARM_IDS),
+            "allocation_id_cross_arm_authoritative": False,
+            "complete": True,
+        },
         "isolation": {
             "unique_run_ids": True,
             "mutable_state_object_ids_disjoint": True,
@@ -897,6 +918,7 @@ def build_engineering_receipt(
             "equal_measured_budget": True,
             "exact_parity_cohort": list(EXACT_PARITY_COHORT),
             "shared_immutable_state_cohort": list(CANONICAL_ARM_IDS),
+            "required_shared_component_registry_complete": True,
             "control_arm_policy": {
                 "policy_code": CONTROL_BUDGET_POLICY_CODE,
                 "arms": list(CONTROL_ARM_IDS),

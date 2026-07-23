@@ -157,8 +157,26 @@
     "unique_learned_block_ids": true,
     "unique_parameter_allocations": true,
     "unique_serialized_state_allocations": true,
+    "required_shared_immutable_component_registry": [
+      {
+        "state_id": "task_adapter",
+        "role": "immutable_task_adapter"
+      },
+      {
+        "state_id": "candidate_transform",
+        "role": "immutable_candidate_transform"
+      },
+      {
+        "state_id": "shared_decoder",
+        "role": "immutable_decoder_component"
+      }
+    ],
+    "required_shared_registry_frozen_for_receipt_schema": true,
+    "required_shared_registry_presence": "every canonical A/B/C/D state inventory must contain the exact state_id/role set with learned=false, mutable=false, learned_block_id=null, and valid shared_artifact_sha256",
+    "registry_outside_immutable_state": "allowed only as arm-local state without shared_artifact_sha256",
+    "registry_outside_shared_hash_claim": "UNREGISTERED_SHARED_ARTIFACT",
     "unregistered_learned_or_head_like_state": "HIDDEN_HEAD_DETECTED",
-    "immutable_head_like_component_exception": "allowed only when learned=false, mutable=false, and every required arm has byte-identical semantic identity plus shared_artifact_sha256",
+    "immutable_head_like_component_exception": "required shared components are authorized only by the frozen registry; other immutable head-like state may be arm-local but may not claim shared_artifact_sha256",
     "shared_component_semantic_identity": [
       "state_id",
       "role",
@@ -189,6 +207,12 @@
     "BUDGET_EVENT_TOPOLOGY_SCOPE_INVALID",
     "BUDGET_EVENT_TOPOLOGY_MISMATCH",
     "RECEIPT_ARM_SET_INVALID",
+    "REQUIRED_SHARED_COMPONENT_MISSING",
+    "REQUIRED_SHARED_COMPONENT_ROLE_MISMATCH",
+    "REQUIRED_SHARED_COMPONENT_STATE_INVALID",
+    "REQUIRED_SHARED_COMPONENT_HASH_MISSING",
+    "REQUIRED_SHARED_COMPONENT_REGISTRY_MISMATCH",
+    "UNREGISTERED_SHARED_ARTIFACT",
     "CAPPED_RESOURCE_EXCEEDED",
     "HIDDEN_HEAD_DETECTED",
     "DUPLICATE_ALLOCATION",
@@ -204,6 +228,7 @@
       "missing, reordered, tampered, duplicate-conflict, and cross-arm injections fail closed",
       "all E1 exact dimensions and prior-artifact guards are source-complete; exact equality is required only for the A/B exact parity cohort",
       "C/D control projections are bound and guarded under CONTROL_ARCHITECTURE_EXACT_PARITY_EXEMPT",
+      "every A/B/C/D inventory contains the frozen task_adapter, candidate_transform, and shared_decoder registry with exact roles and immutable hash bindings",
       "shared immutable component semantic identity and content hashes match across all A/B/C/D arms while allocation namespaces are ignored",
       "update and evaluation event counts independently match their per-task/per-split usage assertions",
       "capped resources are separately reported and within numeric caps when caps are supplied",
@@ -243,6 +268,8 @@
     "The receipt accepts any arm set other than the canonical A/B/C/D IDs, or caller order changes canonical receipt bytes.",
     "A/B pass when any required E1 exact dimension or source usage event is missing or unequal.",
     "C/D are forced into A/B parameter equality instead of being explicitly projected and guarded controls.",
+    "All arms omit or rename required shared components so empty shared-binding lists compare equal and still receive EXPERIMENT_HARNESS_PASS.",
+    "A required shared component spoofs its role, omits its hash, becomes learned or mutable, or references a learned block while the receipt still passes.",
     "A shared immutable component changes semantic identity or content hash in any required arm while parity still passes.",
     "An extra update or evaluation event disagrees with its usage counter while the receipt still passes.",
     "A learned block, mutable head-like state, or duplicate allocation escapes inventory accounting.",

@@ -1,0 +1,252 @@
+{
+  "dataset_file_sha256": {
+    "articles.json": "943a25869db58c862641d90979ea545b888342ed36fba301dcd1ae0b6a9de52e",
+    "questions/type6.json": "05a6b7903fd4c2d9cacdf837e7a31d2f80f596180429303c20222b3a8fda85c4"
+  },
+  "development_sidecar_sha256": "abe10115222b6eb2b6aecad376e227cbebc841bdf28941ae75428c25c3633cf4",
+  "generation_receipt_sha256": "065755b78693e427690da60015c4cb26e1921e2f220333a55eb7e33270ebcc17",
+  "heldout_sidecar_sha256": "7b3c333411b94ab02422780fbe5f71e42ccab7c882d78b752b2234b82907e177",
+  "opaque_source_classes": [
+    "RHO",
+    "TAU"
+  ],
+  "public_manifest_sha256": "540ddf9319d03939da5bb01626a639811b0d85dc988f48a0fcab61944dd3e5cb",
+  "schema_version": "hswm-p1v3-policy-public-manifest/v1",
+  "selection": {
+    "gold_answer_or_cardinality_inspected": false,
+    "public_exact_match_count": 1,
+    "question_type": 6,
+    "selection_fields": [
+      "type",
+      "id",
+      "question",
+      "public_exact_match_count"
+    ],
+    "selection_seed": 20260724,
+    "split_sizes": {
+      "calibration": 3,
+      "heldout": 6,
+      "training": 1
+    }
+  },
+  "source_policy_semantics_published": false,
+  "splits": {
+    "calibration": [
+      {
+        "case_id": "b753e9bd-96ff-47a1-b2c8-d33e33ef6dfa",
+        "derivation_sha256": "f7f76d5035d5df746e510d1b3db974a37c7c7f9a9990d3c97d08846d69690a1b",
+        "document_count": 2,
+        "documents": [
+          {
+            "source_id": "policy:56d928976ae92bd2fed2d7249331d818",
+            "text": "[SOURCE_CLASS=RHO]\n# Steven Deering\n\n## Family\nThe son of Steven Deering is Cordell Deering.\nThe wife of Steven Deering is Patty Deering.\n\n## Friends\n\n\n## Attributes\nThe date of birth of Steven Deering is 0263-02-11.\nThe occupation of Steven Deering is network engineer.\nThe hobby of Steven Deering is volleyball.\nThe gender of Steven Deering is male.\n",
+            "title": "Steven Deering"
+          },
+          {
+            "source_id": "policy:e3455dd5949ac806809d9936980d73ea",
+            "text": "[SOURCE_CLASS=TAU]\n# Shandi Wertz\n\n## Family\nThe son of Shandi Wertz is Isidro Wertz.\nThe daughters of Shandi Wertz are Madelyn Haskins, Mari Wertz, Sasha Wertz.\nThe husband of Shandi Wertz is Orval Wertz.\n\n## Friends\nThe friend of Shandi Wertz is Delma Mares.\n\n## Attributes\nThe date of birth of Shandi Wertz is 0227-11-09.\nThe occupation of Shandi Wertz is physiotherapist.\nThe hobby of Shandi Wertz is sea glass collecting.\nThe gender of Shandi Wertz is female.\n\nThe date of birth of Shandi Wertz is 0263-02-11.",
+            "title": "Shandi Wertz"
+          }
+        ],
+        "public_case_sha256": "a0fefba71a7b8d2df6d775eca123b19dcf62f18ebf0600e1ad19069dbc5faa96",
+        "question": "Who is the person whose date of birth is 0263-02-11?",
+        "schema_version": "hswm-p1v3-policy-conflict-case/v1",
+        "split": "calibration"
+      },
+      {
+        "case_id": "0c4b80ca-6458-4f51-9181-7c72f22b39e7",
+        "derivation_sha256": "f74d24fa7fa94db769f9dedf793ee3e72095b3ca4f6e5f5564015ed9a0fe00d1",
+        "document_count": 2,
+        "documents": [
+          {
+            "source_id": "policy:6da3547fd850631e2a82b67329e2c7c4",
+            "text": "[SOURCE_CLASS=RHO]\n# Derek Bolen\n\n## Family\nThe sister of Derek Bolen is Mallory Byler.\nThe mother of Derek Bolen is Terri Bolen.\nThe father of Derek Bolen is William Bolen.\nThe sons of Derek Bolen are Darrel Bolen, Heath Bolen.\nThe daughter of Derek Bolen is Lora Bolen.\nThe wife of Derek Bolen is Daphne Bolen.\n\n## Friends\nThe friend of Derek Bolen is Isaac Shumaker.\n\n## Attributes\nThe date of birth of Derek Bolen is 0261-07-17.\nThe occupation of Derek Bolen is civil service administrator.\nThe hobby of Derek Bolen is leaves.\nThe gender of Derek Bolen is male.\n",
+            "title": "Derek Bolen"
+          },
+          {
+            "source_id": "policy:c794c906778c2a761a3c3a8d7a8b9dbb",
+            "text": "[SOURCE_CLASS=TAU]\n# Shandi Wertz\n\n## Family\nThe son of Shandi Wertz is Isidro Wertz.\nThe daughters of Shandi Wertz are Madelyn Haskins, Mari Wertz, Sasha Wertz.\nThe husband of Shandi Wertz is Orval Wertz.\n\n## Friends\nThe friend of Shandi Wertz is Delma Mares.\n\n## Attributes\nThe date of birth of Shandi Wertz is 0227-11-09.\nThe occupation of Shandi Wertz is physiotherapist.\nThe hobby of Shandi Wertz is sea glass collecting.\nThe gender of Shandi Wertz is female.\n\nThe date of birth of Shandi Wertz is 0261-07-17.",
+            "title": "Shandi Wertz"
+          }
+        ],
+        "public_case_sha256": "d48cc89688ec25ff5e356803ae34719cc03eae1cb7e9e30a800a0b4c613ff587",
+        "question": "Who is the person whose date of birth is 0261-07-17?",
+        "schema_version": "hswm-p1v3-policy-conflict-case/v1",
+        "split": "calibration"
+      },
+      {
+        "case_id": "4d095fe8-e6f1-4b3a-a7ad-42e98c7fe3e1",
+        "derivation_sha256": "c3850097513ae6c8d8c9d335f9d0585a04cb93b05b0e4738a5fbea97440dbaa5",
+        "document_count": 2,
+        "documents": [
+          {
+            "source_id": "policy:11cbac65eb7ac7ecb92c46874666dab8",
+            "text": "[SOURCE_CLASS=RHO]\n# Tresa Galindo\n\n## Family\nThe sister of Tresa Galindo is Essie Munoz.\nThe brother of Tresa Galindo is Vicente Galindo.\nThe mother of Tresa Galindo is Lashawnda Galindo.\nThe father of Tresa Galindo is Johnny Galindo.\n\n## Friends\nThe friend of Tresa Galindo is Tonia Lorenz.\n\n## Attributes\nThe date of birth of Tresa Galindo is 0288-04-25.\nThe occupation of Tresa Galindo is museum education officer.\nThe hobby of Tresa Galindo is speedcubing.\nThe gender of Tresa Galindo is female.\n",
+            "title": "Tresa Galindo"
+          },
+          {
+            "source_id": "policy:a24e5f091c5a3982768b62b278ef4d20",
+            "text": "[SOURCE_CLASS=TAU]\n# Shandi Wertz\n\n## Family\nThe son of Shandi Wertz is Isidro Wertz.\nThe daughters of Shandi Wertz are Madelyn Haskins, Mari Wertz, Sasha Wertz.\nThe husband of Shandi Wertz is Orval Wertz.\n\n## Friends\nThe friend of Shandi Wertz is Delma Mares.\n\n## Attributes\nThe date of birth of Shandi Wertz is 0227-11-09.\nThe occupation of Shandi Wertz is physiotherapist.\nThe hobby of Shandi Wertz is sea glass collecting.\nThe gender of Shandi Wertz is female.\n\nThe date of birth of Shandi Wertz is 0288-04-25.",
+            "title": "Shandi Wertz"
+          }
+        ],
+        "public_case_sha256": "d5592e8e03f35e5c36903bbd03e6538c2235994afc6c8efb47a9259fb4c39475",
+        "question": "Who is the person whose date of birth is 0288-04-25?",
+        "schema_version": "hswm-p1v3-policy-conflict-case/v1",
+        "split": "calibration"
+      }
+    ],
+    "heldout": [
+      {
+        "case_id": "d4c4871c-2821-4dc7-b6e3-2e36d0c0d06a",
+        "derivation_sha256": "289d967eab8839245f91bde1797e82feb7afc71e82f7ffaed8c47d113edfbd20",
+        "document_count": 2,
+        "documents": [
+          {
+            "source_id": "policy:0c0759b082251176d042483e95bae8d9",
+            "text": "[SOURCE_CLASS=RHO]\n# Micki Sierra\n\n## Family\nThe sister of Micki Sierra is Lynelle Sierra.\nThe mother of Micki Sierra is Jacquline Sierra.\nThe father of Micki Sierra is Roberto Sierra.\n\n## Friends\nThe friend of Micki Sierra is Ashton Stansbury.\n\n## Attributes\nThe date of birth of Micki Sierra is 0314-07-02.\nThe occupation of Micki Sierra is electronics engineer.\nThe hobby of Micki Sierra is life science.\nThe gender of Micki Sierra is female.\n",
+            "title": "Micki Sierra"
+          },
+          {
+            "source_id": "policy:27f83e60aec56f8ab9aa3ec82b4dca04",
+            "text": "[SOURCE_CLASS=TAU]\n# Shandi Wertz\n\n## Family\nThe son of Shandi Wertz is Isidro Wertz.\nThe daughters of Shandi Wertz are Madelyn Haskins, Mari Wertz, Sasha Wertz.\nThe husband of Shandi Wertz is Orval Wertz.\n\n## Friends\nThe friend of Shandi Wertz is Delma Mares.\n\n## Attributes\nThe date of birth of Shandi Wertz is 0227-11-09.\nThe occupation of Shandi Wertz is physiotherapist.\nThe hobby of Shandi Wertz is sea glass collecting.\nThe gender of Shandi Wertz is female.\n\nThe date of birth of Shandi Wertz is 0314-07-02.",
+            "title": "Shandi Wertz"
+          }
+        ],
+        "public_case_sha256": "f27ef3eb9e0608ed9055a91c9948e61665696206cc747f23b86c2985ec033638",
+        "question": "Who is the person whose date of birth is 0314-07-02?",
+        "schema_version": "hswm-p1v3-policy-conflict-case/v1",
+        "split": "heldout"
+      },
+      {
+        "case_id": "affb27b0-6084-4735-8a3e-0a6b77c3d314",
+        "derivation_sha256": "e638968599adc434c6441641347fabac62e9009f844afffd0707a07e58161249",
+        "document_count": 2,
+        "documents": [
+          {
+            "source_id": "policy:6244dab6e6cfcd1eb1c73398c21cb543",
+            "text": "[SOURCE_CLASS=TAU]\n# Shandi Wertz\n\n## Family\nThe son of Shandi Wertz is Isidro Wertz.\nThe daughters of Shandi Wertz are Madelyn Haskins, Mari Wertz, Sasha Wertz.\nThe husband of Shandi Wertz is Orval Wertz.\n\n## Friends\nThe friend of Shandi Wertz is Delma Mares.\n\n## Attributes\nThe date of birth of Shandi Wertz is 0227-11-09.\nThe occupation of Shandi Wertz is physiotherapist.\nThe hobby of Shandi Wertz is sea glass collecting.\nThe gender of Shandi Wertz is female.\n\nThe date of birth of Shandi Wertz is 0244-01-10.",
+            "title": "Shandi Wertz"
+          },
+          {
+            "source_id": "policy:ce1724615b09bbc38282c99f7ccf198b",
+            "text": "[SOURCE_CLASS=RHO]\n# Aldo Peck\n\n## Family\nThe daughter of Aldo Peck is Sherita Peck.\nThe wife of Aldo Peck is Winnie Peck.\n\n## Friends\nThe friend of Aldo Peck is Scot Moorehead.\n\n## Attributes\nThe date of birth of Aldo Peck is 0244-01-10.\nThe occupation of Aldo Peck is airline pilot.\nThe hobby of Aldo Peck is magnet fishing.\nThe gender of Aldo Peck is male.\n",
+            "title": "Aldo Peck"
+          }
+        ],
+        "public_case_sha256": "0c9ce22a5b83ee474fcc99fe537f4a3a8cbf43d19f3deabd28470c9ef662bd12",
+        "question": "Who is the person whose date of birth is 0244-01-10?",
+        "schema_version": "hswm-p1v3-policy-conflict-case/v1",
+        "split": "heldout"
+      },
+      {
+        "case_id": "7231de06-3260-40c3-811e-446470373eb5",
+        "derivation_sha256": "a98dc7c69cbe087ec4d334ce355c68d0a107ab088b211e4131502ce51355b502",
+        "document_count": 2,
+        "documents": [
+          {
+            "source_id": "policy:5fcf9cb7362442bb6b7dfc1e06c0539f",
+            "text": "[SOURCE_CLASS=RHO]\n# Katerine Fogle\n\n## Family\nThe sons of Katerine Fogle are Alfredo Fogle, Alvin Fogle, Johnathan Fogle.\nThe daughters of Katerine Fogle are Henrietta Fogle, Leslee Fogle.\nThe husband of Katerine Fogle is Galen Fogle.\n\n## Friends\n\n\n## Attributes\nThe date of birth of Katerine Fogle is 0265-01-22.\nThe occupation of Katerine Fogle is lecturer.\nThe hobby of Katerine Fogle is ice skating.\nThe gender of Katerine Fogle is female.\n",
+            "title": "Katerine Fogle"
+          },
+          {
+            "source_id": "policy:a5fe1136fc39f52fbccaecf1ebab359e",
+            "text": "[SOURCE_CLASS=TAU]\n# Shandi Wertz\n\n## Family\nThe son of Shandi Wertz is Isidro Wertz.\nThe daughters of Shandi Wertz are Madelyn Haskins, Mari Wertz, Sasha Wertz.\nThe husband of Shandi Wertz is Orval Wertz.\n\n## Friends\nThe friend of Shandi Wertz is Delma Mares.\n\n## Attributes\nThe date of birth of Shandi Wertz is 0227-11-09.\nThe occupation of Shandi Wertz is physiotherapist.\nThe hobby of Shandi Wertz is sea glass collecting.\nThe gender of Shandi Wertz is female.\n\nThe date of birth of Shandi Wertz is 0265-01-22.",
+            "title": "Shandi Wertz"
+          }
+        ],
+        "public_case_sha256": "6320b1bd8cdd560479a62417942dc5d4c2d239eedb9ef0e02e6976130e036114",
+        "question": "Who is the person whose date of birth is 0265-01-22?",
+        "schema_version": "hswm-p1v3-policy-conflict-case/v1",
+        "split": "heldout"
+      },
+      {
+        "case_id": "96f923da-09f3-4332-8ad9-6cdce12794cc",
+        "derivation_sha256": "539f2a8c928291029aed5e82a96776bc57c2299aa750c91e9c46019f1aa6f650",
+        "document_count": 2,
+        "documents": [
+          {
+            "source_id": "policy:2f81426fc6990b59ddd452f54936d62a",
+            "text": "[SOURCE_CLASS=TAU]\n# Shandi Wertz\n\n## Family\nThe son of Shandi Wertz is Isidro Wertz.\nThe daughters of Shandi Wertz are Madelyn Haskins, Mari Wertz, Sasha Wertz.\nThe husband of Shandi Wertz is Orval Wertz.\n\n## Friends\nThe friend of Shandi Wertz is Delma Mares.\n\n## Attributes\nThe date of birth of Shandi Wertz is 0227-11-09.\nThe occupation of Shandi Wertz is physiotherapist.\nThe hobby of Shandi Wertz is sea glass collecting.\nThe gender of Shandi Wertz is female.\n\nThe date of birth of Shandi Wertz is 0276-08-03.",
+            "title": "Shandi Wertz"
+          },
+          {
+            "source_id": "policy:e0f428a937163427e7ee7b98f117bbbf",
+            "text": "[SOURCE_CLASS=RHO]\n# Troy Venegas\n\n## Family\nThe brother of Troy Venegas is Otis Venegas.\nThe mother of Troy Venegas is Liliana Venegas.\nThe father of Troy Venegas is Dave Venegas.\n\n## Friends\nThe friend of Troy Venegas is Emerson Marr.\n\n## Attributes\nThe date of birth of Troy Venegas is 0276-08-03.\nThe occupation of Troy Venegas is firefighter.\nThe hobby of Troy Venegas is thru-hiking.\nThe gender of Troy Venegas is male.\n",
+            "title": "Troy Venegas"
+          }
+        ],
+        "public_case_sha256": "b99393ce20afce3f4ff14f19f89166164ef9b8ce361f300cc036bde3b523c62d",
+        "question": "Who is the person whose date of birth is 0276-08-03?",
+        "schema_version": "hswm-p1v3-policy-conflict-case/v1",
+        "split": "heldout"
+      },
+      {
+        "case_id": "ad612f5d-b0f9-4a5e-a0a8-428859d42f11",
+        "derivation_sha256": "c1ff1ea86eb08a735c9a670e55371a7f0240e75f367740964ac105600ab26d88",
+        "document_count": 2,
+        "documents": [
+          {
+            "source_id": "policy:34eeafe5fbbc7cbc94ab0ce6fc91a9d8",
+            "text": "[SOURCE_CLASS=RHO]\n# Marvin Gaspar\n\n## Family\nThe mother of Marvin Gaspar is Lora Gaspar.\nThe father of Marvin Gaspar is Edgar Gaspar.\nThe son of Marvin Gaspar is Winford Gaspar.\nThe wife of Marvin Gaspar is Amanda Gaspar.\n\n## Friends\nThe friends of Marvin Gaspar are Alec Depew, Melina Dallas.\n\n## Attributes\nThe date of birth of Marvin Gaspar is 0217-10-24.\nThe occupation of Marvin Gaspar is office manager.\nThe hobby of Marvin Gaspar is trainspotting.\nThe gender of Marvin Gaspar is male.\n",
+            "title": "Marvin Gaspar"
+          },
+          {
+            "source_id": "policy:7f3b65a63fe160724fc20109199e3f9a",
+            "text": "[SOURCE_CLASS=TAU]\n# Shandi Wertz\n\n## Family\nThe son of Shandi Wertz is Isidro Wertz.\nThe daughters of Shandi Wertz are Madelyn Haskins, Mari Wertz, Sasha Wertz.\nThe husband of Shandi Wertz is Orval Wertz.\n\n## Friends\nThe friend of Shandi Wertz is Delma Mares.\n\n## Attributes\nThe date of birth of Shandi Wertz is 0227-11-09.\nThe occupation of Shandi Wertz is physiotherapist.\nThe hobby of Shandi Wertz is sea glass collecting.\nThe gender of Shandi Wertz is female.\n\nThe date of birth of Shandi Wertz is 0217-10-24.",
+            "title": "Shandi Wertz"
+          }
+        ],
+        "public_case_sha256": "2c7f19f7b0b6faaadf37a2231ea6c637aed809fd3932b241c4a7d4ee4713a210",
+        "question": "Who is the person whose date of birth is 0217-10-24?",
+        "schema_version": "hswm-p1v3-policy-conflict-case/v1",
+        "split": "heldout"
+      },
+      {
+        "case_id": "fada3842-4c23-4fbd-a675-6b568a90e3f6",
+        "derivation_sha256": "4452fab82eaca691d729e096351ee36a03b08bd07ba38e78a8aac0c246d9f497",
+        "document_count": 2,
+        "documents": [
+          {
+            "source_id": "policy:1c098239a46df5c7ac4786f2482fcb7f",
+            "text": "[SOURCE_CLASS=TAU]\n# Shandi Wertz\n\n## Family\nThe son of Shandi Wertz is Isidro Wertz.\nThe daughters of Shandi Wertz are Madelyn Haskins, Mari Wertz, Sasha Wertz.\nThe husband of Shandi Wertz is Orval Wertz.\n\n## Friends\nThe friend of Shandi Wertz is Delma Mares.\n\n## Attributes\nThe date of birth of Shandi Wertz is 0227-11-09.\nThe occupation of Shandi Wertz is physiotherapist.\nThe hobby of Shandi Wertz is sea glass collecting.\nThe gender of Shandi Wertz is female.\n\nThe date of birth of Shandi Wertz is 0362-09-27.",
+            "title": "Shandi Wertz"
+          },
+          {
+            "source_id": "policy:f5d1587e08ebe3378d8919966c29fef4",
+            "text": "[SOURCE_CLASS=RHO]\n# Ligia Luong\n\n## Family\nThe sister of Ligia Luong is Freda Luong.\nThe mother of Ligia Luong is Maria Luong.\nThe father of Ligia Luong is Hunter Luong.\n\n## Friends\nThe friend of Ligia Luong is Chad Lang.\n\n## Attributes\nThe date of birth of Ligia Luong is 0362-09-27.\nThe occupation of Ligia Luong is rural practice surveyor.\nThe hobby of Ligia Luong is tether car.\nThe gender of Ligia Luong is female.\n",
+            "title": "Ligia Luong"
+          }
+        ],
+        "public_case_sha256": "6211ab53a9eaefa42386bcacb18ecdb1512c228bcda386d3e9247d7a29f6b174",
+        "question": "Who is the person whose date of birth is 0362-09-27?",
+        "schema_version": "hswm-p1v3-policy-conflict-case/v1",
+        "split": "heldout"
+      }
+    ],
+    "training": [
+      {
+        "case_id": "55436ed7-a3f9-4c9d-b203-4c59b8f180b2",
+        "derivation_sha256": "fd3c490cf54fa16d7ec4d4f3947523528d381d2838983648e431bb565e4a730c",
+        "document_count": 2,
+        "documents": [
+          {
+            "source_id": "policy:2937bd96aa424e9ed792fc4f456e2268",
+            "text": "[SOURCE_CLASS=TAU]\n# Shandi Wertz\n\n## Family\nThe son of Shandi Wertz is Isidro Wertz.\nThe daughters of Shandi Wertz are Madelyn Haskins, Mari Wertz, Sasha Wertz.\nThe husband of Shandi Wertz is Orval Wertz.\n\n## Friends\nThe friend of Shandi Wertz is Delma Mares.\n\n## Attributes\nThe date of birth of Shandi Wertz is 0227-11-09.\nThe occupation of Shandi Wertz is physiotherapist.\nThe hobby of Shandi Wertz is sea glass collecting.\nThe gender of Shandi Wertz is female.\n\nThe date of birth of Shandi Wertz is 0341-06-11.",
+            "title": "Shandi Wertz"
+          },
+          {
+            "source_id": "policy:de75872b062a7306f7f6d6521b495517",
+            "text": "[SOURCE_CLASS=RHO]\n# Cory Carper\n\n## Family\nThe sister of Cory Carper is Colette Carper.\nThe brother of Cory Carper is Roy Carper.\nThe mother of Cory Carper is Wonda Carper.\nThe father of Cory Carper is Archie Carper.\n\n## Friends\n\n\n## Attributes\nThe date of birth of Cory Carper is 0341-06-11.\nThe occupation of Cory Carper is financial adviser.\nThe hobby of Cory Carper is literature.\nThe gender of Cory Carper is male.\n",
+            "title": "Cory Carper"
+          }
+        ],
+        "public_case_sha256": "92811d3a6f0e46a935e2cf8a657e684c299fab68b0810523cc6898915b736ebc",
+        "question": "Who is the person whose date of birth is 0341-06-11?",
+        "schema_version": "hswm-p1v3-policy-conflict-case/v1",
+        "split": "training"
+      }
+    ]
+  },
+  "universe": "sparse_t200_fk1"
+}

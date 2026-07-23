@@ -197,6 +197,49 @@ is an operational gate, not only a synthetic unit test.
   model snapshot. Lock and acceptance receipts may not equal or descend from
   any member pack. Lexical siblings remain valid outputs.
 
+### G0.8 — exact B2.1 cache prefix through each target
+
+The frozen B2.1 scorepacks were produced by one shared cached encoder, not by
+three independent dataset runs. The repository already records one rejected
+run where a changed cache key and GPU batch changed scores at float32 scale in
+[`INVALIDATED_b21_preflight_numeric_equivalence_20260723.json`](../evidence/INVALIDATED_b21_preflight_numeric_equivalence_20260723.json).
+That makes the encoder-call prefix part of provenance. Exploratory standalone
+comparisons without a durable receipt are deliberately not quoted as evidence
+here.
+
+The sealed scope is `prefix_through_role_target`: every B2.1 encoder request
+from an empty cache through the role's first target request, inclusive. Calls
+after that target belong to the determinism or frozen-reference verification
+suffix and are not misrepresented as part of this prefix. The exact plans are:
+
+1. reproduction: the 400-query 2Wiki base/legacy target;
+2. full 2Wiki: reproduction base/legacy, reproduction frozen-reference
+   cache hit, then the full base/legacy target;
+3. full MuSiQue: reproduction base/legacy, reproduction frozen-reference,
+   2Wiki full base under legacy and both alternate salts, 2Wiki full
+   private-entity/legacy, then the MuSiQue base/legacy target.
+
+The compiler executes and observes every sealed-prefix call, including the
+zero-miss frozen-reference and alternate-salt calls. Each step binds ordered
+requested, missing, and cumulative-cache counts plus text-digest sequences.
+The compile receipt also binds the prefix profile/scope, 2Wiki source path/hash,
+model snapshot, `device=cuda`, `batch_size=128`, and normalization mode. The
+target embedding-table digest is explicitly a
+`producer_attested_manifest_binding`; it is not claimed to be independently
+re-derived by the model-free lock verifier. B2.1 score continuity and frozen-B2
+replay remain the independent output checks.
+
+Lock creation reconstructs the exact prefix from the pinned datasets and
+requires all three roles to share the reproduction 2Wiki hash. Acceptance
+copies this summary and rebuilds it again before learner access. MuSiQue
+compilation consequently requires
+`--b21-history-2wiki-data <pinned-2wiki.json>`.
+
+The pinned B2.1 scorepack must also bind its producing
+`prom_b21_learned_router.py` SHA and the exact B2.1 frozen-module SHA map to the
+producer hashes sealed in the candidate pack. A missing, extra, or stale module
+entry rejects continuity even when ranked outputs happen to remain unchanged.
+
 ## Required injected negatives
 
 Verification must reject:
@@ -220,7 +263,10 @@ Verification must reject:
 - a lock/acceptance output placed at or below any pack, or a compile
   receipt/frozen reference placed below a pack or model snapshot;
 - an altered acceptance claim boundary or a missing/non-string/non-UTC
-  `accepted_at` value.
+  `accepted_at` value;
+- an absent, reordered, extra, or mutated B2.1 sealed-prefix step;
+- a changed cache-prefix 2Wiki source, target text table, model, device,
+  batch size, normalization mode, or embedding-table digest.
 
 ## Operational boundary
 
@@ -241,9 +287,11 @@ and copied into owning read-only values; neither verification nor learner
 ingestion returns a filename-bearing memory map.
 
 The reproduction compile additionally requires `--frozen-b2-reference`; the
-two full-corpus compiles must omit it. Lock creation reopens the pinned B2.1 and
-frozen-B2 gzip bytes, verifies compressed and payload hashes, and directly
-replays them against the candidate matrices.
+two full-corpus compiles must omit it. The MuSiQue compile additionally requires
+`--b21-history-2wiki-data`. Lock creation reopens the pinned B2.1 and frozen-B2
+gzip bytes, verifies compressed and payload hashes, reconstructs the sealed
+cache prefix, and directly replays the references against the candidate
+matrices.
 
 ## Next falsifier after Gate 0
 

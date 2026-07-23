@@ -38,6 +38,7 @@ from hswm_b22_gate0_harness import (
 )
 from prom_b2_crossfield_merge import finding_text, title_parity
 from prom_b21_learned_router import (
+    FROZEN_MODULES as B21_FROZEN_MODULES,
     compile_scorepack,
     directory_manifest,
     frozen_b2_reference,
@@ -81,6 +82,31 @@ def mk_row(row_id: str, question: str, pairs: list[tuple[str, str]],
     }
 
 
+def musique_rows_from_2wiki(rows: list[dict]) -> list[dict]:
+    converted = []
+    for row in rows:
+        supporting = {
+            str(title).casefold()
+            for title in row["supporting_facts"]["title"]
+        }
+        paragraphs = []
+        for index, (title, sentences) in enumerate(zip(
+                row["context"]["title"], row["context"]["sentences"])):
+            paragraphs.append({
+                "idx": index,
+                "title": title,
+                "paragraph_text": " ".join(sentences),
+                "is_supporting": str(title).casefold() in supporting,
+            })
+        converted.append({
+            "id": row["id"],
+            "question": row["question"],
+            "answer": row["answer"],
+            "paragraphs": paragraphs,
+        })
+    return converted
+
+
 @pytest.fixture
 def raw_rows() -> list[dict]:
     shared = "Zorblax"
@@ -118,7 +144,7 @@ def provenance() -> dict:
     return {
         "dataset_sha256": "a" * 64,
         "model_snapshot_sha256": "b" * 64,
-        "producer_sha256": {"synthetic-test": "c" * 64},
+        "producer_sha256": _producer_hashes(),
     }
 
 
@@ -136,9 +162,14 @@ def synthetic_b21(queries, pool, *, dataset: str, cohort: str,
     scorepack = compile_scorepack(queries, pool, hash_embed, dataset=dataset,
                                   salt="legacy", top_k=20)
     scorepack["cohort"] = cohort
+    producers = _producer_hashes()
     scorepack["provenance"] = {
+        "script_sha256": producers["prom_b21_learned_router.py"],
         "dataset_sha256": dataset_sha256,
         "model_snapshot_sha256": model_snapshot_sha256,
+        "frozen_modules_sha256": {
+            name: producers[name] for name in B21_FROZEN_MODULES
+        },
     }
     return scorepack
 
@@ -147,10 +178,17 @@ def write_role_artifact(root: Path, role: str, raw_rows: list[dict],
                         *, model_payload: bytes = b"synthetic frozen model\n") -> tuple[Path, Path]:
     contract = ACCEPTANCE_ROLES[role]
     dataset, cohort = contract["dataset"], contract["cohort"]
+    role_rows = raw_rows if dataset == "2wiki" else musique_rows_from_2wiki(raw_rows)
     role_root = root / role
     role_root.mkdir(parents=True)
     data_path = role_root / "input.json"
-    data_path.write_bytes(_canonical_bytes(raw_rows))
+    data_path.write_bytes(_canonical_bytes(role_rows))
+    history_2wiki_path = root / "b21-history-2wiki.json"
+    history_payload = _canonical_bytes(raw_rows)
+    if history_2wiki_path.exists():
+        assert history_2wiki_path.read_bytes() == history_payload
+    else:
+        history_2wiki_path.write_bytes(history_payload)
     model_path = role_root / "model"
     model_path.mkdir()
     (model_path / "weights.bin").write_bytes(model_payload)
@@ -161,7 +199,7 @@ def write_role_artifact(root: Path, role: str, raw_rows: list[dict],
         "model_snapshot_sha256": model_sha,
         "producer_sha256": _producer_hashes(),
     }
-    queries, pool = normalize_rows(raw_rows, "2wiki")
+    queries, pool = normalize_rows(role_rows, dataset)
     compiled_pack = compile_full_candidate_pack(
         queries, pool, hash_embed, dataset=dataset, salt="legacy",
         cohort=cohort, provenance=provenance1,
@@ -172,7 +210,7 @@ def write_role_artifact(root: Path, role: str, raw_rows: list[dict],
     )
     b21_path = role_root / "b21.json.gz"
     b21_info = write_scorepack(b21_path, b21)
-    reference = (frozen_b2_reference(raw_rows, hash_embed, top_k=len(pool))
+    reference = (frozen_b2_reference(role_rows, hash_embed, top_k=len(pool))
                  if contract["requires_frozen_b2"] else None)
     reference_path = role_root / "frozen-b2.json.gz"
     reference_info = (_write_frozen_reference(reference_path, reference)
@@ -180,7 +218,21 @@ def write_role_artifact(root: Path, role: str, raw_rows: list[dict],
     pack_path = role_root / "pack"
     receipt = write_pack(pack_path, compiled_pack, frozen_b2=reference,
                          b21_scorepack=b21)
+    cache_history = gate0._make_embedding_cache_history(
+        role,
+        target_raw=role_rows,
+        two_wiki_raw=raw_rows,
+        two_wiki_path=history_2wiki_path,
+        two_wiki_sha256=sha256_file(history_2wiki_path),
+        model_snapshot_sha256=model_sha,
+        target_embedding_table_sha256=compiled_pack.manifest_seed[
+            "embedding_table_sha256"],
+        device="cuda",
+        batch_size=128,
+        reproduction_queries=len(normalize_rows(raw_rows, "2wiki")[0]),
+    )
     receipt.update({
+        "embedding_cache_history": cache_history,
         "determinism_replay": {
             "pass": True,
             "same_embedding_table": True,
@@ -228,13 +280,11 @@ def reseal(pack_dir: Path) -> str:
 def test_full_pack_roundtrip_neutral_and_frozen_replay(tmp_path: Path, raw_rows):
     queries, pool, pack = compiled(raw_rows)
     reference = frozen_b2_reference(raw_rows, hash_embed, top_k=len(pool))
-    b21 = compile_scorepack(queries, pool, hash_embed, dataset="2wiki",
-                            salt="legacy", top_k=20)
-    b21["cohort"] = "synthetic"
-    b21["provenance"] = {
-        "dataset_sha256": provenance()["dataset_sha256"],
-        "model_snapshot_sha256": provenance()["model_snapshot_sha256"],
-    }
+    b21 = synthetic_b21(
+        queries, pool, dataset="2wiki", cohort="synthetic",
+        dataset_sha256=provenance()["dataset_sha256"],
+        model_snapshot_sha256=provenance()["model_snapshot_sha256"],
+    )
     output = tmp_path / "pack"
     receipt = write_pack(output, pack, frozen_b2=reference, b21_scorepack=b21)
 
@@ -367,6 +417,148 @@ def test_acceptance_rejects_cross_role_model_drift(
         create_acceptance_lock(role_paths, tmp_path / "drift.lock.json")
 
 
+def test_cache_history_role_order_is_bound_and_reconstructed(
+        tmp_path: Path, raw_rows, monkeypatch):
+    set_synthetic_acceptance_counts(monkeypatch, raw_rows)
+    role_paths = {role: write_role_artifact(tmp_path, role, raw_rows)
+                  for role in ACCEPTANCE_ROLES}
+    for role, (_, receipt_path) in role_paths.items():
+        receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+        history = receipt["embedding_cache_history"]
+        assert history["profile"] == gate0.CACHE_HISTORY_PROFILE
+        assert history["scope"] == gate0.CACHE_HISTORY_SCOPE
+        assert tuple(step["name"] for step in history["prewarm_steps"]) == (
+            gate0.EXPECTED_B21_CACHE_HISTORY[role])
+        manifest = json.loads(
+            (Path(receipt["pack_path"]) / gate0.MANIFEST_FILE).read_text(
+                encoding="utf-8"))
+        assert history["target_embedding_binding"] == {
+            "sha256": manifest["embedding_table_sha256"],
+            "scope": "producer_attested_manifest_binding",
+            "model_free_rederived": False,
+        }
+
+    _, musique_receipt_path = role_paths["musique_full_closed_corpus"]
+    musique_receipt = json.loads(musique_receipt_path.read_text(encoding="utf-8"))
+    history = musique_receipt["embedding_cache_history"]
+    history["prewarm_steps"][0], history["prewarm_steps"][1] = (
+        history["prewarm_steps"][1], history["prewarm_steps"][0])
+    history["history_sha256"] = _json_sha256({
+        key: value for key, value in history.items() if key != "history_sha256"
+    })
+    musique_receipt_path.write_bytes(_canonical_bytes(musique_receipt))
+    with pytest.raises(PackIntegrityError, match="reconstructed plan"):
+        create_acceptance_lock(role_paths, tmp_path / "reordered-history.lock.json")
+
+
+def test_musique_compile_requires_pinned_2wiki_history_before_embedding(
+        tmp_path: Path, raw_rows, monkeypatch):
+    data_path = tmp_path / "musique.json"
+    data_path.write_bytes(_canonical_bytes(musique_rows_from_2wiki(raw_rows)))
+    model_path = tmp_path / "model"
+    model_path.mkdir()
+    (model_path / "weights.bin").write_bytes(b"model\n")
+
+    class UnexpectedEmbedder:
+        def __init__(self, *_args, **_kwargs) -> None:
+            raise AssertionError("embedding must not start without 2Wiki history")
+
+    monkeypatch.setattr(gate0, "SentenceEmbedder", UnexpectedEmbedder)
+    args = SimpleNamespace(
+        data=str(data_path), dataset="musique", cohort="full_closed_corpus",
+        salt="legacy", model_path=str(model_path), model_id="synthetic-model",
+        device="cuda", batch_size=128, b21_scorepack=None,
+        b21_history_2wiki_data=None, frozen_b2_reference=None,
+        output=str(tmp_path / "pack"),
+        receipt=str(tmp_path / "compile-receipt.json"),
+    )
+    with pytest.raises(PackIntegrityError, match="b21-history-2wiki-data"):
+        gate0._compile_cli(args)
+
+
+def test_musique_compile_records_observed_exact_prefix(
+        tmp_path: Path, raw_rows, monkeypatch):
+    monkeypatch.setitem(
+        gate0.ACCEPTANCE_ROLES["b2_reproduction400"],
+        "queries", len(normalize_rows(raw_rows, "2wiki")[0]))
+    two_wiki_path = tmp_path / "2wiki.json"
+    two_wiki_path.write_bytes(_canonical_bytes(raw_rows))
+    musique_rows = musique_rows_from_2wiki(raw_rows)
+    musique_rows[0]["question"] += " musique-only-target-token"
+    musique_path = tmp_path / "musique.json"
+    musique_path.write_bytes(_canonical_bytes(musique_rows))
+    model_path = tmp_path / "model"
+    model_path.mkdir()
+    (model_path / "weights.bin").write_bytes(b"model\n")
+
+    class CachedHashEmbedder:
+        last = None
+
+        def __init__(self, _model_path: str, *, device: str,
+                     batch_size: int) -> None:
+            assert device == "cuda" and batch_size == 128
+            self.cache: dict[str, np.ndarray] = {}
+            self.calls: list[dict] = []
+            type(self).last = self
+
+        def __call__(self, texts: list[str]) -> np.ndarray:
+            missing = [text for text in texts if text not in self.cache]
+            if missing:
+                for text, vector in zip(missing, hash_embed(missing)):
+                    self.cache[text] = np.asarray(vector, dtype=np.float64)
+            self.calls.append({"requested": tuple(texts), "missing": tuple(missing)})
+            return np.vstack([self.cache[text] for text in texts])
+
+    monkeypatch.setattr(gate0, "SentenceEmbedder", CachedHashEmbedder)
+    receipt_path = tmp_path / "compile-receipt.json"
+    args = SimpleNamespace(
+        data=str(musique_path), dataset="musique", cohort="full_closed_corpus",
+        salt="legacy", model_path=str(model_path), model_id="synthetic-model",
+        device="cuda", batch_size=128, b21_scorepack=None,
+        b21_history_2wiki_data=str(two_wiki_path), frozen_b2_reference=None,
+        output=str(tmp_path / "pack"), receipt=str(receipt_path),
+    )
+
+    assert gate0._compile_cli(args) == 0
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    history = receipt["embedding_cache_history"]
+    sealed_steps = [*history["prewarm_steps"], history["target_step"]]
+    assert sealed_steps[-1]["missing_count"] > 0
+    calls = CachedHashEmbedder.last.calls
+    assert len(calls) == len(sealed_steps) + 1  # deterministic replay is suffix-only
+    for call, step in zip(calls, sealed_steps):
+        assert gate0._text_sequence_sha256(call["requested"]) == step[
+            "requested_sha256"]
+        assert gate0._text_sequence_sha256(call["missing"]) == step["missing_sha256"]
+        assert len(call["missing"]) == step["missing_count"]
+    assert not calls[-1]["missing"]
+    assert tuple(step["name"] for step in history["prewarm_steps"]) == (
+        gate0.EXPECTED_B21_CACHE_HISTORY["musique_full_closed_corpus"])
+
+
+@pytest.mark.parametrize(("device", "batch_size"), [("cpu", 128), ("cuda", 64)])
+def test_acceptance_compile_rejects_encoder_context_drift_before_embedding(
+        tmp_path: Path, raw_rows, monkeypatch, device: str, batch_size: int):
+    data_path = tmp_path / "2wiki.json"
+    data_path.write_bytes(_canonical_bytes(raw_rows))
+
+    class UnexpectedEmbedder:
+        def __init__(self, *_args, **_kwargs) -> None:
+            raise AssertionError("embedding must not start with encoder drift")
+
+    monkeypatch.setattr(gate0, "SentenceEmbedder", UnexpectedEmbedder)
+    args = SimpleNamespace(
+        data=str(data_path), dataset="2wiki", cohort="full_closed_corpus",
+        salt="legacy", model_path=str(tmp_path / "unused-model"),
+        model_id="synthetic-model", device=device, batch_size=batch_size,
+        b21_scorepack=None, b21_history_2wiki_data=None,
+        frozen_b2_reference=None, output=str(tmp_path / "pack"),
+        receipt=str(tmp_path / "compile-receipt.json"),
+    )
+    with pytest.raises(PackIntegrityError, match="device=cuda and batch-size=128"):
+        gate0._compile_cli(args)
+
+
 def test_lock_rejects_nested_model_symlink_ignored_by_legacy_manifest(
         tmp_path: Path, raw_rows, monkeypatch):
     set_synthetic_acceptance_counts(monkeypatch, raw_rows)
@@ -407,7 +599,7 @@ def test_compile_rechecks_model_snapshot_after_lightweight_compilation(
     class MutatingEmbedder:
         def __init__(self, _model_path: str, *, device: str,
                      batch_size: int) -> None:
-            assert device == "cpu" and batch_size == 4
+            assert device == "cuda" and batch_size == 128
             self.mutated = False
 
         def __call__(self, texts: list[str]) -> np.ndarray:
@@ -417,10 +609,14 @@ def test_compile_rechecks_model_snapshot_after_lightweight_compilation(
             return hash_embed(texts)
 
     monkeypatch.setattr(gate0, "SentenceEmbedder", MutatingEmbedder)
+    monkeypatch.setitem(
+        gate0.ACCEPTANCE_ROLES["b2_reproduction400"],
+        "queries", len(normalize_rows(raw_rows, "2wiki")[0]))
     args = SimpleNamespace(
         data=str(data_path), dataset="2wiki", cohort="full_closed_corpus",
         salt="legacy", model_path=str(model_path), model_id="synthetic-model",
-        device="cpu", batch_size=4, b21_scorepack=None,
+        device="cuda", batch_size=128, b21_scorepack=None,
+        b21_history_2wiki_data=None,
         frozen_b2_reference=None, output=str(tmp_path / "pack"),
         receipt=str(tmp_path / "compile-receipt.json"),
     )
@@ -460,7 +656,8 @@ def test_compile_rejects_overlapping_artifacts_before_embedding(
     args = SimpleNamespace(
         data=str(data_path), dataset="2wiki", cohort="b2_reproduction400",
         salt="legacy", model_path=str(model_path), model_id="synthetic-model",
-        device="cpu", batch_size=4, b21_scorepack=None,
+        device="cuda", batch_size=128, b21_scorepack=None,
+        b21_history_2wiki_data=None,
         frozen_b2_reference=str(frozen_path) if frozen_path else None,
         output=str(pack_path), receipt=str(receipt_path),
     )
@@ -724,6 +921,39 @@ def test_nonfinite_and_underwidth_references_fail_closed(tmp_path: Path, raw_row
     broken_b21["top_k"] = 1
     with pytest.raises(ReplayMismatch, match="top_k=20"):
         compare_b21_scorepack(output, broken_b21)
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    ["script_digest", "frozen_digest", "frozen_missing", "frozen_extra"],
+)
+def test_b21_scorepack_producer_lineage_mutations_fail_closed(
+        tmp_path: Path, raw_rows, mutation: str):
+    queries, pool, pack = compiled(raw_rows)
+    output = tmp_path / mutation
+    write_pack(output, pack)
+    b21 = synthetic_b21(
+        queries, pool, dataset="2wiki", cohort="synthetic",
+        dataset_sha256=provenance()["dataset_sha256"],
+        model_snapshot_sha256=provenance()["model_snapshot_sha256"],
+    )
+    broken = copy.deepcopy(b21)
+    lineage = broken["provenance"]
+    expected_error = "script_sha256"
+    if mutation == "script_digest":
+        lineage["script_sha256"] = "d" * 64
+    else:
+        frozen = lineage["frozen_modules_sha256"]
+        name = B21_FROZEN_MODULES[0]
+        expected_error = "frozen_modules_sha256"
+        if mutation == "frozen_digest":
+            frozen[name] = "d" * 64
+        elif mutation == "frozen_missing":
+            frozen.pop(name)
+        else:
+            frozen["unexpected.py"] = "d" * 64
+    with pytest.raises(ReplayMismatch, match=expected_error):
+        compare_b21_scorepack(output, broken)
 
 
 def test_duplicate_query_is_rejected_before_embedding(raw_rows):

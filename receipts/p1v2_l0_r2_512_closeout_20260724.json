@@ -1,0 +1,69 @@
+{
+  "schema_version": "hswm-p1v2-l0-closeout/v1",
+  "stage": "L0_ORACLE_ACTUATION",
+  "run_id": "measurement_r2_512",
+  "scientific_outcome": "KILL",
+  "claim_status": "NO_TYPED_LESSON_ACTUATION_ON_FROZEN_TYPE6_CUT",
+  "registration": {
+    "programme": "LakatosTree_HSWM_20260719",
+    "tag": "p1v2-l0-typed-lesson-actuation-512-r2-20260724",
+    "question": "Q-p1v2-typed-lesson-l0-oracle-actuation",
+    "prediction_receipt_sha256": "b5f360ada0fbadbd0d224cfbe870742ac912bd1df7df2b2007e3c5023dd291d0",
+    "prediction_receipt_file_sha256": "1696b85f45140c4e549bf2c712a329fa5a0f545aa40d5f42f01334b5edfeef31",
+    "preregistration_file_sha256": "c91194fc986d1a41c98b640a17632f99fafa5d5258b37fcb01adb7070d4d1235"
+  },
+  "frozen_execution": {
+    "checkout_git_commit": "7f3cd381e756add86413cda7820e66320de24df5",
+    "outcome_module_ancestor_commit": "e53b73844fb8893f4e0c224c5dc0fb6443a9ecc9",
+    "budget_manifest_sha256": "496f65bf53fbfd11f12f977b78c55d33af6a71be7cd75721acd7ffb0ef462001",
+    "budget_manifest_file_sha256": "5d09dcd951052abd4deadc61886b49c29b0f5f1e997018ac6cbfdd6f32efbe85",
+    "max_output_tokens": 512,
+    "answer_db_status_counts": {
+      "COMPLETE": 24,
+      "ERROR": 0
+    },
+    "answer_db_file_sha256": "f806ba9ceebc8758fb7ce7bf2e20a85c01cf918ef13f49a1066657cdc3b14e7f"
+  },
+  "evidence": {
+    "measurement_evidence_sha256": "b204bb180a4ca007cb5794e1fa27fffe3005959a74427f683920be2d9c43c6b5",
+    "measurement_file_sha256": "bfdce33df924c511eb8b94ffaa5b56fe434bbc78feb9411fa09c2f31bd0c4872",
+    "exact_verdict_key_count": 0,
+    "judge_receipt_sha256": "eed76821dcbd4706b8924defbdbbc14223f130e7f31dec24b542f49de4aac6e5",
+    "judge_file_sha256": "8babfd0cc277e4bfc9affb96d34a7c84f1ddcdddee9a7d957fcf10dc8ac16ab0",
+    "diagnosis_receipt_sha256": "f0ef0e016fbbbb8f69df6a1e840e9d8e02a069907c1a96a385aacda32e731c5e",
+    "diagnosis_file_sha256": "89a30d0566e19525bf9881dc57ea745a05e781b31cb7a70bcadd8caa8763646b"
+  },
+  "measured_criteria": {
+    "valid_case_count": 6,
+    "typed_actuation_case_count": 0,
+    "typed_beats_raw_transcript_case_count": 0,
+    "no_memory_exact_set_match_count": 6,
+    "all_four_arms_identical_answer_count": 6,
+    "contradicted_lesson_rejected": true,
+    "all_call_token_gold_gates_valid": true
+  },
+  "root_cause": {
+    "code_path": "P1V2_SYSTEM_PROMPT plus exact attribute document retrieval already determined the complete answer set",
+    "intervention": "The oracle lesson repeated the complete-set answering policy instead of supplying missing outcome-relevant information",
+    "observed_failure_mode": "BASELINE_CEILING_AND_INTERVENTION_INERT",
+    "same_environment_reuse_allowed": false
+  },
+  "lakatotree_recording": {
+    "independent_judge_world_action_id": "LakatosTree_HSWM_20260719/p1v2-l0-typed-lesson-actuation-512-r2-20260724/act/hswm-p1v2-l0-r2-512-independent-judge-20260724",
+    "diagnosis_event_id": "LakatosTree_HSWM_20260719/p1v2-l0-typed-lesson-actuation-512-r2-20260724/event/hswm-p1v2-l0-r2-inertness-diagnosis-20260724",
+    "server_adjudication_state": "BLOCKED_BEFORE_WRITE",
+    "server_error": "register_prediction accepted direction '>' but submit_result requires 'higher' or 'lower'",
+    "server_error_code": 422,
+    "post_measurement_prediction_mutation_performed": false,
+    "new_frontier_question": "Q-p1v3-nonredundant-policy-lesson-actuation"
+  },
+  "next_programme_move": {
+    "forbidden": "Do not rerun the same Type-6 complete-set lesson environment",
+    "required_environment": "A source-trust or conflict-resolution policy absent from the base prompt, with development-only calibration proving non-ceiling baseline behavior and at least one lesson-caused answer disagreement before a new heldout freeze",
+    "registration_repairs": [
+      "direction must be higher",
+      "script_sha must bind p1v2_l0_judge.py or its successor"
+    ]
+  },
+  "closeout_receipt_sha256": "e90ca3829b5faf232bb7745a1ee17ecff3704516975c31fc5ad18ad809965d2d"
+}

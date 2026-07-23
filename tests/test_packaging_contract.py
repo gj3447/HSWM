@@ -28,6 +28,23 @@ def test_h3_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "qkv_b1_development_falsifier",
     } <= shipped
 
+    assert {
+        "p1v2_typed_lesson",
+        "p1v2_prompt_parity",
+        "p1v2_tokenizer_adapter",
+        "p1v2_l0_harness",
+        "p1v2_llm_answerer",
+        "p1v2_l0_prepare",
+        "p1v2_type6_environment",
+        "p1v2_l0_preflight",
+        "p1v2_l0_measure",
+        "p1v2_l0_judge",
+        "p1v2_l0_judge_fixtures",
+        "p1v2_l0_refreeze",
+        "p1v2_l0_diagnose",
+        "p1v2_ooptdd_receipt",
+    } <= shipped
+
 
 def test_default_pytest_surface_includes_public_research() -> None:
     project = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8"))

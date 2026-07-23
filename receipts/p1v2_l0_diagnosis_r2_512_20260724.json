@@ -1,0 +1,24 @@
+{
+  "diagnosis": "BASELINE_CEILING_AND_INTERVENTION_INERT",
+  "diagnosis_receipt_sha256": "f0ef0e016fbbbb8f69df6a1e840e9d8e02a069907c1a96a385aacda32e731c5e",
+  "evidence_sha256": "b204bb180a4ca007cb5794e1fa27fffe3005959a74427f683920be2d9c43c6b5",
+  "judge_receipt_sha256": "eed76821dcbd4706b8924defbdbbc14223f130e7f31dec24b542f49de4aac6e5",
+  "metrics": {
+    "all_four_arms_identical_answer_count": 6,
+    "case_count": 6,
+    "no_memory_exact_set_match_count": 6,
+    "typed_changed_no_memory_answer_count": 0,
+    "typed_exact_set_match_count": 6,
+    "typed_improved_no_memory_count": 0
+  },
+  "next_environment_gates": [
+    "Use development-only calibration cases to prove non-ceiling no-memory behavior before freezing a new heldout cut.",
+    "The typed lesson must encode an outcome-relevant source-trust or conflict-resolution rule absent from the base system prompt.",
+    "Require at least one calibration answer disagreement caused by that lesson; do not inspect the new heldout outcomes.",
+    "Register LakatoTree direction as higher and bind the independent judge script SHA before measurement."
+  ],
+  "root_cause": "The exact retrieved documents and frozen answer prompt already made the complete answer set available to the no-memory arm. The oracle lesson restated an answering policy instead of supplying a missing, outcome-relevant source-trust or conflict-resolution rule.",
+  "same_environment_reuse_allowed": false,
+  "schema_version": "hswm-p1v2-l0-inertness-diagnosis/v1",
+  "scientific_judgment_reused_not_reissued": true
+}

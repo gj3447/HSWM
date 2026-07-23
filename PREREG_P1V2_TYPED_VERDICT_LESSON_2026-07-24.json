@@ -2,10 +2,10 @@
   "schema": "hswm-preregistration/v1",
   "programme": "LakatosTree_HSWM_20260719",
   "branch": "P1v2-typed-verdict-lesson",
-  "question": "Q-p1v2-do-evidence-bound-typed-lessons-causally-improve-heldout-behavior",
-  "registration_state": "LOCAL_DRAFT_UNREGISTERED_MEASUREMENT_FORBIDDEN",
-  "registered_before_measurement": false,
-  "draft_reason": "The hypothesis, arms, metrics, and kill conditions are fixed locally, but a server-owned LakatoTree prediction receipt, frozen outcome-module hashes, untouched split hash, exact token-budget manifest, neutral judge receipt, and injected-negative judge receipt do not yet exist.",
+  "question": "Q-p1v2-typed-lesson-l0-oracle-actuation",
+  "registration_state": "SERVER_REGISTERED_FROZEN_UNRUN",
+  "registered_before_measurement": true,
+  "draft_reason": null,
   "hard_core_continuity": [
     "HSWM learning is judgment feedback that produces evidence-bound semantic state and changes later heldout behavior.",
     "Promotion is immutable, gated, replayable, and non-destructive.",
@@ -71,6 +71,16 @@
     "credence": 0.3,
     "credence_note": "The action space is supported by prior agent-memory literature, but no HSWM typed-lesson causal result exists and P1's prior scalar belt was null."
   },
+  "l0_server_prediction": {
+    "tag": "p1v2-l0-typed-lesson-actuation-20260724",
+    "metric": "typed_actuation_case_count",
+    "baseline": 0,
+    "direction": ">",
+    "noise_band": 0,
+    "credence": 0.3,
+    "closes_question": "Q-p1v2-typed-lesson-l0-oracle-actuation",
+    "prediction_receipt_sha256": "d85a3bbe88c9b0602778361ffc29282d70839f5b467bc5b45264882337aa7bdd"
+  },
   "comparison_interpretation": {
     "T1_beats_T3_but_not_T2": "Operational compression only. Do not claim HSWM-specific learning and keep P2 closed.",
     "T1_beats_T3_and_T2_and_T4": "P1v2 causal lesson-learning result; permits a separate P2 transfer preregistration.",
@@ -89,7 +99,7 @@
   "data_lock": {
     "universe": "new PhantomWiki universe; the seed-1 P1 universe and all 390 previously inspected eligible questions are forbidden",
     "proposed_generation": "phantom-wiki 1.0.3, same scale flags as P1, seed 2, friendship-seed 2",
-    "preflight": "eligibility counts and schema validity only; no arm answer, reward, recall, delta, or verdict may be inspected",
+    "preflight": "eligibility counts and schema validity only; six heldout cases with 2-10 exact public retrieval documents are selected without sealed answer values or answer cardinality; no arm answer, reward, recall, delta, or verdict may be inspected",
     "split": "training, lesson-calibration, heldout target, and retention canary IDs are disjoint and content-addressed",
     "future_information_refusal": "lesson compiler and retriever must reject future episode IDs, heldout answer values, evaluation labels, and gold-derived strings"
   },
@@ -140,8 +150,35 @@
     "deployment receipt is frozen",
     "neutral judge and injected-negative receipts pass"
   ],
-  "module_sha256": null,
-  "split_manifest_sha256": null,
-  "prediction_receipt_sha256": null,
-  "judge_script_sha256": null
+  "measurement_authorized_for_stage": "L0_ORACLE_ACTUATION_ONLY",
+  "frozen_l0_locks": {
+    "git_commit": "712e873540a79e44575b60d5e3f4f898df9c2542",
+    "public_manifest_sha256": "2ff30b41998846f9dcb98f775e9e5515f0e26b024aa2f90b303ee94acaa11df5",
+    "public_manifest_file_sha256": "6104e8c27503f1dfafbb64c339f252d6c38734f6b5d94b1cfa15f31f93559307",
+    "budget_manifest_sha256": "a66612dec6d43567d30f42faf89964b1f7b9d762f4defe416a067f639bb807ab",
+    "budget_manifest_file_sha256": "6794c9931053264a371ccc963aaa9561fe2510a3a2fc0ea08079014109965800",
+    "deployment_file_sha256": "b8a451279cf835b2ba16902c489f4f13413901a89b0b885bf39ab82dba5bba19",
+    "prediction_receipt_file_sha256": "21aeb8f3d6178206b765b78fe15bd4d3ab00763d1b99a100c49807e0aac04805",
+    "judge_script_sha256": "a2b546bdfdfeac76f8fc732c720b03d6a84270785101621851d38f9c0fff81f3",
+    "judge_fixture_manifest_file_sha256": "5454f51222a769384e127e3217f52cac03d2c60f74add62fee634db111eda675",
+    "contradiction_refusal_file_sha256": "cdb2c8236bac10d8d2d93b41a3fdff1ba12700daa28ffc4ca361d7ba78d24456",
+    "eligible_case_count": 6,
+    "physical_model_call_budget": 24
+  },
+  "module_sha256": {
+    "hswm_weight_snapshot.py": "53a2e1cea7c57d7b7d3b13321e560ef25581b299ff443dcc80791f777bce24f1",
+    "p1_llm_answerer.py": "69b392ba4e833cca600e54950a90bd8b49cd093fba9e9b45ef664f43a63b7335",
+    "p1v2_l0_harness.py": "77c7ea65f92275a5917d8d0657e71c1251d9ca35b9c402600d70d6a346aeb0d9",
+    "p1v2_l0_measure.py": "161a071620c6da4b4a23e8925f2e3ce31f8b5768501d2cd87386f3c9bc29bacd",
+    "p1v2_l0_preflight.py": "89f645e88625ddf7d8c06f2f0ac6448dc7b0b378f1f910f7f2956566ab3c6f40",
+    "p1v2_l0_prepare.py": "32f86a375725a3ed0704075089d764c82dcad1dcbea5b961263e52b142fb1f0f",
+    "p1v2_llm_answerer.py": "c18463d1d3752b2a81d9cfcc383ab7a9c8ca15e7cf24eb60fabbdfba122d8244",
+    "p1v2_prompt_parity.py": "d2d1184e06f2ac1b01502347cdc5276bee96db352c49c271a6086c53948463d0",
+    "p1v2_tokenizer_adapter.py": "03ae29db84678ef507b6dc6f4e9da1271449db800baadfd5f5817845745031d5",
+    "p1v2_type6_environment.py": "767bdefd71c17b189080eeec0df8eff1ac3ce684fbb84c987ff6412329eb20ad",
+    "p1v2_typed_lesson.py": "61a506b1181ccb15a7e9e15477ad4cc98b4f1e058688720e1d617866e1652f24"
+  },
+  "split_manifest_sha256": "2ff30b41998846f9dcb98f775e9e5515f0e26b024aa2f90b303ee94acaa11df5",
+  "prediction_receipt_sha256": "d85a3bbe88c9b0602778361ffc29282d70839f5b467bc5b45264882337aa7bdd",
+  "judge_script_sha256": "a2b546bdfdfeac76f8fc732c720b03d6a84270785101621851d38f9c0fff81f3"
 }

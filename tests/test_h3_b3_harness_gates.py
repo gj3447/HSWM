@@ -5,12 +5,14 @@ from dataclasses import asdict
 from hashlib import sha256
 import inspect
 import json
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
 import h3_b3_falsifier as h3
 import h3_artifact_lifecycle as lifecycle
+import recorded_llm_extractor as rex
 from world_ir import canonical_json
 
 
@@ -108,6 +110,16 @@ def _base_manifest(tmp_path):
     )
     arc_commitment = asdict(arc_config)
     arc_commitment.pop("deployment_attestation_sha256")
+    extractor_config = rex.ExtractorConfigV1(
+        endpoint="http://127.0.0.1:18100/v1",
+        model="qwen3.6-35b-a3b",
+        model_revision="fixture-revision",
+        max_concurrency=2,
+        timeout_seconds=180.0,
+        max_tokens=1024,
+        max_attempts=2,
+        batch_size=1,
+    )
     manifest = {
         "schema_version": h3.MANIFEST_SCHEMA_VERSION,
         "status_at_freeze": "PRE_RUN_FROZEN",
@@ -120,10 +132,15 @@ def _base_manifest(tmp_path):
         },
         "evaluation_config": h3.FROZEN_EVALUATION_CONFIG,
         "extractor": {
-            "model": "qwen3.6-35b-a3b",
-            "model_revision": "fixture-revision",
-            "prompt_sha256": "1" * 64,
-            "config_sha256": "2" * 64,
+            "endpoint": extractor_config.endpoint,
+            "model": extractor_config.model,
+            "model_revision": extractor_config.model_revision,
+            "max_concurrency": extractor_config.max_concurrency,
+            "timeout_seconds": extractor_config.timeout_seconds,
+            "max_tokens": extractor_config.max_tokens,
+            "max_attempts": extractor_config.max_attempts,
+            "prompt_sha256": rex.prompt_sha256(),
+            "config_sha256": rex.config_sha256(extractor_config),
             "batch_size": 1,
         },
         # Semantic validation is stubbed below; root shape remains exact.
@@ -174,8 +191,133 @@ def _stub_manifest_semantics(monkeypatch, manifest):
     )
     monkeypatch.setattr(
         h3, "_validate_deployment_attestation",
-        lambda *_args, **_kwargs: {},
+        lambda *_args, **_kwargs: {
+            "endpoint": manifest["extractor"]["endpoint"],
+        },
     )
+    # These fixtures exercise the generic manifest shape/state-machine teeth
+    # with synthetic paths.  The exact one-off V5 preregistration contract has
+    # its own dedicated tests and must not turn every structural fixture into a
+    # copy of the live run manifest.
+    monkeypatch.setattr(
+        h3, "_require_frozen_v5_manifest_contract",
+        lambda **_kwargs: None,
+    )
+
+
+def _frozen_v5_contract_args():
+    stages = {
+        stage: {
+            "segments": json.loads(json.dumps(
+                h3.FROZEN_V5_STAGE_SEGMENTS[stage]
+            )),
+            "preimages": dict(h3.FROZEN_V5_STAGE_PREIMAGES[stage]),
+            "output_paths": h3._v5_stage_output_paths(stage),
+            "extraction_deployment_receipt": dict(
+                h3.FROZEN_V5_QWEN35_DEPLOYMENT
+            ),
+        }
+        for stage in h3.STAGES
+    }
+    stages["fresh"].update({
+        "arc_deployment_receipt": {
+            "path": (
+                f"{h3.FROZEN_V5_OUTPUT_PREFIX}/fresh/"
+                "qwen27-deployment-v2.json"
+            ),
+            "endpoint": "http://127.0.0.1:18001/v1",
+            "model": h3.arca.FROZEN_MODEL,
+            "model_revision": h3.arca.FROZEN_MODEL_REVISION,
+        },
+        "arc_paths": {
+            dataset: h3._v5_arc_paths(dataset) for dataset in h3.DATASETS
+        },
+    })
+    phase_paths = {
+        "development_report": (
+            f"{h3.FROZEN_V5_OUTPUT_PREFIX}/phases/development-report.json"
+        ),
+        "certificate_transition": (
+            f"{h3.FROZEN_V5_OUTPUT_PREFIX}/phases/certificate-transition.json"
+        ),
+        "fresh_artifact_seal": (
+            f"{h3.FROZEN_V5_OUTPUT_PREFIX}/phases/fresh-artifact-seal.json"
+        ),
+        "final_report": f"{h3.FROZEN_V5_OUTPUT_PREFIX}/phases/final-report.json",
+    }
+    arc_config = {
+        "endpoint": "http://127.0.0.1:18001/v1",
+        "model": h3.arca.FROZEN_MODEL,
+        "model_revision": h3.arca.FROZEN_MODEL_REVISION,
+        "max_concurrency": 2,
+        "timeout_seconds": 180.0,
+        "max_tokens": 96,
+        "config_sha256": (
+            "b771d2a8e90502344454b55a8f7076d4b16dbf57dab33c8af3e109522598153d"
+        ),
+    }
+    return {
+        "manifest_path": (
+            Path(h3.__file__).resolve().parent / h3.FROZEN_V5_MANIFEST_PATH
+        ),
+        "allow_unpublished_candidate": False,
+        "protocol": dict(h3.FROZEN_V5_PROTOCOL_BINDING),
+        "preflight_binding": {"path": h3.FROZEN_V5_PREFLIGHT_PATH},
+        "preflight_receipt": SimpleNamespace(
+            gate_source_code_root_sha256=(
+                h3.FROZEN_V5_GATE_SOURCE_CODE_ROOT_SHA256
+            ),
+        ),
+        "extractor": dict(h3.FROZEN_V5_EXTRACTOR),
+        "embedding": {
+            "model_attestation_receipt": dict(h3.FROZEN_V5_BGE_RECEIPT),
+        },
+        "stages": stages,
+        "phase_paths": phase_paths,
+        "sidecars": json.loads(json.dumps(
+            h3.FROZEN_V5_DEVELOPMENT_SIDECARS
+        )),
+        "holdouts": json.loads(json.dumps(h3.FROZEN_V5_FRESH_HOLDOUT)),
+        "arc_config": arc_config,
+    }
+
+
+def test_exact_v5_loader_contract_accepts_only_frozen_values():
+    baseline = _frozen_v5_contract_args()
+    h3._require_frozen_v5_manifest_contract(**baseline)
+
+    drift = _frozen_v5_contract_args()
+    drift["extractor"]["max_attempts"] = 3
+    config = rex.ExtractorConfigV1(
+        endpoint=drift["extractor"]["endpoint"],
+        model=drift["extractor"]["model"],
+        model_revision=drift["extractor"]["model_revision"],
+        max_concurrency=drift["extractor"]["max_concurrency"],
+        timeout_seconds=drift["extractor"]["timeout_seconds"],
+        max_tokens=drift["extractor"]["max_tokens"],
+        max_attempts=drift["extractor"]["max_attempts"],
+        batch_size=drift["extractor"]["batch_size"],
+    )
+    drift["extractor"]["config_sha256"] = rex.config_sha256(config)
+    with pytest.raises(h3.ArtifactIntegrityError, match="extractor differs"):
+        h3._require_frozen_v5_manifest_contract(**drift)
+
+    wrong_path = _frozen_v5_contract_args()
+    wrong_path["manifest_path"] = (
+        Path(h3.__file__).resolve().parent / "alternate-manifest.json"
+    )
+    with pytest.raises(h3.ArtifactIntegrityError, match="path differs"):
+        h3._require_frozen_v5_manifest_contract(**wrong_path)
+
+
+def test_exact_v5_loader_contract_revalidates_parent_evidence(monkeypatch):
+    bindings = list(h3.FROZEN_V5_PARENT_EVIDENCE)
+    bindings[0] = {**bindings[0], "sha256": "0" * 64}
+    monkeypatch.setattr(h3, "FROZEN_V5_PARENT_EVIDENCE", tuple(bindings))
+    with pytest.raises(h3.ArtifactIntegrityError, match="parent evidence hash"):
+        h3._require_frozen_v5_manifest_contract(
+            **_frozen_v5_contract_args()
+        )
 
 
 def test_manifest_exactly_binds_imported_code_and_rejects_spoofs(
@@ -187,6 +329,19 @@ def test_manifest_exactly_binds_imported_code_and_rejects_spoofs(
         manifest["code_sha256"]
     )
     assert not (tmp_path / "runs/fresh/qwen27-deployment.json").exists()
+
+
+def test_manifest_rejects_extractor_execution_field_drift(tmp_path, monkeypatch):
+    manifest_path, manifest = _base_manifest(tmp_path)
+    _stub_manifest_semantics(monkeypatch, manifest)
+    manifest["extractor"]["max_attempts"] += 1
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    with pytest.raises(
+        h3.ArtifactIntegrityError,
+        match="extractor execution commitment mismatch",
+    ):
+        h3.load_run_manifest(manifest_path)
 
     original = dict(manifest["code_sha256"])
     for replacement in (
@@ -210,6 +365,21 @@ def test_manifest_exactly_binds_imported_code_and_rejects_spoofs(
     manifest["unexpected"] = True
     manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
     with pytest.raises(h3.ArtifactIntegrityError, match="keys must be exactly"):
+        h3.load_run_manifest(manifest_path)
+
+
+def test_manifest_rejects_duplicate_root_keys_before_semantic_validation(
+    tmp_path, monkeypatch,
+):
+    manifest_path, manifest = _base_manifest(tmp_path)
+    _stub_manifest_semantics(monkeypatch, manifest)
+    raw = manifest_path.read_text(encoding="utf-8")
+    manifest_path.write_text(
+        '{"schema_version":"forged-duplicate",' + raw.lstrip()[1:],
+        encoding="utf-8",
+    )
+
+    with pytest.raises(h3.ArtifactIntegrityError, match="duplicate JSON key"):
         h3.load_run_manifest(manifest_path)
 
 

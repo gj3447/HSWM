@@ -1,0 +1,369 @@
+{
+  "schema": "lakato-evidence-record/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "B3-shadow-gated-topology-absorption",
+  "question": "Q-continual-absorption-fsm-unseen",
+  "conjecture": "Three shadow-gated n-ary topology absorption rounds (ADD/SPLIT/MERGE/SUPERSEDE) pass the canary+fresh+target gate in at least one round while preserving canary knowledge at >= 98%, separating harmful from useless absorption - the diagnostic Phase A could not produce.",
+  "preregistration": {
+    "path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/prom_search_hswm/evidence/PREREG_shadow_gated_absorption_20260723.json",
+    "registered_at": null,
+    "registered_before_measurement": true,
+    "prediction_receipt_sha256": "UNRECORDED-user-declared-2026-07-23",
+    "script_sha256": "5558e61b5a79cd3c7bda2bfb36260b14190969c81c07f19c40403e8e195acdfb",
+    "gate_module_sha256": "d8db35428995e95137a146879ec39ea55cd2c8a395648d04f1db8ae5e50a51ed"
+  },
+  "measurement": {
+    "metric": "rounds_passed_shadow_gate",
+    "value": 0,
+    "unit": "count of 3 rounds passing canary+fresh+target gate",
+    "scope": "2Wiki(SiReRAG-converted) deterministic sample n=900; exact normalized query-disjoint splits",
+    "noise_band": 0.0,
+    "novel_metric": "min_canary_preservation_over_rounds",
+    "novel_value": 100.0,
+    "kill_condition_triggered": true,
+    "rounds": [
+      {
+        "round": 1,
+        "arms": {
+          "gated": {
+            "candidate_hash": "148c5b5ed82547c55eaa9378b45e23f215f937516fb173e1c1450ca0f62f04e9",
+            "ops": {
+              "add": 100,
+              "split": 20,
+              "merge": 20
+            },
+            "n_touched_docs": 554,
+            "canary_n": 103,
+            "target_n": 17,
+            "canary_preservation": 100.0,
+            "fresh_delta": 0.0,
+            "target_delta": 0.0,
+            "gate_passed": false,
+            "rejection_reasons": [
+              "no_target_gain"
+            ],
+            "primary_reason": "no_target_gain",
+            "committed": false,
+            "replay_verified": true,
+            "ledger_entries": 220,
+            "active_edges_after": 6107,
+            "version_after": "97fc2f97f6a74800"
+          },
+          "absorb_all": {
+            "candidate_hash": "148c5b5ed82547c55eaa9378b45e23f215f937516fb173e1c1450ca0f62f04e9",
+            "ops": {
+              "add": 100,
+              "split": 20,
+              "merge": 20
+            },
+            "n_touched_docs": 554,
+            "canary_n": 103,
+            "target_n": 17,
+            "canary_preservation": 100.0,
+            "fresh_delta": 0.0,
+            "target_delta": 0.0,
+            "gate_passed": false,
+            "rejection_reasons": [
+              "no_target_gain"
+            ],
+            "primary_reason": "no_target_gain",
+            "committed": true,
+            "replay_verified": true,
+            "ledger_entries": 220,
+            "active_edges_after": 6207,
+            "version_after": "7cc15dc153eeeb19"
+          }
+        }
+      },
+      {
+        "round": 2,
+        "arms": {
+          "gated": {
+            "candidate_hash": "0f5cbcb6096af994cbc93be2858bc926e3a3bbe68073afd66f683ee0855a9188",
+            "ops": {
+              "add": 100,
+              "split": 20,
+              "merge": 20
+            },
+            "n_touched_docs": 552,
+            "canary_n": 109,
+            "target_n": 11,
+            "canary_preservation": 100.0,
+            "fresh_delta": 0.0,
+            "target_delta": 0.0,
+            "gate_passed": false,
+            "rejection_reasons": [
+              "no_target_gain"
+            ],
+            "primary_reason": "no_target_gain",
+            "committed": false,
+            "replay_verified": true,
+            "ledger_entries": 220,
+            "active_edges_after": 6107,
+            "version_after": "97fc2f97f6a74800"
+          },
+          "absorb_all": {
+            "candidate_hash": "3b401d0268a45e57bbbc8aadc661650ab43a8355330f7b9bcd1f95271199b4db",
+            "ops": {
+              "add": 100,
+              "split": 20,
+              "merge": 20
+            },
+            "n_touched_docs": 574,
+            "canary_n": 108,
+            "target_n": 12,
+            "canary_preservation": 99.074074,
+            "fresh_delta": -0.002083,
+            "target_delta": 0.0,
+            "gate_passed": false,
+            "rejection_reasons": [
+              "no_target_gain"
+            ],
+            "primary_reason": "no_target_gain",
+            "committed": true,
+            "replay_verified": true,
+            "ledger_entries": 220,
+            "active_edges_after": 6307,
+            "version_after": "be2d218110b6e855"
+          }
+        }
+      },
+      {
+        "round": 3,
+        "arms": {
+          "gated": {
+            "candidate_hash": "3d45292246fbc04a17635de8e1be6f3c7e5bb0e6b693c03fed355ae9d5215c3d",
+            "ops": {
+              "add": 100,
+              "split": 20,
+              "merge": 20
+            },
+            "n_touched_docs": 561,
+            "canary_n": 108,
+            "target_n": 12,
+            "canary_preservation": 100.0,
+            "fresh_delta": -0.002083,
+            "target_delta": -0.020833,
+            "gate_passed": false,
+            "rejection_reasons": [
+              "no_target_gain"
+            ],
+            "primary_reason": "no_target_gain",
+            "committed": false,
+            "replay_verified": true,
+            "ledger_entries": 220,
+            "active_edges_after": 6107,
+            "version_after": "97fc2f97f6a74800"
+          },
+          "absorb_all": {
+            "candidate_hash": "e8da640f462fba4a3ddc62215685029859445e9eebf0a0c190534317b2198dd4",
+            "ops": {
+              "add": 100,
+              "split": 20,
+              "merge": 20
+            },
+            "n_touched_docs": 554,
+            "canary_n": 105,
+            "target_n": 15,
+            "canary_preservation": 100.0,
+            "fresh_delta": 0.0,
+            "target_delta": 0.0,
+            "gate_passed": false,
+            "rejection_reasons": [
+              "no_target_gain"
+            ],
+            "primary_reason": "no_target_gain",
+            "committed": true,
+            "replay_verified": true,
+            "ledger_entries": 220,
+            "active_edges_after": 6407,
+            "version_after": "82fb9c49966c6d51"
+          }
+        }
+      }
+    ],
+    "sealed_holdout": {
+      "gated_minus_frozen": {
+        "n": 180,
+        "control_recall10": 0.698611,
+        "candidate_recall10": 0.698611,
+        "recall10_delta": 0.0,
+        "recall10_delta_bootstrap95": [
+          0.0,
+          0.0
+        ]
+      },
+      "absorb_all_minus_frozen": {
+        "n": 180,
+        "control_recall10": 0.698611,
+        "candidate_recall10": 0.697222,
+        "recall10_delta": -0.001389,
+        "recall10_delta_bootstrap95": [
+          -0.004167,
+          0.0
+        ]
+      },
+      "absorb_all_minus_gated": {
+        "n": 180,
+        "control_recall10": 0.698611,
+        "candidate_recall10": 0.697222,
+        "recall10_delta": -0.001389,
+        "recall10_delta_bootstrap95": [
+          -0.004167,
+          0.0
+        ]
+      },
+      "frozen_recall10": 0.698611
+    },
+    "pre_registered_checks": {
+      "rounds_passed_ge_1": false,
+      "min_canary_preservation_ge_98": true,
+      "kill_condition_3_rounds_zero_acceptance": true,
+      "all_round_replays_verified": true,
+      "exact_query_id_not_used": true
+    }
+  },
+  "anti_memorization": {
+    "query_id_used_by_model": false,
+    "exact_normalized_query_overlap": 0,
+    "candidate_generation_inputs": "train split gold documents + active edge ledger only",
+    "split_manifest_sha256": "e0d122058ca857012b9ad9a5ccfd7abe908154f81a61b75a40d2a8994eb81c3d",
+    "note": "Topology candidates derive only from the round train batch and the active ledger; validation epochs drive gate accept/discard decisions; the sealed holdout is never consulted before the final comparison."
+  },
+  "provenance": {
+    "grounded": true,
+    "inputs": [
+      {
+        "kind": "source",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/prom_search_hswm/data/2wiki_sirerag_1000.jsonl",
+        "sha256": "b93f5de3b86619028b08f887071b01ef1f0f5d073a5fe472fc7684ecb99a182e"
+      },
+      {
+        "kind": "harness",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/prom_search_hswm/prom_shadow_gated_absorption.py",
+        "sha256": "5558e61b5a79cd3c7bda2bfb36260b14190969c81c07f19c40403e8e195acdfb"
+      },
+      {
+        "kind": "gate_module",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/prom_search_hswm/hswm_shadow_gate.py",
+        "sha256": "d8db35428995e95137a146879ec39ea55cd2c8a395648d04f1db8ae5e50a51ed"
+      },
+      {
+        "kind": "converter",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/prom_search_hswm/convert_sirerag_2wiki.py",
+        "sha256": "1acd226e983871b3ba0621b23bc2e9f299113c0840f5211a1056cc2ce221dcfe"
+      },
+      {
+        "kind": "p5_dependency",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/prom_search_hswm/prom_p5_multiview_hardhop.py",
+        "sha256": "225b7467ff0ca2cfe26e248a234af1e6022cd9d1b8eb6cef74640d54339f12aa"
+      },
+      {
+        "kind": "preregistration",
+        "path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/prom_search_hswm/evidence/PREREG_shadow_gated_absorption_20260723.json",
+        "sha256": "4abd94b3728f956151e62ad18392968e4a8768270b642c07a529402e487fa603"
+      }
+    ],
+    "data_manifest": {
+      "dataset": "2WikiMultihopQA dev via SiReRAG conversion (1000 rows)",
+      "dataset_substitution_reason": "original /Volumes/GM/bench/2wiki_dev.jsonl unmounted; no downloads allowed",
+      "selected_rows": 900,
+      "selected_ids_sha256": "0c286aaed5092f4d62eae6183ff309b6ec52b9ec0c38adbba13271b1d1b80bc8",
+      "question_split_hashes": {
+        "train_1": "24fbd99f88230c090685ac62d2fd56d21b8d3f7a344af7cf3d482f2e3da53e05",
+        "train_2": "0cc491024c88ab1c4b87dcb1b27a24652f02fd827e95e635a811ba58e2abcc6e",
+        "train_3": "f3d2637636c39f15bb9e6e5b7c31da14a1672e3fb90b8fcfd1841d04325be73a",
+        "validation_1": "7ccaf460ee265767e30394aee07b267354883f78173ae824fb4bd37589897ae7",
+        "validation_2": "b336445f8d2c22c23258780c63b7fda5118e00bf00bea001bc8786e7785280c3",
+        "validation_3": "3a08b81fde09389871dc8695e20c264d5388e2c7400254e43d6742ca5f41da9e",
+        "final_holdout": "023c533093f6b540d63d2e5984cbff7521bab09955c1c88e14aac76988b1dbb1"
+      },
+      "split_manifest_sha256": "e0d122058ca857012b9ad9a5ccfd7abe908154f81a61b75a40d2a8994eb81c3d",
+      "seed": 8217,
+      "pool_documents": 5555,
+      "base_hyperedges": 6107,
+      "base_version": "97fc2f97f6a748002de696650edc22869e5de188f861fe6e82a2cf731ce76542",
+      "support_count_histogram": {
+        "2": 692,
+        "4": 208
+      },
+      "hop_types": {
+        "bridge_comparison": 208,
+        "comparison": 220,
+        "compositional": 372,
+        "inference": 100
+      }
+    },
+    "embedding": {
+      "kind": "deterministic lexical (hashed unigram+bigram TF-IDF, seeded random projection)",
+      "substitution_reason": "all-MiniLM-L6-v2 weights unavailable offline (external volume unmounted, downloads forbidden)",
+      "embed_dim": 384,
+      "embed_buckets": 32768,
+      "embed_seed": 20260723,
+      "same_for_all_arms": true
+    },
+    "equal_compute": {
+      "verified": true,
+      "shared_views": [
+        "title_cosine",
+        "body_cosine",
+        "nary_entity_appnp"
+      ],
+      "same_embeddings": true,
+      "same_document_pool": true,
+      "same_top_k": 10,
+      "difference_only": "which hyperedge ledger version feeds the APPNP bridge view"
+    }
+  },
+  "harness": {
+    "command": "GIT/HSWM/.venv/bin/python prom_search_hswm/prom_shadow_gated_absorption.py",
+    "cwd": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/prom_search_hswm",
+    "git_head": "967c961d798d2d5f3ef60cfeffef4077a84a1a8c",
+    "environment": {
+      "python": "3.11.15",
+      "platform": "macOS-27.0-arm64-arm-64bit",
+      "numpy": "2.4.6"
+    },
+    "started_at": "2026-07-23T07:03:58.375142+00:00",
+    "finished_at": "2026-07-23T07:04:09.805884+00:00",
+    "exit_code": 0
+  },
+  "findings": [
+    {
+      "proposal": "A shadow gate with canary/fresh/target probes separates harmful absorption from useless absorption, which the Phase-A FSM gate could not.",
+      "supported_by": [
+        "measurement.rounds"
+      ]
+    },
+    {
+      "proposal": "n-ary topology absorption (ADD/SPLIT/MERGE/SUPERSEDE) is the test bench for HSWM self-improvement; semantic KV residual absorption (Phase A) stays rejected.",
+      "supported_by": [
+        "measurement.sealed_holdout"
+      ]
+    }
+  ],
+  "limitations": [
+    "Dataset and encoder substitutions: SiReRAG-converted 2Wiki (1000 rows) and deterministic lexical embeddings replace the P6 dataset/MiniLM because the external volume is unmounted and downloads are forbidden; absolute recall levels are not comparable to P6, only the paired gate logic carries over.",
+    "LakatoTree prediction was user-declared (2026-07-23); no server receipt sha was recorded in-repo.",
+    "One benchmark, one deterministic split, one seed; training interactions use gold supporting passages (supervised learning-while-using).",
+    "Canary/target slices are structural (candidate-touched gold documents); the target slice approximates the train distribution rather than matching it exactly."
+  ],
+  "diagnostics": {
+    "rounds_passed": 0,
+    "min_canary_preservation": 100.0,
+    "gate_thresholds": {
+      "canary_epsilon": 0.01,
+      "canary_min_preservation": 98.0,
+      "fresh_delta_min": -0.01,
+      "target_gain_min": 0.03
+    },
+    "final_versions": {
+      "gated": "97fc2f97f6a74800",
+      "absorb_all": "82fb9c49966c6d51"
+    },
+    "final_active_edges": {
+      "gated": 6107,
+      "absorb_all": 6407
+    }
+  }
+}

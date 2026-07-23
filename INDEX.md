@@ -28,6 +28,14 @@
   확인됐다. pure bond-readout binding을 추가했고, fine query-edge 상한은
   `+0.048913/+0.083333`이지만 static edge-ID suppression은 6/6 validation/test Δ0였다.
 
+목표 아키텍처의 범주도 고정했다. **HSWM = Hypergraph Semantic Weight Map**이며, 신경망적
+함수 단위가 LLM으로 동작하는 하이퍼그래프 기반의 거대 시멘틱 신경망이다. hypergraph \(H\)가
+함수·상태의 n-ary 연결 구조를, Semantic Weight Map \(W\)가 그 사이의 거시 가중치·활성·
+routing을 이룬다. HSWM 전체가 persistent recurrent state, credit, acceptance,
+weight/topology rewrite를 소유한다. 이는 목표 정체성이며 현재 효능 주장이 아니다.
+정본은
+[`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md)다.
+
 정본 설계는
 [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md),
 반례 기반 수리는
@@ -45,6 +53,17 @@
 - 다음 설계: [`B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md`](prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md) — fast query-bond attention을 먼저 검증하고 반복 효과만 slow `Delta ell`로 증류
 - 결정적 비교 설계 lock: [`_research/shared_field_hypothesis/`](_research/shared_field_hypothesis/) — shared field 대 separate heads에서 비교할 예산 차원·카운터 계약과 독립 selection·revision·감사 지표를 잠금. 현재 `DESIGN_LOCKED_NOT_PREREGISTERED`이며 v1은 모든 run을 거부한다
 - 경계: 설계 수식은 `SECONDARY_AI_RESEARCH_AND_DESIGN`; B2.1 수치는 별도 prereg·실측·감사·LakatoTree receipt에 근거한다.
+
+### P0–P4 전환 상태와 최신 falsifier
+
+| 단계/실험 | 현재 판정 | 산출물 |
+|---|---|---|
+| P0 identity/metric | 목표 정체성 고정. 함수/agent process가 LLM으로 실행되고 `H,W`가 그 거시 신경망을 구성 | [canon](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) |
+| P1 closed learning loop | 사전등록 완료, `eligibility_tag`/`M_commit`/loop harness 미구현·미실행 | [prereg](PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json) |
+| B2 routing signal | 최선 slice oracle +9.92pp, tie 75%; pooled 분포는 tie kill. 얇은 oracle signal이지 learned 성공 아님 | [result](B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md) · [evidence](EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json) |
+| E1 conditional traversal | bridge −13.89pp, factoid −7.27pp. 전면 OFF 유지 | [result](E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md) · [evidence](EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json) |
+| P3 shadow topology absorption | 0/3 수용, canary 100%, sealed Δ0. 안전하지만 후보가 무득 | [result](SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md) · [evidence](prom_search_hswm/evidence/EVIDENCE_shadow_gated_absorption_20260723.json) |
+| prior-art tribunal | generic graph three-factor+sleep novelty는 사망; n-ary credit/LLM verdict/topology/shared persistent field 슬롯 생존 | [tribunal](TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md) |
 
 ## 2026-07-23 paper–code absorption gate
 

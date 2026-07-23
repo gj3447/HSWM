@@ -1,0 +1,90 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "branch": "B3-shadow-gated-topology-absorption",
+  "question": "Q-continual-absorption-fsm-unseen",
+  "conjecture": "Three shadow-gated n-ary topology absorption rounds (ADD/SPLIT/MERGE/SUPERSEDE) pass the canary+fresh+target gate in at least one round while preserving canary knowledge at >= 98%, separating harmful from useless absorption - the diagnostic Phase A could not produce.",
+  "prediction": {
+    "metric": "rounds_passed_shadow_gate",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0.0,
+    "success_threshold": 1,
+    "novel_metric": "min_canary_preservation_over_rounds",
+    "novel_direction": "higher",
+    "novel_threshold": 98.0,
+    "credence": null,
+    "declared_by": "user 2026-07-23 (LakatoTree preregistration reported complete by user; server receipt sha not recorded in-repo)"
+  },
+  "gate_policy": {
+    "shadow_only": "candidates are applied to a shadow copy of the field; the active field is mutated only by supersession commit after PASS",
+    "canary_probe": "validation queries whose gold documents are untouched by any candidate op; per-query regression = post < pre - 0.01; canary_preservation = 100 * (1 - regression rate); minimum slice n=20 (fail-closed)",
+    "fresh_probe": "the round's whole fresh validation epoch (n=120); non-inferiority requires mean recall@10 delta >= -0.01",
+    "target_probe": "validation queries with >= 1 gold document touched by candidate ops (train-distribution slice); improvement requires mean recall@10 delta >= +0.03; minimum slice n=10 (fail-closed)",
+    "pass_condition": "canary_preservation >= 98% AND fresh delta >= -0.01 AND target delta >= +0.03 AND both slices sufficient",
+    "rejection_reasons_priority": ["insufficient_canary_slice", "insufficient_target_slice", "canary_harm", "fresh_harm", "no_target_gain"],
+    "active_mutation": "forbidden; immutable edge ledger + valid_at/invalid_at supersession marks only"
+  },
+  "kill_conditions": [
+    "3 consecutive rounds with zero acceptance (rounds_passed == 0).",
+    "Any accepted candidate regresses canary knowledge below 98% preservation or fresh validation recall@10 by more than 0.01.",
+    "Any exact normalized query overlap across splits, evidence replay mismatch, unequal query-time views, or use of query ID as a model feature is detected."
+  ],
+  "control_arms": {
+    "frozen": "no absorption; base hyperedge ledger throughout",
+    "absorb_all": "every round's candidate committed unconditionally (no gate); isolates the gate's filtering effect",
+    "gated": "candidates committed only on shadow-gate PASS"
+  },
+  "scope_boundary": {
+    "phase": "B-nary-topology-absorption",
+    "topology_learning_claimed": true,
+    "production_pointer_claimed": false,
+    "substitutions": {
+      "dataset": "SiReRAG 2Wiki dev 1000 rows losslessly converted to the P5/P6 loader schema (original /Volumes/GM/bench/2wiki_dev.jsonl unmounted; downloads forbidden); same n=900, seed=8217, split sizes, and anti-memorization discipline as P6",
+      "embedding": "deterministic lexical vectors (hashed unigram+bigram TF-IDF through seeded random projection, stdlib+numpy) replace all-MiniLM-L6-v2 (weights unavailable offline); identical across all arms, all comparisons paired"
+    },
+    "deferred": [
+      "second benchmark",
+      "three seeds",
+      "neural encoder rerun when the external volume returns"
+    ]
+  },
+  "locked_parameters": {
+    "n_q": 900,
+    "seed": 8217,
+    "absorption_rounds": 3,
+    "train_batch_size": 120,
+    "validation_epoch_size": 120,
+    "final_holdout_size": 180,
+    "top_k": 10,
+    "fullchain_k": 20,
+    "bootstrap_reps": 2000,
+    "embed_dim": 384,
+    "embed_buckets": 32768,
+    "embed_seed": 20260723,
+    "canary_epsilon": 0.01,
+    "canary_min_preservation": 98.0,
+    "fresh_delta_min": -0.01,
+    "target_gain_min": 0.03,
+    "min_canary_n": 20,
+    "min_target_n": 10,
+    "max_adds_per_round": 100,
+    "split_min_deg": 8,
+    "split_max_deg": 80,
+    "split_coherence_margin": 0.05,
+    "split_kmeans_iters": 10,
+    "max_splits_per_round": 20,
+    "merge_min_jaccard": 0.6,
+    "merge_max_deg": 80,
+    "max_merges_per_round": 20
+  },
+  "script_sha256": "5558e61b5a79cd3c7bda2bfb36260b14190969c81c07f19c40403e8e195acdfb",
+  "dataset_sha256": "b93f5de3b86619028b08f887071b01ef1f0f5d073a5fe472fc7684ecb99a182e",
+  "gate_module_sha256": "d8db35428995e95137a146879ec39ea55cd2c8a395648d04f1db8ae5e50a51ed",
+  "converter_sha256": "1acd226e983871b3ba0621b23bc2e9f299113c0840f5211a1056cc2ce221dcfe",
+  "p5_dependency_sha256": "225b7467ff0ca2cfe26e248a234af1e6022cd9d1b8eb6cef74640d54339f12aa",
+  "server_registered_at": null,
+  "registered_before_measurement": true,
+  "prediction_receipt_sha256": "UNRECORDED-user-declared-2026-07-23",
+  "lakatotree_tag": "B3-shadow-gated-topology-absorption"
+}

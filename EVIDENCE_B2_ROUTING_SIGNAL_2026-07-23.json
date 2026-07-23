@@ -1,0 +1,982 @@
+{
+  "experiment": "B-2 routing signal existence (measurement-only, no learning)",
+  "date": "2026-07-23",
+  "epsilon": 0.01,
+  "bootstrap": {
+    "n_resamples": 10000,
+    "seed": 20260723,
+    "paired": true
+  },
+  "kill_conditions": {
+    "oracle_gap_pp_lt": 2.0,
+    "tie_rate_pct_gt": 80.0
+  },
+  "inputs": {
+    "substrate_bench_results.json": "2d89d24926af75001bdb6dcbf7961cad57b55842aea297d783c9aa0c5146fcfd",
+    "traversal_bench_results.json": "5ead7a7e5143df4cfb4e1f58f98e92f7d7cd41969bf9056cc758220cc9998698",
+    "ab_p5_full_results.json": "fd3b3c9efd05e81b7d1ce4a1aa8794fa5d139775ac6b13a255b62f636915de31"
+  },
+  "datasets": {
+    "substrate_bench/pooled": {
+      "source": "substrate_bench_results.json",
+      "arms": [
+        "cosine",
+        "bm25",
+        "ppr",
+        "rrf",
+        "hswm"
+      ],
+      "sup_recall_at_3": {
+        "metric": "sup_recall_at_3",
+        "n_queries": 300,
+        "arms": [
+          "cosine",
+          "bm25",
+          "ppr",
+          "rrf",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.669722,
+          "bm25": 0.538611,
+          "ppr": 0.373333,
+          "rrf": 0.618056,
+          "hswm": 0.706111
+        },
+        "best_fixed_arm": "hswm",
+        "best_fixed_mean": 0.706111,
+        "oracle_mean_score": 0.768056,
+        "oracle_gap": 0.061944,
+        "oracle_gap_pp": 6.1944,
+        "oracle_gap_pp_ci95": [
+          4.5278,
+          8.0278
+        ],
+        "tie_rate_pct": 81.33,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 7.5556,
+          "median": 0.0,
+          "p90": 35.0
+        }
+      },
+      "ndcg10": {
+        "metric": "ndcg10",
+        "n_queries": 300,
+        "arms": [
+          "cosine",
+          "bm25",
+          "ppr",
+          "rrf",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.812888,
+          "bm25": 0.699343,
+          "ppr": 0.518018,
+          "rrf": 0.780416,
+          "hswm": 0.838766
+        },
+        "best_fixed_arm": "hswm",
+        "best_fixed_mean": 0.838766,
+        "oracle_mean_score": 0.884322,
+        "oracle_gap": 0.045556,
+        "oracle_gap_pp": 4.5556,
+        "oracle_gap_pp_ci95": [
+          3.5147,
+          5.6664
+        ],
+        "tie_rate_pct": 48.67,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 5.0792,
+          "median": 1.2994,
+          "p90": 16.2606
+        }
+      }
+    },
+    "substrate_bench/2wiki_s7": {
+      "source": "substrate_bench_results.json",
+      "arms": [
+        "cosine",
+        "bm25",
+        "ppr",
+        "rrf",
+        "hswm"
+      ],
+      "sup_recall_at_3": {
+        "metric": "sup_recall_at_3",
+        "n_queries": 100,
+        "arms": [
+          "cosine",
+          "bm25",
+          "ppr",
+          "rrf",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.8425,
+          "bm25": 0.7425,
+          "ppr": 0.695,
+          "rrf": 0.7925,
+          "hswm": 0.88
+        },
+        "best_fixed_arm": "hswm",
+        "best_fixed_mean": 0.88,
+        "oracle_mean_score": 0.92,
+        "oracle_gap": 0.04,
+        "oracle_gap_pp": 4.0,
+        "oracle_gap_pp_ci95": [
+          1.75,
+          6.75
+        ],
+        "tie_rate_pct": 91.0,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 3.5,
+          "median": 0.0,
+          "p90": 0.0
+        }
+      },
+      "ndcg10": {
+        "metric": "ndcg10",
+        "n_queries": 100,
+        "arms": [
+          "cosine",
+          "bm25",
+          "ppr",
+          "rrf",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.950144,
+          "bm25": 0.884176,
+          "ppr": 0.84007,
+          "rrf": 0.923651,
+          "hswm": 0.965449
+        },
+        "best_fixed_arm": "hswm",
+        "best_fixed_mean": 0.965449,
+        "oracle_mean_score": 0.985858,
+        "oracle_gap": 0.020409,
+        "oracle_gap_pp": 2.0409,
+        "oracle_gap_pp_ci95": [
+          1.0828,
+          3.2934
+        ],
+        "tie_rate_pct": 74.0,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 1.8051,
+          "median": 0.0,
+          "p90": 8.0279
+        }
+      }
+    },
+    "substrate_bench/musique_s13": {
+      "source": "substrate_bench_results.json",
+      "arms": [
+        "cosine",
+        "bm25",
+        "ppr",
+        "rrf",
+        "hswm"
+      ],
+      "sup_recall_at_3": {
+        "metric": "sup_recall_at_3",
+        "n_queries": 100,
+        "arms": [
+          "cosine",
+          "bm25",
+          "ppr",
+          "rrf",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.57,
+          "bm25": 0.425,
+          "ppr": 0.2075,
+          "rrf": 0.545,
+          "hswm": 0.630833
+        },
+        "best_fixed_arm": "hswm",
+        "best_fixed_mean": 0.630833,
+        "oracle_mean_score": 0.6775,
+        "oracle_gap": 0.046667,
+        "oracle_gap_pp": 4.6667,
+        "oracle_gap_pp_ci95": [
+          2.3333,
+          7.3333
+        ],
+        "tie_rate_pct": 78.0,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 8.9167,
+          "median": 0.0,
+          "p90": 50.0
+        }
+      },
+      "ndcg10": {
+        "metric": "ndcg10",
+        "n_queries": 100,
+        "arms": [
+          "cosine",
+          "bm25",
+          "ppr",
+          "rrf",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.741615,
+          "bm25": 0.602988,
+          "ppr": 0.347716,
+          "rrf": 0.702632,
+          "hswm": 0.781052
+        },
+        "best_fixed_arm": "hswm",
+        "best_fixed_mean": 0.781052,
+        "oracle_mean_score": 0.827013,
+        "oracle_gap": 0.045961,
+        "oracle_gap_pp": 4.5961,
+        "oracle_gap_pp_ci95": [
+          2.9156,
+          6.4438
+        ],
+        "tie_rate_pct": 40.0,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 5.7824,
+          "median": 2.755,
+          "p90": 16.7544
+        }
+      }
+    },
+    "substrate_bench/musique_s7": {
+      "source": "substrate_bench_results.json",
+      "arms": [
+        "cosine",
+        "bm25",
+        "ppr",
+        "rrf",
+        "hswm"
+      ],
+      "sup_recall_at_3": {
+        "metric": "sup_recall_at_3",
+        "n_queries": 100,
+        "arms": [
+          "cosine",
+          "bm25",
+          "ppr",
+          "rrf",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.596667,
+          "bm25": 0.448333,
+          "ppr": 0.2175,
+          "rrf": 0.516667,
+          "hswm": 0.6075
+        },
+        "best_fixed_arm": "hswm",
+        "best_fixed_mean": 0.6075,
+        "oracle_mean_score": 0.706667,
+        "oracle_gap": 0.099167,
+        "oracle_gap_pp": 9.9167,
+        "oracle_gap_pp_ci95": [
+          6.3333,
+          13.75
+        ],
+        "tie_rate_pct": 75.0,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 10.25,
+          "median": 0.0,
+          "p90": 50.0
+        }
+      },
+      "ndcg10": {
+        "metric": "ndcg10",
+        "n_queries": 100,
+        "arms": [
+          "cosine",
+          "bm25",
+          "ppr",
+          "rrf",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.746906,
+          "bm25": 0.610865,
+          "ppr": 0.366269,
+          "rrf": 0.714966,
+          "hswm": 0.769796
+        },
+        "best_fixed_arm": "hswm",
+        "best_fixed_mean": 0.769796,
+        "oracle_mean_score": 0.840095,
+        "oracle_gap": 0.070299,
+        "oracle_gap_pp": 7.0299,
+        "oracle_gap_pp_ci95": [
+          4.7905,
+          9.4903
+        ],
+        "tie_rate_pct": 32.0,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 7.65,
+          "median": 4.2505,
+          "p90": 22.7293
+        }
+      }
+    },
+    "traversal_bench/pooled_test": {
+      "source": "traversal_bench_results.json",
+      "arms": [
+        "cosine",
+        "hswm_static",
+        "hswm_traversal",
+        "ppr_pure",
+        "traversal_wseed"
+      ],
+      "val_rows_excluded": 121,
+      "sup_recall_at_3": {
+        "metric": "sup_recall_at_3",
+        "n_queries": 179,
+        "arms": [
+          "cosine",
+          "hswm_static",
+          "hswm_traversal",
+          "ppr_pure",
+          "traversal_wseed"
+        ],
+        "arm_means": {
+          "cosine": 0.665736,
+          "hswm_static": 0.709034,
+          "hswm_traversal": 0.548416,
+          "ppr_pure": 0.38687,
+          "traversal_wseed": 0.610801
+        },
+        "best_fixed_arm": "hswm_static",
+        "best_fixed_mean": 0.709034,
+        "oracle_mean_score": 0.745812,
+        "oracle_gap": 0.036779,
+        "oracle_gap_pp": 3.6779,
+        "oracle_gap_pp_ci95": [
+          2.0484,
+          5.4936
+        ],
+        "tie_rate_pct": 87.15,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 4.9814,
+          "median": 0.0,
+          "p90": 25.0
+        }
+      },
+      "ndcg10": {
+        "metric": "ndcg10",
+        "n_queries": 179,
+        "arms": [
+          "cosine",
+          "hswm_static",
+          "hswm_traversal",
+          "ppr_pure",
+          "traversal_wseed"
+        ],
+        "arm_means": {
+          "cosine": 0.814416,
+          "hswm_static": 0.836155,
+          "hswm_traversal": 0.708835,
+          "ppr_pure": 0.536765,
+          "traversal_wseed": 0.739954
+        },
+        "best_fixed_arm": "hswm_static",
+        "best_fixed_mean": 0.836155,
+        "oracle_mean_score": 0.865621,
+        "oracle_gap": 0.029466,
+        "oracle_gap_pp": 2.9466,
+        "oracle_gap_pp_ci95": [
+          2.0349,
+          3.9743
+        ],
+        "tie_rate_pct": 58.1,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 4.2679,
+          "median": 0.0,
+          "p90": 13.108
+        }
+      }
+    },
+    "traversal_bench/2wiki": {
+      "source": "traversal_bench_results.json",
+      "arms": [
+        "cosine",
+        "hswm_static",
+        "hswm_traversal",
+        "ppr_pure",
+        "traversal_wseed"
+      ],
+      "val_rows_excluded": 121,
+      "sup_recall_at_3": {
+        "metric": "sup_recall_at_3",
+        "n_queries": 62,
+        "arms": [
+          "cosine",
+          "hswm_static",
+          "hswm_traversal",
+          "ppr_pure",
+          "traversal_wseed"
+        ],
+        "arm_means": {
+          "cosine": 0.850806,
+          "hswm_static": 0.899194,
+          "hswm_traversal": 0.75,
+          "ppr_pure": 0.709677,
+          "traversal_wseed": 0.826613
+        },
+        "best_fixed_arm": "hswm_static",
+        "best_fixed_mean": 0.899194,
+        "oracle_mean_score": 0.927419,
+        "oracle_gap": 0.028226,
+        "oracle_gap_pp": 2.8226,
+        "oracle_gap_pp_ci95": [
+          0.8065,
+          5.6452
+        ],
+        "tie_rate_pct": 93.55,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 2.4194,
+          "median": 0.0,
+          "p90": 0.0
+        }
+      },
+      "ndcg10": {
+        "metric": "ndcg10",
+        "n_queries": 62,
+        "arms": [
+          "cosine",
+          "hswm_static",
+          "hswm_traversal",
+          "ppr_pure",
+          "traversal_wseed"
+        ],
+        "arm_means": {
+          "cosine": 0.949289,
+          "hswm_static": 0.968255,
+          "hswm_traversal": 0.891906,
+          "ppr_pure": 0.841898,
+          "traversal_wseed": 0.93119
+        },
+        "best_fixed_arm": "hswm_static",
+        "best_fixed_mean": 0.968255,
+        "oracle_mean_score": 0.978019,
+        "oracle_gap": 0.009765,
+        "oracle_gap_pp": 0.9765,
+        "oracle_gap_pp_ci95": [
+          0.4323,
+          1.5977
+        ],
+        "tie_rate_pct": 79.03,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 1.2466,
+          "median": 0.0,
+          "p90": 7.664
+        }
+      }
+    },
+    "traversal_bench/musique": {
+      "source": "traversal_bench_results.json",
+      "arms": [
+        "cosine",
+        "hswm_static",
+        "hswm_traversal",
+        "ppr_pure",
+        "traversal_wseed"
+      ],
+      "val_rows_excluded": 121,
+      "sup_recall_at_3": {
+        "metric": "sup_recall_at_3",
+        "n_queries": 117,
+        "arms": [
+          "cosine",
+          "hswm_static",
+          "hswm_traversal",
+          "ppr_pure",
+          "traversal_wseed"
+        ],
+        "arm_means": {
+          "cosine": 0.567664,
+          "hswm_static": 0.608265,
+          "hswm_traversal": 0.441594,
+          "ppr_pure": 0.21581,
+          "traversal_wseed": 0.496439
+        },
+        "best_fixed_arm": "hswm_static",
+        "best_fixed_mean": 0.608265,
+        "oracle_mean_score": 0.649576,
+        "oracle_gap": 0.041311,
+        "oracle_gap_pp": 4.1311,
+        "oracle_gap_pp_ci95": [
+          1.9944,
+          6.4817
+        ],
+        "tie_rate_pct": 83.76,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 6.3391,
+          "median": 0.0,
+          "p90": 33.33
+        }
+      },
+      "ndcg10": {
+        "metric": "ndcg10",
+        "n_queries": 117,
+        "arms": [
+          "cosine",
+          "hswm_static",
+          "hswm_traversal",
+          "ppr_pure",
+          "traversal_wseed"
+        ],
+        "arm_means": {
+          "cosine": 0.742944,
+          "hswm_static": 0.766153,
+          "hswm_traversal": 0.611822,
+          "ppr_pure": 0.37507,
+          "traversal_wseed": 0.638615
+        },
+        "best_fixed_arm": "hswm_static",
+        "best_fixed_mean": 0.766153,
+        "oracle_mean_score": 0.80606,
+        "oracle_gap": 0.039907,
+        "oracle_gap_pp": 3.9907,
+        "oracle_gap_pp_ci95": [
+          2.6497,
+          5.4428
+        ],
+        "tie_rate_pct": 47.01,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 5.869,
+          "median": 1.84,
+          "p90": 18.792
+        }
+      }
+    },
+    "ab_p5/pooled": {
+      "source": "ab_p5_full_results.json",
+      "arms": [
+        "cosine",
+        "direct",
+        "hswm"
+      ],
+      "f1": {
+        "metric": "f1",
+        "n_queries": 300,
+        "arms": [
+          "cosine",
+          "direct",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.468528,
+          "direct": 0.690333,
+          "hswm": 0.541362
+        },
+        "best_fixed_arm": "direct",
+        "best_fixed_mean": 0.690333,
+        "oracle_mean_score": 0.74645,
+        "oracle_gap": 0.056117,
+        "oracle_gap_pp": 5.6117,
+        "oracle_gap_pp_ci95": [
+          3.3598,
+          8.1525
+        ],
+        "tie_rate_pct": 76.33,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 19.2909,
+          "median": 0.0,
+          "p90": 100.0
+        }
+      },
+      "em": {
+        "metric": "em",
+        "n_queries": 300,
+        "arms": [
+          "cosine",
+          "direct",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.413333,
+          "direct": 0.646667,
+          "hswm": 0.493333
+        },
+        "best_fixed_arm": "direct",
+        "best_fixed_mean": 0.646667,
+        "oracle_mean_score": 0.693333,
+        "oracle_gap": 0.046667,
+        "oracle_gap_pp": 4.6667,
+        "oracle_gap_pp_ci95": [
+          2.3333,
+          7.3333
+        ],
+        "tie_rate_pct": 81.33,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 18.6667,
+          "median": 0.0,
+          "p90": 100.0
+        }
+      }
+    },
+    "ab_p5/2wiki_s7": {
+      "source": "ab_p5_full_results.json",
+      "arms": [
+        "cosine",
+        "direct",
+        "hswm"
+      ],
+      "f1": {
+        "metric": "f1",
+        "n_queries": 100,
+        "arms": [
+          "cosine",
+          "direct",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.657247,
+          "direct": 0.679405,
+          "hswm": 0.720794
+        },
+        "best_fixed_arm": "hswm",
+        "best_fixed_mean": 0.720794,
+        "oracle_mean_score": 0.751628,
+        "oracle_gap": 0.030834,
+        "oracle_gap_pp": 3.0834,
+        "oracle_gap_pp_ci95": [
+          0.4167,
+          6.5023
+        ],
+        "tie_rate_pct": 94.0,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 5.6667,
+          "median": 0.0,
+          "p90": 0.0
+        }
+      },
+      "em": {
+        "metric": "em",
+        "n_queries": 100,
+        "arms": [
+          "cosine",
+          "direct",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.65,
+          "direct": 0.71,
+          "hswm": 0.74
+        },
+        "best_fixed_arm": "hswm",
+        "best_fixed_mean": 0.74,
+        "oracle_mean_score": 0.78,
+        "oracle_gap": 0.04,
+        "oracle_gap_pp": 4.0,
+        "oracle_gap_pp_ci95": [
+          1.0,
+          8.0
+        ],
+        "tie_rate_pct": 94.0,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 6.0,
+          "median": 0.0,
+          "p90": 0.0
+        }
+      }
+    },
+    "ab_p5/musique_s13": {
+      "source": "ab_p5_full_results.json",
+      "arms": [
+        "cosine",
+        "direct",
+        "hswm"
+      ],
+      "f1": {
+        "metric": "f1",
+        "n_queries": 100,
+        "arms": [
+          "cosine",
+          "direct",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.338696,
+          "direct": 0.690665,
+          "hswm": 0.458982
+        },
+        "best_fixed_arm": "direct",
+        "best_fixed_mean": 0.690665,
+        "oracle_mean_score": 0.72846,
+        "oracle_gap": 0.037795,
+        "oracle_gap_pp": 3.7795,
+        "oracle_gap_pp_ci95": [
+          1.1333,
+          7.0666
+        ],
+        "tie_rate_pct": 69.0,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 24.3273,
+          "median": 0.0,
+          "p90": 100.0
+        }
+      },
+      "em": {
+        "metric": "em",
+        "n_queries": 100,
+        "arms": [
+          "cosine",
+          "direct",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.27,
+          "direct": 0.61,
+          "hswm": 0.38
+        },
+        "best_fixed_arm": "direct",
+        "best_fixed_mean": 0.61,
+        "oracle_mean_score": 0.63,
+        "oracle_gap": 0.02,
+        "oracle_gap_pp": 2.0,
+        "oracle_gap_pp_ci95": [
+          0.0,
+          5.0
+        ],
+        "tie_rate_pct": 79.0,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 21.0,
+          "median": 0.0,
+          "p90": 100.0
+        }
+      }
+    },
+    "ab_p5/musique_s7": {
+      "source": "ab_p5_full_results.json",
+      "arms": [
+        "cosine",
+        "direct",
+        "hswm"
+      ],
+      "f1": {
+        "metric": "f1",
+        "n_queries": 100,
+        "arms": [
+          "cosine",
+          "direct",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.409642,
+          "direct": 0.700929,
+          "hswm": 0.44431
+        },
+        "best_fixed_arm": "direct",
+        "best_fixed_mean": 0.700929,
+        "oracle_mean_score": 0.759262,
+        "oracle_gap": 0.058333,
+        "oracle_gap_pp": 5.8333,
+        "oracle_gap_pp_ci95": [
+          2.0,
+          10.3007
+        ],
+        "tie_rate_pct": 66.0,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 27.8786,
+          "median": 0.0,
+          "p90": 100.0
+        }
+      },
+      "em": {
+        "metric": "em",
+        "n_queries": 100,
+        "arms": [
+          "cosine",
+          "direct",
+          "hswm"
+        ],
+        "arm_means": {
+          "cosine": 0.32,
+          "direct": 0.62,
+          "hswm": 0.36
+        },
+        "best_fixed_arm": "direct",
+        "best_fixed_mean": 0.62,
+        "oracle_mean_score": 0.67,
+        "oracle_gap": 0.05,
+        "oracle_gap_pp": 5.0,
+        "oracle_gap_pp_ci95": [
+          1.0,
+          9.0
+        ],
+        "tie_rate_pct": 71.0,
+        "epsilon": 0.01,
+        "margin_pp": {
+          "mean": 29.0,
+          "median": 0.0,
+          "p90": 100.0
+        }
+      }
+    }
+  },
+  "files_without_per_query": {
+    "qkv_routing_result.json": "aggregate counts/rates only; no per-query scores",
+    "qkv_b1_development_result.json": "arms carry only aggregate metrics + score_matrix_sha256; raw score matrix not stored"
+  },
+  "primary_summary": {
+    "per_dataset": [
+      {
+        "dataset": "substrate_bench/pooled",
+        "metric": "sup_recall_at_3",
+        "oracle_gap_pp": 6.1944,
+        "oracle_gap_pp_ci95": [
+          4.5278,
+          8.0278
+        ],
+        "tie_rate_pct": 81.33,
+        "n_queries": 300
+      },
+      {
+        "dataset": "substrate_bench/2wiki_s7",
+        "metric": "sup_recall_at_3",
+        "oracle_gap_pp": 4.0,
+        "oracle_gap_pp_ci95": [
+          1.75,
+          6.75
+        ],
+        "tie_rate_pct": 91.0,
+        "n_queries": 100
+      },
+      {
+        "dataset": "substrate_bench/musique_s13",
+        "metric": "sup_recall_at_3",
+        "oracle_gap_pp": 4.6667,
+        "oracle_gap_pp_ci95": [
+          2.3333,
+          7.3333
+        ],
+        "tie_rate_pct": 78.0,
+        "n_queries": 100
+      },
+      {
+        "dataset": "substrate_bench/musique_s7",
+        "metric": "sup_recall_at_3",
+        "oracle_gap_pp": 9.9167,
+        "oracle_gap_pp_ci95": [
+          6.3333,
+          13.75
+        ],
+        "tie_rate_pct": 75.0,
+        "n_queries": 100
+      },
+      {
+        "dataset": "traversal_bench/pooled_test",
+        "metric": "sup_recall_at_3",
+        "oracle_gap_pp": 3.6779,
+        "oracle_gap_pp_ci95": [
+          2.0484,
+          5.4936
+        ],
+        "tie_rate_pct": 87.15,
+        "n_queries": 179
+      },
+      {
+        "dataset": "traversal_bench/2wiki",
+        "metric": "sup_recall_at_3",
+        "oracle_gap_pp": 2.8226,
+        "oracle_gap_pp_ci95": [
+          0.8065,
+          5.6452
+        ],
+        "tie_rate_pct": 93.55,
+        "n_queries": 62
+      },
+      {
+        "dataset": "traversal_bench/musique",
+        "metric": "sup_recall_at_3",
+        "oracle_gap_pp": 4.1311,
+        "oracle_gap_pp_ci95": [
+          1.9944,
+          6.4817
+        ],
+        "tie_rate_pct": 83.76,
+        "n_queries": 117
+      },
+      {
+        "dataset": "ab_p5/pooled",
+        "metric": "f1",
+        "oracle_gap_pp": 5.6117,
+        "oracle_gap_pp_ci95": [
+          3.3598,
+          8.1525
+        ],
+        "tie_rate_pct": 76.33,
+        "n_queries": 300
+      },
+      {
+        "dataset": "ab_p5/2wiki_s7",
+        "metric": "f1",
+        "oracle_gap_pp": 3.0834,
+        "oracle_gap_pp_ci95": [
+          0.4167,
+          6.5023
+        ],
+        "tie_rate_pct": 94.0,
+        "n_queries": 100
+      },
+      {
+        "dataset": "ab_p5/musique_s13",
+        "metric": "f1",
+        "oracle_gap_pp": 3.7795,
+        "oracle_gap_pp_ci95": [
+          1.1333,
+          7.0666
+        ],
+        "tie_rate_pct": 69.0,
+        "n_queries": 100
+      },
+      {
+        "dataset": "ab_p5/musique_s7",
+        "metric": "f1",
+        "oracle_gap_pp": 5.8333,
+        "oracle_gap_pp_ci95": [
+          2.0,
+          10.3007
+        ],
+        "tie_rate_pct": 66.0,
+        "n_queries": 100
+      }
+    ],
+    "max_oracle_gap_pp": {
+      "dataset": "substrate_bench/musique_s7",
+      "metric": "sup_recall_at_3",
+      "oracle_gap_pp": 9.9167,
+      "ci95": [
+        6.3333,
+        13.75
+      ],
+      "tie_rate_pct": 75.0
+    },
+    "kill_rule": "kill if oracle_gap_pp < 2.0 OR tie_rate_pct > 80 on the most routing-favorable dataset"
+  }
+}

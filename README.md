@@ -1,4 +1,4 @@
-# HSWM — Evidence-Preserving World Compiler + Field Substrate
+# HSWM — Evidence-Preserving World Compiler and Neural-Substrate Research
 
 > Frozen sources and recorded observations compile deterministically into an
 > immutable, evidence-addressable `WorldArtifactV1`. Stable IDs are projected
@@ -12,6 +12,69 @@ H3 artifact production is a separately attested GPU/LLM workflow.
 The repository-wide research map, including the 2026-07-22 open self-similar
 composition work and the 2026-07-23 learned-router result, is in
 [`INDEX.md`](INDEX.md).
+
+## Target architecture and present boundary
+
+**HSWM means Hypergraph Semantic Weight Map.** Its target form is a giant
+hypergraph-based semantic neural network whose neural functional units are
+executed by LLMs:
+
+\[
+f_i^t := \operatorname{LLM}(\rho_i, x_i^t, a_{\mathcal N(i)}^t),
+\qquad
+\mathrm{HSWM}_t := (H_t, W_t, A_t, \{f_i^t\})
+\]
+
+- `H`: the hypergraph topology that binds semantic states and functions through
+  n-ary relations;
+- `W`: the Semantic Weight Map that controls macro-synaptic strength, activation,
+  and routing between those functions;
+- `f_i`: an LLM-executed semantic function (an agent/process role), not a
+  conventional scalar neuron;
+- `A`: recurrent activation and persistent state carried by the whole HSWM.
+
+The same foundation model may realize many `f_i` calls; the claim does not
+require one separately trained LLM per function. LLM parameter weights remain
+inside the function implementation, while HSWM weights describe the semantic
+connections *between* functions and states. The whole hypergraph-weighted
+function network is HSWM. It is not “an LLM plus an external memory”.
+
+HSWM therefore owns the persistent hypergraph state, global routing, recurrence,
+credit assignment, acceptance, and weight/topology rewrites. CAS, CRDT, replay,
+and validation reducers form its deterministic safety/control plane; they are
+not being mislabeled as LLM neurons.
+
+That paragraph is a target identity, not a present-tense efficacy claim. The
+repository currently has a mature evidence/compiler/replay substrate and several
+measured field mechanisms, but the causal learning loop is not closed:
+
+| phase | repository state | completion gate |
+|---|---|---|
+| P0 — identity and metrics | **specified** in the [canonical direction](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md): neural functions are LLM-executed; `H` and `W` form their macro-network | target identity, claim boundary, and learning metric are explicit |
+| P1 — closed weight-learning loop | **preregistered, not implemented or run** ([preregistration](PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json)) | `outcome → eligibility/credit → ΔW → changed next dispatch`, with canary and causal controls |
+| P2 — shared-network transfer | **not implemented or measured** | Agent A writes; frozen Agent B gains on sealed unseen work under equal compute |
+| P3 — structural plasticity | deterministic edits and a shadow gate exist; the first candidate policy was **rejected** | a learned candidate policy passes fresh, target, and canary gates |
+| P4 — federation and sleep | field federation is partial; consolidation/homeostasis remain design work | recover in-field interference and demonstrate stable long-horizon learning |
+
+### Checked-in experiment ledger (2026-07-23)
+
+These results constrain the next implementation; none establishes a general
+intelligence or production claim.
+
+| experiment | measured result | disposition |
+|---|---|---|
+| B2.1 frozen-arm learned router | all 54 standard cells collapsed to `ABSTAIN→MERGED`; primary Δ=0 | **rejected**; router-only action space is insufficient |
+| [B2 routing-signal audit](B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md) | best MuSiQue slice oracle gap +9.92pp, 75% ties; pooled retrieval slices exceed the 80% tie kill line | a thin, concentrated oracle signal exists; this is not a learned-router success |
+| [E1 conditional traversal](E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md) | bridge −13.89pp, CI95 [−19.44, −8.33]; factoid −7.27pp | **rejected**; traversal remains deployment-OFF |
+| [shadow-gated topology absorption](SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md) | 0/3 rounds accepted, 100% canary preservation, sealed Δ=0 | **rejected for no target gain**; the gate was safe, the candidate generator was ineffective |
+| cognitive-uplift reranking | pooled F1 Δ=−0.1489 | **rejected** |
+| P1 eligibility/judgment learning | no modules frozen and no outcome inspected | **preregistered-unrun**; this is the next causal experiment |
+
+The [Phasor Agents prior-art tribunal](TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md)
+also narrows novelty: generic graph three-factor plasticity and sleep-staged
+learning are adopted prior art, not HSWM claims. The remaining research slots
+are n-ary credit assignment, semantic LLM-operator verdicts, topology
+plasticity, and a persistent multi-agent field with provenance/CRDT receipts.
 
 ## Honest status (read first)
 
@@ -128,6 +191,11 @@ formalization remain in
 | `certified_cut_compare.py` | independent-oracle controls, 10×40 scope checks, and 9 mutant attacks |
 | `EPWC_IMPLEMENTATION_S3_2026-07-20.md` | S3 implementation and comparison receipt; smart-hypergraph boundary |
 | `EFFICACY.md` / `verify_efficacy_claims.py` | human and machine-readable current efficacy ledger |
+| `CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md` | target identity: a hypergraph Semantic Weight Map whose neural functions are executed by LLMs |
+| `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` | frozen-before-measurement P1 arms, thresholds, kill/void conditions, and pending module hashes |
+| `B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md` / `b2_routing_signal.py` | oracle routing-signal audit and deterministic evidence generator |
+| `E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md` / `e1_conditional_traversal.py` | bridge/factoid traversal falsifier and evidence generator |
+| `SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md` / `prom_search_hswm/hswm_shadow_gate.py` | topology-candidate shadow-gate result, reducer, preregistration, and receipt |
 | `GENERIC_FEEDBACK_RUNTIME_ACCEPTANCE.md` / `feedback_runtime.py` / `feedback_store.py` | generic authority-separated feedback kernel, durable replay, and explicit non-claims |
 | `INDEX.md` | public research map, 2026-07-22 result ledger, and next frontier |
 | `SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md` | fixed-layer-free open weighted-hypergraph contract |
@@ -178,6 +246,8 @@ Tier 2 is deterministic extended verification over checked-in artifacts:
 ```bash
 uv run python certified_cut_compare.py
 uv run python semantic_layer_falsifier.py --pretty
+uv run python b2_routing_signal.py
+uv run python e1_conditional_traversal.py
 ```
 
 Tiers 1 and 2 need the core NumPy dependency plus the pytest development extra;

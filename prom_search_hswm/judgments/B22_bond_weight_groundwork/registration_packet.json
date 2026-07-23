@@ -1,0 +1,113 @@
+{
+  "schema": "hswm-lakatotree-groundwork-registration/v1",
+  "recorded_at": "2026-07-23T00:31:24Z",
+  "tree": "LakatosTree_PromSearchHSWM_20260721",
+  "source_git_commit": "bf5c509eb79217594963439a6df58be00267d6c8",
+  "node_registration": {
+    "tag": "B2.2-query-bond-weight-groundwork",
+    "parent": "B2.1r1-query-byte-equivalence-repair",
+    "author": "codex-hswm-b22",
+    "algorithm": "pure deterministic score(e|q)=base(e|q)+lambda_s*ell(e)+lambda_q*a_theta(q,e); max-zero fast query potential kept separate from durable slow salience; no learner, promotion, activation, or topology mutation",
+    "result_path": "/Users/lagyeongjun/CD/HSWM/prom_search_hswm/evidence/RECEIPT_b22_bond_weight_groundwork_20260723.json",
+    "result_sha256": "de5e1f36273984d406c073f629243c17bda7462843c1a6302319548b100f4e3f",
+    "response": {
+      "ok": true,
+      "tag": "B2.2-query-bond-weight-groundwork"
+    }
+  },
+  "artifact_manifest": [
+    {
+      "role": "deterministic_module",
+      "path": "prom_search_hswm/hswm_bond_readout.py",
+      "sha256": "41bca84d284f82f52a966c03c06e8b83debe30388dc41d8ce425f57ff61221f1"
+    },
+    {
+      "role": "conformance_tests",
+      "path": "prom_search_hswm/test_hswm_bond_readout.py",
+      "sha256": "ece0e8b5c7e0c5ddaf6e39909dbdb7b59a6fe0af725bbcbe648228d68e9d583a"
+    },
+    {
+      "role": "diagnostic_script",
+      "path": "prom_search_hswm/diag_b22_weight_action_space.py",
+      "sha256": "b599c038327101af74e64a7a83df7240b545acec940940cb11468bf9a03aeed8"
+    },
+    {
+      "role": "diagnostic_evidence",
+      "path": "prom_search_hswm/evidence/DIAG_b22_fine_bond_action_headroom_20260723.json",
+      "sha256": "86da4186b4e4ac3edf50d89389299439a90bc8904f2882254439e4f1a188cd5d"
+    },
+    {
+      "role": "design",
+      "path": "prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md",
+      "sha256": "10092b016ddb45b2c939cdfddf800e2c3dbc89056cf114f4f79b53ee7f80d55d"
+    },
+    {
+      "role": "module_decision",
+      "path": "prom_search_hswm/docs/B22_BOND_WEIGHTING_MODULE_DECISION_20260723.json",
+      "sha256": "643bcea2bc8e8d1ff60120bcc6905dd12b59a69db6c7e9fac9fd2650bd72e97e"
+    },
+    {
+      "role": "engineering_receipt",
+      "path": "prom_search_hswm/evidence/RECEIPT_b22_bond_weight_groundwork_20260723.json",
+      "sha256": "de5e1f36273984d406c073f629243c17bda7462843c1a6302319548b100f4e3f"
+    }
+  ],
+  "accepted_events": [
+    {
+      "event_id": "HSWM-B22-GROUNDWORK-bf5c509eb792",
+      "realm": "agent",
+      "action": "record_engineering_groundwork",
+      "status": "accepted"
+    },
+    {
+      "event_id": "HSWM-B22-DIAG-bf5c509eb792",
+      "realm": "data",
+      "action": "record_development_diagnostic",
+      "status": "accepted"
+    },
+    {
+      "event_id": "HSWM-B22-GIT-bf5c509eb792",
+      "realm": "git",
+      "action": "record_pushed_artifact_set",
+      "status": "accepted"
+    },
+    {
+      "event_id": "HSWM-B22-TESTS-20260723T0929KST",
+      "realm": "bash",
+      "action": "world_action",
+      "status": "accepted",
+      "command": ".venv/bin/python -m pytest prom_search_hswm/test_hswm_open_kernel.py prom_search_hswm/test_hswm_open_composition.py prom_search_hswm/test_hswm_field_algebra.py prom_search_hswm/test_hswm_b2_crossfield.py prom_search_hswm/test_hswm_absorption_fsm.py prom_search_hswm/test_hswm_b21_learned_router.py prom_search_hswm/test_hswm_bond_readout.py tests/test_additive_floor.py tests/test_supersede_confluence.py tests/test_field_snapshot.py -q",
+      "cwd": "/Users/lagyeongjun/CD/HSWM",
+      "exit_code": 0,
+      "stdout_summary": "132 passed in 0.53s"
+    }
+  ],
+  "frontier_registration": {
+    "qname": "Q-b22-query-bond-weight-transfer",
+    "status": "OPEN",
+    "body": "After a full-candidate score-component pack proves neutral weights reproduce frozen B2 exactly, can a frozen low-capacity query-conditioned semantic-bond potential recover more than +0.02 minimum recall@10 on a newly sealed PhantomWiki universe while retaining B2 cross-field and in-field/no-bridge performance within -0.02, passing shuffled-target, private-entity, equal-budget, deterministic replay, and lambda_q=0 fallback controls? If not, does an equal-compute flat/vector reranker match or beat it, falsifying the HSWM-specific weighting claim?"
+  },
+  "rejected_attempts": [
+    {
+      "stage": "research_event",
+      "http_status": 422,
+      "reason": "payload values must be strings; nested artifacts array was rejected",
+      "persisted": false
+    },
+    {
+      "stage": "research_event",
+      "http_status": 422,
+      "reason": "unknown research event realm: engineering",
+      "persisted": false
+    }
+  ],
+  "claim_boundary": {
+    "node_state": "DRAFT",
+    "engineering_groundwork": true,
+    "diagnostic_only": true,
+    "scientific_prediction_registered": false,
+    "scientific_verdict_exists": false,
+    "production_activation_exists": false,
+    "next_gate": "full-candidate score-component pack plus neutral exact frozen-B2 reproduction before fitting or preregistration"
+  }
+}

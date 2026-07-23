@@ -45,6 +45,7 @@ def test_h3_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "p1v2_ooptdd_receipt",
         "p1v3_policy_environment",
         "p1v3_calibration_gate",
+        "p1v3_ooptdd_receipt",
     } <= shipped
 
 

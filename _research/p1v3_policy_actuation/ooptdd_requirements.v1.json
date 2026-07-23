@@ -1,0 +1,35 @@
+{
+  "schema_version": "symposium-ooptdd-requirements/v1",
+  "correlation_id": "hswm-p1v3-nonredundant-policy-actuation-v1",
+  "locked_before_execution": true,
+  "requirements": [
+    {
+      "id": "P1V3-DATA-PUBLIC-BLIND",
+      "role": "guard_defect",
+      "event": "public_packet_hides_gold_and_trust_semantics"
+    },
+    {
+      "id": "P1V3-MECHANISM-CONFLICT",
+      "role": "guard_mechanism",
+      "event": "balanced_content_addressed_conflict_packet_verified"
+    },
+    {
+      "id": "P1V3-MECHANISM-ADMISSION",
+      "role": "guard_mechanism",
+      "event": "inverted_policy_lesson_rejected"
+    },
+    {
+      "id": "P1V3-MECHANISM-CALIBRATION",
+      "role": "guard_mechanism",
+      "positive_event": "development_headroom_gate_passed",
+      "negative_event": "ceiling_environment_rejected"
+    }
+  ],
+  "forbidden_events": [
+    "public_packet_leaked_gold_or_trust_semantics",
+    "unbalanced_conflict_packet_accepted",
+    "inverted_policy_lesson_accepted",
+    "ceiling_environment_authorized"
+  ],
+  "claim_boundary": "Engineering admission only. No heldout scientific result or HSWM learning claim."
+}

@@ -207,6 +207,32 @@ class EventEnvelope:
             value = json.loads(raw.decode("utf-8"))
         except (UnicodeDecodeError, json.JSONDecodeError) as error:
             raise IntegrityError(f"invalid event JSON: {error}") from error
+        expected_fields = {
+            "schema_version",
+            "stream_id",
+            "sequence",
+            "request_id",
+            "kind",
+            "principal_id",
+            "input_cut_id",
+            "causal_parent_ids",
+            "payload",
+            "payload_sha256",
+            "previous_event_sha256",
+            "event_sha256",
+        }
+        if not isinstance(value, dict) or set(value) != expected_fields:
+            raise IntegrityError("event envelope field set must be exact")
+        text_fields = expected_fields - {"sequence", "causal_parent_ids", "payload"}
+        if any(not isinstance(value[field], str) for field in text_fields):
+            raise IntegrityError("event envelope text fields must be strings")
+        if (
+            not isinstance(value["sequence"], int)
+            or isinstance(value["sequence"], bool)
+            or not isinstance(value["causal_parent_ids"], list)
+            or not isinstance(value["payload"], dict)
+        ):
+            raise IntegrityError("event envelope field types are invalid")
         if canonical_json_bytes(value) != raw:
             raise IntegrityError("stored event bytes are not canonical")
         try:
@@ -643,6 +669,8 @@ class FeedbackRuntime:
         )
 
     def submit(self, command: FeedbackCommand) -> EventEnvelope:
+        if command.stream_id != self.stream_id:
+            raise InvalidTransition("command stream does not belong to this runtime")
         kind = EventKind(command.kind)
         principal_id = self.authority.verify(
             command.capability, KIND_ROLE[kind], stream_id=command.stream_id
@@ -722,9 +750,67 @@ class FeedbackRuntime:
         request_id: str,
         capability: CapabilityContext,
     ) -> EventEnvelope:
+        if not request_id:
+            raise InvalidTransition("request_id must be non-empty")
+        principal_id = self.authority.verify(
+            capability,
+            CapabilityRole.JUDGE,
+            stream_id=self.stream_id,
+        )
+        adapter_identity = getattr(port, "adapter_identity", None)
+        if not isinstance(adapter_identity, str) or not adapter_identity:
+            raise InvalidTransition("judgment port adapter_identity must be non-empty")
+
+        # A retry means "return the first judgment recorded for this request,
+        # principal, and adapter identity".  Hidden adapter configuration is not
+        # introspectable, so callers must use a new request id to request a new
+        # evaluation.  This check deliberately precedes phase validation so a
+        # committed/dispatched stream can replay its recorded JUDGE without
+        # invoking the external adapter again.
+        existing = self.store.lookup_request(self.stream_id, request_id)
+        if existing is not None:
+            _stored_request_sha, stored_event = existing
+            if (
+                stored_event.kind != EventKind.JUDGE
+                or stored_event.principal_id != principal_id
+                or stored_event.payload.get("adapter_identity") != adapter_identity
+            ):
+                raise IdempotencyConflict(
+                    "judgment request_id is already bound to different intent"
+                )
+            return stored_event
+
         state = self.state()
+        if state.phase != "observed":
+            raise InvalidTransition(
+                f"JUDGE requires observed phase, got {state.phase}"
+            )
         proposal = state.event(EventKind.PROPOSE)
         observed = state.event(EventKind.OBSERVE)
+        parents = exact_causal_parents(state, EventKind.JUDGE)
+
+        # Prove all local guards—including current cut, exact causal parents,
+        # sequence, phase, and per-stream principal/role separation—before the
+        # first external call.  The simulated event is never persisted.
+        preflight_event = EventEnvelope.build(
+            stream_id=self.stream_id,
+            sequence=state.sequence,
+            request_id=request_id,
+            kind=EventKind.JUDGE,
+            principal_id=principal_id,
+            input_cut_id=state.current_cut_id,
+            causal_parent_ids=parents,
+            payload={
+                "judgment_receipt_id": f"preflight:{request_id}",
+                "proposal_event_sha256": proposal.event_sha256,
+                "observation_event_sha256": observed.event_sha256,
+                "verdict": "ACCEPT",
+                "adapter_identity": adapter_identity,
+            },
+            previous_event_sha256=state.previous_event_sha256,
+        )
+        evolve(state, preflight_event)
+
         receipt = ObservationReceipt(
             receipt_id=str(observed.payload["receipt_id"]),
             proposal_event_sha256=str(observed.payload["proposal_event_sha256"]),
@@ -738,11 +824,23 @@ class FeedbackRuntime:
             pinned_cut=state.current_cut_id,
             idempotency_key=request_id,
         )
+        if not isinstance(judgment, JudgmentReceipt):
+            raise InvalidTransition("judgment port must return JudgmentReceipt")
+        if judgment.adapter_identity != adapter_identity:
+            raise InvalidTransition("judgment receipt adapter identity mismatch")
+        if judgment.proposal_event_sha256 != proposal.event_sha256:
+            raise InvalidTransition("judgment receipt proposal binding mismatch")
+        if judgment.observation_event_sha256 != observed.event_sha256:
+            raise InvalidTransition("judgment receipt observation binding mismatch")
+
         return self.submit(
-            self.command(
-                EventKind.JUDGE,
+            FeedbackCommand(
+                stream_id=self.stream_id,
                 request_id=request_id,
+                kind=EventKind.JUDGE,
                 capability=capability,
+                input_cut_id=state.current_cut_id,
+                causal_parent_ids=parents,
                 payload=judgment.as_payload(),
             )
         )

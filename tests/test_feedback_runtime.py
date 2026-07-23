@@ -261,6 +261,43 @@ def test_first_write_wins_retry_and_conflict(tmp_path):
         store.close()
 
 
+def test_submit_rejects_exact_retry_from_another_runtime_stream(tmp_path):
+    authority = CapabilityAuthority(authority_id="stream-authority", secret=SECRET)
+    store = SQLiteFeedbackStore(tmp_path / "cross-stream.db", initial_cut_id=CUT)
+    runtime_a = FeedbackRuntime(
+        store=store,
+        authority=authority,
+        stream_id="stream-a",
+        initial_cut_id=CUT,
+    )
+    runtime_b = FeedbackRuntime(
+        store=store,
+        authority=authority,
+        stream_id="stream-b",
+        initial_cut_id=CUT,
+    )
+    capability_b = authority.mint(
+        stream_id="stream-b",
+        principal_id="stream-b-proposer",
+        role=CapabilityRole.PROPOSER,
+    )
+    try:
+        command_b = runtime_b.command(
+            EventKind.ATTACH,
+            request_id="stream-b-request",
+            capability=capability_b,
+            payload={"attachment_id": "stream-b-attachment"},
+        )
+        stored_b = runtime_b.submit(command_b)
+
+        with pytest.raises(InvalidTransition, match="this runtime"):
+            runtime_a.submit(command_b)
+        assert runtime_b.submit(command_b) == stored_b
+        assert runtime_a.state().phase == "detached"
+    finally:
+        store.close()
+
+
 def test_judgment_port_receives_pinned_cut_and_adapter_idempotency_key(tmp_path):
     runtime, _, store, caps = make_runtime(tmp_path / "port.db")
     try:
@@ -269,6 +306,7 @@ def test_judgment_port_receives_pinned_cut_and_adapter_idempotency_key(tmp_path)
         class Port:
             adapter_identity = "judge:port-v1"
             received = None
+            calls = 0
 
             def judge(
                 self,
@@ -279,6 +317,7 @@ def test_judgment_port_receives_pinned_cut_and_adapter_idempotency_key(tmp_path)
                 pinned_cut,
                 idempotency_key,
             ):
+                self.calls += 1
                 self.received = (input_cut_id, pinned_cut, idempotency_key)
                 return JudgmentReceipt(
                     receipt_id="port-j",
@@ -296,6 +335,205 @@ def test_judgment_port_receives_pinned_cut_and_adapter_idempotency_key(tmp_path)
             capability=caps[CapabilityRole.JUDGE],
         )
         assert event.kind == EventKind.JUDGE
+        assert port.calls == 1
         assert port.received == (CUT, CUT, "port-request")
+    finally:
+        store.close()
+
+
+def test_judgment_port_preflight_blocks_forged_capability_and_wrong_phase(tmp_path):
+    runtime, _, store, caps = make_runtime(tmp_path / "port-preflight.db")
+
+    class SpyPort:
+        adapter_identity = "judge:spy-v1"
+
+        def __init__(self):
+            self.calls = 0
+
+        def judge(self, *_args, **_kwargs):
+            self.calls += 1
+            raise AssertionError("preflight must reject before calling the port")
+
+    try:
+        forged_port = SpyPort()
+        forged = replace(caps[CapabilityRole.JUDGE], signature="0" * 64)
+        with pytest.raises(CapabilityError):
+            runtime.judge_with_port(
+                forged_port,
+                request_id="forged-judge",
+                capability=forged,
+            )
+        assert forged_port.calls == 0
+
+        wrong_phase_port = SpyPort()
+        with pytest.raises(InvalidTransition, match="observed"):
+            runtime.judge_with_port(
+                wrong_phase_port,
+                request_id="early-judge",
+                capability=caps[CapabilityRole.JUDGE],
+            )
+        assert wrong_phase_port.calls == 0
+    finally:
+        store.close()
+
+
+def test_judgment_port_duplicate_request_returns_recorded_event_without_effect(tmp_path):
+    runtime, _, store, caps = make_runtime(tmp_path / "port-retry.db")
+    try:
+        _attach, proposal, observed = advance_to_observed(runtime, caps)
+
+        class SpyPort:
+            adapter_identity = "judge:stable-v1"
+
+            def __init__(self):
+                self.calls = 0
+
+            def judge(self, *_args, **_kwargs):
+                self.calls += 1
+                return JudgmentReceipt(
+                    receipt_id="stable-judgment",
+                    proposal_event_sha256=proposal.event_sha256,
+                    observation_event_sha256=observed.event_sha256,
+                    verdict="ACCEPT",
+                    adapter_identity=self.adapter_identity,
+                    evidence={"source": "stable-port"},
+                )
+
+        first_port = SpyPort()
+        occupied_request_port = SpyPort()
+        with pytest.raises(IdempotencyConflict, match="different intent"):
+            runtime.judge_with_port(
+                occupied_request_port,
+                request_id="req-observe",
+                capability=caps[CapabilityRole.JUDGE],
+            )
+        assert occupied_request_port.calls == 0
+
+        first = runtime.judge_with_port(
+            first_port,
+            request_id="stable-request",
+            capability=caps[CapabilityRole.JUDGE],
+        )
+        assert first_port.calls == 1
+        runtime.submit(
+            runtime.commit_command(
+                request_id="commit-after-judge",
+                capability=caps[CapabilityRole.COMMITTER],
+            )
+        )
+
+        retry_port = SpyPort()
+        retry = runtime.judge_with_port(
+            retry_port,
+            request_id="stable-request",
+            capability=caps[CapabilityRole.JUDGE],
+        )
+        assert retry == first
+        assert retry_port.calls == 0
+
+        different_adapter = SpyPort()
+        different_adapter.adapter_identity = "judge:different-v1"
+        with pytest.raises(IdempotencyConflict, match="different intent"):
+            runtime.judge_with_port(
+                different_adapter,
+                request_id="stable-request",
+                capability=caps[CapabilityRole.JUDGE],
+            )
+        assert different_adapter.calls == 0
+
+        different_request = SpyPort()
+        with pytest.raises(InvalidTransition, match="observed"):
+            runtime.judge_with_port(
+                different_request,
+                request_id="new-request-after-commit",
+                capability=caps[CapabilityRole.JUDGE],
+            )
+        assert different_request.calls == 0
+    finally:
+        store.close()
+
+
+def test_judgment_port_receipt_binding_mismatch_rejects_before_append(tmp_path):
+    runtime, _, store, caps = make_runtime(tmp_path / "port-binding.db")
+    try:
+        _attach, _proposal, observed = advance_to_observed(runtime, caps)
+
+        class MismatchedPort:
+            adapter_identity = "judge:expected-v1"
+            calls = 0
+
+            def judge(self, *_args, **_kwargs):
+                self.calls += 1
+                return JudgmentReceipt(
+                    receipt_id="mismatched-judgment",
+                    proposal_event_sha256="0" * 64,
+                    observation_event_sha256=observed.event_sha256,
+                    verdict="ACCEPT",
+                    adapter_identity="judge:other-v1",
+                    evidence={},
+                )
+
+        port = MismatchedPort()
+        with pytest.raises(InvalidTransition, match="adapter identity"):
+            runtime.judge_with_port(
+                port,
+                request_id="mismatched-request",
+                capability=caps[CapabilityRole.JUDGE],
+            )
+        assert port.calls == 1
+        assert runtime.state().phase == "observed"
+        assert runtime.state().sequence == 3
+
+        class WrongProposalPort:
+            adapter_identity = "judge:proposal-v1"
+            calls = 0
+
+            def judge(self, *_args, **_kwargs):
+                self.calls += 1
+                return JudgmentReceipt(
+                    receipt_id="wrong-proposal",
+                    proposal_event_sha256="0" * 64,
+                    observation_event_sha256=observed.event_sha256,
+                    verdict="ACCEPT",
+                    adapter_identity=self.adapter_identity,
+                    evidence={},
+                )
+
+        wrong_proposal = WrongProposalPort()
+        with pytest.raises(InvalidTransition, match="proposal binding"):
+            runtime.judge_with_port(
+                wrong_proposal,
+                request_id="wrong-proposal-request",
+                capability=caps[CapabilityRole.JUDGE],
+            )
+        assert wrong_proposal.calls == 1
+
+        class WrongObservationPort:
+            adapter_identity = "judge:observation-v1"
+            calls = 0
+
+            def judge(self, *_args, **_kwargs):
+                self.calls += 1
+                return JudgmentReceipt(
+                    receipt_id="wrong-observation",
+                    proposal_event_sha256=runtime.state()
+                    .event(EventKind.PROPOSE)
+                    .event_sha256,
+                    observation_event_sha256="0" * 64,
+                    verdict="ACCEPT",
+                    adapter_identity=self.adapter_identity,
+                    evidence={},
+                )
+
+        wrong_observation = WrongObservationPort()
+        with pytest.raises(InvalidTransition, match="observation binding"):
+            runtime.judge_with_port(
+                wrong_observation,
+                request_id="wrong-observation-request",
+                capability=caps[CapabilityRole.JUDGE],
+            )
+        assert wrong_observation.calls == 1
+        assert runtime.state().phase == "observed"
+        assert runtime.state().sequence == 3
     finally:
         store.close()

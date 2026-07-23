@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sqlite3
 from concurrent.futures import ThreadPoolExecutor
 
@@ -154,6 +155,46 @@ def test_byte_tamper_and_duplicated_column_tamper_are_detected(tmp_path):
     _runtime, reopened, _caps = open_runtime(byte_path)
     try:
         with pytest.raises(IntegrityError):
+            reopened.events(STREAM)
+    finally:
+        reopened.close()
+
+
+def test_canonical_extra_top_level_envelope_field_is_rejected(tmp_path):
+    path = tmp_path / "extra-envelope-field.db"
+    runtime, store, caps = open_runtime(path)
+    runtime.submit(
+        runtime.command(
+            EventKind.ATTACH,
+            request_id="a",
+            capability=caps[CapabilityRole.PROPOSER],
+            payload={"attachment_id": "a"},
+        )
+    )
+    store.close()
+
+    connection = sqlite3.connect(path)
+    raw = connection.execute(
+        "SELECT canonical_event FROM feedback_events WHERE sequence=0"
+    ).fetchone()[0]
+    envelope = json.loads(raw.decode("utf-8"))
+    envelope["undeclared_top_level_field"] = "silent-drop-attempt"
+    tampered = json.dumps(
+        envelope,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+        allow_nan=False,
+    ).encode("utf-8")
+    connection.execute(
+        "UPDATE feedback_events SET canonical_event=? WHERE sequence=0", (tampered,)
+    )
+    connection.commit()
+    connection.close()
+
+    _runtime, reopened, _caps = open_runtime(path)
+    try:
+        with pytest.raises(IntegrityError, match="field set"):
             reopened.events(STREAM)
     finally:
         reopened.close()

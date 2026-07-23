@@ -15,12 +15,34 @@ composition work and the 2026-07-23 learned-router result, is in
 
 ## Target architecture and present boundary
 
-The target is a **giant endogenous recurrent neuro-symbolic network**. An LLM is
-one bounded local neural computation/transition function *inside* that network;
-it is not the external brain or global controller. HSWM owns the persistent
-hypergraph state, routing, recurrence, credit assignment, acceptance gates, and
-weight/topology rewrites. Agent processes invoke local functions, including LLM
-operators, against that shared state.
+**HSWM means Hypergraph Semantic Weight Map.** Its target form is a giant
+hypergraph-based semantic neural network whose neural functional units are
+executed by LLMs:
+
+\[
+f_i^t := \operatorname{LLM}(\rho_i, x_i^t, a_{\mathcal N(i)}^t),
+\qquad
+\mathrm{HSWM}_t := (H_t, W_t, A_t, \{f_i^t\})
+\]
+
+- `H`: the hypergraph topology that binds semantic states and functions through
+  n-ary relations;
+- `W`: the Semantic Weight Map that controls macro-synaptic strength, activation,
+  and routing between those functions;
+- `f_i`: an LLM-executed semantic function (an agent/process role), not a
+  conventional scalar neuron;
+- `A`: recurrent activation and persistent state carried by the whole HSWM.
+
+The same foundation model may realize many `f_i` calls; the claim does not
+require one separately trained LLM per function. LLM parameter weights remain
+inside the function implementation, while HSWM weights describe the semantic
+connections *between* functions and states. The whole hypergraph-weighted
+function network is HSWM. It is not “an LLM plus an external memory”.
+
+HSWM therefore owns the persistent hypergraph state, global routing, recurrence,
+credit assignment, acceptance, and weight/topology rewrites. CAS, CRDT, replay,
+and validation reducers form its deterministic safety/control plane; they are
+not being mislabeled as LLM neurons.
 
 That paragraph is a target identity, not a present-tense efficacy claim. The
 repository currently has a mature evidence/compiler/replay substrate and several
@@ -28,7 +50,7 @@ measured field mechanisms, but the causal learning loop is not closed:
 
 | phase | repository state | completion gate |
 |---|---|---|
-| P0 — identity and metrics | **specified** in the [canonical direction](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) | target identity, claim boundary, and learning metric are explicit |
+| P0 — identity and metrics | **specified** in the [canonical direction](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md): neural functions are LLM-executed; `H` and `W` form their macro-network | target identity, claim boundary, and learning metric are explicit |
 | P1 — closed weight-learning loop | **preregistered, not implemented or run** ([preregistration](PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json)) | `outcome → eligibility/credit → ΔW → changed next dispatch`, with canary and causal controls |
 | P2 — shared-network transfer | **not implemented or measured** | Agent A writes; frozen Agent B gains on sealed unseen work under equal compute |
 | P3 — structural plasticity | deterministic edits and a shadow gate exist; the first candidate policy was **rejected** | a learned candidate policy passes fresh, target, and canary gates |
@@ -169,7 +191,7 @@ formalization remain in
 | `certified_cut_compare.py` | independent-oracle controls, 10×40 scope checks, and 9 mutant attacks |
 | `EPWC_IMPLEMENTATION_S3_2026-07-20.md` | S3 implementation and comparison receipt; smart-hypergraph boundary |
 | `EFFICACY.md` / `verify_efficacy_claims.py` | human and machine-readable current efficacy ledger |
-| `CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md` | target identity: HSWM as the enclosing network and LLM as an internal local operator |
+| `CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md` | target identity: a hypergraph Semantic Weight Map whose neural functions are executed by LLMs |
 | `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` | frozen-before-measurement P1 arms, thresholds, kill/void conditions, and pending module hashes |
 | `B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md` / `b2_routing_signal.py` | oracle routing-signal audit and deterministic evidence generator |
 | `E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md` / `e1_conditional_traversal.py` | bridge/factoid traversal falsifier and evidence generator |

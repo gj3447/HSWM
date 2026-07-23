@@ -8,23 +8,23 @@
 
 ## 0. 정전 한 줄
 
-> **HSWM의 목표 형태는 LLM 바깥에 붙는 메모리 모듈이 아니라, LLM을 국소 신경 연산·상태전이
-> 함수로 내부에 포함하는 거대한 내생적 순환 신경-기호 인지망이다.** agent는 이 망 안에서
-> 국소 함수를 실행하는 뉴런형 process이고, HSWM은 전역 routing·순환 상태·credit·수용 판정·
-> 가중치 및 topology 재배선을 소유한다. 검증된 경험만이 망을 다시 배선한다. 방어 가능한
-> 목표 형태는 다음 네 조합이다.
+> **HSWM(Hypergraph Semantic Weight Map)은 신경망적 함수 단위가 LLM으로 동작하는,
+> 하이퍼그래프 기반의 거대한 시멘틱 신경망이다.** agent/process는 별도의 외부 두뇌가 아니라
+> LLM으로 실행되는 함수 단위이며, hypergraph가 함수와 시멘틱 상태의 n-ary 연결 구조를,
+> Semantic Weight Map이 그 연결의 가중치·활성·routing을 이룬다. HSWM 전체가 순환 상태·
+> credit·수용 판정·가중치 및 topology 재배선을 소유한다. 검증된 경험만이 망을 다시 배선한다.
 
 \[
 \boxed{
 \text{신경망적 HSWM}
 =
-\underbrace{\text{LLM local operators}}_{\text{bounded neural transition functions}}
+\underbrace{\text{LLM-executed functions}}_{f_i=\operatorname{LLM}(\rho_i,x_i,a_{\mathcal N(i)})}
 +
-\underbrace{\text{associative memory readout}}_{\text{1-step, shallow}}
+\underbrace{\text{hypergraph topology }H}_{\text{n-ary semantic connectivity}}
 +
-\underbrace{\text{three-factor rule}}_{\text{eligibility} \times \text{judgment}}
+\underbrace{\text{Semantic Weight Map }W}_{\text{macro-synapses, activation, routing}}
 +
-\underbrace{\text{stochastic structural plasticity}}_{\text{Bayesian rewiring}}
+\underbrace{\text{recurrent plastic state}}_{\text{credit} \times \text{judgment} \rightarrow \Delta W,\Delta H}
 }
 \]
 
@@ -32,10 +32,12 @@
 
 ### CANONICAL_USER (정전)
 
-1. HSWM은 agent가 완성시키는 semantic neural network다. agent = 함수, 공유 HSWM 상태 = 망의
-   가중치·활성. (2026-07-22 발화, `SPEC_OPEN_SELF_SIMILAR` §0)
-2. LLM은 HSWM에 붙은 외부 두뇌가 아니라 거대 HSWM 내부의 국소 신경 연산·상태전이 함수다.
-   HSWM이 전역 routing, recurrent state, credit, acceptance, rewrite를 소유한다. (2026-07-23 후속 명시)
+1. HSWM은 함수 단위가 LLM으로 동작하는 hypergraph-based semantic neural network다.
+   agent/process = LLM-executed function이고, 공유 HSWM 상태 = 망의 가중치·활성이다.
+   (2026-07-22~23 발화, `SPEC_OPEN_SELF_SIMILAR` §0 및 후속 명시)
+2. LLM은 HSWM에 붙은 외부 두뇌나 선택적 부품이 아니다. **신경망적 함수 `f_i`의 실행
+   방식이 LLM**이며, HSWM이 그 함수들의 전역 routing, recurrent state, credit,
+   acceptance, rewrite를 소유한다. (2026-07-23 후속 명시)
 3. 여러 HSWM은 MoE처럼 나뉘고 전문화되고 다시 연결된다. 고정된 “1층/2층”은 없다. (동)
 4. “구조나 fsm을 개선시키면서 흡수흡수흡수” — 학습은 값 저장이 아니라 구조 가소성이다. (2026-07-22)
 5. 연산 > 절약. (2026-07-22)
@@ -52,10 +54,10 @@
 
 | 신경망 개념 | HSWM 대응 | 상태 |
 |---|---|---|
-| 국소 신경 연산·상태전이 | HSWM 내부에서 호출되는 bounded LLM operator | 모델 endpoint/interface 있음; 전역 학습 주체로는 취급하지 않음 |
+| 함수/뉴런형 process \(f_i\) | 역할·국소 상태·유입 활성을 받아 LLM으로 실행되는 semantic function | 모델 endpoint/interface 있음; 함수망 학습 루프는 미완성 |
 | 뉴런 좌표 | embedding \(X\) | frozen (리프트 본체 ~95%) |
-| 회로 | hypergraph n-ary incidence | 코드 있음 |
-| 시냅스 가중치 | semantic weight \(W\) (fast \(\theta\) + slow \(\ell,b\)) | weight-plane 실측 있음 |
+| 함수·상태 연결 구조 | hypergraph n-ary incidence \(H\) | 코드 있음 |
+| 거시 시냅스 가중치 | Semantic Weight Map \(W\) (fast \(\theta\) + slow \(\ell,b\)) | weight-plane 실측 있음 |
 | 활성 | activation \(a\) (1-step readout) | 코드 있음, 휘발 |
 | **eligibility trace** | retrieval/activation 시 tag | **미구현 — P1 대상** |
 | **neuromodulator \(M\)** | 외부 verdict → \(\Delta W = (r-\hat r)\,z\) | **미구현 — P1 대상** |
@@ -65,9 +67,14 @@
 현재의 dose-graded supersession decay는 \(M\) 없는 three-factor의 특수형이다. tag와 \(M\)의
 분리가 닫힌 루프의 최소 구현이다(plasticity PROM §7이 미시 계약 소유).
 
-LLM 호출이 곧 HSWM 학습은 아니다. LLM은 후보 transition·readout·semantic verdict 같은
-국소 계산을 낼 수 있지만, 어떤 호출을 배치할지, 어떤 상태 cut을 읽을지, 어떤 verdict를
-credit으로 인정할지, 어떤 rewrite를 활성화할지는 HSWM의 검증 가능한 전역 동역학이 결정한다.
+함수 단위가 LLM으로 실행된다는 사실과 HSWM이 학습했다는 주장은 구분한다. 같은 LLM을 여러
+역할 함수가 공유할 수 있고, 함수마다 별도 foundation model을 학습할 필요도 없다. LLM 내부
+parameter는 함수 구현의 micro-weight이고, Semantic Weight Map \(W\)는 함수·상태 사이의
+macro-weight다. HSWM 학습은 단순 호출이나 prompt 변경이 아니라 검증된 결과가 \(W\) 또는
+\(H\)를 바꾸고 그 변화가 다음 함수 활성·dispatch를 인과적으로 바꿀 때만 성립한다.
+
+CAS·CRDT·replay·검증 게이트는 이 LLM 함수망의 결정론적 안전/제어 평면이다. 이들을 뉴런이라고
+부르지 않는다. 신경 연산은 LLM-executed function이, 망의 연결과 가소성은 \(H,W\)가 맡는다.
 
 ## 3. 인지체 metric — “똑똑해졌다”의 정전 정의
 
@@ -159,7 +166,8 @@ n-ary credit assignment / LLM semantic verdict를 M으로 / topology 가소성 /
 ## 8. provenance
 
 - USER ratify 발화 2026-07-23 (SYMPOSIUM 세션): “그내용 명문화 정전으로 만들어서 hswm 레포에다가 써줘봐봐”.
-- USER 후속 범주 정정 2026-07-23: “LLM을 그 신경망 연산 함수로 쓰는 거대한 구조” — §0·§1·§2에 반영.
+- USER 후속 범주 정정 2026-07-23: “HSWM은 함수가 LLM으로 동작하는 거대 시멘틱 신경망,
+  하이퍼그래프 기반의 Hypergraph Semantic Weight Map” — §0·§1·§2에 반영.
 - 4축 PROM 원본: SYMPOSIUM `HSWM/PROM_MACRO_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`.
 - 하위 실행 계약: `PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md` (동일자, 독립 수렴).
 - 로컬 정본: `SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`, `SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md`,

@@ -1,0 +1,63 @@
+{
+  "schema_version": "fsm-spec/v1",
+  "name": "generic-feedback-lifecycle",
+  "execution": {
+    "step_interface": "step(configuration, typed_event) -> next_configuration, effect_commands",
+    "event_queue": "External commands are serialized per stream; emitted effects never re-enter synchronously.",
+    "run_to_completion": "One event is fully verified and reduced before the next event.",
+    "action_order": "Verify capability, phase, cut, parents, receipt, and hashes; compute next state; append; then expose effects."
+  },
+  "context_schema": {
+    "stream_id": {"type": "string"},
+    "current_cut_id": {"type": "string"},
+    "phase": {"type": "string"},
+    "role_ledger": {"type": "object"}
+  },
+  "event_schemas": {
+    "ATTACH": {"type": "object", "required": ["request_id", "principal_id", "input_cut_id", "causal_parent_ids", "previous_event_sha256", "event_sha256"], "properties": {"request_id": {"type": "string"}, "principal_id": {"type": "actor-id"}, "input_cut_id": {"type": "string"}, "causal_parent_ids": {"type": "array"}, "previous_event_sha256": {"type": "string"}, "event_sha256": {"type": "string"}}},
+    "PROPOSE": {"type": "object", "required": ["request_id", "principal_id", "input_cut_id", "causal_parent_ids", "previous_event_sha256", "event_sha256"], "properties": {"request_id": {"type": "string"}, "principal_id": {"type": "actor-id"}, "input_cut_id": {"type": "string"}, "causal_parent_ids": {"type": "array"}, "previous_event_sha256": {"type": "string"}, "event_sha256": {"type": "string"}}},
+    "OBSERVE": {"type": "object", "required": ["request_id", "principal_id", "input_cut_id", "causal_parent_ids", "previous_event_sha256", "event_sha256"], "properties": {"request_id": {"type": "string"}, "principal_id": {"type": "actor-id"}, "input_cut_id": {"type": "string"}, "causal_parent_ids": {"type": "array"}, "previous_event_sha256": {"type": "string"}, "event_sha256": {"type": "string"}}},
+    "JUDGE": {"type": "object", "required": ["request_id", "principal_id", "input_cut_id", "causal_parent_ids", "previous_event_sha256", "event_sha256"], "properties": {"request_id": {"type": "string"}, "principal_id": {"type": "actor-id"}, "input_cut_id": {"type": "string"}, "causal_parent_ids": {"type": "array"}, "previous_event_sha256": {"type": "string"}, "event_sha256": {"type": "string"}}},
+    "COMMIT": {"type": "object", "required": ["request_id", "principal_id", "input_cut_id", "causal_parent_ids", "previous_event_sha256", "event_sha256"], "properties": {"request_id": {"type": "string"}, "principal_id": {"type": "actor-id"}, "input_cut_id": {"type": "string"}, "causal_parent_ids": {"type": "array"}, "previous_event_sha256": {"type": "string"}, "event_sha256": {"type": "string"}}},
+    "DISPATCH": {"type": "object", "required": ["request_id", "principal_id", "input_cut_id", "causal_parent_ids", "previous_event_sha256", "event_sha256"], "properties": {"request_id": {"type": "string"}, "principal_id": {"type": "actor-id"}, "input_cut_id": {"type": "string"}, "causal_parent_ids": {"type": "array"}, "previous_event_sha256": {"type": "string"}, "event_sha256": {"type": "string"}}}
+  },
+  "guards": {
+    "attach_valid": {"reads": ["stream_id", "current_cut_id", "role_ledger"], "event_reads": ["principal_id", "input_cut_id", "causal_parent_ids", "previous_event_sha256", "event_sha256"], "pure": true, "synchronous": true},
+    "propose_valid": {"reads": ["stream_id", "current_cut_id", "role_ledger"], "event_reads": ["principal_id", "input_cut_id", "causal_parent_ids", "previous_event_sha256", "event_sha256"], "pure": true, "synchronous": true},
+    "observe_valid": {"reads": ["stream_id", "current_cut_id", "role_ledger"], "event_reads": ["principal_id", "input_cut_id", "causal_parent_ids", "previous_event_sha256", "event_sha256"], "pure": true, "synchronous": true},
+    "judge_valid": {"reads": ["stream_id", "current_cut_id", "role_ledger"], "event_reads": ["principal_id", "input_cut_id", "causal_parent_ids", "previous_event_sha256", "event_sha256"], "pure": true, "synchronous": true},
+    "commit_valid": {"reads": ["stream_id", "current_cut_id", "role_ledger"], "event_reads": ["principal_id", "input_cut_id", "causal_parent_ids", "previous_event_sha256", "event_sha256"], "pure": true, "synchronous": true},
+    "dispatch_valid": {"reads": ["stream_id", "current_cut_id", "role_ledger"], "event_reads": ["principal_id", "input_cut_id", "causal_parent_ids", "previous_event_sha256", "event_sha256"], "pure": true, "synchronous": true}
+  },
+  "effects": {
+    "RecordEvent": {"kind": "command", "payload_schema": {"type": "object", "required": ["request_id"], "properties": {"request_id": {"type": "string"}}}},
+    "AuditInvalidTransition": {"kind": "audit", "payload_schema": {"type": "object", "required": ["state", "event", "principal_id", "reason", "request_id"], "properties": {"state": {"type": "string"}, "event": {"type": "string"}, "principal_id": {"type": "actor-id"}, "reason": {"type": "string"}, "request_id": {"type": "string"}}}}
+  },
+  "machines": [{
+    "id": "feedback",
+    "initial": "detached",
+    "states": [
+      {"id": "detached", "kind": "atomic"}, {"id": "attached", "kind": "atomic"},
+      {"id": "proposed", "kind": "atomic"}, {"id": "observed", "kind": "atomic"},
+      {"id": "judged", "kind": "atomic"}, {"id": "committed", "kind": "atomic"},
+      {"id": "dispatched", "kind": "final"}
+    ],
+    "events": ["ATTACH", "PROPOSE", "OBSERVE", "JUDGE", "COMMIT", "DISPATCH"],
+    "invalid_event_policy": {"mode": "reject-and-audit", "guard_false": "reject-and-audit", "state_change": "none", "effect": "AuditInvalidTransition", "effect_binding": {"state": "configuration.state", "event": "event.type", "principal_id": "event.principal_id", "reason": "rejection.reason", "request_id": "event.request_id"}},
+    "transitions": [
+      {"id": "attach", "from": "detached", "event": "ATTACH", "to": "attached", "guard": "attach_valid", "effects": ["RecordEvent"], "effect_bindings": {"RecordEvent": {"request_id": "event.request_id"}}},
+      {"id": "propose", "from": "attached", "event": "PROPOSE", "to": "proposed", "guard": "propose_valid", "effects": ["RecordEvent"], "effect_bindings": {"RecordEvent": {"request_id": "event.request_id"}}},
+      {"id": "observe", "from": "proposed", "event": "OBSERVE", "to": "observed", "guard": "observe_valid", "effects": ["RecordEvent"], "effect_bindings": {"RecordEvent": {"request_id": "event.request_id"}}},
+      {"id": "judge", "from": "observed", "event": "JUDGE", "to": "judged", "guard": "judge_valid", "effects": ["RecordEvent"], "effect_bindings": {"RecordEvent": {"request_id": "event.request_id"}}},
+      {"id": "commit", "from": "judged", "event": "COMMIT", "to": "committed", "guard": "commit_valid", "effects": ["RecordEvent"], "effect_bindings": {"RecordEvent": {"request_id": "event.request_id"}}},
+      {"id": "dispatch", "from": "committed", "event": "DISPATCH", "to": "dispatched", "guard": "dispatch_valid", "effects": ["RecordEvent"], "effect_bindings": {"RecordEvent": {"request_id": "event.request_id"}}}
+    ]
+  }],
+  "safety_properties": [
+    {"id": "exact-phase", "statement": "No phase can be skipped, repeated, or reversed.", "verification": "Reducer matrix and invalid trace fixtures."},
+    {"id": "trusted-stream-role", "statement": "Each event requires a verified exact-role capability bound to the stream.", "verification": "Capability and forged-principal tests."}
+  ],
+  "liveness_properties": [{"id": "eventual-dispatch", "statement": "An authorized valid chain can reach dispatched.", "assumptions": ["Every required adapter and authority eventually returns a valid command."], "verification": "ACCEPT and REJECT happy traces."}],
+  "trace_fixtures": ["_research/feedback_runtime/fsm_traces.v1.json"],
+  "conformance": {"implementation_step": "feedback_runtime.evolve", "model_trace_runner": "fsm-design run_fsm_traces.py", "contract_tests": "tests/test_feedback_runtime.py and tests/test_feedback_store.py"}
+}

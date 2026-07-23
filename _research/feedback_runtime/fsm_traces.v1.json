@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {"id": "happy-accept", "machine": "feedback", "steps": [
+      {"event": "ATTACH", "guard_results": {"attach_valid": true}, "expected_state": "attached", "expected_effects": ["RecordEvent"]},
+      {"event": "PROPOSE", "guard_results": {"propose_valid": true}, "expected_state": "proposed", "expected_effects": ["RecordEvent"]},
+      {"event": "OBSERVE", "guard_results": {"observe_valid": true}, "expected_state": "observed", "expected_effects": ["RecordEvent"]},
+      {"event": "JUDGE", "guard_results": {"judge_valid": true}, "expected_state": "judged", "expected_effects": ["RecordEvent"]},
+      {"event": "COMMIT", "guard_results": {"commit_valid": true}, "expected_state": "committed", "expected_effects": ["RecordEvent"]},
+      {"event": "DISPATCH", "guard_results": {"dispatch_valid": true}, "expected_state": "dispatched", "expected_effects": ["RecordEvent"]}
+    ]},
+    {"id": "happy-reject", "machine": "feedback", "steps": [
+      {"event": "ATTACH", "guard_results": {"attach_valid": true}, "expected_state": "attached", "expected_effects": ["RecordEvent"]},
+      {"event": "PROPOSE", "guard_results": {"propose_valid": true}, "expected_state": "proposed", "expected_effects": ["RecordEvent"]},
+      {"event": "OBSERVE", "guard_results": {"observe_valid": true}, "expected_state": "observed", "expected_effects": ["RecordEvent"]},
+      {"event": "JUDGE", "guard_results": {"judge_valid": true}, "expected_state": "judged", "expected_effects": ["RecordEvent"]},
+      {"event": "COMMIT", "guard_results": {"commit_valid": true}, "expected_state": "committed", "expected_effects": ["RecordEvent"]},
+      {"event": "DISPATCH", "guard_results": {"dispatch_valid": true}, "expected_state": "dispatched", "expected_effects": ["RecordEvent"]}
+    ]},
+    {"id": "guard-false-attach", "machine": "feedback", "steps": [{"event": "ATTACH", "guard_results": {"attach_valid": false}, "expected_state": "detached", "expected_effects": ["AuditInvalidTransition"]}]},
+    {"id": "guard-false-propose-stale-cut", "machine": "feedback", "steps": [{"event": "ATTACH", "guard_results": {"attach_valid": true}, "expected_state": "attached", "expected_effects": ["RecordEvent"]}, {"event": "PROPOSE", "guard_results": {"propose_valid": false}, "expected_state": "attached", "expected_effects": ["AuditInvalidTransition"]}]},
+    {"id": "guard-false-observe-wrong-parent", "machine": "feedback", "steps": [{"event": "ATTACH", "guard_results": {"attach_valid": true}, "expected_state": "attached", "expected_effects": ["RecordEvent"]}, {"event": "PROPOSE", "guard_results": {"propose_valid": true}, "expected_state": "proposed", "expected_effects": ["RecordEvent"]}, {"event": "OBSERVE", "guard_results": {"observe_valid": false}, "expected_state": "proposed", "expected_effects": ["AuditInvalidTransition"]}]},
+    {"id": "guard-false-judge-forged-principal", "machine": "feedback", "steps": [{"event": "ATTACH", "guard_results": {"attach_valid": true}, "expected_state": "attached", "expected_effects": ["RecordEvent"]}, {"event": "PROPOSE", "guard_results": {"propose_valid": true}, "expected_state": "proposed", "expected_effects": ["RecordEvent"]}, {"event": "OBSERVE", "guard_results": {"observe_valid": true}, "expected_state": "observed", "expected_effects": ["RecordEvent"]}, {"event": "JUDGE", "guard_results": {"judge_valid": false}, "expected_state": "observed", "expected_effects": ["AuditInvalidTransition"]}]},
+    {"id": "guard-false-commit", "machine": "feedback", "steps": [{"event": "ATTACH", "guard_results": {"attach_valid": true}, "expected_state": "attached", "expected_effects": ["RecordEvent"]}, {"event": "PROPOSE", "guard_results": {"propose_valid": true}, "expected_state": "proposed", "expected_effects": ["RecordEvent"]}, {"event": "OBSERVE", "guard_results": {"observe_valid": true}, "expected_state": "observed", "expected_effects": ["RecordEvent"]}, {"event": "JUDGE", "guard_results": {"judge_valid": true}, "expected_state": "judged", "expected_effects": ["RecordEvent"]}, {"event": "COMMIT", "guard_results": {"commit_valid": false}, "expected_state": "judged", "expected_effects": ["AuditInvalidTransition"]}]},
+    {"id": "guard-false-dispatch", "machine": "feedback", "steps": [{"event": "ATTACH", "guard_results": {"attach_valid": true}, "expected_state": "attached", "expected_effects": ["RecordEvent"]}, {"event": "PROPOSE", "guard_results": {"propose_valid": true}, "expected_state": "proposed", "expected_effects": ["RecordEvent"]}, {"event": "OBSERVE", "guard_results": {"observe_valid": true}, "expected_state": "observed", "expected_effects": ["RecordEvent"]}, {"event": "JUDGE", "guard_results": {"judge_valid": true}, "expected_state": "judged", "expected_effects": ["RecordEvent"]}, {"event": "COMMIT", "guard_results": {"commit_valid": true}, "expected_state": "committed", "expected_effects": ["RecordEvent"]}, {"event": "DISPATCH", "guard_results": {"dispatch_valid": false}, "expected_state": "committed", "expected_effects": ["AuditInvalidTransition"]}]},
+    {"id": "invalid-judge-from-detached", "machine": "feedback", "steps": [{"event": "JUDGE", "guard_results": {"judge_valid": true}, "expected_state": "detached", "expected_effects": ["AuditInvalidTransition"]}]},
+    {"id": "invalid-early-dispatch", "machine": "feedback", "steps": [{"event": "DISPATCH", "guard_results": {"dispatch_valid": true}, "expected_state": "detached", "expected_effects": ["AuditInvalidTransition"]}]}
+  ]
+}

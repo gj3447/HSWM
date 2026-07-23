@@ -1,0 +1,53 @@
+{
+  "schema_version": "engine-spec/v1",
+  "name": "generic-feedback-runtime",
+  "purpose": "Own deterministic admission, replay, verdict-bound cuts, and dispatch intent for a generic feedback stream.",
+  "decision": {
+    "verdict": "engine",
+    "current_consumers": ["python-runtime-adapter", "sqlite-event-store"],
+    "planned_consumers": ["domain-specific judgment adapters"],
+    "fit_evidence": ["The six-phase protocol has shared durable state authority.", "Replay and idempotency require one transactional append authority."],
+    "alternatives_considered": ["Pure in-memory module", "Domain-specific LakatoTree service"]
+  },
+  "boundary": {
+    "owns": "One ordered event chain and derived projection per stream",
+    "mechanism": "Verify capabilities, decide pure transitions, atomically append canonical events, and replay",
+    "policy_outside": ["How observations are produced", "How judgments are selected", "How dispatch effects execute"],
+    "non_goals": ["Scientific progress judgment", "Exactly-once external effects", "Distributed consensus"],
+    "state_authority": "SQLite is the sole durable append authority per database; BEGIN IMMEDIATE serializes writers"
+  },
+  "model": {"resources": ["input-cut", "capability"], "work_units": ["feedback-stream", "request"]},
+  "state_model": "A seven-state linear FSM from detached through dispatched, validated with fsm-design.",
+  "protocol": {
+    "commands": ["Attach", "Propose", "Observe", "Judge", "Commit", "Dispatch"],
+    "events": ["ATTACH", "PROPOSE", "OBSERVE", "JUDGE", "COMMIT", "DISPATCH"],
+    "effects": ["ExecuteProposal", "EvaluateObservation", "PublishDispatch"],
+    "versioning": "Breaking envelope, cut, dispatch, or policy changes require a new schema or policy version."
+  },
+  "invariants": ["Phase order is immutable.", "Capabilities bind exact role and stream.", "One principal cannot hold multiple stream roles in v1.", "Causal parents and input cuts are exact.", "Request ids are first-write-wins."],
+  "ports": ["EventStorePort", "ExecutorPort", "JudgmentPort", "CommitterPort", "DispatcherPort"],
+  "runtime": {
+    "ordering": "Commands are serialized by BEGIN IMMEDIATE and sequence per stream.",
+    "concurrency": "Independent databases may progress concurrently; competing writers to one database serialize.",
+    "backpressure": "SQLite busy timeout bounds lock waiting and exposes failure to the caller.",
+    "cancellation": "The six-event kernel has no cancellation command; outer-loop interruption is specified separately.",
+    "timeouts": "Adapter and dispatch waits are outside the reducer and bounded by the loop contract."
+  },
+  "durability": {
+    "persistence": "Append canonical event bytes before returning success.",
+    "atomic_commit": "Resolve request idempotency, verify the full stream, and append one event in one immediate transaction.",
+    "recovery": "Reopen, verify every row and full fold, then derive the replay projection.",
+    "effect_idempotency": "Ports receive the request id as an adapter idempotency key and a pinned cut.",
+    "migration": "No automatic migration in v1; incompatible schemas fail closed."
+  },
+  "failure_model": ["Invalid commands reject without append.", "Tampered canonical bytes, SQL columns, request hash, or chain fail closed.", "Process restart and transaction rollback are supported; power-loss proof is not claimed."],
+  "observability": {
+    "traces": ["Event envelopes carry request, sequence, causation, principal, cut, and hashes."],
+    "metrics": ["Append conflicts, integrity failures, phase rejections, and replay duration are recommended outer-shell metrics."],
+    "redaction": "Capability secrets and signatures are never serialized into the event log."
+  },
+  "security": ["Authority derives only from verified out-of-band capabilities.", "Every capability is stream scoped.", "Payload actor strings are untrusted data."],
+  "verification": ["Table-test phase, role, cut, and parent guards.", "Race-test identical and conflicting requests.", "Tamper-test every redundant integrity surface."],
+  "implementation_slices": ["Pure kernel", "HMAC capability authority", "SQLite store", "restart and tamper tests", "outer dispatch loop contract"],
+  "falsifiers": ["If durable state, shared replay, and idempotency disappear, collapse the kernel into a pure module."]
+}

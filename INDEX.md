@@ -34,6 +34,8 @@ routing을 이룬다. HSWM 전체가 persistent recurrent state, credit, accepta
 weight/topology rewrite를 소유한다. 이는 목표 정체성이며 현재 효능 주장이 아니다.
 정본은
 [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md)다.
+함수 계약, 실행 cycle, 코드 대응, 구현 가능성, 실패 모드와 결정적 실험은
+[`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md)에 고정했다.
 
 정본 설계는
 [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md),

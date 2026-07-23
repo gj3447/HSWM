@@ -44,6 +44,10 @@ credit assignment, acceptance, and weight/topology rewrites. CAS, CRDT, replay,
 and validation reducers form its deterministic safety/control plane; they are
 not being mislabeled as LLM neurons.
 
+The detailed function contract, runtime cycle, code-to-architecture map,
+feasibility verdict, failure modes, and decisive P1–P4 experiments are in
+[`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md).
+
 That paragraph is a target identity, not a present-tense efficacy claim. The
 repository currently has a mature evidence/compiler/replay substrate and several
 measured field mechanisms, but the causal learning loop is not closed:
@@ -191,6 +195,7 @@ formalization remain in
 | `EPWC_IMPLEMENTATION_S3_2026-07-20.md` | S3 implementation and comparison receipt; smart-hypergraph boundary |
 | `EFFICACY.md` / `verify_efficacy_claims.py` | human and machine-readable current efficacy ledger |
 | `CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md` | target identity: a hypergraph Semantic Weight Map whose neural functions are executed by LLMs |
+| `HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md` | precise LLM-function contract, runtime semantics, current code mapping, feasibility verdict, risks, and decisive gates |
 | `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` | frozen-before-measurement P1 arms, thresholds, kill/void conditions, and pending module hashes |
 | `B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md` / `b2_routing_signal.py` | oracle routing-signal audit and deterministic evidence generator |
 | `E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md` / `e1_conditional_traversal.py` | bridge/factoid traversal falsifier and evidence generator |

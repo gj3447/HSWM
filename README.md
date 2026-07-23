@@ -190,6 +190,12 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
 - ❌ **S4 durable revision runtime:** event-folded supersession, as-of replay,
   compensation, concurrent publication, signatures, and external trust
   distribution are not present-tense claims.
+- 🚧 **Immediate completion gate:** before adding more architecture, one generic
+  agent must complete an attach → propose → external observation → independent
+  LakatoTree judgment → immutable commit → changed next-dispatch loop and replay
+  it bit-identically after restart.  The normative file and acceptance tests
+  are specified in
+  [`GENERIC_FEEDBACK_RUNTIME_ACCEPTANCE.md`](GENERIC_FEEDBACK_RUNTIME_ACCEPTANCE.md).
 
 See [`EFFICACY.md`](EFFICACY.md) for the full claim ledger, budgets, negative
 results, and reproduction boundaries. `verify_efficacy_claims.py` reconstructs
@@ -213,6 +219,7 @@ positive traversal residual does not guarantee ranking/nDCG improvement.
 | `certified_cut_compare.py` | independent-oracle controls, 10×40 scope checks, and 9 mutant attacks |
 | `EPWC_IMPLEMENTATION_S3_2026-07-20.md` | S3 implementation and comparison receipt; smart-hypergraph boundary |
 | `EFFICACY.md` / `verify_efficacy_claims.py` | human and machine-readable current efficacy ledger |
+| `GENERIC_FEEDBACK_RUNTIME_ACCEPTANCE.md` | minimum end-to-end gate: authority-separated verdict, causal redispatch, idempotency, and restart replay |
 | `INDEX.md` | public research map, 2026-07-22 result ledger, and next frontier |
 | `SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md` | fixed-layer-free open weighted-hypergraph contract |
 | `AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md` | v2r3 counterexamples, repairs, tests, and claim boundary |

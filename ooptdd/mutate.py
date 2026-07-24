@@ -166,7 +166,7 @@ def mutation_score(
     else:
         base_cmd = [sys.executable, receipt_path]
     sites = collect_sites(module_path)[:max_mutants]
-    killed, survivors, errors = 0, [], []
+    killed, survivor_sites, errors = 0, [], []
     pyc_dir = os.path.join(os.path.dirname(os.path.abspath(module_path)), "__pycache__")
     module_stem = os.path.splitext(os.path.basename(module_path))[0]
     env = dict(os.environ)
@@ -196,14 +196,31 @@ def mutation_score(
                             capture_output=True, timeout=timeout_per_run,
                         )
                     if proc.returncode == 0:
-                        survivors.append(f"{site.site_id} {site.detail}")
+                        survivor_sites.append(site)
                     else:
                         killed += 1
                 except subprocess.TimeoutExpired:
                     errors.append(f"{site.site_id} timeout")
         except RuntimeError as e:
             errors.append(f"{site.site_id} patch-refused: {e}")
-    return {"killed": killed, "total": len(sites), "survivors": survivors, "errors": errors}
+
+    # allowlist classification (R3): survivors split into documented
+    # equivalents (with reason) and open gaps; score keeps the raw counts and
+    # additionally reports the effective (gap-adjusted) denominator.
+    from ooptdd.allowlist import is_equivalent, load_allowlist
+    allowlist = load_allowlist()
+    module_entries = allowlist.get(os.path.basename(module_path), [])
+    equivalents, open_gaps = [], []
+    for site in survivor_sites:
+        reason = is_equivalent(site, module_entries)
+        label = f"{site.site_id} {site.detail}"
+        if reason:
+            equivalents.append({"site": label, "reason": reason})
+        else:
+            open_gaps.append(label)
+    return {"killed": killed, "total": len(sites),
+            "effective_total": len(sites) - len(equivalents),
+            "survivors": open_gaps, "equivalents": equivalents, "errors": errors}
 
 
 def _sentinel_path(module_path: str) -> str:

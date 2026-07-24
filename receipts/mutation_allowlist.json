@@ -1,0 +1,42 @@
+{
+  "learned_v3_additive.py": [
+    {"kind": "binop", "detail": "Sub->Add", "lineno": 36,
+     "reason": "softmax constant-shift invariance: e^{s+c}/sum = softmax(s); stability-only"},
+    {"kind": "binop", "detail": "Mult->Add", "lineno": 67,
+     "reason": "RNG seed constant change; claims must hold across seeds by design"},
+    {"kind": "compare", "detail": "Gt->GtE", "lineno": 92,
+     "reason": "resid>0 vs >=0 gate boundary is measure-zero on continuous residuals"}
+  ],
+  "traversal.py": [
+    {"kind": "binop", "detail": "Sub->Add", "lineno": 89, "col": 16,
+     "reason": "softmax constant-shift invariance in _softmax_topm"},
+    {"kind": "compare", "detail": "Gt->GtE", "lineno": 90, "col": 7,
+     "reason": "z.size>m vs >=m: at z.size==m the prune branch keeps everything either way"},
+    {"kind": "compare", "detail": "LtE->Lt", "lineno": 99, "col": 7,
+     "reason": "count_nonzero<=m vs <m: pruning to m when count==m is the identity map"},
+    {"kind": "compare", "detail": "LtE->Lt", "lineno": 99, "col": 35,
+     "reason": "total<=0 vs <0: activations are nonnegative, so total==0 implies count==0 and the first disjunct already returned"}
+  ],
+  "expB_longdoc.py": [
+    {"kind": "compare", "detail": "Lt->LtE", "lineno": 97, "col": 74,
+     "reason": "rng.random()<CHAIN_FOLLOW boundary is measure-zero"},
+    {"kind": "compare", "detail": "Gt->GtE", "lineno": 100, "col": 11,
+     "reason": "rng.random()>JUDGE_ACC boundary is measure-zero"}
+  ],
+  "qkv_b1_development_falsifier.py": [
+    {"kind": "binop", "detail": "Mult->Add", "lineno": 52, "col": 46,
+     "reason": "sha256 chunk size (1024*1024 vs 1024+1024) does not change the digest"}
+  ],
+  "h3_title_anchor_falsifier.py": [
+    {"kind": "binop", "detail": "Mult->Add", "lineno": 75, "col": 46,
+     "reason": "sha256 chunk size does not change the digest"},
+    {"kind": "compare", "detail": "LtE->Lt", "lineno": 87, "col": 10,
+     "reason": "outer while boundary is double-guarded by the inner append check at line 89; overshoot unreachable under single fault"},
+    {"kind": "compare", "detail": "LtE->Lt", "lineno": 87, "col": 37,
+     "reason": "any() cursor boundary is double-guarded by the inner cursor check before indexing"},
+    {"kind": "compare", "detail": "LtE->Lt", "lineno": 89, "col": 15,
+     "reason": "inner cursor boundary is double-guarded by the outer any() termination"},
+    {"kind": "compare", "detail": "LtE->Lt", "lineno": 89, "col": 45,
+     "reason": "inner append boundary is double-guarded by the outer while condition; len==n_rows exits before re-evaluation"}
+  ]
+}

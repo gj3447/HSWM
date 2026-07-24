@@ -1,9 +1,15 @@
 from __future__ import annotations
 
+import json
+from types import SimpleNamespace
+
 import numpy as np
+import pytest
+from hashlib import sha256
 
 import composition as comp
 import qkv_b1_development_falsifier as falsifier
+from world_ir import canonical_json
 
 
 def test_policy_grid_matches_frozen_experiment_surface() -> None:
@@ -56,3 +62,94 @@ def test_multigraph_value_shuffle_preserves_exact_in_and_out_degrees() -> None:
     )
     assert all(item.source_target != item.target_target for item in shuffled.arcs)
     assert falsifier._edge_multiset(shuffled) != falsifier._edge_multiset(graph)  # noqa: SLF001
+
+
+# --- v2.4.6 guard-path fixtures (vacuity 0/8: the drift-detection guards were
+# never fed drifted inputs; utilities were tested, guards were not) ---
+
+def _segment_file(tmp_path, *, split="development", dataset="ds", qids=("q1", "q2")):
+    seg = {"split": split, "dataset": dataset,
+           "evaluation_rows": [{"qid": q} for q in qids]}
+    p = tmp_path / "segment.json"
+    p.write_text(json.dumps(seg), encoding="utf-8")
+    return p
+
+
+def _sidecar_file(tmp_path, *, dataset="ds", rows=(), digest=None):
+    rows = list(rows)
+    wrapper = {"dataset": dataset, "rows": rows,
+               "rows_sha256": digest or sha256(
+                   canonical_json(tuple(rows)).encode("utf-8")).hexdigest()}
+    p = tmp_path / "sidecar.json"
+    p.write_text(json.dumps(wrapper), encoding="utf-8")
+    return p
+
+
+def _rows(*qids):
+    return [{"id": q, "relation": "r"} for q in qids]
+
+
+def test_guard_accepts_valid_segment_and_sidecar(tmp_path):
+    """Positive fixture — also kills the NotEq->Eq guard inversions, which turn
+    every valid input into a spurious DevelopmentFalsifierError."""
+    seg = _segment_file(tmp_path)
+    side = _sidecar_file(tmp_path, rows=_rows("q1", "q2"))
+    ds = SimpleNamespace(segment_path=str(seg), dataset="ds")
+    selected, qids = falsifier._raw_rows_for_segment(ds, side)  # noqa: SLF001
+    assert qids == ("q1", "q2")
+    assert len(selected) == 2
+
+
+def test_guard_rejects_segment_split_drift(tmp_path):
+    seg = _segment_file(tmp_path, split="test")
+    side = _sidecar_file(tmp_path, rows=_rows("q1", "q2"))
+    ds = SimpleNamespace(segment_path=str(seg), dataset="ds")
+    with pytest.raises(falsifier.DevelopmentFalsifierError, match="identity/split drift"):
+        falsifier._raw_rows_for_segment(ds, side)  # noqa: SLF001
+
+
+def test_guard_rejects_duplicate_qids(tmp_path):
+    seg = _segment_file(tmp_path, qids=("q1", "q1"))
+    side = _sidecar_file(tmp_path, rows=_rows("q1"))
+    ds = SimpleNamespace(segment_path=str(seg), dataset="ds")
+    with pytest.raises(falsifier.DevelopmentFalsifierError, match="unique"):
+        falsifier._raw_rows_for_segment(ds, side)  # noqa: SLF001
+
+
+def test_guard_rejects_sidecar_identity_drift(tmp_path):
+    seg = _segment_file(tmp_path)
+    side = _sidecar_file(tmp_path, dataset="OTHER", rows=_rows("q1", "q2"))
+    ds = SimpleNamespace(segment_path=str(seg), dataset="ds")
+    with pytest.raises(falsifier.DevelopmentFalsifierError, match="sidecar identity drift"):
+        falsifier._raw_rows_for_segment(ds, side)  # noqa: SLF001
+
+
+def test_guard_rejects_sidecar_digest_mismatch(tmp_path):
+    seg = _segment_file(tmp_path)
+    side = _sidecar_file(tmp_path, rows=_rows("q1", "q2"), digest="0" * 64)
+    ds = SimpleNamespace(segment_path=str(seg), dataset="ds")
+    with pytest.raises(falsifier.DevelopmentFalsifierError, match="digest mismatch"):
+        falsifier._raw_rows_for_segment(ds, side)  # noqa: SLF001
+
+
+def test_split_bindings_partition_matches_assignments(tmp_path, monkeypatch):
+    """cmp@114/118 (== 'val' / == 'test' inversions): the val/test partition
+    must mirror the suite assignments exactly — an inversion silently swaps
+    or merges the evaluation halves without raising."""
+    seg = _segment_file(tmp_path)
+    side = _sidecar_file(tmp_path, rows=_rows("q1", "q2"))
+    ds = SimpleNamespace(segment_path=str(seg), dataset="ds",
+                         queries=[SimpleNamespace(qid="q1"), SimpleNamespace(qid="q2")])
+    stub = SimpleNamespace(
+        examples=[SimpleNamespace(qid="q1", occurrence_id="o1"),
+                  SimpleNamespace(qid="q2", occurrence_id="o2")],
+        assignments=[SimpleNamespace(occurrence_id="o1", split="val", component_id="c1"),
+                     SimpleNamespace(occurrence_id="o2", split="test", component_id="c2")],
+        suite_id="stub", raw_snapshot_sha256="0" * 64,
+    )
+    monkeypatch.setattr(falsifier.reval, "build_relation_evaluation_suite",
+                        lambda *a, **k: stub)
+    val, test, components, _meta = falsifier._split_bindings(ds, side)  # noqa: SLF001
+    assert val == (0,)
+    assert test == (1,)
+    assert components == ("c1", "c2")

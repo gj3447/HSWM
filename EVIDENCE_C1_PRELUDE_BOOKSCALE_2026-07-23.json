@@ -1,0 +1,141 @@
+{
+ "label": "C1_PRELUDE_BOOKSCALE",
+ "prereg": "prom_search_hswm/evidence/PREREG_c1_prelude_bookscale_20260723.json",
+ "n_instances": 262,
+ "pilot": false,
+ "no_judge": false,
+ "books": {
+  "The Count of Monte Cristo": {
+   "chunks": 922,
+   "terms": 7559,
+   "ingest_s": 0.3,
+   "n_instances": 54
+  },
+  "In Search of the Castaways": {
+   "chunks": 312,
+   "terms": 4228,
+   "ingest_s": 0.1,
+   "n_instances": 86
+  },
+  "封神演义": {
+   "chunks": 783,
+   "terms": 3943,
+   "ingest_s": 14.7,
+   "n_instances": 94
+  },
+  "三国演义": {
+   "chunks": 792,
+   "terms": 3686,
+   "ingest_s": 183.5,
+   "n_instances": 28
+  }
+ },
+ "cost": {
+  "embedding_calls": 0,
+  "embedding_fallbacks": 0,
+  "judge_calls": 114,
+  "judge_prompt_tokens": 1531951
+ },
+ "hswm_abstain_count": 28,
+ "macro_f1": {
+  "dense": 0.3955,
+  "hswm": 0.4273,
+  "clique": 0.4472
+ },
+ "per_class": {
+  "dense": {
+   "consistent": {
+    "f1": 0.17857142857142858,
+    "tp": 15,
+    "fp": 3,
+    "fn": 135
+   },
+   "contradict": {
+    "f1": 0.6123595505617978,
+    "tp": 109,
+    "fp": 135,
+    "fn": 3
+   }
+  },
+  "hswm": {
+   "consistent": {
+    "f1": 0.24581005586592178,
+    "tp": 22,
+    "fp": 7,
+    "fn": 128
+   },
+   "contradict": {
+    "f1": 0.6086956521739131,
+    "tp": 105,
+    "fp": 128,
+    "fn": 7
+   }
+  },
+  "clique": {
+   "consistent": {
+    "f1": 0.27624309392265195,
+    "tp": 25,
+    "fp": 6,
+    "fn": 125
+   },
+   "contradict": {
+    "f1": 0.6180758017492711,
+    "tp": 106,
+    "fp": 125,
+    "fn": 6
+   }
+  }
+ },
+ "unparsed": {
+  "dense": 0,
+  "hswm": 0,
+  "clique": 0
+ },
+ "per_book_macro_f1": {
+  "In Search of the Castaways": {
+   "dense": 0.211,
+   "hswm": 0.2861,
+   "clique": 0.3164
+  },
+  "The Count of Monte Cristo": {
+   "dense": 0.505,
+   "hswm": 0.5702,
+   "clique": 0.6291
+  },
+  "三国演义": {
+   "dense": 0.3524,
+   "hswm": 0.4011,
+   "clique": 0.3524
+  },
+  "封神演义": {
+   "dense": 0.5245,
+   "hswm": 0.4839,
+   "clique": 0.4913
+  }
+ },
+ "deltas_pp": {
+  "hswm_minus_dense": {
+   "mean": 3.16,
+   "ci95": [
+    -1.5,
+    7.89
+   ],
+   "p_le_0": 0.0908
+  },
+  "hswm_minus_clique": {
+   "mean": -2.0,
+   "ci95": [
+    -5.64,
+    1.52
+   ],
+   "p_le_0": 0.8788
+  }
+ },
+ "prereg_verdict": {
+  "hswm_minus_dense_ge_3pp": true,
+  "hswm_gt_clique": false,
+  "kill_condition_hit": true,
+  "low_power_note": "n=262 -> CI ~+/-6pt; if CI straddles threshold, verdict is low_power"
+ },
+ "wall_clock_s": 1485.8
+}

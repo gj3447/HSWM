@@ -69,6 +69,7 @@ OLLAMA = os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434")
 JUDGE_URL = os.environ.get("JUDGE_URL", "http://127.0.0.1:18000/v1")
 JUDGE_MODEL = "qwen3.6-27b"
 EMBED_MODEL = "bge-m3"
+EMB_PARALLEL = int(os.environ.get("EMB_PARALLEL", "8"))  # ollama 부하 조절 (16-way 500 에러 경험)
 
 _STOP = set(
     "a an the of to in on at for and or but is are was were be been being as by with "
@@ -105,6 +106,7 @@ class Embedder:
     def __init__(self):
         os.makedirs(CACHE_DIR, exist_ok=True)
         self.calls = 0
+        self.embed_fallbacks = 0
 
     def _cache_path(self, text: str) -> str:
         return os.path.join(CACHE_DIR, f"emb_{sha256_text(EMBED_MODEL + '|' + text)}.npy")
@@ -120,10 +122,18 @@ class Embedder:
                 todo.append(i)
 
         def work(i: int):
-            r = _post(f"{OLLAMA}/api/embeddings", {"model": EMBED_MODEL, "prompt": texts[i]})
+            t = texts[i]
+            try:
+                r = _post(f"{OLLAMA}/api/embeddings", {"model": EMBED_MODEL, "prompt": t})
+            except urllib.error.HTTPError:
+                # bge-m3 NaN-embedding 병리 (실측: idx146 封神 질의) — 괄호(전/반각) 제거 후
+                # 결정론적 1회 재시도. fallback 횟수는 결과 cost에 공시.
+                t2 = t.translate({ord(c): None for c in "（）()"})
+                r = _post(f"{OLLAMA}/api/embeddings", {"model": EMBED_MODEL, "prompt": t2})
+                self.embed_fallbacks += 1
             v = np.asarray(r["embedding"], dtype=np.float64)
             v = v / max(np.linalg.norm(v), 1e-12)
-            np.save(self._cache_path(texts[i]), v)
+            np.save(self._cache_path(t), v)
             return i, v
 
         if todo:
@@ -231,7 +241,7 @@ def build_term_index(chunks: list[str], lang: str):
 def build_hswm(chunks: list[str], chunk_emb: np.ndarray, members: list[list[str]]):
     terms = sorted({t for m in members for t in m})
     t2i = {t: i for i, t in enumerate(terms)}
-    node_emb = np.zeros((len(terms), 2))  # nodes carry no semantics here; field reads edges
+    node_emb = np.zeros((len(terms), chunk_emb.shape[1]))  # nodes carry no semantics; dim must match target_emb (WeightField contract)
     edges = [np.array([t2i[t] for t in m], dtype=np.int64) if m
              else np.array([0], dtype=np.int64) for m in members]
     hg = Hypergraph(node_emb=node_emb, members=edges,
@@ -356,11 +366,14 @@ def main() -> None:
         df = df[df.book_name.isin(keep)]
     df = df.reset_index(drop=True)
     if args.limit:
-        # stratified pilot: round-robin across books keeps book mix
-        df = (df.groupby("book_name", group_keys=False)
-                .apply(lambda g: g.head(math.ceil(args.limit / 4)))
+        # stratified pilot: round-robin across books keeps book mix.
+        # pandas 3.0: groupby.apply drops the grouping column → cumcount 마스크로 교체.
+        per_book = math.ceil(args.limit / 4)
+        df = (df.assign(_rn=df.groupby("book_name").cumcount())
+                .loc[lambda d: d["_rn"] < per_book]
+                .drop(columns="_rn")
+                .head(args.limit)
                 .reset_index(drop=True))
-        df = df.head(args.limit).reset_index(drop=True)
     print(f"[c1] instances: {len(df)} over {df.book_name.nunique()} books", flush=True)
 
     # ---- ingest books ----
@@ -376,7 +389,7 @@ def main() -> None:
         tb = time.time()
         text = load_book_text(path)
         chunks = chunk_book(text, spec["lang"])
-        chunk_emb = emb.embed_many(chunks, parallel=16)
+        chunk_emb = emb.embed_many(chunks, parallel=EMB_PARALLEL)
         vocab, idf, members = build_term_index(chunks, spec["lang"])
         hg, field = build_hswm(chunks, chunk_emb, members)
         idx = traversal.build_index(hg)
@@ -388,7 +401,7 @@ def main() -> None:
               f"{worlds[book]['ingest_s']}s", flush=True)
 
     # ---- queries ----
-    q_emb = emb.embed_many(list(df["content"]), parallel=16)
+    q_emb = emb.embed_many(list(df["content"]), parallel=EMB_PARALLEL)
     golds = list(df["label"])
 
     judge = Judge()
@@ -445,7 +458,8 @@ def main() -> None:
                       "ingest_s": w["ingest_s"],
                       "n_instances": int((df.book_name == b).sum())}
                   for b, w in worlds.items()},
-        "cost": {"embedding_calls": emb.calls, "judge_calls": judge.calls,
+        "cost": {"embedding_calls": emb.calls, "embedding_fallbacks": emb.embed_fallbacks,
+                 "judge_calls": judge.calls,
                  "judge_prompt_tokens": judge.prompt_tokens},
         "hswm_abstain_count": abstain["hswm"],
     }

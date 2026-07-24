@@ -60,6 +60,16 @@ LOCK = {
     "negative_oracle": "signed-j (no ReLU, lam>0) breaks F1; constant-shift (lam + ReLU) breaks F3",
 }
 
+# v2.2: machine binding from LOCK prose keys to the verdict-gating variables.
+# The harness refuses (exit 2) a receipt whose prose has no gating check.
+LOCK_CHECKS = {
+    "F1_pointwise": "f1_ok",
+    "F2_mean": "f2_ok",
+    "F3_zero_boost_exact": "f3_ok",
+    "F4_prereg_efficacy": "f4_ok",
+    "negative_oracle": ["neg_breaks", "neg3_breaks"],
+}
+
 
 def main() -> int:
     print("source-binding:",

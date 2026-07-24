@@ -260,6 +260,12 @@ F1과 P1v5가 각각 통과한 다음 두 축을 합친다.
 
 ## 8. PROM-9 실행 packet 사용법
 
+2026-07-24 현재 위 vertical slice와 세 결정 실험의 fail-closed 판정기가 구현됐다. 실제 endpoint
+실행, manifest 형식, P1v5/P2 causal packet 작성법은
+[`PROM9_DECISIVE_EXPERIMENT_HARNESS_2026-07-24.md`](PROM9_DECISIVE_EXPERIMENT_HARNESS_2026-07-24.md)에
+고정한다. 구현 완료는 효능 결과가 아니며, development 출력은 성공 gate를 모두 통과해도
+`DEVELOPMENT_ONLY`만 낸다.
+
 프로토콜 자체 검사:
 
 ```bash

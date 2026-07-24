@@ -1,0 +1,165 @@
+"""ooptdd v2.1 — automated mutation scoring for receipts (P2/P7 mitigation).
+
+Hand-picked negative oracles prove a receipt *can* fail; a mutation score
+measures *how well* it fails across many faults. This module generates
+single-fault mutants of a target module via AST transforms, runs the receipt
+against each mutant, and reports killed/total.
+
+Killed = the receipt exits non-zero (INVALID or ERROR) against the mutant.
+Survived = the receipt still prints VALID — a hole in the oracle set.
+
+Mutant operators (single-fault, stdlib only):
+  - comparison flips:  >= → >,  >= → <=,  <= → <,  > → >=,  < → <=,  == → !=,  != → ==
+  - arithmetic swaps:  + ↔ -,  * → +
+  - domain mutant:     np.maximum(x, 0) → x   (ReLU/clipping removal)
+
+Runner mechanics: the mutated module is written to a temp dir with the same
+module name and prepended to PYTHONPATH, so the receipt subprocess imports the
+mutant while everything else resolves from the repo. No repo files are touched.
+"""
+from __future__ import annotations
+
+import ast
+import os
+import subprocess
+import sys
+import tempfile
+from dataclasses import dataclass
+
+COMPARE_FLIPS = {
+    ast.GtE: [ast.Gt, ast.LtE],
+    ast.LtE: [ast.Lt],
+    ast.Gt: [ast.GtE],
+    ast.Lt: [ast.LtE],
+    ast.Eq: [ast.NotEq],
+    ast.NotEq: [ast.Eq],
+}
+BINOP_FLIPS = {ast.Add: [ast.Sub], ast.Sub: [ast.Add], ast.Mult: [ast.Add]}
+
+
+@dataclass
+class MutationSite:
+    site_id: str
+    lineno: int
+    kind: str
+    detail: str
+
+
+class _SiteCollector(ast.NodeVisitor):
+    def __init__(self) -> None:
+        self.sites: list[MutationSite] = []
+
+    def visit_Compare(self, node: ast.Compare) -> None:
+        for i, op in enumerate(node.ops):
+            for repl in COMPARE_FLIPS.get(type(op), []):
+                self.sites.append(MutationSite(
+                    f"cmp@{node.lineno}.{i}", node.lineno, "compare",
+                    f"{type(op).__name__}->{repl.__name__}"))
+        self.generic_visit(node)
+
+    def visit_BinOp(self, node: ast.BinOp) -> None:
+        for repl in BINOP_FLIPS.get(type(node.op), []):
+            self.sites.append(MutationSite(
+                f"binop@{node.lineno}", node.lineno, "binop",
+                f"{type(node.op).__name__}->{repl.__name__}"))
+        self.generic_visit(node)
+
+    def visit_Call(self, node: ast.Call) -> None:
+        func = node.func
+        is_clip = (
+            isinstance(func, ast.Attribute) and func.attr in ("maximum", "clip")
+            and len(node.args) >= 2
+            and isinstance(node.args[1], ast.Constant) and node.args[1].value == 0
+        )
+        if is_clip:
+            self.sites.append(MutationSite(
+                f"clip@{node.lineno}", node.lineno, "clip-removal",
+                f"{func.attr}(x, 0) -> x"))
+        self.generic_visit(node)
+
+
+class _Mutator(ast.NodeTransformer):
+    def __init__(self, target: MutationSite) -> None:
+        self.target = target
+        self.applied = False
+
+    def visit_Compare(self, node: ast.Compare) -> ast.AST:
+        self.generic_visit(node)
+        if not self.applied and self.target.kind == "compare" and node.lineno == self.target.lineno:
+            idx = int(self.target.site_id.rsplit(".", 1)[1])
+            repl = getattr(ast, self.target.detail.split("->")[1])
+            node.ops[idx] = repl()
+            self.applied = True
+        return node
+
+    def visit_BinOp(self, node: ast.BinOp) -> ast.AST:
+        self.generic_visit(node)
+        if not self.applied and self.target.kind == "binop" and node.lineno == self.target.lineno:
+            repl = getattr(ast, self.target.detail.split("->")[1])
+            node.op = repl()
+            self.applied = True
+        return node
+
+    def visit_Call(self, node: ast.Call) -> ast.AST:
+        self.generic_visit(node)
+        if not self.applied and self.target.kind == "clip-removal" and node.lineno == self.target.lineno:
+            self.applied = True
+            return node.args[0]
+        return node
+
+
+def collect_sites(module_path: str) -> list[MutationSite]:
+    tree = ast.parse(open(module_path, "r", encoding="utf-8").read(), filename=module_path)
+    collector = _SiteCollector()
+    collector.visit(tree)
+    return collector.sites
+
+
+def render_mutant(module_path: str, site: MutationSite) -> str | None:
+    tree = ast.parse(open(module_path, "r", encoding="utf-8").read(), filename=module_path)
+    mutator = _Mutator(site)
+    new_tree = mutator.visit(tree)
+    if not mutator.applied:
+        return None
+    ast.fix_missing_locations(new_tree)
+    return ast.unparse(new_tree)
+
+
+def mutation_score(
+    module_path: str,
+    receipt_path: str,
+    repo_root: str,
+    max_mutants: int = 12,
+    timeout_per_run: int = 300,
+) -> dict:
+    """Run the receipt against single-fault mutants of module_path.
+
+    Returns {"killed": int, "total": int, "survivors": [...], "errors": [...]}.
+    """
+    sites = collect_sites(module_path)[:max_mutants]
+    module_name = os.path.splitext(os.path.basename(module_path))[0]
+    killed, survivors, errors = 0, [], []
+    for site in sites:
+        mutant_src = render_mutant(module_path, site)
+        if mutant_src is None:
+            continue
+        with tempfile.TemporaryDirectory(prefix="ooptdd_mut_") as td:
+            with open(os.path.join(td, module_name + ".py"), "w", encoding="utf-8") as f:
+                f.write(mutant_src)
+            env = dict(os.environ)
+            env["PYTHONPATH"] = td + os.pathsep + repo_root + os.pathsep + env.get("PYTHONPATH", "")
+            try:
+                # -P (3.11+): do NOT prepend the script's dir to sys.path —
+                # otherwise the repo's original module shadows the mutant.
+                proc = subprocess.run(
+                    [sys.executable, "-P", receipt_path],
+                    cwd=repo_root, env=env,
+                    capture_output=True, timeout=timeout_per_run,
+                )
+                if proc.returncode == 0:
+                    survivors.append(f"{site.site_id} {site.detail}")
+                else:
+                    killed += 1
+            except subprocess.TimeoutExpired:
+                errors.append(f"{site.site_id} timeout")
+    return {"killed": killed, "total": len(sites), "survivors": survivors, "errors": errors}

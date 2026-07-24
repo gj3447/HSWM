@@ -34,16 +34,20 @@ def _sha(path: str) -> str:
     return hashlib.sha256(open(path, "rb").read()).hexdigest()[:12]
 
 
+# v2: locked trace lives at module level so the ooptdd harness can hash it
+# statically (AST) before execution — the lock is bound before the run, not after.
+LOCK = {
+    "F1_pointwise": "W = cosine + lam*ReLU(r) >= cosine for every edge (j>=0)",
+    "F2_mean": "lam chosen on val (grid incl 0) => val mean-nDCG >= cosine; held on test",
+    "not_guaranteed": "per-query nDCG >= cosine (positive j re-ranks; can regress)",
+    "negative_oracle": "signed-j (no ReLU, lam>0) CAN yield W < cosine => F1 breached",
+}
+
+
 def main() -> int:
     print("source-binding:",
           "learned_v3_additive.py", _sha("learned_v3_additive.py"),
           "weight_field.py", _sha("weight_field.py"))
-    LOCK = {
-        "F1_pointwise": "W = cosine + lam*ReLU(r) >= cosine for every edge (j>=0)",
-        "F2_mean": "lam chosen on val (grid incl 0) => val mean-nDCG >= cosine; held on test",
-        "not_guaranteed": "per-query nDCG >= cosine (positive j re-ranks; can regress)",
-        "negative_oracle": "signed-j (no ReLU, lam>0) CAN yield W < cosine => F1 breached",
-    }
     print("locked-trace F1:", LOCK["F1_pointwise"])
 
     ds = synth.generate("semantics", seed=0, deviation=1.0, n_queries=200)

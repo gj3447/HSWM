@@ -47,7 +47,8 @@ def test_every_longinus_binding_resolves_to_its_exact_hash_and_line_range() -> N
 
         start, end = (int(value) for value in str(binding["lineRange"]).split("-", 1))
         line_count = len(payload.decode("utf-8").splitlines())
-        assert int(start_text) == start
+        expected_anchor = int(binding.get("anchorLine", start))
+        assert int(start_text) == expected_anchor
         assert 1 <= start <= end <= line_count
 
 

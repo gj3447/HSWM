@@ -1,10 +1,13 @@
 """Fail-closed stage gate for the next HSWM research programme.
 
-This harness does not run a benchmark or mint a scientific verdict.  It
-verifies the checked-in receipts that constrain the next experiment, evaluates
-their dependency graph, and emits a self-hashed status receipt.  In particular,
-the B2.2 learner cannot become READY until the real three-role Gate-0 acceptance
-receipt is revalidated against its packs and lock.
+This harness does not call an LLM, fit a learner, activate a weight, or mint a
+scientific verdict.  It verifies the checked-in receipts that constrain the
+next experiment, rejudges supplied raw evidence with the existing independent
+judges, and emits a self-hashed status receipt.  Exactly one experimental gate
+may be active: actual-compute F1, real Gate-0 metrology, causal Delta-W/removal,
+weight-only Agent-A-to-frozen-B transfer, then topology and long-horizon work.
+
+# KG: hswm-ordered-research-harness-20260724
 """
 from __future__ import annotations
 
@@ -18,9 +21,19 @@ from typing import Mapping, Sequence
 
 
 PLAN_SCHEMA = "hswm-next-research-plan/v1"
-STATUS_SCHEMA = "hswm-next-research-status/v1"
-LAKATOTREE_PACKET_SCHEMA = "hswm-next-research-lakatotree-packet/v1"
+STATUS_SCHEMA = "hswm-next-research-status/v2"
+LAKATOTREE_PACKET_SCHEMA = "hswm-next-research-lakatotree-packet/v2"
 DEFAULT_PLAN = Path("_research/next_gate_harness/plan.v1.json")
+F1_MIN_SEALED_ITEMS = 100
+F1_EXPECTED_ARMS = frozenset(
+    {
+        "typed_hswm_three_function_network",
+        "flat_single_llm_three_call_workflow",
+        "vector_memory_three_call_workflow",
+        "typed_network_role_removed_schema_preserving_null",
+        "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+    }
+)
 
 
 class NextResearchHarnessError(RuntimeError):
@@ -158,6 +171,9 @@ def _validate_plan(value: Mapping[str, object]) -> tuple[dict[str, object], ...]
         "b21_rejected_result",
         "b22_groundwork",
         "b22_gate0_acceptance",
+        "f1_judgment",
+        "p1v5_packet",
+        "p2_packet",
         "none",
     }
     for index, raw_gate in enumerate(gates):
@@ -439,6 +455,195 @@ def _validate_gate0_acceptance(path: Path) -> dict[str, object]:
     }
 
 
+def _classify_f1_judgment(
+    judgment: Mapping[str, object],
+) -> tuple[str, dict[str, object]]:
+    """Validate an F1 judgment and map it to an ordered-gate state.
+
+    A development judgment is diagnostic even when every numerical gate happens
+    to pass.  A sealed support verdict also needs the programme's registered
+    minimum of 100 items; the lower-level judge deliberately remains reusable
+    for smaller development cuts.
+    """
+
+    judgment_sha = _verify_self_hash(judgment, "judgment_sha256", "F1 judgment")
+    if judgment.get("schema_version") != "hswm-prom9-f1-judgment/v1":
+        raise NextResearchHarnessError("unsupported F1 judgment schema")
+    mode = judgment.get("mode")
+    verdict = judgment.get("verdict")
+    if mode not in {"development", "sealed"}:
+        raise NextResearchHarnessError("F1 judgment mode is invalid")
+    gates = judgment.get("gates")
+    metrics = judgment.get("metrics")
+    parity_failures = judgment.get("parity_failures")
+    expected_gates = {
+        "exact_three_calls_each",
+        "equal_budget",
+        "typed_beats_flat_lcb_gt_0",
+        "typed_beats_vector",
+        "removal_loses_effect",
+        "shuffle_loses_effect",
+    }
+    if not isinstance(gates, dict) or set(gates) != expected_gates:
+        raise NextResearchHarnessError("F1 judgment gates drifted")
+    if any(not isinstance(gates[key], bool) for key in expected_gates):
+        raise NextResearchHarnessError("F1 judgment gates must be boolean")
+    if not isinstance(metrics, dict) or set(metrics) != F1_EXPECTED_ARMS:
+        raise NextResearchHarnessError("F1 judgment metric arms drifted")
+    sample_sizes: set[int] = set()
+    for arm, raw_metric in metrics.items():
+        if not isinstance(arm, str) or not isinstance(raw_metric, dict):
+            raise NextResearchHarnessError("F1 judgment metric is invalid")
+        count = raw_metric.get("n")
+        rate = raw_metric.get("success_rate")
+        if (
+            isinstance(count, bool)
+            or not isinstance(count, int)
+            or count < 1
+            or isinstance(rate, bool)
+            or not isinstance(rate, (int, float))
+            or not 0.0 <= float(rate) <= 1.0
+        ):
+            raise NextResearchHarnessError("F1 judgment metric values are invalid")
+        sample_sizes.add(count)
+    if len(sample_sizes) != 1:
+        raise NextResearchHarnessError("F1 judgment arm sample sizes differ")
+    sample_size = next(iter(sample_sizes))
+    if (
+        not isinstance(parity_failures, list)
+        or any(not isinstance(item, str) or not item for item in parity_failures)
+        or bool(parity_failures) == bool(gates["equal_budget"])
+    ):
+        raise NextResearchHarnessError("F1 parity evidence is inconsistent")
+    conjunction = all(gates.values())
+    expected_verdict = (
+        "DEVELOPMENT_ONLY"
+        if mode == "development"
+        else "F1_SUPPORTED_NARROW"
+        if conjunction
+        else "REJECTED_OR_NARROWED"
+    )
+    if verdict != expected_verdict:
+        raise NextResearchHarnessError("F1 verdict is inconsistent with mode/gates")
+
+    sample_gate = sample_size >= F1_MIN_SEALED_ITEMS
+    if mode == "sealed" and conjunction and sample_gate:
+        state = "SATISFIED"
+        disposition = "F1_SUPPORTED_NARROW_REVALIDATED"
+    elif mode == "sealed" and not conjunction:
+        state = "REJECTED"
+        disposition = "F1_SEALED_CONJUNCTION_REJECTED"
+    else:
+        state = "ACTION_REQUIRED"
+        disposition = (
+            "F1_SEALED_SAMPLE_TOO_SMALL"
+            if mode == "sealed"
+            else "F1_DEVELOPMENT_REPAIR_REQUIRED"
+        )
+    return state, {
+        "disposition": disposition,
+        "judgment_sha256": judgment_sha,
+        "run_id": judgment.get("run_id"),
+        "mode": mode,
+        "verdict": verdict,
+        "sample_size": sample_size,
+        "minimum_sealed_items": F1_MIN_SEALED_ITEMS,
+        "sample_gate": sample_gate,
+        "gates": dict(gates),
+        "parity_failures": list(parity_failures),
+        "claim_boundary": judgment.get("allowed_claim"),
+    }
+
+
+def _validate_f1_evidence(
+    *,
+    repo_root: Path,
+    artifact: object,
+    suite_path: Path | None,
+    gold_path: Path | None,
+) -> tuple[str, dict[str, object]]:
+    if (suite_path is None) != (gold_path is None):
+        raise NextResearchHarnessError("F1 suite and gold must be supplied together")
+    if suite_path is None:
+        path = _inside_repo(repo_root, artifact, "F1 development judgment artifact")
+        return _classify_f1_judgment(_read_json(path, "F1 development judgment"))
+    try:
+        from prom_search_hswm.prom_f1_function_network import judge_suite
+
+        judgment = judge_suite(
+            _read_json(Path(suite_path).resolve(), "F1 suite"),
+            _read_json(Path(gold_path).resolve(), "F1 gold"),
+        )
+    except Exception as error:
+        raise NextResearchHarnessError(f"F1 suite/gold rejudgment failed: {error}") from error
+    state, evidence = _classify_f1_judgment(judgment)
+    evidence["recomputed_from_suite_and_gold"] = True
+    evidence["suite_file_sha256"] = file_sha256(Path(suite_path).resolve())
+    evidence["gold_file_sha256"] = file_sha256(Path(gold_path).resolve())
+    return state, evidence
+
+
+def _validate_p1v5_packet(path: Path) -> tuple[str, dict[str, object]]:
+    try:
+        from prom_search_hswm.prom9_causal_harness import judge_p1v5
+
+        packet = _read_json(path, "P1v5 causal packet")
+        judgment = judge_p1v5(packet)
+    except Exception as error:
+        raise NextResearchHarnessError(f"P1v5 packet rejudgment failed: {error}") from error
+    verdict = judgment.get("verdict")
+    mode = judgment.get("mode")
+    if verdict == "P1V5_SUPPORTED_NARROW" and mode == "sealed":
+        state = "SATISFIED"
+    elif mode == "sealed":
+        state = "REJECTED"
+    else:
+        state = "ACTION_REQUIRED"
+    return state, {
+        "disposition": "P1V5_PACKET_REJUDGED",
+        "packet_file_sha256": file_sha256(path),
+        "judgment_sha256": judgment["judgment_sha256"],
+        "mode": mode,
+        "verdict": verdict,
+        "gates": judgment["gates"],
+        "base_snapshot_id": judgment["base_snapshot_id"],
+        "promoted_snapshot_id": judgment["promoted_snapshot_id"],
+        "claim_boundary": judgment["allowed_claim"],
+    }
+
+
+def _validate_p2_packet(path: Path) -> tuple[str, dict[str, object]]:
+    try:
+        from prom_search_hswm.prom9_causal_harness import judge_p2
+
+        packet = _read_json(path, "P2 transfer packet")
+        judgment = judge_p2(packet)
+    except Exception as error:
+        raise NextResearchHarnessError(f"P2 packet rejudgment failed: {error}") from error
+    verdict = judgment.get("verdict")
+    mode = judgment.get("mode")
+    if verdict == "P2_SUPPORTED_NARROW" and mode == "sealed":
+        state = "SATISFIED"
+    elif mode == "sealed":
+        state = "REJECTED"
+    else:
+        state = "ACTION_REQUIRED"
+    return state, {
+        "disposition": "P2_PACKET_REJUDGED",
+        "packet_file_sha256": file_sha256(path),
+        "judgment_sha256": judgment["judgment_sha256"],
+        "mode": mode,
+        "verdict": verdict,
+        "gates": judgment["gates"],
+        "base_snapshot_id": judgment["base_snapshot_id"],
+        "agent_a_snapshot_id": judgment["agent_a_snapshot_id"],
+        "agent_b_freeze_manifest_sha256": judgment[
+            "agent_b_freeze_manifest_sha256"
+        ],
+        "claim_boundary": judgment["allowed_claim"],
+    }
+
+
 def _validate_recorded_at(value: str | None) -> str:
     if value is None:
         return datetime.now(timezone.utc).isoformat()
@@ -451,11 +656,15 @@ def _validate_recorded_at(value: str | None) -> str:
     return value
 
 
-def build_status(
+def build_status(  # KG: hswm-gate-status-contract-20260724
     *,
     repo_root: Path,
     plan_path: Path | None = None,
     gate0_acceptance: Path | None = None,
+    f1_suite: Path | None = None,
+    f1_gold: Path | None = None,
+    p1v5_packet: Path | None = None,
+    p2_packet: Path | None = None,
     recorded_at: str | None = None,
 ) -> dict[str, object]:
     """Verify current receipts and return the ordered next-gate status."""
@@ -474,6 +683,22 @@ def build_status(
         missing = [dependency for dependency in dependencies if dependency not in satisfied]
         evidence: dict[str, object] | None = None
         state: str
+        supplied_out_of_order = (
+            (gate_id == "B22_GATE0_REAL_PACKS" and gate0_acceptance is not None)
+            or (
+                gate_id == "P1V5_THREE_FACTOR_BOND_PLASTICITY"
+                and p1v5_packet is not None
+            )
+            or (
+                gate_id == "P2_AGENT_A_TO_FROZEN_B_TRANSFER"
+                and p2_packet is not None
+            )
+        )
+        if missing and supplied_out_of_order:
+            raise NextResearchHarnessError(
+                f"out-of-order evidence supplied for {gate_id}; "
+                f"missing prerequisites: {missing}"
+            )
         if missing:
             state = "BLOCKED"
         else:
@@ -497,6 +722,25 @@ def build_status(
                 else:
                     evidence = _validate_gate0_acceptance(Path(gate0_acceptance).resolve())
                     state = "SATISFIED"
+            elif validator == "f1_judgment":
+                state, evidence = _validate_f1_evidence(
+                    repo_root=repo_root,
+                    artifact=artifact,
+                    suite_path=f1_suite,
+                    gold_path=f1_gold,
+                )
+            elif validator == "p1v5_packet":
+                if p1v5_packet is None:
+                    state = "ACTION_REQUIRED"
+                else:
+                    state, evidence = _validate_p1v5_packet(
+                        Path(p1v5_packet).resolve()
+                    )
+            elif validator == "p2_packet":
+                if p2_packet is None:
+                    state = "ACTION_REQUIRED"
+                else:
+                    state, evidence = _validate_p2_packet(Path(p2_packet).resolve())
             elif validator == "none":
                 state = "READY"
             else:  # pragma: no cover - guarded by plan validation
@@ -526,18 +770,29 @@ def build_status(
             "action": row["action"],
         }
         for row in rows
-        if row["state"] in {"ACTION_REQUIRED", "READY"}
+        if row["state"] in {"ACTION_REQUIRED", "READY", "REJECTED"}
     ]
     next_actions.sort(key=lambda item: (int(item["priority"]), str(item["id"])))
+    if len(next_actions) > 1:
+        raise NextResearchHarnessError(
+            "ordered plan exposed more than one active gate; dependency graph drifted"
+        )
+    ordered_remaining = [row["id"] for row in rows if row["state"] != "SATISFIED"]
     unsigned: dict[str, object] = {
         "schema_version": STATUS_SCHEMA,
         "recorded_at": _validate_recorded_at(recorded_at),
         "claim_boundary": plan["claim_boundary"],
         "plan_sha256": file_sha256(plan_path),
         "harness_sha256": file_sha256(Path(__file__).resolve()),
+        "sequence_locked": True,
         "gate0_acceptance_supplied": gate0_acceptance is not None,
+        "f1_suite_and_gold_supplied": f1_suite is not None and f1_gold is not None,
+        "p1v5_packet_supplied": p1v5_packet is not None,
+        "p2_packet_supplied": p2_packet is not None,
         "gates": rows,
+        "active_gate": next_actions[0] if next_actions else None,
         "next_actions": next_actions,
+        "ordered_remaining": ordered_remaining,
         "programme_feedback": plan["programme_feedback"],
         "scientific_prediction_registered": False,
         "scientific_verdict_emitted": False,
@@ -545,7 +800,9 @@ def build_status(
     return {**unsigned, "status_receipt_sha256": canonical_sha256(unsigned)}
 
 
-def verify_status(value: Mapping[str, object]) -> str:
+def verify_status(  # KG: hswm-status-verification-contract-20260724
+    value: Mapping[str, object],
+) -> str:
     if value.get("schema_version") != STATUS_SCHEMA:
         raise NextResearchHarnessError("unsupported status receipt schema")
     if (
@@ -556,7 +813,7 @@ def verify_status(value: Mapping[str, object]) -> str:
     return _verify_self_hash(value, "status_receipt_sha256", "status receipt")
 
 
-def build_lakatotree_packet(
+def build_lakatotree_packet(  # KG: hswm-lakatotree-packet-contract-20260724
     *, status: Mapping[str, object], plan: Mapping[str, object], result_path: str
 ) -> dict[str, object]:
     """Build a DRAFT engineering packet; never a prediction or result submission."""
@@ -574,13 +831,13 @@ def build_lakatotree_packet(
             "parent": lakatotree["parent"],
             "author": lakatotree["author"],
             "comment": (
-                "Fail-closed engineering stage harness for HSWM P1v5/B2.2/F1/P2/P3/P4; "
+                "Fail-closed ordered engineering harness for HSWM F1/B2.2/P1v5/P2/P3/P4; "
                 "no scientific result or prediction."
             ),
             "algorithm": (
-                "Verify P1v4 L2 actuation, B2.1 falsification and B2.2 groundwork; "
-                "require real Gate-0 acceptance before fast-bond plasticity; expose an "
-                "ordered dependency receipt without executing or judging experiments."
+                "Verify preserved evidence, rejudge actual-compute F1 evidence, then require "
+                "real Gate-0 acceptance and rejudge raw P1v5/P2 causal packets in strict "
+                "order; expose exactly one active gate without minting a scientific verdict."
             ),
             "result_path": result_path,
         },
@@ -588,7 +845,7 @@ def build_lakatotree_packet(
         "events": [
             {
                 "realm": "agent",
-                "action": "record_fail_closed_next_gate_harness",
+                "action": "record_fail_closed_ordered_gate_harness",
                 "evidence": [result_path],
                 "payload": {
                     "status_receipt_sha256": status_sha,
@@ -634,7 +891,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     status_parser = subparsers.add_parser("status")
     status_parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     status_parser.add_argument("--plan", type=Path)
+    status_parser.add_argument("--f1-suite", type=Path)
+    status_parser.add_argument("--f1-gold", type=Path)
     status_parser.add_argument("--gate0-acceptance", type=Path)
+    status_parser.add_argument("--p1v5-packet", type=Path)
+    status_parser.add_argument("--p2-packet", type=Path)
     status_parser.add_argument("--recorded-at")
     status_parser.add_argument("--output", type=Path)
 
@@ -652,6 +913,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                 repo_root=args.repo_root,
                 plan_path=args.plan,
                 gate0_acceptance=args.gate0_acceptance,
+                f1_suite=args.f1_suite,
+                f1_gold=args.f1_gold,
+                p1v5_packet=args.p1v5_packet,
+                p2_packet=args.p2_packet,
                 recorded_at=args.recorded_at,
             )
         else:
@@ -686,6 +951,8 @@ if __name__ == "__main__":
 
 __all__ = [
     "DEFAULT_PLAN",
+    "F1_EXPECTED_ARMS",
+    "F1_MIN_SEALED_ITEMS",
     "LAKATOTREE_PACKET_SCHEMA",
     "NextResearchHarnessError",
     "PLAN_SCHEMA",

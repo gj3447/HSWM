@@ -1,10 +1,10 @@
 {
   "schema_version": "hswm-next-research-plan/v1",
-  "claim_boundary": "Engineering sequencing and evidence-readiness only. A SATISFIED prerequisite preserves the cited narrow result; READY or ACTION_REQUIRED is not a prediction, measurement, scientific verdict, activation approval, or evidence that HSWM already learns weights, routing, topology, transfer, or consolidation.",
+  "claim_boundary": "Engineering sequencing and evidence-readiness only. SATISFIED means that the named receipt or packet was revalidated inside its narrow registered scope. READY, ACTION_REQUIRED, or REJECTED is not a prediction, activation approval, or evidence that HSWM already learns weights, topology, transfer, or consolidation.",
   "gates": [
     {
       "id": "P1V4_L0_POLICY_ACTUATION_L2",
-      "lane": "learning-actuation",
+      "lane": "preserved-evidence",
       "priority": 1,
       "validator": "p1v4_l2_result",
       "artifact": "receipts/p1v4_policy_lakatotree_result_seed5_r2_20260724.json",
@@ -15,7 +15,7 @@
     },
     {
       "id": "B21_ROUTER_ONLY_FALSIFICATION",
-      "lane": "bond-routing",
+      "lane": "preserved-evidence",
       "priority": 1,
       "validator": "b21_rejected_result",
       "artifact": "prom_search_hswm/judgments/B21_learned_router/judgment_packet.json",
@@ -26,7 +26,7 @@
     },
     {
       "id": "B22_BOND_WEIGHT_GROUNDWORK",
-      "lane": "bond-routing",
+      "lane": "preserved-evidence",
       "priority": 1,
       "validator": "b22_groundwork",
       "artifact": "prom_search_hswm/judgments/B22_bond_weight_groundwork/registration_packet.json",
@@ -38,76 +38,79 @@
       "failure_boundary": "Development headroom and module tests are not evidence that a learner can recover the oracle room."
     },
     {
+      "id": "F1_MULTI_LLM_FUNCTION_NETWORK",
+      "lane": "llm-function-network",
+      "priority": 2,
+      "validator": "f1_judgment",
+      "artifact": "_research/prom9_runs/f1-2wiki-dev-r4/judgment.json",
+      "depends_on": [
+        "P1V4_L0_POLICY_ACTUATION_L2",
+        "B22_BOND_WEIGHT_GROUNDWORK"
+      ],
+      "action": "Repair actual consumed-token parity, freeze the three typed LLM roles and budgets, preregister, then run a sealed n>=100 comparison against flat/vector with removal and role-shuffle controls.",
+      "completion_evidence": "Recomputed sealed F1 judgment has equal calls and consumed-token budget, typed beats flat and vector, both role ablations lose the effect, and every arm has at least 100 registered items.",
+      "failure_boundary": "The R4 4-item run is development-only: typed tied vector, all paired lower bounds included zero, and every item failed consumed-token parity. More calls or a self-asserted judgment cannot unlock the next gate."
+    },
+    {
       "id": "B22_GATE0_REAL_PACKS",
-      "lane": "bond-routing",
-      "priority": 1,
+      "lane": "semantic-weight-metrology",
+      "priority": 3,
       "validator": "b22_gate0_acceptance",
       "artifact": null,
       "depends_on": [
-        "B22_BOND_WEIGHT_GROUNDWORK"
+        "B22_BOND_WEIGHT_GROUNDWORK",
+        "F1_MULTI_LLM_FUNCTION_NETWORK"
       ],
-      "action": "On the guarded GPU path, build the reproduction, full 2Wiki, and full MuSiQue component packs; lock and accept all three with exact neutral and frozen-B2 replay.",
-      "completion_evidence": "A real hswm-b22-gate0-acceptance-receipt/v1 that reopens its lock and all three packs and returns learner_allowed=true while scientific_claim_allowed=false.",
+      "action": "Build reproduction, full 2Wiki, and full MuSiQue component packs on the guarded compute path; lock and accept all three with exact neutral and frozen-B2 replay.",
+      "completion_evidence": "A real hswm-b22-gate0-acceptance-receipt/v1 reopens its lock and all three packs and returns learner_allowed=true while scientific_claim_allowed=false.",
       "failure_boundary": "No fast learner fitting, preregistration, or outcome inspection is allowed before this acceptance receipt validates."
     },
     {
       "id": "P1V5_THREE_FACTOR_BOND_PLASTICITY",
-      "lane": "learning-plasticity",
-      "priority": 2,
-      "validator": "none",
+      "lane": "semantic-weight-plasticity",
+      "priority": 4,
+      "validator": "p1v5_packet",
       "artifact": null,
       "depends_on": [
         "P1V4_L0_POLICY_ACTUATION_L2",
+        "F1_MULTI_LLM_FUNCTION_NETWORK",
         "B22_GATE0_REAL_PACKS"
       ],
-      "action": "Freeze a query-by-bond fast-potential learner, then test outcome-to-used-bond eligibility-to-fast-candidate-to-slow-Delta-ell promotion with static-update, random-credit, shuffled-eligibility, no-promotion, and removal controls.",
-      "completion_evidence": "Fresh component-disjoint behavior changes only after a promoted rewrite, disappears when that rewrite is removed, preserves retention/canary, beats equal-budget flat/vector memory, and replays server-side.",
-      "failure_boundary": "Do not rescue the failed global scalar update by eta tuning or gate relaxation; if only fast attention works, do not claim durable slow-weight learning."
-    },
-    {
-      "id": "F1_MULTI_LLM_FUNCTION_NETWORK",
-      "lane": "llm-function-network",
-      "priority": 2,
-      "validator": "none",
-      "artifact": null,
-      "depends_on": [
-        "P1V4_L0_POLICY_ACTUATION_L2"
-      ],
-      "action": "Implement at least three registered LLM function roles with typed ports and compare the composed network against one frozen LLM workflow and vector memory under equal calls and tokens.",
-      "completion_evidence": "Role registry, per-call receipts, role-removal and role-shuffle controls, equal-budget sealed result, and deterministic orchestration replay.",
-      "failure_boundary": "Multiple prompts around one answerer or more calls without a role ablation do not establish an LLM-function network."
+      "action": "Run outcome -> used-bond eligibility -> fast candidate -> validated slow Delta-W promotion with static-update, random-credit, shuffled-eligibility, no-promotion, flat/vector, and causal-removal controls.",
+      "completion_evidence": "The harness rejudges a sealed raw packet: the promoted snapshot differs from base, later frozen behavior improves on component-disjoint work, retention/canary hold, and removal restores the base map and erases the gain.",
+      "failure_boundary": "Fast attention without a promoted persistent snapshot is FAST_ONLY; a gain that survives removal is not durable semantic-weight learning."
     },
     {
       "id": "P2_AGENT_A_TO_FROZEN_B_TRANSFER",
-      "lane": "shared-network-transfer",
-      "priority": 3,
-      "validator": "none",
+      "lane": "weight-only-transfer",
+      "priority": 5,
+      "validator": "p2_packet",
       "artifact": null,
       "depends_on": [
-        "P1V5_THREE_FACTOR_BOND_PLASTICITY",
-        "F1_MULTI_LLM_FUNCTION_NETWORK"
+        "F1_MULTI_LLM_FUNCTION_NETWORK",
+        "P1V5_THREE_FACTOR_BOND_PLASTICITY"
       ],
-      "action": "Let Agent A write only through the validated HSWM mutation path, hide A's transcript, freeze Agent B, and test sealed unseen transfer against transcript and flat/vector memory arms.",
-      "completion_evidence": "Frozen B improves on fresh unseen work under equal compute, with A transcript hidden and causal-rewrite removal erasing the gain.",
-      "failure_boundary": "Exact-query cache reuse, B parameter updates, or transcript visibility are not shared-network transfer."
+      "action": "Let Agent A write only an accepted semantic-weight packet; hide its transcript, freeze Agent B byte-for-byte, and compare unseen transfer against no-A, transcript, flat, vector, and removal arms.",
+      "completion_evidence": "The harness rejudges a sealed raw packet: frozen B improves on fresh component-disjoint work, beats flat/vector, has no cache/transcript leakage, and causal removal erases the gain.",
+      "failure_boundary": "Exact-query cache reuse, B parameter or prompt changes, transcript visibility, or an unbound weight snapshot is not shared-network transfer."
     },
     {
       "id": "P3_SINGLE_TYPED_TOPOLOGY_OPERATION",
       "lane": "topology-plasticity",
-      "priority": 4,
+      "priority": 6,
       "validator": "none",
       "artifact": null,
       "depends_on": [
         "P2_AGENT_A_TO_FROZEN_B_TRANSFER"
       ],
-      "action": "Open exactly one typed CONNECT operation through the compiler, fresh evaluation, retention, canary, approval, CAS activation, and removal ablation.",
+      "action": "Only after weight-only transfer, open exactly one typed CONNECT operation through compiler, fresh evaluation, retention, canary, approval, CAS activation, and removal ablation.",
       "completion_evidence": "One immutable topology candidate changes frozen-B behavior, beats weight-only and flat/vector controls, preserves provenance and retention, and rolls back by supersession.",
       "failure_boundary": "No joint weight/router/topology search and no CONNECT/SEPARATE/SPECIALIZE claim from transient routing frequency."
     },
     {
       "id": "P4_HOMEOSTASIS_SLEEP_AND_SCALE",
       "lane": "long-horizon-stability",
-      "priority": 5,
+      "priority": 7,
       "validator": "none",
       "artifact": null,
       "depends_on": [
@@ -120,26 +123,30 @@
   ],
   "lakatotree": {
     "tree": "LakatosTree_HSWM_20260719",
-    "tag": "hswm-next-gate-harness-20260724",
-    "parent": "p1v4-fresh-policy-replication-seed5-r2-20260724",
-    "author": "codex-hswm-next-gates",
+    "tag": "hswm-ordered-causal-gates-20260724",
+    "parent": "hswm-next-gate-harness-20260724",
+    "author": "codex-hswm-ordered-gates",
     "questions": [
       {
-        "qname": "Q-p1v5-three-factor-bond-plasticity",
-        "body": "After real Gate-0 pack acceptance, can outcome-bound used-bond eligibility produce a fast query-bond candidate that survives fresh/retention/canary controls, distills into a durable slow Delta-ell, changes later frozen behavior, and loses that gain when the promoted rewrite is removed, while static-update, random-credit, shuffled-eligibility, no-promotion, and equal-budget flat/vector controls fail?"
+        "qname": "Q-f1-actual-compute-parity",
+        "body": "On a preregistered sealed n>=100 cut, do three typed LLM functions beat equal-call and actual-token-matched flat/vector controls, with role removal and shuffle erasing the advantage?"
       },
       {
-        "qname": "Q-f1-multi-llm-function-network",
-        "body": "Can at least three typed LLM function roles composed through one HSWM state outperform an equal-call, equal-token single-LLM workflow and vector memory on sealed tasks, with role removal and role shuffle demonstrating that the function topology rather than extra calls carries the effect?"
+        "qname": "Q-p1v5-causal-semantic-weight",
+        "body": "After F1 and real Gate-0 acceptance, does outcome-bound used-bond eligibility produce a promoted persistent Delta-W that changes later frozen behavior and loses the gain under exact removal?"
+      },
+      {
+        "qname": "Q-p2-weight-only-agent-transfer",
+        "body": "Can only Agent A's accepted semantic-weight packet improve byte-frozen Agent B on component-disjoint unseen work without transcript, parameter, prompt, or cache leakage?"
       }
     ]
   },
   "programme_feedback": [
-    "P1v4 is a real replicated L0 actuation result, but its n=6 source-policy cut is not Delta-W or a general learned compiler.",
-    "B2.1 already falsified the frozen A/B/MERGED router-only action space; threshold relaxation or another ridge sweep is not the next experiment.",
-    "The immediate weight-plane blocker is operational, not theoretical: the real three-role B2.2 Gate-0 component packs and acceptance receipt do not yet exist.",
-    "Query-conditioned fast bond attention must demonstrate causal behavior before repeated effects may become durable slow salience; attention is use, slow weight is memory, topology is structure.",
-    "F1 multi-role LLM function composition may proceed as an independent architecture lane, but P2 transfer waits for both a validated mutation lane and the function network.",
-    "LakatoTree receives this harness as DRAFT engineering groundwork only; no prediction or scientific result is registered by the harness."
+    "HSWM remains the hypergraph Semantic Weight Map whose typed macro-function nodes are executed by LLMs; the ordered gates test that hard core rather than replacing it with a generic workflow.",
+    "R4 is useful negative development evidence: exact three-call structure and ablations worked, but actual token parity failed and typed did not beat vector.",
+    "Exactly one active experimental gate is exposed. Downstream evidence supplied before its prerequisites is refused instead of ignored.",
+    "P1v5 and P2 status is recomputed from raw causal packets; a copied verdict string cannot unlock the sequence.",
+    "Topology remains closed until persistent Delta-W and weight-only frozen-agent transfer are both causally supported.",
+    "LakatoTree receives this harness as DRAFT engineering ordering only; no prediction or scientific result is registered by the harness."
   ]
 }

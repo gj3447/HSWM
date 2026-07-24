@@ -1,0 +1,123 @@
+{
+  "allowed_claim": "No scientific efficacy claim; use this result only to debug and freeze F1.",
+  "bootstrap": {
+    "paired": true,
+    "reps": 10000,
+    "seed": 20260724
+  },
+  "comparisons": {
+    "typed_minus_flat_single_llm_three_call_workflow": {
+      "bootstrap95": [
+        0.0,
+        1.0
+      ],
+      "mean": 0.5
+    },
+    "typed_minus_typed_network_role_removed_schema_preserving_null": {
+      "bootstrap95": [
+        0.0,
+        1.0
+      ],
+      "mean": 0.5
+    },
+    "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+      "bootstrap95": [
+        0.0,
+        1.0
+      ],
+      "mean": 0.5
+    },
+    "typed_minus_vector_memory_three_call_workflow": {
+      "bootstrap95": [
+        0.0,
+        0.75
+      ],
+      "mean": 0.25
+    }
+  },
+  "evaluator_receipt_sha256": "99dbae543b256333aefe81b76f7e74f68edfdfa79d5c27b8c726c38aa1066a67",
+  "gates": {
+    "equal_budget": false,
+    "exact_three_calls_each": true,
+    "removal_loses_effect": true,
+    "shuffle_loses_effect": true,
+    "typed_beats_flat_lcb_gt_0": false,
+    "typed_beats_vector": true
+  },
+  "item_scores": [
+    {
+      "item_id": "0cd3bdea0bde11eba7f7acde48001122",
+      "scores": {
+        "flat_single_llm_three_call_workflow": 0.0,
+        "typed_hswm_three_function_network": 0.0,
+        "typed_network_role_removed_schema_preserving_null": 0.0,
+        "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+        "vector_memory_three_call_workflow": 0.0
+      }
+    },
+    {
+      "item_id": "61a46987092f11ebbdaeac1f6bf848b6",
+      "scores": {
+        "flat_single_llm_three_call_workflow": 0.0,
+        "typed_hswm_three_function_network": 1.0,
+        "typed_network_role_removed_schema_preserving_null": 0.0,
+        "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+        "vector_memory_three_call_workflow": 0.0
+      }
+    },
+    {
+      "item_id": "8813f87c0bdd11eba7f7acde48001122",
+      "scores": {
+        "flat_single_llm_three_call_workflow": 0.0,
+        "typed_hswm_three_function_network": 1.0,
+        "typed_network_role_removed_schema_preserving_null": 0.0,
+        "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+        "vector_memory_three_call_workflow": 1.0
+      }
+    },
+    {
+      "item_id": "e2a3bf2a0bdd11eba7f7acde48001122",
+      "scores": {
+        "flat_single_llm_three_call_workflow": 0.0,
+        "typed_hswm_three_function_network": 0.0,
+        "typed_network_role_removed_schema_preserving_null": 0.0,
+        "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+        "vector_memory_three_call_workflow": 0.0
+      }
+    }
+  ],
+  "judgment_sha256": "d2b0bd99048601143c6dc673a18a098ecee6c8202c72589e19746041fdf8bb08",
+  "metrics": {
+    "flat_single_llm_three_call_workflow": {
+      "n": 4,
+      "success_rate": 0.0
+    },
+    "typed_hswm_three_function_network": {
+      "n": 4,
+      "success_rate": 0.5
+    },
+    "typed_network_role_removed_schema_preserving_null": {
+      "n": 4,
+      "success_rate": 0.0
+    },
+    "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+      "n": 4,
+      "success_rate": 0.0
+    },
+    "vector_memory_three_call_workflow": {
+      "n": 4,
+      "success_rate": 0.25
+    }
+  },
+  "mode": "development",
+  "parity_failures": [
+    "0cd3bdea0bde11eba7f7acde48001122:consumed-token-spread=757",
+    "61a46987092f11ebbdaeac1f6bf848b6:consumed-token-spread=992",
+    "8813f87c0bdd11eba7f7acde48001122:consumed-token-spread=935",
+    "e2a3bf2a0bdd11eba7f7acde48001122:consumed-token-spread=917"
+  ],
+  "run_id": "f1-2wiki-dev-r3-20260724",
+  "schema_version": "hswm-prom9-f1-judgment/v1",
+  "suite_receipt_sha256": "0ee07e48468040173fa66dce23db4e9f71f477fd0c7f982134d37a2d293db08c",
+  "verdict": "DEVELOPMENT_ONLY"
+}

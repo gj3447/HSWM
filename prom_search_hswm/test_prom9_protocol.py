@@ -70,16 +70,8 @@ def test_protocol_rejects_forward_dependency_role_drift_and_missing_causal_contr
         prom9_protocol.validate_protocol(no_removal)
 
 
-@pytest.mark.parametrize(
-    "stage_id, expected_functions",
-    [
-        ("G0_REAL_PACKS", 0),
-        ("F1_TYPED_FUNCTION_NETWORK", 3),
-    ],
-)
-def test_current_status_allows_only_immediate_prom9_preparation(
-    stage_id: str, expected_functions: int
-) -> None:
+def test_current_status_allows_only_f1_repair_preparation() -> None:
+    stage_id = "F1_TYPED_FUNCTION_NETWORK"
     packet = prom9_protocol.build_stage_packet(
         protocol=_protocol(),
         protocol_sha256=prom9_protocol.file_sha256(PROTOCOL_PATH),
@@ -95,15 +87,16 @@ def test_current_status_allows_only_immediate_prom9_preparation(
     assert packet["activation_allowed"] is False
     assert packet["scientific_prediction_registered"] is False
     assert packet["scientific_result_submitted"] is False
-    assert len(packet["llm_functions"]) == expected_functions
+    assert len(packet["llm_functions"]) == 3
 
 
-def test_current_status_refuses_p1v5_and_p2_before_prerequisites() -> None:
+def test_current_status_refuses_gate0_p1v5_and_p2_before_prerequisites() -> None:
     for stage_id in (
+        "G0_REAL_PACKS",
         "P1V5_FAST_TO_SLOW_PLASTICITY",
         "P2_FROZEN_AGENT_TRANSFER",
     ):
-        with pytest.raises(prom9_protocol.Prom9ProtocolError, match="is not runnable"):
+        with pytest.raises(prom9_protocol.Prom9ProtocolError, match="is not"):
             prom9_protocol.build_stage_packet(
                 protocol=_protocol(),
                 protocol_sha256=prom9_protocol.file_sha256(PROTOCOL_PATH),
@@ -112,6 +105,27 @@ def test_current_status_refuses_p1v5_and_p2_before_prerequisites() -> None:
                 run_id="must-refuse",
                 recorded_at=FIXED_TIME,
             )
+
+
+def test_stage_packet_requires_the_single_active_gate() -> None:
+    status = _status()
+    for row in status["gates"]:
+        if row["id"] == "B22_GATE0_REAL_PACKS":
+            row["state"] = "ACTION_REQUIRED"
+            row["missing_dependencies"] = []
+    unsigned = dict(status)
+    unsigned.pop("status_receipt_sha256")
+    status["status_receipt_sha256"] = next_harness.canonical_sha256(unsigned)
+
+    with pytest.raises(prom9_protocol.Prom9ProtocolError, match="single active"):
+        prom9_protocol.build_stage_packet(
+            protocol=_protocol(),
+            protocol_sha256=prom9_protocol.file_sha256(PROTOCOL_PATH),
+            status=status,
+            stage_id="G0_REAL_PACKS",
+            run_id="must-refuse-nonactive",
+            recorded_at=FIXED_TIME,
+        )
 
 
 def test_tampered_status_and_stage_packet_fail_closed() -> None:

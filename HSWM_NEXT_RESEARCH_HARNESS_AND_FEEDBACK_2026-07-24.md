@@ -21,6 +21,18 @@ R4는 3-call 구조와 removal/shuffle 방향은 보였지만, 네 항목 모두
 깨졌고 typed `2/4`가 vector `2/4`와 동률이었다. 따라서 하네스는 이를
 `F1_DEVELOPMENT_REPAIR_REQUIRED`로 보존하고 뒤 gate를 열지 않는다.
 
+## Longinus / Symposium 진입점
+
+이 하네스의 코드 심볼, 순서 계획, 상태 receipt, LakatoTree packet과 연구 문서는
+[`LONGINUS_HSWM_ORDERED_GATE_BINDING_2026-07-24.json`](LONGINUS_HSWM_ORDERED_GATE_BINDING_2026-07-24.json)의
+7-layer binding으로 묶는다. 이 manifest가 기록하는 `sourceId`, `sourcePath`, line range,
+SHA-256과 Git 구현 커밋이 Longinus 기준선이다. Mac mini Symposium은 별도 materialized
+worktree에서 이 manifest를 진입점으로 읽으며, 기존 diverged `GIT/HSWM` main을 덮어쓰지
+않는다.
+
+Longinus 결합은 연구 결과를 승격하지 않는다. 현재 과학적 경계는 여전히
+`F1_DEVELOPMENT_REPAIR_REQUIRED`이고 활성 gate도 F1 하나다.
+
 ## HSWM hard core와 하네스의 관계
 
 이 순서는 HSWM을 일반 agent workflow로 축소하지 않는다. HSWM은 Hypergraph Semantic

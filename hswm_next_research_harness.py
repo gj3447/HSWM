@@ -6,6 +6,8 @@ next experiment, rejudges supplied raw evidence with the existing independent
 judges, and emits a self-hashed status receipt.  Exactly one experimental gate
 may be active: actual-compute F1, real Gate-0 metrology, causal Delta-W/removal,
 weight-only Agent-A-to-frozen-B transfer, then topology and long-horizon work.
+
+# KG: hswm-ordered-research-harness-20260724
 """
 from __future__ import annotations
 
@@ -654,7 +656,7 @@ def _validate_recorded_at(value: str | None) -> str:
     return value
 
 
-def build_status(
+def build_status(  # KG: hswm-gate-status-contract-20260724
     *,
     repo_root: Path,
     plan_path: Path | None = None,
@@ -798,7 +800,9 @@ def build_status(
     return {**unsigned, "status_receipt_sha256": canonical_sha256(unsigned)}
 
 
-def verify_status(value: Mapping[str, object]) -> str:
+def verify_status(  # KG: hswm-status-verification-contract-20260724
+    value: Mapping[str, object],
+) -> str:
     if value.get("schema_version") != STATUS_SCHEMA:
         raise NextResearchHarnessError("unsupported status receipt schema")
     if (
@@ -809,7 +813,7 @@ def verify_status(value: Mapping[str, object]) -> str:
     return _verify_self_hash(value, "status_receipt_sha256", "status receipt")
 
 
-def build_lakatotree_packet(
+def build_lakatotree_packet(  # KG: hswm-lakatotree-packet-contract-20260724
     *, status: Mapping[str, object], plan: Mapping[str, object], result_path: str
 ) -> dict[str, object]:
     """Build a DRAFT engineering packet; never a prediction or result submission."""

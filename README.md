@@ -50,6 +50,9 @@ feasibility verdict, failure modes, and decisive P1–P4 experiments are in
 The preserved hard core, replaceable protective belt, current evidence table,
 kill rules, and the single ordered research direction are frozen in
 [`HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md`](HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md).
+The ordered-gate implementation is bound back to its KG contracts, exact source
+symbols, line ranges, hashes, and Mac mini Symposium materialization through
+[`LONGINUS_HSWM_ORDERED_GATE_BINDING_2026-07-24.json`](LONGINUS_HSWM_ORDERED_GATE_BINDING_2026-07-24.json).
 
 That paragraph is a target identity, not a present-tense efficacy claim. The
 repository currently has a mature evidence/compiler/replay substrate and several

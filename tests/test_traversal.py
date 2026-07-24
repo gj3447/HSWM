@@ -115,3 +115,41 @@ def test_pointwise_readouts_untouched_by_traversal_import():
     b0 = float(ds.hg.base_salience[3])
     readouts.supersede(f, 3)
     assert float(ds.hg.base_salience[3]) == b0 * 0.5
+
+
+# --- v2.4 oracle strengthening (vacuity map: these were 0/8 — nothing asserted
+# top-m SELECTION, so bottom-m inversion and tie-dropping mutants survived) ---
+
+def test_softmax_topm_selects_top_m_largest():
+    w = np.array([0.1, 0.9, 0.3, 0.8, 0.2, 0.7])
+    s = tv._softmax_topm(w, 2)
+    assert set(np.flatnonzero(s > 0)) == {1, 3}    # the two largest weights, not the smallest
+    assert np.isclose(s.sum(), 1.0)
+    assert s[1] > s[3]                             # order preserved by weight
+
+
+def test_softmax_topm_tie_at_cut_not_dropped():
+    w = np.array([1.0, 1.0, 0.5, 0.1])
+    s = tv._softmax_topm(w, 2)
+    assert s[0] > 0 and s[1] > 0                   # tied leaders at the cut must survive
+    assert np.isclose(s.sum(), 1.0)
+
+
+def _rc():
+    return tv.TraversalReceipt(seed_edges=[], mu=0.4, gamma=0.3, K=3, kappa=1.0)
+
+
+def test_prune_topm_keeps_largest_and_records_mass():
+    a = np.array([0.4, 0.1, 0.3, 0.05, 0.15])
+    rc = _rc()
+    kept = tv._prune_topm(a, 2, rc)
+    assert set(np.flatnonzero(kept)) == {0, 2}     # top-2 by value survive
+    assert np.isclose(kept.sum(), 0.7)
+    assert np.isclose(rc.kept_mass[0], 0.7)
+
+
+def test_prune_topm_tie_at_cut_not_dropped():
+    a = np.array([0.4, 0.4, 0.2])
+    rc = _rc()
+    kept = tv._prune_topm(a, 2, rc)
+    assert kept[0] > 0 and kept[1] > 0             # tied leaders must survive the cut

@@ -45,6 +45,7 @@ class MutationSite:
     lineno: int
     kind: str
     detail: str
+    col: int = 0
 
 
 class _SiteCollector(ast.NodeVisitor):
@@ -55,15 +56,15 @@ class _SiteCollector(ast.NodeVisitor):
         for i, op in enumerate(node.ops):
             for repl in COMPARE_FLIPS.get(type(op), []):
                 self.sites.append(MutationSite(
-                    f"cmp@{node.lineno}.{i}", node.lineno, "compare",
-                    f"{type(op).__name__}->{repl.__name__}"))
+                    f"cmp@{node.lineno}.{node.col_offset}.{i}", node.lineno, "compare",
+                    f"{type(op).__name__}->{repl.__name__}", node.col_offset))
         self.generic_visit(node)
 
     def visit_BinOp(self, node: ast.BinOp) -> None:
         for repl in BINOP_FLIPS.get(type(node.op), []):
             self.sites.append(MutationSite(
-                f"binop@{node.lineno}", node.lineno, "binop",
-                f"{type(node.op).__name__}->{repl.__name__}"))
+                f"binop@{node.lineno}.{node.col_offset}", node.lineno, "binop",
+                f"{type(node.op).__name__}->{repl.__name__}", node.col_offset))
         self.generic_visit(node)
 
     def visit_Call(self, node: ast.Call) -> None:
@@ -75,8 +76,8 @@ class _SiteCollector(ast.NodeVisitor):
         )
         if is_clip:
             self.sites.append(MutationSite(
-                f"clip@{node.lineno}", node.lineno, "clip-removal",
-                f"{func.attr}(x, 0) -> x"))
+                f"clip@{node.lineno}.{node.col_offset}", node.lineno, "clip-removal",
+                f"{func.attr}(x, 0) -> x", node.col_offset))
         self.generic_visit(node)
 
 
@@ -85,9 +86,13 @@ class _Mutator(ast.NodeTransformer):
         self.target = target
         self.applied = False
 
+    def _hit(self, node: ast.AST) -> bool:
+        return (getattr(node, "lineno", None) == self.target.lineno
+                and getattr(node, "col_offset", None) == self.target.col)
+
     def visit_Compare(self, node: ast.Compare) -> ast.AST:
         self.generic_visit(node)
-        if not self.applied and self.target.kind == "compare" and node.lineno == self.target.lineno:
+        if not self.applied and self.target.kind == "compare" and self._hit(node):
             idx = int(self.target.site_id.rsplit(".", 1)[1])
             repl = getattr(ast, self.target.detail.split("->")[1])
             node.ops[idx] = repl()
@@ -96,7 +101,7 @@ class _Mutator(ast.NodeTransformer):
 
     def visit_BinOp(self, node: ast.BinOp) -> ast.AST:
         self.generic_visit(node)
-        if not self.applied and self.target.kind == "binop" and node.lineno == self.target.lineno:
+        if not self.applied and self.target.kind == "binop" and self._hit(node):
             repl = getattr(ast, self.target.detail.split("->")[1])
             node.op = repl()
             self.applied = True
@@ -104,7 +109,7 @@ class _Mutator(ast.NodeTransformer):
 
     def visit_Call(self, node: ast.Call) -> ast.AST:
         self.generic_visit(node)
-        if not self.applied and self.target.kind == "clip-removal" and node.lineno == self.target.lineno:
+        if not self.applied and self.target.kind == "clip-removal" and self._hit(node):
             self.applied = True
             return node.args[0]
         return node
@@ -157,15 +162,24 @@ def mutation_score(
         base_cmd = [sys.executable, receipt_path]
     sites = collect_sites(module_path)[:max_mutants]
     killed, survivors, errors = 0, [], []
+    pyc_dir = os.path.join(os.path.dirname(os.path.abspath(module_path)), "__pycache__")
+    module_stem = os.path.splitext(os.path.basename(module_path))[0]
+    env = dict(os.environ)
+    # Same-size mutants patched within one mtime second otherwise hit a STALE
+    # __pycache__ entry keyed by (mtime, size) — i.e. flaky kill/survive results.
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
     for site in sites:
         mutant_src = render_mutant(module_path, site)
         if mutant_src is None:
             continue
         try:
             with _patched_in_place(module_path, mutant_src):
+                for stale in os.listdir(pyc_dir) if os.path.isdir(pyc_dir) else []:
+                    if stale.startswith(module_stem + ".") and stale.endswith(".pyc"):
+                        os.remove(os.path.join(pyc_dir, stale))
                 try:
                     proc = subprocess.run(
-                        base_cmd, cwd=repo_root,
+                        base_cmd, cwd=repo_root, env=env,
                         capture_output=True, timeout=timeout_per_run,
                     )
                     if proc.returncode == 0:

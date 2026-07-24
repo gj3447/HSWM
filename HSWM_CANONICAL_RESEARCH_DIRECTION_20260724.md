@@ -114,8 +114,9 @@ activation routing을 개선하는지 검사한다. fresh/canary/forgetting/repl
 
 ## 6. 다음 실행 한 줄
 
-**이론 문서 추가보다 먼저 Gate B의 실제 `outcome → credit → Delta W → removal` harness를
-닫고, 동시에 Gate A의 실제 토큰 parity를 수리한다. 그 뒤에만 Agent A→B transfer로 간다.**
+**이론 문서 추가보다 Gate A의 실제 토큰 parity를 먼저 닫고, real Gate-0 pack 뒤 Gate B의
+`outcome → credit → Delta W → removal`을 닫는다. 그 뒤에만 Agent A→B transfer와 topology로
+간다. 하네스는 이 순서를 건너뛰는 evidence를 거부한다.**
 
 관련 정본:
 

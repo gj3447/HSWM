@@ -25,40 +25,6 @@
   },
   "stages": [
     {
-      "id": "G0_REAL_PACKS",
-      "order": 1,
-      "lane": "metrology",
-      "status_gate": "B22_GATE0_REAL_PACKS",
-      "depends_on": [],
-      "purpose": "Build the complete query-by-candidate observable component substrate required before any bond learner can be fitted.",
-      "permitted_actions": [
-        "compile reproduction400 2Wiki pack",
-        "compile full-corpus 2Wiki pack",
-        "compile full-corpus MuSiQue pack",
-        "model-free verification",
-        "three-pack lock and acceptance"
-      ],
-      "forbidden_actions": [
-        "fit or tune a learner",
-        "inspect learner efficacy",
-        "register a positive prediction from Gate-0 output",
-        "commit runtime packs to Git"
-      ],
-      "required_inputs": [
-        "pinned 2Wiki and MuSiQue dataset bytes",
-        "pinned model snapshot",
-        "B2.1 scorepack history",
-        "frozen B2 reproduction reference",
-        "guarded CUDA device with batch size 128"
-      ],
-      "exit_evidence": [
-        "hswm-b22-gate0-acceptance-receipt/v1",
-        "all three role roots reopen and replay",
-        "learner_allowed=true",
-        "scientific_claim_allowed=false"
-      ]
-    },
-    {
       "id": "F1_TYPED_FUNCTION_NETWORK",
       "order": 1,
       "lane": "llm-function-network",
@@ -93,11 +59,48 @@
       ]
     },
     {
-      "id": "P1V5_FAST_TO_SLOW_PLASTICITY",
+      "id": "G0_REAL_PACKS",
       "order": 2,
+      "lane": "metrology",
+      "status_gate": "B22_GATE0_REAL_PACKS",
+      "depends_on": [
+        "F1_TYPED_FUNCTION_NETWORK"
+      ],
+      "purpose": "Build the complete query-by-candidate observable component substrate required before any bond learner can be fitted.",
+      "permitted_actions": [
+        "compile reproduction400 2Wiki pack",
+        "compile full-corpus 2Wiki pack",
+        "compile full-corpus MuSiQue pack",
+        "model-free verification",
+        "three-pack lock and acceptance"
+      ],
+      "forbidden_actions": [
+        "fit or tune a learner",
+        "inspect learner efficacy",
+        "register a positive prediction from Gate-0 output",
+        "commit runtime packs to Git"
+      ],
+      "required_inputs": [
+        "pinned 2Wiki and MuSiQue dataset bytes",
+        "pinned model snapshot",
+        "B2.1 scorepack history",
+        "frozen B2 reproduction reference",
+        "guarded CUDA device with batch size 128"
+      ],
+      "exit_evidence": [
+        "hswm-b22-gate0-acceptance-receipt/v1",
+        "all three role roots reopen and replay",
+        "learner_allowed=true",
+        "scientific_claim_allowed=false"
+      ]
+    },
+    {
+      "id": "P1V5_FAST_TO_SLOW_PLASTICITY",
+      "order": 3,
       "lane": "semantic-weight-learning",
       "status_gate": "P1V5_THREE_FACTOR_BOND_PLASTICITY",
       "depends_on": [
+        "F1_TYPED_FUNCTION_NETWORK",
         "G0_REAL_PACKS"
       ],
       "purpose": "Test whether external outcome bound to actually used bonds can cause a query-conditioned fast change and a separately validated durable slow-weight change.",
@@ -131,7 +134,7 @@
     },
     {
       "id": "P2_FROZEN_AGENT_TRANSFER",
-      "order": 3,
+      "order": 4,
       "lane": "shared-network-transfer",
       "status_gate": "P2_AGENT_A_TO_FROZEN_B_TRANSFER",
       "depends_on": [

@@ -125,11 +125,14 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
   (`6/6` typed vs `2/6` no memory; four improvements). LakatoTree regenerated
   the P1v4 metric server-side. This is L0 answer-interface actuation at `n=6`,
   not a general learned compiler, durable `Delta W`, transfer, or topology.
-- 🧭 **Next-gate harness:** `hswm_next_research_harness.py` verifies P1v4,
-  preserves the B2.1 falsification, and refuses to unlock P1v5 until a real
-  three-pack B2.2 Gate-0 acceptance receipt revalidates. F1 multi-role LLM
-  function composition is the other currently READY lane; the harness emits no
-  prediction or scientific verdict.
+- 🧭 **Strict ordered-gate harness:** `hswm_next_research_harness.py` preserves
+  P1v4/B2.1/B2.2 evidence and exposes exactly one active step in the order
+  `actual-compute F1 → real Gate-0 packs → persistent Delta-W/removal →
+  Agent-A weight-only frozen-B transfer → one topology edit → long-horizon
+  stability`. It rejudges F1 suite+gold and raw P1v5/P2 packets, refuses
+  out-of-order evidence, and emits no prediction or scientific verdict. The
+  current active step is F1 token-parity repair because R4 tied vector and
+  failed consumed-token parity on all four items.
 - 🧠 **PROM-9 semantic neural network protocol:** three frozen typed LLM
   functions (`query compiler -> bond proposer -> answer synthesizer`) now have
   hashable prompts, port boundaries, matched-budget baselines, role
@@ -242,7 +245,7 @@ formalization remain in
 | `prom_search_hswm/hswm_bond_readout.py` | pure slow-salience + volatile query-bond potential application and deterministic ranking |
 | `prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md` | refined B2.2 design, action-space diagnostics, full-score-pack requirement, and fresh confirmation boundary |
 | `prom_search_hswm/hswm_b22_gate0_harness.py` / `prom_search_hswm/docs/B22_GATE0_HARNESS_CONTRACT_20260723.md` | full-candidate Gate-0 compiler, replay, locked acceptance, and trusted-ingestion boundary |
-| `hswm_next_research_harness.py` / `HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md` | fail-closed P1v4→B2.2/P1v5→F1/P2→P3→P4 stage graph, current receipt validator, and LakatoTree DRAFT packet |
+| `hswm_next_research_harness.py` / `HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md` | fail-closed single-frontier `F1→Gate-0→Delta-W/removal→A-to-B weight-only transfer→topology→stability` graph, raw-evidence rejudgment, and LakatoTree DRAFT packet |
 | `PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md` / `prom_search_hswm/prom9_semantic_neural_network.v1.json` / `prom_search_hswm/prom9_protocol.py` | typed LLM function network, fast-to-slow bond plasticity, matched controls, and preparation-only PROM-9 contract |
 | `PROM9_DECISIVE_EXPERIMENT_HARNESS_2026-07-24.md` / `prom_search_hswm/prom_f1_function_network.py` / `prom_search_hswm/prom9_causal_harness.py` | executable F1 equal-budget runner plus P1v5 weight-removal and P2 frozen-agent-transfer causal judges; development output cannot mint a scientific verdict |
 | `_research/shared_field_hypothesis/task_contracts.v1.json` / `e1_contract.v1.json` | independent task/control roles and engineering-only replay/budget receipt contracts |

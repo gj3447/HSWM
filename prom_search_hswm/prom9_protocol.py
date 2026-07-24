@@ -24,8 +24,8 @@ PACKET_SCHEMA = "hswm-prom9-stage-packet/v1"
 DEFAULT_PROTOCOL = Path("prom_search_hswm/prom9_semantic_neural_network.v1.json")
 
 REQUIRED_STAGE_IDS = (
-    "G0_REAL_PACKS",
     "F1_TYPED_FUNCTION_NETWORK",
+    "G0_REAL_PACKS",
     "P1V5_FAST_TO_SLOW_PLASTICITY",
     "P2_FROZEN_AGENT_TRANSFER",
 )
@@ -444,12 +444,17 @@ def build_stage_packet(
     status_gate = str(stage["status_gate"])
     if status_gate not in rows:
         raise Prom9ProtocolError(f"status receipt lacks PROM-9 gate: {status_gate}")
+    active_gate = status.get("active_gate")
+    if (
+        status.get("sequence_locked") is not True
+        or not isinstance(active_gate, dict)
+        or active_gate.get("id") != status_gate
+    ):
+        raise Prom9ProtocolError(
+            f"PROM-9 stage {stage_id} is not the single active status gate"
+        )
     observed_state = rows[status_gate].get("state")
-    allowed_states = (
-        {"ACTION_REQUIRED", "READY"}
-        if stage_id == "G0_REAL_PACKS"
-        else {"READY"}
-    )
+    allowed_states = {"ACTION_REQUIRED", "READY"}
     if observed_state not in allowed_states:
         raise Prom9ProtocolError(
             f"PROM-9 stage {stage_id} is not runnable: "

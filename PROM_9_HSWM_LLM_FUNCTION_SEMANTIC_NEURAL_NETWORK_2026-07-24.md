@@ -272,17 +272,18 @@ F1과 P1v5가 각각 통과한 다음 두 축을 합친다.
 python3 -m prom_search_hswm.prom9_protocol validate
 ```
 
-현재 열려 있는 F1 개발 packet 준비:
+ordered status가 현재 여는 유일한 F1 repair packet 준비:
 
 ```bash
 python3 -m prom_search_hswm.prom9_protocol prepare \
-  --status receipts/HSWM_NEXT_GATE_STATUS_20260724.json \
+  --status receipts/HSWM_ORDERED_GATE_STATUS_20260724.json \
   --stage F1_TYPED_FUNCTION_NETWORK \
   --run-id f1-dev-001 \
   --output /new/write-once/F1_PROM9_STAGE_PACKET.json
 ```
 
-현재 P1v5를 준비하려 하면 Gate-0가 없으므로 거부되어야 정상이다.
+현재 Gate-0, P1v5, P2를 준비하려 하면 F1 actual-compute gate부터 닫히지 않았으므로
+거부되어야 정상이다. PROM-9 stage 순서도 `F1 → Gate-0 → P1v5 → P2`로 고정돼 있다.
 
 stage packet은 `preparation_allowed=true`만 낸다. 다음 값은 언제나 false다.
 

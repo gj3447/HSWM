@@ -18,7 +18,14 @@ The TRUE floor (asserted here):
   (F5) VAL-SELECTION MECHANISM (v2.7, grok-4 audit finding): f2_ok trusted
        train_additive_j's selection; F5 re-derives val scores and requires the
        selection to be an honest argmax over a grid containing 0, so the actual
-       floor-by-construction (val[λ*] ≥ val[0]) is checked, not assumed.
+       floor-by-construction (val[λ*] ≥ val[0]) is checked, not assumed. The
+       recompute is REPORT-independent (diag numbers are not trusted); it shares
+       the _ndcg_for implementation by design (score formulas are locked by
+       F1/F3/F6, so a shared ndcg is not an unguarded path).
+v2.7.1 (2026-07-24, claude-code audit findings): F5 degenerate-val guard
+  (all-zero recompute refused), F5b split re-derivation from (train_q, seed),
+  F5 negative oracle widened to all three rejection branches, F6b AST loop-use
+  check (the loop must call the canaried helper).
   (F6) TRAIN-PATH CANARY (v2.7): the trainer's internal score/gate are the
        shipped _train_score_and_gate — sc == cos + λ·ReLU(resid) and
        gate == λ·(resid>0) exactly. Kills the v21 train-path survivors
@@ -47,6 +54,7 @@ Run:  uv run python receipts/receipt_cosine_floor.py   (exit 0 = valid)
 """
 from __future__ import annotations
 
+import ast
 import hashlib
 import sys
 
@@ -84,16 +92,21 @@ LOCK_CHECKS = {
     "F3_zero_boost_exact": "f3_ok",
     "F4_prereg_efficacy": "f4_ok",
     "F5_val_selection": "f5_ok",
-    "F6_train_canary": "f6_ok",
+    "F6_train_canary": ["f6_ok", "f6b_ok"],
     "negative_oracle": ["neg_breaks", "neg3_breaks", "neg5_breaks"],
 }
 
 
 def _f5_selection_consistent(lam_sel: float, diag: dict, recomputed: dict) -> bool:
     """F5 helper — the val-selection mechanism must be an honest argmax over a
-    grid containing 0. Checks: 0 in grid; diag bookkeeping matches an
-    independent recompute (4dp rounding); selected lam ties the recomputed
-    max; val[lam*] >= val[0] (the actual floor-by-construction)."""
+    grid containing 0. Checks: 0 in grid; diag bookkeeping matches a
+    report-independent recompute (4dp rounding); selected lam ties the recomputed
+    max; val[lam*] >= val[0] (the actual floor-by-construction). A degenerate
+    recompute (empty val / no gold in pool -> all-zero flat scores) is REFUSED
+    (claude-code audit PROBE A: it would pass vacuously)."""
+    vals = list(recomputed.values())
+    if not vals or all(v == 0.0 for v in vals):
+        return False
     claimed = {float(k): float(v) for k, v in diag["val_ndcg_by_lambda"].items()}
     if 0.0 not in claimed:
         return False
@@ -162,11 +175,20 @@ def main() -> int:
     print(f"F4 positive: dev1 mean-nDCG gain = {gain:+.4f} (prereg >= +0.03) -> {'OK' if f4_ok else 'FAIL'}")
 
     # (F5) VAL-SELECTION MECHANISM — grok-audit gap: f2_ok trusted train_additive_j's
-    # selection; here the mechanism itself is checked against an independent recompute.
+    # selection; here the mechanism itself is checked against a recompute that is
+    # independent of the trainer's *reported* numbers (report-independent; it shares
+    # the _ndcg_for implementation by design — score formulas are locked by F1/F3/F6).
     val_q = [int(q) for q in diag["val_q"]]
     recomputed = {l: _ndcg_for(ds, val_q, pooled, M, l, 0) for l in LAMBDA_GRID}
-    f5_ok = _f5_selection_consistent(lam, diag, recomputed)
-    print(f"F5 positive: lam*={lam} = argmax(val) over grid∋0, val[lam*]={recomputed[lam]:.4f} >= val[0]={recomputed[0.0]:.4f} -> {'OK' if f5_ok else 'FAIL'}")
+    # (F5b) split identity (claude-code audit finding b): diag's val_q must match the
+    # canonical split re-derived from (train_q, seed) — a swapped split is detected.
+    rng_split = np.random.default_rng(0 * 5381 + 3)
+    tq = np.array(train_q)
+    rng_split.shuffle(tq)
+    nval = max(1, int(len(tq) * diag.get("val_frac", 0.3)))
+    f5b_ok = val_q == [int(q) for q in tq[:nval]]
+    f5_ok = _f5_selection_consistent(lam, diag, recomputed) and f5b_ok
+    print(f"F5 positive: lam*={lam} = argmax(val) over grid∋0, val[lam*]={recomputed[lam]:.4f} >= val[0]={recomputed[0.0]:.4f}, split-match={f5b_ok} -> {'OK' if f5_ok else 'FAIL'}")
 
     # (F6) TRAIN-PATH CANARY — the trainer's internal score/gate ARE the locked
     # formulas (calls the shipped _train_score_and_gate, not a copy). Kills the
@@ -184,6 +206,16 @@ def main() -> int:
     f6_ok = bool(np.allclose(sc6, sc6_expect, atol=1e-12)
                  and np.allclose(gate6, gate6_expect, atol=1e-12))
     print(f"F6 positive: train sc/gate match locked formulas (atol 1e-12, {(resid6 > 0).sum()}/{len(resid6)} resid>0) -> {'OK' if f6_ok else 'FAIL'}")
+
+    # (F6b) LOOP-USE binding (claude-code audit finding e): F6 canaries the helper;
+    # the training loop must actually CALL it — an inline corruption that drops the
+    # helper call would pass F6 silently, so the call site is AST-checked.
+    f6b_ok = False
+    for _node in ast.walk(ast.parse(open("learned_v3_additive.py", encoding="utf-8").read())):
+        if isinstance(_node, ast.FunctionDef) and _node.name == "train_additive_j":
+            f6b_ok = any(isinstance(_s, ast.Call) and isinstance(_s.func, ast.Name)
+                         and _s.func.id == "_train_score_and_gate" for _s in ast.walk(_node))
+    print(f"F6b positive: train_additive_j calls _train_score_and_gate (AST) -> {'OK' if f6b_ok else 'FAIL'}")
 
     # documented (NOT a floor): per-query min
     per_q_min = min(
@@ -225,16 +257,21 @@ def main() -> int:
     neg3_breaks = shift_worst > 1e-12
     print(f"negative-oracle-F3: constant-shift max |W - cosine| on resid<=0 = {shift_worst:.4f} (must be > 1e-12) -> {'breaks' if neg3_breaks else 'FAILED-to-break'}")
 
-    # (5c) NEGATIVE ORACLE for F5 — a rigged selection diag must be rejected:
-    # bookkeeping claims lam* scored worst (lies about the recompute).
-    rigged = dict(diag)
-    rigged["val_ndcg_by_lambda"] = {**diag["val_ndcg_by_lambda"], lam: -1.0}
-    neg5_breaks = not _f5_selection_consistent(lam, rigged, recomputed)
-    print(f"negative-oracle-F5: rigged selection diag -> {'rejected' if neg5_breaks else 'ACCEPTED (vacuous)'}")
+    # (5c) NEGATIVE ORACLE for F5 — all three rejection branches must fire
+    # (claude-code audit finding d: the single bookkeeping oracle was narrow).
+    rigged_book = dict(diag)
+    rigged_book["val_ndcg_by_lambda"] = {**diag["val_ndcg_by_lambda"], lam: -1.0}
+    neg5a = not _f5_selection_consistent(lam, rigged_book, recomputed)       # bookkeeping lie
+    rigged_grid = dict(diag)
+    rigged_grid["val_ndcg_by_lambda"] = {k: v for k, v in diag["val_ndcg_by_lambda"].items() if k != 0.0}
+    neg5b = not _f5_selection_consistent(lam, rigged_grid, recomputed)       # grid without 0
+    neg5c = not _f5_selection_consistent(lam, diag, {**recomputed, 0.0: max(recomputed.values()) + 0.1})  # non-argmax selection
+    neg5_breaks = neg5a and neg5b and neg5c
+    print(f"negative-oracle-F5: bookkeeping={'rejected' if neg5a else 'PASS?'} grid-no-0={'rejected' if neg5b else 'PASS?'} non-argmax={'rejected' if neg5c else 'PASS?'} -> {'all rejected' if neg5_breaks else 'VACUOUS'}")
 
-    ok = f1_ok and f2_ok and f3_ok and f4_ok and f5_ok and f6_ok and neg_breaks and neg3_breaks and neg5_breaks
+    ok = f1_ok and f2_ok and f3_ok and f4_ok and f5_ok and f6_ok and f6b_ok and neg_breaks and neg3_breaks and neg5_breaks
     print("\nRECEIPT:", "VALID ✅" if ok else "INVALID ❌",
-          f"| F1={f1_ok} F2={f2_ok} F3={f3_ok} F4={f4_ok} F5={f5_ok} F6={f6_ok} negF1={neg_breaks} negF3={neg3_breaks} negF5={neg5_breaks}")
+          f"| F1={f1_ok} F2={f2_ok} F3={f3_ok} F4={f4_ok} F5={f5_ok} F6={f6_ok} F6b={f6b_ok} negF1={neg_breaks} negF3={neg3_breaks} negF5={neg5_breaks}")
     if not neg_breaks:
         print("  !! negative oracle failed to break F1 -> vacuous", file=sys.stderr)
     if not neg3_breaks:

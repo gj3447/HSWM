@@ -1,0 +1,34 @@
+I have completed the audit. Let me record the budget and give the verdict.
+
+## Audit result
+
+I ran the receipt (exit 0, VALID), read all three artifacts, verified the shas match the bundle (`learned_v3_additive.py` = `200a953…`, `weight_field.py` = `29c9b95…`), grepped all callers, read the test file, and executed 5 empirical probes plus enumerated 21 adversarial cases targeting F5/F6.
+
+Key confirmations:
+- **F6 is bound to the shipped function**: receipt imports `_train_score_and_gate` from `learned_v3_additive` and the training loop (`learned_v3_additive.py:106`) actually *calls* that same helper — not a copy. Fixture is non-degenerate (11/25 `resid>0`, so both dReLU branches exercised). Gradient path `coeff=(p−y)*gate`, `grad+=outer(peuᵀcoeff,qu)` is the exact analytic gradient of softmax-CE through `sc=cos+λ·ReLU(resid)`; no double-counting of `resid`.
+- **F5 recompute is independent of the trainer's *reported numbers*** (`diag["val_ndcg_by_lambda"]`): it re-derives val nDCG from `M`+`val_q` and cross-checks argmax + floor. Negative oracle fires (rigged diag rejected).
+- **Clamp/raise is safe**: every `score_additive` caller passes `lam≥0` (`max(lam,1.0)`, grid values, `0.0`, `2.0`); the only `lam<0` call is `test_negative_lambda_refused_fail_closed`, which *expects* the raise. `raise` > clamp is correct: clamping `lam<0`→0 would silently mask a floor-breaking bug instead of failing loud.
+
+I found no break — only bounded, unreachable-on-shipped-code residual gaps.
+
+---
+
+VERDICT: upheld
+
+COUNTEREXAMPLES_TRIED: 21
+
+BREAKS: none
+
+VACUITY_FINDINGS:
+- **F5 shares `_ndcg_for` with the trainer** (`learned_v3_additive.py:116` vs `receipt:167`). "Independent recompute" is independent of the *reported diag values* (bookkeeping), NOT of the *scoring implementation*. A mutant inside `_ndcg_for` / `metrics.ndcg_at_k` moves both the trainer's selection and F5's recompute together → invisible to F5. Out of F5's declared scope (F1/F3/F6 cover the score/train formulas; ndcg is unguarded), so not a break, but the "independent" prose overstates: it is *report-independent*, not *implementation-independent*.
+- **F5 trusts `diag["val_q"]`**: the split identity is taken from the trainer, not re-derived from `(train_q, seed)`. If the split itself were the manipulation vector, F5 recomputes argmax on the *reported* split and can't detect a swapped split. PROBE C: could not construct a val subset making the worst λ the argmax in 200 tries, so exploitation is hard, and there is no canonical "correct" split to check against — scoping limitation, not vacuity.
+- **F5 degenerate-val vacuity (PROBE A, confirmed)**: if `val_q` were empty (or contained only queries with no gold in pool), `_ndcg_for` returns 0.0 for every λ → all tie → `_f5_selection_consistent` returns True vacuously (argmax and floor both trivially satisfied). UNREACHABLE via shipped trainer (`nval=max(1,…)≥1`, `learned_v3_additive.py:90`), so not a live break, but `_f5_selection_consistent` lacks a guard that the recompute is non-degenerate/non-flat.
+- **F5 negative oracle is narrow (PROBE E)**: neg5 rigs `val_ndcg_by_lambda[lam]=-1.0`, which trips only the bookkeeping-mismatch branch (`receipt:100`). It never exercises the argmax branch (`:103`) or the floor branch (`:105`). Those are covered by the positive path on real data, but the oracle proves only one of three failure modes can fire.
+- **F6 canaries the helper in isolation, not the loop's use of it**: F6 verifies `_train_score_and_gate` equals the formulas; it does not dynamically assert the training loop invokes it. A hypothetical mutant that inlines a corrupted formula at `:106` (dropping the helper call) would pass F6. Mitigated by source-sha binding + the loop verifiably calling the helper today — residual oracle gap, not a break.
+
+NOTES:
+- The three named v21/v2.6 train-path survivors are genuinely killed by F6: binop@88.17 (sign flip) and binop@88.30 (mul→add) differ on the 11 `resid>0` rows; binop@92.19 ((resid>0)+lam) differs on *both* branches (2.5 vs 1.5 where resid>0; 1.5 vs 0 where resid≤0) — robustly caught. Using `lam_train=1.5≠0` in the fixture is the right choice; `lam=0` would have made the mul/add mutants indistinguishable on the gate.
+- cmp@92 (`resid>0` vs `>=0`) remains a documented measure-zero EQUIVALENT — F6 does not and cannot break it (correct).
+- F5's final floor check (`recomputed[lam_sel] >= recomputed[0.0]`) is logically implied by the argmax check + `0.0 in grid`; redundant but harmless.
+- Tie handling verified: `max(dict, key=…)` returns the first insertion key (`0.0`) on ties, so aligned/real-KG data collapses to λ=0 and F5 passes correctly; a tied non-zero λ also passes as a legitimate argmax.
+- The receipt correctly runs on synthetic dev1 (where λ*=1.0>0, gain +0.10) so F4/F5 are jointly satisfiable; on real KG (λ→0) F4 would fail by design — the lock's honest scope.

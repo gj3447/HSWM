@@ -139,8 +139,13 @@ def mutation_score(
     max_mutants: int = 12,
     timeout_per_run: int = 300,
     runner: str = "script",
+    confirm_kills: bool = False,
 ) -> dict:
     """Run the receipt against single-fault mutants of module_path.
+
+    confirm_kills=True reruns every apparent kill once and only counts it when
+    it fails twice — under parallel load an unrelated environmental failure
+    (resource contention, timeout neighbour) otherwise becomes a phantom kill.
 
     Mutants are applied IN PLACE (mutmut-style): PYTHONPATH shadowing is
     unreliable once the test suite lives in a package (pytest inserts the
@@ -182,6 +187,14 @@ def mutation_score(
                         base_cmd, cwd=repo_root, env=env,
                         capture_output=True, timeout=timeout_per_run,
                     )
+                    if proc.returncode != 0 and confirm_kills:
+                        for stale in os.listdir(pyc_dir) if os.path.isdir(pyc_dir) else []:
+                            if stale.startswith(module_stem + ".") and stale.endswith(".pyc"):
+                                os.remove(os.path.join(pyc_dir, stale))
+                        proc = subprocess.run(
+                            base_cmd, cwd=repo_root, env=env,
+                            capture_output=True, timeout=timeout_per_run,
+                        )
                     if proc.returncode == 0:
                         survivors.append(f"{site.site_id} {site.detail}")
                     else:

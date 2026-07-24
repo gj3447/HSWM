@@ -58,7 +58,7 @@ def scan_one(job: dict) -> dict:
         os.path.join(job["repo_root"], job["target"] + ".py"),
         job["test_path"], repo_root=job["repo_root"],
         max_mutants=job["max_mutants"], timeout_per_run=job["timeout"],
-        runner="pytest",
+        runner="pytest", confirm_kills=True,
     )
     return {**job, "killed": ms["killed"], "total": ms["total"],
             "survivors": ms["survivors"], "errors": ms["errors"]}

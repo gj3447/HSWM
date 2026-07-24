@@ -127,6 +127,12 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
   three-pack B2.2 Gate-0 acceptance receipt revalidates. F1 multi-role LLM
   function composition is the other currently READY lane; the harness emits no
   prediction or scientific verdict.
+- 🧠 **PROM-9 semantic neural network protocol:** three frozen typed LLM
+  functions (`query compiler -> bond proposer -> answer synthesizer`) now have
+  hashable prompts, port boundaries, matched-budget baselines, role
+  removal/shuffle controls, and a fail-closed stage-packet compiler. It opens
+  Gate-0/F1 preparation only; P1v5 measurement, activation, prediction, and
+  scientific result authority remain closed.
 - ⚠️ **Open-kernel claim boundary:** LakatoTree judged the composition receipt
   chain `partial` and `certified=false`. Learned semantic-weight deltas and
   CONNECT/SEPARATE/SPECIALIZE topology edits, bounded cyclic readout,
@@ -224,6 +230,7 @@ formalization remain in
 | `prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md` | refined B2.2 design, action-space diagnostics, full-score-pack requirement, and fresh confirmation boundary |
 | `prom_search_hswm/hswm_b22_gate0_harness.py` / `prom_search_hswm/docs/B22_GATE0_HARNESS_CONTRACT_20260723.md` | full-candidate Gate-0 compiler, replay, locked acceptance, and trusted-ingestion boundary |
 | `hswm_next_research_harness.py` / `HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md` | fail-closed P1v4→B2.2/P1v5→F1/P2→P3→P4 stage graph, current receipt validator, and LakatoTree DRAFT packet |
+| `PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md` / `prom_search_hswm/prom9_semantic_neural_network.v1.json` / `prom_search_hswm/prom9_protocol.py` | typed LLM function network, fast-to-slow bond plasticity, matched controls, and preparation-only PROM-9 contract |
 | `_research/shared_field_hypothesis/task_contracts.v1.json` / `e1_contract.v1.json` | independent task/control roles and engineering-only replay/budget receipt contracts |
 | `prom_search_hswm/docs/PROM_HSWM_REMAINING_ISSUES_RESOLUTION_20260723.md` | evidence-backed dependency graph from implemented gates to G4 preregistration |
 | `H3_B3_RESUME_STATUS_2026-07-20.md` | corrected PRE_RUN boundary, local receipt hashes, and exact next sequence |

@@ -35,6 +35,7 @@
 | **B2** | `prom_b2_crossfield_merge.py` + `hswm_field_algebra.py` | `EVIDENCE_b2_crossfield_merge_20260722.json` | **progressive** (eureka true BF 6.0) / L5 위반 lemma 편입 | ★ federated merge: cross-field +0.2137 CI[.183,.244] + seam 유의 +0.034 / in-field −0.065 간섭비용. 첫 완전 progressive. `docs/B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md` |
 | **B2.1** | `prom_b21_learned_router.py` | `EVIDENCE_b21_learned_router_20260723.json` + `AUDIT_*` + `judgments/B21_learned_router/` | scientific **REJECTED** / metric **equivalent** / Lakatos **degenerating** | 2벤치×3 partition×3 k×3 seed=54셀 전부 `ABSTAIN->MERGED`; primary Δ0, in-field min −0.0351. gold oracle도 primary min headroom +0.01087로 목표 >+.02 불가능. router-only 폐기, semantic-weight/topology 행동공간으로 이동. [`result`](docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) |
 | **B2.2 diag** | `hswm_bond_readout.py` + `diag_b22_weight_action_space.py` | `DIAG_b22_fine_bond_action_headroom_20260723.json` | `DIAGNOSTIC_NO_CLAIM` | pure weight-combination kernel 착지; B2/OpenHSWM adapter는 다음. fine query-edge oracle +.0489/+.0833 room, static edge-ID patch는 6/6 cal/test Δ0. full pack 뒤 fast bond learner를 개발하고 반복 효과만 slow weight로 증류. [`design`](docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md) |
+| **PROM-9** | `prom9_protocol.py` + `prom9_semantic_neural_network.v1.json` | 준비 packet만 생성; scientific receipt 없음 | `DESIGN_LOCKED_NOT_PREREGISTERED` | QF query compiler→BF bond proposer→AF answer synthesizer의 typed LLM 함수망, equal-call/token flat·vector·removal·shuffle 통제, external outcome→eligibility→fast→slow 승격과 P2 frozen-agent transfer를 fail-closed로 고정. [`protocol`](../PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) |
 | — | `prom_vunione_ab.py` / `_gated_ab.py` | `EVIDENCE_vunione_*` | 종결 | V=V∪E readout, entity 정점추가 blind+gated 兩 RED |
 
 보조 모듈: `hswm_fusion.py`(fusion primitive) · `hswm_hypergraph.py` / `_readout.py`(하이퍼그래프 빌더) · `hswm_field_algebra.py`(**B0 field 대수** — merge/split/compose, L1–L4 법칙 10/10, `test_hswm_field_algebra.py`. 설계=`../DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md`).
@@ -80,4 +81,4 @@ venv=fatal crash, CLAUDE.md GM 정전). 벤치(musique)도 `/Volumes/GM/bench/` 
 
 ---
 
-*갱신 2026-07-23: B2.1 router-only RED 뒤 B2.2 bond-readout module 착지. fine action-space room은 있으나 static edge-ID suppression 전이는 Δ0. 다음 = full component pack → fast query-bond learner → 반복 효과의 slow-weight 증류 → bounded topology proposal.*
+*갱신 2026-07-24: B2.1 router-only RED 뒤 B2.2 Gate-0와 PROM-9 설계/검증 하네스 착지. 다음 = real full component packs와 QF/BF/AF typed function registry를 병렬 구축 → fast query-bond learner → 반복 효과의 slow-weight 증류 → frozen-agent transfer → bounded topology proposal.*

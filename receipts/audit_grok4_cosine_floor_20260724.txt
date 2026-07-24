@@ -1,0 +1,129 @@
+I'll read the audit bundle, receipt, and sources, then stress F1/F2 for vacuity, domain counterexamples, scope, and binding.Reading the full scoring and training paths, plus lambda-grid details.Checking one more binding detail and whether F2’s test claim can fail under the training procedure as written:VERDICT: upheld  
+COUNTEREXAMPLES_TRIED: 24  
+BREAKS: none  
+VACUITY_FINDINGS: F1 positive is algebraically tautological given shipped `score_additive` under λ≥0 (W−cos = λ·ReLU(r) ≥ 0); not fail-closed-vacuous because the check calls the real function (not a local rewrite) and signed-j negative oracle must fail the same inequality. F2’s “val floor by construction” is tautological under `max(grid∋0)` and is **not** what `f2_ok` measures—`f2_ok` only checks **test** mean-nDCG. Val-construction mechanism is therefore under-gated relative to LOCK prose; test floor is empirical, not algebraic.  
+NOTES: Binding OK (`f1_ok`/`f2_ok`/`f3_ok`/`f4_ok`/`neg_breaks`/`neg3_breaks` all appear in `ok = …`). Scope honest on per-query (explicitly `not_guaranteed`). Extra claims F3/F4 are asserted beyond F1/F2. `WeightField.value` is a different formula (bilinear α + λ log b), not the F1 object.
+
+---
+
+### What the lock actually asserts
+
+| ID | Claim | Nature |
+|----|--------|--------|
+| **F1** | `W = cosine + λ·ReLU(resid) ≥ cosine` for every edge | Algebraic, under **j = λ·ReLU ≥ 0** (i.e. λ ≥ 0 in practice) |
+| **F2** | λ from val grid **including 0** ⇒ **val** mean-nDCG ≥ cosine; test “held empirically” | Operational on val; empirical on test |
+| Not claimed | per-query nDCG ≥ cosine | Documented counterexample in receipt (~−0.22) |
+
+Shipped definition (`learned_v3_additive.py`):
+
+```37:42:learned_v3_additive.py
+def score_additive(pe_pool, q, M, lam):
+    """W = cosine + λ·ReLU(peᵀ M q). pe_pool (K,d), q (d,)."""
+    peu = _unit(pe_pool)
+    qu = q / max(np.linalg.norm(q), 1e-12)
+    cos = peu @ qu
+    resid = peu @ M @ qu
+    return cos + lam * np.maximum(0.0, resid)
+```
+
+λ selection (`LAMBDA_GRID = [0, 0.5, 1, 2, 4, 8]`, all ≥ 0):
+
+```87:89:learned_v3_additive.py
+    val_scores = {lam: _ndcg_for(ds, val_q, pooled, M, lam, seed) for lam in LAMBDA_GRID}
+    best_lam = max(val_scores, key=val_scores.get)
+    return (M, best_lam, {'val_ndcg_by_lambda': {k: round(v, 4) for k, v in val_scores.items()}})
+```
+
+---
+
+### 1. Vacuity
+
+| Check | Can it fail on wrong code? | Tested artifact |
+|-------|----------------------------|-----------------|
+| **F1** | Yes if ReLU dropped / signed residual / λ forced negative in the call | **Shipped** `score_additive` |
+| **F2** | Yes if test mean drops below cosine−ε | **Shipped** `score_additive` + trained `(M,λ)` on **test** only |
+| **neg F1** | Must observe `worst_signed < 0` | **Local copy** `score_signed` (intentional mutant) |
+| **F3/neg F3** | Exact equality on resid≤0; constant-shift must violate | Shipped + local `score_shifted` |
+
+- F1 is **not** “tested only on a copied formula.” Cosine for the gap is recomputed independently; score comes from import.
+- F1 **is** true-by-construction for any finite inputs once `score_additive` is correct and `λ≥0`. Receipt forces `lam=max(lam,1.0)`, so it never exercises the selected λ for F1 (only a λ≥1 instance)—still a valid stress of the ReLU floor, but **decoupled from selection**.
+- F2 val-construction is **not instrumented** by `f2_ok`. Mutating selection away from “grid∋0” can still leave `f2_ok` true if test luckily holds. That is a **binding/coverage gap**, not a false F1/F2 theorem.
+- Negative oracles prevent pure “always green” vacuity for F1/F3.
+
+---
+
+### 2. Domain counterexamples (24)
+
+| # | Config | F1 | F2 |
+|---|--------|----|----|
+| 1 | λ=0 | Equality holds | Equality holds |
+| 2 | λ>0, resid≤0 everywhere | Equality (boost-only) | Equality |
+| 3 | λ>0, resid>0 on gold | Holds | Mean usually ↑ |
+| 4 | λ>0, resid boosts **non-gold** more than gold | Holds (pointwise) | **Per-query nDCG can drop**; mean may drop on **test** while val still selected λ>0 → **breaks strong “always test” reading**, not carefully worded LOCK |
+| 5 | λ<0, some resid>0 | **Breaks F1** | Can break mean | Outside LOCK (`j≥0`) and outside `LAMBDA_GRID`; API does not clamp λ |
+| 6 | λ→+∞ | Holds | Ranking becomes pure residual; mean can tank on test |
+| 7 | M=0 | Equality | Equality |
+| 8 | M random (receipt also tests) | Holds if λ≥0 | No algebraic mean guarantee |
+| 9 | M≈−c·I, cos>0 | ReLU zeros; equality | Equality |
+| 10 | Uniform residual add to all candidates | Holds; ranks often unchanged | Mean ≈ cosine |
+| 11 | Degenerate pool size 1 | Holds | Trivial nDCG |
+| 12 | Empty gold∩pool | Holds | Both nDCG=0 |
+| 13 | All candidates gold | Holds | Both ~1 |
+| 14 | Near-tie scores + nDCG jitter | Holds | Floors can flicker at 1e-9 jitter; ε=1e-4 on F2 |
+| 15 | Zero query vector | Norm path: receipt bare `/‖q‖` vs score `max(‖q‖,1e-12)` | Numeric hazard; not a clean algebraic break of j≥0 story |
+| 16 | Zero/near-zero pooled rows | `_unit` clips | Floor still holds if finite |
+| 17 | NaN/Inf in M or emb | Comparisons fail | Out of finite domain |
+| 18 | Grid **without** 0 (mutant) | F1 OK if λ≥0 | **Val construction breaks**; receipt may not catch if test still OK |
+| 19 | Hardcoded λ=8, residual hurts val | F1 OK | True procedure would pick 0; mutant can break val floor |
+| 20 | Val/test split shift (overfit residual) | F1 OK | Val OK by max; **test mean can be < cosine** — falsifies universal test floor, matches LOCK’s “empirical only” |
+| 21 | Real-KG, λ→0 (docs) | Equality | Ties cosine (F2 OK; efficacy F4 may fail) |
+| 22 | Fixed λ>0 **without** selection | F1 OK | Mean floor **not** guaranteed |
+| 23 | `WeightField.value` (α bilinear + λ log b) | **Different field** — F1 does not apply | Out of scope of additive-j lock |
+| 24 | Per-query min gap < 0 (receipt documents) | F1 still true | **Does not break F2** (mean, not per-query); correctly excluded |
+
+No static counterexample **inside** the declared domain (λ from grid∋0, finite unit-normalized embeddings, `score_additive` as shipped) falsifies F1. No counterexample falsifies F2’s **val** construction. Test-mean failures are possible in the abstract (row 4/20) but are outside the LOCK’s universal claim.
+
+---
+
+### 3. Scope
+
+Asserted beyond F1/F2 in the same receipt/LOCK:
+
+- **F3**: resid ≤ 0 ⇒ W == cosine exactly  
+- **F4**: synthetic dev1 mean-nDCG gain ≥ +0.03  
+- Negative oracles for F1/F3  
+
+Explicit non-claim: per-query nDCG floor.  
+F2 LOCK text’s “held on test empirically (dev1 +0.116, real-KG λ→0)” is a **report**, not a theorem—aligned with receipt only checking one synth seed for `f2_ok`.
+
+---
+
+### 4. Binding
+
+```65:71:receipts/receipt_cosine_floor.py
+LOCK_CHECKS = {
+    "F1_pointwise": "f1_ok",
+    "F2_mean": "f2_ok",
+    "F3_zero_boost_exact": "f3_ok",
+    "F4_prereg_efficacy": "f4_ok",
+    "negative_oracle": ["neg_breaks", "neg3_breaks"],
+}
+```
+
+```170:177:receipts/receipt_cosine_floor.py
+    ok = f1_ok and f2_ok and f3_ok and f4_ok and neg_breaks and neg3_breaks
+    ...
+    return 0 if ok else 1
+```
+
+- `not_guaranteed` correctly omitted from `LOCK_CHECKS` (`not_*` exemption in harness).  
+- Mapped vars are assigned and appear in `ok` → harness binding would **verify**.  
+- Caveat: `f2_ok` gates “test mean ≥ cosine”, **not** “λ selected from grid∋0 on val”; construction is trusted via calling `train_additive_j`, not asserted as a separate boolean.
+
+---
+
+### Bottom line for the parent agent
+
+- **F1**: Sound algebraic lock under j≥0; positive check is expected-tautology of the implementation; non-vacuous via shipped import + signed-j oracle.  
+- **F2**: Sound as **val max-including-0** construction; **not** a universal test guarantee; receipt enforces only empirical test inequality.  
+- **No confirmed break** of the locked statements within budget; residual risks are API λ<0, untested val-selection mechanism, and possible test-mean regressions under distribution shift (out of carefully worded lock).

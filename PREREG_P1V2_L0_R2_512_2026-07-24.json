@@ -1,0 +1,84 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_HSWM_20260719",
+  "branch": "P1v2-typed-verdict-lesson-L0-r2-512",
+  "question": "Q-p1v2-typed-lesson-l0-oracle-actuation",
+  "conjecture": "On the untouched PhantomWiki seed-2 public eligibility cut, at least one valid training-evidence-derived typed lesson changes and improves a later heldout exact answer-set decision under identical retrieval, one physical call per arm, exact deployed-tokenizer input parity, sealed gold, and independently verified contradicted-lesson refusal.",
+  "registration_state": "SERVER_REGISTERED_FROZEN_UNRUN",
+  "registered_before_measurement": true,
+  "measurement_authorized_for_stage": "L0_ORACLE_ACTUATION_ONLY",
+  "scope_boundary": {
+    "claimed_if_passed": "oracle typed-lesson actuation exists on at least one frozen heldout case",
+    "not_claimed": [
+      "learned lesson compilation",
+      "Agent A to Agent B transfer",
+      "learned topology rewiring",
+      "sleep or long-term consolidation",
+      "general intelligence"
+    ]
+  },
+  "procedural_continuation": {
+    "prior_tag": "p1v2-l0-typed-lesson-actuation-20260724",
+    "prior_outcome": "PROCEDURAL_ABORT_NO_SCIENTIFIC_JUDGMENT",
+    "prior_abort_receipt_sha256": "ed32ed254e3562da0ec293ffb3bddea3cb544aa69d024d31ab20e486e6e2ba2d",
+    "registered_change_only": "model.max_output_tokens 256 -> 512",
+    "refreeze_receipt_sha256": "6b42acd3bd3df7481b1b85f6b8ad86bd3a4f110db7583fe7ac9285be4d47e7f6",
+    "all_other_budget_fields_unchanged": true
+  },
+  "l0_server_prediction": {
+    "tag": "p1v2-l0-typed-lesson-actuation-512-r2-20260724",
+    "metric": "typed_actuation_case_count",
+    "baseline": 0,
+    "direction": ">",
+    "noise_band": 0,
+    "credence": 0.3,
+    "closes_question": "Q-p1v2-typed-lesson-l0-oracle-actuation",
+    "prediction_receipt_sha256": "b5f360ada0fbadbd0d224cfbe870742ac912bd1df7df2b2007e3c5023dd291d0"
+  },
+  "module_sha256": {
+    "hswm_weight_snapshot.py": "53a2e1cea7c57d7b7d3b13321e560ef25581b299ff443dcc80791f777bce24f1",
+    "p1_llm_answerer.py": "69b392ba4e833cca600e54950a90bd8b49cd093fba9e9b45ef664f43a63b7335",
+    "p1v2_l0_harness.py": "77c7ea65f92275a5917d8d0657e71c1251d9ca35b9c402600d70d6a346aeb0d9",
+    "p1v2_l0_measure.py": "161a071620c6da4b4a23e8925f2e3ce31f8b5768501d2cd87386f3c9bc29bacd",
+    "p1v2_l0_preflight.py": "89f645e88625ddf7d8c06f2f0ac6448dc7b0b378f1f910f7f2956566ab3c6f40",
+    "p1v2_l0_prepare.py": "32f86a375725a3ed0704075089d764c82dcad1dcbea5b961263e52b142fb1f0f",
+    "p1v2_llm_answerer.py": "c18463d1d3752b2a81d9cfcc383ab7a9c8ca15e7cf24eb60fabbdfba122d8244",
+    "p1v2_prompt_parity.py": "d2d1184e06f2ac1b01502347cdc5276bee96db352c49c271a6086c53948463d0",
+    "p1v2_tokenizer_adapter.py": "03ae29db84678ef507b6dc6f4e9da1271449db800baadfd5f5817845745031d5",
+    "p1v2_type6_environment.py": "767bdefd71c17b189080eeec0df8eff1ac3ce684fbb84c987ff6412329eb20ad",
+    "p1v2_typed_lesson.py": "61a506b1181ccb15a7e9e15477ad4cc98b4f1e058688720e1d617866e1652f24"
+  },
+  "frozen_l0_locks": {
+    "git_commit": "e53b73844fb8893f4e0c224c5dc0fb6443a9ecc9",
+    "public_manifest_sha256": "2ff30b41998846f9dcb98f775e9e5515f0e26b024aa2f90b303ee94acaa11df5",
+    "public_manifest_file_sha256": "6104e8c27503f1dfafbb64c339f252d6c38734f6b5d94b1cfa15f31f93559307",
+    "budget_manifest_sha256": "496f65bf53fbfd11f12f977b78c55d33af6a71be7cd75721acd7ffb0ef462001",
+    "budget_manifest_file_sha256": "5d09dcd951052abd4deadc61886b49c29b0f5f1e997018ac6cbfdd6f32efbe85",
+    "deployment_file_sha256": "b8a451279cf835b2ba16902c489f4f13413901a89b0b885bf39ab82dba5bba19",
+    "prediction_receipt_file_sha256": "1696b85f45140c4e549bf2c712a329fa5a0f545aa40d5f42f01334b5edfeef31",
+    "judge_script_sha256": "a2b546bdfdfeac76f8fc732c720b03d6a84270785101621851d38f9c0fff81f3",
+    "judge_fixture_manifest_file_sha256": "5454f51222a769384e127e3217f52cac03d2c60f74add62fee634db111eda675",
+    "contradiction_refusal_file_sha256": "cdb2c8236bac10d8d2d93b41a3fdff1ba12700daa28ffc4ca361d7ba78d24456",
+    "eligible_case_count": 6,
+    "physical_model_call_budget": 24,
+    "max_output_tokens": 512
+  },
+  "equal_compute_lock": {
+    "calls": "one physical model call per arm per case; 24 total",
+    "input_tokens": "exact per-case deployed-tokenizer parity",
+    "retrieval": "same retrieved documents and order in every arm",
+    "model": "same frozen model, revision, temperature, seed, output cap, and stop policy in every arm",
+    "gold": "heldout sealed gold is unavailable until all four answers for a case are recorded"
+  },
+  "judge_lock": {
+    "measurement_artifact": "observations and provenance only; exact scientific verdict key forbidden",
+    "judge": "separate pure deterministic p1v2_l0_judge.py",
+    "contradiction_refusal_receipt_required": true
+  },
+  "kill_conditions": [
+    "zero typed-actuation cases",
+    "any call, token, retrieval, model, split, or gold-opening parity violation",
+    "injected contradicted lesson is accepted",
+    "measurement artifact emits a scientific verdict"
+  ]
+}

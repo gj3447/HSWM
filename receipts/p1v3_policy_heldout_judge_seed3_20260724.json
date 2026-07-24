@@ -1,0 +1,34 @@
+{
+  "baseline": 0,
+  "budget_manifest_sha256": "3bc69aa171459b9b5ec88cdf945b33449d49c30f45f7c634c231963b20c9cc83",
+  "direction": "higher",
+  "evidence_sha256": "c8551aa92622b300c07e3444d205efc7389f8db55cd66f346c0ea765af23eb07",
+  "gate_checks": {
+    "case_cut_exact": true,
+    "exact_prompt_token_parity": true,
+    "gold_boundary_preserved": true,
+    "measurement_did_not_self_judge": true,
+    "physical_call_budget_exact": true,
+    "typed_improvement_threshold_met": true
+  },
+  "judge_receipt_sha256": "956b93ece30288bfb9cb0876968dc433b57da7b4e8803f6eb7989f03c8792fd6",
+  "judge_script_sha256": "3390d0da21adc7f94830c4a130c5378e3209f7e9c9a37ea0b73923d0d91dfa11",
+  "judge_type": "deterministic_non_llm",
+  "metrics": {
+    "all_four_arms_identical_answer_count": 0,
+    "no_memory_exact_set_match_count": 0,
+    "physical_model_calls": 24,
+    "raw_transcript_exact_set_match_count": 1,
+    "removed_exact_set_match_count": 0,
+    "typed_answer_disagreement_count": 6,
+    "typed_exact_set_match_count": 6,
+    "typed_improvement_count_vs_no_memory": 6,
+    "valid_case_count": 6
+  },
+  "minimum_typed_improvements_for_pass": 3,
+  "primary_metric": "typed_improvement_count_vs_no_memory",
+  "schema_version": "hswm-p1v3-policy-heldout-judge/v1",
+  "scientific_verdict_emitted": true,
+  "value": 6,
+  "verdict": "PASS"
+}

@@ -50,12 +50,14 @@ feasibility verdict, failure modes, and decisive P1–P4 experiments are in
 
 That paragraph is a target identity, not a present-tense efficacy claim. The
 repository currently has a mature evidence/compiler/replay substrate and several
-measured field mechanisms, but the causal learning loop is not closed:
+measured field mechanisms. The P1 engineering loop is now closed; its first
+causal efficacy trial is scientifically RED, while its LakatoTree kernel state
+remains unjudged because the historical measurement violated judge separation:
 
 | phase | repository state | completion gate |
 |---|---|---|
 | P0 — identity and metrics | **specified** in the [canonical direction](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md): neural functions are LLM-executed; `H` and `W` form their macro-network | target identity, claim boundary, and learning metric are explicit |
-| P1 — closed weight-learning loop | **preregistered, not implemented or run** ([preregistration](PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json)) | `outcome → eligibility/credit → ΔW → changed next dispatch`, with canary and causal controls |
+| P1 — learning actuation | scalar slow-weight P1 is **scientific RED / LakatoTree unjudged**: 12/12 candidates had fresh Δ=0 and rank replay found 0/456 top-10 changes. The typed-policy fallback then produced a narrow L0 pass in P1v3 and independently replicated in P1v4: typed/no-memory `6/6 vs 2/6`, four improvements, `partial@L2(replay_verified)` | preserve the L0 claim boundary; build real B2.2 Gate-0 packs, then test outcome→used-bond credit→fast candidate→slow `Delta ell` promotion with removal and negative controls |
 | P2 — shared-network transfer | **not implemented or measured** | Agent A writes; frozen Agent B gains on sealed unseen work under equal compute |
 | P3 — structural plasticity | deterministic edits and a shadow gate exist; the first candidate policy was **rejected** | a learned candidate policy passes fresh, target, and canary gates |
 | P4 — federation and sleep | field federation is partial; consolidation/homeostasis remain design work | recover in-field interference and demonstrate stable long-horizon learning |
@@ -72,7 +74,7 @@ intelligence or production claim.
 | [E1 conditional traversal](E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md) | bridge −13.89pp, CI95 [−19.44, −8.33]; factoid −7.27pp | **rejected**; traversal remains deployment-OFF |
 | [shadow-gated topology absorption](SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md) | 0/3 rounds accepted, 100% canary preservation, sealed Δ=0 | **rejected for no target gain**; the gate was safe, the candidate generator was ineffective |
 | cognitive-uplift reranking | pooled F1 Δ=−0.1489 | **rejected** |
-| P1 eligibility/judgment learning | no modules frozen and no outcome inspected | **preregistered-unrun**; this is the next causal experiment |
+| [P1 eligibility/judgment learning](P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md) | loop/runtime implemented; 12 candidates proposed, 0 fresh-gate passes, A1−A2=0, slope −0.0271; rank replay 0/456 top-10 changes | **scientific RED, LakatoTree unjudged**; canary/CAS safety held, typed lesson is the next local-draft falsifier |
 
 The [Phasor Agents prior-art tribunal](TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md)
 also narrows novelty: generic graph three-factor plasticity and sleep-staged
@@ -115,6 +117,22 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
   fail-closed synthetic/attack tests. The real 2Wiki/MuSiQue packs have not been
   built; no learner has been fitted and no B2.2 efficacy claim has been
   registered or made.
+- ✅/⚠️ **P1v3/P1v4 typed-policy actuation:** one training-derived source policy
+  changed a frozen model on fresh heldout questions and replicated on seed-5 R2
+  (`6/6` typed vs `2/6` no memory; four improvements). LakatoTree regenerated
+  the P1v4 metric server-side. This is L0 answer-interface actuation at `n=6`,
+  not a general learned compiler, durable `Delta W`, transfer, or topology.
+- 🧭 **Next-gate harness:** `hswm_next_research_harness.py` verifies P1v4,
+  preserves the B2.1 falsification, and refuses to unlock P1v5 until a real
+  three-pack B2.2 Gate-0 acceptance receipt revalidates. F1 multi-role LLM
+  function composition is the other currently READY lane; the harness emits no
+  prediction or scientific verdict.
+- 🧠 **PROM-9 semantic neural network protocol:** three frozen typed LLM
+  functions (`query compiler -> bond proposer -> answer synthesizer`) now have
+  hashable prompts, port boundaries, matched-budget baselines, role
+  removal/shuffle controls, and a fail-closed stage-packet compiler. It opens
+  Gate-0/F1 preparation only; P1v5 measurement, activation, prediction, and
+  scientific result authority remain closed.
 - ⚠️ **Open-kernel claim boundary:** LakatoTree judged the composition receipt
   chain `partial` and `certified=false`. Learned semantic-weight deltas and
   CONNECT/SEPARATE/SPECIALIZE topology edits, bounded cyclic readout,
@@ -196,7 +214,8 @@ formalization remain in
 | `EFFICACY.md` / `verify_efficacy_claims.py` | human and machine-readable current efficacy ledger |
 | `CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md` | target identity: a hypergraph Semantic Weight Map whose neural functions are executed by LLMs |
 | `HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md` | precise LLM-function contract, runtime semantics, current code mapping, feasibility verdict, risks, and decisive gates |
-| `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` | frozen-before-measurement P1 arms, thresholds, kill/void conditions, and pending module hashes |
+| `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` / `P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md` / `EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` | frozen P1 contract, implementation/result closeout, and historical self-verdict evidence |
+| `RESEARCH_P1_FAILURE_LAKATOTREE_2026-07-24.md` / `P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json` / `PREREG_P1V2_TYPED_VERDICT_LESSON_2026-07-24.json` | LakatoTree-layered failure analysis, frozen retrieval rank replay, and measurement-forbidden typed-lesson draft |
 | `B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md` / `b2_routing_signal.py` | oracle routing-signal audit and deterministic evidence generator |
 | `E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md` / `e1_conditional_traversal.py` | bridge/factoid traversal falsifier and evidence generator |
 | `SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md` / `prom_search_hswm/hswm_shadow_gate.py` | topology-candidate shadow-gate result, reducer, preregistration, and receipt |
@@ -210,6 +229,8 @@ formalization remain in
 | `prom_search_hswm/hswm_bond_readout.py` | pure slow-salience + volatile query-bond potential application and deterministic ranking |
 | `prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md` | refined B2.2 design, action-space diagnostics, full-score-pack requirement, and fresh confirmation boundary |
 | `prom_search_hswm/hswm_b22_gate0_harness.py` / `prom_search_hswm/docs/B22_GATE0_HARNESS_CONTRACT_20260723.md` | full-candidate Gate-0 compiler, replay, locked acceptance, and trusted-ingestion boundary |
+| `hswm_next_research_harness.py` / `HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md` | fail-closed P1v4→B2.2/P1v5→F1/P2→P3→P4 stage graph, current receipt validator, and LakatoTree DRAFT packet |
+| `PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md` / `prom_search_hswm/prom9_semantic_neural_network.v1.json` / `prom_search_hswm/prom9_protocol.py` | typed LLM function network, fast-to-slow bond plasticity, matched controls, and preparation-only PROM-9 contract |
 | `_research/shared_field_hypothesis/task_contracts.v1.json` / `e1_contract.v1.json` | independent task/control roles and engineering-only replay/budget receipt contracts |
 | `prom_search_hswm/docs/PROM_HSWM_REMAINING_ISSUES_RESOLUTION_20260723.md` | evidence-backed dependency graph from implemented gates to G4 preregistration |
 | `H3_B3_RESUME_STATUS_2026-07-20.md` | corrected PRE_RUN boundary, local receipt hashes, and exact next sequence |

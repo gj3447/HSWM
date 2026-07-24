@@ -12,7 +12,7 @@ import hmac
 import json
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Mapping, Protocol, runtime_checkable
+from typing import Any, Callable, Mapping, Protocol, Sequence, runtime_checkable
 
 
 class CapabilityRole(str, Enum):
@@ -208,3 +208,12 @@ class EventStorePort(Protocol):
     def events(self, stream_id: str) -> list[Any]: ...
 
     def append(self, event: Any, request_sha256: str) -> tuple[Any, bool]: ...
+
+    def transact(
+        self,
+        *,
+        stream_id: str,
+        request_id: str,
+        request_sha256: str,
+        decide_event: Callable[[Sequence[Any]], Any],
+    ) -> tuple[Any, bool]: ...

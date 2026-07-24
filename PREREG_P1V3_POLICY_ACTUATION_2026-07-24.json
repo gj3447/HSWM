@@ -1,0 +1,61 @@
+{
+  "claim_boundary": {
+    "excluded": [
+      "learned compiler efficacy over raw transcript",
+      "Agent A to Agent B transfer",
+      "parameter delta-W learning",
+      "topology rewiring",
+      "long-term consolidation"
+    ],
+    "included": "L0 frozen-model answer-interface actuation by a training-derived typed source policy"
+  },
+  "conjecture": "A training-derived typed source policy changes and improves frozen-model heldout answers versus no memory on the fresh seed-3 conflict cut.",
+  "judge": {
+    "independent_from_measurement": true,
+    "script": "p1v3_heldout_judge.py",
+    "script_sha256": "3390d0da21adc7f94830c4a130c5378e3209f7e9c9a37ea0b73923d0d91dfa11",
+    "type": "deterministic_non_llm"
+  },
+  "locks": {
+    "budget_manifest_sha256": "3bc69aa171459b9b5ec88cdf945b33449d49c30f45f7c634c231963b20c9cc83",
+    "calibration_evidence_sha256": "1ab03ebcd2990ad16a9099958befa5d07848fc938a7b93d5da8b55c8f8321bc4",
+    "deployment_file_sha256": "b8a451279cf835b2ba16902c489f4f13413901a89b0b885bf39ab82dba5bba19",
+    "development_sidecar_sha256": "abe10115222b6eb2b6aecad376e227cbebc841bdf28941ae75428c25c3633cf4",
+    "git_commit": "5f0ab6b949dd8fca24770e8c66b3106e0adf3cc4",
+    "heldout_sidecar_sha256": "7b3c333411b94ab02422780fbe5f71e42ccab7c882d78b752b2234b82907e177",
+    "prediction_receipt_file_sha256": "1f0f8bff5933be999a62855c92d980eaeb2fe96ee057436dd7fcbc3e090d26b2",
+    "public_manifest_sha256": "540ddf9319d03939da5bb01626a639811b0d85dc988f48a0fcab61944dd3e5cb"
+  },
+  "module_sha256": {
+    "hswm_weight_snapshot.py": "53a2e1cea7c57d7b7d3b13321e560ef25581b299ff443dcc80791f777bce24f1",
+    "p1_llm_answerer.py": "69b392ba4e833cca600e54950a90bd8b49cd093fba9e9b45ef664f43a63b7335",
+    "p1v2_l0_harness.py": "77c7ea65f92275a5917d8d0657e71c1251d9ca35b9c402600d70d6a346aeb0d9",
+    "p1v2_l0_preflight.py": "89f645e88625ddf7d8c06f2f0ac6448dc7b0b378f1f910f7f2956566ab3c6f40",
+    "p1v2_llm_answerer.py": "c18463d1d3752b2a81d9cfcc383ab7a9c8ca15e7cf24eb60fabbdfba122d8244",
+    "p1v2_prompt_parity.py": "d2d1184e06f2ac1b01502347cdc5276bee96db352c49c271a6086c53948463d0",
+    "p1v2_tokenizer_adapter.py": "03ae29db84678ef507b6dc6f4e9da1271449db800baadfd5f5817845745031d5",
+    "p1v2_typed_lesson.py": "61a506b1181ccb15a7e9e15477ad4cc98b4f1e058688720e1d617866e1652f24",
+    "p1v3_calibration_gate.py": "3f77e4e07c5aa2c445520d2ee9ff08bfa0f3779851b0b0d257904299ce858eec",
+    "p1v3_calibration_preflight.py": "a565188f7519be4074ec0a389e7c46e2729f0c26a24fd46eae42d811432ac777",
+    "p1v3_heldout_judge.py": "3390d0da21adc7f94830c4a130c5378e3209f7e9c9a37ea0b73923d0d91dfa11",
+    "p1v3_heldout_measure.py": "b1901b8ef0f2e9d6ea2b4f270635bb91c89453d6bb3a6577eaa9eab7ee1f8294",
+    "p1v3_heldout_preflight.py": "f70332aaeda34530bb261c52ed1b1083b4561a3a2da355fe73d069c415a1eed4",
+    "p1v3_policy_environment.py": "1d43c073a84939c4888afc124c721984420821a5d4d13f0f5b4e5af52506fd62",
+    "p1v3_prepare.py": "44148dd327282c1af2c871d32524121aa1cfdb29eb43871cdca53ad90f22e6d8"
+  },
+  "prediction": {
+    "baseline": 0,
+    "credence": 0.8,
+    "direction": "higher",
+    "metric": "typed_improvement_count_vs_no_memory",
+    "minimum_typed_improvements_for_pass": 3,
+    "prediction_receipt_sha256": "8be158b1fa3492f4c0726a62e6b38e762e1963914dbe354956d070ae50b5bb50"
+  },
+  "preregistration_sha256": "40758eb554f0b3d1218f053100dc55f3eef2e373df4e8a1751194755662aa76f",
+  "programme": "LakatosTree_HSWM_20260719",
+  "registered_at": "2026-07-24T02:57:01+09:00",
+  "registered_before_measurement": true,
+  "registration_state": "SERVER_REGISTERED_FROZEN_UNRUN",
+  "schema_version": "hswm-p1v3-preregistration/v1",
+  "tag": "p1v3-l0-policy-actuation-seed3-20260724"
+}

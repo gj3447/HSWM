@@ -1,0 +1,343 @@
+{
+  "schema_version": "hswm-prom9-semantic-neural-network/v1",
+  "programme": "PROM-9-HSWM-semantic-neural-network",
+  "status": "DESIGN_LOCKED_NOT_PREREGISTERED",
+  "claim_boundary": "This protocol is executable research design. It does not register a scientific prediction, authorize a sealed measurement, report a result, or establish that HSWM already learns durable weights, transfers between agents, or outperforms matched baselines.",
+  "question": "Can a typed hypergraph of frozen LLM functions use one shared HSWM state for query-conditioned inference and then convert independently measured outcomes into causal, durable semantic-weight changes that improve later frozen-agent behavior under equal compute?",
+  "execution_model": {
+    "node_equation": "y_i = f_i(x_i, R_i(H_t, q); model_i, prompt_i)",
+    "forward_path": "QueryEnvelopeV1 -> QF_QUERY_COMPILER -> QueryPlanV1 -> BF_BOND_PROPOSER -> BondProposalV1 -> frozen HSWM readout -> AF_ANSWER_SYNTHESIZER -> AnswerEnvelopeV1",
+    "learning_path": "external OutcomeEnvelopeV1 -> used-bond EligibilityTraceV1 -> query-conditioned fast BondProposalV1 -> fresh/retention/canary evaluation -> repeated-effect SparseSemanticDeltaV1 -> immutable slow-weight candidate -> approval and CAS activation",
+    "durable_state": [
+      "accepted semantic bond weights",
+      "immutable HSWM snapshot epoch",
+      "typed function registry and port topology",
+      "provenance, evaluation, activation, and removal receipts"
+    ],
+    "non_learning_state": [
+      "one query activation",
+      "one selected route",
+      "an LLM rationale",
+      "Agent A self-rating",
+      "an unpromoted fast potential"
+    ],
+    "evaluator": "An external sealed evaluator owns outcome and promotion evidence; none of the three LLM functions may score its own scientific success."
+  },
+  "stages": [
+    {
+      "id": "G0_REAL_PACKS",
+      "order": 1,
+      "lane": "metrology",
+      "status_gate": "B22_GATE0_REAL_PACKS",
+      "depends_on": [],
+      "purpose": "Build the complete query-by-candidate observable component substrate required before any bond learner can be fitted.",
+      "permitted_actions": [
+        "compile reproduction400 2Wiki pack",
+        "compile full-corpus 2Wiki pack",
+        "compile full-corpus MuSiQue pack",
+        "model-free verification",
+        "three-pack lock and acceptance"
+      ],
+      "forbidden_actions": [
+        "fit or tune a learner",
+        "inspect learner efficacy",
+        "register a positive prediction from Gate-0 output",
+        "commit runtime packs to Git"
+      ],
+      "required_inputs": [
+        "pinned 2Wiki and MuSiQue dataset bytes",
+        "pinned model snapshot",
+        "B2.1 scorepack history",
+        "frozen B2 reproduction reference",
+        "guarded CUDA device with batch size 128"
+      ],
+      "exit_evidence": [
+        "hswm-b22-gate0-acceptance-receipt/v1",
+        "all three role roots reopen and replay",
+        "learner_allowed=true",
+        "scientific_claim_allowed=false"
+      ]
+    },
+    {
+      "id": "F1_TYPED_FUNCTION_NETWORK",
+      "order": 1,
+      "lane": "llm-function-network",
+      "status_gate": "F1_MULTI_LLM_FUNCTION_NETWORK",
+      "depends_on": [],
+      "purpose": "Establish that typed LLM functions and their composition, rather than extra calls or tokens, cause an inference benefit.",
+      "permitted_actions": [
+        "implement the three-role registry and typed ports",
+        "record every call, prompt, response, model, token count, and port hash",
+        "develop equal-budget flat and vector baselines",
+        "run role-removal and role-shuffle development controls"
+      ],
+      "forbidden_actions": [
+        "let a role read test gold or external outcomes",
+        "give the typed arm more calls or tokens",
+        "call three prompts a network without role ablations",
+        "let an LLM role emit the scientific verdict"
+      ],
+      "required_inputs": [
+        "frozen model revision",
+        "three frozen role prompts",
+        "typed port schemas",
+        "equal-budget arm manifest",
+        "query-disjoint development and sealed splits"
+      ],
+      "exit_evidence": [
+        "role registry and deterministic orchestration replay",
+        "exact call parity",
+        "token parity within the registered tolerance",
+        "role-removal and role-shuffle results",
+        "external sealed evaluation receipt"
+      ]
+    },
+    {
+      "id": "P1V5_FAST_TO_SLOW_PLASTICITY",
+      "order": 2,
+      "lane": "semantic-weight-learning",
+      "status_gate": "P1V5_THREE_FACTOR_BOND_PLASTICITY",
+      "depends_on": [
+        "G0_REAL_PACKS"
+      ],
+      "purpose": "Test whether external outcome bound to actually used bonds can cause a query-conditioned fast change and a separately validated durable slow-weight change.",
+      "permitted_actions": [
+        "fit one low-capacity A/B-renaming-invariant fast bond scorer on accepted learner views",
+        "record delayed outcome-bound eligibility",
+        "propose but do not directly activate SparseSemanticDeltaV1",
+        "evaluate fresh, retention, canary, replay, and removal arms"
+      ],
+      "forbidden_actions": [
+        "reuse the rejected A/B/MERGED router search",
+        "use query ID, edge ID embeddings, answer strings, test gold, or hop labels",
+        "jointly change weights, router, and topology",
+        "promote from Agent A self-rating",
+        "tune after sealed outcomes are opened"
+      ],
+      "required_inputs": [
+        "validated Gate-0 acceptance receipt",
+        "accepted detached feature views",
+        "frozen split and model manifests",
+        "server-registered prediction receipt before sealed measurement",
+        "independent evaluator identity"
+      ],
+      "exit_evidence": [
+        "fast-only causal result",
+        "slow-promotion causal result",
+        "removal erases the slow-promotion gain",
+        "retention and canary gates pass",
+        "random-credit, shuffled-eligibility, static-update, and no-promotion controls do not explain the effect"
+      ]
+    },
+    {
+      "id": "P2_FROZEN_AGENT_TRANSFER",
+      "order": 3,
+      "lane": "shared-network-transfer",
+      "status_gate": "P2_AGENT_A_TO_FROZEN_B_TRANSFER",
+      "depends_on": [
+        "F1_TYPED_FUNCTION_NETWORK",
+        "P1V5_FAST_TO_SLOW_PLASTICITY"
+      ],
+      "purpose": "Test whether Agent A can change shared HSWM state and thereby improve a frozen Agent B on unseen work without transcript leakage or parameter updates.",
+      "permitted_actions": [
+        "write only through the validated HSWM mutation path",
+        "freeze Agent B model, prompt, tools, readout, and budget",
+        "hide Agent A transcript",
+        "compare removal, flat memory, vector memory, and transcript-only arms"
+      ],
+      "forbidden_actions": [
+        "exact-query cache hits",
+        "Agent B parameter updates",
+        "Agent A transcript visibility in the transfer arm",
+        "topology mutation before transfer causality is established"
+      ],
+      "required_inputs": [
+        "accepted F1 function registry",
+        "accepted P1v5 slow-weight snapshot",
+        "fresh component-disjoint transfer split",
+        "equal-budget baseline manifest",
+        "server-registered prediction receipt"
+      ],
+      "exit_evidence": [
+        "frozen Agent B fresh unseen gain",
+        "causal rewrite removal erases the gain",
+        "no transcript or exact-cache leakage",
+        "flat and vector memory matched-budget comparison",
+        "server-side replay"
+      ]
+    }
+  ],
+  "llm_functions": [
+    {
+      "id": "QF_QUERY_COMPILER",
+      "role": "Compile a user query into typed evidence requirements; never answer the query.",
+      "model_policy": "Frozen model revision shared across every experimental arm unless a preregistered model-ablation says otherwise.",
+      "input_type": "QueryEnvelopeV1",
+      "output_type": "QueryPlanV1",
+      "reads": [
+        "request_id",
+        "query_text",
+        "allowed evidence types",
+        "budget envelope"
+      ],
+      "writes": [
+        "request_id",
+        "objectives",
+        "required evidence types",
+        "constraints",
+        "abstain"
+      ],
+      "prompt": "You are QF_QUERY_COMPILER, a typed function in HSWM. Convert the QueryEnvelopeV1 into one JSON QueryPlanV1 object. Decompose only what is required to answer, name evidence types rather than answer strings, preserve request_id, and respect the supplied budget. Do not answer the user, select evidence, modify HSWM, predict experiment success, issue a scientific verdict, or inspect outcome labels. If the request is underspecified or unsafe, set abstain=true and state the missing constraint. Output JSON only with exactly: request_id, objectives, required_evidence_types, constraints, abstain.",
+      "abstention": "abstain=true when evidence requirements cannot be formed without inventing facts or exceeding the budget.",
+      "forbidden": [
+        "answer text",
+        "candidate ranking",
+        "outcome labels",
+        "scientific verdict"
+      ]
+    },
+    {
+      "id": "BF_BOND_PROPOSER",
+      "role": "Map a typed query plan and observable candidate components to a bounded query-conditioned bond potential; never see gold outcomes.",
+      "model_policy": "Frozen model revision; output is a volatile proposal and cannot alter slow weights.",
+      "input_type": "BondScoringEnvelopeV1",
+      "output_type": "BondProposalV1",
+      "reads": [
+        "request_id",
+        "QueryPlanV1",
+        "opaque candidate IDs",
+        "observable score, provenance, and structural components",
+        "candidate budget"
+      ],
+      "writes": [
+        "request_id",
+        "ordered candidate IDs",
+        "non-positive bond potentials",
+        "evidence references",
+        "abstain"
+      ],
+      "prompt": "You are BF_BOND_PROPOSER, a typed function in HSWM. Given one QueryPlanV1 and an opaque fixed candidate table, return one JSON BondProposalV1. Rank only supplied candidate IDs and assign each selected candidate a finite potential <= 0, where 0 is least suppressed. Use only supplied observable score, provenance, and structural components. Do not use answer strings, query IDs as features, edge-ID embeddings, hop labels, gold labels, private entity surfaces, prior test outcomes, or your own confidence as promotion authority. Do not answer the query, mutate slow HSWM state, or issue a scientific verdict. Output JSON only with exactly: request_id, ordered_bond_ids, bond_potentials, evidence_refs, abstain.",
+      "abstention": "abstain=true and emit no potentials when the observable components do not support a stable distinction.",
+      "forbidden": [
+        "gold or outcome access",
+        "direct slow-weight mutation",
+        "answer text",
+        "promotion verdict"
+      ]
+    },
+    {
+      "id": "AF_ANSWER_SYNTHESIZER",
+      "role": "Produce an evidence-bound answer from the frozen selected payload; never select new bonds or judge the experiment.",
+      "model_policy": "Frozen model revision with the same answer budget in every arm.",
+      "input_type": "AnswerContextV1",
+      "output_type": "AnswerEnvelopeV1",
+      "reads": [
+        "request_id",
+        "query_text",
+        "QueryPlanV1",
+        "selected evidence payloads",
+        "evidence IDs"
+      ],
+      "writes": [
+        "request_id",
+        "answer",
+        "supporting evidence IDs",
+        "uncertainty",
+        "abstain"
+      ],
+      "prompt": "You are AF_ANSWER_SYNTHESIZER, a typed function in HSWM. Answer only from the selected evidence in AnswerContextV1. Return one JSON AnswerEnvelopeV1 and cite only supplied evidence IDs. Do not retrieve additional material, rerank candidates, alter HSWM, infer hidden outcome labels, or issue a scientific verdict. If the evidence is insufficient or conflicting, set abstain=true and describe the uncertainty without inventing support. Output JSON only with exactly: request_id, answer, supporting_evidence_ids, uncertainty, abstain.",
+      "abstention": "abstain=true when selected evidence cannot support the answer.",
+      "forbidden": [
+        "new retrieval",
+        "bond mutation",
+        "unsupported answer",
+        "scientific verdict"
+      ]
+    }
+  ],
+  "arm_matrix": {
+    "F1": [
+      "typed_hswm_three_function_network",
+      "flat_single_llm_three_call_workflow",
+      "vector_memory_three_call_workflow",
+      "typed_network_role_removed_schema_preserving_null",
+      "typed_network_with_role_instructions_shuffled_but_ports_preserved"
+    ],
+    "P1V5": [
+      "frozen_merged_neutral",
+      "query_conditioned_fast_bond_only",
+      "fast_then_validated_slow_promotion",
+      "static_global_exact_answer_update",
+      "random_credit",
+      "shuffled_eligibility",
+      "no_promotion",
+      "slow_promotion_then_causal_removal",
+      "equal_budget_flat_reranker",
+      "equal_budget_vector_memory"
+    ],
+    "P2": [
+      "frozen_agent_b_no_agent_a_information",
+      "agent_a_transcript_only",
+      "flat_memory_write",
+      "vector_memory_write",
+      "accepted_hswm_slow_weight_write",
+      "accepted_hswm_write_then_causal_removal"
+    ]
+  },
+  "budget_contract": {
+    "llm_calls_per_item": 3,
+    "call_parity": "Every F1 arm, including removal and shuffle controls, executes exactly three physical model calls; a removed role is replaced by a schema-preserving null call whose usage is still charged.",
+    "token_parity": "Register one total input-plus-output token cap before measurement. Pad or truncate non-semantic control context without exposing labels; report both allowed and consumed tokens per item and arm.",
+    "retrieval_parity": "All arms receive the same candidate universe and candidate-count budget.",
+    "state_parity": "Mutable bytes, persistent items, and serialized-state capacity are inventoried and capped for shared, flat, and vector arms.",
+    "cost_ledger": "Record model revision, prompt hash, input/output hash, tokens, latency, retries, cache status, candidate count, and persistent bytes for every call."
+  },
+  "evaluation": {
+    "split_contract": "Use query- and gold-component-disjoint development, validation, and sealed test splits. P1v5 confirmation uses a fresh unopened regime after model, features, lambda, sparsity, abstention, and promotion rules are frozen.",
+    "primary_metrics": {
+      "F1": "paired sealed task success of typed network minus flat single-LLM workflow under equal calls and tokens",
+      "P1V5": "component-bootstrap 95% lower bound of fresh recall@10 delta after validated slow promotion versus frozen MERGED",
+      "P2": "paired fresh unseen frozen-Agent-B task success after Agent-A HSWM write minus no-A-information baseline"
+    },
+    "promotion_gates": [
+      "fresh overall recall@10 component-bootstrap 95% lower bound > 0",
+      "minimum dataset or regime delta > +0.02",
+      "cross-field B2 gain retention >= -0.02",
+      "in-field or no-bridge retention >= -0.02",
+      "zero shuffled-control joint passes",
+      "exact replay and equal-budget checks pass",
+      "causal removal erases the claimed durable effect",
+      "independent evaluator and activation receipt agree"
+    ],
+    "reporting": "Report every arm, seed, regime, exclusion, abstention, retry, token, cost, and failed gate. No aggregate success may hide a failed retention or control gate."
+  },
+  "conclusion_rules": [
+    "INVALID: any preregistration, hash, split, leakage, exact-replay, evaluator-independence, or equal-budget contract fails.",
+    "F1_SUPPORTED_NARROW: the typed network beats the flat and vector matched-budget arms, while at least one role-removal and role-shuffle control loses the effect, on the registered sealed scope.",
+    "FAST_ONLY: query-conditioned fast bonds pass but slow promotion or removal causality fails; retain attention only and do not claim durable semantic-weight learning.",
+    "P1V5_SUPPORTED_NARROW: all fresh, minimum-delta, retention, negative-control, replay, slow-promotion, and removal gates pass.",
+    "P2_SUPPORTED_NARROW: frozen Agent B improves on fresh unseen work only through the accepted HSWM write, with transcript hidden, no parameter update, no exact-cache hit, and removal erasing the gain.",
+    "REJECTED_OR_NARROWED: every valid result not satisfying the relevant support rule; do not retune the sealed run."
+  ],
+  "kill_conditions": [
+    "Gate-0 full packs remove the previously observed oracle room.",
+    "The learned fast bond scorer cannot produce positive confidence intervals on both development datasets.",
+    "Private-surface removal erases the apparent benefit.",
+    "Slow distillation violates retention or its removal does not erase the effect.",
+    "Flat or vector memory matches or exceeds HSWM under equal compute and capacity.",
+    "Role ablations do not reduce F1 performance, indicating a multi-prompt workflow rather than function topology.",
+    "Agent B requires Agent A transcript, a parameter update, or an exact-query cache hit.",
+    "Three diversified candidates fail the preregistered vector gate; terminate the branch as SATURATED rather than tuning indefinitely."
+  ],
+  "lakatotree": {
+    "tree": "LakatosTree_HSWM_20260719",
+    "parent": "hswm-next-gate-harness-20260724",
+    "registration_mode": "ENGINEERING_PROTOCOL_ONLY",
+    "prediction_registration_required_before": [
+      "P1V5 sealed measurement",
+      "P2 sealed measurement"
+    ],
+    "scientific_prediction_registered_by_this_protocol": false,
+    "scientific_result_submitted_by_this_protocol": false
+  }
+}

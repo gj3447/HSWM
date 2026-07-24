@@ -1,0 +1,76 @@
+{
+  "budget": {
+    "budget_manifest_sha256": "dba2d9f469d3a16bd310ab41ef3a5e71130355da148f015e7ef0461d7f642219",
+    "parity": {
+      "case_plans": [
+        {
+          "case_id": "fixture:0"
+        }
+      ]
+    },
+    "schema_version": "hswm-p1v4-replay-fixture-budget/v1",
+    "score_contract": {
+      "baseline": 0,
+      "direction": "higher",
+      "minimum_typed_improvements_for_pass": 1,
+      "primary_metric": "typed_improvement_count_vs_no_memory",
+      "required_valid_case_count": 1
+    }
+  },
+  "bundle_sha256": "42fe6e1dad2737fa089a168ef5f9d256dc91486bbd9c1d292472652eec7e056c",
+  "evidence": {
+    "budget_manifest_sha256": "dba2d9f469d3a16bd310ab41ef3a5e71130355da148f015e7ef0461d7f642219",
+    "evidence_sha256": "7c14db02667403945587bb358ded0d694595c1eaf53a3cfc2a8ea74bfeec9c25",
+    "observations": [
+      {
+        "arms": {
+          "T1_typed_lesson": {
+            "answers_sha256": "e5df54e5169298b72395a99bf99a7573a9ff28f4945ac41d2052c8fdc2f94624",
+            "logical_call_count": 1,
+            "set_match": 1,
+            "user_prompt_tokens": 32
+          },
+          "T2_raw_transcript": {
+            "answers_sha256": "ec494036f6dbed2d9137f5dd367e5273b53ca0d90620070d473d65a968c211a7",
+            "logical_call_count": 1,
+            "set_match": 0,
+            "user_prompt_tokens": 32
+          },
+          "T3_no_memory": {
+            "answers_sha256": "94f0a0a554bd0b77905eadabf5257d78d41279f8177e9c559f0f932d6f5988eb",
+            "logical_call_count": 1,
+            "set_match": 0,
+            "user_prompt_tokens": 32
+          },
+          "T4_shuffled_or_removed": {
+            "answers_sha256": "79abfbf4060afa7ca6c6de990a913607ba6b14a414dea623d6c405c09bdd0273",
+            "logical_call_count": 1,
+            "set_match": 0,
+            "user_prompt_tokens": 32
+          }
+        },
+        "budget": {
+          "logical_model_calls": 4,
+          "token_parity": true
+        },
+        "case_id": "fixture:0",
+        "gold_boundary": {
+          "gold_opened_only_after_all_arm_answers": true,
+          "gold_sent_to_answer_port": false,
+          "gold_values_published": false
+        },
+        "observation_sha256": "5447e787e076384884e0ffd9b041746aa201e22821a77199b92ded2d52acdad9",
+        "schema_version": "hswm-p1v4-replay-fixture-observation/v1"
+      }
+    ],
+    "schema_version": "hswm-p1v4-replay-fixture-evidence/v1"
+  },
+  "schema_version": "hswm-p1v4-lakatotree-replay-bundle/v1",
+  "scorer_contract": {
+    "budget_manifest_sha256": "dba2d9f469d3a16bd310ab41ef3a5e71130355da148f015e7ef0461d7f642219",
+    "contract_id": "p1v3-policy-heldout-judge/v1",
+    "evidence_sha256": "7c14db02667403945587bb358ded0d694595c1eaf53a3cfc2a8ea74bfeec9c25",
+    "primary_metric": "typed_improvement_count_vs_no_memory",
+    "scorer_sha256": "3390d0da21adc7f94830c4a130c5378e3209f7e9c9a37ea0b73923d0d91dfa11"
+  }
+}

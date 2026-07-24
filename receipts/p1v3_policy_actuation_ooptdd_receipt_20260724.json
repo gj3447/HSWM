@@ -1,0 +1,57 @@
+{
+  "schema_version": "symposium-ooptdd-receipt/v1",
+  "template_only": false,
+  "receipt_id": "hswm-p1v3-nonredundant-policy-actuation-v1",
+  "cycle_id": "hswm-p1v3-policy-actuation-slice-20260724",
+  "requirement_group": "P1V3-NONREDUNDANT-POLICY-ACTUATION",
+  "spec": {
+    "path": "_research/p1v3_policy_actuation/ooptdd_requirements.v1.json",
+    "sha256": "5ed35c69ff6d7948f0907353d2f87117b3ef8bf058f2c3fe15e4f4b2dae516c9",
+    "locked_before_execution": true
+  },
+  "producer": {
+    "git_head": "013139ef6ff701e2a307c6741e8192d65943e125",
+    "source_path": "p1v3_ooptdd_receipt.py",
+    "source_symbol": "run_gate",
+    "source_sha256": "4f2d925b8b1737efff94db7576266c36a9c99a48b261cab2f73dc7be1ebc935e",
+    "real_code_path": true
+  },
+  "source_binding": {
+    "environment_path": "p1v3_policy_environment.py",
+    "environment_sha256": "1d43c073a84939c4888afc124c721984420821a5d4d13f0f5b4e5af52506fd62",
+    "calibration_gate_path": "p1v3_calibration_gate.py",
+    "calibration_gate_sha256": "3f77e4e07c5aa2c445520d2ee9ff08bfa0f3779851b0b0d257904299ce858eec"
+  },
+  "correlation": {
+    "cid": "hswm-p1v3-nonredundant-policy-actuation-v1"
+  },
+  "positive": {
+    "command": ".venv/bin/python p1v3_ooptdd_receipt.py --output receipts/p1v3_policy_actuation_positive_20260724.json",
+    "exit_code": 0,
+    "observed_status": "green",
+    "receipt_path": "receipts/p1v3_policy_actuation_positive_20260724.json",
+    "receipt_file_sha256": "42895ab1f30ecfd99ea2c17554f6e42a20549cfc5e7a63885a7304ddb0530d83",
+    "run_receipt_sha256": "c50c995d90167e8c0c991da7922019e6ee265d6d879b018f832a90ba26a65423",
+    "arrived_events": [
+      "public_packet_hides_gold_and_trust_semantics",
+      "balanced_content_addressed_conflict_packet_verified",
+      "inverted_policy_lesson_rejected",
+      "development_headroom_gate_passed"
+    ]
+  },
+  "negative_oracle": {
+    "technique": "fault_injection",
+    "injection": "Replace the development observations with the exact P1v2 ceiling pattern: all four arms correct and answer-identical.",
+    "command": ".venv/bin/python p1v3_ooptdd_receipt.py --inject-ceiling-environment --output receipts/p1v3_policy_actuation_injected_ceiling_20260724.json",
+    "exit_code": 0,
+    "expected_system_outcome": "CALIBRATION_REJECT",
+    "observed_event": "ceiling_environment_rejected",
+    "forbidden_event_absent": "ceiling_environment_authorized",
+    "receipt_path": "receipts/p1v3_policy_actuation_injected_ceiling_20260724.json",
+    "receipt_file_sha256": "603bdfe64c1a1af3ab09efba36c6d7f3868594cf866093611bc53a02541e7124",
+    "run_receipt_sha256": "bf4181bc200b79562dae6775b4453972530766976c248f147c744b9351d441ca",
+    "restored": true
+  },
+  "scientific_claim": "NONE_ENVIRONMENT_ADMISSION_ONLY",
+  "aggregate_receipt_sha256": "de5e051968248321d522f13e9f0053d32835d08a60117eedda3bb823da3c91c8"
+}

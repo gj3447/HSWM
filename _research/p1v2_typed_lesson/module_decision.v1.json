@@ -1,0 +1,65 @@
+{
+  "schema_version": "engine-decision/v1",
+  "name": "p1v2-typed-verdict-lesson-boundary",
+  "verdict": "module",
+  "purpose": "Compile recorded operational verdicts into evidence-bound typed lessons and prepare equal-token four-arm prompts without owning durable or scientific judgment state.",
+  "current_consumers": [
+    "p1v2-l0-actuation-harness"
+  ],
+  "planned_consumers": [
+    "generic-feedback-runtime-domain-adapter",
+    "p2-agent-transfer-harness"
+  ],
+  "rationale": [
+    "The existing generic-feedback-runtime already owns durable replay, role separation, and append authority.",
+    "Typed lesson semantics currently have one executable consumer and no independent scheduling, recovery, or mutable-state authority.",
+    "A pure module keeps model, tokenizer, environment, persistence, and scientific judge behind explicit callers or ports."
+  ],
+  "boundary": {
+    "owns": "Strict typed-lesson compilation, sealed-cut admission, deterministic scope retrieval, exact prompt-token parity verification, and verdict-free L0 observations",
+    "mechanism": "Transform recorded verdict mappings and explicit allow-lists into immutable content-addressed lessons and equal-budget prompt plans",
+    "policy_outside": [
+      "Which LLM produces an operational verdict",
+      "Scientific progress thresholds and LakatoTree judgment",
+      "Dataset generation and split selection",
+      "Lesson promotion and durable publication"
+    ],
+    "non_goals": [
+      "A second feedback engine",
+      "Network or model calls inside the compiler",
+      "Agent transfer",
+      "Topology rewiring",
+      "Sleep or consolidation"
+    ],
+    "state_authority": "The module owns no mutable state; callers or generic-feedback-runtime own recorded inputs and publication"
+  },
+  "contract": "compile_typed_lesson(recorded_operational_verdict_v1, sealed_cut_policy_v1) -> TypedLessonV1 | LessonContractError; retrieve_lessons(query, lessons, top_k) -> LessonSelectionV1; build_prompt_parity_plan(contexts, render, tokenizer_padder_port) -> PromptParityPlanV1 | PromptParityError",
+  "invariants": [
+    "Only frozen training episode and evidence IDs may enter a lesson.",
+    "Heldout identifiers, gold-derived strings, evaluation labels, and future episodes fail closed.",
+    "Identical verdict, policy, query, lessons, tokenizer, and padding inputs produce identical hashes and selections.",
+    "Every arm has the exact same rendered user-prompt token count before model execution.",
+    "Measurement records contain observations and provenance but no scientific verdict field."
+  ],
+  "failure_model": [
+    "Malformed, extra-field, low-confidence, unknown-evidence, future-ID, gold-text, and unknown-supersession inputs raise typed errors before output.",
+    "Tokenizer or padder inability to reach exact parity rejects the plan before any model call.",
+    "Answer receipt identity, call-count, or prompt-token mismatch rejects the observation."
+  ],
+  "verification": [
+    "Golden determinism and content-address tests for compiler, retrieval, and context rendering.",
+    "Injected leakage tests for future episode, heldout task, gold text, extra field, and unknown supersession.",
+    "Four-arm exact-token parity and bad-padder refusal tests.",
+    "L0 fake-answerer test proving gold is absent from every call and measurement evidence contains no verdict."
+  ],
+  "promotion_gates": [
+    "At least two independent runtime consumers require the same mutable lesson lifecycle.",
+    "Lesson publication needs durable single-writer admission, recovery, cancellation, or backpressure not supplied by generic-feedback-runtime.",
+    "A stable migration contract is required across stored lesson schema versions."
+  ],
+  "falsifiers": [
+    "If P1v2 adapters require incompatible lesson semantics, keep separate domain modules rather than promoting a false shared engine.",
+    "If exact token parity cannot be reproduced against the deployed tokenizer, L0 and L1 measurement remain forbidden.",
+    "If an oracle typed lesson cannot change heldout behavior, stop before compiler learning."
+  ]
+}

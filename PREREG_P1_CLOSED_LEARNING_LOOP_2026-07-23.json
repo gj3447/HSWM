@@ -31,6 +31,7 @@
     "credence": 0.35,
     "credence_note": "first ever closed loop on this substrate; the only prior judgment-loop measurement was -0.012 (harmful). credence is deliberately below 0.5."
   },
+  "prediction_receipt_sha256": "9428be55b855c98c34b0c8637a9818b286e88c7ca3ee11dd99d4d9bb81dbdffd",
   "abandon_signal_disclosure": {
     "fired_at_registration": true,
     "server_reason": "예산 5노드 소진, 예측 적중 0 (branch leaf canon-direction-neural-cognitive-entity-20260723)",
@@ -73,15 +74,47 @@
     "seed_k": 3,
     "bootstrap_reps": 2000,
     "boot_seed": 9173,
+    "initial_log_salience": -0.25,
+    "fresh_questions_per_episode": 38,
+    "embedding_model": "all-MiniLM-L6-v2",
+    "answerer_model": "Qwen/Qwen3.6-35B-A3B-FP8",
+    "answerer_revision": "95a723d08a9490559dae23d0cff1d9466213d989",
+    "answerer_temperature": 0,
+    "answerer_max_tokens": 512,
+    "answerer_disable_thinking": true,
+    "a3_shuffle_seed": 9173,
     "universe": "large sparse PhantomWiki (t200, friendship-k 1, question-depth 10), same generation flags as R3"
   },
   "module_sha256": {
-    "status": "PENDING — modules (p1_eligibility_tag, p1_m_commit, p1_loop_harness) do not exist yet. sha256 must be appended at implementation freeze, before any measurement. Any outcome inspected before freeze voids the experiment."
+    "feedback_ports.py": "431a3028f9b1d0da03076ac07e422353368e3bd1de1cfa849cd3a5668c0ddc27",
+    "feedback_runtime.py": "709ae2216583b0b03600197993bedd3e90f2fcde8ee9e20cac2b438f418c60b4",
+    "feedback_store.py": "7db7142cb9f722506c9b8724172aab09028a41e2c30533c3201a5fafb882add9",
+    "bge_m3_embed.py": "3300d2d5cdbd79f61d5520de8453f830e278958c2c02b7823c5566c9e0940801",
+    "hswm_weight_snapshot.py": "53a2e1cea7c57d7b7d3b13321e560ef25581b299ff443dcc80791f777bce24f1",
+    "hswm_weight_store.py": "6facaf249624492c51bf69c18cf144c4f2ce6b48bc466247a4806c12715faa01",
+    "p1_eligibility_tag.py": "acf0db32a9d26047475d2115653eae5981f3e63ce10af3cc6fcc44696091cddf",
+    "p1_weighted_walk.py": "51db4be6653afa2571f9bd7b0ec7b83d22723a2ab3e5a3f181ce82e5f93aaf8d",
+    "p1_m_commit.py": "c575bebd4570ce3a87e24789a90063015a3ac01813b8610e678dbe1e7e5d59e6",
+    "p1_loop_harness.py": "8bb34cc3b321312c0bc17953522edd665ddea5f5c7911f346edf5a351b226dee",
+    "p1_llm_answerer.py": "69b392ba4e833cca600e54950a90bd8b49cd093fba9e9b45ef664f43a63b7335",
+    "p1_phantom_environment.py": "47a50688af4ce092b775112da46b1d96c6ea7cb1dbd393a3d64c1ee79af204ff",
+    "model_deployment_receipt.py": "c1f0b98deb43af4d2c584661fb22aaa2ea55c839183e77a07818e0d431c9d0dc",
+    "prom_search_hswm/hswm_absorption_fsm.py": "23947d16b396f95b7ec14f99e2d11e1a02d8e6ed1c1fe8a22a53085a822b4573",
+    "r1_predicate_alias.py": "037e8f01ea3b8eb6634d08a1c5d9c4488d3d9b8efeb8f0219bf4352c91977d32",
+    "r3_phantom_ingest.py": "9d001369abad6fa857aa4e86a6152b2740fe9f48c50f05820565c97a281acb88",
+    "typed_composition.py": "f353a26af304cdfaa5f7c1e5b477a31c43405c86c5784798b2ee4e77924d4f6b"
   },
   "universe_generation": {
     "tool": "phantom-wiki 1.0.3 (PyPI), SWI-Prolog 10.0.2",
     "flags": "--num-family-trees 200 --friendship-k 1 --num-questions-per-type 30 --question-depth 10 --seed 1 --friendship-seed 1 --article-format json",
     "root": "/Volumes/GM/hswm_lab/phantomwiki_r3"
+  },
+  "preflight_amendment": {
+    "amended_before_measurement": true,
+    "amendment_id": "P1-PREFLIGHT-R2-20260723",
+    "reason": "The frozen R1 preflight found 390 eligible non-aggregation questions with bounded trace gold, while 200 episode plus 200 fresh-gate questions required 400. No arm retrieval, answer, reward, recall, delta, or verdict was computed before refusal.",
+    "change": "fresh_questions_per_episode only: 40 -> 38, yielding 200 episode plus 190 disjoint fresh-gate questions. Episode count, questions per episode, learning rule, arms, thresholds, bootstrap, model, and all outcome criteria remain unchanged.",
+    "refusal_artifact": "P1_PREFLIGHT_REFUSAL_R1_2026-07-23.json"
   },
   "registered_before_measurement": true
 }

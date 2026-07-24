@@ -14,6 +14,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 def test_checked_in_efficacy_snapshot_matches_public_claims() -> None:
     snapshot = efficacy.build_snapshot(REPO_ROOT)
 
+    assert snapshot["schema_version"] == "hswm-efficacy-snapshot/v3"
     assert snapshot["retrieval_substrate"]["status"] == (
         "MEASURED_POSITIVE_WITH_BUDGET_CAVEAT"
     )
@@ -40,6 +41,43 @@ def test_checked_in_efficacy_snapshot_matches_public_claims() -> None:
     assert snapshot["query_time_traversal"]["support_recall_hop_drop"] == {
         "static": 0.2409,
         "selected_traversal": 0.3539,
+    }
+    assert snapshot["p1_closed_macro_weight_loop"] == {
+        "status": "ENGINEERING_COMPLETE_SCIENTIFIC_RED_LAKATOTREE_UNJUDGED",
+        "scientific_domain_status": "CAUSAL_EFFICACY_REJECTED",
+        "lakatotree_kernel_status": "UNJUDGED_PROCEDURAL_BLOCK",
+        "historical_measurement_self_verdict": "FAIL",
+        "a1_minus_a2_mean_paired_recall10": 0.0,
+        "bootstrap95_lower": 0.0,
+        "a1_linear_slope": -0.02708333333333333,
+        "later_episode_mean_recall10": {
+            "A1_tagged_commit": 0.16510416666666666,
+            "A2_no_commit": 0.16510416666666666,
+            "A3_shuffled_M": 0.16510416666666666,
+            "A4_uniform_commit": 0.16510416666666666,
+        },
+        "candidates_staged": 12,
+        "fresh_gate_passes": 0,
+        "activations": 0,
+        "rank_replay": {
+            "candidates": 12,
+            "fresh_query_evaluations": 456,
+            "touched_selected_path_evaluations": 21,
+            "score_change_evaluations": 21,
+            "top10_order_changes": 0,
+            "top10_membership_changes": 0,
+            "max_abs_score_delta": 3.235855457806025e-05,
+            "max_delta_to_boundary_gap": 0.10269710791092374,
+        },
+        "experiment_receipt_id": (
+            "70cf72a18da617a3494b00848f349f0fd96c6dce444639413c21ace41e24f758"
+        ),
+        "boundary": (
+            "The outcome-to-credit-to-candidate loop executed, but no "
+            "candidate changed fresh top-10 retrieval or became active. "
+            "The historical evidence self-wrote FAIL, so the scientific "
+            "RED is not a valid server-owned LakatoTree verdict."
+        ),
     }
     assert snapshot["graded_supersession"][
         "wrong_write_primary_recall_cost_points"
@@ -105,6 +143,10 @@ def test_headline_drift_fails_closed(tmp_path: Path) -> None:
         "semantic_layer_fixture_manifest.json",
         "semantic_layer_routing.py",
         "semantic_2wiki_oracle.py",
+        "EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json",
+        "P1_GATE_DIAGNOSTIC_R2_2026-07-23.json",
+        "P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json",
+        "PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json",
     )
     for name in names:
         (tmp_path / name).write_bytes((REPO_ROOT / name).read_bytes())

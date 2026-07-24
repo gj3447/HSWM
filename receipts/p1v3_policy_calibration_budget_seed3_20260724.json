@@ -1,0 +1,110 @@
+{
+  "budget_manifest_sha256": "3c92c2e34eb7fda1d0625ab883e1ab978d66ffa14092fd0448b3c1a06b291dce",
+  "data": {
+    "calibration_case_count": 3,
+    "development_boundary_receipt_sha256": "3df55a0f8e572c620d6d43c3a746c2e9bb22498b3c8e018da45dca4fe3c6e53c",
+    "development_file_sha256": "0587626c84dad275795b26ab0492c73fbe1d3b800de76155b15dd194c0690fce",
+    "development_sidecar_sha256": "abe10115222b6eb2b6aecad376e227cbebc841bdf28941ae75428c25c3633cf4",
+    "future_heldout_case_count": 6,
+    "future_heldout_case_ids_sha256": "89d51f0bede62b3344051eb2791d7305666ef6e9a2b7830c979777e55a97db77",
+    "gold_open_policy": "after_all_four_answers_for_each_calibration_case",
+    "heldout_outcomes_inspected": false,
+    "heldout_sidecar_loaded": false,
+    "heldout_sidecar_sha256": "7b3c333411b94ab02422780fbe5f71e42ccab7c882d78b752b2234b82907e177",
+    "public_file_sha256": "aec5f66ac65bd22abc05440af976d3e6a2deda1fbf5e3c4710b1d36d512c7f40",
+    "public_manifest_sha256": "540ddf9319d03939da5bb01626a639811b0d85dc988f48a0fcab61944dd3e5cb"
+  },
+  "measurement_state": "FROZEN_UNRUN",
+  "model": {
+    "deployment_file_sha256": "b8a451279cf835b2ba16902c489f4f13413901a89b0b885bf39ab82dba5bba19",
+    "deployment_receipt_sha256": "432b276009d40474478d036d07ce789dac4dc976ee1ba1e54197d24c03c32561",
+    "max_output_tokens": 512,
+    "model_revision": "95a723d08a9490559dae23d0cff1d9466213d989",
+    "seed": 9173,
+    "served_model": "Qwen/Qwen3.6-35B-A3B-FP8",
+    "temperature": 0,
+    "thinking_enabled": false
+  },
+  "module_sha256": {
+    "hswm_weight_snapshot.py": "53a2e1cea7c57d7b7d3b13321e560ef25581b299ff443dcc80791f777bce24f1",
+    "p1_llm_answerer.py": "69b392ba4e833cca600e54950a90bd8b49cd093fba9e9b45ef664f43a63b7335",
+    "p1v2_l0_harness.py": "77c7ea65f92275a5917d8d0657e71c1251d9ca35b9c402600d70d6a346aeb0d9",
+    "p1v2_l0_preflight.py": "89f645e88625ddf7d8c06f2f0ac6448dc7b0b378f1f910f7f2956566ab3c6f40",
+    "p1v2_llm_answerer.py": "c18463d1d3752b2a81d9cfcc383ab7a9c8ca15e7cf24eb60fabbdfba122d8244",
+    "p1v2_prompt_parity.py": "d2d1184e06f2ac1b01502347cdc5276bee96db352c49c271a6086c53948463d0",
+    "p1v2_tokenizer_adapter.py": "03ae29db84678ef507b6dc6f4e9da1271449db800baadfd5f5817845745031d5",
+    "p1v2_typed_lesson.py": "61a506b1181ccb15a7e9e15477ad4cc98b4f1e058688720e1d617866e1652f24",
+    "p1v3_calibration_gate.py": "3f77e4e07c5aa2c445520d2ee9ff08bfa0f3779851b0b0d257904299ce858eec",
+    "p1v3_calibration_measure.py": "36584e6641a8088c2b7d21edc3dfc41bc8100ba29f6b71410e08dc46a1fe1f0e",
+    "p1v3_calibration_preflight.py": "a565188f7519be4074ec0a389e7c46e2729f0c26a24fd46eae42d811432ac777",
+    "p1v3_policy_environment.py": "1d43c073a84939c4888afc124c721984420821a5d4d13f0f5b4e5af52506fd62",
+    "p1v3_prepare.py": "44148dd327282c1af2c871d32524121aa1cfdb29eb43871cdca53ad90f22e6d8"
+  },
+  "oracle": {
+    "compiler_receipt_sha256": "76706398462304ed3f1f1e580846343bea3ea6d55de1ece317937dcfbe8a3358",
+    "lesson_id": "8b540a02b7a179f3abafe60cd1a259ef0f6c968016b6471c66afc82ec91157c8",
+    "raw_training_transcript_sha256": "81765856bd37802342165d9c5e7c3ce7144248639840588a9ebd563400f0cf22"
+  },
+  "parity": {
+    "case_plans": [
+      {
+        "case_id": "b753e9bd-96ff-47a1-b2c8-d33e33ef6dfa",
+        "document_cut_sha256": "7f5a3441cc670a328be36bc77057ae61b7a188bec6e2c025e571baff285a8d0f",
+        "document_ids": [
+          "policy:56d928976ae92bd2fed2d7249331d818",
+          "policy:e3455dd5949ac806809d9936980d73ea"
+        ],
+        "parity_receipt_sha256": "48b1cf9663f97e72a7cfe4612c041c673cf23a10a51fb62a3dd0e11313844ab2",
+        "prompt_sha256": {
+          "T1_typed_lesson": "c3373c62dbc1a815b4a746540a74684de581e77f18ed59ae1ed5fbfca68ae813",
+          "T2_raw_transcript": "d07f66e47d7b299ba186f259b5dd88b8f092a128537ce88576dbffeae250a9e5",
+          "T3_no_memory": "12ffad3a0a530e57caca7fb068e748245333d68b97bfd26dc18f8ee13fba2daf",
+          "T4_shuffled_or_removed": "12ffad3a0a530e57caca7fb068e748245333d68b97bfd26dc18f8ee13fba2daf"
+        },
+        "public_case_sha256": "a0fefba71a7b8d2df6d775eca123b19dcf62f18ebf0600e1ad19069dbc5faa96",
+        "target_input_tokens_per_arm": 1155
+      },
+      {
+        "case_id": "0c4b80ca-6458-4f51-9181-7c72f22b39e7",
+        "document_cut_sha256": "4361e085da5821ca269a96bf32b49c24086c26e134c413312d111781fc17ae9e",
+        "document_ids": [
+          "policy:6da3547fd850631e2a82b67329e2c7c4",
+          "policy:c794c906778c2a761a3c3a8d7a8b9dbb"
+        ],
+        "parity_receipt_sha256": "3ad44a560adf179f7b80ff927acbe8cc082609c40ae8a4212d603509b070ae0d",
+        "prompt_sha256": {
+          "T1_typed_lesson": "6ed7b4cec5f0853801a03a3d2ff7a198d3769387f610f965971affe20ef8e730",
+          "T2_raw_transcript": "c99234a03f0468dea1081feba6789345f7b82177dad16fca8f98a63cf8554fbe",
+          "T3_no_memory": "913574e2aef876c777d535732d9bb53697db3a39f2e8c44167117f9665dc4346",
+          "T4_shuffled_or_removed": "913574e2aef876c777d535732d9bb53697db3a39f2e8c44167117f9665dc4346"
+        },
+        "public_case_sha256": "d48cc89688ec25ff5e356803ae34719cc03eae1cb7e9e30a800a0b4c613ff587",
+        "target_input_tokens_per_arm": 1226
+      },
+      {
+        "case_id": "4d095fe8-e6f1-4b3a-a7ad-42e98c7fe3e1",
+        "document_cut_sha256": "00e03cb249694bbb9bf6fbb954c156491f432c6bd477a5ece2fec48c0b75233c",
+        "document_ids": [
+          "policy:11cbac65eb7ac7ecb92c46874666dab8",
+          "policy:a24e5f091c5a3982768b62b278ef4d20"
+        ],
+        "parity_receipt_sha256": "03c8c720e44db52e7a35307df8c9d8521a8f6b13ef2fe52b785ca24cc96bc33b",
+        "prompt_sha256": {
+          "T1_typed_lesson": "a7748ccb3369352a8bfa3c8cc21d2fc003e87b80cc68a6a9f2732f5810dc055a",
+          "T2_raw_transcript": "dfac966ac6dc539e8a1f47d27db4c449c3c334cc427da8c01f3157583898826d",
+          "T3_no_memory": "b3071a58b1ebb1f36a7cff2b00606a18626a4964e3a63f01e1baa7438da112ee",
+          "T4_shuffled_or_removed": "b3071a58b1ebb1f36a7cff2b00606a18626a4964e3a63f01e1baa7438da112ee"
+        },
+        "public_case_sha256": "d5592e8e03f35e5c36903bbd03e6538c2235994afc6c8efb47a9259fb4c39475",
+        "target_input_tokens_per_arm": 1207
+      }
+    ],
+    "model_calls_per_case_per_arm": 1,
+    "padding_identity": "bf28cf1092ca5d16a6f58acf4c01490a2df365f0bf85f50054388a4726030a82",
+    "physical_model_calls_total": 12,
+    "tokenizer_identity": "1efa3d592d277e51efd2b4c75eac7e29a08c0b5dd6d8d9f4f1dd7a7d7f8455b8"
+  },
+  "schema_version": "hswm-p1v3-policy-calibration-budget/v1",
+  "scientific_judgment_emitted": false,
+  "stage": "P1V3_DEVELOPMENT_CALIBRATION"
+}

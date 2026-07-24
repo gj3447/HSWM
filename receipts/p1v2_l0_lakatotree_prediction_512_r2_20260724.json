@@ -1,0 +1,28 @@
+{
+  "schema_version": "hswm-p1v2-lakatotree-prediction-receipt/v1",
+  "programme": "LakatosTree_HSWM_20260719",
+  "tag": "p1v2-l0-typed-lesson-actuation-512-r2-20260724",
+  "parent_tag": "p1v2-l0-typed-lesson-actuation-20260724",
+  "closes_question": "Q-p1v2-typed-lesson-l0-oracle-actuation",
+  "metric": "typed_actuation_case_count",
+  "baseline": 0,
+  "direction": ">",
+  "noise_band": 0,
+  "credence": 0.3,
+  "script_sha256": "161a071620c6da4b4a23e8925f2e3ce31f8b5768501d2cd87386f3c9bc29bacd",
+  "prediction_receipt_sha256": "b5f360ada0fbadbd0d224cfbe870742ac912bd1df7df2b2007e3c5023dd291d0",
+  "pred_anchor_verified": false,
+  "registration_result": "ok",
+  "procedural_predecessor": {
+    "tag": "p1v2-l0-typed-lesson-actuation-20260724",
+    "outcome": "PROCEDURAL_ABORT_NO_SCIENTIFIC_JUDGMENT",
+    "abort_receipt_sha256": "ed32ed254e3562da0ec293ffb3bddea3cb544aa69d024d31ab20e486e6e2ba2d"
+  },
+  "registered_change": {
+    "field": "model.max_output_tokens",
+    "old": 256,
+    "new": 512,
+    "all_other_budget_fields_unchanged": true,
+    "refreeze_receipt_sha256": "6b42acd3bd3df7481b1b85f6b8ad86bd3a4f110db7583fe7ac9285be4d47e7f6"
+  }
+}

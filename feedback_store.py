@@ -10,7 +10,7 @@ import hmac
 import sqlite3
 import threading
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable, Sequence
 
 from feedback_runtime import (
     EventEnvelope,
@@ -211,6 +211,103 @@ class SQLiteFeedbackStore:
                 fold(
                     [*current, event],
                     stream_id=event.stream_id,
+                    initial_cut_id=self.initial_cut_id,
+                )
+                self._connection.execute(
+                    """
+                    INSERT INTO feedback_events(
+                        stream_id, sequence, request_id, request_sha256, kind,
+                        principal_id, input_cut_id, payload_sha256,
+                        previous_event_sha256, event_sha256, canonical_event
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        event.stream_id,
+                        event.sequence,
+                        event.request_id,
+                        request_sha256,
+                        str(event.kind),
+                        event.principal_id,
+                        event.input_cut_id,
+                        event.payload_sha256,
+                        event.previous_event_sha256,
+                        event.event_sha256,
+                        event.canonical_bytes(),
+                    ),
+                )
+                self._connection.execute("COMMIT")
+                return event, True
+            except BaseException:
+                if self._connection.in_transaction:
+                    self._connection.execute("ROLLBACK")
+                raise
+
+    def transact(
+        self,
+        *,
+        stream_id: str,
+        request_id: str,
+        request_sha256: str,
+        decide_event: Callable[[Sequence[EventEnvelope]], EventEnvelope],
+    ) -> tuple[EventEnvelope, bool]:
+        """Resolve idempotency, decide, and append under one SQLite write lock.
+
+        ``decide_event`` must be pure.  It receives the verified ordered stream
+        after ``BEGIN IMMEDIATE`` has fenced competing writers.  This closes the
+        former lookup/state/append race without moving model or network effects
+        into the transaction.
+        """
+
+        if not stream_id or not request_id:
+            raise IntegrityError("stream_id and request_id must be non-empty")
+        if len(request_sha256) != 64:
+            raise IntegrityError("request_sha256 must be a SHA-256 digest")
+        with self._lock:
+            try:
+                self._connection.execute("BEGIN IMMEDIATE")
+                self._bind_stream(stream_id)
+                current = self._verified_events(stream_id)
+                prior = self._connection.execute(
+                    """
+                    SELECT stream_id, sequence, request_id, request_sha256, kind,
+                           principal_id, input_cut_id, payload_sha256,
+                           previous_event_sha256, event_sha256, canonical_event
+                    FROM feedback_events
+                    WHERE stream_id = ? AND request_id = ?
+                    """,
+                    (stream_id, request_id),
+                ).fetchone()
+                if prior is not None:
+                    stored = self._event_from_row(prior)
+                    if not hmac.compare_digest(
+                        str(prior["request_sha256"]), request_sha256
+                    ):
+                        raise IdempotencyConflict(
+                            "same request_id carries different intent"
+                        )
+                    self._connection.execute("COMMIT")
+                    return stored, False
+
+                event = decide_event(tuple(current))
+                if not isinstance(event, EventEnvelope):
+                    raise IntegrityError("decide_event must return EventEnvelope")
+                event.verify_integrity()
+                if event.stream_id != stream_id or event.request_id != request_id:
+                    raise IntegrityError("decided event identity mismatch")
+                expected_request = derive_request_sha256(
+                    stream_id=event.stream_id,
+                    request_id=event.request_id,
+                    kind=event.kind,
+                    trusted_principal_id=event.principal_id,
+                    input_cut_id=event.input_cut_id,
+                    causal_parent_ids=event.causal_parent_ids,
+                    payload_sha256=event.payload_sha256,
+                )
+                if not hmac.compare_digest(request_sha256, expected_request):
+                    raise IntegrityError("request_sha256 does not match decided event")
+                fold(
+                    [*current, event],
+                    stream_id=stream_id,
                     initial_cut_id=self.initial_cut_id,
                 )
                 self._connection.execute(

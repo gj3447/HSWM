@@ -179,11 +179,11 @@ flowchart LR
 | weight-applied ranking | `rank_bonds(...)` | pure deterministic binding 구현됨 |
 | durable event/replay | `feedback_runtime.py`, `feedback_store.py` | generic chain 구현됨 |
 | role/capability separation | `feedback_ports.py` | proposer/executor/judge/committer/dispatcher 분리 구현됨 |
-| plasticity workflow contract | `prom_search_hswm/fsm/hswm_plasticity_loop.v1.json` | 상세 spec; 실제 W/H engine과 미결합 |
-| LLM function registry | 없음 | **미구현** |
-| typed LLM invocation receipt | `cli_provider_transport.py` 등에 부분 receipt만 있음 | **통합 계약 미구현** |
-| eligibility ledger | P1 prereg에만 있음 | **미구현** |
-| outcome-dependent \(\Delta W\) commit | P1 prereg에만 있음 | **미구현** |
+| plasticity workflow contract | `p1_loop_harness.py` + 기존 absorption FSM | P1 weight-plane에 실제 결합; topology plane은 미결합 |
+| LLM function registry | `p1_llm_answerer.py`의 단일 frozen answer function | **부분 구현**; 다중 role registry 아님 |
+| typed LLM invocation receipt | `RecordedP1Answerer` | P1 answer function에 통합, first-write/cache/gold 차단 구현 |
+| eligibility ledger | `p1_eligibility_tag.py` | **구현·실측**, episode-ID trace와 normalized edge tag |
+| outcome-dependent \(\Delta W\) commit | `p1_m_commit.py`, `hswm_weight_store.py` | candidate/CAS 구현; 실측 candidate 12개 fresh Δ0으로 active commit 0 |
 | learned topology proposal policy | shadow gate와 deterministic 후보만 있음 | **미구현** |
 | homeostasis/collapse monitor | 문헌 흡수 제안만 있음 | **미구현** |
 | Agent-A → frozen Agent-B transfer | 설계만 있음 | **미측정** |
@@ -198,7 +198,7 @@ flowchart LR
 | 질문 | 판정 | 이유 |
 |---|---|---|
 | 이 구조를 소프트웨어로 만들 수 있는가? | **가능, 높은 확신** | weighted actor/dataflow graph, LLM transition, immutable event state는 모두 구현 가능한 부품이며 저장소에 상당한 기반이 이미 있음 |
-| HSWM weight가 다음 행동을 인과적으로 바꿀 수 있는가? | **가능하지만 미증명** | readout에 weight를 결합하는 pure path는 있으나 outcome→credit→commit이 아직 없음 |
+| HSWM weight가 다음 행동을 인과적으로 바꿀 수 있는가? | **코드 경로는 가능, 첫 실측은 실패** | outcome→credit→candidate는 닫혔으나 12/12 fresh Δ0으로 기각되어 active 행동 변화가 없었음 |
 | strong baseline보다 계속 좋아질 수 있는가? | **열린 문제** | 현재 learned router, traversal, cognitive-uplift, topology 후보 실험은 다수 음성 |
 | Agent A의 학습이 Agent B로 전이될 수 있는가? | **이론상 자연스럽지만 미측정** | 공유 \(H,W\)가 transcript가 아닌 공통 상태라면 가능; causal ablation 필요 |
 | 거대한 규모로 안정적으로 확장되는가? | **가장 큰 위험** | LLM call 비용, routing collapse, topology 폭증, stale state, credit dilution 문제가 아직 열림 |
@@ -206,12 +206,12 @@ flowchart LR
 
 ### 종합 판정
 
-**만드는 것은 가능하다. 성공적인 학습 시스템이 되는지는 P1/P2가 결정한다.** 현재 가장
+**만드는 것은 가능하지만 첫 macro-weight 학습 가설은 실패했다.** 현재 가장
 정직한 표현은 다음이다.
 
 > HSWM은 구현 가능한 macro-neural architecture이며, 그 안전한 substrate는 실재한다.
-> 그러나 macro-weight/topology plasticity가 지능 향상과 공유 전이를 만든다는 중심 가설은
-> 아직 실험 전이다.
+> 그러나 이 substrate의 three-factor macro-weight update는 fresh rank를 움직이지 못했다.
+> 공유 전이와 topology/sleep은 아직 실험 전이며, P1 K1에 따라 text-lesson baseline이 선행한다.
 
 ## 7. 성공 가능성을 높이는 설계 선택
 
@@ -250,8 +250,8 @@ graph memory로 수렴할 가능성이 높다.
 
 ### Gate P1 — causal macro-weight loop
 
-기존 [`PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`](PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json)을
-변경하지 않고 그대로 실행한다.
+[`PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`](PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json)을
+R2 premeasurement amendment와 함께 실행 완료했다.
 
 - A1 tagged commit
 - A2 no commit
@@ -259,7 +259,9 @@ graph memory로 수렴할 가능성이 높다.
 - A4 uniform credit
 - 성공: A1−A2 recall@10 > 0.01, bootstrap lower > 0, canary 유지
 
-P1은 HSWM macro-plasticity의 최소 인과 셀이다. 전체 LLM 함수망 효능을 한 번에 주장하지 않는다.
+결과는 A1−A2 `0.0`, bootstrap lower `0.0`, candidate fresh pass `0/12`로 **RED**다.
+상세는 [`P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md`](P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md).
+K1에 따라 동일 slow-weight 경로 재시도 대신 typed text-lesson baseline으로 이동한다.
 
 ### Gate F1 — LLM 함수망 실행 증명
 
@@ -291,13 +293,13 @@ P1 뒤에 별도 preregistration한다.
 
 ## 10. 바로 구현할 최소 파일 경계
 
-P1 결과를 보기 전 거대한 engine을 만들지 않는다. 다음 세 모듈이 먼저다.
+아래 최소 파일은 구현·실측됐다. 실측 효능은 RED이며 topology/transfer engine 확장은 유예한다.
 
 ```text
 p1_eligibility_tag.py
   EligibilityTagV1
   record winning-trace contribution
-  bind episode_id + input_cut_id + edge_id + function invocation receipts
+  bind episode_id + query digest + snapshot cut + edge trace
 
 p1_m_commit.py
   compute M = reward - expanding baseline
@@ -344,15 +346,16 @@ hswm_function_runtime.py
 - shadow candidate + canary + CAS
 - Agent A → B causal transfer
 
-이 여섯 가지를 지키면 **아키텍처 구현은 충분히 가능**하다. 다만 P1에서 \(W\)가 다음 행동을
-바꾸지 못하거나 P2에서 공유 전이가 0이면, “거대 시멘틱 신경망”은 목표 정전으로만 남고
-현재 구현의 방어 가능한 명칭은 evidence-preserving hypergraph memory substrate가 된다.
+이 여섯 가지는 여전히 공학 규율이지만, P1에서 \(W\)가 다음 행동을 바꾸지 못했다. 따라서
+현 시점 “거대 시멘틱 신경망”은 목표 정전이고, 현재 구현의 방어 가능한 명칭은
+**evidence-preserving hypergraph memory substrate with a rejected macro-weight learner**다.
+P2는 typed text-lesson fallback이 먼저 fresh behavior를 움직일 때만 다시 연다.
 
 ## 12. 관련 정본
 
 - [`README.md`](README.md) — 공개 claim boundary와 P0–P4 상태
 - [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) — 사용자 방향 정전
-- [`PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`](PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json) — 다음 causal learning experiment
+- [`P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md`](P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md) — P1 구현·실측 RED closeout
 - [`prom_search_hswm/hswm_open_kernel.py`](prom_search_hswm/hswm_open_kernel.py) — open self-similar structural kernel
 - [`prom_search_hswm/hswm_bond_readout.py`](prom_search_hswm/hswm_bond_readout.py) — slow/fast weight binding
 - [`prom_search_hswm/fsm/hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json) — bounded plasticity workflow contract

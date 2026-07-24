@@ -37,7 +37,7 @@
 - 실행 당일 `/Volumes/GM`(ExFAT)이 30분+ 무응답(ls 타임아웃 4건)이라, universe 5종을 **prereg 잠정 도구/플래그/시드 그대로** 로컬(`~/hswm_lab/phantomwiki_r3`)에 재생성 (prereg amendment 2026-07-24, 측정 전 기록).
 - article 수 일치: 50 / 506 / 5057 / 5057 / 5057.
 - **결정적 증거**: 재생성본의 person_arcs = sparse 25,606 / dense 66,076 / small 348 — prereg에 측정 전 공개된 원본 smoke 수치와 **3/3 정확히 일치** → 로컬 재생성본과 원본(GM)의 동일성 강력 지지.
-- 잔여 followup: GM 복구 시 원본과의 checksum 대조 (큐잉됨).
+- 잔여 followup **해소 (2026-07-25)**: GM 물리 재연결 후 원본(`/Volumes/GM/hswm_lab/phantomwiki_r3`)↔로컬 재생성본 checksum 대조 완료 — `articles.json`+`facts.pl` sha256 **5/5 universe 바이트 동일**, `questions/type*.json` 100파일 **의미론적 전량 일치**(차이는 생성 난수 UUID `id`·`solution_traces` 변수 rename뿐), `timings.csv`는 실행 wall-clock 메타라 대조 제외. 로컬 재생성본 = 원본의 충실한 동형 사본으로 **확정**.
 
 ## 의미
 
@@ -65,3 +65,10 @@
 - eureka 는 `bf_marginal (0.584 ≤ 3.162)` 하나만 남음 — 장부 고장이 아니라 **효과 크기가 실제로 박약**하다는 정직한 판정. 다음 판(BF 강화)은 더 큰 효과의 replication 설계로.
 - 재사용: book-scale/P1 등 무거운 실험도 같은 producer/judge 분리 계약으로 제출하면 replay verified 가 선다.
 - `…-v2` 노드는 정직한 흔적으로 보존 (삭제 없음).
+
+## 부록 — GM 원본↔재생성본 checksum 대조 (2026-07-25, prereg followup 클로저)
+
+- prereg amendment(2026-07-24)의 후속 큐 "GM 복구 시 원본↔재생성본 내용 대조" 실행 — GM은 7/25 자연 회복 (USB hang 해소).
+- 방법: `shasum -a 256` 양쪽 비교 — GM `/Volumes/GM/hswm_lab/phantomwiki_r3/<u>/` vs 로컬 `~/hswm_lab/phantomwiki_r3/<u>/`, 5 universes × `articles.json`+`facts.pl`.
+- 결과: **10/10 MATCH (전부 바이트 동일)**. question ids는 unseeded UUID4라 원본 대조 대상 아님 (prereg 명시) — solution-trace SETS는 7/24에 600/600 검증 완료.
+- 결론: GM 행 당시 "동일 도구/플래그/시드 재생성" 주장이 원본 대조로 확증 — R3 판정(-v3, replay verified)의 데이터 기반은 원본과 무차별. actor: Kimi Code CLI.

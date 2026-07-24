@@ -1,0 +1,130 @@
+{
+  "schema_version": "hswm-prom9-engineering-test-receipt/v1",
+  "receipt_id": "prom9-engineering-tests-macmini-20260724",
+  "recorded_at": "2026-07-24T03:59:27+00:00",
+  "scope": "ENGINEERING_PROTOCOL_AND_FAIL_CLOSED_HARNESS",
+  "tested_git_commit": "9b5b2ed66410d7e056e326dca7eb647410dbe153",
+  "environment": {
+    "host": "lagyeongjun-ui-Macmini.local",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "python": "3.11.15",
+    "pytest": "9.1.1",
+    "repository": "/Users/lagyeongjun/CD/HSWM",
+    "worktree_clean_before_and_after": true
+  },
+  "tested_artifacts": {
+    "prom9_document": {
+      "path": "PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md",
+      "sha256": "4de4a1902a1da0c31459d1564d8644a718df68a4e11212fbff2f0fced52a89e1"
+    },
+    "protocol": {
+      "path": "prom_search_hswm/prom9_semantic_neural_network.v1.json",
+      "sha256": "7d2cb22ebd23b758733fad2a582b5b0a19a923c2fc7268fa8f781925c442eb9a"
+    },
+    "validator": {
+      "path": "prom_search_hswm/prom9_protocol.py",
+      "sha256": "e1a1ef6f496039c550e5021d22d84a5ac8d8104aea943711e0b1334bbb3dfd2d"
+    },
+    "targeted_tests": {
+      "path": "prom_search_hswm/test_prom9_protocol.py",
+      "sha256": "4b057ed9740bfd63187e9b0ab2941ce20725efb8fc57a70d2607446239c3e41d"
+    },
+    "next_gate_status": {
+      "path": "receipts/HSWM_NEXT_GATE_STATUS_20260724.json",
+      "status_receipt_sha256": "aa00b0222731ee2f2cf1acc215446f97ba81950cda72afdd030e4e970c25c27b"
+    }
+  },
+  "commands": [
+    ".venv/bin/python -m prom_search_hswm.prom9_protocol validate",
+    ".venv/bin/python -m pytest -q prom_search_hswm/test_prom9_protocol.py",
+    ".venv/bin/python -m prom_search_hswm.prom9_protocol prepare --status receipts/HSWM_NEXT_GATE_STATUS_20260724.json --stage G0_REAL_PACKS --run-id gate0-engineering-smoke-20260724 --recorded-at 2026-07-24T09:00:00+00:00",
+    ".venv/bin/python -m prom_search_hswm.prom9_protocol prepare --status receipts/HSWM_NEXT_GATE_STATUS_20260724.json --stage F1_TYPED_FUNCTION_NETWORK --run-id f1-engineering-smoke-20260724 --recorded-at 2026-07-24T09:00:00+00:00",
+    ".venv/bin/python -m prom_search_hswm.prom9_protocol prepare --status receipts/HSWM_NEXT_GATE_STATUS_20260724.json --stage P1V5_FAST_TO_SLOW_PLASTICITY --run-id p1v5-refusal-smoke-20260724 --recorded-at 2026-07-24T09:00:00+00:00",
+    ".venv/bin/python -m pytest -q --junitxml=/tmp/hswm-prom9-full-20260724.junit.xml"
+  ],
+  "results": {
+    "protocol_validation": {
+      "status": "PASS",
+      "reported_protocol_sha256": "7d2cb22ebd23b758733fad2a582b5b0a19a923c2fc7268fa8f781925c442eb9a",
+      "scientific_prediction_registered": false
+    },
+    "targeted_suite": {
+      "status": "PASS",
+      "passed": 8,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.03
+    },
+    "full_repository_suite": {
+      "status": "PASS",
+      "passed": 857,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 1,
+      "junit_tests": 858,
+      "duration_seconds": 37.774,
+      "junit_timestamp": "2026-07-24T12:58:37.935879+09:00"
+    },
+    "stage_boundary": {
+      "gate0": {
+        "status_gate_state": "ACTION_REQUIRED",
+        "preparation_allowed": true,
+        "packet_sha256": "197eb9ee905b0ef04884e9b52051e2998799317e169437f6bd49882b18e0c314"
+      },
+      "f1": {
+        "status_gate_state": "READY",
+        "preparation_allowed": true,
+        "typed_function_count": 3,
+        "packet_sha256": "e26af4b40247a94fc77a32779eb3696a2bfffca93f9ae3f45060fe1c794996c6"
+      },
+      "p1v5": {
+        "status_gate_state": "BLOCKED",
+        "exit_code": 1,
+        "refusal": "PROM-9 stage P1V5_FAST_TO_SLOW_PLASTICITY is not runnable: status gate P1V5_THREE_FACTOR_BOND_PLASTICITY is BLOCKED"
+      },
+      "sealed_measurement_allowed": false,
+      "activation_allowed": false,
+      "scientific_prediction_registered": false,
+      "scientific_result_submitted": false
+    }
+  },
+  "raw_evidence": {
+    "canonical_destination": "/opt/lakatotree/.runtime/research-current/RUNTIME_EVIDENCE/PROM9_20260724",
+    "files": [
+      {
+        "name": "hswm-prom9-full-20260724.junit.xml",
+        "sha256": "072407a56da8e198dca9919743b40dacda68300c2b546bc27ab98703c4409da3"
+      },
+      {
+        "name": "hswm-prom9-targeted-20260724.junit.xml",
+        "sha256": "399cfebee2d68df8c593f16c4a329e36b89982ea047dd8fb36fe8fa3575a2a58"
+      },
+      {
+        "name": "prom9-validate-20260724.json",
+        "sha256": "c848c7cb3a0b753e1f85e5dc8be84bf5299f6b813e010f5af47b49c132f62a32"
+      },
+      {
+        "name": "prom9-g0-prepare-20260724.json",
+        "sha256": "6721705207e667327315450a9229c20039c24181dfb6a6993902850b34e48ef6"
+      },
+      {
+        "name": "prom9-f1-prepare-20260724.json",
+        "sha256": "f4e64111f974c9bdf349f9d6a262a79e9e077fd7e6aa39b6e4942d8806ed261e"
+      },
+      {
+        "name": "prom9-p1v5-prepare-20260724.err",
+        "sha256": "2accfe1a3eb03404302b6c19e5d1c7f2348d6f008496060a4eecfcdc9b426a34"
+      }
+    ]
+  },
+  "lakatotree": {
+    "tree": "LakatosTree_HSWM_20260719",
+    "node": "hswm-next-gate-harness-20260724",
+    "registration_surface": "append-only ResearchEvent",
+    "scientific_prediction_registered": false,
+    "scientific_result_submitted": false
+  },
+  "claim_boundary": "PASS establishes PROM-9 protocol validity, typed-role contract closure, current fail-closed stage behavior, and repository regression safety at the tested commit. It is not evidence of F1 task efficacy, real Gate-0 pack acceptance, P1v5 durable semantic-weight learning, Agent-A-to-B transfer, topology learning, or scientific progress.",
+  "receipt_sha256": "6044a9218930d1f049113e4f56fdbead3867e188e0ec96ce8191bcdbe86f4724"
+}

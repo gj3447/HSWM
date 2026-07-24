@@ -20,7 +20,9 @@ mutant while everything else resolves from the repo. No repo files are touched.
 from __future__ import annotations
 
 import ast
+import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -135,40 +137,107 @@ def mutation_score(
 ) -> dict:
     """Run the receipt against single-fault mutants of module_path.
 
-    runner="script": python -P receipt.py  (ooptdd receipts)
-    runner="pytest": python -P -m pytest receipt -q --import-mode=importlib
-                     (harvester vacuity scans; -P keeps cwd off sys.path so the
-                     mutant in PYTHONPATH shadows the original, importlib mode
-                     keeps pytest from prepending the test dir)
+    Mutants are applied IN PLACE (mutmut-style): PYTHONPATH shadowing is
+    unreliable once the test suite lives in a package (pytest inserts the
+    package root at sys.path[0], above any PYTHONPATH entry). Safety:
+      - original bytes are backed up to a temp file BEFORE patching,
+      - a sentinel json in the temp dir records {module, backup, pid},
+      - on entry a stale sentinel from a dead process is self-healed
+        (bytes restored); a live one refuses (concurrent-run protection),
+      - restore happens in finally, so the repo is never left mutated
+        by an exception (only by SIGKILL, which the next run heals).
+
+    runner="script": python receipt.py  |  runner="pytest": python -m pytest …
     Returns {"killed": int, "total": int, "survivors": [...], "errors": [...]}.
     """
     if runner == "pytest":
-        base_cmd = [sys.executable, "-P", "-m", "pytest", receipt_path, "-q",
+        base_cmd = [sys.executable, "-m", "pytest", receipt_path, "-q",
                     "-p", "no:cacheprovider", "--import-mode=importlib"]
     else:
-        base_cmd = [sys.executable, "-P", receipt_path]
+        base_cmd = [sys.executable, receipt_path]
     sites = collect_sites(module_path)[:max_mutants]
-    module_name = os.path.splitext(os.path.basename(module_path))[0]
     killed, survivors, errors = 0, [], []
     for site in sites:
         mutant_src = render_mutant(module_path, site)
         if mutant_src is None:
             continue
-        with tempfile.TemporaryDirectory(prefix="ooptdd_mut_") as td:
-            with open(os.path.join(td, module_name + ".py"), "w", encoding="utf-8") as f:
-                f.write(mutant_src)
-            env = dict(os.environ)
-            env["PYTHONPATH"] = td + os.pathsep + repo_root + os.pathsep + env.get("PYTHONPATH", "")
-            try:
-                proc = subprocess.run(
-                    base_cmd,
-                    cwd=repo_root, env=env,
-                    capture_output=True, timeout=timeout_per_run,
-                )
-                if proc.returncode == 0:
-                    survivors.append(f"{site.site_id} {site.detail}")
-                else:
-                    killed += 1
-            except subprocess.TimeoutExpired:
-                errors.append(f"{site.site_id} timeout")
+        try:
+            with _patched_in_place(module_path, mutant_src):
+                try:
+                    proc = subprocess.run(
+                        base_cmd, cwd=repo_root,
+                        capture_output=True, timeout=timeout_per_run,
+                    )
+                    if proc.returncode == 0:
+                        survivors.append(f"{site.site_id} {site.detail}")
+                    else:
+                        killed += 1
+                except subprocess.TimeoutExpired:
+                    errors.append(f"{site.site_id} timeout")
+        except RuntimeError as e:
+            errors.append(f"{site.site_id} patch-refused: {e}")
     return {"killed": killed, "total": len(sites), "survivors": survivors, "errors": errors}
+
+
+def _sentinel_path(module_path: str) -> str:
+    """Per-module sentinel — parallel workers patch different modules safely."""
+    import hashlib
+    digest = hashlib.sha256(os.path.abspath(module_path).encode()).hexdigest()[:12]
+    return os.path.join(tempfile.gettempdir(), f"ooptdd_sentinel_{digest}.json")
+
+
+def _pid_alive(pid: int) -> bool:
+    try:
+        os.kill(pid, 0)
+        return True
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+
+
+def _heal_stale_sentinel(sentinel: str) -> None:
+    """Restore a module left mutated by a SIGKILLed run; refuse if owner lives."""
+    if not os.path.exists(sentinel):
+        return
+    meta = json.load(open(sentinel))
+    pid = int(meta.get("pid", -1))
+    if pid > 0 and _pid_alive(pid):
+        raise RuntimeError(f"another mutation run is active on this module (pid {pid}) — refusing to patch")
+    shutil.copyfile(meta["backup"], meta["module"])
+    for p in (sentinel, meta["backup"]):
+        try:
+            os.remove(p)
+        except FileNotFoundError:
+            pass
+    print(f"ooptdd.mutate: healed stale mutation on {meta['module']}", file=sys.stderr)
+
+
+class _patched_in_place:
+    """Context manager: back up, overwrite module with mutant, restore in finally."""
+
+    def __init__(self, module_path: str, mutant_src: str) -> None:
+        self.module_path = os.path.abspath(module_path)
+        self.mutant_src = mutant_src
+        self._sentinel = _sentinel_path(module_path)
+
+    def __enter__(self):
+        _heal_stale_sentinel(self._sentinel)
+        self._backup = tempfile.NamedTemporaryFile(
+            prefix="ooptdd_orig_", suffix=".py", delete=False).name
+        shutil.copyfile(self.module_path, self._backup)
+        with open(self._sentinel, "w") as f:
+            json.dump({"module": self.module_path, "backup": self._backup,
+                       "pid": os.getpid()}, f)
+        with open(self.module_path, "w", encoding="utf-8") as f:
+            f.write(self.mutant_src)
+        return self
+
+    def __exit__(self, *exc):
+        shutil.copyfile(self._backup, self.module_path)
+        for p in (self._backup, self._sentinel):
+            try:
+                os.remove(p)
+            except FileNotFoundError:
+                pass
+        return False

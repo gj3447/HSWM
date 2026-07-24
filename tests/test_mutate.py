@@ -72,5 +72,39 @@ def test_negative_oracle_mutants_are_killed(toy_repo):
     assert result["killed"] >= 2, f"vacuous runner: {result}"
 
 
+def test_pytest_runner_kills_in_package_layout(tmp_path):
+    """Regression for the vacuity-map all-zero bug: tests living in a PACKAGE
+    (tests/__init__.py) made pytest insert the repo root at sys.path[0], above
+    PYTHONPATH, so shadowed mutants never loaded. In-place patching must kill.
+    """
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "__init__.py").write_text("")
+    (tmp_path / "toy_mod.py").write_text(TOY_MODULE)
+    (tmp_path / "tests" / "test_toy.py").write_text(textwrap.dedent('''
+        import toy_mod
+        def test_floor():
+            assert toy_mod.floor_ok(1.0, 1.0)
+        def test_clip():
+            assert toy_mod.clip_pos(-2.0) == 0.0
+    '''))
+    result = mutation_score(
+        str(tmp_path / "toy_mod.py"),
+        str(tmp_path / "tests" / "test_toy.py"),
+        repo_root=str(tmp_path),
+        max_mutants=20, timeout_per_run=60, runner="pytest",
+    )
+    assert result["killed"] >= 2, f"package-layout mutants must die: {result}"
+
+
+def test_module_bytes_restored_after_run(toy_repo):
+    """Negative oracle for the restore path: a mutated-then-restored module
+    must be byte-identical, or every later run tests the wrong code."""
+    path = os.path.join(toy_repo, "toy_mod.py")
+    before = open(path, "rb").read()
+    mutation_score(path, os.path.join(toy_repo, "receipt_toy.py"),
+                   repo_root=toy_repo, max_mutants=4, timeout_per_run=60)
+    assert open(path, "rb").read() == before
+
+
 if __name__ == "__main__":
     raise SystemExit(pytest.main([__file__, "-q"]))

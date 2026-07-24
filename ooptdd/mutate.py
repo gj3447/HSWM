@@ -131,11 +131,22 @@ def mutation_score(
     repo_root: str,
     max_mutants: int = 12,
     timeout_per_run: int = 300,
+    runner: str = "script",
 ) -> dict:
     """Run the receipt against single-fault mutants of module_path.
 
+    runner="script": python -P receipt.py  (ooptdd receipts)
+    runner="pytest": python -P -m pytest receipt -q --import-mode=importlib
+                     (harvester vacuity scans; -P keeps cwd off sys.path so the
+                     mutant in PYTHONPATH shadows the original, importlib mode
+                     keeps pytest from prepending the test dir)
     Returns {"killed": int, "total": int, "survivors": [...], "errors": [...]}.
     """
+    if runner == "pytest":
+        base_cmd = [sys.executable, "-P", "-m", "pytest", receipt_path, "-q",
+                    "-p", "no:cacheprovider", "--import-mode=importlib"]
+    else:
+        base_cmd = [sys.executable, "-P", receipt_path]
     sites = collect_sites(module_path)[:max_mutants]
     module_name = os.path.splitext(os.path.basename(module_path))[0]
     killed, survivors, errors = 0, [], []
@@ -149,10 +160,8 @@ def mutation_score(
             env = dict(os.environ)
             env["PYTHONPATH"] = td + os.pathsep + repo_root + os.pathsep + env.get("PYTHONPATH", "")
             try:
-                # -P (3.11+): do NOT prepend the script's dir to sys.path —
-                # otherwise the repo's original module shadows the mutant.
                 proc = subprocess.run(
-                    [sys.executable, "-P", receipt_path],
+                    base_cmd,
                     cwd=repo_root, env=env,
                     capture_output=True, timeout=timeout_per_run,
                 )

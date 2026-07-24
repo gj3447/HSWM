@@ -84,3 +84,62 @@ def test_aboutness_regime_returns_genuine_attribution():
         assert key in v.numbers, key
     for lam in v.numbers["lambda_per_seed"]:
         assert lam in (0.0, 0.1, 0.2, 0.4, 0.8)  # cosine floor: 0 admissible
+
+
+# --- v2.4.4 oracle strengthening (vacuity 0/8: judge-bit corruption and spread
+# damping/clip mutants passed because tests pinned structure, not behavior) ---
+
+def test_judge_bits_binary_and_track_owner(monkeypatch):
+    """Kills cmp@99 (owner==target inversion), binop@101 (1-bits -> 1+bits),
+    cmp@97 Eq->NotEq (hop!=0 forces chain resolution when CHAIN_FOLLOW=0).
+    Boundary twins (cmp@97.74 Lt->LtE, cmp@100 Gt->GtE) are measure-zero
+    equivalents and are expected to survive by design."""
+    import expB_longdoc as eb
+    monkeypatch.setattr(eb, "CHAIN_FOLLOW", 0.0)   # deterministic: target is always t0
+    w = sl.generate("aboutness", seed=2)
+    rng = np.random.default_rng(0)
+    pool = np.arange(60)
+    rates = []
+    for q in range(w.Q):
+        t0 = int(w.query_topic[q])
+        owner = w.unit_owner["chapter"][pool]
+        bits = eb._judge_bits(w, "chapter", q, pool, rng)
+        assert set(np.unique(bits)) <= {0.0, 1.0}, "judge bits must stay binary"
+        rates.append(float((bits == (owner == t0).astype(float)).mean()))
+    rate = float(np.mean(rates))
+    assert abs(rate - eb.JUDGE_ACC) < 0.05, f"judge agreement {rate} != JUDGE_ACC {eb.JUDGE_ACC}"
+
+
+def test_judge_never_resolves_chain_when_follow_rate_zero(monkeypatch):
+    """cmp@97.62 (hop==0 -> hop!=0): with CHAIN_FOLLOW=0 the judge must NEVER
+    resolve the chain for hop>0 queries. Counts actual _chain_target calls."""
+    import expB_longdoc as eb
+    w = sl.generate("aboutness", seed=2)
+    monkeypatch.setattr(eb, "CHAIN_FOLLOW", 0.0)
+    calls = []
+    orig = sl._chain_target
+    monkeypatch.setattr(sl, "_chain_target",
+                        lambda *a: (calls.append(a), orig(*a))[1])
+    rng = np.random.default_rng(0)
+    pool = np.arange(20)
+    hop_qs = [q for q in range(w.Q) if int(w.query_hop[q]) > 0]
+    assert hop_qs, "fixture must contain hop>0 queries"
+    for q in hop_qs[:5]:
+        eb._judge_bits(w, "chapter", q, pool, rng)
+    assert calls == [], "chain resolved despite CHAIN_FOLLOW=0 (injected hop!=0 branch)"
+
+
+def test_spread_scores_nonneg_and_bounded():
+    """Kills clip@108 (negative activations leak), binop@113 Add->Sub
+    ((1-γ) -> (1+γ) amplification) and Mult->Add ((1-γ)*act -> (1-γ)+act).
+    The sentence level (arity 1) exposes amplification that member-mean
+    dilution hides at coarser levels."""
+    import expB_longdoc as eb
+    w = sl.generate("aboutness", seed=4)
+    pool = np.arange(60)
+    for level in ("sentence", "chapter"):
+        for q in range(0, w.Q, 5):
+            s = eb._spread_scores(w, level, q, pool)
+            assert np.isfinite(s).all()
+            assert (s >= -1e-12).all(), f"{level}: spread scores must stay nonnegative"
+            assert (s <= 1.0 + 1e-9).all(), f"{level}: damped spread must stay <= 1"

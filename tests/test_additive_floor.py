@@ -45,3 +45,14 @@ def test_validation_never_selects_a_floor_breaking_lambda_on_aligned():
     # λ=0 must be at least tied-best on aligned data (floor preserved)
     by_lam = diag["val_ndcg_by_lambda"]           # keys are float lambdas
     assert by_lam[0.0] >= max(by_lam.values()) - 1e-4
+
+
+def test_negative_lambda_refused_fail_closed():
+    """v2.7 — λ<0 is outside the boost-only domain (j≥0); refuse, don't clamp."""
+    import pytest
+    ds = synth.generate("semantics", seed=3, deviation=1.0, n_queries=10)
+    pooled = _unit(ds.hg.pooled_emb("mean"))
+    q = ds.query_emb[0]
+    M = np.eye(ds.hg.d)
+    with pytest.raises(ValueError, match="lam must be >= 0"):
+        score_additive(pooled, q, M, lam=-0.5)

@@ -39,12 +39,31 @@ def _softmax(s):
 
 
 def score_additive(pe_pool, q, M, lam):
-    """W = cosine + λ·ReLU(peᵀ M q). pe_pool (K,d), q (d,)."""
+    """W = cosine + λ·ReLU(peᵀ M q). pe_pool (K,d), q (d,).
+
+    λ < 0 is refused (fail-closed): additive-j is a boost-only field (j ≥ 0);
+    a negative λ breaks the floor *by construction* and is never inside the
+    locked domain (LAMBDA_GRID ≥ 0)."""
+    if lam < 0:
+        raise ValueError("score_additive: lam must be >= 0 (boost-only field; j >= 0 required for the floor)")
     peu = _unit(pe_pool)
     qu = q / max(np.linalg.norm(q), 1e-12)
     cos = peu @ qu
     resid = (peu @ M) @ qu
     return cos + lam * np.maximum(0.0, resid)
+
+
+def _train_score_and_gate(peu, qu, M, lam_train):
+    """Training-loop score and dReLU gate — the same locked formulas the
+    receipts bind (F6 canary calls this shipped function, not a copy).
+
+    sc   = cosine + lam_train·ReLU(residual)
+    gate = lam_train where residual > 0 else 0   (dReLU)
+    """
+    resid = (peu @ M) @ qu
+    sc = (peu @ qu) + lam_train * np.maximum(0.0, resid)   # W = cosine + λ·ReLU(residual)
+    gate = (resid > 0).astype(float) * lam_train           # dReLU
+    return sc, gate
 
 
 def _ndcg_for(ds, qs, pooled, M, lam, seed):
@@ -84,12 +103,10 @@ def train_additive_j(ds, train_q, seed=0, epochs=120, lr=0.4, lam_train=1.0,
         for q, pool, goldpos in items:
             peu = pooled[pool]
             qu = ds.query_emb[q] / max(np.linalg.norm(ds.query_emb[q]), 1e-12)
-            resid = (peu @ M) @ qu
-            sc = (peu @ qu) + lam_train * np.maximum(0.0, resid)   # W = cosine + λ·ReLU(residual)
+            sc, gate = _train_score_and_gate(peu, qu, M, lam_train)
             p = _softmax(sc)
             y = np.zeros_like(p)
             y[goldpos] = 1.0 / goldpos.size
-            gate = (resid > 0).astype(float) * lam_train        # dReLU
             coeff = (p - y) * gate
             grad += np.outer(peu.T @ coeff, qu)
         if items:
@@ -98,7 +115,8 @@ def train_additive_j(ds, train_q, seed=0, epochs=120, lr=0.4, lam_train=1.0,
     # select lambda_j on val (grid incl 0 => floor)
     val_scores = {lam: _ndcg_for(ds, val_q, pooled, M, lam, seed) for lam in LAMBDA_GRID}
     best_lam = max(val_scores, key=val_scores.get)
-    return M, best_lam, {"val_ndcg_by_lambda": {k: round(v, 4) for k, v in val_scores.items()}}
+    return M, best_lam, {"val_ndcg_by_lambda": {k: round(v, 4) for k, v in val_scores.items()},
+                         "val_q": [int(q) for q in val_q], "val_frac": val_frac}
 
 
 def run_d1_synthetic(devs=(0.0, 1.0), seeds=(0, 1, 2)):

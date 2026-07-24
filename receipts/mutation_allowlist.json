@@ -2,9 +2,9 @@
   "learned_v3_additive.py": [
     {"kind": "binop", "detail": "Sub->Add", "lineno": 36,
      "reason": "softmax constant-shift invariance: e^{s+c}/sum = softmax(s); stability-only"},
-    {"kind": "binop", "detail": "Mult->Add", "lineno": 67,
+    {"kind": "binop", "detail": "Mult->Add", "lineno": 86,
      "reason": "RNG seed constant change; claims must hold across seeds by design"},
-    {"kind": "compare", "detail": "Gt->GtE", "lineno": 92,
+    {"kind": "compare", "detail": "Gt->GtE", "lineno": 65,
      "reason": "resid>0 vs >=0 gate boundary is measure-zero on continuous residuals"}
   ],
   "traversal.py": [

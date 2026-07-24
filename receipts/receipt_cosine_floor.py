@@ -15,7 +15,17 @@ The TRUE floor (asserted here):
   (F4) PREREGISTERED EFFICACY: synthetic dev1 mean-nDCG gain ≥ +0.03
        (LakatoTree prediction-d1-additive-j-frozen-cosine, prediction ii). Kills
        training-path mutants that hide behind the λ=0 safety hatch (gain → 0).
-NOT guaranteed (documented, not asserted): per-query nDCG ≥ cosine.
+  (F5) VAL-SELECTION MECHANISM (v2.7, grok-4 audit finding): f2_ok trusted
+       train_additive_j's selection; F5 re-derives val scores and requires the
+       selection to be an honest argmax over a grid containing 0, so the actual
+       floor-by-construction (val[λ*] ≥ val[0]) is checked, not assumed.
+  (F6) TRAIN-PATH CANARY (v2.7): the trainer's internal score/gate are the
+       shipped _train_score_and_gate — sc == cos + λ·ReLU(resid) and
+       gate == λ·(resid>0) exactly. Kills the v21 train-path survivors
+       (binop@88.17 sign flip, binop@88.30 mul→add, binop@92.19 dReLU gate).
+NOT guaranteed (documented, not asserted): per-query nDCG ≥ cosine; test mean
+floor under distribution shift (winner's-curse, 4/5 fresh splits negative —
+empirical-on-dev1 only, grok-4 audit + mechanical probes 2026-07-24).
 
 v2.1 mutation audit (2026-07-24, ooptdd/mutate.py, 12 mutants of learned_v3_additive):
   5/12 killed with F1/F2 only → 8/12 after F3+F4 (binop@47 shift killed by F3;
@@ -25,6 +35,9 @@ v2.1 mutation audit (2026-07-24, ooptdd/mutate.py, 12 mutants of learned_v3_addi
   measure-zero boundary). KNOWN SURVIVOR (non-equivalent, open oracle gap):
   binop@92 — dReLU gate corrupted to (resid>0)+lam still learns enough for F4's
   +0.03 gain; catching it needs a gradient-semantics domain oracle, not floors.
+v2.7 (2026-07-24): that oracle is F6 (train score/gate canary on the shipped
+  _train_score_and_gate); F5 closes the grok-4 finding (val-selection trusted,
+  not checked); score_additive refuses λ<0 (fail-closed domain guard).
 
 ooptdd gates: (1) pre-run locked trace (2) real execution (3) positive readback
 (4) source binding (sha) (5) negative oracle (signed-j breaks F1; constant-shift
@@ -41,7 +54,8 @@ import numpy as np
 
 import metrics
 import synth
-from learned_v3_additive import score_additive, train_additive_j
+from learned_v3_additive import (LAMBDA_GRID, _ndcg_for, _train_score_and_gate,
+                                 score_additive, train_additive_j)
 from weight_field import _unit
 
 
@@ -56,8 +70,10 @@ LOCK = {
     "F2_mean": "lam chosen on val (grid incl 0) => val mean-nDCG >= cosine; held on test",
     "F3_zero_boost_exact": "resid <= 0 => W == cosine exactly (boost-only = no-change)",
     "F4_prereg_efficacy": "synthetic dev1 mean-nDCG gain >= +0.03 (prediction-d1-additive-j-frozen-cosine ii)",
+    "F5_val_selection": "selection is honest argmax over a grid containing 0: val[lam*] >= val[0] (grok-audit gap: mechanism was trusted, not checked)",
+    "F6_train_canary": "trainer score/gate ARE the locked formulas: sc == cos + lam*ReLU(resid), gate == lam*(resid>0) (kills binop@88/92 train-path survivors)",
     "not_guaranteed": "per-query nDCG >= cosine (positive j re-ranks; can regress)",
-    "negative_oracle": "signed-j (no ReLU, lam>0) breaks F1; constant-shift (lam + ReLU) breaks F3",
+    "negative_oracle": "signed-j (no ReLU, lam>0) breaks F1; constant-shift (lam + ReLU) breaks F3; rigged selection diag breaks F5",
 }
 
 # v2.2: machine binding from LOCK prose keys to the verdict-gating variables.
@@ -67,8 +83,26 @@ LOCK_CHECKS = {
     "F2_mean": "f2_ok",
     "F3_zero_boost_exact": "f3_ok",
     "F4_prereg_efficacy": "f4_ok",
-    "negative_oracle": ["neg_breaks", "neg3_breaks"],
+    "F5_val_selection": "f5_ok",
+    "F6_train_canary": "f6_ok",
+    "negative_oracle": ["neg_breaks", "neg3_breaks", "neg5_breaks"],
 }
+
+
+def _f5_selection_consistent(lam_sel: float, diag: dict, recomputed: dict) -> bool:
+    """F5 helper — the val-selection mechanism must be an honest argmax over a
+    grid containing 0. Checks: 0 in grid; diag bookkeeping matches an
+    independent recompute (4dp rounding); selected lam ties the recomputed
+    max; val[lam*] >= val[0] (the actual floor-by-construction)."""
+    claimed = {float(k): float(v) for k, v in diag["val_ndcg_by_lambda"].items()}
+    if 0.0 not in claimed:
+        return False
+    if any(abs(recomputed.get(k, -1.0) - v) > 1e-3 for k, v in claimed.items()):
+        return False
+    best = max(recomputed.values())
+    if recomputed.get(lam_sel, -1.0) < best - 1e-12:
+        return False
+    return recomputed[lam_sel] >= recomputed[0.0] - 1e-12
 
 
 def main() -> int:
@@ -82,7 +116,7 @@ def main() -> int:
     perm = rng.permutation(ds.Q)
     train_q, test_q = perm[: int(ds.Q * 0.6)], perm[int(ds.Q * 0.6):]
     pooled = _unit(ds.hg.pooled_emb("mean"))
-    M, lam, _ = train_additive_j(ds, train_q, seed=0)
+    M, lam, diag = train_additive_j(ds, train_q, seed=0)
 
     # (F1) POINTWISE floor — over ALL edges, many queries, on a random M too
     worst_pointwise = np.inf
@@ -127,6 +161,30 @@ def main() -> int:
     f4_ok = gain >= 0.03
     print(f"F4 positive: dev1 mean-nDCG gain = {gain:+.4f} (prereg >= +0.03) -> {'OK' if f4_ok else 'FAIL'}")
 
+    # (F5) VAL-SELECTION MECHANISM — grok-audit gap: f2_ok trusted train_additive_j's
+    # selection; here the mechanism itself is checked against an independent recompute.
+    val_q = [int(q) for q in diag["val_q"]]
+    recomputed = {l: _ndcg_for(ds, val_q, pooled, M, l, 0) for l in LAMBDA_GRID}
+    f5_ok = _f5_selection_consistent(lam, diag, recomputed)
+    print(f"F5 positive: lam*={lam} = argmax(val) over grid∋0, val[lam*]={recomputed[lam]:.4f} >= val[0]={recomputed[0.0]:.4f} -> {'OK' if f5_ok else 'FAIL'}")
+
+    # (F6) TRAIN-PATH CANARY — the trainer's internal score/gate ARE the locked
+    # formulas (calls the shipped _train_score_and_gate, not a copy). Kills the
+    # v21/v2.6 train-path survivors: binop@88.17 (sign flip), binop@88.30 (mul->add),
+    # binop@92.19 (dReLU gate (resid>0)+lam).
+    rng6 = np.random.default_rng(6)
+    d6 = ds.hg.d
+    pe6 = _unit(rng6.normal(size=(25, d6)))
+    q6 = _unit(rng6.normal(size=(1, d6)))[0]
+    M6 = rng6.normal(size=(d6, d6)) / np.sqrt(d6)
+    sc6, gate6 = _train_score_and_gate(pe6, q6, M6, 1.5)
+    resid6 = (pe6 @ M6) @ q6
+    sc6_expect = (pe6 @ q6) + 1.5 * np.maximum(0.0, resid6)
+    gate6_expect = 1.5 * (resid6 > 0).astype(float)
+    f6_ok = bool(np.allclose(sc6, sc6_expect, atol=1e-12)
+                 and np.allclose(gate6, gate6_expect, atol=1e-12))
+    print(f"F6 positive: train sc/gate match locked formulas (atol 1e-12, {(resid6 > 0).sum()}/{len(resid6)} resid>0) -> {'OK' if f6_ok else 'FAIL'}")
+
     # documented (NOT a floor): per-query min
     per_q_min = min(
         metrics.ndcg_at_k(score_additive(pooled[synth.candidate_pool(ds, int(q), 60, 0)], ds.query_emb[int(q)], M, lam),
@@ -167,13 +225,22 @@ def main() -> int:
     neg3_breaks = shift_worst > 1e-12
     print(f"negative-oracle-F3: constant-shift max |W - cosine| on resid<=0 = {shift_worst:.4f} (must be > 1e-12) -> {'breaks' if neg3_breaks else 'FAILED-to-break'}")
 
-    ok = f1_ok and f2_ok and f3_ok and f4_ok and neg_breaks and neg3_breaks
+    # (5c) NEGATIVE ORACLE for F5 — a rigged selection diag must be rejected:
+    # bookkeeping claims lam* scored worst (lies about the recompute).
+    rigged = dict(diag)
+    rigged["val_ndcg_by_lambda"] = {**diag["val_ndcg_by_lambda"], lam: -1.0}
+    neg5_breaks = not _f5_selection_consistent(lam, rigged, recomputed)
+    print(f"negative-oracle-F5: rigged selection diag -> {'rejected' if neg5_breaks else 'ACCEPTED (vacuous)'}")
+
+    ok = f1_ok and f2_ok and f3_ok and f4_ok and f5_ok and f6_ok and neg_breaks and neg3_breaks and neg5_breaks
     print("\nRECEIPT:", "VALID ✅" if ok else "INVALID ❌",
-          f"| F1={f1_ok} F2={f2_ok} F3={f3_ok} F4={f4_ok} negF1={neg_breaks} negF3={neg3_breaks}")
+          f"| F1={f1_ok} F2={f2_ok} F3={f3_ok} F4={f4_ok} F5={f5_ok} F6={f6_ok} negF1={neg_breaks} negF3={neg3_breaks} negF5={neg5_breaks}")
     if not neg_breaks:
         print("  !! negative oracle failed to break F1 -> vacuous", file=sys.stderr)
     if not neg3_breaks:
         print("  !! negative oracle failed to break F3 -> vacuous", file=sys.stderr)
+    if not neg5_breaks:
+        print("  !! negative oracle failed to reject rigged F5 diag -> vacuous", file=sys.stderr)
     return 0 if ok else 1
 
 

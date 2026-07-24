@@ -135,6 +135,8 @@ def main() -> int:
     ap.add_argument("--kind", default="receipt", choices=["receipt", "audit"])
     ap.add_argument("--auditor-id", default=None, help="required when --kind audit")
     ap.add_argument("--target-hash", default=None, help="audited receipt record hash (audit kind)")
+    ap.add_argument("--author", default=os.environ.get("OOPTDD_AUTHOR"),
+                    help="receipt author identity for R1 no-self-audit (default: OOPTDD_AUTHOR env)")
     ap.add_argument("--mutation-target", default=None,
                     help="module to mutate (path) for an automated mutation score (v2.1)")
     ap.add_argument("--max-mutants", type=int, default=12, help="cap on mutants executed")
@@ -161,6 +163,8 @@ def main() -> int:
         "mutation_score": None,
         "attestation": None,
     }
+    if args.author:
+        record["author_id"] = args.author  # R1 (v2.6): no-self-audit is only enforceable with a recorded author
     if args.kind == "audit":
         if not args.auditor_id or not args.target_hash:
             print("audit records require --auditor-id and --target-hash", file=sys.stderr)

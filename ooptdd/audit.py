@@ -18,6 +18,11 @@ P1 said: author == auditor makes VALID meaningless. The audit workflow:
 audited_status(log, receipt_id) promotes only when the latest audit is
 `upheld` AND no receipt record with a different receipt_sha came after it
 (an edit reverts audited -> self-valid: re-audit required).
+
+v2.6: record() delegates to ooptdd.audit_policy.record_audit — R1 no-self-audit
+and R3 calibrated-budget enforcement live there; --mutants/--counterexamples/
+--minutes give the budget a machine-checkable shape (free text still chains,
+flagged policy.budget_check="unverifiable").
 """
 from __future__ import annotations
 
@@ -26,7 +31,8 @@ import json
 import os
 import sys
 
-from ooptdd.receipt_log import append, canonical, file_sha, load, sha256_hex
+from ooptdd.audit_policy import record_audit
+from ooptdd.receipt_log import canonical, file_sha, load, sha256_hex
 from ooptdd.run_receipt import extract_lock
 
 DEFAULT_LOG = os.path.join("receipts", "receipt_log.jsonl")
@@ -54,32 +60,13 @@ def prepare(receipt_path: str, sources: list[str], out_path: str) -> dict:
 
 
 def record(receipt_path: str, log_path: str, auditor_id: str, verdict: str,
-           notes: str, budget: str) -> dict:
-    receipt_id = os.path.splitext(os.path.basename(receipt_path))[0]
-    records = load(log_path)
-    targets = [r for r in records if r.get("receipt_id") == receipt_id and r.get("kind") == "receipt"]
-    if not targets:
-        raise ValueError(f"{log_path}: no receipt record for {receipt_id} — run the harness first")
-    target = targets[-1]
-    rec = append(log_path, {
-        "kind": "audit",
-        "receipt_id": receipt_id,
-        "receipt_sha": file_sha(receipt_path),
-        "source_shas": {},
-        "lock_sha": target["lock_sha"],
-        "lock_binding": target.get("lock_binding", "absent"),
-        "verdict": "VALID" if verdict == "upheld" else "INVALID",
-        "exit_code": 0 if verdict == "upheld" else 1,
-        "status": "audited" if verdict == "upheld" else "self-valid",
-        "auditor_id": auditor_id,
-        "audit_verdict": verdict,
-        "audit_budget": budget,
-        "audit_notes": notes[:500],
-        "target_hash": target["hash"],
-        "mutation_score": None,
-        "attestation": None,
-    })
-    return rec
+           notes: str, budget) -> dict:
+    """Chain an audit record via the enforced policy path (R1/R3, v2.6).
+
+    `budget` is free text (unverifiable, flagged) or a structured dict
+    {mutants, counterexamples, wall_clock_min} (enforced against the
+    calibrated minimum for `upheld` verdicts)."""
+    return record_audit(receipt_path, log_path, auditor_id, verdict, notes, budget)
 
 
 def audited_status(log_path: str, receipt_id: str) -> str:
@@ -109,6 +96,9 @@ def main() -> int:
     r.add_argument("--auditor-id", required=True)
     r.add_argument("--verdict", required=True, choices=["upheld", "broken"])
     r.add_argument("--budget", default="")
+    r.add_argument("--mutants", type=int, default=None)
+    r.add_argument("--counterexamples", type=int, default=None)
+    r.add_argument("--minutes", type=int, default=None, dest="wall_clock_min")
     r.add_argument("--notes", default="")
     s = sub.add_parser("status")
     s.add_argument("receipt")
@@ -120,9 +110,18 @@ def main() -> int:
         print(f"audit bundle -> {args.out} (receipt_sha={bundle['receipt_sha'][:12]}, "
               f"lock_sha={bundle['lock_sha'][:12]})")
     elif args.cmd == "record":
-        rec = record(args.receipt, args.log, args.auditor_id, args.verdict, args.notes, args.budget)
+        structured = {k: v for k, v in (("mutants", args.mutants),
+                                        ("counterexamples", args.counterexamples),
+                                        ("wall_clock_min", args.wall_clock_min)) if v is not None}
+        budget = structured if structured else args.budget
+        try:
+            rec = record(args.receipt, args.log, args.auditor_id, args.verdict, args.notes, budget)
+        except ValueError as e:
+            print(f"audit refused: {e}", file=sys.stderr)
+            return 2
         rid = os.path.splitext(os.path.basename(args.receipt))[0]
         print(f"audit chained: seq={rec['seq']} verdict={rec['audit_verdict']} "
+              f"policy={json.dumps(rec['policy'], ensure_ascii=False)} "
               f"status={audited_status(args.log, rid)}")
     else:
         rid = os.path.splitext(os.path.basename(args.receipt))[0]

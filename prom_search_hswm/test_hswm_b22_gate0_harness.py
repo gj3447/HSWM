@@ -33,6 +33,7 @@ from hswm_b22_gate0_harness import (
     create_acceptance_lock,
     load_feature_view,
     sha256_file,
+    validate_acceptance_receipt,
     verify_pack,
     write_pack,
 )
@@ -687,6 +688,7 @@ def test_acceptance_outputs_cannot_be_written_inside_any_pack(
 
     sibling = tmp_path / "gate0.acceptance.json"
     assert accept_gate0_bundle(lock_path, sibling)["pass"] is True
+    assert validate_acceptance_receipt(sibling)["learner_allowed"] is True
 
 
 @pytest.mark.parametrize(

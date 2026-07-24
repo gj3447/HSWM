@@ -1,0 +1,145 @@
+{
+  "schema_version": "hswm-next-research-plan/v1",
+  "claim_boundary": "Engineering sequencing and evidence-readiness only. A SATISFIED prerequisite preserves the cited narrow result; READY or ACTION_REQUIRED is not a prediction, measurement, scientific verdict, activation approval, or evidence that HSWM already learns weights, routing, topology, transfer, or consolidation.",
+  "gates": [
+    {
+      "id": "P1V4_L0_POLICY_ACTUATION_L2",
+      "lane": "learning-actuation",
+      "priority": 1,
+      "validator": "p1v4_l2_result",
+      "artifact": "receipts/p1v4_policy_lakatotree_result_seed5_r2_20260724.json",
+      "depends_on": [],
+      "action": "Preserve the replicated typed source-policy answer actuation as a narrow L0 starting point.",
+      "completion_evidence": "Fresh seed-5 R2 heldout 6/6 typed versus 2/6 no-memory, four improvements, 24 calls, and LakatoTree server-regenerated replay.",
+      "failure_boundary": "Does not establish a generally learned compiler, Delta-W, Agent-A-to-B transfer, topology learning, or consolidation."
+    },
+    {
+      "id": "B21_ROUTER_ONLY_FALSIFICATION",
+      "lane": "bond-routing",
+      "priority": 1,
+      "validator": "b21_rejected_result",
+      "artifact": "prom_search_hswm/judgments/B21_learned_router/judgment_packet.json",
+      "depends_on": [],
+      "action": "Keep the A/B/MERGED-only ridge-conformal router rejected and do not tune its abstention threshold again.",
+      "completion_evidence": "All 54 standard cells failed, primary delta was zero, and even the frozen-arm oracle could not reach the registered minimum threshold.",
+      "failure_boundary": "Rejects this router-only action space, not every possible learned router or the HSWM programme."
+    },
+    {
+      "id": "B22_BOND_WEIGHT_GROUNDWORK",
+      "lane": "bond-routing",
+      "priority": 1,
+      "validator": "b22_groundwork",
+      "artifact": "prom_search_hswm/judgments/B22_bond_weight_groundwork/registration_packet.json",
+      "depends_on": [
+        "B21_ROUTER_ONLY_FALSIFICATION"
+      ],
+      "action": "Preserve the neutral slow/fast bond readout and Gate-0 compiler boundary without making an efficacy claim.",
+      "completion_evidence": "Pure bond readout, full-candidate Gate-0 compiler, replay contract, attack tests, and LakatoTree DRAFT groundwork node remain hash-bound.",
+      "failure_boundary": "Development headroom and module tests are not evidence that a learner can recover the oracle room."
+    },
+    {
+      "id": "B22_GATE0_REAL_PACKS",
+      "lane": "bond-routing",
+      "priority": 1,
+      "validator": "b22_gate0_acceptance",
+      "artifact": null,
+      "depends_on": [
+        "B22_BOND_WEIGHT_GROUNDWORK"
+      ],
+      "action": "On the guarded GPU path, build the reproduction, full 2Wiki, and full MuSiQue component packs; lock and accept all three with exact neutral and frozen-B2 replay.",
+      "completion_evidence": "A real hswm-b22-gate0-acceptance-receipt/v1 that reopens its lock and all three packs and returns learner_allowed=true while scientific_claim_allowed=false.",
+      "failure_boundary": "No fast learner fitting, preregistration, or outcome inspection is allowed before this acceptance receipt validates."
+    },
+    {
+      "id": "P1V5_THREE_FACTOR_BOND_PLASTICITY",
+      "lane": "learning-plasticity",
+      "priority": 2,
+      "validator": "none",
+      "artifact": null,
+      "depends_on": [
+        "P1V4_L0_POLICY_ACTUATION_L2",
+        "B22_GATE0_REAL_PACKS"
+      ],
+      "action": "Freeze a query-by-bond fast-potential learner, then test outcome-to-used-bond eligibility-to-fast-candidate-to-slow-Delta-ell promotion with static-update, random-credit, shuffled-eligibility, no-promotion, and removal controls.",
+      "completion_evidence": "Fresh component-disjoint behavior changes only after a promoted rewrite, disappears when that rewrite is removed, preserves retention/canary, beats equal-budget flat/vector memory, and replays server-side.",
+      "failure_boundary": "Do not rescue the failed global scalar update by eta tuning or gate relaxation; if only fast attention works, do not claim durable slow-weight learning."
+    },
+    {
+      "id": "F1_MULTI_LLM_FUNCTION_NETWORK",
+      "lane": "llm-function-network",
+      "priority": 2,
+      "validator": "none",
+      "artifact": null,
+      "depends_on": [
+        "P1V4_L0_POLICY_ACTUATION_L2"
+      ],
+      "action": "Implement at least three registered LLM function roles with typed ports and compare the composed network against one frozen LLM workflow and vector memory under equal calls and tokens.",
+      "completion_evidence": "Role registry, per-call receipts, role-removal and role-shuffle controls, equal-budget sealed result, and deterministic orchestration replay.",
+      "failure_boundary": "Multiple prompts around one answerer or more calls without a role ablation do not establish an LLM-function network."
+    },
+    {
+      "id": "P2_AGENT_A_TO_FROZEN_B_TRANSFER",
+      "lane": "shared-network-transfer",
+      "priority": 3,
+      "validator": "none",
+      "artifact": null,
+      "depends_on": [
+        "P1V5_THREE_FACTOR_BOND_PLASTICITY",
+        "F1_MULTI_LLM_FUNCTION_NETWORK"
+      ],
+      "action": "Let Agent A write only through the validated HSWM mutation path, hide A's transcript, freeze Agent B, and test sealed unseen transfer against transcript and flat/vector memory arms.",
+      "completion_evidence": "Frozen B improves on fresh unseen work under equal compute, with A transcript hidden and causal-rewrite removal erasing the gain.",
+      "failure_boundary": "Exact-query cache reuse, B parameter updates, or transcript visibility are not shared-network transfer."
+    },
+    {
+      "id": "P3_SINGLE_TYPED_TOPOLOGY_OPERATION",
+      "lane": "topology-plasticity",
+      "priority": 4,
+      "validator": "none",
+      "artifact": null,
+      "depends_on": [
+        "P2_AGENT_A_TO_FROZEN_B_TRANSFER"
+      ],
+      "action": "Open exactly one typed CONNECT operation through the compiler, fresh evaluation, retention, canary, approval, CAS activation, and removal ablation.",
+      "completion_evidence": "One immutable topology candidate changes frozen-B behavior, beats weight-only and flat/vector controls, preserves provenance and retention, and rolls back by supersession.",
+      "failure_boundary": "No joint weight/router/topology search and no CONNECT/SEPARATE/SPECIALIZE claim from transient routing frequency."
+    },
+    {
+      "id": "P4_HOMEOSTASIS_SLEEP_AND_SCALE",
+      "lane": "long-horizon-stability",
+      "priority": 5,
+      "validator": "none",
+      "artifact": null,
+      "depends_on": [
+        "P3_SINGLE_TYPED_TOPOLOGY_OPERATION"
+      ],
+      "action": "Measure route collapse, specialist starvation, forgetting, replay drift, recursion budgets, cost, rollback, and consolidation over long horizons.",
+      "completion_evidence": "Preregistered stability and retention bands hold across multiple epochs, seeds, regimes, and a second benchmark with bounded cost and deterministic recovery.",
+      "failure_boundary": "Short notebook gains or a single stable replay do not establish scalable continual HSWM learning."
+    }
+  ],
+  "lakatotree": {
+    "tree": "LakatosTree_HSWM_20260719",
+    "tag": "hswm-next-gate-harness-20260724",
+    "parent": "p1v4-fresh-policy-replication-seed5-r2-20260724",
+    "author": "codex-hswm-next-gates",
+    "questions": [
+      {
+        "qname": "Q-p1v5-three-factor-bond-plasticity",
+        "body": "After real Gate-0 pack acceptance, can outcome-bound used-bond eligibility produce a fast query-bond candidate that survives fresh/retention/canary controls, distills into a durable slow Delta-ell, changes later frozen behavior, and loses that gain when the promoted rewrite is removed, while static-update, random-credit, shuffled-eligibility, no-promotion, and equal-budget flat/vector controls fail?"
+      },
+      {
+        "qname": "Q-f1-multi-llm-function-network",
+        "body": "Can at least three typed LLM function roles composed through one HSWM state outperform an equal-call, equal-token single-LLM workflow and vector memory on sealed tasks, with role removal and role shuffle demonstrating that the function topology rather than extra calls carries the effect?"
+      }
+    ]
+  },
+  "programme_feedback": [
+    "P1v4 is a real replicated L0 actuation result, but its n=6 source-policy cut is not Delta-W or a general learned compiler.",
+    "B2.1 already falsified the frozen A/B/MERGED router-only action space; threshold relaxation or another ridge sweep is not the next experiment.",
+    "The immediate weight-plane blocker is operational, not theoretical: the real three-role B2.2 Gate-0 component packs and acceptance receipt do not yet exist.",
+    "Query-conditioned fast bond attention must demonstrate causal behavior before repeated effects may become durable slow salience; attention is use, slow weight is memory, topology is structure.",
+    "F1 multi-role LLM function composition may proceed as an independent architecture lane, but P2 transfer waits for both a validated mutation lane and the function network.",
+    "LakatoTree receives this harness as DRAFT engineering groundwork only; no prediction or scientific result is registered by the harness."
+  ]
+}

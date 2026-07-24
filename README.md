@@ -57,7 +57,7 @@ remains unjudged because the historical measurement violated judge separation:
 | phase | repository state | completion gate |
 |---|---|---|
 | P0 — identity and metrics | **specified** in the [canonical direction](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md): neural functions are LLM-executed; `H` and `W` form their macro-network | target identity, claim boundary, and learning metric are explicit |
-| P1 — closed weight-learning loop | **implemented; scientific RED; LakatoTree unjudged** ([result](P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md), [failure analysis](RESEARCH_P1_FAILURE_LAKATOTREE_2026-07-24.md)): 12/12 candidates had fresh Δ=0; rank replay found 0/456 top-10 changes. The historical harness self-wrote `FAIL`, so this is not a valid server-owned LakatoTree verdict | freeze the scalar slow-weight belt; register and test the typed verdict-to-lesson fallback |
+| P1 — learning actuation | scalar slow-weight P1 is **scientific RED / LakatoTree unjudged**: 12/12 candidates had fresh Δ=0 and rank replay found 0/456 top-10 changes. The typed-policy fallback then produced a narrow L0 pass in P1v3 and independently replicated in P1v4: typed/no-memory `6/6 vs 2/6`, four improvements, `partial@L2(replay_verified)` | preserve the L0 claim boundary; build real B2.2 Gate-0 packs, then test outcome→used-bond credit→fast candidate→slow `Delta ell` promotion with removal and negative controls |
 | P2 — shared-network transfer | **not implemented or measured** | Agent A writes; frozen Agent B gains on sealed unseen work under equal compute |
 | P3 — structural plasticity | deterministic edits and a shadow gate exist; the first candidate policy was **rejected** | a learned candidate policy passes fresh, target, and canary gates |
 | P4 — federation and sleep | field federation is partial; consolidation/homeostasis remain design work | recover in-field interference and demonstrate stable long-horizon learning |
@@ -117,6 +117,16 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
   fail-closed synthetic/attack tests. The real 2Wiki/MuSiQue packs have not been
   built; no learner has been fitted and no B2.2 efficacy claim has been
   registered or made.
+- ✅/⚠️ **P1v3/P1v4 typed-policy actuation:** one training-derived source policy
+  changed a frozen model on fresh heldout questions and replicated on seed-5 R2
+  (`6/6` typed vs `2/6` no memory; four improvements). LakatoTree regenerated
+  the P1v4 metric server-side. This is L0 answer-interface actuation at `n=6`,
+  not a general learned compiler, durable `Delta W`, transfer, or topology.
+- 🧭 **Next-gate harness:** `hswm_next_research_harness.py` verifies P1v4,
+  preserves the B2.1 falsification, and refuses to unlock P1v5 until a real
+  three-pack B2.2 Gate-0 acceptance receipt revalidates. F1 multi-role LLM
+  function composition is the other currently READY lane; the harness emits no
+  prediction or scientific verdict.
 - ⚠️ **Open-kernel claim boundary:** LakatoTree judged the composition receipt
   chain `partial` and `certified=false`. Learned semantic-weight deltas and
   CONNECT/SEPARATE/SPECIALIZE topology edits, bounded cyclic readout,
@@ -213,6 +223,7 @@ formalization remain in
 | `prom_search_hswm/hswm_bond_readout.py` | pure slow-salience + volatile query-bond potential application and deterministic ranking |
 | `prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md` | refined B2.2 design, action-space diagnostics, full-score-pack requirement, and fresh confirmation boundary |
 | `prom_search_hswm/hswm_b22_gate0_harness.py` / `prom_search_hswm/docs/B22_GATE0_HARNESS_CONTRACT_20260723.md` | full-candidate Gate-0 compiler, replay, locked acceptance, and trusted-ingestion boundary |
+| `hswm_next_research_harness.py` / `HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md` | fail-closed P1v4→B2.2/P1v5→F1/P2→P3→P4 stage graph, current receipt validator, and LakatoTree DRAFT packet |
 | `_research/shared_field_hypothesis/task_contracts.v1.json` / `e1_contract.v1.json` | independent task/control roles and engineering-only replay/budget receipt contracts |
 | `prom_search_hswm/docs/PROM_HSWM_REMAINING_ISSUES_RESOLUTION_20260723.md` | evidence-backed dependency graph from implemented gates to G4 preregistration |
 | `H3_B3_RESUME_STATUS_2026-07-20.md` | corrected PRE_RUN boundary, local receipt hashes, and exact next sequence |

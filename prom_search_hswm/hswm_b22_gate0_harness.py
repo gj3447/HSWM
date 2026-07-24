@@ -2038,6 +2038,17 @@ def _load_acceptance_receipt(path: Path) -> dict:
     return value
 
 
+def validate_acceptance_receipt(path: Path) -> dict:
+    """Public fail-closed verifier for downstream stage-gate harnesses.
+
+    Returning this receipt means the lock and every pinned pack were reopened
+    and reconstructed.  It authorizes learner access only; it never authorizes
+    a scientific claim, promotion, or active-state mutation.
+    """
+
+    return _load_acceptance_receipt(Path(path))
+
+
 def load_feature_view(pack_dir: Path, *, acceptance_receipt: Path, role: str) -> dict:
     """Load a learner view only from a root pinned by a Gate-0 acceptance receipt."""
     if role not in ACCEPTANCE_ROLES:

@@ -120,3 +120,44 @@ def test_end_to_end_traversal_on_built_world():
     assert rc0.abstained and np.isfinite(s0).all()     # certified floor path
     ids1, s1, rc1 = tv.traverse(f, q_emb, k=5, mu=0.4)
     assert np.isfinite(s1).all()                       # full path NaN-free (abstain allowed)
+
+
+# --- v2.4.2 oracle strengthening (vacuity 0/5: df-gate frequency, mention length
+# boundary, and hop-count values were published but never asserted) ---
+
+def test_mention_length_boundary_3_chars_kept():
+    """cmp@78 (len<3 -> <=3): exactly-3-char mentions must survive the gate."""
+    ms = wb.extract_mentions("Kim fought the Ember Dragon.")
+    assert "kim" in ms                               # _norm_ent lowercases
+    assert "ember dragon" in ms
+    assert "al" not in wb.extract_mentions("Al fought Kim.")   # <3 dropped in both
+
+
+def _df_gate_rows():
+    """Non-title mentions at two frequencies: 'River Fish' in exactly
+    MIN_ENTITY_COUNT paragraphs, 'Oak Barrel' in MIN+1."""
+    def p(i, t, x):
+        return {"idx": i, "title": t, "paragraph_text": x, "is_supporting": True}
+    paras = [
+        p(0, "Alpha Tale", "River Fish swam. Oak Barrel rolled."),
+        p(1, "Beta Tale", "River Fish jumped. Oak Barrel creaked."),
+        p(2, "Gamma Tale", "Oak Barrel aged in the cellar."),
+        p(3, "Delta Tale", "quiet ponds held nothing at all."),
+    ]
+    return [{"id": "q1", "question": "?", "answer": "x", "paragraphs": paras}]
+
+
+def test_df_gate_frequency_values():
+    """One fixture, three mutant kills:
+    binop@144 (df +1 -> -1) drops everything; cmp@148 GtE->Gt drops the exact-MIN
+    boundary ('River Fish', count==2); GtE->LtE drops frequent mentions
+    ('Oak Barrel', count==3)."""
+    w = wb.build(_df_gate_rows())
+    assert "river fish" in w.entities      # count == MIN must pass (c >= MIN)
+    assert "oak barrel" in w.entities      # count > MIN must pass too
+
+
+def test_queries_per_hop_exact_counts():
+    """binop@182 (hop count +1 -> -1): stats were asserted only for key presence."""
+    w = wb.build(_rows())
+    assert w.stats["queries_per_hop"] == {2: 7, 3: 1}

@@ -63,23 +63,6 @@
    "errors": []
   },
   {
-   "test_path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/tests/test_world_builder.py",
-   "target": "world_builder",
-   "repo_root": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
-   "max_mutants": 8,
-   "timeout": 20,
-   "killed": 0,
-   "total": 5,
-   "survivors": [
-    "cmp@78.11.0 Lt->LtE",
-    "binop@144.24 Add->Sub",
-    "cmp@148.60.0 GtE->Gt",
-    "cmp@148.60.0 GtE->LtE",
-    "binop@182.28 Add->Sub"
-   ],
-   "errors": []
-  },
-  {
    "test_path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/tests/test_cli_provider_transport.py",
    "target": "cli_provider_transport",
    "repo_root": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
@@ -126,7 +109,7 @@
    "total": 8,
    "survivors": [
     "binop@52.46 Mult->Add",
-    "cmp@67.7.0 NotEq->Eq",
+    "cmp@67.48.0 NotEq->Eq",
     "cmp@76.7.0 NotEq->Eq",
     "cmp@79.7.0 NotEq->Eq",
     "cmp@114.11.0 Eq->NotEq",
@@ -415,6 +398,21 @@
    "errors": []
   },
   {
+   "test_path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/tests/test_qkv_b1_probe.py",
+   "target": "qkv_b1_probe",
+   "repo_root": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
+   "max_mutants": 8,
+   "timeout": 20,
+   "killed": 5,
+   "total": 8,
+   "survivors": [
+    "cmp@81.11.0 Lt->LtE",
+    "binop@161.46 Mult->Add",
+    "cmp@176.7.0 Gt->GtE"
+   ],
+   "errors": []
+  },
+  {
    "test_path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/tests/test_readout_identity.py",
    "target": "hypergraph",
    "repo_root": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
@@ -531,20 +529,6 @@
    "errors": []
   },
   {
-   "test_path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/tests/test_falsifier_teeth.py",
-   "target": "falsifier",
-   "repo_root": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
-   "max_mutants": 8,
-   "timeout": 20,
-   "killed": 6,
-   "total": 8,
-   "survivors": [
-    "binop@66.32 Mult->Add",
-    "cmp@135.7.0 GtE->Gt"
-   ],
-   "errors": []
-  },
-  {
    "test_path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/tests/test_h3_b3_end_to_end.py",
    "target": "claim_builder",
    "repo_root": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
@@ -569,34 +553,6 @@
    "survivors": [
     "binop@136.46 Mult->Add",
     "cmp@162.11.0 NotEq->Eq"
-   ],
-   "errors": []
-  },
-  {
-   "test_path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/tests/test_legacy_adapter.py",
-   "target": "legacy_adapter",
-   "repo_root": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
-   "max_mutants": 8,
-   "timeout": 20,
-   "killed": 6,
-   "total": 8,
-   "survivors": [
-    "binop@82.37 Sub->Add",
-    "cmp@113.19.0 Lt->LtE"
-   ],
-   "errors": []
-  },
-  {
-   "test_path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/tests/test_qkv_b1_probe.py",
-   "target": "qkv_b1_probe",
-   "repo_root": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
-   "max_mutants": 8,
-   "timeout": 20,
-   "killed": 6,
-   "total": 8,
-   "survivors": [
-    "binop@161.46 Mult->Add",
-    "cmp@176.7.0 Gt->GtE"
    ],
    "errors": []
   },
@@ -656,6 +612,19 @@
    "errors": []
   },
   {
+   "test_path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/tests/test_falsifier_teeth.py",
+   "target": "falsifier",
+   "repo_root": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
+   "max_mutants": 8,
+   "timeout": 20,
+   "killed": 7,
+   "total": 8,
+   "survivors": [
+    "cmp@135.7.0 GtE->Gt"
+   ],
+   "errors": []
+  },
+  {
    "test_path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/tests/test_h3_artifact_lifecycle.py",
    "target": "h3_artifact_lifecycle",
    "repo_root": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
@@ -691,6 +660,19 @@
    "total": 8,
    "survivors": [
     "binop@193.46 Mult->Add"
+   ],
+   "errors": []
+  },
+  {
+   "test_path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/tests/test_legacy_adapter.py",
+   "target": "legacy_adapter",
+   "repo_root": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
+   "max_mutants": 8,
+   "timeout": 20,
+   "killed": 7,
+   "total": 8,
+   "survivors": [
+    "binop@110.26 Add->Sub"
    ],
    "errors": []
   },
@@ -759,6 +741,17 @@
    "timeout": 20,
    "killed": 8,
    "total": 8,
+   "survivors": [],
+   "errors": []
+  },
+  {
+   "test_path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/tests/test_world_builder.py",
+   "target": "world_builder",
+   "repo_root": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
+   "max_mutants": 8,
+   "timeout": 20,
+   "killed": 5,
+   "total": 5,
    "survivors": [],
    "errors": []
   }

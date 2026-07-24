@@ -1,0 +1,273 @@
+{
+ "schema": "hswm-r3-walk-regime-evidence/v1",
+ "programme": "LakatosTree_PromSearchHSWM_20260721",
+ "branch": "R3-walk-regime-density-dial",
+ "preregistration": {
+  "path": "PREREG_R3_WALK_REGIME_2026-07-23.json",
+  "sha256": "2fc4141382a84acbfd4a27d1426c9595d6f8806114847242d4026f0bc6d394a7",
+  "prediction_receipt_sha256": "51e6b0837a8393a5ea36dc67dd5731518b48e5305db930a3c1044761844a2af0"
+ },
+ "measurement": {
+  "metric": "sparse_hardhop_walk_minus_flat_recall10",
+  "value": 0.011054,
+  "bootstrap95": [
+   0.00085,
+   0.02466
+  ],
+  "novel_metric": "density_monotonicity_sparse_minus_dense_delta",
+  "novel_value": 0.015816,
+  "per_universe": {
+   "dense_t200_fk9": {
+    "config": {
+     "axis": "density",
+     "articles": 5057,
+     "fk": 9
+    },
+    "ingest": {
+     "articles": 5057,
+     "facts_bound": 86304,
+     "facts_unbound": 0,
+     "person_arcs": 66076
+    },
+    "all": {
+     "n": 390,
+     "flat_recall10": 0.175,
+     "walk_recall10": 0.182692,
+     "delta": 0.007692,
+     "bootstrap95": [
+      -0.001709,
+      0.017949
+     ],
+     "queries_with_depth2": 151
+    },
+    "hard_hop": {
+     "n": 70,
+     "flat_recall10": 0.077381,
+     "walk_recall10": 0.072619,
+     "delta": -0.004762,
+     "bootstrap95": [
+      -0.014286,
+      0.0
+     ],
+     "queries_with_depth2": 28
+    },
+    "easy_hop": {
+     "n": 320,
+     "flat_recall10": 0.196354,
+     "walk_recall10": 0.206771,
+     "delta": 0.010417,
+     "bootstrap95": [
+      -0.000521,
+      0.023438
+     ],
+     "queries_with_depth2": 123
+    }
+   },
+   "large_t200_fk3": {
+    "config": {
+     "axis": "both",
+     "articles": 5057,
+     "fk": 3
+    },
+    "ingest": {
+     "articles": 5057,
+     "facts_bound": 55864,
+     "facts_unbound": 0,
+     "person_arcs": 35636
+    },
+    "all": {
+     "n": 390,
+     "flat_recall10": 0.192094,
+     "walk_recall10": 0.204487,
+     "delta": 0.012393,
+     "bootstrap95": [
+      0.002991,
+      0.023077
+     ],
+     "queries_with_depth2": 184
+    },
+    "hard_hop": {
+     "n": 85,
+     "flat_recall10": 0.159804,
+     "walk_recall10": 0.171569,
+     "delta": 0.011765,
+     "bootstrap95": [
+      0.0,
+      0.027451
+     ],
+     "queries_with_depth2": 37
+    },
+    "easy_hop": {
+     "n": 305,
+     "flat_recall10": 0.201093,
+     "walk_recall10": 0.213661,
+     "delta": 0.012568,
+     "bootstrap95": [
+      0.001093,
+      0.02623
+     ],
+     "queries_with_depth2": 147
+    }
+   },
+   "mid_t20_fk3": {
+    "config": {
+     "axis": "size",
+     "articles": 506,
+     "fk": 3
+    },
+    "ingest": {
+     "articles": 506,
+     "facts_bound": 5616,
+     "facts_unbound": 0,
+     "person_arcs": 3592
+    },
+    "all": {
+     "n": 390,
+     "flat_recall10": 0.308974,
+     "walk_recall10": 0.315812,
+     "delta": 0.006838,
+     "bootstrap95": [
+      0.000855,
+      0.015385
+     ],
+     "queries_with_depth2": 189
+    },
+    "hard_hop": {
+     "n": 94,
+     "flat_recall10": 0.225177,
+     "walk_recall10": 0.228723,
+     "delta": 0.003546,
+     "bootstrap95": [
+      0.0,
+      0.010638
+     ],
+     "queries_with_depth2": 50
+    },
+    "easy_hop": {
+     "n": 296,
+     "flat_recall10": 0.335586,
+     "walk_recall10": 0.343468,
+     "delta": 0.007883,
+     "bootstrap95": [
+      0.0,
+      0.018018
+     ],
+     "queries_with_depth2": 139
+    }
+   },
+   "small_t2_fk3": {
+    "config": {
+     "axis": "size",
+     "articles": 50,
+     "fk": 3
+    },
+    "ingest": {
+     "articles": 50,
+     "facts_bound": 548,
+     "facts_unbound": 0,
+     "person_arcs": 348
+    },
+    "all": {
+     "n": 390,
+     "flat_recall10": 0.51859,
+     "walk_recall10": 0.516453,
+     "delta": -0.002137,
+     "bootstrap95": [
+      -0.012607,
+      0.008974
+     ],
+     "queries_with_depth2": 185
+    },
+    "hard_hop": {
+     "n": 80,
+     "flat_recall10": 0.454167,
+     "walk_recall10": 0.447917,
+     "delta": -0.00625,
+     "bootstrap95": [
+      -0.03125,
+      0.014583
+     ],
+     "queries_with_depth2": 40
+    },
+    "easy_hop": {
+     "n": 310,
+     "flat_recall10": 0.535215,
+     "walk_recall10": 0.53414,
+     "delta": -0.001075,
+     "bootstrap95": [
+      -0.014785,
+      0.01129
+     ],
+     "queries_with_depth2": 145
+    }
+   },
+   "sparse_t200_fk1": {
+    "config": {
+     "axis": "density",
+     "articles": 5057,
+     "fk": 1
+    },
+    "ingest": {
+     "articles": 5057,
+     "facts_bound": 45834,
+     "facts_unbound": 0,
+     "person_arcs": 25606
+    },
+    "all": {
+     "n": 390,
+     "flat_recall10": 0.188675,
+     "walk_recall10": 0.208974,
+     "delta": 0.020299,
+     "bootstrap95": [
+      0.01047,
+      0.032051
+     ],
+     "queries_with_depth2": 204
+    },
+    "hard_hop": {
+     "n": 98,
+     "flat_recall10": 0.159014,
+     "walk_recall10": 0.170068,
+     "delta": 0.011054,
+     "bootstrap95": [
+      0.00085,
+      0.02466
+     ],
+     "queries_with_depth2": 48
+    },
+    "easy_hop": {
+     "n": 292,
+     "flat_recall10": 0.19863,
+     "walk_recall10": 0.222032,
+     "delta": 0.023402,
+     "bootstrap95": [
+      0.010845,
+      0.037671
+     ],
+     "queries_with_depth2": 156
+    }
+   }
+  },
+  "size_axis": {
+   "small_t2_fk3": -0.00625,
+   "mid_t20_fk3": 0.003546,
+   "large_t200_fk3": 0.011765
+  },
+  "density_axis": {
+   "sparse_t200_fk1": 0.011054,
+   "large_t200_fk3": 0.011765,
+   "dense_t200_fk9": -0.004762
+  }
+ },
+ "budget": {
+  "llm": 0,
+  "network": 0,
+  "extraction_model": 0,
+  "note": "PhantomWiki facts = deterministic ingest; only MiniLM doc/query embeddings"
+ },
+ "limitations": [
+  "Synthetic template corpus: language is uniform, so lexical/embedding difficulty is unrepresentative of real prose.",
+  "best-trace recall@10 credits any single valid reasoning chain; it is a retrieval-side metric, not answer accuracy.",
+  "Walk arm reuses the strict T3 walker with mu-additive scoring; the frozen kernel's exact arithmetic is not reproduced."
+ ]
+}

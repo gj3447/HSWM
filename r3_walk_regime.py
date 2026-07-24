@@ -18,6 +18,7 @@ from __future__ import annotations
 
 from hashlib import sha256
 import json
+import os
 import random
 from pathlib import Path
 
@@ -36,7 +37,7 @@ UNIVERSES = {
     "sparse_t200_fk1": {"axis": "density", "articles": 5057, "fk": 1},
     "dense_t200_fk9": {"axis": "density", "articles": 5057, "fk": 9},
 }
-ROOT = Path("/Volumes/GM/hswm_lab/phantomwiki_r3")
+ROOT = Path(os.environ.get("R3_ROOT", "/Volumes/GM/hswm_lab/phantomwiki_r3"))
 PREREG = HERE / "PREREG_R3_WALK_REGIME_2026-07-23.json"
 EVIDENCE = HERE / "EVIDENCE_R3_WALK_REGIME_2026-07-23.json"
 FROZEN_MODULES = ("r3_phantom_ingest.py", "r3_walk_regime.py",
@@ -125,7 +126,8 @@ def main() -> int:
     import torch
     torch.manual_seed(BOOT_SEED)
     torch.set_num_threads(2)
-    model = SentenceTransformer(MODEL, cache_folder="/Volumes/GM/hswm_lab/st_cache")
+    model = SentenceTransformer(MODEL, cache_folder=os.environ.get(
+        "R3_ST_CACHE", "/Volumes/GM/hswm_lab/st_cache"))
 
     def embed(texts: list[str]) -> np.ndarray:
         return model.encode(texts, normalize_embeddings=True,

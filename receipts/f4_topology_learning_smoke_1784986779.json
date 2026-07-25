@@ -1,0 +1,529 @@
+{
+ "schema_version": "hswm-f4-topology-learning-receipt/v1",
+ "mode": "development",
+ "branch": "F4-topology-learning",
+ "smoke": true,
+ "preregistration_file": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_f4_topology_learning_20260725.json",
+ "preregistration_file_sha256": "28f8970a54118119625229f0ae65960c18460cc5e247e563f2e0022465fb9499",
+ "script_sha256": "17db89e3a0cb31457af03e140ea548b4592542d609b93a145bf7ee8cc0d16031",
+ "harness_module_sha256": "3676724568fde19a752c07fdeabd9883ecfe04a3534ebf3f4d8fb2cc6b95c6e5",
+ "config": {
+  "lessons": 12,
+  "groups": 4,
+  "n_fresh": 6,
+  "k_context": 2,
+  "loo_m": 2,
+  "curve_k": 1,
+  "checkpoints": 2,
+  "split_seed": 20260726,
+  "seed": 20260725,
+  "max_answers": 1,
+  "max_calls": 100,
+  "parallel": 16,
+  "n_boot": 2000,
+  "universes_dir": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/_research/f2_sealed_universes",
+  "answer_backend": "vllm",
+  "answer_url": "http://127.0.0.1:18000/v1",
+  "answer_model": "qwen3.6-27b",
+  "skip_base": true,
+  "smoke": true,
+  "out": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/receipts/f4_topology_learning_smoke_1784986779.json"
+ },
+ "answerer_freeze": {
+  "backend": "vllm",
+  "url": "http://127.0.0.1:18000/v1",
+  "model": "qwen3.6-27b",
+  "note": "same freeze as the F2 sealed run (vLLM qwen3.6-27b, thinking off via chat_template_kwargs; p1v4 lineage Qwen3.6-35B-A3B-FP8 not served on this host)"
+ },
+ "honesty": "grounded measurement only; no scientific claim; judgment is the gate's",
+ "question_pool": {
+  "universes_dir": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/_research/f2_sealed_universes",
+  "max_answers": 1,
+  "unique_question_texts": 379,
+  "per_universe_raw_counts": {
+   "dense_t200_fk9": 10,
+   "large_t200_fk3": 10,
+   "mid_t20_fk3": 16,
+   "small_t2_fk3": 27,
+   "sparse_t200_fk1": 10,
+   "uni_s1001": 26,
+   "uni_s1002": 29,
+   "uni_s1003": 27,
+   "uni_s1004": 27,
+   "uni_s1005": 27,
+   "uni_s1006": 29,
+   "uni_s1007": 24,
+   "uni_s1008": 26,
+   "uni_s1009": 23,
+   "uni_s1010": 28,
+   "uni_s1011": 23,
+   "uni_s1012": 27,
+   "uni_s1013": 26,
+   "uni_s1014": 27,
+   "uni_s1015": 26,
+   "uni_s1016": 28
+  },
+  "dedup_note": "t200 dirs (sparse/large/dense) share identical articles and type6 texts+answers (verified 2026-07-25, titles_sha equal); dedup by normalized question text collapses them to one contributor."
+ },
+ "splits": {
+  "n_train": 12,
+  "n_fresh": 6,
+  "skipped": {
+   "train": [],
+   "fresh": []
+  },
+  "split_seed": 20260726,
+  "fresh_case_worlds": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+ },
+ "leakage": {
+  "exact_question_text_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "exact_attribute_value_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "binding_leakage": 0,
+  "binding_verdict": "CLEAN",
+  "audit_on_raw_question_texts": {
+   "leakage": 24,
+   "exact_overlaps": [],
+   "near_dup_pairs": [
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0285-04-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0285-04-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0285-04-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0285-04-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0285-04-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0261-12-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0261-12-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0261-12-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0261-12-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0261-12-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is lighting technician?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is lighting technician?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0264-02-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0264-02-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0264-02-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0264-02-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0264-02-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is dispensing optician?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is dispensing optician?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0259-07-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0259-07-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0259-07-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0259-07-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0259-07-04?",
+     0.8
+    ]
+   ],
+   "near_dup_threshold": 0.6,
+   "verdict": "VOID"
+  },
+  "audit_on_attribute_values": {
+   "leakage": 0,
+   "exact_overlaps": [],
+   "near_dup_pairs": [],
+   "near_dup_threshold": 0.6,
+   "verdict": "CLEAN"
+  },
+  "template_artifact_note": "type6 questions share the 'Who is the person whose <attr> is' template (7/9 tokens), so raw-text token-Jaccard near-dups are expected artifacts; the binding criterion is exact question text and attribute-value overlap, both structurally 0 after pool dedup."
+ },
+ "lessons": {
+  "0": {
+   "lesson_id": "13b17c849b9962d02112d9e748640a59e666503996851eafc0e8e577b796a924",
+   "group": 0,
+   "trusted_class": "RHO",
+   "distractor_class": "Q01",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-ad190c84-0d9",
+   "training_universe": "uni_s1011"
+  },
+  "1": {
+   "lesson_id": "03772bbf0e00fa00fba9f046a1428470c713c5862751217901e0e1bf633e42dd",
+   "group": 0,
+   "trusted_class": "RHO",
+   "distractor_class": "Q02",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-b7fefc63-ec7",
+   "training_universe": "uni_s1015"
+  },
+  "2": {
+   "lesson_id": "0522254e3ca3e80ed4aa51a796abb89bc4f8e80b5a5e6ecbea035bfa3c12224c",
+   "group": 0,
+   "trusted_class": "RHO",
+   "distractor_class": "Q03",
+   "orientation": "planted_inverted",
+   "admission": "skipped_planted_inverted",
+   "training_case_id": "f4-train-4c7ac97b-43c",
+   "training_universe": "uni_s1010"
+  },
+  "3": {
+   "lesson_id": "bf04ea404875af9d54bc031329043585383c4aa7e0321e48e6b6970cd541ce8b",
+   "group": 1,
+   "trusted_class": "SIGMA",
+   "distractor_class": "Q04",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-404180aa-a17",
+   "training_universe": "uni_s1009"
+  },
+  "4": {
+   "lesson_id": "4b0e8c190241289a1b9f8a7ced6738d8a9d2982cc829166253760707333954fd",
+   "group": 1,
+   "trusted_class": "SIGMA",
+   "distractor_class": "Q05",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-0cb43436-1df",
+   "training_universe": "uni_s1002"
+  },
+  "5": {
+   "lesson_id": "60a2152dfe159d5e472dbe6deb01fc88c0b8f3d4e601fcf208e4c1e954e8cd7a",
+   "group": 1,
+   "trusted_class": "SIGMA",
+   "distractor_class": "Q06",
+   "orientation": "planted_inverted",
+   "admission": "skipped_planted_inverted",
+   "training_case_id": "f4-train-ff5da3ee-074",
+   "training_universe": "uni_s1009"
+  },
+  "6": {
+   "lesson_id": "e5c5e5725c6ef271e3ec54623b30df5bf30e9761567642f1c78a69f316b5ac13",
+   "group": 2,
+   "trusted_class": "GAMMA",
+   "distractor_class": "Q07",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-77241532-7b5",
+   "training_universe": "uni_s1005"
+  },
+  "7": {
+   "lesson_id": "62008895ca0a5bd5e5f8086e5374f164de04a23314d3c1bf60b0777588ef3f07",
+   "group": 2,
+   "trusted_class": "GAMMA",
+   "distractor_class": "Q08",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-27c9e02d-6a2",
+   "training_universe": "uni_s1012"
+  },
+  "8": {
+   "lesson_id": "4266db6a68fb5b2532d1458ae4931111b74755e431f77abe7ca0cbc64f4b4f06",
+   "group": 2,
+   "trusted_class": "GAMMA",
+   "distractor_class": "Q09",
+   "orientation": "planted_inverted",
+   "admission": "skipped_planted_inverted",
+   "training_case_id": "f4-train-e24c658e-cde",
+   "training_universe": "uni_s1016"
+  },
+  "9": {
+   "lesson_id": "1977bdb598ec9924143ed271bc8cb66f773a7bb7b7bd4f7755a9e6b9d95f7346",
+   "group": 3,
+   "trusted_class": "KAPPA",
+   "distractor_class": "Q10",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-75d87e3a-056",
+   "training_universe": "uni_s1006"
+  },
+  "10": {
+   "lesson_id": "3b4ad1e56f20c79c1ea9390d809e8d18bfebe2d821fec2f1d3c7595cda3186b1",
+   "group": 3,
+   "trusted_class": "KAPPA",
+   "distractor_class": "Q11",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-25c876b7-8a6",
+   "training_universe": "uni_s1007"
+  },
+  "11": {
+   "lesson_id": "e2d43a1a02ab7eff76e2f4f0f9ab8a038f7ccf1f7e4e0a17f793fd0e6131a812",
+   "group": 3,
+   "trusted_class": "KAPPA",
+   "distractor_class": "Q12",
+   "orientation": "planted_inverted",
+   "admission": "skipped_planted_inverted",
+   "training_case_id": "f4-train-9c6bae52-73c",
+   "training_universe": "uni_s1005"
+  }
+ },
+ "fresh_base_accuracy": null,
+ "headroom_note": "base eval skipped (--skip-base)",
+ "learning": {
+  "edges_tested": 12,
+  "edges_kept": 4,
+  "edge_weights": {
+   "0-1": 0,
+   "0-2": 1,
+   "1-2": 1,
+   "3-4": 0,
+   "3-5": 0,
+   "4-5": 0,
+   "6-7": 0,
+   "6-8": 0,
+   "7-8": 0,
+   "9-10": 0,
+   "9-11": 1,
+   "10-11": 1
+  },
+  "checkpoints": [
+   {
+    "after_case": 4,
+    "edges": [
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ]
+    ]
+   },
+   {
+    "after_case": 8,
+    "edges": [
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      2
+     ]
+    ]
+   }
+  ],
+  "group_size": 3,
+  "inverted_worlds": [
+   2,
+   5,
+   8,
+   11
+  ]
+ },
+ "arms": {
+  "A_learned": {
+   "n_edges": 4,
+   "fresh_accuracy": 0.6666666666666666,
+   "fresh_parse_failures": 0
+  },
+  "B_shuffled": {
+   "n_edges": 4,
+   "fresh_accuracy": 0.6666666666666666,
+   "fresh_parse_failures": 0
+  },
+  "C_clique": {
+   "n_edges": 66,
+   "fresh_accuracy": 0.6666666666666666,
+   "fresh_parse_failures": 0
+  },
+  "D_random_sparse": {
+   "n_edges": 4,
+   "fresh_accuracy": 0.6666666666666666,
+   "fresh_parse_failures": 0
+  }
+ },
+ "causal_curve": {
+  "k_steps": 1,
+  "loo_measured_edges": {
+   "0-2": 0.0,
+   "1-2": 0.0
+  },
+  "curve_top_acc": [
+   0.6667
+  ],
+  "curve_rand_acc": [
+   0.6667
+  ],
+  "auc_gap": 0.0,
+  "auc_gap_ci95": [
+   0.0,
+   0.0
+  ],
+  "importance_note": "LOO importance measured on fresh for the top-M edges by learned weight; deeper edges ranked by learned weight (documented deviation from full-LOO prereg reading — full LOO on |E| edges is |E|*n_fresh calls)"
+ },
+ "structure_performance": {
+  "checkpoint_accuracies": {
+   "ckpt_4": 0.6666666666666666,
+   "ckpt_8": 0.6666666666666666,
+   "final": 0.6666666666666666
+  },
+  "points": [
+   [
+    0,
+    0.0
+   ],
+   [
+    2,
+    0.0
+   ],
+   [
+    2,
+    0.0
+   ]
+  ],
+  "spearman_rho": null,
+  "rho_ci95": [
+   null,
+   null
+  ]
+ },
+ "kill_condition_observations": {
+  "f4_k1_any_control_catches_a": true,
+  "f4_k2_auc_gap_ci_includes_0": true,
+  "f4_k3_rho_ci_includes_0": false,
+  "values": {
+   "learned_minus_best_control": 0.0,
+   "best_control": "B_shuffled",
+   "control_gaps": {
+    "B_shuffled": {
+     "a_minus_x": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "C_clique": {
+     "a_minus_x": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "D_random_sparse": {
+     "a_minus_x": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "auc_gap": 0.0,
+   "rho": null
+  },
+  "note": "mechanical observation only; sealed judgment belongs to the gate"
+ },
+ "llm_budget": {
+  "max_calls": 100,
+  "used": 54,
+  "answerer": {
+   "backend": "vllm",
+   "url": "http://127.0.0.1:18000/v1",
+   "model": "qwen3.6-27b",
+   "misses": 54,
+   "hits": 42,
+   "degraded_to_parallel": null
+  },
+  "total_logical": 96
+ },
+ "aborted": null,
+ "wall_clock_s": 335.0
+}

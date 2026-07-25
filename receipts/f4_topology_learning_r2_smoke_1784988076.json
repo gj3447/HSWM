@@ -1,0 +1,587 @@
+{
+ "schema_version": "hswm-f4-topology-learning-r2-receipt/v1",
+ "mode": "development",
+ "branch": "F4-topology-learning",
+ "smoke": true,
+ "preregistration_file": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_f4_topology_learning_20260725.json",
+ "preregistration_file_sha256": "28f8970a54118119625229f0ae65960c18460cc5e247e563f2e0022465fb9499",
+ "script_sha256": "e3efd988ad32f076ee08dea39ab2323ce6f4e047ed4912887d6453a9b077107b",
+ "harness_module_sha256": {
+  "f2_delta_w_credit.py": "3676724568fde19a752c07fdeabd9883ecfe04a3534ebf3f4d8fb2cc6b95c6e5",
+  "f4_topology_learning.py": "17db89e3a0cb31457af03e140ea548b4592542d609b93a145bf7ee8cc0d16031",
+  "hswm_null_battery.py": "df6e95f740f87a2a8e730e4c336c14a2beae87dc586c9ccd32d04be16f093b4f"
+ },
+ "prereg_reading_deviation": "r2 redesign (parent-ratified 2026-07-25): edges are bipartite class-tag-anchor↔lesson adjacency instead of lesson↔lesson hyperedges.  Rationale (r1 smoke receipt f4_topology_learning_smoke_1784986779.json): lesson-topology changed contexts but never answers (all arms bit-identical); the valid-lesson signal lives in document class tags, so topology must govern the anchor→lesson reachability channel (F2-proven deletion channel).  Arms/metrics/kills are unchanged from the prereg.",
+ "config": {
+  "lessons": 12,
+  "n_fresh": 6,
+  "k_context": 2,
+  "loo_m": 2,
+  "curve_k": 1,
+  "checkpoints": 2,
+  "split_seed": 20260726,
+  "seed": 20260725,
+  "max_answers": 1,
+  "max_calls": 100,
+  "parallel": 16,
+  "n_boot": 2000,
+  "universes_dir": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/_research/f2_sealed_universes",
+  "answer_backend": "vllm",
+  "answer_url": "http://127.0.0.1:18000/v1",
+  "answer_model": "qwen3.6-27b",
+  "skip_base": false,
+  "smoke": true,
+  "out": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/receipts/f4_topology_learning_r2_smoke_1784988076.json"
+ },
+ "answerer_freeze": {
+  "backend": "vllm",
+  "url": "http://127.0.0.1:18000/v1",
+  "model": "qwen3.6-27b",
+  "note": "same freeze as the F2 sealed run (vLLM qwen3.6-27b, thinking off; p1v4 lineage model not served on this host)"
+ },
+ "honesty": "grounded measurement only; no scientific claim; judgment is the gate's",
+ "question_pool": {
+  "universes_dir": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/_research/f2_sealed_universes",
+  "max_answers": 1,
+  "unique_question_texts": 379,
+  "per_universe_raw_counts": {
+   "dense_t200_fk9": 10,
+   "large_t200_fk3": 10,
+   "mid_t20_fk3": 16,
+   "small_t2_fk3": 27,
+   "sparse_t200_fk1": 10,
+   "uni_s1001": 26,
+   "uni_s1002": 29,
+   "uni_s1003": 27,
+   "uni_s1004": 27,
+   "uni_s1005": 27,
+   "uni_s1006": 29,
+   "uni_s1007": 24,
+   "uni_s1008": 26,
+   "uni_s1009": 23,
+   "uni_s1010": 28,
+   "uni_s1011": 23,
+   "uni_s1012": 27,
+   "uni_s1013": 26,
+   "uni_s1014": 27,
+   "uni_s1015": 26,
+   "uni_s1016": 28
+  },
+  "dedup_note": "t200 dirs (sparse/large/dense) share identical articles and type6 texts+answers (verified 2026-07-25, titles_sha equal); dedup by normalized question text collapses them to one contributor."
+ },
+ "splits": {
+  "n_train": 12,
+  "n_fresh": 6,
+  "skipped": {
+   "train": [],
+   "fresh": []
+  },
+  "split_seed": 20260726,
+  "fresh_case_worlds": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+ },
+ "leakage": {
+  "exact_question_text_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "exact_attribute_value_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "binding_leakage": 0,
+  "binding_verdict": "CLEAN",
+  "audit_on_raw_question_texts": {
+   "leakage": 24,
+   "exact_overlaps": [],
+   "near_dup_pairs": [
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0285-04-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0285-04-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0285-04-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0285-04-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0285-04-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0261-12-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0261-12-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0261-12-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0261-12-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0261-12-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is lighting technician?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is lighting technician?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0264-02-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0264-02-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0264-02-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0264-02-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0264-02-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is dispensing optician?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is dispensing optician?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0259-07-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0259-07-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0259-07-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0259-07-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0259-07-04?",
+     0.8
+    ]
+   ],
+   "near_dup_threshold": 0.6,
+   "verdict": "VOID"
+  },
+  "audit_on_attribute_values": {
+   "leakage": 0,
+   "exact_overlaps": [],
+   "near_dup_pairs": [],
+   "near_dup_threshold": 0.6,
+   "verdict": "CLEAN"
+  },
+  "template_artifact_note": "type6 questions share the 'Who is the person whose <attr> is' template (7/9 tokens), so raw-text token-Jaccard near-dups are expected artifacts; the binding criterion is exact question text and attribute-value overlap, both structurally 0 after pool dedup."
+ },
+ "lessons": {
+  "0": {
+   "lesson_id": "bc4e919ac217c85eb41888af980ec68e9af3093c3b9e006b9daeccdbbe7edaec",
+   "group": 0,
+   "trusted_class": "C01",
+   "distractor_class": "Q01",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-ad190c84-0d9",
+   "training_universe": "uni_s1011"
+  },
+  "1": {
+   "lesson_id": "0b67945f65cec99b21de7c20321a6f84bfd8796f5a60056cc5c68ae05ef34263",
+   "group": 0,
+   "trusted_class": "C02",
+   "distractor_class": "Q02",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-b7fefc63-ec7",
+   "training_universe": "uni_s1015"
+  },
+  "2": {
+   "lesson_id": "b071122ba884b90269c2cc764db331af379b1b52be19a949807774423c9f131f",
+   "group": 0,
+   "trusted_class": "C03",
+   "distractor_class": "Q03",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-4c7ac97b-43c",
+   "training_universe": "uni_s1010"
+  },
+  "3": {
+   "lesson_id": "d58190d7b3e900a9dee612957a6090ca348ed5bb0c0af04571fd6fdbdf007b39",
+   "group": 0,
+   "trusted_class": "C04",
+   "distractor_class": "Q04",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-404180aa-a17",
+   "training_universe": "uni_s1009"
+  },
+  "4": {
+   "lesson_id": "6d95cb47c0f99262b6ad10943df3879c20086bc59c2c8ebfed6e138036cf21f8",
+   "group": 0,
+   "trusted_class": "C05",
+   "distractor_class": "Q05",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-0cb43436-1df",
+   "training_universe": "uni_s1002"
+  },
+  "5": {
+   "lesson_id": "f3624cce7ced003ab7e2a99d057e835e4090837b889111d1a33bcb0bfec7d3dc",
+   "group": 0,
+   "trusted_class": "C06",
+   "distractor_class": "Q06",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-ff5da3ee-074",
+   "training_universe": "uni_s1009"
+  },
+  "6": {
+   "lesson_id": "4528719c5474d9b41c55cfa3d34d42675cec30457021df13a9d8d0d92b68b9f2",
+   "group": 0,
+   "trusted_class": "C07",
+   "distractor_class": "Q07",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-77241532-7b5",
+   "training_universe": "uni_s1005"
+  },
+  "7": {
+   "lesson_id": "7e0a995682e39f720305de3b661c03a4c2f2d39b28cedef7ce9475189c781e5f",
+   "group": 0,
+   "trusted_class": "C08",
+   "distractor_class": "Q08",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-27c9e02d-6a2",
+   "training_universe": "uni_s1012"
+  },
+  "8": {
+   "lesson_id": "d9d3ae55e2c4cb7382693e5bfe4de92cc77a20127e1cef936609eb167422a040",
+   "group": 0,
+   "trusted_class": "C09",
+   "distractor_class": "Q09",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-e24c658e-cde",
+   "training_universe": "uni_s1016"
+  },
+  "9": {
+   "lesson_id": "532a471983ef5f880c530cd5d85b042761ff36e216d635f12d55c2304e12df27",
+   "group": 0,
+   "trusted_class": "C10",
+   "distractor_class": "Q10",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-75d87e3a-056",
+   "training_universe": "uni_s1006"
+  },
+  "10": {
+   "lesson_id": "b815fadae5b0a408a915c86d3e5951963b592ab9bc5e1ecbcba6e06e9e7b8719",
+   "group": 0,
+   "trusted_class": "C11",
+   "distractor_class": "Q11",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-25c876b7-8a6",
+   "training_universe": "uni_s1007"
+  },
+  "11": {
+   "lesson_id": "168bf7da16274bfa19f1dc0f493b5a005ae907e291834175321b680e64531360",
+   "group": 0,
+   "trusted_class": "C12",
+   "distractor_class": "Q12",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-9c6bae52-73c",
+   "training_universe": "uni_s1005"
+  }
+ },
+ "fresh_base_accuracy": 0.0,
+ "headroom_band": [
+  0.3,
+  0.7
+ ],
+ "headroom_band_ok": false,
+ "learning": {
+  "edges_tested_note": "2 anchors per contributing train case",
+  "edges_kept": 22,
+  "worlds_with_valid_edge": [
+   0,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ],
+  "edge_weights": {
+   "C01->bc4e919ac217": 1,
+   "C03->b071122ba884": 1,
+   "C04->d58190d7b3e9": 1,
+   "C05->6d95cb47c0f9": 1,
+   "C06->f3624cce7ced": 1,
+   "C07->4528719c5474": 1,
+   "C08->7e0a995682e3": 1,
+   "C09->d9d3ae55e2c4": 1,
+   "C10->532a471983ef": 1,
+   "C11->b815fadae5b0": 1,
+   "C12->168bf7da1627": 1,
+   "Q01->bc4e919ac217": 1,
+   "Q03->b071122ba884": 1,
+   "Q04->d58190d7b3e9": 1,
+   "Q05->6d95cb47c0f9": 1,
+   "Q06->f3624cce7ced": 1,
+   "Q07->4528719c5474": 1,
+   "Q08->7e0a995682e3": 1,
+   "Q09->d9d3ae55e2c4": 1,
+   "Q10->532a471983ef": 1,
+   "Q11->b815fadae5b0": 1,
+   "Q12->168bf7da1627": 1
+  },
+  "checkpoints": [
+   {
+    "after_case": 4,
+    "n_edges": 6
+   },
+   {
+    "after_case": 8,
+    "n_edges": 14
+   }
+  ]
+ },
+ "arms": {
+  "A_learned": {
+   "n_edges": 22,
+   "fresh_accuracy": 0.8333333333333334,
+   "fresh_parse_failures": 0,
+   "empty_contexts": 1
+  },
+  "B_shuffled": {
+   "n_edges": 22,
+   "fresh_accuracy": 0.3333333333333333,
+   "fresh_parse_failures": 0,
+   "empty_contexts": 1
+  },
+  "C_clique": {
+   "n_edges": 288,
+   "fresh_accuracy": 0.5,
+   "fresh_parse_failures": 0,
+   "empty_contexts": 0
+  },
+  "D_random_sparse": {
+   "n_edges": 22,
+   "fresh_accuracy": 0.3333333333333333,
+   "fresh_parse_failures": 0,
+   "empty_contexts": 2
+  }
+ },
+ "topology_divergence": {
+  "A_learned_vs_B_shuffled": {
+   "n_differing_cases": 3,
+   "differing_fresh_worlds": [
+    0,
+    4,
+    5
+   ]
+  },
+  "A_learned_vs_C_clique": {
+   "n_differing_cases": 4,
+   "differing_fresh_worlds": [
+    0,
+    1,
+    2,
+    4
+   ]
+  },
+  "A_learned_vs_D_random_sparse": {
+   "n_differing_cases": 3,
+   "differing_fresh_worlds": [
+    0,
+    2,
+    4
+   ]
+  },
+  "B_shuffled_vs_C_clique": {
+   "n_differing_cases": 3,
+   "differing_fresh_worlds": [
+    1,
+    2,
+    5
+   ]
+  },
+  "B_shuffled_vs_D_random_sparse": {
+   "n_differing_cases": 2,
+   "differing_fresh_worlds": [
+    2,
+    5
+   ]
+  },
+  "C_clique_vs_D_random_sparse": {
+   "n_differing_cases": 1,
+   "differing_fresh_worlds": [
+    1
+   ]
+  }
+ },
+ "causal_curve": {
+  "k_steps": 1,
+  "loo_measured_edges": {
+   "C01->bc4e919ac217": 0.0,
+   "C03->b071122ba884": 0.0
+  },
+  "curve_top_acc": [
+   0.8333
+  ],
+  "curve_rand_acc": [
+   0.8333
+  ],
+  "auc_gap": 0.0,
+  "auc_gap_ci95": [
+   0.0,
+   0.0
+  ],
+  "importance_note": "LOO on top-M edges by learned weight; deeper by weight (r1과 동일 편차)"
+ },
+ "structure_performance": {
+  "checkpoint_accuracies": {
+   "ckpt_4": 0.5,
+   "ckpt_8": 0.8333333333333334,
+   "final": 0.8333333333333334
+  },
+  "points": [
+   [
+    8,
+    0.33333333333333337
+   ],
+   [
+    16,
+    0.33333333333333337
+   ],
+   [
+    8,
+    0.0
+   ]
+  ],
+  "spearman_rho": 0.5,
+  "rho_ci95": [
+   0.5,
+   1.0
+  ]
+ },
+ "kill_condition_observations": {
+  "f4_k1_any_control_catches_a": false,
+  "f4_k2_auc_gap_ci_includes_0": true,
+  "f4_k3_rho_ci_includes_0": false,
+  "values": {
+   "learned_minus_best_control": 0.3333,
+   "best_control": "C_clique",
+   "control_gaps": {
+    "B_shuffled": {
+     "a_minus_x": 0.5,
+     "ci95": [
+      0.1667,
+      0.8333
+     ]
+    },
+    "C_clique": {
+     "a_minus_x": 0.3333,
+     "ci95": [
+      -0.3333,
+      0.8333
+     ]
+    },
+    "D_random_sparse": {
+     "a_minus_x": 0.5,
+     "ci95": [
+      0.1667,
+      0.8333
+     ]
+    }
+   },
+   "auc_gap": 0.0,
+   "rho": 0.5
+  },
+  "note": "mechanical observation only; sealed judgment belongs to the gate"
+ },
+ "llm_budget": {
+  "max_calls": 100,
+  "used": 49,
+  "answerer": {
+   "backend": "vllm",
+   "url": "http://127.0.0.1:18000/v1",
+   "model": "qwen3.6-27b",
+   "misses": 49,
+   "hits": 41,
+   "degraded_to_parallel": null
+  },
+  "total_logical": 90
+ },
+ "aborted": null,
+ "wall_clock_s": 422.0
+}

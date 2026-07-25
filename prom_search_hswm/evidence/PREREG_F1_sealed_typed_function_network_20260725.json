@@ -1,0 +1,46 @@
+{
+ "schema_version": "hswm-preregistration/v1",
+ "programme": "PROM-9-HSWM-semantic-neural-network",
+ "branch": "F1-sealed-typed-function-network",
+ "registered_at": "2026-07-25T08:05:00Z",
+ "registered_by": "kimi-code-cli (user-approved sealed fire)",
+ "question": "Sealed n=100에서 typed HSWM 3-function network가 actual-compute-matched flat과 vector를 모두 이기고, 역할 제거/셔플에서 효과가 사라지는가?",
+ "cohort": {
+  "dataset": "framolfese/2WikiMultihopQA",
+  "split": "validation",
+  "offset": 4,
+  "length": 100,
+  "disjoint_from": "dev r1-r5 cohorts (offset 0, length 4)",
+  "source_receipt_sha256": "9e5a7fddfc294b0ca2595796ff5a6248565b23f6bd2ac7ac3de92c1ff124d35b",
+  "gold_sha256": "8e34c1918c73d13898f2eac1be994602466002c1c2b924f893d162daf4df61e0"
+ },
+ "model": {
+  "id": "Qwen/Qwen3.6-27B",
+  "endpoint": "http://192.168.0.23:8000/v1/chat/completions (dgx vLLM)",
+  "temperature": 0,
+  "enable_thinking": false,
+  "tokenizer_validation_receipt": "receipts/token_meter_validation_qwen36_vs_r4_20260725.json (EXACT_MATCH_60_OF_60)"
+ },
+ "budget_contract": {
+  "calls_per_item_per_arm": 3,
+  "output_caps_per_call": [256, 512, 256],
+  "token_tolerance_spread": 512,
+  "per_call_input_caps": {"1": 280, "2": 1713, "3": 2152},
+  "parity_filler": "declared inert digit-unit filler inside validated payload, hash-covered"
+ },
+ "predictions": [
+  {"metric": "typed_minus_flat_paired_bootstrap_lcb", "direction": "higher", "threshold": 0.0, "credence": 0.35},
+  {"metric": "typed_minus_vector_paired_bootstrap_lcb", "direction": "higher", "threshold": 0.0, "credence": 0.25},
+  {"metric": "removal_loses_effect", "direction": "boolean", "threshold": true, "credence": 0.8},
+  {"metric": "shuffle_loses_effect", "direction": "boolean", "threshold": true, "credence": 0.6},
+  {"metric": "token_parity_spread_max", "direction": "lower", "threshold": 512, "credence": 0.9}
+ ],
+ "kill_condition": "The conjunction fails: typed does not beat flat or vector (paired bootstrap LCB <= 0), removal or shuffle retains the effect, any item exceeds the 512 spread, or any arm makes other than exactly 3 calls. On rejection, the current 3-function belt composition claim stops (canon direction 2026-07-24 line: typed=vector tie twice means role-decomposition/state-representation replacement, not belt patching).",
+ "honesty_boundaries": [
+  "n=100 sealed slice of 2Wiki validation only; no production or cross-dataset generalization.",
+  "Bootstrap CIs are over the fixed sealed panel, not a population claim.",
+  "A PASS activates the ORDERED sequence (Gate-0 registration then P1v5); it is not itself an efficacy claim beyond the F1 question.",
+  "Development runs (r1-r5) are engineering receipts only and carry no sealed weight."
+ ],
+ "manifest_sha256": "785ad621dd1db01310cadbccd5518cffc7788b02c8942038008a2c776b20f984"
+}

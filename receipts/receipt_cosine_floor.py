@@ -26,6 +26,12 @@ v2.7.1 (2026-07-24, claude-code audit findings): F5 degenerate-val guard
   (all-zero recompute refused), F5b split re-derivation from (train_q, seed),
   F5 negative oracle widened to all three rejection branches, F6b AST loop-use
   check (the loop must call the canaried helper).
+v2.8b (2026-07-24): F7 winner's-curse bound. F2's "held on test" is empirical;
+  F7 measures the curse rate (λ* picks val noise → test gap < 0) on 8 fresh
+  deterministic splits of THIS structured distribution and locks it ≤ 0.25
+  (measured 0.000). Boundary honestly recorded: on structure-free inputs
+  (raw random embeddings) selection overfits (4/5 negative) — the claim is
+  scoped to structured fields.
   (F6) TRAIN-PATH CANARY (v2.7): the trainer's internal score/gate are the
        shipped _train_score_and_gate — sc == cos + λ·ReLU(resid) and
        gate == λ·(resid>0) exactly. Kills the v21 train-path survivors
@@ -80,8 +86,9 @@ LOCK = {
     "F4_prereg_efficacy": "synthetic dev1 mean-nDCG gain >= +0.03 (prediction-d1-additive-j-frozen-cosine ii)",
     "F5_val_selection": "selection is honest argmax over a grid containing 0: val[lam*] >= val[0] (grok-audit gap: mechanism was trusted, not checked)",
     "F6_train_canary": "trainer score/gate ARE the locked formulas: sc == cos + lam*ReLU(resid), gate == lam*(resid>0) (kills binop@88/92 train-path survivors)",
+    "F7_winners_curse": "test floor는 경험적 보장 — 구조화 필드에서 fresh split curse rate(λ*가 val 노이즈를 골라 test gap<0) 측정값이 선언 상한(0.25) 이하. 구조 없는 입력에선 selection이 overfit 가능(4/5 실측) — claim은 구조화 필드에 한정",
     "not_guaranteed": "per-query nDCG >= cosine (positive j re-ranks; can regress)",
-    "negative_oracle": "signed-j (no ReLU, lam>0) breaks F1; constant-shift (lam + ReLU) breaks F3; rigged selection diag breaks F5",
+    "negative_oracle": "signed-j (no ReLU, lam>0) breaks F1; constant-shift (lam + ReLU) breaks F3; rigged selection diag breaks F5; over-bound curse rate breaks F7",
 }
 
 # v2.2: machine binding from LOCK prose keys to the verdict-gating variables.
@@ -93,8 +100,17 @@ LOCK_CHECKS = {
     "F4_prereg_efficacy": "f4_ok",
     "F5_val_selection": "f5_ok",
     "F6_train_canary": ["f6_ok", "f6b_ok"],
-    "negative_oracle": ["neg_breaks", "neg3_breaks", "neg5_breaks"],
+    "F7_winners_curse": "f7_ok",
+    "negative_oracle": ["neg_breaks", "neg3_breaks", "neg5_breaks", "neg7_breaks"],
 }
+
+
+CURSE_BOUND = 0.25
+CURSE_SEEDS = tuple(range(101, 109))
+
+
+def _f7_within_bound(rate: float, bound: float = CURSE_BOUND) -> bool:
+    return rate <= bound
 
 
 def _f5_selection_consistent(lam_sel: float, diag: dict, recomputed: dict) -> bool:
@@ -217,6 +233,32 @@ def main() -> int:
                          and _s.func.id == "_train_score_and_gate" for _s in ast.walk(_node))
     print(f"F6b positive: train_additive_j calls _train_score_and_gate (AST) -> {'OK' if f6b_ok else 'FAIL'}")
 
+    # (F7) WINNER'S-CURSE BOUND (v2.8b) — the F2 "held on test" claim is empirical;
+    # measure how often val-selection picks noise on FRESH deterministic splits of
+    # this receipt's own structured distribution. On structure-free inputs selection
+    # can overfit (measured 4/5 on raw random embeddings, 2026-07-24) — the claim is
+    # scoped to structured fields, and this gate binds that scope to a bound.
+    curse_gaps = []
+    for s in CURSE_SEEDS:
+        ds_s = synth.generate("semantics", seed=s, deviation=1.0, n_queries=200)
+        perm_s = np.random.default_rng(s).permutation(ds_s.Q)
+        tr_s, te_s = perm_s[: int(ds_s.Q * 0.6)], perm_s[int(ds_s.Q * 0.6):]
+        pooled_s = _unit(ds_s.hg.pooled_emb("mean"))
+        M_s, lam_s, _ = train_additive_j(ds_s, tr_s, seed=s)
+
+        def _mean_ndcg_s(l, _ds=ds_s, _te=te_s, _M=M_s, _p=pooled_s):
+            return float(np.mean([
+                metrics.ndcg_at_k(score_additive(_p[synth.candidate_pool(_ds, int(q), 60, 0)],
+                                                 _ds.query_emb[int(q)], _M, l),
+                                  _ds.gold[int(q)], synth.candidate_pool(_ds, int(q), 60, 0),
+                                  k=10, seed=0)
+                for q in _te]))
+        curse_gaps.append(_mean_ndcg_s(lam_s) - _mean_ndcg_s(0.0))
+    curse_rate = sum(1 for g in curse_gaps if g < -1e-4) / len(curse_gaps)
+    f7_ok = _f7_within_bound(curse_rate)
+    print(f"F7 positive: winner's-curse rate = {curse_rate:.3f} over {len(curse_gaps)} fresh splits "
+          f"(gaps {['%+.3f' % g for g in curse_gaps]}) <= bound {CURSE_BOUND} -> {'OK' if f7_ok else 'FAIL'}")
+
     # documented (NOT a floor): per-query min
     per_q_min = min(
         metrics.ndcg_at_k(score_additive(pooled[synth.candidate_pool(ds, int(q), 60, 0)], ds.query_emb[int(q)], M, lam),
@@ -269,15 +311,21 @@ def main() -> int:
     neg5_breaks = neg5a and neg5b and neg5c
     print(f"negative-oracle-F5: bookkeeping={'rejected' if neg5a else 'PASS?'} grid-no-0={'rejected' if neg5b else 'PASS?'} non-argmax={'rejected' if neg5c else 'PASS?'} -> {'all rejected' if neg5_breaks else 'VACUOUS'}")
 
-    ok = f1_ok and f2_ok and f3_ok and f4_ok and f5_ok and f6_ok and f6b_ok and neg_breaks and neg3_breaks and neg5_breaks
+    # (5d) NEGATIVE ORACLE for F7 — an over-bound curse rate must be rejected
+    neg7_breaks = not _f7_within_bound(CURSE_BOUND + 0.5)
+    print(f"negative-oracle-F7: over-bound curse rate ({CURSE_BOUND + 0.5:.2f}) -> {'rejected' if neg7_breaks else 'ACCEPTED (vacuous)'}")
+
+    ok = f1_ok and f2_ok and f3_ok and f4_ok and f5_ok and f6_ok and f6b_ok and f7_ok and neg_breaks and neg3_breaks and neg5_breaks and neg7_breaks
     print("\nRECEIPT:", "VALID ✅" if ok else "INVALID ❌",
-          f"| F1={f1_ok} F2={f2_ok} F3={f3_ok} F4={f4_ok} F5={f5_ok} F6={f6_ok} F6b={f6b_ok} negF1={neg_breaks} negF3={neg3_breaks} negF5={neg5_breaks}")
+          f"| F1={f1_ok} F2={f2_ok} F3={f3_ok} F4={f4_ok} F5={f5_ok} F6={f6_ok} F6b={f6b_ok} F7={f7_ok} negF1={neg_breaks} negF3={neg3_breaks} negF5={neg5_breaks} negF7={neg7_breaks}")
     if not neg_breaks:
         print("  !! negative oracle failed to break F1 -> vacuous", file=sys.stderr)
     if not neg3_breaks:
         print("  !! negative oracle failed to break F3 -> vacuous", file=sys.stderr)
     if not neg5_breaks:
         print("  !! negative oracle failed to reject rigged F5 diag -> vacuous", file=sys.stderr)
+    if not neg7_breaks:
+        print("  !! negative oracle failed to reject over-bound curse rate -> vacuous", file=sys.stderr)
     return 0 if ok else 1
 
 

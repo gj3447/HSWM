@@ -1,0 +1,429 @@
+{
+ "schema_version": "hswm-f5-consolidation-receipt/v1",
+ "mode": "development",
+ "branch": "F5-consolidation",
+ "smoke": true,
+ "preregistration_file": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_f5_consolidation_20260725.json",
+ "preregistration_file_sha256": "b4de61edd77a72893a36e0c3a7c9753ac1d77c465f2d5b526d82f26c07a41b43",
+ "script_sha256": "e7f3269952ec489331efdaccd7792d0bed089492e159d0260f16d8f986ad1e08",
+ "harness_module_sha256": "3676724568fde19a752c07fdeabd9883ecfe04a3534ebf3f4d8fb2cc6b95c6e5",
+ "config": {
+  "episodes": 4,
+  "n_fresh_ep": 4,
+  "token_budget_chars": 800,
+  "split_seed": 20260730,
+  "seed": 20260725,
+  "max_answers": 1,
+  "max_calls": 120,
+  "parallel": 16,
+  "n_boot": 2000,
+  "universes_dir": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/_research/f2_sealed_universes",
+  "answer_backend": "vllm",
+  "answer_url": "http://127.0.0.1:18000/v1",
+  "answer_model": "qwen3.6-27b",
+  "smoke": true,
+  "out": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/receipts/f5_consolidation_smoke_1784998599.json",
+  "delta": 0.1,
+  "alpha": 0.8,
+  "theta": 0.5,
+  "gist_floor": 0.5
+ },
+ "consolidation_operator_definition": {
+  "wake": "correct typed lesson per episode; initial confidence c0 = 0.5 + 0.5*(acc_with_lesson - acc_without) on the episode's training case (Hebbian contribution).",
+  "sleep": "after episode k<E-1: for every lesson with origin<k, confidence *= alpha (0.8); a full-form lesson with confidence < theta (0.5) is COMPRESSED to the gist form 'Treat SOURCE_CLASS={klass} as authoritative when records conflict.' (supersedes chain) pinned at gist_floor (0.5 = the typed-lesson admission floor); gist lessons are never evicted.",
+  "edge_weight_meaning": "edge weight = Hebbian delta-s (c0) + downscale alpha per sleep (foundation semantic-weight-metric-contract self-fulfillment note).",
+  "retrieval": "rank by (confidence desc, lesson_id), pack into the shared char budget (per-lesson cost = instruction chars + 120)."
+ },
+ "prereg_reading_deviations": [
+  "simulated-lag: wall-clock weeks replaced by episode-interference lag — retention of episode i is probed at the final state, lag(i) = (E-1)-i subsequent episodes.",
+  "decay model: hierarchical function-form comparison (Murre&Dros) read as least-squares slope with paired bootstrap CI.",
+  "gist probe form: forced-choice verdict (parent decision 2026-07-26) — candidate classes listed, strict JSON {\"authoritative\": ...}, memory_context only, no case documents; the free-form meta-question scored 0 for all arms in smoke 1784997083 (answerer shape elicits entity names, not class codes).",
+  "schema-generalization probe read as gist accuracy on episodes whose lessons were compressed (gist form generalizes) vs uncompressed (CLS-prediction composition out of scope here)."
+ ],
+ "answerer_freeze": {
+  "backend": "vllm",
+  "url": "http://127.0.0.1:18000/v1",
+  "model": "qwen3.6-27b",
+  "note": "qwen3.6-27b (ollama qwen3:8b is actuation-incapable per F3-r3 smoke and is not used anywhere)."
+ },
+ "honesty": "grounded measurement only; no scientific claim; judgment is the gate's",
+ "question_pool": {
+  "universes_dir": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/_research/f2_sealed_universes",
+  "max_answers": 1,
+  "unique_question_texts": 379,
+  "per_universe_raw_counts": {
+   "dense_t200_fk9": 10,
+   "large_t200_fk3": 10,
+   "mid_t20_fk3": 16,
+   "small_t2_fk3": 27,
+   "sparse_t200_fk1": 10,
+   "uni_s1001": 26,
+   "uni_s1002": 29,
+   "uni_s1003": 27,
+   "uni_s1004": 27,
+   "uni_s1005": 27,
+   "uni_s1006": 29,
+   "uni_s1007": 24,
+   "uni_s1008": 26,
+   "uni_s1009": 23,
+   "uni_s1010": 28,
+   "uni_s1011": 23,
+   "uni_s1012": 27,
+   "uni_s1013": 26,
+   "uni_s1014": 27,
+   "uni_s1015": 26,
+   "uni_s1016": 28
+  },
+  "dedup_note": "t200 dirs (sparse/large/dense) share identical articles and type6 texts+answers (verified 2026-07-25, titles_sha equal); dedup by normalized question text collapses them to one contributor."
+ },
+ "splits": {
+  "n_train": 4,
+  "n_fresh": 16,
+  "skipped": {
+   "train": [],
+   "fresh": []
+  },
+  "split_seed": 20260730,
+  "fresh_episode_sizes": {
+   "0": 4,
+   "1": 4,
+   "2": 4,
+   "3": 4
+  }
+ },
+ "leakage": {
+  "exact_question_text_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "exact_attribute_value_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "binding_leakage": 0,
+  "binding_verdict": "CLEAN",
+  "audit_on_raw_question_texts": {
+   "leakage": 16,
+   "exact_overlaps": [],
+   "near_dup_pairs": [
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0324-07-03?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is audiophile?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is audiophile?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is audiophile?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is vinyl records?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is vinyl records?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is vinyl records?",
+     0.6667
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0263-10-21?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is baseball?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is baseball?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is baseball?",
+     0.75
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0264-02-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0241-01-17?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0281-11-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0254-08-03?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0212-04-26?",
+     0.8
+    ]
+   ],
+   "near_dup_threshold": 0.6,
+   "verdict": "VOID"
+  },
+  "audit_on_attribute_values": {
+   "leakage": 0,
+   "exact_overlaps": [],
+   "near_dup_pairs": [],
+   "near_dup_threshold": 0.6,
+   "verdict": "CLEAN"
+  },
+  "template_artifact_note": "type6 questions share the 'Who is the person whose <attr> is' template (7/9 tokens), so raw-text token-Jaccard near-dups are expected artifacts; the binding criterion is exact question text and attribute-value overlap, both structurally 0 after pool dedup."
+ },
+ "timeline": {
+  "wake": [
+   {
+    "episode": 0,
+    "acc_with": 1,
+    "acc_without": 1,
+    "c0": 0.5
+   },
+   {
+    "episode": 1,
+    "acc_with": 1,
+    "acc_without": 0,
+    "c0": 1.0
+   },
+   {
+    "episode": 2,
+    "acc_with": 1,
+    "acc_without": 0,
+    "c0": 1.0
+   },
+   {
+    "episode": 3,
+    "acc_with": 1,
+    "acc_without": 0,
+    "c0": 1.0
+   }
+  ],
+  "sleep_snapshot_sha256": [
+   "d25f598eff08a9133fc73fec5be4b4b7e25d713b3244076792592322d377c259",
+   "7f1bb4b4d5ef905a3b624122df1558fa2a74e0284c9f7e122f30c355e4b3aeab",
+   "07ef78074ef0422f60cbce2f852f6acad195bfc721301f6c07e9de5fd7dc538e"
+  ],
+  "final_store_A": [
+   {
+    "lesson_id": "5d9049ab3dc0d306",
+    "origin": 0,
+    "form": "gist",
+    "confidence": 0.5
+   },
+   {
+    "lesson_id": "f226185d97b0c182",
+    "origin": 1,
+    "form": "full",
+    "confidence": 0.8
+   },
+   {
+    "lesson_id": "9368668c24bfac5c",
+    "origin": 2,
+    "form": "full",
+    "confidence": 1.0
+   },
+   {
+    "lesson_id": "70bd6c1f4d9bb373",
+    "origin": 3,
+    "form": "full",
+    "confidence": 1.0
+   }
+  ]
+ },
+ "retention_curves": {
+  "lags": [
+   3,
+   2,
+   1,
+   0
+  ],
+  "R_detail": {
+   "A": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "B": [
+    0.0,
+    0.0,
+    0.25,
+    0.0
+   ],
+   "C": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+   ]
+  },
+  "R_gist": {
+   "A": [
+    1.0,
+    0.0,
+    1.0,
+    1.0
+   ],
+   "B": [
+    1.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "C": [
+    1.0,
+    0.0,
+    1.0,
+    1.0
+   ]
+  },
+  "base_detail": [
+   0.0,
+   0.0,
+   0.25,
+   0.0
+  ],
+  "immediate_A_detail": [
+   1.0,
+   0.75,
+   1.0,
+   1.0
+  ]
+ },
+ "headroom_band": [
+  0.3,
+  0.7
+ ],
+ "headroom_band_ok": false,
+ "decay_slopes": {
+  "slope_A": -0.4,
+  "slope_B": -0.025,
+  "slope_C": -0.4,
+  "A_minus_C": {
+   "diff": 0.0,
+   "ci95": [
+    0.0,
+    0.0
+   ]
+  },
+  "A_minus_B": {
+   "diff": -0.375,
+   "ci95": [
+    -0.4,
+    -0.325
+   ]
+  },
+  "method": "least-squares slope of R_detail(t) vs lag; paired bootstrap over per-lag case vectors (prereg hierarchical fit read as bootstrap slope CI)."
+ },
+ "judgment_conditions": {
+  "cond1_A_dominates_lag4plus_by_delta": false,
+  "cond2_A_slope_shallower_significant": false,
+  "lag4plus_indices": [],
+  "note": "smoke has max lag 3 -> cond1 not evaluable"
+ },
+ "kill_condition_observations": {
+  "f5_k1_B_within_delta_all_lags": true,
+  "f5_k2_A_minus_C_le_delta_all_lags": true,
+  "f5_k3_advantage_only_at_lag0": false,
+  "values": {
+   "gap_A_minus_B": [
+    0.0,
+    0.0,
+    0.75,
+    1.0
+   ],
+   "gap_A_minus_C": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "note": "mechanical observation only; sealed judgment belongs to the gate"
+ },
+ "gist_detail_branch": {
+  "detail_slope_A": -0.4,
+  "gist_slope_A": -0.1,
+  "transformation_signature": false
+ },
+ "BWT_FWT": {
+  "BWT_per_episode": [
+   1.0,
+   0.75,
+   0.0,
+   0.0
+  ],
+  "FWT_slope_immediate_over_episode": 0.025,
+  "note": "GEM format: BWT = immediate minus final-lag retention per episode; FWT = slope of wake-time actuation over episodes."
+ },
+ "conflict_density": {
+  "injected_counts": [
+   0,
+   1,
+   2
+  ],
+  "accuracy_A_ref_episode": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "note": "contradictory (inverted) lesson injection into arm A's render; resolution read as accuracy retention."
+ },
+ "cost_metric": {
+  "mean_context_chars": {
+   "A": 979.0,
+   "B": 800.0,
+   "C": 979.0
+  },
+  "chars_per_correct_answer": {
+   "A": 1958.0,
+   "C": 1958.0,
+   "B": 12800.0
+  }
+ },
+ "parse_failures_total": 0,
+ "llm_budget": {
+  "max_calls": 120,
+  "used": 32,
+  "answerer": {
+   "backend": "vllm",
+   "url": "http://127.0.0.1:18000/v1",
+   "model": "qwen3.6-27b",
+   "misses": 32,
+   "hits": 116
+  },
+  "total_logical": 148
+ },
+ "aborted": null,
+ "wall_clock_s": 64.9
+}

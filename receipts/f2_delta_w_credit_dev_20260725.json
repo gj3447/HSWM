@@ -1,0 +1,313 @@
+{
+ "schema_version": "hswm-f2-delta-w-credit-dev-receipt/v1",
+ "mode": "development",
+ "branch": "F2-delta-w-credit",
+ "preregistration_file": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_f2_delta_w_credit_20260725.json",
+ "preregistration_file_sha256": "8d478dec6a134a29358e7de6f034c0c712e473f2b2122b835c537c04176b41b3",
+ "script_sha256": "e1869ac84dfa1942423a91cbf99948c056a3af466e782203e07386a3bfd8513c",
+ "config": {
+  "n_dev": 2,
+  "m_perms": 1,
+  "n_fresh": 2,
+  "parallel": 4,
+  "max_subsets": 44,
+  "max_calls": 400,
+  "model": "qwen3:14b",
+  "critic_model": "qwen3:14b",
+  "endpoint": "http://127.0.0.1:11434/v1",
+  "seed": 20260725,
+  "smoke": true,
+  "out": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/receipts/f2_delta_w_credit_dev_20260725.json"
+ },
+ "answerer_freeze_note": "Sealed p1v4 answerer (Qwen3.6-35B-A3B-FP8, dell vLLM 127.0.0.1:18002) is not served on this host; dev run freezes the local ollama model qwen3:14b at http://127.0.0.1:11434/v1 per task instruction. Not comparable to sealed p1v4 numbers.",
+ "honesty": "development harness validation; no scientific claim; n << 100",
+ "splits": {
+  "universes": {
+   "train": "sparse_t200_fk1",
+   "dev": "large_t200_fk3",
+   "fresh": "mid_t20_fk3"
+  },
+  "n_train": 6,
+  "n_dev": 2,
+  "n_fresh": 2,
+  "skipped": {
+   "train": [],
+   "dev": [],
+   "fresh": []
+  },
+  "dev_case_worlds": [
+   0,
+   1
+  ],
+  "fresh_case_worlds": [
+   0,
+   1
+  ]
+ },
+ "disjoint_audit": {
+  "leakage": 26,
+  "exact_overlaps": [
+   "Who is the person whose date of birth is 0158-09-05?",
+   "Who is the person whose date of birth is 0324-03-05?"
+  ],
+  "near_dup_pairs": [
+   [
+    "Who is the person whose date of birth is 0324-03-05?",
+    "Who is the person whose date of birth is 0324-03-05?",
+    1.0
+   ],
+   [
+    "Who is the person whose date of birth is 0158-09-05?",
+    "Who is the person whose date of birth is 0324-03-05?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0180-08-19?",
+    "Who is the person whose date of birth is 0324-03-05?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0177-11-05?",
+    "Who is the person whose date of birth is 0324-03-05?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0254-08-03?",
+    "Who is the person whose date of birth is 0324-03-05?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0192-09-27?",
+    "Who is the person whose date of birth is 0324-03-05?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0324-03-05?",
+    "Who is the person whose date of birth is 0158-09-05?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0158-09-05?",
+    "Who is the person whose date of birth is 0158-09-05?",
+    1.0
+   ],
+   [
+    "Who is the person whose date of birth is 0180-08-19?",
+    "Who is the person whose date of birth is 0158-09-05?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0177-11-05?",
+    "Who is the person whose date of birth is 0158-09-05?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0254-08-03?",
+    "Who is the person whose date of birth is 0158-09-05?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0192-09-27?",
+    "Who is the person whose date of birth is 0158-09-05?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0324-03-05?",
+    "Who is the person whose date of birth is 0263-10-24?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0158-09-05?",
+    "Who is the person whose date of birth is 0263-10-24?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0180-08-19?",
+    "Who is the person whose date of birth is 0263-10-24?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0177-11-05?",
+    "Who is the person whose date of birth is 0263-10-24?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0254-08-03?",
+    "Who is the person whose date of birth is 0263-10-24?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0192-09-27?",
+    "Who is the person whose date of birth is 0263-10-24?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0324-03-05?",
+    "Who is the person whose date of birth is 0230-04-26?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0158-09-05?",
+    "Who is the person whose date of birth is 0230-04-26?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0180-08-19?",
+    "Who is the person whose date of birth is 0230-04-26?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0177-11-05?",
+    "Who is the person whose date of birth is 0230-04-26?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0254-08-03?",
+    "Who is the person whose date of birth is 0230-04-26?",
+    0.8
+   ],
+   [
+    "Who is the person whose date of birth is 0192-09-27?",
+    "Who is the person whose date of birth is 0230-04-26?",
+    0.8
+   ]
+  ],
+  "near_dup_threshold": 0.6,
+  "verdict": "VOID"
+ },
+ "lessons": {
+  "58881fc411bdfd57": {
+   "world_idx": 0,
+   "trusted_class": "RHO",
+   "distractor_class": "TAU",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f2dev-train-8c6ba77c-09c",
+   "training_transcript_sha256": "39fb44d788d018f1a2e0845c0be963d9cb1af3b0a2384d5facaa5784f0743cd1"
+  },
+  "bdd4a742e4fdf636": {
+   "world_idx": 3,
+   "trusted_class": "KAPPA",
+   "distractor_class": "ZETA",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f2dev-train-ac93b1b9-ff7",
+   "training_transcript_sha256": "0dbdc908d2e98f80ebffc3c0d24f2278ee2bcff217897483dcad147bc982bbd8"
+  },
+  "c1c8713c3013bf7b": {
+   "world_idx": 2,
+   "trusted_class": "GAMMA",
+   "distractor_class": "DELTA",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f2dev-train-970ac88a-65b",
+   "training_transcript_sha256": "8aff37f137501bc6cf319f8c4e53dd1a6ccee15808fd6a34ac786bc3de78c533"
+  },
+  "c51c088778f3900c": {
+   "world_idx": 5,
+   "trusted_class": "ALPHA",
+   "distractor_class": "NU",
+   "orientation": "planted_inverted",
+   "admission": "skipped_planted_inverted",
+   "training_case_id": "f2dev-train-30e05e04-354",
+   "training_transcript_sha256": "f46378f1269d8a77716818741d6964df74450f5efad6e86e3c8e9cd7b41e530f"
+  },
+  "e1f414ace087cd1b": {
+   "world_idx": 1,
+   "trusted_class": "SIGMA",
+   "distractor_class": "BETA",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f2dev-train-8bb70999-bd0",
+   "training_transcript_sha256": "be017c1849ea12bb7dae1a3cbeea854909712a31f2efa50ff6286545862588a2"
+  },
+  "f6ca9c6094e17861": {
+   "world_idx": 4,
+   "trusted_class": "OMEGA",
+   "distractor_class": "PSI",
+   "orientation": "planted_inverted",
+   "admission": "skipped_planted_inverted",
+   "training_case_id": "f2dev-train-8da5e630-7e9",
+   "training_transcript_sha256": "d49463796701834ccf5c3d2192e8cb7f929bac232a8844cfb359c95aeb2be770"
+  }
+ },
+ "dev_base_accuracy": 0.0,
+ "dev_full_store_accuracy": 0.0,
+ "headroom_band": [
+  0.3,
+  0.7
+ ],
+ "headroom_band_ok": false,
+ "credit": {
+  "m_perms_run": 1,
+  "distinct_subsets_evaluated": 12,
+  "phi_tmc": {
+   "58881fc411bdfd57": 0.0,
+   "bdd4a742e4fdf636": 0.0,
+   "c1c8713c3013bf7b": 0.0,
+   "c51c088778f3900c": 0.0,
+   "e1f414ace087cd1b": 0.0,
+   "f6ca9c6094e17861": 0.0
+  },
+  "loo_delta_v": {
+   "58881fc411bdfd57": 0.0,
+   "bdd4a742e4fdf636": 0.0,
+   "c1c8713c3013bf7b": 0.0,
+   "c51c088778f3900c": 0.0,
+   "e1f414ace087cd1b": 0.0,
+   "f6ca9c6094e17861": 0.0
+  },
+  "spearman_rho": null,
+  "spearman_note": "undefined (constant vector)",
+  "prereg_gate_rho_ge_0.2": null
+ },
+ "arms": {
+  "a_credit_informed": {
+   "kept_lessons": [
+    "58881fc411bdfd57",
+    "bdd4a742e4fdf636",
+    "c1c8713c3013bf7b",
+    "c51c088778f3900c"
+   ],
+   "fresh_accuracy": 0.0,
+   "fresh_parse_failures": 2,
+   "deleted": [
+    "e1f414ace087cd1b",
+    "f6ca9c6094e17861"
+   ],
+   "kept_top2": [
+    "58881fc411bdfd57",
+    "bdd4a742e4fdf636"
+   ]
+  },
+  "b_random_edit": {
+   "kept_lessons": [
+    "58881fc411bdfd57",
+    "bdd4a742e4fdf636",
+    "e1f414ace087cd1b",
+    "f6ca9c6094e17861"
+   ],
+   "fresh_accuracy": 0.0,
+   "fresh_parse_failures": 2,
+   "deleted": [
+    "c1c8713c3013bf7b",
+    "c51c088778f3900c"
+   ]
+  },
+  "c_verbal_gradient": {
+   "error": "arm-c critic output unusable: Expecting value: line 1 column 1 (char 0)"
+  }
+ },
+ "dev_measurements": {
+  "credit_informed_minus_random": 0.0,
+  "note": "development-scale point estimate only; no CI, no claim"
+ },
+ "llm_budget": {
+  "max_calls": 400,
+  "misses": 29,
+  "hits": 0,
+  "total_logical": 29
+ },
+ "aborted": null,
+ "wall_clock_s": 389.4
+}

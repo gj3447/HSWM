@@ -1,0 +1,459 @@
+{
+ "schema_version": "hswm-f2-delta-w-credit-receipt/v2",
+ "mode": "development",
+ "branch": "F2-delta-w-credit",
+ "smoke": true,
+ "preregistration_file": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_f2_delta_w_credit_20260725.json",
+ "preregistration_file_sha256": "8d478dec6a134a29358e7de6f034c0c712e473f2b2122b835c537c04176b41b3",
+ "script_sha256": "3676724568fde19a752c07fdeabd9883ecfe04a3534ebf3f4d8fb2cc6b95c6e5",
+ "config": {
+  "n_dev": 6,
+  "n_fresh": 6,
+  "m_shapley": 4,
+  "lessons": 6,
+  "seed": 20260725,
+  "parallel": 16,
+  "max_answers": 1,
+  "max_calls": 80,
+  "max_subsets": 0,
+  "max_tmc_subsets": 5,
+  "loo_budget": 2,
+  "universes_dir": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/_research/r3_replay/universes",
+  "answer_backend": "vllm",
+  "answer_url": "http://127.0.0.1:18000/v1",
+  "answer_model": "qwen3.6-27b",
+  "critic_url": "http://127.0.0.1:11434",
+  "critic_model": "qwen3:14b",
+  "smoke": true,
+  "out": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/receipts/f2_delta_w_credit_smoke_1784960113.json"
+ },
+ "answerer_freeze": {
+  "backend": "vllm",
+  "url": "http://127.0.0.1:18000/v1",
+  "model": "qwen3.6-27b",
+  "lineage_note": "Sealed p1v4 answerer was Qwen/Qwen3.6-35B-A3B-FP8 (dell vLLM 127.0.0.1:18002, receipts/p1v2_qwen35_deployment_20260724.json), not served on this host; the frozen answerer here is the closest available model in the same Qwen3.6 family on the dgx vLLM endpoint. User directive 2026-07-25: vLLM is the intended answerer backend.",
+  "thinking_off": "vLLM OpenAI-compat chat_template_kwargs {\"enable_thinking\": false} (verified honoured on this endpoint 2026-07-25: content returned, reasoning_content empty, finish=stop).",
+  "judge_role_separation": "Scoring is gold exact-set-match (no LLM judge), so sharing the vLLM endpoint introduces no judging circularity. The verbal-gradient critic is kept on a separate backend/model: ollama qwen3:14b at http://127.0.0.1:11434."
+ },
+ "honesty": "grounded measurement only; no scientific claim; judgment is the gate's",
+ "question_pool": {
+  "universes_dir": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/_research/r3_replay/universes",
+  "max_answers": 1,
+  "unique_question_texts": 52,
+  "per_universe_raw_counts": {
+   "dense_t200_fk9": 10,
+   "large_t200_fk3": 10,
+   "mid_t20_fk3": 16,
+   "small_t2_fk3": 27,
+   "sparse_t200_fk1": 10
+  },
+  "dedup_note": "t200 dirs (sparse/large/dense) share identical articles and type6 texts+answers (verified 2026-07-25, titles_sha equal); dedup by normalized question text collapses them to one contributor."
+ },
+ "splits": {
+  "n_train": 6,
+  "n_dev": 6,
+  "n_fresh": 6,
+  "skipped": {
+   "train": [],
+   "dev": [],
+   "fresh": []
+  },
+  "split_universes": {
+   "train": [
+    "mid_t20_fk3",
+    "small_t2_fk3"
+   ],
+   "dev": [
+    "mid_t20_fk3",
+    "small_t2_fk3"
+   ],
+   "fresh": [
+    "dense_t200_fk9",
+    "mid_t20_fk3",
+    "small_t2_fk3"
+   ]
+  },
+  "dev_case_worlds": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "fresh_case_worlds": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+ },
+ "leakage": {
+  "exact_question_text_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "exact_attribute_value_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "binding_leakage": 0,
+  "binding_verdict": "CLEAN",
+  "audit_on_raw_question_texts": {
+   "leakage": 22,
+   "exact_overlaps": [],
+   "near_dup_pairs": [
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0156-05-03?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0232-04-11?",
+     "Who is the person whose date of birth is 0156-05-03?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-24?",
+     "Who is the person whose date of birth is 0156-05-03?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is clinical cytogeneticist?",
+     "Who is the person whose occupation is operations geologist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is biomedical scientist?",
+     "Who is the person whose occupation is operations geologist?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0230-04-26?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0232-04-11?",
+     "Who is the person whose date of birth is 0230-04-26?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-24?",
+     "Who is the person whose date of birth is 0230-04-26?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is clinical cytogeneticist?",
+     "Who is the person whose occupation is sound technician?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is biomedical scientist?",
+     "Who is the person whose occupation is sound technician?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0302-01-20?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0232-04-11?",
+     "Who is the person whose date of birth is 0302-01-20?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-24?",
+     "Who is the person whose date of birth is 0302-01-20?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0239-10-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0232-04-11?",
+     "Who is the person whose date of birth is 0239-10-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-24?",
+     "Who is the person whose date of birth is 0239-10-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0192-09-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0232-04-11?",
+     "Who is the person whose date of birth is 0192-09-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-24?",
+     "Who is the person whose date of birth is 0192-09-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0150-04-21?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0232-04-11?",
+     "Who is the person whose date of birth is 0150-04-21?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-24?",
+     "Who is the person whose date of birth is 0150-04-21?",
+     0.8
+    ]
+   ],
+   "near_dup_threshold": 0.6,
+   "verdict": "VOID"
+  },
+  "audit_on_attribute_values": {
+   "leakage": 0,
+   "exact_overlaps": [],
+   "near_dup_pairs": [],
+   "near_dup_threshold": 0.6,
+   "verdict": "CLEAN"
+  },
+  "template_artifact_note": "type6 questions share the 'Who is the person whose <attr> is' template (7/9 tokens), so raw-text token-Jaccard near-dups are expected artifacts; the binding criterion is exact question text and attribute-value overlap, both structurally 0 after pool dedup."
+ },
+ "lessons": {
+  "13048f87e78bde1e": {
+   "world_idx": 4,
+   "trusted_class": "OMEGA",
+   "distractor_class": "PSI",
+   "orientation": "planted_inverted",
+   "admission": "skipped_planted_inverted",
+   "training_case_id": "f2seal-train-ee7690c9-056",
+   "training_universe": "small_t2_fk3",
+   "training_transcript_sha256": "cdea5f9cbcb9ce8a48762c636ef2c0ea5d0c6f26e371c8adbda2e5612baea883"
+  },
+  "33bd8606e141d6ed": {
+   "world_idx": 0,
+   "trusted_class": "RHO",
+   "distractor_class": "TAU",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f2seal-train-d7a09653-42c",
+   "training_universe": "small_t2_fk3",
+   "training_transcript_sha256": "1d077879805d10ded5e24e085cdb93a02595eb34b2b742a6937c0359f9ad4c2a"
+  },
+  "42bee883c6879ccd": {
+   "world_idx": 3,
+   "trusted_class": "KAPPA",
+   "distractor_class": "ZETA",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f2seal-train-838e896c-322",
+   "training_universe": "small_t2_fk3",
+   "training_transcript_sha256": "4e4760bd6776d8db885feea7de045082a4b92774726df01b287ce97076882ddb"
+  },
+  "5791e9bc8c19f3ae": {
+   "world_idx": 2,
+   "trusted_class": "GAMMA",
+   "distractor_class": "DELTA",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f2seal-train-3a6cd86c-e7f",
+   "training_universe": "mid_t20_fk3",
+   "training_transcript_sha256": "cb3dd1df8a746e76217765fb44a03ed5c7cb18e8cb749aef65dc48ebf0868af0"
+  },
+  "730777282524f1ac": {
+   "world_idx": 1,
+   "trusted_class": "SIGMA",
+   "distractor_class": "BETA",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f2seal-train-2dee56c6-45b",
+   "training_universe": "small_t2_fk3",
+   "training_transcript_sha256": "ee57270067d60b120c44db44a4a83aa764b03608daa964f6a5711de5d5ce97ff"
+  },
+  "e903ba80f0352243": {
+   "world_idx": 5,
+   "trusted_class": "ALPHA",
+   "distractor_class": "NU",
+   "orientation": "planted_inverted",
+   "admission": "skipped_planted_inverted",
+   "training_case_id": "f2seal-train-48342e2c-b1a",
+   "training_universe": "mid_t20_fk3",
+   "training_transcript_sha256": "6ad74bc25609efe11173e6e3ff0f0c84c9d479d842dcf3751ed77d6ebf3c9197"
+  }
+ },
+ "placebo_store": {
+  "seed": "f2-placebo-20260725",
+  "content_pool": [
+   "When brewing green tea, steep the leaves for two minutes in water below eighty degrees and discard the first rinse to keep the flavor clear.",
+   "Before repotting a fern, loosen the outer roots gently and choose a pot only slightly wider than the one it grew in before.",
+   "To keep a bicycle chain quiet, wipe it dry after wet rides and apply one small drop of lubricant to each link, then spin the pedals slowly.",
+   "When tuning a guitar by ear, match the fifth fret of each string to the open string below it, except for the third string which uses the fourth.",
+   "For a crisp bread crust, preheat the oven completely and place a shallow tray of water on the lower rack during the first half of baking.",
+   "When sketching a portrait, begin with the distance between the eyes and compare every other measurement against that single unit repeatedly."
+  ],
+  "content_pool_sha256": "ca72e23415f449545c991cf5b235b0fd9c115cdfd0d0d6a5ec79f64edceb4695",
+  "lesson_id_map": {
+   "13048f87e78bde1e": "5256d57a89c3c05a",
+   "33bd8606e141d6ed": "f57c606fc5584ed1",
+   "42bee883c6879ccd": "68c4f1e4de0f665f",
+   "5791e9bc8c19f3ae": "194d0bfdf2034c97",
+   "730777282524f1ac": "800caf1b70b72150",
+   "e903ba80f0352243": "cda8f62ecd1671e7"
+  }
+ },
+ "dev_base_accuracy": 0.0,
+ "dev_full_store_accuracy": 0.6666666666666666,
+ "headroom_band": [
+  0.3,
+  0.7
+ ],
+ "headroom_band_ok": false,
+ "credit": {
+  "tmc_seed": "f2-tmc-20260725",
+  "m_perms_run": 1,
+  "tmc_truncated": true,
+  "distinct_subsets_evaluated": 9,
+  "phi_tmc": {
+   "13048f87e78bde1e": 0.0,
+   "33bd8606e141d6ed": 0.1667,
+   "42bee883c6879ccd": 0.1667,
+   "5791e9bc8c19f3ae": 0.1667,
+   "730777282524f1ac": 0.3333,
+   "e903ba80f0352243": -0.1667
+  },
+  "loo_delta_v": {
+   "13048f87e78bde1e": 0.0,
+   "33bd8606e141d6ed": 0.1667,
+   "42bee883c6879ccd": null,
+   "5791e9bc8c19f3ae": 0.1667,
+   "730777282524f1ac": null,
+   "e903ba80f0352243": null
+  },
+  "loo_budget": 2,
+  "spearman_pairs": 3,
+  "spearman_rho": 1.0,
+  "spearman_note": null,
+  "prereg_gate_rho_ge_0.2": true
+ },
+ "arms": {
+  "a_credit_informed": {
+   "kept_lessons": [
+    "33bd8606e141d6ed",
+    "42bee883c6879ccd",
+    "5791e9bc8c19f3ae",
+    "730777282524f1ac"
+   ],
+   "fresh_accuracy": 0.8333333333333334,
+   "fresh_parse_failures": 0,
+   "deleted": [
+    "13048f87e78bde1e",
+    "e903ba80f0352243"
+   ],
+   "kept_top2": [
+    "730777282524f1ac",
+    "42bee883c6879ccd"
+   ]
+  },
+  "b_random_edit": {
+   "kept_lessons": [
+    "13048f87e78bde1e",
+    "33bd8606e141d6ed",
+    "730777282524f1ac",
+    "e903ba80f0352243"
+   ],
+   "fresh_accuracy": 0.3333333333333333,
+   "fresh_parse_failures": 0,
+   "deleted": [
+    "42bee883c6879ccd",
+    "5791e9bc8c19f3ae"
+   ]
+  },
+  "c_verbal_gradient": {
+   "kept_lessons": [
+    "42bee883c6879ccd",
+    "5791e9bc8c19f3ae",
+    "730777282524f1ac",
+    "e903ba80f0352243"
+   ],
+   "deleted": [
+    "13048f87e78bde1e",
+    "33bd8606e141d6ed"
+   ],
+   "fresh_accuracy": 0.3333333333333333,
+   "fresh_parse_failures": 0,
+   "critic": {
+    "critic_raw": {
+     "delete": [
+      "13048f87e78bde1e",
+      "33bd8606e141d6ed"
+     ],
+     "rationale": "Lessons 13048f87e78bde1e and 33bd8606e141d6ed were associated with incorrect outcomes in the development cases, suggesting they may be contributing to inaccuracies. Removing them may improve future accuracy."
+    },
+    "critic_cached": false
+   }
+  },
+  "d_deranged_placebo": {
+   "kept_lessons": [
+    "194d0bfdf2034c97",
+    "68c4f1e4de0f665f",
+    "800caf1b70b72150",
+    "f57c606fc5584ed1"
+   ],
+   "deleted": [
+    "5256d57a89c3c05a",
+    "cda8f62ecd1671e7"
+   ],
+   "fresh_accuracy": 0.0,
+   "fresh_parse_failures": 0,
+   "note": "same schema/token shape as arm (a), unrelated content; fresh accuracy >= arm (a) triggers prereg kill f2_k2"
+  }
+ },
+ "kill_condition_observations": {
+  "f2_k1_credit_informed_minus_random_le_0": false,
+  "f2_k2_placebo_ge_credit": false,
+  "f2_k3_saturation_base_ge_5_6": false,
+  "values": {
+   "credit_informed": 0.8333333333333334,
+   "random_edit": 0.3333333333333333,
+   "verbal_gradient": 0.3333333333333333,
+   "deranged_placebo": 0.0,
+   "dev_base": 0.0
+  },
+  "note": "mechanical observation only; sealed judgment belongs to the gate"
+ },
+ "llm_budget": {
+  "max_calls": 80,
+  "used": 79,
+  "answerer": {
+   "backend": "vllm",
+   "url": "http://127.0.0.1:18000/v1",
+   "model": "qwen3.6-27b",
+   "misses": 78,
+   "hits": 0,
+   "last_http_status": null,
+   "last_error_kind": null,
+   "degraded_to_parallel": null
+  },
+  "critic": {
+   "backend": "ollama",
+   "url": "http://127.0.0.1:11434",
+   "model": "qwen3:14b",
+   "misses": 1,
+   "hits": 0
+  },
+  "total_logical": 79
+ },
+ "aborted": null,
+ "wall_clock_s": 370.6
+}

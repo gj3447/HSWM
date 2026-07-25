@@ -27,9 +27,10 @@ Changes vs the 2026-07-25 dev edition (receipt ..._1784953230.json):
    delete positions as arm (a).  kill observation: placebo_acc >= credit_acc.
 
 3. Scale flags: --n-dev/--n-fresh/--m-shapley/--lessons/--seed/--parallel
-   (sealed defaults 100/100/16/6/20260725/8, parallel auto-degrades 8->4 on
-   ollama 5xx), --max-answers, --universes-dir, --max-tmc-subsets,
-   --loo-budget.  --smoke runs the full path at n6/m4/L6 within ~80 calls.
+   (sealed defaults 100/100/16/6/20260725/auto, parallel auto = 16 for vllm /
+   8 for ollama, halving ladder to min 4 on 429/5xx/timeout), --max-answers,
+   --universes-dir, --max-tmc-subsets, --loo-budget.  --smoke runs the full
+   path at n6/m4/L6 within ~80 calls.
 
 Environment: p1v3 policy-conflict cases (PhantomWiki type6).  Worlds: 6
 source-class pairs, one typed policy lesson per world; worlds 0-3 correct,
@@ -38,15 +39,22 @@ answerer exact-set-match accuracy with lesson subset S in memory_context
 (p1v2 prompt shape).  Credit = budget-capped TMC-Shapley over seeded
 permutations; gate = Spearman(phi, measured LOO delta-V) vs prereg 0.2.
 
-Answerer: local ollama native /api/chat with think=false (the OpenAI-compat
-/v1 path silently ignores every thinking-off switch on ollama 0.17.7 — see
-dev receipt f2_delta_w_credit_dev_20260725.json).  All responses disk-cached
-in .f2_cache/; identical config reruns are cache hits.  Sealed p1v4's answerer
-(Qwen3.6-35B-A3B-FP8, dell vLLM) is not served on this host.
+Answerer backends (--answer-backend): "vllm" (default, user directive
+2026-07-25) = OpenAI-compat /chat/completions at --answer-url (default dgx
+vLLM 127.0.0.1:18000/v1) with chat_template_kwargs enable_thinking=false,
+which this vLLM honours; "ollama" = native /api/chat (ollama's own /v1
+compat path ignores every thinking-off switch on 0.17.7 — see dev receipt
+f2_delta_w_credit_dev_20260725.json).  The verbal-gradient critic always
+stays on ollama (--critic-url/--critic-model, default qwen3:14b) for
+heterogeneous separation; scoring is gold exact-match, so no judge
+circularity.  All responses are disk-cached in .f2_cache/ with
+backend+endpoint+model in the key; identical config reruns are cache hits.
+Sealed p1v4's answerer (Qwen3.6-35B-A3B-FP8, dell vLLM) is not served on
+this host; qwen3.6-27b is the closest available Qwen3.6-family model.
 
 Usage:
   .venv/bin/python f2_delta_w_credit.py --smoke
-  .venv/bin/python f2_delta_w_credit.py --n-dev 100 --n-fresh 100 --m-shapley 16
+  .venv/bin/python f2_delta_w_credit.py --universes-dir _research/f2_sealed_universes
 """
 from __future__ import annotations
 
@@ -142,8 +150,33 @@ class CriticParseError(RuntimeError):
 
 
 # ---------------------------------------------------------------- cached LLM
+class Budget:
+    """Shared LLM miss budget across all backends (answerer + critic)."""
+
+    def __init__(self, max_calls: int):
+        self.max_calls = max_calls
+        self.used = 0
+
+    def take(self) -> None:
+        if self.used >= self.max_calls:
+            raise BudgetExceeded(f"LLM call budget {self.max_calls} exhausted")
+        self.used += 1
+
+
+def _cache_read(path: Path) -> dict | None:
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8"))["response_meta"] | {
+            "cached": True}
+    return None
+
+
+def _cache_write(path: Path, meta: dict) -> None:
+    path.write_text(json.dumps({"response_meta": meta}, ensure_ascii=False),
+                    encoding="utf-8")
+
+
 class CachedChat:
-    """Disk-cached native-ollama /api/chat caller; misses count against budget.
+    """Disk-cached native-ollama /api/chat caller (used for the critic).
 
     ollama 0.17.7's OpenAI-compat /v1/chat/completions silently ignores every
     thinking-off switch (chat_template_kwargs.enable_thinking, "think": false,
@@ -151,12 +184,15 @@ class CachedChat:
     (finish=length, empty content).  Native /api/chat honours "think": false.
     """
 
-    def __init__(self, endpoint: str, max_calls: int):
+    backend_name = "ollama-native-v1"
+
+    def __init__(self, endpoint: str, budget: Budget):
         self.endpoint = endpoint.rstrip("/")
-        self.max_calls = max_calls
+        self.budget = budget
         self.misses = 0
         self.hits = 0
         self.last_http_status: int | None = None
+        self.last_error_kind: str | None = None
         self.degraded_to_parallel: int | None = None
         CACHE_DIR.mkdir(exist_ok=True)
 
@@ -179,36 +215,22 @@ class CachedChat:
             },
         }
         key = hashlib.sha256(json.dumps(
-            {"api": "ollama-native-v1", "endpoint": self.endpoint, "body": body},
+            {"backend": self.backend_name, "endpoint": self.endpoint,
+             "model": model, "body": body},
             sort_keys=True,
         ).encode()).hexdigest()
         path = CACHE_DIR / f"{key}.json"
-        if path.exists():
+        cached = _cache_read(path)
+        if cached is not None:
             self.hits += 1
-            return json.loads(path.read_text(encoding="utf-8"))["response_meta"] | {
-                "cached": True}
-        if self.misses >= self.max_calls:
-            raise BudgetExceeded(f"LLM call budget {self.max_calls} exhausted")
+            return cached
+        self.budget.take()
         self.misses += 1
         req = urllib.request.Request(
             self.endpoint + "/api/chat",
             data=json.dumps(body).encode(),
             headers={"Content-Type": "application/json"}, method="POST")
-        last_err = None
-        for attempt in (1, 2):
-            try:
-                with urllib.request.urlopen(req, timeout=timeout) as resp:
-                    raw = json.loads(resp.read().decode("utf-8"))
-                break
-            except urllib.error.HTTPError as err:
-                self.last_http_status = err.code
-                last_err = err
-                time.sleep(2 * attempt)
-            except Exception as err:  # noqa: BLE001 - dev harness records class only
-                last_err = err
-                time.sleep(2 * attempt)
-        else:
-            raise RuntimeError(f"chat transport failed twice: {type(last_err).__name__}")
+        raw = _transport_with_backoff(req, timeout, self)
         meta = {
             "text": raw["message"]["content"],
             "finish_reason": raw.get("done_reason"),
@@ -219,9 +241,106 @@ class CachedChat:
             },
             "request_sha256": key,
         }
-        path.write_text(json.dumps({"response_meta": meta}, ensure_ascii=False),
-                        encoding="utf-8")
+        _cache_write(path, meta)
         return meta | {"cached": False}
+
+
+class CachedOpenAIChat:
+    """Disk-cached OpenAI-compat /chat/completions caller (vLLM answerer).
+
+    vLLM honours chat_template_kwargs {"enable_thinking": false} (verified
+    2026-07-25: content returned, reasoning_content empty, finish=stop) —
+    unlike ollama's /v1 path, which ignores every thinking-off switch.
+    Retries 429/5xx/timeouts with exponential backoff and records the last
+    status for the parallel auto-degrade ladder."""
+
+    backend_name = "openai-compat-v1"
+
+    def __init__(self, endpoint: str, budget: Budget):
+        self.endpoint = endpoint.rstrip("/")
+        self.budget = budget
+        self.misses = 0
+        self.hits = 0
+        self.last_http_status: int | None = None
+        self.last_error_kind: str | None = None
+        self.degraded_to_parallel: int | None = None
+        CACHE_DIR.mkdir(exist_ok=True)
+
+    def chat(self, *, model: str, system: str, user: str, seed: int,
+             max_tokens: int, timeout: float = 240.0) -> dict:
+        body = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+            "temperature": 0,
+            "top_p": 1.0,
+            "seed": seed,
+            "max_tokens": max_tokens,
+            "response_format": {"type": "json_object"},
+            "chat_template_kwargs": {"enable_thinking": False},
+        }
+        key = hashlib.sha256(json.dumps(
+            {"backend": self.backend_name, "endpoint": self.endpoint,
+             "model": model, "body": body},
+            sort_keys=True,
+        ).encode()).hexdigest()
+        path = CACHE_DIR / f"{key}.json"
+        cached = _cache_read(path)
+        if cached is not None:
+            self.hits += 1
+            return cached
+        self.budget.take()
+        self.misses += 1
+        req = urllib.request.Request(
+            self.endpoint + "/chat/completions",
+            data=json.dumps(body).encode(),
+            headers={"Content-Type": "application/json"}, method="POST")
+        raw = _transport_with_backoff(req, timeout, self)
+        try:
+            choice = raw["choices"][0]
+            text = choice["message"]["content"]
+            finish_reason = choice.get("finish_reason")
+            response_model = raw.get("model")
+            usage = raw.get("usage") or {}
+        except (KeyError, IndexError, TypeError, AttributeError) as error:
+            raise RuntimeError("OpenAI response schema mismatch") from error
+        meta = {
+            "text": text,
+            "finish_reason": finish_reason,
+            "response_model": response_model,
+            "usage": {
+                "prompt_tokens": usage.get("prompt_tokens", 0),
+                "completion_tokens": usage.get("completion_tokens", 0),
+            },
+            "request_sha256": key,
+        }
+        _cache_write(path, meta)
+        return meta | {"cached": False}
+
+
+def _transport_with_backoff(req, timeout: float, backend) -> dict:
+    """POST with exponential backoff on 429/5xx and transient errors."""
+    last_err = None
+    for attempt in (1, 2, 3, 4):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as err:
+            backend.last_http_status = err.code
+            backend.last_error_kind = "http"
+            last_err = err
+            time.sleep(min(2 ** attempt, 16))
+        except (TimeoutError, ConnectionError, OSError) as err:
+            backend.last_error_kind = "timeout"
+            last_err = err
+            time.sleep(min(2 ** attempt, 16))
+        except Exception as err:  # noqa: BLE001 - record class only
+            backend.last_error_kind = type(err).__name__
+            last_err = err
+            time.sleep(min(2 ** attempt, 16))
+    raise RuntimeError(f"chat transport failed 4x: {type(last_err).__name__}")
 
 
 # ------------------------------------------------- question pool and splits
@@ -420,12 +539,13 @@ def normalized_set(values) -> set:
     return {" ".join(v.casefold().split()) for v in values if v.strip()}
 
 
-def evaluate_subset(llm: CachedChat, model: str, subset_ids: tuple[str, ...],
+def evaluate_subset(llm, model: str, subset_ids: tuple[str, ...],
                     cases, lessons: dict, parallel: int, seed: int) -> dict:
     """V(S): mean exact-set-match of the frozen answerer over `cases`.
 
-    Auto-degrade: on repeated transport failure with a 5xx status, retry the
-    whole subset once at parallel=4 (completed calls are cache hits)."""
+    Auto-degrade ladder: on transport failure with 429/5xx/timeout, halve the
+    worker count (min 4) and retry the whole subset once (completed calls are
+    cache hits); the degraded value sticks for later subsets."""
 
     def work(item):
         case, _world_idx, _q, _universe = item
@@ -448,16 +568,22 @@ def evaluate_subset(llm: CachedChat, model: str, subset_ids: tuple[str, ...],
         return {"case_id": case.case_id, "correct": correct, "parse_ok": parse_ok,
                 "cached": meta["cached"]}
 
+    if llm.degraded_to_parallel is not None:
+        parallel = min(parallel, llm.degraded_to_parallel)
     try:
         with ThreadPoolExecutor(max_workers=parallel) as pool:
             rows = list(pool.map(work, cases))
         effective_parallel = parallel
     except RuntimeError:
-        if parallel > 4 and (llm.last_http_status or 0) >= 500:
-            llm.degraded_to_parallel = 4
-            with ThreadPoolExecutor(max_workers=4) as pool:
+        retryable = (llm.last_error_kind == "timeout"
+                     or (llm.last_http_status or 0) == 429
+                     or (llm.last_http_status or 0) >= 500)
+        if parallel > 4 and retryable:
+            degraded = max(4, parallel // 2)
+            llm.degraded_to_parallel = degraded
+            with ThreadPoolExecutor(max_workers=degraded) as pool:
                 rows = list(pool.map(work, cases))
-            effective_parallel = 4
+            effective_parallel = degraded
         else:
             raise
     n = len(rows)
@@ -598,7 +724,8 @@ def main() -> int:
     ap.add_argument("--m-shapley", "--m-perms", dest="m_shapley", type=int, default=16)
     ap.add_argument("--lessons", type=int, default=6)
     ap.add_argument("--seed", type=int, default=20260725)
-    ap.add_argument("--parallel", type=int, default=8)
+    ap.add_argument("--parallel", type=int, default=0,
+                    help="worker count; 0 = auto (16 for vllm, 8 for ollama)")
     ap.add_argument("--max-answers", type=int, default=1)
     ap.add_argument("--max-calls", type=int, default=8000)
     ap.add_argument("--max-subsets", type=int, default=0,
@@ -608,9 +735,11 @@ def main() -> int:
     ap.add_argument("--loo-budget", type=int, default=0,
                     help="max uncached LOO subsets (0 = unlimited)")
     ap.add_argument("--universes-dir", type=Path, default=DEFAULT_UNIVERSES_DIR)
-    ap.add_argument("--model", default="qwen3:14b")
+    ap.add_argument("--answer-backend", choices=("ollama", "vllm"), default="vllm")
+    ap.add_argument("--answer-url", default="http://127.0.0.1:18000/v1")
+    ap.add_argument("--answer-model", default="qwen3.6-27b")
+    ap.add_argument("--critic-url", default="http://127.0.0.1:11434")
     ap.add_argument("--critic-model", default="qwen3:14b")
-    ap.add_argument("--endpoint", default="http://127.0.0.1:11434")
     ap.add_argument("--smoke", action="store_true",
                     help="path-validation preset: n6/f6/m4/L6 within ~80 calls")
     ap.add_argument("--out", default="")
@@ -625,6 +754,8 @@ def main() -> int:
         args.max_calls = 80
     if not (2 <= args.lessons <= len(WORLDS)):
         raise SystemExit(f"--lessons must be in [2, {len(WORLDS)}]")
+    if args.parallel <= 0:
+        args.parallel = 16 if args.answer_backend == "vllm" else 8
     t0 = time.time()
     ts = int(t0)
     if args.out:
@@ -633,6 +764,19 @@ def main() -> int:
         tag = "smoke" if args.smoke else "sealed"
         out_path = RECEIPT_DIR / f"f2_delta_w_credit_{tag}_{ts}.json"
 
+    budget = Budget(args.max_calls)
+    if args.answer_backend == "vllm":
+        answerer = CachedOpenAIChat(args.answer_url, budget)
+        thinking_note = (
+            'vLLM OpenAI-compat chat_template_kwargs {"enable_thinking": false} '
+            "(verified honoured on this endpoint 2026-07-25: content returned, "
+            "reasoning_content empty, finish=stop).")
+    else:
+        answerer = CachedChat(args.answer_url, budget)
+        thinking_note = (
+            "ollama native /api/chat think=false (ollama's /v1 compat path "
+            "ignores every thinking-off switch on 0.17.7).")
+    critic = CachedChat(args.critic_url, budget)
     receipt = {
         "schema_version": "hswm-f2-delta-w-credit-receipt/v2",
         "mode": "development",
@@ -644,13 +788,26 @@ def main() -> int:
         "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "config": vars(args) | {"out": str(out_path),
                                 "universes_dir": str(args.universes_dir)},
-        "answerer_freeze_note": (
-            "Sealed p1v4 answerer (Qwen3.6-35B-A3B-FP8, dell vLLM 127.0.0.1:18002) "
-            "is not served on this host; this run freezes the local ollama model "
-            f"{args.model} at {args.endpoint} (native /api/chat, think=false)."),
+        "answerer_freeze": {
+            "backend": args.answer_backend,
+            "url": args.answer_url,
+            "model": args.answer_model,
+            "lineage_note": (
+                "Sealed p1v4 answerer was Qwen/Qwen3.6-35B-A3B-FP8 (dell vLLM "
+                "127.0.0.1:18002, receipts/p1v2_qwen35_deployment_20260724.json), "
+                "not served on this host; the frozen answerer here is the closest "
+                "available model in the same Qwen3.6 family on the dgx vLLM "
+                "endpoint. User directive 2026-07-25: vLLM is the intended "
+                "answerer backend."),
+            "thinking_off": thinking_note,
+            "judge_role_separation": (
+                "Scoring is gold exact-set-match (no LLM judge), so sharing the "
+                "vLLM endpoint introduces no judging circularity. The "
+                "verbal-gradient critic is kept on a separate backend/model: "
+                f"ollama {args.critic_model} at {args.critic_url}."),
+        },
         "honesty": "grounded measurement only; no scientific claim; judgment is the gate's",
     }
-    llm = CachedChat(args.endpoint, args.max_calls)
     aborted = None
     try:
         # ---- deduped question pool -> splits ----
@@ -697,7 +854,8 @@ def main() -> int:
                     raise BudgetExceeded(
                         f"distinct subset cap {args.max_subsets} exceeded")
                 V_cache[key] = evaluate_subset(
-                    llm, args.model, key, cases, lessons, args.parallel, args.seed)
+                    answerer, args.answer_model, key, cases, lessons,
+                    args.parallel, args.seed)
             return V_cache[key]
 
         # ---- base / headroom ----
@@ -783,8 +941,8 @@ def main() -> int:
         arms: dict[str, dict] = {}
         for arm_id, store in (("a_credit_informed", store_a),
                               ("b_random_edit", store_b)):
-            res = evaluate_subset(llm, args.model, store, fresh_cases, lessons,
-                                  args.parallel, args.seed)
+            res = evaluate_subset(answerer, args.answer_model, store, fresh_cases,
+                                  lessons, args.parallel, args.seed)
             arms[arm_id] = {"kept_lessons": [l[:16] for l in store],
                             "fresh_accuracy": res["accuracy"],
                             "fresh_parse_failures": res["parse_failures"]}
@@ -794,10 +952,10 @@ def main() -> int:
 
         try:
             delete_critic, critic_meta = run_critic(
-                llm, args.critic_model, full_dev, lessons, args.seed)
+                critic, args.critic_model, full_dev, lessons, args.seed)
             store_c = tuple(lid for lid in lesson_ids if lid not in delete_critic)
-            res = evaluate_subset(llm, args.model, store_c, fresh_cases, lessons,
-                                  args.parallel, args.seed)
+            res = evaluate_subset(answerer, args.answer_model, store_c, fresh_cases,
+                                  lessons, args.parallel, args.seed)
             arms["c_verbal_gradient"] = {
                 "kept_lessons": [l[:16] for l in store_c],
                 "deleted": [l[:16] for l in delete_critic],
@@ -812,7 +970,7 @@ def main() -> int:
         delete_placebo = {placebo_map[lid] for lid in delete_credit}
         store_d = tuple(lid for lid in sorted(placebo_lessons)
                         if lid not in delete_placebo)
-        res_d = evaluate_subset(llm, args.model, store_d, fresh_cases,
+        res_d = evaluate_subset(answerer, args.answer_model, store_d, fresh_cases,
                                 placebo_lessons, args.parallel, args.seed)
         arms["d_deranged_placebo"] = {
             "kept_lessons": [l[:16] for l in store_d],
@@ -844,10 +1002,21 @@ def main() -> int:
         aborted = f"{type(err).__name__}: {err}"
 
     receipt["llm_budget"] = {
-        "max_calls": args.max_calls, "misses": llm.misses, "hits": llm.hits,
-        "total_logical": llm.misses + llm.hits,
-        "last_http_status": llm.last_http_status,
-        "degraded_to_parallel": llm.degraded_to_parallel,
+        "max_calls": args.max_calls,
+        "used": budget.used,
+        "answerer": {
+            "backend": args.answer_backend, "url": args.answer_url,
+            "model": args.answer_model,
+            "misses": answerer.misses, "hits": answerer.hits,
+            "last_http_status": answerer.last_http_status,
+            "last_error_kind": answerer.last_error_kind,
+            "degraded_to_parallel": answerer.degraded_to_parallel,
+        },
+        "critic": {
+            "backend": "ollama", "url": args.critic_url, "model": args.critic_model,
+            "misses": critic.misses, "hits": critic.hits,
+        },
+        "total_logical": answerer.misses + answerer.hits + critic.misses + critic.hits,
     }
     receipt["aborted"] = aborted
     receipt["wall_clock_s"] = round(time.time() - t0, 1)

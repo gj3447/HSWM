@@ -596,3 +596,45 @@ def test_request_id_matches_format_noise_but_not_content() -> None:
     assert not _request_id_matches("req-0123abcd4567efab8902", expected)      # content flip
     assert not _request_id_matches("req-0123abcd4567efab89", expected)        # truncated
     assert not _request_id_matches(None, expected)                            # null
+
+
+def _probe_call():
+    from prom_search_hswm.hswm_call_receipt import ModelCallV1
+
+    return ModelCallV1(
+        physical_call_id="p" * 64, run_id="r", arm_id="a", item_id="i",
+        call_index=1, function_id="QF_QUERY_COMPILER", model="m", model_revision="rev",
+        system_prompt="s", input_type="QueryEnvelopeV1", input_payload={},
+        output_type="QueryPlanV1", max_output_tokens=256,
+    )
+
+
+_OK_ENVELOPE = b'{"model": "m", "usage": {"prompt_tokens": 10, "completion_tokens": 5}, "choices": [{"message": {"content": "{\\"a\\": 1}"}}]}'
+_BROKEN_ENVELOPE = b'{"choices": [{"message": {"content": "{\\"a\\": 1'
+
+
+def test_port_retries_transient_transport_failures() -> None:
+    from prom_search_hswm.hswm_call_receipt import OpenAICompatibleJSONPort
+
+    calls = {"n": 0}
+
+    def flaky(request, timeout):
+        calls["n"] += 1
+        if calls["n"] < 3:
+            return _BROKEN_ENVELOPE
+        return _OK_ENVELOPE
+
+    port = OpenAICompatibleJSONPort("http://x", transport=flaky,
+                                    retry_backoff_s=(0.0, 0.0, 0.0))
+    response = port(_probe_call())
+    assert response.retries == 2 and response.payload == {"a": 1}
+
+
+def test_port_fails_closed_after_retry_exhaustion() -> None:
+    from prom_search_hswm.hswm_call_receipt import FunctionCallError, OpenAICompatibleJSONPort
+    import pytest
+
+    port = OpenAICompatibleJSONPort("http://x", transport=lambda request, timeout: _BROKEN_ENVELOPE,
+                                    max_retries=1, retry_backoff_s=(0.0,))
+    with pytest.raises(FunctionCallError, match="model transport failed"):
+        port(_probe_call())

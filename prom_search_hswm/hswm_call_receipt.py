@@ -240,6 +240,8 @@ class OpenAICompatibleJSONPort:
         api_key_env: str | None = None,
         timeout_seconds: float = 180.0,
         transport: Callable[[urllib_request.Request, float], bytes] | None = None,
+        max_retries: int = 3,
+        retry_backoff_s: tuple[float, ...] = (10.0, 30.0, 60.0),
     ) -> None:
         if not endpoint.startswith(("http://", "https://")):
             raise FunctionCallError("endpoint must be HTTP(S)")
@@ -247,6 +249,10 @@ class OpenAICompatibleJSONPort:
         self.api_key_env = api_key_env
         self.timeout_seconds = timeout_seconds
         self._transport = transport or self._urlopen
+        if isinstance(max_retries, bool) or not isinstance(max_retries, int) or max_retries < 0:
+            raise FunctionCallError("max_retries must be a non-negative integer")
+        self.max_retries = max_retries
+        self.retry_backoff_s = tuple(retry_backoff_s)
 
     @staticmethod
     def _urlopen(request: urllib_request.Request, timeout: float) -> bytes:
@@ -279,15 +285,26 @@ class OpenAICompatibleJSONPort:
             method="POST",
         )
         started = time.monotonic()
-        try:
-            raw = self._transport(request, self.timeout_seconds)
-            envelope = json.loads(raw)
-            content = envelope["choices"][0]["message"]["content"]
-            payload = json.loads(content)
-            usage = envelope["usage"]
-            response_model = envelope["model"]
-        except (urllib_error.URLError, TimeoutError, KeyError, IndexError, TypeError, json.JSONDecodeError) as error:
-            raise FunctionCallError(f"model transport failed: {type(error).__name__}: {error}") from error
+        retries_used = 0
+        while True:
+            try:
+                raw = self._transport(request, self.timeout_seconds)
+                envelope = json.loads(raw)
+                content = envelope["choices"][0]["message"]["content"]
+                payload = json.loads(content)
+                usage = envelope["usage"]
+                response_model = envelope["model"]
+                break
+            except (urllib_error.URLError, TimeoutError, KeyError, IndexError, TypeError, json.JSONDecodeError) as error:
+                # Transport-class failure (connection, timeout, truncated body/content).
+                # The 2026-07-25 sealed run aborted on a preempted server truncating
+                # content mid-string; a retried call is the same logical call — no
+                # receipt exists until the call completes, so the 3-call contract is
+                # untouched and the receipt records the retry count.
+                if retries_used >= self.max_retries:
+                    raise FunctionCallError(f"model transport failed: {type(error).__name__}: {error}") from error
+                time.sleep(self.retry_backoff_s[min(retries_used, len(self.retry_backoff_s) - 1)])
+                retries_used += 1
         if not isinstance(payload, dict):
             raise FunctionCallError("model content must be one JSON object")
         if response_model != call.model:
@@ -299,6 +316,7 @@ class OpenAICompatibleJSONPort:
             input_tokens=_nonnegative_int(usage.get("prompt_tokens"), "prompt_tokens"),
             output_tokens=_nonnegative_int(usage.get("completion_tokens"), "completion_tokens"),
             latency_ms=max(0, int((time.monotonic() - started) * 1000)),
+            retries=retries_used,
             cache_status="provider-unknown",
         )
 

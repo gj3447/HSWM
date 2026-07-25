@@ -1,0 +1,426 @@
+{
+ "schema_version": "hswm-f3-agent-ab-transfer-receipt/v1",
+ "mode": "development",
+ "branch": "F3-agent-ab-transfer",
+ "smoke": true,
+ "preregistration_file": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_f3_agent_ab_transfer_20260725.json",
+ "preregistration_file_sha256": "637982ca64c7c1b8f29c0caa1f58f57d36c58ff0cddc26efa65f43dccdc54c59",
+ "script_sha256": "e715aad01f76cc57073596fb2974362437896f85da3a79a57a1c693374082c4c",
+ "harness_module_sha256": "3676724568fde19a752c07fdeabd9883ecfe04a3534ebf3f4d8fb2cc6b95c6e5",
+ "config": {
+  "n_fresh": 6,
+  "train_per_world": 2,
+  "split_seed": 20260727,
+  "seed": 20260725,
+  "max_answers": 1,
+  "max_calls": 120,
+  "parallel_b": 16,
+  "parallel_a": 4,
+  "n_boot": 2000,
+  "universes_dir": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/_research/f2_sealed_universes",
+  "donor_backend": "ollama",
+  "donor_url": "http://127.0.0.1:11434",
+  "donor_model": "qwen3:14b",
+  "receiver_url": "http://127.0.0.1:18000/v1",
+  "receiver_model": "qwen3.6-27b",
+  "smoke": true,
+  "out": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/receipts/f3_agent_ab_transfer_smoke_1784991668.json"
+ },
+ "receiver_freeze": {
+  "backend": "vllm",
+  "url": "http://127.0.0.1:18000/v1",
+  "model": "qwen3.6-27b",
+  "system_prompt_sha256": "1c5eb7efc263dbbfc0222b046e537a52f55c7e81626ce68d2f6d0e7d77e7749b",
+  "prompt_shape": "hswm-p1v2-answer-input/v1 (render_answer_prompt)",
+  "seed": 20260725,
+  "temperature": 0,
+  "max_tokens": 256,
+  "note": "B is frozen: deployment/prompt/tools/readout/budget fixed for all arms; only the memory_context varies."
+ },
+ "donor_freeze": {
+  "backend": "ollama",
+  "url": "http://127.0.0.1:11434",
+  "model": "qwen3:14b",
+  "note": "donor A != receiver B (true cross-agent). B-self uses the receiver model, so B1 vs B5 differs only in authorship."
+ },
+ "honesty": "grounded measurement only; no scientific claim; judgment is the gate's",
+ "question_pool": {
+  "universes_dir": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/_research/f2_sealed_universes",
+  "max_answers": 1,
+  "unique_question_texts": 379,
+  "per_universe_raw_counts": {
+   "dense_t200_fk9": 10,
+   "large_t200_fk3": 10,
+   "mid_t20_fk3": 16,
+   "small_t2_fk3": 27,
+   "sparse_t200_fk1": 10,
+   "uni_s1001": 26,
+   "uni_s1002": 29,
+   "uni_s1003": 27,
+   "uni_s1004": 27,
+   "uni_s1005": 27,
+   "uni_s1006": 29,
+   "uni_s1007": 24,
+   "uni_s1008": 26,
+   "uni_s1009": 23,
+   "uni_s1010": 28,
+   "uni_s1011": 23,
+   "uni_s1012": 27,
+   "uni_s1013": 26,
+   "uni_s1014": 27,
+   "uni_s1015": 26,
+   "uni_s1016": 28
+  },
+  "dedup_note": "t200 dirs (sparse/large/dense) share identical articles and type6 texts+answers (verified 2026-07-25, titles_sha equal); dedup by normalized question text collapses them to one contributor."
+ },
+ "splits": {
+  "n_train": 12,
+  "n_fresh": 6,
+  "skipped": {
+   "train": [],
+   "fresh": []
+  },
+  "split_seed": 20260727,
+  "fresh_case_worlds": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+ },
+ "leakage": {
+  "exact_question_text_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "exact_attribute_value_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "binding_leakage": 0,
+  "binding_verdict": "CLEAN",
+  "audit_on_raw_question_texts": {
+   "leakage": 21,
+   "exact_overlaps": [],
+   "near_dup_pairs": [
+    [
+     "Who is the person whose date of birth is 0200-10-27?",
+     "Who is the person whose date of birth is 0264-07-03?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0271-03-16?",
+     "Who is the person whose date of birth is 0264-07-03?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-11-04?",
+     "Who is the person whose date of birth is 0264-07-03?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0230-04-26?",
+     "Who is the person whose date of birth is 0264-07-03?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0200-10-27?",
+     "Who is the person whose date of birth is 0335-02-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0271-03-16?",
+     "Who is the person whose date of birth is 0335-02-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-11-04?",
+     "Who is the person whose date of birth is 0335-02-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0230-04-26?",
+     "Who is the person whose date of birth is 0335-02-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0200-10-27?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0271-03-16?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-11-04?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0230-04-26?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0200-10-27?",
+     "Who is the person whose date of birth is 0269-01-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0271-03-16?",
+     "Who is the person whose date of birth is 0269-01-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-11-04?",
+     "Who is the person whose date of birth is 0269-01-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0230-04-26?",
+     "Who is the person whose date of birth is 0269-01-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is chemist?",
+     "Who is the person whose occupation is insurance account manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is financial manager?",
+     "Who is the person whose occupation is insurance account manager?",
+     0.7
+    ],
+    [
+     "Who is the person whose occupation is bookseller?",
+     "Who is the person whose occupation is insurance account manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is snowmobiling?",
+     "Who is the person whose hobby is ballet dancing?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is fossil hunting?",
+     "Who is the person whose hobby is ballet dancing?",
+     0.6
+    ]
+   ],
+   "near_dup_threshold": 0.6,
+   "verdict": "VOID"
+  },
+  "audit_on_attribute_values": {
+   "leakage": 0,
+   "exact_overlaps": [],
+   "near_dup_pairs": [],
+   "near_dup_threshold": 0.6,
+   "verdict": "CLEAN"
+  },
+  "template_artifact_note": "type6 questions share the 'Who is the person whose <attr> is' template (7/9 tokens), so raw-text token-Jaccard near-dups are expected artifacts; the binding criterion is exact question text and attribute-value overlap, both structurally 0 after pool dedup."
+ },
+ "donor_a": {
+  "model": "qwen3:14b",
+  "verdicts": {
+   "0": {
+    "valid": true,
+    "choice": "RHO",
+    "ground_truth": "RHO",
+    "orientation": "correct"
+   },
+   "1": {
+    "valid": true,
+    "choice": "SIGMA",
+    "ground_truth": "SIGMA",
+    "orientation": "correct"
+   },
+   "2": {
+    "valid": true,
+    "choice": "GAMMA",
+    "ground_truth": "GAMMA",
+    "orientation": "correct"
+   },
+   "3": {
+    "valid": true,
+    "choice": "KAPPA",
+    "ground_truth": "KAPPA",
+    "orientation": "correct"
+   },
+   "4": {
+    "valid": true,
+    "choice": "OMEGA",
+    "ground_truth": "OMEGA",
+    "orientation": "correct"
+   },
+   "5": {
+    "valid": true,
+    "choice": "ALPHA",
+    "ground_truth": "ALPHA",
+    "orientation": "correct"
+   }
+  },
+  "n_lessons": 6,
+  "orientations": {
+   "0": "correct",
+   "1": "correct",
+   "2": "correct",
+   "3": "correct",
+   "4": "correct",
+   "5": "correct"
+  }
+ },
+ "b_self": {
+  "model": "qwen3.6-27b",
+  "n_lessons": 6,
+  "orientations": {
+   "0": "correct",
+   "1": "correct",
+   "2": "correct",
+   "3": "correct",
+   "4": "correct",
+   "5": "correct"
+  }
+ },
+ "packets": {
+  "donor_a": {
+   "path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/receipts/f3_transfer_packet_1784991668.json",
+   "file_sha256": "500b8d7b5513eb60ebec80b4251f64dbf0fafd00224bb58e02c4ddbbee36497e",
+   "packet_sha256": "7f6d98a45c33f31e6aa1f15cbcdf8ed377c74ebe70da4b0d42279a8399dfaca6",
+   "lesson_merkle_root": "39c34b00bb433d59034ddc3d0433e7b370fe5bfc090da5fa3e1fbf216ee7d205",
+   "corpus_manifest_sha256": "d35e3fed89c0cf54462d2447046d07d34521d98f6ce4720f11bc0bf248e5c634",
+   "n_lessons": 6,
+   "n_deletes": 0
+  },
+  "b_self": {
+   "path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/receipts/f3_transfer_packet_bself_1784991668.json",
+   "file_sha256": "9092670d47e217f2eadb3377e4adf5ccd9541a0cacea4d703ec344c5b910716c",
+   "packet_sha256": "533e0677ac3112e120fa9bdf1519bf7ec59357c39de253a922a92c66ac2e625a",
+   "n_lessons": 6,
+   "n_deletes": 0
+  }
+ },
+ "token_envelope": {
+  "b1_context_chars": 2807,
+  "b3_raw_log_chars_full": 19626,
+  "b3_raw_log_chars_capped": 2807,
+  "cap_note": "B3 raw log deterministically prefix-capped to the B1 context size (prereg token_envelope: equal across arms)."
+ },
+ "arms": {
+  "B0_no_experience": {
+   "context_kind": "none",
+   "n_context_lessons": 0,
+   "fresh_accuracy": 0.0,
+   "fresh_parse_failures": 0,
+   "approx_context_tokens": null
+  },
+  "B1_full_packet": {
+   "context_kind": "lessons",
+   "n_context_lessons": 6,
+   "fresh_accuracy": 0.6666666666666666,
+   "fresh_parse_failures": 0,
+   "approx_context_tokens": null
+  },
+  "B2_placebo_lessons": {
+   "context_kind": "lessons",
+   "n_context_lessons": 6,
+   "fresh_accuracy": 0.0,
+   "fresh_parse_failures": 0,
+   "approx_context_tokens": null
+  },
+  "B3_raw_log_only": {
+   "context_kind": "raw",
+   "n_context_lessons": 0,
+   "fresh_accuracy": 0.0,
+   "fresh_parse_failures": 0,
+   "approx_context_tokens": 701
+  },
+  "B4a_lessons_only": {
+   "context_kind": "lessons",
+   "n_context_lessons": 6,
+   "fresh_accuracy": 0.6666666666666666,
+   "fresh_parse_failures": 0,
+   "approx_context_tokens": null
+  },
+  "B4b_deltaW_only": {
+   "context_kind": "lessons",
+   "n_context_lessons": 6,
+   "fresh_accuracy": 0.0,
+   "fresh_parse_failures": 0,
+   "approx_context_tokens": null
+  },
+  "B5_b_self_lessons": {
+   "context_kind": "lessons",
+   "n_context_lessons": 6,
+   "fresh_accuracy": 0.6666666666666666,
+   "fresh_parse_failures": 0,
+   "approx_context_tokens": null
+  }
+ },
+ "discriminators": {
+  "G": 0.0,
+  "G_ci95": [
+   0.0,
+   0.0
+  ],
+  "S": 0.0,
+  "S_ci95": [
+   0.0,
+   0.0
+  ],
+  "S_components": {
+   "dist_cosine_B1_A": 0.75,
+   "dist_cosine_B5_A": 0.75
+  },
+  "S_secondary_jaccard": {
+   "mean_B1_A": 0.6667,
+   "mean_B5_A": 0.6667
+  },
+  "S_method": "per-case answers normalized (casefold+whitespace), empty set -> '<EMPTY>'; aggregate count-vector cosine between arm and donor answer distributions, difference with paired bootstrap CI (prereg 'corr' reading = distribution cosine; secondary metric = mean per-case answer-set Jaccard difference). Deterministic, no embeddings."
+ },
+ "headroom_band": [
+  0.3,
+  0.7
+ ],
+ "headroom_band_ok": false,
+ "kill_condition_observations": {
+  "f3_k1_G_le_0": true,
+  "f3_k2_S_le_0": true,
+  "f3_k3_B1_le_max_B0_B2_B3": false,
+  "f3_k3_sub_B1_le_B3": false,
+  "f3_k4_saturation_B0_ge_5_6": false,
+  "values": {
+   "B0_no_experience": 0.0,
+   "B1_full_packet": 0.6667,
+   "B2_placebo_lessons": 0.0,
+   "B3_raw_log_only": 0.0,
+   "B4a_lessons_only": 0.6667,
+   "B4b_deltaW_only": 0.0,
+   "B5_b_self_lessons": 0.6667
+  },
+  "note": "mechanical observation only; sealed judgment belongs to the gate"
+ },
+ "llm_budget": {
+  "max_calls": 120,
+  "used": 12,
+  "donor": {
+   "backend": "ollama",
+   "model": "qwen3:14b",
+   "misses": 6,
+   "hits": 18
+  },
+  "receiver": {
+   "model": "qwen3.6-27b",
+   "misses": 6,
+   "hits": 54
+  },
+  "total_logical": 84
+ },
+ "aborted": null,
+ "wall_clock_s": 117.1
+}

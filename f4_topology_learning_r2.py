@@ -364,7 +364,7 @@ def main() -> int:
             + sorted((l for l in units_by_lesson if l not in candidates),
                      key=lambda l: (-sum(weights[e] for e in units_by_lesson[l]), l)))
         rng = random.Random(f"f4r2-curve-{args.seed}")
-        random_order = list(units_by_lesson)
+        random_order = sorted(units_by_lesson)  # hash-order-independent (replay determinism)
         rng.shuffle(random_order)
         k_steps = min(args.curve_k, len(removal_order))
         curve_top, curve_rand = [], []

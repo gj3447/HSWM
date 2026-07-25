@@ -1,0 +1,1000 @@
+[
+    {
+        "id": "c68f6254-3e35-4a64-b46e-49d0304812e3",
+        "question": "How many grandfathers does the great-aunt of the sibling of Alexa Schafer have?",
+        "solution_traces": "[{\"Y_5\": \"Emery Schafer\", \"Count_1\": 1, \"Y_3\": \"Bess Kirksey\"}, {\"Y_5\": \"Emery Schafer\", \"Count_1\": 1, \"Y_3\": \"Florence Kirkham\"}, {\"Count_1\": 1, \"Y_3\": \"Florence Kirkham\", \"Y_5\": \"Violet Schafer\"}, {\"Count_1\": 1, \"Y_3\": \"Bess Kirksey\", \"Y_5\": \"Violet Schafer\"}, {\"Count_1\": 1, \"Y_5\": \"Floyd Schafer\", \"Y_3\": \"Florence Kirkham\"}, {\"Count_1\": 1, \"Y_5\": \"Floyd Schafer\", \"Y_3\": \"Bess Kirksey\"}, {\"Y_3\": \"Florence Kirkham\", \"Y_5\": \"Yasmin Schafer\", \"Count_1\": 1}, {\"Count_1\": 1, \"Y_5\": \"Yasmin Schafer\", \"Y_3\": \"Bess Kirksey\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "great_aunt(Y_5, Y_3)",
+                "sibling(\"Alexa Schafer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "320363dd-af80-44bc-be90-a9de64b44c54",
+        "question": "How many grandchildren does the husband of the great-grandmother of Daniel Rowell have?",
+        "solution_traces": "[{\"Y_3\": \"Carter Fudge\", \"Count_1\": 2, \"Y_5\": \"Kristie Fudge\"}, {\"Y_5\": \"Nancy Summerlin\", \"Count_1\": 2, \"Y_3\": \"Jack Summerlin\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(Y_3, Y_1)), Count_1)",
+                "husband(Y_5, Y_3)",
+                "great_grandmother(\"Daniel Rowell\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "03d1c34a-36d6-498b-9786-24d16143624f",
+        "question": "How many male cousins does the sibling of the sister-in-law of Velia Warren have?",
+        "solution_traces": "[{\"Y_3\": \"Oscar Warren\", \"Y_5\": \"Ai Schafer\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(male_cousin(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "sister_in_law(\"Velia Warren\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "910b6e0e-b215-415f-a22b-9b33aaf4f731",
+        "question": "How many wives does the son-in-law of the father-in-law of Lyle Rowell have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Garth Fudge\", \"Y_3\": \"Lyle Rowell\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(wife(Y_3, Y_1)), Count_1)",
+                "son_in_law(Y_5, Y_3)",
+                "father_in_law(\"Lyle Rowell\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ae14cc70-2a50-426a-892d-4f00487414f8",
+        "question": "How many parents does the child of the grandfather of Lakeshia Warren have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Oscar Warren\", \"Y_3\": \"Moises Warren\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "child(Y_5, Y_3)",
+                "grandfather(\"Lakeshia Warren\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1f0e175b-3b25-433a-8d33-43846a654b6a",
+        "question": "How many great-grandfathers does the male cousin of the brother-in-law of Armando Schafer have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Rory Kirkham\", \"Y_5\": \"Oscar Warren\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandfather(Y_3, Y_1)), Count_1)",
+                "male_cousin(Y_5, Y_3)",
+                "brother_in_law(\"Armando Schafer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "63a1646b-e8ca-4eba-b52a-b73434fd9055",
+        "question": "How many great-grandchildren does the friend of the son-in-law of Joelle Fudge have?",
+        "solution_traces": "[{\"Y_5\": \"Norris Hunsaker\", \"Y_3\": \"Nancy Summerlin\", \"Count_1\": 5}, {\"Count_1\": 0, \"Y_5\": \"Norris Hunsaker\", \"Y_3\": \"Rory Kirkham\"}, {\"Y_5\": \"Norris Hunsaker\", \"Y_3\": \"Jack Summerlin\", \"Count_1\": 5}, {\"Count_1\": 0, \"Y_5\": \"Norris Hunsaker\", \"Y_3\": \"Yasmin Schafer\"}, {\"Count_1\": 0, \"Y_5\": \"Norris Hunsaker\", \"Y_3\": \"Shane Kirkham\"}]",
+        "answer": [
+            "0",
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandchild(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "son_in_law(\"Joelle Fudge\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "be8d8917-00be-4280-8dc5-c1524971447e",
+        "question": "How many cousins does the sibling of the friend of Bess Kirksey have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Emery Schafer\", \"Y_5\": \"Violet Schafer\"}, {\"Y_3\": \"Yasmin Schafer\", \"Count_1\": 1, \"Y_5\": \"Violet Schafer\"}, {\"Count_1\": 1, \"Y_3\": \"Floyd Schafer\", \"Y_5\": \"Violet Schafer\"}, {\"Count_1\": 1, \"Y_3\": \"Alexa Schafer\", \"Y_5\": \"Violet Schafer\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "friend(\"Bess Kirksey\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "07acbbaf-05e2-42e8-86ca-ea4e134c5abe",
+        "question": "How many nieces does the niece of the mother-in-law of Augustus Robertson have?",
+        "solution_traces": "[{\"Y_3\": \"Robbie Hunsaker\", \"Y_5\": \"Brittaney Rowell\", \"Count_1\": 0}, {\"Count_1\": 1, \"Y_5\": \"Brittaney Rowell\", \"Y_3\": \"Rayna Fudge\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "niece(Y_5, Y_3)",
+                "mother_in_law(\"Augustus Robertson\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2c44b582-f5ec-45b5-811a-44c5e21312e0",
+        "question": "How many great-uncles does the friend of the friend of Freeda Dent have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_5\": \"Jack Summerlin\", \"Y_3\": \"Carter Fudge\"}, {\"Y_5\": \"Lyle Rowell\", \"Y_3\": \"Velia Warren\", \"Count_1\": 0}, {\"Y_5\": \"Lyle Rowell\", \"Y_3\": \"Freeda Dent\", \"Count_1\": 0}, {\"Y_5\": \"Lyle Rowell\", \"Count_1\": 0, \"Y_3\": \"Harold Banner\"}, {\"Count_1\": 0, \"Y_5\": \"Emerson Warren\", \"Y_3\": \"Freeda Dent\"}, {\"Count_1\": 1, \"Y_3\": \"Rayna Fudge\", \"Y_5\": \"Bryan Kirksey\"}, {\"Count_1\": 0, \"Y_5\": \"Jack Summerlin\", \"Y_3\": \"Norris Hunsaker\"}, {\"Y_3\": \"Freeda Dent\", \"Y_5\": \"Bryan Kirksey\", \"Count_1\": 0}, {\"Count_1\": 0, \"Y_5\": \"Jack Summerlin\", \"Y_3\": \"Freeda Dent\"}, {\"Count_1\": 0, \"Y_5\": \"Emerson Warren\", \"Y_3\": \"Anneliese Kirkham\"}, {\"Y_5\": \"Jack Summerlin\", \"Y_3\": \"Ignacio Robertson\", \"Count_1\": 1}, {\"Y_5\": \"Lyle Rowell\", \"Count_1\": 0, \"Y_3\": \"Dalton Fudge\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_uncle(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "friend(\"Freeda Dent\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1d032a0b-0067-4cde-926d-3cb33a5fe757",
+        "question": "How many cousins does the female cousin of the great-granddaughter of Nancy Summerlin have?",
+        "solution_traces": "[{\"Y_5\": \"Helga Robertson\", \"Y_3\": \"Rayna Fudge\", \"Count_1\": 3}, {\"Y_5\": \"Danielle Banner\", \"Y_3\": \"Robbie Hunsaker\", \"Count_1\": 3}, {\"Y_5\": \"Robbie Hunsaker\", \"Y_3\": \"Danielle Banner\", \"Count_1\": 2}, {\"Y_3\": \"Robbie Hunsaker\", \"Y_5\": \"Helga Robertson\", \"Count_1\": 3}, {\"Count_1\": 2, \"Y_3\": \"Helga Robertson\", \"Y_5\": \"Rayna Fudge\"}, {\"Count_1\": 2, \"Y_3\": \"Danielle Banner\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_5\": \"Robbie Hunsaker\", \"Y_3\": \"Helga Robertson\", \"Count_1\": 2}, {\"Y_5\": \"Danielle Banner\", \"Y_3\": \"Rayna Fudge\", \"Count_1\": 3}]",
+        "answer": [
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "female_cousin(Y_5, Y_3)",
+                "great_granddaughter(\"Nancy Summerlin\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1a77186c-950d-4bee-8c3d-b939d31c3177",
+        "question": "How many daughters does the parent of the friend of Velia Warren have?",
+        "solution_traces": "[{\"Y_3\": \"Ai Schafer\", \"Count_1\": 3, \"Y_5\": \"Violet Schafer\"}, {\"Y_3\": \"Joelle Fudge\", \"Count_1\": 2, \"Y_5\": \"Rayna Fudge\"}, {\"Count_1\": 0, \"Y_3\": \"Velia Warren\", \"Y_5\": \"Moises Warren\"}, {\"Count_1\": 0, \"Y_3\": \"Oscar Warren\", \"Y_5\": \"Moises Warren\"}, {\"Count_1\": 2, \"Y_5\": \"Rayna Fudge\", \"Y_3\": \"Dalton Fudge\"}, {\"Count_1\": 3, \"Y_3\": \"Armando Schafer\", \"Y_5\": \"Violet Schafer\"}]",
+        "answer": [
+            "0",
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "friend(\"Velia Warren\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d2eb6bc7-bf50-4045-82d2-e43dddbc7e87",
+        "question": "How many female second cousins does the grandson of the niece of Angel Fudge have?",
+        "solution_traces": "[{\"Y_3\": \"Ignacio Robertson\", \"Count_1\": 1, \"Y_5\": \"Brittaney Rowell\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(female_second_cousin(Y_3, Y_1)), Count_1)",
+                "grandson(Y_5, Y_3)",
+                "niece(\"Angel Fudge\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1a32020b-ee54-403c-af84-4c675b6b3aa1",
+        "question": "How many mothers does the friend of the great-grandparent of Yasmin Schafer have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Armando Schafer\", \"Y_5\": \"Maira Kirksey\"}, {\"Count_1\": 1, \"Y_3\": \"Maragret Warren\", \"Y_5\": \"Frederic Kirksey\"}, {\"Count_1\": 1, \"Y_3\": \"Violet Schafer\", \"Y_5\": \"Maira Kirksey\"}, {\"Count_1\": 1, \"Y_3\": \"Mavis Robertson\", \"Y_5\": \"Maira Kirksey\"}, {\"Count_1\": 1, \"Y_3\": \"Charley Kirkham\", \"Y_5\": \"Frederic Kirksey\"}, {\"Y_3\": \"Oscar Warren\", \"Y_5\": \"Frederic Kirksey\", \"Count_1\": 1}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "great_grandparent(\"Yasmin Schafer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3a687562-3ece-45f4-9b3d-83a58977693a",
+        "question": "How many fathers-in-law does the son-in-law of the aunt of Rory Kirkham have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Armando Schafer\", \"Y_5\": \"Maragret Warren\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father_in_law(Y_3, Y_1)), Count_1)",
+                "son_in_law(Y_5, Y_3)",
+                "aunt(\"Rory Kirkham\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b0d403d2-285f-4811-97d7-0ac2bff3cb4c",
+        "question": "How many grandparents does the female second cousin of the child of Robbie Hunsaker have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Amy Hunsaker\", \"Y_3\": \"Tanya Banner\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "female_second_cousin(Y_5, Y_3)",
+                "child(\"Robbie Hunsaker\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0b9eafee-65de-4324-905b-16fb624054fa",
+        "question": "How many male first cousins once removed does the nephew of the son of Anneliese Kirkham have?",
+        "solution_traces": "[{\"Y_3\": \"Rory Kirkham\", \"Y_5\": \"Charley Kirkham\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(male_first_cousin_once_removed(Y_3, Y_1)), Count_1)",
+                "nephew(Y_5, Y_3)",
+                "son(\"Anneliese Kirkham\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f9757e6d-8752-4494-ae1d-b735eb97f6c9",
+        "question": "How many friends does the grandparent of the friend of Nevin Dent have?",
+        "solution_traces": "[{\"Y_5\": \"Rory Kirkham\", \"Count_1\": 3, \"Y_3\": \"Anneliese Kirkham\"}, {\"Y_5\": \"Rory Kirkham\", \"Count_1\": 5, \"Y_3\": \"Shane Kirkham\"}, {\"Y_5\": \"Rory Kirkham\", \"Y_3\": \"Maira Kirksey\", \"Count_1\": 3}, {\"Y_5\": \"Rory Kirkham\", \"Y_3\": \"Frederic Kirksey\", \"Count_1\": 3}]",
+        "answer": [
+            "3",
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "friend(\"Nevin Dent\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8e6ca61a-fd51-47e5-87cb-52d4733dc5c5",
+        "question": "How many friends does the nephew of the daughter-in-law of Shane Kirkham have?",
+        "solution_traces": "[{\"Y_3\": \"Oscar Warren\", \"Count_1\": 4, \"Y_5\": \"Florence Kirkham\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "nephew(Y_5, Y_3)",
+                "daughter_in_law(\"Shane Kirkham\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f5419960-acb3-41e0-8fbc-d74cbf80c2f1",
+        "question": "How many sisters-in-law does the wife of the brother-in-law of Lyle Rowell have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Joelle Fudge\", \"Y_5\": \"Dalton Fudge\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister_in_law(Y_3, Y_1)), Count_1)",
+                "wife(Y_5, Y_3)",
+                "brother_in_law(\"Lyle Rowell\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4e9555a8-c1ce-4172-b3cd-681e7ee2499e",
+        "question": "How many siblings does the aunt of the nephew of Danielle Banner have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Danielle Banner\", \"Y_5\": \"Ignacio Robertson\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "aunt(Y_5, Y_3)",
+                "nephew(\"Danielle Banner\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d4cedcec-e3f6-4c07-8b6b-1da4873d1c9c",
+        "question": "How many fathers does the mother of the nephew of Bess Kirksey have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Maragret Warren\", \"Y_5\": \"Oscar Warren\"}, {\"Y_5\": \"Rory Kirkham\", \"Count_1\": 1, \"Y_3\": \"Florence Kirkham\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father(Y_3, Y_1)), Count_1)",
+                "mother(Y_5, Y_3)",
+                "nephew(\"Bess Kirksey\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b8155695-e67a-490c-90a2-b5cf02baa573",
+        "question": "How many female second cousins does the female cousin of the grandchild of Alex Robertson have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Ignacio Robertson\", \"Y_3\": \"Tanya Banner\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(female_second_cousin(Y_3, Y_1)), Count_1)",
+                "female_cousin(Y_5, Y_3)",
+                "grandchild(\"Alex Robertson\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "06501dce-8fc8-46b7-b46a-86f475a0aecf",
+        "question": "How many nephews does the brother-in-law of the grandson of Nevin Dent have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Daniel Rowell\", \"Y_5\": \"Augustus Robertson\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "brother_in_law(Y_5, Y_3)",
+                "grandson(\"Nevin Dent\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a383e57b-2af6-45b3-b30f-065d89a1e274",
+        "question": "How many aunts does the sister of the brother-in-law of Armando Schafer have?",
+        "solution_traces": "[{\"Y_3\": \"Ai Schafer\", \"Count_1\": 2, \"Y_5\": \"Oscar Warren\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(aunt(Y_3, Y_1)), Count_1)",
+                "sister(Y_5, Y_3)",
+                "brother_in_law(\"Armando Schafer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "625df3c5-2650-4e27-af13-83eaa3509c2b",
+        "question": "How many great-aunts does the sibling of the sibling of Floyd Schafer have?",
+        "solution_traces": "[{\"Y_5\": \"Emery Schafer\", \"Count_1\": 2, \"Y_3\": \"Floyd Schafer\"}, {\"Count_1\": 2, \"Y_3\": \"Emery Schafer\", \"Y_5\": \"Violet Schafer\"}, {\"Y_5\": \"Alexa Schafer\", \"Count_1\": 2, \"Y_3\": \"Yasmin Schafer\"}, {\"Y_5\": \"Emery Schafer\", \"Y_3\": \"Violet Schafer\", \"Count_1\": 2}, {\"Y_5\": \"Alexa Schafer\", \"Count_1\": 2, \"Y_3\": \"Floyd Schafer\"}, {\"Y_5\": \"Yasmin Schafer\", \"Y_3\": \"Alexa Schafer\", \"Count_1\": 2}, {\"Y_5\": \"Yasmin Schafer\", \"Y_3\": \"Emery Schafer\", \"Count_1\": 2}, {\"Y_5\": \"Alexa Schafer\", \"Count_1\": 2, \"Y_3\": \"Emery Schafer\"}, {\"Count_1\": 2, \"Y_3\": \"Alexa Schafer\", \"Y_5\": \"Violet Schafer\"}, {\"Y_3\": \"Yasmin Schafer\", \"Count_1\": 2, \"Y_5\": \"Violet Schafer\"}, {\"Count_1\": 2, \"Y_5\": \"Yasmin Schafer\", \"Y_3\": \"Floyd Schafer\"}, {\"Y_5\": \"Emery Schafer\", \"Count_1\": 2, \"Y_3\": \"Yasmin Schafer\"}, {\"Y_3\": \"Violet Schafer\", \"Y_5\": \"Yasmin Schafer\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Floyd Schafer\", \"Y_5\": \"Violet Schafer\"}, {\"Y_5\": \"Alexa Schafer\", \"Y_3\": \"Violet Schafer\", \"Count_1\": 2}, {\"Y_5\": \"Emery Schafer\", \"Count_1\": 2, \"Y_3\": \"Alexa Schafer\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_aunt(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "sibling(\"Floyd Schafer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "13bf5927-180b-4ec8-8217-7c21dc3447a7",
+        "question": "How many children does the son-in-law of the great-grandfather of Helga Robertson have?",
+        "solution_traces": "[{\"Y_5\": \"Jack Summerlin\", \"Count_1\": 2, \"Y_3\": \"Garth Fudge\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "son_in_law(Y_5, Y_3)",
+                "great_grandfather(\"Helga Robertson\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a1cff5ed-c894-468b-8038-8f6d66b773c1",
+        "question": "How many great-aunts does the nephew of the grandparent of Lakeshia Warren have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Emery Schafer\", \"Y_5\": \"Oscar Warren\"}, {\"Count_1\": 2, \"Y_5\": \"Oscar Warren\", \"Y_3\": \"Floyd Schafer\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_aunt(Y_3, Y_1)), Count_1)",
+                "nephew(Y_5, Y_3)",
+                "grandparent(\"Lakeshia Warren\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "263c3d5d-88bc-4c45-a709-f20f16ed71d8",
+        "question": "How many cousins does the brother of the great-grandchild of Alethia Kirksey have?",
+        "solution_traces": "[{\"Y_3\": \"Oscar Warren\", \"Y_5\": \"Ai Schafer\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "great_grandchild(\"Alethia Kirksey\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b887cc94-1fef-4a6e-9462-513c74b9d77a",
+        "question": "How many children does the great-grandfather of the child of Armando Schafer have?",
+        "solution_traces": "[{\"Y_3\": \"Frederic Kirksey\", \"Count_1\": 3, \"Y_5\": \"Violet Schafer\"}, {\"Y_3\": \"Frederic Kirksey\", \"Y_5\": \"Yasmin Schafer\", \"Count_1\": 3}, {\"Y_3\": \"Frederic Kirksey\", \"Y_5\": \"Floyd Schafer\", \"Count_1\": 3}, {\"Y_3\": \"Frederic Kirksey\", \"Y_5\": \"Alexa Schafer\", \"Count_1\": 3}, {\"Y_5\": \"Emery Schafer\", \"Y_3\": \"Frederic Kirksey\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "great_grandfather(Y_5, Y_3)",
+                "child(\"Armando Schafer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    }
+]

@@ -1,0 +1,926 @@
+[
+    {
+        "id": "f9d9bdf8-f0d7-4ef3-9932-2401152f3244",
+        "question": "Who is the mother-in-law of the daughter of Harvey Parrott?",
+        "solution_traces": "[{\"Y_4\": \"Theda Healey\", \"Y_2\": \"Enid Healey\"}]",
+        "answer": [
+            "Enid Healey"
+        ],
+        "prolog": {
+            "query": [
+                "mother_in_law(Y_4, Y_2)",
+                "daughter(\"Harvey Parrott\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "43f15352-ef16-4ede-8eda-28cca38f9afd",
+        "question": "Who is the parent of the husband of Natasha Mcwhorter?",
+        "solution_traces": "[{\"Y_2\": \"Tammie Mcwhorter\", \"Y_4\": \"Elias Mcwhorter\"}, {\"Y_2\": \"Vito Mcwhorter\", \"Y_4\": \"Elias Mcwhorter\"}]",
+        "answer": [
+            "Tammie Mcwhorter",
+            "Vito Mcwhorter"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "husband(\"Natasha Mcwhorter\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "bdaf600d-88f5-4eb3-a259-65de5f6a3763",
+        "question": "Who is the great-granddaughter of the mother of Debi Drayton?",
+        "solution_traces": "[{\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Enid Healey\"}, {\"Y_4\": \"Enid Healey\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Enid Healey\"}]",
+        "answer": [
+            "Charmain Kimball",
+            "Deirdre Kimball",
+            "Naomi Rauch"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "mother(\"Debi Drayton\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8a64141a-57ee-4e00-87f1-22ecee5248b3",
+        "question": "Who is the grandparent of the sister-in-law of Junior Rauch?",
+        "solution_traces": "[{\"Y_4\": \"Charmain Kimball\", \"Y_2\": \"Theda Healey\"}, {\"Y_2\": \"Ione Kimball\", \"Y_4\": \"Deirdre Kimball\"}, {\"Y_2\": \"Abe Kimball\", \"Y_4\": \"Deirdre Kimball\"}, {\"Y_4\": \"Charmain Kimball\", \"Y_2\": \"Abe Kimball\"}, {\"Y_2\": \"Ione Kimball\", \"Y_4\": \"Charmain Kimball\"}, {\"Y_2\": \"Theda Healey\", \"Y_4\": \"Deirdre Kimball\"}, {\"Y_2\": \"Jeffery Healey\", \"Y_4\": \"Deirdre Kimball\"}, {\"Y_4\": \"Charmain Kimball\", \"Y_2\": \"Jeffery Healey\"}]",
+        "answer": [
+            "Abe Kimball",
+            "Ione Kimball",
+            "Jeffery Healey",
+            "Theda Healey"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "sister_in_law(\"Junior Rauch\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "78828253-e0ef-4c4f-9c4a-74d41885fc86",
+        "question": "Who is the sister of the granddaughter of Jeffery Healey?",
+        "solution_traces": "[{\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Deirdre Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Charmain Kimball\"}, {\"Y_2\": \"Charmain Kimball\", \"Y_4\": \"Naomi Rauch\"}, {\"Y_4\": \"Deirdre Kimball\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Naomi Rauch\"}, {\"Y_4\": \"Charmain Kimball\", \"Y_2\": \"Naomi Rauch\"}]",
+        "answer": [
+            "Charmain Kimball",
+            "Deirdre Kimball",
+            "Naomi Rauch"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "granddaughter(\"Jeffery Healey\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "eac3ec5f-914d-4187-b3b0-eae1ba3208ab",
+        "question": "Who is the parent of the grandchild of Vito Mcwhorter?",
+        "solution_traces": "[{\"Y_4\": \"Neil Faber\", \"Y_2\": \"Catina Faber\"}, {\"Y_4\": \"Pamula Mcwhorter\", \"Y_2\": \"Natasha Mcwhorter\"}, {\"Y_2\": \"Catina Faber\", \"Y_4\": \"Maryann Faber\"}, {\"Y_2\": \"Alden Faber\", \"Y_4\": \"Logan Faber\"}, {\"Y_2\": \"Elias Mcwhorter\", \"Y_4\": \"Pamula Mcwhorter\"}, {\"Y_2\": \"Alden Faber\", \"Y_4\": \"Maryann Faber\"}, {\"Y_2\": \"Catina Faber\", \"Y_4\": \"Logan Faber\"}, {\"Y_4\": \"Neil Faber\", \"Y_2\": \"Alden Faber\"}]",
+        "answer": [
+            "Alden Faber",
+            "Catina Faber",
+            "Elias Mcwhorter",
+            "Natasha Mcwhorter"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "grandchild(\"Vito Mcwhorter\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1d760acb-f2cb-4ccf-ae8f-ea717ee4f640",
+        "question": "Who is the grandfather of the sibling of Reyes Kimball?",
+        "solution_traces": "[{\"Y_2\": \"Abe Kimball\", \"Y_4\": \"Deirdre Kimball\"}, {\"Y_2\": \"Abe Kimball\", \"Y_4\": \"Naomi Rauch\"}, {\"Y_2\": \"Abe Kimball\", \"Y_4\": \"Delbert Kimball\"}, {\"Y_4\": \"Charmain Kimball\", \"Y_2\": \"Abe Kimball\"}, {\"Y_2\": \"Jeffery Healey\", \"Y_4\": \"Deirdre Kimball\"}, {\"Y_2\": \"Jeffery Healey\", \"Y_4\": \"Naomi Rauch\"}, {\"Y_2\": \"Jeffery Healey\", \"Y_4\": \"Delbert Kimball\"}, {\"Y_4\": \"Charmain Kimball\", \"Y_2\": \"Jeffery Healey\"}]",
+        "answer": [
+            "Abe Kimball",
+            "Jeffery Healey"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "sibling(\"Reyes Kimball\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "49bfd07c-85b3-4098-a07c-e07c41d104a9",
+        "question": "Who is the daughter of the great-grandfather of Reyes Kimball?",
+        "solution_traces": "[{\"Y_4\": \"Allen Healey\", \"Y_2\": \"Debi Drayton\"}, {\"Y_4\": \"Harvey Parrott\", \"Y_2\": \"Theda Healey\"}]",
+        "answer": [
+            "Debi Drayton",
+            "Theda Healey"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "great_grandfather(\"Reyes Kimball\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "627b53f6-7611-4920-876a-05001adb9b59",
+        "question": "Who is the uncle of the great-grandson of Derek Burke?",
+        "solution_traces": "[{\"Y_2\": \"Stevie Shields\", \"Y_4\": \"Edwin Faber\"}, {\"Y_4\": \"Rob Faber\", \"Y_2\": \"Stevie Shields\"}, {\"Y_4\": \"Alden Faber\", \"Y_2\": \"Stevie Shields\"}]",
+        "answer": [
+            "Stevie Shields"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "great_grandson(\"Derek Burke\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c9fb332f-ed46-471f-9256-59aaedee7ab7",
+        "question": "Who is the aunt of the brother of Logan Faber?",
+        "solution_traces": "[{\"Y_4\": \"Neil Faber\", \"Y_2\": \"Vanessa Faber\"}]",
+        "answer": [
+            "Vanessa Faber"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "brother(\"Logan Faber\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "99b2fb39-849c-4475-b9bd-008811fa827b",
+        "question": "Who is the grandchild of the grandparent of Reyes Kimball?",
+        "solution_traces": "[{\"Y_4\": \"Abe Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Charmain Kimball\", \"Y_4\": \"Ione Kimball\"}, {\"Y_4\": \"Abe Kimball\", \"Y_2\": \"Naomi Rauch\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Ione Kimball\"}, {\"Y_4\": \"Theda Healey\", \"Y_2\": \"Delbert Kimball\"}, {\"Y_4\": \"Abe Kimball\", \"Y_2\": \"Deirdre Kimball\"}, {\"Y_4\": \"Abe Kimball\", \"Y_2\": \"Delbert Kimball\"}, {\"Y_4\": \"Theda Healey\", \"Y_2\": \"Naomi Rauch\"}, {\"Y_4\": \"Ione Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Abe Kimball\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_2\": \"Charmain Kimball\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_4\": \"Theda Healey\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_4\": \"Theda Healey\", \"Y_2\": \"Deirdre Kimball\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_4\": \"Ione Kimball\"}, {\"Y_4\": \"Jeffery Healey\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Ione Kimball\"}, {\"Y_4\": \"Theda Healey\", \"Y_2\": \"Reyes Kimball\"}]",
+        "answer": [
+            "Charmain Kimball",
+            "Deirdre Kimball",
+            "Delbert Kimball",
+            "Naomi Rauch",
+            "Reyes Kimball"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "grandparent(\"Reyes Kimball\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ac516468-38f1-4b4b-94a2-4212331ccac6",
+        "question": "Who is the niece of the aunt of Heather Healey?",
+        "solution_traces": "[{\"Y_4\": \"Debi Drayton\", \"Y_2\": \"Brigida Healey\"}, {\"Y_4\": \"Debi Drayton\", \"Y_2\": \"Heather Healey\"}, {\"Y_4\": \"Debi Drayton\", \"Y_2\": \"Isabell Kimball\"}, {\"Y_4\": \"Debi Drayton\", \"Y_2\": \"Viva Healey\"}]",
+        "answer": [
+            "Brigida Healey",
+            "Heather Healey",
+            "Isabell Kimball",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "aunt(\"Heather Healey\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1804d07d-e446-4384-abb6-2b16d70adc2b",
+        "question": "Who is the friend of the child of Charity Faber?",
+        "solution_traces": "[{\"Y_2\": \"Junior Rauch\", \"Y_4\": \"Timmy Faber\"}, {\"Y_2\": \"Derek Burke\", \"Y_4\": \"Timmy Faber\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_4\": \"Timmy Faber\"}, {\"Y_2\": \"Neil Faber\", \"Y_4\": \"Timmy Faber\"}, {\"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Timmy Faber\"}, {\"Y_4\": \"Timmy Faber\", \"Y_2\": \"Demetrius Rauch\"}, {\"Y_4\": \"Timmy Faber\", \"Y_2\": \"Reyes Kimball\"}]",
+        "answer": [
+            "Delbert Kimball",
+            "Demetrius Rauch",
+            "Derek Burke",
+            "Isabell Kimball",
+            "Junior Rauch",
+            "Neil Faber",
+            "Reyes Kimball"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "child(\"Charity Faber\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8b6de684-7942-4974-a637-068822e7524c",
+        "question": "Who is the parent of the sister-in-law of Natasha Mcwhorter?",
+        "solution_traces": "[{\"Y_4\": \"Catina Faber\", \"Y_2\": \"Vito Mcwhorter\"}, {\"Y_4\": \"Catina Faber\", \"Y_2\": \"Tammie Mcwhorter\"}]",
+        "answer": [
+            "Tammie Mcwhorter",
+            "Vito Mcwhorter"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "sister_in_law(\"Natasha Mcwhorter\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0cb97369-a194-44e6-8cf4-610491cf42f1",
+        "question": "Who is the cousin of the aunt of Reyes Kimball?",
+        "solution_traces": "[{\"Y_4\": \"Brigida Healey\", \"Y_2\": \"Phil Drayton\"}, {\"Y_4\": \"Heather Healey\", \"Y_2\": \"Phil Drayton\"}, {\"Y_4\": \"Viva Healey\", \"Y_2\": \"Phil Drayton\"}]",
+        "answer": [
+            "Phil Drayton"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "aunt(\"Reyes Kimball\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d93edb03-3b12-4b0f-aecb-6659e1f355df",
+        "question": "Who is the friend of the grandson of Harvey Parrott?",
+        "solution_traces": "[{\"Y_4\": \"Danilo Healey\", \"Y_2\": \"Debbie Shields\"}, {\"Y_4\": \"Danilo Healey\", \"Y_2\": \"Viva Healey\"}, {\"Y_4\": \"Danilo Healey\", \"Y_2\": \"Shelly Vanpelt\"}, {\"Y_4\": \"Danilo Healey\", \"Y_2\": \"Eugenio Faber\"}]",
+        "answer": [
+            "Debbie Shields",
+            "Eugenio Faber",
+            "Shelly Vanpelt",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "grandson(\"Harvey Parrott\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5b1dea20-736b-4f59-bf6d-ac966167a7a8",
+        "question": "Who is the sister of the uncle of Vanessa Faber?",
+        "solution_traces": "[{\"Y_2\": \"Bethany Faber\", \"Y_4\": \"Stevie Shields\"}]",
+        "answer": [
+            "Bethany Faber"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "uncle(\"Vanessa Faber\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "24c86bc6-8edb-4d1c-bdce-d48a446e4736",
+        "question": "Who is the brother of the sibling of Reyes Kimball?",
+        "solution_traces": "[{\"Y_2\": \"Delbert Kimball\", \"Y_4\": \"Charmain Kimball\"}, {\"Y_4\": \"Naomi Rauch\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_4\": \"Naomi Rauch\"}, {\"Y_4\": \"Deirdre Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Delbert Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_4\": \"Deirdre Kimball\"}, {\"Y_4\": \"Charmain Kimball\", \"Y_2\": \"Reyes Kimball\"}]",
+        "answer": [
+            "Delbert Kimball",
+            "Reyes Kimball"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "sibling(\"Reyes Kimball\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d485e32e-e500-49ef-af85-2318b2a02beb",
+        "question": "Who is the grandparent of the niece of Elias Mcwhorter?",
+        "solution_traces": "[{\"Y_2\": \"Lyndon Faber\", \"Y_4\": \"Maryann Faber\"}, {\"Y_4\": \"Maryann Faber\", \"Y_2\": \"Vito Mcwhorter\"}, {\"Y_2\": \"Tammie Mcwhorter\", \"Y_4\": \"Maryann Faber\"}, {\"Y_2\": \"Bethany Faber\", \"Y_4\": \"Maryann Faber\"}]",
+        "answer": [
+            "Bethany Faber",
+            "Lyndon Faber",
+            "Tammie Mcwhorter",
+            "Vito Mcwhorter"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "niece(\"Elias Mcwhorter\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "feb8318a-c58f-4f96-8365-fb90625ed3ae",
+        "question": "Who is the sibling of the daughter-in-law of Abe Kimball?",
+        "solution_traces": "[{\"Y_4\": \"Isabell Kimball\", \"Y_2\": \"Heather Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_2\": \"Viva Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_2\": \"Brigida Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_2\": \"Danilo Healey\"}]",
+        "answer": [
+            "Brigida Healey",
+            "Danilo Healey",
+            "Heather Healey",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "daughter_in_law(\"Abe Kimball\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "816377b1-11a4-4e05-871f-87def941945e",
+        "question": "Who is the great-granddaughter of the grandparent of Heather Healey?",
+        "solution_traces": "[{\"Y_4\": \"Harvey Parrott\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Enid Healey\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Allen Healey\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Harvey Parrott\"}, {\"Y_4\": \"Enid Healey\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Enid Healey\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Antionette Parrott\"}, {\"Y_4\": \"Antionette Parrott\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_4\": \"Harvey Parrott\", \"Y_2\": \"Naomi Rauch\"}, {\"Y_4\": \"Allen Healey\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Antionette Parrott\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Allen Healey\"}]",
+        "answer": [
+            "Charmain Kimball",
+            "Deirdre Kimball",
+            "Naomi Rauch"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "grandparent(\"Heather Healey\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a078b003-cea6-43b4-b637-5a0d5e8408aa",
+        "question": "Who is the parent of the granddaughter of Essie Faber?",
+        "solution_traces": "[{\"Y_2\": \"Lyndon Faber\", \"Y_4\": \"Vanessa Faber\"}, {\"Y_2\": \"Bethany Faber\", \"Y_4\": \"Vanessa Faber\"}]",
+        "answer": [
+            "Bethany Faber",
+            "Lyndon Faber"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "granddaughter(\"Essie Faber\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "92a16b0b-7337-41d7-af97-374490d3693c",
+        "question": "Who is the son of the mother of Rob Faber?",
+        "solution_traces": "[{\"Y_4\": \"Bethany Faber\", \"Y_2\": \"Alden Faber\"}, {\"Y_2\": \"Edwin Faber\", \"Y_4\": \"Bethany Faber\"}, {\"Y_4\": \"Bethany Faber\", \"Y_2\": \"Rob Faber\"}]",
+        "answer": [
+            "Alden Faber",
+            "Edwin Faber",
+            "Rob Faber"
+        ],
+        "prolog": {
+            "query": [
+                "son(Y_4, Y_2)",
+                "mother(\"Rob Faber\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "505d69af-6b0b-4b04-951c-0e45e15427d2",
+        "question": "Who is the grandson of the brother-in-law of Lon Drayton?",
+        "solution_traces": "[{\"Y_2\": \"Delbert Kimball\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_4\": \"Jeffery Healey\", \"Y_2\": \"Reyes Kimball\"}]",
+        "answer": [
+            "Delbert Kimball",
+            "Reyes Kimball"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "brother_in_law(\"Lon Drayton\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e3e3aebd-345e-4d5b-9fce-f04a90680fe1",
+        "question": "Who is the friend of the daughter-in-law of Vito Mcwhorter?",
+        "solution_traces": "[{\"Y_2\": \"Viva Healey\", \"Y_4\": \"Natasha Mcwhorter\"}, {\"Y_4\": \"Natasha Mcwhorter\", \"Y_2\": \"Theda Healey\"}, {\"Y_4\": \"Natasha Mcwhorter\", \"Y_2\": \"Heather Healey\"}]",
+        "answer": [
+            "Heather Healey",
+            "Theda Healey",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "daughter_in_law(\"Vito Mcwhorter\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5ab59a41-f237-4d2d-9ee1-c5c726d17b73",
+        "question": "Who is the niece of the great-uncle of Rosemarie Rauch?",
+        "solution_traces": "[{\"Y_4\": \"Danilo Healey\", \"Y_2\": \"Deirdre Kimball\"}, {\"Y_4\": \"Danilo Healey\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_4\": \"Danilo Healey\", \"Y_2\": \"Naomi Rauch\"}]",
+        "answer": [
+            "Charmain Kimball",
+            "Deirdre Kimball",
+            "Naomi Rauch"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "great_uncle(\"Rosemarie Rauch\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0e0a814f-baf2-48ed-938e-fbd253072009",
+        "question": "Who is the sister of the great-grandson of Jeffery Healey?",
+        "solution_traces": "[{\"Y_2\": \"Rosemarie Rauch\", \"Y_4\": \"Demetrius Rauch\"}]",
+        "answer": [
+            "Rosemarie Rauch"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "great_grandson(\"Jeffery Healey\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c3625116-84bf-4d12-8497-bcb4eedbe0e0",
+        "question": "Who is the great-grandchild of the friend of Harvey Parrott?",
+        "solution_traces": "[{\"Y_4\": \"Antionette Parrott\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Antionette Parrott\"}, {\"Y_4\": \"Antionette Parrott\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Antionette Parrott\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_4\": \"Antionette Parrott\"}]",
+        "answer": [
+            "Charmain Kimball",
+            "Deirdre Kimball",
+            "Delbert Kimball",
+            "Naomi Rauch",
+            "Reyes Kimball"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "friend(\"Harvey Parrott\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0459cda9-21d3-4ba7-8660-90bd5e386241",
+        "question": "Who is the granddaughter of the great-grandfather of Rob Faber?",
+        "solution_traces": "[{\"Y_2\": \"Bethany Faber\", \"Y_4\": \"Derek Burke\"}]",
+        "answer": [
+            "Bethany Faber"
+        ],
+        "prolog": {
+            "query": [
+                "granddaughter(Y_4, Y_2)",
+                "great_grandfather(\"Rob Faber\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0a8ae5ef-4e5f-4f25-bc84-2dbed972f1bd",
+        "question": "Who is the female cousin of the child of Lon Drayton?",
+        "solution_traces": "[{\"Y_4\": \"Phil Drayton\", \"Y_2\": \"Isabell Kimball\"}, {\"Y_4\": \"Phil Drayton\", \"Y_2\": \"Heather Healey\"}, {\"Y_4\": \"Phil Drayton\", \"Y_2\": \"Brigida Healey\"}, {\"Y_4\": \"Phil Drayton\", \"Y_2\": \"Viva Healey\"}]",
+        "answer": [
+            "Brigida Healey",
+            "Heather Healey",
+            "Isabell Kimball",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "female_cousin(Y_4, Y_2)",
+                "child(\"Lon Drayton\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    }
+]

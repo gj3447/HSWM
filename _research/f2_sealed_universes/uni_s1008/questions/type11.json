@@ -1,0 +1,930 @@
+[
+    {
+        "id": "19aff6dc-b3bf-4cc0-8703-e646107df580",
+        "question": "What is the occupation of the husband of Niesha Lawhorn?",
+        "solution_traces": "[{\"Y_2\": \"ambulance person\", \"Y_3\": \"Geoffrey Lawhorn\"}]",
+        "answer": [
+            "ambulance person"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "husband(\"Niesha Lawhorn\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1b310e50-6262-4cc1-8eaa-d2b97dfe5e52",
+        "question": "What is the date of birth of the great-grandchild of Kraig Clapper?",
+        "solution_traces": "[{\"Y_2\": \"0289-12-10\", \"Y_3\": \"Adrienne Clapper\"}, {\"Y_3\": \"Riley Clapper\", \"Y_2\": \"0290-10-28\"}, {\"Y_2\": \"0287-08-28\", \"Y_3\": \"Claude Clapper\"}, {\"Y_3\": \"Delbert Avila\", \"Y_2\": \"0288-08-23\"}, {\"Y_2\": \"0290-01-27\", \"Y_3\": \"Kimiko Avila\"}, {\"Y_3\": \"Timothy Clapper\", \"Y_2\": \"0293-06-27\"}]",
+        "answer": [
+            "0287-08-28",
+            "0288-08-23",
+            "0289-12-10",
+            "0290-01-27",
+            "0290-10-28",
+            "0293-06-27"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandchild(\"Kraig Clapper\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7ff40903-041d-41ee-9d10-203280628d4e",
+        "question": "What is the date of birth of the friend of Brooks Lawhorn?",
+        "solution_traces": "[{\"Y_3\": \"Tiesha Lawhorn\", \"Y_2\": \"0211-11-14\"}, {\"Y_2\": \"0210-01-28\", \"Y_3\": \"Kraig Clapper\"}, {\"Y_3\": \"Tomas Clapper\", \"Y_2\": \"0237-02-26\"}]",
+        "answer": [
+            "0210-01-28",
+            "0211-11-14",
+            "0237-02-26"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(\"Brooks Lawhorn\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1e1261bf-9674-4d79-a7c5-3b82eec45d5c",
+        "question": "What is the hobby of the sibling of Vilma Avila?",
+        "solution_traces": "[{\"Y_3\": \"Haywood Clapper\", \"Y_2\": \"table football\"}, {\"Y_3\": \"Danilo Clapper\", \"Y_2\": \"entrepreneurship\"}, {\"Y_2\": \"sled dog racing\", \"Y_3\": \"Christopher Clapper\"}, {\"Y_2\": \"learning\", \"Y_3\": \"Art Clapper\"}]",
+        "answer": [
+            "entrepreneurship",
+            "learning",
+            "sled dog racing",
+            "table football"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(\"Vilma Avila\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9e2fd59e-cd94-4f4d-bad9-70faf942dac5",
+        "question": "What is the occupation of the aunt of Leeanne Nagy?",
+        "solution_traces": "[{\"Y_3\": \"Cheri Lawhorn\", \"Y_2\": \"speech and language therapist\"}, {\"Y_3\": \"Oma Lawhorn\", \"Y_2\": \"geologist\"}]",
+        "answer": [
+            "geologist",
+            "speech and language therapist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "aunt(\"Leeanne Nagy\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "04a151a4-1e0d-4a85-a2f6-a37cf8a20d9d",
+        "question": "What is the date of birth of the friend of Anibal Lawhorn?",
+        "solution_traces": "[{\"Y_3\": \"Haywood Clapper\", \"Y_2\": \"0266-01-25\"}, {\"Y_3\": \"Riley Joiner\", \"Y_2\": \"0231-04-01\"}, {\"Y_3\": \"Leeanne Nagy\", \"Y_2\": \"0266-08-23\"}, {\"Y_3\": \"Delbert Avila\", \"Y_2\": \"0288-08-23\"}, {\"Y_3\": \"Thalia Mcreynolds\", \"Y_2\": \"0263-04-13\"}]",
+        "answer": [
+            "0231-04-01",
+            "0263-04-13",
+            "0266-01-25",
+            "0266-08-23",
+            "0288-08-23"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(\"Anibal Lawhorn\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d3ee848c-01be-4f21-8a8b-3d47efe0011c",
+        "question": "What is the hobby of the husband of Pamula Oster?",
+        "solution_traces": "[{\"Y_2\": \"benchmarking\", \"Y_3\": \"Dylan Oster\"}]",
+        "answer": [
+            "benchmarking"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "husband(\"Pamula Oster\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c0a1992f-86ba-40fc-9359-4c236cd5f2ad",
+        "question": "What is the date of birth of the friend of Douglas Nagy?",
+        "solution_traces": "[{\"Y_3\": \"Riley Clapper\", \"Y_2\": \"0290-10-28\"}, {\"Y_3\": \"Thalia Mcreynolds\", \"Y_2\": \"0263-04-13\"}, {\"Y_3\": \"Riley Joiner\", \"Y_2\": \"0231-04-01\"}, {\"Y_3\": \"Pamula Oster\", \"Y_2\": \"0263-04-13\"}]",
+        "answer": [
+            "0231-04-01",
+            "0263-04-13",
+            "0290-10-28"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(\"Douglas Nagy\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "95fad4a0-3a4d-45aa-8e29-80a9b9601664",
+        "question": "What is the date of birth of the grandparent of Riley Clapper?",
+        "solution_traces": "[{\"Y_3\": \"Kacey Joiner\", \"Y_2\": \"0229-03-06\"}, {\"Y_3\": \"Riley Joiner\", \"Y_2\": \"0231-04-01\"}, {\"Y_2\": \"0237-07-26\", \"Y_3\": \"Marlena Clapper\"}, {\"Y_3\": \"Tomas Clapper\", \"Y_2\": \"0237-02-26\"}]",
+        "answer": [
+            "0229-03-06",
+            "0231-04-01",
+            "0237-02-26",
+            "0237-07-26"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandparent(\"Riley Clapper\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "57df695d-fab4-46c4-acc2-13098f930595",
+        "question": "What is the occupation of the great-grandparent of Mariana Avila?",
+        "solution_traces": "[{\"Y_2\": \"art therapist\", \"Y_3\": \"Tomas Clapper\"}, {\"Y_2\": \"medical sales representative\", \"Y_3\": \"Marlena Clapper\"}]",
+        "answer": [
+            "art therapist",
+            "medical sales representative"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandparent(\"Mariana Avila\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fd7254f2-fb83-4676-885b-4b23ad09382d",
+        "question": "What is the date of birth of the sister-in-law of Lauren Lawhorn?",
+        "solution_traces": "[{\"Y_3\": \"Thalia Mcreynolds\", \"Y_2\": \"0263-04-13\"}, {\"Y_3\": \"Leeanne Nagy\", \"Y_2\": \"0266-08-23\"}, {\"Y_3\": \"Pamula Oster\", \"Y_2\": \"0263-04-13\"}]",
+        "answer": [
+            "0263-04-13",
+            "0266-08-23"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sister_in_law(\"Lauren Lawhorn\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "926f7017-2397-4ead-b4e2-c26f0e682656",
+        "question": "What is the date of birth of the sister of Pamula Oster?",
+        "solution_traces": "[{\"Y_3\": \"Thalia Mcreynolds\", \"Y_2\": \"0263-04-13\"}, {\"Y_3\": \"Leeanne Nagy\", \"Y_2\": \"0266-08-23\"}]",
+        "answer": [
+            "0263-04-13",
+            "0266-08-23"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sister(\"Pamula Oster\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "653a0ab5-8640-45d5-8279-99f8e42f4702",
+        "question": "What is the occupation of the sister of Art Clapper?",
+        "solution_traces": "[{\"Y_2\": \"government social research officer\", \"Y_3\": \"Vilma Avila\"}]",
+        "answer": [
+            "government social research officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sister(\"Art Clapper\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "42ec8679-a2de-46b6-97f0-69749067df41",
+        "question": "What is the hobby of the granddaughter of Kraig Clapper?",
+        "solution_traces": "[{\"Y_3\": \"Vilma Avila\", \"Y_2\": \"comic book collecting\"}]",
+        "answer": [
+            "comic book collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "granddaughter(\"Kraig Clapper\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1e28cadd-a655-4821-ab39-8b07d7ba8862",
+        "question": "What is the occupation of the great-grandchild of Olin Lawhorn?",
+        "solution_traces": "[{\"Y_3\": \"Adalberto Oster\", \"Y_2\": \"counsellor\"}, {\"Y_3\": \"Babette Farmer\", \"Y_2\": \"management consultant\"}, {\"Y_2\": \"surgeon\", \"Y_3\": \"Isidro Lawhorn\"}, {\"Y_3\": \"Anibal Lawhorn\", \"Y_2\": \"pensions consultant\"}, {\"Y_2\": \"armed forces training and education officer\", \"Y_3\": \"Elicia Mcreynolds\"}, {\"Y_3\": \"Ervin Nagy\", \"Y_2\": \"graphic designer\"}]",
+        "answer": [
+            "armed forces training and education officer",
+            "counsellor",
+            "graphic designer",
+            "management consultant",
+            "pensions consultant",
+            "surgeon"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandchild(\"Olin Lawhorn\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f5457ad6-d613-4ec7-8f36-e064fcceff88",
+        "question": "What is the occupation of the cousin of Elicia Mcreynolds?",
+        "solution_traces": "[{\"Y_3\": \"Adalberto Oster\", \"Y_2\": \"counsellor\"}, {\"Y_3\": \"Babette Farmer\", \"Y_2\": \"management consultant\"}, {\"Y_2\": \"surgeon\", \"Y_3\": \"Isidro Lawhorn\"}, {\"Y_3\": \"Anibal Lawhorn\", \"Y_2\": \"pensions consultant\"}, {\"Y_3\": \"Ervin Nagy\", \"Y_2\": \"graphic designer\"}]",
+        "answer": [
+            "counsellor",
+            "graphic designer",
+            "management consultant",
+            "pensions consultant",
+            "surgeon"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "cousin(\"Elicia Mcreynolds\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "112562f5-7846-4e36-b6b1-1a0959076409",
+        "question": "What is the occupation of the grandchild of Kacey Joiner?",
+        "solution_traces": "[{\"Y_2\": \"building services engineer\", \"Y_3\": \"Riley Clapper\"}, {\"Y_2\": \"prison officer\", \"Y_3\": \"Claude Clapper\"}, {\"Y_3\": \"Adrienne Clapper\", \"Y_2\": \"hospital doctor\"}]",
+        "answer": [
+            "building services engineer",
+            "hospital doctor",
+            "prison officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandchild(\"Kacey Joiner\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "10ae8dcf-4504-43e4-91af-f35d4c7e0ee0",
+        "question": "What is the date of birth of the mother-in-law of Edmundo Mcreynolds?",
+        "solution_traces": "[{\"Y_3\": \"Niesha Lawhorn\", \"Y_2\": \"0234-02-19\"}]",
+        "answer": [
+            "0234-02-19"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "mother_in_law(\"Edmundo Mcreynolds\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "603f0736-2ed7-4e44-a888-4090ebff1b24",
+        "question": "What is the hobby of the grandchild of Olin Lawhorn?",
+        "solution_traces": "[{\"Y_3\": \"Brooks Lawhorn\", \"Y_2\": \"weightlifting\"}, {\"Y_3\": \"Pamula Oster\", \"Y_2\": \"reading\"}, {\"Y_3\": \"Romona Lawhorn\", \"Y_2\": \"insect collecting\"}, {\"Y_3\": \"Thalia Mcreynolds\", \"Y_2\": \"bus spotting\"}, {\"Y_2\": \"wikipedia editing\", \"Y_3\": \"Bethany Lawhorn\"}, {\"Y_3\": \"Leeanne Nagy\", \"Y_2\": \"dolls\"}]",
+        "answer": [
+            "bus spotting",
+            "dolls",
+            "insect collecting",
+            "reading",
+            "weightlifting",
+            "wikipedia editing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandchild(\"Olin Lawhorn\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "70120bed-d491-4b6f-b988-a4e00e576554",
+        "question": "What is the date of birth of the cousin of Ervin Nagy?",
+        "solution_traces": "[{\"Y_2\": \"0294-06-14\", \"Y_3\": \"Elicia Mcreynolds\"}, {\"Y_2\": \"0291-01-17\", \"Y_3\": \"Babette Farmer\"}, {\"Y_2\": \"0288-08-13\", \"Y_3\": \"Adalberto Oster\"}, {\"Y_2\": \"0290-02-18\", \"Y_3\": \"Anibal Lawhorn\"}, {\"Y_3\": \"Isidro Lawhorn\", \"Y_2\": \"0298-01-09\"}]",
+        "answer": [
+            "0288-08-13",
+            "0290-02-18",
+            "0291-01-17",
+            "0294-06-14",
+            "0298-01-09"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "cousin(\"Ervin Nagy\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0786b959-6ff4-495f-8b47-f59f727f8cba",
+        "question": "What is the date of birth of the great-grandson of Sondra Clapper?",
+        "solution_traces": "[{\"Y_3\": \"Riley Clapper\", \"Y_2\": \"0290-10-28\"}, {\"Y_3\": \"Delbert Avila\", \"Y_2\": \"0288-08-23\"}, {\"Y_2\": \"0287-08-28\", \"Y_3\": \"Claude Clapper\"}, {\"Y_3\": \"Timothy Clapper\", \"Y_2\": \"0293-06-27\"}]",
+        "answer": [
+            "0287-08-28",
+            "0288-08-23",
+            "0290-10-28",
+            "0293-06-27"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandson(\"Sondra Clapper\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e93746ab-e1ca-4e29-af60-a256711e99b7",
+        "question": "What is the occupation of the sister-in-law of Chante Lawhorn?",
+        "solution_traces": "[{\"Y_3\": \"Cheri Lawhorn\", \"Y_2\": \"speech and language therapist\"}, {\"Y_3\": \"Oma Lawhorn\", \"Y_2\": \"geologist\"}]",
+        "answer": [
+            "geologist",
+            "speech and language therapist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sister_in_law(\"Chante Lawhorn\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5ea4e6de-92d0-45db-ae1a-936923b3b070",
+        "question": "What is the date of birth of the friend of Cliff Farmer?",
+        "solution_traces": "[{\"Y_2\": \"0256-09-18\", \"Y_3\": \"Ashton Kersey\"}, {\"Y_3\": \"Haywood Clapper\", \"Y_2\": \"0266-01-25\"}, {\"Y_3\": \"Heidi Clapper\", \"Y_2\": \"0267-01-02\"}, {\"Y_3\": \"Charity Clapper\", \"Y_2\": \"0261-02-10\"}, {\"Y_3\": \"Timothy Clapper\", \"Y_2\": \"0293-06-27\"}]",
+        "answer": [
+            "0256-09-18",
+            "0261-02-10",
+            "0266-01-25",
+            "0267-01-02",
+            "0293-06-27"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(\"Cliff Farmer\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "82b5a638-ceb6-46bb-975a-372297bc5d6b",
+        "question": "What is the date of birth of the parent of Elicia Mcreynolds?",
+        "solution_traces": "[{\"Y_3\": \"Thalia Mcreynolds\", \"Y_2\": \"0263-04-13\"}, {\"Y_3\": \"Edmundo Mcreynolds\", \"Y_2\": \"0261-12-18\"}]",
+        "answer": [
+            "0261-12-18",
+            "0263-04-13"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "parent(\"Elicia Mcreynolds\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1c8c9f08-d34a-44a1-9e84-10d3f860ea00",
+        "question": "What is the date of birth of the sister-in-law of Lauren Lawhorn?",
+        "solution_traces": "[{\"Y_3\": \"Thalia Mcreynolds\", \"Y_2\": \"0263-04-13\"}, {\"Y_3\": \"Leeanne Nagy\", \"Y_2\": \"0266-08-23\"}, {\"Y_3\": \"Pamula Oster\", \"Y_2\": \"0263-04-13\"}]",
+        "answer": [
+            "0263-04-13",
+            "0266-08-23"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sister_in_law(\"Lauren Lawhorn\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e783889c-5be1-4904-8a3d-73cfa78281b5",
+        "question": "What is the date of birth of the male cousin of Bethany Lawhorn?",
+        "solution_traces": "[{\"Y_3\": \"Brooks Lawhorn\", \"Y_2\": \"0264-08-11\"}]",
+        "answer": [
+            "0264-08-11"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "male_cousin(\"Bethany Lawhorn\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ddc0f4f8-4ca0-4125-b804-cb2b97c08522",
+        "question": "What is the hobby of the child of Charity Clapper?",
+        "solution_traces": "[{\"Y_3\": \"Riley Clapper\", \"Y_2\": \"book folding\"}, {\"Y_3\": \"Claude Clapper\", \"Y_2\": \"ticket collecting\"}, {\"Y_2\": \"axe throwing\", \"Y_3\": \"Adrienne Clapper\"}]",
+        "answer": [
+            "axe throwing",
+            "book folding",
+            "ticket collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "child(\"Charity Clapper\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e1c3cc32-672c-4066-959d-3a9bb4998c8c",
+        "question": "What is the hobby of the cousin of Anibal Lawhorn?",
+        "solution_traces": "[{\"Y_2\": \"billiards\", \"Y_3\": \"Adalberto Oster\"}, {\"Y_3\": \"Ervin Nagy\", \"Y_2\": \"life science\"}, {\"Y_2\": \"inline skating\", \"Y_3\": \"Elicia Mcreynolds\"}]",
+        "answer": [
+            "billiards",
+            "inline skating",
+            "life science"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "cousin(\"Anibal Lawhorn\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "971b37fc-c890-484e-83fb-c1f838e84c02",
+        "question": "What is the date of birth of the wife of Dylan Oster?",
+        "solution_traces": "[{\"Y_3\": \"Pamula Oster\", \"Y_2\": \"0263-04-13\"}]",
+        "answer": [
+            "0263-04-13"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "wife(\"Dylan Oster\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b65c2eb7-9b92-4e31-b1bb-24b221aec0c1",
+        "question": "What is the date of birth of the great-aunt of Babette Farmer?",
+        "solution_traces": "[{\"Y_3\": \"Oma Lawhorn\", \"Y_2\": \"0239-02-04\"}, {\"Y_3\": \"Cheri Lawhorn\", \"Y_2\": \"0240-03-30\"}]",
+        "answer": [
+            "0239-02-04",
+            "0240-03-30"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_aunt(\"Babette Farmer\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    }
+]

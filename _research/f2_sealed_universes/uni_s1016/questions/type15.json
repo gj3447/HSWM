@@ -1,0 +1,1003 @@
+[
+    {
+        "id": "74a5510d-a2cb-4b27-af1b-bb734cfe0761",
+        "question": "How many granddaughters does the great-grandmother of the son of Jackie Messenger have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Minerva Johansen\", \"Y_5\": \"Hank Messenger\"}, {\"Y_3\": \"Lara Driskell\", \"Count_1\": 1, \"Y_5\": \"Hank Messenger\"}, {\"Y_5\": \"Scotty Messenger\", \"Count_1\": 1, \"Y_3\": \"Minerva Johansen\"}, {\"Y_5\": \"Scotty Messenger\", \"Count_1\": 1, \"Y_3\": \"Lara Driskell\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(granddaughter(Y_3, Y_1)), Count_1)",
+                "great_grandmother(Y_5, Y_3)",
+                "son(\"Jackie Messenger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "19fc4133-90fa-49ad-9521-0c3cef723c80",
+        "question": "How many great-grandparents does the child of the wife of Austin Crim have?",
+        "solution_traces": "[{\"Y_5\": \"Monika Crim\", \"Count_1\": 2, \"Y_3\": \"Trisha Crim\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "child(Y_5, Y_3)",
+                "wife(\"Austin Crim\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "40249019-aedd-44c3-868d-5d204f43705e",
+        "question": "How many mothers-in-law does the husband of the great-aunt of Larue Dorsett have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Hosea Ochs\", \"Y_5\": \"Shawna Ochs\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(Y_3, Y_1)), Count_1)",
+                "husband(Y_5, Y_3)",
+                "great_aunt(\"Larue Dorsett\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e1db61df-64e7-4fdf-9954-48407570ce14",
+        "question": "How many cousins does the child of the friend of Georgette Messenger have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Jason Messenger\", \"Y_5\": \"Selena Messenger\"}, {\"Count_1\": 2, \"Y_3\": \"Larue Dorsett\", \"Y_5\": \"Von Dorsett\"}, {\"Count_1\": 2, \"Y_3\": \"Larue Dorsett\", \"Y_5\": \"Perla Dorsett\"}, {\"Count_1\": 0, \"Y_3\": \"Sara Messenger\", \"Y_5\": \"Selena Messenger\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "child(Y_5, Y_3)",
+                "friend(\"Georgette Messenger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "76b10056-813a-44f4-b8f6-09301d4f6337",
+        "question": "How many daughters-in-law does the father of the cousin of Perla Dorsett have?",
+        "solution_traces": "[{\"Y_3\": \"Hosea Ochs\", \"Count_1\": 1, \"Y_5\": \"Ivan Ochs\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter_in_law(Y_3, Y_1)), Count_1)",
+                "father(Y_5, Y_3)",
+                "cousin(\"Perla Dorsett\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8616f46e-f627-4656-b10d-28f5b9835b41",
+        "question": "How many parents does the mother-in-law of the grandparent of Trisha Crim have?",
+        "solution_traces": "[{\"Y_5\": \"Glenda Ochs\", \"Y_3\": \"Shawna Ochs\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "mother_in_law(Y_5, Y_3)",
+                "grandparent(\"Trisha Crim\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "10b5f895-58d6-432b-98f8-3a07286783f7",
+        "question": "How many sons-in-law does the great-grandfather of the granddaughter of Shawna Ochs have?",
+        "solution_traces": "[{\"Y_5\": \"Rosella Ochs\", \"Count_1\": 1, \"Y_3\": \"Zachery Ybarra\"}, {\"Y_5\": \"Monika Crim\", \"Count_1\": 1, \"Y_3\": \"Zachery Ybarra\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(Y_3, Y_1)), Count_1)",
+                "great_grandfather(Y_5, Y_3)",
+                "granddaughter(\"Shawna Ochs\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a29904a5-c59d-4263-b97b-fd46275c9b97",
+        "question": "How many great-grandmothers does the granddaughter of the friend of Boyd Messenger have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Lyndia Hoagland\", \"Y_5\": \"Selena Messenger\"}, {\"Y_5\": \"Warren Messenger\", \"Y_3\": \"Jewel Messenger\", \"Count_1\": 2}, {\"Y_5\": \"Warren Messenger\", \"Count_1\": 2, \"Y_3\": \"Lyndia Hoagland\"}, {\"Y_3\": \"Jewel Messenger\", \"Count_1\": 2, \"Y_5\": \"Selena Messenger\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandmother(Y_3, Y_1)), Count_1)",
+                "granddaughter(Y_5, Y_3)",
+                "friend(\"Boyd Messenger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "80215ecf-db12-4b74-9e87-b89a51b7df23",
+        "question": "How many granddaughters does the sibling of the great-aunt of Katherine Showers have?",
+        "solution_traces": "[{\"Y_3\": \"Elvin Ybarra\", \"Y_5\": \"Shawna Ochs\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(granddaughter(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "great_aunt(\"Katherine Showers\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d0d00418-5a2b-4e0d-9959-201708f9ed2d",
+        "question": "How many friends does the mother-in-law of the son-in-law of Nathan Witt have?",
+        "solution_traces": "[{\"Y_5\": \"Saul Johansen\", \"Count_1\": 2, \"Y_3\": \"Maira Witt\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "mother_in_law(Y_5, Y_3)",
+                "son_in_law(\"Nathan Witt\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b89e4eee-292f-4c6a-a6a6-484089899d41",
+        "question": "How many siblings does the brother of the sister-in-law of Darrel Showers have?",
+        "solution_traces": "[{\"Y_3\": \"Gale Ybarra\", \"Y_5\": \"Perla Dorsett\", \"Count_1\": 3}, {\"Y_3\": \"Octavio Ybarra\", \"Y_5\": \"Perla Dorsett\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "sister_in_law(\"Darrel Showers\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c54049a0-30ab-4dd3-8259-ff3c3206bcfa",
+        "question": "How many siblings does the friend of the grandchild of Hosea Ochs have?",
+        "solution_traces": "[{\"Y_5\": \"Monika Crim\", \"Count_1\": 0, \"Y_3\": \"Larue Dorsett\"}, {\"Y_5\": \"Monika Crim\", \"Y_3\": \"Cristal Showers\", \"Count_1\": 3}, {\"Y_5\": \"Rosella Ochs\", \"Y_3\": \"Jewel Messenger\", \"Count_1\": 3}, {\"Y_5\": \"Monika Crim\", \"Y_3\": \"Jewel Messenger\", \"Count_1\": 3}, {\"Y_3\": \"Scotty Messenger\", \"Y_5\": \"Rosella Ochs\", \"Count_1\": 3}, {\"Y_3\": \"Saul Johansen\", \"Y_5\": \"Monika Crim\", \"Count_1\": 0}, {\"Y_5\": \"Rosella Ochs\", \"Count_1\": 0, \"Y_3\": \"Francis Tooley\"}, {\"Y_5\": \"Rosella Ochs\", \"Count_1\": 0, \"Y_3\": \"Trisha Crim\"}, {\"Y_5\": \"Rosella Ochs\", \"Y_3\": \"Perla Dorsett\", \"Count_1\": 3}, {\"Y_3\": \"Geoffrey Driskell\", \"Y_5\": \"Rosella Ochs\", \"Count_1\": 0}, {\"Y_3\": \"Scotty Messenger\", \"Y_5\": \"Monika Crim\", \"Count_1\": 3}]",
+        "answer": [
+            "0",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "grandchild(\"Hosea Ochs\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4b4d9846-479e-4515-80f0-72c245127ff3",
+        "question": "How many great-grandparents does the daughter-in-law of the grandmother of Lurline Messenger have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Jewel Messenger\", \"Y_5\": \"Georgette Messenger\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "daughter_in_law(Y_5, Y_3)",
+                "grandmother(\"Lurline Messenger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "20517b45-3d15-4028-9fc7-b6127e69e8a2",
+        "question": "How many nieces does the male cousin of the friend of Katherine Showers have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Gale Ybarra\", \"Y_5\": \"Ivan Ochs\"}, {\"Y_3\": \"Octavio Ybarra\", \"Count_1\": 3, \"Y_5\": \"Ivan Ochs\"}, {\"Y_5\": \"Octavio Ybarra\", \"Count_1\": 0, \"Y_3\": \"Ivan Ochs\"}]",
+        "answer": [
+            "0",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "male_cousin(Y_5, Y_3)",
+                "friend(\"Katherine Showers\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "583a2288-b760-454f-9508-be9b500fad12",
+        "question": "How many uncles does the granddaughter of the wife of Boyd Messenger have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Georgette Messenger\", \"Y_3\": \"Lurline Messenger\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(uncle(Y_3, Y_1)), Count_1)",
+                "granddaughter(Y_5, Y_3)",
+                "wife(\"Boyd Messenger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9c9c04f0-ad08-45eb-8e30-44465a56175f",
+        "question": "How many brothers-in-law does the brother of the sibling of Jason Messenger have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Sara Messenger\", \"Y_3\": \"Jason Messenger\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother_in_law(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "sibling(\"Jason Messenger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "647fd5d4-c29d-4ded-b24b-ec0b8a35d118",
+        "question": "How many friends does the grandparent of the great-granddaughter of Geoffrey Driskell have?",
+        "solution_traces": "[{\"Y_5\": \"Jewel Messenger\", \"Count_1\": 6, \"Y_3\": \"Selena Messenger\"}, {\"Y_3\": \"Cleveland Johansen\", \"Y_5\": \"Lyndia Hoagland\", \"Count_1\": 3}, {\"Y_3\": \"Rosalee Johansen\", \"Count_1\": 2, \"Y_5\": \"Lyndia Hoagland\"}, {\"Y_3\": \"Warren Messenger\", \"Count_1\": 2, \"Y_5\": \"Lyndia Hoagland\"}, {\"Y_5\": \"Jewel Messenger\", \"Y_3\": \"Cleveland Johansen\", \"Count_1\": 3}, {\"Y_5\": \"Jewel Messenger\", \"Count_1\": 2, \"Y_3\": \"Rosalee Johansen\"}, {\"Y_3\": \"Warren Messenger\", \"Y_5\": \"Jewel Messenger\", \"Count_1\": 2}, {\"Count_1\": 6, \"Y_5\": \"Lyndia Hoagland\", \"Y_3\": \"Selena Messenger\"}]",
+        "answer": [
+            "2",
+            "3",
+            "6"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "great_granddaughter(\"Geoffrey Driskell\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "cb9cd3df-23c0-4353-b02e-6ba2d1ab283a",
+        "question": "How many female first cousins once removed does the grandparent of the friend of Ivan Ochs have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_5\": \"Cristal Showers\", \"Y_3\": \"Zachery Ybarra\"}, {\"Y_3\": \"Elvin Ybarra\", \"Count_1\": 0, \"Y_5\": \"Katherine Showers\"}, {\"Y_3\": \"Jackie Messenger\", \"Count_1\": 0, \"Y_5\": \"Lurline Messenger\"}, {\"Count_1\": 3, \"Y_5\": \"Trisha Crim\", \"Y_3\": \"Ivan Ochs\"}, {\"Count_1\": 0, \"Y_5\": \"Katherine Showers\", \"Y_3\": \"Kisha Ybarra\"}, {\"Count_1\": 0, \"Y_3\": \"Georgette Messenger\", \"Y_5\": \"Lurline Messenger\"}, {\"Count_1\": 0, \"Y_3\": \"Boyd Messenger\", \"Y_5\": \"Lurline Messenger\"}, {\"Count_1\": 0, \"Y_5\": \"Trisha Crim\", \"Y_3\": \"Glenda Ochs\"}, {\"Count_1\": 0, \"Y_3\": \"Jason Messenger\", \"Y_5\": \"Lurline Messenger\"}, {\"Count_1\": 0, \"Y_5\": \"Cristal Showers\", \"Y_3\": \"Ruby Ybarra\"}]",
+        "answer": [
+            "0",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(female_first_cousin_once_removed(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "friend(\"Ivan Ochs\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d77c0c2f-a0d0-4d79-bdc6-08e112fcc8f8",
+        "question": "How many sisters does the child of the grandfather of Larue Dorsett have?",
+        "solution_traces": "[{\"Y_5\": \"Elvin Ybarra\", \"Y_3\": \"Gale Ybarra\", \"Count_1\": 2}, {\"Y_5\": \"Elvin Ybarra\", \"Y_3\": \"Cristal Showers\", \"Count_1\": 1}, {\"Y_3\": \"Octavio Ybarra\", \"Y_5\": \"Elvin Ybarra\", \"Count_1\": 2}, {\"Y_5\": \"Elvin Ybarra\", \"Count_1\": 1, \"Y_3\": \"Perla Dorsett\"}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "child(Y_5, Y_3)",
+                "grandfather(\"Larue Dorsett\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "bf961344-dd2d-4201-8d9d-ce1460c8b4b8",
+        "question": "How many friends does the wife of the parent of Monika Crim have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Glenda Ochs\", \"Y_5\": \"Ivan Ochs\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "wife(Y_5, Y_3)",
+                "parent(\"Monika Crim\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8bb3cf51-b172-463e-85b1-445a336c3d30",
+        "question": "How many great-grandfathers does the brother of the sister-in-law of Terence Hoagland have?",
+        "solution_traces": "[{\"Y_5\": \"Jewel Messenger\", \"Count_1\": 2, \"Y_3\": \"Hank Messenger\"}, {\"Y_3\": \"Scotty Messenger\", \"Y_5\": \"Jewel Messenger\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandfather(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "sister_in_law(\"Terence Hoagland\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "cece238c-cdb4-4ee1-8239-3b0a5099944d",
+        "question": "How many brothers does the friend of the sister-in-law of Austin Crim have?",
+        "solution_traces": "[{\"Y_3\": \"Scotty Messenger\", \"Y_5\": \"Rosella Ochs\", \"Count_1\": 1}, {\"Y_5\": \"Rosella Ochs\", \"Count_1\": 0, \"Y_3\": \"Francis Tooley\"}, {\"Y_5\": \"Rosella Ochs\", \"Count_1\": 0, \"Y_3\": \"Trisha Crim\"}, {\"Y_5\": \"Rosella Ochs\", \"Count_1\": 2, \"Y_3\": \"Perla Dorsett\"}, {\"Y_5\": \"Rosella Ochs\", \"Y_3\": \"Jewel Messenger\", \"Count_1\": 2}, {\"Y_3\": \"Geoffrey Driskell\", \"Y_5\": \"Rosella Ochs\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "sister_in_law(\"Austin Crim\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6b25dc6f-2a93-4c1c-97d5-5a2044f4c41b",
+        "question": "How many mothers-in-law does the son-in-law of the mother of Rodrick Johansen have?",
+        "solution_traces": "[{\"Y_3\": \"Jason Messenger\", \"Count_1\": 1, \"Y_5\": \"Rosalee Johansen\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(Y_3, Y_1)), Count_1)",
+                "son_in_law(Y_5, Y_3)",
+                "mother(\"Rodrick Johansen\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "34e0a13c-b91e-4ef6-8d99-6b893a3cf080",
+        "question": "How many grandmothers does the brother-in-law of the grandfather of Lurline Messenger have?",
+        "solution_traces": "[{\"Y_3\": \"Rodrick Johansen\", \"Count_1\": 2, \"Y_5\": \"Jason Messenger\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandmother(Y_3, Y_1)), Count_1)",
+                "brother_in_law(Y_5, Y_3)",
+                "grandfather(\"Lurline Messenger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5878971c-f7a3-4a79-970f-b553a8531e5d",
+        "question": "How many sisters-in-law does the grandparent of the daughter of Perla Dorsett have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Larue Dorsett\", \"Y_3\": \"Kisha Ybarra\"}, {\"Y_3\": \"Elvin Ybarra\", \"Count_1\": 0, \"Y_5\": \"Larue Dorsett\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister_in_law(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "daughter(\"Perla Dorsett\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "59bc6d96-5607-4ad1-832d-b65f1a11a640",
+        "question": "How many grandfathers does the brother of the wife of Terence Hoagland have?",
+        "solution_traces": "[{\"Y_3\": \"Scotty Messenger\", \"Count_1\": 2, \"Y_5\": \"Lyndia Hoagland\"}, {\"Count_1\": 2, \"Y_5\": \"Lyndia Hoagland\", \"Y_3\": \"Hank Messenger\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "wife(\"Terence Hoagland\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "425248c7-1e2d-4fa9-bf4c-cf211f9890d2",
+        "question": "How many fathers-in-law does the father of the female second cousin of Monika Crim have?",
+        "solution_traces": "[{\"Y_3\": \"Darrel Showers\", \"Y_5\": \"Violet Shattuck\", \"Count_1\": 1}, {\"Y_3\": \"Darrel Showers\", \"Count_1\": 1, \"Y_5\": \"Katherine Showers\"}, {\"Count_1\": 1, \"Y_5\": \"Larue Dorsett\", \"Y_3\": \"Von Dorsett\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father_in_law(Y_3, Y_1)), Count_1)",
+                "father(Y_5, Y_3)",
+                "female_second_cousin(\"Monika Crim\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5b3b5cf4-d406-423b-a312-aef8854cd5ae",
+        "question": "How many grandfathers does the cousin of the brother-in-law of Darrel Showers have?",
+        "solution_traces": "[{\"Y_5\": \"Octavio Ybarra\", \"Count_1\": 1, \"Y_3\": \"Ivan Ochs\"}, {\"Y_5\": \"Gale Ybarra\", \"Count_1\": 1, \"Y_3\": \"Ivan Ochs\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "cousin(Y_5, Y_3)",
+                "brother_in_law(\"Darrel Showers\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "884c32c9-9966-4af1-93f7-8b377c4a2dc8",
+        "question": "How many great-granddaughters does the father of the great-grandparent of Jewel Messenger have?",
+        "solution_traces": "[{\"Y_3\": \"Nathan Witt\", \"Count_1\": 1, \"Y_5\": \"Minerva Johansen\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_granddaughter(Y_3, Y_1)), Count_1)",
+                "father(Y_5, Y_3)",
+                "great_grandparent(\"Jewel Messenger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0aaaf61a-10e5-428a-9757-facc44c72729",
+        "question": "How many nephews does the grandchild of the grandparent of Elvin Ybarra have?",
+        "solution_traces": "[{\"Y_3\": \"Elvin Ybarra\", \"Count_1\": 1, \"Y_5\": \"Francis Tooley\"}, {\"Y_3\": \"Elvin Ybarra\", \"Count_1\": 1, \"Y_5\": \"Hoa Tooley\"}, {\"Y_3\": \"Shawna Ochs\", \"Count_1\": 2, \"Y_5\": \"Francis Tooley\"}, {\"Y_3\": \"Shawna Ochs\", \"Y_5\": \"Hoa Tooley\", \"Count_1\": 2}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "grandparent(\"Elvin Ybarra\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    }
+]

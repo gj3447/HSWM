@@ -1,0 +1,915 @@
+[
+    {
+        "id": "e1f7a16d-1086-4b00-90e4-c4e4619597fd",
+        "question": "Who is the great-grandmother of the person whose date of birth is 0298-12-04?",
+        "solution_traces": "[{\"Y_2\": \"Bernice Beard\", \"Y_4\": \"Kurt Ruiz\"}, {\"Y_2\": \"Gina Clary\", \"Y_4\": \"Kurt Ruiz\"}]",
+        "answer": [
+            "Bernice Beard",
+            "Gina Clary"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandmother(Y_4, Y_2)",
+                "dob(Y_4, \"0298-12-04\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0edb8c24-6936-42af-bc8f-6bad84bdba3a",
+        "question": "Who is the friend of the person whose date of birth is 0276-07-12?",
+        "solution_traces": "[{\"Y_4\": \"Betsy Clary\", \"Y_2\": \"Tabetha Lowry\"}, {\"Y_4\": \"Betsy Clary\", \"Y_2\": \"Bernice Beard\"}, {\"Y_4\": \"Betsy Clary\", \"Y_2\": \"Audie Lowry\"}, {\"Y_4\": \"Betsy Clary\", \"Y_2\": \"Riley Clary\"}]",
+        "answer": [
+            "Audie Lowry",
+            "Bernice Beard",
+            "Riley Clary",
+            "Tabetha Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "dob(Y_4, \"0276-07-12\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "37757a5e-2217-43f9-8d03-12e0f72f2ce7",
+        "question": "Who is the friend of the person whose hobby is horseback riding?",
+        "solution_traces": "[{\"Y_4\": \"Enedina Kruger\", \"Y_2\": \"Roderick Ruiz\"}, {\"Y_4\": \"Enedina Kruger\", \"Y_2\": \"Kurtis Lowry\"}, {\"Y_4\": \"Enedina Kruger\", \"Y_2\": \"Cornelius Kruger\"}]",
+        "answer": [
+            "Cornelius Kruger",
+            "Kurtis Lowry",
+            "Roderick Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "hobby(Y_4, \"horseback riding\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b8842954-1a10-4580-9422-77a6fade2d9e",
+        "question": "Who is the great-grandchild of the person whose occupation is risk analyst?",
+        "solution_traces": "[{\"Y_2\": \"Dexter Ruiz\", \"Y_4\": \"Riley Clary\"}, {\"Y_2\": \"Wilbert Ruiz\", \"Y_4\": \"Riley Clary\"}, {\"Y_2\": \"Romelia Ruiz\", \"Y_4\": \"Riley Clary\"}, {\"Y_4\": \"Riley Clary\", \"Y_2\": \"Kyra Clary\"}, {\"Y_2\": \"Mireya Clary\", \"Y_4\": \"Riley Clary\"}]",
+        "answer": [
+            "Dexter Ruiz",
+            "Kyra Clary",
+            "Mireya Clary",
+            "Romelia Ruiz",
+            "Wilbert Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "job(Y_4, \"risk analyst\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "aa1a3132-28c6-470c-83a1-3fa15143938d",
+        "question": "Who is the grandparent of the person whose occupation is herbalist?",
+        "solution_traces": "[{\"Y_4\": \"Romelia Ruiz\", \"Y_2\": \"Roderick Ruiz\"}, {\"Y_4\": \"Romelia Ruiz\", \"Y_2\": \"Catalina Soper\"}, {\"Y_4\": \"Romelia Ruiz\", \"Y_2\": \"Olivia Ruiz\"}, {\"Y_4\": \"Romelia Ruiz\", \"Y_2\": \"Wade Soper\"}]",
+        "answer": [
+            "Catalina Soper",
+            "Olivia Ruiz",
+            "Roderick Ruiz",
+            "Wade Soper"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "job(Y_4, \"herbalist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "df844a90-0311-4e7c-bc99-a785381335ca",
+        "question": "Who is the daughter of the person whose occupation is broadcast presenter?",
+        "solution_traces": "[{\"Y_2\": \"Genesis Ruiz\", \"Y_4\": \"Catalina Soper\"}]",
+        "answer": [
+            "Genesis Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "job(Y_4, \"broadcast presenter\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2dd96c6a-cf44-45ed-812b-d38de2e8e44a",
+        "question": "Who is the sibling of the person whose occupation is hydrographic surveyor?",
+        "solution_traces": "[{\"Y_4\": \"Cornelius Kruger\", \"Y_2\": \"Octavio Kruger\"}]",
+        "answer": [
+            "Octavio Kruger"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "job(Y_4, \"hydrographic surveyor\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6993e5e4-870d-4ac7-9dcd-847ac185ab3c",
+        "question": "Who is the friend of the person whose occupation is ecologist?",
+        "solution_traces": "[{\"Y_2\": \"Cornelius Kruger\", \"Y_4\": \"Octavio Kruger\"}, {\"Y_2\": \"Riley Clary\", \"Y_4\": \"Octavio Kruger\"}, {\"Y_2\": \"Rhea Angle\", \"Y_4\": \"Octavio Kruger\"}, {\"Y_4\": \"Sylvia Sturm\", \"Y_2\": \"Bernice Beard\"}]",
+        "answer": [
+            "Bernice Beard",
+            "Cornelius Kruger",
+            "Rhea Angle",
+            "Riley Clary"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "job(Y_4, \"ecologist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "22c47862-8b64-4c3b-a228-564c62156ca6",
+        "question": "Who is the grandson of the person whose date of birth is 0269-11-23?",
+        "solution_traces": "[{\"Y_2\": \"Dexter Ruiz\", \"Y_4\": \"Catalina Soper\"}, {\"Y_2\": \"Wilbert Ruiz\", \"Y_4\": \"Catalina Soper\"}]",
+        "answer": [
+            "Dexter Ruiz",
+            "Wilbert Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "dob(Y_4, \"0269-11-23\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "08dc1408-6b3f-43de-b991-f7225f589120",
+        "question": "Who is the grandmother of the person whose date of birth is 0275-09-23?",
+        "solution_traces": "[{\"Y_4\": \"Zachary Clary\", \"Y_2\": \"Gina Clary\"}, {\"Y_4\": \"Zachary Clary\", \"Y_2\": \"Bernice Beard\"}]",
+        "answer": [
+            "Bernice Beard",
+            "Gina Clary"
+        ],
+        "prolog": {
+            "query": [
+                "grandmother(Y_4, Y_2)",
+                "dob(Y_4, \"0275-09-23\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "00b86b6f-597e-48ba-9bd0-0e9e0ef6daf6",
+        "question": "Who is the child of the person whose hobby is inline skating?",
+        "solution_traces": "[{\"Y_2\": \"Wm Ruiz\", \"Y_4\": \"Demetria Ruiz\"}]",
+        "answer": [
+            "Wm Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "hobby(Y_4, \"inline skating\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4f321ac8-52ae-4f0c-9e47-28403e32a44f",
+        "question": "Who is the parent of the person whose occupation is copywriter?",
+        "solution_traces": "[{\"Y_2\": \"Shae Clary\", \"Y_4\": \"Kyra Clary\"}, {\"Y_4\": \"Kyra Clary\", \"Y_2\": \"Jessie Clary\"}]",
+        "answer": [
+            "Jessie Clary",
+            "Shae Clary"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "job(Y_4, \"copywriter\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ffad44f3-e166-4650-a61c-52c5044225f8",
+        "question": "Who is the sibling of the person whose date of birth is 0220-11-24?",
+        "solution_traces": "[{\"Y_4\": \"Simone Kruger\", \"Y_2\": \"Alec Kruger\"}]",
+        "answer": [
+            "Alec Kruger"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "dob(Y_4, \"0220-11-24\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5e26d7b4-cad3-4fc0-9af9-5297910f7551",
+        "question": "Who is the friend of the person whose date of birth is 0306-09-29?",
+        "solution_traces": "[{\"Y_4\": \"Faith Lowry\", \"Y_2\": \"Robby Lowry\"}, {\"Y_4\": \"Faith Lowry\", \"Y_2\": \"Bernice Beard\"}]",
+        "answer": [
+            "Bernice Beard",
+            "Robby Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "dob(Y_4, \"0306-09-29\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "96385c2a-f2db-44dc-94f4-c5158e555001",
+        "question": "Who is the child of the person whose hobby is beach volleyball?",
+        "solution_traces": "[{\"Y_2\": \"Cornelius Kruger\", \"Y_4\": \"Alec Kruger\"}, {\"Y_4\": \"Alec Kruger\", \"Y_2\": \"Octavio Kruger\"}]",
+        "answer": [
+            "Cornelius Kruger",
+            "Octavio Kruger"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "hobby(Y_4, \"beach volleyball\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b4c3dc57-08b0-41cf-a046-3ab5499ce515",
+        "question": "Who is the child of the person whose hobby is reading?",
+        "solution_traces": "[{\"Y_4\": \"Elbert Kruger\", \"Y_2\": \"Alec Kruger\"}, {\"Y_2\": \"Simone Kruger\", \"Y_4\": \"Elbert Kruger\"}]",
+        "answer": [
+            "Alec Kruger",
+            "Simone Kruger"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "hobby(Y_4, \"reading\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1b8451ea-e85f-47df-8be1-c955ae07c7a0",
+        "question": "Who is the parent of the person whose date of birth is 0241-11-01?",
+        "solution_traces": "[{\"Y_4\": \"Julian Angle\", \"Y_2\": \"Rhea Angle\"}, {\"Y_4\": \"Julian Angle\", \"Y_2\": \"Eugene Angle\"}]",
+        "answer": [
+            "Eugene Angle",
+            "Rhea Angle"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "dob(Y_4, \"0241-11-01\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "97a1fc14-d942-4d76-be4c-c261a8797ee7",
+        "question": "Who is the sibling of the person whose occupation is merchandiser?",
+        "solution_traces": "[{\"Y_4\": \"Simone Kruger\", \"Y_2\": \"Alec Kruger\"}]",
+        "answer": [
+            "Alec Kruger"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "job(Y_4, \"merchandiser\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7604ed68-4ace-4d5b-ba89-8b750fb35776",
+        "question": "Who is the sibling of the person whose date of birth is 0220-11-24?",
+        "solution_traces": "[{\"Y_4\": \"Simone Kruger\", \"Y_2\": \"Alec Kruger\"}]",
+        "answer": [
+            "Alec Kruger"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "dob(Y_4, \"0220-11-24\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0d8d699f-9c9b-450d-8110-ce3d0906c28e",
+        "question": "Who is the grandfather of the person whose hobby is herping?",
+        "solution_traces": "[{\"Y_4\": \"Demetrius Bauer\", \"Y_2\": \"Kurtis Lowry\"}]",
+        "answer": [
+            "Kurtis Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "hobby(Y_4, \"herping\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4e1d6fec-f86f-4cfe-a29b-ffb7df3d3816",
+        "question": "Who is the great-grandchild of the person whose hobby is rock balancing?",
+        "solution_traces": "[{\"Y_4\": \"Keith Clary\", \"Y_2\": \"Lucas Ruiz\"}, {\"Y_4\": \"Keith Clary\", \"Y_2\": \"Kurt Ruiz\"}, {\"Y_4\": \"Keith Clary\", \"Y_2\": \"Jessie Clary\"}]",
+        "answer": [
+            "Jessie Clary",
+            "Kurt Ruiz",
+            "Lucas Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "hobby(Y_4, \"rock balancing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "45bf08a5-ca18-454e-86cb-dfe90742318e",
+        "question": "Who is the grandfather of the person whose occupation is copywriter?",
+        "solution_traces": "[{\"Y_2\": \"Zachary Clary\", \"Y_4\": \"Kyra Clary\"}]",
+        "answer": [
+            "Zachary Clary"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "job(Y_4, \"copywriter\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "16547430-96d4-45f7-8271-8cfe3339ee70",
+        "question": "Who is the great-grandparent of the person whose occupation is art gallery manager?",
+        "solution_traces": "[{\"Y_4\": \"Wm Ruiz\", \"Y_2\": \"Roderick Ruiz\"}, {\"Y_4\": \"Wm Ruiz\", \"Y_2\": \"Olivia Ruiz\"}, {\"Y_4\": \"Wm Ruiz\", \"Y_2\": \"Wade Soper\"}, {\"Y_4\": \"Wm Ruiz\", \"Y_2\": \"Catalina Soper\"}]",
+        "answer": [
+            "Catalina Soper",
+            "Olivia Ruiz",
+            "Roderick Ruiz",
+            "Wade Soper"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandparent(Y_4, Y_2)",
+                "job(Y_4, \"art gallery manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9d260261-6a48-4a38-ad2b-9064c077cc9a",
+        "question": "Who is the sibling of the person whose occupation is copywriter?",
+        "solution_traces": "[{\"Y_2\": \"Mireya Clary\", \"Y_4\": \"Kyra Clary\"}]",
+        "answer": [
+            "Mireya Clary"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "job(Y_4, \"copywriter\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5b30a340-0288-4a39-9dba-4ae58160b1ff",
+        "question": "Who is the grandchild of the person whose date of birth is 0219-02-08?",
+        "solution_traces": "[{\"Y_4\": \"Phylis Lowry\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_4\": \"Phylis Lowry\", \"Y_2\": \"Aletha Bauer\"}, {\"Y_4\": \"Phylis Lowry\", \"Y_2\": \"Ofelia Lowry\"}, {\"Y_4\": \"Phylis Lowry\", \"Y_2\": \"Robby Lowry\"}]",
+        "answer": [
+            "Aletha Bauer",
+            "Lawrence Lowry",
+            "Ofelia Lowry",
+            "Robby Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "dob(Y_4, \"0219-02-08\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "44825712-8c09-4f95-b754-0ad74e06252b",
+        "question": "Who is the husband of the person whose hobby is horseback riding?",
+        "solution_traces": "[{\"Y_4\": \"Enedina Kruger\", \"Y_2\": \"Elbert Kruger\"}]",
+        "answer": [
+            "Elbert Kruger"
+        ],
+        "prolog": {
+            "query": [
+                "husband(Y_4, Y_2)",
+                "hobby(Y_4, \"horseback riding\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "38c27e02-4987-4cd8-b2e6-e12d78bdd5bc",
+        "question": "Who is the father of the person whose occupation is corporate investment banker?",
+        "solution_traces": "[{\"Y_4\": \"Wilbert Ruiz\", \"Y_2\": \"Lucas Ruiz\"}]",
+        "answer": [
+            "Lucas Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "job(Y_4, \"corporate investment banker\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "080a67ce-7846-4491-9e42-549b5050a8db",
+        "question": "Who is the friend of the person whose hobby is stone collecting?",
+        "solution_traces": "[{\"Y_2\": \"Cornelius Kruger\", \"Y_4\": \"Octavio Kruger\"}, {\"Y_2\": \"Riley Clary\", \"Y_4\": \"Octavio Kruger\"}, {\"Y_2\": \"Rhea Angle\", \"Y_4\": \"Octavio Kruger\"}]",
+        "answer": [
+            "Cornelius Kruger",
+            "Rhea Angle",
+            "Riley Clary"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "hobby(Y_4, \"stone collecting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "80877601-5b03-470a-b82d-0524335253ff",
+        "question": "Who is the great-grandson of the person whose occupation is building services engineer?",
+        "solution_traces": "[{\"Y_2\": \"Lucas Ruiz\", \"Y_4\": \"Mckinley Beard\"}, {\"Y_2\": \"Kurt Ruiz\", \"Y_4\": \"Mckinley Beard\"}, {\"Y_2\": \"Jessie Clary\", \"Y_4\": \"Mckinley Beard\"}]",
+        "answer": [
+            "Jessie Clary",
+            "Kurt Ruiz",
+            "Lucas Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandson(Y_4, Y_2)",
+                "job(Y_4, \"building services engineer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "19de1402-c6ca-48a3-91ec-76702852ffa7",
+        "question": "Who is the friend of the person whose hobby is research?",
+        "solution_traces": "[{\"Y_2\": \"Wm Ruiz\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_2\": \"Aletha Bauer\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_2\": \"Catalina Soper\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_4\": \"Shae Clary\", \"Y_2\": \"Romelia Ruiz\"}, {\"Y_4\": \"Zachary Clary\", \"Y_2\": \"Phylis Lowry\"}, {\"Y_2\": \"Cornelius Kruger\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_4\": \"Shae Clary\", \"Y_2\": \"Mckinley Beard\"}, {\"Y_4\": \"Shae Clary\", \"Y_2\": \"Mireya Clary\"}, {\"Y_2\": \"Laverne Clary\", \"Y_4\": \"Lawrence Lowry\"}]",
+        "answer": [
+            "Aletha Bauer",
+            "Catalina Soper",
+            "Cornelius Kruger",
+            "Laverne Clary",
+            "Mckinley Beard",
+            "Mireya Clary",
+            "Phylis Lowry",
+            "Romelia Ruiz",
+            "Wm Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "hobby(Y_4, \"research\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    }
+]

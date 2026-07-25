@@ -1,0 +1,903 @@
+[
+    {
+        "id": "b4abdc3a-95df-440f-b912-c384dc5517d7",
+        "question": "Who is the son-in-law of the person whose date of birth is 0262-03-10?",
+        "solution_traces": "[{\"Y_4\": \"Jackie Messenger\", \"Y_2\": \"Terence Hoagland\"}, {\"Y_2\": \"Linwood Messenger\", \"Y_4\": \"Jackie Messenger\"}]",
+        "answer": [
+            "Linwood Messenger",
+            "Terence Hoagland"
+        ],
+        "prolog": {
+            "query": [
+                "son_in_law(Y_4, Y_2)",
+                "dob(Y_4, \"0262-03-10\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "efc3da11-3759-42c6-8796-8b507d921e9b",
+        "question": "Who is the uncle of the person whose date of birth is 0307-11-04?",
+        "solution_traces": "[{\"Y_2\": \"Gale Ybarra\", \"Y_4\": \"Violet Shattuck\"}, {\"Y_4\": \"Violet Shattuck\", \"Y_2\": \"Octavio Ybarra\"}]",
+        "answer": [
+            "Gale Ybarra",
+            "Octavio Ybarra"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "dob(Y_4, \"0307-11-04\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "767fa9e1-df24-4d3f-ba76-6f3cb9f1b161",
+        "question": "Who is the father of the person whose occupation is analytical chemist?",
+        "solution_traces": "[{\"Y_4\": \"Monika Crim\", \"Y_2\": \"Ivan Ochs\"}]",
+        "answer": [
+            "Ivan Ochs"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "job(Y_4, \"analytical chemist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2bcd6b3e-10f2-4960-943f-f7ff9d939be7",
+        "question": "Who is the great-aunt of the person whose date of birth is 0330-07-31?",
+        "solution_traces": "[{\"Y_2\": \"Perla Dorsett\", \"Y_4\": \"Stan Shattuck\"}]",
+        "answer": [
+            "Perla Dorsett"
+        ],
+        "prolog": {
+            "query": [
+                "great_aunt(Y_4, Y_2)",
+                "dob(Y_4, \"0330-07-31\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5817128e-ad80-4674-a58b-13799daf4252",
+        "question": "Who is the child of the person whose hobby is beach volleyball?",
+        "solution_traces": "[{\"Y_2\": \"Linwood Messenger\", \"Y_4\": \"Georgette Messenger\"}]",
+        "answer": [
+            "Linwood Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "hobby(Y_4, \"beach volleyball\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e4daf465-87fc-4691-8257-952d09ed9072",
+        "question": "Who is the great-grandfather of the person whose date of birth is 0327-02-23?",
+        "solution_traces": "[{\"Y_4\": \"Eric Hoagland\", \"Y_2\": \"Warren Messenger\"}, {\"Y_4\": \"Eric Hoagland\", \"Y_2\": \"Cleveland Johansen\"}]",
+        "answer": [
+            "Cleveland Johansen",
+            "Warren Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandfather(Y_4, Y_2)",
+                "dob(Y_4, \"0327-02-23\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b51909b2-1dda-4511-98f5-a0a1c65a6194",
+        "question": "Who is the wife of the person whose hobby is kabaddi?",
+        "solution_traces": "[{\"Y_4\": \"Elvin Ybarra\", \"Y_2\": \"Kisha Ybarra\"}]",
+        "answer": [
+            "Kisha Ybarra"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "hobby(Y_4, \"kabaddi\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ba39d05a-cf4a-40ec-9681-86ff463e9a2f",
+        "question": "Who is the parent of the person whose occupation is call centre manager?",
+        "solution_traces": "[{\"Y_4\": \"Rosella Ochs\", \"Y_2\": \"Ivan Ochs\"}, {\"Y_4\": \"Rosella Ochs\", \"Y_2\": \"Glenda Ochs\"}]",
+        "answer": [
+            "Glenda Ochs",
+            "Ivan Ochs"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "job(Y_4, \"call centre manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "676b575e-8b62-4afe-bc5f-2701f189f140",
+        "question": "Who is the grandfather of the person whose hobby is video gaming?",
+        "solution_traces": "[{\"Y_2\": \"Francis Tooley\", \"Y_4\": \"Shawna Ochs\"}]",
+        "answer": [
+            "Francis Tooley"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "hobby(Y_4, \"video gaming\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "60e04251-c943-44ad-ba88-a0922ec986f1",
+        "question": "Who is the second aunt of the person whose occupation is artist?",
+        "solution_traces": "[{\"Y_4\": \"Eric Hoagland\", \"Y_2\": \"Alejandra Driskell\"}]",
+        "answer": [
+            "Alejandra Driskell"
+        ],
+        "prolog": {
+            "query": [
+                "second_aunt(Y_4, Y_2)",
+                "job(Y_4, \"artist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "75402fa0-adcc-42e8-9b48-a6b3de55be31",
+        "question": "Who is the grandchild of the person whose hobby is people-watching?",
+        "solution_traces": "[{\"Y_4\": \"Zachery Ybarra\", \"Y_2\": \"Perla Dorsett\"}, {\"Y_4\": \"Zachery Ybarra\", \"Y_2\": \"Octavio Ybarra\"}, {\"Y_4\": \"Zachery Ybarra\", \"Y_2\": \"Gale Ybarra\"}, {\"Y_4\": \"Zachery Ybarra\", \"Y_2\": \"Ivan Ochs\"}, {\"Y_4\": \"Zachery Ybarra\", \"Y_2\": \"Cristal Showers\"}]",
+        "answer": [
+            "Cristal Showers",
+            "Gale Ybarra",
+            "Ivan Ochs",
+            "Octavio Ybarra",
+            "Perla Dorsett"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "hobby(Y_4, \"people-watching\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dfbeeea7-a6d3-480e-8cd6-92c81b14c0e1",
+        "question": "Who is the friend of the person whose date of birth is 0264-02-01?",
+        "solution_traces": "[{\"Y_4\": \"Boyd Messenger\", \"Y_2\": \"Warren Messenger\"}, {\"Y_4\": \"Boyd Messenger\", \"Y_2\": \"Selena Messenger\"}, {\"Y_4\": \"Boyd Messenger\", \"Y_2\": \"Hank Messenger\"}, {\"Y_4\": \"Boyd Messenger\", \"Y_2\": \"Randall Shattuck\"}]",
+        "answer": [
+            "Hank Messenger",
+            "Randall Shattuck",
+            "Selena Messenger",
+            "Warren Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "dob(Y_4, \"0264-02-01\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a4a1c7e6-ced4-4df3-afb9-82a230b1480a",
+        "question": "Who is the grandson of the person whose occupation is network engineer?",
+        "solution_traces": "[{\"Y_2\": \"Cleveland Johansen\", \"Y_4\": \"Nathan Witt\"}]",
+        "answer": [
+            "Cleveland Johansen"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "job(Y_4, \"network engineer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "942503b6-7bf2-4432-beab-e132aa0c5e24",
+        "question": "Who is the great-grandson of the person whose date of birth is 0235-04-08?",
+        "solution_traces": "[{\"Y_4\": \"Selena Messenger\", \"Y_2\": \"Eric Hoagland\"}]",
+        "answer": [
+            "Eric Hoagland"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandson(Y_4, Y_2)",
+                "dob(Y_4, \"0235-04-08\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "826474cc-251e-41a8-98cf-e6e72a821f11",
+        "question": "Who is the daughter of the person whose date of birth is 0252-01-21?",
+        "solution_traces": "[{\"Y_4\": \"Kisha Ybarra\", \"Y_2\": \"Perla Dorsett\"}, {\"Y_4\": \"Kisha Ybarra\", \"Y_2\": \"Cristal Showers\"}]",
+        "answer": [
+            "Cristal Showers",
+            "Perla Dorsett"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "dob(Y_4, \"0252-01-21\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0c0fe609-5770-4cc2-9a11-5fe56ea1f018",
+        "question": "Who is the child of the person whose hobby is antiquities?",
+        "solution_traces": "[{\"Y_4\": \"Kisha Ybarra\", \"Y_2\": \"Perla Dorsett\"}, {\"Y_4\": \"Kisha Ybarra\", \"Y_2\": \"Cristal Showers\"}, {\"Y_4\": \"Kisha Ybarra\", \"Y_2\": \"Octavio Ybarra\"}, {\"Y_4\": \"Kisha Ybarra\", \"Y_2\": \"Gale Ybarra\"}]",
+        "answer": [
+            "Cristal Showers",
+            "Gale Ybarra",
+            "Octavio Ybarra",
+            "Perla Dorsett"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "hobby(Y_4, \"antiquities\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "43038c3b-5b68-4c9f-bfb1-52f321044d05",
+        "question": "Who is the great-grandparent of the person whose occupation is clothing technologist?",
+        "solution_traces": "[{\"Y_4\": \"Lurline Messenger\", \"Y_2\": \"Warren Messenger\"}, {\"Y_4\": \"Lurline Messenger\", \"Y_2\": \"Selena Messenger\"}, {\"Y_4\": \"Lurline Messenger\", \"Y_2\": \"Cleveland Johansen\"}, {\"Y_4\": \"Lurline Messenger\", \"Y_2\": \"Rosalee Johansen\"}]",
+        "answer": [
+            "Cleveland Johansen",
+            "Rosalee Johansen",
+            "Selena Messenger",
+            "Warren Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandparent(Y_4, Y_2)",
+                "job(Y_4, \"clothing technologist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c63de2f1-541b-4980-9097-82b5d6df0194",
+        "question": "Who is the friend of the person whose date of birth is 0181-10-16?",
+        "solution_traces": "[{\"Y_4\": \"Nathan Witt\", \"Y_2\": \"Perla Dorsett\"}, {\"Y_4\": \"Nathan Witt\", \"Y_2\": \"Francis Tooley\"}, {\"Y_4\": \"Nathan Witt\", \"Y_2\": \"Rosalee Johansen\"}]",
+        "answer": [
+            "Francis Tooley",
+            "Perla Dorsett",
+            "Rosalee Johansen"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "dob(Y_4, \"0181-10-16\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9843e3d3-545e-4526-a90e-7c9b6018d167",
+        "question": "Who is the brother-in-law of the person whose occupation is police officer?",
+        "solution_traces": "[{\"Y_2\": \"Hank Messenger\", \"Y_4\": \"Linwood Messenger\"}, {\"Y_2\": \"Scotty Messenger\", \"Y_4\": \"Linwood Messenger\"}]",
+        "answer": [
+            "Hank Messenger",
+            "Scotty Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "brother_in_law(Y_4, Y_2)",
+                "job(Y_4, \"police officer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f8e2d9c2-d708-4c3e-aee0-2d00682577dd",
+        "question": "Who is the mother of the person whose occupation is analytical chemist?",
+        "solution_traces": "[{\"Y_4\": \"Monika Crim\", \"Y_2\": \"Glenda Ochs\"}]",
+        "answer": [
+            "Glenda Ochs"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "job(Y_4, \"analytical chemist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "99eb1602-4d7d-49f9-910d-25a737e040cc",
+        "question": "Who is the daughter of the person whose date of birth is 0265-01-24?",
+        "solution_traces": "[{\"Y_4\": \"Jason Messenger\", \"Y_2\": \"Jewel Messenger\"}, {\"Y_4\": \"Jason Messenger\", \"Y_2\": \"Lyndia Hoagland\"}]",
+        "answer": [
+            "Jewel Messenger",
+            "Lyndia Hoagland"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "dob(Y_4, \"0265-01-24\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1b81cf0b-bb9d-4dc3-bfe8-35161f1b297e",
+        "question": "Who is the grandfather of the person whose occupation is site engineer?",
+        "solution_traces": "[{\"Y_4\": \"Rodrick Johansen\", \"Y_2\": \"Saul Johansen\"}, {\"Y_4\": \"Rodrick Johansen\", \"Y_2\": \"Geoffrey Driskell\"}]",
+        "answer": [
+            "Geoffrey Driskell",
+            "Saul Johansen"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "job(Y_4, \"site engineer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3f37f462-0daf-484f-b46b-ed4920e6ef54",
+        "question": "Who is the uncle of the person whose hobby is fossil hunting?",
+        "solution_traces": "[{\"Y_4\": \"Eric Hoagland\", \"Y_2\": \"Hank Messenger\"}, {\"Y_4\": \"Eric Hoagland\", \"Y_2\": \"Scotty Messenger\"}]",
+        "answer": [
+            "Hank Messenger",
+            "Scotty Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "hobby(Y_4, \"fossil hunting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2e46aa43-9c0a-4125-8fda-d0e1f45c13e2",
+        "question": "Who is the friend of the person whose occupation is medical technical officer?",
+        "solution_traces": "[{\"Y_4\": \"Saul Johansen\", \"Y_2\": \"Larue Dorsett\"}, {\"Y_2\": \"Monika Crim\", \"Y_4\": \"Saul Johansen\"}, {\"Y_4\": \"Saul Johansen\", \"Y_2\": \"Eric Hoagland\"}, {\"Y_4\": \"Saul Johansen\", \"Y_2\": \"Lyndia Hoagland\"}, {\"Y_2\": \"Violet Shattuck\", \"Y_4\": \"Saul Johansen\"}]",
+        "answer": [
+            "Eric Hoagland",
+            "Larue Dorsett",
+            "Lyndia Hoagland",
+            "Monika Crim",
+            "Violet Shattuck"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "job(Y_4, \"medical technical officer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "aaf81c10-55e1-40f0-bb2f-6a71410b1045",
+        "question": "Who is the uncle of the person whose occupation is chief operating officer?",
+        "solution_traces": "[{\"Y_2\": \"Octavio Ybarra\", \"Y_4\": \"Larue Dorsett\"}, {\"Y_2\": \"Gale Ybarra\", \"Y_4\": \"Larue Dorsett\"}]",
+        "answer": [
+            "Gale Ybarra",
+            "Octavio Ybarra"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "job(Y_4, \"chief operating officer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "519e2abd-037d-4c0a-b6bf-6578546e926d",
+        "question": "Who is the child of the person whose date of birth is 0194-02-19?",
+        "solution_traces": "[{\"Y_2\": \"Ruby Ybarra\", \"Y_4\": \"Hoa Tooley\"}]",
+        "answer": [
+            "Ruby Ybarra"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "dob(Y_4, \"0194-02-19\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4f3bbae2-1804-4334-b8ed-ab1a395ecaf0",
+        "question": "Who is the friend of the person whose hobby is model united nations?",
+        "solution_traces": "[{\"Y_4\": \"Hosea Ochs\", \"Y_2\": \"Jackie Messenger\"}, {\"Y_2\": \"Shawna Ochs\", \"Y_4\": \"Hosea Ochs\"}]",
+        "answer": [
+            "Jackie Messenger",
+            "Shawna Ochs"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "hobby(Y_4, \"model united nations\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0ab75456-7a59-41b1-ba4f-1cbce99e2722",
+        "question": "Who is the great-grandfather of the person whose date of birth is 0289-07-08?",
+        "solution_traces": "[{\"Y_4\": \"Scotty Messenger\", \"Y_2\": \"Saul Johansen\"}, {\"Y_4\": \"Scotty Messenger\", \"Y_2\": \"Geoffrey Driskell\"}]",
+        "answer": [
+            "Geoffrey Driskell",
+            "Saul Johansen"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandfather(Y_4, Y_2)",
+                "dob(Y_4, \"0289-07-08\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "76588058-df18-43f6-a7ab-e7bce2e8e1ee",
+        "question": "Who is the sister-in-law of the person whose hobby is dog sport?",
+        "solution_traces": "[{\"Y_2\": \"Rosella Ochs\", \"Y_4\": \"Austin Crim\"}]",
+        "answer": [
+            "Rosella Ochs"
+        ],
+        "prolog": {
+            "query": [
+                "sister_in_law(Y_4, Y_2)",
+                "hobby(Y_4, \"dog sport\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a7910b02-6593-48e1-a358-c31433a168a7",
+        "question": "Who is the father of the person whose hobby is learning?",
+        "solution_traces": "[{\"Y_4\": \"Katherine Showers\", \"Y_2\": \"Darrel Showers\"}]",
+        "answer": [
+            "Darrel Showers"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "hobby(Y_4, \"learning\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    }
+]

@@ -1,0 +1,1005 @@
+[
+    {
+        "id": "65da97a5-2802-4238-9582-061eb178a614",
+        "question": "How many nephews does the son of the person whose date of birth is 0197-05-12 have?",
+        "solution_traces": "[{\"Y_3\": \"Alberto Lam\", \"Count_1\": 2, \"Y_5\": \"Emelda Lam\"}, {\"Count_1\": 2, \"Y_5\": \"Emelda Lam\", \"Y_3\": \"Wilber Lam\"}, {\"Count_1\": 2, \"Y_5\": \"Emelda Lam\", \"Y_3\": \"Aubrey Lam\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "son(Y_5, Y_3)",
+                "dob(Y_5, \"0197-05-12\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6eaf9335-eb18-433e-8a47-04e19f462ba6",
+        "question": "How many great-grandmothers does the great-uncle of the person whose date of birth is 0329-10-10 have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_5\": \"Estella Handley\", \"Y_3\": \"Giovanni Dees\"}, {\"Count_1\": 3, \"Y_3\": \"Richard Dees\", \"Y_5\": \"Estella Handley\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandmother(Y_3, Y_1)), Count_1)",
+                "great_uncle(Y_5, Y_3)",
+                "dob(Y_5, \"0329-10-10\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e189b2be-5403-40b4-80cc-ca05eb48ffec",
+        "question": "How many great-grandmothers does the great-grandchild of the person whose occupation is hospital pharmacist have?",
+        "solution_traces": "[{\"Y_3\": \"Margie Moorehead\", \"Count_1\": 1, \"Y_5\": \"Toby Lam\"}, {\"Count_1\": 1, \"Y_3\": \"Cortez Michaels\", \"Y_5\": \"Toby Lam\"}, {\"Y_3\": \"Chelsie Reece\", \"Count_1\": 1, \"Y_5\": \"Toby Lam\"}, {\"Y_3\": \"Dorothea Quezada\", \"Count_1\": 1, \"Y_5\": \"Toby Lam\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandmother(Y_3, Y_1)), Count_1)",
+                "great_grandchild(Y_5, Y_3)",
+                "job(Y_5, \"hospital pharmacist\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3132b555-2626-4fa7-b8b4-1064a74a68bb",
+        "question": "How many siblings does the great-grandson of the person whose occupation is horticultural consultant have?",
+        "solution_traces": "[{\"Y_5\": \"Seth Embry\", \"Y_3\": \"Adam Dees\", \"Count_1\": 3}, {\"Y_5\": \"Seth Embry\", \"Count_1\": 3, \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Winnie Halstead\", \"Y_3\": \"Richard Dees\", \"Count_1\": 3}, {\"Y_5\": \"Winnie Halstead\", \"Y_3\": \"Adam Dees\", \"Count_1\": 3}, {\"Y_5\": \"Seth Embry\", \"Y_3\": \"Richard Dees\", \"Count_1\": 3}, {\"Y_5\": \"Winnie Halstead\", \"Count_1\": 3, \"Y_3\": \"Giovanni Dees\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "great_grandson(Y_5, Y_3)",
+                "job(Y_5, \"horticultural consultant\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "10b839e4-89bf-4f7f-a236-be56a62db5fc",
+        "question": "How many grandfathers does the brother of the person whose hobby is science and technology studies have?",
+        "solution_traces": "[{\"Y_5\": \"Dena Michaels\", \"Count_1\": 1, \"Y_3\": \"Alberto Lam\"}, {\"Y_5\": \"Dena Michaels\", \"Count_1\": 1, \"Y_3\": \"Aubrey Lam\"}, {\"Y_5\": \"Dena Michaels\", \"Count_1\": 1, \"Y_3\": \"Wilber Lam\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "hobby(Y_5, \"science and technology studies\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1f8336ec-ea25-4e6d-a72c-f54208be0971",
+        "question": "How many brothers does the grandchild of the person whose hobby is mountain biking have?",
+        "solution_traces": "[{\"Y_5\": \"Viola Halstead\", \"Count_1\": 2, \"Y_3\": \"Adam Dees\"}, {\"Y_5\": \"Viola Halstead\", \"Count_1\": 2, \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Viola Halstead\", \"Count_1\": 3, \"Y_3\": \"Monserrate Dees\"}, {\"Y_5\": \"Viola Halstead\", \"Count_1\": 2, \"Y_3\": \"Richard Dees\"}]",
+        "answer": [
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "hobby(Y_5, \"mountain biking\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d10d7c0c-365e-475d-ae51-171279dc3c4c",
+        "question": "How many nephews does the child of the person whose date of birth is 0226-04-08 have?",
+        "solution_traces": "[{\"Y_5\": \"Viola Halstead\", \"Count_1\": 3, \"Y_3\": \"Clifford Halstead\"}, {\"Count_1\": 0, \"Y_5\": \"Viola Halstead\", \"Y_3\": \"Cherlyn Dees\"}, {\"Y_5\": \"Viola Halstead\", \"Y_3\": \"Kermit Halstead\", \"Count_1\": 3}, {\"Y_5\": \"Viola Halstead\", \"Count_1\": 3, \"Y_3\": \"Johnetta Halstead\"}, {\"Y_5\": \"Viola Halstead\", \"Count_1\": 3, \"Y_3\": \"Rhea Halstead\"}]",
+        "answer": [
+            "0",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "child(Y_5, Y_3)",
+                "dob(Y_5, \"0226-04-08\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ae587146-89c0-4e15-9e44-c4a484ee1adf",
+        "question": "How many grandsons does the grandfather of the person whose hobby is reading have?",
+        "solution_traces": "[{\"Y_5\": \"Johnetta Halstead\", \"Count_1\": 2, \"Y_3\": \"Seth Embry\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandson(Y_3, Y_1)), Count_1)",
+                "grandfather(Y_5, Y_3)",
+                "hobby(Y_5, \"reading\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c996f4c8-4d4c-4063-a2d6-03997f0d457f",
+        "question": "How many aunts does the great-grandson of the person whose date of birth is 0201-12-23 have?",
+        "solution_traces": "[{\"Y_5\": \"Marcelina Dees\", \"Count_1\": 2, \"Y_3\": \"Giovanni Dees\"}, {\"Count_1\": 2, \"Y_5\": \"Marcelina Dees\", \"Y_3\": \"Adam Dees\"}, {\"Count_1\": 2, \"Y_5\": \"Marcelina Dees\", \"Y_3\": \"Richard Dees\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(aunt(Y_3, Y_1)), Count_1)",
+                "great_grandson(Y_5, Y_3)",
+                "dob(Y_5, \"0201-12-23\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "772a22fc-6bbf-4930-accc-9fab21cc060c",
+        "question": "How many female second cousins does the grandchild of the person whose date of birth is 0234-04-21 have?",
+        "solution_traces": "[{\"Y_5\": \"Alberto Lam\", \"Count_1\": 1, \"Y_3\": \"Margie Moorehead\"}, {\"Y_5\": \"Alberto Lam\", \"Count_1\": 1, \"Y_3\": \"Chelsie Reece\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(female_second_cousin(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "dob(Y_5, \"0234-04-21\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9bc3ed2c-1593-41c3-9490-6334e056dd75",
+        "question": "How many great-grandparents does the wife of the person whose hobby is unicycling have?",
+        "solution_traces": "[{\"Y_3\": \"Dorothea Quezada\", \"Y_5\": \"Jakob Quezada\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "wife(Y_5, Y_3)",
+                "hobby(Y_5, \"unicycling\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "54d6f156-ff3c-4c81-ad76-0ef44f6a1402",
+        "question": "How many sisters does the father-in-law of the person whose occupation is landscape architect have?",
+        "solution_traces": "[{\"Y_5\": \"Rudolf Moorehead\", \"Count_1\": 2, \"Y_3\": \"Alberto Lam\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "father_in_law(Y_5, Y_3)",
+                "job(Y_5, \"landscape architect\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2bea5e95-1616-4120-bde2-d27b8fa64910",
+        "question": "How many sisters does the aunt of the person whose hobby is model united nations have?",
+        "solution_traces": "[{\"Y_3\": \"Rhea Halstead\", \"Y_5\": \"Giovanni Dees\", \"Count_1\": 2}, {\"Y_5\": \"Giovanni Dees\", \"Count_1\": 2, \"Y_3\": \"Johnetta Halstead\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "aunt(Y_5, Y_3)",
+                "hobby(Y_5, \"model united nations\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "bcc0f473-a36a-49e2-a504-19ca763d35df",
+        "question": "How many friends does the niece of the person whose occupation is conference centre manager have?",
+        "solution_traces": "[{\"Y_3\": \"Dena Michaels\", \"Count_1\": 1, \"Y_5\": \"Alfred Lam\"}, {\"Y_5\": \"Alfred Lam\", \"Count_1\": 3, \"Y_3\": \"Alethia Lam\"}]",
+        "answer": [
+            "1",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "niece(Y_5, Y_3)",
+                "job(Y_5, \"conference centre manager\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ab640531-0b68-44a7-b29d-4eda9b201a65",
+        "question": "How many fathers does the brother-in-law of the person whose date of birth is 0197-05-12 have?",
+        "solution_traces": "[{\"Y_3\": \"Alfred Lam\", \"Count_1\": 1, \"Y_5\": \"Emelda Lam\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father(Y_3, Y_1)), Count_1)",
+                "brother_in_law(Y_5, Y_3)",
+                "dob(Y_5, \"0197-05-12\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "675f4846-bab1-4db8-9efc-fabec2bbf5a7",
+        "question": "How many great-grandfathers does the friend of the person whose occupation is heritage manager have?",
+        "solution_traces": "[{\"Y_5\": \"Clifford Reece\", \"Y_3\": \"Richard Dees\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandfather(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "job(Y_5, \"heritage manager\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c3917b8d-86a2-4caa-ac71-9b07238a0eaf",
+        "question": "How many brothers does the brother of the person whose occupation is arboriculturist have?",
+        "solution_traces": "[{\"Y_5\": \"Alethia Lam\", \"Count_1\": 2, \"Y_3\": \"Wilber Lam\"}, {\"Y_5\": \"Alethia Lam\", \"Count_1\": 2, \"Y_3\": \"Alberto Lam\"}, {\"Y_5\": \"Alethia Lam\", \"Count_1\": 2, \"Y_3\": \"Aubrey Lam\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "job(Y_5, \"arboriculturist\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5d4b167f-9bf6-4b20-b624-eaee2ecbaea9",
+        "question": "How many mothers-in-law does the grandmother of the person whose hobby is sports memorabilia have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Cherlyn Dees\", \"Y_5\": \"Allyson Dees\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(Y_3, Y_1)), Count_1)",
+                "grandmother(Y_5, Y_3)",
+                "hobby(Y_5, \"sports memorabilia\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9fe971dd-4574-4ef9-9072-5cc73e3d19ff",
+        "question": "How many siblings does the nephew of the person whose date of birth is 0252-04-05 have?",
+        "solution_traces": "[{\"Y_5\": \"Clifford Halstead\", \"Y_3\": \"Richard Dees\", \"Count_1\": 3}, {\"Y_5\": \"Clifford Halstead\", \"Count_1\": 3, \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Clifford Halstead\", \"Y_3\": \"Adam Dees\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "nephew(Y_5, Y_3)",
+                "dob(Y_5, \"0252-04-05\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "70b36466-e291-4af3-b69c-77eb91f3e3a2",
+        "question": "How many friends does the grandparent of the person whose occupation is professor emeritus have?",
+        "solution_traces": "[{\"Count_1\": 5, \"Y_5\": \"Aubrey Lam\", \"Y_3\": \"Alan Lam\"}, {\"Y_5\": \"Monserrate Dees\", \"Count_1\": 1, \"Y_3\": \"Theda Dees\"}, {\"Y_5\": \"Monserrate Dees\", \"Count_1\": 3, \"Y_3\": \"Wendell Dees\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_3\": \"Rosendo Halstead\", \"Count_1\": 3}, {\"Y_5\": \"Monserrate Dees\", \"Y_3\": \"Viola Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Aubrey Lam\", \"Y_3\": \"Roxanne Lam\", \"Count_1\": 3}]",
+        "answer": [
+            "1",
+            "3",
+            "4",
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "job(Y_5, \"professor emeritus\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8d945e19-9e43-4893-9249-2fb6506d5212",
+        "question": "How many brothers-in-law does the friend of the person whose date of birth is 0279-02-18 have?",
+        "solution_traces": "[{\"Y_5\": \"Monserrate Dees\", \"Count_1\": 1, \"Y_3\": \"Emelda Lam\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_3\": \"Rogelio Michaels\", \"Count_1\": 3}, {\"Y_5\": \"Monserrate Dees\", \"Count_1\": 0, \"Y_3\": \"Alberto Lam\"}]",
+        "answer": [
+            "0",
+            "1",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother_in_law(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "dob(Y_5, \"0279-02-18\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b800ba31-d9ba-461a-b41d-bcf3ea23e47b",
+        "question": "How many wives does the great-uncle of the person whose date of birth is 0277-12-22 have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Alberto Lam\", \"Y_5\": \"Dorothea Quezada\"}, {\"Count_1\": 0, \"Y_5\": \"Dorothea Quezada\", \"Y_3\": \"Wilber Lam\"}, {\"Count_1\": 0, \"Y_5\": \"Dorothea Quezada\", \"Y_3\": \"Aubrey Lam\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(wife(Y_3, Y_1)), Count_1)",
+                "great_uncle(Y_5, Y_3)",
+                "dob(Y_5, \"0277-12-22\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "129ad797-0c46-426c-b58b-70b730257a03",
+        "question": "How many brothers does the great-uncle of the person whose occupation is event organiser have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Richard Dees\", \"Y_5\": \"Estella Handley\"}, {\"Count_1\": 2, \"Y_5\": \"Estella Handley\", \"Y_3\": \"Giovanni Dees\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "great_uncle(Y_5, Y_3)",
+                "job(Y_5, \"event organiser\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a92368ca-f19f-407d-8775-62495f8ed9df",
+        "question": "How many brothers does the friend of the person whose hobby is auto audiophilia have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_5\": \"Riley Handley\", \"Y_3\": \"Emelda Lam\"}, {\"Count_1\": 0, \"Y_3\": \"Reggie Quezada\", \"Y_5\": \"Riley Handley\"}, {\"Y_3\": \"Toby Lam\", \"Count_1\": 1, \"Y_5\": \"Riley Handley\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "hobby(Y_5, \"auto audiophilia\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "51ae6c1d-1f98-4452-bda8-03a43126969d",
+        "question": "How many siblings does the grandchild of the person whose hobby is canoeing have?",
+        "solution_traces": "[{\"Y_5\": \"Dustin Halstead\", \"Y_3\": \"Clifford Halstead\", \"Count_1\": 4}, {\"Y_3\": \"Rhea Halstead\", \"Y_5\": \"Dustin Halstead\", \"Count_1\": 4}, {\"Y_3\": \"Cherlyn Dees\", \"Y_5\": \"Dustin Halstead\", \"Count_1\": 4}, {\"Count_1\": 4, \"Y_5\": \"Dustin Halstead\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_3\": \"Kermit Halstead\", \"Y_5\": \"Dustin Halstead\", \"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "hobby(Y_5, \"canoeing\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a467cd8c-2595-4fb1-99d6-1a0e829c00d6",
+        "question": "How many nephews does the grandchild of the person whose date of birth is 0195-03-01 have?",
+        "solution_traces": "[{\"Y_5\": \"Dustin Halstead\", \"Count_1\": 3, \"Y_3\": \"Clifford Halstead\"}, {\"Y_3\": \"Cherlyn Dees\", \"Count_1\": 0, \"Y_5\": \"Dustin Halstead\"}, {\"Y_3\": \"Kermit Halstead\", \"Y_5\": \"Dustin Halstead\", \"Count_1\": 3}, {\"Y_5\": \"Dustin Halstead\", \"Count_1\": 3, \"Y_3\": \"Johnetta Halstead\"}, {\"Y_3\": \"Rhea Halstead\", \"Y_5\": \"Dustin Halstead\", \"Count_1\": 3}]",
+        "answer": [
+            "0",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "dob(Y_5, \"0195-03-01\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e000f975-d0c1-464e-b48d-ef6d5665b901",
+        "question": "How many parents does the great-uncle of the person whose date of birth is 0286-04-22 have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Margie Moorehead\", \"Y_3\": \"Wilber Lam\"}, {\"Count_1\": 2, \"Y_5\": \"Margie Moorehead\", \"Y_3\": \"Aubrey Lam\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "great_uncle(Y_5, Y_3)",
+                "dob(Y_5, \"0286-04-22\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b6ef715b-c8ea-4b74-9acd-5d87bece4dc1",
+        "question": "How many daughters-in-law does the great-grandparent of the person whose hobby is antiquing have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Virgil Michaels\", \"Y_3\": \"Alan Lam\"}, {\"Count_1\": 1, \"Y_5\": \"Virgil Michaels\", \"Y_3\": \"Roxanne Lam\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter_in_law(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "hobby(Y_5, \"antiquing\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "bcef838a-7c5a-4770-8946-e23d41165516",
+        "question": "How many mothers does the great-granddaughter of the person whose date of birth is 0201-12-23 have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Marcelina Dees\", \"Y_3\": \"Monserrate Dees\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother(Y_3, Y_1)), Count_1)",
+                "great_granddaughter(Y_5, Y_3)",
+                "dob(Y_5, \"0201-12-23\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8891edfa-44e8-45eb-8c65-6ca422dc1eb6",
+        "question": "How many friends does the great-grandchild of the person whose date of birth is 0195-09-13 have?",
+        "solution_traces": "[{\"Y_5\": \"Seth Embry\", \"Y_3\": \"Richard Dees\", \"Count_1\": 4}, {\"Y_5\": \"Seth Embry\", \"Count_1\": 2, \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Seth Embry\", \"Count_1\": 3, \"Y_3\": \"Monserrate Dees\"}, {\"Y_5\": \"Seth Embry\", \"Y_3\": \"Adam Dees\", \"Count_1\": 4}]",
+        "answer": [
+            "2",
+            "3",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "great_grandchild(Y_5, Y_3)",
+                "dob(Y_5, \"0195-09-13\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the person whose",
+            "<attribute_name>_6",
+            "is",
+            "<attribute_value>_6",
+            "have",
+            "?"
+        ],
+        "type": 16,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    }
+]

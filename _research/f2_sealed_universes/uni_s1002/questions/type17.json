@@ -1,0 +1,878 @@
+[
+    {
+        "id": "c12833c3-c0b5-4c18-97e8-c2b5e3f37280",
+        "question": "How many nephews does the brother-in-law of Doyle Kasper have?",
+        "solution_traces": "[{\"Y_3\": \"Domingo Lemaster\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "brother_in_law(\"Doyle Kasper\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ae8a50dc-3bf9-4bf5-a62b-e765aac7bfa6",
+        "question": "How many grandparents does the sister-in-law of Nancy Cason have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Page Strickland\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "sister_in_law(\"Nancy Cason\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6a5794c5-99c6-4fdc-ac76-a6a0ca027cab",
+        "question": "How many nephews does the brother-in-law of Doyle Kasper have?",
+        "solution_traces": "[{\"Y_3\": \"Domingo Lemaster\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "brother_in_law(\"Doyle Kasper\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4d6c9ffb-4868-439d-afef-76273cca3dbc",
+        "question": "How many brothers-in-law does the daughter of Manda Feldman have?",
+        "solution_traces": "[{\"Y_3\": \"Nancy Cason\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother_in_law(Y_3, Y_1)), Count_1)",
+                "daughter(\"Manda Feldman\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "91a7a30f-8b56-4039-8568-7af407e208b1",
+        "question": "How many cousins does the daughter of Nancy Cason have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Katy Cason\"}, {\"Y_3\": \"Jewell Cason\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "daughter(\"Nancy Cason\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "28b672a3-f1b3-42e7-9903-99bf20dd0dad",
+        "question": "How many sisters-in-law does the friend of Edmond Strickland have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Tiesha Cason\"}, {\"Y_3\": \"Kacey Hamill\", \"Count_1\": 0}, {\"Count_1\": 0, \"Y_3\": \"Ardath Cason\"}, {\"Count_1\": 2, \"Y_3\": \"Estell Cason\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister_in_law(Y_3, Y_1)), Count_1)",
+                "friend(\"Edmond Strickland\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7e274fb7-4485-428a-a46c-ae33526402e8",
+        "question": "How many grandsons does the father-in-law of Pedro Demello have?",
+        "solution_traces": "[{\"Y_3\": \"Brooks Tobin\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandson(Y_3, Y_1)), Count_1)",
+                "father_in_law(\"Pedro Demello\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "65543f06-552d-4b42-95c0-1487c7d7ab3d",
+        "question": "How many brothers does the daughter of Roseanna Lemaster have?",
+        "solution_traces": "[{\"Y_3\": \"Kacey Swinton\", \"Count_1\": 1}, {\"Y_3\": \"Manda Kasper\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "daughter(\"Roseanna Lemaster\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f09bdc23-9a2b-4d5f-b545-fcfc5c84ed0a",
+        "question": "How many children does the mother-in-law of Odis Breen have?",
+        "solution_traces": "[{\"Y_3\": \"Kacey Swinton\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "mother_in_law(\"Odis Breen\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2534ac45-5fea-4384-bf0e-20dd1e73f323",
+        "question": "How many granddaughters does the father-in-law of Wilfredo Carrington have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Doyle Kasper\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(granddaughter(Y_3, Y_1)), Count_1)",
+                "father_in_law(\"Wilfredo Carrington\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e3786b55-3395-42c3-9b86-5e3b4aaf6a38",
+        "question": "How many parents does the child of Ike Lemaster have?",
+        "solution_traces": "[{\"Y_3\": \"Kacey Swinton\", \"Count_1\": 2}, {\"Y_3\": \"Manda Kasper\", \"Count_1\": 2}, {\"Y_3\": \"Domingo Lemaster\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "child(\"Ike Lemaster\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8669228f-5a63-4a70-848b-45be6786d03b",
+        "question": "How many daughters-in-law does the husband of Angela Cason have?",
+        "solution_traces": "[{\"Y_3\": \"Douglas Cason\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter_in_law(Y_3, Y_1)), Count_1)",
+                "husband(\"Angela Cason\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "46c52884-ff13-4f6b-81b1-a3feed0dfc75",
+        "question": "How many friends does the father of Leesa Breen have?",
+        "solution_traces": "[{\"Count_1\": 5, \"Y_3\": \"Odis Breen\"}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "father(\"Leesa Breen\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a8784560-0ace-4851-90c9-a3717c4976d9",
+        "question": "How many mothers does the brother of Frankie Cason have?",
+        "solution_traces": "[{\"Y_3\": \"Sergio Cason\", \"Count_1\": 1}, {\"Y_3\": \"Joesph Cason\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother(Y_3, Y_1)), Count_1)",
+                "brother(\"Frankie Cason\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "03da9fd1-a6e5-492a-aeb7-6b6c3987d5e4",
+        "question": "How many aunts does the sister-in-law of Estell Cason have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Katy Cason\"}, {\"Y_3\": \"Jewell Cason\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(aunt(Y_3, Y_1)), Count_1)",
+                "sister_in_law(\"Estell Cason\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3247d53a-1018-4cae-abe7-80e448e5755c",
+        "question": "How many parents does the friend of Manda Feldman have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Roseanna Lemaster\"}, {\"Count_1\": 2, \"Y_3\": \"Katy Cason\"}, {\"Count_1\": 2, \"Y_3\": \"Shizuko Tobin\"}, {\"Y_3\": \"Domingo Lemaster\", \"Count_1\": 2}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "friend(\"Manda Feldman\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "489c8005-180d-4e2a-baa1-bc1b4fa061ec",
+        "question": "How many aunts does the child of Nancy Cason have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Rick Cason\"}, {\"Count_1\": 1, \"Y_3\": \"Katy Cason\"}, {\"Y_3\": \"Jewell Cason\", \"Count_1\": 1}, {\"Y_3\": \"Ken Cason\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(aunt(Y_3, Y_1)), Count_1)",
+                "child(\"Nancy Cason\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "699c99c1-c9b6-44fa-b08c-382d5ea63452",
+        "question": "How many children does the mother of Domingo Lemaster have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Roseanna Lemaster\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "mother(\"Domingo Lemaster\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5509c2c0-8a67-4bfe-a9e5-3a72a5c68d7d",
+        "question": "How many great-grandparents does the father of Mariann Tobin have?",
+        "solution_traces": "[{\"Y_3\": \"Cordell Tobin\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "father(\"Mariann Tobin\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "15215381-0cb6-4564-9dcd-0de617d08cc3",
+        "question": "How many sisters does the brother-in-law of Estell Cason have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Rick Cason\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "brother_in_law(\"Estell Cason\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "cb363e04-5396-44d8-b15f-68a7a680401d",
+        "question": "How many great-grandsons does the great-grandparent of Katy Cason have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Jann Aguayo\"}, {\"Count_1\": 2, \"Y_3\": \"Jame Cason\"}, {\"Y_3\": \"Lorenz Aguayo\", \"Count_1\": 2}, {\"Y_3\": \"Ardath Cason\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(Y_3, Y_1)), Count_1)",
+                "great_grandparent(\"Katy Cason\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b93c2133-79bb-4f17-bc66-c831cc9b3c0d",
+        "question": "How many fathers does the grandchild of Roseanna Lemaster have?",
+        "solution_traces": "[{\"Y_3\": \"Loraine Carrington\", \"Count_1\": 1}, {\"Y_3\": \"Maximilian Swinton\", \"Count_1\": 1}, {\"Y_3\": \"Rubye Breen\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father(Y_3, Y_1)), Count_1)",
+                "grandchild(\"Roseanna Lemaster\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "344d73b5-eb13-4a3c-a584-2e0421089082",
+        "question": "How many brothers does the uncle of Jewell Cason have?",
+        "solution_traces": "[{\"Y_3\": \"Joesph Cason\", \"Count_1\": 2}, {\"Y_3\": \"Frankie Cason\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "uncle(\"Jewell Cason\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6f8429e8-f699-423f-b86b-bed979f9297a",
+        "question": "How many sons does the mother-in-law of Doyle Kasper have?",
+        "solution_traces": "[{\"Y_3\": \"Roseanna Lemaster\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son(Y_3, Y_1)), Count_1)",
+                "mother_in_law(\"Doyle Kasper\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8f74788a-b234-4173-9e62-06b25b4f6092",
+        "question": "How many friends does the father of Cordell Tobin have?",
+        "solution_traces": "[{\"Y_3\": \"Brooks Tobin\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "father(\"Cordell Tobin\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a11342d2-c86a-456d-9ac4-920cbc0a9a00",
+        "question": "How many grandchildren does the friend of Leesa Breen have?",
+        "solution_traces": "[{\"Y_3\": \"Manda Kasper\", \"Count_1\": 2}, {\"Y_3\": \"Angela Cason\", \"Count_1\": 5}, {\"Count_1\": 0, \"Y_3\": \"Katy Cason\"}]",
+        "answer": [
+            "0",
+            "2",
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(Y_3, Y_1)), Count_1)",
+                "friend(\"Leesa Breen\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "fd016a04-c418-40ea-9125-5e96ed241869",
+        "question": "How many nieces does the grandchild of Douglas Cason have?",
+        "solution_traces": "[{\"Y_3\": \"Rochelle Strickland\", \"Count_1\": 0}, {\"Count_1\": 0, \"Y_3\": \"Ken Cason\"}, {\"Count_1\": 2, \"Y_3\": \"Rick Cason\"}, {\"Y_3\": \"Jewell Cason\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Katy Cason\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "grandchild(\"Douglas Cason\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6b4ef6db-e481-40d8-a86f-e5c4070fabd5",
+        "question": "How many nephews does the aunt of Cordell Tobin have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Marguerita Carrington\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "aunt(\"Cordell Tobin\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "08f53c66-6849-4d61-8882-1182b3ad4cf3",
+        "question": "How many fathers-in-law does the friend of Bev Demello have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Domingo Lemaster\"}, {\"Y_3\": \"Brooks Tobin\", \"Count_1\": 1}, {\"Count_1\": 0, \"Y_3\": \"Augustus Demello\"}, {\"Count_1\": 0, \"Y_3\": \"Shizuko Tobin\"}, {\"Y_3\": \"Joslyn Tobin\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father_in_law(Y_3, Y_1)), Count_1)",
+                "friend(\"Bev Demello\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "62393613-feb2-4912-ad00-b0156a1060f7",
+        "question": "How many great-aunts does the great-grandchild of Ike Lemaster have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Shizuko Tobin\"}, {\"Count_1\": 1, \"Y_3\": \"Marguerita Carrington\"}, {\"Y_3\": \"Leesa Breen\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_aunt(Y_3, Y_1)), Count_1)",
+                "great_grandchild(\"Ike Lemaster\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    }
+]

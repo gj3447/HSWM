@@ -1,0 +1,927 @@
+[
+    {
+        "id": "36ebbdc4-ed0e-4621-a337-44234a851196",
+        "question": "Who is the brother of the grandchild of Emelda Lam?",
+        "solution_traces": "[{\"Y_2\": \"Virgil Michaels\", \"Y_4\": \"Raul Michaels\"}, {\"Y_4\": \"Virgil Michaels\", \"Y_2\": \"Raul Michaels\"}]",
+        "answer": [
+            "Raul Michaels",
+            "Virgil Michaels"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "grandchild(\"Emelda Lam\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "38507d8b-e7c9-45ff-a71c-4736e7f96da5",
+        "question": "Who is the grandmother of the child of Jakob Quezada?",
+        "solution_traces": "[{\"Y_2\": \"Sheila Michaels\", \"Y_4\": \"Reggie Quezada\"}]",
+        "answer": [
+            "Sheila Michaels"
+        ],
+        "prolog": {
+            "query": [
+                "grandmother(Y_4, Y_2)",
+                "child(\"Jakob Quezada\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "621c19c8-e032-495b-a06b-15013b274422",
+        "question": "Who is the friend of the great-grandson of Winnie Halstead?",
+        "solution_traces": "[{\"Y_4\": \"Giovanni Dees\", \"Y_2\": \"Kermit Halstead\"}, {\"Y_2\": \"Cordell Dees\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Cherlyn Dees\"}, {\"Y_4\": \"Giovanni Dees\", \"Y_2\": \"Raul Michaels\"}, {\"Y_2\": \"Clifford Reece\", \"Y_4\": \"Richard Dees\"}, {\"Y_2\": \"Cheree Michaels\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Wendell Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Viola Halstead\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Roxanne Lam\"}, {\"Y_2\": \"Wilber Lam\", \"Y_4\": \"Richard Dees\"}]",
+        "answer": [
+            "Cheree Michaels",
+            "Cherlyn Dees",
+            "Clifford Reece",
+            "Cordell Dees",
+            "Kermit Halstead",
+            "Raul Michaels",
+            "Roxanne Lam",
+            "Viola Halstead",
+            "Wendell Dees",
+            "Wilber Lam"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "great_grandson(\"Winnie Halstead\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ed63cc98-9353-41b0-9608-832372a5273c",
+        "question": "Who is the great-uncle of the great-grandson of Alan Lam?",
+        "solution_traces": "[{\"Y_2\": \"Alfred Lam\", \"Y_4\": \"Raul Michaels\"}, {\"Y_4\": \"Virgil Michaels\", \"Y_2\": \"Alfred Lam\"}]",
+        "answer": [
+            "Alfred Lam"
+        ],
+        "prolog": {
+            "query": [
+                "great_uncle(Y_4, Y_2)",
+                "great_grandson(\"Alan Lam\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "58a76e7e-53bd-411e-94b8-a09d0cf44058",
+        "question": "Who is the great-grandchild of the son-in-law of Seth Embry?",
+        "solution_traces": "[{\"Y_2\": \"Bonnie Handley\", \"Y_4\": \"Rosendo Halstead\"}, {\"Y_2\": \"Allyson Dees\", \"Y_4\": \"Rosendo Halstead\"}]",
+        "answer": [
+            "Allyson Dees",
+            "Bonnie Handley"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "son_in_law(\"Seth Embry\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a18f1415-1e1b-480f-9e62-2467dd9e4168",
+        "question": "Who is the friend of the great-grandson of Cordell Dees?",
+        "solution_traces": "[{\"Y_4\": \"Giovanni Dees\", \"Y_2\": \"Kermit Halstead\"}, {\"Y_2\": \"Cordell Dees\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Cherlyn Dees\"}, {\"Y_4\": \"Giovanni Dees\", \"Y_2\": \"Raul Michaels\"}, {\"Y_2\": \"Clifford Reece\", \"Y_4\": \"Richard Dees\"}, {\"Y_2\": \"Cheree Michaels\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Wendell Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Viola Halstead\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Roxanne Lam\"}, {\"Y_2\": \"Wilber Lam\", \"Y_4\": \"Richard Dees\"}]",
+        "answer": [
+            "Cheree Michaels",
+            "Cherlyn Dees",
+            "Clifford Reece",
+            "Cordell Dees",
+            "Kermit Halstead",
+            "Raul Michaels",
+            "Roxanne Lam",
+            "Viola Halstead",
+            "Wendell Dees",
+            "Wilber Lam"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "great_grandson(\"Cordell Dees\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "61df07d9-2404-4478-a7d9-d4d91d341931",
+        "question": "Who is the grandparent of the sister-in-law of Riley Handley?",
+        "solution_traces": "[{\"Y_4\": \"Allyson Dees\", \"Y_2\": \"Cherlyn Dees\"}, {\"Y_2\": \"Alvaro Dees\", \"Y_4\": \"Allyson Dees\"}]",
+        "answer": [
+            "Alvaro Dees",
+            "Cherlyn Dees"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "sister_in_law(\"Riley Handley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "da271854-1297-40bc-a6c4-5bb4040920e0",
+        "question": "Who is the grandchild of the father-in-law of Emelda Lam?",
+        "solution_traces": "[{\"Y_2\": \"Alethia Lam\", \"Y_4\": \"Alan Lam\"}, {\"Y_2\": \"Alberto Lam\", \"Y_4\": \"Alan Lam\"}, {\"Y_4\": \"Alan Lam\", \"Y_2\": \"Aubrey Lam\"}, {\"Y_4\": \"Alan Lam\", \"Y_2\": \"Wilber Lam\"}, {\"Y_2\": \"Dena Michaels\", \"Y_4\": \"Alan Lam\"}]",
+        "answer": [
+            "Alberto Lam",
+            "Alethia Lam",
+            "Aubrey Lam",
+            "Dena Michaels",
+            "Wilber Lam"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "father_in_law(\"Emelda Lam\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "217d29bb-345b-4f12-b715-f98db31613b4",
+        "question": "Who is the child of the husband of Viola Halstead?",
+        "solution_traces": "[{\"Y_2\": \"Clifford Halstead\", \"Y_4\": \"Rosendo Halstead\"}, {\"Y_2\": \"Rhea Halstead\", \"Y_4\": \"Rosendo Halstead\"}, {\"Y_2\": \"Johnetta Halstead\", \"Y_4\": \"Rosendo Halstead\"}, {\"Y_2\": \"Cherlyn Dees\", \"Y_4\": \"Rosendo Halstead\"}, {\"Y_2\": \"Kermit Halstead\", \"Y_4\": \"Rosendo Halstead\"}]",
+        "answer": [
+            "Cherlyn Dees",
+            "Clifford Halstead",
+            "Johnetta Halstead",
+            "Kermit Halstead",
+            "Rhea Halstead"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "husband(\"Viola Halstead\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2dbb2ce5-43dd-4f96-ae08-c64b18c5654d",
+        "question": "Who is the friend of the son of Clifford Reece?",
+        "solution_traces": "[{\"Y_4\": \"Edison Reece\", \"Y_2\": \"Maximina Dees\"}, {\"Y_4\": \"Edison Reece\", \"Y_2\": \"Chelsie Reece\"}, {\"Y_4\": \"Edison Reece\", \"Y_2\": \"Alan Lam\"}]",
+        "answer": [
+            "Alan Lam",
+            "Chelsie Reece",
+            "Maximina Dees"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "son(\"Clifford Reece\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "54b30939-b212-4586-87e5-17ca8a76a5bd",
+        "question": "Who is the husband of the wife of Toby Lam?",
+        "solution_traces": "[{\"Y_4\": \"Emelda Lam\", \"Y_2\": \"Toby Lam\"}]",
+        "answer": [
+            "Toby Lam"
+        ],
+        "prolog": {
+            "query": [
+                "husband(Y_4, Y_2)",
+                "wife(\"Toby Lam\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "06841eae-2351-497d-9030-f1a0e8b5e54a",
+        "question": "Who is the aunt of the great-grandchild of Naomi Embry?",
+        "solution_traces": "[{\"Y_4\": \"Adam Dees\", \"Y_2\": \"Johnetta Halstead\"}, {\"Y_2\": \"Rhea Halstead\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Rhea Halstead\"}, {\"Y_2\": \"Johnetta Halstead\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Monserrate Dees\", \"Y_2\": \"Rhea Halstead\"}, {\"Y_4\": \"Giovanni Dees\", \"Y_2\": \"Rhea Halstead\"}, {\"Y_4\": \"Giovanni Dees\", \"Y_2\": \"Johnetta Halstead\"}, {\"Y_4\": \"Monserrate Dees\", \"Y_2\": \"Johnetta Halstead\"}]",
+        "answer": [
+            "Johnetta Halstead",
+            "Rhea Halstead"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "great_grandchild(\"Naomi Embry\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "640564d5-c7da-40f4-96cd-ac47be891d1a",
+        "question": "Who is the nephew of the sibling of Alberto Lam?",
+        "solution_traces": "[{\"Y_4\": \"Alethia Lam\", \"Y_2\": \"Raul Michaels\"}, {\"Y_2\": \"Virgil Michaels\", \"Y_4\": \"Wilber Lam\"}, {\"Y_4\": \"Alethia Lam\", \"Y_2\": \"Virgil Michaels\"}, {\"Y_4\": \"Wilber Lam\", \"Y_2\": \"Raul Michaels\"}, {\"Y_2\": \"Virgil Michaels\", \"Y_4\": \"Aubrey Lam\"}, {\"Y_4\": \"Aubrey Lam\", \"Y_2\": \"Raul Michaels\"}]",
+        "answer": [
+            "Raul Michaels",
+            "Virgil Michaels"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "sibling(\"Alberto Lam\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c84555ba-1c92-4e1f-b0d0-62d0fd3f2f59",
+        "question": "Who is the second aunt of the great-grandchild of Robbie Lam?",
+        "solution_traces": "[{\"Y_2\": \"Alethia Lam\", \"Y_4\": \"Edison Reece\"}, {\"Y_2\": \"Dena Michaels\", \"Y_4\": \"Edison Reece\"}]",
+        "answer": [
+            "Alethia Lam",
+            "Dena Michaels"
+        ],
+        "prolog": {
+            "query": [
+                "second_aunt(Y_4, Y_2)",
+                "great_grandchild(\"Robbie Lam\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "723ea759-1614-45d0-8d39-4759a3764a13",
+        "question": "Who is the great-granddaughter of the daughter-in-law of Theda Dees?",
+        "solution_traces": "[{\"Y_2\": \"Estella Handley\", \"Y_4\": \"Cherlyn Dees\"}]",
+        "answer": [
+            "Estella Handley"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "daughter_in_law(\"Theda Dees\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6cdc1288-31cf-4e40-8987-53860b179306",
+        "question": "Who is the brother of the uncle of Alberto Lam?",
+        "solution_traces": "[{\"Y_4\": \"Alfred Lam\", \"Y_2\": \"Toby Lam\"}]",
+        "answer": [
+            "Toby Lam"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "uncle(\"Alberto Lam\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dc349975-6397-4289-9c3b-7021bcdaf8d6",
+        "question": "Who is the granddaughter of the great-grandparent of Giovanni Dees?",
+        "solution_traces": "[{\"Y_4\": \"Dustin Halstead\", \"Y_2\": \"Rhea Halstead\"}, {\"Y_2\": \"Rhea Halstead\", \"Y_4\": \"Naomi Embry\"}, {\"Y_4\": \"Seth Embry\", \"Y_2\": \"Johnetta Halstead\"}, {\"Y_4\": \"Winnie Halstead\", \"Y_2\": \"Rhea Halstead\"}, {\"Y_4\": \"Winnie Halstead\", \"Y_2\": \"Johnetta Halstead\"}, {\"Y_2\": \"Johnetta Halstead\", \"Y_4\": \"Naomi Embry\"}, {\"Y_4\": \"Winnie Halstead\", \"Y_2\": \"Cherlyn Dees\"}, {\"Y_4\": \"Seth Embry\", \"Y_2\": \"Rhea Halstead\"}, {\"Y_4\": \"Seth Embry\", \"Y_2\": \"Cherlyn Dees\"}, {\"Y_2\": \"Cherlyn Dees\", \"Y_4\": \"Naomi Embry\"}, {\"Y_4\": \"Dustin Halstead\", \"Y_2\": \"Cherlyn Dees\"}, {\"Y_2\": \"Johnetta Halstead\", \"Y_4\": \"Dustin Halstead\"}]",
+        "answer": [
+            "Cherlyn Dees",
+            "Johnetta Halstead",
+            "Rhea Halstead"
+        ],
+        "prolog": {
+            "query": [
+                "granddaughter(Y_4, Y_2)",
+                "great_grandparent(\"Giovanni Dees\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d365d2d4-4f68-4c54-b938-b70180d0ed39",
+        "question": "Who is the wife of the son-in-law of Naomi Embry?",
+        "solution_traces": "[{\"Y_2\": \"Viola Halstead\", \"Y_4\": \"Rosendo Halstead\"}]",
+        "answer": [
+            "Viola Halstead"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "son_in_law(\"Naomi Embry\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "08fbf075-986e-416b-8a1b-9c431dc57388",
+        "question": "Who is the great-grandchild of the friend of Alberto Lam?",
+        "solution_traces": "[{\"Y_4\": \"Roxanne Lam\", \"Y_2\": \"Heidi Moorehead\"}, {\"Y_4\": \"Roxanne Lam\", \"Y_2\": \"Virgil Michaels\"}, {\"Y_4\": \"Roxanne Lam\", \"Y_2\": \"Raul Michaels\"}]",
+        "answer": [
+            "Heidi Moorehead",
+            "Raul Michaels",
+            "Virgil Michaels"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "friend(\"Alberto Lam\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "69b06bc9-5b1e-49e8-9713-08f619b470ac",
+        "question": "Who is the sister of the second aunt of Estella Handley?",
+        "solution_traces": "[{\"Y_4\": \"Johnetta Halstead\", \"Y_2\": \"Cherlyn Dees\"}, {\"Y_4\": \"Rhea Halstead\", \"Y_2\": \"Cherlyn Dees\"}, {\"Y_2\": \"Johnetta Halstead\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_2\": \"Rhea Halstead\"}]",
+        "answer": [
+            "Cherlyn Dees",
+            "Johnetta Halstead",
+            "Rhea Halstead"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "second_aunt(\"Estella Handley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "eb1286af-df7d-4859-8f54-2f0c8d8216a0",
+        "question": "Who is the friend of the father-in-law of Clifford Reece?",
+        "solution_traces": "[{\"Y_4\": \"Rudolf Moorehead\", \"Y_2\": \"Allyson Dees\"}, {\"Y_4\": \"Rudolf Moorehead\", \"Y_2\": \"Alfred Lam\"}]",
+        "answer": [
+            "Alfred Lam",
+            "Allyson Dees"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "father_in_law(\"Clifford Reece\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "47af7723-9b10-4374-bef5-0a6460207e1b",
+        "question": "Who is the father-in-law of the daughter-in-law of Roxanne Lam?",
+        "solution_traces": "[{\"Y_2\": \"Alan Lam\", \"Y_4\": \"Emelda Lam\"}]",
+        "answer": [
+            "Alan Lam"
+        ],
+        "prolog": {
+            "query": [
+                "father_in_law(Y_4, Y_2)",
+                "daughter_in_law(\"Roxanne Lam\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "450eb823-d686-4eb0-809c-192fb5885ea8",
+        "question": "Who is the parent of the grandson of Rosendo Halstead?",
+        "solution_traces": "[{\"Y_4\": \"Giovanni Dees\", \"Y_2\": \"Cherlyn Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Alvaro Dees\"}, {\"Y_2\": \"Cherlyn Dees\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Cherlyn Dees\"}, {\"Y_2\": \"Alvaro Dees\", \"Y_4\": \"Richard Dees\"}, {\"Y_2\": \"Alvaro Dees\", \"Y_4\": \"Giovanni Dees\"}]",
+        "answer": [
+            "Alvaro Dees",
+            "Cherlyn Dees"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "grandson(\"Rosendo Halstead\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7841c375-5412-4aeb-b598-35639189a9d3",
+        "question": "Who is the friend of the great-grandmother of Edison Reece?",
+        "solution_traces": "[{\"Y_2\": \"Roxanne Lam\", \"Y_4\": \"Robbie Lam\"}, {\"Y_4\": \"Robbie Lam\", \"Y_2\": \"Winnie Halstead\"}, {\"Y_4\": \"Robbie Lam\", \"Y_2\": \"Toby Lam\"}, {\"Y_2\": \"Heidi Moorehead\", \"Y_4\": \"Robbie Lam\"}]",
+        "answer": [
+            "Heidi Moorehead",
+            "Roxanne Lam",
+            "Toby Lam",
+            "Winnie Halstead"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "great_grandmother(\"Edison Reece\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ebff0c7b-c7de-42c9-ad10-31b0b0d60f7a",
+        "question": "Who is the nephew of the sibling of Clifford Halstead?",
+        "solution_traces": "[{\"Y_2\": \"Adam Dees\", \"Y_4\": \"Johnetta Halstead\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_4\": \"Rhea Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Kermit Halstead\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_2\": \"Giovanni Dees\", \"Y_4\": \"Kermit Halstead\"}, {\"Y_2\": \"Giovanni Dees\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_2\": \"Giovanni Dees\"}, {\"Y_4\": \"Kermit Halstead\", \"Y_2\": \"Richard Dees\"}]",
+        "answer": [
+            "Adam Dees",
+            "Giovanni Dees",
+            "Richard Dees"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "sibling(\"Clifford Halstead\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "22833436-ea71-49b1-bcf3-e43390d1490a",
+        "question": "Who is the nephew of the great-aunt of Bonnie Handley?",
+        "solution_traces": "[{\"Y_2\": \"Adam Dees\", \"Y_4\": \"Johnetta Halstead\"}, {\"Y_4\": \"Rhea Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_2\": \"Giovanni Dees\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_2\": \"Giovanni Dees\"}]",
+        "answer": [
+            "Adam Dees",
+            "Giovanni Dees",
+            "Richard Dees"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "great_aunt(\"Bonnie Handley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "374140bb-8127-497e-9685-0c5e442e3736",
+        "question": "Who is the sister of the friend of Roxanne Lam?",
+        "solution_traces": "[{\"Y_4\": \"Adam Dees\", \"Y_2\": \"Monserrate Dees\"}, {\"Y_2\": \"Dena Michaels\", \"Y_4\": \"Alberto Lam\"}, {\"Y_2\": \"Alethia Lam\", \"Y_4\": \"Alberto Lam\"}]",
+        "answer": [
+            "Alethia Lam",
+            "Dena Michaels",
+            "Monserrate Dees"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "friend(\"Roxanne Lam\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6469117f-0149-44a5-a9d1-18f11f8b7b46",
+        "question": "Who is the nephew of the friend of Marcelina Dees?",
+        "solution_traces": "[{\"Y_4\": \"Clifford Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_4\": \"Clifford Halstead\", \"Y_2\": \"Giovanni Dees\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Clifford Halstead\"}]",
+        "answer": [
+            "Adam Dees",
+            "Giovanni Dees",
+            "Richard Dees"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "friend(\"Marcelina Dees\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ddb86c1b-0c71-4eed-bc08-4427f83a7fd6",
+        "question": "Who is the great-grandparent of the son of Dorothea Quezada?",
+        "solution_traces": "[{\"Y_2\": \"Dena Michaels\", \"Y_4\": \"Reggie Quezada\"}, {\"Y_2\": \"Rogelio Michaels\", \"Y_4\": \"Reggie Quezada\"}]",
+        "answer": [
+            "Dena Michaels",
+            "Rogelio Michaels"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandparent(Y_4, Y_2)",
+                "son(\"Dorothea Quezada\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4be5577c-d8d1-4be6-94c4-131c0896a790",
+        "question": "Who is the brother of the grandchild of Winnie Halstead?",
+        "solution_traces": "[{\"Y_2\": \"Clifford Halstead\", \"Y_4\": \"Johnetta Halstead\"}, {\"Y_2\": \"Kermit Halstead\", \"Y_4\": \"Cherlyn Dees\"}, {\"Y_2\": \"Kermit Halstead\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_2\": \"Clifford Halstead\", \"Y_4\": \"Kermit Halstead\"}, {\"Y_2\": \"Clifford Halstead\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_2\": \"Kermit Halstead\"}, {\"Y_4\": \"Clifford Halstead\", \"Y_2\": \"Kermit Halstead\"}, {\"Y_2\": \"Clifford Halstead\", \"Y_4\": \"Cherlyn Dees\"}]",
+        "answer": [
+            "Clifford Halstead",
+            "Kermit Halstead"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "grandchild(\"Winnie Halstead\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    }
+]

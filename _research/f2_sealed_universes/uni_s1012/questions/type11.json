@@ -1,0 +1,907 @@
+[
+    {
+        "id": "c31b1e1d-a168-4183-a50d-07354dbe241f",
+        "question": "What is the date of birth of the grandchild of Emelda Lam?",
+        "solution_traces": "[{\"Y_3\": \"Raul Michaels\", \"Y_2\": \"0248-05-13\"}, {\"Y_2\": \"0255-01-03\", \"Y_3\": \"Virgil Michaels\"}, {\"Y_2\": \"0258-12-16\", \"Y_3\": \"Heidi Moorehead\"}]",
+        "answer": [
+            "0248-05-13",
+            "0255-01-03",
+            "0258-12-16"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandchild(\"Emelda Lam\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d089c746-2830-4f5e-84c4-3dfbc874ddfd",
+        "question": "What is the date of birth of the child of Jakob Quezada?",
+        "solution_traces": "[{\"Y_2\": \"0304-02-06\", \"Y_3\": \"Reggie Quezada\"}]",
+        "answer": [
+            "0304-02-06"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "child(\"Jakob Quezada\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3bdee7f1-d9cf-487e-b4de-939d7d4224cc",
+        "question": "What is the hobby of the great-grandson of Winnie Halstead?",
+        "solution_traces": "[{\"Y_2\": \"fitness\", \"Y_3\": \"Adam Dees\"}, {\"Y_2\": \"bus spotting\", \"Y_3\": \"Richard Dees\"}, {\"Y_2\": \"model united nations\", \"Y_3\": \"Giovanni Dees\"}]",
+        "answer": [
+            "bus spotting",
+            "fitness",
+            "model united nations"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandson(\"Winnie Halstead\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "46960519-ddb0-469c-8c98-eead3418e06a",
+        "question": "What is the occupation of the great-grandson of Alan Lam?",
+        "solution_traces": "[{\"Y_2\": \"editor\", \"Y_3\": \"Virgil Michaels\"}, {\"Y_3\": \"Raul Michaels\", \"Y_2\": \"investment banker\"}]",
+        "answer": [
+            "editor",
+            "investment banker"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandson(\"Alan Lam\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b0518e1e-a760-4be4-835d-43fed8108934",
+        "question": "What is the hobby of the son-in-law of Seth Embry?",
+        "solution_traces": "[{\"Y_2\": \"mini golf\", \"Y_3\": \"Rosendo Halstead\"}]",
+        "answer": [
+            "mini golf"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "son_in_law(\"Seth Embry\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1a9d9563-7a8c-43c9-93d9-4cf09f96af07",
+        "question": "What is the hobby of the great-grandson of Cordell Dees?",
+        "solution_traces": "[{\"Y_2\": \"fitness\", \"Y_3\": \"Adam Dees\"}, {\"Y_2\": \"bus spotting\", \"Y_3\": \"Richard Dees\"}, {\"Y_2\": \"model united nations\", \"Y_3\": \"Giovanni Dees\"}]",
+        "answer": [
+            "bus spotting",
+            "fitness",
+            "model united nations"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandson(\"Cordell Dees\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "82f023de-4db3-47cf-b868-c6c3b7b240c5",
+        "question": "What is the occupation of the sister-in-law of Riley Handley?",
+        "solution_traces": "[{\"Y_3\": \"Allyson Dees\", \"Y_2\": \"passenger transport manager\"}]",
+        "answer": [
+            "passenger transport manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sister_in_law(\"Riley Handley\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "afd18290-cfb7-44f9-897a-f9e9602dd3f4",
+        "question": "What is the date of birth of the father-in-law of Emelda Lam?",
+        "solution_traces": "[{\"Y_2\": \"0170-09-09\", \"Y_3\": \"Alan Lam\"}]",
+        "answer": [
+            "0170-09-09"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "father_in_law(\"Emelda Lam\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5ae92d19-a602-4578-8829-c48ffcdda884",
+        "question": "What is the date of birth of the husband of Viola Halstead?",
+        "solution_traces": "[{\"Y_2\": \"0226-06-25\", \"Y_3\": \"Rosendo Halstead\"}]",
+        "answer": [
+            "0226-06-25"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "husband(\"Viola Halstead\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c9dde49d-051e-438f-b2e6-c3a5c1d6e0c8",
+        "question": "What is the hobby of the son of Clifford Reece?",
+        "solution_traces": "[{\"Y_2\": \"animation\", \"Y_3\": \"Edison Reece\"}]",
+        "answer": [
+            "animation"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "son(\"Clifford Reece\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "415a196b-dd2a-4b60-af2e-e05b58932ea3",
+        "question": "What is the date of birth of the wife of Toby Lam?",
+        "solution_traces": "[{\"Y_2\": \"0197-05-12\", \"Y_3\": \"Emelda Lam\"}]",
+        "answer": [
+            "0197-05-12"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "wife(\"Toby Lam\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ba7ff974-4216-494f-883b-1dad832cf33e",
+        "question": "What is the occupation of the great-grandchild of Naomi Embry?",
+        "solution_traces": "[{\"Y_3\": \"Adam Dees\", \"Y_2\": \"facilities manager\"}, {\"Y_2\": \"professor emeritus\", \"Y_3\": \"Monserrate Dees\"}, {\"Y_2\": \"lecturer\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_2\": \"consulting civil engineer\", \"Y_3\": \"Richard Dees\"}]",
+        "answer": [
+            "consulting civil engineer",
+            "facilities manager",
+            "lecturer",
+            "professor emeritus"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandchild(\"Naomi Embry\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ad85f689-0cde-4b15-9542-ffb09a7c1571",
+        "question": "What is the hobby of the sibling of Alberto Lam?",
+        "solution_traces": "[{\"Y_3\": \"Dena Michaels\", \"Y_2\": \"science and technology studies\"}, {\"Y_2\": \"stone collecting\", \"Y_3\": \"Alethia Lam\"}, {\"Y_2\": \"rowing\", \"Y_3\": \"Aubrey Lam\"}, {\"Y_2\": \"coin collecting\", \"Y_3\": \"Wilber Lam\"}]",
+        "answer": [
+            "coin collecting",
+            "rowing",
+            "science and technology studies",
+            "stone collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(\"Alberto Lam\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "31e9e0b0-5e97-4e66-8cf4-42b55239e94d",
+        "question": "What is the hobby of the great-grandchild of Robbie Lam?",
+        "solution_traces": "[{\"Y_2\": \"animation\", \"Y_3\": \"Edison Reece\"}]",
+        "answer": [
+            "animation"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandchild(\"Robbie Lam\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0990b57a-d3bc-4470-927c-b3561b78b73a",
+        "question": "What is the hobby of the daughter-in-law of Theda Dees?",
+        "solution_traces": "[{\"Y_2\": \"martial arts\", \"Y_3\": \"Cherlyn Dees\"}]",
+        "answer": [
+            "martial arts"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "daughter_in_law(\"Theda Dees\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "aec7125e-385f-4870-8363-e4236edb238f",
+        "question": "What is the date of birth of the uncle of Alberto Lam?",
+        "solution_traces": "[{\"Y_3\": \"Alfred Lam\", \"Y_2\": \"0193-10-16\"}]",
+        "answer": [
+            "0193-10-16"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "uncle(\"Alberto Lam\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ea7f3036-c283-4b01-9887-2915e18d86da",
+        "question": "What is the occupation of the great-grandparent of Giovanni Dees?",
+        "solution_traces": "[{\"Y_2\": \"magazine journalist\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_2\": \"geoscientist\"}, {\"Y_2\": \"horticultural consultant\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_2\": \"advice worker\", \"Y_3\": \"Cordell Dees\"}, {\"Y_2\": \"horticultural consultant\", \"Y_3\": \"Seth Embry\"}, {\"Y_2\": \"health service manager\", \"Y_3\": \"Naomi Embry\"}]",
+        "answer": [
+            "advice worker",
+            "geoscientist",
+            "health service manager",
+            "horticultural consultant",
+            "magazine journalist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandparent(\"Giovanni Dees\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e13db4a9-37e2-4fcd-9e5d-35c674749721",
+        "question": "What is the occupation of the son-in-law of Naomi Embry?",
+        "solution_traces": "[{\"Y_3\": \"Rosendo Halstead\", \"Y_2\": \"veterinary surgeon\"}]",
+        "answer": [
+            "veterinary surgeon"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "son_in_law(\"Naomi Embry\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5a8c2e02-3e00-4b25-93e8-07b92933f366",
+        "question": "What is the hobby of the friend of Alberto Lam?",
+        "solution_traces": "[{\"Y_2\": \"antiquing\", \"Y_3\": \"Virgil Michaels\"}, {\"Y_2\": \"mineral collecting\", \"Y_3\": \"Heidi Moorehead\"}, {\"Y_2\": \"unicycling\", \"Y_3\": \"Jakob Quezada\"}, {\"Y_3\": \"Monserrate Dees\", \"Y_2\": \"transit map collecting\"}, {\"Y_2\": \"fishkeeping\", \"Y_3\": \"Roxanne Lam\"}]",
+        "answer": [
+            "antiquing",
+            "fishkeeping",
+            "mineral collecting",
+            "transit map collecting",
+            "unicycling"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "friend(\"Alberto Lam\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3eeebf93-ddf8-4b40-ae8a-0a6978129022",
+        "question": "What is the occupation of the second aunt of Estella Handley?",
+        "solution_traces": "[{\"Y_2\": \"academic librarian\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_3\": \"Rhea Halstead\", \"Y_2\": \"lexicographer\"}]",
+        "answer": [
+            "academic librarian",
+            "lexicographer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "second_aunt(\"Estella Handley\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "916c1360-c52e-42eb-ad89-89d5f4aa43a6",
+        "question": "What is the hobby of the father-in-law of Clifford Reece?",
+        "solution_traces": "[{\"Y_2\": \"speedcubing\", \"Y_3\": \"Rudolf Moorehead\"}]",
+        "answer": [
+            "speedcubing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "father_in_law(\"Clifford Reece\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4ed893ef-3c22-45d6-80ce-b7c97eecca86",
+        "question": "What is the occupation of the daughter-in-law of Roxanne Lam?",
+        "solution_traces": "[{\"Y_2\": \"environmental consultant\", \"Y_3\": \"Emelda Lam\"}]",
+        "answer": [
+            "environmental consultant"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "daughter_in_law(\"Roxanne Lam\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "10988492-ded2-457b-a947-9ffb6a5c5a1b",
+        "question": "What is the date of birth of the grandson of Rosendo Halstead?",
+        "solution_traces": "[{\"Y_3\": \"Richard Dees\", \"Y_2\": \"0278-08-31\"}, {\"Y_2\": \"0279-12-27\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_3\": \"Adam Dees\", \"Y_2\": \"0277-04-25\"}]",
+        "answer": [
+            "0277-04-25",
+            "0278-08-31",
+            "0279-12-27"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandson(\"Rosendo Halstead\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "27338341-169f-46d7-86a1-5f12de5c0f23",
+        "question": "What is the hobby of the great-grandmother of Edison Reece?",
+        "solution_traces": "[{\"Y_2\": \"meditation\", \"Y_3\": \"Robbie Lam\"}]",
+        "answer": [
+            "meditation"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandmother(\"Edison Reece\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "469d5929-1f33-4647-a207-ae91ed276d4f",
+        "question": "What is the occupation of the sibling of Clifford Halstead?",
+        "solution_traces": "[{\"Y_2\": \"academic librarian\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_3\": \"Kermit Halstead\", \"Y_2\": \"electronics engineer\"}, {\"Y_2\": \"geochemist\", \"Y_3\": \"Cherlyn Dees\"}, {\"Y_3\": \"Rhea Halstead\", \"Y_2\": \"lexicographer\"}]",
+        "answer": [
+            "academic librarian",
+            "electronics engineer",
+            "geochemist",
+            "lexicographer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sibling(\"Clifford Halstead\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f65c542e-c3e0-4bd3-994d-47dabb4331c0",
+        "question": "What is the occupation of the great-aunt of Bonnie Handley?",
+        "solution_traces": "[{\"Y_2\": \"academic librarian\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_3\": \"Rhea Halstead\", \"Y_2\": \"lexicographer\"}]",
+        "answer": [
+            "academic librarian",
+            "lexicographer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_aunt(\"Bonnie Handley\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cb04a074-a14e-44e3-bb8c-85f0c2ec6186",
+        "question": "What is the date of birth of the friend of Roxanne Lam?",
+        "solution_traces": "[{\"Y_2\": \"0233-06-01\", \"Y_3\": \"Robbie Lam\"}, {\"Y_2\": \"0234-04-21\", \"Y_3\": \"Alberto Lam\"}, {\"Y_3\": \"Adam Dees\", \"Y_2\": \"0277-04-25\"}]",
+        "answer": [
+            "0233-06-01",
+            "0234-04-21",
+            "0277-04-25"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(\"Roxanne Lam\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "08bb5e50-8af3-4cb3-a3db-940e03447091",
+        "question": "What is the occupation of the friend of Marcelina Dees?",
+        "solution_traces": "[{\"Y_2\": \"medical technical officer\", \"Y_3\": \"Clifford Halstead\"}, {\"Y_3\": \"Alvaro Dees\", \"Y_2\": \"chief marketing officer\"}]",
+        "answer": [
+            "chief marketing officer",
+            "medical technical officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(\"Marcelina Dees\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9cd26ccf-d6ca-45aa-8bbf-96e346473862",
+        "question": "What is the occupation of the son of Dorothea Quezada?",
+        "solution_traces": "[{\"Y_3\": \"Reggie Quezada\", \"Y_2\": \"training and development officer\"}]",
+        "answer": [
+            "training and development officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "son(\"Dorothea Quezada\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b4184045-f607-4fa6-9354-a7c404bcfcee",
+        "question": "What is the occupation of the grandchild of Winnie Halstead?",
+        "solution_traces": "[{\"Y_2\": \"academic librarian\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_3\": \"Rhea Halstead\", \"Y_2\": \"lexicographer\"}, {\"Y_3\": \"Kermit Halstead\", \"Y_2\": \"electronics engineer\"}, {\"Y_2\": \"geochemist\", \"Y_3\": \"Cherlyn Dees\"}, {\"Y_2\": \"medical technical officer\", \"Y_3\": \"Clifford Halstead\"}]",
+        "answer": [
+            "academic librarian",
+            "electronics engineer",
+            "geochemist",
+            "lexicographer",
+            "medical technical officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandchild(\"Winnie Halstead\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    }
+]

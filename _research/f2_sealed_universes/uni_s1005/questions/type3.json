@@ -1,0 +1,909 @@
+[
+    {
+        "id": "6d4ae838-e6e8-485f-b0dd-5e531058135b",
+        "question": "Who is the great-grandson of the daughter of Nelly Alanis?",
+        "solution_traces": "[{\"Y_2\": \"Dewitt Eddings\", \"Y_4\": \"Dominique Moyer\"}]",
+        "answer": [
+            "Dewitt Eddings"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandson(Y_4, Y_2)",
+                "daughter(\"Nelly Alanis\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6ef6c7cc-89f6-4411-a5a3-009dc9cd9def",
+        "question": "Who is the brother of the brother-in-law of Tamala Mello?",
+        "solution_traces": "[{\"Y_2\": \"Orville Mello\", \"Y_4\": \"Rudolf Mello\"}, {\"Y_4\": \"Antonio Mello\", \"Y_2\": \"Orville Mello\"}, {\"Y_4\": \"Antonio Mello\", \"Y_2\": \"Rudolf Mello\"}, {\"Y_4\": \"Antonio Mello\", \"Y_2\": \"Edison Mello\"}, {\"Y_4\": \"Orville Mello\", \"Y_2\": \"Antonio Mello\"}, {\"Y_2\": \"Edison Mello\", \"Y_4\": \"Orville Mello\"}, {\"Y_2\": \"Rudolf Mello\", \"Y_4\": \"Orville Mello\"}, {\"Y_2\": \"Antonio Mello\", \"Y_4\": \"Rudolf Mello\"}, {\"Y_2\": \"Edison Mello\", \"Y_4\": \"Rudolf Mello\"}]",
+        "answer": [
+            "Antonio Mello",
+            "Edison Mello",
+            "Orville Mello",
+            "Rudolf Mello"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "brother_in_law(\"Tamala Mello\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e734ff39-d7d6-4262-823b-2e8486dbd28c",
+        "question": "Who is the second aunt of the great-grandchild of Nelly Alanis?",
+        "solution_traces": "[{\"Y_2\": \"Margaret Hylton\", \"Y_4\": \"Victoria Eddings\"}, {\"Y_2\": \"Margaret Hylton\", \"Y_4\": \"Miki Green\"}]",
+        "answer": [
+            "Margaret Hylton"
+        ],
+        "prolog": {
+            "query": [
+                "second_aunt(Y_4, Y_2)",
+                "great_grandchild(\"Nelly Alanis\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b5a3aa43-0362-43ec-b2e4-96bd86764238",
+        "question": "Who is the friend of the child of Nydia Batista?",
+        "solution_traces": "[{\"Y_4\": \"Irvin Batista\", \"Y_2\": \"Joaquin Eddings\"}, {\"Y_4\": \"Irvin Batista\", \"Y_2\": \"Tod Mello\"}, {\"Y_4\": \"Irvin Batista\", \"Y_2\": \"Monika Townley\"}, {\"Y_4\": \"Irvin Batista\", \"Y_2\": \"Eduardo Moyer\"}]",
+        "answer": [
+            "Eduardo Moyer",
+            "Joaquin Eddings",
+            "Monika Townley",
+            "Tod Mello"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "child(\"Nydia Batista\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2ffaf84c-8235-4b48-aec7-5adccaba640a",
+        "question": "Who is the grandparent of the aunt of Mammie Rayford?",
+        "solution_traces": "[{\"Y_4\": \"Janis Moyer\", \"Y_2\": \"Deirdre Hylton\"}, {\"Y_4\": \"Janis Moyer\", \"Y_2\": \"Anton Hylton\"}]",
+        "answer": [
+            "Anton Hylton",
+            "Deirdre Hylton"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "aunt(\"Mammie Rayford\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a27d2b18-5b95-4c3f-853b-0301d3a44959",
+        "question": "Who is the cousin of the great-grandchild of Virgina Shiver?",
+        "solution_traces": "[{\"Y_2\": \"Kacey Green\", \"Y_4\": \"Dewitt Eddings\"}, {\"Y_4\": \"Kacey Green\", \"Y_2\": \"Dewitt Eddings\"}]",
+        "answer": [
+            "Dewitt Eddings",
+            "Kacey Green"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "great_grandchild(\"Virgina Shiver\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6b0a6b51-f910-4a30-ab16-cfa756bc36d8",
+        "question": "Who is the father of the grandson of Esperanza Molnar?",
+        "solution_traces": "[{\"Y_2\": \"Jerrold Mello\", \"Y_4\": \"Edison Mello\"}, {\"Y_2\": \"Jerrold Mello\", \"Y_4\": \"Orville Mello\"}, {\"Y_2\": \"Jerrold Mello\", \"Y_4\": \"Rudolf Mello\"}, {\"Y_2\": \"Jerrold Mello\", \"Y_4\": \"Antonio Mello\"}]",
+        "answer": [
+            "Jerrold Mello"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "grandson(\"Esperanza Molnar\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dbf9943f-c42e-4158-9f30-097de6971c41",
+        "question": "Who is the son of the father-in-law of Tiffany Townley?",
+        "solution_traces": "[{\"Y_2\": \"Marcelino Townley\", \"Y_4\": \"Wilfredo Townley\"}, {\"Y_2\": \"Cory Townley\", \"Y_4\": \"Wilfredo Townley\"}]",
+        "answer": [
+            "Cory Townley",
+            "Marcelino Townley"
+        ],
+        "prolog": {
+            "query": [
+                "son(Y_4, Y_2)",
+                "father_in_law(\"Tiffany Townley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fa7e059d-3358-4f7f-bf26-bb8b778ba95a",
+        "question": "Who is the friend of the mother of Aimee Townley?",
+        "solution_traces": "[{\"Y_2\": \"Nelly Alanis\", \"Y_4\": \"Monika Townley\"}, {\"Y_2\": \"Miki Green\", \"Y_4\": \"Monika Townley\"}, {\"Y_2\": \"Irvin Batista\", \"Y_4\": \"Monika Townley\"}]",
+        "answer": [
+            "Irvin Batista",
+            "Miki Green",
+            "Nelly Alanis"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "mother(\"Aimee Townley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b676268c-26be-4401-aa0a-005d151d8c95",
+        "question": "Who is the mother-in-law of the friend of Virgina Shiver?",
+        "solution_traces": "[{\"Y_4\": \"Joaquin Eddings\", \"Y_2\": \"Jacquline Moyer\"}]",
+        "answer": [
+            "Jacquline Moyer"
+        ],
+        "prolog": {
+            "query": [
+                "mother_in_law(Y_4, Y_2)",
+                "friend(\"Virgina Shiver\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "de2820b6-86a1-4191-8404-cb7c61486686",
+        "question": "Who is the aunt of the male cousin of Jerrold Mello?",
+        "solution_traces": "[{\"Y_2\": \"Janey Townley\", \"Y_4\": \"Roberto Townley\"}, {\"Y_4\": \"Roberto Townley\", \"Y_2\": \"Aimee Townley\"}, {\"Y_4\": \"Roberto Townley\", \"Y_2\": \"Harriette Mello\"}]",
+        "answer": [
+            "Aimee Townley",
+            "Harriette Mello",
+            "Janey Townley"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "male_cousin(\"Jerrold Mello\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "59caecbd-76a3-420d-8890-dcd1b939cd07",
+        "question": "Who is the sibling of the great-uncle of Irvin Batista?",
+        "solution_traces": "[{\"Y_4\": \"Edison Mello\", \"Y_2\": \"Antonio Mello\"}, {\"Y_4\": \"Edison Mello\", \"Y_2\": \"Rudolf Mello\"}, {\"Y_2\": \"Orville Mello\", \"Y_4\": \"Rudolf Mello\"}, {\"Y_4\": \"Orville Mello\", \"Y_2\": \"Antonio Mello\"}, {\"Y_2\": \"Edison Mello\", \"Y_4\": \"Orville Mello\"}, {\"Y_2\": \"Rudolf Mello\", \"Y_4\": \"Orville Mello\"}, {\"Y_2\": \"Antonio Mello\", \"Y_4\": \"Rudolf Mello\"}, {\"Y_4\": \"Edison Mello\", \"Y_2\": \"Orville Mello\"}, {\"Y_2\": \"Edison Mello\", \"Y_4\": \"Rudolf Mello\"}]",
+        "answer": [
+            "Antonio Mello",
+            "Edison Mello",
+            "Orville Mello",
+            "Rudolf Mello"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "great_uncle(\"Irvin Batista\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c64b8d5d-ec93-4a8c-8f2d-8d1c336cc4d2",
+        "question": "Who is the sister of the great-uncle of Orville Mello?",
+        "solution_traces": "[{\"Y_2\": \"Janey Townley\", \"Y_4\": \"Marcelino Townley\"}, {\"Y_2\": \"Harriette Mello\", \"Y_4\": \"Cory Townley\"}, {\"Y_2\": \"Harriette Mello\", \"Y_4\": \"Marcelino Townley\"}, {\"Y_4\": \"Marcelino Townley\", \"Y_2\": \"Aimee Townley\"}, {\"Y_4\": \"Cory Townley\", \"Y_2\": \"Aimee Townley\"}, {\"Y_2\": \"Janey Townley\", \"Y_4\": \"Cory Townley\"}]",
+        "answer": [
+            "Aimee Townley",
+            "Harriette Mello",
+            "Janey Townley"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "great_uncle(\"Orville Mello\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "39bb6c9a-74b8-4aed-a864-9fe09908dd6c",
+        "question": "Who is the brother-in-law of the parent of Nydia Batista?",
+        "solution_traces": "[{\"Y_4\": \"Golda Mello\", \"Y_2\": \"Orville Mello\"}, {\"Y_2\": \"Edison Mello\", \"Y_4\": \"Golda Mello\"}, {\"Y_2\": \"Rudolf Mello\", \"Y_4\": \"Golda Mello\"}]",
+        "answer": [
+            "Edison Mello",
+            "Orville Mello",
+            "Rudolf Mello"
+        ],
+        "prolog": {
+            "query": [
+                "brother_in_law(Y_4, Y_2)",
+                "parent(\"Nydia Batista\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "16724327-d7f1-4897-8671-9b3eee1eed38",
+        "question": "Who is the mother-in-law of the child of Nelly Alanis?",
+        "solution_traces": "[{\"Y_2\": \"Farrah Moyer\", \"Y_4\": \"Dominique Moyer\"}]",
+        "answer": [
+            "Farrah Moyer"
+        ],
+        "prolog": {
+            "query": [
+                "mother_in_law(Y_4, Y_2)",
+                "child(\"Nelly Alanis\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "69d4c47d-3e72-48b3-8352-f0b472f955a1",
+        "question": "Who is the father of the great-uncle of Orville Mello?",
+        "solution_traces": "[{\"Y_4\": \"Marcelino Townley\", \"Y_2\": \"Wilfredo Townley\"}, {\"Y_4\": \"Cory Townley\", \"Y_2\": \"Wilfredo Townley\"}]",
+        "answer": [
+            "Wilfredo Townley"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "great_uncle(\"Orville Mello\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "42fe1cba-70a1-44bc-a6dd-a7f464c4369f",
+        "question": "Who is the great-aunt of the child of Dick Rayford?",
+        "solution_traces": "[{\"Y_4\": \"Mammie Rayford\", \"Y_2\": \"Margaret Hylton\"}]",
+        "answer": [
+            "Margaret Hylton"
+        ],
+        "prolog": {
+            "query": [
+                "great_aunt(Y_4, Y_2)",
+                "child(\"Dick Rayford\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6530c919-756d-410e-a123-3d841e3d45c2",
+        "question": "Who is the great-grandchild of the great-grandmother of Ramiro Mello?",
+        "solution_traces": "[{\"Y_2\": \"Ramiro Mello\", \"Y_4\": \"Harriette Mello\"}, {\"Y_2\": \"Ramiro Mello\", \"Y_4\": \"Esperanza Molnar\"}, {\"Y_2\": \"Benito Mello\", \"Y_4\": \"Esperanza Molnar\"}, {\"Y_2\": \"Benito Mello\", \"Y_4\": \"Harriette Mello\"}, {\"Y_4\": \"Esperanza Molnar\", \"Y_2\": \"Nydia Batista\"}, {\"Y_4\": \"Harriette Mello\", \"Y_2\": \"Nydia Batista\"}]",
+        "answer": [
+            "Benito Mello",
+            "Nydia Batista",
+            "Ramiro Mello"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "great_grandmother(\"Ramiro Mello\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2481adc7-18ac-4c1b-b5d4-13caf2b8afae",
+        "question": "Who is the great-grandparent of the grandchild of Enid Mello?",
+        "solution_traces": "[{\"Y_2\": \"Esperanza Molnar\", \"Y_4\": \"Nydia Batista\"}, {\"Y_4\": \"Ramiro Mello\", \"Y_2\": \"Forrest Molnar\"}, {\"Y_4\": \"Nydia Batista\", \"Y_2\": \"Forrest Molnar\"}, {\"Y_4\": \"Nydia Batista\", \"Y_2\": \"Tod Mello\"}, {\"Y_2\": \"Tod Mello\", \"Y_4\": \"Benito Mello\"}, {\"Y_2\": \"Esperanza Molnar\", \"Y_4\": \"Benito Mello\"}, {\"Y_2\": \"Forrest Molnar\", \"Y_4\": \"Benito Mello\"}, {\"Y_2\": \"Harriette Mello\", \"Y_4\": \"Benito Mello\"}, {\"Y_2\": \"Harriette Mello\", \"Y_4\": \"Ramiro Mello\"}, {\"Y_4\": \"Nydia Batista\", \"Y_2\": \"Harriette Mello\"}, {\"Y_2\": \"Tod Mello\", \"Y_4\": \"Ramiro Mello\"}, {\"Y_2\": \"Esperanza Molnar\", \"Y_4\": \"Ramiro Mello\"}]",
+        "answer": [
+            "Esperanza Molnar",
+            "Forrest Molnar",
+            "Harriette Mello",
+            "Tod Mello"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandparent(Y_4, Y_2)",
+                "grandchild(\"Enid Mello\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "624a9cf5-f2a6-408c-a686-e9ec3ac6df59",
+        "question": "Who is the son of the cousin of Roberto Townley?",
+        "solution_traces": "[{\"Y_4\": \"Jerrold Mello\", \"Y_2\": \"Antonio Mello\"}, {\"Y_4\": \"Jerrold Mello\", \"Y_2\": \"Orville Mello\"}, {\"Y_2\": \"Edison Mello\", \"Y_4\": \"Jerrold Mello\"}, {\"Y_2\": \"Rudolf Mello\", \"Y_4\": \"Jerrold Mello\"}]",
+        "answer": [
+            "Antonio Mello",
+            "Edison Mello",
+            "Orville Mello",
+            "Rudolf Mello"
+        ],
+        "prolog": {
+            "query": [
+                "son(Y_4, Y_2)",
+                "cousin(\"Roberto Townley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "404f074e-fcb7-4a82-a669-ee677e4069ff",
+        "question": "Who is the nephew of the friend of Roberto Townley?",
+        "solution_traces": "[{\"Y_4\": \"Marlana Rayford\", \"Y_2\": \"Mack Moyer\"}, {\"Y_2\": \"Roberto Townley\", \"Y_4\": \"Harriette Mello\"}]",
+        "answer": [
+            "Mack Moyer",
+            "Roberto Townley"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "friend(\"Roberto Townley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e19bb094-8819-4670-94a1-0997f00c2c2f",
+        "question": "Who is the father-in-law of the mother of Victoria Eddings?",
+        "solution_traces": "[{\"Y_2\": \"Eduardo Moyer\", \"Y_4\": \"Jacquline Moyer\"}]",
+        "answer": [
+            "Eduardo Moyer"
+        ],
+        "prolog": {
+            "query": [
+                "father_in_law(Y_4, Y_2)",
+                "mother(\"Victoria Eddings\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a022191d-e6c0-442e-8ea5-68247dfdff3a",
+        "question": "Who is the aunt of the grandparent of Ramiro Mello?",
+        "solution_traces": "[{\"Y_2\": \"Janey Townley\", \"Y_4\": \"Jerrold Mello\"}, {\"Y_4\": \"Jerrold Mello\", \"Y_2\": \"Aimee Townley\"}]",
+        "answer": [
+            "Aimee Townley",
+            "Janey Townley"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "grandparent(\"Ramiro Mello\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d6c528d5-7422-4963-87d3-56ac1bc99738",
+        "question": "Who is the male first cousin once removed of the nephew of Aimee Townley?",
+        "solution_traces": "[{\"Y_4\": \"Roberto Townley\", \"Y_2\": \"Antonio Mello\"}, {\"Y_4\": \"Roberto Townley\", \"Y_2\": \"Orville Mello\"}, {\"Y_4\": \"Roberto Townley\", \"Y_2\": \"Edison Mello\"}, {\"Y_4\": \"Roberto Townley\", \"Y_2\": \"Rudolf Mello\"}]",
+        "answer": [
+            "Antonio Mello",
+            "Edison Mello",
+            "Orville Mello",
+            "Rudolf Mello"
+        ],
+        "prolog": {
+            "query": [
+                "male_first_cousin_once_removed(Y_4, Y_2)",
+                "nephew(\"Aimee Townley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b9d97d64-411a-4bb0-8f82-d6d718170f6a",
+        "question": "Who is the wife of the sibling of Marlana Rayford?",
+        "solution_traces": "[{\"Y_2\": \"Dominique Moyer\", \"Y_4\": \"Eduardo Moyer\"}]",
+        "answer": [
+            "Dominique Moyer"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "sibling(\"Marlana Rayford\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6a5cbcb5-64c7-4108-8e09-441a516b5d98",
+        "question": "Who is the great-uncle of the grandchild of Nelly Alanis?",
+        "solution_traces": "[{\"Y_2\": \"Jimmie Hylton\", \"Y_4\": \"Jeanette Moyer\"}, {\"Y_4\": \"Mack Moyer\", \"Y_2\": \"Angelo Hylton\"}, {\"Y_4\": \"Mack Moyer\", \"Y_2\": \"Jimmie Hylton\"}, {\"Y_2\": \"Angelo Hylton\", \"Y_4\": \"Jeanette Moyer\"}]",
+        "answer": [
+            "Angelo Hylton",
+            "Jimmie Hylton"
+        ],
+        "prolog": {
+            "query": [
+                "great_uncle(Y_4, Y_2)",
+                "grandchild(\"Nelly Alanis\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "11d042ec-faa6-401e-8f04-a661cafd1825",
+        "question": "Who is the husband of the great-grandparent of Rudolf Mello?",
+        "solution_traces": "[{\"Y_2\": \"Wilfredo Townley\", \"Y_4\": \"Monika Townley\"}]",
+        "answer": [
+            "Wilfredo Townley"
+        ],
+        "prolog": {
+            "query": [
+                "husband(Y_4, Y_2)",
+                "great_grandparent(\"Rudolf Mello\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3f7e3fe2-9aac-489f-b3c1-9aa9b3e69060",
+        "question": "Who is the sibling of the parent of Eduardo Moyer?",
+        "solution_traces": "[{\"Y_2\": \"Jimmie Hylton\", \"Y_4\": \"Farrah Moyer\"}, {\"Y_4\": \"Farrah Moyer\", \"Y_2\": \"Angelo Hylton\"}, {\"Y_2\": \"Margaret Hylton\", \"Y_4\": \"Farrah Moyer\"}]",
+        "answer": [
+            "Angelo Hylton",
+            "Jimmie Hylton",
+            "Margaret Hylton"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "parent(\"Eduardo Moyer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5977ad62-a5ba-4cf9-bbfd-e3cfd4ac6003",
+        "question": "Who is the mother of the aunt of Eduardo Moyer?",
+        "solution_traces": "[{\"Y_2\": \"Deirdre Hylton\", \"Y_4\": \"Margaret Hylton\"}]",
+        "answer": [
+            "Deirdre Hylton"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "aunt(\"Eduardo Moyer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4ac49bb4-6b8f-4575-b69d-8d323330ed78",
+        "question": "Who is the niece of the great-uncle of Mack Moyer?",
+        "solution_traces": "[{\"Y_2\": \"Marlana Rayford\", \"Y_4\": \"Jimmie Hylton\"}, {\"Y_4\": \"Angelo Hylton\", \"Y_2\": \"Janis Moyer\"}, {\"Y_2\": \"Janis Moyer\", \"Y_4\": \"Jimmie Hylton\"}, {\"Y_4\": \"Angelo Hylton\", \"Y_2\": \"Marlana Rayford\"}]",
+        "answer": [
+            "Janis Moyer",
+            "Marlana Rayford"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "great_uncle(\"Mack Moyer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    }
+]

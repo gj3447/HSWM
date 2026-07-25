@@ -1,0 +1,1132 @@
+[
+    {
+        "id": "1f986cb6-fe2e-4db9-ba5e-46ede30cc206",
+        "question": "How many friends does the father of the mother of the sister-in-law of Carrol Nagel have?",
+        "solution_traces": "[{\"Count_1\": 5, \"Y_7\": \"Tabetha Curiel\", \"Y_5\": \"Ming Curiel\", \"Y_3\": \"Antwan Garcia\"}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "father(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "sister_in_law(\"Carrol Nagel\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "47ce91aa-4867-4ce0-b09d-4fd92b8d18f2",
+        "question": "How many female cousins does the cousin of the grandchild of the friend of Frederick Camacho have?",
+        "solution_traces": "[{\"Y_3\": \"Jeffery Curiel\", \"Count_1\": 3, \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Jeffery Curiel\", \"Y_5\": \"Lucile Curiel\", \"Count_1\": 3, \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Kacey Nagel\", \"Count_1\": 2, \"Y_5\": \"Nick Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Michael Curiel\", \"Count_1\": 2, \"Y_5\": \"Sharolyn Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Count_1\": 3, \"Y_5\": \"Kacey Nagel\", \"Y_3\": \"Nick Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Michael Curiel\", \"Count_1\": 2, \"Y_5\": \"Nick Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Jeffery Curiel\", \"Count_1\": 3, \"Y_5\": \"Murray Nagel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Murray Nagel\", \"Y_5\": \"Lucile Curiel\", \"Count_1\": 2, \"Y_7\": \"Ming Curiel\"}, {\"Y_5\": \"Lucile Curiel\", \"Count_1\": 2, \"Y_3\": \"Sharolyn Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Lucile Curiel\", \"Count_1\": 2, \"Y_5\": \"Nick Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Murray Nagel\", \"Count_1\": 2, \"Y_5\": \"Sharolyn Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Kacey Nagel\", \"Count_1\": 2, \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Lucile Curiel\", \"Count_1\": 2, \"Y_5\": \"Sharolyn Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Nick Curiel\", \"Count_1\": 3, \"Y_5\": \"Murray Nagel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Jeffery Curiel\", \"Y_5\": \"Kacey Nagel\", \"Count_1\": 3, \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Kacey Nagel\", \"Y_5\": \"Lucile Curiel\", \"Count_1\": 2, \"Y_7\": \"Ming Curiel\"}, {\"Count_1\": 3, \"Y_5\": \"Lucile Curiel\", \"Y_3\": \"Nick Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Lucile Curiel\", \"Y_5\": \"Kacey Nagel\", \"Count_1\": 2, \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Murray Nagel\", \"Count_1\": 2, \"Y_5\": \"Nick Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Nick Curiel\", \"Count_1\": 3, \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Lucile Curiel\", \"Count_1\": 2, \"Y_5\": \"Murray Nagel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Sharolyn Curiel\", \"Count_1\": 2, \"Y_5\": \"Nick Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Count_1\": 2, \"Y_5\": \"Michael Curiel\", \"Y_3\": \"Sharolyn Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Jeffery Curiel\", \"Count_1\": 2, \"Y_7\": \"Ming Curiel\"}, {\"Count_1\": 2, \"Y_5\": \"Murray Nagel\", \"Y_3\": \"Sharolyn Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_5\": \"Kacey Nagel\", \"Count_1\": 2, \"Y_3\": \"Sharolyn Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Count_1\": 3, \"Y_3\": \"Nick Curiel\", \"Y_5\": \"Sharolyn Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Kacey Nagel\", \"Count_1\": 2, \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Kacey Nagel\", \"Count_1\": 2, \"Y_5\": \"Sharolyn Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Michael Curiel\", \"Count_1\": 2, \"Y_5\": \"Murray Nagel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Kacey Nagel\", \"Y_5\": \"Jeffery Curiel\", \"Count_1\": 2, \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Jeffery Curiel\", \"Count_1\": 3, \"Y_5\": \"Sharolyn Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Lucile Curiel\", \"Y_5\": \"Jeffery Curiel\", \"Count_1\": 2, \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Murray Nagel\", \"Y_5\": \"Jeffery Curiel\", \"Count_1\": 2, \"Y_7\": \"Ming Curiel\"}, {\"Y_3\": \"Murray Nagel\", \"Count_1\": 2, \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_5\": \"Jeffery Curiel\", \"Count_1\": 2, \"Y_3\": \"Sharolyn Curiel\", \"Y_7\": \"Ming Curiel\"}]",
+        "answer": [
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(female_cousin(Y_3, Y_1)), Count_1)",
+                "cousin(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "friend(\"Frederick Camacho\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "013c6c64-8454-4598-89c5-b88ff0ba4ead",
+        "question": "How many sisters-in-law does the mother-in-law of the child of the wife of Frederick Camacho have?",
+        "solution_traces": "[{\"Y_3\": \"Blair Gainey\", \"Y_7\": \"Francesca Camacho\", \"Y_5\": \"Ismael Camacho\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister_in_law(Y_3, Y_1)), Count_1)",
+                "mother_in_law(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "wife(\"Frederick Camacho\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "47ec7330-6b29-492e-9977-4eb953f8aacc",
+        "question": "How many great-grandparents does the son of the son-in-law of the daughter-in-law of Brett Butcher have?",
+        "solution_traces": "[{\"Y_5\": \"Pete Gainey\", \"Y_7\": \"Adele Butcher\", \"Y_3\": \"Joshua Gainey\", \"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "son(Y_5, Y_3)",
+                "son_in_law(Y_7, Y_5)",
+                "daughter_in_law(\"Brett Butcher\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4b81c7ef-286c-4396-bdb5-7552f6c30ea9",
+        "question": "How many cousins does the child of the son-in-law of the mother-in-law of Jules Beason have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_7\": \"Loretta Gainey\", \"Y_3\": \"Tena Brockway\", \"Y_5\": \"Donovan Brockway\"}, {\"Y_5\": \"Jules Beason\", \"Y_7\": \"Loretta Gainey\", \"Y_3\": \"Megan Beason\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "child(Y_5, Y_3)",
+                "son_in_law(Y_7, Y_5)",
+                "mother_in_law(\"Jules Beason\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "497a385a-89bc-4bfa-8c0b-1d3758495556",
+        "question": "How many male cousins does the friend of the nephew of the aunt of Zana Camacho have?",
+        "solution_traces": "[{\"Y_7\": \"Isabella Brockway\", \"Count_1\": 0, \"Y_3\": \"Frederick Camacho\", \"Y_5\": \"Joshua Gainey\"}, {\"Y_7\": \"Isabella Brockway\", \"Count_1\": 0, \"Y_5\": \"Joshua Gainey\", \"Y_3\": \"Kisha Curiel\"}, {\"Y_7\": \"Isabella Brockway\", \"Count_1\": 0, \"Y_3\": \"Pete Gainey\", \"Y_5\": \"Joshua Gainey\"}, {\"Y_5\": \"Joshua Gainey\", \"Y_7\": \"Johnna Beason\", \"Count_1\": 0, \"Y_3\": \"Abdul Curiel\"}, {\"Y_5\": \"Joshua Gainey\", \"Y_7\": \"Johnna Beason\", \"Y_3\": \"Sharolyn Curiel\", \"Count_1\": 4}, {\"Y_5\": \"Joshua Gainey\", \"Count_1\": 0, \"Y_7\": \"Johnna Beason\", \"Y_3\": \"Isabella Brockway\"}, {\"Y_7\": \"Isabella Brockway\", \"Count_1\": 0, \"Y_5\": \"Joshua Gainey\", \"Y_3\": \"Abdul Curiel\"}, {\"Y_7\": \"Isabella Brockway\", \"Y_3\": \"Sharolyn Curiel\", \"Count_1\": 4, \"Y_5\": \"Joshua Gainey\"}, {\"Y_7\": \"Isabella Brockway\", \"Y_3\": \"Isabella Brockway\", \"Count_1\": 0, \"Y_5\": \"Joshua Gainey\"}, {\"Y_5\": \"Joshua Gainey\", \"Count_1\": 0, \"Y_7\": \"Johnna Beason\", \"Y_3\": \"Pete Gainey\"}, {\"Y_5\": \"Joshua Gainey\", \"Y_7\": \"Johnna Beason\", \"Count_1\": 0, \"Y_3\": \"Kisha Curiel\"}, {\"Y_5\": \"Joshua Gainey\", \"Y_3\": \"Frederick Camacho\", \"Y_7\": \"Johnna Beason\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(male_cousin(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "aunt(\"Zana Camacho\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "96ebd3bb-b4bd-4ac4-b2ce-85326472b0c5",
+        "question": "How many husbands does the friend of the cousin of the male cousin of Sharolyn Curiel have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Murray Nagel\", \"Y_3\": \"Tena Brockway\"}, {\"Y_3\": \"Blair Gainey\", \"Y_5\": \"Lucile Curiel\", \"Y_7\": \"Murray Nagel\", \"Count_1\": 1}, {\"Y_3\": \"Blair Gainey\", \"Y_5\": \"Lucile Curiel\", \"Y_7\": \"Nick Curiel\", \"Count_1\": 1}, {\"Count_1\": 0, \"Y_5\": \"Sharolyn Curiel\", \"Y_3\": \"Carrol Nagel\", \"Y_7\": \"Nick Curiel\"}, {\"Count_1\": 0, \"Y_5\": \"Jeffery Curiel\", \"Y_7\": \"Michael Curiel\", \"Y_3\": \"Carrol Nagel\"}, {\"Y_3\": \"Pete Gainey\", \"Count_1\": 0, \"Y_7\": \"Michael Curiel\", \"Y_5\": \"Nick Curiel\"}, {\"Count_1\": 0, \"Y_7\": \"Michael Curiel\", \"Y_3\": \"Carrol Nagel\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Count_1\": 1, \"Y_7\": \"Michael Curiel\", \"Y_3\": \"Allyson Veliz\", \"Y_5\": \"Nick Curiel\"}, {\"Y_3\": \"Gabriele Curiel\", \"Count_1\": 1, \"Y_7\": \"Jeffery Curiel\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Count_1\": 0, \"Y_5\": \"Lucile Curiel\", \"Y_7\": \"Jeffery Curiel\", \"Y_3\": \"Donovan Brockway\"}, {\"Y_3\": \"Lucile Curiel\", \"Count_1\": 0, \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Jeffery Curiel\"}, {\"Count_1\": 0, \"Y_5\": \"Jeffery Curiel\", \"Y_7\": \"Murray Nagel\", \"Y_3\": \"Carrol Nagel\"}, {\"Y_3\": \"Pete Gainey\", \"Count_1\": 0, \"Y_7\": \"Murray Nagel\", \"Y_5\": \"Nick Curiel\"}, {\"Count_1\": 0, \"Y_5\": \"Kacey Nagel\", \"Y_3\": \"Nick Curiel\", \"Y_7\": \"Jeffery Curiel\"}, {\"Count_1\": 0, \"Y_7\": \"Murray Nagel\", \"Y_3\": \"Carrol Nagel\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Count_1\": 0, \"Y_5\": \"Kacey Nagel\", \"Y_3\": \"Nick Curiel\", \"Y_7\": \"Michael Curiel\"}, {\"Y_5\": \"Michael Curiel\", \"Y_7\": \"Jeffery Curiel\", \"Y_3\": \"Leigh Curiel\", \"Count_1\": 1}, {\"Count_1\": 1, \"Y_7\": \"Murray Nagel\", \"Y_3\": \"Allyson Veliz\", \"Y_5\": \"Nick Curiel\"}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Lucile Curiel\", \"Count_1\": 0, \"Y_7\": \"Murray Nagel\"}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Lucile Curiel\", \"Count_1\": 0, \"Y_7\": \"Nick Curiel\"}, {\"Count_1\": 0, \"Y_3\": \"Abdul Curiel\", \"Y_7\": \"Michael Curiel\", \"Y_5\": \"Nick Curiel\"}, {\"Y_5\": \"Kacey Nagel\", \"Y_3\": \"Nick Curiel\", \"Count_1\": 0, \"Y_7\": \"Nick Curiel\"}, {\"Y_5\": \"Jeffery Curiel\", \"Y_3\": \"Zana Camacho\", \"Y_7\": \"Michael Curiel\", \"Count_1\": 1}, {\"Y_3\": \"Pete Gainey\", \"Y_5\": \"Kacey Nagel\", \"Count_1\": 0, \"Y_7\": \"Nick Curiel\"}, {\"Count_1\": 0, \"Y_3\": \"Abdul Curiel\", \"Y_7\": \"Murray Nagel\", \"Y_5\": \"Nick Curiel\"}, {\"Y_3\": \"Gabriele Curiel\", \"Count_1\": 1, \"Y_5\": \"Sharolyn Curiel\", \"Y_7\": \"Nick Curiel\"}, {\"Count_1\": 0, \"Y_5\": \"Murray Nagel\", \"Y_7\": \"Jeffery Curiel\", \"Y_3\": \"Antwan Garcia\"}, {\"Count_1\": 0, \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Jeffery Curiel\", \"Y_3\": \"Tena Brockway\"}, {\"Y_5\": \"Jeffery Curiel\", \"Y_3\": \"Zana Camacho\", \"Y_7\": \"Murray Nagel\", \"Count_1\": 1}, {\"Y_3\": \"Blair Gainey\", \"Y_5\": \"Lucile Curiel\", \"Y_7\": \"Jeffery Curiel\", \"Count_1\": 1}, {\"Y_3\": \"Gabriele Curiel\", \"Count_1\": 1, \"Y_7\": \"Michael Curiel\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Count_1\": 1, \"Y_5\": \"Michael Curiel\", \"Y_3\": \"Leigh Curiel\", \"Y_7\": \"Nick Curiel\"}, {\"Y_3\": \"Miki Garcia\", \"Y_7\": \"Michael Curiel\", \"Y_5\": \"Nick Curiel\", \"Count_1\": 1}, {\"Y_5\": \"Murray Nagel\", \"Count_1\": 0, \"Y_3\": \"Antwan Garcia\", \"Y_7\": \"Nick Curiel\"}, {\"Y_5\": \"Lucile Curiel\", \"Y_3\": \"Kisha Curiel\", \"Y_7\": \"Nick Curiel\", \"Count_1\": 1}, {\"Y_5\": \"Lucile Curiel\", \"Y_7\": \"Murray Nagel\", \"Y_3\": \"Kisha Curiel\", \"Count_1\": 1}, {\"Y_3\": \"Joshua Gainey\", \"Count_1\": 0, \"Y_5\": \"Sharolyn Curiel\", \"Y_7\": \"Nick Curiel\"}, {\"Y_3\": \"Kacey Nagel\", \"Count_1\": 0, \"Y_7\": \"Michael Curiel\", \"Y_5\": \"Nick Curiel\"}, {\"Y_3\": \"Lucile Curiel\", \"Count_1\": 0, \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Murray Nagel\"}, {\"Y_3\": \"Lucile Curiel\", \"Y_5\": \"Michael Curiel\", \"Count_1\": 0, \"Y_7\": \"Nick Curiel\"}, {\"Y_3\": \"Gabriele Curiel\", \"Count_1\": 1, \"Y_7\": \"Murray Nagel\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Count_1\": 0, \"Y_5\": \"Lucile Curiel\", \"Y_7\": \"Murray Nagel\", \"Y_3\": \"Donovan Brockway\"}, {\"Y_5\": \"Lucile Curiel\", \"Count_1\": 0, \"Y_3\": \"Donovan Brockway\", \"Y_7\": \"Nick Curiel\"}, {\"Y_3\": \"Pete Gainey\", \"Y_5\": \"Kacey Nagel\", \"Count_1\": 0, \"Y_7\": \"Jeffery Curiel\"}, {\"Count_1\": 0, \"Y_7\": \"Michael Curiel\", \"Y_3\": \"Clayton Butcher\", \"Y_5\": \"Nick Curiel\"}, {\"Y_3\": \"Joshua Gainey\", \"Count_1\": 0, \"Y_7\": \"Jeffery Curiel\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Y_3\": \"Pete Gainey\", \"Y_5\": \"Kacey Nagel\", \"Count_1\": 0, \"Y_7\": \"Michael Curiel\"}, {\"Y_5\": \"Lucile Curiel\", \"Y_7\": \"Jeffery Curiel\", \"Y_3\": \"Kisha Curiel\", \"Count_1\": 1}, {\"Count_1\": 0, \"Y_5\": \"Murray Nagel\", \"Y_7\": \"Michael Curiel\", \"Y_3\": \"Antwan Garcia\"}, {\"Y_3\": \"Joshua Gainey\", \"Count_1\": 0, \"Y_7\": \"Michael Curiel\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Y_3\": \"Miki Garcia\", \"Y_7\": \"Murray Nagel\", \"Y_5\": \"Nick Curiel\", \"Count_1\": 1}, {\"Y_5\": \"Michael Curiel\", \"Y_7\": \"Murray Nagel\", \"Y_3\": \"Leigh Curiel\", \"Count_1\": 1}, {\"Y_3\": \"Kacey Nagel\", \"Count_1\": 0, \"Y_7\": \"Murray Nagel\", \"Y_5\": \"Nick Curiel\"}, {\"Count_1\": 0, \"Y_7\": \"Jeffery Curiel\", \"Y_3\": \"Carrol Nagel\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Y_3\": \"Maude Nagle\", \"Y_5\": \"Kacey Nagel\", \"Y_7\": \"Nick Curiel\", \"Count_1\": 1}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Lucile Curiel\", \"Count_1\": 0, \"Y_7\": \"Jeffery Curiel\"}, {\"Y_3\": \"Joshua Gainey\", \"Count_1\": 0, \"Y_7\": \"Murray Nagel\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Count_1\": 0, \"Y_7\": \"Murray Nagel\", \"Y_3\": \"Clayton Butcher\", \"Y_5\": \"Nick Curiel\"}, {\"Count_1\": 0, \"Y_5\": \"Jeffery Curiel\", \"Y_7\": \"Michael Curiel\", \"Y_3\": \"Julian Reinke\"}, {\"Y_3\": \"Maude Nagle\", \"Y_5\": \"Kacey Nagel\", \"Y_7\": \"Jeffery Curiel\", \"Count_1\": 1}, {\"Y_3\": \"Tena Brockway\", \"Y_5\": \"Michael Curiel\", \"Count_1\": 0, \"Y_7\": \"Nick Curiel\"}, {\"Y_3\": \"Allie Curiel\", \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Jeffery Curiel\", \"Count_1\": 1}, {\"Y_3\": \"Maude Nagle\", \"Y_5\": \"Kacey Nagel\", \"Y_7\": \"Michael Curiel\", \"Count_1\": 1}, {\"Count_1\": 0, \"Y_5\": \"Jeffery Curiel\", \"Y_7\": \"Murray Nagel\", \"Y_3\": \"Julian Reinke\"}, {\"Y_3\": \"Allie Curiel\", \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Murray Nagel\", \"Count_1\": 1}, {\"Y_3\": \"Allie Curiel\", \"Count_1\": 1, \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Nick Curiel\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(husband(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "male_cousin(\"Sharolyn Curiel\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "83861243-fcd6-4414-b5bc-1f0ae8ebf36f",
+        "question": "How many nephews does the sibling of the sister of the friend of Clayton Butcher have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_5\": \"Elvie Nagel\", \"Y_3\": \"Kennith Curiel\", \"Y_7\": \"Kennith Curiel\"}, {\"Count_1\": 3, \"Y_5\": \"Tabetha Curiel\", \"Y_7\": \"Kennith Curiel\", \"Y_3\": \"Elvie Nagel\"}, {\"Count_1\": 3, \"Y_5\": \"Tabetha Curiel\", \"Y_3\": \"Kennith Curiel\", \"Y_7\": \"Kennith Curiel\"}, {\"Y_5\": \"Elvie Nagel\", \"Count_1\": 4, \"Y_3\": \"Benny Curiel\", \"Y_7\": \"Kennith Curiel\"}, {\"Y_5\": \"Tabetha Curiel\", \"Count_1\": 4, \"Y_3\": \"Benny Curiel\", \"Y_7\": \"Kennith Curiel\"}, {\"Y_5\": \"Tabetha Curiel\", \"Y_3\": \"Ron Curiel\", \"Y_7\": \"Kennith Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Elvie Nagel\", \"Count_1\": 4, \"Y_7\": \"Kennith Curiel\", \"Y_3\": \"Tabetha Curiel\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_3\": \"Ron Curiel\", \"Y_7\": \"Kennith Curiel\", \"Count_1\": 2}]",
+        "answer": [
+            "2",
+            "3",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "sister(Y_7, Y_5)",
+                "friend(\"Clayton Butcher\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d7b8491c-61c7-46df-a8c1-ccb8b9d130dc",
+        "question": "How many uncles does the nephew of the sibling of the friend of Donovan Brockway have?",
+        "solution_traces": "[{\"Y_3\": \"Murray Nagel\", \"Count_1\": 3, \"Y_5\": \"Ron Curiel\", \"Y_7\": \"Benny Curiel\"}, {\"Y_3\": \"Murray Nagel\", \"Y_5\": \"Tabetha Curiel\", \"Count_1\": 3, \"Y_7\": \"Benny Curiel\"}, {\"Y_5\": \"Tabetha Curiel\", \"Y_3\": \"Nick Curiel\", \"Y_7\": \"Benny Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Murray Nagel\", \"Count_1\": 3, \"Y_5\": \"Kennith Curiel\", \"Y_7\": \"Benny Curiel\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_3\": \"Nick Curiel\", \"Y_7\": \"Benny Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Tabetha Curiel\", \"Y_7\": \"Benny Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Jeffery Curiel\", \"Y_5\": \"Elvie Nagel\", \"Y_7\": \"Benny Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Ron Curiel\", \"Y_7\": \"Benny Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Elvie Nagel\", \"Y_7\": \"Benny Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Jeffery Curiel\", \"Y_5\": \"Tabetha Curiel\", \"Y_7\": \"Benny Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Jeffery Curiel\", \"Y_5\": \"Kennith Curiel\", \"Y_7\": \"Benny Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Nick Curiel\", \"Y_5\": \"Kennith Curiel\", \"Y_7\": \"Benny Curiel\", \"Count_1\": 2}]",
+        "answer": [
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(uncle(Y_3, Y_1)), Count_1)",
+                "nephew(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "friend(\"Donovan Brockway\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "929746f5-4018-4db4-bf73-e175f3fa4d49",
+        "question": "How many friends does the sibling of the sister of the son-in-law of Clayton Butcher have?",
+        "solution_traces": "[{\"Y_3\": \"Pete Gainey\", \"Count_1\": 5, \"Y_7\": \"Pete Gainey\", \"Y_5\": \"Isabella Brockway\"}, {\"Y_3\": \"Isabella Brockway\", \"Count_1\": 5, \"Y_7\": \"Pete Gainey\", \"Y_5\": \"Johnna Beason\"}, {\"Y_3\": \"Pete Gainey\", \"Count_1\": 5, \"Y_7\": \"Pete Gainey\", \"Y_5\": \"Johnna Beason\"}, {\"Count_1\": 7, \"Y_7\": \"Pete Gainey\", \"Y_3\": \"Johnna Beason\", \"Y_5\": \"Isabella Brockway\"}]",
+        "answer": [
+            "5",
+            "7"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "sister(Y_7, Y_5)",
+                "son_in_law(\"Clayton Butcher\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d287eac4-9e8b-4fa1-9e88-67a52ae57ddd",
+        "question": "How many wives does the great-grandparent of the son of the friend of Lucile Curiel have?",
+        "solution_traces": "[{\"Y_5\": \"Joshua Gainey\", \"Count_1\": 1, \"Y_7\": \"Blair Gainey\", \"Y_3\": \"Hank Nagle\"}, {\"Y_7\": \"Kisha Curiel\", \"Y_3\": \"Ming Curiel\", \"Count_1\": 0, \"Y_5\": \"Angel Curiel\"}, {\"Y_3\": \"Abdul Curiel\", \"Y_7\": \"Kisha Curiel\", \"Y_5\": \"Angel Curiel\", \"Count_1\": 1}, {\"Count_1\": 0, \"Y_3\": \"Ming Curiel\", \"Y_7\": \"Michael Curiel\", \"Y_5\": \"Angel Curiel\"}, {\"Y_3\": \"Abdul Curiel\", \"Y_7\": \"Michael Curiel\", \"Y_5\": \"Angel Curiel\", \"Count_1\": 1}, {\"Y_5\": \"Joshua Gainey\", \"Count_1\": 0, \"Y_3\": \"Maude Nagle\", \"Y_7\": \"Blair Gainey\"}, {\"Y_5\": \"Joshua Gainey\", \"Count_1\": 0, \"Y_3\": \"Jacqueline Butcher\", \"Y_7\": \"Blair Gainey\"}, {\"Y_5\": \"Joshua Gainey\", \"Count_1\": 1, \"Y_7\": \"Blair Gainey\", \"Y_3\": \"Brett Butcher\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(wife(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "son(Y_7, Y_5)",
+                "friend(\"Lucile Curiel\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c6cb03f0-aea9-4a88-99e5-abad8078d88c",
+        "question": "How many great-grandparents does the cousin of the cousin of the niece of Johnna Beason have?",
+        "solution_traces": "[{\"Y_7\": \"Zana Camacho\", \"Count_1\": 4, \"Y_3\": \"Zana Camacho\", \"Y_5\": \"Tena Brockway\"}, {\"Y_5\": \"Joshua Gainey\", \"Y_3\": \"Megan Beason\", \"Count_1\": 0, \"Y_7\": \"Tena Brockway\"}, {\"Y_3\": \"Tena Brockway\", \"Count_1\": 0, \"Y_5\": \"Zana Camacho\", \"Y_7\": \"Tena Brockway\"}, {\"Y_7\": \"Zana Camacho\", \"Y_3\": \"Tena Brockway\", \"Count_1\": 0, \"Y_5\": \"Megan Beason\"}, {\"Y_7\": \"Zana Camacho\", \"Count_1\": 4, \"Y_5\": \"Tena Brockway\", \"Y_3\": \"Joshua Gainey\"}, {\"Y_7\": \"Zana Camacho\", \"Count_1\": 4, \"Y_3\": \"Zana Camacho\", \"Y_5\": \"Megan Beason\"}, {\"Count_1\": 4, \"Y_3\": \"Zana Camacho\", \"Y_5\": \"Megan Beason\", \"Y_7\": \"Tena Brockway\"}, {\"Y_5\": \"Joshua Gainey\", \"Y_3\": \"Tena Brockway\", \"Count_1\": 0, \"Y_7\": \"Tena Brockway\"}, {\"Y_3\": \"Tena Brockway\", \"Count_1\": 0, \"Y_5\": \"Megan Beason\", \"Y_7\": \"Tena Brockway\"}, {\"Count_1\": 4, \"Y_5\": \"Megan Beason\", \"Y_3\": \"Joshua Gainey\", \"Y_7\": \"Tena Brockway\"}, {\"Y_3\": \"Megan Beason\", \"Count_1\": 0, \"Y_5\": \"Zana Camacho\", \"Y_7\": \"Tena Brockway\"}, {\"Y_7\": \"Zana Camacho\", \"Count_1\": 0, \"Y_3\": \"Megan Beason\", \"Y_5\": \"Tena Brockway\"}, {\"Y_7\": \"Zana Camacho\", \"Count_1\": 4, \"Y_5\": \"Megan Beason\", \"Y_3\": \"Joshua Gainey\"}]",
+        "answer": [
+            "0",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "cousin(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "niece(\"Johnna Beason\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ee185323-dd3d-4f2b-ad03-894c7348c82b",
+        "question": "How many great-aunts does the child of the friend of the husband of Jacqueline Butcher have?",
+        "solution_traces": "[{\"Y_3\": \"Michael Curiel\", \"Count_1\": 0, \"Y_5\": \"Gabriele Curiel\", \"Y_7\": \"Brett Butcher\"}, {\"Count_1\": 2, \"Y_3\": \"Angel Curiel\", \"Y_7\": \"Brett Butcher\", \"Y_5\": \"Kisha Curiel\"}, {\"Y_3\": \"Lucile Curiel\", \"Count_1\": 0, \"Y_5\": \"Gabriele Curiel\", \"Y_7\": \"Brett Butcher\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_aunt(Y_3, Y_1)), Count_1)",
+                "child(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "husband(\"Jacqueline Butcher\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2f776af5-60f2-4419-a4bc-3145dd24e68c",
+        "question": "How many uncles does the friend of the female cousin of the friend of Gabriele Curiel have?",
+        "solution_traces": "[{\"Y_7\": \"Sharolyn Curiel\", \"Y_5\": \"Kacey Nagel\", \"Y_3\": \"Pete Gainey\", \"Count_1\": 0}, {\"Y_7\": \"Sharolyn Curiel\", \"Y_5\": \"Lucile Curiel\", \"Y_3\": \"Michael Curiel\", \"Count_1\": 2}, {\"Y_7\": \"Sharolyn Curiel\", \"Y_5\": \"Lucile Curiel\", \"Count_1\": 0, \"Y_3\": \"Kisha Curiel\"}, {\"Y_7\": \"Sharolyn Curiel\", \"Y_5\": \"Kacey Nagel\", \"Y_3\": \"Nick Curiel\", \"Count_1\": 2}, {\"Y_7\": \"Sharolyn Curiel\", \"Y_5\": \"Lucile Curiel\", \"Y_3\": \"Blair Gainey\", \"Count_1\": 0}, {\"Y_7\": \"Sharolyn Curiel\", \"Y_5\": \"Lucile Curiel\", \"Count_1\": 0, \"Y_3\": \"Donovan Brockway\"}, {\"Y_7\": \"Sharolyn Curiel\", \"Y_5\": \"Kacey Nagel\", \"Count_1\": 0, \"Y_3\": \"Maude Nagle\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(uncle(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "female_cousin(Y_7, Y_5)",
+                "friend(\"Gabriele Curiel\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e3dd6440-09fc-40cd-89e8-dfbcd2c46f8e",
+        "question": "How many children does the grandfather of the child of the aunt of Tena Brockway have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_7\": \"Johnna Beason\", \"Y_5\": \"Megan Beason\", \"Y_3\": \"Owen Gainey\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "grandfather(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "aunt(\"Tena Brockway\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "68a6b575-3bc3-42ff-8873-540113b5246d",
+        "question": "How many grandparents does the sibling of the daughter of the parent of Benny Curiel have?",
+        "solution_traces": "[{\"Y_5\": \"Elvie Nagel\", \"Y_7\": \"Abdul Curiel\", \"Y_3\": \"Kennith Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Elvie Nagel\", \"Y_3\": \"Ron Curiel\", \"Count_1\": 2, \"Y_7\": \"Ming Curiel\"}, {\"Y_5\": \"Tabetha Curiel\", \"Y_7\": \"Abdul Curiel\", \"Count_1\": 2, \"Y_3\": \"Elvie Nagel\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_7\": \"Abdul Curiel\", \"Count_1\": 2, \"Y_3\": \"Tabetha Curiel\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_7\": \"Abdul Curiel\", \"Y_3\": \"Benny Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Tabetha Curiel\", \"Y_3\": \"Elvie Nagel\", \"Count_1\": 2, \"Y_7\": \"Ming Curiel\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_3\": \"Ron Curiel\", \"Y_7\": \"Abdul Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Elvie Nagel\", \"Count_1\": 2, \"Y_3\": \"Kennith Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_5\": \"Tabetha Curiel\", \"Y_7\": \"Abdul Curiel\", \"Y_3\": \"Benny Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Elvie Nagel\", \"Count_1\": 2, \"Y_3\": \"Tabetha Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_5\": \"Tabetha Curiel\", \"Y_3\": \"Ron Curiel\", \"Y_7\": \"Abdul Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Tabetha Curiel\", \"Count_1\": 2, \"Y_3\": \"Kennith Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_5\": \"Tabetha Curiel\", \"Count_1\": 2, \"Y_3\": \"Benny Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_5\": \"Tabetha Curiel\", \"Y_7\": \"Abdul Curiel\", \"Y_3\": \"Kennith Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Elvie Nagel\", \"Count_1\": 2, \"Y_3\": \"Benny Curiel\", \"Y_7\": \"Ming Curiel\"}, {\"Y_5\": \"Tabetha Curiel\", \"Y_3\": \"Ron Curiel\", \"Count_1\": 2, \"Y_7\": \"Ming Curiel\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "daughter(Y_7, Y_5)",
+                "parent(\"Benny Curiel\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1a52f95e-d809-45e1-8827-d755555d380d",
+        "question": "How many children does the great-grandchild of the parent of the sister of Delores Reinke have?",
+        "solution_traces": "[{\"Y_3\": \"Blair Gainey\", \"Count_1\": 2, \"Y_7\": \"Maude Nagle\", \"Y_5\": \"Julian Reinke\"}, {\"Y_5\": \"Naomi Reinke\", \"Y_3\": \"Blair Gainey\", \"Y_7\": \"Maude Nagle\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "great_grandchild(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "sister(\"Delores Reinke\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "26f1206d-072f-4196-a8e9-434cff2a0fb3",
+        "question": "How many sons-in-law does the grandfather of the nephew of the sister of Isabella Brockway have?",
+        "solution_traces": "[{\"Y_5\": \"Joshua Gainey\", \"Y_7\": \"Johnna Beason\", \"Y_3\": \"Clayton Butcher\", \"Count_1\": 1}, {\"Y_5\": \"Joshua Gainey\", \"Count_1\": 2, \"Y_7\": \"Johnna Beason\", \"Y_3\": \"Owen Gainey\"}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(Y_3, Y_1)), Count_1)",
+                "grandfather(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "sister(\"Isabella Brockway\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8374a264-c80e-422d-91ca-9dad3b116b06",
+        "question": "How many sons does the son-in-law of the parent of the grandchild of Maude Nagle have?",
+        "solution_traces": "[{\"Y_3\": \"Pete Gainey\", \"Count_1\": 1, \"Y_5\": \"Clayton Butcher\", \"Y_7\": \"Blair Gainey\"}, {\"Y_5\": \"Adele Butcher\", \"Count_1\": 1, \"Y_3\": \"Pete Gainey\", \"Y_7\": \"Blair Gainey\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son(Y_3, Y_1)), Count_1)",
+                "son_in_law(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "grandchild(\"Maude Nagle\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3737d2d7-7d9a-476d-908e-0348cd76847f",
+        "question": "How many friends does the sibling of the aunt of the great-grandchild of Brett Butcher have?",
+        "solution_traces": "[{\"Count_1\": 7, \"Y_7\": \"Joshua Gainey\", \"Y_3\": \"Johnna Beason\", \"Y_5\": \"Isabella Brockway\"}, {\"Y_7\": \"Zana Camacho\", \"Y_3\": \"Pete Gainey\", \"Count_1\": 5, \"Y_5\": \"Isabella Brockway\"}, {\"Count_1\": 5, \"Y_7\": \"Joshua Gainey\", \"Y_3\": \"Isabella Brockway\", \"Y_5\": \"Johnna Beason\"}, {\"Y_3\": \"Pete Gainey\", \"Count_1\": 5, \"Y_7\": \"Joshua Gainey\", \"Y_5\": \"Johnna Beason\"}, {\"Y_7\": \"Zana Camacho\", \"Count_1\": 7, \"Y_3\": \"Johnna Beason\", \"Y_5\": \"Isabella Brockway\"}, {\"Y_7\": \"Zana Camacho\", \"Y_3\": \"Pete Gainey\", \"Count_1\": 5, \"Y_5\": \"Johnna Beason\"}, {\"Y_7\": \"Zana Camacho\", \"Count_1\": 5, \"Y_3\": \"Isabella Brockway\", \"Y_5\": \"Johnna Beason\"}, {\"Y_3\": \"Pete Gainey\", \"Count_1\": 5, \"Y_7\": \"Joshua Gainey\", \"Y_5\": \"Isabella Brockway\"}]",
+        "answer": [
+            "5",
+            "7"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "aunt(Y_7, Y_5)",
+                "great_grandchild(\"Brett Butcher\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "79277200-6fd5-4fbe-98e4-6c996d098b74",
+        "question": "How many siblings does the parent of the cousin of the child of Donovan Brockway have?",
+        "solution_traces": "[{\"Y_3\": \"Pete Gainey\", \"Count_1\": 2, \"Y_5\": \"Zana Camacho\", \"Y_7\": \"Tena Brockway\"}, {\"Y_3\": \"Blair Gainey\", \"Count_1\": 0, \"Y_5\": \"Zana Camacho\", \"Y_7\": \"Tena Brockway\"}, {\"Y_5\": \"Joshua Gainey\", \"Count_1\": 2, \"Y_3\": \"Pete Gainey\", \"Y_7\": \"Tena Brockway\"}, {\"Count_1\": 0, \"Y_5\": \"Megan Beason\", \"Y_3\": \"Jules Beason\", \"Y_7\": \"Tena Brockway\"}, {\"Y_5\": \"Joshua Gainey\", \"Y_3\": \"Blair Gainey\", \"Count_1\": 0, \"Y_7\": \"Tena Brockway\"}, {\"Y_3\": \"Johnna Beason\", \"Count_1\": 2, \"Y_5\": \"Megan Beason\", \"Y_7\": \"Tena Brockway\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "child(\"Donovan Brockway\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "cf0b1c5d-48bf-4522-9a48-ce37ce41d00b",
+        "question": "How many great-aunts does the granddaughter of the husband of the sister of Delores Reinke have?",
+        "solution_traces": "[{\"Y_5\": \"Hank Nagle\", \"Y_3\": \"Blair Gainey\", \"Y_7\": \"Maude Nagle\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_aunt(Y_3, Y_1)), Count_1)",
+                "granddaughter(Y_5, Y_3)",
+                "husband(Y_7, Y_5)",
+                "sister(\"Delores Reinke\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2c9e4304-dd81-4770-902a-8a8aa35c1193",
+        "question": "How many children does the brother-in-law of the friend of the male cousin of Jeffery Curiel have?",
+        "solution_traces": "[{\"Y_5\": \"Leigh Curiel\", \"Y_7\": \"Michael Curiel\", \"Y_3\": \"Benny Curiel\", \"Count_1\": 1}, {\"Y_3\": \"Kennith Curiel\", \"Y_5\": \"Leigh Curiel\", \"Y_7\": \"Michael Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Ron Curiel\", \"Y_5\": \"Allie Curiel\", \"Y_7\": \"Michael Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Kennith Curiel\", \"Y_5\": \"Allie Curiel\", \"Y_7\": \"Michael Curiel\", \"Count_1\": 2}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "brother_in_law(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "male_cousin(\"Jeffery Curiel\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9895f4b0-3915-4bc4-8e22-7619ff0f833f",
+        "question": "How many uncles does the great-grandchild of the grandparent of the sister-in-law of Gabriele Curiel have?",
+        "solution_traces": "[{\"Y_3\": \"Sharolyn Curiel\", \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Tabetha Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Nick Curiel\", \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Elvie Nagel\", \"Count_1\": 2}, {\"Y_3\": \"Sharolyn Curiel\", \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Elvie Nagel\", \"Count_1\": 2}, {\"Y_5\": \"Antwan Garcia\", \"Y_3\": \"Sharolyn Curiel\", \"Y_7\": \"Tabetha Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Antwan Garcia\", \"Y_3\": \"Nick Curiel\", \"Y_7\": \"Tabetha Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Antwan Garcia\", \"Y_7\": \"Tabetha Curiel\", \"Y_3\": \"Jeffery Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Antwan Garcia\", \"Y_7\": \"Elvie Nagel\", \"Y_3\": \"Michael Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Antwan Garcia\", \"Y_7\": \"Tabetha Curiel\", \"Y_3\": \"Michael Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Jeffery Curiel\", \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Elvie Nagel\", \"Count_1\": 2}, {\"Y_5\": \"Antwan Garcia\", \"Count_1\": 3, \"Y_3\": \"Murray Nagel\", \"Y_7\": \"Elvie Nagel\"}, {\"Y_3\": \"Kacey Nagel\", \"Count_1\": 3, \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Elvie Nagel\"}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Elvie Nagel\", \"Count_1\": 2}, {\"Y_3\": \"Lucile Curiel\", \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Elvie Nagel\", \"Count_1\": 2}, {\"Y_5\": \"Antwan Garcia\", \"Y_7\": \"Elvie Nagel\", \"Y_3\": \"Jeffery Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Antwan Garcia\", \"Y_3\": \"Lucile Curiel\", \"Y_7\": \"Tabetha Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Jeffery Curiel\", \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Tabetha Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Antwan Garcia\", \"Y_3\": \"Sharolyn Curiel\", \"Y_7\": \"Elvie Nagel\", \"Count_1\": 2}, {\"Y_3\": \"Murray Nagel\", \"Count_1\": 3, \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Tabetha Curiel\"}, {\"Y_5\": \"Antwan Garcia\", \"Count_1\": 3, \"Y_3\": \"Kacey Nagel\", \"Y_7\": \"Tabetha Curiel\"}, {\"Y_3\": \"Murray Nagel\", \"Count_1\": 3, \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Elvie Nagel\"}, {\"Y_3\": \"Nick Curiel\", \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Tabetha Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Lucile Curiel\", \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Tabetha Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Antwan Garcia\", \"Count_1\": 3, \"Y_3\": \"Kacey Nagel\", \"Y_7\": \"Elvie Nagel\"}, {\"Y_5\": \"Antwan Garcia\", \"Y_3\": \"Nick Curiel\", \"Y_7\": \"Elvie Nagel\", \"Count_1\": 2}, {\"Y_5\": \"Antwan Garcia\", \"Count_1\": 3, \"Y_3\": \"Murray Nagel\", \"Y_7\": \"Tabetha Curiel\"}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Tabetha Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Kacey Nagel\", \"Count_1\": 3, \"Y_5\": \"Miki Garcia\", \"Y_7\": \"Tabetha Curiel\"}, {\"Y_5\": \"Antwan Garcia\", \"Y_3\": \"Lucile Curiel\", \"Y_7\": \"Elvie Nagel\", \"Count_1\": 2}]",
+        "answer": [
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(uncle(Y_3, Y_1)), Count_1)",
+                "great_grandchild(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "sister_in_law(\"Gabriele Curiel\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a865df27-dec7-4832-8640-dab7df2f3fee",
+        "question": "How many female cousins does the grandson of the friend of the child of Ron Curiel have?",
+        "solution_traces": "[{\"Y_5\": \"Abdul Curiel\", \"Count_1\": 3, \"Y_3\": \"Jeffery Curiel\", \"Y_7\": \"Nick Curiel\"}, {\"Y_3\": \"Joshua Gainey\", \"Y_5\": \"Clayton Butcher\", \"Y_7\": \"Nick Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Abdul Curiel\", \"Y_3\": \"Michael Curiel\", \"Y_7\": \"Nick Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Benny Curiel\", \"Y_5\": \"Miki Garcia\", \"Count_1\": 0, \"Y_7\": \"Nick Curiel\"}, {\"Y_3\": \"Anibal Camacho\", \"Y_5\": \"Pete Gainey\", \"Count_1\": 0, \"Y_7\": \"Nick Curiel\"}, {\"Y_3\": \"Ron Curiel\", \"Y_5\": \"Miki Garcia\", \"Count_1\": 0, \"Y_7\": \"Nick Curiel\"}, {\"Y_5\": \"Abdul Curiel\", \"Y_3\": \"Murray Nagel\", \"Y_7\": \"Nick Curiel\", \"Count_1\": 2}, {\"Y_5\": \"Abdul Curiel\", \"Count_1\": 3, \"Y_3\": \"Nick Curiel\", \"Y_7\": \"Nick Curiel\"}, {\"Y_3\": \"Kennith Curiel\", \"Y_5\": \"Miki Garcia\", \"Count_1\": 0, \"Y_7\": \"Nick Curiel\"}]",
+        "answer": [
+            "0",
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(female_cousin(Y_3, Y_1)), Count_1)",
+                "grandson(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "child(\"Ron Curiel\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f3f56151-0e8a-4a6d-b58a-6165cc6a57a2",
+        "question": "How many uncles does the male cousin of the friend of the niece of Tabetha Curiel have?",
+        "solution_traces": "[{\"Y_3\": \"Murray Nagel\", \"Count_1\": 3, \"Y_7\": \"Kacey Nagel\", \"Y_5\": \"Nick Curiel\"}, {\"Y_3\": \"Murray Nagel\", \"Count_1\": 3, \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Lucile Curiel\"}, {\"Y_3\": \"Nick Curiel\", \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Lucile Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Jeffery Curiel\", \"Y_5\": \"Michael Curiel\", \"Y_7\": \"Lucile Curiel\", \"Count_1\": 2}, {\"Y_3\": \"Michael Curiel\", \"Y_7\": \"Kacey Nagel\", \"Y_5\": \"Nick Curiel\", \"Count_1\": 2}]",
+        "answer": [
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(uncle(Y_3, Y_1)), Count_1)",
+                "male_cousin(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "niece(\"Tabetha Curiel\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f45bf6fd-5212-4c4c-b2ee-35439a74aa5c",
+        "question": "How many sons does the grandparent of the child of the husband of Zana Camacho have?",
+        "solution_traces": "[{\"Y_5\": \"Anibal Camacho\", \"Y_3\": \"Blair Gainey\", \"Y_7\": \"Ismael Camacho\", \"Count_1\": 1}, {\"Y_5\": \"Anibal Camacho\", \"Count_1\": 1, \"Y_3\": \"Francesca Camacho\", \"Y_7\": \"Ismael Camacho\"}, {\"Y_5\": \"Anibal Camacho\", \"Count_1\": 1, \"Y_3\": \"Pete Gainey\", \"Y_7\": \"Ismael Camacho\"}, {\"Y_5\": \"Anibal Camacho\", \"Count_1\": 1, \"Y_3\": \"Frederick Camacho\", \"Y_7\": \"Ismael Camacho\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "husband(\"Zana Camacho\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3a0eb8e1-358f-4206-8b0e-99951b9dc2f6",
+        "question": "How many parents does the sibling of the wife of the father of Tena Brockway have?",
+        "solution_traces": "[{\"Y_3\": \"Pete Gainey\", \"Y_7\": \"Donovan Brockway\", \"Y_5\": \"Isabella Brockway\", \"Count_1\": 2}, {\"Y_7\": \"Donovan Brockway\", \"Y_3\": \"Johnna Beason\", \"Y_5\": \"Isabella Brockway\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "wife(Y_7, Y_5)",
+                "father(\"Tena Brockway\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7273fbc1-3770-4af5-b13c-f9c589316959",
+        "question": "How many sons-in-law does the great-grandparent of the nephew of the friend of Gabriele Curiel have?",
+        "solution_traces": "[{\"Y_5\": \"Joshua Gainey\", \"Count_1\": 1, \"Y_7\": \"Johnna Beason\", \"Y_3\": \"Hank Nagle\"}, {\"Y_5\": \"Joshua Gainey\", \"Y_7\": \"Johnna Beason\", \"Count_1\": 0, \"Y_3\": \"Brett Butcher\"}, {\"Y_5\": \"Joshua Gainey\", \"Y_7\": \"Johnna Beason\", \"Count_1\": 0, \"Y_3\": \"Jacqueline Butcher\"}, {\"Y_5\": \"Joshua Gainey\", \"Y_7\": \"Johnna Beason\", \"Y_3\": \"Maude Nagle\", \"Count_1\": 1}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "friend(\"Gabriele Curiel\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7667fab1-75b7-486a-b6ed-ce6c27914b47",
+        "question": "How many brothers does the daughter of the parent of the child of Ming Curiel have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_7\": \"Tabetha Curiel\", \"Y_5\": \"Ming Curiel\", \"Y_3\": \"Elvie Nagel\"}, {\"Count_1\": 3, \"Y_5\": \"Ming Curiel\", \"Y_7\": \"Benny Curiel\", \"Y_3\": \"Tabetha Curiel\"}, {\"Y_5\": \"Abdul Curiel\", \"Count_1\": 3, \"Y_7\": \"Kennith Curiel\", \"Y_3\": \"Tabetha Curiel\"}, {\"Count_1\": 3, \"Y_7\": \"Elvie Nagel\", \"Y_5\": \"Ming Curiel\", \"Y_3\": \"Tabetha Curiel\"}, {\"Count_1\": 3, \"Y_5\": \"Ming Curiel\", \"Y_7\": \"Ron Curiel\", \"Y_3\": \"Elvie Nagel\"}, {\"Y_5\": \"Abdul Curiel\", \"Count_1\": 3, \"Y_7\": \"Benny Curiel\", \"Y_3\": \"Elvie Nagel\"}, {\"Y_5\": \"Abdul Curiel\", \"Count_1\": 3, \"Y_7\": \"Kennith Curiel\", \"Y_3\": \"Elvie Nagel\"}, {\"Y_5\": \"Abdul Curiel\", \"Count_1\": 3, \"Y_7\": \"Benny Curiel\", \"Y_3\": \"Tabetha Curiel\"}, {\"Y_5\": \"Abdul Curiel\", \"Count_1\": 3, \"Y_7\": \"Elvie Nagel\", \"Y_3\": \"Elvie Nagel\"}, {\"Y_5\": \"Abdul Curiel\", \"Count_1\": 3, \"Y_7\": \"Elvie Nagel\", \"Y_3\": \"Tabetha Curiel\"}, {\"Count_1\": 3, \"Y_7\": \"Tabetha Curiel\", \"Y_5\": \"Ming Curiel\", \"Y_3\": \"Tabetha Curiel\"}, {\"Y_5\": \"Abdul Curiel\", \"Count_1\": 3, \"Y_7\": \"Ron Curiel\", \"Y_3\": \"Tabetha Curiel\"}, {\"Y_5\": \"Abdul Curiel\", \"Count_1\": 3, \"Y_7\": \"Ron Curiel\", \"Y_3\": \"Elvie Nagel\"}, {\"Count_1\": 3, \"Y_5\": \"Ming Curiel\", \"Y_7\": \"Benny Curiel\", \"Y_3\": \"Elvie Nagel\"}, {\"Count_1\": 3, \"Y_5\": \"Ming Curiel\", \"Y_7\": \"Kennith Curiel\", \"Y_3\": \"Elvie Nagel\"}, {\"Y_5\": \"Abdul Curiel\", \"Count_1\": 3, \"Y_7\": \"Tabetha Curiel\", \"Y_3\": \"Elvie Nagel\"}, {\"Count_1\": 3, \"Y_7\": \"Elvie Nagel\", \"Y_5\": \"Ming Curiel\", \"Y_3\": \"Elvie Nagel\"}, {\"Y_5\": \"Abdul Curiel\", \"Count_1\": 3, \"Y_7\": \"Tabetha Curiel\", \"Y_3\": \"Tabetha Curiel\"}, {\"Count_1\": 3, \"Y_5\": \"Ming Curiel\", \"Y_7\": \"Ron Curiel\", \"Y_3\": \"Tabetha Curiel\"}, {\"Count_1\": 3, \"Y_5\": \"Ming Curiel\", \"Y_7\": \"Kennith Curiel\", \"Y_3\": \"Tabetha Curiel\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "daughter(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "child(\"Ming Curiel\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    }
+]

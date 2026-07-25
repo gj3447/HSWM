@@ -1,0 +1,1132 @@
+[
+    {
+        "id": "272695a9-b60e-4a5b-8047-fcb047726a07",
+        "question": "How many sisters does the grandchild of the mother-in-law of the daughter of Harvey Parrott have?",
+        "solution_traces": "[{\"Y_7\": \"Theda Healey\", \"Y_3\": \"Heather Healey\", \"Y_5\": \"Enid Healey\", \"Count_1\": 3}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Brigida Healey\", \"Y_5\": \"Enid Healey\", \"Count_1\": 3}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Viva Healey\", \"Y_5\": \"Enid Healey\", \"Count_1\": 3}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Enid Healey\", \"Count_1\": 3}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Danilo Healey\", \"Count_1\": 4, \"Y_5\": \"Enid Healey\"}, {\"Y_7\": \"Theda Healey\", \"Count_1\": 0, \"Y_3\": \"Phil Drayton\", \"Y_5\": \"Enid Healey\"}]",
+        "answer": [
+            "0",
+            "3",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "mother_in_law(Y_7, Y_5)",
+                "daughter(\"Harvey Parrott\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "bbf17fe6-0d69-459d-b449-b66c37f04063",
+        "question": "How many grandfathers does the brother-in-law of the grandparent of the grandson of Bethany Faber have?",
+        "solution_traces": "[{\"Y_3\": \"Stevie Shields\", \"Count_1\": 1, \"Y_7\": \"Timmy Faber\", \"Y_5\": \"Lyndon Faber\"}, {\"Y_3\": \"Stevie Shields\", \"Count_1\": 1, \"Y_7\": \"Logan Faber\", \"Y_5\": \"Lyndon Faber\"}, {\"Y_7\": \"Neil Faber\", \"Y_3\": \"Stevie Shields\", \"Count_1\": 1, \"Y_5\": \"Lyndon Faber\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "brother_in_law(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "grandson(\"Bethany Faber\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c86cd036-a6c7-468f-8373-6ca14ccd0622",
+        "question": "How many children does the son-in-law of the great-grandparent of the nephew of Danilo Healey have?",
+        "solution_traces": "[{\"Count_1\": 5, \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Delbert Kimball\", \"Y_3\": \"Jeffery Healey\"}, {\"Count_1\": 1, \"Y_7\": \"Delbert Kimball\", \"Y_5\": \"Enid Healey\", \"Y_3\": \"Lon Drayton\"}, {\"Count_1\": 5, \"Y_7\": \"Reyes Kimball\", \"Y_5\": \"Antionette Parrott\", \"Y_3\": \"Jeffery Healey\"}, {\"Count_1\": 5, \"Y_7\": \"Delbert Kimball\", \"Y_5\": \"Antionette Parrott\", \"Y_3\": \"Jeffery Healey\"}, {\"Y_7\": \"Reyes Kimball\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_3\": \"Lon Drayton\"}, {\"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_7\": \"Delbert Kimball\", \"Y_3\": \"Lon Drayton\"}, {\"Count_1\": 5, \"Y_7\": \"Reyes Kimball\", \"Y_5\": \"Harvey Parrott\", \"Y_3\": \"Jeffery Healey\"}, {\"Y_7\": \"Reyes Kimball\", \"Count_1\": 1, \"Y_5\": \"Enid Healey\", \"Y_3\": \"Lon Drayton\"}]",
+        "answer": [
+            "1",
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "son_in_law(Y_5, Y_3)",
+                "great_grandparent(Y_7, Y_5)",
+                "nephew(\"Danilo Healey\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a026ea28-c30a-476c-95db-bde1a956130a",
+        "question": "How many siblings does the sister-in-law of the parent of the grandchild of Vito Mcwhorter have?",
+        "solution_traces": "[{\"Y_3\": \"Vanessa Faber\", \"Y_7\": \"Maryann Faber\", \"Y_5\": \"Catina Faber\", \"Count_1\": 3}, {\"Count_1\": 3, \"Y_3\": \"Vanessa Faber\", \"Y_7\": \"Logan Faber\", \"Y_5\": \"Catina Faber\"}, {\"Count_1\": 1, \"Y_3\": \"Catina Faber\", \"Y_7\": \"Pamula Mcwhorter\", \"Y_5\": \"Natasha Mcwhorter\"}, {\"Y_7\": \"Neil Faber\", \"Y_3\": \"Vanessa Faber\", \"Y_5\": \"Catina Faber\", \"Count_1\": 3}]",
+        "answer": [
+            "1",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "sister_in_law(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "grandchild(\"Vito Mcwhorter\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1b20d781-764f-483f-8183-132ed42c5208",
+        "question": "How many siblings does the sibling of the friend of the friend of Harvey Parrott have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Charmain Kimball\", \"Y_7\": \"Viva Healey\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 4, \"Y_3\": \"Delbert Kimball\", \"Y_7\": \"Viva Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_3\": \"Stevie Shields\", \"Count_1\": 1, \"Y_5\": \"Bethany Faber\", \"Y_7\": \"Edwin Faber\"}, {\"Count_1\": 4, \"Y_3\": \"Viva Healey\", \"Y_5\": \"Danilo Healey\", \"Y_7\": \"Viva Healey\"}, {\"Count_1\": 4, \"Y_3\": \"Deirdre Kimball\", \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Viva Healey\"}, {\"Count_1\": 4, \"Y_3\": \"Naomi Rauch\", \"Y_7\": \"Viva Healey\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 4, \"Y_3\": \"Deirdre Kimball\", \"Y_7\": \"Viva Healey\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 4, \"Y_5\": \"Danilo Healey\", \"Y_3\": \"Heather Healey\", \"Y_7\": \"Viva Healey\"}, {\"Count_1\": 4, \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Brigida Healey\", \"Y_3\": \"Delbert Kimball\"}, {\"Y_3\": \"Rosemarie Rauch\", \"Count_1\": 1, \"Y_5\": \"Demetrius Rauch\", \"Y_7\": \"Viva Healey\"}, {\"Y_7\": \"Antionette Parrott\", \"Y_3\": \"Logan Faber\", \"Count_1\": 2, \"Y_5\": \"Maryann Faber\"}, {\"Y_3\": \"Neil Faber\", \"Y_7\": \"Antionette Parrott\", \"Count_1\": 2, \"Y_5\": \"Maryann Faber\"}, {\"Count_1\": 4, \"Y_3\": \"Brigida Healey\", \"Y_5\": \"Danilo Healey\", \"Y_7\": \"Viva Healey\"}, {\"Count_1\": 4, \"Y_3\": \"Reyes Kimball\", \"Y_7\": \"Viva Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 4, \"Y_3\": \"Reyes Kimball\", \"Y_7\": \"Viva Healey\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 4, \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Viva Healey\", \"Y_3\": \"Naomi Rauch\"}, {\"Count_1\": 4, \"Y_3\": \"Delbert Kimball\", \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Viva Healey\"}, {\"Count_1\": 4, \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Brigida Healey\", \"Y_3\": \"Deirdre Kimball\"}, {\"Count_1\": 4, \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Brigida Healey\", \"Y_3\": \"Naomi Rauch\"}, {\"Count_1\": 4, \"Y_3\": \"Naomi Rauch\", \"Y_7\": \"Viva Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_3\": \"Edwin Faber\", \"Count_1\": 3, \"Y_5\": \"Rob Faber\", \"Y_7\": \"Edwin Faber\"}, {\"Count_1\": 3, \"Y_5\": \"Rob Faber\", \"Y_3\": \"Vanessa Faber\", \"Y_7\": \"Edwin Faber\"}, {\"Count_1\": 4, \"Y_3\": \"Reyes Kimball\", \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Brigida Healey\"}, {\"Count_1\": 4, \"Y_3\": \"Charmain Kimball\", \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Viva Healey\"}, {\"Count_1\": 4, \"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Danilo Healey\", \"Y_7\": \"Viva Healey\"}, {\"Count_1\": 3, \"Y_3\": \"Alden Faber\", \"Y_5\": \"Rob Faber\", \"Y_7\": \"Edwin Faber\"}, {\"Count_1\": 4, \"Y_3\": \"Charmain Kimball\", \"Y_7\": \"Viva Healey\", \"Y_5\": \"Deirdre Kimball\"}]",
+        "answer": [
+            "1",
+            "2",
+            "3",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "friend(\"Harvey Parrott\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0bbca6cc-9c22-4a5e-bfc7-4d37f2414890",
+        "question": "How many sisters does the grandchild of the mother of the aunt of Heather Healey have?",
+        "solution_traces": "[{\"Y_7\": \"Debi Drayton\", \"Y_3\": \"Viva Healey\", \"Y_5\": \"Enid Healey\", \"Count_1\": 3}, {\"Y_7\": \"Debi Drayton\", \"Y_3\": \"Heather Healey\", \"Y_5\": \"Enid Healey\", \"Count_1\": 3}, {\"Count_1\": 4, \"Y_7\": \"Debi Drayton\", \"Y_3\": \"Danilo Healey\", \"Y_5\": \"Enid Healey\"}, {\"Y_7\": \"Debi Drayton\", \"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Enid Healey\", \"Count_1\": 3}, {\"Y_7\": \"Debi Drayton\", \"Y_3\": \"Brigida Healey\", \"Y_5\": \"Enid Healey\", \"Count_1\": 3}, {\"Y_7\": \"Debi Drayton\", \"Count_1\": 0, \"Y_3\": \"Phil Drayton\", \"Y_5\": \"Enid Healey\"}]",
+        "answer": [
+            "0",
+            "3",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "aunt(\"Heather Healey\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4c443590-a526-4e23-82ed-bb49eb2502af",
+        "question": "How many husbands does the great-aunt of the grandchild of the grandparent of Reyes Kimball have?",
+        "solution_traces": "[{\"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Ione Kimball\"}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_5\": \"Reyes Kimball\"}, {\"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_7\": \"Jeffery Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Jeffery Healey\"}, {\"Y_7\": \"Theda Healey\", \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Debi Drayton\", \"Count_1\": 1}, {\"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_7\": \"Jeffery Healey\", \"Y_5\": \"Delbert Kimball\"}, {\"Y_7\": \"Abe Kimball\", \"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_5\": \"Reyes Kimball\"}, {\"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_7\": \"Jeffery Healey\"}, {\"Count_1\": 1, \"Y_3\": \"Debi Drayton\", \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Jeffery Healey\"}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_5\": \"Deirdre Kimball\"}, {\"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_7\": \"Ione Kimball\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_7\": \"Ione Kimball\", \"Y_5\": \"Delbert Kimball\"}, {\"Y_7\": \"Abe Kimball\", \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Debi Drayton\", \"Count_1\": 1}, {\"Y_7\": \"Abe Kimball\", \"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_5\": \"Charmain Kimball\"}, {\"Count_1\": 1, \"Y_3\": \"Debi Drayton\", \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Ione Kimball\"}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_5\": \"Charmain Kimball\"}, {\"Y_7\": \"Abe Kimball\", \"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_5\": \"Deirdre Kimball\"}, {\"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_7\": \"Ione Kimball\"}, {\"Y_7\": \"Abe Kimball\", \"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_5\": \"Delbert Kimball\"}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Debi Drayton\", \"Count_1\": 1, \"Y_5\": \"Delbert Kimball\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(husband(Y_3, Y_1)), Count_1)",
+                "great_aunt(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "grandparent(\"Reyes Kimball\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f04ef49c-6a32-4e6c-94a8-61feaa63ebc8",
+        "question": "How many grandsons does the friend of the brother of the sibling of Vanessa Faber have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Charmain Kimball\", \"Y_5\": \"Rob Faber\", \"Y_7\": \"Edwin Faber\"}, {\"Count_1\": 0, \"Y_5\": \"Alden Faber\", \"Y_3\": \"Catina Faber\", \"Y_7\": \"Edwin Faber\"}, {\"Y_7\": \"Alden Faber\", \"Y_5\": \"Edwin Faber\", \"Count_1\": 0, \"Y_3\": \"Rob Faber\"}, {\"Count_1\": 3, \"Y_3\": \"Essie Faber\", \"Y_5\": \"Rob Faber\", \"Y_7\": \"Edwin Faber\"}, {\"Y_5\": \"Edwin Faber\", \"Y_7\": \"Rob Faber\", \"Count_1\": 2, \"Y_3\": \"Ione Kimball\"}, {\"Y_7\": \"Rob Faber\", \"Y_5\": \"Alden Faber\", \"Y_3\": \"Catina Faber\", \"Count_1\": 0}, {\"Y_7\": \"Alden Faber\", \"Y_5\": \"Edwin Faber\", \"Count_1\": 2, \"Y_3\": \"Ione Kimball\"}, {\"Y_7\": \"Alden Faber\", \"Y_5\": \"Edwin Faber\", \"Y_3\": \"Harvey Parrott\", \"Count_1\": 1}, {\"Y_7\": \"Alden Faber\", \"Count_1\": 0, \"Y_3\": \"Charmain Kimball\", \"Y_5\": \"Rob Faber\"}, {\"Y_7\": \"Rob Faber\", \"Y_5\": \"Alden Faber\", \"Count_1\": 1, \"Y_3\": \"Derek Burke\"}, {\"Y_3\": \"Derek Burke\", \"Y_5\": \"Alden Faber\", \"Count_1\": 1, \"Y_7\": \"Edwin Faber\"}, {\"Count_1\": 3, \"Y_5\": \"Rob Faber\", \"Y_3\": \"Lyndon Faber\", \"Y_7\": \"Edwin Faber\"}, {\"Y_5\": \"Edwin Faber\", \"Y_7\": \"Rob Faber\", \"Count_1\": 0, \"Y_3\": \"Rob Faber\"}, {\"Count_1\": 0, \"Y_5\": \"Alden Faber\", \"Y_3\": \"Junior Rauch\", \"Y_7\": \"Edwin Faber\"}, {\"Y_7\": \"Alden Faber\", \"Y_3\": \"Essie Faber\", \"Y_5\": \"Rob Faber\", \"Count_1\": 3}, {\"Count_1\": 0, \"Y_5\": \"Rob Faber\", \"Y_3\": \"Charity Faber\", \"Y_7\": \"Edwin Faber\"}, {\"Y_7\": \"Alden Faber\", \"Y_5\": \"Edwin Faber\", \"Y_3\": \"Allen Healey\", \"Count_1\": 2}, {\"Y_7\": \"Alden Faber\", \"Y_5\": \"Edwin Faber\", \"Y_3\": \"Bethany Faber\", \"Count_1\": 3}, {\"Y_7\": \"Alden Faber\", \"Count_1\": 0, \"Y_5\": \"Rob Faber\", \"Y_3\": \"Charity Faber\"}, {\"Y_7\": \"Alden Faber\", \"Y_5\": \"Rob Faber\", \"Y_3\": \"Lyndon Faber\", \"Count_1\": 3}, {\"Y_7\": \"Rob Faber\", \"Y_5\": \"Alden Faber\", \"Y_3\": \"Junior Rauch\", \"Count_1\": 0}, {\"Y_3\": \"Edwin Faber\", \"Count_1\": 0, \"Y_5\": \"Rob Faber\", \"Y_7\": \"Edwin Faber\"}, {\"Y_5\": \"Edwin Faber\", \"Y_7\": \"Rob Faber\", \"Y_3\": \"Harvey Parrott\", \"Count_1\": 1}, {\"Y_7\": \"Alden Faber\", \"Count_1\": 0, \"Y_5\": \"Rob Faber\", \"Y_3\": \"Edwin Faber\"}, {\"Y_7\": \"Rob Faber\", \"Y_5\": \"Alden Faber\", \"Y_3\": \"Vito Mcwhorter\", \"Count_1\": 2}, {\"Y_5\": \"Edwin Faber\", \"Y_7\": \"Rob Faber\", \"Y_3\": \"Bethany Faber\", \"Count_1\": 3}, {\"Y_3\": \"Vito Mcwhorter\", \"Y_5\": \"Alden Faber\", \"Count_1\": 2, \"Y_7\": \"Edwin Faber\"}, {\"Y_3\": \"Philip Kimball\", \"Y_5\": \"Alden Faber\", \"Count_1\": 1, \"Y_7\": \"Edwin Faber\"}, {\"Count_1\": 1, \"Y_7\": \"Rob Faber\", \"Y_5\": \"Alden Faber\", \"Y_3\": \"Philip Kimball\"}, {\"Y_5\": \"Edwin Faber\", \"Y_7\": \"Rob Faber\", \"Y_3\": \"Allen Healey\", \"Count_1\": 2}]",
+        "answer": [
+            "0",
+            "1",
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandson(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "sibling(\"Vanessa Faber\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "007b65dd-7134-4329-a36a-1dd8dee460e0",
+        "question": "How many great-grandparents does the uncle of the great-grandchild of the parent of Danilo Healey have?",
+        "solution_traces": "[{\"Y_7\": \"Theda Healey\", \"Count_1\": 4, \"Y_3\": \"Delbert Kimball\", \"Y_5\": \"Rosemarie Rauch\"}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Reyes Kimball\", \"Y_5\": \"Demetrius Rauch\", \"Count_1\": 4}, {\"Count_1\": 4, \"Y_3\": \"Reyes Kimball\", \"Y_5\": \"Demetrius Rauch\", \"Y_7\": \"Jeffery Healey\"}, {\"Count_1\": 4, \"Y_3\": \"Delbert Kimball\", \"Y_7\": \"Jeffery Healey\", \"Y_5\": \"Rosemarie Rauch\"}, {\"Y_7\": \"Theda Healey\", \"Y_5\": \"Demetrius Rauch\", \"Y_3\": \"Delbert Kimball\", \"Count_1\": 4}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Reyes Kimball\", \"Count_1\": 4, \"Y_5\": \"Rosemarie Rauch\"}, {\"Count_1\": 4, \"Y_3\": \"Reyes Kimball\", \"Y_7\": \"Jeffery Healey\", \"Y_5\": \"Rosemarie Rauch\"}, {\"Count_1\": 4, \"Y_3\": \"Delbert Kimball\", \"Y_5\": \"Demetrius Rauch\", \"Y_7\": \"Jeffery Healey\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "uncle(Y_5, Y_3)",
+                "great_grandchild(Y_7, Y_5)",
+                "parent(\"Danilo Healey\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b6b034a1-39b1-415b-bae0-4682310668ad",
+        "question": "How many great-grandparents does the grandson of the friend of the grandson of Harvey Parrott have?",
+        "solution_traces": "[{\"Y_7\": \"Danilo Healey\", \"Y_3\": \"Alden Faber\", \"Count_1\": 2, \"Y_5\": \"Eugenio Faber\"}, {\"Y_7\": \"Danilo Healey\", \"Count_1\": 4, \"Y_5\": \"Shelly Vanpelt\", \"Y_3\": \"Timmy Faber\"}, {\"Y_7\": \"Danilo Healey\", \"Y_3\": \"Alden Faber\", \"Count_1\": 2, \"Y_5\": \"Debbie Shields\"}, {\"Y_7\": \"Danilo Healey\", \"Y_3\": \"Rob Faber\", \"Count_1\": 2, \"Y_5\": \"Debbie Shields\"}, {\"Y_7\": \"Danilo Healey\", \"Y_3\": \"Rob Faber\", \"Count_1\": 2, \"Y_5\": \"Eugenio Faber\"}, {\"Y_7\": \"Danilo Healey\", \"Count_1\": 2, \"Y_3\": \"Edwin Faber\", \"Y_5\": \"Debbie Shields\"}, {\"Y_7\": \"Danilo Healey\", \"Count_1\": 2, \"Y_3\": \"Edwin Faber\", \"Y_5\": \"Eugenio Faber\"}]",
+        "answer": [
+            "2",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "grandson(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "grandson(\"Harvey Parrott\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0a8a5af9-c337-469a-ae04-a0540dd16e63",
+        "question": "How many brothers does the brother of the sister of the friend of Essie Faber have?",
+        "solution_traces": "[{\"Y_7\": \"Rob Faber\", \"Y_3\": \"Rob Faber\", \"Count_1\": 2, \"Y_5\": \"Vanessa Faber\"}, {\"Y_3\": \"Edwin Faber\", \"Y_7\": \"Rob Faber\", \"Count_1\": 2, \"Y_5\": \"Vanessa Faber\"}, {\"Y_3\": \"Alden Faber\", \"Y_7\": \"Rob Faber\", \"Count_1\": 2, \"Y_5\": \"Vanessa Faber\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "sister(Y_7, Y_5)",
+                "friend(\"Essie Faber\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b4a6134b-7d41-4116-8f3c-af655cf30e12",
+        "question": "How many sisters does the grandfather of the niece of the aunt of Charmain Kimball have?",
+        "solution_traces": "[{\"Y_3\": \"Abe Kimball\", \"Count_1\": 0, \"Y_7\": \"Viva Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_5\": \"Naomi Rauch\", \"Count_1\": 1, \"Y_7\": \"Brigida Healey\", \"Y_3\": \"Jeffery Healey\"}, {\"Y_3\": \"Abe Kimball\", \"Y_5\": \"Naomi Rauch\", \"Count_1\": 0, \"Y_7\": \"Brigida Healey\"}, {\"Y_7\": \"Heather Healey\", \"Y_5\": \"Naomi Rauch\", \"Count_1\": 1, \"Y_3\": \"Jeffery Healey\"}, {\"Y_3\": \"Abe Kimball\", \"Y_7\": \"Heather Healey\", \"Y_5\": \"Naomi Rauch\", \"Count_1\": 0}, {\"Count_1\": 1, \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Viva Healey\", \"Y_3\": \"Jeffery Healey\"}, {\"Y_3\": \"Abe Kimball\", \"Count_1\": 0, \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Viva Healey\"}, {\"Y_3\": \"Jeffery Healey\", \"Count_1\": 1, \"Y_7\": \"Viva Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_3\": \"Jeffery Healey\", \"Y_7\": \"Heather Healey\", \"Count_1\": 1, \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 1, \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Brigida Healey\", \"Y_3\": \"Jeffery Healey\"}, {\"Y_3\": \"Abe Kimball\", \"Count_1\": 0, \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Brigida Healey\"}, {\"Y_3\": \"Abe Kimball\", \"Y_7\": \"Heather Healey\", \"Count_1\": 0, \"Y_5\": \"Deirdre Kimball\"}, {\"Y_5\": \"Naomi Rauch\", \"Count_1\": 1, \"Y_7\": \"Viva Healey\", \"Y_3\": \"Jeffery Healey\"}, {\"Y_3\": \"Abe Kimball\", \"Y_5\": \"Naomi Rauch\", \"Count_1\": 0, \"Y_7\": \"Viva Healey\"}, {\"Y_3\": \"Abe Kimball\", \"Count_1\": 0, \"Y_7\": \"Brigida Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_3\": \"Abe Kimball\", \"Y_7\": \"Heather Healey\", \"Count_1\": 0, \"Y_5\": \"Charmain Kimball\"}, {\"Y_3\": \"Jeffery Healey\", \"Count_1\": 1, \"Y_7\": \"Brigida Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 1, \"Y_7\": \"Heather Healey\", \"Y_5\": \"Charmain Kimball\", \"Y_3\": \"Jeffery Healey\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "grandfather(Y_5, Y_3)",
+                "niece(Y_7, Y_5)",
+                "aunt(\"Charmain Kimball\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a5323bde-117e-41c1-acc5-b39f98479d1b",
+        "question": "How many brothers does the sister of the great-granddaughter of the grandparent of Heather Healey have?",
+        "solution_traces": "[{\"Y_7\": \"Enid Healey\", \"Count_1\": 2, \"Y_3\": \"Naomi Rauch\", \"Y_5\": \"Charmain Kimball\"}, {\"Y_5\": \"Naomi Rauch\", \"Y_7\": \"Harvey Parrott\", \"Y_3\": \"Charmain Kimball\", \"Count_1\": 2}, {\"Y_7\": \"Antionette Parrott\", \"Y_5\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Deirdre Kimball\"}, {\"Y_7\": \"Antionette Parrott\", \"Y_5\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Naomi Rauch\"}, {\"Y_5\": \"Naomi Rauch\", \"Y_7\": \"Enid Healey\", \"Count_1\": 2, \"Y_3\": \"Deirdre Kimball\"}, {\"Y_7\": \"Allen Healey\", \"Y_5\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Deirdre Kimball\"}, {\"Y_5\": \"Naomi Rauch\", \"Y_7\": \"Allen Healey\", \"Count_1\": 2, \"Y_3\": \"Deirdre Kimball\"}, {\"Y_3\": \"Charmain Kimball\", \"Y_7\": \"Enid Healey\", \"Count_1\": 2, \"Y_5\": \"Deirdre Kimball\"}, {\"Y_7\": \"Antionette Parrott\", \"Count_1\": 2, \"Y_3\": \"Naomi Rauch\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Charmain Kimball\", \"Y_7\": \"Antionette Parrott\", \"Count_1\": 2}, {\"Y_3\": \"Charmain Kimball\", \"Y_7\": \"Allen Healey\", \"Count_1\": 2, \"Y_5\": \"Deirdre Kimball\"}, {\"Y_7\": \"Harvey Parrott\", \"Y_3\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_5\": \"Deirdre Kimball\"}, {\"Y_7\": \"Enid Healey\", \"Count_1\": 2, \"Y_3\": \"Naomi Rauch\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_5\": \"Naomi Rauch\", \"Y_7\": \"Antionette Parrott\", \"Count_1\": 2, \"Y_3\": \"Deirdre Kimball\"}, {\"Y_7\": \"Enid Healey\", \"Count_1\": 2, \"Y_3\": \"Deirdre Kimball\", \"Y_5\": \"Charmain Kimball\"}, {\"Y_7\": \"Harvey Parrott\", \"Count_1\": 2, \"Y_3\": \"Naomi Rauch\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_3\": \"Charmain Kimball\", \"Y_7\": \"Antionette Parrott\", \"Count_1\": 2, \"Y_5\": \"Deirdre Kimball\"}, {\"Y_7\": \"Harvey Parrott\", \"Y_5\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Deirdre Kimball\"}, {\"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Charmain Kimball\", \"Y_7\": \"Enid Healey\", \"Count_1\": 2}, {\"Y_7\": \"Harvey Parrott\", \"Y_5\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Naomi Rauch\"}, {\"Y_7\": \"Allen Healey\", \"Y_5\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Naomi Rauch\"}, {\"Y_5\": \"Naomi Rauch\", \"Y_7\": \"Harvey Parrott\", \"Count_1\": 2, \"Y_3\": \"Deirdre Kimball\"}, {\"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Charmain Kimball\", \"Y_7\": \"Allen Healey\", \"Count_1\": 2}, {\"Y_7\": \"Allen Healey\", \"Count_1\": 2, \"Y_3\": \"Naomi Rauch\", \"Y_5\": \"Deirdre Kimball\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "sister(Y_5, Y_3)",
+                "great_granddaughter(Y_7, Y_5)",
+                "grandparent(\"Heather Healey\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "dbec0f91-6f24-4544-aea9-946c2c512b99",
+        "question": "How many great-grandmothers does the uncle of the child of the grandson of Ambrose Shields have?",
+        "solution_traces": "[{\"Y_7\": \"Alden Faber\", \"Y_3\": \"Rob Faber\", \"Count_1\": 1, \"Y_5\": \"Maryann Faber\"}, {\"Y_7\": \"Alden Faber\", \"Count_1\": 1, \"Y_3\": \"Edwin Faber\", \"Y_5\": \"Maryann Faber\"}, {\"Y_7\": \"Alden Faber\", \"Y_5\": \"Neil Faber\", \"Y_3\": \"Elias Mcwhorter\", \"Count_1\": 0}, {\"Y_7\": \"Alden Faber\", \"Y_5\": \"Logan Faber\", \"Y_3\": \"Rob Faber\", \"Count_1\": 1}, {\"Y_7\": \"Alden Faber\", \"Y_5\": \"Logan Faber\", \"Count_1\": 1, \"Y_3\": \"Edwin Faber\"}, {\"Y_3\": \"Edwin Faber\", \"Y_5\": \"Timmy Faber\", \"Y_7\": \"Rob Faber\", \"Count_1\": 1}, {\"Y_5\": \"Timmy Faber\", \"Y_7\": \"Rob Faber\", \"Count_1\": 1, \"Y_3\": \"Alden Faber\"}, {\"Y_7\": \"Alden Faber\", \"Y_3\": \"Elias Mcwhorter\", \"Count_1\": 0, \"Y_5\": \"Maryann Faber\"}, {\"Y_7\": \"Alden Faber\", \"Y_5\": \"Neil Faber\", \"Count_1\": 1, \"Y_3\": \"Edwin Faber\"}, {\"Y_7\": \"Alden Faber\", \"Y_5\": \"Neil Faber\", \"Count_1\": 1, \"Y_3\": \"Rob Faber\"}, {\"Y_7\": \"Alden Faber\", \"Y_5\": \"Logan Faber\", \"Y_3\": \"Elias Mcwhorter\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandmother(Y_3, Y_1)), Count_1)",
+                "uncle(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "grandson(\"Ambrose Shields\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1d7b3cc4-bf3c-46e0-b503-1e5cfd071a25",
+        "question": "How many great-granddaughters does the great-grandparent of the grandson of the grandparent of Deirdre Kimball have?",
+        "solution_traces": "[{\"Y_3\": \"Enid Healey\", \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Jeffery Healey\", \"Count_1\": 3}, {\"Y_7\": \"Theda Healey\", \"Count_1\": 3, \"Y_3\": \"Enid Healey\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 3, \"Y_3\": \"Antionette Parrott\", \"Y_7\": \"Ione Kimball\", \"Y_5\": \"Delbert Kimball\"}, {\"Y_3\": \"Harvey Parrott\", \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Ione Kimball\", \"Count_1\": 3}, {\"Y_3\": \"Allen Healey\", \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Jeffery Healey\", \"Count_1\": 3}, {\"Y_7\": \"Abe Kimball\", \"Y_3\": \"Harvey Parrott\", \"Y_5\": \"Reyes Kimball\", \"Count_1\": 3}, {\"Y_7\": \"Abe Kimball\", \"Count_1\": 3, \"Y_3\": \"Antionette Parrott\", \"Y_5\": \"Delbert Kimball\"}, {\"Y_7\": \"Abe Kimball\", \"Y_3\": \"Harvey Parrott\", \"Count_1\": 3, \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 3, \"Y_3\": \"Harvey Parrott\", \"Y_7\": \"Ione Kimball\", \"Y_5\": \"Delbert Kimball\"}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Harvey Parrott\", \"Count_1\": 3, \"Y_5\": \"Delbert Kimball\"}, {\"Y_3\": \"Harvey Parrott\", \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Jeffery Healey\", \"Count_1\": 3}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Allen Healey\", \"Y_5\": \"Reyes Kimball\", \"Count_1\": 3}, {\"Count_1\": 3, \"Y_3\": \"Enid Healey\", \"Y_7\": \"Jeffery Healey\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 3, \"Y_3\": \"Antionette Parrott\", \"Y_7\": \"Jeffery Healey\", \"Y_5\": \"Delbert Kimball\"}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Enid Healey\", \"Y_5\": \"Reyes Kimball\", \"Count_1\": 3}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Antionette Parrott\", \"Y_5\": \"Reyes Kimball\", \"Count_1\": 3}, {\"Count_1\": 3, \"Y_3\": \"Allen Healey\", \"Y_7\": \"Ione Kimball\", \"Y_5\": \"Delbert Kimball\"}, {\"Y_7\": \"Abe Kimball\", \"Count_1\": 3, \"Y_3\": \"Enid Healey\", \"Y_5\": \"Delbert Kimball\"}, {\"Y_3\": \"Allen Healey\", \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Ione Kimball\", \"Count_1\": 3}, {\"Count_1\": 3, \"Y_3\": \"Allen Healey\", \"Y_7\": \"Jeffery Healey\", \"Y_5\": \"Delbert Kimball\"}, {\"Y_3\": \"Antionette Parrott\", \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Jeffery Healey\", \"Count_1\": 3}, {\"Y_7\": \"Theda Healey\", \"Count_1\": 3, \"Y_3\": \"Antionette Parrott\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 3, \"Y_3\": \"Enid Healey\", \"Y_7\": \"Ione Kimball\", \"Y_5\": \"Delbert Kimball\"}, {\"Y_3\": \"Antionette Parrott\", \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Ione Kimball\", \"Count_1\": 3}, {\"Y_7\": \"Abe Kimball\", \"Count_1\": 3, \"Y_3\": \"Allen Healey\", \"Y_5\": \"Delbert Kimball\"}, {\"Y_3\": \"Enid Healey\", \"Y_5\": \"Reyes Kimball\", \"Y_7\": \"Ione Kimball\", \"Count_1\": 3}, {\"Y_7\": \"Abe Kimball\", \"Y_3\": \"Enid Healey\", \"Y_5\": \"Reyes Kimball\", \"Count_1\": 3}, {\"Y_7\": \"Abe Kimball\", \"Y_3\": \"Antionette Parrott\", \"Y_5\": \"Reyes Kimball\", \"Count_1\": 3}, {\"Y_7\": \"Abe Kimball\", \"Y_3\": \"Allen Healey\", \"Y_5\": \"Reyes Kimball\", \"Count_1\": 3}, {\"Y_7\": \"Theda Healey\", \"Y_3\": \"Harvey Parrott\", \"Y_5\": \"Reyes Kimball\", \"Count_1\": 3}, {\"Count_1\": 3, \"Y_3\": \"Harvey Parrott\", \"Y_7\": \"Jeffery Healey\", \"Y_5\": \"Delbert Kimball\"}, {\"Y_7\": \"Theda Healey\", \"Count_1\": 3, \"Y_3\": \"Allen Healey\", \"Y_5\": \"Delbert Kimball\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_granddaughter(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "grandson(Y_7, Y_5)",
+                "grandparent(\"Deirdre Kimball\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e0bd5b3e-8ddb-450a-b2aa-1902f0321f8b",
+        "question": "How many friends does the great-grandparent of the niece of the great-uncle of Rosemarie Rauch have?",
+        "solution_traces": "[{\"Y_7\": \"Danilo Healey\", \"Y_3\": \"Harvey Parrott\", \"Y_5\": \"Charmain Kimball\", \"Count_1\": 4}, {\"Y_7\": \"Danilo Healey\", \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Allen Healey\", \"Count_1\": 4}, {\"Y_7\": \"Danilo Healey\", \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Harvey Parrott\", \"Count_1\": 4}, {\"Y_7\": \"Danilo Healey\", \"Y_3\": \"Harvey Parrott\", \"Count_1\": 4, \"Y_5\": \"Deirdre Kimball\"}, {\"Y_7\": \"Danilo Healey\", \"Y_3\": \"Allen Healey\", \"Y_5\": \"Charmain Kimball\", \"Count_1\": 4}, {\"Y_7\": \"Danilo Healey\", \"Count_1\": 3, \"Y_5\": \"Charmain Kimball\", \"Y_3\": \"Antionette Parrott\"}, {\"Y_7\": \"Danilo Healey\", \"Y_5\": \"Charmain Kimball\", \"Y_3\": \"Enid Healey\", \"Count_1\": 2}, {\"Y_7\": \"Danilo Healey\", \"Count_1\": 2, \"Y_3\": \"Enid Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_7\": \"Danilo Healey\", \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Antionette Parrott\", \"Count_1\": 3}, {\"Y_7\": \"Danilo Healey\", \"Count_1\": 3, \"Y_3\": \"Antionette Parrott\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_7\": \"Danilo Healey\", \"Y_3\": \"Allen Healey\", \"Count_1\": 4, \"Y_5\": \"Deirdre Kimball\"}, {\"Y_7\": \"Danilo Healey\", \"Y_5\": \"Naomi Rauch\", \"Count_1\": 2, \"Y_3\": \"Enid Healey\"}]",
+        "answer": [
+            "2",
+            "3",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "niece(Y_7, Y_5)",
+                "great_uncle(\"Rosemarie Rauch\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4c5124d2-94ea-496d-8a6c-a3906005cfbc",
+        "question": "How many fathers does the great-granddaughter of the friend of the great-granddaughter of Dollie Burke have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Derek Burke\", \"Y_7\": \"Vanessa Faber\", \"Y_3\": \"Vanessa Faber\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father(Y_3, Y_1)), Count_1)",
+                "great_granddaughter(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "great_granddaughter(\"Dollie Burke\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "08f83703-67e8-4d19-b5e7-708fde3ee22b",
+        "question": "How many grandsons does the son of the great-grandmother of the sister of Naomi Rauch have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Enid Healey\", \"Y_3\": \"Jeffery Healey\"}, {\"Y_7\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_5\": \"Enid Healey\", \"Y_3\": \"Jeffery Healey\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandson(Y_3, Y_1)), Count_1)",
+                "son(Y_5, Y_3)",
+                "great_grandmother(Y_7, Y_5)",
+                "sister(\"Naomi Rauch\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "fb0e8337-94d9-4040-91f3-5387be941b8a",
+        "question": "How many fathers-in-law does the friend of the son of the mother-in-law of Natasha Mcwhorter have?",
+        "solution_traces": "[{\"Y_7\": \"Tammie Mcwhorter\", \"Count_1\": 0, \"Y_5\": \"Elias Mcwhorter\", \"Y_3\": \"Vanessa Faber\"}, {\"Count_1\": 1, \"Y_7\": \"Tammie Mcwhorter\", \"Y_5\": \"Elias Mcwhorter\", \"Y_3\": \"Theda Healey\"}, {\"Y_7\": \"Tammie Mcwhorter\", \"Count_1\": 0, \"Y_5\": \"Elias Mcwhorter\", \"Y_3\": \"Stevie Shields\"}, {\"Count_1\": 1, \"Y_7\": \"Tammie Mcwhorter\", \"Y_5\": \"Elias Mcwhorter\", \"Y_3\": \"Jeffery Healey\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father_in_law(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "son(Y_7, Y_5)",
+                "mother_in_law(\"Natasha Mcwhorter\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4d0e667d-3b9a-484e-a257-a7f053a15f4d",
+        "question": "How many siblings does the sibling of the friend of the wife of Francis Vanpelt have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_5\": \"Danilo Healey\", \"Y_7\": \"Shelly Vanpelt\", \"Y_3\": \"Viva Healey\"}, {\"Count_1\": 4, \"Y_3\": \"Reyes Kimball\", \"Y_7\": \"Shelly Vanpelt\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 4, \"Y_5\": \"Danilo Healey\", \"Y_7\": \"Shelly Vanpelt\", \"Y_3\": \"Heather Healey\"}, {\"Count_1\": 4, \"Y_3\": \"Charmain Kimball\", \"Y_7\": \"Shelly Vanpelt\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 4, \"Y_7\": \"Shelly Vanpelt\", \"Y_3\": \"Deirdre Kimball\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 4, \"Y_7\": \"Shelly Vanpelt\", \"Y_3\": \"Naomi Rauch\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 4, \"Y_5\": \"Danilo Healey\", \"Y_7\": \"Shelly Vanpelt\", \"Y_3\": \"Brigida Healey\"}, {\"Count_1\": 4, \"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Danilo Healey\", \"Y_7\": \"Shelly Vanpelt\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "wife(\"Francis Vanpelt\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b028c473-e4a8-476a-97e7-c385047b4b26",
+        "question": "How many male cousins does the granddaughter of the grandmother of the sister-in-law of Philip Kimball have?",
+        "solution_traces": "[{\"Y_3\": \"Isabell Kimball\", \"Count_1\": 1, \"Y_7\": \"Brigida Healey\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_7\": \"Heather Healey\", \"Count_1\": 1, \"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Heather Healey\", \"Count_1\": 1, \"Y_7\": \"Brigida Healey\", \"Y_5\": \"Enid Healey\"}, {\"Y_7\": \"Heather Healey\", \"Y_3\": \"Heather Healey\", \"Count_1\": 1, \"Y_5\": \"Enid Healey\"}, {\"Count_1\": 1, \"Y_7\": \"Heather Healey\", \"Y_3\": \"Viva Healey\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Brigida Healey\", \"Y_5\": \"Enid Healey\", \"Count_1\": 1, \"Y_7\": \"Viva Healey\"}, {\"Y_3\": \"Viva Healey\", \"Count_1\": 1, \"Y_7\": \"Brigida Healey\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Isabell Kimball\", \"Count_1\": 1, \"Y_7\": \"Brigida Healey\", \"Y_5\": \"Enid Healey\"}, {\"Count_1\": 1, \"Y_7\": \"Heather Healey\", \"Y_3\": \"Brigida Healey\", \"Y_5\": \"Enid Healey\"}, {\"Count_1\": 1, \"Y_7\": \"Heather Healey\", \"Y_3\": \"Viva Healey\", \"Y_5\": \"Enid Healey\"}, {\"Y_3\": \"Brigida Healey\", \"Y_5\": \"Antionette Parrott\", \"Count_1\": 1, \"Y_7\": \"Viva Healey\"}, {\"Y_3\": \"Viva Healey\", \"Y_5\": \"Antionette Parrott\", \"Count_1\": 1, \"Y_7\": \"Viva Healey\"}, {\"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Enid Healey\", \"Count_1\": 1, \"Y_7\": \"Viva Healey\"}, {\"Y_3\": \"Heather Healey\", \"Count_1\": 1, \"Y_7\": \"Brigida Healey\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Brigida Healey\", \"Count_1\": 1, \"Y_7\": \"Brigida Healey\", \"Y_5\": \"Antionette Parrott\"}, {\"Count_1\": 1, \"Y_7\": \"Heather Healey\", \"Y_3\": \"Brigida Healey\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Viva Healey\", \"Y_5\": \"Enid Healey\", \"Count_1\": 1, \"Y_7\": \"Viva Healey\"}, {\"Y_7\": \"Heather Healey\", \"Count_1\": 1, \"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Enid Healey\"}, {\"Y_5\": \"Antionette Parrott\", \"Count_1\": 1, \"Y_3\": \"Heather Healey\", \"Y_7\": \"Viva Healey\"}, {\"Y_3\": \"Viva Healey\", \"Count_1\": 1, \"Y_7\": \"Brigida Healey\", \"Y_5\": \"Enid Healey\"}, {\"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Antionette Parrott\", \"Count_1\": 1, \"Y_7\": \"Viva Healey\"}, {\"Y_7\": \"Heather Healey\", \"Y_3\": \"Heather Healey\", \"Count_1\": 1, \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Heather Healey\", \"Y_5\": \"Enid Healey\", \"Count_1\": 1, \"Y_7\": \"Viva Healey\"}, {\"Y_3\": \"Brigida Healey\", \"Count_1\": 1, \"Y_7\": \"Brigida Healey\", \"Y_5\": \"Enid Healey\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(male_cousin(Y_3, Y_1)), Count_1)",
+                "granddaughter(Y_5, Y_3)",
+                "grandmother(Y_7, Y_5)",
+                "sister_in_law(\"Philip Kimball\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "dbf95372-85f3-4313-ba49-6ad087ac0e17",
+        "question": "How many grandsons does the grandmother of the brother of the sibling of Naomi Rauch have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Theda Healey\", \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Reyes Kimball\"}, {\"Y_3\": \"Theda Healey\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 2, \"Y_7\": \"Delbert Kimball\", \"Y_5\": \"Reyes Kimball\", \"Y_3\": \"Ione Kimball\"}, {\"Count_1\": 2, \"Y_7\": \"Charmain Kimball\", \"Y_5\": \"Reyes Kimball\", \"Y_3\": \"Ione Kimball\"}, {\"Count_1\": 2, \"Y_7\": \"Reyes Kimball\", \"Y_3\": \"Ione Kimball\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 2, \"Y_7\": \"Charmain Kimball\", \"Y_3\": \"Ione Kimball\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 2, \"Y_3\": \"Theda Healey\", \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 2, \"Y_3\": \"Theda Healey\", \"Y_7\": \"Delbert Kimball\", \"Y_5\": \"Reyes Kimball\"}, {\"Count_1\": 2, \"Y_3\": \"Theda Healey\", \"Y_7\": \"Charmain Kimball\", \"Y_5\": \"Reyes Kimball\"}, {\"Count_1\": 2, \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Reyes Kimball\", \"Y_3\": \"Ione Kimball\"}, {\"Count_1\": 2, \"Y_3\": \"Ione Kimball\", \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Delbert Kimball\"}, {\"Y_3\": \"Theda Healey\", \"Y_7\": \"Reyes Kimball\", \"Count_1\": 2, \"Y_5\": \"Delbert Kimball\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandson(Y_3, Y_1)), Count_1)",
+                "grandmother(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "sibling(\"Naomi Rauch\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5d99e059-adc2-4634-b2d2-f21a08d61a67",
+        "question": "How many wives does the son of the grandparent of the niece of Brigida Healey have?",
+        "solution_traces": "[{\"Y_3\": \"Danilo Healey\", \"Y_5\": \"Theda Healey\", \"Y_7\": \"Deirdre Kimball\", \"Count_1\": 0}, {\"Y_5\": \"Ione Kimball\", \"Y_3\": \"Philip Kimball\", \"Count_1\": 1, \"Y_7\": \"Deirdre Kimball\"}, {\"Count_1\": 1, \"Y_5\": \"Abe Kimball\", \"Y_3\": \"Philip Kimball\", \"Y_7\": \"Naomi Rauch\"}, {\"Count_1\": 1, \"Y_5\": \"Abe Kimball\", \"Y_3\": \"Philip Kimball\", \"Y_7\": \"Deirdre Kimball\"}, {\"Y_5\": \"Jeffery Healey\", \"Y_3\": \"Danilo Healey\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 0}, {\"Y_5\": \"Jeffery Healey\", \"Y_3\": \"Danilo Healey\", \"Count_1\": 0, \"Y_7\": \"Naomi Rauch\"}, {\"Y_5\": \"Ione Kimball\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_3\": \"Philip Kimball\"}, {\"Y_5\": \"Theda Healey\", \"Y_3\": \"Danilo Healey\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 0}, {\"Y_3\": \"Danilo Healey\", \"Y_5\": \"Theda Healey\", \"Y_7\": \"Naomi Rauch\", \"Count_1\": 0}, {\"Y_5\": \"Ione Kimball\", \"Y_3\": \"Philip Kimball\", \"Count_1\": 1, \"Y_7\": \"Naomi Rauch\"}, {\"Count_1\": 1, \"Y_7\": \"Charmain Kimball\", \"Y_5\": \"Abe Kimball\", \"Y_3\": \"Philip Kimball\"}, {\"Y_5\": \"Jeffery Healey\", \"Y_3\": \"Danilo Healey\", \"Count_1\": 0, \"Y_7\": \"Deirdre Kimball\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(wife(Y_3, Y_1)), Count_1)",
+                "son(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "niece(\"Brigida Healey\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "84a1a20e-26a5-4b2b-a204-7444ab33067b",
+        "question": "How many fathers does the friend of the grandfather of the friend of Francis Vanpelt have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Derek Burke\", \"Y_3\": \"Vanessa Faber\", \"Y_7\": \"Stevie Shields\"}, {\"Count_1\": 1, \"Y_3\": \"Alden Faber\", \"Y_5\": \"Derek Burke\", \"Y_7\": \"Stevie Shields\"}, {\"Y_3\": \"Edwin Faber\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_7\": \"Brigida Healey\"}, {\"Count_1\": 1, \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Brigida Healey\", \"Y_3\": \"Viva Healey\"}, {\"Y_5\": \"Jeffery Healey\", \"Y_3\": \"Elias Mcwhorter\", \"Count_1\": 1, \"Y_7\": \"Deirdre Kimball\"}, {\"Count_1\": 1, \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Brigida Healey\", \"Y_3\": \"Brigida Healey\"}, {\"Count_1\": 1, \"Y_3\": \"Debi Drayton\", \"Y_5\": \"Allen Healey\", \"Y_7\": \"Brigida Healey\"}, {\"Count_1\": 0, \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Brigida Healey\", \"Y_3\": \"Antionette Parrott\"}, {\"Count_1\": 1, \"Y_5\": \"Derek Burke\", \"Y_7\": \"Stevie Shields\", \"Y_3\": \"Timmy Faber\"}, {\"Count_1\": 1, \"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Allen Healey\", \"Y_7\": \"Brigida Healey\"}, {\"Count_1\": 1, \"Y_5\": \"Derek Burke\", \"Y_3\": \"Bethany Faber\", \"Y_7\": \"Stevie Shields\"}, {\"Y_5\": \"Abe Kimball\", \"Y_7\": \"Deirdre Kimball\", \"Count_1\": 0, \"Y_3\": \"Junior Rauch\"}, {\"Count_1\": 0, \"Y_5\": \"Allen Healey\", \"Y_7\": \"Brigida Healey\", \"Y_3\": \"Eugenio Faber\"}, {\"Y_3\": \"Edwin Faber\", \"Count_1\": 1, \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Brigida Healey\"}, {\"Count_1\": 0, \"Y_5\": \"Derek Burke\", \"Y_3\": \"Francis Vanpelt\", \"Y_7\": \"Stevie Shields\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "grandfather(Y_7, Y_5)",
+                "friend(\"Francis Vanpelt\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "42ad6cfe-d9d4-4a6d-a126-d80eb0962f7b",
+        "question": "How many nephews does the aunt of the sister of the granddaughter of Ione Kimball have?",
+        "solution_traces": "[{\"Y_5\": \"Naomi Rauch\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Heather Healey\"}, {\"Y_7\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Heather Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 2, \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Deirdre Kimball\", \"Y_3\": \"Brigida Healey\"}, {\"Y_3\": \"Viva Healey\", \"Y_5\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Heather Healey\", \"Count_1\": 2, \"Y_7\": \"Naomi Rauch\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_7\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Viva Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 2, \"Y_5\": \"Naomi Rauch\", \"Y_7\": \"Deirdre Kimball\", \"Y_3\": \"Brigida Healey\"}, {\"Y_3\": \"Heather Healey\", \"Y_5\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Viva Healey\", \"Count_1\": 2, \"Y_7\": \"Naomi Rauch\", \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 2, \"Y_5\": \"Naomi Rauch\", \"Y_7\": \"Deirdre Kimball\", \"Y_3\": \"Viva Healey\"}, {\"Count_1\": 2, \"Y_3\": \"Heather Healey\", \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Deirdre Kimball\"}, {\"Count_1\": 2, \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Heather Healey\", \"Y_7\": \"Deirdre Kimball\"}, {\"Count_1\": 2, \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Deirdre Kimball\", \"Y_3\": \"Viva Healey\"}, {\"Y_7\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Brigida Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_3\": \"Brigida Healey\", \"Y_5\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Brigida Healey\", \"Count_1\": 2, \"Y_7\": \"Naomi Rauch\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_5\": \"Naomi Rauch\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Viva Healey\"}, {\"Y_5\": \"Naomi Rauch\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Brigida Healey\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "aunt(Y_5, Y_3)",
+                "sister(Y_7, Y_5)",
+                "granddaughter(\"Ione Kimball\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0e9e7e77-ca1f-4cab-b12b-a7f734f39ea4",
+        "question": "How many siblings does the uncle of the brother-in-law of the daughter of Tammie Mcwhorter have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Rob Faber\", \"Y_7\": \"Catina Faber\", \"Y_3\": \"Stevie Shields\"}, {\"Count_1\": 1, \"Y_5\": \"Edwin Faber\", \"Y_7\": \"Catina Faber\", \"Y_3\": \"Stevie Shields\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "uncle(Y_5, Y_3)",
+                "brother_in_law(Y_7, Y_5)",
+                "daughter(\"Tammie Mcwhorter\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4d30c8f1-e3a3-426a-9744-d6aaab853cb2",
+        "question": "How many mothers does the grandchild of the great-grandparent of the sister of Reyes Kimball have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Heather Healey\", \"Y_5\": \"Allen Healey\", \"Y_7\": \"Deirdre Kimball\"}, {\"Y_3\": \"Isabell Kimball\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\"}, {\"Y_3\": \"Isabell Kimball\", \"Count_1\": 1, \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Isabell Kimball\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Danilo Healey\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Enid Healey\"}, {\"Y_3\": \"Brigida Healey\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Enid Healey\"}, {\"Y_7\": \"Charmain Kimball\", \"Y_3\": \"Phil Drayton\", \"Count_1\": 1, \"Y_5\": \"Enid Healey\"}, {\"Y_3\": \"Brigida Healey\", \"Y_5\": \"Enid Healey\", \"Count_1\": 1, \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Danilo Healey\", \"Y_5\": \"Enid Healey\", \"Count_1\": 1, \"Y_7\": \"Naomi Rauch\"}, {\"Y_5\": \"Enid Healey\", \"Count_1\": 1, \"Y_7\": \"Naomi Rauch\", \"Y_3\": \"Phil Drayton\"}, {\"Count_1\": 1, \"Y_7\": \"Charmain Kimball\", \"Y_5\": \"Harvey Parrott\", \"Y_3\": \"Heather Healey\"}, {\"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_3\": \"Heather Healey\", \"Y_5\": \"Enid Healey\"}, {\"Y_3\": \"Heather Healey\", \"Y_5\": \"Enid Healey\", \"Count_1\": 1, \"Y_7\": \"Naomi Rauch\"}, {\"Count_1\": 1, \"Y_3\": \"Heather Healey\", \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Naomi Rauch\"}, {\"Count_1\": 1, \"Y_7\": \"Charmain Kimball\", \"Y_5\": \"Harvey Parrott\", \"Y_3\": \"Brigida Healey\"}, {\"Count_1\": 1, \"Y_3\": \"Brigida Healey\", \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Danilo Healey\", \"Count_1\": 1, \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Brigida Healey\", \"Count_1\": 1, \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Viva Healey\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Antionette Parrott\"}, {\"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_7\": \"Deirdre Kimball\", \"Y_3\": \"Viva Healey\"}, {\"Y_3\": \"Viva Healey\", \"Y_5\": \"Antionette Parrott\", \"Count_1\": 1, \"Y_7\": \"Naomi Rauch\"}, {\"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_3\": \"Brigida Healey\"}, {\"Y_3\": \"Brigida Healey\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Enid Healey\", \"Count_1\": 1, \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Danilo Healey\", \"Y_5\": \"Antionette Parrott\", \"Count_1\": 1, \"Y_7\": \"Naomi Rauch\"}, {\"Count_1\": 1, \"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Allen Healey\", \"Y_7\": \"Deirdre Kimball\"}, {\"Count_1\": 1, \"Y_3\": \"Danilo Healey\", \"Y_7\": \"Charmain Kimball\", \"Y_5\": \"Harvey Parrott\"}, {\"Count_1\": 1, \"Y_3\": \"Danilo Healey\", \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Naomi Rauch\"}, {\"Count_1\": 1, \"Y_7\": \"Charmain Kimball\", \"Y_5\": \"Harvey Parrott\", \"Y_3\": \"Viva Healey\"}, {\"Y_3\": \"Isabell Kimball\", \"Count_1\": 1, \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Enid Healey\"}, {\"Count_1\": 1, \"Y_3\": \"Isabell Kimball\", \"Y_7\": \"Charmain Kimball\", \"Y_5\": \"Harvey Parrott\"}, {\"Y_3\": \"Brigida Healey\", \"Count_1\": 1, \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Enid Healey\"}, {\"Y_3\": \"Viva Healey\", \"Count_1\": 1, \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Enid Healey\"}, {\"Count_1\": 1, \"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Danilo Healey\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\"}, {\"Y_7\": \"Charmain Kimball\", \"Y_3\": \"Phil Drayton\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\"}, {\"Y_3\": \"Danilo Healey\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Phil Drayton\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_7\": \"Naomi Rauch\"}, {\"Count_1\": 1, \"Y_3\": \"Heather Healey\", \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Deirdre Kimball\"}, {\"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_3\": \"Heather Healey\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_5\": \"Antionette Parrott\", \"Count_1\": 1, \"Y_3\": \"Heather Healey\", \"Y_7\": \"Naomi Rauch\"}, {\"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_3\": \"Heather Healey\"}, {\"Y_3\": \"Heather Healey\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Isabell Kimball\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Antionette Parrott\", \"Count_1\": 1, \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Brigida Healey\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Danilo Healey\", \"Count_1\": 1, \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Enid Healey\"}, {\"Y_3\": \"Phil Drayton\", \"Count_1\": 1, \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Enid Healey\"}, {\"Y_3\": \"Viva Healey\", \"Count_1\": 1, \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Brigida Healey\", \"Y_5\": \"Antionette Parrott\", \"Count_1\": 1, \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Heather Healey\", \"Count_1\": 1, \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Enid Healey\"}, {\"Count_1\": 1, \"Y_3\": \"Danilo Healey\", \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Deirdre Kimball\"}, {\"Count_1\": 1, \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Deirdre Kimball\", \"Y_3\": \"Brigida Healey\"}, {\"Y_3\": \"Isabell Kimball\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Enid Healey\"}, {\"Y_3\": \"Danilo Healey\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Viva Healey\", \"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Enid Healey\"}, {\"Count_1\": 1, \"Y_3\": \"Isabell Kimball\", \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Deirdre Kimball\"}, {\"Count_1\": 1, \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Deirdre Kimball\", \"Y_3\": \"Viva Healey\"}, {\"Y_7\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_3\": \"Viva Healey\"}, {\"Count_1\": 1, \"Y_3\": \"Danilo Healey\", \"Y_5\": \"Allen Healey\", \"Y_7\": \"Deirdre Kimball\"}, {\"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_7\": \"Deirdre Kimball\", \"Y_3\": \"Brigida Healey\"}, {\"Count_1\": 1, \"Y_3\": \"Phil Drayton\", \"Y_5\": \"Allen Healey\", \"Y_7\": \"Deirdre Kimball\"}, {\"Y_3\": \"Viva Healey\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Viva Healey\", \"Y_5\": \"Enid Healey\", \"Count_1\": 1, \"Y_7\": \"Naomi Rauch\"}, {\"Count_1\": 1, \"Y_3\": \"Viva Healey\", \"Y_5\": \"Harvey Parrott\", \"Y_7\": \"Naomi Rauch\"}, {\"Y_3\": \"Heather Healey\", \"Count_1\": 1, \"Y_7\": \"Deirdre Kimball\", \"Y_5\": \"Antionette Parrott\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "great_grandparent(Y_7, Y_5)",
+                "sister(\"Reyes Kimball\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f0d64123-ec0d-4a1f-95de-39eded6950f3",
+        "question": "How many great-grandchildren does the great-grandmother of the child of the son of Abe Kimball have?",
+        "solution_traces": "[{\"Count_1\": 5, \"Y_7\": \"Philip Kimball\", \"Y_3\": \"Enid Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 5, \"Y_7\": \"Philip Kimball\", \"Y_5\": \"Charmain Kimball\", \"Y_3\": \"Antionette Parrott\"}, {\"Count_1\": 5, \"Y_7\": \"Philip Kimball\", \"Y_3\": \"Antionette Parrott\", \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 5, \"Y_7\": \"Philip Kimball\", \"Y_5\": \"Charmain Kimball\", \"Y_3\": \"Enid Healey\"}, {\"Y_3\": \"Enid Healey\", \"Y_7\": \"Philip Kimball\", \"Y_5\": \"Reyes Kimball\", \"Count_1\": 5}, {\"Count_1\": 5, \"Y_7\": \"Philip Kimball\", \"Y_3\": \"Antionette Parrott\", \"Y_5\": \"Reyes Kimball\"}, {\"Count_1\": 5, \"Y_7\": \"Philip Kimball\", \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Antionette Parrott\"}, {\"Count_1\": 5, \"Y_7\": \"Philip Kimball\", \"Y_3\": \"Antionette Parrott\", \"Y_5\": \"Delbert Kimball\"}, {\"Count_1\": 5, \"Y_7\": \"Philip Kimball\", \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Enid Healey\"}, {\"Count_1\": 5, \"Y_7\": \"Philip Kimball\", \"Y_3\": \"Enid Healey\", \"Y_5\": \"Delbert Kimball\"}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandchild(Y_3, Y_1)), Count_1)",
+                "great_grandmother(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "son(\"Abe Kimball\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e4eb68eb-412e-472c-a48e-a217b5df4bc2",
+        "question": "How many great-grandchildren does the great-grandfather of the niece of the sibling of Danilo Healey have?",
+        "solution_traces": "[{\"Count_1\": 5, \"Y_3\": \"Harvey Parrott\", \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Brigida Healey\"}, {\"Count_1\": 5, \"Y_3\": \"Allen Healey\", \"Y_7\": \"Viva Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 5, \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Allen Healey\", \"Y_7\": \"Viva Healey\"}, {\"Count_1\": 5, \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Harvey Parrott\", \"Y_7\": \"Viva Healey\"}, {\"Count_1\": 5, \"Y_3\": \"Allen Healey\", \"Y_7\": \"Brigida Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 5, \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Allen Healey\", \"Y_7\": \"Brigida Healey\"}, {\"Count_1\": 5, \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Harvey Parrott\", \"Y_7\": \"Brigida Healey\"}, {\"Count_1\": 5, \"Y_7\": \"Heather Healey\", \"Y_3\": \"Allen Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 5, \"Y_7\": \"Heather Healey\", \"Y_3\": \"Harvey Parrott\", \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 5, \"Y_7\": \"Heather Healey\", \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Allen Healey\"}, {\"Count_1\": 5, \"Y_7\": \"Heather Healey\", \"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Harvey Parrott\"}, {\"Count_1\": 5, \"Y_7\": \"Heather Healey\", \"Y_3\": \"Allen Healey\", \"Y_5\": \"Charmain Kimball\"}, {\"Count_1\": 5, \"Y_7\": \"Heather Healey\", \"Y_3\": \"Harvey Parrott\", \"Y_5\": \"Charmain Kimball\"}, {\"Count_1\": 5, \"Y_3\": \"Allen Healey\", \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Brigida Healey\"}, {\"Count_1\": 5, \"Y_3\": \"Allen Healey\", \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Viva Healey\"}, {\"Count_1\": 5, \"Y_3\": \"Harvey Parrott\", \"Y_5\": \"Charmain Kimball\", \"Y_7\": \"Viva Healey\"}, {\"Count_1\": 5, \"Y_3\": \"Harvey Parrott\", \"Y_7\": \"Viva Healey\", \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 5, \"Y_3\": \"Harvey Parrott\", \"Y_7\": \"Brigida Healey\", \"Y_5\": \"Deirdre Kimball\"}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandchild(Y_3, Y_1)), Count_1)",
+                "great_grandfather(Y_5, Y_3)",
+                "niece(Y_7, Y_5)",
+                "sibling(\"Danilo Healey\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "338014e5-fe91-4661-b058-8098f411c224",
+        "question": "How many friends does the father of the nephew of the parent of Danilo Healey have?",
+        "solution_traces": "[{\"Y_5\": \"Phil Drayton\", \"Count_1\": 2, \"Y_7\": \"Jeffery Healey\", \"Y_3\": \"Lon Drayton\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "father(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "parent(\"Danilo Healey\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    }
+]

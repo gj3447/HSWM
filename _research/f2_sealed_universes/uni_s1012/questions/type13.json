@@ -1,0 +1,1128 @@
+[
+    {
+        "id": "0183f672-9091-430e-908a-0345ff314402",
+        "question": "How many wives does the great-grandfather of the brother of the grandchild of Emelda Lam have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Raul Michaels\", \"Y_7\": \"Virgil Michaels\", \"Y_3\": \"Alan Lam\"}, {\"Count_1\": 1, \"Y_5\": \"Virgil Michaels\", \"Y_3\": \"Alan Lam\", \"Y_7\": \"Raul Michaels\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(wife(Y_3, Y_1)), Count_1)",
+                "great_grandfather(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "grandchild(\"Emelda Lam\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9a9e752c-2190-463b-8ada-430ce48d4aaa",
+        "question": "How many nieces does the great-grandson of the great-grandmother of the great-grandchild of Marcelina Dees have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Marcelina Dees\", \"Y_3\": \"Richard Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Count_1\": 2, \"Y_5\": \"Winnie Halstead\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_5\": \"Winnie Halstead\", \"Count_1\": 2, \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Giovanni Dees\"}, {\"Count_1\": 2, \"Y_5\": \"Winnie Halstead\", \"Y_3\": \"Richard Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_7\": \"Richard Dees\", \"Count_1\": 2, \"Y_5\": \"Winnie Halstead\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Y_7\": \"Adam Dees\", \"Count_1\": 2, \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Count_1\": 0, \"Y_3\": \"Adam Dees\", \"Y_7\": \"Monserrate Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Count_1\": 2, \"Y_3\": \"Richard Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Count_1\": 2, \"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Count_1\": 2, \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_7\": \"Adam Dees\", \"Count_1\": 2, \"Y_5\": \"Winnie Halstead\", \"Y_3\": \"Giovanni Dees\"}, {\"Count_1\": 2, \"Y_7\": \"Adam Dees\", \"Y_3\": \"Richard Dees\", \"Y_5\": \"Winnie Halstead\"}, {\"Count_1\": 0, \"Y_7\": \"Richard Dees\", \"Y_3\": \"Adam Dees\", \"Y_5\": \"Winnie Halstead\"}, {\"Y_5\": \"Marcelina Dees\", \"Count_1\": 0, \"Y_7\": \"Richard Dees\", \"Y_3\": \"Adam Dees\"}, {\"Count_1\": 0, \"Y_7\": \"Adam Dees\", \"Y_3\": \"Adam Dees\", \"Y_5\": \"Winnie Halstead\"}, {\"Y_5\": \"Naomi Embry\", \"Count_1\": 0, \"Y_7\": \"Richard Dees\", \"Y_3\": \"Adam Dees\"}, {\"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Adam Dees\", \"Count_1\": 2, \"Y_3\": \"Giovanni Dees\"}, {\"Count_1\": 0, \"Y_5\": \"Winnie Halstead\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_3\": \"Adam Dees\", \"Count_1\": 0, \"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Monserrate Dees\"}, {\"Y_5\": \"Marcelina Dees\", \"Count_1\": 2, \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Count_1\": 2, \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Count_1\": 0, \"Y_3\": \"Adam Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Count_1\": 2, \"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Giovanni Dees\"}, {\"Count_1\": 0, \"Y_5\": \"Marcelina Dees\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Count_1\": 2, \"Y_7\": \"Richard Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_5\": \"Marcelina Dees\", \"Count_1\": 0, \"Y_7\": \"Adam Dees\", \"Y_3\": \"Adam Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Count_1\": 2, \"Y_7\": \"Adam Dees\", \"Y_3\": \"Richard Dees\"}, {\"Count_1\": 2, \"Y_7\": \"Richard Dees\", \"Y_3\": \"Richard Dees\", \"Y_5\": \"Winnie Halstead\"}, {\"Count_1\": 2, \"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Adam Dees\", \"Y_3\": \"Richard Dees\"}, {\"Count_1\": 2, \"Y_5\": \"Winnie Halstead\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_3\": \"Adam Dees\", \"Count_1\": 0, \"Y_5\": \"Winnie Halstead\", \"Y_7\": \"Monserrate Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Count_1\": 2, \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Y_7\": \"Richard Dees\", \"Count_1\": 2, \"Y_3\": \"Giovanni Dees\"}, {\"Count_1\": 2, \"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Richard Dees\", \"Count_1\": 2, \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Count_1\": 0, \"Y_7\": \"Adam Dees\", \"Y_3\": \"Adam Dees\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "great_grandson(Y_5, Y_3)",
+                "great_grandmother(Y_7, Y_5)",
+                "great_grandchild(\"Marcelina Dees\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 10,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "94688e90-5835-416a-9b56-50d009cb6e7d",
+        "question": "How many great-granddaughters does the daughter-in-law of the father of the great-uncle of Raul Michaels have?",
+        "solution_traces": "[{\"Y_5\": \"Alan Lam\", \"Y_3\": \"Emelda Lam\", \"Count_1\": 3, \"Y_7\": \"Alfred Lam\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_granddaughter(Y_3, Y_1)), Count_1)",
+                "daughter_in_law(Y_5, Y_3)",
+                "father(Y_7, Y_5)",
+                "great_uncle(\"Raul Michaels\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a98bc170-9c3f-4a7a-aa21-4772bd8e18c6",
+        "question": "How many nieces does the uncle of the friend of the great-grandson of Cordell Dees have?",
+        "solution_traces": "[{\"Y_3\": \"Alfred Lam\", \"Count_1\": 2, \"Y_7\": \"Richard Dees\", \"Y_5\": \"Wilber Lam\"}, {\"Count_1\": 1, \"Y_5\": \"Raul Michaels\", \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Aubrey Lam\"}, {\"Y_3\": \"Alberto Lam\", \"Count_1\": 0, \"Y_5\": \"Raul Michaels\", \"Y_7\": \"Giovanni Dees\"}, {\"Count_1\": 1, \"Y_5\": \"Raul Michaels\", \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Wilber Lam\"}]",
+        "answer": [
+            "0",
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "uncle(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "great_grandson(\"Cordell Dees\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5fdd128c-7326-4f3c-ac64-282fd1ad6053",
+        "question": "How many brothers does the sibling of the granddaughter of the mother-in-law of Viola Halstead have?",
+        "solution_traces": "[{\"Y_5\": \"Cherlyn Dees\", \"Count_1\": 1, \"Y_7\": \"Winnie Halstead\", \"Y_3\": \"Clifford Halstead\"}, {\"Y_3\": \"Clifford Halstead\", \"Count_1\": 1, \"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Winnie Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Rhea Halstead\", \"Count_1\": 2, \"Y_7\": \"Winnie Halstead\"}, {\"Count_1\": 2, \"Y_3\": \"Cherlyn Dees\", \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Winnie Halstead\"}, {\"Count_1\": 2, \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Winnie Halstead\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_3\": \"Clifford Halstead\", \"Count_1\": 1, \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Winnie Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Count_1\": 1, \"Y_3\": \"Kermit Halstead\", \"Y_7\": \"Winnie Halstead\"}, {\"Count_1\": 2, \"Y_5\": \"Johnetta Halstead\", \"Y_3\": \"Cherlyn Dees\", \"Y_7\": \"Winnie Halstead\"}, {\"Count_1\": 1, \"Y_3\": \"Kermit Halstead\", \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Winnie Halstead\"}, {\"Count_1\": 1, \"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Winnie Halstead\", \"Y_3\": \"Kermit Halstead\"}, {\"Y_3\": \"Rhea Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Count_1\": 2, \"Y_7\": \"Winnie Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Count_1\": 2, \"Y_7\": \"Winnie Halstead\", \"Y_3\": \"Johnetta Halstead\"}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "granddaughter(Y_7, Y_5)",
+                "mother_in_law(\"Viola Halstead\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8b9be8a7-5bd0-43c7-9dc1-af158acd1cc4",
+        "question": "How many great-grandfathers does the brother of the nephew of the sibling of Rhea Halstead have?",
+        "solution_traces": "[{\"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Richard Dees\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_3\": \"Richard Dees\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Adam Dees\", \"Count_1\": 3}, {\"Y_5\": \"Richard Dees\", \"Y_3\": \"Adam Dees\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Adam Dees\", \"Count_1\": 3}, {\"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Richard Dees\", \"Y_7\": \"Clifford Halstead\", \"Count_1\": 3}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 3, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 3, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Adam Dees\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 3, \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 3, \"Y_3\": \"Richard Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Richard Dees\", \"Count_1\": 3}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Richard Dees\", \"Count_1\": 3}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 3, \"Y_3\": \"Adam Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 3, \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Clifford Halstead\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandfather(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "sibling(\"Rhea Halstead\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3e1474d7-d29b-4099-a5f7-2014518e5d43",
+        "question": "How many sons-in-law does the son of the husband of the wife of Toby Lam have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Toby Lam\", \"Y_3\": \"Alberto Lam\", \"Y_7\": \"Emelda Lam\"}, {\"Count_1\": 0, \"Y_5\": \"Toby Lam\", \"Y_7\": \"Emelda Lam\", \"Y_3\": \"Wilber Lam\"}, {\"Count_1\": 0, \"Y_5\": \"Toby Lam\", \"Y_7\": \"Emelda Lam\", \"Y_3\": \"Aubrey Lam\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(Y_3, Y_1)), Count_1)",
+                "son(Y_5, Y_3)",
+                "husband(Y_7, Y_5)",
+                "wife(\"Toby Lam\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a61f2bdd-128d-4d02-b29f-d24b399294d3",
+        "question": "How many great-grandchildren does the great-grandparent of the sister of the niece of Richard Dees have?",
+        "solution_traces": "[{\"Y_7\": \"Bonnie Handley\", \"Count_1\": 2, \"Y_5\": \"Allyson Dees\", \"Y_3\": \"Viola Halstead\"}, {\"Y_7\": \"Allyson Dees\", \"Count_1\": 2, \"Y_3\": \"Wendell Dees\", \"Y_5\": \"Bonnie Handley\"}, {\"Y_7\": \"Allyson Dees\", \"Count_1\": 2, \"Y_3\": \"Rosendo Halstead\", \"Y_5\": \"Bonnie Handley\"}, {\"Y_7\": \"Bonnie Handley\", \"Count_1\": 2, \"Y_5\": \"Allyson Dees\", \"Y_3\": \"Theda Dees\"}, {\"Y_7\": \"Allyson Dees\", \"Count_1\": 2, \"Y_3\": \"Viola Halstead\", \"Y_5\": \"Bonnie Handley\"}, {\"Y_7\": \"Bonnie Handley\", \"Y_3\": \"Wendell Dees\", \"Count_1\": 2, \"Y_5\": \"Allyson Dees\"}, {\"Y_7\": \"Bonnie Handley\", \"Count_1\": 2, \"Y_3\": \"Rosendo Halstead\", \"Y_5\": \"Allyson Dees\"}, {\"Y_7\": \"Allyson Dees\", \"Count_1\": 2, \"Y_3\": \"Theda Dees\", \"Y_5\": \"Bonnie Handley\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandchild(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "sister(Y_7, Y_5)",
+                "niece(\"Richard Dees\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f89fce12-1c37-4753-a792-d3fb4920036f",
+        "question": "How many friends does the brother-in-law of the father-in-law of the mother-in-law of Jakob Quezada have?",
+        "solution_traces": "[{\"Y_7\": \"Sheila Michaels\", \"Count_1\": 0, \"Y_5\": \"Rogelio Michaels\", \"Y_3\": \"Aubrey Lam\"}, {\"Y_7\": \"Sheila Michaels\", \"Count_1\": 2, \"Y_5\": \"Rogelio Michaels\", \"Y_3\": \"Wilber Lam\"}, {\"Y_7\": \"Sheila Michaels\", \"Count_1\": 5, \"Y_3\": \"Alberto Lam\", \"Y_5\": \"Rogelio Michaels\"}]",
+        "answer": [
+            "0",
+            "2",
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "brother_in_law(Y_5, Y_3)",
+                "father_in_law(Y_7, Y_5)",
+                "mother_in_law(\"Jakob Quezada\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f9adfacd-f1a0-4b35-bf21-7e6b9c665f43",
+        "question": "How many granddaughters does the child of the brother of the uncle of Alberto Lam have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Wilber Lam\", \"Y_5\": \"Toby Lam\", \"Y_7\": \"Alfred Lam\"}, {\"Y_3\": \"Alethia Lam\", \"Count_1\": 0, \"Y_5\": \"Toby Lam\", \"Y_7\": \"Alfred Lam\"}, {\"Y_3\": \"Aubrey Lam\", \"Count_1\": 0, \"Y_5\": \"Toby Lam\", \"Y_7\": \"Alfred Lam\"}, {\"Count_1\": 1, \"Y_3\": \"Dena Michaels\", \"Y_5\": \"Toby Lam\", \"Y_7\": \"Alfred Lam\"}, {\"Count_1\": 2, \"Y_3\": \"Alberto Lam\", \"Y_5\": \"Toby Lam\", \"Y_7\": \"Alfred Lam\"}]",
+        "answer": [
+            "0",
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(granddaughter(Y_3, Y_1)), Count_1)",
+                "child(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "uncle(\"Alberto Lam\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "cac56c73-7210-4dcc-95ca-9d1394f31963",
+        "question": "How many nieces does the aunt of the niece of the grandchild of Seth Embry have?",
+        "solution_traces": "[{\"Y_7\": \"Rhea Halstead\", \"Y_3\": \"Rhea Halstead\", \"Count_1\": 1, \"Y_5\": \"Monserrate Dees\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Johnetta Halstead\"}, {\"Y_5\": \"Monserrate Dees\", \"Count_1\": 1, \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_5\": \"Monserrate Dees\", \"Count_1\": 1, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_3\": \"Rhea Halstead\", \"Count_1\": 1, \"Y_7\": \"Johnetta Halstead\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Rhea Halstead\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_3\": \"Rhea Halstead\", \"Count_1\": 1, \"Y_7\": \"Clifford Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Count_1\": 1, \"Y_5\": \"Monserrate Dees\", \"Y_3\": \"Johnetta Halstead\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "aunt(Y_5, Y_3)",
+                "niece(Y_7, Y_5)",
+                "grandchild(\"Seth Embry\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "87b0978b-875e-49f9-9764-6c1ab1c3572e",
+        "question": "How many sisters does the second uncle of the son of the son-in-law of Sheila Michaels have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Alberto Lam\", \"Y_7\": \"Jakob Quezada\", \"Y_5\": \"Reggie Quezada\"}, {\"Count_1\": 2, \"Y_7\": \"Jakob Quezada\", \"Y_5\": \"Reggie Quezada\", \"Y_3\": \"Wilber Lam\"}, {\"Count_1\": 2, \"Y_7\": \"Jakob Quezada\", \"Y_5\": \"Reggie Quezada\", \"Y_3\": \"Aubrey Lam\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "second_uncle(Y_5, Y_3)",
+                "son(Y_7, Y_5)",
+                "son_in_law(\"Sheila Michaels\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "46b6f54b-278a-40d7-978c-c5dd14f1afa4",
+        "question": "How many grandsons does the great-grandfather of the friend of the father-in-law of Clifford Reece have?",
+        "solution_traces": "[{\"Y_3\": \"Wendell Dees\", \"Y_7\": \"Rudolf Moorehead\", \"Y_5\": \"Allyson Dees\", \"Count_1\": 3}, {\"Y_3\": \"Rosendo Halstead\", \"Y_7\": \"Rudolf Moorehead\", \"Y_5\": \"Allyson Dees\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandson(Y_3, Y_1)), Count_1)",
+                "great_grandfather(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "father_in_law(\"Clifford Reece\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "55d818d3-bf60-42bb-8ffd-16c18653622d",
+        "question": "How many great-grandchildren does the parent of the mother of the granddaughter of Seth Embry have?",
+        "solution_traces": "[{\"Y_5\": \"Viola Halstead\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Johnetta Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Viola Halstead\", \"Y_3\": \"Seth Embry\", \"Y_7\": \"Johnetta Halstead\", \"Count_1\": 4}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Viola Halstead\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 4}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Viola Halstead\", \"Y_3\": \"Seth Embry\", \"Count_1\": 4}, {\"Y_5\": \"Viola Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 4}, {\"Y_5\": \"Viola Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Seth Embry\", \"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandchild(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "granddaughter(\"Seth Embry\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d74e46a9-c684-4a0f-97e0-b219cdcf7ad5",
+        "question": "How many grandparents does the sibling of the sibling of the great-granddaughter of Winnie Halstead have?",
+        "solution_traces": "[{\"Y_5\": \"Adam Dees\", \"Count_1\": 4, \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Giovanni Dees\"}, {\"Count_1\": 4, \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Monserrate Dees\", \"Count_1\": 4}, {\"Y_3\": \"Adam Dees\", \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Monserrate Dees\", \"Count_1\": 4}, {\"Y_5\": \"Richard Dees\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Monserrate Dees\", \"Count_1\": 4}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 4, \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Monserrate Dees\", \"Count_1\": 4}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 4, \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Monserrate Dees\", \"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "great_granddaughter(\"Winnie Halstead\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "10e36e84-1172-4ac4-867b-dfc16cdd7da9",
+        "question": "How many great-grandsons does the great-grandmother of the nephew of the great-aunt of Bonnie Handley have?",
+        "solution_traces": "[{\"Y_5\": \"Giovanni Dees\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 3}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Rhea Halstead\", \"Count_1\": 3, \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Rhea Halstead\", \"Count_1\": 3, \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Giovanni Dees\", \"Count_1\": 3, \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Rhea Halstead\", \"Count_1\": 3, \"Y_3\": \"Winnie Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Giovanni Dees\", \"Count_1\": 3, \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Rhea Halstead\", \"Count_1\": 3, \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 3}, {\"Y_5\": \"Giovanni Dees\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 3, \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(Y_3, Y_1)), Count_1)",
+                "great_grandmother(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "great_aunt(\"Bonnie Handley\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e982e5db-77d2-48c0-8fc2-b086f27d5f0f",
+        "question": "How many grandfathers does the nephew of the friend of the brother of Monserrate Dees have?",
+        "solution_traces": "[{\"Y_3\": \"Cortez Michaels\", \"Count_1\": 1, \"Y_5\": \"Raul Michaels\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_3\": \"Giovanni Dees\", \"Count_1\": 2, \"Y_7\": \"Giovanni Dees\", \"Y_5\": \"Kermit Halstead\"}, {\"Count_1\": 2, \"Y_3\": \"Richard Dees\", \"Y_7\": \"Giovanni Dees\", \"Y_5\": \"Kermit Halstead\"}, {\"Count_1\": 1, \"Y_7\": \"Richard Dees\", \"Y_5\": \"Wilber Lam\", \"Y_3\": \"Virgil Michaels\"}, {\"Count_1\": 2, \"Y_3\": \"Adam Dees\", \"Y_7\": \"Giovanni Dees\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_3\": \"Raul Michaels\", \"Count_1\": 1, \"Y_7\": \"Richard Dees\", \"Y_5\": \"Wilber Lam\"}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "nephew(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "brother(\"Monserrate Dees\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e013bff1-e7d3-4c0e-97cc-7f93efc2fe59",
+        "question": "How many mothers-in-law does the mother of the niece of the great-uncle of Estella Handley have?",
+        "solution_traces": "[{\"Y_3\": \"Maximina Dees\", \"Count_1\": 1, \"Y_5\": \"Allyson Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_3\": \"Maximina Dees\", \"Count_1\": 1, \"Y_7\": \"Giovanni Dees\", \"Y_5\": \"Bonnie Handley\"}, {\"Y_3\": \"Maximina Dees\", \"Count_1\": 1, \"Y_7\": \"Richard Dees\", \"Y_5\": \"Bonnie Handley\"}, {\"Y_3\": \"Maximina Dees\", \"Count_1\": 1, \"Y_7\": \"Richard Dees\", \"Y_5\": \"Allyson Dees\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(Y_3, Y_1)), Count_1)",
+                "mother(Y_5, Y_3)",
+                "niece(Y_7, Y_5)",
+                "great_uncle(\"Estella Handley\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d8cecf54-647d-4623-9f13-30f168585b96",
+        "question": "How many friends does the son-in-law of the wife of the grandchild of Wendell Dees have?",
+        "solution_traces": "[{\"Y_3\": \"Riley Handley\", \"Y_7\": \"Adam Dees\", \"Y_5\": \"Maximina Dees\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "son_in_law(Y_5, Y_3)",
+                "wife(Y_7, Y_5)",
+                "grandchild(\"Wendell Dees\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "62113e15-b688-4712-ae4f-3a71fea034fe",
+        "question": "How many children does the father of the father-in-law of the sibling of Clifford Halstead have?",
+        "solution_traces": "[{\"Y_5\": \"Wendell Dees\", \"Count_1\": 1, \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Cordell Dees\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "father(Y_5, Y_3)",
+                "father_in_law(Y_7, Y_5)",
+                "sibling(\"Clifford Halstead\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "234c74a0-9b79-4e9e-929d-859732364882",
+        "question": "How many great-grandchildren does the grandparent of the sibling of the grandchild of Dustin Halstead have?",
+        "solution_traces": "[{\"Y_5\": \"Cherlyn Dees\", \"Count_1\": 4, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Dustin Halstead\"}, {\"Y_7\": \"Kermit Halstead\", \"Count_1\": 4, \"Y_5\": \"Rhea Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Count_1\": 4, \"Y_7\": \"Johnetta Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_3\": \"Naomi Embry\", \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Johnetta Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Johnetta Halstead\", \"Count_1\": 4, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Clifford Halstead\", \"Y_3\": \"Seth Embry\", \"Y_7\": \"Johnetta Halstead\", \"Count_1\": 4}, {\"Y_7\": \"Kermit Halstead\", \"Count_1\": 4, \"Y_3\": \"Seth Embry\", \"Y_5\": \"Clifford Halstead\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Naomi Embry\", \"Y_5\": \"Rhea Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 4, \"Y_3\": \"Winnie Halstead\"}, {\"Count_1\": 4, \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 4}, {\"Y_3\": \"Seth Embry\", \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Johnetta Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Clifford Halstead\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Johnetta Halstead\", \"Count_1\": 4}, {\"Y_7\": \"Kermit Halstead\", \"Count_1\": 4, \"Y_3\": \"Winnie Halstead\", \"Y_5\": \"Clifford Halstead\"}, {\"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Rhea Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Cherlyn Dees\", \"Count_1\": 4, \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Dustin Halstead\"}, {\"Y_7\": \"Cherlyn Dees\", \"Count_1\": 4, \"Y_3\": \"Seth Embry\", \"Y_5\": \"Kermit Halstead\"}, {\"Count_1\": 4, \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Rhea Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Rhea Halstead\", \"Count_1\": 4, \"Y_5\": \"Kermit Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Clifford Halstead\", \"Y_3\": \"Seth Embry\", \"Count_1\": 4}, {\"Y_3\": \"Seth Embry\", \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Rhea Halstead\", \"Count_1\": 4}, {\"Y_7\": \"Cherlyn Dees\", \"Count_1\": 4, \"Y_3\": \"Winnie Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Clifford Halstead\", \"Count_1\": 4, \"Y_3\": \"Winnie Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Clifford Halstead\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 4}, {\"Y_5\": \"Johnetta Halstead\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\", \"Count_1\": 4}, {\"Y_7\": \"Rhea Halstead\", \"Count_1\": 4, \"Y_3\": \"Winnie Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Rhea Halstead\", \"Count_1\": 4, \"Y_3\": \"Dustin Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Count_1\": 4, \"Y_5\": \"Kermit Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Seth Embry\", \"Count_1\": 4}, {\"Y_3\": \"Dustin Halstead\", \"Y_5\": \"Clifford Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Count_1\": 4}, {\"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Seth Embry\", \"Count_1\": 4}, {\"Y_3\": \"Seth Embry\", \"Count_1\": 4, \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 4}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 4, \"Y_5\": \"Clifford Halstead\"}, {\"Y_3\": \"Winnie Halstead\", \"Count_1\": 4, \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Count_1\": 4}, {\"Count_1\": 4, \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_5\": \"Rhea Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Clifford Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Seth Embry\", \"Count_1\": 4}, {\"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Naomi Embry\", \"Y_5\": \"Rhea Halstead\", \"Count_1\": 4}, {\"Y_7\": \"Rhea Halstead\", \"Count_1\": 4, \"Y_3\": \"Seth Embry\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Count_1\": 4, \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 4}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Clifford Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Clifford Halstead\", \"Count_1\": 4, \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_3\": \"Seth Embry\", \"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Clifford Halstead\", \"Count_1\": 4}, {\"Count_1\": 4, \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Naomi Embry\", \"Y_5\": \"Clifford Halstead\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Seth Embry\", \"Y_5\": \"Rhea Halstead\", \"Count_1\": 4}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Y_3\": \"Seth Embry\", \"Count_1\": 4}, {\"Y_5\": \"Cherlyn Dees\", \"Count_1\": 4, \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_3\": \"Seth Embry\", \"Count_1\": 4}, {\"Count_1\": 4, \"Y_3\": \"Seth Embry\", \"Y_7\": \"Johnetta Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Count_1\": 4, \"Y_3\": \"Winnie Halstead\"}, {\"Count_1\": 4, \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Naomi Embry\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_5\": \"Clifford Halstead\", \"Y_7\": \"Johnetta Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 4}, {\"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Count_1\": 4, \"Y_3\": \"Dustin Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Rhea Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Cherlyn Dees\", \"Count_1\": 4, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Count_1\": 4, \"Y_3\": \"Winnie Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Seth Embry\", \"Y_7\": \"Johnetta Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Count_1\": 4, \"Y_3\": \"Winnie Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Count_1\": 4, \"Y_3\": \"Naomi Embry\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_5\": \"Clifford Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 4}, {\"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Seth Embry\", \"Y_5\": \"Rhea Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 4}, {\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Johnetta Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Clifford Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Count_1\": 4, \"Y_3\": \"Winnie Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Rhea Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Seth Embry\", \"Y_7\": \"Clifford Halstead\", \"Count_1\": 4}, {\"Y_3\": \"Dustin Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Clifford Halstead\", \"Count_1\": 4}, {\"Count_1\": 4, \"Y_3\": \"Winnie Halstead\", \"Y_7\": \"Johnetta Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Y_3\": \"Seth Embry\", \"Count_1\": 4}, {\"Y_3\": \"Dustin Halstead\", \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Johnetta Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 4, \"Y_3\": \"Dustin Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\", \"Count_1\": 4}, {\"Count_1\": 4, \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Johnetta Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Rhea Halstead\", \"Count_1\": 4, \"Y_3\": \"Winnie Halstead\"}, {\"Y_7\": \"Cherlyn Dees\", \"Count_1\": 4, \"Y_5\": \"Rhea Halstead\", \"Y_3\": \"Winnie Halstead\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandchild(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "grandchild(\"Dustin Halstead\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "63206d54-8c44-4a03-8ee9-65128639716f",
+        "question": "How many great-granddaughters does the friend of the sibling of the nephew of Clifford Halstead have?",
+        "solution_traces": "[{\"Y_5\": \"Adam Dees\", \"Count_1\": 1, \"Y_3\": \"Roxanne Lam\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Monserrate Dees\", \"Count_1\": 0, \"Y_3\": \"Alberto Lam\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_7\": \"Richard Dees\", \"Count_1\": 3, \"Y_3\": \"Emelda Lam\"}, {\"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Richard Dees\", \"Count_1\": 0, \"Y_3\": \"Kermit Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 0, \"Y_3\": \"Cheree Michaels\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_3\": \"Rogelio Michaels\", \"Count_1\": 0, \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Monserrate Dees\", \"Count_1\": 0, \"Y_7\": \"Adam Dees\", \"Y_3\": \"Alberto Lam\"}, {\"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Adam Dees\", \"Count_1\": 0, \"Y_3\": \"Kermit Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 0, \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Wilber Lam\"}, {\"Y_5\": \"Monserrate Dees\", \"Count_1\": 0, \"Y_7\": \"Richard Dees\", \"Y_3\": \"Alberto Lam\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 2, \"Y_3\": \"Wendell Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Richard Dees\", \"Count_1\": 2, \"Y_3\": \"Viola Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 1, \"Y_7\": \"Richard Dees\", \"Y_3\": \"Cherlyn Dees\"}, {\"Y_3\": \"Raul Michaels\", \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Adam Dees\", \"Count_1\": 0}, {\"Y_5\": \"Monserrate Dees\", \"Count_1\": 3, \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Emelda Lam\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_7\": \"Adam Dees\", \"Count_1\": 0, \"Y_3\": \"Rogelio Michaels\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 1, \"Y_7\": \"Richard Dees\", \"Y_3\": \"Roxanne Lam\"}, {\"Y_5\": \"Adam Dees\", \"Y_3\": \"Viola Halstead\", \"Count_1\": 2, \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 0, \"Y_3\": \"Clifford Reece\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Richard Dees\", \"Count_1\": 2, \"Y_3\": \"Wendell Dees\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 0, \"Y_7\": \"Adam Dees\", \"Y_3\": \"Cheree Michaels\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_7\": \"Adam Dees\", \"Count_1\": 3, \"Y_3\": \"Emelda Lam\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 0, \"Y_7\": \"Adam Dees\", \"Y_3\": \"Wilber Lam\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 0, \"Y_7\": \"Adam Dees\", \"Y_3\": \"Clifford Reece\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 1, \"Y_7\": \"Adam Dees\", \"Y_3\": \"Cordell Dees\"}, {\"Y_3\": \"Raul Michaels\", \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Richard Dees\", \"Count_1\": 0}, {\"Y_5\": \"Monserrate Dees\", \"Y_7\": \"Richard Dees\", \"Count_1\": 0, \"Y_3\": \"Rogelio Michaels\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 1, \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Cordell Dees\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 1, \"Y_3\": \"Cherlyn Dees\", \"Y_7\": \"Giovanni Dees\"}]",
+        "answer": [
+            "0",
+            "1",
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_granddaughter(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "nephew(\"Clifford Halstead\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b488a44c-cdb0-4bd8-856d-32ea6e057ad6",
+        "question": "How many brothers-in-law does the grandfather of the grandson of the husband of Dena Michaels have?",
+        "solution_traces": "[{\"Y_7\": \"Rogelio Michaels\", \"Y_3\": \"Rogelio Michaels\", \"Y_5\": \"Cortez Michaels\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother_in_law(Y_3, Y_1)), Count_1)",
+                "grandfather(Y_5, Y_3)",
+                "grandson(Y_7, Y_5)",
+                "husband(\"Dena Michaels\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2f22e6fa-b192-439b-bc7c-de08fd6e38ea",
+        "question": "How many friends does the granddaughter of the sibling of the uncle of Monserrate Dees have?",
+        "solution_traces": "[{\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Allyson Dees\", \"Count_1\": 3, \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Allyson Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 3}, {\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Bonnie Handley\", \"Y_7\": \"Clifford Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Bonnie Handley\", \"Count_1\": 4}]",
+        "answer": [
+            "3",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "granddaughter(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "uncle(\"Monserrate Dees\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0026a723-024a-4db8-9b9c-8f018a8748e1",
+        "question": "How many great-granddaughters does the great-grandparent of the nephew of the great-uncle of Allyson Dees have?",
+        "solution_traces": "[{\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Cordell Dees\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 1, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Cordell Dees\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Count_1\": 1}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Seth Embry\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Marcelina Dees\"}, {\"Count_1\": 1, \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 1, \"Y_3\": \"Seth Embry\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 1, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 1, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Dustin Halstead\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Count_1\": 1, \"Y_3\": \"Cordell Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Naomi Embry\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 1, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Count_1\": 1, \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Cordell Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Dustin Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 1, \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Winnie Halstead\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Count_1\": 1, \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 1, \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_3\": \"Seth Embry\", \"Count_1\": 1, \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Dustin Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 1, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Naomi Embry\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 1, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Dustin Halstead\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Count_1\": 1, \"Y_3\": \"Seth Embry\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Cordell Dees\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 1, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 1, \"Y_3\": \"Seth Embry\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Marcelina Dees\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Count_1\": 1, \"Y_3\": \"Winnie Halstead\"}, {\"Count_1\": 1, \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Count_1\": 1, \"Y_3\": \"Seth Embry\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 1, \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Cordell Dees\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Naomi Embry\", \"Count_1\": 1}, {\"Count_1\": 1, \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Count_1\": 1, \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Clifford Halstead\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_granddaughter(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "great_uncle(\"Allyson Dees\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "69acae06-b2e1-412b-8c6a-00d948ea2fcb",
+        "question": "How many daughters does the son-in-law of the mother-in-law of the father of Cherlyn Dees have?",
+        "solution_traces": "[{\"Y_5\": \"Naomi Embry\", \"Y_7\": \"Rosendo Halstead\", \"Y_3\": \"Rosendo Halstead\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter(Y_3, Y_1)), Count_1)",
+                "son_in_law(Y_5, Y_3)",
+                "mother_in_law(Y_7, Y_5)",
+                "father(\"Cherlyn Dees\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f6b0b0ff-6d4f-4b7d-b71c-9874acea4776",
+        "question": "How many siblings does the parent of the nephew of the brother of Johnetta Halstead have?",
+        "solution_traces": "[{\"Y_5\": \"Richard Dees\", \"Count_1\": 0, \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Alvaro Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Cherlyn Dees\", \"Count_1\": 4}, {\"Y_5\": \"Richard Dees\", \"Y_3\": \"Cherlyn Dees\", \"Y_7\": \"Clifford Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Cherlyn Dees\", \"Y_7\": \"Clifford Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Adam Dees\", \"Y_3\": \"Cherlyn Dees\", \"Y_7\": \"Clifford Halstead\", \"Count_1\": 4}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Cherlyn Dees\", \"Count_1\": 4}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 0, \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Alvaro Dees\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Cherlyn Dees\", \"Count_1\": 4}, {\"Y_5\": \"Adam Dees\", \"Count_1\": 0, \"Y_3\": \"Alvaro Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Count_1\": 0, \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Alvaro Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Count_1\": 0, \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Alvaro Dees\"}, {\"Y_5\": \"Richard Dees\", \"Count_1\": 0, \"Y_3\": \"Alvaro Dees\", \"Y_7\": \"Clifford Halstead\"}]",
+        "answer": [
+            "0",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "brother(\"Johnetta Halstead\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "27832078-c35c-4187-be41-70021f64ee49",
+        "question": "How many great-grandparents does the female first cousin once removed of the father-in-law of the son-in-law of Raul Michaels have?",
+        "solution_traces": "[{\"Y_3\": \"Margie Moorehead\", \"Count_1\": 2, \"Y_5\": \"Raul Michaels\", \"Y_7\": \"Jakob Quezada\"}, {\"Y_3\": \"Chelsie Reece\", \"Count_1\": 2, \"Y_5\": \"Raul Michaels\", \"Y_7\": \"Jakob Quezada\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "female_first_cousin_once_removed(Y_5, Y_3)",
+                "father_in_law(Y_7, Y_5)",
+                "son_in_law(\"Raul Michaels\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "168ca4cd-4283-4f03-a96c-67475585ac82",
+        "question": "How many great-aunts does the great-grandchild of the grandmother of the great-grandchild of Cordell Dees have?",
+        "solution_traces": "[{\"Y_3\": \"Bonnie Handley\", \"Y_5\": \"Viola Halstead\", \"Y_7\": \"Adam Dees\", \"Count_1\": 2}, {\"Y_3\": \"Bonnie Handley\", \"Y_5\": \"Viola Halstead\", \"Y_7\": \"Richard Dees\", \"Count_1\": 2}, {\"Y_3\": \"Allyson Dees\", \"Y_5\": \"Viola Halstead\", \"Count_1\": 2, \"Y_7\": \"Giovanni Dees\"}, {\"Count_1\": 2, \"Y_5\": \"Viola Halstead\", \"Y_3\": \"Bonnie Handley\", \"Y_7\": \"Monserrate Dees\"}, {\"Y_5\": \"Viola Halstead\", \"Y_3\": \"Bonnie Handley\", \"Count_1\": 2, \"Y_7\": \"Giovanni Dees\"}, {\"Y_3\": \"Allyson Dees\", \"Y_5\": \"Viola Halstead\", \"Y_7\": \"Adam Dees\", \"Count_1\": 2}, {\"Y_3\": \"Allyson Dees\", \"Y_5\": \"Viola Halstead\", \"Count_1\": 2, \"Y_7\": \"Monserrate Dees\"}, {\"Y_3\": \"Allyson Dees\", \"Y_5\": \"Viola Halstead\", \"Y_7\": \"Richard Dees\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Allyson Dees\", \"Y_7\": \"Richard Dees\", \"Y_5\": \"Theda Dees\"}, {\"Y_3\": \"Allyson Dees\", \"Y_5\": \"Theda Dees\", \"Count_1\": 2, \"Y_7\": \"Giovanni Dees\"}, {\"Y_3\": \"Bonnie Handley\", \"Count_1\": 2, \"Y_7\": \"Adam Dees\", \"Y_5\": \"Theda Dees\"}, {\"Count_1\": 2, \"Y_3\": \"Allyson Dees\", \"Y_7\": \"Adam Dees\", \"Y_5\": \"Theda Dees\"}, {\"Y_3\": \"Bonnie Handley\", \"Count_1\": 2, \"Y_5\": \"Theda Dees\", \"Y_7\": \"Monserrate Dees\"}, {\"Y_3\": \"Bonnie Handley\", \"Y_5\": \"Theda Dees\", \"Count_1\": 2, \"Y_7\": \"Giovanni Dees\"}, {\"Count_1\": 2, \"Y_3\": \"Allyson Dees\", \"Y_5\": \"Theda Dees\", \"Y_7\": \"Monserrate Dees\"}, {\"Y_3\": \"Bonnie Handley\", \"Count_1\": 2, \"Y_7\": \"Richard Dees\", \"Y_5\": \"Theda Dees\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_aunt(Y_3, Y_1)), Count_1)",
+                "great_grandchild(Y_5, Y_3)",
+                "grandmother(Y_7, Y_5)",
+                "great_grandchild(\"Cordell Dees\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2bbc21ff-60fc-4942-8cad-b3c8de79ab2e",
+        "question": "How many brothers-in-law does the child of the grandfather of the uncle of Allyson Dees have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Wendell Dees\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Alvaro Dees\"}, {\"Y_5\": \"Rosendo Halstead\", \"Count_1\": 0, \"Y_3\": \"Rhea Halstead\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Rosendo Halstead\", \"Count_1\": 0, \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Clifford Halstead\"}, {\"Y_5\": \"Rosendo Halstead\", \"Count_1\": 0, \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_5\": \"Wendell Dees\", \"Count_1\": 2, \"Y_3\": \"Alvaro Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Rosendo Halstead\", \"Count_1\": 0, \"Y_7\": \"Richard Dees\", \"Y_3\": \"Clifford Halstead\"}, {\"Y_5\": \"Rosendo Halstead\", \"Count_1\": 0, \"Y_3\": \"Cherlyn Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Rosendo Halstead\", \"Count_1\": 0, \"Y_7\": \"Richard Dees\", \"Y_3\": \"Kermit Halstead\"}, {\"Y_5\": \"Rosendo Halstead\", \"Count_1\": 0, \"Y_7\": \"Richard Dees\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_5\": \"Rosendo Halstead\", \"Count_1\": 0, \"Y_7\": \"Richard Dees\", \"Y_3\": \"Cherlyn Dees\"}, {\"Y_5\": \"Rosendo Halstead\", \"Count_1\": 0, \"Y_3\": \"Rhea Halstead\", \"Y_7\": \"Richard Dees\"}, {\"Y_5\": \"Rosendo Halstead\", \"Count_1\": 0, \"Y_3\": \"Kermit Halstead\", \"Y_7\": \"Giovanni Dees\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother_in_law(Y_3, Y_1)), Count_1)",
+                "child(Y_5, Y_3)",
+                "grandfather(Y_7, Y_5)",
+                "uncle(\"Allyson Dees\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    }
+]

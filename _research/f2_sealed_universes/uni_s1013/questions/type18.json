@@ -1,0 +1,876 @@
+[
+    {
+        "id": "3a233cc7-0fd4-4ccd-a058-5a8a93ecc35c",
+        "question": "How many brothers-in-law does the person whose hobby is tour skating have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Carrol Nagel\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother_in_law(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"tour skating\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a770d037-a459-46c2-97de-976cfb105481",
+        "question": "How many great-grandchildren does the person whose hobby is horsemanship have?",
+        "solution_traces": "[{\"Count_1\": 7, \"Y_3\": \"Antwan Garcia\"}]",
+        "answer": [
+            "7"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandchild(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"horsemanship\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3e6468cd-8005-4b1e-adce-7ad08d4c8e44",
+        "question": "How many granddaughters does the person whose occupation is civil engineer have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Owen Gainey\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(granddaughter(Y_3, Y_1)), Count_1)",
+                "job(Y_3, \"civil engineer\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d7e2db50-3f57-494f-b919-99ec9109adfd",
+        "question": "How many sisters does the person whose hobby is learning have?",
+        "solution_traces": "[{\"Y_3\": \"Isabella Brockway\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"learning\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "71cac484-87b2-4690-9ad6-c20cfbbbdc07",
+        "question": "How many nephews does the person whose occupation is human resources officer have?",
+        "solution_traces": "[{\"Y_3\": \"Benny Curiel\", \"Count_1\": 4}, {\"Y_3\": \"Gabriele Curiel\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "job(Y_3, \"human resources officer\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e7fe777b-ada1-4955-ad0a-00c6b998f6ee",
+        "question": "How many great-grandsons does the person whose occupation is food technologist have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Brett Butcher\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(Y_3, Y_1)), Count_1)",
+                "job(Y_3, \"food technologist\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "43d01d2e-2230-47eb-930c-123e767d3394",
+        "question": "How many male cousins does the person whose occupation is call centre manager have?",
+        "solution_traces": "[{\"Y_3\": \"Nick Curiel\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(male_cousin(Y_3, Y_1)), Count_1)",
+                "job(Y_3, \"call centre manager\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "06b7c278-4ae3-4167-bee8-90464419eb84",
+        "question": "How many siblings does the person whose hobby is wrestling have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Tabetha Curiel\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"wrestling\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3e3d027a-bb74-492e-ad55-229dec90fa3e",
+        "question": "How many grandchildren does the person whose hobby is meditation have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Brett Butcher\"}, {\"Y_3\": \"Florian Irving\", \"Count_1\": 2}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"meditation\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c91a7b7f-975f-4e33-ae5e-dce8a04c0384",
+        "question": "How many friends does the person whose hobby is business have?",
+        "solution_traces": "[{\"Count_1\": 6, \"Y_3\": \"Jacqueline Butcher\"}]",
+        "answer": [
+            "6"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"business\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1b43efcb-dd04-47fc-bc35-dcb0587ecdf2",
+        "question": "How many cousins does the person whose hobby is stuffed toy collecting have?",
+        "solution_traces": "[{\"Y_3\": \"Sharolyn Curiel\", \"Count_1\": 6}]",
+        "answer": [
+            "6"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"stuffed toy collecting\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ea0303b4-0a78-4115-ba94-22c9558489aa",
+        "question": "How many nieces does the person whose date of birth is 0245-01-26 have?",
+        "solution_traces": "[{\"Y_3\": \"Pete Gainey\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "dob(Y_3, \"0245-01-26\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "23ed5360-f150-42c8-a5a6-86e15d2652b6",
+        "question": "How many siblings does the person whose date of birth is 0245-01-26 have?",
+        "solution_traces": "[{\"Y_3\": \"Pete Gainey\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "dob(Y_3, \"0245-01-26\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "fbee7b0b-7060-4af0-ba38-e05ce2ba877d",
+        "question": "How many friends does the person whose occupation is sports therapist have?",
+        "solution_traces": "[{\"Count_1\": 5, \"Y_3\": \"Isabella Brockway\"}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "job(Y_3, \"sports therapist\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2676fb8a-b7ce-4ce1-90c1-7da3d5da0b93",
+        "question": "How many granddaughters does the person whose occupation is proofreader have?",
+        "solution_traces": "[{\"Y_3\": \"Antwan Garcia\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(granddaughter(Y_3, Y_1)), Count_1)",
+                "job(Y_3, \"proofreader\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4d33c0e0-9092-48ed-bb7d-fcd5588c1a35",
+        "question": "How many fathers does the person whose hobby is beekeeping have?",
+        "solution_traces": "[{\"Y_3\": \"Clayton Butcher\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"beekeeping\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "bd312fd3-e371-4013-b720-64914584dfd5",
+        "question": "How many brothers does the person whose hobby is reading have?",
+        "solution_traces": "[{\"Y_3\": \"Maude Nagle\", \"Count_1\": 0}, {\"Count_1\": 3, \"Y_3\": \"Elvie Nagel\"}]",
+        "answer": [
+            "0",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"reading\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ee1d36d0-bad5-43a4-876f-e396d3f4b643",
+        "question": "How many cousins does the person whose date of birth is 0270-08-24 have?",
+        "solution_traces": "[{\"Y_3\": \"Zana Camacho\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "dob(Y_3, \"0270-08-24\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8c2d2b63-9e27-4978-9b89-781417d6da61",
+        "question": "How many cousins does the person whose hobby is baseball have?",
+        "solution_traces": "[{\"Y_3\": \"Jeffery Curiel\", \"Count_1\": 5}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"baseball\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0a032f46-d52f-4e7c-b4ee-4f0171746f3a",
+        "question": "How many nieces does the person whose occupation is consulting civil engineer have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Tabetha Curiel\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "job(Y_3, \"consulting civil engineer\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d6264bc4-a707-4747-a78c-74572fea5bad",
+        "question": "How many friends does the person whose date of birth is 0187-11-13 have?",
+        "solution_traces": "[{\"Count_1\": 6, \"Y_3\": \"Jacqueline Butcher\"}]",
+        "answer": [
+            "6"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "dob(Y_3, \"0187-11-13\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e3cdffc9-8930-4f85-8912-f52c0b1fba7a",
+        "question": "How many children does the person whose occupation is ergonomist have?",
+        "solution_traces": "[{\"Y_3\": \"Allie Curiel\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "job(Y_3, \"ergonomist\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "691e411c-0c8e-45d4-a75e-d0d20d53c7d7",
+        "question": "How many friends does the person whose hobby is social studies have?",
+        "solution_traces": "[{\"Y_3\": \"Julian Reinke\", \"Count_1\": 2}, {\"Y_3\": \"Naomi Reinke\", \"Count_1\": 2}, {\"Count_1\": 1, \"Y_3\": \"Jules Beason\"}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"social studies\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3c034f0f-5a55-4f4e-a438-6976e8e7c99d",
+        "question": "How many husbands does the person whose hobby is slacklining have?",
+        "solution_traces": "[{\"Y_3\": \"Kisha Curiel\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(husband(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"slacklining\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "503731cf-e2c4-41da-b80c-59b25b493fb8",
+        "question": "How many siblings does the person whose occupation is call centre manager have?",
+        "solution_traces": "[{\"Y_3\": \"Nick Curiel\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "job(Y_3, \"call centre manager\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b6ffe088-a8c5-4a05-a385-201db9b90e9f",
+        "question": "How many siblings does the person whose date of birth is 0270-04-03 have?",
+        "solution_traces": "[{\"Y_3\": \"Benny Curiel\", \"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "dob(Y_3, \"0270-04-03\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a14607ee-cfee-4acb-8029-dd52d34fa241",
+        "question": "How many friends does the person whose hobby is renaissance fair have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Allyson Veliz\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"renaissance fair\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1ae0246c-3d14-48af-89c5-c7fbb34dc370",
+        "question": "How many nephews does the person whose date of birth is 0266-04-09 have?",
+        "solution_traces": "[{\"Y_3\": \"Ron Curiel\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "dob(Y_3, \"0266-04-09\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f045955f-3252-4216-9f7e-ff718ef7a56e",
+        "question": "How many sisters does the person whose hobby is equestrianism have?",
+        "solution_traces": "[{\"Y_3\": \"Benny Curiel\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "hobby(Y_3, \"equestrianism\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6f428b2b-18b5-472e-b174-f42c9c2392b5",
+        "question": "How many great-grandchildren does the person whose occupation is field trials officer have?",
+        "solution_traces": "[{\"Y_3\": \"Hank Nagle\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandchild(Y_3, Y_1)), Count_1)",
+                "job(Y_3, \"field trials officer\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the person whose",
+            "<attribute_name>_4",
+            "is",
+            "<attribute_value>_4",
+            "have",
+            "?"
+        ],
+        "type": 18,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    }
+]

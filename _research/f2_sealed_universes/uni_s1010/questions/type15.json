@@ -1,0 +1,1005 @@
+[
+    {
+        "id": "398c7a67-bd3b-41fe-8048-97cf6fa8c0d9",
+        "question": "How many sons-in-law does the great-grandparent of the sibling of Kurt Ruiz have?",
+        "solution_traces": "[{\"Y_5\": \"Lucas Ruiz\", \"Y_3\": \"Mckinley Beard\", \"Count_1\": 1}, {\"Y_5\": \"Lucas Ruiz\", \"Count_1\": 0, \"Y_3\": \"Keith Clary\"}, {\"Y_5\": \"Lucas Ruiz\", \"Count_1\": 0, \"Y_3\": \"Gina Clary\"}, {\"Y_5\": \"Lucas Ruiz\", \"Y_3\": \"Bernice Beard\", \"Count_1\": 1}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "sibling(\"Kurt Ruiz\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f5ddf9b2-5d4e-4bf7-b170-9190ea9d3ebd",
+        "question": "How many friends does the wife of the grandfather of Aletha Bauer have?",
+        "solution_traces": "[{\"Y_3\": \"Rhea Angle\", \"Y_5\": \"Eugene Angle\", \"Count_1\": 2}, {\"Y_3\": \"Phylis Lowry\", \"Y_5\": \"Zachery Lowry\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "wife(Y_5, Y_3)",
+                "grandfather(\"Aletha Bauer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4363c6ea-bdf3-4cd6-a797-e28199b112de",
+        "question": "How many second uncles does the grandchild of the daughter-in-law of Olivia Ruiz have?",
+        "solution_traces": "[{\"Y_5\": \"Genesis Ruiz\", \"Count_1\": 2, \"Y_3\": \"Wm Ruiz\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(second_uncle(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "daughter_in_law(\"Olivia Ruiz\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "30a23274-4f71-4e94-a94c-8af7585efa80",
+        "question": "How many grandmothers does the grandson of the grandparent of Romelia Ruiz have?",
+        "solution_traces": "[{\"Y_5\": \"Wade Soper\", \"Y_3\": \"Wilbert Ruiz\", \"Count_1\": 2}, {\"Y_3\": \"Dexter Ruiz\", \"Y_5\": \"Catalina Soper\", \"Count_1\": 2}, {\"Y_5\": \"Roderick Ruiz\", \"Y_3\": \"Wilbert Ruiz\", \"Count_1\": 2}, {\"Y_3\": \"Wilbert Ruiz\", \"Y_5\": \"Catalina Soper\", \"Count_1\": 2}, {\"Y_3\": \"Dexter Ruiz\", \"Y_5\": \"Roderick Ruiz\", \"Count_1\": 2}, {\"Y_3\": \"Dexter Ruiz\", \"Y_5\": \"Wade Soper\", \"Count_1\": 2}, {\"Y_3\": \"Dexter Ruiz\", \"Y_5\": \"Olivia Ruiz\", \"Count_1\": 2}, {\"Y_5\": \"Olivia Ruiz\", \"Y_3\": \"Wilbert Ruiz\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandmother(Y_3, Y_1)), Count_1)",
+                "grandson(Y_5, Y_3)",
+                "grandparent(\"Romelia Ruiz\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "859eb259-eced-4c16-bd69-ba27fa9083b6",
+        "question": "How many great-grandchildren does the mother of the daughter of Bernice Beard have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_5\": \"Laverne Clary\", \"Y_3\": \"Bernice Beard\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandchild(Y_3, Y_1)), Count_1)",
+                "mother(Y_5, Y_3)",
+                "daughter(\"Bernice Beard\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "383e81ee-a422-4144-8bd2-bc45034766ad",
+        "question": "How many friends does the grandchild of the wife of Elbert Kruger have?",
+        "solution_traces": "[{\"Y_5\": \"Enedina Kruger\", \"Y_3\": \"Octavio Kruger\", \"Count_1\": 3}, {\"Y_5\": \"Enedina Kruger\", \"Y_3\": \"Cornelius Kruger\", \"Count_1\": 4}]",
+        "answer": [
+            "3",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "wife(\"Elbert Kruger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a8dad912-b792-4484-851d-d505668f13b4",
+        "question": "How many friends does the father-in-law of the child of Catalina Soper have?",
+        "solution_traces": "[{\"Y_5\": \"Genesis Ruiz\", \"Y_3\": \"Roderick Ruiz\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "father_in_law(Y_5, Y_3)",
+                "child(\"Catalina Soper\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e2477d50-128e-4a33-8fa6-55ca507b541d",
+        "question": "How many daughters-in-law does the daughter-in-law of the father-in-law of Audie Lowry have?",
+        "solution_traces": "[{\"Y_5\": \"Zachery Lowry\", \"Count_1\": 1, \"Y_3\": \"Audie Lowry\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter_in_law(Y_3, Y_1)), Count_1)",
+                "daughter_in_law(Y_5, Y_3)",
+                "father_in_law(\"Audie Lowry\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "806167c7-1165-449a-89eb-c7fb031b4924",
+        "question": "How many children does the great-grandparent of the grandchild of Cornelius Kruger have?",
+        "solution_traces": "[{\"Y_5\": \"Faith Lowry\", \"Y_3\": \"Thomasine Kruger\", \"Count_1\": 2}, {\"Y_3\": \"Rhea Angle\", \"Y_5\": \"Lela Lowry\", \"Count_1\": 2}, {\"Y_5\": \"Faith Lowry\", \"Y_3\": \"Alec Kruger\", \"Count_1\": 2}, {\"Y_5\": \"Faith Lowry\", \"Y_3\": \"Eugene Angle\", \"Count_1\": 2}, {\"Y_3\": \"Phylis Lowry\", \"Y_5\": \"Lela Lowry\", \"Count_1\": 1}, {\"Y_5\": \"Lela Lowry\", \"Y_3\": \"Thomasine Kruger\", \"Count_1\": 2}, {\"Y_5\": \"Faith Lowry\", \"Count_1\": 1, \"Y_3\": \"Zachery Lowry\"}, {\"Y_5\": \"Lela Lowry\", \"Y_3\": \"Eugene Angle\", \"Count_1\": 2}, {\"Y_5\": \"Lela Lowry\", \"Y_3\": \"Alec Kruger\", \"Count_1\": 2}, {\"Y_3\": \"Phylis Lowry\", \"Y_5\": \"Faith Lowry\", \"Count_1\": 1}, {\"Y_3\": \"Rhea Angle\", \"Y_5\": \"Faith Lowry\", \"Count_1\": 2}, {\"Y_5\": \"Lela Lowry\", \"Count_1\": 1, \"Y_3\": \"Zachery Lowry\"}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "grandchild(\"Cornelius Kruger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1706a995-8077-4a02-a32a-e21cf44263d8",
+        "question": "How many siblings does the daughter of the parent of Simone Kruger have?",
+        "solution_traces": "[{\"Y_5\": \"Enedina Kruger\", \"Count_1\": 1, \"Y_3\": \"Simone Kruger\"}, {\"Y_3\": \"Simone Kruger\", \"Count_1\": 1, \"Y_5\": \"Elbert Kruger\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "daughter(Y_5, Y_3)",
+                "parent(\"Simone Kruger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "70355224-6748-4f22-8a82-fe36e5e58cfb",
+        "question": "How many great-granddaughters does the parent of the friend of Lela Lowry have?",
+        "solution_traces": "[{\"Y_5\": \"Audie Lowry\", \"Y_3\": \"Eugene Angle\", \"Count_1\": 2}, {\"Y_3\": \"Rhea Angle\", \"Y_5\": \"Audie Lowry\", \"Count_1\": 2}, {\"Y_3\": \"Kurtis Lowry\", \"Y_5\": \"Ofelia Lowry\", \"Count_1\": 0}, {\"Count_1\": 0, \"Y_5\": \"Ofelia Lowry\", \"Y_3\": \"Audie Lowry\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_granddaughter(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "friend(\"Lela Lowry\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "95b44263-e269-4af0-b350-2a82360a76f1",
+        "question": "How many parents does the female cousin of the son of Raul Bauer have?",
+        "solution_traces": "[{\"Y_5\": \"Demetrius Bauer\", \"Y_3\": \"Faith Lowry\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_5\": \"Demetrius Bauer\", \"Y_3\": \"Lela Lowry\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "female_cousin(Y_5, Y_3)",
+                "son(\"Raul Bauer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "54c03ddd-598f-4e1f-81e0-936b9e068a0c",
+        "question": "How many husbands does the child of the mother of Julian Angle have?",
+        "solution_traces": "[{\"Y_5\": \"Rhea Angle\", \"Count_1\": 1, \"Y_3\": \"Audie Lowry\"}, {\"Y_5\": \"Rhea Angle\", \"Count_1\": 0, \"Y_3\": \"Julian Angle\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(husband(Y_3, Y_1)), Count_1)",
+                "child(Y_5, Y_3)",
+                "mother(\"Julian Angle\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "332f266b-7c9e-4b09-82b6-53cf747c5de7",
+        "question": "How many siblings does the son of the sibling of Simone Kruger have?",
+        "solution_traces": "[{\"Y_3\": \"Octavio Kruger\", \"Count_1\": 1, \"Y_5\": \"Alec Kruger\"}, {\"Y_3\": \"Cornelius Kruger\", \"Count_1\": 1, \"Y_5\": \"Alec Kruger\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "son(Y_5, Y_3)",
+                "sibling(\"Simone Kruger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "fb7e70ea-20fa-4e63-b64e-cb881a86d4cd",
+        "question": "How many grandfathers does the great-grandson of the parent of Julian Angle have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Eugene Angle\", \"Y_3\": \"Demetrius Bauer\"}, {\"Y_5\": \"Rhea Angle\", \"Count_1\": 1, \"Y_3\": \"Demetrius Bauer\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "great_grandson(Y_5, Y_3)",
+                "parent(\"Julian Angle\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "113bf865-37a9-4a4f-8801-93ed74d7f51a",
+        "question": "How many great-grandmothers does the cousin of the great-grandson of Keith Clary have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Kurt Ruiz\", \"Y_5\": \"Jessie Clary\"}, {\"Y_5\": \"Lucas Ruiz\", \"Y_3\": \"Jessie Clary\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Lucas Ruiz\", \"Y_5\": \"Jessie Clary\"}, {\"Y_3\": \"Jessie Clary\", \"Y_5\": \"Kurt Ruiz\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandmother(Y_3, Y_1)), Count_1)",
+                "cousin(Y_5, Y_3)",
+                "great_grandson(\"Keith Clary\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "72177e95-0538-476f-b7be-ac130789bbe8",
+        "question": "How many daughters does the friend of the granddaughter of Shari Kruger have?",
+        "solution_traces": "[{\"Y_5\": \"Faith Lowry\", \"Y_3\": \"Bernice Beard\", \"Count_1\": 1}, {\"Y_5\": \"Faith Lowry\", \"Y_3\": \"Robby Lowry\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_5\": \"Lela Lowry\", \"Y_3\": \"Audie Lowry\"}, {\"Y_5\": \"Lela Lowry\", \"Y_3\": \"Ofelia Lowry\", \"Count_1\": 0}, {\"Y_5\": \"Lela Lowry\", \"Y_3\": \"Elbert Kruger\", \"Count_1\": 1}]",
+        "answer": [
+            "0",
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "granddaughter(\"Shari Kruger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3e2f3b73-594b-4c8c-abb1-c33935a54375",
+        "question": "How many siblings does the father-in-law of the daughter-in-law of Betsy Clary have?",
+        "solution_traces": "[{\"Y_5\": \"Shae Clary\", \"Y_3\": \"Zachary Clary\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "father_in_law(Y_5, Y_3)",
+                "daughter_in_law(\"Betsy Clary\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5989ef33-dba4-4291-af3b-dfd745e8d4c8",
+        "question": "How many siblings does the sibling of the grandchild of Phylis Lowry have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Aletha Bauer\", \"Y_5\": \"Ofelia Lowry\"}, {\"Count_1\": 3, \"Y_3\": \"Robby Lowry\", \"Y_5\": \"Lawrence Lowry\"}, {\"Count_1\": 3, \"Y_3\": \"Lawrence Lowry\", \"Y_5\": \"Ofelia Lowry\"}, {\"Count_1\": 3, \"Y_3\": \"Ofelia Lowry\", \"Y_5\": \"Lawrence Lowry\"}, {\"Count_1\": 3, \"Y_3\": \"Robby Lowry\", \"Y_5\": \"Aletha Bauer\"}, {\"Count_1\": 3, \"Y_3\": \"Lawrence Lowry\", \"Y_5\": \"Aletha Bauer\"}, {\"Count_1\": 3, \"Y_3\": \"Ofelia Lowry\", \"Y_5\": \"Aletha Bauer\"}, {\"Count_1\": 3, \"Y_3\": \"Aletha Bauer\", \"Y_5\": \"Lawrence Lowry\"}, {\"Count_1\": 3, \"Y_3\": \"Aletha Bauer\", \"Y_5\": \"Robby Lowry\"}, {\"Count_1\": 3, \"Y_3\": \"Robby Lowry\", \"Y_5\": \"Ofelia Lowry\"}, {\"Count_1\": 3, \"Y_3\": \"Ofelia Lowry\", \"Y_5\": \"Robby Lowry\"}, {\"Count_1\": 3, \"Y_3\": \"Lawrence Lowry\", \"Y_5\": \"Robby Lowry\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "grandchild(\"Phylis Lowry\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b386477d-c16b-4e7c-9e9f-c4936b774844",
+        "question": "How many great-grandparents does the female second cousin of the grandchild of Roderick Ruiz have?",
+        "solution_traces": "[{\"Y_5\": \"Romelia Ruiz\", \"Y_3\": \"Kyra Clary\", \"Count_1\": 2}, {\"Y_5\": \"Wilbert Ruiz\", \"Y_3\": \"Kyra Clary\", \"Count_1\": 2}, {\"Y_5\": \"Dexter Ruiz\", \"Y_3\": \"Mireya Clary\", \"Count_1\": 2}, {\"Y_5\": \"Wilbert Ruiz\", \"Y_3\": \"Mireya Clary\", \"Count_1\": 2}, {\"Y_5\": \"Romelia Ruiz\", \"Y_3\": \"Mireya Clary\", \"Count_1\": 2}, {\"Y_3\": \"Kyra Clary\", \"Y_5\": \"Dexter Ruiz\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "female_second_cousin(Y_5, Y_3)",
+                "grandchild(\"Roderick Ruiz\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c85cdcb8-449d-4d84-85a2-42aebc3bf4b2",
+        "question": "How many friends does the friend of the grandchild of Phylis Lowry have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Aletha Bauer\", \"Y_5\": \"Lawrence Lowry\"}, {\"Y_3\": \"Wm Ruiz\", \"Count_1\": 5, \"Y_5\": \"Lawrence Lowry\"}, {\"Count_1\": 2, \"Y_3\": \"Laverne Clary\", \"Y_5\": \"Lawrence Lowry\"}, {\"Count_1\": 4, \"Y_5\": \"Robby Lowry\", \"Y_3\": \"Romelia Ruiz\"}, {\"Count_1\": 6, \"Y_3\": \"Tabetha Lowry\", \"Y_5\": \"Robby Lowry\"}, {\"Count_1\": 3, \"Y_5\": \"Ofelia Lowry\", \"Y_3\": \"Lela Lowry\"}, {\"Count_1\": 3, \"Y_5\": \"Robby Lowry\", \"Y_3\": \"Zachery Lowry\"}, {\"Y_5\": \"Robby Lowry\", \"Y_3\": \"Faith Lowry\", \"Count_1\": 2}, {\"Y_3\": \"Cornelius Kruger\", \"Count_1\": 4, \"Y_5\": \"Lawrence Lowry\"}, {\"Count_1\": 5, \"Y_3\": \"Lawrence Lowry\", \"Y_5\": \"Aletha Bauer\"}, {\"Count_1\": 2, \"Y_3\": \"Catalina Soper\", \"Y_5\": \"Lawrence Lowry\"}, {\"Y_3\": \"Rhea Angle\", \"Y_5\": \"Aletha Bauer\", \"Count_1\": 2}]",
+        "answer": [
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "grandchild(\"Phylis Lowry\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f72fb419-28cd-426f-8a46-987b704ecced",
+        "question": "How many female first cousins once removed does the male cousin of the great-grandchild of Mckinley Beard have?",
+        "solution_traces": "[{\"Y_5\": \"Lucas Ruiz\", \"Y_3\": \"Jessie Clary\", \"Count_1\": 1}, {\"Count_1\": 2, \"Y_3\": \"Kurt Ruiz\", \"Y_5\": \"Jessie Clary\"}, {\"Count_1\": 2, \"Y_3\": \"Lucas Ruiz\", \"Y_5\": \"Jessie Clary\"}, {\"Y_3\": \"Jessie Clary\", \"Y_5\": \"Kurt Ruiz\", \"Count_1\": 1}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(female_first_cousin_once_removed(Y_3, Y_1)), Count_1)",
+                "male_cousin(Y_5, Y_3)",
+                "great_grandchild(\"Mckinley Beard\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f5b8e875-ee08-4a24-b413-aac4a313f229",
+        "question": "How many great-uncles does the male first cousin once removed of the cousin of Kurt Ruiz have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Dexter Ruiz\", \"Y_5\": \"Jessie Clary\"}, {\"Count_1\": 2, \"Y_3\": \"Wilbert Ruiz\", \"Y_5\": \"Jessie Clary\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_uncle(Y_3, Y_1)), Count_1)",
+                "male_first_cousin_once_removed(Y_5, Y_3)",
+                "cousin(\"Kurt Ruiz\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c19098bc-cad8-4636-9439-7d004dd384ae",
+        "question": "How many great-grandparents does the granddaughter of the nephew of Simone Kruger have?",
+        "solution_traces": "[{\"Count_1\": 6, \"Y_5\": \"Cornelius Kruger\", \"Y_3\": \"Faith Lowry\"}, {\"Count_1\": 6, \"Y_5\": \"Cornelius Kruger\", \"Y_3\": \"Lela Lowry\"}]",
+        "answer": [
+            "6"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "granddaughter(Y_5, Y_3)",
+                "nephew(\"Simone Kruger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b0f0481f-1110-4df0-b9c0-d180ab3dbc64",
+        "question": "How many grandfathers does the niece of the grandchild of Eugene Angle have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Ofelia Lowry\", \"Y_3\": \"Lela Lowry\"}, {\"Count_1\": 2, \"Y_5\": \"Aletha Bauer\", \"Y_3\": \"Lela Lowry\"}, {\"Y_3\": \"Faith Lowry\", \"Y_5\": \"Aletha Bauer\", \"Count_1\": 2}, {\"Y_3\": \"Faith Lowry\", \"Y_5\": \"Ofelia Lowry\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Lela Lowry\", \"Y_5\": \"Lawrence Lowry\"}, {\"Count_1\": 2, \"Y_3\": \"Faith Lowry\", \"Y_5\": \"Lawrence Lowry\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "niece(Y_5, Y_3)",
+                "grandchild(\"Eugene Angle\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b63f71df-4573-4bb1-9ffb-a1f8e68be082",
+        "question": "How many mothers does the father-in-law of the great-grandchild of Sylvia Sturm have?",
+        "solution_traces": "[{\"Y_5\": \"Tabetha Lowry\", \"Y_3\": \"Kurtis Lowry\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother(Y_3, Y_1)), Count_1)",
+                "father_in_law(Y_5, Y_3)",
+                "great_grandchild(\"Sylvia Sturm\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b23868e4-287a-451e-b94f-589df1b25c68",
+        "question": "How many great-granddaughters does the great-grandmother of the granddaughter of Cornelius Kruger have?",
+        "solution_traces": "[{\"Y_5\": \"Faith Lowry\", \"Y_3\": \"Thomasine Kruger\", \"Count_1\": 2}, {\"Y_3\": \"Rhea Angle\", \"Y_5\": \"Lela Lowry\", \"Count_1\": 2}, {\"Y_3\": \"Phylis Lowry\", \"Y_5\": \"Lela Lowry\", \"Count_1\": 2}, {\"Y_5\": \"Lela Lowry\", \"Y_3\": \"Thomasine Kruger\", \"Count_1\": 2}, {\"Y_3\": \"Phylis Lowry\", \"Y_5\": \"Faith Lowry\", \"Count_1\": 2}, {\"Y_3\": \"Rhea Angle\", \"Y_5\": \"Faith Lowry\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_granddaughter(Y_3, Y_1)), Count_1)",
+                "great_grandmother(Y_5, Y_3)",
+                "granddaughter(\"Cornelius Kruger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e080fef9-0d8a-4c7d-a0e7-8a837cdb3171",
+        "question": "How many great-granddaughters does the grandparent of the friend of Cornelius Kruger have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Zachery Lowry\", \"Y_5\": \"Lawrence Lowry\"}, {\"Count_1\": 1, \"Y_3\": \"Enedina Kruger\", \"Y_5\": \"Octavio Kruger\"}, {\"Y_3\": \"Alec Kruger\", \"Y_5\": \"Tabetha Lowry\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Eugene Angle\", \"Y_5\": \"Lawrence Lowry\"}, {\"Count_1\": 2, \"Y_5\": \"Tabetha Lowry\", \"Y_3\": \"Thomasine Kruger\"}, {\"Y_3\": \"Elbert Kruger\", \"Count_1\": 1, \"Y_5\": \"Octavio Kruger\"}, {\"Y_3\": \"Phylis Lowry\", \"Count_1\": 2, \"Y_5\": \"Lawrence Lowry\"}, {\"Count_1\": 1, \"Y_3\": \"Sylvia Sturm\", \"Y_5\": \"Octavio Kruger\"}, {\"Y_3\": \"Rhea Angle\", \"Count_1\": 2, \"Y_5\": \"Lawrence Lowry\"}, {\"Count_1\": 1, \"Y_3\": \"Stacey Sturm\", \"Y_5\": \"Octavio Kruger\"}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_granddaughter(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "friend(\"Cornelius Kruger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f61e1742-a47c-4984-a34d-4c3e40d9b9dc",
+        "question": "How many daughters does the mother-in-law of the father of Octavio Kruger have?",
+        "solution_traces": "[{\"Y_3\": \"Sylvia Sturm\", \"Count_1\": 1, \"Y_5\": \"Alec Kruger\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter(Y_3, Y_1)), Count_1)",
+                "mother_in_law(Y_5, Y_3)",
+                "father(\"Octavio Kruger\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6d4b6085-f595-49fc-b515-afed8576fde5",
+        "question": "How many grandparents does the sibling of the friend of Tabetha Lowry have?",
+        "solution_traces": "[{\"Y_3\": \"Lawrence Lowry\", \"Count_1\": 4, \"Y_5\": \"Robby Lowry\"}, {\"Count_1\": 4, \"Y_3\": \"Aletha Bauer\", \"Y_5\": \"Robby Lowry\"}, {\"Y_5\": \"Wilbert Ruiz\", \"Count_1\": 4, \"Y_3\": \"Romelia Ruiz\"}, {\"Count_1\": 4, \"Y_3\": \"Ofelia Lowry\", \"Y_5\": \"Robby Lowry\"}, {\"Count_1\": 4, \"Y_5\": \"Cornelius Kruger\", \"Y_3\": \"Octavio Kruger\"}, {\"Y_3\": \"Dexter Ruiz\", \"Y_5\": \"Wilbert Ruiz\", \"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "friend(\"Tabetha Lowry\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    }
+]

@@ -1,0 +1,1164 @@
+[
+    {
+        "id": "6806ef10-5999-4b2b-91ca-691a977932e8",
+        "question": "What is the occupation of the grandfather of the great-aunt of the sibling of Alexa Schafer?",
+        "solution_traces": "[{\"Y_3\": \"Bryan Kirksey\", \"Y_7\": \"Yasmin Schafer\", \"Y_2\": \"public relations account executive\", \"Y_5\": \"Florence Kirkham\"}, {\"Y_7\": \"Violet Schafer\", \"Y_5\": \"Bess Kirksey\", \"Y_3\": \"Bryan Kirksey\", \"Y_2\": \"public relations account executive\"}, {\"Y_3\": \"Bryan Kirksey\", \"Y_7\": \"Floyd Schafer\", \"Y_2\": \"public relations account executive\", \"Y_5\": \"Florence Kirkham\"}, {\"Y_5\": \"Bess Kirksey\", \"Y_3\": \"Bryan Kirksey\", \"Y_7\": \"Floyd Schafer\", \"Y_2\": \"public relations account executive\"}, {\"Y_3\": \"Bryan Kirksey\", \"Y_7\": \"Emery Schafer\", \"Y_5\": \"Bess Kirksey\", \"Y_2\": \"public relations account executive\"}, {\"Y_7\": \"Violet Schafer\", \"Y_3\": \"Bryan Kirksey\", \"Y_2\": \"public relations account executive\", \"Y_5\": \"Florence Kirkham\"}, {\"Y_5\": \"Bess Kirksey\", \"Y_3\": \"Bryan Kirksey\", \"Y_7\": \"Yasmin Schafer\", \"Y_2\": \"public relations account executive\"}, {\"Y_7\": \"Emery Schafer\", \"Y_3\": \"Bryan Kirksey\", \"Y_2\": \"public relations account executive\", \"Y_5\": \"Florence Kirkham\"}]",
+        "answer": [
+            "public relations account executive"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandfather(Y_5, Y_3)",
+                "great_aunt(Y_7, Y_5)",
+                "sibling(\"Alexa Schafer\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b28f966a-90e7-4be7-a39f-4910b9198a58",
+        "question": "What is the occupation of the grandchild of the father of the sibling of Dalton Fudge?",
+        "solution_traces": "[{\"Y_3\": \"Robbie Hunsaker\", \"Y_5\": \"Garth Fudge\", \"Y_7\": \"Brittaney Rowell\", \"Y_2\": \"doctor\"}, {\"Y_2\": \"hydrographic surveyor\", \"Y_5\": \"Garth Fudge\", \"Y_7\": \"Brittaney Rowell\", \"Y_3\": \"Rayna Fudge\"}, {\"Y_5\": \"Garth Fudge\", \"Y_7\": \"Brittaney Rowell\", \"Y_3\": \"Daniel Rowell\", \"Y_2\": \"licensed conveyancer\"}, {\"Y_2\": \"press sub\", \"Y_5\": \"Garth Fudge\", \"Y_7\": \"Brittaney Rowell\", \"Y_3\": \"Danielle Banner\"}, {\"Y_5\": \"Garth Fudge\", \"Y_7\": \"Brittaney Rowell\", \"Y_3\": \"Helga Robertson\", \"Y_2\": \"occupational hygienist\"}]",
+        "answer": [
+            "doctor",
+            "hydrographic surveyor",
+            "licensed conveyancer",
+            "occupational hygienist",
+            "press sub"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "father(Y_7, Y_5)",
+                "sibling(\"Dalton Fudge\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "29c598a7-d50b-4a01-a40d-907f824ef9db",
+        "question": "What is the hobby of the great-grandparent of the cousin of the brother-in-law of Armando Schafer?",
+        "solution_traces": "[{\"Y_5\": \"Rory Kirkham\", \"Y_3\": \"Bryan Kirksey\", \"Y_2\": \"photography\", \"Y_7\": \"Oscar Warren\"}, {\"Y_5\": \"Rory Kirkham\", \"Y_2\": \"long-distance running\", \"Y_3\": \"Alethia Kirksey\", \"Y_7\": \"Oscar Warren\"}]",
+        "answer": [
+            "long-distance running",
+            "photography"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandparent(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "brother_in_law(\"Armando Schafer\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "23dd05c1-e6eb-4df6-a952-537a037b8663",
+        "question": "What is the date of birth of the sibling of the sister of the sister of Florence Kirkham?",
+        "solution_traces": "[{\"Y_7\": \"Maragret Warren\", \"Y_5\": \"Bess Kirksey\", \"Y_3\": \"Maragret Warren\", \"Y_2\": \"0233-10-06\"}, {\"Y_7\": \"Bess Kirksey\", \"Y_2\": \"0233-10-06\", \"Y_3\": \"Bess Kirksey\", \"Y_5\": \"Maragret Warren\"}, {\"Y_7\": \"Bess Kirksey\", \"Y_2\": \"0233-10-06\", \"Y_3\": \"Bess Kirksey\", \"Y_5\": \"Florence Kirkham\"}, {\"Y_7\": \"Maragret Warren\", \"Y_2\": \"0233-10-06\", \"Y_3\": \"Bess Kirksey\", \"Y_5\": \"Florence Kirkham\"}, {\"Y_7\": \"Bess Kirksey\", \"Y_3\": \"Maragret Warren\", \"Y_2\": \"0233-10-06\", \"Y_5\": \"Florence Kirkham\"}, {\"Y_7\": \"Maragret Warren\", \"Y_5\": \"Bess Kirksey\", \"Y_3\": \"Florence Kirkham\", \"Y_2\": \"0239-06-25\"}, {\"Y_7\": \"Bess Kirksey\", \"Y_3\": \"Florence Kirkham\", \"Y_2\": \"0239-06-25\", \"Y_5\": \"Maragret Warren\"}, {\"Y_7\": \"Maragret Warren\", \"Y_3\": \"Maragret Warren\", \"Y_2\": \"0233-10-06\", \"Y_5\": \"Florence Kirkham\"}]",
+        "answer": [
+            "0233-10-06",
+            "0239-06-25"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sister(Y_7, Y_5)",
+                "sister(\"Florence Kirkham\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "00661d62-d67e-438e-9768-e3fafe3d13a0",
+        "question": "What is the hobby of the great-grandfather of the male cousin of the brother-in-law of Armando Schafer?",
+        "solution_traces": "[{\"Y_5\": \"Rory Kirkham\", \"Y_3\": \"Bryan Kirksey\", \"Y_2\": \"photography\", \"Y_7\": \"Oscar Warren\"}]",
+        "answer": [
+            "photography"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandfather(Y_5, Y_3)",
+                "male_cousin(Y_7, Y_5)",
+                "brother_in_law(\"Armando Schafer\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fbf30921-4470-4bc1-9201-52fdcb9df2d5",
+        "question": "What is the hobby of the sibling of the cousin of the friend of Joelle Fudge?",
+        "solution_traces": "[{\"Y_5\": \"Danielle Banner\", \"Y_3\": \"Helga Robertson\", \"Y_2\": \"geocaching\", \"Y_7\": \"Rayna Fudge\"}, {\"Y_5\": \"Helga Robertson\", \"Y_3\": \"Danielle Banner\", \"Y_2\": \"skiing\", \"Y_7\": \"Rayna Fudge\"}, {\"Y_5\": \"Helga Robertson\", \"Y_2\": \"seashell collecting\", \"Y_3\": \"Daniel Rowell\", \"Y_7\": \"Rayna Fudge\"}, {\"Y_5\": \"Daniel Rowell\", \"Y_2\": \"skiing\", \"Y_3\": \"Danielle Banner\", \"Y_7\": \"Rayna Fudge\"}, {\"Y_5\": \"Danielle Banner\", \"Y_2\": \"seashell collecting\", \"Y_3\": \"Daniel Rowell\", \"Y_7\": \"Rayna Fudge\"}, {\"Y_5\": \"Daniel Rowell\", \"Y_3\": \"Helga Robertson\", \"Y_2\": \"geocaching\", \"Y_7\": \"Rayna Fudge\"}]",
+        "answer": [
+            "geocaching",
+            "seashell collecting",
+            "skiing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "friend(\"Joelle Fudge\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "63d7321d-bab9-4792-a0a4-3c3e05a75907",
+        "question": "What is the occupation of the grandchild of the mother-in-law of the son-in-law of Emerson Warren?",
+        "solution_traces": "[{\"Y_7\": \"Armando Schafer\", \"Y_3\": \"Yasmin Schafer\", \"Y_2\": \"environmental health practitioner\", \"Y_5\": \"Maragret Warren\"}, {\"Y_2\": \"presenter\", \"Y_7\": \"Armando Schafer\", \"Y_3\": \"Emery Schafer\", \"Y_5\": \"Maragret Warren\"}, {\"Y_2\": \"architect\", \"Y_7\": \"Armando Schafer\", \"Y_3\": \"Alexa Schafer\", \"Y_5\": \"Maragret Warren\"}, {\"Y_7\": \"Armando Schafer\", \"Y_3\": \"Violet Schafer\", \"Y_2\": \"water engineer\", \"Y_5\": \"Maragret Warren\"}, {\"Y_7\": \"Armando Schafer\", \"Y_3\": \"Moises Warren\", \"Y_2\": \"technical brewer\", \"Y_5\": \"Maragret Warren\"}, {\"Y_7\": \"Armando Schafer\", \"Y_2\": \"meteorologist\", \"Y_3\": \"Floyd Schafer\", \"Y_5\": \"Maragret Warren\"}]",
+        "answer": [
+            "architect",
+            "environmental health practitioner",
+            "meteorologist",
+            "presenter",
+            "technical brewer",
+            "water engineer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "mother_in_law(Y_7, Y_5)",
+                "son_in_law(\"Emerson Warren\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "df1b3904-9aba-49cc-96d8-78c3d401f204",
+        "question": "What is the occupation of the friend of the father-in-law of the great-aunt of Floyd Schafer?",
+        "solution_traces": "[{\"Y_7\": \"Florence Kirkham\", \"Y_5\": \"Shane Kirkham\", \"Y_3\": \"Angel Fudge\", \"Y_2\": \"advertising account executive\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_3\": \"Robbie Hunsaker\", \"Y_5\": \"Shane Kirkham\", \"Y_2\": \"doctor\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_5\": \"Shane Kirkham\", \"Y_3\": \"Norris Hunsaker\", \"Y_2\": \"prison officer\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_5\": \"Shane Kirkham\", \"Y_3\": \"Danielle Banner\", \"Y_2\": \"press sub\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_5\": \"Shane Kirkham\", \"Y_2\": \"geochemist\", \"Y_3\": \"Brittaney Rowell\"}]",
+        "answer": [
+            "advertising account executive",
+            "doctor",
+            "geochemist",
+            "press sub",
+            "prison officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "father_in_law(Y_7, Y_5)",
+                "great_aunt(\"Floyd Schafer\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "368ca25e-6f7a-4374-bd29-f9f3d7b726d4",
+        "question": "What is the occupation of the cousin of the female cousin of the great-granddaughter of Nancy Summerlin?",
+        "solution_traces": "[{\"Y_2\": \"press sub\", \"Y_7\": \"Danielle Banner\", \"Y_3\": \"Danielle Banner\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_5\": \"Danielle Banner\", \"Y_2\": \"hydrographic surveyor\", \"Y_3\": \"Rayna Fudge\", \"Y_7\": \"Robbie Hunsaker\"}, {\"Y_3\": \"Robbie Hunsaker\", \"Y_5\": \"Helga Robertson\", \"Y_7\": \"Robbie Hunsaker\", \"Y_2\": \"doctor\"}, {\"Y_5\": \"Helga Robertson\", \"Y_3\": \"Rayna Fudge\", \"Y_2\": \"hydrographic surveyor\", \"Y_7\": \"Rayna Fudge\"}, {\"Y_5\": \"Danielle Banner\", \"Y_3\": \"Robbie Hunsaker\", \"Y_2\": \"doctor\", \"Y_7\": \"Rayna Fudge\"}, {\"Y_5\": \"Danielle Banner\", \"Y_3\": \"Robbie Hunsaker\", \"Y_7\": \"Robbie Hunsaker\", \"Y_2\": \"doctor\"}, {\"Y_7\": \"Danielle Banner\", \"Y_5\": \"Robbie Hunsaker\", \"Y_3\": \"Helga Robertson\", \"Y_2\": \"occupational hygienist\"}, {\"Y_7\": \"Helga Robertson\", \"Y_5\": \"Robbie Hunsaker\", \"Y_3\": \"Helga Robertson\", \"Y_2\": \"occupational hygienist\"}, {\"Y_2\": \"press sub\", \"Y_7\": \"Helga Robertson\", \"Y_5\": \"Robbie Hunsaker\", \"Y_3\": \"Danielle Banner\"}, {\"Y_7\": \"Helga Robertson\", \"Y_5\": \"Robbie Hunsaker\", \"Y_3\": \"Daniel Rowell\", \"Y_2\": \"licensed conveyancer\"}, {\"Y_5\": \"Helga Robertson\", \"Y_3\": \"Rayna Fudge\", \"Y_7\": \"Robbie Hunsaker\", \"Y_2\": \"hydrographic surveyor\"}, {\"Y_7\": \"Danielle Banner\", \"Y_5\": \"Robbie Hunsaker\", \"Y_3\": \"Daniel Rowell\", \"Y_2\": \"licensed conveyancer\"}, {\"Y_2\": \"press sub\", \"Y_7\": \"Danielle Banner\", \"Y_5\": \"Robbie Hunsaker\", \"Y_3\": \"Danielle Banner\"}, {\"Y_2\": \"occupational hygienist\", \"Y_7\": \"Helga Robertson\", \"Y_3\": \"Helga Robertson\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_2\": \"press sub\", \"Y_7\": \"Helga Robertson\", \"Y_3\": \"Danielle Banner\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_7\": \"Danielle Banner\", \"Y_2\": \"occupational hygienist\", \"Y_3\": \"Helga Robertson\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_7\": \"Danielle Banner\", \"Y_3\": \"Daniel Rowell\", \"Y_2\": \"licensed conveyancer\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_3\": \"Robbie Hunsaker\", \"Y_5\": \"Helga Robertson\", \"Y_2\": \"doctor\", \"Y_7\": \"Rayna Fudge\"}, {\"Y_5\": \"Danielle Banner\", \"Y_3\": \"Rayna Fudge\", \"Y_2\": \"hydrographic surveyor\", \"Y_7\": \"Rayna Fudge\"}, {\"Y_7\": \"Helga Robertson\", \"Y_3\": \"Daniel Rowell\", \"Y_2\": \"licensed conveyancer\", \"Y_5\": \"Rayna Fudge\"}]",
+        "answer": [
+            "doctor",
+            "hydrographic surveyor",
+            "licensed conveyancer",
+            "occupational hygienist",
+            "press sub"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "cousin(Y_5, Y_3)",
+                "female_cousin(Y_7, Y_5)",
+                "great_granddaughter(\"Nancy Summerlin\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 10,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "20765f6f-01d6-474a-9bd7-19d96129239f",
+        "question": "What is the hobby of the father-in-law of the daughter-in-law of the parent of Garth Fudge?",
+        "solution_traces": "[{\"Y_5\": \"Anita Fudge\", \"Y_3\": \"Carter Fudge\", \"Y_2\": \"people-watching\", \"Y_7\": \"Carter Fudge\"}, {\"Y_5\": \"Anita Fudge\", \"Y_3\": \"Carter Fudge\", \"Y_2\": \"people-watching\", \"Y_7\": \"Kristie Fudge\"}]",
+        "answer": [
+            "people-watching"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "father_in_law(Y_5, Y_3)",
+                "daughter_in_law(Y_7, Y_5)",
+                "parent(\"Garth Fudge\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8638f3f8-021d-4acc-ad98-04c8df760626",
+        "question": "What is the hobby of the great-grandchild of the mother-in-law of the friend of Mavis Robertson?",
+        "solution_traces": "[{\"Y_5\": \"Alethia Kirksey\", \"Y_2\": \"graffiti\", \"Y_3\": \"Rory Kirkham\", \"Y_7\": \"Maira Kirksey\"}, {\"Y_3\": \"Oscar Warren\", \"Y_5\": \"Alethia Kirksey\", \"Y_2\": \"marching band\", \"Y_7\": \"Maira Kirksey\"}, {\"Y_5\": \"Alethia Kirksey\", \"Y_3\": \"Ai Schafer\", \"Y_2\": \"astronomy\", \"Y_7\": \"Maira Kirksey\"}]",
+        "answer": [
+            "astronomy",
+            "graffiti",
+            "marching band"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandchild(Y_5, Y_3)",
+                "mother_in_law(Y_7, Y_5)",
+                "friend(\"Mavis Robertson\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "99635a3e-32bd-4334-9923-19d36b982d3a",
+        "question": "What is the occupation of the son-in-law of the sibling of the granddaughter of Bryan Kirksey?",
+        "solution_traces": "[{\"Y_7\": \"Florence Kirkham\", \"Y_2\": \"air cabin crew\", \"Y_3\": \"Armando Schafer\", \"Y_5\": \"Maragret Warren\"}, {\"Y_7\": \"Bess Kirksey\", \"Y_2\": \"air cabin crew\", \"Y_3\": \"Armando Schafer\", \"Y_5\": \"Maragret Warren\"}]",
+        "answer": [
+            "air cabin crew"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "son_in_law(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "granddaughter(\"Bryan Kirksey\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4c98ba13-18b8-47f1-b14d-65218ffa7141",
+        "question": "What is the date of birth of the grandparent of the female second cousin of the child of Robbie Hunsaker?",
+        "solution_traces": "[{\"Y_3\": \"Lyle Rowell\", \"Y_2\": \"0273-01-08\", \"Y_5\": \"Tanya Banner\", \"Y_7\": \"Amy Hunsaker\"}, {\"Y_5\": \"Tanya Banner\", \"Y_7\": \"Amy Hunsaker\", \"Y_3\": \"Brittaney Rowell\", \"Y_2\": \"0272-10-19\"}]",
+        "answer": [
+            "0272-10-19",
+            "0273-01-08"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandparent(Y_5, Y_3)",
+                "female_second_cousin(Y_7, Y_5)",
+                "child(\"Robbie Hunsaker\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9789ef5e-8967-4971-b27f-23da3d42c928",
+        "question": "What is the hobby of the male first cousin once removed of the cousin of the niece of Florence Kirkham?",
+        "solution_traces": "[{\"Y_5\": \"Rory Kirkham\", \"Y_3\": \"Floyd Schafer\", \"Y_2\": \"lomography\", \"Y_7\": \"Ai Schafer\"}, {\"Y_5\": \"Rory Kirkham\", \"Y_2\": \"flower collecting and pressing\", \"Y_7\": \"Ai Schafer\", \"Y_3\": \"Moises Warren\"}, {\"Y_5\": \"Rory Kirkham\", \"Y_2\": \"antiquing\", \"Y_3\": \"Emery Schafer\", \"Y_7\": \"Ai Schafer\"}]",
+        "answer": [
+            "antiquing",
+            "flower collecting and pressing",
+            "lomography"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "male_first_cousin_once_removed(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "niece(\"Florence Kirkham\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 10,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "62fd6cf0-c608-4d19-8a9e-5afebca151a5",
+        "question": "What is the occupation of the father-in-law of the brother of the friend of Frederic Kirksey?",
+        "solution_traces": "[{\"Y_3\": \"Frederic Kirksey\", \"Y_2\": \"geoscientist\", \"Y_5\": \"Vernon Kirkham\", \"Y_7\": \"Charley Kirkham\"}]",
+        "answer": [
+            "geoscientist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "father_in_law(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "friend(\"Frederic Kirksey\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c7ecd0a1-5725-43db-b209-39ca4a03ada5",
+        "question": "What is the occupation of the grandfather of the great-granddaughter of the friend of Norris Hunsaker?",
+        "solution_traces": "[{\"Y_2\": \"recycling officer\", \"Y_7\": \"Nancy Summerlin\", \"Y_5\": \"Robbie Hunsaker\", \"Y_3\": \"Garth Fudge\"}, {\"Y_2\": \"recycling officer\", \"Y_7\": \"Jack Summerlin\", \"Y_5\": \"Robbie Hunsaker\", \"Y_3\": \"Garth Fudge\"}, {\"Y_2\": \"recycling officer\", \"Y_7\": \"Jack Summerlin\", \"Y_3\": \"Garth Fudge\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_5\": \"Danielle Banner\", \"Y_7\": \"Nancy Summerlin\", \"Y_2\": \"recycling officer\", \"Y_3\": \"Garth Fudge\"}, {\"Y_5\": \"Danielle Banner\", \"Y_7\": \"Jack Summerlin\", \"Y_2\": \"recycling officer\", \"Y_3\": \"Garth Fudge\"}, {\"Y_2\": \"recycling officer\", \"Y_7\": \"Nancy Summerlin\", \"Y_3\": \"Garth Fudge\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_2\": \"recycling officer\", \"Y_5\": \"Helga Robertson\", \"Y_7\": \"Nancy Summerlin\", \"Y_3\": \"Garth Fudge\"}, {\"Y_2\": \"recycling officer\", \"Y_5\": \"Helga Robertson\", \"Y_7\": \"Jack Summerlin\", \"Y_3\": \"Garth Fudge\"}]",
+        "answer": [
+            "recycling officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandfather(Y_5, Y_3)",
+                "great_granddaughter(Y_7, Y_5)",
+                "friend(\"Norris Hunsaker\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "030c71e3-c9e9-4b4f-b21f-55c489e039ae",
+        "question": "What is the date of birth of the sibling of the aunt of the nephew of Danielle Banner?",
+        "solution_traces": "[{\"Y_5\": \"Danielle Banner\", \"Y_2\": \"0296-09-18\", \"Y_3\": \"Helga Robertson\", \"Y_7\": \"Ignacio Robertson\"}, {\"Y_5\": \"Danielle Banner\", \"Y_2\": \"0300-12-30\", \"Y_3\": \"Daniel Rowell\", \"Y_7\": \"Ignacio Robertson\"}]",
+        "answer": [
+            "0296-09-18",
+            "0300-12-30"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "aunt(Y_7, Y_5)",
+                "nephew(\"Danielle Banner\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "055cabce-1d46-4dd8-ae95-baf92264030e",
+        "question": "What is the date of birth of the great-grandfather of the grandchild of the child of Carter Fudge?",
+        "solution_traces": "[{\"Y_5\": \"Danielle Banner\", \"Y_3\": \"Carter Fudge\", \"Y_7\": \"Garth Fudge\", \"Y_2\": \"0217-01-23\"}, {\"Y_5\": \"Helga Robertson\", \"Y_3\": \"Carter Fudge\", \"Y_7\": \"Garth Fudge\", \"Y_2\": \"0217-01-23\"}, {\"Y_3\": \"Carter Fudge\", \"Y_7\": \"Garth Fudge\", \"Y_2\": \"0217-01-23\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_3\": \"Carter Fudge\", \"Y_7\": \"Garth Fudge\", \"Y_2\": \"0217-01-23\", \"Y_5\": \"Robbie Hunsaker\"}, {\"Y_5\": \"Daniel Rowell\", \"Y_7\": \"Garth Fudge\", \"Y_3\": \"Jack Summerlin\", \"Y_2\": \"0219-06-14\"}, {\"Y_5\": \"Danielle Banner\", \"Y_7\": \"Garth Fudge\", \"Y_3\": \"Jack Summerlin\", \"Y_2\": \"0219-06-14\"}, {\"Y_5\": \"Helga Robertson\", \"Y_7\": \"Garth Fudge\", \"Y_3\": \"Jack Summerlin\", \"Y_2\": \"0219-06-14\"}, {\"Y_7\": \"Garth Fudge\", \"Y_3\": \"Jack Summerlin\", \"Y_5\": \"Rayna Fudge\", \"Y_2\": \"0219-06-14\"}, {\"Y_3\": \"Jack Summerlin\", \"Y_7\": \"Garth Fudge\", \"Y_5\": \"Robbie Hunsaker\", \"Y_2\": \"0219-06-14\"}, {\"Y_5\": \"Daniel Rowell\", \"Y_3\": \"Carter Fudge\", \"Y_7\": \"Garth Fudge\", \"Y_2\": \"0217-01-23\"}]",
+        "answer": [
+            "0217-01-23",
+            "0219-06-14"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandfather(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "child(\"Carter Fudge\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b126f3fb-71fa-4912-aeb6-416bb289d141",
+        "question": "What is the occupation of the brother of the friend of the friend of Ignacio Robertson?",
+        "solution_traces": "[{\"Y_2\": \"presenter\", \"Y_5\": \"Floyd Schafer\", \"Y_3\": \"Emery Schafer\", \"Y_7\": \"Joelle Fudge\"}, {\"Y_2\": \"presenter\", \"Y_5\": \"Violet Schafer\", \"Y_3\": \"Emery Schafer\", \"Y_7\": \"Joelle Fudge\"}, {\"Y_2\": \"meteorologist\", \"Y_5\": \"Violet Schafer\", \"Y_3\": \"Floyd Schafer\", \"Y_7\": \"Joelle Fudge\"}, {\"Y_2\": \"advertising account executive\", \"Y_7\": \"Danielle Banner\", \"Y_5\": \"Garth Fudge\", \"Y_3\": \"Angel Fudge\"}]",
+        "answer": [
+            "advertising account executive",
+            "meteorologist",
+            "presenter"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "brother(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "friend(\"Ignacio Robertson\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e5d0a13d-869e-4498-b1b9-3b8fc8680d6f",
+        "question": "What is the occupation of the sibling of the sister-in-law of the child of Shane Kirkham?",
+        "solution_traces": "[{\"Y_2\": \"gaffer\", \"Y_3\": \"Florence Kirkham\", \"Y_7\": \"Vernon Kirkham\", \"Y_5\": \"Maragret Warren\"}, {\"Y_2\": \"international aid worker\", \"Y_7\": \"Vernon Kirkham\", \"Y_3\": \"Bess Kirksey\", \"Y_5\": \"Maragret Warren\"}, {\"Y_2\": \"gaffer\", \"Y_5\": \"Bess Kirksey\", \"Y_3\": \"Florence Kirkham\", \"Y_7\": \"Vernon Kirkham\"}, {\"Y_2\": \"agricultural engineer\", \"Y_5\": \"Bess Kirksey\", \"Y_3\": \"Maragret Warren\", \"Y_7\": \"Vernon Kirkham\"}]",
+        "answer": [
+            "agricultural engineer",
+            "gaffer",
+            "international aid worker"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sister_in_law(Y_7, Y_5)",
+                "child(\"Shane Kirkham\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7db1ecce-31b7-4147-b0ef-179c49c2babc",
+        "question": "What is the hobby of the great-aunt of the sibling of the sibling of Floyd Schafer?",
+        "solution_traces": "[{\"Y_7\": \"Violet Schafer\", \"Y_5\": \"Floyd Schafer\", \"Y_3\": \"Bess Kirksey\", \"Y_2\": \"web design\"}, {\"Y_3\": \"Florence Kirkham\", \"Y_7\": \"Alexa Schafer\", \"Y_5\": \"Yasmin Schafer\", \"Y_2\": \"story writing\"}, {\"Y_7\": \"Emery Schafer\", \"Y_5\": \"Alexa Schafer\", \"Y_3\": \"Bess Kirksey\", \"Y_2\": \"web design\"}, {\"Y_7\": \"Violet Schafer\", \"Y_2\": \"story writing\", \"Y_3\": \"Florence Kirkham\", \"Y_5\": \"Emery Schafer\"}, {\"Y_7\": \"Emery Schafer\", \"Y_5\": \"Floyd Schafer\", \"Y_3\": \"Florence Kirkham\", \"Y_2\": \"story writing\"}, {\"Y_7\": \"Emery Schafer\", \"Y_5\": \"Yasmin Schafer\", \"Y_3\": \"Bess Kirksey\", \"Y_2\": \"web design\"}, {\"Y_5\": \"Floyd Schafer\", \"Y_7\": \"Yasmin Schafer\", \"Y_3\": \"Bess Kirksey\", \"Y_2\": \"web design\"}, {\"Y_7\": \"Emery Schafer\", \"Y_2\": \"web design\", \"Y_3\": \"Bess Kirksey\", \"Y_5\": \"Violet Schafer\"}, {\"Y_5\": \"Emery Schafer\", \"Y_2\": \"story writing\", \"Y_3\": \"Florence Kirkham\", \"Y_7\": \"Yasmin Schafer\"}, {\"Y_7\": \"Violet Schafer\", \"Y_5\": \"Yasmin Schafer\", \"Y_3\": \"Bess Kirksey\", \"Y_2\": \"web design\"}, {\"Y_2\": \"story writing\", \"Y_7\": \"Alexa Schafer\", \"Y_3\": \"Florence Kirkham\", \"Y_5\": \"Floyd Schafer\"}, {\"Y_3\": \"Florence Kirkham\", \"Y_7\": \"Emery Schafer\", \"Y_5\": \"Yasmin Schafer\", \"Y_2\": \"story writing\"}, {\"Y_2\": \"story writing\", \"Y_5\": \"Floyd Schafer\", \"Y_3\": \"Florence Kirkham\", \"Y_7\": \"Yasmin Schafer\"}, {\"Y_7\": \"Alexa Schafer\", \"Y_2\": \"web design\", \"Y_3\": \"Bess Kirksey\", \"Y_5\": \"Violet Schafer\"}, {\"Y_7\": \"Violet Schafer\", \"Y_2\": \"story writing\", \"Y_5\": \"Floyd Schafer\", \"Y_3\": \"Florence Kirkham\"}, {\"Y_7\": \"Alexa Schafer\", \"Y_5\": \"Yasmin Schafer\", \"Y_3\": \"Bess Kirksey\", \"Y_2\": \"web design\"}, {\"Y_7\": \"Violet Schafer\", \"Y_5\": \"Alexa Schafer\", \"Y_3\": \"Florence Kirkham\", \"Y_2\": \"story writing\"}, {\"Y_2\": \"story writing\", \"Y_3\": \"Florence Kirkham\", \"Y_7\": \"Yasmin Schafer\", \"Y_5\": \"Violet Schafer\"}, {\"Y_2\": \"story writing\", \"Y_7\": \"Alexa Schafer\", \"Y_3\": \"Florence Kirkham\", \"Y_5\": \"Violet Schafer\"}, {\"Y_5\": \"Alexa Schafer\", \"Y_3\": \"Florence Kirkham\", \"Y_7\": \"Yasmin Schafer\", \"Y_2\": \"story writing\"}, {\"Y_5\": \"Emery Schafer\", \"Y_2\": \"story writing\", \"Y_7\": \"Alexa Schafer\", \"Y_3\": \"Florence Kirkham\"}, {\"Y_7\": \"Violet Schafer\", \"Y_3\": \"Florence Kirkham\", \"Y_5\": \"Yasmin Schafer\", \"Y_2\": \"story writing\"}, {\"Y_7\": \"Alexa Schafer\", \"Y_2\": \"web design\", \"Y_5\": \"Floyd Schafer\", \"Y_3\": \"Bess Kirksey\"}, {\"Y_7\": \"Emery Schafer\", \"Y_3\": \"Florence Kirkham\", \"Y_2\": \"story writing\", \"Y_5\": \"Violet Schafer\"}, {\"Y_5\": \"Emery Schafer\", \"Y_7\": \"Yasmin Schafer\", \"Y_3\": \"Bess Kirksey\", \"Y_2\": \"web design\"}, {\"Y_5\": \"Alexa Schafer\", \"Y_7\": \"Yasmin Schafer\", \"Y_3\": \"Bess Kirksey\", \"Y_2\": \"web design\"}, {\"Y_5\": \"Emery Schafer\", \"Y_7\": \"Alexa Schafer\", \"Y_3\": \"Bess Kirksey\", \"Y_2\": \"web design\"}, {\"Y_3\": \"Florence Kirkham\", \"Y_7\": \"Emery Schafer\", \"Y_5\": \"Alexa Schafer\", \"Y_2\": \"story writing\"}, {\"Y_7\": \"Violet Schafer\", \"Y_2\": \"web design\", \"Y_3\": \"Bess Kirksey\", \"Y_5\": \"Emery Schafer\"}, {\"Y_7\": \"Emery Schafer\", \"Y_5\": \"Floyd Schafer\", \"Y_3\": \"Bess Kirksey\", \"Y_2\": \"web design\"}, {\"Y_7\": \"Violet Schafer\", \"Y_5\": \"Alexa Schafer\", \"Y_3\": \"Bess Kirksey\", \"Y_2\": \"web design\"}, {\"Y_2\": \"web design\", \"Y_7\": \"Yasmin Schafer\", \"Y_3\": \"Bess Kirksey\", \"Y_5\": \"Violet Schafer\"}]",
+        "answer": [
+            "story writing",
+            "web design"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_aunt(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "sibling(\"Floyd Schafer\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b39f75a0-6a1b-4fef-b39a-93a9baf9a7a1",
+        "question": "What is the date of birth of the grandparent of the child of the grandson of Freeda Dent?",
+        "solution_traces": "[{\"Y_7\": \"Augustus Robertson\", \"Y_5\": \"Ignacio Robertson\", \"Y_3\": \"Brittaney Rowell\", \"Y_2\": \"0272-10-19\"}, {\"Y_7\": \"Augustus Robertson\", \"Y_2\": \"0265-10-23\", \"Y_3\": \"Mavis Robertson\", \"Y_5\": \"Ignacio Robertson\"}, {\"Y_7\": \"Augustus Robertson\", \"Y_2\": \"0263-07-11\", \"Y_3\": \"Alex Robertson\", \"Y_5\": \"Ignacio Robertson\"}, {\"Y_7\": \"Augustus Robertson\", \"Y_2\": \"0273-01-08\", \"Y_3\": \"Lyle Rowell\", \"Y_5\": \"Ignacio Robertson\"}]",
+        "answer": [
+            "0263-07-11",
+            "0265-10-23",
+            "0272-10-19",
+            "0273-01-08"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandparent(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "grandson(\"Freeda Dent\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6a060604-7f46-40c5-a1af-477b4eda02f1",
+        "question": "What is the date of birth of the great-grandchild of the parent of the great-aunt of Yasmin Schafer?",
+        "solution_traces": "[{\"Y_3\": \"Alexa Schafer\", \"Y_7\": \"Bess Kirksey\", \"Y_2\": \"0285-04-14\", \"Y_5\": \"Maira Kirksey\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_2\": \"0291-01-08\", \"Y_5\": \"Maira Kirksey\", \"Y_3\": \"Moises Warren\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_5\": \"Frederic Kirksey\", \"Y_3\": \"Alexa Schafer\", \"Y_2\": \"0285-04-14\"}, {\"Y_7\": \"Bess Kirksey\", \"Y_2\": \"0286-04-22\", \"Y_5\": \"Maira Kirksey\", \"Y_3\": \"Yasmin Schafer\"}, {\"Y_7\": \"Bess Kirksey\", \"Y_2\": \"0286-04-22\", \"Y_3\": \"Emery Schafer\", \"Y_5\": \"Maira Kirksey\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_5\": \"Maira Kirksey\", \"Y_3\": \"Floyd Schafer\", \"Y_2\": \"0287-07-26\"}, {\"Y_2\": \"0286-04-22\", \"Y_7\": \"Bess Kirksey\", \"Y_5\": \"Frederic Kirksey\", \"Y_3\": \"Emery Schafer\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_5\": \"Frederic Kirksey\", \"Y_2\": \"0287-07-26\", \"Y_3\": \"Floyd Schafer\"}, {\"Y_2\": \"0287-07-26\", \"Y_7\": \"Bess Kirksey\", \"Y_5\": \"Maira Kirksey\", \"Y_3\": \"Floyd Schafer\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_2\": \"0286-04-22\", \"Y_3\": \"Emery Schafer\", \"Y_5\": \"Maira Kirksey\"}, {\"Y_7\": \"Bess Kirksey\", \"Y_5\": \"Frederic Kirksey\", \"Y_3\": \"Alexa Schafer\", \"Y_2\": \"0285-04-14\"}, {\"Y_7\": \"Bess Kirksey\", \"Y_2\": \"0291-01-08\", \"Y_5\": \"Maira Kirksey\", \"Y_3\": \"Moises Warren\"}, {\"Y_7\": \"Bess Kirksey\", \"Y_3\": \"Violet Schafer\", \"Y_2\": \"0288-09-02\", \"Y_5\": \"Maira Kirksey\"}, {\"Y_2\": \"0287-07-26\", \"Y_7\": \"Bess Kirksey\", \"Y_5\": \"Frederic Kirksey\", \"Y_3\": \"Floyd Schafer\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_2\": \"0286-04-22\", \"Y_5\": \"Frederic Kirksey\", \"Y_3\": \"Emery Schafer\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_2\": \"0286-04-22\", \"Y_5\": \"Maira Kirksey\", \"Y_3\": \"Yasmin Schafer\"}, {\"Y_7\": \"Bess Kirksey\", \"Y_5\": \"Frederic Kirksey\", \"Y_2\": \"0286-04-22\", \"Y_3\": \"Yasmin Schafer\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_3\": \"Alexa Schafer\", \"Y_5\": \"Maira Kirksey\", \"Y_2\": \"0285-04-14\"}, {\"Y_7\": \"Bess Kirksey\", \"Y_5\": \"Frederic Kirksey\", \"Y_2\": \"0291-01-08\", \"Y_3\": \"Moises Warren\"}, {\"Y_3\": \"Violet Schafer\", \"Y_7\": \"Bess Kirksey\", \"Y_5\": \"Frederic Kirksey\", \"Y_2\": \"0288-09-02\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_5\": \"Frederic Kirksey\", \"Y_2\": \"0286-04-22\", \"Y_3\": \"Yasmin Schafer\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_3\": \"Violet Schafer\", \"Y_5\": \"Frederic Kirksey\", \"Y_2\": \"0288-09-02\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_3\": \"Violet Schafer\", \"Y_2\": \"0288-09-02\", \"Y_5\": \"Maira Kirksey\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_2\": \"0291-01-08\", \"Y_5\": \"Frederic Kirksey\", \"Y_3\": \"Moises Warren\"}]",
+        "answer": [
+            "0285-04-14",
+            "0286-04-22",
+            "0287-07-26",
+            "0288-09-02",
+            "0291-01-08"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandchild(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "great_aunt(\"Yasmin Schafer\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dacd828a-bda2-4ba3-8f6b-930d7c560de7",
+        "question": "What is the date of birth of the great-granddaughter of the parent of the son of Kristie Fudge?",
+        "solution_traces": "[{\"Y_2\": \"0304-08-31\", \"Y_7\": \"Angel Fudge\", \"Y_3\": \"Danielle Banner\", \"Y_5\": \"Kristie Fudge\"}, {\"Y_2\": \"0296-09-18\", \"Y_7\": \"Garth Fudge\", \"Y_3\": \"Helga Robertson\", \"Y_5\": \"Carter Fudge\"}, {\"Y_3\": \"Robbie Hunsaker\", \"Y_2\": \"0304-05-31\", \"Y_7\": \"Angel Fudge\", \"Y_5\": \"Carter Fudge\"}, {\"Y_3\": \"Rayna Fudge\", \"Y_7\": \"Angel Fudge\", \"Y_2\": \"0302-05-31\", \"Y_5\": \"Kristie Fudge\"}, {\"Y_3\": \"Rayna Fudge\", \"Y_7\": \"Angel Fudge\", \"Y_2\": \"0302-05-31\", \"Y_5\": \"Carter Fudge\"}, {\"Y_3\": \"Rayna Fudge\", \"Y_7\": \"Garth Fudge\", \"Y_2\": \"0302-05-31\", \"Y_5\": \"Carter Fudge\"}, {\"Y_3\": \"Robbie Hunsaker\", \"Y_2\": \"0304-05-31\", \"Y_7\": \"Angel Fudge\", \"Y_5\": \"Kristie Fudge\"}, {\"Y_3\": \"Robbie Hunsaker\", \"Y_2\": \"0304-05-31\", \"Y_7\": \"Garth Fudge\", \"Y_5\": \"Kristie Fudge\"}, {\"Y_2\": \"0304-08-31\", \"Y_7\": \"Angel Fudge\", \"Y_3\": \"Danielle Banner\", \"Y_5\": \"Carter Fudge\"}, {\"Y_2\": \"0296-09-18\", \"Y_7\": \"Garth Fudge\", \"Y_3\": \"Helga Robertson\", \"Y_5\": \"Kristie Fudge\"}, {\"Y_2\": \"0296-09-18\", \"Y_7\": \"Angel Fudge\", \"Y_3\": \"Helga Robertson\", \"Y_5\": \"Kristie Fudge\"}, {\"Y_2\": \"0296-09-18\", \"Y_7\": \"Angel Fudge\", \"Y_3\": \"Helga Robertson\", \"Y_5\": \"Carter Fudge\"}, {\"Y_2\": \"0304-08-31\", \"Y_7\": \"Garth Fudge\", \"Y_3\": \"Danielle Banner\", \"Y_5\": \"Carter Fudge\"}, {\"Y_2\": \"0304-08-31\", \"Y_7\": \"Garth Fudge\", \"Y_3\": \"Danielle Banner\", \"Y_5\": \"Kristie Fudge\"}, {\"Y_3\": \"Robbie Hunsaker\", \"Y_2\": \"0304-05-31\", \"Y_7\": \"Garth Fudge\", \"Y_5\": \"Carter Fudge\"}, {\"Y_3\": \"Rayna Fudge\", \"Y_7\": \"Garth Fudge\", \"Y_2\": \"0302-05-31\", \"Y_5\": \"Kristie Fudge\"}]",
+        "answer": [
+            "0296-09-18",
+            "0302-05-31",
+            "0304-05-31",
+            "0304-08-31"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_granddaughter(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "son(\"Kristie Fudge\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6453deed-6fff-4a47-a32b-fa65d90e91d5",
+        "question": "What is the occupation of the great-granddaughter of the friend of the father of Anita Fudge?",
+        "solution_traces": "[{\"Y_2\": \"press sub\", \"Y_7\": \"Jack Summerlin\", \"Y_3\": \"Danielle Banner\", \"Y_5\": \"Carter Fudge\"}, {\"Y_3\": \"Robbie Hunsaker\", \"Y_7\": \"Jack Summerlin\", \"Y_2\": \"doctor\", \"Y_5\": \"Carter Fudge\"}, {\"Y_2\": \"occupational hygienist\", \"Y_7\": \"Jack Summerlin\", \"Y_3\": \"Helga Robertson\", \"Y_5\": \"Carter Fudge\"}, {\"Y_2\": \"hydrographic surveyor\", \"Y_7\": \"Jack Summerlin\", \"Y_3\": \"Rayna Fudge\", \"Y_5\": \"Carter Fudge\"}]",
+        "answer": [
+            "doctor",
+            "hydrographic surveyor",
+            "occupational hygienist",
+            "press sub"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_granddaughter(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "father(\"Anita Fudge\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1d7b4dcc-1d8c-4d86-b0c2-2570f6a2b865",
+        "question": "What is the hobby of the mother-in-law of the friend of the female cousin of Helga Robertson?",
+        "solution_traces": "[{\"Y_3\": \"Maragret Warren\", \"Y_5\": \"Velia Warren\", \"Y_2\": \"metal detecting\", \"Y_7\": \"Rayna Fudge\"}, {\"Y_2\": \"croquet\", \"Y_5\": \"Harold Banner\", \"Y_7\": \"Robbie Hunsaker\", \"Y_3\": \"Brittaney Rowell\"}, {\"Y_2\": \"business\", \"Y_5\": \"Florence Kirkham\", \"Y_3\": \"Anneliese Kirkham\", \"Y_7\": \"Rayna Fudge\"}, {\"Y_2\": \"ant farming\", \"Y_3\": \"Anita Fudge\", \"Y_5\": \"Joelle Fudge\", \"Y_7\": \"Rayna Fudge\"}]",
+        "answer": [
+            "ant farming",
+            "business",
+            "croquet",
+            "metal detecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "mother_in_law(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "female_cousin(\"Helga Robertson\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "be2e99e9-68b8-4fc4-b931-85307376a4bd",
+        "question": "What is the hobby of the daughter-in-law of the great-grandmother of the great-grandchild of Bryan Kirksey?",
+        "solution_traces": "[{\"Y_7\": \"Rory Kirkham\", \"Y_5\": \"Alethia Kirksey\", \"Y_2\": \"stuffed toy collecting\", \"Y_3\": \"Maira Kirksey\"}, {\"Y_2\": \"stuffed toy collecting\", \"Y_5\": \"Alethia Kirksey\", \"Y_3\": \"Maira Kirksey\", \"Y_7\": \"Oscar Warren\"}, {\"Y_2\": \"stuffed toy collecting\", \"Y_5\": \"Alethia Kirksey\", \"Y_3\": \"Maira Kirksey\", \"Y_7\": \"Ai Schafer\"}]",
+        "answer": [
+            "stuffed toy collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "daughter_in_law(Y_5, Y_3)",
+                "great_grandmother(Y_7, Y_5)",
+                "great_grandchild(\"Bryan Kirksey\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "083255be-7e13-4581-a87a-0ac201281924",
+        "question": "What is the hobby of the nephew of the great-aunt of the friend of Norris Hunsaker?",
+        "solution_traces": "[{\"Y_3\": \"Oscar Warren\", \"Y_2\": \"marching band\", \"Y_7\": \"Yasmin Schafer\", \"Y_5\": \"Florence Kirkham\"}, {\"Y_5\": \"Bess Kirksey\", \"Y_2\": \"graffiti\", \"Y_7\": \"Yasmin Schafer\", \"Y_3\": \"Rory Kirkham\"}, {\"Y_3\": \"Oscar Warren\", \"Y_5\": \"Bess Kirksey\", \"Y_7\": \"Yasmin Schafer\", \"Y_2\": \"marching band\"}]",
+        "answer": [
+            "graffiti",
+            "marching band"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "nephew(Y_5, Y_3)",
+                "great_aunt(Y_7, Y_5)",
+                "friend(\"Norris Hunsaker\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e5ebc47c-ec03-4288-b5d5-4bb274a99fc9",
+        "question": "What is the date of birth of the uncle of the niece of the uncle of Daniel Rowell?",
+        "solution_traces": "[{\"Y_5\": \"Helga Robertson\", \"Y_7\": \"Dalton Fudge\", \"Y_2\": \"0274-09-20\", \"Y_3\": \"Dalton Fudge\"}, {\"Y_5\": \"Danielle Banner\", \"Y_7\": \"Dalton Fudge\", \"Y_2\": \"0274-09-20\", \"Y_3\": \"Dalton Fudge\"}]",
+        "answer": [
+            "0274-09-20"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "uncle(Y_5, Y_3)",
+                "niece(Y_7, Y_5)",
+                "uncle(\"Daniel Rowell\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "27622b96-5964-4de2-8de5-9f60af079276",
+        "question": "What is the hobby of the female cousin of the cousin of the friend of Norris Hunsaker?",
+        "solution_traces": "[{\"Y_2\": \"water polo\", \"Y_5\": \"Moises Warren\", \"Y_7\": \"Yasmin Schafer\", \"Y_3\": \"Alexa Schafer\"}, {\"Y_5\": \"Moises Warren\", \"Y_3\": \"Violet Schafer\", \"Y_7\": \"Yasmin Schafer\", \"Y_2\": \"medical science\"}, {\"Y_2\": \"rock balancing\", \"Y_5\": \"Moises Warren\", \"Y_7\": \"Yasmin Schafer\", \"Y_3\": \"Yasmin Schafer\"}]",
+        "answer": [
+            "medical science",
+            "rock balancing",
+            "water polo"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "female_cousin(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "friend(\"Norris Hunsaker\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    }
+]

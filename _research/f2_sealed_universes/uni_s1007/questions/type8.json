@@ -1,0 +1,1182 @@
+[
+    {
+        "id": "4d332049-6462-42a0-bdf3-5dbfcf6125a8",
+        "question": "What is the occupation of the grandfather of the great-aunt of the person whose date of birth is 0285-04-14?",
+        "solution_traces": "[{\"Y_3\": \"Bryan Kirksey\", \"Y_5\": \"Bess Kirksey\", \"Y_7\": \"Alexa Schafer\", \"Y_2\": \"public relations account executive\"}, {\"Y_3\": \"Bryan Kirksey\", \"Y_7\": \"Alexa Schafer\", \"Y_2\": \"public relations account executive\", \"Y_5\": \"Florence Kirkham\"}]",
+        "answer": [
+            "public relations account executive"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandfather(Y_5, Y_3)",
+                "great_aunt(Y_7, Y_5)",
+                "dob(Y_7, \"0285-04-14\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ca9ad038-56d4-4312-9839-6e2b9b24695b",
+        "question": "What is the occupation of the grandchild of the father of the person whose date of birth is 0274-09-20?",
+        "solution_traces": "[{\"Y_3\": \"Robbie Hunsaker\", \"Y_5\": \"Garth Fudge\", \"Y_7\": \"Dalton Fudge\", \"Y_2\": \"doctor\"}, {\"Y_2\": \"press sub\", \"Y_5\": \"Garth Fudge\", \"Y_7\": \"Dalton Fudge\", \"Y_3\": \"Danielle Banner\"}, {\"Y_5\": \"Garth Fudge\", \"Y_7\": \"Dalton Fudge\", \"Y_3\": \"Helga Robertson\", \"Y_2\": \"occupational hygienist\"}, {\"Y_5\": \"Garth Fudge\", \"Y_7\": \"Dalton Fudge\", \"Y_2\": \"licensed conveyancer\", \"Y_3\": \"Daniel Rowell\"}, {\"Y_2\": \"hydrographic surveyor\", \"Y_5\": \"Garth Fudge\", \"Y_7\": \"Dalton Fudge\", \"Y_3\": \"Rayna Fudge\"}]",
+        "answer": [
+            "doctor",
+            "hydrographic surveyor",
+            "licensed conveyancer",
+            "occupational hygienist",
+            "press sub"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "father(Y_7, Y_5)",
+                "dob(Y_7, \"0274-09-20\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1666495e-7158-4388-9d4e-c6eb6f45cf2c",
+        "question": "What is the hobby of the niece of the brother-in-law of the person whose hobby is microscopy?",
+        "solution_traces": "[{\"Y_7\": \"Armando Schafer\", \"Y_2\": \"rock balancing\", \"Y_5\": \"Oscar Warren\", \"Y_3\": \"Yasmin Schafer\"}, {\"Y_3\": \"Alexa Schafer\", \"Y_7\": \"Armando Schafer\", \"Y_2\": \"water polo\", \"Y_5\": \"Oscar Warren\"}, {\"Y_7\": \"Armando Schafer\", \"Y_2\": \"medical science\", \"Y_3\": \"Violet Schafer\", \"Y_5\": \"Oscar Warren\"}]",
+        "answer": [
+            "medical science",
+            "rock balancing",
+            "water polo"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "niece(Y_5, Y_3)",
+                "brother_in_law(Y_7, Y_5)",
+                "hobby(Y_7, \"microscopy\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7c10983b-5952-4f0f-9288-bcac4ed042ff",
+        "question": "What is the date of birth of the husband of the mother of the person whose date of birth is 0239-06-25?",
+        "solution_traces": "[{\"Y_7\": \"Florence Kirkham\", \"Y_3\": \"Frederic Kirksey\", \"Y_5\": \"Maira Kirksey\", \"Y_2\": \"0210-05-10\"}]",
+        "answer": [
+            "0210-05-10"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "husband(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "dob(Y_7, \"0239-06-25\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c324e56e-abab-404e-80e4-e76896e01227",
+        "question": "What is the hobby of the nephew of the brother-in-law of the person whose hobby is microscopy?",
+        "solution_traces": "[{\"Y_7\": \"Armando Schafer\", \"Y_2\": \"lomography\", \"Y_5\": \"Oscar Warren\", \"Y_3\": \"Floyd Schafer\"}, {\"Y_7\": \"Armando Schafer\", \"Y_2\": \"antiquing\", \"Y_3\": \"Emery Schafer\", \"Y_5\": \"Oscar Warren\"}]",
+        "answer": [
+            "antiquing",
+            "lomography"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "nephew(Y_5, Y_3)",
+                "brother_in_law(Y_7, Y_5)",
+                "hobby(Y_7, \"microscopy\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8c77ffdd-8517-4790-a5c9-0b249a46d606",
+        "question": "What is the hobby of the child of the mother-in-law of the person whose hobby is art collecting?",
+        "solution_traces": "[{\"Y_3\": \"Dalton Fudge\", \"Y_5\": \"Anita Fudge\", \"Y_2\": \"business\", \"Y_7\": \"Joelle Fudge\"}, {\"Y_5\": \"Anita Fudge\", \"Y_2\": \"croquet\", \"Y_3\": \"Brittaney Rowell\", \"Y_7\": \"Joelle Fudge\"}]",
+        "answer": [
+            "business",
+            "croquet"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "child(Y_5, Y_3)",
+                "mother_in_law(Y_7, Y_5)",
+                "hobby(Y_7, \"art collecting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7eab488f-f185-4a0b-8831-719420f82b34",
+        "question": "What is the occupation of the niece of the sister-in-law of the person whose hobby is dancing?",
+        "solution_traces": "[{\"Y_3\": \"Ai Schafer\", \"Y_7\": \"Emerson Warren\", \"Y_2\": \"industrial designer\", \"Y_5\": \"Florence Kirkham\"}, {\"Y_5\": \"Bess Kirksey\", \"Y_3\": \"Ai Schafer\", \"Y_7\": \"Emerson Warren\", \"Y_2\": \"industrial designer\"}]",
+        "answer": [
+            "industrial designer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "niece(Y_5, Y_3)",
+                "sister_in_law(Y_7, Y_5)",
+                "hobby(Y_7, \"dancing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c3e344df-6d25-4339-92f6-d21c05ac5aab",
+        "question": "What is the occupation of the male cousin of the cousin of the person whose hobby is lomography?",
+        "solution_traces": "[{\"Y_2\": \"meteorologist\", \"Y_5\": \"Moises Warren\", \"Y_7\": \"Floyd Schafer\", \"Y_3\": \"Floyd Schafer\"}, {\"Y_2\": \"presenter\", \"Y_5\": \"Moises Warren\", \"Y_7\": \"Floyd Schafer\", \"Y_3\": \"Emery Schafer\"}]",
+        "answer": [
+            "meteorologist",
+            "presenter"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "male_cousin(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "hobby(Y_7, \"lomography\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b001af05-5ba4-45bf-9499-a1489f2121f6",
+        "question": "What is the occupation of the friend of the friend of the person whose occupation is lighting technician?",
+        "solution_traces": "[{\"Y_2\": \"gaffer\", \"Y_7\": \"Nancy Summerlin\", \"Y_3\": \"Florence Kirkham\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_3\": \"Jack Summerlin\", \"Y_7\": \"Nancy Summerlin\", \"Y_2\": \"psychotherapist\", \"Y_5\": \"Norris Hunsaker\"}, {\"Y_7\": \"Nancy Summerlin\", \"Y_3\": \"Joelle Fudge\", \"Y_5\": \"Rayna Fudge\", \"Y_2\": \"chartered certified accountant\"}, {\"Y_3\": \"Frederic Kirksey\", \"Y_7\": \"Nancy Summerlin\", \"Y_5\": \"Oscar Warren\", \"Y_2\": \"geoscientist\"}, {\"Y_3\": \"Velia Warren\", \"Y_7\": \"Nancy Summerlin\", \"Y_2\": \"theatre manager\", \"Y_5\": \"Violet Schafer\"}, {\"Y_2\": \"lighting technician\", \"Y_7\": \"Nancy Summerlin\", \"Y_3\": \"Nancy Summerlin\", \"Y_5\": \"Nevin Dent\"}, {\"Y_3\": \"Charley Kirkham\", \"Y_7\": \"Nancy Summerlin\", \"Y_5\": \"Oscar Warren\", \"Y_2\": \"corporate investment banker\"}, {\"Y_3\": \"Maira Kirksey\", \"Y_7\": \"Nancy Summerlin\", \"Y_2\": \"corporate investment banker\", \"Y_5\": \"Violet Schafer\"}, {\"Y_5\": \"Emery Schafer\", \"Y_7\": \"Nancy Summerlin\", \"Y_2\": \"lighting technician\", \"Y_3\": \"Nancy Summerlin\"}, {\"Y_2\": \"international aid worker\", \"Y_7\": \"Nancy Summerlin\", \"Y_3\": \"Bess Kirksey\", \"Y_5\": \"Violet Schafer\"}, {\"Y_2\": \"lighting technician\", \"Y_7\": \"Nancy Summerlin\", \"Y_3\": \"Nancy Summerlin\", \"Y_5\": \"Violet Schafer\"}, {\"Y_2\": \"interpreter\", \"Y_7\": \"Nancy Summerlin\", \"Y_3\": \"Rory Kirkham\", \"Y_5\": \"Norris Hunsaker\"}, {\"Y_3\": \"Charley Kirkham\", \"Y_7\": \"Nancy Summerlin\", \"Y_5\": \"Rayna Fudge\", \"Y_2\": \"corporate investment banker\"}, {\"Y_2\": \"interpreter\", \"Y_7\": \"Nancy Summerlin\", \"Y_3\": \"Rory Kirkham\", \"Y_5\": \"Nevin Dent\"}, {\"Y_7\": \"Nancy Summerlin\", \"Y_5\": \"Nevin Dent\", \"Y_3\": \"Keri Warren\", \"Y_2\": \"leisure centre manager\"}, {\"Y_2\": \"geochemist\", \"Y_3\": \"Brittaney Rowell\", \"Y_7\": \"Nancy Summerlin\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_2\": \"lighting technician\", \"Y_7\": \"Nancy Summerlin\", \"Y_3\": \"Nancy Summerlin\", \"Y_5\": \"Oscar Warren\"}, {\"Y_7\": \"Nancy Summerlin\", \"Y_3\": \"Joelle Fudge\", \"Y_2\": \"chartered certified accountant\", \"Y_5\": \"Violet Schafer\"}, {\"Y_7\": \"Nancy Summerlin\", \"Y_2\": \"environmental health practitioner\", \"Y_5\": \"Norris Hunsaker\", \"Y_3\": \"Yasmin Schafer\"}, {\"Y_2\": \"lighting technician\", \"Y_7\": \"Nancy Summerlin\", \"Y_3\": \"Nancy Summerlin\", \"Y_5\": \"Norris Hunsaker\"}, {\"Y_2\": \"physiological scientist\", \"Y_7\": \"Nancy Summerlin\", \"Y_5\": \"Oscar Warren\", \"Y_3\": \"Tanya Banner\"}, {\"Y_7\": \"Nancy Summerlin\", \"Y_5\": \"Norris Hunsaker\", \"Y_2\": \"speech and language therapist\", \"Y_3\": \"Shane Kirkham\"}, {\"Y_3\": \"Velia Warren\", \"Y_7\": \"Nancy Summerlin\", \"Y_5\": \"Rayna Fudge\", \"Y_2\": \"theatre manager\"}, {\"Y_2\": \"lighting technician\", \"Y_7\": \"Nancy Summerlin\", \"Y_3\": \"Nancy Summerlin\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_3\": \"Bryan Kirksey\", \"Y_7\": \"Nancy Summerlin\", \"Y_2\": \"public relations account executive\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_3\": \"Velia Warren\", \"Y_7\": \"Nancy Summerlin\", \"Y_5\": \"Nevin Dent\", \"Y_2\": \"theatre manager\"}]",
+        "answer": [
+            "chartered certified accountant",
+            "corporate investment banker",
+            "environmental health practitioner",
+            "gaffer",
+            "geochemist",
+            "geoscientist",
+            "international aid worker",
+            "interpreter",
+            "leisure centre manager",
+            "lighting technician",
+            "physiological scientist",
+            "psychotherapist",
+            "public relations account executive",
+            "speech and language therapist",
+            "theatre manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "job(Y_7, \"lighting technician\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "493e8e9a-0228-4445-b574-b16459c91095",
+        "question": "What is the hobby of the great-uncle of the grandchild of the person whose date of birth is 0243-08-05?",
+        "solution_traces": "[{\"Y_2\": \"canoeing\", \"Y_5\": \"Helga Robertson\", \"Y_7\": \"Garth Fudge\", \"Y_3\": \"Angel Fudge\"}, {\"Y_2\": \"canoeing\", \"Y_3\": \"Angel Fudge\", \"Y_7\": \"Garth Fudge\", \"Y_5\": \"Rayna Fudge\"}, {\"Y_5\": \"Danielle Banner\", \"Y_7\": \"Garth Fudge\", \"Y_2\": \"canoeing\", \"Y_3\": \"Angel Fudge\"}, {\"Y_5\": \"Daniel Rowell\", \"Y_7\": \"Garth Fudge\", \"Y_2\": \"canoeing\", \"Y_3\": \"Angel Fudge\"}, {\"Y_2\": \"canoeing\", \"Y_7\": \"Garth Fudge\", \"Y_5\": \"Robbie Hunsaker\", \"Y_3\": \"Angel Fudge\"}]",
+        "answer": [
+            "canoeing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_uncle(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "dob(Y_7, \"0243-08-05\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ebaf074e-0567-43ce-b4d0-25e99b3ded3e",
+        "question": "What is the hobby of the female cousin of the grandchild of the person whose hobby is fishkeeping?",
+        "solution_traces": "[{\"Y_2\": \"coin collecting\", \"Y_5\": \"Ignacio Robertson\", \"Y_3\": \"Tanya Banner\", \"Y_7\": \"Mavis Robertson\"}]",
+        "answer": [
+            "coin collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "female_cousin(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "hobby(Y_7, \"fishkeeping\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d2414bc5-9aa1-40ad-b598-39c85cb5c42f",
+        "question": "What is the occupation of the great-grandson of the wife of the person whose occupation is public relations account executive?",
+        "solution_traces": "[{\"Y_5\": \"Alethia Kirksey\", \"Y_2\": \"interpreter\", \"Y_3\": \"Rory Kirkham\", \"Y_7\": \"Bryan Kirksey\"}, {\"Y_3\": \"Oscar Warren\", \"Y_5\": \"Alethia Kirksey\", \"Y_2\": \"hospital pharmacist\", \"Y_7\": \"Bryan Kirksey\"}]",
+        "answer": [
+            "hospital pharmacist",
+            "interpreter"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandson(Y_5, Y_3)",
+                "wife(Y_7, Y_5)",
+                "job(Y_7, \"public relations account executive\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f7d95f6d-8e1d-4610-b0f8-cab9215882ed",
+        "question": "What is the date of birth of the niece of the female cousin of the person whose date of birth is 0304-05-31?",
+        "solution_traces": "[{\"Y_5\": \"Helga Robertson\", \"Y_7\": \"Robbie Hunsaker\", \"Y_3\": \"Tanya Banner\", \"Y_2\": \"0337-03-25\"}]",
+        "answer": [
+            "0337-03-25"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "niece(Y_5, Y_3)",
+                "female_cousin(Y_7, Y_5)",
+                "dob(Y_7, \"0304-05-31\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "00d2eddc-09e7-4d0a-ba07-f0e33d3ccd22",
+        "question": "What is the hobby of the friend of the brother-in-law of the person whose occupation is gaffer?",
+        "solution_traces": "[{\"Y_7\": \"Florence Kirkham\", \"Y_3\": \"Carter Fudge\", \"Y_2\": \"people-watching\", \"Y_5\": \"Charley Kirkham\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_2\": \"photography\", \"Y_3\": \"Augustus Robertson\", \"Y_5\": \"Charley Kirkham\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_3\": \"Oscar Warren\", \"Y_2\": \"marching band\", \"Y_5\": \"Charley Kirkham\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_3\": \"Frederic Kirksey\", \"Y_2\": \"gongoozling\", \"Y_5\": \"Charley Kirkham\"}, {\"Y_7\": \"Florence Kirkham\", \"Y_3\": \"Rayna Fudge\", \"Y_5\": \"Charley Kirkham\", \"Y_2\": \"life science\"}]",
+        "answer": [
+            "gongoozling",
+            "life science",
+            "marching band",
+            "people-watching",
+            "photography"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "brother_in_law(Y_7, Y_5)",
+                "job(Y_7, \"gaffer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1670896b-8e7d-4616-ab92-1771e063d1f8",
+        "question": "What is the occupation of the grandmother of the grandchild of the person whose hobby is gongoozling?",
+        "solution_traces": "[{\"Y_3\": \"Maira Kirksey\", \"Y_7\": \"Frederic Kirksey\", \"Y_5\": \"Ai Schafer\", \"Y_2\": \"corporate investment banker\"}, {\"Y_5\": \"Rory Kirkham\", \"Y_3\": \"Maira Kirksey\", \"Y_7\": \"Frederic Kirksey\", \"Y_2\": \"corporate investment banker\"}, {\"Y_3\": \"Maira Kirksey\", \"Y_7\": \"Frederic Kirksey\", \"Y_5\": \"Oscar Warren\", \"Y_2\": \"corporate investment banker\"}, {\"Y_5\": \"Rory Kirkham\", \"Y_2\": \"theatre manager\", \"Y_7\": \"Frederic Kirksey\", \"Y_3\": \"Anneliese Kirkham\"}]",
+        "answer": [
+            "corporate investment banker",
+            "theatre manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandmother(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "hobby(Y_7, \"gongoozling\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "28f5fb73-9ae8-4c0d-8620-c83602727661",
+        "question": "What is the occupation of the brother of the friend of the person whose hobby is skiing?",
+        "solution_traces": "[{\"Y_2\": \"presenter\", \"Y_3\": \"Emery Schafer\", \"Y_7\": \"Norris Hunsaker\", \"Y_5\": \"Yasmin Schafer\"}, {\"Y_2\": \"meteorologist\", \"Y_7\": \"Norris Hunsaker\", \"Y_5\": \"Yasmin Schafer\", \"Y_3\": \"Floyd Schafer\"}, {\"Y_2\": \"advertising account executive\", \"Y_7\": \"Danielle Banner\", \"Y_5\": \"Garth Fudge\", \"Y_3\": \"Angel Fudge\"}]",
+        "answer": [
+            "advertising account executive",
+            "meteorologist",
+            "presenter"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "brother(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "hobby(Y_7, \"skiing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c11744b1-7e20-413a-906e-091cc8cff2b3",
+        "question": "What is the date of birth of the sibling of the sister of the person whose occupation is press sub?",
+        "solution_traces": "[{\"Y_7\": \"Danielle Banner\", \"Y_5\": \"Helga Robertson\", \"Y_3\": \"Daniel Rowell\", \"Y_2\": \"0300-12-30\"}, {\"Y_7\": \"Danielle Banner\", \"Y_5\": \"Helga Robertson\", \"Y_3\": \"Danielle Banner\", \"Y_2\": \"0304-08-31\"}]",
+        "answer": [
+            "0300-12-30",
+            "0304-08-31"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sister(Y_7, Y_5)",
+                "job(Y_7, \"press sub\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "46e99ba6-52d0-46d7-9337-af2017b05a3c",
+        "question": "What is the date of birth of the grandson of the daughter-in-law of the person whose date of birth is 0217-01-23?",
+        "solution_traces": "[{\"Y_5\": \"Anita Fudge\", \"Y_3\": \"Daniel Rowell\", \"Y_2\": \"0300-12-30\", \"Y_7\": \"Carter Fudge\"}]",
+        "answer": [
+            "0300-12-30"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandson(Y_5, Y_3)",
+                "daughter_in_law(Y_7, Y_5)",
+                "dob(Y_7, \"0217-01-23\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d551fd6b-79d7-406a-8a20-a012d9913f06",
+        "question": "What is the occupation of the son-in-law of the friend of the person whose hobby is laser tag?",
+        "solution_traces": "[{\"Y_5\": \"Joelle Fudge\", \"Y_2\": \"prison officer\", \"Y_7\": \"Ignacio Robertson\", \"Y_3\": \"Norris Hunsaker\"}, {\"Y_5\": \"Jack Summerlin\", \"Y_2\": \"recycling officer\", \"Y_3\": \"Garth Fudge\", \"Y_7\": \"Ignacio Robertson\"}]",
+        "answer": [
+            "prison officer",
+            "recycling officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "son_in_law(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "hobby(Y_7, \"laser tag\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ed96a246-94ec-4c76-9a42-cff5255095e8",
+        "question": "What is the occupation of the sibling of the friend of the person whose date of birth is 0211-10-21?",
+        "solution_traces": "[{\"Y_2\": \"hydrographic surveyor\", \"Y_3\": \"Rayna Fudge\", \"Y_5\": \"Robbie Hunsaker\", \"Y_7\": \"Shane Kirkham\"}, {\"Y_5\": \"Brittaney Rowell\", \"Y_2\": \"colour technologist\", \"Y_7\": \"Shane Kirkham\", \"Y_3\": \"Dalton Fudge\"}, {\"Y_2\": \"recycling officer\", \"Y_5\": \"Angel Fudge\", \"Y_7\": \"Shane Kirkham\", \"Y_3\": \"Garth Fudge\"}, {\"Y_5\": \"Danielle Banner\", \"Y_7\": \"Shane Kirkham\", \"Y_2\": \"licensed conveyancer\", \"Y_3\": \"Daniel Rowell\"}, {\"Y_5\": \"Danielle Banner\", \"Y_7\": \"Shane Kirkham\", \"Y_3\": \"Helga Robertson\", \"Y_2\": \"occupational hygienist\"}]",
+        "answer": [
+            "colour technologist",
+            "hydrographic surveyor",
+            "licensed conveyancer",
+            "occupational hygienist",
+            "recycling officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "dob(Y_7, \"0211-10-21\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "68c4e352-0485-4669-a418-719a27cb0f75",
+        "question": "What is the hobby of the grandfather of the sibling of the person whose date of birth is 0287-07-26?",
+        "solution_traces": "[{\"Y_5\": \"Alexa Schafer\", \"Y_7\": \"Floyd Schafer\", \"Y_2\": \"dancing\", \"Y_3\": \"Emerson Warren\"}, {\"Y_7\": \"Floyd Schafer\", \"Y_5\": \"Yasmin Schafer\", \"Y_3\": \"Emerson Warren\", \"Y_2\": \"dancing\"}, {\"Y_7\": \"Floyd Schafer\", \"Y_2\": \"dancing\", \"Y_3\": \"Emerson Warren\", \"Y_5\": \"Violet Schafer\"}, {\"Y_5\": \"Emery Schafer\", \"Y_7\": \"Floyd Schafer\", \"Y_2\": \"dancing\", \"Y_3\": \"Emerson Warren\"}]",
+        "answer": [
+            "dancing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandfather(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "dob(Y_7, \"0287-07-26\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "92f89afb-2551-42c7-aa8a-4ab166a2adc3",
+        "question": "What is the date of birth of the grandchild of the husband of the person whose occupation is multimedia programmer?",
+        "solution_traces": "[{\"Y_7\": \"Freeda Dent\", \"Y_3\": \"Augustus Robertson\", \"Y_5\": \"Nevin Dent\", \"Y_2\": \"0295-03-10\"}]",
+        "answer": [
+            "0295-03-10"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "husband(Y_7, Y_5)",
+                "job(Y_7, \"multimedia programmer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "288fe645-1399-4bc0-8863-c258fd9cbb2a",
+        "question": "What is the date of birth of the mother-in-law of the parent of the person whose hobby is rock balancing?",
+        "solution_traces": "[{\"Y_5\": \"Armando Schafer\", \"Y_3\": \"Maragret Warren\", \"Y_7\": \"Yasmin Schafer\", \"Y_2\": \"0233-10-06\"}]",
+        "answer": [
+            "0233-10-06"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "mother_in_law(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "hobby(Y_7, \"rock balancing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7754779b-72b7-450a-9c58-b83b0dcd8bb7",
+        "question": "What is the date of birth of the nephew of the child of the person whose date of birth is 0217-06-20?",
+        "solution_traces": "[{\"Y_5\": \"Angel Fudge\", \"Y_2\": \"0274-09-20\", \"Y_7\": \"Kristie Fudge\", \"Y_3\": \"Dalton Fudge\"}]",
+        "answer": [
+            "0274-09-20"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "nephew(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "dob(Y_7, \"0217-06-20\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e5b19eb4-8976-40b3-b155-88cb7fbc7f78",
+        "question": "What is the occupation of the second uncle of the great-grandchild of the person whose date of birth is 0246-05-08?",
+        "solution_traces": "[{\"Y_2\": \"advertising account executive\", \"Y_7\": \"Anita Fudge\", \"Y_5\": \"Tanya Banner\", \"Y_3\": \"Angel Fudge\"}, {\"Y_2\": \"advertising account executive\", \"Y_7\": \"Anita Fudge\", \"Y_5\": \"Amy Hunsaker\", \"Y_3\": \"Angel Fudge\"}, {\"Y_2\": \"advertising account executive\", \"Y_7\": \"Anita Fudge\", \"Y_5\": \"Ignacio Robertson\", \"Y_3\": \"Angel Fudge\"}]",
+        "answer": [
+            "advertising account executive"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "second_uncle(Y_5, Y_3)",
+                "great_grandchild(Y_7, Y_5)",
+                "dob(Y_7, \"0246-05-08\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "211d0240-287c-4d25-8ecd-90b0ee987d03",
+        "question": "What is the hobby of the great-grandchild of the friend of the person whose hobby is geocaching?",
+        "solution_traces": "[{\"Y_3\": \"Oscar Warren\", \"Y_5\": \"Alethia Kirksey\", \"Y_7\": \"Helga Robertson\", \"Y_2\": \"marching band\"}, {\"Y_5\": \"Alethia Kirksey\", \"Y_7\": \"Helga Robertson\", \"Y_3\": \"Rory Kirkham\", \"Y_2\": \"graffiti\"}, {\"Y_2\": \"geocaching\", \"Y_7\": \"Helga Robertson\", \"Y_3\": \"Helga Robertson\", \"Y_5\": \"Carter Fudge\"}, {\"Y_3\": \"Robbie Hunsaker\", \"Y_2\": \"physics\", \"Y_7\": \"Helga Robertson\", \"Y_5\": \"Carter Fudge\"}, {\"Y_7\": \"Helga Robertson\", \"Y_3\": \"Rayna Fudge\", \"Y_5\": \"Carter Fudge\", \"Y_2\": \"life science\"}, {\"Y_7\": \"Helga Robertson\", \"Y_2\": \"seashell collecting\", \"Y_3\": \"Daniel Rowell\", \"Y_5\": \"Carter Fudge\"}, {\"Y_7\": \"Helga Robertson\", \"Y_3\": \"Danielle Banner\", \"Y_5\": \"Carter Fudge\", \"Y_2\": \"skiing\"}, {\"Y_5\": \"Alethia Kirksey\", \"Y_7\": \"Helga Robertson\", \"Y_2\": \"astronomy\", \"Y_3\": \"Ai Schafer\"}]",
+        "answer": [
+            "astronomy",
+            "geocaching",
+            "graffiti",
+            "life science",
+            "marching band",
+            "physics",
+            "seashell collecting",
+            "skiing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandchild(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "hobby(Y_7, \"geocaching\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c9b276d3-01ca-46db-a0ba-81f3b95f80bd",
+        "question": "What is the hobby of the son-in-law of the daughter-in-law of the person whose hobby is photography?",
+        "solution_traces": "[{\"Y_3\": \"Emerson Warren\", \"Y_2\": \"dancing\", \"Y_5\": \"Maira Kirksey\", \"Y_7\": \"Bryan Kirksey\"}, {\"Y_2\": \"reading\", \"Y_5\": \"Maira Kirksey\", \"Y_7\": \"Bryan Kirksey\", \"Y_3\": \"Vernon Kirkham\"}]",
+        "answer": [
+            "dancing",
+            "reading"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "son_in_law(Y_5, Y_3)",
+                "daughter_in_law(Y_7, Y_5)",
+                "hobby(Y_7, \"photography\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "698a961e-cd18-4250-bf04-3fe56c38e720",
+        "question": "What is the hobby of the female first cousin once removed of the friend of the person whose hobby is skiing?",
+        "solution_traces": "[{\"Y_5\": \"Rory Kirkham\", \"Y_2\": \"rock balancing\", \"Y_7\": \"Norris Hunsaker\", \"Y_3\": \"Yasmin Schafer\"}, {\"Y_2\": \"publishing\", \"Y_3\": \"Lakeshia Warren\", \"Y_7\": \"Norris Hunsaker\", \"Y_5\": \"Yasmin Schafer\"}, {\"Y_5\": \"Rory Kirkham\", \"Y_3\": \"Violet Schafer\", \"Y_2\": \"medical science\", \"Y_7\": \"Norris Hunsaker\"}, {\"Y_5\": \"Rory Kirkham\", \"Y_2\": \"water polo\", \"Y_7\": \"Norris Hunsaker\", \"Y_3\": \"Alexa Schafer\"}]",
+        "answer": [
+            "medical science",
+            "publishing",
+            "rock balancing",
+            "water polo"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "female_first_cousin_once_removed(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "hobby(Y_7, \"skiing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d9c87cb2-0eab-4f40-92f6-1d01ff356684",
+        "question": "What is the date of birth of the brother of the great-uncle of the person whose date of birth is 0300-12-30?",
+        "solution_traces": "[{\"Y_7\": \"Daniel Rowell\", \"Y_5\": \"Angel Fudge\", \"Y_2\": \"0243-08-05\", \"Y_3\": \"Garth Fudge\"}]",
+        "answer": [
+            "0243-08-05"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "brother(Y_5, Y_3)",
+                "great_uncle(Y_7, Y_5)",
+                "dob(Y_7, \"0300-12-30\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "60be2b2e-b1ad-4ecd-ad43-490a305eaab8",
+        "question": "What is the hobby of the friend of the friend of the person whose hobby is skiing?",
+        "solution_traces": "[{\"Y_5\": \"Nancy Summerlin\", \"Y_7\": \"Norris Hunsaker\", \"Y_2\": \"skiing\", \"Y_3\": \"Norris Hunsaker\"}, {\"Y_2\": \"canoeing\", \"Y_7\": \"Norris Hunsaker\", \"Y_5\": \"Shane Kirkham\", \"Y_3\": \"Angel Fudge\"}, {\"Y_7\": \"Danielle Banner\", \"Y_3\": \"Ai Schafer\", \"Y_2\": \"astronomy\", \"Y_5\": \"Ignacio Robertson\"}, {\"Y_5\": \"Alex Robertson\", \"Y_7\": \"Danielle Banner\", \"Y_3\": \"Keri Warren\", \"Y_2\": \"trainspotting\"}, {\"Y_5\": \"Alex Robertson\", \"Y_7\": \"Danielle Banner\", \"Y_2\": \"rock balancing\", \"Y_3\": \"Yasmin Schafer\"}, {\"Y_5\": \"Jack Summerlin\", \"Y_7\": \"Norris Hunsaker\", \"Y_2\": \"skiing\", \"Y_3\": \"Norris Hunsaker\"}, {\"Y_3\": \"Oscar Warren\", \"Y_5\": \"Nancy Summerlin\", \"Y_7\": \"Norris Hunsaker\", \"Y_2\": \"marching band\"}, {\"Y_2\": \"surfing\", \"Y_3\": \"Alex Robertson\", \"Y_7\": \"Norris Hunsaker\", \"Y_5\": \"Yasmin Schafer\"}, {\"Y_5\": \"Nancy Summerlin\", \"Y_2\": \"antiquing\", \"Y_7\": \"Norris Hunsaker\", \"Y_3\": \"Emery Schafer\"}, {\"Y_5\": \"Alex Robertson\", \"Y_7\": \"Danielle Banner\", \"Y_3\": \"Danielle Banner\", \"Y_2\": \"skiing\"}, {\"Y_7\": \"Danielle Banner\", \"Y_3\": \"Danielle Banner\", \"Y_5\": \"Ignacio Robertson\", \"Y_2\": \"skiing\"}, {\"Y_7\": \"Danielle Banner\", \"Y_5\": \"Shane Kirkham\", \"Y_2\": \"croquet\", \"Y_3\": \"Brittaney Rowell\"}, {\"Y_7\": \"Danielle Banner\", \"Y_5\": \"Amy Hunsaker\", \"Y_3\": \"Danielle Banner\", \"Y_2\": \"skiing\"}, {\"Y_7\": \"Norris Hunsaker\", \"Y_3\": \"Danielle Banner\", \"Y_5\": \"Shane Kirkham\", \"Y_2\": \"skiing\"}, {\"Y_3\": \"Robbie Hunsaker\", \"Y_2\": \"physics\", \"Y_7\": \"Norris Hunsaker\", \"Y_5\": \"Shane Kirkham\"}, {\"Y_3\": \"Violet Schafer\", \"Y_5\": \"Nancy Summerlin\", \"Y_2\": \"medical science\", \"Y_7\": \"Norris Hunsaker\"}, {\"Y_2\": \"canoeing\", \"Y_7\": \"Danielle Banner\", \"Y_5\": \"Shane Kirkham\", \"Y_3\": \"Angel Fudge\"}, {\"Y_7\": \"Danielle Banner\", \"Y_5\": \"Garth Fudge\", \"Y_3\": \"Danielle Banner\", \"Y_2\": \"skiing\"}, {\"Y_7\": \"Danielle Banner\", \"Y_5\": \"Shane Kirkham\", \"Y_2\": \"skiing\", \"Y_3\": \"Norris Hunsaker\"}, {\"Y_7\": \"Danielle Banner\", \"Y_5\": \"Garth Fudge\", \"Y_2\": \"seashell collecting\", \"Y_3\": \"Daniel Rowell\"}, {\"Y_5\": \"Rory Kirkham\", \"Y_3\": \"Nevin Dent\", \"Y_7\": \"Norris Hunsaker\", \"Y_2\": \"graffiti\"}, {\"Y_7\": \"Norris Hunsaker\", \"Y_2\": \"croquet\", \"Y_5\": \"Shane Kirkham\", \"Y_3\": \"Brittaney Rowell\"}, {\"Y_7\": \"Danielle Banner\", \"Y_3\": \"Danielle Banner\", \"Y_5\": \"Lakeshia Warren\", \"Y_2\": \"skiing\"}, {\"Y_7\": \"Danielle Banner\", \"Y_5\": \"Shane Kirkham\", \"Y_3\": \"Danielle Banner\", \"Y_2\": \"skiing\"}, {\"Y_7\": \"Danielle Banner\", \"Y_5\": \"Amy Hunsaker\", \"Y_2\": \"business\", \"Y_3\": \"Anneliese Kirkham\"}, {\"Y_5\": \"Rory Kirkham\", \"Y_7\": \"Norris Hunsaker\", \"Y_2\": \"skiing\", \"Y_3\": \"Norris Hunsaker\"}, {\"Y_7\": \"Danielle Banner\", \"Y_2\": \"shooting sports\", \"Y_5\": \"Ignacio Robertson\", \"Y_3\": \"Jack Summerlin\"}, {\"Y_5\": \"Jack Summerlin\", \"Y_3\": \"Carter Fudge\", \"Y_7\": \"Norris Hunsaker\", \"Y_2\": \"people-watching\"}, {\"Y_5\": \"Jack Summerlin\", \"Y_7\": \"Norris Hunsaker\", \"Y_3\": \"Freeda Dent\", \"Y_2\": \"wrestling\"}, {\"Y_2\": \"surfing\", \"Y_7\": \"Danielle Banner\", \"Y_3\": \"Alex Robertson\", \"Y_5\": \"Lakeshia Warren\"}, {\"Y_5\": \"Jack Summerlin\", \"Y_3\": \"Ignacio Robertson\", \"Y_7\": \"Norris Hunsaker\", \"Y_2\": \"laser tag\"}, {\"Y_7\": \"Danielle Banner\", \"Y_5\": \"Amy Hunsaker\", \"Y_2\": \"quidditch\", \"Y_3\": \"Harold Banner\"}, {\"Y_3\": \"Robbie Hunsaker\", \"Y_7\": \"Danielle Banner\", \"Y_2\": \"physics\", \"Y_5\": \"Shane Kirkham\"}, {\"Y_5\": \"Nancy Summerlin\", \"Y_7\": \"Norris Hunsaker\", \"Y_3\": \"Nevin Dent\", \"Y_2\": \"graffiti\"}, {\"Y_3\": \"Robbie Hunsaker\", \"Y_7\": \"Danielle Banner\", \"Y_2\": \"physics\", \"Y_5\": \"Lakeshia Warren\"}, {\"Y_5\": \"Alex Robertson\", \"Y_7\": \"Danielle Banner\", \"Y_3\": \"Lakeshia Warren\", \"Y_2\": \"publishing\"}, {\"Y_7\": \"Danielle Banner\", \"Y_3\": \"Joelle Fudge\", \"Y_5\": \"Ignacio Robertson\", \"Y_2\": \"art collecting\"}, {\"Y_5\": \"Alex Robertson\", \"Y_7\": \"Danielle Banner\", \"Y_3\": \"Helga Robertson\", \"Y_2\": \"geocaching\"}, {\"Y_7\": \"Norris Hunsaker\", \"Y_2\": \"skiing\", \"Y_5\": \"Shane Kirkham\", \"Y_3\": \"Norris Hunsaker\"}, {\"Y_5\": \"Nancy Summerlin\", \"Y_3\": \"Rayna Fudge\", \"Y_7\": \"Norris Hunsaker\", \"Y_2\": \"life science\"}, {\"Y_7\": \"Norris Hunsaker\", \"Y_5\": \"Yasmin Schafer\", \"Y_3\": \"Norris Hunsaker\", \"Y_2\": \"skiing\"}]",
+        "answer": [
+            "antiquing",
+            "art collecting",
+            "astronomy",
+            "business",
+            "canoeing",
+            "croquet",
+            "geocaching",
+            "graffiti",
+            "laser tag",
+            "life science",
+            "marching band",
+            "medical science",
+            "people-watching",
+            "physics",
+            "publishing",
+            "quidditch",
+            "rock balancing",
+            "seashell collecting",
+            "shooting sports",
+            "skiing",
+            "surfing",
+            "trainspotting",
+            "wrestling"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "hobby(Y_7, \"skiing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    }
+]

@@ -1,0 +1,1143 @@
+[
+    {
+        "id": "4ec88c68-882c-403c-918c-040e484edee4",
+        "question": "How many friends does the cousin of the niece of the wife of Darwin Ackerman have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_5\": \"Susie Berglund\", \"Y_3\": \"Buddy Ackerman\", \"Y_7\": \"Yuk Ackerman\"}, {\"Y_5\": \"Susie Berglund\", \"Y_3\": \"Jack Ackerman\", \"Count_1\": 2, \"Y_7\": \"Yuk Ackerman\"}, {\"Count_1\": 5, \"Y_5\": \"Susie Berglund\", \"Y_3\": \"Neil Ackerman\", \"Y_7\": \"Yuk Ackerman\"}]",
+        "answer": [
+            "2",
+            "4",
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "cousin(Y_5, Y_3)",
+                "niece(Y_7, Y_5)",
+                "wife(\"Darwin Ackerman\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8658eafb-c724-4997-b64a-c007a4ffeeaa",
+        "question": "How many nieces does the sister of the friend of the father of Richie Boughton have?",
+        "solution_traces": "[{\"Y_7\": \"Guillermo Boughton\", \"Count_1\": 3, \"Y_5\": \"Keisha Vega\", \"Y_3\": \"Isabella Sparkman\"}, {\"Y_7\": \"Guillermo Boughton\", \"Y_3\": \"Francesca Sparkman\", \"Y_5\": \"Keisha Vega\", \"Count_1\": 3}, {\"Y_7\": \"Guillermo Boughton\", \"Count_1\": 3, \"Y_5\": \"Ismael Sparkman\", \"Y_3\": \"Isabella Sparkman\"}, {\"Y_7\": \"Guillermo Boughton\", \"Y_3\": \"Wanita Boughton\", \"Count_1\": 0, \"Y_5\": \"Richie Boughton\"}, {\"Y_7\": \"Guillermo Boughton\", \"Y_3\": \"Francesca Sparkman\", \"Y_5\": \"Ismael Sparkman\", \"Count_1\": 3}, {\"Y_7\": \"Guillermo Boughton\", \"Count_1\": 1, \"Y_5\": \"Ismael Sparkman\", \"Y_3\": \"Keisha Vega\"}]",
+        "answer": [
+            "0",
+            "1",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "sister(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "father(\"Richie Boughton\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0495e812-d626-46e4-ba32-3437849734bb",
+        "question": "How many grandchildren does the friend of the sister of the sibling of Mickey Twigg have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_7\": \"Yasmin Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Carmine Bible\"}, {\"Count_1\": 5, \"Y_7\": \"Yasmin Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Rebecka Sparkman\"}, {\"Y_5\": \"Yasmin Berglund\", \"Count_1\": 0, \"Y_3\": \"Neil Ackerman\", \"Y_7\": \"Yuk Ackerman\"}, {\"Y_7\": \"Yasmin Berglund\", \"Count_1\": 1, \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Shon Vega\"}, {\"Count_1\": 5, \"Y_5\": \"Yasmin Berglund\", \"Y_3\": \"Rebecka Sparkman\", \"Y_7\": \"Yuk Ackerman\"}, {\"Y_3\": \"Lucio Bible\", \"Y_7\": \"Yasmin Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Count_1\": 0}, {\"Y_3\": \"Sha Sparkman\", \"Y_5\": \"Yasmin Berglund\", \"Count_1\": 5, \"Y_7\": \"Yuk Ackerman\"}, {\"Y_3\": \"Douglas Berglund\", \"Y_5\": \"Yasmin Berglund\", \"Count_1\": 0, \"Y_7\": \"Yuk Ackerman\"}, {\"Y_3\": \"Ismael Sparkman\", \"Count_1\": 0, \"Y_7\": \"Yasmin Berglund\", \"Y_5\": \"Yuk Ackerman\"}, {\"Count_1\": 4, \"Y_5\": \"Yasmin Berglund\", \"Y_3\": \"Timothy Ackerman\", \"Y_7\": \"Yuk Ackerman\"}, {\"Count_1\": 0, \"Y_7\": \"Yasmin Berglund\", \"Y_3\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\"}, {\"Count_1\": 0, \"Y_7\": \"Yasmin Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Erick Sparkman\"}]",
+        "answer": [
+            "0",
+            "1",
+            "4",
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "sister(Y_7, Y_5)",
+                "sibling(\"Mickey Twigg\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1d0e0875-a969-4453-bd54-5884a242e493",
+        "question": "How many nephews does the child of the son-in-law of the grandmother of Dinah Boughton have?",
+        "solution_traces": "[{\"Y_7\": \"Delsie Templeton\", \"Y_5\": \"Timothy Ackerman\", \"Y_3\": \"Dinah Boughton\", \"Count_1\": 3}, {\"Y_7\": \"Delsie Templeton\", \"Y_5\": \"Timothy Ackerman\", \"Y_3\": \"Chelsie Ackerman\", \"Count_1\": 4}, {\"Y_7\": \"Delsie Templeton\", \"Y_5\": \"Timothy Ackerman\", \"Y_3\": \"Darwin Ackerman\", \"Count_1\": 1}]",
+        "answer": [
+            "1",
+            "3",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "child(Y_5, Y_3)",
+                "son_in_law(Y_7, Y_5)",
+                "grandmother(\"Dinah Boughton\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e752ea33-e00c-4695-90c4-84252849ce6a",
+        "question": "How many great-grandparents does the grandchild of the grandmother of the cousin of Jeanette Vega have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Sha Bible\"}, {\"Y_7\": \"Marie Lipsey\", \"Count_1\": 4, \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Sha Bible\"}, {\"Y_7\": \"Adalberto Sparkman\", \"Count_1\": 4, \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Marie Lipsey\"}, {\"Count_1\": 4, \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Erick Sparkman\"}, {\"Y_7\": \"Adalberto Sparkman\", \"Y_3\": \"Jeanette Vega\", \"Count_1\": 4, \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Adalberto Sparkman\", \"Count_1\": 4, \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Erick Sparkman\"}, {\"Y_7\": \"Marie Lipsey\", \"Count_1\": 4, \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Erick Sparkman\"}, {\"Y_7\": \"Marie Lipsey\", \"Count_1\": 4, \"Y_3\": \"Adalberto Sparkman\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_3\": \"Jeanette Vega\", \"Count_1\": 4, \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Adalberto Sparkman\", \"Y_3\": \"Adalberto Sparkman\", \"Count_1\": 4, \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Marie Lipsey\", \"Y_3\": \"Jeanette Vega\", \"Count_1\": 4, \"Y_5\": \"Sha Sparkman\"}, {\"Count_1\": 4, \"Y_3\": \"Adalberto Sparkman\", \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_3\": \"Marie Lipsey\", \"Count_1\": 4, \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Marie Lipsey\", \"Y_3\": \"Marie Lipsey\", \"Count_1\": 4, \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Adalberto Sparkman\", \"Count_1\": 4, \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Sha Bible\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "grandmother(Y_7, Y_5)",
+                "cousin(\"Jeanette Vega\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1792d25b-33b0-46c2-a7c0-a150248941a5",
+        "question": "How many nieces does the sister of the great-uncle of the friend of Lucio Bible have?",
+        "solution_traces": "[{\"Y_7\": \"Leonardo Lipsey\", \"Y_5\": \"Ismael Sparkman\", \"Count_1\": 3, \"Y_3\": \"Isabella Sparkman\"}, {\"Y_7\": \"Leonardo Lipsey\", \"Count_1\": 1, \"Y_5\": \"Ismael Sparkman\", \"Y_3\": \"Keisha Vega\"}, {\"Y_3\": \"Francesca Sparkman\", \"Y_7\": \"Leonardo Lipsey\", \"Y_5\": \"Ismael Sparkman\", \"Count_1\": 3}]",
+        "answer": [
+            "1",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "sister(Y_5, Y_3)",
+                "great_uncle(Y_7, Y_5)",
+                "friend(\"Lucio Bible\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b787a1d0-5704-4154-8fcf-377d3091530c",
+        "question": "How many mothers-in-law does the father-in-law of the mother of the brother of Neil Ackerman have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Timothy Ackerman\", \"Y_5\": \"Yuk Ackerman\"}, {\"Count_1\": 1, \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Timothy Ackerman\", \"Y_5\": \"Yuk Ackerman\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(Y_3, Y_1)), Count_1)",
+                "father_in_law(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "brother(\"Neil Ackerman\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "167e0d89-319b-401f-805d-ee89c9445435",
+        "question": "How many grandmothers does the friend of the husband of the parent of Wanita Boughton have?",
+        "solution_traces": "[{\"Y_3\": \"Richie Boughton\", \"Y_5\": \"Guillermo Boughton\", \"Count_1\": 2, \"Y_7\": \"Bev Boughton\"}, {\"Y_3\": \"Timothy Ackerman\", \"Count_1\": 0, \"Y_5\": \"Guillermo Boughton\", \"Y_7\": \"Bev Boughton\"}, {\"Y_5\": \"Guillermo Boughton\", \"Y_3\": \"Keisha Vega\", \"Count_1\": 2, \"Y_7\": \"Bev Boughton\"}, {\"Y_3\": \"Ismael Sparkman\", \"Y_5\": \"Guillermo Boughton\", \"Count_1\": 2, \"Y_7\": \"Bev Boughton\"}, {\"Y_3\": \"Hiram Sparkman\", \"Count_1\": 0, \"Y_5\": \"Guillermo Boughton\", \"Y_7\": \"Bev Boughton\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandmother(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "husband(Y_7, Y_5)",
+                "parent(\"Wanita Boughton\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9d082bc2-333a-49f1-95ae-8d99aaa1406b",
+        "question": "How many great-grandparents does the brother of the sibling of the friend of Clifton Boughton have?",
+        "solution_traces": "[{\"Y_3\": \"Ismael Sparkman\", \"Y_5\": \"Isabella Sparkman\", \"Y_7\": \"Keisha Vega\", \"Count_1\": 2}, {\"Y_3\": \"Jamel Sparkman\", \"Y_7\": \"Keisha Vega\", \"Count_1\": 2, \"Y_5\": \"Francesca Sparkman\"}, {\"Y_3\": \"Jamel Sparkman\", \"Y_5\": \"Isabella Sparkman\", \"Y_7\": \"Keisha Vega\", \"Count_1\": 2}, {\"Y_3\": \"Ismael Sparkman\", \"Y_5\": \"Jamel Sparkman\", \"Y_7\": \"Keisha Vega\", \"Count_1\": 2}, {\"Y_5\": \"Jack Ackerman\", \"Count_1\": 2, \"Y_7\": \"Neil Ackerman\", \"Y_3\": \"Neil Ackerman\"}, {\"Y_5\": \"Buddy Ackerman\", \"Count_1\": 2, \"Y_7\": \"Neil Ackerman\", \"Y_3\": \"Neil Ackerman\"}, {\"Count_1\": 2, \"Y_3\": \"Jamel Sparkman\", \"Y_7\": \"Keisha Vega\", \"Y_5\": \"Ismael Sparkman\"}, {\"Y_5\": \"Buddy Ackerman\", \"Y_7\": \"Neil Ackerman\", \"Count_1\": 2, \"Y_3\": \"Jack Ackerman\"}, {\"Y_3\": \"Ismael Sparkman\", \"Y_7\": \"Keisha Vega\", \"Count_1\": 2, \"Y_5\": \"Francesca Sparkman\"}, {\"Y_5\": \"Jack Ackerman\", \"Y_3\": \"Buddy Ackerman\", \"Y_7\": \"Neil Ackerman\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "friend(\"Clifton Boughton\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "31fd672f-56c9-4f2b-863f-4d44515bd31b",
+        "question": "How many friends does the friend of the aunt of the grandchild of Gale Twigg have?",
+        "solution_traces": "[{\"Y_5\": \"Dinah Boughton\", \"Count_1\": 4, \"Y_3\": \"Lucio Bible\", \"Y_7\": \"Neil Ackerman\"}, {\"Y_5\": \"Yasmin Berglund\", \"Count_1\": 6, \"Y_3\": \"Timothy Ackerman\", \"Y_7\": \"Neil Ackerman\"}, {\"Y_5\": \"Dinah Boughton\", \"Count_1\": 7, \"Y_7\": \"Neil Ackerman\", \"Y_3\": \"Keisha Vega\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_7\": \"Buddy Ackerman\", \"Count_1\": 7, \"Y_3\": \"Keisha Vega\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Neil Ackerman\", \"Count_1\": 5}, {\"Y_3\": \"Wanita Boughton\", \"Y_7\": \"Buddy Ackerman\", \"Count_1\": 6, \"Y_5\": \"Chelsie Ackerman\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Jack Ackerman\", \"Count_1\": 6, \"Y_3\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Rebecka Sparkman\", \"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Count_1\": 6}, {\"Y_3\": \"Francesca Sparkman\", \"Y_7\": \"Buddy Ackerman\", \"Count_1\": 4, \"Y_5\": \"Chelsie Ackerman\"}, {\"Y_3\": \"Sha Sparkman\", \"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Neil Ackerman\", \"Count_1\": 5}, {\"Y_5\": \"Dinah Boughton\", \"Y_7\": \"Buddy Ackerman\", \"Count_1\": 6, \"Y_3\": \"Susie Berglund\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Dorathy Twigg\", \"Count_1\": 7}, {\"Y_5\": \"Dinah Boughton\", \"Y_7\": \"Buddy Ackerman\", \"Count_1\": 2, \"Y_3\": \"Devin Mcneely\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Jack Ackerman\", \"Count_1\": 2, \"Y_3\": \"Douglas Berglund\"}, {\"Count_1\": 4, \"Y_7\": \"Buddy Ackerman\", \"Y_5\": \"Chelsie Ackerman\", \"Y_3\": \"Rolando Pugliese\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_7\": \"Jack Ackerman\", \"Count_1\": 7, \"Y_3\": \"Keisha Vega\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_7\": \"Neil Ackerman\", \"Count_1\": 2, \"Y_3\": \"Devin Mcneely\"}, {\"Y_3\": \"Richie Boughton\", \"Count_1\": 5, \"Y_7\": \"Jack Ackerman\", \"Y_5\": \"Chelsie Ackerman\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Sha Sparkman\", \"Count_1\": 5}, {\"Count_1\": 4, \"Y_3\": \"Francesca Sparkman\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Chelsie Ackerman\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_3\": \"Rebecka Sparkman\", \"Count_1\": 6, \"Y_7\": \"Neil Ackerman\"}, {\"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Shon Vega\", \"Count_1\": 3}, {\"Y_5\": \"Dinah Boughton\", \"Y_7\": \"Jack Ackerman\", \"Count_1\": 6, \"Y_3\": \"Susie Berglund\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_7\": \"Jack Ackerman\", \"Count_1\": 2, \"Y_3\": \"Devin Mcneely\"}, {\"Y_3\": \"Wanita Boughton\", \"Count_1\": 6, \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Chelsie Ackerman\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Timothy Ackerman\", \"Count_1\": 6}, {\"Y_5\": \"Dinah Boughton\", \"Count_1\": 4, \"Y_3\": \"Lucio Bible\", \"Y_7\": \"Jack Ackerman\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Neil Ackerman\", \"Count_1\": 2, \"Y_3\": \"Douglas Berglund\"}, {\"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Erick Sparkman\", \"Count_1\": 3}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Rebecka Sparkman\", \"Count_1\": 6}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Neil Ackerman\", \"Count_1\": 5}, {\"Y_3\": \"Wanita Boughton\", \"Y_7\": \"Jack Ackerman\", \"Count_1\": 6, \"Y_5\": \"Chelsie Ackerman\"}, {\"Y_3\": \"Ismael Sparkman\", \"Count_1\": 5, \"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\"}, {\"Y_3\": \"Sha Sparkman\", \"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Jack Ackerman\", \"Count_1\": 5}, {\"Y_5\": \"Dinah Boughton\", \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Dorathy Twigg\", \"Count_1\": 7}, {\"Count_1\": 4, \"Y_3\": \"Lucio Bible\", \"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\"}, {\"Count_1\": 4, \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Chelsie Ackerman\", \"Y_3\": \"Rolando Pugliese\"}, {\"Count_1\": 4, \"Y_3\": \"Francesca Sparkman\", \"Y_7\": \"Jack Ackerman\", \"Y_5\": \"Chelsie Ackerman\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Buddy Ackerman\", \"Count_1\": 2, \"Y_3\": \"Douglas Berglund\"}, {\"Y_5\": \"Dinah Boughton\", \"Count_1\": 4, \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Lucio Bible\"}, {\"Y_5\": \"Dinah Boughton\", \"Count_1\": 6, \"Y_3\": \"Susie Berglund\", \"Y_7\": \"Neil Ackerman\"}, {\"Count_1\": 4, \"Y_7\": \"Jack Ackerman\", \"Y_5\": \"Chelsie Ackerman\", \"Y_3\": \"Rolando Pugliese\"}, {\"Y_3\": \"Richie Boughton\", \"Count_1\": 5, \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Chelsie Ackerman\"}, {\"Count_1\": 6, \"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Susie Berglund\"}, {\"Y_5\": \"Dinah Boughton\", \"Count_1\": 7, \"Y_3\": \"Dorathy Twigg\", \"Y_7\": \"Neil Ackerman\"}, {\"Y_3\": \"Richie Boughton\", \"Y_7\": \"Buddy Ackerman\", \"Y_5\": \"Chelsie Ackerman\", \"Count_1\": 5}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Neil Ackerman\", \"Y_3\": \"Neil Ackerman\", \"Count_1\": 5}, {\"Y_3\": \"Carmine Bible\", \"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Count_1\": 3}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Buddy Ackerman\", \"Count_1\": 6, \"Y_3\": \"Timothy Ackerman\"}]",
+        "answer": [
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "aunt(Y_7, Y_5)",
+                "grandchild(\"Gale Twigg\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "22fd8c5c-3029-4fe6-bf62-2a9fa0e0af5b",
+        "question": "How many friends does the parent of the great-grandchild of the son-in-law of Lashandra Pugliese have?",
+        "solution_traces": "[{\"Y_5\": \"Leonardo Lipsey\", \"Count_1\": 1, \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Marie Lipsey\"}, {\"Y_5\": \"Carmine Bible\", \"Count_1\": 4, \"Y_3\": \"Lucio Bible\", \"Y_7\": \"Laurence Sparkman\"}, {\"Y_5\": \"Carmine Bible\", \"Count_1\": 1, \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Sha Bible\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Count_1\": 2, \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Carmine Lipsey\"}]",
+        "answer": [
+            "1",
+            "2",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "great_grandchild(Y_7, Y_5)",
+                "son_in_law(\"Lashandra Pugliese\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "631bcaa4-746a-4edb-a91f-ed25e58e8f3c",
+        "question": "How many children does the sibling of the sibling of the uncle of Jamel Sparkman have?",
+        "solution_traces": "[{\"Y_7\": \"Douglass Pugliese\", \"Y_3\": \"Douglass Pugliese\", \"Count_1\": 0, \"Y_5\": \"Isabell Pugliese\"}, {\"Y_7\": \"Douglass Pugliese\", \"Y_3\": \"Douglass Pugliese\", \"Count_1\": 0, \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Douglass Pugliese\", \"Count_1\": 5, \"Y_5\": \"Isabell Pugliese\", \"Y_3\": \"Sha Sparkman\"}, {\"Y_7\": \"Douglass Pugliese\", \"Count_1\": 0, \"Y_3\": \"Isabell Pugliese\", \"Y_5\": \"Sha Sparkman\"}]",
+        "answer": [
+            "0",
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "uncle(\"Jamel Sparkman\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e936d105-b401-45bb-9508-8caed583e6f8",
+        "question": "How many siblings does the niece of the sister-in-law of the grandfather of Jeanette Vega have?",
+        "solution_traces": "[{\"Y_5\": \"Isabell Pugliese\", \"Count_1\": 4, \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Isabella Sparkman\"}, {\"Y_5\": \"Isabell Pugliese\", \"Count_1\": 4, \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Keisha Vega\"}, {\"Y_5\": \"Isabell Pugliese\", \"Count_1\": 4, \"Y_3\": \"Francesca Sparkman\", \"Y_7\": \"Laurence Sparkman\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "niece(Y_5, Y_3)",
+                "sister_in_law(Y_7, Y_5)",
+                "grandfather(\"Jeanette Vega\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "49f69e8c-7fc9-4008-aa9e-01dd0fcd13bf",
+        "question": "How many cousins does the daughter of the child of the son-in-law of Rolando Pugliese have?",
+        "solution_traces": "[{\"Y_5\": \"Keisha Vega\", \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Sha Bible\", \"Count_1\": 3}, {\"Y_5\": \"Jamel Sparkman\", \"Count_1\": 2, \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Marie Lipsey\"}, {\"Y_3\": \"Jeanette Vega\", \"Y_5\": \"Keisha Vega\", \"Y_7\": \"Laurence Sparkman\", \"Count_1\": 3}]",
+        "answer": [
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "daughter(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "son_in_law(\"Rolando Pugliese\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "05de94bf-e6a6-4a83-873a-77c67f7dce2a",
+        "question": "How many great-uncles does the great-grandson of the mother of the grandchild of Delsie Templeton have?",
+        "solution_traces": "[{\"Y_7\": \"Darwin Ackerman\", \"Count_1\": 1, \"Y_5\": \"Mattie Ackerman\", \"Y_3\": \"Richie Boughton\"}, {\"Y_3\": \"Richie Boughton\", \"Y_7\": \"Dinah Boughton\", \"Count_1\": 1, \"Y_5\": \"Mattie Ackerman\"}, {\"Y_3\": \"Richie Boughton\", \"Count_1\": 1, \"Y_5\": \"Mattie Ackerman\", \"Y_7\": \"Chelsie Ackerman\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_uncle(Y_3, Y_1)), Count_1)",
+                "great_grandson(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "grandchild(\"Delsie Templeton\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0e6330cb-567a-4611-a21f-3685901c8aa6",
+        "question": "How many nephews does the mother of the cousin of the sibling of Neil Ackerman have?",
+        "solution_traces": "[{\"Y_5\": \"Susie Berglund\", \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Yasmin Berglund\", \"Count_1\": 3}, {\"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Dinah Boughton\", \"Count_1\": 3, \"Y_5\": \"Guillermo Boughton\"}, {\"Count_1\": 3, \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Dinah Boughton\", \"Y_5\": \"Guillermo Boughton\"}, {\"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Yasmin Berglund\", \"Count_1\": 3, \"Y_5\": \"Susie Berglund\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "mother(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "sibling(\"Neil Ackerman\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b54a0bfd-74dc-4b03-adc2-7634a936fc1d",
+        "question": "How many brothers does the friend of the female first cousin once removed of the grandchild of Gale Twigg have?",
+        "solution_traces": "[{\"Y_7\": \"Buddy Ackerman\", \"Count_1\": 0, \"Y_5\": \"Wanita Boughton\", \"Y_3\": \"Rolando Pugliese\"}, {\"Count_1\": 0, \"Y_3\": \"Mickey Twigg\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Count_1\": 0, \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\", \"Y_3\": \"Rolando Pugliese\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Y_7\": \"Jack Ackerman\", \"Count_1\": 1, \"Y_5\": \"Wanita Boughton\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Y_7\": \"Buddy Ackerman\", \"Count_1\": 1, \"Y_5\": \"Wanita Boughton\"}, {\"Y_3\": \"Mickey Twigg\", \"Y_7\": \"Jack Ackerman\", \"Y_5\": \"Wanita Boughton\", \"Count_1\": 0}, {\"Count_1\": 2, \"Y_3\": \"Buddy Ackerman\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Mickey Twigg\", \"Y_5\": \"Wanita Boughton\", \"Count_1\": 0}, {\"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Neil Ackerman\", \"Count_1\": 2, \"Y_5\": \"Wanita Boughton\"}, {\"Count_1\": 2, \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_7\": \"Buddy Ackerman\", \"Count_1\": 1, \"Y_5\": \"Wanita Boughton\", \"Y_3\": \"Adalberto Sparkman\"}, {\"Count_1\": 2, \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Buddy Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_3\": \"Adalberto Sparkman\", \"Y_7\": \"Jack Ackerman\", \"Count_1\": 1, \"Y_5\": \"Wanita Boughton\"}, {\"Y_3\": \"Adalberto Sparkman\", \"Count_1\": 1, \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Buddy Ackerman\", \"Count_1\": 2, \"Y_5\": \"Wanita Boughton\"}, {\"Count_1\": 2, \"Y_3\": \"Neil Ackerman\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Count_1\": 1, \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Count_1\": 0, \"Y_7\": \"Jack Ackerman\", \"Y_5\": \"Wanita Boughton\", \"Y_3\": \"Rolando Pugliese\"}]",
+        "answer": [
+            "0",
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "female_first_cousin_once_removed(Y_7, Y_5)",
+                "grandchild(\"Gale Twigg\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d1b771a6-9b22-49ee-8fc6-3498cdc671f1",
+        "question": "How many cousins does the son of the brother of the sibling of Chelsie Ackerman have?",
+        "solution_traces": "[{\"Y_7\": \"Dinah Boughton\", \"Count_1\": 2, \"Y_3\": \"Neil Ackerman\", \"Y_5\": \"Darwin Ackerman\"}, {\"Y_7\": \"Dinah Boughton\", \"Y_3\": \"Buddy Ackerman\", \"Count_1\": 2, \"Y_5\": \"Darwin Ackerman\"}, {\"Y_7\": \"Dinah Boughton\", \"Y_3\": \"Jack Ackerman\", \"Count_1\": 2, \"Y_5\": \"Darwin Ackerman\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "son(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "sibling(\"Chelsie Ackerman\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a5681337-1ca1-426b-9a77-6392d5de62e8",
+        "question": "How many sons-in-law does the sibling of the great-uncle of the male cousin of Sha Bible have?",
+        "solution_traces": "[{\"Y_7\": \"Adalberto Sparkman\", \"Count_1\": 0, \"Y_3\": \"Isabell Pugliese\", \"Y_5\": \"Douglass Pugliese\"}, {\"Y_3\": \"Sha Sparkman\", \"Y_7\": \"Adalberto Sparkman\", \"Count_1\": 1, \"Y_5\": \"Douglass Pugliese\"}, {\"Count_1\": 0, \"Y_3\": \"Isabell Pugliese\", \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Douglass Pugliese\"}, {\"Y_3\": \"Sha Sparkman\", \"Count_1\": 1, \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Douglass Pugliese\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "great_uncle(Y_7, Y_5)",
+                "male_cousin(\"Sha Bible\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a99f8511-5db1-4b00-9370-ad78aa535e97",
+        "question": "How many sisters-in-law does the friend of the male first cousin once removed of the child of Shon Vega have?",
+        "solution_traces": "[{\"Y_5\": \"Leonardo Lipsey\", \"Count_1\": 0, \"Y_3\": \"Isabell Pugliese\", \"Y_7\": \"Jeanette Vega\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Y_3\": \"Lucio Bible\", \"Count_1\": 1, \"Y_7\": \"Jeanette Vega\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Y_5\": \"Leonardo Lipsey\", \"Count_1\": 0, \"Y_7\": \"Jeanette Vega\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Count_1\": 0, \"Y_3\": \"Rebecka Sparkman\", \"Y_7\": \"Sha Bible\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Count_1\": 0, \"Y_3\": \"Dorathy Twigg\", \"Y_7\": \"Jeanette Vega\"}, {\"Count_1\": 1, \"Y_5\": \"Leonardo Lipsey\", \"Y_3\": \"Lucio Bible\", \"Y_7\": \"Sha Bible\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Count_1\": 0, \"Y_3\": \"Rebecka Sparkman\", \"Y_7\": \"Jeanette Vega\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Y_7\": \"Sha Bible\", \"Y_3\": \"Marguerita Sparkman\", \"Count_1\": 3}, {\"Y_5\": \"Leonardo Lipsey\", \"Count_1\": 0, \"Y_3\": \"Isabell Pugliese\", \"Y_7\": \"Sha Bible\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Count_1\": 3, \"Y_3\": \"Marguerita Sparkman\", \"Y_7\": \"Jeanette Vega\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Count_1\": 0, \"Y_7\": \"Sha Bible\", \"Y_3\": \"Dorathy Twigg\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Y_5\": \"Leonardo Lipsey\", \"Count_1\": 0, \"Y_7\": \"Sha Bible\"}]",
+        "answer": [
+            "0",
+            "1",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister_in_law(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "male_first_cousin_once_removed(Y_7, Y_5)",
+                "child(\"Shon Vega\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "74c40c71-d41c-4812-b18e-0df4789a5cde",
+        "question": "How many sisters-in-law does the sibling of the sister-in-law of the uncle of Guillermo Boughton have?",
+        "solution_traces": "[{\"Y_7\": \"Darwin Ackerman\", \"Y_5\": \"Yasmin Berglund\", \"Y_3\": \"Mickey Twigg\", \"Count_1\": 0}, {\"Y_7\": \"Darwin Ackerman\", \"Y_3\": \"Yuk Ackerman\", \"Y_5\": \"Yasmin Berglund\", \"Count_1\": 2}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister_in_law(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "sister_in_law(Y_7, Y_5)",
+                "uncle(\"Guillermo Boughton\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e860f24c-1ce2-4548-9551-2afa95ff3906",
+        "question": "How many female first cousins once removed does the nephew of the sister-in-law of the son-in-law of Gale Twigg have?",
+        "solution_traces": "[{\"Y_7\": \"Darwin Ackerman\", \"Y_5\": \"Yasmin Berglund\", \"Count_1\": 1, \"Y_3\": \"Jack Ackerman\"}, {\"Y_7\": \"Darwin Ackerman\", \"Count_1\": 1, \"Y_5\": \"Yasmin Berglund\", \"Y_3\": \"Buddy Ackerman\"}, {\"Y_7\": \"Darwin Ackerman\", \"Y_5\": \"Yasmin Berglund\", \"Count_1\": 1, \"Y_3\": \"Neil Ackerman\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(female_first_cousin_once_removed(Y_3, Y_1)), Count_1)",
+                "nephew(Y_5, Y_3)",
+                "sister_in_law(Y_7, Y_5)",
+                "son_in_law(\"Gale Twigg\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c36c044b-2986-40e8-aba8-0c0c1b602c7d",
+        "question": "How many siblings does the father of the cousin of the great-granddaughter of Rebecka Sparkman have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_5\": \"Erick Sparkman\", \"Y_3\": \"Jamel Sparkman\", \"Y_7\": \"Jeanette Vega\"}, {\"Count_1\": 4, \"Y_3\": \"Jamel Sparkman\", \"Y_5\": \"Adalberto Sparkman\", \"Y_7\": \"Jeanette Vega\"}, {\"Count_1\": 4, \"Y_3\": \"Jamel Sparkman\", \"Y_5\": \"Marie Lipsey\", \"Y_7\": \"Jeanette Vega\"}, {\"Y_7\": \"Marie Lipsey\", \"Count_1\": 0, \"Y_5\": \"Sha Bible\", \"Y_3\": \"Shon Vega\"}, {\"Count_1\": 4, \"Y_3\": \"Jamel Sparkman\", \"Y_7\": \"Sha Bible\", \"Y_5\": \"Marie Lipsey\"}, {\"Count_1\": 4, \"Y_3\": \"Jamel Sparkman\", \"Y_7\": \"Sha Bible\", \"Y_5\": \"Adalberto Sparkman\"}, {\"Count_1\": 4, \"Y_3\": \"Jamel Sparkman\", \"Y_5\": \"Erick Sparkman\", \"Y_7\": \"Sha Bible\"}, {\"Y_7\": \"Marie Lipsey\", \"Count_1\": 0, \"Y_3\": \"Shon Vega\", \"Y_5\": \"Jeanette Vega\"}]",
+        "answer": [
+            "0",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "father(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "great_granddaughter(\"Rebecka Sparkman\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7fdbd35e-8e6e-49de-b95a-580a2377e208",
+        "question": "How many aunts does the friend of the grandparent of the great-grandchild of Johnetta Sparkman have?",
+        "solution_traces": "[{\"Y_3\": \"Sha Sparkman\", \"Count_1\": 0, \"Y_7\": \"Jamel Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Count_1\": 0, \"Y_3\": \"Mickey Twigg\", \"Y_5\": \"Rolando Pugliese\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_5\": \"Markus Sparkman\", \"Count_1\": 0, \"Y_3\": \"Timothy Ackerman\"}, {\"Y_5\": \"Lashandra Pugliese\", \"Count_1\": 0, \"Y_3\": \"Marguerita Sparkman\", \"Y_7\": \"Isabella Sparkman\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Count_1\": 1, \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Keisha Vega\"}, {\"Y_3\": \"Yasmin Berglund\", \"Count_1\": 0, \"Y_7\": \"Isabella Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Yuk Ackerman\", \"Count_1\": 0, \"Y_7\": \"Keisha Vega\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_5\": \"Markus Sparkman\", \"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Timothy Ackerman\", \"Count_1\": 0}, {\"Y_5\": \"Lashandra Pugliese\", \"Count_1\": 1, \"Y_7\": \"Keisha Vega\", \"Y_3\": \"Keisha Vega\"}, {\"Count_1\": 0, \"Y_3\": \"Mickey Twigg\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Ismael Sparkman\"}, {\"Y_5\": \"Lashandra Pugliese\", \"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Marguerita Sparkman\", \"Count_1\": 0}, {\"Y_3\": \"Yuk Ackerman\", \"Count_1\": 0, \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Count_1\": 0, \"Y_3\": \"Yasmin Berglund\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Douglas Berglund\", \"Count_1\": 0, \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Count_1\": 1, \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Ismael Sparkman\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Y_5\": \"Markus Sparkman\", \"Y_7\": \"Jamel Sparkman\", \"Count_1\": 0}, {\"Y_7\": \"Francesca Sparkman\", \"Y_3\": \"Lucio Bible\", \"Count_1\": 0, \"Y_5\": \"Rolando Pugliese\"}, {\"Count_1\": 0, \"Y_3\": \"Mickey Twigg\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Isabella Sparkman\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Y_5\": \"Markus Sparkman\", \"Count_1\": 0, \"Y_7\": \"Keisha Vega\"}, {\"Count_1\": 0, \"Y_3\": \"Leonardo Lipsey\", \"Y_7\": \"Isabella Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Douglas Berglund\", \"Count_1\": 0, \"Y_7\": \"Isabella Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Wanita Boughton\", \"Count_1\": 0, \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Ismael Sparkman\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Count_1\": 1, \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Isabella Sparkman\"}, {\"Y_5\": \"Lashandra Pugliese\", \"Count_1\": 0, \"Y_3\": \"Marguerita Sparkman\", \"Y_7\": \"Keisha Vega\"}, {\"Y_3\": \"Yuk Ackerman\", \"Count_1\": 0, \"Y_7\": \"Jamel Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Lucio Bible\", \"Count_1\": 0, \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Ismael Sparkman\"}, {\"Y_3\": \"Wanita Boughton\", \"Count_1\": 0, \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Isabella Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Count_1\": 0, \"Y_3\": \"Sha Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Count_1\": 3, \"Y_3\": \"Neil Ackerman\", \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Wanita Boughton\", \"Count_1\": 0, \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Keisha Vega\"}, {\"Y_7\": \"Francesca Sparkman\", \"Count_1\": 0, \"Y_3\": \"Leonardo Lipsey\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_5\": \"Lashandra Pugliese\", \"Count_1\": 1, \"Y_3\": \"Keisha Vega\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Y_5\": \"Markus Sparkman\", \"Count_1\": 0, \"Y_7\": \"Ismael Sparkman\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Count_1\": 1, \"Y_7\": \"Jamel Sparkman\", \"Y_5\": \"Rolando Pugliese\"}, {\"Y_3\": \"Douglas Berglund\", \"Count_1\": 0, \"Y_7\": \"Keisha Vega\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Y_5\": \"Markus Sparkman\", \"Count_1\": 0, \"Y_7\": \"Isabella Sparkman\"}, {\"Count_1\": 0, \"Y_3\": \"Mickey Twigg\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Keisha Vega\"}, {\"Count_1\": 0, \"Y_3\": \"Leonardo Lipsey\", \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Count_1\": 3, \"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Neil Ackerman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_5\": \"Markus Sparkman\", \"Y_3\": \"Johnetta Sparkman\", \"Count_1\": 0}, {\"Y_5\": \"Lashandra Pugliese\", \"Count_1\": 1, \"Y_7\": \"Ismael Sparkman\", \"Y_3\": \"Keisha Vega\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_3\": \"Chelsie Ackerman\", \"Y_5\": \"Rolando Pugliese\", \"Count_1\": 1}, {\"Y_5\": \"Lashandra Pugliese\", \"Y_7\": \"Jamel Sparkman\", \"Count_1\": 1, \"Y_3\": \"Keisha Vega\"}, {\"Y_3\": \"Lucio Bible\", \"Y_7\": \"Jamel Sparkman\", \"Y_5\": \"Rolando Pugliese\", \"Count_1\": 0}, {\"Y_5\": \"Markus Sparkman\", \"Count_1\": 0, \"Y_3\": \"Timothy Ackerman\", \"Y_7\": \"Keisha Vega\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_5\": \"Lashandra Pugliese\", \"Count_1\": 0, \"Y_3\": \"Marguerita Sparkman\"}, {\"Y_5\": \"Markus Sparkman\", \"Count_1\": 0, \"Y_3\": \"Timothy Ackerman\", \"Y_7\": \"Isabella Sparkman\"}, {\"Count_1\": 0, \"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Yasmin Berglund\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Lucio Bible\", \"Count_1\": 0, \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Isabella Sparkman\"}, {\"Y_5\": \"Lashandra Pugliese\", \"Count_1\": 1, \"Y_7\": \"Isabella Sparkman\", \"Y_3\": \"Keisha Vega\"}, {\"Count_1\": 3, \"Y_7\": \"Isabella Sparkman\", \"Y_3\": \"Neil Ackerman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Sha Sparkman\", \"Count_1\": 0, \"Y_7\": \"Keisha Vega\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_5\": \"Markus Sparkman\", \"Count_1\": 0, \"Y_3\": \"Timothy Ackerman\", \"Y_7\": \"Ismael Sparkman\"}, {\"Y_3\": \"Sha Sparkman\", \"Count_1\": 0, \"Y_7\": \"Isabella Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Count_1\": 0, \"Y_3\": \"Leonardo Lipsey\", \"Y_7\": \"Keisha Vega\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_3\": \"Yuk Ackerman\", \"Count_1\": 0, \"Y_5\": \"Rebecka Sparkman\"}, {\"Count_1\": 0, \"Y_3\": \"Yasmin Berglund\", \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Count_1\": 0, \"Y_3\": \"Douglas Berglund\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Wanita Boughton\", \"Count_1\": 0, \"Y_7\": \"Jamel Sparkman\", \"Y_5\": \"Rolando Pugliese\"}, {\"Y_3\": \"Yasmin Berglund\", \"Count_1\": 0, \"Y_7\": \"Keisha Vega\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Yuk Ackerman\", \"Count_1\": 0, \"Y_7\": \"Isabella Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Count_1\": 3, \"Y_7\": \"Keisha Vega\", \"Y_3\": \"Neil Ackerman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_3\": \"Wanita Boughton\", \"Count_1\": 0, \"Y_5\": \"Rolando Pugliese\"}, {\"Count_1\": 0, \"Y_7\": \"Jamel Sparkman\", \"Y_5\": \"Rolando Pugliese\", \"Y_3\": \"Mickey Twigg\"}, {\"Y_3\": \"Lucio Bible\", \"Count_1\": 0, \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Keisha Vega\"}, {\"Y_3\": \"Douglas Berglund\", \"Count_1\": 0, \"Y_7\": \"Jamel Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Count_1\": 0, \"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Leonardo Lipsey\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_5\": \"Lashandra Pugliese\", \"Count_1\": 0, \"Y_3\": \"Marguerita Sparkman\", \"Y_7\": \"Ismael Sparkman\"}, {\"Y_3\": \"Sha Sparkman\", \"Count_1\": 0, \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Count_1\": 3, \"Y_3\": \"Neil Ackerman\", \"Y_5\": \"Rebecka Sparkman\"}]",
+        "answer": [
+            "0",
+            "1",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(aunt(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "great_grandchild(\"Johnetta Sparkman\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2b5e6dd2-fd68-4e84-842e-52c09ad2da8e",
+        "question": "How many sons-in-law does the mother of the great-uncle of the friend of Lucio Bible have?",
+        "solution_traces": "[{\"Y_3\": \"Sha Sparkman\", \"Y_7\": \"Leonardo Lipsey\", \"Count_1\": 1, \"Y_5\": \"Ismael Sparkman\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(Y_3, Y_1)), Count_1)",
+                "mother(Y_5, Y_3)",
+                "great_uncle(Y_7, Y_5)",
+                "friend(\"Lucio Bible\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "92e7c2ec-a540-4998-b398-2975cc7578d8",
+        "question": "How many sons does the daughter-in-law of the parent of the brother of Ismael Sparkman have?",
+        "solution_traces": "[{\"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Marguerita Sparkman\", \"Y_5\": \"Sha Sparkman\", \"Count_1\": 2}, {\"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Marguerita Sparkman\", \"Y_5\": \"Laurence Sparkman\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son(Y_3, Y_1)), Count_1)",
+                "daughter_in_law(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "brother(\"Ismael Sparkman\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e7cd6a14-2104-4ad1-98e8-f8c7639e85c3",
+        "question": "How many children does the parent of the brother of the sister of Douglass Pugliese have?",
+        "solution_traces": "[{\"Y_7\": \"Isabell Pugliese\", \"Count_1\": 3, \"Y_3\": \"Rolando Pugliese\", \"Y_5\": \"Douglass Pugliese\"}, {\"Count_1\": 3, \"Y_5\": \"Douglass Pugliese\", \"Y_3\": \"Lashandra Pugliese\", \"Y_7\": \"Sha Sparkman\"}, {\"Y_7\": \"Isabell Pugliese\", \"Count_1\": 3, \"Y_3\": \"Lashandra Pugliese\", \"Y_5\": \"Douglass Pugliese\"}, {\"Count_1\": 3, \"Y_5\": \"Douglass Pugliese\", \"Y_3\": \"Rolando Pugliese\", \"Y_7\": \"Sha Sparkman\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "sister(\"Douglass Pugliese\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d3ec1090-b3fe-425a-9285-cac84d155e06",
+        "question": "How many great-uncles does the grandchild of the great-grandmother of the male second cousin of Leonardo Lipsey have?",
+        "solution_traces": "[{\"Y_7\": \"Carmine Bible\", \"Y_3\": \"Adalberto Sparkman\", \"Count_1\": 1, \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Carmine Bible\", \"Count_1\": 1, \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Erick Sparkman\"}, {\"Y_7\": \"Carmine Bible\", \"Y_3\": \"Jeanette Vega\", \"Count_1\": 1, \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Carmine Bible\", \"Count_1\": 1, \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Marie Lipsey\"}, {\"Y_7\": \"Carmine Bible\", \"Count_1\": 1, \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Sha Bible\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_uncle(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "great_grandmother(Y_7, Y_5)",
+                "male_second_cousin(\"Leonardo Lipsey\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 11,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "22d9bba5-9199-46fb-8581-a003218868ab",
+        "question": "How many friends does the great-grandfather of the nephew of the great-uncle of Carmine Bible have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Erick Sparkman\", \"Y_3\": \"Markus Sparkman\", \"Y_7\": \"Ismael Sparkman\"}, {\"Count_1\": 4, \"Y_3\": \"Rolando Pugliese\", \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Adalberto Sparkman\"}, {\"Count_1\": 2, \"Y_3\": \"Markus Sparkman\", \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Adalberto Sparkman\"}, {\"Count_1\": 4, \"Y_5\": \"Erick Sparkman\", \"Y_7\": \"Ismael Sparkman\", \"Y_3\": \"Rolando Pugliese\"}]",
+        "answer": [
+            "2",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "great_grandfather(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "great_uncle(\"Carmine Bible\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "58ad2f08-2ed8-4553-951d-9acd6ebd892e",
+        "question": "How many husbands does the great-grandparent of the friend of the daughter of Gina Mcneely have?",
+        "solution_traces": "[{\"Y_5\": \"Buddy Ackerman\", \"Y_3\": \"Delsie Templeton\", \"Count_1\": 1, \"Y_7\": \"Bev Boughton\"}, {\"Y_5\": \"Erick Sparkman\", \"Count_1\": 1, \"Y_3\": \"Rebecka Sparkman\", \"Y_7\": \"Bev Boughton\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Count_1\": 1, \"Y_5\": \"Ismael Sparkman\", \"Y_7\": \"Bev Boughton\"}, {\"Count_1\": 0, \"Y_5\": \"Erick Sparkman\", \"Y_3\": \"Rolando Pugliese\", \"Y_7\": \"Bev Boughton\"}, {\"Y_5\": \"Buddy Ackerman\", \"Y_3\": \"Leonardo Templeton\", \"Count_1\": 0, \"Y_7\": \"Bev Boughton\"}, {\"Y_3\": \"Mattie Ackerman\", \"Count_1\": 1, \"Y_5\": \"Richie Boughton\", \"Y_7\": \"Bev Boughton\"}, {\"Y_3\": \"Hiram Sparkman\", \"Count_1\": 0, \"Y_5\": \"Ismael Sparkman\", \"Y_7\": \"Bev Boughton\"}, {\"Count_1\": 0, \"Y_3\": \"Timothy Ackerman\", \"Y_5\": \"Richie Boughton\", \"Y_7\": \"Bev Boughton\"}, {\"Y_5\": \"Erick Sparkman\", \"Count_1\": 1, \"Y_3\": \"Lashandra Pugliese\", \"Y_7\": \"Bev Boughton\"}, {\"Count_1\": 0, \"Y_5\": \"Erick Sparkman\", \"Y_3\": \"Markus Sparkman\", \"Y_7\": \"Bev Boughton\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(husband(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "daughter(\"Gina Mcneely\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    }
+]

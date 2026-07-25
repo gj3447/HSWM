@@ -1,0 +1,1006 @@
+[
+    {
+        "id": "0c549260-1d03-48aa-b7e3-d195b1fe8a69",
+        "question": "How many sisters-in-law does the wife of the husband of Niesha Lawhorn have?",
+        "solution_traces": "[{\"Y_5\": \"Geoffrey Lawhorn\", \"Count_1\": 2, \"Y_3\": \"Niesha Lawhorn\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister_in_law(Y_3, Y_1)), Count_1)",
+                "wife(Y_5, Y_3)",
+                "husband(\"Niesha Lawhorn\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2abc6d4a-17c7-4bb3-8805-9ad5e00cf6ec",
+        "question": "How many friends does the parent of the daughter of Ashton Kersey have?",
+        "solution_traces": "[{\"Y_3\": \"Bradley Kersey\", \"Count_1\": 3, \"Y_5\": \"Lora Avila\"}, {\"Y_3\": \"Ashton Kersey\", \"Count_1\": 3, \"Y_5\": \"Lora Avila\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "daughter(\"Ashton Kersey\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9141d428-5179-4cf2-97bc-1f8d85ab1990",
+        "question": "How many male cousins does the grandchild of the friend of Ervin Nagy have?",
+        "solution_traces": "[{\"Y_5\": \"Kraig Clapper\", \"Y_3\": \"Haywood Clapper\", \"Count_1\": 0}, {\"Y_5\": \"Riley Joiner\", \"Count_1\": 2, \"Y_3\": \"Riley Clapper\"}, {\"Y_5\": \"Riley Joiner\", \"Y_3\": \"Adrienne Clapper\", \"Count_1\": 2}, {\"Count_1\": 1, \"Y_3\": \"Bethany Lawhorn\", \"Y_5\": \"Olin Lawhorn\"}, {\"Y_3\": \"Brooks Lawhorn\", \"Y_5\": \"Olin Lawhorn\", \"Count_1\": 0}, {\"Y_5\": \"Olin Lawhorn\", \"Y_3\": \"Leeanne Nagy\", \"Count_1\": 0}, {\"Y_5\": \"Kraig Clapper\", \"Y_3\": \"Art Clapper\", \"Count_1\": 0}, {\"Y_5\": \"Riley Joiner\", \"Y_3\": \"Claude Clapper\", \"Count_1\": 2}, {\"Y_5\": \"Kraig Clapper\", \"Y_3\": \"Vilma Avila\", \"Count_1\": 0}, {\"Y_3\": \"Romona Lawhorn\", \"Count_1\": 1, \"Y_5\": \"Olin Lawhorn\"}, {\"Y_3\": \"Pamula Oster\", \"Y_5\": \"Olin Lawhorn\", \"Count_1\": 0}, {\"Y_5\": \"Kraig Clapper\", \"Y_3\": \"Christopher Clapper\", \"Count_1\": 0}, {\"Y_5\": \"Kraig Clapper\", \"Count_1\": 0, \"Y_3\": \"Danilo Clapper\"}, {\"Y_3\": \"Thalia Mcreynolds\", \"Y_5\": \"Olin Lawhorn\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(male_cousin(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "friend(\"Ervin Nagy\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "03356a30-0be0-419c-af87-3026cff6d31a",
+        "question": "How many parents does the niece of the aunt of Leeanne Nagy have?",
+        "solution_traces": "[{\"Y_3\": \"Pamula Oster\", \"Count_1\": 2, \"Y_5\": \"Oma Lawhorn\"}, {\"Y_3\": \"Thalia Mcreynolds\", \"Count_1\": 2, \"Y_5\": \"Oma Lawhorn\"}, {\"Y_3\": \"Romona Lawhorn\", \"Count_1\": 2, \"Y_5\": \"Oma Lawhorn\"}, {\"Y_3\": \"Romona Lawhorn\", \"Y_5\": \"Cheri Lawhorn\", \"Count_1\": 2}, {\"Y_3\": \"Pamula Oster\", \"Y_5\": \"Cheri Lawhorn\", \"Count_1\": 2}, {\"Y_5\": \"Cheri Lawhorn\", \"Count_1\": 2, \"Y_3\": \"Leeanne Nagy\"}, {\"Count_1\": 2, \"Y_5\": \"Oma Lawhorn\", \"Y_3\": \"Leeanne Nagy\"}, {\"Y_5\": \"Cheri Lawhorn\", \"Count_1\": 2, \"Y_3\": \"Bethany Lawhorn\"}, {\"Y_3\": \"Bethany Lawhorn\", \"Count_1\": 2, \"Y_5\": \"Oma Lawhorn\"}, {\"Y_5\": \"Cheri Lawhorn\", \"Count_1\": 2, \"Y_3\": \"Thalia Mcreynolds\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "niece(Y_5, Y_3)",
+                "aunt(\"Leeanne Nagy\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6fdbb961-d845-4f30-b175-614bbeb62cb4",
+        "question": "How many granddaughters does the mother of the child of Tomas Clapper have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Christopher Clapper\", \"Y_3\": \"Marlena Clapper\"}, {\"Y_5\": \"Art Clapper\", \"Count_1\": 2, \"Y_3\": \"Marlena Clapper\"}, {\"Count_1\": 2, \"Y_5\": \"Haywood Clapper\", \"Y_3\": \"Marlena Clapper\"}, {\"Y_5\": \"Danilo Clapper\", \"Count_1\": 2, \"Y_3\": \"Marlena Clapper\"}, {\"Count_1\": 2, \"Y_5\": \"Vilma Avila\", \"Y_3\": \"Marlena Clapper\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(granddaughter(Y_3, Y_1)), Count_1)",
+                "mother(Y_5, Y_3)",
+                "child(\"Tomas Clapper\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ddab2dfa-e60f-4cbe-a822-16704183aa3a",
+        "question": "How many uncles does the friend of the mother of Lora Avila have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Christopher Clapper\", \"Y_5\": \"Ashton Kersey\"}, {\"Count_1\": 2, \"Y_3\": \"Cliff Farmer\", \"Y_5\": \"Ashton Kersey\"}, {\"Count_1\": 0, \"Y_3\": \"Niesha Lawhorn\", \"Y_5\": \"Ashton Kersey\"}]",
+        "answer": [
+            "0",
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(uncle(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "mother(\"Lora Avila\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "90ef2333-8ca5-4bd0-bf35-86661c43b10a",
+        "question": "How many sisters-in-law does the daughter of the grandparent of Riley Clapper have?",
+        "solution_traces": "[{\"Y_5\": \"Marlena Clapper\", \"Y_3\": \"Vilma Avila\", \"Count_1\": 0}, {\"Y_5\": \"Tomas Clapper\", \"Y_3\": \"Vilma Avila\", \"Count_1\": 0}, {\"Count_1\": 1, \"Y_5\": \"Kacey Joiner\", \"Y_3\": \"Charity Clapper\"}, {\"Count_1\": 1, \"Y_5\": \"Riley Joiner\", \"Y_3\": \"Charity Clapper\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister_in_law(Y_3, Y_1)), Count_1)",
+                "daughter(Y_5, Y_3)",
+                "grandparent(\"Riley Clapper\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8186ed84-925d-4e5b-98ce-c41eff413ead",
+        "question": "How many friends does the husband of the mother-in-law of Delbert Avila have?",
+        "solution_traces": "[{\"Y_3\": \"Bradley Kersey\", \"Count_1\": 3, \"Y_5\": \"Ashton Kersey\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "husband(Y_5, Y_3)",
+                "mother_in_law(\"Delbert Avila\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ca77d106-b22b-4699-8295-16dae987a2c6",
+        "question": "How many children does the husband of the mother-in-law of Chris Farmer have?",
+        "solution_traces": "[{\"Y_5\": \"Lauren Lawhorn\", \"Y_3\": \"Brooks Lawhorn\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "husband(Y_5, Y_3)",
+                "mother_in_law(\"Chris Farmer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4bfcd5db-c69b-4a28-8aa1-781460b36b98",
+        "question": "How many sons-in-law does the mother of the sister of Art Clapper have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Vilma Avila\", \"Y_3\": \"Marlena Clapper\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(Y_3, Y_1)), Count_1)",
+                "mother(Y_5, Y_3)",
+                "sister(\"Art Clapper\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8715af2c-1eaf-40b2-b7ba-3fc0397d36c9",
+        "question": "How many nieces does the great-uncle of the cousin of Isidro Lawhorn have?",
+        "solution_traces": "[{\"Y_5\": \"Elicia Mcreynolds\", \"Count_1\": 3, \"Y_3\": \"Quintin Lawhorn\"}, {\"Count_1\": 3, \"Y_5\": \"Adalberto Oster\", \"Y_3\": \"Quintin Lawhorn\"}, {\"Count_1\": 3, \"Y_5\": \"Ervin Nagy\", \"Y_3\": \"Quintin Lawhorn\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "great_uncle(Y_5, Y_3)",
+                "cousin(\"Isidro Lawhorn\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "cedf5e78-ee63-46a6-8edd-6e92656679e9",
+        "question": "How many grandmothers does the daughter of the sibling of Oma Lawhorn have?",
+        "solution_traces": "[{\"Y_3\": \"Romona Lawhorn\", \"Count_1\": 1, \"Y_5\": \"Quintin Lawhorn\"}, {\"Y_5\": \"Geoffrey Lawhorn\", \"Count_1\": 1, \"Y_3\": \"Leeanne Nagy\"}, {\"Count_1\": 1, \"Y_3\": \"Bethany Lawhorn\", \"Y_5\": \"Quintin Lawhorn\"}, {\"Y_5\": \"Geoffrey Lawhorn\", \"Y_3\": \"Thalia Mcreynolds\", \"Count_1\": 1}, {\"Y_5\": \"Geoffrey Lawhorn\", \"Y_3\": \"Pamula Oster\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandmother(Y_3, Y_1)), Count_1)",
+                "daughter(Y_5, Y_3)",
+                "sibling(\"Oma Lawhorn\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "db433302-354c-4860-aa23-2e05026bdcdb",
+        "question": "How many grandchildren does the great-grandparent of the grandchild of Kacey Joiner have?",
+        "solution_traces": "[{\"Count_1\": 5, \"Y_5\": \"Claude Clapper\", \"Y_3\": \"Kraig Clapper\"}, {\"Y_3\": \"Sondra Clapper\", \"Y_5\": \"Adrienne Clapper\", \"Count_1\": 5}, {\"Y_3\": \"Kraig Clapper\", \"Count_1\": 5, \"Y_5\": \"Riley Clapper\"}, {\"Y_3\": \"Sondra Clapper\", \"Count_1\": 5, \"Y_5\": \"Riley Clapper\"}, {\"Y_5\": \"Adrienne Clapper\", \"Count_1\": 5, \"Y_3\": \"Kraig Clapper\"}, {\"Y_3\": \"Sondra Clapper\", \"Count_1\": 5, \"Y_5\": \"Claude Clapper\"}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "grandchild(\"Kacey Joiner\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2dbb409b-0e01-469e-92a6-0130fc16fb7e",
+        "question": "How many brothers does the aunt of the child of Niesha Lawhorn have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Oma Lawhorn\", \"Y_5\": \"Brooks Lawhorn\"}, {\"Y_3\": \"Cheri Lawhorn\", \"Y_5\": \"Pamula Oster\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Oma Lawhorn\", \"Y_5\": \"Leeanne Nagy\"}, {\"Y_3\": \"Cheri Lawhorn\", \"Count_1\": 2, \"Y_5\": \"Thalia Mcreynolds\"}, {\"Y_3\": \"Cheri Lawhorn\", \"Count_1\": 2, \"Y_5\": \"Brooks Lawhorn\"}, {\"Y_5\": \"Pamula Oster\", \"Y_3\": \"Oma Lawhorn\", \"Count_1\": 2}, {\"Y_3\": \"Cheri Lawhorn\", \"Count_1\": 2, \"Y_5\": \"Leeanne Nagy\"}, {\"Count_1\": 2, \"Y_5\": \"Thalia Mcreynolds\", \"Y_3\": \"Oma Lawhorn\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "aunt(Y_5, Y_3)",
+                "child(\"Niesha Lawhorn\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9fe0710f-33ff-43f2-970e-814579c64cf7",
+        "question": "How many grandchildren does the wife of the brother of Jarvis Clapper have?",
+        "solution_traces": "[{\"Y_5\": \"Tomas Clapper\", \"Count_1\": 6, \"Y_3\": \"Marlena Clapper\"}]",
+        "answer": [
+            "6"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(Y_3, Y_1)), Count_1)",
+                "wife(Y_5, Y_3)",
+                "brother(\"Jarvis Clapper\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2b7d7c88-405c-4ac6-b9ba-fae6b7abf57c",
+        "question": "How many siblings does the uncle of the great-grandson of Sondra Clapper have?",
+        "solution_traces": "[{\"Y_3\": \"Danilo Clapper\", \"Count_1\": 4, \"Y_5\": \"Timothy Clapper\"}, {\"Y_3\": \"Art Clapper\", \"Count_1\": 4, \"Y_5\": \"Claude Clapper\"}, {\"Count_1\": 4, \"Y_3\": \"Art Clapper\", \"Y_5\": \"Riley Clapper\"}, {\"Y_3\": \"Haywood Clapper\", \"Count_1\": 4, \"Y_5\": \"Riley Clapper\"}, {\"Y_3\": \"Haywood Clapper\", \"Count_1\": 4, \"Y_5\": \"Claude Clapper\"}, {\"Y_3\": \"Christopher Clapper\", \"Count_1\": 4, \"Y_5\": \"Delbert Avila\"}, {\"Y_3\": \"Haywood Clapper\", \"Count_1\": 4, \"Y_5\": \"Delbert Avila\"}, {\"Y_3\": \"Danilo Clapper\", \"Count_1\": 4, \"Y_5\": \"Delbert Avila\"}, {\"Y_3\": \"Danilo Clapper\", \"Count_1\": 4, \"Y_5\": \"Claude Clapper\"}, {\"Y_3\": \"Danilo Clapper\", \"Count_1\": 4, \"Y_5\": \"Riley Clapper\"}, {\"Y_3\": \"Art Clapper\", \"Count_1\": 4, \"Y_5\": \"Timothy Clapper\"}, {\"Count_1\": 4, \"Y_3\": \"Art Clapper\", \"Y_5\": \"Delbert Avila\"}, {\"Y_3\": \"Christopher Clapper\", \"Count_1\": 4, \"Y_5\": \"Timothy Clapper\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "uncle(Y_5, Y_3)",
+                "great_grandson(\"Sondra Clapper\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9c5c4c0c-df3d-4d17-b81a-bd84b74d9b44",
+        "question": "How many grandparents does the daughter of the mother of Haywood Clapper have?",
+        "solution_traces": "[{\"Y_5\": \"Marlena Clapper\", \"Count_1\": 2, \"Y_3\": \"Vilma Avila\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "daughter(Y_5, Y_3)",
+                "mother(\"Haywood Clapper\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b9a522ca-9eea-4a42-adee-5704672da6bc",
+        "question": "How many siblings does the parent of the child of Babette Farmer have?",
+        "solution_traces": "[{\"Y_3\": \"Chris Farmer\", \"Count_1\": 0, \"Y_5\": \"Cliff Farmer\"}, {\"Count_1\": 2, \"Y_3\": \"Babette Farmer\", \"Y_5\": \"Cliff Farmer\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "child(\"Babette Farmer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c6d5b74c-4206-407b-9d75-617ff3723692",
+        "question": "How many siblings does the brother of the sister-in-law of Lauren Lawhorn have?",
+        "solution_traces": "[{\"Y_5\": \"Pamula Oster\", \"Y_3\": \"Brooks Lawhorn\", \"Count_1\": 3}, {\"Count_1\": 3, \"Y_5\": \"Thalia Mcreynolds\", \"Y_3\": \"Brooks Lawhorn\"}, {\"Y_3\": \"Brooks Lawhorn\", \"Count_1\": 3, \"Y_5\": \"Leeanne Nagy\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "sister_in_law(\"Lauren Lawhorn\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "01cbcb99-eb01-4660-8a04-4d9271860727",
+        "question": "How many siblings does the nephew of the brother of Danilo Clapper have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Riley Clapper\", \"Y_5\": \"Haywood Clapper\"}, {\"Y_3\": \"Timothy Clapper\", \"Y_5\": \"Christopher Clapper\", \"Count_1\": 0}, {\"Y_5\": \"Art Clapper\", \"Count_1\": 2, \"Y_3\": \"Riley Clapper\"}, {\"Count_1\": 1, \"Y_5\": \"Christopher Clapper\", \"Y_3\": \"Delbert Avila\"}, {\"Y_5\": \"Art Clapper\", \"Count_1\": 1, \"Y_3\": \"Delbert Avila\"}, {\"Count_1\": 1, \"Y_5\": \"Haywood Clapper\", \"Y_3\": \"Delbert Avila\"}, {\"Y_5\": \"Art Clapper\", \"Count_1\": 2, \"Y_3\": \"Claude Clapper\"}, {\"Y_5\": \"Art Clapper\", \"Y_3\": \"Timothy Clapper\", \"Count_1\": 0}, {\"Count_1\": 2, \"Y_3\": \"Claude Clapper\", \"Y_5\": \"Haywood Clapper\"}]",
+        "answer": [
+            "0",
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "nephew(Y_5, Y_3)",
+                "brother(\"Danilo Clapper\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5323a12a-bf04-463c-bd61-a12825a32faa",
+        "question": "How many male cousins does the nephew of the parent of Riley Clapper have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Timothy Clapper\", \"Y_5\": \"Christopher Clapper\"}, {\"Count_1\": 3, \"Y_5\": \"Christopher Clapper\", \"Y_3\": \"Delbert Avila\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(male_cousin(Y_3, Y_1)), Count_1)",
+                "nephew(Y_5, Y_3)",
+                "parent(\"Riley Clapper\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a74ed4b2-e2bd-43d0-8f60-a2e952788cb5",
+        "question": "How many siblings does the sibling of the wife of Dylan Oster have?",
+        "solution_traces": "[{\"Y_5\": \"Pamula Oster\", \"Y_3\": \"Brooks Lawhorn\", \"Count_1\": 3}, {\"Y_5\": \"Pamula Oster\", \"Count_1\": 3, \"Y_3\": \"Leeanne Nagy\"}, {\"Y_3\": \"Thalia Mcreynolds\", \"Y_5\": \"Pamula Oster\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "wife(\"Dylan Oster\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d169b19d-baf9-4452-b3ae-dc8fa58daf10",
+        "question": "How many sisters does the grandchild of the husband of Tiesha Lawhorn have?",
+        "solution_traces": "[{\"Y_3\": \"Thalia Mcreynolds\", \"Count_1\": 2, \"Y_5\": \"Olin Lawhorn\"}, {\"Y_3\": \"Pamula Oster\", \"Count_1\": 2, \"Y_5\": \"Olin Lawhorn\"}, {\"Count_1\": 1, \"Y_3\": \"Bethany Lawhorn\", \"Y_5\": \"Olin Lawhorn\"}, {\"Y_3\": \"Brooks Lawhorn\", \"Count_1\": 3, \"Y_5\": \"Olin Lawhorn\"}, {\"Y_3\": \"Romona Lawhorn\", \"Count_1\": 1, \"Y_5\": \"Olin Lawhorn\"}, {\"Count_1\": 2, \"Y_5\": \"Olin Lawhorn\", \"Y_3\": \"Leeanne Nagy\"}]",
+        "answer": [
+            "1",
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "husband(\"Tiesha Lawhorn\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a0f23d63-5b72-4a02-a7ce-d027544c2285",
+        "question": "How many uncles does the aunt of the friend of Quintin Lawhorn have?",
+        "solution_traces": "[{\"Y_3\": \"Cheri Lawhorn\", \"Count_1\": 0, \"Y_5\": \"Bethany Lawhorn\"}, {\"Y_5\": \"Elicia Mcreynolds\", \"Count_1\": 1, \"Y_3\": \"Leeanne Nagy\"}, {\"Y_3\": \"Pamula Oster\", \"Y_5\": \"Ervin Nagy\", \"Count_1\": 1}, {\"Y_3\": \"Oma Lawhorn\", \"Count_1\": 0, \"Y_5\": \"Bethany Lawhorn\"}, {\"Count_1\": 1, \"Y_3\": \"Thalia Mcreynolds\", \"Y_5\": \"Ervin Nagy\"}, {\"Y_5\": \"Elicia Mcreynolds\", \"Y_3\": \"Pamula Oster\", \"Count_1\": 1}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(uncle(Y_3, Y_1)), Count_1)",
+                "aunt(Y_5, Y_3)",
+                "friend(\"Quintin Lawhorn\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "316b2c92-6367-42c8-b26b-ec904a671cbb",
+        "question": "How many great-grandparents does the nephew of the male first cousin once removed of Romona Lawhorn have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Cliff Farmer\", \"Y_5\": \"Isidro Lawhorn\"}, {\"Count_1\": 2, \"Y_5\": \"Anibal Lawhorn\", \"Y_3\": \"Cliff Farmer\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "nephew(Y_5, Y_3)",
+                "male_first_cousin_once_removed(\"Romona Lawhorn\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2312c7f3-5881-4d77-af6d-51381024a25a",
+        "question": "How many nieces does the aunt of the uncle of Elicia Mcreynolds have?",
+        "solution_traces": "[{\"Y_3\": \"Cheri Lawhorn\", \"Y_5\": \"Brooks Lawhorn\", \"Count_1\": 5}, {\"Y_3\": \"Oma Lawhorn\", \"Y_5\": \"Brooks Lawhorn\", \"Count_1\": 5}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "aunt(Y_5, Y_3)",
+                "uncle(\"Elicia Mcreynolds\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "832aba10-b2fe-432b-adbe-40492a05fc46",
+        "question": "How many great-grandsons does the father-in-law of the parent of Thalia Mcreynolds have?",
+        "solution_traces": "[{\"Y_3\": \"Olin Lawhorn\", \"Count_1\": 4, \"Y_5\": \"Niesha Lawhorn\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(Y_3, Y_1)), Count_1)",
+                "father_in_law(Y_5, Y_3)",
+                "parent(\"Thalia Mcreynolds\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "04718488-1ec4-404b-bc9d-79a5a106957c",
+        "question": "How many brothers does the aunt of the niece of Cheri Lawhorn have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Oma Lawhorn\", \"Y_5\": \"Bethany Lawhorn\"}, {\"Y_3\": \"Cheri Lawhorn\", \"Y_5\": \"Pamula Oster\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Oma Lawhorn\", \"Y_5\": \"Leeanne Nagy\"}, {\"Y_3\": \"Cheri Lawhorn\", \"Count_1\": 2, \"Y_5\": \"Thalia Mcreynolds\"}, {\"Y_3\": \"Cheri Lawhorn\", \"Count_1\": 2, \"Y_5\": \"Bethany Lawhorn\"}, {\"Y_3\": \"Cheri Lawhorn\", \"Y_5\": \"Romona Lawhorn\", \"Count_1\": 2}, {\"Y_5\": \"Pamula Oster\", \"Y_3\": \"Oma Lawhorn\", \"Count_1\": 2}, {\"Y_3\": \"Cheri Lawhorn\", \"Count_1\": 2, \"Y_5\": \"Leeanne Nagy\"}, {\"Count_1\": 2, \"Y_5\": \"Thalia Mcreynolds\", \"Y_3\": \"Oma Lawhorn\"}, {\"Y_5\": \"Romona Lawhorn\", \"Y_3\": \"Oma Lawhorn\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "aunt(Y_5, Y_3)",
+                "niece(\"Cheri Lawhorn\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "54ab4914-f9bc-4258-9c96-76a38a6d2082",
+        "question": "How many aunts does the friend of the great-aunt of Cliff Farmer have?",
+        "solution_traces": "[{\"Y_5\": \"Thalia Mcreynolds\", \"Y_3\": \"Delbert Avila\", \"Count_1\": 0}, {\"Y_3\": \"Anibal Lawhorn\", \"Count_1\": 3, \"Y_5\": \"Leeanne Nagy\"}, {\"Y_3\": \"Dylan Oster\", \"Y_5\": \"Thalia Mcreynolds\", \"Count_1\": 0}, {\"Y_5\": \"Thalia Mcreynolds\", \"Y_3\": \"Douglas Nagy\", \"Count_1\": 0}, {\"Y_5\": \"Thalia Mcreynolds\", \"Y_3\": \"Oma Lawhorn\", \"Count_1\": 0}, {\"Count_1\": 1, \"Y_5\": \"Pamula Oster\", \"Y_3\": \"Adrienne Clapper\"}, {\"Y_5\": \"Pamula Oster\", \"Y_3\": \"Douglas Nagy\", \"Count_1\": 0}, {\"Count_1\": 0, \"Y_3\": \"Brendon Avila\", \"Y_5\": \"Leeanne Nagy\"}, {\"Y_3\": \"Adalberto Oster\", \"Count_1\": 2, \"Y_5\": \"Leeanne Nagy\"}, {\"Count_1\": 0, \"Y_3\": \"Kimiko Avila\", \"Y_5\": \"Leeanne Nagy\"}, {\"Y_5\": \"Thalia Mcreynolds\", \"Count_1\": 3, \"Y_3\": \"Isidro Lawhorn\"}, {\"Y_3\": \"Romona Lawhorn\", \"Count_1\": 2, \"Y_5\": \"Leeanne Nagy\"}, {\"Y_5\": \"Thalia Mcreynolds\", \"Count_1\": 3, \"Y_3\": \"Anibal Lawhorn\"}, {\"Y_3\": \"Ervin Nagy\", \"Y_5\": \"Thalia Mcreynolds\", \"Count_1\": 2}, {\"Y_3\": \"Cheri Lawhorn\", \"Y_5\": \"Thalia Mcreynolds\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "1",
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(aunt(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "great_aunt(\"Cliff Farmer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "77c19fc2-187d-42bc-a325-07cec0577519",
+        "question": "How many nieces does the second uncle of the friend of Ashton Kersey have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Quintin Lawhorn\", \"Y_5\": \"Cliff Farmer\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "second_uncle(Y_5, Y_3)",
+                "friend(\"Ashton Kersey\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    }
+]

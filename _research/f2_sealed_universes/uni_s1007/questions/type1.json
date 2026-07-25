@@ -1,0 +1,1037 @@
+[
+    {
+        "id": "a636c473-d7af-4e1b-bd94-257f2c2ca8f9",
+        "question": "Who is the grandfather of the great-aunt of the sibling of Alexa Schafer?",
+        "solution_traces": "[{\"Y_6\": \"Yasmin Schafer\", \"Y_2\": \"Bryan Kirksey\", \"Y_4\": \"Bess Kirksey\"}, {\"Y_4\": \"Florence Kirkham\", \"Y_2\": \"Bryan Kirksey\", \"Y_6\": \"Emery Schafer\"}, {\"Y_6\": \"Floyd Schafer\", \"Y_2\": \"Bryan Kirksey\", \"Y_4\": \"Bess Kirksey\"}, {\"Y_6\": \"Floyd Schafer\", \"Y_4\": \"Florence Kirkham\", \"Y_2\": \"Bryan Kirksey\"}, {\"Y_6\": \"Yasmin Schafer\", \"Y_4\": \"Florence Kirkham\", \"Y_2\": \"Bryan Kirksey\"}, {\"Y_2\": \"Bryan Kirksey\", \"Y_4\": \"Bess Kirksey\", \"Y_6\": \"Emery Schafer\"}, {\"Y_2\": \"Bryan Kirksey\", \"Y_4\": \"Bess Kirksey\", \"Y_6\": \"Violet Schafer\"}, {\"Y_4\": \"Florence Kirkham\", \"Y_2\": \"Bryan Kirksey\", \"Y_6\": \"Violet Schafer\"}]",
+        "answer": [
+            "Bryan Kirksey"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "great_aunt(Y_6, Y_4)",
+                "sibling(\"Alexa Schafer\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ead8c49c-1410-4c34-bdad-9d9e40ce4d8d",
+        "question": "Who is the grandchild of the husband of the great-grandmother of Daniel Rowell?",
+        "solution_traces": "[{\"Y_2\": \"Dalton Fudge\", \"Y_4\": \"Carter Fudge\", \"Y_6\": \"Kristie Fudge\"}, {\"Y_6\": \"Nancy Summerlin\", \"Y_2\": \"Dalton Fudge\", \"Y_4\": \"Jack Summerlin\"}, {\"Y_2\": \"Brittaney Rowell\", \"Y_4\": \"Carter Fudge\", \"Y_6\": \"Kristie Fudge\"}, {\"Y_6\": \"Nancy Summerlin\", \"Y_2\": \"Brittaney Rowell\", \"Y_4\": \"Jack Summerlin\"}]",
+        "answer": [
+            "Brittaney Rowell",
+            "Dalton Fudge"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "husband(Y_6, Y_4)",
+                "great_grandmother(\"Daniel Rowell\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7a5aa091-33de-43c1-ac52-f991cbdeebc7",
+        "question": "Who is the male cousin of the sibling of the sister-in-law of Velia Warren?",
+        "solution_traces": "[{\"Y_2\": \"Rory Kirkham\", \"Y_4\": \"Oscar Warren\", \"Y_6\": \"Ai Schafer\"}]",
+        "answer": [
+            "Rory Kirkham"
+        ],
+        "prolog": {
+            "query": [
+                "male_cousin(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "sister_in_law(\"Velia Warren\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a93f79fc-1fc0-4d5c-bcdb-f83a515c2bbc",
+        "question": "Who is the wife of the son-in-law of the father-in-law of Lyle Rowell?",
+        "solution_traces": "[{\"Y_2\": \"Brittaney Rowell\", \"Y_6\": \"Garth Fudge\", \"Y_4\": \"Lyle Rowell\"}]",
+        "answer": [
+            "Brittaney Rowell"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "son_in_law(Y_6, Y_4)",
+                "father_in_law(\"Lyle Rowell\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1921aacd-f869-4fe8-a924-a7b8af3410e5",
+        "question": "Who is the parent of the child of the grandfather of Lakeshia Warren?",
+        "solution_traces": "[{\"Y_2\": \"Oscar Warren\", \"Y_6\": \"Oscar Warren\", \"Y_4\": \"Moises Warren\"}, {\"Y_2\": \"Velia Warren\", \"Y_6\": \"Oscar Warren\", \"Y_4\": \"Moises Warren\"}]",
+        "answer": [
+            "Oscar Warren",
+            "Velia Warren"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "child(Y_6, Y_4)",
+                "grandfather(\"Lakeshia Warren\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "bec42f3d-be4a-4f08-b1a0-7a7bd9516ac7",
+        "question": "Who is the great-grandfather of the male cousin of the brother-in-law of Armando Schafer?",
+        "solution_traces": "[{\"Y_2\": \"Bryan Kirksey\", \"Y_4\": \"Rory Kirkham\", \"Y_6\": \"Oscar Warren\"}]",
+        "answer": [
+            "Bryan Kirksey"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandfather(Y_4, Y_2)",
+                "male_cousin(Y_6, Y_4)",
+                "brother_in_law(\"Armando Schafer\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e494084a-b5fa-4b05-afcb-15784f89245e",
+        "question": "Who is the great-grandchild of the friend of the son-in-law of Joelle Fudge?",
+        "solution_traces": "[{\"Y_2\": \"Robbie Hunsaker\", \"Y_6\": \"Norris Hunsaker\", \"Y_4\": \"Nancy Summerlin\"}, {\"Y_6\": \"Norris Hunsaker\", \"Y_4\": \"Jack Summerlin\", \"Y_2\": \"Danielle Banner\"}, {\"Y_2\": \"Robbie Hunsaker\", \"Y_6\": \"Norris Hunsaker\", \"Y_4\": \"Jack Summerlin\"}, {\"Y_6\": \"Norris Hunsaker\", \"Y_2\": \"Rayna Fudge\", \"Y_4\": \"Jack Summerlin\"}, {\"Y_6\": \"Norris Hunsaker\", \"Y_4\": \"Jack Summerlin\", \"Y_2\": \"Helga Robertson\"}, {\"Y_6\": \"Norris Hunsaker\", \"Y_4\": \"Nancy Summerlin\", \"Y_2\": \"Daniel Rowell\"}, {\"Y_6\": \"Norris Hunsaker\", \"Y_4\": \"Jack Summerlin\", \"Y_2\": \"Daniel Rowell\"}, {\"Y_6\": \"Norris Hunsaker\", \"Y_4\": \"Nancy Summerlin\", \"Y_2\": \"Helga Robertson\"}, {\"Y_6\": \"Norris Hunsaker\", \"Y_4\": \"Nancy Summerlin\", \"Y_2\": \"Rayna Fudge\"}, {\"Y_6\": \"Norris Hunsaker\", \"Y_4\": \"Nancy Summerlin\", \"Y_2\": \"Danielle Banner\"}]",
+        "answer": [
+            "Daniel Rowell",
+            "Danielle Banner",
+            "Helga Robertson",
+            "Rayna Fudge",
+            "Robbie Hunsaker"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "son_in_law(\"Joelle Fudge\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dac6eb31-dc6c-4095-b025-82eab67b9d9d",
+        "question": "Who is the cousin of the sibling of the friend of Bess Kirksey?",
+        "solution_traces": "[{\"Y_2\": \"Moises Warren\", \"Y_4\": \"Alexa Schafer\", \"Y_6\": \"Violet Schafer\"}, {\"Y_2\": \"Moises Warren\", \"Y_4\": \"Emery Schafer\", \"Y_6\": \"Violet Schafer\"}, {\"Y_2\": \"Moises Warren\", \"Y_4\": \"Floyd Schafer\", \"Y_6\": \"Violet Schafer\"}, {\"Y_2\": \"Moises Warren\", \"Y_4\": \"Yasmin Schafer\", \"Y_6\": \"Violet Schafer\"}]",
+        "answer": [
+            "Moises Warren"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "friend(\"Bess Kirksey\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "66dad147-641c-4ac1-8359-d65a69655220",
+        "question": "Who is the niece of the niece of the mother-in-law of Augustus Robertson?",
+        "solution_traces": "[{\"Y_2\": \"Amy Hunsaker\", \"Y_6\": \"Brittaney Rowell\", \"Y_4\": \"Rayna Fudge\"}]",
+        "answer": [
+            "Amy Hunsaker"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "niece(Y_6, Y_4)",
+                "mother_in_law(\"Augustus Robertson\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "683f8954-4f25-4c51-855a-7ceaf4d4b182",
+        "question": "Who is the great-uncle of the friend of the friend of Freeda Dent?",
+        "solution_traces": "[{\"Y_2\": \"Angel Fudge\", \"Y_4\": \"Rayna Fudge\", \"Y_6\": \"Bryan Kirksey\"}, {\"Y_2\": \"Dalton Fudge\", \"Y_6\": \"Jack Summerlin\", \"Y_4\": \"Ignacio Robertson\"}]",
+        "answer": [
+            "Angel Fudge",
+            "Dalton Fudge"
+        ],
+        "prolog": {
+            "query": [
+                "great_uncle(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "friend(\"Freeda Dent\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b4bfc1ab-5e2d-40bb-ae18-b2ade3c453fb",
+        "question": "Who is the cousin of the female cousin of the great-granddaughter of Nancy Summerlin?",
+        "solution_traces": "[{\"Y_6\": \"Helga Robertson\", \"Y_2\": \"Danielle Banner\", \"Y_4\": \"Robbie Hunsaker\"}, {\"Y_6\": \"Danielle Banner\", \"Y_4\": \"Rayna Fudge\", \"Y_2\": \"Helga Robertson\"}, {\"Y_2\": \"Robbie Hunsaker\", \"Y_6\": \"Robbie Hunsaker\", \"Y_4\": \"Helga Robertson\"}, {\"Y_2\": \"Robbie Hunsaker\", \"Y_4\": \"Helga Robertson\", \"Y_6\": \"Rayna Fudge\"}, {\"Y_4\": \"Danielle Banner\", \"Y_6\": \"Rayna Fudge\", \"Y_2\": \"Rayna Fudge\"}, {\"Y_6\": \"Danielle Banner\", \"Y_4\": \"Rayna Fudge\", \"Y_2\": \"Daniel Rowell\"}, {\"Y_6\": \"Helga Robertson\", \"Y_4\": \"Rayna Fudge\", \"Y_2\": \"Helga Robertson\"}, {\"Y_6\": \"Danielle Banner\", \"Y_2\": \"Danielle Banner\", \"Y_4\": \"Robbie Hunsaker\"}, {\"Y_6\": \"Helga Robertson\", \"Y_2\": \"Helga Robertson\", \"Y_4\": \"Robbie Hunsaker\"}, {\"Y_6\": \"Robbie Hunsaker\", \"Y_4\": \"Danielle Banner\", \"Y_2\": \"Rayna Fudge\"}, {\"Y_2\": \"Robbie Hunsaker\", \"Y_4\": \"Danielle Banner\", \"Y_6\": \"Rayna Fudge\"}, {\"Y_6\": \"Danielle Banner\", \"Y_4\": \"Rayna Fudge\", \"Y_2\": \"Danielle Banner\"}, {\"Y_6\": \"Danielle Banner\", \"Y_2\": \"Daniel Rowell\", \"Y_4\": \"Robbie Hunsaker\"}, {\"Y_6\": \"Helga Robertson\", \"Y_4\": \"Rayna Fudge\", \"Y_2\": \"Danielle Banner\"}, {\"Y_2\": \"Robbie Hunsaker\", \"Y_6\": \"Robbie Hunsaker\", \"Y_4\": \"Danielle Banner\"}, {\"Y_6\": \"Robbie Hunsaker\", \"Y_2\": \"Rayna Fudge\", \"Y_4\": \"Helga Robertson\"}, {\"Y_2\": \"Rayna Fudge\", \"Y_4\": \"Helga Robertson\", \"Y_6\": \"Rayna Fudge\"}, {\"Y_6\": \"Danielle Banner\", \"Y_2\": \"Helga Robertson\", \"Y_4\": \"Robbie Hunsaker\"}, {\"Y_6\": \"Helga Robertson\", \"Y_2\": \"Daniel Rowell\", \"Y_4\": \"Robbie Hunsaker\"}, {\"Y_6\": \"Helga Robertson\", \"Y_4\": \"Rayna Fudge\", \"Y_2\": \"Daniel Rowell\"}]",
+        "answer": [
+            "Daniel Rowell",
+            "Danielle Banner",
+            "Helga Robertson",
+            "Rayna Fudge",
+            "Robbie Hunsaker"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "female_cousin(Y_6, Y_4)",
+                "great_granddaughter(\"Nancy Summerlin\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d1747bde-c4d2-4874-b9da-a3297d3c009d",
+        "question": "Who is the daughter of the parent of the friend of Velia Warren?",
+        "solution_traces": "[{\"Y_2\": \"Robbie Hunsaker\", \"Y_6\": \"Rayna Fudge\", \"Y_4\": \"Dalton Fudge\"}, {\"Y_2\": \"Robbie Hunsaker\", \"Y_4\": \"Joelle Fudge\", \"Y_6\": \"Rayna Fudge\"}, {\"Y_2\": \"Yasmin Schafer\", \"Y_4\": \"Ai Schafer\", \"Y_6\": \"Violet Schafer\"}, {\"Y_4\": \"Ai Schafer\", \"Y_2\": \"Violet Schafer\", \"Y_6\": \"Violet Schafer\"}, {\"Y_2\": \"Rayna Fudge\", \"Y_6\": \"Rayna Fudge\", \"Y_4\": \"Dalton Fudge\"}, {\"Y_4\": \"Armando Schafer\", \"Y_2\": \"Alexa Schafer\", \"Y_6\": \"Violet Schafer\"}, {\"Y_4\": \"Joelle Fudge\", \"Y_2\": \"Rayna Fudge\", \"Y_6\": \"Rayna Fudge\"}, {\"Y_2\": \"Violet Schafer\", \"Y_4\": \"Armando Schafer\", \"Y_6\": \"Violet Schafer\"}, {\"Y_2\": \"Yasmin Schafer\", \"Y_4\": \"Armando Schafer\", \"Y_6\": \"Violet Schafer\"}, {\"Y_4\": \"Ai Schafer\", \"Y_2\": \"Alexa Schafer\", \"Y_6\": \"Violet Schafer\"}]",
+        "answer": [
+            "Alexa Schafer",
+            "Rayna Fudge",
+            "Robbie Hunsaker",
+            "Violet Schafer",
+            "Yasmin Schafer"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "parent(Y_6, Y_4)",
+                "friend(\"Velia Warren\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1af383c1-5c56-4b19-8c19-097c1b7fddfd",
+        "question": "Who is the female second cousin of the grandson of the niece of Angel Fudge?",
+        "solution_traces": "[{\"Y_2\": \"Amy Hunsaker\", \"Y_4\": \"Ignacio Robertson\", \"Y_6\": \"Brittaney Rowell\"}]",
+        "answer": [
+            "Amy Hunsaker"
+        ],
+        "prolog": {
+            "query": [
+                "female_second_cousin(Y_4, Y_2)",
+                "grandson(Y_6, Y_4)",
+                "niece(\"Angel Fudge\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "24a30f77-afdc-4e63-8c9b-75b65515702f",
+        "question": "Who is the mother of the friend of the great-grandparent of Yasmin Schafer?",
+        "solution_traces": "[{\"Y_4\": \"Maragret Warren\", \"Y_6\": \"Frederic Kirksey\", \"Y_2\": \"Maira Kirksey\"}, {\"Y_4\": \"Mavis Robertson\", \"Y_6\": \"Maira Kirksey\", \"Y_2\": \"Freeda Dent\"}, {\"Y_4\": \"Charley Kirkham\", \"Y_6\": \"Frederic Kirksey\", \"Y_2\": \"Anneliese Kirkham\"}, {\"Y_4\": \"Violet Schafer\", \"Y_2\": \"Ai Schafer\", \"Y_6\": \"Maira Kirksey\"}, {\"Y_4\": \"Oscar Warren\", \"Y_6\": \"Frederic Kirksey\", \"Y_2\": \"Maragret Warren\"}]",
+        "answer": [
+            "Ai Schafer",
+            "Anneliese Kirkham",
+            "Freeda Dent",
+            "Maira Kirksey",
+            "Maragret Warren"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "great_grandparent(\"Yasmin Schafer\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "258d2f54-12c1-4250-8984-1b9e910ba12b",
+        "question": "Who is the father-in-law of the son-in-law of the aunt of Rory Kirkham?",
+        "solution_traces": "[{\"Y_2\": \"Emerson Warren\", \"Y_4\": \"Armando Schafer\", \"Y_6\": \"Maragret Warren\"}]",
+        "answer": [
+            "Emerson Warren"
+        ],
+        "prolog": {
+            "query": [
+                "father_in_law(Y_4, Y_2)",
+                "son_in_law(Y_6, Y_4)",
+                "aunt(\"Rory Kirkham\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f1f0bd7a-984b-42d8-b912-0b0054f6da9e",
+        "question": "Who is the grandparent of the female second cousin of the child of Robbie Hunsaker?",
+        "solution_traces": "[{\"Y_2\": \"Brittaney Rowell\", \"Y_6\": \"Amy Hunsaker\", \"Y_4\": \"Tanya Banner\"}, {\"Y_6\": \"Amy Hunsaker\", \"Y_2\": \"Lyle Rowell\", \"Y_4\": \"Tanya Banner\"}]",
+        "answer": [
+            "Brittaney Rowell",
+            "Lyle Rowell"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "female_second_cousin(Y_6, Y_4)",
+                "child(\"Robbie Hunsaker\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "42878d2e-c1c1-4c2b-afa4-363cbc4f82cf",
+        "question": "Who is the male first cousin once removed of the nephew of the son of Anneliese Kirkham?",
+        "solution_traces": "[{\"Y_2\": \"Moises Warren\", \"Y_4\": \"Rory Kirkham\", \"Y_6\": \"Charley Kirkham\"}, {\"Y_2\": \"Floyd Schafer\", \"Y_4\": \"Rory Kirkham\", \"Y_6\": \"Charley Kirkham\"}, {\"Y_4\": \"Rory Kirkham\", \"Y_2\": \"Emery Schafer\", \"Y_6\": \"Charley Kirkham\"}]",
+        "answer": [
+            "Emery Schafer",
+            "Floyd Schafer",
+            "Moises Warren"
+        ],
+        "prolog": {
+            "query": [
+                "male_first_cousin_once_removed(Y_4, Y_2)",
+                "nephew(Y_6, Y_4)",
+                "son(\"Anneliese Kirkham\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "64dae632-2934-4acd-9ce1-fed5a9e37c47",
+        "question": "Who is the friend of the grandparent of the friend of Nevin Dent?",
+        "solution_traces": "[{\"Y_4\": \"Frederic Kirksey\", \"Y_2\": \"Oscar Warren\", \"Y_6\": \"Rory Kirkham\"}, {\"Y_2\": \"Floyd Schafer\", \"Y_4\": \"Anneliese Kirkham\", \"Y_6\": \"Rory Kirkham\"}, {\"Y_4\": \"Frederic Kirksey\", \"Y_2\": \"Charley Kirkham\", \"Y_6\": \"Rory Kirkham\"}, {\"Y_2\": \"Emerson Warren\", \"Y_4\": \"Anneliese Kirkham\", \"Y_6\": \"Rory Kirkham\"}, {\"Y_4\": \"Frederic Kirksey\", \"Y_2\": \"Maragret Warren\", \"Y_6\": \"Rory Kirkham\"}, {\"Y_4\": \"Shane Kirkham\", \"Y_2\": \"Norris Hunsaker\", \"Y_6\": \"Rory Kirkham\"}, {\"Y_2\": \"Amy Hunsaker\", \"Y_4\": \"Anneliese Kirkham\", \"Y_6\": \"Rory Kirkham\"}, {\"Y_4\": \"Shane Kirkham\", \"Y_2\": \"Danielle Banner\", \"Y_6\": \"Rory Kirkham\"}, {\"Y_4\": \"Shane Kirkham\", \"Y_2\": \"Brittaney Rowell\", \"Y_6\": \"Rory Kirkham\"}, {\"Y_4\": \"Maira Kirksey\", \"Y_2\": \"Violet Schafer\", \"Y_6\": \"Rory Kirkham\"}, {\"Y_4\": \"Shane Kirkham\", \"Y_2\": \"Angel Fudge\", \"Y_6\": \"Rory Kirkham\"}, {\"Y_4\": \"Shane Kirkham\", \"Y_2\": \"Robbie Hunsaker\", \"Y_6\": \"Rory Kirkham\"}, {\"Y_4\": \"Maira Kirksey\", \"Y_2\": \"Armando Schafer\", \"Y_6\": \"Rory Kirkham\"}, {\"Y_4\": \"Maira Kirksey\", \"Y_2\": \"Mavis Robertson\", \"Y_6\": \"Rory Kirkham\"}]",
+        "answer": [
+            "Amy Hunsaker",
+            "Angel Fudge",
+            "Armando Schafer",
+            "Brittaney Rowell",
+            "Charley Kirkham",
+            "Danielle Banner",
+            "Emerson Warren",
+            "Floyd Schafer",
+            "Maragret Warren",
+            "Mavis Robertson",
+            "Norris Hunsaker",
+            "Oscar Warren",
+            "Robbie Hunsaker",
+            "Violet Schafer"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "grandparent(Y_6, Y_4)",
+                "friend(\"Nevin Dent\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b1e3ebc3-8b7f-4cae-b2f0-c451151d29ec",
+        "question": "Who is the friend of the nephew of the daughter-in-law of Shane Kirkham?",
+        "solution_traces": "[{\"Y_4\": \"Oscar Warren\", \"Y_2\": \"Nancy Summerlin\", \"Y_6\": \"Florence Kirkham\"}, {\"Y_4\": \"Oscar Warren\", \"Y_2\": \"Frederic Kirksey\", \"Y_6\": \"Florence Kirkham\"}, {\"Y_4\": \"Oscar Warren\", \"Y_2\": \"Charley Kirkham\", \"Y_6\": \"Florence Kirkham\"}, {\"Y_4\": \"Oscar Warren\", \"Y_2\": \"Tanya Banner\", \"Y_6\": \"Florence Kirkham\"}]",
+        "answer": [
+            "Charley Kirkham",
+            "Frederic Kirksey",
+            "Nancy Summerlin",
+            "Tanya Banner"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "nephew(Y_6, Y_4)",
+                "daughter_in_law(\"Shane Kirkham\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ee688fd7-6cd8-49b1-8f59-6e0404c48a91",
+        "question": "Who is the sister-in-law of the wife of the brother-in-law of Lyle Rowell?",
+        "solution_traces": "[{\"Y_2\": \"Brittaney Rowell\", \"Y_4\": \"Joelle Fudge\", \"Y_6\": \"Dalton Fudge\"}]",
+        "answer": [
+            "Brittaney Rowell"
+        ],
+        "prolog": {
+            "query": [
+                "sister_in_law(Y_4, Y_2)",
+                "wife(Y_6, Y_4)",
+                "brother_in_law(\"Lyle Rowell\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "482cf823-6566-45d8-bced-2b5b8f984d4d",
+        "question": "Who is the sibling of the aunt of the nephew of Danielle Banner?",
+        "solution_traces": "[{\"Y_4\": \"Danielle Banner\", \"Y_6\": \"Ignacio Robertson\", \"Y_2\": \"Daniel Rowell\"}, {\"Y_4\": \"Danielle Banner\", \"Y_6\": \"Ignacio Robertson\", \"Y_2\": \"Helga Robertson\"}]",
+        "answer": [
+            "Daniel Rowell",
+            "Helga Robertson"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "aunt(Y_6, Y_4)",
+                "nephew(\"Danielle Banner\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5918b8c3-3606-427a-a2eb-08d212cedbe2",
+        "question": "Who is the father of the mother of the nephew of Bess Kirksey?",
+        "solution_traces": "[{\"Y_2\": \"Frederic Kirksey\", \"Y_4\": \"Maragret Warren\", \"Y_6\": \"Oscar Warren\"}, {\"Y_2\": \"Frederic Kirksey\", \"Y_4\": \"Florence Kirkham\", \"Y_6\": \"Rory Kirkham\"}]",
+        "answer": [
+            "Frederic Kirksey"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "mother(Y_6, Y_4)",
+                "nephew(\"Bess Kirksey\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "117e0e46-98c6-42d3-bf0d-023755fde6ae",
+        "question": "Who is the female second cousin of the female cousin of the grandchild of Alex Robertson?",
+        "solution_traces": "[{\"Y_2\": \"Amy Hunsaker\", \"Y_6\": \"Ignacio Robertson\", \"Y_4\": \"Tanya Banner\"}]",
+        "answer": [
+            "Amy Hunsaker"
+        ],
+        "prolog": {
+            "query": [
+                "female_second_cousin(Y_4, Y_2)",
+                "female_cousin(Y_6, Y_4)",
+                "grandchild(\"Alex Robertson\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 10,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "91ceb015-1ee3-44df-8c2f-637c131f9af8",
+        "question": "Who is the nephew of the brother-in-law of the grandson of Nevin Dent?",
+        "solution_traces": "[{\"Y_2\": \"Ignacio Robertson\", \"Y_4\": \"Daniel Rowell\", \"Y_6\": \"Augustus Robertson\"}]",
+        "answer": [
+            "Ignacio Robertson"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "brother_in_law(Y_6, Y_4)",
+                "grandson(\"Nevin Dent\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6a3d6d23-2e52-413b-92d0-075251f9da52",
+        "question": "Who is the aunt of the sister of the brother-in-law of Armando Schafer?",
+        "solution_traces": "[{\"Y_4\": \"Ai Schafer\", \"Y_6\": \"Oscar Warren\", \"Y_2\": \"Bess Kirksey\"}, {\"Y_4\": \"Ai Schafer\", \"Y_2\": \"Florence Kirkham\", \"Y_6\": \"Oscar Warren\"}]",
+        "answer": [
+            "Bess Kirksey",
+            "Florence Kirkham"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "sister(Y_6, Y_4)",
+                "brother_in_law(\"Armando Schafer\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f6bfaa7a-67e2-447d-a3a8-4a508370ddf8",
+        "question": "Who is the great-aunt of the sibling of the sibling of Floyd Schafer?",
+        "solution_traces": "[{\"Y_2\": \"Bess Kirksey\", \"Y_4\": \"Violet Schafer\", \"Y_6\": \"Emery Schafer\"}, {\"Y_6\": \"Yasmin Schafer\", \"Y_4\": \"Emery Schafer\", \"Y_2\": \"Bess Kirksey\"}, {\"Y_6\": \"Yasmin Schafer\", \"Y_2\": \"Florence Kirkham\", \"Y_4\": \"Alexa Schafer\"}, {\"Y_6\": \"Yasmin Schafer\", \"Y_2\": \"Florence Kirkham\", \"Y_4\": \"Floyd Schafer\"}, {\"Y_4\": \"Yasmin Schafer\", \"Y_2\": \"Florence Kirkham\", \"Y_6\": \"Violet Schafer\"}, {\"Y_6\": \"Yasmin Schafer\", \"Y_4\": \"Alexa Schafer\", \"Y_2\": \"Bess Kirksey\"}, {\"Y_6\": \"Yasmin Schafer\", \"Y_4\": \"Floyd Schafer\", \"Y_2\": \"Bess Kirksey\"}, {\"Y_6\": \"Alexa Schafer\", \"Y_4\": \"Violet Schafer\", \"Y_2\": \"Florence Kirkham\"}, {\"Y_6\": \"Yasmin Schafer\", \"Y_4\": \"Violet Schafer\", \"Y_2\": \"Bess Kirksey\"}, {\"Y_2\": \"Bess Kirksey\", \"Y_4\": \"Emery Schafer\", \"Y_6\": \"Violet Schafer\"}, {\"Y_6\": \"Yasmin Schafer\", \"Y_4\": \"Emery Schafer\", \"Y_2\": \"Florence Kirkham\"}, {\"Y_4\": \"Violet Schafer\", \"Y_2\": \"Florence Kirkham\", \"Y_6\": \"Emery Schafer\"}, {\"Y_2\": \"Florence Kirkham\", \"Y_4\": \"Alexa Schafer\", \"Y_6\": \"Violet Schafer\"}, {\"Y_2\": \"Florence Kirkham\", \"Y_4\": \"Floyd Schafer\", \"Y_6\": \"Violet Schafer\"}, {\"Y_2\": \"Florence Kirkham\", \"Y_4\": \"Alexa Schafer\", \"Y_6\": \"Emery Schafer\"}, {\"Y_2\": \"Florence Kirkham\", \"Y_4\": \"Floyd Schafer\", \"Y_6\": \"Emery Schafer\"}, {\"Y_4\": \"Yasmin Schafer\", \"Y_2\": \"Florence Kirkham\", \"Y_6\": \"Emery Schafer\"}, {\"Y_6\": \"Alexa Schafer\", \"Y_2\": \"Florence Kirkham\", \"Y_4\": \"Floyd Schafer\"}, {\"Y_4\": \"Yasmin Schafer\", \"Y_2\": \"Bess Kirksey\", \"Y_6\": \"Emery Schafer\"}, {\"Y_2\": \"Bess Kirksey\", \"Y_4\": \"Floyd Schafer\", \"Y_6\": \"Emery Schafer\"}, {\"Y_2\": \"Bess Kirksey\", \"Y_4\": \"Alexa Schafer\", \"Y_6\": \"Emery Schafer\"}, {\"Y_2\": \"Bess Kirksey\", \"Y_4\": \"Alexa Schafer\", \"Y_6\": \"Violet Schafer\"}, {\"Y_2\": \"Bess Kirksey\", \"Y_4\": \"Floyd Schafer\", \"Y_6\": \"Violet Schafer\"}, {\"Y_6\": \"Alexa Schafer\", \"Y_4\": \"Emery Schafer\", \"Y_2\": \"Bess Kirksey\"}, {\"Y_6\": \"Alexa Schafer\", \"Y_2\": \"Bess Kirksey\", \"Y_4\": \"Yasmin Schafer\"}, {\"Y_4\": \"Emery Schafer\", \"Y_2\": \"Florence Kirkham\", \"Y_6\": \"Violet Schafer\"}, {\"Y_6\": \"Yasmin Schafer\", \"Y_4\": \"Violet Schafer\", \"Y_2\": \"Florence Kirkham\"}, {\"Y_6\": \"Alexa Schafer\", \"Y_4\": \"Violet Schafer\", \"Y_2\": \"Bess Kirksey\"}, {\"Y_6\": \"Alexa Schafer\", \"Y_2\": \"Florence Kirkham\", \"Y_4\": \"Yasmin Schafer\"}, {\"Y_6\": \"Alexa Schafer\", \"Y_4\": \"Emery Schafer\", \"Y_2\": \"Florence Kirkham\"}, {\"Y_4\": \"Yasmin Schafer\", \"Y_2\": \"Bess Kirksey\", \"Y_6\": \"Violet Schafer\"}, {\"Y_6\": \"Alexa Schafer\", \"Y_4\": \"Floyd Schafer\", \"Y_2\": \"Bess Kirksey\"}]",
+        "answer": [
+            "Bess Kirksey",
+            "Florence Kirkham"
+        ],
+        "prolog": {
+            "query": [
+                "great_aunt(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "sibling(\"Floyd Schafer\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0d81dec3-9f92-4231-b2c9-f7d6b4a1ab77",
+        "question": "Who is the child of the son-in-law of the great-grandfather of Helga Robertson?",
+        "solution_traces": "[{\"Y_2\": \"Brittaney Rowell\", \"Y_6\": \"Jack Summerlin\", \"Y_4\": \"Garth Fudge\"}, {\"Y_2\": \"Dalton Fudge\", \"Y_6\": \"Jack Summerlin\", \"Y_4\": \"Garth Fudge\"}]",
+        "answer": [
+            "Brittaney Rowell",
+            "Dalton Fudge"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "son_in_law(Y_6, Y_4)",
+                "great_grandfather(\"Helga Robertson\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d83ab562-9975-4147-9008-5b4795200182",
+        "question": "Who is the great-aunt of the nephew of the grandparent of Lakeshia Warren?",
+        "solution_traces": "[{\"Y_2\": \"Florence Kirkham\", \"Y_6\": \"Oscar Warren\", \"Y_4\": \"Floyd Schafer\"}, {\"Y_4\": \"Emery Schafer\", \"Y_2\": \"Florence Kirkham\", \"Y_6\": \"Oscar Warren\"}, {\"Y_4\": \"Emery Schafer\", \"Y_6\": \"Oscar Warren\", \"Y_2\": \"Bess Kirksey\"}, {\"Y_6\": \"Oscar Warren\", \"Y_4\": \"Floyd Schafer\", \"Y_2\": \"Bess Kirksey\"}]",
+        "answer": [
+            "Bess Kirksey",
+            "Florence Kirkham"
+        ],
+        "prolog": {
+            "query": [
+                "great_aunt(Y_4, Y_2)",
+                "nephew(Y_6, Y_4)",
+                "grandparent(\"Lakeshia Warren\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "596f9630-e3bc-46a1-ab47-6d46a417d3da",
+        "question": "Who is the cousin of the brother of the great-grandchild of Alethia Kirksey?",
+        "solution_traces": "[{\"Y_2\": \"Rory Kirkham\", \"Y_4\": \"Oscar Warren\", \"Y_6\": \"Ai Schafer\"}]",
+        "answer": [
+            "Rory Kirkham"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "brother(Y_6, Y_4)",
+                "great_grandchild(\"Alethia Kirksey\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a325a510-546f-4e02-97c5-aaf2829aa623",
+        "question": "Who is the child of the great-grandfather of the child of Armando Schafer?",
+        "solution_traces": "[{\"Y_4\": \"Frederic Kirksey\", \"Y_2\": \"Bess Kirksey\", \"Y_6\": \"Violet Schafer\"}, {\"Y_4\": \"Frederic Kirksey\", \"Y_2\": \"Bess Kirksey\", \"Y_6\": \"Emery Schafer\"}, {\"Y_6\": \"Floyd Schafer\", \"Y_2\": \"Bess Kirksey\", \"Y_4\": \"Frederic Kirksey\"}, {\"Y_6\": \"Alexa Schafer\", \"Y_2\": \"Maragret Warren\", \"Y_4\": \"Frederic Kirksey\"}, {\"Y_4\": \"Frederic Kirksey\", \"Y_2\": \"Maragret Warren\", \"Y_6\": \"Violet Schafer\"}, {\"Y_6\": \"Floyd Schafer\", \"Y_2\": \"Maragret Warren\", \"Y_4\": \"Frederic Kirksey\"}, {\"Y_6\": \"Yasmin Schafer\", \"Y_2\": \"Florence Kirkham\", \"Y_4\": \"Frederic Kirksey\"}, {\"Y_6\": \"Floyd Schafer\", \"Y_2\": \"Florence Kirkham\", \"Y_4\": \"Frederic Kirksey\"}, {\"Y_4\": \"Frederic Kirksey\", \"Y_2\": \"Florence Kirkham\", \"Y_6\": \"Violet Schafer\"}, {\"Y_6\": \"Alexa Schafer\", \"Y_2\": \"Bess Kirksey\", \"Y_4\": \"Frederic Kirksey\"}, {\"Y_6\": \"Alexa Schafer\", \"Y_2\": \"Florence Kirkham\", \"Y_4\": \"Frederic Kirksey\"}, {\"Y_6\": \"Yasmin Schafer\", \"Y_2\": \"Maragret Warren\", \"Y_4\": \"Frederic Kirksey\"}, {\"Y_4\": \"Frederic Kirksey\", \"Y_2\": \"Florence Kirkham\", \"Y_6\": \"Emery Schafer\"}, {\"Y_6\": \"Yasmin Schafer\", \"Y_2\": \"Bess Kirksey\", \"Y_4\": \"Frederic Kirksey\"}, {\"Y_4\": \"Frederic Kirksey\", \"Y_2\": \"Maragret Warren\", \"Y_6\": \"Emery Schafer\"}]",
+        "answer": [
+            "Bess Kirksey",
+            "Florence Kirkham",
+            "Maragret Warren"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "great_grandfather(Y_6, Y_4)",
+                "child(\"Armando Schafer\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    }
+]

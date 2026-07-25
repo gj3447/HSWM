@@ -1,0 +1,1173 @@
+[
+    {
+        "id": "a8db47dc-c500-4643-864a-10835bdf40b6",
+        "question": "What is the occupation of the daughter-in-law of the daughter of the person whose date of birth is 0171-03-22?",
+        "solution_traces": "[{\"Y_2\": \"freight forwarder\", \"Y_7\": \"Ivan Christie\", \"Y_3\": \"Sona Adams\", \"Y_5\": \"Tonya Adams\"}]",
+        "answer": [
+            "freight forwarder"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "daughter_in_law(Y_5, Y_3)",
+                "daughter(Y_7, Y_5)",
+                "dob(Y_7, \"0171-03-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a31d8994-68d2-4572-a43d-14b39fc465d6",
+        "question": "What is the date of birth of the grandchild of the daughter of the person whose occupation is outdoor activities manager?",
+        "solution_traces": "[{\"Y_2\": \"0252-03-22\", \"Y_7\": \"Edwina Christie\", \"Y_3\": \"Elvie Adams\", \"Y_5\": \"Tonya Adams\"}, {\"Y_3\": \"Anjanette Marx\", \"Y_7\": \"Edwina Christie\", \"Y_2\": \"0254-05-01\", \"Y_5\": \"Tonya Adams\"}, {\"Y_2\": \"0249-11-25\", \"Y_7\": \"Edwina Christie\", \"Y_3\": \"Monroe Adams\", \"Y_5\": \"Tonya Adams\"}, {\"Y_3\": \"Lyndon Adams\", \"Y_7\": \"Edwina Christie\", \"Y_2\": \"0252-03-17\", \"Y_5\": \"Tonya Adams\"}, {\"Y_7\": \"Edwina Christie\", \"Y_3\": \"Javier Adams\", \"Y_2\": \"0254-05-01\", \"Y_5\": \"Tonya Adams\"}]",
+        "answer": [
+            "0249-11-25",
+            "0252-03-17",
+            "0252-03-22",
+            "0254-05-01"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "daughter(Y_7, Y_5)",
+                "job(Y_7, \"outdoor activities manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "48101a1a-c646-49fc-bbb7-41f00b0b5f10",
+        "question": "What is the occupation of the granddaughter of the mother-in-law of the person whose occupation is freight forwarder?",
+        "solution_traces": "[{\"Y_3\": \"Anjanette Marx\", \"Y_2\": \"agricultural engineer\", \"Y_7\": \"Sona Adams\", \"Y_5\": \"Tonya Adams\"}, {\"Y_2\": \"graphic designer\", \"Y_7\": \"Sona Adams\", \"Y_3\": \"Elvie Adams\", \"Y_5\": \"Tonya Adams\"}]",
+        "answer": [
+            "agricultural engineer",
+            "graphic designer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "granddaughter(Y_5, Y_3)",
+                "mother_in_law(Y_7, Y_5)",
+                "job(Y_7, \"freight forwarder\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6391cfab-3897-464c-a925-0dfac469585b",
+        "question": "What is the occupation of the sibling of the friend of the person whose occupation is product manager?",
+        "solution_traces": "[{\"Y_7\": \"Trent Burch\", \"Y_2\": \"product manager\", \"Y_3\": \"Trent Burch\", \"Y_5\": \"Saul Burch\"}, {\"Y_2\": \"actor\", \"Y_3\": \"Kimberlee Marx\", \"Y_5\": \"Conrad Marx\", \"Y_7\": \"Bee Adams\"}, {\"Y_7\": \"Trent Burch\", \"Y_2\": \"quarry manager\", \"Y_3\": \"Adalberto Burch\", \"Y_5\": \"Saul Burch\"}, {\"Y_7\": \"Trent Burch\", \"Y_5\": \"Robyn Harbison\", \"Y_3\": \"Dwain Burch\", \"Y_2\": \"commercial art gallery manager\"}, {\"Y_2\": \"conservation officer\", \"Y_5\": \"Cedrick Marx\", \"Y_3\": \"Darwin Marx\", \"Y_7\": \"Bee Adams\"}, {\"Y_7\": \"Trent Burch\", \"Y_5\": \"Robyn Harbison\", \"Y_2\": \"sales promotion account executive\", \"Y_3\": \"Saul Burch\"}, {\"Y_7\": \"Trent Burch\", \"Y_2\": \"mental health nurse\", \"Y_5\": \"Saul Burch\", \"Y_3\": \"Robyn Harbison\"}, {\"Y_7\": \"Trent Burch\", \"Y_2\": \"commercial art gallery manager\", \"Y_3\": \"Dwain Burch\", \"Y_5\": \"Saul Burch\"}, {\"Y_7\": \"Trent Burch\", \"Y_2\": \"product manager\", \"Y_5\": \"Robyn Harbison\", \"Y_3\": \"Trent Burch\"}, {\"Y_7\": \"Trent Burch\", \"Y_2\": \"quarry manager\", \"Y_5\": \"Robyn Harbison\", \"Y_3\": \"Adalberto Burch\"}, {\"Y_3\": \"Ardath Denham\", \"Y_2\": \"applications developer\", \"Y_5\": \"Cedrick Marx\", \"Y_7\": \"Bee Adams\"}]",
+        "answer": [
+            "actor",
+            "applications developer",
+            "commercial art gallery manager",
+            "conservation officer",
+            "mental health nurse",
+            "product manager",
+            "quarry manager",
+            "sales promotion account executive"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "job(Y_7, \"product manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1c0182a7-3549-4da0-bac1-b810c0c41fed",
+        "question": "What is the hobby of the brother of the great-granddaughter of the person whose date of birth is 0171-03-22?",
+        "solution_traces": "[{\"Y_5\": \"Elvie Adams\", \"Y_2\": \"gymnastics\", \"Y_7\": \"Ivan Christie\", \"Y_3\": \"Lyndon Adams\"}, {\"Y_2\": \"airsoft\", \"Y_7\": \"Ivan Christie\", \"Y_5\": \"Anjanette Marx\", \"Y_3\": \"Monroe Adams\"}, {\"Y_5\": \"Elvie Adams\", \"Y_2\": \"airsoft\", \"Y_7\": \"Ivan Christie\", \"Y_3\": \"Monroe Adams\"}, {\"Y_2\": \"gymnastics\", \"Y_7\": \"Ivan Christie\", \"Y_3\": \"Lyndon Adams\", \"Y_5\": \"Anjanette Marx\"}, {\"Y_2\": \"stone skipping\", \"Y_7\": \"Ivan Christie\", \"Y_5\": \"Anjanette Marx\", \"Y_3\": \"Javier Adams\"}, {\"Y_5\": \"Elvie Adams\", \"Y_2\": \"stone skipping\", \"Y_7\": \"Ivan Christie\", \"Y_3\": \"Javier Adams\"}]",
+        "answer": [
+            "airsoft",
+            "gymnastics",
+            "stone skipping"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "brother(Y_5, Y_3)",
+                "great_granddaughter(Y_7, Y_5)",
+                "dob(Y_7, \"0171-03-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f6ef5fcd-b948-4afa-9cbb-c034cd5b3e98",
+        "question": "What is the date of birth of the second uncle of the cousin of the person whose hobby is shooting sports?",
+        "solution_traces": "[{\"Y_2\": \"0233-06-12\", \"Y_7\": \"Tobias Marx\", \"Y_5\": \"Conrad Marx\", \"Y_3\": \"Ken Adams\"}, {\"Y_5\": \"Kimberlee Marx\", \"Y_2\": \"0233-06-12\", \"Y_7\": \"Tobias Marx\", \"Y_3\": \"Ken Adams\"}, {\"Y_5\": \"Fidel Denham\", \"Y_2\": \"0233-06-12\", \"Y_7\": \"Tobias Marx\", \"Y_3\": \"Ken Adams\"}]",
+        "answer": [
+            "0233-06-12"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "second_uncle(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "hobby(Y_7, \"shooting sports\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "216b68e6-5d25-4881-8d92-9b01626ec6f7",
+        "question": "What is the hobby of the father-in-law of the husband of the person whose hobby is herping?",
+        "solution_traces": "[{\"Y_2\": \"reading\", \"Y_3\": \"Stefan Burch\", \"Y_7\": \"Robyn Harbison\", \"Y_5\": \"Rashad Harbison\"}]",
+        "answer": [
+            "reading"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "father_in_law(Y_5, Y_3)",
+                "husband(Y_7, Y_5)",
+                "hobby(Y_7, \"herping\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "eee4d1ee-f167-43db-a214-f3f5a7486766",
+        "question": "What is the occupation of the friend of the great-grandmother of the person whose date of birth is 0280-08-10?",
+        "solution_traces": "[{\"Y_3\": \"German Burch\", \"Y_7\": \"Darrell Adams\", \"Y_2\": \"community education officer\", \"Y_5\": \"Tonya Adams\"}, {\"Y_3\": \"Ken Adams\", \"Y_7\": \"Darrell Adams\", \"Y_2\": \"newspaper journalist\", \"Y_5\": \"Tonya Adams\"}, {\"Y_2\": \"pathologist\", \"Y_3\": \"Stefan Burch\", \"Y_7\": \"Darrell Adams\", \"Y_5\": \"Tonya Adams\"}, {\"Y_7\": \"Darrell Adams\", \"Y_3\": \"Ivan Christie\", \"Y_2\": \"product designer\", \"Y_5\": \"Tonya Adams\"}]",
+        "answer": [
+            "community education officer",
+            "newspaper journalist",
+            "pathologist",
+            "product designer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "great_grandmother(Y_7, Y_5)",
+                "dob(Y_7, \"0280-08-10\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3a7151f5-fe51-46e8-893a-e75b08a806d0",
+        "question": "What is the occupation of the grandparent of the friend of the person whose date of birth is 0163-11-04?",
+        "solution_traces": "[{\"Y_2\": \"community education officer\", \"Y_7\": \"Romona Chester\", \"Y_3\": \"German Burch\", \"Y_5\": \"Adalberto Burch\"}, {\"Y_3\": \"Jesse Burch\", \"Y_7\": \"Romona Chester\", \"Y_2\": \"licensed conveyancer\", \"Y_5\": \"Adalberto Burch\"}]",
+        "answer": [
+            "community education officer",
+            "licensed conveyancer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandparent(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "dob(Y_7, \"0163-11-04\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a97e8834-2434-40f6-a836-5f4656b587ef",
+        "question": "What is the occupation of the grandfather of the cousin of the person whose date of birth is 0280-08-10?",
+        "solution_traces": "[{\"Y_5\": \"Darwin Marx\", \"Y_3\": \"Ernest Adams\", \"Y_7\": \"Darrell Adams\", \"Y_2\": \"landscape architect\"}, {\"Y_3\": \"Ernest Adams\", \"Y_7\": \"Darrell Adams\", \"Y_2\": \"landscape architect\", \"Y_5\": \"Cedrick Marx\"}, {\"Y_3\": \"Ernest Adams\", \"Y_5\": \"Ardath Denham\", \"Y_7\": \"Darrell Adams\", \"Y_2\": \"landscape architect\"}]",
+        "answer": [
+            "landscape architect"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandfather(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "dob(Y_7, \"0280-08-10\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "52eeb6bb-e4f6-4a57-b22c-02627e5787ec",
+        "question": "What is the occupation of the child of the great-grandfather of the person whose occupation is statistician?",
+        "solution_traces": "[{\"Y_5\": \"Earl Adams\", \"Y_3\": \"Ernest Adams\", \"Y_7\": \"Cedrick Marx\", \"Y_2\": \"landscape architect\"}, {\"Y_5\": \"Earl Adams\", \"Y_7\": \"Cedrick Marx\", \"Y_2\": \"newspaper journalist\", \"Y_3\": \"Ken Adams\"}]",
+        "answer": [
+            "landscape architect",
+            "newspaper journalist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "child(Y_5, Y_3)",
+                "great_grandfather(Y_7, Y_5)",
+                "job(Y_7, \"statistician\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e7c23b06-cb23-48cf-8004-17841a255b11",
+        "question": "What is the date of birth of the great-grandmother of the cousin of the person whose date of birth is 0302-08-09?",
+        "solution_traces": "[{\"Y_5\": \"Kimberlee Marx\", \"Y_2\": \"0223-08-22\", \"Y_7\": \"Tobias Marx\", \"Y_3\": \"Sona Adams\"}, {\"Y_5\": \"Fidel Denham\", \"Y_2\": \"0223-08-22\", \"Y_7\": \"Tobias Marx\", \"Y_3\": \"Sona Adams\"}, {\"Y_3\": \"Sona Adams\", \"Y_2\": \"0223-08-22\", \"Y_7\": \"Tobias Marx\", \"Y_5\": \"Conrad Marx\"}]",
+        "answer": [
+            "0223-08-22"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandmother(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "dob(Y_7, \"0302-08-09\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f01524af-136d-41f6-adc1-b882bb910049",
+        "question": "What is the occupation of the grandchild of the husband of the person whose occupation is pilot?",
+        "solution_traces": "[{\"Y_7\": \"Tonya Adams\", \"Y_5\": \"Earl Adams\", \"Y_3\": \"Anjanette Marx\", \"Y_2\": \"agricultural engineer\"}, {\"Y_7\": \"Tonya Adams\", \"Y_5\": \"Earl Adams\", \"Y_3\": \"Lyndon Adams\", \"Y_2\": \"financial manager\"}, {\"Y_7\": \"Tonya Adams\", \"Y_2\": \"graphic designer\", \"Y_5\": \"Earl Adams\", \"Y_3\": \"Elvie Adams\"}, {\"Y_7\": \"Tonya Adams\", \"Y_5\": \"Earl Adams\", \"Y_2\": \"ranger\", \"Y_3\": \"Monroe Adams\"}, {\"Y_7\": \"Tonya Adams\", \"Y_5\": \"Earl Adams\", \"Y_2\": \"fashion designer\", \"Y_3\": \"Javier Adams\"}]",
+        "answer": [
+            "agricultural engineer",
+            "fashion designer",
+            "financial manager",
+            "graphic designer",
+            "ranger"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "husband(Y_7, Y_5)",
+                "job(Y_7, \"pilot\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e21e0d04-0995-4271-8b64-54231e3bda70",
+        "question": "What is the date of birth of the sibling of the son of the person whose hobby is baton twirling?",
+        "solution_traces": "[{\"Y_5\": \"Javier Adams\", \"Y_7\": \"Sona Adams\", \"Y_3\": \"Lyndon Adams\", \"Y_2\": \"0252-03-17\"}, {\"Y_2\": \"0254-05-01\", \"Y_7\": \"Sona Adams\", \"Y_3\": \"Javier Adams\", \"Y_5\": \"Monroe Adams\"}, {\"Y_3\": \"Anjanette Marx\", \"Y_2\": \"0254-05-01\", \"Y_7\": \"Sona Adams\", \"Y_5\": \"Lyndon Adams\"}, {\"Y_7\": \"Sona Adams\", \"Y_3\": \"Lyndon Adams\", \"Y_5\": \"Monroe Adams\", \"Y_2\": \"0252-03-17\"}, {\"Y_2\": \"0249-11-25\", \"Y_7\": \"Sona Adams\", \"Y_5\": \"Lyndon Adams\", \"Y_3\": \"Monroe Adams\"}, {\"Y_7\": \"Sona Adams\", \"Y_2\": \"0252-03-22\", \"Y_3\": \"Elvie Adams\", \"Y_5\": \"Lyndon Adams\"}, {\"Y_5\": \"Javier Adams\", \"Y_7\": \"Sona Adams\", \"Y_3\": \"Anjanette Marx\", \"Y_2\": \"0254-05-01\"}, {\"Y_2\": \"0254-05-01\", \"Y_7\": \"Sona Adams\", \"Y_3\": \"Javier Adams\", \"Y_5\": \"Lyndon Adams\"}, {\"Y_5\": \"Javier Adams\", \"Y_2\": \"0249-11-25\", \"Y_7\": \"Sona Adams\", \"Y_3\": \"Monroe Adams\"}, {\"Y_3\": \"Anjanette Marx\", \"Y_2\": \"0254-05-01\", \"Y_7\": \"Sona Adams\", \"Y_5\": \"Monroe Adams\"}, {\"Y_7\": \"Sona Adams\", \"Y_2\": \"0252-03-22\", \"Y_3\": \"Elvie Adams\", \"Y_5\": \"Monroe Adams\"}, {\"Y_5\": \"Javier Adams\", \"Y_7\": \"Sona Adams\", \"Y_2\": \"0252-03-22\", \"Y_3\": \"Elvie Adams\"}]",
+        "answer": [
+            "0249-11-25",
+            "0252-03-17",
+            "0252-03-22",
+            "0254-05-01"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "son(Y_7, Y_5)",
+                "hobby(Y_7, \"baton twirling\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "334300f8-b192-4887-8c62-67b0ffbc54ed",
+        "question": "What is the hobby of the friend of the friend of the person whose hobby is beekeeping?",
+        "solution_traces": "[{\"Y_7\": \"Porfirio Chester\", \"Y_2\": \"cornhole\", \"Y_5\": \"Tobias Marx\", \"Y_3\": \"Kimberlee Marx\"}, {\"Y_7\": \"Porfirio Chester\", \"Y_2\": \"reading\", \"Y_3\": \"Stefan Burch\", \"Y_5\": \"Jarrod Burch\"}, {\"Y_7\": \"Porfirio Chester\", \"Y_3\": \"Ardath Denham\", \"Y_2\": \"philosophy\", \"Y_5\": \"Tobias Marx\"}, {\"Y_7\": \"Porfirio Chester\", \"Y_2\": \"aircraft spotting\", \"Y_5\": \"Tobias Marx\", \"Y_3\": \"Ivan Christie\"}, {\"Y_7\": \"Porfirio Chester\", \"Y_3\": \"Evelyne Burch\", \"Y_2\": \"learning\", \"Y_5\": \"Jarrod Burch\"}, {\"Y_7\": \"Porfirio Chester\", \"Y_2\": \"beekeeping\", \"Y_3\": \"Porfirio Chester\", \"Y_5\": \"Jarrod Burch\"}, {\"Y_7\": \"Porfirio Chester\", \"Y_2\": \"digital hoarding\", \"Y_5\": \"Tobias Marx\", \"Y_3\": \"Florentino Gilbreath\"}, {\"Y_7\": \"Porfirio Chester\", \"Y_3\": \"Delma Phelps\", \"Y_2\": \"insect collecting\", \"Y_5\": \"Jarrod Burch\"}, {\"Y_7\": \"Porfirio Chester\", \"Y_3\": \"Cristopher Marx\", \"Y_2\": \"leaves\", \"Y_5\": \"Jarrod Burch\"}, {\"Y_7\": \"Porfirio Chester\", \"Y_2\": \"ballet dancing\", \"Y_5\": \"Rashad Harbison\", \"Y_3\": \"Cedrick Marx\"}, {\"Y_7\": \"Porfirio Chester\", \"Y_2\": \"beekeeping\", \"Y_5\": \"Rashad Harbison\", \"Y_3\": \"Porfirio Chester\"}, {\"Y_7\": \"Porfirio Chester\", \"Y_2\": \"cornhole\", \"Y_5\": \"Rashad Harbison\", \"Y_3\": \"Kimberlee Marx\"}, {\"Y_7\": \"Porfirio Chester\", \"Y_3\": \"Delma Phelps\", \"Y_2\": \"insect collecting\", \"Y_5\": \"Tobias Marx\"}, {\"Y_7\": \"Porfirio Chester\", \"Y_2\": \"beekeeping\", \"Y_5\": \"Tobias Marx\", \"Y_3\": \"Porfirio Chester\"}]",
+        "answer": [
+            "aircraft spotting",
+            "ballet dancing",
+            "beekeeping",
+            "cornhole",
+            "digital hoarding",
+            "insect collecting",
+            "learning",
+            "leaves",
+            "philosophy",
+            "reading"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "hobby(Y_7, \"beekeeping\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0072dda4-2831-494b-bb11-3e66197f04f2",
+        "question": "What is the occupation of the friend of the son of the person whose hobby is herping?",
+        "solution_traces": "[{\"Y_3\": \"Adrianna Harbison\", \"Y_7\": \"Robyn Harbison\", \"Y_2\": \"sales executive\", \"Y_5\": \"Fabian Harbison\"}, {\"Y_7\": \"Robyn Harbison\", \"Y_3\": \"Ken Adams\", \"Y_2\": \"newspaper journalist\", \"Y_5\": \"Fabian Harbison\"}, {\"Y_3\": \"Dwain Burch\", \"Y_7\": \"Robyn Harbison\", \"Y_2\": \"commercial art gallery manager\", \"Y_5\": \"Fabian Harbison\"}, {\"Y_3\": \"Jamel Phelps\", \"Y_7\": \"Robyn Harbison\", \"Y_2\": \"community arts worker\", \"Y_5\": \"Fabian Harbison\"}, {\"Y_3\": \"Carlotta Burch\", \"Y_7\": \"Robyn Harbison\", \"Y_2\": \"commercial horticulturist\", \"Y_5\": \"Fabian Harbison\"}, {\"Y_3\": \"Florentino Gilbreath\", \"Y_7\": \"Robyn Harbison\", \"Y_2\": \"product development scientist\", \"Y_5\": \"Fabian Harbison\"}]",
+        "answer": [
+            "commercial art gallery manager",
+            "commercial horticulturist",
+            "community arts worker",
+            "newspaper journalist",
+            "product development scientist",
+            "sales executive"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "son(Y_7, Y_5)",
+                "hobby(Y_7, \"herping\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "683db3d5-9f08-4bc0-8715-51927f4fd486",
+        "question": "What is the date of birth of the nephew of the sibling of the person whose hobby is airsoft?",
+        "solution_traces": "[{\"Y_5\": \"Javier Adams\", \"Y_3\": \"Darrell Adams\", \"Y_7\": \"Monroe Adams\", \"Y_2\": \"0280-08-10\"}, {\"Y_3\": \"Cedrick Marx\", \"Y_2\": \"0282-08-05\", \"Y_7\": \"Monroe Adams\", \"Y_5\": \"Lyndon Adams\"}, {\"Y_5\": \"Javier Adams\", \"Y_7\": \"Monroe Adams\", \"Y_2\": \"0284-07-09\", \"Y_3\": \"Darwin Marx\"}, {\"Y_5\": \"Elvie Adams\", \"Y_3\": \"Darrell Adams\", \"Y_7\": \"Monroe Adams\", \"Y_2\": \"0280-08-10\"}, {\"Y_3\": \"Darrell Adams\", \"Y_2\": \"0280-08-10\", \"Y_7\": \"Monroe Adams\", \"Y_5\": \"Anjanette Marx\"}, {\"Y_5\": \"Javier Adams\", \"Y_2\": \"0282-08-05\", \"Y_7\": \"Monroe Adams\", \"Y_3\": \"Cedrick Marx\"}, {\"Y_5\": \"Elvie Adams\", \"Y_7\": \"Monroe Adams\", \"Y_2\": \"0284-07-09\", \"Y_3\": \"Darwin Marx\"}, {\"Y_7\": \"Monroe Adams\", \"Y_2\": \"0284-07-09\", \"Y_5\": \"Lyndon Adams\", \"Y_3\": \"Darwin Marx\"}, {\"Y_5\": \"Elvie Adams\", \"Y_2\": \"0282-08-05\", \"Y_7\": \"Monroe Adams\", \"Y_3\": \"Cedrick Marx\"}]",
+        "answer": [
+            "0280-08-10",
+            "0282-08-05",
+            "0284-07-09"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "nephew(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "hobby(Y_7, \"airsoft\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "81549806-4d46-44b2-98e6-b1a270ece089",
+        "question": "What is the date of birth of the sibling of the sibling of the person whose hobby is flower collecting and pressing?",
+        "solution_traces": "[{\"Y_5\": \"Stefan Burch\", \"Y_2\": \"0195-12-31\", \"Y_3\": \"Jarrod Burch\", \"Y_7\": \"Chloe Burch\"}, {\"Y_5\": \"Stefan Burch\", \"Y_3\": \"Chloe Burch\", \"Y_2\": \"0194-01-14\", \"Y_7\": \"Chloe Burch\"}, {\"Y_3\": \"Stefan Burch\", \"Y_7\": \"Chloe Burch\", \"Y_2\": \"0191-05-26\", \"Y_5\": \"Jarrod Burch\"}, {\"Y_3\": \"Chloe Burch\", \"Y_2\": \"0194-01-14\", \"Y_7\": \"Chloe Burch\", \"Y_5\": \"Jarrod Burch\"}]",
+        "answer": [
+            "0191-05-26",
+            "0194-01-14",
+            "0195-12-31"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "hobby(Y_7, \"flower collecting and pressing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "72f31780-2bdd-4768-9e50-7b0787bec0f8",
+        "question": "What is the occupation of the parent of the sibling of the person whose hobby is jujitsu?",
+        "solution_traces": "[{\"Y_2\": \"commercial art gallery manager\", \"Y_5\": \"Mathew Burch\", \"Y_3\": \"Dwain Burch\", \"Y_7\": \"Matt Burch\"}, {\"Y_5\": \"Mathew Burch\", \"Y_3\": \"Georgina Burch\", \"Y_7\": \"Matt Burch\", \"Y_2\": \"forensic psychologist\"}]",
+        "answer": [
+            "commercial art gallery manager",
+            "forensic psychologist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "hobby(Y_7, \"jujitsu\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "65cc85b2-c34e-4a0a-8cf8-d50aeffd98c5",
+        "question": "What is the hobby of the grandfather of the grandson of the person whose date of birth is 0223-08-22?",
+        "solution_traces": "[{\"Y_7\": \"Sona Adams\", \"Y_3\": \"Ernest Adams\", \"Y_5\": \"Cedrick Marx\", \"Y_2\": \"longboarding\"}, {\"Y_3\": \"Ernest Adams\", \"Y_7\": \"Sona Adams\", \"Y_5\": \"Darrell Adams\", \"Y_2\": \"longboarding\"}, {\"Y_7\": \"Sona Adams\", \"Y_3\": \"Ernest Adams\", \"Y_5\": \"Darwin Marx\", \"Y_2\": \"longboarding\"}]",
+        "answer": [
+            "longboarding"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandfather(Y_5, Y_3)",
+                "grandson(Y_7, Y_5)",
+                "dob(Y_7, \"0223-08-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3d38ca2f-f4e8-4f15-baec-aa06a0d0ca9a",
+        "question": "What is the occupation of the husband of the daughter-in-law of the person whose hobby is meteorology?",
+        "solution_traces": "[{\"Y_7\": \"German Burch\", \"Y_3\": \"Stefan Burch\", \"Y_5\": \"Carlotta Burch\", \"Y_2\": \"pathologist\"}]",
+        "answer": [
+            "pathologist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "husband(Y_5, Y_3)",
+                "daughter_in_law(Y_7, Y_5)",
+                "hobby(Y_7, \"meteorology\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "109702b0-52c4-41de-bae5-59ba99ee4241",
+        "question": "What is the occupation of the father of the uncle of the person whose hobby is ballet dancing?",
+        "solution_traces": "[{\"Y_2\": \"landscape architect\", \"Y_3\": \"Ernest Adams\", \"Y_7\": \"Cedrick Marx\", \"Y_5\": \"Lyndon Adams\"}, {\"Y_5\": \"Javier Adams\", \"Y_3\": \"Ernest Adams\", \"Y_7\": \"Cedrick Marx\", \"Y_2\": \"landscape architect\"}, {\"Y_5\": \"Monroe Adams\", \"Y_3\": \"Ernest Adams\", \"Y_7\": \"Cedrick Marx\", \"Y_2\": \"landscape architect\"}]",
+        "answer": [
+            "landscape architect"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "father(Y_5, Y_3)",
+                "uncle(Y_7, Y_5)",
+                "hobby(Y_7, \"ballet dancing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "76bde810-4aca-420f-b75e-671dc3baf228",
+        "question": "What is the date of birth of the great-grandfather of the brother-in-law of the person whose occupation is product manager?",
+        "solution_traces": "[{\"Y_5\": \"Javier Adams\", \"Y_2\": \"0171-03-22\", \"Y_3\": \"Ivan Christie\", \"Y_7\": \"Bee Adams\"}, {\"Y_5\": \"Monroe Adams\", \"Y_2\": \"0171-03-22\", \"Y_3\": \"Ivan Christie\", \"Y_7\": \"Bee Adams\"}]",
+        "answer": [
+            "0171-03-22"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandfather(Y_5, Y_3)",
+                "brother_in_law(Y_7, Y_5)",
+                "job(Y_7, \"product manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e2670d3f-e097-4d2a-b7d7-550b1ce9c059",
+        "question": "What is the occupation of the parent of the father of the person whose date of birth is 0280-08-10?",
+        "solution_traces": "[{\"Y_2\": \"freight forwarder\", \"Y_7\": \"Darrell Adams\", \"Y_3\": \"Sona Adams\", \"Y_5\": \"Lyndon Adams\"}, {\"Y_2\": \"landscape architect\", \"Y_3\": \"Ernest Adams\", \"Y_7\": \"Darrell Adams\", \"Y_5\": \"Lyndon Adams\"}]",
+        "answer": [
+            "freight forwarder",
+            "landscape architect"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "father(Y_7, Y_5)",
+                "dob(Y_7, \"0280-08-10\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a9bc81c5-1555-43db-ae0d-0e175c98aeaf",
+        "question": "What is the date of birth of the great-grandparent of the child of the person whose hobby is sailing?",
+        "solution_traces": "[{\"Y_3\": \"Sona Adams\", \"Y_2\": \"0223-08-22\", \"Y_5\": \"Fidel Denham\", \"Y_7\": \"Silas Denham\"}, {\"Y_3\": \"Ernest Adams\", \"Y_5\": \"Fidel Denham\", \"Y_7\": \"Silas Denham\", \"Y_2\": \"0223-03-04\"}]",
+        "answer": [
+            "0223-03-04",
+            "0223-08-22"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandparent(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "hobby(Y_7, \"sailing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a7ffb16c-fd01-4d05-984a-395e1a81aa4f",
+        "question": "What is the date of birth of the cousin of the cousin of the person whose hobby is amateur astronomy?",
+        "solution_traces": "[{\"Y_7\": \"Fabian Harbison\", \"Y_5\": \"Mathew Burch\", \"Y_2\": \"0253-12-09\", \"Y_3\": \"Adrianna Harbison\"}, {\"Y_7\": \"Fabian Harbison\", \"Y_5\": \"Mathew Burch\", \"Y_3\": \"Fabian Harbison\", \"Y_2\": \"0250-09-06\"}, {\"Y_7\": \"Fabian Harbison\", \"Y_5\": \"Matt Burch\", \"Y_3\": \"Fabian Harbison\", \"Y_2\": \"0250-09-06\"}, {\"Y_7\": \"Fabian Harbison\", \"Y_3\": \"Adrianna Harbison\", \"Y_2\": \"0253-12-09\", \"Y_5\": \"Matt Burch\"}]",
+        "answer": [
+            "0250-09-06",
+            "0253-12-09"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "cousin(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "hobby(Y_7, \"amateur astronomy\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0bf7ccb6-5932-4b08-8271-33d5e068ace8",
+        "question": "What is the date of birth of the friend of the friend of the person whose occupation is freight forwarder?",
+        "solution_traces": "[{\"Y_7\": \"Signe Gilbreath\", \"Y_2\": \"0192-01-09\", \"Y_3\": \"Signe Gilbreath\", \"Y_5\": \"Lyndon Adams\"}, {\"Y_2\": \"0200-08-08\", \"Y_5\": \"Ivan Christie\", \"Y_7\": \"Sona Adams\", \"Y_3\": \"Tonya Adams\"}, {\"Y_7\": \"Signe Gilbreath\", \"Y_2\": \"0193-01-04\", \"Y_5\": \"Elvie Adams\", \"Y_3\": \"Florentino Gilbreath\"}, {\"Y_7\": \"Signe Gilbreath\", \"Y_2\": \"0253-12-09\", \"Y_3\": \"Adrianna Harbison\", \"Y_5\": \"Elvie Adams\"}, {\"Y_3\": \"Anjanette Marx\", \"Y_5\": \"Ivan Christie\", \"Y_7\": \"Sona Adams\", \"Y_2\": \"0254-05-01\"}, {\"Y_7\": \"Signe Gilbreath\", \"Y_3\": \"Catalina Marx\", \"Y_2\": \"0284-05-06\", \"Y_5\": \"Elvie Adams\"}, {\"Y_5\": \"Ivan Christie\", \"Y_7\": \"Sona Adams\", \"Y_2\": \"0302-08-09\", \"Y_3\": \"Tobias Marx\"}, {\"Y_7\": \"Signe Gilbreath\", \"Y_2\": \"0220-04-12\", \"Y_5\": \"Lyndon Adams\", \"Y_3\": \"Robyn Harbison\"}, {\"Y_7\": \"Signe Gilbreath\", \"Y_2\": \"0220-04-12\", \"Y_5\": \"Elvie Adams\", \"Y_3\": \"Robyn Harbison\"}, {\"Y_7\": \"Signe Gilbreath\", \"Y_2\": \"0192-01-09\", \"Y_3\": \"Signe Gilbreath\", \"Y_5\": \"Elvie Adams\"}, {\"Y_5\": \"Ivan Christie\", \"Y_7\": \"Sona Adams\", \"Y_2\": \"0167-07-22\", \"Y_3\": \"German Burch\"}, {\"Y_7\": \"Signe Gilbreath\", \"Y_2\": \"0167-07-22\", \"Y_3\": \"German Burch\", \"Y_5\": \"Lyndon Adams\"}, {\"Y_7\": \"Signe Gilbreath\", \"Y_3\": \"Saul Burch\", \"Y_2\": \"0216-12-19\", \"Y_5\": \"Lyndon Adams\"}, {\"Y_7\": \"Signe Gilbreath\", \"Y_3\": \"Conrad Marx\", \"Y_2\": \"0307-12-11\", \"Y_5\": \"Lyndon Adams\"}, {\"Y_5\": \"Ivan Christie\", \"Y_7\": \"Sona Adams\", \"Y_2\": \"0223-08-22\", \"Y_3\": \"Sona Adams\"}]",
+        "answer": [
+            "0167-07-22",
+            "0192-01-09",
+            "0193-01-04",
+            "0200-08-08",
+            "0216-12-19",
+            "0220-04-12",
+            "0223-08-22",
+            "0253-12-09",
+            "0254-05-01",
+            "0284-05-06",
+            "0302-08-09",
+            "0307-12-11"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "job(Y_7, \"freight forwarder\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7efa10ec-f937-44c1-863c-e4fed7083fb0",
+        "question": "What is the date of birth of the sibling of the great-granddaughter of the person whose date of birth is 0171-03-22?",
+        "solution_traces": "[{\"Y_7\": \"Ivan Christie\", \"Y_5\": \"Anjanette Marx\", \"Y_3\": \"Javier Adams\", \"Y_2\": \"0254-05-01\"}, {\"Y_7\": \"Ivan Christie\", \"Y_3\": \"Lyndon Adams\", \"Y_5\": \"Anjanette Marx\", \"Y_2\": \"0252-03-17\"}, {\"Y_5\": \"Elvie Adams\", \"Y_7\": \"Ivan Christie\", \"Y_3\": \"Anjanette Marx\", \"Y_2\": \"0254-05-01\"}, {\"Y_5\": \"Elvie Adams\", \"Y_2\": \"0249-11-25\", \"Y_7\": \"Ivan Christie\", \"Y_3\": \"Monroe Adams\"}, {\"Y_7\": \"Ivan Christie\", \"Y_5\": \"Anjanette Marx\", \"Y_3\": \"Elvie Adams\", \"Y_2\": \"0252-03-22\"}, {\"Y_2\": \"0249-11-25\", \"Y_7\": \"Ivan Christie\", \"Y_5\": \"Anjanette Marx\", \"Y_3\": \"Monroe Adams\"}, {\"Y_5\": \"Elvie Adams\", \"Y_7\": \"Ivan Christie\", \"Y_3\": \"Javier Adams\", \"Y_2\": \"0254-05-01\"}, {\"Y_5\": \"Elvie Adams\", \"Y_7\": \"Ivan Christie\", \"Y_3\": \"Lyndon Adams\", \"Y_2\": \"0252-03-17\"}]",
+        "answer": [
+            "0249-11-25",
+            "0252-03-17",
+            "0252-03-22",
+            "0254-05-01"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "great_granddaughter(Y_7, Y_5)",
+                "dob(Y_7, \"0171-03-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "118a9347-5342-4585-9088-918e7e241f12",
+        "question": "What is the date of birth of the uncle of the uncle of the person whose occupation is applications developer?",
+        "solution_traces": "[{\"Y_2\": \"0233-06-12\", \"Y_7\": \"Ardath Denham\", \"Y_5\": \"Lyndon Adams\", \"Y_3\": \"Ken Adams\"}, {\"Y_5\": \"Javier Adams\", \"Y_2\": \"0233-06-12\", \"Y_7\": \"Ardath Denham\", \"Y_3\": \"Ken Adams\"}, {\"Y_5\": \"Monroe Adams\", \"Y_2\": \"0233-06-12\", \"Y_7\": \"Ardath Denham\", \"Y_3\": \"Ken Adams\"}]",
+        "answer": [
+            "0233-06-12"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "uncle(Y_5, Y_3)",
+                "uncle(Y_7, Y_5)",
+                "job(Y_7, \"applications developer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0cec1bc0-52ce-4e6c-9136-c845c724b443",
+        "question": "What is the hobby of the father of the father of the person whose date of birth is 0279-04-04?",
+        "solution_traces": "[{\"Y_3\": \"Dwain Burch\", \"Y_5\": \"Mathew Burch\", \"Y_7\": \"Lea Burch\", \"Y_2\": \"deltiology\"}]",
+        "answer": [
+            "deltiology"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "father(Y_5, Y_3)",
+                "father(Y_7, Y_5)",
+                "dob(Y_7, \"0279-04-04\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    }
+]

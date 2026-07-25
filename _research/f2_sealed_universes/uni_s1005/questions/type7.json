@@ -1,0 +1,1179 @@
+[
+    {
+        "id": "fb5b9b70-34a9-4cc4-982e-69c49c1f40f5",
+        "question": "What is the occupation of the friend of the great-grandson of the daughter of Nelly Alanis?",
+        "solution_traces": "[{\"Y_7\": \"Dominique Moyer\", \"Y_2\": \"clinical molecular geneticist\", \"Y_3\": \"Janis Moyer\", \"Y_5\": \"Dewitt Eddings\"}, {\"Y_3\": \"Benito Mello\", \"Y_7\": \"Dominique Moyer\", \"Y_2\": \"English as a second language teacher\", \"Y_5\": \"Dewitt Eddings\"}, {\"Y_7\": \"Dominique Moyer\", \"Y_3\": \"Wilfredo Townley\", \"Y_2\": \"waste management officer\", \"Y_5\": \"Dewitt Eddings\"}]",
+        "answer": [
+            "English as a second language teacher",
+            "clinical molecular geneticist",
+            "waste management officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "great_grandson(Y_7, Y_5)",
+                "daughter(\"Nelly Alanis\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5b355b0e-2ab7-49a8-bb29-c65c90e19a96",
+        "question": "What is the hobby of the great-grandchild of the mother-in-law of the mother-in-law of Joaquin Eddings?",
+        "solution_traces": "[{\"Y_3\": \"Kacey Green\", \"Y_7\": \"Jacquline Moyer\", \"Y_5\": \"Dominique Moyer\", \"Y_2\": \"meteorology\"}, {\"Y_7\": \"Jacquline Moyer\", \"Y_5\": \"Dominique Moyer\", \"Y_2\": \"herping\", \"Y_3\": \"Dewitt Eddings\"}]",
+        "answer": [
+            "herping",
+            "meteorology"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandchild(Y_5, Y_3)",
+                "mother_in_law(Y_7, Y_5)",
+                "mother_in_law(\"Joaquin Eddings\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7013bb8a-9cec-4904-b5dd-d028b3812cc0",
+        "question": "What is the hobby of the sibling of the sibling of the friend of Dick Rayford?",
+        "solution_traces": "[{\"Y_3\": \"Angelo Hylton\", \"Y_5\": \"Margaret Hylton\", \"Y_2\": \"audiophile\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_7\": \"Janey Townley\", \"Y_5\": \"Marcelino Townley\", \"Y_2\": \"audiophile\", \"Y_3\": \"Harriette Mello\"}, {\"Y_7\": \"Janey Townley\", \"Y_5\": \"Aimee Townley\", \"Y_2\": \"poker\", \"Y_3\": \"Janey Townley\"}, {\"Y_7\": \"Janey Townley\", \"Y_3\": \"Aimee Townley\", \"Y_2\": \"metal detecting\", \"Y_5\": \"Harriette Mello\"}, {\"Y_7\": \"Janey Townley\", \"Y_2\": \"flower collecting and pressing\", \"Y_3\": \"Cory Townley\", \"Y_5\": \"Harriette Mello\"}, {\"Y_7\": \"Janey Townley\", \"Y_2\": \"poker\", \"Y_3\": \"Janey Townley\", \"Y_5\": \"Harriette Mello\"}, {\"Y_7\": \"Janey Townley\", \"Y_3\": \"Marcelino Townley\", \"Y_5\": \"Harriette Mello\", \"Y_2\": \"baton twirling\"}, {\"Y_7\": \"Janey Townley\", \"Y_5\": \"Aimee Townley\", \"Y_3\": \"Cory Townley\", \"Y_2\": \"flower collecting and pressing\"}, {\"Y_2\": \"horseshoes\", \"Y_3\": \"Farrah Moyer\", \"Y_5\": \"Jimmie Hylton\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_7\": \"Janey Townley\", \"Y_5\": \"Aimee Townley\", \"Y_3\": \"Marcelino Townley\", \"Y_2\": \"baton twirling\"}, {\"Y_7\": \"Janey Townley\", \"Y_2\": \"poker\", \"Y_5\": \"Cory Townley\", \"Y_3\": \"Janey Townley\"}, {\"Y_7\": \"Janey Townley\", \"Y_3\": \"Aimee Townley\", \"Y_2\": \"metal detecting\", \"Y_5\": \"Cory Townley\"}, {\"Y_2\": \"metal detecting\", \"Y_7\": \"Janey Townley\", \"Y_3\": \"Aimee Townley\", \"Y_5\": \"Marcelino Townley\"}, {\"Y_7\": \"Janey Townley\", \"Y_5\": \"Marcelino Townley\", \"Y_3\": \"Cory Townley\", \"Y_2\": \"flower collecting and pressing\"}, {\"Y_2\": \"poker\", \"Y_7\": \"Janey Townley\", \"Y_5\": \"Marcelino Townley\", \"Y_3\": \"Janey Townley\"}, {\"Y_5\": \"Margaret Hylton\", \"Y_3\": \"Farrah Moyer\", \"Y_2\": \"horseshoes\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_2\": \"martial arts\", \"Y_5\": \"Farrah Moyer\", \"Y_3\": \"Jimmie Hylton\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_7\": \"Janey Townley\", \"Y_5\": \"Aimee Townley\", \"Y_2\": \"audiophile\", \"Y_3\": \"Harriette Mello\"}, {\"Y_2\": \"gongoozling\", \"Y_3\": \"Margaret Hylton\", \"Y_5\": \"Farrah Moyer\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_2\": \"martial arts\", \"Y_5\": \"Margaret Hylton\", \"Y_3\": \"Jimmie Hylton\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_3\": \"Angelo Hylton\", \"Y_2\": \"audiophile\", \"Y_5\": \"Jimmie Hylton\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_2\": \"audiophile\", \"Y_7\": \"Janey Townley\", \"Y_5\": \"Cory Townley\", \"Y_3\": \"Harriette Mello\"}, {\"Y_7\": \"Janey Townley\", \"Y_3\": \"Marcelino Townley\", \"Y_5\": \"Cory Townley\", \"Y_2\": \"baton twirling\"}, {\"Y_2\": \"gongoozling\", \"Y_3\": \"Margaret Hylton\", \"Y_5\": \"Jimmie Hylton\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_3\": \"Angelo Hylton\", \"Y_5\": \"Farrah Moyer\", \"Y_2\": \"audiophile\", \"Y_7\": \"Angelo Hylton\"}]",
+        "answer": [
+            "audiophile",
+            "baton twirling",
+            "flower collecting and pressing",
+            "gongoozling",
+            "horseshoes",
+            "martial arts",
+            "metal detecting",
+            "poker"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "friend(\"Dick Rayford\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8c991eb1-68a3-4689-8069-829701917fcb",
+        "question": "What is the occupation of the great-grandfather of the cousin of the great-grandchild of Virgina Shiver?",
+        "solution_traces": "[{\"Y_5\": \"Kacey Green\", \"Y_7\": \"Dewitt Eddings\", \"Y_2\": \"homeopath\", \"Y_3\": \"Eduardo Moyer\"}, {\"Y_3\": \"Cristopher Shiver\", \"Y_2\": \"TEFL teacher\", \"Y_7\": \"Kacey Green\", \"Y_5\": \"Dewitt Eddings\"}, {\"Y_2\": \"homeopath\", \"Y_3\": \"Eduardo Moyer\", \"Y_7\": \"Kacey Green\", \"Y_5\": \"Dewitt Eddings\"}, {\"Y_5\": \"Kacey Green\", \"Y_3\": \"Cristopher Shiver\", \"Y_7\": \"Dewitt Eddings\", \"Y_2\": \"TEFL teacher\"}]",
+        "answer": [
+            "TEFL teacher",
+            "homeopath"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandfather(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "great_grandchild(\"Virgina Shiver\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 10,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b4bf5b9f-1793-4dc3-8a0f-d3cb695533e4",
+        "question": "What is the occupation of the sibling of the sibling of the friend of Mack Moyer?",
+        "solution_traces": "[{\"Y_2\": \"translator\", \"Y_7\": \"Harriette Mello\", \"Y_3\": \"Janey Townley\", \"Y_5\": \"Aimee Townley\"}, {\"Y_7\": \"Orville Mello\", \"Y_3\": \"Antonio Mello\", \"Y_2\": \"film editor\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_2\": \"psychologist\", \"Y_7\": \"Harriette Mello\", \"Y_3\": \"Harriette Mello\", \"Y_5\": \"Aimee Townley\"}, {\"Y_7\": \"Miki Green\", \"Y_5\": \"Victoria Eddings\", \"Y_3\": \"Miki Green\", \"Y_2\": \"art gallery manager\"}, {\"Y_7\": \"Harriette Mello\", \"Y_3\": \"Marcelino Townley\", \"Y_5\": \"Cory Townley\", \"Y_2\": \"fast food restaurant manager\"}, {\"Y_2\": \"clothing technologist\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Janey Townley\", \"Y_3\": \"Cory Townley\"}, {\"Y_2\": \"translator\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Marcelino Townley\", \"Y_3\": \"Janey Townley\"}, {\"Y_2\": \"psychologist\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Cory Townley\", \"Y_3\": \"Harriette Mello\"}, {\"Y_7\": \"Orville Mello\", \"Y_2\": \"surgeon\", \"Y_3\": \"Orville Mello\", \"Y_5\": \"Edison Mello\"}, {\"Y_7\": \"Harriette Mello\", \"Y_3\": \"Marcelino Townley\", \"Y_5\": \"Janey Townley\", \"Y_2\": \"fast food restaurant manager\"}, {\"Y_2\": \"field seismologist\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Marcelino Townley\", \"Y_3\": \"Aimee Townley\"}, {\"Y_7\": \"Orville Mello\", \"Y_5\": \"Antonio Mello\", \"Y_2\": \"computer games developer\", \"Y_3\": \"Edison Mello\"}, {\"Y_7\": \"Orville Mello\", \"Y_2\": \"surgeon\", \"Y_3\": \"Orville Mello\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_2\": \"psychologist\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Janey Townley\", \"Y_3\": \"Harriette Mello\"}, {\"Y_7\": \"Harriette Mello\", \"Y_3\": \"Marcelino Townley\", \"Y_2\": \"fast food restaurant manager\", \"Y_5\": \"Aimee Townley\"}, {\"Y_2\": \"field seismologist\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Cory Townley\", \"Y_3\": \"Aimee Townley\"}, {\"Y_7\": \"Orville Mello\", \"Y_5\": \"Antonio Mello\", \"Y_2\": \"chiropractor\", \"Y_3\": \"Rudolf Mello\"}, {\"Y_7\": \"Orville Mello\", \"Y_5\": \"Antonio Mello\", \"Y_3\": \"Orville Mello\", \"Y_2\": \"surgeon\"}, {\"Y_7\": \"Harriette Mello\", \"Y_5\": \"Marcelino Townley\", \"Y_3\": \"Cory Townley\", \"Y_2\": \"clothing technologist\"}, {\"Y_7\": \"Orville Mello\", \"Y_2\": \"computer games developer\", \"Y_3\": \"Edison Mello\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_7\": \"Orville Mello\", \"Y_3\": \"Rudolf Mello\", \"Y_2\": \"chiropractor\", \"Y_5\": \"Edison Mello\"}, {\"Y_2\": \"field seismologist\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Janey Townley\", \"Y_3\": \"Aimee Townley\"}, {\"Y_7\": \"Harriette Mello\", \"Y_3\": \"Cory Townley\", \"Y_2\": \"clothing technologist\", \"Y_5\": \"Aimee Townley\"}, {\"Y_2\": \"psychologist\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Marcelino Townley\", \"Y_3\": \"Harriette Mello\"}, {\"Y_2\": \"translator\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Cory Townley\", \"Y_3\": \"Janey Townley\"}, {\"Y_7\": \"Orville Mello\", \"Y_3\": \"Antonio Mello\", \"Y_2\": \"film editor\", \"Y_5\": \"Edison Mello\"}]",
+        "answer": [
+            "art gallery manager",
+            "chiropractor",
+            "clothing technologist",
+            "computer games developer",
+            "fast food restaurant manager",
+            "field seismologist",
+            "film editor",
+            "psychologist",
+            "surgeon",
+            "translator"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "friend(\"Mack Moyer\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fb8d80b5-6b78-487c-894e-e1a59a79d8db",
+        "question": "What is the occupation of the friend of the great-grandmother of the friend of Golda Mello?",
+        "solution_traces": "[{\"Y_2\": \"psychologist\", \"Y_5\": \"Esperanza Molnar\", \"Y_7\": \"Benito Mello\", \"Y_3\": \"Harriette Mello\"}, {\"Y_2\": \"herbalist\", \"Y_3\": \"Tiffany Townley\", \"Y_5\": \"Esperanza Molnar\", \"Y_7\": \"Benito Mello\"}, {\"Y_3\": \"Mack Moyer\", \"Y_2\": \"architect\", \"Y_7\": \"Benito Mello\", \"Y_5\": \"Harriette Mello\"}, {\"Y_2\": \"mechanical engineer\", \"Y_3\": \"Jacquline Moyer\", \"Y_5\": \"Esperanza Molnar\", \"Y_7\": \"Benito Mello\"}, {\"Y_3\": \"Roberto Townley\", \"Y_2\": \"data processing manager\", \"Y_7\": \"Benito Mello\", \"Y_5\": \"Harriette Mello\"}, {\"Y_3\": \"Janis Moyer\", \"Y_2\": \"clinical molecular geneticist\", \"Y_7\": \"Benito Mello\", \"Y_5\": \"Harriette Mello\"}, {\"Y_3\": \"Esperanza Molnar\", \"Y_7\": \"Benito Mello\", \"Y_5\": \"Harriette Mello\", \"Y_2\": \"chief marketing officer\"}, {\"Y_3\": \"Edison Mello\", \"Y_2\": \"computer games developer\", \"Y_5\": \"Esperanza Molnar\", \"Y_7\": \"Benito Mello\"}]",
+        "answer": [
+            "architect",
+            "chief marketing officer",
+            "clinical molecular geneticist",
+            "computer games developer",
+            "data processing manager",
+            "herbalist",
+            "mechanical engineer",
+            "psychologist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "great_grandmother(Y_7, Y_5)",
+                "friend(\"Golda Mello\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d3aed2dd-03a8-492b-9708-f9f9a37d0be8",
+        "question": "What is the occupation of the nephew of the aunt of the male cousin of Jerrold Mello?",
+        "solution_traces": "[{\"Y_3\": \"Roberto Townley\", \"Y_2\": \"data processing manager\", \"Y_5\": \"Harriette Mello\", \"Y_7\": \"Roberto Townley\"}, {\"Y_3\": \"Roberto Townley\", \"Y_2\": \"data processing manager\", \"Y_5\": \"Janey Townley\", \"Y_7\": \"Roberto Townley\"}, {\"Y_3\": \"Roberto Townley\", \"Y_5\": \"Aimee Townley\", \"Y_2\": \"data processing manager\", \"Y_7\": \"Roberto Townley\"}, {\"Y_3\": \"Jerrold Mello\", \"Y_2\": \"financial controller\", \"Y_5\": \"Janey Townley\", \"Y_7\": \"Roberto Townley\"}, {\"Y_2\": \"financial controller\", \"Y_5\": \"Aimee Townley\", \"Y_3\": \"Jerrold Mello\", \"Y_7\": \"Roberto Townley\"}]",
+        "answer": [
+            "data processing manager",
+            "financial controller"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "nephew(Y_5, Y_3)",
+                "aunt(Y_7, Y_5)",
+                "male_cousin(\"Jerrold Mello\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f4886a6d-2572-4042-91e0-d84478459310",
+        "question": "What is the hobby of the mother-in-law of the daughter-in-law of the daughter-in-law of Farrah Moyer?",
+        "solution_traces": "[{\"Y_2\": \"billiards\", \"Y_7\": \"Dominique Moyer\", \"Y_3\": \"Dominique Moyer\", \"Y_5\": \"Jacquline Moyer\"}]",
+        "answer": [
+            "billiards"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "mother_in_law(Y_5, Y_3)",
+                "daughter_in_law(Y_7, Y_5)",
+                "daughter_in_law(\"Farrah Moyer\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f7cbe1e4-bf47-4435-afd1-207188d30b78",
+        "question": "What is the occupation of the parent of the daughter of the grandchild of Anton Hylton?",
+        "solution_traces": "[{\"Y_3\": \"Marlana Rayford\", \"Y_2\": \"building control surveyor\", \"Y_7\": \"Marlana Rayford\", \"Y_5\": \"Mammie Rayford\"}, {\"Y_2\": \"homeopath\", \"Y_7\": \"Eduardo Moyer\", \"Y_5\": \"Jeanette Moyer\", \"Y_3\": \"Eduardo Moyer\"}, {\"Y_3\": \"Dominique Moyer\", \"Y_7\": \"Eduardo Moyer\", \"Y_5\": \"Jeanette Moyer\", \"Y_2\": \"early years teacher\"}, {\"Y_3\": \"Dick Rayford\", \"Y_2\": \"energy engineer\", \"Y_7\": \"Marlana Rayford\", \"Y_5\": \"Mammie Rayford\"}]",
+        "answer": [
+            "building control surveyor",
+            "early years teacher",
+            "energy engineer",
+            "homeopath"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "daughter(Y_7, Y_5)",
+                "grandchild(\"Anton Hylton\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5da28a3e-c735-405e-8b2e-fc7c47f47370",
+        "question": "What is the date of birth of the child of the father of the great-uncle of Orville Mello?",
+        "solution_traces": "[{\"Y_7\": \"Marcelino Townley\", \"Y_5\": \"Wilfredo Townley\", \"Y_2\": \"0213-09-17\", \"Y_3\": \"Harriette Mello\"}, {\"Y_7\": \"Cory Townley\", \"Y_5\": \"Wilfredo Townley\", \"Y_2\": \"0213-09-17\", \"Y_3\": \"Harriette Mello\"}, {\"Y_2\": \"0203-12-15\", \"Y_7\": \"Marcelino Townley\", \"Y_5\": \"Wilfredo Townley\", \"Y_3\": \"Aimee Townley\"}, {\"Y_7\": \"Marcelino Townley\", \"Y_5\": \"Wilfredo Townley\", \"Y_3\": \"Cory Townley\", \"Y_2\": \"0206-10-09\"}, {\"Y_2\": \"0216-07-24\", \"Y_7\": \"Marcelino Townley\", \"Y_5\": \"Wilfredo Townley\", \"Y_3\": \"Janey Townley\"}, {\"Y_7\": \"Cory Townley\", \"Y_5\": \"Wilfredo Townley\", \"Y_3\": \"Cory Townley\", \"Y_2\": \"0206-10-09\"}, {\"Y_2\": \"0216-07-24\", \"Y_7\": \"Cory Townley\", \"Y_5\": \"Wilfredo Townley\", \"Y_3\": \"Janey Townley\"}, {\"Y_2\": \"0203-12-15\", \"Y_7\": \"Cory Townley\", \"Y_5\": \"Wilfredo Townley\", \"Y_3\": \"Aimee Townley\"}, {\"Y_7\": \"Cory Townley\", \"Y_5\": \"Wilfredo Townley\", \"Y_3\": \"Marcelino Townley\", \"Y_2\": \"0210-02-04\"}, {\"Y_7\": \"Marcelino Townley\", \"Y_5\": \"Wilfredo Townley\", \"Y_3\": \"Marcelino Townley\", \"Y_2\": \"0210-02-04\"}]",
+        "answer": [
+            "0203-12-15",
+            "0206-10-09",
+            "0210-02-04",
+            "0213-09-17",
+            "0216-07-24"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "child(Y_5, Y_3)",
+                "father(Y_7, Y_5)",
+                "great_uncle(\"Orville Mello\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0c5ff9a4-be4e-4854-ae0f-8afadca18453",
+        "question": "What is the occupation of the uncle of the grandchild of the grandparent of Marlana Rayford?",
+        "solution_traces": "[{\"Y_7\": \"Deirdre Hylton\", \"Y_2\": \"public librarian\", \"Y_3\": \"Jimmie Hylton\", \"Y_5\": \"Marlana Rayford\"}, {\"Y_7\": \"Deirdre Hylton\", \"Y_5\": \"Janis Moyer\", \"Y_2\": \"public librarian\", \"Y_3\": \"Jimmie Hylton\"}, {\"Y_7\": \"Deirdre Hylton\", \"Y_3\": \"Angelo Hylton\", \"Y_2\": \"training and development officer\", \"Y_5\": \"Marlana Rayford\"}, {\"Y_7\": \"Deirdre Hylton\", \"Y_2\": \"public librarian\", \"Y_3\": \"Jimmie Hylton\", \"Y_5\": \"Eduardo Moyer\"}, {\"Y_2\": \"public librarian\", \"Y_7\": \"Anton Hylton\", \"Y_3\": \"Jimmie Hylton\", \"Y_5\": \"Eduardo Moyer\"}, {\"Y_3\": \"Angelo Hylton\", \"Y_2\": \"training and development officer\", \"Y_7\": \"Anton Hylton\", \"Y_5\": \"Marlana Rayford\"}, {\"Y_2\": \"public librarian\", \"Y_5\": \"Janis Moyer\", \"Y_7\": \"Anton Hylton\", \"Y_3\": \"Jimmie Hylton\"}, {\"Y_2\": \"public librarian\", \"Y_7\": \"Anton Hylton\", \"Y_3\": \"Jimmie Hylton\", \"Y_5\": \"Marlana Rayford\"}, {\"Y_3\": \"Angelo Hylton\", \"Y_5\": \"Janis Moyer\", \"Y_7\": \"Anton Hylton\", \"Y_2\": \"training and development officer\"}, {\"Y_3\": \"Angelo Hylton\", \"Y_2\": \"training and development officer\", \"Y_7\": \"Anton Hylton\", \"Y_5\": \"Eduardo Moyer\"}, {\"Y_7\": \"Deirdre Hylton\", \"Y_3\": \"Angelo Hylton\", \"Y_2\": \"training and development officer\", \"Y_5\": \"Eduardo Moyer\"}, {\"Y_7\": \"Deirdre Hylton\", \"Y_5\": \"Janis Moyer\", \"Y_3\": \"Angelo Hylton\", \"Y_2\": \"training and development officer\"}]",
+        "answer": [
+            "public librarian",
+            "training and development officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "uncle(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "grandparent(\"Marlana Rayford\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "abd2ab29-8421-4bb9-b6c3-2dcdcb41129d",
+        "question": "What is the date of birth of the great-grandmother of the female cousin of the grandson of Nelly Alanis?",
+        "solution_traces": "[{\"Y_3\": \"Deirdre Hylton\", \"Y_2\": \"0175-01-15\", \"Y_7\": \"Mack Moyer\", \"Y_5\": \"Mammie Rayford\"}]",
+        "answer": [
+            "0175-01-15"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandmother(Y_5, Y_3)",
+                "female_cousin(Y_7, Y_5)",
+                "grandson(\"Nelly Alanis\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8c61a2d4-9506-406b-8cf6-e63669ebc917",
+        "question": "What is the date of birth of the grandmother of the nephew of the friend of Roberto Townley?",
+        "solution_traces": "[{\"Y_5\": \"Mack Moyer\", \"Y_3\": \"Nelly Alanis\", \"Y_7\": \"Marlana Rayford\", \"Y_2\": \"0211-05-26\"}, {\"Y_5\": \"Roberto Townley\", \"Y_7\": \"Harriette Mello\", \"Y_2\": \"0184-06-22\", \"Y_3\": \"Monika Townley\"}, {\"Y_5\": \"Mack Moyer\", \"Y_2\": \"0202-06-17\", \"Y_3\": \"Farrah Moyer\", \"Y_7\": \"Marlana Rayford\"}]",
+        "answer": [
+            "0184-06-22",
+            "0202-06-17",
+            "0211-05-26"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandmother(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "friend(\"Roberto Townley\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "45e7575c-36bf-4d0a-9d1d-e34dc8fabf53",
+        "question": "What is the occupation of the aunt of the father-in-law of the friend of Benito Mello?",
+        "solution_traces": "[{\"Y_2\": \"homeopath\", \"Y_7\": \"Jacquline Moyer\", \"Y_3\": \"Margaret Hylton\", \"Y_5\": \"Eduardo Moyer\"}, {\"Y_7\": \"Golda Mello\", \"Y_3\": \"Aimee Townley\", \"Y_2\": \"field seismologist\", \"Y_5\": \"Jerrold Mello\"}, {\"Y_2\": \"translator\", \"Y_7\": \"Golda Mello\", \"Y_5\": \"Jerrold Mello\", \"Y_3\": \"Janey Townley\"}]",
+        "answer": [
+            "field seismologist",
+            "homeopath",
+            "translator"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "aunt(Y_5, Y_3)",
+                "father_in_law(Y_7, Y_5)",
+                "friend(\"Benito Mello\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "46895852-2dda-46be-9e96-dc1ab402dbfb",
+        "question": "What is the occupation of the daughter of the wife of the great-grandson of Monika Townley?",
+        "solution_traces": "[{\"Y_7\": \"Antonio Mello\", \"Y_3\": \"Nydia Batista\", \"Y_5\": \"Golda Mello\", \"Y_2\": \"training and development officer\"}]",
+        "answer": [
+            "training and development officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "daughter(Y_5, Y_3)",
+                "wife(Y_7, Y_5)",
+                "great_grandson(\"Monika Townley\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "13e03ee2-c263-4dae-9eb4-2b8cfaa66e6b",
+        "question": "What is the hobby of the nephew of the great-uncle of the grandchild of Nelly Alanis?",
+        "solution_traces": "[{\"Y_2\": \"satellite watching\", \"Y_5\": \"Angelo Hylton\", \"Y_7\": \"Mack Moyer\", \"Y_3\": \"Eduardo Moyer\"}, {\"Y_2\": \"satellite watching\", \"Y_5\": \"Angelo Hylton\", \"Y_7\": \"Jeanette Moyer\", \"Y_3\": \"Eduardo Moyer\"}, {\"Y_2\": \"satellite watching\", \"Y_7\": \"Jeanette Moyer\", \"Y_5\": \"Jimmie Hylton\", \"Y_3\": \"Eduardo Moyer\"}, {\"Y_2\": \"satellite watching\", \"Y_3\": \"Eduardo Moyer\", \"Y_7\": \"Mack Moyer\", \"Y_5\": \"Jimmie Hylton\"}]",
+        "answer": [
+            "satellite watching"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "nephew(Y_5, Y_3)",
+                "great_uncle(Y_7, Y_5)",
+                "grandchild(\"Nelly Alanis\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "45e957f6-6f68-41e1-b33e-0c497dec8f60",
+        "question": "What is the date of birth of the child of the parent of the sibling of Margaret Hylton?",
+        "solution_traces": "[{\"Y_2\": \"0207-06-08\", \"Y_3\": \"Angelo Hylton\", \"Y_5\": \"Deirdre Hylton\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_7\": \"Jimmie Hylton\", \"Y_5\": \"Deirdre Hylton\", \"Y_3\": \"Farrah Moyer\", \"Y_2\": \"0202-06-17\"}, {\"Y_2\": \"0207-11-19\", \"Y_5\": \"Anton Hylton\", \"Y_3\": \"Jimmie Hylton\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_7\": \"Farrah Moyer\", \"Y_3\": \"Farrah Moyer\", \"Y_2\": \"0202-06-17\", \"Y_5\": \"Anton Hylton\"}, {\"Y_2\": \"0207-11-19\", \"Y_7\": \"Jimmie Hylton\", \"Y_3\": \"Jimmie Hylton\", \"Y_5\": \"Anton Hylton\"}, {\"Y_7\": \"Farrah Moyer\", \"Y_5\": \"Deirdre Hylton\", \"Y_3\": \"Margaret Hylton\", \"Y_2\": \"0202-04-03\"}, {\"Y_5\": \"Deirdre Hylton\", \"Y_3\": \"Farrah Moyer\", \"Y_2\": \"0202-06-17\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_7\": \"Farrah Moyer\", \"Y_5\": \"Deirdre Hylton\", \"Y_3\": \"Jimmie Hylton\", \"Y_2\": \"0207-11-19\"}, {\"Y_2\": \"0207-06-08\", \"Y_3\": \"Angelo Hylton\", \"Y_7\": \"Jimmie Hylton\", \"Y_5\": \"Deirdre Hylton\"}, {\"Y_7\": \"Farrah Moyer\", \"Y_5\": \"Deirdre Hylton\", \"Y_3\": \"Farrah Moyer\", \"Y_2\": \"0202-06-17\"}, {\"Y_2\": \"0207-11-19\", \"Y_5\": \"Deirdre Hylton\", \"Y_3\": \"Jimmie Hylton\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_3\": \"Margaret Hylton\", \"Y_5\": \"Anton Hylton\", \"Y_7\": \"Angelo Hylton\", \"Y_2\": \"0202-04-03\"}, {\"Y_2\": \"0207-06-08\", \"Y_3\": \"Angelo Hylton\", \"Y_7\": \"Farrah Moyer\", \"Y_5\": \"Deirdre Hylton\"}, {\"Y_3\": \"Margaret Hylton\", \"Y_7\": \"Farrah Moyer\", \"Y_5\": \"Anton Hylton\", \"Y_2\": \"0202-04-03\"}, {\"Y_2\": \"0207-11-19\", \"Y_7\": \"Farrah Moyer\", \"Y_3\": \"Jimmie Hylton\", \"Y_5\": \"Anton Hylton\"}, {\"Y_5\": \"Anton Hylton\", \"Y_3\": \"Farrah Moyer\", \"Y_2\": \"0202-06-17\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_7\": \"Jimmie Hylton\", \"Y_5\": \"Deirdre Hylton\", \"Y_3\": \"Margaret Hylton\", \"Y_2\": \"0202-04-03\"}, {\"Y_2\": \"0207-06-08\", \"Y_3\": \"Angelo Hylton\", \"Y_7\": \"Jimmie Hylton\", \"Y_5\": \"Anton Hylton\"}, {\"Y_2\": \"0207-06-08\", \"Y_3\": \"Angelo Hylton\", \"Y_5\": \"Anton Hylton\", \"Y_7\": \"Angelo Hylton\"}, {\"Y_3\": \"Margaret Hylton\", \"Y_5\": \"Deirdre Hylton\", \"Y_7\": \"Angelo Hylton\", \"Y_2\": \"0202-04-03\"}, {\"Y_7\": \"Jimmie Hylton\", \"Y_3\": \"Farrah Moyer\", \"Y_2\": \"0202-06-17\", \"Y_5\": \"Anton Hylton\"}, {\"Y_2\": \"0207-06-08\", \"Y_3\": \"Angelo Hylton\", \"Y_7\": \"Farrah Moyer\", \"Y_5\": \"Anton Hylton\"}, {\"Y_3\": \"Margaret Hylton\", \"Y_7\": \"Jimmie Hylton\", \"Y_5\": \"Anton Hylton\", \"Y_2\": \"0202-04-03\"}, {\"Y_7\": \"Jimmie Hylton\", \"Y_5\": \"Deirdre Hylton\", \"Y_3\": \"Jimmie Hylton\", \"Y_2\": \"0207-11-19\"}]",
+        "answer": [
+            "0202-04-03",
+            "0202-06-17",
+            "0207-06-08",
+            "0207-11-19"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "child(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "sibling(\"Margaret Hylton\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c2cb07cb-8bc7-4bd2-a6d6-747403574573",
+        "question": "What is the hobby of the niece of the sibling of the uncle of Marlana Rayford?",
+        "solution_traces": "[{\"Y_3\": \"Marlana Rayford\", \"Y_5\": \"Margaret Hylton\", \"Y_7\": \"Angelo Hylton\", \"Y_2\": \"sea glass collecting\"}, {\"Y_3\": \"Marlana Rayford\", \"Y_5\": \"Jimmie Hylton\", \"Y_7\": \"Angelo Hylton\", \"Y_2\": \"sea glass collecting\"}, {\"Y_3\": \"Janis Moyer\", \"Y_5\": \"Jimmie Hylton\", \"Y_7\": \"Angelo Hylton\", \"Y_2\": \"video gaming\"}, {\"Y_3\": \"Janis Moyer\", \"Y_7\": \"Jimmie Hylton\", \"Y_5\": \"Margaret Hylton\", \"Y_2\": \"video gaming\"}, {\"Y_5\": \"Angelo Hylton\", \"Y_7\": \"Jimmie Hylton\", \"Y_3\": \"Janis Moyer\", \"Y_2\": \"video gaming\"}, {\"Y_3\": \"Marlana Rayford\", \"Y_5\": \"Angelo Hylton\", \"Y_7\": \"Jimmie Hylton\", \"Y_2\": \"sea glass collecting\"}, {\"Y_3\": \"Marlana Rayford\", \"Y_7\": \"Jimmie Hylton\", \"Y_5\": \"Margaret Hylton\", \"Y_2\": \"sea glass collecting\"}, {\"Y_3\": \"Janis Moyer\", \"Y_5\": \"Margaret Hylton\", \"Y_7\": \"Angelo Hylton\", \"Y_2\": \"video gaming\"}]",
+        "answer": [
+            "sea glass collecting",
+            "video gaming"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "niece(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "uncle(\"Marlana Rayford\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "eb82cb72-d95c-4895-a7ed-e19d1450ae80",
+        "question": "What is the hobby of the brother of the sibling of the great-aunt of Mammie Rayford?",
+        "solution_traces": "[{\"Y_7\": \"Margaret Hylton\", \"Y_5\": \"Farrah Moyer\", \"Y_3\": \"Jimmie Hylton\", \"Y_2\": \"martial arts\"}, {\"Y_5\": \"Angelo Hylton\", \"Y_7\": \"Margaret Hylton\", \"Y_3\": \"Jimmie Hylton\", \"Y_2\": \"martial arts\"}, {\"Y_3\": \"Angelo Hylton\", \"Y_7\": \"Margaret Hylton\", \"Y_5\": \"Farrah Moyer\", \"Y_2\": \"audiophile\"}, {\"Y_3\": \"Angelo Hylton\", \"Y_7\": \"Margaret Hylton\", \"Y_5\": \"Jimmie Hylton\", \"Y_2\": \"audiophile\"}]",
+        "answer": [
+            "audiophile",
+            "martial arts"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "brother(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "great_aunt(\"Mammie Rayford\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1adc2785-bef8-4f79-88ce-ca5a3f60c6a0",
+        "question": "What is the hobby of the sibling of the sibling of the friend of Janis Moyer?",
+        "solution_traces": "[{\"Y_2\": \"audiophile\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Cory Townley\", \"Y_3\": \"Harriette Mello\"}, {\"Y_7\": \"Harriette Mello\", \"Y_2\": \"metal detecting\", \"Y_5\": \"Janey Townley\", \"Y_3\": \"Aimee Townley\"}, {\"Y_2\": \"flower collecting and pressing\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Janey Townley\", \"Y_3\": \"Cory Townley\"}, {\"Y_7\": \"Harriette Mello\", \"Y_3\": \"Cory Townley\", \"Y_2\": \"flower collecting and pressing\", \"Y_5\": \"Aimee Townley\"}, {\"Y_7\": \"Harriette Mello\", \"Y_5\": \"Marcelino Townley\", \"Y_2\": \"audiophile\", \"Y_3\": \"Harriette Mello\"}, {\"Y_7\": \"Harriette Mello\", \"Y_3\": \"Marcelino Townley\", \"Y_5\": \"Janey Townley\", \"Y_2\": \"baton twirling\"}, {\"Y_2\": \"poker\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Marcelino Townley\", \"Y_3\": \"Janey Townley\"}, {\"Y_7\": \"Harriette Mello\", \"Y_2\": \"metal detecting\", \"Y_5\": \"Cory Townley\", \"Y_3\": \"Aimee Townley\"}, {\"Y_2\": \"audiophile\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Janey Townley\", \"Y_3\": \"Harriette Mello\"}, {\"Y_2\": \"metal detecting\", \"Y_7\": \"Harriette Mello\", \"Y_5\": \"Marcelino Townley\", \"Y_3\": \"Aimee Townley\"}, {\"Y_7\": \"Harriette Mello\", \"Y_2\": \"audiophile\", \"Y_3\": \"Harriette Mello\", \"Y_5\": \"Aimee Townley\"}, {\"Y_7\": \"Harriette Mello\", \"Y_5\": \"Marcelino Townley\", \"Y_3\": \"Cory Townley\", \"Y_2\": \"flower collecting and pressing\"}, {\"Y_7\": \"Harriette Mello\", \"Y_3\": \"Marcelino Townley\", \"Y_5\": \"Cory Townley\", \"Y_2\": \"baton twirling\"}, {\"Y_7\": \"Victoria Eddings\", \"Y_3\": \"Victoria Eddings\", \"Y_5\": \"Miki Green\", \"Y_2\": \"astronomy\"}, {\"Y_7\": \"Harriette Mello\", \"Y_2\": \"poker\", \"Y_3\": \"Janey Townley\", \"Y_5\": \"Aimee Townley\"}, {\"Y_7\": \"Harriette Mello\", \"Y_2\": \"poker\", \"Y_5\": \"Cory Townley\", \"Y_3\": \"Janey Townley\"}, {\"Y_2\": \"baton twirling\", \"Y_7\": \"Harriette Mello\", \"Y_3\": \"Marcelino Townley\", \"Y_5\": \"Aimee Townley\"}]",
+        "answer": [
+            "astronomy",
+            "audiophile",
+            "baton twirling",
+            "flower collecting and pressing",
+            "metal detecting",
+            "poker"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "friend(\"Janis Moyer\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "95c214b9-dea8-4ae5-9bcf-917769b69cc7",
+        "question": "What is the hobby of the sibling of the mother of the daughter of Marlana Rayford?",
+        "solution_traces": "[{\"Y_2\": \"satellite watching\", \"Y_3\": \"Eduardo Moyer\", \"Y_7\": \"Mammie Rayford\", \"Y_5\": \"Marlana Rayford\"}, {\"Y_3\": \"Janis Moyer\", \"Y_7\": \"Mammie Rayford\", \"Y_2\": \"video gaming\", \"Y_5\": \"Marlana Rayford\"}]",
+        "answer": [
+            "satellite watching",
+            "video gaming"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "daughter(\"Marlana Rayford\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fcfcb433-9fc0-4a07-866e-58f445c918c2",
+        "question": "What is the date of birth of the great-granddaughter of the mother of the grandmother of Victoria Eddings?",
+        "solution_traces": "[{\"Y_7\": \"Dominique Moyer\", \"Y_5\": \"Nelly Alanis\", \"Y_3\": \"Miki Green\", \"Y_2\": \"0290-12-24\"}, {\"Y_7\": \"Dominique Moyer\", \"Y_5\": \"Nelly Alanis\", \"Y_2\": \"0285-08-05\", \"Y_3\": \"Victoria Eddings\"}]",
+        "answer": [
+            "0285-08-05",
+            "0290-12-24"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_granddaughter(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "grandmother(\"Victoria Eddings\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "534ab8bc-9269-446a-ae56-303900c65d28",
+        "question": "What is the hobby of the grandmother of the friend of the grandmother of Roberto Townley?",
+        "solution_traces": "[{\"Y_7\": \"Monika Townley\", \"Y_5\": \"Miki Green\", \"Y_2\": \"research\", \"Y_3\": \"Virgina Shiver\"}, {\"Y_2\": \"billiards\", \"Y_3\": \"Dominique Moyer\", \"Y_7\": \"Monika Townley\", \"Y_5\": \"Miki Green\"}, {\"Y_5\": \"Irvin Batista\", \"Y_7\": \"Monika Townley\", \"Y_2\": \"ice hockey\", \"Y_3\": \"Golda Mello\"}]",
+        "answer": [
+            "billiards",
+            "ice hockey",
+            "research"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandmother(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "grandmother(\"Roberto Townley\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e34d76ab-1f04-45a3-a88f-1ca332e01cc6",
+        "question": "What is the hobby of the sibling of the brother of the child of Enid Mello?",
+        "solution_traces": "[{\"Y_7\": \"Antonio Mello\", \"Y_3\": \"Antonio Mello\", \"Y_5\": \"Orville Mello\", \"Y_2\": \"leaves\"}, {\"Y_5\": \"Edison Mello\", \"Y_2\": \"insect collecting\", \"Y_7\": \"Rudolf Mello\", \"Y_3\": \"Orville Mello\"}, {\"Y_2\": \"insect collecting\", \"Y_3\": \"Orville Mello\", \"Y_7\": \"Edison Mello\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_5\": \"Orville Mello\", \"Y_7\": \"Rudolf Mello\", \"Y_2\": \"chess\", \"Y_3\": \"Rudolf Mello\"}, {\"Y_5\": \"Orville Mello\", \"Y_2\": \"chess\", \"Y_7\": \"Edison Mello\", \"Y_3\": \"Rudolf Mello\"}, {\"Y_3\": \"Edison Mello\", \"Y_2\": \"urban exploration\", \"Y_7\": \"Edison Mello\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_3\": \"Edison Mello\", \"Y_5\": \"Antonio Mello\", \"Y_2\": \"urban exploration\", \"Y_7\": \"Edison Mello\"}, {\"Y_7\": \"Orville Mello\", \"Y_3\": \"Antonio Mello\", \"Y_2\": \"leaves\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_7\": \"Antonio Mello\", \"Y_5\": \"Orville Mello\", \"Y_2\": \"chess\", \"Y_3\": \"Rudolf Mello\"}, {\"Y_5\": \"Edison Mello\", \"Y_3\": \"Antonio Mello\", \"Y_7\": \"Rudolf Mello\", \"Y_2\": \"leaves\"}, {\"Y_3\": \"Antonio Mello\", \"Y_2\": \"leaves\", \"Y_7\": \"Edison Mello\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_7\": \"Orville Mello\", \"Y_5\": \"Antonio Mello\", \"Y_2\": \"urban exploration\", \"Y_3\": \"Edison Mello\"}, {\"Y_7\": \"Orville Mello\", \"Y_2\": \"urban exploration\", \"Y_3\": \"Edison Mello\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_3\": \"Antonio Mello\", \"Y_5\": \"Orville Mello\", \"Y_2\": \"leaves\", \"Y_7\": \"Edison Mello\"}, {\"Y_7\": \"Antonio Mello\", \"Y_3\": \"Antonio Mello\", \"Y_2\": \"leaves\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_7\": \"Antonio Mello\", \"Y_5\": \"Edison Mello\", \"Y_2\": \"insect collecting\", \"Y_3\": \"Orville Mello\"}, {\"Y_7\": \"Orville Mello\", \"Y_2\": \"insect collecting\", \"Y_3\": \"Orville Mello\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_7\": \"Antonio Mello\", \"Y_3\": \"Edison Mello\", \"Y_2\": \"urban exploration\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_5\": \"Antonio Mello\", \"Y_7\": \"Rudolf Mello\", \"Y_2\": \"chess\", \"Y_3\": \"Rudolf Mello\"}, {\"Y_5\": \"Antonio Mello\", \"Y_7\": \"Rudolf Mello\", \"Y_2\": \"insect collecting\", \"Y_3\": \"Orville Mello\"}, {\"Y_5\": \"Antonio Mello\", \"Y_3\": \"Orville Mello\", \"Y_2\": \"insect collecting\", \"Y_7\": \"Edison Mello\"}, {\"Y_7\": \"Orville Mello\", \"Y_2\": \"insect collecting\", \"Y_3\": \"Orville Mello\", \"Y_5\": \"Edison Mello\"}, {\"Y_7\": \"Antonio Mello\", \"Y_2\": \"insect collecting\", \"Y_3\": \"Orville Mello\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_3\": \"Edison Mello\", \"Y_2\": \"urban exploration\", \"Y_5\": \"Orville Mello\", \"Y_7\": \"Rudolf Mello\"}, {\"Y_7\": \"Antonio Mello\", \"Y_5\": \"Edison Mello\", \"Y_3\": \"Antonio Mello\", \"Y_2\": \"leaves\"}, {\"Y_3\": \"Edison Mello\", \"Y_5\": \"Orville Mello\", \"Y_2\": \"urban exploration\", \"Y_7\": \"Edison Mello\"}, {\"Y_5\": \"Edison Mello\", \"Y_7\": \"Rudolf Mello\", \"Y_2\": \"chess\", \"Y_3\": \"Rudolf Mello\"}, {\"Y_3\": \"Antonio Mello\", \"Y_5\": \"Orville Mello\", \"Y_7\": \"Rudolf Mello\", \"Y_2\": \"leaves\"}, {\"Y_5\": \"Antonio Mello\", \"Y_2\": \"chess\", \"Y_7\": \"Edison Mello\", \"Y_3\": \"Rudolf Mello\"}, {\"Y_7\": \"Antonio Mello\", \"Y_3\": \"Edison Mello\", \"Y_5\": \"Orville Mello\", \"Y_2\": \"urban exploration\"}, {\"Y_7\": \"Orville Mello\", \"Y_3\": \"Antonio Mello\", \"Y_2\": \"leaves\", \"Y_5\": \"Edison Mello\"}, {\"Y_7\": \"Orville Mello\", \"Y_5\": \"Antonio Mello\", \"Y_2\": \"chess\", \"Y_3\": \"Rudolf Mello\"}, {\"Y_7\": \"Antonio Mello\", \"Y_5\": \"Edison Mello\", \"Y_2\": \"chess\", \"Y_3\": \"Rudolf Mello\"}, {\"Y_7\": \"Orville Mello\", \"Y_3\": \"Rudolf Mello\", \"Y_2\": \"chess\", \"Y_5\": \"Edison Mello\"}, {\"Y_3\": \"Edison Mello\", \"Y_5\": \"Antonio Mello\", \"Y_7\": \"Rudolf Mello\", \"Y_2\": \"urban exploration\"}, {\"Y_7\": \"Orville Mello\", \"Y_5\": \"Antonio Mello\", \"Y_3\": \"Orville Mello\", \"Y_2\": \"insect collecting\"}]",
+        "answer": [
+            "chess",
+            "insect collecting",
+            "leaves",
+            "urban exploration"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "child(\"Enid Mello\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9cb63f8c-46a3-439b-b806-3d43e6ed6625",
+        "question": "What is the occupation of the great-granddaughter of the great-grandmother of the friend of Pasquale Alanis?",
+        "solution_traces": "[{\"Y_7\": \"Miki Green\", \"Y_3\": \"Victoria Eddings\", \"Y_2\": \"artist\", \"Y_5\": \"Farrah Moyer\"}, {\"Y_7\": \"Miki Green\", \"Y_5\": \"Nelly Alanis\", \"Y_2\": \"artist\", \"Y_3\": \"Victoria Eddings\"}, {\"Y_7\": \"Miki Green\", \"Y_5\": \"Nelly Alanis\", \"Y_3\": \"Miki Green\", \"Y_2\": \"art gallery manager\"}, {\"Y_7\": \"Miki Green\", \"Y_3\": \"Miki Green\", \"Y_5\": \"Farrah Moyer\", \"Y_2\": \"art gallery manager\"}]",
+        "answer": [
+            "art gallery manager",
+            "artist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_granddaughter(Y_5, Y_3)",
+                "great_grandmother(Y_7, Y_5)",
+                "friend(\"Pasquale Alanis\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8b12b018-f4ce-475b-ae4d-38ec88349a69",
+        "question": "What is the occupation of the friend of the father of the friend of Joaquin Eddings?",
+        "solution_traces": "[{\"Y_2\": \"public librarian\", \"Y_5\": \"Hans Batista\", \"Y_7\": \"Irvin Batista\", \"Y_3\": \"Jimmie Hylton\"}, {\"Y_7\": \"Dominique Moyer\", \"Y_5\": \"Pasquale Alanis\", \"Y_2\": \"computer games developer\", \"Y_3\": \"Edison Mello\"}, {\"Y_7\": \"Dominique Moyer\", \"Y_5\": \"Pasquale Alanis\", \"Y_2\": \"chiropractor\", \"Y_3\": \"Rudolf Mello\"}, {\"Y_3\": \"Dick Rayford\", \"Y_7\": \"Dominique Moyer\", \"Y_2\": \"energy engineer\", \"Y_5\": \"Pasquale Alanis\"}, {\"Y_7\": \"Dominique Moyer\", \"Y_3\": \"Antonio Mello\", \"Y_5\": \"Pasquale Alanis\", \"Y_2\": \"film editor\"}, {\"Y_7\": \"Dominique Moyer\", \"Y_2\": \"field seismologist\", \"Y_5\": \"Pasquale Alanis\", \"Y_3\": \"Aimee Townley\"}, {\"Y_2\": \"art gallery manager\", \"Y_7\": \"Dominique Moyer\", \"Y_5\": \"Pasquale Alanis\", \"Y_3\": \"Miki Green\"}]",
+        "answer": [
+            "art gallery manager",
+            "chiropractor",
+            "computer games developer",
+            "energy engineer",
+            "field seismologist",
+            "film editor",
+            "public librarian"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "father(Y_7, Y_5)",
+                "friend(\"Joaquin Eddings\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "125b2a54-94df-4bdf-b7d6-ca06c8f5cb78",
+        "question": "What is the hobby of the female cousin of the friend of the brother-in-law of Dick Rayford?",
+        "solution_traces": "[{\"Y_2\": \"flower collecting and pressing\", \"Y_7\": \"Eduardo Moyer\", \"Y_5\": \"Jeanette Moyer\", \"Y_3\": \"Mammie Rayford\"}]",
+        "answer": [
+            "flower collecting and pressing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "female_cousin(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "brother_in_law(\"Dick Rayford\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9016ed37-a7d3-410f-9166-e1b2e667b44b",
+        "question": "What is the occupation of the great-uncle of the grandchild of the mother of Enid Mello?",
+        "solution_traces": "[{\"Y_7\": \"Esperanza Molnar\", \"Y_5\": \"Orville Mello\", \"Y_3\": \"Marcelino Townley\", \"Y_2\": \"fast food restaurant manager\"}, {\"Y_5\": \"Antonio Mello\", \"Y_7\": \"Esperanza Molnar\", \"Y_3\": \"Marcelino Townley\", \"Y_2\": \"fast food restaurant manager\"}, {\"Y_5\": \"Edison Mello\", \"Y_7\": \"Esperanza Molnar\", \"Y_3\": \"Cory Townley\", \"Y_2\": \"clothing technologist\"}, {\"Y_7\": \"Esperanza Molnar\", \"Y_3\": \"Cory Townley\", \"Y_2\": \"clothing technologist\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_5\": \"Edison Mello\", \"Y_7\": \"Esperanza Molnar\", \"Y_3\": \"Marcelino Townley\", \"Y_2\": \"fast food restaurant manager\"}, {\"Y_7\": \"Esperanza Molnar\", \"Y_3\": \"Marcelino Townley\", \"Y_2\": \"fast food restaurant manager\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_5\": \"Antonio Mello\", \"Y_7\": \"Esperanza Molnar\", \"Y_3\": \"Cory Townley\", \"Y_2\": \"clothing technologist\"}, {\"Y_7\": \"Esperanza Molnar\", \"Y_5\": \"Orville Mello\", \"Y_3\": \"Cory Townley\", \"Y_2\": \"clothing technologist\"}]",
+        "answer": [
+            "clothing technologist",
+            "fast food restaurant manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_uncle(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "mother(\"Enid Mello\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "89b6d6dc-df44-4887-8298-34a2a9f000e5",
+        "question": "What is the hobby of the brother of the sibling of the aunt of Janis Moyer?",
+        "solution_traces": "[{\"Y_7\": \"Margaret Hylton\", \"Y_5\": \"Farrah Moyer\", \"Y_3\": \"Jimmie Hylton\", \"Y_2\": \"martial arts\"}, {\"Y_5\": \"Angelo Hylton\", \"Y_7\": \"Margaret Hylton\", \"Y_3\": \"Jimmie Hylton\", \"Y_2\": \"martial arts\"}, {\"Y_3\": \"Angelo Hylton\", \"Y_7\": \"Margaret Hylton\", \"Y_5\": \"Farrah Moyer\", \"Y_2\": \"audiophile\"}, {\"Y_3\": \"Angelo Hylton\", \"Y_7\": \"Margaret Hylton\", \"Y_5\": \"Jimmie Hylton\", \"Y_2\": \"audiophile\"}]",
+        "answer": [
+            "audiophile",
+            "martial arts"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "brother(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "aunt(\"Janis Moyer\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0a64ef0e-9768-4920-aeaf-d22ab25b7f83",
+        "question": "What is the occupation of the nephew of the brother of the husband of Golda Mello?",
+        "solution_traces": "[{\"Y_7\": \"Antonio Mello\", \"Y_5\": \"Orville Mello\", \"Y_3\": \"Ramiro Mello\", \"Y_2\": \"patent examiner\"}, {\"Y_7\": \"Antonio Mello\", \"Y_2\": \"English as a second language teacher\", \"Y_3\": \"Benito Mello\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_7\": \"Antonio Mello\", \"Y_3\": \"Ramiro Mello\", \"Y_2\": \"patent examiner\", \"Y_5\": \"Rudolf Mello\"}, {\"Y_7\": \"Antonio Mello\", \"Y_5\": \"Orville Mello\", \"Y_2\": \"English as a second language teacher\", \"Y_3\": \"Benito Mello\"}]",
+        "answer": [
+            "English as a second language teacher",
+            "patent examiner"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "nephew(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "husband(\"Golda Mello\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    }
+]

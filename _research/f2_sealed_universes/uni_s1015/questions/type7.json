@@ -1,0 +1,1168 @@
+[
+    {
+        "id": "ec9e46a0-c80c-4c99-8993-c44b6ad4f26e",
+        "question": "What is the occupation of the daughter-in-law of the wife of the father of Antwan Schiller?",
+        "solution_traces": "[{\"Y_5\": \"Maurine Schiller\", \"Y_7\": \"Booker Schiller\", \"Y_2\": \"town planner\", \"Y_3\": \"Leonora Schiller\"}]",
+        "answer": [
+            "town planner"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "daughter_in_law(Y_5, Y_3)",
+                "wife(Y_7, Y_5)",
+                "father(\"Antwan Schiller\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "493e6ae1-47df-44d8-b0dc-62a233a7a29d",
+        "question": "What is the date of birth of the niece of the sibling of the grandfather of Catalina Keane?",
+        "solution_traces": "[{\"Y_3\": \"Dorathy Keane\", \"Y_7\": \"Erik Hodges\", \"Y_5\": \"Carl Hodges\", \"Y_2\": \"0266-10-22\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_2\": \"0262-02-06\", \"Y_7\": \"Erik Hodges\", \"Y_5\": \"Carl Hodges\"}, {\"Y_7\": \"Erik Hodges\", \"Y_5\": \"Carl Hodges\", \"Y_2\": \"0265-01-06\", \"Y_3\": \"Katerine Hodges\"}]",
+        "answer": [
+            "0262-02-06",
+            "0265-01-06",
+            "0266-10-22"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "niece(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "grandfather(\"Catalina Keane\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2cc3b750-cb09-41f6-a60d-4f5096b8363f",
+        "question": "What is the date of birth of the uncle of the sister of the aunt of Catalina Keane?",
+        "solution_traces": "[{\"Y_2\": \"0233-12-13\", \"Y_3\": \"Richard Cho\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Katelyn Hodges\"}, {\"Y_2\": \"0233-12-13\", \"Y_3\": \"Richard Cho\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Katelyn Hodges\"}, {\"Y_3\": \"Cody Cho\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Katelyn Hodges\", \"Y_2\": \"0231-07-02\"}, {\"Y_2\": \"0233-12-13\", \"Y_3\": \"Richard Cho\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Dorathy Keane\"}, {\"Y_3\": \"Carl Hodges\", \"Y_2\": \"0231-12-24\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Katelyn Hodges\"}, {\"Y_3\": \"Cody Cho\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Dorathy Keane\", \"Y_2\": \"0231-07-02\"}, {\"Y_3\": \"Cody Cho\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Katelyn Hodges\", \"Y_2\": \"0231-07-02\"}, {\"Y_3\": \"Carl Hodges\", \"Y_2\": \"0231-12-24\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Dorathy Keane\"}, {\"Y_2\": \"0233-12-13\", \"Y_3\": \"Richard Cho\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Katelyn Hodges\"}, {\"Y_3\": \"Carl Hodges\", \"Y_2\": \"0231-12-24\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Katelyn Hodges\"}, {\"Y_3\": \"Carl Hodges\", \"Y_2\": \"0231-12-24\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Katelyn Hodges\"}, {\"Y_3\": \"Cody Cho\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Katelyn Hodges\", \"Y_2\": \"0231-07-02\"}]",
+        "answer": [
+            "0231-07-02",
+            "0231-12-24",
+            "0233-12-13"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "uncle(Y_5, Y_3)",
+                "sister(Y_7, Y_5)",
+                "aunt(\"Catalina Keane\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "27719e77-9759-458b-9fbe-eb6d38dd7352",
+        "question": "What is the date of birth of the cousin of the grandparent of the great-grandchild of Dortha Cho?",
+        "solution_traces": "[{\"Y_3\": \"Lakeshia Schiller\", \"Y_2\": \"0228-12-23\", \"Y_7\": \"Catalina Keane\", \"Y_5\": \"Rosie Hodges\"}]",
+        "answer": [
+            "0228-12-23"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "cousin(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "great_grandchild(\"Dortha Cho\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "91cfc8a6-bf09-49d2-961f-3d4bd7409b10",
+        "question": "What is the hobby of the uncle of the daughter of the sibling of Adam Schiller?",
+        "solution_traces": "[{\"Y_7\": \"Antwan Schiller\", \"Y_2\": \"cartophily\", \"Y_3\": \"Mario Cho\", \"Y_5\": \"Lakeshia Schiller\"}, {\"Y_2\": \"finance\", \"Y_7\": \"Antwan Schiller\", \"Y_3\": \"Adam Schiller\", \"Y_5\": \"Lakeshia Schiller\"}]",
+        "answer": [
+            "cartophily",
+            "finance"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "uncle(Y_5, Y_3)",
+                "daughter(Y_7, Y_5)",
+                "sibling(\"Adam Schiller\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3fdad53d-b70b-4a21-b67b-e85f1246fa34",
+        "question": "What is the hobby of the sibling of the great-granddaughter of the grandparent of Rosie Hodges?",
+        "solution_traces": "[{\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Annette Lark\", \"Y_2\": \"record collecting\"}, {\"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Serena Cho\", \"Y_2\": \"association football\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Woodrow Lark\", \"Y_2\": \"checkers (draughts)\"}, {\"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Woodrow Lark\", \"Y_2\": \"association football\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Mitchell Cho\", \"Y_2\": \"checkers (draughts)\"}, {\"Y_2\": \"association football\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Mitchell Cho\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Annette Lark\", \"Y_2\": \"association football\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Serena Cho\", \"Y_2\": \"checkers (draughts)\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Mitchell Cho\", \"Y_2\": \"record collecting\"}, {\"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Annette Lark\", \"Y_2\": \"association football\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Woodrow Lark\", \"Y_2\": \"record collecting\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Annette Lark\", \"Y_2\": \"checkers (draughts)\"}, {\"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Serena Cho\", \"Y_2\": \"association football\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Woodrow Lark\", \"Y_2\": \"association football\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Serena Cho\", \"Y_2\": \"record collecting\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Annette Lark\", \"Y_2\": \"record collecting\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Woodrow Lark\", \"Y_2\": \"checkers (draughts)\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Woodrow Lark\", \"Y_2\": \"record collecting\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Mitchell Cho\", \"Y_2\": \"checkers (draughts)\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Serena Cho\", \"Y_2\": \"checkers (draughts)\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Annette Lark\", \"Y_2\": \"checkers (draughts)\"}, {\"Y_2\": \"association football\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Mitchell Cho\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Serena Cho\", \"Y_2\": \"record collecting\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Mitchell Cho\", \"Y_2\": \"record collecting\"}]",
+        "answer": [
+            "association football",
+            "checkers (draughts)",
+            "record collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "great_granddaughter(Y_7, Y_5)",
+                "grandparent(\"Rosie Hodges\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8130597a-c1bd-4305-9c31-f4aaa76e87a0",
+        "question": "What is the occupation of the grandfather of the grandchild of the great-grandmother of Nevin Roth?",
+        "solution_traces": "[{\"Y_3\": \"Winford Andresen\", \"Y_2\": \"automotive engineer\", \"Y_7\": \"Karen Roth\", \"Y_5\": \"Orlando Roth\"}, {\"Y_3\": \"Earle Roth\", \"Y_5\": \"Zachery Roth\", \"Y_7\": \"Karen Roth\", \"Y_2\": \"market researcher\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Earle Roth\", \"Y_7\": \"Karen Roth\", \"Y_2\": \"market researcher\"}, {\"Y_3\": \"Winford Andresen\", \"Y_5\": \"Carmon Roth\", \"Y_7\": \"Claudie Andresen\", \"Y_2\": \"automotive engineer\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Winford Andresen\", \"Y_2\": \"automotive engineer\", \"Y_7\": \"Claudie Andresen\"}, {\"Y_3\": \"Winford Andresen\", \"Y_2\": \"automotive engineer\", \"Y_7\": \"Claudie Andresen\", \"Y_5\": \"Orlando Roth\"}, {\"Y_3\": \"Earle Roth\", \"Y_5\": \"Carmon Roth\", \"Y_7\": \"Karen Roth\", \"Y_2\": \"market researcher\"}, {\"Y_3\": \"Winford Andresen\", \"Y_5\": \"Zachery Roth\", \"Y_7\": \"Claudie Andresen\", \"Y_2\": \"automotive engineer\"}, {\"Y_3\": \"Winford Andresen\", \"Y_5\": \"Zachery Roth\", \"Y_7\": \"Karen Roth\", \"Y_2\": \"automotive engineer\"}, {\"Y_3\": \"Earle Roth\", \"Y_5\": \"Carmon Roth\", \"Y_7\": \"Claudie Andresen\", \"Y_2\": \"market researcher\"}, {\"Y_3\": \"Earle Roth\", \"Y_7\": \"Karen Roth\", \"Y_2\": \"market researcher\", \"Y_5\": \"Orlando Roth\"}, {\"Y_3\": \"Earle Roth\", \"Y_2\": \"market researcher\", \"Y_7\": \"Claudie Andresen\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Winford Andresen\", \"Y_2\": \"automotive engineer\", \"Y_7\": \"Karen Roth\"}, {\"Y_3\": \"Winford Andresen\", \"Y_5\": \"Carmon Roth\", \"Y_7\": \"Karen Roth\", \"Y_2\": \"automotive engineer\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Earle Roth\", \"Y_7\": \"Claudie Andresen\", \"Y_2\": \"market researcher\"}, {\"Y_3\": \"Earle Roth\", \"Y_5\": \"Zachery Roth\", \"Y_7\": \"Claudie Andresen\", \"Y_2\": \"market researcher\"}]",
+        "answer": [
+            "automotive engineer",
+            "market researcher"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandfather(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "great_grandmother(\"Nevin Roth\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "49638d87-966f-4b59-9f9d-ae93ef5667ac",
+        "question": "What is the hobby of the grandparent of the second aunt of the nephew of Herman Roth?",
+        "solution_traces": "[{\"Y_3\": \"Rupert Tan\", \"Y_7\": \"Dave Roth\", \"Y_5\": \"Lavonna Roth\", \"Y_2\": \"magic\"}, {\"Y_3\": \"Elissa Tan\", \"Y_7\": \"Nevin Roth\", \"Y_5\": \"Lavonna Roth\", \"Y_2\": \"cornhole\"}, {\"Y_2\": \"mini golf\", \"Y_7\": \"Nevin Roth\", \"Y_3\": \"Reyna Roth\", \"Y_5\": \"Lavonna Roth\"}, {\"Y_3\": \"Elissa Tan\", \"Y_7\": \"Dave Roth\", \"Y_5\": \"Lavonna Roth\", \"Y_2\": \"cornhole\"}, {\"Y_3\": \"Pasquale Roth\", \"Y_7\": \"Dave Roth\", \"Y_2\": \"research\", \"Y_5\": \"Lavonna Roth\"}, {\"Y_2\": \"mini golf\", \"Y_3\": \"Reyna Roth\", \"Y_7\": \"Dave Roth\", \"Y_5\": \"Lavonna Roth\"}, {\"Y_3\": \"Rupert Tan\", \"Y_7\": \"Nevin Roth\", \"Y_5\": \"Lavonna Roth\", \"Y_2\": \"magic\"}, {\"Y_3\": \"Pasquale Roth\", \"Y_7\": \"Nevin Roth\", \"Y_2\": \"research\", \"Y_5\": \"Lavonna Roth\"}]",
+        "answer": [
+            "cornhole",
+            "magic",
+            "mini golf",
+            "research"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandparent(Y_5, Y_3)",
+                "second_aunt(Y_7, Y_5)",
+                "nephew(\"Herman Roth\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cf89f40c-afba-4cd5-a7e5-424561c5bc42",
+        "question": "What is the date of birth of the sister of the grandson of the grandfather of Orlando Roth?",
+        "solution_traces": "[{\"Y_5\": \"Herman Roth\", \"Y_2\": \"0264-06-21\", \"Y_7\": \"Earle Roth\", \"Y_3\": \"Carmon Roth\"}, {\"Y_3\": \"Carmon Roth\", \"Y_2\": \"0264-06-21\", \"Y_7\": \"Earle Roth\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Zachery Roth\", \"Y_2\": \"0264-06-21\", \"Y_7\": \"Earle Roth\", \"Y_3\": \"Carmon Roth\"}, {\"Y_3\": \"Carmon Roth\", \"Y_2\": \"0264-06-21\", \"Y_7\": \"Winford Andresen\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_2\": \"0264-06-21\", \"Y_7\": \"Winford Andresen\", \"Y_3\": \"Carmon Roth\"}, {\"Y_5\": \"Zachery Roth\", \"Y_2\": \"0264-06-21\", \"Y_7\": \"Winford Andresen\", \"Y_3\": \"Carmon Roth\"}]",
+        "answer": [
+            "0264-06-21"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sister(Y_5, Y_3)",
+                "grandson(Y_7, Y_5)",
+                "grandfather(\"Orlando Roth\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "734a1ce3-8eb4-46b6-bc4e-521b3d159c4f",
+        "question": "What is the hobby of the great-grandparent of the great-granddaughter of the grandfather of Cody Cho?",
+        "solution_traces": "[{\"Y_2\": \"fruit picking\", \"Y_3\": \"Annette Lark\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_2\": \"fruit picking\", \"Y_3\": \"Annette Lark\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Woodrow Lark\"}, {\"Y_2\": \"fruit picking\", \"Y_3\": \"Annette Lark\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_2\": \"fruit picking\", \"Y_3\": \"Annette Lark\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Woodrow Lark\"}, {\"Y_2\": \"transit map collecting\", \"Y_3\": \"Mitchell Cho\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Woodrow Lark\"}, {\"Y_3\": \"Woodrow Lark\", \"Y_2\": \"reading\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Serena Cho\", \"Y_2\": \"longboarding\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Woodrow Lark\"}, {\"Y_2\": \"fruit picking\", \"Y_3\": \"Annette Lark\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Woodrow Lark\"}, {\"Y_3\": \"Serena Cho\", \"Y_2\": \"longboarding\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Woodrow Lark\"}, {\"Y_3\": \"Woodrow Lark\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Woodrow Lark\", \"Y_2\": \"reading\"}, {\"Y_3\": \"Woodrow Lark\", \"Y_2\": \"reading\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Serena Cho\", \"Y_2\": \"longboarding\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_2\": \"fruit picking\", \"Y_3\": \"Annette Lark\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Serena Cho\", \"Y_2\": \"longboarding\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Woodrow Lark\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Woodrow Lark\", \"Y_2\": \"reading\"}, {\"Y_2\": \"transit map collecting\", \"Y_3\": \"Mitchell Cho\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_2\": \"transit map collecting\", \"Y_3\": \"Mitchell Cho\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Serena Cho\", \"Y_2\": \"longboarding\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Woodrow Lark\"}, {\"Y_3\": \"Woodrow Lark\", \"Y_2\": \"reading\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_2\": \"transit map collecting\", \"Y_3\": \"Mitchell Cho\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Woodrow Lark\"}, {\"Y_2\": \"transit map collecting\", \"Y_3\": \"Mitchell Cho\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Woodrow Lark\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Woodrow Lark\", \"Y_2\": \"reading\"}, {\"Y_3\": \"Serena Cho\", \"Y_2\": \"longboarding\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_2\": \"transit map collecting\", \"Y_3\": \"Mitchell Cho\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Woodrow Lark\"}]",
+        "answer": [
+            "fruit picking",
+            "longboarding",
+            "reading",
+            "transit map collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandparent(Y_5, Y_3)",
+                "great_granddaughter(Y_7, Y_5)",
+                "grandfather(\"Cody Cho\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b1e6719e-2edc-4c97-ad4c-2c3f81970781",
+        "question": "What is the hobby of the father-in-law of the mother of the aunt of Dave Roth?",
+        "solution_traces": "[{\"Y_5\": \"Melodie Roth\", \"Y_2\": \"aircraft spotting\", \"Y_3\": \"Earle Roth\", \"Y_7\": \"Carmon Roth\"}]",
+        "answer": [
+            "aircraft spotting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "father_in_law(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "aunt(\"Dave Roth\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "90234871-122e-44aa-ad06-3b848c5f949c",
+        "question": "What is the occupation of the great-aunt of the friend of the second uncle of Nevin Roth?",
+        "solution_traces": "[{\"Y_5\": \"Herman Roth\", \"Y_3\": \"Lavonna Roth\", \"Y_7\": \"Nicky Roth\", \"Y_2\": \"electrical engineer\"}, {\"Y_3\": \"Lavonna Roth\", \"Y_2\": \"electrical engineer\", \"Y_7\": \"Nicky Roth\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Katerine Hodges\", \"Y_2\": \"town planner\", \"Y_7\": \"Nicky Roth\", \"Y_3\": \"Leonora Schiller\"}]",
+        "answer": [
+            "electrical engineer",
+            "town planner"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_aunt(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "second_uncle(\"Nevin Roth\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "11902fc6-535a-4ae6-ab1a-51121d20ca92",
+        "question": "What is the date of birth of the friend of the father-in-law of the great-grandfather of Zachery Roth?",
+        "solution_traces": "[{\"Y_5\": \"Matthew Ayotte\", \"Y_7\": \"Marko Andresen\", \"Y_2\": \"0261-05-24\", \"Y_3\": \"Zachery Roth\"}, {\"Y_3\": \"Carmon Roth\", \"Y_2\": \"0264-06-21\", \"Y_5\": \"Rupert Tan\", \"Y_7\": \"Hyman Roth\"}, {\"Y_5\": \"Matthew Ayotte\", \"Y_2\": \"0179-03-01\", \"Y_3\": \"Gertrude Andresen\", \"Y_7\": \"Marko Andresen\"}, {\"Y_2\": \"0208-02-23\", \"Y_3\": \"Mario Cho\", \"Y_5\": \"Rupert Tan\", \"Y_7\": \"Hyman Roth\"}, {\"Y_3\": \"Catalina Keane\", \"Y_2\": \"0294-10-13\", \"Y_5\": \"Rupert Tan\", \"Y_7\": \"Hyman Roth\"}, {\"Y_3\": \"Claudie Andresen\", \"Y_2\": \"0212-01-21\", \"Y_5\": \"Rupert Tan\", \"Y_7\": \"Hyman Roth\"}, {\"Y_5\": \"Matthew Ayotte\", \"Y_3\": \"Woodrow Lark\", \"Y_2\": \"0179-10-24\", \"Y_7\": \"Marko Andresen\"}]",
+        "answer": [
+            "0179-03-01",
+            "0179-10-24",
+            "0208-02-23",
+            "0212-01-21",
+            "0261-05-24",
+            "0264-06-21",
+            "0294-10-13"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "father_in_law(Y_7, Y_5)",
+                "great_grandfather(\"Zachery Roth\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c1bba85c-9140-438b-9678-5030e44fe475",
+        "question": "What is the date of birth of the wife of the father of the great-grandchild of Serena Cho?",
+        "solution_traces": "[{\"Y_3\": \"Rosie Hodges\", \"Y_5\": \"Erik Hodges\", \"Y_7\": \"Katelyn Hodges\", \"Y_2\": \"0236-12-05\"}, {\"Y_3\": \"Rosie Hodges\", \"Y_5\": \"Erik Hodges\", \"Y_7\": \"Dorathy Keane\", \"Y_2\": \"0236-12-05\"}, {\"Y_3\": \"Rosie Hodges\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Erik Hodges\", \"Y_2\": \"0236-12-05\"}]",
+        "answer": [
+            "0236-12-05"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "wife(Y_5, Y_3)",
+                "father(Y_7, Y_5)",
+                "great_grandchild(\"Serena Cho\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "51215712-da6d-4cbc-b5f2-51722424998e",
+        "question": "What is the occupation of the great-grandparent of the sibling of the friend of Woodrow Lark?",
+        "solution_traces": "[{\"Y_5\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Y_2\": \"garment technologist\", \"Y_7\": \"Carmon Roth\"}, {\"Y_5\": \"Zachery Roth\", \"Y_3\": \"Marko Andresen\", \"Y_2\": \"garment technologist\", \"Y_7\": \"Carmon Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_2\": \"best boy\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\"}, {\"Y_2\": \"best boy\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_5\": \"Orlando Roth\"}, {\"Y_2\": \"mining engineer\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Zachery Roth\", \"Y_2\": \"mining engineer\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\"}, {\"Y_5\": \"Herman Roth\", \"Y_2\": \"mining engineer\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\"}, {\"Y_5\": \"Zachery Roth\", \"Y_2\": \"best boy\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\"}, {\"Y_3\": \"Marko Andresen\", \"Y_2\": \"garment technologist\", \"Y_7\": \"Carmon Roth\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"educational psychologist\"}, {\"Y_3\": \"Hyman Roth\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"educational psychologist\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Zachery Roth\", \"Y_3\": \"Hyman Roth\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"educational psychologist\"}]",
+        "answer": [
+            "best boy",
+            "educational psychologist",
+            "garment technologist",
+            "mining engineer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandparent(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "friend(\"Woodrow Lark\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "93651a76-8d4e-46d8-bfd4-465cb348250f",
+        "question": "What is the date of birth of the mother-in-law of the grandfather of the sister of Katelyn Hodges?",
+        "solution_traces": "[{\"Y_2\": \"0176-09-09\", \"Y_5\": \"Mario Cho\", \"Y_3\": \"Annette Lark\", \"Y_7\": \"Katerine Hodges\"}, {\"Y_5\": \"Mario Cho\", \"Y_2\": \"0176-09-09\", \"Y_3\": \"Annette Lark\", \"Y_7\": \"Dorathy Keane\"}]",
+        "answer": [
+            "0176-09-09"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "mother_in_law(Y_5, Y_3)",
+                "grandfather(Y_7, Y_5)",
+                "sister(\"Katelyn Hodges\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "eb60b368-0818-4946-a2bc-fd3a499f2aa5",
+        "question": "What is the hobby of the brother of the brother-in-law of the friend of Booker Schiller?",
+        "solution_traces": "[{\"Y_3\": \"Richard Cho\", \"Y_7\": \"Erik Hodges\", \"Y_2\": \"judo\", \"Y_5\": \"Cody Cho\"}, {\"Y_3\": \"Cody Cho\", \"Y_7\": \"Erik Hodges\", \"Y_2\": \"birdwatching\", \"Y_5\": \"Richard Cho\"}]",
+        "answer": [
+            "birdwatching",
+            "judo"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "brother(Y_5, Y_3)",
+                "brother_in_law(Y_7, Y_5)",
+                "friend(\"Booker Schiller\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "73f20a3b-0d53-48b5-a663-27893d59950a",
+        "question": "What is the hobby of the great-grandparent of the sibling of the grandchild of Karen Roth?",
+        "solution_traces": "[{\"Y_7\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Y_5\": \"Zachery Roth\", \"Y_2\": \"gardening\"}, {\"Y_5\": \"Herman Roth\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_2\": \"insect collecting\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Y_5\": \"Carmon Roth\", \"Y_2\": \"urban exploration\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_2\": \"insect collecting\", \"Y_5\": \"Orlando Roth\"}, {\"Y_2\": \"element collecting\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_2\": \"insect collecting\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Hyman Roth\", \"Y_5\": \"Zachery Roth\", \"Y_2\": \"gardening\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_2\": \"element collecting\", \"Y_5\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\"}, {\"Y_5\": \"Herman Roth\", \"Y_2\": \"element collecting\", \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Gertrude Andresen\"}, {\"Y_5\": \"Zachery Roth\", \"Y_2\": \"element collecting\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\"}, {\"Y_3\": \"Marko Andresen\", \"Y_5\": \"Zachery Roth\", \"Y_2\": \"urban exploration\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Hyman Roth\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"gardening\", \"Y_5\": \"Carmon Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_2\": \"element collecting\", \"Y_3\": \"Gertrude Andresen\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_2\": \"element collecting\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Y_2\": \"urban exploration\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Zachery Roth\", \"Y_3\": \"Marko Andresen\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"urban exploration\"}, {\"Y_5\": \"Zachery Roth\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_2\": \"insect collecting\"}, {\"Y_7\": \"Herman Roth\", \"Y_2\": \"element collecting\", \"Y_5\": \"Zachery Roth\", \"Y_3\": \"Gertrude Andresen\"}, {\"Y_2\": \"element collecting\", \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Gertrude Andresen\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_2\": \"element collecting\", \"Y_3\": \"Gertrude Andresen\", \"Y_7\": \"Orlando Roth\"}, {\"Y_2\": \"element collecting\", \"Y_5\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_2\": \"insect collecting\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"urban exploration\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Y_5\": \"Zachery Roth\", \"Y_2\": \"urban exploration\"}, {\"Y_5\": \"Zachery Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_2\": \"insect collecting\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Hyman Roth\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"gardening\", \"Y_5\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Y_5\": \"Carmon Roth\", \"Y_2\": \"gardening\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"gardening\"}, {\"Y_2\": \"element collecting\", \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Gertrude Andresen\", \"Y_5\": \"Carmon Roth\"}, {\"Y_3\": \"Hyman Roth\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"gardening\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Zachery Roth\", \"Y_3\": \"Hyman Roth\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"gardening\"}, {\"Y_3\": \"Marko Andresen\", \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Carmon Roth\", \"Y_2\": \"urban exploration\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_2\": \"insect collecting\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Marko Andresen\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"urban exploration\", \"Y_5\": \"Orlando Roth\"}, {\"Y_7\": \"Zachery Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_2\": \"insect collecting\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"urban exploration\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_2\": \"insect collecting\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Y_2\": \"urban exploration\", \"Y_5\": \"Orlando Roth\"}, {\"Y_7\": \"Zachery Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_5\": \"Carmon Roth\", \"Y_2\": \"insect collecting\"}, {\"Y_3\": \"Marko Andresen\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"urban exploration\", \"Y_5\": \"Orlando Roth\"}, {\"Y_2\": \"element collecting\", \"Y_5\": \"Zachery Roth\", \"Y_3\": \"Gertrude Andresen\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Y_2\": \"gardening\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Hyman Roth\", \"Y_5\": \"Carmon Roth\", \"Y_2\": \"gardening\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"gardening\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Y_2\": \"gardening\", \"Y_5\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Zachery Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_2\": \"insect collecting\"}, {\"Y_3\": \"Marko Andresen\", \"Y_5\": \"Carmon Roth\", \"Y_2\": \"urban exploration\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_2\": \"insect collecting\"}]",
+        "answer": [
+            "element collecting",
+            "gardening",
+            "insect collecting",
+            "urban exploration"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandparent(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "grandchild(\"Karen Roth\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0a1ffdcb-ffdf-45e5-9f86-5663310885bf",
+        "question": "What is the date of birth of the grandchild of the parent of the friend of Lavonna Roth?",
+        "solution_traces": "[{\"Y_7\": \"Herman Roth\", \"Y_2\": \"0291-08-02\", \"Y_5\": \"Melodie Roth\", \"Y_3\": \"Nevin Roth\"}, {\"Y_5\": \"Maurine Schiller\", \"Y_3\": \"Lakeshia Schiller\", \"Y_7\": \"Antwan Schiller\", \"Y_2\": \"0228-12-23\"}, {\"Y_7\": \"Herman Roth\", \"Y_2\": \"0286-07-07\", \"Y_5\": \"Melodie Roth\", \"Y_3\": \"Dave Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_2\": \"0291-08-02\", \"Y_5\": \"Samual Roth\", \"Y_3\": \"Nevin Roth\"}, {\"Y_5\": \"Lucretia Ridgeway\", \"Y_7\": \"Annette Lark\", \"Y_2\": \"0207-10-28\", \"Y_3\": \"Dortha Cho\"}, {\"Y_7\": \"Herman Roth\", \"Y_2\": \"0286-07-07\", \"Y_5\": \"Samual Roth\", \"Y_3\": \"Dave Roth\"}, {\"Y_3\": \"Lakeshia Schiller\", \"Y_7\": \"Antwan Schiller\", \"Y_5\": \"Booker Schiller\", \"Y_2\": \"0228-12-23\"}, {\"Y_5\": \"Florian Ridgeway\", \"Y_7\": \"Annette Lark\", \"Y_2\": \"0207-10-28\", \"Y_3\": \"Dortha Cho\"}]",
+        "answer": [
+            "0207-10-28",
+            "0228-12-23",
+            "0286-07-07",
+            "0291-08-02"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "friend(\"Lavonna Roth\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ad3aace2-98f7-4f9d-8e51-09275c385019",
+        "question": "What is the hobby of the brother-in-law of the friend of the friend of Antwan Schiller?",
+        "solution_traces": "[{\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Antwan Schiller\", \"Y_2\": \"cartophily\", \"Y_3\": \"Mario Cho\"}, {\"Y_5\": \"Antwan Schiller\", \"Y_2\": \"cartophily\", \"Y_3\": \"Mario Cho\", \"Y_7\": \"Adam Schiller\"}, {\"Y_5\": \"Antwan Schiller\", \"Y_2\": \"cartophily\", \"Y_7\": \"Dorathy Keane\", \"Y_3\": \"Mario Cho\"}, {\"Y_3\": \"Mario Cho\", \"Y_5\": \"Antwan Schiller\", \"Y_2\": \"cartophily\", \"Y_7\": \"Lavonna Roth\"}, {\"Y_3\": \"Cody Cho\", \"Y_5\": \"Erik Hodges\", \"Y_7\": \"Dorathy Keane\", \"Y_2\": \"birdwatching\"}, {\"Y_5\": \"Antwan Schiller\", \"Y_7\": \"Erik Hodges\", \"Y_3\": \"Mario Cho\", \"Y_2\": \"cartophily\"}, {\"Y_3\": \"Richard Cho\", \"Y_5\": \"Erik Hodges\", \"Y_7\": \"Dorathy Keane\", \"Y_2\": \"judo\"}]",
+        "answer": [
+            "birdwatching",
+            "cartophily",
+            "judo"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "brother_in_law(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "friend(\"Antwan Schiller\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7b187a22-228c-4db0-b8ce-7a630fbc7623",
+        "question": "What is the date of birth of the sibling of the great-grandchild of the friend of Adam Schiller?",
+        "solution_traces": "[{\"Y_3\": \"Dorathy Keane\", \"Y_2\": \"0266-10-22\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Annette Lark\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_3\": \"Orlando Roth\", \"Y_2\": \"0257-12-23\", \"Y_5\": \"Herman Roth\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_3\": \"Orlando Roth\", \"Y_2\": \"0257-12-23\", \"Y_5\": \"Zachery Roth\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_3\": \"Carmon Roth\", \"Y_2\": \"0264-06-21\", \"Y_5\": \"Orlando Roth\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_3\": \"Orlando Roth\", \"Y_2\": \"0257-12-23\", \"Y_5\": \"Carmon Roth\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Carmon Roth\", \"Y_2\": \"0261-05-24\", \"Y_3\": \"Zachery Roth\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_3\": \"Zachery Roth\", \"Y_2\": \"0261-05-24\", \"Y_5\": \"Orlando Roth\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Zachery Roth\", \"Y_3\": \"Herman Roth\", \"Y_2\": \"0269-09-16\"}, {\"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Annette Lark\", \"Y_2\": \"0265-01-06\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_2\": \"0262-02-06\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Annette Lark\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Carmon Roth\", \"Y_3\": \"Herman Roth\", \"Y_2\": \"0269-09-16\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_2\": \"0269-09-16\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Orlando Roth\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Zachery Roth\", \"Y_2\": \"0264-06-21\", \"Y_3\": \"Carmon Roth\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Herman Roth\", \"Y_2\": \"0261-05-24\", \"Y_3\": \"Zachery Roth\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Herman Roth\", \"Y_2\": \"0264-06-21\", \"Y_3\": \"Carmon Roth\"}, {\"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Annette Lark\", \"Y_2\": \"0265-01-06\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_2\": \"0262-02-06\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Annette Lark\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_2\": \"0266-10-22\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Annette Lark\"}]",
+        "answer": [
+            "0257-12-23",
+            "0261-05-24",
+            "0262-02-06",
+            "0264-06-21",
+            "0265-01-06",
+            "0266-10-22",
+            "0269-09-16"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "great_grandchild(Y_7, Y_5)",
+                "friend(\"Adam Schiller\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "079834d2-51b2-4292-b9ce-a742eb0e3ccd",
+        "question": "What is the date of birth of the daughter of the grandfather of the great-grandchild of Woodrow Lark?",
+        "solution_traces": "[{\"Y_5\": \"Mario Cho\", \"Y_3\": \"Rosie Hodges\", \"Y_7\": \"Katerine Hodges\", \"Y_2\": \"0236-12-05\"}, {\"Y_5\": \"Mario Cho\", \"Y_3\": \"Rosie Hodges\", \"Y_7\": \"Katelyn Hodges\", \"Y_2\": \"0236-12-05\"}, {\"Y_5\": \"Mario Cho\", \"Y_3\": \"Rosie Hodges\", \"Y_7\": \"Dorathy Keane\", \"Y_2\": \"0236-12-05\"}]",
+        "answer": [
+            "0236-12-05"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "daughter(Y_5, Y_3)",
+                "grandfather(Y_7, Y_5)",
+                "great_grandchild(\"Woodrow Lark\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dc209d8a-ee86-4f44-8dbe-bf4857361072",
+        "question": "What is the hobby of the great-grandchild of the great-grandparent of the great-grandchild of Gertrude Andresen?",
+        "solution_traces": "[{\"Y_7\": \"Herman Roth\", \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Adrianna Roth\", \"Y_2\": \"cornhole\"}, {\"Y_3\": \"Carmon Roth\", \"Y_5\": \"Hyman Roth\", \"Y_2\": \"laser tag\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"laser tag\", \"Y_3\": \"Carmon Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Herman Roth\", \"Y_2\": \"science and technology studies\"}, {\"Y_2\": \"science and technology studies\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Hyman Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Carmon Roth\", \"Y_2\": \"laser tag\", \"Y_5\": \"Hyman Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_3\": \"Carmon Roth\", \"Y_2\": \"laser tag\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Gertrude Andresen\", \"Y_2\": \"science and technology studies\"}, {\"Y_7\": \"Carmon Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"laser tag\", \"Y_3\": \"Carmon Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"laser tag\", \"Y_3\": \"Carmon Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Gertrude Andresen\", \"Y_2\": \"laser tag\", \"Y_3\": \"Carmon Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"science and technology studies\"}, {\"Y_7\": \"Zachery Roth\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"science and technology studies\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Herman Roth\", \"Y_2\": \"science and technology studies\"}, {\"Y_7\": \"Carmon Roth\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"science and technology studies\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Herman Roth\", \"Y_2\": \"science and technology studies\"}, {\"Y_7\": \"Zachery Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"laser tag\", \"Y_3\": \"Carmon Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"laser tag\", \"Y_3\": \"Carmon Roth\"}, {\"Y_2\": \"science and technology studies\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Hyman Roth\"}, {\"Y_3\": \"Carmon Roth\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"laser tag\", \"Y_5\": \"Hyman Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Adrianna Roth\", \"Y_2\": \"laser tag\", \"Y_3\": \"Carmon Roth\"}, {\"Y_3\": \"Orlando Roth\", \"Y_5\": \"Hyman Roth\", \"Y_2\": \"cornhole\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Carmon Roth\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"laser tag\", \"Y_5\": \"Hyman Roth\"}, {\"Y_2\": \"science and technology studies\", \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Hyman Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Herman Roth\", \"Y_2\": \"science and technology studies\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"laser tag\", \"Y_3\": \"Carmon Roth\"}, {\"Y_3\": \"Zachery Roth\", \"Y_5\": \"Hyman Roth\", \"Y_2\": \"meteorology\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_2\": \"science and technology studies\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Hyman Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_3\": \"Orlando Roth\", \"Y_2\": \"cornhole\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_3\": \"Zachery Roth\", \"Y_2\": \"meteorology\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Orlando Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"cornhole\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"laser tag\", \"Y_3\": \"Carmon Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_3\": \"Orlando Roth\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"cornhole\"}, {\"Y_7\": \"Carmon Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"meteorology\", \"Y_3\": \"Zachery Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"meteorology\", \"Y_3\": \"Zachery Roth\"}, {\"Y_3\": \"Orlando Roth\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"cornhole\", \"Y_5\": \"Hyman Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Orlando Roth\", \"Y_2\": \"cornhole\", \"Y_5\": \"Hyman Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_3\": \"Orlando Roth\", \"Y_2\": \"cornhole\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Zachery Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"meteorology\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_3\": \"Zachery Roth\", \"Y_2\": \"meteorology\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Orlando Roth\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"cornhole\", \"Y_5\": \"Hyman Roth\"}, {\"Y_3\": \"Zachery Roth\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"meteorology\", \"Y_5\": \"Hyman Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_3\": \"Orlando Roth\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"cornhole\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"meteorology\", \"Y_3\": \"Zachery Roth\"}, {\"Y_3\": \"Orlando Roth\", \"Y_7\": \"Carmon Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"cornhole\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Adrianna Roth\", \"Y_2\": \"meteorology\", \"Y_3\": \"Zachery Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Zachery Roth\", \"Y_2\": \"meteorology\", \"Y_5\": \"Hyman Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_3\": \"Orlando Roth\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"cornhole\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"meteorology\", \"Y_3\": \"Zachery Roth\"}, {\"Y_3\": \"Orlando Roth\", \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"cornhole\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_2\": \"science and technology studies\", \"Y_3\": \"Herman Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Gertrude Andresen\", \"Y_2\": \"meteorology\", \"Y_3\": \"Zachery Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"cornhole\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_3\": \"Orlando Roth\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"cornhole\"}, {\"Y_7\": \"Zachery Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"meteorology\", \"Y_3\": \"Zachery Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_7\": \"Zachery Roth\", \"Y_2\": \"meteorology\", \"Y_3\": \"Zachery Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Gertrude Andresen\", \"Y_2\": \"cornhole\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"meteorology\", \"Y_3\": \"Zachery Roth\"}, {\"Y_2\": \"science and technology studies\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Marko Andresen\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_2\": \"science and technology studies\", \"Y_3\": \"Herman Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Zachery Roth\", \"Y_7\": \"Carmon Roth\", \"Y_2\": \"meteorology\", \"Y_5\": \"Hyman Roth\"}, {\"Y_3\": \"Carmon Roth\", \"Y_5\": \"Marko Andresen\", \"Y_2\": \"laser tag\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_3\": \"Carmon Roth\", \"Y_2\": \"laser tag\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Adrianna Roth\", \"Y_3\": \"Herman Roth\", \"Y_2\": \"science and technology studies\"}]",
+        "answer": [
+            "cornhole",
+            "laser tag",
+            "meteorology",
+            "science and technology studies"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandchild(Y_5, Y_3)",
+                "great_grandparent(Y_7, Y_5)",
+                "great_grandchild(\"Gertrude Andresen\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 10,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ce30d36e-8d66-41b7-a685-32178059dcb7",
+        "question": "What is the hobby of the grandparent of the friend of the grandchild of Gertrude Andresen?",
+        "solution_traces": "[{\"Y_7\": \"Melodie Roth\", \"Y_2\": \"story writing\", \"Y_5\": \"Catalina Keane\", \"Y_3\": \"Erik Hodges\"}, {\"Y_2\": \"fruit picking\", \"Y_7\": \"Melodie Roth\", \"Y_3\": \"Annette Lark\", \"Y_5\": \"Cody Cho\"}, {\"Y_2\": \"thru-hiking\", \"Y_7\": \"Melodie Roth\", \"Y_3\": \"Rosie Hodges\", \"Y_5\": \"Catalina Keane\"}, {\"Y_3\": \"Serena Cho\", \"Y_7\": \"Melodie Roth\", \"Y_2\": \"longboarding\", \"Y_5\": \"Cody Cho\"}, {\"Y_2\": \"transit map collecting\", \"Y_7\": \"Melodie Roth\", \"Y_3\": \"Mitchell Cho\", \"Y_5\": \"Cody Cho\"}, {\"Y_7\": \"Melodie Roth\", \"Y_3\": \"Woodrow Lark\", \"Y_2\": \"reading\", \"Y_5\": \"Cody Cho\"}]",
+        "answer": [
+            "fruit picking",
+            "longboarding",
+            "reading",
+            "story writing",
+            "thru-hiking",
+            "transit map collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandparent(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "grandchild(\"Gertrude Andresen\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c70eaf5e-a9c2-479e-839c-124bdf3602ed",
+        "question": "What is the date of birth of the granddaughter of the great-grandparent of the friend of Melodie Roth?",
+        "solution_traces": "[{\"Y_3\": \"Dorathy Keane\", \"Y_2\": \"0266-10-22\", \"Y_5\": \"Niki Hodges\", \"Y_7\": \"Catalina Keane\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_2\": \"0262-02-06\", \"Y_5\": \"Niki Hodges\", \"Y_7\": \"Catalina Keane\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Mario Cho\", \"Y_2\": \"0266-10-22\", \"Y_7\": \"Catalina Keane\"}, {\"Y_5\": \"Mario Cho\", \"Y_7\": \"Catalina Keane\", \"Y_2\": \"0265-01-06\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Mario Cho\", \"Y_2\": \"0262-02-06\", \"Y_7\": \"Catalina Keane\"}, {\"Y_5\": \"Niki Hodges\", \"Y_7\": \"Catalina Keane\", \"Y_2\": \"0265-01-06\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_2\": \"0262-02-06\", \"Y_5\": \"Dortha Cho\", \"Y_7\": \"Catalina Keane\"}, {\"Y_2\": \"0265-01-06\", \"Y_7\": \"Catalina Keane\", \"Y_5\": \"Andres Hodges\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_2\": \"0266-10-22\", \"Y_7\": \"Catalina Keane\", \"Y_5\": \"Andres Hodges\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_2\": \"0266-10-22\", \"Y_5\": \"Dortha Cho\", \"Y_7\": \"Catalina Keane\"}, {\"Y_5\": \"Dortha Cho\", \"Y_7\": \"Catalina Keane\", \"Y_2\": \"0265-01-06\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Dortha Cho\", \"Y_5\": \"Lucretia Ridgeway\", \"Y_2\": \"0207-10-28\", \"Y_7\": \"Cody Cho\"}, {\"Y_3\": \"Dortha Cho\", \"Y_5\": \"Florian Ridgeway\", \"Y_2\": \"0207-10-28\", \"Y_7\": \"Cody Cho\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_2\": \"0262-02-06\", \"Y_7\": \"Catalina Keane\", \"Y_5\": \"Andres Hodges\"}]",
+        "answer": [
+            "0207-10-28",
+            "0262-02-06",
+            "0265-01-06",
+            "0266-10-22"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "granddaughter(Y_5, Y_3)",
+                "great_grandparent(Y_7, Y_5)",
+                "friend(\"Melodie Roth\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6a210026-4f41-498d-aa21-71021d7f180f",
+        "question": "What is the hobby of the son-in-law of the grandparent of the sibling of Nicky Roth?",
+        "solution_traces": "[{\"Y_5\": \"Rupert Tan\", \"Y_3\": \"Hyman Roth\", \"Y_2\": \"gardening\", \"Y_7\": \"Earle Roth\"}, {\"Y_3\": \"Hyman Roth\", \"Y_2\": \"gardening\", \"Y_7\": \"Lavonna Roth\", \"Y_5\": \"Rupert Tan\"}, {\"Y_2\": \"gardening\", \"Y_3\": \"Hyman Roth\", \"Y_5\": \"Elissa Tan\", \"Y_7\": \"Earle Roth\"}, {\"Y_2\": \"gardening\", \"Y_3\": \"Hyman Roth\", \"Y_5\": \"Elissa Tan\", \"Y_7\": \"Lavonna Roth\"}]",
+        "answer": [
+            "gardening"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "son_in_law(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "sibling(\"Nicky Roth\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5b41c83a-4f0e-4a5e-943e-57a61d236d97",
+        "question": "What is the date of birth of the friend of the great-uncle of the child of Samual Roth?",
+        "solution_traces": "[{\"Y_2\": \"0265-01-06\", \"Y_3\": \"Katerine Hodges\", \"Y_5\": \"Nicky Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Booker Schiller\", \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Nicky Roth\", \"Y_2\": \"0171-01-11\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Booker Schiller\", \"Y_5\": \"Nicky Roth\", \"Y_2\": \"0171-01-11\"}, {\"Y_2\": \"0269-09-16\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Nicky Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_2\": \"0257-12-23\", \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Nicky Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_2\": \"0257-12-23\", \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Nicky Roth\"}, {\"Y_3\": \"Catalina Keane\", \"Y_2\": \"0294-10-13\", \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Nicky Roth\"}, {\"Y_3\": \"Booker Schiller\", \"Y_7\": \"Carmon Roth\", \"Y_5\": \"Nicky Roth\", \"Y_2\": \"0171-01-11\"}, {\"Y_7\": \"Zachery Roth\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Nicky Roth\", \"Y_2\": \"0269-09-16\"}, {\"Y_7\": \"Carmon Roth\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Nicky Roth\", \"Y_2\": \"0269-09-16\"}, {\"Y_2\": \"0195-12-17\", \"Y_3\": \"Adam Schiller\", \"Y_7\": \"Carmon Roth\", \"Y_5\": \"Nicky Roth\"}, {\"Y_3\": \"Catalina Keane\", \"Y_2\": \"0294-10-13\", \"Y_5\": \"Nicky Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_2\": \"0195-12-17\", \"Y_3\": \"Adam Schiller\", \"Y_5\": \"Nicky Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Catalina Keane\", \"Y_2\": \"0294-10-13\", \"Y_7\": \"Carmon Roth\", \"Y_5\": \"Nicky Roth\"}, {\"Y_2\": \"0265-01-06\", \"Y_7\": \"Carmon Roth\", \"Y_5\": \"Nicky Roth\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_7\": \"Herman Roth\", \"Y_2\": \"0265-01-06\", \"Y_5\": \"Nicky Roth\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_2\": \"0265-01-06\", \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Nicky Roth\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Nicky Roth\", \"Y_2\": \"0269-09-16\"}, {\"Y_3\": \"Booker Schiller\", \"Y_2\": \"0171-01-11\", \"Y_5\": \"Nicky Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_2\": \"0195-12-17\", \"Y_3\": \"Adam Schiller\", \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Nicky Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_2\": \"0294-10-13\", \"Y_5\": \"Nicky Roth\", \"Y_3\": \"Catalina Keane\"}, {\"Y_7\": \"Herman Roth\", \"Y_2\": \"0195-12-17\", \"Y_3\": \"Adam Schiller\", \"Y_5\": \"Nicky Roth\"}, {\"Y_3\": \"Orlando Roth\", \"Y_2\": \"0257-12-23\", \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Nicky Roth\"}, {\"Y_3\": \"Orlando Roth\", \"Y_2\": \"0257-12-23\", \"Y_7\": \"Carmon Roth\", \"Y_5\": \"Nicky Roth\"}]",
+        "answer": [
+            "0171-01-11",
+            "0195-12-17",
+            "0257-12-23",
+            "0265-01-06",
+            "0269-09-16",
+            "0294-10-13"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "great_uncle(Y_7, Y_5)",
+                "child(\"Samual Roth\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "aa13ad81-a956-4a74-a897-fdf88c0fa90e",
+        "question": "What is the occupation of the brother-in-law of the sibling of the husband of Dortha Cho?",
+        "solution_traces": "[{\"Y_7\": \"Mario Cho\", \"Y_5\": \"Leonora Schiller\", \"Y_3\": \"Adam Schiller\", \"Y_2\": \"event organiser\"}]",
+        "answer": [
+            "event organiser"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "brother_in_law(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "husband(\"Dortha Cho\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "08eddf56-1a7b-4b9a-a1e1-a3420ee39589",
+        "question": "What is the date of birth of the parent of the son-in-law of the mother-in-law of Hyman Roth?",
+        "solution_traces": "[{\"Y_3\": \"Pasquale Roth\", \"Y_2\": \"0149-07-17\", \"Y_7\": \"Elissa Tan\", \"Y_5\": \"Hyman Roth\"}, {\"Y_3\": \"Reyna Roth\", \"Y_7\": \"Elissa Tan\", \"Y_2\": \"0151-10-02\", \"Y_5\": \"Hyman Roth\"}]",
+        "answer": [
+            "0149-07-17",
+            "0151-10-02"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "son_in_law(Y_7, Y_5)",
+                "mother_in_law(\"Hyman Roth\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2f4bfb40-56f5-40fe-8f15-04e117432dde",
+        "question": "What is the occupation of the sister-in-law of the mother-in-law of the wife of Samual Roth?",
+        "solution_traces": "[{\"Y_3\": \"Lavonna Roth\", \"Y_7\": \"Melodie Roth\", \"Y_5\": \"Karen Roth\", \"Y_2\": \"electrical engineer\"}]",
+        "answer": [
+            "electrical engineer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sister_in_law(Y_5, Y_3)",
+                "mother_in_law(Y_7, Y_5)",
+                "wife(\"Samual Roth\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    }
+]

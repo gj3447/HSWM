@@ -1,0 +1,911 @@
+[
+    {
+        "id": "e18dd54e-9d12-447d-b5ff-712221e7c97b",
+        "question": "Who is the brother of the brother of Barry Mcnamee?",
+        "solution_traces": "[{\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Lanny Mcnamee\"}, {\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Charley Mcnamee\"}, {\"Y_2\": \"Lanny Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_2\": \"Charley Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_2\": \"Lanny Mcnamee\", \"Y_4\": \"Charley Mcnamee\"}, {\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_2\": \"Trent Mcnamee\", \"Y_4\": \"Lanny Mcnamee\"}, {\"Y_4\": \"Charley Mcnamee\", \"Y_2\": \"Trent Mcnamee\"}, {\"Y_2\": \"Charley Mcnamee\", \"Y_4\": \"Lanny Mcnamee\"}]",
+        "answer": [
+            "Barry Mcnamee",
+            "Charley Mcnamee",
+            "Lanny Mcnamee",
+            "Trent Mcnamee"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "brother(\"Barry Mcnamee\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f8f2b071-5d66-44eb-b169-3908dc41657b",
+        "question": "Who is the brother of the brother-in-law of Colleen Mcnamee?",
+        "solution_traces": "[{\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Lanny Mcnamee\"}, {\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Charley Mcnamee\"}, {\"Y_2\": \"Lanny Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_2\": \"Charley Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_2\": \"Lanny Mcnamee\", \"Y_4\": \"Charley Mcnamee\"}, {\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_2\": \"Trent Mcnamee\", \"Y_4\": \"Lanny Mcnamee\"}, {\"Y_4\": \"Charley Mcnamee\", \"Y_2\": \"Trent Mcnamee\"}, {\"Y_2\": \"Charley Mcnamee\", \"Y_4\": \"Lanny Mcnamee\"}]",
+        "answer": [
+            "Barry Mcnamee",
+            "Charley Mcnamee",
+            "Lanny Mcnamee",
+            "Trent Mcnamee"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "brother_in_law(\"Colleen Mcnamee\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8c5e3e4d-742b-4c32-ab57-b78abf692818",
+        "question": "Who is the grandparent of the aunt of Samual Grayson?",
+        "solution_traces": "[{\"Y_4\": \"Almeta Lanza\", \"Y_2\": \"Johnetta Matheson\"}, {\"Y_4\": \"Magdalene Matheson\", \"Y_2\": \"Johnetta Matheson\"}, {\"Y_4\": \"Almeta Lanza\", \"Y_2\": \"Benito Matheson\"}, {\"Y_4\": \"Magdalene Matheson\", \"Y_2\": \"Benito Matheson\"}]",
+        "answer": [
+            "Benito Matheson",
+            "Johnetta Matheson"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "aunt(\"Samual Grayson\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "353e03ad-0d58-4e7f-a650-542db43a6506",
+        "question": "Who is the brother of the brother of Lanny Mcnamee?",
+        "solution_traces": "[{\"Y_2\": \"Charley Mcnamee\", \"Y_4\": \"Barry Mcnamee\"}, {\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Charley Mcnamee\"}, {\"Y_2\": \"Lanny Mcnamee\", \"Y_4\": \"Barry Mcnamee\"}, {\"Y_2\": \"Charley Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_2\": \"Lanny Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_2\": \"Lanny Mcnamee\", \"Y_4\": \"Charley Mcnamee\"}, {\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_4\": \"Barry Mcnamee\", \"Y_2\": \"Trent Mcnamee\"}, {\"Y_4\": \"Charley Mcnamee\", \"Y_2\": \"Trent Mcnamee\"}]",
+        "answer": [
+            "Barry Mcnamee",
+            "Charley Mcnamee",
+            "Lanny Mcnamee",
+            "Trent Mcnamee"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "brother(\"Lanny Mcnamee\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "805cad9f-8b30-4598-b1fc-5ffdc24017d2",
+        "question": "Who is the sibling of the grandson of Timmy Munguia?",
+        "solution_traces": "[{\"Y_2\": \"Rolando Matheson\", \"Y_4\": \"Manuel Matheson\"}, {\"Y_4\": \"Manuel Matheson\", \"Y_2\": \"Shaina Mcglynn\"}, {\"Y_4\": \"Rolando Matheson\", \"Y_2\": \"Shaina Mcglynn\"}, {\"Y_4\": \"Rolando Matheson\", \"Y_2\": \"Manuel Matheson\"}]",
+        "answer": [
+            "Manuel Matheson",
+            "Rolando Matheson",
+            "Shaina Mcglynn"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "grandson(\"Timmy Munguia\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "08d5c653-d244-4b98-8ee4-6beb239451e7",
+        "question": "Who is the great-grandchild of the friend of Michell Kingery?",
+        "solution_traces": "[{\"Y_2\": \"Tad Fitzpatrick\", \"Y_4\": \"Philip Bledsoe\"}, {\"Y_4\": \"Everett Mcnamee\", \"Y_2\": \"Shaunte Mcnamee\"}, {\"Y_4\": \"Everett Mcnamee\", \"Y_2\": \"Reyes Mcnamee\"}, {\"Y_4\": \"Everett Mcnamee\", \"Y_2\": \"Kieth Mcnamee\"}]",
+        "answer": [
+            "Kieth Mcnamee",
+            "Reyes Mcnamee",
+            "Shaunte Mcnamee",
+            "Tad Fitzpatrick"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "friend(\"Michell Kingery\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "57b3a837-16e5-4628-8dbb-8aede1eabc85",
+        "question": "Who is the grandfather of the nephew of Trent Mcnamee?",
+        "solution_traces": "[{\"Y_2\": \"Bo Mcnamee\", \"Y_4\": \"Reyes Mcnamee\"}, {\"Y_4\": \"Kieth Mcnamee\", \"Y_2\": \"Bo Mcnamee\"}]",
+        "answer": [
+            "Bo Mcnamee"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "nephew(\"Trent Mcnamee\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9beec067-5d21-467d-bd46-bc8708a5c4b0",
+        "question": "Who is the female cousin of the child of Pauline Mcnamee?",
+        "solution_traces": "[{\"Y_4\": \"Kieth Mcnamee\", \"Y_2\": \"Shaunte Mcnamee\"}]",
+        "answer": [
+            "Shaunte Mcnamee"
+        ],
+        "prolog": {
+            "query": [
+                "female_cousin(Y_4, Y_2)",
+                "child(\"Pauline Mcnamee\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1aa8aadf-b383-4fdd-a2f4-ec85b51ba629",
+        "question": "Who is the grandfather of the sibling of Manuel Matheson?",
+        "solution_traces": "[{\"Y_4\": \"Rolando Matheson\", \"Y_2\": \"Timmy Munguia\"}, {\"Y_4\": \"Shaina Mcglynn\", \"Y_2\": \"Timmy Munguia\"}]",
+        "answer": [
+            "Timmy Munguia"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "sibling(\"Manuel Matheson\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3a046e12-2446-442f-a1cb-174032fa8703",
+        "question": "Who is the female first cousin once removed of the great-grandchild of Tamala Munguia?",
+        "solution_traces": "[{\"Y_2\": \"Ivette Kingery\", \"Y_4\": \"Lane Mcglynn\"}, {\"Y_4\": \"Lane Mcglynn\", \"Y_2\": \"Mariann Grayson\"}, {\"Y_2\": \"Antonia Lanza\", \"Y_4\": \"Lane Mcglynn\"}]",
+        "answer": [
+            "Antonia Lanza",
+            "Ivette Kingery",
+            "Mariann Grayson"
+        ],
+        "prolog": {
+            "query": [
+                "female_first_cousin_once_removed(Y_4, Y_2)",
+                "great_grandchild(\"Tamala Munguia\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cecf47c0-5781-4a50-bcda-60a2b1cc874a",
+        "question": "Who is the second aunt of the child of Colleen Mcnamee?",
+        "solution_traces": "[{\"Y_2\": \"Carmon Bledsoe\", \"Y_4\": \"Shaunte Mcnamee\"}]",
+        "answer": [
+            "Carmon Bledsoe"
+        ],
+        "prolog": {
+            "query": [
+                "second_aunt(Y_4, Y_2)",
+                "child(\"Colleen Mcnamee\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d8fbed71-411a-4d4d-a19e-68ac972a86dc",
+        "question": "Who is the friend of the female first cousin once removed of Samual Grayson?",
+        "solution_traces": "[{\"Y_4\": \"Michell Kingery\", \"Y_2\": \"Lindsey Grayson\"}, {\"Y_4\": \"Michell Kingery\", \"Y_2\": \"Hiram Lanza\"}, {\"Y_2\": \"Adam Mcglynn\", \"Y_4\": \"Michell Kingery\"}, {\"Y_2\": \"Everett Mcnamee\", \"Y_4\": \"Michell Kingery\"}, {\"Y_4\": \"Michell Kingery\", \"Y_2\": \"Philip Bledsoe\"}]",
+        "answer": [
+            "Adam Mcglynn",
+            "Everett Mcnamee",
+            "Hiram Lanza",
+            "Lindsey Grayson",
+            "Philip Bledsoe"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "female_first_cousin_once_removed(\"Samual Grayson\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "91a85ce2-c8c2-4695-a9f1-8eff9dbdd66f",
+        "question": "Who is the great-grandson of the grandfather of Manuel Matheson?",
+        "solution_traces": "[{\"Y_4\": \"Timmy Munguia\", \"Y_2\": \"Lane Mcglynn\"}]",
+        "answer": [
+            "Lane Mcglynn"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandson(Y_4, Y_2)",
+                "grandfather(\"Manuel Matheson\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "bf767f4e-3012-43f6-bbb5-e6e1090ab68a",
+        "question": "Who is the sibling of the male second cousin of Tad Fitzpatrick?",
+        "solution_traces": "[{\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Lanny Mcnamee\"}, {\"Y_2\": \"Charley Mcnamee\", \"Y_4\": \"Barry Mcnamee\"}, {\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Charley Mcnamee\"}, {\"Y_2\": \"Lanny Mcnamee\", \"Y_4\": \"Barry Mcnamee\"}, {\"Y_2\": \"Charley Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_2\": \"Lanny Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_2\": \"Lanny Mcnamee\", \"Y_4\": \"Charley Mcnamee\"}, {\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_4\": \"Barry Mcnamee\", \"Y_2\": \"Trent Mcnamee\"}, {\"Y_2\": \"Trent Mcnamee\", \"Y_4\": \"Lanny Mcnamee\"}, {\"Y_4\": \"Charley Mcnamee\", \"Y_2\": \"Trent Mcnamee\"}, {\"Y_2\": \"Charley Mcnamee\", \"Y_4\": \"Lanny Mcnamee\"}]",
+        "answer": [
+            "Barry Mcnamee",
+            "Charley Mcnamee",
+            "Lanny Mcnamee",
+            "Trent Mcnamee"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "male_second_cousin(\"Tad Fitzpatrick\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b207aea6-d39c-4609-82a8-c09633a53351",
+        "question": "Who is the parent of the father-in-law of Carmon Bledsoe?",
+        "solution_traces": "[{\"Y_4\": \"Philip Bledsoe\", \"Y_2\": \"Joe Bledsoe\"}, {\"Y_2\": \"Rasheeda Bledsoe\", \"Y_4\": \"Philip Bledsoe\"}]",
+        "answer": [
+            "Joe Bledsoe",
+            "Rasheeda Bledsoe"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "father_in_law(\"Carmon Bledsoe\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c0eabec6-41a6-4525-a30a-2164da74c378",
+        "question": "Who is the grandmother of the father-in-law of Pauline Mcnamee?",
+        "solution_traces": "[{\"Y_2\": \"Krystle Vogel\", \"Y_4\": \"Bo Mcnamee\"}]",
+        "answer": [
+            "Krystle Vogel"
+        ],
+        "prolog": {
+            "query": [
+                "grandmother(Y_4, Y_2)",
+                "father_in_law(\"Pauline Mcnamee\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a6e94b22-572d-4763-a043-1697488266d5",
+        "question": "Who is the male second cousin of the grandchild of Eddy Bledsoe?",
+        "solution_traces": "[{\"Y_4\": \"Tad Fitzpatrick\", \"Y_2\": \"Trent Mcnamee\"}, {\"Y_4\": \"Tad Fitzpatrick\", \"Y_2\": \"Lanny Mcnamee\"}, {\"Y_4\": \"Tad Fitzpatrick\", \"Y_2\": \"Barry Mcnamee\"}, {\"Y_4\": \"Tad Fitzpatrick\", \"Y_2\": \"Charley Mcnamee\"}]",
+        "answer": [
+            "Barry Mcnamee",
+            "Charley Mcnamee",
+            "Lanny Mcnamee",
+            "Trent Mcnamee"
+        ],
+        "prolog": {
+            "query": [
+                "male_second_cousin(Y_4, Y_2)",
+                "grandchild(\"Eddy Bledsoe\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6e2e2891-5baf-4b8c-bc91-5059fcdaac51",
+        "question": "Who is the mother of the child of Lindsey Grayson?",
+        "solution_traces": "[{\"Y_4\": \"Harold Grayson\", \"Y_2\": \"Lindsey Grayson\"}]",
+        "answer": [
+            "Lindsey Grayson"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "child(\"Lindsey Grayson\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3e112450-8fd2-4711-a121-5a5e9d886c03",
+        "question": "Who is the second aunt of the daughter of Colleen Mcnamee?",
+        "solution_traces": "[{\"Y_2\": \"Carmon Bledsoe\", \"Y_4\": \"Shaunte Mcnamee\"}]",
+        "answer": [
+            "Carmon Bledsoe"
+        ],
+        "prolog": {
+            "query": [
+                "second_aunt(Y_4, Y_2)",
+                "daughter(\"Colleen Mcnamee\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "93b76ec1-50a1-4b0d-9c71-ed3dba5e31f6",
+        "question": "Who is the friend of the parent of Bobby Kingery?",
+        "solution_traces": "[{\"Y_4\": \"Ivette Kingery\", \"Y_2\": \"Emmett Bledsoe\"}, {\"Y_2\": \"Manuel Matheson\", \"Y_4\": \"Jimmie Kingery\"}]",
+        "answer": [
+            "Emmett Bledsoe",
+            "Manuel Matheson"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "parent(\"Bobby Kingery\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d672e77b-df7e-4626-9afc-5acf2b89f189",
+        "question": "Who is the friend of the father of Deidre Fitzpatrick?",
+        "solution_traces": "[{\"Y_2\": \"Jacquelyn Mcnamee\", \"Y_4\": \"Eddy Bledsoe\"}, {\"Y_2\": \"Lona Bledsoe\", \"Y_4\": \"Eddy Bledsoe\"}, {\"Y_2\": \"Almeta Lanza\", \"Y_4\": \"Eddy Bledsoe\"}, {\"Y_2\": \"Tad Fitzpatrick\", \"Y_4\": \"Eddy Bledsoe\"}]",
+        "answer": [
+            "Almeta Lanza",
+            "Jacquelyn Mcnamee",
+            "Lona Bledsoe",
+            "Tad Fitzpatrick"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "father(\"Deidre Fitzpatrick\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1f8f8f63-ec6d-45ce-adcc-191e3572b684",
+        "question": "Who is the cousin of the cousin of Kieth Mcnamee?",
+        "solution_traces": "[{\"Y_2\": \"Kieth Mcnamee\", \"Y_4\": \"Reyes Mcnamee\"}, {\"Y_2\": \"Reyes Mcnamee\", \"Y_4\": \"Shaunte Mcnamee\"}, {\"Y_2\": \"Shaunte Mcnamee\", \"Y_4\": \"Reyes Mcnamee\"}, {\"Y_2\": \"Kieth Mcnamee\", \"Y_4\": \"Shaunte Mcnamee\"}]",
+        "answer": [
+            "Kieth Mcnamee",
+            "Reyes Mcnamee",
+            "Shaunte Mcnamee"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "cousin(\"Kieth Mcnamee\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2d7120e8-9903-46aa-a068-0423b08882b2",
+        "question": "Who is the grandparent of the great-aunt of Antonia Lanza?",
+        "solution_traces": "[{\"Y_4\": \"Shaina Mcglynn\", \"Y_2\": \"Tamala Munguia\"}, {\"Y_4\": \"Shaina Mcglynn\", \"Y_2\": \"Timmy Munguia\"}]",
+        "answer": [
+            "Tamala Munguia",
+            "Timmy Munguia"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "great_aunt(\"Antonia Lanza\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6da5e06e-c9a4-4502-8c62-b29a90547654",
+        "question": "Who is the grandfather of the sister-in-law of Jimmie Kingery?",
+        "solution_traces": "[{\"Y_4\": \"Antonia Lanza\", \"Y_2\": \"Manuel Matheson\"}]",
+        "answer": [
+            "Manuel Matheson"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "sister_in_law(\"Jimmie Kingery\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "96384273-4989-42f4-8385-9ce2cb58e284",
+        "question": "Who is the daughter-in-law of the grandparent of Mariann Grayson?",
+        "solution_traces": "[{\"Y_4\": \"Maurice Grayson\", \"Y_2\": \"Kerry Grayson\"}, {\"Y_2\": \"Kerry Grayson\", \"Y_4\": \"Lindsey Grayson\"}]",
+        "answer": [
+            "Kerry Grayson"
+        ],
+        "prolog": {
+            "query": [
+                "daughter_in_law(Y_4, Y_2)",
+                "grandparent(\"Mariann Grayson\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "75272a45-7a4c-4d13-b14a-462fce53e3b8",
+        "question": "Who is the wife of the grandfather of Lane Mcglynn?",
+        "solution_traces": "[{\"Y_2\": \"Johnetta Matheson\", \"Y_4\": \"Benito Matheson\"}]",
+        "answer": [
+            "Johnetta Matheson"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "grandfather(\"Lane Mcglynn\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "41abc5d5-3ff5-4c3c-9f9f-483d77743823",
+        "question": "Who is the father of the child of Jimmie Kingery?",
+        "solution_traces": "[{\"Y_4\": \"Michell Kingery\", \"Y_2\": \"Jimmie Kingery\"}, {\"Y_2\": \"Jimmie Kingery\", \"Y_4\": \"Bobby Kingery\"}]",
+        "answer": [
+            "Jimmie Kingery"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "child(\"Jimmie Kingery\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2f27ac97-6144-4c8c-a750-65fcb5d48cd4",
+        "question": "Who is the parent of the niece of Rolando Matheson?",
+        "solution_traces": "[{\"Y_4\": \"Magdalene Matheson\", \"Y_2\": \"Manuel Matheson\"}, {\"Y_2\": \"Manuel Matheson\", \"Y_4\": \"Almeta Lanza\"}, {\"Y_4\": \"Magdalene Matheson\", \"Y_2\": \"Sara Matheson\"}, {\"Y_2\": \"Manuel Matheson\", \"Y_4\": \"Kerry Grayson\"}, {\"Y_4\": \"Kerry Grayson\", \"Y_2\": \"Sara Matheson\"}, {\"Y_2\": \"Sara Matheson\", \"Y_4\": \"Almeta Lanza\"}]",
+        "answer": [
+            "Manuel Matheson",
+            "Sara Matheson"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "niece(\"Rolando Matheson\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "97e8a014-3882-419b-add9-93bd70104953",
+        "question": "Who is the sibling of the male second cousin of Tad Fitzpatrick?",
+        "solution_traces": "[{\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Lanny Mcnamee\"}, {\"Y_2\": \"Charley Mcnamee\", \"Y_4\": \"Barry Mcnamee\"}, {\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Charley Mcnamee\"}, {\"Y_2\": \"Lanny Mcnamee\", \"Y_4\": \"Barry Mcnamee\"}, {\"Y_2\": \"Charley Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_2\": \"Lanny Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_2\": \"Lanny Mcnamee\", \"Y_4\": \"Charley Mcnamee\"}, {\"Y_2\": \"Barry Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_4\": \"Barry Mcnamee\", \"Y_2\": \"Trent Mcnamee\"}, {\"Y_2\": \"Trent Mcnamee\", \"Y_4\": \"Lanny Mcnamee\"}, {\"Y_4\": \"Charley Mcnamee\", \"Y_2\": \"Trent Mcnamee\"}, {\"Y_2\": \"Charley Mcnamee\", \"Y_4\": \"Lanny Mcnamee\"}]",
+        "answer": [
+            "Barry Mcnamee",
+            "Charley Mcnamee",
+            "Lanny Mcnamee",
+            "Trent Mcnamee"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "male_second_cousin(\"Tad Fitzpatrick\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3c8f7cb6-d949-4a83-bf2e-e87b092872c2",
+        "question": "Who is the niece of the son of Bo Mcnamee?",
+        "solution_traces": "[{\"Y_2\": \"Shaunte Mcnamee\", \"Y_4\": \"Lanny Mcnamee\"}, {\"Y_2\": \"Shaunte Mcnamee\", \"Y_4\": \"Trent Mcnamee\"}, {\"Y_4\": \"Charley Mcnamee\", \"Y_2\": \"Shaunte Mcnamee\"}]",
+        "answer": [
+            "Shaunte Mcnamee"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "son(\"Bo Mcnamee\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    }
+]

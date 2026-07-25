@@ -1,0 +1,932 @@
+[
+    {
+        "id": "b3424104-5e03-4478-ba7a-3ac8d5d13d11",
+        "question": "Who is the wife of the husband of Niesha Lawhorn?",
+        "solution_traces": "[{\"Y_2\": \"Niesha Lawhorn\", \"Y_4\": \"Geoffrey Lawhorn\"}]",
+        "answer": [
+            "Niesha Lawhorn"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "husband(\"Niesha Lawhorn\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "64e748dc-09e1-4d22-9d9d-a4431f68f4d4",
+        "question": "Who is the father of the great-grandchild of Kraig Clapper?",
+        "solution_traces": "[{\"Y_4\": \"Riley Clapper\", \"Y_2\": \"Christopher Clapper\"}, {\"Y_4\": \"Kimiko Avila\", \"Y_2\": \"Brendon Avila\"}, {\"Y_4\": \"Delbert Avila\", \"Y_2\": \"Brendon Avila\"}, {\"Y_4\": \"Timothy Clapper\", \"Y_2\": \"Haywood Clapper\"}, {\"Y_4\": \"Claude Clapper\", \"Y_2\": \"Christopher Clapper\"}, {\"Y_2\": \"Christopher Clapper\", \"Y_4\": \"Adrienne Clapper\"}]",
+        "answer": [
+            "Brendon Avila",
+            "Christopher Clapper",
+            "Haywood Clapper"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "great_grandchild(\"Kraig Clapper\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "875b6247-1500-4b92-a11f-e029fb2f7d7d",
+        "question": "Who is the child of the friend of Brooks Lawhorn?",
+        "solution_traces": "[{\"Y_4\": \"Tiesha Lawhorn\", \"Y_2\": \"Quintin Lawhorn\"}, {\"Y_2\": \"Art Clapper\", \"Y_4\": \"Tomas Clapper\"}, {\"Y_2\": \"Geoffrey Lawhorn\", \"Y_4\": \"Tiesha Lawhorn\"}, {\"Y_4\": \"Tomas Clapper\", \"Y_2\": \"Haywood Clapper\"}, {\"Y_4\": \"Kraig Clapper\", \"Y_2\": \"Tomas Clapper\"}, {\"Y_4\": \"Tomas Clapper\", \"Y_2\": \"Christopher Clapper\"}, {\"Y_2\": \"Cheri Lawhorn\", \"Y_4\": \"Tiesha Lawhorn\"}, {\"Y_4\": \"Tiesha Lawhorn\", \"Y_2\": \"Oma Lawhorn\"}, {\"Y_2\": \"Jarvis Clapper\", \"Y_4\": \"Kraig Clapper\"}, {\"Y_4\": \"Tomas Clapper\", \"Y_2\": \"Vilma Avila\"}, {\"Y_2\": \"Danilo Clapper\", \"Y_4\": \"Tomas Clapper\"}]",
+        "answer": [
+            "Art Clapper",
+            "Cheri Lawhorn",
+            "Christopher Clapper",
+            "Danilo Clapper",
+            "Geoffrey Lawhorn",
+            "Haywood Clapper",
+            "Jarvis Clapper",
+            "Oma Lawhorn",
+            "Quintin Lawhorn",
+            "Tomas Clapper",
+            "Vilma Avila"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "friend(\"Brooks Lawhorn\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2cb1a7af-4d77-4bd1-a70f-6407dd1a68c3",
+        "question": "Who is the grandparent of the sibling of Vilma Avila?",
+        "solution_traces": "[{\"Y_2\": \"Kraig Clapper\", \"Y_4\": \"Haywood Clapper\"}, {\"Y_4\": \"Art Clapper\", \"Y_2\": \"Sondra Clapper\"}, {\"Y_2\": \"Sondra Clapper\", \"Y_4\": \"Christopher Clapper\"}, {\"Y_2\": \"Kraig Clapper\", \"Y_4\": \"Danilo Clapper\"}, {\"Y_2\": \"Sondra Clapper\", \"Y_4\": \"Haywood Clapper\"}, {\"Y_2\": \"Kraig Clapper\", \"Y_4\": \"Art Clapper\"}, {\"Y_2\": \"Kraig Clapper\", \"Y_4\": \"Christopher Clapper\"}, {\"Y_4\": \"Danilo Clapper\", \"Y_2\": \"Sondra Clapper\"}]",
+        "answer": [
+            "Kraig Clapper",
+            "Sondra Clapper"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "sibling(\"Vilma Avila\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "44ce2840-f283-4076-9507-8b3e00936feb",
+        "question": "Who is the niece of the aunt of Leeanne Nagy?",
+        "solution_traces": "[{\"Y_2\": \"Bethany Lawhorn\", \"Y_4\": \"Oma Lawhorn\"}, {\"Y_2\": \"Thalia Mcreynolds\", \"Y_4\": \"Oma Lawhorn\"}, {\"Y_2\": \"Romona Lawhorn\", \"Y_4\": \"Oma Lawhorn\"}, {\"Y_2\": \"Thalia Mcreynolds\", \"Y_4\": \"Cheri Lawhorn\"}, {\"Y_2\": \"Pamula Oster\", \"Y_4\": \"Oma Lawhorn\"}, {\"Y_2\": \"Pamula Oster\", \"Y_4\": \"Cheri Lawhorn\"}, {\"Y_2\": \"Leeanne Nagy\", \"Y_4\": \"Cheri Lawhorn\"}, {\"Y_2\": \"Leeanne Nagy\", \"Y_4\": \"Oma Lawhorn\"}, {\"Y_2\": \"Bethany Lawhorn\", \"Y_4\": \"Cheri Lawhorn\"}, {\"Y_2\": \"Romona Lawhorn\", \"Y_4\": \"Cheri Lawhorn\"}]",
+        "answer": [
+            "Bethany Lawhorn",
+            "Leeanne Nagy",
+            "Pamula Oster",
+            "Romona Lawhorn",
+            "Thalia Mcreynolds"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "aunt(\"Leeanne Nagy\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "76a09ec0-d474-47b0-a009-7518287b2a9c",
+        "question": "Who is the sister of the friend of Anibal Lawhorn?",
+        "solution_traces": "[{\"Y_2\": \"Leeanne Nagy\", \"Y_4\": \"Thalia Mcreynolds\"}, {\"Y_4\": \"Delbert Avila\", \"Y_2\": \"Kimiko Avila\"}, {\"Y_2\": \"Pamula Oster\", \"Y_4\": \"Thalia Mcreynolds\"}, {\"Y_2\": \"Vilma Avila\", \"Y_4\": \"Haywood Clapper\"}, {\"Y_4\": \"Leeanne Nagy\", \"Y_2\": \"Pamula Oster\"}, {\"Y_4\": \"Leeanne Nagy\", \"Y_2\": \"Thalia Mcreynolds\"}]",
+        "answer": [
+            "Kimiko Avila",
+            "Leeanne Nagy",
+            "Pamula Oster",
+            "Thalia Mcreynolds",
+            "Vilma Avila"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "friend(\"Anibal Lawhorn\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d80477e3-677d-431f-a6a2-c1fdf1d5aa03",
+        "question": "Who is the friend of the husband of Pamula Oster?",
+        "solution_traces": "[{\"Y_2\": \"Thalia Mcreynolds\", \"Y_4\": \"Dylan Oster\"}, {\"Y_2\": \"Kraig Clapper\", \"Y_4\": \"Dylan Oster\"}, {\"Y_2\": \"Edmundo Mcreynolds\", \"Y_4\": \"Dylan Oster\"}, {\"Y_4\": \"Dylan Oster\", \"Y_2\": \"Christopher Clapper\"}]",
+        "answer": [
+            "Christopher Clapper",
+            "Edmundo Mcreynolds",
+            "Kraig Clapper",
+            "Thalia Mcreynolds"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "husband(\"Pamula Oster\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "837a1c52-e1ab-4d46-84d3-d2e26868e5ea",
+        "question": "Who is the sister of the friend of Douglas Nagy?",
+        "solution_traces": "[{\"Y_2\": \"Leeanne Nagy\", \"Y_4\": \"Pamula Oster\"}, {\"Y_2\": \"Leeanne Nagy\", \"Y_4\": \"Thalia Mcreynolds\"}, {\"Y_2\": \"Pamula Oster\", \"Y_4\": \"Thalia Mcreynolds\"}, {\"Y_2\": \"Thalia Mcreynolds\", \"Y_4\": \"Pamula Oster\"}, {\"Y_4\": \"Riley Clapper\", \"Y_2\": \"Adrienne Clapper\"}]",
+        "answer": [
+            "Adrienne Clapper",
+            "Leeanne Nagy",
+            "Pamula Oster",
+            "Thalia Mcreynolds"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "friend(\"Douglas Nagy\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b91e9684-d436-4ed1-aa30-f4a8c1df3de7",
+        "question": "Who is the daughter of the grandparent of Riley Clapper?",
+        "solution_traces": "[{\"Y_4\": \"Riley Joiner\", \"Y_2\": \"Charity Clapper\"}, {\"Y_4\": \"Tomas Clapper\", \"Y_2\": \"Vilma Avila\"}, {\"Y_4\": \"Marlena Clapper\", \"Y_2\": \"Vilma Avila\"}, {\"Y_4\": \"Kacey Joiner\", \"Y_2\": \"Charity Clapper\"}]",
+        "answer": [
+            "Charity Clapper",
+            "Vilma Avila"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "grandparent(\"Riley Clapper\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dfb079a0-c594-4597-97c2-7e19c05cff70",
+        "question": "Who is the father-in-law of the great-grandparent of Mariana Avila?",
+        "solution_traces": "[{\"Y_2\": \"Kraig Clapper\", \"Y_4\": \"Marlena Clapper\"}]",
+        "answer": [
+            "Kraig Clapper"
+        ],
+        "prolog": {
+            "query": [
+                "father_in_law(Y_4, Y_2)",
+                "great_grandparent(\"Mariana Avila\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "30785b8b-c793-46ed-9ca6-4a2c279830c8",
+        "question": "Who is the sister of the sister-in-law of Lauren Lawhorn?",
+        "solution_traces": "[{\"Y_2\": \"Leeanne Nagy\", \"Y_4\": \"Pamula Oster\"}, {\"Y_2\": \"Leeanne Nagy\", \"Y_4\": \"Thalia Mcreynolds\"}, {\"Y_2\": \"Pamula Oster\", \"Y_4\": \"Thalia Mcreynolds\"}, {\"Y_4\": \"Leeanne Nagy\", \"Y_2\": \"Pamula Oster\"}, {\"Y_2\": \"Thalia Mcreynolds\", \"Y_4\": \"Pamula Oster\"}, {\"Y_4\": \"Leeanne Nagy\", \"Y_2\": \"Thalia Mcreynolds\"}]",
+        "answer": [
+            "Leeanne Nagy",
+            "Pamula Oster",
+            "Thalia Mcreynolds"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "sister_in_law(\"Lauren Lawhorn\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "bca7fb64-a735-4e2f-a136-af500f789c1e",
+        "question": "Who is the child of the sister of Pamula Oster?",
+        "solution_traces": "[{\"Y_4\": \"Leeanne Nagy\", \"Y_2\": \"Ervin Nagy\"}, {\"Y_2\": \"Elicia Mcreynolds\", \"Y_4\": \"Thalia Mcreynolds\"}]",
+        "answer": [
+            "Elicia Mcreynolds",
+            "Ervin Nagy"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "sister(\"Pamula Oster\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "33dcd9a3-8fd5-4e48-9580-0827e5ee0b37",
+        "question": "Who is the mother of the sister of Art Clapper?",
+        "solution_traces": "[{\"Y_4\": \"Vilma Avila\", \"Y_2\": \"Marlena Clapper\"}]",
+        "answer": [
+            "Marlena Clapper"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "sister(\"Art Clapper\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7c2b284d-f8ff-45cb-b3c1-09f7022e49d3",
+        "question": "Who is the nephew of the granddaughter of Kraig Clapper?",
+        "solution_traces": "[{\"Y_4\": \"Vilma Avila\", \"Y_2\": \"Riley Clapper\"}, {\"Y_4\": \"Vilma Avila\", \"Y_2\": \"Claude Clapper\"}, {\"Y_4\": \"Vilma Avila\", \"Y_2\": \"Timothy Clapper\"}]",
+        "answer": [
+            "Claude Clapper",
+            "Riley Clapper",
+            "Timothy Clapper"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "granddaughter(\"Kraig Clapper\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8f61175a-5240-4e2d-bb26-eb616db7ea7e",
+        "question": "Who is the great-grandparent of the great-grandchild of Olin Lawhorn?",
+        "solution_traces": "[{\"Y_4\": \"Isidro Lawhorn\", \"Y_2\": \"Olin Lawhorn\"}, {\"Y_4\": \"Elicia Mcreynolds\", \"Y_2\": \"Olin Lawhorn\"}, {\"Y_2\": \"Tiesha Lawhorn\", \"Y_4\": \"Elicia Mcreynolds\"}, {\"Y_2\": \"Tiesha Lawhorn\", \"Y_4\": \"Anibal Lawhorn\"}, {\"Y_2\": \"Tiesha Lawhorn\", \"Y_4\": \"Babette Farmer\"}, {\"Y_2\": \"Olin Lawhorn\", \"Y_4\": \"Ervin Nagy\"}, {\"Y_2\": \"Olin Lawhorn\", \"Y_4\": \"Babette Farmer\"}, {\"Y_2\": \"Olin Lawhorn\", \"Y_4\": \"Adalberto Oster\"}, {\"Y_2\": \"Tiesha Lawhorn\", \"Y_4\": \"Adalberto Oster\"}, {\"Y_2\": \"Olin Lawhorn\", \"Y_4\": \"Anibal Lawhorn\"}, {\"Y_2\": \"Tiesha Lawhorn\", \"Y_4\": \"Ervin Nagy\"}, {\"Y_2\": \"Tiesha Lawhorn\", \"Y_4\": \"Isidro Lawhorn\"}]",
+        "answer": [
+            "Olin Lawhorn",
+            "Tiesha Lawhorn"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandparent(Y_4, Y_2)",
+                "great_grandchild(\"Olin Lawhorn\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a696b253-ce75-42e4-b0fb-223c6e4f0a12",
+        "question": "Who is the nephew of the cousin of Elicia Mcreynolds?",
+        "solution_traces": "[{\"Y_2\": \"Cliff Farmer\", \"Y_4\": \"Isidro Lawhorn\"}, {\"Y_2\": \"Cliff Farmer\", \"Y_4\": \"Anibal Lawhorn\"}]",
+        "answer": [
+            "Cliff Farmer"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "cousin(\"Elicia Mcreynolds\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ee48b92d-858f-44d0-8788-393baa75698c",
+        "question": "Who is the great-grandparent of the grandchild of Kacey Joiner?",
+        "solution_traces": "[{\"Y_4\": \"Riley Clapper\", \"Y_2\": \"Sondra Clapper\"}, {\"Y_4\": \"Claude Clapper\", \"Y_2\": \"Sondra Clapper\"}, {\"Y_2\": \"Sondra Clapper\", \"Y_4\": \"Adrienne Clapper\"}, {\"Y_4\": \"Riley Clapper\", \"Y_2\": \"Kraig Clapper\"}, {\"Y_4\": \"Claude Clapper\", \"Y_2\": \"Kraig Clapper\"}, {\"Y_2\": \"Kraig Clapper\", \"Y_4\": \"Adrienne Clapper\"}]",
+        "answer": [
+            "Kraig Clapper",
+            "Sondra Clapper"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandparent(Y_4, Y_2)",
+                "grandchild(\"Kacey Joiner\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "132d6c4c-a681-40aa-b8bb-feafc911ef23",
+        "question": "Who is the child of the mother-in-law of Edmundo Mcreynolds?",
+        "solution_traces": "[{\"Y_4\": \"Niesha Lawhorn\", \"Y_2\": \"Thalia Mcreynolds\"}, {\"Y_4\": \"Niesha Lawhorn\", \"Y_2\": \"Brooks Lawhorn\"}, {\"Y_4\": \"Niesha Lawhorn\", \"Y_2\": \"Pamula Oster\"}, {\"Y_2\": \"Leeanne Nagy\", \"Y_4\": \"Niesha Lawhorn\"}]",
+        "answer": [
+            "Brooks Lawhorn",
+            "Leeanne Nagy",
+            "Pamula Oster",
+            "Thalia Mcreynolds"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "mother_in_law(\"Edmundo Mcreynolds\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "12c9b188-c7e7-436d-91e4-8bf9b1068335",
+        "question": "Who is the female first cousin once removed of the grandchild of Olin Lawhorn?",
+        "solution_traces": "[{\"Y_4\": \"Bethany Lawhorn\", \"Y_2\": \"Babette Farmer\"}, {\"Y_2\": \"Elicia Mcreynolds\", \"Y_4\": \"Romona Lawhorn\"}, {\"Y_4\": \"Bethany Lawhorn\", \"Y_2\": \"Elicia Mcreynolds\"}, {\"Y_4\": \"Romona Lawhorn\", \"Y_2\": \"Babette Farmer\"}]",
+        "answer": [
+            "Babette Farmer",
+            "Elicia Mcreynolds"
+        ],
+        "prolog": {
+            "query": [
+                "female_first_cousin_once_removed(Y_4, Y_2)",
+                "grandchild(\"Olin Lawhorn\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2646312b-f66a-4f8a-a33e-8bc2ea7a0af8",
+        "question": "Who is the great-aunt of the cousin of Ervin Nagy?",
+        "solution_traces": "[{\"Y_2\": \"Cheri Lawhorn\", \"Y_4\": \"Adalberto Oster\"}, {\"Y_4\": \"Isidro Lawhorn\", \"Y_2\": \"Oma Lawhorn\"}, {\"Y_2\": \"Cheri Lawhorn\", \"Y_4\": \"Babette Farmer\"}, {\"Y_4\": \"Elicia Mcreynolds\", \"Y_2\": \"Oma Lawhorn\"}, {\"Y_2\": \"Oma Lawhorn\", \"Y_4\": \"Anibal Lawhorn\"}, {\"Y_2\": \"Cheri Lawhorn\", \"Y_4\": \"Elicia Mcreynolds\"}, {\"Y_2\": \"Cheri Lawhorn\", \"Y_4\": \"Anibal Lawhorn\"}, {\"Y_2\": \"Oma Lawhorn\", \"Y_4\": \"Adalberto Oster\"}, {\"Y_2\": \"Oma Lawhorn\", \"Y_4\": \"Babette Farmer\"}, {\"Y_4\": \"Isidro Lawhorn\", \"Y_2\": \"Cheri Lawhorn\"}]",
+        "answer": [
+            "Cheri Lawhorn",
+            "Oma Lawhorn"
+        ],
+        "prolog": {
+            "query": [
+                "great_aunt(Y_4, Y_2)",
+                "cousin(\"Ervin Nagy\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "42983b4c-9027-440a-9c01-4536feb1d077",
+        "question": "Who is the uncle of the great-grandson of Sondra Clapper?",
+        "solution_traces": "[{\"Y_4\": \"Riley Clapper\", \"Y_2\": \"Danilo Clapper\"}, {\"Y_4\": \"Claude Clapper\", \"Y_2\": \"Danilo Clapper\"}, {\"Y_4\": \"Timothy Clapper\", \"Y_2\": \"Danilo Clapper\"}, {\"Y_4\": \"Delbert Avila\", \"Y_2\": \"Christopher Clapper\"}, {\"Y_4\": \"Delbert Avila\", \"Y_2\": \"Haywood Clapper\"}, {\"Y_2\": \"Art Clapper\", \"Y_4\": \"Delbert Avila\"}, {\"Y_4\": \"Claude Clapper\", \"Y_2\": \"Art Clapper\"}, {\"Y_4\": \"Riley Clapper\", \"Y_2\": \"Haywood Clapper\"}, {\"Y_4\": \"Riley Clapper\", \"Y_2\": \"Art Clapper\"}, {\"Y_4\": \"Timothy Clapper\", \"Y_2\": \"Christopher Clapper\"}, {\"Y_4\": \"Delbert Avila\", \"Y_2\": \"Danilo Clapper\"}, {\"Y_4\": \"Claude Clapper\", \"Y_2\": \"Haywood Clapper\"}, {\"Y_4\": \"Timothy Clapper\", \"Y_2\": \"Art Clapper\"}]",
+        "answer": [
+            "Art Clapper",
+            "Christopher Clapper",
+            "Danilo Clapper",
+            "Haywood Clapper"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "great_grandson(\"Sondra Clapper\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "82d5d026-dbc6-45dc-b6b0-eca2aa2db60e",
+        "question": "Who is the brother of the sister-in-law of Chante Lawhorn?",
+        "solution_traces": "[{\"Y_2\": \"Quintin Lawhorn\", \"Y_4\": \"Oma Lawhorn\"}, {\"Y_2\": \"Geoffrey Lawhorn\", \"Y_4\": \"Cheri Lawhorn\"}, {\"Y_4\": \"Cheri Lawhorn\", \"Y_2\": \"Quintin Lawhorn\"}, {\"Y_2\": \"Geoffrey Lawhorn\", \"Y_4\": \"Oma Lawhorn\"}]",
+        "answer": [
+            "Geoffrey Lawhorn",
+            "Quintin Lawhorn"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "sister_in_law(\"Chante Lawhorn\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d3724ebc-53db-4422-872d-3e48a390a84f",
+        "question": "Who is the child of the friend of Cliff Farmer?",
+        "solution_traces": "[{\"Y_4\": \"Heidi Clapper\", \"Y_2\": \"Timothy Clapper\"}, {\"Y_4\": \"Ashton Kersey\", \"Y_2\": \"Lora Avila\"}, {\"Y_2\": \"Riley Clapper\", \"Y_4\": \"Charity Clapper\"}, {\"Y_2\": \"Claude Clapper\", \"Y_4\": \"Charity Clapper\"}, {\"Y_2\": \"Adrienne Clapper\", \"Y_4\": \"Charity Clapper\"}, {\"Y_2\": \"Timothy Clapper\", \"Y_4\": \"Haywood Clapper\"}]",
+        "answer": [
+            "Adrienne Clapper",
+            "Claude Clapper",
+            "Lora Avila",
+            "Riley Clapper",
+            "Timothy Clapper"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "friend(\"Cliff Farmer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b1c374bb-5af1-4a61-a0cb-de4118cf90d8",
+        "question": "Who is the sibling of the parent of Elicia Mcreynolds?",
+        "solution_traces": "[{\"Y_4\": \"Thalia Mcreynolds\", \"Y_2\": \"Brooks Lawhorn\"}, {\"Y_2\": \"Leeanne Nagy\", \"Y_4\": \"Thalia Mcreynolds\"}, {\"Y_2\": \"Pamula Oster\", \"Y_4\": \"Thalia Mcreynolds\"}]",
+        "answer": [
+            "Brooks Lawhorn",
+            "Leeanne Nagy",
+            "Pamula Oster"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "parent(\"Elicia Mcreynolds\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9d3dac32-0fcd-4e6d-8c81-8592ad497259",
+        "question": "Who is the brother of the sister-in-law of Lauren Lawhorn?",
+        "solution_traces": "[{\"Y_4\": \"Thalia Mcreynolds\", \"Y_2\": \"Brooks Lawhorn\"}, {\"Y_4\": \"Leeanne Nagy\", \"Y_2\": \"Brooks Lawhorn\"}, {\"Y_4\": \"Pamula Oster\", \"Y_2\": \"Brooks Lawhorn\"}]",
+        "answer": [
+            "Brooks Lawhorn"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "sister_in_law(\"Lauren Lawhorn\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ff39d39d-d657-47e9-b1e9-db96c78ea93f",
+        "question": "Who is the child of the male cousin of Bethany Lawhorn?",
+        "solution_traces": "[{\"Y_2\": \"Isidro Lawhorn\", \"Y_4\": \"Brooks Lawhorn\"}, {\"Y_2\": \"Babette Farmer\", \"Y_4\": \"Brooks Lawhorn\"}, {\"Y_2\": \"Anibal Lawhorn\", \"Y_4\": \"Brooks Lawhorn\"}]",
+        "answer": [
+            "Anibal Lawhorn",
+            "Babette Farmer",
+            "Isidro Lawhorn"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "male_cousin(\"Bethany Lawhorn\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dc6141e2-db67-4cf8-8823-9d4420e6e252",
+        "question": "Who is the female first cousin once removed of the child of Charity Clapper?",
+        "solution_traces": "[{\"Y_4\": \"Claude Clapper\", \"Y_2\": \"Mariana Avila\"}, {\"Y_2\": \"Mariana Avila\", \"Y_4\": \"Adrienne Clapper\"}, {\"Y_4\": \"Riley Clapper\", \"Y_2\": \"Mariana Avila\"}]",
+        "answer": [
+            "Mariana Avila"
+        ],
+        "prolog": {
+            "query": [
+                "female_first_cousin_once_removed(Y_4, Y_2)",
+                "child(\"Charity Clapper\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "247e7a86-6b71-44ca-8e79-3bd218808f17",
+        "question": "Who is the male cousin of the cousin of Anibal Lawhorn?",
+        "solution_traces": "[{\"Y_2\": \"Isidro Lawhorn\", \"Y_4\": \"Elicia Mcreynolds\"}, {\"Y_2\": \"Adalberto Oster\", \"Y_4\": \"Ervin Nagy\"}, {\"Y_2\": \"Anibal Lawhorn\", \"Y_4\": \"Ervin Nagy\"}, {\"Y_2\": \"Anibal Lawhorn\", \"Y_4\": \"Adalberto Oster\"}, {\"Y_2\": \"Ervin Nagy\", \"Y_4\": \"Adalberto Oster\"}, {\"Y_2\": \"Isidro Lawhorn\", \"Y_4\": \"Adalberto Oster\"}, {\"Y_2\": \"Isidro Lawhorn\", \"Y_4\": \"Ervin Nagy\"}, {\"Y_4\": \"Elicia Mcreynolds\", \"Y_2\": \"Adalberto Oster\"}, {\"Y_4\": \"Elicia Mcreynolds\", \"Y_2\": \"Anibal Lawhorn\"}, {\"Y_4\": \"Elicia Mcreynolds\", \"Y_2\": \"Ervin Nagy\"}]",
+        "answer": [
+            "Adalberto Oster",
+            "Anibal Lawhorn",
+            "Ervin Nagy",
+            "Isidro Lawhorn"
+        ],
+        "prolog": {
+            "query": [
+                "male_cousin(Y_4, Y_2)",
+                "cousin(\"Anibal Lawhorn\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "15bf7072-4913-4a59-9d8f-a7e986259fd5",
+        "question": "Who is the sibling of the wife of Dylan Oster?",
+        "solution_traces": "[{\"Y_2\": \"Leeanne Nagy\", \"Y_4\": \"Pamula Oster\"}, {\"Y_2\": \"Thalia Mcreynolds\", \"Y_4\": \"Pamula Oster\"}, {\"Y_4\": \"Pamula Oster\", \"Y_2\": \"Brooks Lawhorn\"}]",
+        "answer": [
+            "Brooks Lawhorn",
+            "Leeanne Nagy",
+            "Thalia Mcreynolds"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "wife(\"Dylan Oster\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "031f1105-c7b5-4030-8227-e6eab55829bd",
+        "question": "Who is the sibling of the great-aunt of Babette Farmer?",
+        "solution_traces": "[{\"Y_4\": \"Cheri Lawhorn\", \"Y_2\": \"Oma Lawhorn\"}, {\"Y_4\": \"Cheri Lawhorn\", \"Y_2\": \"Quintin Lawhorn\"}, {\"Y_2\": \"Quintin Lawhorn\", \"Y_4\": \"Oma Lawhorn\"}, {\"Y_2\": \"Geoffrey Lawhorn\", \"Y_4\": \"Cheri Lawhorn\"}, {\"Y_2\": \"Geoffrey Lawhorn\", \"Y_4\": \"Oma Lawhorn\"}, {\"Y_2\": \"Cheri Lawhorn\", \"Y_4\": \"Oma Lawhorn\"}]",
+        "answer": [
+            "Cheri Lawhorn",
+            "Geoffrey Lawhorn",
+            "Oma Lawhorn",
+            "Quintin Lawhorn"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "great_aunt(\"Babette Farmer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    }
+]

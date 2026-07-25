@@ -1,0 +1,915 @@
+[
+    {
+        "id": "ef545012-da2d-44b7-8ba1-2119bbaf5bb4",
+        "question": "Who is the grandparent of the grandchild of Leroy Bidwell?",
+        "solution_traces": "[{\"Y_4\": \"Roxy Cornwell\", \"Y_2\": \"Lucretia Bidwell\"}, {\"Y_2\": \"Leroy Bidwell\", \"Y_4\": \"Cecil Cornwell\"}, {\"Y_4\": \"Levi Cornwell\", \"Y_2\": \"Leroy Bidwell\"}, {\"Y_4\": \"Roxy Cornwell\", \"Y_2\": \"Leroy Bidwell\"}, {\"Y_4\": \"Erik Cornwell\", \"Y_2\": \"Lucretia Bidwell\"}, {\"Y_4\": \"Erik Cornwell\", \"Y_2\": \"Leroy Bidwell\"}, {\"Y_4\": \"Levi Cornwell\", \"Y_2\": \"Lucretia Bidwell\"}, {\"Y_2\": \"Lucretia Bidwell\", \"Y_4\": \"Cecil Cornwell\"}]",
+        "answer": [
+            "Leroy Bidwell",
+            "Lucretia Bidwell"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "grandchild(\"Leroy Bidwell\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4f6f707d-cef6-4ece-ab31-6ae5746d5118",
+        "question": "Who is the wife of the sibling of Kenton Kline?",
+        "solution_traces": "[{\"Y_4\": \"Tyron Kline\", \"Y_2\": \"Jeanette Kline\"}]",
+        "answer": [
+            "Jeanette Kline"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "sibling(\"Kenton Kline\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7a8bb8f7-89ee-432f-a0a8-ac916a6501b5",
+        "question": "Who is the son-in-law of the father-in-law of Ramon West?",
+        "solution_traces": "[{\"Y_2\": \"Ramon West\", \"Y_4\": \"Maximo Mingo\"}]",
+        "answer": [
+            "Ramon West"
+        ],
+        "prolog": {
+            "query": [
+                "son_in_law(Y_4, Y_2)",
+                "father_in_law(\"Ramon West\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "525d7168-1a03-4099-ad9c-168f3e206c1f",
+        "question": "Who is the son-in-law of the father of Marguerite Mingo?",
+        "solution_traces": "[{\"Y_2\": \"Ramon West\", \"Y_4\": \"Maximo Mingo\"}]",
+        "answer": [
+            "Ramon West"
+        ],
+        "prolog": {
+            "query": [
+                "son_in_law(Y_4, Y_2)",
+                "father(\"Marguerite Mingo\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "57e4d5c9-e2af-4869-a94e-78ecbb3d64cc",
+        "question": "Who is the grandparent of the grandchild of Jefferson Cornwell?",
+        "solution_traces": "[{\"Y_2\": \"Jefferson Cornwell\", \"Y_4\": \"Terrell Cornwell\"}, {\"Y_4\": \"Quincy Cornwell\", \"Y_2\": \"Jefferson Cornwell\"}, {\"Y_4\": \"Jamal Cornwell\", \"Y_2\": \"Leesa Cornwell\"}, {\"Y_4\": \"Quincy Cornwell\", \"Y_2\": \"Leesa Cornwell\"}, {\"Y_4\": \"Jamal Cornwell\", \"Y_2\": \"Jefferson Cornwell\"}, {\"Y_4\": \"Terrell Cornwell\", \"Y_2\": \"Leesa Cornwell\"}]",
+        "answer": [
+            "Jefferson Cornwell",
+            "Leesa Cornwell"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "grandchild(\"Jefferson Cornwell\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cab48f0b-65d3-4af1-9df8-c127a8820ed1",
+        "question": "Who is the friend of the mother-in-law of Gregory Yazzie?",
+        "solution_traces": "[{\"Y_4\": \"Audra Juarez\", \"Y_2\": \"Oliver West\"}, {\"Y_4\": \"Audra Juarez\", \"Y_2\": \"Gregory Yazzie\"}, {\"Y_4\": \"Audra Juarez\", \"Y_2\": \"Ted West\"}, {\"Y_4\": \"Audra Juarez\", \"Y_2\": \"Tena Bidwell\"}]",
+        "answer": [
+            "Gregory Yazzie",
+            "Oliver West",
+            "Ted West",
+            "Tena Bidwell"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "mother_in_law(\"Gregory Yazzie\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c526fa5c-bacf-405c-a560-cc0847c87f2f",
+        "question": "Who is the friend of the son of Kenton Kline?",
+        "solution_traces": "[{\"Y_2\": \"Cecil Cornwell\", \"Y_4\": \"Freddie Kline\"}, {\"Y_2\": \"Jefferson Cornwell\", \"Y_4\": \"Freddie Kline\"}, {\"Y_2\": \"Stanford Juarez\", \"Y_4\": \"Freddie Kline\"}, {\"Y_2\": \"Jenny Colter\", \"Y_4\": \"Freddie Kline\"}]",
+        "answer": [
+            "Cecil Cornwell",
+            "Jefferson Cornwell",
+            "Jenny Colter",
+            "Stanford Juarez"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "son(\"Kenton Kline\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1a90b468-74bf-4d92-9ebb-9aa44bc82806",
+        "question": "Who is the sibling of the grandson of Jefferson Cornwell?",
+        "solution_traces": "[{\"Y_2\": \"Quincy Cornwell\", \"Y_4\": \"Terrell Cornwell\"}, {\"Y_2\": \"Quincy Cornwell\", \"Y_4\": \"Jamal Cornwell\"}, {\"Y_4\": \"Quincy Cornwell\", \"Y_2\": \"Jamal Cornwell\"}, {\"Y_4\": \"Terrell Cornwell\", \"Y_2\": \"Jamal Cornwell\"}, {\"Y_2\": \"Terrell Cornwell\", \"Y_4\": \"Quincy Cornwell\"}, {\"Y_2\": \"Terrell Cornwell\", \"Y_4\": \"Jamal Cornwell\"}]",
+        "answer": [
+            "Jamal Cornwell",
+            "Quincy Cornwell",
+            "Terrell Cornwell"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "grandson(\"Jefferson Cornwell\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6b65c049-becf-42b6-ad6a-9006e32771f8",
+        "question": "Who is the child of the great-grandson of Audra Juarez?",
+        "solution_traces": "[{\"Y_2\": \"Ted West\", \"Y_4\": \"Stuart West\"}, {\"Y_2\": \"Abdul West\", \"Y_4\": \"Ramon West\"}, {\"Y_4\": \"Ramon West\", \"Y_2\": \"Morgan West\"}, {\"Y_2\": \"Johnetta West\", \"Y_4\": \"Stuart West\"}]",
+        "answer": [
+            "Abdul West",
+            "Johnetta West",
+            "Morgan West",
+            "Ted West"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "great_grandson(\"Audra Juarez\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "79e2db54-abb1-4cfb-85b6-bfd60e6a014b",
+        "question": "Who is the grandson of the great-grandfather of Ramon West?",
+        "solution_traces": "[{\"Y_2\": \"Kristopher West\", \"Y_4\": \"Logan West\"}, {\"Y_2\": \"Vern Yazzie\", \"Y_4\": \"Stanford Juarez\"}]",
+        "answer": [
+            "Kristopher West",
+            "Vern Yazzie"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "great_grandfather(\"Ramon West\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4787dc89-118c-47cd-9bc5-217f5b4ce477",
+        "question": "Who is the grandchild of the child of Addie Kline?",
+        "solution_traces": "[{\"Y_4\": \"Tyron Kline\", \"Y_2\": \"Leesa Cornwell\"}, {\"Y_4\": \"Tyron Kline\", \"Y_2\": \"Tena Bidwell\"}]",
+        "answer": [
+            "Leesa Cornwell",
+            "Tena Bidwell"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "child(\"Addie Kline\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b716d5e8-7862-4ea2-a15c-bcc588abbbcb",
+        "question": "Who is the great-grandparent of the friend of Audra Juarez?",
+        "solution_traces": "[{\"Y_2\": \"Addie Kline\", \"Y_4\": \"Tena Bidwell\"}, {\"Y_2\": \"Thelma Yazzie\", \"Y_4\": \"Ted West\"}, {\"Y_4\": \"Tena Bidwell\", \"Y_2\": \"Lonny Kline\"}, {\"Y_2\": \"Isabella West\", \"Y_4\": \"Ted West\"}, {\"Y_2\": \"Oliver West\", \"Y_4\": \"Ted West\"}, {\"Y_4\": \"Tena Bidwell\", \"Y_2\": \"Sebastian Colter\"}, {\"Y_4\": \"Tena Bidwell\", \"Y_2\": \"Jenny Colter\"}, {\"Y_4\": \"Ted West\", \"Y_2\": \"Gregory Yazzie\"}]",
+        "answer": [
+            "Addie Kline",
+            "Gregory Yazzie",
+            "Isabella West",
+            "Jenny Colter",
+            "Lonny Kline",
+            "Oliver West",
+            "Sebastian Colter",
+            "Thelma Yazzie"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandparent(Y_4, Y_2)",
+                "friend(\"Audra Juarez\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0775b002-4ed6-40e4-8d18-fdc38e59ff84",
+        "question": "Who is the great-grandchild of the great-grandfather of Tena Bidwell?",
+        "solution_traces": "[{\"Y_2\": \"Tena Bidwell\", \"Y_4\": \"Lonny Kline\"}, {\"Y_2\": \"Leesa Cornwell\", \"Y_4\": \"Lonny Kline\"}, {\"Y_4\": \"Sebastian Colter\", \"Y_2\": \"Tena Bidwell\"}, {\"Y_4\": \"Sebastian Colter\", \"Y_2\": \"Leesa Cornwell\"}]",
+        "answer": [
+            "Leesa Cornwell",
+            "Tena Bidwell"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "great_grandfather(\"Tena Bidwell\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d8b22f0b-a064-4e18-99b8-ae00c0fd3b64",
+        "question": "Who is the friend of the grandparent of Freddie Kline?",
+        "solution_traces": "[{\"Y_2\": \"Gregory Yazzie\", \"Y_4\": \"Lonny Kline\"}, {\"Y_2\": \"Geri West\", \"Y_4\": \"Lonny Kline\"}, {\"Y_2\": \"Sadye Cornwell\", \"Y_4\": \"Lonny Kline\"}, {\"Y_4\": \"Addie Kline\", \"Y_2\": \"Maximo Mingo\"}, {\"Y_4\": \"Addie Kline\", \"Y_2\": \"Leroy Bidwell\"}, {\"Y_2\": \"Stanford Juarez\", \"Y_4\": \"Addie Kline\"}, {\"Y_2\": \"Johnna West\", \"Y_4\": \"Lonny Kline\"}, {\"Y_2\": \"Logan West\", \"Y_4\": \"Addie Kline\"}, {\"Y_2\": \"Sebastian Colter\", \"Y_4\": \"Lonny Kline\"}]",
+        "answer": [
+            "Geri West",
+            "Gregory Yazzie",
+            "Johnna West",
+            "Leroy Bidwell",
+            "Logan West",
+            "Maximo Mingo",
+            "Sadye Cornwell",
+            "Sebastian Colter",
+            "Stanford Juarez"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "grandparent(\"Freddie Kline\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "68736197-202b-4a10-ac8e-07a661b2f2c5",
+        "question": "Who is the uncle of the friend of Johnna West?",
+        "solution_traces": "[{\"Y_2\": \"Ramon West\", \"Y_4\": \"Ted West\"}, {\"Y_4\": \"Morgan West\", \"Y_2\": \"Stuart West\"}]",
+        "answer": [
+            "Ramon West",
+            "Stuart West"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "friend(\"Johnna West\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "18d8dfdf-da7c-4b98-9c4c-40d070e104d3",
+        "question": "Who is the cousin of the grandparent of Erik Cornwell?",
+        "solution_traces": "[{\"Y_2\": \"Freddie Kline\", \"Y_4\": \"Lucretia Bidwell\"}]",
+        "answer": [
+            "Freddie Kline"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "grandparent(\"Erik Cornwell\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "63311186-25b4-415a-b30e-29997e3b664e",
+        "question": "Who is the father of the grandchild of Leesa Cornwell?",
+        "solution_traces": "[{\"Y_2\": \"Cecil Cornwell\", \"Y_4\": \"Terrell Cornwell\"}, {\"Y_2\": \"Cecil Cornwell\", \"Y_4\": \"Jamal Cornwell\"}, {\"Y_2\": \"Cecil Cornwell\", \"Y_4\": \"Quincy Cornwell\"}]",
+        "answer": [
+            "Cecil Cornwell"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "grandchild(\"Leesa Cornwell\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "45224d7d-53c5-46d2-a11c-1cd9f41c8ddd",
+        "question": "Who is the daughter-in-law of the mother of Kristopher West?",
+        "solution_traces": "[{\"Y_2\": \"Matilda West\", \"Y_4\": \"Isabella West\"}]",
+        "answer": [
+            "Matilda West"
+        ],
+        "prolog": {
+            "query": [
+                "daughter_in_law(Y_4, Y_2)",
+                "mother(\"Kristopher West\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9c7eb7fa-158a-4b87-9fcd-d9841e387b33",
+        "question": "Who is the second uncle of the sibling of Cecil Cornwell?",
+        "solution_traces": "[{\"Y_4\": \"Roxy Cornwell\", \"Y_2\": \"Kenton Kline\"}, {\"Y_2\": \"Kenton Kline\", \"Y_4\": \"Erik Cornwell\"}, {\"Y_2\": \"Kenton Kline\", \"Y_4\": \"Levi Cornwell\"}]",
+        "answer": [
+            "Kenton Kline"
+        ],
+        "prolog": {
+            "query": [
+                "second_uncle(Y_4, Y_2)",
+                "sibling(\"Cecil Cornwell\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "14b2f8ba-db16-4010-af2c-8a756b0b8fd3",
+        "question": "Who is the brother of the sister of Randal West?",
+        "solution_traces": "[{\"Y_4\": \"Hyun West\", \"Y_2\": \"Randal West\"}]",
+        "answer": [
+            "Randal West"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "sister(\"Randal West\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "01f4ab5b-74be-4e68-b1e8-443912b2d4e0",
+        "question": "Who is the cousin of the grandchild of Kristopher West?",
+        "solution_traces": "[{\"Y_2\": \"Ted West\", \"Y_4\": \"Abdul West\"}, {\"Y_4\": \"Ted West\", \"Y_2\": \"Morgan West\"}, {\"Y_2\": \"Abdul West\", \"Y_4\": \"Johnetta West\"}, {\"Y_2\": \"Abdul West\", \"Y_4\": \"Ted West\"}, {\"Y_2\": \"Ted West\", \"Y_4\": \"Morgan West\"}, {\"Y_2\": \"Johnetta West\", \"Y_4\": \"Abdul West\"}, {\"Y_2\": \"Johnetta West\", \"Y_4\": \"Morgan West\"}, {\"Y_4\": \"Johnetta West\", \"Y_2\": \"Morgan West\"}]",
+        "answer": [
+            "Abdul West",
+            "Johnetta West",
+            "Morgan West",
+            "Ted West"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "grandchild(\"Kristopher West\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3d91f216-7715-4b41-9c57-ffb2f847599c",
+        "question": "Who is the husband of the grandmother of Abdul West?",
+        "solution_traces": "[{\"Y_4\": \"Ella Mingo\", \"Y_2\": \"Maximo Mingo\"}, {\"Y_4\": \"Matilda West\", \"Y_2\": \"Kristopher West\"}]",
+        "answer": [
+            "Kristopher West",
+            "Maximo Mingo"
+        ],
+        "prolog": {
+            "query": [
+                "husband(Y_4, Y_2)",
+                "grandmother(\"Abdul West\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dbfa69b7-e7c0-42c8-935e-ed49a8cf37be",
+        "question": "Who is the sibling of the nephew of Levi Cornwell?",
+        "solution_traces": "[{\"Y_2\": \"Quincy Cornwell\", \"Y_4\": \"Terrell Cornwell\"}, {\"Y_2\": \"Quincy Cornwell\", \"Y_4\": \"Jamal Cornwell\"}, {\"Y_4\": \"Quincy Cornwell\", \"Y_2\": \"Jamal Cornwell\"}, {\"Y_4\": \"Terrell Cornwell\", \"Y_2\": \"Jamal Cornwell\"}, {\"Y_2\": \"Terrell Cornwell\", \"Y_4\": \"Quincy Cornwell\"}, {\"Y_2\": \"Terrell Cornwell\", \"Y_4\": \"Jamal Cornwell\"}]",
+        "answer": [
+            "Jamal Cornwell",
+            "Quincy Cornwell",
+            "Terrell Cornwell"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "nephew(\"Levi Cornwell\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "58924df2-d6d4-4a10-84ee-645b136a5e71",
+        "question": "Who is the mother of the niece of Stuart West?",
+        "solution_traces": "[{\"Y_2\": \"Ora West\", \"Y_4\": \"Morgan West\"}]",
+        "answer": [
+            "Ora West"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "niece(\"Stuart West\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "49317af2-4a10-49cf-aabb-6657717fdc5d",
+        "question": "Who is the great-granddaughter of the mother of Dallas Kline?",
+        "solution_traces": "[{\"Y_4\": \"Addie Kline\", \"Y_2\": \"Leesa Cornwell\"}, {\"Y_4\": \"Addie Kline\", \"Y_2\": \"Tena Bidwell\"}]",
+        "answer": [
+            "Leesa Cornwell",
+            "Tena Bidwell"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "mother(\"Dallas Kline\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "be2c00d0-12f3-4317-81ed-c4ccbb9127c5",
+        "question": "Who is the female cousin of the child of Jeannine Kline?",
+        "solution_traces": "[{\"Y_4\": \"Freddie Kline\", \"Y_2\": \"Lucretia Bidwell\"}, {\"Y_2\": \"Golda Kline\", \"Y_4\": \"Freddie Kline\"}]",
+        "answer": [
+            "Golda Kline",
+            "Lucretia Bidwell"
+        ],
+        "prolog": {
+            "query": [
+                "female_cousin(Y_4, Y_2)",
+                "child(\"Jeannine Kline\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e52262f0-23c8-4abb-89c8-bb0cbc0782d7",
+        "question": "Who is the uncle of the granddaughter of Ella Mingo?",
+        "solution_traces": "[{\"Y_4\": \"Morgan West\", \"Y_2\": \"Stuart West\"}]",
+        "answer": [
+            "Stuart West"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "granddaughter(\"Ella Mingo\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1c89d691-bc3f-43c8-acdf-f945a1ceca92",
+        "question": "Who is the brother of the nephew of Levi Cornwell?",
+        "solution_traces": "[{\"Y_2\": \"Quincy Cornwell\", \"Y_4\": \"Terrell Cornwell\"}, {\"Y_2\": \"Quincy Cornwell\", \"Y_4\": \"Jamal Cornwell\"}, {\"Y_4\": \"Quincy Cornwell\", \"Y_2\": \"Jamal Cornwell\"}, {\"Y_4\": \"Terrell Cornwell\", \"Y_2\": \"Jamal Cornwell\"}, {\"Y_2\": \"Terrell Cornwell\", \"Y_4\": \"Quincy Cornwell\"}, {\"Y_2\": \"Terrell Cornwell\", \"Y_4\": \"Jamal Cornwell\"}]",
+        "answer": [
+            "Jamal Cornwell",
+            "Quincy Cornwell",
+            "Terrell Cornwell"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "nephew(\"Levi Cornwell\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d4a71355-9a30-4e16-a9bd-aea330846e7d",
+        "question": "Who is the great-grandmother of the granddaughter of Jeanette Kline?",
+        "solution_traces": "[{\"Y_4\": \"Leesa Cornwell\", \"Y_2\": \"Jenny Colter\"}, {\"Y_2\": \"Addie Kline\", \"Y_4\": \"Tena Bidwell\"}, {\"Y_2\": \"Addie Kline\", \"Y_4\": \"Leesa Cornwell\"}, {\"Y_4\": \"Tena Bidwell\", \"Y_2\": \"Jenny Colter\"}]",
+        "answer": [
+            "Addie Kline",
+            "Jenny Colter"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandmother(Y_4, Y_2)",
+                "granddaughter(\"Jeanette Kline\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "275ec9c7-43c8-4ebe-a767-a1d2df276669",
+        "question": "Who is the aunt of the great-granddaughter of Gregory Yazzie?",
+        "solution_traces": "[{\"Y_4\": \"Morgan West\", \"Y_2\": \"Marguerite Mingo\"}]",
+        "answer": [
+            "Marguerite Mingo"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "great_granddaughter(\"Gregory Yazzie\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    }
+]

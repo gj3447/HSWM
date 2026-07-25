@@ -1,0 +1,752 @@
+[
+    {
+        "id": "ac54a745-16d5-42d8-aef5-fb746154eb09",
+        "question": "How many grandchildren does Emelda Lam have?",
+        "solution_traces": "[{\"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(\"Emelda Lam\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "23d5bd96-2371-4320-bef0-734bd67ef00d",
+        "question": "How many friends does Cordell Dees have?",
+        "solution_traces": "[{\"Count_1\": 5}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(\"Cordell Dees\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "85c6a6a1-0ff2-44da-83c3-0904b9ea1a61",
+        "question": "How many grandparents does Estella Handley have?",
+        "solution_traces": "[{\"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(\"Estella Handley\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c8a6c3c2-b0a7-483a-a378-e8208346d3e5",
+        "question": "How many great-grandsons does Winnie Halstead have?",
+        "solution_traces": "[{\"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(\"Winnie Halstead\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0e656fef-2bc3-4d6a-ac68-3b406aaf6a20",
+        "question": "How many wives does Toby Lam have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(wife(\"Toby Lam\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c16cfdd2-e0e3-4383-844e-8927391d4f27",
+        "question": "How many great-uncles does Raul Michaels have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_uncle(\"Raul Michaels\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7fae0728-118b-45dc-92cf-aa2b01626b09",
+        "question": "How many sons-in-law does Seth Embry have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(\"Seth Embry\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "dea7cfcf-9fed-4167-a090-c7006c7d6368",
+        "question": "How many sons does Roxanne Lam have?",
+        "solution_traces": "[{\"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son(\"Roxanne Lam\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "faeb17ab-1b64-41c7-98b1-b3a0acb0f9d3",
+        "question": "How many friends does Dena Michaels have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(\"Dena Michaels\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "03948dc9-4b72-4c05-8240-b6e33a65c341",
+        "question": "How many sisters-in-law does Riley Handley have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister_in_law(\"Riley Handley\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "26a3038d-8a37-4a65-aa52-440d63ac9d00",
+        "question": "How many mothers-in-law does Viola Halstead have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(\"Viola Halstead\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3b49a23c-e3ca-4be1-b924-411dbecc615f",
+        "question": "How many grandchildren does Seth Embry have?",
+        "solution_traces": "[{\"Count_1\": 5}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(\"Seth Embry\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "64080cce-3239-4cea-a495-f99b4407df65",
+        "question": "How many husbands does Viola Halstead have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(husband(\"Viola Halstead\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3354ea1e-e87c-4829-8960-c8dd0027d311",
+        "question": "How many daughters-in-law does Dustin Halstead have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter_in_law(\"Dustin Halstead\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "334d86e9-766a-4f83-a429-199e459ef47a",
+        "question": "How many grandmothers does Johnetta Halstead have?",
+        "solution_traces": "[{\"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandmother(\"Johnetta Halstead\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "35e1f762-d0b7-4d98-92ab-5f18775d5a8c",
+        "question": "How many wives does Toby Lam have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(wife(\"Toby Lam\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d285a329-ea8e-4764-88d3-89f53f2d84bb",
+        "question": "How many grandsons does Marcelina Dees have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandson(\"Marcelina Dees\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "354e5af3-9ae0-4268-b5e4-9e245928e1a1",
+        "question": "How many uncles does Raul Michaels have?",
+        "solution_traces": "[{\"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(uncle(\"Raul Michaels\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "53b0a057-dd6a-4073-8907-84bd1bf3fe03",
+        "question": "How many siblings does Alberto Lam have?",
+        "solution_traces": "[{\"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(\"Alberto Lam\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2a05a465-2448-4ee8-8e5b-14d0525848f6",
+        "question": "How many second uncles does Edison Reece have?",
+        "solution_traces": "[{\"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(second_uncle(\"Edison Reece\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0f98dc77-add6-4bfe-807d-5daa5c21dbb5",
+        "question": "How many mothers-in-law does Jakob Quezada have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(\"Jakob Quezada\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f6ab0d0c-f5de-4371-8391-4d3c2f86c033",
+        "question": "How many daughters-in-law does Theda Dees have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter_in_law(\"Theda Dees\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "27a66759-85b1-4483-9827-93c301bc7a0f",
+        "question": "How many grandsons does Rudolf Moorehead have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandson(\"Rudolf Moorehead\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7e5d0aa2-cd47-46b1-a8f6-bf9bb36e2f92",
+        "question": "How many siblings does Alethia Lam have?",
+        "solution_traces": "[{\"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(\"Alethia Lam\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7f09b3a8-735a-4580-8ac6-2d8861d29db5",
+        "question": "How many great-grandparents does Giovanni Dees have?",
+        "solution_traces": "[{\"Count_1\": 6}]",
+        "answer": [
+            "6"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(\"Giovanni Dees\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b28ea711-f8c5-40a1-b6d6-677962fc06e5",
+        "question": "How many grandchildren does Seth Embry have?",
+        "solution_traces": "[{\"Count_1\": 5}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(\"Seth Embry\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "795147b3-ce4b-4e73-919d-be30192fbb1b",
+        "question": "How many mothers does Alfred Lam have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother(\"Alfred Lam\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "788bd37e-b010-405e-87c7-cea04d137628",
+        "question": "How many friends does Alberto Lam have?",
+        "solution_traces": "[{\"Count_1\": 5}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(\"Alberto Lam\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8e95ff35-47d4-4093-83d5-f602f5e7f2af",
+        "question": "How many daughters does Emelda Lam have?",
+        "solution_traces": "[{\"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter(\"Emelda Lam\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6e247955-9465-4f1a-8d41-75c74ad28cfb",
+        "question": "How many brothers does Dena Michaels have?",
+        "solution_traces": "[{\"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(\"Dena Michaels\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    }
+]

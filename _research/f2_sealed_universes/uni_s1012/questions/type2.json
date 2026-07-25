@@ -1,0 +1,1055 @@
+[
+    {
+        "id": "7e08a2be-44b4-4083-8848-9f1cec153944",
+        "question": "Who is the nephew of the son of the person whose date of birth is 0197-05-12?",
+        "solution_traces": "[{\"Y_2\": \"Virgil Michaels\", \"Y_6\": \"Emelda Lam\", \"Y_4\": \"Alberto Lam\"}, {\"Y_4\": \"Wilber Lam\", \"Y_2\": \"Raul Michaels\", \"Y_6\": \"Emelda Lam\"}, {\"Y_2\": \"Virgil Michaels\", \"Y_4\": \"Wilber Lam\", \"Y_6\": \"Emelda Lam\"}, {\"Y_2\": \"Raul Michaels\", \"Y_6\": \"Emelda Lam\", \"Y_4\": \"Alberto Lam\"}, {\"Y_4\": \"Aubrey Lam\", \"Y_2\": \"Raul Michaels\", \"Y_6\": \"Emelda Lam\"}, {\"Y_2\": \"Virgil Michaels\", \"Y_4\": \"Aubrey Lam\", \"Y_6\": \"Emelda Lam\"}]",
+        "answer": [
+            "Raul Michaels",
+            "Virgil Michaels"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "son(Y_6, Y_4)",
+                "dob(Y_6, \"0197-05-12\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "efc0fa9d-398a-42b1-a445-db62506baefc",
+        "question": "Who is the great-grandmother of the great-uncle of the person whose date of birth is 0329-10-10?",
+        "solution_traces": "[{\"Y_2\": \"Naomi Embry\", \"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Estella Handley\"}, {\"Y_4\": \"Richard Dees\", \"Y_2\": \"Marcelina Dees\", \"Y_6\": \"Estella Handley\"}, {\"Y_4\": \"Giovanni Dees\", \"Y_2\": \"Marcelina Dees\", \"Y_6\": \"Estella Handley\"}, {\"Y_2\": \"Naomi Embry\", \"Y_4\": \"Richard Dees\", \"Y_6\": \"Estella Handley\"}, {\"Y_4\": \"Giovanni Dees\", \"Y_2\": \"Winnie Halstead\", \"Y_6\": \"Estella Handley\"}, {\"Y_2\": \"Winnie Halstead\", \"Y_4\": \"Richard Dees\", \"Y_6\": \"Estella Handley\"}]",
+        "answer": [
+            "Marcelina Dees",
+            "Naomi Embry",
+            "Winnie Halstead"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandmother(Y_4, Y_2)",
+                "great_uncle(Y_6, Y_4)",
+                "dob(Y_6, \"0329-10-10\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3f0c5956-9d19-46a7-a5aa-da20529716aa",
+        "question": "Who is the great-grandmother of the great-grandchild of the person whose occupation is hospital pharmacist?",
+        "solution_traces": "[{\"Y_6\": \"Toby Lam\", \"Y_4\": \"Margie Moorehead\", \"Y_2\": \"Emelda Lam\"}, {\"Y_6\": \"Toby Lam\", \"Y_4\": \"Chelsie Reece\", \"Y_2\": \"Emelda Lam\"}, {\"Y_6\": \"Toby Lam\", \"Y_2\": \"Emelda Lam\", \"Y_4\": \"Dorothea Quezada\"}, {\"Y_6\": \"Toby Lam\", \"Y_2\": \"Emelda Lam\", \"Y_4\": \"Cortez Michaels\"}]",
+        "answer": [
+            "Emelda Lam"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandmother(Y_4, Y_2)",
+                "great_grandchild(Y_6, Y_4)",
+                "job(Y_6, \"hospital pharmacist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b9ee112c-254c-414f-bf34-22bdf39c1c1c",
+        "question": "Who is the sibling of the great-grandson of the person whose occupation is horticultural consultant?",
+        "solution_traces": "[{\"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Seth Embry\", \"Y_2\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_6\": \"Seth Embry\", \"Y_2\": \"Monserrate Dees\"}, {\"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Winnie Halstead\", \"Y_4\": \"Richard Dees\"}, {\"Y_2\": \"Monserrate Dees\", \"Y_6\": \"Winnie Halstead\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Seth Embry\"}, {\"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Seth Embry\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_6\": \"Winnie Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_2\": \"Monserrate Dees\", \"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Seth Embry\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Monserrate Dees\", \"Y_6\": \"Winnie Halstead\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Winnie Halstead\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Winnie Halstead\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Seth Embry\"}, {\"Y_4\": \"Adam Dees\", \"Y_6\": \"Seth Embry\", \"Y_2\": \"Richard Dees\"}, {\"Y_2\": \"Adam Dees\", \"Y_6\": \"Seth Embry\", \"Y_4\": \"Richard Dees\"}, {\"Y_2\": \"Monserrate Dees\", \"Y_6\": \"Seth Embry\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Winnie Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_2\": \"Adam Dees\", \"Y_6\": \"Winnie Halstead\", \"Y_4\": \"Richard Dees\"}, {\"Y_2\": \"Monserrate Dees\", \"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Winnie Halstead\"}]",
+        "answer": [
+            "Adam Dees",
+            "Giovanni Dees",
+            "Monserrate Dees",
+            "Richard Dees"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "great_grandson(Y_6, Y_4)",
+                "job(Y_6, \"horticultural consultant\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "93db0fde-e4c1-442a-ac45-012d18b92174",
+        "question": "Who is the grandfather of the brother of the person whose hobby is science and technology studies?",
+        "solution_traces": "[{\"Y_6\": \"Dena Michaels\", \"Y_2\": \"Alan Lam\", \"Y_4\": \"Wilber Lam\"}, {\"Y_4\": \"Aubrey Lam\", \"Y_6\": \"Dena Michaels\", \"Y_2\": \"Alan Lam\"}, {\"Y_6\": \"Dena Michaels\", \"Y_2\": \"Alan Lam\", \"Y_4\": \"Alberto Lam\"}]",
+        "answer": [
+            "Alan Lam"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "brother(Y_6, Y_4)",
+                "hobby(Y_6, \"science and technology studies\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4335610a-7baf-4c5c-95ca-25854bb772b6",
+        "question": "Who is the brother of the grandchild of the person whose hobby is mountain biking?",
+        "solution_traces": "[{\"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Viola Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_4\": \"Monserrate Dees\", \"Y_2\": \"Adam Dees\", \"Y_6\": \"Viola Halstead\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Viola Halstead\"}, {\"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Viola Halstead\", \"Y_4\": \"Richard Dees\"}, {\"Y_2\": \"Adam Dees\", \"Y_6\": \"Viola Halstead\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Monserrate Dees\", \"Y_6\": \"Viola Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Viola Halstead\"}, {\"Y_4\": \"Adam Dees\", \"Y_6\": \"Viola Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_4\": \"Monserrate Dees\", \"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Viola Halstead\"}]",
+        "answer": [
+            "Adam Dees",
+            "Giovanni Dees",
+            "Richard Dees"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "grandchild(Y_6, Y_4)",
+                "hobby(Y_6, \"mountain biking\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0b1825e8-ef65-47de-a419-882f308d6cec",
+        "question": "Who is the nephew of the child of the person whose date of birth is 0226-04-08?",
+        "solution_traces": "[{\"Y_2\": \"Adam Dees\", \"Y_4\": \"Johnetta Halstead\", \"Y_6\": \"Viola Halstead\"}, {\"Y_4\": \"Clifford Halstead\", \"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Viola Halstead\"}, {\"Y_6\": \"Viola Halstead\", \"Y_4\": \"Rhea Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Viola Halstead\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Clifford Halstead\", \"Y_6\": \"Viola Halstead\"}, {\"Y_6\": \"Viola Halstead\", \"Y_4\": \"Kermit Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_2\": \"Adam Dees\", \"Y_6\": \"Viola Halstead\", \"Y_4\": \"Kermit Halstead\"}, {\"Y_2\": \"Adam Dees\", \"Y_6\": \"Viola Halstead\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_6\": \"Viola Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Viola Halstead\", \"Y_4\": \"Kermit Halstead\"}, {\"Y_4\": \"Clifford Halstead\", \"Y_6\": \"Viola Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Viola Halstead\"}]",
+        "answer": [
+            "Adam Dees",
+            "Giovanni Dees",
+            "Richard Dees"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "child(Y_6, Y_4)",
+                "dob(Y_6, \"0226-04-08\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "96a10a66-7eda-4659-ba1e-b438cc9dacdd",
+        "question": "Who is the grandson of the grandfather of the person whose hobby is reading?",
+        "solution_traces": "[{\"Y_2\": \"Kermit Halstead\", \"Y_4\": \"Dustin Halstead\", \"Y_6\": \"Johnetta Halstead\"}, {\"Y_4\": \"Seth Embry\", \"Y_2\": \"Clifford Halstead\", \"Y_6\": \"Johnetta Halstead\"}, {\"Y_2\": \"Clifford Halstead\", \"Y_4\": \"Dustin Halstead\", \"Y_6\": \"Johnetta Halstead\"}, {\"Y_4\": \"Seth Embry\", \"Y_2\": \"Kermit Halstead\", \"Y_6\": \"Johnetta Halstead\"}]",
+        "answer": [
+            "Clifford Halstead",
+            "Kermit Halstead"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "grandfather(Y_6, Y_4)",
+                "hobby(Y_6, \"reading\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3b9a69df-255a-4421-8b05-6d46deef784c",
+        "question": "Who is the aunt of the great-grandson of the person whose date of birth is 0201-12-23?",
+        "solution_traces": "[{\"Y_4\": \"Giovanni Dees\", \"Y_2\": \"Johnetta Halstead\", \"Y_6\": \"Marcelina Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_6\": \"Marcelina Dees\", \"Y_2\": \"Rhea Halstead\"}, {\"Y_2\": \"Johnetta Halstead\", \"Y_6\": \"Marcelina Dees\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Johnetta Halstead\", \"Y_6\": \"Marcelina Dees\"}, {\"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Marcelina Dees\", \"Y_2\": \"Rhea Halstead\"}, {\"Y_2\": \"Rhea Halstead\", \"Y_6\": \"Marcelina Dees\", \"Y_4\": \"Richard Dees\"}]",
+        "answer": [
+            "Johnetta Halstead",
+            "Rhea Halstead"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "great_grandson(Y_6, Y_4)",
+                "dob(Y_6, \"0201-12-23\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8cba5b54-5ba5-409e-abc0-70532ac22a51",
+        "question": "Who is the female second cousin of the grandchild of the person whose date of birth is 0234-04-21?",
+        "solution_traces": "[{\"Y_4\": \"Margie Moorehead\", \"Y_6\": \"Alberto Lam\", \"Y_2\": \"Dorothea Quezada\"}, {\"Y_4\": \"Chelsie Reece\", \"Y_6\": \"Alberto Lam\", \"Y_2\": \"Dorothea Quezada\"}]",
+        "answer": [
+            "Dorothea Quezada"
+        ],
+        "prolog": {
+            "query": [
+                "female_second_cousin(Y_4, Y_2)",
+                "grandchild(Y_6, Y_4)",
+                "dob(Y_6, \"0234-04-21\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "699fa685-ee4e-45d4-b0ce-92b25048b72c",
+        "question": "Who is the great-grandparent of the wife of the person whose hobby is unicycling?",
+        "solution_traces": "[{\"Y_6\": \"Jakob Quezada\", \"Y_2\": \"Toby Lam\", \"Y_4\": \"Dorothea Quezada\"}, {\"Y_2\": \"Emelda Lam\", \"Y_6\": \"Jakob Quezada\", \"Y_4\": \"Dorothea Quezada\"}]",
+        "answer": [
+            "Emelda Lam",
+            "Toby Lam"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandparent(Y_4, Y_2)",
+                "wife(Y_6, Y_4)",
+                "hobby(Y_6, \"unicycling\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "587b5340-bfc3-4f5d-ab8e-0660c82897c1",
+        "question": "Who is the sister of the father-in-law of the person whose occupation is landscape architect?",
+        "solution_traces": "[{\"Y_2\": \"Dena Michaels\", \"Y_6\": \"Rudolf Moorehead\", \"Y_4\": \"Alberto Lam\"}, {\"Y_2\": \"Alethia Lam\", \"Y_6\": \"Rudolf Moorehead\", \"Y_4\": \"Alberto Lam\"}]",
+        "answer": [
+            "Alethia Lam",
+            "Dena Michaels"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "father_in_law(Y_6, Y_4)",
+                "job(Y_6, \"landscape architect\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "98c24d07-3413-49f4-96ba-456d2e3a4080",
+        "question": "Who is the sister of the aunt of the person whose hobby is model united nations?",
+        "solution_traces": "[{\"Y_2\": \"Johnetta Halstead\", \"Y_6\": \"Giovanni Dees\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_2\": \"Cherlyn Dees\", \"Y_6\": \"Giovanni Dees\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_6\": \"Giovanni Dees\", \"Y_2\": \"Cherlyn Dees\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_6\": \"Giovanni Dees\", \"Y_2\": \"Rhea Halstead\"}]",
+        "answer": [
+            "Cherlyn Dees",
+            "Johnetta Halstead",
+            "Rhea Halstead"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "aunt(Y_6, Y_4)",
+                "hobby(Y_6, \"model united nations\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5cc61ce8-e559-4387-80c7-a6eab291be19",
+        "question": "Who is the friend of the niece of the person whose occupation is conference centre manager?",
+        "solution_traces": "[{\"Y_4\": \"Alethia Lam\", \"Y_2\": \"Virgil Michaels\", \"Y_6\": \"Alfred Lam\"}, {\"Y_2\": \"Bonnie Handley\", \"Y_6\": \"Alfred Lam\", \"Y_4\": \"Dena Michaels\"}, {\"Y_4\": \"Alethia Lam\", \"Y_2\": \"Allyson Dees\", \"Y_6\": \"Alfred Lam\"}, {\"Y_4\": \"Alethia Lam\", \"Y_2\": \"Cordell Dees\", \"Y_6\": \"Alfred Lam\"}]",
+        "answer": [
+            "Allyson Dees",
+            "Bonnie Handley",
+            "Cordell Dees",
+            "Virgil Michaels"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "niece(Y_6, Y_4)",
+                "job(Y_6, \"conference centre manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "58a06521-e693-4bf0-9a96-eb6666e3110e",
+        "question": "Who is the father of the brother-in-law of the person whose date of birth is 0197-05-12?",
+        "solution_traces": "[{\"Y_2\": \"Alan Lam\", \"Y_4\": \"Alfred Lam\", \"Y_6\": \"Emelda Lam\"}]",
+        "answer": [
+            "Alan Lam"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "brother_in_law(Y_6, Y_4)",
+                "dob(Y_6, \"0197-05-12\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "622a5ec5-7848-430a-bebe-2bf56fefe88e",
+        "question": "Who is the great-grandfather of the friend of the person whose occupation is heritage manager?",
+        "solution_traces": "[{\"Y_2\": \"Seth Embry\", \"Y_6\": \"Clifford Reece\", \"Y_4\": \"Richard Dees\"}, {\"Y_2\": \"Cordell Dees\", \"Y_6\": \"Clifford Reece\", \"Y_4\": \"Richard Dees\"}, {\"Y_2\": \"Dustin Halstead\", \"Y_6\": \"Clifford Reece\", \"Y_4\": \"Richard Dees\"}]",
+        "answer": [
+            "Cordell Dees",
+            "Dustin Halstead",
+            "Seth Embry"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandfather(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "job(Y_6, \"heritage manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cea1932f-8549-4357-8e41-05f0ceace31d",
+        "question": "Who is the brother of the brother of the person whose occupation is arboriculturist?",
+        "solution_traces": "[{\"Y_2\": \"Alberto Lam\", \"Y_4\": \"Aubrey Lam\", \"Y_6\": \"Alethia Lam\"}, {\"Y_4\": \"Wilber Lam\", \"Y_6\": \"Alethia Lam\", \"Y_2\": \"Aubrey Lam\"}, {\"Y_2\": \"Alberto Lam\", \"Y_4\": \"Wilber Lam\", \"Y_6\": \"Alethia Lam\"}, {\"Y_2\": \"Wilber Lam\", \"Y_6\": \"Alethia Lam\", \"Y_4\": \"Alberto Lam\"}, {\"Y_4\": \"Aubrey Lam\", \"Y_6\": \"Alethia Lam\", \"Y_2\": \"Wilber Lam\"}, {\"Y_2\": \"Aubrey Lam\", \"Y_6\": \"Alethia Lam\", \"Y_4\": \"Alberto Lam\"}]",
+        "answer": [
+            "Alberto Lam",
+            "Aubrey Lam",
+            "Wilber Lam"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "brother(Y_6, Y_4)",
+                "job(Y_6, \"arboriculturist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1a78ef21-d8fd-4c96-bfa2-6e950009ebe3",
+        "question": "Who is the mother-in-law of the grandmother of the person whose hobby is sports memorabilia?",
+        "solution_traces": "[{\"Y_4\": \"Cherlyn Dees\", \"Y_2\": \"Theda Dees\", \"Y_6\": \"Allyson Dees\"}]",
+        "answer": [
+            "Theda Dees"
+        ],
+        "prolog": {
+            "query": [
+                "mother_in_law(Y_4, Y_2)",
+                "grandmother(Y_6, Y_4)",
+                "hobby(Y_6, \"sports memorabilia\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1add289c-6d64-468e-81b5-b32716cb572c",
+        "question": "Who is the sibling of the nephew of the person whose date of birth is 0252-04-05?",
+        "solution_traces": "[{\"Y_4\": \"Adam Dees\", \"Y_6\": \"Clifford Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_2\": \"Monserrate Dees\", \"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Clifford Halstead\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Clifford Halstead\"}, {\"Y_2\": \"Adam Dees\", \"Y_6\": \"Clifford Halstead\", \"Y_4\": \"Richard Dees\"}, {\"Y_2\": \"Monserrate Dees\", \"Y_6\": \"Clifford Halstead\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_6\": \"Clifford Halstead\", \"Y_2\": \"Monserrate Dees\"}, {\"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Clifford Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Clifford Halstead\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Clifford Halstead\"}]",
+        "answer": [
+            "Adam Dees",
+            "Giovanni Dees",
+            "Monserrate Dees",
+            "Richard Dees"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "nephew(Y_6, Y_4)",
+                "dob(Y_6, \"0252-04-05\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9c558eda-4a31-48f2-be5c-d5c40dfa33a8",
+        "question": "Who is the friend of the grandparent of the person whose occupation is professor emeritus?",
+        "solution_traces": "[{\"Y_4\": \"Viola Halstead\", \"Y_6\": \"Monserrate Dees\", \"Y_2\": \"Kermit Halstead\"}, {\"Y_4\": \"Alan Lam\", \"Y_6\": \"Aubrey Lam\", \"Y_2\": \"Edison Reece\"}, {\"Y_4\": \"Theda Dees\", \"Y_6\": \"Monserrate Dees\", \"Y_2\": \"Rogelio Michaels\"}, {\"Y_6\": \"Monserrate Dees\", \"Y_2\": \"Estella Handley\", \"Y_4\": \"Rosendo Halstead\"}, {\"Y_4\": \"Alan Lam\", \"Y_2\": \"Sheila Michaels\", \"Y_6\": \"Aubrey Lam\"}, {\"Y_4\": \"Roxanne Lam\", \"Y_6\": \"Aubrey Lam\", \"Y_2\": \"Alberto Lam\"}, {\"Y_2\": \"Viola Halstead\", \"Y_4\": \"Alan Lam\", \"Y_6\": \"Aubrey Lam\"}, {\"Y_2\": \"Rosendo Halstead\", \"Y_4\": \"Alan Lam\", \"Y_6\": \"Aubrey Lam\"}, {\"Y_4\": \"Roxanne Lam\", \"Y_2\": \"Adam Dees\", \"Y_6\": \"Aubrey Lam\"}, {\"Y_2\": \"Viola Halstead\", \"Y_6\": \"Monserrate Dees\", \"Y_4\": \"Rosendo Halstead\"}, {\"Y_2\": \"Alan Lam\", \"Y_6\": \"Monserrate Dees\", \"Y_4\": \"Rosendo Halstead\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Viola Halstead\", \"Y_6\": \"Monserrate Dees\"}, {\"Y_4\": \"Roxanne Lam\", \"Y_2\": \"Robbie Lam\", \"Y_6\": \"Aubrey Lam\"}, {\"Y_4\": \"Viola Halstead\", \"Y_2\": \"Alan Lam\", \"Y_6\": \"Monserrate Dees\"}, {\"Y_4\": \"Wendell Dees\", \"Y_6\": \"Monserrate Dees\", \"Y_2\": \"Toby Lam\"}, {\"Y_4\": \"Wendell Dees\", \"Y_6\": \"Monserrate Dees\", \"Y_2\": \"Adam Dees\"}, {\"Y_2\": \"Rosendo Halstead\", \"Y_4\": \"Viola Halstead\", \"Y_6\": \"Monserrate Dees\"}, {\"Y_2\": \"Clifford Halstead\", \"Y_4\": \"Alan Lam\", \"Y_6\": \"Aubrey Lam\"}, {\"Y_4\": \"Wendell Dees\", \"Y_6\": \"Monserrate Dees\", \"Y_2\": \"Rhea Halstead\"}]",
+        "answer": [
+            "Adam Dees",
+            "Alan Lam",
+            "Alberto Lam",
+            "Clifford Halstead",
+            "Edison Reece",
+            "Estella Handley",
+            "Kermit Halstead",
+            "Rhea Halstead",
+            "Robbie Lam",
+            "Rogelio Michaels",
+            "Rosendo Halstead",
+            "Sheila Michaels",
+            "Toby Lam",
+            "Viola Halstead"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "grandparent(Y_6, Y_4)",
+                "job(Y_6, \"professor emeritus\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "904a6559-3d52-434a-8f43-b0ebb623e06a",
+        "question": "Who is the brother-in-law of the friend of the person whose date of birth is 0279-02-18?",
+        "solution_traces": "[{\"Y_2\": \"Wilber Lam\", \"Y_6\": \"Monserrate Dees\", \"Y_4\": \"Rogelio Michaels\"}, {\"Y_2\": \"Aubrey Lam\", \"Y_6\": \"Monserrate Dees\", \"Y_4\": \"Rogelio Michaels\"}, {\"Y_2\": \"Alfred Lam\", \"Y_6\": \"Monserrate Dees\", \"Y_4\": \"Emelda Lam\"}, {\"Y_2\": \"Alberto Lam\", \"Y_6\": \"Monserrate Dees\", \"Y_4\": \"Rogelio Michaels\"}]",
+        "answer": [
+            "Alberto Lam",
+            "Alfred Lam",
+            "Aubrey Lam",
+            "Wilber Lam"
+        ],
+        "prolog": {
+            "query": [
+                "brother_in_law(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "dob(Y_6, \"0279-02-18\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2fccbc78-3df2-438a-aa12-5f74d4ec202d",
+        "question": "Who is the wife of the great-uncle of the person whose date of birth is 0277-12-22?",
+        "solution_traces": "[{\"Y_4\": \"Alberto Lam\", \"Y_2\": \"Robbie Lam\", \"Y_6\": \"Dorothea Quezada\"}]",
+        "answer": [
+            "Robbie Lam"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "great_uncle(Y_6, Y_4)",
+                "dob(Y_6, \"0277-12-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2fa3a200-1aad-4419-b5a8-6fc01ef854c9",
+        "question": "Who is the brother of the great-uncle of the person whose occupation is event organiser?",
+        "solution_traces": "[{\"Y_4\": \"Richard Dees\", \"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Estella Handley\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Richard Dees\", \"Y_6\": \"Estella Handley\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Estella Handley\"}, {\"Y_4\": \"Giovanni Dees\", \"Y_2\": \"Richard Dees\", \"Y_6\": \"Estella Handley\"}]",
+        "answer": [
+            "Adam Dees",
+            "Giovanni Dees",
+            "Richard Dees"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "great_uncle(Y_6, Y_4)",
+                "job(Y_6, \"event organiser\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dcc07ca0-1cec-4bc7-9070-6fe6623af068",
+        "question": "Who is the brother of the friend of the person whose hobby is auto audiophilia?",
+        "solution_traces": "[{\"Y_2\": \"Alfred Lam\", \"Y_4\": \"Toby Lam\", \"Y_6\": \"Riley Handley\"}]",
+        "answer": [
+            "Alfred Lam"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "hobby(Y_6, \"auto audiophilia\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "75410af4-c1c8-4feb-9b3d-9f2d79a31672",
+        "question": "Who is the sibling of the grandchild of the person whose hobby is canoeing?",
+        "solution_traces": "[{\"Y_2\": \"Cherlyn Dees\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_2\": \"Clifford Halstead\", \"Y_4\": \"Johnetta Halstead\", \"Y_6\": \"Dustin Halstead\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_2\": \"Cherlyn Dees\"}, {\"Y_4\": \"Clifford Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_2\": \"Rhea Halstead\"}, {\"Y_4\": \"Clifford Halstead\", \"Y_2\": \"Johnetta Halstead\", \"Y_6\": \"Dustin Halstead\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_2\": \"Kermit Halstead\", \"Y_6\": \"Dustin Halstead\"}, {\"Y_2\": \"Kermit Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Cherlyn Dees\"}, {\"Y_2\": \"Kermit Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_2\": \"Clifford Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Cherlyn Dees\"}, {\"Y_2\": \"Johnetta Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_2\": \"Johnetta Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Kermit Halstead\"}, {\"Y_2\": \"Cherlyn Dees\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Kermit Halstead\"}, {\"Y_2\": \"Rhea Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Cherlyn Dees\"}, {\"Y_2\": \"Johnetta Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Cherlyn Dees\"}, {\"Y_2\": \"Clifford Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_4\": \"Clifford Halstead\", \"Y_2\": \"Kermit Halstead\", \"Y_6\": \"Dustin Halstead\"}, {\"Y_2\": \"Clifford Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Kermit Halstead\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_2\": \"Rhea Halstead\"}, {\"Y_2\": \"Rhea Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Kermit Halstead\"}, {\"Y_4\": \"Clifford Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_2\": \"Cherlyn Dees\"}]",
+        "answer": [
+            "Cherlyn Dees",
+            "Clifford Halstead",
+            "Johnetta Halstead",
+            "Kermit Halstead",
+            "Rhea Halstead"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "grandchild(Y_6, Y_4)",
+                "hobby(Y_6, \"canoeing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c45e4ad8-426a-4754-8cd1-ef73425045f0",
+        "question": "Who is the nephew of the grandchild of the person whose date of birth is 0195-03-01?",
+        "solution_traces": "[{\"Y_4\": \"Clifford Halstead\", \"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Dustin Halstead\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Dustin Halstead\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Clifford Halstead\", \"Y_6\": \"Dustin Halstead\"}, {\"Y_2\": \"Richard Dees\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Kermit Halstead\"}, {\"Y_2\": \"Richard Dees\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Kermit Halstead\"}, {\"Y_2\": \"Adam Dees\", \"Y_4\": \"Johnetta Halstead\", \"Y_6\": \"Dustin Halstead\"}, {\"Y_2\": \"Adam Dees\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_4\": \"Clifford Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_2\": \"Richard Dees\"}, {\"Y_2\": \"Giovanni Dees\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Rhea Halstead\"}, {\"Y_2\": \"Adam Dees\", \"Y_6\": \"Dustin Halstead\", \"Y_4\": \"Kermit Halstead\"}, {\"Y_4\": \"Johnetta Halstead\", \"Y_6\": \"Dustin Halstead\", \"Y_2\": \"Richard Dees\"}]",
+        "answer": [
+            "Adam Dees",
+            "Giovanni Dees",
+            "Richard Dees"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "grandchild(Y_6, Y_4)",
+                "dob(Y_6, \"0195-03-01\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c3e5120c-40bc-4583-8d82-e4c5f9e7bb6c",
+        "question": "Who is the parent of the great-uncle of the person whose date of birth is 0286-04-22?",
+        "solution_traces": "[{\"Y_4\": \"Wilber Lam\", \"Y_2\": \"Toby Lam\", \"Y_6\": \"Margie Moorehead\"}, {\"Y_4\": \"Aubrey Lam\", \"Y_2\": \"Toby Lam\", \"Y_6\": \"Margie Moorehead\"}, {\"Y_4\": \"Wilber Lam\", \"Y_2\": \"Emelda Lam\", \"Y_6\": \"Margie Moorehead\"}, {\"Y_4\": \"Aubrey Lam\", \"Y_2\": \"Emelda Lam\", \"Y_6\": \"Margie Moorehead\"}]",
+        "answer": [
+            "Emelda Lam",
+            "Toby Lam"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "great_uncle(Y_6, Y_4)",
+                "dob(Y_6, \"0286-04-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1ec59d6a-7d2f-4ee3-8ea1-de20a1608c4a",
+        "question": "Who is the daughter-in-law of the great-grandparent of the person whose hobby is antiquing?",
+        "solution_traces": "[{\"Y_4\": \"Roxanne Lam\", \"Y_2\": \"Emelda Lam\", \"Y_6\": \"Virgil Michaels\"}, {\"Y_4\": \"Alan Lam\", \"Y_2\": \"Emelda Lam\", \"Y_6\": \"Virgil Michaels\"}]",
+        "answer": [
+            "Emelda Lam"
+        ],
+        "prolog": {
+            "query": [
+                "daughter_in_law(Y_4, Y_2)",
+                "great_grandparent(Y_6, Y_4)",
+                "hobby(Y_6, \"antiquing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ac14d9b7-0c17-4f54-b9f2-2c87f6190b7d",
+        "question": "Who is the mother of the great-granddaughter of the person whose date of birth is 0201-12-23?",
+        "solution_traces": "[{\"Y_4\": \"Monserrate Dees\", \"Y_6\": \"Marcelina Dees\", \"Y_2\": \"Cherlyn Dees\"}]",
+        "answer": [
+            "Cherlyn Dees"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "great_granddaughter(Y_6, Y_4)",
+                "dob(Y_6, \"0201-12-23\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e3af72ea-e3e5-43d7-96ce-ce9d71d41b02",
+        "question": "Who is the friend of the great-grandchild of the person whose date of birth is 0195-09-13?",
+        "solution_traces": "[{\"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Seth Embry\", \"Y_2\": \"Kermit Halstead\"}, {\"Y_4\": \"Monserrate Dees\", \"Y_2\": \"Emelda Lam\", \"Y_6\": \"Seth Embry\"}, {\"Y_2\": \"Cordell Dees\", \"Y_6\": \"Seth Embry\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_6\": \"Seth Embry\", \"Y_2\": \"Cherlyn Dees\"}, {\"Y_4\": \"Giovanni Dees\", \"Y_6\": \"Seth Embry\", \"Y_2\": \"Raul Michaels\"}, {\"Y_4\": \"Monserrate Dees\", \"Y_6\": \"Seth Embry\", \"Y_2\": \"Alberto Lam\"}, {\"Y_2\": \"Cheree Michaels\", \"Y_6\": \"Seth Embry\", \"Y_4\": \"Richard Dees\"}, {\"Y_2\": \"Clifford Reece\", \"Y_6\": \"Seth Embry\", \"Y_4\": \"Richard Dees\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Wendell Dees\", \"Y_6\": \"Seth Embry\"}, {\"Y_4\": \"Monserrate Dees\", \"Y_6\": \"Seth Embry\", \"Y_2\": \"Rogelio Michaels\"}, {\"Y_4\": \"Adam Dees\", \"Y_2\": \"Viola Halstead\", \"Y_6\": \"Seth Embry\"}, {\"Y_4\": \"Adam Dees\", \"Y_6\": \"Seth Embry\", \"Y_2\": \"Roxanne Lam\"}, {\"Y_2\": \"Wilber Lam\", \"Y_6\": \"Seth Embry\", \"Y_4\": \"Richard Dees\"}]",
+        "answer": [
+            "Alberto Lam",
+            "Cheree Michaels",
+            "Cherlyn Dees",
+            "Clifford Reece",
+            "Cordell Dees",
+            "Emelda Lam",
+            "Kermit Halstead",
+            "Raul Michaels",
+            "Rogelio Michaels",
+            "Roxanne Lam",
+            "Viola Halstead",
+            "Wendell Dees",
+            "Wilber Lam"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "great_grandchild(Y_6, Y_4)",
+                "dob(Y_6, \"0195-09-13\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    }
+]

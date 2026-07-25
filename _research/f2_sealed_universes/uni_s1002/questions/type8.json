@@ -1,0 +1,1153 @@
+[
+    {
+        "id": "acf4ee35-499c-446a-8f7d-2d5d470f81dd",
+        "question": "What is the hobby of the child of the great-granddaughter of the person whose occupation is lexicographer?",
+        "solution_traces": "[{\"Y_7\": \"Doyle Kasper\", \"Y_5\": \"Hulda Demello\", \"Y_2\": \"knowledge/word games\", \"Y_3\": \"Augustus Demello\"}, {\"Y_7\": \"Doyle Kasper\", \"Y_5\": \"Hulda Demello\", \"Y_3\": \"Bev Demello\", \"Y_2\": \"audiophile\"}]",
+        "answer": [
+            "audiophile",
+            "knowledge/word games"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "child(Y_5, Y_3)",
+                "great_granddaughter(Y_7, Y_5)",
+                "job(Y_7, \"lexicographer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "80ab7e08-eebd-4e7d-a3a2-d6b47a063dab",
+        "question": "What is the occupation of the sister-in-law of the grandfather of the person whose occupation is warehouse manager?",
+        "solution_traces": "[{\"Y_2\": \"acupuncturist\", \"Y_5\": \"Eusebio Swinton\", \"Y_7\": \"Leesa Breen\", \"Y_3\": \"Manda Kasper\"}]",
+        "answer": [
+            "acupuncturist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sister_in_law(Y_5, Y_3)",
+                "grandfather(Y_7, Y_5)",
+                "job(Y_7, \"warehouse manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "56879e00-066d-44d2-b60c-a036ab8e8a6c",
+        "question": "What is the hobby of the sister of the granddaughter of the person whose occupation is equality and diversity officer?",
+        "solution_traces": "[{\"Y_5\": \"Tiesha Cason\", \"Y_7\": \"Bobby Hamill\", \"Y_3\": \"Teresita Cason\", \"Y_2\": \"aircraft spotting\"}, {\"Y_2\": \"badminton\", \"Y_7\": \"Bobby Hamill\", \"Y_3\": \"Tiesha Cason\", \"Y_5\": \"Teresita Cason\"}]",
+        "answer": [
+            "aircraft spotting",
+            "badminton"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sister(Y_5, Y_3)",
+                "granddaughter(Y_7, Y_5)",
+                "job(Y_7, \"equality and diversity officer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4413e29d-68a2-4fd6-8d24-d44dbf4c75e8",
+        "question": "What is the occupation of the friend of the friend of the person whose hobby is philosophy?",
+        "solution_traces": "[{\"Y_3\": \"Brooks Tobin\", \"Y_2\": \"buyer\", \"Y_7\": \"Edmond Strickland\", \"Y_5\": \"Kacey Hamill\"}, {\"Y_2\": \"writer\", \"Y_3\": \"Edmond Strickland\", \"Y_7\": \"Edmond Strickland\", \"Y_5\": \"Kacey Hamill\"}, {\"Y_3\": \"Rubye Breen\", \"Y_7\": \"Edmond Strickland\", \"Y_5\": \"Estell Cason\", \"Y_2\": \"surgeon\"}, {\"Y_3\": \"Edmond Strickland\", \"Y_5\": \"Tiesha Cason\", \"Y_7\": \"Edmond Strickland\", \"Y_2\": \"writer\"}, {\"Y_5\": \"Ardath Cason\", \"Y_7\": \"Edmond Strickland\", \"Y_3\": \"Eusebio Swinton\", \"Y_2\": \"marketing executive\"}, {\"Y_2\": \"writer\", \"Y_3\": \"Edmond Strickland\", \"Y_7\": \"Edmond Strickland\", \"Y_5\": \"Estell Cason\"}, {\"Y_2\": \"acupuncturist\", \"Y_5\": \"Ardath Cason\", \"Y_3\": \"Manda Kasper\", \"Y_7\": \"Edmond Strickland\"}, {\"Y_5\": \"Ardath Cason\", \"Y_7\": \"Edmond Strickland\", \"Y_3\": \"Odis Breen\", \"Y_2\": \"armed forces training and education officer\"}, {\"Y_7\": \"Edmond Strickland\", \"Y_2\": \"trading standards officer\", \"Y_5\": \"Estell Cason\", \"Y_3\": \"Nancy Cason\"}, {\"Y_5\": \"Ardath Cason\", \"Y_3\": \"Edmond Strickland\", \"Y_7\": \"Edmond Strickland\", \"Y_2\": \"writer\"}, {\"Y_2\": \"forensic psychologist\", \"Y_7\": \"Edmond Strickland\", \"Y_3\": \"Maira Tobin\", \"Y_5\": \"Estell Cason\"}]",
+        "answer": [
+            "acupuncturist",
+            "armed forces training and education officer",
+            "buyer",
+            "forensic psychologist",
+            "marketing executive",
+            "surgeon",
+            "trading standards officer",
+            "writer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "hobby(Y_7, \"philosophy\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "bed9b4b7-cc4a-4bbd-ae01-bece80c94823",
+        "question": "What is the hobby of the aunt of the sister of the person whose hobby is aircraft spotting?",
+        "solution_traces": "[{\"Y_5\": \"Tiesha Cason\", \"Y_7\": \"Teresita Cason\", \"Y_2\": \"stone collecting\", \"Y_3\": \"Katy Cason\"}, {\"Y_5\": \"Tiesha Cason\", \"Y_3\": \"Jewell Cason\", \"Y_7\": \"Teresita Cason\", \"Y_2\": \"shortwave listening\"}]",
+        "answer": [
+            "shortwave listening",
+            "stone collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "aunt(Y_5, Y_3)",
+                "sister(Y_7, Y_5)",
+                "hobby(Y_7, \"aircraft spotting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "970ece5f-0e8d-4233-bdb9-84fb2d76e686",
+        "question": "What is the date of birth of the son-in-law of the friend of the person whose occupation is tour manager?",
+        "solution_traces": "[{\"Y_3\": \"Sergio Cason\", \"Y_2\": \"0288-10-22\", \"Y_7\": \"Page Strickland\", \"Y_5\": \"Dante Feldman\"}]",
+        "answer": [
+            "0288-10-22"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "son_in_law(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "job(Y_7, \"tour manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ccc1fc5d-5e97-412e-bceb-f3ea26552790",
+        "question": "What is the date of birth of the parent of the child of the person whose date of birth is 0190-04-14?",
+        "solution_traces": "[{\"Y_2\": \"0188-02-15\", \"Y_7\": \"Ike Lemaster\", \"Y_3\": \"Roseanna Lemaster\", \"Y_5\": \"Manda Kasper\"}, {\"Y_2\": \"0188-02-15\", \"Y_7\": \"Ike Lemaster\", \"Y_3\": \"Roseanna Lemaster\", \"Y_5\": \"Kacey Swinton\"}, {\"Y_5\": \"Domingo Lemaster\", \"Y_7\": \"Ike Lemaster\", \"Y_3\": \"Roseanna Lemaster\", \"Y_2\": \"0188-02-15\"}, {\"Y_3\": \"Ike Lemaster\", \"Y_5\": \"Domingo Lemaster\", \"Y_2\": \"0190-04-14\", \"Y_7\": \"Ike Lemaster\"}, {\"Y_2\": \"0190-04-14\", \"Y_3\": \"Ike Lemaster\", \"Y_7\": \"Ike Lemaster\", \"Y_5\": \"Kacey Swinton\"}, {\"Y_2\": \"0190-04-14\", \"Y_3\": \"Ike Lemaster\", \"Y_7\": \"Ike Lemaster\", \"Y_5\": \"Manda Kasper\"}]",
+        "answer": [
+            "0188-02-15",
+            "0190-04-14"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "dob(Y_7, \"0190-04-14\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5409502c-3e86-42e2-8a76-1f71efd4e74f",
+        "question": "What is the date of birth of the son of the sibling of the person whose hobby is microscopy?",
+        "solution_traces": "[{\"Y_3\": \"Maximilian Swinton\", \"Y_7\": \"Manda Kasper\", \"Y_2\": \"0240-01-15\", \"Y_5\": \"Kacey Swinton\"}]",
+        "answer": [
+            "0240-01-15"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "son(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "hobby(Y_7, \"microscopy\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "da22ac5e-a4b6-458c-b00c-78a32995a270",
+        "question": "What is the occupation of the great-grandparent of the child of the person whose date of birth is 0291-09-19?",
+        "solution_traces": "[{\"Y_7\": \"Nancy Cason\", \"Y_3\": \"Lorenz Aguayo\", \"Y_5\": \"Ken Cason\", \"Y_2\": \"forest manager\"}, {\"Y_7\": \"Nancy Cason\", \"Y_5\": \"Rick Cason\", \"Y_2\": \"arts administrator\", \"Y_3\": \"Jame Cason\"}, {\"Y_7\": \"Nancy Cason\", \"Y_2\": \"commissioning editor\", \"Y_5\": \"Rick Cason\", \"Y_3\": \"Jann Aguayo\"}, {\"Y_7\": \"Nancy Cason\", \"Y_2\": \"commissioning editor\", \"Y_5\": \"Katy Cason\", \"Y_3\": \"Jann Aguayo\"}, {\"Y_7\": \"Nancy Cason\", \"Y_5\": \"Jewell Cason\", \"Y_2\": \"mining engineer\", \"Y_3\": \"Ardath Cason\"}, {\"Y_7\": \"Nancy Cason\", \"Y_5\": \"Katy Cason\", \"Y_2\": \"arts administrator\", \"Y_3\": \"Jame Cason\"}, {\"Y_7\": \"Nancy Cason\", \"Y_3\": \"Lorenz Aguayo\", \"Y_5\": \"Rick Cason\", \"Y_2\": \"forest manager\"}, {\"Y_7\": \"Nancy Cason\", \"Y_5\": \"Jewell Cason\", \"Y_3\": \"Lorenz Aguayo\", \"Y_2\": \"forest manager\"}, {\"Y_7\": \"Nancy Cason\", \"Y_5\": \"Ken Cason\", \"Y_2\": \"arts administrator\", \"Y_3\": \"Jame Cason\"}, {\"Y_7\": \"Nancy Cason\", \"Y_5\": \"Jewell Cason\", \"Y_2\": \"commissioning editor\", \"Y_3\": \"Jann Aguayo\"}, {\"Y_7\": \"Nancy Cason\", \"Y_5\": \"Jewell Cason\", \"Y_2\": \"arts administrator\", \"Y_3\": \"Jame Cason\"}, {\"Y_7\": \"Nancy Cason\", \"Y_5\": \"Katy Cason\", \"Y_2\": \"mining engineer\", \"Y_3\": \"Ardath Cason\"}, {\"Y_7\": \"Nancy Cason\", \"Y_5\": \"Rick Cason\", \"Y_2\": \"mining engineer\", \"Y_3\": \"Ardath Cason\"}, {\"Y_7\": \"Nancy Cason\", \"Y_3\": \"Lorenz Aguayo\", \"Y_5\": \"Katy Cason\", \"Y_2\": \"forest manager\"}, {\"Y_7\": \"Nancy Cason\", \"Y_2\": \"commissioning editor\", \"Y_5\": \"Ken Cason\", \"Y_3\": \"Jann Aguayo\"}, {\"Y_7\": \"Nancy Cason\", \"Y_5\": \"Ken Cason\", \"Y_2\": \"mining engineer\", \"Y_3\": \"Ardath Cason\"}]",
+        "answer": [
+            "arts administrator",
+            "commissioning editor",
+            "forest manager",
+            "mining engineer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandparent(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "dob(Y_7, \"0291-09-19\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c138cc9f-f724-4f02-8d6b-4bc33b3854e9",
+        "question": "What is the date of birth of the grandson of the child of the person whose hobby is archaeology?",
+        "solution_traces": "[{\"Y_7\": \"Manda Feldman\", \"Y_5\": \"Nancy Cason\", \"Y_3\": \"Rory Cason\", \"Y_2\": \"0344-12-06\"}]",
+        "answer": [
+            "0344-12-06"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandson(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "hobby(Y_7, \"archaeology\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8bcc0663-417a-402c-ad33-62b6e003558a",
+        "question": "What is the hobby of the parent of the mother-in-law of the person whose occupation is trading standards officer?",
+        "solution_traces": "[{\"Y_7\": \"Nancy Cason\", \"Y_3\": \"Lorenz Aguayo\", \"Y_5\": \"Angela Cason\", \"Y_2\": \"association football\"}, {\"Y_7\": \"Nancy Cason\", \"Y_2\": \"hooping\", \"Y_5\": \"Angela Cason\", \"Y_3\": \"Jann Aguayo\"}]",
+        "answer": [
+            "association football",
+            "hooping"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "mother_in_law(Y_7, Y_5)",
+                "job(Y_7, \"trading standards officer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e449086b-2b54-4e0b-b971-27a129f1cf92",
+        "question": "What is the date of birth of the wife of the sibling of the person whose hobby is element collecting?",
+        "solution_traces": "[{\"Y_7\": \"Joesph Cason\", \"Y_5\": \"Sergio Cason\", \"Y_3\": \"Nancy Cason\", \"Y_2\": \"0291-09-19\"}]",
+        "answer": [
+            "0291-09-19"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "wife(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "hobby(Y_7, \"element collecting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e516dad6-9171-49df-a752-f5a265e8e5a0",
+        "question": "What is the occupation of the friend of the cousin of the person whose hobby is stone collecting?",
+        "solution_traces": "[{\"Y_7\": \"Katy Cason\", \"Y_3\": \"Rory Cason\", \"Y_2\": \"cartographer\", \"Y_5\": \"Rochelle Strickland\"}, {\"Y_7\": \"Katy Cason\", \"Y_2\": \"chemist\", \"Y_3\": \"Joesph Cason\", \"Y_5\": \"Rochelle Strickland\"}, {\"Y_7\": \"Katy Cason\", \"Y_2\": \"arts administrator\", \"Y_5\": \"Rochelle Strickland\", \"Y_3\": \"Jame Cason\"}, {\"Y_7\": \"Katy Cason\", \"Y_2\": \"building services engineer\", \"Y_5\": \"Rochelle Strickland\", \"Y_3\": \"Marguerita Carrington\"}]",
+        "answer": [
+            "arts administrator",
+            "building services engineer",
+            "cartographer",
+            "chemist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "hobby(Y_7, \"stone collecting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "acec601e-1c78-4cef-b4e5-dee551c4c65f",
+        "question": "What is the occupation of the father of the grandchild of the person whose date of birth is 0288-09-27?",
+        "solution_traces": "[{\"Y_7\": \"Kacey Hamill\", \"Y_5\": \"Tiesha Cason\", \"Y_2\": \"commercial horticulturist\", \"Y_3\": \"Ken Cason\"}, {\"Y_7\": \"Kacey Hamill\", \"Y_2\": \"commercial horticulturist\", \"Y_3\": \"Ken Cason\", \"Y_5\": \"Rory Cason\"}, {\"Y_7\": \"Kacey Hamill\", \"Y_2\": \"commercial horticulturist\", \"Y_3\": \"Ken Cason\", \"Y_5\": \"Teresita Cason\"}]",
+        "answer": [
+            "commercial horticulturist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "father(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "dob(Y_7, \"0288-09-27\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b1758e0c-c2ad-480b-b109-92433299d6ee",
+        "question": "What is the hobby of the brother of the brother-in-law of the person whose date of birth is 0291-09-19?",
+        "solution_traces": "[{\"Y_7\": \"Nancy Cason\", \"Y_3\": \"Sergio Cason\", \"Y_2\": \"cribbage\", \"Y_5\": \"Frankie Cason\"}, {\"Y_7\": \"Nancy Cason\", \"Y_3\": \"Sergio Cason\", \"Y_5\": \"Joesph Cason\", \"Y_2\": \"cribbage\"}, {\"Y_7\": \"Nancy Cason\", \"Y_2\": \"element collecting\", \"Y_3\": \"Joesph Cason\", \"Y_5\": \"Frankie Cason\"}, {\"Y_7\": \"Nancy Cason\", \"Y_3\": \"Frankie Cason\", \"Y_5\": \"Joesph Cason\", \"Y_2\": \"beekeeping\"}]",
+        "answer": [
+            "beekeeping",
+            "cribbage",
+            "element collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "brother(Y_5, Y_3)",
+                "brother_in_law(Y_7, Y_5)",
+                "dob(Y_7, \"0291-09-19\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9f5209b6-f7c6-4cd6-a674-50ea3405e41e",
+        "question": "What is the occupation of the sibling of the great-aunt of the person whose hobby is scouting?",
+        "solution_traces": "[{\"Y_7\": \"Leesa Breen\", \"Y_3\": \"Kacey Swinton\", \"Y_5\": \"Manda Kasper\", \"Y_2\": \"theatre manager\"}, {\"Y_7\": \"Leesa Breen\", \"Y_2\": \"applications developer\", \"Y_5\": \"Manda Kasper\", \"Y_3\": \"Domingo Lemaster\"}]",
+        "answer": [
+            "applications developer",
+            "theatre manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "great_aunt(Y_7, Y_5)",
+                "hobby(Y_7, \"scouting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5324bc6b-8fab-4544-8ac3-8e066ada31f6",
+        "question": "What is the occupation of the wife of the grandparent of the person whose occupation is radio broadcast assistant?",
+        "solution_traces": "[{\"Y_5\": \"Bobby Hamill\", \"Y_3\": \"Kacey Hamill\", \"Y_7\": \"Teresita Cason\", \"Y_2\": \"acupuncturist\"}, {\"Y_5\": \"Sergio Cason\", \"Y_2\": \"trading standards officer\", \"Y_7\": \"Teresita Cason\", \"Y_3\": \"Nancy Cason\"}]",
+        "answer": [
+            "acupuncturist",
+            "trading standards officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "wife(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "job(Y_7, \"radio broadcast assistant\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "edabfc08-b7fa-4b69-a3c3-67d9f4c0f6b5",
+        "question": "What is the occupation of the great-granddaughter of the cousin of the person whose occupation is IT consultant?",
+        "solution_traces": "[{\"Y_3\": \"Joslyn Tobin\", \"Y_7\": \"Maximilian Swinton\", \"Y_2\": \"estate agent\", \"Y_5\": \"Loraine Carrington\"}, {\"Y_3\": \"Mariann Tobin\", \"Y_7\": \"Maximilian Swinton\", \"Y_2\": \"fitness centre manager\", \"Y_5\": \"Loraine Carrington\"}, {\"Y_3\": \"Bev Demello\", \"Y_7\": \"Maximilian Swinton\", \"Y_5\": \"Loraine Carrington\", \"Y_2\": \"advertising account executive\"}]",
+        "answer": [
+            "advertising account executive",
+            "estate agent",
+            "fitness centre manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_granddaughter(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "job(Y_7, \"IT consultant\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "440e69c1-9a9a-46a4-b29c-3b1dc7775ba1",
+        "question": "What is the hobby of the sibling of the sibling of the person whose occupation is archaeologist?",
+        "solution_traces": "[{\"Y_7\": \"Hulda Demello\", \"Y_2\": \"fishkeeping\", \"Y_3\": \"Hulda Demello\", \"Y_5\": \"Katharine Tobin\"}, {\"Y_7\": \"Hulda Demello\", \"Y_3\": \"Cordell Tobin\", \"Y_2\": \"beekeeping\", \"Y_5\": \"Katharine Tobin\"}, {\"Y_7\": \"Hulda Demello\", \"Y_2\": \"fossil hunting\", \"Y_3\": \"Katharine Tobin\", \"Y_5\": \"Cordell Tobin\"}, {\"Y_7\": \"Hulda Demello\", \"Y_2\": \"fishkeeping\", \"Y_3\": \"Hulda Demello\", \"Y_5\": \"Cordell Tobin\"}]",
+        "answer": [
+            "beekeeping",
+            "fishkeeping",
+            "fossil hunting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "job(Y_7, \"archaeologist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ef1eb239-f352-47da-9f3f-52393747da20",
+        "question": "What is the date of birth of the daughter of the sibling of the person whose date of birth is 0220-08-12?",
+        "solution_traces": "[{\"Y_3\": \"Loraine Carrington\", \"Y_2\": \"0245-02-11\", \"Y_5\": \"Manda Kasper\", \"Y_7\": \"Kacey Swinton\"}]",
+        "answer": [
+            "0245-02-11"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "daughter(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "dob(Y_7, \"0220-08-12\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "245efd45-8bf2-4dd1-8079-e6d442129722",
+        "question": "What is the hobby of the brother-in-law of the child of the person whose date of birth is 0258-11-19?",
+        "solution_traces": "[{\"Y_7\": \"Dante Feldman\", \"Y_3\": \"Frankie Cason\", \"Y_2\": \"beekeeping\", \"Y_5\": \"Nancy Cason\"}, {\"Y_3\": \"Joesph Cason\", \"Y_2\": \"element collecting\", \"Y_7\": \"Dante Feldman\", \"Y_5\": \"Nancy Cason\"}]",
+        "answer": [
+            "beekeeping",
+            "element collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "brother_in_law(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "dob(Y_7, \"0258-11-19\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0a81c57d-adb6-4cea-9e5e-eeedc35efb63",
+        "question": "What is the occupation of the cousin of the aunt of the person whose hobby is slot car?",
+        "solution_traces": "[{\"Y_2\": \"neurosurgeon\", \"Y_3\": \"Rochelle Strickland\", \"Y_7\": \"Rory Cason\", \"Y_5\": \"Katy Cason\"}, {\"Y_5\": \"Jewell Cason\", \"Y_3\": \"Rochelle Strickland\", \"Y_7\": \"Rory Cason\", \"Y_2\": \"neurosurgeon\"}]",
+        "answer": [
+            "neurosurgeon"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "cousin(Y_5, Y_3)",
+                "aunt(Y_7, Y_5)",
+                "hobby(Y_7, \"slot car\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dbc62889-3fbb-4452-a8d3-1282e8351877",
+        "question": "What is the date of birth of the grandchild of the friend of the person whose date of birth is 0321-07-25?",
+        "solution_traces": "[{\"Y_7\": \"Katy Cason\", \"Y_5\": \"Manda Feldman\", \"Y_2\": \"0313-06-07\", \"Y_3\": \"Rick Cason\"}, {\"Y_7\": \"Katy Cason\", \"Y_5\": \"Roseanna Lemaster\", \"Y_3\": \"Loraine Carrington\", \"Y_2\": \"0245-02-11\"}, {\"Y_7\": \"Katy Cason\", \"Y_5\": \"Manda Feldman\", \"Y_2\": \"0321-07-25\", \"Y_3\": \"Katy Cason\"}, {\"Y_7\": \"Katy Cason\", \"Y_5\": \"Roseanna Lemaster\", \"Y_3\": \"Maximilian Swinton\", \"Y_2\": \"0240-01-15\"}, {\"Y_7\": \"Katy Cason\", \"Y_5\": \"Manda Feldman\", \"Y_3\": \"Ken Cason\", \"Y_2\": \"0317-05-15\"}, {\"Y_7\": \"Katy Cason\", \"Y_5\": \"Roseanna Lemaster\", \"Y_3\": \"Rubye Breen\", \"Y_2\": \"0249-01-01\"}, {\"Y_7\": \"Katy Cason\", \"Y_5\": \"Manda Feldman\", \"Y_3\": \"Jewell Cason\", \"Y_2\": \"0322-07-22\"}]",
+        "answer": [
+            "0240-01-15",
+            "0245-02-11",
+            "0249-01-01",
+            "0313-06-07",
+            "0317-05-15",
+            "0321-07-25",
+            "0322-07-22"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "dob(Y_7, \"0321-07-25\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "abfe8265-a8f5-4f13-993d-559ceb1325f7",
+        "question": "What is the date of birth of the grandchild of the parent of the person whose occupation is chief operating officer?",
+        "solution_traces": "[{\"Y_7\": \"Estell Cason\", \"Y_3\": \"Teresita Cason\", \"Y_5\": \"Bobby Hamill\", \"Y_2\": \"0341-12-05\"}, {\"Y_7\": \"Estell Cason\", \"Y_2\": \"0343-12-23\", \"Y_5\": \"Bobby Hamill\", \"Y_3\": \"Tiesha Cason\"}, {\"Y_7\": \"Estell Cason\", \"Y_3\": \"Rory Cason\", \"Y_5\": \"Kacey Hamill\", \"Y_2\": \"0344-12-06\"}, {\"Y_7\": \"Estell Cason\", \"Y_2\": \"0343-12-23\", \"Y_5\": \"Kacey Hamill\", \"Y_3\": \"Tiesha Cason\"}, {\"Y_7\": \"Estell Cason\", \"Y_3\": \"Rory Cason\", \"Y_5\": \"Bobby Hamill\", \"Y_2\": \"0344-12-06\"}, {\"Y_7\": \"Estell Cason\", \"Y_3\": \"Teresita Cason\", \"Y_5\": \"Kacey Hamill\", \"Y_2\": \"0341-12-05\"}]",
+        "answer": [
+            "0341-12-05",
+            "0343-12-23",
+            "0344-12-06"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "job(Y_7, \"chief operating officer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2efda5fa-afa5-4108-8845-5e016b45b1c2",
+        "question": "What is the occupation of the second uncle of the parent of the person whose occupation is estate agent?",
+        "solution_traces": "[{\"Y_7\": \"Joslyn Tobin\", \"Y_2\": \"applications developer\", \"Y_3\": \"Domingo Lemaster\", \"Y_5\": \"Cordell Tobin\"}]",
+        "answer": [
+            "applications developer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "second_uncle(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "job(Y_7, \"estate agent\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dc00e8ab-06eb-425d-a3d6-9a3eebc5e257",
+        "question": "What is the hobby of the sister of the child of the person whose hobby is audiophile?",
+        "solution_traces": "[{\"Y_7\": \"Wilfredo Carrington\", \"Y_2\": \"magnet fishing\", \"Y_5\": \"Shizuko Tobin\", \"Y_3\": \"Marguerita Carrington\"}, {\"Y_7\": \"Wilfredo Carrington\", \"Y_5\": \"Marguerita Carrington\", \"Y_2\": \"deltiology\", \"Y_3\": \"Shizuko Tobin\"}]",
+        "answer": [
+            "deltiology",
+            "magnet fishing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sister(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "hobby(Y_7, \"audiophile\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "16e7e780-6a9f-497b-a433-0d62abe18064",
+        "question": "What is the date of birth of the great-grandparent of the great-granddaughter of the person whose hobby is herping?",
+        "solution_traces": "[{\"Y_7\": \"Jame Cason\", \"Y_5\": \"Jewell Cason\", \"Y_3\": \"Ardath Cason\", \"Y_2\": \"0233-02-25\"}, {\"Y_7\": \"Jame Cason\", \"Y_3\": \"Lorenz Aguayo\", \"Y_5\": \"Katy Cason\", \"Y_2\": \"0238-10-24\"}, {\"Y_7\": \"Jame Cason\", \"Y_5\": \"Jewell Cason\", \"Y_2\": \"0233-01-04\", \"Y_3\": \"Jame Cason\"}, {\"Y_7\": \"Jame Cason\", \"Y_2\": \"0238-06-14\", \"Y_5\": \"Rochelle Strickland\", \"Y_3\": \"Jann Aguayo\"}, {\"Y_7\": \"Jame Cason\", \"Y_2\": \"0233-01-04\", \"Y_5\": \"Rochelle Strickland\", \"Y_3\": \"Jame Cason\"}, {\"Y_7\": \"Jame Cason\", \"Y_5\": \"Katy Cason\", \"Y_3\": \"Ardath Cason\", \"Y_2\": \"0233-02-25\"}, {\"Y_7\": \"Jame Cason\", \"Y_5\": \"Katy Cason\", \"Y_2\": \"0238-06-14\", \"Y_3\": \"Jann Aguayo\"}, {\"Y_7\": \"Jame Cason\", \"Y_2\": \"0233-01-04\", \"Y_5\": \"Katy Cason\", \"Y_3\": \"Jame Cason\"}, {\"Y_7\": \"Jame Cason\", \"Y_5\": \"Jewell Cason\", \"Y_3\": \"Lorenz Aguayo\", \"Y_2\": \"0238-10-24\"}, {\"Y_7\": \"Jame Cason\", \"Y_3\": \"Ardath Cason\", \"Y_5\": \"Rochelle Strickland\", \"Y_2\": \"0233-02-25\"}, {\"Y_7\": \"Jame Cason\", \"Y_5\": \"Jewell Cason\", \"Y_2\": \"0238-06-14\", \"Y_3\": \"Jann Aguayo\"}, {\"Y_7\": \"Jame Cason\", \"Y_3\": \"Lorenz Aguayo\", \"Y_5\": \"Rochelle Strickland\", \"Y_2\": \"0238-10-24\"}]",
+        "answer": [
+            "0233-01-04",
+            "0233-02-25",
+            "0238-06-14",
+            "0238-10-24"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandparent(Y_5, Y_3)",
+                "great_granddaughter(Y_7, Y_5)",
+                "hobby(Y_7, \"herping\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8783007b-e1d2-4dda-8c88-dd5f5156591b",
+        "question": "What is the date of birth of the great-grandparent of the sister-in-law of the person whose date of birth is 0298-03-24?",
+        "solution_traces": "[{\"Y_3\": \"Doyle Kasper\", \"Y_2\": \"0219-07-21\", \"Y_5\": \"Katharine Tobin\", \"Y_7\": \"Maira Tobin\"}, {\"Y_2\": \"0219-10-09\", \"Y_3\": \"Manda Kasper\", \"Y_5\": \"Hulda Demello\", \"Y_7\": \"Maira Tobin\"}, {\"Y_5\": \"Hulda Demello\", \"Y_2\": \"0219-07-21\", \"Y_3\": \"Doyle Kasper\", \"Y_7\": \"Maira Tobin\"}, {\"Y_2\": \"0219-10-09\", \"Y_3\": \"Manda Kasper\", \"Y_5\": \"Katharine Tobin\", \"Y_7\": \"Maira Tobin\"}]",
+        "answer": [
+            "0219-07-21",
+            "0219-10-09"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandparent(Y_5, Y_3)",
+                "sister_in_law(Y_7, Y_5)",
+                "dob(Y_7, \"0298-03-24\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f057d871-484f-4b41-905c-3f9670bd93b2",
+        "question": "What is the occupation of the cousin of the child of the person whose hobby is fishkeeping?",
+        "solution_traces": "[{\"Y_7\": \"Hulda Demello\", \"Y_3\": \"Mariann Tobin\", \"Y_5\": \"Augustus Demello\", \"Y_2\": \"fitness centre manager\"}, {\"Y_7\": \"Hulda Demello\", \"Y_5\": \"Bev Demello\", \"Y_2\": \"estate agent\", \"Y_3\": \"Joslyn Tobin\"}, {\"Y_7\": \"Hulda Demello\", \"Y_3\": \"Mariann Tobin\", \"Y_5\": \"Bev Demello\", \"Y_2\": \"fitness centre manager\"}, {\"Y_7\": \"Hulda Demello\", \"Y_5\": \"Augustus Demello\", \"Y_2\": \"estate agent\", \"Y_3\": \"Joslyn Tobin\"}]",
+        "answer": [
+            "estate agent",
+            "fitness centre manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "cousin(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "hobby(Y_7, \"fishkeeping\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1d42776b-7cfd-4aa2-995e-9af72afd2bef",
+        "question": "What is the occupation of the cousin of the child of the person whose date of birth is 0288-10-22?",
+        "solution_traces": "[{\"Y_5\": \"Ken Cason\", \"Y_3\": \"Rochelle Strickland\", \"Y_7\": \"Sergio Cason\", \"Y_2\": \"neurosurgeon\"}, {\"Y_5\": \"Jewell Cason\", \"Y_3\": \"Rochelle Strickland\", \"Y_7\": \"Sergio Cason\", \"Y_2\": \"neurosurgeon\"}, {\"Y_2\": \"neurosurgeon\", \"Y_3\": \"Rochelle Strickland\", \"Y_7\": \"Sergio Cason\", \"Y_5\": \"Katy Cason\"}, {\"Y_2\": \"neurosurgeon\", \"Y_3\": \"Rochelle Strickland\", \"Y_7\": \"Sergio Cason\", \"Y_5\": \"Rick Cason\"}]",
+        "answer": [
+            "neurosurgeon"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "cousin(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "dob(Y_7, \"0288-10-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "?"
+        ],
+        "type": 8,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    }
+]

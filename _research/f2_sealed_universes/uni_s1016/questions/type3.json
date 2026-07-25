@@ -1,0 +1,906 @@
+[
+    {
+        "id": "42305335-5564-4970-b63b-259c6bd7ecd4",
+        "question": "Who is the great-grandmother of the son of Jackie Messenger?",
+        "solution_traces": "[{\"Y_4\": \"Scotty Messenger\", \"Y_2\": \"Minerva Johansen\"}, {\"Y_4\": \"Hank Messenger\", \"Y_2\": \"Minerva Johansen\"}, {\"Y_4\": \"Scotty Messenger\", \"Y_2\": \"Lara Driskell\"}, {\"Y_4\": \"Hank Messenger\", \"Y_2\": \"Lara Driskell\"}]",
+        "answer": [
+            "Lara Driskell",
+            "Minerva Johansen"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandmother(Y_4, Y_2)",
+                "son(\"Jackie Messenger\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d8642701-9abd-49ac-ab81-4d3967f94ab7",
+        "question": "Who is the daughter of the parent of Violet Shattuck?",
+        "solution_traces": "[{\"Y_2\": \"Katherine Showers\", \"Y_4\": \"Cristal Showers\"}, {\"Y_2\": \"Violet Shattuck\", \"Y_4\": \"Cristal Showers\"}, {\"Y_2\": \"Violet Shattuck\", \"Y_4\": \"Darrel Showers\"}, {\"Y_4\": \"Darrel Showers\", \"Y_2\": \"Katherine Showers\"}]",
+        "answer": [
+            "Katherine Showers",
+            "Violet Shattuck"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "parent(\"Violet Shattuck\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cf43533e-de75-4808-9551-59010a63a9b1",
+        "question": "Who is the grandchild of the great-grandparent of Monika Crim?",
+        "solution_traces": "[{\"Y_4\": \"Zachery Ybarra\", \"Y_2\": \"Perla Dorsett\"}, {\"Y_4\": \"Ruby Ybarra\", \"Y_2\": \"Ivan Ochs\"}, {\"Y_4\": \"Zachery Ybarra\", \"Y_2\": \"Octavio Ybarra\"}, {\"Y_2\": \"Gale Ybarra\", \"Y_4\": \"Ruby Ybarra\"}, {\"Y_2\": \"Perla Dorsett\", \"Y_4\": \"Ruby Ybarra\"}, {\"Y_2\": \"Cristal Showers\", \"Y_4\": \"Ruby Ybarra\"}, {\"Y_4\": \"Zachery Ybarra\", \"Y_2\": \"Gale Ybarra\"}, {\"Y_4\": \"Ruby Ybarra\", \"Y_2\": \"Octavio Ybarra\"}, {\"Y_4\": \"Zachery Ybarra\", \"Y_2\": \"Ivan Ochs\"}, {\"Y_4\": \"Zachery Ybarra\", \"Y_2\": \"Cristal Showers\"}]",
+        "answer": [
+            "Cristal Showers",
+            "Gale Ybarra",
+            "Ivan Ochs",
+            "Octavio Ybarra",
+            "Perla Dorsett"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "great_grandparent(\"Monika Crim\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1cc1b9dd-6338-4ac2-9d10-3f46770fbc8c",
+        "question": "Who is the brother-in-law of the grandparent of Stan Shattuck?",
+        "solution_traces": "[{\"Y_2\": \"Gale Ybarra\", \"Y_4\": \"Darrel Showers\"}, {\"Y_4\": \"Darrel Showers\", \"Y_2\": \"Octavio Ybarra\"}]",
+        "answer": [
+            "Gale Ybarra",
+            "Octavio Ybarra"
+        ],
+        "prolog": {
+            "query": [
+                "brother_in_law(Y_4, Y_2)",
+                "grandparent(\"Stan Shattuck\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6c41e135-9f17-4e7f-b4d1-407a14902a4f",
+        "question": "Who is the child of the friend of Georgette Messenger?",
+        "solution_traces": "[{\"Y_4\": \"Selena Messenger\", \"Y_2\": \"Sara Messenger\"}, {\"Y_4\": \"Von Dorsett\", \"Y_2\": \"Larue Dorsett\"}, {\"Y_2\": \"Larue Dorsett\", \"Y_4\": \"Perla Dorsett\"}, {\"Y_4\": \"Selena Messenger\", \"Y_2\": \"Jason Messenger\"}]",
+        "answer": [
+            "Jason Messenger",
+            "Larue Dorsett",
+            "Sara Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "friend(\"Georgette Messenger\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1656dcb8-2c00-4ded-a57f-91cc5373669c",
+        "question": "Who is the mother-in-law of the grandparent of Eric Hoagland?",
+        "solution_traces": "[{\"Y_4\": \"Jason Messenger\", \"Y_2\": \"Rosalee Johansen\"}, {\"Y_4\": \"Jackie Messenger\", \"Y_2\": \"Selena Messenger\"}]",
+        "answer": [
+            "Rosalee Johansen",
+            "Selena Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "mother_in_law(Y_4, Y_2)",
+                "grandparent(\"Eric Hoagland\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1760941c-b366-4944-89d3-82e158e2a87b",
+        "question": "Who is the grandparent of the granddaughter of Elvin Ybarra?",
+        "solution_traces": "[{\"Y_4\": \"Larue Dorsett\", \"Y_2\": \"Elvin Ybarra\"}, {\"Y_4\": \"Katherine Showers\", \"Y_2\": \"Elvin Ybarra\"}, {\"Y_2\": \"Kisha Ybarra\", \"Y_4\": \"Violet Shattuck\"}, {\"Y_4\": \"Violet Shattuck\", \"Y_2\": \"Elvin Ybarra\"}, {\"Y_2\": \"Kisha Ybarra\", \"Y_4\": \"Larue Dorsett\"}, {\"Y_2\": \"Kisha Ybarra\", \"Y_4\": \"Katherine Showers\"}]",
+        "answer": [
+            "Elvin Ybarra",
+            "Kisha Ybarra"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "granddaughter(\"Elvin Ybarra\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b7ff30c7-b02d-421b-868e-c5206386d368",
+        "question": "Who is the child of the great-grandfather of Rosella Ochs?",
+        "solution_traces": "[{\"Y_4\": \"Zachery Ybarra\", \"Y_2\": \"Shawna Ochs\"}, {\"Y_4\": \"Zachery Ybarra\", \"Y_2\": \"Elvin Ybarra\"}]",
+        "answer": [
+            "Elvin Ybarra",
+            "Shawna Ochs"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "great_grandfather(\"Rosella Ochs\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a6172bba-fd37-46a9-a30d-a44c0bd91ec9",
+        "question": "Who is the great-grandfather of the granddaughter of Shawna Ochs?",
+        "solution_traces": "[{\"Y_2\": \"Zachery Ybarra\", \"Y_4\": \"Monika Crim\"}, {\"Y_2\": \"Zachery Ybarra\", \"Y_4\": \"Rosella Ochs\"}]",
+        "answer": [
+            "Zachery Ybarra"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandfather(Y_4, Y_2)",
+                "granddaughter(\"Shawna Ochs\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "db65858e-bddb-46f9-b48d-101e3f3a15b3",
+        "question": "Who is the great-granddaughter of the great-grandparent of Eric Hoagland?",
+        "solution_traces": "[{\"Y_4\": \"Warren Messenger\", \"Y_2\": \"Lurline Messenger\"}, {\"Y_4\": \"Selena Messenger\", \"Y_2\": \"Lurline Messenger\"}, {\"Y_2\": \"Lurline Messenger\", \"Y_4\": \"Rosalee Johansen\"}, {\"Y_2\": \"Lurline Messenger\", \"Y_4\": \"Cleveland Johansen\"}]",
+        "answer": [
+            "Lurline Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "great_grandparent(\"Eric Hoagland\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ad3ea568-0b0b-438a-8354-eb4b2a8404f0",
+        "question": "Who is the mother of the great-granddaughter of Zachery Ybarra?",
+        "solution_traces": "[{\"Y_4\": \"Monika Crim\", \"Y_2\": \"Glenda Ochs\"}, {\"Y_2\": \"Cristal Showers\", \"Y_4\": \"Violet Shattuck\"}, {\"Y_2\": \"Perla Dorsett\", \"Y_4\": \"Larue Dorsett\"}, {\"Y_2\": \"Cristal Showers\", \"Y_4\": \"Katherine Showers\"}, {\"Y_4\": \"Rosella Ochs\", \"Y_2\": \"Glenda Ochs\"}]",
+        "answer": [
+            "Cristal Showers",
+            "Glenda Ochs",
+            "Perla Dorsett"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "great_granddaughter(\"Zachery Ybarra\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "566bfbc1-9eb6-4a7b-a514-d56544728571",
+        "question": "Who is the sister-in-law of the son of Boyd Messenger?",
+        "solution_traces": "[{\"Y_2\": \"Lyndia Hoagland\", \"Y_4\": \"Linwood Messenger\"}]",
+        "answer": [
+            "Lyndia Hoagland"
+        ],
+        "prolog": {
+            "query": [
+                "sister_in_law(Y_4, Y_2)",
+                "son(\"Boyd Messenger\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c06b6d14-10e0-4371-a4ac-ec2c8a798426",
+        "question": "Who is the mother-in-law of the son-in-law of Nathan Witt?",
+        "solution_traces": "[{\"Y_4\": \"Saul Johansen\", \"Y_2\": \"Maira Witt\"}]",
+        "answer": [
+            "Maira Witt"
+        ],
+        "prolog": {
+            "query": [
+                "mother_in_law(Y_4, Y_2)",
+                "son_in_law(\"Nathan Witt\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a5988086-45e8-46d5-93d6-7d6c28876db9",
+        "question": "Who is the nephew of the child of Selena Messenger?",
+        "solution_traces": "[{\"Y_2\": \"Hank Messenger\", \"Y_4\": \"Sara Messenger\"}, {\"Y_4\": \"Sara Messenger\", \"Y_2\": \"Scotty Messenger\"}]",
+        "answer": [
+            "Hank Messenger",
+            "Scotty Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "child(\"Selena Messenger\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "197d0038-5d0d-4606-a0f3-2dd6aa08ffd6",
+        "question": "Who is the sibling of the child of Kisha Ybarra?",
+        "solution_traces": "[{\"Y_4\": \"Cristal Showers\", \"Y_2\": \"Octavio Ybarra\"}, {\"Y_2\": \"Cristal Showers\", \"Y_4\": \"Gale Ybarra\"}, {\"Y_2\": \"Perla Dorsett\", \"Y_4\": \"Gale Ybarra\"}, {\"Y_2\": \"Cristal Showers\", \"Y_4\": \"Perla Dorsett\"}, {\"Y_2\": \"Gale Ybarra\", \"Y_4\": \"Perla Dorsett\"}, {\"Y_2\": \"Perla Dorsett\", \"Y_4\": \"Cristal Showers\"}, {\"Y_4\": \"Octavio Ybarra\", \"Y_2\": \"Perla Dorsett\"}, {\"Y_2\": \"Octavio Ybarra\", \"Y_4\": \"Perla Dorsett\"}, {\"Y_2\": \"Gale Ybarra\", \"Y_4\": \"Cristal Showers\"}, {\"Y_2\": \"Gale Ybarra\", \"Y_4\": \"Octavio Ybarra\"}, {\"Y_4\": \"Gale Ybarra\", \"Y_2\": \"Octavio Ybarra\"}, {\"Y_2\": \"Cristal Showers\", \"Y_4\": \"Octavio Ybarra\"}]",
+        "answer": [
+            "Cristal Showers",
+            "Gale Ybarra",
+            "Octavio Ybarra",
+            "Perla Dorsett"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "child(\"Kisha Ybarra\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8a22ddc1-6c3e-4363-9e90-392688888626",
+        "question": "Who is the parent of the great-grandson of Kisha Ybarra?",
+        "solution_traces": "[{\"Y_2\": \"Randall Shattuck\", \"Y_4\": \"Stan Shattuck\"}, {\"Y_2\": \"Violet Shattuck\", \"Y_4\": \"Stan Shattuck\"}]",
+        "answer": [
+            "Randall Shattuck",
+            "Violet Shattuck"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "great_grandson(\"Kisha Ybarra\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "09c1c33f-4a1a-442c-8649-5a68643af861",
+        "question": "Who is the daughter-in-law of the grandmother of Lurline Messenger?",
+        "solution_traces": "[{\"Y_2\": \"Jewel Messenger\", \"Y_4\": \"Georgette Messenger\"}]",
+        "answer": [
+            "Jewel Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "daughter_in_law(Y_4, Y_2)",
+                "grandmother(\"Lurline Messenger\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a799f52b-3677-420a-b582-54ec6dc5f5e1",
+        "question": "Who is the friend of the wife of Nathan Witt?",
+        "solution_traces": "[{\"Y_2\": \"Glenda Ochs\", \"Y_4\": \"Maira Witt\"}, {\"Y_2\": \"Perla Dorsett\", \"Y_4\": \"Maira Witt\"}]",
+        "answer": [
+            "Glenda Ochs",
+            "Perla Dorsett"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "wife(\"Nathan Witt\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c18b545d-4775-40fe-9d4f-e7956b3f2e49",
+        "question": "Who is the nephew of the brother-in-law of Linwood Messenger?",
+        "solution_traces": "[{\"Y_4\": \"Hank Messenger\", \"Y_2\": \"Eric Hoagland\"}, {\"Y_4\": \"Scotty Messenger\", \"Y_2\": \"Eric Hoagland\"}]",
+        "answer": [
+            "Eric Hoagland"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "brother_in_law(\"Linwood Messenger\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b7db3147-78f0-4b5a-9e1c-f30c3e9a2081",
+        "question": "Who is the daughter of the great-grandparent of Monika Crim?",
+        "solution_traces": "[{\"Y_2\": \"Shawna Ochs\", \"Y_4\": \"Ruby Ybarra\"}, {\"Y_4\": \"Zachery Ybarra\", \"Y_2\": \"Shawna Ochs\"}]",
+        "answer": [
+            "Shawna Ochs"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "great_grandparent(\"Monika Crim\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ba2ea16c-82a4-4ab8-9afe-aaeb17194136",
+        "question": "Who is the brother of the sibling of Jason Messenger?",
+        "solution_traces": "[{\"Y_2\": \"Jason Messenger\", \"Y_4\": \"Sara Messenger\"}]",
+        "answer": [
+            "Jason Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "sibling(\"Jason Messenger\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2f13e4a8-f73b-47a1-ae03-06bbf58dd694",
+        "question": "Who is the great-granddaughter of the grandparent of Rodrick Johansen?",
+        "solution_traces": "[{\"Y_2\": \"Jewel Messenger\", \"Y_4\": \"Geoffrey Driskell\"}, {\"Y_2\": \"Jewel Messenger\", \"Y_4\": \"Lara Driskell\"}, {\"Y_4\": \"Lara Driskell\", \"Y_2\": \"Lyndia Hoagland\"}, {\"Y_4\": \"Saul Johansen\", \"Y_2\": \"Lyndia Hoagland\"}, {\"Y_2\": \"Jewel Messenger\", \"Y_4\": \"Saul Johansen\"}, {\"Y_2\": \"Lyndia Hoagland\", \"Y_4\": \"Minerva Johansen\"}, {\"Y_2\": \"Jewel Messenger\", \"Y_4\": \"Minerva Johansen\"}, {\"Y_4\": \"Geoffrey Driskell\", \"Y_2\": \"Lyndia Hoagland\"}]",
+        "answer": [
+            "Jewel Messenger",
+            "Lyndia Hoagland"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "grandparent(\"Rodrick Johansen\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5e64a928-862b-43c4-9469-2c75bb31f3a8",
+        "question": "Who is the uncle of the female cousin of Eric Hoagland?",
+        "solution_traces": "[{\"Y_4\": \"Lurline Messenger\", \"Y_2\": \"Hank Messenger\"}, {\"Y_4\": \"Lurline Messenger\", \"Y_2\": \"Scotty Messenger\"}]",
+        "answer": [
+            "Hank Messenger",
+            "Scotty Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "female_cousin(\"Eric Hoagland\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "08b984f3-2f39-4c8a-88cd-ea3d9d48efe4",
+        "question": "Who is the son-in-law of the daughter-in-law of Saul Johansen?",
+        "solution_traces": "[{\"Y_2\": \"Jason Messenger\", \"Y_4\": \"Rosalee Johansen\"}]",
+        "answer": [
+            "Jason Messenger"
+        ],
+        "prolog": {
+            "query": [
+                "son_in_law(Y_4, Y_2)",
+                "daughter_in_law(\"Saul Johansen\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "10407555-584b-4696-b9cd-90f45402adb4",
+        "question": "Who is the child of the grandfather of Larue Dorsett?",
+        "solution_traces": "[{\"Y_4\": \"Elvin Ybarra\", \"Y_2\": \"Perla Dorsett\"}, {\"Y_4\": \"Elvin Ybarra\", \"Y_2\": \"Octavio Ybarra\"}, {\"Y_2\": \"Gale Ybarra\", \"Y_4\": \"Elvin Ybarra\"}, {\"Y_2\": \"Cristal Showers\", \"Y_4\": \"Elvin Ybarra\"}]",
+        "answer": [
+            "Cristal Showers",
+            "Gale Ybarra",
+            "Octavio Ybarra",
+            "Perla Dorsett"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "grandfather(\"Larue Dorsett\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "69584d57-9998-4cda-b32c-03c9b2bd2824",
+        "question": "Who is the parent of the grandson of Hoa Tooley?",
+        "solution_traces": "[{\"Y_4\": \"Elvin Ybarra\", \"Y_2\": \"Zachery Ybarra\"}, {\"Y_2\": \"Ruby Ybarra\", \"Y_4\": \"Elvin Ybarra\"}]",
+        "answer": [
+            "Ruby Ybarra",
+            "Zachery Ybarra"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "grandson(\"Hoa Tooley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0dfc479a-21db-43c0-a7b3-e1c474df72e0",
+        "question": "Who is the friend of the great-granddaughter of Hosea Ochs?",
+        "solution_traces": "[{\"Y_2\": \"Darrel Showers\", \"Y_4\": \"Trisha Crim\"}, {\"Y_2\": \"Rosella Ochs\", \"Y_4\": \"Trisha Crim\"}, {\"Y_2\": \"Ivan Ochs\", \"Y_4\": \"Trisha Crim\"}]",
+        "answer": [
+            "Darrel Showers",
+            "Ivan Ochs",
+            "Rosella Ochs"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "great_granddaughter(\"Hosea Ochs\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "16ec63a6-f942-4913-bd34-e1659bb8ca45",
+        "question": "Who is the great-grandfather of the sister of Scotty Messenger?",
+        "solution_traces": "[{\"Y_4\": \"Jewel Messenger\", \"Y_2\": \"Geoffrey Driskell\"}, {\"Y_4\": \"Lyndia Hoagland\", \"Y_2\": \"Geoffrey Driskell\"}, {\"Y_4\": \"Jewel Messenger\", \"Y_2\": \"Saul Johansen\"}, {\"Y_4\": \"Lyndia Hoagland\", \"Y_2\": \"Saul Johansen\"}]",
+        "answer": [
+            "Geoffrey Driskell",
+            "Saul Johansen"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandfather(Y_4, Y_2)",
+                "sister(\"Scotty Messenger\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6d00dd25-4df2-44e5-be1b-985b67d73c4e",
+        "question": "Who is the friend of the sister-in-law of Austin Crim?",
+        "solution_traces": "[{\"Y_4\": \"Rosella Ochs\", \"Y_2\": \"Scotty Messenger\"}, {\"Y_4\": \"Rosella Ochs\", \"Y_2\": \"Francis Tooley\"}, {\"Y_2\": \"Perla Dorsett\", \"Y_4\": \"Rosella Ochs\"}, {\"Y_4\": \"Rosella Ochs\", \"Y_2\": \"Geoffrey Driskell\"}, {\"Y_2\": \"Jewel Messenger\", \"Y_4\": \"Rosella Ochs\"}, {\"Y_4\": \"Rosella Ochs\", \"Y_2\": \"Trisha Crim\"}]",
+        "answer": [
+            "Francis Tooley",
+            "Geoffrey Driskell",
+            "Jewel Messenger",
+            "Perla Dorsett",
+            "Scotty Messenger",
+            "Trisha Crim"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "sister_in_law(\"Austin Crim\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "26bb2a7d-3ee1-48e5-bf58-bd5ce1ac0b17",
+        "question": "Who is the mother of the female second cousin of Katherine Showers?",
+        "solution_traces": "[{\"Y_4\": \"Rosella Ochs\", \"Y_2\": \"Glenda Ochs\"}, {\"Y_4\": \"Monika Crim\", \"Y_2\": \"Glenda Ochs\"}]",
+        "answer": [
+            "Glenda Ochs"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "female_second_cousin(\"Katherine Showers\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    }
+]

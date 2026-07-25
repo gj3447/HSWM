@@ -1,0 +1,907 @@
+[
+    {
+        "id": "847093dc-ad49-4e8a-94f6-071bf524346d",
+        "question": "Who is the nephew of the brother-in-law of Doyle Kasper?",
+        "solution_traces": "[{\"Y_2\": \"Maximilian Swinton\", \"Y_4\": \"Domingo Lemaster\"}]",
+        "answer": [
+            "Maximilian Swinton"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "brother_in_law(\"Doyle Kasper\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "440fbed1-6c1c-460b-a457-d07fe01d437e",
+        "question": "Who is the grandparent of the sister-in-law of Nancy Cason?",
+        "solution_traces": "[{\"Y_4\": \"Page Strickland\", \"Y_2\": \"Jame Cason\"}, {\"Y_4\": \"Page Strickland\", \"Y_2\": \"Jann Aguayo\"}, {\"Y_4\": \"Page Strickland\", \"Y_2\": \"Lorenz Aguayo\"}, {\"Y_4\": \"Page Strickland\", \"Y_2\": \"Ardath Cason\"}]",
+        "answer": [
+            "Ardath Cason",
+            "Jame Cason",
+            "Jann Aguayo",
+            "Lorenz Aguayo"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "sister_in_law(\"Nancy Cason\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "44b61cb1-bc31-46fd-9230-61d618ec23fc",
+        "question": "Who is the nephew of the brother-in-law of Doyle Kasper?",
+        "solution_traces": "[{\"Y_2\": \"Maximilian Swinton\", \"Y_4\": \"Domingo Lemaster\"}]",
+        "answer": [
+            "Maximilian Swinton"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "brother_in_law(\"Doyle Kasper\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c6d824e9-2d18-4eb9-adfd-e1696e32eba9",
+        "question": "Who is the brother-in-law of the daughter of Manda Feldman?",
+        "solution_traces": "[{\"Y_2\": \"Frankie Cason\", \"Y_4\": \"Nancy Cason\"}, {\"Y_4\": \"Nancy Cason\", \"Y_2\": \"Joesph Cason\"}]",
+        "answer": [
+            "Frankie Cason",
+            "Joesph Cason"
+        ],
+        "prolog": {
+            "query": [
+                "brother_in_law(Y_4, Y_2)",
+                "daughter(\"Manda Feldman\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "338ba76f-833b-470a-8cfa-afacd19f51a9",
+        "question": "Who is the cousin of the daughter of Nancy Cason?",
+        "solution_traces": "[{\"Y_2\": \"Rochelle Strickland\", \"Y_4\": \"Jewell Cason\"}, {\"Y_2\": \"Rochelle Strickland\", \"Y_4\": \"Katy Cason\"}]",
+        "answer": [
+            "Rochelle Strickland"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "daughter(\"Nancy Cason\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "20d4050d-474e-49d5-9e6a-53e0c079a4c1",
+        "question": "Who is the sister-in-law of the friend of Edmond Strickland?",
+        "solution_traces": "[{\"Y_4\": \"Estell Cason\", \"Y_2\": \"Katy Cason\"}, {\"Y_2\": \"Jewell Cason\", \"Y_4\": \"Estell Cason\"}]",
+        "answer": [
+            "Jewell Cason",
+            "Katy Cason"
+        ],
+        "prolog": {
+            "query": [
+                "sister_in_law(Y_4, Y_2)",
+                "friend(\"Edmond Strickland\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f0ab74b3-ab1e-43e2-aee8-c309aea21506",
+        "question": "Who is the grandson of the father-in-law of Pedro Demello?",
+        "solution_traces": "[{\"Y_2\": \"Augustus Demello\", \"Y_4\": \"Brooks Tobin\"}]",
+        "answer": [
+            "Augustus Demello"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "father_in_law(\"Pedro Demello\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2d1b2d0f-1526-4de0-9f14-ca5f3b25a99a",
+        "question": "Who is the brother of the daughter of Roseanna Lemaster?",
+        "solution_traces": "[{\"Y_4\": \"Kacey Swinton\", \"Y_2\": \"Domingo Lemaster\"}, {\"Y_2\": \"Domingo Lemaster\", \"Y_4\": \"Manda Kasper\"}]",
+        "answer": [
+            "Domingo Lemaster"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "daughter(\"Roseanna Lemaster\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9ee64e29-bab6-4824-8898-a3b63ad5470c",
+        "question": "Who is the child of the mother-in-law of Odis Breen?",
+        "solution_traces": "[{\"Y_4\": \"Kacey Swinton\", \"Y_2\": \"Rubye Breen\"}, {\"Y_2\": \"Maximilian Swinton\", \"Y_4\": \"Kacey Swinton\"}]",
+        "answer": [
+            "Maximilian Swinton",
+            "Rubye Breen"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "mother_in_law(\"Odis Breen\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e6af87c5-08f8-4e8e-818d-c96cbd7567e3",
+        "question": "Who is the granddaughter of the father-in-law of Wilfredo Carrington?",
+        "solution_traces": "[{\"Y_4\": \"Doyle Kasper\", \"Y_2\": \"Marguerita Carrington\"}, {\"Y_4\": \"Doyle Kasper\", \"Y_2\": \"Shizuko Tobin\"}]",
+        "answer": [
+            "Marguerita Carrington",
+            "Shizuko Tobin"
+        ],
+        "prolog": {
+            "query": [
+                "granddaughter(Y_4, Y_2)",
+                "father_in_law(\"Wilfredo Carrington\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "98441f54-60b5-4c1e-b9f3-636978534507",
+        "question": "Who is the parent of the child of Ike Lemaster?",
+        "solution_traces": "[{\"Y_4\": \"Kacey Swinton\", \"Y_2\": \"Roseanna Lemaster\"}, {\"Y_2\": \"Ike Lemaster\", \"Y_4\": \"Manda Kasper\"}, {\"Y_4\": \"Domingo Lemaster\", \"Y_2\": \"Roseanna Lemaster\"}, {\"Y_2\": \"Ike Lemaster\", \"Y_4\": \"Kacey Swinton\"}, {\"Y_2\": \"Roseanna Lemaster\", \"Y_4\": \"Manda Kasper\"}, {\"Y_2\": \"Ike Lemaster\", \"Y_4\": \"Domingo Lemaster\"}]",
+        "answer": [
+            "Ike Lemaster",
+            "Roseanna Lemaster"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "child(\"Ike Lemaster\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "93bbf4ad-5d80-4cfb-8c0a-e6ddb5bc7273",
+        "question": "Who is the daughter-in-law of the husband of Angela Cason?",
+        "solution_traces": "[{\"Y_4\": \"Douglas Cason\", \"Y_2\": \"Nancy Cason\"}]",
+        "answer": [
+            "Nancy Cason"
+        ],
+        "prolog": {
+            "query": [
+                "daughter_in_law(Y_4, Y_2)",
+                "husband(\"Angela Cason\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d18d3fc2-64b6-4ee2-97c3-b51c93cc6093",
+        "question": "Who is the friend of the father of Leesa Breen?",
+        "solution_traces": "[{\"Y_4\": \"Odis Breen\", \"Y_2\": \"Ardath Cason\"}, {\"Y_4\": \"Odis Breen\", \"Y_2\": \"Wilfredo Carrington\"}, {\"Y_2\": \"Cordell Tobin\", \"Y_4\": \"Odis Breen\"}, {\"Y_2\": \"Bobby Hamill\", \"Y_4\": \"Odis Breen\"}, {\"Y_2\": \"Ike Lemaster\", \"Y_4\": \"Odis Breen\"}]",
+        "answer": [
+            "Ardath Cason",
+            "Bobby Hamill",
+            "Cordell Tobin",
+            "Ike Lemaster",
+            "Wilfredo Carrington"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "father(\"Leesa Breen\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c36f41a9-1a57-4621-8b7f-25fe13ba7aec",
+        "question": "Who is the mother of the brother of Frankie Cason?",
+        "solution_traces": "[{\"Y_2\": \"Angela Cason\", \"Y_4\": \"Sergio Cason\"}, {\"Y_2\": \"Angela Cason\", \"Y_4\": \"Joesph Cason\"}]",
+        "answer": [
+            "Angela Cason"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "brother(\"Frankie Cason\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b09b6556-aa33-4f12-a31d-7ba3747c8e1a",
+        "question": "Who is the aunt of the sister-in-law of Estell Cason?",
+        "solution_traces": "[{\"Y_2\": \"Page Strickland\", \"Y_4\": \"Katy Cason\"}, {\"Y_4\": \"Jewell Cason\", \"Y_2\": \"Page Strickland\"}]",
+        "answer": [
+            "Page Strickland"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "sister_in_law(\"Estell Cason\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6c694e1a-ab75-45dd-9029-cee8d5a18939",
+        "question": "Who is the parent of the friend of Manda Feldman?",
+        "solution_traces": "[{\"Y_2\": \"Sergio Cason\", \"Y_4\": \"Katy Cason\"}, {\"Y_2\": \"Loraine Carrington\", \"Y_4\": \"Shizuko Tobin\"}, {\"Y_4\": \"Domingo Lemaster\", \"Y_2\": \"Roseanna Lemaster\"}, {\"Y_4\": \"Shizuko Tobin\", \"Y_2\": \"Wilfredo Carrington\"}, {\"Y_4\": \"Katy Cason\", \"Y_2\": \"Nancy Cason\"}, {\"Y_2\": \"Ike Lemaster\", \"Y_4\": \"Domingo Lemaster\"}]",
+        "answer": [
+            "Ike Lemaster",
+            "Loraine Carrington",
+            "Nancy Cason",
+            "Roseanna Lemaster",
+            "Sergio Cason",
+            "Wilfredo Carrington"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "friend(\"Manda Feldman\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1586a190-c6de-443d-8ae8-148673e34adc",
+        "question": "Who is the aunt of the child of Nancy Cason?",
+        "solution_traces": "[{\"Y_2\": \"Page Strickland\", \"Y_4\": \"Katy Cason\"}, {\"Y_4\": \"Jewell Cason\", \"Y_2\": \"Page Strickland\"}, {\"Y_2\": \"Page Strickland\", \"Y_4\": \"Rick Cason\"}, {\"Y_2\": \"Page Strickland\", \"Y_4\": \"Ken Cason\"}]",
+        "answer": [
+            "Page Strickland"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "child(\"Nancy Cason\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cf2be245-09be-451c-8584-14196ef3dc3f",
+        "question": "Who is the child of the mother of Domingo Lemaster?",
+        "solution_traces": "[{\"Y_2\": \"Manda Kasper\", \"Y_4\": \"Roseanna Lemaster\"}, {\"Y_4\": \"Roseanna Lemaster\", \"Y_2\": \"Kacey Swinton\"}, {\"Y_4\": \"Roseanna Lemaster\", \"Y_2\": \"Domingo Lemaster\"}]",
+        "answer": [
+            "Domingo Lemaster",
+            "Kacey Swinton",
+            "Manda Kasper"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "mother(\"Domingo Lemaster\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ded3835f-c236-4cc6-8289-b7f0a2642da7",
+        "question": "Who is the great-grandparent of the father of Mariann Tobin?",
+        "solution_traces": "[{\"Y_4\": \"Cordell Tobin\", \"Y_2\": \"Manda Kasper\"}, {\"Y_4\": \"Cordell Tobin\", \"Y_2\": \"Doyle Kasper\"}]",
+        "answer": [
+            "Doyle Kasper",
+            "Manda Kasper"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandparent(Y_4, Y_2)",
+                "father(\"Mariann Tobin\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e21f0dad-e8cb-48c5-a009-f59958f1b9aa",
+        "question": "Who is the sister of the brother-in-law of Estell Cason?",
+        "solution_traces": "[{\"Y_4\": \"Rick Cason\", \"Y_2\": \"Katy Cason\"}, {\"Y_2\": \"Jewell Cason\", \"Y_4\": \"Rick Cason\"}]",
+        "answer": [
+            "Jewell Cason",
+            "Katy Cason"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "brother_in_law(\"Estell Cason\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d62daad4-c91f-4bfb-b181-07abc0777759",
+        "question": "Who is the great-grandson of the great-grandparent of Katy Cason?",
+        "solution_traces": "[{\"Y_4\": \"Ardath Cason\", \"Y_2\": \"Ken Cason\"}, {\"Y_2\": \"Ken Cason\", \"Y_4\": \"Jann Aguayo\"}, {\"Y_4\": \"Jann Aguayo\", \"Y_2\": \"Rick Cason\"}, {\"Y_4\": \"Ardath Cason\", \"Y_2\": \"Rick Cason\"}, {\"Y_2\": \"Ken Cason\", \"Y_4\": \"Jame Cason\"}, {\"Y_4\": \"Jame Cason\", \"Y_2\": \"Rick Cason\"}, {\"Y_2\": \"Rick Cason\", \"Y_4\": \"Lorenz Aguayo\"}, {\"Y_2\": \"Ken Cason\", \"Y_4\": \"Lorenz Aguayo\"}]",
+        "answer": [
+            "Ken Cason",
+            "Rick Cason"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandson(Y_4, Y_2)",
+                "great_grandparent(\"Katy Cason\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "900b8399-2899-403a-a411-3bcc4b6b7d8e",
+        "question": "Who is the father of the grandchild of Roseanna Lemaster?",
+        "solution_traces": "[{\"Y_4\": \"Rubye Breen\", \"Y_2\": \"Eusebio Swinton\"}, {\"Y_2\": \"Eusebio Swinton\", \"Y_4\": \"Maximilian Swinton\"}, {\"Y_2\": \"Doyle Kasper\", \"Y_4\": \"Loraine Carrington\"}]",
+        "answer": [
+            "Doyle Kasper",
+            "Eusebio Swinton"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "grandchild(\"Roseanna Lemaster\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cced31b6-76d5-445f-bf28-351450b3637e",
+        "question": "Who is the brother of the uncle of Jewell Cason?",
+        "solution_traces": "[{\"Y_2\": \"Frankie Cason\", \"Y_4\": \"Joesph Cason\"}, {\"Y_4\": \"Frankie Cason\", \"Y_2\": \"Joesph Cason\"}, {\"Y_2\": \"Sergio Cason\", \"Y_4\": \"Frankie Cason\"}, {\"Y_2\": \"Sergio Cason\", \"Y_4\": \"Joesph Cason\"}]",
+        "answer": [
+            "Frankie Cason",
+            "Joesph Cason",
+            "Sergio Cason"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "uncle(\"Jewell Cason\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3a6f9de5-a4b3-4bf7-adf1-8fd648858549",
+        "question": "Who is the son of the mother-in-law of Doyle Kasper?",
+        "solution_traces": "[{\"Y_4\": \"Roseanna Lemaster\", \"Y_2\": \"Domingo Lemaster\"}]",
+        "answer": [
+            "Domingo Lemaster"
+        ],
+        "prolog": {
+            "query": [
+                "son(Y_4, Y_2)",
+                "mother_in_law(\"Doyle Kasper\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "405fefd5-dc27-4f96-aa1b-9f2c0f4e39a4",
+        "question": "Who is the friend of the father of Cordell Tobin?",
+        "solution_traces": "[{\"Y_4\": \"Brooks Tobin\", \"Y_2\": \"Shizuko Tobin\"}, {\"Y_4\": \"Brooks Tobin\", \"Y_2\": \"Bev Demello\"}, {\"Y_4\": \"Brooks Tobin\", \"Y_2\": \"Kacey Hamill\"}]",
+        "answer": [
+            "Bev Demello",
+            "Kacey Hamill",
+            "Shizuko Tobin"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "father(\"Cordell Tobin\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "443b8392-fb7a-4b57-a44e-3dcc1ff4382d",
+        "question": "Who is the grandchild of the friend of Leesa Breen?",
+        "solution_traces": "[{\"Y_2\": \"Rochelle Strickland\", \"Y_4\": \"Angela Cason\"}, {\"Y_2\": \"Marguerita Carrington\", \"Y_4\": \"Manda Kasper\"}, {\"Y_2\": \"Shizuko Tobin\", \"Y_4\": \"Manda Kasper\"}, {\"Y_2\": \"Jewell Cason\", \"Y_4\": \"Angela Cason\"}, {\"Y_2\": \"Ken Cason\", \"Y_4\": \"Angela Cason\"}, {\"Y_4\": \"Angela Cason\", \"Y_2\": \"Rick Cason\"}, {\"Y_4\": \"Angela Cason\", \"Y_2\": \"Katy Cason\"}]",
+        "answer": [
+            "Jewell Cason",
+            "Katy Cason",
+            "Ken Cason",
+            "Marguerita Carrington",
+            "Rick Cason",
+            "Rochelle Strickland",
+            "Shizuko Tobin"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "friend(\"Leesa Breen\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ea7428d0-a7c7-4d6c-a11d-1e3d73e607f7",
+        "question": "Who is the niece of the grandchild of Douglas Cason?",
+        "solution_traces": "[{\"Y_4\": \"Katy Cason\", \"Y_2\": \"Tiesha Cason\"}, {\"Y_2\": \"Teresita Cason\", \"Y_4\": \"Rick Cason\"}, {\"Y_2\": \"Tiesha Cason\", \"Y_4\": \"Rick Cason\"}, {\"Y_4\": \"Jewell Cason\", \"Y_2\": \"Teresita Cason\"}, {\"Y_4\": \"Jewell Cason\", \"Y_2\": \"Tiesha Cason\"}, {\"Y_2\": \"Teresita Cason\", \"Y_4\": \"Katy Cason\"}]",
+        "answer": [
+            "Teresita Cason",
+            "Tiesha Cason"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "grandchild(\"Douglas Cason\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c08b3705-d95b-42e6-97a1-a6b7704094d9",
+        "question": "Who is the nephew of the aunt of Cordell Tobin?",
+        "solution_traces": "[{\"Y_2\": \"Cordell Tobin\", \"Y_4\": \"Marguerita Carrington\"}]",
+        "answer": [
+            "Cordell Tobin"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "aunt(\"Cordell Tobin\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e00d4eac-ef55-4bc2-8cda-8348f5a1b9ef",
+        "question": "Who is the father-in-law of the friend of Bev Demello?",
+        "solution_traces": "[{\"Y_4\": \"Brooks Tobin\", \"Y_2\": \"Wilfredo Carrington\"}]",
+        "answer": [
+            "Wilfredo Carrington"
+        ],
+        "prolog": {
+            "query": [
+                "father_in_law(Y_4, Y_2)",
+                "friend(\"Bev Demello\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a8c726e1-8082-40e2-9203-58a9dc9b6ecb",
+        "question": "Who is the great-aunt of the great-grandchild of Ike Lemaster?",
+        "solution_traces": "[{\"Y_2\": \"Manda Kasper\", \"Y_4\": \"Leesa Breen\"}, {\"Y_2\": \"Kacey Swinton\", \"Y_4\": \"Shizuko Tobin\"}, {\"Y_2\": \"Kacey Swinton\", \"Y_4\": \"Marguerita Carrington\"}]",
+        "answer": [
+            "Kacey Swinton",
+            "Manda Kasper"
+        ],
+        "prolog": {
+            "query": [
+                "great_aunt(Y_4, Y_2)",
+                "great_grandchild(\"Ike Lemaster\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    }
+]

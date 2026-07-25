@@ -1,0 +1,752 @@
+[
+    {
+        "id": "1b30523c-3dbc-486b-9538-bffdcb54609f",
+        "question": "How many fathers does Antwan Schiller have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father(\"Antwan Schiller\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6e0c1b6e-0fe8-43f1-b75c-aad00c3b4a10",
+        "question": "How many grandparents does Nicky Roth have?",
+        "solution_traces": "[{\"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(\"Nicky Roth\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "42683cc1-1d75-4c03-bd01-48ee0bd0db74",
+        "question": "How many daughters-in-law does Reyna Roth have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter_in_law(\"Reyna Roth\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e0620f21-88ee-426e-8926-44b493cb8d0c",
+        "question": "How many sons does Reyna Roth have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son(\"Reyna Roth\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5c58cb61-8293-458a-9af5-91406a5b25bc",
+        "question": "How many parents does Mario Cho have?",
+        "solution_traces": "[{\"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(\"Mario Cho\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "52c28574-11a3-49c0-bdae-66287ef22ccd",
+        "question": "How many aunts does Catalina Keane have?",
+        "solution_traces": "[{\"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(aunt(\"Catalina Keane\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "312f1e6e-5eef-4f7f-bcb9-77816de0f16c",
+        "question": "How many wives does Hyman Roth have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(wife(\"Hyman Roth\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a07ed820-921c-41bb-9f45-21d391c2b689",
+        "question": "How many sons-in-law does Elissa Tan have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(\"Elissa Tan\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2686ec89-0983-4a2e-90a1-4038bea02f7e",
+        "question": "How many husbands does Rosie Hodges have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(husband(\"Rosie Hodges\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "04dc6484-fb98-4824-856a-8edada0fb6d8",
+        "question": "How many husbands does Maurine Schiller have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(husband(\"Maurine Schiller\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "eb123a9b-e4f2-4e21-a7b4-fd4ef5632520",
+        "question": "How many siblings does Adam Schiller have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(\"Adam Schiller\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "cbf2024f-6084-4817-a076-c155d6fc61eb",
+        "question": "How many husbands does Yoko Ayotte have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(husband(\"Yoko Ayotte\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "493c1062-66c3-474f-87ee-e5ca43de6da3",
+        "question": "How many friends does Rosie Hodges have?",
+        "solution_traces": "[{\"Count_1\": 5}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(\"Rosie Hodges\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "84a979f1-d1f8-4678-beb5-a95205405899",
+        "question": "How many mothers-in-law does Samual Roth have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(\"Samual Roth\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "bd463581-20b0-4517-8a12-a53ebf5e911e",
+        "question": "How many sons-in-law does Elissa Tan have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(\"Elissa Tan\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8c4f597c-858b-4253-b2b5-93c88133a9de",
+        "question": "How many great-grandmothers does Nevin Roth have?",
+        "solution_traces": "[{\"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandmother(\"Nevin Roth\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ea5e9c21-6711-4976-9109-5eb2ea72db97",
+        "question": "How many mothers-in-law does Hyman Roth have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(\"Hyman Roth\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "cdc75701-7d07-4a29-83a1-7c2e5547b49b",
+        "question": "How many aunts does Catalina Keane have?",
+        "solution_traces": "[{\"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(aunt(\"Catalina Keane\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a16d48e3-30f3-4702-aaa3-d82982fca916",
+        "question": "How many friends does Rupert Tan have?",
+        "solution_traces": "[{\"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(\"Rupert Tan\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e686cdd0-b17f-4a64-9137-454bb6bd242d",
+        "question": "How many friends does Cody Cho have?",
+        "solution_traces": "[{\"Count_1\": 7}]",
+        "answer": [
+            "7"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(\"Cody Cho\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "81e8c712-ae2c-4814-81e5-e3eeb121e406",
+        "question": "How many grandfathers does Orlando Roth have?",
+        "solution_traces": "[{\"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(\"Orlando Roth\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9d0005fc-3040-41b6-8f2f-9c0824f34ee3",
+        "question": "How many sons does Andres Hodges have?",
+        "solution_traces": "[{\"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son(\"Andres Hodges\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b040aafa-734d-4ec9-94af-4c9269cf7937",
+        "question": "How many grandchildren does Earle Roth have?",
+        "solution_traces": "[{\"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(\"Earle Roth\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ddfbc6c6-7a47-4454-8519-6a44ed06f726",
+        "question": "How many second aunts does Catalina Keane have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(second_aunt(\"Catalina Keane\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "cdbbe0ff-ce5c-4bfe-a4b8-db7e78a11a69",
+        "question": "How many friends does Katerine Hodges have?",
+        "solution_traces": "[{\"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(\"Katerine Hodges\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b00e876e-e0f8-4c7a-abb9-955ba2468d8f",
+        "question": "How many aunts does Dave Roth have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(aunt(\"Dave Roth\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "04f8d01e-ce21-4a29-bc30-8ebe86b39f73",
+        "question": "How many great-grandparents does Nevin Roth have?",
+        "solution_traces": "[{\"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(\"Nevin Roth\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "66911486-4ae1-4c86-ac7d-3c45de237cfa",
+        "question": "How many husbands does Rosie Hodges have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(husband(\"Rosie Hodges\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "abb06df8-a012-4c8f-b292-d6b6757274a4",
+        "question": "How many sons-in-law does Mario Cho have?",
+        "solution_traces": "[{\"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(\"Mario Cho\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6724dfaf-d6a4-4bca-bbc9-74a8181ba01b",
+        "question": "How many grandfathers does Dorathy Keane have?",
+        "solution_traces": "[{\"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(\"Dorathy Keane\", Y_1)), Count_1)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "<name>_3",
+            "have",
+            "?"
+        ],
+        "type": 19,
+        "difficulty": 1,
+        "is_aggregation_question": true
+    }
+]

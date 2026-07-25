@@ -1,0 +1,1215 @@
+[
+    {
+        "id": "c19b7171-4e17-4b25-bab4-44052effb759",
+        "question": "What is the hobby of the cousin of the niece of the wife of Darwin Ackerman?",
+        "solution_traces": "[{\"Y_2\": \"benchmarking\", \"Y_5\": \"Susie Berglund\", \"Y_3\": \"Buddy Ackerman\", \"Y_7\": \"Yuk Ackerman\"}, {\"Y_5\": \"Susie Berglund\", \"Y_2\": \"model racing\", \"Y_3\": \"Neil Ackerman\", \"Y_7\": \"Yuk Ackerman\"}, {\"Y_5\": \"Susie Berglund\", \"Y_3\": \"Jack Ackerman\", \"Y_2\": \"mycology\", \"Y_7\": \"Yuk Ackerman\"}]",
+        "answer": [
+            "benchmarking",
+            "model racing",
+            "mycology"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "cousin(Y_5, Y_3)",
+                "niece(Y_7, Y_5)",
+                "wife(\"Darwin Ackerman\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5dcfe08a-8611-4ab4-b5c2-bf8931a9d818",
+        "question": "What is the occupation of the sister of the friend of the father of Richie Boughton?",
+        "solution_traces": "[{\"Y_7\": \"Guillermo Boughton\", \"Y_3\": \"Francesca Sparkman\", \"Y_5\": \"Ismael Sparkman\", \"Y_2\": \"adult guidance worker\"}, {\"Y_7\": \"Guillermo Boughton\", \"Y_2\": \"air traffic controller\", \"Y_5\": \"Ismael Sparkman\", \"Y_3\": \"Isabella Sparkman\"}, {\"Y_7\": \"Guillermo Boughton\", \"Y_2\": \"air traffic controller\", \"Y_5\": \"Keisha Vega\", \"Y_3\": \"Isabella Sparkman\"}, {\"Y_7\": \"Guillermo Boughton\", \"Y_3\": \"Francesca Sparkman\", \"Y_5\": \"Keisha Vega\", \"Y_2\": \"adult guidance worker\"}, {\"Y_7\": \"Guillermo Boughton\", \"Y_3\": \"Wanita Boughton\", \"Y_2\": \"risk analyst\", \"Y_5\": \"Richie Boughton\"}, {\"Y_7\": \"Guillermo Boughton\", \"Y_2\": \"psychiatrist\", \"Y_5\": \"Ismael Sparkman\", \"Y_3\": \"Keisha Vega\"}]",
+        "answer": [
+            "adult guidance worker",
+            "air traffic controller",
+            "psychiatrist",
+            "risk analyst"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sister(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "father(\"Richie Boughton\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "bbc746c8-bd5b-484c-9ede-ca44365b5758",
+        "question": "What is the date of birth of the friend of the sister of the sibling of Mickey Twigg?",
+        "solution_traces": "[{\"Y_3\": \"Sha Sparkman\", \"Y_5\": \"Yasmin Berglund\", \"Y_2\": \"0233-09-11\", \"Y_7\": \"Yuk Ackerman\"}, {\"Y_3\": \"Ismael Sparkman\", \"Y_7\": \"Yasmin Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_2\": \"0265-08-13\"}, {\"Y_2\": \"0288-10-15\", \"Y_7\": \"Yasmin Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Erick Sparkman\"}, {\"Y_2\": \"0255-01-03\", \"Y_7\": \"Yasmin Berglund\", \"Y_3\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_3\": \"Rebecka Sparkman\", \"Y_2\": \"0206-08-07\", \"Y_7\": \"Yuk Ackerman\"}, {\"Y_2\": \"0320-02-07\", \"Y_7\": \"Yasmin Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Carmine Bible\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_3\": \"Timothy Ackerman\", \"Y_2\": \"0205-09-09\", \"Y_7\": \"Yuk Ackerman\"}, {\"Y_3\": \"Lucio Bible\", \"Y_7\": \"Yasmin Berglund\", \"Y_2\": \"0290-01-24\", \"Y_5\": \"Yuk Ackerman\"}, {\"Y_3\": \"Douglas Berglund\", \"Y_5\": \"Yasmin Berglund\", \"Y_2\": \"0222-12-28\", \"Y_7\": \"Yuk Ackerman\"}, {\"Y_2\": \"0263-01-19\", \"Y_7\": \"Yasmin Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Shon Vega\"}, {\"Y_7\": \"Yasmin Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Rebecka Sparkman\", \"Y_2\": \"0206-08-07\"}, {\"Y_2\": \"0252-07-20\", \"Y_5\": \"Yasmin Berglund\", \"Y_3\": \"Neil Ackerman\", \"Y_7\": \"Yuk Ackerman\"}]",
+        "answer": [
+            "0205-09-09",
+            "0206-08-07",
+            "0222-12-28",
+            "0233-09-11",
+            "0252-07-20",
+            "0255-01-03",
+            "0263-01-19",
+            "0265-08-13",
+            "0288-10-15",
+            "0290-01-24",
+            "0320-02-07"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "sister(Y_7, Y_5)",
+                "sibling(\"Mickey Twigg\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d17fd443-0840-4fd0-8ef1-d67d785369a3",
+        "question": "What is the occupation of the child of the son-in-law of the grandmother of Dinah Boughton?",
+        "solution_traces": "[{\"Y_7\": \"Delsie Templeton\", \"Y_5\": \"Timothy Ackerman\", \"Y_3\": \"Dinah Boughton\", \"Y_2\": \"haematologist\"}, {\"Y_7\": \"Delsie Templeton\", \"Y_5\": \"Timothy Ackerman\", \"Y_3\": \"Chelsie Ackerman\", \"Y_2\": \"ranger\"}, {\"Y_7\": \"Delsie Templeton\", \"Y_5\": \"Timothy Ackerman\", \"Y_3\": \"Darwin Ackerman\", \"Y_2\": \"English as a foreign language teacher\"}]",
+        "answer": [
+            "English as a foreign language teacher",
+            "haematologist",
+            "ranger"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "child(Y_5, Y_3)",
+                "son_in_law(Y_7, Y_5)",
+                "grandmother(\"Dinah Boughton\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1c8f4904-3692-48de-a1be-68738457fb32",
+        "question": "What is the occupation of the grandchild of the grandmother of the cousin of Jeanette Vega?",
+        "solution_traces": "[{\"Y_7\": \"Adalberto Sparkman\", \"Y_2\": \"communications engineer\", \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Marie Lipsey\"}, {\"Y_2\": \"statistician\", \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Sha Bible\"}, {\"Y_2\": \"journalist\", \"Y_7\": \"Adalberto Sparkman\", \"Y_3\": \"Adalberto Sparkman\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Marie Lipsey\", \"Y_2\": \"statistician\", \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Sha Bible\"}, {\"Y_7\": \"Marie Lipsey\", \"Y_3\": \"Jeanette Vega\", \"Y_2\": \"higher education careers adviser\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Marie Lipsey\", \"Y_2\": \"proofreader\", \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Erick Sparkman\"}, {\"Y_2\": \"proofreader\", \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Erick Sparkman\"}, {\"Y_2\": \"higher education careers adviser\", \"Y_3\": \"Jeanette Vega\", \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_2\": \"journalist\", \"Y_3\": \"Adalberto Sparkman\", \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Adalberto Sparkman\", \"Y_2\": \"proofreader\", \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Erick Sparkman\"}, {\"Y_7\": \"Marie Lipsey\", \"Y_3\": \"Adalberto Sparkman\", \"Y_5\": \"Sha Sparkman\", \"Y_2\": \"journalist\"}, {\"Y_7\": \"Marie Lipsey\", \"Y_3\": \"Marie Lipsey\", \"Y_2\": \"communications engineer\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_2\": \"higher education careers adviser\", \"Y_7\": \"Adalberto Sparkman\", \"Y_3\": \"Jeanette Vega\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Adalberto Sparkman\", \"Y_2\": \"statistician\", \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Sha Bible\"}, {\"Y_3\": \"Marie Lipsey\", \"Y_2\": \"communications engineer\", \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Sha Sparkman\"}]",
+        "answer": [
+            "communications engineer",
+            "higher education careers adviser",
+            "journalist",
+            "proofreader",
+            "statistician"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "grandmother(Y_7, Y_5)",
+                "cousin(\"Jeanette Vega\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3b5bf9df-124b-4a61-9c5f-e0cf18a5c1bb",
+        "question": "What is the occupation of the sister of the great-uncle of the friend of Lucio Bible?",
+        "solution_traces": "[{\"Y_3\": \"Francesca Sparkman\", \"Y_7\": \"Leonardo Lipsey\", \"Y_5\": \"Ismael Sparkman\", \"Y_2\": \"adult guidance worker\"}, {\"Y_7\": \"Leonardo Lipsey\", \"Y_2\": \"psychiatrist\", \"Y_5\": \"Ismael Sparkman\", \"Y_3\": \"Keisha Vega\"}, {\"Y_7\": \"Leonardo Lipsey\", \"Y_2\": \"air traffic controller\", \"Y_5\": \"Ismael Sparkman\", \"Y_3\": \"Isabella Sparkman\"}]",
+        "answer": [
+            "adult guidance worker",
+            "air traffic controller",
+            "psychiatrist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sister(Y_5, Y_3)",
+                "great_uncle(Y_7, Y_5)",
+                "friend(\"Lucio Bible\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c2f2beae-db86-4cd5-b5f5-c5b9dcd442be",
+        "question": "What is the occupation of the father-in-law of the mother of the brother of Neil Ackerman?",
+        "solution_traces": "[{\"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Timothy Ackerman\", \"Y_5\": \"Yuk Ackerman\", \"Y_2\": \"race relations officer\"}, {\"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Timothy Ackerman\", \"Y_5\": \"Yuk Ackerman\", \"Y_2\": \"race relations officer\"}]",
+        "answer": [
+            "race relations officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "father_in_law(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "brother(\"Neil Ackerman\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "eb1c5846-e9c8-40b3-a6bd-e146eb66326c",
+        "question": "What is the occupation of the friend of the husband of the parent of Wanita Boughton?",
+        "solution_traces": "[{\"Y_2\": \"audiological scientist\", \"Y_3\": \"Hiram Sparkman\", \"Y_5\": \"Guillermo Boughton\", \"Y_7\": \"Bev Boughton\"}, {\"Y_2\": \"psychiatrist\", \"Y_5\": \"Guillermo Boughton\", \"Y_3\": \"Keisha Vega\", \"Y_7\": \"Bev Boughton\"}, {\"Y_3\": \"Ismael Sparkman\", \"Y_2\": \"agricultural consultant\", \"Y_5\": \"Guillermo Boughton\", \"Y_7\": \"Bev Boughton\"}, {\"Y_3\": \"Richie Boughton\", \"Y_2\": \"conservator\", \"Y_5\": \"Guillermo Boughton\", \"Y_7\": \"Bev Boughton\"}, {\"Y_3\": \"Timothy Ackerman\", \"Y_5\": \"Guillermo Boughton\", \"Y_2\": \"race relations officer\", \"Y_7\": \"Bev Boughton\"}]",
+        "answer": [
+            "agricultural consultant",
+            "audiological scientist",
+            "conservator",
+            "psychiatrist",
+            "race relations officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "husband(Y_7, Y_5)",
+                "parent(\"Wanita Boughton\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "da3d656b-13a1-46b3-b7a8-9b0d9fc44b49",
+        "question": "What is the hobby of the brother of the sibling of the friend of Clifton Boughton?",
+        "solution_traces": "[{\"Y_5\": \"Buddy Ackerman\", \"Y_7\": \"Neil Ackerman\", \"Y_2\": \"mycology\", \"Y_3\": \"Jack Ackerman\"}, {\"Y_2\": \"slot car\", \"Y_3\": \"Jamel Sparkman\", \"Y_7\": \"Keisha Vega\", \"Y_5\": \"Ismael Sparkman\"}, {\"Y_2\": \"slot car\", \"Y_3\": \"Jamel Sparkman\", \"Y_7\": \"Keisha Vega\", \"Y_5\": \"Francesca Sparkman\"}, {\"Y_3\": \"Ismael Sparkman\", \"Y_5\": \"Isabella Sparkman\", \"Y_7\": \"Keisha Vega\", \"Y_2\": \"physics\"}, {\"Y_3\": \"Ismael Sparkman\", \"Y_7\": \"Keisha Vega\", \"Y_2\": \"physics\", \"Y_5\": \"Francesca Sparkman\"}, {\"Y_3\": \"Jamel Sparkman\", \"Y_2\": \"slot car\", \"Y_5\": \"Isabella Sparkman\", \"Y_7\": \"Keisha Vega\"}, {\"Y_5\": \"Buddy Ackerman\", \"Y_2\": \"model racing\", \"Y_7\": \"Neil Ackerman\", \"Y_3\": \"Neil Ackerman\"}, {\"Y_3\": \"Ismael Sparkman\", \"Y_5\": \"Jamel Sparkman\", \"Y_7\": \"Keisha Vega\", \"Y_2\": \"physics\"}, {\"Y_5\": \"Jack Ackerman\", \"Y_2\": \"model racing\", \"Y_7\": \"Neil Ackerman\", \"Y_3\": \"Neil Ackerman\"}, {\"Y_2\": \"benchmarking\", \"Y_5\": \"Jack Ackerman\", \"Y_3\": \"Buddy Ackerman\", \"Y_7\": \"Neil Ackerman\"}]",
+        "answer": [
+            "benchmarking",
+            "model racing",
+            "mycology",
+            "physics",
+            "slot car"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "brother(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "friend(\"Clifton Boughton\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3ec90912-2fc5-48ef-9bdc-843d0e66ece9",
+        "question": "What is the hobby of the friend of the aunt of the grandchild of Gale Twigg?",
+        "solution_traces": "[{\"Y_5\": \"Dinah Boughton\", \"Y_3\": \"Lucio Bible\", \"Y_7\": \"Jack Ackerman\", \"Y_2\": \"shortwave listening\"}, {\"Y_3\": \"Richie Boughton\", \"Y_7\": \"Buddy Ackerman\", \"Y_5\": \"Chelsie Ackerman\", \"Y_2\": \"research\"}, {\"Y_2\": \"benchmarking\", \"Y_3\": \"Francesca Sparkman\", \"Y_7\": \"Jack Ackerman\", \"Y_5\": \"Chelsie Ackerman\"}, {\"Y_2\": \"geocaching\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Chelsie Ackerman\", \"Y_3\": \"Rolando Pugliese\"}, {\"Y_2\": \"geocaching\", \"Y_7\": \"Buddy Ackerman\", \"Y_5\": \"Chelsie Ackerman\", \"Y_3\": \"Rolando Pugliese\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_7\": \"Buddy Ackerman\", \"Y_2\": \"microbiology\", \"Y_3\": \"Devin Mcneely\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_3\": \"Timothy Ackerman\", \"Y_7\": \"Neil Ackerman\", \"Y_2\": \"satellite watching\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_7\": \"Jack Ackerman\", \"Y_2\": \"motor sports\", \"Y_3\": \"Keisha Vega\"}, {\"Y_2\": \"movie memorabilia collecting\", \"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Erick Sparkman\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Buddy Ackerman\", \"Y_2\": \"fossil hunting\", \"Y_3\": \"Douglas Berglund\"}, {\"Y_3\": \"Lucio Bible\", \"Y_2\": \"shortwave listening\", \"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_2\": \"auto audiophilia\", \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Susie Berglund\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Rebecka Sparkman\", \"Y_2\": \"geography\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Lucio Bible\", \"Y_2\": \"shortwave listening\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_2\": \"videography\", \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Sha Sparkman\"}, {\"Y_2\": \"geography\", \"Y_5\": \"Yasmin Berglund\", \"Y_3\": \"Rebecka Sparkman\", \"Y_7\": \"Neil Ackerman\"}, {\"Y_3\": \"Sha Sparkman\", \"Y_5\": \"Yasmin Berglund\", \"Y_2\": \"videography\", \"Y_7\": \"Neil Ackerman\"}, {\"Y_2\": \"geocaching\", \"Y_7\": \"Jack Ackerman\", \"Y_5\": \"Chelsie Ackerman\", \"Y_3\": \"Rolando Pugliese\"}, {\"Y_2\": \"benchmarking\", \"Y_3\": \"Francesca Sparkman\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Chelsie Ackerman\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_2\": \"reading\", \"Y_3\": \"Dorathy Twigg\", \"Y_7\": \"Neil Ackerman\"}, {\"Y_3\": \"Wanita Boughton\", \"Y_7\": \"Buddy Ackerman\", \"Y_2\": \"publishing\", \"Y_5\": \"Chelsie Ackerman\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_2\": \"reading\", \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Dorathy Twigg\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Timothy Ackerman\", \"Y_2\": \"satellite watching\"}, {\"Y_2\": \"magic\", \"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Shon Vega\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_3\": \"Lucio Bible\", \"Y_2\": \"shortwave listening\", \"Y_7\": \"Neil Ackerman\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_2\": \"auto audiophilia\", \"Y_3\": \"Susie Berglund\", \"Y_7\": \"Neil Ackerman\"}, {\"Y_2\": \"benchmarking\", \"Y_3\": \"Francesca Sparkman\", \"Y_7\": \"Buddy Ackerman\", \"Y_5\": \"Chelsie Ackerman\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_2\": \"microbiology\", \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Devin Mcneely\"}, {\"Y_3\": \"Ismael Sparkman\", \"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_2\": \"physics\"}, {\"Y_3\": \"Wanita Boughton\", \"Y_2\": \"publishing\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Chelsie Ackerman\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Jack Ackerman\", \"Y_2\": \"fossil hunting\", \"Y_3\": \"Douglas Berglund\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_2\": \"motor sports\", \"Y_7\": \"Neil Ackerman\", \"Y_3\": \"Keisha Vega\"}, {\"Y_2\": \"auto audiophilia\", \"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_3\": \"Susie Berglund\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Jack Ackerman\", \"Y_2\": \"model racing\", \"Y_3\": \"Neil Ackerman\"}, {\"Y_3\": \"Carmine Bible\", \"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\", \"Y_2\": \"microscopy\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_2\": \"microbiology\", \"Y_7\": \"Neil Ackerman\", \"Y_3\": \"Devin Mcneely\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_2\": \"fossil hunting\", \"Y_7\": \"Neil Ackerman\", \"Y_3\": \"Douglas Berglund\"}, {\"Y_3\": \"Richie Boughton\", \"Y_7\": \"Jack Ackerman\", \"Y_5\": \"Chelsie Ackerman\", \"Y_2\": \"research\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Jack Ackerman\", \"Y_2\": \"geography\", \"Y_3\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Sha Sparkman\", \"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Jack Ackerman\", \"Y_2\": \"videography\"}, {\"Y_2\": \"geography\", \"Y_3\": \"Rebecka Sparkman\", \"Y_7\": \"Susie Berglund\", \"Y_5\": \"Yuk Ackerman\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_7\": \"Buddy Ackerman\", \"Y_2\": \"motor sports\", \"Y_3\": \"Keisha Vega\"}, {\"Y_3\": \"Richie Boughton\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Chelsie Ackerman\", \"Y_2\": \"research\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Timothy Ackerman\", \"Y_2\": \"satellite watching\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_2\": \"reading\", \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Dorathy Twigg\"}, {\"Y_3\": \"Wanita Boughton\", \"Y_7\": \"Jack Ackerman\", \"Y_2\": \"publishing\", \"Y_5\": \"Chelsie Ackerman\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_7\": \"Buddy Ackerman\", \"Y_2\": \"model racing\", \"Y_3\": \"Neil Ackerman\"}, {\"Y_5\": \"Dinah Boughton\", \"Y_2\": \"auto audiophilia\", \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Susie Berglund\"}, {\"Y_5\": \"Yasmin Berglund\", \"Y_2\": \"model racing\", \"Y_7\": \"Neil Ackerman\", \"Y_3\": \"Neil Ackerman\"}]",
+        "answer": [
+            "auto audiophilia",
+            "benchmarking",
+            "fossil hunting",
+            "geocaching",
+            "geography",
+            "magic",
+            "microbiology",
+            "microscopy",
+            "model racing",
+            "motor sports",
+            "movie memorabilia collecting",
+            "physics",
+            "publishing",
+            "reading",
+            "research",
+            "satellite watching",
+            "shortwave listening",
+            "videography"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "aunt(Y_7, Y_5)",
+                "grandchild(\"Gale Twigg\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a4064ba5-fc4f-420b-94f6-b6d002f6839d",
+        "question": "What is the hobby of the parent of the great-grandchild of the son-in-law of Lashandra Pugliese?",
+        "solution_traces": "[{\"Y_5\": \"Carmine Bible\", \"Y_2\": \"insect collecting\", \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Sha Bible\"}, {\"Y_5\": \"Carmine Bible\", \"Y_3\": \"Lucio Bible\", \"Y_2\": \"shortwave listening\", \"Y_7\": \"Laurence Sparkman\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Y_2\": \"tai chi\", \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Carmine Lipsey\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Marie Lipsey\", \"Y_2\": \"karting\"}]",
+        "answer": [
+            "insect collecting",
+            "karting",
+            "shortwave listening",
+            "tai chi"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "great_grandchild(Y_7, Y_5)",
+                "son_in_law(\"Lashandra Pugliese\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3c348725-4d81-4836-9de8-332c10bf1ed9",
+        "question": "What is the date of birth of the sibling of the sibling of the uncle of Jamel Sparkman?",
+        "solution_traces": "[{\"Y_7\": \"Douglass Pugliese\", \"Y_2\": \"0233-07-20\", \"Y_3\": \"Isabell Pugliese\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Douglass Pugliese\", \"Y_2\": \"0236-04-19\", \"Y_3\": \"Douglass Pugliese\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Douglass Pugliese\", \"Y_2\": \"0236-04-19\", \"Y_3\": \"Douglass Pugliese\", \"Y_5\": \"Isabell Pugliese\"}, {\"Y_7\": \"Douglass Pugliese\", \"Y_5\": \"Isabell Pugliese\", \"Y_3\": \"Sha Sparkman\", \"Y_2\": \"0233-09-11\"}]",
+        "answer": [
+            "0233-07-20",
+            "0233-09-11",
+            "0236-04-19"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "uncle(\"Jamel Sparkman\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2d3ea40c-dd6b-4929-84ac-18f09d411ce9",
+        "question": "What is the date of birth of the niece of the sister-in-law of the grandfather of Jeanette Vega?",
+        "solution_traces": "[{\"Y_5\": \"Isabell Pugliese\", \"Y_2\": \"0263-01-08\", \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Keisha Vega\"}, {\"Y_5\": \"Isabell Pugliese\", \"Y_2\": \"0264-06-20\", \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Isabella Sparkman\"}, {\"Y_5\": \"Isabell Pugliese\", \"Y_3\": \"Francesca Sparkman\", \"Y_7\": \"Laurence Sparkman\", \"Y_2\": \"0261-11-16\"}]",
+        "answer": [
+            "0261-11-16",
+            "0263-01-08",
+            "0264-06-20"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "niece(Y_5, Y_3)",
+                "sister_in_law(Y_7, Y_5)",
+                "grandfather(\"Jeanette Vega\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "172a25e3-a746-4c21-9091-19bcaa17f120",
+        "question": "What is the hobby of the daughter of the child of the son-in-law of Rolando Pugliese?",
+        "solution_traces": "[{\"Y_3\": \"Jeanette Vega\", \"Y_2\": \"meditation\", \"Y_5\": \"Keisha Vega\", \"Y_7\": \"Laurence Sparkman\"}, {\"Y_5\": \"Jamel Sparkman\", \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Marie Lipsey\", \"Y_2\": \"karting\"}, {\"Y_2\": \"insect collecting\", \"Y_5\": \"Keisha Vega\", \"Y_7\": \"Laurence Sparkman\", \"Y_3\": \"Sha Bible\"}]",
+        "answer": [
+            "insect collecting",
+            "karting",
+            "meditation"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "daughter(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "son_in_law(\"Rolando Pugliese\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b6517cae-5060-4ace-98e9-3f2396df197f",
+        "question": "What is the occupation of the great-grandson of the mother of the grandchild of Delsie Templeton?",
+        "solution_traces": "[{\"Y_7\": \"Darwin Ackerman\", \"Y_2\": \"conservator\", \"Y_5\": \"Mattie Ackerman\", \"Y_3\": \"Richie Boughton\"}, {\"Y_3\": \"Richie Boughton\", \"Y_2\": \"conservator\", \"Y_5\": \"Mattie Ackerman\", \"Y_7\": \"Chelsie Ackerman\"}, {\"Y_3\": \"Richie Boughton\", \"Y_7\": \"Dinah Boughton\", \"Y_2\": \"conservator\", \"Y_5\": \"Mattie Ackerman\"}]",
+        "answer": [
+            "conservator"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandson(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "grandchild(\"Delsie Templeton\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e88fffd2-da78-4eb7-9118-b49ba12e2be4",
+        "question": "What is the occupation of the mother of the cousin of the sibling of Neil Ackerman?",
+        "solution_traces": "[{\"Y_7\": \"Buddy Ackerman\", \"Y_2\": \"accountant\", \"Y_3\": \"Yasmin Berglund\", \"Y_5\": \"Susie Berglund\"}, {\"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Dinah Boughton\", \"Y_2\": \"haematologist\", \"Y_5\": \"Guillermo Boughton\"}, {\"Y_5\": \"Susie Berglund\", \"Y_7\": \"Jack Ackerman\", \"Y_2\": \"accountant\", \"Y_3\": \"Yasmin Berglund\"}, {\"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Dinah Boughton\", \"Y_2\": \"haematologist\", \"Y_5\": \"Guillermo Boughton\"}]",
+        "answer": [
+            "accountant",
+            "haematologist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "mother(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "sibling(\"Neil Ackerman\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d6f61ecc-145e-4e14-bf68-f320d913344a",
+        "question": "What is the date of birth of the friend of the female first cousin once removed of the grandchild of Gale Twigg?",
+        "solution_traces": "[{\"Y_2\": \"0252-07-20\", \"Y_3\": \"Neil Ackerman\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_2\": \"0289-11-01\", \"Y_3\": \"Adalberto Sparkman\", \"Y_7\": \"Jack Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_3\": \"Adalberto Sparkman\", \"Y_2\": \"0289-11-01\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_3\": \"Mickey Twigg\", \"Y_2\": \"0224-04-11\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_3\": \"Mickey Twigg\", \"Y_7\": \"Jack Ackerman\", \"Y_2\": \"0224-04-11\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_2\": \"0256-06-30\", \"Y_3\": \"Buddy Ackerman\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Y_2\": \"0227-10-11\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Mickey Twigg\", \"Y_2\": \"0224-04-11\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_2\": \"0252-07-20\", \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_2\": \"0206-04-03\", \"Y_7\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\", \"Y_3\": \"Rolando Pugliese\"}, {\"Y_2\": \"0252-07-20\", \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Neil Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Y_7\": \"Buddy Ackerman\", \"Y_2\": \"0227-10-11\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_2\": \"0206-04-03\", \"Y_7\": \"Jack Ackerman\", \"Y_5\": \"Wanita Boughton\", \"Y_3\": \"Rolando Pugliese\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Y_2\": \"0227-10-11\", \"Y_7\": \"Jack Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_2\": \"0206-04-03\", \"Y_7\": \"Buddy Ackerman\", \"Y_5\": \"Wanita Boughton\", \"Y_3\": \"Rolando Pugliese\"}, {\"Y_2\": \"0256-06-30\", \"Y_7\": \"Jack Ackerman\", \"Y_3\": \"Buddy Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_2\": \"0256-06-30\", \"Y_7\": \"Buddy Ackerman\", \"Y_3\": \"Buddy Ackerman\", \"Y_5\": \"Wanita Boughton\"}, {\"Y_7\": \"Buddy Ackerman\", \"Y_2\": \"0289-11-01\", \"Y_5\": \"Wanita Boughton\", \"Y_3\": \"Adalberto Sparkman\"}]",
+        "answer": [
+            "0206-04-03",
+            "0224-04-11",
+            "0227-10-11",
+            "0252-07-20",
+            "0256-06-30",
+            "0289-11-01"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "female_first_cousin_once_removed(Y_7, Y_5)",
+                "grandchild(\"Gale Twigg\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ed75c936-993f-4f44-91ba-37bd850e3b05",
+        "question": "What is the hobby of the son of the brother of the sibling of Chelsie Ackerman?",
+        "solution_traces": "[{\"Y_2\": \"benchmarking\", \"Y_7\": \"Dinah Boughton\", \"Y_3\": \"Buddy Ackerman\", \"Y_5\": \"Darwin Ackerman\"}, {\"Y_7\": \"Dinah Boughton\", \"Y_3\": \"Jack Ackerman\", \"Y_2\": \"mycology\", \"Y_5\": \"Darwin Ackerman\"}, {\"Y_7\": \"Dinah Boughton\", \"Y_2\": \"model racing\", \"Y_3\": \"Neil Ackerman\", \"Y_5\": \"Darwin Ackerman\"}]",
+        "answer": [
+            "benchmarking",
+            "model racing",
+            "mycology"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "son(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "sibling(\"Chelsie Ackerman\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "03ac54c1-d59c-4c0a-af73-67e08f8d19bb",
+        "question": "What is the hobby of the sibling of the great-uncle of the male cousin of Sha Bible?",
+        "solution_traces": "[{\"Y_2\": \"rail transport modelling\", \"Y_3\": \"Isabell Pugliese\", \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Douglass Pugliese\"}, {\"Y_3\": \"Sha Sparkman\", \"Y_2\": \"videography\", \"Y_7\": \"Erick Sparkman\", \"Y_5\": \"Douglass Pugliese\"}, {\"Y_7\": \"Adalberto Sparkman\", \"Y_3\": \"Isabell Pugliese\", \"Y_2\": \"rail transport modelling\", \"Y_5\": \"Douglass Pugliese\"}, {\"Y_3\": \"Sha Sparkman\", \"Y_7\": \"Adalberto Sparkman\", \"Y_2\": \"videography\", \"Y_5\": \"Douglass Pugliese\"}]",
+        "answer": [
+            "rail transport modelling",
+            "videography"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "great_uncle(Y_7, Y_5)",
+                "male_cousin(\"Sha Bible\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ef96b00b-5cf1-4715-8e60-80dcc6fd6627",
+        "question": "What is the hobby of the friend of the male first cousin once removed of the child of Shon Vega?",
+        "solution_traces": "[{\"Y_5\": \"Leonardo Lipsey\", \"Y_3\": \"Marguerita Sparkman\", \"Y_2\": \"neuroscience\", \"Y_7\": \"Jeanette Vega\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Y_3\": \"Isabell Pugliese\", \"Y_2\": \"rail transport modelling\", \"Y_7\": \"Jeanette Vega\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Y_3\": \"Lucio Bible\", \"Y_2\": \"shortwave listening\", \"Y_7\": \"Jeanette Vega\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Y_3\": \"Isabell Pugliese\", \"Y_7\": \"Sha Bible\", \"Y_2\": \"rail transport modelling\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Y_5\": \"Leonardo Lipsey\", \"Y_7\": \"Sha Bible\", \"Y_2\": \"insect collecting\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Y_2\": \"reading\", \"Y_7\": \"Sha Bible\", \"Y_3\": \"Dorathy Twigg\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Y_3\": \"Rebecka Sparkman\", \"Y_2\": \"geography\", \"Y_7\": \"Jeanette Vega\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Y_2\": \"reading\", \"Y_3\": \"Dorathy Twigg\", \"Y_7\": \"Jeanette Vega\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Y_5\": \"Leonardo Lipsey\", \"Y_2\": \"insect collecting\", \"Y_7\": \"Jeanette Vega\"}, {\"Y_2\": \"neuroscience\", \"Y_5\": \"Leonardo Lipsey\", \"Y_7\": \"Sha Bible\", \"Y_3\": \"Marguerita Sparkman\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Y_3\": \"Lucio Bible\", \"Y_7\": \"Sha Bible\", \"Y_2\": \"shortwave listening\"}, {\"Y_5\": \"Leonardo Lipsey\", \"Y_3\": \"Rebecka Sparkman\", \"Y_7\": \"Sha Bible\", \"Y_2\": \"geography\"}]",
+        "answer": [
+            "geography",
+            "insect collecting",
+            "neuroscience",
+            "rail transport modelling",
+            "reading",
+            "shortwave listening"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "male_first_cousin_once_removed(Y_7, Y_5)",
+                "child(\"Shon Vega\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b6d3abe7-870a-492a-9519-ffd45ff1a323",
+        "question": "What is the hobby of the sibling of the sister-in-law of the uncle of Guillermo Boughton?",
+        "solution_traces": "[{\"Y_7\": \"Darwin Ackerman\", \"Y_5\": \"Yasmin Berglund\", \"Y_3\": \"Mickey Twigg\", \"Y_2\": \"compact discs\"}, {\"Y_7\": \"Darwin Ackerman\", \"Y_3\": \"Yuk Ackerman\", \"Y_5\": \"Yasmin Berglund\", \"Y_2\": \"bus spotting\"}]",
+        "answer": [
+            "bus spotting",
+            "compact discs"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sister_in_law(Y_7, Y_5)",
+                "uncle(\"Guillermo Boughton\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ec5c981b-9a96-48b0-b819-6f0be049a7ca",
+        "question": "What is the hobby of the nephew of the sister-in-law of the son-in-law of Gale Twigg?",
+        "solution_traces": "[{\"Y_7\": \"Darwin Ackerman\", \"Y_5\": \"Yasmin Berglund\", \"Y_3\": \"Buddy Ackerman\", \"Y_2\": \"benchmarking\"}, {\"Y_7\": \"Darwin Ackerman\", \"Y_5\": \"Yasmin Berglund\", \"Y_2\": \"model racing\", \"Y_3\": \"Neil Ackerman\"}, {\"Y_7\": \"Darwin Ackerman\", \"Y_5\": \"Yasmin Berglund\", \"Y_3\": \"Jack Ackerman\", \"Y_2\": \"mycology\"}]",
+        "answer": [
+            "benchmarking",
+            "model racing",
+            "mycology"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "nephew(Y_5, Y_3)",
+                "sister_in_law(Y_7, Y_5)",
+                "son_in_law(\"Gale Twigg\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "07784f04-5fb3-4498-816f-65a6beb7804b",
+        "question": "What is the date of birth of the father of the cousin of the great-granddaughter of Rebecka Sparkman?",
+        "solution_traces": "[{\"Y_2\": \"0263-01-08\", \"Y_3\": \"Jamel Sparkman\", \"Y_5\": \"Adalberto Sparkman\", \"Y_7\": \"Jeanette Vega\"}, {\"Y_2\": \"0263-01-08\", \"Y_5\": \"Erick Sparkman\", \"Y_3\": \"Jamel Sparkman\", \"Y_7\": \"Jeanette Vega\"}, {\"Y_7\": \"Marie Lipsey\", \"Y_2\": \"0263-01-19\", \"Y_3\": \"Shon Vega\", \"Y_5\": \"Jeanette Vega\"}, {\"Y_7\": \"Marie Lipsey\", \"Y_2\": \"0263-01-19\", \"Y_5\": \"Sha Bible\", \"Y_3\": \"Shon Vega\"}, {\"Y_2\": \"0263-01-08\", \"Y_3\": \"Jamel Sparkman\", \"Y_7\": \"Sha Bible\", \"Y_5\": \"Marie Lipsey\"}, {\"Y_2\": \"0263-01-08\", \"Y_3\": \"Jamel Sparkman\", \"Y_5\": \"Erick Sparkman\", \"Y_7\": \"Sha Bible\"}, {\"Y_2\": \"0263-01-08\", \"Y_3\": \"Jamel Sparkman\", \"Y_5\": \"Marie Lipsey\", \"Y_7\": \"Jeanette Vega\"}, {\"Y_2\": \"0263-01-08\", \"Y_3\": \"Jamel Sparkman\", \"Y_7\": \"Sha Bible\", \"Y_5\": \"Adalberto Sparkman\"}]",
+        "answer": [
+            "0263-01-08",
+            "0263-01-19"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "father(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "great_granddaughter(\"Rebecka Sparkman\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ab60bed9-0249-4e7b-9b5b-f9c621a9c7ec",
+        "question": "What is the date of birth of the friend of the grandparent of the great-grandchild of Johnetta Sparkman?",
+        "solution_traces": "[{\"Y_2\": \"0263-01-08\", \"Y_5\": \"Lashandra Pugliese\", \"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Keisha Vega\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Y_2\": \"0177-01-26\", \"Y_5\": \"Markus Sparkman\", \"Y_7\": \"Jamel Sparkman\"}, {\"Y_2\": \"0321-02-21\", \"Y_3\": \"Leonardo Lipsey\", \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_2\": \"0252-07-20\", \"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Neil Ackerman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Wanita Boughton\", \"Y_2\": \"0288-12-23\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Keisha Vega\"}, {\"Y_5\": \"Markus Sparkman\", \"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Timothy Ackerman\", \"Y_2\": \"0205-09-09\"}, {\"Y_5\": \"Markus Sparkman\", \"Y_3\": \"Timothy Ackerman\", \"Y_7\": \"Keisha Vega\", \"Y_2\": \"0205-09-09\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_2\": \"0177-01-26\", \"Y_5\": \"Markus Sparkman\", \"Y_3\": \"Johnetta Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_3\": \"Sha Sparkman\", \"Y_2\": \"0233-09-11\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_2\": \"0252-07-20\", \"Y_7\": \"Isabella Sparkman\", \"Y_3\": \"Neil Ackerman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_2\": \"0224-04-11\", \"Y_3\": \"Mickey Twigg\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Ismael Sparkman\"}, {\"Y_3\": \"Wanita Boughton\", \"Y_2\": \"0288-12-23\", \"Y_7\": \"Jamel Sparkman\", \"Y_5\": \"Rolando Pugliese\"}, {\"Y_3\": \"Sha Sparkman\", \"Y_7\": \"Jamel Sparkman\", \"Y_2\": \"0233-09-11\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_3\": \"Chelsie Ackerman\", \"Y_2\": \"0227-10-11\", \"Y_5\": \"Rolando Pugliese\"}, {\"Y_2\": \"0222-04-06\", \"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Yasmin Berglund\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_2\": \"0321-02-21\", \"Y_3\": \"Leonardo Lipsey\", \"Y_7\": \"Keisha Vega\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Yuk Ackerman\", \"Y_2\": \"0227-05-02\", \"Y_7\": \"Jamel Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_5\": \"Lashandra Pugliese\", \"Y_3\": \"Marguerita Sparkman\", \"Y_2\": \"0261-12-14\"}, {\"Y_3\": \"Mickey Twigg\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Isabella Sparkman\", \"Y_2\": \"0224-04-11\"}, {\"Y_2\": \"0252-07-20\", \"Y_3\": \"Neil Ackerman\", \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_3\": \"Lucio Bible\", \"Y_5\": \"Rolando Pugliese\", \"Y_2\": \"0290-01-24\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_3\": \"Yuk Ackerman\", \"Y_2\": \"0227-05-02\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_2\": \"0321-02-21\", \"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Leonardo Lipsey\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_2\": \"0222-04-06\", \"Y_3\": \"Yasmin Berglund\", \"Y_7\": \"Keisha Vega\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Douglas Berglund\", \"Y_2\": \"0222-12-28\", \"Y_7\": \"Isabella Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Y_2\": \"0227-10-11\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Ismael Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_2\": \"0263-01-08\", \"Y_5\": \"Lashandra Pugliese\", \"Y_3\": \"Keisha Vega\"}, {\"Y_2\": \"0290-01-24\", \"Y_3\": \"Lucio Bible\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Isabella Sparkman\"}, {\"Y_3\": \"Douglas Berglund\", \"Y_7\": \"Jamel Sparkman\", \"Y_2\": \"0222-12-28\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_2\": \"0222-04-06\", \"Y_3\": \"Yasmin Berglund\", \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Douglas Berglund\", \"Y_2\": \"0222-12-28\", \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_2\": \"0252-07-20\", \"Y_7\": \"Keisha Vega\", \"Y_3\": \"Neil Ackerman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Sha Sparkman\", \"Y_2\": \"0233-09-11\", \"Y_7\": \"Keisha Vega\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Y_2\": \"0177-01-26\", \"Y_5\": \"Markus Sparkman\", \"Y_7\": \"Keisha Vega\"}, {\"Y_2\": \"0222-04-06\", \"Y_3\": \"Yasmin Berglund\", \"Y_7\": \"Isabella Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Mickey Twigg\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Keisha Vega\", \"Y_2\": \"0224-04-11\"}, {\"Y_3\": \"Sha Sparkman\", \"Y_2\": \"0233-09-11\", \"Y_7\": \"Isabella Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Wanita Boughton\", \"Y_2\": \"0288-12-23\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Isabella Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_3\": \"Douglas Berglund\", \"Y_2\": \"0222-12-28\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_2\": \"0205-09-09\", \"Y_5\": \"Markus Sparkman\", \"Y_3\": \"Timothy Ackerman\", \"Y_7\": \"Ismael Sparkman\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Y_2\": \"0227-10-11\", \"Y_7\": \"Jamel Sparkman\", \"Y_5\": \"Rolando Pugliese\"}, {\"Y_2\": \"0290-01-24\", \"Y_3\": \"Lucio Bible\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Keisha Vega\"}, {\"Y_5\": \"Markus Sparkman\", \"Y_3\": \"Timothy Ackerman\", \"Y_7\": \"Isabella Sparkman\", \"Y_2\": \"0205-09-09\"}, {\"Y_3\": \"Wanita Boughton\", \"Y_2\": \"0288-12-23\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Ismael Sparkman\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Y_2\": \"0227-10-11\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Isabella Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_5\": \"Markus Sparkman\", \"Y_3\": \"Timothy Ackerman\", \"Y_2\": \"0205-09-09\"}, {\"Y_3\": \"Lucio Bible\", \"Y_5\": \"Rolando Pugliese\", \"Y_2\": \"0290-01-24\", \"Y_7\": \"Ismael Sparkman\"}, {\"Y_3\": \"Yuk Ackerman\", \"Y_2\": \"0227-05-02\", \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_2\": \"0263-01-08\", \"Y_5\": \"Lashandra Pugliese\", \"Y_7\": \"Keisha Vega\", \"Y_3\": \"Keisha Vega\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Y_2\": \"0177-01-26\", \"Y_5\": \"Markus Sparkman\", \"Y_7\": \"Isabella Sparkman\"}, {\"Y_2\": \"0263-01-08\", \"Y_5\": \"Lashandra Pugliese\", \"Y_7\": \"Isabella Sparkman\", \"Y_3\": \"Keisha Vega\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_3\": \"Wanita Boughton\", \"Y_2\": \"0288-12-23\", \"Y_5\": \"Rolando Pugliese\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_2\": \"0222-04-06\", \"Y_3\": \"Yasmin Berglund\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Y_2\": \"0177-01-26\", \"Y_5\": \"Markus Sparkman\", \"Y_7\": \"Ismael Sparkman\"}, {\"Y_3\": \"Sha Sparkman\", \"Y_2\": \"0233-09-11\", \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_5\": \"Lashandra Pugliese\", \"Y_3\": \"Marguerita Sparkman\", \"Y_7\": \"Keisha Vega\", \"Y_2\": \"0261-12-14\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_3\": \"Mickey Twigg\", \"Y_5\": \"Rolando Pugliese\", \"Y_2\": \"0224-04-11\"}, {\"Y_5\": \"Lashandra Pugliese\", \"Y_3\": \"Marguerita Sparkman\", \"Y_7\": \"Isabella Sparkman\", \"Y_2\": \"0261-12-14\"}, {\"Y_3\": \"Lucio Bible\", \"Y_7\": \"Jamel Sparkman\", \"Y_5\": \"Rolando Pugliese\", \"Y_2\": \"0290-01-24\"}, {\"Y_3\": \"Yuk Ackerman\", \"Y_2\": \"0227-05-02\", \"Y_7\": \"Keisha Vega\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Douglas Berglund\", \"Y_2\": \"0222-12-28\", \"Y_7\": \"Keisha Vega\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_2\": \"0252-07-20\", \"Y_3\": \"Neil Ackerman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_2\": \"0261-12-14\", \"Y_5\": \"Lashandra Pugliese\", \"Y_3\": \"Marguerita Sparkman\", \"Y_7\": \"Ismael Sparkman\"}, {\"Y_7\": \"Francesca Sparkman\", \"Y_3\": \"Leonardo Lipsey\", \"Y_2\": \"0321-02-21\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_5\": \"Lashandra Pugliese\", \"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Marguerita Sparkman\", \"Y_2\": \"0261-12-14\"}, {\"Y_3\": \"Chelsie Ackerman\", \"Y_2\": \"0227-10-11\", \"Y_5\": \"Rolando Pugliese\", \"Y_7\": \"Keisha Vega\"}, {\"Y_2\": \"0321-02-21\", \"Y_3\": \"Leonardo Lipsey\", \"Y_7\": \"Isabella Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_3\": \"Yuk Ackerman\", \"Y_2\": \"0227-05-02\", \"Y_7\": \"Isabella Sparkman\", \"Y_5\": \"Rebecka Sparkman\"}, {\"Y_2\": \"0224-04-11\", \"Y_7\": \"Jamel Sparkman\", \"Y_5\": \"Rolando Pugliese\", \"Y_3\": \"Mickey Twigg\"}, {\"Y_2\": \"0263-01-08\", \"Y_5\": \"Lashandra Pugliese\", \"Y_7\": \"Ismael Sparkman\", \"Y_3\": \"Keisha Vega\"}]",
+        "answer": [
+            "0177-01-26",
+            "0205-09-09",
+            "0222-04-06",
+            "0222-12-28",
+            "0224-04-11",
+            "0227-05-02",
+            "0227-10-11",
+            "0233-09-11",
+            "0252-07-20",
+            "0261-12-14",
+            "0263-01-08",
+            "0288-12-23",
+            "0290-01-24",
+            "0321-02-21"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "great_grandchild(\"Johnetta Sparkman\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "01e4e66d-1594-4641-a125-6ad03d4c5bbd",
+        "question": "What is the hobby of the mother of the great-uncle of the friend of Lucio Bible?",
+        "solution_traces": "[{\"Y_3\": \"Sha Sparkman\", \"Y_7\": \"Leonardo Lipsey\", \"Y_2\": \"videography\", \"Y_5\": \"Ismael Sparkman\"}]",
+        "answer": [
+            "videography"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "mother(Y_5, Y_3)",
+                "great_uncle(Y_7, Y_5)",
+                "friend(\"Lucio Bible\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2ad7ca61-1fab-4704-a56c-5054421febb9",
+        "question": "What is the date of birth of the daughter-in-law of the parent of the brother of Ismael Sparkman?",
+        "solution_traces": "[{\"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Marguerita Sparkman\", \"Y_5\": \"Sha Sparkman\", \"Y_2\": \"0261-12-14\"}, {\"Y_7\": \"Jamel Sparkman\", \"Y_3\": \"Marguerita Sparkman\", \"Y_5\": \"Laurence Sparkman\", \"Y_2\": \"0261-12-14\"}]",
+        "answer": [
+            "0261-12-14"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "daughter_in_law(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "brother(\"Ismael Sparkman\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a33bf1e8-098e-41e5-8bfb-9468b1f0357f",
+        "question": "What is the date of birth of the parent of the brother of the sister of Douglass Pugliese?",
+        "solution_traces": "[{\"Y_2\": \"0203-02-24\", \"Y_5\": \"Douglass Pugliese\", \"Y_3\": \"Lashandra Pugliese\", \"Y_7\": \"Sha Sparkman\"}, {\"Y_7\": \"Isabell Pugliese\", \"Y_2\": \"0206-04-03\", \"Y_3\": \"Rolando Pugliese\", \"Y_5\": \"Douglass Pugliese\"}, {\"Y_7\": \"Isabell Pugliese\", \"Y_2\": \"0203-02-24\", \"Y_3\": \"Lashandra Pugliese\", \"Y_5\": \"Douglass Pugliese\"}, {\"Y_2\": \"0206-04-03\", \"Y_5\": \"Douglass Pugliese\", \"Y_3\": \"Rolando Pugliese\", \"Y_7\": \"Sha Sparkman\"}]",
+        "answer": [
+            "0203-02-24",
+            "0206-04-03"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "sister(\"Douglass Pugliese\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "05d52c2f-64d5-4e4b-9da4-ac4c054f7bf1",
+        "question": "What is the occupation of the grandchild of the great-grandmother of the male second cousin of Leonardo Lipsey?",
+        "solution_traces": "[{\"Y_2\": \"higher education careers adviser\", \"Y_7\": \"Carmine Bible\", \"Y_3\": \"Jeanette Vega\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Carmine Bible\", \"Y_2\": \"statistician\", \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Sha Bible\"}, {\"Y_7\": \"Carmine Bible\", \"Y_2\": \"communications engineer\", \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Marie Lipsey\"}, {\"Y_2\": \"journalist\", \"Y_7\": \"Carmine Bible\", \"Y_3\": \"Adalberto Sparkman\", \"Y_5\": \"Sha Sparkman\"}, {\"Y_7\": \"Carmine Bible\", \"Y_2\": \"proofreader\", \"Y_5\": \"Sha Sparkman\", \"Y_3\": \"Erick Sparkman\"}]",
+        "answer": [
+            "communications engineer",
+            "higher education careers adviser",
+            "journalist",
+            "proofreader",
+            "statistician"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "great_grandmother(Y_7, Y_5)",
+                "male_second_cousin(\"Leonardo Lipsey\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 11,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "99ece1a0-97b6-4faf-805b-62d22f456763",
+        "question": "What is the hobby of the great-grandfather of the nephew of the great-uncle of Carmine Bible?",
+        "solution_traces": "[{\"Y_2\": \"geocaching\", \"Y_3\": \"Rolando Pugliese\", \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Adalberto Sparkman\"}, {\"Y_2\": \"stone collecting\", \"Y_3\": \"Markus Sparkman\", \"Y_7\": \"Ismael Sparkman\", \"Y_5\": \"Adalberto Sparkman\"}, {\"Y_2\": \"geocaching\", \"Y_5\": \"Erick Sparkman\", \"Y_7\": \"Ismael Sparkman\", \"Y_3\": \"Rolando Pugliese\"}, {\"Y_5\": \"Erick Sparkman\", \"Y_3\": \"Markus Sparkman\", \"Y_7\": \"Ismael Sparkman\", \"Y_2\": \"stone collecting\"}]",
+        "answer": [
+            "geocaching",
+            "stone collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandfather(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "great_uncle(\"Carmine Bible\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a6d2e9b6-6f15-4e23-9874-42d6a82f1061",
+        "question": "What is the date of birth of the great-grandparent of the friend of the daughter of Gina Mcneely?",
+        "solution_traces": "[{\"Y_3\": \"Mattie Ackerman\", \"Y_2\": \"0203-06-20\", \"Y_5\": \"Richie Boughton\", \"Y_7\": \"Bev Boughton\"}, {\"Y_3\": \"Johnetta Sparkman\", \"Y_2\": \"0177-01-26\", \"Y_5\": \"Ismael Sparkman\", \"Y_7\": \"Bev Boughton\"}, {\"Y_2\": \"0206-04-03\", \"Y_5\": \"Erick Sparkman\", \"Y_3\": \"Rolando Pugliese\", \"Y_7\": \"Bev Boughton\"}, {\"Y_5\": \"Buddy Ackerman\", \"Y_3\": \"Leonardo Templeton\", \"Y_2\": \"0177-07-19\", \"Y_7\": \"Bev Boughton\"}, {\"Y_3\": \"Hiram Sparkman\", \"Y_2\": \"0177-11-08\", \"Y_5\": \"Ismael Sparkman\", \"Y_7\": \"Bev Boughton\"}, {\"Y_5\": \"Erick Sparkman\", \"Y_2\": \"0207-02-07\", \"Y_3\": \"Markus Sparkman\", \"Y_7\": \"Bev Boughton\"}, {\"Y_2\": \"0175-09-26\", \"Y_5\": \"Buddy Ackerman\", \"Y_3\": \"Delsie Templeton\", \"Y_7\": \"Bev Boughton\"}, {\"Y_2\": \"0203-02-24\", \"Y_5\": \"Erick Sparkman\", \"Y_3\": \"Lashandra Pugliese\", \"Y_7\": \"Bev Boughton\"}, {\"Y_2\": \"0206-08-07\", \"Y_5\": \"Erick Sparkman\", \"Y_3\": \"Rebecka Sparkman\", \"Y_7\": \"Bev Boughton\"}, {\"Y_3\": \"Timothy Ackerman\", \"Y_5\": \"Richie Boughton\", \"Y_2\": \"0205-09-09\", \"Y_7\": \"Bev Boughton\"}]",
+        "answer": [
+            "0175-09-26",
+            "0177-01-26",
+            "0177-07-19",
+            "0177-11-08",
+            "0203-02-24",
+            "0203-06-20",
+            "0205-09-09",
+            "0206-04-03",
+            "0206-08-07",
+            "0207-02-07"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandparent(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "daughter(\"Gina Mcneely\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    }
+]

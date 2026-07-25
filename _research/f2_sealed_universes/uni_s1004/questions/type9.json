@@ -1,0 +1,1043 @@
+[
+    {
+        "id": "372650c5-64c9-4d0b-8686-97da8c93ae82",
+        "question": "What is the date of birth of the son of the parent of Jarvis Arias?",
+        "solution_traces": "[{\"Y_5\": \"Alana Arias\", \"Y_3\": \"Jarvis Arias\", \"Y_2\": \"0327-01-18\"}, {\"Y_3\": \"Jarvis Arias\", \"Y_2\": \"0327-01-18\", \"Y_5\": \"Elbert Arias\"}]",
+        "answer": [
+            "0327-01-18"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "son(Y_5, Y_3)",
+                "parent(\"Jarvis Arias\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "05579924-77dc-41ef-931f-855b6abea103",
+        "question": "What is the occupation of the daughter-in-law of the husband of Gail Springer?",
+        "solution_traces": "[{\"Y_3\": \"Kayla Springer\", \"Y_5\": \"Jorge Springer\", \"Y_2\": \"fitness centre manager\"}]",
+        "answer": [
+            "fitness centre manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "daughter_in_law(Y_5, Y_3)",
+                "husband(\"Gail Springer\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2376aab6-0195-4e85-8b77-7343315f1dfb",
+        "question": "What is the hobby of the friend of the niece of Reita Springer?",
+        "solution_traces": "[{\"Y_5\": \"Marybeth Bushnell\", \"Y_3\": \"Dana Womble\", \"Y_2\": \"boxing\"}, {\"Y_5\": \"Deloris Gosselin\", \"Y_3\": \"Buddy Gosselin\", \"Y_2\": \"cartophily\"}, {\"Y_5\": \"Marybeth Bushnell\", \"Y_2\": \"jukskei\", \"Y_3\": \"Reita Springer\"}, {\"Y_5\": \"Marybeth Bushnell\", \"Y_3\": \"Rodger Springer\", \"Y_2\": \"reading\"}, {\"Y_5\": \"Marybeth Bushnell\", \"Y_3\": \"Mac Ridgway\", \"Y_2\": \"whale watching\"}, {\"Y_5\": \"Marybeth Bushnell\", \"Y_2\": \"tennis\", \"Y_3\": \"Lorenz Womble\"}]",
+        "answer": [
+            "boxing",
+            "cartophily",
+            "jukskei",
+            "reading",
+            "tennis",
+            "whale watching"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "niece(\"Reita Springer\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cea26b24-0b5c-4dc5-b56b-0e69455f48fc",
+        "question": "What is the occupation of the male first cousin once removed of the sister of Ted Shane?",
+        "solution_traces": "[{\"Y_2\": \"media buyer\", \"Y_5\": \"Deloris Gosselin\", \"Y_3\": \"Rodger Springer\"}, {\"Y_5\": \"Deloris Gosselin\", \"Y_2\": \"systems developer\", \"Y_3\": \"Isaac Springer\"}, {\"Y_2\": \"web designer\", \"Y_5\": \"Deloris Gosselin\", \"Y_3\": \"Joesph Springer\"}, {\"Y_2\": \"research officer\", \"Y_5\": \"Deloris Gosselin\", \"Y_3\": \"Richard Bushnell\"}]",
+        "answer": [
+            "media buyer",
+            "research officer",
+            "systems developer",
+            "web designer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "male_first_cousin_once_removed(Y_5, Y_3)",
+                "sister(\"Ted Shane\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b116f0af-de31-44bf-8d21-1f564fa25fce",
+        "question": "What is the hobby of the granddaughter of the husband of Raina Springer?",
+        "solution_traces": "[{\"Y_2\": \"history\", \"Y_5\": \"Russell Springer\", \"Y_3\": \"Marybeth Bushnell\"}, {\"Y_5\": \"Russell Springer\", \"Y_2\": \"magic\", \"Y_3\": \"Deloris Gosselin\"}]",
+        "answer": [
+            "history",
+            "magic"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "granddaughter(Y_5, Y_3)",
+                "husband(\"Raina Springer\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7930fb25-4bbc-4e28-95be-28ccdc28be57",
+        "question": "What is the date of birth of the second aunt of the grandchild of Wes Springer?",
+        "solution_traces": "[{\"Y_3\": \"Reita Springer\", \"Y_5\": \"Evette Springer\", \"Y_2\": \"0267-05-17\"}, {\"Y_3\": \"Sandy Springer\", \"Y_2\": \"0263-04-22\", \"Y_5\": \"Evette Springer\"}, {\"Y_3\": \"Adelina Shane\", \"Y_5\": \"Evette Springer\", \"Y_2\": \"0257-02-24\"}, {\"Y_3\": \"Sandy Springer\", \"Y_2\": \"0263-04-22\", \"Y_5\": \"Alyssa Newby\"}, {\"Y_3\": \"Reita Springer\", \"Y_5\": \"Alyssa Newby\", \"Y_2\": \"0267-05-17\"}, {\"Y_3\": \"Adelina Shane\", \"Y_5\": \"Alyssa Newby\", \"Y_2\": \"0257-02-24\"}]",
+        "answer": [
+            "0257-02-24",
+            "0263-04-22",
+            "0267-05-17"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "second_aunt(Y_5, Y_3)",
+                "grandchild(\"Wes Springer\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dc59eeb6-7cb5-4d04-984a-57d4fa3a0c52",
+        "question": "What is the occupation of the great-aunt of the child of Wanda Springer?",
+        "solution_traces": "[{\"Y_2\": \"health physicist\", \"Y_5\": \"Evette Springer\", \"Y_3\": \"Marybeth Bushnell\"}]",
+        "answer": [
+            "health physicist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_aunt(Y_5, Y_3)",
+                "child(\"Wanda Springer\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0449a1ba-d417-4221-91ac-21ef9972fe99",
+        "question": "What is the hobby of the grandchild of the father-in-law of Chet Shane?",
+        "solution_traces": "[{\"Y_2\": \"history\", \"Y_5\": \"Russell Springer\", \"Y_3\": \"Marybeth Bushnell\"}, {\"Y_5\": \"Russell Springer\", \"Y_2\": \"magic\", \"Y_3\": \"Deloris Gosselin\"}, {\"Y_5\": \"Russell Springer\", \"Y_3\": \"Ted Shane\", \"Y_2\": \"hobby horsing\"}, {\"Y_3\": \"Wes Springer\", \"Y_5\": \"Russell Springer\", \"Y_2\": \"auto detailing\"}]",
+        "answer": [
+            "auto detailing",
+            "history",
+            "hobby horsing",
+            "magic"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "father_in_law(\"Chet Shane\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "222dba41-29c6-4d4e-9e3d-d591777874ab",
+        "question": "What is the hobby of the great-grandchild of the grandmother of Helena Womble?",
+        "solution_traces": "[{\"Y_3\": \"Dillon Womble\", \"Y_2\": \"skydiving\", \"Y_5\": \"Belia Womble\"}, {\"Y_2\": \"rock balancing\", \"Y_5\": \"Belia Womble\", \"Y_3\": \"Kiana Arias\"}, {\"Y_2\": \"butterfly watching\", \"Y_3\": \"Preston Womble\", \"Y_5\": \"Belia Womble\"}]",
+        "answer": [
+            "butterfly watching",
+            "rock balancing",
+            "skydiving"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandchild(Y_5, Y_3)",
+                "grandmother(\"Helena Womble\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8fa7be7e-691d-4cb3-a72d-8400aeff0a98",
+        "question": "What is the hobby of the wife of the friend of Buddy Gosselin?",
+        "solution_traces": "[{\"Y_5\": \"Stuart Womble\", \"Y_2\": \"learning\", \"Y_3\": \"Hilda Womble\"}]",
+        "answer": [
+            "learning"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "wife(Y_5, Y_3)",
+                "friend(\"Buddy Gosselin\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7e3d6d4d-43b1-42ab-9846-5405652435d1",
+        "question": "What is the occupation of the friend of the great-grandchild of Dortha Ridgway?",
+        "solution_traces": "[{\"Y_2\": \"photographer\", \"Y_3\": \"Stuart Womble\", \"Y_5\": \"Elbert Arias\"}, {\"Y_5\": \"Laurette Webber\", \"Y_2\": \"environmental consultant\", \"Y_3\": \"Ellis Gosselin\"}, {\"Y_5\": \"Laurette Webber\", \"Y_2\": \"osteopath\", \"Y_3\": \"Lera Arias\"}, {\"Y_5\": \"Laurette Webber\", \"Y_2\": \"fitness centre manager\", \"Y_3\": \"Kayla Springer\"}, {\"Y_5\": \"Laurette Webber\", \"Y_2\": \"structural engineer\", \"Y_3\": \"Wes Springer\"}, {\"Y_5\": \"Laurette Webber\", \"Y_2\": \"systems developer\", \"Y_3\": \"Isaac Springer\"}]",
+        "answer": [
+            "environmental consultant",
+            "fitness centre manager",
+            "osteopath",
+            "photographer",
+            "structural engineer",
+            "systems developer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "great_grandchild(\"Dortha Ridgway\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7b137669-a65d-4933-b2f0-f119fd6863cc",
+        "question": "What is the date of birth of the niece of the aunt of Preston Womble?",
+        "solution_traces": "[{\"Y_5\": \"Julianne Womble\", \"Y_2\": \"0274-11-25\", \"Y_3\": \"Kiana Arias\"}, {\"Y_2\": \"0274-11-25\", \"Y_3\": \"Kiana Arias\", \"Y_5\": \"Helena Womble\"}]",
+        "answer": [
+            "0274-11-25"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "niece(Y_5, Y_3)",
+                "aunt(\"Preston Womble\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "44084043-f920-4aee-85a1-eba88c033cf8",
+        "question": "What is the hobby of the friend of the parent of Stuart Womble?",
+        "solution_traces": "[{\"Y_3\": \"Francisco Bushnell\", \"Y_2\": \"cheerleading\", \"Y_5\": \"Dana Womble\"}, {\"Y_2\": \"rock balancing\", \"Y_5\": \"Dana Womble\", \"Y_3\": \"Russell Springer\"}, {\"Y_2\": \"biology\", \"Y_3\": \"Alyssa Newby\", \"Y_5\": \"Dana Womble\"}, {\"Y_2\": \"jukskei\", \"Y_3\": \"Reita Springer\", \"Y_5\": \"Dana Womble\"}, {\"Y_2\": \"butterfly watching\", \"Y_3\": \"Preston Womble\", \"Y_5\": \"Dana Womble\"}, {\"Y_2\": \"history\", \"Y_3\": \"Marybeth Bushnell\", \"Y_5\": \"Dana Womble\"}, {\"Y_3\": \"Lorenz Womble\", \"Y_2\": \"tennis\", \"Y_5\": \"Belia Womble\"}]",
+        "answer": [
+            "biology",
+            "butterfly watching",
+            "cheerleading",
+            "history",
+            "jukskei",
+            "rock balancing",
+            "tennis"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "parent(\"Stuart Womble\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a5207b07-d94e-46bc-9496-96e56c0b6816",
+        "question": "What is the occupation of the great-grandmother of the sister-in-law of Alana Arias?",
+        "solution_traces": "[{\"Y_5\": \"Laurette Webber\", \"Y_3\": \"Hilda Womble\", \"Y_2\": \"radiographer\"}, {\"Y_5\": \"Laurette Webber\", \"Y_2\": \"passenger transport manager\", \"Y_3\": \"Dortha Ridgway\"}]",
+        "answer": [
+            "passenger transport manager",
+            "radiographer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandmother(Y_5, Y_3)",
+                "sister_in_law(\"Alana Arias\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b2b6e372-4cde-4364-a144-f2fe2a4d204f",
+        "question": "What is the hobby of the friend of the daughter of Raina Springer?",
+        "solution_traces": "[{\"Y_2\": \"history\", \"Y_5\": \"Reita Springer\", \"Y_3\": \"Marybeth Bushnell\"}, {\"Y_3\": \"Alvin Webber\", \"Y_5\": \"Sandy Springer\", \"Y_2\": \"mineral collecting\"}, {\"Y_3\": \"Wanda Springer\", \"Y_5\": \"Reita Springer\", \"Y_2\": \"auto audiophilia\"}, {\"Y_2\": \"physics\", \"Y_5\": \"Sandy Springer\", \"Y_3\": \"Noel Arias\"}, {\"Y_3\": \"Dana Womble\", \"Y_5\": \"Reita Springer\", \"Y_2\": \"boxing\"}, {\"Y_3\": \"Pamela Newby\", \"Y_2\": \"vr gaming\", \"Y_5\": \"Adelina Shane\"}, {\"Y_2\": \"tennis\", \"Y_3\": \"Lorenz Womble\", \"Y_5\": \"Reita Springer\"}, {\"Y_5\": \"Sandy Springer\", \"Y_2\": \"audiophile\", \"Y_3\": \"Jorge Springer\"}, {\"Y_5\": \"Sandy Springer\", \"Y_2\": \"gongoozling\", \"Y_3\": \"Alana Arias\"}, {\"Y_3\": \"Matilda Arias\", \"Y_2\": \"lapel pins\", \"Y_5\": \"Adelina Shane\"}, {\"Y_3\": \"Alvin Webber\", \"Y_5\": \"Reita Springer\", \"Y_2\": \"mineral collecting\"}]",
+        "answer": [
+            "audiophile",
+            "auto audiophilia",
+            "boxing",
+            "gongoozling",
+            "history",
+            "lapel pins",
+            "mineral collecting",
+            "physics",
+            "tennis",
+            "vr gaming"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "daughter(\"Raina Springer\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d5eee2dc-d258-4002-8800-16ddeb918d79",
+        "question": "What is the hobby of the grandparent of the grandchild of Gail Springer?",
+        "solution_traces": "[{\"Y_3\": \"Gail Springer\", \"Y_2\": \"research\", \"Y_5\": \"Rodger Springer\"}, {\"Y_3\": \"Jorge Springer\", \"Y_2\": \"audiophile\", \"Y_5\": \"Rodger Springer\"}, {\"Y_3\": \"Gail Springer\", \"Y_2\": \"research\", \"Y_5\": \"Joesph Springer\"}, {\"Y_2\": \"audiophile\", \"Y_3\": \"Jorge Springer\", \"Y_5\": \"Joesph Springer\"}, {\"Y_3\": \"Gail Springer\", \"Y_5\": \"Richard Bushnell\", \"Y_2\": \"research\"}, {\"Y_5\": \"Pamela Newby\", \"Y_2\": \"audiophile\", \"Y_3\": \"Jorge Springer\"}, {\"Y_3\": \"Gail Springer\", \"Y_5\": \"Pamela Newby\", \"Y_2\": \"research\"}, {\"Y_5\": \"Richard Bushnell\", \"Y_2\": \"audiophile\", \"Y_3\": \"Jorge Springer\"}, {\"Y_5\": \"Isaac Springer\", \"Y_2\": \"research\", \"Y_3\": \"Gail Springer\"}, {\"Y_5\": \"Isaac Springer\", \"Y_2\": \"audiophile\", \"Y_3\": \"Jorge Springer\"}]",
+        "answer": [
+            "audiophile",
+            "research"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandparent(Y_5, Y_3)",
+                "grandchild(\"Gail Springer\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "525f8993-144b-48bd-a7c3-a72db174afc1",
+        "question": "What is the occupation of the female cousin of the nephew of Adelina Shane?",
+        "solution_traces": "[{\"Y_5\": \"Wes Springer\", \"Y_3\": \"Deloris Gosselin\", \"Y_2\": \"brewing technologist\"}]",
+        "answer": [
+            "brewing technologist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "female_cousin(Y_5, Y_3)",
+                "nephew(\"Adelina Shane\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "bab579fc-460f-42f1-9fc2-407f6f2e9f22",
+        "question": "What is the occupation of the niece of the sister of Sandy Springer?",
+        "solution_traces": "[{\"Y_2\": \"health physicist\", \"Y_5\": \"Reita Springer\", \"Y_3\": \"Marybeth Bushnell\"}, {\"Y_2\": \"brewing technologist\", \"Y_5\": \"Reita Springer\", \"Y_3\": \"Deloris Gosselin\"}, {\"Y_2\": \"health physicist\", \"Y_5\": \"Adelina Shane\", \"Y_3\": \"Marybeth Bushnell\"}]",
+        "answer": [
+            "brewing technologist",
+            "health physicist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "niece(Y_5, Y_3)",
+                "sister(\"Sandy Springer\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a6120482-77ae-423c-8c33-9ee776256f46",
+        "question": "What is the hobby of the uncle of the parent of Matilda Arias?",
+        "solution_traces": "[{\"Y_3\": \"Dillon Womble\", \"Y_2\": \"skydiving\", \"Y_5\": \"Elbert Arias\"}, {\"Y_2\": \"butterfly watching\", \"Y_3\": \"Preston Womble\", \"Y_5\": \"Elbert Arias\"}]",
+        "answer": [
+            "butterfly watching",
+            "skydiving"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "uncle(Y_5, Y_3)",
+                "parent(\"Matilda Arias\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c76e5aa1-d815-4c21-8d63-1cc796d4e9f3",
+        "question": "What is the date of birth of the daughter of the great-grandchild of Belia Womble?",
+        "solution_traces": "[{\"Y_2\": \"0304-12-19\", \"Y_5\": \"Kiana Arias\", \"Y_3\": \"Laurette Webber\"}]",
+        "answer": [
+            "0304-12-19"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "daughter(Y_5, Y_3)",
+                "great_grandchild(\"Belia Womble\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4f86ac9d-5190-4830-9485-02248bcddaec",
+        "question": "What is the date of birth of the parent of the mother-in-law of Ellis Gosselin?",
+        "solution_traces": "[{\"Y_3\": \"Raina Springer\", \"Y_5\": \"Adelina Shane\", \"Y_2\": \"0232-01-23\"}, {\"Y_2\": \"0234-06-21\", \"Y_5\": \"Adelina Shane\", \"Y_3\": \"Russell Springer\"}]",
+        "answer": [
+            "0232-01-23",
+            "0234-06-21"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "mother_in_law(\"Ellis Gosselin\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8d351ed2-0c7e-42c2-8fc7-f5a5dd41f540",
+        "question": "What is the occupation of the great-grandchild of the grandparent of Elbert Arias?",
+        "solution_traces": "[{\"Y_5\": \"Lera Arias\", \"Y_3\": \"Leonora Arias\", \"Y_2\": \"dispensing optician\"}, {\"Y_3\": \"Jarvis Arias\", \"Y_2\": \"plant breeder\", \"Y_5\": \"Isabell Womble\"}, {\"Y_3\": \"Alvin Webber\", \"Y_5\": \"Lera Arias\", \"Y_2\": \"retail banker\"}, {\"Y_3\": \"Matilda Arias\", \"Y_5\": \"Lera Arias\", \"Y_2\": \"special effects artist\"}, {\"Y_3\": \"Leonora Arias\", \"Y_2\": \"dispensing optician\", \"Y_5\": \"Isabell Womble\"}, {\"Y_3\": \"Alvin Webber\", \"Y_2\": \"retail banker\", \"Y_5\": \"Isabell Womble\"}, {\"Y_3\": \"Matilda Arias\", \"Y_2\": \"special effects artist\", \"Y_5\": \"Isabell Womble\"}, {\"Y_3\": \"Leonora Arias\", \"Y_2\": \"dispensing optician\", \"Y_5\": \"Lorenz Womble\"}, {\"Y_3\": \"Alvin Webber\", \"Y_2\": \"retail banker\", \"Y_5\": \"Ethan Arias\"}, {\"Y_3\": \"Matilda Arias\", \"Y_2\": \"special effects artist\", \"Y_5\": \"Ethan Arias\"}, {\"Y_5\": \"Lera Arias\", \"Y_2\": \"plant breeder\", \"Y_3\": \"Jarvis Arias\"}, {\"Y_2\": \"plant breeder\", \"Y_3\": \"Jarvis Arias\", \"Y_5\": \"Ethan Arias\"}, {\"Y_3\": \"Alvin Webber\", \"Y_2\": \"retail banker\", \"Y_5\": \"Lorenz Womble\"}, {\"Y_3\": \"Leonora Arias\", \"Y_2\": \"dispensing optician\", \"Y_5\": \"Ethan Arias\"}, {\"Y_3\": \"Matilda Arias\", \"Y_2\": \"special effects artist\", \"Y_5\": \"Lorenz Womble\"}, {\"Y_2\": \"plant breeder\", \"Y_3\": \"Jarvis Arias\", \"Y_5\": \"Lorenz Womble\"}]",
+        "answer": [
+            "dispensing optician",
+            "plant breeder",
+            "retail banker",
+            "special effects artist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandchild(Y_5, Y_3)",
+                "grandparent(\"Elbert Arias\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cc68e31d-c86e-4e56-98b5-1cf64d0491a4",
+        "question": "What is the hobby of the sibling of the nephew of Jorge Springer?",
+        "solution_traces": "[{\"Y_2\": \"magic\", \"Y_5\": \"Ted Shane\", \"Y_3\": \"Deloris Gosselin\"}]",
+        "answer": [
+            "magic"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "nephew(\"Jorge Springer\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "23d126a9-87e8-47dc-a4d9-8193becb18b4",
+        "question": "What is the occupation of the parent of the niece of Sandy Springer?",
+        "solution_traces": "[{\"Y_5\": \"Marybeth Bushnell\", \"Y_2\": \"oceanographer\", \"Y_3\": \"Jorge Springer\"}, {\"Y_5\": \"Marybeth Bushnell\", \"Y_3\": \"Gail Springer\", \"Y_2\": \"social researcher\"}, {\"Y_2\": \"hydrologist\", \"Y_5\": \"Deloris Gosselin\", \"Y_3\": \"Adelina Shane\"}, {\"Y_5\": \"Deloris Gosselin\", \"Y_3\": \"Chet Shane\", \"Y_2\": \"logistics and distribution manager\"}]",
+        "answer": [
+            "hydrologist",
+            "logistics and distribution manager",
+            "oceanographer",
+            "social researcher"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "niece(\"Sandy Springer\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a92dfb9e-b64a-4464-80cf-483dea962805",
+        "question": "What is the hobby of the child of the mother-in-law of Lorenz Womble?",
+        "solution_traces": "[{\"Y_5\": \"Dortha Ridgway\", \"Y_3\": \"Isabell Womble\", \"Y_2\": \"leaves\"}]",
+        "answer": [
+            "leaves"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "child(Y_5, Y_3)",
+                "mother_in_law(\"Lorenz Womble\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b32dafb9-841a-48a0-a045-10587a83f3c0",
+        "question": "What is the date of birth of the sister-in-law of the wife of Jorge Springer?",
+        "solution_traces": "[{\"Y_3\": \"Sandy Springer\", \"Y_2\": \"0263-04-22\", \"Y_5\": \"Gail Springer\"}, {\"Y_3\": \"Reita Springer\", \"Y_5\": \"Gail Springer\", \"Y_2\": \"0267-05-17\"}, {\"Y_3\": \"Adelina Shane\", \"Y_5\": \"Gail Springer\", \"Y_2\": \"0257-02-24\"}]",
+        "answer": [
+            "0257-02-24",
+            "0263-04-22",
+            "0267-05-17"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sister_in_law(Y_5, Y_3)",
+                "wife(\"Jorge Springer\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8f1cbd7d-8072-4cf3-a436-679bf8eaa535",
+        "question": "What is the hobby of the brother of the grandchild of Kiana Arias?",
+        "solution_traces": "[{\"Y_2\": \"auto detailing\", \"Y_5\": \"Leonora Arias\", \"Y_3\": \"Jarvis Arias\"}, {\"Y_2\": \"auto detailing\", \"Y_5\": \"Matilda Arias\", \"Y_3\": \"Jarvis Arias\"}]",
+        "answer": [
+            "auto detailing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "brother(Y_5, Y_3)",
+                "grandchild(\"Kiana Arias\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "78bc7697-71c3-4226-9a8c-44e82bb69f5f",
+        "question": "What is the hobby of the female cousin of the great-granddaughter of Jorge Springer?",
+        "solution_traces": "[{\"Y_3\": \"Alyssa Newby\", \"Y_5\": \"Evette Springer\", \"Y_2\": \"biology\"}, {\"Y_2\": \"ant farming\", \"Y_3\": \"Evette Springer\", \"Y_5\": \"Alyssa Newby\"}]",
+        "answer": [
+            "ant farming",
+            "biology"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "female_cousin(Y_5, Y_3)",
+                "great_granddaughter(\"Jorge Springer\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a9b8fd9e-734a-4bda-9237-a7e65886d49c",
+        "question": "What is the hobby of the grandchild of the great-grandparent of Alvin Webber?",
+        "solution_traces": "[{\"Y_3\": \"Elbert Arias\", \"Y_5\": \"Lorenz Womble\", \"Y_2\": \"stone collecting\"}, {\"Y_2\": \"ballet dancing\", \"Y_5\": \"Isabell Womble\", \"Y_3\": \"Laurette Webber\"}, {\"Y_3\": \"Laurette Webber\", \"Y_2\": \"ballet dancing\", \"Y_5\": \"Lorenz Womble\"}, {\"Y_3\": \"Elbert Arias\", \"Y_5\": \"Ethan Arias\", \"Y_2\": \"stone collecting\"}, {\"Y_5\": \"Lera Arias\", \"Y_3\": \"Elbert Arias\", \"Y_2\": \"stone collecting\"}, {\"Y_3\": \"Laurette Webber\", \"Y_2\": \"ballet dancing\", \"Y_5\": \"Ethan Arias\"}, {\"Y_5\": \"Lera Arias\", \"Y_2\": \"ballet dancing\", \"Y_3\": \"Laurette Webber\"}, {\"Y_3\": \"Elbert Arias\", \"Y_5\": \"Isabell Womble\", \"Y_2\": \"stone collecting\"}]",
+        "answer": [
+            "ballet dancing",
+            "stone collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "great_grandparent(\"Alvin Webber\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "64f6dd73-0fa7-4db1-b5b1-cea8d92d2785",
+        "question": "What is the date of birth of the son-in-law of the great-grandparent of Jarvis Arias?",
+        "solution_traces": "[{\"Y_2\": \"0274-09-18\", \"Y_5\": \"Isabell Womble\", \"Y_3\": \"Noel Arias\"}, {\"Y_2\": \"0274-09-18\", \"Y_3\": \"Noel Arias\", \"Y_5\": \"Lorenz Womble\"}]",
+        "answer": [
+            "0274-09-18"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "son_in_law(Y_5, Y_3)",
+                "great_grandparent(\"Jarvis Arias\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    }
+]

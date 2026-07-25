@@ -1,0 +1,957 @@
+[
+    {
+        "id": "52080d55-e3f4-4e68-89d8-12d48ed9b262",
+        "question": "Who is the sibling of the grandson of Ivan Christie?",
+        "solution_traces": "[{\"Y_2\": \"Ken Adams\", \"Y_4\": \"Ernest Adams\"}, {\"Y_4\": \"Ken Adams\", \"Y_2\": \"Ernest Adams\"}]",
+        "answer": [
+            "Ernest Adams",
+            "Ken Adams"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "grandson(\"Ivan Christie\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b444803e-9a75-4570-9afc-bb3bf3da9ccf",
+        "question": "Who is the son of the mother-in-law of Carlotta Burch?",
+        "solution_traces": "[{\"Y_2\": \"Jarrod Burch\", \"Y_4\": \"Jesse Burch\"}, {\"Y_2\": \"Stefan Burch\", \"Y_4\": \"Jesse Burch\"}]",
+        "answer": [
+            "Jarrod Burch",
+            "Stefan Burch"
+        ],
+        "prolog": {
+            "query": [
+                "son(Y_4, Y_2)",
+                "mother_in_law(\"Carlotta Burch\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "54f00584-2abc-4066-8f83-96e88824af65",
+        "question": "Who is the brother of the sibling of Dwain Burch?",
+        "solution_traces": "[{\"Y_2\": \"Saul Burch\", \"Y_4\": \"Adalberto Burch\"}, {\"Y_2\": \"Dwain Burch\", \"Y_4\": \"Adalberto Burch\"}, {\"Y_2\": \"Dwain Burch\", \"Y_4\": \"Robyn Harbison\"}, {\"Y_2\": \"Saul Burch\", \"Y_4\": \"Robyn Harbison\"}, {\"Y_2\": \"Trent Burch\", \"Y_4\": \"Robyn Harbison\"}, {\"Y_4\": \"Saul Burch\", \"Y_2\": \"Adalberto Burch\"}, {\"Y_4\": \"Trent Burch\", \"Y_2\": \"Adalberto Burch\"}, {\"Y_2\": \"Saul Burch\", \"Y_4\": \"Trent Burch\"}, {\"Y_4\": \"Saul Burch\", \"Y_2\": \"Trent Burch\"}, {\"Y_4\": \"Saul Burch\", \"Y_2\": \"Dwain Burch\"}, {\"Y_2\": \"Dwain Burch\", \"Y_4\": \"Trent Burch\"}, {\"Y_2\": \"Trent Burch\", \"Y_4\": \"Adalberto Burch\"}, {\"Y_2\": \"Adalberto Burch\", \"Y_4\": \"Robyn Harbison\"}]",
+        "answer": [
+            "Adalberto Burch",
+            "Dwain Burch",
+            "Saul Burch",
+            "Trent Burch"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "sibling(\"Dwain Burch\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9f32e23f-bac6-4297-bf8a-3e457b61aef9",
+        "question": "Who is the brother of the great-uncle of Conrad Marx?",
+        "solution_traces": "[{\"Y_4\": \"Lyndon Adams\", \"Y_2\": \"Javier Adams\"}, {\"Y_2\": \"Lyndon Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_2\": \"Javier Adams\", \"Y_4\": \"Monroe Adams\"}, {\"Y_4\": \"Lyndon Adams\", \"Y_2\": \"Monroe Adams\"}, {\"Y_4\": \"Javier Adams\", \"Y_2\": \"Monroe Adams\"}, {\"Y_2\": \"Lyndon Adams\", \"Y_4\": \"Monroe Adams\"}]",
+        "answer": [
+            "Javier Adams",
+            "Lyndon Adams",
+            "Monroe Adams"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "great_uncle(\"Conrad Marx\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4491f9ff-c86a-4b3f-9c58-3f134060beba",
+        "question": "Who is the child of the grandparent of Adrianna Harbison?",
+        "solution_traces": "[{\"Y_4\": \"Carlotta Burch\", \"Y_2\": \"Dwain Burch\"}, {\"Y_2\": \"Dwain Burch\", \"Y_4\": \"Stefan Burch\"}, {\"Y_2\": \"Saul Burch\", \"Y_4\": \"Stefan Burch\"}, {\"Y_2\": \"Adalberto Burch\", \"Y_4\": \"Stefan Burch\"}, {\"Y_2\": \"Trent Burch\", \"Y_4\": \"Stefan Burch\"}, {\"Y_4\": \"Carlotta Burch\", \"Y_2\": \"Robyn Harbison\"}, {\"Y_4\": \"Carlotta Burch\", \"Y_2\": \"Adalberto Burch\"}, {\"Y_4\": \"Stefan Burch\", \"Y_2\": \"Robyn Harbison\"}, {\"Y_4\": \"Carlotta Burch\", \"Y_2\": \"Trent Burch\"}, {\"Y_2\": \"Saul Burch\", \"Y_4\": \"Carlotta Burch\"}]",
+        "answer": [
+            "Adalberto Burch",
+            "Dwain Burch",
+            "Robyn Harbison",
+            "Saul Burch",
+            "Trent Burch"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "grandparent(\"Adrianna Harbison\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fe88a049-169c-49c0-9638-22b68767661e",
+        "question": "Who is the friend of the mother of Trent Burch?",
+        "solution_traces": "[{\"Y_4\": \"Carlotta Burch\", \"Y_2\": \"German Burch\"}, {\"Y_4\": \"Carlotta Burch\", \"Y_2\": \"Fabian Harbison\"}, {\"Y_4\": \"Carlotta Burch\", \"Y_2\": \"Robyn Harbison\"}, {\"Y_2\": \"Suzanne Marx\", \"Y_4\": \"Carlotta Burch\"}]",
+        "answer": [
+            "Fabian Harbison",
+            "German Burch",
+            "Robyn Harbison",
+            "Suzanne Marx"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "mother(\"Trent Burch\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7bc872fb-2178-4886-875c-7eeb4f77d900",
+        "question": "Who is the grandparent of the nephew of Cedrick Marx?",
+        "solution_traces": "[{\"Y_2\": \"Anjanette Marx\", \"Y_4\": \"Fidel Denham\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_4\": \"Conrad Marx\"}, {\"Y_2\": \"Cristopher Marx\", \"Y_4\": \"Fidel Denham\"}, {\"Y_2\": \"Cristopher Marx\", \"Y_4\": \"Conrad Marx\"}]",
+        "answer": [
+            "Anjanette Marx",
+            "Cristopher Marx"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "nephew(\"Cedrick Marx\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "95eab6db-00ad-457d-ac79-b5fc9a5519b7",
+        "question": "Who is the granddaughter of the great-grandparent of Ardath Denham?",
+        "solution_traces": "[{\"Y_2\": \"Elvie Adams\", \"Y_4\": \"Tonya Adams\"}, {\"Y_4\": \"Earl Adams\", \"Y_2\": \"Elvie Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_4\": \"Tonya Adams\"}, {\"Y_4\": \"Earl Adams\", \"Y_2\": \"Anjanette Marx\"}]",
+        "answer": [
+            "Anjanette Marx",
+            "Elvie Adams"
+        ],
+        "prolog": {
+            "query": [
+                "granddaughter(Y_4, Y_2)",
+                "great_grandparent(\"Ardath Denham\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d5949e85-c887-4b51-838d-727be9618532",
+        "question": "Who is the friend of the son-in-law of Romona Chester?",
+        "solution_traces": "[{\"Y_2\": \"Cedrick Marx\", \"Y_4\": \"Florentino Gilbreath\"}, {\"Y_2\": \"Ardath Denham\", \"Y_4\": \"Florentino Gilbreath\"}, {\"Y_2\": \"Darrell Adams\", \"Y_4\": \"Florentino Gilbreath\"}, {\"Y_2\": \"Tobias Marx\", \"Y_4\": \"Florentino Gilbreath\"}, {\"Y_2\": \"Fabian Harbison\", \"Y_4\": \"Florentino Gilbreath\"}, {\"Y_2\": \"Elvie Adams\", \"Y_4\": \"Florentino Gilbreath\"}, {\"Y_2\": \"Chloe Burch\", \"Y_4\": \"Florentino Gilbreath\"}]",
+        "answer": [
+            "Ardath Denham",
+            "Cedrick Marx",
+            "Chloe Burch",
+            "Darrell Adams",
+            "Elvie Adams",
+            "Fabian Harbison",
+            "Tobias Marx"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "son_in_law(\"Romona Chester\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f43528fe-1bb8-48ff-98d4-2a53c5d1c366",
+        "question": "Who is the parent of the friend of Florentino Gilbreath?",
+        "solution_traces": "[{\"Y_2\": \"Anjanette Marx\", \"Y_4\": \"Ardath Denham\"}, {\"Y_4\": \"Elvie Adams\", \"Y_2\": \"Sona Adams\"}, {\"Y_4\": \"Chloe Burch\", \"Y_2\": \"German Burch\"}, {\"Y_4\": \"Fabian Harbison\", \"Y_2\": \"Robyn Harbison\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_4\": \"Cedrick Marx\"}, {\"Y_2\": \"Ernest Adams\", \"Y_4\": \"Elvie Adams\"}, {\"Y_2\": \"Cedrick Marx\", \"Y_4\": \"Tobias Marx\"}, {\"Y_2\": \"Rashad Harbison\", \"Y_4\": \"Fabian Harbison\"}, {\"Y_2\": \"Cristopher Marx\", \"Y_4\": \"Cedrick Marx\"}, {\"Y_4\": \"Chloe Burch\", \"Y_2\": \"Jesse Burch\"}, {\"Y_2\": \"Cristopher Marx\", \"Y_4\": \"Ardath Denham\"}, {\"Y_4\": \"Darrell Adams\", \"Y_2\": \"Bee Adams\"}, {\"Y_2\": \"Suzanne Marx\", \"Y_4\": \"Tobias Marx\"}, {\"Y_4\": \"Darrell Adams\", \"Y_2\": \"Lyndon Adams\"}]",
+        "answer": [
+            "Anjanette Marx",
+            "Bee Adams",
+            "Cedrick Marx",
+            "Cristopher Marx",
+            "Ernest Adams",
+            "German Burch",
+            "Jesse Burch",
+            "Lyndon Adams",
+            "Rashad Harbison",
+            "Robyn Harbison",
+            "Sona Adams",
+            "Suzanne Marx"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "friend(\"Florentino Gilbreath\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0bb1b792-5f8f-4481-8595-e5869db3154f",
+        "question": "Who is the great-grandchild of the great-grandfather of Robyn Harbison?",
+        "solution_traces": "[{\"Y_2\": \"Saul Burch\", \"Y_4\": \"Jamel Phelps\"}, {\"Y_4\": \"Jamel Phelps\", \"Y_2\": \"Trent Burch\"}, {\"Y_4\": \"Jamel Phelps\", \"Y_2\": \"Robyn Harbison\"}, {\"Y_4\": \"Jamel Phelps\", \"Y_2\": \"Adalberto Burch\"}, {\"Y_4\": \"Jamel Phelps\", \"Y_2\": \"Dwain Burch\"}]",
+        "answer": [
+            "Adalberto Burch",
+            "Dwain Burch",
+            "Robyn Harbison",
+            "Saul Burch",
+            "Trent Burch"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "great_grandfather(\"Robyn Harbison\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c220273f-70dd-4007-bce3-33e1da31bad8",
+        "question": "Who is the husband of the daughter-in-law of Ernest Adams?",
+        "solution_traces": "[{\"Y_4\": \"Bee Adams\", \"Y_2\": \"Lyndon Adams\"}]",
+        "answer": [
+            "Lyndon Adams"
+        ],
+        "prolog": {
+            "query": [
+                "husband(Y_4, Y_2)",
+                "daughter_in_law(\"Ernest Adams\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "84f23de3-804f-4ea0-bad1-5c15816e830c",
+        "question": "Who is the great-grandson of the great-grandparent of Fidel Denham?",
+        "solution_traces": "[{\"Y_2\": \"Tobias Marx\", \"Y_4\": \"Ernest Adams\"}, {\"Y_2\": \"Conrad Marx\", \"Y_4\": \"Sona Adams\"}, {\"Y_2\": \"Fidel Denham\", \"Y_4\": \"Sona Adams\"}, {\"Y_2\": \"Fidel Denham\", \"Y_4\": \"Ernest Adams\"}, {\"Y_2\": \"Tobias Marx\", \"Y_4\": \"Sona Adams\"}, {\"Y_2\": \"Conrad Marx\", \"Y_4\": \"Ernest Adams\"}]",
+        "answer": [
+            "Conrad Marx",
+            "Fidel Denham",
+            "Tobias Marx"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandson(Y_4, Y_2)",
+                "great_grandparent(\"Fidel Denham\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8a3179b9-6b26-450b-94ff-de6562bf3438",
+        "question": "Who is the parent of the friend of Delma Phelps?",
+        "solution_traces": "[{\"Y_2\": \"Dwain Burch\", \"Y_4\": \"Mathew Burch\"}, {\"Y_2\": \"German Burch\", \"Y_4\": \"Stefan Burch\"}, {\"Y_2\": \"Cedrick Marx\", \"Y_4\": \"Tobias Marx\"}, {\"Y_2\": \"Georgina Burch\", \"Y_4\": \"Mathew Burch\"}, {\"Y_4\": \"Stefan Burch\", \"Y_2\": \"Jesse Burch\"}, {\"Y_4\": \"Jarrod Burch\", \"Y_2\": \"Jesse Burch\"}, {\"Y_4\": \"Jarrod Burch\", \"Y_2\": \"German Burch\"}, {\"Y_2\": \"Suzanne Marx\", \"Y_4\": \"Tobias Marx\"}]",
+        "answer": [
+            "Cedrick Marx",
+            "Dwain Burch",
+            "Georgina Burch",
+            "German Burch",
+            "Jesse Burch",
+            "Suzanne Marx"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "friend(\"Delma Phelps\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "320706ca-729b-4bea-b248-2871ef428437",
+        "question": "Who is the uncle of the granddaughter of Stefan Burch?",
+        "solution_traces": "[{\"Y_4\": \"Adrianna Harbison\", \"Y_2\": \"Adalberto Burch\"}, {\"Y_4\": \"Adrianna Harbison\", \"Y_2\": \"Dwain Burch\"}, {\"Y_4\": \"Adrianna Harbison\", \"Y_2\": \"Saul Burch\"}, {\"Y_4\": \"Adrianna Harbison\", \"Y_2\": \"Trent Burch\"}]",
+        "answer": [
+            "Adalberto Burch",
+            "Dwain Burch",
+            "Saul Burch",
+            "Trent Burch"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "granddaughter(\"Stefan Burch\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7cad1044-b157-4111-a169-65c1144e1cbd",
+        "question": "Who is the cousin of the sister of Darrell Adams?",
+        "solution_traces": "[{\"Y_2\": \"Darwin Marx\", \"Y_4\": \"Melodie Adams\"}, {\"Y_2\": \"Ardath Denham\", \"Y_4\": \"Melodie Adams\"}, {\"Y_2\": \"Cedrick Marx\", \"Y_4\": \"Melodie Adams\"}]",
+        "answer": [
+            "Ardath Denham",
+            "Cedrick Marx",
+            "Darwin Marx"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "sister(\"Darrell Adams\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4eed0841-c0e4-4956-9042-b235569c8b72",
+        "question": "Who is the son of the grandparent of Fabian Harbison?",
+        "solution_traces": "[{\"Y_4\": \"Carlotta Burch\", \"Y_2\": \"Dwain Burch\"}, {\"Y_2\": \"Dwain Burch\", \"Y_4\": \"Stefan Burch\"}, {\"Y_2\": \"Saul Burch\", \"Y_4\": \"Stefan Burch\"}, {\"Y_2\": \"Adalberto Burch\", \"Y_4\": \"Stefan Burch\"}, {\"Y_2\": \"Trent Burch\", \"Y_4\": \"Stefan Burch\"}, {\"Y_4\": \"Carlotta Burch\", \"Y_2\": \"Adalberto Burch\"}, {\"Y_4\": \"Carlotta Burch\", \"Y_2\": \"Trent Burch\"}, {\"Y_2\": \"Saul Burch\", \"Y_4\": \"Carlotta Burch\"}]",
+        "answer": [
+            "Adalberto Burch",
+            "Dwain Burch",
+            "Saul Burch",
+            "Trent Burch"
+        ],
+        "prolog": {
+            "query": [
+                "son(Y_4, Y_2)",
+                "grandparent(\"Fabian Harbison\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dce8e3df-3f2c-4feb-9b18-a595dc954408",
+        "question": "Who is the parent of the friend of Evelyne Burch?",
+        "solution_traces": "[{\"Y_4\": \"Anjanette Marx\", \"Y_2\": \"Sona Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_4\": \"Cedrick Marx\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_2\": \"Ernest Adams\"}, {\"Y_2\": \"Cristopher Marx\", \"Y_4\": \"Cedrick Marx\"}, {\"Y_4\": \"Ken Adams\", \"Y_2\": \"Earl Adams\"}, {\"Y_4\": \"Jarrod Burch\", \"Y_2\": \"Jesse Burch\"}, {\"Y_4\": \"Jarrod Burch\", \"Y_2\": \"German Burch\"}, {\"Y_4\": \"Ken Adams\", \"Y_2\": \"Tonya Adams\"}]",
+        "answer": [
+            "Anjanette Marx",
+            "Cristopher Marx",
+            "Earl Adams",
+            "Ernest Adams",
+            "German Burch",
+            "Jesse Burch",
+            "Sona Adams",
+            "Tonya Adams"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "friend(\"Evelyne Burch\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8958faa1-53a1-4f27-ae3c-4219a66cc46c",
+        "question": "Who is the parent of the son of Lyndon Adams?",
+        "solution_traces": "[{\"Y_4\": \"Darrell Adams\", \"Y_2\": \"Bee Adams\"}, {\"Y_4\": \"Darrell Adams\", \"Y_2\": \"Lyndon Adams\"}]",
+        "answer": [
+            "Bee Adams",
+            "Lyndon Adams"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "son(\"Lyndon Adams\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4cb40aa7-9cbc-4479-b12d-34f2a0cd124e",
+        "question": "Who is the uncle of the great-granddaughter of Florentino Gilbreath?",
+        "solution_traces": "[{\"Y_4\": \"Lea Burch\", \"Y_2\": \"Matt Burch\"}]",
+        "answer": [
+            "Matt Burch"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "great_granddaughter(\"Florentino Gilbreath\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "918cfdc6-db29-41d4-bebe-af3d3fe8e8cf",
+        "question": "Who is the sister of the grandchild of Tonya Adams?",
+        "solution_traces": "[{\"Y_2\": \"Anjanette Marx\", \"Y_4\": \"Lyndon Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_4\": \"Elvie Adams\"}, {\"Y_2\": \"Elvie Adams\", \"Y_4\": \"Monroe Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_4\": \"Monroe Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_4\": \"Javier Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_2\": \"Elvie Adams\"}, {\"Y_2\": \"Elvie Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_4\": \"Lyndon Adams\", \"Y_2\": \"Elvie Adams\"}]",
+        "answer": [
+            "Anjanette Marx",
+            "Elvie Adams"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "grandchild(\"Tonya Adams\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e031048c-c6cd-42ba-98dd-39ef17422ef8",
+        "question": "Who is the father-in-law of the wife of Ernest Adams?",
+        "solution_traces": "[{\"Y_2\": \"Earl Adams\", \"Y_4\": \"Sona Adams\"}]",
+        "answer": [
+            "Earl Adams"
+        ],
+        "prolog": {
+            "query": [
+                "father_in_law(Y_4, Y_2)",
+                "wife(\"Ernest Adams\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6a33f2c1-73c3-4af3-8864-20780cbfb702",
+        "question": "Who is the brother of the brother of Mathew Burch?",
+        "solution_traces": "[{\"Y_4\": \"Matt Burch\", \"Y_2\": \"Mathew Burch\"}]",
+        "answer": [
+            "Mathew Burch"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "brother(\"Mathew Burch\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5ccdf6f7-9d22-4cd5-b06d-8091eda1bd03",
+        "question": "Who is the great-grandson of the great-grandparent of Javier Adams?",
+        "solution_traces": "[{\"Y_4\": \"Ivan Christie\", \"Y_2\": \"Monroe Adams\"}, {\"Y_4\": \"Edwina Christie\", \"Y_2\": \"Lyndon Adams\"}, {\"Y_4\": \"Edwina Christie\", \"Y_2\": \"Javier Adams\"}, {\"Y_4\": \"Edwina Christie\", \"Y_2\": \"Monroe Adams\"}, {\"Y_2\": \"Javier Adams\", \"Y_4\": \"Ivan Christie\"}, {\"Y_2\": \"Lyndon Adams\", \"Y_4\": \"Ivan Christie\"}]",
+        "answer": [
+            "Javier Adams",
+            "Lyndon Adams",
+            "Monroe Adams"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandson(Y_4, Y_2)",
+                "great_grandparent(\"Javier Adams\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6dfcaab4-79ed-4c51-999e-8f5fcf7b4466",
+        "question": "Who is the friend of the friend of Rashad Harbison?",
+        "solution_traces": "[{\"Y_2\": \"Florentino Gilbreath\", \"Y_4\": \"Cedrick Marx\"}, {\"Y_2\": \"Rashad Harbison\", \"Y_4\": \"Kimberlee Marx\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Saul Burch\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Ardath Denham\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Evelyne Burch\"}, {\"Y_2\": \"Tobias Marx\", \"Y_4\": \"Porfirio Chester\"}, {\"Y_2\": \"Cristopher Marx\", \"Y_4\": \"Kimberlee Marx\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Rashad Harbison\"}, {\"Y_2\": \"Darwin Marx\", \"Y_4\": \"Kimberlee Marx\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Ernest Adams\"}, {\"Y_2\": \"Rashad Harbison\", \"Y_4\": \"Porfirio Chester\"}, {\"Y_4\": \"Porfirio Chester\", \"Y_2\": \"Jarrod Burch\"}, {\"Y_2\": \"Ernest Adams\", \"Y_4\": \"Kimberlee Marx\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Bee Adams\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Robyn Harbison\"}, {\"Y_2\": \"Dwain Burch\", \"Y_4\": \"Kimberlee Marx\"}, {\"Y_2\": \"Tobias Marx\", \"Y_4\": \"Kimberlee Marx\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Mathew Burch\"}]",
+        "answer": [
+            "Ardath Denham",
+            "Bee Adams",
+            "Cristopher Marx",
+            "Darwin Marx",
+            "Dwain Burch",
+            "Ernest Adams",
+            "Evelyne Burch",
+            "Florentino Gilbreath",
+            "Jarrod Burch",
+            "Mathew Burch",
+            "Rashad Harbison",
+            "Robyn Harbison",
+            "Saul Burch",
+            "Tobias Marx"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "friend(\"Rashad Harbison\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "51253913-041f-4dd0-af43-29e3931cd5a7",
+        "question": "Who is the grandchild of the grandmother of Robyn Harbison?",
+        "solution_traces": "[{\"Y_2\": \"Saul Burch\", \"Y_4\": \"Jesse Burch\"}, {\"Y_2\": \"Robyn Harbison\", \"Y_4\": \"Jesse Burch\"}, {\"Y_2\": \"Trent Burch\", \"Y_4\": \"Jesse Burch\"}, {\"Y_2\": \"Dwain Burch\", \"Y_4\": \"Jesse Burch\"}, {\"Y_2\": \"Adalberto Burch\", \"Y_4\": \"Jesse Burch\"}]",
+        "answer": [
+            "Adalberto Burch",
+            "Dwain Burch",
+            "Robyn Harbison",
+            "Saul Burch",
+            "Trent Burch"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "grandmother(\"Robyn Harbison\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "925dd766-2e1f-460f-8c74-3ffbcf282dfb",
+        "question": "Who is the mother of the aunt of Trent Burch?",
+        "solution_traces": "[{\"Y_4\": \"Chloe Burch\", \"Y_2\": \"Jesse Burch\"}]",
+        "answer": [
+            "Jesse Burch"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "aunt(\"Trent Burch\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dc115c0f-b04b-46c4-87b1-38b999b7c9a3",
+        "question": "Who is the nephew of the sister of Jarrod Burch?",
+        "solution_traces": "[{\"Y_4\": \"Chloe Burch\", \"Y_2\": \"Adalberto Burch\"}, {\"Y_4\": \"Chloe Burch\", \"Y_2\": \"Saul Burch\"}, {\"Y_4\": \"Chloe Burch\", \"Y_2\": \"Dwain Burch\"}, {\"Y_4\": \"Chloe Burch\", \"Y_2\": \"Trent Burch\"}]",
+        "answer": [
+            "Adalberto Burch",
+            "Dwain Burch",
+            "Saul Burch",
+            "Trent Burch"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "sister(\"Jarrod Burch\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e1771ac6-7dac-4418-b222-253babafaf30",
+        "question": "Who is the grandparent of the nephew of Ken Adams?",
+        "solution_traces": "[{\"Y_2\": \"Earl Adams\", \"Y_4\": \"Monroe Adams\"}, {\"Y_2\": \"Earl Adams\", \"Y_4\": \"Lyndon Adams\"}, {\"Y_2\": \"Tonya Adams\", \"Y_4\": \"Monroe Adams\"}, {\"Y_2\": \"Earl Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_2\": \"Tonya Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_4\": \"Lyndon Adams\", \"Y_2\": \"Tonya Adams\"}]",
+        "answer": [
+            "Earl Adams",
+            "Tonya Adams"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "nephew(\"Ken Adams\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "58093d9c-6ccf-4e1e-86d1-baa7b489f90d",
+        "question": "Who is the parent of the brother of Darwin Marx?",
+        "solution_traces": "[{\"Y_2\": \"Anjanette Marx\", \"Y_4\": \"Cedrick Marx\"}, {\"Y_2\": \"Cristopher Marx\", \"Y_4\": \"Cedrick Marx\"}]",
+        "answer": [
+            "Anjanette Marx",
+            "Cristopher Marx"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "brother(\"Darwin Marx\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    }
+]

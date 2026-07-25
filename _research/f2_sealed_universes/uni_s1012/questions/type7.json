@@ -1,0 +1,1177 @@
+[
+    {
+        "id": "0386551b-c954-4c6e-9b43-254fa8add6bc",
+        "question": "What is the date of birth of the great-grandfather of the brother of the grandchild of Emelda Lam?",
+        "solution_traces": "[{\"Y_5\": \"Raul Michaels\", \"Y_2\": \"0170-09-09\", \"Y_7\": \"Virgil Michaels\", \"Y_3\": \"Alan Lam\"}, {\"Y_5\": \"Virgil Michaels\", \"Y_3\": \"Alan Lam\", \"Y_2\": \"0170-09-09\", \"Y_7\": \"Raul Michaels\"}]",
+        "answer": [
+            "0170-09-09"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandfather(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "grandchild(\"Emelda Lam\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f5492a24-b47c-41f6-9e5b-f0dec1e0227e",
+        "question": "What is the occupation of the great-grandson of the great-grandmother of the great-grandchild of Marcelina Dees?",
+        "solution_traces": "[{\"Y_2\": \"consulting civil engineer\", \"Y_5\": \"Marcelina Dees\", \"Y_3\": \"Richard Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Adam Dees\", \"Y_2\": \"lecturer\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_2\": \"consulting civil engineer\", \"Y_5\": \"Winnie Halstead\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_7\": \"Richard Dees\", \"Y_3\": \"Adam Dees\", \"Y_5\": \"Winnie Halstead\", \"Y_2\": \"facilities manager\"}, {\"Y_2\": \"consulting civil engineer\", \"Y_5\": \"Winnie Halstead\", \"Y_3\": \"Richard Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_3\": \"Adam Dees\", \"Y_5\": \"Winnie Halstead\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"facilities manager\"}, {\"Y_2\": \"facilities manager\", \"Y_5\": \"Winnie Halstead\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_7\": \"Adam Dees\", \"Y_5\": \"Winnie Halstead\", \"Y_2\": \"lecturer\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Y_7\": \"Richard Dees\", \"Y_2\": \"lecturer\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_3\": \"Adam Dees\", \"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"facilities manager\"}, {\"Y_5\": \"Naomi Embry\", \"Y_2\": \"consulting civil engineer\", \"Y_3\": \"Richard Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_2\": \"consulting civil engineer\", \"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Y_2\": \"consulting civil engineer\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_7\": \"Richard Dees\", \"Y_5\": \"Winnie Halstead\", \"Y_2\": \"lecturer\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_2\": \"consulting civil engineer\", \"Y_7\": \"Adam Dees\", \"Y_3\": \"Richard Dees\", \"Y_5\": \"Winnie Halstead\"}, {\"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Richard Dees\", \"Y_2\": \"lecturer\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"lecturer\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"lecturer\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Marcelina Dees\", \"Y_2\": \"lecturer\", \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Adam Dees\", \"Y_3\": \"Adam Dees\", \"Y_2\": \"facilities manager\"}, {\"Y_5\": \"Marcelina Dees\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Adam Dees\", \"Y_2\": \"facilities manager\"}, {\"Y_7\": \"Adam Dees\", \"Y_3\": \"Adam Dees\", \"Y_5\": \"Winnie Halstead\", \"Y_2\": \"facilities manager\"}, {\"Y_5\": \"Winnie Halstead\", \"Y_2\": \"lecturer\", \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Adam Dees\", \"Y_2\": \"facilities manager\"}, {\"Y_5\": \"Naomi Embry\", \"Y_7\": \"Adam Dees\", \"Y_2\": \"lecturer\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Y_2\": \"lecturer\", \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Y_7\": \"Adam Dees\", \"Y_3\": \"Adam Dees\", \"Y_2\": \"facilities manager\"}, {\"Y_5\": \"Naomi Embry\", \"Y_2\": \"consulting civil engineer\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Y_2\": \"consulting civil engineer\", \"Y_7\": \"Adam Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_2\": \"consulting civil engineer\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Richard Dees\", \"Y_5\": \"Winnie Halstead\"}, {\"Y_5\": \"Marcelina Dees\", \"Y_2\": \"consulting civil engineer\", \"Y_7\": \"Adam Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_5\": \"Winnie Halstead\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"lecturer\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Y_2\": \"facilities manager\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Marcelina Dees\", \"Y_2\": \"consulting civil engineer\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_2\": \"facilities manager\", \"Y_5\": \"Marcelina Dees\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Naomi Embry\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"facilities manager\"}]",
+        "answer": [
+            "consulting civil engineer",
+            "facilities manager",
+            "lecturer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandson(Y_5, Y_3)",
+                "great_grandmother(Y_7, Y_5)",
+                "great_grandchild(\"Marcelina Dees\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 10,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4c5af142-30ee-4967-a21c-fbc271e7ffdb",
+        "question": "What is the hobby of the daughter-in-law of the father of the great-uncle of Raul Michaels?",
+        "solution_traces": "[{\"Y_2\": \"baseball\", \"Y_5\": \"Alan Lam\", \"Y_3\": \"Emelda Lam\", \"Y_7\": \"Alfred Lam\"}]",
+        "answer": [
+            "baseball"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "daughter_in_law(Y_5, Y_3)",
+                "father(Y_7, Y_5)",
+                "great_uncle(\"Raul Michaels\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "39e7a930-e7d6-4fd3-b1bf-49358e3de075",
+        "question": "What is the hobby of the uncle of the friend of the great-grandson of Cordell Dees?",
+        "solution_traces": "[{\"Y_3\": \"Alberto Lam\", \"Y_5\": \"Raul Michaels\", \"Y_2\": \"insect collecting\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_2\": \"coin collecting\", \"Y_5\": \"Raul Michaels\", \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Wilber Lam\"}, {\"Y_3\": \"Alfred Lam\", \"Y_2\": \"cricket\", \"Y_7\": \"Richard Dees\", \"Y_5\": \"Wilber Lam\"}, {\"Y_2\": \"rowing\", \"Y_5\": \"Raul Michaels\", \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Aubrey Lam\"}]",
+        "answer": [
+            "coin collecting",
+            "cricket",
+            "insect collecting",
+            "rowing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "uncle(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "great_grandson(\"Cordell Dees\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fa176f43-b304-4c78-9c0c-062c1c454109",
+        "question": "What is the occupation of the sibling of the granddaughter of the mother-in-law of Viola Halstead?",
+        "solution_traces": "[{\"Y_3\": \"Clifford Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Winnie Halstead\", \"Y_2\": \"medical technical officer\"}, {\"Y_2\": \"geochemist\", \"Y_3\": \"Cherlyn Dees\", \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Winnie Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Rhea Halstead\", \"Y_7\": \"Winnie Halstead\", \"Y_2\": \"lexicographer\"}, {\"Y_3\": \"Rhea Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Winnie Halstead\", \"Y_2\": \"lexicographer\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Kermit Halstead\", \"Y_7\": \"Winnie Halstead\", \"Y_2\": \"electronics engineer\"}, {\"Y_3\": \"Kermit Halstead\", \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Winnie Halstead\", \"Y_2\": \"electronics engineer\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_2\": \"medical technical officer\", \"Y_7\": \"Winnie Halstead\", \"Y_3\": \"Clifford Halstead\"}, {\"Y_2\": \"geochemist\", \"Y_5\": \"Johnetta Halstead\", \"Y_3\": \"Cherlyn Dees\", \"Y_7\": \"Winnie Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_2\": \"academic librarian\", \"Y_7\": \"Winnie Halstead\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_2\": \"academic librarian\", \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Winnie Halstead\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_5\": \"Johnetta Halstead\", \"Y_2\": \"electronics engineer\", \"Y_7\": \"Winnie Halstead\", \"Y_3\": \"Kermit Halstead\"}, {\"Y_3\": \"Clifford Halstead\", \"Y_2\": \"medical technical officer\", \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Winnie Halstead\"}]",
+        "answer": [
+            "academic librarian",
+            "electronics engineer",
+            "geochemist",
+            "lexicographer",
+            "medical technical officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "granddaughter(Y_7, Y_5)",
+                "mother_in_law(\"Viola Halstead\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b444aa05-c376-4cb3-8d3c-d332969675da",
+        "question": "What is the hobby of the brother of the nephew of the sibling of Rhea Halstead?",
+        "solution_traces": "[{\"Y_5\": \"Richard Dees\", \"Y_7\": \"Clifford Halstead\", \"Y_2\": \"model united nations\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_2\": \"bus spotting\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Richard Dees\", \"Y_7\": \"Johnetta Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_2\": \"model united nations\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_2\": \"fitness\", \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Adam Dees\"}, {\"Y_2\": \"bus spotting\", \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_2\": \"fitness\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Johnetta Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Adam Dees\", \"Y_2\": \"fitness\"}, {\"Y_5\": \"Richard Dees\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Johnetta Halstead\", \"Y_2\": \"fitness\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"bus spotting\", \"Y_3\": \"Richard Dees\", \"Y_7\": \"Johnetta Halstead\"}, {\"Y_2\": \"fitness\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_2\": \"model united nations\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Clifford Halstead\", \"Y_2\": \"model united nations\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Clifford Halstead\", \"Y_2\": \"fitness\"}, {\"Y_2\": \"bus spotting\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Richard Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"model united nations\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Richard Dees\", \"Y_2\": \"bus spotting\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"bus spotting\", \"Y_3\": \"Richard Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"model united nations\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Giovanni Dees\"}]",
+        "answer": [
+            "bus spotting",
+            "fitness",
+            "model united nations"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "brother(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "sibling(\"Rhea Halstead\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "14165d36-748b-4965-baa3-77acdf535836",
+        "question": "What is the hobby of the son of the husband of the wife of Toby Lam?",
+        "solution_traces": "[{\"Y_2\": \"coin collecting\", \"Y_5\": \"Toby Lam\", \"Y_7\": \"Emelda Lam\", \"Y_3\": \"Wilber Lam\"}, {\"Y_5\": \"Toby Lam\", \"Y_3\": \"Alberto Lam\", \"Y_2\": \"insect collecting\", \"Y_7\": \"Emelda Lam\"}, {\"Y_5\": \"Toby Lam\", \"Y_2\": \"rowing\", \"Y_7\": \"Emelda Lam\", \"Y_3\": \"Aubrey Lam\"}]",
+        "answer": [
+            "coin collecting",
+            "insect collecting",
+            "rowing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "son(Y_5, Y_3)",
+                "husband(Y_7, Y_5)",
+                "wife(\"Toby Lam\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "748d9122-0c61-423e-b623-b446553f4cb6",
+        "question": "What is the hobby of the great-grandparent of the sister of the niece of Richard Dees?",
+        "solution_traces": "[{\"Y_2\": \"microscopy\", \"Y_7\": \"Bonnie Handley\", \"Y_5\": \"Allyson Dees\", \"Y_3\": \"Theda Dees\"}, {\"Y_7\": \"Bonnie Handley\", \"Y_3\": \"Wendell Dees\", \"Y_5\": \"Allyson Dees\", \"Y_2\": \"fossil hunting\"}, {\"Y_7\": \"Allyson Dees\", \"Y_2\": \"mini golf\", \"Y_3\": \"Rosendo Halstead\", \"Y_5\": \"Bonnie Handley\"}, {\"Y_7\": \"Bonnie Handley\", \"Y_5\": \"Allyson Dees\", \"Y_3\": \"Viola Halstead\", \"Y_2\": \"mountain biking\"}, {\"Y_7\": \"Allyson Dees\", \"Y_2\": \"microscopy\", \"Y_3\": \"Theda Dees\", \"Y_5\": \"Bonnie Handley\"}, {\"Y_7\": \"Allyson Dees\", \"Y_3\": \"Wendell Dees\", \"Y_2\": \"fossil hunting\", \"Y_5\": \"Bonnie Handley\"}, {\"Y_2\": \"mini golf\", \"Y_7\": \"Bonnie Handley\", \"Y_3\": \"Rosendo Halstead\", \"Y_5\": \"Allyson Dees\"}, {\"Y_7\": \"Allyson Dees\", \"Y_2\": \"mountain biking\", \"Y_3\": \"Viola Halstead\", \"Y_5\": \"Bonnie Handley\"}]",
+        "answer": [
+            "fossil hunting",
+            "microscopy",
+            "mini golf",
+            "mountain biking"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandparent(Y_5, Y_3)",
+                "sister(Y_7, Y_5)",
+                "niece(\"Richard Dees\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a1f49c1e-d89f-4200-bccd-50a5bfc7725e",
+        "question": "What is the hobby of the brother-in-law of the father-in-law of the mother-in-law of Jakob Quezada?",
+        "solution_traces": "[{\"Y_7\": \"Sheila Michaels\", \"Y_2\": \"coin collecting\", \"Y_5\": \"Rogelio Michaels\", \"Y_3\": \"Wilber Lam\"}, {\"Y_7\": \"Sheila Michaels\", \"Y_2\": \"rowing\", \"Y_5\": \"Rogelio Michaels\", \"Y_3\": \"Aubrey Lam\"}, {\"Y_7\": \"Sheila Michaels\", \"Y_3\": \"Alberto Lam\", \"Y_5\": \"Rogelio Michaels\", \"Y_2\": \"insect collecting\"}]",
+        "answer": [
+            "coin collecting",
+            "insect collecting",
+            "rowing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "brother_in_law(Y_5, Y_3)",
+                "father_in_law(Y_7, Y_5)",
+                "mother_in_law(\"Jakob Quezada\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "825fa928-9ef8-4dbf-a04d-60de226410d4",
+        "question": "What is the hobby of the child of the brother of the uncle of Alberto Lam?",
+        "solution_traces": "[{\"Y_2\": \"coin collecting\", \"Y_3\": \"Wilber Lam\", \"Y_5\": \"Toby Lam\", \"Y_7\": \"Alfred Lam\"}, {\"Y_3\": \"Alethia Lam\", \"Y_2\": \"stone collecting\", \"Y_5\": \"Toby Lam\", \"Y_7\": \"Alfred Lam\"}, {\"Y_3\": \"Aubrey Lam\", \"Y_2\": \"rowing\", \"Y_5\": \"Toby Lam\", \"Y_7\": \"Alfred Lam\"}, {\"Y_3\": \"Alberto Lam\", \"Y_2\": \"insect collecting\", \"Y_5\": \"Toby Lam\", \"Y_7\": \"Alfred Lam\"}, {\"Y_2\": \"science and technology studies\", \"Y_3\": \"Dena Michaels\", \"Y_5\": \"Toby Lam\", \"Y_7\": \"Alfred Lam\"}]",
+        "answer": [
+            "coin collecting",
+            "insect collecting",
+            "rowing",
+            "science and technology studies",
+            "stone collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "child(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "uncle(\"Alberto Lam\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3db141fd-3895-4b95-86dd-d30914a31636",
+        "question": "What is the occupation of the aunt of the niece of the grandchild of Seth Embry?",
+        "solution_traces": "[{\"Y_5\": \"Monserrate Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_2\": \"academic librarian\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_3\": \"Rhea Halstead\", \"Y_7\": \"Clifford Halstead\", \"Y_2\": \"lexicographer\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_3\": \"Rhea Halstead\", \"Y_7\": \"Johnetta Halstead\", \"Y_2\": \"lexicographer\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Monserrate Dees\", \"Y_2\": \"academic librarian\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Rhea Halstead\", \"Y_2\": \"lexicographer\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_7\": \"Clifford Halstead\", \"Y_2\": \"academic librarian\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_2\": \"academic librarian\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_3\": \"Rhea Halstead\", \"Y_5\": \"Monserrate Dees\", \"Y_2\": \"lexicographer\"}]",
+        "answer": [
+            "academic librarian",
+            "lexicographer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "aunt(Y_5, Y_3)",
+                "niece(Y_7, Y_5)",
+                "grandchild(\"Seth Embry\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "056b4a12-abdc-4ebf-817f-6bc40b04d8bd",
+        "question": "What is the occupation of the second uncle of the son of the son-in-law of Sheila Michaels?",
+        "solution_traces": "[{\"Y_2\": \"special educational needs teacher\", \"Y_7\": \"Jakob Quezada\", \"Y_5\": \"Reggie Quezada\", \"Y_3\": \"Wilber Lam\"}, {\"Y_2\": \"warehouse manager\", \"Y_3\": \"Alberto Lam\", \"Y_7\": \"Jakob Quezada\", \"Y_5\": \"Reggie Quezada\"}, {\"Y_2\": \"professor emeritus\", \"Y_7\": \"Jakob Quezada\", \"Y_5\": \"Reggie Quezada\", \"Y_3\": \"Aubrey Lam\"}]",
+        "answer": [
+            "professor emeritus",
+            "special educational needs teacher",
+            "warehouse manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "second_uncle(Y_5, Y_3)",
+                "son(Y_7, Y_5)",
+                "son_in_law(\"Sheila Michaels\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b5db2048-12d2-4db8-ae4f-3ddee77c40e7",
+        "question": "What is the occupation of the great-grandfather of the friend of the father-in-law of Clifford Reece?",
+        "solution_traces": "[{\"Y_3\": \"Wendell Dees\", \"Y_7\": \"Rudolf Moorehead\", \"Y_5\": \"Allyson Dees\", \"Y_2\": \"magazine features editor\"}, {\"Y_3\": \"Rosendo Halstead\", \"Y_7\": \"Rudolf Moorehead\", \"Y_5\": \"Allyson Dees\", \"Y_2\": \"veterinary surgeon\"}]",
+        "answer": [
+            "magazine features editor",
+            "veterinary surgeon"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandfather(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "father_in_law(\"Clifford Reece\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f10777be-78af-47d2-bf8c-1e953ca5cb22",
+        "question": "What is the hobby of the parent of the mother of the granddaughter of Seth Embry?",
+        "solution_traces": "[{\"Y_5\": \"Viola Halstead\", \"Y_3\": \"Seth Embry\", \"Y_7\": \"Johnetta Halstead\", \"Y_2\": \"butterfly watching\"}, {\"Y_2\": \"longboarding\", \"Y_5\": \"Viola Halstead\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Johnetta Halstead\"}, {\"Y_2\": \"longboarding\", \"Y_5\": \"Viola Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Naomi Embry\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Viola Halstead\", \"Y_3\": \"Seth Embry\", \"Y_2\": \"butterfly watching\"}, {\"Y_5\": \"Viola Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Seth Embry\", \"Y_2\": \"butterfly watching\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Viola Halstead\", \"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\"}]",
+        "answer": [
+            "butterfly watching",
+            "longboarding"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "granddaughter(\"Seth Embry\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ae31c571-c00f-401f-91f9-6c34e500eb8e",
+        "question": "What is the occupation of the sibling of the sibling of the great-granddaughter of Winnie Halstead?",
+        "solution_traces": "[{\"Y_2\": \"consulting civil engineer\", \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Richard Dees\"}, {\"Y_2\": \"professor emeritus\", \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Monserrate Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"lecturer\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"professor emeritus\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Monserrate Dees\"}, {\"Y_3\": \"Adam Dees\", \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"facilities manager\"}, {\"Y_5\": \"Richard Dees\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"facilities manager\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"professor emeritus\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Monserrate Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"lecturer\", \"Y_3\": \"Giovanni Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"consulting civil engineer\", \"Y_7\": \"Monserrate Dees\", \"Y_3\": \"Richard Dees\"}]",
+        "answer": [
+            "consulting civil engineer",
+            "facilities manager",
+            "lecturer",
+            "professor emeritus"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "great_granddaughter(\"Winnie Halstead\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fe14b665-bff6-44c9-88f5-9813dda2a0c5",
+        "question": "What is the hobby of the great-grandmother of the nephew of the great-aunt of Bonnie Handley?",
+        "solution_traces": "[{\"Y_7\": \"Rhea Halstead\", \"Y_2\": \"longboarding\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Naomi Embry\"}, {\"Y_5\": \"Giovanni Dees\", \"Y_2\": \"fishkeeping\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Johnetta Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_2\": \"stamp collecting\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_2\": \"stamp collecting\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\"}, {\"Y_5\": \"Giovanni Dees\", \"Y_2\": \"stamp collecting\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_2\": \"fishkeeping\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"stamp collecting\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"stamp collecting\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_2\": \"fishkeeping\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_2\": \"fishkeeping\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_2\": \"longboarding\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Johnetta Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Johnetta Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_2\": \"stamp collecting\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"fishkeeping\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"fishkeeping\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Marcelina Dees\"}]",
+        "answer": [
+            "fishkeeping",
+            "longboarding",
+            "stamp collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandmother(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "great_aunt(\"Bonnie Handley\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "93a4fdb1-7790-40b5-a350-b83459aa883b",
+        "question": "What is the hobby of the nephew of the friend of the brother of Monserrate Dees?",
+        "solution_traces": "[{\"Y_2\": \"meditation\", \"Y_3\": \"Cortez Michaels\", \"Y_5\": \"Raul Michaels\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_2\": \"fitness\", \"Y_3\": \"Adam Dees\", \"Y_7\": \"Giovanni Dees\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_2\": \"bus spotting\", \"Y_3\": \"Richard Dees\", \"Y_7\": \"Giovanni Dees\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_7\": \"Richard Dees\", \"Y_5\": \"Wilber Lam\", \"Y_2\": \"antiquing\", \"Y_3\": \"Virgil Michaels\"}, {\"Y_3\": \"Raul Michaels\", \"Y_7\": \"Richard Dees\", \"Y_5\": \"Wilber Lam\", \"Y_2\": \"public transport riding\"}, {\"Y_3\": \"Giovanni Dees\", \"Y_2\": \"model united nations\", \"Y_7\": \"Giovanni Dees\", \"Y_5\": \"Kermit Halstead\"}]",
+        "answer": [
+            "antiquing",
+            "bus spotting",
+            "fitness",
+            "meditation",
+            "model united nations",
+            "public transport riding"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "nephew(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "brother(\"Monserrate Dees\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "87c18611-bfd5-4352-a460-40f9504cc563",
+        "question": "What is the occupation of the mother of the niece of the great-uncle of Estella Handley?",
+        "solution_traces": "[{\"Y_3\": \"Maximina Dees\", \"Y_7\": \"Richard Dees\", \"Y_2\": \"cabin crew\", \"Y_5\": \"Bonnie Handley\"}, {\"Y_3\": \"Maximina Dees\", \"Y_2\": \"cabin crew\", \"Y_5\": \"Allyson Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_3\": \"Maximina Dees\", \"Y_2\": \"cabin crew\", \"Y_7\": \"Giovanni Dees\", \"Y_5\": \"Bonnie Handley\"}, {\"Y_3\": \"Maximina Dees\", \"Y_7\": \"Richard Dees\", \"Y_5\": \"Allyson Dees\", \"Y_2\": \"cabin crew\"}]",
+        "answer": [
+            "cabin crew"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "mother(Y_5, Y_3)",
+                "niece(Y_7, Y_5)",
+                "great_uncle(\"Estella Handley\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "33fe83db-8650-4617-b051-9d9d73523c40",
+        "question": "What is the hobby of the son-in-law of the wife of the grandchild of Wendell Dees?",
+        "solution_traces": "[{\"Y_3\": \"Riley Handley\", \"Y_7\": \"Adam Dees\", \"Y_5\": \"Maximina Dees\", \"Y_2\": \"auto audiophilia\"}]",
+        "answer": [
+            "auto audiophilia"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "son_in_law(Y_5, Y_3)",
+                "wife(Y_7, Y_5)",
+                "grandchild(\"Wendell Dees\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "68dfd665-ff39-489f-af6f-cc6e54d46a14",
+        "question": "What is the date of birth of the father of the father-in-law of the sibling of Clifford Halstead?",
+        "solution_traces": "[{\"Y_5\": \"Wendell Dees\", \"Y_2\": \"0202-08-06\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Cordell Dees\"}]",
+        "answer": [
+            "0202-08-06"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "father(Y_5, Y_3)",
+                "father_in_law(Y_7, Y_5)",
+                "sibling(\"Clifford Halstead\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "77aed16d-6a76-4091-8f03-4e0980373db2",
+        "question": "What is the hobby of the grandparent of the sibling of the grandchild of Dustin Halstead?",
+        "solution_traces": "[{\"Y_7\": \"Rhea Halstead\", \"Y_2\": \"butterfly watching\", \"Y_3\": \"Seth Embry\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_2\": \"stamp collecting\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_2\": \"longboarding\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Naomi Embry\", \"Y_5\": \"Rhea Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Seth Embry\", \"Y_2\": \"butterfly watching\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Rhea Halstead\", \"Y_2\": \"canoeing\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_2\": \"longboarding\", \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Y_3\": \"Naomi Embry\"}, {\"Y_5\": \"Johnetta Halstead\", \"Y_2\": \"canoeing\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Dustin Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Clifford Halstead\", \"Y_3\": \"Seth Embry\", \"Y_2\": \"butterfly watching\"}, {\"Y_2\": \"stamp collecting\", \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Rhea Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_2\": \"longboarding\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Naomi Embry\", \"Y_5\": \"Clifford Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_2\": \"stamp collecting\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_2\": \"stamp collecting\", \"Y_5\": \"Rhea Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_2\": \"longboarding\", \"Y_5\": \"Clifford Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Naomi Embry\"}, {\"Y_2\": \"stamp collecting\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Winnie Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Seth Embry\", \"Y_7\": \"Clifford Halstead\", \"Y_2\": \"butterfly watching\"}, {\"Y_2\": \"butterfly watching\", \"Y_3\": \"Seth Embry\", \"Y_7\": \"Johnetta Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_2\": \"canoeing\", \"Y_7\": \"Johnetta Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_2\": \"stamp collecting\", \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_2\": \"longboarding\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Naomi Embry\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Y_3\": \"Seth Embry\", \"Y_2\": \"butterfly watching\"}, {\"Y_3\": \"Seth Embry\", \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Johnetta Halstead\", \"Y_2\": \"butterfly watching\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_2\": \"stamp collecting\", \"Y_3\": \"Winnie Halstead\", \"Y_5\": \"Clifford Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_2\": \"stamp collecting\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_7\": \"Cherlyn Dees\", \"Y_2\": \"stamp collecting\", \"Y_5\": \"Rhea Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_3\": \"Seth Embry\", \"Y_2\": \"butterfly watching\", \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_2\": \"canoeing\", \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Rhea Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_2\": \"canoeing\", \"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_2\": \"stamp collecting\", \"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_2\": \"canoeing\", \"Y_5\": \"Clifford Halstead\", \"Y_7\": \"Johnetta Halstead\"}, {\"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_2\": \"stamp collecting\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Johnetta Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Kermit Halstead\", \"Y_2\": \"canoeing\", \"Y_5\": \"Clifford Halstead\"}, {\"Y_5\": \"Clifford Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_2\": \"stamp collecting\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_2\": \"stamp collecting\", \"Y_3\": \"Winnie Halstead\", \"Y_7\": \"Johnetta Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Rhea Halstead\", \"Y_2\": \"canoeing\", \"Y_5\": \"Johnetta Halstead\"}, {\"Y_3\": \"Seth Embry\", \"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Clifford Halstead\", \"Y_2\": \"butterfly watching\"}, {\"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Johnetta Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_2\": \"canoeing\", \"Y_7\": \"Cherlyn Dees\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Clifford Halstead\", \"Y_2\": \"canoeing\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Y_2\": \"stamp collecting\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Clifford Halstead\", \"Y_2\": \"stamp collecting\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_3\": \"Seth Embry\", \"Y_2\": \"butterfly watching\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Y_2\": \"canoeing\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_2\": \"longboarding\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Naomi Embry\"}, {\"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\", \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Johnetta Halstead\"}, {\"Y_2\": \"longboarding\", \"Y_5\": \"Johnetta Halstead\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_2\": \"stamp collecting\", \"Y_3\": \"Winnie Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_5\": \"Clifford Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_2\": \"canoeing\"}, {\"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Rhea Halstead\"}, {\"Y_5\": \"Clifford Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Seth Embry\", \"Y_2\": \"butterfly watching\"}, {\"Y_5\": \"Clifford Halstead\", \"Y_2\": \"stamp collecting\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Seth Embry\", \"Y_7\": \"Johnetta Halstead\", \"Y_2\": \"butterfly watching\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_2\": \"canoeing\", \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_3\": \"Winnie Halstead\", \"Y_2\": \"stamp collecting\", \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Seth Embry\", \"Y_5\": \"Rhea Halstead\", \"Y_2\": \"butterfly watching\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_2\": \"longboarding\", \"Y_5\": \"Johnetta Halstead\", \"Y_3\": \"Naomi Embry\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Rhea Halstead\", \"Y_2\": \"canoeing\", \"Y_3\": \"Dustin Halstead\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Y_3\": \"Seth Embry\", \"Y_2\": \"butterfly watching\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_2\": \"canoeing\", \"Y_7\": \"Cherlyn Dees\", \"Y_5\": \"Rhea Halstead\"}, {\"Y_2\": \"longboarding\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Naomi Embry\", \"Y_5\": \"Rhea Halstead\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_2\": \"butterfly watching\", \"Y_3\": \"Seth Embry\", \"Y_5\": \"Clifford Halstead\"}, {\"Y_5\": \"Johnetta Halstead\", \"Y_2\": \"longboarding\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Naomi Embry\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_2\": \"stamp collecting\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_2\": \"longboarding\", \"Y_5\": \"Clifford Halstead\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Johnetta Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_2\": \"canoeing\", \"Y_3\": \"Dustin Halstead\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_2\": \"canoeing\", \"Y_5\": \"Rhea Halstead\", \"Y_7\": \"Johnetta Halstead\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Seth Embry\", \"Y_5\": \"Rhea Halstead\", \"Y_2\": \"butterfly watching\"}, {\"Y_7\": \"Cherlyn Dees\", \"Y_2\": \"butterfly watching\", \"Y_3\": \"Seth Embry\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_2\": \"canoeing\", \"Y_7\": \"Johnetta Halstead\", \"Y_3\": \"Dustin Halstead\"}, {\"Y_5\": \"Johnetta Halstead\", \"Y_7\": \"Cherlyn Dees\", \"Y_3\": \"Seth Embry\", \"Y_2\": \"butterfly watching\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_2\": \"canoeing\", \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Rhea Halstead\"}, {\"Y_5\": \"Clifford Halstead\", \"Y_3\": \"Seth Embry\", \"Y_7\": \"Johnetta Halstead\", \"Y_2\": \"butterfly watching\"}, {\"Y_3\": \"Seth Embry\", \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Rhea Halstead\", \"Y_2\": \"butterfly watching\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Clifford Halstead\", \"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\"}, {\"Y_2\": \"longboarding\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\", \"Y_5\": \"Kermit Halstead\"}, {\"Y_7\": \"Rhea Halstead\", \"Y_5\": \"Johnetta Halstead\", \"Y_2\": \"stamp collecting\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_2\": \"canoeing\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Dustin Halstead\"}]",
+        "answer": [
+            "butterfly watching",
+            "canoeing",
+            "longboarding",
+            "stamp collecting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandparent(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "grandchild(\"Dustin Halstead\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "987546dc-3aaa-483f-b292-4226e982383c",
+        "question": "What is the hobby of the friend of the sibling of the nephew of Clifford Halstead?",
+        "solution_traces": "[{\"Y_5\": \"Monserrate Dees\", \"Y_7\": \"Adam Dees\", \"Y_3\": \"Alberto Lam\", \"Y_2\": \"insect collecting\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"martial arts\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Cherlyn Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"fishkeeping\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Roxanne Lam\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_3\": \"Alberto Lam\", \"Y_2\": \"insect collecting\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"taekwondo\", \"Y_3\": \"Cheree Michaels\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_3\": \"Rogelio Michaels\", \"Y_2\": \"fingerprint collecting\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"taekwondo\", \"Y_7\": \"Adam Dees\", \"Y_3\": \"Cheree Michaels\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Adam Dees\", \"Y_2\": \"microscopy\", \"Y_3\": \"Cordell Dees\"}, {\"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Richard Dees\", \"Y_2\": \"ant farming\", \"Y_3\": \"Kermit Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"coin collecting\", \"Y_7\": \"Adam Dees\", \"Y_3\": \"Wilber Lam\"}, {\"Y_5\": \"Adam Dees\", \"Y_3\": \"Wendell Dees\", \"Y_7\": \"Giovanni Dees\", \"Y_2\": \"fossil hunting\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Alberto Lam\", \"Y_2\": \"insect collecting\"}, {\"Y_5\": \"Adam Dees\", \"Y_3\": \"Viola Halstead\", \"Y_7\": \"Giovanni Dees\", \"Y_2\": \"mountain biking\"}, {\"Y_3\": \"Raul Michaels\", \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Richard Dees\", \"Y_2\": \"public transport riding\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Wendell Dees\", \"Y_2\": \"fossil hunting\"}, {\"Y_3\": \"Raul Michaels\", \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Adam Dees\", \"Y_2\": \"public transport riding\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_2\": \"baseball\", \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Emelda Lam\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_7\": \"Richard Dees\", \"Y_2\": \"fingerprint collecting\", \"Y_3\": \"Rogelio Michaels\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"martial arts\", \"Y_3\": \"Cherlyn Dees\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_2\": \"baseball\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Emelda Lam\"}, {\"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Adam Dees\", \"Y_2\": \"ant farming\", \"Y_3\": \"Kermit Halstead\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_2\": \"baseball\", \"Y_7\": \"Adam Dees\", \"Y_3\": \"Emelda Lam\"}, {\"Y_5\": \"Monserrate Dees\", \"Y_7\": \"Adam Dees\", \"Y_2\": \"fingerprint collecting\", \"Y_3\": \"Rogelio Michaels\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Adam Dees\", \"Y_3\": \"Clifford Reece\", \"Y_2\": \"leaves\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"microscopy\", \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Cordell Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_3\": \"Clifford Reece\", \"Y_7\": \"Giovanni Dees\", \"Y_2\": \"leaves\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"fishkeeping\", \"Y_3\": \"Roxanne Lam\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Viola Halstead\", \"Y_2\": \"mountain biking\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"coin collecting\", \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Wilber Lam\"}]",
+        "answer": [
+            "ant farming",
+            "baseball",
+            "coin collecting",
+            "fingerprint collecting",
+            "fishkeeping",
+            "fossil hunting",
+            "insect collecting",
+            "leaves",
+            "martial arts",
+            "microscopy",
+            "mountain biking",
+            "public transport riding",
+            "taekwondo"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "nephew(\"Clifford Halstead\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "528d7d9b-d179-4cf9-8596-099bc6bce83b",
+        "question": "What is the occupation of the grandfather of the grandson of the husband of Dena Michaels?",
+        "solution_traces": "[{\"Y_7\": \"Rogelio Michaels\", \"Y_3\": \"Rogelio Michaels\", \"Y_5\": \"Cortez Michaels\", \"Y_2\": \"politician's assistant\"}]",
+        "answer": [
+            "politician's assistant"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandfather(Y_5, Y_3)",
+                "grandson(Y_7, Y_5)",
+                "husband(\"Dena Michaels\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "894085c6-af92-47c6-80bc-f2f722b851a2",
+        "question": "What is the hobby of the granddaughter of the sibling of the uncle of Monserrate Dees?",
+        "solution_traces": "[{\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Allyson Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_2\": \"sports memorabilia\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Bonnie Handley\", \"Y_2\": \"research\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_2\": \"research\", \"Y_3\": \"Bonnie Handley\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Cherlyn Dees\", \"Y_3\": \"Allyson Dees\", \"Y_2\": \"sports memorabilia\", \"Y_7\": \"Clifford Halstead\"}]",
+        "answer": [
+            "research",
+            "sports memorabilia"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "granddaughter(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "uncle(\"Monserrate Dees\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "bf37ae7c-3e93-45d5-b3b6-5774845a336b",
+        "question": "What is the occupation of the great-grandparent of the nephew of the great-uncle of Allyson Dees?",
+        "solution_traces": "[{\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_2\": \"advice worker\", \"Y_3\": \"Cordell Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"horticultural consultant\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Giovanni Dees\", \"Y_2\": \"magazine journalist\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_2\": \"geoscientist\"}, {\"Y_2\": \"health service manager\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_3\": \"Seth Embry\", \"Y_2\": \"horticultural consultant\", \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"horticultural consultant\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"advice worker\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Cordell Dees\"}, {\"Y_2\": \"horticultural consultant\", \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Seth Embry\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"geoscientist\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Dustin Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"horticultural consultant\", \"Y_3\": \"Seth Embry\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_2\": \"magazine journalist\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"health service manager\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Naomi Embry\"}, {\"Y_2\": \"horticultural consultant\", \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"health service manager\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"magazine journalist\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_2\": \"geoscientist\", \"Y_3\": \"Dustin Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"horticultural consultant\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Seth Embry\"}, {\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_2\": \"advice worker\", \"Y_3\": \"Cordell Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_2\": \"advice worker\", \"Y_3\": \"Cordell Dees\"}, {\"Y_5\": \"Giovanni Dees\", \"Y_2\": \"advice worker\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Cordell Dees\"}, {\"Y_2\": \"horticultural consultant\", \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"horticultural consultant\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Seth Embry\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"magazine journalist\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_2\": \"geoscientist\", \"Y_3\": \"Dustin Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"health service manager\", \"Y_3\": \"Naomi Embry\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_2\": \"magazine journalist\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"health service manager\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Naomi Embry\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"horticultural consultant\", \"Y_3\": \"Seth Embry\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"geoscientist\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Dustin Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_2\": \"magazine journalist\", \"Y_3\": \"Marcelina Dees\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"advice worker\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Cordell Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"horticultural consultant\", \"Y_7\": \"Clifford Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"horticultural consultant\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Winnie Halstead\"}, {\"Y_2\": \"health service manager\", \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Naomi Embry\"}, {\"Y_3\": \"Dustin Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_7\": \"Clifford Halstead\", \"Y_2\": \"geoscientist\"}]",
+        "answer": [
+            "advice worker",
+            "geoscientist",
+            "health service manager",
+            "horticultural consultant",
+            "magazine journalist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandparent(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "great_uncle(\"Allyson Dees\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b29cc4c7-c7a8-4bd0-b44c-e9c5197552f5",
+        "question": "What is the date of birth of the son-in-law of the mother-in-law of the father of Cherlyn Dees?",
+        "solution_traces": "[{\"Y_5\": \"Naomi Embry\", \"Y_2\": \"0226-06-25\", \"Y_7\": \"Rosendo Halstead\", \"Y_3\": \"Rosendo Halstead\"}]",
+        "answer": [
+            "0226-06-25"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "son_in_law(Y_5, Y_3)",
+                "mother_in_law(Y_7, Y_5)",
+                "father(\"Cherlyn Dees\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "530d62cf-bf35-412d-b3c8-eba1052820bd",
+        "question": "What is the date of birth of the parent of the nephew of the brother of Johnetta Halstead?",
+        "solution_traces": "[{\"Y_5\": \"Adam Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Cherlyn Dees\", \"Y_2\": \"0253-04-21\"}, {\"Y_2\": \"0252-03-05\", \"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Alvaro Dees\"}, {\"Y_2\": \"0252-03-05\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Alvaro Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"0253-04-21\", \"Y_3\": \"Cherlyn Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"0252-03-05\", \"Y_3\": \"Alvaro Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"0252-03-05\", \"Y_3\": \"Alvaro Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_2\": \"0253-04-21\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Cherlyn Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"0253-04-21\", \"Y_3\": \"Cherlyn Dees\", \"Y_7\": \"Clifford Halstead\"}, {\"Y_5\": \"Adam Dees\", \"Y_2\": \"0252-03-05\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Alvaro Dees\"}, {\"Y_7\": \"Kermit Halstead\", \"Y_5\": \"Giovanni Dees\", \"Y_3\": \"Cherlyn Dees\", \"Y_2\": \"0253-04-21\"}, {\"Y_5\": \"Richard Dees\", \"Y_2\": \"0252-03-05\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Alvaro Dees\"}, {\"Y_5\": \"Richard Dees\", \"Y_7\": \"Kermit Halstead\", \"Y_3\": \"Cherlyn Dees\", \"Y_2\": \"0253-04-21\"}]",
+        "answer": [
+            "0252-03-05",
+            "0253-04-21"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "brother(\"Johnetta Halstead\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1500c588-c689-4c68-aff2-696581e5a313",
+        "question": "What is the hobby of the female first cousin once removed of the father-in-law of the son-in-law of Raul Michaels?",
+        "solution_traces": "[{\"Y_3\": \"Chelsie Reece\", \"Y_2\": \"sled dog racing\", \"Y_5\": \"Raul Michaels\", \"Y_7\": \"Jakob Quezada\"}, {\"Y_3\": \"Margie Moorehead\", \"Y_5\": \"Raul Michaels\", \"Y_7\": \"Jakob Quezada\", \"Y_2\": \"cooking\"}]",
+        "answer": [
+            "cooking",
+            "sled dog racing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "female_first_cousin_once_removed(Y_5, Y_3)",
+                "father_in_law(Y_7, Y_5)",
+                "son_in_law(\"Raul Michaels\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "73d3d33e-f522-4f9d-8138-cc99f32f81da",
+        "question": "What is the occupation of the great-grandchild of the grandmother of the great-grandchild of Cordell Dees?",
+        "solution_traces": "[{\"Y_3\": \"Allyson Dees\", \"Y_5\": \"Theda Dees\", \"Y_2\": \"passenger transport manager\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Viola Halstead\", \"Y_3\": \"Bonnie Handley\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"barista\"}, {\"Y_3\": \"Allyson Dees\", \"Y_7\": \"Adam Dees\", \"Y_5\": \"Theda Dees\", \"Y_2\": \"passenger transport manager\"}, {\"Y_3\": \"Bonnie Handley\", \"Y_5\": \"Viola Halstead\", \"Y_7\": \"Adam Dees\", \"Y_2\": \"barista\"}, {\"Y_3\": \"Allyson Dees\", \"Y_5\": \"Theda Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"passenger transport manager\"}, {\"Y_5\": \"Viola Halstead\", \"Y_3\": \"Bonnie Handley\", \"Y_2\": \"barista\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_3\": \"Bonnie Handley\", \"Y_5\": \"Viola Halstead\", \"Y_7\": \"Richard Dees\", \"Y_2\": \"barista\"}, {\"Y_3\": \"Bonnie Handley\", \"Y_7\": \"Richard Dees\", \"Y_5\": \"Theda Dees\", \"Y_2\": \"barista\"}, {\"Y_3\": \"Bonnie Handley\", \"Y_5\": \"Theda Dees\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"barista\"}, {\"Y_3\": \"Allyson Dees\", \"Y_5\": \"Viola Halstead\", \"Y_2\": \"passenger transport manager\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_3\": \"Bonnie Handley\", \"Y_7\": \"Adam Dees\", \"Y_5\": \"Theda Dees\", \"Y_2\": \"barista\"}, {\"Y_3\": \"Allyson Dees\", \"Y_5\": \"Viola Halstead\", \"Y_7\": \"Adam Dees\", \"Y_2\": \"passenger transport manager\"}, {\"Y_3\": \"Bonnie Handley\", \"Y_5\": \"Theda Dees\", \"Y_2\": \"barista\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_3\": \"Allyson Dees\", \"Y_5\": \"Viola Halstead\", \"Y_7\": \"Monserrate Dees\", \"Y_2\": \"passenger transport manager\"}, {\"Y_3\": \"Allyson Dees\", \"Y_5\": \"Viola Halstead\", \"Y_7\": \"Richard Dees\", \"Y_2\": \"passenger transport manager\"}, {\"Y_3\": \"Allyson Dees\", \"Y_7\": \"Richard Dees\", \"Y_5\": \"Theda Dees\", \"Y_2\": \"passenger transport manager\"}]",
+        "answer": [
+            "barista",
+            "passenger transport manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandchild(Y_5, Y_3)",
+                "grandmother(Y_7, Y_5)",
+                "great_grandchild(\"Cordell Dees\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c04da5e1-21e7-4f80-9497-c7328b32b577",
+        "question": "What is the occupation of the child of the grandfather of the uncle of Allyson Dees?",
+        "solution_traces": "[{\"Y_5\": \"Rosendo Halstead\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Clifford Halstead\", \"Y_2\": \"medical technical officer\"}, {\"Y_5\": \"Wendell Dees\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Alvaro Dees\", \"Y_2\": \"chief marketing officer\"}, {\"Y_5\": \"Rosendo Halstead\", \"Y_3\": \"Cherlyn Dees\", \"Y_2\": \"geochemist\", \"Y_7\": \"Giovanni Dees\"}, {\"Y_5\": \"Rosendo Halstead\", \"Y_3\": \"Kermit Halstead\", \"Y_7\": \"Giovanni Dees\", \"Y_2\": \"electronics engineer\"}, {\"Y_5\": \"Rosendo Halstead\", \"Y_7\": \"Richard Dees\", \"Y_3\": \"Cherlyn Dees\", \"Y_2\": \"geochemist\"}, {\"Y_5\": \"Rosendo Halstead\", \"Y_3\": \"Rhea Halstead\", \"Y_7\": \"Giovanni Dees\", \"Y_2\": \"lexicographer\"}, {\"Y_5\": \"Rosendo Halstead\", \"Y_3\": \"Rhea Halstead\", \"Y_7\": \"Richard Dees\", \"Y_2\": \"lexicographer\"}, {\"Y_5\": \"Rosendo Halstead\", \"Y_2\": \"academic librarian\", \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_5\": \"Wendell Dees\", \"Y_3\": \"Alvaro Dees\", \"Y_7\": \"Giovanni Dees\", \"Y_2\": \"chief marketing officer\"}, {\"Y_5\": \"Rosendo Halstead\", \"Y_7\": \"Richard Dees\", \"Y_2\": \"academic librarian\", \"Y_3\": \"Johnetta Halstead\"}, {\"Y_5\": \"Rosendo Halstead\", \"Y_2\": \"medical technical officer\", \"Y_7\": \"Giovanni Dees\", \"Y_3\": \"Clifford Halstead\"}, {\"Y_5\": \"Rosendo Halstead\", \"Y_7\": \"Richard Dees\", \"Y_2\": \"electronics engineer\", \"Y_3\": \"Kermit Halstead\"}]",
+        "answer": [
+            "academic librarian",
+            "chief marketing officer",
+            "electronics engineer",
+            "geochemist",
+            "lexicographer",
+            "medical technical officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "child(Y_5, Y_3)",
+                "grandfather(Y_7, Y_5)",
+                "uncle(\"Allyson Dees\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    }
+]

@@ -1,0 +1,904 @@
+[
+    {
+        "id": "0158a500-2f27-49b7-99a8-1f92fbfbc89f",
+        "question": "Who is the sister-in-law of the person whose date of birth is 0229-12-02?",
+        "solution_traces": "[{\"Y_4\": \"Leroy Bidwell\", \"Y_2\": \"Golda Kline\"}]",
+        "answer": [
+            "Golda Kline"
+        ],
+        "prolog": {
+            "query": [
+                "sister_in_law(Y_4, Y_2)",
+                "dob(Y_4, \"0229-12-02\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2c6ca77f-8635-4803-8a24-1fe5582dc573",
+        "question": "Who is the brother of the person whose date of birth is 0202-12-20?",
+        "solution_traces": "[{\"Y_4\": \"Kenton Kline\", \"Y_2\": \"Tyron Kline\"}, {\"Y_4\": \"Tyron Kline\", \"Y_2\": \"Kenton Kline\"}]",
+        "answer": [
+            "Kenton Kline",
+            "Tyron Kline"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "dob(Y_4, \"0202-12-20\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4cb64c49-524b-4e64-86b8-9739a43a1b81",
+        "question": "Who is the sister-in-law of the person whose occupation is stage manager?",
+        "solution_traces": "[{\"Y_2\": \"Marguerite Mingo\", \"Y_4\": \"Ramon West\"}]",
+        "answer": [
+            "Marguerite Mingo"
+        ],
+        "prolog": {
+            "query": [
+                "sister_in_law(Y_4, Y_2)",
+                "job(Y_4, \"stage manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "365115f6-9a8b-4f9c-a2b1-db73aefbbfc5",
+        "question": "Who is the nephew of the person whose occupation is geologist?",
+        "solution_traces": "[{\"Y_4\": \"Marguerite Mingo\", \"Y_2\": \"Abdul West\"}]",
+        "answer": [
+            "Abdul West"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "job(Y_4, \"geologist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3d81e9cd-32bf-44af-801f-e2e4db86dccf",
+        "question": "Who is the sister-in-law of the person whose occupation is structural engineer?",
+        "solution_traces": "[{\"Y_4\": \"Jefferson Cornwell\", \"Y_2\": \"Tena Bidwell\"}]",
+        "answer": [
+            "Tena Bidwell"
+        ],
+        "prolog": {
+            "query": [
+                "sister_in_law(Y_4, Y_2)",
+                "job(Y_4, \"structural engineer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b4e94bcc-7238-4ba1-9661-b84083a3467a",
+        "question": "Who is the friend of the person whose occupation is tree surgeon?",
+        "solution_traces": "[{\"Y_4\": \"Gregory Yazzie\", \"Y_2\": \"Lonny Kline\"}, {\"Y_4\": \"Tena Bidwell\", \"Y_2\": \"Jefferson Cornwell\"}, {\"Y_4\": \"Tena Bidwell\", \"Y_2\": \"Roxy Cornwell\"}, {\"Y_4\": \"Gregory Yazzie\", \"Y_2\": \"Audra Juarez\"}, {\"Y_2\": \"Jeannine Kline\", \"Y_4\": \"Tena Bidwell\"}, {\"Y_4\": \"Gregory Yazzie\", \"Y_2\": \"Vern Yazzie\"}, {\"Y_2\": \"Sadye Cornwell\", \"Y_4\": \"Tena Bidwell\"}, {\"Y_4\": \"Tena Bidwell\", \"Y_2\": \"Audra Juarez\"}]",
+        "answer": [
+            "Audra Juarez",
+            "Jeannine Kline",
+            "Jefferson Cornwell",
+            "Lonny Kline",
+            "Roxy Cornwell",
+            "Sadye Cornwell",
+            "Vern Yazzie"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "job(Y_4, \"tree surgeon\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "03fbc588-a300-4b30-a2d0-0624e8bed0ed",
+        "question": "Who is the friend of the person whose hobby is rock balancing?",
+        "solution_traces": "[{\"Y_2\": \"Dallas Kline\", \"Y_4\": \"Kenton Kline\"}, {\"Y_2\": \"Ted West\", \"Y_4\": \"Kenton Kline\"}]",
+        "answer": [
+            "Dallas Kline",
+            "Ted West"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "hobby(Y_4, \"rock balancing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a61c0c75-7a07-481c-97ad-469c1d99cc67",
+        "question": "Who is the son of the person whose occupation is structural engineer?",
+        "solution_traces": "[{\"Y_4\": \"Jefferson Cornwell\", \"Y_2\": \"Cecil Cornwell\"}, {\"Y_4\": \"Jefferson Cornwell\", \"Y_2\": \"Levi Cornwell\"}, {\"Y_4\": \"Jefferson Cornwell\", \"Y_2\": \"Erik Cornwell\"}]",
+        "answer": [
+            "Cecil Cornwell",
+            "Erik Cornwell",
+            "Levi Cornwell"
+        ],
+        "prolog": {
+            "query": [
+                "son(Y_4, Y_2)",
+                "job(Y_4, \"structural engineer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7c740757-7828-44ec-82a0-89ecfe3dae74",
+        "question": "Who is the grandchild of the person whose hobby is myrmecology?",
+        "solution_traces": "[{\"Y_4\": \"Audra Juarez\", \"Y_2\": \"Vern Yazzie\"}, {\"Y_4\": \"Audra Juarez\", \"Y_2\": \"Matilda West\"}]",
+        "answer": [
+            "Matilda West",
+            "Vern Yazzie"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "hobby(Y_4, \"myrmecology\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "85f7f5c3-d70f-4f89-8b8a-baf7a973046f",
+        "question": "Who is the niece of the person whose hobby is whale watching?",
+        "solution_traces": "[{\"Y_2\": \"Johnetta West\", \"Y_4\": \"Ramon West\"}]",
+        "answer": [
+            "Johnetta West"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "hobby(Y_4, \"whale watching\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "903a27bf-a294-49e3-a754-1f4aaa78e065",
+        "question": "Who is the grandson of the person whose date of birth is 0174-10-05?",
+        "solution_traces": "[{\"Y_2\": \"Freddie Kline\", \"Y_4\": \"Addie Kline\"}]",
+        "answer": [
+            "Freddie Kline"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "dob(Y_4, \"0174-10-05\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0ea2079b-5d7c-409f-96b9-498a76110d17",
+        "question": "Who is the son-in-law of the person whose hobby is myrmecology?",
+        "solution_traces": "[{\"Y_4\": \"Audra Juarez\", \"Y_2\": \"Gregory Yazzie\"}]",
+        "answer": [
+            "Gregory Yazzie"
+        ],
+        "prolog": {
+            "query": [
+                "son_in_law(Y_4, Y_2)",
+                "hobby(Y_4, \"myrmecology\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3b7bf965-42fe-4f6b-ae23-845c8b198e3f",
+        "question": "Who is the great-aunt of the person whose hobby is art collecting?",
+        "solution_traces": "[{\"Y_2\": \"Deena Kline\", \"Y_4\": \"Tena Bidwell\"}, {\"Y_4\": \"Tena Bidwell\", \"Y_2\": \"Dallas Kline\"}]",
+        "answer": [
+            "Dallas Kline",
+            "Deena Kline"
+        ],
+        "prolog": {
+            "query": [
+                "great_aunt(Y_4, Y_2)",
+                "hobby(Y_4, \"art collecting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "16c01e23-eb38-4468-94c4-1c484bc37278",
+        "question": "Who is the friend of the person whose occupation is trade mark attorney?",
+        "solution_traces": "[{\"Y_2\": \"Cecil Cornwell\", \"Y_4\": \"Freddie Kline\"}, {\"Y_2\": \"Jefferson Cornwell\", \"Y_4\": \"Freddie Kline\"}, {\"Y_2\": \"Stanford Juarez\", \"Y_4\": \"Freddie Kline\"}, {\"Y_2\": \"Jenny Colter\", \"Y_4\": \"Freddie Kline\"}]",
+        "answer": [
+            "Cecil Cornwell",
+            "Jefferson Cornwell",
+            "Jenny Colter",
+            "Stanford Juarez"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "job(Y_4, \"trade mark attorney\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "821b0f9e-2e75-45e2-bd53-efc5d54a08a2",
+        "question": "Who is the grandchild of the person whose hobby is jurisprudential?",
+        "solution_traces": "[{\"Y_4\": \"Johnna West\", \"Y_2\": \"Kristopher West\"}]",
+        "answer": [
+            "Kristopher West"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "hobby(Y_4, \"jurisprudential\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "65a7bd2a-3797-41d0-82c7-7689f2851686",
+        "question": "Who is the second aunt of the person whose occupation is applications developer?",
+        "solution_traces": "[{\"Y_2\": \"Deena Kline\", \"Y_4\": \"Erik Cornwell\"}, {\"Y_4\": \"Erik Cornwell\", \"Y_2\": \"Dallas Kline\"}]",
+        "answer": [
+            "Dallas Kline",
+            "Deena Kline"
+        ],
+        "prolog": {
+            "query": [
+                "second_aunt(Y_4, Y_2)",
+                "job(Y_4, \"applications developer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ac3b884d-617d-457d-b560-61389c2b60b2",
+        "question": "Who is the aunt of the person whose occupation is building control surveyor?",
+        "solution_traces": "[{\"Y_2\": \"Golda Kline\", \"Y_4\": \"Leesa Cornwell\"}]",
+        "answer": [
+            "Golda Kline"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "job(Y_4, \"building control surveyor\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "09d16346-6b0b-427a-a4de-954c9f9f14a8",
+        "question": "Who is the grandson of the person whose date of birth is 0244-12-13?",
+        "solution_traces": "[{\"Y_2\": \"Abdul West\", \"Y_4\": \"Kristopher West\"}, {\"Y_2\": \"Ted West\", \"Y_4\": \"Kristopher West\"}]",
+        "answer": [
+            "Abdul West",
+            "Ted West"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "dob(Y_4, \"0244-12-13\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "13589cea-b206-43c8-9bc2-ee393f72496d",
+        "question": "Who is the friend of the person whose date of birth is 0288-08-23?",
+        "solution_traces": "[{\"Y_2\": \"Abdul West\", \"Y_4\": \"Cecil Cornwell\"}, {\"Y_4\": \"Cecil Cornwell\", \"Y_2\": \"Leesa Cornwell\"}, {\"Y_2\": \"Geri West\", \"Y_4\": \"Cecil Cornwell\"}, {\"Y_2\": \"Marguerite Mingo\", \"Y_4\": \"Cecil Cornwell\"}, {\"Y_2\": \"Freddie Kline\", \"Y_4\": \"Cecil Cornwell\"}]",
+        "answer": [
+            "Abdul West",
+            "Freddie Kline",
+            "Geri West",
+            "Leesa Cornwell",
+            "Marguerite Mingo"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "dob(Y_4, \"0288-08-23\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dba349ea-4802-43a2-aa13-fc659cd1fdda",
+        "question": "Who is the sibling of the person whose date of birth is 0321-02-19?",
+        "solution_traces": "[{\"Y_4\": \"Randal West\", \"Y_2\": \"Hyun West\"}]",
+        "answer": [
+            "Hyun West"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "dob(Y_4, \"0321-02-19\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7451d145-785d-40df-b823-cec2737bfa23",
+        "question": "Who is the great-grandchild of the person whose occupation is health and safety inspector?",
+        "solution_traces": "[{\"Y_2\": \"Randal West\", \"Y_4\": \"Kristopher West\"}, {\"Y_2\": \"Hyun West\", \"Y_4\": \"Kristopher West\"}]",
+        "answer": [
+            "Hyun West",
+            "Randal West"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "job(Y_4, \"health and safety inspector\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "18f4ffe5-a382-473d-b143-7ed9f071b3ca",
+        "question": "Who is the grandmother of the person whose occupation is physicist?",
+        "solution_traces": "[{\"Y_4\": \"Roxy Cornwell\", \"Y_2\": \"Lucretia Bidwell\"}, {\"Y_2\": \"Matilda West\", \"Y_4\": \"Abdul West\"}, {\"Y_2\": \"Ella Mingo\", \"Y_4\": \"Abdul West\"}]",
+        "answer": [
+            "Ella Mingo",
+            "Lucretia Bidwell",
+            "Matilda West"
+        ],
+        "prolog": {
+            "query": [
+                "grandmother(Y_4, Y_2)",
+                "job(Y_4, \"physicist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7d0e0738-bb8f-46b8-a3fa-335f01b73cce",
+        "question": "Who is the sibling of the person whose occupation is horticulturist?",
+        "solution_traces": "[{\"Y_2\": \"Erik Cornwell\", \"Y_4\": \"Levi Cornwell\"}, {\"Y_2\": \"Cecil Cornwell\", \"Y_4\": \"Levi Cornwell\"}, {\"Y_4\": \"Levi Cornwell\", \"Y_2\": \"Roxy Cornwell\"}]",
+        "answer": [
+            "Cecil Cornwell",
+            "Erik Cornwell",
+            "Roxy Cornwell"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "job(Y_4, \"horticulturist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c2c2146d-4de7-4566-b0c6-c76d7612208c",
+        "question": "Who is the mother of the person whose occupation is licensed conveyancer?",
+        "solution_traces": "[{\"Y_2\": \"Matilda West\", \"Y_4\": \"Stuart West\"}]",
+        "answer": [
+            "Matilda West"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "job(Y_4, \"licensed conveyancer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "04405a00-119b-4f29-96a2-87b10494c46f",
+        "question": "Who is the nephew of the person whose occupation is colour technologist?",
+        "solution_traces": "[{\"Y_2\": \"Freddie Kline\", \"Y_4\": \"Dallas Kline\"}]",
+        "answer": [
+            "Freddie Kline"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "job(Y_4, \"colour technologist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d43132ba-5d3b-4aeb-a677-4d85f4c497ab",
+        "question": "Who is the sister-in-law of the person whose date of birth is 0202-03-06?",
+        "solution_traces": "[{\"Y_2\": \"Deena Kline\", \"Y_4\": \"Jeannine Kline\"}, {\"Y_2\": \"Dallas Kline\", \"Y_4\": \"Jeannine Kline\"}]",
+        "answer": [
+            "Dallas Kline",
+            "Deena Kline"
+        ],
+        "prolog": {
+            "query": [
+                "sister_in_law(Y_4, Y_2)",
+                "dob(Y_4, \"0202-03-06\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "533b4ed6-aa37-445d-8f3a-a35dc9c88bfe",
+        "question": "Who is the daughter of the person whose occupation is education officer?",
+        "solution_traces": "[{\"Y_2\": \"Marguerite Mingo\", \"Y_4\": \"Ella Mingo\"}, {\"Y_2\": \"Ora West\", \"Y_4\": \"Ella Mingo\"}]",
+        "answer": [
+            "Marguerite Mingo",
+            "Ora West"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "job(Y_4, \"education officer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b310025b-fe05-4de2-870e-0cf7803f1723",
+        "question": "Who is the brother of the person whose occupation is horticulturist?",
+        "solution_traces": "[{\"Y_2\": \"Erik Cornwell\", \"Y_4\": \"Levi Cornwell\"}, {\"Y_2\": \"Cecil Cornwell\", \"Y_4\": \"Levi Cornwell\"}]",
+        "answer": [
+            "Cecil Cornwell",
+            "Erik Cornwell"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "job(Y_4, \"horticulturist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "38ebccc3-9b07-42ad-a410-abe5dd21d5b8",
+        "question": "Who is the great-grandchild of the person whose date of birth is 0202-05-06?",
+        "solution_traces": "[{\"Y_2\": \"Erik Cornwell\", \"Y_4\": \"Jeanette Kline\"}, {\"Y_2\": \"Levi Cornwell\", \"Y_4\": \"Jeanette Kline\"}, {\"Y_2\": \"Cecil Cornwell\", \"Y_4\": \"Jeanette Kline\"}, {\"Y_4\": \"Jeanette Kline\", \"Y_2\": \"Roxy Cornwell\"}]",
+        "answer": [
+            "Cecil Cornwell",
+            "Erik Cornwell",
+            "Levi Cornwell",
+            "Roxy Cornwell"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "dob(Y_4, \"0202-05-06\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8da86a9a-dc68-4335-9362-1c3d8b9579ea",
+        "question": "Who is the wife of the person whose hobby is coin collecting?",
+        "solution_traces": "[{\"Y_4\": \"Gregory Yazzie\", \"Y_2\": \"Thelma Yazzie\"}]",
+        "answer": [
+            "Thelma Yazzie"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "hobby(Y_4, \"coin collecting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    }
+]

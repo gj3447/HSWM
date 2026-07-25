@@ -1,0 +1,1197 @@
+[
+    {
+        "id": "5902d16c-eb9c-45bd-a0e6-2562c5bec6aa",
+        "question": "Who is the father-in-law of the daughter-in-law of the daughter of the person whose date of birth is 0171-03-22?",
+        "solution_traces": "[{\"Y_8\": \"Ivan Christie\", \"Y_6\": \"Tonya Adams\", \"Y_4\": \"Sona Adams\", \"Y_2\": \"Earl Adams\"}]",
+        "answer": [
+            "Earl Adams"
+        ],
+        "prolog": {
+            "query": [
+                "father_in_law(Y_4, Y_2)",
+                "daughter_in_law(Y_6, Y_4)",
+                "daughter(Y_8, Y_6)",
+                "dob(Y_8, \"0171-03-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "18413c8f-e154-4b81-8962-e608a0de07db",
+        "question": "Who is the sibling of the grandchild of the daughter of the person whose occupation is outdoor activities manager?",
+        "solution_traces": "[{\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_2\": \"Elvie Adams\", \"Y_4\": \"Monroe Adams\"}, {\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_4\": \"Lyndon Adams\", \"Y_2\": \"Monroe Adams\"}, {\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_4\": \"Javier Adams\", \"Y_2\": \"Monroe Adams\"}, {\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_2\": \"Lyndon Adams\", \"Y_4\": \"Monroe Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_2\": \"Javier Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_2\": \"Elvie Adams\"}, {\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_2\": \"Lyndon Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_2\": \"Javier Adams\", \"Y_4\": \"Lyndon Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_4\": \"Elvie Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_2\": \"Lyndon Adams\"}, {\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_4\": \"Elvie Adams\", \"Y_2\": \"Monroe Adams\"}, {\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_2\": \"Elvie Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_4\": \"Lyndon Adams\"}, {\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_2\": \"Elvie Adams\", \"Y_4\": \"Lyndon Adams\"}, {\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_4\": \"Elvie Adams\", \"Y_2\": \"Lyndon Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_2\": \"Monroe Adams\"}, {\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_4\": \"Elvie Adams\", \"Y_2\": \"Javier Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_4\": \"Monroe Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_4\": \"Javier Adams\"}, {\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Edwina Christie\", \"Y_2\": \"Javier Adams\", \"Y_4\": \"Monroe Adams\"}]",
+        "answer": [
+            "Anjanette Marx",
+            "Elvie Adams",
+            "Javier Adams",
+            "Lyndon Adams",
+            "Monroe Adams"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "grandchild(Y_6, Y_4)",
+                "daughter(Y_8, Y_6)",
+                "job(Y_8, \"outdoor activities manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0b22e711-76d9-4fee-837b-26b8d5c38d43",
+        "question": "Who is the brother of the granddaughter of the mother-in-law of the person whose occupation is freight forwarder?",
+        "solution_traces": "[{\"Y_4\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Tonya Adams\", \"Y_2\": \"Lyndon Adams\"}, {\"Y_8\": \"Sona Adams\", \"Y_6\": \"Tonya Adams\", \"Y_4\": \"Elvie Adams\", \"Y_2\": \"Monroe Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Tonya Adams\", \"Y_2\": \"Javier Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Tonya Adams\", \"Y_2\": \"Monroe Adams\"}, {\"Y_8\": \"Sona Adams\", \"Y_6\": \"Tonya Adams\", \"Y_4\": \"Elvie Adams\", \"Y_2\": \"Javier Adams\"}, {\"Y_8\": \"Sona Adams\", \"Y_6\": \"Tonya Adams\", \"Y_2\": \"Lyndon Adams\", \"Y_4\": \"Elvie Adams\"}]",
+        "answer": [
+            "Javier Adams",
+            "Lyndon Adams",
+            "Monroe Adams"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "granddaughter(Y_6, Y_4)",
+                "mother_in_law(Y_8, Y_6)",
+                "job(Y_8, \"freight forwarder\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fadcd0be-ba13-40f2-9795-94de0cb917d7",
+        "question": "Who is the uncle of the sibling of the friend of the person whose occupation is product manager?",
+        "solution_traces": "[{\"Y_6\": \"Conrad Marx\", \"Y_2\": \"Cedrick Marx\", \"Y_4\": \"Kimberlee Marx\", \"Y_8\": \"Bee Adams\"}, {\"Y_2\": \"Jarrod Burch\", \"Y_4\": \"Dwain Burch\", \"Y_6\": \"Robyn Harbison\", \"Y_8\": \"Trent Burch\"}, {\"Y_4\": \"Ardath Denham\", \"Y_6\": \"Cedrick Marx\", \"Y_2\": \"Lyndon Adams\", \"Y_8\": \"Bee Adams\"}, {\"Y_4\": \"Ardath Denham\", \"Y_2\": \"Javier Adams\", \"Y_6\": \"Cedrick Marx\", \"Y_8\": \"Bee Adams\"}, {\"Y_2\": \"Jarrod Burch\", \"Y_4\": \"Trent Burch\", \"Y_6\": \"Robyn Harbison\", \"Y_8\": \"Trent Burch\"}, {\"Y_4\": \"Darwin Marx\", \"Y_6\": \"Cedrick Marx\", \"Y_2\": \"Lyndon Adams\", \"Y_8\": \"Bee Adams\"}, {\"Y_6\": \"Saul Burch\", \"Y_2\": \"Jarrod Burch\", \"Y_4\": \"Adalberto Burch\", \"Y_8\": \"Trent Burch\"}, {\"Y_2\": \"Jarrod Burch\", \"Y_4\": \"Saul Burch\", \"Y_6\": \"Robyn Harbison\", \"Y_8\": \"Trent Burch\"}, {\"Y_6\": \"Saul Burch\", \"Y_4\": \"Robyn Harbison\", \"Y_2\": \"Jarrod Burch\", \"Y_8\": \"Trent Burch\"}, {\"Y_4\": \"Darwin Marx\", \"Y_2\": \"Javier Adams\", \"Y_6\": \"Cedrick Marx\", \"Y_8\": \"Bee Adams\"}, {\"Y_4\": \"Darwin Marx\", \"Y_6\": \"Cedrick Marx\", \"Y_8\": \"Bee Adams\", \"Y_2\": \"Monroe Adams\"}, {\"Y_2\": \"Jarrod Burch\", \"Y_4\": \"Adalberto Burch\", \"Y_6\": \"Robyn Harbison\", \"Y_8\": \"Trent Burch\"}, {\"Y_6\": \"Saul Burch\", \"Y_4\": \"Dwain Burch\", \"Y_2\": \"Jarrod Burch\", \"Y_8\": \"Trent Burch\"}, {\"Y_6\": \"Saul Burch\", \"Y_4\": \"Trent Burch\", \"Y_2\": \"Jarrod Burch\", \"Y_8\": \"Trent Burch\"}, {\"Y_4\": \"Ardath Denham\", \"Y_6\": \"Cedrick Marx\", \"Y_8\": \"Bee Adams\", \"Y_2\": \"Monroe Adams\"}]",
+        "answer": [
+            "Cedrick Marx",
+            "Jarrod Burch",
+            "Javier Adams",
+            "Lyndon Adams",
+            "Monroe Adams"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "friend(Y_8, Y_6)",
+                "job(Y_8, \"product manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1c260b72-f2ab-4722-b7a3-4c415efe7a83",
+        "question": "Who is the friend of the brother of the great-granddaughter of the person whose date of birth is 0171-03-22?",
+        "solution_traces": "[{\"Y_8\": \"Ivan Christie\", \"Y_4\": \"Lyndon Adams\", \"Y_2\": \"Signe Gilbreath\", \"Y_6\": \"Anjanette Marx\"}, {\"Y_8\": \"Ivan Christie\", \"Y_2\": \"Fidel Denham\", \"Y_6\": \"Elvie Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_2\": \"Saul Burch\", \"Y_4\": \"Javier Adams\", \"Y_6\": \"Anjanette Marx\"}, {\"Y_8\": \"Ivan Christie\", \"Y_2\": \"Saul Burch\", \"Y_4\": \"Lyndon Adams\", \"Y_6\": \"Anjanette Marx\"}, {\"Y_8\": \"Ivan Christie\", \"Y_6\": \"Elvie Adams\", \"Y_4\": \"Lyndon Adams\", \"Y_2\": \"Robyn Harbison\"}, {\"Y_8\": \"Ivan Christie\", \"Y_6\": \"Elvie Adams\", \"Y_4\": \"Lyndon Adams\", \"Y_2\": \"Conrad Marx\"}, {\"Y_8\": \"Ivan Christie\", \"Y_4\": \"Lyndon Adams\", \"Y_2\": \"German Burch\", \"Y_6\": \"Anjanette Marx\"}, {\"Y_8\": \"Ivan Christie\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Dwain Burch\", \"Y_4\": \"Javier Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_4\": \"Javier Adams\", \"Y_2\": \"Fidel Denham\", \"Y_6\": \"Anjanette Marx\"}, {\"Y_8\": \"Ivan Christie\", \"Y_4\": \"Lyndon Adams\", \"Y_6\": \"Anjanette Marx\", \"Y_2\": \"Robyn Harbison\"}, {\"Y_8\": \"Ivan Christie\", \"Y_2\": \"Saul Burch\", \"Y_6\": \"Elvie Adams\", \"Y_4\": \"Lyndon Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_4\": \"Lyndon Adams\", \"Y_6\": \"Anjanette Marx\", \"Y_2\": \"Conrad Marx\"}, {\"Y_8\": \"Ivan Christie\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Signe Gilbreath\", \"Y_4\": \"Lyndon Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"German Burch\", \"Y_4\": \"Lyndon Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_2\": \"Saul Burch\", \"Y_6\": \"Elvie Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_4\": \"Javier Adams\", \"Y_2\": \"Dwain Burch\", \"Y_6\": \"Anjanette Marx\"}]",
+        "answer": [
+            "Conrad Marx",
+            "Dwain Burch",
+            "Fidel Denham",
+            "German Burch",
+            "Robyn Harbison",
+            "Saul Burch",
+            "Signe Gilbreath"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "brother(Y_6, Y_4)",
+                "great_granddaughter(Y_8, Y_6)",
+                "dob(Y_8, \"0171-03-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2e053709-0b2f-4acf-a0cf-999c8db338ec",
+        "question": "Who is the parent of the second uncle of the cousin of the person whose hobby is shooting sports?",
+        "solution_traces": "[{\"Y_6\": \"Fidel Denham\", \"Y_4\": \"Ken Adams\", \"Y_8\": \"Tobias Marx\", \"Y_2\": \"Earl Adams\"}, {\"Y_6\": \"Conrad Marx\", \"Y_4\": \"Ken Adams\", \"Y_8\": \"Tobias Marx\", \"Y_2\": \"Tonya Adams\"}, {\"Y_6\": \"Conrad Marx\", \"Y_4\": \"Ken Adams\", \"Y_8\": \"Tobias Marx\", \"Y_2\": \"Earl Adams\"}, {\"Y_4\": \"Ken Adams\", \"Y_6\": \"Kimberlee Marx\", \"Y_8\": \"Tobias Marx\", \"Y_2\": \"Earl Adams\"}, {\"Y_4\": \"Ken Adams\", \"Y_6\": \"Kimberlee Marx\", \"Y_8\": \"Tobias Marx\", \"Y_2\": \"Tonya Adams\"}, {\"Y_6\": \"Fidel Denham\", \"Y_4\": \"Ken Adams\", \"Y_8\": \"Tobias Marx\", \"Y_2\": \"Tonya Adams\"}]",
+        "answer": [
+            "Earl Adams",
+            "Tonya Adams"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "second_uncle(Y_6, Y_4)",
+                "cousin(Y_8, Y_6)",
+                "hobby(Y_8, \"shooting sports\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "90433d17-c1dc-4583-8e8c-1171eb2f9357",
+        "question": "Who is the granddaughter of the father-in-law of the husband of the person whose hobby is herping?",
+        "solution_traces": "[{\"Y_2\": \"Adrianna Harbison\", \"Y_8\": \"Robyn Harbison\", \"Y_4\": \"Stefan Burch\", \"Y_6\": \"Rashad Harbison\"}]",
+        "answer": [
+            "Adrianna Harbison"
+        ],
+        "prolog": {
+            "query": [
+                "granddaughter(Y_4, Y_2)",
+                "father_in_law(Y_6, Y_4)",
+                "husband(Y_8, Y_6)",
+                "hobby(Y_8, \"herping\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "537315f9-67b8-4c2f-934b-f094ed27f3d8",
+        "question": "Who is the great-granddaughter of the friend of the great-grandmother of the person whose date of birth is 0280-08-10?",
+        "solution_traces": "[{\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Darrell Adams\", \"Y_4\": \"Stefan Burch\", \"Y_2\": \"Lea Burch\"}, {\"Y_6\": \"Tonya Adams\", \"Y_8\": \"Darrell Adams\", \"Y_2\": \"Elvie Adams\", \"Y_4\": \"Ivan Christie\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_6\": \"Tonya Adams\", \"Y_8\": \"Darrell Adams\", \"Y_4\": \"Ivan Christie\"}, {\"Y_2\": \"Adrianna Harbison\", \"Y_6\": \"Tonya Adams\", \"Y_8\": \"Darrell Adams\", \"Y_4\": \"German Burch\"}]",
+        "answer": [
+            "Adrianna Harbison",
+            "Anjanette Marx",
+            "Elvie Adams",
+            "Lea Burch"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "great_grandmother(Y_8, Y_6)",
+                "dob(Y_8, \"0280-08-10\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6272ee3e-0f07-4c5f-8036-1df453ea1a19",
+        "question": "Who is the grandson of the grandparent of the friend of the person whose date of birth is 0163-11-04?",
+        "solution_traces": "[{\"Y_8\": \"Romona Chester\", \"Y_6\": \"Adalberto Burch\", \"Y_2\": \"Adalberto Burch\", \"Y_4\": \"Jesse Burch\"}, {\"Y_8\": \"Romona Chester\", \"Y_6\": \"Adalberto Burch\", \"Y_2\": \"Trent Burch\", \"Y_4\": \"German Burch\"}, {\"Y_2\": \"Saul Burch\", \"Y_8\": \"Romona Chester\", \"Y_6\": \"Adalberto Burch\", \"Y_4\": \"Jesse Burch\"}, {\"Y_8\": \"Romona Chester\", \"Y_6\": \"Adalberto Burch\", \"Y_2\": \"Trent Burch\", \"Y_4\": \"Jesse Burch\"}, {\"Y_2\": \"Saul Burch\", \"Y_8\": \"Romona Chester\", \"Y_6\": \"Adalberto Burch\", \"Y_4\": \"German Burch\"}, {\"Y_8\": \"Romona Chester\", \"Y_6\": \"Adalberto Burch\", \"Y_2\": \"Dwain Burch\", \"Y_4\": \"Jesse Burch\"}, {\"Y_8\": \"Romona Chester\", \"Y_6\": \"Adalberto Burch\", \"Y_2\": \"Adalberto Burch\", \"Y_4\": \"German Burch\"}, {\"Y_8\": \"Romona Chester\", \"Y_6\": \"Adalberto Burch\", \"Y_2\": \"Dwain Burch\", \"Y_4\": \"German Burch\"}]",
+        "answer": [
+            "Adalberto Burch",
+            "Dwain Burch",
+            "Saul Burch",
+            "Trent Burch"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "grandparent(Y_6, Y_4)",
+                "friend(Y_8, Y_6)",
+                "dob(Y_8, \"0163-11-04\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "974c61ff-8d15-4f92-b766-60cad6dab088",
+        "question": "Who is the wife of the grandfather of the cousin of the person whose date of birth is 0280-08-10?",
+        "solution_traces": "[{\"Y_8\": \"Darrell Adams\", \"Y_4\": \"Ernest Adams\", \"Y_6\": \"Darwin Marx\", \"Y_2\": \"Sona Adams\"}, {\"Y_8\": \"Darrell Adams\", \"Y_4\": \"Ernest Adams\", \"Y_2\": \"Sona Adams\", \"Y_6\": \"Ardath Denham\"}, {\"Y_8\": \"Darrell Adams\", \"Y_2\": \"Sona Adams\", \"Y_4\": \"Ernest Adams\", \"Y_6\": \"Cedrick Marx\"}]",
+        "answer": [
+            "Sona Adams"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "grandfather(Y_6, Y_4)",
+                "cousin(Y_8, Y_6)",
+                "dob(Y_8, \"0280-08-10\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1c9e6fb0-7830-45e5-b1c7-596fff8ab811",
+        "question": "Who is the niece of the child of the great-grandfather of the person whose occupation is statistician?",
+        "solution_traces": "[{\"Y_4\": \"Ken Adams\", \"Y_2\": \"Anjanette Marx\", \"Y_8\": \"Cedrick Marx\", \"Y_6\": \"Earl Adams\"}, {\"Y_4\": \"Ken Adams\", \"Y_2\": \"Elvie Adams\", \"Y_8\": \"Cedrick Marx\", \"Y_6\": \"Earl Adams\"}]",
+        "answer": [
+            "Anjanette Marx",
+            "Elvie Adams"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "child(Y_6, Y_4)",
+                "great_grandfather(Y_8, Y_6)",
+                "job(Y_8, \"statistician\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0c5a1939-16d8-4d99-a68e-0308b9eb4aac",
+        "question": "Who is the daughter of the great-grandmother of the cousin of the person whose date of birth is 0302-08-09?",
+        "solution_traces": "[{\"Y_6\": \"Fidel Denham\", \"Y_8\": \"Tobias Marx\", \"Y_2\": \"Elvie Adams\", \"Y_4\": \"Sona Adams\"}, {\"Y_6\": \"Fidel Denham\", \"Y_2\": \"Anjanette Marx\", \"Y_8\": \"Tobias Marx\", \"Y_4\": \"Sona Adams\"}, {\"Y_6\": \"Conrad Marx\", \"Y_8\": \"Tobias Marx\", \"Y_2\": \"Elvie Adams\", \"Y_4\": \"Sona Adams\"}, {\"Y_6\": \"Conrad Marx\", \"Y_2\": \"Anjanette Marx\", \"Y_8\": \"Tobias Marx\", \"Y_4\": \"Sona Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_6\": \"Kimberlee Marx\", \"Y_8\": \"Tobias Marx\", \"Y_4\": \"Sona Adams\"}, {\"Y_6\": \"Kimberlee Marx\", \"Y_8\": \"Tobias Marx\", \"Y_2\": \"Elvie Adams\", \"Y_4\": \"Sona Adams\"}]",
+        "answer": [
+            "Anjanette Marx",
+            "Elvie Adams"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "great_grandmother(Y_6, Y_4)",
+                "cousin(Y_8, Y_6)",
+                "dob(Y_8, \"0302-08-09\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cf1ee787-f5a7-43ad-99bc-e95144a33bc0",
+        "question": "Who is the brother of the grandchild of the husband of the person whose occupation is pilot?",
+        "solution_traces": "[{\"Y_2\": \"Monroe Adams\", \"Y_4\": \"Lyndon Adams\", \"Y_6\": \"Earl Adams\", \"Y_8\": \"Tonya Adams\"}, {\"Y_4\": \"Lyndon Adams\", \"Y_6\": \"Earl Adams\", \"Y_2\": \"Javier Adams\", \"Y_8\": \"Tonya Adams\"}, {\"Y_2\": \"Lyndon Adams\", \"Y_6\": \"Earl Adams\", \"Y_4\": \"Javier Adams\", \"Y_8\": \"Tonya Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_2\": \"Lyndon Adams\", \"Y_6\": \"Earl Adams\", \"Y_8\": \"Tonya Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_2\": \"Monroe Adams\", \"Y_6\": \"Earl Adams\", \"Y_8\": \"Tonya Adams\"}, {\"Y_2\": \"Monroe Adams\", \"Y_4\": \"Elvie Adams\", \"Y_6\": \"Earl Adams\", \"Y_8\": \"Tonya Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_6\": \"Earl Adams\", \"Y_2\": \"Javier Adams\", \"Y_8\": \"Tonya Adams\"}, {\"Y_4\": \"Monroe Adams\", \"Y_6\": \"Earl Adams\", \"Y_2\": \"Lyndon Adams\", \"Y_8\": \"Tonya Adams\"}, {\"Y_2\": \"Monroe Adams\", \"Y_6\": \"Earl Adams\", \"Y_4\": \"Javier Adams\", \"Y_8\": \"Tonya Adams\"}, {\"Y_4\": \"Elvie Adams\", \"Y_6\": \"Earl Adams\", \"Y_2\": \"Javier Adams\", \"Y_8\": \"Tonya Adams\"}, {\"Y_4\": \"Monroe Adams\", \"Y_6\": \"Earl Adams\", \"Y_2\": \"Javier Adams\", \"Y_8\": \"Tonya Adams\"}, {\"Y_4\": \"Elvie Adams\", \"Y_2\": \"Lyndon Adams\", \"Y_6\": \"Earl Adams\", \"Y_8\": \"Tonya Adams\"}]",
+        "answer": [
+            "Javier Adams",
+            "Lyndon Adams",
+            "Monroe Adams"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "grandchild(Y_6, Y_4)",
+                "husband(Y_8, Y_6)",
+                "job(Y_8, \"pilot\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "052fde46-8d7b-4b05-b8cc-2fba40a14522",
+        "question": "Who is the sister of the sibling of the son of the person whose hobby is baton twirling?",
+        "solution_traces": "[{\"Y_2\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_4\": \"Elvie Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_4\": \"Elvie Adams\", \"Y_6\": \"Monroe Adams\"}, {\"Y_8\": \"Sona Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_2\": \"Elvie Adams\", \"Y_4\": \"Monroe Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Javier Adams\", \"Y_2\": \"Elvie Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Javier Adams\", \"Y_4\": \"Elvie Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Javier Adams\", \"Y_4\": \"Monroe Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_2\": \"Elvie Adams\"}, {\"Y_8\": \"Sona Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_2\": \"Elvie Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_8\": \"Sona Adams\", \"Y_6\": \"Javier Adams\", \"Y_2\": \"Elvie Adams\", \"Y_4\": \"Monroe Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_4\": \"Monroe Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_2\": \"Elvie Adams\", \"Y_6\": \"Monroe Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Monroe Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_8\": \"Sona Adams\", \"Y_2\": \"Elvie Adams\", \"Y_6\": \"Monroe Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Javier Adams\", \"Y_4\": \"Lyndon Adams\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_4\": \"Lyndon Adams\", \"Y_6\": \"Monroe Adams\"}, {\"Y_8\": \"Sona Adams\", \"Y_2\": \"Elvie Adams\", \"Y_4\": \"Lyndon Adams\", \"Y_6\": \"Monroe Adams\"}, {\"Y_8\": \"Sona Adams\", \"Y_6\": \"Javier Adams\", \"Y_2\": \"Elvie Adams\", \"Y_4\": \"Lyndon Adams\"}]",
+        "answer": [
+            "Anjanette Marx",
+            "Elvie Adams"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "son(Y_8, Y_6)",
+                "hobby(Y_8, \"baton twirling\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ad7b7df6-d6c0-461d-aa58-ac14d727c76e",
+        "question": "Who is the friend of the friend of the friend of the person whose hobby is beekeeping?",
+        "solution_traces": "[{\"Y_4\": \"Florentino Gilbreath\", \"Y_2\": \"Tobias Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Cristopher Marx\", \"Y_4\": \"Kimberlee Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Rashad Harbison\", \"Y_4\": \"Porfirio Chester\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_4\": \"Ardath Denham\", \"Y_2\": \"Melodie Adams\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_6\": \"Jarrod Burch\", \"Y_2\": \"Tobias Marx\", \"Y_4\": \"Porfirio Chester\", \"Y_8\": \"Porfirio Chester\"}, {\"Y_2\": \"Darrell Adams\", \"Y_4\": \"Ardath Denham\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Tobias Marx\", \"Y_4\": \"Delma Phelps\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Ernest Adams\", \"Y_4\": \"Kimberlee Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_2\": \"Darrell Adams\", \"Y_4\": \"Florentino Gilbreath\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_4\": \"Ivan Christie\", \"Y_2\": \"Sona Adams\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_6\": \"Jarrod Burch\", \"Y_4\": \"Delma Phelps\", \"Y_8\": \"Porfirio Chester\", \"Y_2\": \"Tobias Marx\"}, {\"Y_6\": \"Jarrod Burch\", \"Y_2\": \"Delma Phelps\", \"Y_4\": \"Stefan Burch\", \"Y_8\": \"Porfirio Chester\"}, {\"Y_4\": \"Florentino Gilbreath\", \"Y_2\": \"Chloe Burch\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_6\": \"Jarrod Burch\", \"Y_4\": \"Evelyne Burch\", \"Y_8\": \"Porfirio Chester\"}, {\"Y_4\": \"Delma Phelps\", \"Y_2\": \"Silas Denham\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_6\": \"Jarrod Burch\", \"Y_4\": \"Delma Phelps\", \"Y_8\": \"Porfirio Chester\", \"Y_2\": \"Mathew Burch\"}, {\"Y_2\": \"Cristopher Marx\", \"Y_4\": \"Kimberlee Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Ernest Adams\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_4\": \"Delma Phelps\", \"Y_2\": \"Jarrod Burch\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Evelyne Burch\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_6\": \"Jarrod Burch\", \"Y_4\": \"Delma Phelps\", \"Y_2\": \"Jarrod Burch\", \"Y_8\": \"Porfirio Chester\"}, {\"Y_6\": \"Jarrod Burch\", \"Y_4\": \"Porfirio Chester\", \"Y_2\": \"Jarrod Burch\", \"Y_8\": \"Porfirio Chester\"}, {\"Y_2\": \"Cedrick Marx\", \"Y_6\": \"Jarrod Burch\", \"Y_4\": \"Evelyne Burch\", \"Y_8\": \"Porfirio Chester\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Robyn Harbison\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Rashad Harbison\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_4\": \"Ardath Denham\", \"Y_2\": \"Cedrick Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Darwin Marx\", \"Y_4\": \"Kimberlee Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_4\": \"Florentino Gilbreath\", \"Y_2\": \"Ardath Denham\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_4\": \"Florentino Gilbreath\", \"Y_2\": \"Fabian Harbison\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_4\": \"Ivan Christie\", \"Y_2\": \"Tonya Adams\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_4\": \"Cristopher Marx\", \"Y_6\": \"Jarrod Burch\", \"Y_2\": \"Jarrod Burch\", \"Y_8\": \"Porfirio Chester\"}, {\"Y_2\": \"Tobias Marx\", \"Y_4\": \"Kimberlee Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Tobias Marx\", \"Y_4\": \"Porfirio Chester\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Florentino Gilbreath\", \"Y_4\": \"Cedrick Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_4\": \"Ivan Christie\", \"Y_2\": \"German Burch\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Rashad Harbison\", \"Y_4\": \"Kimberlee Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Ken Adams\", \"Y_6\": \"Jarrod Burch\", \"Y_4\": \"Evelyne Burch\", \"Y_8\": \"Porfirio Chester\"}, {\"Y_2\": \"Darwin Marx\", \"Y_4\": \"Kimberlee Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Ardath Denham\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Saul Burch\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_4\": \"Porfirio Chester\", \"Y_2\": \"Jarrod Burch\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_4\": \"Florentino Gilbreath\", \"Y_2\": \"Elvie Adams\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Dwain Burch\", \"Y_4\": \"Kimberlee Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Bee Adams\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_2\": \"Tobias Marx\", \"Y_4\": \"Kimberlee Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_2\": \"Tobias Marx\", \"Y_4\": \"Porfirio Chester\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_2\": \"Jarrod Burch\", \"Y_6\": \"Jarrod Burch\", \"Y_4\": \"Stefan Burch\", \"Y_8\": \"Porfirio Chester\"}, {\"Y_4\": \"Delma Phelps\", \"Y_2\": \"Stefan Burch\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Florentino Gilbreath\", \"Y_4\": \"Ardath Denham\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Rashad Harbison\", \"Y_4\": \"Porfirio Chester\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Mathew Burch\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_6\": \"Jarrod Burch\", \"Y_4\": \"Porfirio Chester\", \"Y_8\": \"Porfirio Chester\", \"Y_2\": \"Rashad Harbison\"}, {\"Y_6\": \"Jarrod Burch\", \"Y_4\": \"Delma Phelps\", \"Y_2\": \"Stefan Burch\", \"Y_8\": \"Porfirio Chester\"}, {\"Y_2\": \"Rashad Harbison\", \"Y_4\": \"Kimberlee Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_4\": \"Delma Phelps\", \"Y_2\": \"Mathew Burch\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_4\": \"Florentino Gilbreath\", \"Y_2\": \"Cedrick Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_4\": \"Ardath Denham\", \"Y_2\": \"Tobias Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_4\": \"Ivan Christie\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_4\": \"Cristopher Marx\", \"Y_6\": \"Jarrod Burch\", \"Y_2\": \"Kimberlee Marx\", \"Y_8\": \"Porfirio Chester\"}, {\"Y_2\": \"Ernest Adams\", \"Y_4\": \"Kimberlee Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_6\": \"Jarrod Burch\", \"Y_4\": \"Delma Phelps\", \"Y_8\": \"Porfirio Chester\", \"Y_2\": \"Silas Denham\"}, {\"Y_6\": \"Jarrod Burch\", \"Y_4\": \"Evelyne Burch\", \"Y_2\": \"Jarrod Burch\", \"Y_8\": \"Porfirio Chester\"}, {\"Y_4\": \"Ivan Christie\", \"Y_2\": \"Tobias Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_4\": \"Cristopher Marx\", \"Y_6\": \"Jarrod Burch\", \"Y_2\": \"Ken Adams\", \"Y_8\": \"Porfirio Chester\"}, {\"Y_4\": \"Porfirio Chester\", \"Y_2\": \"Jarrod Burch\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_2\": \"Dwain Burch\", \"Y_4\": \"Kimberlee Marx\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Rashad Harbison\"}, {\"Y_4\": \"Ardath Denham\", \"Y_2\": \"German Burch\", \"Y_8\": \"Porfirio Chester\", \"Y_6\": \"Tobias Marx\"}, {\"Y_6\": \"Jarrod Burch\", \"Y_2\": \"Tonya Adams\", \"Y_4\": \"Stefan Burch\", \"Y_8\": \"Porfirio Chester\"}]",
+        "answer": [
+            "Anjanette Marx",
+            "Ardath Denham",
+            "Bee Adams",
+            "Cedrick Marx",
+            "Chloe Burch",
+            "Cristopher Marx",
+            "Darrell Adams",
+            "Darwin Marx",
+            "Delma Phelps",
+            "Dwain Burch",
+            "Elvie Adams",
+            "Ernest Adams",
+            "Evelyne Burch",
+            "Fabian Harbison",
+            "Florentino Gilbreath",
+            "German Burch",
+            "Jarrod Burch",
+            "Ken Adams",
+            "Kimberlee Marx",
+            "Mathew Burch",
+            "Melodie Adams",
+            "Rashad Harbison",
+            "Robyn Harbison",
+            "Saul Burch",
+            "Silas Denham",
+            "Sona Adams",
+            "Stefan Burch",
+            "Tobias Marx",
+            "Tonya Adams"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "friend(Y_8, Y_6)",
+                "hobby(Y_8, \"beekeeping\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "912ae3f6-7caa-4d07-a977-67c65b5090ab",
+        "question": "Who is the aunt of the friend of the son of the person whose hobby is herping?",
+        "solution_traces": "[{\"Y_8\": \"Robyn Harbison\", \"Y_6\": \"Fabian Harbison\", \"Y_4\": \"Dwain Burch\", \"Y_2\": \"Chloe Burch\"}]",
+        "answer": [
+            "Chloe Burch"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "son(Y_8, Y_6)",
+                "hobby(Y_8, \"herping\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a2ae5f2c-d130-4f88-b446-04ceb2c66e7d",
+        "question": "Who is the uncle of the nephew of the sibling of the person whose hobby is airsoft?",
+        "solution_traces": "[{\"Y_4\": \"Darrell Adams\", \"Y_8\": \"Monroe Adams\", \"Y_6\": \"Javier Adams\", \"Y_2\": \"Javier Adams\"}, {\"Y_4\": \"Darwin Marx\", \"Y_8\": \"Monroe Adams\", \"Y_6\": \"Javier Adams\", \"Y_2\": \"Javier Adams\"}, {\"Y_8\": \"Monroe Adams\", \"Y_6\": \"Javier Adams\", \"Y_2\": \"Lyndon Adams\", \"Y_4\": \"Cedrick Marx\"}, {\"Y_8\": \"Monroe Adams\", \"Y_6\": \"Javier Adams\", \"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Monroe Adams\"}, {\"Y_8\": \"Monroe Adams\", \"Y_2\": \"Lyndon Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_4\": \"Cedrick Marx\"}, {\"Y_4\": \"Darrell Adams\", \"Y_8\": \"Monroe Adams\", \"Y_2\": \"Javier Adams\", \"Y_6\": \"Anjanette Marx\"}, {\"Y_4\": \"Darrell Adams\", \"Y_8\": \"Monroe Adams\", \"Y_6\": \"Anjanette Marx\", \"Y_2\": \"Monroe Adams\"}, {\"Y_4\": \"Darwin Marx\", \"Y_8\": \"Monroe Adams\", \"Y_2\": \"Lyndon Adams\", \"Y_6\": \"Lyndon Adams\"}, {\"Y_8\": \"Monroe Adams\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Lyndon Adams\", \"Y_4\": \"Cedrick Marx\"}, {\"Y_8\": \"Monroe Adams\", \"Y_2\": \"Javier Adams\", \"Y_6\": \"Javier Adams\", \"Y_4\": \"Cedrick Marx\"}, {\"Y_4\": \"Darwin Marx\", \"Y_8\": \"Monroe Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_2\": \"Javier Adams\"}, {\"Y_4\": \"Darwin Marx\", \"Y_8\": \"Monroe Adams\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Monroe Adams\"}, {\"Y_8\": \"Monroe Adams\", \"Y_2\": \"Javier Adams\", \"Y_6\": \"Elvie Adams\", \"Y_4\": \"Cedrick Marx\"}, {\"Y_8\": \"Monroe Adams\", \"Y_6\": \"Elvie Adams\", \"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Monroe Adams\"}, {\"Y_4\": \"Darwin Marx\", \"Y_8\": \"Monroe Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_2\": \"Monroe Adams\"}, {\"Y_4\": \"Darwin Marx\", \"Y_8\": \"Monroe Adams\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Lyndon Adams\"}, {\"Y_4\": \"Darrell Adams\", \"Y_8\": \"Monroe Adams\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Javier Adams\"}, {\"Y_8\": \"Monroe Adams\", \"Y_2\": \"Javier Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_4\": \"Cedrick Marx\"}, {\"Y_4\": \"Darrell Adams\", \"Y_8\": \"Monroe Adams\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Monroe Adams\"}, {\"Y_4\": \"Darwin Marx\", \"Y_8\": \"Monroe Adams\", \"Y_6\": \"Javier Adams\", \"Y_2\": \"Lyndon Adams\"}, {\"Y_8\": \"Monroe Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_4\": \"Cedrick Marx\", \"Y_2\": \"Monroe Adams\"}, {\"Y_4\": \"Darwin Marx\", \"Y_8\": \"Monroe Adams\", \"Y_6\": \"Javier Adams\", \"Y_2\": \"Monroe Adams\"}, {\"Y_4\": \"Darwin Marx\", \"Y_8\": \"Monroe Adams\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Javier Adams\"}, {\"Y_4\": \"Darrell Adams\", \"Y_8\": \"Monroe Adams\", \"Y_6\": \"Javier Adams\", \"Y_2\": \"Monroe Adams\"}]",
+        "answer": [
+            "Javier Adams",
+            "Lyndon Adams",
+            "Monroe Adams"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "nephew(Y_6, Y_4)",
+                "sibling(Y_8, Y_6)",
+                "hobby(Y_8, \"airsoft\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "063ad7ba-48a9-401f-849b-5f7f58880d46",
+        "question": "Who is the parent of the sibling of the sibling of the person whose hobby is flower collecting and pressing?",
+        "solution_traces": "[{\"Y_4\": \"Chloe Burch\", \"Y_6\": \"Jarrod Burch\", \"Y_8\": \"Chloe Burch\", \"Y_2\": \"Jesse Burch\"}, {\"Y_4\": \"Chloe Burch\", \"Y_6\": \"Stefan Burch\", \"Y_8\": \"Chloe Burch\", \"Y_2\": \"German Burch\"}, {\"Y_6\": \"Jarrod Burch\", \"Y_8\": \"Chloe Burch\", \"Y_4\": \"Stefan Burch\", \"Y_2\": \"Jesse Burch\"}, {\"Y_4\": \"Jarrod Burch\", \"Y_6\": \"Stefan Burch\", \"Y_8\": \"Chloe Burch\", \"Y_2\": \"German Burch\"}, {\"Y_4\": \"Jarrod Burch\", \"Y_6\": \"Stefan Burch\", \"Y_8\": \"Chloe Burch\", \"Y_2\": \"Jesse Burch\"}, {\"Y_4\": \"Chloe Burch\", \"Y_6\": \"Jarrod Burch\", \"Y_8\": \"Chloe Burch\", \"Y_2\": \"German Burch\"}, {\"Y_6\": \"Jarrod Burch\", \"Y_8\": \"Chloe Burch\", \"Y_4\": \"Stefan Burch\", \"Y_2\": \"German Burch\"}, {\"Y_4\": \"Chloe Burch\", \"Y_6\": \"Stefan Burch\", \"Y_8\": \"Chloe Burch\", \"Y_2\": \"Jesse Burch\"}]",
+        "answer": [
+            "German Burch",
+            "Jesse Burch"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "sibling(Y_8, Y_6)",
+                "hobby(Y_8, \"flower collecting and pressing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c417f8b2-2198-4c40-9b4f-61d335b471ed",
+        "question": "Who is the brother-in-law of the parent of the sibling of the person whose hobby is jujitsu?",
+        "solution_traces": "[{\"Y_4\": \"Georgina Burch\", \"Y_8\": \"Matt Burch\", \"Y_6\": \"Mathew Burch\", \"Y_2\": \"Trent Burch\"}, {\"Y_2\": \"Saul Burch\", \"Y_4\": \"Georgina Burch\", \"Y_8\": \"Matt Burch\", \"Y_6\": \"Mathew Burch\"}, {\"Y_2\": \"Adalberto Burch\", \"Y_4\": \"Georgina Burch\", \"Y_8\": \"Matt Burch\", \"Y_6\": \"Mathew Burch\"}]",
+        "answer": [
+            "Adalberto Burch",
+            "Saul Burch",
+            "Trent Burch"
+        ],
+        "prolog": {
+            "query": [
+                "brother_in_law(Y_4, Y_2)",
+                "parent(Y_6, Y_4)",
+                "sibling(Y_8, Y_6)",
+                "hobby(Y_8, \"jujitsu\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "07b44db9-e3a7-460b-8b14-8b3b59b05bf3",
+        "question": "Who is the daughter-in-law of the grandfather of the grandson of the person whose date of birth is 0223-08-22?",
+        "solution_traces": "[{\"Y_8\": \"Sona Adams\", \"Y_2\": \"Bee Adams\", \"Y_4\": \"Ernest Adams\", \"Y_6\": \"Cedrick Marx\"}, {\"Y_8\": \"Sona Adams\", \"Y_2\": \"Bee Adams\", \"Y_4\": \"Ernest Adams\", \"Y_6\": \"Darrell Adams\"}, {\"Y_8\": \"Sona Adams\", \"Y_2\": \"Bee Adams\", \"Y_4\": \"Ernest Adams\", \"Y_6\": \"Darwin Marx\"}]",
+        "answer": [
+            "Bee Adams"
+        ],
+        "prolog": {
+            "query": [
+                "daughter_in_law(Y_4, Y_2)",
+                "grandfather(Y_6, Y_4)",
+                "grandson(Y_8, Y_6)",
+                "dob(Y_8, \"0223-08-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d9122478-72ac-4126-8535-694e6a38e2e0",
+        "question": "Who is the grandparent of the husband of the daughter-in-law of the person whose hobby is meteorology?",
+        "solution_traces": "[{\"Y_6\": \"Carlotta Burch\", \"Y_2\": \"Jamel Phelps\", \"Y_4\": \"Stefan Burch\", \"Y_8\": \"German Burch\"}, {\"Y_6\": \"Carlotta Burch\", \"Y_2\": \"Delma Phelps\", \"Y_4\": \"Stefan Burch\", \"Y_8\": \"German Burch\"}]",
+        "answer": [
+            "Delma Phelps",
+            "Jamel Phelps"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "husband(Y_6, Y_4)",
+                "daughter_in_law(Y_8, Y_6)",
+                "hobby(Y_8, \"meteorology\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6340c88f-d472-4d12-8898-0178f55a4b04",
+        "question": "Who is the grandson of the father of the uncle of the person whose hobby is ballet dancing?",
+        "solution_traces": "[{\"Y_2\": \"Darwin Marx\", \"Y_8\": \"Cedrick Marx\", \"Y_4\": \"Ernest Adams\", \"Y_6\": \"Monroe Adams\"}, {\"Y_2\": \"Darrell Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_8\": \"Cedrick Marx\", \"Y_4\": \"Ernest Adams\"}, {\"Y_2\": \"Darwin Marx\", \"Y_6\": \"Lyndon Adams\", \"Y_8\": \"Cedrick Marx\", \"Y_4\": \"Ernest Adams\"}, {\"Y_2\": \"Darrell Adams\", \"Y_8\": \"Cedrick Marx\", \"Y_4\": \"Ernest Adams\", \"Y_6\": \"Monroe Adams\"}, {\"Y_2\": \"Cedrick Marx\", \"Y_8\": \"Cedrick Marx\", \"Y_4\": \"Ernest Adams\", \"Y_6\": \"Monroe Adams\"}, {\"Y_6\": \"Lyndon Adams\", \"Y_8\": \"Cedrick Marx\", \"Y_4\": \"Ernest Adams\", \"Y_2\": \"Cedrick Marx\"}, {\"Y_2\": \"Darrell Adams\", \"Y_8\": \"Cedrick Marx\", \"Y_4\": \"Ernest Adams\", \"Y_6\": \"Javier Adams\"}, {\"Y_2\": \"Cedrick Marx\", \"Y_8\": \"Cedrick Marx\", \"Y_4\": \"Ernest Adams\", \"Y_6\": \"Javier Adams\"}, {\"Y_2\": \"Darwin Marx\", \"Y_8\": \"Cedrick Marx\", \"Y_4\": \"Ernest Adams\", \"Y_6\": \"Javier Adams\"}]",
+        "answer": [
+            "Cedrick Marx",
+            "Darrell Adams",
+            "Darwin Marx"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "father(Y_6, Y_4)",
+                "uncle(Y_8, Y_6)",
+                "hobby(Y_8, \"ballet dancing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0ae7c2be-201b-40c2-813a-5dc55580ed4e",
+        "question": "Who is the wife of the great-grandfather of the brother-in-law of the person whose occupation is product manager?",
+        "solution_traces": "[{\"Y_2\": \"Edwina Christie\", \"Y_4\": \"Ivan Christie\", \"Y_6\": \"Javier Adams\", \"Y_8\": \"Bee Adams\"}, {\"Y_2\": \"Edwina Christie\", \"Y_4\": \"Ivan Christie\", \"Y_6\": \"Monroe Adams\", \"Y_8\": \"Bee Adams\"}]",
+        "answer": [
+            "Edwina Christie"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "great_grandfather(Y_6, Y_4)",
+                "brother_in_law(Y_8, Y_6)",
+                "job(Y_8, \"product manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0c53fa17-46ca-4f0d-8d90-6b1dfc02c62d",
+        "question": "Who is the brother-in-law of the parent of the father of the person whose date of birth is 0280-08-10?",
+        "solution_traces": "[{\"Y_2\": \"Ken Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_8\": \"Darrell Adams\", \"Y_4\": \"Sona Adams\"}]",
+        "answer": [
+            "Ken Adams"
+        ],
+        "prolog": {
+            "query": [
+                "brother_in_law(Y_4, Y_2)",
+                "parent(Y_6, Y_4)",
+                "father(Y_8, Y_6)",
+                "dob(Y_8, \"0280-08-10\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "424d7570-107c-40aa-8fe5-bdc74f9fe0d5",
+        "question": "Who is the father of the great-grandparent of the child of the person whose hobby is sailing?",
+        "solution_traces": "[{\"Y_6\": \"Fidel Denham\", \"Y_4\": \"Ernest Adams\", \"Y_8\": \"Silas Denham\", \"Y_2\": \"Earl Adams\"}]",
+        "answer": [
+            "Earl Adams"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "great_grandparent(Y_6, Y_4)",
+                "child(Y_8, Y_6)",
+                "hobby(Y_8, \"sailing\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d7002de9-3470-4f02-80ff-a767297f2767",
+        "question": "Who is the uncle of the cousin of the cousin of the person whose hobby is amateur astronomy?",
+        "solution_traces": "[{\"Y_4\": \"Adrianna Harbison\", \"Y_6\": \"Matt Burch\", \"Y_2\": \"Adalberto Burch\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_2\": \"Dwain Burch\", \"Y_6\": \"Matt Burch\", \"Y_4\": \"Fabian Harbison\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_2\": \"Saul Burch\", \"Y_6\": \"Matt Burch\", \"Y_4\": \"Fabian Harbison\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_2\": \"Trent Burch\", \"Y_4\": \"Fabian Harbison\", \"Y_6\": \"Mathew Burch\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_2\": \"Adalberto Burch\", \"Y_6\": \"Matt Burch\", \"Y_4\": \"Fabian Harbison\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_4\": \"Adrianna Harbison\", \"Y_2\": \"Dwain Burch\", \"Y_6\": \"Mathew Burch\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_2\": \"Adalberto Burch\", \"Y_4\": \"Fabian Harbison\", \"Y_6\": \"Mathew Burch\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_4\": \"Adrianna Harbison\", \"Y_2\": \"Adalberto Burch\", \"Y_6\": \"Mathew Burch\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_2\": \"Saul Burch\", \"Y_4\": \"Fabian Harbison\", \"Y_6\": \"Mathew Burch\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_4\": \"Adrianna Harbison\", \"Y_2\": \"Dwain Burch\", \"Y_6\": \"Matt Burch\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_2\": \"Trent Burch\", \"Y_6\": \"Matt Burch\", \"Y_4\": \"Fabian Harbison\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_4\": \"Adrianna Harbison\", \"Y_2\": \"Saul Burch\", \"Y_6\": \"Mathew Burch\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_4\": \"Adrianna Harbison\", \"Y_2\": \"Saul Burch\", \"Y_6\": \"Matt Burch\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_2\": \"Dwain Burch\", \"Y_4\": \"Fabian Harbison\", \"Y_6\": \"Mathew Burch\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_4\": \"Adrianna Harbison\", \"Y_6\": \"Matt Burch\", \"Y_2\": \"Trent Burch\", \"Y_8\": \"Fabian Harbison\"}, {\"Y_4\": \"Adrianna Harbison\", \"Y_2\": \"Trent Burch\", \"Y_6\": \"Mathew Burch\", \"Y_8\": \"Fabian Harbison\"}]",
+        "answer": [
+            "Adalberto Burch",
+            "Dwain Burch",
+            "Saul Burch",
+            "Trent Burch"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "cousin(Y_6, Y_4)",
+                "cousin(Y_8, Y_6)",
+                "hobby(Y_8, \"amateur astronomy\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "082b4c04-75fc-4390-9211-ff67f39b7961",
+        "question": "Who is the child of the friend of the friend of the person whose occupation is freight forwarder?",
+        "solution_traces": "[{\"Y_4\": \"Florentino Gilbreath\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Georgina Burch\", \"Y_8\": \"Signe Gilbreath\"}, {\"Y_2\": \"Adrianna Harbison\", \"Y_4\": \"Robyn Harbison\", \"Y_6\": \"Elvie Adams\", \"Y_8\": \"Signe Gilbreath\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Ivan Christie\", \"Y_2\": \"Cedrick Marx\"}, {\"Y_8\": \"Sona Adams\", \"Y_6\": \"Ivan Christie\", \"Y_4\": \"Tonya Adams\", \"Y_2\": \"Ernest Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_2\": \"Ardath Denham\", \"Y_6\": \"Ivan Christie\"}, {\"Y_8\": \"Sona Adams\", \"Y_6\": \"Ivan Christie\", \"Y_2\": \"Elvie Adams\", \"Y_4\": \"Sona Adams\"}, {\"Y_6\": \"Lyndon Adams\", \"Y_2\": \"Stefan Burch\", \"Y_4\": \"German Burch\", \"Y_8\": \"Signe Gilbreath\"}, {\"Y_2\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Ivan Christie\", \"Y_4\": \"Sona Adams\"}, {\"Y_6\": \"Lyndon Adams\", \"Y_2\": \"Fabian Harbison\", \"Y_4\": \"Robyn Harbison\", \"Y_8\": \"Signe Gilbreath\"}, {\"Y_2\": \"Adrianna Harbison\", \"Y_6\": \"Lyndon Adams\", \"Y_4\": \"Robyn Harbison\", \"Y_8\": \"Signe Gilbreath\"}, {\"Y_8\": \"Sona Adams\", \"Y_6\": \"Ivan Christie\", \"Y_4\": \"German Burch\", \"Y_2\": \"Jarrod Burch\"}, {\"Y_6\": \"Elvie Adams\", \"Y_2\": \"Georgina Burch\", \"Y_4\": \"Signe Gilbreath\", \"Y_8\": \"Signe Gilbreath\"}, {\"Y_2\": \"Conrad Marx\", \"Y_6\": \"Elvie Adams\", \"Y_4\": \"Catalina Marx\", \"Y_8\": \"Signe Gilbreath\"}, {\"Y_8\": \"Sona Adams\", \"Y_2\": \"Chloe Burch\", \"Y_6\": \"Ivan Christie\", \"Y_4\": \"German Burch\"}, {\"Y_2\": \"Kimberlee Marx\", \"Y_6\": \"Elvie Adams\", \"Y_4\": \"Catalina Marx\", \"Y_8\": \"Signe Gilbreath\"}, {\"Y_8\": \"Sona Adams\", \"Y_6\": \"Ivan Christie\", \"Y_4\": \"German Burch\", \"Y_2\": \"Stefan Burch\"}, {\"Y_8\": \"Sona Adams\", \"Y_2\": \"Lyndon Adams\", \"Y_6\": \"Ivan Christie\", \"Y_4\": \"Sona Adams\"}, {\"Y_8\": \"Sona Adams\", \"Y_6\": \"Ivan Christie\", \"Y_4\": \"Sona Adams\", \"Y_2\": \"Monroe Adams\"}, {\"Y_4\": \"Robyn Harbison\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Fabian Harbison\", \"Y_8\": \"Signe Gilbreath\"}, {\"Y_8\": \"Sona Adams\", \"Y_2\": \"Javier Adams\", \"Y_6\": \"Ivan Christie\", \"Y_4\": \"Sona Adams\"}, {\"Y_4\": \"Anjanette Marx\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Ivan Christie\", \"Y_2\": \"Darwin Marx\"}, {\"Y_6\": \"Lyndon Adams\", \"Y_2\": \"Jarrod Burch\", \"Y_4\": \"German Burch\", \"Y_8\": \"Signe Gilbreath\"}, {\"Y_6\": \"Lyndon Adams\", \"Y_2\": \"Chloe Burch\", \"Y_4\": \"German Burch\", \"Y_8\": \"Signe Gilbreath\"}, {\"Y_2\": \"Ken Adams\", \"Y_8\": \"Sona Adams\", \"Y_6\": \"Ivan Christie\", \"Y_4\": \"Tonya Adams\"}, {\"Y_6\": \"Lyndon Adams\", \"Y_2\": \"Georgina Burch\", \"Y_4\": \"Signe Gilbreath\", \"Y_8\": \"Signe Gilbreath\"}]",
+        "answer": [
+            "Adrianna Harbison",
+            "Anjanette Marx",
+            "Ardath Denham",
+            "Cedrick Marx",
+            "Chloe Burch",
+            "Conrad Marx",
+            "Darwin Marx",
+            "Elvie Adams",
+            "Ernest Adams",
+            "Fabian Harbison",
+            "Georgina Burch",
+            "Jarrod Burch",
+            "Javier Adams",
+            "Ken Adams",
+            "Kimberlee Marx",
+            "Lyndon Adams",
+            "Monroe Adams",
+            "Stefan Burch"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "friend(Y_8, Y_6)",
+                "job(Y_8, \"freight forwarder\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "47d881a2-1f2a-4e88-97e4-de42ca700bb7",
+        "question": "Who is the parent of the sibling of the great-granddaughter of the person whose date of birth is 0171-03-22?",
+        "solution_traces": "[{\"Y_8\": \"Ivan Christie\", \"Y_2\": \"Sona Adams\", \"Y_6\": \"Elvie Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_2\": \"Sona Adams\", \"Y_6\": \"Elvie Adams\", \"Y_4\": \"Lyndon Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Ernest Adams\", \"Y_4\": \"Monroe Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Sona Adams\", \"Y_4\": \"Monroe Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_4\": \"Lyndon Adams\", \"Y_2\": \"Ernest Adams\", \"Y_6\": \"Anjanette Marx\"}, {\"Y_8\": \"Ivan Christie\", \"Y_2\": \"Sona Adams\", \"Y_6\": \"Anjanette Marx\", \"Y_4\": \"Monroe Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_2\": \"Sona Adams\", \"Y_4\": \"Elvie Adams\", \"Y_6\": \"Anjanette Marx\"}, {\"Y_8\": \"Ivan Christie\", \"Y_4\": \"Javier Adams\", \"Y_2\": \"Ernest Adams\", \"Y_6\": \"Anjanette Marx\"}, {\"Y_8\": \"Ivan Christie\", \"Y_2\": \"Sona Adams\", \"Y_4\": \"Lyndon Adams\", \"Y_6\": \"Anjanette Marx\"}, {\"Y_8\": \"Ivan Christie\", \"Y_2\": \"Ernest Adams\", \"Y_6\": \"Anjanette Marx\", \"Y_4\": \"Monroe Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_4\": \"Anjanette Marx\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Sona Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_4\": \"Javier Adams\", \"Y_2\": \"Sona Adams\", \"Y_6\": \"Anjanette Marx\"}, {\"Y_8\": \"Ivan Christie\", \"Y_2\": \"Ernest Adams\", \"Y_4\": \"Elvie Adams\", \"Y_6\": \"Anjanette Marx\"}, {\"Y_8\": \"Ivan Christie\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Ernest Adams\", \"Y_4\": \"Javier Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Ernest Adams\", \"Y_4\": \"Lyndon Adams\"}, {\"Y_8\": \"Ivan Christie\", \"Y_4\": \"Anjanette Marx\", \"Y_6\": \"Elvie Adams\", \"Y_2\": \"Ernest Adams\"}]",
+        "answer": [
+            "Ernest Adams",
+            "Sona Adams"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "great_granddaughter(Y_8, Y_6)",
+                "dob(Y_8, \"0171-03-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "694939c9-74f6-48d5-8b91-2b0368d8d41a",
+        "question": "Who is the father of the uncle of the uncle of the person whose occupation is applications developer?",
+        "solution_traces": "[{\"Y_4\": \"Ken Adams\", \"Y_8\": \"Ardath Denham\", \"Y_6\": \"Monroe Adams\", \"Y_2\": \"Earl Adams\"}, {\"Y_4\": \"Ken Adams\", \"Y_6\": \"Javier Adams\", \"Y_8\": \"Ardath Denham\", \"Y_2\": \"Earl Adams\"}, {\"Y_4\": \"Ken Adams\", \"Y_6\": \"Lyndon Adams\", \"Y_8\": \"Ardath Denham\", \"Y_2\": \"Earl Adams\"}]",
+        "answer": [
+            "Earl Adams"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "uncle(Y_6, Y_4)",
+                "uncle(Y_8, Y_6)",
+                "job(Y_8, \"applications developer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8344de45-c904-4945-8268-1f7d6a8f662e",
+        "question": "Who is the mother-in-law of the father of the father of the person whose date of birth is 0279-04-04?",
+        "solution_traces": "[{\"Y_4\": \"Dwain Burch\", \"Y_8\": \"Lea Burch\", \"Y_6\": \"Mathew Burch\", \"Y_2\": \"Signe Gilbreath\"}]",
+        "answer": [
+            "Signe Gilbreath"
+        ],
+        "prolog": {
+            "query": [
+                "mother_in_law(Y_4, Y_2)",
+                "father(Y_6, Y_4)",
+                "father(Y_8, Y_6)",
+                "dob(Y_8, \"0279-04-04\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    }
+]

@@ -1,0 +1,896 @@
+[
+    {
+        "id": "3fd5ba58-7304-4000-8361-d63ca1a904ce",
+        "question": "What is the occupation of the daughter of Harvey Parrott?",
+        "solution_traces": "[{\"Y_2\": \"training and development officer\", \"Y_3\": \"Theda Healey\"}]",
+        "answer": [
+            "training and development officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "daughter(\"Harvey Parrott\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "07793b26-6212-4fe7-a587-ba635e103aed",
+        "question": "What is the date of birth of the husband of Natasha Mcwhorter?",
+        "solution_traces": "[{\"Y_3\": \"Elias Mcwhorter\", \"Y_2\": \"0276-06-15\"}]",
+        "answer": [
+            "0276-06-15"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "husband(\"Natasha Mcwhorter\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "06ebed04-79fa-406f-9b84-ce9c75c1a91b",
+        "question": "What is the hobby of the mother of Debi Drayton?",
+        "solution_traces": "[{\"Y_2\": \"research\", \"Y_3\": \"Enid Healey\"}]",
+        "answer": [
+            "research"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "mother(\"Debi Drayton\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "906e23be-a578-48c3-9703-63a3a5c25493",
+        "question": "What is the occupation of the sister-in-law of Junior Rauch?",
+        "solution_traces": "[{\"Y_3\": \"Deirdre Kimball\", \"Y_2\": \"paramedic\"}, {\"Y_2\": \"ophthalmologist\", \"Y_3\": \"Charmain Kimball\"}]",
+        "answer": [
+            "ophthalmologist",
+            "paramedic"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sister_in_law(\"Junior Rauch\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c83e1943-1acc-4f12-90c3-d18b58f86f50",
+        "question": "What is the date of birth of the granddaughter of Jeffery Healey?",
+        "solution_traces": "[{\"Y_2\": \"0316-07-20\", \"Y_3\": \"Naomi Rauch\"}, {\"Y_3\": \"Charmain Kimball\", \"Y_2\": \"0315-05-24\"}, {\"Y_2\": \"0316-07-20\", \"Y_3\": \"Deirdre Kimball\"}]",
+        "answer": [
+            "0315-05-24",
+            "0316-07-20"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "granddaughter(\"Jeffery Healey\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1ae172c5-0566-4094-977e-e1c07932d8b5",
+        "question": "What is the date of birth of the grandchild of Vito Mcwhorter?",
+        "solution_traces": "[{\"Y_3\": \"Neil Faber\", \"Y_2\": \"0295-12-08\"}, {\"Y_2\": \"0299-11-30\", \"Y_3\": \"Maryann Faber\"}, {\"Y_2\": \"0298-12-04\", \"Y_3\": \"Pamula Mcwhorter\"}, {\"Y_2\": \"0294-10-22\", \"Y_3\": \"Logan Faber\"}]",
+        "answer": [
+            "0294-10-22",
+            "0295-12-08",
+            "0298-12-04",
+            "0299-11-30"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandchild(\"Vito Mcwhorter\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e5cb566e-b84c-424f-a12e-1e8afdf4d276",
+        "question": "What is the hobby of the sibling of Reyes Kimball?",
+        "solution_traces": "[{\"Y_2\": \"slot car racing\", \"Y_3\": \"Delbert Kimball\"}, {\"Y_2\": \"iceboat racing\", \"Y_3\": \"Charmain Kimball\"}, {\"Y_3\": \"Deirdre Kimball\", \"Y_2\": \"fishkeeping\"}, {\"Y_2\": \"railway studies\", \"Y_3\": \"Naomi Rauch\"}]",
+        "answer": [
+            "fishkeeping",
+            "iceboat racing",
+            "railway studies",
+            "slot car racing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(\"Reyes Kimball\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b7bb4676-66cb-4bde-8467-9ab2d858135b",
+        "question": "What is the date of birth of the great-grandfather of Reyes Kimball?",
+        "solution_traces": "[{\"Y_2\": \"0241-01-17\", \"Y_3\": \"Harvey Parrott\"}, {\"Y_3\": \"Allen Healey\", \"Y_2\": \"0233-12-19\"}]",
+        "answer": [
+            "0233-12-19",
+            "0241-01-17"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandfather(\"Reyes Kimball\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6314c9f0-2cd1-491b-8d15-0d7a9e3d3478",
+        "question": "What is the occupation of the great-grandson of Derek Burke?",
+        "solution_traces": "[{\"Y_3\": \"Edwin Faber\", \"Y_2\": \"chiropractor\"}, {\"Y_3\": \"Alden Faber\", \"Y_2\": \"hydrologist\"}, {\"Y_3\": \"Rob Faber\", \"Y_2\": \"clinical psychologist\"}]",
+        "answer": [
+            "chiropractor",
+            "clinical psychologist",
+            "hydrologist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandson(\"Derek Burke\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c5b8dc0c-278a-4dcc-9d17-7b76f1805428",
+        "question": "What is the date of birth of the brother of Logan Faber?",
+        "solution_traces": "[{\"Y_3\": \"Neil Faber\", \"Y_2\": \"0295-12-08\"}]",
+        "answer": [
+            "0295-12-08"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "brother(\"Logan Faber\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1529dad8-15bc-4943-8597-263b6a5d0bdc",
+        "question": "What is the date of birth of the grandparent of Reyes Kimball?",
+        "solution_traces": "[{\"Y_3\": \"Theda Healey\", \"Y_2\": \"0269-01-27\"}, {\"Y_3\": \"Abe Kimball\", \"Y_2\": \"0258-02-22\"}, {\"Y_2\": \"0266-10-03\", \"Y_3\": \"Jeffery Healey\"}, {\"Y_2\": \"0257-06-27\", \"Y_3\": \"Ione Kimball\"}]",
+        "answer": [
+            "0257-06-27",
+            "0258-02-22",
+            "0266-10-03",
+            "0269-01-27"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandparent(\"Reyes Kimball\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "680e2542-6544-419a-98e9-0f07d0ddab8e",
+        "question": "What is the occupation of the aunt of Heather Healey?",
+        "solution_traces": "[{\"Y_3\": \"Debi Drayton\", \"Y_2\": \"chief executive officer\"}]",
+        "answer": [
+            "chief executive officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "aunt(\"Heather Healey\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7b867efa-48d8-4bb2-b5d4-c633e4581159",
+        "question": "What is the hobby of the child of Charity Faber?",
+        "solution_traces": "[{\"Y_2\": \"shortwave listening\", \"Y_3\": \"Timmy Faber\"}]",
+        "answer": [
+            "shortwave listening"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "child(\"Charity Faber\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "00db21b8-d1f2-4f20-bd03-5eeba4649c9b",
+        "question": "What is the date of birth of the sister-in-law of Natasha Mcwhorter?",
+        "solution_traces": "[{\"Y_3\": \"Catina Faber\", \"Y_2\": \"0269-06-21\"}]",
+        "answer": [
+            "0269-06-21"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sister_in_law(\"Natasha Mcwhorter\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3f08e0aa-5909-44c6-96c5-8908727ca8a5",
+        "question": "What is the hobby of the aunt of Reyes Kimball?",
+        "solution_traces": "[{\"Y_2\": \"amateur astronomy\", \"Y_3\": \"Brigida Healey\"}, {\"Y_2\": \"picnicking\", \"Y_3\": \"Viva Healey\"}, {\"Y_2\": \"tether car\", \"Y_3\": \"Heather Healey\"}]",
+        "answer": [
+            "amateur astronomy",
+            "picnicking",
+            "tether car"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "aunt(\"Reyes Kimball\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "162208e8-05de-49b5-93e8-609dd8a7735e",
+        "question": "What is the hobby of the grandson of Harvey Parrott?",
+        "solution_traces": "[{\"Y_3\": \"Danilo Healey\", \"Y_2\": \"benchmarking\"}]",
+        "answer": [
+            "benchmarking"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandson(\"Harvey Parrott\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9da29223-7a8b-4df6-aaa8-0d56f0bdba01",
+        "question": "What is the date of birth of the uncle of Vanessa Faber?",
+        "solution_traces": "[{\"Y_2\": \"0236-04-15\", \"Y_3\": \"Stevie Shields\"}]",
+        "answer": [
+            "0236-04-15"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "uncle(\"Vanessa Faber\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8834f6f9-f4ec-4e2e-bf74-16251e38fbea",
+        "question": "What is the date of birth of the sibling of Reyes Kimball?",
+        "solution_traces": "[{\"Y_2\": \"0321-12-02\", \"Y_3\": \"Delbert Kimball\"}, {\"Y_2\": \"0316-07-20\", \"Y_3\": \"Naomi Rauch\"}, {\"Y_3\": \"Charmain Kimball\", \"Y_2\": \"0315-05-24\"}, {\"Y_2\": \"0316-07-20\", \"Y_3\": \"Deirdre Kimball\"}]",
+        "answer": [
+            "0315-05-24",
+            "0316-07-20",
+            "0321-12-02"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sibling(\"Reyes Kimball\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b3099581-4e15-4c2c-adc1-324935d7aa2d",
+        "question": "What is the occupation of the niece of Elias Mcwhorter?",
+        "solution_traces": "[{\"Y_2\": \"film editor\", \"Y_3\": \"Maryann Faber\"}]",
+        "answer": [
+            "film editor"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "niece(\"Elias Mcwhorter\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b8dbb7d4-a039-4acd-9df0-391139b7f4da",
+        "question": "What is the date of birth of the daughter-in-law of Abe Kimball?",
+        "solution_traces": "[{\"Y_3\": \"Isabell Kimball\", \"Y_2\": \"0290-10-03\"}]",
+        "answer": [
+            "0290-10-03"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "daughter_in_law(\"Abe Kimball\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fad8de48-2396-478a-a86b-87a844a7b677",
+        "question": "What is the hobby of the grandparent of Heather Healey?",
+        "solution_traces": "[{\"Y_3\": \"Allen Healey\", \"Y_2\": \"philately\"}, {\"Y_3\": \"Harvey Parrott\", \"Y_2\": \"meteorology\"}, {\"Y_2\": \"meditation\", \"Y_3\": \"Antionette Parrott\"}, {\"Y_2\": \"research\", \"Y_3\": \"Enid Healey\"}]",
+        "answer": [
+            "meditation",
+            "meteorology",
+            "philately",
+            "research"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandparent(\"Heather Healey\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "11eafa22-159c-4c37-9aae-163d9b07fc8b",
+        "question": "What is the date of birth of the granddaughter of Essie Faber?",
+        "solution_traces": "[{\"Y_3\": \"Vanessa Faber\", \"Y_2\": \"0263-08-14\"}]",
+        "answer": [
+            "0263-08-14"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "granddaughter(\"Essie Faber\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "40cc86ce-418c-467c-8206-313069373f4f",
+        "question": "What is the date of birth of the mother of Rob Faber?",
+        "solution_traces": "[{\"Y_2\": \"0242-01-16\", \"Y_3\": \"Bethany Faber\"}]",
+        "answer": [
+            "0242-01-16"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "mother(\"Rob Faber\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ffcca6d2-28dc-4096-bb96-b82cbf51c3c6",
+        "question": "What is the occupation of the brother-in-law of Lon Drayton?",
+        "solution_traces": "[{\"Y_2\": \"estate manager\", \"Y_3\": \"Jeffery Healey\"}]",
+        "answer": [
+            "estate manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "brother_in_law(\"Lon Drayton\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a4c93a93-f986-4e22-a9de-2548a0cb0617",
+        "question": "What is the hobby of the daughter-in-law of Vito Mcwhorter?",
+        "solution_traces": "[{\"Y_2\": \"slot car\", \"Y_3\": \"Natasha Mcwhorter\"}]",
+        "answer": [
+            "slot car"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "daughter_in_law(\"Vito Mcwhorter\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dd082510-d995-4469-ab44-3e9e0f2bf973",
+        "question": "What is the occupation of the great-uncle of Rosemarie Rauch?",
+        "solution_traces": "[{\"Y_3\": \"Danilo Healey\", \"Y_2\": \"government social research officer\"}]",
+        "answer": [
+            "government social research officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_uncle(\"Rosemarie Rauch\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7cdbf18d-9dc7-4d55-9470-56eac78da539",
+        "question": "What is the date of birth of the great-grandson of Jeffery Healey?",
+        "solution_traces": "[{\"Y_3\": \"Demetrius Rauch\", \"Y_2\": \"0342-07-22\"}]",
+        "answer": [
+            "0342-07-22"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandson(\"Jeffery Healey\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a5836a2d-19a5-44af-8503-c37f3c62d860",
+        "question": "What is the occupation of the friend of Harvey Parrott?",
+        "solution_traces": "[{\"Y_2\": \"exhibition designer\", \"Y_3\": \"Viva Healey\"}, {\"Y_3\": \"Brigida Healey\", \"Y_2\": \"technical author\"}, {\"Y_3\": \"Edwin Faber\", \"Y_2\": \"chiropractor\"}, {\"Y_2\": \"scientist\", \"Y_3\": \"Antionette Parrott\"}]",
+        "answer": [
+            "chiropractor",
+            "exhibition designer",
+            "scientist",
+            "technical author"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(\"Harvey Parrott\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4dc932c7-56e2-4401-8778-5b8f0084292f",
+        "question": "What is the date of birth of the great-grandfather of Rob Faber?",
+        "solution_traces": "[{\"Y_3\": \"Derek Burke\", \"Y_2\": \"0188-09-27\"}]",
+        "answer": [
+            "0188-09-27"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandfather(\"Rob Faber\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "733beb68-431d-4b50-b034-fffdd7295c04",
+        "question": "What is the occupation of the child of Lon Drayton?",
+        "solution_traces": "[{\"Y_3\": \"Phil Drayton\", \"Y_2\": \"airline pilot\"}]",
+        "answer": [
+            "airline pilot"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "child(\"Lon Drayton\", Y_3)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "?"
+        ],
+        "type": 11,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    }
+]

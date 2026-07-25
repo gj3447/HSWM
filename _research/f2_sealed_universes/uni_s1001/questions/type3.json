@@ -1,0 +1,939 @@
+[
+    {
+        "id": "c4a1ed44-33b9-4261-a56d-a2f42711383f",
+        "question": "Who is the nephew of the great-uncle of Quentin Catalano?",
+        "solution_traces": "[{\"Y_2\": \"Lawrence Catalano\", \"Y_4\": \"Daryl Berman\"}, {\"Y_2\": \"Lawrence Catalano\", \"Y_4\": \"Clark Berman\"}, {\"Y_4\": \"Daryl Berman\", \"Y_2\": \"Kraig Berman\"}]",
+        "answer": [
+            "Kraig Berman",
+            "Lawrence Catalano"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "great_uncle(\"Quentin Catalano\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "bd03bc04-b4b7-45ed-8466-f43391c0b99f",
+        "question": "Who is the sibling of the brother-in-law of Bernice Caldera?",
+        "solution_traces": "[{\"Y_4\": \"Louis Caldera\", \"Y_2\": \"Dawn Dudley\"}, {\"Y_4\": \"Louis Caldera\", \"Y_2\": \"Clair Caldera\"}]",
+        "answer": [
+            "Clair Caldera",
+            "Dawn Dudley"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "brother_in_law(\"Bernice Caldera\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "773d29bd-b476-4932-bbef-1ce106a68904",
+        "question": "Who is the aunt of the cousin of Lora Canfield?",
+        "solution_traces": "[{\"Y_4\": \"Kraig Berman\", \"Y_2\": \"Nedra Catalano\"}]",
+        "answer": [
+            "Nedra Catalano"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "cousin(\"Lora Canfield\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7988ee31-946d-4c6b-b582-40c1e097e15c",
+        "question": "Who is the aunt of the child of Clair Caldera?",
+        "solution_traces": "[{\"Y_2\": \"Dawn Dudley\", \"Y_4\": \"Laurette Caldera\"}, {\"Y_2\": \"Dawn Dudley\", \"Y_4\": \"Genny Caldera\"}]",
+        "answer": [
+            "Dawn Dudley"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "child(\"Clair Caldera\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3e4baaf0-19df-4332-926a-69799491c5de",
+        "question": "Who is the sibling of the sister-in-law of Zackary Linden?",
+        "solution_traces": "[{\"Y_2\": \"Betsy Linden\", \"Y_4\": \"Brigida Stallings\"}, {\"Y_4\": \"Brigida Stallings\", \"Y_2\": \"Violet Pohl\"}, {\"Y_4\": \"Violet Pohl\", \"Y_2\": \"Brigida Stallings\"}, {\"Y_4\": \"Violet Pohl\", \"Y_2\": \"Betsy Linden\"}]",
+        "answer": [
+            "Betsy Linden",
+            "Brigida Stallings",
+            "Violet Pohl"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "sister_in_law(\"Zackary Linden\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1ec13a9c-5d47-4edf-bec3-d206f35be066",
+        "question": "Who is the aunt of the cousin of Dennis Linden?",
+        "solution_traces": "[{\"Y_2\": \"Brigida Stallings\", \"Y_4\": \"Louella Pohl\"}, {\"Y_2\": \"Betsy Linden\", \"Y_4\": \"Louella Pohl\"}, {\"Y_4\": \"Vance Stallings\", \"Y_2\": \"Violet Pohl\"}, {\"Y_2\": \"Betsy Linden\", \"Y_4\": \"Vance Stallings\"}]",
+        "answer": [
+            "Betsy Linden",
+            "Brigida Stallings",
+            "Violet Pohl"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "cousin(\"Dennis Linden\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f110c9ea-a10d-44ba-89d5-07df4a497272",
+        "question": "Who is the friend of the aunt of Dennis Linden?",
+        "solution_traces": "[{\"Y_4\": \"Violet Pohl\", \"Y_2\": \"Katharine Whittaker\"}, {\"Y_4\": \"Brigida Stallings\", \"Y_2\": \"Ben Grigg\"}, {\"Y_2\": \"Clark Berman\", \"Y_4\": \"Brigida Stallings\"}, {\"Y_4\": \"Violet Pohl\", \"Y_2\": \"Porfirio Stallings\"}, {\"Y_4\": \"Violet Pohl\", \"Y_2\": \"Nedra Catalano\"}]",
+        "answer": [
+            "Ben Grigg",
+            "Clark Berman",
+            "Katharine Whittaker",
+            "Nedra Catalano",
+            "Porfirio Stallings"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "aunt(\"Dennis Linden\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c9be3200-cfac-4511-ae9b-012a9b399b96",
+        "question": "Who is the friend of the friend of Felton Caldera?",
+        "solution_traces": "[{\"Y_4\": \"Nedra Catalano\", \"Y_2\": \"Violet Pohl\"}, {\"Y_4\": \"Nanette Bernardo\", \"Y_2\": \"Lashandra Caldera\"}, {\"Y_2\": \"Otto Dudley\", \"Y_4\": \"Genny Caldera\"}, {\"Y_2\": \"Lawrence Catalano\", \"Y_4\": \"Mac Dudley\"}, {\"Y_4\": \"Nedra Catalano\", \"Y_2\": \"Elbert Canfield\"}, {\"Y_2\": \"Genny Caldera\", \"Y_4\": \"Nedra Catalano\"}, {\"Y_2\": \"Willis Berman\", \"Y_4\": \"Mac Dudley\"}, {\"Y_2\": \"Felton Caldera\", \"Y_4\": \"Laurette Caldera\"}, {\"Y_2\": \"Felton Caldera\", \"Y_4\": \"Nedra Catalano\"}, {\"Y_2\": \"Norman Dudley\", \"Y_4\": \"Nanette Bernardo\"}, {\"Y_2\": \"Dennis Linden\", \"Y_4\": \"Genny Caldera\"}, {\"Y_4\": \"Laurette Caldera\", \"Y_2\": \"Elbert Canfield\"}, {\"Y_2\": \"Nedra Catalano\", \"Y_4\": \"Genny Caldera\"}, {\"Y_2\": \"Daryl Berman\", \"Y_4\": \"Nedra Catalano\"}, {\"Y_4\": \"Mac Dudley\", \"Y_2\": \"Katharine Whittaker\"}, {\"Y_2\": \"Felton Caldera\", \"Y_4\": \"Genny Caldera\"}, {\"Y_4\": \"Nanette Bernardo\", \"Y_2\": \"Felton Caldera\"}, {\"Y_2\": \"Andres Catalano\", \"Y_4\": \"Laurette Caldera\"}, {\"Y_2\": \"Johnna Caldera\", \"Y_4\": \"Mac Dudley\"}, {\"Y_2\": \"Felton Caldera\", \"Y_4\": \"Mac Dudley\"}, {\"Y_4\": \"Nedra Catalano\", \"Y_2\": \"Lashandra Caldera\"}]",
+        "answer": [
+            "Andres Catalano",
+            "Daryl Berman",
+            "Dennis Linden",
+            "Elbert Canfield",
+            "Felton Caldera",
+            "Genny Caldera",
+            "Johnna Caldera",
+            "Katharine Whittaker",
+            "Lashandra Caldera",
+            "Lawrence Catalano",
+            "Nedra Catalano",
+            "Norman Dudley",
+            "Otto Dudley",
+            "Violet Pohl",
+            "Willis Berman"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "friend(\"Felton Caldera\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "65cc4a26-759e-4b33-a60d-84e349d9107e",
+        "question": "Who is the father-in-law of the daughter-in-law of Woodrow Caldera?",
+        "solution_traces": "[{\"Y_2\": \"Woodrow Caldera\", \"Y_4\": \"Bernice Caldera\"}]",
+        "answer": [
+            "Woodrow Caldera"
+        ],
+        "prolog": {
+            "query": [
+                "father_in_law(Y_4, Y_2)",
+                "daughter_in_law(\"Woodrow Caldera\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "43d4eeb3-3771-4433-9f5f-8b0df993328f",
+        "question": "Who is the child of the sibling of Louis Caldera?",
+        "solution_traces": "[{\"Y_2\": \"Genny Caldera\", \"Y_4\": \"Clair Caldera\"}, {\"Y_2\": \"Betsy Linden\", \"Y_4\": \"Dawn Dudley\"}, {\"Y_2\": \"Brigida Stallings\", \"Y_4\": \"Dawn Dudley\"}, {\"Y_2\": \"Laurette Caldera\", \"Y_4\": \"Clair Caldera\"}, {\"Y_2\": \"Violet Pohl\", \"Y_4\": \"Dawn Dudley\"}]",
+        "answer": [
+            "Betsy Linden",
+            "Brigida Stallings",
+            "Genny Caldera",
+            "Laurette Caldera",
+            "Violet Pohl"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "sibling(\"Louis Caldera\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "273fb931-34b3-4527-aa0c-a919c86248e0",
+        "question": "Who is the husband of the wife of Willis Berman?",
+        "solution_traces": "[{\"Y_2\": \"Willis Berman\", \"Y_4\": \"Luisa Berman\"}]",
+        "answer": [
+            "Willis Berman"
+        ],
+        "prolog": {
+            "query": [
+                "husband(Y_4, Y_2)",
+                "wife(\"Willis Berman\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "af54b16b-a12d-4bb4-af12-fb96ce4ace93",
+        "question": "Who is the friend of the brother of Otto Dudley?",
+        "solution_traces": "[{\"Y_4\": \"Mac Dudley\", \"Y_2\": \"Katharine Whittaker\"}, {\"Y_2\": \"Johnna Caldera\", \"Y_4\": \"Mac Dudley\"}, {\"Y_2\": \"Felton Caldera\", \"Y_4\": \"Mac Dudley\"}, {\"Y_2\": \"Lawrence Catalano\", \"Y_4\": \"Mac Dudley\"}, {\"Y_2\": \"Willis Berman\", \"Y_4\": \"Mac Dudley\"}]",
+        "answer": [
+            "Felton Caldera",
+            "Johnna Caldera",
+            "Katharine Whittaker",
+            "Lawrence Catalano",
+            "Willis Berman"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "brother(\"Otto Dudley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "92dd20a5-aadd-4a35-b0b8-f49ca1d1d587",
+        "question": "Who is the niece of the child of Norman Dudley?",
+        "solution_traces": "[{\"Y_2\": \"Betsy Linden\", \"Y_4\": \"Otto Dudley\"}, {\"Y_2\": \"Brigida Stallings\", \"Y_4\": \"Otto Dudley\"}, {\"Y_4\": \"Otto Dudley\", \"Y_2\": \"Violet Pohl\"}]",
+        "answer": [
+            "Betsy Linden",
+            "Brigida Stallings",
+            "Violet Pohl"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "child(\"Norman Dudley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2d5f8adf-3781-4ef6-81cd-f35bbbc3e930",
+        "question": "Who is the father of the female cousin of Laurette Caldera?",
+        "solution_traces": "[{\"Y_4\": \"Brigida Stallings\", \"Y_2\": \"Mac Dudley\"}, {\"Y_4\": \"Violet Pohl\", \"Y_2\": \"Mac Dudley\"}, {\"Y_4\": \"Betsy Linden\", \"Y_2\": \"Mac Dudley\"}]",
+        "answer": [
+            "Mac Dudley"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "female_cousin(\"Laurette Caldera\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d8da5012-b517-43c0-a37d-5ce550308ba9",
+        "question": "Who is the friend of the friend of Kraig Berman?",
+        "solution_traces": "[{\"Y_4\": \"Jay Bernardo\", \"Y_2\": \"Jeffery Corbin\"}, {\"Y_4\": \"Quentin Catalano\", \"Y_2\": \"Dennis Linden\"}, {\"Y_4\": \"Jay Bernardo\", \"Y_2\": \"Katharine Whittaker\"}, {\"Y_4\": \"Jay Bernardo\", \"Y_2\": \"Johnna Caldera\"}, {\"Y_4\": \"Quentin Catalano\", \"Y_2\": \"Lawrence Catalano\"}, {\"Y_4\": \"Quentin Catalano\", \"Y_2\": \"Mckinley Bernardo\"}, {\"Y_4\": \"Jay Bernardo\", \"Y_2\": \"Kraig Berman\"}, {\"Y_4\": \"Jay Bernardo\", \"Y_2\": \"Louella Pohl\"}, {\"Y_4\": \"Quentin Catalano\", \"Y_2\": \"Luisa Berman\"}, {\"Y_4\": \"Quentin Catalano\", \"Y_2\": \"Kraig Berman\"}]",
+        "answer": [
+            "Dennis Linden",
+            "Jeffery Corbin",
+            "Johnna Caldera",
+            "Katharine Whittaker",
+            "Kraig Berman",
+            "Lawrence Catalano",
+            "Louella Pohl",
+            "Luisa Berman",
+            "Mckinley Bernardo"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "friend(\"Kraig Berman\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6ab81217-f52e-4dd7-9c56-9ab5703a0ce2",
+        "question": "Who is the sibling of the uncle of Lora Canfield?",
+        "solution_traces": "[{\"Y_4\": \"Clark Berman\", \"Y_2\": \"Daryl Berman\"}, {\"Y_2\": \"Clark Berman\", \"Y_4\": \"Daryl Berman\"}, {\"Y_4\": \"Clark Berman\", \"Y_2\": \"Nedra Catalano\"}, {\"Y_2\": \"Nedra Catalano\", \"Y_4\": \"Daryl Berman\"}]",
+        "answer": [
+            "Clark Berman",
+            "Daryl Berman",
+            "Nedra Catalano"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "uncle(\"Lora Canfield\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c3c1af1f-9669-4a45-a301-4f2c199c4599",
+        "question": "Who is the sibling of the friend of Jay Bernardo?",
+        "solution_traces": "[{\"Y_2\": \"Lela Whittaker\", \"Y_4\": \"Katharine Whittaker\"}]",
+        "answer": [
+            "Lela Whittaker"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "friend(\"Jay Bernardo\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1b796b77-6504-43b7-b229-3c733f8adf7d",
+        "question": "Who is the grandmother of the son of Porfirio Stallings?",
+        "solution_traces": "[{\"Y_4\": \"Vance Stallings\", \"Y_2\": \"Dawn Dudley\"}]",
+        "answer": [
+            "Dawn Dudley"
+        ],
+        "prolog": {
+            "query": [
+                "grandmother(Y_4, Y_2)",
+                "son(\"Porfirio Stallings\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "247f96a6-f39a-4015-90fe-c7f1d3cb4ecf",
+        "question": "Who is the son of the parent of Clark Berman?",
+        "solution_traces": "[{\"Y_4\": \"Willis Berman\", \"Y_2\": \"Daryl Berman\"}, {\"Y_2\": \"Clark Berman\", \"Y_4\": \"Luisa Berman\"}, {\"Y_2\": \"Clark Berman\", \"Y_4\": \"Willis Berman\"}, {\"Y_2\": \"Daryl Berman\", \"Y_4\": \"Luisa Berman\"}]",
+        "answer": [
+            "Clark Berman",
+            "Daryl Berman"
+        ],
+        "prolog": {
+            "query": [
+                "son(Y_4, Y_2)",
+                "parent(\"Clark Berman\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "48c25245-49b3-49d3-b9b5-4fc32178fd29",
+        "question": "Who is the friend of the niece of Otto Dudley?",
+        "solution_traces": "[{\"Y_4\": \"Violet Pohl\", \"Y_2\": \"Katharine Whittaker\"}, {\"Y_4\": \"Brigida Stallings\", \"Y_2\": \"Ben Grigg\"}, {\"Y_2\": \"Clark Berman\", \"Y_4\": \"Brigida Stallings\"}, {\"Y_4\": \"Violet Pohl\", \"Y_2\": \"Porfirio Stallings\"}, {\"Y_4\": \"Violet Pohl\", \"Y_2\": \"Nedra Catalano\"}]",
+        "answer": [
+            "Ben Grigg",
+            "Clark Berman",
+            "Katharine Whittaker",
+            "Nedra Catalano",
+            "Porfirio Stallings"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "niece(\"Otto Dudley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "bf0312be-78e0-4ee7-a0f7-58fa5772b934",
+        "question": "Who is the mother of the great-uncle of Vance Stallings?",
+        "solution_traces": "[{\"Y_4\": \"Louis Caldera\", \"Y_2\": \"Johnna Caldera\"}, {\"Y_2\": \"Maximina Dudley\", \"Y_4\": \"Otto Dudley\"}, {\"Y_2\": \"Johnna Caldera\", \"Y_4\": \"Clair Caldera\"}]",
+        "answer": [
+            "Johnna Caldera",
+            "Maximina Dudley"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "great_uncle(\"Vance Stallings\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "039e00d1-e57e-4a06-b059-2b53f08c5871",
+        "question": "Who is the grandchild of the father-in-law of Porfirio Stallings?",
+        "solution_traces": "[{\"Y_2\": \"Vance Stallings\", \"Y_4\": \"Mac Dudley\"}, {\"Y_4\": \"Mac Dudley\", \"Y_2\": \"Dennis Linden\"}, {\"Y_4\": \"Mac Dudley\", \"Y_2\": \"Louella Pohl\"}]",
+        "answer": [
+            "Dennis Linden",
+            "Louella Pohl",
+            "Vance Stallings"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "father_in_law(\"Porfirio Stallings\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "39c68c33-1dc6-4905-9fdb-dba4ad51f44f",
+        "question": "Who is the wife of the parent of Genny Caldera?",
+        "solution_traces": "[{\"Y_2\": \"Bernice Caldera\", \"Y_4\": \"Clair Caldera\"}]",
+        "answer": [
+            "Bernice Caldera"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "parent(\"Genny Caldera\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "94c8e551-ba9b-414a-827a-f59e832cc5b4",
+        "question": "Who is the mother of the brother of Otto Dudley?",
+        "solution_traces": "[{\"Y_2\": \"Maximina Dudley\", \"Y_4\": \"Mac Dudley\"}]",
+        "answer": [
+            "Maximina Dudley"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "brother(\"Otto Dudley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "41da948b-df33-44e5-90c5-5efe2f2aca0b",
+        "question": "Who is the parent of the sibling of Katharine Whittaker?",
+        "solution_traces": "[{\"Y_2\": \"Vernie Whittaker\", \"Y_4\": \"Lela Whittaker\"}, {\"Y_2\": \"Isaiah Whittaker\", \"Y_4\": \"Lela Whittaker\"}]",
+        "answer": [
+            "Isaiah Whittaker",
+            "Vernie Whittaker"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "sibling(\"Katharine Whittaker\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9cd06a37-45dc-4e5a-bf1c-da30fdba5793",
+        "question": "Who is the daughter-in-law of the friend of Mac Dudley?",
+        "solution_traces": "[{\"Y_4\": \"Willis Berman\", \"Y_2\": \"Rosalyn Berman\"}, {\"Y_4\": \"Felton Caldera\", \"Y_2\": \"Johnna Caldera\"}, {\"Y_2\": \"Bernice Caldera\", \"Y_4\": \"Johnna Caldera\"}]",
+        "answer": [
+            "Bernice Caldera",
+            "Johnna Caldera",
+            "Rosalyn Berman"
+        ],
+        "prolog": {
+            "query": [
+                "daughter_in_law(Y_4, Y_2)",
+                "friend(\"Mac Dudley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "aca566c7-6653-4a33-bf47-d29199fca436",
+        "question": "Who is the brother of the great-grandchild of Luisa Berman?",
+        "solution_traces": "[{\"Y_4\": \"Nanette Bernardo\", \"Y_2\": \"Quentin Catalano\"}]",
+        "answer": [
+            "Quentin Catalano"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "great_grandchild(\"Luisa Berman\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3cb68f10-dcf1-47e3-90fb-1bd2babdcb54",
+        "question": "Who is the great-granddaughter of the friend of Laurette Caldera?",
+        "solution_traces": "[{\"Y_2\": \"Genny Caldera\", \"Y_4\": \"Felton Caldera\"}, {\"Y_4\": \"Andres Catalano\", \"Y_2\": \"Vernie Whittaker\"}, {\"Y_2\": \"Betsy Linden\", \"Y_4\": \"Felton Caldera\"}, {\"Y_4\": \"Felton Caldera\", \"Y_2\": \"Violet Pohl\"}, {\"Y_2\": \"Brigida Stallings\", \"Y_4\": \"Felton Caldera\"}, {\"Y_4\": \"Felton Caldera\", \"Y_2\": \"Laurette Caldera\"}]",
+        "answer": [
+            "Betsy Linden",
+            "Brigida Stallings",
+            "Genny Caldera",
+            "Laurette Caldera",
+            "Vernie Whittaker",
+            "Violet Pohl"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "friend(\"Laurette Caldera\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "36a2d8a5-667d-490e-b204-4a0d3a805f60",
+        "question": "Who is the friend of the brother of Otto Dudley?",
+        "solution_traces": "[{\"Y_4\": \"Mac Dudley\", \"Y_2\": \"Katharine Whittaker\"}, {\"Y_2\": \"Johnna Caldera\", \"Y_4\": \"Mac Dudley\"}, {\"Y_2\": \"Felton Caldera\", \"Y_4\": \"Mac Dudley\"}, {\"Y_2\": \"Lawrence Catalano\", \"Y_4\": \"Mac Dudley\"}, {\"Y_2\": \"Willis Berman\", \"Y_4\": \"Mac Dudley\"}]",
+        "answer": [
+            "Felton Caldera",
+            "Johnna Caldera",
+            "Katharine Whittaker",
+            "Lawrence Catalano",
+            "Willis Berman"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "brother(\"Otto Dudley\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "be22d891-7407-404a-b6a0-b4852a4dcdc6",
+        "question": "Who is the grandparent of the sibling of Violet Pohl?",
+        "solution_traces": "[{\"Y_2\": \"Maximina Dudley\", \"Y_4\": \"Betsy Linden\"}, {\"Y_2\": \"Norman Dudley\", \"Y_4\": \"Betsy Linden\"}, {\"Y_4\": \"Brigida Stallings\", \"Y_2\": \"Johnna Caldera\"}, {\"Y_2\": \"Norman Dudley\", \"Y_4\": \"Brigida Stallings\"}, {\"Y_4\": \"Betsy Linden\", \"Y_2\": \"Johnna Caldera\"}, {\"Y_2\": \"Woodrow Caldera\", \"Y_4\": \"Betsy Linden\"}, {\"Y_2\": \"Maximina Dudley\", \"Y_4\": \"Brigida Stallings\"}, {\"Y_2\": \"Woodrow Caldera\", \"Y_4\": \"Brigida Stallings\"}]",
+        "answer": [
+            "Johnna Caldera",
+            "Maximina Dudley",
+            "Norman Dudley",
+            "Woodrow Caldera"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "sibling(\"Violet Pohl\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    }
+]

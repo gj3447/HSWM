@@ -1,0 +1,1011 @@
+[
+    {
+        "id": "9bc21f4d-a53a-438c-8fc1-d62f6d2ad4f0",
+        "question": "How many grandchildren does the mother-in-law of the daughter of Harvey Parrott have?",
+        "solution_traces": "[{\"Y_5\": \"Theda Healey\", \"Count_1\": 6, \"Y_3\": \"Enid Healey\"}]",
+        "answer": [
+            "6"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(Y_3, Y_1)), Count_1)",
+                "mother_in_law(Y_5, Y_3)",
+                "daughter(\"Harvey Parrott\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0f41c901-056b-4900-b134-e8e6d8d8e4c4",
+        "question": "How many granddaughters does the great-grandparent of the sibling of Logan Faber have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Neil Faber\", \"Y_3\": \"Debbie Shields\"}, {\"Y_3\": \"Essie Faber\", \"Y_5\": \"Neil Faber\", \"Count_1\": 1}, {\"Count_1\": 1, \"Y_3\": \"Eugenio Faber\", \"Y_5\": \"Maryann Faber\"}, {\"Y_3\": \"Ambrose Shields\", \"Count_1\": 1, \"Y_5\": \"Maryann Faber\"}, {\"Y_5\": \"Neil Faber\", \"Count_1\": 1, \"Y_3\": \"Eugenio Faber\"}, {\"Count_1\": 1, \"Y_3\": \"Debbie Shields\", \"Y_5\": \"Maryann Faber\"}, {\"Y_3\": \"Ambrose Shields\", \"Y_5\": \"Neil Faber\", \"Count_1\": 1}, {\"Y_3\": \"Essie Faber\", \"Count_1\": 1, \"Y_5\": \"Maryann Faber\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(granddaughter(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "sibling(\"Logan Faber\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3837725f-bacd-4ab1-9d8e-d78ab6af0f81",
+        "question": "How many mothers-in-law does the grandparent of the sister-in-law of Junior Rauch have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Ione Kimball\", \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 0, \"Y_5\": \"Charmain Kimball\", \"Y_3\": \"Ione Kimball\"}, {\"Count_1\": 1, \"Y_5\": \"Charmain Kimball\", \"Y_3\": \"Jeffery Healey\"}, {\"Y_3\": \"Abe Kimball\", \"Count_1\": 0, \"Y_5\": \"Charmain Kimball\"}, {\"Count_1\": 1, \"Y_3\": \"Theda Healey\", \"Y_5\": \"Charmain Kimball\"}, {\"Y_3\": \"Theda Healey\", \"Count_1\": 1, \"Y_5\": \"Deirdre Kimball\"}, {\"Y_3\": \"Abe Kimball\", \"Count_1\": 0, \"Y_5\": \"Deirdre Kimball\"}, {\"Y_3\": \"Jeffery Healey\", \"Count_1\": 1, \"Y_5\": \"Deirdre Kimball\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "sister_in_law(\"Junior Rauch\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8d687448-43e6-4d0b-81bd-45bfc3564f58",
+        "question": "How many uncles does the sister of the granddaughter of Jeffery Healey have?",
+        "solution_traces": "[{\"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Charmain Kimball\", \"Count_1\": 1}, {\"Y_3\": \"Charmain Kimball\", \"Count_1\": 1, \"Y_5\": \"Deirdre Kimball\"}, {\"Count_1\": 1, \"Y_5\": \"Charmain Kimball\", \"Y_3\": \"Naomi Rauch\"}, {\"Y_5\": \"Naomi Rauch\", \"Count_1\": 1, \"Y_3\": \"Deirdre Kimball\"}, {\"Count_1\": 1, \"Y_5\": \"Charmain Kimball\", \"Y_3\": \"Deirdre Kimball\"}, {\"Count_1\": 1, \"Y_3\": \"Naomi Rauch\", \"Y_5\": \"Deirdre Kimball\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(uncle(Y_3, Y_1)), Count_1)",
+                "sister(Y_5, Y_3)",
+                "granddaughter(\"Jeffery Healey\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b2864cc7-355e-405f-b7e4-ceb0c58d575b",
+        "question": "How many siblings does the friend of the child of Natasha Mcwhorter have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Deirdre Kimball\", \"Y_5\": \"Pamula Mcwhorter\"}, {\"Count_1\": 4, \"Y_3\": \"Viva Healey\", \"Y_5\": \"Pamula Mcwhorter\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "child(\"Natasha Mcwhorter\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "692e746c-2267-4bca-a9a8-8224c264e2eb",
+        "question": "How many siblings does the friend of the friend of Harvey Parrott have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Harvey Parrott\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_5\": \"Viva Healey\", \"Count_1\": 0, \"Y_3\": \"Harvey Parrott\"}, {\"Y_5\": \"Viva Healey\", \"Y_3\": \"Reyes Kimball\", \"Count_1\": 4}, {\"Y_5\": \"Brigida Healey\", \"Y_3\": \"Tammie Mcwhorter\", \"Count_1\": 0}, {\"Y_5\": \"Brigida Healey\", \"Count_1\": 0, \"Y_3\": \"Francis Vanpelt\"}, {\"Y_5\": \"Viva Healey\", \"Count_1\": 4, \"Y_3\": \"Deirdre Kimball\"}, {\"Y_5\": \"Edwin Faber\", \"Count_1\": 1, \"Y_3\": \"Bethany Faber\"}, {\"Y_5\": \"Edwin Faber\", \"Y_3\": \"Harvey Parrott\", \"Count_1\": 0}, {\"Y_5\": \"Viva Healey\", \"Count_1\": 0, \"Y_3\": \"Natasha Mcwhorter\"}, {\"Y_5\": \"Brigida Healey\", \"Y_3\": \"Charmain Kimball\", \"Count_1\": 4}, {\"Count_1\": 0, \"Y_3\": \"Charity Faber\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_5\": \"Viva Healey\", \"Y_3\": \"Danilo Healey\", \"Count_1\": 4}, {\"Y_5\": \"Edwin Faber\", \"Y_3\": \"Allen Healey\", \"Count_1\": 0}, {\"Y_3\": \"Maryann Faber\", \"Count_1\": 2, \"Y_5\": \"Antionette Parrott\"}, {\"Y_5\": \"Viva Healey\", \"Count_1\": 4, \"Y_3\": \"Delbert Kimball\"}, {\"Y_5\": \"Viva Healey\", \"Count_1\": 1, \"Y_3\": \"Demetrius Rauch\"}, {\"Count_1\": 3, \"Y_5\": \"Edwin Faber\", \"Y_3\": \"Rob Faber\"}, {\"Y_5\": \"Brigida Healey\", \"Count_1\": 0, \"Y_3\": \"Harvey Parrott\"}, {\"Y_5\": \"Edwin Faber\", \"Count_1\": 0, \"Y_3\": \"Ione Kimball\"}, {\"Y_5\": \"Viva Healey\", \"Count_1\": 0, \"Y_3\": \"Pamula Mcwhorter\"}]",
+        "answer": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "friend(\"Harvey Parrott\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3a785743-6e27-4bc7-9d0a-61cb603b6c51",
+        "question": "How many mothers does the uncle of the great-grandson of Derek Burke have?",
+        "solution_traces": "[{\"Y_5\": \"Alden Faber\", \"Count_1\": 1, \"Y_3\": \"Stevie Shields\"}, {\"Count_1\": 1, \"Y_5\": \"Rob Faber\", \"Y_3\": \"Stevie Shields\"}, {\"Y_5\": \"Edwin Faber\", \"Count_1\": 1, \"Y_3\": \"Stevie Shields\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother(Y_3, Y_1)), Count_1)",
+                "uncle(Y_5, Y_3)",
+                "great_grandson(\"Derek Burke\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e03c9e7d-c9d7-4b09-a28a-819cabcd04a7",
+        "question": "How many nephews does the sister-in-law of the sister of Elias Mcwhorter have?",
+        "solution_traces": "[{\"Y_3\": \"Vanessa Faber\", \"Y_5\": \"Catina Faber\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "sister_in_law(Y_5, Y_3)",
+                "sister(\"Elias Mcwhorter\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e94fedac-1b1b-4341-bab9-ef8f983774c9",
+        "question": "How many grandsons does the grandparent of the great-granddaughter of Eugenio Faber have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Bethany Faber\", \"Y_5\": \"Maryann Faber\"}, {\"Y_3\": \"Tammie Mcwhorter\", \"Count_1\": 2, \"Y_5\": \"Maryann Faber\"}, {\"Count_1\": 3, \"Y_3\": \"Lyndon Faber\", \"Y_5\": \"Maryann Faber\"}, {\"Y_3\": \"Vito Mcwhorter\", \"Count_1\": 2, \"Y_5\": \"Maryann Faber\"}]",
+        "answer": [
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandson(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "great_granddaughter(\"Eugenio Faber\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "85511491-6e21-45c8-982f-4f53ae5671f4",
+        "question": "How many sons-in-law does the friend of the child of Charity Faber have?",
+        "solution_traces": "[{\"Y_5\": \"Timmy Faber\", \"Count_1\": 0, \"Y_3\": \"Demetrius Rauch\"}, {\"Y_5\": \"Timmy Faber\", \"Count_1\": 0, \"Y_3\": \"Neil Faber\"}, {\"Y_5\": \"Timmy Faber\", \"Count_1\": 0, \"Y_3\": \"Delbert Kimball\"}, {\"Y_5\": \"Timmy Faber\", \"Y_3\": \"Derek Burke\", \"Count_1\": 1}, {\"Y_5\": \"Timmy Faber\", \"Count_1\": 0, \"Y_3\": \"Reyes Kimball\"}, {\"Y_5\": \"Timmy Faber\", \"Count_1\": 1, \"Y_3\": \"Isabell Kimball\"}, {\"Y_5\": \"Timmy Faber\", \"Count_1\": 0, \"Y_3\": \"Junior Rauch\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "child(\"Charity Faber\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9e370cc4-ad06-4ab2-ac3b-cdb0b5bb28b5",
+        "question": "How many uncles does the great-grandchild of the parent of Danilo Healey have?",
+        "solution_traces": "[{\"Y_5\": \"Jeffery Healey\", \"Y_3\": \"Demetrius Rauch\", \"Count_1\": 2}, {\"Y_5\": \"Theda Healey\", \"Count_1\": 2, \"Y_3\": \"Rosemarie Rauch\"}, {\"Y_5\": \"Jeffery Healey\", \"Count_1\": 2, \"Y_3\": \"Rosemarie Rauch\"}, {\"Y_5\": \"Theda Healey\", \"Y_3\": \"Demetrius Rauch\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(uncle(Y_3, Y_1)), Count_1)",
+                "great_grandchild(Y_5, Y_3)",
+                "parent(\"Danilo Healey\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8aa6123c-f2b7-4e98-8920-82cadea04420",
+        "question": "How many friends does the son of the daughter-in-law of Ione Kimball have?",
+        "solution_traces": "[{\"Count_1\": 6, \"Y_5\": \"Isabell Kimball\", \"Y_3\": \"Reyes Kimball\"}, {\"Y_5\": \"Isabell Kimball\", \"Y_3\": \"Delbert Kimball\", \"Count_1\": 3}]",
+        "answer": [
+            "3",
+            "6"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "son(Y_5, Y_3)",
+                "daughter_in_law(\"Ione Kimball\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "66c710c2-d884-4208-acce-34cd74232f3a",
+        "question": "How many friends does the sister of the uncle of Vanessa Faber have?",
+        "solution_traces": "[{\"Y_5\": \"Stevie Shields\", \"Count_1\": 5, \"Y_3\": \"Bethany Faber\"}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "sister(Y_5, Y_3)",
+                "uncle(\"Vanessa Faber\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "375906b2-a2bd-4132-a0e9-c9ade782c921",
+        "question": "How many nephews does the brother of the brother of Edwin Faber have?",
+        "solution_traces": "[{\"Y_3\": \"Edwin Faber\", \"Y_5\": \"Alden Faber\", \"Count_1\": 3}, {\"Count_1\": 1, \"Y_3\": \"Alden Faber\", \"Y_5\": \"Rob Faber\"}, {\"Y_3\": \"Edwin Faber\", \"Y_5\": \"Rob Faber\", \"Count_1\": 3}, {\"Y_3\": \"Rob Faber\", \"Y_5\": \"Alden Faber\", \"Count_1\": 2}]",
+        "answer": [
+            "1",
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "brother(\"Edwin Faber\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "773f2fea-2aa8-4d06-acdf-0ddc67c06c52",
+        "question": "How many mothers does the great-grandmother of the nephew of Vanessa Faber have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Neil Faber\", \"Y_3\": \"Debbie Shields\"}, {\"Y_5\": \"Timmy Faber\", \"Count_1\": 0, \"Y_3\": \"Essie Faber\"}, {\"Count_1\": 1, \"Y_5\": \"Timmy Faber\", \"Y_3\": \"Debbie Shields\"}, {\"Y_5\": \"Logan Faber\", \"Count_1\": 0, \"Y_3\": \"Essie Faber\"}, {\"Y_3\": \"Essie Faber\", \"Y_5\": \"Neil Faber\", \"Count_1\": 0}, {\"Count_1\": 1, \"Y_5\": \"Logan Faber\", \"Y_3\": \"Debbie Shields\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother(Y_3, Y_1)), Count_1)",
+                "great_grandmother(Y_5, Y_3)",
+                "nephew(\"Vanessa Faber\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "818aa76b-efd9-4e38-a51d-ebed7a1c0b6d",
+        "question": "How many sisters does the great-granddaughter of the grandparent of Heather Healey have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Allen Healey\", \"Y_3\": \"Deirdre Kimball\"}, {\"Y_3\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Deirdre Kimball\", \"Count_1\": 2, \"Y_5\": \"Enid Healey\"}, {\"Count_1\": 2, \"Y_5\": \"Enid Healey\", \"Y_3\": \"Naomi Rauch\"}, {\"Y_5\": \"Harvey Parrott\", \"Count_1\": 2, \"Y_3\": \"Naomi Rauch\"}, {\"Y_5\": \"Harvey Parrott\", \"Count_1\": 2, \"Y_3\": \"Deirdre Kimball\"}, {\"Count_1\": 2, \"Y_5\": \"Allen Healey\", \"Y_3\": \"Naomi Rauch\"}, {\"Count_1\": 2, \"Y_5\": \"Antionette Parrott\", \"Y_3\": \"Naomi Rauch\"}, {\"Y_3\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_5\": \"Enid Healey\"}, {\"Y_3\": \"Deirdre Kimball\", \"Count_1\": 2, \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Charmain Kimball\", \"Y_5\": \"Harvey Parrott\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Charmain Kimball\", \"Y_5\": \"Allen Healey\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "great_granddaughter(Y_5, Y_3)",
+                "grandparent(\"Heather Healey\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4a9bcdb4-1072-46e4-8c2a-04f6d1698888",
+        "question": "How many brothers does the grandson of the parent of Lyndon Faber have?",
+        "solution_traces": "[{\"Y_3\": \"Edwin Faber\", \"Y_5\": \"Essie Faber\", \"Count_1\": 2}, {\"Y_3\": \"Edwin Faber\", \"Count_1\": 2, \"Y_5\": \"Eugenio Faber\"}, {\"Y_3\": \"Rob Faber\", \"Y_5\": \"Essie Faber\", \"Count_1\": 2}, {\"Y_3\": \"Rob Faber\", \"Count_1\": 2, \"Y_5\": \"Eugenio Faber\"}, {\"Y_3\": \"Alden Faber\", \"Y_5\": \"Essie Faber\", \"Count_1\": 2}, {\"Y_3\": \"Alden Faber\", \"Count_1\": 2, \"Y_5\": \"Eugenio Faber\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "grandson(Y_5, Y_3)",
+                "parent(\"Lyndon Faber\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9bb62099-ff11-4fc2-8b0c-9969d7130cf0",
+        "question": "How many great-grandparents does the cousin of the female cousin of Maryann Faber have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Logan Faber\", \"Y_5\": \"Pamula Mcwhorter\"}, {\"Count_1\": 4, \"Y_3\": \"Neil Faber\", \"Y_5\": \"Pamula Mcwhorter\"}, {\"Count_1\": 4, \"Y_3\": \"Maryann Faber\", \"Y_5\": \"Pamula Mcwhorter\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "cousin(Y_5, Y_3)",
+                "female_cousin(\"Maryann Faber\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f03ca486-f53b-42c3-87ff-e47af1ed42fc",
+        "question": "How many great-grandsons does the friend of the daughter-in-law of Vito Mcwhorter have?",
+        "solution_traces": "[{\"Y_3\": \"Theda Healey\", \"Count_1\": 1, \"Y_5\": \"Natasha Mcwhorter\"}, {\"Y_3\": \"Heather Healey\", \"Y_5\": \"Natasha Mcwhorter\", \"Count_1\": 0}, {\"Count_1\": 0, \"Y_5\": \"Natasha Mcwhorter\", \"Y_3\": \"Viva Healey\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "daughter_in_law(\"Vito Mcwhorter\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "49118baf-7d42-4e3b-8ce3-0eb36704b9f3",
+        "question": "How many friends does the great-grandparent of the niece of Delbert Kimball have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Ione Kimball\", \"Y_5\": \"Rosemarie Rauch\"}, {\"Y_3\": \"Abe Kimball\", \"Count_1\": 1, \"Y_5\": \"Rosemarie Rauch\"}, {\"Y_3\": \"Jeffery Healey\", \"Count_1\": 1, \"Y_5\": \"Rosemarie Rauch\"}, {\"Count_1\": 3, \"Y_3\": \"Theda Healey\", \"Y_5\": \"Rosemarie Rauch\"}]",
+        "answer": [
+            "1",
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "niece(\"Delbert Kimball\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "bc811773-604e-41ad-84e3-786a13ab091c",
+        "question": "How many great-granddaughters does the friend of the great-granddaughter of Dollie Burke have?",
+        "solution_traces": "[{\"Y_3\": \"Elias Mcwhorter\", \"Count_1\": 0, \"Y_5\": \"Vanessa Faber\"}, {\"Y_3\": \"Derek Burke\", \"Count_1\": 1, \"Y_5\": \"Vanessa Faber\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_granddaughter(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "great_granddaughter(\"Dollie Burke\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9a5397cd-2a0b-4550-9f78-0e0a448f8bab",
+        "question": "How many daughters-in-law does the granddaughter of the great-grandfather of Rob Faber have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Derek Burke\", \"Y_3\": \"Bethany Faber\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter_in_law(Y_3, Y_1)), Count_1)",
+                "granddaughter(Y_5, Y_3)",
+                "great_grandfather(\"Rob Faber\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "737c487b-e65b-4b6b-ac9f-d7e952e592ee",
+        "question": "How many grandmothers does the grandmother of the grandson of Bethany Faber have?",
+        "solution_traces": "[{\"Y_3\": \"Tammie Mcwhorter\", \"Y_5\": \"Neil Faber\", \"Count_1\": 0}, {\"Y_5\": \"Timmy Faber\", \"Count_1\": 1, \"Y_3\": \"Bethany Faber\"}, {\"Y_5\": \"Logan Faber\", \"Count_1\": 1, \"Y_3\": \"Bethany Faber\"}, {\"Y_5\": \"Logan Faber\", \"Y_3\": \"Tammie Mcwhorter\", \"Count_1\": 0}, {\"Y_5\": \"Neil Faber\", \"Count_1\": 1, \"Y_3\": \"Bethany Faber\"}, {\"Y_5\": \"Timmy Faber\", \"Count_1\": 0, \"Y_3\": \"Shelly Vanpelt\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandmother(Y_3, Y_1)), Count_1)",
+                "grandmother(Y_5, Y_3)",
+                "grandson(\"Bethany Faber\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "cf56a889-bf12-4afd-857d-2c18e994467e",
+        "question": "How many wives does the father-in-law of the friend of Derek Burke have?",
+        "solution_traces": "[{\"Y_3\": \"Vito Mcwhorter\", \"Y_5\": \"Alden Faber\", \"Count_1\": 1}, {\"Count_1\": 1, \"Y_3\": \"Eugenio Faber\", \"Y_5\": \"Bethany Faber\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(wife(Y_3, Y_1)), Count_1)",
+                "father_in_law(Y_5, Y_3)",
+                "friend(\"Derek Burke\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a1eca141-2ea9-4c4c-aadd-1c4b54565fa8",
+        "question": "How many siblings does the sibling of the brother-in-law of Lyndon Faber have?",
+        "solution_traces": "[{\"Y_5\": \"Stevie Shields\", \"Count_1\": 1, \"Y_3\": \"Bethany Faber\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "brother_in_law(\"Lyndon Faber\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "da273a3e-4437-495d-8184-5062e7b9281d",
+        "question": "How many granddaughters does the grandmother of the sister-in-law of Philip Kimball have?",
+        "solution_traces": "[{\"Y_5\": \"Brigida Healey\", \"Y_3\": \"Antionette Parrott\", \"Count_1\": 4}, {\"Count_1\": 4, \"Y_5\": \"Heather Healey\", \"Y_3\": \"Enid Healey\"}, {\"Y_5\": \"Brigida Healey\", \"Y_3\": \"Enid Healey\", \"Count_1\": 4}, {\"Y_5\": \"Viva Healey\", \"Y_3\": \"Enid Healey\", \"Count_1\": 4}, {\"Count_1\": 4, \"Y_5\": \"Heather Healey\", \"Y_3\": \"Antionette Parrott\"}, {\"Y_5\": \"Viva Healey\", \"Y_3\": \"Antionette Parrott\", \"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(granddaughter(Y_3, Y_1)), Count_1)",
+                "grandmother(Y_5, Y_3)",
+                "sister_in_law(\"Philip Kimball\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "41071a74-ed06-4ad4-b24c-e62411502f8f",
+        "question": "How many daughters does the child of the great-grandfather of Reyes Kimball have?",
+        "solution_traces": "[{\"Y_3\": \"Debi Drayton\", \"Y_5\": \"Allen Healey\", \"Count_1\": 0}, {\"Count_1\": 4, \"Y_3\": \"Theda Healey\", \"Y_5\": \"Harvey Parrott\"}, {\"Count_1\": 4, \"Y_5\": \"Allen Healey\", \"Y_3\": \"Jeffery Healey\"}]",
+        "answer": [
+            "0",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter(Y_3, Y_1)), Count_1)",
+                "child(Y_5, Y_3)",
+                "great_grandfather(\"Reyes Kimball\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0f11cd3b-542f-465e-83a1-44bd61439415",
+        "question": "How many grandchildren does the brother-in-law of the son-in-law of Enid Healey have?",
+        "solution_traces": "[{\"Y_3\": \"Jeffery Healey\", \"Count_1\": 5, \"Y_5\": \"Lon Drayton\"}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(Y_3, Y_1)), Count_1)",
+                "brother_in_law(Y_5, Y_3)",
+                "son_in_law(\"Enid Healey\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2fe452ab-cbc1-4ab4-b72e-0450aa53dea6",
+        "question": "How many sisters does the sister of the sibling of Delbert Kimball have?",
+        "solution_traces": "[{\"Y_5\": \"Naomi Rauch\", \"Y_3\": \"Charmain Kimball\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Charmain Kimball\", \"Y_5\": \"Reyes Kimball\"}, {\"Count_1\": 2, \"Y_3\": \"Naomi Rauch\", \"Y_5\": \"Deirdre Kimball\"}, {\"Y_5\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Deirdre Kimball\"}, {\"Count_1\": 2, \"Y_5\": \"Reyes Kimball\", \"Y_3\": \"Deirdre Kimball\"}, {\"Y_5\": \"Naomi Rauch\", \"Count_1\": 2, \"Y_3\": \"Deirdre Kimball\"}, {\"Count_1\": 2, \"Y_5\": \"Reyes Kimball\", \"Y_3\": \"Naomi Rauch\"}, {\"Y_5\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_3\": \"Naomi Rauch\"}, {\"Y_3\": \"Charmain Kimball\", \"Count_1\": 2, \"Y_5\": \"Deirdre Kimball\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "sister(Y_5, Y_3)",
+                "sibling(\"Delbert Kimball\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0c04a4c8-deee-420c-a78c-2fcf186c8939",
+        "question": "How many granddaughters does the friend of the great-grandparent of Delbert Kimball have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_5\": \"Enid Healey\", \"Y_3\": \"Stevie Shields\"}, {\"Count_1\": 4, \"Y_3\": \"Harvey Parrott\", \"Y_5\": \"Antionette Parrott\"}, {\"Count_1\": 0, \"Y_5\": \"Harvey Parrott\", \"Y_3\": \"Brigida Healey\"}, {\"Y_3\": \"Isabell Kimball\", \"Count_1\": 1, \"Y_5\": \"Allen Healey\"}, {\"Y_3\": \"Debi Drayton\", \"Y_5\": \"Allen Healey\", \"Count_1\": 0}, {\"Count_1\": 4, \"Y_5\": \"Harvey Parrott\", \"Y_3\": \"Antionette Parrott\"}, {\"Y_3\": \"Philip Kimball\", \"Count_1\": 1, \"Y_5\": \"Enid Healey\"}, {\"Count_1\": 1, \"Y_5\": \"Allen Healey\", \"Y_3\": \"Eugenio Faber\"}, {\"Y_3\": \"Edwin Faber\", \"Count_1\": 0, \"Y_5\": \"Harvey Parrott\"}, {\"Count_1\": 0, \"Y_3\": \"Maryann Faber\", \"Y_5\": \"Antionette Parrott\"}, {\"Y_3\": \"Edwin Faber\", \"Count_1\": 0, \"Y_5\": \"Allen Healey\"}, {\"Count_1\": 0, \"Y_5\": \"Harvey Parrott\", \"Y_3\": \"Viva Healey\"}, {\"Count_1\": 0, \"Y_3\": \"Charity Faber\", \"Y_5\": \"Antionette Parrott\"}]",
+        "answer": [
+            "0",
+            "1",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(granddaughter(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "great_grandparent(\"Delbert Kimball\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    }
+]

@@ -1,0 +1,1202 @@
+[
+    {
+        "id": "6d663a51-3c68-4c85-bfd7-4dcfed00900f",
+        "question": "Who is the sister of the brother of the great-grandchild of the person whose date of birth is 0241-01-17?",
+        "solution_traces": "[{\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Reyes Kimball\", \"Y_2\": \"Deirdre Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Reyes Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Naomi Rauch\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Delbert Kimball\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Delbert Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Delbert Kimball\", \"Y_6\": \"Deirdre Kimball\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Delbert Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Delbert Kimball\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Reyes Kimball\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Reyes Kimball\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Delbert Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Reyes Kimball\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Delbert Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Reyes Kimball\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Reyes Kimball\", \"Y_2\": \"Deirdre Kimball\", \"Y_6\": \"Delbert Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Reyes Kimball\", \"Y_4\": \"Delbert Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Reyes Kimball\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Delbert Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Reyes Kimball\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Delbert Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_6\": \"Reyes Kimball\", \"Y_4\": \"Delbert Kimball\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Delbert Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_6\": \"Reyes Kimball\", \"Y_4\": \"Delbert Kimball\", \"Y_2\": \"Deirdre Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Reyes Kimball\", \"Y_2\": \"Deirdre Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Reyes Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Deirdre Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Reyes Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Delbert Kimball\"}]",
+        "answer": [
+            "Charmain Kimball",
+            "Deirdre Kimball",
+            "Naomi Rauch"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "brother(Y_6, Y_4)",
+                "great_grandchild(Y_8, Y_6)",
+                "dob(Y_8, \"0241-01-17\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1ea637ae-07bb-4b4f-97ab-0f08f39bd204",
+        "question": "Who is the great-grandson of the great-grandparent of the son of the person whose occupation is publishing rights manager?",
+        "solution_traces": "[{\"Y_6\": \"Alden Faber\", \"Y_4\": \"Derek Burke\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Alden Faber\"}, {\"Y_6\": \"Alden Faber\", \"Y_4\": \"Derek Burke\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Rob Faber\"}, {\"Y_4\": \"Dollie Burke\", \"Y_6\": \"Rob Faber\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Edwin Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Derek Burke\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Alden Faber\"}, {\"Y_4\": \"Dollie Burke\", \"Y_6\": \"Rob Faber\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Rob Faber\"}, {\"Y_6\": \"Alden Faber\", \"Y_4\": \"Derek Burke\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Edwin Faber\"}, {\"Y_4\": \"Dollie Burke\", \"Y_6\": \"Alden Faber\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Edwin Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Derek Burke\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Edwin Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Dollie Burke\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Edwin Faber\"}, {\"Y_6\": \"Rob Faber\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Edwin Faber\", \"Y_4\": \"Derek Burke\"}, {\"Y_4\": \"Dollie Burke\", \"Y_6\": \"Alden Faber\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Alden Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Dollie Burke\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Alden Faber\"}, {\"Y_6\": \"Rob Faber\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Alden Faber\", \"Y_4\": \"Derek Burke\"}, {\"Y_6\": \"Rob Faber\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Rob Faber\", \"Y_4\": \"Derek Burke\"}, {\"Y_4\": \"Dollie Burke\", \"Y_6\": \"Rob Faber\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Alden Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Dollie Burke\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Rob Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Derek Burke\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Rob Faber\"}, {\"Y_4\": \"Dollie Burke\", \"Y_6\": \"Alden Faber\", \"Y_8\": \"Bethany Faber\", \"Y_2\": \"Rob Faber\"}]",
+        "answer": [
+            "Alden Faber",
+            "Edwin Faber",
+            "Rob Faber"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandson(Y_4, Y_2)",
+                "great_grandparent(Y_6, Y_4)",
+                "son(Y_8, Y_6)",
+                "job(Y_8, \"publishing rights manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5fc33765-516d-4a10-85a8-a4b7ef9646fd",
+        "question": "Who is the child of the son-in-law of the grandfather of the person whose occupation is government social research officer?",
+        "solution_traces": "[{\"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Jeffery Healey\", \"Y_8\": \"Danilo Healey\"}, {\"Y_6\": \"Allen Healey\", \"Y_4\": \"Lon Drayton\", \"Y_2\": \"Phil Drayton\", \"Y_8\": \"Danilo Healey\"}, {\"Y_2\": \"Brigida Healey\", \"Y_6\": \"Harvey Parrott\", \"Y_4\": \"Jeffery Healey\", \"Y_8\": \"Danilo Healey\"}, {\"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Heather Healey\", \"Y_4\": \"Jeffery Healey\", \"Y_8\": \"Danilo Healey\"}, {\"Y_2\": \"Viva Healey\", \"Y_6\": \"Harvey Parrott\", \"Y_4\": \"Jeffery Healey\", \"Y_8\": \"Danilo Healey\"}, {\"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Danilo Healey\", \"Y_4\": \"Jeffery Healey\", \"Y_8\": \"Danilo Healey\"}]",
+        "answer": [
+            "Brigida Healey",
+            "Danilo Healey",
+            "Heather Healey",
+            "Isabell Kimball",
+            "Phil Drayton",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "son_in_law(Y_6, Y_4)",
+                "grandfather(Y_8, Y_6)",
+                "job(Y_8, \"government social research officer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "40c1e630-6af1-47ea-9853-260ecfb5cb67",
+        "question": "Who is the sibling of the sister-in-law of the child of the person whose date of birth is 0239-12-23?",
+        "solution_traces": "[{\"Y_8\": \"Vito Mcwhorter\", \"Y_2\": \"Alden Faber\", \"Y_4\": \"Vanessa Faber\", \"Y_6\": \"Catina Faber\"}, {\"Y_8\": \"Vito Mcwhorter\", \"Y_4\": \"Vanessa Faber\", \"Y_6\": \"Catina Faber\", \"Y_2\": \"Rob Faber\"}, {\"Y_8\": \"Vito Mcwhorter\", \"Y_2\": \"Edwin Faber\", \"Y_4\": \"Vanessa Faber\", \"Y_6\": \"Catina Faber\"}]",
+        "answer": [
+            "Alden Faber",
+            "Edwin Faber",
+            "Rob Faber"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "sister_in_law(Y_6, Y_4)",
+                "child(Y_8, Y_6)",
+                "dob(Y_8, \"0239-12-23\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0f407bcb-24d1-482f-b707-7f6ccd86de09",
+        "question": "Who is the sibling of the sibling of the friend of the person whose hobby is meteorology?",
+        "solution_traces": "[{\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Danilo Healey\", \"Y_4\": \"Heather Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_4\": \"Danilo Healey\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Rob Faber\", \"Y_2\": \"Edwin Faber\", \"Y_8\": \"Ione Kimball\"}, {\"Y_2\": \"Heather Healey\", \"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_4\": \"Danilo Healey\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Alden Faber\", \"Y_4\": \"Rob Faber\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Danilo Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Danilo Healey\", \"Y_4\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Edwin Faber\", \"Y_4\": \"Vanessa Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Vanessa Faber\", \"Y_4\": \"Rob Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Rob Faber\", \"Y_8\": \"Ione Kimball\", \"Y_2\": \"Vanessa Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Vanessa Faber\", \"Y_8\": \"Ione Kimball\", \"Y_2\": \"Rob Faber\"}, {\"Y_2\": \"Heather Healey\", \"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Brigida Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Rob Faber\", \"Y_2\": \"Alden Faber\", \"Y_8\": \"Ione Kimball\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Brigida Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Danilo Healey\", \"Y_4\": \"Brigida Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_2\": \"Edwin Faber\", \"Y_4\": \"Vanessa Faber\", \"Y_8\": \"Ione Kimball\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Heather Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Edwin Faber\", \"Y_4\": \"Alden Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_2\": \"Edwin Faber\", \"Y_8\": \"Ione Kimball\", \"Y_4\": \"Alden Faber\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Vanessa Faber\", \"Y_2\": \"Rob Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_8\": \"Ione Kimball\", \"Y_2\": \"Rob Faber\", \"Y_4\": \"Alden Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Rob Faber\", \"Y_4\": \"Alden Faber\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Heather Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Alden Faber\", \"Y_4\": \"Vanessa Faber\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Danilo Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Danilo Healey\", \"Y_4\": \"Heather Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Vanessa Faber\", \"Y_4\": \"Alden Faber\"}, {\"Y_4\": \"Danilo Healey\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Isabell Kimball\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Brigida Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_4\": \"Danilo Healey\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_4\": \"Danilo Healey\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_2\": \"Alden Faber\", \"Y_4\": \"Vanessa Faber\", \"Y_8\": \"Ione Kimball\"}, {\"Y_4\": \"Danilo Healey\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Heather Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_4\": \"Danilo Healey\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Heather Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_4\": \"Danilo Healey\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Isabell Kimball\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Heather Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Edwin Faber\", \"Y_4\": \"Rob Faber\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Heather Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_2\": \"Vanessa Faber\", \"Y_8\": \"Ione Kimball\", \"Y_4\": \"Alden Faber\"}]",
+        "answer": [
+            "Alden Faber",
+            "Brigida Healey",
+            "Danilo Healey",
+            "Edwin Faber",
+            "Heather Healey",
+            "Isabell Kimball",
+            "Rob Faber",
+            "Vanessa Faber",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "friend(Y_8, Y_6)",
+                "hobby(Y_8, \"meteorology\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8425c315-f38e-4a38-8954-546481dd299f",
+        "question": "Who is the sister of the sister of the sister of the person whose occupation is firefighter?",
+        "solution_traces": "[{\"Y_8\": \"Heather Healey\", \"Y_6\": \"Isabell Kimball\", \"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Heather Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Heather Healey\", \"Y_2\": \"Isabell Kimball\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Isabell Kimball\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Heather Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Brigida Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Heather Healey\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Heather Healey\", \"Y_2\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Isabell Kimball\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Isabell Kimball\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Viva Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Isabell Kimball\", \"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Viva Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Heather Healey\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Isabell Kimball\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Isabell Kimball\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Heather Healey\", \"Y_2\": \"Isabell Kimball\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Isabell Kimball\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Isabell Kimball\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Heather Healey\", \"Y_4\": \"Brigida Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Isabell Kimball\", \"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Isabell Kimball\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Brigida Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Isabell Kimball\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Heather Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Isabell Kimball\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Heather Healey\", \"Y_4\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Isabell Kimball\", \"Y_2\": \"Heather Healey\", \"Y_4\": \"Viva Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Isabell Kimball\", \"Y_2\": \"Heather Healey\", \"Y_4\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Heather Healey\", \"Y_2\": \"Viva Healey\", \"Y_6\": \"Viva Healey\"}]",
+        "answer": [
+            "Brigida Healey",
+            "Heather Healey",
+            "Isabell Kimball",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "sister(Y_6, Y_4)",
+                "sister(Y_8, Y_6)",
+                "job(Y_8, \"firefighter\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3375066a-1cc4-4a7e-9313-f7d913adb7bc",
+        "question": "Who is the granddaughter of the grandfather of the sister of the person whose occupation is actor?",
+        "solution_traces": "[{\"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Charmain Kimball\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Jeffery Healey\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_4\": \"Abe Kimball\", \"Y_2\": \"Deirdre Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_4\": \"Abe Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Abe Kimball\", \"Y_2\": \"Deirdre Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Charmain Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Deirdre Kimball\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_4\": \"Abe Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_4\": \"Abe Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Deirdre Kimball\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Deirdre Kimball\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_4\": \"Abe Kimball\", \"Y_2\": \"Deirdre Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Abe Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Naomi Rauch\"}, {\"Y_4\": \"Abe Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_4\": \"Jeffery Healey\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_4\": \"Abe Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Jeffery Healey\", \"Y_2\": \"Naomi Rauch\"}, {\"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Charmain Kimball\", \"Y_4\": \"Jeffery Healey\", \"Y_6\": \"Naomi Rauch\"}]",
+        "answer": [
+            "Charmain Kimball",
+            "Deirdre Kimball",
+            "Naomi Rauch"
+        ],
+        "prolog": {
+            "query": [
+                "granddaughter(Y_4, Y_2)",
+                "grandfather(Y_6, Y_4)",
+                "sister(Y_8, Y_6)",
+                "job(Y_8, \"actor\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4a8c6a12-d57f-4789-bf63-89a1db61660d",
+        "question": "Who is the grandson of the friend of the brother of the person whose date of birth is 0263-08-14?",
+        "solution_traces": "[{\"Y_6\": \"Edwin Faber\", \"Y_2\": \"Neil Faber\", \"Y_4\": \"Bethany Faber\", \"Y_8\": \"Vanessa Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Vanessa Faber\", \"Y_4\": \"Ione Kimball\"}, {\"Y_4\": \"Essie Faber\", \"Y_6\": \"Rob Faber\", \"Y_8\": \"Vanessa Faber\", \"Y_2\": \"Alden Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Allen Healey\", \"Y_8\": \"Vanessa Faber\", \"Y_2\": \"Danilo Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Harvey Parrott\", \"Y_8\": \"Vanessa Faber\", \"Y_2\": \"Danilo Healey\"}, {\"Y_4\": \"Essie Faber\", \"Y_6\": \"Rob Faber\", \"Y_8\": \"Vanessa Faber\", \"Y_2\": \"Rob Faber\"}, {\"Y_4\": \"Essie Faber\", \"Y_6\": \"Rob Faber\", \"Y_8\": \"Vanessa Faber\", \"Y_2\": \"Edwin Faber\"}, {\"Y_6\": \"Alden Faber\", \"Y_4\": \"Philip Kimball\", \"Y_8\": \"Vanessa Faber\", \"Y_2\": \"Demetrius Rauch\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Allen Healey\", \"Y_8\": \"Vanessa Faber\", \"Y_2\": \"Phil Drayton\"}, {\"Y_6\": \"Alden Faber\", \"Y_2\": \"Neil Faber\", \"Y_4\": \"Vito Mcwhorter\", \"Y_8\": \"Vanessa Faber\"}, {\"Y_6\": \"Alden Faber\", \"Y_4\": \"Derek Burke\", \"Y_8\": \"Vanessa Faber\", \"Y_2\": \"Stevie Shields\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Bethany Faber\", \"Y_8\": \"Vanessa Faber\", \"Y_2\": \"Logan Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_8\": \"Vanessa Faber\", \"Y_4\": \"Ione Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Bethany Faber\", \"Y_8\": \"Vanessa Faber\", \"Y_2\": \"Timmy Faber\"}, {\"Y_6\": \"Rob Faber\", \"Y_2\": \"Logan Faber\", \"Y_8\": \"Vanessa Faber\", \"Y_4\": \"Lyndon Faber\"}, {\"Y_2\": \"Neil Faber\", \"Y_6\": \"Rob Faber\", \"Y_8\": \"Vanessa Faber\", \"Y_4\": \"Lyndon Faber\"}, {\"Y_6\": \"Rob Faber\", \"Y_2\": \"Timmy Faber\", \"Y_8\": \"Vanessa Faber\", \"Y_4\": \"Lyndon Faber\"}, {\"Y_6\": \"Alden Faber\", \"Y_4\": \"Vito Mcwhorter\", \"Y_8\": \"Vanessa Faber\", \"Y_2\": \"Logan Faber\"}]",
+        "answer": [
+            "Alden Faber",
+            "Danilo Healey",
+            "Delbert Kimball",
+            "Demetrius Rauch",
+            "Edwin Faber",
+            "Logan Faber",
+            "Neil Faber",
+            "Phil Drayton",
+            "Reyes Kimball",
+            "Rob Faber",
+            "Stevie Shields",
+            "Timmy Faber"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "brother(Y_8, Y_6)",
+                "dob(Y_8, \"0263-08-14\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0082dde6-836a-481f-8873-4c42011cc4ba",
+        "question": "Who is the father-in-law of the grandchild of the friend of the person whose date of birth is 0296-10-14?",
+        "solution_traces": "[{\"Y_2\": \"Francis Vanpelt\", \"Y_4\": \"Rob Faber\", \"Y_6\": \"Debbie Shields\", \"Y_8\": \"Danilo Healey\"}, {\"Y_4\": \"Alden Faber\", \"Y_2\": \"Vito Mcwhorter\", \"Y_6\": \"Eugenio Faber\", \"Y_8\": \"Danilo Healey\"}, {\"Y_2\": \"Francis Vanpelt\", \"Y_4\": \"Rob Faber\", \"Y_6\": \"Eugenio Faber\", \"Y_8\": \"Danilo Healey\"}, {\"Y_4\": \"Alden Faber\", \"Y_6\": \"Debbie Shields\", \"Y_2\": \"Vito Mcwhorter\", \"Y_8\": \"Danilo Healey\"}]",
+        "answer": [
+            "Francis Vanpelt",
+            "Vito Mcwhorter"
+        ],
+        "prolog": {
+            "query": [
+                "father_in_law(Y_4, Y_2)",
+                "grandchild(Y_6, Y_4)",
+                "friend(Y_8, Y_6)",
+                "dob(Y_8, \"0296-10-14\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5892fcc2-89bd-4530-9227-05af28891752",
+        "question": "Who is the aunt of the niece of the friend of the person whose occupation is environmental education officer?",
+        "solution_traces": "[{\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Charmain Kimball\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Charmain Kimball\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Naomi Rauch\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Naomi Rauch\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Naomi Rauch\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Heather Healey\", \"Y_4\": \"Naomi Rauch\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Naomi Rauch\", \"Y_6\": \"Brigida Healey\"}, {\"Y_2\": \"Heather Healey\", \"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Deirdre Kimball\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Deirdre Kimball\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Charmain Kimball\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Charmain Kimball\", \"Y_2\": \"Viva Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_6\": \"Edwin Faber\", \"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Maryann Faber\", \"Y_2\": \"Vanessa Faber\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Deirdre Kimball\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Deirdre Kimball\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Charmain Kimball\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_2\": \"Vanessa Faber\", \"Y_6\": \"Rob Faber\", \"Y_8\": \"Charity Faber\", \"Y_4\": \"Maryann Faber\"}, {\"Y_2\": \"Heather Healey\", \"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Deirdre Kimball\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Charmain Kimball\", \"Y_2\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Deirdre Kimball\", \"Y_6\": \"Brigida Healey\"}, {\"Y_2\": \"Heather Healey\", \"Y_8\": \"Harvey Parrott\", \"Y_4\": \"Naomi Rauch\", \"Y_6\": \"Brigida Healey\"}]",
+        "answer": [
+            "Brigida Healey",
+            "Heather Healey",
+            "Vanessa Faber",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "niece(Y_6, Y_4)",
+                "friend(Y_8, Y_6)",
+                "job(Y_8, \"environmental education officer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "bfe72e78-ca14-450b-b5c8-9cff0bab683a",
+        "question": "Who is the brother of the brother of the grandchild of the person whose hobby is race walking?",
+        "solution_traces": "[{\"Y_8\": \"Essie Faber\", \"Y_4\": \"Alden Faber\", \"Y_2\": \"Edwin Faber\", \"Y_6\": \"Edwin Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_2\": \"Rob Faber\", \"Y_6\": \"Vanessa Faber\", \"Y_4\": \"Alden Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_6\": \"Rob Faber\", \"Y_2\": \"Rob Faber\", \"Y_4\": \"Edwin Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_2\": \"Edwin Faber\", \"Y_6\": \"Vanessa Faber\", \"Y_4\": \"Alden Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_4\": \"Alden Faber\", \"Y_2\": \"Rob Faber\", \"Y_6\": \"Edwin Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_6\": \"Alden Faber\", \"Y_2\": \"Edwin Faber\", \"Y_4\": \"Rob Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_6\": \"Rob Faber\", \"Y_2\": \"Alden Faber\", \"Y_4\": \"Edwin Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_2\": \"Alden Faber\", \"Y_6\": \"Vanessa Faber\", \"Y_4\": \"Edwin Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_4\": \"Rob Faber\", \"Y_2\": \"Edwin Faber\", \"Y_6\": \"Edwin Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_6\": \"Alden Faber\", \"Y_2\": \"Rob Faber\", \"Y_4\": \"Edwin Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_6\": \"Alden Faber\", \"Y_2\": \"Alden Faber\", \"Y_4\": \"Rob Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_6\": \"Alden Faber\", \"Y_2\": \"Alden Faber\", \"Y_4\": \"Edwin Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_6\": \"Rob Faber\", \"Y_2\": \"Rob Faber\", \"Y_4\": \"Alden Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_4\": \"Rob Faber\", \"Y_2\": \"Alden Faber\", \"Y_6\": \"Edwin Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_6\": \"Rob Faber\", \"Y_2\": \"Edwin Faber\", \"Y_4\": \"Alden Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_2\": \"Rob Faber\", \"Y_6\": \"Vanessa Faber\", \"Y_4\": \"Edwin Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_4\": \"Rob Faber\", \"Y_2\": \"Edwin Faber\", \"Y_6\": \"Vanessa Faber\"}, {\"Y_8\": \"Essie Faber\", \"Y_4\": \"Rob Faber\", \"Y_2\": \"Alden Faber\", \"Y_6\": \"Vanessa Faber\"}]",
+        "answer": [
+            "Alden Faber",
+            "Edwin Faber",
+            "Rob Faber"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "brother(Y_6, Y_4)",
+                "grandchild(Y_8, Y_6)",
+                "hobby(Y_8, \"race walking\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cb3ce5bd-696e-4bf2-bb0b-24fce7e6c688",
+        "question": "Who is the child of the great-grandparent of the niece of the person whose occupation is ophthalmologist?",
+        "solution_traces": "[{\"Y_8\": \"Charmain Kimball\", \"Y_4\": \"Ione Kimball\", \"Y_6\": \"Rosemarie Rauch\", \"Y_2\": \"Philip Kimball\"}, {\"Y_4\": \"Theda Healey\", \"Y_8\": \"Charmain Kimball\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Rosemarie Rauch\"}, {\"Y_4\": \"Theda Healey\", \"Y_8\": \"Charmain Kimball\", \"Y_2\": \"Isabell Kimball\", \"Y_6\": \"Rosemarie Rauch\"}, {\"Y_8\": \"Charmain Kimball\", \"Y_2\": \"Isabell Kimball\", \"Y_6\": \"Rosemarie Rauch\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_8\": \"Charmain Kimball\", \"Y_2\": \"Danilo Healey\", \"Y_6\": \"Rosemarie Rauch\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_4\": \"Theda Healey\", \"Y_8\": \"Charmain Kimball\", \"Y_2\": \"Viva Healey\", \"Y_6\": \"Rosemarie Rauch\"}, {\"Y_8\": \"Charmain Kimball\", \"Y_2\": \"Viva Healey\", \"Y_6\": \"Rosemarie Rauch\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_4\": \"Theda Healey\", \"Y_8\": \"Charmain Kimball\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Rosemarie Rauch\"}, {\"Y_4\": \"Theda Healey\", \"Y_8\": \"Charmain Kimball\", \"Y_2\": \"Danilo Healey\", \"Y_6\": \"Rosemarie Rauch\"}, {\"Y_4\": \"Abe Kimball\", \"Y_8\": \"Charmain Kimball\", \"Y_2\": \"Philip Kimball\", \"Y_6\": \"Rosemarie Rauch\"}, {\"Y_8\": \"Charmain Kimball\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Rosemarie Rauch\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_8\": \"Charmain Kimball\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Rosemarie Rauch\", \"Y_4\": \"Jeffery Healey\"}]",
+        "answer": [
+            "Brigida Healey",
+            "Danilo Healey",
+            "Heather Healey",
+            "Isabell Kimball",
+            "Philip Kimball",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "great_grandparent(Y_6, Y_4)",
+                "niece(Y_8, Y_6)",
+                "job(Y_8, \"ophthalmologist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e6a113f1-e6fd-44a5-9273-a75ec2c1aecd",
+        "question": "Who is the father of the grandchild of the grandfather of the person whose hobby is tether car?",
+        "solution_traces": "[{\"Y_8\": \"Heather Healey\", \"Y_4\": \"Heather Healey\", \"Y_2\": \"Jeffery Healey\", \"Y_6\": \"Allen Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Jeffery Healey\", \"Y_6\": \"Harvey Parrott\", \"Y_4\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Lon Drayton\", \"Y_4\": \"Phil Drayton\", \"Y_6\": \"Allen Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Jeffery Healey\", \"Y_6\": \"Allen Healey\", \"Y_4\": \"Brigida Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Heather Healey\", \"Y_2\": \"Jeffery Healey\", \"Y_6\": \"Harvey Parrott\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Jeffery Healey\", \"Y_6\": \"Allen Healey\", \"Y_4\": \"Viva Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Jeffery Healey\", \"Y_6\": \"Allen Healey\", \"Y_4\": \"Isabell Kimball\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Jeffery Healey\", \"Y_6\": \"Allen Healey\", \"Y_4\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Jeffery Healey\", \"Y_6\": \"Harvey Parrott\", \"Y_4\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Jeffery Healey\", \"Y_6\": \"Harvey Parrott\", \"Y_4\": \"Isabell Kimball\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Jeffery Healey\", \"Y_6\": \"Harvey Parrott\", \"Y_4\": \"Viva Healey\"}]",
+        "answer": [
+            "Jeffery Healey",
+            "Lon Drayton"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "grandchild(Y_6, Y_4)",
+                "grandfather(Y_8, Y_6)",
+                "hobby(Y_8, \"tether car\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "992d42e6-139f-4a68-8a50-a46e4fbe3ed9",
+        "question": "Who is the great-grandmother of the brother of the grandchild of the person whose occupation is secondary school teacher?",
+        "solution_traces": "[{\"Y_4\": \"Rob Faber\", \"Y_2\": \"Dollie Burke\", \"Y_8\": \"Ambrose Shields\", \"Y_6\": \"Vanessa Faber\"}, {\"Y_2\": \"Dollie Burke\", \"Y_4\": \"Edwin Faber\", \"Y_8\": \"Ambrose Shields\", \"Y_6\": \"Vanessa Faber\"}, {\"Y_4\": \"Alden Faber\", \"Y_6\": \"Rob Faber\", \"Y_2\": \"Dollie Burke\", \"Y_8\": \"Ambrose Shields\"}, {\"Y_6\": \"Edwin Faber\", \"Y_4\": \"Rob Faber\", \"Y_2\": \"Dollie Burke\", \"Y_8\": \"Ambrose Shields\"}, {\"Y_6\": \"Alden Faber\", \"Y_2\": \"Dollie Burke\", \"Y_8\": \"Ambrose Shields\", \"Y_4\": \"Rob Faber\"}, {\"Y_6\": \"Rob Faber\", \"Y_2\": \"Dollie Burke\", \"Y_8\": \"Ambrose Shields\", \"Y_4\": \"Edwin Faber\"}, {\"Y_4\": \"Alden Faber\", \"Y_2\": \"Dollie Burke\", \"Y_8\": \"Ambrose Shields\", \"Y_6\": \"Vanessa Faber\"}, {\"Y_6\": \"Alden Faber\", \"Y_2\": \"Dollie Burke\", \"Y_8\": \"Ambrose Shields\", \"Y_4\": \"Edwin Faber\"}, {\"Y_6\": \"Edwin Faber\", \"Y_2\": \"Dollie Burke\", \"Y_8\": \"Ambrose Shields\", \"Y_4\": \"Alden Faber\"}]",
+        "answer": [
+            "Dollie Burke"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandmother(Y_4, Y_2)",
+                "brother(Y_6, Y_4)",
+                "grandchild(Y_8, Y_6)",
+                "job(Y_8, \"secondary school teacher\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "09836159-7279-446c-947c-d1afd8625c43",
+        "question": "Who is the female first cousin once removed of the cousin of the uncle of the person whose occupation is paramedic?",
+        "solution_traces": "[{\"Y_6\": \"Danilo Healey\", \"Y_4\": \"Phil Drayton\", \"Y_8\": \"Deirdre Kimball\", \"Y_2\": \"Deirdre Kimball\"}, {\"Y_6\": \"Danilo Healey\", \"Y_4\": \"Phil Drayton\", \"Y_8\": \"Deirdre Kimball\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_6\": \"Danilo Healey\", \"Y_4\": \"Phil Drayton\", \"Y_2\": \"Naomi Rauch\", \"Y_8\": \"Deirdre Kimball\"}]",
+        "answer": [
+            "Charmain Kimball",
+            "Deirdre Kimball",
+            "Naomi Rauch"
+        ],
+        "prolog": {
+            "query": [
+                "female_first_cousin_once_removed(Y_4, Y_2)",
+                "cousin(Y_6, Y_4)",
+                "uncle(Y_8, Y_6)",
+                "job(Y_8, \"paramedic\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 10,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b6a23f9a-ef70-4f41-8440-69e50323ea28",
+        "question": "Who is the friend of the grandmother of the great-aunt of the person whose hobby is poker?",
+        "solution_traces": "[{\"Y_6\": \"Heather Healey\", \"Y_4\": \"Antionette Parrott\", \"Y_8\": \"Rosemarie Rauch\", \"Y_2\": \"Harvey Parrott\"}, {\"Y_4\": \"Enid Healey\", \"Y_6\": \"Heather Healey\", \"Y_8\": \"Rosemarie Rauch\", \"Y_2\": \"Philip Kimball\"}, {\"Y_4\": \"Enid Healey\", \"Y_2\": \"Stevie Shields\", \"Y_8\": \"Rosemarie Rauch\", \"Y_6\": \"Brigida Healey\"}, {\"Y_2\": \"Charity Faber\", \"Y_6\": \"Heather Healey\", \"Y_4\": \"Antionette Parrott\", \"Y_8\": \"Rosemarie Rauch\"}, {\"Y_2\": \"Maryann Faber\", \"Y_6\": \"Heather Healey\", \"Y_4\": \"Antionette Parrott\", \"Y_8\": \"Rosemarie Rauch\"}, {\"Y_2\": \"Maryann Faber\", \"Y_4\": \"Antionette Parrott\", \"Y_8\": \"Rosemarie Rauch\", \"Y_6\": \"Brigida Healey\"}, {\"Y_4\": \"Enid Healey\", \"Y_2\": \"Stevie Shields\", \"Y_8\": \"Rosemarie Rauch\", \"Y_6\": \"Viva Healey\"}, {\"Y_2\": \"Maryann Faber\", \"Y_4\": \"Antionette Parrott\", \"Y_8\": \"Rosemarie Rauch\", \"Y_6\": \"Viva Healey\"}, {\"Y_2\": \"Harvey Parrott\", \"Y_4\": \"Antionette Parrott\", \"Y_8\": \"Rosemarie Rauch\", \"Y_6\": \"Brigida Healey\"}, {\"Y_4\": \"Enid Healey\", \"Y_6\": \"Heather Healey\", \"Y_8\": \"Rosemarie Rauch\", \"Y_2\": \"Stevie Shields\"}, {\"Y_4\": \"Enid Healey\", \"Y_8\": \"Rosemarie Rauch\", \"Y_2\": \"Philip Kimball\", \"Y_6\": \"Brigida Healey\"}, {\"Y_2\": \"Charity Faber\", \"Y_4\": \"Antionette Parrott\", \"Y_8\": \"Rosemarie Rauch\", \"Y_6\": \"Brigida Healey\"}, {\"Y_2\": \"Charity Faber\", \"Y_4\": \"Antionette Parrott\", \"Y_8\": \"Rosemarie Rauch\", \"Y_6\": \"Viva Healey\"}, {\"Y_4\": \"Antionette Parrott\", \"Y_8\": \"Rosemarie Rauch\", \"Y_2\": \"Harvey Parrott\", \"Y_6\": \"Viva Healey\"}, {\"Y_4\": \"Enid Healey\", \"Y_8\": \"Rosemarie Rauch\", \"Y_2\": \"Philip Kimball\", \"Y_6\": \"Viva Healey\"}]",
+        "answer": [
+            "Charity Faber",
+            "Harvey Parrott",
+            "Maryann Faber",
+            "Philip Kimball",
+            "Stevie Shields"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "grandmother(Y_6, Y_4)",
+                "great_aunt(Y_8, Y_6)",
+                "hobby(Y_8, \"poker\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f03342e8-a37b-4d2c-9370-ddfad3f2ed63",
+        "question": "Who is the granddaughter of the grandmother of the friend of the person whose hobby is lotology?",
+        "solution_traces": "[{\"Y_8\": \"Dollie Burke\", \"Y_4\": \"Antionette Parrott\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Isabell Kimball\"}, {\"Y_8\": \"Dollie Burke\", \"Y_4\": \"Antionette Parrott\", \"Y_2\": \"Isabell Kimball\", \"Y_6\": \"Isabell Kimball\"}, {\"Y_2\": \"Isabell Kimball\", \"Y_8\": \"Dollie Burke\", \"Y_4\": \"Enid Healey\", \"Y_6\": \"Isabell Kimball\"}, {\"Y_8\": \"Dollie Burke\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Antionette Parrott\", \"Y_6\": \"Isabell Kimball\"}, {\"Y_8\": \"Dollie Burke\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Enid Healey\", \"Y_6\": \"Isabell Kimball\"}, {\"Y_8\": \"Dollie Burke\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Antionette Parrott\", \"Y_6\": \"Isabell Kimball\"}, {\"Y_8\": \"Dollie Burke\", \"Y_4\": \"Enid Healey\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Isabell Kimball\"}, {\"Y_8\": \"Dollie Burke\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Enid Healey\", \"Y_6\": \"Isabell Kimball\"}]",
+        "answer": [
+            "Brigida Healey",
+            "Heather Healey",
+            "Isabell Kimball",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "granddaughter(Y_4, Y_2)",
+                "grandmother(Y_6, Y_4)",
+                "friend(Y_8, Y_6)",
+                "hobby(Y_8, \"lotology\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "16b3e993-d85e-4174-af82-0dc9f54a0f37",
+        "question": "Who is the grandson of the son of the great-grandparent of the person whose date of birth is 0316-07-20?",
+        "solution_traces": "[{\"Y_6\": \"Allen Healey\", \"Y_8\": \"Deirdre Kimball\", \"Y_4\": \"Jeffery Healey\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_6\": \"Allen Healey\", \"Y_8\": \"Deirdre Kimball\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_6\": \"Enid Healey\", \"Y_8\": \"Naomi Rauch\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_6\": \"Allen Healey\", \"Y_8\": \"Naomi Rauch\", \"Y_4\": \"Jeffery Healey\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_8\": \"Deirdre Kimball\", \"Y_6\": \"Enid Healey\", \"Y_4\": \"Jeffery Healey\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_6\": \"Enid Healey\", \"Y_8\": \"Naomi Rauch\", \"Y_4\": \"Jeffery Healey\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Deirdre Kimball\", \"Y_6\": \"Enid Healey\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_6\": \"Allen Healey\", \"Y_8\": \"Naomi Rauch\", \"Y_4\": \"Jeffery Healey\"}]",
+        "answer": [
+            "Delbert Kimball",
+            "Reyes Kimball"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "son(Y_6, Y_4)",
+                "great_grandparent(Y_8, Y_6)",
+                "dob(Y_8, \"0316-07-20\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b8e0ad87-5d99-4fc2-8130-ff5a3e332aa6",
+        "question": "Who is the grandmother of the friend of the daughter of the person whose occupation is purchasing manager?",
+        "solution_traces": "[{\"Y_2\": \"Antionette Parrott\", \"Y_8\": \"Natasha Mcwhorter\", \"Y_4\": \"Viva Healey\", \"Y_6\": \"Pamula Mcwhorter\"}, {\"Y_2\": \"Enid Healey\", \"Y_8\": \"Natasha Mcwhorter\", \"Y_4\": \"Viva Healey\", \"Y_6\": \"Pamula Mcwhorter\"}, {\"Y_8\": \"Natasha Mcwhorter\", \"Y_2\": \"Theda Healey\", \"Y_4\": \"Deirdre Kimball\", \"Y_6\": \"Pamula Mcwhorter\"}, {\"Y_2\": \"Ione Kimball\", \"Y_8\": \"Natasha Mcwhorter\", \"Y_4\": \"Deirdre Kimball\", \"Y_6\": \"Pamula Mcwhorter\"}]",
+        "answer": [
+            "Antionette Parrott",
+            "Enid Healey",
+            "Ione Kimball",
+            "Theda Healey"
+        ],
+        "prolog": {
+            "query": [
+                "grandmother(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "daughter(Y_8, Y_6)",
+                "job(Y_8, \"purchasing manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ab2e5849-563d-4546-a445-12e7e7b46f14",
+        "question": "Who is the sibling of the sibling of the friend of the person whose date of birth is 0242-08-22?",
+        "solution_traces": "[{\"Y_4\": \"Reyes Kimball\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Deirdre Kimball\", \"Y_2\": \"Naomi Rauch\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Francis Vanpelt\", \"Y_2\": \"Isabell Kimball\", \"Y_6\": \"Brigida Healey\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_4\": \"Charmain Kimball\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_2\": \"Brigida Healey\", \"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_4\": \"Reyes Kimball\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Naomi Rauch\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Heather Healey\", \"Y_2\": \"Brigida Healey\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Brigida Healey\"}, {\"Y_4\": \"Charmain Kimball\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Deirdre Kimball\", \"Y_2\": \"Naomi Rauch\"}, {\"Y_8\": \"Francis Vanpelt\", \"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Delbert Kimball\", \"Y_6\": \"Deirdre Kimball\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Naomi Rauch\", \"Y_6\": \"Deirdre Kimball\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Charmain Kimball\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_2\": \"Brigida Healey\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Brigida Healey\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Delbert Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Delbert Kimball\", \"Y_6\": \"Deirdre Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Charmain Kimball\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Deirdre Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Reyes Kimball\", \"Y_8\": \"Francis Vanpelt\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Francis Vanpelt\", \"Y_2\": \"Danilo Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_2\": \"Stevie Shields\", \"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Bethany Faber\", \"Y_6\": \"Stevie Shields\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_2\": \"Viva Healey\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Brigida Healey\"}, {\"Y_4\": \"Danilo Healey\", \"Y_8\": \"Francis Vanpelt\", \"Y_2\": \"Isabell Kimball\", \"Y_6\": \"Brigida Healey\"}, {\"Y_4\": \"Heather Healey\", \"Y_2\": \"Viva Healey\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Brigida Healey\"}, {\"Y_4\": \"Danilo Healey\", \"Y_8\": \"Francis Vanpelt\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Francis Vanpelt\", \"Y_2\": \"Heather Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_2\": \"Heather Healey\", \"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Naomi Rauch\", \"Y_6\": \"Deirdre Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Naomi Rauch\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Danilo Healey\", \"Y_2\": \"Brigida Healey\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Brigida Healey\"}, {\"Y_4\": \"Danilo Healey\", \"Y_2\": \"Viva Healey\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Brigida Healey\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Reyes Kimball\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Francis Vanpelt\", \"Y_2\": \"Danilo Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Francis Vanpelt\", \"Y_2\": \"Danilo Healey\", \"Y_4\": \"Viva Healey\", \"Y_6\": \"Brigida Healey\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Delbert Kimball\", \"Y_6\": \"Deirdre Kimball\"}]",
+        "answer": [
+            "Brigida Healey",
+            "Charmain Kimball",
+            "Danilo Healey",
+            "Deirdre Kimball",
+            "Delbert Kimball",
+            "Heather Healey",
+            "Isabell Kimball",
+            "Naomi Rauch",
+            "Reyes Kimball",
+            "Stevie Shields",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "friend(Y_8, Y_6)",
+                "dob(Y_8, \"0242-08-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5b8c3ace-25f4-43d5-82f0-55d65fb4bd11",
+        "question": "Who is the friend of the aunt of the sister-in-law of the person whose occupation is radiation protection practitioner?",
+        "solution_traces": "[{\"Y_8\": \"Philip Kimball\", \"Y_4\": \"Debi Drayton\", \"Y_6\": \"Heather Healey\", \"Y_2\": \"Allen Healey\"}, {\"Y_8\": \"Philip Kimball\", \"Y_4\": \"Debi Drayton\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Brigida Healey\"}, {\"Y_8\": \"Philip Kimball\", \"Y_4\": \"Debi Drayton\", \"Y_2\": \"Allen Healey\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Philip Kimball\", \"Y_4\": \"Debi Drayton\", \"Y_6\": \"Heather Healey\", \"Y_2\": \"Naomi Rauch\"}, {\"Y_8\": \"Philip Kimball\", \"Y_4\": \"Debi Drayton\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Viva Healey\"}, {\"Y_8\": \"Philip Kimball\", \"Y_4\": \"Debi Drayton\", \"Y_6\": \"Brigida Healey\", \"Y_2\": \"Allen Healey\"}]",
+        "answer": [
+            "Allen Healey",
+            "Naomi Rauch"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "aunt(Y_6, Y_4)",
+                "sister_in_law(Y_8, Y_6)",
+                "job(Y_8, \"radiation protection practitioner\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "763118b1-f32d-4ea9-964e-b3b65061c1f5",
+        "question": "Who is the grandson of the grandmother of the brother of the person whose date of birth is 0316-07-20?",
+        "solution_traces": "[{\"Y_4\": \"Theda Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_6\": \"Reyes Kimball\", \"Y_8\": \"Naomi Rauch\"}, {\"Y_4\": \"Theda Healey\", \"Y_8\": \"Deirdre Kimball\", \"Y_6\": \"Reyes Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_8\": \"Deirdre Kimball\", \"Y_6\": \"Reyes Kimball\", \"Y_4\": \"Ione Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Theda Healey\", \"Y_6\": \"Reyes Kimball\", \"Y_8\": \"Naomi Rauch\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_6\": \"Reyes Kimball\", \"Y_8\": \"Naomi Rauch\", \"Y_4\": \"Ione Kimball\"}, {\"Y_6\": \"Reyes Kimball\", \"Y_8\": \"Naomi Rauch\", \"Y_4\": \"Ione Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Theda Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Deirdre Kimball\", \"Y_6\": \"Delbert Kimball\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Deirdre Kimball\", \"Y_4\": \"Ione Kimball\", \"Y_6\": \"Delbert Kimball\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Naomi Rauch\", \"Y_6\": \"Delbert Kimball\", \"Y_4\": \"Ione Kimball\"}, {\"Y_4\": \"Theda Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Deirdre Kimball\", \"Y_6\": \"Reyes Kimball\"}, {\"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Deirdre Kimball\", \"Y_6\": \"Reyes Kimball\", \"Y_4\": \"Ione Kimball\"}, {\"Y_8\": \"Deirdre Kimball\", \"Y_4\": \"Ione Kimball\", \"Y_6\": \"Delbert Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Theda Healey\", \"Y_8\": \"Naomi Rauch\", \"Y_6\": \"Delbert Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Theda Healey\", \"Y_8\": \"Deirdre Kimball\", \"Y_6\": \"Delbert Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Theda Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Naomi Rauch\", \"Y_6\": \"Delbert Kimball\"}, {\"Y_2\": \"Reyes Kimball\", \"Y_8\": \"Naomi Rauch\", \"Y_6\": \"Delbert Kimball\", \"Y_4\": \"Ione Kimball\"}]",
+        "answer": [
+            "Delbert Kimball",
+            "Reyes Kimball"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "grandmother(Y_6, Y_4)",
+                "brother(Y_8, Y_6)",
+                "dob(Y_8, \"0316-07-20\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2c9aac3a-95a6-4ea4-9295-13f5f4973e22",
+        "question": "Who is the child of the son of the grandparent of the person whose occupation is technical author?",
+        "solution_traces": "[{\"Y_2\": \"Danilo Healey\", \"Y_8\": \"Brigida Healey\", \"Y_6\": \"Enid Healey\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_6\": \"Allen Healey\", \"Y_8\": \"Brigida Healey\", \"Y_2\": \"Heather Healey\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Viva Healey\", \"Y_8\": \"Brigida Healey\", \"Y_6\": \"Enid Healey\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Isabell Kimball\", \"Y_6\": \"Allen Healey\", \"Y_8\": \"Brigida Healey\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Brigida Healey\", \"Y_8\": \"Brigida Healey\", \"Y_6\": \"Enid Healey\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Viva Healey\", \"Y_6\": \"Allen Healey\", \"Y_8\": \"Brigida Healey\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Heather Healey\", \"Y_8\": \"Brigida Healey\", \"Y_6\": \"Enid Healey\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Brigida Healey\", \"Y_6\": \"Allen Healey\", \"Y_8\": \"Brigida Healey\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Isabell Kimball\", \"Y_8\": \"Brigida Healey\", \"Y_6\": \"Enid Healey\", \"Y_4\": \"Jeffery Healey\"}, {\"Y_2\": \"Danilo Healey\", \"Y_6\": \"Allen Healey\", \"Y_8\": \"Brigida Healey\", \"Y_4\": \"Jeffery Healey\"}]",
+        "answer": [
+            "Brigida Healey",
+            "Danilo Healey",
+            "Heather Healey",
+            "Isabell Kimball",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "son(Y_6, Y_4)",
+                "grandparent(Y_8, Y_6)",
+                "job(Y_8, \"technical author\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a5915fbb-66c7-4f7f-b3d8-773d2095e6d4",
+        "question": "Who is the wife of the friend of the friend of the person whose hobby is sociology?",
+        "solution_traces": "[{\"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Francis Vanpelt\", \"Y_6\": \"Deirdre Kimball\", \"Y_2\": \"Shelly Vanpelt\"}, {\"Y_2\": \"Shelly Vanpelt\", \"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Francis Vanpelt\", \"Y_6\": \"Stevie Shields\"}, {\"Y_2\": \"Antionette Parrott\", \"Y_4\": \"Harvey Parrott\", \"Y_8\": \"Francis Vanpelt\", \"Y_6\": \"Brigida Healey\"}, {\"Y_6\": \"Derek Burke\", \"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Francis Vanpelt\", \"Y_2\": \"Shelly Vanpelt\"}, {\"Y_4\": \"Elias Mcwhorter\", \"Y_8\": \"Francis Vanpelt\", \"Y_2\": \"Natasha Mcwhorter\", \"Y_6\": \"Stevie Shields\"}, {\"Y_8\": \"Francis Vanpelt\", \"Y_4\": \"Francis Vanpelt\", \"Y_6\": \"Brigida Healey\", \"Y_2\": \"Shelly Vanpelt\"}, {\"Y_4\": \"Alden Faber\", \"Y_6\": \"Derek Burke\", \"Y_8\": \"Francis Vanpelt\", \"Y_2\": \"Catina Faber\"}]",
+        "answer": [
+            "Antionette Parrott",
+            "Catina Faber",
+            "Natasha Mcwhorter",
+            "Shelly Vanpelt"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "friend(Y_8, Y_6)",
+                "hobby(Y_8, \"sociology\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "768b2edd-794a-4a5d-b903-4c145b17a749",
+        "question": "Who is the nephew of the aunt of the grandchild of the person whose occupation is dance movement psychotherapist?",
+        "solution_traces": "[{\"Y_4\": \"Viva Healey\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Delbert Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Viva Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Delbert Kimball\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Ione Kimball\", \"Y_2\": \"Delbert Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_4\": \"Viva Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_6\": \"Reyes Kimball\", \"Y_8\": \"Ione Kimball\"}, {\"Y_4\": \"Viva Healey\", \"Y_6\": \"Reyes Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Heather Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Brigida Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_4\": \"Brigida Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_8\": \"Ione Kimball\"}, {\"Y_4\": \"Brigida Healey\", \"Y_6\": \"Charmain Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Heather Healey\", \"Y_6\": \"Charmain Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Heather Healey\", \"Y_6\": \"Charmain Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_2\": \"Delbert Kimball\"}, {\"Y_4\": \"Viva Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Brigida Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Viva Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_4\": \"Heather Healey\", \"Y_2\": \"Reyes Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_4\": \"Brigida Healey\", \"Y_6\": \"Reyes Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Brigida Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_6\": \"Reyes Kimball\", \"Y_8\": \"Ione Kimball\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Deirdre Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Viva Healey\", \"Y_6\": \"Charmain Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Viva Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_8\": \"Ione Kimball\"}, {\"Y_4\": \"Brigida Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Delbert Kimball\"}, {\"Y_4\": \"Brigida Healey\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Delbert Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Viva Healey\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Deirdre Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Heather Healey\", \"Y_6\": \"Reyes Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_2\": \"Delbert Kimball\"}, {\"Y_4\": \"Heather Healey\", \"Y_6\": \"Reyes Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Brigida Healey\", \"Y_2\": \"Reyes Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_4\": \"Viva Healey\", \"Y_2\": \"Reyes Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Delbert Kimball\", \"Y_2\": \"Reyes Kimball\"}, {\"Y_4\": \"Heather Healey\", \"Y_2\": \"Delbert Kimball\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Delbert Kimball\"}, {\"Y_4\": \"Brigida Healey\", \"Y_8\": \"Ione Kimball\", \"Y_6\": \"Deirdre Kimball\", \"Y_2\": \"Reyes Kimball\"}]",
+        "answer": [
+            "Delbert Kimball",
+            "Reyes Kimball"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "aunt(Y_6, Y_4)",
+                "grandchild(Y_8, Y_6)",
+                "job(Y_8, \"dance movement psychotherapist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4c08eb76-f5d2-48d3-bf4b-b741a69e6266",
+        "question": "Who is the brother of the wife of the son-in-law of the person whose date of birth is 0242-02-01?",
+        "solution_traces": "[{\"Y_8\": \"Tammie Mcwhorter\", \"Y_6\": \"Alden Faber\", \"Y_4\": \"Catina Faber\", \"Y_2\": \"Elias Mcwhorter\"}]",
+        "answer": [
+            "Elias Mcwhorter"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "wife(Y_6, Y_4)",
+                "son_in_law(Y_8, Y_6)",
+                "dob(Y_8, \"0242-02-01\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "15010e3c-9094-4bb2-8a53-c573f2499ec4",
+        "question": "Who is the sibling of the granddaughter of the great-grandparent of the person whose date of birth is 0318-07-11?",
+        "solution_traces": "[{\"Y_2\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\", \"Y_4\": \"Viva Healey\"}, {\"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\", \"Y_4\": \"Viva Healey\"}, {\"Y_2\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\", \"Y_4\": \"Viva Healey\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\", \"Y_2\": \"Viva Healey\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\", \"Y_2\": \"Brigida Healey\"}, {\"Y_2\": \"Danilo Healey\", \"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\"}, {\"Y_4\": \"Viva Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Danilo Healey\", \"Y_6\": \"Enid Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Danilo Healey\", \"Y_6\": \"Enid Healey\"}, {\"Y_4\": \"Brigida Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Viva Healey\", \"Y_6\": \"Enid Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\", \"Y_2\": \"Brigida Healey\"}, {\"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Brigida Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Viva Healey\", \"Y_6\": \"Enid Healey\"}, {\"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Viva Healey\"}, {\"Y_4\": \"Brigida Healey\", \"Y_2\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Enid Healey\"}, {\"Y_4\": \"Viva Healey\", \"Y_2\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Enid Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_2\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Enid Healey\"}, {\"Y_2\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\", \"Y_4\": \"Viva Healey\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Viva Healey\", \"Y_6\": \"Enid Healey\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Isabell Kimball\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\", \"Y_2\": \"Brigida Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Danilo Healey\", \"Y_6\": \"Enid Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\", \"Y_2\": \"Danilo Healey\"}, {\"Y_2\": \"Viva Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\", \"Y_4\": \"Brigida Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\", \"Y_2\": \"Brigida Healey\"}, {\"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Allen Healey\", \"Y_4\": \"Viva Healey\"}, {\"Y_4\": \"Brigida Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Danilo Healey\", \"Y_6\": \"Enid Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\", \"Y_2\": \"Viva Healey\"}, {\"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Brigida Healey\"}, {\"Y_2\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\", \"Y_4\": \"Brigida Healey\"}, {\"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\", \"Y_4\": \"Brigida Healey\"}, {\"Y_2\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\", \"Y_4\": \"Brigida Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\", \"Y_2\": \"Heather Healey\"}, {\"Y_2\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_4\": \"Brigida Healey\"}, {\"Y_2\": \"Danilo Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\", \"Y_4\": \"Viva Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\", \"Y_2\": \"Danilo Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Enid Healey\"}, {\"Y_2\": \"Danilo Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\", \"Y_4\": \"Brigida Healey\"}, {\"Y_4\": \"Brigida Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Isabell Kimball\", \"Y_6\": \"Enid Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Danilo Healey\"}, {\"Y_2\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\", \"Y_4\": \"Brigida Healey\"}, {\"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Danilo Healey\", \"Y_4\": \"Brigida Healey\"}, {\"Y_2\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\", \"Y_4\": \"Viva Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\", \"Y_2\": \"Heather Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\", \"Y_2\": \"Viva Healey\"}, {\"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Danilo Healey\", \"Y_4\": \"Viva Healey\"}, {\"Y_2\": \"Viva Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\", \"Y_4\": \"Brigida Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Heather Healey\"}, {\"Y_4\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\", \"Y_2\": \"Viva Healey\"}, {\"Y_2\": \"Danilo Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\", \"Y_4\": \"Brigida Healey\"}, {\"Y_4\": \"Viva Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Enid Healey\"}, {\"Y_2\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_4\": \"Viva Healey\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Isabell Kimball\", \"Y_6\": \"Enid Healey\"}, {\"Y_4\": \"Viva Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Isabell Kimball\", \"Y_6\": \"Enid Healey\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Enid Healey\"}, {\"Y_2\": \"Danilo Healey\", \"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\"}, {\"Y_2\": \"Danilo Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\", \"Y_4\": \"Viva Healey\"}, {\"Y_8\": \"Reyes Kimball\", \"Y_2\": \"Brigida Healey\", \"Y_6\": \"Antionette Parrott\", \"Y_4\": \"Viva Healey\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Viva Healey\"}, {\"Y_2\": \"Isabell Kimball\", \"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Antionette Parrott\"}, {\"Y_4\": \"Heather Healey\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Harvey Parrott\", \"Y_2\": \"Danilo Healey\"}, {\"Y_2\": \"Isabell Kimball\", \"Y_8\": \"Reyes Kimball\", \"Y_6\": \"Allen Healey\", \"Y_4\": \"Brigida Healey\"}]",
+        "answer": [
+            "Brigida Healey",
+            "Danilo Healey",
+            "Heather Healey",
+            "Isabell Kimball",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "granddaughter(Y_6, Y_4)",
+                "great_grandparent(Y_8, Y_6)",
+                "dob(Y_8, \"0318-07-11\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7b8076da-5bad-41c1-9114-658509f391fc",
+        "question": "Who is the great-aunt of the great-granddaughter of the wife of the person whose date of birth is 0258-02-22?",
+        "solution_traces": "[{\"Y_2\": \"Viva Healey\", \"Y_4\": \"Rosemarie Rauch\", \"Y_6\": \"Ione Kimball\", \"Y_8\": \"Abe Kimball\"}, {\"Y_2\": \"Brigida Healey\", \"Y_4\": \"Rosemarie Rauch\", \"Y_6\": \"Ione Kimball\", \"Y_8\": \"Abe Kimball\"}, {\"Y_2\": \"Heather Healey\", \"Y_4\": \"Rosemarie Rauch\", \"Y_6\": \"Ione Kimball\", \"Y_8\": \"Abe Kimball\"}]",
+        "answer": [
+            "Brigida Healey",
+            "Heather Healey",
+            "Viva Healey"
+        ],
+        "prolog": {
+            "query": [
+                "great_aunt(Y_4, Y_2)",
+                "great_granddaughter(Y_6, Y_4)",
+                "wife(Y_8, Y_6)",
+                "dob(Y_8, \"0258-02-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "43fad89d-2d2f-44e3-b96d-57db5cf61269",
+        "question": "Who is the great-granddaughter of the great-grandparent of the niece of the person whose date of birth is 0296-10-14?",
+        "solution_traces": "[{\"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Charmain Kimball\", \"Y_4\": \"Antionette Parrott\", \"Y_8\": \"Danilo Healey\"}, {\"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Enid Healey\", \"Y_2\": \"Charmain Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_4\": \"Harvey Parrott\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Charmain Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Allen Healey\", \"Y_6\": \"Deirdre Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Allen Healey\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_4\": \"Harvey Parrott\", \"Y_6\": \"Naomi Rauch\", \"Y_2\": \"Charmain Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Harvey Parrott\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Antionette Parrott\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Deirdre Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Antionette Parrott\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Harvey Parrott\", \"Y_6\": \"Charmain Kimball\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Antionette Parrott\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Harvey Parrott\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Allen Healey\", \"Y_6\": \"Naomi Rauch\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Allen Healey\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Allen Healey\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Deirdre Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Allen Healey\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Enid Healey\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Enid Healey\", \"Y_8\": \"Danilo Healey\"}, {\"Y_4\": \"Allen Healey\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Charmain Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Harvey Parrott\", \"Y_6\": \"Deirdre Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Harvey Parrott\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_4\": \"Allen Healey\", \"Y_6\": \"Naomi Rauch\", \"Y_2\": \"Charmain Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Allen Healey\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Antionette Parrott\", \"Y_6\": \"Deirdre Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Enid Healey\", \"Y_6\": \"Deirdre Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Enid Healey\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Antionette Parrott\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Enid Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Allen Healey\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Harvey Parrott\", \"Y_6\": \"Naomi Rauch\", \"Y_8\": \"Danilo Healey\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Antionette Parrott\", \"Y_6\": \"Naomi Rauch\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Harvey Parrott\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Naomi Rauch\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Antionette Parrott\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Harvey Parrott\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Antionette Parrott\", \"Y_8\": \"Danilo Healey\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Antionette Parrott\", \"Y_6\": \"Naomi Rauch\", \"Y_8\": \"Danilo Healey\"}, {\"Y_4\": \"Enid Healey\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Naomi Rauch\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Enid Healey\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Enid Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Antionette Parrott\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Harvey Parrott\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Naomi Rauch\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Harvey Parrott\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Antionette Parrott\", \"Y_6\": \"Deirdre Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Harvey Parrott\", \"Y_6\": \"Charmain Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Antionette Parrott\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Antionette Parrott\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Enid Healey\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Harvey Parrott\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_4\": \"Harvey Parrott\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Deirdre Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Harvey Parrott\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Allen Healey\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Charmain Kimball\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Antionette Parrott\"}, {\"Y_4\": \"Allen Healey\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Deirdre Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_4\": \"Enid Healey\", \"Y_6\": \"Naomi Rauch\", \"Y_2\": \"Charmain Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Allen Healey\", \"Y_6\": \"Naomi Rauch\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Allen Healey\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Enid Healey\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_4\": \"Allen Healey\", \"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Charmain Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_4\": \"Enid Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_6\": \"Naomi Rauch\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Enid Healey\", \"Y_6\": \"Deirdre Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Antionette Parrott\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Allen Healey\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Deirdre Kimball\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Charmain Kimball\", \"Y_2\": \"Charmain Kimball\", \"Y_4\": \"Antionette Parrott\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Charmain Kimball\", \"Y_4\": \"Enid Healey\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_4\": \"Enid Healey\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Deirdre Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Allen Healey\", \"Y_6\": \"Deirdre Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Allen Healey\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_8\": \"Heather Healey\", \"Y_4\": \"Enid Healey\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Naomi Rauch\"}, {\"Y_4\": \"Harvey Parrott\", \"Y_2\": \"Charmain Kimball\", \"Y_6\": \"Deirdre Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Enid Healey\", \"Y_6\": \"Deirdre Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_4\": \"Antionette Parrott\", \"Y_6\": \"Naomi Rauch\", \"Y_2\": \"Charmain Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_4\": \"Harvey Parrott\", \"Y_6\": \"Charmain Kimball\", \"Y_8\": \"Danilo Healey\"}]",
+        "answer": [
+            "Charmain Kimball",
+            "Deirdre Kimball",
+            "Naomi Rauch"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "great_grandparent(Y_6, Y_4)",
+                "niece(Y_8, Y_6)",
+                "dob(Y_8, \"0296-10-14\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "720827f3-d7a5-481d-a6c5-a2f7aa2150d1",
+        "question": "Who is the great-granddaughter of the parent of the aunt of the person whose date of birth is 0296-10-14?",
+        "solution_traces": "[{\"Y_6\": \"Debi Drayton\", \"Y_4\": \"Enid Healey\", \"Y_2\": \"Charmain Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_6\": \"Debi Drayton\", \"Y_4\": \"Allen Healey\"}, {\"Y_2\": \"Naomi Rauch\", \"Y_6\": \"Debi Drayton\", \"Y_4\": \"Allen Healey\", \"Y_8\": \"Danilo Healey\"}, {\"Y_6\": \"Debi Drayton\", \"Y_4\": \"Allen Healey\", \"Y_2\": \"Charmain Kimball\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Debi Drayton\", \"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Enid Healey\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_6\": \"Debi Drayton\", \"Y_4\": \"Enid Healey\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Debi Drayton\", \"Y_4\": \"Enid Healey\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_2\": \"Deirdre Kimball\", \"Y_6\": \"Debi Drayton\", \"Y_4\": \"Allen Healey\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Debi Drayton\", \"Y_4\": \"Allen Healey\", \"Y_2\": \"Naomi Rauch\"}, {\"Y_8\": \"Heather Healey\", \"Y_6\": \"Debi Drayton\", \"Y_4\": \"Allen Healey\", \"Y_2\": \"Charmain Kimball\"}, {\"Y_6\": \"Debi Drayton\", \"Y_2\": \"Naomi Rauch\", \"Y_4\": \"Enid Healey\", \"Y_8\": \"Danilo Healey\"}, {\"Y_8\": \"Heather Healey\", \"Y_2\": \"Deirdre Kimball\", \"Y_6\": \"Debi Drayton\", \"Y_4\": \"Enid Healey\"}]",
+        "answer": [
+            "Charmain Kimball",
+            "Deirdre Kimball",
+            "Naomi Rauch"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "parent(Y_6, Y_4)",
+                "aunt(Y_8, Y_6)",
+                "dob(Y_8, \"0296-10-14\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "the person whose",
+            "<attribute_name>_9",
+            "is",
+            "<attribute_value>_9",
+            "?"
+        ],
+        "type": 0,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    }
+]

@@ -1,0 +1,1078 @@
+[
+    {
+        "id": "8899ce27-05d2-4f32-b0a4-3379302625d0",
+        "question": "Who is the cousin of the niece of the wife of Darwin Ackerman?",
+        "solution_traces": "[{\"Y_6\": \"Yuk Ackerman\", \"Y_4\": \"Susie Berglund\", \"Y_2\": \"Jack Ackerman\"}, {\"Y_6\": \"Yuk Ackerman\", \"Y_4\": \"Susie Berglund\", \"Y_2\": \"Buddy Ackerman\"}, {\"Y_2\": \"Neil Ackerman\", \"Y_6\": \"Yuk Ackerman\", \"Y_4\": \"Susie Berglund\"}]",
+        "answer": [
+            "Buddy Ackerman",
+            "Jack Ackerman",
+            "Neil Ackerman"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "niece(Y_6, Y_4)",
+                "wife(\"Darwin Ackerman\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "03df5900-1d58-46f2-92d6-6f243fdca5ea",
+        "question": "Who is the sister-in-law of the father of the friend of Wanita Boughton?",
+        "solution_traces": "[{\"Y_6\": \"Chelsie Ackerman\", \"Y_4\": \"Timothy Ackerman\", \"Y_2\": \"Latisha Templeton\"}, {\"Y_4\": \"Darwin Ackerman\", \"Y_6\": \"Buddy Ackerman\", \"Y_2\": \"Yasmin Berglund\"}, {\"Y_4\": \"Darwin Ackerman\", \"Y_6\": \"Neil Ackerman\", \"Y_2\": \"Yasmin Berglund\"}]",
+        "answer": [
+            "Latisha Templeton",
+            "Yasmin Berglund"
+        ],
+        "prolog": {
+            "query": [
+                "sister_in_law(Y_4, Y_2)",
+                "father(Y_6, Y_4)",
+                "friend(\"Wanita Boughton\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "619b43ca-7409-4f52-8489-75b90c9fa134",
+        "question": "Who is the aunt of the cousin of the niece of Isabella Sparkman?",
+        "solution_traces": "[{\"Y_4\": \"Adalberto Sparkman\", \"Y_2\": \"Francesca Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_4\": \"Marie Lipsey\", \"Y_6\": \"Jeanette Vega\", \"Y_2\": \"Keisha Vega\"}, {\"Y_4\": \"Adalberto Sparkman\", \"Y_6\": \"Jeanette Vega\", \"Y_2\": \"Isabella Sparkman\"}, {\"Y_2\": \"Keisha Vega\", \"Y_4\": \"Erick Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_2\": \"Francesca Sparkman\", \"Y_4\": \"Erick Sparkman\"}, {\"Y_4\": \"Adalberto Sparkman\", \"Y_6\": \"Jeanette Vega\", \"Y_2\": \"Francesca Sparkman\"}, {\"Y_4\": \"Marie Lipsey\", \"Y_2\": \"Keisha Vega\", \"Y_6\": \"Sha Bible\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_4\": \"Erick Sparkman\", \"Y_2\": \"Isabella Sparkman\"}, {\"Y_2\": \"Isabella Sparkman\", \"Y_4\": \"Erick Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_2\": \"Francesca Sparkman\", \"Y_4\": \"Erick Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_4\": \"Marie Lipsey\", \"Y_2\": \"Isabella Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_4\": \"Marie Lipsey\", \"Y_2\": \"Francesca Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_4\": \"Marie Lipsey\", \"Y_6\": \"Jeanette Vega\", \"Y_2\": \"Francesca Sparkman\"}, {\"Y_6\": \"Marie Lipsey\", \"Y_2\": \"Francesca Sparkman\", \"Y_4\": \"Sha Bible\"}, {\"Y_2\": \"Isabella Sparkman\", \"Y_6\": \"Marie Lipsey\", \"Y_4\": \"Sha Bible\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_4\": \"Erick Sparkman\", \"Y_2\": \"Keisha Vega\"}, {\"Y_2\": \"Isabella Sparkman\", \"Y_4\": \"Adalberto Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_4\": \"Marie Lipsey\", \"Y_6\": \"Jeanette Vega\", \"Y_2\": \"Isabella Sparkman\"}, {\"Y_4\": \"Jeanette Vega\", \"Y_2\": \"Isabella Sparkman\", \"Y_6\": \"Marie Lipsey\"}, {\"Y_4\": \"Jeanette Vega\", \"Y_6\": \"Marie Lipsey\", \"Y_2\": \"Francesca Sparkman\"}, {\"Y_4\": \"Adalberto Sparkman\", \"Y_6\": \"Jeanette Vega\", \"Y_2\": \"Keisha Vega\"}, {\"Y_4\": \"Adalberto Sparkman\", \"Y_2\": \"Keisha Vega\", \"Y_6\": \"Sha Bible\"}]",
+        "answer": [
+            "Francesca Sparkman",
+            "Isabella Sparkman",
+            "Keisha Vega"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "cousin(Y_6, Y_4)",
+                "niece(\"Isabella Sparkman\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d1bd380d-aeda-490c-b52c-cbc591b079cd",
+        "question": "Who is the nephew of the sister of the nephew of Isabell Pugliese?",
+        "solution_traces": "[{\"Y_4\": \"Francesca Sparkman\", \"Y_2\": \"Adalberto Sparkman\", \"Y_6\": \"Jamel Sparkman\"}, {\"Y_2\": \"Adalberto Sparkman\", \"Y_6\": \"Jamel Sparkman\", \"Y_4\": \"Keisha Vega\"}, {\"Y_6\": \"Ismael Sparkman\", \"Y_2\": \"Erick Sparkman\", \"Y_4\": \"Isabella Sparkman\"}, {\"Y_2\": \"Erick Sparkman\", \"Y_6\": \"Jamel Sparkman\", \"Y_4\": \"Isabella Sparkman\"}, {\"Y_6\": \"Ismael Sparkman\", \"Y_2\": \"Erick Sparkman\", \"Y_4\": \"Keisha Vega\"}, {\"Y_6\": \"Ismael Sparkman\", \"Y_2\": \"Adalberto Sparkman\", \"Y_4\": \"Isabella Sparkman\"}, {\"Y_6\": \"Ismael Sparkman\", \"Y_4\": \"Francesca Sparkman\", \"Y_2\": \"Erick Sparkman\"}, {\"Y_2\": \"Adalberto Sparkman\", \"Y_6\": \"Jamel Sparkman\", \"Y_4\": \"Isabella Sparkman\"}, {\"Y_2\": \"Erick Sparkman\", \"Y_4\": \"Francesca Sparkman\", \"Y_6\": \"Jamel Sparkman\"}, {\"Y_6\": \"Ismael Sparkman\", \"Y_2\": \"Adalberto Sparkman\", \"Y_4\": \"Keisha Vega\"}, {\"Y_2\": \"Erick Sparkman\", \"Y_6\": \"Jamel Sparkman\", \"Y_4\": \"Keisha Vega\"}, {\"Y_6\": \"Ismael Sparkman\", \"Y_4\": \"Francesca Sparkman\", \"Y_2\": \"Adalberto Sparkman\"}]",
+        "answer": [
+            "Adalberto Sparkman",
+            "Erick Sparkman"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "sister(Y_6, Y_4)",
+                "nephew(\"Isabell Pugliese\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6ee41b93-d12b-46fe-9065-4d0b1e9b45d2",
+        "question": "Who is the grandparent of the parent of the grandson of Dorathy Twigg?",
+        "solution_traces": "[{\"Y_4\": \"Darwin Ackerman\", \"Y_2\": \"Leonardo Templeton\", \"Y_6\": \"Jack Ackerman\"}, {\"Y_4\": \"Darwin Ackerman\", \"Y_2\": \"Leonardo Templeton\", \"Y_6\": \"Neil Ackerman\"}, {\"Y_4\": \"Darwin Ackerman\", \"Y_2\": \"Delsie Templeton\", \"Y_6\": \"Neil Ackerman\"}, {\"Y_4\": \"Darwin Ackerman\", \"Y_6\": \"Buddy Ackerman\", \"Y_2\": \"Delsie Templeton\"}, {\"Y_4\": \"Darwin Ackerman\", \"Y_2\": \"Delsie Templeton\", \"Y_6\": \"Jack Ackerman\"}, {\"Y_4\": \"Darwin Ackerman\", \"Y_2\": \"Leonardo Templeton\", \"Y_6\": \"Buddy Ackerman\"}]",
+        "answer": [
+            "Delsie Templeton",
+            "Leonardo Templeton"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "parent(Y_6, Y_4)",
+                "grandson(\"Dorathy Twigg\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c972d2c2-7c07-411a-9940-f4d1959e456f",
+        "question": "Who is the grandchild of the grandmother of the cousin of Jeanette Vega?",
+        "solution_traces": "[{\"Y_2\": \"Erick Sparkman\", \"Y_6\": \"Erick Sparkman\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_2\": \"Sha Bible\", \"Y_6\": \"Marie Lipsey\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_2\": \"Sha Bible\", \"Y_6\": \"Adalberto Sparkman\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_6\": \"Marie Lipsey\", \"Y_2\": \"Marie Lipsey\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_2\": \"Sha Bible\", \"Y_6\": \"Erick Sparkman\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_6\": \"Adalberto Sparkman\", \"Y_2\": \"Jeanette Vega\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_6\": \"Adalberto Sparkman\", \"Y_2\": \"Adalberto Sparkman\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_2\": \"Marie Lipsey\", \"Y_6\": \"Erick Sparkman\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_6\": \"Marie Lipsey\", \"Y_2\": \"Adalberto Sparkman\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_6\": \"Marie Lipsey\", \"Y_2\": \"Jeanette Vega\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_6\": \"Adalberto Sparkman\", \"Y_2\": \"Marie Lipsey\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_2\": \"Adalberto Sparkman\", \"Y_6\": \"Erick Sparkman\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_2\": \"Erick Sparkman\", \"Y_6\": \"Marie Lipsey\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_2\": \"Erick Sparkman\", \"Y_6\": \"Adalberto Sparkman\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_2\": \"Jeanette Vega\", \"Y_6\": \"Erick Sparkman\", \"Y_4\": \"Sha Sparkman\"}]",
+        "answer": [
+            "Adalberto Sparkman",
+            "Erick Sparkman",
+            "Jeanette Vega",
+            "Marie Lipsey",
+            "Sha Bible"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "grandmother(Y_6, Y_4)",
+                "cousin(\"Jeanette Vega\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0fef34fd-c3cb-4042-a28d-cf5651d4f83a",
+        "question": "Who is the sister-in-law of the friend of the grandchild of Delsie Templeton?",
+        "solution_traces": "[{\"Y_4\": \"Lucio Bible\", \"Y_2\": \"Jeanette Vega\", \"Y_6\": \"Dinah Boughton\"}]",
+        "answer": [
+            "Jeanette Vega"
+        ],
+        "prolog": {
+            "query": [
+                "sister_in_law(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "grandchild(\"Delsie Templeton\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "270b384a-35d8-4111-8cc9-c6aad9320154",
+        "question": "Who is the husband of the daughter-in-law of the son-in-law of Lashandra Pugliese?",
+        "solution_traces": "[{\"Y_4\": \"Marguerita Sparkman\", \"Y_2\": \"Jamel Sparkman\", \"Y_6\": \"Laurence Sparkman\"}]",
+        "answer": [
+            "Jamel Sparkman"
+        ],
+        "prolog": {
+            "query": [
+                "husband(Y_4, Y_2)",
+                "daughter_in_law(Y_6, Y_4)",
+                "son_in_law(\"Lashandra Pugliese\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "17eb38c7-cf68-41dc-befa-a277d5c57ff4",
+        "question": "Who is the great-grandfather of the grandson of the great-grandparent of Jeanette Vega?",
+        "solution_traces": "[{\"Y_6\": \"Rebecka Sparkman\", \"Y_2\": \"Hiram Sparkman\", \"Y_4\": \"Ismael Sparkman\"}, {\"Y_4\": \"Jamel Sparkman\", \"Y_6\": \"Rebecka Sparkman\", \"Y_2\": \"Hiram Sparkman\"}, {\"Y_2\": \"Hiram Sparkman\", \"Y_6\": \"Lashandra Pugliese\", \"Y_4\": \"Ismael Sparkman\"}, {\"Y_4\": \"Jamel Sparkman\", \"Y_2\": \"Hiram Sparkman\", \"Y_6\": \"Lashandra Pugliese\"}, {\"Y_6\": \"Rolando Pugliese\", \"Y_2\": \"Hiram Sparkman\", \"Y_4\": \"Ismael Sparkman\"}, {\"Y_2\": \"Hiram Sparkman\", \"Y_6\": \"Markus Sparkman\", \"Y_4\": \"Ismael Sparkman\"}, {\"Y_6\": \"Rolando Pugliese\", \"Y_4\": \"Jamel Sparkman\", \"Y_2\": \"Hiram Sparkman\"}, {\"Y_4\": \"Jamel Sparkman\", \"Y_2\": \"Hiram Sparkman\", \"Y_6\": \"Markus Sparkman\"}]",
+        "answer": [
+            "Hiram Sparkman"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandfather(Y_4, Y_2)",
+                "grandson(Y_6, Y_4)",
+                "great_grandparent(\"Jeanette Vega\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ddc1a55e-3548-430a-8a64-5542dbc85cb6",
+        "question": "Who is the great-grandchild of the great-grandfather of the great-uncle of Carmine Bible?",
+        "solution_traces": "[{\"Y_4\": \"Hiram Sparkman\", \"Y_6\": \"Jamel Sparkman\", \"Y_2\": \"Jamel Sparkman\"}, {\"Y_6\": \"Ismael Sparkman\", \"Y_2\": \"Keisha Vega\", \"Y_4\": \"Hiram Sparkman\"}, {\"Y_4\": \"Hiram Sparkman\", \"Y_2\": \"Francesca Sparkman\", \"Y_6\": \"Jamel Sparkman\"}, {\"Y_4\": \"Hiram Sparkman\", \"Y_2\": \"Isabella Sparkman\", \"Y_6\": \"Jamel Sparkman\"}, {\"Y_6\": \"Ismael Sparkman\", \"Y_4\": \"Hiram Sparkman\", \"Y_2\": \"Francesca Sparkman\"}, {\"Y_4\": \"Hiram Sparkman\", \"Y_2\": \"Keisha Vega\", \"Y_6\": \"Jamel Sparkman\"}, {\"Y_4\": \"Hiram Sparkman\", \"Y_2\": \"Ismael Sparkman\", \"Y_6\": \"Jamel Sparkman\"}, {\"Y_6\": \"Ismael Sparkman\", \"Y_4\": \"Hiram Sparkman\", \"Y_2\": \"Jamel Sparkman\"}, {\"Y_6\": \"Ismael Sparkman\", \"Y_2\": \"Ismael Sparkman\", \"Y_4\": \"Hiram Sparkman\"}, {\"Y_6\": \"Ismael Sparkman\", \"Y_2\": \"Isabella Sparkman\", \"Y_4\": \"Hiram Sparkman\"}]",
+        "answer": [
+            "Francesca Sparkman",
+            "Isabella Sparkman",
+            "Ismael Sparkman",
+            "Jamel Sparkman",
+            "Keisha Vega"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "great_grandfather(Y_6, Y_4)",
+                "great_uncle(\"Carmine Bible\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ad1f6c61-c3fd-4278-870d-f4fd8720113f",
+        "question": "Who is the brother of the sibling of the friend of Clifton Boughton?",
+        "solution_traces": "[{\"Y_4\": \"Francesca Sparkman\", \"Y_2\": \"Ismael Sparkman\", \"Y_6\": \"Keisha Vega\"}, {\"Y_4\": \"Francesca Sparkman\", \"Y_2\": \"Jamel Sparkman\", \"Y_6\": \"Keisha Vega\"}, {\"Y_2\": \"Neil Ackerman\", \"Y_4\": \"Jack Ackerman\", \"Y_6\": \"Neil Ackerman\"}, {\"Y_4\": \"Buddy Ackerman\", \"Y_6\": \"Neil Ackerman\", \"Y_2\": \"Jack Ackerman\"}, {\"Y_2\": \"Ismael Sparkman\", \"Y_4\": \"Isabella Sparkman\", \"Y_6\": \"Keisha Vega\"}, {\"Y_2\": \"Jamel Sparkman\", \"Y_4\": \"Isabella Sparkman\", \"Y_6\": \"Keisha Vega\"}, {\"Y_4\": \"Jack Ackerman\", \"Y_6\": \"Neil Ackerman\", \"Y_2\": \"Buddy Ackerman\"}, {\"Y_2\": \"Jamel Sparkman\", \"Y_4\": \"Ismael Sparkman\", \"Y_6\": \"Keisha Vega\"}, {\"Y_2\": \"Neil Ackerman\", \"Y_4\": \"Buddy Ackerman\", \"Y_6\": \"Neil Ackerman\"}, {\"Y_2\": \"Ismael Sparkman\", \"Y_4\": \"Jamel Sparkman\", \"Y_6\": \"Keisha Vega\"}]",
+        "answer": [
+            "Buddy Ackerman",
+            "Ismael Sparkman",
+            "Jack Ackerman",
+            "Jamel Sparkman",
+            "Neil Ackerman"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "friend(\"Clifton Boughton\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5685c8a4-f1bb-4efe-9061-016cf334ece8",
+        "question": "Who is the husband of the grandmother of the nephew of Mickey Twigg?",
+        "solution_traces": "[{\"Y_4\": \"Mattie Ackerman\", \"Y_2\": \"Timothy Ackerman\", \"Y_6\": \"Neil Ackerman\"}, {\"Y_2\": \"Timothy Ackerman\", \"Y_6\": \"Jack Ackerman\", \"Y_4\": \"Mattie Ackerman\"}, {\"Y_2\": \"Gale Twigg\", \"Y_4\": \"Dorathy Twigg\", \"Y_6\": \"Jack Ackerman\"}, {\"Y_2\": \"Gale Twigg\", \"Y_4\": \"Dorathy Twigg\", \"Y_6\": \"Neil Ackerman\"}, {\"Y_2\": \"Gale Twigg\", \"Y_4\": \"Dorathy Twigg\", \"Y_6\": \"Buddy Ackerman\"}, {\"Y_2\": \"Timothy Ackerman\", \"Y_6\": \"Buddy Ackerman\", \"Y_4\": \"Mattie Ackerman\"}]",
+        "answer": [
+            "Gale Twigg",
+            "Timothy Ackerman"
+        ],
+        "prolog": {
+            "query": [
+                "husband(Y_4, Y_2)",
+                "grandmother(Y_6, Y_4)",
+                "nephew(\"Mickey Twigg\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9021acd9-2990-4fdc-976a-de4e91aaf503",
+        "question": "Who is the father-in-law of the brother of the friend of Richie Boughton?",
+        "solution_traces": "[{\"Y_6\": \"Chelsie Ackerman\", \"Y_4\": \"Darwin Ackerman\", \"Y_2\": \"Gale Twigg\"}]",
+        "answer": [
+            "Gale Twigg"
+        ],
+        "prolog": {
+            "query": [
+                "father_in_law(Y_4, Y_2)",
+                "brother(Y_6, Y_4)",
+                "friend(\"Richie Boughton\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9a62b5b6-62b7-4182-b101-fd9abd0d7ac2",
+        "question": "Who is the brother of the sister-in-law of the parent of Susie Berglund?",
+        "solution_traces": "[{\"Y_4\": \"Yuk Ackerman\", \"Y_2\": \"Mickey Twigg\", \"Y_6\": \"Douglas Berglund\"}]",
+        "answer": [
+            "Mickey Twigg"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "sister_in_law(Y_6, Y_4)",
+                "parent(\"Susie Berglund\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "36868bfe-9191-4ea6-becc-13d43bdfb79a",
+        "question": "Who is the brother of the sister of the sister of Darwin Ackerman?",
+        "solution_traces": "[{\"Y_2\": \"Darwin Ackerman\", \"Y_6\": \"Dinah Boughton\", \"Y_4\": \"Chelsie Ackerman\"}, {\"Y_6\": \"Chelsie Ackerman\", \"Y_4\": \"Dinah Boughton\", \"Y_2\": \"Darwin Ackerman\"}]",
+        "answer": [
+            "Darwin Ackerman"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "sister(Y_6, Y_4)",
+                "sister(\"Darwin Ackerman\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "52e7006f-dc64-405f-bc9b-7722e0a53840",
+        "question": "Who is the niece of the sister-in-law of the grandfather of Jeanette Vega?",
+        "solution_traces": "[{\"Y_4\": \"Isabell Pugliese\", \"Y_2\": \"Keisha Vega\", \"Y_6\": \"Laurence Sparkman\"}, {\"Y_4\": \"Isabell Pugliese\", \"Y_2\": \"Isabella Sparkman\", \"Y_6\": \"Laurence Sparkman\"}, {\"Y_4\": \"Isabell Pugliese\", \"Y_2\": \"Francesca Sparkman\", \"Y_6\": \"Laurence Sparkman\"}]",
+        "answer": [
+            "Francesca Sparkman",
+            "Isabella Sparkman",
+            "Keisha Vega"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "sister_in_law(Y_6, Y_4)",
+                "grandfather(\"Jeanette Vega\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "980af945-2fe8-4251-9cca-bac11c515013",
+        "question": "Who is the daughter of the mother-in-law of the grandparent of Erick Sparkman?",
+        "solution_traces": "[{\"Y_2\": \"Sha Sparkman\", \"Y_4\": \"Lashandra Pugliese\", \"Y_6\": \"Laurence Sparkman\"}, {\"Y_4\": \"Lashandra Pugliese\", \"Y_2\": \"Isabell Pugliese\", \"Y_6\": \"Laurence Sparkman\"}]",
+        "answer": [
+            "Isabell Pugliese",
+            "Sha Sparkman"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "mother_in_law(Y_6, Y_4)",
+                "grandparent(\"Erick Sparkman\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4c8f011f-1853-4608-a66f-c4ae24f10b13",
+        "question": "Who is the granddaughter of the great-grandmother of the great-grandchild of Markus Sparkman?",
+        "solution_traces": "[{\"Y_4\": \"Rebecka Sparkman\", \"Y_2\": \"Francesca Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_2\": \"Keisha Vega\", \"Y_6\": \"Marie Lipsey\", \"Y_4\": \"Lashandra Pugliese\"}, {\"Y_2\": \"Francesca Sparkman\", \"Y_4\": \"Lashandra Pugliese\", \"Y_6\": \"Sha Bible\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_4\": \"Lashandra Pugliese\", \"Y_2\": \"Keisha Vega\"}, {\"Y_2\": \"Keisha Vega\", \"Y_4\": \"Lashandra Pugliese\", \"Y_6\": \"Sha Bible\"}, {\"Y_4\": \"Rebecka Sparkman\", \"Y_6\": \"Adalberto Sparkman\", \"Y_2\": \"Keisha Vega\"}, {\"Y_4\": \"Rebecka Sparkman\", \"Y_2\": \"Francesca Sparkman\", \"Y_6\": \"Erick Sparkman\"}, {\"Y_2\": \"Isabella Sparkman\", \"Y_4\": \"Lashandra Pugliese\", \"Y_6\": \"Erick Sparkman\"}, {\"Y_2\": \"Isabella Sparkman\", \"Y_6\": \"Adalberto Sparkman\", \"Y_4\": \"Lashandra Pugliese\"}, {\"Y_2\": \"Isabella Sparkman\", \"Y_4\": \"Rebecka Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_4\": \"Rebecka Sparkman\", \"Y_6\": \"Marie Lipsey\", \"Y_2\": \"Isabella Sparkman\"}, {\"Y_2\": \"Isabella Sparkman\", \"Y_4\": \"Lashandra Pugliese\", \"Y_6\": \"Sha Bible\"}, {\"Y_2\": \"Isabella Sparkman\", \"Y_6\": \"Marie Lipsey\", \"Y_4\": \"Lashandra Pugliese\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_4\": \"Lashandra Pugliese\", \"Y_2\": \"Francesca Sparkman\"}, {\"Y_2\": \"Keisha Vega\", \"Y_6\": \"Adalberto Sparkman\", \"Y_4\": \"Lashandra Pugliese\"}, {\"Y_2\": \"Francesca Sparkman\", \"Y_4\": \"Lashandra Pugliese\", \"Y_6\": \"Erick Sparkman\"}, {\"Y_4\": \"Rebecka Sparkman\", \"Y_6\": \"Marie Lipsey\", \"Y_2\": \"Keisha Vega\"}, {\"Y_4\": \"Rebecka Sparkman\", \"Y_6\": \"Marie Lipsey\", \"Y_2\": \"Francesca Sparkman\"}, {\"Y_2\": \"Francesca Sparkman\", \"Y_6\": \"Adalberto Sparkman\", \"Y_4\": \"Lashandra Pugliese\"}, {\"Y_2\": \"Keisha Vega\", \"Y_4\": \"Lashandra Pugliese\", \"Y_6\": \"Erick Sparkman\"}, {\"Y_4\": \"Rebecka Sparkman\", \"Y_6\": \"Adalberto Sparkman\", \"Y_2\": \"Francesca Sparkman\"}, {\"Y_4\": \"Rebecka Sparkman\", \"Y_2\": \"Keisha Vega\", \"Y_6\": \"Erick Sparkman\"}, {\"Y_4\": \"Rebecka Sparkman\", \"Y_6\": \"Adalberto Sparkman\", \"Y_2\": \"Isabella Sparkman\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_2\": \"Francesca Sparkman\", \"Y_4\": \"Rebecka Sparkman\"}, {\"Y_4\": \"Rebecka Sparkman\", \"Y_2\": \"Keisha Vega\", \"Y_6\": \"Sha Bible\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_4\": \"Rebecka Sparkman\", \"Y_2\": \"Keisha Vega\"}, {\"Y_2\": \"Francesca Sparkman\", \"Y_6\": \"Marie Lipsey\", \"Y_4\": \"Lashandra Pugliese\"}, {\"Y_2\": \"Isabella Sparkman\", \"Y_4\": \"Rebecka Sparkman\", \"Y_6\": \"Erick Sparkman\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_4\": \"Lashandra Pugliese\", \"Y_2\": \"Isabella Sparkman\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_4\": \"Rebecka Sparkman\", \"Y_2\": \"Isabella Sparkman\"}]",
+        "answer": [
+            "Francesca Sparkman",
+            "Isabella Sparkman",
+            "Keisha Vega"
+        ],
+        "prolog": {
+            "query": [
+                "granddaughter(Y_4, Y_2)",
+                "great_grandmother(Y_6, Y_4)",
+                "great_grandchild(\"Markus Sparkman\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d681c32e-11ca-4d54-a602-c01b56e83aff",
+        "question": "Who is the great-grandchild of the great-grandparent of the male first cousin once removed of Jeanette Vega?",
+        "solution_traces": "[{\"Y_6\": \"Leonardo Lipsey\", \"Y_2\": \"Leonardo Lipsey\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_6\": \"Leonardo Lipsey\", \"Y_2\": \"Carmine Bible\", \"Y_4\": \"Sha Sparkman\"}, {\"Y_2\": \"Carmine Bible\", \"Y_6\": \"Leonardo Lipsey\", \"Y_4\": \"Laurence Sparkman\"}, {\"Y_6\": \"Leonardo Lipsey\", \"Y_4\": \"Laurence Sparkman\", \"Y_2\": \"Leonardo Lipsey\"}]",
+        "answer": [
+            "Carmine Bible",
+            "Leonardo Lipsey"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "great_grandparent(Y_6, Y_4)",
+                "male_first_cousin_once_removed(\"Jeanette Vega\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 10,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c2ca945b-7690-49de-8b48-2bc483491448",
+        "question": "Who is the grandson of the husband of the great-grandmother of Erick Sparkman?",
+        "solution_traces": "[{\"Y_2\": \"Ismael Sparkman\", \"Y_6\": \"Rebecka Sparkman\", \"Y_4\": \"Markus Sparkman\"}, {\"Y_2\": \"Ismael Sparkman\", \"Y_6\": \"Lashandra Pugliese\", \"Y_4\": \"Rolando Pugliese\"}, {\"Y_2\": \"Jamel Sparkman\", \"Y_6\": \"Lashandra Pugliese\", \"Y_4\": \"Rolando Pugliese\"}, {\"Y_6\": \"Rebecka Sparkman\", \"Y_4\": \"Markus Sparkman\", \"Y_2\": \"Jamel Sparkman\"}]",
+        "answer": [
+            "Ismael Sparkman",
+            "Jamel Sparkman"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "husband(Y_6, Y_4)",
+                "great_grandmother(\"Erick Sparkman\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fb238422-9e8b-4085-b4de-2b1f3c845348",
+        "question": "Who is the friend of the female first cousin once removed of the grandchild of Gale Twigg?",
+        "solution_traces": "[{\"Y_4\": \"Wanita Boughton\", \"Y_6\": \"Buddy Ackerman\", \"Y_2\": \"Buddy Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_2\": \"Rolando Pugliese\", \"Y_6\": \"Buddy Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_2\": \"Adalberto Sparkman\", \"Y_6\": \"Buddy Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_6\": \"Buddy Ackerman\", \"Y_2\": \"Mickey Twigg\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_6\": \"Buddy Ackerman\", \"Y_2\": \"Neil Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_2\": \"Chelsie Ackerman\", \"Y_6\": \"Buddy Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_2\": \"Chelsie Ackerman\", \"Y_6\": \"Neil Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_2\": \"Neil Ackerman\", \"Y_6\": \"Neil Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_2\": \"Chelsie Ackerman\", \"Y_6\": \"Jack Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_2\": \"Neil Ackerman\", \"Y_6\": \"Jack Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_6\": \"Jack Ackerman\", \"Y_2\": \"Mickey Twigg\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_2\": \"Adalberto Sparkman\", \"Y_6\": \"Neil Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_2\": \"Rolando Pugliese\", \"Y_6\": \"Neil Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_2\": \"Rolando Pugliese\", \"Y_6\": \"Jack Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_2\": \"Mickey Twigg\", \"Y_6\": \"Neil Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_2\": \"Adalberto Sparkman\", \"Y_6\": \"Jack Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_6\": \"Jack Ackerman\", \"Y_2\": \"Buddy Ackerman\"}, {\"Y_4\": \"Wanita Boughton\", \"Y_6\": \"Neil Ackerman\", \"Y_2\": \"Buddy Ackerman\"}]",
+        "answer": [
+            "Adalberto Sparkman",
+            "Buddy Ackerman",
+            "Chelsie Ackerman",
+            "Mickey Twigg",
+            "Neil Ackerman",
+            "Rolando Pugliese"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "female_first_cousin_once_removed(Y_6, Y_4)",
+                "grandchild(\"Gale Twigg\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fea35d25-9d59-48c9-961d-1ad8cfe941bb",
+        "question": "Who is the sister of the aunt of the niece of Ismael Sparkman?",
+        "solution_traces": "[{\"Y_2\": \"Keisha Vega\", \"Y_6\": \"Marie Lipsey\", \"Y_4\": \"Isabella Sparkman\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_4\": \"Francesca Sparkman\", \"Y_2\": \"Keisha Vega\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_4\": \"Francesca Sparkman\", \"Y_2\": \"Isabella Sparkman\"}, {\"Y_4\": \"Francesca Sparkman\", \"Y_2\": \"Keisha Vega\", \"Y_6\": \"Sha Bible\"}, {\"Y_2\": \"Isabella Sparkman\", \"Y_4\": \"Francesca Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_6\": \"Marie Lipsey\", \"Y_2\": \"Francesca Sparkman\", \"Y_4\": \"Keisha Vega\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_2\": \"Keisha Vega\", \"Y_4\": \"Isabella Sparkman\"}, {\"Y_4\": \"Francesca Sparkman\", \"Y_6\": \"Marie Lipsey\", \"Y_2\": \"Isabella Sparkman\"}, {\"Y_4\": \"Isabella Sparkman\", \"Y_2\": \"Keisha Vega\", \"Y_6\": \"Sha Bible\"}, {\"Y_4\": \"Francesca Sparkman\", \"Y_6\": \"Marie Lipsey\", \"Y_2\": \"Keisha Vega\"}, {\"Y_2\": \"Isabella Sparkman\", \"Y_6\": \"Marie Lipsey\", \"Y_4\": \"Keisha Vega\"}, {\"Y_4\": \"Isabella Sparkman\", \"Y_2\": \"Francesca Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_2\": \"Francesca Sparkman\", \"Y_4\": \"Isabella Sparkman\"}, {\"Y_6\": \"Marie Lipsey\", \"Y_2\": \"Francesca Sparkman\", \"Y_4\": \"Isabella Sparkman\"}]",
+        "answer": [
+            "Francesca Sparkman",
+            "Isabella Sparkman",
+            "Keisha Vega"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "aunt(Y_6, Y_4)",
+                "niece(\"Ismael Sparkman\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b538b902-696b-4bd5-bcf0-10a867badf5c",
+        "question": "Who is the great-grandfather of the grandson of the friend of Lucio Bible?",
+        "solution_traces": "[{\"Y_6\": \"Rolando Pugliese\", \"Y_2\": \"Hiram Sparkman\", \"Y_4\": \"Ismael Sparkman\"}, {\"Y_6\": \"Dinah Boughton\", \"Y_2\": \"Timothy Ackerman\", \"Y_4\": \"Richie Boughton\"}, {\"Y_6\": \"Rolando Pugliese\", \"Y_4\": \"Jamel Sparkman\", \"Y_2\": \"Hiram Sparkman\"}]",
+        "answer": [
+            "Hiram Sparkman",
+            "Timothy Ackerman"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandfather(Y_4, Y_2)",
+                "grandson(Y_6, Y_4)",
+                "friend(\"Lucio Bible\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "95d4f154-f5c6-4d69-a053-2f90b8ed63aa",
+        "question": "Who is the niece of the brother-in-law of the sibling of Chelsie Ackerman?",
+        "solution_traces": "[{\"Y_6\": \"Darwin Ackerman\", \"Y_2\": \"Susie Berglund\", \"Y_4\": \"Mickey Twigg\"}]",
+        "answer": [
+            "Susie Berglund"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "brother_in_law(Y_6, Y_4)",
+                "sibling(\"Chelsie Ackerman\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dc490463-a979-4e04-9ba9-fb070b10995a",
+        "question": "Who is the grandparent of the friend of the friend of Adalberto Sparkman?",
+        "solution_traces": "[{\"Y_6\": \"Richie Boughton\", \"Y_2\": \"Rebecka Sparkman\", \"Y_4\": \"Isabella Sparkman\"}, {\"Y_6\": \"Wanita Boughton\", \"Y_4\": \"Buddy Ackerman\", \"Y_2\": \"Dorathy Twigg\"}, {\"Y_4\": \"Adalberto Sparkman\", \"Y_6\": \"Wanita Boughton\", \"Y_2\": \"Sha Sparkman\"}, {\"Y_6\": \"Wanita Boughton\", \"Y_4\": \"Neil Ackerman\", \"Y_2\": \"Dorathy Twigg\"}, {\"Y_4\": \"Guillermo Boughton\", \"Y_6\": \"Timothy Ackerman\", \"Y_2\": \"Mattie Ackerman\"}, {\"Y_6\": \"Wanita Boughton\", \"Y_4\": \"Neil Ackerman\", \"Y_2\": \"Timothy Ackerman\"}, {\"Y_2\": \"Gale Twigg\", \"Y_6\": \"Wanita Boughton\", \"Y_4\": \"Buddy Ackerman\"}, {\"Y_6\": \"Richie Boughton\", \"Y_2\": \"Delsie Templeton\", \"Y_4\": \"Chelsie Ackerman\"}, {\"Y_2\": \"Gale Twigg\", \"Y_6\": \"Wanita Boughton\", \"Y_4\": \"Neil Ackerman\"}, {\"Y_6\": \"Wanita Boughton\", \"Y_4\": \"Buddy Ackerman\", \"Y_2\": \"Timothy Ackerman\"}, {\"Y_6\": \"Richie Boughton\", \"Y_4\": \"Guillermo Boughton\", \"Y_2\": \"Mattie Ackerman\"}, {\"Y_4\": \"Guillermo Boughton\", \"Y_6\": \"Timothy Ackerman\", \"Y_2\": \"Timothy Ackerman\"}, {\"Y_4\": \"Adalberto Sparkman\", \"Y_6\": \"Wanita Boughton\", \"Y_2\": \"Laurence Sparkman\"}, {\"Y_6\": \"Richie Boughton\", \"Y_2\": \"Leonardo Templeton\", \"Y_4\": \"Chelsie Ackerman\"}, {\"Y_6\": \"Wanita Boughton\", \"Y_2\": \"Delsie Templeton\", \"Y_4\": \"Chelsie Ackerman\"}, {\"Y_6\": \"Richie Boughton\", \"Y_2\": \"Rolando Pugliese\", \"Y_4\": \"Isabella Sparkman\"}, {\"Y_2\": \"Laurence Sparkman\", \"Y_4\": \"Adalberto Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_6\": \"Richie Boughton\", \"Y_2\": \"Markus Sparkman\", \"Y_4\": \"Isabella Sparkman\"}, {\"Y_6\": \"Wanita Boughton\", \"Y_4\": \"Buddy Ackerman\", \"Y_2\": \"Mattie Ackerman\"}, {\"Y_6\": \"Richie Boughton\", \"Y_4\": \"Adalberto Sparkman\", \"Y_2\": \"Sha Sparkman\"}, {\"Y_4\": \"Adalberto Sparkman\", \"Y_2\": \"Sha Sparkman\", \"Y_6\": \"Timothy Ackerman\"}, {\"Y_6\": \"Richie Boughton\", \"Y_4\": \"Adalberto Sparkman\", \"Y_2\": \"Laurence Sparkman\"}, {\"Y_2\": \"Laurence Sparkman\", \"Y_4\": \"Adalberto Sparkman\", \"Y_6\": \"Timothy Ackerman\"}, {\"Y_4\": \"Adalberto Sparkman\", \"Y_2\": \"Sha Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_6\": \"Wanita Boughton\", \"Y_4\": \"Neil Ackerman\", \"Y_2\": \"Mattie Ackerman\"}, {\"Y_6\": \"Wanita Boughton\", \"Y_2\": \"Leonardo Templeton\", \"Y_4\": \"Chelsie Ackerman\"}, {\"Y_6\": \"Richie Boughton\", \"Y_4\": \"Isabella Sparkman\", \"Y_2\": \"Lashandra Pugliese\"}, {\"Y_6\": \"Richie Boughton\", \"Y_4\": \"Guillermo Boughton\", \"Y_2\": \"Timothy Ackerman\"}]",
+        "answer": [
+            "Delsie Templeton",
+            "Dorathy Twigg",
+            "Gale Twigg",
+            "Lashandra Pugliese",
+            "Laurence Sparkman",
+            "Leonardo Templeton",
+            "Markus Sparkman",
+            "Mattie Ackerman",
+            "Rebecka Sparkman",
+            "Rolando Pugliese",
+            "Sha Sparkman",
+            "Timothy Ackerman"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "friend(\"Adalberto Sparkman\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "84f039f1-10a6-4c8f-835c-ca7f20178456",
+        "question": "Who is the sibling of the sister-in-law of the uncle of Guillermo Boughton?",
+        "solution_traces": "[{\"Y_6\": \"Darwin Ackerman\", \"Y_4\": \"Yasmin Berglund\", \"Y_2\": \"Mickey Twigg\"}, {\"Y_6\": \"Darwin Ackerman\", \"Y_4\": \"Yasmin Berglund\", \"Y_2\": \"Yuk Ackerman\"}]",
+        "answer": [
+            "Mickey Twigg",
+            "Yuk Ackerman"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "sister_in_law(Y_6, Y_4)",
+                "uncle(\"Guillermo Boughton\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4819d2c0-4941-42c7-a422-ac4179df8f04",
+        "question": "Who is the friend of the friend of the cousin of Jack Ackerman?",
+        "solution_traces": "[{\"Y_2\": \"Erick Sparkman\", \"Y_6\": \"Susie Berglund\", \"Y_4\": \"Yuk Ackerman\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Timothy Ackerman\", \"Y_2\": \"Markus Sparkman\"}, {\"Y_2\": \"Leonardo Lipsey\", \"Y_4\": \"Isabell Pugliese\", \"Y_6\": \"Susie Berglund\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_2\": \"Dinah Boughton\", \"Y_4\": \"Keisha Vega\"}, {\"Y_4\": \"Laurence Sparkman\", \"Y_6\": \"Susie Berglund\", \"Y_2\": \"Susie Berglund\"}, {\"Y_4\": \"Isabell Pugliese\", \"Y_2\": \"Hiram Sparkman\", \"Y_6\": \"Susie Berglund\"}, {\"Y_2\": \"Devin Mcneely\", \"Y_4\": \"Dinah Boughton\", \"Y_6\": \"Susie Berglund\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_2\": \"Sha Sparkman\", \"Y_4\": \"Keisha Vega\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Timothy Ackerman\", \"Y_2\": \"Guillermo Boughton\"}, {\"Y_2\": \"Gale Twigg\", \"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Ismael Sparkman\"}, {\"Y_2\": \"Ismael Sparkman\", \"Y_6\": \"Susie Berglund\", \"Y_4\": \"Yuk Ackerman\"}, {\"Y_2\": \"Neil Ackerman\", \"Y_4\": \"Clifton Boughton\", \"Y_6\": \"Susie Berglund\"}, {\"Y_2\": \"Ismael Sparkman\", \"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Keisha Vega\"}, {\"Y_2\": \"Dorathy Twigg\", \"Y_4\": \"Clifton Boughton\", \"Y_6\": \"Susie Berglund\"}, {\"Y_2\": \"Keisha Vega\", \"Y_4\": \"Clifton Boughton\", \"Y_6\": \"Susie Berglund\"}, {\"Y_2\": \"Carmine Bible\", \"Y_6\": \"Susie Berglund\", \"Y_4\": \"Yuk Ackerman\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_2\": \"Guillermo Boughton\", \"Y_4\": \"Richie Boughton\"}, {\"Y_2\": \"Carmine Lipsey\", \"Y_4\": \"Clifton Boughton\", \"Y_6\": \"Susie Berglund\"}, {\"Y_2\": \"Dorathy Twigg\", \"Y_4\": \"Dinah Boughton\", \"Y_6\": \"Susie Berglund\"}, {\"Y_2\": \"Keisha Vega\", \"Y_4\": \"Dinah Boughton\", \"Y_6\": \"Susie Berglund\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Timothy Ackerman\", \"Y_2\": \"Sha Sparkman\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_2\": \"Guillermo Boughton\", \"Y_4\": \"Keisha Vega\"}, {\"Y_4\": \"Hiram Sparkman\", \"Y_6\": \"Guillermo Boughton\", \"Y_2\": \"Carmine Bible\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Timothy Ackerman\", \"Y_2\": \"Marguerita Sparkman\"}, {\"Y_2\": \"Susie Berglund\", \"Y_6\": \"Susie Berglund\", \"Y_4\": \"Yuk Ackerman\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Timothy Ackerman\", \"Y_2\": \"Yasmin Berglund\"}, {\"Y_4\": \"Dinah Boughton\", \"Y_2\": \"Lucio Bible\", \"Y_6\": \"Susie Berglund\"}, {\"Y_2\": \"Shon Vega\", \"Y_6\": \"Susie Berglund\", \"Y_4\": \"Yuk Ackerman\"}, {\"Y_4\": \"Dinah Boughton\", \"Y_6\": \"Susie Berglund\", \"Y_2\": \"Susie Berglund\"}, {\"Y_2\": \"Delsie Templeton\", \"Y_4\": \"Laurence Sparkman\", \"Y_6\": \"Susie Berglund\"}, {\"Y_2\": \"Chelsie Ackerman\", \"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Richie Boughton\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Keisha Vega\", \"Y_2\": \"Lashandra Pugliese\"}, {\"Y_4\": \"Clifton Boughton\", \"Y_6\": \"Susie Berglund\", \"Y_2\": \"Susie Berglund\"}, {\"Y_4\": \"Isabell Pugliese\", \"Y_2\": \"Gina Mcneely\", \"Y_6\": \"Susie Berglund\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Timothy Ackerman\", \"Y_2\": \"Adalberto Sparkman\"}, {\"Y_4\": \"Isabella Sparkman\", \"Y_2\": \"Richie Boughton\", \"Y_6\": \"Susie Berglund\"}, {\"Y_2\": \"Bev Boughton\", \"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Ismael Sparkman\"}, {\"Y_2\": \"Isabella Sparkman\", \"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Richie Boughton\"}, {\"Y_2\": \"Johnetta Sparkman\", \"Y_4\": \"Clifton Boughton\", \"Y_6\": \"Susie Berglund\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_2\": \"Guillermo Boughton\", \"Y_4\": \"Ismael Sparkman\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_2\": \"Adalberto Sparkman\", \"Y_4\": \"Richie Boughton\"}, {\"Y_4\": \"Hiram Sparkman\", \"Y_6\": \"Guillermo Boughton\", \"Y_2\": \"Guillermo Boughton\"}, {\"Y_2\": \"Lucio Bible\", \"Y_6\": \"Susie Berglund\", \"Y_4\": \"Yuk Ackerman\"}, {\"Y_4\": \"Hiram Sparkman\", \"Y_6\": \"Guillermo Boughton\", \"Y_2\": \"Isabell Pugliese\"}, {\"Y_2\": \"Rebecka Sparkman\", \"Y_6\": \"Susie Berglund\", \"Y_4\": \"Yuk Ackerman\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_2\": \"Leonardo Templeton\", \"Y_4\": \"Keisha Vega\"}, {\"Y_2\": \"Keisha Vega\", \"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Ismael Sparkman\"}, {\"Y_4\": \"Isabella Sparkman\", \"Y_6\": \"Susie Berglund\", \"Y_2\": \"Susie Berglund\"}, {\"Y_2\": \"Jamel Sparkman\", \"Y_4\": \"Laurence Sparkman\", \"Y_6\": \"Susie Berglund\"}, {\"Y_4\": \"Isabell Pugliese\", \"Y_6\": \"Susie Berglund\", \"Y_2\": \"Susie Berglund\"}, {\"Y_2\": \"Clifton Boughton\", \"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Keisha Vega\"}, {\"Y_2\": \"Bev Boughton\", \"Y_6\": \"Guillermo Boughton\", \"Y_4\": \"Richie Boughton\"}, {\"Y_4\": \"Hiram Sparkman\", \"Y_6\": \"Guillermo Boughton\", \"Y_2\": \"Carmine Lipsey\"}, {\"Y_6\": \"Guillermo Boughton\", \"Y_2\": \"Yuk Ackerman\", \"Y_4\": \"Ismael Sparkman\"}]",
+        "answer": [
+            "Adalberto Sparkman",
+            "Bev Boughton",
+            "Carmine Bible",
+            "Carmine Lipsey",
+            "Chelsie Ackerman",
+            "Clifton Boughton",
+            "Delsie Templeton",
+            "Devin Mcneely",
+            "Dinah Boughton",
+            "Dorathy Twigg",
+            "Erick Sparkman",
+            "Gale Twigg",
+            "Gina Mcneely",
+            "Guillermo Boughton",
+            "Hiram Sparkman",
+            "Isabell Pugliese",
+            "Isabella Sparkman",
+            "Ismael Sparkman",
+            "Jamel Sparkman",
+            "Johnetta Sparkman",
+            "Keisha Vega",
+            "Lashandra Pugliese",
+            "Leonardo Lipsey",
+            "Leonardo Templeton",
+            "Lucio Bible",
+            "Marguerita Sparkman",
+            "Markus Sparkman",
+            "Neil Ackerman",
+            "Rebecka Sparkman",
+            "Richie Boughton",
+            "Sha Sparkman",
+            "Shon Vega",
+            "Susie Berglund",
+            "Yasmin Berglund",
+            "Yuk Ackerman"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "cousin(\"Jack Ackerman\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "210fc420-e9e0-483b-9426-3a757647f7bd",
+        "question": "Who is the son-in-law of the mother of the friend of Douglas Berglund?",
+        "solution_traces": "[{\"Y_2\": \"Douglas Berglund\", \"Y_4\": \"Dorathy Twigg\", \"Y_6\": \"Yasmin Berglund\"}, {\"Y_4\": \"Dorathy Twigg\", \"Y_2\": \"Darwin Ackerman\", \"Y_6\": \"Yasmin Berglund\"}]",
+        "answer": [
+            "Darwin Ackerman",
+            "Douglas Berglund"
+        ],
+        "prolog": {
+            "query": [
+                "son_in_law(Y_4, Y_2)",
+                "mother(Y_6, Y_4)",
+                "friend(\"Douglas Berglund\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "746d399b-86e7-44bf-8224-5245fcf366f1",
+        "question": "Who is the sister of the sibling of the daughter of Gale Twigg?",
+        "solution_traces": "[{\"Y_6\": \"Yuk Ackerman\", \"Y_4\": \"Mickey Twigg\", \"Y_2\": \"Yuk Ackerman\"}, {\"Y_4\": \"Mickey Twigg\", \"Y_6\": \"Yasmin Berglund\", \"Y_2\": \"Yasmin Berglund\"}, {\"Y_6\": \"Yuk Ackerman\", \"Y_2\": \"Yuk Ackerman\", \"Y_4\": \"Yasmin Berglund\"}, {\"Y_6\": \"Yuk Ackerman\", \"Y_4\": \"Mickey Twigg\", \"Y_2\": \"Yasmin Berglund\"}, {\"Y_2\": \"Yasmin Berglund\", \"Y_6\": \"Yasmin Berglund\", \"Y_4\": \"Yuk Ackerman\"}, {\"Y_4\": \"Mickey Twigg\", \"Y_2\": \"Yuk Ackerman\", \"Y_6\": \"Yasmin Berglund\"}]",
+        "answer": [
+            "Yasmin Berglund",
+            "Yuk Ackerman"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "daughter(\"Gale Twigg\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c6019070-303f-42e5-b0b2-98fa96aafd29",
+        "question": "Who is the grandparent of the male first cousin once removed of the great-grandchild of Markus Sparkman?",
+        "solution_traces": "[{\"Y_4\": \"Leonardo Lipsey\", \"Y_6\": \"Sha Bible\", \"Y_2\": \"Jamel Sparkman\"}, {\"Y_4\": \"Leonardo Lipsey\", \"Y_2\": \"Marguerita Sparkman\", \"Y_6\": \"Sha Bible\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_4\": \"Leonardo Lipsey\", \"Y_2\": \"Marguerita Sparkman\"}, {\"Y_2\": \"Keisha Vega\", \"Y_6\": \"Marie Lipsey\", \"Y_4\": \"Carmine Bible\"}, {\"Y_2\": \"Keisha Vega\", \"Y_4\": \"Carmine Bible\", \"Y_6\": \"Adalberto Sparkman\"}, {\"Y_2\": \"Keisha Vega\", \"Y_4\": \"Carmine Bible\", \"Y_6\": \"Erick Sparkman\"}, {\"Y_2\": \"Shon Vega\", \"Y_6\": \"Marie Lipsey\", \"Y_4\": \"Carmine Bible\"}, {\"Y_2\": \"Shon Vega\", \"Y_4\": \"Carmine Bible\", \"Y_6\": \"Adalberto Sparkman\"}, {\"Y_2\": \"Shon Vega\", \"Y_4\": \"Carmine Bible\", \"Y_6\": \"Erick Sparkman\"}, {\"Y_6\": \"Jeanette Vega\", \"Y_4\": \"Leonardo Lipsey\", \"Y_2\": \"Jamel Sparkman\"}]",
+        "answer": [
+            "Jamel Sparkman",
+            "Keisha Vega",
+            "Marguerita Sparkman",
+            "Shon Vega"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "male_first_cousin_once_removed(Y_6, Y_4)",
+                "great_grandchild(\"Markus Sparkman\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    }
+]

@@ -1,0 +1,879 @@
+[
+    {
+        "id": "98163934-f75e-404f-8e37-4c852082f413",
+        "question": "How many great-grandsons does the daughter of Nelly Alanis have?",
+        "solution_traces": "[{\"Y_3\": \"Dominique Moyer\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(Y_3, Y_1)), Count_1)",
+                "daughter(\"Nelly Alanis\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6725f841-bbb5-4750-8f28-939f7ded616f",
+        "question": "How many brothers does the brother-in-law of Tamala Mello have?",
+        "solution_traces": "[{\"Y_3\": \"Antonio Mello\", \"Count_1\": 3}, {\"Count_1\": 3, \"Y_3\": \"Rudolf Mello\"}, {\"Y_3\": \"Orville Mello\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "brother_in_law(\"Tamala Mello\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2f2b4b90-ff32-47d7-ae7b-c693130d8866",
+        "question": "How many second aunts does the great-grandchild of Nelly Alanis have?",
+        "solution_traces": "[{\"Y_3\": \"Miki Green\", \"Count_1\": 1}, {\"Y_3\": \"Victoria Eddings\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(second_aunt(Y_3, Y_1)), Count_1)",
+                "great_grandchild(\"Nelly Alanis\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "48b8eb48-8806-459d-bac6-5ac104b1fb23",
+        "question": "How many friends does the child of Nydia Batista have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Irvin Batista\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "child(\"Nydia Batista\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5d60e901-65a4-49bf-aa83-99fb46397fcd",
+        "question": "How many grandparents does the aunt of Mammie Rayford have?",
+        "solution_traces": "[{\"Y_3\": \"Janis Moyer\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "aunt(\"Mammie Rayford\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ae132338-1f87-4cbb-a75b-0c154ad8588f",
+        "question": "How many cousins does the great-grandchild of Virgina Shiver have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Dewitt Eddings\"}, {\"Y_3\": \"Kacey Green\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "great_grandchild(\"Virgina Shiver\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f69f5e8f-bc30-420a-948d-53a695069f29",
+        "question": "How many fathers does the grandson of Esperanza Molnar have?",
+        "solution_traces": "[{\"Y_3\": \"Antonio Mello\", \"Count_1\": 1}, {\"Count_1\": 1, \"Y_3\": \"Orville Mello\"}, {\"Y_3\": \"Edison Mello\", \"Count_1\": 1}, {\"Count_1\": 1, \"Y_3\": \"Rudolf Mello\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father(Y_3, Y_1)), Count_1)",
+                "grandson(\"Esperanza Molnar\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "363ebf40-ca49-4987-b0bf-ee58fe2ef9d2",
+        "question": "How many sons does the father-in-law of Tiffany Townley have?",
+        "solution_traces": "[{\"Y_3\": \"Wilfredo Townley\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son(Y_3, Y_1)), Count_1)",
+                "father_in_law(\"Tiffany Townley\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "62ebbe37-8c95-49b3-9f8b-e743c14b1ebe",
+        "question": "How many friends does the mother of Aimee Townley have?",
+        "solution_traces": "[{\"Y_3\": \"Monika Townley\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "mother(\"Aimee Townley\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "140eede3-8238-4fac-9a24-8d6d59a08497",
+        "question": "How many mothers-in-law does the friend of Virgina Shiver have?",
+        "solution_traces": "[{\"Y_3\": \"Joaquin Eddings\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(Y_3, Y_1)), Count_1)",
+                "friend(\"Virgina Shiver\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3b8ceb9e-0cdd-4326-ad8f-7e86c8d5cd77",
+        "question": "How many aunts does the male cousin of Jerrold Mello have?",
+        "solution_traces": "[{\"Y_3\": \"Roberto Townley\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(aunt(Y_3, Y_1)), Count_1)",
+                "male_cousin(\"Jerrold Mello\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f58bc053-4e99-4579-a5e0-57a2d950194a",
+        "question": "How many siblings does the great-uncle of Irvin Batista have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Rudolf Mello\"}, {\"Y_3\": \"Edison Mello\", \"Count_1\": 3}, {\"Y_3\": \"Orville Mello\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "great_uncle(\"Irvin Batista\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f9ca744d-be69-4140-9c2f-e6beb0ea6675",
+        "question": "How many sisters does the great-uncle of Orville Mello have?",
+        "solution_traces": "[{\"Y_3\": \"Marcelino Townley\", \"Count_1\": 3}, {\"Y_3\": \"Cory Townley\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "great_uncle(\"Orville Mello\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7513597b-9f77-452f-8e49-af1c7505ac0c",
+        "question": "How many brothers-in-law does the parent of Nydia Batista have?",
+        "solution_traces": "[{\"Y_3\": \"Golda Mello\", \"Count_1\": 3}, {\"Y_3\": \"Antonio Mello\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother_in_law(Y_3, Y_1)), Count_1)",
+                "parent(\"Nydia Batista\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4407d48f-ae26-476d-a96a-ad7a8c6b77b8",
+        "question": "How many mothers-in-law does the child of Nelly Alanis have?",
+        "solution_traces": "[{\"Y_3\": \"Dominique Moyer\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(Y_3, Y_1)), Count_1)",
+                "child(\"Nelly Alanis\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0091c5ae-4685-4f39-a543-72134357325b",
+        "question": "How many fathers does the great-uncle of Orville Mello have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Cory Townley\"}, {\"Count_1\": 1, \"Y_3\": \"Marcelino Townley\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father(Y_3, Y_1)), Count_1)",
+                "great_uncle(\"Orville Mello\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f49b98e9-7104-4764-ba62-fff3c42da3c2",
+        "question": "How many great-aunts does the child of Dick Rayford have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Mammie Rayford\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_aunt(Y_3, Y_1)), Count_1)",
+                "child(\"Dick Rayford\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7cb60e02-ad89-4efe-b9ff-d72f7fbb5fe3",
+        "question": "How many great-grandchildren does the great-grandmother of Ramiro Mello have?",
+        "solution_traces": "[{\"Y_3\": \"Harriette Mello\", \"Count_1\": 3}, {\"Y_3\": \"Esperanza Molnar\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandchild(Y_3, Y_1)), Count_1)",
+                "great_grandmother(\"Ramiro Mello\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3a01c0d6-9c72-472c-a6a2-b570c9fbf32b",
+        "question": "How many great-grandparents does the grandchild of Enid Mello have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Benito Mello\"}, {\"Count_1\": 4, \"Y_3\": \"Nydia Batista\"}, {\"Count_1\": 4, \"Y_3\": \"Ramiro Mello\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "grandchild(\"Enid Mello\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6aa4a74d-b3bc-4b72-88d4-a6591f47cdb2",
+        "question": "How many sons does the cousin of Roberto Townley have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Jerrold Mello\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son(Y_3, Y_1)), Count_1)",
+                "cousin(\"Roberto Townley\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5c093923-5a65-467f-84ee-2bcb5a2fa2b3",
+        "question": "How many nephews does the friend of Roberto Townley have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Harriette Mello\"}, {\"Y_3\": \"Marlana Rayford\", \"Count_1\": 1}, {\"Count_1\": 0, \"Y_3\": \"Jerrold Mello\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "friend(\"Roberto Townley\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2d69d330-ff7c-4923-9226-54ad7e2f6e51",
+        "question": "How many fathers-in-law does the mother of Victoria Eddings have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Jacquline Moyer\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father_in_law(Y_3, Y_1)), Count_1)",
+                "mother(\"Victoria Eddings\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7931d700-c03e-4cb0-b9ce-0807a6d9cb81",
+        "question": "How many aunts does the grandparent of Ramiro Mello have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Jerrold Mello\"}, {\"Count_1\": 0, \"Y_3\": \"Enid Mello\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(aunt(Y_3, Y_1)), Count_1)",
+                "grandparent(\"Ramiro Mello\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2f62438a-12b0-4a69-b0b3-46703452c22f",
+        "question": "How many male first cousins once removed does the nephew of Aimee Townley have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Jerrold Mello\"}, {\"Count_1\": 4, \"Y_3\": \"Roberto Townley\"}]",
+        "answer": [
+            "0",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(male_first_cousin_once_removed(Y_3, Y_1)), Count_1)",
+                "nephew(\"Aimee Townley\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "34a0c0aa-653e-4748-8864-937bae9fb81f",
+        "question": "How many wives does the sibling of Marlana Rayford have?",
+        "solution_traces": "[{\"Y_3\": \"Janis Moyer\", \"Count_1\": 0}, {\"Count_1\": 1, \"Y_3\": \"Eduardo Moyer\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(wife(Y_3, Y_1)), Count_1)",
+                "sibling(\"Marlana Rayford\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2e3420c2-ae3e-4015-abf8-e3e05550d45c",
+        "question": "How many great-uncles does the grandchild of Nelly Alanis have?",
+        "solution_traces": "[{\"Y_3\": \"Mack Moyer\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Jeanette Moyer\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_uncle(Y_3, Y_1)), Count_1)",
+                "grandchild(\"Nelly Alanis\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "90e17c23-3e4f-440a-a73e-600ecc57c912",
+        "question": "How many husbands does the great-grandparent of Rudolf Mello have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Wilfredo Townley\"}, {\"Count_1\": 1, \"Y_3\": \"Monika Townley\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(husband(Y_3, Y_1)), Count_1)",
+                "great_grandparent(\"Rudolf Mello\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "bdd9e449-6193-403f-8051-28e05a4fbdb7",
+        "question": "How many siblings does the parent of Eduardo Moyer have?",
+        "solution_traces": "[{\"Y_3\": \"Farrah Moyer\", \"Count_1\": 3}, {\"Y_3\": \"Steve Moyer\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "parent(\"Eduardo Moyer\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3cdfb1c9-5779-48be-9616-91d368522301",
+        "question": "How many mothers does the aunt of Eduardo Moyer have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Margaret Hylton\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother(Y_3, Y_1)), Count_1)",
+                "aunt(\"Eduardo Moyer\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "df4f31db-e8ca-4329-9bc3-c07fb814f036",
+        "question": "How many nieces does the great-uncle of Mack Moyer have?",
+        "solution_traces": "[{\"Y_3\": \"Angelo Hylton\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Jimmie Hylton\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "great_uncle(\"Mack Moyer\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    }
+]

@@ -1,0 +1,1127 @@
+[
+    {
+        "id": "24618eee-78e2-43ae-af98-7f9726aee1b8",
+        "question": "How many brothers does the grandchild of the grandparent of the grandchild of Leroy Bidwell have?",
+        "solution_traces": "[{\"Y_3\": \"Levi Cornwell\", \"Y_5\": \"Lucretia Bidwell\", \"Count_1\": 2, \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Count_1\": 2, \"Y_3\": \"Erik Cornwell\", \"Y_7\": \"Levi Cornwell\"}, {\"Y_5\": \"Lucretia Bidwell\", \"Y_7\": \"Roxy Cornwell\", \"Count_1\": 2, \"Y_3\": \"Erik Cornwell\"}, {\"Y_5\": \"Lucretia Bidwell\", \"Y_7\": \"Erik Cornwell\", \"Count_1\": 2, \"Y_3\": \"Erik Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_3\": \"Roxy Cornwell\", \"Count_1\": 3, \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_7\": \"Erik Cornwell\", \"Count_1\": 2, \"Y_3\": \"Erik Cornwell\"}, {\"Y_3\": \"Levi Cornwell\", \"Y_5\": \"Lucretia Bidwell\", \"Y_7\": \"Erik Cornwell\", \"Count_1\": 2}, {\"Y_5\": \"Leroy Bidwell\", \"Y_7\": \"Roxy Cornwell\", \"Count_1\": 2, \"Y_3\": \"Erik Cornwell\"}, {\"Y_5\": \"Lucretia Bidwell\", \"Count_1\": 2, \"Y_3\": \"Erik Cornwell\", \"Y_7\": \"Levi Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Count_1\": 2, \"Y_3\": \"Levi Cornwell\", \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Lucretia Bidwell\", \"Count_1\": 2, \"Y_3\": \"Erik Cornwell\", \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Count_1\": 3, \"Y_3\": \"Roxy Cornwell\", \"Y_7\": \"Levi Cornwell\"}, {\"Y_5\": \"Lucretia Bidwell\", \"Y_7\": \"Roxy Cornwell\", \"Y_3\": \"Roxy Cornwell\", \"Count_1\": 3}, {\"Y_5\": \"Lucretia Bidwell\", \"Y_7\": \"Erik Cornwell\", \"Y_3\": \"Roxy Cornwell\", \"Count_1\": 3}, {\"Y_5\": \"Leroy Bidwell\", \"Count_1\": 2, \"Y_3\": \"Erik Cornwell\", \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_7\": \"Erik Cornwell\", \"Count_1\": 2, \"Y_3\": \"Levi Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_3\": \"Cecil Cornwell\", \"Y_7\": \"Roxy Cornwell\", \"Count_1\": 2}, {\"Y_5\": \"Lucretia Bidwell\", \"Y_3\": \"Roxy Cornwell\", \"Count_1\": 3, \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Lucretia Bidwell\", \"Y_3\": \"Cecil Cornwell\", \"Y_7\": \"Erik Cornwell\", \"Count_1\": 2}, {\"Y_5\": \"Leroy Bidwell\", \"Y_3\": \"Cecil Cornwell\", \"Count_1\": 2, \"Y_7\": \"Levi Cornwell\"}, {\"Y_5\": \"Lucretia Bidwell\", \"Y_3\": \"Cecil Cornwell\", \"Count_1\": 2, \"Y_7\": \"Levi Cornwell\"}, {\"Y_3\": \"Levi Cornwell\", \"Y_5\": \"Lucretia Bidwell\", \"Count_1\": 2, \"Y_7\": \"Levi Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_7\": \"Roxy Cornwell\", \"Count_1\": 2, \"Y_3\": \"Levi Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_3\": \"Cecil Cornwell\", \"Y_7\": \"Erik Cornwell\", \"Count_1\": 2}, {\"Y_5\": \"Lucretia Bidwell\", \"Y_3\": \"Cecil Cornwell\", \"Count_1\": 2, \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Lucretia Bidwell\", \"Y_7\": \"Roxy Cornwell\", \"Count_1\": 2, \"Y_3\": \"Cecil Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_3\": \"Cecil Cornwell\", \"Count_1\": 2, \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_7\": \"Erik Cornwell\", \"Y_3\": \"Roxy Cornwell\", \"Count_1\": 3}, {\"Y_5\": \"Leroy Bidwell\", \"Y_7\": \"Roxy Cornwell\", \"Y_3\": \"Roxy Cornwell\", \"Count_1\": 3}, {\"Y_5\": \"Lucretia Bidwell\", \"Count_1\": 3, \"Y_3\": \"Roxy Cornwell\", \"Y_7\": \"Levi Cornwell\"}, {\"Y_3\": \"Levi Cornwell\", \"Y_5\": \"Lucretia Bidwell\", \"Y_7\": \"Roxy Cornwell\", \"Count_1\": 2}, {\"Y_5\": \"Leroy Bidwell\", \"Y_3\": \"Levi Cornwell\", \"Count_1\": 2, \"Y_7\": \"Levi Cornwell\"}]",
+        "answer": [
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "grandchild(\"Leroy Bidwell\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "452fdf80-5fd1-4237-bdd4-1de172012e05",
+        "question": "How many great-aunts does the great-grandchild of the grandfather of the great-grandchild of Tyron Kline have?",
+        "solution_traces": "[{\"Y_5\": \"Leroy Bidwell\", \"Count_1\": 1, \"Y_7\": \"Levi Cornwell\", \"Y_3\": \"Quincy Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Count_1\": 1, \"Y_3\": \"Quincy Cornwell\", \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_7\": \"Roxy Cornwell\", \"Count_1\": 1, \"Y_3\": \"Jamal Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_7\": \"Roxy Cornwell\", \"Count_1\": 1, \"Y_3\": \"Quincy Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Count_1\": 1, \"Y_7\": \"Erik Cornwell\", \"Y_3\": \"Jamal Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_3\": \"Terrell Cornwell\", \"Y_7\": \"Roxy Cornwell\", \"Count_1\": 1}, {\"Y_5\": \"Leroy Bidwell\", \"Count_1\": 1, \"Y_7\": \"Erik Cornwell\", \"Y_3\": \"Quincy Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_3\": \"Terrell Cornwell\", \"Y_7\": \"Erik Cornwell\", \"Count_1\": 1}, {\"Y_5\": \"Leroy Bidwell\", \"Count_1\": 1, \"Y_7\": \"Levi Cornwell\", \"Y_3\": \"Jamal Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Count_1\": 1, \"Y_3\": \"Jamal Cornwell\", \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_3\": \"Terrell Cornwell\", \"Count_1\": 1, \"Y_7\": \"Levi Cornwell\"}, {\"Y_5\": \"Leroy Bidwell\", \"Y_3\": \"Terrell Cornwell\", \"Count_1\": 1, \"Y_7\": \"Cecil Cornwell\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_aunt(Y_3, Y_1)), Count_1)",
+                "great_grandchild(Y_5, Y_3)",
+                "grandfather(Y_7, Y_5)",
+                "great_grandchild(\"Tyron Kline\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7a85a03f-0afb-4bcc-9bd9-e07da1a26ffd",
+        "question": "How many fathers does the aunt of the aunt of the great-aunt of Terrell Cornwell have?",
+        "solution_traces": "[{\"Y_3\": \"Deena Kline\", \"Y_5\": \"Golda Kline\", \"Y_7\": \"Tena Bidwell\", \"Count_1\": 1}, {\"Count_1\": 1, \"Y_3\": \"Dallas Kline\", \"Y_5\": \"Golda Kline\", \"Y_7\": \"Tena Bidwell\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father(Y_3, Y_1)), Count_1)",
+                "aunt(Y_5, Y_3)",
+                "aunt(Y_7, Y_5)",
+                "great_aunt(\"Terrell Cornwell\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e188ae09-4e88-449d-99d4-dfced6fa3f3d",
+        "question": "How many great-aunts does the niece of the friend of the mother-in-law of Gregory Yazzie have?",
+        "solution_traces": "[{\"Y_7\": \"Audra Juarez\", \"Y_5\": \"Tena Bidwell\", \"Count_1\": 1, \"Y_3\": \"Roxy Cornwell\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_aunt(Y_3, Y_1)), Count_1)",
+                "niece(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "mother_in_law(\"Gregory Yazzie\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4c7b65d7-ea95-4392-a758-b9b9aec77e57",
+        "question": "How many grandparents does the son of the grandparent of the child of Stuart West have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Stuart West\", \"Y_5\": \"Kristopher West\", \"Y_7\": \"Ted West\"}, {\"Y_5\": \"Matilda West\", \"Count_1\": 4, \"Y_3\": \"Stuart West\", \"Y_7\": \"Johnetta West\"}, {\"Y_3\": \"Ramon West\", \"Count_1\": 4, \"Y_5\": \"Kristopher West\", \"Y_7\": \"Johnetta West\"}, {\"Y_5\": \"Matilda West\", \"Count_1\": 4, \"Y_3\": \"Ramon West\", \"Y_7\": \"Ted West\"}, {\"Count_1\": 4, \"Y_3\": \"Stuart West\", \"Y_5\": \"Kristopher West\", \"Y_7\": \"Johnetta West\"}, {\"Y_5\": \"Matilda West\", \"Count_1\": 4, \"Y_3\": \"Stuart West\", \"Y_7\": \"Ted West\"}, {\"Y_3\": \"Ramon West\", \"Count_1\": 4, \"Y_5\": \"Kristopher West\", \"Y_7\": \"Ted West\"}, {\"Y_5\": \"Matilda West\", \"Count_1\": 4, \"Y_3\": \"Ramon West\", \"Y_7\": \"Johnetta West\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "son(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "child(\"Stuart West\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "53a9733e-ecca-404d-88a9-eb3eff3c92b0",
+        "question": "How many granddaughters does the friend of the daughter-in-law of the wife of Kristopher West have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_7\": \"Matilda West\", \"Y_5\": \"Hattie West\", \"Y_3\": \"Stuart West\"}, {\"Count_1\": 0, \"Y_3\": \"Thelma Yazzie\", \"Y_7\": \"Matilda West\", \"Y_5\": \"Hattie West\"}, {\"Y_7\": \"Matilda West\", \"Y_5\": \"Hattie West\", \"Count_1\": 2, \"Y_3\": \"Sebastian Colter\"}]",
+        "answer": [
+            "0",
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(granddaughter(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "daughter_in_law(Y_7, Y_5)",
+                "wife(\"Kristopher West\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4df7f557-7f6a-4d3e-b8b6-eaaf9482ade7",
+        "question": "How many great-grandsons does the grandfather of the grandchild of the child of Addie Kline have?",
+        "solution_traces": "[{\"Y_5\": \"Tena Bidwell\", \"Y_7\": \"Tyron Kline\", \"Y_3\": \"Tyron Kline\", \"Count_1\": 3}, {\"Y_5\": \"Leesa Cornwell\", \"Y_7\": \"Tyron Kline\", \"Y_3\": \"Tyron Kline\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(Y_3, Y_1)), Count_1)",
+                "grandfather(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "child(\"Addie Kline\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "03445da6-2e80-4f27-859a-fbf41782eaa3",
+        "question": "How many mothers does the great-grandmother of the great-grandson of the son-in-law of Audra Juarez have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Isabella West\", \"Y_7\": \"Gregory Yazzie\", \"Y_5\": \"Ted West\"}, {\"Y_3\": \"Thelma Yazzie\", \"Y_7\": \"Gregory Yazzie\", \"Count_1\": 1, \"Y_5\": \"Abdul West\"}, {\"Y_3\": \"Thelma Yazzie\", \"Y_7\": \"Gregory Yazzie\", \"Y_5\": \"Ted West\", \"Count_1\": 1}, {\"Count_1\": 0, \"Y_3\": \"Isabella West\", \"Y_7\": \"Gregory Yazzie\", \"Y_5\": \"Abdul West\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother(Y_3, Y_1)), Count_1)",
+                "great_grandmother(Y_5, Y_3)",
+                "great_grandson(Y_7, Y_5)",
+                "son_in_law(\"Audra Juarez\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9a5fb961-c6c5-4121-b02e-72522c2df72a",
+        "question": "How many sons does the cousin of the friend of the friend of Lonny Kline have?",
+        "solution_traces": "[{\"Y_3\": \"Abdul West\", \"Y_7\": \"Johnna West\", \"Count_1\": 0, \"Y_5\": \"Ted West\"}, {\"Y_7\": \"Johnna West\", \"Y_5\": \"Morgan West\", \"Count_1\": 1, \"Y_3\": \"Ted West\"}, {\"Count_1\": 0, \"Y_7\": \"Geri West\", \"Y_5\": \"Golda Kline\", \"Y_3\": \"Freddie Kline\"}, {\"Y_7\": \"Johnna West\", \"Count_1\": 0, \"Y_5\": \"Ted West\", \"Y_3\": \"Morgan West\"}, {\"Y_3\": \"Johnetta West\", \"Y_7\": \"Johnna West\", \"Y_5\": \"Morgan West\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son(Y_3, Y_1)), Count_1)",
+                "cousin(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "friend(\"Lonny Kline\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "51abd325-c299-4090-b03f-159fb45517b7",
+        "question": "How many wives does the uncle of the cousin of the grandparent of Erik Cornwell have?",
+        "solution_traces": "[{\"Y_3\": \"Tyron Kline\", \"Count_1\": 1, \"Y_7\": \"Lucretia Bidwell\", \"Y_5\": \"Freddie Kline\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(wife(Y_3, Y_1)), Count_1)",
+                "uncle(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "grandparent(\"Erik Cornwell\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "719451ff-e4b8-41e0-9505-bb59c8d546a3",
+        "question": "How many parents does the grandchild of the sibling of the great-aunt of Quincy Cornwell have?",
+        "solution_traces": "[{\"Y_5\": \"Leesa Cornwell\", \"Y_7\": \"Tena Bidwell\", \"Count_1\": 2, \"Y_3\": \"Quincy Cornwell\"}, {\"Y_3\": \"Terrell Cornwell\", \"Y_5\": \"Leesa Cornwell\", \"Y_7\": \"Tena Bidwell\", \"Count_1\": 2}, {\"Y_5\": \"Leesa Cornwell\", \"Y_7\": \"Tena Bidwell\", \"Count_1\": 2, \"Y_3\": \"Jamal Cornwell\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "great_aunt(\"Quincy Cornwell\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "fda1108d-0d13-4864-8eab-bc7c48ba9fb6",
+        "question": "How many siblings does the son of the friend of the friend of Golda Kline have?",
+        "solution_traces": "[{\"Y_7\": \"Geri West\", \"Y_5\": \"Sadye Cornwell\", \"Count_1\": 2, \"Y_3\": \"Jamal Cornwell\"}, {\"Y_7\": \"Geri West\", \"Y_5\": \"Sadye Cornwell\", \"Count_1\": 2, \"Y_3\": \"Quincy Cornwell\"}, {\"Y_3\": \"Kenton Kline\", \"Y_7\": \"Leroy Bidwell\", \"Y_5\": \"Addie Kline\", \"Count_1\": 3}, {\"Y_7\": \"Jenny Colter\", \"Count_1\": 3, \"Y_5\": \"Leesa Cornwell\", \"Y_3\": \"Erik Cornwell\"}, {\"Y_7\": \"Geri West\", \"Y_3\": \"Tyron Kline\", \"Count_1\": 3, \"Y_5\": \"Lonny Kline\"}, {\"Count_1\": 0, \"Y_7\": \"Erik Cornwell\", \"Y_5\": \"Jeannine Kline\", \"Y_3\": \"Freddie Kline\"}, {\"Y_7\": \"Jenny Colter\", \"Y_5\": \"Sadye Cornwell\", \"Count_1\": 2, \"Y_3\": \"Jamal Cornwell\"}, {\"Count_1\": 2, \"Y_7\": \"Geri West\", \"Y_5\": \"Cecil Cornwell\", \"Y_3\": \"Quincy Cornwell\"}, {\"Y_7\": \"Leroy Bidwell\", \"Y_5\": \"Leesa Cornwell\", \"Count_1\": 3, \"Y_3\": \"Erik Cornwell\"}, {\"Y_3\": \"Kenton Kline\", \"Y_7\": \"Geri West\", \"Count_1\": 3, \"Y_5\": \"Lonny Kline\"}, {\"Y_7\": \"Leroy Bidwell\", \"Y_5\": \"Leesa Cornwell\", \"Y_3\": \"Cecil Cornwell\", \"Count_1\": 3}, {\"Y_3\": \"Terrell Cornwell\", \"Y_7\": \"Geri West\", \"Y_5\": \"Sadye Cornwell\", \"Count_1\": 2}, {\"Y_7\": \"Jenny Colter\", \"Y_3\": \"Terrell Cornwell\", \"Y_5\": \"Sadye Cornwell\", \"Count_1\": 2}, {\"Y_3\": \"Levi Cornwell\", \"Y_7\": \"Leroy Bidwell\", \"Y_5\": \"Leesa Cornwell\", \"Count_1\": 3}, {\"Y_7\": \"Jenny Colter\", \"Y_3\": \"Cecil Cornwell\", \"Y_5\": \"Leesa Cornwell\", \"Count_1\": 3}, {\"Y_7\": \"Jenny Colter\", \"Y_5\": \"Sadye Cornwell\", \"Count_1\": 2, \"Y_3\": \"Quincy Cornwell\"}, {\"Y_7\": \"Jenny Colter\", \"Y_3\": \"Kristopher West\", \"Count_1\": 0, \"Y_5\": \"Isabella West\"}, {\"Y_7\": \"Jenny Colter\", \"Count_1\": 3, \"Y_5\": \"Leesa Cornwell\", \"Y_3\": \"Levi Cornwell\"}, {\"Y_3\": \"Tyron Kline\", \"Y_7\": \"Leroy Bidwell\", \"Y_5\": \"Addie Kline\", \"Count_1\": 3}, {\"Count_1\": 2, \"Y_7\": \"Geri West\", \"Y_5\": \"Cecil Cornwell\", \"Y_3\": \"Jamal Cornwell\"}, {\"Y_3\": \"Terrell Cornwell\", \"Y_7\": \"Geri West\", \"Y_5\": \"Cecil Cornwell\", \"Count_1\": 2}]",
+        "answer": [
+            "0",
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "son(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "friend(\"Golda Kline\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4e042f76-12ad-4520-89a5-e3096bc3603f",
+        "question": "How many grandsons does the great-grandparent of the cousin of the grandchild of Kristopher West have?",
+        "solution_traces": "[{\"Y_5\": \"Morgan West\", \"Y_3\": \"Gregory Yazzie\", \"Count_1\": 2, \"Y_7\": \"Ted West\"}, {\"Y_3\": \"Isabella West\", \"Count_1\": 2, \"Y_5\": \"Abdul West\", \"Y_7\": \"Johnetta West\"}, {\"Count_1\": 2, \"Y_3\": \"Oliver West\", \"Y_5\": \"Abdul West\", \"Y_7\": \"Johnetta West\"}, {\"Y_5\": \"Morgan West\", \"Y_3\": \"Oliver West\", \"Count_1\": 2, \"Y_7\": \"Ted West\"}, {\"Y_3\": \"Isabella West\", \"Y_5\": \"Ted West\", \"Count_1\": 2, \"Y_7\": \"Abdul West\"}, {\"Y_3\": \"Isabella West\", \"Count_1\": 2, \"Y_5\": \"Abdul West\", \"Y_7\": \"Ted West\"}, {\"Y_3\": \"Thelma Yazzie\", \"Count_1\": 2, \"Y_5\": \"Abdul West\", \"Y_7\": \"Johnetta West\"}, {\"Y_3\": \"Thelma Yazzie\", \"Y_7\": \"Morgan West\", \"Count_1\": 2, \"Y_5\": \"Ted West\"}, {\"Y_3\": \"Gregory Yazzie\", \"Y_7\": \"Morgan West\", \"Count_1\": 2, \"Y_5\": \"Ted West\"}, {\"Y_3\": \"Thelma Yazzie\", \"Y_5\": \"Johnetta West\", \"Count_1\": 2, \"Y_7\": \"Abdul West\"}, {\"Y_5\": \"Morgan West\", \"Y_3\": \"Gregory Yazzie\", \"Count_1\": 2, \"Y_7\": \"Johnetta West\"}, {\"Y_3\": \"Thelma Yazzie\", \"Y_5\": \"Ted West\", \"Count_1\": 2, \"Y_7\": \"Abdul West\"}, {\"Y_3\": \"Thelma Yazzie\", \"Count_1\": 2, \"Y_5\": \"Abdul West\", \"Y_7\": \"Ted West\"}, {\"Y_3\": \"Gregory Yazzie\", \"Y_5\": \"Johnetta West\", \"Count_1\": 2, \"Y_7\": \"Abdul West\"}, {\"Y_3\": \"Thelma Yazzie\", \"Y_5\": \"Morgan West\", \"Count_1\": 2, \"Y_7\": \"Johnetta West\"}, {\"Y_3\": \"Gregory Yazzie\", \"Y_5\": \"Ted West\", \"Count_1\": 2, \"Y_7\": \"Abdul West\"}, {\"Y_3\": \"Isabella West\", \"Y_5\": \"Morgan West\", \"Count_1\": 2, \"Y_7\": \"Johnetta West\"}, {\"Count_1\": 2, \"Y_3\": \"Gregory Yazzie\", \"Y_5\": \"Abdul West\", \"Y_7\": \"Ted West\"}, {\"Y_5\": \"Johnetta West\", \"Y_3\": \"Isabella West\", \"Y_7\": \"Morgan West\", \"Count_1\": 2}, {\"Y_5\": \"Morgan West\", \"Y_3\": \"Oliver West\", \"Count_1\": 2, \"Y_7\": \"Johnetta West\"}, {\"Y_3\": \"Isabella West\", \"Y_7\": \"Morgan West\", \"Count_1\": 2, \"Y_5\": \"Ted West\"}, {\"Y_3\": \"Oliver West\", \"Y_5\": \"Johnetta West\", \"Count_1\": 2, \"Y_7\": \"Abdul West\"}, {\"Y_3\": \"Thelma Yazzie\", \"Y_5\": \"Morgan West\", \"Count_1\": 2, \"Y_7\": \"Ted West\"}, {\"Y_3\": \"Isabella West\", \"Y_5\": \"Johnetta West\", \"Count_1\": 2, \"Y_7\": \"Abdul West\"}, {\"Y_3\": \"Isabella West\", \"Y_5\": \"Morgan West\", \"Count_1\": 2, \"Y_7\": \"Ted West\"}, {\"Y_5\": \"Johnetta West\", \"Y_3\": \"Oliver West\", \"Y_7\": \"Morgan West\", \"Count_1\": 2}, {\"Y_5\": \"Johnetta West\", \"Y_3\": \"Thelma Yazzie\", \"Y_7\": \"Morgan West\", \"Count_1\": 2}, {\"Y_3\": \"Oliver West\", \"Y_5\": \"Ted West\", \"Count_1\": 2, \"Y_7\": \"Abdul West\"}, {\"Count_1\": 2, \"Y_3\": \"Oliver West\", \"Y_5\": \"Abdul West\", \"Y_7\": \"Ted West\"}, {\"Y_5\": \"Johnetta West\", \"Y_3\": \"Gregory Yazzie\", \"Y_7\": \"Morgan West\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Gregory Yazzie\", \"Y_5\": \"Abdul West\", \"Y_7\": \"Johnetta West\"}, {\"Y_3\": \"Oliver West\", \"Y_7\": \"Morgan West\", \"Count_1\": 2, \"Y_5\": \"Ted West\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandson(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "grandchild(\"Kristopher West\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "62a51f3f-1419-4665-b317-5113549b0dc0",
+        "question": "How many second uncles does the sibling of the uncle of the brother of Quincy Cornwell have?",
+        "solution_traces": "[{\"Y_3\": \"Cecil Cornwell\", \"Count_1\": 1, \"Y_5\": \"Levi Cornwell\", \"Y_7\": \"Terrell Cornwell\"}, {\"Y_3\": \"Cecil Cornwell\", \"Y_5\": \"Erik Cornwell\", \"Count_1\": 1, \"Y_7\": \"Terrell Cornwell\"}, {\"Count_1\": 1, \"Y_5\": \"Levi Cornwell\", \"Y_3\": \"Roxy Cornwell\", \"Y_7\": \"Terrell Cornwell\"}, {\"Y_3\": \"Levi Cornwell\", \"Y_5\": \"Erik Cornwell\", \"Count_1\": 1, \"Y_7\": \"Terrell Cornwell\"}, {\"Count_1\": 1, \"Y_5\": \"Levi Cornwell\", \"Y_7\": \"Jamal Cornwell\", \"Y_3\": \"Roxy Cornwell\"}, {\"Y_5\": \"Erik Cornwell\", \"Count_1\": 1, \"Y_3\": \"Roxy Cornwell\", \"Y_7\": \"Terrell Cornwell\"}, {\"Count_1\": 1, \"Y_5\": \"Erik Cornwell\", \"Y_7\": \"Jamal Cornwell\", \"Y_3\": \"Roxy Cornwell\"}, {\"Y_3\": \"Cecil Cornwell\", \"Y_5\": \"Levi Cornwell\", \"Y_7\": \"Jamal Cornwell\", \"Count_1\": 1}, {\"Y_3\": \"Cecil Cornwell\", \"Y_5\": \"Erik Cornwell\", \"Y_7\": \"Jamal Cornwell\", \"Count_1\": 1}, {\"Y_3\": \"Levi Cornwell\", \"Count_1\": 1, \"Y_5\": \"Erik Cornwell\", \"Y_7\": \"Jamal Cornwell\"}, {\"Count_1\": 1, \"Y_5\": \"Levi Cornwell\", \"Y_7\": \"Jamal Cornwell\", \"Y_3\": \"Erik Cornwell\"}, {\"Count_1\": 1, \"Y_5\": \"Levi Cornwell\", \"Y_3\": \"Erik Cornwell\", \"Y_7\": \"Terrell Cornwell\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(second_uncle(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "uncle(Y_7, Y_5)",
+                "brother(\"Quincy Cornwell\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f61eabba-4d3c-4227-b779-b473fa6dd3e6",
+        "question": "How many great-grandsons does the grandparent of the sibling of the sibling of Roxy Cornwell have?",
+        "solution_traces": "[{\"Y_5\": \"Erik Cornwell\", \"Y_3\": \"Lucretia Bidwell\", \"Count_1\": 3, \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Roxy Cornwell\", \"Y_3\": \"Lucretia Bidwell\", \"Count_1\": 3, \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Roxy Cornwell\", \"Y_3\": \"Leroy Bidwell\", \"Y_7\": \"Erik Cornwell\", \"Count_1\": 3}, {\"Y_5\": \"Levi Cornwell\", \"Y_3\": \"Lucretia Bidwell\", \"Count_1\": 3, \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Levi Cornwell\", \"Y_3\": \"Leroy Bidwell\", \"Y_7\": \"Erik Cornwell\", \"Count_1\": 3}, {\"Count_1\": 3, \"Y_3\": \"Leroy Bidwell\", \"Y_5\": \"Cecil Cornwell\", \"Y_7\": \"Levi Cornwell\"}, {\"Count_1\": 3, \"Y_5\": \"Erik Cornwell\", \"Y_3\": \"Leroy Bidwell\", \"Y_7\": \"Levi Cornwell\"}, {\"Y_5\": \"Erik Cornwell\", \"Y_3\": \"Leroy Bidwell\", \"Count_1\": 3, \"Y_7\": \"Cecil Cornwell\"}, {\"Y_3\": \"Leroy Bidwell\", \"Y_7\": \"Erik Cornwell\", \"Y_5\": \"Cecil Cornwell\", \"Count_1\": 3}, {\"Y_3\": \"Leroy Bidwell\", \"Y_5\": \"Levi Cornwell\", \"Count_1\": 3, \"Y_7\": \"Cecil Cornwell\"}, {\"Y_5\": \"Levi Cornwell\", \"Y_7\": \"Erik Cornwell\", \"Y_3\": \"Lucretia Bidwell\", \"Count_1\": 3}, {\"Count_1\": 3, \"Y_3\": \"Lucretia Bidwell\", \"Y_5\": \"Cecil Cornwell\", \"Y_7\": \"Levi Cornwell\"}, {\"Count_1\": 3, \"Y_5\": \"Erik Cornwell\", \"Y_3\": \"Lucretia Bidwell\", \"Y_7\": \"Levi Cornwell\"}, {\"Y_5\": \"Roxy Cornwell\", \"Count_1\": 3, \"Y_3\": \"Lucretia Bidwell\", \"Y_7\": \"Levi Cornwell\"}, {\"Y_3\": \"Lucretia Bidwell\", \"Y_7\": \"Erik Cornwell\", \"Y_5\": \"Cecil Cornwell\", \"Count_1\": 3}, {\"Y_5\": \"Roxy Cornwell\", \"Y_7\": \"Erik Cornwell\", \"Y_3\": \"Lucretia Bidwell\", \"Count_1\": 3}, {\"Count_1\": 3, \"Y_5\": \"Roxy Cornwell\", \"Y_3\": \"Leroy Bidwell\", \"Y_7\": \"Levi Cornwell\"}, {\"Y_5\": \"Roxy Cornwell\", \"Y_3\": \"Leroy Bidwell\", \"Count_1\": 3, \"Y_7\": \"Cecil Cornwell\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "sibling(\"Roxy Cornwell\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "badafd90-d505-47e1-91f1-78e73b288fd1",
+        "question": "How many grandmothers does the grandchild of the female cousin of the child of Jeannine Kline have?",
+        "solution_traces": "[{\"Y_5\": \"Lucretia Bidwell\", \"Count_1\": 1, \"Y_3\": \"Erik Cornwell\", \"Y_7\": \"Freddie Kline\"}, {\"Y_5\": \"Lucretia Bidwell\", \"Count_1\": 1, \"Y_3\": \"Roxy Cornwell\", \"Y_7\": \"Freddie Kline\"}, {\"Y_5\": \"Lucretia Bidwell\", \"Y_3\": \"Cecil Cornwell\", \"Count_1\": 1, \"Y_7\": \"Freddie Kline\"}, {\"Y_3\": \"Levi Cornwell\", \"Y_5\": \"Lucretia Bidwell\", \"Count_1\": 1, \"Y_7\": \"Freddie Kline\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandmother(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "female_cousin(Y_7, Y_5)",
+                "child(\"Jeannine Kline\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c4f376ba-7b07-44c0-b2b0-035fa8334265",
+        "question": "How many sisters does the nephew of the niece of the granddaughter of Jenny Colter have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Tena Bidwell\", \"Y_7\": \"Golda Kline\", \"Y_3\": \"Erik Cornwell\"}, {\"Y_3\": \"Levi Cornwell\", \"Count_1\": 1, \"Y_5\": \"Tena Bidwell\", \"Y_7\": \"Golda Kline\"}, {\"Y_3\": \"Cecil Cornwell\", \"Y_5\": \"Tena Bidwell\", \"Y_7\": \"Golda Kline\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "nephew(Y_5, Y_3)",
+                "niece(Y_7, Y_5)",
+                "granddaughter(\"Jenny Colter\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "47a01c2b-78c7-4da0-aae2-b66b315e1fd8",
+        "question": "How many siblings does the sister-in-law of the daughter-in-law of the great-granddaughter of Lonny Kline have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_7\": \"Leesa Cornwell\", \"Y_3\": \"Roxy Cornwell\", \"Y_5\": \"Sadye Cornwell\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "sister_in_law(Y_5, Y_3)",
+                "daughter_in_law(Y_7, Y_5)",
+                "great_granddaughter(\"Lonny Kline\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c0a8b686-e1c3-4f52-b3f0-e688cf83b3f5",
+        "question": "How many daughters-in-law does the grandmother of the grandson of the friend of Vern Yazzie have?",
+        "solution_traces": "[{\"Y_3\": \"Isabella West\", \"Y_7\": \"Gregory Yazzie\", \"Y_5\": \"Ramon West\", \"Count_1\": 1}, {\"Y_7\": \"Kristopher West\", \"Y_3\": \"Ella Mingo\", \"Count_1\": 0, \"Y_5\": \"Abdul West\"}, {\"Y_7\": \"Kristopher West\", \"Count_1\": 2, \"Y_5\": \"Ted West\", \"Y_3\": \"Matilda West\"}, {\"Count_1\": 0, \"Y_3\": \"Thelma Yazzie\", \"Y_7\": \"Gregory Yazzie\", \"Y_5\": \"Stuart West\"}, {\"Count_1\": 0, \"Y_3\": \"Thelma Yazzie\", \"Y_7\": \"Gregory Yazzie\", \"Y_5\": \"Ramon West\"}, {\"Y_3\": \"Isabella West\", \"Y_7\": \"Gregory Yazzie\", \"Count_1\": 1, \"Y_5\": \"Stuart West\"}, {\"Y_7\": \"Kristopher West\", \"Count_1\": 2, \"Y_3\": \"Matilda West\", \"Y_5\": \"Abdul West\"}]",
+        "answer": [
+            "0",
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter_in_law(Y_3, Y_1)), Count_1)",
+                "grandmother(Y_5, Y_3)",
+                "grandson(Y_7, Y_5)",
+                "friend(\"Vern Yazzie\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "04e7dbff-635e-4980-831a-0ffcb8e8e5bd",
+        "question": "How many friends does the friend of the great-grandchild of the niece of Dallas Kline have?",
+        "solution_traces": "[{\"Count_1\": 6, \"Y_7\": \"Lucretia Bidwell\", \"Y_5\": \"Quincy Cornwell\", \"Y_3\": \"Jefferson Cornwell\"}, {\"Y_3\": \"Deena Kline\", \"Y_7\": \"Lucretia Bidwell\", \"Y_5\": \"Terrell Cornwell\", \"Count_1\": 3}, {\"Y_3\": \"Abdul West\", \"Count_1\": 5, \"Y_7\": \"Lucretia Bidwell\", \"Y_5\": \"Jamal Cornwell\"}]",
+        "answer": [
+            "3",
+            "5",
+            "6"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "great_grandchild(Y_7, Y_5)",
+                "niece(\"Dallas Kline\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "500931e2-ea3d-4687-b24c-5739b02ca73d",
+        "question": "How many grandparents does the brother of the grandchild of the friend of Cecil Cornwell have?",
+        "solution_traces": "[{\"Y_3\": \"Terrell Cornwell\", \"Y_7\": \"Leesa Cornwell\", \"Y_5\": \"Quincy Cornwell\", \"Count_1\": 2}, {\"Y_7\": \"Leesa Cornwell\", \"Y_5\": \"Quincy Cornwell\", \"Count_1\": 2, \"Y_3\": \"Jamal Cornwell\"}, {\"Count_1\": 2, \"Y_7\": \"Leesa Cornwell\", \"Y_5\": \"Terrell Cornwell\", \"Y_3\": \"Quincy Cornwell\"}, {\"Y_3\": \"Terrell Cornwell\", \"Y_7\": \"Leesa Cornwell\", \"Y_5\": \"Jamal Cornwell\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_7\": \"Leesa Cornwell\", \"Y_5\": \"Terrell Cornwell\", \"Y_3\": \"Jamal Cornwell\"}, {\"Y_7\": \"Leesa Cornwell\", \"Y_5\": \"Jamal Cornwell\", \"Count_1\": 2, \"Y_3\": \"Quincy Cornwell\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "friend(\"Cecil Cornwell\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9463e394-6cd8-4376-b112-9b5931ac0569",
+        "question": "How many second aunts does the grandchild of the son-in-law of the granddaughter of Jenny Colter have?",
+        "solution_traces": "[{\"Y_5\": \"Jefferson Cornwell\", \"Y_7\": \"Lucretia Bidwell\", \"Count_1\": 1, \"Y_3\": \"Jamal Cornwell\"}, {\"Y_5\": \"Jefferson Cornwell\", \"Y_7\": \"Lucretia Bidwell\", \"Count_1\": 1, \"Y_3\": \"Quincy Cornwell\"}, {\"Y_5\": \"Jefferson Cornwell\", \"Y_3\": \"Terrell Cornwell\", \"Y_7\": \"Lucretia Bidwell\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(second_aunt(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "son_in_law(Y_7, Y_5)",
+                "granddaughter(\"Jenny Colter\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d263c3a2-cf34-4995-92db-1f18f18fa446",
+        "question": "How many friends does the friend of the father of the parent of Johnetta West have?",
+        "solution_traces": "[{\"Y_7\": \"Stuart West\", \"Count_1\": 6, \"Y_3\": \"Jefferson Cornwell\", \"Y_5\": \"Kristopher West\"}, {\"Y_7\": \"Stuart West\", \"Count_1\": 7, \"Y_3\": \"Leesa Cornwell\", \"Y_5\": \"Kristopher West\"}, {\"Y_7\": \"Stuart West\", \"Count_1\": 5, \"Y_3\": \"Abdul West\", \"Y_5\": \"Kristopher West\"}, {\"Y_7\": \"Stuart West\", \"Count_1\": 5, \"Y_3\": \"Morgan West\", \"Y_5\": \"Kristopher West\"}, {\"Y_7\": \"Stuart West\", \"Count_1\": 2, \"Y_5\": \"Kristopher West\", \"Y_3\": \"Vern Yazzie\"}]",
+        "answer": [
+            "2",
+            "5",
+            "6",
+            "7"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "father(Y_7, Y_5)",
+                "parent(\"Johnetta West\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "fb724263-1359-4648-9d90-140280c18a34",
+        "question": "How many mothers does the brother-in-law of the friend of the friend of Cecil Cornwell have?",
+        "solution_traces": "[{\"Y_7\": \"Leesa Cornwell\", \"Count_1\": 1, \"Y_5\": \"Kristopher West\", \"Y_3\": \"Vern Yazzie\"}, {\"Y_7\": \"Geri West\", \"Y_5\": \"Sadye Cornwell\", \"Count_1\": 1, \"Y_3\": \"Erik Cornwell\"}, {\"Y_3\": \"Levi Cornwell\", \"Y_7\": \"Geri West\", \"Y_5\": \"Sadye Cornwell\", \"Count_1\": 1}, {\"Y_3\": \"Vern Yazzie\", \"Count_1\": 1, \"Y_5\": \"Kristopher West\", \"Y_7\": \"Abdul West\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother(Y_3, Y_1)), Count_1)",
+                "brother_in_law(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "friend(\"Cecil Cornwell\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "49a3db4a-e29e-4276-9262-632639cdf69d",
+        "question": "How many sisters does the sister-in-law of the great-grandparent of the nephew of Tena Bidwell have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Dallas Kline\", \"Y_7\": \"Erik Cornwell\", \"Y_5\": \"Jeanette Kline\"}, {\"Y_3\": \"Deena Kline\", \"Y_7\": \"Erik Cornwell\", \"Y_5\": \"Jeanette Kline\", \"Count_1\": 1}, {\"Y_3\": \"Dallas Kline\", \"Count_1\": 1, \"Y_5\": \"Jeanette Kline\", \"Y_7\": \"Cecil Cornwell\"}, {\"Y_3\": \"Deena Kline\", \"Count_1\": 1, \"Y_5\": \"Jeanette Kline\", \"Y_7\": \"Cecil Cornwell\"}, {\"Y_3\": \"Dallas Kline\", \"Count_1\": 1, \"Y_5\": \"Jeanette Kline\", \"Y_7\": \"Levi Cornwell\"}, {\"Y_3\": \"Deena Kline\", \"Count_1\": 1, \"Y_5\": \"Jeanette Kline\", \"Y_7\": \"Levi Cornwell\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "sister_in_law(Y_5, Y_3)",
+                "great_grandparent(Y_7, Y_5)",
+                "nephew(\"Tena Bidwell\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "47e8a065-45fc-420f-9dca-6063e1f15e70",
+        "question": "How many mothers does the daughter of the father-in-law of the friend of Abdul West have?",
+        "solution_traces": "[{\"Y_7\": \"Kristopher West\", \"Y_5\": \"Gregory Yazzie\", \"Y_3\": \"Matilda West\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother(Y_3, Y_1)), Count_1)",
+                "daughter(Y_5, Y_3)",
+                "father_in_law(Y_7, Y_5)",
+                "friend(\"Abdul West\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b37afc31-a4d0-4276-aada-ad3dfd546b27",
+        "question": "How many great-grandsons does the grandparent of the brother-in-law of the mother of Jamal Cornwell have?",
+        "solution_traces": "[{\"Y_3\": \"Leroy Bidwell\", \"Y_5\": \"Levi Cornwell\", \"Y_7\": \"Sadye Cornwell\", \"Count_1\": 3}, {\"Y_3\": \"Lucretia Bidwell\", \"Y_5\": \"Erik Cornwell\", \"Y_7\": \"Sadye Cornwell\", \"Count_1\": 3}, {\"Y_3\": \"Lucretia Bidwell\", \"Y_5\": \"Levi Cornwell\", \"Y_7\": \"Sadye Cornwell\", \"Count_1\": 3}, {\"Count_1\": 3, \"Y_5\": \"Erik Cornwell\", \"Y_7\": \"Sadye Cornwell\", \"Y_3\": \"Leroy Bidwell\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "brother_in_law(Y_7, Y_5)",
+                "mother(\"Jamal Cornwell\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0a943b9e-101e-443a-bcb4-763160729120",
+        "question": "How many grandchildren does the grandparent of the brother of the great-granddaughter of Oliver West have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Kristopher West\", \"Y_7\": \"Morgan West\", \"Y_5\": \"Abdul West\"}, {\"Y_3\": \"Ella Mingo\", \"Y_7\": \"Morgan West\", \"Y_5\": \"Abdul West\", \"Count_1\": 2}, {\"Count_1\": 4, \"Y_3\": \"Kristopher West\", \"Y_5\": \"Ted West\", \"Y_7\": \"Johnetta West\"}, {\"Count_1\": 2, \"Y_7\": \"Morgan West\", \"Y_5\": \"Abdul West\", \"Y_3\": \"Maximo Mingo\"}, {\"Y_3\": \"Matilda West\", \"Count_1\": 4, \"Y_7\": \"Morgan West\", \"Y_5\": \"Abdul West\"}, {\"Y_3\": \"Matilda West\", \"Count_1\": 4, \"Y_5\": \"Ted West\", \"Y_7\": \"Johnetta West\"}]",
+        "answer": [
+            "2",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "great_granddaughter(\"Oliver West\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6b19c3c4-d894-480f-bfbc-20c4c4d41b83",
+        "question": "How many second aunts does the nephew of the great-grandchild of the mother-in-law of Jeannine Kline have?",
+        "solution_traces": "[{\"Y_3\": \"Cecil Cornwell\", \"Y_5\": \"Tena Bidwell\", \"Y_7\": \"Addie Kline\", \"Count_1\": 2}, {\"Y_3\": \"Levi Cornwell\", \"Count_1\": 2, \"Y_5\": \"Tena Bidwell\", \"Y_7\": \"Addie Kline\"}, {\"Count_1\": 2, \"Y_5\": \"Tena Bidwell\", \"Y_7\": \"Addie Kline\", \"Y_3\": \"Erik Cornwell\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(second_aunt(Y_3, Y_1)), Count_1)",
+                "nephew(Y_5, Y_3)",
+                "great_grandchild(Y_7, Y_5)",
+                "mother_in_law(\"Jeannine Kline\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d7d86e2a-d24c-4298-9074-32c58c2cfae6",
+        "question": "How many mothers-in-law does the daughter-in-law of the grandparent of the great-aunt of Cecil Cornwell have?",
+        "solution_traces": "[{\"Y_3\": \"Jeanette Kline\", \"Count_1\": 1, \"Y_7\": \"Golda Kline\", \"Y_5\": \"Addie Kline\"}, {\"Y_3\": \"Jeannine Kline\", \"Count_1\": 1, \"Y_7\": \"Golda Kline\", \"Y_5\": \"Lonny Kline\"}, {\"Y_3\": \"Jeannine Kline\", \"Count_1\": 1, \"Y_7\": \"Golda Kline\", \"Y_5\": \"Addie Kline\"}, {\"Y_3\": \"Jeanette Kline\", \"Count_1\": 1, \"Y_7\": \"Golda Kline\", \"Y_5\": \"Lonny Kline\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(Y_3, Y_1)), Count_1)",
+                "daughter_in_law(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "great_aunt(\"Cecil Cornwell\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    }
+]

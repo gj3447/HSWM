@@ -1,0 +1,1051 @@
+[
+    {
+        "id": "061571db-cb83-49a1-9864-6bb73ee9144d",
+        "question": "What is the date of birth of the nephew of the great-uncle of Quentin Catalano?",
+        "solution_traces": "[{\"Y_5\": \"Daryl Berman\", \"Y_2\": \"0204-03-31\", \"Y_3\": \"Kraig Berman\"}, {\"Y_3\": \"Lawrence Catalano\", \"Y_2\": \"0208-04-17\", \"Y_5\": \"Clark Berman\"}, {\"Y_5\": \"Daryl Berman\", \"Y_2\": \"0208-04-17\", \"Y_3\": \"Lawrence Catalano\"}]",
+        "answer": [
+            "0204-03-31",
+            "0208-04-17"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "nephew(Y_5, Y_3)",
+                "great_uncle(\"Quentin Catalano\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1b0d3f75-4124-4c19-8e9d-0ca253c84c0c",
+        "question": "What is the hobby of the great-grandchild of the uncle of Adele Corbin?",
+        "solution_traces": "[{\"Y_3\": \"Lela Whittaker\", \"Y_2\": \"hobby tunneling\", \"Y_5\": \"Lawrence Catalano\"}, {\"Y_2\": \"ballroom dancing\", \"Y_3\": \"Katharine Whittaker\", \"Y_5\": \"Lawrence Catalano\"}]",
+        "answer": [
+            "ballroom dancing",
+            "hobby tunneling"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_grandchild(Y_5, Y_3)",
+                "uncle(\"Adele Corbin\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c7fb731c-9c2c-4d1a-bd4d-4b13dfdd0d2e",
+        "question": "What is the date of birth of the grandchild of the son of Lashandra Caldera?",
+        "solution_traces": "[{\"Y_3\": \"Genny Caldera\", \"Y_5\": \"Woodrow Caldera\", \"Y_2\": \"0238-09-16\"}, {\"Y_2\": \"0232-09-14\", \"Y_5\": \"Woodrow Caldera\", \"Y_3\": \"Betsy Linden\"}, {\"Y_3\": \"Laurette Caldera\", \"Y_2\": \"0235-11-08\", \"Y_5\": \"Woodrow Caldera\"}, {\"Y_2\": \"0234-04-28\", \"Y_3\": \"Violet Pohl\", \"Y_5\": \"Woodrow Caldera\"}, {\"Y_5\": \"Woodrow Caldera\", \"Y_3\": \"Brigida Stallings\", \"Y_2\": \"0236-07-04\"}]",
+        "answer": [
+            "0232-09-14",
+            "0234-04-28",
+            "0235-11-08",
+            "0236-07-04",
+            "0238-09-16"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "son(\"Lashandra Caldera\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8ce88160-48b4-432c-ad94-1d9a97c3cc1f",
+        "question": "What is the date of birth of the sibling of the sister-in-law of Zackary Linden?",
+        "solution_traces": "[{\"Y_5\": \"Violet Pohl\", \"Y_3\": \"Brigida Stallings\", \"Y_2\": \"0236-07-04\"}, {\"Y_2\": \"0232-09-14\", \"Y_5\": \"Brigida Stallings\", \"Y_3\": \"Betsy Linden\"}, {\"Y_5\": \"Violet Pohl\", \"Y_2\": \"0232-09-14\", \"Y_3\": \"Betsy Linden\"}, {\"Y_3\": \"Violet Pohl\", \"Y_5\": \"Brigida Stallings\", \"Y_2\": \"0234-04-28\"}]",
+        "answer": [
+            "0232-09-14",
+            "0234-04-28",
+            "0236-07-04"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sister_in_law(\"Zackary Linden\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2e50b12f-3947-4000-84ec-30e6c0fd6482",
+        "question": "What is the date of birth of the mother of the son of Jeffery Corbin?",
+        "solution_traces": "[{\"Y_3\": \"Adele Corbin\", \"Y_2\": \"0236-08-27\", \"Y_5\": \"Curt Corbin\"}]",
+        "answer": [
+            "0236-08-27"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "mother(Y_5, Y_3)",
+                "son(\"Jeffery Corbin\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "764bfd88-7c23-4946-b4e3-49d3e035ce94",
+        "question": "What is the hobby of the second uncle of the sibling of Vernie Whittaker?",
+        "solution_traces": "[{\"Y_2\": \"learning\", \"Y_3\": \"Daryl Berman\", \"Y_5\": \"Maurice Bernardo\"}, {\"Y_2\": \"literature\", \"Y_3\": \"Clark Berman\", \"Y_5\": \"Mckinley Bernardo\"}, {\"Y_2\": \"learning\", \"Y_3\": \"Daryl Berman\", \"Y_5\": \"Mckinley Bernardo\"}, {\"Y_3\": \"Clark Berman\", \"Y_2\": \"literature\", \"Y_5\": \"Maurice Bernardo\"}]",
+        "answer": [
+            "learning",
+            "literature"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "second_uncle(Y_5, Y_3)",
+                "sibling(\"Vernie Whittaker\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7d197b26-3cf8-4710-b759-9ea6da82deb8",
+        "question": "What is the date of birth of the father-in-law of the daughter-in-law of Woodrow Caldera?",
+        "solution_traces": "[{\"Y_5\": \"Bernice Caldera\", \"Y_2\": \"0177-03-01\", \"Y_3\": \"Woodrow Caldera\"}]",
+        "answer": [
+            "0177-03-01"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "father_in_law(Y_5, Y_3)",
+                "daughter_in_law(\"Woodrow Caldera\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7d3fa3b7-a966-4fe7-bffb-3eb6b40acb69",
+        "question": "What is the date of birth of the friend of the great-grandparent of Dennis Linden?",
+        "solution_traces": "[{\"Y_5\": \"Norman Dudley\", \"Y_3\": \"Nanette Bernardo\", \"Y_2\": \"0235-02-04\"}, {\"Y_2\": \"0181-04-12\", \"Y_3\": \"Rosalyn Berman\", \"Y_5\": \"Johnna Caldera\"}, {\"Y_2\": \"0236-12-24\", \"Y_3\": \"Jay Bernardo\", \"Y_5\": \"Johnna Caldera\"}, {\"Y_3\": \"Mac Dudley\", \"Y_2\": \"0204-11-25\", \"Y_5\": \"Johnna Caldera\"}, {\"Y_5\": \"Woodrow Caldera\", \"Y_2\": \"0212-08-13\", \"Y_3\": \"Zulema Catalano\"}, {\"Y_3\": \"Lawrence Catalano\", \"Y_2\": \"0208-04-17\", \"Y_5\": \"Maximina Dudley\"}, {\"Y_3\": \"Adele Corbin\", \"Y_2\": \"0236-08-27\", \"Y_5\": \"Maximina Dudley\"}, {\"Y_5\": \"Maximina Dudley\", \"Y_2\": \"0261-02-09\", \"Y_3\": \"Isaiah Whittaker\"}, {\"Y_5\": \"Norman Dudley\", \"Y_2\": \"0263-10-21\", \"Y_3\": \"Vernie Whittaker\"}, {\"Y_2\": \"0209-03-01\", \"Y_5\": \"Woodrow Caldera\", \"Y_3\": \"Otto Dudley\"}, {\"Y_5\": \"Maximina Dudley\", \"Y_2\": \"0181-03-09\", \"Y_3\": \"Clark Berman\"}, {\"Y_2\": \"0157-09-20\", \"Y_3\": \"Willis Berman\", \"Y_5\": \"Johnna Caldera\"}, {\"Y_5\": \"Norman Dudley\", \"Y_2\": \"0263-08-02\", \"Y_3\": \"Monica Stallings\"}, {\"Y_5\": \"Norman Dudley\", \"Y_2\": \"0264-12-04\", \"Y_3\": \"Vance Stallings\"}]",
+        "answer": [
+            "0157-09-20",
+            "0181-03-09",
+            "0181-04-12",
+            "0204-11-25",
+            "0208-04-17",
+            "0209-03-01",
+            "0212-08-13",
+            "0235-02-04",
+            "0236-08-27",
+            "0236-12-24",
+            "0261-02-09",
+            "0263-08-02",
+            "0263-10-21",
+            "0264-12-04"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "great_grandparent(\"Dennis Linden\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "27b1bcc0-5aeb-4e16-976a-1776bd31d3f3",
+        "question": "What is the hobby of the father of the granddaughter of Maximina Dudley?",
+        "solution_traces": "[{\"Y_3\": \"Mac Dudley\", \"Y_2\": \"fishkeeping\", \"Y_5\": \"Violet Pohl\"}, {\"Y_3\": \"Mac Dudley\", \"Y_2\": \"fishkeeping\", \"Y_5\": \"Betsy Linden\"}, {\"Y_3\": \"Mac Dudley\", \"Y_2\": \"fishkeeping\", \"Y_5\": \"Brigida Stallings\"}]",
+        "answer": [
+            "fishkeeping"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "father(Y_5, Y_3)",
+                "granddaughter(\"Maximina Dudley\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c9798fb6-784d-4c14-a3c6-3976d845c098",
+        "question": "What is the date of birth of the niece of the child of Norman Dudley?",
+        "solution_traces": "[{\"Y_2\": \"0234-04-28\", \"Y_3\": \"Violet Pohl\", \"Y_5\": \"Otto Dudley\"}, {\"Y_5\": \"Otto Dudley\", \"Y_3\": \"Brigida Stallings\", \"Y_2\": \"0236-07-04\"}, {\"Y_2\": \"0232-09-14\", \"Y_5\": \"Otto Dudley\", \"Y_3\": \"Betsy Linden\"}]",
+        "answer": [
+            "0232-09-14",
+            "0234-04-28",
+            "0236-07-04"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "niece(Y_5, Y_3)",
+                "child(\"Norman Dudley\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4b1049e4-1fb9-4843-b40f-b4bd431bd383",
+        "question": "What is the hobby of the female cousin of the wife of Jeffery Corbin?",
+        "solution_traces": "[{\"Y_3\": \"Nanette Bernardo\", \"Y_5\": \"Adele Corbin\", \"Y_2\": \"myrmecology\"}]",
+        "answer": [
+            "myrmecology"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "female_cousin(Y_5, Y_3)",
+                "wife(\"Jeffery Corbin\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a9640848-8eef-4336-b4d5-6de66613f3a5",
+        "question": "What is the date of birth of the father-in-law of the son-in-law of Zulema Catalano?",
+        "solution_traces": "[{\"Y_3\": \"Lawrence Catalano\", \"Y_5\": \"Jay Bernardo\", \"Y_2\": \"0208-04-17\"}]",
+        "answer": [
+            "0208-04-17"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "father_in_law(Y_5, Y_3)",
+                "son_in_law(\"Zulema Catalano\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cd65c0db-c5c1-4c69-aaef-2fddb7d76c1f",
+        "question": "What is the occupation of the sibling of the friend of Jay Bernardo?",
+        "solution_traces": "[{\"Y_3\": \"Lela Whittaker\", \"Y_5\": \"Katharine Whittaker\", \"Y_2\": \"theme park manager\"}]",
+        "answer": [
+            "theme park manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "friend(\"Jay Bernardo\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c6ba3ef0-7680-41dc-bb8e-d9ee839bfe14",
+        "question": "What is the date of birth of the grandparent of the daughter of Dawn Dudley?",
+        "solution_traces": "[{\"Y_5\": \"Violet Pohl\", \"Y_2\": \"0177-03-01\", \"Y_3\": \"Woodrow Caldera\"}, {\"Y_2\": \"0184-12-16\", \"Y_5\": \"Betsy Linden\", \"Y_3\": \"Norman Dudley\"}, {\"Y_2\": \"0184-12-16\", \"Y_5\": \"Violet Pohl\", \"Y_3\": \"Norman Dudley\"}, {\"Y_2\": \"0174-10-04\", \"Y_3\": \"Johnna Caldera\", \"Y_5\": \"Violet Pohl\"}, {\"Y_2\": \"0177-03-01\", \"Y_5\": \"Betsy Linden\", \"Y_3\": \"Woodrow Caldera\"}, {\"Y_2\": \"0177-03-01\", \"Y_5\": \"Brigida Stallings\", \"Y_3\": \"Woodrow Caldera\"}, {\"Y_2\": \"0174-10-04\", \"Y_3\": \"Johnna Caldera\", \"Y_5\": \"Brigida Stallings\"}, {\"Y_2\": \"0184-12-23\", \"Y_5\": \"Brigida Stallings\", \"Y_3\": \"Maximina Dudley\"}, {\"Y_2\": \"0174-10-04\", \"Y_3\": \"Johnna Caldera\", \"Y_5\": \"Betsy Linden\"}, {\"Y_2\": \"0184-12-23\", \"Y_5\": \"Violet Pohl\", \"Y_3\": \"Maximina Dudley\"}, {\"Y_2\": \"0184-12-23\", \"Y_5\": \"Betsy Linden\", \"Y_3\": \"Maximina Dudley\"}, {\"Y_2\": \"0184-12-16\", \"Y_5\": \"Brigida Stallings\", \"Y_3\": \"Norman Dudley\"}]",
+        "answer": [
+            "0174-10-04",
+            "0177-03-01",
+            "0184-12-16",
+            "0184-12-23"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandparent(Y_5, Y_3)",
+                "daughter(\"Dawn Dudley\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2b54ff04-a3d6-4a12-b12e-413a955891f0",
+        "question": "What is the hobby of the niece of the great-uncle of Dennis Linden?",
+        "solution_traces": "[{\"Y_2\": \"aircraft spotting\", \"Y_5\": \"Clair Caldera\", \"Y_3\": \"Betsy Linden\"}, {\"Y_3\": \"Genny Caldera\", \"Y_2\": \"animation\", \"Y_5\": \"Louis Caldera\"}, {\"Y_5\": \"Clair Caldera\", \"Y_3\": \"Violet Pohl\", \"Y_2\": \"skateboarding\"}, {\"Y_2\": \"flower collecting and pressing\", \"Y_5\": \"Clair Caldera\", \"Y_3\": \"Brigida Stallings\"}, {\"Y_3\": \"Violet Pohl\", \"Y_5\": \"Louis Caldera\", \"Y_2\": \"skateboarding\"}, {\"Y_2\": \"aircraft spotting\", \"Y_5\": \"Louis Caldera\", \"Y_3\": \"Betsy Linden\"}, {\"Y_2\": \"flower collecting and pressing\", \"Y_5\": \"Otto Dudley\", \"Y_3\": \"Brigida Stallings\"}, {\"Y_3\": \"Violet Pohl\", \"Y_5\": \"Otto Dudley\", \"Y_2\": \"skateboarding\"}, {\"Y_2\": \"flower collecting and pressing\", \"Y_5\": \"Louis Caldera\", \"Y_3\": \"Brigida Stallings\"}, {\"Y_2\": \"aircraft spotting\", \"Y_5\": \"Otto Dudley\", \"Y_3\": \"Betsy Linden\"}, {\"Y_3\": \"Laurette Caldera\", \"Y_5\": \"Louis Caldera\", \"Y_2\": \"canoeing\"}]",
+        "answer": [
+            "aircraft spotting",
+            "animation",
+            "canoeing",
+            "flower collecting and pressing",
+            "skateboarding"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "niece(Y_5, Y_3)",
+                "great_uncle(\"Dennis Linden\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3ed78d4e-5070-4092-a383-5d5500dd3ee7",
+        "question": "What is the occupation of the mother of the great-uncle of Vance Stallings?",
+        "solution_traces": "[{\"Y_2\": \"therapist\", \"Y_5\": \"Otto Dudley\", \"Y_3\": \"Maximina Dudley\"}, {\"Y_5\": \"Clair Caldera\", \"Y_2\": \"museum curator\", \"Y_3\": \"Johnna Caldera\"}, {\"Y_3\": \"Johnna Caldera\", \"Y_2\": \"museum curator\", \"Y_5\": \"Louis Caldera\"}]",
+        "answer": [
+            "museum curator",
+            "therapist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "mother(Y_5, Y_3)",
+                "great_uncle(\"Vance Stallings\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "65649026-7265-409b-8b6d-7dccdbeaccbb",
+        "question": "What is the date of birth of the father of the father-in-law of Porfirio Stallings?",
+        "solution_traces": "[{\"Y_3\": \"Norman Dudley\", \"Y_2\": \"0184-12-16\", \"Y_5\": \"Mac Dudley\"}]",
+        "answer": [
+            "0184-12-16"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "father(Y_5, Y_3)",
+                "father_in_law(\"Porfirio Stallings\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fa8947a1-5770-4c34-88bd-6b061f8e1345",
+        "question": "What is the date of birth of the mother of the sister of Daryl Berman?",
+        "solution_traces": "[{\"Y_3\": \"Luisa Berman\", \"Y_2\": \"0153-06-24\", \"Y_5\": \"Nedra Catalano\"}]",
+        "answer": [
+            "0153-06-24"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "mother(Y_5, Y_3)",
+                "sister(\"Daryl Berman\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "35e5b43e-f9db-4392-a128-019f63b82ef2",
+        "question": "What is the date of birth of the parent of the sibling of Katharine Whittaker?",
+        "solution_traces": "[{\"Y_2\": \"0263-10-21\", \"Y_5\": \"Lela Whittaker\", \"Y_3\": \"Vernie Whittaker\"}, {\"Y_2\": \"0261-02-09\", \"Y_5\": \"Lela Whittaker\", \"Y_3\": \"Isaiah Whittaker\"}]",
+        "answer": [
+            "0261-02-09",
+            "0263-10-21"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "sibling(\"Katharine Whittaker\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e1100aa5-528f-4eca-9807-f5af3ca47633",
+        "question": "What is the hobby of the grandson of the grandchild of Willis Berman?",
+        "solution_traces": "[{\"Y_2\": \"jumping rope\", \"Y_3\": \"Mckinley Bernardo\", \"Y_5\": \"Lawrence Catalano\"}, {\"Y_3\": \"Maurice Bernardo\", \"Y_2\": \"bridge\", \"Y_5\": \"Lawrence Catalano\"}, {\"Y_2\": \"meteorology\", \"Y_5\": \"Lora Canfield\", \"Y_3\": \"Curt Corbin\"}]",
+        "answer": [
+            "bridge",
+            "jumping rope",
+            "meteorology"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandson(Y_5, Y_3)",
+                "grandchild(\"Willis Berman\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b8ffdc1a-67b6-4ca8-ae09-7ea841a8e52c",
+        "question": "What is the hobby of the son-in-law of the grandparent of Dennis Linden?",
+        "solution_traces": "[{\"Y_5\": \"Dawn Dudley\", \"Y_2\": \"disc golf\", \"Y_3\": \"Porfirio Stallings\"}, {\"Y_2\": \"pickleball\", \"Y_5\": \"Mac Dudley\", \"Y_3\": \"Zackary Linden\"}, {\"Y_5\": \"Dawn Dudley\", \"Y_2\": \"field hockey\", \"Y_3\": \"Sonny Pohl\"}, {\"Y_3\": \"Porfirio Stallings\", \"Y_2\": \"disc golf\", \"Y_5\": \"Mac Dudley\"}, {\"Y_2\": \"field hockey\", \"Y_3\": \"Sonny Pohl\", \"Y_5\": \"Mac Dudley\"}, {\"Y_5\": \"Dawn Dudley\", \"Y_2\": \"pickleball\", \"Y_3\": \"Zackary Linden\"}]",
+        "answer": [
+            "disc golf",
+            "field hockey",
+            "pickleball"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "son_in_law(Y_5, Y_3)",
+                "grandparent(\"Dennis Linden\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "751133d0-d69c-443a-b0ea-68da1008f45a",
+        "question": "What is the occupation of the friend of the brother of Otto Dudley?",
+        "solution_traces": "[{\"Y_2\": \"camera operator\", \"Y_5\": \"Mac Dudley\", \"Y_3\": \"Felton Caldera\"}, {\"Y_2\": \"psychotherapist\", \"Y_5\": \"Mac Dudley\", \"Y_3\": \"Willis Berman\"}, {\"Y_3\": \"Lawrence Catalano\", \"Y_2\": \"optometrist\", \"Y_5\": \"Mac Dudley\"}, {\"Y_3\": \"Katharine Whittaker\", \"Y_2\": \"medical physicist\", \"Y_5\": \"Mac Dudley\"}, {\"Y_3\": \"Johnna Caldera\", \"Y_2\": \"museum curator\", \"Y_5\": \"Mac Dudley\"}]",
+        "answer": [
+            "camera operator",
+            "medical physicist",
+            "museum curator",
+            "optometrist",
+            "psychotherapist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "brother(\"Otto Dudley\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e40bc0be-7b5b-487e-9451-996f64eab362",
+        "question": "What is the hobby of the great-granddaughter of the grandparent of Dawn Dudley?",
+        "solution_traces": "[{\"Y_2\": \"flower collecting and pressing\", \"Y_5\": \"Lashandra Caldera\", \"Y_3\": \"Brigida Stallings\"}, {\"Y_3\": \"Laurette Caldera\", \"Y_5\": \"Lashandra Caldera\", \"Y_2\": \"canoeing\"}, {\"Y_3\": \"Genny Caldera\", \"Y_2\": \"animation\", \"Y_5\": \"Felton Caldera\"}, {\"Y_2\": \"flower collecting and pressing\", \"Y_5\": \"Felton Caldera\", \"Y_3\": \"Brigida Stallings\"}, {\"Y_3\": \"Violet Pohl\", \"Y_5\": \"Felton Caldera\", \"Y_2\": \"skateboarding\"}, {\"Y_3\": \"Genny Caldera\", \"Y_2\": \"animation\", \"Y_5\": \"Lashandra Caldera\"}, {\"Y_2\": \"aircraft spotting\", \"Y_5\": \"Felton Caldera\", \"Y_3\": \"Betsy Linden\"}, {\"Y_2\": \"aircraft spotting\", \"Y_5\": \"Lashandra Caldera\", \"Y_3\": \"Betsy Linden\"}, {\"Y_5\": \"Lashandra Caldera\", \"Y_3\": \"Violet Pohl\", \"Y_2\": \"skateboarding\"}, {\"Y_3\": \"Laurette Caldera\", \"Y_5\": \"Felton Caldera\", \"Y_2\": \"canoeing\"}]",
+        "answer": [
+            "aircraft spotting",
+            "animation",
+            "canoeing",
+            "flower collecting and pressing",
+            "skateboarding"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_granddaughter(Y_5, Y_3)",
+                "grandparent(\"Dawn Dudley\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3ff27495-cd16-4beb-af90-3b3545ae3662",
+        "question": "What is the hobby of the friend of the husband of Nedra Catalano?",
+        "solution_traces": "[{\"Y_5\": \"Andres Catalano\", \"Y_2\": \"skiing\", \"Y_3\": \"Rosalyn Berman\"}, {\"Y_3\": \"Laurette Caldera\", \"Y_5\": \"Andres Catalano\", \"Y_2\": \"canoeing\"}, {\"Y_5\": \"Andres Catalano\", \"Y_2\": \"geocaching\", \"Y_3\": \"Lora Canfield\"}]",
+        "answer": [
+            "canoeing",
+            "geocaching",
+            "skiing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "husband(\"Nedra Catalano\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "54ba970c-3149-4ec9-b958-fed60bfe17de",
+        "question": "What is the occupation of the uncle of the sister-in-law of Porfirio Stallings?",
+        "solution_traces": "[{\"Y_3\": \"Clair Caldera\", \"Y_5\": \"Betsy Linden\", \"Y_2\": \"patent attorney\"}, {\"Y_5\": \"Violet Pohl\", \"Y_2\": \"operations geologist\", \"Y_3\": \"Otto Dudley\"}, {\"Y_5\": \"Betsy Linden\", \"Y_2\": \"management consultant\", \"Y_3\": \"Louis Caldera\"}, {\"Y_5\": \"Violet Pohl\", \"Y_2\": \"management consultant\", \"Y_3\": \"Louis Caldera\"}, {\"Y_5\": \"Violet Pohl\", \"Y_3\": \"Clair Caldera\", \"Y_2\": \"patent attorney\"}, {\"Y_5\": \"Betsy Linden\", \"Y_2\": \"operations geologist\", \"Y_3\": \"Otto Dudley\"}]",
+        "answer": [
+            "management consultant",
+            "operations geologist",
+            "patent attorney"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "uncle(Y_5, Y_3)",
+                "sister_in_law(\"Porfirio Stallings\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "02c17024-d7da-4a95-8dea-ec6339970bc9",
+        "question": "What is the date of birth of the granddaughter of the great-grandmother of Louella Pohl?",
+        "solution_traces": "[{\"Y_3\": \"Genny Caldera\", \"Y_2\": \"0238-09-16\", \"Y_5\": \"Johnna Caldera\"}, {\"Y_2\": \"0232-09-14\", \"Y_3\": \"Betsy Linden\", \"Y_5\": \"Johnna Caldera\"}, {\"Y_3\": \"Laurette Caldera\", \"Y_2\": \"0235-11-08\", \"Y_5\": \"Johnna Caldera\"}, {\"Y_3\": \"Violet Pohl\", \"Y_2\": \"0234-04-28\", \"Y_5\": \"Johnna Caldera\"}, {\"Y_5\": \"Maximina Dudley\", \"Y_3\": \"Brigida Stallings\", \"Y_2\": \"0236-07-04\"}, {\"Y_3\": \"Violet Pohl\", \"Y_5\": \"Maximina Dudley\", \"Y_2\": \"0234-04-28\"}, {\"Y_2\": \"0232-09-14\", \"Y_5\": \"Maximina Dudley\", \"Y_3\": \"Betsy Linden\"}, {\"Y_2\": \"0236-07-04\", \"Y_3\": \"Brigida Stallings\", \"Y_5\": \"Johnna Caldera\"}]",
+        "answer": [
+            "0232-09-14",
+            "0234-04-28",
+            "0235-11-08",
+            "0236-07-04",
+            "0238-09-16"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "granddaughter(Y_5, Y_3)",
+                "great_grandmother(\"Louella Pohl\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0dc95b57-277c-44a2-bd04-157c5cd29057",
+        "question": "What is the date of birth of the father-in-law of the son-in-law of Ben Grigg?",
+        "solution_traces": "[{\"Y_3\": \"Ben Grigg\", \"Y_2\": \"0184-03-12\", \"Y_5\": \"Lawrence Catalano\"}]",
+        "answer": [
+            "0184-03-12"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "father_in_law(Y_5, Y_3)",
+                "son_in_law(\"Ben Grigg\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "28b00197-13c5-4929-a99b-d6ae7d039691",
+        "question": "What is the occupation of the friend of the wife of Vance Stallings?",
+        "solution_traces": "[{\"Y_5\": \"Monica Stallings\", \"Y_2\": \"archivist\", \"Y_3\": \"Vernie Whittaker\"}, {\"Y_5\": \"Monica Stallings\", \"Y_3\": \"Norman Dudley\", \"Y_2\": \"clinical psychologist\"}, {\"Y_5\": \"Monica Stallings\", \"Y_2\": \"operations geologist\", \"Y_3\": \"Otto Dudley\"}, {\"Y_3\": \"Porfirio Stallings\", \"Y_2\": \"advertising account planner\", \"Y_5\": \"Monica Stallings\"}]",
+        "answer": [
+            "advertising account planner",
+            "archivist",
+            "clinical psychologist",
+            "operations geologist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "wife(\"Vance Stallings\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fd311b9f-cf87-42fe-a6c9-c8b663f9b136",
+        "question": "What is the occupation of the granddaughter of the male cousin of Kraig Berman?",
+        "solution_traces": "[{\"Y_2\": \"archivist\", \"Y_5\": \"Lawrence Catalano\", \"Y_3\": \"Vernie Whittaker\"}]",
+        "answer": [
+            "archivist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "granddaughter(Y_5, Y_3)",
+                "male_cousin(\"Kraig Berman\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "839b5fe6-f7d6-47c4-bc4f-82c879a7e587",
+        "question": "What is the hobby of the cousin of the friend of Andres Catalano?",
+        "solution_traces": "[{\"Y_3\": \"Violet Pohl\", \"Y_2\": \"skateboarding\", \"Y_5\": \"Laurette Caldera\"}, {\"Y_2\": \"aircraft spotting\", \"Y_3\": \"Betsy Linden\", \"Y_5\": \"Laurette Caldera\"}, {\"Y_2\": \"flower collecting and pressing\", \"Y_3\": \"Brigida Stallings\", \"Y_5\": \"Laurette Caldera\"}, {\"Y_2\": \"beach volleyball\", \"Y_5\": \"Lora Canfield\", \"Y_3\": \"Kraig Berman\"}]",
+        "answer": [
+            "aircraft spotting",
+            "beach volleyball",
+            "flower collecting and pressing",
+            "skateboarding"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "cousin(Y_5, Y_3)",
+                "friend(\"Andres Catalano\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    }
+]

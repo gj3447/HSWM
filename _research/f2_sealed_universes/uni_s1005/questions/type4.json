@@ -1,0 +1,902 @@
+[
+    {
+        "id": "f33ddca7-9bea-42f7-b86f-e6a2e84dd63f",
+        "question": "Who is the friend of the person whose date of birth is 0211-05-26?",
+        "solution_traces": "[{\"Y_4\": \"Nelly Alanis\", \"Y_2\": \"Tiffany Townley\"}, {\"Y_4\": \"Nelly Alanis\", \"Y_2\": \"Monika Townley\"}, {\"Y_4\": \"Nelly Alanis\", \"Y_2\": \"Joaquin Eddings\"}]",
+        "answer": [
+            "Joaquin Eddings",
+            "Monika Townley",
+            "Tiffany Townley"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "dob(Y_4, \"0211-05-26\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1fba4d07-3528-475f-be42-4726a79d37a3",
+        "question": "Who is the father-in-law of the person whose occupation is quality manager?",
+        "solution_traces": "[{\"Y_2\": \"Jerrold Mello\", \"Y_4\": \"Tamala Mello\"}]",
+        "answer": [
+            "Jerrold Mello"
+        ],
+        "prolog": {
+            "query": [
+                "father_in_law(Y_4, Y_2)",
+                "job(Y_4, \"quality manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "17708e32-972a-4d1b-993f-45c74a533647",
+        "question": "Who is the friend of the person whose occupation is exercise physiologist?",
+        "solution_traces": "[{\"Y_4\": \"Nelly Alanis\", \"Y_2\": \"Tiffany Townley\"}, {\"Y_4\": \"Nelly Alanis\", \"Y_2\": \"Monika Townley\"}, {\"Y_4\": \"Nelly Alanis\", \"Y_2\": \"Joaquin Eddings\"}]",
+        "answer": [
+            "Joaquin Eddings",
+            "Monika Townley",
+            "Tiffany Townley"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "job(Y_4, \"exercise physiologist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0095ab9f-4100-4403-95dc-50b0dc89e655",
+        "question": "Who is the friend of the person whose date of birth is 0309-09-12?",
+        "solution_traces": "[{\"Y_2\": \"Cory Townley\", \"Y_4\": \"Nydia Batista\"}, {\"Y_4\": \"Nydia Batista\", \"Y_2\": \"Cristopher Shiver\"}]",
+        "answer": [
+            "Cory Townley",
+            "Cristopher Shiver"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "dob(Y_4, \"0309-09-12\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a0c31e09-ff9d-423d-be9e-dd59aeb5b42b",
+        "question": "Who is the female cousin of the person whose date of birth is 0261-07-01?",
+        "solution_traces": "[{\"Y_4\": \"Mammie Rayford\", \"Y_2\": \"Jeanette Moyer\"}]",
+        "answer": [
+            "Jeanette Moyer"
+        ],
+        "prolog": {
+            "query": [
+                "female_cousin(Y_4, Y_2)",
+                "dob(Y_4, \"0261-07-01\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "56d27227-e53b-4c3a-92b7-cf1ceab3e111",
+        "question": "Who is the great-grandchild of the person whose hobby is research?",
+        "solution_traces": "[{\"Y_4\": \"Pasquale Alanis\", \"Y_2\": \"Miki Green\"}, {\"Y_2\": \"Dewitt Eddings\", \"Y_4\": \"Virgina Shiver\"}, {\"Y_4\": \"Virgina Shiver\", \"Y_2\": \"Kacey Green\"}, {\"Y_4\": \"Pasquale Alanis\", \"Y_2\": \"Victoria Eddings\"}]",
+        "answer": [
+            "Dewitt Eddings",
+            "Kacey Green",
+            "Miki Green",
+            "Victoria Eddings"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "hobby(Y_4, \"research\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "eaf4c394-ad5d-4891-900c-53757f928cb7",
+        "question": "Who is the grandson of the person whose occupation is chief marketing officer?",
+        "solution_traces": "[{\"Y_4\": \"Esperanza Molnar\", \"Y_2\": \"Antonio Mello\"}, {\"Y_2\": \"Rudolf Mello\", \"Y_4\": \"Esperanza Molnar\"}, {\"Y_2\": \"Edison Mello\", \"Y_4\": \"Esperanza Molnar\"}, {\"Y_4\": \"Esperanza Molnar\", \"Y_2\": \"Orville Mello\"}]",
+        "answer": [
+            "Antonio Mello",
+            "Edison Mello",
+            "Orville Mello",
+            "Rudolf Mello"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "job(Y_4, \"chief marketing officer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ba60b11a-b614-4bdd-a329-4f25163c00fe",
+        "question": "Who is the father-in-law of the person whose date of birth is 0203-07-18?",
+        "solution_traces": "[{\"Y_4\": \"Tiffany Townley\", \"Y_2\": \"Wilfredo Townley\"}]",
+        "answer": [
+            "Wilfredo Townley"
+        ],
+        "prolog": {
+            "query": [
+                "father_in_law(Y_4, Y_2)",
+                "dob(Y_4, \"0203-07-18\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a3de794a-b08f-4572-98de-bdf00e0f24d2",
+        "question": "Who is the friend of the person whose hobby is metal detecting?",
+        "solution_traces": "[{\"Y_4\": \"Aimee Townley\", \"Y_2\": \"Pasquale Alanis\"}, {\"Y_2\": \"Steve Moyer\", \"Y_4\": \"Aimee Townley\"}, {\"Y_2\": \"Eduardo Moyer\", \"Y_4\": \"Aimee Townley\"}]",
+        "answer": [
+            "Eduardo Moyer",
+            "Pasquale Alanis",
+            "Steve Moyer"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "hobby(Y_4, \"metal detecting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "eeecc896-2287-4826-91f9-e82ce969f4a3",
+        "question": "Who is the granddaughter of the person whose hobby is research?",
+        "solution_traces": "[{\"Y_4\": \"Virgina Shiver\", \"Y_2\": \"Miki Green\"}, {\"Y_4\": \"Pasquale Alanis\", \"Y_2\": \"Jeanette Moyer\"}, {\"Y_4\": \"Virgina Shiver\", \"Y_2\": \"Victoria Eddings\"}]",
+        "answer": [
+            "Jeanette Moyer",
+            "Miki Green",
+            "Victoria Eddings"
+        ],
+        "prolog": {
+            "query": [
+                "granddaughter(Y_4, Y_2)",
+                "hobby(Y_4, \"research\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a3cec575-1f8e-4945-8b75-dc8f5bcc1474",
+        "question": "Who is the child of the person whose hobby is snowboarding?",
+        "solution_traces": "[{\"Y_4\": \"Jerrold Mello\", \"Y_2\": \"Antonio Mello\"}, {\"Y_4\": \"Jerrold Mello\", \"Y_2\": \"Orville Mello\"}, {\"Y_2\": \"Edison Mello\", \"Y_4\": \"Jerrold Mello\"}, {\"Y_2\": \"Rudolf Mello\", \"Y_4\": \"Jerrold Mello\"}]",
+        "answer": [
+            "Antonio Mello",
+            "Edison Mello",
+            "Orville Mello",
+            "Rudolf Mello"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "hobby(Y_4, \"snowboarding\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d084c780-3d77-4e2f-9a09-1b540cfd390f",
+        "question": "Who is the father of the person whose occupation is records manager?",
+        "solution_traces": "[{\"Y_4\": \"Irvin Batista\", \"Y_2\": \"Hans Batista\"}]",
+        "answer": [
+            "Hans Batista"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "job(Y_4, \"records manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6a51112c-3396-4eb2-9296-aaceb60e4cde",
+        "question": "Who is the grandmother of the person whose hobby is insect collecting?",
+        "solution_traces": "[{\"Y_2\": \"Esperanza Molnar\", \"Y_4\": \"Orville Mello\"}, {\"Y_2\": \"Harriette Mello\", \"Y_4\": \"Orville Mello\"}]",
+        "answer": [
+            "Esperanza Molnar",
+            "Harriette Mello"
+        ],
+        "prolog": {
+            "query": [
+                "grandmother(Y_4, Y_2)",
+                "hobby(Y_4, \"insect collecting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0151e01a-2e8c-4e5b-bcf3-16144ce71b93",
+        "question": "Who is the great-grandmother of the person whose date of birth is 0309-09-12?",
+        "solution_traces": "[{\"Y_2\": \"Esperanza Molnar\", \"Y_4\": \"Nydia Batista\"}, {\"Y_4\": \"Nydia Batista\", \"Y_2\": \"Harriette Mello\"}]",
+        "answer": [
+            "Esperanza Molnar",
+            "Harriette Mello"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandmother(Y_4, Y_2)",
+                "dob(Y_4, \"0309-09-12\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ce9c3264-cf91-4652-80b1-6ca640269209",
+        "question": "Who is the son-in-law of the person whose date of birth is 0211-05-26?",
+        "solution_traces": "[{\"Y_4\": \"Nelly Alanis\", \"Y_2\": \"Eduardo Moyer\"}]",
+        "answer": [
+            "Eduardo Moyer"
+        ],
+        "prolog": {
+            "query": [
+                "son_in_law(Y_4, Y_2)",
+                "dob(Y_4, \"0211-05-26\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f26ae2f5-234a-4678-8c22-aaee12cd71f5",
+        "question": "Who is the great-uncle of the person whose hobby is insect collecting?",
+        "solution_traces": "[{\"Y_2\": \"Cory Townley\", \"Y_4\": \"Orville Mello\"}, {\"Y_2\": \"Marcelino Townley\", \"Y_4\": \"Orville Mello\"}]",
+        "answer": [
+            "Cory Townley",
+            "Marcelino Townley"
+        ],
+        "prolog": {
+            "query": [
+                "great_uncle(Y_4, Y_2)",
+                "hobby(Y_4, \"insect collecting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2b37b47e-7583-4827-9d22-11e5fa13b059",
+        "question": "Who is the mother-in-law of the person whose date of birth is 0225-09-07?",
+        "solution_traces": "[{\"Y_4\": \"Dick Rayford\", \"Y_2\": \"Farrah Moyer\"}]",
+        "answer": [
+            "Farrah Moyer"
+        ],
+        "prolog": {
+            "query": [
+                "mother_in_law(Y_4, Y_2)",
+                "dob(Y_4, \"0225-09-07\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0e539d49-6d75-4397-b4d9-6a3e97b431be",
+        "question": "Who is the great-grandfather of the person whose occupation is patent examiner?",
+        "solution_traces": "[{\"Y_4\": \"Ramiro Mello\", \"Y_2\": \"Forrest Molnar\"}, {\"Y_2\": \"Tod Mello\", \"Y_4\": \"Ramiro Mello\"}]",
+        "answer": [
+            "Forrest Molnar",
+            "Tod Mello"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandfather(Y_4, Y_2)",
+                "job(Y_4, \"patent examiner\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e6b8833b-d5e9-4f09-ae79-4ced5b6eb177",
+        "question": "Who is the husband of the person whose occupation is field seismologist?",
+        "solution_traces": "[{\"Y_2\": \"Jerrold Mello\", \"Y_4\": \"Enid Mello\"}]",
+        "answer": [
+            "Jerrold Mello"
+        ],
+        "prolog": {
+            "query": [
+                "husband(Y_4, Y_2)",
+                "job(Y_4, \"field seismologist\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e07a7d7b-d01e-44f9-9947-38659e094eda",
+        "question": "Who is the aunt of the person whose occupation is data processing manager?",
+        "solution_traces": "[{\"Y_2\": \"Janey Townley\", \"Y_4\": \"Roberto Townley\"}, {\"Y_4\": \"Roberto Townley\", \"Y_2\": \"Aimee Townley\"}, {\"Y_4\": \"Roberto Townley\", \"Y_2\": \"Harriette Mello\"}]",
+        "answer": [
+            "Aimee Townley",
+            "Harriette Mello",
+            "Janey Townley"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "job(Y_4, \"data processing manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f58e221c-d795-43ae-b739-c4432f78324c",
+        "question": "Who is the cousin of the person whose hobby is debate?",
+        "solution_traces": "[{\"Y_2\": \"Jerrold Mello\", \"Y_4\": \"Roberto Townley\"}]",
+        "answer": [
+            "Jerrold Mello"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "hobby(Y_4, \"debate\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c3dfd999-4ffd-4a7d-af47-7a1d3e0cf169",
+        "question": "Who is the great-aunt of the person whose date of birth is 0285-08-05?",
+        "solution_traces": "[{\"Y_4\": \"Victoria Eddings\", \"Y_2\": \"Marlana Rayford\"}, {\"Y_4\": \"Victoria Eddings\", \"Y_2\": \"Janis Moyer\"}]",
+        "answer": [
+            "Janis Moyer",
+            "Marlana Rayford"
+        ],
+        "prolog": {
+            "query": [
+                "great_aunt(Y_4, Y_2)",
+                "dob(Y_4, \"0285-08-05\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ffe50cbd-a4ec-405c-8046-e7dbdfb5b54a",
+        "question": "Who is the grandparent of the person whose occupation is patent examiner?",
+        "solution_traces": "[{\"Y_2\": \"Enid Mello\", \"Y_4\": \"Ramiro Mello\"}, {\"Y_2\": \"Jerrold Mello\", \"Y_4\": \"Ramiro Mello\"}]",
+        "answer": [
+            "Enid Mello",
+            "Jerrold Mello"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "job(Y_4, \"patent examiner\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "13121416-dd8f-4010-af38-f0703436c78f",
+        "question": "Who is the nephew of the person whose hobby is metal detecting?",
+        "solution_traces": "[{\"Y_2\": \"Jerrold Mello\", \"Y_4\": \"Aimee Townley\"}, {\"Y_4\": \"Aimee Townley\", \"Y_2\": \"Roberto Townley\"}]",
+        "answer": [
+            "Jerrold Mello",
+            "Roberto Townley"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "hobby(Y_4, \"metal detecting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4c6245ea-5786-45c7-88a0-20d2ff27b549",
+        "question": "Who is the mother of the person whose date of birth is 0228-02-23?",
+        "solution_traces": "[{\"Y_4\": \"Marlana Rayford\", \"Y_2\": \"Farrah Moyer\"}]",
+        "answer": [
+            "Farrah Moyer"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "dob(Y_4, \"0228-02-23\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "14cb5c25-51c2-4a09-a322-b64ebc19b09f",
+        "question": "Who is the great-granddaughter of the person whose date of birth is 0211-05-26?",
+        "solution_traces": "[{\"Y_4\": \"Nelly Alanis\", \"Y_2\": \"Victoria Eddings\"}, {\"Y_4\": \"Nelly Alanis\", \"Y_2\": \"Miki Green\"}]",
+        "answer": [
+            "Miki Green",
+            "Victoria Eddings"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "dob(Y_4, \"0211-05-26\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4cf074c0-8c1c-4280-8ede-b8b7af862467",
+        "question": "Who is the niece of the person whose hobby is chess?",
+        "solution_traces": "[{\"Y_2\": \"Nydia Batista\", \"Y_4\": \"Rudolf Mello\"}]",
+        "answer": [
+            "Nydia Batista"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "hobby(Y_4, \"chess\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e746c9ba-0c64-4eb5-8a1b-cfc4d51b5bd1",
+        "question": "Who is the sibling of the person whose date of birth is 0233-01-11?",
+        "solution_traces": "[{\"Y_2\": \"Janis Moyer\", \"Y_4\": \"Eduardo Moyer\"}, {\"Y_2\": \"Marlana Rayford\", \"Y_4\": \"Eduardo Moyer\"}]",
+        "answer": [
+            "Janis Moyer",
+            "Marlana Rayford"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "dob(Y_4, \"0233-01-11\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "13feec62-c5f6-4ddc-a3f1-b12d416b49bd",
+        "question": "Who is the grandchild of the person whose occupation is homeopath?",
+        "solution_traces": "[{\"Y_2\": \"Victoria Eddings\", \"Y_4\": \"Eduardo Moyer\"}, {\"Y_2\": \"Miki Green\", \"Y_4\": \"Eduardo Moyer\"}]",
+        "answer": [
+            "Miki Green",
+            "Victoria Eddings"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "job(Y_4, \"homeopath\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "72f75bc1-dddf-442a-a85a-48915a4aa4e8",
+        "question": "Who is the great-grandfather of the person whose hobby is shoes?",
+        "solution_traces": "[{\"Y_4\": \"Mack Moyer\", \"Y_2\": \"Anton Hylton\"}]",
+        "answer": [
+            "Anton Hylton"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandfather(Y_4, Y_2)",
+                "hobby(Y_4, \"shoes\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the person whose",
+            "<attribute_name>_5",
+            "is",
+            "<attribute_value>_5",
+            "?"
+        ],
+        "type": 4,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    }
+]

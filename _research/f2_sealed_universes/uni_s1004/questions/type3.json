@@ -1,0 +1,925 @@
+[
+    {
+        "id": "ce8b998f-73f9-4385-bd07-4160014343b3",
+        "question": "Who is the son of the parent of Jarvis Arias?",
+        "solution_traces": "[{\"Y_4\": \"Alana Arias\", \"Y_2\": \"Jarvis Arias\"}, {\"Y_4\": \"Elbert Arias\", \"Y_2\": \"Jarvis Arias\"}]",
+        "answer": [
+            "Jarvis Arias"
+        ],
+        "prolog": {
+            "query": [
+                "son(Y_4, Y_2)",
+                "parent(\"Jarvis Arias\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5163f736-afb9-4386-afa3-0b957396062a",
+        "question": "Who is the sibling of the aunt of Evette Springer?",
+        "solution_traces": "[{\"Y_2\": \"Rodger Springer\", \"Y_4\": \"Pamela Newby\"}, {\"Y_4\": \"Pamela Newby\", \"Y_2\": \"Isaac Springer\"}, {\"Y_2\": \"Joesph Springer\", \"Y_4\": \"Pamela Newby\"}]",
+        "answer": [
+            "Isaac Springer",
+            "Joesph Springer",
+            "Rodger Springer"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "aunt(\"Evette Springer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d158684e-da74-4d4a-b8c1-ac2a1f234d4c",
+        "question": "Who is the daughter of the brother of Julianne Womble?",
+        "solution_traces": "[{\"Y_4\": \"Lorenz Womble\", \"Y_2\": \"Kiana Arias\"}]",
+        "answer": [
+            "Kiana Arias"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "brother(\"Julianne Womble\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "84138634-083a-4194-99d3-175e71f3b852",
+        "question": "Who is the friend of the great-grandfather of Elbert Arias?",
+        "solution_traces": "[{\"Y_2\": \"Buddy Gosselin\", \"Y_4\": \"Stuart Womble\"}, {\"Y_4\": \"Stuart Womble\", \"Y_2\": \"Kayla Springer\"}, {\"Y_4\": \"Stuart Womble\", \"Y_2\": \"Ellis Gosselin\"}, {\"Y_4\": \"Mac Ridgway\", \"Y_2\": \"Alana Arias\"}, {\"Y_4\": \"Stuart Womble\", \"Y_2\": \"Helena Womble\"}, {\"Y_4\": \"Stuart Womble\", \"Y_2\": \"Elbert Arias\"}, {\"Y_4\": \"Mac Ridgway\", \"Y_2\": \"Marybeth Bushnell\"}, {\"Y_2\": \"Dillon Womble\", \"Y_4\": \"Stuart Womble\"}, {\"Y_4\": \"Stuart Womble\", \"Y_2\": \"Alana Arias\"}, {\"Y_2\": \"Isabell Womble\", \"Y_4\": \"Stuart Womble\"}, {\"Y_4\": \"Stuart Womble\", \"Y_2\": \"Wes Springer\"}]",
+        "answer": [
+            "Alana Arias",
+            "Buddy Gosselin",
+            "Dillon Womble",
+            "Elbert Arias",
+            "Ellis Gosselin",
+            "Helena Womble",
+            "Isabell Womble",
+            "Kayla Springer",
+            "Marybeth Bushnell",
+            "Wes Springer"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "great_grandfather(\"Elbert Arias\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cbb07365-3460-419c-93bb-ac5ec2aa0f33",
+        "question": "Who is the male first cousin once removed of the sister of Ted Shane?",
+        "solution_traces": "[{\"Y_2\": \"Richard Bushnell\", \"Y_4\": \"Deloris Gosselin\"}, {\"Y_4\": \"Deloris Gosselin\", \"Y_2\": \"Isaac Springer\"}, {\"Y_4\": \"Deloris Gosselin\", \"Y_2\": \"Joesph Springer\"}, {\"Y_2\": \"Rodger Springer\", \"Y_4\": \"Deloris Gosselin\"}]",
+        "answer": [
+            "Isaac Springer",
+            "Joesph Springer",
+            "Richard Bushnell",
+            "Rodger Springer"
+        ],
+        "prolog": {
+            "query": [
+                "male_first_cousin_once_removed(Y_4, Y_2)",
+                "sister(\"Ted Shane\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3af5fa81-1fa0-43d2-a730-500faf6c598e",
+        "question": "Who is the child of the grandchild of Dana Womble?",
+        "solution_traces": "[{\"Y_4\": \"Lorenz Womble\", \"Y_2\": \"Preston Womble\"}, {\"Y_4\": \"Lorenz Womble\", \"Y_2\": \"Dillon Womble\"}, {\"Y_4\": \"Lorenz Womble\", \"Y_2\": \"Kiana Arias\"}]",
+        "answer": [
+            "Dillon Womble",
+            "Kiana Arias",
+            "Preston Womble"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "grandchild(\"Dana Womble\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dcdf793e-6285-4895-886b-a3e4b08d758e",
+        "question": "Who is the aunt of the nephew of Sandy Springer?",
+        "solution_traces": "[{\"Y_4\": \"Wes Springer\", \"Y_2\": \"Sandy Springer\"}, {\"Y_2\": \"Adelina Shane\", \"Y_4\": \"Wes Springer\"}, {\"Y_2\": \"Sandy Springer\", \"Y_4\": \"Ted Shane\"}, {\"Y_2\": \"Reita Springer\", \"Y_4\": \"Ted Shane\"}, {\"Y_2\": \"Reita Springer\", \"Y_4\": \"Wes Springer\"}]",
+        "answer": [
+            "Adelina Shane",
+            "Reita Springer",
+            "Sandy Springer"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "nephew(\"Sandy Springer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "92598bb3-18b6-40a0-8c17-022c69bc5bc1",
+        "question": "Who is the brother of the great-granddaughter of Ethan Arias?",
+        "solution_traces": "[{\"Y_2\": \"Jarvis Arias\", \"Y_4\": \"Leonora Arias\"}, {\"Y_4\": \"Matilda Arias\", \"Y_2\": \"Jarvis Arias\"}]",
+        "answer": [
+            "Jarvis Arias"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "great_granddaughter(\"Ethan Arias\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c9d598b8-f95c-46e3-9a35-f2db20f9326a",
+        "question": "Who is the great-aunt of the child of Wanda Springer?",
+        "solution_traces": "[{\"Y_2\": \"Marybeth Bushnell\", \"Y_4\": \"Evette Springer\"}]",
+        "answer": [
+            "Marybeth Bushnell"
+        ],
+        "prolog": {
+            "query": [
+                "great_aunt(Y_4, Y_2)",
+                "child(\"Wanda Springer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "aec201d0-5d7a-489f-9e8d-2958f5480018",
+        "question": "Who is the aunt of the sibling of Wes Springer?",
+        "solution_traces": "[{\"Y_2\": \"Reita Springer\", \"Y_4\": \"Marybeth Bushnell\"}, {\"Y_2\": \"Adelina Shane\", \"Y_4\": \"Marybeth Bushnell\"}, {\"Y_4\": \"Marybeth Bushnell\", \"Y_2\": \"Sandy Springer\"}]",
+        "answer": [
+            "Adelina Shane",
+            "Reita Springer",
+            "Sandy Springer"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "sibling(\"Wes Springer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ac21f2f1-0001-4008-a348-2475d31043a4",
+        "question": "Who is the husband of the friend of Pamela Newby?",
+        "solution_traces": "[{\"Y_4\": \"Hilda Womble\", \"Y_2\": \"Stuart Womble\"}, {\"Y_2\": \"Chet Shane\", \"Y_4\": \"Adelina Shane\"}]",
+        "answer": [
+            "Chet Shane",
+            "Stuart Womble"
+        ],
+        "prolog": {
+            "query": [
+                "husband(Y_4, Y_2)",
+                "friend(\"Pamela Newby\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6f55e2b0-a5eb-410d-bdb0-834826780503",
+        "question": "Who is the cousin of the grandson of Kiana Arias?",
+        "solution_traces": "[{\"Y_2\": \"Leonora Arias\", \"Y_4\": \"Alvin Webber\"}, {\"Y_4\": \"Alvin Webber\", \"Y_2\": \"Matilda Arias\"}, {\"Y_4\": \"Jarvis Arias\", \"Y_2\": \"Alvin Webber\"}, {\"Y_4\": \"Alvin Webber\", \"Y_2\": \"Jarvis Arias\"}]",
+        "answer": [
+            "Alvin Webber",
+            "Jarvis Arias",
+            "Leonora Arias",
+            "Matilda Arias"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "grandson(\"Kiana Arias\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6a9a330a-84a1-45d2-b9b0-5113598fb8c3",
+        "question": "Who is the wife of the friend of Buddy Gosselin?",
+        "solution_traces": "[{\"Y_4\": \"Stuart Womble\", \"Y_2\": \"Hilda Womble\"}]",
+        "answer": [
+            "Hilda Womble"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "friend(\"Buddy Gosselin\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a79fb6c7-c542-41fc-ad12-ffded2914dd9",
+        "question": "Who is the cousin of the grandchild of Kiana Arias?",
+        "solution_traces": "[{\"Y_4\": \"Alvin Webber\", \"Y_2\": \"Matilda Arias\"}, {\"Y_4\": \"Jarvis Arias\", \"Y_2\": \"Alvin Webber\"}, {\"Y_4\": \"Alvin Webber\", \"Y_2\": \"Jarvis Arias\"}, {\"Y_4\": \"Leonora Arias\", \"Y_2\": \"Alvin Webber\"}, {\"Y_2\": \"Leonora Arias\", \"Y_4\": \"Alvin Webber\"}, {\"Y_4\": \"Matilda Arias\", \"Y_2\": \"Alvin Webber\"}]",
+        "answer": [
+            "Alvin Webber",
+            "Jarvis Arias",
+            "Leonora Arias",
+            "Matilda Arias"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "grandchild(\"Kiana Arias\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "479ee54b-08ca-4c8c-b04e-9e88c94b786e",
+        "question": "Who is the friend of the grandchild of Stuart Womble?",
+        "solution_traces": "[{\"Y_2\": \"Jarvis Arias\", \"Y_4\": \"Dillon Womble\"}, {\"Y_2\": \"Stuart Womble\", \"Y_4\": \"Dillon Womble\"}, {\"Y_4\": \"Kiana Arias\", \"Y_2\": \"Jorge Springer\"}, {\"Y_2\": \"Helena Womble\", \"Y_4\": \"Kiana Arias\"}, {\"Y_2\": \"Dana Womble\", \"Y_4\": \"Preston Womble\"}, {\"Y_2\": \"Alyssa Newby\", \"Y_4\": \"Kiana Arias\"}]",
+        "answer": [
+            "Alyssa Newby",
+            "Dana Womble",
+            "Helena Womble",
+            "Jarvis Arias",
+            "Jorge Springer",
+            "Stuart Womble"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "grandchild(\"Stuart Womble\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "18cedfba-ccf6-45fa-8e60-cf89acf07b06",
+        "question": "Who is the sibling of the grandfather of Rodger Springer?",
+        "solution_traces": "[{\"Y_2\": \"Reita Springer\", \"Y_4\": \"Jorge Springer\"}, {\"Y_2\": \"Adelina Shane\", \"Y_4\": \"Jorge Springer\"}, {\"Y_4\": \"Jorge Springer\", \"Y_2\": \"Sandy Springer\"}]",
+        "answer": [
+            "Adelina Shane",
+            "Reita Springer",
+            "Sandy Springer"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "grandfather(\"Rodger Springer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f7475152-6991-460d-b63b-67e2658a31a1",
+        "question": "Who is the friend of the parent of Stuart Womble?",
+        "solution_traces": "[{\"Y_4\": \"Dana Womble\", \"Y_2\": \"Alyssa Newby\"}, {\"Y_4\": \"Dana Womble\", \"Y_2\": \"Reita Springer\"}, {\"Y_4\": \"Dana Womble\", \"Y_2\": \"Russell Springer\"}, {\"Y_4\": \"Dana Womble\", \"Y_2\": \"Preston Womble\"}, {\"Y_4\": \"Dana Womble\", \"Y_2\": \"Francisco Bushnell\"}, {\"Y_4\": \"Dana Womble\", \"Y_2\": \"Marybeth Bushnell\"}, {\"Y_2\": \"Lorenz Womble\", \"Y_4\": \"Belia Womble\"}]",
+        "answer": [
+            "Alyssa Newby",
+            "Francisco Bushnell",
+            "Lorenz Womble",
+            "Marybeth Bushnell",
+            "Preston Womble",
+            "Reita Springer",
+            "Russell Springer"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "parent(\"Stuart Womble\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "02a5010a-5b6c-446e-b1c5-1bd51b68e0e7",
+        "question": "Who is the great-granddaughter of the grandparent of Laurette Webber?",
+        "solution_traces": "[{\"Y_2\": \"Leonora Arias\", \"Y_4\": \"Isabell Womble\"}, {\"Y_4\": \"Lorenz Womble\", \"Y_2\": \"Matilda Arias\"}, {\"Y_2\": \"Leonora Arias\", \"Y_4\": \"Lera Arias\"}, {\"Y_4\": \"Ethan Arias\", \"Y_2\": \"Leonora Arias\"}, {\"Y_2\": \"Matilda Arias\", \"Y_4\": \"Isabell Womble\"}, {\"Y_4\": \"Lera Arias\", \"Y_2\": \"Matilda Arias\"}, {\"Y_4\": \"Ethan Arias\", \"Y_2\": \"Matilda Arias\"}, {\"Y_4\": \"Lorenz Womble\", \"Y_2\": \"Leonora Arias\"}]",
+        "answer": [
+            "Leonora Arias",
+            "Matilda Arias"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "grandparent(\"Laurette Webber\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "353cc48c-f7bf-4247-bb31-fad1a1dda43e",
+        "question": "Who is the granddaughter of the grandparent of Kiana Arias?",
+        "solution_traces": "[{\"Y_4\": \"Stuart Womble\", \"Y_2\": \"Kiana Arias\"}, {\"Y_4\": \"Dortha Ridgway\", \"Y_2\": \"Kiana Arias\"}, {\"Y_4\": \"Mac Ridgway\", \"Y_2\": \"Kiana Arias\"}, {\"Y_4\": \"Hilda Womble\", \"Y_2\": \"Kiana Arias\"}]",
+        "answer": [
+            "Kiana Arias"
+        ],
+        "prolog": {
+            "query": [
+                "granddaughter(Y_4, Y_2)",
+                "grandparent(\"Kiana Arias\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ff00e8f0-ef53-46e6-a260-f1696e04a466",
+        "question": "Who is the great-grandfather of the friend of Isaac Springer?",
+        "solution_traces": "[{\"Y_4\": \"Laurette Webber\", \"Y_2\": \"Stuart Womble\"}, {\"Y_4\": \"Laurette Webber\", \"Y_2\": \"Mac Ridgway\"}, {\"Y_4\": \"Rodger Springer\", \"Y_2\": \"Russell Springer\"}]",
+        "answer": [
+            "Mac Ridgway",
+            "Russell Springer",
+            "Stuart Womble"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandfather(Y_4, Y_2)",
+                "friend(\"Isaac Springer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "390a44c1-42e2-4458-bc36-63274c9529c2",
+        "question": "Who is the grandparent of the grandchild of Gail Springer?",
+        "solution_traces": "[{\"Y_4\": \"Pamela Newby\", \"Y_2\": \"Gail Springer\"}, {\"Y_4\": \"Rodger Springer\", \"Y_2\": \"Jorge Springer\"}, {\"Y_4\": \"Pamela Newby\", \"Y_2\": \"Jorge Springer\"}, {\"Y_4\": \"Joesph Springer\", \"Y_2\": \"Gail Springer\"}, {\"Y_4\": \"Richard Bushnell\", \"Y_2\": \"Jorge Springer\"}, {\"Y_4\": \"Isaac Springer\", \"Y_2\": \"Jorge Springer\"}, {\"Y_4\": \"Isaac Springer\", \"Y_2\": \"Gail Springer\"}, {\"Y_4\": \"Joesph Springer\", \"Y_2\": \"Jorge Springer\"}, {\"Y_4\": \"Richard Bushnell\", \"Y_2\": \"Gail Springer\"}, {\"Y_4\": \"Rodger Springer\", \"Y_2\": \"Gail Springer\"}]",
+        "answer": [
+            "Gail Springer",
+            "Jorge Springer"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "grandchild(\"Gail Springer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "55f6cac3-1848-4f94-938c-97735d4a13a0",
+        "question": "Who is the second aunt of the child of Nevin Webber?",
+        "solution_traces": "[{\"Y_2\": \"Helena Womble\", \"Y_4\": \"Alvin Webber\"}, {\"Y_4\": \"Alvin Webber\", \"Y_2\": \"Julianne Womble\"}]",
+        "answer": [
+            "Helena Womble",
+            "Julianne Womble"
+        ],
+        "prolog": {
+            "query": [
+                "second_aunt(Y_4, Y_2)",
+                "child(\"Nevin Webber\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c2fb1947-f169-4401-845a-792349ae1543",
+        "question": "Who is the grandfather of the great-grandchild of Lera Arias?",
+        "solution_traces": "[{\"Y_4\": \"Alvin Webber\", \"Y_2\": \"Noel Arias\"}, {\"Y_4\": \"Matilda Arias\", \"Y_2\": \"Noel Arias\"}, {\"Y_4\": \"Jarvis Arias\", \"Y_2\": \"Noel Arias\"}, {\"Y_2\": \"Noel Arias\", \"Y_4\": \"Leonora Arias\"}]",
+        "answer": [
+            "Noel Arias"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "great_grandchild(\"Lera Arias\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8474382b-3637-4b5d-b71f-d40c7758880a",
+        "question": "Who is the mother-in-law of the son-in-law of Raina Springer?",
+        "solution_traces": "[{\"Y_2\": \"Raina Springer\", \"Y_4\": \"Chet Shane\"}]",
+        "answer": [
+            "Raina Springer"
+        ],
+        "prolog": {
+            "query": [
+                "mother_in_law(Y_4, Y_2)",
+                "son_in_law(\"Raina Springer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4f8256e1-3a53-4706-9fe4-76505a679706",
+        "question": "Who is the uncle of the parent of Matilda Arias?",
+        "solution_traces": "[{\"Y_4\": \"Elbert Arias\", \"Y_2\": \"Preston Womble\"}, {\"Y_2\": \"Dillon Womble\", \"Y_4\": \"Elbert Arias\"}]",
+        "answer": [
+            "Dillon Womble",
+            "Preston Womble"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "parent(\"Matilda Arias\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "23cf1e43-f088-4fa6-8565-976603fb72e6",
+        "question": "Who is the son-in-law of the son-in-law of Mac Ridgway?",
+        "solution_traces": "[{\"Y_4\": \"Lorenz Womble\", \"Y_2\": \"Noel Arias\"}]",
+        "answer": [
+            "Noel Arias"
+        ],
+        "prolog": {
+            "query": [
+                "son_in_law(Y_4, Y_2)",
+                "son_in_law(\"Mac Ridgway\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7a29a82a-086c-4aff-86b6-2d437307b040",
+        "question": "Who is the sibling of the child of Kayla Springer?",
+        "solution_traces": "[{\"Y_4\": \"Joesph Springer\", \"Y_2\": \"Pamela Newby\"}, {\"Y_4\": \"Joesph Springer\", \"Y_2\": \"Isaac Springer\"}, {\"Y_4\": \"Isaac Springer\", \"Y_2\": \"Joesph Springer\"}, {\"Y_4\": \"Rodger Springer\", \"Y_2\": \"Isaac Springer\"}, {\"Y_4\": \"Rodger Springer\", \"Y_2\": \"Pamela Newby\"}, {\"Y_4\": \"Rodger Springer\", \"Y_2\": \"Joesph Springer\"}, {\"Y_4\": \"Pamela Newby\", \"Y_2\": \"Isaac Springer\"}, {\"Y_2\": \"Rodger Springer\", \"Y_4\": \"Pamela Newby\"}, {\"Y_4\": \"Joesph Springer\", \"Y_2\": \"Rodger Springer\"}, {\"Y_4\": \"Isaac Springer\", \"Y_2\": \"Pamela Newby\"}, {\"Y_4\": \"Isaac Springer\", \"Y_2\": \"Rodger Springer\"}, {\"Y_2\": \"Joesph Springer\", \"Y_4\": \"Pamela Newby\"}]",
+        "answer": [
+            "Isaac Springer",
+            "Joesph Springer",
+            "Pamela Newby",
+            "Rodger Springer"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "child(\"Kayla Springer\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7aefc383-de82-4828-a651-3cf0da68e42d",
+        "question": "Who is the niece of the parent of Alvin Webber?",
+        "solution_traces": "[{\"Y_4\": \"Laurette Webber\", \"Y_2\": \"Matilda Arias\"}, {\"Y_2\": \"Leonora Arias\", \"Y_4\": \"Laurette Webber\"}]",
+        "answer": [
+            "Leonora Arias",
+            "Matilda Arias"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "parent(\"Alvin Webber\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b8ece1a1-ffce-4d1b-a5dd-ec073938c789",
+        "question": "Who is the great-grandchild of the grandparent of Elbert Arias?",
+        "solution_traces": "[{\"Y_2\": \"Alvin Webber\", \"Y_4\": \"Isabell Womble\"}, {\"Y_2\": \"Leonora Arias\", \"Y_4\": \"Isabell Womble\"}, {\"Y_4\": \"Lorenz Womble\", \"Y_2\": \"Matilda Arias\"}, {\"Y_4\": \"Lorenz Womble\", \"Y_2\": \"Alvin Webber\"}, {\"Y_4\": \"Lera Arias\", \"Y_2\": \"Jarvis Arias\"}, {\"Y_4\": \"Ethan Arias\", \"Y_2\": \"Jarvis Arias\"}, {\"Y_2\": \"Leonora Arias\", \"Y_4\": \"Lera Arias\"}, {\"Y_4\": \"Ethan Arias\", \"Y_2\": \"Leonora Arias\"}, {\"Y_4\": \"Lera Arias\", \"Y_2\": \"Matilda Arias\"}, {\"Y_2\": \"Matilda Arias\", \"Y_4\": \"Isabell Womble\"}, {\"Y_2\": \"Jarvis Arias\", \"Y_4\": \"Isabell Womble\"}, {\"Y_4\": \"Lorenz Womble\", \"Y_2\": \"Jarvis Arias\"}, {\"Y_4\": \"Ethan Arias\", \"Y_2\": \"Alvin Webber\"}, {\"Y_4\": \"Ethan Arias\", \"Y_2\": \"Matilda Arias\"}, {\"Y_4\": \"Lera Arias\", \"Y_2\": \"Alvin Webber\"}, {\"Y_4\": \"Lorenz Womble\", \"Y_2\": \"Leonora Arias\"}]",
+        "answer": [
+            "Alvin Webber",
+            "Jarvis Arias",
+            "Leonora Arias",
+            "Matilda Arias"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "grandparent(\"Elbert Arias\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "31293ebc-ddfa-465a-a76a-c44cc632d2f6",
+        "question": "Who is the niece of the brother of Dillon Womble?",
+        "solution_traces": "[{\"Y_2\": \"Laurette Webber\", \"Y_4\": \"Preston Womble\"}]",
+        "answer": [
+            "Laurette Webber"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "brother(\"Dillon Womble\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    }
+]

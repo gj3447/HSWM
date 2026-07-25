@@ -1,0 +1,1031 @@
+[
+    {
+        "id": "68960afe-a142-426b-8abf-343cf1843d34",
+        "question": "Who is the child of the great-granddaughter of the person whose occupation is lexicographer?",
+        "solution_traces": "[{\"Y_4\": \"Hulda Demello\", \"Y_6\": \"Doyle Kasper\", \"Y_2\": \"Bev Demello\"}, {\"Y_2\": \"Augustus Demello\", \"Y_4\": \"Hulda Demello\", \"Y_6\": \"Doyle Kasper\"}]",
+        "answer": [
+            "Augustus Demello",
+            "Bev Demello"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "great_granddaughter(Y_6, Y_4)",
+                "job(Y_6, \"lexicographer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2ddb5ffe-2f28-4843-a83a-2029ab3812bf",
+        "question": "Who is the grandson of the friend of the person whose hobby is squash?",
+        "solution_traces": "[{\"Y_2\": \"Frankie Cason\", \"Y_6\": \"Odis Breen\", \"Y_4\": \"Ardath Cason\"}, {\"Y_6\": \"Odis Breen\", \"Y_4\": \"Ardath Cason\", \"Y_2\": \"Joesph Cason\"}, {\"Y_2\": \"Maximilian Swinton\", \"Y_6\": \"Odis Breen\", \"Y_4\": \"Ike Lemaster\"}, {\"Y_2\": \"Sergio Cason\", \"Y_6\": \"Odis Breen\", \"Y_4\": \"Ardath Cason\"}, {\"Y_2\": \"Cordell Tobin\", \"Y_6\": \"Odis Breen\", \"Y_4\": \"Wilfredo Carrington\"}, {\"Y_6\": \"Odis Breen\", \"Y_2\": \"Rory Cason\", \"Y_4\": \"Bobby Hamill\"}]",
+        "answer": [
+            "Cordell Tobin",
+            "Frankie Cason",
+            "Joesph Cason",
+            "Maximilian Swinton",
+            "Rory Cason",
+            "Sergio Cason"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "hobby(Y_6, \"squash\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e0d693bf-eca4-4c33-a794-a9119c6d58fd",
+        "question": "Who is the grandchild of the mother of the person whose occupation is electrical engineer?",
+        "solution_traces": "[{\"Y_6\": \"Loraine Carrington\", \"Y_2\": \"Shizuko Tobin\", \"Y_4\": \"Manda Kasper\"}, {\"Y_6\": \"Loraine Carrington\", \"Y_2\": \"Marguerita Carrington\", \"Y_4\": \"Manda Kasper\"}]",
+        "answer": [
+            "Marguerita Carrington",
+            "Shizuko Tobin"
+        ],
+        "prolog": {
+            "query": [
+                "grandchild(Y_4, Y_2)",
+                "mother(Y_6, Y_4)",
+                "job(Y_6, \"electrical engineer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3a0b1c48-f2ee-4db1-928b-d6bbbf38df23",
+        "question": "Who is the sibling of the sister-in-law of the person whose date of birth is 0291-09-19?",
+        "solution_traces": "[{\"Y_4\": \"Page Strickland\", \"Y_2\": \"Frankie Cason\", \"Y_6\": \"Nancy Cason\"}, {\"Y_4\": \"Page Strickland\", \"Y_2\": \"Sergio Cason\", \"Y_6\": \"Nancy Cason\"}, {\"Y_4\": \"Page Strickland\", \"Y_6\": \"Nancy Cason\", \"Y_2\": \"Joesph Cason\"}]",
+        "answer": [
+            "Frankie Cason",
+            "Joesph Cason",
+            "Sergio Cason"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "sister_in_law(Y_6, Y_4)",
+                "dob(Y_6, \"0291-09-19\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "6cc69163-0654-41a1-9410-43d5bd3be199",
+        "question": "Who is the mother of the friend of the person whose hobby is linguistics?",
+        "solution_traces": "[{\"Y_6\": \"Maira Tobin\", \"Y_4\": \"Estell Cason\", \"Y_2\": \"Kacey Hamill\"}, {\"Y_4\": \"Page Strickland\", \"Y_6\": \"Maira Tobin\", \"Y_2\": \"Angela Cason\"}, {\"Y_4\": \"Domingo Lemaster\", \"Y_6\": \"Maira Tobin\", \"Y_2\": \"Roseanna Lemaster\"}]",
+        "answer": [
+            "Angela Cason",
+            "Kacey Hamill",
+            "Roseanna Lemaster"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "hobby(Y_6, \"linguistics\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8c839d4b-af71-4a6a-a601-628481a9a86d",
+        "question": "Who is the aunt of the sister of the person whose hobby is aircraft spotting?",
+        "solution_traces": "[{\"Y_6\": \"Teresita Cason\", \"Y_2\": \"Jewell Cason\", \"Y_4\": \"Tiesha Cason\"}, {\"Y_6\": \"Teresita Cason\", \"Y_4\": \"Tiesha Cason\", \"Y_2\": \"Katy Cason\"}]",
+        "answer": [
+            "Jewell Cason",
+            "Katy Cason"
+        ],
+        "prolog": {
+            "query": [
+                "aunt(Y_4, Y_2)",
+                "sister(Y_6, Y_4)",
+                "hobby(Y_6, \"aircraft spotting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2a1c3bd6-0887-4379-a37c-f8ec6bf18e97",
+        "question": "Who is the friend of the brother-in-law of the person whose occupation is armed forces training and education officer?",
+        "solution_traces": "[{\"Y_6\": \"Odis Breen\", \"Y_2\": \"Wilfredo Carrington\", \"Y_4\": \"Maximilian Swinton\"}, {\"Y_6\": \"Odis Breen\", \"Y_2\": \"Lorenz Aguayo\", \"Y_4\": \"Maximilian Swinton\"}, {\"Y_6\": \"Odis Breen\", \"Y_2\": \"Katy Cason\", \"Y_4\": \"Maximilian Swinton\"}]",
+        "answer": [
+            "Katy Cason",
+            "Lorenz Aguayo",
+            "Wilfredo Carrington"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "brother_in_law(Y_6, Y_4)",
+                "job(Y_6, \"armed forces training and education officer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "17870b92-ecc7-4541-9936-c692a5367a21",
+        "question": "Who is the parent of the grandchild of the person whose date of birth is 0288-10-22?",
+        "solution_traces": "[{\"Y_4\": \"Teresita Cason\", \"Y_2\": \"Estell Cason\", \"Y_6\": \"Sergio Cason\"}, {\"Y_4\": \"Tiesha Cason\", \"Y_2\": \"Estell Cason\", \"Y_6\": \"Sergio Cason\"}, {\"Y_4\": \"Teresita Cason\", \"Y_2\": \"Ken Cason\", \"Y_6\": \"Sergio Cason\"}, {\"Y_2\": \"Ken Cason\", \"Y_4\": \"Tiesha Cason\", \"Y_6\": \"Sergio Cason\"}, {\"Y_2\": \"Estell Cason\", \"Y_4\": \"Rory Cason\", \"Y_6\": \"Sergio Cason\"}, {\"Y_2\": \"Ken Cason\", \"Y_4\": \"Rory Cason\", \"Y_6\": \"Sergio Cason\"}]",
+        "answer": [
+            "Estell Cason",
+            "Ken Cason"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "grandchild(Y_6, Y_4)",
+                "dob(Y_6, \"0288-10-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4b6433aa-5301-428d-966c-2c5b7adaba32",
+        "question": "Who is the great-grandmother of the grandchild of the person whose date of birth is 0258-11-19?",
+        "solution_traces": "[{\"Y_2\": \"Ardath Cason\", \"Y_4\": \"Rick Cason\", \"Y_6\": \"Dante Feldman\"}, {\"Y_2\": \"Jann Aguayo\", \"Y_4\": \"Rick Cason\", \"Y_6\": \"Dante Feldman\"}, {\"Y_4\": \"Ken Cason\", \"Y_2\": \"Jann Aguayo\", \"Y_6\": \"Dante Feldman\"}, {\"Y_4\": \"Katy Cason\", \"Y_2\": \"Jann Aguayo\", \"Y_6\": \"Dante Feldman\"}, {\"Y_4\": \"Jewell Cason\", \"Y_2\": \"Jann Aguayo\", \"Y_6\": \"Dante Feldman\"}, {\"Y_4\": \"Ken Cason\", \"Y_2\": \"Ardath Cason\", \"Y_6\": \"Dante Feldman\"}, {\"Y_4\": \"Jewell Cason\", \"Y_2\": \"Ardath Cason\", \"Y_6\": \"Dante Feldman\"}, {\"Y_2\": \"Ardath Cason\", \"Y_4\": \"Katy Cason\", \"Y_6\": \"Dante Feldman\"}]",
+        "answer": [
+            "Ardath Cason",
+            "Jann Aguayo"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandmother(Y_4, Y_2)",
+                "grandchild(Y_6, Y_4)",
+                "dob(Y_6, \"0258-11-19\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "68c496b6-a435-481a-bf8d-57d1e7cf5426",
+        "question": "Who is the daughter of the great-grandparent of the person whose date of birth is 0277-07-15?",
+        "solution_traces": "[{\"Y_2\": \"Manda Kasper\", \"Y_4\": \"Roseanna Lemaster\", \"Y_6\": \"Leesa Breen\"}, {\"Y_2\": \"Kacey Swinton\", \"Y_6\": \"Leesa Breen\", \"Y_4\": \"Ike Lemaster\"}, {\"Y_2\": \"Manda Kasper\", \"Y_6\": \"Leesa Breen\", \"Y_4\": \"Ike Lemaster\"}, {\"Y_4\": \"Roseanna Lemaster\", \"Y_2\": \"Kacey Swinton\", \"Y_6\": \"Leesa Breen\"}]",
+        "answer": [
+            "Kacey Swinton",
+            "Manda Kasper"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "great_grandparent(Y_6, Y_4)",
+                "dob(Y_6, \"0277-07-15\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "71e05564-a2ab-4700-828a-585322425487",
+        "question": "Who is the great-grandparent of the child of the person whose date of birth is 0291-09-19?",
+        "solution_traces": "[{\"Y_4\": \"Jewell Cason\", \"Y_2\": \"Ardath Cason\", \"Y_6\": \"Nancy Cason\"}, {\"Y_6\": \"Nancy Cason\", \"Y_4\": \"Rick Cason\", \"Y_2\": \"Lorenz Aguayo\"}, {\"Y_4\": \"Jewell Cason\", \"Y_6\": \"Nancy Cason\", \"Y_2\": \"Jame Cason\"}, {\"Y_4\": \"Jewell Cason\", \"Y_6\": \"Nancy Cason\", \"Y_2\": \"Jann Aguayo\"}, {\"Y_4\": \"Ken Cason\", \"Y_6\": \"Nancy Cason\", \"Y_2\": \"Jann Aguayo\"}, {\"Y_6\": \"Nancy Cason\", \"Y_2\": \"Jann Aguayo\", \"Y_4\": \"Katy Cason\"}, {\"Y_2\": \"Lorenz Aguayo\", \"Y_6\": \"Nancy Cason\", \"Y_4\": \"Katy Cason\"}, {\"Y_6\": \"Nancy Cason\", \"Y_2\": \"Jame Cason\", \"Y_4\": \"Katy Cason\"}, {\"Y_4\": \"Ken Cason\", \"Y_6\": \"Nancy Cason\", \"Y_2\": \"Lorenz Aguayo\"}, {\"Y_4\": \"Ken Cason\", \"Y_6\": \"Nancy Cason\", \"Y_2\": \"Jame Cason\"}, {\"Y_4\": \"Jewell Cason\", \"Y_6\": \"Nancy Cason\", \"Y_2\": \"Lorenz Aguayo\"}, {\"Y_2\": \"Jann Aguayo\", \"Y_6\": \"Nancy Cason\", \"Y_4\": \"Rick Cason\"}, {\"Y_2\": \"Jame Cason\", \"Y_6\": \"Nancy Cason\", \"Y_4\": \"Rick Cason\"}, {\"Y_2\": \"Ardath Cason\", \"Y_6\": \"Nancy Cason\", \"Y_4\": \"Rick Cason\"}, {\"Y_4\": \"Ken Cason\", \"Y_2\": \"Ardath Cason\", \"Y_6\": \"Nancy Cason\"}, {\"Y_2\": \"Ardath Cason\", \"Y_6\": \"Nancy Cason\", \"Y_4\": \"Katy Cason\"}]",
+        "answer": [
+            "Ardath Cason",
+            "Jame Cason",
+            "Jann Aguayo",
+            "Lorenz Aguayo"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandparent(Y_4, Y_2)",
+                "child(Y_6, Y_4)",
+                "dob(Y_6, \"0291-09-19\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a9540336-e3f0-4467-b321-7b6e99fcba68",
+        "question": "Who is the parent of the sister-in-law of the person whose date of birth is 0291-09-19?",
+        "solution_traces": "[{\"Y_4\": \"Page Strickland\", \"Y_6\": \"Nancy Cason\", \"Y_2\": \"Angela Cason\"}, {\"Y_4\": \"Page Strickland\", \"Y_2\": \"Douglas Cason\", \"Y_6\": \"Nancy Cason\"}]",
+        "answer": [
+            "Angela Cason",
+            "Douglas Cason"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "sister_in_law(Y_6, Y_4)",
+                "dob(Y_6, \"0291-09-19\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "487eb759-ff18-42a5-b2ba-4dc291f3cd8e",
+        "question": "Who is the grandfather of the granddaughter of the person whose date of birth is 0291-09-19?",
+        "solution_traces": "[{\"Y_2\": \"Sergio Cason\", \"Y_4\": \"Tiesha Cason\", \"Y_6\": \"Nancy Cason\"}, {\"Y_2\": \"Bobby Hamill\", \"Y_4\": \"Tiesha Cason\", \"Y_6\": \"Nancy Cason\"}, {\"Y_2\": \"Sergio Cason\", \"Y_4\": \"Teresita Cason\", \"Y_6\": \"Nancy Cason\"}, {\"Y_2\": \"Bobby Hamill\", \"Y_4\": \"Teresita Cason\", \"Y_6\": \"Nancy Cason\"}]",
+        "answer": [
+            "Bobby Hamill",
+            "Sergio Cason"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "granddaughter(Y_6, Y_4)",
+                "dob(Y_6, \"0291-09-19\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0ab1111d-f54a-4d34-9b93-8443829bc3f1",
+        "question": "Who is the daughter of the great-grandparent of the person whose date of birth is 0341-12-05?",
+        "solution_traces": "[{\"Y_2\": \"Nancy Cason\", \"Y_6\": \"Teresita Cason\", \"Y_4\": \"Manda Feldman\"}, {\"Y_6\": \"Teresita Cason\", \"Y_4\": \"Angela Cason\", \"Y_2\": \"Page Strickland\"}, {\"Y_6\": \"Teresita Cason\", \"Y_2\": \"Nancy Cason\", \"Y_4\": \"Dante Feldman\"}, {\"Y_6\": \"Teresita Cason\", \"Y_4\": \"Douglas Cason\", \"Y_2\": \"Page Strickland\"}]",
+        "answer": [
+            "Nancy Cason",
+            "Page Strickland"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "great_grandparent(Y_6, Y_4)",
+                "dob(Y_6, \"0341-12-05\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d2d61619-c310-4637-94f4-74cda3ed8dd3",
+        "question": "Who is the brother of the sister-in-law of the person whose date of birth is 0298-03-24?",
+        "solution_traces": "[{\"Y_2\": \"Cordell Tobin\", \"Y_6\": \"Maira Tobin\", \"Y_4\": \"Hulda Demello\"}, {\"Y_2\": \"Cordell Tobin\", \"Y_6\": \"Maira Tobin\", \"Y_4\": \"Katharine Tobin\"}]",
+        "answer": [
+            "Cordell Tobin"
+        ],
+        "prolog": {
+            "query": [
+                "brother(Y_4, Y_2)",
+                "sister_in_law(Y_6, Y_4)",
+                "dob(Y_6, \"0298-03-24\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7f2941cb-365d-4818-a71a-8cd862aeab90",
+        "question": "Who is the friend of the cousin of the person whose hobby is stone collecting?",
+        "solution_traces": "[{\"Y_6\": \"Katy Cason\", \"Y_2\": \"Marguerita Carrington\", \"Y_4\": \"Rochelle Strickland\"}, {\"Y_2\": \"Joesph Cason\", \"Y_6\": \"Katy Cason\", \"Y_4\": \"Rochelle Strickland\"}, {\"Y_6\": \"Katy Cason\", \"Y_2\": \"Rory Cason\", \"Y_4\": \"Rochelle Strickland\"}, {\"Y_2\": \"Jame Cason\", \"Y_6\": \"Katy Cason\", \"Y_4\": \"Rochelle Strickland\"}]",
+        "answer": [
+            "Jame Cason",
+            "Joesph Cason",
+            "Marguerita Carrington",
+            "Rory Cason"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "cousin(Y_6, Y_4)",
+                "hobby(Y_6, \"stone collecting\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5b3c5af6-7037-44ff-9184-3a30907db816",
+        "question": "Who is the mother of the brother of the person whose date of birth is 0288-10-22?",
+        "solution_traces": "[{\"Y_2\": \"Angela Cason\", \"Y_4\": \"Joesph Cason\", \"Y_6\": \"Sergio Cason\"}, {\"Y_4\": \"Frankie Cason\", \"Y_2\": \"Angela Cason\", \"Y_6\": \"Sergio Cason\"}]",
+        "answer": [
+            "Angela Cason"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "brother(Y_6, Y_4)",
+                "dob(Y_6, \"0288-10-22\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9b2a54c5-88e2-49c3-9f18-0ca03b58df44",
+        "question": "Who is the sibling of the uncle of the person whose occupation is location manager?",
+        "solution_traces": "[{\"Y_2\": \"Sergio Cason\", \"Y_4\": \"Frankie Cason\", \"Y_6\": \"Katy Cason\"}, {\"Y_4\": \"Frankie Cason\", \"Y_6\": \"Katy Cason\", \"Y_2\": \"Page Strickland\"}, {\"Y_2\": \"Page Strickland\", \"Y_6\": \"Katy Cason\", \"Y_4\": \"Joesph Cason\"}, {\"Y_4\": \"Frankie Cason\", \"Y_6\": \"Katy Cason\", \"Y_2\": \"Joesph Cason\"}, {\"Y_2\": \"Sergio Cason\", \"Y_6\": \"Katy Cason\", \"Y_4\": \"Joesph Cason\"}, {\"Y_2\": \"Frankie Cason\", \"Y_6\": \"Katy Cason\", \"Y_4\": \"Joesph Cason\"}]",
+        "answer": [
+            "Frankie Cason",
+            "Joesph Cason",
+            "Page Strickland",
+            "Sergio Cason"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "uncle(Y_6, Y_4)",
+                "job(Y_6, \"location manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cca590e1-e33c-4538-8a31-d9384f1f851b",
+        "question": "Who is the nephew of the second uncle of the person whose date of birth is 0299-10-21?",
+        "solution_traces": "[{\"Y_2\": \"Maximilian Swinton\", \"Y_6\": \"Cordell Tobin\", \"Y_4\": \"Domingo Lemaster\"}]",
+        "answer": [
+            "Maximilian Swinton"
+        ],
+        "prolog": {
+            "query": [
+                "nephew(Y_4, Y_2)",
+                "second_uncle(Y_6, Y_4)",
+                "dob(Y_6, \"0299-10-21\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "40535e7c-77f6-46e8-b7f3-d636fb88adca",
+        "question": "Who is the uncle of the sibling of the person whose occupation is surgeon?",
+        "solution_traces": "[{\"Y_6\": \"Rubye Breen\", \"Y_2\": \"Domingo Lemaster\", \"Y_4\": \"Maximilian Swinton\"}]",
+        "answer": [
+            "Domingo Lemaster"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "job(Y_6, \"surgeon\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e6f61e39-2304-4282-8d3e-d18924f26db5",
+        "question": "Who is the wife of the grandparent of the person whose occupation is radio broadcast assistant?",
+        "solution_traces": "[{\"Y_6\": \"Teresita Cason\", \"Y_2\": \"Kacey Hamill\", \"Y_4\": \"Bobby Hamill\"}, {\"Y_6\": \"Teresita Cason\", \"Y_2\": \"Nancy Cason\", \"Y_4\": \"Sergio Cason\"}]",
+        "answer": [
+            "Kacey Hamill",
+            "Nancy Cason"
+        ],
+        "prolog": {
+            "query": [
+                "wife(Y_4, Y_2)",
+                "grandparent(Y_6, Y_4)",
+                "job(Y_6, \"radio broadcast assistant\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "82b1de39-1a5e-45d2-b288-7c66d381fe1d",
+        "question": "Who is the great-granddaughter of the great-grandparent of the person whose hobby is audiophile?",
+        "solution_traces": "[{\"Y_2\": \"Mariann Tobin\", \"Y_6\": \"Bev Demello\", \"Y_4\": \"Loraine Carrington\"}, {\"Y_4\": \"Wilfredo Carrington\", \"Y_6\": \"Bev Demello\", \"Y_2\": \"Joslyn Tobin\"}, {\"Y_4\": \"Wilfredo Carrington\", \"Y_6\": \"Bev Demello\", \"Y_2\": \"Mariann Tobin\"}, {\"Y_2\": \"Bev Demello\", \"Y_4\": \"Wilfredo Carrington\", \"Y_6\": \"Bev Demello\"}, {\"Y_2\": \"Bev Demello\", \"Y_6\": \"Bev Demello\", \"Y_4\": \"Loraine Carrington\"}, {\"Y_2\": \"Joslyn Tobin\", \"Y_6\": \"Bev Demello\", \"Y_4\": \"Loraine Carrington\"}]",
+        "answer": [
+            "Bev Demello",
+            "Joslyn Tobin",
+            "Mariann Tobin"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "great_grandparent(Y_6, Y_4)",
+                "hobby(Y_6, \"audiophile\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0974df92-d150-4cb2-9a85-d417da255e3d",
+        "question": "Who is the brother-in-law of the son-in-law of the person whose occupation is barrister?",
+        "solution_traces": "[{\"Y_4\": \"Eusebio Swinton\", \"Y_2\": \"Domingo Lemaster\", \"Y_6\": \"Ike Lemaster\"}, {\"Y_2\": \"Domingo Lemaster\", \"Y_4\": \"Doyle Kasper\", \"Y_6\": \"Ike Lemaster\"}]",
+        "answer": [
+            "Domingo Lemaster"
+        ],
+        "prolog": {
+            "query": [
+                "brother_in_law(Y_4, Y_2)",
+                "son_in_law(Y_6, Y_4)",
+                "job(Y_6, \"barrister\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b4b17391-844a-440a-8a03-64db723fb246",
+        "question": "Who is the great-uncle of the great-granddaughter of the person whose date of birth is 0258-11-19?",
+        "solution_traces": "[{\"Y_2\": \"Frankie Cason\", \"Y_4\": \"Tiesha Cason\", \"Y_6\": \"Dante Feldman\"}, {\"Y_4\": \"Teresita Cason\", \"Y_2\": \"Joesph Cason\", \"Y_6\": \"Dante Feldman\"}, {\"Y_4\": \"Teresita Cason\", \"Y_2\": \"Frankie Cason\", \"Y_6\": \"Dante Feldman\"}, {\"Y_4\": \"Tiesha Cason\", \"Y_2\": \"Joesph Cason\", \"Y_6\": \"Dante Feldman\"}]",
+        "answer": [
+            "Frankie Cason",
+            "Joesph Cason"
+        ],
+        "prolog": {
+            "query": [
+                "great_uncle(Y_4, Y_2)",
+                "great_granddaughter(Y_6, Y_4)",
+                "dob(Y_6, \"0258-11-19\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1261467a-e3d4-4d31-861d-93ffb51d64f5",
+        "question": "Who is the parent of the mother of the person whose date of birth is 0297-01-30?",
+        "solution_traces": "[{\"Y_6\": \"Frankie Cason\", \"Y_2\": \"Jann Aguayo\", \"Y_4\": \"Angela Cason\"}, {\"Y_6\": \"Frankie Cason\", \"Y_4\": \"Angela Cason\", \"Y_2\": \"Lorenz Aguayo\"}]",
+        "answer": [
+            "Jann Aguayo",
+            "Lorenz Aguayo"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "mother(Y_6, Y_4)",
+                "dob(Y_6, \"0297-01-30\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "096337ec-8984-48b4-818a-8404e07ae4b1",
+        "question": "Who is the brother-in-law of the child of the person whose date of birth is 0258-11-19?",
+        "solution_traces": "[{\"Y_4\": \"Nancy Cason\", \"Y_2\": \"Joesph Cason\", \"Y_6\": \"Dante Feldman\"}, {\"Y_2\": \"Frankie Cason\", \"Y_4\": \"Nancy Cason\", \"Y_6\": \"Dante Feldman\"}]",
+        "answer": [
+            "Frankie Cason",
+            "Joesph Cason"
+        ],
+        "prolog": {
+            "query": [
+                "brother_in_law(Y_4, Y_2)",
+                "child(Y_6, Y_4)",
+                "dob(Y_6, \"0258-11-19\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c354753c-7f44-4a90-97a2-3a3d94297f43",
+        "question": "Who is the child of the brother-in-law of the person whose occupation is producer?",
+        "solution_traces": "[{\"Y_4\": \"Cordell Tobin\", \"Y_6\": \"Pedro Demello\", \"Y_2\": \"Mariann Tobin\"}, {\"Y_4\": \"Cordell Tobin\", \"Y_6\": \"Pedro Demello\", \"Y_2\": \"Joslyn Tobin\"}]",
+        "answer": [
+            "Joslyn Tobin",
+            "Mariann Tobin"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "brother_in_law(Y_6, Y_4)",
+                "job(Y_6, \"producer\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2eca6b4d-f862-4f96-a775-083ff88c60e3",
+        "question": "Who is the child of the husband of the person whose occupation is restaurant manager?",
+        "solution_traces": "[{\"Y_2\": \"Kacey Swinton\", \"Y_6\": \"Roseanna Lemaster\", \"Y_4\": \"Ike Lemaster\"}, {\"Y_2\": \"Manda Kasper\", \"Y_6\": \"Roseanna Lemaster\", \"Y_4\": \"Ike Lemaster\"}, {\"Y_6\": \"Roseanna Lemaster\", \"Y_2\": \"Domingo Lemaster\", \"Y_4\": \"Ike Lemaster\"}]",
+        "answer": [
+            "Domingo Lemaster",
+            "Kacey Swinton",
+            "Manda Kasper"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "husband(Y_6, Y_4)",
+                "job(Y_6, \"restaurant manager\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "3590d57e-e613-49fe-9609-2f064b85bb9d",
+        "question": "Who is the son of the husband of the person whose date of birth is 0188-02-15?",
+        "solution_traces": "[{\"Y_6\": \"Roseanna Lemaster\", \"Y_2\": \"Domingo Lemaster\", \"Y_4\": \"Ike Lemaster\"}]",
+        "answer": [
+            "Domingo Lemaster"
+        ],
+        "prolog": {
+            "query": [
+                "son(Y_4, Y_2)",
+                "husband(Y_6, Y_4)",
+                "dob(Y_6, \"0188-02-15\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "184f540f-eae3-45e5-b627-fb87fb473688",
+        "question": "Who is the granddaughter of the mother of the person whose date of birth is 0313-06-07?",
+        "solution_traces": "[{\"Y_2\": \"Tiesha Cason\", \"Y_4\": \"Nancy Cason\", \"Y_6\": \"Rick Cason\"}, {\"Y_2\": \"Teresita Cason\", \"Y_4\": \"Nancy Cason\", \"Y_6\": \"Rick Cason\"}]",
+        "answer": [
+            "Teresita Cason",
+            "Tiesha Cason"
+        ],
+        "prolog": {
+            "query": [
+                "granddaughter(Y_4, Y_2)",
+                "mother(Y_6, Y_4)",
+                "dob(Y_6, \"0313-06-07\")"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the person whose",
+            "<attribute_name>_7",
+            "is",
+            "<attribute_value>_7",
+            "?"
+        ],
+        "type": 2,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    }
+]

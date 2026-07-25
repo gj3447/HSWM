@@ -1,0 +1,1131 @@
+[
+    {
+        "id": "99db7f27-7c61-476b-911c-3425a4668b2a",
+        "question": "How many brothers-in-law does the parent of the female cousin of the person whose occupation is loss adjuster have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_7\": \"Quentin Catalano\", \"Y_3\": \"Elbert Canfield\", \"Y_5\": \"Adele Corbin\"}, {\"Y_7\": \"Quentin Catalano\", \"Count_1\": 0, \"Y_5\": \"Adele Corbin\", \"Y_3\": \"Lora Canfield\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother_in_law(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "female_cousin(Y_7, Y_5)",
+                "job(Y_7, \"loss adjuster\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ffde8d84-2d23-40e8-9b9a-ee8ef54f4c8e",
+        "question": "How many siblings does the sister of the great-granddaughter of the person whose hobby is business have?",
+        "solution_traces": "[{\"Y_3\": \"Violet Pohl\", \"Count_1\": 2, \"Y_7\": \"Lashandra Caldera\", \"Y_5\": \"Brigida Stallings\"}, {\"Count_1\": 2, \"Y_7\": \"Lashandra Caldera\", \"Y_5\": \"Betsy Linden\", \"Y_3\": \"Brigida Stallings\"}, {\"Count_1\": 2, \"Y_5\": \"Violet Pohl\", \"Y_7\": \"Lashandra Caldera\", \"Y_3\": \"Brigida Stallings\"}, {\"Y_3\": \"Genny Caldera\", \"Y_7\": \"Lashandra Caldera\", \"Count_1\": 1, \"Y_5\": \"Laurette Caldera\"}, {\"Count_1\": 2, \"Y_5\": \"Violet Pohl\", \"Y_7\": \"Lashandra Caldera\", \"Y_3\": \"Betsy Linden\"}, {\"Count_1\": 2, \"Y_7\": \"Lashandra Caldera\", \"Y_5\": \"Brigida Stallings\", \"Y_3\": \"Betsy Linden\"}, {\"Count_1\": 1, \"Y_3\": \"Laurette Caldera\", \"Y_7\": \"Lashandra Caldera\", \"Y_5\": \"Genny Caldera\"}, {\"Y_3\": \"Violet Pohl\", \"Count_1\": 2, \"Y_7\": \"Lashandra Caldera\", \"Y_5\": \"Betsy Linden\"}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "sister(Y_5, Y_3)",
+                "great_granddaughter(Y_7, Y_5)",
+                "hobby(Y_7, \"business\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5e3d9b4a-0462-4782-b20f-83329519efbc",
+        "question": "How many sons does the great-grandfather of the nephew of the person whose date of birth is 0234-04-28 have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_7\": \"Violet Pohl\", \"Y_5\": \"Vance Stallings\", \"Y_3\": \"Norman Dudley\"}, {\"Count_1\": 2, \"Y_5\": \"Dennis Linden\", \"Y_7\": \"Violet Pohl\", \"Y_3\": \"Woodrow Caldera\"}, {\"Count_1\": 2, \"Y_5\": \"Dennis Linden\", \"Y_7\": \"Violet Pohl\", \"Y_3\": \"Norman Dudley\"}, {\"Count_1\": 2, \"Y_7\": \"Violet Pohl\", \"Y_5\": \"Vance Stallings\", \"Y_3\": \"Woodrow Caldera\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son(Y_3, Y_1)), Count_1)",
+                "great_grandfather(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "dob(Y_7, \"0234-04-28\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ea9c7fd8-db63-44d6-af11-4d2bc45b4c68",
+        "question": "How many sisters does the sibling of the aunt of the person whose hobby is ant farming have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_7\": \"Dennis Linden\", \"Y_5\": \"Violet Pohl\", \"Y_3\": \"Brigida Stallings\"}, {\"Count_1\": 2, \"Y_7\": \"Dennis Linden\", \"Y_5\": \"Violet Pohl\", \"Y_3\": \"Betsy Linden\"}, {\"Y_7\": \"Dennis Linden\", \"Count_1\": 2, \"Y_3\": \"Violet Pohl\", \"Y_5\": \"Brigida Stallings\"}, {\"Y_7\": \"Dennis Linden\", \"Count_1\": 2, \"Y_5\": \"Brigida Stallings\", \"Y_3\": \"Betsy Linden\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "aunt(Y_7, Y_5)",
+                "hobby(Y_7, \"ant farming\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "97ece84a-4e13-4d2e-ae75-7ca506fa14c5",
+        "question": "How many granddaughters does the friend of the second uncle of the person whose date of birth is 0263-10-21 have?",
+        "solution_traces": "[{\"Y_5\": \"Daryl Berman\", \"Y_3\": \"Nedra Catalano\", \"Count_1\": 2, \"Y_7\": \"Vernie Whittaker\"}, {\"Y_5\": \"Daryl Berman\", \"Y_3\": \"Maurice Bernardo\", \"Y_7\": \"Vernie Whittaker\", \"Count_1\": 0}, {\"Y_3\": \"Maximina Dudley\", \"Y_5\": \"Clark Berman\", \"Y_7\": \"Vernie Whittaker\", \"Count_1\": 3}, {\"Y_3\": \"Brigida Stallings\", \"Y_5\": \"Clark Berman\", \"Y_7\": \"Vernie Whittaker\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(granddaughter(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "second_uncle(Y_7, Y_5)",
+                "dob(Y_7, \"0263-10-21\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e8469b2d-30a9-48fd-9546-bf10addef605",
+        "question": "How many grandchildren does the wife of the father of the person whose occupation is civil service fast streamer have?",
+        "solution_traces": "[{\"Y_3\": \"Violet Pohl\", \"Y_5\": \"Sonny Pohl\", \"Y_7\": \"Louella Pohl\", \"Count_1\": 0}, {\"Y_3\": \"Nedra Catalano\", \"Y_5\": \"Andres Catalano\", \"Count_1\": 3, \"Y_7\": \"Lora Canfield\"}]",
+        "answer": [
+            "0",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(Y_3, Y_1)), Count_1)",
+                "wife(Y_5, Y_3)",
+                "father(Y_7, Y_5)",
+                "job(Y_7, \"civil service fast streamer\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6f45ebef-9c7b-41a3-8fd7-2d9a173c9522",
+        "question": "How many uncles does the grandchild of the wife of the person whose date of birth is 0157-09-20 have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Luisa Berman\", \"Y_7\": \"Willis Berman\", \"Y_3\": \"Lora Canfield\"}, {\"Count_1\": 1, \"Y_5\": \"Luisa Berman\", \"Y_3\": \"Kraig Berman\", \"Y_7\": \"Willis Berman\"}, {\"Y_3\": \"Lawrence Catalano\", \"Count_1\": 2, \"Y_5\": \"Luisa Berman\", \"Y_7\": \"Willis Berman\"}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(uncle(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "wife(Y_7, Y_5)",
+                "dob(Y_7, \"0157-09-20\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e5b79ef8-8226-438f-a317-9da3c5974f3b",
+        "question": "How many wives does the son-in-law of the sibling of the person whose occupation is loss adjuster have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_7\": \"Quentin Catalano\", \"Y_5\": \"Nanette Bernardo\", \"Y_3\": \"Isaiah Whittaker\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(wife(Y_3, Y_1)), Count_1)",
+                "son_in_law(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "job(Y_7, \"loss adjuster\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a4b05913-97d9-4659-a7c9-91a5d146796a",
+        "question": "How many friends does the friend of the friend of the person whose date of birth is 0236-08-27 have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Jay Bernardo\", \"Y_7\": \"Jeffery Corbin\", \"Y_3\": \"Kraig Berman\"}, {\"Count_1\": 2, \"Y_3\": \"Woodrow Caldera\", \"Y_5\": \"Zulema Catalano\", \"Y_7\": \"Adele Corbin\"}, {\"Y_3\": \"Isaiah Whittaker\", \"Y_5\": \"Maximina Dudley\", \"Count_1\": 4, \"Y_7\": \"Adele Corbin\"}, {\"Y_3\": \"Nedra Catalano\", \"Y_5\": \"Elbert Canfield\", \"Y_7\": \"Jeffery Corbin\", \"Count_1\": 6}, {\"Count_1\": 5, \"Y_5\": \"Louella Pohl\", \"Y_7\": \"Jeffery Corbin\", \"Y_3\": \"Jeffery Corbin\"}, {\"Y_3\": \"Johnna Caldera\", \"Y_5\": \"Jay Bernardo\", \"Y_7\": \"Jeffery Corbin\", \"Count_1\": 4}, {\"Y_3\": \"Luisa Berman\", \"Y_5\": \"Elbert Canfield\", \"Y_7\": \"Jeffery Corbin\", \"Count_1\": 3}, {\"Count_1\": 5, \"Y_5\": \"Elbert Canfield\", \"Y_7\": \"Jeffery Corbin\", \"Y_3\": \"Jeffery Corbin\"}, {\"Y_3\": \"Jay Bernardo\", \"Y_5\": \"Louella Pohl\", \"Y_7\": \"Jeffery Corbin\", \"Count_1\": 5}, {\"Y_3\": \"Lawrence Catalano\", \"Y_5\": \"Maximina Dudley\", \"Count_1\": 4, \"Y_7\": \"Adele Corbin\"}, {\"Y_5\": \"Elbert Canfield\", \"Y_7\": \"Jeffery Corbin\", \"Count_1\": 4, \"Y_3\": \"Isaiah Whittaker\"}, {\"Y_5\": \"Nicky Stallings\", \"Count_1\": 3, \"Y_7\": \"Jeffery Corbin\", \"Y_3\": \"Lela Whittaker\"}, {\"Count_1\": 3, \"Y_7\": \"Jeffery Corbin\", \"Y_3\": \"Sonny Pohl\", \"Y_5\": \"Willis Berman\"}, {\"Y_5\": \"Nicky Stallings\", \"Y_3\": \"Dennis Linden\", \"Y_7\": \"Jeffery Corbin\", \"Count_1\": 4}, {\"Y_5\": \"Nicky Stallings\", \"Count_1\": 5, \"Y_7\": \"Jeffery Corbin\", \"Y_3\": \"Jeffery Corbin\"}, {\"Y_5\": \"Ben Grigg\", \"Count_1\": 3, \"Y_3\": \"Adele Corbin\", \"Y_7\": \"Adele Corbin\"}, {\"Count_1\": 2, \"Y_5\": \"Maximina Dudley\", \"Y_3\": \"Clark Berman\", \"Y_7\": \"Adele Corbin\"}, {\"Count_1\": 5, \"Y_3\": \"Nicky Stallings\", \"Y_7\": \"Jeffery Corbin\", \"Y_5\": \"Willis Berman\"}, {\"Count_1\": 2, \"Y_5\": \"Jay Bernardo\", \"Y_7\": \"Jeffery Corbin\", \"Y_3\": \"Louella Pohl\"}, {\"Y_3\": \"Adele Corbin\", \"Count_1\": 3, \"Y_5\": \"Maximina Dudley\", \"Y_7\": \"Adele Corbin\"}, {\"Y_5\": \"Jay Bernardo\", \"Y_3\": \"Katharine Whittaker\", \"Y_7\": \"Jeffery Corbin\", \"Count_1\": 5}, {\"Y_5\": \"Ben Grigg\", \"Count_1\": 2, \"Y_3\": \"Brigida Stallings\", \"Y_7\": \"Adele Corbin\"}, {\"Count_1\": 1, \"Y_3\": \"Lyndsey Grigg\", \"Y_5\": \"Zulema Catalano\", \"Y_7\": \"Adele Corbin\"}, {\"Count_1\": 5, \"Y_7\": \"Jeffery Corbin\", \"Y_5\": \"Willis Berman\", \"Y_3\": \"Jeffery Corbin\"}, {\"Y_5\": \"Nicky Stallings\", \"Count_1\": 3, \"Y_7\": \"Jeffery Corbin\", \"Y_3\": \"Vance Stallings\"}, {\"Y_3\": \"Laurette Caldera\", \"Y_5\": \"Elbert Canfield\", \"Y_7\": \"Jeffery Corbin\", \"Count_1\": 3}, {\"Count_1\": 5, \"Y_5\": \"Jay Bernardo\", \"Y_7\": \"Jeffery Corbin\", \"Y_3\": \"Jeffery Corbin\"}, {\"Y_3\": \"Johnna Caldera\", \"Y_7\": \"Jeffery Corbin\", \"Count_1\": 4, \"Y_5\": \"Willis Berman\"}, {\"Y_3\": \"Mac Dudley\", \"Count_1\": 5, \"Y_7\": \"Jeffery Corbin\", \"Y_5\": \"Willis Berman\"}, {\"Y_5\": \"Elbert Canfield\", \"Y_7\": \"Jeffery Corbin\", \"Y_3\": \"Lashandra Caldera\", \"Count_1\": 3}, {\"Y_3\": \"Adele Corbin\", \"Count_1\": 3, \"Y_5\": \"Zulema Catalano\", \"Y_7\": \"Adele Corbin\"}, {\"Y_5\": \"Nicky Stallings\", \"Y_7\": \"Jeffery Corbin\", \"Count_1\": 5, \"Y_3\": \"Willis Berman\"}]",
+        "answer": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "dob(Y_7, \"0236-08-27\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c8a091a7-d528-4310-ad00-0a611a8ccbda",
+        "question": "How many great-grandsons does the mother-in-law of the sibling of the person whose occupation is civil service fast streamer have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Lyndsey Grigg\", \"Y_7\": \"Lora Canfield\", \"Y_5\": \"Lawrence Catalano\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(Y_3, Y_1)), Count_1)",
+                "mother_in_law(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "job(Y_7, \"civil service fast streamer\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8c1399bc-bccb-49f8-8865-e33a4428856f",
+        "question": "How many nieces does the brother of the sibling of the person whose occupation is immigration officer have?",
+        "solution_traces": "[{\"Y_5\": \"Clair Caldera\", \"Y_7\": \"Dawn Dudley\", \"Count_1\": 5, \"Y_3\": \"Louis Caldera\"}, {\"Y_7\": \"Dawn Dudley\", \"Y_3\": \"Clair Caldera\", \"Y_5\": \"Louis Caldera\", \"Count_1\": 3}]",
+        "answer": [
+            "3",
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "job(Y_7, \"immigration officer\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4300aa87-7cf0-4a30-8310-0c9dd549e182",
+        "question": "How many friends does the great-grandchild of the mother of the person whose date of birth is 0208-03-07 have?",
+        "solution_traces": "[{\"Y_7\": \"Clair Caldera\", \"Count_1\": 2, \"Y_3\": \"Louella Pohl\", \"Y_5\": \"Johnna Caldera\"}, {\"Y_7\": \"Clair Caldera\", \"Y_3\": \"Dennis Linden\", \"Count_1\": 4, \"Y_5\": \"Johnna Caldera\"}, {\"Y_7\": \"Clair Caldera\", \"Count_1\": 3, \"Y_3\": \"Vance Stallings\", \"Y_5\": \"Johnna Caldera\"}]",
+        "answer": [
+            "2",
+            "3",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "great_grandchild(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "dob(Y_7, \"0208-03-07\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a4775ac1-325b-444d-99de-e8348e324de0",
+        "question": "How many great-uncles does the grandchild of the grandfather of the person whose occupation is health service manager have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_7\": \"Vance Stallings\", \"Y_5\": \"Mac Dudley\", \"Y_3\": \"Louella Pohl\"}, {\"Count_1\": 3, \"Y_7\": \"Vance Stallings\", \"Y_5\": \"Mac Dudley\", \"Y_3\": \"Vance Stallings\"}, {\"Y_3\": \"Dennis Linden\", \"Y_7\": \"Vance Stallings\", \"Y_5\": \"Mac Dudley\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_uncle(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "grandfather(Y_7, Y_5)",
+                "job(Y_7, \"health service manager\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7115b445-8439-4f81-b8de-b4a3b7b81554",
+        "question": "How many grandchildren does the great-grandparent of the child of the person whose date of birth is 0237-03-27 have?",
+        "solution_traces": "[{\"Count_1\": 5, \"Y_3\": \"Johnna Caldera\", \"Y_5\": \"Vance Stallings\", \"Y_7\": \"Porfirio Stallings\"}, {\"Y_3\": \"Norman Dudley\", \"Count_1\": 3, \"Y_5\": \"Vance Stallings\", \"Y_7\": \"Porfirio Stallings\"}, {\"Y_3\": \"Maximina Dudley\", \"Y_5\": \"Vance Stallings\", \"Y_7\": \"Porfirio Stallings\", \"Count_1\": 3}, {\"Count_1\": 5, \"Y_5\": \"Vance Stallings\", \"Y_7\": \"Porfirio Stallings\", \"Y_3\": \"Woodrow Caldera\"}]",
+        "answer": [
+            "3",
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "dob(Y_7, \"0237-03-27\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c89dd0ec-37ac-4e42-8d40-b89148d3a89b",
+        "question": "How many parents does the sibling of the niece of the person whose date of birth is 0204-01-25 have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Violet Pohl\", \"Y_7\": \"Louis Caldera\", \"Y_3\": \"Brigida Stallings\"}, {\"Count_1\": 2, \"Y_3\": \"Violet Pohl\", \"Y_5\": \"Betsy Linden\", \"Y_7\": \"Louis Caldera\"}, {\"Count_1\": 2, \"Y_5\": \"Violet Pohl\", \"Y_7\": \"Louis Caldera\", \"Y_3\": \"Betsy Linden\"}, {\"Count_1\": 2, \"Y_3\": \"Violet Pohl\", \"Y_5\": \"Brigida Stallings\", \"Y_7\": \"Louis Caldera\"}, {\"Count_1\": 2, \"Y_5\": \"Betsy Linden\", \"Y_7\": \"Louis Caldera\", \"Y_3\": \"Brigida Stallings\"}, {\"Y_3\": \"Genny Caldera\", \"Count_1\": 2, \"Y_7\": \"Louis Caldera\", \"Y_5\": \"Laurette Caldera\"}, {\"Count_1\": 2, \"Y_5\": \"Brigida Stallings\", \"Y_7\": \"Louis Caldera\", \"Y_3\": \"Betsy Linden\"}, {\"Y_3\": \"Laurette Caldera\", \"Count_1\": 2, \"Y_7\": \"Louis Caldera\", \"Y_5\": \"Genny Caldera\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "niece(Y_7, Y_5)",
+                "dob(Y_7, \"0204-01-25\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "aef72ff7-91e7-4fd8-98d9-205ea4fb61a5",
+        "question": "How many cousins does the male cousin of the granddaughter of the person whose hobby is fishkeeping have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Louella Pohl\", \"Y_3\": \"Vance Stallings\", \"Y_7\": \"Mac Dudley\"}, {\"Count_1\": 2, \"Y_5\": \"Louella Pohl\", \"Y_3\": \"Dennis Linden\", \"Y_7\": \"Mac Dudley\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "male_cousin(Y_5, Y_3)",
+                "granddaughter(Y_7, Y_5)",
+                "hobby(Y_7, \"fishkeeping\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "2fbcff3e-9f3f-4b2c-abad-df24accd411e",
+        "question": "How many grandfathers does the friend of the friend of the person whose date of birth is 0259-08-27 have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_7\": \"Dennis Linden\", \"Y_3\": \"Dennis Linden\", \"Y_5\": \"Genny Caldera\"}, {\"Y_7\": \"Dennis Linden\", \"Y_5\": \"Sonny Pohl\", \"Count_1\": 0, \"Y_3\": \"Willis Berman\"}, {\"Y_3\": \"Lela Whittaker\", \"Y_7\": \"Dennis Linden\", \"Y_5\": \"Sonny Pohl\", \"Count_1\": 1}, {\"Y_3\": \"Lawrence Catalano\", \"Y_7\": \"Dennis Linden\", \"Y_5\": \"Quentin Catalano\", \"Count_1\": 1}, {\"Y_5\": \"Nicky Stallings\", \"Y_7\": \"Dennis Linden\", \"Y_3\": \"Dennis Linden\", \"Count_1\": 1}, {\"Count_1\": 1, \"Y_7\": \"Dennis Linden\", \"Y_5\": \"Sonny Pohl\", \"Y_3\": \"Dennis Linden\"}, {\"Y_7\": \"Dennis Linden\", \"Count_1\": 0, \"Y_5\": \"Genny Caldera\", \"Y_3\": \"Otto Dudley\"}, {\"Y_5\": \"Nicky Stallings\", \"Y_7\": \"Dennis Linden\", \"Count_1\": 1, \"Y_3\": \"Vance Stallings\"}, {\"Y_3\": \"Luisa Berman\", \"Y_7\": \"Dennis Linden\", \"Y_5\": \"Quentin Catalano\", \"Count_1\": 0}, {\"Count_1\": 1, \"Y_7\": \"Dennis Linden\", \"Y_5\": \"Quentin Catalano\", \"Y_3\": \"Kraig Berman\"}, {\"Y_7\": \"Dennis Linden\", \"Count_1\": 0, \"Y_5\": \"Genny Caldera\", \"Y_3\": \"Nedra Catalano\"}, {\"Y_7\": \"Dennis Linden\", \"Count_1\": 0, \"Y_5\": \"Genny Caldera\", \"Y_3\": \"Felton Caldera\"}, {\"Y_5\": \"Nicky Stallings\", \"Y_7\": \"Dennis Linden\", \"Count_1\": 0, \"Y_3\": \"Willis Berman\"}, {\"Y_5\": \"Nicky Stallings\", \"Y_7\": \"Dennis Linden\", \"Y_3\": \"Lela Whittaker\", \"Count_1\": 1}, {\"Count_1\": 1, \"Y_7\": \"Dennis Linden\", \"Y_5\": \"Quentin Catalano\", \"Y_3\": \"Dennis Linden\"}, {\"Count_1\": 1, \"Y_7\": \"Dennis Linden\", \"Y_3\": \"Mckinley Bernardo\", \"Y_5\": \"Quentin Catalano\"}, {\"Y_5\": \"Nicky Stallings\", \"Y_7\": \"Dennis Linden\", \"Y_3\": \"Jeffery Corbin\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "dob(Y_7, \"0259-08-27\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7a039260-1d6d-4ae1-92d1-264526b3d5c2",
+        "question": "How many daughters-in-law does the parent of the great-uncle of the person whose hobby is meteorology have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_7\": \"Louella Pohl\", \"Y_5\": \"Otto Dudley\", \"Y_3\": \"Norman Dudley\"}, {\"Count_1\": 1, \"Y_7\": \"Louella Pohl\", \"Y_5\": \"Otto Dudley\", \"Y_3\": \"Maximina Dudley\"}, {\"Count_1\": 1, \"Y_5\": \"Clair Caldera\", \"Y_7\": \"Louella Pohl\", \"Y_3\": \"Johnna Caldera\"}, {\"Count_1\": 1, \"Y_3\": \"Nedra Catalano\", \"Y_7\": \"Curt Corbin\", \"Y_5\": \"Lawrence Catalano\"}, {\"Count_1\": 1, \"Y_7\": \"Louella Pohl\", \"Y_5\": \"Louis Caldera\", \"Y_3\": \"Woodrow Caldera\"}, {\"Count_1\": 1, \"Y_3\": \"Andres Catalano\", \"Y_7\": \"Curt Corbin\", \"Y_5\": \"Lawrence Catalano\"}, {\"Count_1\": 1, \"Y_5\": \"Clair Caldera\", \"Y_7\": \"Louella Pohl\", \"Y_3\": \"Woodrow Caldera\"}, {\"Count_1\": 1, \"Y_3\": \"Johnna Caldera\", \"Y_7\": \"Louella Pohl\", \"Y_5\": \"Louis Caldera\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter_in_law(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "great_uncle(Y_7, Y_5)",
+                "hobby(Y_7, \"meteorology\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "71a6457e-d876-4313-bd7b-2400c7571d23",
+        "question": "How many friends does the niece of the great-grandson of the person whose hobby is snowmobiling have?",
+        "solution_traces": "[{\"Y_3\": \"Lela Whittaker\", \"Y_7\": \"Lyndsey Grigg\", \"Count_1\": 3, \"Y_5\": \"Mckinley Bernardo\"}, {\"Y_3\": \"Lela Whittaker\", \"Y_7\": \"Lyndsey Grigg\", \"Count_1\": 3, \"Y_5\": \"Maurice Bernardo\"}, {\"Count_1\": 5, \"Y_7\": \"Lyndsey Grigg\", \"Y_3\": \"Katharine Whittaker\", \"Y_5\": \"Maurice Bernardo\"}, {\"Y_7\": \"Lyndsey Grigg\", \"Y_3\": \"Katharine Whittaker\", \"Count_1\": 5, \"Y_5\": \"Mckinley Bernardo\"}]",
+        "answer": [
+            "3",
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "niece(Y_5, Y_3)",
+                "great_grandson(Y_7, Y_5)",
+                "hobby(Y_7, \"snowmobiling\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "06d2894b-549c-4c50-aa60-8dc3752a01b9",
+        "question": "How many brothers does the great-uncle of the great-grandchild of the person whose occupation is customer service manager have?",
+        "solution_traces": "[{\"Y_3\": \"Clark Berman\", \"Count_1\": 1, \"Y_5\": \"Adele Corbin\", \"Y_7\": \"Luisa Berman\"}, {\"Count_1\": 1, \"Y_5\": \"Quentin Catalano\", \"Y_3\": \"Clark Berman\", \"Y_7\": \"Luisa Berman\"}, {\"Count_1\": 1, \"Y_5\": \"Quentin Catalano\", \"Y_3\": \"Daryl Berman\", \"Y_7\": \"Luisa Berman\"}, {\"Count_1\": 1, \"Y_3\": \"Daryl Berman\", \"Y_5\": \"Adele Corbin\", \"Y_7\": \"Luisa Berman\"}, {\"Count_1\": 1, \"Y_3\": \"Daryl Berman\", \"Y_5\": \"Nanette Bernardo\", \"Y_7\": \"Luisa Berman\"}, {\"Count_1\": 1, \"Y_5\": \"Nanette Bernardo\", \"Y_3\": \"Clark Berman\", \"Y_7\": \"Luisa Berman\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "great_uncle(Y_5, Y_3)",
+                "great_grandchild(Y_7, Y_5)",
+                "job(Y_7, \"customer service manager\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b1b08876-baf4-4d6d-9353-170d9d8bf489",
+        "question": "How many daughters-in-law does the parent of the great-uncle of the person whose occupation is civil service fast streamer have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_7\": \"Louella Pohl\", \"Y_5\": \"Otto Dudley\", \"Y_3\": \"Norman Dudley\"}, {\"Count_1\": 1, \"Y_7\": \"Louella Pohl\", \"Y_5\": \"Otto Dudley\", \"Y_3\": \"Maximina Dudley\"}, {\"Count_1\": 1, \"Y_5\": \"Clair Caldera\", \"Y_7\": \"Louella Pohl\", \"Y_3\": \"Johnna Caldera\"}, {\"Count_1\": 1, \"Y_7\": \"Louella Pohl\", \"Y_5\": \"Louis Caldera\", \"Y_3\": \"Woodrow Caldera\"}, {\"Count_1\": 1, \"Y_5\": \"Clair Caldera\", \"Y_7\": \"Louella Pohl\", \"Y_3\": \"Woodrow Caldera\"}, {\"Count_1\": 1, \"Y_3\": \"Johnna Caldera\", \"Y_7\": \"Louella Pohl\", \"Y_5\": \"Louis Caldera\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter_in_law(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "great_uncle(Y_7, Y_5)",
+                "job(Y_7, \"civil service fast streamer\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "827fc84e-db99-47e9-8d2d-36175712bcdf",
+        "question": "How many aunts does the niece of the sibling of the person whose occupation is animal technologist have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_7\": \"Violet Pohl\", \"Y_5\": \"Betsy Linden\", \"Y_3\": \"Louella Pohl\"}, {\"Count_1\": 2, \"Y_7\": \"Violet Pohl\", \"Y_5\": \"Brigida Stallings\", \"Y_3\": \"Louella Pohl\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(aunt(Y_3, Y_1)), Count_1)",
+                "niece(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "job(Y_7, \"animal technologist\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7eb1a34a-14b8-4431-a7d6-efa095822718",
+        "question": "How many great-uncles does the brother-in-law of the son-in-law of the person whose occupation is optometrist have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Jay Bernardo\", \"Y_3\": \"Quentin Catalano\", \"Y_7\": \"Lawrence Catalano\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_uncle(Y_3, Y_1)), Count_1)",
+                "brother_in_law(Y_5, Y_3)",
+                "son_in_law(Y_7, Y_5)",
+                "job(Y_7, \"optometrist\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3d988bed-b080-4b81-885c-d4bbf9268f14",
+        "question": "How many great-granddaughters does the great-grandmother of the friend of the person whose occupation is broadcast engineer have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Dennis Linden\", \"Y_7\": \"Sonny Pohl\", \"Y_3\": \"Johnna Caldera\"}, {\"Count_1\": 2, \"Y_7\": \"Sonny Pohl\", \"Y_5\": \"Lela Whittaker\", \"Y_3\": \"Zulema Catalano\"}, {\"Count_1\": 1, \"Y_5\": \"Dennis Linden\", \"Y_7\": \"Sonny Pohl\", \"Y_3\": \"Maximina Dudley\"}]",
+        "answer": [
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_granddaughter(Y_3, Y_1)), Count_1)",
+                "great_grandmother(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "job(Y_7, \"broadcast engineer\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "49eb4788-1ba3-4d9c-9bbc-91875baed13a",
+        "question": "How many siblings does the sibling of the great-aunt of the person whose date of birth is 0263-10-21 have?",
+        "solution_traces": "[{\"Y_3\": \"Lawrence Catalano\", \"Y_5\": \"Lora Canfield\", \"Y_7\": \"Vernie Whittaker\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "great_aunt(Y_7, Y_5)",
+                "dob(Y_7, \"0263-10-21\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b662a671-dc50-4c77-9ba6-ebf77d122d40",
+        "question": "How many brothers does the son of the mother-in-law of the person whose occupation is government social research officer have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Johnna Caldera\", \"Y_3\": \"Louis Caldera\", \"Y_7\": \"Mac Dudley\"}, {\"Count_1\": 1, \"Y_5\": \"Johnna Caldera\", \"Y_3\": \"Clair Caldera\", \"Y_7\": \"Mac Dudley\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "son(Y_5, Y_3)",
+                "mother_in_law(Y_7, Y_5)",
+                "job(Y_7, \"government social research officer\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "66fe126c-05b5-4204-b8a0-fdc4001f2353",
+        "question": "How many mothers-in-law does the mother-in-law of the husband of the person whose occupation is claims inspector have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Jay Bernardo\", \"Y_7\": \"Nanette Bernardo\", \"Y_3\": \"Zulema Catalano\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother_in_law(Y_3, Y_1)), Count_1)",
+                "mother_in_law(Y_5, Y_3)",
+                "husband(Y_7, Y_5)",
+                "job(Y_7, \"claims inspector\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5be3a3be-550e-4aad-9061-e82a8a5cf86b",
+        "question": "How many great-granddaughters does the husband of the sister-in-law of the person whose hobby is skiing have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_7\": \"Rosalyn Berman\", \"Y_3\": \"Andres Catalano\", \"Y_5\": \"Nedra Catalano\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_granddaughter(Y_3, Y_1)), Count_1)",
+                "husband(Y_5, Y_3)",
+                "sister_in_law(Y_7, Y_5)",
+                "hobby(Y_7, \"skiing\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "817d5cbd-07d3-45b3-a878-a9b187ceda10",
+        "question": "How many cousins does the great-aunt of the great-grandchild of the person whose date of birth is 0184-03-12 have?",
+        "solution_traces": "[{\"Y_7\": \"Ben Grigg\", \"Count_1\": 1, \"Y_5\": \"Maurice Bernardo\", \"Y_3\": \"Lora Canfield\"}, {\"Y_7\": \"Ben Grigg\", \"Y_3\": \"Lora Canfield\", \"Count_1\": 1, \"Y_5\": \"Mckinley Bernardo\"}, {\"Y_7\": \"Ben Grigg\", \"Y_5\": \"Vernie Whittaker\", \"Count_1\": 1, \"Y_3\": \"Lora Canfield\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "great_aunt(Y_5, Y_3)",
+                "great_grandchild(Y_7, Y_5)",
+                "dob(Y_7, \"0184-03-12\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "66151f2c-a9dc-4111-ba73-8de3349847c0",
+        "question": "How many grandchildren does the grandfather of the great-granddaughter of the person whose date of birth is 0157-09-20 have?",
+        "solution_traces": "[{\"Y_5\": \"Adele Corbin\", \"Count_1\": 3, \"Y_3\": \"Andres Catalano\", \"Y_7\": \"Willis Berman\"}, {\"Y_3\": \"Ben Grigg\", \"Count_1\": 2, \"Y_5\": \"Nanette Bernardo\", \"Y_7\": \"Willis Berman\"}, {\"Y_5\": \"Nanette Bernardo\", \"Y_3\": \"Andres Catalano\", \"Y_7\": \"Willis Berman\", \"Count_1\": 3}]",
+        "answer": [
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(Y_3, Y_1)), Count_1)",
+                "grandfather(Y_5, Y_3)",
+                "great_granddaughter(Y_7, Y_5)",
+                "dob(Y_7, \"0157-09-20\")"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the person whose",
+            "<attribute_name>_8",
+            "is",
+            "<attribute_value>_8",
+            "have",
+            "?"
+        ],
+        "type": 14,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    }
+]

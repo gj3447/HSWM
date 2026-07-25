@@ -1,0 +1,1168 @@
+[
+    {
+        "id": "29b41531-ef34-4222-820b-d7a2ad4b50a1",
+        "question": "What is the hobby of the grandparent of the brother of the brother of Barry Mcnamee?",
+        "solution_traces": "[{\"Y_3\": \"Jacquelyn Mcnamee\", \"Y_5\": \"Lanny Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_2\": \"satellite watching\"}, {\"Y_7\": \"Charley Mcnamee\", \"Y_5\": \"Lanny Mcnamee\", \"Y_2\": \"satellite watching\", \"Y_3\": \"Jacquelyn Mcnamee\"}, {\"Y_5\": \"Lanny Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_2\": \"benchmarking\", \"Y_3\": \"Everett Mcnamee\"}, {\"Y_7\": \"Charley Mcnamee\", \"Y_5\": \"Trent Mcnamee\", \"Y_2\": \"satellite watching\", \"Y_3\": \"Jacquelyn Mcnamee\"}, {\"Y_7\": \"Charley Mcnamee\", \"Y_5\": \"Lanny Mcnamee\", \"Y_2\": \"benchmarking\", \"Y_3\": \"Everett Mcnamee\"}, {\"Y_5\": \"Charley Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_2\": \"benchmarking\", \"Y_3\": \"Everett Mcnamee\"}, {\"Y_7\": \"Charley Mcnamee\", \"Y_5\": \"Trent Mcnamee\", \"Y_2\": \"benchmarking\", \"Y_3\": \"Everett Mcnamee\"}, {\"Y_5\": \"Charley Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_2\": \"satellite watching\", \"Y_3\": \"Jacquelyn Mcnamee\"}, {\"Y_7\": \"Charley Mcnamee\", \"Y_2\": \"satellite watching\", \"Y_5\": \"Barry Mcnamee\", \"Y_3\": \"Jacquelyn Mcnamee\"}, {\"Y_5\": \"Barry Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_2\": \"benchmarking\", \"Y_3\": \"Everett Mcnamee\"}, {\"Y_5\": \"Barry Mcnamee\", \"Y_7\": \"Lanny Mcnamee\", \"Y_2\": \"benchmarking\", \"Y_3\": \"Everett Mcnamee\"}, {\"Y_7\": \"Charley Mcnamee\", \"Y_2\": \"benchmarking\", \"Y_5\": \"Barry Mcnamee\", \"Y_3\": \"Everett Mcnamee\"}, {\"Y_5\": \"Barry Mcnamee\", \"Y_7\": \"Lanny Mcnamee\", \"Y_2\": \"satellite watching\", \"Y_3\": \"Jacquelyn Mcnamee\"}, {\"Y_3\": \"Jacquelyn Mcnamee\", \"Y_7\": \"Lanny Mcnamee\", \"Y_5\": \"Trent Mcnamee\", \"Y_2\": \"satellite watching\"}, {\"Y_5\": \"Charley Mcnamee\", \"Y_7\": \"Lanny Mcnamee\", \"Y_2\": \"satellite watching\", \"Y_3\": \"Jacquelyn Mcnamee\"}, {\"Y_5\": \"Barry Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_2\": \"satellite watching\", \"Y_3\": \"Jacquelyn Mcnamee\"}, {\"Y_5\": \"Charley Mcnamee\", \"Y_7\": \"Lanny Mcnamee\", \"Y_2\": \"benchmarking\", \"Y_3\": \"Everett Mcnamee\"}, {\"Y_7\": \"Lanny Mcnamee\", \"Y_5\": \"Trent Mcnamee\", \"Y_2\": \"benchmarking\", \"Y_3\": \"Everett Mcnamee\"}]",
+        "answer": [
+            "benchmarking",
+            "satellite watching"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandparent(Y_5, Y_3)",
+                "brother(Y_7, Y_5)",
+                "brother(\"Barry Mcnamee\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5a9f6f85-0a2a-4e4f-bd95-a8cbea693ac8",
+        "question": "What is the hobby of the great-aunt of the grandchild of the wife of Manuel Matheson?",
+        "solution_traces": "[{\"Y_5\": \"Mariann Grayson\", \"Y_3\": \"Shaina Mcglynn\", \"Y_2\": \"teaching\", \"Y_7\": \"Sara Matheson\"}, {\"Y_5\": \"Samual Grayson\", \"Y_3\": \"Shaina Mcglynn\", \"Y_2\": \"teaching\", \"Y_7\": \"Sara Matheson\"}, {\"Y_5\": \"Ivette Kingery\", \"Y_3\": \"Shaina Mcglynn\", \"Y_2\": \"teaching\", \"Y_7\": \"Sara Matheson\"}, {\"Y_5\": \"Antonia Lanza\", \"Y_3\": \"Shaina Mcglynn\", \"Y_2\": \"teaching\", \"Y_7\": \"Sara Matheson\"}]",
+        "answer": [
+            "teaching"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "great_aunt(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "wife(\"Manuel Matheson\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e1401ce3-c430-49b1-ad84-00aeed772aca",
+        "question": "What is the date of birth of the mother of the grandson of the great-grandparent of Lane Mcglynn?",
+        "solution_traces": "[{\"Y_5\": \"Manuel Matheson\", \"Y_7\": \"Timmy Munguia\", \"Y_3\": \"Johnetta Matheson\", \"Y_2\": \"0221-03-19\"}, {\"Y_2\": \"0221-03-19\", \"Y_5\": \"Rolando Matheson\", \"Y_7\": \"Tamala Munguia\", \"Y_3\": \"Johnetta Matheson\"}, {\"Y_2\": \"0221-03-19\", \"Y_5\": \"Manuel Matheson\", \"Y_7\": \"Tamala Munguia\", \"Y_3\": \"Johnetta Matheson\"}, {\"Y_5\": \"Rolando Matheson\", \"Y_7\": \"Timmy Munguia\", \"Y_3\": \"Johnetta Matheson\", \"Y_2\": \"0221-03-19\"}]",
+        "answer": [
+            "0221-03-19"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "mother(Y_5, Y_3)",
+                "grandson(Y_7, Y_5)",
+                "great_grandparent(\"Lane Mcglynn\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fd3c45cc-7838-4ce6-91c8-60d89f10adab",
+        "question": "What is the occupation of the friend of the great-grandchild of the friend of Michell Kingery?",
+        "solution_traces": "[{\"Y_2\": \"education administrator\", \"Y_5\": \"Tad Fitzpatrick\", \"Y_3\": \"Eddy Bledsoe\", \"Y_7\": \"Philip Bledsoe\"}, {\"Y_2\": \"banker\", \"Y_3\": \"Tamala Munguia\", \"Y_7\": \"Everett Mcnamee\", \"Y_5\": \"Kieth Mcnamee\"}, {\"Y_3\": \"Timmy Munguia\", \"Y_5\": \"Reyes Mcnamee\", \"Y_7\": \"Everett Mcnamee\", \"Y_2\": \"podiatrist\"}, {\"Y_5\": \"Shaunte Mcnamee\", \"Y_2\": \"medical illustrator\", \"Y_7\": \"Everett Mcnamee\", \"Y_3\": \"Deidre Fitzpatrick\"}, {\"Y_7\": \"Everett Mcnamee\", \"Y_5\": \"Kieth Mcnamee\", \"Y_3\": \"Karrie Mcnamee\", \"Y_2\": \"water quality scientist\"}, {\"Y_2\": \"general practice doctor\", \"Y_5\": \"Reyes Mcnamee\", \"Y_7\": \"Everett Mcnamee\", \"Y_3\": \"Shaina Mcglynn\"}, {\"Y_5\": \"Shaunte Mcnamee\", \"Y_2\": \"programmer\", \"Y_7\": \"Everett Mcnamee\", \"Y_3\": \"Carmon Bledsoe\"}, {\"Y_5\": \"Shaunte Mcnamee\", \"Y_7\": \"Everett Mcnamee\", \"Y_2\": \"architect\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_2\": \"field seismologist\", \"Y_5\": \"Reyes Mcnamee\", \"Y_7\": \"Everett Mcnamee\", \"Y_3\": \"Barry Mcnamee\"}, {\"Y_5\": \"Shaunte Mcnamee\", \"Y_7\": \"Everett Mcnamee\", \"Y_2\": \"fisheries officer\", \"Y_3\": \"Magdalene Matheson\"}, {\"Y_2\": \"general practice doctor\", \"Y_5\": \"Tad Fitzpatrick\", \"Y_3\": \"Shaina Mcglynn\", \"Y_7\": \"Philip Bledsoe\"}, {\"Y_3\": \"Deidre Fitzpatrick\", \"Y_2\": \"medical illustrator\", \"Y_5\": \"Tad Fitzpatrick\", \"Y_7\": \"Philip Bledsoe\"}, {\"Y_5\": \"Reyes Mcnamee\", \"Y_7\": \"Everett Mcnamee\", \"Y_3\": \"Karrie Mcnamee\", \"Y_2\": \"water quality scientist\"}, {\"Y_5\": \"Tad Fitzpatrick\", \"Y_2\": \"records manager\", \"Y_3\": \"Pat Fitzpatrick\", \"Y_7\": \"Philip Bledsoe\"}]",
+        "answer": [
+            "architect",
+            "banker",
+            "education administrator",
+            "field seismologist",
+            "fisheries officer",
+            "general practice doctor",
+            "medical illustrator",
+            "podiatrist",
+            "programmer",
+            "records manager",
+            "water quality scientist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "great_grandchild(Y_7, Y_5)",
+                "friend(\"Michell Kingery\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "52db5fb6-8004-467b-9223-9845ec0d9de9",
+        "question": "What is the date of birth of the great-grandparent of the sibling of the great-granddaughter of Tamala Munguia?",
+        "solution_traces": "[{\"Y_3\": \"Timmy Munguia\", \"Y_7\": \"Magdalene Matheson\", \"Y_2\": \"0196-03-05\", \"Y_5\": \"Kerry Grayson\"}, {\"Y_3\": \"Timmy Munguia\", \"Y_7\": \"Magdalene Matheson\", \"Y_2\": \"0196-03-05\", \"Y_5\": \"Almeta Lanza\"}, {\"Y_7\": \"Almeta Lanza\", \"Y_3\": \"Timmy Munguia\", \"Y_5\": \"Magdalene Matheson\", \"Y_2\": \"0196-03-05\"}, {\"Y_3\": \"Tamala Munguia\", \"Y_2\": \"0195-06-03\", \"Y_7\": \"Kerry Grayson\", \"Y_5\": \"Almeta Lanza\"}, {\"Y_3\": \"Timmy Munguia\", \"Y_5\": \"Magdalene Matheson\", \"Y_2\": \"0196-03-05\", \"Y_7\": \"Kerry Grayson\"}, {\"Y_3\": \"Timmy Munguia\", \"Y_2\": \"0196-03-05\", \"Y_7\": \"Kerry Grayson\", \"Y_5\": \"Almeta Lanza\"}, {\"Y_7\": \"Almeta Lanza\", \"Y_5\": \"Magdalene Matheson\", \"Y_2\": \"0195-06-03\", \"Y_3\": \"Tamala Munguia\"}, {\"Y_5\": \"Magdalene Matheson\", \"Y_2\": \"0195-06-03\", \"Y_7\": \"Kerry Grayson\", \"Y_3\": \"Tamala Munguia\"}, {\"Y_7\": \"Magdalene Matheson\", \"Y_2\": \"0195-06-03\", \"Y_3\": \"Tamala Munguia\", \"Y_5\": \"Almeta Lanza\"}, {\"Y_7\": \"Magdalene Matheson\", \"Y_2\": \"0195-06-03\", \"Y_5\": \"Kerry Grayson\", \"Y_3\": \"Tamala Munguia\"}, {\"Y_7\": \"Almeta Lanza\", \"Y_3\": \"Timmy Munguia\", \"Y_2\": \"0196-03-05\", \"Y_5\": \"Kerry Grayson\"}, {\"Y_7\": \"Almeta Lanza\", \"Y_3\": \"Tamala Munguia\", \"Y_2\": \"0195-06-03\", \"Y_5\": \"Kerry Grayson\"}]",
+        "answer": [
+            "0195-06-03",
+            "0196-03-05"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandparent(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "great_granddaughter(\"Tamala Munguia\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "56f90152-ff58-4f2a-be49-b828ece69006",
+        "question": "What is the hobby of the female cousin of the nephew of the friend of Bobby Kingery?",
+        "solution_traces": "[{\"Y_7\": \"Almeta Lanza\", \"Y_2\": \"fishing\", \"Y_5\": \"Samual Grayson\", \"Y_3\": \"Antonia Lanza\"}, {\"Y_7\": \"Almeta Lanza\", \"Y_5\": \"Samual Grayson\", \"Y_3\": \"Ivette Kingery\", \"Y_2\": \"butterfly watching\"}, {\"Y_5\": \"Reyes Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_2\": \"gongoozling\", \"Y_3\": \"Shaunte Mcnamee\"}, {\"Y_7\": \"Trent Mcnamee\", \"Y_5\": \"Kieth Mcnamee\", \"Y_2\": \"gongoozling\", \"Y_3\": \"Shaunte Mcnamee\"}]",
+        "answer": [
+            "butterfly watching",
+            "fishing",
+            "gongoozling"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "female_cousin(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "friend(\"Bobby Kingery\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "58c76a07-56e1-4133-9bdb-5a8dfed3f645",
+        "question": "What is the hobby of the child of the second aunt of the child of Colleen Mcnamee?",
+        "solution_traces": "[{\"Y_7\": \"Shaunte Mcnamee\", \"Y_2\": \"scouting\", \"Y_5\": \"Carmon Bledsoe\", \"Y_3\": \"Deidre Fitzpatrick\"}, {\"Y_3\": \"Emmett Bledsoe\", \"Y_7\": \"Shaunte Mcnamee\", \"Y_2\": \"myrmecology\", \"Y_5\": \"Carmon Bledsoe\"}]",
+        "answer": [
+            "myrmecology",
+            "scouting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "child(Y_5, Y_3)",
+                "second_aunt(Y_7, Y_5)",
+                "child(\"Colleen Mcnamee\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2eee918f-15c6-4e0a-8788-3139303b994d",
+        "question": "What is the hobby of the friend of the father-in-law of the wife of Philip Bledsoe?",
+        "solution_traces": "[{\"Y_5\": \"Joe Bledsoe\", \"Y_3\": \"Myrl Mcnamee\", \"Y_7\": \"Lona Bledsoe\", \"Y_2\": \"shooting\"}, {\"Y_5\": \"Joe Bledsoe\", \"Y_3\": \"Manuel Matheson\", \"Y_7\": \"Lona Bledsoe\", \"Y_2\": \"antiquities\"}]",
+        "answer": [
+            "antiquities",
+            "shooting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "father_in_law(Y_7, Y_5)",
+                "wife(\"Philip Bledsoe\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "56af657d-d750-483a-bbe0-24559629cd1f",
+        "question": "What is the date of birth of the great-grandson of the father-in-law of the son of Lona Bledsoe?",
+        "solution_traces": "[{\"Y_5\": \"Alberto Vogel\", \"Y_7\": \"Eddy Bledsoe\", \"Y_2\": \"0313-11-02\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_5\": \"Alberto Vogel\", \"Y_7\": \"Eddy Bledsoe\", \"Y_3\": \"Barry Mcnamee\", \"Y_2\": \"0315-10-12\"}, {\"Y_5\": \"Alberto Vogel\", \"Y_7\": \"Eddy Bledsoe\", \"Y_3\": \"Lanny Mcnamee\", \"Y_2\": \"0310-06-14\"}, {\"Y_5\": \"Alberto Vogel\", \"Y_7\": \"Eddy Bledsoe\", \"Y_2\": \"0317-03-08\", \"Y_3\": \"Tad Fitzpatrick\"}, {\"Y_5\": \"Alberto Vogel\", \"Y_7\": \"Eddy Bledsoe\", \"Y_2\": \"0312-12-13\", \"Y_3\": \"Charley Mcnamee\"}]",
+        "answer": [
+            "0310-06-14",
+            "0312-12-13",
+            "0313-11-02",
+            "0315-10-12",
+            "0317-03-08"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "great_grandson(Y_5, Y_3)",
+                "father_in_law(Y_7, Y_5)",
+                "son(\"Lona Bledsoe\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "21dcc3fc-5125-4de7-b2af-eaf49c24b4e8",
+        "question": "What is the occupation of the great-grandchild of the grandmother of the father-in-law of Pauline Mcnamee?",
+        "solution_traces": "[{\"Y_2\": \"field seismologist\", \"Y_5\": \"Krystle Vogel\", \"Y_7\": \"Bo Mcnamee\", \"Y_3\": \"Barry Mcnamee\"}, {\"Y_5\": \"Krystle Vogel\", \"Y_3\": \"Tad Fitzpatrick\", \"Y_7\": \"Bo Mcnamee\", \"Y_2\": \"charity fundraiser\"}, {\"Y_2\": \"aid worker\", \"Y_5\": \"Krystle Vogel\", \"Y_7\": \"Bo Mcnamee\", \"Y_3\": \"Charley Mcnamee\"}, {\"Y_2\": \"architect\", \"Y_5\": \"Krystle Vogel\", \"Y_7\": \"Bo Mcnamee\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_2\": \"health visitor\", \"Y_5\": \"Krystle Vogel\", \"Y_7\": \"Bo Mcnamee\", \"Y_3\": \"Lanny Mcnamee\"}]",
+        "answer": [
+            "aid worker",
+            "architect",
+            "charity fundraiser",
+            "field seismologist",
+            "health visitor"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "great_grandchild(Y_5, Y_3)",
+                "grandmother(Y_7, Y_5)",
+                "father_in_law(\"Pauline Mcnamee\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5fad4ad5-a8b0-452b-9d6a-98e4a22a8beb",
+        "question": "What is the occupation of the parent of the parent of the grandchild of Joe Bledsoe?",
+        "solution_traces": "[{\"Y_7\": \"Eddy Bledsoe\", \"Y_2\": \"building surveyor\", \"Y_3\": \"Rasheeda Bledsoe\", \"Y_5\": \"Philip Bledsoe\"}, {\"Y_2\": \"immunologist\", \"Y_7\": \"Eddy Bledsoe\", \"Y_3\": \"Joe Bledsoe\", \"Y_5\": \"Philip Bledsoe\"}]",
+        "answer": [
+            "building surveyor",
+            "immunologist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "grandchild(\"Joe Bledsoe\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "824db5d4-ccb9-4bee-a88d-a782d77ac7d0",
+        "question": "What is the hobby of the sibling of the sibling of the cousin of Ivette Kingery?",
+        "solution_traces": "[{\"Y_2\": \"people-watching\", \"Y_5\": \"Samual Grayson\", \"Y_3\": \"Mariann Grayson\", \"Y_7\": \"Mariann Grayson\"}, {\"Y_3\": \"Samual Grayson\", \"Y_2\": \"beekeeping\", \"Y_7\": \"Samual Grayson\", \"Y_5\": \"Mariann Grayson\"}]",
+        "answer": [
+            "beekeeping",
+            "people-watching"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "cousin(\"Ivette Kingery\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a122ed0e-dad5-4aa7-9b5e-bf3efcd9d166",
+        "question": "What is the occupation of the daughter-in-law of the friend of the father of Deidre Fitzpatrick?",
+        "solution_traces": "[{\"Y_7\": \"Eddy Bledsoe\", \"Y_5\": \"Jacquelyn Mcnamee\", \"Y_3\": \"Karrie Mcnamee\", \"Y_2\": \"water quality scientist\"}, {\"Y_7\": \"Eddy Bledsoe\", \"Y_2\": \"programmer\", \"Y_5\": \"Lona Bledsoe\", \"Y_3\": \"Carmon Bledsoe\"}]",
+        "answer": [
+            "programmer",
+            "water quality scientist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "daughter_in_law(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "father(\"Deidre Fitzpatrick\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "15acb0f3-f57b-47d0-9f2e-7f56b84feb20",
+        "question": "What is the date of birth of the male first cousin once removed of the grandson of the parent of Eddy Bledsoe?",
+        "solution_traces": "[{\"Y_5\": \"Emmett Bledsoe\", \"Y_3\": \"Barry Mcnamee\", \"Y_2\": \"0315-10-12\", \"Y_7\": \"Philip Bledsoe\"}, {\"Y_2\": \"0312-12-13\", \"Y_5\": \"Emmett Bledsoe\", \"Y_3\": \"Charley Mcnamee\", \"Y_7\": \"Philip Bledsoe\"}, {\"Y_5\": \"Emmett Bledsoe\", \"Y_7\": \"Lona Bledsoe\", \"Y_3\": \"Barry Mcnamee\", \"Y_2\": \"0315-10-12\"}, {\"Y_2\": \"0313-11-02\", \"Y_5\": \"Emmett Bledsoe\", \"Y_3\": \"Trent Mcnamee\", \"Y_7\": \"Philip Bledsoe\"}, {\"Y_2\": \"0310-06-14\", \"Y_5\": \"Emmett Bledsoe\", \"Y_3\": \"Lanny Mcnamee\", \"Y_7\": \"Philip Bledsoe\"}, {\"Y_5\": \"Emmett Bledsoe\", \"Y_2\": \"0312-12-13\", \"Y_7\": \"Lona Bledsoe\", \"Y_3\": \"Charley Mcnamee\"}, {\"Y_5\": \"Emmett Bledsoe\", \"Y_7\": \"Lona Bledsoe\", \"Y_3\": \"Trent Mcnamee\", \"Y_2\": \"0313-11-02\"}, {\"Y_5\": \"Emmett Bledsoe\", \"Y_7\": \"Lona Bledsoe\", \"Y_3\": \"Lanny Mcnamee\", \"Y_2\": \"0310-06-14\"}]",
+        "answer": [
+            "0310-06-14",
+            "0312-12-13",
+            "0313-11-02",
+            "0315-10-12"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "male_first_cousin_once_removed(Y_5, Y_3)",
+                "grandson(Y_7, Y_5)",
+                "parent(\"Eddy Bledsoe\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "05b9af3c-80cd-465b-abae-8b9c2e4d2322",
+        "question": "What is the hobby of the grandchild of the grandparent of the grandson of Lona Bledsoe?",
+        "solution_traces": "[{\"Y_3\": \"Bo Mcnamee\", \"Y_5\": \"Krystle Vogel\", \"Y_7\": \"Emmett Bledsoe\", \"Y_2\": \"flower collecting and pressing\"}, {\"Y_3\": \"Deidre Fitzpatrick\", \"Y_7\": \"Emmett Bledsoe\", \"Y_2\": \"scouting\", \"Y_5\": \"Philip Bledsoe\"}, {\"Y_5\": \"Lona Bledsoe\", \"Y_7\": \"Emmett Bledsoe\", \"Y_2\": \"scouting\", \"Y_3\": \"Deidre Fitzpatrick\"}, {\"Y_3\": \"Emmett Bledsoe\", \"Y_2\": \"myrmecology\", \"Y_5\": \"Krystle Vogel\", \"Y_7\": \"Emmett Bledsoe\"}, {\"Y_5\": \"Lona Bledsoe\", \"Y_3\": \"Emmett Bledsoe\", \"Y_2\": \"myrmecology\", \"Y_7\": \"Emmett Bledsoe\"}, {\"Y_5\": \"Alberto Vogel\", \"Y_3\": \"Emmett Bledsoe\", \"Y_2\": \"myrmecology\", \"Y_7\": \"Emmett Bledsoe\"}, {\"Y_5\": \"Alberto Vogel\", \"Y_3\": \"Bo Mcnamee\", \"Y_7\": \"Emmett Bledsoe\", \"Y_2\": \"flower collecting and pressing\"}, {\"Y_3\": \"Emmett Bledsoe\", \"Y_2\": \"myrmecology\", \"Y_7\": \"Emmett Bledsoe\", \"Y_5\": \"Philip Bledsoe\"}, {\"Y_5\": \"Alberto Vogel\", \"Y_7\": \"Emmett Bledsoe\", \"Y_2\": \"scouting\", \"Y_3\": \"Deidre Fitzpatrick\"}, {\"Y_5\": \"Krystle Vogel\", \"Y_7\": \"Emmett Bledsoe\", \"Y_2\": \"scouting\", \"Y_3\": \"Deidre Fitzpatrick\"}]",
+        "answer": [
+            "flower collecting and pressing",
+            "myrmecology",
+            "scouting"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "grandson(\"Lona Bledsoe\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "030e34d3-acad-4b8e-aad1-515b32524f6b",
+        "question": "What is the date of birth of the father of the wife of the grandfather of Lane Mcglynn?",
+        "solution_traces": "[{\"Y_7\": \"Benito Matheson\", \"Y_3\": \"Timmy Munguia\", \"Y_2\": \"0196-03-05\", \"Y_5\": \"Johnetta Matheson\"}]",
+        "answer": [
+            "0196-03-05"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "father(Y_5, Y_3)",
+                "wife(Y_7, Y_5)",
+                "grandfather(\"Lane Mcglynn\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "678b1b20-56d8-43a0-b201-4529c26c5525",
+        "question": "What is the hobby of the child of the son-in-law of the great-grandmother of Lane Mcglynn?",
+        "solution_traces": "[{\"Y_5\": \"Benito Matheson\", \"Y_3\": \"Manuel Matheson\", \"Y_2\": \"antiquities\", \"Y_7\": \"Tamala Munguia\"}, {\"Y_5\": \"Benito Matheson\", \"Y_3\": \"Rolando Matheson\", \"Y_2\": \"volleyball\", \"Y_7\": \"Tamala Munguia\"}, {\"Y_5\": \"Benito Matheson\", \"Y_7\": \"Tamala Munguia\", \"Y_2\": \"teaching\", \"Y_3\": \"Shaina Mcglynn\"}]",
+        "answer": [
+            "antiquities",
+            "teaching",
+            "volleyball"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "child(Y_5, Y_3)",
+                "son_in_law(Y_7, Y_5)",
+                "great_grandmother(\"Lane Mcglynn\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "21bc330a-cf40-426f-b5f3-9960c3e704a5",
+        "question": "What is the occupation of the uncle of the nephew of the uncle of Kieth Mcnamee?",
+        "solution_traces": "[{\"Y_2\": \"field seismologist\", \"Y_7\": \"Trent Mcnamee\", \"Y_5\": \"Kieth Mcnamee\", \"Y_3\": \"Barry Mcnamee\"}, {\"Y_2\": \"field seismologist\", \"Y_7\": \"Lanny Mcnamee\", \"Y_5\": \"Kieth Mcnamee\", \"Y_3\": \"Barry Mcnamee\"}, {\"Y_5\": \"Reyes Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_2\": \"architect\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_7\": \"Barry Mcnamee\", \"Y_5\": \"Reyes Mcnamee\", \"Y_2\": \"architect\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_2\": \"aid worker\", \"Y_5\": \"Reyes Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_3\": \"Charley Mcnamee\"}, {\"Y_2\": \"aid worker\", \"Y_7\": \"Barry Mcnamee\", \"Y_5\": \"Reyes Mcnamee\", \"Y_3\": \"Charley Mcnamee\"}, {\"Y_2\": \"field seismologist\", \"Y_5\": \"Reyes Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_3\": \"Barry Mcnamee\"}, {\"Y_2\": \"field seismologist\", \"Y_7\": \"Barry Mcnamee\", \"Y_5\": \"Kieth Mcnamee\", \"Y_3\": \"Barry Mcnamee\"}, {\"Y_2\": \"health visitor\", \"Y_7\": \"Trent Mcnamee\", \"Y_5\": \"Kieth Mcnamee\", \"Y_3\": \"Lanny Mcnamee\"}, {\"Y_2\": \"health visitor\", \"Y_7\": \"Barry Mcnamee\", \"Y_5\": \"Kieth Mcnamee\", \"Y_3\": \"Lanny Mcnamee\"}, {\"Y_2\": \"architect\", \"Y_7\": \"Trent Mcnamee\", \"Y_5\": \"Kieth Mcnamee\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_7\": \"Lanny Mcnamee\", \"Y_5\": \"Kieth Mcnamee\", \"Y_3\": \"Trent Mcnamee\", \"Y_2\": \"architect\"}, {\"Y_7\": \"Barry Mcnamee\", \"Y_5\": \"Kieth Mcnamee\", \"Y_3\": \"Trent Mcnamee\", \"Y_2\": \"architect\"}, {\"Y_2\": \"field seismologist\", \"Y_7\": \"Barry Mcnamee\", \"Y_5\": \"Reyes Mcnamee\", \"Y_3\": \"Barry Mcnamee\"}, {\"Y_2\": \"health visitor\", \"Y_7\": \"Lanny Mcnamee\", \"Y_5\": \"Kieth Mcnamee\", \"Y_3\": \"Lanny Mcnamee\"}]",
+        "answer": [
+            "aid worker",
+            "architect",
+            "field seismologist",
+            "health visitor"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "uncle(Y_5, Y_3)",
+                "nephew(Y_7, Y_5)",
+                "uncle(\"Kieth Mcnamee\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b428d2b2-1296-4a0c-b553-cc34a1e39677",
+        "question": "What is the occupation of the granddaughter of the daughter-in-law of the sister of Ellen Munguia?",
+        "solution_traces": "[{\"Y_7\": \"Johnetta Matheson\", \"Y_3\": \"Mariann Grayson\", \"Y_2\": \"geoscientist\", \"Y_5\": \"Sara Matheson\"}, {\"Y_3\": \"Ivette Kingery\", \"Y_7\": \"Johnetta Matheson\", \"Y_2\": \"advertising account executive\", \"Y_5\": \"Sara Matheson\"}, {\"Y_3\": \"Antonia Lanza\", \"Y_7\": \"Johnetta Matheson\", \"Y_2\": \"scientist\", \"Y_5\": \"Sara Matheson\"}]",
+        "answer": [
+            "advertising account executive",
+            "geoscientist",
+            "scientist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "granddaughter(Y_5, Y_3)",
+                "daughter_in_law(Y_7, Y_5)",
+                "sister(\"Ellen Munguia\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9d282050-4d25-4403-abf2-a5bfe3fa515d",
+        "question": "What is the hobby of the niece of the great-granddaughter of the grandparent of Rolando Matheson?",
+        "solution_traces": "[{\"Y_2\": \"people-watching\", \"Y_5\": \"Magdalene Matheson\", \"Y_3\": \"Mariann Grayson\", \"Y_7\": \"Tamala Munguia\"}, {\"Y_2\": \"people-watching\", \"Y_3\": \"Mariann Grayson\", \"Y_7\": \"Tamala Munguia\", \"Y_5\": \"Almeta Lanza\"}, {\"Y_5\": \"Magdalene Matheson\", \"Y_2\": \"fishing\", \"Y_7\": \"Timmy Munguia\", \"Y_3\": \"Antonia Lanza\"}, {\"Y_3\": \"Ivette Kingery\", \"Y_5\": \"Magdalene Matheson\", \"Y_7\": \"Timmy Munguia\", \"Y_2\": \"butterfly watching\"}, {\"Y_3\": \"Ivette Kingery\", \"Y_5\": \"Kerry Grayson\", \"Y_7\": \"Tamala Munguia\", \"Y_2\": \"butterfly watching\"}, {\"Y_3\": \"Ivette Kingery\", \"Y_5\": \"Magdalene Matheson\", \"Y_7\": \"Tamala Munguia\", \"Y_2\": \"butterfly watching\"}, {\"Y_5\": \"Kerry Grayson\", \"Y_2\": \"fishing\", \"Y_7\": \"Tamala Munguia\", \"Y_3\": \"Antonia Lanza\"}, {\"Y_5\": \"Magdalene Matheson\", \"Y_2\": \"fishing\", \"Y_7\": \"Tamala Munguia\", \"Y_3\": \"Antonia Lanza\"}, {\"Y_3\": \"Mariann Grayson\", \"Y_5\": \"Magdalene Matheson\", \"Y_7\": \"Timmy Munguia\", \"Y_2\": \"people-watching\"}, {\"Y_2\": \"fishing\", \"Y_7\": \"Timmy Munguia\", \"Y_5\": \"Kerry Grayson\", \"Y_3\": \"Antonia Lanza\"}, {\"Y_3\": \"Mariann Grayson\", \"Y_2\": \"people-watching\", \"Y_7\": \"Timmy Munguia\", \"Y_5\": \"Almeta Lanza\"}, {\"Y_3\": \"Ivette Kingery\", \"Y_7\": \"Timmy Munguia\", \"Y_5\": \"Kerry Grayson\", \"Y_2\": \"butterfly watching\"}]",
+        "answer": [
+            "butterfly watching",
+            "fishing",
+            "people-watching"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "niece(Y_5, Y_3)",
+                "great_granddaughter(Y_7, Y_5)",
+                "grandparent(\"Rolando Matheson\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0c7a86fa-7b1e-479d-8e80-ab7e8019de37",
+        "question": "What is the occupation of the brother of the child of the daughter-in-law of Everett Mcnamee?",
+        "solution_traces": "[{\"Y_5\": \"Barry Mcnamee\", \"Y_7\": \"Karrie Mcnamee\", \"Y_2\": \"health visitor\", \"Y_3\": \"Lanny Mcnamee\"}, {\"Y_5\": \"Barry Mcnamee\", \"Y_7\": \"Karrie Mcnamee\", \"Y_2\": \"architect\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_2\": \"field seismologist\", \"Y_7\": \"Karrie Mcnamee\", \"Y_5\": \"Trent Mcnamee\", \"Y_3\": \"Barry Mcnamee\"}, {\"Y_5\": \"Charley Mcnamee\", \"Y_7\": \"Karrie Mcnamee\", \"Y_3\": \"Barry Mcnamee\", \"Y_2\": \"field seismologist\"}, {\"Y_5\": \"Barry Mcnamee\", \"Y_7\": \"Karrie Mcnamee\", \"Y_3\": \"Charley Mcnamee\", \"Y_2\": \"aid worker\"}, {\"Y_7\": \"Karrie Mcnamee\", \"Y_5\": \"Lanny Mcnamee\", \"Y_2\": \"architect\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_5\": \"Charley Mcnamee\", \"Y_7\": \"Karrie Mcnamee\", \"Y_2\": \"health visitor\", \"Y_3\": \"Lanny Mcnamee\"}, {\"Y_2\": \"aid worker\", \"Y_7\": \"Karrie Mcnamee\", \"Y_5\": \"Lanny Mcnamee\", \"Y_3\": \"Charley Mcnamee\"}, {\"Y_2\": \"health visitor\", \"Y_7\": \"Karrie Mcnamee\", \"Y_5\": \"Trent Mcnamee\", \"Y_3\": \"Lanny Mcnamee\"}, {\"Y_5\": \"Charley Mcnamee\", \"Y_7\": \"Karrie Mcnamee\", \"Y_2\": \"architect\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_2\": \"field seismologist\", \"Y_7\": \"Karrie Mcnamee\", \"Y_5\": \"Lanny Mcnamee\", \"Y_3\": \"Barry Mcnamee\"}, {\"Y_2\": \"aid worker\", \"Y_7\": \"Karrie Mcnamee\", \"Y_5\": \"Trent Mcnamee\", \"Y_3\": \"Charley Mcnamee\"}]",
+        "answer": [
+            "aid worker",
+            "architect",
+            "field seismologist",
+            "health visitor"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "brother(Y_5, Y_3)",
+                "child(Y_7, Y_5)",
+                "daughter_in_law(\"Everett Mcnamee\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "186a3d97-6850-4557-b648-593744c92def",
+        "question": "What is the hobby of the grandson of the grandchild of the great-grandparent of Barry Mcnamee?",
+        "solution_traces": "[{\"Y_7\": \"Krystle Vogel\", \"Y_5\": \"Bo Mcnamee\", \"Y_2\": \"leaves\", \"Y_3\": \"Reyes Mcnamee\"}, {\"Y_3\": \"Kieth Mcnamee\", \"Y_7\": \"Alberto Vogel\", \"Y_5\": \"Bo Mcnamee\", \"Y_2\": \"boxing\"}, {\"Y_7\": \"Alberto Vogel\", \"Y_5\": \"Bo Mcnamee\", \"Y_2\": \"leaves\", \"Y_3\": \"Reyes Mcnamee\"}, {\"Y_3\": \"Kieth Mcnamee\", \"Y_7\": \"Krystle Vogel\", \"Y_5\": \"Bo Mcnamee\", \"Y_2\": \"boxing\"}]",
+        "answer": [
+            "boxing",
+            "leaves"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandson(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "great_grandparent(\"Barry Mcnamee\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "26d1d414-cac7-45a6-9e87-70380b99b842",
+        "question": "What is the date of birth of the second aunt of the cousin of the nephew of Lanny Mcnamee?",
+        "solution_traces": "[{\"Y_2\": \"0260-03-26\", \"Y_5\": \"Reyes Mcnamee\", \"Y_7\": \"Kieth Mcnamee\", \"Y_3\": \"Carmon Bledsoe\"}, {\"Y_5\": \"Shaunte Mcnamee\", \"Y_7\": \"Kieth Mcnamee\", \"Y_3\": \"Carmon Bledsoe\", \"Y_2\": \"0260-03-26\"}]",
+        "answer": [
+            "0260-03-26"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "second_aunt(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "nephew(\"Lanny Mcnamee\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 10,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "15bd6c85-6cc8-4918-afad-0d6be36cf614",
+        "question": "What is the date of birth of the son of the parent of the grandchild of Jacquelyn Mcnamee?",
+        "solution_traces": "[{\"Y_7\": \"Charley Mcnamee\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Barry Mcnamee\", \"Y_2\": \"0315-10-12\"}, {\"Y_5\": \"Karrie Mcnamee\", \"Y_7\": \"Lanny Mcnamee\", \"Y_3\": \"Lanny Mcnamee\", \"Y_2\": \"0310-06-14\"}, {\"Y_7\": \"Charley Mcnamee\", \"Y_2\": \"0313-11-02\", \"Y_3\": \"Trent Mcnamee\", \"Y_5\": \"Karrie Mcnamee\"}, {\"Y_7\": \"Lanny Mcnamee\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Barry Mcnamee\", \"Y_2\": \"0315-10-12\"}, {\"Y_7\": \"Trent Mcnamee\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Lanny Mcnamee\", \"Y_2\": \"0310-06-14\"}, {\"Y_5\": \"Karrie Mcnamee\", \"Y_7\": \"Lanny Mcnamee\", \"Y_3\": \"Barry Mcnamee\", \"Y_2\": \"0315-10-12\"}, {\"Y_5\": \"Karrie Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_2\": \"0312-12-13\", \"Y_3\": \"Charley Mcnamee\"}, {\"Y_5\": \"Karrie Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_2\": \"0313-11-02\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_7\": \"Barry Mcnamee\", \"Y_2\": \"0313-11-02\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_7\": \"Lanny Mcnamee\", \"Y_2\": \"0313-11-02\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_7\": \"Trent Mcnamee\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Barry Mcnamee\", \"Y_2\": \"0315-10-12\"}, {\"Y_7\": \"Lanny Mcnamee\", \"Y_2\": \"0312-12-13\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Charley Mcnamee\"}, {\"Y_5\": \"Karrie Mcnamee\", \"Y_7\": \"Lanny Mcnamee\", \"Y_2\": \"0312-12-13\", \"Y_3\": \"Charley Mcnamee\"}, {\"Y_7\": \"Charley Mcnamee\", \"Y_2\": \"0310-06-14\", \"Y_3\": \"Lanny Mcnamee\", \"Y_5\": \"Karrie Mcnamee\"}, {\"Y_7\": \"Barry Mcnamee\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Lanny Mcnamee\", \"Y_2\": \"0310-06-14\"}, {\"Y_5\": \"Karrie Mcnamee\", \"Y_7\": \"Lanny Mcnamee\", \"Y_2\": \"0313-11-02\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_7\": \"Charley Mcnamee\", \"Y_2\": \"0312-12-13\", \"Y_3\": \"Charley Mcnamee\", \"Y_5\": \"Karrie Mcnamee\"}, {\"Y_7\": \"Charley Mcnamee\", \"Y_3\": \"Barry Mcnamee\", \"Y_2\": \"0315-10-12\", \"Y_5\": \"Karrie Mcnamee\"}, {\"Y_7\": \"Barry Mcnamee\", \"Y_2\": \"0312-12-13\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Charley Mcnamee\"}, {\"Y_5\": \"Karrie Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_3\": \"Lanny Mcnamee\", \"Y_2\": \"0310-06-14\"}, {\"Y_7\": \"Barry Mcnamee\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Barry Mcnamee\", \"Y_2\": \"0315-10-12\"}, {\"Y_7\": \"Trent Mcnamee\", \"Y_2\": \"0313-11-02\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_5\": \"Karrie Mcnamee\", \"Y_7\": \"Barry Mcnamee\", \"Y_2\": \"0313-11-02\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_5\": \"Karrie Mcnamee\", \"Y_7\": \"Trent Mcnamee\", \"Y_3\": \"Barry Mcnamee\", \"Y_2\": \"0315-10-12\"}, {\"Y_7\": \"Charley Mcnamee\", \"Y_2\": \"0313-11-02\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Trent Mcnamee\"}, {\"Y_2\": \"0312-12-13\", \"Y_7\": \"Trent Mcnamee\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Charley Mcnamee\"}, {\"Y_5\": \"Karrie Mcnamee\", \"Y_7\": \"Barry Mcnamee\", \"Y_3\": \"Lanny Mcnamee\", \"Y_2\": \"0310-06-14\"}, {\"Y_7\": \"Charley Mcnamee\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Lanny Mcnamee\", \"Y_2\": \"0310-06-14\"}, {\"Y_5\": \"Karrie Mcnamee\", \"Y_7\": \"Barry Mcnamee\", \"Y_2\": \"0312-12-13\", \"Y_3\": \"Charley Mcnamee\"}, {\"Y_5\": \"Karrie Mcnamee\", \"Y_7\": \"Barry Mcnamee\", \"Y_3\": \"Barry Mcnamee\", \"Y_2\": \"0315-10-12\"}, {\"Y_7\": \"Charley Mcnamee\", \"Y_2\": \"0312-12-13\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Charley Mcnamee\"}, {\"Y_7\": \"Lanny Mcnamee\", \"Y_5\": \"Bo Mcnamee\", \"Y_3\": \"Lanny Mcnamee\", \"Y_2\": \"0310-06-14\"}]",
+        "answer": [
+            "0310-06-14",
+            "0312-12-13",
+            "0313-11-02",
+            "0315-10-12"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "son(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "grandchild(\"Jacquelyn Mcnamee\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d728384b-7520-4bad-8a7f-fb1fdc35ce6d",
+        "question": "What is the date of birth of the child of the mother-in-law of the friend of Tad Fitzpatrick?",
+        "solution_traces": "[{\"Y_3\": \"Emmett Bledsoe\", \"Y_5\": \"Carmon Bledsoe\", \"Y_7\": \"Pat Fitzpatrick\", \"Y_2\": \"0290-02-19\"}, {\"Y_5\": \"Carmon Bledsoe\", \"Y_7\": \"Pat Fitzpatrick\", \"Y_2\": \"0286-01-18\", \"Y_3\": \"Deidre Fitzpatrick\"}, {\"Y_3\": \"Jacquelyn Mcnamee\", \"Y_7\": \"Eddy Bledsoe\", \"Y_5\": \"Krystle Vogel\", \"Y_2\": \"0256-09-25\"}, {\"Y_7\": \"Eddy Bledsoe\", \"Y_5\": \"Krystle Vogel\", \"Y_3\": \"Carmon Bledsoe\", \"Y_2\": \"0260-03-26\"}]",
+        "answer": [
+            "0256-09-25",
+            "0260-03-26",
+            "0286-01-18",
+            "0290-02-19"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "child(Y_5, Y_3)",
+                "mother_in_law(Y_7, Y_5)",
+                "friend(\"Tad Fitzpatrick\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5f27c597-3e05-4f1f-a517-e0dffa3f04ff",
+        "question": "What is the date of birth of the grandson of the aunt of the great-grandchild of Rasheeda Bledsoe?",
+        "solution_traces": "[{\"Y_7\": \"Deidre Fitzpatrick\", \"Y_5\": \"Jacquelyn Mcnamee\", \"Y_3\": \"Lanny Mcnamee\", \"Y_2\": \"0310-06-14\"}, {\"Y_2\": \"0315-10-12\", \"Y_7\": \"Emmett Bledsoe\", \"Y_3\": \"Barry Mcnamee\", \"Y_5\": \"Jacquelyn Mcnamee\"}, {\"Y_2\": \"0312-12-13\", \"Y_7\": \"Emmett Bledsoe\", \"Y_3\": \"Charley Mcnamee\", \"Y_5\": \"Jacquelyn Mcnamee\"}, {\"Y_7\": \"Deidre Fitzpatrick\", \"Y_5\": \"Jacquelyn Mcnamee\", \"Y_3\": \"Barry Mcnamee\", \"Y_2\": \"0315-10-12\"}, {\"Y_7\": \"Deidre Fitzpatrick\", \"Y_5\": \"Jacquelyn Mcnamee\", \"Y_3\": \"Trent Mcnamee\", \"Y_2\": \"0313-11-02\"}, {\"Y_7\": \"Deidre Fitzpatrick\", \"Y_5\": \"Jacquelyn Mcnamee\", \"Y_2\": \"0312-12-13\", \"Y_3\": \"Charley Mcnamee\"}, {\"Y_7\": \"Emmett Bledsoe\", \"Y_3\": \"Trent Mcnamee\", \"Y_5\": \"Jacquelyn Mcnamee\", \"Y_2\": \"0313-11-02\"}, {\"Y_3\": \"Lanny Mcnamee\", \"Y_7\": \"Emmett Bledsoe\", \"Y_5\": \"Jacquelyn Mcnamee\", \"Y_2\": \"0310-06-14\"}]",
+        "answer": [
+            "0310-06-14",
+            "0312-12-13",
+            "0313-11-02",
+            "0315-10-12"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "grandson(Y_5, Y_3)",
+                "aunt(Y_7, Y_5)",
+                "great_grandchild(\"Rasheeda Bledsoe\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "83c76240-83fe-40b9-adec-44b12b89bd38",
+        "question": "What is the date of birth of the father-in-law of the husband of the great-aunt of Barry Mcnamee?",
+        "solution_traces": "[{\"Y_5\": \"Eddy Bledsoe\", \"Y_7\": \"Carmon Bledsoe\", \"Y_2\": \"0230-01-26\", \"Y_3\": \"Alberto Vogel\"}]",
+        "answer": [
+            "0230-01-26"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "father_in_law(Y_5, Y_3)",
+                "husband(Y_7, Y_5)",
+                "great_aunt(\"Barry Mcnamee\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fc355f87-092b-4648-9635-ceac37814152",
+        "question": "What is the hobby of the grandson of the wife of the parent of Johnetta Matheson?",
+        "solution_traces": "[{\"Y_3\": \"Manuel Matheson\", \"Y_2\": \"antiquities\", \"Y_7\": \"Timmy Munguia\", \"Y_5\": \"Tamala Munguia\"}, {\"Y_3\": \"Rolando Matheson\", \"Y_2\": \"volleyball\", \"Y_7\": \"Timmy Munguia\", \"Y_5\": \"Tamala Munguia\"}]",
+        "answer": [
+            "antiquities",
+            "volleyball"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandson(Y_5, Y_3)",
+                "wife(Y_7, Y_5)",
+                "parent(\"Johnetta Matheson\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fb81020e-8b8b-403a-9b71-c8677da3b24a",
+        "question": "What is the date of birth of the granddaughter of the parent of the wife of Benito Matheson?",
+        "solution_traces": "[{\"Y_2\": \"0255-01-17\", \"Y_7\": \"Johnetta Matheson\", \"Y_5\": \"Tamala Munguia\", \"Y_3\": \"Shaina Mcglynn\"}, {\"Y_2\": \"0255-01-17\", \"Y_7\": \"Johnetta Matheson\", \"Y_5\": \"Timmy Munguia\", \"Y_3\": \"Shaina Mcglynn\"}]",
+        "answer": [
+            "0255-01-17"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "granddaughter(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "wife(\"Benito Matheson\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a1e88f6a-d975-4672-b42b-34b5bc4914ab",
+        "question": "What is the occupation of the parent of the cousin of the sister-in-law of Jimmie Kingery?",
+        "solution_traces": "[{\"Y_3\": \"Kerry Grayson\", \"Y_7\": \"Antonia Lanza\", \"Y_2\": \"dietitian\", \"Y_5\": \"Mariann Grayson\"}, {\"Y_5\": \"Samual Grayson\", \"Y_3\": \"Kerry Grayson\", \"Y_7\": \"Antonia Lanza\", \"Y_2\": \"dietitian\"}, {\"Y_5\": \"Samual Grayson\", \"Y_7\": \"Antonia Lanza\", \"Y_3\": \"Harold Grayson\", \"Y_2\": \"graphic designer\"}, {\"Y_7\": \"Antonia Lanza\", \"Y_3\": \"Harold Grayson\", \"Y_2\": \"graphic designer\", \"Y_5\": \"Mariann Grayson\"}]",
+        "answer": [
+            "dietitian",
+            "graphic designer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "cousin(Y_7, Y_5)",
+                "sister_in_law(\"Jimmie Kingery\", Y_7)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "?"
+        ],
+        "type": 7,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    }
+]

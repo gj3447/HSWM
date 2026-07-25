@@ -1,0 +1,1005 @@
+[
+    {
+        "id": "875bfcc3-f578-460e-afcd-04747bfeb6b3",
+        "question": "How many siblings does the son of the parent of Jarvis Arias have?",
+        "solution_traces": "[{\"Y_5\": \"Alana Arias\", \"Count_1\": 2, \"Y_3\": \"Jarvis Arias\"}, {\"Count_1\": 2, \"Y_3\": \"Jarvis Arias\", \"Y_5\": \"Elbert Arias\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "son(Y_5, Y_3)",
+                "parent(\"Jarvis Arias\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "46e2f730-4045-4f5d-bccd-c7f71900a319",
+        "question": "How many granddaughters does the daughter-in-law of the husband of Gail Springer have?",
+        "solution_traces": "[{\"Y_3\": \"Kayla Springer\", \"Y_5\": \"Jorge Springer\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(granddaughter(Y_3, Y_1)), Count_1)",
+                "daughter_in_law(Y_5, Y_3)",
+                "husband(\"Gail Springer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c31ceec3-9805-4881-9528-e0f2d7a9c1f8",
+        "question": "How many cousins does the friend of the niece of Reita Springer have?",
+        "solution_traces": "[{\"Y_5\": \"Marybeth Bushnell\", \"Y_3\": \"Dana Womble\", \"Count_1\": 0}, {\"Y_5\": \"Marybeth Bushnell\", \"Y_3\": \"Reita Springer\", \"Count_1\": 0}, {\"Y_5\": \"Marybeth Bushnell\", \"Y_3\": \"Mac Ridgway\", \"Count_1\": 0}, {\"Count_1\": 0, \"Y_5\": \"Deloris Gosselin\", \"Y_3\": \"Buddy Gosselin\"}, {\"Y_5\": \"Marybeth Bushnell\", \"Y_3\": \"Lorenz Womble\", \"Count_1\": 0}, {\"Y_5\": \"Marybeth Bushnell\", \"Count_1\": 1, \"Y_3\": \"Rodger Springer\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "niece(\"Reita Springer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ef319f2a-8c7c-48de-b693-98dd74c1f61c",
+        "question": "How many cousins does the male first cousin once removed of the sister of Ted Shane have?",
+        "solution_traces": "[{\"Y_5\": \"Deloris Gosselin\", \"Y_3\": \"Rodger Springer\", \"Count_1\": 1}, {\"Y_5\": \"Deloris Gosselin\", \"Count_1\": 1, \"Y_3\": \"Joesph Springer\"}, {\"Y_5\": \"Deloris Gosselin\", \"Count_1\": 1, \"Y_3\": \"Isaac Springer\"}, {\"Y_5\": \"Deloris Gosselin\", \"Y_3\": \"Richard Bushnell\", \"Count_1\": 4}]",
+        "answer": [
+            "1",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "male_first_cousin_once_removed(Y_5, Y_3)",
+                "sister(\"Ted Shane\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1684cbb7-67ba-443d-b104-e61f19aeadc0",
+        "question": "How many male first cousins once removed does the granddaughter of the husband of Raina Springer have?",
+        "solution_traces": "[{\"Y_5\": \"Russell Springer\", \"Count_1\": 4, \"Y_3\": \"Deloris Gosselin\"}, {\"Y_5\": \"Russell Springer\", \"Count_1\": 1, \"Y_3\": \"Marybeth Bushnell\"}]",
+        "answer": [
+            "1",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(male_first_cousin_once_removed(Y_3, Y_1)), Count_1)",
+                "granddaughter(Y_5, Y_3)",
+                "husband(\"Raina Springer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a5d54b24-9a93-4503-b6af-1d8b9a7d75b4",
+        "question": "How many siblings does the second aunt of the grandchild of Wes Springer have?",
+        "solution_traces": "[{\"Y_3\": \"Sandy Springer\", \"Y_5\": \"Evette Springer\", \"Count_1\": 3}, {\"Y_3\": \"Sandy Springer\", \"Y_5\": \"Alyssa Newby\", \"Count_1\": 3}, {\"Count_1\": 3, \"Y_3\": \"Adelina Shane\", \"Y_5\": \"Evette Springer\"}, {\"Y_3\": \"Reita Springer\", \"Y_5\": \"Alyssa Newby\", \"Count_1\": 3}, {\"Y_3\": \"Adelina Shane\", \"Y_5\": \"Alyssa Newby\", \"Count_1\": 3}, {\"Count_1\": 3, \"Y_3\": \"Reita Springer\", \"Y_5\": \"Evette Springer\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "second_aunt(Y_5, Y_3)",
+                "grandchild(\"Wes Springer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7a4e48d0-f6e0-4876-b4d2-4bf60eaa8d5f",
+        "question": "How many nephews does the great-aunt of the child of Wanda Springer have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_5\": \"Evette Springer\", \"Y_3\": \"Marybeth Bushnell\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(nephew(Y_3, Y_1)), Count_1)",
+                "great_aunt(Y_5, Y_3)",
+                "child(\"Wanda Springer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "172f842c-b8bd-4569-af2c-e95744c52305",
+        "question": "How many male first cousins once removed does the grandchild of the father-in-law of Chet Shane have?",
+        "solution_traces": "[{\"Y_5\": \"Russell Springer\", \"Y_3\": \"Ted Shane\", \"Count_1\": 4}, {\"Y_3\": \"Wes Springer\", \"Y_5\": \"Russell Springer\", \"Count_1\": 1}, {\"Y_5\": \"Russell Springer\", \"Count_1\": 4, \"Y_3\": \"Deloris Gosselin\"}, {\"Y_5\": \"Russell Springer\", \"Count_1\": 1, \"Y_3\": \"Marybeth Bushnell\"}]",
+        "answer": [
+            "1",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(male_first_cousin_once_removed(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "father_in_law(\"Chet Shane\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a49944c1-97dd-474c-b4e1-da2099abf290",
+        "question": "How many grandfathers does the great-grandchild of the grandmother of Helena Womble have?",
+        "solution_traces": "[{\"Y_3\": \"Preston Womble\", \"Count_1\": 2, \"Y_5\": \"Belia Womble\"}, {\"Count_1\": 2, \"Y_5\": \"Belia Womble\", \"Y_3\": \"Kiana Arias\"}, {\"Y_3\": \"Dillon Womble\", \"Count_1\": 2, \"Y_5\": \"Belia Womble\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "great_grandchild(Y_5, Y_3)",
+                "grandmother(\"Helena Womble\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1d13d325-4438-4227-b657-c48d495c5943",
+        "question": "How many daughters-in-law does the wife of the friend of Buddy Gosselin have?",
+        "solution_traces": "[{\"Y_5\": \"Stuart Womble\", \"Count_1\": 1, \"Y_3\": \"Hilda Womble\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter_in_law(Y_3, Y_1)), Count_1)",
+                "wife(Y_5, Y_3)",
+                "friend(\"Buddy Gosselin\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d7dcef53-245e-434e-bbe4-aedfa05a401e",
+        "question": "How many aunts does the friend of the great-grandchild of Dortha Ridgway have?",
+        "solution_traces": "[{\"Y_5\": \"Laurette Webber\", \"Count_1\": 1, \"Y_3\": \"Isaac Springer\"}, {\"Y_5\": \"Laurette Webber\", \"Count_1\": 0, \"Y_3\": \"Kayla Springer\"}, {\"Y_5\": \"Laurette Webber\", \"Count_1\": 0, \"Y_3\": \"Ellis Gosselin\"}, {\"Y_5\": \"Laurette Webber\", \"Count_1\": 0, \"Y_3\": \"Lera Arias\"}, {\"Y_5\": \"Laurette Webber\", \"Count_1\": 3, \"Y_3\": \"Wes Springer\"}, {\"Count_1\": 0, \"Y_3\": \"Stuart Womble\", \"Y_5\": \"Elbert Arias\"}]",
+        "answer": [
+            "0",
+            "1",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(aunt(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "great_grandchild(\"Dortha Ridgway\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "09f0f687-7fe3-4582-b773-b7fcbb3f841d",
+        "question": "How many siblings does the niece of the aunt of Preston Womble have?",
+        "solution_traces": "[{\"Y_5\": \"Julianne Womble\", \"Count_1\": 2, \"Y_3\": \"Kiana Arias\"}, {\"Count_1\": 2, \"Y_3\": \"Kiana Arias\", \"Y_5\": \"Helena Womble\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "niece(Y_5, Y_3)",
+                "aunt(\"Preston Womble\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e564e50a-5987-4aef-a501-c5fa0a910c68",
+        "question": "How many grandfathers does the friend of the parent of Stuart Womble have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Reita Springer\", \"Y_5\": \"Dana Womble\"}, {\"Count_1\": 0, \"Y_3\": \"Francisco Bushnell\", \"Y_5\": \"Dana Womble\"}, {\"Count_1\": 0, \"Y_5\": \"Dana Womble\", \"Y_3\": \"Russell Springer\"}, {\"Y_3\": \"Preston Womble\", \"Count_1\": 2, \"Y_5\": \"Dana Womble\"}, {\"Count_1\": 1, \"Y_3\": \"Marybeth Bushnell\", \"Y_5\": \"Dana Womble\"}, {\"Y_3\": \"Alyssa Newby\", \"Count_1\": 1, \"Y_5\": \"Dana Womble\"}, {\"Count_1\": 1, \"Y_3\": \"Lorenz Womble\", \"Y_5\": \"Belia Womble\"}]",
+        "answer": [
+            "0",
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "parent(\"Stuart Womble\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f817173c-abd4-44bf-94c8-617ed475e267",
+        "question": "How many grandsons does the great-grandmother of the sister-in-law of Alana Arias have?",
+        "solution_traces": "[{\"Y_5\": \"Laurette Webber\", \"Y_3\": \"Hilda Womble\", \"Count_1\": 2}, {\"Y_5\": \"Laurette Webber\", \"Count_1\": 2, \"Y_3\": \"Dortha Ridgway\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandson(Y_3, Y_1)), Count_1)",
+                "great_grandmother(Y_5, Y_3)",
+                "sister_in_law(\"Alana Arias\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "8873368d-29d0-42c7-a757-3314c4d20a4f",
+        "question": "How many brothers-in-law does the friend of the daughter of Raina Springer have?",
+        "solution_traces": "[{\"Y_3\": \"Alvin Webber\", \"Count_1\": 0, \"Y_5\": \"Reita Springer\"}, {\"Y_3\": \"Pamela Newby\", \"Y_5\": \"Adelina Shane\", \"Count_1\": 0}, {\"Count_1\": 0, \"Y_3\": \"Dana Womble\", \"Y_5\": \"Reita Springer\"}, {\"Count_1\": 0, \"Y_5\": \"Sandy Springer\", \"Y_3\": \"Alana Arias\"}, {\"Count_1\": 0, \"Y_5\": \"Sandy Springer\", \"Y_3\": \"Jorge Springer\"}, {\"Count_1\": 0, \"Y_3\": \"Lorenz Womble\", \"Y_5\": \"Reita Springer\"}, {\"Y_3\": \"Alvin Webber\", \"Y_5\": \"Sandy Springer\", \"Count_1\": 0}, {\"Count_1\": 0, \"Y_5\": \"Reita Springer\", \"Y_3\": \"Marybeth Bushnell\"}, {\"Y_5\": \"Sandy Springer\", \"Count_1\": 2, \"Y_3\": \"Noel Arias\"}, {\"Y_3\": \"Matilda Arias\", \"Y_5\": \"Adelina Shane\", \"Count_1\": 0}, {\"Y_3\": \"Wanda Springer\", \"Count_1\": 2, \"Y_5\": \"Reita Springer\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother_in_law(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "daughter(\"Raina Springer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b9fd931f-2434-4eaa-9b78-2cb0cd4e3ccc",
+        "question": "How many great-granddaughters does the grandparent of the grandchild of Gail Springer have?",
+        "solution_traces": "[{\"Y_5\": \"Isaac Springer\", \"Count_1\": 2, \"Y_3\": \"Jorge Springer\"}, {\"Y_3\": \"Gail Springer\", \"Count_1\": 2, \"Y_5\": \"Rodger Springer\"}, {\"Y_3\": \"Jorge Springer\", \"Count_1\": 2, \"Y_5\": \"Rodger Springer\"}, {\"Y_3\": \"Gail Springer\", \"Count_1\": 2, \"Y_5\": \"Joesph Springer\"}, {\"Count_1\": 2, \"Y_3\": \"Jorge Springer\", \"Y_5\": \"Joesph Springer\"}, {\"Y_5\": \"Pamela Newby\", \"Count_1\": 2, \"Y_3\": \"Jorge Springer\"}, {\"Y_5\": \"Isaac Springer\", \"Count_1\": 2, \"Y_3\": \"Gail Springer\"}, {\"Y_5\": \"Richard Bushnell\", \"Count_1\": 2, \"Y_3\": \"Jorge Springer\"}, {\"Y_3\": \"Gail Springer\", \"Y_5\": \"Richard Bushnell\", \"Count_1\": 2}, {\"Y_3\": \"Gail Springer\", \"Y_5\": \"Pamela Newby\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_granddaughter(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "grandchild(\"Gail Springer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ea0678b3-549d-446d-9045-f2d8b1395522",
+        "question": "How many cousins does the female cousin of the nephew of Adelina Shane have?",
+        "solution_traces": "[{\"Y_5\": \"Wes Springer\", \"Count_1\": 2, \"Y_3\": \"Deloris Gosselin\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "female_cousin(Y_5, Y_3)",
+                "nephew(\"Adelina Shane\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9a8aee7b-df5d-4b31-bd53-61f3002a30d2",
+        "question": "How many nieces does the niece of the sister of Sandy Springer have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Reita Springer\", \"Y_3\": \"Marybeth Bushnell\"}, {\"Count_1\": 1, \"Y_5\": \"Adelina Shane\", \"Y_3\": \"Marybeth Bushnell\"}, {\"Count_1\": 0, \"Y_5\": \"Reita Springer\", \"Y_3\": \"Deloris Gosselin\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "niece(Y_5, Y_3)",
+                "sister(\"Sandy Springer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6d240362-9cd3-4a49-85be-5550e93ec1a6",
+        "question": "How many great-grandparents does the uncle of the parent of Matilda Arias have?",
+        "solution_traces": "[{\"Y_3\": \"Preston Womble\", \"Count_1\": 2, \"Y_5\": \"Elbert Arias\"}, {\"Y_3\": \"Dillon Womble\", \"Count_1\": 2, \"Y_5\": \"Elbert Arias\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "uncle(Y_5, Y_3)",
+                "parent(\"Matilda Arias\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1b38ee39-c0e6-4c9a-ae0d-4ec0b9e5912f",
+        "question": "How many brothers does the daughter of the great-grandchild of Belia Womble have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_5\": \"Kiana Arias\", \"Y_3\": \"Laurette Webber\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "daughter(Y_5, Y_3)",
+                "great_grandchild(\"Belia Womble\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6d420865-6b93-4015-be70-adb98d360462",
+        "question": "How many grandchildren does the parent of the mother-in-law of Ellis Gosselin have?",
+        "solution_traces": "[{\"Y_3\": \"Raina Springer\", \"Y_5\": \"Adelina Shane\", \"Count_1\": 4}, {\"Y_5\": \"Adelina Shane\", \"Count_1\": 4, \"Y_3\": \"Russell Springer\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandchild(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "mother_in_law(\"Ellis Gosselin\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1b850f32-7d08-47bd-a783-d430b331c2fe",
+        "question": "How many cousins does the great-grandchild of the grandparent of Elbert Arias have?",
+        "solution_traces": "[{\"Y_5\": \"Lera Arias\", \"Y_3\": \"Leonora Arias\", \"Count_1\": 1}, {\"Y_3\": \"Alvin Webber\", \"Count_1\": 3, \"Y_5\": \"Isabell Womble\"}, {\"Y_3\": \"Matilda Arias\", \"Y_5\": \"Lera Arias\", \"Count_1\": 1}, {\"Y_3\": \"Matilda Arias\", \"Count_1\": 1, \"Y_5\": \"Ethan Arias\"}, {\"Count_1\": 1, \"Y_3\": \"Leonora Arias\", \"Y_5\": \"Isabell Womble\"}, {\"Count_1\": 1, \"Y_3\": \"Jarvis Arias\", \"Y_5\": \"Lorenz Womble\"}, {\"Count_1\": 1, \"Y_3\": \"Leonora Arias\", \"Y_5\": \"Lorenz Womble\"}, {\"Y_3\": \"Matilda Arias\", \"Count_1\": 1, \"Y_5\": \"Isabell Womble\"}, {\"Y_3\": \"Alvin Webber\", \"Count_1\": 3, \"Y_5\": \"Lorenz Womble\"}, {\"Y_3\": \"Matilda Arias\", \"Count_1\": 1, \"Y_5\": \"Lorenz Womble\"}, {\"Count_1\": 1, \"Y_3\": \"Jarvis Arias\", \"Y_5\": \"Ethan Arias\"}, {\"Count_1\": 1, \"Y_3\": \"Jarvis Arias\", \"Y_5\": \"Isabell Womble\"}, {\"Count_1\": 1, \"Y_3\": \"Leonora Arias\", \"Y_5\": \"Ethan Arias\"}, {\"Y_3\": \"Alvin Webber\", \"Y_5\": \"Lera Arias\", \"Count_1\": 3}, {\"Y_3\": \"Alvin Webber\", \"Count_1\": 3, \"Y_5\": \"Ethan Arias\"}, {\"Y_5\": \"Lera Arias\", \"Count_1\": 1, \"Y_3\": \"Jarvis Arias\"}]",
+        "answer": [
+            "1",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "great_grandchild(Y_5, Y_3)",
+                "grandparent(\"Elbert Arias\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4d70251c-7b6e-4b7a-ac01-52c7e9524876",
+        "question": "How many male first cousins once removed does the sibling of the nephew of Jorge Springer have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_5\": \"Ted Shane\", \"Y_3\": \"Deloris Gosselin\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(male_first_cousin_once_removed(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "nephew(\"Jorge Springer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4567ff8e-f24d-46fc-9fc7-d748b81cdf62",
+        "question": "How many children does the parent of the niece of Sandy Springer have?",
+        "solution_traces": "[{\"Y_5\": \"Deloris Gosselin\", \"Count_1\": 2, \"Y_3\": \"Adelina Shane\"}, {\"Y_5\": \"Marybeth Bushnell\", \"Count_1\": 2, \"Y_3\": \"Gail Springer\"}, {\"Y_5\": \"Deloris Gosselin\", \"Y_3\": \"Chet Shane\", \"Count_1\": 2}, {\"Y_5\": \"Marybeth Bushnell\", \"Count_1\": 2, \"Y_3\": \"Jorge Springer\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "niece(\"Sandy Springer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a7bf5f9d-f15f-4ced-9788-6ee84a42886b",
+        "question": "How many sons-in-law does the child of the mother-in-law of Lorenz Womble have?",
+        "solution_traces": "[{\"Y_5\": \"Dortha Ridgway\", \"Count_1\": 1, \"Y_3\": \"Isabell Womble\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(Y_3, Y_1)), Count_1)",
+                "child(Y_5, Y_3)",
+                "mother_in_law(\"Lorenz Womble\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "792a9dc6-8ef6-467d-b564-4e0700e9f365",
+        "question": "How many sisters does the sister-in-law of the wife of Jorge Springer have?",
+        "solution_traces": "[{\"Y_3\": \"Sandy Springer\", \"Y_5\": \"Gail Springer\", \"Count_1\": 2}, {\"Y_3\": \"Reita Springer\", \"Y_5\": \"Gail Springer\", \"Count_1\": 2}, {\"Y_3\": \"Adelina Shane\", \"Y_5\": \"Gail Springer\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "sister_in_law(Y_5, Y_3)",
+                "wife(\"Jorge Springer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "314fc3b7-4e86-4474-87d0-cc9844b52e5f",
+        "question": "How many second aunts does the brother of the grandchild of Kiana Arias have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Leonora Arias\", \"Y_3\": \"Jarvis Arias\"}, {\"Y_5\": \"Matilda Arias\", \"Count_1\": 2, \"Y_3\": \"Jarvis Arias\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(second_aunt(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "grandchild(\"Kiana Arias\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "71c752d4-10e5-4e44-ae7f-962385eaa6ac",
+        "question": "How many friends does the female cousin of the great-granddaughter of Jorge Springer have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Evette Springer\", \"Y_5\": \"Alyssa Newby\"}, {\"Y_3\": \"Alyssa Newby\", \"Y_5\": \"Evette Springer\", \"Count_1\": 4}]",
+        "answer": [
+            "0",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "female_cousin(Y_5, Y_3)",
+                "great_granddaughter(\"Jorge Springer\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d7e58346-1d81-4557-bdb1-74b0b8b42fd4",
+        "question": "How many friends does the grandchild of the great-grandparent of Alvin Webber have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Elbert Arias\", \"Y_5\": \"Isabell Womble\"}, {\"Y_3\": \"Laurette Webber\", \"Y_5\": \"Ethan Arias\", \"Count_1\": 5}, {\"Count_1\": 1, \"Y_3\": \"Elbert Arias\", \"Y_5\": \"Lorenz Womble\"}, {\"Y_5\": \"Lera Arias\", \"Y_3\": \"Laurette Webber\", \"Count_1\": 5}, {\"Y_5\": \"Isabell Womble\", \"Y_3\": \"Laurette Webber\", \"Count_1\": 5}, {\"Y_3\": \"Laurette Webber\", \"Y_5\": \"Lorenz Womble\", \"Count_1\": 5}, {\"Count_1\": 1, \"Y_3\": \"Elbert Arias\", \"Y_5\": \"Ethan Arias\"}, {\"Y_5\": \"Lera Arias\", \"Y_3\": \"Elbert Arias\", \"Count_1\": 1}]",
+        "answer": [
+            "1",
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "great_grandparent(\"Alvin Webber\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "0791e5b7-dc12-4da5-a5aa-c59c317b2d53",
+        "question": "How many parents does the son-in-law of the great-grandparent of Jarvis Arias have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Noel Arias\", \"Y_5\": \"Lorenz Womble\"}, {\"Count_1\": 2, \"Y_5\": \"Isabell Womble\", \"Y_3\": \"Noel Arias\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "son_in_law(Y_5, Y_3)",
+                "great_grandparent(\"Jarvis Arias\", Y_5)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "have",
+            "?"
+        ],
+        "type": 15,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    }
+]

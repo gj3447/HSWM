@@ -1,0 +1,1065 @@
+[
+    {
+        "id": "085cc34d-20b3-4211-b5c1-303199c7b8e5",
+        "question": "What is the date of birth of the mother of the sister-in-law of Carrol Nagel?",
+        "solution_traces": "[{\"Y_5\": \"Tabetha Curiel\", \"Y_3\": \"Ming Curiel\", \"Y_2\": \"0240-04-09\"}]",
+        "answer": [
+            "0240-04-09"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "mother(Y_5, Y_3)",
+                "sister_in_law(\"Carrol Nagel\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "48029870-160c-4fbf-867b-065a4a1ed5ee",
+        "question": "What is the occupation of the friend of the grandchild of Pete Gainey?",
+        "solution_traces": "[{\"Y_5\": \"Anibal Camacho\", \"Y_3\": \"Francesca Camacho\", \"Y_2\": \"exercise physiologist\"}, {\"Y_5\": \"Anibal Camacho\", \"Y_2\": \"sports therapist\", \"Y_3\": \"Isabella Brockway\"}]",
+        "answer": [
+            "exercise physiologist",
+            "sports therapist"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "grandchild(\"Pete Gainey\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dbc96169-6191-471b-97c1-c3ebd1ca62e9",
+        "question": "What is the date of birth of the niece of the sister-in-law of Donovan Brockway?",
+        "solution_traces": "[{\"Y_2\": \"0270-08-24\", \"Y_3\": \"Zana Camacho\", \"Y_5\": \"Johnna Beason\"}, {\"Y_3\": \"Tena Brockway\", \"Y_2\": \"0279-07-20\", \"Y_5\": \"Johnna Beason\"}]",
+        "answer": [
+            "0270-08-24",
+            "0279-07-20"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "niece(Y_5, Y_3)",
+                "sister_in_law(\"Donovan Brockway\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c1cfa81b-27c0-486b-8a27-8d985164d968",
+        "question": "What is the occupation of the female cousin of the niece of Benny Curiel?",
+        "solution_traces": "[{\"Y_5\": \"Lucile Curiel\", \"Y_2\": \"orthoptist\", \"Y_3\": \"Sharolyn Curiel\"}, {\"Y_3\": \"Lucile Curiel\", \"Y_5\": \"Kacey Nagel\", \"Y_2\": \"structural engineer\"}, {\"Y_5\": \"Kacey Nagel\", \"Y_2\": \"orthoptist\", \"Y_3\": \"Sharolyn Curiel\"}, {\"Y_3\": \"Kacey Nagel\", \"Y_5\": \"Lucile Curiel\", \"Y_2\": \"counselling psychologist\"}]",
+        "answer": [
+            "counselling psychologist",
+            "orthoptist",
+            "structural engineer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "female_cousin(Y_5, Y_3)",
+                "niece(\"Benny Curiel\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "30e44446-6a73-4689-aded-c66369a5e0e3",
+        "question": "What is the occupation of the grandfather of the nephew of Ron Curiel?",
+        "solution_traces": "[{\"Y_2\": \"warehouse manager\", \"Y_5\": \"Murray Nagel\", \"Y_3\": \"Abdul Curiel\"}, {\"Y_2\": \"warehouse manager\", \"Y_5\": \"Michael Curiel\", \"Y_3\": \"Abdul Curiel\"}]",
+        "answer": [
+            "warehouse manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandfather(Y_5, Y_3)",
+                "nephew(\"Ron Curiel\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f049006f-0c28-47f3-b8f6-14e744426f33",
+        "question": "What is the date of birth of the son-in-law of the mother-in-law of Jules Beason?",
+        "solution_traces": "[{\"Y_3\": \"Jules Beason\", \"Y_5\": \"Loretta Gainey\", \"Y_2\": \"0245-11-21\"}, {\"Y_2\": \"0250-11-19\", \"Y_3\": \"Donovan Brockway\", \"Y_5\": \"Loretta Gainey\"}]",
+        "answer": [
+            "0245-11-21",
+            "0250-11-19"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "son_in_law(Y_5, Y_3)",
+                "mother_in_law(\"Jules Beason\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "9d7db7cb-e04d-4edd-b546-ad37661d2479",
+        "question": "What is the hobby of the father-in-law of the friend of Brett Butcher?",
+        "solution_traces": "[{\"Y_5\": \"Gabriele Curiel\", \"Y_2\": \"sports memorabilia\", \"Y_3\": \"Abdul Curiel\"}, {\"Y_3\": \"Kennith Curiel\", \"Y_2\": \"poker\", \"Y_5\": \"Kisha Curiel\"}]",
+        "answer": [
+            "poker",
+            "sports memorabilia"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "father_in_law(Y_5, Y_3)",
+                "friend(\"Brett Butcher\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "21086b48-022f-405b-88db-244ff9caa003",
+        "question": "What is the hobby of the grandson of the daughter-in-law of Owen Gainey?",
+        "solution_traces": "[{\"Y_5\": \"Blair Gainey\", \"Y_2\": \"sports memorabilia\", \"Y_3\": \"Anibal Camacho\"}]",
+        "answer": [
+            "sports memorabilia"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandson(Y_5, Y_3)",
+                "daughter_in_law(\"Owen Gainey\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1f53bcc9-52b6-42a8-ad71-73d8ace47edc",
+        "question": "What is the occupation of the mother of the friend of Delores Reinke?",
+        "solution_traces": "[{\"Y_5\": \"Maude Nagle\", \"Y_3\": \"Naomi Reinke\", \"Y_2\": \"biomedical engineer\"}]",
+        "answer": [
+            "biomedical engineer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "mother(Y_5, Y_3)",
+                "friend(\"Delores Reinke\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "aab4a09b-e884-4a5a-8544-8ed891d40001",
+        "question": "What is the hobby of the sibling of the sister of Pete Gainey?",
+        "solution_traces": "[{\"Y_3\": \"Pete Gainey\", \"Y_2\": \"fossil hunting\", \"Y_5\": \"Johnna Beason\"}, {\"Y_3\": \"Pete Gainey\", \"Y_2\": \"fossil hunting\", \"Y_5\": \"Isabella Brockway\"}, {\"Y_3\": \"Isabella Brockway\", \"Y_2\": \"learning\", \"Y_5\": \"Johnna Beason\"}, {\"Y_2\": \"story writing\", \"Y_3\": \"Johnna Beason\", \"Y_5\": \"Isabella Brockway\"}]",
+        "answer": [
+            "fossil hunting",
+            "learning",
+            "story writing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sister(\"Pete Gainey\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c48b5026-f8dd-44de-80ce-0f05a5c9d8c9",
+        "question": "What is the occupation of the sibling of the friend of Donovan Brockway?",
+        "solution_traces": "[{\"Y_3\": \"Kennith Curiel\", \"Y_5\": \"Benny Curiel\", \"Y_2\": \"copy\"}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Lucile Curiel\", \"Y_2\": \"medical laboratory scientific officer\"}, {\"Y_5\": \"Benny Curiel\", \"Y_2\": \"consulting civil engineer\", \"Y_3\": \"Tabetha Curiel\"}, {\"Y_2\": \"international aid worker\", \"Y_5\": \"Benny Curiel\", \"Y_3\": \"Elvie Nagel\"}, {\"Y_3\": \"Ron Curiel\", \"Y_5\": \"Benny Curiel\", \"Y_2\": \"financial manager\"}]",
+        "answer": [
+            "consulting civil engineer",
+            "copy",
+            "financial manager",
+            "international aid worker",
+            "medical laboratory scientific officer"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "friend(\"Donovan Brockway\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1c4f7125-68b3-4169-8e56-2caeba6dd0bf",
+        "question": "What is the date of birth of the female cousin of the cousin of Kacey Nagel?",
+        "solution_traces": "[{\"Y_5\": \"Jeffery Curiel\", \"Y_2\": \"0297-07-07\", \"Y_3\": \"Sharolyn Curiel\"}, {\"Y_5\": \"Lucile Curiel\", \"Y_2\": \"0297-07-07\", \"Y_3\": \"Sharolyn Curiel\"}, {\"Y_3\": \"Lucile Curiel\", \"Y_5\": \"Nick Curiel\", \"Y_2\": \"0301-02-13\"}, {\"Y_3\": \"Lucile Curiel\", \"Y_5\": \"Jeffery Curiel\", \"Y_2\": \"0301-02-13\"}, {\"Y_3\": \"Kacey Nagel\", \"Y_5\": \"Nick Curiel\", \"Y_2\": \"0297-04-17\"}, {\"Y_3\": \"Kacey Nagel\", \"Y_5\": \"Michael Curiel\", \"Y_2\": \"0297-04-17\"}, {\"Y_3\": \"Lucile Curiel\", \"Y_5\": \"Sharolyn Curiel\", \"Y_2\": \"0301-02-13\"}, {\"Y_3\": \"Kacey Nagel\", \"Y_5\": \"Jeffery Curiel\", \"Y_2\": \"0297-04-17\"}, {\"Y_3\": \"Kacey Nagel\", \"Y_5\": \"Lucile Curiel\", \"Y_2\": \"0297-04-17\"}, {\"Y_3\": \"Kacey Nagel\", \"Y_5\": \"Sharolyn Curiel\", \"Y_2\": \"0297-04-17\"}, {\"Y_3\": \"Sharolyn Curiel\", \"Y_2\": \"0297-07-07\", \"Y_5\": \"Nick Curiel\"}, {\"Y_5\": \"Michael Curiel\", \"Y_3\": \"Sharolyn Curiel\", \"Y_2\": \"0297-07-07\"}]",
+        "answer": [
+            "0297-04-17",
+            "0297-07-07",
+            "0301-02-13"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "female_cousin(Y_5, Y_3)",
+                "cousin(\"Kacey Nagel\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "37521684-cc28-40ec-8a48-022935a5b0f9",
+        "question": "What is the hobby of the grandparent of the nephew of Elvie Nagel?",
+        "solution_traces": "[{\"Y_5\": \"Nick Curiel\", \"Y_3\": \"Abdul Curiel\", \"Y_2\": \"sports memorabilia\"}, {\"Y_5\": \"Michael Curiel\", \"Y_2\": \"sports memorabilia\", \"Y_3\": \"Abdul Curiel\"}, {\"Y_5\": \"Jeffery Curiel\", \"Y_3\": \"Ming Curiel\", \"Y_2\": \"long-distance running\"}, {\"Y_3\": \"Ming Curiel\", \"Y_5\": \"Nick Curiel\", \"Y_2\": \"long-distance running\"}, {\"Y_5\": \"Jeffery Curiel\", \"Y_2\": \"sports memorabilia\", \"Y_3\": \"Abdul Curiel\"}, {\"Y_5\": \"Michael Curiel\", \"Y_3\": \"Ming Curiel\", \"Y_2\": \"long-distance running\"}, {\"Y_5\": \"Jeffery Curiel\", \"Y_2\": \"knowledge/word games\", \"Y_3\": \"Manuela Irving\"}, {\"Y_2\": \"knowledge/word games\", \"Y_5\": \"Nick Curiel\", \"Y_3\": \"Manuela Irving\"}, {\"Y_3\": \"Florian Irving\", \"Y_5\": \"Jeffery Curiel\", \"Y_2\": \"meditation\"}, {\"Y_3\": \"Florian Irving\", \"Y_5\": \"Nick Curiel\", \"Y_2\": \"meditation\"}]",
+        "answer": [
+            "knowledge/word games",
+            "long-distance running",
+            "meditation",
+            "sports memorabilia"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandparent(Y_5, Y_3)",
+                "nephew(\"Elvie Nagel\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1b0d6303-d43e-4957-80e0-0c85c4cb4ccd",
+        "question": "What is the hobby of the grandparent of the granddaughter of Bernie Veliz?",
+        "solution_traces": "[{\"Y_3\": \"Abdul Curiel\", \"Y_2\": \"sports memorabilia\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Y_3\": \"Allyson Veliz\", \"Y_5\": \"Sharolyn Curiel\", \"Y_2\": \"renaissance fair\"}, {\"Y_3\": \"Bernie Veliz\", \"Y_2\": \"neuroscience\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Y_3\": \"Ming Curiel\", \"Y_2\": \"long-distance running\", \"Y_5\": \"Sharolyn Curiel\"}]",
+        "answer": [
+            "long-distance running",
+            "neuroscience",
+            "renaissance fair",
+            "sports memorabilia"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "grandparent(Y_5, Y_3)",
+                "granddaughter(\"Bernie Veliz\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0d6c0915-7b89-477c-8b79-1b3edccb65c1",
+        "question": "What is the occupation of the grandchild of the father-in-law of Blair Gainey?",
+        "solution_traces": "[{\"Y_2\": \"publishing rights manager\", \"Y_5\": \"Owen Gainey\", \"Y_3\": \"Megan Beason\"}, {\"Y_3\": \"Zana Camacho\", \"Y_5\": \"Owen Gainey\", \"Y_2\": \"financial risk analyst\"}, {\"Y_3\": \"Tena Brockway\", \"Y_5\": \"Owen Gainey\", \"Y_2\": \"music tutor\"}, {\"Y_5\": \"Owen Gainey\", \"Y_2\": \"arboriculturist\", \"Y_3\": \"Joshua Gainey\"}]",
+        "answer": [
+            "arboriculturist",
+            "financial risk analyst",
+            "music tutor",
+            "publishing rights manager"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "grandchild(Y_5, Y_3)",
+                "father_in_law(\"Blair Gainey\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f605f52f-2254-483b-9da3-10289c6b0240",
+        "question": "What is the date of birth of the friend of the husband of Jacqueline Butcher?",
+        "solution_traces": "[{\"Y_3\": \"Gabriele Curiel\", \"Y_5\": \"Brett Butcher\", \"Y_2\": \"0269-11-22\"}, {\"Y_5\": \"Brett Butcher\", \"Y_2\": \"0301-11-13\", \"Y_3\": \"Kisha Curiel\"}]",
+        "answer": [
+            "0269-11-22",
+            "0301-11-13"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "husband(\"Jacqueline Butcher\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a631dafb-4305-49a3-8ef9-1022afbb0832",
+        "question": "What is the hobby of the friend of the wife of Brett Butcher?",
+        "solution_traces": "[{\"Y_2\": \"story writing\", \"Y_3\": \"Johnna Beason\", \"Y_5\": \"Jacqueline Butcher\"}, {\"Y_2\": \"reading\", \"Y_3\": \"Elvie Nagel\", \"Y_5\": \"Jacqueline Butcher\"}, {\"Y_3\": \"Kisha Curiel\", \"Y_2\": \"slacklining\", \"Y_5\": \"Jacqueline Butcher\"}, {\"Y_2\": \"shoes\", \"Y_3\": \"Adele Butcher\", \"Y_5\": \"Jacqueline Butcher\"}, {\"Y_3\": \"Ismael Camacho\", \"Y_2\": \"aerospace\", \"Y_5\": \"Jacqueline Butcher\"}, {\"Y_3\": \"Allie Curiel\", \"Y_2\": \"audiophile\", \"Y_5\": \"Jacqueline Butcher\"}]",
+        "answer": [
+            "aerospace",
+            "audiophile",
+            "reading",
+            "shoes",
+            "slacklining",
+            "story writing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "wife(\"Brett Butcher\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "44bcd877-1bbe-4c1a-a628-5a00c67b946a",
+        "question": "What is the date of birth of the friend of the sister of Pete Gainey?",
+        "solution_traces": "[{\"Y_2\": \"0272-09-14\", \"Y_3\": \"Megan Beason\", \"Y_5\": \"Johnna Beason\"}, {\"Y_3\": \"Maude Nagle\", \"Y_2\": \"0189-11-25\", \"Y_5\": \"Johnna Beason\"}, {\"Y_2\": \"0236-09-07\", \"Y_3\": \"Allyson Veliz\", \"Y_5\": \"Isabella Brockway\"}, {\"Y_3\": \"Gabriele Curiel\", \"Y_2\": \"0269-11-22\", \"Y_5\": \"Johnna Beason\"}, {\"Y_3\": \"Allie Curiel\", \"Y_2\": \"0270-11-20\", \"Y_5\": \"Johnna Beason\"}, {\"Y_2\": \"0187-11-13\", \"Y_3\": \"Jacqueline Butcher\", \"Y_5\": \"Johnna Beason\"}, {\"Y_2\": \"0270-05-06\", \"Y_3\": \"Carrol Nagel\", \"Y_5\": \"Johnna Beason\"}, {\"Y_3\": \"Anibal Camacho\", \"Y_2\": \"0296-07-18\", \"Y_5\": \"Isabella Brockway\"}, {\"Y_2\": \"0269-01-26\", \"Y_5\": \"Isabella Brockway\", \"Y_3\": \"Elvie Nagel\"}, {\"Y_3\": \"Joshua Gainey\", \"Y_5\": \"Isabella Brockway\", \"Y_2\": \"0268-07-15\"}, {\"Y_3\": \"Naomi Reinke\", \"Y_2\": \"0162-12-09\", \"Y_5\": \"Isabella Brockway\"}, {\"Y_3\": \"Leigh Curiel\", \"Y_2\": \"0267-11-25\", \"Y_5\": \"Johnna Beason\"}]",
+        "answer": [
+            "0162-12-09",
+            "0187-11-13",
+            "0189-11-25",
+            "0236-09-07",
+            "0267-11-25",
+            "0268-07-15",
+            "0269-01-26",
+            "0269-11-22",
+            "0270-05-06",
+            "0270-11-20",
+            "0272-09-14",
+            "0296-07-18"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "friend(Y_5, Y_3)",
+                "sister(\"Pete Gainey\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c444b7e4-fcbe-41e1-80a6-3ea2e2fd6c44",
+        "question": "What is the date of birth of the child of the grandfather of Nick Curiel?",
+        "solution_traces": "[{\"Y_5\": \"Abdul Curiel\", \"Y_3\": \"Benny Curiel\", \"Y_2\": \"0270-04-03\"}, {\"Y_5\": \"Florian Irving\", \"Y_2\": \"0267-11-25\", \"Y_3\": \"Leigh Curiel\"}, {\"Y_5\": \"Abdul Curiel\", \"Y_2\": \"0262-05-23\", \"Y_3\": \"Tabetha Curiel\"}, {\"Y_5\": \"Abdul Curiel\", \"Y_2\": \"0269-01-26\", \"Y_3\": \"Elvie Nagel\"}, {\"Y_5\": \"Abdul Curiel\", \"Y_3\": \"Kennith Curiel\", \"Y_2\": \"0268-03-10\"}, {\"Y_5\": \"Abdul Curiel\", \"Y_3\": \"Ron Curiel\", \"Y_2\": \"0266-04-09\"}]",
+        "answer": [
+            "0262-05-23",
+            "0266-04-09",
+            "0267-11-25",
+            "0268-03-10",
+            "0269-01-26",
+            "0270-04-03"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "child(Y_5, Y_3)",
+                "grandfather(\"Nick Curiel\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5685aafd-efbf-486a-8243-0fe0080d7bdc",
+        "question": "What is the hobby of the sibling of the daughter of Abdul Curiel?",
+        "solution_traces": "[{\"Y_2\": \"reading\", \"Y_5\": \"Tabetha Curiel\", \"Y_3\": \"Elvie Nagel\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_2\": \"equestrianism\", \"Y_3\": \"Benny Curiel\"}, {\"Y_5\": \"Tabetha Curiel\", \"Y_3\": \"Ron Curiel\", \"Y_2\": \"cycling\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_3\": \"Kennith Curiel\", \"Y_2\": \"poker\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_3\": \"Ron Curiel\", \"Y_2\": \"cycling\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_2\": \"wrestling\", \"Y_3\": \"Tabetha Curiel\"}, {\"Y_5\": \"Tabetha Curiel\", \"Y_3\": \"Kennith Curiel\", \"Y_2\": \"poker\"}, {\"Y_5\": \"Tabetha Curiel\", \"Y_2\": \"equestrianism\", \"Y_3\": \"Benny Curiel\"}]",
+        "answer": [
+            "cycling",
+            "equestrianism",
+            "poker",
+            "reading",
+            "wrestling"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "daughter(\"Abdul Curiel\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dc769723-f2d6-47c8-82fb-b43343b44113",
+        "question": "What is the hobby of the parent of the sister of Delores Reinke?",
+        "solution_traces": "[{\"Y_5\": \"Maude Nagle\", \"Y_3\": \"Julian Reinke\", \"Y_2\": \"social studies\"}, {\"Y_5\": \"Maude Nagle\", \"Y_3\": \"Naomi Reinke\", \"Y_2\": \"social studies\"}]",
+        "answer": [
+            "social studies"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "parent(Y_5, Y_3)",
+                "sister(\"Delores Reinke\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0b5a0edb-2b26-4d2d-9317-2d1cb13ef2cb",
+        "question": "What is the hobby of the uncle of the nephew of Benny Curiel?",
+        "solution_traces": "[{\"Y_5\": \"Jeffery Curiel\", \"Y_2\": \"equestrianism\", \"Y_3\": \"Benny Curiel\"}, {\"Y_3\": \"Benny Curiel\", \"Y_5\": \"Michael Curiel\", \"Y_2\": \"equestrianism\"}, {\"Y_3\": \"Benny Curiel\", \"Y_2\": \"equestrianism\", \"Y_5\": \"Nick Curiel\"}, {\"Y_3\": \"Ron Curiel\", \"Y_5\": \"Michael Curiel\", \"Y_2\": \"cycling\"}, {\"Y_3\": \"Benny Curiel\", \"Y_5\": \"Murray Nagel\", \"Y_2\": \"equestrianism\"}, {\"Y_5\": \"Jeffery Curiel\", \"Y_3\": \"Kennith Curiel\", \"Y_2\": \"poker\"}, {\"Y_3\": \"Kennith Curiel\", \"Y_5\": \"Nick Curiel\", \"Y_2\": \"poker\"}, {\"Y_3\": \"Ron Curiel\", \"Y_5\": \"Murray Nagel\", \"Y_2\": \"cycling\"}, {\"Y_3\": \"Kennith Curiel\", \"Y_5\": \"Murray Nagel\", \"Y_2\": \"poker\"}]",
+        "answer": [
+            "cycling",
+            "equestrianism",
+            "poker"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "uncle(Y_5, Y_3)",
+                "nephew(\"Benny Curiel\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fe0c542b-d53b-432c-97b5-8eaa5c68ffd7",
+        "question": "What is the occupation of the male cousin of the female cousin of Nick Curiel?",
+        "solution_traces": "[{\"Y_3\": \"Jeffery Curiel\", \"Y_2\": \"medical technical officer\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Y_3\": \"Jeffery Curiel\", \"Y_5\": \"Lucile Curiel\", \"Y_2\": \"medical technical officer\"}, {\"Y_5\": \"Kacey Nagel\", \"Y_3\": \"Nick Curiel\", \"Y_2\": \"call centre manager\"}, {\"Y_3\": \"Murray Nagel\", \"Y_5\": \"Lucile Curiel\", \"Y_2\": \"trade mark attorney\"}, {\"Y_3\": \"Jeffery Curiel\", \"Y_5\": \"Kacey Nagel\", \"Y_2\": \"medical technical officer\"}, {\"Y_5\": \"Lucile Curiel\", \"Y_3\": \"Nick Curiel\", \"Y_2\": \"call centre manager\"}, {\"Y_3\": \"Michael Curiel\", \"Y_2\": \"medical laboratory scientific officer\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Y_3\": \"Nick Curiel\", \"Y_2\": \"call centre manager\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Y_3\": \"Murray Nagel\", \"Y_2\": \"trade mark attorney\", \"Y_5\": \"Sharolyn Curiel\"}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Kacey Nagel\", \"Y_2\": \"medical laboratory scientific officer\"}]",
+        "answer": [
+            "call centre manager",
+            "medical laboratory scientific officer",
+            "medical technical officer",
+            "trade mark attorney"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "male_cousin(Y_5, Y_3)",
+                "female_cousin(\"Nick Curiel\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "db524f33-0b1e-4676-a0d3-13226dea18a8",
+        "question": "What is the occupation of the mother of the sister-in-law of Allie Curiel?",
+        "solution_traces": "[{\"Y_5\": \"Tabetha Curiel\", \"Y_2\": \"environmental health practitioner\", \"Y_3\": \"Ming Curiel\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_2\": \"environmental health practitioner\", \"Y_3\": \"Ming Curiel\"}]",
+        "answer": [
+            "environmental health practitioner"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "mother(Y_5, Y_3)",
+                "sister_in_law(\"Allie Curiel\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c116e913-c1db-4e7d-97ab-34d4262f039b",
+        "question": "What is the hobby of the sibling of the husband of Blair Gainey?",
+        "solution_traces": "[{\"Y_5\": \"Pete Gainey\", \"Y_2\": \"story writing\", \"Y_3\": \"Johnna Beason\"}, {\"Y_5\": \"Pete Gainey\", \"Y_3\": \"Isabella Brockway\", \"Y_2\": \"learning\"}]",
+        "answer": [
+            "learning",
+            "story writing"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "husband(\"Blair Gainey\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8691496f-54bb-4f94-a5c4-b1c22b9a3acc",
+        "question": "What is the date of birth of the cousin of the child of Donovan Brockway?",
+        "solution_traces": "[{\"Y_2\": \"0270-08-24\", \"Y_3\": \"Zana Camacho\", \"Y_5\": \"Tena Brockway\"}, {\"Y_3\": \"Megan Beason\", \"Y_5\": \"Tena Brockway\", \"Y_2\": \"0272-09-14\"}, {\"Y_2\": \"0268-07-15\", \"Y_5\": \"Tena Brockway\", \"Y_3\": \"Joshua Gainey\"}]",
+        "answer": [
+            "0268-07-15",
+            "0270-08-24",
+            "0272-09-14"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "cousin(Y_5, Y_3)",
+                "child(\"Donovan Brockway\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e2e0deb5-846f-4437-9309-fe4c7320f86c",
+        "question": "What is the occupation of the cousin of the nephew of Benny Curiel?",
+        "solution_traces": "[{\"Y_3\": \"Lucile Curiel\", \"Y_2\": \"structural engineer\", \"Y_5\": \"Nick Curiel\"}, {\"Y_3\": \"Kacey Nagel\", \"Y_2\": \"counselling psychologist\", \"Y_5\": \"Michael Curiel\"}, {\"Y_3\": \"Nick Curiel\", \"Y_5\": \"Murray Nagel\", \"Y_2\": \"call centre manager\"}, {\"Y_3\": \"Jeffery Curiel\", \"Y_5\": \"Murray Nagel\", \"Y_2\": \"medical technical officer\"}, {\"Y_3\": \"Murray Nagel\", \"Y_5\": \"Nick Curiel\", \"Y_2\": \"trade mark attorney\"}, {\"Y_3\": \"Nick Curiel\", \"Y_5\": \"Michael Curiel\", \"Y_2\": \"call centre manager\"}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Murray Nagel\", \"Y_2\": \"medical laboratory scientific officer\"}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Jeffery Curiel\", \"Y_2\": \"medical laboratory scientific officer\"}, {\"Y_5\": \"Murray Nagel\", \"Y_2\": \"orthoptist\", \"Y_3\": \"Sharolyn Curiel\"}, {\"Y_3\": \"Murray Nagel\", \"Y_5\": \"Michael Curiel\", \"Y_2\": \"trade mark attorney\"}, {\"Y_3\": \"Murray Nagel\", \"Y_5\": \"Jeffery Curiel\", \"Y_2\": \"trade mark attorney\"}, {\"Y_3\": \"Kacey Nagel\", \"Y_5\": \"Jeffery Curiel\", \"Y_2\": \"counselling psychologist\"}, {\"Y_3\": \"Lucile Curiel\", \"Y_5\": \"Jeffery Curiel\", \"Y_2\": \"structural engineer\"}, {\"Y_3\": \"Sharolyn Curiel\", \"Y_2\": \"orthoptist\", \"Y_5\": \"Nick Curiel\"}, {\"Y_3\": \"Jeffery Curiel\", \"Y_5\": \"Michael Curiel\", \"Y_2\": \"medical technical officer\"}, {\"Y_3\": \"Lucile Curiel\", \"Y_2\": \"structural engineer\", \"Y_5\": \"Murray Nagel\"}, {\"Y_3\": \"Michael Curiel\", \"Y_5\": \"Nick Curiel\", \"Y_2\": \"medical laboratory scientific officer\"}, {\"Y_3\": \"Kacey Nagel\", \"Y_2\": \"counselling psychologist\", \"Y_5\": \"Nick Curiel\"}, {\"Y_5\": \"Michael Curiel\", \"Y_2\": \"orthoptist\", \"Y_3\": \"Sharolyn Curiel\"}, {\"Y_5\": \"Jeffery Curiel\", \"Y_2\": \"orthoptist\", \"Y_3\": \"Sharolyn Curiel\"}]",
+        "answer": [
+            "call centre manager",
+            "counselling psychologist",
+            "medical laboratory scientific officer",
+            "medical technical officer",
+            "orthoptist",
+            "structural engineer",
+            "trade mark attorney"
+        ],
+        "prolog": {
+            "query": [
+                "job(Y_3, Y_2)",
+                "cousin(Y_5, Y_3)",
+                "nephew(\"Benny Curiel\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "33b19987-39ba-4378-82b0-801b178aa591",
+        "question": "What is the hobby of the sibling of the sister-in-law of Leigh Curiel?",
+        "solution_traces": "[{\"Y_2\": \"reading\", \"Y_5\": \"Tabetha Curiel\", \"Y_3\": \"Elvie Nagel\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_2\": \"equestrianism\", \"Y_3\": \"Benny Curiel\"}, {\"Y_5\": \"Tabetha Curiel\", \"Y_3\": \"Ron Curiel\", \"Y_2\": \"cycling\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_3\": \"Kennith Curiel\", \"Y_2\": \"poker\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_3\": \"Ron Curiel\", \"Y_2\": \"cycling\"}, {\"Y_5\": \"Elvie Nagel\", \"Y_2\": \"wrestling\", \"Y_3\": \"Tabetha Curiel\"}, {\"Y_5\": \"Tabetha Curiel\", \"Y_3\": \"Kennith Curiel\", \"Y_2\": \"poker\"}, {\"Y_5\": \"Tabetha Curiel\", \"Y_2\": \"equestrianism\", \"Y_3\": \"Benny Curiel\"}]",
+        "answer": [
+            "cycling",
+            "equestrianism",
+            "poker",
+            "reading",
+            "wrestling"
+        ],
+        "prolog": {
+            "query": [
+                "hobby(Y_3, Y_2)",
+                "sibling(Y_5, Y_3)",
+                "sister_in_law(\"Leigh Curiel\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f9d44cc8-f118-4a89-8bd9-cbfabea65527",
+        "question": "What is the date of birth of the cousin of the cousin of Tena Brockway?",
+        "solution_traces": "[{\"Y_5\": \"Joshua Gainey\", \"Y_3\": \"Tena Brockway\", \"Y_2\": \"0279-07-20\"}, {\"Y_3\": \"Tena Brockway\", \"Y_5\": \"Megan Beason\", \"Y_2\": \"0279-07-20\"}, {\"Y_5\": \"Joshua Gainey\", \"Y_3\": \"Megan Beason\", \"Y_2\": \"0272-09-14\"}, {\"Y_2\": \"0270-08-24\", \"Y_3\": \"Zana Camacho\", \"Y_5\": \"Megan Beason\"}, {\"Y_2\": \"0268-07-15\", \"Y_5\": \"Megan Beason\", \"Y_3\": \"Joshua Gainey\"}, {\"Y_3\": \"Megan Beason\", \"Y_5\": \"Zana Camacho\", \"Y_2\": \"0272-09-14\"}, {\"Y_3\": \"Tena Brockway\", \"Y_5\": \"Zana Camacho\", \"Y_2\": \"0279-07-20\"}]",
+        "answer": [
+            "0268-07-15",
+            "0270-08-24",
+            "0272-09-14",
+            "0279-07-20"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "cousin(Y_5, Y_3)",
+                "cousin(\"Tena Brockway\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "788bff38-78c7-4b9f-b696-cf13647e5bf4",
+        "question": "What is the date of birth of the nephew of the friend of Frederick Camacho?",
+        "solution_traces": "[{\"Y_3\": \"Nick Curiel\", \"Y_5\": \"Kennith Curiel\", \"Y_2\": \"0290-06-11\"}, {\"Y_3\": \"Murray Nagel\", \"Y_5\": \"Kennith Curiel\", \"Y_2\": \"0303-08-09\"}, {\"Y_3\": \"Jeffery Curiel\", \"Y_2\": \"0293-03-07\", \"Y_5\": \"Kennith Curiel\"}, {\"Y_5\": \"Joshua Gainey\", \"Y_2\": \"0296-07-18\", \"Y_3\": \"Anibal Camacho\"}]",
+        "answer": [
+            "0290-06-11",
+            "0293-03-07",
+            "0296-07-18",
+            "0303-08-09"
+        ],
+        "prolog": {
+            "query": [
+                "dob(Y_3, Y_2)",
+                "nephew(Y_5, Y_3)",
+                "friend(\"Frederick Camacho\", Y_5)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "What is",
+            "the",
+            "<attribute_name>_3",
+            "of",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "<name>_7",
+            "?"
+        ],
+        "type": 9,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    }
+]

@@ -1,0 +1,1132 @@
+[
+    {
+        "id": "20a9af53-a28c-4f8e-9fa6-798ce34b1de3",
+        "question": "How many children does the daughter-in-law of the wife of the father of Antwan Schiller have?",
+        "solution_traces": "[{\"Y_5\": \"Maurine Schiller\", \"Y_7\": \"Booker Schiller\", \"Count_1\": 1, \"Y_3\": \"Leonora Schiller\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(child(Y_3, Y_1)), Count_1)",
+                "daughter_in_law(Y_5, Y_3)",
+                "wife(Y_7, Y_5)",
+                "father(\"Antwan Schiller\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e1b0c6cb-579b-4569-8550-46d3fe336e1a",
+        "question": "How many parents does the niece of the sibling of the grandfather of Catalina Keane have?",
+        "solution_traces": "[{\"Y_3\": \"Katelyn Hodges\", \"Y_7\": \"Erik Hodges\", \"Y_5\": \"Carl Hodges\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_7\": \"Erik Hodges\", \"Y_5\": \"Carl Hodges\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_7\": \"Erik Hodges\", \"Y_5\": \"Carl Hodges\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "niece(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "grandfather(\"Catalina Keane\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "e63b33c3-7b07-4acf-9d46-29fc212d6ae4",
+        "question": "How many parents does the uncle of the sister of the aunt of Catalina Keane have?",
+        "solution_traces": "[{\"Y_3\": \"Carl Hodges\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Katelyn Hodges\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Richard Cho\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Katelyn Hodges\"}, {\"Count_1\": 2, \"Y_3\": \"Cody Cho\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Katelyn Hodges\"}, {\"Count_1\": 2, \"Y_3\": \"Richard Cho\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Dorathy Keane\"}, {\"Y_3\": \"Carl Hodges\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Dorathy Keane\", \"Count_1\": 2}, {\"Y_3\": \"Carl Hodges\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Katelyn Hodges\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Cody Cho\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Katelyn Hodges\"}, {\"Count_1\": 2, \"Y_3\": \"Cody Cho\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Dorathy Keane\"}, {\"Count_1\": 2, \"Y_3\": \"Richard Cho\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Katelyn Hodges\"}, {\"Count_1\": 2, \"Y_3\": \"Richard Cho\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Katelyn Hodges\"}, {\"Y_3\": \"Carl Hodges\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Katelyn Hodges\", \"Count_1\": 2}, {\"Count_1\": 2, \"Y_3\": \"Cody Cho\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Katelyn Hodges\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "uncle(Y_5, Y_3)",
+                "sister(Y_7, Y_5)",
+                "aunt(\"Catalina Keane\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9c29f37f-a5ed-4ab6-9607-30c525c6b31f",
+        "question": "How many grandmothers does the cousin of the grandparent of the great-grandchild of Dortha Cho have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Lakeshia Schiller\", \"Y_7\": \"Catalina Keane\", \"Y_5\": \"Rosie Hodges\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandmother(Y_3, Y_1)), Count_1)",
+                "cousin(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "great_grandchild(\"Dortha Cho\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f33f273b-7339-4525-964d-bd8059486e17",
+        "question": "How many friends does the uncle of the daughter of the sibling of Adam Schiller have?",
+        "solution_traces": "[{\"Y_7\": \"Antwan Schiller\", \"Y_3\": \"Adam Schiller\", \"Count_1\": 4, \"Y_5\": \"Lakeshia Schiller\"}, {\"Y_7\": \"Antwan Schiller\", \"Count_1\": 3, \"Y_3\": \"Mario Cho\", \"Y_5\": \"Lakeshia Schiller\"}]",
+        "answer": [
+            "3",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "uncle(Y_5, Y_3)",
+                "daughter(Y_7, Y_5)",
+                "sibling(\"Adam Schiller\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b9481d06-3567-48d8-9072-7ea3755f524c",
+        "question": "How many great-aunts does the sibling of the great-granddaughter of the grandparent of Rosie Hodges have?",
+        "solution_traces": "[{\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Serena Cho\", \"Count_1\": 1}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Woodrow Lark\", \"Count_1\": 1}, {\"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Annette Lark\", \"Count_1\": 1, \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Mitchell Cho\", \"Count_1\": 1}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Serena Cho\", \"Count_1\": 1}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Serena Cho\", \"Count_1\": 1}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Annette Lark\", \"Count_1\": 1}, {\"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Serena Cho\", \"Count_1\": 1, \"Y_3\": \"Katerine Hodges\"}, {\"Y_5\": \"Katelyn Hodges\", \"Count_1\": 1, \"Y_7\": \"Mitchell Cho\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Mitchell Cho\", \"Count_1\": 1}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Mitchell Cho\", \"Count_1\": 1}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Serena Cho\", \"Count_1\": 1}, {\"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Woodrow Lark\", \"Count_1\": 1, \"Y_3\": \"Katerine Hodges\"}, {\"Y_5\": \"Dorathy Keane\", \"Count_1\": 1, \"Y_7\": \"Mitchell Cho\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Annette Lark\", \"Count_1\": 1}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Annette Lark\", \"Count_1\": 1}, {\"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Woodrow Lark\", \"Count_1\": 1, \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Woodrow Lark\", \"Count_1\": 1}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Mitchell Cho\", \"Count_1\": 1}, {\"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Annette Lark\", \"Count_1\": 1, \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Annette Lark\", \"Count_1\": 1}, {\"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Serena Cho\", \"Count_1\": 1, \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Woodrow Lark\", \"Count_1\": 1}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Woodrow Lark\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_aunt(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "great_granddaughter(Y_7, Y_5)",
+                "grandparent(\"Rosie Hodges\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ecbf2e41-a40e-410a-995d-777f91937f44",
+        "question": "How many sons-in-law does the grandfather of the grandchild of the great-grandmother of Nevin Roth have?",
+        "solution_traces": "[{\"Y_3\": \"Earle Roth\", \"Y_5\": \"Zachery Roth\", \"Y_7\": \"Karen Roth\", \"Count_1\": 0}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Earle Roth\", \"Y_7\": \"Karen Roth\", \"Count_1\": 0}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Winford Andresen\", \"Y_7\": \"Karen Roth\", \"Count_1\": 1}, {\"Y_3\": \"Winford Andresen\", \"Y_5\": \"Zachery Roth\", \"Y_7\": \"Karen Roth\", \"Count_1\": 1}, {\"Y_3\": \"Earle Roth\", \"Count_1\": 0, \"Y_7\": \"Claudie Andresen\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Earle Roth\", \"Y_7\": \"Claudie Andresen\", \"Count_1\": 0}, {\"Y_3\": \"Earle Roth\", \"Y_5\": \"Zachery Roth\", \"Y_7\": \"Claudie Andresen\", \"Count_1\": 0}, {\"Y_3\": \"Winford Andresen\", \"Y_5\": \"Carmon Roth\", \"Y_7\": \"Karen Roth\", \"Count_1\": 1}, {\"Y_3\": \"Winford Andresen\", \"Y_7\": \"Karen Roth\", \"Count_1\": 1, \"Y_5\": \"Orlando Roth\"}, {\"Y_3\": \"Earle Roth\", \"Y_5\": \"Carmon Roth\", \"Y_7\": \"Claudie Andresen\", \"Count_1\": 0}, {\"Y_3\": \"Winford Andresen\", \"Y_5\": \"Carmon Roth\", \"Y_7\": \"Claudie Andresen\", \"Count_1\": 1}, {\"Y_3\": \"Earle Roth\", \"Y_7\": \"Karen Roth\", \"Count_1\": 0, \"Y_5\": \"Orlando Roth\"}, {\"Y_3\": \"Earle Roth\", \"Y_5\": \"Carmon Roth\", \"Y_7\": \"Karen Roth\", \"Count_1\": 0}, {\"Y_3\": \"Winford Andresen\", \"Y_5\": \"Zachery Roth\", \"Y_7\": \"Claudie Andresen\", \"Count_1\": 1}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Winford Andresen\", \"Y_7\": \"Claudie Andresen\", \"Count_1\": 1}, {\"Y_3\": \"Winford Andresen\", \"Y_7\": \"Claudie Andresen\", \"Count_1\": 1, \"Y_5\": \"Orlando Roth\"}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(Y_3, Y_1)), Count_1)",
+                "grandfather(Y_5, Y_3)",
+                "grandchild(Y_7, Y_5)",
+                "great_grandmother(\"Nevin Roth\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 8,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "97b90a48-b708-4aaf-8c19-6a43bfb4ede8",
+        "question": "How many friends does the grandparent of the second aunt of the nephew of Herman Roth have?",
+        "solution_traces": "[{\"Y_3\": \"Pasquale Roth\", \"Y_7\": \"Nevin Roth\", \"Y_5\": \"Lavonna Roth\", \"Count_1\": 3}, {\"Y_3\": \"Elissa Tan\", \"Y_7\": \"Dave Roth\", \"Y_5\": \"Lavonna Roth\", \"Count_1\": 1}, {\"Y_3\": \"Pasquale Roth\", \"Count_1\": 3, \"Y_7\": \"Dave Roth\", \"Y_5\": \"Lavonna Roth\"}, {\"Y_3\": \"Reyna Roth\", \"Y_7\": \"Dave Roth\", \"Y_5\": \"Lavonna Roth\", \"Count_1\": 3}, {\"Y_3\": \"Rupert Tan\", \"Y_7\": \"Nevin Roth\", \"Count_1\": 4, \"Y_5\": \"Lavonna Roth\"}, {\"Count_1\": 4, \"Y_3\": \"Rupert Tan\", \"Y_7\": \"Dave Roth\", \"Y_5\": \"Lavonna Roth\"}, {\"Y_7\": \"Nevin Roth\", \"Y_3\": \"Reyna Roth\", \"Y_5\": \"Lavonna Roth\", \"Count_1\": 3}, {\"Y_3\": \"Elissa Tan\", \"Y_7\": \"Nevin Roth\", \"Y_5\": \"Lavonna Roth\", \"Count_1\": 1}]",
+        "answer": [
+            "1",
+            "3",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "second_aunt(Y_7, Y_5)",
+                "nephew(\"Herman Roth\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c40a5691-bd91-4cb4-a1ca-8de57a31cdb7",
+        "question": "How many siblings does the sister of the grandson of the grandfather of Orlando Roth have?",
+        "solution_traces": "[{\"Y_3\": \"Carmon Roth\", \"Count_1\": 3, \"Y_7\": \"Winford Andresen\", \"Y_5\": \"Orlando Roth\"}, {\"Count_1\": 3, \"Y_5\": \"Zachery Roth\", \"Y_7\": \"Earle Roth\", \"Y_3\": \"Carmon Roth\"}, {\"Y_5\": \"Herman Roth\", \"Count_1\": 3, \"Y_7\": \"Earle Roth\", \"Y_3\": \"Carmon Roth\"}, {\"Count_1\": 3, \"Y_5\": \"Zachery Roth\", \"Y_7\": \"Winford Andresen\", \"Y_3\": \"Carmon Roth\"}, {\"Y_3\": \"Carmon Roth\", \"Count_1\": 3, \"Y_7\": \"Earle Roth\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Count_1\": 3, \"Y_7\": \"Winford Andresen\", \"Y_3\": \"Carmon Roth\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "sister(Y_5, Y_3)",
+                "grandson(Y_7, Y_5)",
+                "grandfather(\"Orlando Roth\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "465a2c5e-ee8f-402e-ab83-809efaa2c4ba",
+        "question": "How many friends does the great-grandparent of the great-granddaughter of the grandfather of Cody Cho have?",
+        "solution_traces": "[{\"Y_3\": \"Woodrow Lark\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Woodrow Lark\", \"Count_1\": 6}, {\"Count_1\": 2, \"Y_3\": \"Mitchell Cho\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Serena Cho\", \"Count_1\": 3, \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Mitchell Cho\"}, {\"Count_1\": 2, \"Y_3\": \"Mitchell Cho\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Woodrow Lark\"}, {\"Y_3\": \"Woodrow Lark\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Mitchell Cho\", \"Count_1\": 6}, {\"Count_1\": 2, \"Y_3\": \"Mitchell Cho\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Woodrow Lark\"}, {\"Y_3\": \"Woodrow Lark\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Mitchell Cho\", \"Count_1\": 6}, {\"Y_3\": \"Woodrow Lark\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Woodrow Lark\", \"Count_1\": 6}, {\"Count_1\": 2, \"Y_3\": \"Mitchell Cho\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Serena Cho\", \"Count_1\": 3, \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Annette Lark\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Woodrow Lark\", \"Count_1\": 5}, {\"Y_3\": \"Annette Lark\", \"Y_5\": \"Katerine Hodges\", \"Count_1\": 5, \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Serena Cho\", \"Count_1\": 3, \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Woodrow Lark\"}, {\"Y_3\": \"Serena Cho\", \"Count_1\": 3, \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Woodrow Lark\"}, {\"Count_1\": 2, \"Y_3\": \"Mitchell Cho\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Woodrow Lark\"}, {\"Y_3\": \"Woodrow Lark\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Mitchell Cho\", \"Count_1\": 6}, {\"Y_3\": \"Serena Cho\", \"Count_1\": 3, \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Annette Lark\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Woodrow Lark\", \"Count_1\": 5}, {\"Y_3\": \"Annette Lark\", \"Y_5\": \"Katelyn Hodges\", \"Count_1\": 5, \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Annette Lark\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Woodrow Lark\", \"Count_1\": 5}, {\"Y_3\": \"Woodrow Lark\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Woodrow Lark\", \"Count_1\": 6}, {\"Count_1\": 2, \"Y_3\": \"Mitchell Cho\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Annette Lark\", \"Y_5\": \"Dorathy Keane\", \"Count_1\": 5, \"Y_7\": \"Mitchell Cho\"}, {\"Y_3\": \"Serena Cho\", \"Count_1\": 3, \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Woodrow Lark\"}]",
+        "answer": [
+            "2",
+            "3",
+            "5",
+            "6"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "great_granddaughter(Y_7, Y_5)",
+                "grandfather(\"Cody Cho\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "27309a6f-930b-4ba9-b80e-3fac673672bd",
+        "question": "How many great-grandsons does the father-in-law of the mother of the aunt of Dave Roth have?",
+        "solution_traces": "[{\"Y_5\": \"Melodie Roth\", \"Y_3\": \"Earle Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(Y_3, Y_1)), Count_1)",
+                "father_in_law(Y_5, Y_3)",
+                "mother(Y_7, Y_5)",
+                "aunt(\"Dave Roth\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6eae6746-1e7c-4a9c-9881-8a198e75ca7d",
+        "question": "How many grandparents does the great-aunt of the friend of the second uncle of Nevin Roth have?",
+        "solution_traces": "[{\"Y_5\": \"Herman Roth\", \"Y_3\": \"Lavonna Roth\", \"Count_1\": 4, \"Y_7\": \"Nicky Roth\"}, {\"Y_3\": \"Lavonna Roth\", \"Count_1\": 4, \"Y_7\": \"Nicky Roth\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Katerine Hodges\", \"Count_1\": 0, \"Y_7\": \"Nicky Roth\", \"Y_3\": \"Leonora Schiller\"}]",
+        "answer": [
+            "0",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "great_aunt(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "second_uncle(\"Nevin Roth\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 9,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7e6d2eef-cebc-4aa8-889b-1e6f95899263",
+        "question": "How many parents does the friend of the father-in-law of the great-grandfather of Zachery Roth have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Mario Cho\", \"Y_5\": \"Rupert Tan\", \"Y_7\": \"Hyman Roth\"}, {\"Y_5\": \"Matthew Ayotte\", \"Y_3\": \"Woodrow Lark\", \"Y_7\": \"Marko Andresen\", \"Count_1\": 0}, {\"Count_1\": 2, \"Y_3\": \"Carmon Roth\", \"Y_5\": \"Rupert Tan\", \"Y_7\": \"Hyman Roth\"}, {\"Y_5\": \"Matthew Ayotte\", \"Y_3\": \"Gertrude Andresen\", \"Y_7\": \"Marko Andresen\", \"Count_1\": 2}, {\"Y_3\": \"Catalina Keane\", \"Count_1\": 2, \"Y_5\": \"Rupert Tan\", \"Y_7\": \"Hyman Roth\"}, {\"Y_5\": \"Matthew Ayotte\", \"Y_7\": \"Marko Andresen\", \"Count_1\": 2, \"Y_3\": \"Zachery Roth\"}, {\"Y_3\": \"Claudie Andresen\", \"Count_1\": 0, \"Y_5\": \"Rupert Tan\", \"Y_7\": \"Hyman Roth\"}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "father_in_law(Y_7, Y_5)",
+                "great_grandfather(\"Zachery Roth\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "fa5f7121-f075-49bb-ab6d-15e50da9fad4",
+        "question": "How many daughters does the wife of the father of the great-grandchild of Serena Cho have?",
+        "solution_traces": "[{\"Y_3\": \"Rosie Hodges\", \"Y_5\": \"Erik Hodges\", \"Y_7\": \"Dorathy Keane\", \"Count_1\": 3}, {\"Y_3\": \"Rosie Hodges\", \"Y_7\": \"Katerine Hodges\", \"Y_5\": \"Erik Hodges\", \"Count_1\": 3}, {\"Y_3\": \"Rosie Hodges\", \"Y_5\": \"Erik Hodges\", \"Y_7\": \"Katelyn Hodges\", \"Count_1\": 3}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter(Y_3, Y_1)), Count_1)",
+                "wife(Y_5, Y_3)",
+                "father(Y_7, Y_5)",
+                "great_grandchild(\"Serena Cho\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a1572327-26f5-4d95-b6e1-04a48c2e1bc7",
+        "question": "How many fathers-in-law does the great-grandparent of the sibling of the friend of Woodrow Lark have?",
+        "solution_traces": "[{\"Y_7\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Count_1\": 1, \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Zachery Roth\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Count_1\": 1}, {\"Y_7\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\", \"Count_1\": 0, \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Count_1\": 1}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 1}, {\"Y_3\": \"Hyman Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 1, \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Zachery Roth\", \"Y_3\": \"Marko Andresen\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 1}, {\"Y_3\": \"Marko Andresen\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 1, \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 1}, {\"Y_5\": \"Zachery Roth\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\", \"Count_1\": 0}, {\"Y_5\": \"Zachery Roth\", \"Y_3\": \"Hyman Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 1}, {\"Y_5\": \"Herman Roth\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father_in_law(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "friend(\"Woodrow Lark\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "fe3e2e19-9f94-46c0-bd28-981c81202b51",
+        "question": "How many parents does the mother-in-law of the grandfather of the sister of Katelyn Hodges have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Mario Cho\", \"Y_3\": \"Annette Lark\", \"Y_7\": \"Dorathy Keane\"}, {\"Count_1\": 2, \"Y_5\": \"Mario Cho\", \"Y_3\": \"Annette Lark\", \"Y_7\": \"Katerine Hodges\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "mother_in_law(Y_5, Y_3)",
+                "grandfather(Y_7, Y_5)",
+                "sister(\"Katelyn Hodges\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3ed3465a-2d41-4606-a23e-43892c49120f",
+        "question": "How many great-grandparents does the brother of the brother-in-law of the friend of Booker Schiller have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Cody Cho\", \"Y_7\": \"Erik Hodges\", \"Y_5\": \"Richard Cho\"}, {\"Count_1\": 2, \"Y_3\": \"Richard Cho\", \"Y_7\": \"Erik Hodges\", \"Y_5\": \"Cody Cho\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "brother(Y_5, Y_3)",
+                "brother_in_law(Y_7, Y_5)",
+                "friend(\"Booker Schiller\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3d0604f0-cb70-45a0-929a-70d147badc98",
+        "question": "How many great-grandchildren does the great-grandparent of the sibling of the grandchild of Karen Roth have?",
+        "solution_traces": "[{\"Y_3\": \"Marko Andresen\", \"Y_5\": \"Carmon Roth\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Count_1\": 4}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 4, \"Y_3\": \"Adrianna Roth\", \"Y_5\": \"Orlando Roth\"}, {\"Count_1\": 4, \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Adrianna Roth\", \"Y_5\": \"Carmon Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Adrianna Roth\", \"Count_1\": 4}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Count_1\": 4}, {\"Y_3\": \"Hyman Roth\", \"Y_5\": \"Zachery Roth\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Count_1\": 4, \"Y_3\": \"Gertrude Andresen\", \"Y_7\": \"Orlando Roth\"}, {\"Count_1\": 4, \"Y_3\": \"Hyman Roth\", \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Carmon Roth\"}, {\"Y_3\": \"Marko Andresen\", \"Y_5\": \"Zachery Roth\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Count_1\": 4, \"Y_3\": \"Marko Andresen\", \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Carmon Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\", \"Count_1\": 4}, {\"Y_5\": \"Herman Roth\", \"Count_1\": 4, \"Y_3\": \"Adrianna Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Zachery Roth\", \"Y_3\": \"Adrianna Roth\", \"Count_1\": 4, \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Zachery Roth\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\", \"Count_1\": 4}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Y_5\": \"Carmon Roth\", \"Count_1\": 4}, {\"Y_5\": \"Zachery Roth\", \"Y_3\": \"Adrianna Roth\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Zachery Roth\", \"Y_3\": \"Gertrude Andresen\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Y_5\": \"Carmon Roth\", \"Count_1\": 4}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 4}, {\"Y_5\": \"Zachery Roth\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Count_1\": 4}, {\"Y_5\": \"Herman Roth\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\", \"Count_1\": 4}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 4, \"Y_3\": \"Gertrude Andresen\", \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 4}, {\"Y_7\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Count_1\": 4, \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Zachery Roth\", \"Y_3\": \"Hyman Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4}, {\"Y_3\": \"Marko Andresen\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4, \"Y_5\": \"Orlando Roth\"}, {\"Y_3\": \"Marko Andresen\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 4, \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Zachery Roth\", \"Y_3\": \"Marko Andresen\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4}, {\"Y_3\": \"Hyman Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4, \"Y_5\": \"Orlando Roth\"}, {\"Y_7\": \"Zachery Roth\", \"Y_3\": \"Gertrude Andresen\", \"Count_1\": 4, \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Count_1\": 4, \"Y_5\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Y_5\": \"Zachery Roth\", \"Count_1\": 4}, {\"Y_7\": \"Carmon Roth\", \"Y_3\": \"Gertrude Andresen\", \"Count_1\": 4, \"Y_5\": \"Orlando Roth\"}, {\"Y_5\": \"Carmon Roth\", \"Y_3\": \"Adrianna Roth\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Count_1\": 4, \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Gertrude Andresen\", \"Y_5\": \"Carmon Roth\"}, {\"Y_3\": \"Hyman Roth\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 4, \"Y_5\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Zachery Roth\", \"Y_3\": \"Gertrude Andresen\", \"Count_1\": 4}, {\"Y_5\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Hyman Roth\", \"Count_1\": 4, \"Y_5\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Marko Andresen\", \"Y_5\": \"Zachery Roth\", \"Count_1\": 4}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Zachery Roth\", \"Y_3\": \"Adrianna Roth\", \"Count_1\": 4}, {\"Y_3\": \"Hyman Roth\", \"Y_5\": \"Carmon Roth\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Herman Roth\", \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Gertrude Andresen\", \"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandchild(Y_3, Y_1)), Count_1)",
+                "great_grandparent(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "grandchild(\"Karen Roth\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b9840eb4-7e1a-498b-9893-b9531c715044",
+        "question": "How many grandparents does the grandchild of the parent of the friend of Lavonna Roth have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Florian Ridgeway\", \"Y_7\": \"Annette Lark\", \"Y_3\": \"Dortha Cho\"}, {\"Y_3\": \"Lakeshia Schiller\", \"Y_7\": \"Antwan Schiller\", \"Count_1\": 4, \"Y_5\": \"Booker Schiller\"}, {\"Y_5\": \"Maurine Schiller\", \"Y_3\": \"Lakeshia Schiller\", \"Y_7\": \"Antwan Schiller\", \"Count_1\": 4}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Melodie Roth\", \"Count_1\": 2, \"Y_3\": \"Dave Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Samual Roth\", \"Count_1\": 2, \"Y_3\": \"Dave Roth\"}, {\"Count_1\": 2, \"Y_5\": \"Lucretia Ridgeway\", \"Y_7\": \"Annette Lark\", \"Y_3\": \"Dortha Cho\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 2, \"Y_5\": \"Melodie Roth\", \"Y_3\": \"Nevin Roth\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 2, \"Y_5\": \"Samual Roth\", \"Y_3\": \"Nevin Roth\"}]",
+        "answer": [
+            "2",
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "grandchild(Y_5, Y_3)",
+                "parent(Y_7, Y_5)",
+                "friend(\"Lavonna Roth\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "95c28dfa-8e79-46a2-8010-edba2fa80b0e",
+        "question": "How many sons-in-law does the brother-in-law of the friend of the friend of Antwan Schiller have?",
+        "solution_traces": "[{\"Y_5\": \"Antwan Schiller\", \"Y_7\": \"Dorathy Keane\", \"Y_3\": \"Mario Cho\", \"Count_1\": 1}, {\"Y_3\": \"Mario Cho\", \"Y_5\": \"Antwan Schiller\", \"Y_7\": \"Lavonna Roth\", \"Count_1\": 1}, {\"Y_3\": \"Cody Cho\", \"Y_5\": \"Erik Hodges\", \"Y_7\": \"Dorathy Keane\", \"Count_1\": 0}, {\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Antwan Schiller\", \"Y_3\": \"Mario Cho\", \"Count_1\": 1}, {\"Y_5\": \"Antwan Schiller\", \"Y_3\": \"Mario Cho\", \"Count_1\": 1, \"Y_7\": \"Adam Schiller\"}, {\"Y_5\": \"Antwan Schiller\", \"Y_7\": \"Erik Hodges\", \"Y_3\": \"Mario Cho\", \"Count_1\": 1}, {\"Y_3\": \"Richard Cho\", \"Y_5\": \"Erik Hodges\", \"Y_7\": \"Dorathy Keane\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son_in_law(Y_3, Y_1)), Count_1)",
+                "brother_in_law(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "friend(\"Antwan Schiller\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "6f8f9ea0-6ce6-42f7-8d55-03c8ab93d94c",
+        "question": "How many sisters does the sibling of the great-grandchild of the friend of Adam Schiller have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Annette Lark\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Annette Lark\", \"Count_1\": 2}, {\"Y_7\": \"Adrianna Roth\", \"Y_3\": \"Carmon Roth\", \"Count_1\": 0, \"Y_5\": \"Orlando Roth\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Katerine Hodges\", \"Y_7\": \"Annette Lark\", \"Count_1\": 2}, {\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Zachery Roth\", \"Y_3\": \"Herman Roth\", \"Count_1\": 1}, {\"Count_1\": 2, \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Annette Lark\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Carmon Roth\", \"Y_3\": \"Herman Roth\", \"Count_1\": 1}, {\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Herman Roth\", \"Count_1\": 1, \"Y_3\": \"Zachery Roth\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Carmon Roth\", \"Count_1\": 1, \"Y_3\": \"Zachery Roth\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_3\": \"Herman Roth\", \"Count_1\": 1, \"Y_5\": \"Orlando Roth\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Dorathy Keane\", \"Y_7\": \"Annette Lark\", \"Count_1\": 2}, {\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Herman Roth\", \"Count_1\": 0, \"Y_3\": \"Carmon Roth\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_3\": \"Zachery Roth\", \"Count_1\": 1, \"Y_5\": \"Orlando Roth\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Katelyn Hodges\", \"Y_7\": \"Annette Lark\", \"Count_1\": 2}, {\"Y_7\": \"Adrianna Roth\", \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Herman Roth\", \"Count_1\": 1}, {\"Y_7\": \"Adrianna Roth\", \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Zachery Roth\", \"Count_1\": 1}, {\"Y_7\": \"Adrianna Roth\", \"Y_5\": \"Zachery Roth\", \"Count_1\": 0, \"Y_3\": \"Carmon Roth\"}, {\"Y_7\": \"Adrianna Roth\", \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Carmon Roth\", \"Count_1\": 1}]",
+        "answer": [
+            "0",
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sister(Y_3, Y_1)), Count_1)",
+                "sibling(Y_5, Y_3)",
+                "great_grandchild(Y_7, Y_5)",
+                "friend(\"Adam Schiller\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "656592ef-6f3d-4adb-9f50-03892a78af33",
+        "question": "How many brothers does the daughter of the grandfather of the great-grandchild of Woodrow Lark have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Mario Cho\", \"Y_3\": \"Rosie Hodges\", \"Y_7\": \"Dorathy Keane\"}, {\"Count_1\": 2, \"Y_5\": \"Mario Cho\", \"Y_3\": \"Rosie Hodges\", \"Y_7\": \"Katerine Hodges\"}, {\"Count_1\": 2, \"Y_5\": \"Mario Cho\", \"Y_3\": \"Rosie Hodges\", \"Y_7\": \"Katelyn Hodges\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "daughter(Y_5, Y_3)",
+                "grandfather(Y_7, Y_5)",
+                "great_grandchild(\"Woodrow Lark\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "55f5a79b-59f3-450f-819d-ac9920ffb3f6",
+        "question": "How many great-grandparents does the great-grandchild of the great-grandparent of the great-grandchild of Gertrude Andresen have?",
+        "solution_traces": "[{\"Y_7\": \"Herman Roth\", \"Y_3\": \"Orlando Roth\", \"Count_1\": 4, \"Y_5\": \"Hyman Roth\"}, {\"Y_3\": \"Carmon Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4, \"Y_5\": \"Hyman Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Count_1\": 4, \"Y_3\": \"Zachery Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 4, \"Y_3\": \"Zachery Roth\", \"Y_5\": \"Hyman Roth\"}, {\"Count_1\": 4, \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Marko Andresen\", \"Y_3\": \"Carmon Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 4, \"Y_3\": \"Carmon Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_3\": \"Orlando Roth\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Count_1\": 4, \"Y_3\": \"Herman Roth\", \"Y_5\": \"Marko Andresen\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Zachery Roth\", \"Count_1\": 4, \"Y_5\": \"Marko Andresen\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Count_1\": 4, \"Y_3\": \"Zachery Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_3\": \"Carmon Roth\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_3\": \"Orlando Roth\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 4, \"Y_3\": \"Zachery Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_3\": \"Carmon Roth\", \"Count_1\": 4, \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Carmon Roth\", \"Count_1\": 4, \"Y_5\": \"Marko Andresen\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Zachery Roth\", \"Count_1\": 4, \"Y_5\": \"Hyman Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Count_1\": 4, \"Y_3\": \"Herman Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 4, \"Y_5\": \"Marko Andresen\", \"Y_3\": \"Carmon Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_3\": \"Orlando Roth\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 4}, {\"Count_1\": 4, \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Marko Andresen\"}, {\"Count_1\": 4, \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Marko Andresen\", \"Y_3\": \"Zachery Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Carmon Roth\", \"Count_1\": 4, \"Y_5\": \"Hyman Roth\"}, {\"Count_1\": 4, \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Hyman Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 4, \"Y_3\": \"Zachery Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Count_1\": 4, \"Y_3\": \"Herman Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Count_1\": 4, \"Y_7\": \"Carmon Roth\", \"Y_5\": \"Marko Andresen\", \"Y_3\": \"Zachery Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4, \"Y_3\": \"Zachery Roth\"}, {\"Count_1\": 4, \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Marko Andresen\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Carmon Roth\", \"Y_3\": \"Herman Roth\", \"Count_1\": 4, \"Y_5\": \"Hyman Roth\"}, {\"Y_3\": \"Zachery Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4, \"Y_5\": \"Hyman Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_3\": \"Orlando Roth\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 4}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 4, \"Y_3\": \"Herman Roth\", \"Y_5\": \"Gertrude Andresen\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 4, \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Marko Andresen\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Adrianna Roth\", \"Count_1\": 4}, {\"Count_1\": 4, \"Y_3\": \"Herman Roth\", \"Y_5\": \"Hyman Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Adrianna Roth\", \"Count_1\": 4, \"Y_3\": \"Carmon Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_3\": \"Orlando Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4}, {\"Y_5\": \"Adrianna Roth\", \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Herman Roth\", \"Count_1\": 4}, {\"Y_3\": \"Zachery Roth\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 4, \"Y_5\": \"Hyman Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4, \"Y_3\": \"Zachery Roth\"}, {\"Y_3\": \"Orlando Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4, \"Y_5\": \"Hyman Roth\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 4, \"Y_3\": \"Herman Roth\", \"Y_5\": \"Hyman Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Adrianna Roth\", \"Count_1\": 4, \"Y_3\": \"Zachery Roth\"}, {\"Y_3\": \"Carmon Roth\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 4, \"Y_5\": \"Hyman Roth\"}, {\"Y_7\": \"Herman Roth\", \"Y_5\": \"Adrianna Roth\", \"Y_3\": \"Herman Roth\", \"Count_1\": 4}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 4, \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Gertrude Andresen\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 4, \"Y_3\": \"Herman Roth\", \"Y_5\": \"Marko Andresen\"}, {\"Y_3\": \"Orlando Roth\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 4, \"Y_5\": \"Hyman Roth\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 4, \"Y_5\": \"Gertrude Andresen\", \"Y_3\": \"Carmon Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_3\": \"Orlando Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4}, {\"Count_1\": 4, \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Marko Andresen\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Herman Roth\", \"Count_1\": 4}, {\"Y_3\": \"Orlando Roth\", \"Count_1\": 4, \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Marko Andresen\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4, \"Y_3\": \"Carmon Roth\"}, {\"Count_1\": 4, \"Y_7\": \"Carmon Roth\", \"Y_5\": \"Marko Andresen\", \"Y_3\": \"Carmon Roth\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 4, \"Y_5\": \"Gertrude Andresen\", \"Y_3\": \"Zachery Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Herman Roth\", \"Count_1\": 4}, {\"Y_3\": \"Orlando Roth\", \"Count_1\": 4, \"Y_7\": \"Carmon Roth\", \"Y_5\": \"Marko Andresen\"}, {\"Y_7\": \"Zachery Roth\", \"Y_3\": \"Herman Roth\", \"Count_1\": 4, \"Y_5\": \"Hyman Roth\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 4, \"Y_5\": \"Marko Andresen\", \"Y_3\": \"Zachery Roth\"}, {\"Y_5\": \"Gertrude Andresen\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 4, \"Y_3\": \"Carmon Roth\"}, {\"Y_3\": \"Carmon Roth\", \"Count_1\": 4, \"Y_5\": \"Hyman Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_5\": \"Adrianna Roth\", \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Herman Roth\", \"Count_1\": 4}, {\"Y_5\": \"Gertrude Andresen\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 4, \"Y_3\": \"Carmon Roth\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandparent(Y_3, Y_1)), Count_1)",
+                "great_grandchild(Y_5, Y_3)",
+                "great_grandparent(Y_7, Y_5)",
+                "great_grandchild(\"Gertrude Andresen\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 10,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b23054fd-ae75-42ec-8501-cbccfe5003ee",
+        "question": "How many brothers-in-law does the grandparent of the friend of the grandchild of Gertrude Andresen have?",
+        "solution_traces": "[{\"Y_7\": \"Melodie Roth\", \"Y_3\": \"Mitchell Cho\", \"Count_1\": 0, \"Y_5\": \"Cody Cho\"}, {\"Y_7\": \"Melodie Roth\", \"Y_3\": \"Rosie Hodges\", \"Y_5\": \"Catalina Keane\", \"Count_1\": 1}, {\"Y_7\": \"Melodie Roth\", \"Y_3\": \"Woodrow Lark\", \"Count_1\": 0, \"Y_5\": \"Cody Cho\"}, {\"Y_3\": \"Serena Cho\", \"Y_7\": \"Melodie Roth\", \"Count_1\": 0, \"Y_5\": \"Cody Cho\"}, {\"Y_7\": \"Melodie Roth\", \"Y_3\": \"Annette Lark\", \"Count_1\": 0, \"Y_5\": \"Cody Cho\"}, {\"Count_1\": 2, \"Y_7\": \"Melodie Roth\", \"Y_5\": \"Catalina Keane\", \"Y_3\": \"Erik Hodges\"}]",
+        "answer": [
+            "0",
+            "1",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother_in_law(Y_3, Y_1)), Count_1)",
+                "grandparent(Y_5, Y_3)",
+                "friend(Y_7, Y_5)",
+                "grandchild(\"Gertrude Andresen\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "99a9b93a-e2fd-49e9-b2e2-e82bc790e5ab",
+        "question": "How many siblings does the granddaughter of the great-grandparent of the friend of Melodie Roth have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_5\": \"Dortha Cho\", \"Y_7\": \"Catalina Keane\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Dorathy Keane\", \"Count_1\": 2, \"Y_7\": \"Catalina Keane\", \"Y_5\": \"Andres Hodges\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Dortha Cho\", \"Y_7\": \"Catalina Keane\", \"Count_1\": 2}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Mario Cho\", \"Y_7\": \"Catalina Keane\", \"Count_1\": 2}, {\"Y_3\": \"Katelyn Hodges\", \"Count_1\": 2, \"Y_7\": \"Catalina Keane\", \"Y_5\": \"Andres Hodges\"}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Dortha Cho\", \"Y_7\": \"Catalina Keane\", \"Count_1\": 2}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Mario Cho\", \"Y_7\": \"Catalina Keane\", \"Count_1\": 2}, {\"Y_3\": \"Katelyn Hodges\", \"Y_5\": \"Niki Hodges\", \"Y_7\": \"Catalina Keane\", \"Count_1\": 2}, {\"Y_3\": \"Dortha Cho\", \"Y_5\": \"Lucretia Ridgeway\", \"Count_1\": 0, \"Y_7\": \"Cody Cho\"}, {\"Count_1\": 2, \"Y_5\": \"Niki Hodges\", \"Y_7\": \"Catalina Keane\", \"Y_3\": \"Katerine Hodges\"}, {\"Count_1\": 2, \"Y_5\": \"Mario Cho\", \"Y_7\": \"Catalina Keane\", \"Y_3\": \"Katerine Hodges\"}, {\"Count_1\": 2, \"Y_7\": \"Catalina Keane\", \"Y_5\": \"Andres Hodges\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Dortha Cho\", \"Y_5\": \"Florian Ridgeway\", \"Count_1\": 0, \"Y_7\": \"Cody Cho\"}, {\"Y_3\": \"Dorathy Keane\", \"Y_5\": \"Niki Hodges\", \"Y_7\": \"Catalina Keane\", \"Count_1\": 2}]",
+        "answer": [
+            "0",
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "granddaughter(Y_5, Y_3)",
+                "great_grandparent(Y_7, Y_5)",
+                "friend(\"Melodie Roth\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 7,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d5c4ef8e-eb61-4003-8577-7bf8d1352053",
+        "question": "How many great-grandsons does the son-in-law of the grandparent of the sibling of Nicky Roth have?",
+        "solution_traces": "[{\"Y_5\": \"Rupert Tan\", \"Count_1\": 3, \"Y_3\": \"Hyman Roth\", \"Y_7\": \"Earle Roth\"}, {\"Count_1\": 3, \"Y_3\": \"Hyman Roth\", \"Y_7\": \"Lavonna Roth\", \"Y_5\": \"Rupert Tan\"}, {\"Count_1\": 3, \"Y_3\": \"Hyman Roth\", \"Y_5\": \"Elissa Tan\", \"Y_7\": \"Earle Roth\"}, {\"Count_1\": 3, \"Y_3\": \"Hyman Roth\", \"Y_5\": \"Elissa Tan\", \"Y_7\": \"Lavonna Roth\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(Y_3, Y_1)), Count_1)",
+                "son_in_law(Y_5, Y_3)",
+                "grandparent(Y_7, Y_5)",
+                "sibling(\"Nicky Roth\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d635bd63-1bb5-48ca-add6-81a5a7b6234e",
+        "question": "How many siblings does the friend of the great-uncle of the child of Samual Roth have?",
+        "solution_traces": "[{\"Y_3\": \"Booker Schiller\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 0, \"Y_5\": \"Nicky Roth\"}, {\"Y_3\": \"Booker Schiller\", \"Count_1\": 0, \"Y_5\": \"Nicky Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Count_1\": 2, \"Y_7\": \"Carmon Roth\", \"Y_5\": \"Nicky Roth\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Adam Schiller\", \"Y_5\": \"Nicky Roth\", \"Count_1\": 1}, {\"Count_1\": 2, \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Nicky Roth\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_3\": \"Adam Schiller\", \"Y_7\": \"Carmon Roth\", \"Y_5\": \"Nicky Roth\", \"Count_1\": 1}, {\"Y_3\": \"Catalina Keane\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 0, \"Y_5\": \"Nicky Roth\"}, {\"Y_3\": \"Booker Schiller\", \"Y_7\": \"Zachery Roth\", \"Count_1\": 0, \"Y_5\": \"Nicky Roth\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 2, \"Y_5\": \"Nicky Roth\", \"Y_3\": \"Katerine Hodges\"}, {\"Y_7\": \"Herman Roth\", \"Y_3\": \"Booker Schiller\", \"Count_1\": 0, \"Y_5\": \"Nicky Roth\"}, {\"Count_1\": 2, \"Y_3\": \"Katerine Hodges\", \"Y_5\": \"Nicky Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Count_1\": 3, \"Y_3\": \"Herman Roth\", \"Y_5\": \"Nicky Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Orlando Roth\", \"Count_1\": 3, \"Y_7\": \"Carmon Roth\", \"Y_5\": \"Nicky Roth\"}, {\"Y_3\": \"Catalina Keane\", \"Count_1\": 0, \"Y_5\": \"Nicky Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Count_1\": 3, \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Nicky Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Catalina Keane\", \"Y_7\": \"Carmon Roth\", \"Count_1\": 0, \"Y_5\": \"Nicky Roth\"}, {\"Y_3\": \"Adam Schiller\", \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Nicky Roth\", \"Count_1\": 1}, {\"Count_1\": 3, \"Y_7\": \"Carmon Roth\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Nicky Roth\"}, {\"Count_1\": 3, \"Y_7\": \"Zachery Roth\", \"Y_3\": \"Herman Roth\", \"Y_5\": \"Nicky Roth\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 3, \"Y_3\": \"Herman Roth\", \"Y_5\": \"Nicky Roth\"}, {\"Y_3\": \"Adam Schiller\", \"Count_1\": 1, \"Y_5\": \"Nicky Roth\", \"Y_7\": \"Orlando Roth\"}, {\"Y_3\": \"Orlando Roth\", \"Count_1\": 3, \"Y_7\": \"Zachery Roth\", \"Y_5\": \"Nicky Roth\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 0, \"Y_5\": \"Nicky Roth\", \"Y_3\": \"Catalina Keane\"}, {\"Y_7\": \"Herman Roth\", \"Count_1\": 3, \"Y_3\": \"Orlando Roth\", \"Y_5\": \"Nicky Roth\"}]",
+        "answer": [
+            "0",
+            "1",
+            "2",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "friend(Y_5, Y_3)",
+                "great_uncle(Y_7, Y_5)",
+                "child(\"Samual Roth\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1b192d68-12e2-47dd-af55-b8913eb8b1fd",
+        "question": "How many brothers does the brother-in-law of the sibling of the husband of Dortha Cho have?",
+        "solution_traces": "[{\"Y_7\": \"Mario Cho\", \"Y_5\": \"Leonora Schiller\", \"Y_3\": \"Adam Schiller\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "brother_in_law(Y_5, Y_3)",
+                "sibling(Y_7, Y_5)",
+                "husband(\"Dortha Cho\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "09289668-d3eb-45e5-9f6f-f3c063507036",
+        "question": "How many sons does the parent of the son-in-law of the mother-in-law of Hyman Roth have?",
+        "solution_traces": "[{\"Y_3\": \"Reyna Roth\", \"Y_7\": \"Elissa Tan\", \"Count_1\": 1, \"Y_5\": \"Hyman Roth\"}, {\"Y_3\": \"Pasquale Roth\", \"Y_7\": \"Elissa Tan\", \"Count_1\": 1, \"Y_5\": \"Hyman Roth\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(son(Y_3, Y_1)), Count_1)",
+                "parent(Y_5, Y_3)",
+                "son_in_law(Y_7, Y_5)",
+                "mother_in_law(\"Hyman Roth\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "53421c45-50a3-48c6-a721-08b1cc149782",
+        "question": "How many grandparents does the sister-in-law of the mother-in-law of the wife of Samual Roth have?",
+        "solution_traces": "[{\"Y_3\": \"Lavonna Roth\", \"Y_7\": \"Melodie Roth\", \"Count_1\": 4, \"Y_5\": \"Karen Roth\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "sister_in_law(Y_5, Y_3)",
+                "mother_in_law(Y_7, Y_5)",
+                "wife(\"Samual Roth\", Y_7)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "the",
+            "<relation>_6",
+            "of",
+            "the",
+            "<relation>_8",
+            "of",
+            "<name>_9",
+            "have",
+            "?"
+        ],
+        "type": 13,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    }
+]

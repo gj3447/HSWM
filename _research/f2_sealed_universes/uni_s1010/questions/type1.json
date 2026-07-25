@@ -1,0 +1,1073 @@
+[
+    {
+        "id": "4f1b9ee6-db14-4fbc-a005-ac219d02f677",
+        "question": "Who is the son-in-law of the great-grandparent of the sibling of Kurt Ruiz?",
+        "solution_traces": "[{\"Y_6\": \"Lucas Ruiz\", \"Y_2\": \"Riley Clary\", \"Y_4\": \"Mckinley Beard\"}, {\"Y_4\": \"Bernice Beard\", \"Y_6\": \"Lucas Ruiz\", \"Y_2\": \"Riley Clary\"}]",
+        "answer": [
+            "Riley Clary"
+        ],
+        "prolog": {
+            "query": [
+                "son_in_law(Y_4, Y_2)",
+                "great_grandparent(Y_6, Y_4)",
+                "sibling(\"Kurt Ruiz\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d19e702f-2f41-4441-a8d0-77d9c6b9aa5f",
+        "question": "Who is the friend of the wife of the grandfather of Aletha Bauer?",
+        "solution_traces": "[{\"Y_4\": \"Phylis Lowry\", \"Y_6\": \"Zachery Lowry\", \"Y_2\": \"Audie Lowry\"}, {\"Y_6\": \"Eugene Angle\", \"Y_4\": \"Rhea Angle\", \"Y_2\": \"Aletha Bauer\"}, {\"Y_2\": \"Zachary Clary\", \"Y_4\": \"Phylis Lowry\", \"Y_6\": \"Zachery Lowry\"}, {\"Y_6\": \"Eugene Angle\", \"Y_4\": \"Rhea Angle\", \"Y_2\": \"Octavio Kruger\"}]",
+        "answer": [
+            "Aletha Bauer",
+            "Audie Lowry",
+            "Octavio Kruger",
+            "Zachary Clary"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "wife(Y_6, Y_4)",
+                "grandfather(\"Aletha Bauer\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "72ae074a-a944-42c8-8c23-a3fd9b149303",
+        "question": "Who is the second uncle of the grandchild of the daughter-in-law of Olivia Ruiz?",
+        "solution_traces": "[{\"Y_2\": \"Linwood Clary\", \"Y_4\": \"Wm Ruiz\", \"Y_6\": \"Genesis Ruiz\"}, {\"Y_4\": \"Wm Ruiz\", \"Y_6\": \"Genesis Ruiz\", \"Y_2\": \"Zachary Clary\"}]",
+        "answer": [
+            "Linwood Clary",
+            "Zachary Clary"
+        ],
+        "prolog": {
+            "query": [
+                "second_uncle(Y_4, Y_2)",
+                "grandchild(Y_6, Y_4)",
+                "daughter_in_law(\"Olivia Ruiz\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "13b9eaa5-2568-48ab-a2c3-54fa1f67215e",
+        "question": "Who is the grandmother of the grandson of the grandparent of Romelia Ruiz?",
+        "solution_traces": "[{\"Y_6\": \"Wade Soper\", \"Y_2\": \"Catalina Soper\", \"Y_4\": \"Dexter Ruiz\"}, {\"Y_4\": \"Dexter Ruiz\", \"Y_2\": \"Catalina Soper\", \"Y_6\": \"Olivia Ruiz\"}, {\"Y_6\": \"Catalina Soper\", \"Y_4\": \"Wilbert Ruiz\", \"Y_2\": \"Catalina Soper\"}, {\"Y_4\": \"Wilbert Ruiz\", \"Y_2\": \"Catalina Soper\", \"Y_6\": \"Olivia Ruiz\"}, {\"Y_4\": \"Wilbert Ruiz\", \"Y_2\": \"Olivia Ruiz\", \"Y_6\": \"Roderick Ruiz\"}, {\"Y_6\": \"Wade Soper\", \"Y_2\": \"Olivia Ruiz\", \"Y_4\": \"Dexter Ruiz\"}, {\"Y_4\": \"Wilbert Ruiz\", \"Y_6\": \"Wade Soper\", \"Y_2\": \"Catalina Soper\"}, {\"Y_4\": \"Dexter Ruiz\", \"Y_2\": \"Olivia Ruiz\", \"Y_6\": \"Roderick Ruiz\"}, {\"Y_4\": \"Dexter Ruiz\", \"Y_2\": \"Olivia Ruiz\", \"Y_6\": \"Olivia Ruiz\"}, {\"Y_6\": \"Catalina Soper\", \"Y_4\": \"Wilbert Ruiz\", \"Y_2\": \"Olivia Ruiz\"}, {\"Y_6\": \"Catalina Soper\", \"Y_4\": \"Dexter Ruiz\", \"Y_2\": \"Catalina Soper\"}, {\"Y_4\": \"Wilbert Ruiz\", \"Y_2\": \"Olivia Ruiz\", \"Y_6\": \"Olivia Ruiz\"}, {\"Y_4\": \"Wilbert Ruiz\", \"Y_2\": \"Catalina Soper\", \"Y_6\": \"Roderick Ruiz\"}, {\"Y_4\": \"Wilbert Ruiz\", \"Y_6\": \"Wade Soper\", \"Y_2\": \"Olivia Ruiz\"}, {\"Y_4\": \"Dexter Ruiz\", \"Y_2\": \"Catalina Soper\", \"Y_6\": \"Roderick Ruiz\"}, {\"Y_6\": \"Catalina Soper\", \"Y_4\": \"Dexter Ruiz\", \"Y_2\": \"Olivia Ruiz\"}]",
+        "answer": [
+            "Catalina Soper",
+            "Olivia Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "grandmother(Y_4, Y_2)",
+                "grandson(Y_6, Y_4)",
+                "grandparent(\"Romelia Ruiz\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "5b868a36-1a81-4716-bd0f-07f94ea2efba",
+        "question": "Who is the great-grandchild of the mother of the daughter of Bernice Beard?",
+        "solution_traces": "[{\"Y_2\": \"Lucas Ruiz\", \"Y_6\": \"Laverne Clary\", \"Y_4\": \"Bernice Beard\"}, {\"Y_6\": \"Laverne Clary\", \"Y_4\": \"Bernice Beard\", \"Y_2\": \"Jessie Clary\"}, {\"Y_2\": \"Kurt Ruiz\", \"Y_6\": \"Laverne Clary\", \"Y_4\": \"Bernice Beard\"}]",
+        "answer": [
+            "Jessie Clary",
+            "Kurt Ruiz",
+            "Lucas Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandchild(Y_4, Y_2)",
+                "mother(Y_6, Y_4)",
+                "daughter(\"Bernice Beard\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e2bcad18-d09c-4e77-b8f9-ec0f064fdb78",
+        "question": "Who is the friend of the grandchild of the wife of Elbert Kruger?",
+        "solution_traces": "[{\"Y_2\": \"Tabetha Lowry\", \"Y_6\": \"Enedina Kruger\", \"Y_4\": \"Cornelius Kruger\"}, {\"Y_6\": \"Enedina Kruger\", \"Y_4\": \"Cornelius Kruger\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_6\": \"Enedina Kruger\", \"Y_2\": \"Riley Clary\", \"Y_4\": \"Octavio Kruger\"}, {\"Y_6\": \"Enedina Kruger\", \"Y_4\": \"Cornelius Kruger\", \"Y_2\": \"Octavio Kruger\"}, {\"Y_6\": \"Enedina Kruger\", \"Y_2\": \"Cornelius Kruger\", \"Y_4\": \"Octavio Kruger\"}, {\"Y_6\": \"Enedina Kruger\", \"Y_2\": \"Rhea Angle\", \"Y_4\": \"Octavio Kruger\"}, {\"Y_2\": \"Enedina Kruger\", \"Y_6\": \"Enedina Kruger\", \"Y_4\": \"Cornelius Kruger\"}]",
+        "answer": [
+            "Cornelius Kruger",
+            "Enedina Kruger",
+            "Lawrence Lowry",
+            "Octavio Kruger",
+            "Rhea Angle",
+            "Riley Clary",
+            "Tabetha Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "grandchild(Y_6, Y_4)",
+                "wife(\"Elbert Kruger\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "65f948fc-d1c3-42e2-b308-da54c0ef6d84",
+        "question": "Who is the friend of the father-in-law of the child of Catalina Soper?",
+        "solution_traces": "[{\"Y_2\": \"Enedina Kruger\", \"Y_6\": \"Genesis Ruiz\", \"Y_4\": \"Roderick Ruiz\"}, {\"Y_6\": \"Genesis Ruiz\", \"Y_4\": \"Roderick Ruiz\", \"Y_2\": \"Audie Lowry\"}, {\"Y_6\": \"Genesis Ruiz\", \"Y_2\": \"Julian Angle\", \"Y_4\": \"Roderick Ruiz\"}]",
+        "answer": [
+            "Audie Lowry",
+            "Enedina Kruger",
+            "Julian Angle"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "father_in_law(Y_6, Y_4)",
+                "child(\"Catalina Soper\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "03e46a6f-85b2-4c9a-b6af-bf9984aef586",
+        "question": "Who is the daughter-in-law of the daughter-in-law of the father-in-law of Audie Lowry?",
+        "solution_traces": "[{\"Y_4\": \"Audie Lowry\", \"Y_2\": \"Tabetha Lowry\", \"Y_6\": \"Zachery Lowry\"}]",
+        "answer": [
+            "Tabetha Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "daughter_in_law(Y_4, Y_2)",
+                "daughter_in_law(Y_6, Y_4)",
+                "father_in_law(\"Audie Lowry\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e6525e77-e4e7-4d52-92cc-59c78af514d6",
+        "question": "Who is the child of the great-grandparent of the grandchild of Cornelius Kruger?",
+        "solution_traces": "[{\"Y_2\": \"Audie Lowry\", \"Y_6\": \"Lela Lowry\", \"Y_4\": \"Eugene Angle\"}, {\"Y_6\": \"Faith Lowry\", \"Y_2\": \"Octavio Kruger\", \"Y_4\": \"Thomasine Kruger\"}, {\"Y_2\": \"Julian Angle\", \"Y_6\": \"Faith Lowry\", \"Y_4\": \"Rhea Angle\"}, {\"Y_6\": \"Lela Lowry\", \"Y_4\": \"Alec Kruger\", \"Y_2\": \"Cornelius Kruger\"}, {\"Y_6\": \"Faith Lowry\", \"Y_4\": \"Alec Kruger\", \"Y_2\": \"Octavio Kruger\"}, {\"Y_2\": \"Audie Lowry\", \"Y_6\": \"Faith Lowry\", \"Y_4\": \"Eugene Angle\"}, {\"Y_4\": \"Zachery Lowry\", \"Y_6\": \"Faith Lowry\", \"Y_2\": \"Kurtis Lowry\"}, {\"Y_6\": \"Faith Lowry\", \"Y_2\": \"Cornelius Kruger\", \"Y_4\": \"Thomasine Kruger\"}, {\"Y_6\": \"Lela Lowry\", \"Y_4\": \"Alec Kruger\", \"Y_2\": \"Octavio Kruger\"}, {\"Y_4\": \"Zachery Lowry\", \"Y_6\": \"Lela Lowry\", \"Y_2\": \"Kurtis Lowry\"}, {\"Y_2\": \"Audie Lowry\", \"Y_4\": \"Rhea Angle\", \"Y_6\": \"Lela Lowry\"}, {\"Y_2\": \"Audie Lowry\", \"Y_6\": \"Faith Lowry\", \"Y_4\": \"Rhea Angle\"}, {\"Y_2\": \"Octavio Kruger\", \"Y_6\": \"Lela Lowry\", \"Y_4\": \"Thomasine Kruger\"}, {\"Y_2\": \"Julian Angle\", \"Y_6\": \"Lela Lowry\", \"Y_4\": \"Eugene Angle\"}, {\"Y_4\": \"Phylis Lowry\", \"Y_6\": \"Faith Lowry\", \"Y_2\": \"Kurtis Lowry\"}, {\"Y_2\": \"Julian Angle\", \"Y_6\": \"Faith Lowry\", \"Y_4\": \"Eugene Angle\"}, {\"Y_6\": \"Lela Lowry\", \"Y_2\": \"Cornelius Kruger\", \"Y_4\": \"Thomasine Kruger\"}, {\"Y_2\": \"Julian Angle\", \"Y_4\": \"Rhea Angle\", \"Y_6\": \"Lela Lowry\"}, {\"Y_6\": \"Faith Lowry\", \"Y_2\": \"Cornelius Kruger\", \"Y_4\": \"Alec Kruger\"}, {\"Y_4\": \"Phylis Lowry\", \"Y_6\": \"Lela Lowry\", \"Y_2\": \"Kurtis Lowry\"}]",
+        "answer": [
+            "Audie Lowry",
+            "Cornelius Kruger",
+            "Julian Angle",
+            "Kurtis Lowry",
+            "Octavio Kruger"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "great_grandparent(Y_6, Y_4)",
+                "grandchild(\"Cornelius Kruger\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "dfd4ee57-5df5-4ed9-881c-49d993d26060",
+        "question": "Who is the sibling of the daughter of the parent of Simone Kruger?",
+        "solution_traces": "[{\"Y_6\": \"Elbert Kruger\", \"Y_4\": \"Simone Kruger\", \"Y_2\": \"Alec Kruger\"}, {\"Y_4\": \"Simone Kruger\", \"Y_6\": \"Enedina Kruger\", \"Y_2\": \"Alec Kruger\"}]",
+        "answer": [
+            "Alec Kruger"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "daughter(Y_6, Y_4)",
+                "parent(\"Simone Kruger\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "b78b4348-eb36-4fa2-9a49-47c110b681c2",
+        "question": "Who is the great-granddaughter of the parent of the friend of Lela Lowry?",
+        "solution_traces": "[{\"Y_2\": \"Lela Lowry\", \"Y_4\": \"Rhea Angle\", \"Y_6\": \"Audie Lowry\"}, {\"Y_2\": \"Faith Lowry\", \"Y_4\": \"Rhea Angle\", \"Y_6\": \"Audie Lowry\"}, {\"Y_2\": \"Faith Lowry\", \"Y_6\": \"Audie Lowry\", \"Y_4\": \"Eugene Angle\"}, {\"Y_2\": \"Lela Lowry\", \"Y_6\": \"Audie Lowry\", \"Y_4\": \"Eugene Angle\"}]",
+        "answer": [
+            "Faith Lowry",
+            "Lela Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "parent(Y_6, Y_4)",
+                "friend(\"Lela Lowry\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "a47fc499-4430-414c-8a9c-80cf8800387f",
+        "question": "Who is the parent of the female cousin of the son of Raul Bauer?",
+        "solution_traces": "[{\"Y_4\": \"Lela Lowry\", \"Y_2\": \"Robby Lowry\", \"Y_6\": \"Demetrius Bauer\"}, {\"Y_4\": \"Faith Lowry\", \"Y_2\": \"Tabetha Lowry\", \"Y_6\": \"Demetrius Bauer\"}, {\"Y_4\": \"Faith Lowry\", \"Y_2\": \"Robby Lowry\", \"Y_6\": \"Demetrius Bauer\"}, {\"Y_4\": \"Lela Lowry\", \"Y_2\": \"Tabetha Lowry\", \"Y_6\": \"Demetrius Bauer\"}]",
+        "answer": [
+            "Robby Lowry",
+            "Tabetha Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "parent(Y_4, Y_2)",
+                "female_cousin(Y_6, Y_4)",
+                "son(\"Raul Bauer\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f11c2ada-8efe-4d8f-a62e-d7a627fd60c9",
+        "question": "Who is the husband of the child of the mother of Julian Angle?",
+        "solution_traces": "[{\"Y_4\": \"Audie Lowry\", \"Y_6\": \"Rhea Angle\", \"Y_2\": \"Kurtis Lowry\"}]",
+        "answer": [
+            "Kurtis Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "husband(Y_4, Y_2)",
+                "child(Y_6, Y_4)",
+                "mother(\"Julian Angle\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cc713c56-e6ef-4a6f-9bf5-f161a8a0cf1f",
+        "question": "Who is the sibling of the son of the sibling of Simone Kruger?",
+        "solution_traces": "[{\"Y_6\": \"Alec Kruger\", \"Y_4\": \"Cornelius Kruger\", \"Y_2\": \"Octavio Kruger\"}, {\"Y_6\": \"Alec Kruger\", \"Y_2\": \"Cornelius Kruger\", \"Y_4\": \"Octavio Kruger\"}]",
+        "answer": [
+            "Cornelius Kruger",
+            "Octavio Kruger"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "son(Y_6, Y_4)",
+                "sibling(\"Simone Kruger\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "927a6d41-c2b9-4379-9150-1adbb90a56b8",
+        "question": "Who is the grandfather of the great-grandson of the parent of Julian Angle?",
+        "solution_traces": "[{\"Y_6\": \"Eugene Angle\", \"Y_4\": \"Demetrius Bauer\", \"Y_2\": \"Kurtis Lowry\"}, {\"Y_4\": \"Demetrius Bauer\", \"Y_6\": \"Rhea Angle\", \"Y_2\": \"Kurtis Lowry\"}]",
+        "answer": [
+            "Kurtis Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "great_grandson(Y_6, Y_4)",
+                "parent(\"Julian Angle\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "88fc4c23-847b-49c4-ab81-b6ab27179fb4",
+        "question": "Who is the great-grandmother of the cousin of the great-grandson of Keith Clary?",
+        "solution_traces": "[{\"Y_6\": \"Jessie Clary\", \"Y_2\": \"Gina Clary\", \"Y_4\": \"Lucas Ruiz\"}, {\"Y_6\": \"Jessie Clary\", \"Y_2\": \"Bernice Beard\", \"Y_4\": \"Kurt Ruiz\"}, {\"Y_2\": \"Gina Clary\", \"Y_6\": \"Lucas Ruiz\", \"Y_4\": \"Jessie Clary\"}, {\"Y_6\": \"Jessie Clary\", \"Y_2\": \"Gina Clary\", \"Y_4\": \"Kurt Ruiz\"}, {\"Y_6\": \"Jessie Clary\", \"Y_2\": \"Bernice Beard\", \"Y_4\": \"Lucas Ruiz\"}, {\"Y_2\": \"Bernice Beard\", \"Y_6\": \"Lucas Ruiz\", \"Y_4\": \"Jessie Clary\"}, {\"Y_2\": \"Gina Clary\", \"Y_4\": \"Jessie Clary\", \"Y_6\": \"Kurt Ruiz\"}, {\"Y_2\": \"Bernice Beard\", \"Y_4\": \"Jessie Clary\", \"Y_6\": \"Kurt Ruiz\"}]",
+        "answer": [
+            "Bernice Beard",
+            "Gina Clary"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandmother(Y_4, Y_2)",
+                "cousin(Y_6, Y_4)",
+                "great_grandson(\"Keith Clary\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 9,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e15f6497-58dc-4f23-a9dd-e0e8ca97e907",
+        "question": "Who is the daughter of the friend of the granddaughter of Shari Kruger?",
+        "solution_traces": "[{\"Y_4\": \"Audie Lowry\", \"Y_6\": \"Lela Lowry\", \"Y_2\": \"Ofelia Lowry\"}, {\"Y_4\": \"Audie Lowry\", \"Y_6\": \"Lela Lowry\", \"Y_2\": \"Aletha Bauer\"}, {\"Y_2\": \"Laverne Clary\", \"Y_6\": \"Faith Lowry\", \"Y_4\": \"Bernice Beard\"}, {\"Y_2\": \"Simone Kruger\", \"Y_6\": \"Lela Lowry\", \"Y_4\": \"Elbert Kruger\"}, {\"Y_2\": \"Faith Lowry\", \"Y_6\": \"Faith Lowry\", \"Y_4\": \"Robby Lowry\"}, {\"Y_2\": \"Lela Lowry\", \"Y_6\": \"Faith Lowry\", \"Y_4\": \"Robby Lowry\"}]",
+        "answer": [
+            "Aletha Bauer",
+            "Faith Lowry",
+            "Laverne Clary",
+            "Lela Lowry",
+            "Ofelia Lowry",
+            "Simone Kruger"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "granddaughter(\"Shari Kruger\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "06dbc5d6-07c6-428c-a632-bb6ba86dc415",
+        "question": "Who is the sibling of the father-in-law of the daughter-in-law of Betsy Clary?",
+        "solution_traces": "[{\"Y_4\": \"Zachary Clary\", \"Y_2\": \"Linwood Clary\", \"Y_6\": \"Shae Clary\"}, {\"Y_4\": \"Zachary Clary\", \"Y_6\": \"Shae Clary\", \"Y_2\": \"Olivia Ruiz\"}]",
+        "answer": [
+            "Linwood Clary",
+            "Olivia Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "father_in_law(Y_6, Y_4)",
+                "daughter_in_law(\"Betsy Clary\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "98fcc61c-bddb-4393-87b3-fc98aac0b923",
+        "question": "Who is the sibling of the sibling of the grandchild of Phylis Lowry?",
+        "solution_traces": "[{\"Y_6\": \"Ofelia Lowry\", \"Y_4\": \"Aletha Bauer\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Robby Lowry\", \"Y_4\": \"Ofelia Lowry\"}, {\"Y_4\": \"Aletha Bauer\", \"Y_6\": \"Robby Lowry\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_2\": \"Robby Lowry\", \"Y_4\": \"Aletha Bauer\", \"Y_6\": \"Robby Lowry\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_4\": \"Ofelia Lowry\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Robby Lowry\", \"Y_2\": \"Ofelia Lowry\"}, {\"Y_2\": \"Robby Lowry\", \"Y_4\": \"Ofelia Lowry\", \"Y_6\": \"Robby Lowry\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_4\": \"Robby Lowry\", \"Y_2\": \"Ofelia Lowry\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_2\": \"Robby Lowry\", \"Y_4\": \"Aletha Bauer\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_4\": \"Robby Lowry\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_2\": \"Ofelia Lowry\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_4\": \"Ofelia Lowry\", \"Y_6\": \"Robby Lowry\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_2\": \"Robby Lowry\", \"Y_4\": \"Ofelia Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Aletha Bauer\", \"Y_2\": \"Ofelia Lowry\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_2\": \"Ofelia Lowry\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Ofelia Lowry\", \"Y_2\": \"Aletha Bauer\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_2\": \"Aletha Bauer\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_2\": \"Ofelia Lowry\", \"Y_6\": \"Robby Lowry\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_2\": \"Aletha Bauer\", \"Y_6\": \"Robby Lowry\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Robby Lowry\", \"Y_2\": \"Aletha Bauer\"}, {\"Y_2\": \"Aletha Bauer\", \"Y_4\": \"Ofelia Lowry\", \"Y_6\": \"Robby Lowry\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_2\": \"Aletha Bauer\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_4\": \"Robby Lowry\", \"Y_2\": \"Aletha Bauer\"}, {\"Y_2\": \"Robby Lowry\", \"Y_6\": \"Robby Lowry\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_4\": \"Aletha Bauer\", \"Y_2\": \"Ofelia Lowry\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_4\": \"Ofelia Lowry\", \"Y_2\": \"Aletha Bauer\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_4\": \"Robby Lowry\", \"Y_2\": \"Aletha Bauer\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Robby Lowry\", \"Y_4\": \"Aletha Bauer\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Aletha Bauer\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Robby Lowry\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_2\": \"Robby Lowry\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_4\": \"Robby Lowry\", \"Y_2\": \"Ofelia Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Ofelia Lowry\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_4\": \"Aletha Bauer\", \"Y_6\": \"Robby Lowry\", \"Y_2\": \"Ofelia Lowry\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_4\": \"Robby Lowry\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_2\": \"Robby Lowry\", \"Y_4\": \"Lawrence Lowry\"}]",
+        "answer": [
+            "Aletha Bauer",
+            "Lawrence Lowry",
+            "Ofelia Lowry",
+            "Robby Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "grandchild(\"Phylis Lowry\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "1e281c82-6492-4941-ab95-a519f45c43a6",
+        "question": "Who is the great-grandparent of the female second cousin of the grandchild of Roderick Ruiz?",
+        "solution_traces": "[{\"Y_6\": \"Wilbert Ruiz\", \"Y_4\": \"Kyra Clary\", \"Y_2\": \"Riley Clary\"}, {\"Y_2\": \"Laverne Clary\", \"Y_4\": \"Kyra Clary\", \"Y_6\": \"Dexter Ruiz\"}, {\"Y_2\": \"Laverne Clary\", \"Y_6\": \"Dexter Ruiz\", \"Y_4\": \"Mireya Clary\"}, {\"Y_2\": \"Laverne Clary\", \"Y_6\": \"Romelia Ruiz\", \"Y_4\": \"Mireya Clary\"}, {\"Y_6\": \"Romelia Ruiz\", \"Y_4\": \"Kyra Clary\", \"Y_2\": \"Riley Clary\"}, {\"Y_2\": \"Riley Clary\", \"Y_6\": \"Dexter Ruiz\", \"Y_4\": \"Mireya Clary\"}, {\"Y_6\": \"Romelia Ruiz\", \"Y_2\": \"Riley Clary\", \"Y_4\": \"Mireya Clary\"}, {\"Y_6\": \"Wilbert Ruiz\", \"Y_2\": \"Riley Clary\", \"Y_4\": \"Mireya Clary\"}, {\"Y_2\": \"Laverne Clary\", \"Y_6\": \"Wilbert Ruiz\", \"Y_4\": \"Mireya Clary\"}, {\"Y_4\": \"Kyra Clary\", \"Y_2\": \"Riley Clary\", \"Y_6\": \"Dexter Ruiz\"}, {\"Y_2\": \"Laverne Clary\", \"Y_6\": \"Romelia Ruiz\", \"Y_4\": \"Kyra Clary\"}, {\"Y_2\": \"Laverne Clary\", \"Y_6\": \"Wilbert Ruiz\", \"Y_4\": \"Kyra Clary\"}]",
+        "answer": [
+            "Laverne Clary",
+            "Riley Clary"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandparent(Y_4, Y_2)",
+                "female_second_cousin(Y_6, Y_4)",
+                "grandchild(\"Roderick Ruiz\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 10,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4c9ae137-7b17-4307-ad0e-07a61d0a1ede",
+        "question": "Who is the friend of the friend of the grandchild of Phylis Lowry?",
+        "solution_traces": "[{\"Y_6\": \"Ofelia Lowry\", \"Y_4\": \"Lela Lowry\", \"Y_2\": \"Audie Lowry\"}, {\"Y_2\": \"Robby Lowry\", \"Y_4\": \"Tabetha Lowry\", \"Y_6\": \"Robby Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Catalina Soper\", \"Y_4\": \"Wm Ruiz\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_2\": \"Laverne Clary\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_4\": \"Romelia Ruiz\", \"Y_6\": \"Robby Lowry\", \"Y_2\": \"Demetria Ruiz\"}, {\"Y_4\": \"Zachery Lowry\", \"Y_2\": \"Simone Kruger\", \"Y_6\": \"Robby Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Cornelius Kruger\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_4\": \"Tabetha Lowry\", \"Y_6\": \"Robby Lowry\", \"Y_2\": \"Cornelius Kruger\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Cornelius Kruger\", \"Y_2\": \"Octavio Kruger\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Julian Angle\", \"Y_4\": \"Wm Ruiz\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_2\": \"Catalina Soper\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_4\": \"Tabetha Lowry\", \"Y_6\": \"Robby Lowry\", \"Y_2\": \"Demetria Ruiz\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Catalina Soper\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_4\": \"Faith Lowry\", \"Y_2\": \"Robby Lowry\", \"Y_6\": \"Robby Lowry\"}, {\"Y_4\": \"Faith Lowry\", \"Y_2\": \"Bernice Beard\", \"Y_6\": \"Robby Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Cornelius Kruger\", \"Y_2\": \"Enedina Kruger\"}, {\"Y_4\": \"Romelia Ruiz\", \"Y_6\": \"Robby Lowry\", \"Y_2\": \"Raul Bauer\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Lawrence Lowry\", \"Y_4\": \"Laverne Clary\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_4\": \"Rhea Angle\", \"Y_2\": \"Aletha Bauer\"}, {\"Y_2\": \"Betsy Clary\", \"Y_4\": \"Tabetha Lowry\", \"Y_6\": \"Robby Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Lawrence Lowry\", \"Y_4\": \"Wm Ruiz\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Tabetha Lowry\", \"Y_4\": \"Cornelius Kruger\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_2\": \"Aletha Bauer\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_4\": \"Zachery Lowry\", \"Y_2\": \"Robby Lowry\", \"Y_6\": \"Robby Lowry\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_4\": \"Lela Lowry\", \"Y_2\": \"Ofelia Lowry\"}, {\"Y_2\": \"Wilbert Ruiz\", \"Y_4\": \"Tabetha Lowry\", \"Y_6\": \"Robby Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Rhea Angle\", \"Y_4\": \"Aletha Bauer\"}, {\"Y_4\": \"Romelia Ruiz\", \"Y_2\": \"Shae Clary\", \"Y_6\": \"Robby Lowry\"}, {\"Y_4\": \"Romelia Ruiz\", \"Y_2\": \"Robby Lowry\", \"Y_6\": \"Robby Lowry\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_4\": \"Lela Lowry\", \"Y_2\": \"Elbert Kruger\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_2\": \"Wm Ruiz\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Kurtis Lowry\", \"Y_4\": \"Wm Ruiz\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_2\": \"Cornelius Kruger\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_2\": \"Stacey Sturm\", \"Y_4\": \"Tabetha Lowry\", \"Y_6\": \"Robby Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Aletha Bauer\", \"Y_2\": \"Lawrence Lowry\"}, {\"Y_2\": \"Jessie Clary\", \"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Laverne Clary\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_4\": \"Rhea Angle\", \"Y_2\": \"Octavio Kruger\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Dexter Ruiz\", \"Y_4\": \"Wm Ruiz\"}, {\"Y_4\": \"Zachery Lowry\", \"Y_6\": \"Robby Lowry\", \"Y_2\": \"Kurtis Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Wm Ruiz\", \"Y_4\": \"Catalina Soper\"}]",
+        "answer": [
+            "Aletha Bauer",
+            "Audie Lowry",
+            "Bernice Beard",
+            "Betsy Clary",
+            "Catalina Soper",
+            "Cornelius Kruger",
+            "Demetria Ruiz",
+            "Dexter Ruiz",
+            "Elbert Kruger",
+            "Enedina Kruger",
+            "Jessie Clary",
+            "Julian Angle",
+            "Kurtis Lowry",
+            "Laverne Clary",
+            "Lawrence Lowry",
+            "Octavio Kruger",
+            "Ofelia Lowry",
+            "Raul Bauer",
+            "Rhea Angle",
+            "Robby Lowry",
+            "Shae Clary",
+            "Simone Kruger",
+            "Stacey Sturm",
+            "Tabetha Lowry",
+            "Wilbert Ruiz",
+            "Wm Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "friend(Y_6, Y_4)",
+                "grandchild(\"Phylis Lowry\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "47f1375f-ac23-4539-b02a-f051eae98a4c",
+        "question": "Who is the female first cousin once removed of the male cousin of the great-grandchild of Mckinley Beard?",
+        "solution_traces": "[{\"Y_6\": \"Jessie Clary\", \"Y_4\": \"Lucas Ruiz\", \"Y_2\": \"Kyra Clary\"}, {\"Y_2\": \"Romelia Ruiz\", \"Y_4\": \"Jessie Clary\", \"Y_6\": \"Kurt Ruiz\"}, {\"Y_2\": \"Romelia Ruiz\", \"Y_6\": \"Lucas Ruiz\", \"Y_4\": \"Jessie Clary\"}, {\"Y_6\": \"Jessie Clary\", \"Y_4\": \"Kurt Ruiz\", \"Y_2\": \"Kyra Clary\"}, {\"Y_2\": \"Mireya Clary\", \"Y_6\": \"Jessie Clary\", \"Y_4\": \"Kurt Ruiz\"}, {\"Y_2\": \"Mireya Clary\", \"Y_6\": \"Jessie Clary\", \"Y_4\": \"Lucas Ruiz\"}]",
+        "answer": [
+            "Kyra Clary",
+            "Mireya Clary",
+            "Romelia Ruiz"
+        ],
+        "prolog": {
+            "query": [
+                "female_first_cousin_once_removed(Y_4, Y_2)",
+                "male_cousin(Y_6, Y_4)",
+                "great_grandchild(\"Mckinley Beard\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 10,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ccdafc8a-80c0-42d8-95e3-63f8fa3f5672",
+        "question": "Who is the great-uncle of the male first cousin once removed of the cousin of Kurt Ruiz?",
+        "solution_traces": "[{\"Y_6\": \"Jessie Clary\", \"Y_2\": \"Zachary Clary\", \"Y_4\": \"Dexter Ruiz\"}, {\"Y_2\": \"Linwood Clary\", \"Y_6\": \"Jessie Clary\", \"Y_4\": \"Wilbert Ruiz\"}, {\"Y_2\": \"Linwood Clary\", \"Y_6\": \"Jessie Clary\", \"Y_4\": \"Dexter Ruiz\"}, {\"Y_6\": \"Jessie Clary\", \"Y_2\": \"Zachary Clary\", \"Y_4\": \"Wilbert Ruiz\"}]",
+        "answer": [
+            "Linwood Clary",
+            "Zachary Clary"
+        ],
+        "prolog": {
+            "query": [
+                "great_uncle(Y_4, Y_2)",
+                "male_first_cousin_once_removed(Y_6, Y_4)",
+                "cousin(\"Kurt Ruiz\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 10,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "29d311cc-2956-497d-a198-84c94c5929ab",
+        "question": "Who is the great-grandparent of the granddaughter of the nephew of Simone Kruger?",
+        "solution_traces": "[{\"Y_4\": \"Faith Lowry\", \"Y_6\": \"Cornelius Kruger\", \"Y_2\": \"Alec Kruger\"}, {\"Y_4\": \"Lela Lowry\", \"Y_2\": \"Rhea Angle\", \"Y_6\": \"Cornelius Kruger\"}, {\"Y_4\": \"Faith Lowry\", \"Y_2\": \"Eugene Angle\", \"Y_6\": \"Cornelius Kruger\"}, {\"Y_4\": \"Lela Lowry\", \"Y_2\": \"Phylis Lowry\", \"Y_6\": \"Cornelius Kruger\"}, {\"Y_4\": \"Lela Lowry\", \"Y_2\": \"Zachery Lowry\", \"Y_6\": \"Cornelius Kruger\"}, {\"Y_4\": \"Lela Lowry\", \"Y_2\": \"Eugene Angle\", \"Y_6\": \"Cornelius Kruger\"}, {\"Y_4\": \"Lela Lowry\", \"Y_6\": \"Cornelius Kruger\", \"Y_2\": \"Alec Kruger\"}, {\"Y_4\": \"Faith Lowry\", \"Y_2\": \"Zachery Lowry\", \"Y_6\": \"Cornelius Kruger\"}, {\"Y_4\": \"Lela Lowry\", \"Y_6\": \"Cornelius Kruger\", \"Y_2\": \"Thomasine Kruger\"}, {\"Y_4\": \"Faith Lowry\", \"Y_6\": \"Cornelius Kruger\", \"Y_2\": \"Thomasine Kruger\"}, {\"Y_4\": \"Faith Lowry\", \"Y_2\": \"Rhea Angle\", \"Y_6\": \"Cornelius Kruger\"}, {\"Y_4\": \"Faith Lowry\", \"Y_2\": \"Phylis Lowry\", \"Y_6\": \"Cornelius Kruger\"}]",
+        "answer": [
+            "Alec Kruger",
+            "Eugene Angle",
+            "Phylis Lowry",
+            "Rhea Angle",
+            "Thomasine Kruger",
+            "Zachery Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandparent(Y_4, Y_2)",
+                "granddaughter(Y_6, Y_4)",
+                "nephew(\"Simone Kruger\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 7,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "480d7aad-ffbd-41c6-b6c6-ed62c1caa0df",
+        "question": "Who is the grandfather of the niece of the grandchild of Eugene Angle?",
+        "solution_traces": "[{\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Lela Lowry\", \"Y_2\": \"Kurtis Lowry\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_4\": \"Lela Lowry\", \"Y_2\": \"Kurtis Lowry\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_4\": \"Faith Lowry\", \"Y_2\": \"Cornelius Kruger\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Faith Lowry\", \"Y_2\": \"Kurtis Lowry\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_4\": \"Lela Lowry\", \"Y_2\": \"Cornelius Kruger\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_4\": \"Lela Lowry\", \"Y_2\": \"Kurtis Lowry\"}, {\"Y_6\": \"Ofelia Lowry\", \"Y_4\": \"Faith Lowry\", \"Y_2\": \"Kurtis Lowry\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_4\": \"Faith Lowry\", \"Y_2\": \"Kurtis Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Cornelius Kruger\", \"Y_4\": \"Faith Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Lela Lowry\", \"Y_2\": \"Cornelius Kruger\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_4\": \"Lela Lowry\", \"Y_2\": \"Cornelius Kruger\"}, {\"Y_6\": \"Aletha Bauer\", \"Y_4\": \"Faith Lowry\", \"Y_2\": \"Cornelius Kruger\"}]",
+        "answer": [
+            "Cornelius Kruger",
+            "Kurtis Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "grandfather(Y_4, Y_2)",
+                "niece(Y_6, Y_4)",
+                "grandchild(\"Eugene Angle\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "7fe7bced-3b0b-4a2d-ba97-54638b968f9f",
+        "question": "Who is the mother of the father-in-law of the great-grandchild of Sylvia Sturm?",
+        "solution_traces": "[{\"Y_4\": \"Kurtis Lowry\", \"Y_2\": \"Phylis Lowry\", \"Y_6\": \"Tabetha Lowry\"}]",
+        "answer": [
+            "Phylis Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "father_in_law(Y_6, Y_4)",
+                "great_grandchild(\"Sylvia Sturm\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "50035afd-1bc2-4d9e-a59c-420b3b608987",
+        "question": "Who is the great-granddaughter of the great-grandmother of the granddaughter of Cornelius Kruger?",
+        "solution_traces": "[{\"Y_2\": \"Lela Lowry\", \"Y_4\": \"Phylis Lowry\", \"Y_6\": \"Faith Lowry\"}, {\"Y_2\": \"Lela Lowry\", \"Y_6\": \"Faith Lowry\", \"Y_4\": \"Thomasine Kruger\"}, {\"Y_2\": \"Lela Lowry\", \"Y_4\": \"Rhea Angle\", \"Y_6\": \"Lela Lowry\"}, {\"Y_2\": \"Faith Lowry\", \"Y_6\": \"Faith Lowry\", \"Y_4\": \"Thomasine Kruger\"}, {\"Y_2\": \"Faith Lowry\", \"Y_4\": \"Phylis Lowry\", \"Y_6\": \"Faith Lowry\"}, {\"Y_2\": \"Faith Lowry\", \"Y_4\": \"Rhea Angle\", \"Y_6\": \"Lela Lowry\"}, {\"Y_2\": \"Faith Lowry\", \"Y_4\": \"Phylis Lowry\", \"Y_6\": \"Lela Lowry\"}, {\"Y_2\": \"Faith Lowry\", \"Y_6\": \"Lela Lowry\", \"Y_4\": \"Thomasine Kruger\"}, {\"Y_2\": \"Lela Lowry\", \"Y_6\": \"Faith Lowry\", \"Y_4\": \"Rhea Angle\"}, {\"Y_4\": \"Phylis Lowry\", \"Y_2\": \"Lela Lowry\", \"Y_6\": \"Lela Lowry\"}, {\"Y_2\": \"Lela Lowry\", \"Y_6\": \"Lela Lowry\", \"Y_4\": \"Thomasine Kruger\"}, {\"Y_2\": \"Faith Lowry\", \"Y_6\": \"Faith Lowry\", \"Y_4\": \"Rhea Angle\"}]",
+        "answer": [
+            "Faith Lowry",
+            "Lela Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "great_grandmother(Y_6, Y_4)",
+                "granddaughter(\"Cornelius Kruger\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 8,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e6857780-bc3d-4287-98a7-9c3b6c851d8e",
+        "question": "Who is the great-granddaughter of the grandparent of the friend of Cornelius Kruger?",
+        "solution_traces": "[{\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Lela Lowry\", \"Y_4\": \"Rhea Angle\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Phylis Lowry\", \"Y_2\": \"Lela Lowry\"}, {\"Y_6\": \"Octavio Kruger\", \"Y_2\": \"Tabetha Lowry\", \"Y_4\": \"Stacey Sturm\"}, {\"Y_6\": \"Octavio Kruger\", \"Y_2\": \"Tabetha Lowry\", \"Y_4\": \"Elbert Kruger\"}, {\"Y_6\": \"Octavio Kruger\", \"Y_2\": \"Tabetha Lowry\", \"Y_4\": \"Sylvia Sturm\"}, {\"Y_4\": \"Alec Kruger\", \"Y_2\": \"Faith Lowry\", \"Y_6\": \"Tabetha Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Rhea Angle\", \"Y_2\": \"Faith Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Lela Lowry\", \"Y_4\": \"Eugene Angle\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Lela Lowry\", \"Y_4\": \"Zachery Lowry\"}, {\"Y_2\": \"Lela Lowry\", \"Y_6\": \"Tabetha Lowry\", \"Y_4\": \"Thomasine Kruger\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Zachery Lowry\", \"Y_2\": \"Faith Lowry\"}, {\"Y_4\": \"Alec Kruger\", \"Y_2\": \"Lela Lowry\", \"Y_6\": \"Tabetha Lowry\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_2\": \"Faith Lowry\", \"Y_4\": \"Eugene Angle\"}, {\"Y_2\": \"Faith Lowry\", \"Y_6\": \"Tabetha Lowry\", \"Y_4\": \"Thomasine Kruger\"}, {\"Y_6\": \"Lawrence Lowry\", \"Y_4\": \"Phylis Lowry\", \"Y_2\": \"Faith Lowry\"}, {\"Y_4\": \"Enedina Kruger\", \"Y_6\": \"Octavio Kruger\", \"Y_2\": \"Tabetha Lowry\"}]",
+        "answer": [
+            "Faith Lowry",
+            "Lela Lowry",
+            "Tabetha Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "great_granddaughter(Y_4, Y_2)",
+                "grandparent(Y_6, Y_4)",
+                "friend(\"Cornelius Kruger\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "13257e06-5edf-4469-b82a-55338ac277e1",
+        "question": "Who is the daughter of the mother-in-law of the father of Octavio Kruger?",
+        "solution_traces": "[{\"Y_6\": \"Alec Kruger\", \"Y_4\": \"Sylvia Sturm\", \"Y_2\": \"Thomasine Kruger\"}]",
+        "answer": [
+            "Thomasine Kruger"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "mother_in_law(Y_6, Y_4)",
+                "father(\"Octavio Kruger\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ba427908-267a-4728-90d5-f0ae8dee7e91",
+        "question": "Who is the grandparent of the sibling of the friend of Tabetha Lowry?",
+        "solution_traces": "[{\"Y_2\": \"Enedina Kruger\", \"Y_6\": \"Cornelius Kruger\", \"Y_4\": \"Octavio Kruger\"}, {\"Y_2\": \"Zachery Lowry\", \"Y_4\": \"Ofelia Lowry\", \"Y_6\": \"Robby Lowry\"}, {\"Y_2\": \"Rhea Angle\", \"Y_4\": \"Aletha Bauer\", \"Y_6\": \"Robby Lowry\"}, {\"Y_4\": \"Romelia Ruiz\", \"Y_6\": \"Wilbert Ruiz\", \"Y_2\": \"Catalina Soper\"}, {\"Y_2\": \"Zachery Lowry\", \"Y_6\": \"Robby Lowry\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_6\": \"Wilbert Ruiz\", \"Y_2\": \"Roderick Ruiz\", \"Y_4\": \"Dexter Ruiz\"}, {\"Y_2\": \"Rhea Angle\", \"Y_4\": \"Ofelia Lowry\", \"Y_6\": \"Robby Lowry\"}, {\"Y_2\": \"Phylis Lowry\", \"Y_6\": \"Robby Lowry\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_2\": \"Eugene Angle\", \"Y_6\": \"Robby Lowry\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_6\": \"Wilbert Ruiz\", \"Y_2\": \"Olivia Ruiz\", \"Y_4\": \"Dexter Ruiz\"}, {\"Y_2\": \"Phylis Lowry\", \"Y_4\": \"Ofelia Lowry\", \"Y_6\": \"Robby Lowry\"}, {\"Y_4\": \"Romelia Ruiz\", \"Y_6\": \"Wilbert Ruiz\", \"Y_2\": \"Olivia Ruiz\"}, {\"Y_4\": \"Romelia Ruiz\", \"Y_2\": \"Wade Soper\", \"Y_6\": \"Wilbert Ruiz\"}, {\"Y_2\": \"Wade Soper\", \"Y_6\": \"Wilbert Ruiz\", \"Y_4\": \"Dexter Ruiz\"}, {\"Y_2\": \"Sylvia Sturm\", \"Y_6\": \"Cornelius Kruger\", \"Y_4\": \"Octavio Kruger\"}, {\"Y_2\": \"Stacey Sturm\", \"Y_6\": \"Cornelius Kruger\", \"Y_4\": \"Octavio Kruger\"}, {\"Y_2\": \"Zachery Lowry\", \"Y_4\": \"Aletha Bauer\", \"Y_6\": \"Robby Lowry\"}, {\"Y_2\": \"Rhea Angle\", \"Y_6\": \"Robby Lowry\", \"Y_4\": \"Lawrence Lowry\"}, {\"Y_6\": \"Wilbert Ruiz\", \"Y_2\": \"Catalina Soper\", \"Y_4\": \"Dexter Ruiz\"}, {\"Y_2\": \"Eugene Angle\", \"Y_4\": \"Aletha Bauer\", \"Y_6\": \"Robby Lowry\"}, {\"Y_2\": \"Eugene Angle\", \"Y_4\": \"Ofelia Lowry\", \"Y_6\": \"Robby Lowry\"}, {\"Y_2\": \"Elbert Kruger\", \"Y_6\": \"Cornelius Kruger\", \"Y_4\": \"Octavio Kruger\"}, {\"Y_2\": \"Phylis Lowry\", \"Y_4\": \"Aletha Bauer\", \"Y_6\": \"Robby Lowry\"}, {\"Y_4\": \"Romelia Ruiz\", \"Y_6\": \"Wilbert Ruiz\", \"Y_2\": \"Roderick Ruiz\"}]",
+        "answer": [
+            "Catalina Soper",
+            "Elbert Kruger",
+            "Enedina Kruger",
+            "Eugene Angle",
+            "Olivia Ruiz",
+            "Phylis Lowry",
+            "Rhea Angle",
+            "Roderick Ruiz",
+            "Stacey Sturm",
+            "Sylvia Sturm",
+            "Wade Soper",
+            "Zachery Lowry"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "sibling(Y_6, Y_4)",
+                "friend(\"Tabetha Lowry\", Y_6)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "the",
+            "<relation>_7",
+            "of",
+            "<name>_8",
+            "?"
+        ],
+        "type": 1,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    }
+]

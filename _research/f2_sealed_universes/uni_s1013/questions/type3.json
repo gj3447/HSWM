@@ -1,0 +1,945 @@
+[
+    {
+        "id": "696c7698-5860-43fd-ba97-9eb2a5042ebc",
+        "question": "Who is the mother of the sister-in-law of Carrol Nagel?",
+        "solution_traces": "[{\"Y_4\": \"Tabetha Curiel\", \"Y_2\": \"Ming Curiel\"}]",
+        "answer": [
+            "Ming Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "mother(Y_4, Y_2)",
+                "sister_in_law(\"Carrol Nagel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d23af574-87b9-40b4-8522-15610557f6df",
+        "question": "Who is the son-in-law of the friend of Antwan Garcia?",
+        "solution_traces": "[{\"Y_2\": \"Clayton Butcher\", \"Y_4\": \"Maude Nagle\"}, {\"Y_4\": \"Julian Reinke\", \"Y_2\": \"Hank Nagle\"}, {\"Y_4\": \"Clayton Butcher\", \"Y_2\": \"Pete Gainey\"}]",
+        "answer": [
+            "Clayton Butcher",
+            "Hank Nagle",
+            "Pete Gainey"
+        ],
+        "prolog": {
+            "query": [
+                "son_in_law(Y_4, Y_2)",
+                "friend(\"Antwan Garcia\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cb1103c9-b43a-4487-91f0-ff4d075dc16d",
+        "question": "Who is the female cousin of the grandchild of Owen Gainey?",
+        "solution_traces": "[{\"Y_2\": \"Megan Beason\", \"Y_4\": \"Zana Camacho\"}, {\"Y_4\": \"Joshua Gainey\", \"Y_2\": \"Tena Brockway\"}, {\"Y_2\": \"Tena Brockway\", \"Y_4\": \"Megan Beason\"}, {\"Y_4\": \"Tena Brockway\", \"Y_2\": \"Megan Beason\"}, {\"Y_4\": \"Megan Beason\", \"Y_2\": \"Zana Camacho\"}, {\"Y_4\": \"Joshua Gainey\", \"Y_2\": \"Megan Beason\"}, {\"Y_2\": \"Tena Brockway\", \"Y_4\": \"Zana Camacho\"}, {\"Y_4\": \"Tena Brockway\", \"Y_2\": \"Zana Camacho\"}]",
+        "answer": [
+            "Megan Beason",
+            "Tena Brockway",
+            "Zana Camacho"
+        ],
+        "prolog": {
+            "query": [
+                "female_cousin(Y_4, Y_2)",
+                "grandchild(\"Owen Gainey\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "05e3a190-faf3-4776-b11c-b34d5d0133a4",
+        "question": "Who is the uncle of the niece of Isabella Brockway?",
+        "solution_traces": "[{\"Y_2\": \"Pete Gainey\", \"Y_4\": \"Megan Beason\"}]",
+        "answer": [
+            "Pete Gainey"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "niece(\"Isabella Brockway\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "259e9e03-a6b4-4e00-a4ae-eb8be1821d0f",
+        "question": "Who is the female cousin of the niece of Benny Curiel?",
+        "solution_traces": "[{\"Y_4\": \"Lucile Curiel\", \"Y_2\": \"Sharolyn Curiel\"}, {\"Y_4\": \"Kacey Nagel\", \"Y_2\": \"Lucile Curiel\"}, {\"Y_4\": \"Kacey Nagel\", \"Y_2\": \"Sharolyn Curiel\"}, {\"Y_4\": \"Lucile Curiel\", \"Y_2\": \"Kacey Nagel\"}]",
+        "answer": [
+            "Kacey Nagel",
+            "Lucile Curiel",
+            "Sharolyn Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "female_cousin(Y_4, Y_2)",
+                "niece(\"Benny Curiel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "2c8bbd3c-325b-4070-a658-f275e781e6a1",
+        "question": "Who is the son-in-law of the daughter-in-law of Brett Butcher?",
+        "solution_traces": "[{\"Y_4\": \"Adele Butcher\", \"Y_2\": \"Pete Gainey\"}]",
+        "answer": [
+            "Pete Gainey"
+        ],
+        "prolog": {
+            "query": [
+                "son_in_law(Y_4, Y_2)",
+                "daughter_in_law(\"Brett Butcher\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4cb4ba26-cd7a-446c-95e4-4b5509b5ff41",
+        "question": "Who is the male cousin of the cousin of Nick Curiel?",
+        "solution_traces": "[{\"Y_2\": \"Murray Nagel\", \"Y_4\": \"Sharolyn Curiel\"}, {\"Y_2\": \"Michael Curiel\", \"Y_4\": \"Kacey Nagel\"}, {\"Y_2\": \"Jeffery Curiel\", \"Y_4\": \"Sharolyn Curiel\"}, {\"Y_2\": \"Michael Curiel\", \"Y_4\": \"Murray Nagel\"}, {\"Y_4\": \"Lucile Curiel\", \"Y_2\": \"Nick Curiel\"}, {\"Y_4\": \"Michael Curiel\", \"Y_2\": \"Jeffery Curiel\"}, {\"Y_4\": \"Kacey Nagel\", \"Y_2\": \"Jeffery Curiel\"}, {\"Y_4\": \"Murray Nagel\", \"Y_2\": \"Nick Curiel\"}, {\"Y_4\": \"Murray Nagel\", \"Y_2\": \"Jeffery Curiel\"}, {\"Y_2\": \"Murray Nagel\", \"Y_4\": \"Lucile Curiel\"}, {\"Y_4\": \"Kacey Nagel\", \"Y_2\": \"Nick Curiel\"}, {\"Y_4\": \"Michael Curiel\", \"Y_2\": \"Nick Curiel\"}, {\"Y_4\": \"Lucile Curiel\", \"Y_2\": \"Jeffery Curiel\"}, {\"Y_2\": \"Nick Curiel\", \"Y_4\": \"Sharolyn Curiel\"}, {\"Y_2\": \"Murray Nagel\", \"Y_4\": \"Michael Curiel\"}, {\"Y_2\": \"Michael Curiel\", \"Y_4\": \"Sharolyn Curiel\"}]",
+        "answer": [
+            "Jeffery Curiel",
+            "Michael Curiel",
+            "Murray Nagel",
+            "Nick Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "male_cousin(Y_4, Y_2)",
+                "cousin(\"Nick Curiel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0a03798a-1ec3-40ba-a72a-e6b7128c39d6",
+        "question": "Who is the sister of the nephew of Tabetha Curiel?",
+        "solution_traces": "[{\"Y_4\": \"Murray Nagel\", \"Y_2\": \"Kacey Nagel\"}, {\"Y_4\": \"Michael Curiel\", \"Y_2\": \"Lucile Curiel\"}]",
+        "answer": [
+            "Kacey Nagel",
+            "Lucile Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "nephew(\"Tabetha Curiel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4ace09b6-33ce-4c55-85ad-86e9a0684e69",
+        "question": "Who is the father-in-law of the friend of Brett Butcher?",
+        "solution_traces": "[{\"Y_4\": \"Kisha Curiel\", \"Y_2\": \"Kennith Curiel\"}, {\"Y_2\": \"Abdul Curiel\", \"Y_4\": \"Gabriele Curiel\"}]",
+        "answer": [
+            "Abdul Curiel",
+            "Kennith Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "father_in_law(Y_4, Y_2)",
+                "friend(\"Brett Butcher\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "f7cbb276-3ad7-4018-9b12-ad4a3cd134da",
+        "question": "Who is the friend of the friend of Jacqueline Butcher?",
+        "solution_traces": "[{\"Y_2\": \"Michael Curiel\", \"Y_4\": \"Allie Curiel\"}, {\"Y_4\": \"Elvie Nagel\", \"Y_2\": \"Isabella Brockway\"}, {\"Y_4\": \"Kisha Curiel\", \"Y_2\": \"Joshua Gainey\"}, {\"Y_2\": \"Tabetha Curiel\", \"Y_4\": \"Ismael Camacho\"}, {\"Y_2\": \"Jacqueline Butcher\", \"Y_4\": \"Kisha Curiel\"}, {\"Y_4\": \"Allie Curiel\", \"Y_2\": \"Tena Brockway\"}, {\"Y_2\": \"Jacqueline Butcher\", \"Y_4\": \"Adele Butcher\"}, {\"Y_4\": \"Kisha Curiel\", \"Y_2\": \"Brett Butcher\"}, {\"Y_2\": \"Carrol Nagel\", \"Y_4\": \"Johnna Beason\"}, {\"Y_4\": \"Elvie Nagel\", \"Y_2\": \"Megan Beason\"}, {\"Y_2\": \"Jacqueline Butcher\", \"Y_4\": \"Johnna Beason\"}, {\"Y_4\": \"Johnna Beason\", \"Y_2\": \"Maude Nagle\"}, {\"Y_4\": \"Johnna Beason\", \"Y_2\": \"Megan Beason\"}, {\"Y_2\": \"Jacqueline Butcher\", \"Y_4\": \"Elvie Nagel\"}, {\"Y_4\": \"Kisha Curiel\", \"Y_2\": \"Lucile Curiel\"}, {\"Y_4\": \"Johnna Beason\", \"Y_2\": \"Leigh Curiel\"}, {\"Y_4\": \"Johnna Beason\", \"Y_2\": \"Allie Curiel\"}, {\"Y_4\": \"Allie Curiel\", \"Y_2\": \"Ron Curiel\"}, {\"Y_4\": \"Ismael Camacho\", \"Y_2\": \"Leigh Curiel\"}, {\"Y_4\": \"Adele Butcher\", \"Y_2\": \"Ming Curiel\"}, {\"Y_4\": \"Johnna Beason\", \"Y_2\": \"Gabriele Curiel\"}, {\"Y_2\": \"Maude Nagle\", \"Y_4\": \"Ismael Camacho\"}, {\"Y_4\": \"Ismael Camacho\", \"Y_2\": \"Angel Curiel\"}, {\"Y_2\": \"Jacqueline Butcher\", \"Y_4\": \"Ismael Camacho\"}, {\"Y_4\": \"Kisha Curiel\", \"Y_2\": \"Ming Curiel\"}, {\"Y_4\": \"Adele Butcher\", \"Y_2\": \"Kennith Curiel\"}, {\"Y_2\": \"Johnna Beason\", \"Y_4\": \"Allie Curiel\"}, {\"Y_4\": \"Kisha Curiel\", \"Y_2\": \"Kennith Curiel\"}, {\"Y_2\": \"Jacqueline Butcher\", \"Y_4\": \"Allie Curiel\"}]",
+        "answer": [
+            "Allie Curiel",
+            "Angel Curiel",
+            "Brett Butcher",
+            "Carrol Nagel",
+            "Gabriele Curiel",
+            "Isabella Brockway",
+            "Jacqueline Butcher",
+            "Johnna Beason",
+            "Joshua Gainey",
+            "Kennith Curiel",
+            "Leigh Curiel",
+            "Lucile Curiel",
+            "Maude Nagle",
+            "Megan Beason",
+            "Michael Curiel",
+            "Ming Curiel",
+            "Ron Curiel",
+            "Tabetha Curiel",
+            "Tena Brockway"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "friend(\"Jacqueline Butcher\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "e51f3192-05fa-47a7-b705-25bc918fb5e3",
+        "question": "Who is the cousin of the male cousin of Sharolyn Curiel?",
+        "solution_traces": "[{\"Y_4\": \"Michael Curiel\", \"Y_2\": \"Sharolyn Curiel\"}, {\"Y_2\": \"Michael Curiel\", \"Y_4\": \"Nick Curiel\"}, {\"Y_2\": \"Lucile Curiel\", \"Y_4\": \"Nick Curiel\"}, {\"Y_2\": \"Murray Nagel\", \"Y_4\": \"Jeffery Curiel\"}, {\"Y_4\": \"Michael Curiel\", \"Y_2\": \"Nick Curiel\"}, {\"Y_2\": \"Murray Nagel\", \"Y_4\": \"Nick Curiel\"}, {\"Y_4\": \"Jeffery Curiel\", \"Y_2\": \"Kacey Nagel\"}, {\"Y_4\": \"Michael Curiel\", \"Y_2\": \"Jeffery Curiel\"}, {\"Y_4\": \"Murray Nagel\", \"Y_2\": \"Lucile Curiel\"}, {\"Y_4\": \"Murray Nagel\", \"Y_2\": \"Jeffery Curiel\"}, {\"Y_4\": \"Murray Nagel\", \"Y_2\": \"Nick Curiel\"}, {\"Y_2\": \"Kacey Nagel\", \"Y_4\": \"Nick Curiel\"}, {\"Y_2\": \"Michael Curiel\", \"Y_4\": \"Jeffery Curiel\"}, {\"Y_4\": \"Nick Curiel\", \"Y_2\": \"Sharolyn Curiel\"}, {\"Y_4\": \"Jeffery Curiel\", \"Y_2\": \"Sharolyn Curiel\"}, {\"Y_4\": \"Jeffery Curiel\", \"Y_2\": \"Lucile Curiel\"}, {\"Y_2\": \"Murray Nagel\", \"Y_4\": \"Michael Curiel\"}, {\"Y_2\": \"Michael Curiel\", \"Y_4\": \"Murray Nagel\"}, {\"Y_4\": \"Michael Curiel\", \"Y_2\": \"Kacey Nagel\"}, {\"Y_4\": \"Murray Nagel\", \"Y_2\": \"Sharolyn Curiel\"}]",
+        "answer": [
+            "Jeffery Curiel",
+            "Kacey Nagel",
+            "Lucile Curiel",
+            "Michael Curiel",
+            "Murray Nagel",
+            "Nick Curiel",
+            "Sharolyn Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "male_cousin(\"Sharolyn Curiel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "cd8cd42d-8ffd-41b7-bce8-a213ea93d49f",
+        "question": "Who is the niece of the sister of Pete Gainey?",
+        "solution_traces": "[{\"Y_4\": \"Johnna Beason\", \"Y_2\": \"Zana Camacho\"}, {\"Y_2\": \"Zana Camacho\", \"Y_4\": \"Isabella Brockway\"}, {\"Y_2\": \"Megan Beason\", \"Y_4\": \"Isabella Brockway\"}, {\"Y_4\": \"Johnna Beason\", \"Y_2\": \"Tena Brockway\"}]",
+        "answer": [
+            "Megan Beason",
+            "Tena Brockway",
+            "Zana Camacho"
+        ],
+        "prolog": {
+            "query": [
+                "niece(Y_4, Y_2)",
+                "sister(\"Pete Gainey\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ddbfdd4c-8b0f-488a-bf3c-313d85bbd151",
+        "question": "Who is the sibling of the sister of Pete Gainey?",
+        "solution_traces": "[{\"Y_2\": \"Pete Gainey\", \"Y_4\": \"Isabella Brockway\"}, {\"Y_2\": \"Johnna Beason\", \"Y_4\": \"Isabella Brockway\"}, {\"Y_4\": \"Johnna Beason\", \"Y_2\": \"Isabella Brockway\"}, {\"Y_4\": \"Johnna Beason\", \"Y_2\": \"Pete Gainey\"}]",
+        "answer": [
+            "Isabella Brockway",
+            "Johnna Beason",
+            "Pete Gainey"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "sister(\"Pete Gainey\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "40e135b3-ca13-4979-8a2d-9cb485971d2e",
+        "question": "Who is the female cousin of the niece of Isabella Brockway?",
+        "solution_traces": "[{\"Y_2\": \"Tena Brockway\", \"Y_4\": \"Megan Beason\"}, {\"Y_4\": \"Megan Beason\", \"Y_2\": \"Zana Camacho\"}, {\"Y_2\": \"Megan Beason\", \"Y_4\": \"Zana Camacho\"}, {\"Y_2\": \"Tena Brockway\", \"Y_4\": \"Zana Camacho\"}]",
+        "answer": [
+            "Megan Beason",
+            "Tena Brockway",
+            "Zana Camacho"
+        ],
+        "prolog": {
+            "query": [
+                "female_cousin(Y_4, Y_2)",
+                "niece(\"Isabella Brockway\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "8adfd8d7-cebd-4bd3-9940-db6f890d396b",
+        "question": "Who is the uncle of the great-grandchild of Antwan Garcia?",
+        "solution_traces": "[{\"Y_4\": \"Lucile Curiel\", \"Y_2\": \"Ron Curiel\"}, {\"Y_4\": \"Michael Curiel\", \"Y_2\": \"Ron Curiel\"}, {\"Y_4\": \"Kacey Nagel\", \"Y_2\": \"Ron Curiel\"}, {\"Y_4\": \"Murray Nagel\", \"Y_2\": \"Ron Curiel\"}, {\"Y_2\": \"Kennith Curiel\", \"Y_4\": \"Sharolyn Curiel\"}, {\"Y_4\": \"Jeffery Curiel\", \"Y_2\": \"Kennith Curiel\"}, {\"Y_2\": \"Benny Curiel\", \"Y_4\": \"Nick Curiel\"}, {\"Y_4\": \"Lucile Curiel\", \"Y_2\": \"Benny Curiel\"}, {\"Y_4\": \"Murray Nagel\", \"Y_2\": \"Kennith Curiel\"}, {\"Y_4\": \"Michael Curiel\", \"Y_2\": \"Benny Curiel\"}, {\"Y_4\": \"Kacey Nagel\", \"Y_2\": \"Benny Curiel\"}, {\"Y_4\": \"Kacey Nagel\", \"Y_2\": \"Kennith Curiel\"}, {\"Y_2\": \"Ron Curiel\", \"Y_4\": \"Sharolyn Curiel\"}, {\"Y_4\": \"Murray Nagel\", \"Y_2\": \"Benny Curiel\"}, {\"Y_2\": \"Kennith Curiel\", \"Y_4\": \"Nick Curiel\"}, {\"Y_4\": \"Jeffery Curiel\", \"Y_2\": \"Benny Curiel\"}]",
+        "answer": [
+            "Benny Curiel",
+            "Kennith Curiel",
+            "Ron Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "great_grandchild(\"Antwan Garcia\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 5,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "247d6a8c-7d14-4129-aa6b-d51cd454ba03",
+        "question": "Who is the sister of the son-in-law of Clayton Butcher?",
+        "solution_traces": "[{\"Y_4\": \"Pete Gainey\", \"Y_2\": \"Isabella Brockway\"}, {\"Y_2\": \"Johnna Beason\", \"Y_4\": \"Pete Gainey\"}]",
+        "answer": [
+            "Isabella Brockway",
+            "Johnna Beason"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "son_in_law(\"Clayton Butcher\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "4367913b-7ab7-473f-8d20-71eb13dd0036",
+        "question": "Who is the grandparent of the nephew of Elvie Nagel?",
+        "solution_traces": "[{\"Y_2\": \"Abdul Curiel\", \"Y_4\": \"Michael Curiel\"}, {\"Y_2\": \"Florian Irving\", \"Y_4\": \"Jeffery Curiel\"}, {\"Y_2\": \"Abdul Curiel\", \"Y_4\": \"Jeffery Curiel\"}, {\"Y_2\": \"Manuela Irving\", \"Y_4\": \"Nick Curiel\"}, {\"Y_4\": \"Nick Curiel\", \"Y_2\": \"Ming Curiel\"}, {\"Y_4\": \"Michael Curiel\", \"Y_2\": \"Ming Curiel\"}, {\"Y_4\": \"Jeffery Curiel\", \"Y_2\": \"Ming Curiel\"}, {\"Y_2\": \"Abdul Curiel\", \"Y_4\": \"Nick Curiel\"}, {\"Y_2\": \"Manuela Irving\", \"Y_4\": \"Jeffery Curiel\"}, {\"Y_2\": \"Florian Irving\", \"Y_4\": \"Nick Curiel\"}]",
+        "answer": [
+            "Abdul Curiel",
+            "Florian Irving",
+            "Manuela Irving",
+            "Ming Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "grandparent(Y_4, Y_2)",
+                "nephew(\"Elvie Nagel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "526ae2e3-bded-4034-b4ae-1200348b47f8",
+        "question": "Who is the female cousin of the brother of Zana Camacho?",
+        "solution_traces": "[{\"Y_4\": \"Joshua Gainey\", \"Y_2\": \"Megan Beason\"}, {\"Y_4\": \"Joshua Gainey\", \"Y_2\": \"Tena Brockway\"}]",
+        "answer": [
+            "Megan Beason",
+            "Tena Brockway"
+        ],
+        "prolog": {
+            "query": [
+                "female_cousin(Y_4, Y_2)",
+                "brother(\"Zana Camacho\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "d2bd61c9-75a3-473c-b397-712f027df482",
+        "question": "Who is the cousin of the female cousin of Jeffery Curiel?",
+        "solution_traces": "[{\"Y_2\": \"Murray Nagel\", \"Y_4\": \"Sharolyn Curiel\"}, {\"Y_2\": \"Michael Curiel\", \"Y_4\": \"Kacey Nagel\"}, {\"Y_2\": \"Jeffery Curiel\", \"Y_4\": \"Sharolyn Curiel\"}, {\"Y_2\": \"Kacey Nagel\", \"Y_4\": \"Sharolyn Curiel\"}, {\"Y_4\": \"Lucile Curiel\", \"Y_2\": \"Sharolyn Curiel\"}, {\"Y_4\": \"Lucile Curiel\", \"Y_2\": \"Nick Curiel\"}, {\"Y_2\": \"Nick Curiel\", \"Y_4\": \"Sharolyn Curiel\"}, {\"Y_4\": \"Kacey Nagel\", \"Y_2\": \"Sharolyn Curiel\"}, {\"Y_4\": \"Kacey Nagel\", \"Y_2\": \"Jeffery Curiel\"}, {\"Y_2\": \"Murray Nagel\", \"Y_4\": \"Lucile Curiel\"}, {\"Y_4\": \"Kacey Nagel\", \"Y_2\": \"Lucile Curiel\"}, {\"Y_4\": \"Kacey Nagel\", \"Y_2\": \"Nick Curiel\"}, {\"Y_4\": \"Lucile Curiel\", \"Y_2\": \"Kacey Nagel\"}, {\"Y_4\": \"Lucile Curiel\", \"Y_2\": \"Jeffery Curiel\"}, {\"Y_2\": \"Lucile Curiel\", \"Y_4\": \"Sharolyn Curiel\"}, {\"Y_2\": \"Michael Curiel\", \"Y_4\": \"Sharolyn Curiel\"}]",
+        "answer": [
+            "Jeffery Curiel",
+            "Kacey Nagel",
+            "Lucile Curiel",
+            "Michael Curiel",
+            "Murray Nagel",
+            "Nick Curiel",
+            "Sharolyn Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "cousin(Y_4, Y_2)",
+                "female_cousin(\"Jeffery Curiel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "fe72ec19-c3b4-479e-bf08-a6f8e0653ed3",
+        "question": "Who is the grandson of the father of Tabetha Curiel?",
+        "solution_traces": "[{\"Y_4\": \"Abdul Curiel\", \"Y_2\": \"Nick Curiel\"}, {\"Y_4\": \"Abdul Curiel\", \"Y_2\": \"Murray Nagel\"}, {\"Y_4\": \"Abdul Curiel\", \"Y_2\": \"Michael Curiel\"}, {\"Y_4\": \"Abdul Curiel\", \"Y_2\": \"Jeffery Curiel\"}]",
+        "answer": [
+            "Jeffery Curiel",
+            "Michael Curiel",
+            "Murray Nagel",
+            "Nick Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "grandson(Y_4, Y_2)",
+                "father(\"Tabetha Curiel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "faaa3036-663d-4484-9766-5006802fea30",
+        "question": "Who is the friend of the husband of Jacqueline Butcher?",
+        "solution_traces": "[{\"Y_2\": \"Gabriele Curiel\", \"Y_4\": \"Brett Butcher\"}, {\"Y_2\": \"Kisha Curiel\", \"Y_4\": \"Brett Butcher\"}]",
+        "answer": [
+            "Gabriele Curiel",
+            "Kisha Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "friend(Y_4, Y_2)",
+                "husband(\"Jacqueline Butcher\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c9a641c3-8c51-4200-9d38-32fa27244310",
+        "question": "Who is the sister of the brother-in-law of Allie Curiel?",
+        "solution_traces": "[{\"Y_2\": \"Elvie Nagel\", \"Y_4\": \"Kennith Curiel\"}, {\"Y_2\": \"Tabetha Curiel\", \"Y_4\": \"Kennith Curiel\"}, {\"Y_2\": \"Tabetha Curiel\", \"Y_4\": \"Ron Curiel\"}, {\"Y_2\": \"Elvie Nagel\", \"Y_4\": \"Ron Curiel\"}]",
+        "answer": [
+            "Elvie Nagel",
+            "Tabetha Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "sister(Y_4, Y_2)",
+                "brother_in_law(\"Allie Curiel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "0d513a92-c70f-4a9d-9ec4-02566adbc695",
+        "question": "Who is the great-grandmother of the great-grandchild of Naomi Reinke?",
+        "solution_traces": "[{\"Y_4\": \"Blair Gainey\", \"Y_2\": \"Naomi Reinke\"}]",
+        "answer": [
+            "Naomi Reinke"
+        ],
+        "prolog": {
+            "query": [
+                "great_grandmother(Y_4, Y_2)",
+                "great_grandchild(\"Naomi Reinke\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 6,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "ab52b7ce-d800-4e89-bb0e-173e5cb7f71c",
+        "question": "Who is the sibling of the friend of Kisha Curiel?",
+        "solution_traces": "[{\"Y_2\": \"Tabetha Curiel\", \"Y_4\": \"Kennith Curiel\"}, {\"Y_4\": \"Joshua Gainey\", \"Y_2\": \"Zana Camacho\"}, {\"Y_2\": \"Ron Curiel\", \"Y_4\": \"Kennith Curiel\"}, {\"Y_2\": \"Michael Curiel\", \"Y_4\": \"Lucile Curiel\"}, {\"Y_2\": \"Elvie Nagel\", \"Y_4\": \"Kennith Curiel\"}, {\"Y_2\": \"Benny Curiel\", \"Y_4\": \"Kennith Curiel\"}]",
+        "answer": [
+            "Benny Curiel",
+            "Elvie Nagel",
+            "Michael Curiel",
+            "Ron Curiel",
+            "Tabetha Curiel",
+            "Zana Camacho"
+        ],
+        "prolog": {
+            "query": [
+                "sibling(Y_4, Y_2)",
+                "friend(\"Kisha Curiel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "c4c28bf3-f28a-42d9-92ca-11c9439d123f",
+        "question": "Who is the child of the grandfather of Nick Curiel?",
+        "solution_traces": "[{\"Y_4\": \"Abdul Curiel\", \"Y_2\": \"Benny Curiel\"}, {\"Y_4\": \"Abdul Curiel\", \"Y_2\": \"Elvie Nagel\"}, {\"Y_4\": \"Abdul Curiel\", \"Y_2\": \"Kennith Curiel\"}, {\"Y_4\": \"Abdul Curiel\", \"Y_2\": \"Ron Curiel\"}, {\"Y_4\": \"Abdul Curiel\", \"Y_2\": \"Tabetha Curiel\"}, {\"Y_4\": \"Florian Irving\", \"Y_2\": \"Leigh Curiel\"}]",
+        "answer": [
+            "Benny Curiel",
+            "Elvie Nagel",
+            "Kennith Curiel",
+            "Leigh Curiel",
+            "Ron Curiel",
+            "Tabetha Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "child(Y_4, Y_2)",
+                "grandfather(\"Nick Curiel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "83802e44-998b-40ad-a5f7-5ed334913045",
+        "question": "Who is the daughter of the parent of Benny Curiel?",
+        "solution_traces": "[{\"Y_4\": \"Abdul Curiel\", \"Y_2\": \"Tabetha Curiel\"}, {\"Y_2\": \"Elvie Nagel\", \"Y_4\": \"Ming Curiel\"}, {\"Y_4\": \"Abdul Curiel\", \"Y_2\": \"Elvie Nagel\"}, {\"Y_2\": \"Tabetha Curiel\", \"Y_4\": \"Ming Curiel\"}]",
+        "answer": [
+            "Elvie Nagel",
+            "Tabetha Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "daughter(Y_4, Y_2)",
+                "parent(\"Benny Curiel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 2,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "41337aba-078b-45de-bd72-fbcfbc14dc06",
+        "question": "Who is the son-in-law of the friend of Allyson Veliz?",
+        "solution_traces": "[{\"Y_2\": \"Clayton Butcher\", \"Y_4\": \"Hank Nagle\"}, {\"Y_4\": \"Florian Irving\", \"Y_2\": \"Ron Curiel\"}]",
+        "answer": [
+            "Clayton Butcher",
+            "Ron Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "son_in_law(Y_4, Y_2)",
+                "friend(\"Allyson Veliz\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "93ee3c82-1965-4351-bb42-28133d3dad81",
+        "question": "Who is the mother-in-law of the parent of Ron Curiel?",
+        "solution_traces": "[{\"Y_4\": \"Abdul Curiel\", \"Y_2\": \"Miki Garcia\"}]",
+        "answer": [
+            "Miki Garcia"
+        ],
+        "prolog": {
+            "query": [
+                "mother_in_law(Y_4, Y_2)",
+                "parent(\"Ron Curiel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "59fd57c2-9109-4452-8ad4-5392ad34b69e",
+        "question": "Who is the uncle of the nephew of Benny Curiel?",
+        "solution_traces": "[{\"Y_4\": \"Michael Curiel\", \"Y_2\": \"Ron Curiel\"}, {\"Y_4\": \"Murray Nagel\", \"Y_2\": \"Ron Curiel\"}, {\"Y_4\": \"Jeffery Curiel\", \"Y_2\": \"Kennith Curiel\"}, {\"Y_2\": \"Benny Curiel\", \"Y_4\": \"Nick Curiel\"}, {\"Y_4\": \"Murray Nagel\", \"Y_2\": \"Kennith Curiel\"}, {\"Y_4\": \"Michael Curiel\", \"Y_2\": \"Benny Curiel\"}, {\"Y_4\": \"Murray Nagel\", \"Y_2\": \"Benny Curiel\"}, {\"Y_2\": \"Kennith Curiel\", \"Y_4\": \"Nick Curiel\"}, {\"Y_4\": \"Jeffery Curiel\", \"Y_2\": \"Benny Curiel\"}]",
+        "answer": [
+            "Benny Curiel",
+            "Kennith Curiel",
+            "Ron Curiel"
+        ],
+        "prolog": {
+            "query": [
+                "uncle(Y_4, Y_2)",
+                "nephew(\"Benny Curiel\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 4,
+        "is_aggregation_question": false
+    },
+    {
+        "id": "897f8f45-4da2-4512-98d8-11f24916cbf5",
+        "question": "Who is the father of the sister-in-law of Hank Nagle?",
+        "solution_traces": "[{\"Y_2\": \"Julian Reinke\", \"Y_4\": \"Delores Reinke\"}]",
+        "answer": [
+            "Julian Reinke"
+        ],
+        "prolog": {
+            "query": [
+                "father(Y_4, Y_2)",
+                "sister_in_law(\"Hank Nagle\", Y_4)"
+            ],
+            "answer": "Y_2"
+        },
+        "template": [
+            "Who is",
+            "the",
+            "<relation>_3",
+            "of",
+            "the",
+            "<relation>_5",
+            "of",
+            "<name>_6",
+            "?"
+        ],
+        "type": 3,
+        "difficulty": 3,
+        "is_aggregation_question": false
+    }
+]

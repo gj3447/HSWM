@@ -1,0 +1,877 @@
+[
+    {
+        "id": "9c93a360-232b-4618-9954-521ced174e62",
+        "question": "How many brothers does the brother of Barry Mcnamee have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Lanny Mcnamee\"}, {\"Count_1\": 3, \"Y_3\": \"Charley Mcnamee\"}, {\"Count_1\": 3, \"Y_3\": \"Trent Mcnamee\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "brother(\"Barry Mcnamee\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "5b6993f6-b1a6-4745-b9a3-25060f8f0afb",
+        "question": "How many brothers does the brother-in-law of Colleen Mcnamee have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Lanny Mcnamee\"}, {\"Count_1\": 3, \"Y_3\": \"Charley Mcnamee\"}, {\"Count_1\": 3, \"Y_3\": \"Trent Mcnamee\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "brother_in_law(\"Colleen Mcnamee\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c219fd42-f277-4e9c-8428-ce02688bc3ca",
+        "question": "How many grandparents does the aunt of Samual Grayson have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Almeta Lanza\"}, {\"Count_1\": 2, \"Y_3\": \"Magdalene Matheson\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "aunt(\"Samual Grayson\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4ab12d12-2b0a-4889-a89e-aa2afbc176ac",
+        "question": "How many brothers does the brother of Lanny Mcnamee have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Barry Mcnamee\"}, {\"Count_1\": 3, \"Y_3\": \"Trent Mcnamee\"}, {\"Count_1\": 3, \"Y_3\": \"Charley Mcnamee\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(brother(Y_3, Y_1)), Count_1)",
+                "brother(\"Lanny Mcnamee\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4ee00ab9-6edf-4121-ad16-c3c670d2878a",
+        "question": "How many siblings does the grandson of Timmy Munguia have?",
+        "solution_traces": "[{\"Y_3\": \"Manuel Matheson\", \"Count_1\": 2}, {\"Y_3\": \"Rolando Matheson\", \"Count_1\": 2}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "grandson(\"Timmy Munguia\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9ff136a1-f9c3-4aa9-8f7e-d4da5270b1ff",
+        "question": "How many great-grandchildren does the friend of Michell Kingery have?",
+        "solution_traces": "[{\"Y_3\": \"Adam Mcglynn\", \"Count_1\": 0}, {\"Y_3\": \"Hiram Lanza\", \"Count_1\": 0}, {\"Count_1\": 3, \"Y_3\": \"Everett Mcnamee\"}, {\"Count_1\": 0, \"Y_3\": \"Lindsey Grayson\"}, {\"Y_3\": \"Philip Bledsoe\", \"Count_1\": 1}]",
+        "answer": [
+            "0",
+            "1",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandchild(Y_3, Y_1)), Count_1)",
+                "friend(\"Michell Kingery\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "d6a5848a-d7e9-40ef-b160-1a1beeec3333",
+        "question": "How many grandfathers does the nephew of Trent Mcnamee have?",
+        "solution_traces": "[{\"Y_3\": \"Reyes Mcnamee\", \"Count_1\": 1}, {\"Y_3\": \"Kieth Mcnamee\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "nephew(\"Trent Mcnamee\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "cad8e34d-30cc-4c4f-986f-82abb0785807",
+        "question": "How many female cousins does the child of Pauline Mcnamee have?",
+        "solution_traces": "[{\"Y_3\": \"Kieth Mcnamee\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(female_cousin(Y_3, Y_1)), Count_1)",
+                "child(\"Pauline Mcnamee\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f434e21b-1c9c-47fa-b028-28ed75a90609",
+        "question": "How many grandfathers does the sibling of Manuel Matheson have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Shaina Mcglynn\"}, {\"Y_3\": \"Rolando Matheson\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "sibling(\"Manuel Matheson\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c8ed048c-d91f-402e-a26b-ba6d363e080d",
+        "question": "How many female first cousins once removed does the great-grandchild of Tamala Munguia have?",
+        "solution_traces": "[{\"Count_1\": 0, \"Y_3\": \"Magdalene Matheson\"}, {\"Count_1\": 3, \"Y_3\": \"Lane Mcglynn\"}, {\"Y_3\": \"Almeta Lanza\", \"Count_1\": 0}, {\"Y_3\": \"Kerry Grayson\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(female_first_cousin_once_removed(Y_3, Y_1)), Count_1)",
+                "great_grandchild(\"Tamala Munguia\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "4ee28c5c-1f28-4e7c-aa2e-16f6b75920fd",
+        "question": "How many second aunts does the child of Colleen Mcnamee have?",
+        "solution_traces": "[{\"Y_3\": \"Shaunte Mcnamee\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(second_aunt(Y_3, Y_1)), Count_1)",
+                "child(\"Colleen Mcnamee\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "752d3675-86c2-4ab1-83b1-ca1188bb91d6",
+        "question": "How many friends does the female first cousin once removed of Samual Grayson have?",
+        "solution_traces": "[{\"Y_3\": \"Michell Kingery\", \"Count_1\": 5}]",
+        "answer": [
+            "5"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "female_first_cousin_once_removed(\"Samual Grayson\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 5,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "76dc7d1b-9824-46a7-9e82-3946057a6e12",
+        "question": "How many great-grandsons does the grandfather of Manuel Matheson have?",
+        "solution_traces": "[{\"Y_3\": \"Timmy Munguia\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(great_grandson(Y_3, Y_1)), Count_1)",
+                "grandfather(\"Manuel Matheson\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "c9b2399d-b185-4e8a-9175-ade536ca8681",
+        "question": "How many siblings does the male second cousin of Tad Fitzpatrick have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Lanny Mcnamee\"}, {\"Count_1\": 3, \"Y_3\": \"Barry Mcnamee\"}, {\"Count_1\": 3, \"Y_3\": \"Trent Mcnamee\"}, {\"Count_1\": 3, \"Y_3\": \"Charley Mcnamee\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "male_second_cousin(\"Tad Fitzpatrick\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f1e23929-ad6e-4830-864f-3bff06d3c4bf",
+        "question": "How many parents does the father-in-law of Carmon Bledsoe have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Philip Bledsoe\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "father_in_law(\"Carmon Bledsoe\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "fb944d51-280d-40d8-985c-d58452e8e596",
+        "question": "How many grandmothers does the father-in-law of Pauline Mcnamee have?",
+        "solution_traces": "[{\"Y_3\": \"Bo Mcnamee\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandmother(Y_3, Y_1)), Count_1)",
+                "father_in_law(\"Pauline Mcnamee\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "305e1062-7980-4fef-b8e8-9cb774b0c3f0",
+        "question": "How many male second cousins does the grandchild of Eddy Bledsoe have?",
+        "solution_traces": "[{\"Y_3\": \"Tad Fitzpatrick\", \"Count_1\": 4}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(male_second_cousin(Y_3, Y_1)), Count_1)",
+                "grandchild(\"Eddy Bledsoe\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "9b6c8274-e52c-457e-9420-8895d76d4e7a",
+        "question": "How many mothers does the child of Lindsey Grayson have?",
+        "solution_traces": "[{\"Y_3\": \"Harold Grayson\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(mother(Y_3, Y_1)), Count_1)",
+                "child(\"Lindsey Grayson\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "7df093db-04ce-4857-a9ba-fab104ad79ef",
+        "question": "How many second aunts does the daughter of Colleen Mcnamee have?",
+        "solution_traces": "[{\"Y_3\": \"Shaunte Mcnamee\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(second_aunt(Y_3, Y_1)), Count_1)",
+                "daughter(\"Colleen Mcnamee\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "18ad5e87-85a4-4835-a070-1011b9a2ff0e",
+        "question": "How many friends does the parent of Bobby Kingery have?",
+        "solution_traces": "[{\"Y_3\": \"Jimmie Kingery\", \"Count_1\": 1}, {\"Y_3\": \"Ivette Kingery\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "parent(\"Bobby Kingery\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "55ce8f9c-a07c-425f-a4e9-971d2a1d733a",
+        "question": "How many friends does the father of Deidre Fitzpatrick have?",
+        "solution_traces": "[{\"Count_1\": 4, \"Y_3\": \"Eddy Bledsoe\"}]",
+        "answer": [
+            "4"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(friend(Y_3, Y_1)), Count_1)",
+                "father(\"Deidre Fitzpatrick\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "245297c1-727d-4aca-a3b9-1f6dfecbea8b",
+        "question": "How many cousins does the cousin of Kieth Mcnamee have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Shaunte Mcnamee\"}, {\"Count_1\": 2, \"Y_3\": \"Reyes Mcnamee\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(cousin(Y_3, Y_1)), Count_1)",
+                "cousin(\"Kieth Mcnamee\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "691e978b-9615-4fcd-a29f-040814fed5a0",
+        "question": "How many grandparents does the great-aunt of Antonia Lanza have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Shaina Mcglynn\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandparent(Y_3, Y_1)), Count_1)",
+                "great_aunt(\"Antonia Lanza\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 4,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "f68c7ecc-f252-4a73-be6d-c5452add0384",
+        "question": "How many grandfathers does the sister-in-law of Jimmie Kingery have?",
+        "solution_traces": "[{\"Count_1\": 1, \"Y_3\": \"Antonia Lanza\"}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(grandfather(Y_3, Y_1)), Count_1)",
+                "sister_in_law(\"Jimmie Kingery\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "3548ed6d-b79f-42e4-89f7-cb2b1309560c",
+        "question": "How many daughters-in-law does the grandparent of Mariann Grayson have?",
+        "solution_traces": "[{\"Y_3\": \"Lindsey Grayson\", \"Count_1\": 1}, {\"Y_3\": \"Maurice Grayson\", \"Count_1\": 1}, {\"Y_3\": \"Manuel Matheson\", \"Count_1\": 0}, {\"Y_3\": \"Sara Matheson\", \"Count_1\": 0}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(daughter_in_law(Y_3, Y_1)), Count_1)",
+                "grandparent(\"Mariann Grayson\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "1f782e80-03c7-4857-b038-6a09c7c85369",
+        "question": "How many wives does the grandfather of Lane Mcglynn have?",
+        "solution_traces": "[{\"Y_3\": \"Benito Matheson\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(wife(Y_3, Y_1)), Count_1)",
+                "grandfather(\"Lane Mcglynn\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "b1b199f4-acdf-4a87-a8b2-a481e445dd92",
+        "question": "How many fathers does the child of Jimmie Kingery have?",
+        "solution_traces": "[{\"Y_3\": \"Michell Kingery\", \"Count_1\": 1}, {\"Y_3\": \"Bobby Kingery\", \"Count_1\": 1}]",
+        "answer": [
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(father(Y_3, Y_1)), Count_1)",
+                "child(\"Jimmie Kingery\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "ce27da64-6599-49fc-b082-327b0633b33b",
+        "question": "How many parents does the niece of Rolando Matheson have?",
+        "solution_traces": "[{\"Count_1\": 2, \"Y_3\": \"Almeta Lanza\"}, {\"Count_1\": 2, \"Y_3\": \"Kerry Grayson\"}, {\"Count_1\": 2, \"Y_3\": \"Magdalene Matheson\"}]",
+        "answer": [
+            "2"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(parent(Y_3, Y_1)), Count_1)",
+                "niece(\"Rolando Matheson\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 3,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "a2e2be6a-6538-4386-9c7e-f4af6f69b8e1",
+        "question": "How many siblings does the male second cousin of Tad Fitzpatrick have?",
+        "solution_traces": "[{\"Count_1\": 3, \"Y_3\": \"Lanny Mcnamee\"}, {\"Count_1\": 3, \"Y_3\": \"Barry Mcnamee\"}, {\"Count_1\": 3, \"Y_3\": \"Trent Mcnamee\"}, {\"Count_1\": 3, \"Y_3\": \"Charley Mcnamee\"}]",
+        "answer": [
+            "3"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(sibling(Y_3, Y_1)), Count_1)",
+                "male_second_cousin(\"Tad Fitzpatrick\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 6,
+        "is_aggregation_question": true
+    },
+    {
+        "id": "78c2f3f5-f743-4d10-b519-64186eecab2a",
+        "question": "How many nieces does the son of Bo Mcnamee have?",
+        "solution_traces": "[{\"Y_3\": \"Barry Mcnamee\", \"Count_1\": 0}, {\"Y_3\": \"Trent Mcnamee\", \"Count_1\": 1}, {\"Y_3\": \"Charley Mcnamee\", \"Count_1\": 1}, {\"Y_3\": \"Lanny Mcnamee\", \"Count_1\": 1}]",
+        "answer": [
+            "0",
+            "1"
+        ],
+        "prolog": {
+            "query": [
+                "aggregate_all(count, distinct(niece(Y_3, Y_1)), Count_1)",
+                "son(\"Bo Mcnamee\", Y_3)"
+            ],
+            "answer": "Count_1"
+        },
+        "template": [
+            "How many",
+            "<relation_plural>_2",
+            "does",
+            "the",
+            "<relation>_4",
+            "of",
+            "<name>_5",
+            "have",
+            "?"
+        ],
+        "type": 17,
+        "difficulty": 2,
+        "is_aggregation_question": true
+    }
+]

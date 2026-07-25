@@ -1,0 +1,3264 @@
+{
+ "schema_version": "hswm-f4-topology-learning-r2-receipt/v1",
+ "mode": "development",
+ "branch": "F4-topology-learning",
+ "smoke": false,
+ "preregistration_file": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_f4_topology_learning_20260725.json",
+ "preregistration_file_sha256": "28f8970a54118119625229f0ae65960c18460cc5e247e563f2e0022465fb9499",
+ "script_sha256": "65d332d814287a2a97d9fee7508f6392696068a69438c8e411ec4767654a5fca",
+ "harness_module_sha256": {
+  "f2_delta_w_credit.py": "3676724568fde19a752c07fdeabd9883ecfe04a3534ebf3f4d8fb2cc6b95c6e5",
+  "f4_topology_learning.py": "17db89e3a0cb31457af03e140ea548b4592542d609b93a145bf7ee8cc0d16031",
+  "hswm_null_battery.py": "df6e95f740f87a2a8e730e4c336c14a2beae87dc586c9ccd32d04be16f093b4f"
+ },
+ "prereg_reading_deviation": "r2 redesign (parent-ratified 2026-07-25): edges are bipartite class-tag-anchor↔lesson adjacency instead of lesson↔lesson hyperedges (r1 smoke f4_topology_learning_smoke_1784986779.json: contexts changed, answers never did).  Amendment (parent decision 2026-07-25, option (a)): the ablation/LOO unit is the ANCHOR-PAIR of a lesson, not a single edge (per-edge LOO is structurally flat under dual-anchor redundancy).  Arms/metrics/kills are unchanged from the prereg.",
+ "config": {
+  "lessons": 30,
+  "n_fresh": 50,
+  "k_context": 4,
+  "loo_m": 30,
+  "curve_k": 10,
+  "checkpoints": 4,
+  "split_seed": 20260726,
+  "seed": 20260725,
+  "max_answers": 1,
+  "max_calls": 4000,
+  "parallel": 16,
+  "n_boot": 2000,
+  "universes_dir": "_research/f2_sealed_universes",
+  "answer_backend": "vllm",
+  "answer_url": "http://127.0.0.1:18000/v1",
+  "answer_model": "qwen3.6-27b",
+  "skip_base": false,
+  "smoke": false,
+  "out": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/receipts/f4_topology_learning_r2_sealed_1784989721.json"
+ },
+ "answerer_freeze": {
+  "backend": "vllm",
+  "url": "http://127.0.0.1:18000/v1",
+  "model": "qwen3.6-27b",
+  "note": "same freeze as the F2 sealed run (vLLM qwen3.6-27b, thinking off; p1v4 lineage model not served on this host)"
+ },
+ "honesty": "grounded measurement only; no scientific claim; judgment is the gate's",
+ "question_pool": {
+  "universes_dir": "_research/f2_sealed_universes",
+  "max_answers": 1,
+  "unique_question_texts": 379,
+  "per_universe_raw_counts": {
+   "dense_t200_fk9": 10,
+   "large_t200_fk3": 10,
+   "mid_t20_fk3": 16,
+   "small_t2_fk3": 27,
+   "sparse_t200_fk1": 10,
+   "uni_s1001": 26,
+   "uni_s1002": 29,
+   "uni_s1003": 27,
+   "uni_s1004": 27,
+   "uni_s1005": 27,
+   "uni_s1006": 29,
+   "uni_s1007": 24,
+   "uni_s1008": 26,
+   "uni_s1009": 23,
+   "uni_s1010": 28,
+   "uni_s1011": 23,
+   "uni_s1012": 27,
+   "uni_s1013": 26,
+   "uni_s1014": 27,
+   "uni_s1015": 26,
+   "uni_s1016": 28
+  },
+  "dedup_note": "t200 dirs (sparse/large/dense) share identical articles and type6 texts+answers (verified 2026-07-25, titles_sha equal); dedup by normalized question text collapses them to one contributor."
+ },
+ "splits": {
+  "n_train": 30,
+  "n_fresh": 50,
+  "skipped": {
+   "train": [],
+   "fresh": []
+  },
+  "split_seed": 20260726,
+  "fresh_case_worlds": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19
+  ]
+ },
+ "leakage": {
+  "exact_question_text_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "exact_attribute_value_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "binding_leakage": 0,
+  "binding_verdict": "CLEAN",
+  "audit_on_raw_question_texts": {
+   "leakage": 481,
+   "exact_overlaps": [],
+   "near_dup_pairs": [
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0271-03-16?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0262-06-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is leisure centre manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0298-12-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0259-08-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0275-09-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is network engineer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is network engineer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is lighting technician?",
+     "Who is the person whose occupation is network engineer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is dispensing optician?",
+     "Who is the person whose occupation is network engineer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is network engineer?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is glass blower?",
+     "Who is the person whose occupation is network engineer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is sound technician?",
+     "Who is the person whose occupation is network engineer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is arts administrator?",
+     "Who is the person whose occupation is network engineer?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is badminton?",
+     "Who is the person whose hobby is neuroscience?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is color guard?",
+     "Who is the person whose hobby is neuroscience?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is web design?",
+     "Who is the person whose hobby is neuroscience?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is cycling?",
+     "Who is the person whose hobby is neuroscience?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is hobby tunneling?",
+     "Who is the person whose hobby is neuroscience?",
+     0.75
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is investment banker?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is investment banker?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is lighting technician?",
+     "Who is the person whose occupation is investment banker?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is dispensing optician?",
+     "Who is the person whose occupation is investment banker?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is investment banker?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is glass blower?",
+     "Who is the person whose occupation is investment banker?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is sound technician?",
+     "Who is the person whose occupation is investment banker?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is arts administrator?",
+     "Who is the person whose occupation is investment banker?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0215-06-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is badminton?",
+     "Who is the person whose hobby is footbag?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is color guard?",
+     "Who is the person whose hobby is footbag?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is web design?",
+     "Who is the person whose hobby is footbag?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is cycling?",
+     "Who is the person whose hobby is footbag?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is hobby tunneling?",
+     "Who is the person whose hobby is footbag?",
+     0.75
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is environmental manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is environmental manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is lighting technician?",
+     "Who is the person whose occupation is environmental manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is dispensing optician?",
+     "Who is the person whose occupation is environmental manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is environmental manager?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is glass blower?",
+     "Who is the person whose occupation is environmental manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is sound technician?",
+     "Who is the person whose occupation is environmental manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is arts administrator?",
+     "Who is the person whose occupation is environmental manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is badminton?",
+     "Who is the person whose hobby is unicycling?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is color guard?",
+     "Who is the person whose hobby is unicycling?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is web design?",
+     "Who is the person whose hobby is unicycling?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is cycling?",
+     "Who is the person whose hobby is unicycling?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is hobby tunneling?",
+     "Who is the person whose hobby is unicycling?",
+     0.75
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0263-10-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0269-06-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is badminton?",
+     "Who is the person whose hobby is bus spotting?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is color guard?",
+     "Who is the person whose hobby is bus spotting?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is web design?",
+     "Who is the person whose hobby is bus spotting?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is cycling?",
+     "Who is the person whose hobby is bus spotting?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is hobby tunneling?",
+     "Who is the person whose hobby is bus spotting?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is badminton?",
+     "Who is the person whose hobby is astronomy?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is color guard?",
+     "Who is the person whose hobby is astronomy?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is web design?",
+     "Who is the person whose hobby is astronomy?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is cycling?",
+     "Who is the person whose hobby is astronomy?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is hobby tunneling?",
+     "Who is the person whose hobby is astronomy?",
+     0.75
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is market researcher?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is market researcher?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is lighting technician?",
+     "Who is the person whose occupation is market researcher?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is dispensing optician?",
+     "Who is the person whose occupation is market researcher?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is market researcher?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is glass blower?",
+     "Who is the person whose occupation is market researcher?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is sound technician?",
+     "Who is the person whose occupation is market researcher?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is arts administrator?",
+     "Who is the person whose occupation is market researcher?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0261-02-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0220-11-24?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0260-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is operations geologist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is operations geologist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is lighting technician?",
+     "Who is the person whose occupation is operations geologist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is dispensing optician?",
+     "Who is the person whose occupation is operations geologist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is operations geologist?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is glass blower?",
+     "Who is the person whose occupation is operations geologist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is sound technician?",
+     "Who is the person whose occupation is operations geologist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is arts administrator?",
+     "Who is the person whose occupation is operations geologist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is trading standards officer?",
+     "Who is the person whose occupation is race relations officer?",
+     0.6364
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is race relations officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is arts development officer?",
+     "Who is the person whose occupation is race relations officer?",
+     0.6364
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is associate professor?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is associate professor?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is lighting technician?",
+     "Who is the person whose occupation is associate professor?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is dispensing optician?",
+     "Who is the person whose occupation is associate professor?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is associate professor?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is glass blower?",
+     "Who is the person whose occupation is associate professor?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is sound technician?",
+     "Who is the person whose occupation is associate professor?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is arts administrator?",
+     "Who is the person whose occupation is associate professor?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0232-09-04?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is badminton?",
+     "Who is the person whose hobby is weightlifting?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is color guard?",
+     "Who is the person whose hobby is weightlifting?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is web design?",
+     "Who is the person whose hobby is weightlifting?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is cycling?",
+     "Who is the person whose hobby is weightlifting?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is hobby tunneling?",
+     "Who is the person whose hobby is weightlifting?",
+     0.75
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is international aid worker?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is badminton?",
+     "Who is the person whose hobby is mountain biking?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is color guard?",
+     "Who is the person whose hobby is mountain biking?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is web design?",
+     "Who is the person whose hobby is mountain biking?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is cycling?",
+     "Who is the person whose hobby is mountain biking?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is hobby tunneling?",
+     "Who is the person whose hobby is mountain biking?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is publishing copy?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is publishing copy?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is lighting technician?",
+     "Who is the person whose occupation is publishing copy?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is dispensing optician?",
+     "Who is the person whose occupation is publishing copy?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is publishing copy?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is glass blower?",
+     "Who is the person whose occupation is publishing copy?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is sound technician?",
+     "Who is the person whose occupation is publishing copy?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is arts administrator?",
+     "Who is the person whose occupation is publishing copy?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0283-09-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0359-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is badminton?",
+     "Who is the person whose hobby is die-cast toy?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is color guard?",
+     "Who is the person whose hobby is die-cast toy?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is web design?",
+     "Who is the person whose hobby is die-cast toy?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is cycling?",
+     "Who is the person whose hobby is die-cast toy?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is hobby tunneling?",
+     "Who is the person whose hobby is die-cast toy?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is trading standards officer?",
+     "Who is the person whose occupation is herbalist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is herbalist?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is herbalist?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is lighting technician?",
+     "Who is the person whose occupation is herbalist?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is dispensing optician?",
+     "Who is the person whose occupation is herbalist?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is herbalist?",
+     0.75
+    ],
+    [
+     "Who is the person whose occupation is glass blower?",
+     "Who is the person whose occupation is herbalist?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is sound technician?",
+     "Who is the person whose occupation is herbalist?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is arts administrator?",
+     "Who is the person whose occupation is herbalist?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is arts development officer?",
+     "Who is the person whose occupation is herbalist?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is badminton?",
+     "Who is the person whose hobby is tour skating?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is color guard?",
+     "Who is the person whose hobby is tour skating?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is web design?",
+     "Who is the person whose hobby is tour skating?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is cycling?",
+     "Who is the person whose hobby is tour skating?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is hobby tunneling?",
+     "Who is the person whose hobby is tour skating?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is trading standards officer?",
+     "Who is the person whose occupation is chief operating officer?",
+     0.6364
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is chief operating officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is arts development officer?",
+     "Who is the person whose occupation is chief operating officer?",
+     0.6364
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is hospital pharmacist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is hospital pharmacist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is lighting technician?",
+     "Who is the person whose occupation is hospital pharmacist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is dispensing optician?",
+     "Who is the person whose occupation is hospital pharmacist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is hospital pharmacist?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is glass blower?",
+     "Who is the person whose occupation is hospital pharmacist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is sound technician?",
+     "Who is the person whose occupation is hospital pharmacist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is arts administrator?",
+     "Who is the person whose occupation is hospital pharmacist?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0205-07-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0262-03-10?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0237-10-14?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is marine scientist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is marine scientist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is lighting technician?",
+     "Who is the person whose occupation is marine scientist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is dispensing optician?",
+     "Who is the person whose occupation is marine scientist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is marine scientist?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is glass blower?",
+     "Who is the person whose occupation is marine scientist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is sound technician?",
+     "Who is the person whose occupation is marine scientist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is arts administrator?",
+     "Who is the person whose occupation is marine scientist?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is badminton?",
+     "Who is the person whose hobby is gongoozling?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is color guard?",
+     "Who is the person whose hobby is gongoozling?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is web design?",
+     "Who is the person whose hobby is gongoozling?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is cycling?",
+     "Who is the person whose hobby is gongoozling?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is hobby tunneling?",
+     "Who is the person whose hobby is gongoozling?",
+     0.75
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0289-06-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is chief of staff?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0229-06-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0318-07-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is trading standards officer?",
+     "Who is the person whose occupation is research officer?",
+     0.7
+    ],
+    [
+     "Who is the person whose occupation is exercise physiologist?",
+     "Who is the person whose occupation is research officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is analytical chemist?",
+     "Who is the person whose occupation is research officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is lighting technician?",
+     "Who is the person whose occupation is research officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is dispensing optician?",
+     "Who is the person whose occupation is research officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is accountant?",
+     "Who is the person whose occupation is research officer?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is glass blower?",
+     "Who is the person whose occupation is research officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is sound technician?",
+     "Who is the person whose occupation is research officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is arts administrator?",
+     "Who is the person whose occupation is research officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is arts development officer?",
+     "Who is the person whose occupation is research officer?",
+     0.7
+    ],
+    [
+     "Who is the person whose date of birth is 0163-05-24?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0170-05-20?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0277-10-21?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0242-02-01?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0201-12-23?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0285-04-14?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0261-12-18?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0264-02-15?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0259-07-04?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0192-09-27?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0263-10-21?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0329-12-10?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0288-10-22?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0234-04-21?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0294-10-13?",
+     "Who is the person whose date of birth is 0220-07-22?",
+     0.8
+    ]
+   ],
+   "near_dup_threshold": 0.6,
+   "verdict": "VOID"
+  },
+  "audit_on_attribute_values": {
+   "leakage": 0,
+   "exact_overlaps": [],
+   "near_dup_pairs": [],
+   "near_dup_threshold": 0.6,
+   "verdict": "CLEAN"
+  },
+  "template_artifact_note": "type6 questions share the 'Who is the person whose <attr> is' template (7/9 tokens), so raw-text token-Jaccard near-dups are expected artifacts; the binding criterion is exact question text and attribute-value overlap, both structurally 0 after pool dedup."
+ },
+ "lessons": {
+  "0": {
+   "lesson_id": "bc4e919ac217c85eb41888af980ec68e9af3093c3b9e006b9daeccdbbe7edaec",
+   "group": 0,
+   "trusted_class": "C01",
+   "distractor_class": "Q01",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-ad190c84-0d9",
+   "training_universe": "uni_s1011"
+  },
+  "1": {
+   "lesson_id": "0b67945f65cec99b21de7c20321a6f84bfd8796f5a60056cc5c68ae05ef34263",
+   "group": 0,
+   "trusted_class": "C02",
+   "distractor_class": "Q02",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-b7fefc63-ec7",
+   "training_universe": "uni_s1015"
+  },
+  "2": {
+   "lesson_id": "b071122ba884b90269c2cc764db331af379b1b52be19a949807774423c9f131f",
+   "group": 0,
+   "trusted_class": "C03",
+   "distractor_class": "Q03",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-4c7ac97b-43c",
+   "training_universe": "uni_s1010"
+  },
+  "3": {
+   "lesson_id": "d58190d7b3e900a9dee612957a6090ca348ed5bb0c0af04571fd6fdbdf007b39",
+   "group": 0,
+   "trusted_class": "C04",
+   "distractor_class": "Q04",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-404180aa-a17",
+   "training_universe": "uni_s1009"
+  },
+  "4": {
+   "lesson_id": "6d95cb47c0f99262b6ad10943df3879c20086bc59c2c8ebfed6e138036cf21f8",
+   "group": 0,
+   "trusted_class": "C05",
+   "distractor_class": "Q05",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-0cb43436-1df",
+   "training_universe": "uni_s1002"
+  },
+  "5": {
+   "lesson_id": "f3624cce7ced003ab7e2a99d057e835e4090837b889111d1a33bcb0bfec7d3dc",
+   "group": 0,
+   "trusted_class": "C06",
+   "distractor_class": "Q06",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-ff5da3ee-074",
+   "training_universe": "uni_s1009"
+  },
+  "6": {
+   "lesson_id": "4528719c5474d9b41c55cfa3d34d42675cec30457021df13a9d8d0d92b68b9f2",
+   "group": 0,
+   "trusted_class": "C07",
+   "distractor_class": "Q07",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-77241532-7b5",
+   "training_universe": "uni_s1005"
+  },
+  "7": {
+   "lesson_id": "7e0a995682e39f720305de3b661c03a4c2f2d39b28cedef7ce9475189c781e5f",
+   "group": 0,
+   "trusted_class": "C08",
+   "distractor_class": "Q08",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-27c9e02d-6a2",
+   "training_universe": "uni_s1012"
+  },
+  "8": {
+   "lesson_id": "d9d3ae55e2c4cb7382693e5bfe4de92cc77a20127e1cef936609eb167422a040",
+   "group": 0,
+   "trusted_class": "C09",
+   "distractor_class": "Q09",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-e24c658e-cde",
+   "training_universe": "uni_s1016"
+  },
+  "9": {
+   "lesson_id": "532a471983ef5f880c530cd5d85b042761ff36e216d635f12d55c2304e12df27",
+   "group": 0,
+   "trusted_class": "C10",
+   "distractor_class": "Q10",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-75d87e3a-056",
+   "training_universe": "uni_s1006"
+  },
+  "10": {
+   "lesson_id": "b815fadae5b0a408a915c86d3e5951963b592ab9bc5e1ecbcba6e06e9e7b8719",
+   "group": 0,
+   "trusted_class": "C11",
+   "distractor_class": "Q11",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-25c876b7-8a6",
+   "training_universe": "uni_s1007"
+  },
+  "11": {
+   "lesson_id": "168bf7da16274bfa19f1dc0f493b5a005ae907e291834175321b680e64531360",
+   "group": 0,
+   "trusted_class": "C12",
+   "distractor_class": "Q12",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-9c6bae52-73c",
+   "training_universe": "uni_s1005"
+  },
+  "12": {
+   "lesson_id": "c4999c88d714eba70a987e5b2ec6d34709204bec40f91b9fe3e254a0d4d5a2d3",
+   "group": 0,
+   "trusted_class": "C13",
+   "distractor_class": "Q13",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-cccfa631-e30",
+   "training_universe": "uni_s1007"
+  },
+  "13": {
+   "lesson_id": "ca3b608a1fa671cc938b71a81ce55eeffe6b71120accddf2412e097e949cd004",
+   "group": 0,
+   "trusted_class": "C14",
+   "distractor_class": "Q14",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-f6419ea2-f65",
+   "training_universe": "uni_s1008"
+  },
+  "14": {
+   "lesson_id": "fa4832f9ec6e9c98922ac23645adb006cb0b7acaf94f0892dc18f824b47caec2",
+   "group": 0,
+   "trusted_class": "C15",
+   "distractor_class": "Q15",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-12b03864-aef",
+   "training_universe": "uni_s1007"
+  },
+  "15": {
+   "lesson_id": "586ad878e31707d49b56c80e10691933bb6a16ba4ceddde040bc9fad53a54a56",
+   "group": 0,
+   "trusted_class": "C16",
+   "distractor_class": "Q16",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-ad3b0ee2-e76",
+   "training_universe": "uni_s1016"
+  },
+  "16": {
+   "lesson_id": "fea6515a9e0df5178d6207d9c050f267b9bbc44763ea8ab197872bb406ba8484",
+   "group": 0,
+   "trusted_class": "C17",
+   "distractor_class": "Q17",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-216b2439-09c",
+   "training_universe": "uni_s1004"
+  },
+  "17": {
+   "lesson_id": "6eba478ce2e9413794fcc2e9d1525755fe79353807452010c096c076148d7826",
+   "group": 0,
+   "trusted_class": "C18",
+   "distractor_class": "Q18",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-79a46904-f0e",
+   "training_universe": "uni_s1014"
+  },
+  "18": {
+   "lesson_id": "c07be371867ec2b5c112bf6c557748141fd513dd55d3fae4274d061016bb0d16",
+   "group": 0,
+   "trusted_class": "C19",
+   "distractor_class": "Q19",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-56ba904b-a42",
+   "training_universe": "uni_s1014"
+  },
+  "19": {
+   "lesson_id": "23456219ee7fb989f61d6ee1e3beca358ac2daa26a8e7073f8b6b3ca1e12c51e",
+   "group": 0,
+   "trusted_class": "C20",
+   "distractor_class": "Q20",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-df90db80-59b",
+   "training_universe": "dense_t200_fk9"
+  },
+  "20": {
+   "lesson_id": "5195617d250ed1365072dea3d1a2be17ca3acfb08daca4b17be3dbefddd44607",
+   "group": 0,
+   "trusted_class": "C21",
+   "distractor_class": "Q21",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-4103a712-f0d",
+   "training_universe": "uni_s1001"
+  },
+  "21": {
+   "lesson_id": "05a3195441059868395e3f1226774f19e944f8584a5fa48c7853eb1d49f78d6d",
+   "group": 0,
+   "trusted_class": "C22",
+   "distractor_class": "Q22",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-04a2178f-ccc",
+   "training_universe": "uni_s1001"
+  },
+  "22": {
+   "lesson_id": "101bc7df6459cead4810360f48f92802aea7fd9c3c4cfa80c2683370e4b52f68",
+   "group": 0,
+   "trusted_class": "C23",
+   "distractor_class": "Q23",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-23fd513b-5cd",
+   "training_universe": "uni_s1012"
+  },
+  "23": {
+   "lesson_id": "040f9416c5ec2c560dca01ba5ac38ceccdcd5ee3ecc1a6214a91990021638de6",
+   "group": 0,
+   "trusted_class": "C24",
+   "distractor_class": "Q24",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-91647e15-dbd",
+   "training_universe": "small_t2_fk3"
+  },
+  "24": {
+   "lesson_id": "cb5b747f45e2a2824d1054c8b52bcf65d31785e885c38e2d8d22a7bd1a8c501a",
+   "group": 0,
+   "trusted_class": "C25",
+   "distractor_class": "Q25",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-f3fe50ef-12d",
+   "training_universe": "dense_t200_fk9"
+  },
+  "25": {
+   "lesson_id": "1acf30381fea52131ff0a0518a1389f2bee256e3781d074251e729e818e92e88",
+   "group": 0,
+   "trusted_class": "C26",
+   "distractor_class": "Q26",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-c072cdd3-509",
+   "training_universe": "uni_s1002"
+  },
+  "26": {
+   "lesson_id": "0977e4bb09a5940ddd909e5d55f9e6df3ab5817a14d0092dfa0d126b171ba3a6",
+   "group": 0,
+   "trusted_class": "C27",
+   "distractor_class": "Q27",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-3bed6e47-7be",
+   "training_universe": "uni_s1002"
+  },
+  "27": {
+   "lesson_id": "79d6c0a89a3c3c783a0c779c7edf8e03addc94bd9082577a4bb6777627d46f0d",
+   "group": 0,
+   "trusted_class": "C28",
+   "distractor_class": "Q28",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-3be7b495-49f",
+   "training_universe": "uni_s1012"
+  },
+  "28": {
+   "lesson_id": "558643c6d1e0a015fc7990819f1387702cb70959d162769a050a324c5f5ef4b8",
+   "group": 0,
+   "trusted_class": "C29",
+   "distractor_class": "Q29",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-33b3cbee-78c",
+   "training_universe": "uni_s1006"
+  },
+  "29": {
+   "lesson_id": "770ea00efbd01a9c8f30b7a99a7bd3d8e8a652bce56b8eb900be9baf2ec07eca",
+   "group": 0,
+   "trusted_class": "C30",
+   "distractor_class": "Q30",
+   "orientation": "correct",
+   "admission": "oracle_admission_passed",
+   "training_case_id": "f4-train-5e701a77-c65",
+   "training_universe": "uni_s1015"
+  }
+ },
+ "fresh_base_accuracy": 0.12,
+ "headroom_band": [
+  0.3,
+  0.7
+ ],
+ "headroom_band_ok": false,
+ "headroom_assessment": "floor (not saturation), parent decision 2026-07-25: F4's operative contrast is the null topologies (B/C/D), not the no-memory base; base << A is the deletion channel's precondition.  A band violation here records a floor, it does not void the arm comparison.",
+ "learning": {
+  "edges_tested_note": "2 anchors per contributing train case",
+  "edges_kept": 54,
+  "worlds_with_valid_edge": [
+   0,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28
+  ],
+  "edge_weights": {
+   "C01->bc4e919ac217": 1,
+   "C03->b071122ba884": 1,
+   "C04->d58190d7b3e9": 1,
+   "C05->6d95cb47c0f9": 1,
+   "C06->f3624cce7ced": 1,
+   "C07->4528719c5474": 1,
+   "C08->7e0a995682e3": 1,
+   "C09->d9d3ae55e2c4": 1,
+   "C10->532a471983ef": 1,
+   "C11->b815fadae5b0": 1,
+   "C12->168bf7da1627": 1,
+   "C13->c4999c88d714": 1,
+   "C14->ca3b608a1fa6": 1,
+   "C15->fa4832f9ec6e": 1,
+   "C17->fea6515a9e0d": 1,
+   "C18->6eba478ce2e9": 1,
+   "C19->c07be371867e": 1,
+   "C20->23456219ee7f": 1,
+   "C21->5195617d250e": 1,
+   "C22->05a319544105": 1,
+   "C23->101bc7df6459": 1,
+   "C24->040f9416c5ec": 1,
+   "C25->cb5b747f45e2": 1,
+   "C26->1acf30381fea": 1,
+   "C27->0977e4bb09a5": 1,
+   "C28->79d6c0a89a3c": 1,
+   "C29->558643c6d1e0": 1,
+   "Q01->bc4e919ac217": 1,
+   "Q03->b071122ba884": 1,
+   "Q04->d58190d7b3e9": 1,
+   "Q05->6d95cb47c0f9": 1,
+   "Q06->f3624cce7ced": 1,
+   "Q07->4528719c5474": 1,
+   "Q08->7e0a995682e3": 1,
+   "Q09->d9d3ae55e2c4": 1,
+   "Q10->532a471983ef": 1,
+   "Q11->b815fadae5b0": 1,
+   "Q12->168bf7da1627": 1,
+   "Q13->c4999c88d714": 1,
+   "Q14->ca3b608a1fa6": 1,
+   "Q15->fa4832f9ec6e": 1,
+   "Q17->fea6515a9e0d": 1,
+   "Q18->6eba478ce2e9": 1,
+   "Q19->c07be371867e": 1,
+   "Q20->23456219ee7f": 1,
+   "Q21->5195617d250e": 1,
+   "Q22->05a319544105": 1,
+   "Q23->101bc7df6459": 1,
+   "Q24->040f9416c5ec": 1,
+   "Q25->cb5b747f45e2": 1,
+   "Q26->1acf30381fea": 1,
+   "Q27->0977e4bb09a5": 1,
+   "Q28->79d6c0a89a3c": 1,
+   "Q29->558643c6d1e0": 1
+  },
+  "checkpoints": [
+   {
+    "after_case": 6,
+    "n_edges": 10
+   },
+   {
+    "after_case": 12,
+    "n_edges": 22
+   },
+   {
+    "after_case": 18,
+    "n_edges": 32
+   },
+   {
+    "after_case": 24,
+    "n_edges": 44
+   }
+  ]
+ },
+ "arms": {
+  "A_learned": {
+   "n_edges": 54,
+   "fresh_accuracy": 0.9,
+   "fresh_parse_failures": 0,
+   "empty_contexts": 5
+  },
+  "B_shuffled": {
+   "n_edges": 54,
+   "fresh_accuracy": 0.46,
+   "fresh_parse_failures": 0,
+   "empty_contexts": 5
+  },
+  "C_clique": {
+   "n_edges": 1800,
+   "fresh_accuracy": 0.48,
+   "fresh_parse_failures": 0,
+   "empty_contexts": 0
+  },
+  "D_random_sparse": {
+   "n_edges": 54,
+   "fresh_accuracy": 0.52,
+   "fresh_parse_failures": 0,
+   "empty_contexts": 5
+  }
+ },
+ "topology_divergence": {
+  "A_learned_vs_B_shuffled": {
+   "n_differing_cases": 22,
+   "differing_fresh_worlds": [
+    2,
+    6,
+    7,
+    10,
+    11,
+    12,
+    16,
+    18,
+    19,
+    23
+   ]
+  },
+  "A_learned_vs_C_clique": {
+   "n_differing_cases": 25,
+   "differing_fresh_worlds": [
+    1,
+    2,
+    6,
+    7,
+    10,
+    11,
+    12,
+    16,
+    17,
+    18
+   ]
+  },
+  "A_learned_vs_D_random_sparse": {
+   "n_differing_cases": 19,
+   "differing_fresh_worlds": [
+    2,
+    5,
+    7,
+    10,
+    11,
+    12,
+    16,
+    19,
+    22,
+    23
+   ]
+  },
+  "B_shuffled_vs_C_clique": {
+   "n_differing_cases": 5,
+   "differing_fresh_worlds": [
+    1,
+    17,
+    22,
+    23,
+    1
+   ]
+  },
+  "B_shuffled_vs_D_random_sparse": {
+   "n_differing_cases": 7,
+   "differing_fresh_worlds": [
+    5,
+    6,
+    18,
+    22,
+    28,
+    0,
+    12
+   ]
+  },
+  "C_clique_vs_D_random_sparse": {
+   "n_differing_cases": 10,
+   "differing_fresh_worlds": [
+    1,
+    5,
+    6,
+    17,
+    18,
+    23,
+    28,
+    0,
+    1,
+    12
+   ]
+  }
+ },
+ "causal_curve": {
+  "removal_unit": "anchor_pair",
+  "unit_deviation_note": "prereg reading deviation #2 (parent decision 2026-07-25, option (a)): LOO importance and the removal curve are computed per ANCHOR-PAIR unit (both anchor edges of a lesson removed together), not per single edge.  Per-edge LOO is structurally flat because the two anchors are redundant reachability paths (r2 smoke: per-edge LOO = 0.0 on all top edges).  Learner unchanged; only the ablation unit moved.",
+  "k_steps": 10,
+  "loo_candidate_units": 27,
+  "loo_measured_units": {
+   "040f9416c5ec": 0.02,
+   "05a319544105": 0.02,
+   "0977e4bb09a5": 0.0,
+   "101bc7df6459": 0.02,
+   "168bf7da1627": 0.02,
+   "1acf30381fea": 0.02,
+   "23456219ee7f": 0.04,
+   "4528719c5474": 0.04,
+   "5195617d250e": 0.02,
+   "532a471983ef": 0.04,
+   "558643c6d1e0": 0.02,
+   "6d95cb47c0f9": 0.02,
+   "6eba478ce2e9": 0.04,
+   "79d6c0a89a3c": 0.02,
+   "7e0a995682e3": 0.04,
+   "b071122ba884": 0.04,
+   "b815fadae5b0": 0.04,
+   "bc4e919ac217": 0.02,
+   "c07be371867e": 0.04,
+   "c4999c88d714": 0.04,
+   "ca3b608a1fa6": 0.04,
+   "cb5b747f45e2": 0.02,
+   "d58190d7b3e9": 0.04,
+   "d9d3ae55e2c4": 0.04,
+   "f3624cce7ced": 0.04,
+   "fa4832f9ec6e": 0.0,
+   "fea6515a9e0d": 0.04
+  },
+  "curve_top_acc": [
+   0.86,
+   0.82,
+   0.78,
+   0.74,
+   0.7,
+   0.66,
+   0.62,
+   0.58,
+   0.54,
+   0.5
+  ],
+  "curve_rand_acc": [
+   0.88,
+   0.84,
+   0.82,
+   0.8,
+   0.76,
+   0.72,
+   0.68,
+   0.66,
+   0.62,
+   0.6
+  ],
+  "auc_gap": 0.058,
+  "auc_gap_ci95": [
+   0.012,
+   0.108
+  ]
+ },
+ "structure_performance": {
+  "checkpoint_accuracies": {
+   "ckpt_6": 0.28,
+   "ckpt_12": 0.5,
+   "ckpt_18": 0.66,
+   "ckpt_24": 0.82,
+   "final": 0.9
+  },
+  "points": [
+   [
+    12,
+    0.21999999999999997
+   ],
+   [
+    22,
+    0.38
+   ],
+   [
+    34,
+    0.5399999999999999
+   ],
+   [
+    44,
+    0.62
+   ],
+   [
+    10,
+    0.16000000000000003
+   ],
+   [
+    22,
+    0.31999999999999995
+   ],
+   [
+    32,
+    0.4
+   ],
+   [
+    12,
+    0.15999999999999992
+   ],
+   [
+    22,
+    0.24
+   ],
+   [
+    10,
+    0.08000000000000007
+   ]
+  ],
+  "spearman_rho": 0.957,
+  "rho_ci95": [
+   0.7629656673174388,
+   1.0
+  ]
+ },
+ "kill_condition_observations": {
+  "f4_k1_any_control_catches_a": false,
+  "f4_k2_auc_gap_ci_includes_0": false,
+  "f4_k3_rho_ci_includes_0": false,
+  "values": {
+   "learned_minus_best_control": 0.38,
+   "best_control": "D_random_sparse",
+   "control_gaps": {
+    "B_shuffled": {
+     "a_minus_x": 0.44,
+     "ci95": [
+      0.3,
+      0.58
+     ]
+    },
+    "C_clique": {
+     "a_minus_x": 0.42,
+     "ci95": [
+      0.26,
+      0.58
+     ]
+    },
+    "D_random_sparse": {
+     "a_minus_x": 0.38,
+     "ci95": [
+      0.24,
+      0.52
+     ]
+    }
+   },
+   "auc_gap": 0.058,
+   "rho": 0.957
+  },
+  "note": "mechanical observation only; sealed judgment belongs to the gate"
+ },
+ "llm_budget": {
+  "max_calls": 4000,
+  "used": 271,
+  "answerer": {
+   "backend": "vllm",
+   "url": "http://127.0.0.1:18000/v1",
+   "model": "qwen3.6-27b",
+   "misses": 271,
+   "hits": 2589,
+   "degraded_to_parallel": null
+  },
+  "total_logical": 2860
+ },
+ "aborted": null,
+ "wall_clock_s": 1572.5
+}

@@ -254,7 +254,7 @@ def test_f1_executes_three_calls_per_arm_and_development_cannot_claim_science() 
         for row in suite["item_runs"]
         for call in row["calls"]
     }
-    assert all(value.startswith("req-") and len(value) == 24 for value in request_ids)
+    assert all(value.startswith("req-") and len(value) == 12 for value in request_ids)
     assert len(request_ids) == 4 * len(F1_ARMS)
     gold = {
         "schema_version": GOLD_SCHEMA,

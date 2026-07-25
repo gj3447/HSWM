@@ -283,13 +283,15 @@ def request_id_for(run_id: str, arm_id: str, item_id: str) -> str:
     """Return a compact, receipt-bound transport correlation identifier.
 
     Run, arm, and item identity are already recorded independently in every
-    call receipt.  Sending their full human-readable concatenation through an
-    LLM makes an otherwise opaque transport field needlessly error-prone, so
-    the model copies a deterministic short digest instead.
+    call receipt.  The digest must also be SHORT enough for the model to copy
+    verbatim: the 2026-07-25 sealed run showed a 20-hex digest gets truncated
+    by the model on some items ('req-b6912424d27a44a00361' came back as
+    'req-b6912424d27a44a0'). 8 hex chars (32 bits) is both copy-reliable at
+    temperature 0 and collision-negligible at sealed scale (~500 item-runs).
     """
 
     identity = {"run_id": run_id, "arm_id": arm_id, "item_id": item_id}
-    return f"req-{canonical_sha256(identity)[:20]}"
+    return f"req-{canonical_sha256(identity)[:8]}"
 
 
 def _request_id_matches(observed: object, expected: str) -> bool:

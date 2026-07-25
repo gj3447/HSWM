@@ -1,0 +1,123 @@
+{
+  "schema": "longinus-hswm-ordered-gate-binding/v1",
+  "binding_id": "longinus-hswm-ordered-gates-20260724",
+  "binding_state": "PIERCED",
+  "baseline_scope": "HSWM ordered-gate implementation commit and the exact research artifacts required to resume the next active gate",
+  "generated_at": "2026-07-24T00:00:00+09:00",
+  "git": {
+    "remote": "https://github.com/gj3447/HSWM.git",
+    "branch": "codex/hswm-next-gate-harness",
+    "implementation_commit": "f32c8a6fad19544f19185df8a46d4af5545120b8",
+    "implementation_commit_rule": "The readable checkout must contain this commit as an ancestor and every bound file must match its SHA-256 baseline. The post-manifest publication commit is recorded by the external materialization receipt to avoid a self-referential Git hash."
+  },
+  "kg": {
+    "repo_tag": "HSWM",
+    "root_anchor": "hswm-ordered-research-harness-20260724",
+    "contract": "hswm-ordered-research-gates-20260724",
+    "owner_edge": "HAS_REFERENCE_SITE",
+    "code_edge": "MATERIALIZES",
+    "reference_edge": "BINDS_TO"
+  },
+  "symposium": {
+    "host": "lagyeongjun-ui-Macmini.local",
+    "root": "/Users/lagyeongjun/CD/SYMPOSIUM",
+    "materialized_worktree": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM_ORDERED_GATES",
+    "entrypoint": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM_ORDERED_GATES/LONGINUS_HSWM_ORDERED_GATE_BINDING_2026-07-24.json",
+    "human_entrypoint": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM_ORDERED_GATES/HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md",
+    "read_rule": "Read the manifest first, reject a checkout with hash drift, then follow the active-gate status receipt. Do not use the diverged SYMPOSIUM/GIT/HSWM main as this programme's ordered-gate baseline."
+  },
+  "layers": [
+    "KG_NODE",
+    "CONTRACT_BINDING",
+    "CODE_SYMBOL",
+    "FILE_LINE",
+    "LINE_RANGE",
+    "SHA256",
+    "CRATE_SCRIPT"
+  ],
+  "bindings": [
+    {
+      "kind": "python_module",
+      "kg_ref": "hswm-ordered-research-harness-20260724",
+      "sourceId": "hswm_next_research_harness",
+      "sourcePath": "hswm_next_research_harness.py:10",
+      "anchorLine": 10,
+      "lineRange": "1-965",
+      "sha256": "0c6825b442c0485bb3b3dbaa2a8cfb1bcdadc3fbf859ba2c1ac80c0610c72ef2"
+    },
+    {
+      "kind": "python_symbol",
+      "kg_ref": "hswm-gate-status-contract-20260724",
+      "sourceId": "hswm_next_research_harness.build_status",
+      "sourcePath": "hswm_next_research_harness.py:659",
+      "lineRange": "659-800",
+      "sha256": "0c6825b442c0485bb3b3dbaa2a8cfb1bcdadc3fbf859ba2c1ac80c0610c72ef2"
+    },
+    {
+      "kind": "python_symbol",
+      "kg_ref": "hswm-status-verification-contract-20260724",
+      "sourceId": "hswm_next_research_harness.verify_status",
+      "sourcePath": "hswm_next_research_harness.py:803",
+      "lineRange": "803-813",
+      "sha256": "0c6825b442c0485bb3b3dbaa2a8cfb1bcdadc3fbf859ba2c1ac80c0610c72ef2"
+    },
+    {
+      "kind": "python_symbol",
+      "kg_ref": "hswm-lakatotree-packet-contract-20260724",
+      "sourceId": "hswm_next_research_harness.build_lakatotree_packet",
+      "sourcePath": "hswm_next_research_harness.py:816",
+      "lineRange": "816-861",
+      "sha256": "0c6825b442c0485bb3b3dbaa2a8cfb1bcdadc3fbf859ba2c1ac80c0610c72ef2"
+    },
+    {
+      "kind": "research_plan",
+      "kg_ref": "hswm-ordered-plan-reference-20260724",
+      "sourceId": "HSWMOrderedResearchPlan.v1",
+      "sourcePath": "_research/next_gate_harness/plan.v1.json:1",
+      "lineRange": "1-152",
+      "sha256": "eeebcbe66313f6249226a8d3facb50f97649c5a295af3ba81546668de9b73bfd"
+    },
+    {
+      "kind": "status_receipt",
+      "kg_ref": "hswm-ordered-status-reference-20260724",
+      "sourceId": "HSWMOrderedGateStatus.20260724",
+      "sourcePath": "receipts/HSWM_ORDERED_GATE_STATUS_20260724.json:1",
+      "lineRange": "1-236",
+      "sha256": "4dfdefc7d0915a43f2ae4e5540e916a1c67b47cc381dc9b3598af44d52e2cef1"
+    },
+    {
+      "kind": "lakatotree_packet",
+      "kg_ref": "hswm-ordered-lakatotree-packet-reference-20260724",
+      "sourceId": "HSWMOrderedGateLakatoTreePacket.20260724",
+      "sourcePath": "receipts/HSWM_ORDERED_GATE_LAKATOTREE_PACKET_20260724.json:1",
+      "lineRange": "1-43",
+      "sha256": "bb7455efb699e8537e11606ffe5dcd0c8658f324cfc586fe3a8c92a23b0bbc1f"
+    },
+    {
+      "kind": "runbook",
+      "kg_ref": "hswm-ordered-runbook-reference-20260724",
+      "sourceId": "HSWMOrderedGateRunbook.20260724",
+      "sourcePath": "HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md:1",
+      "lineRange": "1-184",
+      "sha256": "1b8b16894b8ac250b7c976f536ea4aa6b1b9abbc2222b40ccb7d767b02ef4339"
+    },
+    {
+      "kind": "canonical_direction",
+      "kg_ref": "hswm-canonical-direction-reference-20260724",
+      "sourceId": "HSWMCanonicalResearchDirection.20260724",
+      "sourcePath": "HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md:1",
+      "lineRange": "1-127",
+      "sha256": "6037794a604fcb0677a4adeac9d35656f6c35f5eb6327972acc389d1a298ea43"
+    },
+    {
+      "kind": "protocol",
+      "kg_ref": "hswm-prom9-protocol-reference-20260724",
+      "sourceId": "HSWMProm9LLMFunctionNetworkProtocol.20260724",
+      "sourcePath": "PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md:1",
+      "lineRange": "1-320",
+      "sha256": "80fe4f14a8a23c7767c7d7b5b243a521633448df874f47869973f0e0e66a35de"
+    }
+  ],
+  "active_gate": "F1_MULTI_LLM_FUNCTION_NETWORK",
+  "claim_boundary": "Longinus proves reference integrity and Symposium readability only. It does not establish typed-network efficacy, persistent semantic-weight learning, Agent-A-to-B transfer, topology learning, or a scientific LakatoTree verdict."
+}

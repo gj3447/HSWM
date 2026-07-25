@@ -47,6 +47,12 @@ not being mislabeled as LLM neurons.
 The detailed function contract, runtime cycle, code-to-architecture map,
 feasibility verdict, failure modes, and decisive P1–P4 experiments are in
 [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md).
+The preserved hard core, replaceable protective belt, current evidence table,
+kill rules, and the single ordered research direction are frozen in
+[`HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md`](HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md).
+The ordered-gate implementation is bound back to its KG contracts, exact source
+symbols, line ranges, hashes, and Mac mini Symposium materialization through
+[`LONGINUS_HSWM_ORDERED_GATE_BINDING_2026-07-24.json`](LONGINUS_HSWM_ORDERED_GATE_BINDING_2026-07-24.json).
 
 That paragraph is a target identity, not a present-tense efficacy claim. The
 repository currently has a mature evidence/compiler/replay substrate and several
@@ -122,17 +128,30 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
   (`6/6` typed vs `2/6` no memory; four improvements). LakatoTree regenerated
   the P1v4 metric server-side. This is L0 answer-interface actuation at `n=6`,
   not a general learned compiler, durable `Delta W`, transfer, or topology.
-- 🧭 **Next-gate harness:** `hswm_next_research_harness.py` verifies P1v4,
-  preserves the B2.1 falsification, and refuses to unlock P1v5 until a real
-  three-pack B2.2 Gate-0 acceptance receipt revalidates. F1 multi-role LLM
-  function composition is the other currently READY lane; the harness emits no
-  prediction or scientific verdict.
+- 🧭 **Strict ordered-gate harness:** `hswm_next_research_harness.py` preserves
+  P1v4/B2.1/B2.2 evidence and exposes exactly one active step in the order
+  `actual-compute F1 → real Gate-0 packs → persistent Delta-W/removal →
+  Agent-A weight-only frozen-B transfer → one topology edit → long-horizon
+  stability`. It rejudges F1 suite+gold and raw P1v5/P2 packets, refuses
+  out-of-order evidence, and emits no prediction or scientific verdict. The
+  current active step is F1 token-parity repair because R4 tied vector and
+  failed consumed-token parity on all four items.
 - 🧠 **PROM-9 semantic neural network protocol:** three frozen typed LLM
   functions (`query compiler -> bond proposer -> answer synthesizer`) now have
   hashable prompts, port boundaries, matched-budget baselines, role
-  removal/shuffle controls, and a fail-closed stage-packet compiler. It opens
-  Gate-0/F1 preparation only; P1v5 measurement, activation, prediction, and
-  scientific result authority remain closed.
+  removal/shuffle controls, and a fail-closed stage-packet compiler. The
+  executable vertical slice now includes exact typed-port validation, immutable
+  function registries, three-call model receipts, a five-arm F1 runner, an
+  independent gold judge, and snapshot-bound P1v5/P2 causal judges. This is
+  development-ready harness closure, not F1/P1v5/P2 efficacy; real Gate-0 packs,
+  preregistration, sealed splits, and independent evaluation remain required.
+- 🧪 **PROM-9 F1 actual-model development run:** the corrected 4-item 2Wiki run
+  executed 60 physical `Qwen3.6-27B` calls. Typed scored `2/4`, flat `1/4`,
+  vector `2/4`, role removal `0/4`, and role shuffle `1/4`; however every item
+  failed consumed-token parity and all paired lower bounds included zero.
+  The result is therefore `DEVELOPMENT_ONLY`, with no unique HSWM efficacy
+  claim. See
+  [`PROM9_F1_2WIKI_DEVELOPMENT_RESULTS_20260724.md`](prom_search_hswm/docs/PROM9_F1_2WIKI_DEVELOPMENT_RESULTS_20260724.md).
 - ⚠️ **Open-kernel claim boundary:** LakatoTree judged the composition receipt
   chain `partial` and `certified=false`. Learned semantic-weight deltas and
   CONNECT/SEPARATE/SPECIALIZE topology edits, bounded cyclic readout,
@@ -229,8 +248,9 @@ formalization remain in
 | `prom_search_hswm/hswm_bond_readout.py` | pure slow-salience + volatile query-bond potential application and deterministic ranking |
 | `prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md` | refined B2.2 design, action-space diagnostics, full-score-pack requirement, and fresh confirmation boundary |
 | `prom_search_hswm/hswm_b22_gate0_harness.py` / `prom_search_hswm/docs/B22_GATE0_HARNESS_CONTRACT_20260723.md` | full-candidate Gate-0 compiler, replay, locked acceptance, and trusted-ingestion boundary |
-| `hswm_next_research_harness.py` / `HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md` | fail-closed P1v4→B2.2/P1v5→F1/P2→P3→P4 stage graph, current receipt validator, and LakatoTree DRAFT packet |
+| `hswm_next_research_harness.py` / `HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md` | fail-closed single-frontier `F1→Gate-0→Delta-W/removal→A-to-B weight-only transfer→topology→stability` graph, raw-evidence rejudgment, and LakatoTree DRAFT packet |
 | `PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md` / `prom_search_hswm/prom9_semantic_neural_network.v1.json` / `prom_search_hswm/prom9_protocol.py` | typed LLM function network, fast-to-slow bond plasticity, matched controls, and preparation-only PROM-9 contract |
+| `PROM9_DECISIVE_EXPERIMENT_HARNESS_2026-07-24.md` / `prom_search_hswm/prom_f1_function_network.py` / `prom_search_hswm/prom9_causal_harness.py` | executable F1 equal-budget runner plus P1v5 weight-removal and P2 frozen-agent-transfer causal judges; development output cannot mint a scientific verdict |
 | `_research/shared_field_hypothesis/task_contracts.v1.json` / `e1_contract.v1.json` | independent task/control roles and engineering-only replay/budget receipt contracts |
 | `prom_search_hswm/docs/PROM_HSWM_REMAINING_ISSUES_RESOLUTION_20260723.md` | evidence-backed dependency graph from implemented gates to G4 preregistration |
 | `H3_B3_RESUME_STATUS_2026-07-20.md` | corrected PRE_RUN boundary, local receipt hashes, and exact next sequence |

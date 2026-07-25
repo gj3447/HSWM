@@ -1,0 +1,1799 @@
+{
+  "gold_opened": false,
+  "item_runs": [
+    {
+      "answer": {
+        "abstain": false,
+        "answer": "Małgorzata Braunek",
+        "request_id": "f1-2wiki-smoke-r4-20260724:typed_hswm_three_function_network:8813f87c0bdd11eba7f7acde48001122",
+        "supporting_evidence_ids": [
+          "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+          "8813f87c0bdd11eba7f7acde48001122:evidence:7"
+        ],
+        "uncertainty": ""
+      },
+      "arm_id": "typed_hswm_three_function_network",
+      "calls": [
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "typed_hswm_three_function_network",
+          "cache_status": "provider-unknown",
+          "call_index": 1,
+          "function_id": "QF_QUERY_COMPILER",
+          "input_payload": {
+            "allowed_evidence_types": [
+              "wikipedia_paragraph"
+            ],
+            "budget": {
+              "max_candidates": 10,
+              "max_evidence_items": 3,
+              "max_input_tokens": 16000,
+              "max_output_tokens": 512
+            },
+            "query_text": "Who is the mother of the director of film Polish-Russian War (Film)?",
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_hswm_three_function_network:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "input_port_sha256": "26214e2296424539ca39a73324dffa04bcc116100ec0d97dfd64a5a2c116a985",
+          "input_tokens": 295,
+          "input_type": "QueryEnvelopeV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 43373,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": false,
+            "constraints": [
+              "max_candidates: 10",
+              "max_evidence_items: 3",
+              "max_input_tokens: 16000",
+              "max_output_tokens: 512"
+            ],
+            "objectives": [
+              "Identify the director of the film 'Polish-Russian War'",
+              "Identify the mother of the identified director"
+            ],
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_hswm_three_function_network:8813f87c0bdd11eba7f7acde48001122",
+            "required_evidence_types": [
+              "wikipedia_paragraph"
+            ]
+          },
+          "output_port_sha256": "0a3c381e78fc4aaaff051c0c927796cdce63a06cbd5f1835e55d8465999d07b4",
+          "output_tokens": 185,
+          "output_type": "QueryPlanV1",
+          "physical_call_id": "8042194c177d18921090ba383b1de48571ae31c2947a2787c96722767859509a",
+          "prompt_sha256": "6b6101bdf6495c49a9e8c6fac0ff01c4b6d0b5ba42d96101b0cdaf36f8c5cb7f",
+          "receipt_sha256": "b6c18057cb2a4e497be12ba587fdd0a54f4818341c4d8c8038da3aea654855b5",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        },
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "typed_hswm_three_function_network",
+          "cache_status": "provider-unknown",
+          "call_index": 2,
+          "function_id": "BF_BOND_PROPOSER",
+          "input_payload": {
+            "candidate_budget": 3,
+            "candidates": [
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:0",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:0",
+                "observable": {
+                  "base_score": 0.02402396,
+                  "flat_position": 0,
+                  "flat_score": 1.0,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.02402396
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:1",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:1",
+                "observable": {
+                  "base_score": 0.17895602,
+                  "flat_position": 1,
+                  "flat_score": 0.88888889,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.17895602
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:2",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:2",
+                "observable": {
+                  "base_score": 0.09243713,
+                  "flat_position": 2,
+                  "flat_score": 0.77777778,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.09243713
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:3",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:3",
+                "observable": {
+                  "base_score": 0.178217,
+                  "flat_position": 3,
+                  "flat_score": 0.66666667,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.178217
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:4",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+                "observable": {
+                  "base_score": 0.63966076,
+                  "flat_position": 4,
+                  "flat_score": 0.55555556,
+                  "incidence_count": 2,
+                  "seam_count": 1,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.63966076
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:5",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:5",
+                "observable": {
+                  "base_score": 0.0177237,
+                  "flat_position": 5,
+                  "flat_score": 0.44444444,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.0177237
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:6",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:6",
+                "observable": {
+                  "base_score": 0.04513323,
+                  "flat_position": 6,
+                  "flat_score": 0.33333333,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.04513323
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:7",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:7",
+                "observable": {
+                  "base_score": 0.20116165,
+                  "flat_position": 7,
+                  "flat_score": 0.22222222,
+                  "incidence_count": 2,
+                  "seam_count": 1,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.20116165
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:8",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:8",
+                "observable": {
+                  "base_score": 0.07242466,
+                  "flat_position": 8,
+                  "flat_score": 0.11111111,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.07242466
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:9",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:9",
+                "observable": {
+                  "base_score": 0.0254085,
+                  "flat_position": 9,
+                  "flat_score": 0.0,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.0254085
+                }
+              }
+            ],
+            "query_plan": {
+              "abstain": false,
+              "constraints": [
+                "max_candidates: 10",
+                "max_evidence_items: 3",
+                "max_input_tokens: 16000",
+                "max_output_tokens: 512"
+              ],
+              "objectives": [
+                "Identify the director of the film 'Polish-Russian War'",
+                "Identify the mother of the identified director"
+              ],
+              "request_id": "f1-2wiki-smoke-r4-20260724:typed_hswm_three_function_network:8813f87c0bdd11eba7f7acde48001122",
+              "required_evidence_types": [
+                "wikipedia_paragraph"
+              ]
+            },
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_hswm_three_function_network:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "input_port_sha256": "1bb6da26f79bd851bd48876ba2c12ae7d09e7f3a89fcc0312800df5533581d7e",
+          "input_tokens": 1788,
+          "input_type": "BondScoringEnvelopeV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 106696,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": false,
+            "bond_potentials": {
+              "8813f87c0bdd11eba7f7acde48001122:bond:1": -0.17895602,
+              "8813f87c0bdd11eba7f7acde48001122:bond:4": -0.63966076,
+              "8813f87c0bdd11eba7f7acde48001122:bond:7": -0.20116165
+            },
+            "evidence_refs": [
+              "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+              "8813f87c0bdd11eba7f7acde48001122:evidence:7",
+              "8813f87c0bdd11eba7f7acde48001122:evidence:1"
+            ],
+            "ordered_bond_ids": [
+              "8813f87c0bdd11eba7f7acde48001122:bond:4",
+              "8813f87c0bdd11eba7f7acde48001122:bond:7",
+              "8813f87c0bdd11eba7f7acde48001122:bond:1"
+            ],
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_hswm_three_function_network:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "output_port_sha256": "dd611e865a307789d4431b9aba928f18a5d8c8611452b3c3d950de7f16639ebc",
+          "output_tokens": 448,
+          "output_type": "BondProposalV1",
+          "physical_call_id": "1713d1f65bced5f82fbe71909361e245f04773f722010d8a8bfdf217de509bf1",
+          "prompt_sha256": "c032a190a89827e821e7bb6045ebdb4c653e50c130303438088f30519253131c",
+          "receipt_sha256": "632ddb71e6a56bb3ed887922a2d687d550e7199173b5d102f948b1431f99043b",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        },
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "typed_hswm_three_function_network",
+          "cache_status": "provider-unknown",
+          "call_index": 3,
+          "function_id": "AF_ANSWER_SYNTHESIZER",
+          "input_payload": {
+            "max_answer_tokens": 512,
+            "query_plan": {
+              "abstain": false,
+              "constraints": [
+                "max_candidates: 10",
+                "max_evidence_items: 3",
+                "max_input_tokens: 16000",
+                "max_output_tokens: 512"
+              ],
+              "objectives": [
+                "Identify the director of the film 'Polish-Russian War'",
+                "Identify the mother of the identified director"
+              ],
+              "request_id": "f1-2wiki-smoke-r4-20260724:typed_hswm_three_function_network:8813f87c0bdd11eba7f7acde48001122",
+              "required_evidence_types": [
+                "wikipedia_paragraph"
+              ]
+            },
+            "query_text": "Who is the mother of the director of film Polish-Russian War (Film)?",
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_hswm_three_function_network:8813f87c0bdd11eba7f7acde48001122",
+            "selected_evidence": [
+              {
+                "content": "Polish-Russian War (film). Polish-Russian War (Wojna polsko-ruska) is a 2009 Polish film directed by Xawery Żuławski based on the novel Polish-Russian War under the white-red flag by Dorota Masłowska.",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:4"
+              },
+              {
+                "content": "Xawery Żuławski. Xawery Żuławski (born 22 December 1971 in Warsaw) is a Polish film director. In 1995 he graduated National Film School in Łódź. He is the son of actress Małgorzata Braunek and director Andrzej Żuławski. His second feature \"Wojna polsko-ruska\" (2009), adapted from the controversial best-selling novel by Dorota Masłowska, won First Prize in the New Polish Films competition at the 9th Era New Horizons Film Festival in Wrocław. In 2013, he stated he intends to direct a Polish novel \"Zły\" by Leopold Tyrmand. Żuławski and his wife Maria Strzelecka had 2 children together: son Kaj Żuławski (born 2002) and daughter Jagna Żuławska (born 2009).",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:7"
+              },
+              {
+                "content": "Viktor Yeliseyev. Viktor Petrovich Yeliseyev( born June 9, 1950) is a Russian general, orchestra conductor and music teacher. He is the director of the Ministry of the Interior Ensemble, one of the two Russian Red Army Choirs.",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:1"
+              }
+            ]
+          },
+          "input_port_sha256": "b560b810740d3faaade283d61e651469f0a41ab96feb0b6cae18b421edaab6dd",
+          "input_tokens": 829,
+          "input_type": "AnswerContextV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 41246,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": false,
+            "answer": "Małgorzata Braunek",
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_hswm_three_function_network:8813f87c0bdd11eba7f7acde48001122",
+            "supporting_evidence_ids": [
+              "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+              "8813f87c0bdd11eba7f7acde48001122:evidence:7"
+            ],
+            "uncertainty": ""
+          },
+          "output_port_sha256": "af900f778d434046a3eeb7ec00edebdc856b2f575d2423f027e1e458b07e807e",
+          "output_tokens": 174,
+          "output_type": "AnswerEnvelopeV1",
+          "physical_call_id": "1bf9cc2a720030b200bc5e562bd3b14a2804f7d936bd195eb5c3185b3f4daac2",
+          "prompt_sha256": "3cca6aa3e8b8f40bdce9bdc33ca26b1ad2b18ec9bac3fae4e4f401055c2349af",
+          "receipt_sha256": "25c4143047a9ae94e9735d800c456d2ab3249afc2ddc845d329adfeca0c69bfb",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        }
+      ],
+      "candidate_universe_sha256": "d5821fd792b3692bd5a43117b78b42dc453dcb3702061b8f187610db16339617",
+      "item_id": "8813f87c0bdd11eba7f7acde48001122",
+      "persistent_state_bytes": 4096,
+      "registry_sha256": "90ac05280df2d9edf74f8a92f572bc6bdcc3637064a6d8a6fbb96b0723593e17",
+      "run_id": "f1-2wiki-smoke-r4-20260724",
+      "run_receipt_sha256": "15b7971ebdeb4b623f9b7216d705d326e5670f4c992847273f128e6377589290",
+      "schema_version": "hswm-prom9-f1-item-run/v1",
+      "selected_bond_ids": [
+        "8813f87c0bdd11eba7f7acde48001122:bond:4",
+        "8813f87c0bdd11eba7f7acde48001122:bond:7",
+        "8813f87c0bdd11eba7f7acde48001122:bond:1"
+      ],
+      "total_allowed_output_tokens": 1536,
+      "total_input_tokens": 2912,
+      "total_output_tokens": 807
+    },
+    {
+      "answer": {
+        "abstain": true,
+        "answer": "The provided evidence does not contain information about the film 'Polish-Russian War', its director, or the director's mother. The evidence mentions Maheen Khan (fashion designer), Viktor Yeliseyev (general/conductor), and Alice Washburn (actress), none of whom are identified as the director of the specified film.",
+        "request_id": "f1-2wiki-smoke-r4-20260724:flat_single_llm_three_call_workflow:8813f87c0bdd11eba7f7acde48001122",
+        "supporting_evidence_ids": [],
+        "uncertainty": "high"
+      },
+      "arm_id": "flat_single_llm_three_call_workflow",
+      "calls": [
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "flat_single_llm_three_call_workflow",
+          "cache_status": "provider-unknown",
+          "call_index": 1,
+          "function_id": "QF_QUERY_COMPILER",
+          "input_payload": {
+            "allowed_evidence_types": [
+              "wikipedia_paragraph"
+            ],
+            "budget": {
+              "max_candidates": 10,
+              "max_evidence_items": 3,
+              "max_input_tokens": 16000,
+              "max_output_tokens": 512
+            },
+            "query_text": "Who is the mother of the director of film Polish-Russian War (Film)?",
+            "request_id": "f1-2wiki-smoke-r4-20260724:flat_single_llm_three_call_workflow:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "input_port_sha256": "12f6a01fb99ef9a82796bbd0a1cbeb730eb74b643d15824f18c33ca4c7bfcea9",
+          "input_tokens": 201,
+          "input_type": "QueryEnvelopeV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 47015,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": false,
+            "constraints": [
+              "Use only wikipedia_paragraph evidence",
+              "Limit candidates to 10",
+              "Limit evidence items to 3",
+              "Limit input tokens to 16000",
+              "Limit output tokens to 512"
+            ],
+            "objectives": [
+              "Identify the director of the film 'Polish-Russian War'",
+              "Identify the mother of the identified director"
+            ],
+            "request_id": "f1-2wiki-smoke-r4-20260724:flat_single_llm_three_call_workflow:8813f87c0bdd11eba7f7acde48001122",
+            "required_evidence_types": [
+              "wikipedia_paragraph"
+            ]
+          },
+          "output_port_sha256": "5214ecfb8823c53b9ca4d480a3feedd0edf211fe3cdb17b58920f14321b23b4a",
+          "output_tokens": 193,
+          "output_type": "QueryPlanV1",
+          "physical_call_id": "3baa20a4a94a6c91ec389e9e2bde8c232c191b40a19aeeab7867e4667158cfaf",
+          "prompt_sha256": "9ade6f078ff458776155a3c6d90766ec2ddb8f008b8a8a2323c30483610c0bc4",
+          "receipt_sha256": "38eed77dfce0b6ba6374700496704c8d40b25cad3d4a365ef4da0c6b11e5d1a3",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        },
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "flat_single_llm_three_call_workflow",
+          "cache_status": "provider-unknown",
+          "call_index": 2,
+          "function_id": "BF_BOND_PROPOSER",
+          "input_payload": {
+            "candidate_budget": 3,
+            "candidates": [
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:0",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:0",
+                "observable": {
+                  "flat_position": 0,
+                  "flat_score": 1.0,
+                  "source_type": "wikipedia_context"
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:1",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:1",
+                "observable": {
+                  "flat_position": 1,
+                  "flat_score": 0.88888889,
+                  "source_type": "wikipedia_context"
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:2",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:2",
+                "observable": {
+                  "flat_position": 2,
+                  "flat_score": 0.77777778,
+                  "source_type": "wikipedia_context"
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:3",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:3",
+                "observable": {
+                  "flat_position": 3,
+                  "flat_score": 0.66666667,
+                  "source_type": "wikipedia_context"
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:4",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+                "observable": {
+                  "flat_position": 4,
+                  "flat_score": 0.55555556,
+                  "source_type": "wikipedia_context"
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:5",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:5",
+                "observable": {
+                  "flat_position": 5,
+                  "flat_score": 0.44444444,
+                  "source_type": "wikipedia_context"
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:6",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:6",
+                "observable": {
+                  "flat_position": 6,
+                  "flat_score": 0.33333333,
+                  "source_type": "wikipedia_context"
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:7",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:7",
+                "observable": {
+                  "flat_position": 7,
+                  "flat_score": 0.22222222,
+                  "source_type": "wikipedia_context"
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:8",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:8",
+                "observable": {
+                  "flat_position": 8,
+                  "flat_score": 0.11111111,
+                  "source_type": "wikipedia_context"
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:9",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:9",
+                "observable": {
+                  "flat_position": 9,
+                  "flat_score": 0.0,
+                  "source_type": "wikipedia_context"
+                }
+              }
+            ],
+            "query_plan": {
+              "abstain": false,
+              "constraints": [
+                "Use only wikipedia_paragraph evidence",
+                "Limit candidates to 10",
+                "Limit evidence items to 3",
+                "Limit input tokens to 16000",
+                "Limit output tokens to 512"
+              ],
+              "objectives": [
+                "Identify the director of the film 'Polish-Russian War'",
+                "Identify the mother of the identified director"
+              ],
+              "request_id": "f1-2wiki-smoke-r4-20260724:flat_single_llm_three_call_workflow:8813f87c0bdd11eba7f7acde48001122",
+              "required_evidence_types": [
+                "wikipedia_paragraph"
+              ]
+            },
+            "request_id": "f1-2wiki-smoke-r4-20260724:flat_single_llm_three_call_workflow:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "input_port_sha256": "92095b23b42b21ed6f3afc5c86d0ab7be8131b5df0abd0cbe9a5d82d7d9b2c07",
+          "input_tokens": 1275,
+          "input_type": "BondScoringEnvelopeV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 103402,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": false,
+            "bond_potentials": {
+              "8813f87c0bdd11eba7f7acde48001122:bond:0": -1.0,
+              "8813f87c0bdd11eba7f7acde48001122:bond:1": -0.88888889,
+              "8813f87c0bdd11eba7f7acde48001122:bond:2": -0.77777778
+            },
+            "evidence_refs": [
+              "8813f87c0bdd11eba7f7acde48001122:evidence:0",
+              "8813f87c0bdd11eba7f7acde48001122:evidence:1",
+              "8813f87c0bdd11eba7f7acde48001122:evidence:2"
+            ],
+            "ordered_bond_ids": [
+              "8813f87c0bdd11eba7f7acde48001122:bond:0",
+              "8813f87c0bdd11eba7f7acde48001122:bond:1",
+              "8813f87c0bdd11eba7f7acde48001122:bond:2"
+            ],
+            "request_id": "f1-2wiki-smoke-r4-20260724:flat_single_llm_three_call_workflow:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "output_port_sha256": "7ac96ef69c642e7c88cbc2d753224911e6338ee9e151354e840e9572c9cdf8fc",
+          "output_tokens": 441,
+          "output_type": "BondProposalV1",
+          "physical_call_id": "b9b2009ed5820ffce1865ea71e38e29f014bd1313ff6fb6774dde0933b325ef5",
+          "prompt_sha256": "e32fc7a2264052ea795feb405f1b359e2d3bbac7fba1fee145a7d2676dfb6028",
+          "receipt_sha256": "2b27221820ee68a3e65c3db6d54c74407ef6b2936a54b29a761cec6119204b1d",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        },
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "flat_single_llm_three_call_workflow",
+          "cache_status": "provider-unknown",
+          "call_index": 3,
+          "function_id": "AF_ANSWER_SYNTHESIZER",
+          "input_payload": {
+            "max_answer_tokens": 512,
+            "query_plan": {
+              "abstain": false,
+              "constraints": [
+                "Use only wikipedia_paragraph evidence",
+                "Limit candidates to 10",
+                "Limit evidence items to 3",
+                "Limit input tokens to 16000",
+                "Limit output tokens to 512"
+              ],
+              "objectives": [
+                "Identify the director of the film 'Polish-Russian War'",
+                "Identify the mother of the identified director"
+              ],
+              "request_id": "f1-2wiki-smoke-r4-20260724:flat_single_llm_three_call_workflow:8813f87c0bdd11eba7f7acde48001122",
+              "required_evidence_types": [
+                "wikipedia_paragraph"
+              ]
+            },
+            "query_text": "Who is the mother of the director of film Polish-Russian War (Film)?",
+            "request_id": "f1-2wiki-smoke-r4-20260724:flat_single_llm_three_call_workflow:8813f87c0bdd11eba7f7acde48001122",
+            "selected_evidence": [
+              {
+                "content": "Maheen Khan. Maheen Khan is a Pakistani fashion and costume designer, also an award winner fashion designer for fashion labels like\" The Embroidery HouseMaheen\" and\" Gulabo\". She has done many national and international fashion events and shows. She undertook embroidery for the film Snow White and the Huntsman and television series The Jewel in the Crown.",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:0"
+              },
+              {
+                "content": "Viktor Yeliseyev. Viktor Petrovich Yeliseyev( born June 9, 1950) is a Russian general, orchestra conductor and music teacher. He is the director of the Ministry of the Interior Ensemble, one of the two Russian Red Army Choirs.",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:1"
+              },
+              {
+                "content": "Alice Washburn. Alice Washburn( 1860- 1929) was an American stage and film actress. She worked at the Edison, Vitagraph and Kalem studios. Her final film Snow White was her only known feature film. She died of heart attack in November 1929.",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:2"
+              }
+            ]
+          },
+          "input_port_sha256": "146b890217e4f80a752e47352d7b6303343c49ed2ceab53015ca5f72fff29096",
+          "input_tokens": 632,
+          "input_type": "AnswerContextV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 39161,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": true,
+            "answer": "The provided evidence does not contain information about the film 'Polish-Russian War', its director, or the director's mother. The evidence mentions Maheen Khan (fashion designer), Viktor Yeliseyev (general/conductor), and Alice Washburn (actress), none of whom are identified as the director of the specified film.",
+            "request_id": "f1-2wiki-smoke-r4-20260724:flat_single_llm_three_call_workflow:8813f87c0bdd11eba7f7acde48001122",
+            "supporting_evidence_ids": [],
+            "uncertainty": "high"
+          },
+          "output_port_sha256": "bc93fd40a7dd2a24e797b996feed8eb9bc9cd1cc4b522481dad2468952ba5d43",
+          "output_tokens": 166,
+          "output_type": "AnswerEnvelopeV1",
+          "physical_call_id": "a3c6403ecd26767a075a6a702c229697b1a2ff09f2ba5f20dfde9f8c04f1e1c7",
+          "prompt_sha256": "e33ebf9b195dd120e4b6e876d51e02e08ae38d8f6ddf6a3e06ce92b746e3cd9f",
+          "receipt_sha256": "16851f5aaf667adf055bc4d6c88bba19170f59b981ad573de669dd2dd9826e87",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        }
+      ],
+      "candidate_universe_sha256": "d5821fd792b3692bd5a43117b78b42dc453dcb3702061b8f187610db16339617",
+      "item_id": "8813f87c0bdd11eba7f7acde48001122",
+      "persistent_state_bytes": 4096,
+      "registry_sha256": "e139ad4be11db2ffaf33427ab2837f1f83d599eb6c85a6f33d35e6f8097f8caf",
+      "run_id": "f1-2wiki-smoke-r4-20260724",
+      "run_receipt_sha256": "b0ec4b44a93285996c0f6710b599705e8e02904fd835447e8836d83af9ff4571",
+      "schema_version": "hswm-prom9-f1-item-run/v1",
+      "selected_bond_ids": [
+        "8813f87c0bdd11eba7f7acde48001122:bond:0",
+        "8813f87c0bdd11eba7f7acde48001122:bond:1",
+        "8813f87c0bdd11eba7f7acde48001122:bond:2"
+      ],
+      "total_allowed_output_tokens": 1536,
+      "total_input_tokens": 2108,
+      "total_output_tokens": 800
+    },
+    {
+      "answer": {
+        "abstain": false,
+        "answer": "Małgorzata Braunek",
+        "request_id": "f1-2wiki-smoke-r4-20260724:vector_memory_three_call_workflow:8813f87c0bdd11eba7f7acde48001122",
+        "supporting_evidence_ids": [
+          "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+          "8813f87c0bdd11eba7f7acde48001122:evidence:7"
+        ],
+        "uncertainty": "low"
+      },
+      "arm_id": "vector_memory_three_call_workflow",
+      "calls": [
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "vector_memory_three_call_workflow",
+          "cache_status": "provider-unknown",
+          "call_index": 1,
+          "function_id": "QF_QUERY_COMPILER",
+          "input_payload": {
+            "allowed_evidence_types": [
+              "wikipedia_paragraph"
+            ],
+            "budget": {
+              "max_candidates": 10,
+              "max_evidence_items": 3,
+              "max_input_tokens": 16000,
+              "max_output_tokens": 512
+            },
+            "query_text": "Who is the mother of the director of film Polish-Russian War (Film)?",
+            "request_id": "f1-2wiki-smoke-r4-20260724:vector_memory_three_call_workflow:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "input_port_sha256": "bae1d6386120c6ccffd1c432fda75303efb5036c272e32ef670b219505c2e113",
+          "input_tokens": 200,
+          "input_type": "QueryEnvelopeV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 43141,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": false,
+            "constraints": [
+              "max_candidates: 10",
+              "max_evidence_items: 3",
+              "max_input_tokens: 16000",
+              "max_output_tokens: 512"
+            ],
+            "objectives": [
+              "Identify the director of the film 'Polish-Russian War'",
+              "Identify the mother of the identified director"
+            ],
+            "request_id": "f1-2wiki-smoke-r4-20260724:vector_memory_three_call_workflow:8813f87c0bdd11eba7f7acde48001122",
+            "required_evidence_types": [
+              "wikipedia_paragraph"
+            ]
+          },
+          "output_port_sha256": "0d8989cdd6fdb5250e0628b3245c74661fef5871ad3caa9dae2d115cf4e9b88b",
+          "output_tokens": 183,
+          "output_type": "QueryPlanV1",
+          "physical_call_id": "58ef6d2111531beff0767784421e2dd0e5e093b355dd0b571761b9fe416ae940",
+          "prompt_sha256": "bb297c9b81f0a90cc98f7d0ac3e516107880eb9f1d51c1a40cc6d345899d6f10",
+          "receipt_sha256": "40f75b7a6fb398d45a709fd9e9d5a43dc46097775d3fad6c58024fbffacefa81",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        },
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "vector_memory_three_call_workflow",
+          "cache_status": "provider-unknown",
+          "call_index": 2,
+          "function_id": "BF_BOND_PROPOSER",
+          "input_payload": {
+            "candidate_budget": 3,
+            "candidates": [
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:0",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:0",
+                "observable": {
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.02402396
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:1",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:1",
+                "observable": {
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.17895602
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:2",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:2",
+                "observable": {
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.09243713
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:3",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:3",
+                "observable": {
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.178217
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:4",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+                "observable": {
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.63966076
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:5",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:5",
+                "observable": {
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.0177237
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:6",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:6",
+                "observable": {
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.04513323
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:7",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:7",
+                "observable": {
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.20116165
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:8",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:8",
+                "observable": {
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.07242466
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:9",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:9",
+                "observable": {
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.0254085
+                }
+              }
+            ],
+            "query_plan": {
+              "abstain": false,
+              "constraints": [
+                "max_candidates: 10",
+                "max_evidence_items: 3",
+                "max_input_tokens: 16000",
+                "max_output_tokens: 512"
+              ],
+              "objectives": [
+                "Identify the director of the film 'Polish-Russian War'",
+                "Identify the mother of the identified director"
+              ],
+              "request_id": "f1-2wiki-smoke-r4-20260724:vector_memory_three_call_workflow:8813f87c0bdd11eba7f7acde48001122",
+              "required_evidence_types": [
+                "wikipedia_paragraph"
+              ]
+            },
+            "request_id": "f1-2wiki-smoke-r4-20260724:vector_memory_three_call_workflow:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "input_port_sha256": "f60a86a91392108c34e70821237a497c66c178891e83f935d89f1d15891b7973",
+          "input_tokens": 1223,
+          "input_type": "BondScoringEnvelopeV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 106094,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": false,
+            "bond_potentials": {
+              "8813f87c0bdd11eba7f7acde48001122:bond:1": -0.17895602,
+              "8813f87c0bdd11eba7f7acde48001122:bond:4": -0.63966076,
+              "8813f87c0bdd11eba7f7acde48001122:bond:7": -0.20116165
+            },
+            "evidence_refs": [
+              "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+              "8813f87c0bdd11eba7f7acde48001122:evidence:7",
+              "8813f87c0bdd11eba7f7acde48001122:evidence:1"
+            ],
+            "ordered_bond_ids": [
+              "8813f87c0bdd11eba7f7acde48001122:bond:4",
+              "8813f87c0bdd11eba7f7acde48001122:bond:7",
+              "8813f87c0bdd11eba7f7acde48001122:bond:1"
+            ],
+            "request_id": "f1-2wiki-smoke-r4-20260724:vector_memory_three_call_workflow:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "output_port_sha256": "1e2e56fc5b5e74a5cd12e2d4e5b3705b813bc7824c6902ea19a26845e4eee617",
+          "output_tokens": 446,
+          "output_type": "BondProposalV1",
+          "physical_call_id": "e0668b8b80e8d5eca54efa024c62368b55ff512ac1e10ca9ddc315da103e74f8",
+          "prompt_sha256": "50d38c2dcd6e33b7a4b0342aad3923b0fbd1c6c060445fff1767d43541203cae",
+          "receipt_sha256": "62f3b168d529f419e995c5d79552688f73eb2b759210f3fb1a6b679b3fffebdb",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        },
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "vector_memory_three_call_workflow",
+          "cache_status": "provider-unknown",
+          "call_index": 3,
+          "function_id": "AF_ANSWER_SYNTHESIZER",
+          "input_payload": {
+            "max_answer_tokens": 512,
+            "query_plan": {
+              "abstain": false,
+              "constraints": [
+                "max_candidates: 10",
+                "max_evidence_items: 3",
+                "max_input_tokens: 16000",
+                "max_output_tokens: 512"
+              ],
+              "objectives": [
+                "Identify the director of the film 'Polish-Russian War'",
+                "Identify the mother of the identified director"
+              ],
+              "request_id": "f1-2wiki-smoke-r4-20260724:vector_memory_three_call_workflow:8813f87c0bdd11eba7f7acde48001122",
+              "required_evidence_types": [
+                "wikipedia_paragraph"
+              ]
+            },
+            "query_text": "Who is the mother of the director of film Polish-Russian War (Film)?",
+            "request_id": "f1-2wiki-smoke-r4-20260724:vector_memory_three_call_workflow:8813f87c0bdd11eba7f7acde48001122",
+            "selected_evidence": [
+              {
+                "content": "Polish-Russian War (film). Polish-Russian War (Wojna polsko-ruska) is a 2009 Polish film directed by Xawery Żuławski based on the novel Polish-Russian War under the white-red flag by Dorota Masłowska.",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:4"
+              },
+              {
+                "content": "Xawery Żuławski. Xawery Żuławski (born 22 December 1971 in Warsaw) is a Polish film director. In 1995 he graduated National Film School in Łódź. He is the son of actress Małgorzata Braunek and director Andrzej Żuławski. His second feature \"Wojna polsko-ruska\" (2009), adapted from the controversial best-selling novel by Dorota Masłowska, won First Prize in the New Polish Films competition at the 9th Era New Horizons Film Festival in Wrocław. In 2013, he stated he intends to direct a Polish novel \"Zły\" by Leopold Tyrmand. Żuławski and his wife Maria Strzelecka had 2 children together: son Kaj Żuławski (born 2002) and daughter Jagna Żuławska (born 2009).",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:7"
+              },
+              {
+                "content": "Viktor Yeliseyev. Viktor Petrovich Yeliseyev( born June 9, 1950) is a Russian general, orchestra conductor and music teacher. He is the director of the Ministry of the Interior Ensemble, one of the two Russian Red Army Choirs.",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:1"
+              }
+            ]
+          },
+          "input_port_sha256": "27934e5e2d23ed1d456db15a84c28fe4379bbc6721f15df716554ef846ac2e33",
+          "input_tokens": 742,
+          "input_type": "AnswerContextV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 41374,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": false,
+            "answer": "Małgorzata Braunek",
+            "request_id": "f1-2wiki-smoke-r4-20260724:vector_memory_three_call_workflow:8813f87c0bdd11eba7f7acde48001122",
+            "supporting_evidence_ids": [
+              "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+              "8813f87c0bdd11eba7f7acde48001122:evidence:7"
+            ],
+            "uncertainty": "low"
+          },
+          "output_port_sha256": "c733678c670a2f9b361b89c9000f825f90d1ebe0b5b9422878ac29289ae90275",
+          "output_tokens": 174,
+          "output_type": "AnswerEnvelopeV1",
+          "physical_call_id": "0eb88b5e7dd579213cdc0e74cf3b6999d8d85d8ec9344d8962708e2ee0e62698",
+          "prompt_sha256": "2a3d74737347b1dab8084c6032796c03f07de2e42b0615ac1f1380606822f293",
+          "receipt_sha256": "5a65d718ed6ed6d35d525f19da977434eceb98eaad845efba6d5e7985a260258",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        }
+      ],
+      "candidate_universe_sha256": "d5821fd792b3692bd5a43117b78b42dc453dcb3702061b8f187610db16339617",
+      "item_id": "8813f87c0bdd11eba7f7acde48001122",
+      "persistent_state_bytes": 4096,
+      "registry_sha256": "3a122b5258b987d336b84f1669c84a4a15b269dfbd8ef90012717d9503b415e9",
+      "run_id": "f1-2wiki-smoke-r4-20260724",
+      "run_receipt_sha256": "31a067ac1647528623df07072c6bcd86bcb15d2275451a2bc22e520ac7b320ca",
+      "schema_version": "hswm-prom9-f1-item-run/v1",
+      "selected_bond_ids": [
+        "8813f87c0bdd11eba7f7acde48001122:bond:4",
+        "8813f87c0bdd11eba7f7acde48001122:bond:7",
+        "8813f87c0bdd11eba7f7acde48001122:bond:1"
+      ],
+      "total_allowed_output_tokens": 1536,
+      "total_input_tokens": 2165,
+      "total_output_tokens": 803
+    },
+    {
+      "answer": {
+        "abstain": true,
+        "answer": "",
+        "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_role_removed_schema_preserving_null:8813f87c0bdd11eba7f7acde48001122",
+        "supporting_evidence_ids": [],
+        "uncertainty": "The selected_evidence list is empty, so there is no information available to identify the director of the film 'Polish-Russian War' or their mother."
+      },
+      "arm_id": "typed_network_role_removed_schema_preserving_null",
+      "calls": [
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "typed_network_role_removed_schema_preserving_null",
+          "cache_status": "provider-unknown",
+          "call_index": 1,
+          "function_id": "QF_QUERY_COMPILER",
+          "input_payload": {
+            "allowed_evidence_types": [
+              "wikipedia_paragraph"
+            ],
+            "budget": {
+              "max_candidates": 10,
+              "max_evidence_items": 3,
+              "max_input_tokens": 16000,
+              "max_output_tokens": 512
+            },
+            "query_text": "Who is the mother of the director of film Polish-Russian War (Film)?",
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_role_removed_schema_preserving_null:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "input_port_sha256": "adf27867ce54e1a6e79fd267c35216c4a8593410c1d2daedcbb7b14ec484b40f",
+          "input_tokens": 296,
+          "input_type": "QueryEnvelopeV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 43980,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": false,
+            "constraints": [
+              "max_candidates: 10",
+              "max_evidence_items: 3",
+              "max_input_tokens: 16000",
+              "max_output_tokens: 512"
+            ],
+            "objectives": [
+              "Identify the director of the film 'Polish-Russian War'",
+              "Identify the mother of the identified director"
+            ],
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_role_removed_schema_preserving_null:8813f87c0bdd11eba7f7acde48001122",
+            "required_evidence_types": [
+              "wikipedia_paragraph"
+            ]
+          },
+          "output_port_sha256": "966ec533ec72ccec9cec85365b76cb9f891503a5564adaad6881e8ce7127ab60",
+          "output_tokens": 186,
+          "output_type": "QueryPlanV1",
+          "physical_call_id": "886a7e5eed06d1bd4a1b50f6a46a911e169b156cf228cf710667bfd6bc1492d0",
+          "prompt_sha256": "6b6101bdf6495c49a9e8c6fac0ff01c4b6d0b5ba42d96101b0cdaf36f8c5cb7f",
+          "receipt_sha256": "c3bae579bdccb0f15740cf42c26023bf1dd3b4d4a536c1c1ec1db87fa868471d",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        },
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "typed_network_role_removed_schema_preserving_null",
+          "cache_status": "provider-unknown",
+          "call_index": 2,
+          "function_id": "BF_BOND_PROPOSER",
+          "input_payload": {
+            "candidate_budget": 3,
+            "candidates": [
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:0",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:0",
+                "observable": {
+                  "base_score": 0.02402396,
+                  "flat_position": 0,
+                  "flat_score": 1.0,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.02402396
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:1",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:1",
+                "observable": {
+                  "base_score": 0.17895602,
+                  "flat_position": 1,
+                  "flat_score": 0.88888889,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.17895602
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:2",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:2",
+                "observable": {
+                  "base_score": 0.09243713,
+                  "flat_position": 2,
+                  "flat_score": 0.77777778,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.09243713
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:3",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:3",
+                "observable": {
+                  "base_score": 0.178217,
+                  "flat_position": 3,
+                  "flat_score": 0.66666667,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.178217
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:4",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+                "observable": {
+                  "base_score": 0.63966076,
+                  "flat_position": 4,
+                  "flat_score": 0.55555556,
+                  "incidence_count": 2,
+                  "seam_count": 1,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.63966076
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:5",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:5",
+                "observable": {
+                  "base_score": 0.0177237,
+                  "flat_position": 5,
+                  "flat_score": 0.44444444,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.0177237
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:6",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:6",
+                "observable": {
+                  "base_score": 0.04513323,
+                  "flat_position": 6,
+                  "flat_score": 0.33333333,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.04513323
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:7",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:7",
+                "observable": {
+                  "base_score": 0.20116165,
+                  "flat_position": 7,
+                  "flat_score": 0.22222222,
+                  "incidence_count": 2,
+                  "seam_count": 1,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.20116165
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:8",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:8",
+                "observable": {
+                  "base_score": 0.07242466,
+                  "flat_position": 8,
+                  "flat_score": 0.11111111,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.07242466
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:9",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:9",
+                "observable": {
+                  "base_score": 0.0254085,
+                  "flat_position": 9,
+                  "flat_score": 0.0,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.0254085
+                }
+              }
+            ],
+            "query_plan": {
+              "abstain": false,
+              "constraints": [
+                "max_candidates: 10",
+                "max_evidence_items: 3",
+                "max_input_tokens: 16000",
+                "max_output_tokens: 512"
+              ],
+              "objectives": [
+                "Identify the director of the film 'Polish-Russian War'",
+                "Identify the mother of the identified director"
+              ],
+              "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_role_removed_schema_preserving_null:8813f87c0bdd11eba7f7acde48001122",
+              "required_evidence_types": [
+                "wikipedia_paragraph"
+              ]
+            },
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_role_removed_schema_preserving_null:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "input_port_sha256": "b567c3dc4d9bf344041c431a34070a2cea9302c8904bf2aa4c454631942ac387",
+          "input_tokens": 1678,
+          "input_type": "BondScoringEnvelopeV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 26842,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": true,
+            "bond_potentials": {},
+            "evidence_refs": [],
+            "ordered_bond_ids": [],
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_role_removed_schema_preserving_null:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "output_port_sha256": "041c4d284ef9e576a29f017cc31fb1200c1a0f4cb6b6824e7e1d6d7b566c089f",
+          "output_tokens": 99,
+          "output_type": "BondProposalV1",
+          "physical_call_id": "0b79b8b71faee32cb61894937902416c87bd44fc020a73a636560e81318dab38",
+          "prompt_sha256": "37d99b8544f41c025bbd1af2b5aa8f1401466a530e3736d030f35c7e622e4637",
+          "receipt_sha256": "1f218dc9a7136cc8a45d54af8711c9ab6e8b836acad0e381f04756bbdffe6d76",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        },
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "typed_network_role_removed_schema_preserving_null",
+          "cache_status": "provider-unknown",
+          "call_index": 3,
+          "function_id": "AF_ANSWER_SYNTHESIZER",
+          "input_payload": {
+            "max_answer_tokens": 512,
+            "query_plan": {
+              "abstain": false,
+              "constraints": [
+                "max_candidates: 10",
+                "max_evidence_items: 3",
+                "max_input_tokens: 16000",
+                "max_output_tokens: 512"
+              ],
+              "objectives": [
+                "Identify the director of the film 'Polish-Russian War'",
+                "Identify the mother of the identified director"
+              ],
+              "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_role_removed_schema_preserving_null:8813f87c0bdd11eba7f7acde48001122",
+              "required_evidence_types": [
+                "wikipedia_paragraph"
+              ]
+            },
+            "query_text": "Who is the mother of the director of film Polish-Russian War (Film)?",
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_role_removed_schema_preserving_null:8813f87c0bdd11eba7f7acde48001122",
+            "selected_evidence": []
+          },
+          "input_port_sha256": "f2d1fd400399bc35f694e108940376e682ebaded177c0e5fffbb2a2e3ab978b6",
+          "input_tokens": 397,
+          "input_type": "AnswerContextV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 30145,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": true,
+            "answer": "",
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_role_removed_schema_preserving_null:8813f87c0bdd11eba7f7acde48001122",
+            "supporting_evidence_ids": [],
+            "uncertainty": "The selected_evidence list is empty, so there is no information available to identify the director of the film 'Polish-Russian War' or their mother."
+          },
+          "output_port_sha256": "f16c77d11a1a7b2103c04f9a4f481415ab8d67d0e8a87fb8b28e95a3efe8ece5",
+          "output_tokens": 128,
+          "output_type": "AnswerEnvelopeV1",
+          "physical_call_id": "48e8d3d8567693883e2c3f2301a29a2579e779ff8a221cc9e16d061c6a5577e8",
+          "prompt_sha256": "3cca6aa3e8b8f40bdce9bdc33ca26b1ad2b18ec9bac3fae4e4f401055c2349af",
+          "receipt_sha256": "863fddfe2285205a61c5626815297da70cbc14df30020a9a94dec6f8a66a460d",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        }
+      ],
+      "candidate_universe_sha256": "d5821fd792b3692bd5a43117b78b42dc453dcb3702061b8f187610db16339617",
+      "item_id": "8813f87c0bdd11eba7f7acde48001122",
+      "persistent_state_bytes": 4096,
+      "registry_sha256": "ed83133865866f1d85896456338b045b6ad6bdd09d2daf127af3ff9a7174f4a0",
+      "run_id": "f1-2wiki-smoke-r4-20260724",
+      "run_receipt_sha256": "3bf2dfb8715f33ee9b422f596bbc2b7a47aa4f492c122349f14a056f51f20525",
+      "schema_version": "hswm-prom9-f1-item-run/v1",
+      "selected_bond_ids": [],
+      "total_allowed_output_tokens": 1536,
+      "total_input_tokens": 2371,
+      "total_output_tokens": 413
+    },
+    {
+      "answer": {
+        "abstain": false,
+        "answer": "The director of the film 'Polish-Russian War' is Xawery Żuławski. His mother is Małgorzata Braunek.",
+        "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_with_role_instructions_shuffled_but_ports_preserved:8813f87c0bdd11eba7f7acde48001122",
+        "supporting_evidence_ids": [
+          "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+          "8813f87c0bdd11eba7f7acde48001122:evidence:7"
+        ],
+        "uncertainty": "low"
+      },
+      "arm_id": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+      "calls": [
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+          "cache_status": "provider-unknown",
+          "call_index": 1,
+          "function_id": "QF_QUERY_COMPILER",
+          "input_payload": {
+            "allowed_evidence_types": [
+              "wikipedia_paragraph"
+            ],
+            "budget": {
+              "max_candidates": 10,
+              "max_evidence_items": 3,
+              "max_input_tokens": 16000,
+              "max_output_tokens": 512
+            },
+            "query_text": "Who is the mother of the director of film Polish-Russian War (Film)?",
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_with_role_instructions_shuffled_but_ports_preserved:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "input_port_sha256": "d608dbab392ec6eac4a6a51db7ace32093f3b28b713cbb3339470d2b31505eb0",
+          "input_tokens": 224,
+          "input_type": "QueryEnvelopeV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 49065,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": false,
+            "constraints": [
+              "Use only Wikipedia paragraphs as evidence",
+              "Limit search to 10 candidates",
+              "Limit evidence items to 3",
+              "Limit input tokens to 16000",
+              "Limit output tokens to 512"
+            ],
+            "objectives": [
+              "Identify the director of the film 'Polish-Russian War'",
+              "Identify the mother of the identified director"
+            ],
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_with_role_instructions_shuffled_but_ports_preserved:8813f87c0bdd11eba7f7acde48001122",
+            "required_evidence_types": [
+              "wikipedia_paragraph"
+            ]
+          },
+          "output_port_sha256": "6e60a1dc5e04d6e1dcef34bf7658cd7ddd5fc7be061e3597ebe5520aa8f4d968",
+          "output_tokens": 199,
+          "output_type": "QueryPlanV1",
+          "physical_call_id": "d964b339d2a472562455f573273f2d0a8f5ef6688056677d9eb386e042d452ad",
+          "prompt_sha256": "7ab1466149329e25a8b7d1e711785a9f6a038cd23e120630e6c049e42a212dd6",
+          "receipt_sha256": "05243769b4666b239153f75c0893386bef8b751e12a5d4e90faf606d618a6d97",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        },
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+          "cache_status": "provider-unknown",
+          "call_index": 2,
+          "function_id": "BF_BOND_PROPOSER",
+          "input_payload": {
+            "candidate_budget": 3,
+            "candidates": [
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:0",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:0",
+                "observable": {
+                  "base_score": 0.02402396,
+                  "flat_position": 0,
+                  "flat_score": 1.0,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.02402396
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:1",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:1",
+                "observable": {
+                  "base_score": 0.17895602,
+                  "flat_position": 1,
+                  "flat_score": 0.88888889,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.17895602
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:2",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:2",
+                "observable": {
+                  "base_score": 0.09243713,
+                  "flat_position": 2,
+                  "flat_score": 0.77777778,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.09243713
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:3",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:3",
+                "observable": {
+                  "base_score": 0.178217,
+                  "flat_position": 3,
+                  "flat_score": 0.66666667,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.178217
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:4",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+                "observable": {
+                  "base_score": 0.63966076,
+                  "flat_position": 4,
+                  "flat_score": 0.55555556,
+                  "incidence_count": 2,
+                  "seam_count": 1,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.63966076
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:5",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:5",
+                "observable": {
+                  "base_score": 0.0177237,
+                  "flat_position": 5,
+                  "flat_score": 0.44444444,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.0177237
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:6",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:6",
+                "observable": {
+                  "base_score": 0.04513323,
+                  "flat_position": 6,
+                  "flat_score": 0.33333333,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.04513323
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:7",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:7",
+                "observable": {
+                  "base_score": 0.20116165,
+                  "flat_position": 7,
+                  "flat_score": 0.22222222,
+                  "incidence_count": 2,
+                  "seam_count": 1,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.20116165
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:8",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:8",
+                "observable": {
+                  "base_score": 0.07242466,
+                  "flat_position": 8,
+                  "flat_score": 0.11111111,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.07242466
+                }
+              },
+              {
+                "bond_id": "8813f87c0bdd11eba7f7acde48001122:bond:9",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:9",
+                "observable": {
+                  "base_score": 0.0254085,
+                  "flat_position": 9,
+                  "flat_score": 0.0,
+                  "incidence_count": 1,
+                  "seam_count": 0,
+                  "source_type": "wikipedia_context",
+                  "vector_score": 0.0254085
+                }
+              }
+            ],
+            "query_plan": {
+              "abstain": false,
+              "constraints": [
+                "Use only Wikipedia paragraphs as evidence",
+                "Limit search to 10 candidates",
+                "Limit evidence items to 3",
+                "Limit input tokens to 16000",
+                "Limit output tokens to 512"
+              ],
+              "objectives": [
+                "Identify the director of the film 'Polish-Russian War'",
+                "Identify the mother of the identified director"
+              ],
+              "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_with_role_instructions_shuffled_but_ports_preserved:8813f87c0bdd11eba7f7acde48001122",
+              "required_evidence_types": [
+                "wikipedia_paragraph"
+              ]
+            },
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_with_role_instructions_shuffled_but_ports_preserved:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "input_port_sha256": "688ef601bd179f8c709fd26c99aa0546b73d06849540653b537f7fccf45dfa44",
+          "input_tokens": 1680,
+          "input_type": "BondScoringEnvelopeV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 105947,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": false,
+            "bond_potentials": {
+              "8813f87c0bdd11eba7f7acde48001122:bond:1": -0.17895602,
+              "8813f87c0bdd11eba7f7acde48001122:bond:4": -0.63966076,
+              "8813f87c0bdd11eba7f7acde48001122:bond:7": -0.20116165
+            },
+            "evidence_refs": [
+              "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+              "8813f87c0bdd11eba7f7acde48001122:evidence:7",
+              "8813f87c0bdd11eba7f7acde48001122:evidence:1"
+            ],
+            "ordered_bond_ids": [
+              "8813f87c0bdd11eba7f7acde48001122:bond:4",
+              "8813f87c0bdd11eba7f7acde48001122:bond:7",
+              "8813f87c0bdd11eba7f7acde48001122:bond:1"
+            ],
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_with_role_instructions_shuffled_but_ports_preserved:8813f87c0bdd11eba7f7acde48001122"
+          },
+          "output_port_sha256": "30e0758d332531bf4e7de74ae666bc246ceb35bc498ab39974725dcf3e7cdbd6",
+          "output_tokens": 452,
+          "output_type": "BondProposalV1",
+          "physical_call_id": "78ce3f54a3716795b36cec6d0a8e5512f3f64ad28275feb3092f25f43acd396a",
+          "prompt_sha256": "b773e729b8957f72aa5e12cd40b0402967e1b20c5c40e2befe60dbeff4b88a09",
+          "receipt_sha256": "deda1aaaa90cb9e9f7bf3543e84de8855ca094226ae2fee067d442e1fc1a48ef",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        },
+        {
+          "allowed_output_tokens": 512,
+          "arm_id": "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+          "cache_status": "provider-unknown",
+          "call_index": 3,
+          "function_id": "AF_ANSWER_SYNTHESIZER",
+          "input_payload": {
+            "max_answer_tokens": 512,
+            "query_plan": {
+              "abstain": false,
+              "constraints": [
+                "Use only Wikipedia paragraphs as evidence",
+                "Limit search to 10 candidates",
+                "Limit evidence items to 3",
+                "Limit input tokens to 16000",
+                "Limit output tokens to 512"
+              ],
+              "objectives": [
+                "Identify the director of the film 'Polish-Russian War'",
+                "Identify the mother of the identified director"
+              ],
+              "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_with_role_instructions_shuffled_but_ports_preserved:8813f87c0bdd11eba7f7acde48001122",
+              "required_evidence_types": [
+                "wikipedia_paragraph"
+              ]
+            },
+            "query_text": "Who is the mother of the director of film Polish-Russian War (Film)?",
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_with_role_instructions_shuffled_but_ports_preserved:8813f87c0bdd11eba7f7acde48001122",
+            "selected_evidence": [
+              {
+                "content": "Polish-Russian War (film). Polish-Russian War (Wojna polsko-ruska) is a 2009 Polish film directed by Xawery Żuławski based on the novel Polish-Russian War under the white-red flag by Dorota Masłowska.",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:4"
+              },
+              {
+                "content": "Xawery Żuławski. Xawery Żuławski (born 22 December 1971 in Warsaw) is a Polish film director. In 1995 he graduated National Film School in Łódź. He is the son of actress Małgorzata Braunek and director Andrzej Żuławski. His second feature \"Wojna polsko-ruska\" (2009), adapted from the controversial best-selling novel by Dorota Masłowska, won First Prize in the New Polish Films competition at the 9th Era New Horizons Film Festival in Wrocław. In 2013, he stated he intends to direct a Polish novel \"Zły\" by Leopold Tyrmand. Żuławski and his wife Maria Strzelecka had 2 children together: son Kaj Żuławski (born 2002) and daughter Jagna Żuławska (born 2009).",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:7"
+              },
+              {
+                "content": "Viktor Yeliseyev. Viktor Petrovich Yeliseyev( born June 9, 1950) is a Russian general, orchestra conductor and music teacher. He is the director of the Ministry of the Interior Ensemble, one of the two Russian Red Army Choirs.",
+                "evidence_id": "8813f87c0bdd11eba7f7acde48001122:evidence:1"
+              }
+            ]
+          },
+          "input_port_sha256": "b1da781189d1fbb4fcc2a19693311fca2d63964da4d528a5ea8f22e0d513c15b",
+          "input_tokens": 771,
+          "input_type": "AnswerContextV1",
+          "item_id": "8813f87c0bdd11eba7f7acde48001122",
+          "latency_ms": 46442,
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_payload": {
+            "abstain": false,
+            "answer": "The director of the film 'Polish-Russian War' is Xawery Żuławski. His mother is Małgorzata Braunek.",
+            "request_id": "f1-2wiki-smoke-r4-20260724:typed_network_with_role_instructions_shuffled_but_ports_preserved:8813f87c0bdd11eba7f7acde48001122",
+            "supporting_evidence_ids": [
+              "8813f87c0bdd11eba7f7acde48001122:evidence:4",
+              "8813f87c0bdd11eba7f7acde48001122:evidence:7"
+            ],
+            "uncertainty": "low"
+          },
+          "output_port_sha256": "e8efc91c05d874ae02a9598e5a3de84be5ecb9dc449d8a386e12241917bad246",
+          "output_tokens": 203,
+          "output_type": "AnswerEnvelopeV1",
+          "physical_call_id": "1453a5acecc2f5f8984f37a6c81764186539765af6ed51e30a48f6ec0653548a",
+          "prompt_sha256": "38a7c7c428e69c6ac89b09226665b87c7c770ae2f4db2019868836ad4655ab85",
+          "receipt_sha256": "0cffdcf93c6c8ee15a19590a0c6b679d3198b0d7420b768931470b871665c9db",
+          "retries": 0,
+          "run_id": "f1-2wiki-smoke-r4-20260724",
+          "schema_version": "hswm-prom9-call-receipt/v1"
+        }
+      ],
+      "candidate_universe_sha256": "d5821fd792b3692bd5a43117b78b42dc453dcb3702061b8f187610db16339617",
+      "item_id": "8813f87c0bdd11eba7f7acde48001122",
+      "persistent_state_bytes": 4096,
+      "registry_sha256": "9f93a9baeb1d1109e2cb6329b4d9b6eecf31503d8d800c8c9b17a9fc14d38330",
+      "run_id": "f1-2wiki-smoke-r4-20260724",
+      "run_receipt_sha256": "cf181dbbca745560fef8b606917f3980eb24e3dec430a5b04889cd3130b1522d",
+      "schema_version": "hswm-prom9-f1-item-run/v1",
+      "selected_bond_ids": [
+        "8813f87c0bdd11eba7f7acde48001122:bond:4",
+        "8813f87c0bdd11eba7f7acde48001122:bond:7",
+        "8813f87c0bdd11eba7f7acde48001122:bond:1"
+      ],
+      "total_allowed_output_tokens": 1536,
+      "total_input_tokens": 2675,
+      "total_output_tokens": 854
+    }
+  ],
+  "manifest_sha256": "ecbeb505ecb96f5f9d1188e3c7d68886aa20dd17b6caf0fab40986310dd30022",
+  "max_workers": 5,
+  "mode": "development",
+  "model": "qwen3.6-27b",
+  "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+  "preregistration_receipt_sha256": null,
+  "registries": {
+    "flat_single_llm_three_call_workflow": {
+      "functions": [
+        {
+          "function_id": "QF_QUERY_COMPILER",
+          "input_type": "QueryEnvelopeV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "QueryPlanV1",
+          "prompt": "Generic flat workflow planning pass. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+          "prompt_sha256": "9ade6f078ff458776155a3c6d90766ec2ddb8f008b8a8a2323c30483610c0bc4"
+        },
+        {
+          "function_id": "BF_BOND_PROPOSER",
+          "input_type": "BondScoringEnvelopeV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "BondProposalV1",
+          "prompt": "Generic flat-context selection pass. Use only flat_position, flat_score, and source_type. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+          "prompt_sha256": "e32fc7a2264052ea795feb405f1b359e2d3bbac7fba1fee145a7d2676dfb6028"
+        },
+        {
+          "function_id": "AF_ANSWER_SYNTHESIZER",
+          "input_type": "AnswerContextV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "AnswerEnvelopeV1",
+          "prompt": "Generic flat workflow answering pass. Answer only from selected_evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+          "prompt_sha256": "e33ebf9b195dd120e4b6e876d51e02e08ae38d8f6ddf6a3e06ce92b746e3cd9f"
+        }
+      ],
+      "protocol_sha256": "d6efde1469dae6b5943340fdd95e9c50d98545f19f40588918bef3494e18f86e",
+      "registry_sha256": "e139ad4be11db2ffaf33427ab2837f1f83d599eb6c85a6f33d35e6f8097f8caf",
+      "schema_version": "hswm-prom9-function-registry/v1"
+    },
+    "typed_hswm_three_function_network": {
+      "functions": [
+        {
+          "function_id": "QF_QUERY_COMPILER",
+          "input_type": "QueryEnvelopeV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "QueryPlanV1",
+          "prompt": "You are QF_QUERY_COMPILER, a typed function in HSWM. Convert the QueryEnvelopeV1 into one JSON QueryPlanV1 object. Decompose only what is required to answer, name evidence types rather than answer strings, preserve request_id exactly, and respect the supplied budget. Do not answer the user, select evidence, modify HSWM, predict experiment success, issue a scientific verdict, or inspect outcome labels. If the request is underspecified or unsafe, set abstain=true and state the missing constraint. Output JSON only with exactly these field types: request_id string; objectives array of unique non-empty strings; required_evidence_types array of unique non-empty strings; constraints array of unique non-empty strings; abstain boolean. Do not return an object or string where an array is required.",
+          "prompt_sha256": "6b6101bdf6495c49a9e8c6fac0ff01c4b6d0b5ba42d96101b0cdaf36f8c5cb7f"
+        },
+        {
+          "function_id": "BF_BOND_PROPOSER",
+          "input_type": "BondScoringEnvelopeV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "BondProposalV1",
+          "prompt": "You are BF_BOND_PROPOSER, a typed function in HSWM. Given one QueryPlanV1 and an opaque fixed candidate table, return one JSON BondProposalV1. Preserve request_id exactly. Rank only supplied candidate IDs and assign each selected candidate a finite numeric potential <= 0, where 0 is least suppressed. Use only supplied observable score, provenance, and structural components. Do not use answer strings, query IDs as features, edge-ID embeddings, hop labels, gold labels, private entity surfaces, prior test outcomes, or your own confidence as promotion authority. Do not answer the query, mutate slow HSWM state, or issue a scientific verdict. Output JSON only with exactly these field types: request_id string; ordered_bond_ids array of unique supplied bond-ID strings; bond_potentials object mapping every ordered bond ID to one finite number <= 0 and containing no other keys; evidence_refs array of unique supplied evidence-ID strings corresponding to selected bonds; abstain boolean. When abstain=true, return empty ordered_bond_ids, bond_potentials, and evidence_refs.",
+          "prompt_sha256": "c032a190a89827e821e7bb6045ebdb4c653e50c130303438088f30519253131c"
+        },
+        {
+          "function_id": "AF_ANSWER_SYNTHESIZER",
+          "input_type": "AnswerContextV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "AnswerEnvelopeV1",
+          "prompt": "You are AF_ANSWER_SYNTHESIZER, a typed function in HSWM. Answer only from the selected evidence in AnswerContextV1. Preserve request_id exactly and cite only supplied evidence IDs. Do not retrieve additional material, rerank candidates, alter HSWM, infer hidden outcome labels, or issue a scientific verdict. If the evidence is insufficient or conflicting, set abstain=true and describe the uncertainty without inventing support. Output JSON only with exactly these field types: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied evidence-ID strings actually used; uncertainty string; abstain boolean. Do not return an object or array where a string is required.",
+          "prompt_sha256": "3cca6aa3e8b8f40bdce9bdc33ca26b1ad2b18ec9bac3fae4e4f401055c2349af"
+        }
+      ],
+      "protocol_sha256": "d6efde1469dae6b5943340fdd95e9c50d98545f19f40588918bef3494e18f86e",
+      "registry_sha256": "90ac05280df2d9edf74f8a92f572bc6bdcc3637064a6d8a6fbb96b0723593e17",
+      "schema_version": "hswm-prom9-function-registry/v1"
+    },
+    "typed_network_role_removed_schema_preserving_null": {
+      "functions": [
+        {
+          "function_id": "QF_QUERY_COMPILER",
+          "input_type": "QueryEnvelopeV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "QueryPlanV1",
+          "prompt": "You are QF_QUERY_COMPILER, a typed function in HSWM. Convert the QueryEnvelopeV1 into one JSON QueryPlanV1 object. Decompose only what is required to answer, name evidence types rather than answer strings, preserve request_id exactly, and respect the supplied budget. Do not answer the user, select evidence, modify HSWM, predict experiment success, issue a scientific verdict, or inspect outcome labels. If the request is underspecified or unsafe, set abstain=true and state the missing constraint. Output JSON only with exactly these field types: request_id string; objectives array of unique non-empty strings; required_evidence_types array of unique non-empty strings; constraints array of unique non-empty strings; abstain boolean. Do not return an object or string where an array is required.",
+          "prompt_sha256": "6b6101bdf6495c49a9e8c6fac0ff01c4b6d0b5ba42d96101b0cdaf36f8c5cb7f"
+        },
+        {
+          "function_id": "BF_BOND_PROPOSER",
+          "input_type": "BondScoringEnvelopeV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "BondProposalV1",
+          "prompt": "Schema-preserving null BF control. Make this physical call but select no bonds. Copy request_id; ordered_bond_ids=[], bond_potentials={}, evidence_refs=[], abstain=true. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+          "prompt_sha256": "37d99b8544f41c025bbd1af2b5aa8f1401466a530e3736d030f35c7e622e4637"
+        },
+        {
+          "function_id": "AF_ANSWER_SYNTHESIZER",
+          "input_type": "AnswerContextV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "AnswerEnvelopeV1",
+          "prompt": "You are AF_ANSWER_SYNTHESIZER, a typed function in HSWM. Answer only from the selected evidence in AnswerContextV1. Preserve request_id exactly and cite only supplied evidence IDs. Do not retrieve additional material, rerank candidates, alter HSWM, infer hidden outcome labels, or issue a scientific verdict. If the evidence is insufficient or conflicting, set abstain=true and describe the uncertainty without inventing support. Output JSON only with exactly these field types: request_id string; answer string containing only the shortest answer span, or an empty string when abstaining; supporting_evidence_ids array of unique supplied evidence-ID strings actually used; uncertainty string; abstain boolean. Do not return an object or array where a string is required.",
+          "prompt_sha256": "3cca6aa3e8b8f40bdce9bdc33ca26b1ad2b18ec9bac3fae4e4f401055c2349af"
+        }
+      ],
+      "protocol_sha256": "d6efde1469dae6b5943340fdd95e9c50d98545f19f40588918bef3494e18f86e",
+      "registry_sha256": "ed83133865866f1d85896456338b045b6ad6bdd09d2daf127af3ff9a7174f4a0",
+      "schema_version": "hswm-prom9-function-registry/v1"
+    },
+    "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+      "functions": [
+        {
+          "function_id": "QF_QUERY_COMPILER",
+          "input_type": "QueryEnvelopeV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "QueryPlanV1",
+          "prompt": "Use the answer-synthesizer role instruction, but this port has no evidence and must remain a QueryPlanV1. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+          "prompt_sha256": "7ab1466149329e25a8b7d1e711785a9f6a038cd23e120630e6c049e42a212dd6"
+        },
+        {
+          "function_id": "BF_BOND_PROPOSER",
+          "input_type": "BondScoringEnvelopeV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "BondProposalV1",
+          "prompt": "Use the query-compiler role instruction on the supplied candidate table while preserving the BondProposalV1 port. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+          "prompt_sha256": "b773e729b8957f72aa5e12cd40b0402967e1b20c5c40e2befe60dbeff4b88a09"
+        },
+        {
+          "function_id": "AF_ANSWER_SYNTHESIZER",
+          "input_type": "AnswerContextV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "AnswerEnvelopeV1",
+          "prompt": "Use the bond-proposer role instruction, but preserve the AnswerEnvelopeV1 port and cite only supplied evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+          "prompt_sha256": "38a7c7c428e69c6ac89b09226665b87c7c770ae2f4db2019868836ad4655ab85"
+        }
+      ],
+      "protocol_sha256": "d6efde1469dae6b5943340fdd95e9c50d98545f19f40588918bef3494e18f86e",
+      "registry_sha256": "9f93a9baeb1d1109e2cb6329b4d9b6eecf31503d8d800c8c9b17a9fc14d38330",
+      "schema_version": "hswm-prom9-function-registry/v1"
+    },
+    "vector_memory_three_call_workflow": {
+      "functions": [
+        {
+          "function_id": "QF_QUERY_COMPILER",
+          "input_type": "QueryEnvelopeV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "QueryPlanV1",
+          "prompt": "Generic vector-memory query planning pass. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; objectives array of unique strings; required_evidence_types array of unique strings; constraints array of unique strings; abstain boolean. Preserve request_id exactly.",
+          "prompt_sha256": "bb297c9b81f0a90cc98f7d0ac3e516107880eb9f1d51c1a40cc6d345899d6f10"
+        },
+        {
+          "function_id": "BF_BOND_PROPOSER",
+          "input_type": "BondScoringEnvelopeV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "BondProposalV1",
+          "prompt": "Vector-memory selection pass. Rank only by supplied vector_score and source_type. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; ordered_bond_ids array of unique supplied strings; bond_potentials object exactly covering ordered_bond_ids with finite numbers <= 0; evidence_refs array of unique supplied evidence-ID strings; abstain boolean. Preserve request_id exactly.",
+          "prompt_sha256": "50d38c2dcd6e33b7a4b0342aad3923b0fbd1c6c060445fff1767d43541203cae"
+        },
+        {
+          "function_id": "AF_ANSWER_SYNTHESIZER",
+          "input_type": "AnswerContextV1",
+          "model": "qwen3.6-27b",
+          "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+          "output_type": "AnswerEnvelopeV1",
+          "prompt": "Vector-memory answering pass. Answer only from selected_evidence. Preserve request_id. Never inspect gold/outcome labels, mutate persistent state, or judge the experiment. Return JSON only with exactly: request_id string; answer string; supporting_evidence_ids array of unique supplied strings; uncertainty string; abstain boolean. Preserve request_id exactly.",
+          "prompt_sha256": "2a3d74737347b1dab8084c6032796c03f07de2e42b0615ac1f1380606822f293"
+        }
+      ],
+      "protocol_sha256": "d6efde1469dae6b5943340fdd95e9c50d98545f19f40588918bef3494e18f86e",
+      "registry_sha256": "3a122b5258b987d336b84f1669c84a4a15b269dfbd8ef90012717d9503b415e9",
+      "schema_version": "hswm-prom9-function-registry/v1"
+    }
+  },
+  "run_id": "f1-2wiki-smoke-r4-20260724",
+  "schema_version": "hswm-prom9-f1-suite/v1",
+  "scientific_verdict_emitted": false,
+  "state_capacity_bytes": 4096,
+  "suite_receipt_sha256": "076682eff1b04f2317ff4f8c4d5d446e225051949da77f317c471f66b55f6b89",
+  "token_tolerance": 512
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": "hswm-prom9-decisive-harness-test-receipt/v1",
+  "receipt_id": "prom9-decisive-harness-tests-codex-mac-20260724",
+  "recorded_at": "2026-07-24T04:31:04+00:00",
+  "scope": "ENGINEERING_EXECUTOR_CAUSAL_JUDGE_AND_REGRESSION",
+  "tested_base_commit": "c01fe5d2989e053a60e278b039bd59fbe3b4d1ad",
+  "environment": {
+    "python": "3.13.7",
+    "runner": ".venv/bin/python -m pytest",
+    "repository": "/Users/gj3447/CD/AGENT/staging/hswm-next-gates",
+    "worktree_contains_the_tested_uncommitted_harness": true
+  },
+  "tested_artifacts": {
+    "prom_search_hswm/hswm_typed_ports.py": "52ee2bd0df3593acb4bad2420881e9a7bdc388528b93a3daaaaa78ccbe7f3fce",
+    "prom_search_hswm/hswm_function_registry.py": "fa04030e25e2a800d0b4524e8c3db48bb1e9f78ccbcad845124b43f45e62137a",
+    "prom_search_hswm/hswm_call_receipt.py": "c1f10a44c136ffe30353f82c0a9167a9cebe922d74eac5ffd31bda95168cbedc",
+    "prom_search_hswm/hswm_function_network.py": "324e7b848fc419693934a1c51f9d523c0b112e840e5a66ca485d83394339158a",
+    "prom_search_hswm/prom_f1_function_network.py": "ce4d9c3dfafd2b2c4af22b58f89fa0e129a432089761212937768903a7f1ad61",
+    "prom_search_hswm/prom9_causal_harness.py": "a97dc1c957b3eecc26dd4ae44906d33917363974e790cf564dc6a2d643fa87bd",
+    "prom_search_hswm/test_prom9_experiment_harness.py": "6a633fc6835cefe37d01e974a89165492f793b2787424c971f800d7516558a03",
+    "PROM9_DECISIVE_EXPERIMENT_HARNESS_2026-07-24.md": "e97911160c4ae3f3a4c5f65e420d5f82fa81d77e5f354605fd76628d0e7fb770",
+    "_research/prom9_harness/f1_manifest.development.example.json": "af69fe434f15c56f57c282d9c756fb43605fb8580be9b44c7b0cc160a4079caa",
+    "_research/prom9_harness/f1_gold.development.example.json": "f780ea9d0f76f4dabc385a249ed6fd06ceb4e1f6ccbedfb7e5766c0a75d0aee2"
+  },
+  "commands": [
+    "python3 -m prom_search_hswm.prom9_protocol validate",
+    "python3 inline validation of _research/prom9_harness/f1_manifest.development.example.json",
+    ".venv/bin/python -m pytest -q"
+  ],
+  "results": {
+    "protocol_validation": {
+      "status": "PASS",
+      "protocol_sha256": "7d2cb22ebd23b758733fad2a582b5b0a19a923c2fc7268fa8f781925c442eb9a",
+      "scientific_prediction_registered": false
+    },
+    "example_manifest_validation": {
+      "status": "PASS",
+      "items": 1
+    },
+    "full_repository_suite": {
+      "status": "PASS",
+      "passed": 864,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 1,
+      "duration_seconds": 117.59
+    },
+    "new_negative_controls": [
+      "extra typed-port keys and positive bond potentials are rejected",
+      "tampered physical-call receipts are rejected even when enclosing hashes are recomputed",
+      "candidate deltas on unused bonds are rejected",
+      "Agent B parameter drift prevents the frozen-identity gate",
+      "development runs cannot emit F1, P1v5, or P2 scientific support verdicts"
+    ]
+  },
+  "scientific_authority": {
+    "prediction_registered": false,
+    "sealed_measurement_executed": false,
+    "scientific_result_submitted": false,
+    "activation_authorized": false
+  },
+  "claim_boundary": "PASS establishes only that the PROM-9 typed function executor, equal-budget audit, snapshot/eligibility/removal judges, frozen-Agent-B audit, examples, and repository regressions behaved as tested. It is not evidence that typed HSWM beats flat/vector baselines, that outcome-driven slow weights improve fresh tasks, or that Agent-A-to-B transfer exists.",
+  "receipt_sha256": "e7fb21dcbe0e6556165fe57f301bf1f8be189b07cb3aedc72ffe3d7417a026db"
+}

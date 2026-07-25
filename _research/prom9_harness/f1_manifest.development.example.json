@@ -1,0 +1,45 @@
+{
+  "schema_version": "hswm-prom9-f1-manifest/v1",
+  "run_id": "f1-development-example",
+  "mode": "development",
+  "model": "replace-with-frozen-model-name",
+  "model_revision": "replace-with-frozen-model-revision",
+  "token_tolerance": 32,
+  "state_capacity_bytes": 4096,
+  "state_bytes_by_arm": {
+    "typed_hswm_three_function_network": 4096,
+    "flat_single_llm_three_call_workflow": 4096,
+    "vector_memory_three_call_workflow": 4096,
+    "typed_network_role_removed_schema_preserving_null": 4096,
+    "typed_network_with_role_instructions_shuffled_but_ports_preserved": 4096
+  },
+  "preregistration_receipt_sha256": null,
+  "items": [
+    {
+      "item_id": "replace-with-development-item-id",
+      "query_text": "What is the capital of France?",
+      "allowed_evidence_types": [
+        "text"
+      ],
+      "candidates": [
+        {
+          "bond_id": "bond-example-1",
+          "evidence_id": "evidence-example-1",
+          "content": "Paris is the capital of France.",
+          "observable": {
+            "base_score": 0.91,
+            "flat_position": 0,
+            "flat_score": 0.91,
+            "incidence_count": 2,
+            "seam_count": 1,
+            "source_type": "text",
+            "vector_score": 0.88
+          }
+        }
+      ],
+      "max_evidence_items": 1,
+      "max_input_tokens": 4096,
+      "max_output_tokens_per_call": 256
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "allowed_claim": "No scientific efficacy claim; use this result only to debug and freeze F1.",
+  "bootstrap": {
+    "paired": true,
+    "reps": 1000,
+    "seed": 20260724
+  },
+  "comparisons": {
+    "typed_minus_flat_single_llm_three_call_workflow": {
+      "bootstrap95": [
+        1.0,
+        1.0
+      ],
+      "mean": 1.0
+    },
+    "typed_minus_typed_network_role_removed_schema_preserving_null": {
+      "bootstrap95": [
+        1.0,
+        1.0
+      ],
+      "mean": 1.0
+    },
+    "typed_minus_typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+      "bootstrap95": [
+        1.0,
+        1.0
+      ],
+      "mean": 1.0
+    },
+    "typed_minus_vector_memory_three_call_workflow": {
+      "bootstrap95": [
+        0.0,
+        0.0
+      ],
+      "mean": 0.0
+    }
+  },
+  "evaluator_receipt_sha256": "589376caf5276feb23b7b1da4fe4d40e1d59f91bff2f503e8d109d5a27fab74b",
+  "gates": {
+    "equal_budget": false,
+    "exact_three_calls_each": true,
+    "removal_loses_effect": true,
+    "shuffle_loses_effect": true,
+    "typed_beats_flat_lcb_gt_0": true,
+    "typed_beats_vector": false
+  },
+  "item_scores": [
+    {
+      "item_id": "8813f87c0bdd11eba7f7acde48001122",
+      "scores": {
+        "flat_single_llm_three_call_workflow": 0.0,
+        "typed_hswm_three_function_network": 1.0,
+        "typed_network_role_removed_schema_preserving_null": 0.0,
+        "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.0,
+        "vector_memory_three_call_workflow": 1.0
+      }
+    }
+  ],
+  "judgment_sha256": "abc523b1061ebdbc64d018faa64cc6426bd2708f5a13d9755c556338dda1176d",
+  "metrics": {
+    "flat_single_llm_three_call_workflow": {
+      "n": 1,
+      "success_rate": 0.0
+    },
+    "typed_hswm_three_function_network": {
+      "n": 1,
+      "success_rate": 1.0
+    },
+    "typed_network_role_removed_schema_preserving_null": {
+      "n": 1,
+      "success_rate": 0.0
+    },
+    "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+      "n": 1,
+      "success_rate": 0.0
+    },
+    "vector_memory_three_call_workflow": {
+      "n": 1,
+      "success_rate": 1.0
+    }
+  },
+  "mode": "development",
+  "parity_failures": [
+    "8813f87c0bdd11eba7f7acde48001122:consumed-token-spread=935"
+  ],
+  "run_id": "f1-2wiki-smoke-r4-20260724",
+  "schema_version": "hswm-prom9-f1-judgment/v1",
+  "suite_receipt_sha256": "076682eff1b04f2317ff4f8c4d5d446e225051949da77f317c471f66b55f6b89",
+  "verdict": "DEVELOPMENT_ONLY"
+}

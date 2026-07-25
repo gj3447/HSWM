@@ -86,7 +86,8 @@ def test_source_distribution_carries_the_default_test_surface() -> None:
 
     assert "include *.json" in manifest
     assert "include *.py" in manifest
+    assert "recursive-include receipts *.py *.json" in manifest
     assert "recursive-include prom_search_hswm *.py *.json *.md *.mmd" in manifest
     assert "recursive-exclude prom_search_hswm/data *" in manifest
     assert "include prom_search_hswm/data/gold_badiou24.json" in manifest
-    assert "recursive-include _research/shared_field_hypothesis *.py *.json *.md" in manifest
+    assert "recursive-include _research *.py *.json *.md *.sh *.tsv" in manifest

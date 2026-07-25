@@ -1,0 +1,43 @@
+{
+  "events": [
+    {
+      "action": "record_fail_closed_ordered_gate_harness",
+      "evidence": [
+        "/opt/lakatotree/.runtime/research-current/HSWM/receipts/HSWM_ORDERED_GATE_STATUS_20260724.json"
+      ],
+      "payload": {
+        "scientific_claim": "NONE_ENGINEERING_SEQUENCE_ONLY",
+        "status_receipt_sha256": "cbf36f21e96e068ae36151c5a8fe22d616cb1593385928905f0e467ee807f3f2"
+      },
+      "realm": "agent"
+    }
+  ],
+  "node": {
+    "algorithm": "Verify preserved evidence, rejudge actual-compute F1 evidence, then require real Gate-0 acceptance and rejudge raw P1v5/P2 causal packets in strict order; expose exactly one active gate without minting a scientific verdict.",
+    "author": "codex-hswm-ordered-gates",
+    "comment": "Fail-closed ordered engineering harness for HSWM F1/B2.2/P1v5/P2/P3/P4; no scientific result or prediction.",
+    "parent": "hswm-next-gate-harness-20260724",
+    "result_path": "/opt/lakatotree/.runtime/research-current/HSWM/receipts/HSWM_ORDERED_GATE_STATUS_20260724.json",
+    "tag": "hswm-ordered-causal-gates-20260724"
+  },
+  "node_state_expected": "DRAFT",
+  "packet_sha256": "0ca5bbe74f369be0d9b4e6954ea145301683921068a219024f919fecd1566aec",
+  "questions": [
+    {
+      "body": "On a preregistered sealed n>=100 cut, do three typed LLM functions beat equal-call and actual-token-matched flat/vector controls, with role removal and shuffle erasing the advantage?",
+      "qname": "Q-f1-actual-compute-parity"
+    },
+    {
+      "body": "After F1 and real Gate-0 acceptance, does outcome-bound used-bond eligibility produce a promoted persistent Delta-W that changes later frozen behavior and loses the gain under exact removal?",
+      "qname": "Q-p1v5-causal-semantic-weight"
+    },
+    {
+      "body": "Can only Agent A's accepted semantic-weight packet improve byte-frozen Agent B on component-disjoint unseen work without transcript, parameter, prompt, or cache leakage?",
+      "qname": "Q-p2-weight-only-agent-transfer"
+    }
+  ],
+  "schema_version": "hswm-next-research-lakatotree-packet/v2",
+  "scientific_prediction_registered": false,
+  "scientific_result_submitted": false,
+  "tree": "LakatosTree_HSWM_20260719"
+}

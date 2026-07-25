@@ -1,0 +1,306 @@
+{
+ "schema_version": "hswm-f3-transfer-packet/v1",
+ "donor": {
+  "backend": "ollama",
+  "url": "http://127.0.0.1:11434",
+  "model": "qwen3:8b",
+  "role": "b_self"
+ },
+ "experience": {
+  "train_case_ids": [
+   "f3r2-train-3ca2caca-3cc",
+   "f3r2-train-ded95f3f-321",
+   "f3r2-train-eb708739-c2a",
+   "f3r2-train-b8e64afa-d5d",
+   "f3r2-train-afb19467-7ed",
+   "f3r2-train-500c222d-0e3",
+   "f3r2-train-28688593-0da",
+   "f3r2-train-64085fb7-8a0",
+   "f3r2-train-8fe7561f-ae3",
+   "f3r2-train-894d130d-024",
+   "f3r2-train-824b4a25-f6a",
+   "f3r2-train-cef2ba06-b46",
+   "f3r2-train-0e5d216d-781",
+   "f3r2-train-b93d665b-cb9",
+   "f3r2-train-052d0d5e-bf6",
+   "f3r2-train-c1a7d6b2-fd7",
+   "f3r2-train-0a3cc29c-6f8",
+   "f3r2-train-e6f24572-7f1"
+  ],
+  "corpus_manifest_sha256": "81b3113fad4a388da0219d1d908e3991096bd78b1c3977bf81450af1d038a66a"
+ },
+ "lessons": [
+  {
+   "schema_version": "hswm-p1v2-typed-lesson/v1",
+   "source_episode_ids": [
+    "policy-training:f3r2-train-3ca2caca-3cc"
+   ],
+   "evidence_ids": [
+    "policy-training-evidence:1544e63ddb182361d8d60c3feca1e765ae99bf667b5d092de51b3dad2eea40e5"
+   ],
+   "verdict_type": "GENERALIZATION",
+   "scope_predicate": {
+    "all_terms": [
+     "the person whose",
+     "who is"
+    ],
+    "any_terms": [
+     "date of birth",
+     "gender",
+     "hobby",
+     "occupation"
+    ],
+    "excluded_terms": []
+   },
+   "instruction": "When supplied records contain conflicting answer candidates, treat SOURCE_CLASS=Q0A as authoritative, ignore SOURCE_CLASS=Q0B, SOURCE_CLASS=Q0C, SOURCE_CLASS=RHO claims for the final answer, and cite only Q0A records.",
+   "polarity": "DO",
+   "confidence": 1.0,
+   "supersedes": [],
+   "forbidden_uses": [
+    "evaluation_label",
+    "future_episode",
+    "heldout_gold"
+   ],
+   "compiler_receipt_sha256": "5226801b62fc7f62cc43a7d22fe3603f4031ed33e0d37df117adb369a0a31d25",
+   "source_verdict_sha256": "94759c8cffecc936461edb9461420a6ebcd400c788deb8dae14aa92f38e549dc",
+   "lesson_id": "fed8924f54e41afb081af060408f2748593a1dbe9602a298239fb1f74ea1be6a"
+  },
+  {
+   "schema_version": "hswm-p1v2-typed-lesson/v1",
+   "source_episode_ids": [
+    "policy-training:f3r2-train-b8e64afa-d5d"
+   ],
+   "evidence_ids": [
+    "policy-training-evidence:b686abdf2414b074560a56ebf00cb688023121c9af361a043b77a249cb9ebc54"
+   ],
+   "verdict_type": "GENERALIZATION",
+   "scope_predicate": {
+    "all_terms": [
+     "the person whose",
+     "who is"
+    ],
+    "any_terms": [
+     "date of birth",
+     "gender",
+     "hobby",
+     "occupation"
+    ],
+    "excluded_terms": []
+   },
+   "instruction": "When supplied records contain conflicting answer candidates, treat SOURCE_CLASS=Q1A as authoritative, ignore SOURCE_CLASS=Q1B, SOURCE_CLASS=Q1C, SOURCE_CLASS=SIGMA claims for the final answer, and cite only Q1A records.",
+   "polarity": "DO",
+   "confidence": 1.0,
+   "supersedes": [],
+   "forbidden_uses": [
+    "evaluation_label",
+    "future_episode",
+    "heldout_gold"
+   ],
+   "compiler_receipt_sha256": "869557670f7981d1934c4a37e1ce62fbab4af56c746782a52af27ad8e92d512b",
+   "source_verdict_sha256": "432309d8575820e55a3d6383e2069b32119a4b34ae6f8316ed7236a647381f5e",
+   "lesson_id": "38709d8d59a34393737b5d82f2a19135eb3232468d782d8ee85abdc8c269728a"
+  },
+  {
+   "schema_version": "hswm-p1v2-typed-lesson/v1",
+   "source_episode_ids": [
+    "policy-training:f3r2-train-28688593-0da"
+   ],
+   "evidence_ids": [
+    "policy-training-evidence:772641e902d9b2d25732fd5f23221c33b3d2ca8fce104405c320d25b25dbbe0d"
+   ],
+   "verdict_type": "GENERALIZATION",
+   "scope_predicate": {
+    "all_terms": [
+     "the person whose",
+     "who is"
+    ],
+    "any_terms": [
+     "date of birth",
+     "gender",
+     "hobby",
+     "occupation"
+    ],
+    "excluded_terms": []
+   },
+   "instruction": "When supplied records contain conflicting answer candidates, treat SOURCE_CLASS=GAMMA as authoritative, ignore SOURCE_CLASS=Q2A, SOURCE_CLASS=Q2B, SOURCE_CLASS=Q2C claims for the final answer, and cite only GAMMA records.",
+   "polarity": "DO",
+   "confidence": 1.0,
+   "supersedes": [],
+   "forbidden_uses": [
+    "evaluation_label",
+    "future_episode",
+    "heldout_gold"
+   ],
+   "compiler_receipt_sha256": "8e00b65d5f06a36cae74fde5a97c266e118390b0f14425b2a34d85cb091aa81b",
+   "source_verdict_sha256": "66fc152d4c2b7844691105a3403257f7e046d3a1a6f069061633d344f59c2164",
+   "lesson_id": "857f375c691bf0d1af7c487317bcc0d47655dba29f12a5cfe9f2674f287eeb6a"
+  },
+  {
+   "schema_version": "hswm-p1v2-typed-lesson/v1",
+   "source_episode_ids": [
+    "policy-training:f3r2-train-894d130d-024"
+   ],
+   "evidence_ids": [
+    "policy-training-evidence:4cffd5797854a6cd85e19056157071a6416bdb6e73a6dcdb73249bb0bd849f7c"
+   ],
+   "verdict_type": "GENERALIZATION",
+   "scope_predicate": {
+    "all_terms": [
+     "the person whose",
+     "who is"
+    ],
+    "any_terms": [
+     "date of birth",
+     "gender",
+     "hobby",
+     "occupation"
+    ],
+    "excluded_terms": []
+   },
+   "instruction": "When supplied records contain conflicting answer candidates, treat SOURCE_CLASS=KAPPA as authoritative, ignore SOURCE_CLASS=Q3A, SOURCE_CLASS=Q3B, SOURCE_CLASS=Q3C claims for the final answer, and cite only KAPPA records.",
+   "polarity": "DO",
+   "confidence": 1.0,
+   "supersedes": [],
+   "forbidden_uses": [
+    "evaluation_label",
+    "future_episode",
+    "heldout_gold"
+   ],
+   "compiler_receipt_sha256": "a1e6b41962c1da81f5e193e98ce42cd10b09428c01234f8057a3102baa6855e8",
+   "source_verdict_sha256": "05f42cf40eda0f61c6dc35c3b97d7df74bcb11c48ee988c6aedc1ef45ae8db75",
+   "lesson_id": "5fada9a604a3dd2888a4fc8bb0180cc053dd9e75296a52e4a3b980061b0a7d0d"
+  },
+  {
+   "schema_version": "hswm-p1v2-typed-lesson/v1",
+   "source_episode_ids": [
+    "policy-training:f3r2-train-0e5d216d-781"
+   ],
+   "evidence_ids": [
+    "policy-training-evidence:1a71789ec8234a91a90a2c354c426fcf859a5047f6932c0354909f7101097049"
+   ],
+   "verdict_type": "GENERALIZATION",
+   "scope_predicate": {
+    "all_terms": [
+     "the person whose",
+     "who is"
+    ],
+    "any_terms": [
+     "date of birth",
+     "gender",
+     "hobby",
+     "occupation"
+    ],
+    "excluded_terms": []
+   },
+   "instruction": "When supplied records contain conflicting answer candidates, treat SOURCE_CLASS=OMEGA as authoritative, ignore SOURCE_CLASS=Q4A, SOURCE_CLASS=Q4B, SOURCE_CLASS=Q4C claims for the final answer, and cite only OMEGA records.",
+   "polarity": "DO",
+   "confidence": 1.0,
+   "supersedes": [],
+   "forbidden_uses": [
+    "evaluation_label",
+    "future_episode",
+    "heldout_gold"
+   ],
+   "compiler_receipt_sha256": "cbc329cbfeacedb553e75ab2dc21c6304fd7b8b76ceed7198cc0d44d8f3db66d",
+   "source_verdict_sha256": "1e34f0d12b4388217eab6ed34510b7fd306a59e77372e8443775fad44818fe2b",
+   "lesson_id": "a85aecbb2366712d3891425da81e088fa2ba4aa107daef3559c83353dcee7529"
+  },
+  {
+   "schema_version": "hswm-p1v2-typed-lesson/v1",
+   "source_episode_ids": [
+    "policy-training:f3r2-train-c1a7d6b2-fd7"
+   ],
+   "evidence_ids": [
+    "policy-training-evidence:a53c30683a1e801aae85eeee64047b0fa85fc9750dd44b4008014673891e811c"
+   ],
+   "verdict_type": "GENERALIZATION",
+   "scope_predicate": {
+    "all_terms": [
+     "the person whose",
+     "who is"
+    ],
+    "any_terms": [
+     "date of birth",
+     "gender",
+     "hobby",
+     "occupation"
+    ],
+    "excluded_terms": []
+   },
+   "instruction": "When supplied records contain conflicting answer candidates, treat SOURCE_CLASS=ALPHA as authoritative, ignore SOURCE_CLASS=Q5A, SOURCE_CLASS=Q5B, SOURCE_CLASS=Q5C claims for the final answer, and cite only ALPHA records.",
+   "polarity": "DO",
+   "confidence": 1.0,
+   "supersedes": [],
+   "forbidden_uses": [
+    "evaluation_label",
+    "future_episode",
+    "heldout_gold"
+   ],
+   "compiler_receipt_sha256": "03617e0794d946ce341c69e77625f2a659b41407928ec4b63ceb5ff3a9e34c8f",
+   "source_verdict_sha256": "53d8619239903e76c9fcffd6021b61178f5aafc0485790ce2a54777edb106da0",
+   "lesson_id": "42d59db4f06b73bc2fbeb7aabdbf88f221a0267fa7fdad6f33dde8e0ff38bcc3"
+  }
+ ],
+ "lesson_merkle_root": "6182cda583d4296f965b2784eb86ab6bb5d6b6151165aa8a18d92fb50cea43d6",
+ "delta_w": {
+  "schema_version": "hswm-f3-delta-w-edit-log/v1",
+  "store_manifest_sha256": "6182cda583d4296f965b2784eb86ab6bb5d6b6151165aa8a18d92fb50cea43d6",
+  "edits": [
+   {
+    "op": "keep",
+    "target": "fed8924f54e41afb081af060408f2748593a1dbe9602a298239fb1f74ea1be6a",
+    "evidence": {
+     "n_cases": 2,
+     "acc_with_lesson": 0,
+     "acc_without_lesson": 0
+    }
+   },
+   {
+    "op": "keep",
+    "target": "38709d8d59a34393737b5d82f2a19135eb3232468d782d8ee85abdc8c269728a",
+    "evidence": {
+     "n_cases": 2,
+     "acc_with_lesson": 0,
+     "acc_without_lesson": 0
+    }
+   },
+   {
+    "op": "keep",
+    "target": "857f375c691bf0d1af7c487317bcc0d47655dba29f12a5cfe9f2674f287eeb6a",
+    "evidence": {
+     "n_cases": 2,
+     "acc_with_lesson": 0,
+     "acc_without_lesson": 0
+    }
+   },
+   {
+    "op": "keep",
+    "target": "5fada9a604a3dd2888a4fc8bb0180cc053dd9e75296a52e4a3b980061b0a7d0d",
+    "evidence": {
+     "n_cases": 2,
+     "acc_with_lesson": 0,
+     "acc_without_lesson": 0
+    }
+   },
+   {
+    "op": "keep",
+    "target": "a85aecbb2366712d3891425da81e088fa2ba4aa107daef3559c83353dcee7529",
+    "evidence": {
+     "n_cases": 2,
+     "acc_with_lesson": 0,
+     "acc_without_lesson": 0
+    }
+   },
+   {
+    "op": "keep",
+    "target": "42d59db4f06b73bc2fbeb7aabdbf88f221a0267fa7fdad6f33dde8e0ff38bcc3",
+    "evidence": {
+     "n_cases": 2,
+     "acc_with_lesson": 0,
+     "acc_without_lesson": 0
+    }
+   }
+  ]
+ },
+ "packet_sha256": "1ee8dfad87c18ab7718f5add68d415e52c05b71ce37333985f9db484db99cceb"
+}

@@ -583,3 +583,16 @@ def test_p2_rejects_agent_b_parameter_drift() -> None:
     packet["agent_b_freeze_after"]["manifest_sha256"] = canonical_sha256(unsigned)
     result = judge_p2(packet, bootstrap_reps=20)
     assert result["gates"]["agent_b_identity_frozen"] is False
+
+
+def test_request_id_matches_format_noise_but_not_content() -> None:
+    from prom_search_hswm.hswm_function_network import _request_id_matches
+
+    expected = "req-0123abcd4567efab8901"
+    assert _request_id_matches("req-0123abcd4567efab8901", expected)          # exact
+    assert _request_id_matches("REQ-0123ABCD4567EFAB8901", expected)          # case noise
+    assert _request_id_matches("req 0123abcd 4567efab 8901", expected)        # whitespace
+    assert _request_id_matches("req-0123abcd-4567efab-8901", expected)        # punctuation
+    assert not _request_id_matches("req-0123abcd4567efab8902", expected)      # content flip
+    assert not _request_id_matches("req-0123abcd4567efab89", expected)        # truncated
+    assert not _request_id_matches(None, expected)                            # null

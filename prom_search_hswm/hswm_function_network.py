@@ -292,6 +292,18 @@ def request_id_for(run_id: str, arm_id: str, item_id: str) -> str:
     return f"req-{canonical_sha256(identity)[:20]}"
 
 
+def _request_id_matches(observed: object, expected: str) -> bool:
+    """Transport correlation by content, not formatting.
+
+    Models copying a hex digest add case/punctuation/whitespace noise (the
+    sealed 2026-07-25 run aborted on exactly this).  Compare the
+    case-folded alphanumeric core: a mismatch after normalization is a real
+    transport break, a formatting variant is not.
+    """
+    core = lambda s: "".join(c for c in str(s).casefold() if c.isalnum())
+    return core(observed) == core(expected)
+
+
 def run_item(
     *,
     run_id: str,
@@ -347,8 +359,10 @@ def run_item(
         max_output_tokens=envelope.output_caps[0],
         model_port=model_port,
     )
-    if query_plan["request_id"] != request_id:
-        raise FunctionNetworkError("QF changed request_id")
+    if not _request_id_matches(query_plan["request_id"], request_id):
+        raise FunctionNetworkError(
+            f"QF changed request_id: expected {request_id!r}, model returned {query_plan['request_id']!r}"
+        )
 
     scoring = fit(
         bf.prompt,

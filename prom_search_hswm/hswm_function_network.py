@@ -11,7 +11,13 @@ from prom_search_hswm.hswm_call_receipt import (
     verify_call_receipt,
 )
 from prom_search_hswm.hswm_function_registry import FunctionRegistryV1, verify_registry
-from prom_search_hswm.hswm_typed_ports import canonical_sha256, validate_port
+from prom_search_hswm.hswm_token_meter import TokenMeter, fit_parity_filler
+from prom_search_hswm.hswm_typed_ports import (
+    PARITY_FILLER_FIELD,
+    canonical_json,
+    canonical_sha256,
+    validate_port,
+)
 
 
 RUN_SCHEMA = "hswm-prom9-f1-item-run/v1"
@@ -136,7 +142,144 @@ def observable_for_arm(
     return {key: values[key] for key in sorted(values)}
 
 
-def _request_id(run_id: str, arm_id: str, item_id: str) -> str:
+@dataclass(frozen=True)
+class CallEnvelopeV1:
+    """Registered per-call token envelope shared identically by every arm.
+
+    ``input_caps[index]`` is the exact prompt-token count every arm's call
+    ``index + 1`` must consume; the harness reaches it by fitting the declared
+    inert parity filler.  ``output_caps[index]`` is the maximum completion
+    budget of that call.  The meter is the same tokenizer identity the
+    manifest binds; without it no run is permitted.
+    """
+
+    input_caps: tuple[int, int, int]
+    output_caps: tuple[int, int, int]
+    filler_field: str
+    filler_unit: str
+    max_filler_chars: int
+    meter: TokenMeter
+
+    def __post_init__(self) -> None:
+        for label, values in (("input_caps", self.input_caps), ("output_caps", self.output_caps)):
+            if len(values) != 3 or any(
+                isinstance(value, bool) or not isinstance(value, int) or value < 1
+                for value in values
+            ):
+                raise FunctionNetworkError(f"{label} must hold three positive integers")
+        if not self.filler_unit:
+            raise FunctionNetworkError("filler unit must be non-empty")
+        if (
+            isinstance(self.max_filler_chars, bool)
+            or not isinstance(self.max_filler_chars, int)
+            or self.max_filler_chars < 0
+        ):
+            raise FunctionNetworkError("max_filler_chars must be a non-negative integer")
+
+
+def query_envelope_payload(
+    *,
+    item: FunctionNetworkItemV1,
+    request_id: str,
+    parity_filler: str = "",
+) -> dict[str, object]:
+    """Build the (not yet port-validated) QueryEnvelopeV1 payload."""
+
+    return {
+        "request_id": request_id,
+        "query_text": item.query_text,
+        "allowed_evidence_types": list(item.allowed_evidence_types),
+        "budget": {
+            "max_candidates": len(item.candidates),
+            "max_evidence_items": item.max_evidence_items,
+            "max_input_tokens": item.max_input_tokens,
+            "max_output_tokens": item.max_output_tokens_per_call,
+        },
+        PARITY_FILLER_FIELD: parity_filler,
+    }
+
+
+def candidate_table_for_arm(
+    arm_id: str, candidates: Sequence[EvidenceCandidateV1]
+) -> dict[str, object]:
+    """Serialize the candidate universe once per item in columnar form.
+
+    Every arm uses the same serializer; only the registered observable column
+    subset differs.  Observable components whose canonical value is identical
+    across all candidates are factored into ``constants`` so repeated key
+    names and repeated constant values leave the prompt.  No feature is
+    dropped: the table round-trips to the same per-candidate observables.
+    """
+
+    if not candidates:
+        raise FunctionNetworkError("candidates must be non-empty")
+    observables = [observable_for_arm(arm_id, candidate.observable) for candidate in candidates]
+    key_sets = {tuple(sorted(observable)) for observable in observables}
+    if len(key_sets) != 1:
+        raise FunctionNetworkError("candidate observable key sets must be uniform")
+    all_keys = sorted(key_sets.pop())
+    constants: dict[str, object] = {}
+    varying: list[str] = []
+    for key in all_keys:
+        canonical_values = {
+            canonical_json(observable[key]) for observable in observables
+        }
+        if len(canonical_values) == 1:
+            constants[key] = observables[0][key]
+        else:
+            varying.append(key)
+    columns = ["bond_id", "evidence_id", *varying]
+    rows = [
+        [candidate.bond_id, candidate.evidence_id]
+        + [observable[key] for key in varying]
+        for candidate, observable in zip(candidates, observables)
+    ]
+    return {"constants": constants, "columns": columns, "rows": rows}
+
+
+def bond_scoring_payload(
+    *,
+    item: FunctionNetworkItemV1,
+    arm_id: str,
+    request_id: str,
+    query_plan: Mapping[str, object],
+    parity_filler: str = "",
+) -> dict[str, object]:
+    """Build the (not yet port-validated) BondScoringEnvelopeV1 payload."""
+
+    return {
+        "request_id": request_id,
+        "query_plan": dict(query_plan),
+        "candidate_table": candidate_table_for_arm(arm_id, item.candidates),
+        "candidate_budget": item.max_evidence_items,
+        PARITY_FILLER_FIELD: parity_filler,
+    }
+
+
+def answer_context_payload(
+    *,
+    item: FunctionNetworkItemV1,
+    request_id: str,
+    query_plan: Mapping[str, object],
+    selected: Sequence[EvidenceCandidateV1],
+    parity_filler: str = "",
+) -> dict[str, object]:
+    """Build the (not yet port-validated) AnswerContextV1 payload."""
+
+    return {
+        "request_id": request_id,
+        "query_text": item.query_text,
+        "query_plan": dict(query_plan),
+        "selected_evidence": [
+            {"evidence_id": candidate.evidence_id, "content": candidate.content}
+            for candidate in selected
+        ],
+        "max_answer_tokens": item.max_output_tokens_per_call,
+        PARITY_FILLER_FIELD: parity_filler,
+    }
+
+
+def request_id_for(run_id: str, arm_id: str, item_id: str) -> str:
     """Return a compact, receipt-bound transport correlation identifier.
 
     Run, arm, and item identity are already recorded independently in every
@@ -156,9 +299,17 @@ def run_item(
     item: FunctionNetworkItemV1,
     registry: FunctionRegistryV1,
     model_port: ModelPort,
+    envelope: CallEnvelopeV1,
     persistent_state_bytes: int = 0,
 ) -> FunctionNetworkRunV1:
-    """Execute exactly QF -> BF -> AF, including removal control null calls."""
+    """Execute exactly QF -> BF -> AF, including removal control null calls.
+
+    Every call's prompt is fitted to the registered per-call input envelope
+    with the declared inert parity filler before invocation, so all arms
+    consume identical input tokens per call by construction.  The filler is
+    part of the validated input payload and therefore of the hashed call
+    receipt; nothing about it is implicit.
+    """
 
     if arm_id not in F1_ARMS:
         raise FunctionNetworkError(f"unsupported F1 arm: {arm_id}")
@@ -168,20 +319,23 @@ def run_item(
     qf = registry.by_id("QF_QUERY_COMPILER")
     bf = registry.by_id("BF_BOND_PROPOSER")
     af = registry.by_id("AF_ANSWER_SYNTHESIZER")
-    request_id = _request_id(run_id, arm_id, item.item_id)
-    query_envelope = validate_port(
-        "QueryEnvelopeV1",
-        {
-            "request_id": request_id,
-            "query_text": item.query_text,
-            "allowed_evidence_types": list(item.allowed_evidence_types),
-            "budget": {
-                "max_candidates": len(item.candidates),
-                "max_evidence_items": item.max_evidence_items,
-                "max_input_tokens": item.max_input_tokens,
-                "max_output_tokens": item.max_output_tokens_per_call,
-            },
-        },
+    request_id = request_id_for(run_id, arm_id, item.item_id)
+
+    def fit(system_prompt: str, payload: Mapping[str, object], call_index: int) -> dict[str, object]:
+        return fit_parity_filler(
+            meter=envelope.meter,
+            system_prompt=system_prompt,
+            payload=payload,
+            filler_field=envelope.filler_field,
+            cap=envelope.input_caps[call_index - 1],
+            unit=envelope.filler_unit,
+            max_chars=envelope.max_filler_chars,
+        )
+
+    query_envelope = fit(
+        qf.prompt,
+        query_envelope_payload(item=item, request_id=request_id),
+        1,
     )
     query_plan, call_1 = invoke_function(
         run_id=run_id,
@@ -190,27 +344,21 @@ def run_item(
         call_index=1,
         function=qf,
         input_payload=query_envelope,
-        max_output_tokens=item.max_output_tokens_per_call,
+        max_output_tokens=envelope.output_caps[0],
         model_port=model_port,
     )
     if query_plan["request_id"] != request_id:
         raise FunctionNetworkError("QF changed request_id")
 
-    scoring = validate_port(
-        "BondScoringEnvelopeV1",
-        {
-            "request_id": request_id,
-            "query_plan": query_plan,
-            "candidates": [
-                {
-                    "bond_id": candidate.bond_id,
-                    "evidence_id": candidate.evidence_id,
-                    "observable": observable_for_arm(arm_id, candidate.observable),
-                }
-                for candidate in item.candidates
-            ],
-            "candidate_budget": item.max_evidence_items,
-        },
+    scoring = fit(
+        bf.prompt,
+        bond_scoring_payload(
+            item=item,
+            arm_id=arm_id,
+            request_id=request_id,
+            query_plan=query_plan,
+        ),
+        2,
     )
     proposal, call_2 = invoke_function(
         run_id=run_id,
@@ -219,7 +367,7 @@ def run_item(
         call_index=2,
         function=bf,
         input_payload=scoring,
-        max_output_tokens=item.max_output_tokens_per_call,
+        max_output_tokens=envelope.output_caps[1],
         model_port=model_port,
     )
     if proposal["request_id"] != request_id:
@@ -235,18 +383,15 @@ def run_item(
     if not set(proposal["evidence_refs"]).issubset(selected_evidence_ids):
         raise FunctionNetworkError("BF cited evidence outside its selected bonds")
 
-    answer_context = validate_port(
-        "AnswerContextV1",
-        {
-            "request_id": request_id,
-            "query_text": item.query_text,
-            "query_plan": query_plan,
-            "selected_evidence": [
-                {"evidence_id": candidate.evidence_id, "content": candidate.content}
-                for candidate in selected
-            ],
-            "max_answer_tokens": item.max_output_tokens_per_call,
-        },
+    answer_context = fit(
+        af.prompt,
+        answer_context_payload(
+            item=item,
+            request_id=request_id,
+            query_plan=query_plan,
+            selected=selected,
+        ),
+        3,
     )
     answer, call_3 = invoke_function(
         run_id=run_id,
@@ -255,7 +400,7 @@ def run_item(
         call_index=3,
         function=af,
         input_payload=answer_context,
-        max_output_tokens=item.max_output_tokens_per_call,
+        max_output_tokens=envelope.output_caps[2],
         model_port=model_port,
     )
     if answer["request_id"] != request_id:
@@ -279,7 +424,7 @@ def run_item(
         "selected_bond_ids": [candidate.bond_id for candidate in selected],
         "total_input_tokens": total_input,
         "total_output_tokens": total_output,
-        "total_allowed_output_tokens": 3 * item.max_output_tokens_per_call,
+        "total_allowed_output_tokens": sum(envelope.output_caps),
         "persistent_state_bytes": persistent_state_bytes,
     }
     constructor = {
@@ -316,6 +461,7 @@ def verify_run(value: Mapping[str, object]) -> str:
 
 
 __all__ = [
+    "CallEnvelopeV1",
     "EvidenceCandidateV1",
     "F1_ARMS",
     "FLAT_ARM",
@@ -327,7 +473,12 @@ __all__ = [
     "SHUFFLE_ARM",
     "TYPED_ARM",
     "VECTOR_ARM",
+    "answer_context_payload",
+    "bond_scoring_payload",
+    "candidate_table_for_arm",
     "observable_for_arm",
+    "query_envelope_payload",
+    "request_id_for",
     "run_item",
     "verify_run",
 ]

@@ -15,13 +15,23 @@ from hswm_weight_snapshot import (
 from p1_eligibility_tag import derive_eligibility_tags, make_activation_trace
 from prom_search_hswm.hswm_call_receipt import ModelCallV1, ModelResponseV1
 from prom_search_hswm.hswm_function_network import F1_ARMS, TYPED_ARM
-from prom_search_hswm.hswm_typed_ports import TypedPortError, canonical_sha256, validate_port
+from prom_search_hswm.hswm_function_registry import build_registry
+from prom_search_hswm.hswm_token_meter import FakeMeter
+from prom_search_hswm.hswm_typed_ports import (
+    PARITY_FILLER_FIELD,
+    TypedPortError,
+    canonical_json,
+    canonical_sha256,
+    validate_port,
+)
+from prom_search_hswm.prom9_f1_envelope import compute_minimum_input_caps
 from prom_search_hswm.prom_f1_function_network import (
     F1HarnessError,
     GOLD_SCHEMA,
     MANIFEST_SCHEMA,
     judge_suite,
     run_suite,
+    validate_manifest,
     verify_suite,
 )
 from prom_search_hswm.prom9_causal_harness import (
@@ -38,8 +48,30 @@ from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
+_FAKE_PROJECTED_OUTPUTS = {arm: {"1": 5, "2": 5, "3": 5} for arm in F1_ARMS}
+
+
+def _registries() -> dict:
+    return {
+        arm: build_registry(
+            REPO_ROOT / DEFAULT_PROTOCOL,
+            model="fake-model",
+            model_revision="fake-rev",
+            prompt_overrides=_prompt_overrides(arm),
+        )
+        for arm in F1_ARMS
+    }
+
+
+def _prompt_overrides(arm: str) -> dict[str, str]:
+    from prom_search_hswm.prom_f1_function_network import _arm_overrides
+
+    return _arm_overrides(arm)
+
 
 class FakePort:
+    output_tokens_by_arm: dict[str, int] = {}
+
     def __call__(self, call: ModelCallV1) -> ModelResponseV1:
         request_id = str(call.input_payload["request_id"])
         if call.function_id == "QF_QUERY_COMPILER":
@@ -51,7 +83,9 @@ class FakePort:
                 "abstain": False,
             }
         elif call.function_id == "BF_BOND_PROPOSER":
-            candidates = call.input_payload["candidates"]
+            table = call.input_payload["candidate_table"]
+            bond_index = table["columns"].index("bond_id")
+            evidence_index = table["columns"].index("evidence_id")
             if "role_removed" in call.arm_id:
                 payload = {
                     "request_id": request_id,
@@ -61,12 +95,12 @@ class FakePort:
                     "abstain": True,
                 }
             else:
-                selected = candidates[0]
+                selected = table["rows"][0]
                 payload = {
                     "request_id": request_id,
-                    "ordered_bond_ids": [selected["bond_id"]],
-                    "bond_potentials": {selected["bond_id"]: 0.0},
-                    "evidence_refs": [selected["evidence_id"]],
+                    "ordered_bond_ids": [selected[bond_index]],
+                    "bond_potentials": {selected[bond_index]: 0.0},
+                    "evidence_refs": [selected[evidence_index]],
                     "abstain": False,
                 }
         else:
@@ -89,7 +123,80 @@ class FakePort:
         )
 
 
-def _f1_manifest() -> dict:
+class MeteredFakePort(FakePort):
+    """Fake port that reports meter-exact input tokens like the server would."""
+
+    def __init__(self, meter: FakeMeter, output_tokens_by_arm: dict[str, int] | None = None) -> None:
+        self._meter = meter
+        self._output_tokens_by_arm = output_tokens_by_arm or {}
+
+    def __call__(self, call: ModelCallV1) -> ModelResponseV1:
+        response = super().__call__(call)
+        return ModelResponseV1(
+            payload=response.payload,
+            model=response.model,
+            model_revision=response.model_revision,
+            input_tokens=self._meter.count_chat_prompt(
+                call.system_prompt, canonical_json(call.input_payload)
+            ),
+            output_tokens=self._output_tokens_by_arm.get(call.arm_id, response.output_tokens),
+            latency_ms=response.latency_ms,
+        )
+
+
+def _token_envelope(meter: FakeMeter) -> dict:
+    registries = _registries()
+    items = [_item(raw) for raw in _f1_manifest_items()]
+    caps = compute_minimum_input_caps(
+        run_id="f1-dev-1",
+        items=items,
+        arms=F1_ARMS,
+        registries=registries,
+        meter=meter,
+        projected_outputs=_FAKE_PROJECTED_OUTPUTS,
+        slack=4,
+    )
+    return {
+        "schema_version": "hswm-prom9-f1-token-envelope/v1",
+        "tokenizer": {**meter.identity(), "validation_receipt_sha256": "b" * 64},
+        "filler": {"field": PARITY_FILLER_FIELD, "unit": "0", "max_filler_chars": 60000},
+        "per_call_input_caps": caps,
+        "per_call_output_caps": {"1": 16, "2": 16, "3": 16},
+        "projected_output_tokens_by_arm": deepcopy(_FAKE_PROJECTED_OUTPUTS),
+        "projection_slack_tokens": 4,
+    }
+
+
+def _f1_manifest_items() -> list[dict]:
+    return [
+        {
+            "item_id": f"item-{index}",
+            "query_text": "What is the capital of France?",
+            "allowed_evidence_types": ["text"],
+            "candidates": [
+                {
+                    "bond_id": "bond-1",
+                    "evidence_id": "evidence-1",
+                    "content": "Paris is the capital of France.",
+                    "observable": {
+                        "flat_position": 0,
+                        "flat_score": 1.0,
+                        "vector_score": 0.9,
+                        "source_type": "text",
+                        "seam_count": 1,
+                    },
+                }
+            ],
+            "max_evidence_items": 1,
+            "max_input_tokens": 100000,
+            "max_output_tokens_per_call": 16,
+        }
+        for index in range(4)
+    ]
+
+
+def _f1_manifest(meter: FakeMeter | None = None) -> dict:
+    meter = meter or FakeMeter()
     return {
         "schema_version": MANIFEST_SCHEMA,
         "run_id": "f1-dev-1",
@@ -100,32 +207,15 @@ def _f1_manifest() -> dict:
         "state_capacity_bytes": 100,
         "state_bytes_by_arm": {arm: 100 for arm in F1_ARMS},
         "preregistration_receipt_sha256": None,
-        "items": [
-            {
-                "item_id": f"item-{index}",
-                "query_text": "What is the capital of France?",
-                "allowed_evidence_types": ["text"],
-                "candidates": [
-                    {
-                        "bond_id": "bond-1",
-                        "evidence_id": "evidence-1",
-                        "content": "Paris is the capital of France.",
-                        "observable": {
-                            "flat_position": 0,
-                            "flat_score": 1.0,
-                            "vector_score": 0.9,
-                            "source_type": "text",
-                            "seam_count": 1,
-                        },
-                    }
-                ],
-                "max_evidence_items": 1,
-                "max_input_tokens": 100,
-                "max_output_tokens_per_call": 16,
-            }
-            for index in range(4)
-        ],
+        "token_envelope": _token_envelope(meter),
+        "items": _f1_manifest_items(),
     }
+
+
+def _item(raw: dict):
+    from prom_search_hswm.prom_f1_function_network import _item as convert
+
+    return convert(raw)
 
 
 def test_typed_ports_reject_extra_keys_and_positive_bond_potential() -> None:
@@ -148,10 +238,12 @@ def test_typed_ports_reject_extra_keys_and_positive_bond_potential() -> None:
 
 
 def test_f1_executes_three_calls_per_arm_and_development_cannot_claim_science() -> None:
+    meter = FakeMeter()
     suite = run_suite(
-        _f1_manifest(),
+        _f1_manifest(meter),
         protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
         model_port=FakePort(),
+        token_meter=meter,
         max_workers=3,
     )
     assert verify_suite(suite) == suite["suite_receipt_sha256"]
@@ -181,11 +273,118 @@ def test_f1_executes_three_calls_per_arm_and_development_cannot_claim_science() 
     ]["mean"] == 1.0
 
 
-def test_f1_refuses_tampered_call_receipt() -> None:
+def test_f1_envelope_equalizes_input_tokens_across_arms() -> None:
+    meter = FakeMeter()
+    outputs = {arm: 5 for arm in F1_ARMS}
+    outputs[TYPED_ARM] = 9
+    manifest = _f1_manifest(meter)
+    manifest["token_tolerance"] = 12
     suite = run_suite(
-        _f1_manifest(),
+        manifest,
+        protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+        model_port=MeteredFakePort(meter, outputs),
+        token_meter=meter,
+    )
+    assert verify_suite(suite) == suite["suite_receipt_sha256"]
+    parity = suite["token_parity"]
+    caps = suite["token_envelope"]["per_call_input_caps"]
+    expected_input = caps["1"] + caps["2"] + caps["3"]
+    assert parity["input_spread_max"] == 0
+    for entry in parity["items"]:
+        assert entry["input_spread"] == 0
+        assert set(entry["input_tokens_by_arm"].values()) == {expected_input}
+        # Only the output-side asymmetry remains in the spread.
+        assert entry["spread"] == 3 * (9 - 5)
+        assert entry["within_tolerance"] is True
+    for row in suite["item_runs"]:
+        for call in row["calls"]:
+            assert call["input_tokens"] == caps[str(call["call_index"])]
+            assert PARITY_FILLER_FIELD in call["input_payload"]
+
+
+def test_f1_manifest_rejects_spreading_projections_and_small_caps() -> None:
+    meter = FakeMeter()
+    registries = _registries()
+    manifest = _f1_manifest(meter)
+    manifest["token_envelope"]["projected_output_tokens_by_arm"][TYPED_ARM] = {
+        "1": 5,
+        "2": 5,
+        "3": 6,
+    }
+    with pytest.raises(F1HarnessError, match="spread"):
+        validate_manifest(manifest, token_meter=meter, registries=registries)
+    broken = _f1_manifest(meter)
+    caps = broken["token_envelope"]["per_call_input_caps"]
+    caps["1"] = caps["1"] - 1
+    with pytest.raises(F1HarnessError, match="exceeds the registered"):
+        validate_manifest(broken, token_meter=meter, registries=registries)
+
+
+def test_f1_manifest_binds_the_exact_tokenizer_identity() -> None:
+    meter = FakeMeter()
+    registries = _registries()
+    manifest = _f1_manifest(meter)
+    manifest["token_envelope"]["tokenizer"]["chars_per_token"] = 3
+    with pytest.raises(F1HarnessError, match="tokenizer identity drifted"):
+        validate_manifest(manifest, token_meter=meter, registries=registries)
+
+
+def test_f1_envelope_fitting_is_deterministic_and_hash_bound() -> None:
+    meter = FakeMeter()
+    first = run_suite(
+        _f1_manifest(meter),
+        protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+        model_port=MeteredFakePort(meter),
+        token_meter=meter,
+    )
+    second = run_suite(
+        _f1_manifest(meter),
+        protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+        model_port=MeteredFakePort(meter),
+        token_meter=meter,
+    )
+    assert first["suite_receipt_sha256"] == second["suite_receipt_sha256"]
+    broken = deepcopy(first)
+    filler = broken["item_runs"][0]["calls"][0]["input_payload"][PARITY_FILLER_FIELD]
+    broken["item_runs"][0]["calls"][0]["input_payload"][PARITY_FILLER_FIELD] = filler + "0"
+    with pytest.raises(Exception, match="self-hash drifted"):
+        verify_suite(broken)
+    drifted = deepcopy(first)
+    drifted["token_parity"]["items"][0]["spread"] = 999
+    unsigned = dict(drifted)
+    unsigned.pop("suite_receipt_sha256")
+    drifted["suite_receipt_sha256"] = canonical_sha256(unsigned)
+    with pytest.raises(F1HarnessError, match="token parity record"):
+        verify_suite(drifted)
+
+
+def test_f1_prompt_hashes_stay_bound_to_the_frozen_registries() -> None:
+    meter = FakeMeter()
+    suite = run_suite(
+        _f1_manifest(meter),
+        protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+        model_port=MeteredFakePort(meter),
+        token_meter=meter,
+    )
+    fresh = {arm: registry.canonical() for arm, registry in _registries().items()}
+    assert suite["registries"] == fresh
+    for arm, registry in fresh.items():
+        prompts = {function["function_id"]: function["prompt_sha256"] for function in registry["functions"]}
+        for row in suite["item_runs"]:
+            if row["arm_id"] != arm:
+                continue
+            for call in row["calls"]:
+                assert call["prompt_sha256"] == prompts[call["function_id"]]
+                assert PARITY_FILLER_FIELD not in registry["functions"][0]["prompt"]
+
+
+def test_f1_refuses_tampered_call_receipt() -> None:
+    meter = FakeMeter()
+    suite = run_suite(
+        _f1_manifest(meter),
         protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
         model_port=FakePort(),
+        token_meter=meter,
     )
     broken = deepcopy(suite)
     broken["item_runs"][0]["calls"][0]["output_tokens"] = 999

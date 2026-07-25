@@ -1,0 +1,32 @@
+{
+  "derivation": "max observed output tokens per arm per call over the f1-2wiki-dev-r4-20260724 development suite (4 items, DGX vLLM Qwen3.6-27B, temp 0)",
+  "projected_output_tokens_by_arm": {
+    "flat_single_llm_three_call_workflow": {
+      "1": 183,
+      "2": 409,
+      "3": 144
+    },
+    "typed_hswm_three_function_network": {
+      "1": 176,
+      "2": 417,
+      "3": 143
+    },
+    "typed_network_role_removed_schema_preserving_null": {
+      "1": 174,
+      "2": 65,
+      "3": 103
+    },
+    "typed_network_with_role_instructions_shuffled_but_ports_preserved": {
+      "1": 187,
+      "2": 416,
+      "3": 136
+    },
+    "vector_memory_three_call_workflow": {
+      "1": 186,
+      "2": 415,
+      "3": 143
+    }
+  },
+  "schema_version": "hswm-prom9-f1-projected-outputs/v1",
+  "source_suite_receipt_sha256": "97fd2d317471f25a0f620976c0e90092cff69eff567d497d37a1f34aaf61b9dd"
+}

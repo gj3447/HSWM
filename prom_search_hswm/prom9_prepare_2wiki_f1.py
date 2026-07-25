@@ -5,6 +5,11 @@ Rows are fetched read-only through the Hugging Face Dataset Viewer.  Retrieval
 features are computed from question/context bytes only; supporting_facts,
 evidences, and answer are never used in candidate scoring.  Gold is written to
 a separate file for the independent F1 judge.
+
+The emitted manifest is schema v2: it carries a registered token envelope
+(per-call input caps derived from exact tokenizer projection, per-call output
+caps, declared per-arm output projections, and the parity-filler spec) so the
+run phase equalizes consumed input tokens across arms by construction.
 """
 from __future__ import annotations
 
@@ -22,8 +27,17 @@ from urllib.parse import urlencode
 from urllib.request import urlopen
 
 from prom_search_hswm.hswm_function_network import F1_ARMS
+from prom_search_hswm.hswm_function_registry import build_registry
+from prom_search_hswm.hswm_token_meter import QwenBpeMeter
 from prom_search_hswm.hswm_typed_ports import canonical_sha256
-from prom_search_hswm.prom_f1_function_network import GOLD_SCHEMA, MANIFEST_SCHEMA
+from prom_search_hswm.prom9_f1_envelope import compute_minimum_input_caps
+from prom_search_hswm.prom_f1_function_network import (
+    GOLD_SCHEMA,
+    MANIFEST_SCHEMA,
+    _arm_overrides,
+    _item,
+)
+from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
 
 
 SOURCE_SCHEMA = "hswm-prom9-f1-2wiki-source-receipt/v1"
@@ -114,6 +128,9 @@ def make_artifacts(
     offset: int,
     length: int,
     run_id: str,
+    token_envelope: Mapping[str, object],
+    model: str = "qwen3.6-27b",
+    model_revision: str = "Qwen/Qwen3.6-27B@server-process-attested-20260724",
 ) -> tuple[dict[str, object], dict[str, object], dict[str, object]]:
     raw_rows = viewer_response.get("rows")
     if not isinstance(raw_rows, list) or len(raw_rows) != length:
@@ -206,12 +223,13 @@ def make_artifacts(
         "schema_version": MANIFEST_SCHEMA,
         "run_id": run_id,
         "mode": "development",
-        "model": "qwen3.6-27b",
-        "model_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+        "model": model,
+        "model_revision": model_revision,
         "token_tolerance": 512,
         "state_capacity_bytes": 4096,
         "state_bytes_by_arm": {arm: 4096 for arm in F1_ARMS},
         "preregistration_receipt_sha256": None,
+        "token_envelope": dict(token_envelope),
         "items": items,
     }
     gold = {
@@ -221,6 +239,61 @@ def make_artifacts(
         "items": gold_items,
     }
     return manifest, gold, source
+
+
+def build_token_envelope(
+    items: Sequence[Mapping[str, object]],
+    *,
+    run_id: str,
+    model: str,
+    model_revision: str,
+    protocol_path: Path,
+    meter: QwenBpeMeter,
+    validation_receipt_sha256: str,
+    projected_outputs: Mapping[str, Mapping[str, int]],
+    output_caps: Mapping[str, int],
+    projection_slack: int,
+) -> dict[str, object]:
+    """Derive and assemble the manifest's registered token envelope block."""
+
+    if set(projected_outputs) != set(F1_ARMS):
+        raise Prepare2WikiError("projected outputs must exactly cover F1 arms")
+    if set(output_caps) != {"1", "2", "3"}:
+        raise Prepare2WikiError("output caps must cover calls 1, 2, and 3")
+    registries = {
+        arm: build_registry(
+            protocol_path,
+            model=model,
+            model_revision=model_revision,
+            prompt_overrides=_arm_overrides(arm),
+        )
+        for arm in F1_ARMS
+    }
+    converted = [_item(raw) for raw in items]
+    input_caps = compute_minimum_input_caps(
+        run_id=run_id,
+        items=converted,
+        arms=F1_ARMS,
+        registries=registries,
+        meter=meter,
+        projected_outputs=projected_outputs,
+        slack=projection_slack,
+    )
+    return {
+        "schema_version": "hswm-prom9-f1-token-envelope/v1",
+        "tokenizer": {
+            **meter.identity(),
+            "validation_receipt_sha256": validation_receipt_sha256,
+        },
+        "filler": {"field": "parity_filler", "unit": "0", "max_filler_chars": 60000},
+        "per_call_input_caps": input_caps,
+        "per_call_output_caps": {key: int(value) for key, value in output_caps.items()},
+        "projected_output_tokens_by_arm": {
+            arm: {key: int(value) for key, value in projections.items()}
+            for arm, projections in projected_outputs.items()
+        },
+        "projection_slack_tokens": projection_slack,
+    }
 
 
 def _write_once(path: Path, value: Mapping[str, object]) -> None:
@@ -248,10 +321,47 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--gold", type=Path, required=True)
     parser.add_argument("--source-receipt", type=Path, required=True)
     parser.add_argument("--ca-file", type=Path, default=Path("/etc/ssl/cert.pem"))
+    parser.add_argument("--tokenizer-dir", type=Path, required=True)
+    parser.add_argument("--validation-receipt", type=Path, required=True)
+    parser.add_argument(
+        "--projected-outputs",
+        type=Path,
+        required=True,
+        help="JSON object mapping each F1 arm to its declared per-call output projections",
+    )
+    parser.add_argument("--output-caps", default="256,512,256")
+    parser.add_argument("--projection-slack", type=int, default=32)
+    parser.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
     args = parser.parse_args(argv)
     try:
         if args.offset < 0 or not 1 <= args.length <= 100:
             raise Prepare2WikiError("offset/length are outside Dataset Viewer bounds")
+        output_cap_parts = args.output_caps.split(",")
+        if len(output_cap_parts) != 3 or any(
+            not part.isdigit() or int(part) < 1 for part in output_cap_parts
+        ):
+            raise Prepare2WikiError("--output-caps must be three positive integers")
+        output_caps = {str(index): int(output_cap_parts[index - 1]) for index in range(1, 4)}
+        if args.projection_slack < 0:
+            raise Prepare2WikiError("projection slack must be non-negative")
+        try:
+            receipt = json.loads(args.validation_receipt.read_text(encoding="utf-8"))
+            projected_document = json.loads(args.projected_outputs.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError) as error:
+            raise Prepare2WikiError(f"cannot read envelope inputs: {error}") from error
+        if not isinstance(projected_document, dict):
+            raise Prepare2WikiError("projected outputs must be a JSON object")
+        projected_outputs = projected_document.get(
+            "projected_output_tokens_by_arm", projected_document
+        )
+        receipt_sha = receipt.get("validation_receipt_sha256")
+        if not isinstance(receipt_sha, str) or len(receipt_sha) != 64:
+            raise Prepare2WikiError("validation receipt lacks its SHA-256")
+        meter = QwenBpeMeter(
+            args.tokenizer_dir / "vocab.json",
+            args.tokenizer_dir / "merges.txt",
+            args.tokenizer_dir / "tokenizer_config.json",
+        )
         query = urlencode(
             {
                 "dataset": args.dataset,
@@ -267,6 +377,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         viewer_response = json.loads(raw)
         if not isinstance(viewer_response, dict):
             raise Prepare2WikiError("Dataset Viewer response must be an object")
+        model = "qwen3.6-27b"
+        model_revision = "Qwen/Qwen3.6-27B@server-process-attested-20260724"
         manifest, gold, source = make_artifacts(
             viewer_response,
             dataset=args.dataset,
@@ -275,7 +387,21 @@ def main(argv: Sequence[str] | None = None) -> int:
             offset=args.offset,
             length=args.length,
             run_id=args.run_id,
+            token_envelope={},
         )
+        envelope = build_token_envelope(
+            manifest["items"],
+            run_id=args.run_id,
+            model=model,
+            model_revision=model_revision,
+            protocol_path=args.protocol,
+            meter=meter,
+            validation_receipt_sha256=receipt_sha,
+            projected_outputs=projected_outputs,
+            output_caps=output_caps,
+            projection_slack=args.projection_slack,
+        )
+        manifest["token_envelope"] = envelope
         _write_once(args.manifest, manifest)
         _write_once(args.gold, gold)
         _write_once(args.source_receipt, source)
@@ -287,6 +413,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                     "manifest_sha256": hashlib.sha256(args.manifest.read_bytes()).hexdigest(),
                     "gold_sha256": hashlib.sha256(args.gold.read_bytes()).hexdigest(),
                     "source_receipt_sha256": source["source_receipt_sha256"],
+                    "per_call_input_caps": envelope["per_call_input_caps"],
                 },
                 sort_keys=True,
             )
@@ -301,4 +428,4 @@ if __name__ == "__main__":
     raise SystemExit(main())
 
 
-__all__ = ["Prepare2WikiError", "make_artifacts"]
+__all__ = ["Prepare2WikiError", "build_token_envelope", "make_artifacts"]

@@ -5,6 +5,13 @@ The ``run`` command never opens gold.  The ``judge`` command takes a separate
 gold file and first revalidates every model-call and item-run receipt.  A
 development run can exercise the entire pipeline but can never emit a sealed
 scientific support verdict.
+
+Manifest schema v2 binds a registered token envelope: one exact tokenizer
+identity, per-call input caps that every arm reaches via a declared inert
+parity filler, per-call output caps, and declared per-arm output projections.
+Validation recomputes the projected prompt-token upper bounds of every item
+and refuses the cohort before any model call when the envelope is infeasible
+or the projections already spread beyond the registered tolerance.
 """
 from __future__ import annotations
 
@@ -30,13 +37,25 @@ from prom_search_hswm.hswm_function_network import (
     run_item,
     verify_run,
 )
-from prom_search_hswm.hswm_function_registry import build_registry
+from prom_search_hswm.hswm_function_registry import FunctionRegistryV1, build_registry
+from prom_search_hswm.hswm_token_meter import (
+    QwenBpeMeter,
+    TokenMeter,
+    TokenMeterError,
+)
 from prom_search_hswm.hswm_typed_ports import canonical_sha256
+from prom_search_hswm.prom9_f1_envelope import (
+    EnvelopeError,
+    check_tokenizer_identity,
+    enforce_projection,
+    envelope_spec,
+    validate_token_envelope,
+)
 from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
 
 
-MANIFEST_SCHEMA = "hswm-prom9-f1-manifest/v1"
-SUITE_SCHEMA = "hswm-prom9-f1-suite/v1"
+MANIFEST_SCHEMA = "hswm-prom9-f1-manifest/v2"
+SUITE_SCHEMA = "hswm-prom9-f1-suite/v2"
 GOLD_SCHEMA = "hswm-prom9-f1-gold/v1"
 JUDGMENT_SCHEMA = "hswm-prom9-f1-judgment/v1"
 _SHA = re.compile(r"^[0-9a-f]{64}$")
@@ -156,13 +175,28 @@ def _arm_overrides(arm_id: str) -> dict[str, str]:
     raise F1HarnessError(f"unknown arm: {arm_id}")
 
 
-def validate_manifest(value: Mapping[str, object]) -> dict[str, object]:
+def validate_manifest(
+    value: Mapping[str, object],
+    *,
+    token_meter: TokenMeter,
+    registries: Mapping[str, FunctionRegistryV1],
+) -> tuple[dict[str, object], dict[str, object]]:
+    """Validate an F1 manifest and enforce its registered token envelope.
+
+    Beyond the structural contract, validation binds the exact tokenizer
+    identity and recomputes per-item, per-arm, per-call prompt-token upper
+    bounds.  A manifest whose projected natural prompts exceed the registered
+    per-call input caps, or whose declared per-arm output projections already
+    spread beyond ``token_tolerance``, is rejected before any model call.
+    Returns the normalized manifest and the projection record.
+    """
+
     _keys(
         value,
         {
             "schema_version", "run_id", "mode", "model", "model_revision",
             "token_tolerance", "state_capacity_bytes", "state_bytes_by_arm",
-            "preregistration_receipt_sha256", "items",
+            "preregistration_receipt_sha256", "token_envelope", "items",
         },
         "F1 manifest",
     )
@@ -207,10 +241,29 @@ def validate_manifest(value: Mapping[str, object]) -> dict[str, object]:
         if item_id in seen:
             raise F1HarnessError(f"duplicate item_id: {item_id}")
         seen.add(item_id)
-    _text(value.get("run_id"), "run_id")
-    _text(value.get("model"), "model")
-    _text(value.get("model_revision"), "model_revision")
-    return json.loads(json.dumps(value, ensure_ascii=False))
+    run_id = _text(value.get("run_id"), "run_id")
+    model = _text(value.get("model"), "model")
+    model_revision = _text(value.get("model_revision"), "model_revision")
+    if set(registries) != set(F1_ARMS):
+        raise F1HarnessError("registries must exactly cover F1 arms")
+    try:
+        envelope = validate_token_envelope(value["token_envelope"], arms=F1_ARMS)
+        check_tokenizer_identity(envelope["tokenizer"], token_meter)
+        items = [_item(raw) for raw in raw_items]
+        projection = enforce_projection(
+            run_id=run_id,
+            items=items,
+            arms=F1_ARMS,
+            registries=registries,
+            meter=token_meter,
+            envelope=envelope,
+            token_tolerance=tolerance,
+        )
+    except (EnvelopeError, TokenMeterError) as error:
+        raise F1HarnessError(f"token envelope refused: {error}") from error
+    normalized = json.loads(json.dumps(value, ensure_ascii=False))
+    normalized["token_envelope"] = envelope
+    return normalized, projection
 
 
 def _item(raw: Mapping[str, object]) -> FunctionNetworkItemV1:
@@ -248,20 +301,26 @@ def run_suite(
     *,
     protocol_path: Path,
     model_port,
+    token_meter: TokenMeter,
     max_workers: int = 1,
 ) -> dict[str, object]:
-    normalized = validate_manifest(manifest)
-    if isinstance(max_workers, bool) or not isinstance(max_workers, int) or not 1 <= max_workers <= 8:
-        raise F1HarnessError("max_workers must be in [1, 8]")
+    model = _text(manifest.get("model"), "model")
+    model_revision = _text(manifest.get("model_revision"), "model_revision")
     registries = {
         arm: build_registry(
             protocol_path,
-            model=str(normalized["model"]),
-            model_revision=str(normalized["model_revision"]),
+            model=model,
+            model_revision=model_revision,
             prompt_overrides=_arm_overrides(arm),
         )
         for arm in F1_ARMS
     }
+    normalized, projection = validate_manifest(
+        manifest, token_meter=token_meter, registries=registries
+    )
+    if isinstance(max_workers, bool) or not isinstance(max_workers, int) or not 1 <= max_workers <= 8:
+        raise F1HarnessError("max_workers must be in [1, 8]")
+    envelope = envelope_spec(normalized["token_envelope"], token_meter)
     jobs = [(_item(raw), arm) for raw in normalized["items"] for arm in F1_ARMS]
 
     def execute(job):
@@ -272,6 +331,7 @@ def run_suite(
             item=item,
             registry=registries[arm],
             model_port=model_port,
+            envelope=envelope,
             persistent_state_bytes=int(normalized["state_bytes_by_arm"][arm]),
         ).canonical()
 
@@ -280,6 +340,11 @@ def run_suite(
     else:
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             rows = list(executor.map(execute, jobs))
+    token_parity = _token_parity_record(
+        rows,
+        tolerance=int(normalized["token_tolerance"]),
+        envelope=normalized["token_envelope"],
+    )
     unsigned = {
         "schema_version": SUITE_SCHEMA,
         "run_id": normalized["run_id"],
@@ -290,6 +355,9 @@ def run_suite(
         "token_tolerance": normalized["token_tolerance"],
         "state_capacity_bytes": normalized["state_capacity_bytes"],
         "preregistration_receipt_sha256": normalized["preregistration_receipt_sha256"],
+        "token_envelope": normalized["token_envelope"],
+        "envelope_projection": projection,
+        "token_parity": token_parity,
         "max_workers": max_workers,
         "registries": {arm: registries[arm].canonical() for arm in F1_ARMS},
         "item_runs": rows,
@@ -297,6 +365,53 @@ def run_suite(
         "scientific_verdict_emitted": False,
     }
     return {**unsigned, "suite_receipt_sha256": canonical_sha256(unsigned)}
+
+
+def _token_parity_record(
+    rows: Sequence[Mapping[str, object]],
+    *,
+    tolerance: int,
+    envelope: Mapping[str, object],
+) -> dict[str, object]:
+    """Record per-item, per-arm consumed tokens and their spread.
+
+    Input tokens are equalized across arms by construction (the parity
+    filler); whatever spread remains is recorded per item so the judge and
+    any auditor can see both the allowed and the actually consumed budgets.
+    """
+
+    indexed: dict[str, dict[str, Mapping[str, object]]] = {}
+    for row in rows:
+        indexed.setdefault(str(row["item_id"]), {})[str(row["arm_id"])] = row
+    items: list[dict[str, object]] = []
+    for item_id in sorted(indexed):
+        arms = indexed[item_id]
+        if set(arms) != set(F1_ARMS):
+            raise F1HarnessError(f"item {item_id} does not cover every F1 arm")
+        inputs = {arm: int(row["total_input_tokens"]) for arm, row in arms.items()}
+        outputs = {arm: int(row["total_output_tokens"]) for arm, row in arms.items()}
+        totals = {arm: inputs[arm] + outputs[arm] for arm in arms}
+        spread = max(totals.values()) - min(totals.values())
+        input_spread = max(inputs.values()) - min(inputs.values())
+        items.append(
+            {
+                "item_id": item_id,
+                "input_tokens_by_arm": inputs,
+                "output_tokens_by_arm": outputs,
+                "total_tokens_by_arm": totals,
+                "spread": spread,
+                "input_spread": input_spread,
+                "within_tolerance": spread <= tolerance,
+            }
+        )
+    return {
+        "per_call_input_caps": envelope["per_call_input_caps"],
+        "per_call_output_caps": envelope["per_call_output_caps"],
+        "input_spread_max": max(item["input_spread"] for item in items),
+        "spread_max": max(item["spread"] for item in items),
+        "all_within_tolerance": all(item["within_tolerance"] for item in items),
+        "items": items,
+    }
 
 
 def verify_suite(value: Mapping[str, object]) -> str:
@@ -349,7 +464,52 @@ def verify_suite(value: Mapping[str, object]) -> str:
             function = registry_functions[arm].get(str(call.get("function_id")))
             if function is None or call.get("prompt_sha256") != function.get("prompt_sha256"):
                 raise F1HarnessError("call prompt is not bound to the arm registry")
+    _verify_token_blocks(data, rows)
     return declared
+
+
+def _verify_token_blocks(data: Mapping[str, object], rows: Sequence[Mapping[str, object]]) -> None:
+    """Re-derive the recorded token parity from the hashed item runs.
+
+    The suite's ``token_envelope`` and ``token_parity`` blocks are covered by
+    the suite self-hash; this check additionally proves they were computed
+    from the actual item runs rather than declared after the fact.
+    """
+
+    try:
+        envelope = validate_token_envelope(data.get("token_envelope"), arms=F1_ARMS)
+    except EnvelopeError as error:
+        raise F1HarnessError(f"suite token envelope drifted: {error}") from error
+    parity = data.get("token_parity")
+    if not isinstance(parity, dict):
+        raise F1HarnessError("F1 suite lacks a token parity record")
+    _keys(
+        parity,
+        {
+            "per_call_input_caps", "per_call_output_caps", "input_spread_max",
+            "spread_max", "all_within_tolerance", "items",
+        },
+        "F1 token parity",
+    )
+    if parity["per_call_input_caps"] != envelope["per_call_input_caps"]:
+        raise F1HarnessError("token parity input caps drifted from the envelope")
+    if parity["per_call_output_caps"] != envelope["per_call_output_caps"]:
+        raise F1HarnessError("token parity output caps drifted from the envelope")
+    tolerance = int(data["token_tolerance"])
+    recorded = parity["items"]
+    if not isinstance(recorded, list) or not recorded:
+        raise F1HarnessError("token parity items must be non-empty")
+    indexed: dict[str, dict[str, Mapping[str, object]]] = {}
+    for row in rows:
+        indexed.setdefault(str(row["item_id"]), {})[str(row["arm_id"])] = row
+    recomputed = _token_parity_record(rows, tolerance=tolerance, envelope=envelope)
+    if parity != recomputed:
+        raise F1HarnessError("token parity record was not computed from the item runs")
+    projection = data.get("envelope_projection")
+    if not isinstance(projection, dict) or set(projection) != {
+        "projected_total_tokens_by_arm", "projected_spread", "items"
+    }:
+        raise F1HarnessError("F1 suite envelope projection record drifted")
 
 
 def _normalize_answer(value: str) -> str:
@@ -493,6 +653,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     run_parser.add_argument("--api-key-env")
     run_parser.add_argument("--timeout-seconds", type=float, default=180.0)
     run_parser.add_argument("--max-workers", type=int, default=1)
+    run_parser.add_argument(
+        "--tokenizer-dir",
+        type=Path,
+        required=True,
+        help="Directory holding the manifest-declared tokenizer vocab.json, merges.txt, and tokenizer_config.json",
+    )
     run_parser.add_argument("--output", type=Path, required=True)
     judge_parser = subparsers.add_parser("judge")
     judge_parser.add_argument("--suite", type=Path, required=True)
@@ -504,6 +670,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.command == "run":
             manifest = _read_json(args.manifest, "F1 manifest")
+            meter = QwenBpeMeter(
+                args.tokenizer_dir / "vocab.json",
+                args.tokenizer_dir / "merges.txt",
+                args.tokenizer_dir / "tokenizer_config.json",
+            )
             port = OpenAICompatibleJSONPort(
                 args.endpoint,
                 api_key_env=args.api_key_env,
@@ -513,6 +684,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 manifest,
                 protocol_path=args.protocol,
                 model_port=port,
+                token_meter=meter,
                 max_workers=args.max_workers,
             )
         else:

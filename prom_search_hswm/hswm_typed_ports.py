@@ -13,7 +13,15 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 
-PORT_SCHEMA = "hswm-prom9-typed-port/v1"
+PORT_SCHEMA = "hswm-prom9-typed-port/v2"
+
+#: Name of the declared, inert parity-filler field carried by every F1 input
+#: envelope.  The field only ever holds repetitions of the manifest-declared
+#: filler unit; it pads each call's prompt to the registered per-call input
+#: envelope so that consumed-token parity holds by construction.
+PARITY_FILLER_FIELD = "parity_filler"
+
+MAX_FILLER_CHARS = 65536
 
 
 class TypedPortError(ValueError):
@@ -104,11 +112,19 @@ def _json_value(value: object, label: str) -> object:
         raise TypedPortError(f"{label} is not a JSON value") from error
 
 
+def _parity_filler(value: object, label: str) -> str:
+    if not isinstance(value, str):
+        raise TypedPortError(f"{label} must be text")
+    if len(value) > MAX_FILLER_CHARS:
+        raise TypedPortError(f"{label} exceeds the filler character ceiling")
+    return value
+
+
 def _query_envelope(value: object) -> dict[str, object]:
     data = _object(value, "QueryEnvelopeV1")
     _keys(
         data,
-        {"request_id", "query_text", "allowed_evidence_types", "budget"},
+        {"request_id", "query_text", "allowed_evidence_types", "budget", PARITY_FILLER_FIELD},
         "QueryEnvelopeV1",
     )
     budget = _object(data["budget"], "QueryEnvelopeV1 budget")
@@ -132,6 +148,7 @@ def _query_envelope(value: object) -> dict[str, object]:
                 "max_output_tokens",
             )
         },
+        PARITY_FILLER_FIELD: _parity_filler(data[PARITY_FILLER_FIELD], PARITY_FILLER_FIELD),
     }
 
 
@@ -153,42 +170,69 @@ def _query_plan(value: object) -> dict[str, object]:
     }
 
 
+def _candidate_table(value: object, label: str) -> dict[str, object]:
+    """Validate a columnar candidate table.
+
+    The table carries exactly the same information as the retired
+    list-of-objects encoding: ``constants`` holds observable components that
+    are identical across every row, ``columns`` names the per-row fields
+    (``bond_id`` and ``evidence_id`` are mandatory), and ``rows`` holds one
+    array per candidate.  Factoring the schema out of the rows removes
+    repeated key names from the prompt without dropping any feature.
+    """
+
+    data = _object(value, label)
+    _keys(data, {"constants", "columns", "rows"}, label)
+    constants = _object(data["constants"], f"{label} constants")
+    normalized_constants = {
+        _text(key, f"{label} constant key"): _json_value(raw, f"{label} constant {key}")
+        for key, raw in constants.items()
+    }
+    columns = _text_list(data["columns"], f"{label} columns")
+    if "bond_id" not in columns or "evidence_id" not in columns:
+        raise TypedPortError(f"{label} columns must include bond_id and evidence_id")
+    bond_index = columns.index("bond_id")
+    evidence_index = columns.index("evidence_id")
+    rows = data["rows"]
+    if not isinstance(rows, list) or not rows:
+        raise TypedPortError(f"{label} rows must be a non-empty array")
+    normalized_rows: list[list[object]] = []
+    for index, raw in enumerate(rows):
+        if not isinstance(raw, list) or len(raw) != len(columns):
+            raise TypedPortError(f"{label} row {index} must cover every column")
+        normalized_rows.append(
+            [_json_value(cell, f"{label} row {index} cell") for cell in raw]
+        )
+        _text(normalized_rows[-1][bond_index], f"{label} row {index} bond_id")
+        _text(normalized_rows[-1][evidence_index], f"{label} row {index} evidence_id")
+    bond_ids = [str(row[bond_index]) for row in normalized_rows]
+    evidence_ids = [str(row[evidence_index]) for row in normalized_rows]
+    if len(bond_ids) != len(set(bond_ids)) or len(evidence_ids) != len(set(evidence_ids)):
+        raise TypedPortError(f"{label} bond_id and evidence_id values must be unique")
+    return {
+        "constants": normalized_constants,
+        "columns": columns,
+        "rows": normalized_rows,
+    }
+
+
 def _bond_scoring_envelope(value: object) -> dict[str, object]:
     data = _object(value, "BondScoringEnvelopeV1")
     _keys(
         data,
-        {"request_id", "query_plan", "candidates", "candidate_budget"},
+        {"request_id", "query_plan", "candidate_table", "candidate_budget", PARITY_FILLER_FIELD},
         "BondScoringEnvelopeV1",
     )
-    candidates = data["candidates"]
-    if not isinstance(candidates, list) or not candidates:
-        raise TypedPortError("candidates must be a non-empty array")
-    normalized_candidates: list[dict[str, object]] = []
-    for index, raw in enumerate(candidates):
-        candidate = _object(raw, f"candidate {index}")
-        _keys(candidate, {"bond_id", "evidence_id", "observable"}, f"candidate {index}")
-        observable = _object(candidate["observable"], f"candidate {index} observable")
-        normalized_candidates.append(
-            {
-                "bond_id": _text(candidate["bond_id"], f"candidate {index} bond_id"),
-                "evidence_id": _text(
-                    candidate["evidence_id"], f"candidate {index} evidence_id"
-                ),
-                "observable": _json_value(observable, f"candidate {index} observable"),
-            }
-        )
-    bond_ids = [str(candidate["bond_id"]) for candidate in normalized_candidates]
-    evidence_ids = [str(candidate["evidence_id"]) for candidate in normalized_candidates]
-    if len(bond_ids) != len(set(bond_ids)) or len(evidence_ids) != len(set(evidence_ids)):
-        raise TypedPortError("candidate bond_id and evidence_id values must be unique")
+    table = _candidate_table(data["candidate_table"], "BondScoringEnvelopeV1 candidate_table")
     budget = _positive_int(data["candidate_budget"], "candidate_budget")
-    if budget > len(normalized_candidates):
+    if budget > len(table["rows"]):
         raise TypedPortError("candidate_budget exceeds supplied candidates")
     return {
         "request_id": _text(data["request_id"], "request_id"),
         "query_plan": _query_plan(data["query_plan"]),
-        "candidates": normalized_candidates,
+        "candidate_table": table,
         "candidate_budget": budget,
+        PARITY_FILLER_FIELD: _parity_filler(data[PARITY_FILLER_FIELD], PARITY_FILLER_FIELD),
     }
 
 
@@ -222,7 +266,7 @@ def _answer_context(value: object) -> dict[str, object]:
     data = _object(value, "AnswerContextV1")
     _keys(
         data,
-        {"request_id", "query_text", "query_plan", "selected_evidence", "max_answer_tokens"},
+        {"request_id", "query_text", "query_plan", "selected_evidence", "max_answer_tokens", PARITY_FILLER_FIELD},
         "AnswerContextV1",
     )
     evidence = data["selected_evidence"]
@@ -247,6 +291,7 @@ def _answer_context(value: object) -> dict[str, object]:
         "query_plan": _query_plan(data["query_plan"]),
         "selected_evidence": normalized,
         "max_answer_tokens": _positive_int(data["max_answer_tokens"], "max_answer_tokens"),
+        PARITY_FILLER_FIELD: _parity_filler(data[PARITY_FILLER_FIELD], PARITY_FILLER_FIELD),
     }
 
 
@@ -296,6 +341,8 @@ def port_digest(port_type: str, value: object) -> str:
 
 
 __all__ = [
+    "MAX_FILLER_CHARS",
+    "PARITY_FILLER_FIELD",
     "PORT_SCHEMA",
     "TypedPortError",
     "canonical_json",

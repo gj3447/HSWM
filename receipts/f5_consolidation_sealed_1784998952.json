@@ -1,0 +1,1608 @@
+{
+ "schema_version": "hswm-f5-consolidation-receipt/v1",
+ "mode": "development",
+ "branch": "F5-consolidation",
+ "smoke": false,
+ "preregistration_file": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm/evidence/PREREG_f5_consolidation_20260725.json",
+ "preregistration_file_sha256": "b4de61edd77a72893a36e0c3a7c9753ac1d77c465f2d5b526d82f26c07a41b43",
+ "script_sha256": "e7f3269952ec489331efdaccd7792d0bed089492e159d0260f16d8f986ad1e08",
+ "harness_module_sha256": "3676724568fde19a752c07fdeabd9883ecfe04a3534ebf3f4d8fb2cc6b95c6e5",
+ "config": {
+  "episodes": 8,
+  "n_fresh_ep": 12,
+  "token_budget_chars": 1600,
+  "split_seed": 20260730,
+  "seed": 20260725,
+  "max_answers": 1,
+  "max_calls": 1000,
+  "parallel": 16,
+  "n_boot": 2000,
+  "universes_dir": "_research/f2_sealed_universes",
+  "answer_backend": "vllm",
+  "answer_url": "http://127.0.0.1:18000/v1",
+  "answer_model": "qwen3.6-27b",
+  "smoke": false,
+  "out": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/receipts/f5_consolidation_sealed_1784998952.json",
+  "delta": 0.1,
+  "alpha": 0.8,
+  "theta": 0.5,
+  "gist_floor": 0.5
+ },
+ "consolidation_operator_definition": {
+  "wake": "correct typed lesson per episode; initial confidence c0 = 0.5 + 0.5*(acc_with_lesson - acc_without) on the episode's training case (Hebbian contribution).",
+  "sleep": "after episode k<E-1: for every lesson with origin<k, confidence *= alpha (0.8); a full-form lesson with confidence < theta (0.5) is COMPRESSED to the gist form 'Treat SOURCE_CLASS={klass} as authoritative when records conflict.' (supersedes chain) pinned at gist_floor (0.5 = the typed-lesson admission floor); gist lessons are never evicted.",
+  "edge_weight_meaning": "edge weight = Hebbian delta-s (c0) + downscale alpha per sleep (foundation semantic-weight-metric-contract self-fulfillment note).",
+  "retrieval": "rank by (confidence desc, lesson_id), pack into the shared char budget (per-lesson cost = instruction chars + 120)."
+ },
+ "prereg_reading_deviations": [
+  "simulated-lag: wall-clock weeks replaced by episode-interference lag — retention of episode i is probed at the final state, lag(i) = (E-1)-i subsequent episodes.",
+  "decay model: hierarchical function-form comparison (Murre&Dros) read as least-squares slope with paired bootstrap CI.",
+  "gist probe form: forced-choice verdict (parent decision 2026-07-26) — candidate classes listed, strict JSON {\"authoritative\": ...}, memory_context only, no case documents; the free-form meta-question scored 0 for all arms in smoke 1784997083 (answerer shape elicits entity names, not class codes).",
+  "schema-generalization probe read as gist accuracy on episodes whose lessons were compressed (gist form generalizes) vs uncompressed (CLS-prediction composition out of scope here)."
+ ],
+ "answerer_freeze": {
+  "backend": "vllm",
+  "url": "http://127.0.0.1:18000/v1",
+  "model": "qwen3.6-27b",
+  "note": "qwen3.6-27b (ollama qwen3:8b is actuation-incapable per F3-r3 smoke and is not used anywhere)."
+ },
+ "honesty": "grounded measurement only; no scientific claim; judgment is the gate's",
+ "question_pool": {
+  "universes_dir": "_research/f2_sealed_universes",
+  "max_answers": 1,
+  "unique_question_texts": 379,
+  "per_universe_raw_counts": {
+   "dense_t200_fk9": 10,
+   "large_t200_fk3": 10,
+   "mid_t20_fk3": 16,
+   "small_t2_fk3": 27,
+   "sparse_t200_fk1": 10,
+   "uni_s1001": 26,
+   "uni_s1002": 29,
+   "uni_s1003": 27,
+   "uni_s1004": 27,
+   "uni_s1005": 27,
+   "uni_s1006": 29,
+   "uni_s1007": 24,
+   "uni_s1008": 26,
+   "uni_s1009": 23,
+   "uni_s1010": 28,
+   "uni_s1011": 23,
+   "uni_s1012": 27,
+   "uni_s1013": 26,
+   "uni_s1014": 27,
+   "uni_s1015": 26,
+   "uni_s1016": 28
+  },
+  "dedup_note": "t200 dirs (sparse/large/dense) share identical articles and type6 texts+answers (verified 2026-07-25, titles_sha equal); dedup by normalized question text collapses them to one contributor."
+ },
+ "splits": {
+  "n_train": 8,
+  "n_fresh": 96,
+  "skipped": {
+   "train": [],
+   "fresh": []
+  },
+  "split_seed": 20260730,
+  "fresh_episode_sizes": {
+   "0": 12,
+   "1": 12,
+   "2": 12,
+   "3": 12,
+   "4": 12,
+   "5": 12,
+   "6": 12,
+   "7": 12
+  }
+ },
+ "leakage": {
+  "exact_question_text_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "exact_attribute_value_overlap": {
+   "train_dev": [],
+   "train_fresh": [],
+   "dev_fresh": []
+  },
+  "binding_leakage": 0,
+  "binding_verdict": "CLEAN",
+  "audit_on_raw_question_texts": {
+   "leakage": 230,
+   "exact_overlaps": [],
+   "near_dup_pairs": [
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is vinyl records?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is vinyl records?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is vinyl records?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is vinyl records?",
+     0.6667
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0263-10-21?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0263-10-21?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is producer?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is producer?",
+     0.75
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is early years teacher?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is accountant?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is accountant?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is baseball?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is baseball?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is baseball?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is baseball?",
+     0.75
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0264-02-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0264-02-15?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0241-01-17?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0241-01-17?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0281-11-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0281-11-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0254-08-03?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0254-08-03?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0212-04-26?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0212-04-26?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is statistician?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is statistician?",
+     0.75
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0255-01-03?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0255-01-03?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is licensed conveyancer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is licensed conveyancer?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is fishing?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is fishing?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is fishing?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is fishing?",
+     0.75
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is neurosurgeon?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is neurosurgeon?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is radio-controlled model collecting?",
+     0.7
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is radio-controlled model collecting?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is radio-controlled model collecting?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is international aid worker?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is financial controller?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is financial controller?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is amateur astronomy?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is amateur astronomy?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is amateur astronomy?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is amateur astronomy?",
+     0.6667
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0206-11-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0206-11-25?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is publishing?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is publishing?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is publishing?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is publishing?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is learning?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is learning?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is learning?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is learning?",
+     0.75
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0188-06-20?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0188-06-20?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is location manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is location manager?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is meditation?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is meditation?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is meditation?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is meditation?",
+     0.75
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0296-08-20?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0296-08-20?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is dispensing optician?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is dispensing optician?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is stuffed toy collecting?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is stuffed toy collecting?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is geoscientist?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is geoscientist?",
+     0.75
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0335-02-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0335-02-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0267-10-17?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0267-10-17?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0324-03-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0324-03-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is films?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is films?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is films?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is films?",
+     0.75
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0286-07-07?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0286-07-07?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is insurance account manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is gongoozling?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is gongoozling?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is gongoozling?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is gongoozling?",
+     0.75
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0261-12-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0261-12-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is geocaching?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is geocaching?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is geocaching?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is geocaching?",
+     0.75
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is leisure centre manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is gymnastics?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is gymnastics?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is gymnastics?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is gymnastics?",
+     0.75
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is wellsite geologist?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is wellsite geologist?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is sports administrator?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is sports administrator?",
+     0.6667
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0171-03-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0171-03-22?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0195-12-17?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0195-12-17?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0314-05-19?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0314-05-19?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is recycling officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is recycling officer?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is animation?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is animation?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is animation?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is animation?",
+     0.75
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is publishing copy?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is publishing copy?",
+     0.6667
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0174-10-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0174-10-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is chief marketing officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is civil engineer?",
+     0.7778
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is civil engineer?",
+     0.6667
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0240-11-01?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0240-11-01?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is art collecting?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is art collecting?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is art collecting?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is art collecting?",
+     0.6667
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0236-08-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0236-08-18?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is magnet fishing?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is magnet fishing?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is magnet fishing?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is magnet fishing?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is museum conservator?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is museum conservator?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is bookseller?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is bookseller?",
+     0.75
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0177-11-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0177-11-05?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0239-10-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0239-10-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0310-11-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is electrical engineer?",
+     0.7778
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is electrical engineer?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is microscopy?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is microscopy?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is microscopy?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is microscopy?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is shoes?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is shoes?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is shoes?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is shoes?",
+     0.75
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0210-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0210-01-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is development worker?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is development worker?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is model united nations?",
+     0.7
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is model united nations?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is model united nations?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0206-10-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0206-10-09?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0201-12-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0201-12-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is manufacturing systems engineer?",
+     0.7
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is manufacturing systems engineer?",
+     0.6
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0302-01-20?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0302-01-20?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0202-05-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0202-05-06?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is investment banker?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is investment banker?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is stage manager?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is stage manager?",
+     0.6667
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0265-04-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0265-04-23?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0246-05-08?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0246-05-08?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is wikipedia editing?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is wikipedia editing?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is wikipedia editing?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is wikipedia editing?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is research officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is research officer?",
+     0.6667
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0192-09-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0192-09-27?",
+     0.8
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is chief operating officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is rugby league football?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is rugby league football?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is ballet dancing?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is ballet dancing?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is ballet dancing?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is ballet dancing?",
+     0.6667
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0261-02-26?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0261-02-26?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0268-12-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0268-12-11?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0234-04-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0234-04-28?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is weightlifting?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is weightlifting?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is weightlifting?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is weightlifting?",
+     0.75
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is tennis polo?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is tennis polo?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is tennis polo?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is tennis polo?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is landscape architect?",
+     0.6
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is landscape architect?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is trading standards officer?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is mountain biking?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is mountain biking?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is mountain biking?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is mountain biking?",
+     0.6667
+    ],
+    [
+     "Who is the person whose date of birth is 0270-12-24?",
+     "Who is the person whose date of birth is 0234-04-21?",
+     0.8
+    ],
+    [
+     "Who is the person whose date of birth is 0324-07-03?",
+     "Who is the person whose date of birth is 0234-04-21?",
+     0.8
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is fossil hunting?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is fossil hunting?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is fossil hunting?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is fossil hunting?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is network engineer?",
+     "Who is the person whose occupation is proofreader?",
+     0.6667
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is proofreader?",
+     0.75
+    ],
+    [
+     "Who is the person whose occupation is doctor?",
+     "Who is the person whose occupation is historic buildings inspector?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is compact discs?",
+     "Who is the person whose hobby is race walking?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is model racing?",
+     "Who is the person whose hobby is race walking?",
+     0.6
+    ],
+    [
+     "Who is the person whose hobby is birdwatching?",
+     "Who is the person whose hobby is race walking?",
+     0.6667
+    ],
+    [
+     "Who is the person whose hobby is audiophile?",
+     "Who is the person whose hobby is race walking?",
+     0.6667
+    ]
+   ],
+   "near_dup_threshold": 0.6,
+   "verdict": "VOID"
+  },
+  "audit_on_attribute_values": {
+   "leakage": 0,
+   "exact_overlaps": [],
+   "near_dup_pairs": [],
+   "near_dup_threshold": 0.6,
+   "verdict": "CLEAN"
+  },
+  "template_artifact_note": "type6 questions share the 'Who is the person whose <attr> is' template (7/9 tokens), so raw-text token-Jaccard near-dups are expected artifacts; the binding criterion is exact question text and attribute-value overlap, both structurally 0 after pool dedup."
+ },
+ "timeline": {
+  "wake": [
+   {
+    "episode": 0,
+    "acc_with": 1,
+    "acc_without": 1,
+    "c0": 0.5
+   },
+   {
+    "episode": 1,
+    "acc_with": 1,
+    "acc_without": 0,
+    "c0": 1.0
+   },
+   {
+    "episode": 2,
+    "acc_with": 1,
+    "acc_without": 0,
+    "c0": 1.0
+   },
+   {
+    "episode": 3,
+    "acc_with": 1,
+    "acc_without": 0,
+    "c0": 1.0
+   },
+   {
+    "episode": 4,
+    "acc_with": 1,
+    "acc_without": 0,
+    "c0": 1.0
+   },
+   {
+    "episode": 5,
+    "acc_with": 1,
+    "acc_without": 0,
+    "c0": 1.0
+   },
+   {
+    "episode": 6,
+    "acc_with": 1,
+    "acc_without": 0,
+    "c0": 1.0
+   },
+   {
+    "episode": 7,
+    "acc_with": 1,
+    "acc_without": 0,
+    "c0": 1.0
+   }
+  ],
+  "sleep_snapshot_sha256": [
+   "d25f598eff08a9133fc73fec5be4b4b7e25d713b3244076792592322d377c259",
+   "7f1bb4b4d5ef905a3b624122df1558fa2a74e0284c9f7e122f30c355e4b3aeab",
+   "07ef78074ef0422f60cbce2f852f6acad195bfc721301f6c07e9de5fd7dc538e",
+   "38fb3be8811d788b39164e11789c99a7064fbab2f19690ea3c91e55231f5b752",
+   "1a4e6622b71e961302699afd536ca8d7e23c351046a86979aafa1422ee71f905",
+   "a6ae95708dca79c0f4a3043f7ff303a46a21813ccef126842baab9a8a5a568cc",
+   "f9eac6c59f4ddcd0cd4268c60596d1aaf58e6a0c64201af743d573b7b1ac7038"
+  ],
+  "final_store_A": [
+   {
+    "lesson_id": "5d9049ab3dc0d306",
+    "origin": 0,
+    "form": "gist",
+    "confidence": 0.5
+   },
+   {
+    "lesson_id": "f753879b351ba498",
+    "origin": 1,
+    "form": "gist",
+    "confidence": 0.5
+   },
+   {
+    "lesson_id": "47c6531cdca12094",
+    "origin": 2,
+    "form": "gist",
+    "confidence": 0.5
+   },
+   {
+    "lesson_id": "70bd6c1f4d9bb373",
+    "origin": 3,
+    "form": "full",
+    "confidence": 0.512
+   },
+   {
+    "lesson_id": "046acf1c03fb98b4",
+    "origin": 4,
+    "form": "full",
+    "confidence": 0.64
+   },
+   {
+    "lesson_id": "898ea6b8a377533a",
+    "origin": 5,
+    "form": "full",
+    "confidence": 0.8
+   },
+   {
+    "lesson_id": "f1fa61f0f0cd0f53",
+    "origin": 6,
+    "form": "full",
+    "confidence": 1.0
+   },
+   {
+    "lesson_id": "784b5fa65a9aae59",
+    "origin": 7,
+    "form": "full",
+    "confidence": 1.0
+   }
+  ]
+ },
+ "retention_curves": {
+  "lags": [
+   7,
+   6,
+   5,
+   4,
+   3,
+   2,
+   1,
+   0
+  ],
+  "R_detail": {
+   "A": [
+    0.16666666666666666,
+    0.08333333333333333,
+    0.08333333333333333,
+    0.9166666666666666,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "B": [
+    0.16666666666666666,
+    0.08333333333333333,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.08333333333333333,
+    0.0
+   ],
+   "C": [
+    0.25,
+    0.08333333333333333,
+    0.25,
+    0.9166666666666666,
+    1.0,
+    0.9166666666666666,
+    0.25,
+    1.0
+   ]
+  },
+  "R_gist": {
+   "A": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "B": [
+    1.0,
+    0.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.0,
+    1.0
+   ],
+   "C": [
+    1.0,
+    0.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ]
+  },
+  "base_detail": [
+   0.08333333333333333,
+   0.0,
+   0.0,
+   0.08333333333333333,
+   0.16666666666666666,
+   0.08333333333333333,
+   0.08333333333333333,
+   0.0
+  ],
+  "immediate_A_detail": [
+   1.0,
+   0.9166666666666666,
+   0.75,
+   0.75,
+   1.0,
+   0.9166666666666666,
+   1.0,
+   1.0
+  ]
+ },
+ "headroom_band": [
+  0.3,
+  0.7
+ ],
+ "headroom_band_ok": false,
+ "decay_slopes": {
+  "slope_A": -0.1577,
+  "slope_B": 0.0139,
+  "slope_C": -0.0972,
+  "A_minus_C": {
+   "diff": -0.0605,
+   "ci95": [
+    -0.0982,
+    -0.0238
+   ]
+  },
+  "A_minus_B": {
+   "diff": -0.1716,
+   "ci95": [
+    -0.2004,
+    -0.1419
+   ]
+  },
+  "method": "least-squares slope of R_detail(t) vs lag; paired bootstrap over per-lag case vectors (prereg hierarchical fit read as bootstrap slope CI)."
+ },
+ "judgment_conditions": {
+  "cond1_A_dominates_lag4plus_by_delta": false,
+  "cond2_A_slope_shallower_significant": false,
+  "lag4plus_indices": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "note": "evaluated at lags [7, 6, 5, 4]"
+ },
+ "kill_condition_observations": {
+  "f5_k1_B_within_delta_all_lags": true,
+  "f5_k2_A_minus_C_le_delta_all_lags": false,
+  "f5_k3_advantage_only_at_lag0": false,
+  "values": {
+   "gap_A_minus_B": [
+    0.0,
+    0.0,
+    0.0833,
+    0.9167,
+    1.0,
+    1.0,
+    0.9167,
+    1.0
+   ],
+   "gap_A_minus_C": [
+    -0.0833,
+    0.0,
+    -0.1667,
+    0.0,
+    0.0,
+    0.0833,
+    0.75,
+    0.0
+   ]
+  },
+  "note": "mechanical observation only; sealed judgment belongs to the gate"
+ },
+ "gist_detail_branch": {
+  "detail_slope_A": -0.1577,
+  "gist_slope_A": -0.0952,
+  "transformation_signature": false
+ },
+ "BWT_FWT": {
+  "BWT_per_episode": [
+   0.8333,
+   0.8333,
+   0.6667,
+   -0.1667,
+   0.0,
+   -0.0833,
+   0.0,
+   0.0
+  ],
+  "FWT_slope_immediate_over_episode": 0.0139,
+  "note": "GEM format: BWT = immediate minus final-lag retention per episode; FWT = slope of wake-time actuation over episodes."
+ },
+ "conflict_density": {
+  "injected_counts": [
+   0,
+   1,
+   2
+  ],
+  "accuracy_A_ref_episode": [
+   0.1667,
+   0.1667,
+   0.1667
+  ],
+  "note": "contradictory (inverted) lesson injection into arm A's render; resolution read as accuracy retention."
+ },
+ "cost_metric": {
+  "mean_context_chars": {
+   "A": 2349.0,
+   "B": 1574.875,
+   "C": 2230.0
+  },
+  "chars_per_correct_answer": {
+   "A": 3579.4,
+   "C": 3822.9,
+   "B": 37797.0
+  }
+ },
+ "parse_failures_total": 0,
+ "llm_budget": {
+  "max_calls": 1000,
+  "used": 795,
+  "answerer": {
+   "backend": "vllm",
+   "url": "http://127.0.0.1:18000/v1",
+   "model": "qwen3.6-27b",
+   "misses": 795,
+   "hits": 25
+  },
+  "total_logical": 820
+ },
+ "aborted": null,
+ "wall_clock_s": 6578.0
+}

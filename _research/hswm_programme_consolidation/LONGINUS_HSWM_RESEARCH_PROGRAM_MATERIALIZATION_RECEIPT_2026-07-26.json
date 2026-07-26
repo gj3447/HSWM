@@ -1,0 +1,106 @@
+{
+  "schema": "longinus-hswm-active-programme-materialization/v1",
+  "recorded_at": "2026-07-26T22:56:09+09:00",
+  "status": "PASS",
+  "scientific_status": "UNJUDGED",
+  "claim_boundary": "Engineering programme consolidation and reference integrity only; no scientific progress or canon verdict.",
+  "git": {
+    "hswm_materialization_base_commit": "e336128755e1e32711ab8ff0fd25330d496b74a2",
+    "hswm_branch": "main",
+    "hswm_remote": "https://github.com/gj3447/HSWM.git",
+    "symposium_contract_commit": "24cf359120a6a99a06cac2d2a1135f95ac8cb32f",
+    "skills_sync_commit": "989c3eda61cbd45a63c1de7459d6a10ae3edcd4f",
+    "lakatotree_preflight_commit": "f9c11405ee9bc1741f3e631ad86bea59708e3322",
+    "lakatotree_preflight_branch": "codex/hswm-authority-preflight-20260726"
+  },
+  "artifacts": {
+    "ledger": {
+      "path": "research/HSWM_RESEARCH_LEDGER.v1.json",
+      "sha256": "e79b277e9cc44ce51e983c76819278b8f4c0aee8e436a5aa8720b8d2358bc589"
+    },
+    "longinus_manifest": {
+      "path": "LONGINUS_HSWM_RESEARCH_PROGRAM_BINDING_2026-07-26.json",
+      "sha256": "fbb0e2e49fe11223861e2cc0ece537a2c97434a0d2ce91313b31c0afd341251a"
+    },
+    "longinus_verifier": {
+      "path": "_research/hswm_programme_consolidation/verify_hswm_research_programme_longinus.py",
+      "sha256": "285170f0bb9ce1ac85b936ff5596d09f6773f161491b5cfb2b3cacaf4ac76aec"
+    }
+  },
+  "validation": {
+    "research_ledger": {
+      "status": "PASS",
+      "active_tree": "LakatosTree_HSWM_20260719",
+      "hypotheses_checked": 7,
+      "artifacts_checked": 17,
+      "local_hashes_verified": true
+    },
+    "longinus": {
+      "status": "PASS",
+      "bindings_verified": 21,
+      "predecessors_verified": 3,
+      "required_gaps_preserved": 6,
+      "injected_negative_caught": true
+    },
+    "pytest": {
+      "command": "python3 -m pytest -q _research/hswm_programme_consolidation/test_verify_hswm_research_programme_longinus.py tests/test_hswm_research_ledger.py",
+      "passed": 21,
+      "failed": 0
+    },
+    "lean": {
+      "command": "cd formal && lake build HSWMDurableRuntime",
+      "status": "PASS",
+      "jobs": 4
+    }
+  },
+  "proxmox": {
+    "active_snapshot": "/opt/lakatotree/.runtime/research-20260726-224710",
+    "sync_receipt": {
+      "mappings": 23,
+      "verified": true,
+      "stale_mappings": []
+    },
+    "consecutive_syncs_verified": 2,
+    "authority_paths": {
+      "catalog": "/opt/lakatotree/.runtime/research-20260726-224710/HSWM",
+      "executable_ssot": "/opt/lakatotree/.runtime/research-20260726-224710/COMPAT_SOURCES/CDROOT/SYMPOSIUM/GIT/HSWM",
+      "legacy_replay": "/opt/lakatotree/.runtime/research-20260726-224710/ARCHIVED_SUPERSEDED/CDROOT/HSWM"
+    },
+    "legacy_archive": {
+      "sha256_manifest_digest": "a3f0d658e494dc33dbc9aaba5a50047aa17e729a861ae3ea387586d23c54d06a",
+      "digest_equal_across_two_syncs": true,
+      "writable_entries": 0,
+      "b21_script_sha256": "76af6dd849416e9410bc01f635047da0a1418902a1541c7ea0e516fcf7d31f88"
+    },
+    "judge": {
+      "service": "lakatotree.service",
+      "health": "ok",
+      "dependencies": {
+        "mongo": "ok",
+        "neo4j": "ok",
+        "pg": "ok"
+      },
+      "active_ssot_root_enabled": true,
+      "ssot_preflight": "PASS_NO_OUT_OF_ROOT",
+      "resolved_test_path": "/opt/lakatotree/.runtime/research-20260726-224710/COMPAT_SOURCES/CDROOT/SYMPOSIUM/GIT/HSWM/scripts/validate_hswm_research_ledger.py",
+      "server_env_backup": "/opt/lakatotree/server.env.pre-hswm-ssot-20260726-2250"
+    }
+  },
+  "lakatotree_event": {
+    "tree": "LakatosTree_HSWM_20260719",
+    "tag": "hswm-cellular-runtime-gap-map-20260726",
+    "event_id": "hswm-active-programme-ledger-longinus-sync-20260726-224710",
+    "event_uri": "LakatosTree_HSWM_20260719/hswm-cellular-runtime-gap-map-20260726/event/hswm-active-programme-ledger-longinus-sync-20260726-224710",
+    "realm": "git",
+    "action": "programme_consolidation",
+    "readback_count_for_tag": 2,
+    "readback_created_at": "2026-07-26T13:55:46.494491+00:00",
+    "verdict_mutation": false,
+    "scientific_status": "UNJUDGED"
+  },
+  "kg": {
+    "write_state": "PROPOSED_NOT_WRITTEN",
+    "proposal_path": "_research/hswm_programme_consolidation/KG_REFERENCE_SITE_PROPOSAL.cypher",
+    "reason": "The research request authorized integration work but did not explicitly authorize a Neo4j ReferenceSite mutation."
+  }
+}

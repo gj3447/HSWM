@@ -1,0 +1,243 @@
+{
+  "schema_version": "hswm-prereg-cpl1/v1",
+  "status": "DRAFT_SECONDARY_AI_PROPOSAL_USER_RATIFICATION_REQUIRED",
+  "experiment_id": "HSWM-CPL1",
+  "title": "Causal plastic LLM-function network with frozen-agent transfer",
+  "created_at": "2026-07-26",
+  "owner_question": "Can role-specific LLM functions, outcome-bound numeric Semantic Weight Map plasticity, and learned topology cause sealed unseen improvement and donor-specific transfer beyond equal-information text/vector baselines?",
+  "canon_preserved": {
+    "hswm_identity": "LLM-executed functions plus hypergraph H plus Semantic Weight Map W plus recurrent plastic state",
+    "model_parameters": "frozen",
+    "learning_target": "versioned external numeric W and H",
+    "not_claimed": [
+      "foundation-model parameter learning",
+      "general intelligence",
+      "universal superiority over flat or vector systems",
+      "sleep consolidation"
+    ]
+  },
+  "predecessor_evidence": [
+    "_research/prom9_runs/f1-2wiki-dev-r6-live/judgment.json",
+    "receipts/f2_delta_w_credit_sealed_1784960618.json",
+    "receipts/f3r3_agent_ab_transfer_sealed_1784996298.json",
+    "receipts/f3v2_dev_smoke_live_1785051784.json",
+    "receipts/f4_topology_learning_r2_sealed_1784992554.json",
+    "receipts/f5_consolidation_sealed_1784998952.json"
+  ],
+  "testbed": {
+    "base": "F3v2 procedural foundry worlds",
+    "required_extension": "two donor-exclusive latent procedural invariants plus common strata and composition-disjoint entity surfaces",
+    "scorer": "deterministic exact world simulator",
+    "splits": [
+      "development",
+      "sealed_train",
+      "sealed_fresh",
+      "sealed_retention",
+      "sealed_donor_exclusive",
+      "sealed_common"
+    ],
+    "disjointness_identity": "world content SHA-256 and entity/relation-program composition",
+    "baseline_headroom": [0.35, 0.65],
+    "minimum_independent_seeds": 5,
+    "sample_size_rule": "paired pilot variance must show power at least 0.80 for a 0.05 absolute effect; otherwise increase sealed clusters before machine lock"
+  },
+  "adoption_gate": {
+    "all_required": true,
+    "donor_vanilla_accuracy_min": 0.7,
+    "receiver_no_memory_accuracy_min": 0.35,
+    "receiver_no_memory_accuracy_max": 0.65,
+    "receiver_b_self_minus_no_memory_min": 0.15,
+    "placebo_minus_no_memory_abs_max": 0.05,
+    "donor_exclusive_stratum_gap_min": 0.2,
+    "on_failure": "do not seal; retune world difficulty without observing sealed items"
+  },
+  "function_contract": {
+    "foundation_model_shared": true,
+    "roles": {
+      "QF_QUERY_COMPILER": {
+        "reads": ["query", "relation_schema"],
+        "writes": ["goal_state", "executable_plan"],
+        "local_metric": "plan validity and simulator executability"
+      },
+      "BF_BOND_PROPOSER": {
+        "reads": ["goal_state", "opaque_candidate_features", "local_W_H_neighborhood"],
+        "writes": ["activation_trace", "selected_bond_ids"],
+        "forbidden_reads": ["gold", "answer_text", "full_evidence_body"],
+        "local_metric": "evidence utility on a gold-blind support split"
+      },
+      "AF_ANSWER_SYNTHESIZER": {
+        "reads": ["goal_state", "selected_evidence", "activation_trace"],
+        "writes": ["proposed_action_or_answer"],
+        "forbidden_reads": ["gold", "full_candidate_universe", "retrieval_score_table"],
+        "local_metric": "simulator outcome and evidence faithfulness"
+      }
+    },
+    "role_local_state": ["W_QF", "W_BF", "W_AF"],
+    "port_rule": "minimal canonical JSON sufficient statistic only",
+    "strong_flat_information": "union of all raw observations available across typed roles",
+    "fairness": [
+      "same model and revision",
+      "same raw-information union",
+      "same candidate library",
+      "same useful input plus output token envelope",
+      "same persistent active bytes",
+      "same outcome observations",
+      "no null-call or inert-padding credit toward useful compute"
+    ]
+  },
+  "plasticity_contract": {
+    "eligibility": {
+      "timing": "append-only before outcome",
+      "identity": "episode_id plus base_epoch_sha256 plus pre_outcome_receipt_sha256",
+      "fields": [
+        "activated_function_ids",
+        "activated_edge_or_hyperedge_ids",
+        "route_probabilities",
+        "activation_strengths"
+      ],
+      "post_outcome_creation_forbidden": true
+    },
+    "third_factor": {
+      "source": "independent exact simulator outcome",
+      "delta": "reward minus preregistered prediction baseline",
+      "natural_language_rationale_is_learning_state": false
+    },
+    "fast_weight_update": "theta_fast[e] <- clip(theta_fast[e] + eta_W * delta * eligibility[e] - lambda_W * theta_fast[e])",
+    "topology_update": "alpha[e] <- alpha[e] + eta_H * delta * eligibility[e] * (sampled_gate[e] - sigmoid(alpha[e])) - sparsity_penalty - homeostasis_penalty",
+    "topology_estimator": "logged-propensity score-function estimator; no end-to-end gradient claim",
+    "candidate_incidence_set_frozen_before_seal": true,
+    "slow_promotion": [
+      "fresh improvement",
+      "canary non-regression",
+      "retention loss within bound",
+      "CAS epoch commit",
+      "complete rollback receipt"
+    ],
+    "new_text_lesson_writeback_forbidden": true
+  },
+  "phase_A_role_causality": {
+    "arms": [
+      "learned_typed_roles",
+      "prompt_only_typed_roles",
+      "strongest_equal_information_flat",
+      "equal_information_vector_memory",
+      "matched_example_QF_state_interchange",
+      "matched_example_BF_state_interchange"
+    ],
+    "useful_token_budget_points": 3,
+    "primary_gate": {
+      "typed_minus_strongest_baseline_abs_min": 0.05,
+      "paired_bootstrap_lcb_gt": 0.0,
+      "QF_interchange_ace_lcb_gt": 0.0,
+      "BF_interchange_ace_lcb_gt": 0.0,
+      "counterfactual_direction_match_required": true,
+      "non_dominated_budget_points_min": 2
+    },
+    "kill": [
+      "learned typed equals prompt-only typed within ROPE plus or minus 0.02",
+      "QF or BF interchange preserves the full typed margin",
+      "typed wins only when flat or vector receives less information",
+      "typed is Pareto-dominated at all useful-token budgets"
+    ]
+  },
+  "phase_B_closed_loop": {
+    "arms": [
+      "FULL_eligibility_credit_W_H_slow_commit",
+      "FROZEN_no_W_H_write",
+      "STRONG_TEXT_VECTOR_same_outcomes",
+      "CREDIT_SHUFFLE_across_episodes",
+      "ELIGIBILITY_SHUFFLE_across_edges",
+      "W_ROLLBACK_to_pretrain_epoch",
+      "H_DEGREE_MATCHED_SHUFFLE_with_learned_W"
+    ],
+    "checkpoints": [0, 40, 80, 160, 240],
+    "primary_gate": {
+      "FULL_minus_FROZEN_abs_min": 0.05,
+      "FULL_minus_STRONG_TEXT_VECTOR_abs_min": 0.05,
+      "paired_cluster_bootstrap_lcb_gt": 0.0,
+      "unseen_learning_slope_lcb_gt": 0.0,
+      "credit_shuffle_gain_removed_min_fraction": 0.7,
+      "eligibility_shuffle_gain_removed_min_fraction": 0.7,
+      "W_rollback_gain_removed_min_fraction": 0.7,
+      "old_regime_retention_loss_max": 0.03,
+      "seed_direction_agreement_min": "4 of 5",
+      "post_verdict_route_divergence_min": 1
+    },
+    "topology_subclaim": {
+      "FULL_minus_H_SHUFFLE_rope": [-0.02, 0.02],
+      "inside_rope": "kill topology subclaim while allowing numeric W learning to survive",
+      "outside_positive_rope_with_lcb_gt_zero": "topology subclaim survives narrow"
+    },
+    "void": [
+      "baseline headroom outside adoption band",
+      "training answer or verdict text appears in a later prompt",
+      "post-outcome eligibility creation or mutation",
+      "model, candidate, information, useful-token, or active-byte parity failure",
+      "sealed split hash overlap"
+    ]
+  },
+  "phase_C_two_donor_transfer": {
+    "receiver": "byte-frozen model, prompt library, code, candidate schema, and initial W/H",
+    "packet_allowlist": [
+      "shared_schema_sha256",
+      "edge_or_hyperedge_id",
+      "numeric_delta",
+      "confidence",
+      "provenance_sha256"
+    ],
+    "packet_denylist": [
+      "donor transcript",
+      "training answer",
+      "verdict text",
+      "natural-language lesson",
+      "hidden cache",
+      "new prompt instruction"
+    ],
+    "arms": [
+      "B_no_memory",
+      "B_self_numeric_update",
+      "B_matched_donor_numeric_packet",
+      "B_capability_mismatched_donor_packet",
+      "B_source_shuffled_packet",
+      "B_token_matched_placebo_packet"
+    ],
+    "metrics": {
+      "G_match": "matched minus max(B_self, mismatched, source_shuffled, placebo)",
+      "DSI": "(matched minus mismatched on donor-exclusive strata) minus (matched minus mismatched on common strata)"
+    },
+    "primary_gate": {
+      "G_match_paired_lcb_gt": 0.0,
+      "DSI_paired_lcb_gt": 0.0,
+      "packet_removal_reverses_gain": true,
+      "prompt_forbidden_overlap_count": 0
+    },
+    "interpretation": {
+      "accuracy_gain_and_DSI_zero": "generic memory injection only",
+      "G_match_and_DSI_positive": "donor-specific numeric external-state transfer supported narrow"
+    }
+  },
+  "verdict_levels": {
+    "L0_RUNTIME_ONLY": "typed calls and receipts execute",
+    "L1_NEURAL_PLASTIC_NETWORK_SUPPORTED_NARROW": "phase A plus credit plus numeric W gates pass",
+    "L2_SHARED_HSWM_TRANSFER_SUPPORTED_NARROW": "L1 plus phase C G_match and DSI pass",
+    "L3_TOPOLOGY_PLASTICITY_SUPPORTED_NARROW": "L2 plus topology subclaim passes",
+    "REJECT_OR_NARROW": "report each failed seam independently; no averaged compensation"
+  },
+  "sleep_consolidation": {
+    "included": false,
+    "unlock_condition": "L1 and L2 pass with real numeric packets and provenance",
+    "reason": "F5 age-downscale was rejected; predictive replay requires a working plastic state first"
+  },
+  "ratification_and_lock": {
+    "current_state": "draft only",
+    "required_before_sealed_run": [
+      "user ratification",
+      "canonical JSON SHA-256 machine lock",
+      "dataset and candidate manifest hashes",
+      "model endpoint and revision freeze",
+      "power receipt",
+      "independent evaluator receipt",
+      "LakatoTree prediction registration"
+    ]
+  }
+}

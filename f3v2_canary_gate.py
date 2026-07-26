@@ -117,8 +117,9 @@ def _eval_model(chat, model: str, worlds: list[dict], seed: int,
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--endpoint", default="http://192.168.219.102:8000",
-                    help="donor endpoint")
+    ap.add_argument("--endpoint", default="http://192.168.0.23:8000",
+                    help="donor endpoint (dgx; LAN reverted to .0/24 on 2026-07-26, "
+                         "the .219.102 default from the router-swap window is dead)")
     ap.add_argument("--receiver-endpoint", default="",
                     help="receiver endpoint; default = --endpoint value")
     ap.add_argument("--donor-model", default="qwen3.6-27b")

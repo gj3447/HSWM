@@ -1,0 +1,89 @@
+{
+  "schema": "hswm-cellular-runtime-validation-receipt/v1",
+  "receipt_id": "hswm-cellular-runtime-validation-20260726",
+  "generated_at": "2026-07-26T00:00:00+09:00",
+  "status": "PASS",
+  "engineering_status": "VERIFIED_VERTICAL_SLICE",
+  "scientific_status": "UNJUDGED",
+  "baseline_parent": "fcd5fcd1ffb352817a3118757bf03b926c4ef205",
+  "artifacts": {
+    "lean_definition": "formal/HSWMRuntime.lean",
+    "python_runtime": "hswm_cellular_runtime.py",
+    "python_tests": "tests/test_hswm_cellular_runtime.py",
+    "engine_spec": "_research/hswm_cellular_runtime/engine_spec.v1.json",
+    "operator_document": "HSWM_CELLULAR_RUNTIME_V1_2026-07-26.md",
+    "longinus_manifest": "LONGINUS_HSWM_CELLULAR_RUNTIME_BINDING_2026-07-26.json",
+    "longinus_verifier": "formal/verify_hswm_cellular_runtime_longinus.py"
+  },
+  "validation": [
+    {
+      "command": "cd formal && lake build",
+      "status": "PASS",
+      "result": "Build completed successfully (4 jobs)."
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_hswm_cellular_runtime.py",
+      "status": "PASS",
+      "result": "11 passed"
+    },
+    {
+      "command": ".venv/bin/python formal/verify_hswm_cellular_runtime_longinus.py",
+      "status": "PASS",
+      "result": {
+        "bindings_checked_before_receipt_binding": 13,
+        "files_checked": 8,
+        "layers": 7,
+        "symbol_pairs_checked": 16,
+        "kg_write_state": "NOT_AUTHORIZED_NOT_WRITTEN"
+      }
+    },
+    {
+      "command": ".venv/bin/python validate_engine_spec.py _research/hswm_cellular_runtime/engine_spec.v1.json",
+      "status": "PASS",
+      "result": "0 warnings"
+    },
+    {
+      "command": "rg -n '\\b(sorry|admit)\\b' formal/HSWMRuntime.lean",
+      "status": "PASS",
+      "result": "NO_SORRY_OR_ADMIT"
+    },
+    {
+      "command": ".venv/bin/python -m py_compile hswm_cellular_runtime.py formal/verify_hswm_cellular_runtime_longinus.py",
+      "status": "PASS",
+      "result": "no diagnostics"
+    }
+  ],
+  "toolchain_resolution": [
+    {
+      "attempt": "python -m pytest",
+      "status": "ENVIRONMENT_FAILURE",
+      "cause": "No python command alias exists in this shell."
+    },
+    {
+      "attempt": "python3 -m pytest",
+      "status": "ENVIRONMENT_FAILURE",
+      "cause": "System Python is 3.9.6 while pyproject.toml requires Python >=3.11."
+    },
+    {
+      "attempt": ".venv/bin/python -m pytest",
+      "status": "PASS",
+      "cause": "Repository virtual environment provides Python 3.11.15."
+    }
+  ],
+  "proved_or_tested_boundary": [
+    "Version, budget, duplicate activation, registry, and packet-type admission",
+    "Request-to-effect and output-to-completion vertical path",
+    "Deterministic replay and payload-free state digest",
+    "Model adapter exclusion from decide and evolve",
+    "Lean-Python protocol token correspondence"
+  ],
+  "not_claimed": [
+    "Durable event storage or transactional outbox",
+    "Production small-LLM invocation",
+    "Result-to-credit-to-delta-weight learning closure",
+    "Agent-to-agent learned transfer",
+    "Learned topology rewiring",
+    "Long-term consolidation or sleep",
+    "A scientific verdict that HSWM is a larger AI"
+  ]
+}

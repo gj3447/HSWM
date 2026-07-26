@@ -1,0 +1,153 @@
+{
+  "schema_version": "engine-spec/v1",
+  "name": "HSWM Cellular Runtime Kernel",
+  "purpose": "Authorize, replay, and expose adapter effects for typed HSWM cell activations without allowing model calls or external mutation inside the reducer.",
+  "decision": {
+    "verdict": "engine",
+    "current_consumers": [
+      "formal/HSWMRuntime.lean executable specification",
+      "hswm_cellular_runtime.py injected CellPort adapter"
+    ],
+    "planned_consumers": [
+      "durable event-store adapter",
+      "small-LLM cell adapter",
+      "HSWM scheduler and semantic-synapse planner"
+    ],
+    "fit_evidence": [
+      "The boundary owns shared activation state, version checks, budgets, replay, and typed rejection semantics.",
+      "Formal and executable consumers require the same command-event-effect vocabulary.",
+      "Multiple model and persistence adapters can share the kernel without importing prompt or storage policy."
+    ],
+    "alternatives_considered": [
+      "A helper module was rejected because activation ordering, replay, and budget ownership are shared protocol concerns.",
+      "A model wrapper was rejected because model invocation is an external effect rather than kernel authority.",
+      "A full scheduler was deferred because scheduling and topology policy are explicit non-goals of slice 1."
+    ]
+  },
+  "boundary": {
+    "owns": "Typed activation admission, optimistic version checks, budget consumption, pending/completed correlation, deterministic replay, and effect description.",
+    "mechanism": "Pure decide(state, command), evolve(state, event), effects(event), and replay(initial, history) functions over versioned commands and events.",
+    "state_authority": "The committed event sequence is authoritative; slice 1 receives the replayed immutable state from its caller while a durable append port remains a promotion gate.",
+    "policy_outside": [
+      "Which cell to select or schedule",
+      "Prompt construction and decoding policy",
+      "Semantic weight update or credit assignment",
+      "Topology mutation and consolidation policy",
+      "LakatoTree scientific judgment"
+    ],
+    "non_goals": [
+      "Proving that connected cells constitute a larger AI",
+      "Proving semantic-weight causal mediation",
+      "Agent-to-agent learning transfer",
+      "Autonomous topology learning",
+      "Long-term consolidation or sleep"
+    ]
+  },
+  "model": {
+    "resources": [
+      "CellContract",
+      "PacketEnvelope",
+      "KernelState",
+      "PendingActivation",
+      "CompletedActivation"
+    ],
+    "work_units": [
+      "RequestCellStep command",
+      "RecordCellOutput command",
+      "CellStepRequested event",
+      "CellStepCompleted event",
+      "InvokeCell effect"
+    ]
+  },
+  "state_model": {
+    "version": "Monotone event sequence used for optimistic conflict rejection.",
+    "remaining_budget": "Natural-number authority consumed exactly once by each accepted request event.",
+    "pending": "Activation-correlated cell, input digest, and expected output type.",
+    "completed": "Activation-correlated output identity and digest; raw adapter state is excluded."
+  },
+  "protocol": {
+    "commands": [
+      "RequestCellStep(expected_version, activation_id, cell_id, input)",
+      "RecordCellOutput(expected_version, activation_id, output)"
+    ],
+    "events": [
+      "CellStepRequested(sequence, activation_id, cell_id, input, expected_output_type)",
+      "CellStepCompleted(sequence, activation_id, cell_id, output)"
+    ],
+    "effects": [
+      "InvokeCell(activation_id, cell_id, input, expected_output_type)"
+    ],
+    "versioning": "All v1 Python records use hswm-cellular-runtime/v1; breaking field or semantic changes require a new protocol version and replay migration."
+  },
+  "invariants": [
+    "Rejected commands emit no events, consume no budget, and expose no effects.",
+    "Every accepted event sequence equals the prior state version plus one.",
+    "An accepted request consumes exactly one budget unit and creates exactly one pending activation.",
+    "An activation identifier cannot be pending or completed twice.",
+    "Completion requires a pending activation and its declared output packet type.",
+    "Completion preserves remaining budget and removes the matching pending activation.",
+    "Only CellStepRequested exposes InvokeCell; CellStepCompleted exposes no effect.",
+    "Replay of the same initial state and ordered history yields the same state digest."
+  ],
+  "ports": [
+    "CellPort.invoke executes one InvokeCell effect and returns a typed PacketEnvelope.",
+    "Future EventStore atomically appends accepted events under expected version.",
+    "Future SnapshotStore accelerates replay without becoming authoritative."
+  ],
+  "runtime": {
+    "ordering": "Per kernel state, events are totally ordered by contiguous natural-number sequence.",
+    "concurrency": "Commands use optimistic expected_version checks; slice 1 has no internal threads or locks.",
+    "backpressure": "remaining_budget rejects new requests at zero; queue capacity and fair scheduling are outside this slice.",
+    "cancellation": "Not present in v1; cancellation requires a versioned command/event pair before implementation.",
+    "timeouts": "The pure kernel has no clock; adapter hosts own timeouts and must record any resulting terminal event in a later protocol version."
+  },
+  "durability": {
+    "persistence": "None in slice 1; callers retain ordered events. A durable EventStore is required before production use.",
+    "atomic_commit": "None in slice 1; effects must be dispatched only after the caller has committed the request event.",
+    "recovery": "Deterministic replay reconstructs state from an initial state and ordered history; crash recovery is not claimed until a durable store exists.",
+    "effect_idempotency": "activation_id provides first-write conflict detection; an outbox and adapter idempotency receipt remain a promotion gate.",
+    "migration": "Protocol v1 is immutable; a breaking change requires explicit event upcasters and golden replay tests."
+  },
+  "failure_model": [
+    "Stale versions, exhausted budget, duplicate activation, unknown cell, type mismatch, and unknown completion are typed rejections.",
+    "An invalid event that bypasses admission raises KernelInvariantError during Python replay.",
+    "Adapter failure occurs outside the reducer and cannot manufacture a completion event.",
+    "Crash-after-commit-before-effect and duplicate effect delivery remain open until durable outbox work."
+  ],
+  "observability": {
+    "traces": [
+      "activation_id correlation across request event, invoke effect, and completion event",
+      "event sequence and cell_id for each committed transition"
+    ],
+    "metrics": [
+      "accepted and rejected command counts by rejection reason",
+      "pending activation count and remaining budget",
+      "adapter latency outside the pure kernel"
+    ],
+    "redaction": "Receipts and state projections retain packet identifiers and SHA-256 digests but exclude packet payloads and model-private adapter state."
+  },
+  "security": [
+    "Packet payload and provenance must be canonical JSON before digesting.",
+    "Cell contracts are injected as trusted deterministic configuration for slice 1.",
+    "Reducers perform no filesystem, network, environment, random, clock, or subprocess access.",
+    "External adapters must enforce secret isolation and output-size limits before returning a packet."
+  ],
+  "verification": [
+    "Lean compilation with no sorry or admit for the command-event-effect invariants.",
+    "Python tests for the happy path, every v1 rejection family, deterministic replay, effect separation, and adapter injection.",
+    "Engine specification schema validation.",
+    "Longinus hash and symbol binding verification across Lean, Python, tests, specification, and receipt."
+  ],
+  "implementation_slices": [
+    "Slice 1 complete target: pure Lean and Python runtime kernel plus one injected CellPort vertical path.",
+    "Slice 2: atomic EventStore and transactional outbox with crash-window tests.",
+    "Slice 3: one small-LLM cell adapter with deterministic fixtures and bounded live smoke tests.",
+    "Slice 4: typed semantic-synapse planner that submits commands without gaining state authority."
+  ],
+  "falsifiers": [
+    "Collapse the engine to a helper module if versioned shared state, replay, and multiple adapters are removed.",
+    "Reject production promotion if a model call can occur before request-event commit.",
+    "Reject production promotion if crash replay can duplicate an external model invocation without an idempotency receipt.",
+    "Reject the Lean-Python correspondence claim if any named command, event, rejection, transition, or effect has divergent semantics."
+  ]
+}

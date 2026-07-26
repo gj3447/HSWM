@@ -1,0 +1,544 @@
+{
+  "schema_version": "hswm-research-ledger/v1",
+  "ledger_id": "HSWM_RESEARCH_LEDGER_V1_20260726",
+  "generated_at": "2026-07-26T22:18:01+09:00",
+  "programme_authority": {
+    "programme_id": "HSWM_RESEARCH_PROGRAMME",
+    "status": "ACTIVE",
+    "code_repository": "github.com/gj3447/HSWM",
+    "default_branch": "main",
+    "active_roots": [
+      {
+        "root_id": "hswm-code-authority",
+        "path": ".",
+        "role": "CODE_AUTHORITY"
+      },
+      {
+        "root_id": "hswm-ledger-authority",
+        "path": "research",
+        "role": "LEDGER_AUTHORITY"
+      }
+    ],
+    "claim_policy": "The ledger may consolidate evidence but may not promote a hypothesis beyond its independently judged and LakatoTree-read-back state. Engineering PASS is not scientific progress."
+  },
+  "active_tree": {
+    "tree_id": "LakatosTree_HSWM_20260719",
+    "status": "ACTIVE",
+    "authority_uri": "lakatotree://proxmox-lxc-301/LakatosTree_HSWM_20260719",
+    "host_role": "ADJUDICATION_AND_RECORD",
+    "claim_boundary": "Proxmox hosts the adjudication and record layer; DGX may execute heavy experiments but is not the programme authority."
+  },
+  "predecessor_trees": [
+    {
+      "tree_id": "LakatosTree_PromSearchHSWM_20260721",
+      "status": "PREDECESSOR",
+      "relation": "LINEAGE_ONLY",
+      "mutation_policy": "PRESERVE_NO_FORCE_MERGE",
+      "notes": "Preserved as search-layer research lineage. It is not an alternative active HSWM programme."
+    },
+    {
+      "tree_id": "LakatosTree_HSWM_SolidMultiAgent_20260722",
+      "status": "PREDECESSOR",
+      "relation": "LINEAGE_ONLY",
+      "mutation_policy": "PRESERVE_NO_FORCE_MERGE",
+      "notes": "Preserved as federated and multi-agent lineage. Its nodes must be linked, not silently copied or re-promoted."
+    }
+  ],
+  "source_roles": [
+    {
+      "source_id": "source-hswm-code",
+      "role": "CODE_AUTHORITY",
+      "uri": "repo://github.com/gj3447/HSWM/main",
+      "authority": "AUTHORITATIVE",
+      "write_policy": "READ_WRITE",
+      "notes": "The active code, machine preregistrations, receipts, validator, and this ledger live here."
+    },
+    {
+      "source_id": "source-symposium-hswm-catalogue",
+      "role": "RESEARCH_CATALOGUE",
+      "uri": "repo://SYMPOSIUM/HSWM",
+      "authority": "CATALOGUE_ONLY",
+      "write_policy": "READ_ONLY",
+      "notes": "Human-facing synthesis and lineage catalogue; it may point to this repository but does not override machine evidence."
+    },
+    {
+      "source_id": "source-hswm-canon-draft",
+      "role": "CANON_DESIGN_DRAFT",
+      "uri": "repo://SYMPOSIUM/THEORY/재배맨/HSWM_STANDARD.md",
+      "authority": "DRAFT_ONLY",
+      "write_policy": "READ_ONLY",
+      "notes": "DESIGN DRAFT, not a standard and not a scientific verdict."
+    },
+    {
+      "source_id": "source-lakatotree-proxmox",
+      "role": "ADJUDICATION_RECORD",
+      "uri": "lakatotree://proxmox-lxc-301:55170",
+      "authority": "AUTHORITATIVE",
+      "write_policy": "APPEND_ONLY",
+      "notes": "Single active LakatoTree adjudication and durable record plane."
+    },
+    {
+      "source_id": "source-dgx-runtime",
+      "role": "COMPUTE_RUNTIME",
+      "uri": "runtime://dgx/qwen3.6-27b",
+      "authority": "RUNTIME_ONLY",
+      "write_policy": "REMOTE_EXECUTION_ONLY",
+      "notes": "Heavy inference and sealed-run execution only; outputs require hash, judge, and Proxmox readback before promotion."
+    }
+  ],
+  "promotion_gate": {
+    "gate_id": "HSWM_PROMOTION_GATE_V1",
+    "fail_closed": true,
+    "required_for_states": [
+      "progressive",
+      "canonical"
+    ],
+    "ordered_requirements": [
+      "Freeze hypothesis, arms, metrics, kill conditions, budget, and judge before execution.",
+      "Pin every claimed preregistration and source artifact by SHA-256.",
+      "Pin the execution code by Git commit and record the runtime identity and budget.",
+      "Produce immutable evidence receipts with negative controls and leakage checks.",
+      "Run an independent judge whose receipt is distinct from the producer evidence.",
+      "Write and exactly read back the resulting verdict from the single active Proxmox LakatoTree.",
+      "Bind code, evidence, judge, Lakato node, and KG provenance through Longinus without rewriting predecessor history."
+    ],
+    "prohibitions": [
+      "No local self-asserted progressive or canonical state.",
+      "No promotion from an engineering PASS alone.",
+      "No post-hoc preregistration substitution.",
+      "No forced merge or deletion of predecessor trees.",
+      "No reuse of an old judge receipt for a changed preregistration, code hash, or evidence payload."
+    ]
+  },
+  "hypotheses": [
+    {
+      "hypothesis_id": "F1-larger-ai-baselines-and-retention",
+      "title": "F1 sealed comparative baseline and retention run",
+      "state": "running",
+      "claim_scope": "Tests whether the typed function-network condition beats frozen comparison arms under the sealed F1 protocol. No outcome is claimed while the remote suite is incomplete.",
+      "prereg_refs": [
+        {
+          "artifact_id": "artifact-f1-prereg-amend2",
+          "kind": "preregistration",
+          "path": "prom_search_hswm/evidence/PREREG_F1_sealed_typed_function_network_20260726_amend2.json",
+          "sha256": "2cee59f6bcebaed6a0ba50d5ddbebc330740f2ee0892f70daff1a30e3cda2cf4",
+          "availability": "present",
+          "claim_boundary": "Latest local machine-lock amendment; it is a protocol artifact, not a result."
+        }
+      ],
+      "source_refs": [],
+      "evidence_refs": [],
+      "judge_refs": [],
+      "lakato_refs": [],
+      "git": {
+        "repository": "github.com/gj3447/HSWM",
+        "branch": "main",
+        "ledger_base_commit": "62cced44f38987a7986eb28bf0040b64dc0b3ac6",
+        "notes": "The ledger base commit is known; the DGX runtime checkout was not read back and is therefore not asserted."
+      },
+      "runtime": {
+        "execution_host": "dgx",
+        "control_plane": "proxmox-lxc-301-lakatotree",
+        "status": "RUNNING_REMOTE_PID_1516224_NO_SUITE_RECEIPT_YET",
+        "observed_at": "2026-07-26T22:18:01+09:00",
+        "notes": "Observed by read-only SSH: qwen3.6-27b suite process active with max-workers=2; run.log empty and suite.json absent at observation time."
+      },
+      "supersedes": [
+        "F1.sealed-r1",
+        "F1.sealed-r2"
+      ],
+      "next_falsifier": {
+        "falsifier_id": "falsifier-f1-sealed-r3",
+        "test": "Finish the locked suite, run the frozen independent judge, and submit the result to the active LakatoTree without changing arms or thresholds.",
+        "kill_condition": "Any preregistered F1 kill condition fires, the run cannot be replayed, or the judge and producer receipts disagree.",
+        "dependency_ids": []
+      },
+      "caveats": [
+        "A live process is not evidence of a completed experiment.",
+        "No result, judge receipt, or LakatoTree verdict was present at the observation time.",
+        "Runtime checkout SHA remains unknown and must be captured before promotion."
+      ]
+    },
+    {
+      "hypothesis_id": "durable-cell-runtime",
+      "title": "Durable HSWM LLM-cell execution substrate",
+      "state": "engineering_validated",
+      "claim_scope": "A SQLite event store, transactional outbox, typed CellPort, replay, and one live qwen3.6-27b activation satisfy the preregistered engineering fault gates. This is infrastructure, not evidence that HSWM forms a larger AI.",
+      "prereg_refs": [
+        {
+          "artifact_id": "artifact-durable-runtime-prereg-v2",
+          "kind": "preregistration",
+          "path": "_research/hswm_cellular_runtime/PREREG_HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.json",
+          "sha256": "9917b092eb7b599a611ee2f5dfb4ec9e7f1a4c3858a5f56dbf6ca14144e6ab22",
+          "availability": "present",
+          "claim_boundary": "Engineering fault-gate preregistration only."
+        }
+      ],
+      "source_refs": [
+        {
+          "artifact_id": "artifact-durable-runtime-design",
+          "kind": "source",
+          "path": "HSWM_CELLULAR_DURABLE_RUNTIME_V2_2026-07-26.md",
+          "sha256": "70c0a4c659b06472bd4dc3f47bbc2ff36a380df7ef2ee0bc930090390fb01334",
+          "availability": "present",
+          "claim_boundary": "As-built engineering description with explicit scientific non-claims."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "artifact_id": "artifact-durable-runtime-validation",
+          "kind": "evidence_receipt",
+          "path": "receipts/HSWM_CELLULAR_DURABLE_RUNTIME_VALIDATION_20260726.json",
+          "sha256": "d87d5f895e43d810c34d888e42385cd55e6ea6b498e9d3d4d4075f2dab6e7af5",
+          "availability": "present",
+          "claim_boundary": "Validates engineering fault gates and one live model probe; scientific_status remains UNJUDGED."
+        }
+      ],
+      "judge_refs": [],
+      "lakato_refs": [
+        {
+          "artifact_id": "artifact-durable-runtime-lakato-readback",
+          "kind": "lakatotree_readback",
+          "path": "receipts/HSWM_CELLULAR_LAKATOTREE_READBACK_20260726.json",
+          "sha256": "6b139f2f35fb38ff3be578fd2f9c98b449646b616fd8bffcec818930c9b6f0e7",
+          "availability": "present",
+          "claim_boundary": "Exact readback of DRAFT/UNJUDGED programme structure; no scientific-progress verdict."
+        }
+      ],
+      "git": {
+        "repository": "github.com/gj3447/HSWM",
+        "branch": "main",
+        "ledger_base_commit": "62cced44f38987a7986eb28bf0040b64dc0b3ac6",
+        "runtime_commit": "62cced44f38987a7986eb28bf0040b64dc0b3ac6",
+        "notes": "Durable runtime implementation and receipts are included in this commit."
+      },
+      "runtime": {
+        "execution_host": "mac-and-qwen-compatible-endpoint",
+        "control_plane": "proxmox-lxc-301-lakatotree",
+        "status": "ENGINEERING_PASS_SCIENTIFICALLY_UNJUDGED",
+        "observed_at": "2026-07-26T22:18:01+09:00",
+        "notes": "Local Python, Lean, FSM, loop-contract, fault-probe, and Longinus checks passed before the base commit."
+      },
+      "supersedes": [
+        "hswm-cellular-runtime-v1-in-memory"
+      ],
+      "next_falsifier": {
+        "falsifier_id": "falsifier-durable-runtime-recovery",
+        "test": "Inject stale IN_FLIGHT leases, process interruption, schema migration, and endpoint unknown-outcome cases across restart boundaries.",
+        "kill_condition": "Any accepted command is lost, duplicated without detection, silently retried after unknown outcome, or becomes unreplayable after a supported migration.",
+        "dependency_ids": []
+      },
+      "caveats": [
+        "Durable approval ownership, lease expiry, and forward migrations remain incomplete.",
+        "Exactly-once model execution is not claimed.",
+        "The runtime does not yet implement result-to-credit-to-delta-W learning."
+      ]
+    },
+    {
+      "hypothesis_id": "semantic-weight-metric-contract",
+      "title": "Semantic-weight metric contract",
+      "state": "planned",
+      "claim_scope": "Defines a comparable, machine-checkable meaning for semantic operator weight and the ablations required to distinguish it from prompt context, scalar confidence, topology, and embedding similarity.",
+      "prereg_refs": [],
+      "source_refs": [
+        {
+          "artifact_id": "artifact-semantic-weight-prom16",
+          "kind": "source",
+          "path": "PROM_16_HSWM_SEMANTIC_WEIGHT_FIELD_MATHEMATICS_2026-07-26.md",
+          "sha256": "8a33af2adc08f97bf15867ea1a3d7dac3afaae56193c6315460716872a97e8a8",
+          "availability": "present",
+          "claim_boundary": "Mathematical research synthesis and proposal; not a frozen metric contract or experimental verdict."
+        },
+        {
+          "artifact_id": "artifact-semantic-weight-field-v0",
+          "kind": "source",
+          "path": "prom_search_hswm/evidence/HSWM_SEMANTIC_WEIGHT_FIELD_V0_20260726.json",
+          "sha256": "bd0c13780c87006c078ab6e710fe3c0714468745caa6513f349ca926e538a5ff",
+          "availability": "present",
+          "claim_boundary": "Version-zero field definition evidence; it does not close the metric or causal comparison."
+        }
+      ],
+      "evidence_refs": [],
+      "judge_refs": [],
+      "lakato_refs": [],
+      "git": {
+        "repository": "github.com/gj3447/HSWM",
+        "branch": "main",
+        "ledger_base_commit": "62cced44f38987a7986eb28bf0040b64dc0b3ac6",
+        "notes": "Source mathematics is pinned; the executable metric contract does not yet exist."
+      },
+      "runtime": {
+        "execution_host": "not-scheduled",
+        "control_plane": "proxmox-lxc-301-lakatotree",
+        "status": "PLANNED_NO_PREREGISTRATION",
+        "observed_at": "2026-07-26T22:18:01+09:00",
+        "notes": "Lightweight contract work should precede another heavy run."
+      },
+      "supersedes": [],
+      "next_falsifier": {
+        "falsifier_id": "falsifier-semantic-weight-identifiability",
+        "test": "Freeze equal-information and equal-compute arms for full W, W removed, W shuffled, scalar weight, topology-only, and strongest full-context or vector baseline.",
+        "kill_condition": "The metric cannot distinguish learned W from shuffled or removed W after controlling context, calls, tokens, topology, and information exposure.",
+        "dependency_ids": [
+          "F1-larger-ai-baselines-and-retention"
+        ]
+      },
+      "caveats": [
+        "Existing formulas are definitions and proposals, not an agreed measurement contract.",
+        "No preregistered ablation currently establishes semantic identifiability.",
+        "Embedding similarity must not be silently relabelled as learned semantic weight."
+      ]
+    },
+    {
+      "hypothesis_id": "operator-W-causal-mediation",
+      "title": "Outcome to credit to delta-W to later behavior causal closure",
+      "state": "planned",
+      "claim_scope": "Asks whether a committed semantic operator-weight update mediates fresh behavior, and whether removal or shuffling of that update erases the gain. F2 is precursor evidence only.",
+      "prereg_refs": [],
+      "source_refs": [
+        {
+          "artifact_id": "artifact-operator-w-precursor-prereg",
+          "kind": "source",
+          "path": "repo://SYMPOSIUM/HSWM/PREREG_F2_F5_UNPROVEN_CLAIMS_2026-07-25.md",
+          "sha256": "bd0921cc5a7d8fcfc4a6547a835144a579f5e541c531edb751fad9b94b4431b1",
+          "availability": "external_unverified",
+          "claim_boundary": "Historical combined preregistration is a precursor, not the required operator-W removal and restoration protocol."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "artifact_id": "artifact-operator-w-f2-precursor",
+          "kind": "evidence_receipt",
+          "path": "receipts/f2_delta_w_credit_sealed_1784960618.json",
+          "sha256": "9a3c0721e8111b0cec1d765d7373a9aae3300e4efab4e4bf5630443866eddf80",
+          "availability": "present",
+          "claim_boundary": "F2 measured credit-informed editing above controls, but its receipt explicitly defers scientific judgment and does not test durable operator-W mediation."
+        }
+      ],
+      "judge_refs": [],
+      "lakato_refs": [],
+      "git": {
+        "repository": "github.com/gj3447/HSWM",
+        "branch": "main",
+        "ledger_base_commit": "62cced44f38987a7986eb28bf0040b64dc0b3ac6",
+        "notes": "Durable execution substrate exists, but no operator-W mediation implementation or frozen causal preregistration is pinned."
+      },
+      "runtime": {
+        "execution_host": "not-scheduled",
+        "control_plane": "proxmox-lxc-301-lakatotree",
+        "status": "BLOCKED_BY_METRIC_CONTRACT",
+        "observed_at": "2026-07-26T22:18:01+09:00",
+        "notes": "The next scientific run must wait for the semantic-weight metric contract and F1 result handling."
+      },
+      "supersedes": [],
+      "next_falsifier": {
+        "falsifier_id": "falsifier-operator-w-removal-restoration",
+        "test": "On frozen fresh tasks, commit outcome-derived delta-W, measure later behavior, remove or shuffle only W, then restore the exact W snapshot under equal context and compute.",
+        "kill_condition": "Delta-W yields no fresh-behavior gain, W removal or shuffling erases less than 70 percent of any gain, restoration does not recover it, or a context-only control matches the effect.",
+        "dependency_ids": [
+          "semantic-weight-metric-contract",
+          "durable-cell-runtime"
+        ]
+      },
+      "caveats": [
+        "F2 credit correlation is not proof that W caused later behavior.",
+        "No closed-loop outcome-to-credit-to-delta-W runtime path has been independently judged.",
+        "The 70 percent mediation threshold is a proposed next gate and must be frozen before data collection."
+      ]
+    },
+    {
+      "hypothesis_id": "weight-only-agent-transfer",
+      "title": "Agent A to Agent B learned transfer",
+      "state": "exploratory_refuted",
+      "claim_scope": "The sealed F3 r3 environment found no donor-specific gain or survival beyond B-self. This refutes transfer in that testbed, not the universal possibility of transfer.",
+      "prereg_refs": [
+        {
+          "artifact_id": "artifact-transfer-f3v2-prereg",
+          "kind": "preregistration",
+          "path": "prom_search_hswm/evidence/PREREG_F3V2_harder_transfer_20260726.json",
+          "sha256": "e03f3168c5fd8b17625573883f6545fd26f7d70734f522aff18d10db23a4d9b2",
+          "availability": "present",
+          "claim_boundary": "Successor harder-transfer preregistration; it does not alter the negative F3 r3 result and has no sealed result yet."
+        }
+      ],
+      "source_refs": [],
+      "evidence_refs": [
+        {
+          "artifact_id": "artifact-transfer-f3r3-sealed",
+          "kind": "evidence_receipt",
+          "path": "receipts/f3r3_agent_ab_transfer_sealed_1784996298.json",
+          "sha256": "6ae8ea68428c61cc5b6b283fed48ffe926a69bda0e43b74ecb489a0b461a9663",
+          "availability": "present",
+          "claim_boundary": "Mechanical sealed measurement reports F3 K1 and K2 firing with G=0 and S=0; the receipt says formal judgment belongs to the gate."
+        }
+      ],
+      "judge_refs": [],
+      "lakato_refs": [],
+      "git": {
+        "repository": "github.com/gj3447/HSWM",
+        "branch": "main",
+        "ledger_base_commit": "62cced44f38987a7986eb28bf0040b64dc0b3ac6",
+        "notes": "F3 r3 receipt and F3v2 machine preregistration are present; no successor sealed verdict is asserted."
+      },
+      "runtime": {
+        "execution_host": "dgx-for-sealed-r3-and-local-dev-for-f3v2",
+        "control_plane": "proxmox-lxc-301-lakatotree",
+        "status": "R3_NEGATIVE_F3V2_NOT_SEALED",
+        "observed_at": "2026-07-26T22:18:01+09:00",
+        "notes": "The harder F3v2 apparatus exists, but transfer should not be promoted ahead of operator-W causal mediation."
+      },
+      "supersedes": [
+        "F3.agent-transfer-r1",
+        "F3.agent-transfer-r2"
+      ],
+      "next_falsifier": {
+        "falsifier_id": "falsifier-weight-only-transfer-after-mediation",
+        "test": "After operator-W mediation passes, transfer only the authenticated learned W packet from donor A to a frozen receiver B and compare against B-self, raw-log, placebo, and context controls on fresh tasks.",
+        "kill_condition": "Donor-specific transfer gain is non-positive, survival is non-positive, B-self matches the donor packet, or the receiver succeeds only when raw donor context is exposed.",
+        "dependency_ids": [
+          "operator-W-causal-mediation"
+        ]
+      },
+      "caveats": [
+        "Current negative evidence is environment-specific.",
+        "The successor F3v2 preregistration has not produced a sealed result.",
+        "Weight-only transfer is not meaningful until the transferred W is itself causally identified."
+      ]
+    },
+    {
+      "hypothesis_id": "topology-causal-mediation",
+      "title": "Learned topology rewiring causes behavior",
+      "state": "exploratory_supported",
+      "claim_scope": "The F4 r2 receipt reports a learned sparse topology above shuffled, clique, and random controls, but the ledger does not treat this as a programme-level causal verdict without a pinned independent judge and full mediation isolation.",
+      "prereg_refs": [
+        {
+          "artifact_id": "artifact-topology-combined-prereg",
+          "kind": "preregistration",
+          "path": "repo://SYMPOSIUM/HSWM/PREREG_F2_F5_UNPROVEN_CLAIMS_2026-07-25.md",
+          "sha256": "bd0921cc5a7d8fcfc4a6547a835144a579f5e541c531edb751fad9b94b4431b1",
+          "availability": "external_unverified",
+          "claim_boundary": "Historical combined preregistration pointer; the exact local preregistration file named inside the receipt is absent from the active code root."
+        }
+      ],
+      "source_refs": [
+        {
+          "artifact_id": "artifact-topology-research-source",
+          "kind": "source",
+          "path": "PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md",
+          "sha256": "cbdc87a29320b19c3e0878efbe05d79f6fca072c86cfeee69201a2e941e14479",
+          "availability": "present",
+          "claim_boundary": "Research synthesis and mechanism proposal, not a scientific verdict."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "artifact_id": "artifact-topology-f4r2-sealed",
+          "kind": "evidence_receipt",
+          "path": "receipts/f4_topology_learning_r2_sealed_1784992554.json",
+          "sha256": "1807045d60e178f4ddb2a001ac38b126ed41f929b26e9647570f149a3b8e5278",
+          "availability": "present",
+          "claim_boundary": "Mechanical F4 r2 measurements are positive, while the receipt explicitly reserves judgment and records headroom_band_ok=false."
+        }
+      ],
+      "judge_refs": [],
+      "lakato_refs": [],
+      "git": {
+        "repository": "github.com/gj3447/HSWM",
+        "branch": "main",
+        "ledger_base_commit": "62cced44f38987a7986eb28bf0040b64dc0b3ac6",
+        "notes": "The evidence receipt is pinned; no independent judge receipt is claimed by this active ledger."
+      },
+      "runtime": {
+        "execution_host": "dgx-sealed-run",
+        "control_plane": "proxmox-lxc-301-lakatotree",
+        "status": "EXPLORATORY_POSITIVE_NOT_PROMOTED",
+        "observed_at": "2026-07-26T22:18:01+09:00",
+        "notes": "No new topology run is scheduled before semantic-W and operator-W mediation gates."
+      },
+      "supersedes": [
+        "F4.topology-r1"
+      ],
+      "next_falsifier": {
+        "falsifier_id": "falsifier-topology-intervention-mediation",
+        "test": "Freeze W values and all information exposure, intervene only on learned topology, degree-preserving shuffle, clique, and random sparse controls, and measure behavior plus a topology-removal restoration curve.",
+        "kill_condition": "A matched control catches the learned graph, confidence intervals include zero, the effect disappears after W is frozen, or topology restoration fails to restore the effect.",
+        "dependency_ids": [
+          "operator-W-causal-mediation"
+        ]
+      },
+      "caveats": [
+        "Positive mechanical observations are not equivalent to an independent causal verdict.",
+        "The sealed receipt reports headroom_band_ok=false.",
+        "Topology and semantic weight effects may be confounded until operator-W mediation is isolated."
+      ]
+    },
+    {
+      "hypothesis_id": "long-term-consolidation-sleep",
+      "title": "Long-term consolidation or sleep improves retention",
+      "state": "exploratory_refuted",
+      "claim_scope": "The sealed F5 environment fired K1: append-only remained within the preregistered delta of the wake-plus-sleep arm. This rejects the tested downscale-style consolidation operator, not all possible consolidation mechanisms.",
+      "prereg_refs": [
+        {
+          "artifact_id": "artifact-consolidation-combined-prereg",
+          "kind": "preregistration",
+          "path": "repo://SYMPOSIUM/HSWM/PREREG_F2_F5_UNPROVEN_CLAIMS_2026-07-25.md",
+          "sha256": "bd0921cc5a7d8fcfc4a6547a835144a579f5e541c531edb751fad9b94b4431b1",
+          "availability": "external_unverified",
+          "claim_boundary": "Historical F5 preregistration pointer; the exact local machine preregistration named in the receipt is absent from the active code root."
+        }
+      ],
+      "source_refs": [
+        {
+          "artifact_id": "artifact-consolidation-f5v2-draft",
+          "kind": "source",
+          "path": "repo://SYMPOSIUM/HSWM/PREREG_F5V2_RETRIEVAL_TIME_CONSOLIDATION_2026-07-26.md",
+          "sha256": "cf403d95733ad01d8feb50557481d1ebf8af93014158dc18ef3d5055f454f9d2",
+          "availability": "external_unverified",
+          "claim_boundary": "Successor F5v2 design draft is unregistered and unmeasured; it cannot supersede the negative F5 result."
+        }
+      ],
+      "evidence_refs": [
+        {
+          "artifact_id": "artifact-consolidation-f5-sealed",
+          "kind": "evidence_receipt",
+          "path": "receipts/f5_consolidation_sealed_1784998952.json",
+          "sha256": "3acec13a80e0701a371e5e6d58fed974f78e42223a1427e034c4ddb5c1619745",
+          "availability": "present",
+          "claim_boundary": "Mechanical sealed measurement fires F5 K1; the receipt reserves formal judgment for the gate."
+        }
+      ],
+      "judge_refs": [],
+      "lakato_refs": [],
+      "git": {
+        "repository": "github.com/gj3447/HSWM",
+        "branch": "main",
+        "ledger_base_commit": "62cced44f38987a7986eb28bf0040b64dc0b3ac6",
+        "notes": "The negative F5 evidence is pinned; F5v2 remains an external draft pointer only."
+      },
+      "runtime": {
+        "execution_host": "dgx-sealed-run",
+        "control_plane": "proxmox-lxc-301-lakatotree",
+        "status": "TESTED_OPERATOR_KILLED_SUCCESSOR_UNREGISTERED",
+        "observed_at": "2026-07-26T22:18:01+09:00",
+        "notes": "No successor consolidation run should start before operator-W and topology causal gates."
+      },
+      "supersedes": [
+        "F5.consolidation-smoke"
+      ],
+      "next_falsifier": {
+        "falsifier_id": "falsifier-consolidation-retrieval-time-v2",
+        "test": "After upstream causal gates pass, preregister durable query-agnostic slow-W or topology consolidation against append-only, no-op, and strong retrieval controls across lags with cost and false-memory metrics.",
+        "kill_condition": "The consolidation arm remains within delta of append-only at all lags, loses to a no-op or strong retrieval control, improves only at lag zero, increases false memory, or violates the frozen cost envelope.",
+        "dependency_ids": [
+          "operator-W-causal-mediation",
+          "topology-causal-mediation"
+        ]
+      },
+      "caveats": [
+        "The current result rejects one downscale-style operator and one environment, not consolidation in general.",
+        "The F5v2 draft is neither registered nor measured.",
+        "Long-term claims require multiple lags, retention curves, cost accounting, and false-memory guards."
+      ]
+    }
+  ]
+}

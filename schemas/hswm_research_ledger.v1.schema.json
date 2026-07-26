@@ -1,0 +1,460 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/gj3447/HSWM/schemas/hswm_research_ledger.v1.schema.json",
+  "title": "HSWM Research Ledger v1",
+  "description": "A fail-closed, evidence-bounded ledger for one active HSWM Lakatos research programme.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ledger_id",
+    "generated_at",
+    "programme_authority",
+    "active_tree",
+    "predecessor_trees",
+    "source_roles",
+    "promotion_gate",
+    "hypotheses"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "hswm-research-ledger/v1"
+    },
+    "ledger_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "programme_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "programme_id",
+        "status",
+        "code_repository",
+        "default_branch",
+        "active_roots",
+        "claim_policy"
+      ],
+      "properties": {
+        "programme_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "status": {
+          "const": "ACTIVE"
+        },
+        "code_repository": {
+          "type": "string",
+          "minLength": 1
+        },
+        "default_branch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "active_roots": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["root_id", "path", "role"],
+            "properties": {
+              "root_id": {
+                "$ref": "#/$defs/identifier"
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role": {
+                "enum": ["CODE_AUTHORITY", "LEDGER_AUTHORITY"]
+              }
+            }
+          }
+        },
+        "claim_policy": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "active_tree": {
+      "$ref": "#/$defs/activeTree"
+    },
+    "predecessor_trees": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/predecessorTree"
+      }
+    },
+    "source_roles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/sourceRole"
+      }
+    },
+    "promotion_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gate_id",
+        "fail_closed",
+        "required_for_states",
+        "ordered_requirements",
+        "prohibitions"
+      ],
+      "properties": {
+        "gate_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "fail_closed": {
+          "const": true
+        },
+        "required_for_states": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "enum": ["progressive", "canonical"]
+          },
+          "uniqueItems": true
+        },
+        "ordered_requirements": {
+          "type": "array",
+          "minItems": 6,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "prohibitions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "hypotheses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/hypothesis"
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "artifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_id",
+        "kind",
+        "path",
+        "sha256",
+        "availability",
+        "claim_boundary"
+      ],
+      "properties": {
+        "artifact_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "kind": {
+          "enum": [
+            "preregistration",
+            "source",
+            "evidence_receipt",
+            "judge_receipt",
+            "lakatotree_readback"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "availability": {
+          "enum": ["present", "remote", "external_unverified"]
+        },
+        "claim_boundary": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "activeTree": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tree_id",
+        "status",
+        "authority_uri",
+        "host_role",
+        "claim_boundary"
+      ],
+      "properties": {
+        "tree_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "status": {
+          "const": "ACTIVE"
+        },
+        "authority_uri": {
+          "type": "string",
+          "minLength": 1
+        },
+        "host_role": {
+          "const": "ADJUDICATION_AND_RECORD"
+        },
+        "claim_boundary": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "predecessorTree": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tree_id",
+        "status",
+        "relation",
+        "mutation_policy",
+        "notes"
+      ],
+      "properties": {
+        "tree_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "status": {
+          "const": "PREDECESSOR"
+        },
+        "relation": {
+          "const": "LINEAGE_ONLY"
+        },
+        "mutation_policy": {
+          "const": "PRESERVE_NO_FORCE_MERGE"
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "sourceRole": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "role",
+        "uri",
+        "authority",
+        "write_policy",
+        "notes"
+      ],
+      "properties": {
+        "source_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "role": {
+          "enum": [
+            "CODE_AUTHORITY",
+            "RESEARCH_CATALOGUE",
+            "CANON_DESIGN_DRAFT",
+            "ADJUDICATION_RECORD",
+            "COMPUTE_RUNTIME"
+          ]
+        },
+        "uri": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authority": {
+          "enum": ["AUTHORITATIVE", "CATALOGUE_ONLY", "DRAFT_ONLY", "RUNTIME_ONLY"]
+        },
+        "write_policy": {
+          "enum": ["READ_WRITE", "READ_ONLY", "APPEND_ONLY", "REMOTE_EXECUTION_ONLY"]
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "hypothesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hypothesis_id",
+        "title",
+        "state",
+        "claim_scope",
+        "prereg_refs",
+        "source_refs",
+        "evidence_refs",
+        "judge_refs",
+        "lakato_refs",
+        "git",
+        "runtime",
+        "supersedes",
+        "next_falsifier",
+        "caveats"
+      ],
+      "properties": {
+        "hypothesis_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state": {
+          "enum": [
+            "planned",
+            "running",
+            "engineering_validated",
+            "exploratory_supported",
+            "exploratory_refuted",
+            "partial",
+            "progressive",
+            "canonical",
+            "abandoned"
+          ]
+        },
+        "claim_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prereg_refs": {
+          "$ref": "#/$defs/artifactRefs"
+        },
+        "source_refs": {
+          "$ref": "#/$defs/artifactRefs"
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/artifactRefs"
+        },
+        "judge_refs": {
+          "$ref": "#/$defs/artifactRefs"
+        },
+        "lakato_refs": {
+          "$ref": "#/$defs/artifactRefs"
+        },
+        "git": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repository", "branch", "ledger_base_commit", "notes"],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "minLength": 1
+            },
+            "branch": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ledger_base_commit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "runtime_commit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "notes": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "runtime": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["execution_host", "control_plane", "status", "observed_at", "notes"],
+          "properties": {
+            "execution_host": {
+              "type": "string",
+              "minLength": 1
+            },
+            "control_plane": {
+              "type": "string",
+              "minLength": 1
+            },
+            "status": {
+              "type": "string",
+              "minLength": 1
+            },
+            "observed_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "notes": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "supersedes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          },
+          "uniqueItems": true
+        },
+        "next_falsifier": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["falsifier_id", "test", "kill_condition", "dependency_ids"],
+          "properties": {
+            "falsifier_id": {
+              "$ref": "#/$defs/identifier"
+            },
+            "test": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kill_condition": {
+              "type": "string",
+              "minLength": 1
+            },
+            "dependency_ids": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/identifier"
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "caveats": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "artifactRefs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifactRef"
+      }
+    }
+  }
+}

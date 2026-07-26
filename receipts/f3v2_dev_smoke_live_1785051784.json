@@ -1,0 +1,1592 @@
+{
+ "schema_version": "hswm-f3v2-arms-receipt/v1",
+ "mode": "development",
+ "stage": "DEVELOPMENT_ONLY",
+ "branch": "F3v2-harder-transfer",
+ "preregistration_file": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md",
+ "preregistration_file_sha256": "e4e9c90652b1a8ad2a2de10909b6254ca6d476db2d935fe3536778a6b94f9a88",
+ "preregistration_status": "DRAFT — user ratify pending; machine-lock to prom_search_hswm/evidence/PREREG_f3v2_*.json happens only after ratify",
+ "script_sha256": "f3ac0241e2fa45ff7be852d3bb43e12bc3c39d80bf664cf3bbaab0c24714f6b7",
+ "harness_module_sha256": {
+  "f3v2_procedural_worlds.py": "0a9aa5c208fd3cd66c7d45cab7da8a8322dc058fa00140fb5b1428b295b7574c",
+  "f2_delta_w_credit.py": "3676724568fde19a752c07fdeabd9883ecfe04a3534ebf3f4d8fb2cc6b95c6e5",
+  "f3v2_arms.py": "385160f9129a96a7647cc2cc2d6fec94fdf34a243219a1c5ad560bebf2b02472"
+ },
+ "config": {
+  "endpoint": "http://192.168.0.23:8000",
+  "receiver_endpoint": "http://192.168.0.23:8001",
+  "donor_model": "qwen3.6-27b",
+  "receiver_model": "qwen3-4b-real",
+  "seed": 20260726,
+  "train_seed": 20260726,
+  "test_seed": 20260727,
+  "n_train": 4,
+  "n_test": 4,
+  "tier": "hard",
+  "max_tokens": 768,
+  "max_calls": 32,
+  "gated": false,
+  "boot_reps": 10000,
+  "live": true,
+  "out": "receipts/f3v2_dev_smoke_live_1785051784.json",
+  "arm_ids": [
+   "a_no_memory",
+   "b_naive_donor",
+   "c_abstracted",
+   "d_contrast",
+   "e_b_self",
+   "f_placebo"
+  ],
+  "plan_calls": 32,
+  "endpoint_v1": "http://192.168.0.23:8000/v1",
+  "receiver_endpoint_v1": "http://192.168.0.23:8001/v1",
+  "embedder": "hash-bow-sha256-v1 (dim=256, fixed across arms per MemDelta)",
+  "top_k": 3
+ },
+ "split_audit": {
+  "tier": "hard",
+  "train_seed": 20260726,
+  "test_seed": 20260727,
+  "n_train": 4,
+  "n_test": 4,
+  "shared_world_sha256": [],
+  "verdict": "DISJOINT",
+  "note": "world_id is per-seed and collides across splits by construction; content sha256 is the split identity (prereg §6.2 instance-disjoint)."
+ },
+ "worlds": [
+  {
+   "world_id": "f3v2-hard-0",
+   "split": "train",
+   "tier": "hard",
+   "seed": 20260726,
+   "n_items": 5,
+   "optimal_len": 21,
+   "step_cap": 25,
+   "watermark": "ad6a70c2f14b3dae",
+   "world_sha256": "c6e7a7267544b5e3db8d7b9f7224b5162c2d409a97c8e086efb605c8a8096479"
+  },
+  {
+   "world_id": "f3v2-hard-1",
+   "split": "train",
+   "tier": "hard",
+   "seed": 20260726,
+   "n_items": 5,
+   "optimal_len": 21,
+   "step_cap": 25,
+   "watermark": "a282e8e0667aaddb",
+   "world_sha256": "f84e4b62bb5d94c166b5202a044ef8afe420fe46d87f23b1615f2ea616c760f2"
+  },
+  {
+   "world_id": "f3v2-hard-2",
+   "split": "train",
+   "tier": "hard",
+   "seed": 20260726,
+   "n_items": 5,
+   "optimal_len": 21,
+   "step_cap": 25,
+   "watermark": "7092f32dfaa695a5",
+   "world_sha256": "5116f44b432dfdc3fb4a7b647bedf3c76847444203781f183b2cf163b7697283"
+  },
+  {
+   "world_id": "f3v2-hard-3",
+   "split": "train",
+   "tier": "hard",
+   "seed": 20260726,
+   "n_items": 5,
+   "optimal_len": 21,
+   "step_cap": 25,
+   "watermark": "75d315a09004fa49",
+   "world_sha256": "7af53958713f73681463a182aa8c70833ae8bafaea2cbd973cf7c35d7be25b2c"
+  },
+  {
+   "world_id": "f3v2-hard-0",
+   "split": "test",
+   "tier": "hard",
+   "seed": 20260727,
+   "n_items": 4,
+   "optimal_len": 17,
+   "step_cap": 21,
+   "watermark": "b9525209b5de76de",
+   "world_sha256": "a48a1c41d0c4500fee6292bf4748de3a678b05f235d8b47f1c6ae773a81f375c"
+  },
+  {
+   "world_id": "f3v2-hard-1",
+   "split": "test",
+   "tier": "hard",
+   "seed": 20260727,
+   "n_items": 5,
+   "optimal_len": 21,
+   "step_cap": 25,
+   "watermark": "608903b7aa9a516a",
+   "world_sha256": "c514b7e318e6d7799ab0a5202b3dbef73e5202f043644bb8e249c482ec2298bf"
+  },
+  {
+   "world_id": "f3v2-hard-2",
+   "split": "test",
+   "tier": "hard",
+   "seed": 20260727,
+   "n_items": 5,
+   "optimal_len": 21,
+   "step_cap": 25,
+   "watermark": "65b23b2479f05110",
+   "world_sha256": "05cd666571a9f831ad3d078c4e2e9ed1b1cb480a2fa048b23c707290c1f6e2ce"
+  },
+  {
+   "world_id": "f3v2-hard-3",
+   "split": "test",
+   "tier": "hard",
+   "seed": 20260727,
+   "n_items": 5,
+   "optimal_len": 21,
+   "step_cap": 25,
+   "watermark": "56c2f25623ee87ae",
+   "world_sha256": "e5328664fd46396cd232c1b8fc916ce62faa5a04aa428fe0bf442266ce4406fc"
+  }
+ ],
+ "arms": {
+  "a_no_memory": {
+   "arm_id": "a_no_memory",
+   "n": 4,
+   "n_correct": 0,
+   "accuracy": 0.0,
+   "rows": [
+    {
+     "world_id": "f3v2-hard-0",
+     "world_seed": 20260727,
+     "watermark": "b9525209b5de76de",
+     "tier": "hard",
+     "n_items": 4,
+     "optimal_len": 17,
+     "step_cap": 21,
+     "parse_ok": true,
+     "actions": [
+      "heat(asheth)",
+      "heat(brenos)",
+      "heat(thuos)",
+      "heat(vornite)",
+      "charge(asheth)",
+      "charge(brenos)",
+      "charge(thuos)",
+      "charge(vornite)",
+      "cleanse(asheth)",
+      "cleanse(brenos)",
+      "cleanse(thuos)",
+      "cleanse(vornite)",
+      "inscribe(asheth)",
+      "inscribe(brenos)",
+      "inscribe(thuos)",
+      "inscribe(vornite)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "heat(brenos) requires inscribed",
+     "steps": 1,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 465,
+      "completion_tokens": 134
+     },
+     "request_sha256": "56d9748ad1ca808fd5fb901d445e1245c195f4a59aca77a1a0d7d46d18c70552"
+    },
+    {
+     "world_id": "f3v2-hard-1",
+     "world_seed": 20260727,
+     "watermark": "608903b7aa9a516a",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "heat(glimon)",
+      "heat(iloil)",
+      "heat(quaeth)",
+      "heat(sylium)",
+      "heat(thueth)",
+      "inscribe(glimon)",
+      "inscribe(iloil)",
+      "inscribe(quaeth)",
+      "inscribe(sylium)",
+      "inscribe(thueth)",
+      "charge(glimon)",
+      "charge(iloil)",
+      "charge(quaeth)",
+      "charge(sylium)",
+      "charge(thueth)",
+      "cleanse(glimon)",
+      "cleanse(iloil)",
+      "cleanse(quaeth)",
+      "cleanse(sylium)",
+      "cleanse(thueth)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "heat(thueth) requires inscribed",
+     "steps": 4,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 483,
+      "completion_tokens": 164
+     },
+     "request_sha256": "daaf8b840e179478445fa69caa880c309c07cf377d443d728f0df5814f88304f"
+    },
+    {
+     "world_id": "f3v2-hard-2",
+     "world_seed": 20260727,
+     "watermark": "65b23b2479f05110",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "inscribe(miil)",
+      "heat(miil)",
+      "charge(miil)",
+      "cleanse(miil)",
+      "inscribe(morar)",
+      "heat(morar)",
+      "cleanse(morar)",
+      "charge(morar)",
+      "inscribe(torar)",
+      "heat(torar)",
+      "charge(torar)",
+      "cleanse(torar)",
+      "inscribe(torek)",
+      "heat(torek)",
+      "charge(torek)",
+      "cleanse(torek)",
+      "inscribe(zeleth)",
+      "heat(zeleth)",
+      "charge(zeleth)",
+      "cleanse(zeleth)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "inscribe(torar) requires primed",
+     "steps": 8,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 484,
+      "completion_tokens": 164
+     },
+     "request_sha256": "f6db79c1f3040eec75fc5cecc83a2af2af5d5a5d95e36403116b2d06ed12c418"
+    },
+    {
+     "world_id": "f3v2-hard-3",
+     "world_seed": 20260727,
+     "watermark": "56c2f25623ee87ae",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "inscribe(miox)",
+      "cleanse(miox)",
+      "heat(miox)",
+      "charge(miox)",
+      "inscribe(miyx)",
+      "heat(miyx)",
+      "cleanse(miyx)",
+      "charge(miyx)",
+      "heat(moreth)",
+      "cleanse(moreth)",
+      "charge(moreth)",
+      "inscribe(moreth)",
+      "inscribe(moron)",
+      "heat(moron)",
+      "cleanse(moron)",
+      "charge(moron)",
+      "heat(sylek)",
+      "inscribe(sylek)",
+      "charge(sylek)",
+      "cleanse(sylek)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "inscribe(miyx) requires heated",
+     "steps": 4,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 483,
+      "completion_tokens": 156
+     },
+     "request_sha256": "9dd1621b63c5ee4fa91b4181a864d8509972aca1cdfbd70c690c16587b030647"
+    }
+   ]
+  },
+  "b_naive_donor": {
+   "arm_id": "b_naive_donor",
+   "n": 4,
+   "n_correct": 0,
+   "accuracy": 0.0,
+   "rows": [
+    {
+     "world_id": "f3v2-hard-0",
+     "world_seed": 20260727,
+     "watermark": "b9525209b5de76de",
+     "tier": "hard",
+     "n_items": 4,
+     "optimal_len": 17,
+     "step_cap": 21,
+     "parse_ok": true,
+     "actions": [
+      "inscribe(vornite)",
+      "cleanse(vornite)",
+      "heat(vornite)",
+      "charge(vornite)",
+      "inscribe(thuos)",
+      "cleanse(thuos)",
+      "heat(thuos)",
+      "charge(thuos)",
+      "inscribe(brenos)",
+      "cleanse(brenos)",
+      "heat(brenos)",
+      "charge(brenos)",
+      "inscribe(asheth)",
+      "heat(asheth)",
+      "charge(asheth)",
+      "cleanse(asheth)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "inscribe(thuos) requires cleansed",
+     "steps": 4,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 634,
+      "completion_tokens": 134
+     },
+     "request_sha256": "9b28a20ffd7b39cdbb2d68a341933a4c7660d90443fe0ebac7faddcbe6185db1"
+    },
+    {
+     "world_id": "f3v2-hard-1",
+     "world_seed": 20260727,
+     "watermark": "608903b7aa9a516a",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "heat(glimon)",
+      "heat(iloil)",
+      "heat(quaoth)",
+      "heat(sylium)",
+      "heat(thueth)",
+      "cleanse(glimon)",
+      "cleanse(iloil)",
+      "cleanse(quaoth)",
+      "cleanse(sylium)",
+      "cleanse(thueth)",
+      "inscribe(glimon)",
+      "inscribe(iloil)",
+      "inscribe(quaoth)",
+      "inscribe(sylium)",
+      "inscribe(thueth)",
+      "charge(glimon)",
+      "charge(iloil)",
+      "charge(quaoth)",
+      "charge(sylium)",
+      "charge(thueth)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "unknown_item",
+     "reason": "unknown ore 'quaoth'",
+     "steps": 2,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 618,
+      "completion_tokens": 164
+     },
+     "request_sha256": "09910434bee0f15f07e64eddf5c7dce292413ddbc0442ff9889a4cd939cead3e"
+    },
+    {
+     "world_id": "f3v2-hard-2",
+     "world_seed": 20260727,
+     "watermark": "65b23b2479f05110",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "inscribe(miil)",
+      "heat(miil)",
+      "charge(miil)",
+      "cleanse(miil)",
+      "inscribe(morar)",
+      "heat(morar)",
+      "cleanse(morar)",
+      "charge(morar)",
+      "inscribe(torar)",
+      "cleanse(torar)",
+      "heat(torar)",
+      "charge(torar)",
+      "inscribe(torek)",
+      "heat(torek)",
+      "charge(torek)",
+      "cleanse(torek)",
+      "inscribe(zeleth)",
+      "cleanse(zeleth)",
+      "heat(zeleth)",
+      "charge(zeleth)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "inscribe(torar) requires primed",
+     "steps": 8,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 619,
+      "completion_tokens": 164
+     },
+     "request_sha256": "12c6519b4773468d0a417088418f7b1d549adf226c5e98375c061a133678c27f"
+    },
+    {
+     "world_id": "f3v2-hard-3",
+     "world_seed": 20260727,
+     "watermark": "56c2f25623ee87ae",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "inscribe(miox)",
+      "cleanse(miox)",
+      "heat(miox)",
+      "charge(miox)",
+      "inscribe(miyx)",
+      "heat(miyx)",
+      "cleanse(miyx)",
+      "charge(miyx)",
+      "inscribe(moreth)",
+      "heat(moreth)",
+      "cleanse(moreth)",
+      "charge(moreth)",
+      "inscribe(moron)",
+      "heat(moron)",
+      "cleanse(moron)",
+      "charge(moron)",
+      "inscribe(sylek)",
+      "heat(sylek)",
+      "charge(sylek)",
+      "cleanse(sylek)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "inscribe(miyx) requires heated",
+     "steps": 4,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 618,
+      "completion_tokens": 156
+     },
+     "request_sha256": "40c9ddd61e3dc9977f08699a811a97b356a6bf94627c5e245dc825f88adede43"
+    }
+   ]
+  },
+  "c_abstracted": {
+   "arm_id": "c_abstracted",
+   "n": 4,
+   "n_correct": 1,
+   "accuracy": 0.25,
+   "rows": [
+    {
+     "world_id": "f3v2-hard-0",
+     "world_seed": 20260727,
+     "watermark": "b9525209b5de76de",
+     "tier": "hard",
+     "n_items": 4,
+     "optimal_len": 17,
+     "step_cap": 21,
+     "parse_ok": true,
+     "actions": [
+      "heat(asheth)",
+      "charge(asheth)",
+      "cleanse(asheth)",
+      "inscribe(asheth)",
+      "cleanse(brenos)",
+      "inscribe(brenos)",
+      "heat(brenos)",
+      "charge(brenos)",
+      "heat(thuos)",
+      "cleanse(thuos)",
+      "inscribe(thuos)",
+      "charge(thuos)",
+      "inscribe(vornite)",
+      "cleanse(vornite)",
+      "heat(vornite)",
+      "charge(vornite)",
+      "fuse"
+     ],
+     "correct": true,
+     "violation": null,
+     "reason": "ok",
+     "steps": 17,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 730,
+      "completion_tokens": 134
+     },
+     "request_sha256": "955e00937738fb772b82896298029b03d1fecd9c4d36ba102eb51101b470ebca"
+    },
+    {
+     "world_id": "f3v2-hard-1",
+     "world_seed": 20260727,
+     "watermark": "608903b7aa9a516a",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "heat(glimon)",
+      "heat(iloil)",
+      "heat(quaeth)",
+      "heat(sylium)",
+      "heat(thueth)",
+      "inscribe(glimon)",
+      "inscribe(iloil)",
+      "inscribe(quaeth)",
+      "inscribe(sylium)",
+      "inscribe(thueth)",
+      "charge(glimon)",
+      "charge(iloil)",
+      "charge(quaeth)",
+      "charge(sylium)",
+      "charge(thueth)",
+      "cleanse(glimon)",
+      "cleanse(iloil)",
+      "cleanse(quaeth)",
+      "cleanse(sylium)",
+      "cleanse(thueth)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "heat(thueth) requires inscribed",
+     "steps": 4,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 748,
+      "completion_tokens": 164
+     },
+     "request_sha256": "5950315d9e678c730861fb3a8143ad55e58c3566cd5eb15a4ab1dc2d3981f195"
+    },
+    {
+     "world_id": "f3v2-hard-2",
+     "world_seed": 20260727,
+     "watermark": "65b23b2479f05110",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "inscribe(miil)",
+      "heat(miil)",
+      "charge(miil)",
+      "cleanse(miil)",
+      "inscribe(morar)",
+      "heat(morar)",
+      "cleanse(morar)",
+      "charge(morar)",
+      "inscribe(torar)",
+      "heat(torar)",
+      "charge(torar)",
+      "cleanse(torar)",
+      "inscribe(torek)",
+      "heat(torek)",
+      "charge(torek)",
+      "cleanse(torek)",
+      "inscribe(zeleth)",
+      "heat(zeleth)",
+      "charge(zeleth)",
+      "cleanse(zeleth)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "inscribe(torar) requires primed",
+     "steps": 8,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 749,
+      "completion_tokens": 164
+     },
+     "request_sha256": "97da5a1328d0ace59d2f8885b8bceacd29fc8720ad7a7d620451812860a3d7af"
+    },
+    {
+     "world_id": "f3v2-hard-3",
+     "world_seed": 20260727,
+     "watermark": "56c2f25623ee87ae",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(miox)",
+      "heat(miox)",
+      "charge(miox)",
+      "inscribe(miox)",
+      "cleanse(miyx)",
+      "heat(miyx)",
+      "inscribe(miyx)",
+      "charge(miyx)",
+      "cleanse(moreth)",
+      "heat(moreth)",
+      "charge(moreth)",
+      "inscribe(moreth)",
+      "cleanse(moron)",
+      "inscribe(moron)",
+      "heat(moron)",
+      "charge(moron)",
+      "cleanse(sylek)",
+      "heat(sylek)",
+      "inscribe(sylek)",
+      "charge(sylek)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "cleanse(miox) requires inscribed",
+     "steps": 0,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 748,
+      "completion_tokens": 156
+     },
+     "request_sha256": "53f5fd3a4eb638eb9d3e4c1ed878cd3e2eb0bb8ce5aaaa2ef1a68441029d42b5"
+    }
+   ]
+  },
+  "d_contrast": {
+   "arm_id": "d_contrast",
+   "n": 4,
+   "n_correct": 1,
+   "accuracy": 0.25,
+   "rows": [
+    {
+     "world_id": "f3v2-hard-0",
+     "world_seed": 20260727,
+     "watermark": "b9525209b5de76de",
+     "tier": "hard",
+     "n_items": 4,
+     "optimal_len": 17,
+     "step_cap": 21,
+     "parse_ok": true,
+     "actions": [
+      "heat(asheth)",
+      "charge(asheth)",
+      "cleanse(asheth)",
+      "inscribe(asheth)",
+      "heat(brenos)",
+      "cleanse(brenos)",
+      "inscribe(brenos)",
+      "heat(brenos)",
+      "charge(brenos)",
+      "heat(thuos)",
+      "charge(thuos)",
+      "cleanse(thuos)",
+      "inscribe(thuos)",
+      "heat(thuos)",
+      "charge(thuos)",
+      "heat(vornite)",
+      "inscribe(vornite)",
+      "cleanse(vornite)",
+      "heat(vornite)",
+      "charge(vornite)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "heat(brenos) requires inscribed",
+     "steps": 4,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 612,
+      "completion_tokens": 162
+     },
+     "request_sha256": "14fe3551d7fbbba9d08eebe628036675f18984289fc72474b13b8a7915342f78"
+    },
+    {
+     "world_id": "f3v2-hard-1",
+     "world_seed": 20260727,
+     "watermark": "608903b7aa9a516a",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "heat(glimon)",
+      "inscribe(glimon)",
+      "charge(glimon)",
+      "cleanse(glimon)",
+      "heat(iloil)",
+      "inscribe(iloil)",
+      "charge(iloil)",
+      "cleanse(iloil)",
+      "heat(quaeth)",
+      "charge(quaeth)",
+      "cleanse(quaeth)",
+      "inscribe(quaeth)",
+      "heat(sylium)",
+      "cleanse(sylium)",
+      "inscribe(sylium)",
+      "charge(sylium)",
+      "inscribe(thueth)",
+      "heat(thueth)",
+      "charge(thueth)",
+      "cleanse(thueth)",
+      "fuse"
+     ],
+     "correct": true,
+     "violation": null,
+     "reason": "ok",
+     "steps": 21,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 630,
+      "completion_tokens": 164
+     },
+     "request_sha256": "efe03489a30c0455e9047694f2a772d89ef39c0a1b6707edfc603801ced540e1"
+    },
+    {
+     "world_id": "f3v2-hard-2",
+     "world_seed": 20260727,
+     "watermark": "65b23b2479f05110",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "inscribe(miil)",
+      "heat(miil)",
+      "charge(miil)",
+      "cleanse(miil)",
+      "inscribe(morar)",
+      "heat(morar)",
+      "cleanse(morar)",
+      "charge(morar)",
+      "inscribe(torar)",
+      "cleanse(torar)",
+      "heat(torar)",
+      "charge(torar)",
+      "inscribe(torek)",
+      "heat(torek)",
+      "charge(torek)",
+      "cleanse(torek)",
+      "inscribe(zeleth)",
+      "cleanse(zeleth)",
+      "heat(zeleth)",
+      "charge(zeleth)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "inscribe(torar) requires primed",
+     "steps": 8,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 631,
+      "completion_tokens": 164
+     },
+     "request_sha256": "f89fe8730d1e1ebc0cd1c035879dc2bae79fc000617c7a0ba059cd2386492245"
+    },
+    {
+     "world_id": "f3v2-hard-3",
+     "world_seed": 20260727,
+     "watermark": "56c2f25623ee87ae",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "inscribe(miox)",
+      "cleanse(miox)",
+      "heat(miox)",
+      "charge(miox)",
+      "inscribe(miyx)",
+      "heat(miyx)",
+      "cleanse(miyx)",
+      "charge(miyx)",
+      "heat(moreth)",
+      "cleanse(moreth)",
+      "charge(moreth)",
+      "inscribe(moreth)",
+      "inscribe(moron)",
+      "heat(moron)",
+      "cleanse(moron)",
+      "charge(moron)",
+      "heat(sylek)",
+      "inscribe(sylek)",
+      "charge(sylek)",
+      "cleanse(sylek)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "inscribe(miyx) requires heated",
+     "steps": 4,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 630,
+      "completion_tokens": 156
+     },
+     "request_sha256": "ccd4feac05b342c2d76a50b7804fda67433e90801b18350c8a1a9e400e051a50"
+    }
+   ]
+  },
+  "e_b_self": {
+   "arm_id": "e_b_self",
+   "n": 4,
+   "n_correct": 0,
+   "accuracy": 0.0,
+   "rows": [
+    {
+     "world_id": "f3v2-hard-0",
+     "world_seed": 20260727,
+     "watermark": "b9525209b5de76de",
+     "tier": "hard",
+     "n_items": 4,
+     "optimal_len": 17,
+     "step_cap": 21,
+     "parse_ok": true,
+     "actions": [
+      "inscribe(vornite)",
+      "cleanse(vornite)",
+      "heat(vornite)",
+      "charge(vornite)",
+      "inscribe(thuos)",
+      "cleanse(thuos)",
+      "heat(thuos)",
+      "charge(thuos)",
+      "inscribe(brenos)",
+      "cleanse(brenos)",
+      "heat(brenos)",
+      "charge(brenos)",
+      "inscribe(asheth)",
+      "heat(asheth)",
+      "charge(asheth)",
+      "cleanse(asheth)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "inscribe(thuos) requires cleansed",
+     "steps": 4,
+     "cached": true,
+     "usage": {
+      "prompt_tokens": 634,
+      "completion_tokens": 134
+     },
+     "request_sha256": "9b28a20ffd7b39cdbb2d68a341933a4c7660d90443fe0ebac7faddcbe6185db1"
+    },
+    {
+     "world_id": "f3v2-hard-1",
+     "world_seed": 20260727,
+     "watermark": "608903b7aa9a516a",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "heat(glimon)",
+      "heat(iloil)",
+      "heat(quaoth)",
+      "heat(sylium)",
+      "heat(thueth)",
+      "cleanse(glimon)",
+      "cleanse(iloil)",
+      "cleanse(quaoth)",
+      "cleanse(sylium)",
+      "cleanse(thueth)",
+      "inscribe(glimon)",
+      "inscribe(iloil)",
+      "inscribe(quaoth)",
+      "inscribe(sylium)",
+      "inscribe(thueth)",
+      "charge(glimon)",
+      "charge(iloil)",
+      "charge(quaoth)",
+      "charge(sylium)",
+      "charge(thueth)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "unknown_item",
+     "reason": "unknown ore 'quaoth'",
+     "steps": 2,
+     "cached": true,
+     "usage": {
+      "prompt_tokens": 618,
+      "completion_tokens": 164
+     },
+     "request_sha256": "09910434bee0f15f07e64eddf5c7dce292413ddbc0442ff9889a4cd939cead3e"
+    },
+    {
+     "world_id": "f3v2-hard-2",
+     "world_seed": 20260727,
+     "watermark": "65b23b2479f05110",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "inscribe(miil)",
+      "heat(miil)",
+      "charge(miil)",
+      "cleanse(miil)",
+      "inscribe(morar)",
+      "heat(morar)",
+      "cleanse(morar)",
+      "charge(morar)",
+      "inscribe(torar)",
+      "cleanse(torar)",
+      "heat(torar)",
+      "charge(torar)",
+      "inscribe(torek)",
+      "heat(torek)",
+      "charge(torek)",
+      "cleanse(torek)",
+      "inscribe(zeleth)",
+      "cleanse(zeleth)",
+      "heat(zeleth)",
+      "charge(zeleth)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "inscribe(torar) requires primed",
+     "steps": 8,
+     "cached": true,
+     "usage": {
+      "prompt_tokens": 619,
+      "completion_tokens": 164
+     },
+     "request_sha256": "12c6519b4773468d0a417088418f7b1d549adf226c5e98375c061a133678c27f"
+    },
+    {
+     "world_id": "f3v2-hard-3",
+     "world_seed": 20260727,
+     "watermark": "56c2f25623ee87ae",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "inscribe(miox)",
+      "cleanse(miox)",
+      "heat(miox)",
+      "charge(miox)",
+      "inscribe(miyx)",
+      "heat(miyx)",
+      "cleanse(miyx)",
+      "charge(miyx)",
+      "inscribe(moreth)",
+      "heat(moreth)",
+      "cleanse(moreth)",
+      "charge(moreth)",
+      "inscribe(moron)",
+      "heat(moron)",
+      "cleanse(moron)",
+      "charge(moron)",
+      "inscribe(sylek)",
+      "heat(sylek)",
+      "charge(sylek)",
+      "cleanse(sylek)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "inscribe(miyx) requires heated",
+     "steps": 4,
+     "cached": true,
+     "usage": {
+      "prompt_tokens": 618,
+      "completion_tokens": 156
+     },
+     "request_sha256": "40c9ddd61e3dc9977f08699a811a97b356a6bf94627c5e245dc825f88adede43"
+    }
+   ]
+  },
+  "f_placebo": {
+   "arm_id": "f_placebo",
+   "n": 4,
+   "n_correct": 1,
+   "accuracy": 0.25,
+   "rows": [
+    {
+     "world_id": "f3v2-hard-0",
+     "world_seed": 20260727,
+     "watermark": "b9525209b5de76de",
+     "tier": "hard",
+     "n_items": 4,
+     "optimal_len": 17,
+     "step_cap": 21,
+     "parse_ok": true,
+     "actions": [
+      "heat(asheth)",
+      "charge(asheth)",
+      "cleanse(asheth)",
+      "inscribe(asheth)",
+      "heat(brenos)",
+      "inscribe(brenos)",
+      "cleanse(brenos)",
+      "charge(brenos)",
+      "heat(thuos)",
+      "cleanse(thuos)",
+      "inscribe(thuos)",
+      "charge(thuos)",
+      "inscribe(vornite)",
+      "cleanse(vornite)",
+      "heat(vornite)",
+      "charge(vornite)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "heat(brenos) requires inscribed",
+     "steps": 4,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 575,
+      "completion_tokens": 134
+     },
+     "request_sha256": "e339a1fc3f5681c622a0fbf06590f21a60a6b109792530367eda062f7c6d4a7d"
+    },
+    {
+     "world_id": "f3v2-hard-1",
+     "world_seed": 20260727,
+     "watermark": "608903b7aa9a516a",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "heat(glimon)",
+      "inscribe(glimon)",
+      "charge(glimon)",
+      "cleanse(glimon)",
+      "heat(iloil)",
+      "inscribe(iloil)",
+      "charge(iloil)",
+      "cleanse(iloil)",
+      "heat(quaeth)",
+      "charge(quaeth)",
+      "cleanse(quaeth)",
+      "inscribe(quaeth)",
+      "heat(sylium)",
+      "cleanse(sylium)",
+      "inscribe(sylium)",
+      "charge(sylium)",
+      "inscribe(thueth)",
+      "heat(thueth)",
+      "charge(thueth)",
+      "cleanse(thueth)",
+      "fuse"
+     ],
+     "correct": true,
+     "violation": null,
+     "reason": "ok",
+     "steps": 21,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 593,
+      "completion_tokens": 164
+     },
+     "request_sha256": "424af7385f8bc15cec63056ef58e515ae813deee76bce7d7b704c3b8f796716e"
+    },
+    {
+     "world_id": "f3v2-hard-2",
+     "world_seed": 20260727,
+     "watermark": "65b23b2479f05110",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "inscribe(miil)",
+      "heat(miil)",
+      "charge(miil)",
+      "cleanse(miil)",
+      "inscribe(morar)",
+      "heat(morar)",
+      "cleanse(morar)",
+      "charge(morar)",
+      "inscribe(torar)",
+      "heat(torar)",
+      "charge(torar)",
+      "cleanse(torar)",
+      "inscribe(torek)",
+      "heat(torek)",
+      "charge(torek)",
+      "cleanse(torek)",
+      "inscribe(zeleth)",
+      "heat(zeleth)",
+      "charge(zeleth)",
+      "cleanse(zeleth)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "inscribe(torar) requires primed",
+     "steps": 8,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 600,
+      "completion_tokens": 164
+     },
+     "request_sha256": "2cee684d3e084945f20cd468cb9ec7177b2f99e04382b75af74519b70664b5d0"
+    },
+    {
+     "world_id": "f3v2-hard-3",
+     "world_seed": 20260727,
+     "watermark": "56c2f25623ee87ae",
+     "tier": "hard",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "inscribe(miox)",
+      "cleanse(miox)",
+      "heat(miox)",
+      "charge(miox)",
+      "inscribe(miyx)",
+      "heat(miyx)",
+      "cleanse(miyx)",
+      "charge(miyx)",
+      "heat(moreth)",
+      "cleanse(moreth)",
+      "charge(moreth)",
+      "inscribe(moreth)",
+      "inscribe(moron)",
+      "heat(moron)",
+      "cleanse(moron)",
+      "charge(moron)",
+      "heat(sylek)",
+      "inscribe(sylek)",
+      "charge(sylek)",
+      "cleanse(sylek)",
+      "fuse"
+     ],
+     "correct": false,
+     "violation": "precondition",
+     "reason": "inscribe(miyx) requires heated",
+     "steps": 4,
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 599,
+      "completion_tokens": 156
+     },
+     "request_sha256": "605fe85bcdf3faaebf93615cede4e522c1b39e2e6a52ba596ab38bcd0120ea04"
+    }
+   ]
+  }
+ },
+ "trr": {
+  "hard": {
+   "a_no_memory": {
+    "arm": "a_no_memory",
+    "n": 4,
+    "acc": 0.0,
+    "no_mem_acc": 0.0,
+    "b_self_acc": 0.0,
+    "trr": null,
+    "degenerate": true,
+    "negative_transfer_rate": 0.0,
+    "scores": {
+     "arm": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "no_mem": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "b_self": [
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   "b_naive_donor": {
+    "arm": "b_naive_donor",
+    "n": 4,
+    "acc": 0.0,
+    "no_mem_acc": 0.0,
+    "b_self_acc": 0.0,
+    "trr": null,
+    "degenerate": true,
+    "negative_transfer_rate": 0.0,
+    "scores": {
+     "arm": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "no_mem": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "b_self": [
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   "c_abstracted": {
+    "arm": "c_abstracted",
+    "n": 4,
+    "acc": 0.25,
+    "no_mem_acc": 0.0,
+    "b_self_acc": 0.0,
+    "trr": null,
+    "degenerate": true,
+    "negative_transfer_rate": 0.0,
+    "scores": {
+     "arm": [
+      1,
+      0,
+      0,
+      0
+     ],
+     "no_mem": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "b_self": [
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   "d_contrast": {
+    "arm": "d_contrast",
+    "n": 4,
+    "acc": 0.25,
+    "no_mem_acc": 0.0,
+    "b_self_acc": 0.0,
+    "trr": null,
+    "degenerate": true,
+    "negative_transfer_rate": 0.0,
+    "scores": {
+     "arm": [
+      0,
+      1,
+      0,
+      0
+     ],
+     "no_mem": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "b_self": [
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   "e_b_self": {
+    "arm": "e_b_self",
+    "n": 4,
+    "acc": 0.0,
+    "no_mem_acc": 0.0,
+    "b_self_acc": 0.0,
+    "trr": null,
+    "degenerate": true,
+    "negative_transfer_rate": 0.0,
+    "scores": {
+     "arm": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "no_mem": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "b_self": [
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   "f_placebo": {
+    "arm": "f_placebo",
+    "n": 4,
+    "acc": 0.25,
+    "no_mem_acc": 0.0,
+    "b_self_acc": 0.0,
+    "trr": null,
+    "degenerate": true,
+    "negative_transfer_rate": 0.0,
+    "scores": {
+     "arm": [
+      0,
+      1,
+      0,
+      0
+     ],
+     "no_mem": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "b_self": [
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   }
+  }
+ },
+ "judgment_target": {
+  "name": "min(trr_c_abstracted, trr_d_contrast) [hard]",
+  "value": null,
+  "degenerate": true
+ },
+ "kills": {
+  "k1_env_kill": {
+   "kill": "k1_env_kill",
+   "fired": false,
+   "evaluable": false,
+   "values": {
+    "trr_contrast": null,
+    "trr_abstracted": null,
+    "b_self_acc": 0.0,
+    "b_self_min": 0.6
+   },
+   "note": "mechanical observation only; sealed judgment is the gate's"
+  },
+  "k2_claim_kill": {
+   "kill": "k2_claim_kill",
+   "fired": false,
+   "evaluable": false,
+   "values": {
+    "naive_trr": null,
+    "contrast_minus_naive": {
+     "mean_diff": 0.25,
+     "ci95": [
+      0.0,
+      0.75
+     ],
+     "reps": 10000,
+     "seed": 20260726,
+     "n": 4
+    },
+    "abstracted_minus_naive": {
+     "mean_diff": 0.25,
+     "ci95": [
+      0.0,
+      0.75
+     ],
+     "reps": 10000,
+     "seed": 20260726,
+     "n": 4
+    },
+    "contrast_beats_naive": false,
+    "abstracted_beats_naive": false
+   },
+   "note": "mechanical observation only; sealed judgment is the gate's"
+  },
+  "k3_priming_kill": {
+   "kill": "k3_priming_kill",
+   "fired": false,
+   "evaluable": false,
+   "values": {
+    "trr_placebo": null,
+    "trr_abstracted": null,
+    "slack": 0.1
+   },
+   "note": "mechanical observation only; sealed judgment is the gate's"
+  },
+  "k4_judge_kill": {
+   "kill": "k4_judge_kill",
+   "fired": false,
+   "applicable": false,
+   "note": "N/A in simulator-scored F3v2: there is no LLM judge panel whose planted-wrong-answer catch rate could be measured; reinstated only if a judge-scored variant is added (prereg §7 step 2 covers the sealed judge track)."
+  },
+  "k5_noise_floor_kill": {
+   "kill": "k5_noise_floor_kill",
+   "fired": false,
+   "applicable": false,
+   "note": "N/A in simulator-scored F3v2: gold ground truth is planted by construction (annotation error rate 0), so a re-annotation noise floor cannot bind; documented, not measured."
+  }
+ },
+ "llm_budget": {
+  "mode": "live",
+  "max_calls": 32,
+  "planned_calls": 32,
+  "used": 28,
+  "donor": {
+   "model": "qwen3.6-27b",
+   "url": "http://192.168.0.23:8000/v1",
+   "misses": 4,
+   "hits": 0
+  },
+  "receiver": {
+   "model": "qwen3-4b-real",
+   "url": "http://192.168.0.23:8001/v1",
+   "misses": 24,
+   "hits": 4
+  }
+ },
+ "honesty": "grounded measurement only; no scientific claim; judgment is the gate's. DEVELOPMENT_ONLY: nothing sealed.",
+ "wall_clock_s": 516.2,
+ "dry_run": false,
+ "memory": {
+  "disagreement_flags": {
+   "f3v2-hard-0": false,
+   "f3v2-hard-1": true,
+   "f3v2-hard-2": false,
+   "f3v2-hard-3": true
+  },
+  "n_lessons": {
+   "naive": 52,
+   "abstracted": 8,
+   "contrast": 2,
+   "b_self": 55,
+   "placebo": 16
+  },
+  "gate_note": "flag = receiver failed the train world while the donor succeeded on it; *_gated arms inject only flagged lessons (Agent KB: gate가 전이 성립 조건)."
+ },
+ "models_served": {
+  "donor_endpoint": "http://192.168.0.23:8000/v1",
+  "donor": {
+   "object": "list",
+   "data": [
+    {
+     "id": "qwen3.6-27b",
+     "object": "model",
+     "created": 1785052300,
+     "owned_by": "vllm",
+     "root": "Qwen/Qwen3.6-27B",
+     "parent": null,
+     "max_model_len": 24576,
+     "permission": [
+      {
+       "id": "modelperm-a0d59af99c744ab3",
+       "object": "model_permission",
+       "created": 1785052300,
+       "allow_create_engine": false,
+       "allow_sampling": true,
+       "allow_logprobs": true,
+       "allow_search_indices": false,
+       "allow_view": true,
+       "allow_fine_tuning": false,
+       "organization": "*",
+       "group": null,
+       "is_blocking": false
+      }
+     ]
+    },
+    {
+     "id": "qwen3-4b",
+     "object": "model",
+     "created": 1785052300,
+     "owned_by": "vllm",
+     "root": "Qwen/Qwen3.6-27B",
+     "parent": null,
+     "max_model_len": 24576,
+     "permission": [
+      {
+       "id": "modelperm-a338a044a8a18d6f",
+       "object": "model_permission",
+       "created": 1785052300,
+       "allow_create_engine": false,
+       "allow_sampling": true,
+       "allow_logprobs": true,
+       "allow_search_indices": false,
+       "allow_view": true,
+       "allow_fine_tuning": false,
+       "organization": "*",
+       "group": null,
+       "is_blocking": false
+      }
+     ]
+    }
+   ]
+  },
+  "receiver_endpoint": "http://192.168.0.23:8001/v1",
+  "receiver": {
+   "object": "list",
+   "data": [
+    {
+     "id": "qwen3-4b-real",
+     "object": "model",
+     "created": 1785052300,
+     "owned_by": "vllm",
+     "root": "Qwen/Qwen3-4B",
+     "parent": null,
+     "max_model_len": 8192,
+     "permission": [
+      {
+       "id": "modelperm-84509704a178263d",
+       "object": "model_permission",
+       "created": 1785052300,
+       "allow_create_engine": false,
+       "allow_sampling": true,
+       "allow_logprobs": true,
+       "allow_search_indices": false,
+       "allow_view": true,
+       "allow_fine_tuning": false,
+       "organization": "*",
+       "group": null,
+       "is_blocking": false
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "aborted": null
+}

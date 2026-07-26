@@ -16,11 +16,17 @@ All three must hold for gate PASS; otherwise difficulty retune (prereg:
 deterministic world simulator (no judge, no gold reveal at run time — the
 rules are in the prompt, the optimal sequence is what the simulator checks).
 
-Backend: live OpenAI-compatible endpoint (shared vLLM box — this script is
+Backend: live OpenAI-compatible endpoints (shared vLLM boxes — this script is
 strictly sequential, <=2 concurrent, and hard-capped at 2*n live chat calls,
-default 16, max 20).  Receiver default qwen3-4b is a DEV STAND-IN: the real
-sealed receiver is qwen3:14b, pending the dgx window.  The /v1/models listing
-is recorded verbatim in the receipt for served-model identity honesty.
+default 16, max 20).  Donor and receiver may live on different endpoints
+(--receiver-endpoint, default = --endpoint).  Receiver default qwen3-4b is a
+DEV STAND-IN: the real sealed receiver is qwen3:14b, pending the dgx window.
+2026-07-26 confound resolved: the first receiver stand-in (qwen3-4b on :8000)
+turned out to be a vLLM alias of the donor weights (shared root
+Qwen/Qwen3.6-27B; 8/8 identical action sequences, receipt ..._1785037859);
+the real Qwen3-4B is now served as qwen3-4b-real on :8001 (root Qwen/Qwen3-4B,
+verified via /v1/models).  Both endpoints' /v1/models listings are recorded
+verbatim in the receipt for served-model identity honesty.
 
 Receipts are always mode="development" measurements, DEVELOPMENT_ONLY stage;
 the scientific judgment belongs to the LakatosTree gate, never to this file.
@@ -111,7 +117,10 @@ def _eval_model(chat, model: str, worlds: list[dict], seed: int,
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--endpoint", default="http://192.168.219.102:8000")
+    ap.add_argument("--endpoint", default="http://192.168.219.102:8000",
+                    help="donor endpoint")
+    ap.add_argument("--receiver-endpoint", default="",
+                    help="receiver endpoint; default = --endpoint value")
     ap.add_argument("--donor-model", default="qwen3.6-27b")
     ap.add_argument("--receiver-model", default="qwen3-4b")
     ap.add_argument("--seed", type=int, default=20260726)
@@ -129,6 +138,8 @@ def main() -> int:
     t0 = time.time()
     ts = int(t0)
     endpoint_v1 = _normalize_endpoint(args.endpoint)
+    receiver_endpoint_v1 = _normalize_endpoint(
+        args.receiver_endpoint or args.endpoint)
     out_path = Path(args.out) if args.out else (
         RECEIPT_DIR / f"f3v2_canary_gate_dev_{ts}.json")
 
@@ -153,20 +164,25 @@ def main() -> int:
                 (HERE / "f2_delta_w_credit.py").read_bytes()).hexdigest(),
         },
         "config": vars(args) | {"endpoint_v1": endpoint_v1,
+                                "receiver_endpoint_v1": receiver_endpoint_v1,
                                 "out": str(out_path)},
         "donor_freeze": {"backend": "vllm-openai-compat", "url": endpoint_v1,
                          "model": args.donor_model,
                          "thinking_off": "chat_template_kwargs enable_thinking=false"},
         "receiver_freeze": {
-            "backend": "vllm-openai-compat", "url": endpoint_v1,
+            "backend": "vllm-openai-compat", "url": receiver_endpoint_v1,
             "model": args.receiver_model,
             "thinking_off": "chat_template_kwargs enable_thinking=false",
             "system_prompt_sha256": hashlib.sha256(
                 SYSTEM_PROMPT.encode()).hexdigest(),
             "seed": args.seed, "temperature": 0, "max_tokens": args.max_tokens,
-            "note": ("qwen3-4b is a DEV STAND-IN for the sealed qwen3:14b "
-                     "receiver (pending dgx window); both models frozen, "
-                     "input channel only, identical prompts, simulator-scored."),
+            "note": ("DEV STAND-IN for the sealed qwen3:14b receiver (pending "
+                     "dgx window); both models frozen, input channel only, "
+                     "identical prompts, simulator-scored. 2026-07-26 alias "
+                     "confound resolved: real Qwen3-4B served as "
+                     "qwen3-4b-real on its own container (root Qwen/Qwen3-4B "
+                     "per /v1/models), replacing the :8000 alias that shared "
+                     "donor weights."),
         },
         "honesty": ("grounded measurement only; no scientific claim; judgment "
                     "is the gate's. DEVELOPMENT_ONLY: nothing sealed."),
@@ -179,12 +195,17 @@ def main() -> int:
                     "constraints": w["constraints"],
                     "watermark": w["watermark"],
                     "world_sha256": fw.world_sha256(w)} for w in worlds],
-        "models_served": _list_models(endpoint_v1),
+        "models_served": {
+            "donor_endpoint": endpoint_v1,
+            "donor": _list_models(endpoint_v1),
+            "receiver_endpoint": receiver_endpoint_v1,
+            "receiver": _list_models(receiver_endpoint_v1),
+        },
     }
 
     budget = f2.Budget(2 * args.n)
     donor = f2.CachedOpenAIChat(endpoint_v1, budget)
-    receiver = f2.CachedOpenAIChat(endpoint_v1, budget)
+    receiver = f2.CachedOpenAIChat(receiver_endpoint_v1, budget)
     aborted = None
     try:
         rec = _eval_model(receiver, args.receiver_model, worlds, args.seed,
@@ -218,10 +239,10 @@ def main() -> int:
 
     receipt["llm_budget"] = {
         "max_calls": 2 * args.n, "used": budget.used,
-        "donor": {"model": args.donor_model, "misses": donor.misses,
-                  "hits": donor.hits},
-        "receiver": {"model": args.receiver_model, "misses": receiver.misses,
-                     "hits": receiver.hits},
+        "donor": {"model": args.donor_model, "url": endpoint_v1,
+                  "misses": donor.misses, "hits": donor.hits},
+        "receiver": {"model": args.receiver_model, "url": receiver_endpoint_v1,
+                     "misses": receiver.misses, "hits": receiver.hits},
     }
     receipt["aborted"] = aborted
     receipt["wall_clock_s"] = round(time.time() - t0, 1)

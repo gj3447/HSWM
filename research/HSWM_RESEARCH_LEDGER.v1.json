@@ -1,7 +1,7 @@
 {
   "schema_version": "hswm-research-ledger/v1",
   "ledger_id": "HSWM_RESEARCH_LEDGER_V1_20260726",
-  "generated_at": "2026-07-26T22:18:01+09:00",
+  "generated_at": "2026-07-27T00:16:56+09:00",
   "programme_authority": {
     "programme_id": "HSWM_RESEARCH_PROGRAMME",
     "status": "ACTIVE",
@@ -231,15 +231,24 @@
       "caveats": [
         "Durable approval ownership, lease expiry, and forward migrations remain incomplete.",
         "Exactly-once model execution is not claimed.",
-        "The runtime does not yet implement result-to-credit-to-delta-W learning."
+        "The durable cellular runtime does not yet wire the existing scalar P1 credit-and-delta-W components into model-cell orchestration."
       ]
     },
     {
       "hypothesis_id": "semantic-weight-metric-contract",
       "title": "Semantic-weight metric contract",
-      "state": "planned",
-      "claim_scope": "Defines a comparable, machine-checkable meaning for semantic operator weight and the ablations required to distinguish it from prompt context, scalar confidence, topology, and embedding similarity.",
-      "prereg_refs": [],
+      "state": "engineering_validated",
+      "claim_scope": "Defines and validates a comparable machine metric for the implemented scalar slow-W causal shadow while keeping proposed operator-valued semantic W explicitly unimplemented and unjudged.",
+      "prereg_refs": [
+        {
+          "artifact_id": "artifact-scalar-w-causal-prereg-v1",
+          "kind": "preregistration",
+          "path": "research/PREREG_HSWM_SCALAR_W_CAUSAL_MEDIATION.v1.json",
+          "sha256": "a3d830f029e3f8a82493149a7f9fd712ec92d355b36d27bf14d3b92dcc5c263e",
+          "availability": "present",
+          "claim_boundary": "Unratified scalar-W causal-shadow draft with measurement_authorized=false; it is not an operator-W preregistration or result."
+        }
+      ],
       "source_refs": [
         {
           "artifact_id": "artifact-semantic-weight-prom16",
@@ -256,37 +265,72 @@
           "sha256": "bd0c13780c87006c078ab6e710fe3c0714468745caa6513f349ca926e538a5ff",
           "availability": "present",
           "claim_boundary": "Version-zero field definition evidence; it does not close the metric or causal comparison."
+        },
+        {
+          "artifact_id": "artifact-semantic-weight-metric-contract-v1",
+          "kind": "source",
+          "path": "research/HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT.v1.json",
+          "sha256": "61a54265a2a424d32889721214eb0ec8a13a6c39de9ac78e4e8f40e7ca786ec3",
+          "availability": "present",
+          "claim_boundary": "Engineering-draft metric and intervention contract; user ratification, machine lock, and measurement remain forbidden."
+        },
+        {
+          "artifact_id": "artifact-semantic-weight-metric-schema-v1",
+          "kind": "source",
+          "path": "schemas/hswm_semantic_weight_metric_contract.v1.schema.json",
+          "sha256": "6a4e53d9ae5385893ddb119978b646cc9368780ecb5683ee2da9ec422dd23d98",
+          "availability": "present",
+          "claim_boundary": "Machine interchange shape only; no scientific judgment."
+        },
+        {
+          "artifact_id": "artifact-scalar-w-causal-judge-v1",
+          "kind": "source",
+          "path": "hswm_scalar_w_causal_judge.py",
+          "sha256": "d87be1006cb13ba7d7dfb3d5f1028e9c6dd5cb4b95eedd74a75b401ad878ae91",
+          "availability": "present",
+          "claim_boundary": "Frozen pure judge for scalar_slow_efficacy_v1 only; it cannot promote an operator-W claim and has no external write path."
         }
       ],
-      "evidence_refs": [],
+      "evidence_refs": [
+        {
+          "artifact_id": "artifact-semantic-weight-contract-validation-v1",
+          "kind": "evidence_receipt",
+          "path": "receipts/HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT_VALIDATION_20260726.json",
+          "sha256": "ad25fe39663dbd2f59ff8d0023a65880595073731dfa51e508271429124a7c82",
+          "availability": "present",
+          "claim_boundary": "Positive and injected-negative engineering validation only; measurement_authorized=false and scientific_status=UNJUDGED."
+        }
+      ],
       "judge_refs": [],
       "lakato_refs": [],
       "git": {
         "repository": "github.com/gj3447/HSWM",
         "branch": "main",
-        "ledger_base_commit": "62cced44f38987a7986eb28bf0040b64dc0b3ac6",
-        "notes": "Source mathematics is pinned; the executable metric contract does not yet exist."
+        "ledger_base_commit": "811937cfb2c6edd2853677568a32f80266877192",
+        "notes": "The executable scalar-W metric, intervention builder, schema, validator, negative tests, and unratified draft preregistration are pinned on this base."
       },
       "runtime": {
         "execution_host": "not-scheduled",
         "control_plane": "proxmox-lxc-301-lakatotree",
-        "status": "PLANNED_NO_PREREGISTRATION",
-        "observed_at": "2026-07-26T22:18:01+09:00",
-        "notes": "Lightweight contract work should precede another heavy run."
+        "status": "ENGINEERING_CONTRACT_PASS_MEASUREMENT_FORBIDDEN",
+        "observed_at": "2026-07-27T00:53:59+09:00",
+        "notes": "Eleven arms, twenty-three metrics, direct FULL-over-embedding and FULL-over-hypergraph effects, non-compensable no-state, uniform, random, and context control gates, both balanced intervention sequences, exact five-seed and bootstrap locks, route-count consistency, bound-schema execution, exact numeric restore, a separate pure judge, and injected-negative checks pass locally. No data were collected and the draft is not user-ratified or server-registered."
       },
       "supersedes": [],
       "next_falsifier": {
         "falsifier_id": "falsifier-semantic-weight-identifiability",
-        "test": "Freeze equal-information and equal-compute arms for full W, W removed, W shuffled, scalar weight, topology-only, and strongest full-context or vector baseline.",
-        "kill_condition": "The metric cannot distinguish learned W from shuffled or removed W after controlling context, calls, tokens, topology, and information exposure.",
+        "test": "After F1 adjudication and explicit ratification, machine-lock a new disjoint cohort, development-selected strongest baseline, and the full eleven-arm scalar-W removal, shuffle, random, context, and exact-restoration protocol.",
+        "kill_condition": "The metric cannot distinguish learned scalar W from removed, shuffled, random-update, or equal-information context controls under exact parity, or exact restoration fails.",
         "dependency_ids": [
           "F1-larger-ai-baselines-and-retention"
         ]
       },
       "caveats": [
-        "Existing formulas are definitions and proposals, not an agreed measurement contract.",
-        "No preregistered ablation currently establishes semantic identifiability.",
-        "Embedding similarity must not be silently relabelled as learned semantic weight."
+        "The contract is engineering-validated but unratified and authorizes no measurement.",
+        "The strongest baseline and fresh cohort remain deliberately unselected until F1 is adjudicated.",
+        "The experiment tag is bound to the active tree locally, but no server preregistration receipt exists before explicit ratification.",
+        "Passing the scalar causal shadow would not implement or prove operator-valued semantic W.",
+        "Embedding similarity and query-local gates must not be silently relabelled as learned semantic weight."
       ]
     },
     {
@@ -326,9 +370,9 @@
       "runtime": {
         "execution_host": "not-scheduled",
         "control_plane": "proxmox-lxc-301-lakatotree",
-        "status": "BLOCKED_BY_METRIC_CONTRACT",
-        "observed_at": "2026-07-26T22:18:01+09:00",
-        "notes": "The next scientific run must wait for the semantic-weight metric contract and F1 result handling."
+        "status": "BLOCKED_BY_OPERATOR_RUNTIME_F1_AND_RATIFICATION",
+        "observed_at": "2026-07-26T23:57:26+09:00",
+        "notes": "A scalar-W causal-shadow contract now exists, but relation tensors, incidence transports, signed learned-fast efficacy, an operator snapshot, and an operator-specific preregistration do not."
       },
       "supersedes": [],
       "next_falsifier": {
@@ -342,8 +386,8 @@
       },
       "caveats": [
         "F2 credit correlation is not proof that W caused later behavior.",
-        "No closed-loop outcome-to-credit-to-delta-W runtime path has been independently judged.",
-        "The 70 percent mediation threshold is a proposed next gate and must be frozen before data collection."
+        "A synthetic scalar result-to-credit-to-delta-ell loop exists, but no operator-valued outcome-to-credit-to-delta-W path has been implemented or independently judged.",
+        "The 70 percent scalar mediation threshold is frozen only in an unratified no-measurement draft and cannot be reused as operator-W evidence."
       ]
     },
     {

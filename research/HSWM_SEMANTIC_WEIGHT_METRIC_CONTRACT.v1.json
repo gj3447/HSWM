@@ -1,0 +1,329 @@
+{
+  "schema_version": "hswm-semantic-weight-metric-contract/v1",
+  "contract_id": "HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT_V1_20260726",
+  "status": "ENGINEERING_DRAFT_UNRATIFIED",
+  "created_at": "2026-07-26",
+  "authority": {
+    "user_ratified": false,
+    "scientific_status": "UNJUDGED",
+    "scientific_judgment_emitted": false,
+    "kg_write_state": "NOT_WRITTEN",
+    "lakatotree_write_state": "NOT_REGISTERED"
+  },
+  "scope": {
+    "implemented_weight_scope": "scalar_slow_efficacy_v1",
+    "target_weight_scope": "operator_semantic_weight_future",
+    "causal_question": "Does an outcome-learned, content-addressed scalar slow-W field cause later fresh behavior beyond equal-information and equal-compute alternatives, and is the effect removed by exact base rollback or within-stratum shuffle and recovered by exact restoration?",
+    "claim_boundary": "This contract can identify a scalar causal shadow of semantic weight. It cannot establish the proposed relation tensor, incidence transport, role-aware operator, topology rewiring, agent transfer, consolidation, or a larger-AI claim.",
+    "excluded_claims": [
+      "operator-valued semantic W implemented",
+      "foundation-model parameter learning",
+      "learned topology causally effective",
+      "weight-only agent transfer",
+      "long-term consolidation",
+      "larger AI scientifically demonstrated"
+    ]
+  },
+  "weight_planes": [
+    {
+      "plane_id": "query_gate",
+      "symbol": "a(e|q)",
+      "domain": "a<=0",
+      "semantics": "volatile query-relative bond potential recomputed for each query",
+      "learning": "not persisted and not outcome-updated",
+      "claim_use": "EXCLUDED_FROM_LEARNED_W_CLAIM"
+    },
+    {
+      "plane_id": "boost_channel",
+      "symbol": "j(e|q)",
+      "domain": "j>=0",
+      "semantics": "catalogue-level boost-only fast channel kept distinct from query_gate and learned efficacy",
+      "learning": "no causal runtime is frozen in this contract",
+      "claim_use": "EXCLUDED_FROM_LEARNED_W_CLAIM"
+    },
+    {
+      "plane_id": "slow_log_salience",
+      "symbol": "ell_e",
+      "domain": "ell<=0",
+      "semantics": "durable scalar macro-synaptic salience stored in immutable snapshots",
+      "learning": "ell_next=clip(ell+eta*(reward-prediction)*pre_outcome_eligibility, ell_min, 0)",
+      "claim_use": "SCALAR_CAUSAL_SHADOW_ONLY"
+    },
+    {
+      "plane_id": "learned_fast_efficacy",
+      "symbol": "theta_fast[e,t]",
+      "domain": "signed bounded numeric efficacy",
+      "semantics": "proposed outcome-learned fast component of operator-valued semantic W",
+      "learning": "target equation only; no production snapshot or causal runtime is implemented",
+      "claim_use": "TARGET_NOT_IMPLEMENTED"
+    }
+  ],
+  "formulae": {
+    "implemented_readout": "score(e|q)=base_score(e)+lambda_s*ell_e+lambda_q*a(e|q)",
+    "implemented_update": "ell_next=clip(ell+eta*(reward-prediction)*eligibility, ell_min, 0)",
+    "full": "W_full=W0 plus approved DeltaW",
+    "removed": "W_removed=W0 exactly, never an all-zero synthetic field",
+    "shuffled": "W_shuffled=W0 plus P_stratum(DeltaW), with a forced derangement inside frozen relation-role-degree strata",
+    "restored": "W_restored is the exact W_full snapshot SHA, not a relearned approximation",
+    "routing_actuation": "A_W=macro_mean JSD(pi_full || pi_intervention)/ln(2); routing change is necessary but not sufficient for utility"
+  },
+  "required_arms": [
+    {
+      "arm_id": "NO_SHARED_STATE",
+      "purpose": "measure gain over no persistent learned state",
+      "w_mount": "exact base W0",
+      "information_rule": "same raw observation union but no learned-state treatment",
+      "compute_rule": "same frozen compute envelope"
+    },
+    {
+      "arm_id": "EMBEDDING_ONLY",
+      "purpose": "separate embedding similarity from learned W efficacy",
+      "w_mount": "exact base W0",
+      "information_rule": "same raw observation union represented by the frozen embedding baseline",
+      "compute_rule": "same frozen compute envelope"
+    },
+    {
+      "arm_id": "HYPERGRAPH_ONLY",
+      "purpose": "separate fixed hypergraph structure from learned W efficacy",
+      "w_mount": "exact base W0",
+      "information_rule": "same candidate universe and fixed topology without learned W",
+      "compute_rule": "same frozen compute envelope"
+    },
+    {
+      "arm_id": "FROZEN_NO_WRITE",
+      "purpose": "control for training exposure while suppressing all W writes",
+      "w_mount": "exact base W0",
+      "information_rule": "same outcomes are observed but no numeric update is committed",
+      "compute_rule": "same frozen compute envelope"
+    },
+    {
+      "arm_id": "STRONG_CONTEXT_VECTOR_EQUAL_INFO",
+      "purpose": "test whether serialized context or vector memory explains the effect",
+      "w_mount": "exact base W0",
+      "information_rule": "same learned numeric information content is exposed through the strongest dev-selected non-W representation",
+      "compute_rule": "same frozen compute envelope and active-state byte cap"
+    },
+    {
+      "arm_id": "W_UNIFORM_L1_MATCHED",
+      "purpose": "control for update mass without semantic credit assignment",
+      "w_mount": "base W0 plus uniform support-matched and L1-matched update",
+      "information_rule": "same outcome exposure without edge-specific semantic assignment",
+      "compute_rule": "same frozen compute envelope"
+    },
+    {
+      "arm_id": "W_RANDOM_UPDATE_MATCHED",
+      "purpose": "control for random numeric perturbation with matched update statistics",
+      "w_mount": "base W0 plus preregistered random support and magnitude-distribution-matched update",
+      "information_rule": "same outcome exposure with source assignment destroyed",
+      "compute_rule": "same frozen compute envelope"
+    },
+    {
+      "arm_id": "W_FULL_LEARNED",
+      "purpose": "measure the approved outcome-learned scalar W treatment",
+      "w_mount": "exact content-addressed W1=W0 plus DeltaW",
+      "information_rule": "pre-outcome eligibility and independent numeric outcome only",
+      "compute_rule": "same frozen compute envelope"
+    },
+    {
+      "arm_id": "W_REMOVED_BASE",
+      "purpose": "test necessity of the learned W assignment",
+      "w_mount": "exact base W0",
+      "information_rule": "all non-W treatment information held fixed",
+      "compute_rule": "same frozen compute envelope"
+    },
+    {
+      "arm_id": "W_SHUFFLED_WITHIN_STRATUM",
+      "purpose": "test semantic assignment rather than update magnitude",
+      "w_mount": "W0 plus forced within-stratum derangement of DeltaW",
+      "information_rule": "all non-W treatment information held fixed",
+      "compute_rule": "same frozen compute envelope"
+    },
+    {
+      "arm_id": "W_RESTORED_EXACT",
+      "purpose": "test reversibility and exclude intervention carryover",
+      "w_mount": "the exact original W1 snapshot SHA after removal or shuffle",
+      "information_rule": "no relearning and all non-W state held fixed",
+      "compute_rule": "same frozen compute envelope"
+    }
+  ],
+  "required_metric_ids": [
+    "transfer_gain",
+    "embedding_delta",
+    "hyper_only_delta",
+    "full_over_embedding_delta",
+    "full_over_hypergraph_delta",
+    "learned_gain",
+    "w_ablation_delta",
+    "w_shuffle_delta",
+    "w_uniform_delta",
+    "w_random_update_delta",
+    "context_operator_delta",
+    "removal_erasure_fraction",
+    "shuffle_erasure_fraction",
+    "random_update_erasure_fraction",
+    "restoration_recovery_fraction",
+    "restoration_gap",
+    "route_jsd_normalized",
+    "route_case_count",
+    "route_divergence_cases",
+    "retention_loss",
+    "negative_transfer_rate",
+    "direction",
+    "noise_band"
+  ],
+  "parity_fields": [
+    "model_sha256",
+    "task_sha256",
+    "topology_sha256",
+    "embedding_sha256",
+    "relation_schema_sha256",
+    "candidate_universe_sha256",
+    "raw_information_union_sha256",
+    "compute_envelope_sha256",
+    "physical_call_cap",
+    "logical_call_cap",
+    "input_token_cap",
+    "output_token_cap",
+    "state_budget_bytes"
+  ],
+  "intervention_invariants": [
+    "W_REMOVED_BASE mounts the exact W0 snapshot rather than setting every ell to zero",
+    "W_RESTORED_EXACT mounts the bit-identical W1 snapshot and exact pre-LLM route digest",
+    "shuffle preserves the DeltaW multiset inside every frozen relation-role-degree stratum",
+    "shuffle preserves DeltaW L1 and L2 norms, support count, tensor shape, type, arity, and degree strata",
+    "all arms preserve topology, model, prompt protocol, embedding revision, relation schema, tasks, and candidate universe",
+    "stable edge-id renaming cannot change aggregate metrics",
+    "unordered role permutations are invariant and ordered role permutations are only equivariant",
+    "adding one constant to all local route logits cannot change local route probabilities",
+    "query_gate and boost_channel cannot be relabeled as outcome-learned W",
+    "eligibility is sealed before outcome and the answer is sealed before gold reveal",
+    "training answers, verdicts, rationales, and natural-language lessons never become W update state or later prompt input",
+    "world, relation, and component clusters are macro-aggregated before paired resampling",
+    "FULL and RESTORED numeric logits, ranks, route probabilities, and route digest must match before any LLM call"
+  ],
+  "statistics": {
+    "unit": "world_or_connected_component_cluster",
+    "aggregation": "macro_then_paired_cluster_bootstrap",
+    "bootstrap_samples": 10000,
+    "bootstrap_seed": 20260726,
+    "bootstrap_interval": "paired_percentile_95",
+    "confidence": 0.95,
+    "seed_direction_rule": "at_least_4_of_5_same_positive_direction",
+    "baseline_selection": {
+      "status": "UNSELECTED_BLOCKS_MEASUREMENT",
+      "allowlist": [
+        "FROZEN_NO_WRITE",
+        "STRONG_CONTEXT_VECTOR_EQUAL_INFO",
+        "W_UNIFORM_L1_MATCHED"
+      ],
+      "rule": "Choose one strongest baseline on development only, freeze its artifact SHA before sealed evaluation, and never select per sealed result."
+    }
+  },
+  "thresholds": {
+    "learned_gain_abs_min": 0.05,
+    "paired_lcb_min_exclusive": 0.0,
+    "removal_erasure_fraction_min": 0.7,
+    "shuffle_erasure_fraction_min": 0.7,
+    "random_update_erasure_fraction_min": 0.7,
+    "restoration_recovery_fraction_min": 0.9,
+    "restoration_equivalence_rope": [-0.02, 0.02],
+    "context_operator_delta_min": 0.03,
+    "retention_loss_max": 0.03,
+    "negative_transfer_rate_max": 0.1,
+    "route_divergence_cases_min": 1
+  },
+  "firewalls": {
+    "eligibility_pre_outcome": true,
+    "answer_pre_gold": true,
+    "natural_language_learning_state_forbidden": true,
+    "cache_hits_required": 0,
+    "f1_cohort_reuse_forbidden": true,
+    "void_on_hash_or_parity_drift": true
+  },
+  "measurement_gate": {
+    "measurement_authorized": false,
+    "f1_completed_and_adjudicated": false,
+    "user_ratified": false,
+    "machine_locked": false,
+    "fresh_cohort_frozen": false,
+    "strongest_baseline_selected": false,
+    "independent_judge_frozen": false,
+    "lakatotree_prediction_registered": false
+  },
+  "source_artifacts": [
+    {
+      "artifact_id": "semantic-weight-prom16-math",
+      "path": "PROM_16_HSWM_SEMANTIC_WEIGHT_FIELD_MATHEMATICS_2026-07-26.md",
+      "sha256": "8a33af2adc08f97bf15867ea1a3d7dac3afaae56193c6315460716872a97e8a8",
+      "role": "operator-valued mathematical target and falsifier proposal"
+    },
+    {
+      "artifact_id": "semantic-weight-field-v0",
+      "path": "prom_search_hswm/evidence/HSWM_SEMANTIC_WEIGHT_FIELD_V0_20260726.json",
+      "sha256": "bd0c13780c87006c078ab6e710fe3c0714468745caa6513f349ca926e538a5ff",
+      "role": "machine-readable secondary-AI target definition"
+    },
+    {
+      "artifact_id": "causal-plasticity-cpl1-draft",
+      "path": "prom_search_hswm/evidence/PREREG_CPL1_hswm_causal_plasticity_20260726.draft.json",
+      "sha256": "bb1ab0a3d4e844ce1e86c4d96ee91d9c8d062a13fbeaedb73957850cee7975fa",
+      "role": "preserved predecessor draft requiring user ratification"
+    },
+    {
+      "artifact_id": "immutable-scalar-weight-snapshot",
+      "path": "hswm_weight_snapshot.py",
+      "sha256": "53a2e1cea7c57d7b7d3b13321e560ef25581b299ff443dcc80791f777bce24f1",
+      "role": "implemented content-addressed scalar W substrate"
+    },
+    {
+      "artifact_id": "scalar-bond-readout",
+      "path": "prom_search_hswm/hswm_bond_readout.py",
+      "sha256": "41bca84d284f82f52a966c03c06e8b83debe30388dc41d8ce425f57ff61221f1",
+      "role": "implemented scalar slow-weight and query-gate readout"
+    }
+  ],
+  "runtime_artifacts": [
+    {
+      "artifact_id": "w-ablation-builder",
+      "path": "hswm_w_ablation.py",
+      "sha256": "f8328be98b9ce5fdffc0402422c087b11661bde836e996741adbb75cb60a77be",
+      "role": "deterministic removal, within-stratum shuffle, and exact restore construction"
+    },
+    {
+      "artifact_id": "semantic-weight-metric-reducer",
+      "path": "hswm_semantic_weight_metric.py",
+      "sha256": "bb15e1096a04b3d7c31d832e20a9794af9eedab3eb9715eec4a612bc4e747fb3",
+      "role": "pure observation validation and non-verdict metric reduction"
+    },
+    {
+      "artifact_id": "semantic-weight-contract-validator",
+      "path": "scripts/validate_hswm_semantic_weight_metric_contract.py",
+      "sha256": "875d932f631068256efa4f7a3e7017092fa15e9768ed1a6222567e0f47ea05b2",
+      "role": "fail-closed contract and preregistration validation"
+    },
+    {
+      "artifact_id": "semantic-weight-negative-tests",
+      "path": "tests/test_hswm_semantic_weight_metric.py",
+      "sha256": "86ddcdf04910117c1064eae1b8b31608730f97e94282017348a45c2dc440f9ca",
+      "role": "positive fixture and injected-negative enforcement"
+    },
+    {
+      "artifact_id": "scalar-w-causal-judge",
+      "path": "hswm_scalar_w_causal_judge.py",
+      "sha256": "d87be1006cb13ba7d7dfb3d5f1028e9c6dd5cb4b95eedd74a75b401ad878ae91",
+      "role": "frozen pure judge for narrow scalar-W causal mediation only"
+    },
+    {
+      "artifact_id": "scalar-w-causal-judge-tests",
+      "path": "tests/test_hswm_scalar_w_causal_judge.py",
+      "sha256": "38e73613b9b8bb77e2788c9e3abc14362e1999e35bacf78b0c4ea50f05945c1a",
+      "role": "independent judge positive, failed-seam, drift, and CLI replay tests"
+    }
+  ],
+  "schema_binding": {
+    "artifact_id": "semantic-weight-metric-schema",
+    "path": "schemas/hswm_semantic_weight_metric_contract.v1.schema.json",
+    "sha256": "6a4e53d9ae5385893ddb119978b646cc9368780ecb5683ee2da9ec422dd23d98",
+    "role": "JSON interchange schema"
+  }
+}

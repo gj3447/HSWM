@@ -1,8 +1,8 @@
 {
   "schema": "longinus-hswm-active-research-programme/v1",
   "binding_id": "longinus-hswm-active-research-programme-20260726",
-  "generated_at": "2026-07-26T22:31:14+09:00",
-  "baseline_scope": "GIT/HSWM main base 62cced44 plus exact SYMPOSIUM integration artifacts and Proxmox LakatoTree readback",
+  "generated_at": "2026-07-27T00:16:56+09:00",
+  "baseline_scope": "GIT/HSWM main base 811937cf plus exact semantic-W engineering artifacts, SYMPOSIUM integration artifacts, and Proxmox LakatoTree readback",
   "authority": {
     "kg_write_state": "PROPOSED_NOT_WRITTEN",
     "lakatotree_write_state": "READBACK_ONLY",
@@ -30,7 +30,7 @@
       "path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
       "repository": "https://github.com/gj3447/HSWM.git",
       "branch": "main",
-      "git_base_commit": "62cced44f38987a7986eb28bf0040b64dc0b3ac6",
+      "git_base_commit": "811937cfb2c6edd2853677568a32f80266877192",
       "snapshot_validation": "CONTENT_HASH_BINDINGS_PLUS_SYNC_RECEIPT",
       "relation": "EXECUTABLE_SSOT"
     },
@@ -400,8 +400,8 @@
         "contract_binding": "hswm-ordered-research-gates-20260724",
         "qualified_symbol": "HSWM_RESEARCH_LEDGER_V1_20260726",
         "file_line": 1,
-        "line_range": "1-544",
-        "sha256": "e79b277e9cc44ce51e983c76819278b8f4c0aee8e436a5aa8720b8d2358bc589",
+        "line_range": "1-588",
+        "sha256": "3f9d2c82859b9275ef16f50dbe79c923e3c6988e0571d03116ea58bb7eb3e4be",
         "crate_script": "_research/hswm_programme_consolidation/verify_hswm_research_programme_longinus.py"
       },
       "qualified_symbol": "HSWM_RESEARCH_LEDGER_V1_20260726",
@@ -409,9 +409,9 @@
       "source_root": "HSWM",
       "source_path": "research/HSWM_RESEARCH_LEDGER.v1.json",
       "file_line": 1,
-      "line_range": "1-544",
-      "line_count": 544,
-      "sha256": "e79b277e9cc44ce51e983c76819278b8f4c0aee8e436a5aa8720b8d2358bc589",
+      "line_range": "1-588",
+      "line_count": 588,
+      "sha256": "3f9d2c82859b9275ef16f50dbe79c923e3c6988e0571d03116ea58bb7eb3e4be",
       "binding_state": "ACTIVE_PROGRAMME_LEDGER",
       "confidence": "EXTRACTED",
       "witness": {
@@ -662,13 +662,277 @@
         "method": "WHOLE_FILE"
       },
       "claim_boundary": "REFERENCE_INTEGRITY_ONLY_NO_SCIENTIFIC_VERDICT"
+    },
+    {
+      "sourceId": "hswm-semantic-weight-metric-contract-v1",
+      "chain": {
+        "kg_node": "hswm-ordered-research-harness-20260724",
+        "contract_binding": "hswm-ordered-research-gates-20260724",
+        "qualified_symbol": "HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT_V1_20260726",
+        "file_line": 1,
+        "line_range": "1-329",
+        "sha256": "61a54265a2a424d32889721214eb0ec8a13a6c39de9ac78e4e8f40e7ca786ec3",
+        "crate_script": "_research/hswm_programme_consolidation/verify_hswm_research_programme_longinus.py"
+      },
+      "qualified_symbol": "HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT_V1_20260726",
+      "symbol_kind": "artifact",
+      "source_root": "HSWM",
+      "source_path": "research/HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT.v1.json",
+      "file_line": 1,
+      "line_range": "1-329",
+      "line_count": 329,
+      "sha256": "61a54265a2a424d32889721214eb0ec8a13a6c39de9ac78e4e8f40e7ca786ec3",
+      "binding_state": "ENGINEERING_DRAFT_UNRATIFIED",
+      "confidence": "EXTRACTED",
+      "witness": {
+        "method": "JSON_ARTIFACT"
+      },
+      "claim_boundary": "REFERENCE_INTEGRITY_ONLY_NO_SCIENTIFIC_VERDICT"
+    },
+    {
+      "sourceId": "hswm-semantic-weight-metric-schema-v1",
+      "chain": {
+        "kg_node": "hswm-ordered-research-harness-20260724",
+        "contract_binding": "hswm-ordered-research-gates-20260724",
+        "qualified_symbol": "HSWM.SemanticWeightMetric.Schema.v1",
+        "file_line": 1,
+        "line_range": "1-330",
+        "sha256": "6a4e53d9ae5385893ddb119978b646cc9368780ecb5683ee2da9ec422dd23d98",
+        "crate_script": "_research/hswm_programme_consolidation/verify_hswm_research_programme_longinus.py"
+      },
+      "qualified_symbol": "HSWM.SemanticWeightMetric.Schema.v1",
+      "symbol_kind": "schema_artifact",
+      "source_root": "HSWM",
+      "source_path": "schemas/hswm_semantic_weight_metric_contract.v1.schema.json",
+      "file_line": 1,
+      "line_range": "1-330",
+      "line_count": 330,
+      "sha256": "6a4e53d9ae5385893ddb119978b646cc9368780ecb5683ee2da9ec422dd23d98",
+      "binding_state": "EXACT",
+      "confidence": "EXTRACTED",
+      "witness": {
+        "method": "JSON_ARTIFACT"
+      },
+      "claim_boundary": "REFERENCE_INTEGRITY_ONLY_NO_SCIENTIFIC_VERDICT"
+    },
+    {
+      "sourceId": "hswm-scalar-w-causal-prereg-v1",
+      "chain": {
+        "kg_node": "hswm-ordered-research-harness-20260724",
+        "contract_binding": "hswm-ordered-research-gates-20260724",
+        "qualified_symbol": "PREREG_HSWM_SCALAR_W_CAUSAL_MEDIATION_V1_20260726",
+        "file_line": 1,
+        "line_range": "1-211",
+        "sha256": "a3d830f029e3f8a82493149a7f9fd712ec92d355b36d27bf14d3b92dcc5c263e",
+        "crate_script": "_research/hswm_programme_consolidation/verify_hswm_research_programme_longinus.py"
+      },
+      "qualified_symbol": "PREREG_HSWM_SCALAR_W_CAUSAL_MEDIATION_V1_20260726",
+      "symbol_kind": "preregistration_artifact",
+      "source_root": "HSWM",
+      "source_path": "research/PREREG_HSWM_SCALAR_W_CAUSAL_MEDIATION.v1.json",
+      "file_line": 1,
+      "line_range": "1-211",
+      "line_count": 211,
+      "sha256": "a3d830f029e3f8a82493149a7f9fd712ec92d355b36d27bf14d3b92dcc5c263e",
+      "binding_state": "DRAFT_UNRATIFIED_NO_MEASUREMENT",
+      "confidence": "EXTRACTED",
+      "witness": {
+        "method": "JSON_ARTIFACT"
+      },
+      "claim_boundary": "REFERENCE_INTEGRITY_ONLY_NO_SCIENTIFIC_VERDICT"
+    },
+    {
+      "sourceId": "hswm-scalar-w-ablation-builder",
+      "chain": {
+        "kg_node": "hswm-ordered-research-harness-20260724",
+        "contract_binding": "hswm-ordered-research-gates-20260724",
+        "qualified_symbol": "hswm_w_ablation.build_w_ablation_bundle",
+        "file_line": 174,
+        "line_range": "174-214",
+        "sha256": "f8328be98b9ce5fdffc0402422c087b11661bde836e996741adbb75cb60a77be",
+        "crate_script": "_research/hswm_programme_consolidation/verify_hswm_research_programme_longinus.py"
+      },
+      "qualified_symbol": "hswm_w_ablation.build_w_ablation_bundle",
+      "symbol_kind": "function",
+      "source_root": "HSWM",
+      "source_path": "hswm_w_ablation.py",
+      "file_line": 174,
+      "line_range": "174-214",
+      "line_count": 250,
+      "sha256": "f8328be98b9ce5fdffc0402422c087b11661bde836e996741adbb75cb60a77be",
+      "binding_state": "ENGINEERING_ONLY",
+      "confidence": "EXTRACTED",
+      "witness": {
+        "method": "PYTHON_AST",
+        "symbol": "build_w_ablation_bundle"
+      },
+      "claim_boundary": "REFERENCE_INTEGRITY_ONLY_NO_SCIENTIFIC_VERDICT"
+    },
+    {
+      "sourceId": "hswm-semantic-weight-metric-reducer",
+      "chain": {
+        "kg_node": "hswm-ordered-research-harness-20260724",
+        "contract_binding": "hswm-ordered-research-gates-20260724",
+        "qualified_symbol": "hswm_semantic_weight_metric.evaluate_observations",
+        "file_line": 445,
+        "line_range": "445-591",
+        "sha256": "bb15e1096a04b3d7c31d832e20a9794af9eedab3eb9715eec4a612bc4e747fb3",
+        "crate_script": "_research/hswm_programme_consolidation/verify_hswm_research_programme_longinus.py"
+      },
+      "qualified_symbol": "hswm_semantic_weight_metric.evaluate_observations",
+      "symbol_kind": "function",
+      "source_root": "HSWM",
+      "source_path": "hswm_semantic_weight_metric.py",
+      "file_line": 445,
+      "line_range": "445-591",
+      "line_count": 615,
+      "sha256": "bb15e1096a04b3d7c31d832e20a9794af9eedab3eb9715eec4a612bc4e747fb3",
+      "binding_state": "ENGINEERING_ONLY",
+      "confidence": "EXTRACTED",
+      "witness": {
+        "method": "PYTHON_AST",
+        "symbol": "evaluate_observations"
+      },
+      "claim_boundary": "REFERENCE_INTEGRITY_ONLY_NO_SCIENTIFIC_VERDICT"
+    },
+    {
+      "sourceId": "hswm-semantic-weight-contract-validator",
+      "chain": {
+        "kg_node": "hswm-ordered-research-harness-20260724",
+        "contract_binding": "hswm-ordered-research-gates-20260724",
+        "qualified_symbol": "validate_hswm_semantic_weight_metric_contract.validate_contract",
+        "file_line": 378,
+        "line_range": "378-519",
+        "sha256": "875d932f631068256efa4f7a3e7017092fa15e9768ed1a6222567e0f47ea05b2",
+        "crate_script": "_research/hswm_programme_consolidation/verify_hswm_research_programme_longinus.py"
+      },
+      "qualified_symbol": "validate_hswm_semantic_weight_metric_contract.validate_contract",
+      "symbol_kind": "function",
+      "source_root": "HSWM",
+      "source_path": "scripts/validate_hswm_semantic_weight_metric_contract.py",
+      "file_line": 378,
+      "line_range": "378-519",
+      "line_count": 807,
+      "sha256": "875d932f631068256efa4f7a3e7017092fa15e9768ed1a6222567e0f47ea05b2",
+      "binding_state": "EXACT",
+      "confidence": "EXTRACTED",
+      "witness": {
+        "method": "PYTHON_AST",
+        "symbol": "validate_contract"
+      },
+      "claim_boundary": "REFERENCE_INTEGRITY_ONLY_NO_SCIENTIFIC_VERDICT"
+    },
+    {
+      "sourceId": "hswm-semantic-weight-metric-negative-tests",
+      "chain": {
+        "kg_node": "hswm-ordered-research-harness-20260724",
+        "contract_binding": "hswm-ordered-research-gates-20260724",
+        "qualified_symbol": "tests.test_hswm_semantic_weight_metric",
+        "file_line": 1,
+        "line_range": "1-457",
+        "sha256": "86ddcdf04910117c1064eae1b8b31608730f97e94282017348a45c2dc440f9ca",
+        "crate_script": "_research/hswm_programme_consolidation/verify_hswm_research_programme_longinus.py"
+      },
+      "qualified_symbol": "tests.test_hswm_semantic_weight_metric",
+      "symbol_kind": "test_artifact",
+      "source_root": "HSWM",
+      "source_path": "tests/test_hswm_semantic_weight_metric.py",
+      "file_line": 1,
+      "line_range": "1-457",
+      "line_count": 457,
+      "sha256": "86ddcdf04910117c1064eae1b8b31608730f97e94282017348a45c2dc440f9ca",
+      "binding_state": "EXACT",
+      "confidence": "EXTRACTED",
+      "witness": {
+        "method": "WHOLE_FILE"
+      },
+      "claim_boundary": "REFERENCE_INTEGRITY_ONLY_NO_SCIENTIFIC_VERDICT"
+    },
+    {
+      "sourceId": "hswm-semantic-weight-contract-validation-receipt",
+      "chain": {
+        "kg_node": "hswm-ordered-research-harness-20260724",
+        "contract_binding": "hswm-ordered-research-gates-20260724",
+        "qualified_symbol": "HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT_VALIDATION_20260726",
+        "file_line": 1,
+        "line_range": "1-74",
+        "sha256": "ad25fe39663dbd2f59ff8d0023a65880595073731dfa51e508271429124a7c82",
+        "crate_script": "_research/hswm_programme_consolidation/verify_hswm_research_programme_longinus.py"
+      },
+      "qualified_symbol": "HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT_VALIDATION_20260726",
+      "symbol_kind": "evidence_receipt",
+      "source_root": "HSWM",
+      "source_path": "receipts/HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT_VALIDATION_20260726.json",
+      "file_line": 1,
+      "line_range": "1-74",
+      "line_count": 74,
+      "sha256": "ad25fe39663dbd2f59ff8d0023a65880595073731dfa51e508271429124a7c82",
+      "binding_state": "ENGINEERING_ONLY",
+      "confidence": "EXTRACTED",
+      "witness": {
+        "method": "JSON_ARTIFACT"
+      },
+      "claim_boundary": "REFERENCE_INTEGRITY_ONLY_NO_SCIENTIFIC_VERDICT"
+    },
+    {
+      "sourceId": "hswm-scalar-w-causal-pure-judge",
+      "chain": {
+        "kg_node": "hswm-ordered-research-harness-20260724",
+        "contract_binding": "hswm-ordered-research-gates-20260724",
+        "qualified_symbol": "hswm_scalar_w_causal_judge.judge_metrics",
+        "file_line": 157,
+        "line_range": "157-435",
+        "sha256": "d87be1006cb13ba7d7dfb3d5f1028e9c6dd5cb4b95eedd74a75b401ad878ae91",
+        "crate_script": "_research/hswm_programme_consolidation/verify_hswm_research_programme_longinus.py"
+      },
+      "qualified_symbol": "hswm_scalar_w_causal_judge.judge_metrics",
+      "symbol_kind": "function",
+      "source_root": "HSWM",
+      "source_path": "hswm_scalar_w_causal_judge.py",
+      "file_line": 157,
+      "line_range": "157-435",
+      "line_count": 460,
+      "sha256": "d87be1006cb13ba7d7dfb3d5f1028e9c6dd5cb4b95eedd74a75b401ad878ae91",
+      "binding_state": "FROZEN_UNRUN_NO_SERVER_REGISTRATION",
+      "confidence": "EXTRACTED",
+      "witness": {
+        "method": "PYTHON_AST",
+        "symbol": "judge_metrics"
+      },
+      "claim_boundary": "REFERENCE_INTEGRITY_ONLY_NO_SCIENTIFIC_VERDICT"
+    },
+    {
+      "sourceId": "hswm-scalar-w-causal-pure-judge-tests",
+      "chain": {
+        "kg_node": "hswm-ordered-research-harness-20260724",
+        "contract_binding": "hswm-ordered-research-gates-20260724",
+        "qualified_symbol": "tests.test_hswm_scalar_w_causal_judge",
+        "file_line": 1,
+        "line_range": "1-317",
+        "sha256": "38e73613b9b8bb77e2788c9e3abc14362e1999e35bacf78b0c4ea50f05945c1a",
+        "crate_script": "_research/hswm_programme_consolidation/verify_hswm_research_programme_longinus.py"
+      },
+      "qualified_symbol": "tests.test_hswm_scalar_w_causal_judge",
+      "symbol_kind": "test_artifact",
+      "source_root": "HSWM",
+      "source_path": "tests/test_hswm_scalar_w_causal_judge.py",
+      "file_line": 1,
+      "line_range": "1-317",
+      "line_count": 317,
+      "sha256": "38e73613b9b8bb77e2788c9e3abc14362e1999e35bacf78b0c4ea50f05945c1a",
+      "binding_state": "EXACT",
+      "confidence": "EXTRACTED",
+      "witness": {
+        "method": "WHOLE_FILE"
+      },
+      "claim_boundary": "REFERENCE_INTEGRITY_ONLY_NO_SCIENTIFIC_VERDICT"
     }
   ],
   "required_gaps": [
     {
       "gap_id": "semantic-weight-metric-contract",
-      "status": "MISSING_REQUIRED",
-      "next_falsifier": "Freeze a machine-readable semantic-weight metric with scalar, embedding, topology, and prompt-context ablations before collecting outcome data."
+      "status": "OPEN_UNJUDGED",
+      "next_falsifier": "Ratify and machine-lock the engineering-validated scalar-W metric draft after F1 adjudication, then freeze a new cohort and development-selected strongest baseline before collecting data."
     },
     {
       "gap_id": "operator-W-causal-mediation",

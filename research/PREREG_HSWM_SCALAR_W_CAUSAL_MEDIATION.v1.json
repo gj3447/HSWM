@@ -1,0 +1,211 @@
+{
+  "schema_version": "hswm-scalar-w-causal-preregistration/v1",
+  "preregistration_id": "PREREG_HSWM_SCALAR_W_CAUSAL_MEDIATION_V1_20260726",
+  "experiment_id": "HSWM-SWCM-1",
+  "experiment_tag": "hswm-scalar-w-causal-mediation-v1",
+  "active_tree": {
+    "tree_id": "LakatosTree_HSWM_20260719",
+    "authority_uri": "lakatotree://proxmox-lxc-301/LakatosTree_HSWM_20260719",
+    "role": "PREDICTION_AND_ADJUDICATION_RECORD"
+  },
+  "status": "DRAFT_UNRATIFIED_NO_MEASUREMENT",
+  "created_at": "2026-07-26",
+  "title": "Scalar slow-W causal mediation shadow before operator-valued semantic W",
+  "w_scope": "scalar_slow_efficacy_v1",
+  "operator_w_claim_allowed": false,
+  "authority": {
+    "user_ratified": false,
+    "scientific_status": "UNJUDGED",
+    "scientific_judgment_emitted": false,
+    "measurement_authorized": false
+  },
+  "predecessors": [
+    {
+      "path": "prom_search_hswm/evidence/PREREG_CPL1_hswm_causal_plasticity_20260726.draft.json",
+      "sha256": "bb1ab0a3d4e844ce1e86c4d96ee91d9c8d062a13fbeaedb73957850cee7975fa",
+      "relation": "REFINES_PHASE_B_WITHOUT_RATIFYING_CPL1"
+    },
+    {
+      "path": "prom_search_hswm/evidence/HSWM_SEMANTIC_WEIGHT_FIELD_V0_20260726.json",
+      "sha256": "bd0c13780c87006c078ab6e710fe3c0714468745caa6513f349ca926e538a5ff",
+      "relation": "SCALAR_CAUSAL_SHADOW_OF_FUTURE_OPERATOR_TARGET"
+    }
+  ],
+  "contract_binding": {
+    "path": "research/HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT.v1.json",
+    "sha256": "61a54265a2a424d32889721214eb0ec8a13a6c39de9ac78e4e8f40e7ca786ec3"
+  },
+  "hypothesis": {
+    "primary": "On a fresh frozen cohort, W_FULL_LEARNED improves utility over one development-selected strongest baseline by at least 0.05 with paired cluster-bootstrap LCB95 greater than zero.",
+    "mediation": "Exact W removal and within-stratum W shuffle each erase at least 70 percent of learned gain, while exact W restoration recovers at least 90 percent and is equivalent to FULL inside a plus or minus 0.02 ROPE.",
+    "representation": "Embedding-only, hypergraph-only, uniform-L1, random-update, and equal-information context/vector controls do not explain the FULL effect.",
+    "actuation": "At least one fresh case changes a pre-LLM route under removal or shuffle, while exact restoration recovers the FULL numeric route digest.",
+    "retention": "Old-regime retention loss is at most 0.03 and negative-transfer rate is at most 0.10.",
+    "interpretation_limit": "Passing supports only causal efficacy of the implemented durable scalar W projection; it does not support operator-valued W, topology learning, transfer, consolidation, or larger-AI claims."
+  },
+  "testbed": {
+    "family": "F3v2 procedural foundry successor",
+    "cohort_rule": "new component-disjoint worlds never used by F1 sealed-r1, r2, or r3 and frozen before any measurement",
+    "scorer": "deterministic exact world simulator",
+    "cohorts": ["development", "fresh", "retention"],
+    "cluster_unit": "world_or_connected_component",
+    "minimum_independent_seeds": 5,
+    "sample_size_rule": "paired development variance must establish at least 0.80 power for an absolute 0.05 effect before machine lock",
+    "freshness_identity": "world content SHA-256 plus entity, relation, program, template, and near-duplicate exclusion manifest"
+  },
+  "arms": [
+    "NO_SHARED_STATE",
+    "EMBEDDING_ONLY",
+    "HYPERGRAPH_ONLY",
+    "FROZEN_NO_WRITE",
+    "STRONG_CONTEXT_VECTOR_EQUAL_INFO",
+    "W_UNIFORM_L1_MATCHED",
+    "W_RANDOM_UPDATE_MATCHED",
+    "W_FULL_LEARNED",
+    "W_REMOVED_BASE",
+    "W_SHUFFLED_WITHIN_STRATUM",
+    "W_RESTORED_EXACT"
+  ],
+  "intervention_sequences": {
+    "full_remove_shuffle_restore": [
+      "W_FULL_LEARNED",
+      "W_REMOVED_BASE",
+      "W_SHUFFLED_WITHIN_STRATUM",
+      "W_RESTORED_EXACT"
+    ],
+    "full_shuffle_remove_restore": [
+      "W_FULL_LEARNED",
+      "W_SHUFFLED_WITHIN_STRATUM",
+      "W_REMOVED_BASE",
+      "W_RESTORED_EXACT"
+    ],
+    "assignment": "balance the remove-first and shuffle-first sequences by hash(component_id, preregistration_seed) and counterbalance non-intervention arm positions with a frozen Latin square",
+    "carryover_control": "distinct request ids, cache_hits=0, no hidden session state, and exact W mount receipt before every arm"
+  },
+  "arm_construction": {
+    "W_FULL_LEARNED": "mount the approved immutable W1 snapshot derived from W0 and pre-outcome eligibility-bound DeltaW",
+    "W_REMOVED_BASE": "mount exact W0; never synthesize an all-zero ell field",
+    "W_SHUFFLED_WITHIN_STRATUM": "force a derangement of DeltaW inside frozen relation-type, role-signature, arity, degree, and candidate-size strata while preserving the delta multiset and L1/L2 norms",
+    "W_RESTORED_EXACT": "remount the original W1 bytes and require identical snapshot SHA, pre-LLM logits, rank, probabilities, and route digest",
+    "W_UNIFORM_L1_MATCHED": "distribute matched update mass over identical support without semantic credit assignment",
+    "W_RANDOM_UPDATE_MATCHED": "use a preregistered seed to match support and magnitude distribution while destroying source assignment",
+    "STRONG_CONTEXT_VECTOR_EQUAL_INFO": "serialize the same learned numeric information content through the strongest development-selected non-W representation under the same active-byte cap"
+  },
+  "parity": {
+    "exact_fields": [
+      "model_sha256",
+      "task_sha256",
+      "topology_sha256",
+      "embedding_sha256",
+      "relation_schema_sha256",
+      "candidate_universe_sha256",
+      "raw_information_union_sha256",
+      "compute_envelope_sha256",
+      "physical_call_cap",
+      "logical_call_cap",
+      "input_token_cap",
+      "output_token_cap",
+      "state_budget_bytes"
+    ],
+    "same_model_revision_and_serving": true,
+    "same_candidate_and_topology": true,
+    "same_raw_information_union": true,
+    "same_useful_compute_envelope": true,
+    "inert_padding_forbidden": true,
+    "null_calls_forbidden": true
+  },
+  "metrics_and_thresholds": {
+    "learned_gain": "FULL minus frozen development-selected strongest baseline; mean at least 0.05 and paired cluster-bootstrap LCB95 greater than zero",
+    "full_over_embedding_delta": "FULL minus EMBEDDING_ONLY; paired cluster-bootstrap LCB95 greater than zero",
+    "full_over_hypergraph_delta": "FULL minus HYPERGRAPH_ONLY; paired cluster-bootstrap LCB95 greater than zero",
+    "w_ablation_delta": "FULL minus REMOVED; paired LCB95 greater than zero",
+    "w_shuffle_delta": "FULL minus SHUFFLED; paired LCB95 greater than zero",
+    "w_random_update_delta": "FULL minus RANDOM_UPDATE; paired LCB95 greater than zero",
+    "context_operator_delta": "FULL minus STRONG_CONTEXT_VECTOR; mean at least 0.03 and paired LCB95 greater than zero",
+    "removal_erasure_fraction": "(FULL-REMOVED)/(FULL-strongest_baseline) at least 0.70 when denominator is positive",
+    "shuffle_erasure_fraction": "(FULL-SHUFFLED)/(FULL-strongest_baseline) at least 0.70 when denominator is positive",
+    "random_update_erasure_fraction": "(FULL-RANDOM_UPDATE)/(FULL-strongest_baseline) at least 0.70 when denominator is positive",
+    "restoration_recovery_fraction": "(RESTORED-REMOVED)/(FULL-REMOVED) at least 0.90",
+    "restoration_gap": "FULL minus RESTORED paired interval entirely inside [-0.02,0.02]",
+    "route_jsd_normalized": "macro mean JSD(pi_FULL||pi_intervention)/ln(2), with at least one route-divergent fresh case",
+    "route_case_count": "number of fresh FULL rows independently eligible for route-divergence comparison",
+    "route_divergence_cases": "fresh FULL rows whose removal or shuffle route JSD exceeds 1e-12; at least one and never greater than route_case_count",
+    "retention_loss": "strongest-baseline retention minus FULL retention at most 0.03",
+    "negative_transfer_rate": "fraction of fresh clusters with harmful FULL effect at most 0.10",
+    "seed_direction": "at least four of five independent seeds have positive learned-gain direction",
+    "noise_band": [-0.02, 0.02]
+  },
+  "statistics": {
+    "primary_unit": "world_or_connected_component_cluster",
+    "within_cluster": "macro mean across items before resampling",
+    "resampling": "paired percentile bootstrap with 10000 samples and frozen seed",
+    "bootstrap_seed": 20260726,
+    "bootstrap_interval": "paired_percentile_95",
+    "confidence": 0.95,
+    "strongest_baseline_selection": "select exactly one of FROZEN_NO_WRITE, STRONG_CONTEXT_VECTOR_EQUAL_INFO, or W_UNIFORM_L1_MATCHED on development only and freeze its SHA before fresh evaluation",
+    "multiple_views": "utility, route actuation, retention, and negative transfer are reported separately and cannot compensate for a failed primary seam"
+  },
+  "firewalls": {
+    "eligibility": "append-only receipt sealed before independent numeric reward",
+    "gold": "answer and route receipts sealed before gold release",
+    "language": "training answer, verdict, rationale, and natural-language lesson are forbidden from W updates and later prompts",
+    "identity": "edge ids, tuple ids, candidate order, prompt strings, and cache keys cannot reveal world identity",
+    "cohort": "F1 sealed items and any exposed development item are forbidden",
+    "hashes": "any post-lock change to model, prompt, tokenizer, function registry, topology, embedding, relation schema, candidate universe, W builder, metric reducer, or judge voids the run"
+  },
+  "judge_binding": {
+    "path": "hswm_scalar_w_causal_judge.py",
+    "sha256": "d87be1006cb13ba7d7dfb3d5f1028e9c6dd5cb4b95eedd74a75b401ad878ae91",
+    "replay_command": "python3 hswm_scalar_w_causal_judge.py --metrics <sealed_metrics.json>",
+    "judgment_schema": "hswm-scalar-w-causal-judgment/v1"
+  },
+  "server_registration": {
+    "tree_id": "LakatosTree_HSWM_20260719",
+    "experiment_tag": "hswm-scalar-w-causal-mediation-v1",
+    "state": "NOT_REGISTERED_BLOCKS_MEASUREMENT",
+    "receipt_sha256": null
+  },
+  "kill_conditions": [
+    "learned gain is below 0.05 or paired LCB95 is not greater than zero",
+    "the development-selected strongest baseline matches or exceeds FULL",
+    "NO_SHARED_STATE, EMBEDDING_ONLY, HYPERGRAPH_ONLY, W_UNIFORM_L1_MATCHED, W_RANDOM_UPDATE_MATCHED, or STRONG_CONTEXT_VECTOR_EQUAL_INFO matches or exceeds FULL under its preregistered paired gate",
+    "removal or shuffle erases less than 70 percent of a positive learned gain",
+    "random matched updates explain the effect",
+    "exact W1 restoration fails or restored behavior is outside the frozen equivalence ROPE",
+    "no pre-LLM route or selected bond changes under two independent intervention attempts",
+    "the effect disappears under fresh relation or entity paraphrases",
+    "retention or negative-transfer guardrails fail"
+  ],
+  "void_conditions": [
+    "model, compute envelope, raw-information union, topology, embedding, relation schema, task, candidate universe, or state-capacity parity fails",
+    "eligibility is created or mutated after independent reward observation",
+    "answer, verdict, rationale, or natural-language lesson leaks into a later prompt or W update",
+    "fresh cohort overlaps F1, development, training, or a near-duplicate surface",
+    "shuffle changes support, type, role, arity, degree stratum, delta multiset, L1 norm, or L2 norm",
+    "restored snapshot SHA or deterministic route digest differs from FULL",
+    "any measurement-affecting artifact changes after machine lock",
+    "producer and independent judge receipts are not distinct",
+    "injected-negative validation does not fail closed"
+  ],
+  "required_before_lock": [
+    "explicit user ratification of this exact draft or a successor hash",
+    "F1 sealed-r3 completion, independent adjudication, and active-tree readback",
+    "fresh dataset, split, candidate-universe, and near-duplicate manifest hashes",
+    "model endpoint, revision, tokenizer, prompt, function registry, and compute-envelope hashes",
+    "W0, W1, DeltaW, strata, shuffle permutation, random-update, and restoration manifest hashes",
+    "development-only strongest-baseline selection receipt",
+    "power receipt and five frozen independent seeds",
+    "independent pure-judge code and injected-negative fixtures",
+    "LakatoTree prediction registration and exact readback"
+  ],
+  "measurement_gate": {
+    "measurement_authorized": false,
+    "f1_completed_and_adjudicated": false,
+    "user_ratified": false,
+    "machine_locked": false,
+    "fresh_cohort_frozen": false,
+    "strongest_baseline_selected": false,
+    "independent_judge_frozen": false,
+    "lakatotree_prediction_registered": false
+  }
+}

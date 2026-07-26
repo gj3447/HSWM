@@ -74,6 +74,13 @@ def traverse(field: WeightField, query_emb: np.ndarray, k: int = 10,
 def supersede(field: WeightField, edge_id: int, decay: float = 0.5) -> None:
     """(iii) Compatibility write: multiplicatively decay slow b(e). NEVER deletes.
 
+    DEPRECATED (2026-07-26, HSWM_MATH_DEFINITION_UNIFIED §4-4): this in-place
+    path is non-idempotent — prom_search_hswm T2's negative oracle proves exact
+    squared-decay corruption on duplicate delivery. The canonical path is the
+    G-Set CRDT ledger (prom_search_hswm/supersede_ledger.py, bit-level
+    convergent canonical event-id fold). Kept only for measurement-replay
+    compatibility of historical receipts; do not use for new writes.
+
     Eilu-va-Eilu: the hyperedge stays in the hypergraph and stays scorable; its
     contribution to W just drops. S3+ replaces this positional in-place write
     with stable-ID event folding and immutable field snapshots.

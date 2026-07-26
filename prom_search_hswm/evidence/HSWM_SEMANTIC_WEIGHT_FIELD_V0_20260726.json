@@ -1,0 +1,152 @@
+{
+  "schema_version": "hswm.semantic_weight_field.v0",
+  "status": "SECONDARY_AI_RESEARCH_PROPOSED_FALSIFIER",
+  "cycle_id": "prom-hswm-semantic-weight-field-math-20260726",
+  "canon_boundary": {
+    "user_canon_preserved": true,
+    "proposal_is_ratified_canon": false,
+    "naesengmoon_dispatched": false
+  },
+  "definition": {
+    "embedding_is": "a coordinate chart for semantic state",
+    "semantic_weight_is": "a typed context-conditioned n-ary relation operator over embedding coordinates",
+    "semantic_compatibility_is_not_causal_efficacy": true,
+    "semantic_compatibility": "K_e(q), frozen-embedding relation and role compatibility",
+    "causal_efficacy": "theta_e(t), outcome-learned macro-synaptic utility",
+    "weight_state": [
+      "relation_parameters",
+      "incidence_transport_maps",
+      "fast_edge_strength",
+      "slow_edge_strength",
+      "topology_gate_logit",
+      "eligibility_trace",
+      "uncertainty_and_provenance_channels"
+    ],
+    "system_state": "S_t=(X_t,H_t,Theta_t,alpha_t,A_t,Z_t,P_t)"
+  },
+  "embedding_space": {
+    "proposal": "M=R^d_semantic x PoincareBall(kappa,d_hierarchy) x Simplex(d_epistemic)",
+    "channels": {
+      "euclidean": "distributional content, analogy, local composition",
+      "hyperbolic": "taxonomy, subsumption, abstraction depth",
+      "simplex": "support, contradict, unknown and related epistemic state"
+    },
+    "relation_conditioned_gate": "g_r(q)=softmax(G_r q)",
+    "kill_if": "product geometry is within +/-2 percentage points of the simpler Euclidean typed-tensor model"
+  },
+  "hyperedge": {
+    "form": "e=(r;v_1:rho_1,...,v_k:rho_k)",
+    "typed_roles_required": true,
+    "unordered_relations_are_permutation_invariant": true,
+    "ordered_relations_are_role_equivariant": true
+  },
+  "equations": {
+    "semantic_cp_potential": "phi_sem(e,q)=sum_l a_r,l(q) product_i <u_r,rho_i,l,s_v_i>",
+    "directed_binary_auxiliary": "B_r=S_r+A_r, S_r=L_r L_r^T is PSD, A_r=-A_r^T is skew-symmetric",
+    "hierarchy_potential": "phi_hier(e,q)=-sum_i omega_r,i(q) d_B(T_r,rho_i h_v_i,c_r,i(q))^2",
+    "log_potential": "Psi_e=g_sem phi_sem+g_hier phi_hier+theta_fast+theta_slow+b_r^T u_e-lambda_unc U_e+alpha_e",
+    "routing": "pi(e|j,q)=exp(Psi_e/tau)/sum_{e' in Inc(j)} exp(Psi_e'/tau)",
+    "transport": "R_v_to_e^(r,rho):R^d_v -> R^d_e",
+    "hyperedge_message": "m_e=F_r(R_v1_to_e a_v1,...,R_vk_to_e a_vk,y_f_e,q)",
+    "node_message": "m_e_to_j=pi(e|j,q) R_j_to_e^T P_r,j m_e",
+    "activation": "a_j_next=(1-gamma)a_j+gamma Norm(sum_e m_e_to_j)",
+    "eligibility": "z_e,t=lambda_z z_e,t-1+grad_Theta log pi_Theta(e_t|S_t,q_t)",
+    "prediction_error": "delta_t=r_t-rhat_t",
+    "fast_weight_update": "Theta_fast_next=clip(Theta_fast+eta_W delta_t Z_t-lambda_W Theta_fast)",
+    "topology_update": "Delta alpha_e=eta_H delta_t z_e,t(g_e-sigmoid(alpha_e))-lambda_0-mu homeostasis(e)",
+    "behavioral_edge_importance": "I_e=E_q KL[p(y|q,H,W) || p(y|q,H_without_e,W)]"
+  },
+  "function_node": {
+    "form": "y_i=P_i[LLM_phi(role_i,Read_i(S_t),q_t)]",
+    "foundation_model_may_be_shared": true,
+    "required_distinctions": [
+      "typed port contract",
+      "read and write ownership",
+      "external numeric state",
+      "relation position",
+      "routing and outcome history"
+    ],
+    "free_text_must_be_projected_to_fixed_schema": true
+  },
+  "invariants": [
+    "local routing probabilities sum to one",
+    "typed role order is not erased",
+    "at least one pairwise-indistinguishable world pair has a non-zero n-ary energy margin",
+    "numeric activation is bounded",
+    "eligibility receipt is sealed before outcome",
+    "training answer, verdict rationale and new lesson text are blocked from receiver prompts",
+    "rollback of learned W/H removes most measured gain",
+    "H, W, relation schema and embedding model are independently content-addressed",
+    "field merge and split identities do not depend on derived embedding caches",
+    "slow commit is blocked on degree, entropy, activation or edge-budget violation",
+    "embedding geometry parameters and outcome efficacy parameters are logged separately",
+    "fixed-routing numeric core passes a contraction margin or is reported only as bounded recurrent execution"
+  ],
+  "preregistered_falsifier": {
+    "experiment_id": "HSWM-SWF-M1",
+    "worlds": {
+      "H1": ["123", "145", "167", "246", "257", "347", "356"],
+      "H2": ["123", "145", "167", "346", "357", "247", "256"],
+      "pairwise_property": "every unordered pair appears exactly once in each world",
+      "required_check": "pairwise clique input digests are bit-identical"
+    },
+    "arms": [
+      "FULL_SWF",
+      "EUCLIDEAN_COSINE",
+      "CLIQUE_GNN",
+      "HYPERGRAPH_SCALAR",
+      "PAIRWISE_RELATION",
+      "TENSOR_SHUFFLE",
+      "W_ROLLBACK"
+    ],
+    "equal_compute": [
+      "same small LLM",
+      "same function library",
+      "same input and output token budget",
+      "same call count",
+      "same candidate universe"
+    ],
+    "acceptance": {
+      "minimum_gain_over_strongest_baseline_pp": 10,
+      "paired_bootstrap_ci_lower_gt": 0,
+      "minimum_directionally_consistent_seeds": "4/5",
+      "minimum_gain_removed_by_tensor_shuffle": 0.7,
+      "minimum_gain_removed_by_weight_rollback": 0.7
+    },
+    "void_conditions": [
+      "world identity leaks through tuple ids, prompt strings or candidate order",
+      "compute or information planes differ between arms",
+      "clique input digests differ",
+      "eligibility is constructed after outcome"
+    ],
+    "kill_criteria": [
+      "pairwise baseline is within +/-2 percentage points of FULL_SWF",
+      "tensor shuffle preserves at least 50 percent of the full gain",
+      "gain disappears on fresh entity and relation paraphrases"
+    ]
+  },
+  "implementation_sequence": [
+    "SWF-0 role-aware CP score and local softmax on the existing immutable hypergraph",
+    "SWF-1 pre-outcome eligibility, independent outcome, numeric fast weights and rollback",
+    "SWF-2 product geometry only after M1 passes",
+    "SWF-3 frozen receiver transfer through version-pinned numeric W/H only",
+    "SWF-4 slow consolidation only after causal mediation passes"
+  ],
+  "primary_sources": [
+    "https://aclanthology.org/D19-1522/",
+    "https://icml.cc/2011/papers/438_icmlpaper.pdf",
+    "https://arxiv.org/abs/2007.03988",
+    "https://proceedings.mlr.press/v48/trouillon16.pdf",
+    "https://proceedings.neurips.cc/paper_files/paper/2017/hash/59dfa2df42d9e3d41f5b02bfc32229dd-Abstract.html",
+    "https://proceedings.neurips.cc/paper_files/paper/2006/hash/dff8e9c2ac33381546d96deea9922999-Abstract.html",
+    "https://proceedings.neurips.cc/paper_files/paper/2022/hash/75c45fca2aa416ada062b26cc4fb7641-Abstract-Conference.html",
+    "https://proceedings.mlr.press/v198/xiao22a.html",
+    "https://openreview.net/forum?id=BylaUTNtPS",
+    "https://openreview.net/forum?id=tL89RnzIiCd",
+    "https://proceedings.mlr.press/v235/zhuge24a.html",
+    "https://proceedings.mlr.press/v238/ma24b.html",
+    "https://proceedings.mlr.press/v117/bhattacharjee20a.html",
+    "https://link.springer.com/article/10.1007/BF00992696",
+    "https://www.nature.com/articles/s41467-020-17236-y"
+  ]
+}

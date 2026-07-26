@@ -1,0 +1,45 @@
+{
+  "cases": [
+    {
+      "id": "happy-completion",
+      "machine": "outbox-effect-lifecycle",
+      "steps": [
+        {"event": "CLAIM", "guard_results": {}, "expected_state": "in_flight", "expected_effects": ["RecordClaim"]},
+        {"event": "COMPLETE", "guard_results": {}, "expected_state": "succeeded", "expected_effects": ["CommitCompletion"]}
+      ]
+    },
+    {
+      "id": "safe-failure-reclaim",
+      "machine": "outbox-effect-lifecycle",
+      "steps": [
+        {"event": "CLAIM", "guard_results": {}, "expected_state": "in_flight", "expected_effects": ["RecordClaim"]},
+        {"event": "SAFE_FAILURE", "guard_results": {}, "expected_state": "pending", "expected_effects": ["RecordSafeFailure"]}
+      ]
+    },
+    {
+      "id": "unknown-reconciled",
+      "machine": "outbox-effect-lifecycle",
+      "steps": [
+        {"event": "CLAIM", "guard_results": {}, "expected_state": "in_flight", "expected_effects": ["RecordClaim"]},
+        {"event": "UNKNOWN", "guard_results": {}, "expected_state": "unknown_outcome", "expected_effects": ["RecordUnknownOutcome"]},
+        {"event": "RECONCILE_COMPLETED", "guard_results": {}, "expected_state": "succeeded", "expected_effects": ["CommitReconciledCompletion"]}
+      ]
+    },
+    {
+      "id": "unknown-abandoned",
+      "machine": "outbox-effect-lifecycle",
+      "steps": [
+        {"event": "CLAIM", "guard_results": {}, "expected_state": "in_flight", "expected_effects": ["RecordClaim"]},
+        {"event": "UNKNOWN", "guard_results": {}, "expected_state": "unknown_outcome", "expected_effects": ["RecordUnknownOutcome"]},
+        {"event": "ABANDON", "guard_results": {}, "expected_state": "failed_permanent", "expected_effects": ["RecordAbandonment"]}
+      ]
+    },
+    {
+      "id": "invalid-complete-before-claim",
+      "machine": "outbox-effect-lifecycle",
+      "steps": [
+        {"event": "COMPLETE", "guard_results": {}, "expected_state": "pending", "expected_effects": ["AuditInvalidTransition"]}
+      ]
+    }
+  ]
+}

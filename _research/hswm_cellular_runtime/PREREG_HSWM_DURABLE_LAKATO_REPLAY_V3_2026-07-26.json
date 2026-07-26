@@ -1,0 +1,45 @@
+{
+  "schema": "hswm-durable-lakato-replay-preregistration/v1",
+  "preregistration_id": "hswm-durable-lakato-replay-v3-20260726",
+  "registered_before_replay_submission": true,
+  "parent_result": {
+    "tag": "hswm-cellular-durable-runtime-v2-20260726",
+    "verdict": "partial",
+    "measurement_grade": "client_asserted",
+    "replay_status": "mismatch",
+    "cause": "The locked v2 judge emits JSON value while LakatoTree replay parses metric=<float>."
+  },
+  "question": "Can a byte-stable adapter delegate to the unchanged locked v2 judge and satisfy LakatoTree's numeric producer-replay contract without changing the engineering result?",
+  "metric": {
+    "name": "durable_runtime_replay_contract_fraction",
+    "baseline": 0.0,
+    "direction": "higher",
+    "threshold": 1.0,
+    "noise_band": 0.0,
+    "credence": 0.95
+  },
+  "locked_judge": {
+    "path": "_research/hswm_cellular_runtime/judge_hswm_durable_lakato_replay.py",
+    "sha256": "f3b0f465fc500726b6ff50a6c1a60ec60ae10d92306552e14b983ddf2baa77a9",
+    "delegated_v2_judge_sha256": "0fdad97294d9bb3450a64306aab4b45d87e1e1aca97d948440da74d5f48f8bb0"
+  },
+  "success_conditions": [
+    "The adapter rejects any base-receipt or locked-v2-judge SHA drift.",
+    "The adapter delegates all nine engineering gate decisions to the locked v2 judge.",
+    "A local positional replay exits zero and prints metric=1.",
+    "LakatoTree producer replay records server_regenerated rather than client_asserted."
+  ],
+  "kill_conditions": [
+    "The adapter duplicates or changes any v2 fault-gate decision.",
+    "The v2 receipt or v2 judge is edited to obtain a new verdict.",
+    "Server replay remains mismatch after the positional metric contract is satisfied.",
+    "The adapter is presented as new HSWM scientific evidence."
+  ],
+  "claim_boundary": "Measurement-sovereignty repair only; the v2 partial receipt remains immutable and no larger-AI hypothesis is judged.",
+  "lakatotree": {
+    "tree": "LakatosTree_HSWM_20260719",
+    "tag": "hswm-durable-runtime-replay-contract-v3-20260726",
+    "parent": "hswm-cellular-durable-runtime-v2-20260726",
+    "closes_question": "Q-hswm-lakato-replay-contract"
+  }
+}

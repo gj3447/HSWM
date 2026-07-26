@@ -1,0 +1,92 @@
+{
+  "schema": "hswm-cellular-durable-runtime-validation/v1",
+  "receipt_id": "hswm-cellular-durable-runtime-validation-20260726",
+  "preregistration_id": "hswm-cellular-durable-runtime-v2-20260726",
+  "generated_at": "2026-07-26T00:00:00+09:00",
+  "status": "PASS",
+  "engineering_status": "DURABLE_VERTICAL_SLICE_VERIFIED",
+  "scientific_status": "UNJUDGED",
+  "fault_gates": {
+    "atomic_request_event_and_outbox": true,
+    "pending_outbox_recovers_after_reopen": true,
+    "single_claim_under_competition": true,
+    "unknown_outcome_is_not_auto_retried": true,
+    "completion_event_and_outbox_success_are_atomic": true,
+    "exact_command_retry_adds_no_event": true,
+    "same_key_different_intent_is_rejected": true,
+    "same_history_has_stable_digest": true,
+    "typed_cell_port_completes": true
+  },
+  "model_probe": "LIVE_PASS",
+  "details": {
+    "fault_gate_score": "9/9",
+    "stable_replay_digest": "af88151afb87422131faf32f0015426c640efbb14530d4127f4a01a9642eeb42",
+    "live_model": "qwen3.6-27b",
+    "live_endpoint_class": "private-openai-compatible",
+    "live_request_count": 1,
+    "live_stream_version": 2,
+    "live_outbox_status": "SUCCEEDED",
+    "live_output_payload_sha256": "567080b9f259dff8274ec0045bc31ab95744d6709a4672f8836a352bb4761252",
+    "live_response_policy": "chat_template_kwargs.enable_thinking=false"
+  },
+  "validation": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/test_hswm_cellular_store.py tests/test_hswm_cellular_openai.py",
+      "status": "PASS",
+      "result": "16 passed"
+    },
+    {
+      "command": ".venv/bin/python _research/hswm_cellular_runtime/run_hswm_cellular_durable_fault_probe.py",
+      "status": "PASS",
+      "result": "9/9 preregistered fault gates"
+    },
+    {
+      "command": ".venv/bin/python hswm_cellular_live_probe.py --mode live --db-path /tmp/hswm-cell-live-probe-thinking-off-20260726.sqlite3 --base-url PRIVATE --model qwen3.6-27b --timeout-seconds 120",
+      "status": "PASS",
+      "result": "one request, CellStepRequested sequence 1, CellStepCompleted sequence 2, outbox SUCCEEDED"
+    },
+    {
+      "command": "validate_engine_spec.py _research/hswm_cellular_runtime/engine_spec.v1.json",
+      "status": "PASS",
+      "result": "0 warnings"
+    },
+    {
+      "command": "validate_fsm.py and run_fsm_traces.py",
+      "status": "PASS",
+      "result": "0 warnings; 5 abstract trace cases"
+    },
+    {
+      "command": "validate_loop_contract.py _research/hswm_cellular_runtime/runtime_loop_contract.v1.json",
+      "status": "PASS",
+      "result": "0 warnings"
+    }
+  ],
+  "observed_failures": [
+    {
+      "stage": "fault_probe_bootstrap",
+      "result": "FAIL_THEN_FIXED",
+      "cause": "the nested probe did not place repository root on sys.path",
+      "correction": "derive and prepend REPO_ROOT before runtime imports"
+    },
+    {
+      "stage": "first_live_probe",
+      "result": "UNKNOWN_OUTCOME_THEN_RECONCILED",
+      "cause": "qwen thinking mode returned empty final content for the typed text contract",
+      "safety_behavior": "the runtime persisted UNKNOWN_OUTCOME and did not retry it",
+      "reconciliation": "the unusable outcome was explicitly marked FAILED_PERMANENT; a new database and activation were used for the corrected probe"
+    }
+  ],
+  "promotion_gates_remaining": [
+    "Durable approval and interruption state are specified but not owned by SqliteCellRuntime v1.",
+    "Stale IN_FLIGHT lease recovery needs an explicit expiry and reconciliation protocol.",
+    "The endpoint must return a durable idempotency receipt before exactly-once execution can be claimed.",
+    "Forward SQLite and event-schema migrations are not implemented."
+  ],
+  "not_claimed": [
+    "A scientific verdict that the connected cells constitute a larger AI",
+    "Result-to-credit-to-delta-weight learning closure",
+    "Agent-to-agent learned transfer",
+    "Learned topology rewiring",
+    "Long-term consolidation or sleep"
+  ]
+}

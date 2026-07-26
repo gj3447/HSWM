@@ -6,11 +6,11 @@
     "verdict": "engine",
     "current_consumers": [
       "formal/HSWMRuntime.lean executable specification",
-      "hswm_cellular_runtime.py injected CellPort adapter"
+      "hswm_cellular_runtime.py injected CellPort adapter",
+      "hswm_cellular_store.py SQLite event store and transactional outbox",
+      "hswm_cellular_openai.py OpenAI-compatible and deterministic fixture ports"
     ],
     "planned_consumers": [
-      "durable event-store adapter",
-      "small-LLM cell adapter",
       "HSWM scheduler and semantic-synapse planner"
     ],
     "fit_evidence": [
@@ -27,7 +27,7 @@
   "boundary": {
     "owns": "Typed activation admission, optimistic version checks, budget consumption, pending/completed correlation, deterministic replay, and effect description.",
     "mechanism": "Pure decide(state, command), evolve(state, event), effects(event), and replay(initial, history) functions over versioned commands and events.",
-    "state_authority": "The committed event sequence is authoritative; slice 1 receives the replayed immutable state from its caller while a durable append port remains a promotion gate.",
+    "state_authority": "The committed SQLite event sequence is authoritative. Each accepted command atomically commits events, stream state, command receipt, and effect intents under one BEGIN IMMEDIATE boundary; the pure reducer remains storage-independent.",
     "policy_outside": [
       "Which cell to select or schedule",
       "Prompt construction and decoding policy",
@@ -91,28 +91,29 @@
   ],
   "ports": [
     "CellPort.invoke executes one InvokeCell effect and returns a typed PacketEnvelope.",
-    "Future EventStore atomically appends accepted events under expected version.",
+    "SqliteCellRuntime atomically appends accepted events under expected version and owns the transactional outbox.",
     "Future SnapshotStore accelerates replay without becoming authoritative."
   ],
   "runtime": {
     "ordering": "Per kernel state, events are totally ordered by contiguous natural-number sequence.",
-    "concurrency": "Commands use optimistic expected_version checks; slice 1 has no internal threads or locks.",
+    "concurrency": "Commands use optimistic expected_version checks; SQLite BEGIN IMMEDIATE serializes competing writers and outbox claims per database.",
     "backpressure": "remaining_budget rejects new requests at zero; queue capacity and fair scheduling are outside this slice.",
     "cancellation": "Not present in v1; cancellation requires a versioned command/event pair before implementation.",
     "timeouts": "The pure kernel has no clock; adapter hosts own timeouts and must record any resulting terminal event in a later protocol version."
   },
   "durability": {
-    "persistence": "None in slice 1; callers retain ordered events. A durable EventStore is required before production use.",
-    "atomic_commit": "None in slice 1; effects must be dispatched only after the caller has committed the request event.",
-    "recovery": "Deterministic replay reconstructs state from an initial state and ordered history; crash recovery is not claimed until a durable store exists.",
-    "effect_idempotency": "activation_id provides first-write conflict detection; an outbox and adapter idempotency receipt remain a promotion gate.",
-    "migration": "Protocol v1 is immutable; a breaking change requires explicit event upcasters and golden replay tests."
+    "persistence": "SQLite WAL with synchronous FULL persists streams, events, command receipts, and outbox records; committed state is integrity-checked against deterministic replay.",
+    "atomic_commit": "BEGIN IMMEDIATE atomically commits request events and pending outbox effects, and atomically commits completion events with terminal outbox success.",
+    "recovery": "Reopening the database recovers pending effects and deterministic stream state. UNKNOWN_OUTCOME effects remain suspended until explicit reconciliation or abandonment.",
+    "effect_idempotency": "activation_id and intent SHA-256 provide exact-retry receipts and conflicting-intent rejection. X-Idempotency-Key is sent to the model endpoint, but exactly-once external execution is not claimed.",
+    "migration": "SQLite user_version 1 and protocol v1 are immutable. Forward schema migration and event upcasters remain production promotion gates."
   },
   "failure_model": [
     "Stale versions, exhausted budget, duplicate activation, unknown cell, type mismatch, and unknown completion are typed rejections.",
     "An invalid event that bypasses admission raises KernelInvariantError during Python replay.",
     "Adapter failure occurs outside the reducer and cannot manufacture a completion event.",
-    "Crash-after-commit-before-effect and duplicate effect delivery remain open until durable outbox work."
+    "Crash-after-commit-before-effect recovers a pending outbox record; ambiguous after-send failures become UNKNOWN_OUTCOME and are never automatically retried.",
+    "Durable approval state, stale in-flight lease recovery, and endpoint-side idempotency receipts remain production promotion gates."
   ],
   "observability": {
     "traces": [
@@ -139,9 +140,9 @@
     "Longinus hash and symbol binding verification across Lean, Python, tests, specification, and receipt."
   ],
   "implementation_slices": [
-    "Slice 1 complete target: pure Lean and Python runtime kernel plus one injected CellPort vertical path.",
-    "Slice 2: atomic EventStore and transactional outbox with crash-window tests.",
-    "Slice 3: one small-LLM cell adapter with deterministic fixtures and bounded live smoke tests.",
+    "Slice 1 complete: pure Lean and Python runtime kernel plus one injected CellPort vertical path.",
+    "Slice 2 engineering gate complete: atomic SQLite EventStore and transactional outbox with named crash-window tests; durable approvals and lease-expiry recovery remain promotion work.",
+    "Slice 3 bounded smoke complete: deterministic fixture plus one actual qwen3.6-27b OpenAI-compatible activation; endpoint-side idempotency receipt remains promotion work.",
     "Slice 4: typed semantic-synapse planner that submits commands without gaining state authority."
   ],
   "falsifiers": [

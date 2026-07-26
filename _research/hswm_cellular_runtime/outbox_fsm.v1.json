@@ -1,0 +1,78 @@
+{
+  "schema_version": "fsm-spec/v1",
+  "name": "hswm-cellular-outbox",
+  "execution": {
+    "step_interface": "step(outbox_record, typed_event) -> next_status, persistence_commands",
+    "event_queue": "One SQLite writer serializes transitions with BEGIN IMMEDIATE; adapter results re-enter as external typed events.",
+    "run_to_completion": "One outbox transition commits fully before another claim or completion observes the row.",
+    "action_order": "Validate row and event, select one transition, atomically persist status and any completion event, then return."
+  },
+  "context_schema": {
+    "effect_id": {"type": "string"},
+    "stream_id": {"type": "string"},
+    "activation_id": {"type": "string"},
+    "attempts": {"type": "non-negative integer"}
+  },
+  "event_schemas": {
+    "CLAIM": {"type": "object", "required": ["effect_id", "actor", "event_id"], "properties": {"effect_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}}},
+    "COMPLETE": {"type": "object", "required": ["effect_id", "output_packet_id", "actor", "event_id"], "properties": {"effect_id": {"type": "string"}, "output_packet_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}}},
+    "SAFE_FAILURE": {"type": "object", "required": ["effect_id", "reason", "actor", "event_id"], "properties": {"effect_id": {"type": "string"}, "reason": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}}},
+    "UNKNOWN": {"type": "object", "required": ["effect_id", "reason", "actor", "event_id"], "properties": {"effect_id": {"type": "string"}, "reason": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}}},
+    "RECONCILE_COMPLETED": {"type": "object", "required": ["effect_id", "output_packet_id", "actor", "event_id"], "properties": {"effect_id": {"type": "string"}, "output_packet_id": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}}},
+    "ABANDON": {"type": "object", "required": ["effect_id", "reason", "actor", "event_id"], "properties": {"effect_id": {"type": "string"}, "reason": {"type": "string"}, "actor": {"type": "actor-id"}, "event_id": {"type": "string"}}}
+  },
+  "guards": {},
+  "effects": {
+    "RecordClaim": {"kind": "command", "payload_schema": {"type": "object", "required": ["effect_id", "event_id"], "properties": {"effect_id": {"type": "string"}, "event_id": {"type": "string"}}}},
+    "CommitCompletion": {"kind": "command", "payload_schema": {"type": "object", "required": ["effect_id", "output_packet_id"], "properties": {"effect_id": {"type": "string"}, "output_packet_id": {"type": "string"}}}},
+    "RecordSafeFailure": {"kind": "command", "payload_schema": {"type": "object", "required": ["effect_id", "reason"], "properties": {"effect_id": {"type": "string"}, "reason": {"type": "string"}}}},
+    "RecordUnknownOutcome": {"kind": "command", "payload_schema": {"type": "object", "required": ["effect_id", "reason"], "properties": {"effect_id": {"type": "string"}, "reason": {"type": "string"}}}},
+    "CommitReconciledCompletion": {"kind": "command", "payload_schema": {"type": "object", "required": ["effect_id", "output_packet_id"], "properties": {"effect_id": {"type": "string"}, "output_packet_id": {"type": "string"}}}},
+    "RecordAbandonment": {"kind": "command", "payload_schema": {"type": "object", "required": ["effect_id", "reason"], "properties": {"effect_id": {"type": "string"}, "reason": {"type": "string"}}}},
+    "AuditInvalidTransition": {"kind": "audit", "payload_schema": {"type": "object", "required": ["state", "event", "actor", "reason", "event_id"], "properties": {"state": {"type": "string"}, "event": {"type": "string"}, "actor": {"type": "actor-id"}, "reason": {"type": "string"}, "event_id": {"type": "string"}}}}
+  },
+  "machines": [
+    {
+      "id": "outbox-effect-lifecycle",
+      "initial": "pending",
+      "states": [
+        {"id": "pending", "kind": "atomic"},
+        {"id": "in_flight", "kind": "atomic"},
+        {"id": "unknown_outcome", "kind": "atomic"},
+        {"id": "succeeded", "kind": "final"},
+        {"id": "failed_permanent", "kind": "final"}
+      ],
+      "events": ["CLAIM", "COMPLETE", "SAFE_FAILURE", "UNKNOWN", "RECONCILE_COMPLETED", "ABANDON"],
+      "invalid_event_policy": {
+        "mode": "reject-and-audit",
+        "guard_false": "reject-and-audit",
+        "state_change": "none",
+        "effect": "AuditInvalidTransition",
+        "effect_binding": {"state": "configuration.state", "event": "event.type", "actor": "event.actor", "reason": "rejection.reason", "event_id": "event.event_id"}
+      },
+      "transitions": [
+        {"id": "claim-pending", "from": "pending", "event": "CLAIM", "to": "in_flight", "effects": ["RecordClaim"], "effect_bindings": {"RecordClaim": {"effect_id": "event.effect_id", "event_id": "event.event_id"}}},
+        {"id": "complete-in-flight", "from": "in_flight", "event": "COMPLETE", "to": "succeeded", "effects": ["CommitCompletion"], "effect_bindings": {"CommitCompletion": {"effect_id": "event.effect_id", "output_packet_id": "event.output_packet_id"}}},
+        {"id": "safe-failure", "from": "in_flight", "event": "SAFE_FAILURE", "to": "pending", "effects": ["RecordSafeFailure"], "effect_bindings": {"RecordSafeFailure": {"effect_id": "event.effect_id", "reason": "event.reason"}}},
+        {"id": "mark-unknown", "from": "in_flight", "event": "UNKNOWN", "to": "unknown_outcome", "effects": ["RecordUnknownOutcome"], "effect_bindings": {"RecordUnknownOutcome": {"effect_id": "event.effect_id", "reason": "event.reason"}}},
+        {"id": "reconcile-completed", "from": "unknown_outcome", "event": "RECONCILE_COMPLETED", "to": "succeeded", "effects": ["CommitReconciledCompletion"], "effect_bindings": {"CommitReconciledCompletion": {"effect_id": "event.effect_id", "output_packet_id": "event.output_packet_id"}}},
+        {"id": "abandon-unknown", "from": "unknown_outcome", "event": "ABANDON", "to": "failed_permanent", "effects": ["RecordAbandonment"], "effect_bindings": {"RecordAbandonment": {"effect_id": "event.effect_id", "reason": "event.reason"}}}
+      ]
+    }
+  ],
+  "safety_properties": [
+    {"id": "no-effect-before-intent", "statement": "Only a committed pending outbox row may be claimed for invocation.", "verification": "Atomic store integration test and SQLite constraint inspection."},
+    {"id": "no-blind-unknown-retry", "statement": "unknown_outcome has no transition back to pending or in_flight.", "verification": "Static FSM validation and invalid-event trace."},
+    {"id": "completion-is-terminal", "statement": "succeeded and failed_permanent have no outgoing transitions.", "verification": "Static terminal-isolation gate."}
+  ],
+  "liveness_properties": [
+    {"id": "pending-eventually-claimed", "statement": "A pending effect eventually leaves pending.", "assumptions": ["A single dispatcher remains live and receives permission to claim."], "verification": "Bounded integration trace."},
+    {"id": "unknown-eventually-reconciled", "statement": "An unknown outcome eventually reaches a terminal state.", "assumptions": ["An external receipt or explicit abandonment is eventually supplied."], "verification": "Reconciliation and abandonment trace fixtures."}
+  ],
+  "trace_fixtures": ["_research/hswm_cellular_runtime/outbox_fsm_traces.v1.json"],
+  "conformance": {
+    "implementation_step": "hswm_cellular_store.SqliteCellRuntime claim, complete, safe-failure, unknown, reconcile, and abandon methods.",
+    "model_trace_runner": "fsm-design/scripts/run_fsm_traces.py",
+    "contract_tests": "Run every transition and invalid-event case against both the abstract model and SQLite implementation."
+  }
+}

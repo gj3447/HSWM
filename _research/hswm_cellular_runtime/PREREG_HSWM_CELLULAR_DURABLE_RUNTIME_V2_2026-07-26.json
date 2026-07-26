@@ -1,0 +1,58 @@
+{
+  "schema": "hswm-cellular-durable-runtime-preregistration/v1",
+  "preregistration_id": "hswm-cellular-durable-runtime-v2-20260726",
+  "registered_before_implementation": true,
+  "baseline_commit": "030f94bd6d372cb15a62f3f9bc74ff5a3aaf8ba3",
+  "question": "Can the typed HSWM cell kernel survive the named SQLite commit, crash, duplicate, conflict, and effect-uncertainty cases while completing one injected cell adapter path?",
+  "scope": "Engineering protective-belt test only; no larger-AI, semantic-learning, transfer, topology, or consolidation verdict.",
+  "metric": {
+    "name": "durable_runtime_fault_gate_fraction",
+    "baseline": 0.0,
+    "direction": "higher",
+    "threshold": 1.0,
+    "noise_band": 0.0,
+    "credence": 0.85
+  },
+  "locked_judge": {
+    "path": "_research/hswm_cellular_runtime/judge_hswm_cellular_durable.py",
+    "sha256": "0fdad97294d9bb3450a64306aab4b45d87e1e1aca97d948440da74d5f48f8bb0",
+    "receipt_schema": "hswm-cellular-durable-runtime-validation/v1"
+  },
+  "required_fault_gates": [
+    "atomic_request_event_and_outbox",
+    "pending_outbox_recovers_after_reopen",
+    "single_claim_under_competition",
+    "unknown_outcome_is_not_auto_retried",
+    "completion_event_and_outbox_success_are_atomic",
+    "exact_command_retry_adds_no_event",
+    "same_key_different_intent_is_rejected",
+    "same_history_has_stable_digest",
+    "typed_cell_port_completes"
+  ],
+  "allowed_model_probe": [
+    "FIXTURE_PASS",
+    "LIVE_PASS"
+  ],
+  "kill_conditions": [
+    "Any required fault gate is false.",
+    "An external cell invocation can occur before its request event and outbox intent are committed.",
+    "An expired in-flight effect is automatically retried without reconciliation.",
+    "An exact command retry appends a second event or creates a second effect.",
+    "The same idempotency key with different intent is accepted.",
+    "The implementation claims exactly-once external model execution."
+  ],
+  "implementation_constraints": [
+    "Use only the Python standard library for SQLite persistence and HTTP transport.",
+    "Keep model calls outside decide, evolve, replay, and the SQLite transaction.",
+    "Use BEGIN IMMEDIATE and a monotone stream version for the single-writer commit boundary.",
+    "Treat unknown external outcomes as suspended reconciliation, not retryable success.",
+    "Keep all existing F1-F5 experiment files and receipts outside the write set."
+  ],
+  "lakatotree": {
+    "tree": "LakatosTree_HSWM_20260719",
+    "tag": "hswm-cellular-durable-runtime-v2-20260726",
+    "parent": "theory-math-definition-unified-20260726",
+    "closes_question": "Q-hswm-cell-runtime-crash-safety",
+    "scientific_status_on_pass": "PROTECTIVE_BELT_ENGINEERING_ONLY"
+  }
+}

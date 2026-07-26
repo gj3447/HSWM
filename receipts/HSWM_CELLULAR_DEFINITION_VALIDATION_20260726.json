@@ -1,0 +1,29 @@
+{
+  "schema": "hswm-cellular-definition-validation/v1",
+  "receipt_id": "hswm-cellular-definition-validation-20260726",
+  "status": "PASS",
+  "checks": [
+    {
+      "command": "cd formal && lake env lean HSWMCellular.lean && lake build",
+      "status": "PASS",
+      "result": "Lean 4.32.1; build completed successfully with 3 jobs"
+    },
+    {
+      "command": "python3 formal/verify_hswm_cellular_longinus.py",
+      "status": "PASS",
+      "result": "32 bindings; 7 layers; EXACT=19, STRUCTURAL_EXACT=2, PARTIAL_MATERIALIZATION=7, CONFOUNDED_EVIDENCE=1, UNPROVEN_CONDITION=3"
+    },
+    {
+      "command": "python3 -m pytest -q prom_search_hswm/test_hswm_open_composition.py tests/test_longinus_ordered_gate_binding.py",
+      "status": "PASS",
+      "result": "24 passed in 0.10s"
+    },
+    {
+      "command": "jq -e . LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json",
+      "status": "PASS",
+      "result": "valid JSON"
+    }
+  ],
+  "known_tooling_note": "The bare pytest entrypoint was absent; python3 -m pytest was available and produced the recorded result.",
+  "claim_boundary": "Validation proves formal compilation, current structural regression tests, and local Longinus integrity. It does not prove the larger-AI scientific conditions."
+}

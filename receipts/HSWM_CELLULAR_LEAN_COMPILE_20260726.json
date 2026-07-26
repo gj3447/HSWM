@@ -1,0 +1,29 @@
+{
+  "schema": "hswm-cellular-lean-compile-receipt/v1",
+  "receipt_id": "hswm-cellular-lean-compile-20260726",
+  "status": "PASS",
+  "claim_boundary": "Lean compilation proves the stated type and algebraic contracts only; it does not prove larger-AI efficacy or scientific progress.",
+  "toolchain": {
+    "lean": "4.32.1",
+    "platform": "arm64-apple-darwin24.6.0",
+    "commit": "f054605aea4b840552cca2e725580bffd1e1b704"
+  },
+  "commands": [
+    "cd formal && lake env lean HSWMCellular.lean",
+    "cd formal && lake build",
+    "rg -n '\\b(sorry|admit)\\b' formal/HSWMCellular.lean"
+  ],
+  "results": {
+    "lean_exit": 0,
+    "lake_build_exit": 0,
+    "lake_jobs": 3,
+    "theorems": 9,
+    "definitions_and_structures": 17,
+    "sorry_or_admit": 0
+  },
+  "source": {
+    "path": "formal/HSWMCellular.lean",
+    "sha256": "501ec200ca367bc6a898f23657d1a684c178073ebd898c2ccb0522564c303e50",
+    "lines": 279
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "schema_version": "hswm.holistic_research_program.v0",
+  "status": "SECONDARY_AI_RESEARCH_HOLISTIC_PROTECTIVE_BELT",
+  "cycle_id": "prom-hswm-holistic-scientific-architecture-20260726",
+  "canon_boundary": {
+    "user_canon_preserved": true,
+    "proposal_is_ratified_canon": false,
+    "naesengmoon_dispatched": false,
+    "live_kg_lakatotree_read_completed": false,
+    "authority_fallback": "local USER_CANON and sealed reports through 2026-07-26"
+  },
+  "system_definition": {
+    "class": "typed open stochastic multiscale adaptive hypergraph system",
+    "state": "Omega_t=(C,H_t,X_t,A_t,Q_t,W_fast_t,W_slow_t,alpha_t,M_t,G_t,P_t)",
+    "headline_claim": "small LLM functions form one larger learning AI only when external numeric and structural state causally mediates later behavior"
+  },
+  "planes": [
+    {"id":"P0","name":"composition","state":["typed ports","function contracts","private state","execution receipts"],"primary_theory":"colored wiring operads, open-system category theory and dependent type theory"},
+    {"id":"P1","name":"semantics","state":["H","X","relation operators","transport maps"],"primary_theory":"hypergraphs, tensors, sheaves, information geometry"},
+    {"id":"P2","name":"dynamics","state":["A","Q","prediction residuals","workspace"],"primary_theory":"nonlinear dynamics and predictive coding"},
+    {"id":"P3","name":"control","state":["policy","epistemic value","viability constraints","budgets"],"primary_theory":"control, stochastic decision theory, active inference as an optional parameterization"},
+    {"id":"P4","name":"plasticity","state":["eligibility","outcome error","W_fast","metaplasticity"],"primary_theory":"causal inference, reinforcement learning, three-factor plasticity"},
+    {"id":"P5","name":"memory","state":["episodic trace","W_slow","exception ledger","replay"],"primary_theory":"complementary learning systems and continual learning"},
+    {"id":"P6","name":"collective","state":["transfer","claim-local trust","consensus","dissent"],"primary_theory":"multi-agent learning, game theory and social choice"},
+    {"id":"P7","name":"development","state":["function roster","topology","schema versions","diversity archive"],"primary_theory":"evolutionary search, developmental learning and MDL"}
+  ],
+  "timescales": [
+    {"id":"tau0","name":"call_token","durable_write":false},
+    {"id":"tau1","name":"activation_tick","durable_write":false},
+    {"id":"tau2","name":"episode_fast_learning","durable_write":"candidate W_fast only"},
+    {"id":"tau3","name":"consolidation","durable_write":"validated W_slow and exceptions"},
+    {"id":"tau4","name":"structural_epoch","durable_write":"one validated topology or function mutation class"},
+    {"id":"tau5","name":"federation_generation","durable_write":"versioned transfer, trust and diversity state"}
+  ],
+  "currencies": [
+    "external utility",
+    "epistemic information gain",
+    "compute and communication resources",
+    "viability including safety, retention, calibration and diversity"
+  ],
+  "equations": {
+    "function": "f_i:(I_i,S_i)->(O_i,S_i_next)",
+    "dependent_contract": "Gamma |- f_i : Pi(x:A_i) B_i(x); Gamma |- o_i : Sigma(y:B_i(x)) Receipt(y,x)",
+    "stochastic_execution": "K_i:(I_i x S_i) -> Prob(O_i x S_i_next)",
+    "dynamics": "S_next=T_(H,W,pi)(S,o,noise)",
+    "viability": "K={S:activation<=B_A, active_edges<=B_E, calls<=B_c, risk<=B_r, forgetting<=B_f}",
+    "predictive_residual": "epsilon_i=o_i-o_hat_i(H,W,S)",
+    "control_objective": "max_pi E[R|pi]+beta I(Z_future;O_future|pi)-lambda Cost(pi), subject to S in K and retention/risk/budget constraints",
+    "causal_edge_effect": "ACE_e=E[Y|do(g_e=1)]-E[Y|do(g_e=0)]",
+    "eligibility": "z_e,t=lambda_z z_e,t-1+grad_Theta log pi_Theta(e_t|S_t)",
+    "fast_plasticity": "Delta W_fast_e=eta_e(r-rhat)z_e-lambda_W W_fast_e",
+    "homeostatic_scaling": "W_i,* <- W_i,* B_i/(sum_e abs(W_i,e)+epsilon)",
+    "metaplasticity": "eta_e_next=clip(eta_e+kappa(novelty-saturation-risk))",
+    "subcritical_default": "R_t=E[new activations|one active activation] <= 1-epsilon",
+    "predictive_memory_waste": "I_nostalgia=I(S_t;Y_past)-I(S_t;Y_future)",
+    "structure_objective": "J(H,W)=U_fresh-lambda_c Cost-lambda_m MDL-lambda_f Forgetting+lambda_d Diversity",
+    "claim_consensus": "log b_star(y|c) proportional to sum_i q_i(c) log b_i(y|c), only after source-correlation correction",
+    "dissent": "d_i(c)=KL(b_i(c)||b_star(c))"
+  },
+  "theory_conflicts": [
+    {"a":"contraction stability","b":"criticality","resolution":"stable activation epochs and diagnostic regime exploration at structural epochs"},
+    {"a":"symmetric energy models","b":"directed asynchronous LLM workflows","resolution":"separate associative and directed control planes"},
+    {"a":"global broadcast","b":"modular sparse communication","resolution":"test sparse workspace as an optional bounded channel"},
+    {"a":"compression","b":"rare exception preservation","resolution":"slow semantic rules plus immutable exception ledger"},
+    {"a":"consensus","b":"truth and dissent","resolution":"separate agreement, calibrated truth score and decision authority"},
+    {"a":"single free-energy objective","b":"plural user values and safety constraints","resolution":"explicit constrained multi-objective policy"},
+    {"a":"static type safety","b":"developmental rewiring","resolution":"schema-versioned typed rewrites with migration receipts"},
+    {"a":"fixed-support information geometry","b":"topology rewrite changing dimension and support","resolution":"KL or mirror steps inside an epoch and discrete typed proposals only at epoch boundaries"},
+    {"a":"open-ended evolution","b":"reproducibility","resolution":"generation snapshots and frozen evaluation"
+    }
+  ],
+  "mandatory_invariants": [
+    "every plane has an independent version and rollback boundary",
+    "embedding, belief, activation, efficacy and topology are distinct state types",
+    "eligibility is sealed before outcome",
+    "inference topology is frozen inside an episode",
+    "no training answer, verdict rationale or new lesson text enters receiver prompts",
+    "all comparison arms have equal information and compute envelopes",
+    "slow memory requires fresh, retention, exception and rollback gates",
+    "consensus is claim-local and preserves dissent",
+    "correlated evidence is not counted as independent support",
+    "structural epochs allow one mutation class at a time",
+    "branching ratio stays below one by default and approaches criticality only in sealed utility-risk comparisons",
+    "criticality and consciousness are never inferred from task score alone",
+    "scientific progress requires preregistration, real execution, receipt and independent judgment"
+  ],
+  "world_chassis": {
+    "id":"HSWM-WORLD-0",
+    "stages":["WORLD-S exact symbolic oracle","WORLD-L frozen small LLM functions","WORLD-R real domain and time-disjoint replication"],
+    "factor_switches":[
+      "irreducible typed n-ary relation",
+      "hidden regime shift and delayed outcome",
+      "partial observation requiring information actions",
+      "private function observations and restricted ports",
+      "asymmetric Agent A and Agent B capabilities",
+      "old/new interference and rare exceptions",
+      "correlated and malicious evidence sources",
+      "call, token, latency and communication budgets",
+      "missing function or topology requiring development",
+      "exact causal event log"
+    ]
+  },
+  "experiment_ladder": [
+    {"id":"X0","claim":"typed function composition","primary_kill":"role labels or information deletion explain the gain"},
+    {"id":"X1","claim":"irreducible n-ary semantics","primary_kill":"pairwise baseline is within +/-2pp of full"},
+    {"id":"X2","claim":"bounded recurrence and sparse workspace","primary_kill":"full context matches performance or unstable runs exceed 5 percent"},
+    {"id":"X3","claim":"causal numeric plasticity","primary_kill":"credit, eligibility or rollback does not remove at least 70 percent of gain"},
+    {"id":"X4","claim":"epistemic action","primary_kill":"information action has no equal-budget regret or calibration benefit"},
+    {"id":"X5","claim":"predictive consolidation","primary_kill":"append-only matches or rare exceptions are systematically erased"},
+    {"id":"X6","claim":"transfer, robust consensus and dissent","primary_kill":"agreement rises while truth/calibration falls or shuffled donor matches"},
+    {"id":"X7","claim":"developmental topology and function growth","primary_kill":"fixed architecture matches or complexity-adjusted gain is non-positive"},
+    {"id":"X8","claim":"larger learning AI conjunction","primary_kill":"plane rollback is not selectively necessary for its preregistered capability"}
+  ],
+  "rivals": [
+    "strong vector or RAG memory",
+    "fixed typed LLM workflow",
+    "MoE router",
+    "pairwise LLM agent graph",
+    "differentiable numeric hypergraph neural network",
+    "shared symbolic blackboard",
+    "predictive or active-inference agent without persistent semantic topology"
+  ],
+  "measurement_vector": [
+    "utility",
+    "learning_slope",
+    "causal_mediation",
+    "composition",
+    "transfer",
+    "adaptation",
+    "retention",
+    "calibration",
+    "stability",
+    "diversity",
+    "cost"
+  ],
+  "next_execution": {
+    "artifact":"HSWM-WORLD-0 exact-oracle factorized chassis",
+    "order":["X0","X1","X2","X3"],
+    "deferred_until_earlier_gates_pass":["mixed geometry","consolidation","collective consensus","developmental evolution","integrated X8"]
+  },
+  "primary_sources": [
+    "https://arxiv.org/abs/1609.05382",
+    "https://arxiv.org/abs/1305.0297",
+    "https://www.cse.chalmers.se/research/group/logic/book/book.pdf",
+    "https://arxiv.org/abs/1908.07021",
+    "https://arxiv.org/abs/1803.05316",
+    "https://aclanthology.org/D19-1522/",
+    "https://proceedings.neurips.cc/paper_files/paper/2006/hash/dff8e9c2ac33381546d96deea9922999-Abstract.html",
+    "https://proceedings.neurips.cc/paper_files/paper/2022/hash/75c45fca2aa416ada062b26cc4fb7641-Abstract-Conference.html",
+    "https://www.nature.com/articles/nn0199_79",
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC5167251/",
+    "https://www.nature.com/articles/s41467-020-17236-y",
+    "https://www.nature.com/articles/385533a0",
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC2834419/",
+    "https://epubs.siam.org/doi/10.1137/S0363012997331639",
+    "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.109.120604",
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC7209926/",
+    "https://openreview.net/forum?id=BylaUTNtPS",
+    "https://proceedings.mlr.press/v87/alet18a.html",
+    "https://proceedings.mlr.press/v235/zhuge24a.html",
+    "https://proceedings.mlr.press/v235/morioka24a.html",
+    "https://proceedings.mlr.press/v211/akgun23a.html",
+    "https://proceedings.mlr.press/v80/zhang18n.html",
+    "https://www.tandfonline.com/doi/abs/10.1080/01621459.1974.10480137",
+    "https://proceedings.mlr.press/v115/wu20b.html",
+    "https://proceedings.mlr.press/v87/majumdar18a.html",
+    "https://www.nature.com/articles/s41598-019-52326-y",
+    "https://www.frontiersin.org/journals/systems-neuroscience/articles/10.3389/fnsys.2014.00108/full",
+    "https://arxiv.org/abs/1901.01753",
+    "https://arxiv.org/abs/1504.04909",
+    "https://www.nature.com/articles/s41586-025-08888-1"
+  ]
+}

@@ -1,0 +1,5698 @@
+{
+  "arms": [
+    "a_no_memory",
+    "b_naive_donor",
+    "c_abstracted",
+    "d_contrast",
+    "e_b_self",
+    "f_placebo",
+    "g_flat_file",
+    "b_naive_donor_gated",
+    "c_abstracted_gated",
+    "d_contrast_gated"
+  ],
+  "branch": "F3v2-harder-transfer-testbed",
+  "budget": {
+    "contexts_per_test_world": 10,
+    "donor_train": 48,
+    "hard_cap": 5400,
+    "per_call_max_tokens": 768,
+    "receiver_test": 5120,
+    "receiver_train": 48,
+    "total": 5216,
+    "within_cap": true
+  },
+  "cohort": {
+    "cluster_key": "world (paired design: same world under every arm context)",
+    "split_rule": "train/test instance-disjoint by seed AND world_sha256 (harness asserts no shared hash); worlds procedurally generated = train은 sealed 전까지 receiver/judge 입력 금지, test는 sealed run 시점에만 개봉",
+    "test": {
+      "n_worlds": 512,
+      "role": "sealed judgment panel",
+      "seed": 20260810,
+      "tiers": {
+        "hard": 384,
+        "mid": 128
+      },
+      "worlds": [
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "402698f5f3cc50bf",
+          "world_id": "f3v2-hard-0",
+          "world_sha256": "0767f930f3c7b3efed0ddbead77e45d3db51b1aec285abaa2d850638b4c94fcb"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "1cbf98f5e69cc548",
+          "world_id": "f3v2-hard-1",
+          "world_sha256": "3103e1e97c421af43aca23807d020d38ea8d1d84c8d8067d7d1396e1a38bbd9e"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "68b90a6ead426fa6",
+          "world_id": "f3v2-hard-2",
+          "world_sha256": "f6d65a495bb90805247b0c5c7d4f38ca8d716d84a4b8ed540e47ab74b2b5bdc7"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "5926c1e946e72837",
+          "world_id": "f3v2-hard-3",
+          "world_sha256": "dae10370591fd04b51ac48a344a7fc722f6559dde9982e30621d544796d0da2d"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "03161751efac24a5",
+          "world_id": "f3v2-hard-4",
+          "world_sha256": "1349d891a5a07ac8a906845f216c20d5ae16f7caca9a38e8a2c460b4862bff70"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "183ca2919e98770b",
+          "world_id": "f3v2-hard-5",
+          "world_sha256": "8afcaadba88211b34125f4909a54ee32b2271428812f73abd5a3449ee6febc43"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "0821997eb4ccbdda",
+          "world_id": "f3v2-hard-6",
+          "world_sha256": "9a2169b240187062ff954a30aa70b2521b5540486751096b1b90caee4a953c55"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "ffa211922064899d",
+          "world_id": "f3v2-hard-7",
+          "world_sha256": "17e4d5d6dbc9cdccc8b4d730eb4300eaa8e959ffffebcaf1dfaef02f7c1f6731"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "a960530fa81ebce9",
+          "world_id": "f3v2-hard-8",
+          "world_sha256": "3b9b1a58ead006e448c06e8745f09a1dd7b276e77851d1a747aa843804d375c2"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "44bab7fb92193c22",
+          "world_id": "f3v2-hard-9",
+          "world_sha256": "fd9699c20e3c1373daf3020eab9752f84058976b16aae75fe74a0992453ede58"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "43ee0615b6d3d648",
+          "world_id": "f3v2-hard-10",
+          "world_sha256": "7188495a5c96d89ef8607dbd6736b5a1d4ede9686b7d6821f4842c68b6082b08"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "ce38ed28b28a0eef",
+          "world_id": "f3v2-hard-11",
+          "world_sha256": "e325d968442c6a96e6524aa3872b767250b9a8703141f5d768d99724842c8b48"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "696f001c0338bcad",
+          "world_id": "f3v2-hard-12",
+          "world_sha256": "e216c45cf5583c5db4b4139d3ad98575f9e696f930ff90768033a9576c7357b1"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "e80f507ebf1a360d",
+          "world_id": "f3v2-hard-13",
+          "world_sha256": "992f6cfc53ca7442ce694f05c71b6eb02e2cddc4e1098ece4d48f9929c030ee8"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "76bf0f770642d275",
+          "world_id": "f3v2-hard-14",
+          "world_sha256": "bfb612c420e03131ba8eb4caee3ea821f3a368fe581fb2c7aeb844285f98aad2"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "a90b547e86e4e634",
+          "world_id": "f3v2-hard-15",
+          "world_sha256": "0be45f78771c6409118c37d5b5bb12df3cedd7dfa14a3175823931711517dad6"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "0bd63db927f5970b",
+          "world_id": "f3v2-hard-16",
+          "world_sha256": "be0a2c6ca88a2b4c57d24f19b699f3822a65b5cb6842de9e9a51772fa5bb03f9"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "076d36d898d4fdc0",
+          "world_id": "f3v2-hard-17",
+          "world_sha256": "f9c10b55f6e5bcce88ab589c8b355de96ff9fadc9133dbc43e8392dae5458d49"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "bc273eb5922d6e7b",
+          "world_id": "f3v2-hard-18",
+          "world_sha256": "822a52c6843fb738c4fab9c7b1f3dd000d0f2cbfa82492f20cf6685a7df5977c"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "f6a30ac2c79535d1",
+          "world_id": "f3v2-hard-19",
+          "world_sha256": "af560f6e2a0364968904ab9f95792ab63b9e7cf2bb5017c7089a8d678daafc44"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b64f0141def8a3cb",
+          "world_id": "f3v2-hard-20",
+          "world_sha256": "971e648058a95014820d6a8efd2c847c60dd2f00de694a0a7ab49806dddcad2a"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "b4cb313a48b3c000",
+          "world_id": "f3v2-hard-21",
+          "world_sha256": "4925e30955ef265eadf82884a6d2eb35a0f02f9a309733a2c4af57ec6063a079"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "77685b6726cb3338",
+          "world_id": "f3v2-hard-22",
+          "world_sha256": "aea8b7a003bc2ba2ade5b64034444bdd67ebe1a2fe8368ae4e84b6dca525b1a3"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "4674a43537097230",
+          "world_id": "f3v2-hard-23",
+          "world_sha256": "5ae266602e5d38ae576c9cb9c50bdf72b9251076cf22590c4589346880213cac"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "09255573843f245a",
+          "world_id": "f3v2-hard-24",
+          "world_sha256": "a417e51e903776a8602d29e10f5191d5187b87f34e8108ac60cfce5cdc843186"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "f015738273fc9b44",
+          "world_id": "f3v2-hard-25",
+          "world_sha256": "03d8164284ece5b75f94ce508f661f391f7f375505d149c55d18b4f02705beef"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "732e7b18b2f69755",
+          "world_id": "f3v2-hard-26",
+          "world_sha256": "fe211ce2dbb18e7df3c7d15faf27dadfc5cfb92410e1342b4470757edb325f6f"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "ddf13360870a8af6",
+          "world_id": "f3v2-hard-27",
+          "world_sha256": "d0c220d2343d8e5791fa3b07b3f5e34b1d3fc31f1c99313311d64dc2e6c918f6"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "4a06114fd9591fe7",
+          "world_id": "f3v2-hard-28",
+          "world_sha256": "27f2de13a64e65de97314431c75f063d2f7b90350db69eac8af70c053f76e352"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "5c213b418cc508e3",
+          "world_id": "f3v2-hard-29",
+          "world_sha256": "a71a1f2df28c7208080c28c9c3915fad02d8274a932f152fd0be734296b34bfa"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "36417d446007d73f",
+          "world_id": "f3v2-hard-30",
+          "world_sha256": "b3beda582ff2d2d5854f0a3c6619c25e7dca795c9fc8c23e8a38389434cf9486"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "5cc20e6936ee2c38",
+          "world_id": "f3v2-hard-31",
+          "world_sha256": "890cd4ca12a24bf288023345b012af032e7e20c384777cd2a41aca00e80e100a"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "3c3552fd4630c9ee",
+          "world_id": "f3v2-hard-32",
+          "world_sha256": "ad7f833350ae3f9a87ff2745261819822ea892d19147795c769860e9900e9abb"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "61bd6abfe6150664",
+          "world_id": "f3v2-hard-33",
+          "world_sha256": "818ea0652ab2fb5c798243924eb94d6f696b112c3c4d6049dd10cbacee9c6165"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "0def929e9c4c0d99",
+          "world_id": "f3v2-hard-34",
+          "world_sha256": "e76b4c03c2136cb805e231a3d796e73d2828566ed2caa59589dc15495140d1be"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b624b5c09c8aa227",
+          "world_id": "f3v2-hard-35",
+          "world_sha256": "b02223f86ed7afaf0e2f9299cbd5041397153dbc368cdf8d2c1da10e94897866"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "e755da9d67005691",
+          "world_id": "f3v2-hard-36",
+          "world_sha256": "00b40ac22891f7a88e5068c1019b59cd832af61348cbf4ad0cd04840003ee3b4"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "822ae26fa00d8094",
+          "world_id": "f3v2-hard-37",
+          "world_sha256": "e0f34f1d07133c2be4cb1f3c40ad6b0ede9424cdbfcb4e8edfca85e941089618"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "684bd77ef92aa6ca",
+          "world_id": "f3v2-hard-38",
+          "world_sha256": "534a86ac0656b3f90226b4a12688b26e8a022228c3fb85d374bc31964cce8397"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "2e6c6b8955c2914f",
+          "world_id": "f3v2-hard-39",
+          "world_sha256": "4d8cf692b0364e538f775b92cba5b0b9fa6ff3e770bc2557a3157711179e4427"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "5d89eb020f6bac14",
+          "world_id": "f3v2-hard-40",
+          "world_sha256": "bd49c07ce0af627f06e3447827f2d1c510cb61350b42f196de737a049fb6e0b5"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b58dd58a970ddb61",
+          "world_id": "f3v2-hard-41",
+          "world_sha256": "e78f7fd9052204757caac522620ad845797294c71cc213d1ad3d9e72a7c4a4de"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "765052c2d0a4092f",
+          "world_id": "f3v2-hard-42",
+          "world_sha256": "24ab178aca4e5f521ce5cf4fdb1da3560b5d4f61a18c3b5c1d1bcfbb57e7e858"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "e38281446c54db45",
+          "world_id": "f3v2-hard-43",
+          "world_sha256": "d3b09601df5619623358ab468fcadb6a0ac836183738aceb0ce6154b9096dcac"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "dddf7f12742cfde8",
+          "world_id": "f3v2-hard-44",
+          "world_sha256": "8e73f4ecdcd2f3288e701b19929b7c80d6f178d1e135cec53c7090044acf34ed"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "7d2bcf29d48d5563",
+          "world_id": "f3v2-hard-45",
+          "world_sha256": "471d6cf71c85300698432820d35095039f5405e58504ef23915751a3cb059f3e"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "a2c21a515961bd7e",
+          "world_id": "f3v2-hard-46",
+          "world_sha256": "06f8dfde3d325643bfceec8335c9a7b952dda1dd3c0e298d130f05214a6116c5"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "ed915068a6d806c6",
+          "world_id": "f3v2-hard-47",
+          "world_sha256": "c24ad866c853c252d5a7ea0cab3da73897f1ad85dedb043409068daa1668ddf6"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "c0cc11e15db5d089",
+          "world_id": "f3v2-hard-48",
+          "world_sha256": "b6c562748b1e7ad296ecaede929880b2e96da0981ff3f422dfc4e68336906a5d"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "c4ca10bbc6e80e64",
+          "world_id": "f3v2-hard-49",
+          "world_sha256": "e964b1b571fb71c72afc7227540c84430ab799c64ad284a3e7a0c547f2b4837a"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "c74b5d64bce745a6",
+          "world_id": "f3v2-hard-50",
+          "world_sha256": "5d11a2d219859748cd5afd61b6c256646660ac74ea9c5e105cfbedad46e6a799"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "4deb14660f603b11",
+          "world_id": "f3v2-hard-51",
+          "world_sha256": "ab0869efc87c2cbf5deb374cd08a6fce764b6ff9b80bec04ce26ce23ce170c69"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "0ac6805b6e940b5c",
+          "world_id": "f3v2-hard-52",
+          "world_sha256": "a5cadd849418df61c0e71d7607caab2764e7a14fe1fb53e0f6a766bdefda1961"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "5a6b08910d0b9b56",
+          "world_id": "f3v2-hard-53",
+          "world_sha256": "791aa5870013b8cb84a7fd7f964642b888ba6f9122f0dcbea42a96078df84d43"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "bcd46aaea7966ff5",
+          "world_id": "f3v2-hard-54",
+          "world_sha256": "ea796138c8b25650e87df37eba52de4e7701842fadaabae8b1eeed8a9fbd5425"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "651c0e6371ac0605",
+          "world_id": "f3v2-hard-55",
+          "world_sha256": "fc8c5b9f29f927a92e1f3089f52096dd1e2caa5cffcc7cfb7e9bdcb3414078e6"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "cda8e091fe34e776",
+          "world_id": "f3v2-hard-56",
+          "world_sha256": "de021853a90dceaff94f7a2ab364874b5295a4dd0138955bd40d65ec03921b0e"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "406bea8551e287f2",
+          "world_id": "f3v2-hard-57",
+          "world_sha256": "de67af2ca7fd3936764fa518fec6202ad71cb965a808864b35704d63d071a0f7"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "b8eea872faf4ee08",
+          "world_id": "f3v2-hard-58",
+          "world_sha256": "74cf31ebd6c2ecab03cee2f5bc2e9c141d4697b7114b375d624de5e43f2993cb"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "914faa77a7f4c17d",
+          "world_id": "f3v2-hard-59",
+          "world_sha256": "fba1e50666923a059b6d0edbb06e77ef8cdca74fcfccfe3786cd1d8fdb8a5ee0"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b416cb61127a0f8e",
+          "world_id": "f3v2-hard-60",
+          "world_sha256": "60794e162fd054076bc6a7bafbdb167c38346f3de372325e100c023120371466"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "4baf90dd0a5be43c",
+          "world_id": "f3v2-hard-61",
+          "world_sha256": "64634fd7ccb6ddfa9cad898d718bfefa9a2a9008ceadf084929e45bf1fd7d97f"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "dbbd4f63e5cddda0",
+          "world_id": "f3v2-hard-62",
+          "world_sha256": "5346b2723ef132e7192c92db3ce234b5d4a1d95292aa6bbd5d109ca6d5afbbfe"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b71e75058962c5e5",
+          "world_id": "f3v2-hard-63",
+          "world_sha256": "764e907038e523765992562447ce113ed15082751c4be28db38f1b4426eea3e2"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "3c93df56336b1ea7",
+          "world_id": "f3v2-hard-64",
+          "world_sha256": "050bb07da7f05fc9fd22e985bdf9b82d622f1e0797d2904d5c4065b4712a6411"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "94d20d864ce265db",
+          "world_id": "f3v2-hard-65",
+          "world_sha256": "805de5f93dd8b0b9b62aa031b78daa55b8547aeb1943f7099f98c1bb08b33c25"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "e45d1d9fffa8f43d",
+          "world_id": "f3v2-hard-66",
+          "world_sha256": "1f22d4894cfea9afee147b7a399e3772271af0cf7f12e38f34092cd417effcc5"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "839ff27e432bb5ab",
+          "world_id": "f3v2-hard-67",
+          "world_sha256": "4d94e9cbcdd4a53db20081524496aa7476b4140b78e0056408ea343ac6d1355b"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "59f1a76d792177bf",
+          "world_id": "f3v2-hard-68",
+          "world_sha256": "652c77324b6997c9df40cca6e8844b452beefa6699701a7ca3a6d3dd331064b1"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "c5d30c0d1eae5014",
+          "world_id": "f3v2-hard-69",
+          "world_sha256": "01d884ab07f4980dcc47576f9a5710aee6e891f83475898f413c50edfb8b4bb1"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "c78e0a24bc022ae9",
+          "world_id": "f3v2-hard-70",
+          "world_sha256": "a18fda78f4fd612557be279a224e2e6a67c7860fb7a656ce8864a45622f24442"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "107fa53e7044bcab",
+          "world_id": "f3v2-hard-71",
+          "world_sha256": "0d7d5e81b78ca1de66a9c51668445451c0712c3ad05516555ea2db0d9d3047fc"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "99afbaeed4cca61b",
+          "world_id": "f3v2-hard-72",
+          "world_sha256": "fe007f133acd29eda2084a699094bab50d04967b750f62a915f42fab8b43c5a5"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "ca57868f221a7110",
+          "world_id": "f3v2-hard-73",
+          "world_sha256": "67804a81a509948435af02de836067f07e9c8134a9276c4006828cdf60339513"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "99d5e59e0435ef1e",
+          "world_id": "f3v2-hard-74",
+          "world_sha256": "c50ec49fe8edbb6ca02884521074fee19a72228ecf0374643d71700c60f6d7ab"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "d2dea61f33406e9b",
+          "world_id": "f3v2-hard-75",
+          "world_sha256": "3897f794620bee58c9c8cddb3762a3612e87201f7a7bc5220b3f949f37479c72"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "037d6faceae25c9c",
+          "world_id": "f3v2-hard-76",
+          "world_sha256": "8458e411341885a5e76d0bb8b00e611fa893f10d4ce86ab7ca5f1209b5845d42"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "1a9499984202204c",
+          "world_id": "f3v2-hard-77",
+          "world_sha256": "1d9317eed0c2fef7ad5ec42a9aec829f53d7641d1ad593fb4d0a9e3375684034"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "241b320fcdd5d617",
+          "world_id": "f3v2-hard-78",
+          "world_sha256": "a4f5bb1950fb420bb1e3d47f51fcce86be8845440104432a9011c33e41df5d2a"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "4ff635ddca0ebc8d",
+          "world_id": "f3v2-hard-79",
+          "world_sha256": "3468572f1224d91881ea9d745864495d89869ae32668bdc81887fbf6677b8be0"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "3f50c159cb5828d2",
+          "world_id": "f3v2-hard-80",
+          "world_sha256": "366ec2598a6b316794b62f749708f3d5bab0ea247b7b94a8e75478d551fb343a"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "607d0bc75ea510d0",
+          "world_id": "f3v2-hard-81",
+          "world_sha256": "c6e708c2f5a1970e6cb3c8f9c8159ac037c9f696ca33acec1476d5c646a7c834"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "1df64922bf5411e1",
+          "world_id": "f3v2-hard-82",
+          "world_sha256": "fd8fc08660d461a5ebeb508c76f35ee4bdfc6116c64bffab9c7a886990370383"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "62d3b7171b325387",
+          "world_id": "f3v2-hard-83",
+          "world_sha256": "6ab04312ba4eabcf4cc932cc5501eacde23145c70d187453a31ddae02d00e7b3"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "244c3277cdd886a3",
+          "world_id": "f3v2-hard-84",
+          "world_sha256": "40e8acd0c66a7e63601372c0282e3db653f0e691f06a01e1be8853f40c3a4549"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "5f56bee60e86fe98",
+          "world_id": "f3v2-hard-85",
+          "world_sha256": "0b01662bd74c8f6bf47fba11c3943e0c368ec8c5ac3720e2098a8cfaa13d4b18"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "a6c28d84d8424020",
+          "world_id": "f3v2-hard-86",
+          "world_sha256": "6e2063fb4103c5dccd3ada8103d1a051c75fb5e90266ea7bd14376074d8aeb85"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "a2190dd10a26aab4",
+          "world_id": "f3v2-hard-87",
+          "world_sha256": "e714b637efefdc41abe19990d4149f4711ac8bbf2f56fed4a18788be5a4b025a"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "248dc19f343ba65c",
+          "world_id": "f3v2-hard-88",
+          "world_sha256": "dd21521c8f739ab6896f0fe28d832ec0fe71fcdd8dfcf5d266d246d02198d973"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "c5ab1c23ddc0f0e2",
+          "world_id": "f3v2-hard-89",
+          "world_sha256": "3ac2f4afd0a5ca3a148ee215ef0027491a4401cc68bf39ed887b03177ff70fb3"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "ac1f6ef9473d3492",
+          "world_id": "f3v2-hard-90",
+          "world_sha256": "42f4fa7dab210c0d380cadd2b02c040188791ba0a45a7343f51f800ffdfe9160"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "154c068c62b66dd2",
+          "world_id": "f3v2-hard-91",
+          "world_sha256": "893a7f85d5924b2c03d369b823b6a988c5684b51f6305ccd740f17499596547a"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "920439e72dfaf1c4",
+          "world_id": "f3v2-hard-92",
+          "world_sha256": "bb1a0186bbcb7b893d08d7dba5bf8b23681cfb1f054b2767a66ec5c384a74122"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "2e0b1ce69446429d",
+          "world_id": "f3v2-hard-93",
+          "world_sha256": "784b81bb970296cadb31aa12d92111460a247ee967305b55e8c13e7dc393cadc"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "82940a9201aa6bab",
+          "world_id": "f3v2-hard-94",
+          "world_sha256": "21f4b8acf7de4b983c182accbda3cb68a37ef58bddf8cde3e8c057042506123a"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "33a7090108b205e4",
+          "world_id": "f3v2-hard-95",
+          "world_sha256": "646e49e79be7e84823c6a97c9af9a9caa9ffb56835bc8a9f6b785a1b1063f395"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "6033ae48dce9e61b",
+          "world_id": "f3v2-hard-96",
+          "world_sha256": "fa7ba7c07dab4e70c6be067bef89576cc2bc4c2ee8b8405af5da4a5689128866"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "5f7ccac3e6ed5b11",
+          "world_id": "f3v2-hard-97",
+          "world_sha256": "9a0670f9a6fb849b5677c4f9de5914dcba80bff393125cf7776ddcb4a5d00145"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "3bb2fe17e773d249",
+          "world_id": "f3v2-hard-98",
+          "world_sha256": "b971d4185385a58db59a16fff262c2a5c72c722bb618edcb68929bcc12a0a888"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "e48327f8a0d8c674",
+          "world_id": "f3v2-hard-99",
+          "world_sha256": "fda2f3d7f4064ca0417140d39a115b7dc9ab1c04d88c4b955fe68d616ef49d2b"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "13c4c8b8285a33ab",
+          "world_id": "f3v2-hard-100",
+          "world_sha256": "8c9f118f6c82198f75dc4bbd679894ab24970d140953b2089432059889115772"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "1dd49d8ead1c85e8",
+          "world_id": "f3v2-hard-101",
+          "world_sha256": "65779e1e56c7fec12e19aaf8d298af6b045af4a1d60ad109d83c2237034c7082"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "5712ebf3a1abeaa3",
+          "world_id": "f3v2-hard-102",
+          "world_sha256": "0da16b7ca4f969a24d21169acc0c4e835d4fc6e511a375c50edc284172a28c8e"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "167f520fcdcdee72",
+          "world_id": "f3v2-hard-103",
+          "world_sha256": "be75dd9545c2331518a9b47671db6a496552882edef37303ccee6366f599c564"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "bbcba93897bfbc6a",
+          "world_id": "f3v2-hard-104",
+          "world_sha256": "6087acbc6202d9fcbeb9d477ac64af09589b60dd3f201402dca1e0c9f3c91c12"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "be36e92c531d5789",
+          "world_id": "f3v2-hard-105",
+          "world_sha256": "f5f4dc684db04e997665911833d62433ac11fc1d7378d9f03b95ad62fd549087"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "3a9b268edca140cf",
+          "world_id": "f3v2-hard-106",
+          "world_sha256": "5d15722efb471e312dab79bcad22c8ee33dc56c26459ed72aa21e45fdbba5a40"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "21562797b739f802",
+          "world_id": "f3v2-hard-107",
+          "world_sha256": "f726eb804730af2f512902413e8a8a41519526d85aed418ca8e18180cdcd10af"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b02ef4e7ae172af2",
+          "world_id": "f3v2-hard-108",
+          "world_sha256": "18acb67d5147c99bfa4210de79b8d2fd09993fe0aa36a07cfa87673b5cdb19c6"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "720806db5406740e",
+          "world_id": "f3v2-hard-109",
+          "world_sha256": "15fdac64e893be7f2bf24c3257d450bb9f65ccd9f7fd07c970df58ea5e7c8c17"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "9301be88bb060157",
+          "world_id": "f3v2-hard-110",
+          "world_sha256": "1e43faad017ff02363480a8f35b0b1c6159a30e2c6dce46fd6d1179036eb314a"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "8b6446022a35fdd5",
+          "world_id": "f3v2-hard-111",
+          "world_sha256": "76fa2016cc2c15991d8a799952b6750b917a1e5c1cf566811523d24fc8fdd109"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "83dbecce2355c6e7",
+          "world_id": "f3v2-hard-112",
+          "world_sha256": "b8d68e2d3eda6fae9c0d080781d56bc30ba4889ce6a210fa5b7fe864750e0db0"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "e5eefa0cefc84a04",
+          "world_id": "f3v2-hard-113",
+          "world_sha256": "ec737816813a66573060372cf0d0a1348d4f2aaf19be4b6e6501aef58c5c4b5f"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "23193e88f1159f91",
+          "world_id": "f3v2-hard-114",
+          "world_sha256": "1cf1a7b6f0d1527a23c886d18e85c1fd922c34caa20ca640e0cdc124549ec4e2"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "977fd718fc2fe316",
+          "world_id": "f3v2-hard-115",
+          "world_sha256": "ef6895c10fdccf1059808d3de137eeb4fd7afe51634f007543383b5f4a9ad82e"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "55e9e36f290cba4c",
+          "world_id": "f3v2-hard-116",
+          "world_sha256": "1f834745d700e22073afe364fbbf5017bf3a5de289607edc550d4d2decc5e96c"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "1239a0b1669db0e6",
+          "world_id": "f3v2-hard-117",
+          "world_sha256": "e82c3c38a412d78dff0cea1a52469578725558232a288db199f1a8d9227e6788"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "4d7e3a64a1a82263",
+          "world_id": "f3v2-hard-118",
+          "world_sha256": "47140b88a95f8895a6b63feefe147e183d58bf8efbe9652b0195eb68359897ea"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "c1c608c84529e34f",
+          "world_id": "f3v2-hard-119",
+          "world_sha256": "348856b4283372cc84eacdfd19cc2fdb98eb79cb695e8454b710edf5022eef53"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "d889ef7210f52f36",
+          "world_id": "f3v2-hard-120",
+          "world_sha256": "7c79a351ac63f3b051d2eff087771c3fe8f10d6838acd567a28be210d3e3ed43"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "cdc66f2c2f96f3a3",
+          "world_id": "f3v2-hard-121",
+          "world_sha256": "52c0b2f1a399897d855157edd50f0a9049186343e326ce1b5bcfd027e68bf9d1"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "039dcf36b19e6df4",
+          "world_id": "f3v2-hard-122",
+          "world_sha256": "2605a9ed7798699b13f3298cbf8ad809e6eaf06bd994c751cac04ecaf3327c7e"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "f91743a3aa6a08ca",
+          "world_id": "f3v2-hard-123",
+          "world_sha256": "614bda7aee639b51f29fc623fe5c49755fcc1a7ea8beee0c49295a19bc555a00"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "e2ec4d81a6ce0b94",
+          "world_id": "f3v2-hard-124",
+          "world_sha256": "a41d222ec6795e08553caf6fc7152f6e36bde847db73cd18655d237d8f2e8403"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "8102ecd6cf9f4532",
+          "world_id": "f3v2-hard-125",
+          "world_sha256": "523db6eefbfcb4763067ea8158253d8b8d2e2a2a493f59acb9083ca1c5a7d338"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "5248329370565d4d",
+          "world_id": "f3v2-hard-126",
+          "world_sha256": "2cc6eee66a62bcaf8d9da73ecb44eebad811b23494e71ad4d441b67c85538278"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "6ad1edb58d0a2984",
+          "world_id": "f3v2-hard-127",
+          "world_sha256": "46556fea84aaa13c8afc77e44d484a65c7648959a650f6f4fc4f35ad79d676e0"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "106d0e7fc29cd258",
+          "world_id": "f3v2-hard-128",
+          "world_sha256": "5d8e1fb2d1df34e995e50ba2f30d6cdbc69594109d7a3e5d48141d8d189c75fd"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "88d2860897854eb0",
+          "world_id": "f3v2-hard-129",
+          "world_sha256": "95f3dc62eb8f78c0aa397a45b10ac396107e3b733424fc6b4ae99a9cb5d7a2bf"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "7b0d3795ab0d85a2",
+          "world_id": "f3v2-hard-130",
+          "world_sha256": "d1f1084f2527b357a8a82fbdfcee39f8ef26ecae39de115054c429bd09b89075"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "e8bae1f2662500ed",
+          "world_id": "f3v2-hard-131",
+          "world_sha256": "bbeb96e2801aab8333ff26b8ed200d3716b52281071065faf5c060b737b3cb77"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "5cc152dbca178714",
+          "world_id": "f3v2-hard-132",
+          "world_sha256": "910766402344bcda6d1a4491e4dedd60149d1089a8191a4b36715aff925b856c"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b199b6089f56aa7a",
+          "world_id": "f3v2-hard-133",
+          "world_sha256": "b98a6aa1eea8890dbabc8bd897ef8b70dba05e32595a61bbf079a4df9aaaebd5"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "e866c65bc844af49",
+          "world_id": "f3v2-hard-134",
+          "world_sha256": "97439680bb5b5d3f14bf7671ed5bebdaea918d277ec4987c8ecd2394c3f2132a"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "36aa5c5bd465bf75",
+          "world_id": "f3v2-hard-135",
+          "world_sha256": "1a26af0e90e38eb89bb9739ab1970b6bf6dd5008ae2494839f9cfaf8f1b4b1f5"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "f3c380427e2cdfc6",
+          "world_id": "f3v2-hard-136",
+          "world_sha256": "e5784b06ba6c0e8bcbebb1be9b830935e8556f8898dd694b347c54d5e4dcf7f0"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "8ca59fccfca47cbf",
+          "world_id": "f3v2-hard-137",
+          "world_sha256": "ce4a5df7ceb46a5cf4a7be0cf45c341b7fdf34af96f3c67a538dccc8b2f47f89"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "c1cfd6877d9b6dd9",
+          "world_id": "f3v2-hard-138",
+          "world_sha256": "5ea721cb6c1119021c6f94ad04acab34d7b1d69395a2c8071cdfac631b5ff563"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "1b3ca6a0c82c96aa",
+          "world_id": "f3v2-hard-139",
+          "world_sha256": "eaee74ed2742ca464ec1441539ded07990d183f99aecd74d23a1000506f6e45b"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "1af76e7ba4c709f5",
+          "world_id": "f3v2-hard-140",
+          "world_sha256": "5d0866080084c9f435f9395519809b8720fcca5cf3823b8ab954e203339a6ad7"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "2906eed9f1e7c5de",
+          "world_id": "f3v2-hard-141",
+          "world_sha256": "c9f44fdeb30261b2aec23cfc5004a4dd69121b2cff95c3a63a3b6b58a28cb867"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "11c673de8890a49b",
+          "world_id": "f3v2-hard-142",
+          "world_sha256": "3e397f1a8bc7cb8791eddf82b2c26641e817c675912ae24afb823112c7ee59e7"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "7c7abb9bcff44782",
+          "world_id": "f3v2-hard-143",
+          "world_sha256": "527fb70c96d7dff0ac9fe1bac293c49d5c076ab5a33f6b9c93b757b245229d54"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "ce92d83dcc775edb",
+          "world_id": "f3v2-hard-144",
+          "world_sha256": "ce8e42b7eb64e48aae38c7a241fd4075305fc9bb85aa951adee988ce020d49a9"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "0813c0c8ff73cae7",
+          "world_id": "f3v2-hard-145",
+          "world_sha256": "d435f8edfb332a2720ece382abdf51bb38ad90ed29594e05d47200dd7d85bb22"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "452b70b56e862f28",
+          "world_id": "f3v2-hard-146",
+          "world_sha256": "e691f8d42ddf3440c270fff4dae54b53356517b26b4e1490e76fa55a5b12effa"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "f82a3f5f9afb8813",
+          "world_id": "f3v2-hard-147",
+          "world_sha256": "1d5ce6f806d61614857f05117fc354c35781a3dff23924956d8f6a3fde6ff76d"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "672ec41b43dcb773",
+          "world_id": "f3v2-hard-148",
+          "world_sha256": "c2aa069c28b7dcc236068315db7ef911858bf42ccf17ab8af9a8d784350603c6"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "2a082e8566fe12bb",
+          "world_id": "f3v2-hard-149",
+          "world_sha256": "dfa8b65b4f8281bdf2cacab9e37fdd4a56073f7ea6bb77fe074494e1275561b2"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b4701f745462fcbd",
+          "world_id": "f3v2-hard-150",
+          "world_sha256": "b0aa4214f014c3bef2b162b5a6adafd58d71bf5be1c4b30884f740726a4f57e6"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "2e9a9c7ef38430ba",
+          "world_id": "f3v2-hard-151",
+          "world_sha256": "9bcacaf05cee66b583efc9fad1654716130da30000f55318b6881b4487efdd21"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "4c5cb69eb3c348c1",
+          "world_id": "f3v2-hard-152",
+          "world_sha256": "a510c606482d4758d929e42f5b4f87fa26968d929a8b358d0e0a2fa6b6ea8cb6"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "35d71ae478db2a27",
+          "world_id": "f3v2-hard-153",
+          "world_sha256": "f03263f478b58bdb7d518eec5a59fca413b1f86a8e43a0ca63973419133e7aa8"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "ae3b20ac8105a2fe",
+          "world_id": "f3v2-hard-154",
+          "world_sha256": "f4d04d5c2896e3b03891aceafa861d8ffdab4067b0004793dc7ea792479c15ba"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "33b15ecf816170ee",
+          "world_id": "f3v2-hard-155",
+          "world_sha256": "67c669e04e963f4bc5a1da4f76a44054a96dcf91f529a8b91f6894a4f08bfbc7"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "35023782d27ed656",
+          "world_id": "f3v2-hard-156",
+          "world_sha256": "55c472501402e96dafb0aee817f0b7a7863239b04765a9e8bd9d68095a878bd0"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "e70ebadd655de50c",
+          "world_id": "f3v2-hard-157",
+          "world_sha256": "e6a05f4f2a6795494a6971e264d207f9a03cd4739af657c3879e46e68f6b6a4f"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "49e6dea8879502be",
+          "world_id": "f3v2-hard-158",
+          "world_sha256": "79d9f44576cc99c7c4d665213eaf2737037044e13abe2f11bf18a72ee3dfde2d"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "5d03dba4bb941c50",
+          "world_id": "f3v2-hard-159",
+          "world_sha256": "8041936c006202e30e02be9a55422ef1b53a10f5f25875c7d42245e469972ea3"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "e8bdf8f70e9f5440",
+          "world_id": "f3v2-hard-160",
+          "world_sha256": "a2720949f727b48657c77e3b4ff0bfc73265941912406ccdf90eb354f62f2dfd"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "d2e1b8ab5512b504",
+          "world_id": "f3v2-hard-161",
+          "world_sha256": "0b4b4720f16db3ab7673d297d66ddeefdf0c94cc448aedbc948a7e609cb93e24"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "8aae3df8b268ba42",
+          "world_id": "f3v2-hard-162",
+          "world_sha256": "d293d048ed5a8079c641b04dbb69ce4441e4d3b789b601c508c4f80d11792d42"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "d2e4d6e138281727",
+          "world_id": "f3v2-hard-163",
+          "world_sha256": "5435c36cc9bf3c8a82b00f47fc0db9ca066301879b475a9ed9207308ebea28e2"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "480f59280509f234",
+          "world_id": "f3v2-hard-164",
+          "world_sha256": "cb375b3bcd41205ac5836db4afeab7f8134244279e9ff184212f6ab536d0f390"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "9b5b783e0e2f1f93",
+          "world_id": "f3v2-hard-165",
+          "world_sha256": "23984adeae190549415d1f47384655f58c6ab1b7f97e6fb57fd2cc61c54f8e12"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "40c07e728c5b6a15",
+          "world_id": "f3v2-hard-166",
+          "world_sha256": "a7ee007324221e5a108316defc1103a8749462c4844c25c58b142916e3b2a191"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "c76ca4da72ea0e5d",
+          "world_id": "f3v2-hard-167",
+          "world_sha256": "271ece1352bc742a62895fc0a8c63c01403109900ef5a62fdb9ed7d644367cee"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "9b8429e8de651bab",
+          "world_id": "f3v2-hard-168",
+          "world_sha256": "5ce8b2ce16e084d5e9ffb8c2306df7f043ea5144e4489326df3a1e7bad19ec3b"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "c65447a72c138f75",
+          "world_id": "f3v2-hard-169",
+          "world_sha256": "ceb0981e7fe9e29612edaefba9009c0cf1748966c893faef04fc8d11d8990dd5"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "a8201d92f488a126",
+          "world_id": "f3v2-hard-170",
+          "world_sha256": "9352a3c0c7b6f25077e2058bd24d1877d5702de31afcbdf7f9b0dc26221aa99c"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "8ed429edd4d5ac7c",
+          "world_id": "f3v2-hard-171",
+          "world_sha256": "1840a18c58db39f32dff0e2a6f7289269a84fe0e6a27d8df84d9579c45ae110a"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "fe73fa4862aa86a6",
+          "world_id": "f3v2-hard-172",
+          "world_sha256": "dcda2603ac7ca8985b7cb6fbbe9086a852c6c47f47dcbcec661eef2b430692c0"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "6850f47000f14836",
+          "world_id": "f3v2-hard-173",
+          "world_sha256": "0f74841e3ac81a86bf8b4dd13e4942fa03ee81d69ec1a816eeaa7bce1fb0846d"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "088a48580baa5f91",
+          "world_id": "f3v2-hard-174",
+          "world_sha256": "7c65c8a6b26e649c7fd53e6ed8ad5279b98a3bebd6d71f5e192741c19c686686"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "7a63163d5e8a056e",
+          "world_id": "f3v2-hard-175",
+          "world_sha256": "2bf21a057c2b74f1814984c9d385c1b07085e2f6aa011e268e8a4a4a024821d8"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "53699f849ad5a490",
+          "world_id": "f3v2-hard-176",
+          "world_sha256": "36366181be2663048df799acfddec62a4c2fddb0961c89409e27ef19d5898e28"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "06924dada56bc556",
+          "world_id": "f3v2-hard-177",
+          "world_sha256": "10c656b3f30c6b24281bd267936a67cc7ee8464dcf4ff63df3e9c0989127c3df"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "eabd834c71af44ae",
+          "world_id": "f3v2-hard-178",
+          "world_sha256": "6240f211d813a62f18b9ecbd073c6fe78c23154492059eea1982d92b04b44a62"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "1d6490e14a31f15f",
+          "world_id": "f3v2-hard-179",
+          "world_sha256": "d7eeeef481d72216a02640a34c4d836a46e19e095a323dd826d5bd7f1ccbf341"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "d934b685727810fb",
+          "world_id": "f3v2-hard-180",
+          "world_sha256": "cd8ce980dc90cc8d9a18ce205c5dcca5bbe1131fbbb21920edc486984fda29ba"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "a947fc986bad0710",
+          "world_id": "f3v2-hard-181",
+          "world_sha256": "12527303d7ffaddcd771858d35f13863bcd500f61176964f56da0dd2f6e7da21"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "ad94c6fa74d9e806",
+          "world_id": "f3v2-hard-182",
+          "world_sha256": "e407f05693a104f141db0d1ea4986934accef55f2c4a62017bdc5a1ed8c9d26b"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "71d9cbca699a02f3",
+          "world_id": "f3v2-hard-183",
+          "world_sha256": "9ecbd195a5df232c5275bf734e1a4e82a27c443abdf6f8b451b3870db52cecc1"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "85edef3901e5ad74",
+          "world_id": "f3v2-hard-184",
+          "world_sha256": "779fe87ae9526c3cdb332c338a461fc28466aaee045e6bd177655830d4b9ea30"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "88c05c3089a6f460",
+          "world_id": "f3v2-hard-185",
+          "world_sha256": "bfe11c2c277a4f6f5ff59997de43c8cadcead9d41e89c358e735ba6b9680d05e"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "87017e9465ca9d44",
+          "world_id": "f3v2-hard-186",
+          "world_sha256": "44b53695d502755a1bfc024016b8f4faf4ec00d0a2ab9787cb822df03e6cd008"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "ecde42ba47dbb2fe",
+          "world_id": "f3v2-hard-187",
+          "world_sha256": "104ba9602a4df94386bdc57f75e6cdccc9bf211febb1bc6ed03844bd0aafc99f"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "94a367490830b43b",
+          "world_id": "f3v2-hard-188",
+          "world_sha256": "b090cff86f3f212780e61f6d3a8a1139e690f468e198ac715787f19c8b45023a"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "15e8179ab649a80b",
+          "world_id": "f3v2-hard-189",
+          "world_sha256": "2dae77a5aa7c48f986de6b9f024af2ef790cf109f6627048d28254d2bf2f2192"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "9b2565487b90b7bd",
+          "world_id": "f3v2-hard-190",
+          "world_sha256": "519914176cffa2ee63fc276e936f96c377e7d54aae357b99d0491a2a34be765c"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "1e7df3f6bc533f33",
+          "world_id": "f3v2-hard-191",
+          "world_sha256": "be7a2ece8b040126115f055154d2e1e1ed6acbeab9a5b509b68752785622792b"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b35917ae19b29046",
+          "world_id": "f3v2-hard-192",
+          "world_sha256": "d1696722a2f2ba3a930784543751e56360ac6d9ca7ea1778253583f6bf2cc793"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "5bab97a2794c3247",
+          "world_id": "f3v2-hard-193",
+          "world_sha256": "9eedadb30e0f9d2e5214e1927ee248f7b00e3a8f8b567c9b158f72c4ebb0d55d"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "1fbaae0198a97a62",
+          "world_id": "f3v2-hard-194",
+          "world_sha256": "2f86e91ecbdb65fc97d7eb9ef5c32b37e6dc873ba62e34e5454393d5636aaad1"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "dc7d0d909d7accfc",
+          "world_id": "f3v2-hard-195",
+          "world_sha256": "f6052afa005e602c34f551943035ee3a13fa8630a9ab0699061cbb05767e9f7a"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "e9ae2d58d9f769ba",
+          "world_id": "f3v2-hard-196",
+          "world_sha256": "d82b080d186814d0bca400ee7eaf0c0c8578d6511c42ac539d713d6eee9e6b0e"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "931aa282132f614c",
+          "world_id": "f3v2-hard-197",
+          "world_sha256": "27c669834c736b2a4cdedfeba65207e85c73ef2d3aa8a608f742f39fa554bf55"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "7f8c2b15127a2c11",
+          "world_id": "f3v2-hard-198",
+          "world_sha256": "86a3e1294c6f790bbb3aed934949a4bd0cacaec77b37e71514ccf2b398fbdd82"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "815ea68a2cd3bb89",
+          "world_id": "f3v2-hard-199",
+          "world_sha256": "515bdeee11b2a90cd9f49c75ba145c07e15853932935ff9798fa251b4633c81b"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "8a7fe5f8bcd6134c",
+          "world_id": "f3v2-hard-200",
+          "world_sha256": "15351906eed381d30f8ed83f9a1afd067f373764a819b36fbc356bd16a4e9474"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "08c669482a9b2997",
+          "world_id": "f3v2-hard-201",
+          "world_sha256": "da697d1d23585e06519ec908fc51f352bc8a08b6b1fcdb168915a47619c6753c"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "4bad6e899a9c0022",
+          "world_id": "f3v2-hard-202",
+          "world_sha256": "5607301566ece16e0116a41704b06c79e57edaba81fd261a210bd851976b1d18"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "46a50499370a9c31",
+          "world_id": "f3v2-hard-203",
+          "world_sha256": "f2d083a09973355c96b12ccd6b0db41a1b710bbf8a34b6b4e671e5942c81c369"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "2e43723d46ed96b3",
+          "world_id": "f3v2-hard-204",
+          "world_sha256": "4d0d7cf977952822017ce131f11b38bc09b847c60c96d8d8bd1ef6d35ee58487"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "90e7b9ab4e6ff1b9",
+          "world_id": "f3v2-hard-205",
+          "world_sha256": "4debb9291b219af872dd12821ff6b85976012472069d0e53848dab9e2d063ff1"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "44bcd6276324169b",
+          "world_id": "f3v2-hard-206",
+          "world_sha256": "2df243ee9222138d58821fa27e16897e25f660195d2bbdda55be75507e3b64d8"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "94b1583df8116428",
+          "world_id": "f3v2-hard-207",
+          "world_sha256": "5075e3cf3b6b5766d390b733e169947964c41fecd8987d64f0934e11a6b78f0a"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "331dbda14c9e47f5",
+          "world_id": "f3v2-hard-208",
+          "world_sha256": "7e54549c3ad3119556c3d9801c37cf60cc5844c1df5b3868e61458338a2d8f37"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "70b26dcfad3a981a",
+          "world_id": "f3v2-hard-209",
+          "world_sha256": "0b0f7e938947620a4acd3fbbe245e73aefe6d5794745b6fe2fa9d61155e409c3"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "c636b7a517032cd5",
+          "world_id": "f3v2-hard-210",
+          "world_sha256": "504d045e18c301e21bcb3209fcb75803171dbe5c344ab922357fb719c5a97c40"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "3574feab921662de",
+          "world_id": "f3v2-hard-211",
+          "world_sha256": "021369d4b0a53dfef48d44ba216e1362f462bdb305e06dc1a26f83a70a9e43b4"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "9d3b69c4526d26c2",
+          "world_id": "f3v2-hard-212",
+          "world_sha256": "a6722cf2a6d1b8b558c5a07f83d6cb1f689f18d25f35c5e93c3d2721df2d891f"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "3f3bd4077cbef3ee",
+          "world_id": "f3v2-hard-213",
+          "world_sha256": "49b1dac857cb056d903d3c4b15a238546bdb057710f3c2fc83908600088611e4"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "38da1099ff90544f",
+          "world_id": "f3v2-hard-214",
+          "world_sha256": "b4345991e7db5569878c410eae31f97a3ae19a18909dbc90321c784e683f2b46"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "1ced9342a945ce0a",
+          "world_id": "f3v2-hard-215",
+          "world_sha256": "95c998fe41252f3ae2a63c597b29a78ca612afaf8e0b618f161552e4dce4b23b"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "c1bdd51da74dbd83",
+          "world_id": "f3v2-hard-216",
+          "world_sha256": "f2b8bec5d86fdb4a0b90f0c7598961992e0694b60703914bfb2ccbedfde03831"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "0531d070f52d1f2b",
+          "world_id": "f3v2-hard-217",
+          "world_sha256": "94383f088d818857bc2741a9249e360b78c9f8a6ae0fad89c5eba8cf48ef7627"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "04114940f012c55f",
+          "world_id": "f3v2-hard-218",
+          "world_sha256": "27afcfbef2c54f86dc4b40f34c27555740c931065003b7b46f0595502f98bf2d"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "cfcd73f68ec495e5",
+          "world_id": "f3v2-hard-219",
+          "world_sha256": "e73f3a787bb94da382813177d0a0060f8fd5baf3eba33065a5a656017fdc2d5b"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "3ac1d1f3f79d69f2",
+          "world_id": "f3v2-hard-220",
+          "world_sha256": "9ba7f83dbaa5cd431f4965f208bf49c0fb6bac16d37381a59ce3e3752da18371"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "2552e1392c8c54d3",
+          "world_id": "f3v2-hard-221",
+          "world_sha256": "ff1de033cfb11bd1697322f5b6175a351b886a8a48c4555439155ba3bb4f15d4"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "7f954812b6d3d217",
+          "world_id": "f3v2-hard-222",
+          "world_sha256": "4065378b60d10e52aa1021d5c037d67e8ae3b8e00b2645b6f1cbed722fdabb96"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "46eace8096053215",
+          "world_id": "f3v2-hard-223",
+          "world_sha256": "31df64c17726a5f3d0effdd0a64024c57e28463676c31dd3586bf2552e088761"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "9a94330959ace360",
+          "world_id": "f3v2-hard-224",
+          "world_sha256": "60087799cf7861bff9542bec9f8605e8696c1b39d6dd878a045117f9ea32b077"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b7b26216536a462e",
+          "world_id": "f3v2-hard-225",
+          "world_sha256": "afc0f992f4fcc396e94e4167360556a8051ae37e230d900e7eea4c45b4f004ca"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "e57f9ac63360c132",
+          "world_id": "f3v2-hard-226",
+          "world_sha256": "065696b752f4247505cdfdff51c7a2c6579e9aae5b9405aebb35b0eee9bf1dbb"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "cb5fcf396674733c",
+          "world_id": "f3v2-hard-227",
+          "world_sha256": "5d1f8205f26a05d3826828597a0e0ed92345b00750b248277ee18343690ae043"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "c5b2d63aeff127dd",
+          "world_id": "f3v2-hard-228",
+          "world_sha256": "9df649d32cc5f751cc289df7b1c17d9c1dfba1ddbf2db171ae2b321aec93f222"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "7ec11c073cba895a",
+          "world_id": "f3v2-hard-229",
+          "world_sha256": "5097b77f7a775ffbd1bdde2226e2bb208509f4dbb8948ff7246dc77e8e017c18"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "72f510d0f137bec6",
+          "world_id": "f3v2-hard-230",
+          "world_sha256": "612ca4763c3f709ba60455fb65c9a118d22125a20777908cf07c0083bd2dc7f8"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "0de9ce72370b649f",
+          "world_id": "f3v2-hard-231",
+          "world_sha256": "cfa34315404c215f7c204b918d5cda9edfa74973f8e055e901204ca8e6316475"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "0375ffec95b4dc7b",
+          "world_id": "f3v2-hard-232",
+          "world_sha256": "04fd265b26b65853ca8a5419e21462e70d99f3f4f7f401c35bfed8a65605379a"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "492a0cbed8de562e",
+          "world_id": "f3v2-hard-233",
+          "world_sha256": "e108a584740a9b76a4c72134fc256155108b98328094c93322f30a3bd954e340"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "366e2cd687fb2d47",
+          "world_id": "f3v2-hard-234",
+          "world_sha256": "d163349797110fa752f5dd8dc40ec98aa3737d638afedd55238c69bb14d5ed77"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "2c86f6ddbf7277cd",
+          "world_id": "f3v2-hard-235",
+          "world_sha256": "5417705d2badb86877d7f8f35fa9e03351c6abb25d57ca237858e9ab46a78df8"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "13544471a656d7fa",
+          "world_id": "f3v2-hard-236",
+          "world_sha256": "0889a60d6bff9be6c76745f9e3c2c42dd1d1f6e99c0888023aeccc3b4cf57118"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "f77c51de07f7e18d",
+          "world_id": "f3v2-hard-237",
+          "world_sha256": "c92e3d82a16d629be01ca3c99761393ac02add303369bd49e03a51dd42132f10"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "756116219d3285cb",
+          "world_id": "f3v2-hard-238",
+          "world_sha256": "58c62949d82c1eeb816b34658ce816473f35b804eaa5ec8df26e4fd884fdddd9"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "d8626316d39bc78d",
+          "world_id": "f3v2-hard-239",
+          "world_sha256": "add140c1a8aa1c80aa3d87489e82190627ccc80f3383781775674cb697853498"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "213a9456c8d5e708",
+          "world_id": "f3v2-hard-240",
+          "world_sha256": "5234cd8486dc3183adf6bd2f40da841147ddd6e2770b8d311d5bf7ec47a3e88f"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "1ecee23dbe96f039",
+          "world_id": "f3v2-hard-241",
+          "world_sha256": "52fc1cf877231a0088b745606ea10bdebdab8d9e330af015e68ed2dfd5dcdcf2"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "7d38371f628a3a75",
+          "world_id": "f3v2-hard-242",
+          "world_sha256": "c89048a64bf39cb8f179ec395abd0348fbd808dae7a7b05dd419c918a8f7fd3a"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "ae5f7792b2fcc174",
+          "world_id": "f3v2-hard-243",
+          "world_sha256": "06980e957197d32ddab751507c519938d1337a910abefa79e12edcf828c8c424"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "fd25a4e389d0d77c",
+          "world_id": "f3v2-hard-244",
+          "world_sha256": "7c8d95105c2c988da56baa12e2afbc7e17ee036a86ef5e0353a0919aafce371e"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "c73a572c6e2d6979",
+          "world_id": "f3v2-hard-245",
+          "world_sha256": "c6320d18f882230a206c4bf2ec9cc465bc4cc337e85a5843a01d5c6bb0d6934f"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "aa6cbc94c6cbf6c3",
+          "world_id": "f3v2-hard-246",
+          "world_sha256": "352033194363bfae35f4960452a0458aa3d1dd4e61cea62cda1f97b93cc2f290"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "3953ef7149d4ef27",
+          "world_id": "f3v2-hard-247",
+          "world_sha256": "386b69cc02c20a0967e7683c05712fc2d27871f46f445bf4e4cc9f3ca419e22e"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b97cd8f01d0400bc",
+          "world_id": "f3v2-hard-248",
+          "world_sha256": "27c79d2955c2f1e1f4aef4ffdc0b35378a17c12dcfb8c0c71c6b86ea7f2533bb"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "508a081db2a3d4d9",
+          "world_id": "f3v2-hard-249",
+          "world_sha256": "baa950221452abd0c90a7528cec0015b287825e4d62cde9351e053ae95d076c2"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "c2f965c5a5e3fee4",
+          "world_id": "f3v2-hard-250",
+          "world_sha256": "6a44be805178ddadd184bcaae0a63d16a163c4e4587dbaf27cd6ec37d368f953"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "0740d970371c47be",
+          "world_id": "f3v2-hard-251",
+          "world_sha256": "43dcdd7136fe7e419588796d57987b0fa6e8c05fe1061892eaabec800d1a2414"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "ca96f352f638f85c",
+          "world_id": "f3v2-hard-252",
+          "world_sha256": "007d3d6d128018d3deb92cd3b0ec1c318a27ced61cf89d401e4ee5e38ad4db32"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "a5b43c7910988646",
+          "world_id": "f3v2-hard-253",
+          "world_sha256": "c01847ec1b599085db545da06f5b53a6761547afd722e4147c17b1e1d77f2325"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "476073b6b0a0b29a",
+          "world_id": "f3v2-hard-254",
+          "world_sha256": "014c612d9327bc689332e35454c4f953148f817515da8198b70eb99ae1d143ec"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "5d8bd37c859867db",
+          "world_id": "f3v2-hard-255",
+          "world_sha256": "df71eb80a21e1396480fda7f79ebf2fda5a4a0ce789c5cc78233b01363a6bf8c"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b67bdb7e7e625e60",
+          "world_id": "f3v2-hard-256",
+          "world_sha256": "920607cf883e4ec3ca04bc3a800f6c82108ef5bd73c3f7b247a9777b1e5a00d0"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "814816d000f309d7",
+          "world_id": "f3v2-hard-257",
+          "world_sha256": "c8f305c358ace2228dac6fe6cc2bc41b49c7c9efa9b485eda9aaa5309d948c06"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "e7b25600f0d607e9",
+          "world_id": "f3v2-hard-258",
+          "world_sha256": "2a40a33936ff00dfe1d2b2ad7387de671b999cc43663fe65886ff26d581bd058"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "18849222c83befec",
+          "world_id": "f3v2-hard-259",
+          "world_sha256": "fd0fae12e828dd06937cfab0d6ade720548b6416e97e9cb6d26d6bbfbd891b42"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "d693e39eaaa76251",
+          "world_id": "f3v2-hard-260",
+          "world_sha256": "2f22342a7816c7e29497dfe9fbfec62907df2ca3f0eda4eb815f80fc661d3376"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "8c1d44ffade92d61",
+          "world_id": "f3v2-hard-261",
+          "world_sha256": "151c9f3997fb1d750950185a3181282ecc5eb307fb52a32b3e739e6eeacbbaac"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "be4db31ff5b9217e",
+          "world_id": "f3v2-hard-262",
+          "world_sha256": "46565059d082162db639fba65dbbf69acf7502111847b097d658187fc192efa2"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "fc976c32a122fbd1",
+          "world_id": "f3v2-hard-263",
+          "world_sha256": "c02228212034af3ae4d0f96446c3d0231a8fc41e2edd4442f4f168e8395bcf35"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "461dfe6669aeaff6",
+          "world_id": "f3v2-hard-264",
+          "world_sha256": "564b8a21201a425d997a83bf62cf42ec0857a5a64f184260e2e153659492c5f0"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "efe4526d4235a71e",
+          "world_id": "f3v2-hard-265",
+          "world_sha256": "d8181887607b1e527b9de3a030edefa9359f3882d12b0969877c3f522f146e30"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "1359326d627a5af5",
+          "world_id": "f3v2-hard-266",
+          "world_sha256": "54c0cd603b7a6488279a3b3dfece14e2b580fe18eb4522105252c402436042b0"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "7ae3e395f3a8ef8d",
+          "world_id": "f3v2-hard-267",
+          "world_sha256": "d25378ad7f9332086dd42ad9e89626c201e59a8c2fd1101f1190f974c09a5e4b"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "34d912959755c411",
+          "world_id": "f3v2-hard-268",
+          "world_sha256": "a7b5e5e81745134b0eaccf50b913831fd1441e637b1a3a62b5a857913572f2f0"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "905d15c40cf824ff",
+          "world_id": "f3v2-hard-269",
+          "world_sha256": "d8c8509cfc786986da1befbc698f68718d94b13488c8a8bce678653f6e3fbfff"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "258792c8be9c24a2",
+          "world_id": "f3v2-hard-270",
+          "world_sha256": "974724161e797ae5167d3f1a04fd6b6c60169466244eb7d157a1b57a7b99b05c"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "ba1eb2d19d3cc13f",
+          "world_id": "f3v2-hard-271",
+          "world_sha256": "a6b9ee4091c84f2ee67ee977c7fff11157aa69005ed2c7d5af8abc7b3f219eaf"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "22b5bff755ebd552",
+          "world_id": "f3v2-hard-272",
+          "world_sha256": "827ce24e783ea732f49bc9bbb855253f81fed5f9f3084608af6c786194aa7345"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "d50707f71a4d19f0",
+          "world_id": "f3v2-hard-273",
+          "world_sha256": "db5ced32bb0eed09b7a0462637356b36bfda512ccda4b20e5e749d206f25cd74"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "34fc07833f57ca13",
+          "world_id": "f3v2-hard-274",
+          "world_sha256": "de5f2161a5aa099bf1104e8b1d740dea60ec8c4f6c6f7ef62303633466994996"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "6b7bcd4838aada12",
+          "world_id": "f3v2-hard-275",
+          "world_sha256": "2bef6e64262e76ae82842dc4041e8fa0a24537692adf8805137e4e20f97c2087"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "3132db9586fc6bd4",
+          "world_id": "f3v2-hard-276",
+          "world_sha256": "dd0ab201c0df7350a6edaf0824206086bd36ccf635c05a9b90fbdb4513c3d09c"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "0ba37585c28fb54f",
+          "world_id": "f3v2-hard-277",
+          "world_sha256": "1e57fcbc4653ce82147312061ff38285af4e9a1d5ba89ec69a288beecdf84db8"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "1f5637bdf0697572",
+          "world_id": "f3v2-hard-278",
+          "world_sha256": "a28b6b77d9dd93e3cb2dffeeb76665f6924d2ba160221557c70ca022d933da9f"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "aa0e48c43f8cbf05",
+          "world_id": "f3v2-hard-279",
+          "world_sha256": "aabd31c73689c5cafc46dfe0d72a0748f11430bc51cb61476adcc220212f6992"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "cbf08b9e01b23e23",
+          "world_id": "f3v2-hard-280",
+          "world_sha256": "dd6a3f30a04befb6f4c09a0b134aa3155bfe8a13da9eb196fa71247dced3f3ab"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "8cfa616d7442fc95",
+          "world_id": "f3v2-hard-281",
+          "world_sha256": "5367a856c5a2d320f2fe7ac2ed8a8f7215d04a81244495a37f7a3c3d9468a5e1"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "ffa15d2714d7775d",
+          "world_id": "f3v2-hard-282",
+          "world_sha256": "a0ef6b3b8bc360ca9210baa800138471861da723048d9562bd298b61e451cbeb"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "4470c76612f6b9ef",
+          "world_id": "f3v2-hard-283",
+          "world_sha256": "bf37ae2d3f3dadbb2234392494960ae08bd3760c9b830839c2eefa9b87596ba3"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "82d230b92fd1ff67",
+          "world_id": "f3v2-hard-284",
+          "world_sha256": "c294ed57409fe11b9561b4778c325097115284d5d56c6357a8da5b636706e4d5"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "4d2641640fe0f88e",
+          "world_id": "f3v2-hard-285",
+          "world_sha256": "d438561c6373d64f114e307a8ed197d069b78dbf659ace26763e303e4ff2d2dc"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "53d0cfbaf127bd13",
+          "world_id": "f3v2-hard-286",
+          "world_sha256": "8335824e5b11d240c47e8fdbfea0eb551b93f5f42180e0fc812f51abc37682cd"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "dbb8865c92e39d9f",
+          "world_id": "f3v2-hard-287",
+          "world_sha256": "71563e6c9e1a7551575c5b8e4875f41c5cbcf636d8431fb60e507374bbba8d2b"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "c7e50a45d55e5758",
+          "world_id": "f3v2-hard-288",
+          "world_sha256": "b740b41ec850af62503cd0cc50a8e85631baf5dcd47f84c05a9be71ab7d52694"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "435f5ce32fae0bc1",
+          "world_id": "f3v2-hard-289",
+          "world_sha256": "2582c94a014156de1b21fe5cef8e4e1320feeb807c5072ff10499684b901ecc5"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "c3fa01c045d33e2e",
+          "world_id": "f3v2-hard-290",
+          "world_sha256": "c42b5b0c52d3182ebad428238e850b001d218068450c2044226c9866be5aac87"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "83f65f4129b3b7be",
+          "world_id": "f3v2-hard-291",
+          "world_sha256": "9b4b4beaa4e1d93d3fc7fb5cfa298ec67d0a002ba2b9506abb55feb2abbc6a44"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "c83a683149a0e57d",
+          "world_id": "f3v2-hard-292",
+          "world_sha256": "f09b79a834a95a73bea25036761d012b741cbe15d277aaa4c43235df708fd563"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "52d9841a901caf42",
+          "world_id": "f3v2-hard-293",
+          "world_sha256": "2b6798e8aaacaa24408445c727a5949eada5b4a78fe337775adfcb0751992478"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "becddd5289945ead",
+          "world_id": "f3v2-hard-294",
+          "world_sha256": "0b4571f64fc3c284400b0394474581f64f002db8e5f77a82bd7bdd03abfd7a4d"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "343b1f6b49a89191",
+          "world_id": "f3v2-hard-295",
+          "world_sha256": "56f0ba0e1067e445a395b770cf5281fb73e5bd6f6a1a9fecaeb80c8d857c4605"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "ad298e101f6fa9ca",
+          "world_id": "f3v2-hard-296",
+          "world_sha256": "8d82462c27741f9e1869e80079f284524cfdcc8dd9aa03625109fcee54579944"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "fa43bd47a486ae8d",
+          "world_id": "f3v2-hard-297",
+          "world_sha256": "e2f8aece7f593e7b7c485aec903c8c8a51c015d6675089cebd9a0df5b1824573"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "bcf0d686ba0668db",
+          "world_id": "f3v2-hard-298",
+          "world_sha256": "863089c3a3f879eb549c9f590f2f0513c9bbdda64e0ebf468fcc1279beb73b9e"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "0e6d962dc17b6c16",
+          "world_id": "f3v2-hard-299",
+          "world_sha256": "a479d8189668a8030a0dc95f07c1c6d3943ce44748f7745d9b0f5b18d1ea87f1"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "d97cd3f840608f76",
+          "world_id": "f3v2-hard-300",
+          "world_sha256": "847ac2a7fdcb23bd4a79800110a0a239abe8ec7c1e5f17dc4caa2c38eb247925"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "1699b76db6c507e0",
+          "world_id": "f3v2-hard-301",
+          "world_sha256": "b608d5392d280a7783016d3378ce83c6ef9eb87281bba6986201541aa3f4d2c6"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b821cdbb8741e165",
+          "world_id": "f3v2-hard-302",
+          "world_sha256": "2efe5450631092ca1019ea3e77dd35e9df54ad470fc4e138e843825927dc39bc"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "1a608c81b7749669",
+          "world_id": "f3v2-hard-303",
+          "world_sha256": "990292a0ae86369759a9077c636175b0be4c144ac04482b15628f1072d21748b"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "1c3851cee2e688ac",
+          "world_id": "f3v2-hard-304",
+          "world_sha256": "a05352cab32155c0ebefb3f35453c35c20c02df4b6723e300f091e7c5ef53237"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "4b6a085fad9e35d2",
+          "world_id": "f3v2-hard-305",
+          "world_sha256": "4663b0635b81112570668597ef4a25a0839cf3758c47c0088e7b3fdce2b813d3"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "469f003a177e2beb",
+          "world_id": "f3v2-hard-306",
+          "world_sha256": "8c148c727c17bb81c39434ad338d780e855134ecaf24ab7181ef88723dc7c9a4"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "7c44ab5247883c3a",
+          "world_id": "f3v2-hard-307",
+          "world_sha256": "75bb667f1f1f5a5c7339cb2f001a76a9bb1f419618d2aa78afaed3839cec46a5"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "a996b7425b247108",
+          "world_id": "f3v2-hard-308",
+          "world_sha256": "ce6ef10c7b89541dd4b970e914107efda6a2a0331de1952e4e2bc924092d847e"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "dc635b64c0175cc8",
+          "world_id": "f3v2-hard-309",
+          "world_sha256": "737b317d5e953d9868b177b4543e49def1e597baada6e8d5a9b388eeb5db1208"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "7fc170e8b910276e",
+          "world_id": "f3v2-hard-310",
+          "world_sha256": "9a7d4ee71b4e03c3e01a2317ca46f37db66e56134fd3cd193168558027b598af"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "00f09d33ca7b9c2d",
+          "world_id": "f3v2-hard-311",
+          "world_sha256": "7c1746f99c3879fe0ae6c35cac58af1966bcf1d9d19c3e9bd992feb2a3f32291"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "11efe900e7eac08a",
+          "world_id": "f3v2-hard-312",
+          "world_sha256": "8b003ba9e36ae984f55ad4a8e60f0e6f446f6a7d7ddb1aede52e1d024a4ef3af"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "c3630642d9cfa72c",
+          "world_id": "f3v2-hard-313",
+          "world_sha256": "43c85be10afb5053f4fc51d91283eeb4ac46ecafc50d3160ed86fd0e0b404874"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "618da4a42fb08879",
+          "world_id": "f3v2-hard-314",
+          "world_sha256": "bafb37c9ff522646e1d75c0c2c921e95b94641addb60da59eac68578e6f8a1a1"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "bb56720b3555586a",
+          "world_id": "f3v2-hard-315",
+          "world_sha256": "090a0cd6eb12740dd7a77b085364c3428899e5c93e97b5ec03f54e16fef5d617"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "50eb14d79fe5cbff",
+          "world_id": "f3v2-hard-316",
+          "world_sha256": "107a4e11e9dfdfbca56fce59fc5990ff6e98c2a36fd369e9cd67c15e2bb35b5f"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "70799bf40824a05a",
+          "world_id": "f3v2-hard-317",
+          "world_sha256": "4e8cb62513112b5030e4caaba15fe983a8ca0874a9106b53fd967fdca9b2e96d"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "9388d31bbd7dc199",
+          "world_id": "f3v2-hard-318",
+          "world_sha256": "49024420b2451b762562dfabce240b510e68f06892b1c596f9e99caea6222488"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "fd3aacba29c41521",
+          "world_id": "f3v2-hard-319",
+          "world_sha256": "a18ad5ef423a95af4080ffd5b7f4e0e257c85793066005e0226b7840c4133662"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "5b21d07be00fd7d7",
+          "world_id": "f3v2-hard-320",
+          "world_sha256": "3caab185438a8ffccfa6b2fe9f5b4f8a433c5d3e87281d881fe49e26e63fef18"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "20185b3056602222",
+          "world_id": "f3v2-hard-321",
+          "world_sha256": "aff9c22ff837d8d9a36e216cabec296b2bad324b846a5b41e548afc85674d6d4"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "672c3a957e024ea4",
+          "world_id": "f3v2-hard-322",
+          "world_sha256": "308a9c952b2865db580fb610dda4586123ca4fd87fd4801a6dc9804110a217a6"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "ad8b1ca606949d76",
+          "world_id": "f3v2-hard-323",
+          "world_sha256": "1c144996b1d788704feaef1d055ceabf2d21172bbffbcb56bcc004d12ff5d131"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "e7db67cb6a3e16b5",
+          "world_id": "f3v2-hard-324",
+          "world_sha256": "38b3eb0e1c2ca85debf1632c2a9ef42f4675f887058fce78c7997f73b7d85817"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "604dea61805064de",
+          "world_id": "f3v2-hard-325",
+          "world_sha256": "6403fe1f5935657bd6fd54ad97ce3ede91d1a7545305913adb5db815186d6ba7"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "880fe4a70bc275c8",
+          "world_id": "f3v2-hard-326",
+          "world_sha256": "723e1c51cfca720a14904a28ddb17b95f4dd8ee1df1be3190ea3577bdb9d46a2"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "a3094371286e9cbe",
+          "world_id": "f3v2-hard-327",
+          "world_sha256": "1c0abafe345830fbf9e58d7b0629fbe85af9943fed2fd0f929086537867c4f89"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "e969b2462fea2dfd",
+          "world_id": "f3v2-hard-328",
+          "world_sha256": "e8d3d0562721f27ba4abede2b7f15a9a324c95bc464c18e858a53c94e2bd10d3"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "c143a649d3d5b40b",
+          "world_id": "f3v2-hard-329",
+          "world_sha256": "4a487b1695f9372ff76affccdb866f23294a14f505eeb6356f44955e4e853c3b"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "4dcda877f8c354df",
+          "world_id": "f3v2-hard-330",
+          "world_sha256": "b6e67ba8ba90805a92b5fa7bfe7d9ce024df492c586d625764a0a444883ba2da"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "196ff81fef04dc28",
+          "world_id": "f3v2-hard-331",
+          "world_sha256": "96bfe2bda2ac333f9678ea4c78ab72c92d30237525f68ed8da180bff996bfbfa"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "912b761056be9bf5",
+          "world_id": "f3v2-hard-332",
+          "world_sha256": "5bfb495c2f6a064330b9db5c8f1c392c557dd9a365c6cc2e0077a0d56afe002f"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "3deed6398d251fe2",
+          "world_id": "f3v2-hard-333",
+          "world_sha256": "45d187304e4084bdbc6ee9adbd4270570b6a9918826d904595954ee00689f034"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "fed4bed48af1f9ae",
+          "world_id": "f3v2-hard-334",
+          "world_sha256": "b89a48d16e1b64f4d67ded54ce6c00709d67e7e931bc1d4f819475c761f65292"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "eb2239511b624cc6",
+          "world_id": "f3v2-hard-335",
+          "world_sha256": "422fb85e41199b8aa71fbc44b6ed40bdc9d26c5966429ed168b448c3ec9ebb29"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "dcc2bc36c0608c30",
+          "world_id": "f3v2-hard-336",
+          "world_sha256": "3798e4173057291289b7e5d582ac500b7750c75f6861a8839f92981585ca400f"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "1ddaf2a9da95e3ee",
+          "world_id": "f3v2-hard-337",
+          "world_sha256": "97f70d1b813449895046bb7932330c544866f1de5243590dce3e87b90b4d2f0a"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "4be1a93dd96fe765",
+          "world_id": "f3v2-hard-338",
+          "world_sha256": "320f86bbd03ae1fb953a505c3cc9c068d6ed55fc6f81ad28a566efd68480a51b"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "f2bfe80c7a890df5",
+          "world_id": "f3v2-hard-339",
+          "world_sha256": "150ed3fd5ed2b3d1cc3b140d9804683ff01b9837e7985f33e7751cd28791d653"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "a111d0bb9fb3cdcf",
+          "world_id": "f3v2-hard-340",
+          "world_sha256": "25c9e386922e0680196a5db1d3b1b3d65e797af01d2946e3ca23f451af834cbf"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "27f8fac63753ab08",
+          "world_id": "f3v2-hard-341",
+          "world_sha256": "b3038b4de21493799c669dc66c09b3e0d7d51b9e285626a22d81be9b8f400a28"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "79fd958aca072c20",
+          "world_id": "f3v2-hard-342",
+          "world_sha256": "1de64267636ac5057a0b34216fd14cfe5880212bc7a4e37cbc38d3c7eac24d4f"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "b5b96353297c2567",
+          "world_id": "f3v2-hard-343",
+          "world_sha256": "b5184fb1a9ae8cdda05a9752dfa1e473e847482206f7899e8b85cfe8c1926807"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "fc6c1cd9cacd969a",
+          "world_id": "f3v2-hard-344",
+          "world_sha256": "61f0f882c24c290169845bf8966e5109d25239d1083a843ff434eb2343281d12"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "1b037fa892c5ff93",
+          "world_id": "f3v2-hard-345",
+          "world_sha256": "00595681b96bd51b8437c6f87f10e6c46b027d63602009602f908243a153906a"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "3f47e8bdc29c99e8",
+          "world_id": "f3v2-hard-346",
+          "world_sha256": "d35f8041d6868bb17434269c30975e8a233e9f81d8886c13cf10d6e1686a1a2e"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "78c66b1c6829a93a",
+          "world_id": "f3v2-hard-347",
+          "world_sha256": "f70a2fd02c994a9298367f0d8b27d1b6db96288b460365a071d29d2493e76777"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "4c91160f89112a61",
+          "world_id": "f3v2-hard-348",
+          "world_sha256": "edfc6cc6c464afa7ad3aa9f7655347e3340252a841a006a038fed476c472eefe"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "b2d5cbfc9ce32cb3",
+          "world_id": "f3v2-hard-349",
+          "world_sha256": "30b6efb7466f50c9cf288f4f11f0654a66b47a5a817f5556e8b650390711b885"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "a784a4c0563cb116",
+          "world_id": "f3v2-hard-350",
+          "world_sha256": "5a439f0d7566b7d8e56009fdd4b30bc905b99e3b9bb52e22706594d2a1a14d73"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "0b524b1ef6f0eab8",
+          "world_id": "f3v2-hard-351",
+          "world_sha256": "9faf48d05c9a82df8e64ee9f6931fbebd77a0bc120e56f7e8549bd6b153c191d"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "2d1c8574f42ffb42",
+          "world_id": "f3v2-hard-352",
+          "world_sha256": "f1afbb43fae2f0982797d92543c521dd9f6d18c7f76ab9ae367e9b740812c878"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "0790a0c902bcf0cd",
+          "world_id": "f3v2-hard-353",
+          "world_sha256": "18f30a8ca1e2f8d4b195b48c3c156f1cef0da05177a75657a552eff503774d83"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "686c43b9d4385903",
+          "world_id": "f3v2-hard-354",
+          "world_sha256": "3c0a8a3ec8091124fa855961fc01c6af249bb6aba45e8b7da34216e330078f53"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "33289de5fe01c985",
+          "world_id": "f3v2-hard-355",
+          "world_sha256": "90ba72e7b14f4af5f33b3bde421df9c57693360fdf2798a8f487b781d98d7e6a"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b970bf1982fee44a",
+          "world_id": "f3v2-hard-356",
+          "world_sha256": "4d7d9a4df805488c9a5e1e58797402dbc48993bdc7e7e38f74b4b34c2e30bf34"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "b51a1ecc2018f2fa",
+          "world_id": "f3v2-hard-357",
+          "world_sha256": "ef085bbb877fcdb2b24c4a1ce59db742cc31ca8fc89084460ccb9d97c902b7cc"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "c42a191412c258af",
+          "world_id": "f3v2-hard-358",
+          "world_sha256": "c13929f0603f1034253dedbd289efaab3de3faef12728d598f906b4e41e70c0e"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "07b043ee120d821e",
+          "world_id": "f3v2-hard-359",
+          "world_sha256": "67747cb9c685038445ebb1518b5c612b9209455b02b89e53bcb81cf6f805400b"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "105ba3741a24ae3e",
+          "world_id": "f3v2-hard-360",
+          "world_sha256": "6ad1e08746c50ccbe8daa65ac069d7ad2285e773d71c1fdc7fe69b03efef6fd3"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "4de430d2816bd8db",
+          "world_id": "f3v2-hard-361",
+          "world_sha256": "1e0ae5ee9967307c7d4e6e9684e1fb38f5c8be81fb5477fb66f09ab7341a5a84"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "a513f6ba96046d05",
+          "world_id": "f3v2-hard-362",
+          "world_sha256": "99b9ff3d78225930c76dfb1948185fd3390d0f4c67ee9eff706f5eb52dd50ef4"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "9b35ec33741fe4cb",
+          "world_id": "f3v2-hard-363",
+          "world_sha256": "dafa1d1863bebc2567db2146397630ea16fe218220e179f7d2a0a95193f3479d"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "2f73e3d347935129",
+          "world_id": "f3v2-hard-364",
+          "world_sha256": "f21ec05a13ee2a9b6c2c6607d931ab1ba6f508595e972d84eb1c2b6cb1077d23"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "63036fe424d4bf27",
+          "world_id": "f3v2-hard-365",
+          "world_sha256": "ac0ffeab8ba1434eebee6268f6c596f9ad9ecd3d839550bfaf129df040105786"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "fac21ec0ccc7d141",
+          "world_id": "f3v2-hard-366",
+          "world_sha256": "3038be818a9868c5310100c89802950ec32351a8a4d5f7b44aa0e2a9d0f83051"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "485d20b345fe41d3",
+          "world_id": "f3v2-hard-367",
+          "world_sha256": "b354e000515677fe6b4e8d237c3b4de79348963853a09467dafdec717e26a219"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "289e22a8799d7872",
+          "world_id": "f3v2-hard-368",
+          "world_sha256": "673fb60ee0a5dcbddfa58024c98907784fe4ff039c8e0c421d1d24316b6d3ed3"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "2b39b934caa3ee91",
+          "world_id": "f3v2-hard-369",
+          "world_sha256": "4cfea7311d9f6d32ad6f226404f49369ada19a96cf6e12c5294aa9da47e5b1b8"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "103ce6a4224c82b8",
+          "world_id": "f3v2-hard-370",
+          "world_sha256": "81e8c9029cd7132b20d42f84d27cd495254b55cef1fea38b5a4151a5e3089955"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "48c7a4ac4286a43a",
+          "world_id": "f3v2-hard-371",
+          "world_sha256": "d6b31a5cb78c99b5e31daaed6ca9e3c4b0aea1c5f244d2386e272bc3848e7230"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "dad29fdbb7983278",
+          "world_id": "f3v2-hard-372",
+          "world_sha256": "b5d53c7bdc574abcbe93361f6b708284b7e8a2697d2c7720e29af5a4a3273ead"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "617b12e2ef0a2627",
+          "world_id": "f3v2-hard-373",
+          "world_sha256": "ef5d5ac0fd13888a7a35920150f3bb7c06a3b081b16b0615dd6c9e3065fbd5a4"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "e90b66551f75931c",
+          "world_id": "f3v2-hard-374",
+          "world_sha256": "b4301b0e440e07ce438e07ab6c1c9d22e4f06915d26654d9e5984c8e0eb16be4"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "a93fc72b20be76e8",
+          "world_id": "f3v2-hard-375",
+          "world_sha256": "b800919b4e5232e951521b4466bf423930253de71919cef69421ca7a2c3340bd"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "8b2f643b720a68b6",
+          "world_id": "f3v2-hard-376",
+          "world_sha256": "8274a47fd08ecb06521c72bb9f773818f5293954b2c2c5a3b31d0f7616e463c6"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "69233a7e3a48ea2c",
+          "world_id": "f3v2-hard-377",
+          "world_sha256": "f698f75d3d5f2c0db55515eaf76011ffe1f841ace4286f014502b75a9b127c85"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "96d8820dd4e21fa5",
+          "world_id": "f3v2-hard-378",
+          "world_sha256": "ba45c97f0136e5bab2cf25cb237e5c2d2879e6bee19ce44268f6b23f5c603c1c"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "faf73cbb38191cbe",
+          "world_id": "f3v2-hard-379",
+          "world_sha256": "58e657cdd8b554ccc691c9e26aa62f76afbe90ded2898f989243932d446ccf4c"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "2cc1b9a1202add47",
+          "world_id": "f3v2-hard-380",
+          "world_sha256": "ff8b5c2ab65e63f2b0fbdffe61b8910ecafc4bfce3e8758726982f25f21ee822"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "5467b38bd704a54d",
+          "world_id": "f3v2-hard-381",
+          "world_sha256": "c0a901809f1fb4574c9d8dc62a85dbd48386ad6a75b7e71b41f3ba38f9b2604f"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260810,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "fde8342809d0a294",
+          "world_id": "f3v2-hard-382",
+          "world_sha256": "4af84eec684870910f5908f1024916435a45f972f46a3abef5e628e4ac9fc2eb"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260810,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "273f792d63ff2aac",
+          "world_id": "f3v2-hard-383",
+          "world_sha256": "465bac619c0f396101eb29379f4ea9141d43465fbdf01ba4dcc7b8544cc19b71"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "d62fa308cb9722f8",
+          "world_id": "f3v2-mid-0",
+          "world_sha256": "f735d6ec6b63a20cc0f239b377f872a514f1bf244f8ca3e41d87ea0ddc606556"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "515f2995c39c824a",
+          "world_id": "f3v2-mid-1",
+          "world_sha256": "e99ad2458428e6f6630303d1d0cb9f3c59bb4780ad45afa6f329268c7f8d94cc"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "e092a4fb2071e986",
+          "world_id": "f3v2-mid-2",
+          "world_sha256": "4aab78bcecfa35e82850c4853947e398424ffeed86468be89f936246a2d579f7"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "1e7ac57634166a05",
+          "world_id": "f3v2-mid-3",
+          "world_sha256": "edacfe9d94e35991c744ffbd9bd878ccfb39102b1f56e68cb861031f01a389e8"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "b73e9f9efe6e3454",
+          "world_id": "f3v2-mid-4",
+          "world_sha256": "9b668a89262c962b9c580cfb5dd2ada3aaf06fbe2344be65a47d11c4656e3c82"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "a5fa0b13ebe4b639",
+          "world_id": "f3v2-mid-5",
+          "world_sha256": "7e82324c549e1976eabc236038187e88575537225c6bf9497f2efee9398066cd"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "9b37042db8a84db8",
+          "world_id": "f3v2-mid-6",
+          "world_sha256": "5fc7d19e311be171d554d529600f55a9d2c409d0225055005b94515e63535f4e"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "1f9a256184a7d87b",
+          "world_id": "f3v2-mid-7",
+          "world_sha256": "ba66bc1bda42a8662dd3b5117bc191e7b8ab1c6b48f52c4311f8bcce411bd38d"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "ff9a23c9d8a2b8ba",
+          "world_id": "f3v2-mid-8",
+          "world_sha256": "061de8414a2e4cbd81726b4789fb8eff96fdf969fc3b94d7f2553b3f14a19d3a"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "24c996b24153e541",
+          "world_id": "f3v2-mid-9",
+          "world_sha256": "de53d673611762ef813d878e84b91e7c5ae5113c8241daaab86bda79cfe978aa"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "9e00708e54218328",
+          "world_id": "f3v2-mid-10",
+          "world_sha256": "9cdf0e07c14a9194bdaced5873593d010c87599411406243416e7fbeb866aa33"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "980a935b91099960",
+          "world_id": "f3v2-mid-11",
+          "world_sha256": "cbfac56f558ef81079b6896f9ce1984c587412f9543e3b391a984a3a89ff06af"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "231a169a8e25be78",
+          "world_id": "f3v2-mid-12",
+          "world_sha256": "782b4379c55368925b1a7e1d8f43b64c38d7c0f1f1972447113a307495808511"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "d7fcdd42923543c6",
+          "world_id": "f3v2-mid-13",
+          "world_sha256": "439472dc59d8894015ba376842947dcbeb449bd0f10ad1be5a2ce2358e29983f"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "0fb768dc37169c50",
+          "world_id": "f3v2-mid-14",
+          "world_sha256": "47cea6003cb075df61cc0b9bf6def8411ec8527cc0c2f0e84342aaf52614b362"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "3b5eb28f6d3760bd",
+          "world_id": "f3v2-mid-15",
+          "world_sha256": "f343e1d1876577bdc07c309c13d3a6041f6fcf5698536f7656110fc292a5aa9d"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "2cd3359027f2bddf",
+          "world_id": "f3v2-mid-16",
+          "world_sha256": "e3a05c5c348819372b3175ff912245d90a1efc9c5ac6c4196f361d2eb3ffde2f"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "53b86a16eaf0edbc",
+          "world_id": "f3v2-mid-17",
+          "world_sha256": "af7eee956d7c65c0ba9f7d49c098a6b6efd98b6fe6f7a77c33b85f296c07c77b"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "d863d872b60a107d",
+          "world_id": "f3v2-mid-18",
+          "world_sha256": "49ad541b0bb076314818f69b272ef392729fdda0443bad7af15f8b339f2141ba"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "16cd5a6b2f95ba4d",
+          "world_id": "f3v2-mid-19",
+          "world_sha256": "f8b509563761a668450afebb018f2c0a61e5f70f4eeebf321a69227ffd1f60be"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "c00e42d0921ee9ee",
+          "world_id": "f3v2-mid-20",
+          "world_sha256": "7ec84e7956f11f32498832c2d391af8eb46884b0141a67741c5677490447e181"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "26236cf6bdf2f6d6",
+          "world_id": "f3v2-mid-21",
+          "world_sha256": "ecc9d849fa2b36a77bb1fd45a4efa098d596485ab62552a576b019b669cd4c46"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "48979a2c02b0ab93",
+          "world_id": "f3v2-mid-22",
+          "world_sha256": "134b24aeb788996edec94771a893887133494b9b05ef999138b998b5b1861364"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "9db5c9706a7d3369",
+          "world_id": "f3v2-mid-23",
+          "world_sha256": "a9aa80b1811268585e6225e1b4073c77d4e57682fbde8f688e295683b6574bf9"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "a7e19507df42418b",
+          "world_id": "f3v2-mid-24",
+          "world_sha256": "fa69bef3336e60302d849c8fe524c67f8c3253bb742e8aa24884e433b73d6aa8"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "4d4ad12aac33d096",
+          "world_id": "f3v2-mid-25",
+          "world_sha256": "7a80892e701f30f340fd8c5f957f3abd0989b7705084d297e5de1735015ac479"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "855cb58a7af8d5ed",
+          "world_id": "f3v2-mid-26",
+          "world_sha256": "9b363b838b7bff12016bce68fa65fe1723ada55734764e96df632524d44d588e"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "5f8c177d37338f32",
+          "world_id": "f3v2-mid-27",
+          "world_sha256": "60fdcd00f98308a7962015984ced001e5a678f73066012a8e7b579f412c4d839"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "6c028f580b4a49dd",
+          "world_id": "f3v2-mid-28",
+          "world_sha256": "b5eba099023ba8d67163e4d812a6f6a88599220a6b82e538c6992c1872f4d991"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "032e051cc3fe81c0",
+          "world_id": "f3v2-mid-29",
+          "world_sha256": "427a4a86413bf6b39b3d9dac61979c84822dfe0dcf98f5cf652a70b103b74905"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "fa832b3322bf2d4c",
+          "world_id": "f3v2-mid-30",
+          "world_sha256": "0a4f0b2970b544842de300140b43f13d43f7caadf3076165758cb63972673507"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "0a48e853ab973ef7",
+          "world_id": "f3v2-mid-31",
+          "world_sha256": "028a37a2fef2d322f859e3de3594d7d973b72162e46088410bb64c3c5393b730"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "e9af0371113993c5",
+          "world_id": "f3v2-mid-32",
+          "world_sha256": "619a69a4467d4f4b5e8302c0416277d7723b20b1baf19193558311853d5be810"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "17654a88662edf4e",
+          "world_id": "f3v2-mid-33",
+          "world_sha256": "a25a75f3a476314bc15dfba547326528cd3bc6d2a3c8059154b967b0d7d15c74"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "eeb0e0e8d152c7dc",
+          "world_id": "f3v2-mid-34",
+          "world_sha256": "d32fcc24bfea3e6b161aae46e52710ba0356ba2c5604b12d2c1a0b16d969b85a"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "3e80da6b92d6a073",
+          "world_id": "f3v2-mid-35",
+          "world_sha256": "76decf83736a6aa829e293c1478ce2358122aba7d92d2a538a93adc86bed1b86"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "4d96f5b2500425ed",
+          "world_id": "f3v2-mid-36",
+          "world_sha256": "a1d4cc2967d78bb5a998937f64c063cf9d3cb1ef1db9ae9ad4742003fe0d92f1"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "33b35c4988a50565",
+          "world_id": "f3v2-mid-37",
+          "world_sha256": "8583002bce2f993bbc404b1d3be750ca3613f326794098cd8d13ecc61855ec71"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "f7320af59e0d3261",
+          "world_id": "f3v2-mid-38",
+          "world_sha256": "9dc875c6f8b5cbed33cf5d8dd418d463968bf8e9c8909fcf132a901547d0bc5f"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "df7f0be5d8ac663e",
+          "world_id": "f3v2-mid-39",
+          "world_sha256": "06391220d897502e9637444f5f3df3d6f5046ee240676d8ad5d509c445d563b0"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "29b4d78b4c42f804",
+          "world_id": "f3v2-mid-40",
+          "world_sha256": "6fff73f87fbc4beb583ac0f180a6f604c4fcd734f5d4f5c9006f99d6613802ae"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "bdec097851a771b9",
+          "world_id": "f3v2-mid-41",
+          "world_sha256": "ee12a2e9db54fd76601890b7c5feb164c1bef7aea448c2338b111bca2f586928"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "1bbe1af0d8275425",
+          "world_id": "f3v2-mid-42",
+          "world_sha256": "0d5fdc8061c09cfe2ed82b5e97735c44fa53abca85cbe33a5a8397b0e9065038"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "482eea9724088070",
+          "world_id": "f3v2-mid-43",
+          "world_sha256": "4ea2e264b0dba200339236c3df4f41a586babfdb21dbe9251605e317341ad9b2"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "6ce6c39c53136753",
+          "world_id": "f3v2-mid-44",
+          "world_sha256": "c3140473e43649694e3563ebd08316e637541b9b2450e5d6598043f9a3917d6b"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "f2a0a2591e7327a6",
+          "world_id": "f3v2-mid-45",
+          "world_sha256": "704f5e3d0a39f6867d0dc04df0adfa35b4e1cef3ad6d71352aa63d3e4f28e5fb"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "ecd5d06794c2a5b2",
+          "world_id": "f3v2-mid-46",
+          "world_sha256": "7c19a3798bd3200757d38a2997022f49422226dd9ae63117c188e168e0455413"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "7b891ca20df2cee3",
+          "world_id": "f3v2-mid-47",
+          "world_sha256": "cba099d8f661025454c6a96674891c3bf7117a81d24bc7016572fbec8ebc432e"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "108853760ccc28a1",
+          "world_id": "f3v2-mid-48",
+          "world_sha256": "4bc6c3fcdabfd83e4ec34f69c537e5ac809cbde5e4711b9b88032a63682f9d75"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "d7120b0a85ee9d37",
+          "world_id": "f3v2-mid-49",
+          "world_sha256": "fc98d8aa61e69ecd7264f58ac84ea0e0021c30fbeedc3b9c5cee8a8b8e075417"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "8d55cac1afc84dba",
+          "world_id": "f3v2-mid-50",
+          "world_sha256": "9df260313276d1fea05b718baacd493737a93c3b499f6dd5196c788a2652bd88"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "27791adc9651af38",
+          "world_id": "f3v2-mid-51",
+          "world_sha256": "2452e6959f0475a14f010092a046310bba84e3b14a5a8b551184f2aa72d081ef"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "29deb8bfed008ded",
+          "world_id": "f3v2-mid-52",
+          "world_sha256": "9b6a0c5924ecab753645293feec8fa45511d1d0013757b39348d462797d44b45"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "0529bbdb2d56ef22",
+          "world_id": "f3v2-mid-53",
+          "world_sha256": "e34e4458360b79072521a9e4e1f7469da6560a12b566e7e608fd8c7e67cbbad0"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "bd77278a0d6237a0",
+          "world_id": "f3v2-mid-54",
+          "world_sha256": "3f6f5dc643f56b804df2af29750645efa62315785e5844ff2f09730e2b06e3c3"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "849cdb654f7e10f0",
+          "world_id": "f3v2-mid-55",
+          "world_sha256": "b23e6ed0d7d10f48ec4381b13d5f4a1b3ef363a601a8040d37dbccea41ffde8c"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "944ade37d9a794db",
+          "world_id": "f3v2-mid-56",
+          "world_sha256": "bfcd450ce877c88489cabe0314d99bc194cab0ad789b7d59e62aa91788092b71"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "b627a6f4d2fe181e",
+          "world_id": "f3v2-mid-57",
+          "world_sha256": "90efd722979de84d24877fc807d4b642a691c3556ee9b6efd56abe0c99016985"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "f1cfe76260332c27",
+          "world_id": "f3v2-mid-58",
+          "world_sha256": "46ee5f9e165ff9a3b35b786b801558ac309055db3ed3802a623465a425fe023f"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "5e020ec9e49eb59e",
+          "world_id": "f3v2-mid-59",
+          "world_sha256": "40d70deb63940bd44994169c2e02c3cc2bf0bae80c6c4bb6ce9be732d52c99cf"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "ecc9ffd4a4330f20",
+          "world_id": "f3v2-mid-60",
+          "world_sha256": "3069097a769dab11091d05b03de5ab668c0aedb2251de211379f4d918e4a32d8"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "5c427c03d8d1ba2d",
+          "world_id": "f3v2-mid-61",
+          "world_sha256": "e660ee938f81b856b7268f0fd7fc79bb7f965fe4c0cb0189f36798d381cf206a"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "79b3e8054889c409",
+          "world_id": "f3v2-mid-62",
+          "world_sha256": "914547126bf49ca7a024eeb2007250ff641e01bc43cf8fb89d81ca2f56a947a1"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "64b944457020d7bd",
+          "world_id": "f3v2-mid-63",
+          "world_sha256": "9a1bae9ec6cb39d3e6d96820549b16e1ffd45709585656bc3a8cca1cba52792c"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "c129160396e887ef",
+          "world_id": "f3v2-mid-64",
+          "world_sha256": "25cd88a46a1a6f7bcdf6b55feb01c34f44105b00fbe192d35e9025ec805f32fc"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "71ded38ae9e363dd",
+          "world_id": "f3v2-mid-65",
+          "world_sha256": "31f1c184570baf673f5de9f5279ee32b5bf452c16d96f0e3c19ec854e750bd03"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "3e8ad412ed210965",
+          "world_id": "f3v2-mid-66",
+          "world_sha256": "e9e1986960a330bafbbec217ab6de3a1509c3421d839ef2a68455558e916e349"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "1afbf13fe54b6cb6",
+          "world_id": "f3v2-mid-67",
+          "world_sha256": "26da07d24d915bdea0ce976ac7638a8c61f6fbe18fc8c0460381d3a41c42b019"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "a0bb50182a5a4bdf",
+          "world_id": "f3v2-mid-68",
+          "world_sha256": "1d8635bc613466ee7068551ce3117ca52c41c9b2bdbef8ae445545f38389d89b"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "3091d7b9fd2a685e",
+          "world_id": "f3v2-mid-69",
+          "world_sha256": "a6d2d99a38d2add009862e85906e7ce5b237e158e699b2ba30907cfc6db6cc20"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "5964ab4c0fb2095a",
+          "world_id": "f3v2-mid-70",
+          "world_sha256": "5b237d9c51084bf2a18a665ff6554d4febe50351fb89a029e81e309939e73dd2"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "588b5deba21baa9e",
+          "world_id": "f3v2-mid-71",
+          "world_sha256": "eb3e48209e24366644a4bf4992cd12f5e58fa04099d2a32718f21f56d0323380"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "5eb54934ff0dfdfd",
+          "world_id": "f3v2-mid-72",
+          "world_sha256": "2246cb1b0cf362af7ee177cf6334216bd234e8522f117d3111f7babfd670790f"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "fc1528b1a0dbacf0",
+          "world_id": "f3v2-mid-73",
+          "world_sha256": "2b3271d55f44bba8cecb40b2e2ecf7c21edbc32235ddcd015e8acb384400bf37"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "1aeade3fc32ca04f",
+          "world_id": "f3v2-mid-74",
+          "world_sha256": "25f81cb5e4000efcc30a8b8ab5a1e522ab7199cb6312988b627f5f715e4100fe"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "537face6e58d83ef",
+          "world_id": "f3v2-mid-75",
+          "world_sha256": "c7f668f6158968e8d7cbb6378b2ae9fd1c44950f045be697a66aac899e9d9fd6"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "3d4e9e047f569828",
+          "world_id": "f3v2-mid-76",
+          "world_sha256": "1e95cd9bfce43f3d79039a95f99e24dcadf1304b53d242e81c5a22b049d6093b"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "a596346ad260c1cd",
+          "world_id": "f3v2-mid-77",
+          "world_sha256": "2422102fbce66058c200e64e5239876c4fb3ab299b59705c141ef6fa21688e97"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "a93914c75c4d9c91",
+          "world_id": "f3v2-mid-78",
+          "world_sha256": "d9ba8d07a8b092d75694d9017c478046dfb84bf92e181bb9e425de1df915171c"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "902fd6257f2925e9",
+          "world_id": "f3v2-mid-79",
+          "world_sha256": "7dccd6309d817bf2cd7c24755abe4242d6a867fc5506232ca7459eff61186ed0"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "66809143b95fa4b4",
+          "world_id": "f3v2-mid-80",
+          "world_sha256": "b4672d04e852bf6911da06d1951b4c0f5914b470a9bcd3c4da7c35511c1d1b8a"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "2a7a90b3d06b79c6",
+          "world_id": "f3v2-mid-81",
+          "world_sha256": "246f7c8cec324203e91c68eefcdc0bab9f05a442bc6f75115c43dfa6317ce3f3"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "640873a24b311251",
+          "world_id": "f3v2-mid-82",
+          "world_sha256": "1b4126cc2435cd29847b4fe59ab20bae93621aa052e63224df681e756c6c7d06"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "9fabe462ca1b5056",
+          "world_id": "f3v2-mid-83",
+          "world_sha256": "41705b53fd63d4bc603b271464c6d3b859287b1bf94dd83d5c04601db5520afb"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "ebb35b74abd71ce1",
+          "world_id": "f3v2-mid-84",
+          "world_sha256": "91c9aa96cba93acb6ce8d3fb976a16ed164723e49503ddc723a69c5ce58cbb87"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "43dd2e6c57230209",
+          "world_id": "f3v2-mid-85",
+          "world_sha256": "3f8b2446f1d0bd73b83b10d599f55becda388cdb0accb2f6ae41e178847f16ad"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "6d1589b033b63c44",
+          "world_id": "f3v2-mid-86",
+          "world_sha256": "f285177b0b3e46be88f60398795104e6d4da5d14f8ab2b52346b268462a574d6"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "7edefc22009fd42e",
+          "world_id": "f3v2-mid-87",
+          "world_sha256": "161fb33e99960aae54e4cbfb83ef90e0f23879f898883caffa39d2c98a91b27f"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "a92f541512170dc6",
+          "world_id": "f3v2-mid-88",
+          "world_sha256": "0fea183c50917e0f19473960998dd1ea38f4f66c676f50e469c85b03255001e4"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "07a0f464c51e63ae",
+          "world_id": "f3v2-mid-89",
+          "world_sha256": "5464363593df843811fa0dad1d1dae93b04149ae2cd941b8d3365df82f8572ad"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "fefaecf07dfba760",
+          "world_id": "f3v2-mid-90",
+          "world_sha256": "eec2f0ee5fda64b024c296c7795ac8891ecd08b54c12c5fb564032c6c70002a1"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "02cf86bcd6fccc80",
+          "world_id": "f3v2-mid-91",
+          "world_sha256": "81ecd3282ccbd4e24e70080fbc92587871765a5a177652c2cb8e8ab70cb7cc1d"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "302b89226a458845",
+          "world_id": "f3v2-mid-92",
+          "world_sha256": "995c1953430d151bbb084d3b55e94f5e33bf993c99c28e18ae905b6e63b6ca9d"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "72cd5d692a013d5f",
+          "world_id": "f3v2-mid-93",
+          "world_sha256": "5e2696cad3df0a872c4ca0bf107d3db722c2daa40abc2515412b57972a7228d7"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "d11bf2faac5135fb",
+          "world_id": "f3v2-mid-94",
+          "world_sha256": "5728327d7fc5c87f72bda1d360c915f191efcff9e5c906dd6dcacac120e2204f"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "5cf2367cf5e3f377",
+          "world_id": "f3v2-mid-95",
+          "world_sha256": "bed39586c3201e117f09531cf77b8af6208558b768d61f8209b899d227874117"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "310bf63d5dd8334c",
+          "world_id": "f3v2-mid-96",
+          "world_sha256": "d01b7318c265d03bd1c47f446acd6f912f11f025abc563517cf76bc545ac3e07"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "85f54fa671e2bb7a",
+          "world_id": "f3v2-mid-97",
+          "world_sha256": "244c17713fe7a9ad8a056e82268ab2804757b4e8c5431bcaf57b5f9a608b209b"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "2f8ed27c942f2fb3",
+          "world_id": "f3v2-mid-98",
+          "world_sha256": "a9fe07a8ad3e49902ccef98d2c1c42e7a61272853a74616fd26d30c6f194d9ef"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "963908781338e7bf",
+          "world_id": "f3v2-mid-99",
+          "world_sha256": "9e6f57a579d936517cd4a8be0b2636a5826c5650687e352d160dcac83d0779d5"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "1e4d0144c1ddba21",
+          "world_id": "f3v2-mid-100",
+          "world_sha256": "2985278e1dcb7b4bfd58a581b94ac8675fae24b607628f3970810211a777fa76"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "ff9884cf3bc2d9a1",
+          "world_id": "f3v2-mid-101",
+          "world_sha256": "ab9092e93e383da788c3f09803dc5d7a237b565507c4b44375b9e3ca36d230c3"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "d6e1f592c2c65c78",
+          "world_id": "f3v2-mid-102",
+          "world_sha256": "401605cc1364b73db58098135db3cb0e4fc25b4387d7d94f7c22b9724e871cf1"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "d00a990da3d4fc97",
+          "world_id": "f3v2-mid-103",
+          "world_sha256": "0a1856580aaa8200e7ea50671867b6f75c529695160ce2ff1567f4af429a3657"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "25e5402592b803e5",
+          "world_id": "f3v2-mid-104",
+          "world_sha256": "b2b23a9faa4587a865c9e09a0779b0429897367e0c6191e1190451e4001b28bd"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "f81889de7393508b",
+          "world_id": "f3v2-mid-105",
+          "world_sha256": "d853bfe0e6258639e565f366d290b8db393867691cca132ce91f4d232e40ed0b"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "eeb714b36660df38",
+          "world_id": "f3v2-mid-106",
+          "world_sha256": "e1e1608fc9a4fead489526d5aada204bee35ad75ccec7ba63aa97fce961daf4b"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "bfb1522227f1f167",
+          "world_id": "f3v2-mid-107",
+          "world_sha256": "67c432194d9b811264d3b0aa81601a1e314ae27c3aff55e5eb428808f225c297"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "633eb091688d6a44",
+          "world_id": "f3v2-mid-108",
+          "world_sha256": "246e7a3a0e40ab23c7a8d0ddea32fa20aa34a8280e83477c1399e576731f9d69"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "75e03a46f64f8463",
+          "world_id": "f3v2-mid-109",
+          "world_sha256": "0a8edee9e2008c1729473be492d34f4d8894b9a9653af1fb03e542581bb6f547"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "196cd28e77b427c3",
+          "world_id": "f3v2-mid-110",
+          "world_sha256": "917e9604020480e9acabc0b8727d073c07397aec2f109ae0cb71d83cae0b7063"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "2a4a52ac6f0b722d",
+          "world_id": "f3v2-mid-111",
+          "world_sha256": "e1e4c2bd669c027931dea0b574f1f3f6859cd0d0ac961a1740809faaeb1f8414"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "7ab1101749e773d3",
+          "world_id": "f3v2-mid-112",
+          "world_sha256": "e54753e0993bdc85e3530c3a7c4f5759a5c85f8591d08d699a3571043cb98869"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "6b5c2383d5297ce1",
+          "world_id": "f3v2-mid-113",
+          "world_sha256": "6ddf2dd316adc17dfd9ded7fbc269151216816bfc7ddb5630f6203271807625a"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "9aef77acde77bacd",
+          "world_id": "f3v2-mid-114",
+          "world_sha256": "f0fd8ea58d568043d2b299534a23df642e879bf719f317d2775a523ece504207"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "f1d0351e325f33d8",
+          "world_id": "f3v2-mid-115",
+          "world_sha256": "547ab6650e5decbf91de8a9f5b2a72ed6879f1b2322a8384e6f2e5e8747521a0"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "5e03756f831f4291",
+          "world_id": "f3v2-mid-116",
+          "world_sha256": "1c512bafa9a2c8bb28a2becccf4dbc5f391242876eaf449f0050a1181cdfdaaa"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "88309c72445f18ff",
+          "world_id": "f3v2-mid-117",
+          "world_sha256": "c87fd61fb53d85bf80af1368676c2f20840a0d2b5882223fc4961d00432ebbcb"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "e03fe653c577010a",
+          "world_id": "f3v2-mid-118",
+          "world_sha256": "303468e46c307145440d48f27319b44c6c255fa9b1674a97eaf86caa7c790359"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "abe9bb0e823ef9ce",
+          "world_id": "f3v2-mid-119",
+          "world_sha256": "cc77a1c64ab6334881421174fc1865bc6ed29b8ce567a732dd78545c2e264243"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "e49458348ee51711",
+          "world_id": "f3v2-mid-120",
+          "world_sha256": "b4475b72784df28fc896667d29e8dd0277ce4e53c0ed8352f2f55d0b700d280c"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "0fee1ce038d7cba4",
+          "world_id": "f3v2-mid-121",
+          "world_sha256": "6da3e186d27bb3afb2bee1dd26c7689593bd04ee5d50db811f0264344e1e6242"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "c49a18575713f6b9",
+          "world_id": "f3v2-mid-122",
+          "world_sha256": "a7c9bed38a9c7cd4fb524c295ddd76c2e1e652be3de8f563fc982cceb45598e0"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "3b77d2034c53d4ca",
+          "world_id": "f3v2-mid-123",
+          "world_sha256": "354e7559be338e5a58546730201b82e31f621794b481863dd7e099faf2066e17"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "6fc5b657e28c9841",
+          "world_id": "f3v2-mid-124",
+          "world_sha256": "9a984218b2b28ab1a2bae802e87f2bc727c09d955f66bcd43c80282a8cabf2d0"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "44a050a3de3689dc",
+          "world_id": "f3v2-mid-125",
+          "world_sha256": "918387adb481497383179101d165c4d36f1114d5734ba0c8c25eca16a2cb4ea4"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "939b7769e273b91e",
+          "world_id": "f3v2-mid-126",
+          "world_sha256": "f80bc24d6fe20c824d1189580a79737d3cf9188e68d8338e585b5a7722dc3b2c"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260810,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "e584168286f1899c",
+          "world_id": "f3v2-mid-127",
+          "world_sha256": "344ef02d1d0a7dae01016671d516b98f5db6f4953e81ea78264d0766a4418136"
+        }
+      ]
+    },
+    "train": {
+      "n_worlds": 48,
+      "role": "donor experience + receiver-train ZS (disagreement gate, b_self, contrast failure pool)",
+      "seed": 20260727,
+      "tiers": {
+        "hard": 32,
+        "mid": 16
+      },
+      "worlds": [
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "b9525209b5de76de",
+          "world_id": "f3v2-hard-0",
+          "world_sha256": "a48a1c41d0c4500fee6292bf4748de3a678b05f235d8b47f1c6ae773a81f375c"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260727,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "608903b7aa9a516a",
+          "world_id": "f3v2-hard-1",
+          "world_sha256": "c514b7e318e6d7799ab0a5202b3dbef73e5202f043644bb8e249c482ec2298bf"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260727,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "65b23b2479f05110",
+          "world_id": "f3v2-hard-2",
+          "world_sha256": "05cd666571a9f831ad3d078c4e2e9ed1b1cb480a2fa048b23c707290c1f6e2ce"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260727,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "56c2f25623ee87ae",
+          "world_id": "f3v2-hard-3",
+          "world_sha256": "e5328664fd46396cd232c1b8fc916ce62faa5a04aa428fe0bf442266ce4406fc"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260727,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "5a7a393568f78af0",
+          "world_id": "f3v2-hard-4",
+          "world_sha256": "0409501c64e63a608ed19999839cd58bf09ccaca623882c7f507ee5ac6a2d250"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "6b21a8d7ed45808f",
+          "world_id": "f3v2-hard-5",
+          "world_sha256": "85778c277b03a697227e2ece5365a56ff7d99aee8e97195c69ab3e6b58a5cf93"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260727,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "2ca49c7fb5dc2e06",
+          "world_id": "f3v2-hard-6",
+          "world_sha256": "0c12b415585c88c3ecc2fc255cac10b83b9c13021650fae5dc6bacc3c62959c0"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "4d0af19fa7463042",
+          "world_id": "f3v2-hard-7",
+          "world_sha256": "3d7ed9baacebdd169a14868a43f97aa96e229b8772b6f3353b9546b8a6685ebc"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "7f905512b3db2667",
+          "world_id": "f3v2-hard-8",
+          "world_sha256": "6ad4735cdd7f32df04bfd6390d7ffe78715013ac552846f61b1f25e4919aca4d"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "13e88259ca96c7c4",
+          "world_id": "f3v2-hard-9",
+          "world_sha256": "bf10c7e0213d7e7921947c35a2ffb0b80e156c9f89f8be344e976364ddc8cdcb"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "7d11a99631b831f7",
+          "world_id": "f3v2-hard-10",
+          "world_sha256": "6917c91b1ed382b0804eea9b3e88f944396df20a78083c96813d52118968ea84"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "42f13d4238d7d0a5",
+          "world_id": "f3v2-hard-11",
+          "world_sha256": "f26c40ef9bc9489e50be8fdd2507054d4c6325850b111dac485fe73b7235b0ba"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260727,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "d114b7bd51cd5636",
+          "world_id": "f3v2-hard-12",
+          "world_sha256": "296c0ebb1710adf46ee2e1a7a917acf944fcf47d35b88dc39d5d806321817688"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "a9c513fa2803891b",
+          "world_id": "f3v2-hard-13",
+          "world_sha256": "856e23f616ba3186e7d0656615355f4398a48d02e3064539b2bbc4f698340f3c"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "2e2fa9205e49bd7a",
+          "world_id": "f3v2-hard-14",
+          "world_sha256": "c6a6b3f8ee6ea7b378a1f5f61f6666c039ebe0d10fbe3b8b8f9de3443d21d853"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260727,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "1669664d725a5294",
+          "world_id": "f3v2-hard-15",
+          "world_sha256": "6634d7d3fe69257867371476173ff72c7312a0a73ef5c11503e1668009b34f03"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "e2e4bd3754e0b581",
+          "world_id": "f3v2-hard-16",
+          "world_sha256": "4b39a5f556a6bd746d91358dc0293064586fd2436b2ab898cade268e3cd90710"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "c803fa4205ca3659",
+          "world_id": "f3v2-hard-17",
+          "world_sha256": "b8c34e6d6a7665e9003db3d56592fffb4d7f222332e139a2795bf2642f5c20ac"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "34cf3cecfd8e09ab",
+          "world_id": "f3v2-hard-18",
+          "world_sha256": "def6d28e3a66ac74e50b4f7c24ec2fe6f3d778e8694c7d3246904f202d25c771"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260727,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "38ff6c10c4436698",
+          "world_id": "f3v2-hard-19",
+          "world_sha256": "bc30ac704d865d01a836c48e6bf1aff5a7ba9d7843cc48c89a95232b99c6dcde"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260727,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "087be95f4c37f211",
+          "world_id": "f3v2-hard-20",
+          "world_sha256": "efc3077aa45aa0f46a0b7619a4d97130ea31a79e9f806088a4eb64d43e767a3b"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260727,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "d42c1eb31d80d5b9",
+          "world_id": "f3v2-hard-21",
+          "world_sha256": "9ccc3b5f8b7dc404354159dbddb305de541d19b2664f9601da7d2e37eeddb471"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260727,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "48381245cba4aa1b",
+          "world_id": "f3v2-hard-22",
+          "world_sha256": "ce36f11f58c4fdb5a4703fd70d61390dde9e1ac27d5588c877afbd1ba000a0fc"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "16dc18c72c21e955",
+          "world_id": "f3v2-hard-23",
+          "world_sha256": "bf99f21d41b64aed0065f1d8ac1b362aad9f3885fb67edcf519072986156e9cf"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "6bcf607dba3d9bf5",
+          "world_id": "f3v2-hard-24",
+          "world_sha256": "3f6aea52aae71968277ee93edabcd44f4b7e76622e310e5c037d3ea19cbf7f06"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "4b24152c0c1ebbbe",
+          "world_id": "f3v2-hard-25",
+          "world_sha256": "fb61c87d462987f8dd0518fe58209813394627a4396521b9a41b83efc6667bd2"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260727,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "0962a1ad1247cc7f",
+          "world_id": "f3v2-hard-26",
+          "world_sha256": "6cb48226474bbdc95082e7615b8063a394d5d29b85c2902209235b942b543002"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "07f507627031d006",
+          "world_id": "f3v2-hard-27",
+          "world_sha256": "133d262ea28eca2cdd173098879157c251311e1c3fbc13caaf1c3ff9d1378550"
+        },
+        {
+          "n_items": 5,
+          "optimal_len": 21,
+          "seed": 20260727,
+          "step_cap": 25,
+          "tier": "hard",
+          "watermark": "77ceff92386aa426",
+          "world_id": "f3v2-hard-28",
+          "world_sha256": "173b19dfd780ae1df7cc695a1ac27b1c7cac5cd2a5136bc229f15095a97e674f"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "7b699b317143894c",
+          "world_id": "f3v2-hard-29",
+          "world_sha256": "869ab6a24cf3e90f59f85e7910f9fed9850c109baa02a56f910ee484987997da"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "5216034161f6d60d",
+          "world_id": "f3v2-hard-30",
+          "world_sha256": "79d09a879c6bb7e16bf4061bdb58f9a80ee515a9d8da98c4f18dd721f2589494"
+        },
+        {
+          "n_items": 4,
+          "optimal_len": 17,
+          "seed": 20260727,
+          "step_cap": 21,
+          "tier": "hard",
+          "watermark": "01b2425826f137a5",
+          "world_id": "f3v2-hard-31",
+          "world_sha256": "fa184b7dd148c3bbae4142b163757f4271ffc3aee900c1ae81dc40cdb3ada1c4"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "5e6d13aa7cfb489f",
+          "world_id": "f3v2-mid-0",
+          "world_sha256": "1967e874705d3148eb97254754b72748c30989fa6dc8908acc594efc1d8fdc0c"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "18ac5c51ab9a3cf0",
+          "world_id": "f3v2-mid-1",
+          "world_sha256": "047b914552cbedb2f001e58fb822d4b4a2b7643811a5340fc7bfa6d7581bcbbc"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "10395ec095e2c2f0",
+          "world_id": "f3v2-mid-2",
+          "world_sha256": "7c10af04b4626caa38eccb313cf3489af6e221e280dc8bd58ea701ae637683ae"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "6a9884bce1aa2e52",
+          "world_id": "f3v2-mid-3",
+          "world_sha256": "b8667dea6d150163be97c6a8a4f67022bdbe1f8ebd21e5b90d884c7fd4523b19"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "9d37c4a4af8013fb",
+          "world_id": "f3v2-mid-4",
+          "world_sha256": "ab66792ae0e65553099385e3b7146b795da1c1852c4d4ae279743635dd891403"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "b2dcbaa918fc1b9b",
+          "world_id": "f3v2-mid-5",
+          "world_sha256": "129d4a7d69044ed973287a7a495cd4848bccf2332ac324bf9cf6847e187db937"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "2837f8dfde2bd1c2",
+          "world_id": "f3v2-mid-6",
+          "world_sha256": "15276db8d46ab32619df1291386aa64c73b239e88ef9141e817b4fcb33806629"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "925e8ea8d09a04bf",
+          "world_id": "f3v2-mid-7",
+          "world_sha256": "9dffd8be266d6e4a06d2f002377d006abf0daec9e9c9d7c887c2ca6073c2634c"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "27d988c292b39593",
+          "world_id": "f3v2-mid-8",
+          "world_sha256": "a764fce977c2d6de601dbc16a540d326d09e4db5c528743941ee3b118d746c05"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "38b6ccfd8671f23e",
+          "world_id": "f3v2-mid-9",
+          "world_sha256": "6b097e26055691984e310be9d43e44628495a962d7ecb7ae21c3f83c3290b179"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "b41040b7e7e7169d",
+          "world_id": "f3v2-mid-10",
+          "world_sha256": "48793c6de8a4e97961314fcfc7a2570a8bd7c14fddca3a889636722ee7fb1a48"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "be1584c67ac60c11",
+          "world_id": "f3v2-mid-11",
+          "world_sha256": "097eceb0f998ea7f3c63ddeeee7a1f09f5c1197d72bbaa3bcf6c816c7f7571ca"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "8de1d84623afd1bf",
+          "world_id": "f3v2-mid-12",
+          "world_sha256": "07f925d88394febb6996c8d7053b954f55c8528d164a5fa69b1d42029655300c"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "109f7c835e81dcad",
+          "world_id": "f3v2-mid-13",
+          "world_sha256": "c6ccd11d4b68a6a26ed68ccc6b03cbeb53fd9e85e69d0e9841cf6e0d49234a08"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "236eaf247fa3f3e9",
+          "world_id": "f3v2-mid-14",
+          "world_sha256": "c62cf26691b49a4eddcd84de62a528f4afbd908653a9403cef845ee0c218314b"
+        },
+        {
+          "n_items": 2,
+          "optimal_len": 7,
+          "seed": 20260727,
+          "step_cap": 9,
+          "tier": "mid",
+          "watermark": "1b954495502a8b27",
+          "world_id": "f3v2-mid-15",
+          "world_sha256": "8032d75a5d9be5d0dcc2a6b6064b207f118cc7872f07687219b6fb19ee94a973"
+        }
+      ]
+    }
+  },
+  "estimation": {
+    "bootstrap_reps": 10000,
+    "bootstrap_seed": 20260727,
+    "source": "paired bootstrap 95% CI (reps=10000, seed=20260727) + Bowyer Bayesian CI (n<수백 구간 백업)"
+  },
+  "generator": {
+    "module": "f3v2_procedural_worlds.py",
+    "note": "fills prereg environment.generator_sha256_at_lock (placeholder TO_BE_FILLED_BY_SEALED_PREP stays in the locked prereg file; the value is sealed HERE).",
+    "sha256": "0a9aa5c208fd3cd66c7d45cab7da8a8322dc058fa00140fb5b1428b295b7574c"
+  },
+  "harness_module_sha256": {
+    "f2_delta_w_credit.py": "3676724568fde19a752c07fdeabd9883ecfe04a3534ebf3f4d8fb2cc6b95c6e5",
+    "f3v2_arms.py": "b2a609030b223629aef787caeedc195521b1481f38a39dfa25f98e33e6a62370",
+    "f3v2_procedural_worlds.py": "0a9aa5c208fd3cd66c7d45cab7da8a8322dc058fa00140fb5b1428b295b7574c",
+    "f3v2_sealed_prep.py": "fb2f58592916cf9893611cf9bc7414b431bed989db087347e18171a2ea69ba33"
+  },
+  "honesty": "sealed cohort manifest only; no measurement here. Judgment belongs to the gate.",
+  "mode": "development",
+  "models": {
+    "donor": {
+      "enable_thinking": false,
+      "endpoint": "http://192.168.0.23:8000/v1/chat/completions",
+      "id": "qwen3.6-27b",
+      "role": "train experience only — test 입력 금지",
+      "temperature": 0
+    },
+    "judge": "NONE — deterministic world simulator scoring (verify_solution). K4 judge kill은 이 testbed에 N/A.",
+    "receiver": {
+      "enable_thinking": false,
+      "endpoint": "http://192.168.0.23:8001/v1/chat/completions",
+      "id": "qwen3-4b-real",
+      "note": "canary가 :8000의 qwen3-4b alias(27B weights 공유) confound를 발견 — real Qwen3-4B는 :8001 전용 컨테이너. dev-4에서 b_self=0 (n=4, 노이즈) — 14B 대비 옵션은 결과 해석 시 재평가.",
+      "role": "frozen receiver, input channel만",
+      "temperature": 0
+    }
+  },
+  "preregistration_file": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/prom_search_hswm/evidence/PREREG_F3V2_harder_transfer_20260726.json",
+  "preregistration_receipt_sha256": "e03f3168c5fd8b17625573883f6545fd26f7d70734f522aff18d10db23a4d9b2",
+  "preregistration_schema": "hswm-preregistration/v1",
+  "run_id": "f3v2-sealed-prep-r1",
+  "schema_version": "hswm-f3v2-sealed-manifest/v1",
+  "split_audit": {
+    "duplicate_world_sha256": [],
+    "note": "world_id is per-seed and collides across splits by construction; content sha256 is the split identity.",
+    "shared_world_sha256": [],
+    "verdict": "DISJOINT"
+  }
+}

@@ -1,0 +1,92 @@
+{
+ "schema_version": "hswm-preregistration/v1",
+ "programme": "PROM-9-HSWM-semantic-neural-network",
+ "branch": "F3v2-harder-transfer-testbed",
+ "registered_at": "2026-07-26T06:20:00Z",
+ "registered_by": "kimi-code-cli (machine-lock of user-ratified prereg)",
+ "preregistration_doc": {
+  "path": "SYMPOSIUM/HSWM/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md",
+  "sha256": "e4e9c90652b1a8ad2a2de10909b6254ca6d476db2d935fe3536778a6b94f9a88",
+  "status": "RATIFIED by user 2026-07-26 (LakatoTree node f3v2-harder-transfer-prereg-20260726 on LakatosTree_HSWM_20260719; prediction trr_hard_min>0 credence 0.45 registered). MD 헤더는 DRAFT 표기 그대로 — 사본 해시 고정을 위해 원본 미수정.",
+  "adoption_gate_evidence": "canary PASS receipt receipts/f3v2_canary_gate_dev_1785040277.json (prereg §2: receiver ZS hard 12.5% <= 30, donor 87.5% >= 70, gap 75pp >= 15)",
+  "dev_smoke_evidence": "receipts/f3v2_dev_smoke_live_1785051784.json (dev-4 live, 28 calls, aborted=null; n=4 TRR degenerate — 판정 아닌 파이프라인 검증)"
+ },
+ "question": "모델-역량 축이 실재하는 procedural testbed에서, typed HSWM donor lesson이 frozen receiver의 heldout 성능을 B-self lesson 이상이 아니라도 naive/placebo 대비 유의하게 올리는가 (claim ② 재시험)?",
+ "environment": {
+  "generator": "f3v2_procedural_worlds.py (ritual foundry, per-ore non-uniform orders on hard tier)",
+  "generator_sha256_at_lock": "TO_BE_FILLED_BY_SEALED_PREP",
+  "tiers": {"mid": "2 ores, shared 3-step order, no interaction rules", "hard": "4-5 ores, per-ore 4-step orders, all interaction rules"},
+  "knowledge_layers": ["fact (environment rule facts)", "workflow (atomic per-ore procedure)", "norm (enforce/avoid contrast)"]
+ },
+ "cohort": {
+  "train": {"hard": 32, "mid": 16, "seed": 20260727, "role": "donor experience + receiver-train ZS (disagreement gate, b_self, contrast failure pool)"},
+  "test": {"hard": 384, "mid": 128, "seed": 20260810, "role": "sealed judgment panel"},
+  "split_rule": "train/test instance-disjoint by seed AND world_sha256 (harness asserts no shared hash); worlds procedurally generated = train은 sealed 전까지 receiver/judge 입력 금지, test는 sealed run 시점에만 개봉",
+  "cluster_key": "world (paired design: same world under every arm context)"
+ },
+ "models": {
+  "donor": {"id": "qwen3.6-27b", "endpoint": "http://192.168.0.23:8000/v1/chat/completions", "temperature": 0, "enable_thinking": false, "role": "train experience only — test 입력 금지"},
+  "receiver": {"id": "qwen3-4b-real", "endpoint": "http://192.168.0.23:8001/v1/chat/completions", "temperature": 0, "enable_thinking": false, "role": "frozen receiver, input channel만", "note": "canary가 :8000의 qwen3-4b alias(27B weights 공유) confound를 발견 — real Qwen3-4B는 :8001 전용 컨테이너. dev-4에서 b_self=0 (n=4, 노이즈) — 14B 대비 옵션은 결과 해석 시 재평가."},
+  "judge": "NONE — deterministic world simulator scoring (verify_solution). K4 judge kill은 이 testbed에 N/A."
+ },
+ "arms": {
+  "a_no_memory": "receiver 단독 (하한)",
+  "b_naive_donor": "donor raw lesson 그대로 (null 재현 예상)",
+  "c_abstracted": "Insight형 task-agnostic 재작성 (세계관 토큰 제거 programmatic)",
+  "d_contrast": "성공/실패 궤적 대조 → (enforce; avoid) 증류",
+  "e_b_self": "receiver 자기 lesson + self-contrast (천장)",
+  "f_placebo": "형식 동일·내용 무관 generic tips ((a)와 동률이어야 함)",
+  "g_flat_file": "§6.5 strong null — flat-file 자기관리 harness (AutoMEM식): 무구조 노트 파일 + 자기관리 지시. typed arms가 이기지 못하면 구조 기여 0 표기",
+  "x_xvendor": "보류 (비-Qwen receiver 미확보 — same-family confound는 caveat로 명기)",
+  "gated_variants": "b/c/d의 disagreement-gate ON 변형 3종 (on/off ablation, prereg §3)"
+ },
+ "metrics": {
+  "primary": "TRR = (arm − no_mem) / (b_self − no_mem), hard/mid tier 분리. 판정 대상 = min(TRR_contrast, TRR_abstracted) hard-tier. degenerate(b_self==no_mem) 시 판정 보류(부모 설계 결함 재시험).",
+  "secondary": ["negative-transfer rate (arm < no_mem 항목 비율)", "지식 타입별 TRR (fact≈0, workflow/norm>0 이어야 전이)", "placebo−no_mem (≈0 확인)", "쿼리당 토큰"],
+  "estimation": "paired bootstrap 95% CI (reps=10000, seed=20260727) + Bowyer Bayesian CI (n<수백 구간 백업)"
+ },
+ "predictions": [
+  {"metric": "trr_hard_min (min(TRR_c, TRR_d) hard)", "direction": "higher", "threshold": 0.0, "credence": 0.45, "note": "LakatoTree 사전등록과 동일 — MemCollab cross-family +12~15pp 유효 vs naive 열화 실측, 절반 이하가 정직"},
+  {"metric": "naive_trr_hard", "direction": "lower_or_null", "threshold": 0.0, "credence": 0.55, "note": "MemCollab naive 이식 열화(50.6<52.2) 재현 예상"},
+  {"metric": "placebo_minus_no_mem", "direction": "near_zero", "threshold": 0.05, "credence": 0.7},
+  {"metric": "fact_trr", "direction": "near_zero", "threshold": 0.05, "credence": 0.75, "note": "②③(workflow/norm)만 양수여야 '환경 아닌 전이'"}
+ ],
+ "kill_conditions": {
+  "K1_env_kill": "TRR_c, TRR_d hard ≤ 0 AND b_self ZS ≥ 60% → 역량 축 부재, testbed 재설계로 회귀",
+  "K2_claim_kill": "naive TRR < 0 AND contrast/abstracted가 naive를 bootstrap CI로 못 넘음 → claim ② shelve",
+  "K3_priming_kill": "TRR_placebo ≥ TRR_abstracted − 0.1 → lift는 generic priming, '전이' 명명 금지",
+  "K4_judge_invalid": "N/A (simulator-scored, LLM judge 없음)",
+  "K5_noise_floor_kill": "N/A (planted ground truth — 라벨 노이즈 개념 없음; 시뮬레이터 결정론)",
+  "tie_rule": "canon 규칙 계승 (동률 2회 = 해당 belt 중단)"
+ },
+ "power_analysis": {
+  "method": "McNemar paired discordant-count approximation (Miller 2411.00640 관습)",
+  "formula": "n = (z_{0.975}+z_{0.8})^2 * p_discordant / delta^2, z-sum = 2.80",
+  "registered_mde": {"delta_pp": 3, "assumed_p_discordant": 0.11, "n_required": 969, "with_cluster_design_effect_3x": 2907},
+  "chosen_n": {"test_hard": 384, "test_mid": 128, "rationale": "야간 단일 vLLM 윈도(~5h, 4B 전용 컨테이너 ≈ 6s/call×2 workers)에 적합"},
+  "achieved_mde": {"delta_pp": 6.4, "assumed_p_discordant": 0.2, "power": 0.8, "note": "기대 효과크기(MemCollab cross-family +12~15pp, MTL +1.8~2.6%)의 하한 12pp > 6.4pp MDE — 등록 판정에는 충분. 3pp 정밀도는 n≈2900 멀티나이트 캠페인 옵션으로 보류."},
+  "small_sample_fallback": "n<수백 구간(mid 128)은 Bowyer Bayesian CI로 보고"
+ },
+ "budget_contract": {
+  "contexts_per_test_world": 10,
+  "arms_breakdown": "6 core (a-f) + 3 gated (b/c/d) + 1 flat-file strong null (g)",
+  "estimated_calls": {"receiver_test": 5120, "receiver_train": 48, "donor_train": 48, "total": 5216},
+  "per_call_max_tokens": 768,
+  "hard_cap": 5400,
+  "note": "receiver(:8001, 4B 전용 컨테이너)가 총콜의 ~98% — donor(:8000) 부하는 train 48콜뿐이라 F1 sealed와 동시 윈도 무리 없음"
+ },
+ "honesty_boundaries": [
+  "synthetic procedural worlds only; real-world transfer claim 아님 (claim ②의 환경-의존 재시험).",
+  "TRR CI는 고정 sealed 패널 위 — 모집단 주장 아님.",
+  "xvendor 보류로 same-family confound 미격리 — K-계열 해석은 '재활성화 vs 전이 미분리'로 강등.",
+  "dev runs(canary/dev-4)는 engineering receipt일 뿐 sealed 무게 없음.",
+  "K4/K5는 simulator-scored testbed 특성상 N/A — judge 섀시가 필요한 후속(비-PhantomWiki 일반화)에서 부활."
+ ],
+ "execution_order": [
+  "1. canary 채택 게이트 — DONE (PASS, receipt 1785040277)",
+  "2. dev-4 라이브 스모크 — DONE (receipt 1785051784, 파이프라인 검증)",
+  "3. 이 머신락 + sealed prep (cohort manifest, sha 봉인)",
+  "4. sealed run (F1 sealed 완료 후 vLLM 윈도 확보, 밤새 — dgx 자체 실행)",
+  "5. TRR/kills 판정 (cache-only) → r2 replay 승격 → LakatoTree 제출"
+ ]
+}

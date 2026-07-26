@@ -58,6 +58,13 @@ def test_h3_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "hswm_next_research_harness",
     } <= shipped
 
+    assert {
+        "f5v2_operators",
+        "f5v2_topic_cache",
+        "f5v2_judge",
+        "f5v2_sealed_prep",
+    } <= shipped
+
 
 def test_default_pytest_surface_includes_public_research() -> None:
     project = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8"))

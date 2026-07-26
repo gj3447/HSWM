@@ -66,6 +66,17 @@ weight/topology rewrite를 소유한다. 이는 목표 정체성이며 현재 �
 | P3 shadow topology absorption | 0/3 수용, canary 100%, sealed Δ0. 안전하지만 후보가 무득 | [result](SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md) · [evidence](prom_search_hswm/evidence/EVIDENCE_shadow_gated_absorption_20260723.json) |
 | prior-art tribunal | generic graph three-factor+sleep novelty는 사망; n-ary credit/LLM verdict/topology/shared persistent field 슬롯 생존 | [tribunal](TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md) |
 
+### F5v2 B-prime 오프라인 준비 (2026-07-26)
+
+F5v2는 query-conditioned QFR을 비영속 retrieval 대조군으로 분리하고,
+query 공개 전 CPL1 numeric packet+provenance로 만드는 content-addressed B-prime을
+consolidation treatment로 시험하도록 재설계됐다. 현재는 exact packet 경계, query leakage
+차단, durable no-derived B0, B-prime file-cache candidate, provenance/canary/DRM judge,
+ordered-gate offline integrity seal만 구현됐다. self-hash는 권위로 취급하지 않으며,
+prereg은 DRAFT이고 F1이 active라 측정과 machine lock은 의도적으로 거부된다. 정확한 구현
+범위와 미구현 경계는
+[`F5V2_BPRIME_OFFLINE_PREP_2026-07-26.md`](F5V2_BPRIME_OFFLINE_PREP_2026-07-26.md)에 있다.
+
 ## 2026-07-23 paper–code absorption gate
 
 11개 외부 시스템을 이름이 아니라 paper–code pair로 고정했다. 현재 상태는

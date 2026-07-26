@@ -1,0 +1,81 @@
+{
+  "schema_version": "hswm-scalar-w-proxmox-replay/v1",
+  "receipt_id": "HSWM_SCALAR_W_PROXMOX_REPLAY_20260727",
+  "created_at": "2026-07-27T01:04:34+09:00",
+  "status": "PASS",
+  "source": {
+    "repository": "github.com/gj3447/HSWM",
+    "branch": "main",
+    "commit": "3eeac45bfc42ef044152390a936560fd1e3c8acf",
+    "remote_ref": "refs/heads/main",
+    "remote_readback_sha": "3eeac45bfc42ef044152390a936560fd1e3c8acf"
+  },
+  "proxmox_snapshot": {
+    "host": "lakatotree-01",
+    "container": "proxmox-ct301",
+    "snapshot": "/opt/lakatotree/.runtime/research-20260727-005906",
+    "source_path": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM",
+    "sync_receipt_sha256": "4650717ba3ea17077fede92ca8d8766bde5098e1ca49bc853c5b77348738ec03",
+    "mappings": 23,
+    "verified": true,
+    "stale_mappings": [],
+    "git_provenance_mode": "SNAPSHOT_CONTENT_HASH_PLUS_SYNC_RECEIPT",
+    "provenance_boundary": "The 31 Longinus-bound HSWM references are content-exact to the pushed commit. The canonical rsync snapshot may also preserve unrelated workspace WIP and is not asserted to be a clean git archive."
+  },
+  "runtime": {
+    "python": "/opt/lakatotree/.venv/bin/python",
+    "python_version": "3.13.5",
+    "pytest_version": "9.1.0",
+    "system_python_note": "/usr/bin/python3 lacked pytest; the canonical LakatoTree virtual environment replayed the exact suite without installing packages."
+  },
+  "results": {
+    "contract_validator": {
+      "status": "PASS",
+      "arms_checked": 11,
+      "metrics_checked": 23,
+      "source_artifacts_checked": 5,
+      "runtime_artifacts_checked": 6,
+      "injected_negative_caught": true
+    },
+    "research_ledger": {
+      "status": "PASS",
+      "hypotheses_checked": 7,
+      "artifacts_checked": 22,
+      "local_hashes_verified": true
+    },
+    "longinus": {
+      "status": "PASS",
+      "bindings_verified": 31,
+      "predecessors_verified": 3,
+      "required_gaps_preserved": 6,
+      "injected_negative_caught": true
+    },
+    "pytest": {
+      "status": "PASS",
+      "passed": 73,
+      "failed": 0,
+      "duration_seconds": 1.06
+    }
+  },
+  "artifact_sha256": {
+    "contract": "61a54265a2a424d32889721214eb0ec8a13a6c39de9ac78e4e8f40e7ca786ec3",
+    "preregistration": "a3d830f029e3f8a82493149a7f9fd712ec92d355b36d27bf14d3b92dcc5c263e",
+    "metric_reducer": "bb15e1096a04b3d7c31d832e20a9794af9eedab3eb9715eec4a612bc4e747fb3",
+    "pure_judge": "d87be1006cb13ba7d7dfb3d5f1028e9c6dd5cb4b95eedd74a75b401ad878ae91",
+    "contract_validation_receipt": "ad25fe39663dbd2f59ff8d0023a65880595073731dfa51e508271429124a7c82",
+    "research_ledger": "3f9d2c82859b9275ef16f50dbe79c923e3c6988e0571d03116ea58bb7eb3e4be",
+    "longinus_manifest": "28721dadecee25b9c5728dc3e0809d36f9089f9a02207e43e83247746c4eba9d"
+  },
+  "authority": {
+    "measurement_authorized": false,
+    "scientific_judgment_emitted": false,
+    "scientific_status": "UNJUDGED",
+    "user_ratified": false,
+    "server_preregistration_state": "NOT_REGISTERED_BLOCKS_MEASUREMENT",
+    "kg_write_performed": false,
+    "lakatotree_operational_sync_write": true,
+    "hswm_prediction_or_verdict_write_performed": false
+  },
+  "claim_boundary": "Engineering content and deterministic replay evidence only. This receipt is not a scalar-W measurement, an operator-W result, a LakatoTree scientific verdict, or evidence for a larger AI.",
+  "next_gate": "Resolve and independently adjudicate F1, obtain explicit user ratification of the exact preregistration hash, freeze the disjoint cohort and strongest baseline, then register and read back the prediction before measurement."
+}

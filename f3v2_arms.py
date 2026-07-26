@@ -1,1054 +1,720 @@
-"""F3v2 arms harness (slice 2) — prereg §3 arms over the procedural testbed.
+"""F3v2 arms harness (slice 2) — 6-arm transfer experiment driver, dev smoke.
 
-PREREG (draft, sha-pinned in every receipt):
-  /Users/lagyeongjun/CD/SYMPOSIUM/HSWM/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md §3-§5.
+PREREG (draft, sha-pinned in the receipt):
+  /Users/lagyeongjun/CD/SYMPOSIUM/HSWM/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md §3-5.
 
-Slice 1 (f3v2_procedural_worlds.py) built the foundry-world testbed and the
-canary gate adopted it (receipt f3v2_canary_gate_dev_1785040277.json: receiver
-ZS hard 12.5% <= 30, donor 87.5% >= 70, gap 75pp).  This module implements the
-prereg §3 transfer arms on top of it: a donor experiences TRAIN worlds, its
-experience is distilled into typed lessons, and the frozen receiver is scored
-on disjoint TEST worlds with each arm's memory context.  Scoring is the
-deterministic world simulator — no LLM judge anywhere in this slice.
+Arms (prereg §3):
+  (a) a_no_memory    receiver alone (floor)
+  (b) b_naive_donor  donor raw typed lessons as-is (null reproduction expected)
+  (c) c_abstracted   Insight-style task-agnostic rewrite of (b) via the donor
+  (d) d_contrast     (enforce; avoid) distilled by the donor from its own
+                     success/failure trajectory pair (MemCollab style)
+  (e) e_b_self       receiver's own lessons from mid-tier experience (ceiling)
+  (f) f_placebo      same-format content-free generic tips (must tie (a))
 
-Split / leakage (prereg §6.2): experience comes from `train_seed` worlds,
-scoring from `test_seed` worlds (same tier, default S / S+1).  Disjointness is
-enforced on world_sha256 — world_id is per-seed (f3v2-<tier>-<idx>) and
-collides across seeds by construction, so content sha is the identity.
-make_splits fails closed on any shared sha.
+Flow: donor re-solves the canary train worlds (hard tier, seed 20260726 —
+identical request bodies to the canary gate, so these are disk-cache hits);
+its typed lesson store is compiled from the worlds it SOLVED (its slip world
+feeds the contrast pair).  Arms (c)/(d) are rewrites of (b) via the donor
+model itself (temp 0, pinned prompts).  Heldout test worlds use a different
+seed (instance-disjoint, sha-audited).  Eval = receiver on test worlds with
+the arm's lesson context, simulator-scored.  Retrieval is top-k=3
+deterministic token-Jaccard; the disagreement gate (Agent KB style) discards
+retrieved lessons whose per-ore order claims contradict the test world's
+STATED orders — on/off ablation flag, default ON for arms b/c/d.
 
-Donor experience pipeline: run_experience(chat, model, worlds, ...) attempts
-each world (render_prompt -> chat -> parse_model_actions -> simulate) and
-returns per-world trajectory records.  `chat` is INJECTED — production passes
-f2.CachedOpenAIChat (budget-capped, disk-cached); tests and the dry-run smoke
-pass ScriptedChat (offline, exact-table, fail-closed on a miss).
-compile_arm_lessons reuses fw.compile_lessons for the per-world ground-truth
-typed lessons (fact / workflow / norm, prereg §2) and adds trajectory-derived
-contrast entries: classify_failure maps a failed trajectory to a planted
-failure mode (verb-batching / blast-shortcut / interleave-cooling /
-drain-timeout / reheat-shatter / order-confusion / parse-failure) from its
-violation kind, reason string, and action-sequence signature — a deterministic
-heuristic, documented at the function.
+Metric (prereg §4): TRR = (arm - no-mem) / (B-self - no-mem) on hard tier;
+negative-transfer rate per task with Track-style tags; per-lesson-type TRR
+behind --include-per-type.  Kill conditions (prereg §5) are a pure function
+(evaluate_kill_conditions) the sealed judge can call; here they are only a
+mechanical observation.  Prereg-reading note: K1's "B-self ZS >= 60%" is read
+as the receiver no-memory accuracy (the a4 recipe uses "B-self ZS" for the
+receiver zero-shot bar).
 
-Arms (each builds the receiver's augmented prompt for a test world):
+Slice-2 smoke deviations (recorded in every receipt):
+* donor lesson store = deterministic typed-lesson compile from donor-SOLVED
+  train worlds (not donor free-written text) — wiring simplification.
+* retrieval = deterministic token-Jaccard, not the pinned BGE embedder
+  (MemDelta fixed-embedding rule bites at sealed prep, not dev smoke).
+* gate ablation is wired (--no-gate) but the smoke runs gate ON only.
+* per-type TRR arms exist (--include-per-type) but stay off in the smoke
+  budget (<=20 new live calls: 12 eval + 2 donor rewrites + 2 B-self).
 
-* (a) no_memory   — bare render_prompt, nothing added.
-* (b) naive_donor — donor train-world typed lessons verbatim.
-* (c) abstracted  — programmatic task-agnostic rewrite: per-ore order facts
-                    dropped (world-specific), world name -> "the foundry",
-                    ore names -> "each ore", relic -> "the relic", numeric
-                    drain windows -> "the drain window"; the workflow layer
-                    collapses to the planted-strategy statement (already
-                    world-agnostic); enforce/avoid semantics kept; identical
-                    texts deduped with merged provenance; a fail-closed check
-                    asserts no world token survives.  There is deliberately NO
-                    LLM-mediated rewrite hook in the dev path: (c) must be a
-                    deterministic transformation here, and a live rewrite
-                    would add an unbudgeted call channel.
-* (d) contrast    — (enforce; avoid) pairs kept only when supported by BOTH a
-                    donor success trajectory AND an observed failure
-                    trajectory on the same train world (MemCollab-style).
-                    Success evidence is donor-only; failure evidence is the
-                    union of donor and receiver train trajectories — the
-                    disagreement gate already runs receiver ZS on train, so
-                    the receiver's OWN failure modes enter the contrast at
-                    zero extra call cost.
-* (e) b_self      — the receiver's own lessons from its own train
-                    trajectories: the typed lessons of the worlds it
-                    experienced PLUS (enforce; avoid) pairs distilled from
-                    its OWN observed failure modes.  With one attempt per
-                    world a receiver-only success/failure contrast is
-                    structurally empty, so the self-contrast success side is
-                    the world's planted winnability
-                    (ground_truth_trajectories — no LLM): the ceiling is the
-                    perfect consolidation of the receiver's own experience.
-                    Same compilation PIPELINE as (d); self pairs are framed
-                    "from your own failed attempt" so (d)/(e) contexts stay
-                    textually distinct.
-* (f) placebo     — identical lesson FORMAT (fact/workflow/norm blocks of
-                    comparable length) with unrelated-domain content
-                    (household/craft tips).  Zero foundry verbs is a
-                    fail-closed module invariant; content-word disjointness
-                    vs the real lesson corpus is asserted in tests.
-* (x) xvendor     — prereg §8 deferral: non-Qwen receiver not available;
-                    build_arm_prompt raises NotImplementedError.
+Everything here is a DEVELOPMENT_ONLY measurement: no scientific claim;
+judgment belongs to the LakatosTree gate, never to this file.
 
-Retrieval (prereg §3): lessons attach to their source train worlds; for a
-test world the top-k=3 lessons by embedding similarity are injected
-(MemCollab non-monotonic k).  The embedder is FIXED across arms (MemDelta):
-default HashEmbedder — deterministic offline token-hashed bag-of-words
-(sha256(token) -> bucket) with cosine; an embedder callable is injectable for
-the live path.  Query = the test world's rules text vs lesson texts.
-
-Disagreement gate (on/off ablation; Agent KB: gate가 전이 성립 조건): the
-receiver is run zero-shot on TRAIN worlds; a train world is disagreement-
-flagged when the receiver failed it while the donor succeeded on it.  Gate ON
-(arm variant `*_gated`) injects only flagged lessons; OFF injects all
-retrieved.  no_memory / b_self / placebo are gate-invariant (a `_gated`
-variant of those is an ArmsError).  For merged abstracted lessons the flag is
-"any supporting world flagged" — generic lessons dedupe across worlds, so the
-gate only bites (c) when NO supporting world is flagged; documented honestly.
-
-TRR (prereg §4): per test world the arm's 0/1 score is paired across arms.
-TRR = (arm - no_mem) / (b_self - no_mem) on the paired means, reported per
-tier; the judgment target is min(TRR_c, TRR_d) on hard.  b_self == no_mem is
-the degenerate case: TRR is reported null with degenerate=True (never a
-divide-by-zero).  negative_transfer_rate (share of worlds with arm < no_mem)
-rides along as the prereg's secondary metric.
-
-Kills (prereg §5), pure functions over paired vectors + config:
-
-* K1 env kill     — TRR_c <= 0 AND TRR_d <= 0 (hard) AND b_self acc >= 0.60.
-                    "B-self ZS" is read as the arm-(e) accuracy: lessons
-                    provably CAN move the receiver, so donor-transfer failure
-                    indicts the environment's capability axis.
-* K2 claim kill   — naive TRR < 0 AND neither contrast nor abstracted beats
-                    naive by paired bootstrap 95% CI (LCB of the paired diff
-                    > 0 required); reps=10000 with a pinned seed.
-* K3 priming kill — TRR_placebo >= TRR_abstracted - 0.1.
-* K4 (judge) / K5 (noise floor) are NOT APPLICABLE to simulator-scored F3v2:
-  K4 presupposes an LLM judge panel (this testbed scores with the world
-  simulator — reinstated only if a judge-scored variant is added, prereg §7
-  step 2 measures it on the sealed judge track); K5 presupposes annotation
-  error in gold labels (ground truth here is planted by construction,
-  annotation error rate 0 — the kill cannot bind).  Both are recorded with
-  one-line rationales in KILLS_NOT_APPLICABLE, never stubbed into fake
-  measurements.
-
-Receipts follow the canary-gate conventions: schema
-hswm-f3v2-arms-receipt/v1, mode development, stage DEVELOPMENT_ONLY, prereg
-file + sha256, script + harness-module sha256 map, config dump, worlds with
-watermarks/sha256, split audit, per-arm results, TRR table, kills, llm_budget
-block, wall_clock_s, and the honesty line: grounded measurement only; no
-scientific claim; judgment is the gate's.
+Usage (once the vLLM box is back):
+  .venv/bin/python f3v2_arms.py --dry-run            # offline plan, no calls
+  ./f3v2_smoke_preflight.sh                          # endpoint checks + smoke
+  .venv/bin/python f3v2_arms.py --smoke \
+      --endpoint http://192.168.219.102:8000 --donor-model qwen3.6-27b \
+      --receiver-endpoint http://192.168.219.102:8001 \
+      --receiver-model qwen3-4b-real
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import importlib
 import json
-import math
 from pathlib import Path
 import random
 import re
 import sys
+import time
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
+f2 = importlib.import_module("f2_delta_w_credit")
 fw = importlib.import_module("f3v2_procedural_worlds")
+# identical system prompt to the canary gate: donor train re-solves below hit
+# the canary's disk cache byte-for-byte (same endpoint/model/body/seed)
+canary = importlib.import_module("f3v2_canary_gate")
 
 PREREG_PATH = Path(
     "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md")
+RECEIPT_DIR = HERE / "receipts"
 
-TOP_K = 3                  # prereg §3: MemCollab non-monotonic top-k
-BOOT_REPS = 10000          # prereg §5 K2: paired bootstrap replicates
-K1_B_SELF_MIN = 0.60       # prereg §5 K1: b_self accuracy floor
-K3_PLACEBO_SLACK = 0.1     # prereg §5 K3: placebo >= abstracted - 0.1
+SYSTEM_PROMPT = canary.SYSTEM_PROMPT
+WRITER_SYSTEM = (
+    "You are distilling agent experience into reusable field notes. Reply "
+    "with JSON only.")
 
-# byte-identical to f3v2_canary_gate.SYSTEM_PROMPT (receiver-freeze
-# continuity with the adopted canary gate; the sha is pinned in its receipt).
-SYSTEM_PROMPT = (
-    "You are an agent solving synthetic foundry-world planning tasks. Read "
-    "the world rules carefully, track every ore's state step by step, and "
-    "reply with JSON only.")
+ARMS = ("a_no_memory", "b_naive_donor", "c_abstracted", "d_contrast",
+        "e_b_self", "f_placebo")
+GATE_ARMS = ("b_naive_donor", "c_abstracted", "d_contrast")
+TOP_K = 3  # prereg §3: top-k=3 (MemCollab non-monotonic)
 
-CORE_ARM_IDS = ("a_no_memory", "b_naive_donor", "c_abstracted",
-                "d_contrast", "e_b_self", "f_placebo")
-GATED_ARM_IDS = ("b_naive_donor_gated", "c_abstracted_gated",
-                 "d_contrast_gated")
-ARM_POOLS = {"b_naive_donor": "naive", "c_abstracted": "abstracted",
-             "d_contrast": "contrast", "e_b_self": "b_self",
-             "f_placebo": "placebo"}
-GATE_INVARIANT_ARMS = ("a_no_memory", "e_b_self", "f_placebo")
+K1_RECEIVER_ZS_SATURATION = 0.60  # prereg §5 K1: "B-self ZS >= 60%"
+K3_PRIMING_MARGIN = 0.1           # prereg §5 K3
+
+PLACEBO_TIPS = (
+    "Read every instruction twice before starting any procedure.",
+    "Keep the workshop tidy and put every tool back where it belongs.",
+    "Write down what you did so that you can repeat it later.",
+    "If something goes wrong, stop and check each step in order.",
+    "Measure twice, cut once: confirm the requirements before acting.",
+    "Work steadily and do not rush the final step.",
+    "Label your materials so that nothing gets mixed up.",
+    "Take notes on failures; they will be useful next time.",
+    "A clear plan before the first action saves rework afterwards.",
+    "Check off each requirement as you complete it.",
+    "Good lighting and a clean bench prevent most mistakes.",
+    "When two steps seem equal, do the simpler one first.",
+    "Keep a checklist and mark items as you finish them.",
+    "Ask whether each action is reversible before you take it.",
+    "Slow is smooth, and smooth is fast.",
+    "Store leftover materials properly for the next job.",
+)
+
+ABSTRACT_PROMPT = """You are distilling field notes for transfer.
+
+Below are raw typed field notes from an experienced agent's foundry worlds.
+Rewrite them as task-agnostic insights that apply to ANY ritual-foundry
+world: remove ALL ore names, world names, and world-specific preparation
+orders, but keep the procedure (how to schedule work) and the norms (what to
+enforce, what to avoid). 3-6 bullets.
+
+RAW NOTES:
+{raw}
+
+Reply with JSON only: {{"lessons": ["...", "..."]}}."""
+
+CONTRAST_PROMPT = """You are distilling a success/failure contrast into norms.
+
+An experienced agent solved ritual-foundry worlds. One trajectory SUCCEEDED,
+one FAILED on a rule violation. Distill the behavioral difference into
+(enforce; avoid) norm pairs: task-agnostic, no ore names, no world names.
+2-4 enforce rules and 2-4 avoid rules.
+
+WORLD RULES (shared by both trajectories):
+{rules}
+
+SUCCESSFUL trajectory ({n_ok} actions, fuse succeeded):
+{ok_actions}
+
+FAILED trajectory (violation: {fail_reason}):
+{fail_actions}
+
+Reply with JSON only: {{"enforce": ["..."], "avoid": ["..."]}}."""
+
+BSELF_WRITE_PROMPT = """You just solved a ritual-foundry task:
+
+{task}
+
+Your solution (accepted): {actions}
+
+Write field notes that would help you solve NEW foundry worlds with
+different ores and different preparation orders: what you learned about how
+foundries work, the procedure you used, and mistakes to avoid. 3-6 bullets.
+
+Reply with JSON only: {{"lessons": ["...", "..."]}}."""
 
 
 class ArmsError(RuntimeError):
     pass
 
 
-class SplitError(ArmsError):
-    pass
-
-
-# ---------------------------------------------------------------- splits
-def make_splits(n_train: int, n_test: int, tier: str,
-                train_seed: int, test_seed: int) -> dict:
-    """Train/test world sets, same tier, instance-disjoint by world_sha256.
-
-    world_id is per-seed (f3v2-<tier>-<idx>) and collides across seeds by
-    construction; the content sha is the split identity.  Fail-closed."""
-    train = fw.generate_batch(n_train, tier, train_seed)
-    test = fw.generate_batch(n_test, tier, test_seed)
-    shared = sorted({fw.world_sha256(w) for w in train}
-                    & {fw.world_sha256(w) for w in test})
-    if shared:
-        raise SplitError(
-            f"train/test world overlap: {len(shared)} shared world_sha256 "
-            f"(train_seed={train_seed}, test_seed={test_seed}); pick "
-            "different seeds — leakage voids the run (prereg §6.2)")
-    return {"train": train, "test": test}
-
-
-# ---------------------------------------------------------------- experience
-def run_experience(chat, model: str, worlds: list[dict], *, seed: int,
-                   max_tokens: int, system: str = SYSTEM_PROMPT,
-                   prompt_fn=None) -> list[dict]:
-    """Attempt each world once; return per-world trajectory records.
-
-    chat is any object with the CachedOpenAIChat.chat signature (production:
-    f2.CachedOpenAIChat; offline: ScriptedChat).  prompt_fn(world) overrides
-    the prompt (arm contexts); default is the bare ZS prompt."""
-    rows = []
-    for world in worlds:
-        prompt = prompt_fn(world) if prompt_fn is not None \
-            else fw.render_prompt(world)
-        meta = chat.chat(model=model, system=system, user=prompt,
-                         seed=seed, max_tokens=max_tokens)
-        actions = fw.parse_model_actions(meta["text"])
-        if actions is not None:
-            sim = fw.simulate(world, actions)
-            correct = bool(sim["ok"])
-            violation, reason, steps = sim["violation"], sim["reason"], sim["steps"]
-        else:
-            correct, violation, reason, steps = (
-                False, "parse_failure", "parse_failure: no JSON actions object", 0)
-        rows.append({
-            "world_id": world["world_id"],
-            "world_seed": world["seed"],
-            "watermark": world["watermark"],
-            "tier": world["tier"],
-            "n_items": len(world["items"]),
-            "optimal_len": world["optimal_len"],
-            "step_cap": world["step_cap"],
-            "parse_ok": actions is not None,
-            "actions": actions,
-            "correct": correct,
-            "violation": violation,
-            "reason": reason,
-            "steps": steps,
-            "cached": meta["cached"],
-            "usage": meta["usage"],
-            "request_sha256": meta["request_sha256"],
-        })
-    return rows
-
-
-def accuracy(rows: list[dict]):
-    return round(sum(r["correct"] for r in rows) / len(rows), 4) if rows else None
-
-
-# ------------------------------------------------------- failure taxonomy
-_VERB_ITEM_RE = re.compile(r"(cleanse|heat|charge|inscribe|blast)\(([^)]+)\)")
-_HEAT_RE = re.compile(r"heat\(([^)]+)\)")
-
-
-def _batched(actions: list[str]) -> bool:
-    """Verb-batching signature: the same verb applied to >=2 distinct ores in
-    one consecutive run (the weak-planner policy shape — naive_batch_solver)."""
-    run_verb, run_items = None, set()
-    for action in actions:
-        m = _VERB_ITEM_RE.match(action)
-        if not m:
-            run_verb, run_items = None, set()
+# ---------------------------------------------------------------- pure pieces
+def build_donor_lesson_store(train_worlds: list[dict],
+                             donor_rows: list[dict]) -> list[dict]:
+    """Typed lessons of the train worlds the donor SOLVED (flattened)."""
+    ok_worlds = {r["world_id"] for r in donor_rows if r.get("correct")}
+    store: list[dict] = []
+    for world in train_worlds:
+        if world["world_id"] not in ok_worlds:
             continue
-        verb, item = m.group(1), m.group(2)
-        if verb == run_verb:
-            run_items.add(item)
-            if len(run_items) >= 2:
-                return True
+        lessons = world["lessons"]
+        for entry in lessons["fact"]:
+            store.append({"lesson_id": entry["lesson_id"], "type": "fact",
+                          "world_id": world["world_id"], "text": entry["text"]})
+        for key in ("workflow", "norm"):
+            entry = lessons[key]
+            text = entry["text"] if key == "workflow" else (
+                f"{entry['enforce']}. {entry['avoid']}")
+            store.append({"lesson_id": entry["lesson_id"], "type": key,
+                          "world_id": world["world_id"], "text": text})
+    return store
+
+
+def _tokens(text: str) -> set[str]:
+    return {t for t in re.split(r"[^a-z0-9]+", text.casefold()) if len(t) > 2}
+
+
+def retrieve_topk(query_text: str, store: list[dict], k: int = TOP_K) -> list[dict]:
+    """Deterministic token-Jaccard retrieval (dev smoke embedder stand-in)."""
+    q = _tokens(query_text)
+    scored = []
+    for entry in store:
+        toks = _tokens(entry["text"])
+        union = len(q | toks) or 1
+        scored.append((len(q & toks) / union, entry["lesson_id"], entry))
+    scored.sort(key=lambda x: (-x[0], x[1]))
+    return [e for _s, _i, e in scored[:k]]
+
+
+_ORDER_CLAIM_RE = re.compile(
+    r"preparation order of ([a-z]+)\s*:\s*((?:[a-z]+\s*->\s*)+[a-z]+)", re.I)
+
+
+def disagreement_gate(lessons: list[dict], world: dict) -> tuple[list[dict], list[dict]]:
+    """Drop lessons whose per-ore order claims contradict the world's STATED
+    orders (Agent KB disagreement gate). Returns (kept, dropped-with-reason)."""
+    kept, dropped = [], []
+    for entry in lessons:
+        reason = None
+        for m in _ORDER_CLAIM_RE.finditer(entry["text"]):
+            ore = m.group(1).casefold()
+            claimed = tuple(" ".join(m.group(2).casefold().split()).split(" -> "))
+            if ore in world["items"]:
+                actual = tuple(world["ladders"][ore])
+                if claimed != actual:
+                    reason = (f"claims order of {ore} as {' -> '.join(claimed)} "
+                              f"but the world states {' -> '.join(actual)}")
+                    break
+        if reason is None:
+            kept.append(entry)
         else:
-            run_verb, run_items = verb, {item}
-    return False
+            dropped.append({"lesson_id": entry["lesson_id"], "reason": reason})
+    return kept, dropped
 
 
-def _cooled_by_interleave(actions: list[str], fail_idx: int, item: str) -> bool:
-    """The ore WAS heated, then a DIFFERENT ore was heated (one-crucible
-    cooling revoked the heat), then a verb needing `heated` failed."""
-    last_heat = None
-    for i in range(fail_idx):
-        m = _HEAT_RE.match(actions[i])
-        if m and m.group(1) == item:
-            last_heat = i
-    if last_heat is None:
-        return False
-    for i in range(last_heat + 1, fail_idx):
-        m = _HEAT_RE.match(actions[i])
-        if m and m.group(1) != item:
-            return True
-    return False
+def render_lesson_block(lessons_texts: list[str]) -> str:
+    return ("Field notes from prior foundry work:\n"
+            + "\n".join(f"- {t}" for t in lessons_texts))
 
 
-def classify_failure(world: dict, traj: dict):
-    """Map a failed trajectory to a planted failure mode (deterministic
-    heuristic): blast-shortcut / reheat-shatter / verb-batching /
-    interleave-cooling / drain-timeout / order-confusion / parse-failure.
+def build_placebo(reference_block: str, seed_tag: str,
+                  band: tuple[float, float] = (0.85, 1.15)) -> str:
+    """Content-free generic tips, format-matched to the reference lesson block
+    (same notes-block shape) and inside its token-length band (placebo format
+    parity, prereg §3 arm f).  Bullet count is NOT matched — the priming
+    control needs length parity, not structural identity; tips may repeat if
+    the reference is longer than the whole pool."""
+    rng = random.Random(f"f3v2-placebo:{seed_tag}")
+    tips = list(PLACEBO_TIPS)
+    rng.shuffle(tips)
+    target = len(reference_block)
+    chosen: list[str] = []
+    i = 0
+    while len(render_lesson_block(chosen)) < band[0] * target:
+        chosen.append(tips[i % len(tips)])
+        i += 1
+        if i > 3 * len(tips):  # pool exhausted without reaching the band
+            break
+    if len(render_lesson_block(chosen)) > band[1] * target and len(chosen) > 1:
+        chosen.pop()
+    return render_lesson_block(chosen)
 
-    Priority is policy-shape first (blast usage, batching signature — those
-    are the sins the lessons preach against), then violation-kind analysis;
-    anything unmapped falls back to the raw simulator violation string."""
-    if traj["correct"]:
+
+def compute_trr(acc_arm: float | None, acc_a: float | None,
+                acc_e: float | None) -> float | None:
+    """TRR = (arm - no-mem) / (B-self - no-mem); None when the ceiling gap
+    collapses (B-self == no-mem) or any input is missing."""
+    if acc_arm is None or acc_a is None or acc_e is None:
         return None
-    if not traj["parse_ok"]:
-        return "parse-failure"
-    actions = traj["actions"] or []
-    violation = traj.get("violation") or ""
-    reason = traj.get("reason") or ""
-    if any(a.startswith("blast(") for a in actions):
-        return "blast-shortcut"
-    if violation == "shattered":
-        return "reheat-shatter"
-    if _batched(actions):
-        return "verb-batching"
-    if violation == "precondition" and "requires heated" in reason:
-        fail_idx = traj["steps"]
-        item = None
-        if 0 <= fail_idx < len(actions):
-            m = _VERB_ITEM_RE.match(actions[fail_idx])
-            if m:
-                item = m.group(2)
-        if item is not None and _cooled_by_interleave(actions, fail_idx, item):
-            return "interleave-cooling"
-        return "order-confusion"
-    if (violation == "precondition" and "requires primed" in reason
-            and reason.startswith("inscribe(")):
-        return "drain-timeout"
-    if violation in ("precondition", "fuse_rejected", "no_fuse"):
-        return "order-confusion"
-    return violation or "unknown"
+    denom = acc_e - acc_a
+    if denom <= 0:
+        return None
+    return (acc_arm - acc_a) / denom
 
 
-# ---------------------------------------------------------------- lessons
-def _lesson(lesson_id: str, kind: str, *, text: str = "",
-            enforce=None, avoid=None, mode=None, sources) -> dict:
-    return {"lesson_id": lesson_id, "kind": kind, "text": text,
-            "enforce": enforce, "avoid": avoid, "mode": mode,
-            "sources": list(sources), "flagged": False}
+def negative_transfer_rate(vec_arm: list[int], vec_a: list[int]) -> float | None:
+    """Fraction of tasks where the arm scored WORSE than no-mem (binary)."""
+    if not vec_arm or len(vec_arm) != len(vec_a):
+        return None
+    return sum(1 for x, a in zip(vec_arm, vec_a) if x < a) / len(vec_arm)
 
 
-CONTRAST_ENFORCE = (
-    "enforce: run each ore's own preparation order atomically, one ore at a "
-    "time, then fuse")
-CONTRAST_AVOID = {
-    "verb-batching": ("batching one verb across several ores (orders differ "
-                      "per ore; the batch breaks each ore's own order and "
-                      "trips the one-crucible cooling rule)"),
-    "interleave-cooling": ("interleaving two ores' preparation (one crucible: "
-                           "heating a second ore cools the first)"),
-    "blast-shortcut": ("the blast shortcut (it taints the ore and the final "
-                       "fuse fails)"),
-    "drain-timeout": ("leaving a primed ore un-inscribed past the drain "
-                      "window (it drains and must be redone)"),
-    "reheat-shatter": ("re-heating a primed ore (it shatters and the world "
-                       "is lost)"),
-    "order-confusion": ("assuming all ores share one order (check each ore's "
-                        "own listed order)"),
-    "parse-failure": "free-form replies (emit only the JSON actions object)",
-}
+def bootstrap_paired_ci(vec_x: list[int], vec_y: list[int], *,
+                        n_boot: int = 2000, seed: int = 0) -> dict | None:
+    """CI of mean(x - y) over paired per-task vectors (single resample index)."""
+    if not vec_x or len(vec_x) != len(vec_y):
+        return None
+    rng = random.Random(seed)
+    n = len(vec_x)
+    diffs = sorted(
+        sum(vec_x[i] for i in idx) / n - sum(vec_y[i] for i in idx) / n
+        for idx in ([rng.randrange(n) for _ in range(n)] for _ in range(n_boot)))
+    return {"mean": sum(diffs) / n_boot,
+            "ci95": [diffs[int(0.025 * n_boot)], diffs[int(0.975 * n_boot)]]}
 
 
-def _contrast_lesson(world: dict, mode: str, observed_reason: str, *,
-                     framing: str = "observed") -> dict:
-    wm = world["watermark"]
-    avoid_body = CONTRAST_AVOID.get(
-        mode, f"the pattern that failed in experience (violation: {mode})")
-    if framing == "own":  # b_self: the receiver's OWN failed attempt
-        tag = f"(from your own failed attempt: {observed_reason})"
+def evaluate_kill_conditions(acc: dict, vectors: dict, *,
+                             n_boot: int = 2000, seed: int = 0) -> dict:
+    """Prereg §5 K1-K3 as a pure function (the sealed judge calls this).
+
+    K1 environment: TRR_c <= 0 AND TRR_d <= 0 AND receiver no-mem >= 60%.
+    K2 claim:       TRR_naive < 0 AND neither contrast nor abstracted beats
+                    naive with a paired bootstrap CI (lower bound > 0).
+    K3 priming:     TRR_placebo >= TRR_abstracted - 0.1.
+    fired=None means indeterminate (missing/degenerate inputs), never a pass.
+    """
+    acc_a, acc_e = acc.get("a_no_memory"), acc.get("e_b_self")
+    trr = {arm: compute_trr(acc.get(arm), acc_a, acc_e)
+           for arm in ("b_naive_donor", "c_abstracted", "d_contrast", "f_placebo")}
+
+    if trr["c_abstracted"] is None or trr["d_contrast"] is None or acc_a is None:
+        k1 = {"fired": None, "reason": "TRR indeterminate (ceiling gap collapsed)"}
     else:
-        tag = f"(observed: {observed_reason})"
-    return _lesson(
-        f"{world['world_id']}-{wm[:8]}-contrast-{mode}-{framing}", "contrast",
-        enforce=CONTRAST_ENFORCE,
-        avoid=f"avoid: {avoid_body} {tag}",
-        mode=mode, sources=[wm])
+        k1 = {"fired": bool(trr["c_abstracted"] <= 0
+                            and trr["d_contrast"] <= 0
+                            and acc_a >= K1_RECEIVER_ZS_SATURATION),
+              "reason": (f"TRR_c={_r2(trr['c_abstracted'])}, "
+                         f"TRR_d={_r2(trr['d_contrast'])}, "
+                         f"receiver_zs={_r2(acc_a)} (bar {K1_RECEIVER_ZS_SATURATION})")}
 
-
-def ground_truth_trajectories(worlds: list[dict]) -> list[dict]:
-    """Synthetic success trajectories (NO LLM): every world is winnable by
-    construction (strategy_solver, slice-1 guarantee).  Used as the success
-    side of the b_self self-contrast — with one attempt per world a
-    receiver-only success/failure contrast is structurally empty, so the
-    ceiling consolidates the receiver's own failures against ground truth."""
-    rows = []
-    for w in worlds:
-        actions = fw.strategy_solver(w)
-        rows.append({
-            "world_id": w["world_id"], "world_seed": w["seed"],
-            "watermark": w["watermark"], "tier": w["tier"],
-            "parse_ok": True, "actions": actions, "correct": True,
-            "violation": None, "reason": "ok", "steps": len(actions),
-            "synthetic": True,
-        })
-    return rows
-
-
-def compile_arm_lessons(worlds: list[dict], trajectories: list[dict], *,
-                        failure_trajectories=None,
-                        contrast_framing: str = "observed") -> dict:
-    """Typed lessons (prereg §2 three layers) + trajectory-derived contrast.
-
-    lessons: per-world ground-truth fact/workflow/norm (fw.compile_lessons).
-    contrast: (enforce; avoid) pairs, kept only for worlds with BOTH a success
-    in `trajectories` AND a classified failure in `failure_trajectories`
-    (default: the same pool) — MemCollab-style success/failure contrast."""
-    traj_by_wm: dict[str, list] = {}
-    for t in trajectories:
-        traj_by_wm.setdefault(t["watermark"], []).append(t)
-    fail_by_wm: dict[str, list] = {}
-    for t in (trajectories if failure_trajectories is None
-              else failure_trajectories):
-        fail_by_wm.setdefault(t["watermark"], []).append(t)
-    lessons: list[dict] = []
-    contrast: list[dict] = []
-    for w in worlds:
-        wm = w["watermark"]
-        gt = w["lessons"]
-        for i, fact in enumerate(gt["fact"]):
-            lessons.append(_lesson(f"{w['world_id']}-{wm[:8]}-fact-{i}",
-                                   "fact", text=fact["text"], sources=[wm]))
-        lessons.append(_lesson(f"{w['world_id']}-{wm[:8]}-workflow",
-                               "workflow", text=gt["workflow"]["text"],
-                               sources=[wm]))
-        lessons.append(_lesson(f"{w['world_id']}-{wm[:8]}-norm", "norm",
-                               enforce=gt["norm"]["enforce"],
-                               avoid=gt["norm"]["avoid"], sources=[wm]))
-        if not any(t["correct"] for t in traj_by_wm.get(wm, [])):
-            continue  # no success evidence -> no contrast support here
-        modes: dict[str, str] = {}
-        for t in fail_by_wm.get(wm, []):
-            mode = classify_failure(w, t)
-            if mode is not None and mode not in modes:
-                modes[mode] = t["reason"]
-        for mode in sorted(modes):
-            contrast.append(_contrast_lesson(w, mode, modes[mode],
-                                             framing=contrast_framing))
-    return {"lessons": lessons, "contrast": contrast}
-
-
-# ------------------------------------------------------- (c) abstraction
-def _world_tokens(worlds: list[dict]) -> list[tuple[str, str]]:
-    toks = []
-    for w in worlds:
-        toks.append((f"the {w['world_name']}", "the foundry"))
-        toks.append((w["world_name"], "the foundry"))
-        toks.append((f"the {w['relic']}", "the relic"))
-        toks.append((w["relic"], "the relic"))
-        for item in w["items"]:
-            toks.append((item, "each ore"))
-    toks.sort(key=lambda tr: -len(tr[0]))  # longest first (phrase before word)
-    return toks
-
-
-def _abstract_text(text: str, toks: list[tuple[str, str]]) -> str:
-    for tok, repl in toks:
-        text = re.sub(r"\b" + re.escape(tok) + r"\b", repl, text)
-    # world-specific numeric mechanic parameters -> generic references
-    text = re.sub(r"within the next \d+ actions", "within the drain window", text)
-    text = re.sub(r"more than \d+ actions", "more than the drain window allows",
-                  text)
-    return text
-
-
-def abstract_lessons(lessons: list[dict], worlds: list[dict]) -> list[dict]:
-    """(c) abstracted: programmatic task-agnostic rewrite of donor lessons.
-
-    Per-ore order facts are DROPPED (world-specific by construction); generic
-    mechanic facts, the workflow layer (= the planted-strategy statement,
-    already world-agnostic) and the norm layer are kept with world tokens
-    stripped; identical texts dedupe with merged provenance.  Fail-closed: a
-    surviving world token is an ArmsError."""
-    toks = _world_tokens(worlds)
-    by_wm = {w["watermark"]: w for w in worlds}
-    all_items = {item for w in worlds for item in w["items"]}
-    out: list[dict] = []
-    seen: dict[tuple, dict] = {}
-
-    def push(kind, *, text="", enforce=None, avoid=None, sources):
-        key = (kind, text, enforce, avoid)
-        if key in seen:
-            tgt = seen[key]
-            for s in sources:
-                if s not in tgt["sources"]:
-                    tgt["sources"].append(s)
-            return
-        lesson = _lesson(f"abstracted-{kind}-{len(out)}", kind, text=text,
-                         enforce=enforce, avoid=avoid, sources=list(sources))
-        seen[key] = lesson
-        out.append(lesson)
-
-    for lesson in lessons:
-        if lesson["kind"] == "fact":
-            if any(re.search(r"\b" + re.escape(i) + r"\b", lesson["text"])
-                   for i in all_items):
-                continue  # per-ore order facts cannot generalize
-            push("fact", text=_abstract_text(lesson["text"], toks),
-                 sources=lesson["sources"])
-        elif lesson["kind"] == "workflow":
-            for s in lesson["sources"]:
-                if s in by_wm:
-                    push("workflow",
-                         text=by_wm[s]["planted_strategy"]["statement"],
-                         sources=lesson["sources"])
-        elif lesson["kind"] == "norm":
-            push("norm",
-                 enforce=_abstract_text(lesson["enforce"] or "", toks),
-                 avoid=_abstract_text(lesson["avoid"] or "", toks),
-                 sources=lesson["sources"])
-    for lesson in out:  # fail-closed purity check
-        blob = " ".join(p for p in (lesson["text"], lesson["enforce"],
-                                    lesson["avoid"]) if p)
-        for w in worlds:
-            for tok in (w["world_name"], w["relic"], *w["items"]):
-                if re.search(r"\b" + re.escape(tok) + r"\b", blob):
-                    raise ArmsError(
-                        f"abstraction leak: {tok!r} survives in "
-                        f"{lesson['lesson_id']}")
-    return out
-
-
-# ------------------------------------------------------- (f) placebo store
-# unrelated-domain content (household/craft tips), zero foundry vocabulary;
-# format identical to real lessons (fact tips / workflow advice / enforce;
-# avoid norms), comparable length.  Content-word disjointness vs the real
-# lesson corpus is asserted in tests/test_f3v2_arms.py.
-PLACEBO_FACTS = (
-    "When brewing green tea, steep the leaves briefly in water under eighty "
-    "degrees and discard the initial rinse to keep the flavor clear.",
-    "Before repotting a fern, loosen the outer roots gently and choose a pot "
-    "slightly wider than its previous home.",
-    "To quiet a bicycle chain, wipe it dry after wet rides and apply a small "
-    "drop of lubricant onto every link, then spin the pedals slowly.",
-    "When tuning a guitar by ear, match the fifth fret of each string "
-    "against the open string beneath it, except the third.",
-    "For a crisp bread crust, bring the oven to temperature early and lay a "
-    "shallow tray of water on the lower rack during baking.",
-    "When sketching a portrait, begin with the gap between the eyes and "
-    "gauge every later measurement against that single unit.",
-    "To season a wooden board, rub food-safe oil along the grain, let it "
-    "soak overnight, and buff away the excess.",
-    "When labeling pantry jars, write the packing date on every lid and "
-    "rotate older stock toward the front.",
-)
-PLACEBO_WORKFLOWS = (
-    "Proceed patiently through one stage at a stretch: complete what lies in "
-    "front of you, tidy the bench, then move along.",
-    "Handle each garden bed separately: weed thoroughly, water deeply, mulch "
-    "lightly, and only then attend the neighboring bed.",
-)
-PLACEBO_NORMS = (
-    ("enforce: double-check each measurement twice against a known reference",
-     "avoid: rushing the closing check; avoid: guessing a reading from "
-     "recollection"),
-    ("enforce: label every container the day it is packed",
-     "avoid: leaving lids loose; avoid: trusting memory over a fresh tag"),
-    ("enforce: sharpen blades lightly and often rather than waiting for them "
-     "to dull",
-     "avoid: storing tools damp; avoid: oiling over rust"),
-    ("enforce: gather ingredients fully before lighting the stove",
-     "avoid: salting early; avoid: crowding the pan"),
-)
-
-FOUNDRY_VERB_RE = re.compile(
-    r"\b(cleanse|heat|charge|inscribe|blast|fuse|fusing|primed|tainted|"
-    r"crucible)\b", re.IGNORECASE)
-
-# function words + format markers, excluded from the content-word disjointness
-# check (placebo vs real lessons).  Format markers (enforce/avoid) are shared
-# BY DESIGN — the placebo arm must keep the identical lesson format.
-PLACEBO_STOPWORDS = frozenset(
-    "a an the and or but if then else of to in on for with without at by from "
-    "up down over under after before between among into out off about above "
-    "across along around during through per as so such is are was were be "
-    "been being has have had do does did done can could may might must shall "
-    "should will would not no never always only just also too very more most "
-    "less least much many few any all each every some none one two three "
-    "first second third last next same other another own it its he she they "
-    "them their we our you your i me my who what which how when where why "
-    "again once twice now still yet already soon later back away here "
-    "there this that these those than then thus hence therefore however "
-    "though although because while until unless instead rather quite even "
-    "ever perhaps maybe almost nearly hardly barely simply merely enough "
-    "s re ll ve don t "
-    "enforce avoid lesson lessons fact workflow norm contrast".split())
-
-
-def build_placebo_lessons(worlds: list[dict]) -> list[dict]:
-    """(f) placebo: identical format, unrelated content, one set per train
-    world (deterministic pick by world watermark).  Purity is fail-closed."""
-    out: list[dict] = []
-    for w in worlds:
-        wm = w["watermark"]
-        h = int(wm[:8], 16)
-        i, j = h % len(PLACEBO_FACTS), (h // 3 + 1) % len(PLACEBO_FACTS)
-        if i == j:
-            j = (j + 1) % len(PLACEBO_FACTS)
-        enforce, avoid = PLACEBO_NORMS[h % len(PLACEBO_NORMS)]
-        pid = f"placebo-{w['world_id']}-{wm[:8]}"
-        out.append(_lesson(f"{pid}-fact-0", "fact",
-                           text=PLACEBO_FACTS[i], sources=[wm]))
-        out.append(_lesson(f"{pid}-fact-1", "fact",
-                           text=PLACEBO_FACTS[j], sources=[wm]))
-        out.append(_lesson(f"{pid}-workflow", "workflow",
-                           text=PLACEBO_WORKFLOWS[h % len(PLACEBO_WORKFLOWS)],
-                           sources=[wm]))
-        out.append(_lesson(f"{pid}-norm", "norm", enforce=enforce,
-                           avoid=avoid, sources=[wm]))
-    for lesson in out:
-        blob = " ".join(p for p in (lesson["text"], lesson["enforce"],
-                                    lesson["avoid"]) if p)
-        if FOUNDRY_VERB_RE.search(blob):
-            raise ArmsError(
-                f"placebo purity violation: foundry verb in {lesson['lesson_id']}")
-    return out
-
-
-# ------------------------------------------------------- disagreement gate
-def disagreement_flags(worlds: list[dict], donor_trajs: list[dict],
-                       receiver_trajs: list[dict]) -> dict:
-    """world flagged <=> receiver FAILED the train world while the donor
-    SUCCEEDED on it (Agent KB: gate가 전이 성립 조건 — only then does donor
-    knowledge transfer something the receiver demonstrably lacks)."""
-    don_ok: dict[str, bool] = {}
-    for t in donor_trajs:
-        don_ok[t["watermark"]] = don_ok.get(t["watermark"], False) or t["correct"]
-    rec_ok: dict[str, bool] = {}
-    for t in receiver_trajs:
-        rec_ok[t["watermark"]] = rec_ok.get(t["watermark"], False) or t["correct"]
-    return {w["watermark"]: (not rec_ok.get(w["watermark"], False))
-            and don_ok.get(w["watermark"], False) for w in worlds}
-
-
-def build_lesson_sets(train_worlds: list[dict], donor_trajs: list[dict],
-                      receiver_trajs: list[dict]) -> dict:
-    """All arm pools + the disagreement map, from the two train experiences.
-
-    b_self (ceiling) = typed lessons of the worlds the receiver experienced
-    PLUS self-contrast pairs: the receiver's OWN observed failure modes
-    distilled against ground-truth winnability (synthetic successes — one
-    attempt per world makes a receiver-only success/failure contrast
-    structurally empty; the ceiling is the perfect consolidation of the
-    receiver's own experience, framed "from your own failed attempt" so the
-    (d) and (e) contexts stay textually distinct)."""
-    flags = disagreement_flags(train_worlds, donor_trajs, receiver_trajs)
-    don = compile_arm_lessons(train_worlds, donor_trajs)
-    con = compile_arm_lessons(
-        train_worlds, donor_trajs,
-        failure_trajectories=list(donor_trajs) + list(receiver_trajs))["contrast"]
-    rec = compile_arm_lessons(train_worlds, receiver_trajs)
-    self_contrast = compile_arm_lessons(
-        train_worlds, ground_truth_trajectories(train_worlds),
-        failure_trajectories=receiver_trajs,
-        contrast_framing="own")["contrast"]
-    pools = {
-        "naive": don["lessons"],
-        "abstracted": abstract_lessons(don["lessons"], train_worlds),
-        "contrast": con,
-        "b_self": rec["lessons"] + self_contrast,
-        "placebo": build_placebo_lessons(train_worlds),
-        "disagreement": flags,
-    }
-    for name, pool in pools.items():
-        if name == "disagreement":
-            continue
-        for lesson in pool:
-            lesson["flagged"] = any(flags.get(s, False)
-                                    for s in lesson["sources"])
-    return pools
-
-
-# ---------------------------------------------------------------- embedding
-_TOKEN_RE = re.compile(r"[a-z0-9]+")
-
-
-class HashEmbedder:
-    """Deterministic offline embedder (MemDelta: FIXED across arms):
-    token-hashed bag-of-words — sha256(token) -> bucket, L2-normalized —
-    scored with cosine.  No model, no network, bit-stable across runs."""
-
-    name = "hash-bow-sha256-v1"
-
-    def __init__(self, dim: int = 256):
-        self.dim = dim
-
-    def __call__(self, text: str) -> list[float]:
-        vec = [0.0] * self.dim
-        for tok in _TOKEN_RE.findall(text.casefold()):
-            digest = hashlib.sha256(tok.encode("utf-8")).digest()
-            vec[int.from_bytes(digest[:8], "big") % self.dim] += 1.0
-        norm = math.sqrt(sum(x * x for x in vec))
-        if norm:
-            vec = [x / norm for x in vec]
-        return vec
-
-
-def cosine(a: list[float], b: list[float]) -> float:
-    return sum(x * y for x, y in zip(a, b))
-
-
-def _lesson_embed_text(lesson: dict) -> str:
-    return " ".join(p for p in (lesson["text"], lesson["enforce"],
-                                lesson["avoid"]) if p)
-
-
-def retrieve_lessons(query_text: str, lessons: list[dict], embedder,
-                     top_k: int = TOP_K) -> list[dict]:
-    """Top-k lessons by embedding similarity (score desc, lesson_id asc —
-    fully deterministic under ties)."""
-    if not lessons or top_k <= 0:
-        return []
-    q = embedder(query_text)
-    scored = [(cosine(q, embedder(_lesson_embed_text(lesson))),
-               lesson["lesson_id"], lesson) for lesson in lessons]
-    scored.sort(key=lambda s: (-s[0], s[1]))
-    return [lesson for _score, _lid, lesson in scored[:top_k]]
-
-
-def _rules_text(world: dict) -> str:
-    return "\n".join(r["text"] for r in world["rules"])
-
-
-# ---------------------------------------------------------------- arms
-def render_lesson_block(lessons: list[dict]) -> str:
-    """The injected memory context.  ONE format for every arm (placebo parity
-    requires byte-identical scaffolding; only the content differs)."""
-    lines = ["Experience notes from prior work in other workshops (apply "
-             "what transfers; the ores and orders differ here):"]
-    for i, lesson in enumerate(lessons, start=1):
-        if lesson["kind"] in ("norm", "contrast"):
-            body = f"{lesson['enforce']} || {lesson['avoid']}"
+    if trr["b_naive_donor"] is None:
+        k2 = {"fired": None, "reason": "naive TRR indeterminate"}
+    elif not trr["b_naive_donor"] < 0:
+        k2 = {"fired": False, "reason": f"naive TRR {_r2(trr['b_naive_donor'])} >= 0"}
+    else:
+        sig = {}
+        for arm, key in (("c_abstracted", "sig_c_beats_naive"),
+                         ("d_contrast", "sig_d_beats_naive")):
+            ci = bootstrap_paired_ci(vectors.get(arm) or [],
+                                     vectors.get("b_naive_donor") or [],
+                                     n_boot=n_boot, seed=seed)
+            sig[key] = None if ci is None else bool(ci["ci95"][0] > 0)
+        if any(v is None for v in sig.values()):
+            k2 = {"fired": None, "reason": "missing paired vectors for bootstrap"}
         else:
-            body = lesson["text"]
-        lines.append(f"{i}. [{lesson['kind']}] {body}")
-    return "\n".join(lines)
+            k2 = {"fired": bool(not sig["sig_c_beats_naive"]
+                                and not sig["sig_d_beats_naive"]),
+                  "reason": (f"naive TRR {_r2(trr['b_naive_donor'])} < 0 and "
+                             f"c beats naive: {sig['sig_c_beats_naive']}, "
+                             f"d beats naive: {sig['sig_d_beats_naive']}")}
+
+    if trr["f_placebo"] is None or trr["c_abstracted"] is None:
+        k3 = {"fired": None, "reason": "placebo/abstracted TRR indeterminate"}
+    else:
+        k3 = {"fired": bool(trr["f_placebo"]
+                            >= trr["c_abstracted"] - K3_PRIMING_MARGIN),
+              "reason": (f"TRR_placebo={_r2(trr['f_placebo'])} vs "
+                         f"TRR_abstracted={_r2(trr['c_abstracted'])} "
+                         f"(margin {K3_PRIMING_MARGIN})")}
+
+    return {"trr": {k: _r2(v) for k, v in trr.items()},
+            "k1_environment_kill": k1, "k2_claim_kill": k2,
+            "k3_priming_kill": k3,
+            "note": "mechanical observation only; sealed judgment belongs to the gate"}
 
 
-def build_arm_prompt(arm_id: str, world: dict, lesson_sets: dict, *,
-                     embedder=None, top_k: int = TOP_K) -> str:
-    """The receiver's augmented prompt for a test world under one arm."""
-    base = fw.render_prompt(world)
-    if arm_id == "a_no_memory":
-        return base
-    if arm_id == "x_xvendor":
-        raise NotImplementedError(
-            "xvendor arm deferred (prereg §8): no non-Qwen receiver is "
-            "available; same-family confound stays a documented caveat")
-    gated = arm_id.endswith("_gated")
-    base_arm = arm_id[:-len("_gated")] if gated else arm_id
-    if gated and base_arm in GATE_INVARIANT_ARMS:
-        raise ArmsError(f"arm {base_arm} is gate-invariant; no _gated variant")
-    pool_name = ARM_POOLS.get(base_arm)
-    if pool_name is None:
-        raise ArmsError(f"unknown arm {arm_id!r}")
-    lessons = lesson_sets[pool_name]
-    if gated:  # gate ON: only disagreement-flagged lessons transfer
-        lessons = [lesson for lesson in lessons if lesson["flagged"]]
-    embedder = embedder or HashEmbedder()
-    retrieved = retrieve_lessons(_rules_text(world), lessons, embedder, top_k)
-    if not retrieved:
-        return base
-    return render_lesson_block(retrieved) + "\n\n" + base
+def _r2(x):
+    return None if x is None else round(x, 4)
 
 
-def evaluate_arms(chat, model: str, test_worlds: list[dict],
-                  arm_ids, lesson_sets: dict, *, embedder=None, seed: int,
-                  max_tokens: int, system: str = SYSTEM_PROMPT) -> dict:
-    """Score the receiver on test worlds under each arm context (paired:
-    every arm attempts the same worlds)."""
-    embedder = embedder or HashEmbedder()
-    out = {}
-    for arm in arm_ids:
-        rows = run_experience(
-            chat, model, test_worlds, seed=seed, max_tokens=max_tokens,
-            system=system,
-            prompt_fn=lambda w, a=arm: build_arm_prompt(
-                a, w, lesson_sets, embedder=embedder))
-        out[arm] = {"arm_id": arm, "n": len(rows),
-                    "n_correct": sum(r["correct"] for r in rows),
-                    "accuracy": accuracy(rows), "rows": rows}
-    return out
+# ---------------------------------------------------------------- llm pieces
+def solve(chat, model: str, world: dict, lesson_block: str | None,
+          seed: int, max_tokens: int) -> dict:
+    user = ((lesson_block + "\n\n") if lesson_block else "") + fw.render_prompt(world)
+    meta = chat.chat(model=model, system=SYSTEM_PROMPT, user=user,
+                     seed=seed, max_tokens=max_tokens)
+    actions = fw.parse_model_actions(meta["text"])
+    ok, reason = (fw.verify_solution(world, actions) if actions is not None
+                  else (False, "parse_failure: no JSON actions object"))
+    return {"world_id": world["world_id"], "parse_ok": actions is not None,
+            "actions": actions, "correct": bool(ok), "reason": reason,
+            "cached": meta["cached"], "usage": meta["usage"],
+            "request_sha256": meta["request_sha256"]}
 
 
-# ---------------------------------------------------------------- TRR
-def _r4(x):
-    return round(x, 4) if x is not None else None
+def _json_field(meta: dict, key: str) -> list[str]:
+    try:
+        obj = json.loads(meta["text"])
+        vals = obj.get(key)
+        return [str(v) for v in vals] if isinstance(vals, list) else []
+    except (ValueError, TypeError):
+        return []
 
 
-def _trr_entry(arm: str, vec: list[int], nm: list[int], bs: list[int]) -> dict:
-    n = len(vec)
-    acc = sum(vec) / n if n else None
-    m = sum(nm) / n if n else None
-    b = sum(bs) / n if n else None
-    degenerate = m is None or b is None or b == m
-    trr = None if degenerate or acc is None else (acc - m) / (b - m)
-    ntr = (sum(1 for x, y in zip(vec, nm) if x < y) / n) if n else None
-    return {"arm": arm, "n": n, "acc": _r4(acc), "no_mem_acc": _r4(m),
-            "b_self_acc": _r4(b), "trr": _r4(trr), "degenerate": degenerate,
-            "negative_transfer_rate": _r4(ntr),
-            "scores": {"arm": list(vec), "no_mem": list(nm),
-                       "b_self": list(bs)}}
+def abstract_lessons(chat, model: str, raw_block: str, seed: int,
+                     max_tokens: int) -> dict:
+    meta = chat.chat(model=model, system=WRITER_SYSTEM,
+                     user=ABSTRACT_PROMPT.format(raw=raw_block),
+                     seed=seed, max_tokens=max_tokens)
+    return {"lessons": _json_field(meta, "lessons"), "cached": meta["cached"],
+            "request_sha256": meta["request_sha256"]}
 
 
-def trr_table(results: dict, *, no_mem: str = "a_no_memory",
-              b_self: str = "e_b_self") -> dict:
-    """TRR = (arm - no_mem) / (b_self - no_mem) per tier, paired per world.
-
-    Degenerate case (b_self == no_mem): trr null + degenerate=True — never a
-    divide-by-zero.  Pairing is fail-closed: every arm must attempt the same
-    worlds in the same order."""
-    for required in (no_mem, b_self):
-        if required not in results:
-            raise ArmsError(f"trr_table needs arm {required!r}")
-    ref = [r["world_id"] for r in results[no_mem]["rows"]]
-    for arm, res in results.items():
-        ids = [r["world_id"] for r in res["rows"]]
-        if ids != ref:
-            raise ArmsError(
-                f"arm {arm} worlds not paired with {no_mem} "
-                f"({len(ids)} vs {len(ref)} rows)")
-    tiers = sorted({r["tier"] for r in results[no_mem]["rows"]})
-    out: dict[str, dict] = {}
-    for tier in tiers:
-        def vec(arm):
-            return [int(r["correct"]) for r in results[arm]["rows"]
-                    if r["tier"] == tier]
-        nm, bs = vec(no_mem), vec(b_self)
-        out[tier] = {arm: _trr_entry(arm, vec(arm), nm, bs)
-                     for arm in results}
-    return out
+def contrast_lessons(chat, model: str, world: dict, ok_row: dict,
+                     fail_row: dict, fail_reason: str, seed: int,
+                     max_tokens: int) -> dict:
+    rules_txt = "\n".join(r["text"] for r in world["rules"])
+    meta = chat.chat(model=model, system=WRITER_SYSTEM,
+                     user=CONTRAST_PROMPT.format(
+                         rules=rules_txt, n_ok=len(ok_row["actions"] or []),
+                         ok_actions=json.dumps(ok_row["actions"]),
+                         fail_reason=fail_reason,
+                         fail_actions=json.dumps(fail_row["actions"])),
+                     seed=seed, max_tokens=max_tokens)
+    lessons = ([f"enforce: {t}" for t in _json_field(meta, "enforce")]
+               + [f"avoid: {t}" for t in _json_field(meta, "avoid")])
+    return {"lessons": lessons, "cached": meta["cached"],
+            "request_sha256": meta["request_sha256"]}
 
 
-# ---------------------------------------------------------------- kills
-def paired_bootstrap_diff(a: list, b: list, *, reps: int = BOOT_REPS,
-                          seed: int = 20260726) -> dict:
-    """Paired bootstrap CI of mean(a - b): resample world indices with
-    replacement, percentile interval [2.5%, 97.5%], pinned seed."""
-    if len(a) != len(b) or not a:
-        raise ArmsError("paired_bootstrap_diff needs equal non-empty vectors")
-    rng = random.Random(f"f3v2-boot:{seed}")
-    n = len(a)
-    diffs = [x - y for x, y in zip(a, b)]
-    stats = sorted(sum(diffs[rng.randrange(n)] for _ in range(n)) / n
-                   for _ in range(reps))
-    lo = stats[int(0.025 * reps)]
-    hi = stats[min(int(0.975 * reps), reps - 1)]
-    return {"mean_diff": _r4(sum(diffs) / n), "ci95": [_r4(lo), _r4(hi)],
-            "reps": reps, "seed": seed, "n": n}
+def bself_lessons(chat, model: str, mid_world: dict, seed: int,
+                  max_tokens: int) -> dict:
+    solve_row = solve(chat, model, mid_world, None, seed, max_tokens)
+    write = chat.chat(model=model, system=WRITER_SYSTEM,
+                      user=BSELF_WRITE_PROMPT.format(
+                          task=fw.render_prompt(mid_world),
+                          actions=json.dumps(solve_row["actions"])),
+                      seed=seed, max_tokens=max_tokens)
+    return {"solve_row": solve_row, "lessons": _json_field(write, "lessons"),
+            "write_cached": write["cached"],
+            "write_request_sha256": write["request_sha256"]}
 
 
-def eval_k1_env_kill(*, trr_contrast, trr_abstracted, b_self_acc) -> dict:
-    """K1 (prereg §5): TRR_c <= 0 AND TRR_d <= 0 (hard) AND b_self >= 0.60
-    -> capability axis absent, testbed redesign.  'B-self ZS' is read as the
-    arm-(e) accuracy: self-lessons provably move the receiver, so donor
-    transfer failure indicts the environment, not the lesson format."""
-    evaluable = trr_contrast is not None and trr_abstracted is not None
-    fired = (evaluable and trr_contrast <= 0 and trr_abstracted <= 0
-             and b_self_acc is not None and b_self_acc >= K1_B_SELF_MIN)
-    return {"kill": "k1_env_kill", "fired": bool(fired),
-            "evaluable": evaluable,
-            "values": {"trr_contrast": trr_contrast,
-                       "trr_abstracted": trr_abstracted,
-                       "b_self_acc": b_self_acc,
-                       "b_self_min": K1_B_SELF_MIN},
-            "note": "mechanical observation only; sealed judgment is the gate's"}
+def _track_tag(row: dict, context_lessons: list[dict]) -> str | None:
+    """Track-style negative-transfer tag (heuristic, dev smoke)."""
+    if row["correct"]:
+        return None
+    reason = row["reason"]
+    ore_match = re.search(r"\(([a-z]+)\)", reason)
+    if "requires" in reason and ore_match:
+        ore = ore_match.group(1)
+        if any(ore in les["text"] for les in context_lessons):
+            return "mismatched_anchoring"
+        return "misapplied_practice"
+    if "fuse" in reason:
+        return "false_validation"
+    return "misapplied_practice"
 
 
-def eval_k2_claim_kill(*, naive_trr, contrast_scores, naive_scores,
-                       abstracted_scores, reps: int = BOOT_REPS,
-                       seed: int = 20260726) -> dict:
-    """K2 (prereg §5): naive TRR < 0 AND neither contrast nor abstracted beats
-    naive by paired bootstrap 95% CI (LCB of the paired diff > 0 required)
-    -> typed store indistinguishable from naive, claim ② shelve."""
-    boot_c = paired_bootstrap_diff(contrast_scores, naive_scores,
-                                   reps=reps, seed=seed)
-    boot_a = paired_bootstrap_diff(abstracted_scores, naive_scores,
-                                   reps=reps, seed=seed)
-    c_beats = boot_c["ci95"][0] > 0
-    a_beats = boot_a["ci95"][0] > 0
-    evaluable = naive_trr is not None
-    fired = evaluable and naive_trr < 0 and not c_beats and not a_beats
-    return {"kill": "k2_claim_kill", "fired": bool(fired),
-            "evaluable": evaluable,
-            "values": {"naive_trr": naive_trr,
-                       "contrast_minus_naive": boot_c,
-                       "abstracted_minus_naive": boot_a,
-                       "contrast_beats_naive": c_beats,
-                       "abstracted_beats_naive": a_beats},
-            "note": "mechanical observation only; sealed judgment is the gate's"}
+# ---------------------------------------------------------------- main
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--endpoint", default="http://192.168.219.102:8000")
+    ap.add_argument("--receiver-endpoint", default="")
+    ap.add_argument("--donor-model", default="qwen3.6-27b")
+    ap.add_argument("--receiver-model", default="qwen3-4b-real")
+    ap.add_argument("--seed", type=int, default=20260726)
+    ap.add_argument("--train-seed", type=int, default=20260726)
+    ap.add_argument("--train-worlds", type=int, default=8)
+    ap.add_argument("--test-seed", type=int, default=20260727)
+    ap.add_argument("--n-test", type=int, default=2)
+    ap.add_argument("--bself-seed", type=int, default=20260728)
+    ap.add_argument("--max-tokens", type=int, default=768)
+    ap.add_argument("--max-live-calls", type=int, default=20)
+    ap.add_argument("--n-boot", type=int, default=2000)
+    ap.add_argument("--gate", dest="gate", action="store_true", default=True)
+    ap.add_argument("--no-gate", dest="gate", action="store_false")
+    ap.add_argument("--include-per-type", action="store_true")
+    ap.add_argument("--smoke", action="store_true")
+    ap.add_argument("--dry-run", action="store_true",
+                    help="build the plan without any chat call and exit")
+    ap.add_argument("--out", default="")
+    args = ap.parse_args()
+    if args.smoke:
+        args.n_test = min(args.n_test, 2)
 
+    t0 = time.time()
+    ts = int(t0)
+    endpoint_v1 = args.endpoint.rstrip("/")
+    if not endpoint_v1.endswith("/v1"):
+        endpoint_v1 += "/v1"
+    receiver_endpoint_v1 = (args.receiver_endpoint or args.endpoint).rstrip("/")
+    if not receiver_endpoint_v1.endswith("/v1"):
+        receiver_endpoint_v1 += "/v1"
+    out_path = Path(args.out) if args.out else (
+        RECEIPT_DIR / f"f3v2_arms_smoke_{ts}.json")
 
-def eval_k3_priming_kill(*, trr_placebo, trr_abstracted) -> dict:
-    """K3 (prereg §5): TRR_placebo >= TRR_abstracted - 0.1 -> the lift is
-    generic priming, 'transfer' naming forbidden."""
-    evaluable = trr_placebo is not None and trr_abstracted is not None
-    fired = (evaluable
-             and trr_placebo >= trr_abstracted - K3_PLACEBO_SLACK)
-    return {"kill": "k3_priming_kill", "fired": bool(fired),
-            "evaluable": evaluable,
-            "values": {"trr_placebo": trr_placebo,
-                       "trr_abstracted": trr_abstracted,
-                       "slack": K3_PLACEBO_SLACK},
-            "note": "mechanical observation only; sealed judgment is the gate's"}
+    train_worlds = fw.generate_batch(args.train_worlds, "hard", args.train_seed)
+    test_worlds = fw.generate_batch(args.n_test, "hard", args.test_seed)
+    mid_world = fw.generate_world(seed=args.bself_seed, tier="mid", world_idx=0)
+    train_shas = {fw.world_sha256(w) for w in train_worlds}
+    test_shas = {fw.world_sha256(w) for w in test_worlds}
+    leakage = {"train_seed": args.train_seed, "test_seed": args.test_seed,
+               "world_sha_overlap": sorted(train_shas & test_shas),
+               "binding_verdict": "CLEAN" if not (train_shas & test_shas) else "LEAK"}
+    if leakage["binding_verdict"] == "LEAK":
+        raise ArmsError(f"train/test world overlap: {leakage['world_sha_overlap']}")
 
-
-KILLS_NOT_APPLICABLE = {
-    "k4_judge_kill": {
-        "kill": "k4_judge_kill", "fired": False, "applicable": False,
-        "note": ("N/A in simulator-scored F3v2: there is no LLM judge panel "
-                 "whose planted-wrong-answer catch rate could be measured; "
-                 "reinstated only if a judge-scored variant is added "
-                 "(prereg §7 step 2 covers the sealed judge track).")},
-    "k5_noise_floor_kill": {
-        "kill": "k5_noise_floor_kill", "fired": False, "applicable": False,
-        "note": ("N/A in simulator-scored F3v2: gold ground truth is planted "
-                 "by construction (annotation error rate 0), so a "
-                 "re-annotation noise floor cannot bind; documented, not "
-                 "measured.")},
-}
-
-
-def evaluate_kills(tier_table: dict, *, reps: int = BOOT_REPS,
-                   seed: int = 20260726) -> dict:
-    """All kill observations over one tier's TRR table (the five core arms
-    are required; gated variants are ablations, not kill inputs)."""
-    required = ("a_no_memory", "b_naive_donor", "c_abstracted",
-                "d_contrast", "e_b_self", "f_placebo")
-    missing = [a for a in required if a not in tier_table]
-    if missing:
-        raise ArmsError(f"evaluate_kills: missing core arms {missing}")
-    kills = {
-        "k1_env_kill": eval_k1_env_kill(
-            trr_contrast=tier_table["d_contrast"]["trr"],
-            trr_abstracted=tier_table["c_abstracted"]["trr"],
-            b_self_acc=tier_table["e_b_self"]["acc"]),
-        "k2_claim_kill": eval_k2_claim_kill(
-            naive_trr=tier_table["b_naive_donor"]["trr"],
-            contrast_scores=tier_table["d_contrast"]["scores"]["arm"],
-            naive_scores=tier_table["b_naive_donor"]["scores"]["arm"],
-            abstracted_scores=tier_table["c_abstracted"]["scores"]["arm"],
-            reps=reps, seed=seed),
-        "k3_priming_kill": eval_k3_priming_kill(
-            trr_placebo=tier_table["f_placebo"]["trr"],
-            trr_abstracted=tier_table["c_abstracted"]["trr"]),
+    planned_calls = {
+        "donor_train_resolves_cache_hits": args.train_worlds,
+        "abstracted_rewrite": 1, "contrast_distill": 1, "bself_mid_solve": 1,
+        "bself_lesson_write": 1, "receiver_eval": len(ARMS) * args.n_test,
     }
-    kills.update({k: dict(v) for k, v in KILLS_NOT_APPLICABLE.items()})
-    return kills
+    planned_calls["total_new_live"] = sum(
+        v for k, v in planned_calls.items() if "cache" not in k)
 
+    if args.dry_run:
+        print(json.dumps({
+            "dry_run": True, "leakage": leakage,
+            "train_worlds": [(w["world_id"], len(w["items"])) for w in train_worlds],
+            "test_worlds": [(w["world_id"], len(w["items"]),
+                             fw.world_sha256(w)[:12]) for w in test_worlds],
+            "bself_mid_world": mid_world["world_id"],
+            "arms": ARMS, "gate_on_for": list(GATE_ARMS) if args.gate else [],
+            "planned_calls": planned_calls,
+            "budget_ok": planned_calls["total_new_live"] <= args.max_live_calls,
+        }, indent=1, ensure_ascii=False))
+        return 0 if planned_calls["total_new_live"] <= args.max_live_calls else 1
 
-# ---------------------------------------------------------------- receipt
-def build_receipt(*, script_path, config: dict, train_worlds: list[dict],
-                  test_worlds: list[dict], arm_results: dict, trr: dict,
-                  kills: dict, budget_block: dict, wall_clock_s: float,
-                  prereg_path=PREREG_PATH, extra: dict | None = None) -> dict:
-    """Canary-gate-convention receipt: hswm-f3v2-arms-receipt/v1."""
-    prereg_path = Path(prereg_path)
-    if not prereg_path.exists():
-        raise ArmsError(f"prereg file missing: {prereg_path}")
-    harness = {}
-    for name in ("f3v2_procedural_worlds.py", "f2_delta_w_credit.py",
-                 "f3v2_arms.py"):
-        path = HERE / name
-        harness[name] = (hashlib.sha256(path.read_bytes()).hexdigest()
-                         if path.exists() else None)
-    tier = config.get("tier", "hard")
-    worlds = []
-    for split, batch in (("train", train_worlds), ("test", test_worlds)):
-        for w in batch:
-            worlds.append({"world_id": w["world_id"], "split": split,
-                           "tier": w["tier"], "seed": w["seed"],
-                           "n_items": len(w["items"]),
-                           "optimal_len": w["optimal_len"],
-                           "step_cap": w["step_cap"],
-                           "watermark": w["watermark"],
-                           "world_sha256": fw.world_sha256(w)})
-    shared = sorted({fw.world_sha256(w) for w in train_worlds}
-                    & {fw.world_sha256(w) for w in test_worlds})
-    tt = trr.get(tier, {})
-    cd = [tt[a]["trr"] for a in ("c_abstracted", "d_contrast") if a in tt]
-    present = [v for v in cd if v is not None]
     receipt = {
         "schema_version": "hswm-f3v2-arms-receipt/v1",
         "mode": "development",
         "stage": "DEVELOPMENT_ONLY",
         "branch": "F3v2-harder-transfer",
-        "preregistration_file": str(prereg_path),
+        "smoke": bool(args.smoke),
+        "preregistration_file": str(PREREG_PATH),
         "preregistration_file_sha256": hashlib.sha256(
-            prereg_path.read_bytes()).hexdigest(),
-        "preregistration_status": (
-            "DRAFT — user ratify pending; machine-lock to "
-            "prom_search_hswm/evidence/PREREG_f3v2_*.json happens only after "
-            "ratify"),
-        "script_sha256": hashlib.sha256(
-            Path(script_path).read_bytes()).hexdigest(),
-        "harness_module_sha256": harness,
-        "config": config,
-        "split_audit": {
-            "tier": tier,
-            "train_seed": config.get("train_seed"),
-            "test_seed": config.get("test_seed"),
-            "n_train": len(train_worlds), "n_test": len(test_worlds),
-            "shared_world_sha256": shared,
-            "verdict": "DISJOINT" if not shared else "VOID",
-            "note": ("world_id is per-seed and collides across splits by "
-                     "construction; content sha256 is the split identity "
-                     "(prereg §6.2 instance-disjoint)."),
+            PREREG_PATH.read_bytes()).hexdigest(),
+        "preregistration_status": ("DRAFT — user ratify pending; machine-lock "
+                                   "to prom_search_hswm/evidence/PREREG_f3v2_*.json "
+                                   "happens only after ratify"),
+        "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "harness_module_sha256": {
+            "f3v2_procedural_worlds.py": hashlib.sha256(
+                (HERE / "f3v2_procedural_worlds.py").read_bytes()).hexdigest(),
+            "f3v2_canary_gate.py": hashlib.sha256(
+                (HERE / "f3v2_canary_gate.py").read_bytes()).hexdigest(),
+            "f2_delta_w_credit.py": hashlib.sha256(
+                (HERE / "f2_delta_w_credit.py").read_bytes()).hexdigest(),
         },
-        "worlds": worlds,
-        "arms": arm_results,
-        "trr": trr,
-        "judgment_target": {
-            "name": f"min(trr_c_abstracted, trr_d_contrast) [{tier}]",
-            "value": _r4(min(present)) if len(present) == 2 else None,
-            "degenerate": len(present) < 2,
+        "config": vars(args) | {"endpoint_v1": endpoint_v1,
+                                "receiver_endpoint_v1": receiver_endpoint_v1,
+                                "out": str(out_path)},
+        "donor_freeze": {"backend": "vllm-openai-compat", "url": endpoint_v1,
+                         "model": args.donor_model,
+                         "thinking_off": "chat_template_kwargs enable_thinking=false"},
+        "receiver_freeze": {
+            "backend": "vllm-openai-compat", "url": receiver_endpoint_v1,
+            "model": args.receiver_model,
+            "thinking_off": "chat_template_kwargs enable_thinking=false",
+            "system_prompt_sha256": hashlib.sha256(
+                SYSTEM_PROMPT.encode()).hexdigest(),
+            "seed": args.seed, "temperature": 0, "max_tokens": args.max_tokens,
+            "note": ("DEV STAND-IN for the sealed qwen3:14b receiver; frozen, "
+                     "input channel only; only the lesson block varies across "
+                     "arms. Real Qwen3-4B on its own container (root "
+                     "Qwen/Qwen3-4B per /v1/models)."),
         },
-        "kills": kills,
-        "llm_budget": budget_block,
         "honesty": ("grounded measurement only; no scientific claim; judgment "
-                    "is the gate's. DEVELOPMENT_ONLY: nothing sealed."),
-        "wall_clock_s": wall_clock_s,
+                    "is the gate's. DEVELOPMENT_ONLY: nothing sealed. n=2 test "
+                    "tasks is a WIRING test, not a measurement."),
+        "deviations": [
+            "donor lesson store = deterministic typed-lesson compile from "
+            "donor-SOLVED train worlds (not donor free-written text).",
+            "retrieval = deterministic token-Jaccard (BGE fixed embedder is "
+            "deferred to sealed prep, MemDelta rule).",
+            "gate ablation wired (--no-gate) but smoke runs gate ON only.",
+            "per-type TRR arms behind --include-per-type, off in smoke budget.",
+            "B-self experience = 1 mid-tier world (parent directive).",
+            "K1 'B-self ZS >= 60%' read as receiver no-memory accuracy.",
+        ],
+        "leakage": leakage,
+        "train_worlds": [{"world_id": w["world_id"], "n_items": len(w["items"]),
+                          "world_sha256": fw.world_sha256(w)} for w in train_worlds],
+        "test_worlds": [{"world_id": w["world_id"], "n_items": len(w["items"]),
+                         "world_sha256": fw.world_sha256(w)} for w in test_worlds],
+        "disagreement_gate": {"default_on_for": list(GATE_ARMS),
+                              "active": bool(args.gate), "top_k": TOP_K},
+        "planned_calls": planned_calls,
     }
-    if extra:
-        receipt.update(extra)
-    return receipt
 
-
-# ---------------------------------------------------------------- offline chat
-class ScriptedChat:
-    """Offline deterministic chat stand-in (tests / dev-smoke dry-run; NO
-    network).  Exact-table routing: (model, system, user) -> action list.  A
-    table miss is a hard error (fail-closed) so pipeline drift surfaces
-    immediately instead of silently changing the scripted outcomes."""
-
-    backend_name = "scripted-offline-v1"
-
-    def __init__(self, table: dict | None = None):
-        self.table = dict(table or {})
-        self.misses = 0
-        self.hits = 0
-        self.last_http_status = None
-        self.last_error_kind = None
-        self.degraded_to_parallel = None
-
-    def add(self, model: str, system: str, user: str, actions: list) -> None:
-        self.table[(model, system, user)] = list(actions)
-
-    def chat(self, *, model: str, system: str, user: str, seed: int,
-             max_tokens: int, timeout: float = 0.0) -> dict:
-        key = (model, system, user)
-        if key not in self.table:
-            raise ArmsError(
-                f"ScriptedChat miss (model={model!r}): no scripted reply for "
-                f"prompt {user[:80]!r}... — extend the table")
-        self.misses += 1
-        actions = self.table[key]
-        return {
-            "text": json.dumps({"actions": actions}),
-            "finish_reason": "stop",
-            "response_model": model,
-            "usage": {"prompt_tokens": len(user) // 4,
-                      "completion_tokens": 3 * len(actions)},
-            "request_sha256": hashlib.sha256(json.dumps(
-                {"backend": self.backend_name, "model": model,
-                 "system": system, "user": user, "seed": seed,
-                 "max_tokens": max_tokens}, sort_keys=True).encode()).hexdigest(),
-            "cached": False,
+    budget = f2.Budget(args.max_live_calls)
+    donor = f2.CachedOpenAIChat(endpoint_v1, budget)
+    receiver = f2.CachedOpenAIChat(receiver_endpoint_v1, budget)
+    aborted = None
+    try:
+        # donor re-solves train worlds (canary-identical bodies: cache hits)
+        donor_rows = [solve(donor, args.donor_model, w, None,
+                            args.seed, args.max_tokens) for w in train_worlds]
+        store = build_donor_lesson_store(train_worlds, donor_rows)
+        raw_block = render_lesson_block([e["text"] for e in store])
+        receipt["donor_train"] = {
+            "n_worlds": len(train_worlds),
+            "n_solved": sum(r["correct"] for r in donor_rows),
+            "solved_worlds": [r["world_id"] for r in donor_rows if r["correct"]],
+            "failed_worlds": [r["world_id"] for r in donor_rows
+                              if not r["correct"]],
+            "lesson_store_size": len(store),
         }
+
+        abs_res = abstract_lessons(donor, args.donor_model, raw_block,
+                                   args.seed, args.max_tokens)
+        ok_row = next((r for r in donor_rows if r["correct"]), None)
+        fail_row = next((r for r in donor_rows if not r["correct"]), None)
+        if ok_row is None:
+            raise ArmsError("donor solved no train world — no lesson store")
+        if fail_row is not None:
+            fail_world = train_worlds[[w["world_id"] for w in train_worlds]
+                                      .index(fail_row["world_id"])]
+            con_res = contrast_lessons(donor, args.donor_model, fail_world,
+                                       ok_row, fail_row, fail_row["reason"],
+                                       args.seed, args.max_tokens)
+            receipt["contrast_pair"] = {"success": ok_row["world_id"],
+                                        "failure": fail_row["world_id"],
+                                        "synthetic_failure": False}
+        else:  # no donor failure: synthetic batching trajectory as the pair
+            fail_world = train_worlds[0]
+            synth_actions = fw.naive_batch_solver(fail_world)
+            _ok, synth_reason = fw.verify_solution(fail_world, synth_actions)
+            con_res = contrast_lessons(
+                donor, args.donor_model, fail_world, ok_row,
+                {"actions": synth_actions}, synth_reason,
+                args.seed, args.max_tokens)
+            receipt["contrast_pair"] = {"success": ok_row["world_id"],
+                                        "failure": "synthetic_naive_batch",
+                                        "synthetic_failure": True}
+
+        bself = bself_lessons(receiver, args.receiver_model, mid_world,
+                              args.seed, args.max_tokens)
+        bself_block = render_lesson_block(bself["lessons"]) if bself["lessons"] \
+            else ""
+        receipt["b_self"] = {"mid_world": mid_world["world_id"],
+                             "mid_solve_correct": bself["solve_row"]["correct"],
+                             "n_lessons": len(bself["lessons"])}
+
+        arm_blocks: dict[str, str | None] = {
+            "a_no_memory": None,
+            "c_abstracted": render_lesson_block(abs_res["lessons"]),
+            "d_contrast": render_lesson_block(con_res["lessons"]),
+            "e_b_self": bself_block,
+        }
+        # placebo parity reference = the (b) block on the first test world
+        ref_lessons = retrieve_topk(fw.render_prompt(test_worlds[0]), store)
+        b_ref_block = render_lesson_block([e["text"] for e in ref_lessons])
+        arm_blocks["f_placebo"] = build_placebo(b_ref_block, f"{args.seed}")
+        receipt["placebo"] = {
+            "reference_block_chars": len(b_ref_block),
+            "placebo_block_chars": len(arm_blocks["f_placebo"]),
+            "band": [0.85, 1.15],
+        }
+
+        arms_out: dict[str, dict] = {}
+        for arm in ARMS:
+            rows = []
+            for world in test_worlds:
+                if arm == "b_naive_donor":
+                    lessons = retrieve_topk(fw.render_prompt(world), store)
+                elif arm == "c_abstracted":
+                    lessons = [{"lesson_id": "abstracted-0",
+                                "text": t} for t in abs_res["lessons"]]
+                elif arm == "d_contrast":
+                    lessons = [{"lesson_id": "contrast-0",
+                                "text": t} for t in con_res["lessons"]]
+                elif arm == "e_b_self":
+                    lessons = [{"lesson_id": f"bself-{i}", "text": t}
+                               for i, t in enumerate(bself["lessons"])]
+                else:
+                    lessons = []
+                dropped: list[dict] = []
+                if arm in GATE_ARMS and args.gate and lessons:
+                    lessons, dropped = disagreement_gate(lessons, world)
+                if arm in ("a_no_memory",):
+                    block = None
+                elif arm == "f_placebo":
+                    block = arm_blocks["f_placebo"]
+                elif arm in ("b_naive_donor", "c_abstracted",
+                             "d_contrast", "e_b_self"):
+                    block = render_lesson_block([e["text"] for e in lessons]) \
+                        if lessons else None
+                row = solve(receiver, args.receiver_model, world, block,
+                            args.seed, args.max_tokens)
+                row["n_context_lessons"] = len(lessons)
+                row["gate_dropped"] = dropped
+                row["track_tag"] = _track_tag(row, lessons)
+                rows.append(row)
+            vec = [r["correct"] for r in rows]
+            arms_out[arm] = {
+                "rows": rows, "correct_vector": [int(v) for v in vec],
+                "accuracy": round(sum(vec) / len(vec), 4) if rows else None,
+                "block_chars": len(arm_blocks.get(arm) or ""),
+            }
+
+        acc = {arm: v["accuracy"] for arm, v in arms_out.items()}
+        vectors = {arm: v["correct_vector"] for arm, v in arms_out.items()}
+        receipt["arms"] = arms_out
+        receipt["metrics"] = {
+            "accuracies": acc,
+            "trr": {arm: _r2(compute_trr(acc[arm], acc["a_no_memory"],
+                                         acc["e_b_self"]))
+                    for arm in ("b_naive_donor", "c_abstracted", "d_contrast",
+                                "f_placebo")},
+            "negative_transfer_rate": {
+                arm: _r2(negative_transfer_rate(vectors[arm],
+                                                vectors["a_no_memory"]))
+                for arm in ARMS if arm != "a_no_memory"},
+            "placebo_minus_no_mem": _r2(acc["f_placebo"] - acc["a_no_memory"]),
+            "note": "n=2 wiring smoke — values are not a measurement.",
+        }
+        receipt["kill_condition_observations"] = evaluate_kill_conditions(
+            acc, vectors, n_boot=args.n_boot, seed=args.seed)
+    except (ArmsError, f2.BudgetExceeded) as err:
+        aborted = str(err)
+    except Exception as err:  # noqa: BLE001
+        aborted = f"{type(err).__name__}: {err}"
+
+    receipt["llm_budget"] = {
+        "max_calls": args.max_live_calls, "used": budget.used,
+        "donor": {"model": args.donor_model, "url": endpoint_v1,
+                  "misses": donor.misses, "hits": donor.hits},
+        "receiver": {"model": args.receiver_model, "url": receiver_endpoint_v1,
+                     "misses": receiver.misses, "hits": receiver.hits},
+    }
+    receipt["aborted"] = aborted
+    receipt["wall_clock_s"] = round(time.time() - t0, 1)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(receipt, indent=1, ensure_ascii=False) + "\n",
+                        encoding="utf-8")
+    print(json.dumps({
+        "receipt": str(out_path), "aborted": aborted,
+        "leakage": receipt["leakage"]["binding_verdict"],
+        "donor_train": receipt.get("donor_train"),
+        "accuracies": receipt.get("metrics", {}).get("accuracies"),
+        "trr": receipt.get("metrics", {}).get("trr"),
+        "kills": {k: v.get("fired") for k, v in
+                  receipt.get("kill_condition_observations", {}).items()
+                  if k.startswith("k")},
+        "calls": receipt["llm_budget"], "wall_clock_s": receipt["wall_clock_s"],
+    }, indent=1, ensure_ascii=False))
+    return 0 if aborted is None else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

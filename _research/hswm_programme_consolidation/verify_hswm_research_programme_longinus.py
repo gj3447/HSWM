@@ -60,6 +60,51 @@ def safe_path(root_name: str, relative: str) -> Path:
     return candidate
 
 
+def verify_git_provenance(programme: dict[str, Any], root: Path = HSWM_ROOT) -> str:
+    """Verify commit ancestry locally or the immutable sync envelope on Proxmox.
+
+    Snapshot sync intentionally excludes ``.git``.  Treating that absence as a
+    failed Git ancestry check makes the registered verifier unreplayable on the
+    adjudication host.  The fallback is allowed only inside the exact generated
+    GIT/HSWM snapshot path and requires a verified, non-stale sync receipt; the
+    per-file Longinus hashes remain the content identity check.
+    """
+
+    base_commit = programme["active_code_root"]["git_base_commit"]
+    if (root / ".git").exists():
+        ancestor = subprocess.run(
+            ["git", "merge-base", "--is-ancestor", base_commit, "HEAD"],
+            cwd=root,
+            check=False,
+        )
+        if ancestor.returncode != 0:
+            raise BindingError(f"git base commit is not an ancestor of HEAD: {base_commit}")
+        return "GIT_ANCESTOR"
+
+    suffix = "/COMPAT_SOURCES/CDROOT/SYMPOSIUM/GIT/HSWM"
+    if not root.as_posix().endswith(suffix):
+        raise BindingError(f"git metadata absent outside an approved snapshot root: {root}")
+    snapshot = next(
+        (
+            parent
+            for parent in (root, *root.parents)
+            if parent.name.startswith("research-")
+            and (parent / "RUNTIME_EVIDENCE/SYNC_RECEIPT.json").is_file()
+        ),
+        None,
+    )
+    if snapshot is None:
+        raise BindingError("snapshot Git fallback has no sync receipt")
+    receipt = json.loads(
+        (snapshot / "RUNTIME_EVIDENCE/SYNC_RECEIPT.json").read_text(encoding="utf-8")
+    )
+    if receipt.get("verified") is not True or receipt.get("snapshot") != str(snapshot):
+        raise BindingError("snapshot sync receipt is not exact and verified")
+    if "COMPAT_SOURCES/CDROOT/SYMPOSIUM/GIT" in receipt.get("stale_mappings", []):
+        raise BindingError("GIT snapshot mapping is explicitly stale")
+    return "SNAPSHOT_CONTENT_HASH_PLUS_SYNC_RECEIPT"
+
+
 def python_symbol_range(path: Path, symbol: str) -> tuple[int, int]:
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     matches = [
@@ -156,14 +201,7 @@ def validate_manifest(manifest: dict[str, Any], *, inject_negative: bool = True)
     programme = manifest["programme"]
     if programme["relationship"] != "HAS_CONTRACT":
         raise BindingError("programme contract relationship drift")
-    base_commit = programme["active_code_root"]["git_base_commit"]
-    ancestor = subprocess.run(
-        ["git", "merge-base", "--is-ancestor", base_commit, "HEAD"],
-        cwd=HSWM_ROOT,
-        check=False,
-    )
-    if ancestor.returncode != 0:
-        raise BindingError(f"git base commit is not an ancestor of HEAD: {base_commit}")
+    provenance_mode = verify_git_provenance(programme)
 
     predecessors = manifest["predecessor_manifests"]
     if len(predecessors) < 3:
@@ -220,6 +258,7 @@ def validate_manifest(manifest: dict[str, Any], *, inject_negative: bool = True)
         "predecessors_verified": len(predecessors),
         "required_gaps_preserved": len(required_gap_ids),
         "injected_negative_caught": negative_caught,
+        "git_provenance_mode": provenance_mode,
         "scientific_status": "UNJUDGED",
     }
 

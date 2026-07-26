@@ -73,3 +73,46 @@ def test_reordered_longinus_chain_is_rejected(manifest: dict) -> None:
     chain["kg_node"] = kg_node
     with pytest.raises(MODULE.BindingError, match="seven-layer chain"):
         MODULE.validate_manifest(broken, inject_negative=False)
+
+
+def test_verified_proxmox_snapshot_is_accepted(manifest: dict, tmp_path: Path) -> None:
+    snapshot = tmp_path / "research-20260726-230000"
+    fake_hswm = snapshot / "COMPAT_SOURCES/CDROOT/SYMPOSIUM/GIT/HSWM"
+    fake_hswm.mkdir(parents=True)
+    receipt_path = snapshot / "RUNTIME_EVIDENCE/SYNC_RECEIPT.json"
+    receipt_path.parent.mkdir()
+    receipt_path.write_text(
+        json.dumps(
+            {
+                "snapshot": str(snapshot),
+                "verified": True,
+                "stale_mappings": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    mode = MODULE.verify_git_provenance(manifest["programme"], root=fake_hswm)
+
+    assert mode == "SNAPSHOT_CONTENT_HASH_PLUS_SYNC_RECEIPT"
+
+
+def test_stale_proxmox_snapshot_is_rejected(manifest: dict, tmp_path: Path) -> None:
+    snapshot = tmp_path / "research-20260726-230001"
+    fake_hswm = snapshot / "COMPAT_SOURCES/CDROOT/SYMPOSIUM/GIT/HSWM"
+    fake_hswm.mkdir(parents=True)
+    receipt_path = snapshot / "RUNTIME_EVIDENCE/SYNC_RECEIPT.json"
+    receipt_path.parent.mkdir()
+    receipt_path.write_text(
+        json.dumps(
+            {
+                "snapshot": str(snapshot),
+                "verified": True,
+                "stale_mappings": ["COMPAT_SOURCES/CDROOT/SYMPOSIUM/GIT"],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(MODULE.BindingError, match="explicitly stale"):
+        MODULE.verify_git_provenance(manifest["programme"], root=fake_hswm)

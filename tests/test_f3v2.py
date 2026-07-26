@@ -63,9 +63,11 @@ def test_tier_shapes():
     for w in _worlds("mid"):
         assert len(w["items"]) == 2
         assert w["ladder"] == ["cleanse", "heat", "charge"]
+        assert all(order == w["ladder"] for order in w["ladders"].values())
         assert w["constraints"]["cooling"] is False
         assert w["constraints"]["blast_enabled"] is False
         assert w["constraints"]["decay_k"] is None
+        assert w["constraints"]["per_ore_orders"] is False
     for w in _worlds("hard"):
         assert len(w["items"]) in (4, 5)  # retuned 3-4 -> 4-5, 2026-07-26
         assert w["ladder"] == ["cleanse", "heat", "charge", "inscribe"]
@@ -73,7 +75,15 @@ def test_tier_shapes():
         assert w["constraints"]["blast_enabled"] is True
         assert w["constraints"]["reheat_ruin"] is True
         assert w["constraints"]["decay_k"] in (3, 4)
+        assert w["constraints"]["per_ore_orders"] is True
         assert w["optimal_len"] > 16  # meaningfully deeper than mid (7)
+        # mechanism lever 2026-07-26 (b): per-ore non-uniform orders
+        orders = list(w["ladders"].values())
+        assert len(orders) == len(w["items"])
+        for order in orders:
+            assert sorted(order) == sorted(w["ladder"])  # a permutation
+            assert order.index("heat") < order.index("charge")  # no suicide
+        assert len({tuple(o) for o in orders}) >= 2  # never one shared order
 
 
 def test_verb_batching_passes_mid_but_fails_hard():
@@ -97,8 +107,10 @@ def test_blast_shortcut_fails_on_hard():
 def test_rule_violations_are_caught():
     w = fw.generate_world(seed=1, tier="hard", world_idx=0)
     item = w["items"][0]
-    # heat before cleanse violates the precondition ladder
-    ok, reason = fw.verify_solution(w, [f"heat({item})"])
+    # applying the SECOND step of an ore's own order directly violates its
+    # precondition (the first step's flag is missing)
+    second = w["ladders"][item][1]
+    ok, reason = fw.verify_solution(w, [f"{second}({item})"])
     assert not ok and "requires" in reason
     # unknown ore is rejected
     ok, reason = fw.verify_solution(w, ["cleanse(zzz)"])
@@ -113,16 +125,25 @@ def test_rule_violations_are_caught():
 
 
 def test_drain_window_binding():
-    w = fw.generate_world(seed=1, tier="hard", world_idx=0)
+    # deterministic search: a hard world with an ore whose own order has
+    # charge immediately before inscribe (so inscribe's precondition is the
+    # primed flag that drain clears)
+    target = None
+    for w in _worlds("hard"):
+        for ore, order in w["ladders"].items():
+            if order.index("inscribe") == order.index("charge") + 1:
+                other = next(i for i in w["items"] if i != ore)
+                target = (w, ore, other)
+                break
+        if target:
+            break
+    assert target, "no charge->inscribe ore in the deterministic world set"
+    w, a, b = target
     k = w["constraints"]["decay_k"]
-    a, b = w["items"][0], w["items"][1]
-    # prime a, then stall with >k other-ore actions before inscribing a
-    stall = []
-    # cleanse/heat alternate on b is impossible without cooling; use cleanse
-    # repetitions (always valid) to burn actions
-    stall = [f"cleanse({b})"] * (k + 1)
-    actions = [f"cleanse({a})", f"heat({a})", f"charge({a})"] + stall + \
-              [f"inscribe({a})"]
+    order_a = w["ladders"][a]
+    prime_steps = [f"{v}({a})" for v in order_a[: order_a.index("charge") + 1]]
+    stall_verb = w["ladders"][b][0]  # first step of b's order: always legal
+    actions = prime_steps + [f"{stall_verb}({b})"] * (k + 1) + [f"inscribe({a})"]
     ok, reason = fw.verify_solution(w, actions)
     assert not ok
     assert "requires primed" in reason  # drained before the inscribe

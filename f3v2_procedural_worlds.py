@@ -24,12 +24,22 @@ therefore generates "ritual foundry" worlds:
   "enforce atomic ladders; avoid blast / reheat / drain".
 
 Tiers: mid (2 ores, 3-step ladder, no interaction rules — weak models should
-mostly pass) and hard (3-4 ores, 4-step ladder, all interaction rules on —
+mostly pass) and hard (4-5 ores, 4-step ladder, all interaction rules on —
 designed so a weak model fails zero-shot but succeeds with the right lessons).
 The ZS prompt states the bare rule FACTS only; it never states the workflow
 strategy or the norms (those are exactly the (2)(3) lessons a donor must
 supply).  Determinism: everything derives from random.Random(f-string seeds);
 canonical JSON (sort_keys) is stable across runs.
+
+Prereg-sanctioned difficulty retunes (prereg §2 "미달 시 난이도 재조정"):
+* 2026-07-26: hard-tier ore count 3-4 -> 4-5.  Reason: canary adoption-gate
+  criterion-1 miss vs the real Qwen3-4B receiver — receiver ZS hard = 50%
+  (bar <= 30%), donor 100%, gap 50pp (receipt
+  receipts/f3v2_canary_gate_dev_1785038688.json).  All 4 receiver failures
+  were the planted cooling trap via verb-batching, so the knob that adds
+  heat/charge windows (ore count) moves; drain K / cap / ladder unchanged
+  (their failure modes were not observed).  Donor headroom was 100% vs the
+  >= 70% floor, so modest added difficulty is safe for criterion 2.
 
 Everything here is a DEVELOPMENT_ONLY harness component: measurements are
 grounded measurements, never scientific claims; judgment belongs to the gate.
@@ -91,7 +101,7 @@ def generate_world(*, seed: int, tier: str, world_idx: int) -> dict:
         raise WorldError(f"unknown tier {tier!r}")
     rng = _rng(seed, tier, world_idx)
     ladder = list(LADDER_MID if tier == "mid" else LADDER_HARD)
-    n_items = 2 if tier == "mid" else rng.choice((3, 4))
+    n_items = 2 if tier == "mid" else rng.choice((4, 5))
     items = _item_names(rng, n_items)
     constraints = {
         # heating one ore instantly cools every other heated ore (one crucible)

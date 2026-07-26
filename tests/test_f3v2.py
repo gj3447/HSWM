@@ -67,13 +67,13 @@ def test_tier_shapes():
         assert w["constraints"]["blast_enabled"] is False
         assert w["constraints"]["decay_k"] is None
     for w in _worlds("hard"):
-        assert len(w["items"]) in (3, 4)
+        assert len(w["items"]) in (4, 5)  # retuned 3-4 -> 4-5, 2026-07-26
         assert w["ladder"] == ["cleanse", "heat", "charge", "inscribe"]
         assert w["constraints"]["cooling"] is True
         assert w["constraints"]["blast_enabled"] is True
         assert w["constraints"]["reheat_ruin"] is True
         assert w["constraints"]["decay_k"] in (3, 4)
-        assert w["optimal_len"] > 8  # meaningfully deeper than mid (7)
+        assert w["optimal_len"] > 16  # meaningfully deeper than mid (7)
 
 
 def test_verb_batching_passes_mid_but_fails_hard():

@@ -1,0 +1,956 @@
+{
+ "schema_version": "hswm-f3v2-canary-gate-receipt/v1",
+ "mode": "development",
+ "stage": "DEVELOPMENT_ONLY",
+ "branch": "F3v2-harder-transfer",
+ "smoke": false,
+ "preregistration_file": "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md",
+ "preregistration_file_sha256": "e4e9c90652b1a8ad2a2de10909b6254ca6d476db2d935fe3536778a6b94f9a88",
+ "preregistration_status": "DRAFT — user ratify pending; machine-lock to prom_search_hswm/evidence/PREREG_f3v2_*.json happens only after ratify",
+ "script_sha256": "17d0a423a1ea0c45de6640289c696f713537d666551c7a2a9aceb1e8cd5e171d",
+ "harness_module_sha256": {
+  "f3v2_procedural_worlds.py": "59c81341dfeeaf3c6524cde53f55a8632487d53ff7f42389dda907b25736318d",
+  "f2_delta_w_credit.py": "3676724568fde19a752c07fdeabd9883ecfe04a3534ebf3f4d8fb2cc6b95c6e5"
+ },
+ "config": {
+  "endpoint": "http://192.168.219.102:8000",
+  "receiver_endpoint": "http://192.168.219.102:8001",
+  "donor_model": "qwen3.6-27b",
+  "receiver_model": "qwen3-4b-real",
+  "seed": 20260726,
+  "n": 8,
+  "max_tokens": 768,
+  "smoke": false,
+  "out": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/receipts/f3v2_canary_gate_dev_1785038973.json",
+  "endpoint_v1": "http://192.168.219.102:8000/v1",
+  "receiver_endpoint_v1": "http://192.168.219.102:8001/v1"
+ },
+ "donor_freeze": {
+  "backend": "vllm-openai-compat",
+  "url": "http://192.168.219.102:8000/v1",
+  "model": "qwen3.6-27b",
+  "thinking_off": "chat_template_kwargs enable_thinking=false"
+ },
+ "receiver_freeze": {
+  "backend": "vllm-openai-compat",
+  "url": "http://192.168.219.102:8001/v1",
+  "model": "qwen3-4b-real",
+  "thinking_off": "chat_template_kwargs enable_thinking=false",
+  "system_prompt_sha256": "4ca5dc3099fdf84694ecccc17e7fb6d8e153cfbe01f446f02e3f76647abaa859",
+  "seed": 20260726,
+  "temperature": 0,
+  "max_tokens": 768,
+  "note": "DEV STAND-IN for the sealed qwen3:14b receiver (pending dgx window); both models frozen, input channel only, identical prompts, simulator-scored. 2026-07-26 alias confound resolved: real Qwen3-4B served as qwen3-4b-real on its own container (root Qwen/Qwen3-4B per /v1/models), replacing the :8000 alias that shared donor weights."
+ },
+ "honesty": "grounded measurement only; no scientific claim; judgment is the gate's. DEVELOPMENT_ONLY: nothing sealed.",
+ "thresholds": {
+  "receiver_zs_hard_max": 0.3,
+  "donor_zs_hard_min": 0.7,
+  "baseline_gap_min_pp": 15.0
+ },
+ "worlds": [
+  {
+   "world_id": "f3v2-hard-0",
+   "seed": 20260726,
+   "n_items": 5,
+   "items": [
+    "ashite",
+    "draane",
+    "ostar",
+    "toros",
+    "toryx"
+   ],
+   "optimal_len": 21,
+   "step_cap": 25,
+   "constraints": {
+    "cooling": true,
+    "reheat_ruin": true,
+    "decay_k": 4,
+    "blast_enabled": true
+   },
+   "watermark": "c4bf3c163b63f0c3",
+   "world_sha256": "3b72e1d06d7322e25b0f7350b5cb046adb600860b5988f37ffbf9d7f9b66e3f2"
+  },
+  {
+   "world_id": "f3v2-hard-1",
+   "seed": 20260726,
+   "n_items": 5,
+   "items": [
+    "brenium",
+    "narar",
+    "ostos",
+    "sylil",
+    "zelyx"
+   ],
+   "optimal_len": 21,
+   "step_cap": 25,
+   "constraints": {
+    "cooling": true,
+    "reheat_ruin": true,
+    "decay_k": 3,
+    "blast_enabled": true
+   },
+   "watermark": "9ec0b50bf744031d",
+   "world_sha256": "1a701879150eb2dd68fe0fa8ef5bf6a9130042748124ddc6e73ef3ee50af5a3d"
+  },
+  {
+   "world_id": "f3v2-hard-2",
+   "seed": 20260726,
+   "n_items": 5,
+   "items": [
+    "mieth",
+    "morek",
+    "quaium",
+    "quayx",
+    "vorneth"
+   ],
+   "optimal_len": 21,
+   "step_cap": 25,
+   "constraints": {
+    "cooling": true,
+    "reheat_ruin": true,
+    "decay_k": 3,
+    "blast_enabled": true
+   },
+   "watermark": "17554a62e4d6efb6",
+   "world_sha256": "46ae9771cc0c9c5315af9b3fb18c00de449a68c1770308123ee9164542bd0174"
+  },
+  {
+   "world_id": "f3v2-hard-3",
+   "seed": 20260726,
+   "n_items": 5,
+   "items": [
+    "kelos",
+    "kelum",
+    "narek",
+    "velum",
+    "vornane"
+   ],
+   "optimal_len": 21,
+   "step_cap": 25,
+   "constraints": {
+    "cooling": true,
+    "reheat_ruin": true,
+    "decay_k": 3,
+    "blast_enabled": true
+   },
+   "watermark": "1c5e5c89dd3c16ef",
+   "world_sha256": "07eebc5bb9e0fe81cace6a5527d7406c338412b4ca9a783e84df0ae631f789f8"
+  },
+  {
+   "world_id": "f3v2-hard-4",
+   "seed": 20260726,
+   "n_items": 5,
+   "items": [
+    "brenite",
+    "glimium",
+    "quaite",
+    "sylium",
+    "zelyx"
+   ],
+   "optimal_len": 21,
+   "step_cap": 25,
+   "constraints": {
+    "cooling": true,
+    "reheat_ruin": true,
+    "decay_k": 4,
+    "blast_enabled": true
+   },
+   "watermark": "2b0bc251064191c9",
+   "world_sha256": "bc39142de1c0ad1122daf040ea6ec2522090c7e489058484336da804c72f3bc9"
+  },
+  {
+   "world_id": "f3v2-hard-5",
+   "seed": 20260726,
+   "n_items": 4,
+   "items": [
+    "brenek",
+    "kelane",
+    "quaium",
+    "vornyx"
+   ],
+   "optimal_len": 17,
+   "step_cap": 21,
+   "constraints": {
+    "cooling": true,
+    "reheat_ruin": true,
+    "decay_k": 4,
+    "blast_enabled": true
+   },
+   "watermark": "3100859bfa706fc8",
+   "world_sha256": "3c889d16048dbfd4dacc79db43c56c40bca4d4b13f55a3362b7354faab14a627"
+  },
+  {
+   "world_id": "f3v2-hard-6",
+   "seed": 20260726,
+   "n_items": 4,
+   "items": [
+    "ashite",
+    "glimum",
+    "quaite",
+    "thuil"
+   ],
+   "optimal_len": 17,
+   "step_cap": 21,
+   "constraints": {
+    "cooling": true,
+    "reheat_ruin": true,
+    "decay_k": 4,
+    "blast_enabled": true
+   },
+   "watermark": "1a68887d4e7777ef",
+   "world_sha256": "8c962ba6c103b5c771cf53ae8afeb3789a5377dd562a92e2ffb40ffd4a3924c0"
+  },
+  {
+   "world_id": "f3v2-hard-7",
+   "seed": 20260726,
+   "n_items": 5,
+   "items": [
+    "morek",
+    "ostyx",
+    "quaeth",
+    "thueth",
+    "vornyx"
+   ],
+   "optimal_len": 21,
+   "step_cap": 25,
+   "constraints": {
+    "cooling": true,
+    "reheat_ruin": true,
+    "decay_k": 3,
+    "blast_enabled": true
+   },
+   "watermark": "67513224f113de52",
+   "world_sha256": "04402db11f4fe9f60e62089bef3759b4946c3b94bdc8bdc868b3371b56b439fd"
+  }
+ ],
+ "models_served": {
+  "donor_endpoint": "http://192.168.219.102:8000/v1",
+  "donor": {
+   "object": "list",
+   "data": [
+    {
+     "id": "qwen3.6-27b",
+     "object": "model",
+     "created": 1785038973,
+     "owned_by": "vllm",
+     "root": "Qwen/Qwen3.6-27B",
+     "parent": null,
+     "max_model_len": 24576,
+     "permission": [
+      {
+       "id": "modelperm-9dbc80a2bd210aff",
+       "object": "model_permission",
+       "created": 1785038973,
+       "allow_create_engine": false,
+       "allow_sampling": true,
+       "allow_logprobs": true,
+       "allow_search_indices": false,
+       "allow_view": true,
+       "allow_fine_tuning": false,
+       "organization": "*",
+       "group": null,
+       "is_blocking": false
+      }
+     ]
+    },
+    {
+     "id": "qwen3-4b",
+     "object": "model",
+     "created": 1785038973,
+     "owned_by": "vllm",
+     "root": "Qwen/Qwen3.6-27B",
+     "parent": null,
+     "max_model_len": 24576,
+     "permission": [
+      {
+       "id": "modelperm-a23e9393e0ef60d1",
+       "object": "model_permission",
+       "created": 1785038973,
+       "allow_create_engine": false,
+       "allow_sampling": true,
+       "allow_logprobs": true,
+       "allow_search_indices": false,
+       "allow_view": true,
+       "allow_fine_tuning": false,
+       "organization": "*",
+       "group": null,
+       "is_blocking": false
+      }
+     ]
+    }
+   ]
+  },
+  "receiver_endpoint": "http://192.168.219.102:8001/v1",
+  "receiver": {
+   "object": "list",
+   "data": [
+    {
+     "id": "qwen3-4b-real",
+     "object": "model",
+     "created": 1785038973,
+     "owned_by": "vllm",
+     "root": "Qwen/Qwen3-4B",
+     "parent": null,
+     "max_model_len": 8192,
+     "permission": [
+      {
+       "id": "modelperm-be3d14c4014ab530",
+       "object": "model_permission",
+       "created": 1785038973,
+       "allow_create_engine": false,
+       "allow_sampling": true,
+       "allow_logprobs": true,
+       "allow_search_indices": false,
+       "allow_view": true,
+       "allow_fine_tuning": false,
+       "organization": "*",
+       "group": null,
+       "is_blocking": false
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "measurements": {
+  "receiver_zs_hard_accuracy": 0.625,
+  "donor_zs_hard_accuracy": 1.0,
+  "baseline_gap_pp": 37.5,
+  "receiver": {
+   "model": "qwen3-4b-real",
+   "n": 8,
+   "n_correct": 5,
+   "accuracy": 0.625,
+   "rows": [
+    {
+     "world_id": "f3v2-hard-0",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(ashite)",
+      "heat(ashite)",
+      "charge(ashite)",
+      "inscribe(ashite)",
+      "cleanse(draane)",
+      "heat(draane)",
+      "charge(draane)",
+      "inscribe(draane)",
+      "cleanse(ostar)",
+      "heat(ostar)",
+      "charge(ostar)",
+      "inscribe(ostar)",
+      "cleanse(toros)",
+      "heat(toros)",
+      "charge(toros)",
+      "inscribe(toros)",
+      "cleanse(toryx)",
+      "heat(toryx)",
+      "charge(toryx)",
+      "inscribe(toryx)",
+      "fuse"
+     ],
+     "correct": true,
+     "reason": "ok",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 394,
+      "completion_tokens": 137
+     },
+     "request_sha256": "0664ced2ac81d4a5ef14e31dbbd1a3746ea96263dc4382157e03c7e46e2581ee"
+    },
+    {
+     "world_id": "f3v2-hard-1",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(brenium)",
+      "heat(brenium)",
+      "charge(brenium)",
+      "inscribe(brenium)",
+      "cleanse(narar)",
+      "heat(narar)",
+      "charge(narar)",
+      "inscribe(narar)",
+      "cleanse(ostos)",
+      "heat(ostos)",
+      "charge(ostos)",
+      "inscribe(ostos)",
+      "cleanse(sylil)",
+      "heat(sylil)",
+      "charge(sylil)",
+      "inscribe(sylil)",
+      "cleanse(zelyx)",
+      "heat(zelyx)",
+      "charge(zelyx)",
+      "inscribe(zelyx)",
+      "fuse"
+     ],
+     "correct": true,
+     "reason": "ok",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 394,
+      "completion_tokens": 164
+     },
+     "request_sha256": "c1ab26fb0dd85a3806bbec9b2fe83f52e386130c2ed9e0a3ce276e8f8e1b857d"
+    },
+    {
+     "world_id": "f3v2-hard-2",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(mieth)",
+      "heat(mieth)",
+      "charge(mieth)",
+      "inscribe(mieth)",
+      "cleanse(morek)",
+      "heat(morek)",
+      "charge(morek)",
+      "inscribe(morek)",
+      "cleanse(quaium)",
+      "heat(quaium)",
+      "charge(quaium)",
+      "inscribe(quaium)",
+      "cleanse(quayx)",
+      "heat(quayx)",
+      "charge(quayx)",
+      "inscribe(quayx)",
+      "cleanse(vorneth)",
+      "heat(vorneth)",
+      "charge(vorneth)",
+      "inscribe(vorneth)",
+      "fuse"
+     ],
+     "correct": true,
+     "reason": "ok",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 394,
+      "completion_tokens": 160
+     },
+     "request_sha256": "886ba42f5d002bf09517a093ff4031ac978b56716c0975a6eb014ec3159a1ac2"
+    },
+    {
+     "world_id": "f3v2-hard-3",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(kelos)",
+      "heat(kelos)",
+      "charge(kelos)",
+      "inscribe(kelos)",
+      "cleanse(kelum)",
+      "heat(kelum)",
+      "charge(kelum)",
+      "inscribe(kelum)",
+      "cleanse(narek)",
+      "heat(narek)",
+      "charge(narek)",
+      "inscribe(narek)",
+      "cleanse(velum)",
+      "heat(velum)",
+      "charge(velum)",
+      "inscribe(velum)",
+      "cleanse(vornane)",
+      "heat(vornane)",
+      "charge(vornane)",
+      "inscribe(vornane)",
+      "fuse"
+     ],
+     "correct": true,
+     "reason": "ok",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 394,
+      "completion_tokens": 137
+     },
+     "request_sha256": "c247f069a97cb4a088be0fc3bed9afd4acd678089af084d56f897a2675c9f358"
+    },
+    {
+     "world_id": "f3v2-hard-4",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(brenite)",
+      "heat(brenite)",
+      "charge(brenite)",
+      "inscribe(brenite)",
+      "cleanse(glimium)",
+      "heat(glimium)",
+      "charge(glimium)",
+      "inscribe(glimium)",
+      "cleanse(quaite)",
+      "heat(quaite)",
+      "charge(quaite)",
+      "inscribe(quaite)",
+      "cleanse(sylium)",
+      "heat(sylium)",
+      "charge(sylium)",
+      "inscribe(sylium)",
+      "cleanse(zelyx)",
+      "heat(zelyx)",
+      "charge(zelyx)",
+      "inscribe(zelyx)",
+      "fuse"
+     ],
+     "correct": true,
+     "reason": "ok",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 397,
+      "completion_tokens": 168
+     },
+     "request_sha256": "3e3eb04ba768e11975af332d0d4bbccf6c6eb6a97f63d4e7bcc8c3d1af601533"
+    },
+    {
+     "world_id": "f3v2-hard-5",
+     "n_items": 4,
+     "optimal_len": 17,
+     "step_cap": 21,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(brenek)",
+      "cleanse(kelane)",
+      "cleanse(quaium)",
+      "cleanse(vornyx)",
+      "heat(brenek)",
+      "heat(kelane)",
+      "heat(quaium)",
+      "heat(vornyx)",
+      "charge(brenek)",
+      "charge(kelane)",
+      "charge(quaium)",
+      "charge(vornyx)",
+      "inscribe(brenek)",
+      "inscribe(kelane)",
+      "inscribe(quaium)",
+      "inscribe(vornyx)",
+      "fuse"
+     ],
+     "correct": false,
+     "reason": "charge(brenek) requires heated",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 391,
+      "completion_tokens": 134
+     },
+     "request_sha256": "08f6f29f9623fb78a00b837b26d15a42dd0d329c7930441fb8cf2a8be88309f5"
+    },
+    {
+     "world_id": "f3v2-hard-6",
+     "n_items": 4,
+     "optimal_len": 17,
+     "step_cap": 21,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(ashite)",
+      "cleanse(glimum)",
+      "cleanse(quaite)",
+      "cleanse(thuil)",
+      "heat(ashite)",
+      "heat(glimum)",
+      "heat(quaite)",
+      "heat(thuil)",
+      "charge(ashite)",
+      "charge(glimum)",
+      "charge(quaite)",
+      "charge(thuil)",
+      "inscribe(ashite)",
+      "inscribe(glimum)",
+      "inscribe(quaite)",
+      "inscribe(thuil)",
+      "fuse"
+     ],
+     "correct": false,
+     "reason": "charge(ashite) requires heated",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 388,
+      "completion_tokens": 126
+     },
+     "request_sha256": "a7b6fe263b6318acfb61b114287303215cd5f5f322b3299a06ec58016ba434d3"
+    },
+    {
+     "world_id": "f3v2-hard-7",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(morek)",
+      "heat(morek)",
+      "charge(morek)",
+      "inscribe(morek)",
+      "cleanse(ostyx)",
+      "heat(ostyx)",
+      "charge(ostyx)",
+      "inscribe(ostyx)",
+      "cleanse(quaueth)",
+      "heat(quaueth)",
+      "charge(quaueth)",
+      "inscribe(quaueth)",
+      "cleanse(thueth)",
+      "heat(thueth)",
+      "charge(thueth)",
+      "inscribe(thueth)",
+      "cleanse(vornyx)",
+      "heat(vornyx)",
+      "charge(vornyx)",
+      "inscribe(vornyx)",
+      "fuse"
+     ],
+     "correct": false,
+     "reason": "unknown ore 'quaueth'",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 393,
+      "completion_tokens": 164
+     },
+     "request_sha256": "e17338c4a144bf26f95cc9146caba8d674328cc671d24a0ecb2159ed56cad9e4"
+    }
+   ]
+  },
+  "donor": {
+   "model": "qwen3.6-27b",
+   "n": 8,
+   "n_correct": 8,
+   "accuracy": 1.0,
+   "rows": [
+    {
+     "world_id": "f3v2-hard-0",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(ashite)",
+      "heat(ashite)",
+      "charge(ashite)",
+      "inscribe(ashite)",
+      "cleanse(draane)",
+      "heat(draane)",
+      "charge(draane)",
+      "inscribe(draane)",
+      "cleanse(ostar)",
+      "heat(ostar)",
+      "charge(ostar)",
+      "inscribe(ostar)",
+      "cleanse(toros)",
+      "heat(toros)",
+      "charge(toros)",
+      "inscribe(toros)",
+      "cleanse(toryx)",
+      "heat(toryx)",
+      "charge(toryx)",
+      "inscribe(toryx)",
+      "fuse"
+     ],
+     "correct": true,
+     "reason": "ok",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 409,
+      "completion_tokens": 157
+     },
+     "request_sha256": "43b8b284ed8d64b4ef21677caa3ed83b8aaa095dc8a345f76082f6fc37d82405"
+    },
+    {
+     "world_id": "f3v2-hard-1",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(brenium)",
+      "heat(brenium)",
+      "charge(brenium)",
+      "inscribe(brenium)",
+      "cleanse(narar)",
+      "heat(narar)",
+      "charge(narar)",
+      "inscribe(narar)",
+      "cleanse(ostos)",
+      "heat(ostos)",
+      "charge(ostos)",
+      "inscribe(ostos)",
+      "cleanse(sylil)",
+      "heat(sylil)",
+      "charge(sylil)",
+      "inscribe(sylil)",
+      "cleanse(zelyx)",
+      "heat(zelyx)",
+      "charge(zelyx)",
+      "inscribe(zelyx)",
+      "fuse"
+     ],
+     "correct": true,
+     "reason": "ok",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 408,
+      "completion_tokens": 161
+     },
+     "request_sha256": "f423e816280c8a6ac74e72f2c05cfe5d7014380fad88f64fe43725cd547be457"
+    },
+    {
+     "world_id": "f3v2-hard-2",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(mieth)",
+      "heat(mieth)",
+      "charge(mieth)",
+      "inscribe(mieth)",
+      "cleanse(morek)",
+      "heat(morek)",
+      "charge(morek)",
+      "inscribe(morek)",
+      "cleanse(quaium)",
+      "heat(quaium)",
+      "charge(quaium)",
+      "inscribe(quaium)",
+      "cleanse(quayx)",
+      "heat(quayx)",
+      "charge(quayx)",
+      "inscribe(quayx)",
+      "cleanse(vorneth)",
+      "heat(vorneth)",
+      "charge(vorneth)",
+      "inscribe(vorneth)",
+      "fuse"
+     ],
+     "correct": true,
+     "reason": "ok",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 407,
+      "completion_tokens": 161
+     },
+     "request_sha256": "685a0e6766734610844bfbba6763b0b3805f8e844fd6b14d6d3df67fb3b1e105"
+    },
+    {
+     "world_id": "f3v2-hard-3",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(kelos)",
+      "heat(kelos)",
+      "charge(kelos)",
+      "inscribe(kelos)",
+      "cleanse(kelum)",
+      "heat(kelum)",
+      "charge(kelum)",
+      "inscribe(kelum)",
+      "cleanse(narek)",
+      "heat(narek)",
+      "charge(narek)",
+      "inscribe(narek)",
+      "cleanse(velum)",
+      "heat(velum)",
+      "charge(velum)",
+      "inscribe(velum)",
+      "cleanse(vornane)",
+      "heat(vornane)",
+      "charge(vornane)",
+      "inscribe(vornane)",
+      "fuse"
+     ],
+     "correct": true,
+     "reason": "ok",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 407,
+      "completion_tokens": 157
+     },
+     "request_sha256": "9bf6374b4c96824d69e7759d1c68621ce3aa326e24c5982d84e76ead450f0081"
+    },
+    {
+     "world_id": "f3v2-hard-4",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(brenite)",
+      "heat(brenite)",
+      "charge(brenite)",
+      "inscribe(brenite)",
+      "cleanse(glimium)",
+      "heat(glimium)",
+      "charge(glimium)",
+      "inscribe(glimium)",
+      "cleanse(quaite)",
+      "heat(quaite)",
+      "charge(quaite)",
+      "inscribe(quaite)",
+      "cleanse(sylium)",
+      "heat(sylium)",
+      "charge(sylium)",
+      "inscribe(sylium)",
+      "cleanse(zelyx)",
+      "heat(zelyx)",
+      "charge(zelyx)",
+      "inscribe(zelyx)",
+      "fuse"
+     ],
+     "correct": true,
+     "reason": "ok",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 412,
+      "completion_tokens": 165
+     },
+     "request_sha256": "51c16b56333aae1f8eb1ef54e94b8d40d3888e47edbae551894111e4147451ff"
+    },
+    {
+     "world_id": "f3v2-hard-5",
+     "n_items": 4,
+     "optimal_len": 17,
+     "step_cap": 21,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(brenek)",
+      "heat(brenek)",
+      "charge(brenek)",
+      "inscribe(brenek)",
+      "cleanse(kelane)",
+      "heat(kelane)",
+      "charge(kelane)",
+      "inscribe(kelane)",
+      "cleanse(quaium)",
+      "heat(quaium)",
+      "charge(quaium)",
+      "inscribe(quaium)",
+      "cleanse(vornyx)",
+      "heat(vornyx)",
+      "charge(vornyx)",
+      "inscribe(vornyx)",
+      "fuse"
+     ],
+     "correct": true,
+     "reason": "ok",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 405,
+      "completion_tokens": 135
+     },
+     "request_sha256": "f301e6f953e9c491f6f108bbe2ff557ef9bf115befe011de7b99578fc085b024"
+    },
+    {
+     "world_id": "f3v2-hard-6",
+     "n_items": 4,
+     "optimal_len": 17,
+     "step_cap": 21,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(ashite)",
+      "heat(ashite)",
+      "charge(ashite)",
+      "inscribe(ashite)",
+      "cleanse(glimum)",
+      "heat(glimum)",
+      "charge(glimum)",
+      "inscribe(glimum)",
+      "cleanse(quaite)",
+      "heat(quaite)",
+      "charge(quaite)",
+      "inscribe(quaite)",
+      "cleanse(thuil)",
+      "heat(thuil)",
+      "charge(thuil)",
+      "inscribe(thuil)",
+      "fuse"
+     ],
+     "correct": true,
+     "reason": "ok",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 403,
+      "completion_tokens": 131
+     },
+     "request_sha256": "d379e177e573b0704901c03b7c41da4e70c69481dda66144cce59387321c3fa8"
+    },
+    {
+     "world_id": "f3v2-hard-7",
+     "n_items": 5,
+     "optimal_len": 21,
+     "step_cap": 25,
+     "parse_ok": true,
+     "actions": [
+      "cleanse(morek)",
+      "heat(morek)",
+      "charge(morek)",
+      "inscribe(morek)",
+      "cleanse(ostyx)",
+      "heat(ostyx)",
+      "charge(ostyx)",
+      "inscribe(ostyx)",
+      "cleanse(quaeth)",
+      "heat(quaeth)",
+      "charge(quaeth)",
+      "inscribe(quaeth)",
+      "cleanse(thueth)",
+      "heat(thueth)",
+      "charge(thueth)",
+      "inscribe(thueth)",
+      "cleanse(vornyx)",
+      "heat(vornyx)",
+      "charge(vornyx)",
+      "inscribe(vornyx)",
+      "fuse"
+     ],
+     "correct": true,
+     "reason": "ok",
+     "cached": false,
+     "usage": {
+      "prompt_tokens": 407,
+      "completion_tokens": 165
+     },
+     "request_sha256": "107bf38791b21b5f9738834f54fcf17a431b18e9472bd66432588dd5a4728373"
+    }
+   ]
+  }
+ },
+ "gate": {
+  "criteria": {
+   "receiver_zs_hard_le_30pct": false,
+   "donor_zs_hard_ge_70pct": true,
+   "baseline_gap_ge_15pp": true
+  },
+  "verdict": "FAIL",
+  "note": "adoption gate, prereg §2: (2)(3) knowledge must be underivable by the receiver without donor experience. FAIL -> retune difficulty knobs (n_items, ladder, decay_k, cap); sealed runs remain forbidden."
+ },
+ "llm_budget": {
+  "max_calls": 16,
+  "used": 16,
+  "donor": {
+   "model": "qwen3.6-27b",
+   "url": "http://192.168.219.102:8000/v1",
+   "misses": 8,
+   "hits": 0
+  },
+  "receiver": {
+   "model": "qwen3-4b-real",
+   "url": "http://192.168.219.102:8001/v1",
+   "misses": 8,
+   "hits": 0
+  }
+ },
+ "aborted": null,
+ "wall_clock_s": 405.9
+}

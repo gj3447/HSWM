@@ -116,3 +116,10 @@ def test_stale_proxmox_snapshot_is_rejected(manifest: dict, tmp_path: Path) -> N
 
     with pytest.raises(MODULE.BindingError, match="explicitly stale"):
         MODULE.verify_git_provenance(manifest["programme"], root=fake_hswm)
+
+
+def test_proxmox_snapshot_uses_catalogue_root(tmp_path: Path) -> None:
+    snapshot = tmp_path / "research-20260726-230002"
+    fake_hswm = snapshot / "COMPAT_SOURCES/CDROOT/SYMPOSIUM/GIT/HSWM"
+
+    assert MODULE.infer_symposium_root(fake_hswm) == snapshot

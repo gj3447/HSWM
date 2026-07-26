@@ -22,9 +22,20 @@ class BindingError(RuntimeError):
     """Raised when a seven-layer reference chain is incomplete or drifted."""
 
 
+SNAPSHOT_HSWM_PARTS = ("COMPAT_SOURCES", "CDROOT", "SYMPOSIUM", "GIT", "HSWM")
+
+
+def infer_symposium_root(hswm_root: Path) -> Path:
+    """Map the executable HSWM root to the local or synced SYMPOSIUM root."""
+
+    if tuple(hswm_root.parts[-len(SNAPSHOT_HSWM_PARTS) :]) == SNAPSHOT_HSWM_PARTS:
+        return hswm_root.parents[len(SNAPSHOT_HSWM_PARTS) - 1]
+    return hswm_root.parents[1]
+
+
 SCRIPT_PATH = Path(__file__).resolve()
 HSWM_ROOT = SCRIPT_PATH.parents[2]
-SYMPOSIUM_ROOT = HSWM_ROOT.parents[1]
+SYMPOSIUM_ROOT = infer_symposium_root(HSWM_ROOT)
 MANIFEST_PATH = HSWM_ROOT / "LONGINUS_HSWM_RESEARCH_PROGRAM_BINDING_2026-07-26.json"
 ROOTS = {"HSWM": HSWM_ROOT, "SYMPOSIUM": SYMPOSIUM_ROOT}
 CHAIN_FIELDS = (
@@ -81,7 +92,7 @@ def verify_git_provenance(programme: dict[str, Any], root: Path = HSWM_ROOT) -> 
             raise BindingError(f"git base commit is not an ancestor of HEAD: {base_commit}")
         return "GIT_ANCESTOR"
 
-    suffix = "/COMPAT_SOURCES/CDROOT/SYMPOSIUM/GIT/HSWM"
+    suffix = "/" + "/".join(SNAPSHOT_HSWM_PARTS)
     if not root.as_posix().endswith(suffix):
         raise BindingError(f"git metadata absent outside an approved snapshot root: {root}")
     snapshot = next(

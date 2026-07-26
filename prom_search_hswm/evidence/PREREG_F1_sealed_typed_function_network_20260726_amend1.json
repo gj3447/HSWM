@@ -1,0 +1,57 @@
+{
+ "schema_version": "hswm-preregistration/v1",
+ "programme": "PROM-9-HSWM-semantic-neural-network",
+ "branch": "F1-sealed-typed-function-network",
+ "registered_at": "2026-07-25T08:05:00Z",
+ "registered_by": "kimi-code-cli (user-approved sealed fire)",
+ "question": "Sealed n=100에서 typed HSWM 3-function network가 actual-compute-matched flat과 vector를 모두 이기고, 역할 제거/셔플에서 효과가 사라지는가?",
+ "cohort": {
+  "dataset": "framolfese/2WikiMultihopQA",
+  "split": "validation",
+  "offset": 4,
+  "length": 100,
+  "disjoint_from": "dev r1-r5 cohorts (offset 0, length 4)",
+  "source_receipt_sha256": "9e5a7fddfc294b0ca2595796ff5a6248565b23f6bd2ac7ac3de92c1ff124d35b",
+  "gold_sha256": "8e34c1918c73d13898f2eac1be994602466002c1c2b924f893d162daf4df61e0"
+ },
+ "model": {
+  "id": "Qwen/Qwen3.6-27B",
+  "endpoint": "http://192.168.219.102:8000/v1/chat/completions (edgexpert-e229 GB10 vLLM)",
+  "temperature": 0,
+  "enable_thinking": false,
+  "tokenizer_validation_receipt": "receipts/token_meter_validation_qwen36_vs_r4_20260725.json (EXACT_MATCH_60_OF_60)"
+ },
+ "budget_contract": {
+  "calls_per_item_per_arm": 3,
+  "output_caps_per_call": [256, 512, 256],
+  "token_tolerance_spread": 512,
+  "per_call_input_caps": {"1": 280, "2": 1713, "3": 2152},
+  "parity_filler": "declared inert digit-unit filler inside validated payload, hash-covered"
+ },
+ "predictions": [
+  {"metric": "typed_minus_flat_paired_bootstrap_lcb", "direction": "higher", "threshold": 0.0, "credence": 0.35},
+  {"metric": "typed_minus_vector_paired_bootstrap_lcb", "direction": "higher", "threshold": 0.0, "credence": 0.25},
+  {"metric": "removal_loses_effect", "direction": "boolean", "threshold": true, "credence": 0.8},
+  {"metric": "shuffle_loses_effect", "direction": "boolean", "threshold": true, "credence": 0.6},
+  {"metric": "token_parity_spread_max", "direction": "lower", "threshold": 512, "credence": 0.9}
+ ],
+ "kill_condition": "The conjunction fails: typed does not beat flat or vector (paired bootstrap LCB <= 0), removal or shuffle retains the effect, any item exceeds the 512 spread, or any arm makes other than exactly 3 calls. On rejection, the current 3-function belt composition claim stops (canon direction 2026-07-24 line: typed=vector tie twice means role-decomposition/state-representation replacement, not belt patching).",
+ "honesty_boundaries": [
+  "n=100 sealed slice of 2Wiki validation only; no production or cross-dataset generalization.",
+  "Bootstrap CIs are over the fixed sealed panel, not a population claim.",
+  "A PASS activates the ORDERED sequence (Gate-0 registration then P1v5); it is not itself an efficacy claim beyond the F1 question.",
+  "Development runs (r1-r5) are engineering receipts only and carry no sealed weight."
+ ],
+ "manifest_sha256": "785ad621dd1db01310cadbccd5518cffc7788b02c8942038008a2c776b20f984",
+ "amendment": {
+  "amendment_id": "amend1",
+  "amends": "PREREG_F1_sealed_typed_function_network_20260725.json (sha256 d3ba679beeaea37a8cd225968907b63e3111440da66de09ecf238187e6565e63)",
+  "amended_at": "2026-07-26T03:40:00Z",
+  "actor": "kimi-code-cli",
+  "reason": "dgx vLLM endpoint 192.168.0.23:8000 unreachable after router replacement; F1 sealed r3 (fired 2026-07-25 night, task bash-ujy785be) lost with no receipt. User approved re-fire on the replacement endpoint.",
+  "changes": ["model.endpoint only — every other field carried over verbatim from the amended prereg"],
+  "hardware_note": "Replacement server is edgexpert-e229 (NVIDIA GB10) instead of dgx; same vLLM serving stack, OpenAI-compatible /v1/chat/completions, temp 0, thinking disabled.",
+  "weights_identity_note": "Model id qwen3.6-27b (root Qwen/Qwen3.6-27B) is served identically; weight-file identity with the dgx deployment is assumed from the model id and is unverifiable while dgx is down.",
+  "parity_evidence": "dev-4 live parity re-run on the replacement endpoint before sealed fire (run dir _research/prom9_runs/f1-2wiki-dev-r6-live, suite 247f1111c059930c64f9e523ce00526799e8de5cc3f3befd92aab1f1b09a86b3, judgment 60263fe0543ed00d04d84cf3da8e32147b58394101d849e8d23a35a0ae670292; 60 calls, 2 workers, 0 retries): parity_failures=[], spread_max 406 (tolerance 512, r5-live dgx range 376-415), 20 item-runs x exactly 3 calls. Metrics vs dgx r4/r5-live: typed 0.5=0.5, flat 0.25=0.25, vector 0.5=0.5, removal 0.0=0.0 identical; shuffle control arm 0.5 vs 0.25 = exactly one score cell of 20 flipped (item 8813f87c0bdd answered correctly instead of erring), consistent with cross-GPU near-tie numerics on the chaotic control arm and conservative for the sealed gates (a stronger shuffle control makes shuffle_loses_effect harder to pass, not easier). Judged NOT a material divergence by kimi-code-cli before sealed fire."
+ }
+}

@@ -1,0 +1,110 @@
+{
+  "boundary": "SIGKILL is OS process-crash evidence on the target filesystem; electrical power loss is not exercised.",
+  "config": {
+    "model": "qwen3.6-27b",
+    "server_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+    "timeout_seconds": 300.0,
+    "upstream": "http://127.0.0.1:8000/v1/chat/completions",
+    "workdir": "/home/metahumotonic27/hswm_f1_durable/_probe/run2"
+  },
+  "generated_at": "2026-07-27T17:39:44.192916+00:00",
+  "host": {
+    "hostname": "edgexpert-e229",
+    "platform": "linux",
+    "python": "3.12.3"
+  },
+  "overall_pass": true,
+  "probes": [
+    {
+      "checks": {
+        "binding_roots_equal": true,
+        "client_accepted_exactly_one": true,
+        "delivery_ambiguous_then_redelivered": true,
+        "output_is_typed_object": true,
+        "raw_replay_body_sha_matches_ledger": true,
+        "raw_replay_flag_true": true,
+        "receipt_minted": true,
+        "spool_complete_exactly_one": true
+      },
+      "client_event_chain": [
+        "PREPARED",
+        "SENT",
+        "DELIVERY_AMBIGUOUS",
+        "SENT",
+        "RAW_COMPLETE",
+        "ENVELOPE_VALID",
+        "SCHEMA_VALID",
+        "ACCEPTED"
+      ],
+      "client_status_counts": {
+        "ACCEPTED": 1
+      },
+      "finished_at": "2026-07-27T17:39:06.320301+00:00",
+      "pass": true,
+      "probe": "disconnect_real_upstream",
+      "raw_replay": {
+        "attested_response_sha256": "b64929af2f211dd773c2a5fa955ff982a2bfeb2715b1e822f365495ee7fd39f9",
+        "body_sha256": "b64929af2f211dd773c2a5fa955ff982a2bfeb2715b1e822f365495ee7fd39f9",
+        "replayed": "true",
+        "status": 200
+      },
+      "response_sha256": "b64929af2f211dd773c2a5fa955ff982a2bfeb2715b1e822f365495ee7fd39f9",
+      "run_id": "f1-target-probe-disconnect-1785173914",
+      "spool_status_counts": {
+        "COMPLETE": 1
+      },
+      "started_at": "2026-07-27T17:38:34.621325+00:00"
+    },
+    {
+      "checks": {
+        "client_accepted_exactly_one": true,
+        "committed_row_survives_sigkill": true,
+        "no_new_dispatch_after_restart": true,
+        "raw_replay_body_sha_matches_ledger": true,
+        "raw_replay_flag_true_after_restart": true
+      },
+      "finished_at": "2026-07-27T17:39:41.052527+00:00",
+      "offline_status_counts_after_sigkill": {
+        "COMPLETE": 1
+      },
+      "pass": true,
+      "post_replay_status_counts": {
+        "COMPLETE": 1
+      },
+      "probe": "crash_complete_target_filesystem",
+      "raw_replay": {
+        "attested_response_sha256": "e761bfd7ec66514ba7bd570cf13e5a3eb5b509c618f03c5e55f939f772b26725",
+        "body_sha256": "e761bfd7ec66514ba7bd570cf13e5a3eb5b509c618f03c5e55f939f772b26725",
+        "replayed": "true",
+        "status": 200
+      },
+      "response_sha256": "e761bfd7ec66514ba7bd570cf13e5a3eb5b509c618f03c5e55f939f772b26725",
+      "run_id": "f1-target-probe-crash-complete-1785173946",
+      "sigkill_at": "2026-07-27T17:39:40.913291+00:00",
+      "started_at": "2026-07-27T17:39:06.320345+00:00"
+    },
+    {
+      "checks": {
+        "client_ambiguous_abort": true,
+        "never_redispatched": true,
+        "observed_dispatching_before_kill": true,
+        "row_recovered_as_unknown": true,
+        "worker_finished": true
+      },
+      "client_outcome": {
+        "error": "result spool refused recovery: OUTCOME_UNKNOWN",
+        "result": "AMBIGUOUS_ABORT"
+      },
+      "finished_at": "2026-07-27T17:39:44.192897+00:00",
+      "pass": true,
+      "probe": "crash_dispatching_never_redispatch",
+      "run_id": "f1-target-probe-crash-dispatching-1785173981",
+      "sigkill_at": "2026-07-27T17:39:41.168403+00:00",
+      "spool_status_counts_after_recovery": {
+        "UNKNOWN": 1
+      },
+      "started_at": "2026-07-27T17:39:41.052630+00:00"
+    }
+  ],
+  "schema_version": "hswm-f1-target-deployment-probe/v1"
+}

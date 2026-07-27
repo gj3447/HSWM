@@ -1,0 +1,98 @@
+{
+  "schema_version": "hswm-preregistration/v1",
+  "programme": "PROM-9-HSWM-semantic-neural-network",
+  "branch": "F1-sealed-typed-function-network",
+  "registered_at": "2026-07-28T02:55:00+09:00",
+  "registered_by": "claude-code (user directive 2026-07-28 '둘다 진행해줘' after C4/F5v2 ratification session)",
+  "question": "Sealed n=100에서 typed HSWM 3-function network가 actual-compute-matched flat과 vector를 모두 이기고, 역할 제거/셔플에서 효과가 사라지는가?",
+  "cohort": {
+    "dataset": "framolfese/2WikiMultihopQA",
+    "split": "validation",
+    "offset": 4,
+    "length": 100,
+    "disjoint_from": "dev r1-r5 cohorts (offset 0, length 4)",
+    "source_receipt_sha256": "9e5a7fddfc294b0ca2595796ff5a6248565b23f6bd2ac7ac3de92c1ff124d35b",
+    "gold_sha256": "8e34c1918c73d13898f2eac1be994602466002c1c2b924f893d162daf4df61e0"
+  },
+  "model": {
+    "id": "Qwen/Qwen3.6-27B",
+    "endpoint": "http://127.0.0.1:8010 (durable result spool, dgx loopback) -> upstream http://127.0.0.1:8000/v1/chat/completions (same dgx vLLM process as amend2)",
+    "temperature": 0,
+    "enable_thinking": false,
+    "tokenizer_validation_receipt": "receipts/token_meter_validation_qwen36_vs_r4_20260725.json (EXACT_MATCH_60_OF_60)"
+  },
+  "budget_contract": {
+    "calls_per_item_per_arm": 3,
+    "output_caps_per_call": [256, 512, 256],
+    "token_tolerance_spread": 512,
+    "per_call_input_caps": {"1": 280, "2": 1713, "3": 2152},
+    "parity_filler": "declared inert digit-unit filler inside validated payload, hash-covered"
+  },
+  "durable_transport": {
+    "contract": "prom_search_hswm/docs/F1_DURABLE_TRANSPORT_CONTRACT_20260727.md",
+    "runner_and_spool_code_commit": "b80f871ab43682420cda76b7ca12af47716d4d16",
+    "implementation_lineage": [
+      "95bf78b51aba5efde8674134a3eed4c2c7494c29 (crash-durable model transport)",
+      "ae85301fb5bc6580f4b1998ff84df5d906b13af9 (target-deployment probes)",
+      "b80f871ab43682420cda76b7ca12af47716d4d16 (structured-output grammar compat: uniqueItems dropped)"
+    ],
+    "server_revision": "Qwen/Qwen3.6-27B@server-process-attested-20260724",
+    "server_process_continuity": "dgx vLLM PID 923224 started Wed Jul 22 10:17:24 2026 KST, verified still the same continuously-running process on 2026-07-28; spool --server-revision must equal manifest model_revision",
+    "structured_output_schema_sha256": {
+      "QueryPlanV1": "4134842219b99de9619d59db7fec2a1ad9b25425a7226755441ec8ff6fc24714",
+      "BondProposalV1": "1b0d108635fa4ec696130e21cb98d4686f92dfb8655e9ca05d03c1fc6cde2479",
+      "AnswerEnvelopeV1": "a388d25d4451f7587272aa5ab6174be99de02aedfa54512a78a9845e010d1960"
+    },
+    "tokenizer_files_sha256": {
+      "vocab.json": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003",
+      "merges.txt": "a9d356d7bdf1ef4949e3e748e95b8e10ad9d4e2e838eddc38a0a7b6b94d1db8d",
+      "tokenizer_config.json": "5186f0defcd7f232382c7f0aebcd2252d073bb921ab240e407b7ae8745d2b29b"
+    },
+    "bounded_delivery_policy": {
+      "max_delivery_attempts": 8,
+      "delivery_backoff_s": [1.0, 2.0, 5.0, 10.0, 20.0, 30.0, 60.0, 60.0],
+      "timeout_seconds": 900,
+      "max_response_bytes": 4000000
+    },
+    "topology": "one runner + one client ledger (attempt-db) on dgx; exactly one spool process (loopback 127.0.0.1:8010) owning one spool DB at ~/hswm_f1_durable/spool/f1_spool.sqlite3 on local ext4 nvme; client bearer token separate from upstream (upstream unauthenticated loopback vLLM)",
+    "target_probe_receipt": {
+      "path": "receipts/HSWM_F1_TARGET_DEPLOYMENT_PROBE_20260728.json",
+      "sha256": "ae447da5b081778fda0a79576665bd2857b2f90926a6ae4aa4c2199333ef48ca",
+      "result": "overall_pass=true (disconnect_real_upstream 8/8, crash_complete_target_filesystem 5/5, crash_dispatching_never_redispatch 5/5)",
+      "upstream_corroboration": "vLLM container f15e3099552d access log in probe window 2026-07-28T02:38:30~02:50:00+09:00 shows exactly 2 completed POST /v1/chat/completions (probes 1-2, one dispatch each); probe 3's single in-flight dispatch was aborted by spool SIGKILL and produced no completed access line and no re-dispatch after restart",
+      "boundary": "SIGKILL is OS process-crash evidence on the target ext4 filesystem; electrical power loss is not exercised"
+    }
+  },
+  "predictions": [
+    {"metric": "typed_minus_flat_paired_bootstrap_lcb", "direction": "higher", "threshold": 0.0, "credence": 0.35},
+    {"metric": "typed_minus_vector_paired_bootstrap_lcb", "direction": "higher", "threshold": 0.0, "credence": 0.25},
+    {"metric": "removal_loses_effect", "direction": "boolean", "threshold": true, "credence": 0.8},
+    {"metric": "shuffle_loses_effect", "direction": "boolean", "threshold": true, "credence": 0.6},
+    {"metric": "token_parity_spread_max", "direction": "lower", "threshold": 512, "credence": 0.9}
+  ],
+  "kill_condition": "The conjunction fails: typed does not beat flat or vector (paired bootstrap LCB <= 0), removal or shuffle retains the effect, any item exceeds the 512 spread, or any arm makes other than exactly 3 calls. On rejection, the current 3-function belt composition claim stops (canon direction 2026-07-24 line: typed=vector tie twice means role-decomposition/state-representation replacement, not belt patching). Additionally VOID (not a verdict) if the durable transport audit fails admissibility: call_count != 1500 all ACCEPTED, item_run_count != 500, or any UNKNOWN/identity-conflict/ledger-corruption cohort abort.",
+  "honesty_boundaries": [
+    "n=100 sealed slice of 2Wiki validation only; no production or cross-dataset generalization.",
+    "Bootstrap CIs are over the fixed sealed panel, not a population claim.",
+    "A PASS activates the ORDERED sequence (Gate-0 registration then P1v5); it is not itself an efficacy claim beyond the F1 question.",
+    "Development runs (r1-r5) are engineering receipts only and carry no sealed weight.",
+    "r3 (2026-07-26 20:00 KST fire) ended REFUSED with zero durable receipts under the pre-durable transport; its 721 physical HTTP 200s are retry-ambiguous forensics only and carry no sealed weight.",
+    "Structured-output schemas changed at b80f871 (uniqueItems removed for the deployed grammar compiler); uniqueness is still enforced by typed-port validators, so an accepted receipt implies uniqueness. The prior sealed preregistrations are NOT reused; this amendment re-pins all schema hashes."
+  ],
+  "manifest_sha256": "3000655a26f5c37b7b7e198a4ee171cb89cf50bf424bb775bc265b0f177fc241",
+  "amendment": {
+    "amendment_id": "amend3-durable",
+    "amends": "PREREG_F1_sealed_typed_function_network_20260726_amend2.json (sha256 2cee59f6bcebaed6a0ba50d5ddbebc330740f2ee0892f70daff1a30e3cda2cf4)",
+    "amended_at": "2026-07-28T02:55:00+09:00",
+    "actor": "claude-code",
+    "reason": "r3 died REFUSED after ~4h40m: one truncated model-response JSON was terminal under the pre-durable OpenAICompatibleJSONPort, and in-memory row buffering meant 721 physical HTTP 200s produced zero durable receipts, no suite, no judgment. Commit 95bf78b introduced the crash-durable one-dispatch spool transport; the runner now refuses direct vLLM endpoints. G0 target-deployment gates (dgx spool deployment, actual-upstream disconnect falsifier, target-filesystem crash probes) passed on 2026-07-28 (receipt pinned above). The probe also caught a real deployed-grammar incompatibility (uniqueItems -> HTTP 400 on every structured call), fixed at b80f871 before any sealed fire.",
+    "changes": [
+      "model.endpoint: direct vLLM endpoint replaced by the durable result-spool route (spool 127.0.0.1:8010 -> upstream 127.0.0.1:8000 on the same dgx host, removing the cross-host LAN failure mode that killed r2)",
+      "durable_transport block added: code commits, server revision continuity, structured-output schema sha256s, tokenizer sha256s, bounded delivery policy, topology, target probe receipt",
+      "structured-output grammars: uniqueItems removed (deployed vLLM grammar compiler rejects it); schema sha256s re-pinned; uniqueness enforced by typed-port validators",
+      "kill_condition: durable-audit admissibility VOID clause added (1500/500/1 exact or no verdict)",
+      "run dir f1-2wiki-sealed-r4; manifest identical to r3 (sha256 3000655a...) except preregistration_receipt_sha256 now binds this file",
+      "every other field carried over verbatim from amend2"
+    ]
+  }
+}

@@ -27,6 +27,11 @@ MAX_FILLER_CHARS = 65536
 # generation.  The Python validators below remain the final typed authority;
 # these schemas constrain generation and provide a stable schema digest for the
 # durable transport ledger.
+# These schemas are sent verbatim as vLLM structured-output grammars. The
+# deployed grammar compiler rejects `uniqueItems` (probe receipt 2026-07-28:
+# "Grammar error: Unimplemented keys"), so uniqueness is NOT expressed here;
+# it is enforced by the Python validators below (duplicates -> TypedPortError
+# -> REJECTED_PROTOCOL, never a silently accepted receipt).
 OUTPUT_JSON_SCHEMAS: dict[str, dict[str, object]] = {
     "QueryPlanV1": {
         "type": "object",
@@ -43,17 +48,14 @@ OUTPUT_JSON_SCHEMAS: dict[str, dict[str, object]] = {
             "objectives": {
                 "type": "array",
                 "items": {"type": "string", "minLength": 1},
-                "uniqueItems": True,
             },
             "required_evidence_types": {
                 "type": "array",
                 "items": {"type": "string", "minLength": 1},
-                "uniqueItems": True,
             },
             "constraints": {
                 "type": "array",
                 "items": {"type": "string", "minLength": 1},
-                "uniqueItems": True,
             },
             "abstain": {"type": "boolean"},
         },
@@ -73,7 +75,6 @@ OUTPUT_JSON_SCHEMAS: dict[str, dict[str, object]] = {
             "ordered_bond_ids": {
                 "type": "array",
                 "items": {"type": "string", "minLength": 1},
-                "uniqueItems": True,
             },
             "bond_potentials": {
                 "type": "object",
@@ -82,7 +83,6 @@ OUTPUT_JSON_SCHEMAS: dict[str, dict[str, object]] = {
             "evidence_refs": {
                 "type": "array",
                 "items": {"type": "string", "minLength": 1},
-                "uniqueItems": True,
             },
             "abstain": {"type": "boolean"},
         },
@@ -103,7 +103,6 @@ OUTPUT_JSON_SCHEMAS: dict[str, dict[str, object]] = {
             "supporting_evidence_ids": {
                 "type": "array",
                 "items": {"type": "string", "minLength": 1},
-                "uniqueItems": True,
             },
             "uncertainty": {"type": "string"},
             "abstain": {"type": "boolean"},

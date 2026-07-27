@@ -2,7 +2,7 @@
 
 > **date**: 2026-07-23 · **mode**: Naesengmoon (적대적 novelty 재판)
 > **trigger**: [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) §6 선행 경보 → 정전 §7 즉시 다음 행동 1순위
-> **피고**: Rodja Trappe (Zauberzeug GmbH), "Phasor Agents: Oscillatory Graphs with Three-Factor Plasticity and Sleep-Staged Learning", [arXiv:2601.04362v1](https://arxiv.org/abs/2601.04362) (2026-01-07), 코드 공개 ([github.com/zauberzeug/phasor-agents-paper](https://github.com/zauberzeug/phasor-agents-paper), PyPI `phasor-agents`)
+> **피고**: Rodja Trappe (Zauberzeug GmbH), "Phasor Agents: Oscillatory Graphs with Three-Factor Plasticity and Sleep-Staged Learning", [arXiv:2601.04362v1](https://arxiv.org/abs/2601.04362) (2026-01-07), ~~코드 공개~~ **코드 공개 주장 미이행 — repo 2종·PyPI 전부 404 (2026-07-24 실측, 수치는 self-reported 취급. 보충 감사: SYMPOSIUM `HSWM/TRIBUNAL_PHASOR_AGENTS_2026-07-24.md`)**
 > **원고(방어 대상)**: HSWM 정전 §0–§6의 신경망 정체성 주장
 > **1차 소스**: abstract + [HTML full text v1](https://arxiv.org/html/2601.04362v1) 직독. 실재 검증 통과.
 

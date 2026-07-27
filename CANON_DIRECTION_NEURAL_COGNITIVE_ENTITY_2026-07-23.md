@@ -160,7 +160,7 @@ n-ary credit assignment / LLM semantic verdict를 M으로 / topology 가소성 /
 
 1. ~~Phasor Agents prior-art tribunal~~ → **완료** (`TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md`).
    다음은 재판 §5 흡수 목록의 P1 편입 검토(USER ratify 대상).
-2. P0 prereg 작성: 인지체 metric(slope) + 평가 3종 + P1 kill 조건.
+2. ~~P0 prereg 작성: 인지체 metric(slope) + 평가 3종 + P1 kill 조건~~ → **초안 완료** ([`PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md`](PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md), USER ratify 대기).
 3. P1 수직 슬라이스 스펙: eligibility tag 스키마 + \(M\) 커밋 경로 + canary
    (기존 FSM/CRDT/kernel v2 재사용 — plasticity PROM §9 loop가 앞단).
 4. P2 실험 설계만 — 구현은 P1 통과 후.

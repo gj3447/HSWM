@@ -37,6 +37,18 @@ it still needs:
    counters, a parameter inventory, per-task and per-split parity, numeric
    resource caps, cost-equivalence rules, and a complete statistical plan.
 
+## Legacy supersession warning
+
+`readouts.supersede()` is retained only for historical measurement replay. Its
+in-place multiplicative update is non-idempotent: the injected negative oracle
+`tests/test_supersede_confluence.py::test_t2_negative_oracle_legacy_path_does_corrupt_on_double_apply`
+demonstrates squared-decay corruption after duplicate delivery. New durable
+writes must use the G-Set CRDT event fold in `supersede_ledger.py`.
+
+This warning deliberately lives outside the byte-locked mechanism sources.
+Changing a v1 mechanism byte requires a new reviewed protocol version; a
+documentation-only warning does not silently rebaseline that design lock.
+
 Those additions require a new, reviewed protocol version; filling nulls or
 changing the status string cannot promote v1. Only that later version may become
 `PREREGISTERED_UNRUN`. Contract or provenance failure yields `VOID`, not a

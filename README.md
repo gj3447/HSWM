@@ -155,6 +155,14 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
   The result is therefore `DEVELOPMENT_ONLY`, with no unique HSWM efficacy
   claim. See
   [`PROM9_F1_2WIKI_DEVELOPMENT_RESULTS_20260724.md`](prom_search_hswm/docs/PROM9_F1_2WIKI_DEVELOPMENT_RESULTS_20260724.md).
+- 🧰 **F1 durable transport repair:** the r3 sealed attempt ended `REFUSED`
+  after 721 observed HTTP 200 responses and produced no suite. A focused
+  SQLite WAL/FULL client ledger plus server result spool now passes local
+  disconnect, truncation, crash, replay, tamper, and `15/5/1` reconstruction
+  faults. This is local engineering infrastructure only: target DGX deployment,
+  an actual-upstream disconnect falsifier, successor preregistration, and all
+  `1500/500/1` observation/judgment gates remain blocked. See the
+  [`durable transport contract`](prom_search_hswm/docs/F1_DURABLE_TRANSPORT_CONTRACT_20260727.md).
 - ⚠️ **Open-kernel claim boundary:** LakatoTree judged the composition receipt
   chain `partial` and `certified=false`. Learned semantic-weight deltas and
   CONNECT/SEPARATE/SPECIALIZE topology edits, bounded cyclic readout,

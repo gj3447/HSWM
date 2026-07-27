@@ -13,7 +13,9 @@ unchanged from the 2026-07-23 reconciliation).
 > `operator-W-causal-mediation` is `planned` with the F2 sealed receipt classified as
 > precursor evidence only, and `F1-larger-ai-baselines-and-retention` is still `running`
 > after its r3 attempt was `REFUSED` on transport with no suite and no verdict. Nothing in
-> that set is promoted to `progressive` or `canonical`.
+> that set is promoted to `progressive` or `canonical`. The local durable-spool repair is
+> an engineering PASS only; it has not been deployed or measured against the target DGX
+> upstream and contributes no efficacy observation.
 
 ## Bottom line
 

@@ -1,0 +1,111 @@
+{
+  "schema": "hswm-f1-durable-transport-validation/v1",
+  "receipt_id": "hswm-f1-durable-transport-validation-20260727",
+  "generated_at": "2026-07-27T11:50:53+09:00",
+  "status": "PASS_LOCAL_ENGINEERING",
+  "engineering_status": "F1_DURABLE_TRANSPORT_VERTICAL_SLICE_VERIFIED",
+  "target_deployment_status": "PENDING_DGX_ACTUAL_UPSTREAM_FAULT_PROBE",
+  "measurement_authorized": false,
+  "scientific_status": "UNJUDGED",
+  "implementation": {
+    "repository": "https://github.com/gj3447/HSWM.git",
+    "branch": "main",
+    "baseline_parent": "dd0c78f0432c48c039916595f095ba1caaa5dae3",
+    "implementation_commit": "95bf78b51aba5efde8674134a3eed4c2c7494c29",
+    "repository_head_at_receipt": "68e14f9741c8bde6a84c04b2169fc805340cfcca",
+    "decision": "FOCUSED_MODULE_NOT_ENGINE",
+    "omd_used": false
+  },
+  "artifacts": {
+    "server_spool": "prom_search_hswm/hswm_result_spool.py",
+    "client_ledger_and_port": "prom_search_hswm/hswm_f1_durable_transport.py",
+    "typed_output_schemas": "prom_search_hswm/hswm_typed_ports.py",
+    "suite_integration": "prom_search_hswm/prom_f1_function_network.py",
+    "fault_tests": "prom_search_hswm/test_f1_durable_transport.py",
+    "operator_contract": "prom_search_hswm/docs/F1_DURABLE_TRANSPORT_CONTRACT_20260727.md",
+    "longinus_manifest": "LONGINUS_HSWM_F1_DURABLE_TRANSPORT_BINDING_2026-07-27.json",
+    "longinus_verifier": "prom_search_hswm/verify_f1_durable_transport_longinus.py"
+  },
+  "source_sha256": {
+    "prom_search_hswm/hswm_result_spool.py": "288ce271b82160c5f1e6d68da5d0db983a6ad0f3326bcb8662366dbe1c94b257",
+    "prom_search_hswm/hswm_f1_durable_transport.py": "fcd5926f138d14aaedf0385a477e98ad32afc49768cfd6b9228d244ca68f04bc",
+    "prom_search_hswm/hswm_call_receipt.py": "91243aeadbad635bf23120ed91e783122a8c8d6bb87653a98520ad8bf8830776",
+    "prom_search_hswm/hswm_function_network.py": "d96e23681536ff9fb0d35aa835693b4f8c9ec0f023f4088c2491c35c0dc1d092",
+    "prom_search_hswm/hswm_typed_ports.py": "3f32a506b4af19fde2d13ad6339209d7243d6c52aff29573751d7dd668164377",
+    "prom_search_hswm/prom_f1_function_network.py": "59e88cda18061bf312697b48e1df4639dae5b31be25dd1bfade6602db0468bfe",
+    "prom_search_hswm/test_f1_durable_transport.py": "9edf914d4118939f01191b7f9f0a57a7a69af2dde5d0289ec4845d8543becb00",
+    "prom_search_hswm/test_prom9_experiment_harness.py": "aa29db5e31ee07a75d0e01bcb1b0f8ed2ab2a0e3881f1bf758dec3fc0074e20c",
+    "prom_search_hswm/docs/F1_DURABLE_TRANSPORT_CONTRACT_20260727.md": "f47dd697927cd7c1e08cf00c20fa10b940f298e926939e8fba3e01d37e56a25d"
+  },
+  "durability_contract": {
+    "client_store": "SQLite WAL synchronous FULL",
+    "server_store": "SQLite WAL synchronous FULL",
+    "physical_call_dispatch_limit": 1,
+    "physical_calls_per_item_arm": 3,
+    "automatic_direct_post_retries": 0,
+    "delivery_recovery": "same physical_call_id plus identical request bytes through durable spool only",
+    "server_restart_rule": "DISPATCHING becomes UNKNOWN and is never automatically redispatched",
+    "cohort_ambiguity_rule": "FULL_COHORT_AMBIGUOUS_ABORT"
+  },
+  "fault_gates": {
+    "disconnect_after_spool_commit_replays_identical_bytes_once": true,
+    "server_process_kill_after_dispatch_never_redispatches": true,
+    "outer_json_truncation_yields_zero_accepted_receipts": true,
+    "inner_json_truncation_yields_zero_accepted_receipts": true,
+    "finish_reason_length_yields_zero_accepted_receipts": true,
+    "duplicate_key_yields_zero_accepted_receipts": true,
+    "typed_schema_mismatch_yields_zero_accepted_receipts": true,
+    "crash_after_raw_commit_resumes_offline": true,
+    "pending_spool_result_reconciles_without_new_identity": true,
+    "event_chain_tamper_detected": true,
+    "item_run_byte_tamper_detected": true,
+    "same_id_different_intent_rejected": true,
+    "bearer_secret_not_persisted": true,
+    "non_loopback_plain_http_bind_rejected": true,
+    "one_item_five_arm_fixture_reconstructs_15_calls_5_items_1_suite": true,
+    "second_materialization_is_network_free_and_byte_identical": true
+  },
+  "validation": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q -p no:cacheprovider prom_search_hswm/test_f1_durable_transport.py prom_search_hswm/test_prom9_experiment_harness.py",
+      "status": "PASS",
+      "result": "30 passed"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q -p no:cacheprovider",
+      "status": "PASS",
+      "result": "1085 passed"
+    },
+    {
+      "command": ".venv/bin/python -m compileall -q prom_search_hswm and both F1/spool CLI help probes",
+      "status": "PASS",
+      "result": "no diagnostics; both CLIs expose bounded required arguments"
+    },
+    {
+      "command": ".venv/bin/python -m prom_search_hswm.verify_f1_durable_transport_longinus",
+      "status": "PASS",
+      "result": "seven Longinus layers and all bound source bytes verified; KG write not authorized"
+    }
+  ],
+  "full_suite_baseline_repair": {
+    "observed": "The first repository-wide run reported 1080 passed and 2 failures because commit 13e6ccf changed byte-locked readouts.py documentation.",
+    "resolution": "The v1 mechanism bytes and semantic lock were preserved; the deprecation warning moved outside the lock with the corrected supersede_ledger.py path.",
+    "repair_commit": "68e14f9741c8bde6a84c04b2169fc805340cfcca"
+  },
+  "g0_disposition": {
+    "local_implementation_and_fixture_fault_battery": "PASS",
+    "dgx_spool_deployment": "PENDING",
+    "actual_upstream_disconnect_falsifier": "PENDING",
+    "target_filesystem_power_loss_probe": "PENDING",
+    "successor_preregistration_exact_readback": "PENDING",
+    "overall_measurement_gate": "BLOCKED"
+  },
+  "not_claimed": [
+    "An F1 measurement result or comparative winner",
+    "A scientific verdict that HSWM is a larger AI",
+    "Exactly-once execution by an unmodified OpenAI-compatible or vLLM endpoint",
+    "Production durability on DGX before target deployment fault testing",
+    "Authorization to reuse the prior sealed preregistration after structured-output schema changes",
+    "Scalar-W, operator-W, transfer, topology, or consolidation progress"
+  ]
+}

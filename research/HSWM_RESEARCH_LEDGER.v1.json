@@ -1,7 +1,7 @@
 {
   "schema_version": "hswm-research-ledger/v1",
   "ledger_id": "HSWM_RESEARCH_LEDGER_V1_20260726",
-  "generated_at": "2026-07-27T00:16:56+09:00",
+  "generated_at": "2026-07-27T11:50:53+09:00",
   "programme_authority": {
     "programme_id": "HSWM_RESEARCH_PROGRAMME",
     "status": "ACTIVE",
@@ -115,7 +115,7 @@
       "hypothesis_id": "F1-larger-ai-baselines-and-retention",
       "title": "F1 sealed comparative baseline and retention run",
       "state": "running",
-      "claim_scope": "Tests whether the typed function-network condition beats frozen comparison arms under the sealed F1 protocol. No outcome is claimed while the remote suite is incomplete.",
+      "claim_scope": "Tests whether the typed function-network condition beats frozen comparison arms under a sealed F1 protocol. The r3 attempt was refused on transport with no suite; the local durable-transport repair is engineering infrastructure and no outcome is claimed.",
       "prereg_refs": [
         {
           "artifact_id": "artifact-f1-prereg-amend2",
@@ -127,7 +127,16 @@
         }
       ],
       "source_refs": [],
-      "evidence_refs": [],
+      "evidence_refs": [
+        {
+          "artifact_id": "artifact-f1-durable-transport-validation-v1",
+          "kind": "evidence_receipt",
+          "path": "receipts/HSWM_F1_DURABLE_TRANSPORT_VALIDATION_20260727.json",
+          "sha256": "f66c51f82010325a5c33524d8797cd177490fc3089e2014fbffa8dbb67c24c21",
+          "availability": "present",
+          "claim_boundary": "Local deterministic spool/ledger fault battery only; DGX deployment, actual-upstream disconnect falsifier, successor preregistration, measurement, and scientific judgment remain blocked."
+        }
+      ],
       "judge_refs": [],
       "lakato_refs": [],
       "git": {
@@ -139,24 +148,24 @@
       "runtime": {
         "execution_host": "dgx",
         "control_plane": "proxmox-lxc-301-lakatotree",
-        "status": "RUNNING_REMOTE_PID_1516224_NO_SUITE_RECEIPT_YET",
-        "observed_at": "2026-07-26T22:18:01+09:00",
-        "notes": "Observed by read-only SSH: qwen3.6-27b suite process active with max-workers=2; run.log empty and suite.json absent at observation time."
+        "status": "R3_REFUSED_TRANSPORT_NO_SUITE_LOCAL_REPAIR_VERIFIED",
+        "observed_at": "2026-07-27T11:50:53+09:00",
+        "notes": "The r3 process ended REFUSED after an unterminated JSON response; access-log evidence counted 721 HTTP 200 responses but cannot identify unique logical calls. Commit 95bf78b adds a local durable spool and attempt ledger. No target deployment or successor observation has run."
       },
       "supersedes": [
         "F1.sealed-r1",
         "F1.sealed-r2"
       ],
       "next_falsifier": {
-        "falsifier_id": "falsifier-f1-sealed-r3",
-        "test": "Finish the locked suite, run the frozen independent judge, and submit the result to the active LakatoTree without changing arms or thresholds.",
-        "kill_condition": "Any preregistered F1 kill condition fires, the run cannot be replayed, or the judge and producer receipts disagree.",
+        "falsifier_id": "falsifier-f1-durable-target-deployment",
+        "test": "Deploy the result spool on target durable storage, inject a disconnect after actual upstream inference and before client commit, prove one upstream dispatch plus byte-identical replay, then bind the changed schemas and code in a successor preregistration before any full cohort.",
+        "kill_condition": "A duplicate upstream inference occurs for one physical_call_id, replay bytes differ, a credential enters a ledger, the target filesystem loses a committed receipt, or successor registration/readback is absent.",
         "dependency_ids": []
       },
       "caveats": [
-        "A live process is not evidence of a completed experiment.",
-        "No result, judge receipt, or LakatoTree verdict was present at the observation time.",
-        "Runtime checkout SHA remains unknown and must be captured before promotion."
+        "The refused r3 attempt is an instrumentation failure, not a negative scientific result.",
+        "Local engineering PASS does not authorize measurement or scientific promotion.",
+        "Actual-upstream replay, target-filesystem durability, successor preregistration, independent judge, and LakatoTree exact readback remain absent."
       ]
     },
     {

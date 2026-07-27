@@ -12,7 +12,7 @@
 
 | 가설 (`hypothesis_id`) | 장부 `state` | 영수증·경계 |
 |---|---|---|
-| `F1-larger-ai-baselines-and-retention` | `running` | 미완. r3 는 physical HTTP 200 721/1500 뒤 transport 오류로 `REFUSED` 되어 suite·verdict 가 0건이다 |
+| `F1-larger-ai-baselines-and-retention` | `running` | r3 는 physical HTTP 200 721/1500 뒤 transport 오류로 `REFUSED` 되어 suite·verdict 가 0건이다. [durable transport](prom_search_hswm/docs/F1_DURABLE_TRANSPORT_CONTRACT_20260727.md)는 로컬 fault battery를 통과했지만 DGX 실배치·actual-upstream disconnect·successor prereg가 남았다 |
 | `durable-cell-runtime` | `engineering_validated` | SQLite event store·outbox·typed CellPort·replay. 인프라이며 효능 증거가 아니다 |
 | `semantic-weight-metric-contract` | `engineering_validated` | [contract](research/HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT.v1.json). scalar slow-W 한정이고 operator-valued W 는 미구현이다 |
 | `operator-W-causal-mediation` | `planned` | [F2 sealed](receipts/f2_delta_w_credit_sealed_1784960618.json) 는 장부 분류상 **precursor evidence only** 다 |

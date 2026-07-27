@@ -609,12 +609,12 @@ def _probe_call():
     )
 
 
-_OK_ENVELOPE = b'{"model": "m", "usage": {"prompt_tokens": 10, "completion_tokens": 5}, "choices": [{"message": {"content": "{\\"a\\": 1}"}}]}'
+_OK_ENVELOPE = b'{"model": "m", "usage": {"prompt_tokens": 10, "completion_tokens": 5}, "choices": [{"finish_reason": "stop", "message": {"content": "{\\"a\\": 1}"}}]}'
 _BROKEN_ENVELOPE = b'{"choices": [{"message": {"content": "{\\"a\\": 1'
 
 
-def test_port_retries_transient_transport_failures() -> None:
-    from prom_search_hswm.hswm_call_receipt import OpenAICompatibleJSONPort
+def test_legacy_port_does_not_resample_a_truncated_post() -> None:
+    from prom_search_hswm.hswm_call_receipt import FunctionCallError, OpenAICompatibleJSONPort
 
     calls = {"n": 0}
 
@@ -626,15 +626,19 @@ def test_port_retries_transient_transport_failures() -> None:
 
     port = OpenAICompatibleJSONPort("http://x", transport=flaky,
                                     retry_backoff_s=(0.0, 0.0, 0.0))
-    response = port(_probe_call())
-    assert response.retries == 2 and response.payload == {"a": 1}
+    with pytest.raises(FunctionCallError, match="without retry"):
+        port(_probe_call())
+    assert calls["n"] == 1
 
 
-def test_port_fails_closed_after_retry_exhaustion() -> None:
+def test_legacy_port_rejects_automatic_post_retry_configuration() -> None:
     from prom_search_hswm.hswm_call_receipt import FunctionCallError, OpenAICompatibleJSONPort
     import pytest
 
-    port = OpenAICompatibleJSONPort("http://x", transport=lambda request, timeout: _BROKEN_ENVELOPE,
-                                    max_retries=1, retry_backoff_s=(0.0,))
-    with pytest.raises(FunctionCallError, match="model transport failed"):
-        port(_probe_call())
+    with pytest.raises(FunctionCallError, match="automatic POST retries are forbidden"):
+        OpenAICompatibleJSONPort(
+            "http://x",
+            transport=lambda request, timeout: _BROKEN_ENVELOPE,
+            max_retries=1,
+            retry_backoff_s=(0.0,),
+        )

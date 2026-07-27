@@ -448,12 +448,18 @@ def run_item(
         for key, value in unsigned.items()
         if key not in {"schema_version", "calls", "selected_bond_ids"}
     }
-    return FunctionNetworkRunV1(
+    result = FunctionNetworkRunV1(
         **constructor,
         calls=calls,
         selected_bond_ids=tuple(unsigned["selected_bond_ids"]),
         run_receipt_sha256=canonical_sha256(unsigned),
     )
+    accept_item_run = getattr(model_port, "accept_item_run", None)
+    if accept_item_run is not None:
+        if not callable(accept_item_run):
+            raise FunctionNetworkError("model port item-run sink is not callable")
+        accept_item_run(result.canonical())
+    return result
 
 
 def verify_run(value: Mapping[str, object]) -> str:

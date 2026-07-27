@@ -23,6 +23,94 @@ PARITY_FILLER_FIELD = "parity_filler"
 
 MAX_FILLER_CHARS = 65536
 
+# Machine-readable output contracts sent to vLLM/OpenAI-compatible structured
+# generation.  The Python validators below remain the final typed authority;
+# these schemas constrain generation and provide a stable schema digest for the
+# durable transport ledger.
+OUTPUT_JSON_SCHEMAS: dict[str, dict[str, object]] = {
+    "QueryPlanV1": {
+        "type": "object",
+        "additionalProperties": False,
+        "required": [
+            "request_id",
+            "objectives",
+            "required_evidence_types",
+            "constraints",
+            "abstain",
+        ],
+        "properties": {
+            "request_id": {"type": "string", "minLength": 1},
+            "objectives": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": True,
+            },
+            "required_evidence_types": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": True,
+            },
+            "constraints": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": True,
+            },
+            "abstain": {"type": "boolean"},
+        },
+    },
+    "BondProposalV1": {
+        "type": "object",
+        "additionalProperties": False,
+        "required": [
+            "request_id",
+            "ordered_bond_ids",
+            "bond_potentials",
+            "evidence_refs",
+            "abstain",
+        ],
+        "properties": {
+            "request_id": {"type": "string", "minLength": 1},
+            "ordered_bond_ids": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": True,
+            },
+            "bond_potentials": {
+                "type": "object",
+                "additionalProperties": {"type": "number", "maximum": 0},
+            },
+            "evidence_refs": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": True,
+            },
+            "abstain": {"type": "boolean"},
+        },
+    },
+    "AnswerEnvelopeV1": {
+        "type": "object",
+        "additionalProperties": False,
+        "required": [
+            "request_id",
+            "answer",
+            "supporting_evidence_ids",
+            "uncertainty",
+            "abstain",
+        ],
+        "properties": {
+            "request_id": {"type": "string", "minLength": 1},
+            "answer": {"type": "string"},
+            "supporting_evidence_ids": {
+                "type": "array",
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": True,
+            },
+            "uncertainty": {"type": "string"},
+            "abstain": {"type": "boolean"},
+        },
+    },
+}
+
 
 class TypedPortError(ValueError):
     """A PROM-9 function input or output violates its frozen schema."""
@@ -43,6 +131,26 @@ def canonical_json(value: object) -> str:
 
 def canonical_sha256(value: object) -> str:
     return hashlib.sha256(canonical_json(value).encode("utf-8")).hexdigest()
+
+
+def output_json_schema(port_type: str) -> dict[str, object]:
+    try:
+        schema = OUTPUT_JSON_SCHEMAS[port_type]
+    except KeyError as error:
+        raise TypedPortError(f"no structured-output schema for port: {port_type}") from error
+    # Canonical round-trip returns an isolated JSON value so callers cannot
+    # mutate the module authority in place.
+    return json.loads(canonical_json(schema))
+
+
+def output_schema_sha256(port_type: str) -> str:
+    return canonical_sha256(
+        {
+            "port_schema_version": PORT_SCHEMA,
+            "port_type": port_type,
+            "json_schema": output_json_schema(port_type),
+        }
+    )
 
 
 def _object(value: object, label: str) -> dict[str, Any]:
@@ -341,12 +449,15 @@ def port_digest(port_type: str, value: object) -> str:
 
 
 __all__ = [
+    "OUTPUT_JSON_SCHEMAS",
     "MAX_FILLER_CHARS",
     "PARITY_FILLER_FIELD",
     "PORT_SCHEMA",
     "TypedPortError",
     "canonical_json",
     "canonical_sha256",
+    "output_json_schema",
+    "output_schema_sha256",
     "port_digest",
     "validate_port",
 ]

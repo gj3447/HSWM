@@ -16,7 +16,7 @@ or the projections already spread beyond the registered tolerance.
 from __future__ import annotations
 
 import argparse
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import FIRST_EXCEPTION, ThreadPoolExecutor, wait
 import json
 import os
 from pathlib import Path
@@ -24,7 +24,7 @@ import random
 import re
 from collections.abc import Mapping, Sequence
 
-from prom_search_hswm.hswm_call_receipt import OpenAICompatibleJSONPort
+from prom_search_hswm.hswm_f1_durable_transport import DurableSpoolJSONPort
 from prom_search_hswm.hswm_function_network import (
     EvidenceCandidateV1,
     F1_ARMS,
@@ -87,14 +87,32 @@ def _write_once(path: Path, value: Mapping[str, object]) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = (json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n").encode()
+    temporary = path.with_name(f".{path.name}.partial-{os.getpid()}")
     try:
-        descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
+        descriptor = os.open(
+            temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644
+        )
     except FileExistsError as error:
-        raise F1HarnessError(f"refusing to replace output: {path}") from error
+        raise F1HarnessError(f"stale partial output requires inspection: {temporary}") from error
     with os.fdopen(descriptor, "wb") as handle:
         handle.write(payload)
         handle.flush()
         os.fsync(handle.fileno())
+    try:
+        try:
+            os.link(temporary, path)
+        except FileExistsError as error:
+            raise F1HarnessError(f"refusing to replace output: {path}") from error
+        directory = os.open(str(path.parent), os.O_RDONLY)
+        try:
+            os.fsync(directory)
+        finally:
+            os.close(directory)
+    finally:
+        try:
+            temporary.unlink()
+        except FileNotFoundError:
+            pass
 
 
 def _keys(value: Mapping[str, object], expected: set[str], label: str) -> None:
@@ -338,13 +356,43 @@ def run_suite(
     if max_workers == 1:
         rows = [execute(job) for job in jobs]
     else:
+        rows = []
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            rows = list(executor.map(execute, jobs))
+            # Bound eager scheduling to one worker-sized batch.  On the first
+            # ambiguous or terminal call failure, do not launch the remaining
+            # cohort.  Results are still materialized in manifest order.
+            for offset in range(0, len(jobs), max_workers):
+                batch = jobs[offset : offset + max_workers]
+                futures = [executor.submit(execute, job) for job in batch]
+                done, pending = wait(futures, return_when=FIRST_EXCEPTION)
+                failure = next(
+                    (future.exception() for future in done if future.exception() is not None),
+                    None,
+                )
+                if failure is not None:
+                    for future in pending:
+                        future.cancel()
+                    raise failure
+                rows.extend(future.result() for future in futures)
     token_parity = _token_parity_record(
         rows,
         tolerance=int(normalized["token_tolerance"]),
         envelope=normalized["token_envelope"],
     )
+    audit_port = getattr(model_port, "audit", None)
+    transport_audit = audit_port() if callable(audit_port) else None
+    if normalized["mode"] == "sealed" and transport_audit is None:
+        raise F1HarnessError("sealed F1 requires a durable transport audit")
+    if transport_audit is not None:
+        expected_calls = len(rows) * 3
+        if (
+            transport_audit.get("call_count") != expected_calls
+            or transport_audit.get("status_counts") != {"ACCEPTED": expected_calls}
+            or transport_audit.get("item_run_count") != len(rows)
+        ):
+            raise F1HarnessError(
+                "durable transport counts do not exactly match the completed suite"
+            )
     unsigned = {
         "schema_version": SUITE_SCHEMA,
         "run_id": normalized["run_id"],
@@ -360,6 +408,7 @@ def run_suite(
         "token_parity": token_parity,
         "max_workers": max_workers,
         "registries": {arm: registries[arm].canonical() for arm in F1_ARMS},
+        "transport_audit": transport_audit,
         "item_runs": rows,
         "gold_opened": False,
         "scientific_verdict_emitted": False,
@@ -464,6 +513,21 @@ def verify_suite(value: Mapping[str, object]) -> str:
             function = registry_functions[arm].get(str(call.get("function_id")))
             if function is None or call.get("prompt_sha256") != function.get("prompt_sha256"):
                 raise F1HarnessError("call prompt is not bound to the arm registry")
+    transport_audit = data.get("transport_audit")
+    if transport_audit is not None:
+        if not isinstance(transport_audit, dict):
+            raise F1HarnessError("F1 transport audit must be an object")
+        audit_unsigned = dict(transport_audit)
+        audit_sha = audit_unsigned.pop("audit_sha256", None)
+        if not isinstance(audit_sha, str) or canonical_sha256(audit_unsigned) != audit_sha:
+            raise F1HarnessError("F1 transport audit hash drifted")
+        expected_calls = len(rows) * 3
+        if (
+            transport_audit.get("call_count") != expected_calls
+            or transport_audit.get("status_counts") != {"ACCEPTED": expected_calls}
+            or transport_audit.get("item_run_count") != len(rows)
+        ):
+            raise F1HarnessError("F1 transport audit completeness drifted")
     _verify_token_blocks(data, rows)
     return declared
 
@@ -649,10 +713,21 @@ def main(argv: Sequence[str] | None = None) -> int:
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument("--manifest", type=Path, required=True)
     run_parser.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
-    run_parser.add_argument("--endpoint", required=True)
-    run_parser.add_argument("--api-key-env")
+    run_parser.add_argument(
+        "--endpoint",
+        required=True,
+        help="Durable result-spool base URL; direct vLLM endpoints are not accepted",
+    )
+    run_parser.add_argument(
+        "--attempt-db",
+        type=Path,
+        required=True,
+        help="Local SQLite WAL/FULL per-call and per-item receipt ledger",
+    )
+    run_parser.add_argument("--spool-token-env")
     run_parser.add_argument("--timeout-seconds", type=float, default=180.0)
     run_parser.add_argument("--max-workers", type=int, default=1)
+    run_parser.add_argument("--max-delivery-attempts", type=int, default=8)
     run_parser.add_argument(
         "--tokenizer-dir",
         type=Path,
@@ -675,18 +750,20 @@ def main(argv: Sequence[str] | None = None) -> int:
                 args.tokenizer_dir / "merges.txt",
                 args.tokenizer_dir / "tokenizer_config.json",
             )
-            port = OpenAICompatibleJSONPort(
+            with DurableSpoolJSONPort(
                 args.endpoint,
-                api_key_env=args.api_key_env,
+                args.attempt_db,
+                spool_token_env=args.spool_token_env,
                 timeout_seconds=args.timeout_seconds,
-            )
-            result = run_suite(
-                manifest,
-                protocol_path=args.protocol,
-                model_port=port,
-                token_meter=meter,
-                max_workers=args.max_workers,
-            )
+                max_delivery_attempts=args.max_delivery_attempts,
+            ) as port:
+                result = run_suite(
+                    manifest,
+                    protocol_path=args.protocol,
+                    model_port=port,
+                    token_meter=meter,
+                    max_workers=args.max_workers,
+                )
         else:
             result = judge_suite(
                 _read_json(args.suite, "F1 suite"),

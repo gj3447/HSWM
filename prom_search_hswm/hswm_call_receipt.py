@@ -14,6 +14,7 @@ from prom_search_hswm.hswm_function_registry import FunctionSpecV1
 from prom_search_hswm.hswm_typed_ports import (
     canonical_json,
     canonical_sha256,
+    output_json_schema,
     port_digest,
     validate_port,
 )
@@ -205,6 +206,11 @@ def invoke_function(
         **{key: value for key, value in unsigned.items() if key != "schema_version"},
         receipt_sha256=canonical_sha256(unsigned),
     )
+    accept_receipt = getattr(model_port, "accept_call_receipt", None)
+    if accept_receipt is not None:
+        if not callable(accept_receipt):
+            raise FunctionCallError("model port receipt sink is not callable")
+        accept_receipt(receipt)
     return normalized_output, receipt
 
 
@@ -227,10 +233,13 @@ def verify_call_receipt(value: Mapping[str, object]) -> str:
 
 
 class OpenAICompatibleJSONPort:
-    """Minimal OpenAI-compatible transport used by the Mac mini runner.
+    """Legacy one-shot OpenAI-compatible transport.
 
     Authentication is read only from the named environment variable.  The key
-    is never placed in a request receipt.
+    is never placed in a request receipt.  Automatic POST retry is forbidden:
+    sealed F1 requires exactly three physical calls per item-arm, and a generic
+    OpenAI-compatible endpoint has no byte-replay idempotency contract.  Use
+    ``DurableSpoolJSONPort`` for resumable execution.
     """
 
     def __init__(
@@ -240,7 +249,7 @@ class OpenAICompatibleJSONPort:
         api_key_env: str | None = None,
         timeout_seconds: float = 180.0,
         transport: Callable[[urllib_request.Request, float], bytes] | None = None,
-        max_retries: int = 3,
+        max_retries: int = 0,
         retry_backoff_s: tuple[float, ...] = (10.0, 30.0, 60.0),
     ) -> None:
         if not endpoint.startswith(("http://", "https://")):
@@ -249,8 +258,10 @@ class OpenAICompatibleJSONPort:
         self.api_key_env = api_key_env
         self.timeout_seconds = timeout_seconds
         self._transport = transport or self._urlopen
-        if isinstance(max_retries, bool) or not isinstance(max_retries, int) or max_retries < 0:
-            raise FunctionCallError("max_retries must be a non-negative integer")
+        if max_retries != 0:
+            raise FunctionCallError(
+                "automatic POST retries are forbidden without a durable result spool"
+            )
         self.max_retries = max_retries
         self.retry_backoff_s = tuple(retry_backoff_s)
 
@@ -269,7 +280,14 @@ class OpenAICompatibleJSONPort:
             "temperature": 0,
             "top_p": 1,
             "max_tokens": call.max_output_tokens,
-            "response_format": {"type": "json_object"},
+            "response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": call.output_type,
+                    "strict": True,
+                    "schema": output_json_schema(call.output_type),
+                },
+            },
             "chat_template_kwargs": {"enable_thinking": False},
         }
         headers = {"Content-Type": "application/json"}
@@ -285,26 +303,22 @@ class OpenAICompatibleJSONPort:
             method="POST",
         )
         started = time.monotonic()
-        retries_used = 0
-        while True:
-            try:
-                raw = self._transport(request, self.timeout_seconds)
-                envelope = json.loads(raw)
-                content = envelope["choices"][0]["message"]["content"]
-                payload = json.loads(content)
-                usage = envelope["usage"]
-                response_model = envelope["model"]
-                break
-            except (urllib_error.URLError, TimeoutError, KeyError, IndexError, TypeError, json.JSONDecodeError) as error:
-                # Transport-class failure (connection, timeout, truncated body/content).
-                # The 2026-07-25 sealed run aborted on a preempted server truncating
-                # content mid-string; a retried call is the same logical call — no
-                # receipt exists until the call completes, so the 3-call contract is
-                # untouched and the receipt records the retry count.
-                if retries_used >= self.max_retries:
-                    raise FunctionCallError(f"model transport failed: {type(error).__name__}: {error}") from error
-                time.sleep(self.retry_backoff_s[min(retries_used, len(self.retry_backoff_s) - 1)])
-                retries_used += 1
+        try:
+            raw = self._transport(request, self.timeout_seconds)
+            envelope = json.loads(raw)
+            choice = envelope["choices"][0]
+            if choice.get("finish_reason") != "stop":
+                raise FunctionCallError("model finish_reason must be stop")
+            content = choice["message"]["content"]
+            payload = json.loads(content)
+            usage = envelope["usage"]
+            response_model = envelope["model"]
+        except FunctionCallError:
+            raise
+        except (urllib_error.URLError, TimeoutError, KeyError, IndexError, TypeError, json.JSONDecodeError) as error:
+            raise FunctionCallError(
+                f"model transport failed without retry: {type(error).__name__}: {error}"
+            ) from error
         if not isinstance(payload, dict):
             raise FunctionCallError("model content must be one JSON object")
         if response_model != call.model:
@@ -316,7 +330,7 @@ class OpenAICompatibleJSONPort:
             input_tokens=_nonnegative_int(usage.get("prompt_tokens"), "prompt_tokens"),
             output_tokens=_nonnegative_int(usage.get("completion_tokens"), "completion_tokens"),
             latency_ms=max(0, int((time.monotonic() - started) * 1000)),
-            retries=retries_used,
+            retries=0,
             cache_status="provider-unknown",
         )
 

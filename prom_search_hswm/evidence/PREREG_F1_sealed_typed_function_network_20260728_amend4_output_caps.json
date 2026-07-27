@@ -131,6 +131,7 @@
     "reason": "r4 REFUSED VOID: strict pipeline correctly rejected a finish_reason=length response; the durable ledger preserved the killing call and 435 accepted calls, making the root cause directly readable for the first time (r3's unterminated-JSON death was almost certainly the same class, invisible under the pre-durable transport). Output caps [256,512,256] were near-saturated across accepted calls and deterministically insufficient for verbose items.",
     "changes": [
       "budget_contract.output_caps_per_call: [256,512,256] -> [768,1536,768] (3x, all arms identically; token parity kill metric and per-call input caps unchanged)",
+      "items[*].max_output_tokens_per_call: 512 -> 1536 (per-item single-call ceiling must admit the largest per-call cap; envelope validation refused r5 fail-fast at zero calls. max_input_tokens 16000 unchanged)",
       "run dir f1-2wiki-sealed-r5; manifest = r4 manifest with token_envelope.per_call_output_caps updated and preregistration_receipt_sha256 bound to this file",
       "every other field carried over verbatim from amend3-durable"
     ]

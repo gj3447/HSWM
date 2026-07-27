@@ -124,6 +124,14 @@
           "sha256": "2cee59f6bcebaed6a0ba50d5ddbebc330740f2ee0892f70daff1a30e3cda2cf4",
           "availability": "present",
           "claim_boundary": "Latest local machine-lock amendment; it is a protocol artifact, not a result."
+        },
+        {
+          "artifact_id": "artifact-f1-prereg-amend3-durable",
+          "kind": "preregistration",
+          "path": "prom_search_hswm/evidence/PREREG_F1_sealed_typed_function_network_20260728_amend3_durable.json",
+          "sha256": "b7c63f0b11c5eb14363859e80b99cdb13aaaa4b2d1e98e5a3dbfcd7e947b705b",
+          "availability": "present",
+          "claim_boundary": "Successor preregistration for the durable-transport sealed r4: pins spool/runner commit b80f871, re-pinned structured-output schema hashes (uniqueItems removed for deployed grammar), tokenizer hashes, bounded delivery policy, and the target probe receipt. Protocol artifact, not a result."
         }
       ],
       "source_refs": [],
@@ -135,6 +143,14 @@
           "sha256": "f66c51f82010325a5c33524d8797cd177490fc3089e2014fbffa8dbb67c24c21",
           "availability": "present",
           "claim_boundary": "Local deterministic spool/ledger fault battery only; DGX deployment, actual-upstream disconnect falsifier, successor preregistration, measurement, and scientific judgment remain blocked."
+        },
+        {
+          "artifact_id": "artifact-f1-target-deployment-probe-20260728",
+          "kind": "evidence_receipt",
+          "path": "receipts/HSWM_F1_TARGET_DEPLOYMENT_PROBE_20260728.json",
+          "sha256": "ae447da5b081778fda0a79576665bd2857b2f90926a6ae4aa4c2199333ef48ca",
+          "availability": "present",
+          "claim_boundary": "Target-deployment G0 gates on dgx against the actual upstream: disconnect falsifier 8/8, crash-complete 5/5, crash-dispatching 5/5, overall_pass=true. SIGKILL process-crash evidence only; electrical power loss not exercised. Engineering evidence, not a scientific verdict."
         }
       ],
       "judge_refs": [],
@@ -148,18 +164,18 @@
       "runtime": {
         "execution_host": "dgx",
         "control_plane": "proxmox-lxc-301-lakatotree",
-        "status": "R3_REFUSED_TRANSPORT_NO_SUITE_LOCAL_REPAIR_VERIFIED",
-        "observed_at": "2026-07-27T11:50:53+09:00",
-        "notes": "The r3 process ended REFUSED after an unterminated JSON response; access-log evidence counted 721 HTTP 200 responses but cannot identify unique logical calls. Commit 95bf78b adds a local durable spool and attempt ledger. No target deployment or successor observation has run."
+        "status": "R4_SEALED_RUNNING_DURABLE_TRANSPORT",
+        "observed_at": "2026-07-28T03:00:00+09:00",
+        "notes": "r4 fired 2026-07-28 02:57 KST from ~/hswm_f1_durable (commit a26686f archive): runner PID 2176203 + watchdog 2176204, durable spool PID 2173211 on 127.0.0.1:8010 -> loopback vLLM. LakatoTree prediction preregistered (Q-f1-actual-compute-parity-try1, receipt abe8c3a6...). Target probe also caught and fixed a deployed-grammar incompatibility (uniqueItems -> HTTP 400) at b80f871 before the fire."
       },
       "supersedes": [
         "F1.sealed-r1",
         "F1.sealed-r2"
       ],
       "next_falsifier": {
-        "falsifier_id": "falsifier-f1-durable-target-deployment",
-        "test": "Deploy the result spool on target durable storage, inject a disconnect after actual upstream inference and before client commit, prove one upstream dispatch plus byte-identical replay, then bind the changed schemas and code in a successor preregistration before any full cohort.",
-        "kill_condition": "A duplicate upstream inference occurs for one physical_call_id, replay bytes differ, a credential enters a ledger, the target filesystem loses a committed receipt, or successor registration/readback is absent.",
+        "falsifier_id": "falsifier-f1-sealed-r4-admissible-completion",
+        "test": "r4 completes with an admissible durable audit (1500/1500 calls ACCEPTED, 500/500 item-arms, 1/1 suite with matching embedded transport audit), the deterministic judge emits judgment.json, and the LakatoTree prediction is scored by script with exact readback.",
+        "kill_condition": "Any UNKNOWN/identity-conflict/ledger-corruption cohort abort, call or item-run counts differing from 1500/500/1, a credential found in either SQLite file, or judge/LakatoTree readback absent. A REFUSED run under the durable transport refutes the transport-repair hypothesis itself.",
         "dependency_ids": []
       },
       "caveats": [

@@ -11,7 +11,10 @@ H3 artifact production is a separately attested GPU/LLM workflow.
 
 The repository-wide research map, including the 2026-07-22 open self-similar
 composition work and the 2026-07-23 learned-router result, is in
-[`INDEX.md`](INDEX.md).
+[`INDEX.md`](INDEX.md). The machine-readable programme ledger, which owns the F1-F5
+hypothesis states, their sealed receipts, and the fail-closed promotion gate, is
+[`research/HSWM_RESEARCH_LEDGER.v1.json`](research/HSWM_RESEARCH_LEDGER.v1.json); its
+programme-level `scientific_status` is `UNJUDGED` as of 2026-07-27.
 
 ## Target architecture and present boundary
 

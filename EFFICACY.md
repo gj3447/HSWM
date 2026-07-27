@@ -1,6 +1,19 @@
 # HSWM efficacy status
 
-Last reconciled: 2026-07-23.
+Last reconciled: 2026-07-27 (ledger sync only; the efficacy findings below are
+unchanged from the 2026-07-23 reconciliation).
+
+> **Programme state lives in the ledger, not here.** This document covers the
+> retrieval-substrate ladder. The F1-F5 hypothesis states, their sealed receipts, and the
+> fail-closed promotion gate are owned by
+> [`research/HSWM_RESEARCH_LEDGER.v1.json`](research/HSWM_RESEARCH_LEDGER.v1.json) and are
+> adjudicated on `LakatosTree_HSWM_20260719`. As of 2026-07-27 the programme
+> `scientific_status` is `UNJUDGED`: `topology-causal-mediation` is `exploratory_supported`,
+> `weight-only-agent-transfer` and `long-term-consolidation-sleep` are `exploratory_refuted`,
+> `operator-W-causal-mediation` is `planned` with the F2 sealed receipt classified as
+> precursor evidence only, and `F1-larger-ai-baselines-and-retention` is still `running`
+> after its r3 attempt was `REFUSED` on transport with no suite and no verdict. Nothing in
+> that set is promoted to `progressive` or `canonical`.
 
 ## Bottom line
 

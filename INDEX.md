@@ -3,6 +3,28 @@
 > HSWM = Hypergraph Semantic Weight Map. 지향 정체성은 함수 단위가 LLM으로 실행되는 하이퍼그래프 시멘틱 신경망이다. 현재 측정으로 방어 가능한 범위는 **evidence-preserving memory substrate + 좁은 L0 typed-policy actuation 재현**까지이며, durable weight/topology learning은 아직 미폐쇄다. 이 인덱스는 공개 저장소의 코드·설계·실험
 > 영수증만 가리킨다.
 
+## 2026-07-27 — 실행 정본과 연구 장부
+
+이 인덱스는 카탈로그다. **기계 판독 정본은
+[`research/HSWM_RESEARCH_LEDGER.v1.json`](research/HSWM_RESEARCH_LEDGER.v1.json)** 이고,
+판정 기록층은 Proxmox LXC-301 의 `LakatosTree_HSWM_20260719` 하나다. 아래 `state` 값은
+장부 원문 그대로이며, 이 문서가 임의로 승격하지 않는다.
+
+| 가설 (`hypothesis_id`) | 장부 `state` | 영수증·경계 |
+|---|---|---|
+| `F1-larger-ai-baselines-and-retention` | `running` | 미완. r3 는 physical HTTP 200 721/1500 뒤 transport 오류로 `REFUSED` 되어 suite·verdict 가 0건이다 |
+| `durable-cell-runtime` | `engineering_validated` | SQLite event store·outbox·typed CellPort·replay. 인프라이며 효능 증거가 아니다 |
+| `semantic-weight-metric-contract` | `engineering_validated` | [contract](research/HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT.v1.json). scalar slow-W 한정이고 operator-valued W 는 미구현이다 |
+| `operator-W-causal-mediation` | `planned` | [F2 sealed](receipts/f2_delta_w_credit_sealed_1784960618.json) 는 장부 분류상 **precursor evidence only** 다 |
+| `topology-causal-mediation` | `exploratory_supported` | [F4 r2 sealed](receipts/f4_topology_learning_r2_sealed_1784992554.json). 독립 judge 영수증 부재로 미승격 |
+| `weight-only-agent-transfer` | `exploratory_refuted` | [F3 r3 sealed](receipts/f3r3_agent_ab_transfer_sealed_1784996298.json). 해당 testbed 한정 반증이다 |
+| `long-term-consolidation-sleep` | `exploratory_refuted` | [F5 sealed](receipts/f5_consolidation_sealed_1784998952.json). 시험한 downscale 연산자를 기각한 것이다 |
+
+프로그램 전체의 `scientific_status` 는 여전히 **`UNJUDGED`** 다. 장부의 승격 게이트는
+freeze → SHA-256 pin → git commit pin → 음성대조 포함 영수증 → 생산자와 분리된 독립 judge →
+Proxmox LakatoTree exact readback → Longinus 바인딩의 7단계를 모두 요구하고, engineering PASS
+단독 승격과 로컬 자가선언 `progressive`/`canonical` 을 금지한다.
+
 ## 현재 설계 결론
 
 2026-07-22의 핵심 수정은 “고정된 1층/2층”을 없앤 것이다.

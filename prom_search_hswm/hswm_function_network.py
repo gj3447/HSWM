@@ -386,7 +386,7 @@ def run_item(
         max_output_tokens=envelope.output_caps[1],
         model_port=model_port,
     )
-    if proposal["request_id"] != request_id:
+    if not _request_id_matches(proposal["request_id"], request_id):
         raise FunctionNetworkError("BF changed request_id")
     supplied = {candidate.bond_id: candidate for candidate in item.candidates}
     ordered = list(proposal["ordered_bond_ids"])
@@ -419,7 +419,7 @@ def run_item(
         max_output_tokens=envelope.output_caps[2],
         model_port=model_port,
     )
-    if answer["request_id"] != request_id:
+    if not _request_id_matches(answer["request_id"], request_id):
         raise FunctionNetworkError("AF changed request_id")
     if not set(answer["supporting_evidence_ids"]).issubset(selected_evidence_ids):
         raise FunctionNetworkError("AF cited evidence outside the frozen selection")

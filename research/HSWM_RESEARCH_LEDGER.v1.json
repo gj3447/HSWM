@@ -172,17 +172,17 @@
       "runtime": {
         "execution_host": "dgx",
         "control_plane": "proxmox-lxc-301-lakatotree",
-        "status": "R5_IDENTITY_CONFLICT_VOID__R6_SEALED_RUNNING",
-        "observed_at": "2026-07-28T07:15:00+09:00",
-        "notes": "r5 VOID at 46/1500: shared spool DB carried r4 rows; changed intents (raised caps) hit IDENTITY_CONFLICT — spool one-dispatch invariant working as designed, deployment error was reusing one spool DB across attempts (KG lesson-f1-spool-db-per-sealed-attempt-2026-07-28). r6 fired 2026-07-28 07:07 KST with fresh spool DB f1_spool_r6.sqlite3 (spool PID 2195537, runner 2195543, watchdog 2195548); manifest byte-identical to r5 (02e453dc..., amend4 binding unchanged). Prior spool DB preserved as spool/f1_spool.r4r5-evidence.sqlite3. LakatoTree prediction try2 (receipt 6c139e31...) remains the active preregistration."
+        "status": "R6_BF_REQUEST_ID_VOID__R7_SEALED_RUNNING",
+        "observed_at": "2026-07-28T17:50:00+09:00",
+        "notes": "r5 VOID at 46/1500: shared spool DB carried r4 rows; changed intents (raised caps) hit IDENTITY_CONFLICT — spool one-dispatch invariant working as designed, deployment error was reusing one spool DB across attempts (KG lesson-f1-spool-db-per-sealed-attempt-2026-07-28). r6 fired 2026-07-28 07:07 KST with fresh spool DB f1_spool_r6.sqlite3 (spool PID 2195537, runner 2195543, watchdog 2195548); manifest byte-identical to r5 (02e453dc..., amend4 binding unchanged). Prior spool DB preserved as spool/f1_spool.r4r5-evidence.sqlite3. r6 VOID at 1091/1500 accepted, item 364/500: REFUSED (BF changed request_id) — model copy-noise on the request_id echo; QF had tolerant _request_id_matches (post-2026-07-25 lesson) but BF/AF still used strict equality (asymmetric patch coverage). Per the preregistered kill_condition this is a protocol-content REFUSED: VOID for the cohort, durable forensics working as designed, NOT a refutation of the transport-repair hypothesis. Fix commit 1b3cd7a applies _request_id_matches to BF/AF; dgx copy single-file hash-synced (md5 7d5dedde02f8f4d3998a0baed4d50e8d). r7 fired 2026-07-28 15:56 KST with fresh spool DB f1_spool_r7.sqlite3 (spool PID 2238168, runner 2238170, watchdog 2238177); manifest+gold byte-identical to r6 (amend4 binding unchanged). r6 receipt ledger preserved at sealed-r6/f1_ledger.sqlite3. LakatoTree prediction try2 (receipt 6c139e31...) remains the active preregistration."
       },
       "supersedes": [
         "F1.sealed-r1",
         "F1.sealed-r2"
       ],
       "next_falsifier": {
-        "falsifier_id": "falsifier-f1-sealed-r6-admissible-completion",
-        "test": "r6 completes with an admissible durable audit (1500/1500 calls ACCEPTED, 500/500 item-arms, 1/1 suite with matching embedded transport audit), the deterministic judge emits judgment.json, and the LakatoTree prediction is scored by script with exact readback.",
+        "falsifier_id": "falsifier-f1-sealed-r7-admissible-completion",
+        "test": "r7 completes with an admissible durable audit (1500/1500 calls ACCEPTED, 500/500 item-arms, 1/1 suite with matching embedded transport audit), the deterministic judge emits judgment.json, and the LakatoTree prediction is scored by script with exact readback.",
         "kill_condition": "Any UNKNOWN/identity-conflict/ledger-corruption cohort abort, call or item-run counts differing from 1500/500/1, a credential found in either SQLite file, or judge/LakatoTree readback absent. A transport-layer REFUSED (delivery ambiguity, spool loss, replay divergence) refutes the transport-repair hypothesis; a protocol-content REFUSED (e.g. finish_reason=length) is VOID for the cohort but is durable-forensics working as designed.",
         "dependency_ids": []
       },

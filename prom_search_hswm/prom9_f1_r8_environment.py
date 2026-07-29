@@ -1181,7 +1181,6 @@ def verify_repository_dependency_blobs(
             raise EnvironmentPreimageError(
                 f"unsupported committed tree mode {rendered_mode}: {name}"
             )
-        expected_mode = 0o755 if tree_mode == b"100755" else 0o644
         observed = _capture_file(
             declared,
             inline_limit_bytes=DEFAULT_INLINE_LIMIT_BYTES,
@@ -1191,9 +1190,10 @@ def verify_repository_dependency_blobs(
             raise EnvironmentPreimageError(
                 f"repository dependency path changed while hashing: {name}"
             )
-        if observed["mode"] != oct(expected_mode):
+        observed_mode = int(str(observed["mode"]), 8)
+        if bool(observed_mode & stat.S_IXUSR) != (tree_mode == b"100755"):
             raise EnvironmentPreimageError(
-                f"repository dependency mode differs from the frozen commit: {name}"
+                f"repository dependency Git executable mode differs from the frozen commit: {name}"
             )
         try:
             object_name = object_id.decode("ascii")

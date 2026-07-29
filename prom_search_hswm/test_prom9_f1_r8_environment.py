@@ -529,10 +529,41 @@ def test_repository_dependency_tree_mode_is_exact_with_core_filemode_false(
         ["git", "-C", str(repo), "diff", "--quiet", commit, "--", "dependency.py"],
         check=False,
     ).returncode == 0
-    with pytest.raises(environment.EnvironmentPreimageError, match="mode differs"):
+    with pytest.raises(
+        environment.EnvironmentPreimageError, match="executable mode differs"
+    ):
         environment.verify_repository_dependency_blobs(
             repo, commit, {"runner": dependency}
         )
+
+
+@pytest.mark.parametrize("non_executable_mode", [0o600, 0o640, 0o644])
+def test_repository_non_executable_tree_mode_is_umask_portable(
+    tmp_path: Path, non_executable_mode: int
+) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.email", "test@example.invalid"],
+        check=True,
+    )
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.name", "HSWM test"],
+        check=True,
+    )
+    dependency = repo / "dependency.py"
+    dependency.write_text("VALUE = 1\n", encoding="utf-8")
+    dependency.chmod(non_executable_mode)
+    subprocess.run(["git", "-C", str(repo), "add", "dependency.py"], check=True)
+    subprocess.run(["git", "-C", str(repo), "commit", "-qm", "freeze"], check=True)
+    commit = subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", "HEAD"], text=True
+    ).strip()
+
+    assert environment.verify_repository_dependency_blobs(
+        repo, commit, {"runner": dependency}
+    ) == ("dependency.py",)
 
 
 def test_repository_dependency_committed_symlink_mode_is_refused(

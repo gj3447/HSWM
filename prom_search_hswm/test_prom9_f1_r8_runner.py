@@ -70,6 +70,9 @@ from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+ABORTED_ATTEMPT_EXPOSURE_PATH = (
+    REPO_ROOT / "receipts/hswm_f1_r8_v8_aborted_exposure.v1.json"
+)
 _JUDGE_RELATIVE_PATH = Path(
     "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
 )
@@ -526,6 +529,7 @@ def _bundle(tmp_path: Path, manifest: dict[str, object], result_contract: Path):
 def _lock(
     manifest: dict[str, object],
     *,
+    aborted_attempt_exposure_receipt: dict[str, object],
     bundle: dict[str, object],
     result_contract: Path,
     genesis_sha: str,
@@ -539,6 +543,11 @@ def _lock(
         protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
         selection_receipt_sha256="1" * 64,
         prior_exposure_receipt_sha256="2" * 64,
+        aborted_attempt_exposure_receipt_sha256=str(
+            aborted_attempt_exposure_receipt[
+                "aborted_attempt_exposure_receipt_sha256"
+            ]
+        ),
         public_source_receipt_sha256="3" * 64,
         gold_source_receipt_sha256="4" * 64,
         gold_sha256="5" * 64,
@@ -574,8 +583,13 @@ def _context(tmp_path: Path) -> dict[str, object]:
     result_contract.write_text('{"schema_version":"result-contract/v1"}\n')
     bundle, dependency_args = _bundle(tmp_path, manifest, result_contract)
     genesis = _genesis(str(manifest["run_id"]))
+    aborted_exposure = json.loads(
+        ABORTED_ATTEMPT_EXPOSURE_PATH.read_text(encoding="utf-8")
+    )
+    assert isinstance(aborted_exposure, dict)
     lock = _lock(
         manifest,
+        aborted_attempt_exposure_receipt=aborted_exposure,
         bundle=bundle,
         result_contract=result_contract,
         genesis_sha=str(genesis["genesis_sha256"]),
@@ -590,6 +604,7 @@ def _context(tmp_path: Path) -> dict[str, object]:
         "bundle": bundle,
         "genesis": genesis,
         "lock": lock,
+        "aborted_exposure": aborted_exposure,
         "derivation": derivation,
         "preflight": _preflight(
             str(manifest["run_id"]),
@@ -659,6 +674,9 @@ def _sealed_preregistration_context(context: dict[str, object], tmp_path: Path):
         "calibration_receipt_sha256": "e" * 64,
         "selection_receipt_sha256": lock["selection_receipt_sha256"],
         "prior_exposure_receipt_sha256": lock["prior_exposure_receipt_sha256"],
+        "aborted_attempt_exposure_receipt_sha256": lock[
+            "aborted_attempt_exposure_receipt_sha256"
+        ],
         "public_source_receipt_sha256": lock["public_source_receipt_sha256"],
         "gold_source_receipt_sha256": lock["gold_source_receipt_sha256"],
         "gold_sha256": lock["gold_sha256"],
@@ -974,6 +992,7 @@ def _run(context: dict[str, object]) -> tuple[dict[str, object], FakeDurablePort
         token_meter=context["meter"],
         max_workers=2,
         token_envelope_derivation=context["derivation"],
+        aborted_attempt_exposure_receipt=context["aborted_exposure"],
         environment_dependency_bundle=context["bundle"],
         result_contract_path=context["result_contract"],
         **_dependency_kwargs(context),
@@ -1133,6 +1152,15 @@ def _rehash(value: dict[str, object], field: str) -> None:
 
 def test_run_is_full_preflight_bound_and_gold_blind(tmp_path: Path) -> None:
     context = _context(tmp_path)
+    assert context["manifest"]["run_id"] == "f1-2wiki-development-r8-try3-a2"
+    assert context["lock"]["schema_version"] == (
+        "hswm-prom9-f1-r8-execution-lock/v4"
+    )
+    assert context["lock"]["aborted_attempt_exposure_receipt_sha256"] == (
+        context["aborted_exposure"][
+            "aborted_attempt_exposure_receipt_sha256"
+        ]
+    )
     draft, port = _run(context)
     assert len(draft["item_runs"]) == 10
     assert len(port.receipts) == 30
@@ -1162,6 +1190,10 @@ def test_sealed_preregistration_readback_and_manifest_core_are_exact(
     context = _context(tmp_path / "development")
     manifest, lock, artifact, readback, judge = _sealed_preregistration_context(
         context, tmp_path
+    )
+    assert lock["schema_version"] == "hswm-prom9-f1-r8-measurement-lock/v6"
+    assert artifact["schema_version"] == (
+        "hswm-prom9-f1-r8-preregistration-artifact/v4"
     )
     placeholder = copy.deepcopy(manifest)
     placeholder["preregistration_artifact_sha256"] = (
@@ -1286,6 +1318,7 @@ def test_all_pure_drift_refuses_before_first_model_call(tmp_path: Path) -> None:
                 token_meter=context["meter"],
                 max_workers=2,
                 token_envelope_derivation=context["derivation"],
+                aborted_attempt_exposure_receipt=context["aborted_exposure"],
                 environment_dependency_bundle=bundle,
                 result_contract_path=context["result_contract"],
                 **_dependency_kwargs(context),
@@ -1305,6 +1338,7 @@ def test_all_pure_drift_refuses_before_first_model_call(tmp_path: Path) -> None:
             token_meter=context["meter"],
             max_workers=2,
             token_envelope_derivation=context["derivation"],
+            aborted_attempt_exposure_receipt=context["aborted_exposure"],
             environment_dependency_bundle=context["bundle"],
             result_contract_path=context["result_contract"],
             **wrong_root_args,
@@ -1334,6 +1368,7 @@ def test_derivation_missing_tampered_and_resigned_refuse_before_calls(
             token_meter=context["meter"],
             max_workers=2,
             token_envelope_derivation=missing,
+            aborted_attempt_exposure_receipt=context["aborted_exposure"],
             environment_dependency_bundle=context["bundle"],
             result_contract_path=context["result_contract"],
             **_dependency_kwargs(context),
@@ -1354,6 +1389,7 @@ def test_derivation_missing_tampered_and_resigned_refuse_before_calls(
             token_meter=context["meter"],
             max_workers=2,
             token_envelope_derivation=tampered,
+            aborted_attempt_exposure_receipt=context["aborted_exposure"],
             environment_dependency_bundle=context["bundle"],
             result_contract_path=context["result_contract"],
             **_dependency_kwargs(context),
@@ -1384,12 +1420,79 @@ def test_derivation_missing_tampered_and_resigned_refuse_before_calls(
             token_meter=context["meter"],
             max_workers=2,
             token_envelope_derivation=resigned,
+            aborted_attempt_exposure_receipt=context["aborted_exposure"],
             environment_dependency_bundle=context["bundle"],
             result_contract_path=context["result_contract"],
             **_dependency_kwargs(context),
             spool_identity_preflight=resigned_preflight,
         )
     assert port.calls == {}
+
+
+def test_aborted_attempt_receipt_missing_tampered_and_resigned_refuse_cleanly(
+    tmp_path: Path,
+) -> None:
+    context = _context(tmp_path / "context")
+    tampered = copy.deepcopy(context["aborted_exposure"])
+    tampered["termination"]["exit_code"] = 1
+
+    resigned = copy.deepcopy(context["aborted_exposure"])
+    resigned["run_identity"]["run_id"] = "forged-aborted-attempt"
+    _rehash(resigned, "aborted_attempt_exposure_receipt_sha256")
+    resigned_lock = copy.deepcopy(context["lock"])
+    resigned_lock["aborted_attempt_exposure_receipt_sha256"] = resigned[
+        "aborted_attempt_exposure_receipt_sha256"
+    ]
+    _rehash(resigned_lock, "lock_sha256")
+    resigned_preflight = _preflight(
+        str(context["manifest"]["run_id"]),
+        str(resigned_lock["lock_sha256"]),
+        str(context["genesis"]["genesis_sha256"]),
+    )
+
+    cases = (
+        ("missing", {}, context["lock"], context["preflight"]),
+        ("tampered", tampered, context["lock"], context["preflight"]),
+        ("resigned", resigned, resigned_lock, resigned_preflight),
+    )
+    for label, receipt, lock, preflight in cases:
+        attempt_ledger = tmp_path / f"{label}-attempt.sqlite3"
+        spool_ledger = tmp_path / f"{label}-spool.sqlite3"
+        attempt_ledger.write_bytes(b"attempt-ledger-must-remain-unchanged")
+        spool_ledger.write_bytes(b"spool-ledger-must-remain-unchanged")
+        attempt_ledger.chmod(0o644)
+        spool_ledger.chmod(0o644)
+        before_attempt = attempt_ledger.read_bytes()
+        before_spool = spool_ledger.read_bytes()
+        port = FakeDurablePort(context["meter"])
+        port.ledger = type("LedgerPath", (), {"path": attempt_ledger})()
+        before_audit = port.audit()
+
+        with pytest.raises(
+            R8RunnerRefusal,
+            match="aborted-attempt exposure receipt verification failed",
+        ):
+            run_suite_v3_draft(
+                context["manifest"],
+                execution_lock=lock,
+                protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+                model_port=port,
+                token_meter=context["meter"],
+                max_workers=2,
+                token_envelope_derivation=context["derivation"],
+                aborted_attempt_exposure_receipt=receipt,
+                environment_dependency_bundle=context["bundle"],
+                result_contract_path=context["result_contract"],
+                **_dependency_kwargs(context),
+                spool_identity_preflight=preflight,
+            )
+
+        assert port.calls == {}
+        assert port.audit() == before_audit
+        assert attempt_ledger.read_bytes() == before_attempt
+        assert spool_ledger.read_bytes() == before_spool
+        assert attempt_ledger.stat().st_mode & 0o777 == 0o644
+        assert spool_ledger.stat().st_mode & 0o777 == 0o644
 
 
 def test_dummy_runner_dependency_is_rejected_before_first_model_call(
@@ -1424,6 +1527,7 @@ def test_dummy_runner_dependency_is_rejected_before_first_model_call(
     )
     lock = _lock(
         context["manifest"],
+        aborted_attempt_exposure_receipt=context["aborted_exposure"],
         bundle=bundle,
         result_contract=context["result_contract"],
         genesis_sha=context["genesis"]["genesis_sha256"],
@@ -1441,6 +1545,7 @@ def test_dummy_runner_dependency_is_rejected_before_first_model_call(
             token_meter=context["meter"],
             max_workers=2,
             token_envelope_derivation=context["derivation"],
+            aborted_attempt_exposure_receipt=context["aborted_exposure"],
             environment_dependency_bundle=bundle,
             result_contract_path=context["result_contract"],
             **_dependency_kwargs(context),
@@ -1465,6 +1570,7 @@ def test_direct_api_max_workers_is_lock_bound_before_calls(tmp_path: Path) -> No
             token_meter=context["meter"],
             max_workers=1,
             token_envelope_derivation=context["derivation"],
+            aborted_attempt_exposure_receipt=context["aborted_exposure"],
             environment_dependency_bundle=context["bundle"],
             result_contract_path=context["result_contract"],
             **_dependency_kwargs(context),
@@ -1823,6 +1929,8 @@ def test_cli_preexisting_output_refuses_before_endpoint_transport(
             "--token-envelope-derivation-receipt",
             str(derivation_paths["receipt"]),
             "--selection-receipt", str(derivation_paths["selection_receipt"]),
+            "--aborted-attempt-exposure-receipt",
+            str(ABORTED_ATTEMPT_EXPOSURE_PATH),
             "--historical-manifest", str(derivation_paths["historical_manifest"]),
             "--token-meter-validation-receipt",
             str(derivation_paths["validation_receipt"]),

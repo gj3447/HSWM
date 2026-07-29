@@ -29,12 +29,174 @@ from prom_search_hswm.prom9_f1_r8_source import (
 
 
 SCHEMA = "hswm-prom9-f1-prior-exposure/v1"
+ABORTED_ATTEMPT_EXPOSURE_SCHEMA = (
+    "hswm-prom9-f1-aborted-attempt-exposure/v1"
+)
+ABORTED_ATTEMPT_STATUS = "ABORTED_QUARANTINED"
 DATASET_SERVER = "https://datasets-server.huggingface.co"
 EXPECTED_PAGE_SPECS = ((0, 1), (0, 4), (0, 8), (4, 100))
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _ROW_KEYS = {
     "id", "question", "answer", "context", "supporting_facts",
     "evidences", "type",
+}
+
+_ABORTED_ATTEMPT_SOURCE_ENTITY_IDS = [
+    "62fae3c7206b92e5cbfae10a7df751ed8b6eba4979ce4d84a76173f777183705",
+    "6f19a0c33d2b426c8085d17852acf6937779dbc049011284b8f8cc3e5757ef00",
+    "78f42b260a62927800e2687fa02737af665ceebb15568b57df8c46fe88cec5a3",
+    "7e0d80aaa85e7abf8ce30eb5ec2d426a6eefd28ce03e98845625577a27a57061",
+    "8782a4cd6735509620fec41955d215431cde0a540fbb81d300ff0a42c4be26aa",
+    "9ad0fd8fc2099664ed27019406df882bb284d9de79b2c271b3813d0201a71439",
+    "a50a0b75cd71cef497203b5aebee7575c40d633f60835f29721af4e4e952efab",
+    "b88446ef6e3f2cbf409287424ed9a56a701e09df49177c5c99437303df39e341",
+    "bb4bcb851ccb6ed900fe21ed833855862ec4f6096143e191bca6c5150a291598",
+    "bfc5f3085983a56df3bf226480dcdbd918687a5f0a15a8493e2af374c05af5d8",
+]
+_ABORTED_ATTEMPT_RUN_IDENTITY = {
+    "run_id": "f1-2wiki-development-r8-try3",
+    "job_name": "hswm-f1-r8-v8-development-825",
+    "stage_path": "/data/kjra/PROJECT/PI/hswm_f1_r8_try3_v8_20260729",
+    "host": "airobotics-Precision-7960-Tower",
+    "started_at": "2026-07-29T23:15:22+09:00",
+    "ended_at": "2026-07-29T23:15:34+09:00",
+    "implementation_commit": "63a03623d98220800e9921527510d02971b882dc",
+    "carrier_commit": "4da21495ed52d8c85ae112fdf5cf732c14fabaf9",
+    "model": "qwen3.6-27b",
+    "model_revision": "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9",
+}
+_ABORTED_ATTEMPT_TERMINATION = {"signal": "SIGBUS", "exit_code": 135}
+_ABORTED_ATTEMPT_ACCEPTED_CALL = {
+    "arm_id": "typed_hswm_three_function_network",
+    "cohort": "development",
+    "function_id": "QF_QUERY_COMPILER",
+    "state": "ACCEPTED",
+    "physical_call_id": (
+        "3c9261a5e38c986c54e6c0bde7321baa4d9f7d2ef2052d407e864b4ee61a1f04"
+    ),
+    "item_id": "04a544a40bde11eba7f7acde48001122",
+    "dataset_row_index": 124,
+    "component_id": (
+        "4a7e6b4488685b62049c278cc7adedceb0fa2bafc436ff2eda23050e80835539"
+    ),
+    "source_entity_ids": _ABORTED_ATTEMPT_SOURCE_ENTITY_IDS,
+    "query_sha256": (
+        "24aecf4cf1485f6775e83ae43052009a3e1d96c936b8de69edc0da01f3638ca8"
+    ),
+    "intent_sha256": (
+        "d3771fe7aea13ad923371223af0f1babec3401f4b89daa2e5a232b82fcef3cf2"
+    ),
+    "request_sha256": (
+        "fcc073995e29847e208dd40630a1b12cccd83d0c5ff34be19a647d97d69441fe"
+    ),
+    "response_sha256": (
+        "cabaeec1ce8959202a64c3e998bb723be4daeedd1831627581b6cf5028a6ad87"
+    ),
+    "model_response_sha256": (
+        "65dc7bc71a3dc5ce20767da5898ce1f5f904d74d45eee776d5613c2d38329189"
+    ),
+    "call_receipt_sha256": (
+        "9da3704cb0034c8ef8d7c93c3648f3aae32bee56f3ee417bbc4e49a63c04e820"
+    ),
+}
+_ABORTED_ATTEMPT_LOCAL_ONLY_CALL = {
+    "arm_id": "typed_hswm_three_function_network",
+    "cohort": "development",
+    "function_id": "BF_BOND_PROPOSER",
+    "state": "SENT_NOT_UPSTREAM",
+    "physical_call_id": (
+        "4cb5b7fcd108999198249a1561ba258a8cd510864693817891148f98706d08d7"
+    ),
+    "request_sha256": (
+        "3d962fa008bcf9348eff7a68f82d30ebb61374cc1155715052c585b5cc5a8f52"
+    ),
+}
+_ABORTED_ATTEMPT_NON_EXPOSURE = {
+    "confirmatory_upstream_calls": 0,
+    "requests_containing_gold_or_evaluator": 0,
+    "runner_gold_opened": False,
+    "evaluator_invoked": False,
+    "scientific_verdict": False,
+}
+_ABORTED_ATTEMPT_EVIDENCE = {
+    "causative_session": {
+        "path": (
+            "/Users/lagyeongjun/.codex/sessions/2026/07/29/"
+            "rollout-2026-07-29T21-48-40-019fadeb-8269-7fc3-927c-"
+            "e276c1b8fb93.jsonl"
+        ),
+        "hash_scope": "prefix",
+        "prefix_bytes": 5681835,
+        "prefix_lines": 1545,
+        "prefix_sha256": (
+            "9e917e0d0231e99457a4eefc0c7022deac5b8a5f733d00d8e315023659f34e97"
+        ),
+        "observed_file_bytes": 6216544,
+        "observed_file_lines": 1620,
+        "observed_file_sha256": (
+            "0eccb877232d257dd983ed564d73e7f7916a99db07c278a86a8041d0165071e1"
+        ),
+    },
+    "remote_command_file": {
+        "path": "/data/kjra/.dt/jobs/hswm-f1-r8-v8-development-825/cmd.sh",
+        "bytes": 3292,
+        "sha256": (
+            "569f64b8572c0831f93a00f17d861a8ff28533d1fa5e2ad0c1061495eed10eff"
+        ),
+    },
+    "remote_job_log": {
+        "path": "/data/kjra/.dt/jobs/hswm-f1-r8-v8-development-825/log",
+        "bytes": 1606,
+        "sha256": (
+            "4f2d36b3b738c6920134573d9b1d555c33720436694067060e3d7633d82aba64"
+        ),
+        "rc": 135,
+    },
+    "vllm_access_log_snapshot": {
+        "path": "/data/kjra/.dt/jobs/hswm-f1-r8-vllm-canary-triton/log",
+        "snapshot_bytes": 46713,
+        "snapshot_mtime": "2026-07-29T23:47:25.362464813+09:00",
+        "snapshot_sha256": (
+            "376a14d9e70c67a794a716fef4c967aa19848c47eafdbbe754bc81bf0971ad58"
+        ),
+        "post_count": 1,
+        "server_pid": 1025995,
+        "time_anchor_line": 423,
+        "time_anchor_at": "2026-07-29T23:15:31+09:00",
+        "time_anchor_running_requests": 1,
+        "time_anchor_relation": "immediately_precedes_access_line",
+        "access_line": 424,
+        "source": "127.0.0.1:58622",
+        "method": "POST",
+        "request_path": "/v1/chat/completions",
+        "protocol": "HTTP/1.1",
+        "http_status": 200,
+    },
+    "attempt_database_family": {
+        "attempt.sqlite3": (
+            "360ae284913fbe7ea8ab58a3cce397e9cc11a4f39800896031676c80ba3f8005"
+        ),
+        "attempt.sqlite3-shm": (
+            "cf62d20f247f7db7abf7f6d3ad7b11b5ac204b4e827fd616d3be679dd24d9d98"
+        ),
+        "attempt.sqlite3-wal": (
+            "a1d43f941d6b7c8ac72b70fdf57ba7ae4d2344d2e74ed7273145cf337ef584ce"
+        ),
+    },
+    "spool_database_family": {
+        "spool.sqlite3": (
+            "43e43c30c91c34ccf5e82019b9d4c6d6858e770702fe39e6c71c602c8c272ace"
+        ),
+        "spool.sqlite3-shm": (
+            "8c2cb0e866accb47d8502501158dbe5774e9252ccce46baad47deceac7d27f14"
+        ),
+        "spool.sqlite3-wal": (
+            "2038f2f362d69201e2ae20ab27557e4ec78414d3e7063de60437c0fb97035750"
+        ),
+    },
+    "suite_draft_reservation_sha256": (
+        "2cafa2404b8ac5b7e5f3b625e29a887bef4e87111201ce816c3ec51ee955429d"
+    ),
 }
 
 
@@ -53,6 +215,29 @@ def _pairs(values: list[tuple[str, object]]) -> dict[str, object]:
 
 def _reject_constant(_value: str) -> object:
     raise PriorExposureRefusal("non-finite JSON number")
+
+
+def _exact_json_equal(actual: object, expected: object) -> bool:
+    """Compare JSON values without Python's bool/int/float equality aliases."""
+    if isinstance(expected, dict):
+        return (
+            isinstance(actual, Mapping)
+            and set(actual) == set(expected)
+            and all(
+                _exact_json_equal(actual[key], expected[key])
+                for key in expected
+            )
+        )
+    if isinstance(expected, list):
+        return (
+            isinstance(actual, list)
+            and len(actual) == len(expected)
+            and all(
+                _exact_json_equal(left, right)
+                for left, right in zip(actual, expected, strict=True)
+            )
+        )
+    return type(actual) is type(expected) and actual == expected
 
 
 def _read_private_bytes(path: Path) -> bytes:
@@ -579,6 +764,201 @@ def verify_prior_exposure_receipt(value: Mapping[str, object]) -> str:
     return declared
 
 
+def _strict_boundary_values(
+    aggregate: Mapping[str, object], key: str, label: str
+) -> list[str]:
+    values = aggregate.get(key)
+    if (
+        not isinstance(values, list)
+        or any(not isinstance(item, str) or not item for item in values)
+        or values != sorted(set(values))
+    ):
+        raise PriorExposureRefusal(f"{label} are not a sorted unique string list")
+    return values
+
+
+def verify_aborted_attempt_exposure_receipt(
+    value: Mapping[str, object],
+) -> str:
+    """Verify the immutable public boundary for the quarantined r8/v8 attempt."""
+    expected_top_level = {
+        "schema_version",
+        "status",
+        "run_identity",
+        "termination",
+        "accepted_upstream_calls",
+        "local_only_calls",
+        "non_exposure_boundary",
+        "evidence",
+        "evidence_roots",
+        "counts",
+        "aggregate",
+        "complete",
+        "aborted_attempt_exposure_receipt_sha256",
+    }
+    if not isinstance(value, Mapping) or set(value) != expected_top_level:
+        raise PriorExposureRefusal("aborted-attempt receipt shape drifted")
+    if (
+        value.get("schema_version") != ABORTED_ATTEMPT_EXPOSURE_SCHEMA
+        or value.get("status") != ABORTED_ATTEMPT_STATUS
+        or value.get("complete") is not True
+    ):
+        raise PriorExposureRefusal("aborted-attempt receipt is not quarantined and complete")
+
+    unsigned = dict(value)
+    declared = unsigned.pop("aborted_attempt_exposure_receipt_sha256", None)
+    try:
+        computed = canonical_sha256(unsigned)
+    except Exception as error:
+        raise PriorExposureRefusal(
+            "aborted-attempt receipt is not canonical JSON"
+        ) from error
+    if (
+        not isinstance(declared, str)
+        or not _SHA256.fullmatch(declared)
+        or computed != declared
+    ):
+        raise PriorExposureRefusal("aborted-attempt receipt self-hash drifted")
+
+    run_identity = value.get("run_identity")
+    termination = value.get("termination")
+    accepted_calls = value.get("accepted_upstream_calls")
+    local_calls = value.get("local_only_calls")
+    non_exposure = value.get("non_exposure_boundary")
+    evidence = value.get("evidence")
+    evidence_roots = value.get("evidence_roots")
+    counts = value.get("counts")
+    aggregate = value.get("aggregate")
+    if not _exact_json_equal(run_identity, _ABORTED_ATTEMPT_RUN_IDENTITY):
+        raise PriorExposureRefusal("aborted-attempt run identity drifted")
+    if not _exact_json_equal(termination, _ABORTED_ATTEMPT_TERMINATION):
+        raise PriorExposureRefusal("aborted-attempt termination drifted")
+    if (
+        not isinstance(accepted_calls, list)
+        or len(accepted_calls) != 1
+        or not _exact_json_equal(
+            accepted_calls[0], _ABORTED_ATTEMPT_ACCEPTED_CALL
+        )
+    ):
+        raise PriorExposureRefusal("accepted upstream exposure drifted")
+    if (
+        not isinstance(local_calls, list)
+        or len(local_calls) != 1
+        or not _exact_json_equal(
+            local_calls[0], _ABORTED_ATTEMPT_LOCAL_ONLY_CALL
+        )
+    ):
+        raise PriorExposureRefusal("local-only call boundary drifted")
+    if not _exact_json_equal(non_exposure, _ABORTED_ATTEMPT_NON_EXPOSURE):
+        raise PriorExposureRefusal("non-exposure boundary drifted")
+    if not _exact_json_equal(evidence, _ABORTED_ATTEMPT_EVIDENCE):
+        raise PriorExposureRefusal("aborted-attempt evidence drifted")
+
+    expected_evidence_roots = {
+        "attempt_database_family_root_sha256": canonical_sha256(
+            _ABORTED_ATTEMPT_EVIDENCE["attempt_database_family"]
+        ),
+        "spool_database_family_root_sha256": canonical_sha256(
+            _ABORTED_ATTEMPT_EVIDENCE["spool_database_family"]
+        ),
+    }
+    if not _exact_json_equal(evidence_roots, expected_evidence_roots):
+        raise PriorExposureRefusal("aborted-attempt evidence root drifted")
+
+    expected_counts = {
+        "accepted_development_upstream_calls": len(accepted_calls),
+        "local_only_calls": len(local_calls),
+        "confirmatory_upstream_calls": non_exposure[
+            "confirmatory_upstream_calls"
+        ],
+        "requests_containing_gold_or_evaluator": non_exposure[
+            "requests_containing_gold_or_evaluator"
+        ],
+        "items": 1,
+        "source_entities": len(_ABORTED_ATTEMPT_SOURCE_ENTITY_IDS),
+        "components": 1,
+    }
+    if not _exact_json_equal(counts, expected_counts):
+        raise PriorExposureRefusal("aborted-attempt exposure counts drifted")
+    if not isinstance(aggregate, Mapping) or set(aggregate) != {
+        "prior_item_ids",
+        "prior_source_entity_ids",
+        "prior_component_ids",
+        "item_root_sha256",
+        "source_entity_root_sha256",
+        "component_root_sha256",
+    }:
+        raise PriorExposureRefusal("aborted-attempt aggregate shape drifted")
+    item_ids = _strict_boundary_values(aggregate, "prior_item_ids", "item ids")
+    source_entity_ids = _strict_boundary_values(
+        aggregate, "prior_source_entity_ids", "source entity ids"
+    )
+    component_ids = _strict_boundary_values(
+        aggregate, "prior_component_ids", "component ids"
+    )
+    accepted = accepted_calls[0]
+    if (
+        item_ids != [accepted["item_id"]]
+        or source_entity_ids != accepted["source_entity_ids"]
+        or component_ids != [accepted["component_id"]]
+        or canonical_sha256(
+            {
+                "schema_version": COMPONENT_SCHEMA,
+                "source_entity_ids": source_entity_ids,
+            }
+        )
+        != component_ids[0]
+    ):
+        raise PriorExposureRefusal("aborted-attempt aggregate exposure drifted")
+    for values, root_key in (
+        (item_ids, "item_root_sha256"),
+        (source_entity_ids, "source_entity_root_sha256"),
+        (component_ids, "component_root_sha256"),
+    ):
+        if canonical_sha256(values) != aggregate.get(root_key):
+            raise PriorExposureRefusal("aborted-attempt aggregate root drifted")
+    if (
+        counts["items"] != len(item_ids)
+        or counts["source_entities"] != len(source_entity_ids)
+        or counts["components"] != len(component_ids)
+    ):
+        raise PriorExposureRefusal("aborted-attempt aggregate count drifted")
+    return declared
+
+
+def merge_exposure_boundaries(
+    prior: Mapping[str, object], incident: Mapping[str, object]
+) -> dict[str, object]:
+    """Return the canonical union of historical and aborted-attempt exposure."""
+    prior_sha = verify_prior_exposure_receipt(prior)
+    incident_sha = verify_aborted_attempt_exposure_receipt(incident)
+    prior_aggregate = prior.get("aggregate")
+    incident_aggregate = incident.get("aggregate")
+    if not isinstance(prior_aggregate, Mapping) or not isinstance(
+        incident_aggregate, Mapping
+    ):
+        raise PriorExposureRefusal("exposure aggregate is absent")
+
+    def merged(key: str, label: str) -> list[str]:
+        historical = _strict_boundary_values(prior_aggregate, key, label)
+        aborted = _strict_boundary_values(incident_aggregate, key, label)
+        return sorted(set(historical).union(aborted))
+
+    item_ids = merged("prior_item_ids", "item ids")
+    source_entity_ids = merged("prior_source_entity_ids", "source entity ids")
+    component_ids = merged("prior_component_ids", "component ids")
+    return {
+        "prior_exposure_receipt_sha256": prior_sha,
+        "aborted_attempt_exposure_receipt_sha256": incident_sha,
+        "item_ids": item_ids,
+        "source_entity_ids": source_entity_ids,
+        "component_ids": component_ids,
+        "item_root_sha256": canonical_sha256(item_ids),
+        "source_entity_root_sha256": canonical_sha256(source_entity_ids),
+        "component_root_sha256": canonical_sha256(component_ids),
+    }
+
+
 def write_private_once(path: Path, value: Mapping[str, object]) -> None:
     destination = Path(path)
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -683,11 +1063,15 @@ if __name__ == "__main__":
 
 
 __all__ = [
+    "ABORTED_ATTEMPT_EXPOSURE_SCHEMA",
+    "ABORTED_ATTEMPT_STATUS",
     "EXPECTED_PAGE_SPECS",
     "PriorExposureRefusal",
     "SCHEMA",
     "build_prior_exposure_receipt",
     "inventory_stable_tree",
+    "merge_exposure_boundaries",
+    "verify_aborted_attempt_exposure_receipt",
     "verify_prior_exposure_receipt",
     "write_private_once",
 ]

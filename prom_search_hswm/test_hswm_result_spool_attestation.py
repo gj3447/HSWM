@@ -414,8 +414,8 @@ def test_alternate_self_consistent_deployment_binding_differs_from_lock() -> Non
 def test_schema_versions_advance_fail_closed() -> None:
     assert SPOOL_IDENTITY_SCHEMA.endswith("/v2")
     assert runner.SPOOL_PREFLIGHT_SCHEMA.endswith("/v2")
-    assert runner.EXECUTION_LOCK_SCHEMA.endswith("/v3")
-    assert runner.SEALED_LOCK_SCHEMA.endswith("/v5")
+    assert runner.EXECUTION_LOCK_SCHEMA.endswith("/v4")
+    assert runner.SEALED_LOCK_SCHEMA.endswith("/v6")
     assert runner.SUITE_DRAFT_SCHEMA.endswith("/v4")
     assert runner.SUITE_SCHEMA.endswith("/v4")
 

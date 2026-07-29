@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 from functools import lru_cache
+import json
 import os
 from pathlib import Path
 import subprocess
@@ -39,6 +40,9 @@ from prom_search_hswm.prom9_f1_r8_power_cli import (
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+INCIDENT_RECEIPT_PATH = (
+    REPO_ROOT / "receipts/hswm_f1_r8_v8_aborted_exposure.v1.json"
+)
 _JUDGE_RELATIVE_PATH = Path(
     "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
 )
@@ -438,7 +442,7 @@ def _allow_synthetic_components(
     )
 
 
-def _v3_receipt(
+def _v4_receipt(
     *,
     components: list[dict[str, object]],
     plan: dict[str, object],
@@ -446,14 +450,21 @@ def _v3_receipt(
     judge_sha256: str,
     environment_hashes: dict[str, str] | None = None,
 ) -> dict[str, object]:
+    incident = json.loads(INCIDENT_RECEIPT_PATH.read_text(encoding="utf-8"))
+    incident_sha256 = incident["aborted_attempt_exposure_receipt_sha256"]
     evidence = {
-        "schema_version": "hswm-prom9-f1-r8-development-evidence/v1",
+        "schema_version": "hswm-prom9-f1-r8-development-evidence/v2",
         "manifest": {},
-        "execution_lock": {},
+        "execution_lock": {
+            "aborted_attempt_exposure_receipt_sha256": incident_sha256
+        },
         "public_source_receipt": {},
-        "selection_receipt": {},
+        "selection_receipt": {
+            "aborted_attempt_exposure_receipt_sha256": incident_sha256
+        },
         "gold_source_receipt": {},
         "prior_exposure_receipt": {},
+        "aborted_attempt_exposure_receipt": incident,
         "suite": {},
         "evaluator_receipt": {},
         "gold": {},
@@ -464,6 +475,9 @@ def _v3_receipt(
             or {field: canonical_sha256(field) for field in ENVIRONMENT_HASH_FIELDS}
         ),
     }
+    evidence["artifact_receipts"][
+        "aborted_attempt_exposure_receipt_sha256"
+    ] = incident_sha256
     analysis = {
         "schema_version": POWER_DEVELOPMENT_SCHEMA,
         "development_components": components,
@@ -491,13 +505,13 @@ def _rehash(receipt: dict[str, object]) -> dict[str, object]:
     return {**unsigned, "receipt_sha256": canonical_sha256(unsigned)}
 
 
-def test_actual_prospective_judge_semantics_pass_v3_power_gates_but_incomplete_judge_evidence_refuses(
+def test_actual_prospective_judge_semantics_pass_v4_power_gates_but_incomplete_judge_evidence_refuses(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    assert POWER_RECEIPT_SCHEMA == "hswm-prom9-f1-r8-power-operating-characteristic/v3"
+    assert POWER_RECEIPT_SCHEMA == "hswm-prom9-f1-r8-power-operating-characteristic/v4"
     judge, components, plan, characteristics = _actual_judge_power()
     judge_sha = str(judge.judge_core_sha256(JUDGE_PATH))
-    receipt = _v3_receipt(
+    receipt = _v4_receipt(
         components=components,
         plan=plan,
         characteristics=characteristics,
@@ -546,7 +560,7 @@ def test_power_gate_rejects_a_subthreshold_actual_judge_characteristic(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     judge, components, plan, characteristics = _actual_judge_power()
-    receipt = _v3_receipt(
+    receipt = _v4_receipt(
         components=components,
         plan=plan,
         characteristics=characteristics,
@@ -569,7 +583,7 @@ def test_rehashed_detached_component_contrast_is_refused_by_evidence_rederivatio
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     judge, components, plan, characteristics = _actual_judge_power()
-    receipt = _v3_receipt(
+    receipt = _v4_receipt(
         components=components,
         plan=plan,
         characteristics=characteristics,
@@ -599,7 +613,7 @@ def test_terminal_power_verifier_rejects_incomplete_evidence_shape(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     judge, components, plan, characteristics = _actual_judge_power()
-    receipt = _v3_receipt(
+    receipt = _v4_receipt(
         components=components,
         plan=plan,
         characteristics=characteristics,
@@ -791,7 +805,7 @@ def test_subthreshold_receipt_is_refused_before_private_write(
 ) -> None:
     judge, components, plan, characteristics = _actual_judge_power()
     hashes = {field: canonical_sha256(field) for field in ENVIRONMENT_HASH_FIELDS}
-    receipt = _v3_receipt(
+    receipt = _v4_receipt(
         components=components,
         plan=plan,
         characteristics=characteristics,
@@ -814,6 +828,116 @@ def test_subthreshold_receipt_is_refused_before_private_write(
         write_validated_power_receipt(
             Path("must-not-exist.json"),
             failing,
+            expected_environment_hashes=hashes,
+            judge_core_path=JUDGE_PATH,
+        )
+    assert writes == []
+
+
+def test_terminal_power_write_exact_verifies_and_binds_incident(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import prom_search_hswm.prom9_f1_r8_power_cli as cli
+
+    hashes = {field: canonical_sha256(field) for field in ENVIRONMENT_HASH_FIELDS}
+    receipt = _v4_receipt(
+        components=[],
+        plan={},
+        characteristics={},
+        judge_sha256="a" * 64,
+        environment_hashes=hashes,
+    )
+    writes: list[tuple[Path, object]] = []
+    monkeypatch.setattr(cli, "verify_receipt_environment_hashes", lambda *_args: None)
+    monkeypatch.setattr(
+        cli, "verify_power_operating_characteristics", lambda *_args, **_kwargs: "ok"
+    )
+    monkeypatch.setattr(
+        cli, "write_private_once", lambda path, value: writes.append((path, value))
+    )
+
+    output = Path("validated-power.json")
+    write_validated_power_receipt(
+        output,
+        receipt,
+        expected_environment_hashes=hashes,
+        judge_core_path=JUDGE_PATH,
+    )
+    assert writes == [(output, receipt)]
+
+
+@pytest.mark.parametrize(
+    "failure",
+    [
+        "empty_incident",
+        "incomplete_incident",
+        "resigned_incident",
+        "artifact_binding",
+        "selection_binding",
+        "execution_lock_binding",
+    ],
+)
+def test_terminal_power_write_refuses_invalid_or_unbound_incident_before_write(
+    failure: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import prom_search_hswm.prom9_f1_r8_power_cli as cli
+
+    hashes = {field: canonical_sha256(field) for field in ENVIRONMENT_HASH_FIELDS}
+    receipt = _v4_receipt(
+        components=[],
+        plan={},
+        characteristics={},
+        judge_sha256="a" * 64,
+        environment_hashes=hashes,
+    )
+    evidence = receipt["development_evidence"]
+    assert isinstance(evidence, dict)
+    incident = evidence["aborted_attempt_exposure_receipt"]
+    assert isinstance(incident, dict)
+    if failure == "empty_incident":
+        evidence["aborted_attempt_exposure_receipt"] = {
+            "aborted_attempt_exposure_receipt_sha256": canonical_sha256({})
+        }
+    elif failure == "incomplete_incident":
+        incident.pop("evidence")
+        unsigned = dict(incident)
+        unsigned.pop("aborted_attempt_exposure_receipt_sha256")
+        incident["aborted_attempt_exposure_receipt_sha256"] = canonical_sha256(
+            unsigned
+        )
+    elif failure == "resigned_incident":
+        incident["complete"] = False
+        unsigned = dict(incident)
+        unsigned.pop("aborted_attempt_exposure_receipt_sha256")
+        incident["aborted_attempt_exposure_receipt_sha256"] = canonical_sha256(
+            unsigned
+        )
+    else:
+        target_name = {
+            "artifact_binding": "artifact_receipts",
+            "selection_binding": "selection_receipt",
+            "execution_lock_binding": "execution_lock",
+        }[failure]
+        target = evidence[target_name]
+        assert isinstance(target, dict)
+        target["aborted_attempt_exposure_receipt_sha256"] = "0" * 64
+    receipt["development_evidence_sha256"] = canonical_sha256(evidence)
+    receipt = _rehash(receipt)
+
+    writes: list[tuple[Path, object]] = []
+    monkeypatch.setattr(cli, "verify_receipt_environment_hashes", lambda *_args: None)
+    monkeypatch.setattr(
+        cli, "verify_power_operating_characteristics", lambda *_args, **_kwargs: "ok"
+    )
+    monkeypatch.setattr(
+        cli, "write_private_once", lambda path, value: writes.append((path, value))
+    )
+
+    with pytest.raises(PowerCLIRefusal, match="aborted-attempt exposure"):
+        write_validated_power_receipt(
+            Path("must-not-exist.json"),
+            receipt,
             expected_environment_hashes=hashes,
             judge_core_path=JUDGE_PATH,
         )
@@ -844,6 +968,8 @@ def test_cli_refusal_does_not_echo_private_error_text(
         "c",
         "--prior-exposure-receipt",
         "p",
+        "--aborted-attempt-exposure-receipt",
+        "a",
         "--suite",
         "u",
         "--evaluator-receipt",

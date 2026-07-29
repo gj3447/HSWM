@@ -1,25 +1,31 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
 import copy
+from functools import lru_cache
 import hashlib
 import json
 import os
 from pathlib import Path
-import subprocess
-import sys
 
 import pytest
 
 from prom_search_hswm.hswm_function_network import F1_ARMS, TYPED_ARM, VECTOR_ARM
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
-from prom_search_hswm.prom9_f1_prior_exposure import SCHEMA as PRIOR_SCHEMA
+from prom_search_hswm.prom9_f1_prior_exposure import (
+    PriorExposureRefusal,
+    SCHEMA as PRIOR_SCHEMA,
+)
 from prom_search_hswm.prom9_f1_r8_environment import R8_DEPENDENCY_NAMES
 from prom_search_hswm.prom9_f1_r8_power import (
     CONFIRMATORY_POOL_OFFSETS,
     DEVELOPMENT_OFFSETS,
     GOLD_SOURCE_SCHEMA,
+    POWER_EVIDENCE_SCHEMA,
+    POWER_RECEIPT_SCHEMA,
     SELECTION_SCHEMA,
     PowerRefusal,
+    _component_key,
     _load_judge_core,
     build_power_receipt,
     build_selection_receipts,
@@ -27,15 +33,23 @@ from prom_search_hswm.prom9_f1_r8_power import (
     evaluator_selected_entries,
     replay_selection_receipt,
     _manifest_source_entity_ids,
+    main,
     selected_entries,
     verify_gold_source_receipt,
     verify_selection_receipt,
 )
-from prom_search_hswm.prom9_f1_r8_source import build_artifacts
+from prom_search_hswm.prom9_f1_r8_source import (
+    COMPONENT_SCHEMA,
+    build_artifacts,
+    source_entity_id,
+)
 
 
 SENTINEL = "PRIVATE_SENTINEL_ANSWER"
 REPO_ROOT = Path(__file__).resolve().parents[1]
+INCIDENT_RECEIPT_PATH = (
+    REPO_ROOT / "receipts/hswm_f1_r8_v8_aborted_exposure.v1.json"
+)
 _JUDGE_RELATIVE_PATH = Path(
     "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
 )
@@ -67,10 +81,75 @@ SYMPOSIUM_ROOT = _resolve_symposium_root()
 JUDGE_PATH = SYMPOSIUM_ROOT / _JUDGE_RELATIVE_PATH
 
 
+def _incident() -> dict[str, object]:
+    return json.loads(INCIDENT_RECEIPT_PATH.read_text(encoding="utf-8"))
+
+
+_INCIDENT_AGGREGATE = _incident()["aggregate"]
+assert isinstance(_INCIDENT_AGGREGATE, dict)
+_INCIDENT_ITEM_ID = str(_INCIDENT_AGGREGATE["prior_item_ids"][0])
+_INCIDENT_COMPONENT_ID = str(_INCIDENT_AGGREGATE["prior_component_ids"][0])
+_INCIDENT_SOURCE_ENTITY_IDS = tuple(
+    str(value) for value in _INCIDENT_AGGREGATE["prior_source_entity_ids"]
+)
+_INCIDENT_SELECTION_KEY = _component_key(
+    _INCIDENT_COMPONENT_ID, "development_power"
+)
+
+
+@lru_cache(maxsize=None)
+def _ordinary_development_title(label: str) -> str:
+    """Give ordinary synthetic components ranks after the incident component."""
+
+    for nonce in range(1000):
+        title = f"{label}-nonce-{nonce}"
+        sentences = [f"Sentence {title}."]
+        entity_id = source_entity_id(title, sentences)
+        component_id = canonical_sha256(
+            {
+                "schema_version": COMPONENT_SCHEMA,
+                "source_entity_ids": [entity_id],
+            }
+        )
+        if _component_key(component_id, "development_power") > (
+            _INCIDENT_SELECTION_KEY
+        ):
+            return title
+    raise AssertionError("could not synthesize a post-incident component rank")
+
+
+@pytest.fixture(autouse=True)
+def _synthetic_incident_source_entities(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import prom_search_hswm.prom9_f1_prior_exposure as prior_exposure
+    import prom_search_hswm.prom9_f1_r8_source as source
+
+    original = source.source_entity_id
+    mapped = {
+        f"incident-source-{index}": entity_id
+        for index, entity_id in enumerate(_INCIDENT_SOURCE_ENTITY_IDS)
+    }
+
+    def synthetic_source_entity_id(title: str, sentences) -> str:
+        if title in mapped:
+            return mapped[title]
+        return original(title, sentences)
+
+    monkeypatch.setattr(source, "source_entity_id", synthetic_source_entity_id)
+    monkeypatch.setattr(
+        prior_exposure, "source_entity_id", synthetic_source_entity_id
+    )
+
+
 def _prior() -> dict[str, object]:
-    items = [f"prior-item-{index:03d}" for index in range(104)]
-    entities = [canonical_sha256({"prior-entity": index}) for index in range(104)]
-    components = [canonical_sha256({"prior-component": index}) for index in range(104)]
+    items = sorted(f"prior-item-{index:03d}" for index in range(104))
+    entities = sorted(
+        canonical_sha256({"prior-entity": index}) for index in range(104)
+    )
+    components = sorted(
+        canonical_sha256({"prior-component": index}) for index in range(104)
+    )
     unsigned = {
         "schema_version": PRIOR_SCHEMA,
         "aggregate": {
@@ -86,18 +165,128 @@ def _prior() -> dict[str, object]:
     return {**unsigned, "prior_exposure_receipt_sha256": canonical_sha256(unsigned)}
 
 
+def _allow_resigned_incident_for_preimage_test(
+    monkeypatch: pytest.MonkeyPatch,
+    incident: dict[str, object],
+) -> str:
+    """Bypass only the fixed incident identity to exercise candidate replay."""
+
+    import prom_search_hswm.prom9_f1_r8_power as power
+
+    unsigned = dict(incident)
+    unsigned.pop("aborted_attempt_exposure_receipt_sha256")
+    incident_sha = canonical_sha256(unsigned)
+    incident["aborted_attempt_exposure_receipt_sha256"] = incident_sha
+    monkeypatch.setattr(
+        power,
+        "verify_aborted_attempt_exposure_receipt",
+        lambda _value: incident_sha,
+    )
+
+    def preverified_merge(prior, supplied_incident):
+        assert supplied_incident is incident
+        prior_aggregate = prior["aggregate"]
+        incident_aggregate = supplied_incident["aggregate"]
+
+        def union(key: str) -> list[str]:
+            return sorted(
+                set(prior_aggregate[key]).union(incident_aggregate[key])
+            )
+
+        item_ids = union("prior_item_ids")
+        source_ids = union("prior_source_entity_ids")
+        component_ids = union("prior_component_ids")
+        return {
+            "prior_exposure_receipt_sha256": prior[
+                "prior_exposure_receipt_sha256"
+            ],
+            "aborted_attempt_exposure_receipt_sha256": incident_sha,
+            "item_ids": item_ids,
+            "source_entity_ids": source_ids,
+            "component_ids": component_ids,
+            "item_root_sha256": canonical_sha256(item_ids),
+            "source_entity_root_sha256": canonical_sha256(source_ids),
+            "component_root_sha256": canonical_sha256(component_ids),
+        }
+
+    monkeypatch.setattr(power, "merge_exposure_boundaries", preverified_merge)
+    return incident_sha
+
+
+def _prior_with_component_dimension(
+    component: Mapping[str, object], dimension: str
+) -> dict[str, object]:
+    receipt = _prior()
+    aggregate = receipt["aggregate"]
+    assert isinstance(aggregate, dict)
+    key_by_dimension = {
+        "item_ids": "prior_item_ids",
+        "source_entity_ids": "prior_source_entity_ids",
+        "component_ids": "prior_component_ids",
+    }
+    root_by_dimension = {
+        "item_ids": "item_root_sha256",
+        "source_entity_ids": "source_entity_root_sha256",
+        "component_ids": "component_root_sha256",
+    }
+    aggregate_key = key_by_dimension[dimension]
+    component_values = (
+        [component["component_id"]]
+        if dimension == "component_ids"
+        else component[dimension]
+    )
+    values = sorted(
+        set(str(value) for value in aggregate[aggregate_key]).union(
+            str(value) for value in component_values
+        )
+    )
+    aggregate[aggregate_key] = values
+    aggregate[root_by_dimension[dimension]] = canonical_sha256(values)
+    unsigned = dict(receipt)
+    unsigned.pop("prior_exposure_receipt_sha256")
+    receipt["prior_exposure_receipt_sha256"] = canonical_sha256(unsigned)
+    return receipt
+
+
 def _row(
     index: int, *, development: bool, answer: str | None = None
 ) -> dict[str, object]:
-    if development and index < 200:
-        title = f"development-pair-{index // 2:03d}"
+    if development and index == 20:
+        item_id = _INCIDENT_ITEM_ID
+        titles = [
+            f"incident-source-{source_index}"
+            for source_index in range(len(_INCIDENT_SOURCE_ENTITY_IDS))
+        ]
+    elif development and index < 20:
+        item_id = f"dev-item-{index:04d}"
+        titles = [
+            _ordinary_development_title(
+                f"development-pair-{index // 2:03d}"
+            )
+        ]
+    elif development and 21 <= index < 47:
+        item_id = f"dev-item-{index:04d}"
+        titles = [
+            _ordinary_development_title(
+                f"development-pair-{10 + (index - 21) // 2:03d}"
+            )
+        ]
+    elif development:
+        item_id = f"dev-item-{index:04d}"
+        titles = [
+            _ordinary_development_title(f"development-{index:04d}")
+        ]
     else:
-        title = f"{'development' if development else 'confirmatory'}-{index:04d}"
+        item_id = f"r8-item-{index:04d}"
+        titles = [f"confirmatory-{index:04d}"]
     return {
-        "id": f"{'dev' if development else 'r8'}-item-{index:04d}",
+        "id": item_id,
         "question": f"Question {index}?",
         "answer": answer if answer is not None else f"PRIVATE_{index}",
-        "context": {"title": [title], "sentences": [[f"Sentence {title}."]]},
+        "context": {
+            "title": titles,
+            "sentences": [[f"Sentence {title}."] for title in titles],
+        },
         "supporting_facts": {"title": [], "sent_id": []},
         "evidences": [],
         "type": "comparison",
@@ -135,21 +324,24 @@ def _envelope() -> dict[str, object]:
     }
 
 
-def test_public_selection_v2_and_private_gold_source_are_physically_separate(
+def test_public_selection_v3_and_private_gold_source_are_physically_separate(
     tmp_path: Path,
 ) -> None:
     development, confirmatory = _pages(tmp_path, answer=SENTINEL)
     selection, gold_source = build_selection_receipts(
         prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=_incident(),
         development_pages=development,
         confirmatory_pages=confirmatory,
     )
     assert selection["schema_version"] == SELECTION_SCHEMA
     assert gold_source["schema_version"] == GOLD_SOURCE_SCHEMA
     assert verify_selection_receipt(selection) == selection["selection_receipt_sha256"]
-    assert replay_selection_receipt(selection, prior_receipt=_prior()) == selection[
-        "selection_receipt_sha256"
-    ]
+    assert replay_selection_receipt(
+        selection,
+        prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=_incident(),
+    ) == selection["selection_receipt_sha256"]
     assert verify_gold_source_receipt(gold_source, selection) == gold_source[
         "gold_source_receipt_sha256"
     ]
@@ -161,6 +353,7 @@ def test_public_selection_v2_and_private_gold_source_are_physically_separate(
     assert all(set(entry["row"]) == {"id", "question", "context", "type"} for entry in public_rows)
     assert all("answer" in entry["row"] for entry in full_rows)
     assert len(selection["development"]["component_schedule"]) == 48
+    assert len(selection["development"]["item_ids"]) == 55
     assert len(selection["confirmatory"]["item_ids"]) == 100
 
 
@@ -170,6 +363,7 @@ def test_answer_only_mutation_leaves_public_selection_byte_identical(
     development, confirmatory = _pages(tmp_path, answer="FIRST_PRIVATE")
     first_selection, first_gold_source = build_selection_receipts(
         prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=_incident(),
         development_pages=development,
         confirmatory_pages=confirmatory,
     )
@@ -181,6 +375,7 @@ def test_answer_only_mutation_leaves_public_selection_byte_identical(
         path.chmod(0o600)
     second_selection, second_gold_source = build_selection_receipts(
         prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=_incident(),
         development_pages=development,
         confirmatory_pages=confirmatory,
     )
@@ -191,7 +386,201 @@ def test_answer_only_mutation_leaves_public_selection_byte_identical(
     ]
 
 
-def test_select_cli_requires_distinct_public_and_gold_source_outputs(tmp_path: Path) -> None:
+def test_incident_component_is_excluded_and_replacement_is_selected(
+    tmp_path: Path,
+) -> None:
+    import prom_search_hswm.prom9_f1_r8_power as power
+
+    development, confirmatory = _pages(tmp_path)
+    incident = _incident()
+    selection, _gold_source = build_selection_receipts(
+        prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=incident,
+        development_pages=development,
+        confirmatory_pages=confirmatory,
+    )
+    projections: list[dict[str, object]] = []
+    for page in selection["source_pages"]:
+        if page["purpose"] == "development":
+            _receipt, rows, _entries = power._page_input_redacted(
+                page["redacted_rows"], page["offset"]
+            )
+            projections.extend(rows)
+    projected_items = [dict(row) for row in projections]
+    components = power._assign_components(projected_items)
+    ordered = sorted(
+        components,
+        key=lambda component: _component_key(
+            str(component["component_id"]), "development_power"
+        ),
+    )
+    incident_aggregate = incident["aggregate"]
+    accepted_call = incident["accepted_upstream_calls"][0]
+    assert [
+        item["dataset_row_index"]
+        for item in projected_items
+        if item["item_id"] == accepted_call["item_id"]
+        and item["component_id"] == accepted_call["component_id"]
+        and item["source_entity_ids"] == accepted_call["source_entity_ids"]
+    ] == [accepted_call["dataset_row_index"]]
+    assert ordered[0] == {
+        "component_id": incident_aggregate["prior_component_ids"][0],
+        "item_ids": incident_aggregate["prior_item_ids"],
+        "source_entity_ids": incident_aggregate["prior_source_entity_ids"],
+    }
+    selected_components = {
+        str(component["component_id"])
+        for component in selection["development"]["component_schedule"]
+    }
+    expected_components = {
+        str(component["component_id"]) for component in ordered[1:49]
+    }
+    assert selected_components == expected_components
+    assert str(ordered[48]["component_id"]) in selected_components
+    assert not selected_components & set(
+        incident_aggregate["prior_component_ids"]
+    )
+    assert not set(selection["development"]["item_ids"]) & set(
+        incident_aggregate["prior_item_ids"]
+    )
+    assert not set(selection["development"]["source_entity_ids"]) & set(
+        incident_aggregate["prior_source_entity_ids"]
+    )
+    assert selection["aborted_attempt_exposure_receipt_sha256"] == incident[
+        "aborted_attempt_exposure_receipt_sha256"
+    ]
+    assert len(selection["development"]["component_schedule"]) == 48
+    assert len(selection["development"]["item_ids"]) == 55
+    assert len(selection["confirmatory"]["item_ids"]) == 100
+
+
+def test_missing_tampered_and_resigned_incident_are_refused(
+    tmp_path: Path,
+) -> None:
+    development, confirmatory = _pages(tmp_path)
+    with pytest.raises(TypeError, match="aborted_attempt_exposure_receipt"):
+        build_selection_receipts(
+            prior_receipt=_prior(),
+            development_pages=development,
+            confirmatory_pages=confirmatory,
+        )
+
+    tampered = _incident()
+    tampered["termination"]["exit_code"] = 134
+    with pytest.raises(PriorExposureRefusal, match="self-hash"):
+        build_selection_receipts(
+            prior_receipt=_prior(),
+            aborted_attempt_exposure_receipt=tampered,
+            development_pages=development,
+            confirmatory_pages=confirmatory,
+        )
+
+    selection, _gold_source = build_selection_receipts(
+        prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=_incident(),
+        development_pages=development,
+        confirmatory_pages=confirmatory,
+    )
+    resigned = _incident()
+    resigned["run_identity"]["run_id"] = "re-signed-wrong-attempt"
+    unsigned = dict(resigned)
+    unsigned.pop("aborted_attempt_exposure_receipt_sha256")
+    resigned["aborted_attempt_exposure_receipt_sha256"] = canonical_sha256(
+        unsigned
+    )
+    with pytest.raises(PriorExposureRefusal, match="run identity"):
+        replay_selection_receipt(
+            selection,
+            prior_receipt=_prior(),
+            aborted_attempt_exposure_receipt=resigned,
+        )
+
+
+def test_incident_must_reproduce_one_candidate_component_even_if_preverified(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    development, confirmatory = _pages(tmp_path)
+    prior = _prior()
+    wrong = _incident()
+    wrong_item = "re-signed-but-not-in-candidate-pages"
+    wrong["accepted_upstream_calls"][0]["item_id"] = wrong_item
+    wrong["aggregate"]["prior_item_ids"] = [wrong_item]
+    wrong["aggregate"]["item_root_sha256"] = canonical_sha256([wrong_item])
+    _allow_resigned_incident_for_preimage_test(monkeypatch, wrong)
+    with pytest.raises(PowerRefusal, match="exactly one development component"):
+        build_selection_receipts(
+            prior_receipt=prior,
+            aborted_attempt_exposure_receipt=wrong,
+            development_pages=development,
+            confirmatory_pages=confirmatory,
+        )
+
+
+def test_resigned_incident_row_index_must_match_candidate_preimage(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    development, confirmatory = _pages(tmp_path)
+    wrong = _incident()
+    accepted_call = wrong["accepted_upstream_calls"][0]
+    assert accepted_call["dataset_row_index"] == 124
+    accepted_call["dataset_row_index"] = 125
+    _allow_resigned_incident_for_preimage_test(monkeypatch, wrong)
+
+    with pytest.raises(PowerRefusal, match="development candidate preimage"):
+        build_selection_receipts(
+            prior_receipt=_prior(),
+            aborted_attempt_exposure_receipt=wrong,
+            development_pages=development,
+            confirmatory_pages=confirmatory,
+        )
+
+
+@pytest.mark.parametrize(
+    ("cohort", "dimension"),
+    [
+        (cohort, dimension)
+        for cohort in ("development", "confirmatory")
+        for dimension in ("item_ids", "source_entity_ids", "component_ids")
+    ],
+)
+def test_all_identity_dimensions_filter_development_and_confirmatory_components(
+    tmp_path: Path,
+    cohort: str,
+    dimension: str,
+) -> None:
+    development, confirmatory = _pages(tmp_path)
+    baseline, _gold_source = build_selection_receipts(
+        prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=_incident(),
+        development_pages=development,
+        confirmatory_pages=confirmatory,
+    )
+    target = baseline[cohort]["component_schedule"][0]
+    reselection, _replacement_gold_source = build_selection_receipts(
+        prior_receipt=_prior_with_component_dimension(target, dimension),
+        aborted_attempt_exposure_receipt=_incident(),
+        development_pages=development,
+        confirmatory_pages=confirmatory,
+    )
+    replacement_components = {
+        str(component["component_id"])
+        for component in reselection[cohort]["component_schedule"]
+    }
+    assert target["component_id"] not in replacement_components
+    assert not set(target["item_ids"]) & set(reselection[cohort]["item_ids"])
+    assert not set(target["source_entity_ids"]) & set(
+        reselection[cohort]["source_entity_ids"]
+    )
+    expected_count = 48 if cohort == "development" else 100
+    assert len(reselection[cohort]["component_schedule"]) == expected_count
+
+
+def test_select_cli_requires_public_incident_and_separate_gold_output(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
     development, confirmatory = _pages(tmp_path, answer=SENTINEL)
     prior_path = tmp_path / "prior.json"
     prior_path.write_text(json.dumps(_prior()), encoding="utf-8")
@@ -199,8 +588,9 @@ def test_select_cli_requires_distinct_public_and_gold_source_outputs(tmp_path: P
     public_path = tmp_path / "selection.json"
     gold_source_path = tmp_path / "gold-source.json"
     command = [
-        sys.executable, "-m", "prom_search_hswm.prom9_f1_r8_power", "select",
+        "select",
         "--prior-exposure-receipt", str(prior_path),
+        "--aborted-attempt-exposure-receipt", str(INCIDENT_RECEIPT_PATH),
     ]
     for offset, path in development.items():
         command.extend(["--development-page", f"{offset}:{path}"])
@@ -209,9 +599,19 @@ def test_select_cli_requires_distinct_public_and_gold_source_outputs(tmp_path: P
     command.extend(
         ["--output", str(public_path), "--gold-source-output", str(gold_source_path)]
     )
-    result = subprocess.run(command, check=False, capture_output=True, text=True)
-    assert result.returncode == 0, result.stderr
-    assert SENTINEL not in result.stdout + result.stderr
+    missing_incident = list(command)
+    incident_option = missing_incident.index(
+        "--aborted-attempt-exposure-receipt"
+    )
+    del missing_incident[incident_option : incident_option + 2]
+    with pytest.raises(SystemExit):
+        main(missing_incident)
+    assert "--aborted-attempt-exposure-receipt" in capsys.readouterr().err
+
+    assert os.stat(INCIDENT_RECEIPT_PATH).st_mode & 0o077 == 0o044
+    assert main(command) == 0
+    captured = capsys.readouterr()
+    assert SENTINEL not in captured.out + captured.err
     assert SENTINEL not in public_path.read_text(encoding="utf-8")
     assert SENTINEL in gold_source_path.read_text(encoding="utf-8")
     assert os.stat(public_path).st_mode & 0o777 == 0o600
@@ -222,6 +622,7 @@ def test_rehashed_block_swap_is_refused_by_public_selector_replay(tmp_path: Path
     development, confirmatory = _pages(tmp_path)
     selection, _gold_source = build_selection_receipts(
         prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=_incident(),
         development_pages=development,
         confirmatory_pages=confirmatory,
     )
@@ -234,13 +635,18 @@ def test_rehashed_block_swap_is_refused_by_public_selector_replay(tmp_path: Path
     unsigned.pop("selection_receipt_sha256")
     tampered["selection_receipt_sha256"] = canonical_sha256(unsigned)
     with pytest.raises(PowerRefusal, match="block assignment"):
-        replay_selection_receipt(tampered, prior_receipt=_prior())
+        replay_selection_receipt(
+            tampered,
+            prior_receipt=_prior(),
+            aborted_attempt_exposure_receipt=_incident(),
+        )
 
 
 def test_terminal_components_use_evaluator_only_gold_after_the_run(tmp_path: Path) -> None:
     development, confirmatory = _pages(tmp_path)
     selection, gold_source = build_selection_receipts(
         prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=_incident(),
         development_pages=development,
         confirmatory_pages=confirmatory,
     )
@@ -305,8 +711,10 @@ def test_power_builder_success_rederives_full_embedded_development_evidence(
 
     development, confirmatory = _pages(tmp_path)
     prior = _prior()
+    incident = _incident()
     selection, gold_source = build_selection_receipts(
         prior_receipt=prior,
+        aborted_attempt_exposure_receipt=incident,
         development_pages=development,
         confirmatory_pages=confirmatory,
     )
@@ -394,6 +802,9 @@ def test_power_builder_success_rederives_full_embedded_development_evidence(
         "prior_exposure_receipt_sha256": prior[
             "prior_exposure_receipt_sha256"
         ],
+        "aborted_attempt_exposure_receipt_sha256": incident[
+            "aborted_attempt_exposure_receipt_sha256"
+        ],
         "public_source_receipt_sha256": source["source_receipt_sha256"],
         "gold_source_receipt_sha256": gold_source[
             "gold_source_receipt_sha256"
@@ -459,6 +870,7 @@ def test_power_builder_success_rederives_full_embedded_development_evidence(
         selection_receipt=selection,
         gold_source_receipt=gold_source,
         prior_exposure_receipt=prior,
+        aborted_attempt_exposure_receipt=incident,
         suite=suite,
         evaluator_receipt=evaluator,
         gold=gold,
@@ -473,9 +885,15 @@ def test_power_builder_success_rederives_full_embedded_development_evidence(
         selection_receipt=selection,
     )
     assert receipt["analysis_input"]["development_components"] == expected_components
+    assert receipt["schema_version"] == POWER_RECEIPT_SCHEMA
+    assert receipt["development_evidence"]["schema_version"] == POWER_EVIDENCE_SCHEMA
+    assert receipt["development_evidence"][
+        "aborted_attempt_exposure_receipt"
+    ] == incident
     assert set(receipt["development_evidence"]["artifact_receipts"]) == {
         "selection_receipt_sha256",
         "prior_exposure_receipt_sha256",
+        "aborted_attempt_exposure_receipt_sha256",
         "execution_lock_sha256",
         "public_source_receipt_sha256",
         "gold_source_receipt_sha256",

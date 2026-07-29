@@ -52,11 +52,11 @@ EXPECTED_DEVELOPMENT_ITEMS = 55
 EXPECTED_CONFIRMATORY_ITEMS = 100
 EXPECTED_CONFIRMATORY_COMPONENTS = 100
 DEFAULT_TOKEN_TOLERANCE = 512
-DEVELOPMENT_RUN_ID = "f1-2wiki-development-r8-try3"
+DEVELOPMENT_RUN_ID = "f1-2wiki-development-r8-try3-a2"
 CONFIRMATORY_RUN_ID = "f1-2wiki-sealed-r8-try3"
 R8_DERIVATION_PREIMAGE_FILE_SHA256 = {
     "selection_receipt": (
-        "8b16158db888ed0023056af85e204db8e0f9e3eb307ee53dc02be2ff9674ac91"
+        "999d5c38f0e0ccfe594a8c69cc0b697fb2a6972835f3472144b2d51fcce2fcab"
     ),
     "historical_manifest": (
         "02e453dc25d7ec657494105d5d1592358501ac3a1fdd179e2b7e032dc890ebcc"
@@ -79,7 +79,7 @@ R8_PROTOCOL_CANONICAL_SHA256 = (
 )
 R8_DERIVATION_PREIMAGE_CANONICAL_SHA256 = {
     "selection_receipt": (
-        "2a98eb24d683c304af4561a6463dfa6683a9945d1d028845af4c448e2d915bd1"
+        "03143d6e84e1d0c787d49db3e16f73b7833630b16f3a8f44a19d84fd5ed5a846"
     ),
     "historical_manifest": (
         "bf047193f84ca1888cc5e9d2527f6d6e2a89bc5c049ae3e4b7c73766e8fc5957"

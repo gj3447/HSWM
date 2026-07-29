@@ -4,8 +4,6 @@ import copy
 import json
 import os
 from pathlib import Path
-import subprocess
-import sys
 
 import pytest
 
@@ -25,10 +23,17 @@ from prom_search_hswm.prom9_f1_r8_source import (
     build_artifacts,
     redact_entries,
     source_entity_id,
+    main as source_main,
     verify_evaluator_seal,
     verify_public_source_receipt,
 )
-from prom_search_hswm.test_prom9_f1_r8_power import SENTINEL, _pages, _prior
+from prom_search_hswm.test_prom9_f1_r8_power import (
+    SENTINEL,
+    _incident,
+    _pages,
+    _prior,
+    _synthetic_incident_source_entities,
+)
 
 
 def _row(item_id: str, question: str, answer: str, paragraphs: list[tuple[str, list[str]]]):
@@ -185,10 +190,14 @@ def test_answer_mutation_changes_only_evaluator_side_hashes() -> None:
     ]["gold_source_receipt_sha256"]
 
 
-def test_cli_consumes_both_receipts_and_never_prints_answers(tmp_path: Path) -> None:
+def test_cli_consumes_both_receipts_and_never_prints_answers(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
     development, confirmatory = _pages(tmp_path, answer=SENTINEL)
     selection, gold_source = build_selection_receipts(
         prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=_incident(),
         development_pages=development,
         confirmatory_pages=confirmatory,
     )
@@ -210,7 +219,6 @@ def test_cli_consumes_both_receipts_and_never_prints_answers(tmp_path: Path) -> 
         for name in ("manifest", "gold", "source", "evaluator")
     }
     command = [
-        sys.executable, "-m", "prom_search_hswm.prom9_f1_r8_source",
         "--selection-receipt", str(inputs["selection"]),
         "--gold-source-receipt", str(inputs["gold_source"]),
         "--selection-cohort", "development",
@@ -226,9 +234,9 @@ def test_cli_consumes_both_receipts_and_never_prints_answers(tmp_path: Path) -> 
         "--source-receipt", str(outputs["source"]),
         "--evaluator-receipt", str(outputs["evaluator"]),
     ]
-    result = subprocess.run(command, check=False, capture_output=True, text=True)
-    assert result.returncode == 0, result.stderr
-    assert SENTINEL not in result.stdout + result.stderr
+    assert source_main(command) == 0
+    captured = capsys.readouterr()
+    assert SENTINEL not in captured.out + captured.err
     assert SENTINEL not in outputs["manifest"].read_text(encoding="utf-8")
     assert SENTINEL not in outputs["source"].read_text(encoding="utf-8")
     assert SENTINEL not in outputs["evaluator"].read_text(encoding="utf-8")

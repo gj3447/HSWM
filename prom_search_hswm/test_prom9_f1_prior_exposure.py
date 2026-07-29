@@ -10,12 +10,30 @@ import pytest
 import prom_search_hswm.prom9_f1_prior_exposure as prior_exposure
 from prom_search_hswm.hswm_typed_ports import canonical_sha256
 from prom_search_hswm.prom9_f1_prior_exposure import (
+    ABORTED_ATTEMPT_EXPOSURE_SCHEMA,
+    ABORTED_ATTEMPT_STATUS,
     EXPECTED_PAGE_SPECS,
     PriorExposureRefusal,
+    SCHEMA,
     build_prior_exposure_receipt,
     inventory_stable_tree,
+    merge_exposure_boundaries,
+    verify_aborted_attempt_exposure_receipt,
     verify_prior_exposure_receipt,
     write_private_once,
+)
+from prom_search_hswm.prom9_f1_r8_runner import (
+    R8RunnerRefusal,
+    read_stable_json,
+)
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+INCIDENT_RECEIPT_PATH = (
+    REPO_ROOT / "receipts" / "hswm_f1_r8_v8_aborted_exposure.v1.json"
+)
+INCIDENT_RECEIPT_SHA256 = (
+    "6d3f2f8978a8502c0f01135ad7b998841dbb4bd61462934927f735e3932bad7d"
 )
 
 
@@ -94,6 +112,41 @@ def _receipt(tmp_path: Path):
         expected_manifests=1,
         expected_suites=1,
     )
+
+
+def _incident_receipt() -> dict[str, object]:
+    value, _raw_file_sha256 = read_stable_json(
+        INCIDENT_RECEIPT_PATH, "aborted-attempt exposure receipt"
+    )
+    return value
+
+
+def _resign_incident(value: dict[str, object]) -> None:
+    unsigned = copy.deepcopy(value)
+    unsigned.pop("aborted_attempt_exposure_receipt_sha256", None)
+    value["aborted_attempt_exposure_receipt_sha256"] = canonical_sha256(unsigned)
+
+
+def _minimal_prior(
+    *, item_ids: list[str], source_entity_ids: list[str], component_ids: list[str]
+) -> dict[str, object]:
+    aggregate = {
+        "prior_item_ids": item_ids,
+        "prior_source_entity_ids": source_entity_ids,
+        "prior_component_ids": component_ids,
+        "item_root_sha256": canonical_sha256(item_ids),
+        "source_entity_root_sha256": canonical_sha256(source_entity_ids),
+        "component_root_sha256": canonical_sha256(component_ids),
+    }
+    unsigned = {
+        "schema_version": SCHEMA,
+        "aggregate": aggregate,
+        "complete": True,
+    }
+    return {
+        **unsigned,
+        "prior_exposure_receipt_sha256": canonical_sha256(unsigned),
+    }
 
 
 def test_complete_receipt_has_exact_104_item_union_and_opaque_gold(tmp_path: Path) -> None:
@@ -189,3 +242,145 @@ def test_private_write_is_0600_and_write_once(tmp_path: Path) -> None:
     assert os.stat(output).st_mode & 0o777 == 0o600
     with pytest.raises(PriorExposureRefusal, match="replace"):
         write_private_once(output, {"value": 2})
+
+
+def test_aborted_attempt_receipt_is_exact_complete_public_metadata() -> None:
+    receipt = _incident_receipt()
+    assert receipt["schema_version"] == ABORTED_ATTEMPT_EXPOSURE_SCHEMA
+    assert receipt["status"] == ABORTED_ATTEMPT_STATUS
+    assert receipt["complete"] is True
+    assert set(receipt["run_identity"]) == {
+        "carrier_commit",
+        "ended_at",
+        "host",
+        "implementation_commit",
+        "job_name",
+        "model",
+        "model_revision",
+        "run_id",
+        "stage_path",
+        "started_at",
+    }
+    assert receipt["run_identity"]["job_name"] == (
+        "hswm-f1-r8-v8-development-825"
+    )
+    assert receipt["run_identity"]["stage_path"] == (
+        "/data/kjra/PROJECT/PI/hswm_f1_r8_try3_v8_20260729"
+    )
+    assert receipt["run_identity"]["host"] == (
+        "airobotics-Precision-7960-Tower"
+    )
+    assert receipt["run_identity"]["started_at"] == (
+        "2026-07-29T23:15:22+09:00"
+    )
+    assert receipt["run_identity"]["ended_at"] == (
+        "2026-07-29T23:15:34+09:00"
+    )
+    assert (
+        verify_aborted_attempt_exposure_receipt(receipt)
+        == INCIDENT_RECEIPT_SHA256
+        == receipt["aborted_attempt_exposure_receipt_sha256"]
+    )
+    accepted = receipt["accepted_upstream_calls"]
+    assert isinstance(accepted, list) and len(accepted) == 1
+    assert accepted[0]["physical_call_id"] == (
+        "3c9261a5e38c986c54e6c0bde7321baa4d9f7d2ef2052d407e864b4ee61a1f04"
+    )
+    assert accepted[0]["arm_id"] == "typed_hswm_three_function_network"
+    assert accepted[0]["function_id"] == "QF_QUERY_COMPILER"
+    assert accepted[0]["dataset_row_index"] == 124
+    assert len(accepted[0]["source_entity_ids"]) == 10
+    local_only = receipt["local_only_calls"]
+    assert isinstance(local_only, list) and local_only[0]["state"] == (
+        "SENT_NOT_UPSTREAM"
+    )
+    assert local_only[0]["arm_id"] == "typed_hswm_three_function_network"
+    assert local_only[0]["function_id"] == "BF_BOND_PROPOSER"
+
+
+def test_aborted_attempt_file_gate_refuses_duplicate_keys(tmp_path: Path) -> None:
+    original = INCIDENT_RECEIPT_PATH.read_text(encoding="utf-8")
+    duplicated = original.replace(
+        '  "status": "ABORTED_QUARANTINED",',
+        '  "status": "ABORTED",\n  "status": "ABORTED_QUARANTINED",',
+        1,
+    )
+    assert duplicated != original
+    path = tmp_path / "duplicate-key-incident.json"
+    path.write_text(duplicated, encoding="utf-8")
+    with pytest.raises(R8RunnerRefusal, match="duplicate JSON key"):
+        read_stable_json(path, "aborted-attempt exposure receipt")
+
+
+@pytest.mark.parametrize(
+    ("section", "field", "replacement"),
+    [
+        ("non_exposure_boundary", "runner_gold_opened", True),
+        ("non_exposure_boundary", "runner_gold_opened", 0),
+        ("counts", "accepted_development_upstream_calls", 2),
+        ("counts", "accepted_development_upstream_calls", True),
+        ("termination", "exit_code", 135.0),
+        ("accepted_upstream_calls", 0, None),
+        (None, "status", "ABORTED"),
+    ],
+)
+def test_aborted_attempt_tamper_and_resign_is_refused(
+    section: str | None, field: str | int, replacement: object
+) -> None:
+    receipt = _incident_receipt()
+    target = receipt if section is None else receipt[section]
+    if section == "accepted_upstream_calls":
+        assert isinstance(target, list) and field == 0
+        accepted = target[0]
+        assert isinstance(accepted, dict)
+        accepted["dataset_row_index"] = 124.0
+    else:
+        assert isinstance(target, dict) and isinstance(field, str)
+        target[field] = replacement
+    _resign_incident(receipt)
+    with pytest.raises(PriorExposureRefusal):
+        verify_aborted_attempt_exposure_receipt(receipt)
+
+
+def test_aborted_attempt_aggregate_root_mismatch_is_refused_after_resign() -> None:
+    receipt = _incident_receipt()
+    aggregate = receipt["aggregate"]
+    assert isinstance(aggregate, dict)
+    aggregate["source_entity_root_sha256"] = "0" * 64
+    _resign_incident(receipt)
+    with pytest.raises(PriorExposureRefusal, match="aggregate root"):
+        verify_aborted_attempt_exposure_receipt(receipt)
+
+
+def test_merge_exposure_boundaries_returns_sorted_canonical_union() -> None:
+    incident = _incident_receipt()
+    incident_aggregate = incident["aggregate"]
+    assert isinstance(incident_aggregate, dict)
+    incident_items = incident_aggregate["prior_item_ids"]
+    incident_sources = incident_aggregate["prior_source_entity_ids"]
+    incident_components = incident_aggregate["prior_component_ids"]
+    assert isinstance(incident_items, list)
+    assert isinstance(incident_sources, list)
+    assert isinstance(incident_components, list)
+    prior = _minimal_prior(
+        item_ids=sorted(["000-prior-item", incident_items[0]]),
+        source_entity_ids=sorted(["0" * 64, incident_sources[0]]),
+        component_ids=sorted(["0" * 64, incident_components[0]]),
+    )
+
+    merged = merge_exposure_boundaries(prior, incident)
+    expected_items = sorted({"000-prior-item", *incident_items})
+    expected_sources = sorted({"0" * 64, *incident_sources})
+    expected_components = sorted({"0" * 64, *incident_components})
+    assert merged == {
+        "prior_exposure_receipt_sha256": prior[
+            "prior_exposure_receipt_sha256"
+        ],
+        "aborted_attempt_exposure_receipt_sha256": INCIDENT_RECEIPT_SHA256,
+        "item_ids": expected_items,
+        "source_entity_ids": expected_sources,
+        "component_ids": expected_components,
+        "item_root_sha256": canonical_sha256(expected_items),
+        "source_entity_root_sha256": canonical_sha256(expected_sources),
+        "component_root_sha256": canonical_sha256(expected_components),
+    }

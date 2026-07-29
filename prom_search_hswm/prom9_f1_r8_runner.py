@@ -80,6 +80,9 @@ from prom_search_hswm.prom9_f1_r8_private_output import (
     canonical_output_path,
     reserve_private_outputs,
 )
+from prom_search_hswm.prom9_f1_prior_exposure import (
+    verify_aborted_attempt_exposure_receipt,
+)
 from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
 from prom_search_hswm.prom_f1_function_network import (
     _arm_overrides,
@@ -89,19 +92,19 @@ from prom_search_hswm.prom_f1_function_network import (
 MANIFEST_SCHEMA = "hswm-prom9-f1-manifest/v3"
 SUITE_DRAFT_SCHEMA = "hswm-prom9-f1-suite-draft/v4"
 SUITE_SCHEMA = "hswm-prom9-f1-suite/v4"
-EXECUTION_LOCK_SCHEMA = "hswm-prom9-f1-r8-execution-lock/v3"
-SEALED_LOCK_SCHEMA = "hswm-prom9-f1-r8-measurement-lock/v5"
+EXECUTION_LOCK_SCHEMA = "hswm-prom9-f1-r8-execution-lock/v4"
+SEALED_LOCK_SCHEMA = "hswm-prom9-f1-r8-measurement-lock/v6"
 SEALED_LOCK_PURPOSE = "CONFIRMATORY_R8_TRY3_MEASUREMENT"
 SEALED_EXPERIMENT_TAG = "Q-f1-actual-compute-parity-try3"
 SEALED_CLOSES_QUESTION = "Q-f1-actual-compute-parity"
 SEALED_RUN_ID = "f1-2wiki-sealed-r8-try3"
-DEVELOPMENT_RUN_ID = "f1-2wiki-development-r8-try3"
+DEVELOPMENT_RUN_ID = "f1-2wiki-development-r8-try3-a2"
 TRANSPORT_SCHEMA = "hswm-f1-durable-call-ledger/v1"
 TRANSPORT_BINDINGS_SCHEMA = "hswm-prom9-f1-r8-transport-bindings/v1"
 GENESIS_SCHEMA = "hswm-prom9-f1-r8-transport-genesis/v1"
 SPOOL_PREFLIGHT_SCHEMA = "hswm-prom9-f1-r8-spool-endpoint-preflight/v2"
 PREREGISTRATION_ARTIFACT_SCHEMA = (
-    "hswm-prom9-f1-r8-preregistration-artifact/v3"
+    "hswm-prom9-f1-r8-preregistration-artifact/v4"
 )
 PREREGISTRATION_READBACK_SCHEMA = "hswm-prom9-f1-r8-prereg-readback/v1"
 GENERATION_POLICY = {
@@ -148,7 +151,9 @@ _SPOOL_COLUMNS = {
 _DEVELOPMENT_LOCK_FIELDS = {
     "schema_version", "purpose", "run_id", "mode", "manifest_sha256",
     "preregistration_artifact_sha256", "selection_receipt_sha256",
-    "prior_exposure_receipt_sha256", "public_source_receipt_sha256",
+    "prior_exposure_receipt_sha256",
+    "aborted_attempt_exposure_receipt_sha256",
+    "public_source_receipt_sha256",
     "gold_source_receipt_sha256", "gold_sha256", "evaluator_receipt_sha256",
     "db_genesis_receipt_sha256", "environment_receipt_sha256",
     "dependency_receipt_sha256",
@@ -285,7 +290,9 @@ _PREREGISTRATION_ARTIFACT_FIELDS = {
     "measurement_lock_schema_sha256", "result_bundle_builder_sha256",
     "power_operating_characteristic_receipt_sha256",
     "calibration_receipt_sha256", "selection_receipt_sha256",
-    "prior_exposure_receipt_sha256", "public_source_receipt_sha256",
+    "prior_exposure_receipt_sha256",
+    "aborted_attempt_exposure_receipt_sha256",
+    "public_source_receipt_sha256",
     "gold_source_receipt_sha256", "gold_sha256", "evaluator_receipt_sha256",
     "db_genesis_receipt_sha256", "environment_receipt_sha256",
     "dependency_receipt_sha256",
@@ -1116,6 +1123,26 @@ def _validate_environment_dependency_bundle(
     if any(execution_lock.get(key) != item for key, item in expected_bindings.items()):
         raise R8RunnerRefusal("environment/dependency bundle differs from execution lock")
     return verified["bundle_sha256"]
+
+
+def _validate_aborted_attempt_exposure_gate(
+    value: Mapping[str, object],
+    *,
+    execution_lock: Mapping[str, object],
+) -> str:
+    try:
+        receipt_sha = verify_aborted_attempt_exposure_receipt(value)
+    except Exception as error:
+        raise R8RunnerRefusal(
+            "aborted-attempt exposure receipt verification failed"
+        ) from error
+    if receipt_sha != execution_lock.get(
+        "aborted_attempt_exposure_receipt_sha256"
+    ):
+        raise R8RunnerRefusal(
+            "aborted-attempt exposure receipt differs from execution lock"
+        )
+    return receipt_sha
 
 
 def _validate_preregistration_gate(
@@ -2173,6 +2200,7 @@ def build_development_execution_lock(
     protocol: Mapping[str, object] | None = None,
     selection_receipt_sha256: str,
     prior_exposure_receipt_sha256: str,
+    aborted_attempt_exposure_receipt_sha256: str,
     public_source_receipt_sha256: str,
     gold_source_receipt_sha256: str,
     gold_sha256: str,
@@ -2201,6 +2229,10 @@ def build_development_execution_lock(
     for value, label in (
         (selection_receipt_sha256, "selection receipt"),
         (prior_exposure_receipt_sha256, "prior-exposure receipt"),
+        (
+            aborted_attempt_exposure_receipt_sha256,
+            "aborted-attempt exposure receipt",
+        ),
         (public_source_receipt_sha256, "public-source receipt"),
         (gold_source_receipt_sha256, "gold-source receipt"),
         (gold_sha256, "gold"),
@@ -2296,6 +2328,9 @@ def build_development_execution_lock(
         "preregistration_artifact_sha256": None,
         "selection_receipt_sha256": selection_receipt_sha256,
         "prior_exposure_receipt_sha256": prior_exposure_receipt_sha256,
+        "aborted_attempt_exposure_receipt_sha256": (
+            aborted_attempt_exposure_receipt_sha256
+        ),
         "public_source_receipt_sha256": public_source_receipt_sha256,
         "gold_source_receipt_sha256": gold_source_receipt_sha256,
         "gold_sha256": gold_sha256,
@@ -2996,6 +3031,7 @@ def run_suite_v3_draft(
     token_meter: TokenMeter,
     max_workers: int,
     token_envelope_derivation: Mapping[str, object],
+    aborted_attempt_exposure_receipt: Mapping[str, object],
     environment_dependency_bundle: Mapping[str, object],
     result_contract_path: Path,
     judge_core_path: Path,
@@ -3041,6 +3077,10 @@ def run_suite_v3_draft(
         token_meter=token_meter,
         protocol_path=protocol_path,
         preregistration_artifact=preregistration_artifact,
+    )
+    _validate_aborted_attempt_exposure_gate(
+        aborted_attempt_exposure_receipt,
+        execution_lock=execution_lock,
     )
     deployment_binding = load_model_deployment_binding(
         model_weight_receipt_path,
@@ -3448,6 +3488,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         "--token-envelope-derivation-receipt", type=Path, required=True
     )
     run.add_argument("--selection-receipt", type=Path, required=True)
+    run.add_argument(
+        "--aborted-attempt-exposure-receipt", type=Path, required=True
+    )
     run.add_argument("--historical-manifest", type=Path, required=True)
     run.add_argument("--token-meter-validation-receipt", type=Path, required=True)
     run.add_argument("--projected-outputs-receipt", type=Path, required=True)
@@ -3486,27 +3529,37 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         if args.command == "run":
-            manifest = read_json(args.manifest, "manifest")
-            execution_lock = read_json(args.execution_lock, "execution lock")
+            manifest, _manifest_file_sha = read_stable_json(
+                args.manifest, "manifest"
+            )
+            execution_lock, _execution_lock_file_sha = read_stable_json(
+                args.execution_lock, "execution lock"
+            )
             environment_bundle = load_private_receipt(
                 args.environment_dependency_bundle, verify_live=True
             )
             preregistration_artifact = (
-                read_json(args.preregistration_artifact, "preregistration artifact")
+                read_stable_json(
+                    args.preregistration_artifact, "preregistration artifact"
+                )[0]
                 if args.preregistration_artifact is not None
                 else None
             )
             preregistration_readback = (
-                read_json(
+                read_stable_json(
                     args.preregistration_readback_receipt,
                     "preregistration readback",
-                )
+                )[0]
                 if args.preregistration_readback_receipt is not None
                 else None
             )
             receipt, _receipt_file_sha = read_stable_json(
                 args.token_envelope_derivation_receipt,
                 "token-envelope derivation receipt",
+            )
+            aborted_exposure, _aborted_exposure_file_sha = read_stable_json(
+                args.aborted_attempt_exposure_receipt,
+                "aborted-attempt exposure receipt",
             )
             derivation_values: dict[str, object] = {"receipt": receipt}
             derivation_file_specs = {
@@ -3563,6 +3616,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                 protocol_path=args.protocol,
                 preregistration_artifact=preregistration_artifact,
             )
+            _validate_aborted_attempt_exposure_gate(
+                aborted_exposure,
+                execution_lock=execution_lock,
+            )
             deployment_binding = load_model_deployment_binding(
                 args.model_weight_receipt,
                 upstream_endpoint=str(
@@ -3612,7 +3669,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                 max_delivery_attempts=args.max_delivery_attempts,
                 spool_token_env=args.spool_token_env,
             )
-            genesis = read_json(args.db_genesis_receipt, "DB genesis receipt")
+            genesis, _genesis_file_sha = read_stable_json(
+                args.db_genesis_receipt, "DB genesis receipt"
+            )
             genesis_sha = verify_fresh_transport_genesis(
                 genesis,
                 execution_lock=execution_lock,
@@ -3626,6 +3685,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 args.environment_dependency_bundle, args.result_contract,
                 args.judge_core, args.model_catalog, args.model_weight_receipt,
                 args.python_lock, args.token_envelope_derivation_receipt,
+                args.aborted_attempt_exposure_receipt,
                 args.selection_receipt, args.historical_manifest,
                 args.token_meter_validation_receipt,
                 args.projected_outputs_receipt, args.token_meter_source_suite,
@@ -3683,6 +3743,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                         token_meter=meter,
                         max_workers=args.max_workers,
                         token_envelope_derivation=derivation_values,
+                        aborted_attempt_exposure_receipt=aborted_exposure,
                         environment_dependency_bundle=environment_bundle,
                         result_contract_path=args.result_contract,
                         judge_core_path=args.judge_core,

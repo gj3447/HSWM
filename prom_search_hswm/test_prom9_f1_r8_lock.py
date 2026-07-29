@@ -26,8 +26,16 @@ from prom_search_hswm.prom9_f1_r8_power import (
     selected_entries,
 )
 from prom_search_hswm.prom9_f1_r8_source import build_artifacts
+from prom_search_hswm.prom9_f1_r8_runner import DEVELOPMENT_RUN_ID
 from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
-from prom_search_hswm.test_prom9_f1_r8_power import SENTINEL, _pages, _prior
+from prom_search_hswm.test_prom9_f1_r8_power import (
+    INCIDENT_RECEIPT_PATH,
+    SENTINEL,
+    _incident,
+    _pages,
+    _prior,
+    _synthetic_incident_source_entities,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -65,7 +73,7 @@ def _resolve_symposium_root() -> Path:
 
 SYMPOSIUM_ROOT = _resolve_symposium_root()
 DEFAULT_JUDGE_CORE = SYMPOSIUM_ROOT / _JUDGE_RELATIVE_PATH
-RUN_ID = "f1-2wiki-development-r8-try3"
+RUN_ID = DEVELOPMENT_RUN_ID
 ENDPOINT = "http://127.0.0.1:8011"
 UPSTREAM_ENDPOINT = "http://127.0.0.1:18002/v1/chat/completions"
 DEPLOYMENT_SHA256 = "d" * 64
@@ -251,6 +259,7 @@ def _public_pipeline(tmp_path: Path, *, answer: str) -> tuple[dict[str, Path], d
     prior = _prior()
     selection, gold_source = build_selection_receipts(
         prior_receipt=prior,
+        aborted_attempt_exposure_receipt=_incident(),
         development_pages=development,
         confirmatory_pages=confirmatory,
     )
@@ -293,6 +302,7 @@ def _public_pipeline(tmp_path: Path, *, answer: str) -> tuple[dict[str, Path], d
             "source_suite",
         )
     }
+    paths["incident"] = INCIDENT_RECEIPT_PATH
     derivation_unsigned = {
         "schema_version": "hswm-test-token-envelope-derivation/v1",
     }
@@ -349,6 +359,7 @@ def _invoke_lock(
             "--projected-outputs-receipt", str(paths["projected"]),
             "--token-meter-source-suite", str(paths["source_suite"]),
             "--prior-exposure-receipt", str(paths["prior"]),
+            "--aborted-attempt-exposure-receipt", str(paths["incident"]),
             "--protocol", str(dependencies["protocol_json"]),
             "--judge-core", str(dependencies["judge_core"]),
             "--result-contract", str(dependencies["result_contract"]),

@@ -15,6 +15,8 @@ from prom_search_hswm.hswm_result_spool import load_model_deployment_binding
 from prom_search_hswm.prom9_f1_prior_exposure import (
     _read_private_bytes,
     _strict_object,
+    merge_exposure_boundaries,
+    verify_aborted_attempt_exposure_receipt,
     verify_prior_exposure_receipt,
     write_private_once,
 )
@@ -239,6 +241,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--projected-outputs-receipt", type=Path, required=True)
     parser.add_argument("--token-meter-source-suite", type=Path, required=True)
     parser.add_argument("--prior-exposure-receipt", type=Path, required=True)
+    parser.add_argument(
+        "--aborted-attempt-exposure-receipt", type=Path, required=True
+    )
     parser.add_argument("--protocol", type=Path, required=True)
     parser.add_argument("--judge-core", type=Path, required=True)
     parser.add_argument("--result-contract", type=Path, required=True)
@@ -269,6 +274,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         evaluator = _read(args.evaluator_receipt, "evaluator seal")
         genesis = _read(args.db_genesis_receipt, "DB genesis receipt")
         prior = _read(args.prior_exposure_receipt, "prior-exposure receipt")
+        aborted_exposure, _aborted_exposure_file_sha = _read_with_sha(
+            args.aborted_attempt_exposure_receipt,
+            "aborted-attempt exposure receipt",
+        )
         derivation_receipt, _derivation_file_sha = _read_with_sha(
             args.token_envelope_derivation_receipt,
             "token-envelope derivation receipt",
@@ -294,9 +303,21 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
 
         prior_sha = verify_prior_exposure_receipt(prior)
-        selection_sha = replay_selection_receipt(selection, prior_receipt=prior)
-        if selection.get("prior_exposure_receipt_sha256") != prior_sha:
-            raise LockRefusal("selection is not bound to prior exposure")
+        aborted_exposure_sha = verify_aborted_attempt_exposure_receipt(
+            aborted_exposure
+        )
+        exposure_boundary = merge_exposure_boundaries(prior, aborted_exposure)
+        selection_sha = replay_selection_receipt(
+            selection,
+            prior_receipt=prior,
+            aborted_attempt_exposure_receipt=aborted_exposure,
+        )
+        if (
+            selection.get("prior_exposure_receipt_sha256") != prior_sha
+            or selection.get("aborted_attempt_exposure_receipt_sha256")
+            != aborted_exposure_sha
+        ):
+            raise LockRefusal("selection is not bound to the exposure boundary")
         derivation_sha = _self_hash(
             derivation_receipt,
             "receipt_sha256",
@@ -415,15 +436,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             args.result_contract, "result contract"
         )
 
-        aggregate = prior.get("aggregate")
-        if not isinstance(aggregate, Mapping):
-            raise LockRefusal("prior exposure aggregate is absent")
         lock = build_development_execution_lock(
             manifest,
             protocol_path=args.protocol,
             protocol=protocol,
             selection_receipt_sha256=selection_sha,
             prior_exposure_receipt_sha256=prior_sha,
+            aborted_attempt_exposure_receipt_sha256=aborted_exposure_sha,
             public_source_receipt_sha256=source_sha,
             gold_source_receipt_sha256=gold_source_sha,
             gold_sha256=gold_sha,
@@ -439,13 +458,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             judge_core_file_sha256=judge_core_file_sha,
             token_envelope_derivation_receipt_sha256=derivation_sha,
             deployment_binding=deployment_binding,
-            forbidden_prior_item_ids=sorted(aggregate.get("prior_item_ids", [])),
-            forbidden_prior_source_entity_ids=sorted(
-                aggregate.get("prior_source_entity_ids", [])
-            ),
-            forbidden_prior_component_ids=sorted(
-                aggregate.get("prior_component_ids", [])
-            ),
+            forbidden_prior_item_ids=exposure_boundary["item_ids"],
+            forbidden_prior_source_entity_ids=exposure_boundary[
+                "source_entity_ids"
+            ],
+            forbidden_prior_component_ids=exposure_boundary["component_ids"],
             execution_policy={
                 "endpoint": args.endpoint,
                 "max_workers": args.max_workers,

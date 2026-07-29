@@ -17,6 +17,8 @@ from prom_search_hswm.hswm_function_registry import (
 )
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
 from prom_search_hswm.prom9_f1_r8_envelope import (
+    DEVELOPMENT_RUN_ID,
+    EXPECTED_DEVELOPMENT_ITEMS,
     R8EnvelopeRefusal,
     build_token_envelope_artifacts,
     verify_token_envelope_derivation,
@@ -26,7 +28,13 @@ from prom_search_hswm.prom9_f1_r8_power import build_selection_receipts
 from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL, read_json as read_protocol
 from prom_search_hswm.prom9_validate_token_meter import validate_meter_against_suite
 from prom_search_hswm.prom_f1_function_network import _arm_overrides
-from prom_search_hswm.test_prom9_f1_r8_power import SENTINEL, _pages, _prior
+from prom_search_hswm.test_prom9_f1_r8_power import (
+    SENTINEL,
+    _incident,
+    _pages,
+    _prior,
+    _synthetic_incident_source_entities,
+)
 
 
 REVISION = "6a9e13bd6fc8f0983b9b99948120bc37f49c13e9"
@@ -54,6 +62,7 @@ def _public_selection(tmp_path: Path) -> dict[str, object]:
     development, confirmatory = _pages(tmp_path, answer=SENTINEL)
     selection, _gold_source = build_selection_receipts(
         prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=_incident(),
         development_pages=development,
         confirmatory_pages=confirmatory,
     )
@@ -184,9 +193,9 @@ def _artifacts(tmp_path: Path) -> dict[str, dict[str, object]]:
         protocol_path=DEFAULT_PROTOCOL,
         model="qwen3.6-27b",
         model_revision=REVISION,
-        development_run_id="f1-2wiki-development-r8-try3",
+        development_run_id=DEVELOPMENT_RUN_ID,
         confirmatory_run_id="f1-2wiki-sealed-r8-try3",
-        expected_development_items=66,
+        expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
         expected_confirmatory_items=100,
     )
 
@@ -204,7 +213,7 @@ def test_public_only_builder_derives_tight_common_caps(tmp_path: Path) -> None:
     assert artifacts["token_envelope"]["per_call_input_caps"] == expected
     assert expected != {"1": 9000, "2": 9000, "3": 9000}
     assert receipt["historical_input_caps_used_as_floor"] is False
-    assert receipt["development"]["items"] == 66
+    assert receipt["development"]["items"] == EXPECTED_DEVELOPMENT_ITEMS
     assert receipt["development"]["components"] == 48
     assert receipt["confirmatory"]["items"] == 100
     assert receipt["confirmatory"]["components"] == 100
@@ -235,7 +244,7 @@ def test_meter_or_projection_drift_refuses_before_output(tmp_path: Path) -> None
             model_revision=REVISION,
             development_run_id="dev",
             confirmatory_run_id="sealed",
-            expected_development_items=66,
+            expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
             expected_confirmatory_items=100,
         )
 
@@ -259,9 +268,9 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
         protocol_path=DEFAULT_PROTOCOL,
         model="qwen3.6-27b",
         model_revision=REVISION,
-        development_run_id="f1-2wiki-development-r8-try3",
+        development_run_id=DEVELOPMENT_RUN_ID,
         confirmatory_run_id="f1-2wiki-sealed-r8-try3",
-        expected_development_items=66,
+        expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
         expected_confirmatory_items=100,
     )
     receipt = artifacts["derivation_receipt"]
@@ -304,7 +313,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
         file_sha256s=fixed_files,
         expected_file_sha256s=fixed_files,
         expected_canonical_sha256s=fixed_canonical,
-        expected_development_items=66,
+        expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
         expected_confirmatory_items=100,
     ) == receipt["receipt_sha256"]
 
@@ -327,7 +336,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
             file_sha256s=fixed_files,
             expected_file_sha256s=fixed_files,
             expected_canonical_sha256s=fixed_canonical,
-            expected_development_items=66,
+            expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
             expected_confirmatory_items=100,
         )
 
@@ -346,7 +355,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
             file_sha256s=drifted_files,
             expected_file_sha256s=fixed_files,
             expected_canonical_sha256s=fixed_canonical,
-            expected_development_items=66,
+            expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
             expected_confirmatory_items=100,
         )
 
@@ -371,7 +380,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
             file_sha256s=fixed_files,
             expected_file_sha256s=fixed_files,
             expected_canonical_sha256s=fixed_canonical,
-            expected_development_items=66,
+            expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
             expected_confirmatory_items=100,
         )
 
@@ -391,7 +400,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
             file_sha256s=fixed_files,
             expected_file_sha256s=fixed_files,
             expected_canonical_sha256s=fixed_canonical,
-            expected_development_items=66,
+            expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
             expected_confirmatory_items=100,
         )
 

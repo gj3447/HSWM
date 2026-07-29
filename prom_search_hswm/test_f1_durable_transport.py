@@ -19,14 +19,30 @@ from prom_search_hswm.hswm_f1_durable_transport import (
 )
 from prom_search_hswm.hswm_function_registry import FunctionSpecV1
 from prom_search_hswm.hswm_result_spool import (
+    ModelDeploymentBinding,
     RawHTTPResponse,
     ResultSpoolError,
     ResultSpoolHTTPServer,
     ResultSpoolService,
     SQLiteResultSpool,
 )
+import prom_search_hswm.hswm_result_spool as result_spool
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
 from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
+
+
+DEPLOYMENT_SHA256 = "d" * 64
+MODEL_REVISION = "f" * 40
+
+
+def _deployment_binding(endpoint: str) -> ModelDeploymentBinding:
+    return ModelDeploymentBinding(
+        upstream_endpoint=endpoint,
+        deployment_receipt_sha256=DEPLOYMENT_SHA256,
+        deployment_id=f"hswm:model_deployment:v2:{DEPLOYMENT_SHA256}",
+        served_model="fixed-model",
+        model_revision=MODEL_REVISION,
+    )
 
 
 def _function() -> FunctionSpecV1:
@@ -34,7 +50,7 @@ def _function() -> FunctionSpecV1:
     return FunctionSpecV1(
         function_id="QF_QUERY_COMPILER",
         model="fixed-model",
-        model_revision="fixed-revision",
+        model_revision=MODEL_REVISION,
         input_type="QueryEnvelopeV1",
         output_type="QueryPlanV1",
         prompt=prompt,
@@ -175,7 +191,7 @@ def test_same_physical_id_with_different_intent_is_rejected(tmp_path: Path) -> N
         call_index=1,
         function_id="QF_QUERY_COMPILER",
         model="fixed-model",
-        model_revision="fixed-revision",
+        model_revision=MODEL_REVISION,
         system_prompt="one",
         input_type="QueryEnvelopeV1",
         input_payload=_input(),
@@ -306,10 +322,18 @@ def test_disconnect_after_spool_commit_replays_identical_bytes_once(
         )
 
     spool = SQLiteResultSpool(tmp_path / "spool.db")
+    upstream_endpoint = "http://upstream/v1/chat/completions"
+    binding = _deployment_binding(upstream_endpoint)
+    monkeypatch.setattr(
+        result_spool,
+        "load_model_deployment_binding",
+        lambda *_args, **_kwargs: binding,
+    )
     service = ResultSpoolService(
         spool,
-        upstream_endpoint="http://upstream/v1/chat/completions",
-        server_revision="fixed-revision",
+        upstream_endpoint=upstream_endpoint,
+        deployment_binding=binding,
+        deployment_receipt_path=tmp_path / "deployment.json",
         upstream_transport=upstream,
         client_token="spool-client-secret",
     )
@@ -348,12 +372,22 @@ def test_disconnect_after_spool_commit_replays_identical_bytes_once(
     assert b"spool-client-secret" not in (tmp_path / "spool.db").read_bytes()
 
 
-def test_spool_refuses_plain_non_loopback_binding(tmp_path: Path) -> None:
+def test_spool_refuses_plain_non_loopback_binding(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     spool = SQLiteResultSpool(tmp_path / "loopback.db")
+    upstream_endpoint = "http://upstream/v1/chat/completions"
+    binding = _deployment_binding(upstream_endpoint)
+    monkeypatch.setattr(
+        result_spool,
+        "load_model_deployment_binding",
+        lambda *_args, **_kwargs: binding,
+    )
     service = ResultSpoolService(
         spool,
-        upstream_endpoint="http://upstream/v1/chat/completions",
-        server_revision="fixed-revision",
+        upstream_endpoint=upstream_endpoint,
+        deployment_binding=binding,
+        deployment_receipt_path=tmp_path / "deployment.json",
         upstream_transport=lambda *_args: pytest.fail("server should not start"),
     )
     try:

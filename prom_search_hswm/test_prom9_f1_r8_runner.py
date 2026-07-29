@@ -20,6 +20,7 @@ from prom_search_hswm.hswm_f1_durable_transport import (
 from prom_search_hswm.hswm_function_network import F1_ARMS, TYPED_ARM
 from prom_search_hswm.hswm_function_registry import build_registry
 from prom_search_hswm.hswm_result_spool import (
+    ModelDeploymentBinding,
     RawHTTPResponse,
     ResultSpoolHTTPServer,
     ResultSpoolService,
@@ -77,6 +78,19 @@ SYMPOSIUM_COMMIT = subprocess.check_output(
     ["git", "-C", str(SYMPOSIUM_ROOT), "rev-parse", "HEAD"], text=True
 ).strip()
 ENDPOINT = "http://127.0.0.1:8011"
+UPSTREAM_ENDPOINT = "http://127.0.0.1:18002/v1/chat/completions"
+DEPLOYMENT_SHA256 = "d" * 64
+TEST_REVISION = "f" * 40
+
+
+def _deployment_binding() -> ModelDeploymentBinding:
+    return ModelDeploymentBinding(
+        upstream_endpoint=UPSTREAM_ENDPOINT,
+        deployment_receipt_sha256=DEPLOYMENT_SHA256,
+        deployment_id=f"hswm:model_deployment:v2:{DEPLOYMENT_SHA256}",
+        served_model="fake-model",
+        model_revision=TEST_REVISION,
+    )
 
 
 @pytest.fixture(autouse=True)
@@ -133,6 +147,11 @@ def _verify_dirty_owned_paths_without_weakening_runner(
         }
 
     monkeypatch.setattr(runner, "verify_r8_preimage_bundle", verify)
+    monkeypatch.setattr(
+        runner,
+        "load_model_deployment_binding",
+        lambda *_args, **_kwargs: _deployment_binding(),
+    )
 
 
 def _registries() -> dict[str, object]:
@@ -140,7 +159,7 @@ def _registries() -> dict[str, object]:
         arm: build_registry(
             REPO_ROOT / DEFAULT_PROTOCOL,
             model="fake-model",
-            model_revision="fake-revision",
+            model_revision=TEST_REVISION,
             prompt_overrides=_arm_overrides(arm),
         )
         for arm in F1_ARMS
@@ -210,7 +229,7 @@ def _manifest(meter: FakeMeter) -> dict[str, object]:
         "run_id": "f1-2wiki-power-pilot-test",
         "mode": "development",
         "model": "fake-model",
-        "model_revision": "fake-revision",
+        "model_revision": TEST_REVISION,
         "token_tolerance": 32,
         "state_capacity_bytes": 128,
         "state_bytes_by_arm": {arm: 128 for arm in F1_ARMS},
@@ -258,7 +277,11 @@ def _empty_spool_audit() -> dict[str, object]:
 def _preflight(run_id: str, lock_sha: str, genesis_sha: str) -> dict[str, object]:
     identity_unsigned = {
         "schema_version": SPOOL_IDENTITY_SCHEMA,
-        "server_revision": "fake-revision",
+        "normalized_upstream_endpoint": UPSTREAM_ENDPOINT,
+        "deployment_receipt_sha256": DEPLOYMENT_SHA256,
+        "deployment_id": f"hswm:model_deployment:v2:{DEPLOYMENT_SHA256}",
+        "served_model": "fake-model",
+        "model_revision": TEST_REVISION,
         "db_identity": {
             "resolved_path": "/private/spool.sqlite3",
             "st_dev": 7,
@@ -276,6 +299,11 @@ def _preflight(run_id: str, lock_sha: str, genesis_sha: str) -> dict[str, object
         "execution_lock_sha256": lock_sha,
         "db_genesis_sha256": genesis_sha,
         "endpoint": ENDPOINT,
+        "upstream_endpoint": UPSTREAM_ENDPOINT,
+        "deployment_receipt_sha256": DEPLOYMENT_SHA256,
+        "deployment_id": f"hswm:model_deployment:v2:{DEPLOYMENT_SHA256}",
+        "served_model": "fake-model",
+        "model_revision": TEST_REVISION,
         "endpoint_identity": identity,
     }
     return {**unsigned, "preflight_sha256": canonical_sha256(unsigned)}
@@ -345,7 +373,9 @@ def _bundle(tmp_path: Path, manifest: dict[str, object], result_contract: Path):
     bundle = build_preimage_bundle(
         dependencies,
         labels={
-            "endpoint": ENDPOINT,
+            "spool_endpoint": ENDPOINT,
+            "model_upstream_endpoint": UPSTREAM_ENDPOINT,
+            "model_deployment_receipt_sha256": DEPLOYMENT_SHA256,
             "hswm_commit": HSWM_COMMIT,
             "model": str(manifest["model"]),
             "model_revision": str(manifest["model_revision"]),
@@ -393,6 +423,7 @@ def _lock(
         result_contract_sha256=hashlib.sha256(result_contract.read_bytes()).hexdigest(),
         judge_core_sha256="a" * 64,
         judge_core_file_sha256="b" * 64,
+        deployment_binding=_deployment_binding(),
         forbidden_prior_item_ids=["prior-item"],
         forbidden_prior_source_entity_ids=["8" * 64],
         forbidden_prior_component_ids=["9" * 64],
@@ -1138,10 +1169,12 @@ def test_dummy_runner_dependency_is_rejected_before_first_model_call(
     bundle = build_preimage_bundle(
         paths,
         labels={
-            "endpoint": ENDPOINT,
+            "spool_endpoint": ENDPOINT,
+            "model_upstream_endpoint": UPSTREAM_ENDPOINT,
+            "model_deployment_receipt_sha256": DEPLOYMENT_SHA256,
             "hswm_commit": HSWM_COMMIT,
             "model": "fake-model",
-            "model_revision": "fake-revision",
+            "model_revision": TEST_REVISION,
             "run_id": context["manifest"]["run_id"],
             "symposium_commit": SYMPOSIUM_COMMIT,
         },
@@ -1433,7 +1466,14 @@ def test_runtime_policy_and_live_spool_identity_are_exact(
     service = ResultSpoolService(
         store,
         upstream_endpoint="http://127.0.0.1:9/v1/chat/completions",
-        server_revision="fake-revision",
+        deployment_binding=ModelDeploymentBinding(
+            upstream_endpoint="http://127.0.0.1:9/v1/chat/completions",
+            deployment_receipt_sha256=DEPLOYMENT_SHA256,
+            deployment_id=f"hswm:model_deployment:v2:{DEPLOYMENT_SHA256}",
+            served_model="fake-model",
+            model_revision=TEST_REVISION,
+        ),
+        deployment_receipt_path=tmp_path / "deployment.json",
         client_token="private-token",
         upstream_transport=lambda *_args: RawHTTPResponse(500, {}, b""),
     )
@@ -1446,7 +1486,13 @@ def test_runtime_policy_and_live_spool_identity_are_exact(
         receipt = verify_spool_endpoint_identity(
             endpoint=endpoint,
             spool_db=spool_db,
-            model_revision="fake-revision",
+            deployment_binding=ModelDeploymentBinding(
+                upstream_endpoint="http://127.0.0.1:9/v1/chat/completions",
+                deployment_receipt_sha256=DEPLOYMENT_SHA256,
+                deployment_id=f"hswm:model_deployment:v2:{DEPLOYMENT_SHA256}",
+                served_model="fake-model",
+                model_revision=TEST_REVISION,
+            ),
             spool_token_env="SPOOL_CLIENT_TOKEN",
             timeout_seconds=5.0,
             run_id="run",
@@ -1521,7 +1567,8 @@ def test_cli_preexisting_output_refuses_before_endpoint_transport(
             "--judge-core", str(context["judge_core_path"]),
             "--symposium-repo-root", str(SYMPOSIUM_ROOT),
             "--model-catalog", str(context["model_catalog_path"]),
-            "--model-weight-receipt", str(context["model_weight_receipt_path"]),
+            "--model-deployment-receipt",
+            str(context["model_weight_receipt_path"]),
             "--python-lock", str(context["python_lock_path"]),
             "--spool-token-env", "SPOOL_CLIENT_TOKEN",
             "--spool-identity-receipt", str(tmp_path / "spool-identity.json"),

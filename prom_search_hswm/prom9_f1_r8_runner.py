@@ -44,7 +44,12 @@ from prom_search_hswm.hswm_function_registry import (
     FunctionRegistryV1,
     build_registry,
 )
-from prom_search_hswm.hswm_result_spool import SQLiteResultSpool
+from prom_search_hswm.hswm_result_spool import (
+    ModelDeploymentBinding,
+    SQLiteResultSpool,
+    load_model_deployment_binding,
+    normalize_upstream_endpoint,
+)
 from prom_search_hswm.hswm_token_meter import QwenBpeMeter, TokenMeter
 from prom_search_hswm.hswm_result_spool import (
     SPOOL_IDENTITY_ROUTE,
@@ -83,8 +88,8 @@ from prom_search_hswm.prom_f1_function_network import (
 MANIFEST_SCHEMA = "hswm-prom9-f1-manifest/v3"
 SUITE_DRAFT_SCHEMA = "hswm-prom9-f1-suite-draft/v3"
 SUITE_SCHEMA = "hswm-prom9-f1-suite/v3"
-EXECUTION_LOCK_SCHEMA = "hswm-prom9-f1-r8-execution-lock/v1"
-SEALED_LOCK_SCHEMA = "hswm-prom9-f1-r8-measurement-lock/v3"
+EXECUTION_LOCK_SCHEMA = "hswm-prom9-f1-r8-execution-lock/v2"
+SEALED_LOCK_SCHEMA = "hswm-prom9-f1-r8-measurement-lock/v4"
 SEALED_LOCK_PURPOSE = "CONFIRMATORY_R8_TRY3_MEASUREMENT"
 SEALED_EXPERIMENT_TAG = "Q-f1-actual-compute-parity-try3"
 SEALED_CLOSES_QUESTION = "Q-f1-actual-compute-parity"
@@ -92,7 +97,7 @@ SEALED_RUN_ID = "f1-2wiki-sealed-r8-try3"
 TRANSPORT_SCHEMA = "hswm-f1-durable-call-ledger/v1"
 TRANSPORT_BINDINGS_SCHEMA = "hswm-prom9-f1-r8-transport-bindings/v1"
 GENESIS_SCHEMA = "hswm-prom9-f1-r8-transport-genesis/v1"
-SPOOL_PREFLIGHT_SCHEMA = "hswm-prom9-f1-r8-spool-endpoint-preflight/v1"
+SPOOL_PREFLIGHT_SCHEMA = "hswm-prom9-f1-r8-spool-endpoint-preflight/v2"
 PREREGISTRATION_ARTIFACT_SCHEMA = (
     "hswm-prom9-f1-r8-preregistration-artifact/v3"
 )
@@ -136,7 +141,8 @@ _DEVELOPMENT_LOCK_FIELDS = {
     "environment_dependency_compatibility_root_sha256",
     "environment_dependency_bundle_sha256", "hswm_commit",
     "result_contract_sha256", "judge_core_sha256", "judge_core_file_sha256",
-    "model", "model_revision",
+    "model", "model_revision", "upstream_endpoint",
+    "deployment_receipt_sha256", "deployment_id", "served_model",
     "protocol_sha256",
     "registries_root_sha256", "token_envelope_sha256",
     "generation_policy_sha256", "cohort_root_sha256",
@@ -177,12 +183,15 @@ _SPOOL_AUDIT_FIELDS = {
     "status_counts", "completed_root_sha256", "audit_sha256",
 }
 _SPOOL_IDENTITY_FIELDS = {
-    "schema_version", "server_revision", "db_identity", "audit",
-    "identity_sha256",
+    "schema_version", "normalized_upstream_endpoint",
+    "deployment_receipt_sha256", "deployment_id", "served_model",
+    "model_revision", "db_identity", "audit", "identity_sha256",
 }
 _SPOOL_PREFLIGHT_FIELDS = {
     "schema_version", "run_id", "execution_lock_sha256", "db_genesis_sha256",
-    "endpoint", "endpoint_identity", "preflight_sha256",
+    "endpoint", "upstream_endpoint", "deployment_receipt_sha256",
+    "deployment_id", "served_model", "model_revision", "endpoint_identity",
+    "preflight_sha256",
 }
 _TRANSPORT_BINDING_FIELDS = {
     "schema_version", "run_id", "db_genesis_sha256", "attempt_integrity",
@@ -204,7 +213,8 @@ _TRANSPORT_BINDING_FIELDS = {
 }
 _DRAFT_FIELDS = {
     "schema_version", "run_id", "mode", "manifest_sha256", "model",
-    "model_revision", "token_tolerance", "state_capacity_bytes",
+    "model_revision", "upstream_endpoint", "deployment_receipt_sha256",
+    "deployment_id", "served_model", "token_tolerance", "state_capacity_bytes",
     "state_bytes_by_arm", "preregistration_artifact_sha256",
     "preregistration_readback_sha256", "anchored_judge_file_sha256",
     "measurement_lock_sha256", "result_contract_sha256",
@@ -436,6 +446,48 @@ def _validate_execution_policy_value(value: object) -> dict[str, object]:
     return dict(value)
 
 
+def _validate_deployment_binding(
+    execution_lock: Mapping[str, object],
+    binding: ModelDeploymentBinding,
+) -> None:
+    expected = {
+        "upstream_endpoint": binding.upstream_endpoint,
+        "deployment_receipt_sha256": binding.deployment_receipt_sha256,
+        "deployment_id": binding.deployment_id,
+        "served_model": binding.served_model,
+        "model_revision": binding.model_revision,
+    }
+    if any(execution_lock.get(key) != value for key, value in expected.items()):
+        raise R8RunnerRefusal(
+            "live model deployment differs from the frozen execution lock"
+        )
+    if execution_lock.get("model") != binding.served_model:
+        raise R8RunnerRefusal("manifest model differs from the served model")
+    try:
+        normalize_upstream_endpoint(binding.upstream_endpoint)
+    except Exception as error:
+        raise R8RunnerRefusal("frozen upstream endpoint is not canonical") from error
+
+
+def _deployment_binding_from_lock(
+    execution_lock: Mapping[str, object],
+) -> ModelDeploymentBinding:
+    try:
+        binding = ModelDeploymentBinding(
+            upstream_endpoint=str(execution_lock.get("upstream_endpoint", "")),
+            deployment_receipt_sha256=str(
+                execution_lock.get("deployment_receipt_sha256", "")
+            ),
+            deployment_id=str(execution_lock.get("deployment_id", "")),
+            served_model=str(execution_lock.get("served_model", "")),
+            model_revision=str(execution_lock.get("model_revision", "")),
+        )
+    except Exception as error:
+        raise R8RunnerRefusal("execution-lock deployment binding is invalid") from error
+    _validate_deployment_binding(execution_lock, binding)
+    return binding
+
+
 def _validate_prior_list(
     value: object, label: str, *, sha_values: bool
 ) -> list[str]:
@@ -600,7 +652,7 @@ def _validate_spool_identity_preflight(
     value: object,
     *,
     run_id: str,
-    model_revision: str,
+    deployment_binding: ModelDeploymentBinding,
     execution_lock_sha256: str,
     db_genesis_sha256: str,
     endpoint: str,
@@ -614,6 +666,22 @@ def _validate_spool_identity_preflight(
     _self_hash(identity, "identity_sha256", "result-spool identity")
     _spool_preflight_database_identity(value)
     _validate_spool_audit(identity.get("audit"))
+    deployment_values = {
+        "upstream_endpoint": deployment_binding.upstream_endpoint,
+        "deployment_receipt_sha256": (
+            deployment_binding.deployment_receipt_sha256
+        ),
+        "deployment_id": deployment_binding.deployment_id,
+        "served_model": deployment_binding.served_model,
+        "model_revision": deployment_binding.model_revision,
+    }
+    identity_values = {
+        "upstream_endpoint": identity.get("normalized_upstream_endpoint"),
+        "deployment_receipt_sha256": identity.get("deployment_receipt_sha256"),
+        "deployment_id": identity.get("deployment_id"),
+        "served_model": identity.get("served_model"),
+        "model_revision": identity.get("model_revision"),
+    }
     if (
         value.get("schema_version") != SPOOL_PREFLIGHT_SCHEMA
         or value.get("run_id") != run_id
@@ -621,7 +689,8 @@ def _validate_spool_identity_preflight(
         or value.get("db_genesis_sha256") != db_genesis_sha256
         or value.get("endpoint") != endpoint
         or identity.get("schema_version") != SPOOL_IDENTITY_SCHEMA
-        or identity.get("server_revision") != model_revision
+        or any(value.get(key) != item for key, item in deployment_values.items())
+        or identity_values != deployment_values
     ):
         raise R8RunnerRefusal("spool identity preflight differs from frozen execution")
     return declared
@@ -684,7 +753,8 @@ def _validate_environment_dependency_bundle(
     run_id: str,
     model: str,
     model_revision: str,
-    endpoint: str,
+    spool_endpoint: str,
+    deployment_binding: ModelDeploymentBinding,
     dependency_paths: Mapping[str, Path],
     symposium_repo_root: Path,
 ) -> str:
@@ -708,7 +778,11 @@ def _validate_environment_dependency_bundle(
             "environment symposium_commit is not an exact Git SHA"
         )
     labels = {
-        "endpoint": endpoint,
+        "spool_endpoint": spool_endpoint,
+        "model_upstream_endpoint": deployment_binding.upstream_endpoint,
+        "model_deployment_receipt_sha256": (
+            deployment_binding.deployment_receipt_sha256
+        ),
         "hswm_commit": execution_lock.get("hswm_commit"),
         "model": model,
         "model_revision": model_revision,
@@ -1172,7 +1246,7 @@ def verify_spool_endpoint_identity(
     *,
     endpoint: str,
     spool_db: Path,
-    model_revision: str,
+    deployment_binding: ModelDeploymentBinding,
     spool_token_env: str,
     timeout_seconds: float,
     run_id: str,
@@ -1212,23 +1286,43 @@ def verify_spool_endpoint_identity(
     _validate_spool_audit(audit)
     if (
         identity.get("schema_version") != SPOOL_IDENTITY_SCHEMA
-        or identity.get("server_revision") != model_revision
         or identity.get("db_identity") != _database_identity(spool_db, "result spool")
     ):
         raise R8RunnerRefusal("endpoint service does not own the frozen empty spool DB")
+    identity_deployment = {
+        "upstream_endpoint": identity.get("normalized_upstream_endpoint"),
+        "deployment_receipt_sha256": identity.get("deployment_receipt_sha256"),
+        "deployment_id": identity.get("deployment_id"),
+        "served_model": identity.get("served_model"),
+        "model_revision": identity.get("model_revision"),
+    }
+    expected_deployment = {
+        "upstream_endpoint": deployment_binding.upstream_endpoint,
+        "deployment_receipt_sha256": (
+            deployment_binding.deployment_receipt_sha256
+        ),
+        "deployment_id": deployment_binding.deployment_id,
+        "served_model": deployment_binding.served_model,
+        "model_revision": deployment_binding.model_revision,
+    }
+    if identity_deployment != expected_deployment:
+        raise R8RunnerRefusal(
+            "endpoint service deployment differs from the frozen lock"
+        )
     unsigned = {
         "schema_version": SPOOL_PREFLIGHT_SCHEMA,
         "run_id": run_id,
         "execution_lock_sha256": execution_lock_sha256,
         "db_genesis_sha256": db_genesis_sha256,
         "endpoint": endpoint,
+        **expected_deployment,
         "endpoint_identity": dict(identity),
     }
     result = {**unsigned, "preflight_sha256": canonical_sha256(unsigned)}
     _validate_spool_identity_preflight(
         result,
         run_id=run_id,
-        model_revision=model_revision,
+        deployment_binding=deployment_binding,
         execution_lock_sha256=execution_lock_sha256,
         db_genesis_sha256=db_genesis_sha256,
         endpoint=endpoint,
@@ -1786,6 +1880,7 @@ def build_development_execution_lock(
     result_contract_sha256: str,
     judge_core_sha256: str,
     judge_core_file_sha256: str,
+    deployment_binding: ModelDeploymentBinding,
     forbidden_prior_item_ids: Sequence[str],
     forbidden_prior_source_entity_ids: Sequence[str],
     forbidden_prior_component_ids: Sequence[str],
@@ -1820,6 +1915,13 @@ def build_development_execution_lock(
         raise R8RunnerRefusal("hswm_commit must be an exact lowercase Git SHA")
     model = str(manifest.get("model"))
     revision = str(manifest.get("model_revision"))
+    if (
+        deployment_binding.served_model != model
+        or deployment_binding.model_revision != revision
+    ):
+        raise R8RunnerRefusal(
+            "deployment identity differs from the development manifest"
+        )
     registries = _registries(
         protocol_path=protocol_path, model=model, model_revision=revision
     )
@@ -1899,6 +2001,12 @@ def build_development_execution_lock(
         "judge_core_file_sha256": judge_core_file_sha256,
         "model": model,
         "model_revision": revision,
+        "upstream_endpoint": deployment_binding.upstream_endpoint,
+        "deployment_receipt_sha256": (
+            deployment_binding.deployment_receipt_sha256
+        ),
+        "deployment_id": deployment_binding.deployment_id,
+        "served_model": deployment_binding.served_model,
         "protocol_sha256": next(iter(protocol_roots)),
         "registries_root_sha256": canonical_sha256(
             {arm: registries[arm].registry_sha256 for arm in F1_ARMS}
@@ -1964,6 +2072,7 @@ def validate_manifest_v3(
     else:
         raise R8RunnerRefusal("manifest mode must be development or sealed")
     _validate_execution_policy_value(execution_lock.get("execution_policy"))
+    _deployment_binding_from_lock(execution_lock)
     for field in _DEVELOPMENT_LOCK_FIELDS:
         if field.endswith("_sha256") and field != "preregistration_artifact_sha256":
             _sha(execution_lock.get(field), f"execution-lock {field}")
@@ -2492,10 +2601,11 @@ def _verify_execution_structure(
     policy = _validate_execution_policy_value(value.get("execution_policy"))
     if value.get("max_workers") != policy.get("max_workers"):
         raise R8RunnerRefusal("suite max_workers differs from execution policy")
+    deployment_binding = _deployment_binding_from_lock(value)
     preflight_sha = _validate_spool_identity_preflight(
         value.get("spool_identity_preflight"),
         run_id=str(run_id),
-        model_revision=str(model_revision),
+        deployment_binding=deployment_binding,
         execution_lock_sha256=str(value.get("measurement_lock_sha256")),
         db_genesis_sha256=str(value.get("db_genesis_receipt_sha256")),
         endpoint=str(policy.get("endpoint")),
@@ -2597,6 +2707,14 @@ def run_suite_v3_draft(
         registries=registries,
     )
     execution_lock_sha = str(projection_record.pop("execution_lock_sha256"))
+    deployment_binding = load_model_deployment_binding(
+        model_weight_receipt_path,
+        upstream_endpoint=str(execution_lock.get("upstream_endpoint", "")),
+        served_model=str(normalized["model"]),
+        model_revision=str(normalized["model_revision"]),
+        verify_live_process=True,
+    )
+    _validate_deployment_binding(execution_lock, deployment_binding)
     policy = _validate_execution_policy_value(execution_lock.get("execution_policy"))
     if max_workers != policy.get("max_workers"):
         raise R8RunnerRefusal("direct API max_workers differs from execution lock")
@@ -2629,7 +2747,8 @@ def run_suite_v3_draft(
         run_id=str(normalized["run_id"]),
         model=str(normalized["model"]),
         model_revision=str(normalized["model_revision"]),
-        endpoint=str(policy["endpoint"]),
+        spool_endpoint=str(policy["endpoint"]),
+        deployment_binding=deployment_binding,
         dependency_paths=dependency_paths,
         symposium_repo_root=symposium_repo_root,
     )
@@ -2647,7 +2766,7 @@ def run_suite_v3_draft(
     preflight_sha = _validate_spool_identity_preflight(
         spool_identity_preflight,
         run_id=str(normalized["run_id"]),
-        model_revision=str(normalized["model_revision"]),
+        deployment_binding=deployment_binding,
         execution_lock_sha256=execution_lock_sha,
         db_genesis_sha256=str(execution_lock["db_genesis_receipt_sha256"]),
         endpoint=str(policy["endpoint"]),
@@ -2739,6 +2858,12 @@ def run_suite_v3_draft(
         "manifest_sha256": canonical_sha256(normalized),
         "model": normalized["model"],
         "model_revision": normalized["model_revision"],
+        "upstream_endpoint": deployment_binding.upstream_endpoint,
+        "deployment_receipt_sha256": (
+            deployment_binding.deployment_receipt_sha256
+        ),
+        "deployment_id": deployment_binding.deployment_id,
+        "served_model": deployment_binding.served_model,
         "token_tolerance": normalized["token_tolerance"],
         "state_capacity_bytes": normalized["state_capacity_bytes"],
         "state_bytes_by_arm": normalized["state_bytes_by_arm"],
@@ -2985,7 +3110,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     run.add_argument("--judge-core", type=Path, required=True)
     run.add_argument("--symposium-repo-root", type=Path, required=True)
     run.add_argument("--model-catalog", type=Path, required=True)
-    run.add_argument("--model-weight-receipt", type=Path, required=True)
+    run.add_argument(
+        "--model-deployment-receipt",
+        dest="model_weight_receipt",
+        type=Path,
+        required=True,
+    )
     run.add_argument("--python-lock", type=Path, required=True)
     run.add_argument("--preregistration-artifact", type=Path)
     run.add_argument("--preregistration-readback-receipt", type=Path)
@@ -3045,6 +3175,16 @@ def main(argv: Sequence[str] | None = None) -> int:
                 registries=registries,
             )
             lock_sha = str(projection["execution_lock_sha256"])
+            deployment_binding = load_model_deployment_binding(
+                args.model_weight_receipt,
+                upstream_endpoint=str(
+                    execution_lock.get("upstream_endpoint", "")
+                ),
+                served_model=str(normalized["model"]),
+                model_revision=str(normalized["model_revision"]),
+                verify_live_process=True,
+            )
+            _validate_deployment_binding(execution_lock, deployment_binding)
             dependency_paths = r8_dependency_paths(
                 protocol_path=args.protocol,
                 judge_core_path=args.judge_core,
@@ -3060,7 +3200,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                 run_id=str(normalized["run_id"]),
                 model=str(normalized["model"]),
                 model_revision=str(normalized["model_revision"]),
-                endpoint=args.endpoint,
+                spool_endpoint=args.endpoint,
+                deployment_binding=deployment_binding,
                 dependency_paths=dependency_paths,
                 symposium_repo_root=args.symposium_repo_root,
             )
@@ -3122,7 +3263,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 endpoint_preflight = verify_spool_endpoint_identity(
                     endpoint=args.endpoint,
                     spool_db=args.spool_db,
-                    model_revision=str(manifest.get("model_revision")),
+                    deployment_binding=deployment_binding,
                     spool_token_env=args.spool_token_env,
                     timeout_seconds=args.timeout_seconds,
                     run_id=str(manifest.get("run_id")),

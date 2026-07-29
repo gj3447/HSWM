@@ -22,20 +22,23 @@ from pathlib import Path
 import re
 import socket
 import sqlite3
+import stat
 import threading
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 from urllib import error as urllib_error
 from urllib import request as urllib_request
+from urllib.parse import urlsplit, urlunsplit
 
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
 
 
 SPOOL_SCHEMA = "hswm-f1-result-spool/v1"
 SPOOL_ROUTE_PREFIX = "/v1/hswm/calls/"
-SPOOL_IDENTITY_SCHEMA = "hswm-f1-result-spool-identity/v1"
+SPOOL_IDENTITY_SCHEMA = "hswm-f1-result-spool-identity/v2"
 SPOOL_IDENTITY_ROUTE = "/v1/hswm/spool-identity"
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
+_MODEL_REVISION = re.compile(r"^[0-9a-f]{40}$")
 _GENESIS = "0" * 64
 _FORWARDED_RESPONSE_HEADERS = frozenset(
     {"content-type", "content-length", "x-request-id", "x-client-request-id"}
@@ -58,6 +61,36 @@ class SpoolOutcomeUnknown(ResultSpoolError):
 
 class SpoolIntegrityError(ResultSpoolError):
     pass
+
+
+@dataclass(frozen=True)
+class ModelDeploymentBinding:
+    """Exact immutable deployment identity admitted by the result spool."""
+
+    upstream_endpoint: str
+    deployment_receipt_sha256: str
+    deployment_id: str
+    served_model: str
+    model_revision: str
+
+    def __post_init__(self) -> None:
+        normalized = normalize_upstream_endpoint(self.upstream_endpoint)
+        if normalized != self.upstream_endpoint:
+            raise ResultSpoolError("upstream endpoint is not canonical")
+        digest = _require_sha256(
+            self.deployment_receipt_sha256, "deployment receipt"
+        )
+        if self.deployment_id != f"hswm:model_deployment:v2:{digest}":
+            raise ResultSpoolError("deployment ID differs from receipt hash")
+        if not isinstance(self.served_model, str) or not self.served_model:
+            raise ResultSpoolError("served model must be non-empty")
+        if (
+            not isinstance(self.model_revision, str)
+            or _MODEL_REVISION.fullmatch(self.model_revision) is None
+        ):
+            raise ResultSpoolError(
+                "model revision must be an exact lowercase 40-hex revision"
+            )
 
 
 @dataclass(frozen=True)
@@ -102,6 +135,131 @@ def _require_sha256(value: str, label: str) -> str:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
         raise ResultSpoolError(f"{label} must be a lowercase SHA-256 digest")
     return value
+
+
+def normalize_upstream_endpoint(endpoint: str) -> str:
+    """Return the credential-free canonical OpenAI completions endpoint."""
+
+    if not isinstance(endpoint, str):
+        raise ResultSpoolError("upstream endpoint must be text")
+    parsed = urlsplit(endpoint)
+    if (
+        parsed.scheme not in {"http", "https"}
+        or not parsed.netloc
+        or parsed.username is not None
+        or parsed.password is not None
+        or parsed.query
+        or parsed.fragment
+        or parsed.path != "/v1/chat/completions"
+    ):
+        raise ResultSpoolError(
+            "upstream endpoint must be a credential-free canonical "
+            "/v1/chat/completions URL"
+        )
+    normalized = urlunsplit(
+        (parsed.scheme, parsed.netloc, "/v1/chat/completions", "", "")
+    )
+    if endpoint != normalized:
+        raise ResultSpoolError("upstream endpoint is not canonical")
+    return normalized
+
+
+def _deployment_binding_from_receipt(
+    receipt: Mapping[str, object],
+    *,
+    upstream_endpoint: str,
+    served_model: str,
+    model_revision: str,
+) -> ModelDeploymentBinding:
+    snapshot = receipt.get("snapshot")
+    receipt_endpoint = receipt.get("endpoint")
+    if not isinstance(snapshot, Mapping) or not isinstance(receipt_endpoint, str):
+        raise ResultSpoolError("deployment receipt identity is incomplete")
+    expected_upstream = normalize_upstream_endpoint(
+        f"{receipt_endpoint}/chat/completions"
+    )
+    normalized_upstream = normalize_upstream_endpoint(upstream_endpoint)
+    if normalized_upstream != expected_upstream:
+        raise ResultSpoolError(
+            "upstream endpoint differs from the deployment receipt"
+        )
+    if receipt.get("served_model") != served_model:
+        raise ResultSpoolError("served model differs from the deployment receipt")
+    if snapshot.get("resolved_revision") != model_revision:
+        raise ResultSpoolError("model revision differs from the deployment receipt")
+    return ModelDeploymentBinding(
+        upstream_endpoint=normalized_upstream,
+        deployment_receipt_sha256=str(receipt.get("receipt_sha256", "")),
+        deployment_id=str(receipt.get("deployment_id", "")),
+        served_model=served_model,
+        model_revision=model_revision,
+    )
+
+
+def load_model_deployment_binding(
+    path: str | Path,
+    *,
+    upstream_endpoint: str,
+    served_model: str,
+    model_revision: str,
+    verify_live_process: bool = True,
+) -> ModelDeploymentBinding:
+    """Load one private official receipt without rehashing model weights."""
+
+    target = Path(path).expanduser()
+    try:
+        before = target.lstat()
+    except OSError as error:
+        raise ResultSpoolError("model deployment receipt is unavailable") from error
+    if not stat.S_ISREG(before.st_mode) or stat.S_ISLNK(before.st_mode):
+        raise ResultSpoolError("model deployment receipt must be a regular file")
+    if stat.S_IMODE(before.st_mode) != 0o600:
+        raise ResultSpoolError("model deployment receipt must have mode 0600")
+    # Lazy import keeps ordinary control-plane imports from loading NumPy; the
+    # deployment host pays this cost only at the explicit attestation gate.
+    # The imported files are nevertheless closed-world dependencies.
+    try:
+        from model_deployment_receipt import (
+            DeploymentAttestationError,
+            load_deployment_receipt,
+        )
+    except ImportError as error:
+        raise ResultSpoolError(
+            "official model deployment verifier is unavailable"
+        ) from error
+    try:
+        receipt = load_deployment_receipt(
+            target,
+            verify_snapshot=False,
+            verify_live_process=verify_live_process,
+        )
+    except DeploymentAttestationError as error:
+        raise ResultSpoolError("model deployment receipt verification failed") from error
+    try:
+        raw = target.read_bytes()
+        after = target.lstat()
+    except OSError as error:
+        raise ResultSpoolError(
+            "model deployment receipt changed while loading"
+        ) from error
+    identity = lambda value: (  # noqa: E731 - compact immutable stat projection
+        value.st_dev,
+        value.st_ino,
+        value.st_mode,
+        value.st_size,
+        value.st_mtime_ns,
+        value.st_ctime_ns,
+    )
+    if identity(before) != identity(after):
+        raise ResultSpoolError("model deployment receipt changed while loading")
+    if raw != (canonical_json(receipt) + "\n").encode("utf-8"):
+        raise ResultSpoolError("model deployment receipt bytes are not canonical")
+    return _deployment_binding_from_receipt(
+        receipt,
+        upstream_endpoint=upstream_endpoint,
+        served_model=served_model,
+        model_revision=model_revision,
+    )
 
 
 def _safe_headers(headers: Mapping[str, str]) -> dict[str, str]:
@@ -239,6 +397,7 @@ class SQLiteResultSpool:
         intent_sha256: str,
         request_bytes: bytes,
         upstream: Callable[[bytes], RawHTTPResponse],
+        pre_dispatch: Callable[[], None] | None = None,
     ) -> SpoolResult:
         """Dispatch at most once, then replay the first committed response bytes."""
 
@@ -266,6 +425,8 @@ class SQLiteResultSpool:
                         )
                     self._connection.execute("COMMIT")
                     return self._result(row, replayed=True)
+                if pre_dispatch is not None:
+                    pre_dispatch()
                 self._connection.execute(
                     """
                     INSERT INTO spool_calls(
@@ -401,22 +562,23 @@ class ResultSpoolService:
         store: SQLiteResultSpool,
         *,
         upstream_endpoint: str,
-        server_revision: str,
+        deployment_binding: ModelDeploymentBinding,
+        deployment_receipt_path: str | Path,
         upstream_transport: UpstreamTransport | None = None,
         api_key: str | None = None,
         client_token: str | None = None,
         timeout_seconds: float = 180.0,
         max_response_bytes: int = 4_000_000,
     ) -> None:
-        if not upstream_endpoint.startswith(("http://", "https://")):
-            raise ResultSpoolError("upstream endpoint must be HTTP(S)")
+        normalized_upstream = normalize_upstream_endpoint(upstream_endpoint)
+        if normalized_upstream != deployment_binding.upstream_endpoint:
+            raise ResultSpoolError("upstream endpoint differs from deployment binding")
         if timeout_seconds <= 0 or max_response_bytes <= 0:
             raise ResultSpoolError("timeout and response byte cap must be positive")
-        if not isinstance(server_revision, str) or not server_revision.strip():
-            raise ResultSpoolError("server_revision must be non-empty")
         self.store = store
-        self.upstream_endpoint = upstream_endpoint
-        self.server_revision = server_revision
+        self.upstream_endpoint = normalized_upstream
+        self.deployment_binding = deployment_binding
+        self.deployment_receipt_path = Path(deployment_receipt_path)
         self.api_key = api_key
         self.client_token = client_token
         self.timeout_seconds = timeout_seconds
@@ -432,7 +594,13 @@ class ResultSpoolService:
         audit = self.store.audit()
         unsigned = {
             "schema_version": SPOOL_IDENTITY_SCHEMA,
-            "server_revision": self.server_revision,
+            "normalized_upstream_endpoint": self.upstream_endpoint,
+            "deployment_receipt_sha256": (
+                self.deployment_binding.deployment_receipt_sha256
+            ),
+            "deployment_id": self.deployment_binding.deployment_id,
+            "served_model": self.deployment_binding.served_model,
+            "model_revision": self.deployment_binding.model_revision,
             "db_identity": {
                 "resolved_path": str(resolved),
                 "st_dev": int(info.st_dev),
@@ -441,6 +609,37 @@ class ResultSpoolService:
             "audit": audit,
         }
         return {**unsigned, "identity_sha256": canonical_sha256(unsigned)}
+
+    def _verify_live_deployment(self) -> None:
+        observed = load_model_deployment_binding(
+            self.deployment_receipt_path,
+            upstream_endpoint=self.upstream_endpoint,
+            served_model=self.deployment_binding.served_model,
+            model_revision=self.deployment_binding.model_revision,
+            verify_live_process=True,
+        )
+        if observed != self.deployment_binding:
+            raise ResultSpoolError("live deployment differs from startup binding")
+
+    def _verify_request_model(self, request_bytes: bytes) -> None:
+        def object_pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+            value: dict[str, Any] = {}
+            for key, item in pairs:
+                if key in value:
+                    raise ResultSpoolError(
+                        f"upstream request contains duplicate JSON key {key!r}"
+                    )
+                value[key] = item
+            return value
+
+        try:
+            value = json.loads(request_bytes.decode("utf-8"), object_pairs_hook=object_pairs)
+        except (UnicodeError, json.JSONDecodeError) as error:
+            raise ResultSpoolError("upstream request is not strict JSON") from error
+        if not isinstance(value, Mapping):
+            raise ResultSpoolError("upstream request must be a JSON object")
+        if value.get("model") != self.deployment_binding.served_model:
+            raise ResultSpoolError("request model differs from the attested served model")
 
     def _urlopen(self, request: urllib_request.Request, timeout: float) -> RawHTTPResponse:
         try:
@@ -461,6 +660,8 @@ class ResultSpoolService:
     def execute(
         self, physical_call_id: str, intent_sha256: str, request_bytes: bytes
     ) -> SpoolResult:
+        self._verify_request_model(request_bytes)
+
         def upstream(body: bytes) -> RawHTTPResponse:
             headers = {"Content-Type": "application/json"}
             if self.api_key:
@@ -489,6 +690,7 @@ class ResultSpoolService:
             intent_sha256=intent_sha256,
             request_bytes=request_bytes,
             upstream=upstream,
+            pre_dispatch=self._verify_live_deployment,
         )
 
 
@@ -576,7 +778,10 @@ class _ResultSpoolHandler(BaseHTTPRequestHandler):
                 return
             _require_sha256(physical_call_id, "physical_call_id")
             _require_sha256(intent_sha256, "intent_sha256")
-            if self.headers.get("X-HSWM-Model-Revision") != self.server.service.server_revision:
+            if (
+                self.headers.get("X-HSWM-Model-Revision")
+                != self.server.service.deployment_binding.model_revision
+            ):
                 raise ResultSpoolError("model revision differs from the configured spool revision")
             declared = int(self.headers.get("Content-Length", "-1"))
             if declared < 1 or declared > self.server.max_request_bytes:
@@ -612,7 +817,10 @@ class _ResultSpoolHandler(BaseHTTPRequestHandler):
         self.send_header("X-HSWM-Spool-Request-SHA256", result.request_sha256)
         self.send_header("X-HSWM-Spool-Response-SHA256", result.body_sha256)
         self.send_header("X-HSWM-Spool-Replayed", "true" if result.replayed else "false")
-        self.send_header("X-HSWM-Spool-Server-Revision", self.server.service.server_revision)
+        self.send_header(
+            "X-HSWM-Spool-Server-Revision",
+            self.server.service.deployment_binding.model_revision,
+        )
         self.end_headers()
         self.wfile.write(result.body)
 
@@ -621,7 +829,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--db", type=Path, required=True)
     parser.add_argument("--upstream", required=True)
-    parser.add_argument("--server-revision", required=True)
+    parser.add_argument("--served-model", required=True)
+    parser.add_argument("--model-revision", required=True)
+    parser.add_argument("--model-deployment-receipt", type=Path, required=True)
     parser.add_argument("--listen-host", default="127.0.0.1")
     parser.add_argument("--listen-port", type=int, default=8010)
     parser.add_argument("--api-key-env")
@@ -639,11 +849,22 @@ def main(argv: Sequence[str] | None = None) -> int:
         client_token = os.environ.get(args.client_token_env)
         if not client_token:
             parser.error(f"missing spool client token environment: {args.client_token_env}")
+    try:
+        deployment_binding = load_model_deployment_binding(
+            args.model_deployment_receipt,
+            upstream_endpoint=args.upstream,
+            served_model=args.served_model,
+            model_revision=args.model_revision,
+            verify_live_process=True,
+        )
+    except ResultSpoolError as error:
+        parser.error(str(error))
     store = SQLiteResultSpool(args.db)
     service = ResultSpoolService(
         store,
-        upstream_endpoint=args.upstream,
-        server_revision=args.server_revision,
+        upstream_endpoint=deployment_binding.upstream_endpoint,
+        deployment_binding=deployment_binding,
+        deployment_receipt_path=args.model_deployment_receipt,
         api_key=api_key,
         client_token=client_token,
         timeout_seconds=args.timeout_seconds,
@@ -665,6 +886,7 @@ if __name__ == "__main__":
 
 
 __all__ = [
+    "ModelDeploymentBinding",
     "RawHTTPResponse",
     "ResultSpoolError",
     "ResultSpoolHTTPServer",
@@ -678,4 +900,6 @@ __all__ = [
     "SpoolIntegrityError",
     "SpoolOutcomeUnknown",
     "SpoolResult",
+    "load_model_deployment_binding",
+    "normalize_upstream_endpoint",
 ]

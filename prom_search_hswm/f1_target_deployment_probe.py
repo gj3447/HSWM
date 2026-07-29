@@ -51,11 +51,12 @@ from prom_search_hswm.hswm_result_spool import (
     ResultSpoolHTTPServer,
     ResultSpoolService,
     SQLiteResultSpool,
+    load_model_deployment_binding,
 )
 from prom_search_hswm.hswm_typed_ports import canonical_sha256
 
 TOKEN_ENV = "HSWM_PROBE_SPOOL_TOKEN"
-RECEIPT_SCHEMA = "hswm-f1-target-deployment-probe/v1"
+RECEIPT_SCHEMA = "hswm-f1-target-deployment-probe/v2"
 
 
 class ProbeFailure(RuntimeError):
@@ -170,17 +171,30 @@ def _raw_idempotent_put(
 
 
 def probe_disconnect(
-    workdir: Path, upstream: str, model: str, model_revision: str, timeout: float
+    workdir: Path,
+    upstream: str,
+    model: str,
+    model_revision: str,
+    deployment_receipt_path: Path,
+    timeout: float,
 ) -> dict[str, object]:
     token = _require_token()
     spool_db = workdir / "disconnect.spool.sqlite3"
     client_db = workdir / "disconnect.client.sqlite3"
     started = _utc_now()
+    deployment_binding = load_model_deployment_binding(
+        deployment_receipt_path,
+        upstream_endpoint=upstream,
+        served_model=model,
+        model_revision=model_revision,
+        verify_live_process=True,
+    )
     spool = SQLiteResultSpool(spool_db)
     service = ResultSpoolService(
         spool,
-        upstream_endpoint=upstream,
-        server_revision=model_revision,
+        upstream_endpoint=deployment_binding.upstream_endpoint,
+        deployment_binding=deployment_binding,
+        deployment_receipt_path=deployment_receipt_path,
         client_token=token,
         timeout_seconds=timeout,
     )
@@ -260,7 +274,9 @@ def _spawn_spool_cli(
     repo_root: Path,
     spool_db: Path,
     upstream: str,
+    model: str,
     model_revision: str,
+    deployment_receipt_path: Path,
     port_num: int,
     token: str,
     timeout: float,
@@ -276,8 +292,12 @@ def _spawn_spool_cli(
             str(spool_db),
             "--upstream",
             upstream,
-            "--server-revision",
+            "--served-model",
+            model,
+            "--model-revision",
             model_revision,
+            "--model-deployment-receipt",
+            str(deployment_receipt_path),
             "--listen-host",
             "127.0.0.1",
             "--listen-port",
@@ -311,6 +331,7 @@ def probe_crash_complete(
     upstream: str,
     model: str,
     model_revision: str,
+    deployment_receipt_path: Path,
     port_num: int,
     timeout: float,
 ) -> dict[str, object]:
@@ -321,7 +342,15 @@ def probe_crash_complete(
     endpoint = f"http://127.0.0.1:{port_num}"
     run_id = f"f1-target-probe-crash-complete-{int(time.time())}"
     process = _spawn_spool_cli(
-        repo_root, spool_db, upstream, model_revision, port_num, token, timeout
+        repo_root,
+        spool_db,
+        upstream,
+        model,
+        model_revision,
+        deployment_receipt_path,
+        port_num,
+        token,
+        timeout,
     )
     try:
         with DurableSpoolJSONPort(
@@ -356,7 +385,15 @@ def probe_crash_complete(
     finally:
         offline_spool.close()
     restarted = _spawn_spool_cli(
-        repo_root, spool_db, upstream, model_revision, port_num, token, timeout
+        repo_root,
+        spool_db,
+        upstream,
+        model,
+        model_revision,
+        deployment_receipt_path,
+        port_num,
+        token,
+        timeout,
     )
     try:
         replay_check = _raw_idempotent_put(endpoint, call_row, model_revision, token)
@@ -395,6 +432,7 @@ def probe_crash_dispatching(
     upstream: str,
     model: str,
     model_revision: str,
+    deployment_receipt_path: Path,
     port_num: int,
     timeout: float,
 ) -> dict[str, object]:
@@ -405,7 +443,15 @@ def probe_crash_dispatching(
     endpoint = f"http://127.0.0.1:{port_num}"
     run_id = f"f1-target-probe-crash-dispatching-{int(time.time())}"
     process = _spawn_spool_cli(
-        repo_root, spool_db, upstream, model_revision, port_num, token, timeout
+        repo_root,
+        spool_db,
+        upstream,
+        model,
+        model_revision,
+        deployment_receipt_path,
+        port_num,
+        token,
+        timeout,
     )
     outcome: dict[str, object] = {}
 
@@ -466,7 +512,15 @@ def probe_crash_dispatching(
         )
     time.sleep(2.0)
     restarted = _spawn_spool_cli(
-        repo_root, spool_db, upstream, model_revision, port_num, token, timeout
+        repo_root,
+        spool_db,
+        upstream,
+        model,
+        model_revision,
+        deployment_receipt_path,
+        port_num,
+        token,
+        timeout,
     )
     try:
         worker.join(timeout=timeout + 60)
@@ -505,7 +559,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     parser.add_argument("--upstream", required=True)
     parser.add_argument("--model", required=True)
-    parser.add_argument("--server-revision", required=True)
+    parser.add_argument("--model-revision", required=True)
+    parser.add_argument("--model-deployment-receipt", type=Path, required=True)
     parser.add_argument("--timeout-seconds", type=float, default=300.0)
     parser.add_argument("--crash-complete-port", type=int, default=8012)
     parser.add_argument("--crash-dispatching-port", type=int, default=8013)
@@ -515,6 +570,16 @@ def main(argv: list[str] | None = None) -> int:
         default="all",
     )
     args = parser.parse_args(argv)
+    try:
+        deployment_binding = load_model_deployment_binding(
+            args.model_deployment_receipt,
+            upstream_endpoint=args.upstream,
+            served_model=args.model,
+            model_revision=args.model_revision,
+            verify_live_process=True,
+        )
+    except Exception as error:
+        parser.error(f"model deployment attestation failed: {type(error).__name__}")
     args.workdir.mkdir(parents=True, exist_ok=True)
     results: list[dict[str, object]] = []
     if args.probe in {"disconnect", "all"}:
@@ -523,7 +588,8 @@ def main(argv: list[str] | None = None) -> int:
                 args.workdir,
                 args.upstream,
                 args.model,
-                args.server_revision,
+                args.model_revision,
+                args.model_deployment_receipt,
                 args.timeout_seconds,
             )
         )
@@ -534,7 +600,8 @@ def main(argv: list[str] | None = None) -> int:
                 args.repo_root,
                 args.upstream,
                 args.model,
-                args.server_revision,
+                args.model_revision,
+                args.model_deployment_receipt,
                 args.crash_complete_port,
                 args.timeout_seconds,
             )
@@ -546,7 +613,8 @@ def main(argv: list[str] | None = None) -> int:
                 args.repo_root,
                 args.upstream,
                 args.model,
-                args.server_revision,
+                args.model_revision,
+                args.model_deployment_receipt,
                 args.crash_dispatching_port,
                 args.timeout_seconds,
             )
@@ -562,7 +630,11 @@ def main(argv: list[str] | None = None) -> int:
         "config": {
             "upstream": args.upstream,
             "model": args.model,
-            "server_revision": args.server_revision,
+            "model_revision": args.model_revision,
+            "deployment_receipt_sha256": (
+                deployment_binding.deployment_receipt_sha256
+            ),
+            "deployment_id": deployment_binding.deployment_id,
             "workdir": str(args.workdir),
             "timeout_seconds": args.timeout_seconds,
         },

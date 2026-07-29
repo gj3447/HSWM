@@ -9,6 +9,8 @@ import sys
 import pytest
 
 import prom_search_hswm.prom9_f1_r8_environment as environment
+import prom_search_hswm.prom9_f1_r8_lock as lock_module
+from prom_search_hswm.hswm_result_spool import ModelDeploymentBinding
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
 from prom_search_hswm.prom9_f1_prior_exposure import write_private_once
 from prom_search_hswm.prom9_f1_r8_environment import (
@@ -36,6 +38,19 @@ DEFAULT_JUDGE_CORE = (
 )
 RUN_ID = "f1-2wiki-r8-development-lock-test"
 ENDPOINT = "http://127.0.0.1:8011"
+UPSTREAM_ENDPOINT = "http://127.0.0.1:18002/v1/chat/completions"
+DEPLOYMENT_SHA256 = "d" * 64
+TEST_REVISION = "f" * 40
+
+
+def _deployment_binding() -> ModelDeploymentBinding:
+    return ModelDeploymentBinding(
+        upstream_endpoint=UPSTREAM_ENDPOINT,
+        deployment_receipt_sha256=DEPLOYMENT_SHA256,
+        deployment_id=f"hswm:model_deployment:v2:{DEPLOYMENT_SHA256}",
+        served_model="model",
+        model_revision=TEST_REVISION,
+    )
 
 
 def _write(path: Path, value: dict[str, object]) -> None:
@@ -98,9 +113,11 @@ def _environment_labels(
     symposium_commit: str,
 ) -> dict[str, str]:
     return r8_environment_labels(
-        endpoint=ENDPOINT,
+        spool_endpoint=ENDPOINT,
+        model_upstream_endpoint=UPSTREAM_ENDPOINT,
+        model_deployment_receipt_sha256=DEPLOYMENT_SHA256,
         model="model",
-        model_revision="revision",
+        model_revision=TEST_REVISION,
         run_id=RUN_ID,
         hswm_commit=hswm_commit,
         symposium_commit=symposium_commit,
@@ -151,6 +168,11 @@ def _allow_pre_c1_dependencies(monkeypatch: pytest.MonkeyPatch) -> None:
         environment,
         "verify_repository_dependency_blobs",
         verify_with_hswm_pre_c1_exception,
+    )
+    monkeypatch.setattr(
+        lock_module,
+        "load_model_deployment_binding",
+        lambda *_args, **_kwargs: _deployment_binding(),
     )
 
 
@@ -206,7 +228,7 @@ def _public_pipeline(tmp_path: Path, *, answer: str) -> tuple[dict[str, Path], d
         run_id=RUN_ID,
         mode="development",
         model="model",
-        model_revision="revision",
+        model_revision=TEST_REVISION,
         token_envelope=_envelope(),
         sealed_at="2026-07-29T00:00:00Z",
         preregistration_artifact_sha256=None,
@@ -265,10 +287,12 @@ def _invoke_lock(
             "--result-contract", str(dependencies["result_contract"]),
             "--tokenizer-dir", str(dependencies["tokenizer_vocab"].parent),
             "--model-catalog", str(dependencies["model_catalog"]),
-            "--model-weight-receipt", str(dependencies["model_weight_receipt"]),
+            "--model-deployment-receipt",
+            str(dependencies["model_deployment_receipt"]),
             "--python-lock", str(dependencies["python_lock"]),
             "--symposium-repo-root", str(symposium_repo_root),
             "--endpoint", ENDPOINT,
+            "--upstream-endpoint", UPSTREAM_ENDPOINT,
             "--max-workers", "2",
             "--timeout-seconds", "180",
             "--max-delivery-attempts", "8",

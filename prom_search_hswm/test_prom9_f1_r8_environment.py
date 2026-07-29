@@ -24,7 +24,9 @@ SAFE_ENV = {
     "HSWM_SPOOL_TOKEN": "also-must-never-be-recorded",
 }
 LABELS = {
-    "endpoint": "http://127.0.0.1:8010/v1",
+    "spool_endpoint": "http://127.0.0.1:8010",
+    "model_upstream_endpoint": "http://127.0.0.1:18002/v1/chat/completions",
+    "model_deployment_receipt_sha256": "d" * 64,
     "model": "frozen-model-alias",
     "model_revision": "frozen-revision",
     "run_id": "f1-r8-development",
@@ -381,20 +383,46 @@ def test_r8_labels_and_live_repository_commit_are_exact() -> None:
         ["git", "-C", str(repo_root), "rev-parse", "HEAD"], text=True
     ).strip()
     labels = environment.r8_environment_labels(
-        endpoint="http://127.0.0.1:8010/v1",
+        spool_endpoint="http://127.0.0.1:8010",
+        model_upstream_endpoint="http://127.0.0.1:18002/v1/chat/completions",
+        model_deployment_receipt_sha256="d" * 64,
         model="model",
-        model_revision="revision",
+        model_revision="f" * 40,
         run_id="run",
         hswm_commit=commit,
         symposium_commit=commit,
     )
     assert set(labels) == set(environment.NONSECRET_LABEL_ALLOWLIST)
     assert environment.verify_repository_commit(repo_root, commit) == commit
-    with pytest.raises(environment.EnvironmentPreimageError, match="commit label"):
+    with pytest.raises(environment.EnvironmentPreimageError, match="model revision"):
         environment.r8_environment_labels(
-            endpoint="http://127.0.0.1:8010/v1",
+            spool_endpoint="http://127.0.0.1:8010",
+            model_upstream_endpoint="http://127.0.0.1:18002/v1/chat/completions",
+            model_deployment_receipt_sha256="d" * 64,
             model="model",
             model_revision="revision",
+            run_id="run",
+            hswm_commit=commit,
+            symposium_commit=commit,
+        )
+    with pytest.raises(environment.EnvironmentPreimageError, match="receipt label"):
+        environment.r8_environment_labels(
+            spool_endpoint="http://127.0.0.1:8010",
+            model_upstream_endpoint="http://127.0.0.1:18002/v1/chat/completions",
+            model_deployment_receipt_sha256="not-a-digest",
+            model="model",
+            model_revision="f" * 40,
+            run_id="run",
+            hswm_commit=commit,
+            symposium_commit=commit,
+        )
+    with pytest.raises(environment.EnvironmentPreimageError, match="commit label"):
+        environment.r8_environment_labels(
+            spool_endpoint="http://127.0.0.1:8010",
+            model_upstream_endpoint="http://127.0.0.1:18002/v1/chat/completions",
+            model_deployment_receipt_sha256="d" * 64,
+            model="model",
+            model_revision="f" * 40,
             run_id="run",
             hswm_commit="not-a-commit",
             symposium_commit=commit,
@@ -481,7 +509,25 @@ def test_r8_dependency_path_inventory_covers_every_runtime_module(
         "token_meter": "hswm_token_meter.py",
         "typed_ports": "hswm_typed_ports.py",
         "token_envelope": "prom9_f1_envelope.py",
+        "model_deployment_receipt_code": "model_deployment_receipt.py",
+        "model_snapshot_attestation_core": "bge_m3_embed.py",
         "data_preparer": "prom9_f1_r8_source.py",
     }
     assert set(expected_code) == set(environment.R8_COMMIT_BOUND_DEPENDENCY_NAMES)
-    assert all(paths[name] == module_dir / filename for name, filename in expected_code.items())
+    assert all(
+        paths[name] == module_dir / filename
+        for name, filename in expected_code.items()
+        if name not in {
+            "model_deployment_receipt_code",
+            "model_snapshot_attestation_core",
+        }
+    )
+    assert paths["model_deployment_receipt_code"] == (
+        module_dir.parent / "model_deployment_receipt.py"
+    )
+    assert paths["model_snapshot_attestation_core"] == (
+        module_dir.parent / "bge_m3_embed.py"
+    )
+    assert len(paths) == 31
+    assert "model_weight_receipt" not in paths
+    assert paths["model_deployment_receipt"] == tmp_path / "model-weight.json"

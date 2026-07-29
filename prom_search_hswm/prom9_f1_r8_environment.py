@@ -76,7 +76,9 @@ NONSECRET_ENV_ALLOWLIST: tuple[str, ...] = (
 # Optional semantic labels are also closed-world.  They bind non-secret runtime
 # policy without turning this module into an arbitrary environment dumper.
 NONSECRET_LABEL_ALLOWLIST: tuple[str, ...] = (
-    "endpoint",
+    "model_deployment_receipt_sha256",
+    "model_upstream_endpoint",
+    "spool_endpoint",
     "hswm_commit",
     "model",
     "model_revision",
@@ -104,6 +106,8 @@ R8_DEPENDENCY_NAMES: tuple[str, ...] = (
     "token_meter",
     "typed_ports",
     "token_envelope",
+    "model_deployment_receipt_code",
+    "model_snapshot_attestation_core",
     "protocol_json",
     "data_preparer",
     "judge_core",
@@ -112,7 +116,7 @@ R8_DEPENDENCY_NAMES: tuple[str, ...] = (
     "tokenizer_merges",
     "tokenizer_config",
     "model_catalog",
-    "model_weight_receipt",
+    "model_deployment_receipt",
     "python_lock",
 )
 # Compatibility name for in-flight consumers; this is an alias, not a second
@@ -139,6 +143,8 @@ R8_COMMIT_BOUND_DEPENDENCY_NAMES = frozenset(
         "token_meter",
         "typed_ports",
         "token_envelope",
+        "model_deployment_receipt_code",
+        "model_snapshot_attestation_core",
         "data_preparer",
     }
 )
@@ -438,7 +444,7 @@ def _labels(values: Mapping[str, str] | None) -> dict[str, str]:
             or len(value.encode("utf-8")) > MAX_ENV_VALUE_BYTES
         ):
             raise EnvironmentPreimageError(f"runtime label is invalid: {name}")
-        if name == "endpoint":
+        if name in {"model_upstream_endpoint", "spool_endpoint"}:
             parsed = urlsplit(value)
             if (
                 parsed.scheme not in {"http", "https"}
@@ -448,7 +454,22 @@ def _labels(values: Mapping[str, str] | None) -> dict[str, str]:
                 or parsed.query
                 or parsed.fragment
             ):
-                raise EnvironmentPreimageError("endpoint label must be credential-free")
+                raise EnvironmentPreimageError(
+                    f"{name} label must be credential-free"
+                )
+            if (
+                name == "model_upstream_endpoint"
+                and parsed.path != "/v1/chat/completions"
+            ):
+                raise EnvironmentPreimageError(
+                    "model_upstream_endpoint must be the exact completions route"
+                )
+            if name == "spool_endpoint" and parsed.path not in {"", "/"}:
+                raise EnvironmentPreimageError(
+                    "spool_endpoint must identify the server root"
+                )
+        if name == "model_deployment_receipt_sha256":
+            _require_sha256(value, name)
     return {name: labels[name] for name in sorted(labels)}
 
 
@@ -968,6 +989,10 @@ def r8_dependency_paths(
         "token_meter": module_dir / "hswm_token_meter.py",
         "typed_ports": module_dir / "hswm_typed_ports.py",
         "token_envelope": module_dir / "prom9_f1_envelope.py",
+        "model_deployment_receipt_code": (
+            module_dir.parent / "model_deployment_receipt.py"
+        ),
+        "model_snapshot_attestation_core": module_dir.parent / "bge_m3_embed.py",
         "protocol_json": Path(protocol_path),
         "data_preparer": module_dir / "prom9_f1_r8_source.py",
         "judge_core": Path(judge_core_path),
@@ -976,7 +1001,7 @@ def r8_dependency_paths(
         "tokenizer_merges": Path(tokenizer_dir) / "merges.txt",
         "tokenizer_config": Path(tokenizer_dir) / "tokenizer_config.json",
         "model_catalog": Path(model_catalog_path),
-        "model_weight_receipt": Path(model_weight_receipt_path),
+        "model_deployment_receipt": Path(model_weight_receipt_path),
         "python_lock": Path(python_lock_path),
     }
     if set(paths) != set(R8_DEPENDENCY_NAMES):
@@ -986,7 +1011,9 @@ def r8_dependency_paths(
 
 def r8_environment_labels(
     *,
-    endpoint: str,
+    spool_endpoint: str,
+    model_upstream_endpoint: str,
+    model_deployment_receipt_sha256: str,
     model: str,
     model_revision: str,
     run_id: str,
@@ -994,7 +1021,9 @@ def r8_environment_labels(
     symposium_commit: str,
 ) -> dict[str, str]:
     labels = {
-        "endpoint": endpoint,
+        "spool_endpoint": spool_endpoint,
+        "model_upstream_endpoint": model_upstream_endpoint,
+        "model_deployment_receipt_sha256": model_deployment_receipt_sha256,
         "model": model,
         "model_revision": model_revision,
         "run_id": run_id,
@@ -1007,6 +1036,14 @@ def r8_environment_labels(
     ):
         raise EnvironmentPreimageError(
             "repository commit labels must be full lowercase commits"
+        )
+    if _GIT_COMMIT.fullmatch(model_revision) is None:
+        raise EnvironmentPreimageError(
+            "model revision label must be an exact lowercase 40-hex revision"
+        )
+    if _SHA256.fullmatch(model_deployment_receipt_sha256) is None:
+        raise EnvironmentPreimageError(
+            "model deployment receipt label must be a lowercase SHA-256 digest"
         )
     return _labels(labels)
 
@@ -1140,7 +1177,13 @@ def verify_r8_preimage_bundle(
     if not isinstance(environment, Mapping) or not isinstance(dependencies, Mapping):
         raise EnvironmentPreimageError("r8 bundle receipts are absent")
     labels = r8_environment_labels(
-        endpoint=str(expected_labels.get("endpoint", "")),
+        spool_endpoint=str(expected_labels.get("spool_endpoint", "")),
+        model_upstream_endpoint=str(
+            expected_labels.get("model_upstream_endpoint", "")
+        ),
+        model_deployment_receipt_sha256=str(
+            expected_labels.get("model_deployment_receipt_sha256", "")
+        ),
         model=str(expected_labels.get("model", "")),
         model_revision=str(expected_labels.get("model_revision", "")),
         run_id=str(expected_labels.get("run_id", "")),

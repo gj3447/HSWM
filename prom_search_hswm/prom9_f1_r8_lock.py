@@ -12,6 +12,7 @@ import sys
 from collections.abc import Mapping, Sequence
 
 from prom_search_hswm.hswm_typed_ports import canonical_sha256
+from prom_search_hswm.hswm_result_spool import load_model_deployment_binding
 from prom_search_hswm.prom9_f1_prior_exposure import (
     _read_private_bytes,
     _strict_object,
@@ -41,8 +42,9 @@ from prom_search_hswm.prom9_f1_r8_source import (
 
 REQUIRED_DEPENDENCY_FILES = R8_DEPENDENCY_NAMES
 REQUIRED_ENVIRONMENT_LABELS = (
-    "endpoint", "model", "model_revision", "run_id", "hswm_commit",
-    "symposium_commit",
+    "spool_endpoint", "model_upstream_endpoint",
+    "model_deployment_receipt_sha256", "model", "model_revision", "run_id",
+    "hswm_commit", "symposium_commit",
 )
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _COMMIT = re.compile(r"^[0-9a-f]{40}$")
@@ -233,10 +235,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--result-contract", type=Path, required=True)
     parser.add_argument("--tokenizer-dir", type=Path, required=True)
     parser.add_argument("--model-catalog", type=Path, required=True)
-    parser.add_argument("--model-weight-receipt", type=Path, required=True)
+    parser.add_argument(
+        "--model-deployment-receipt",
+        dest="model_weight_receipt",
+        type=Path,
+        required=True,
+    )
     parser.add_argument("--python-lock", type=Path, required=True)
     parser.add_argument("--symposium-repo-root", type=Path, required=True)
     parser.add_argument("--endpoint", required=True)
+    parser.add_argument("--upstream-endpoint", required=True)
     parser.add_argument("--max-workers", type=int, required=True)
     parser.add_argument("--timeout-seconds", type=float, required=True)
     parser.add_argument("--max-delivery-attempts", type=int, required=True)
@@ -295,6 +303,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             or not isinstance(model_revision, str)
         ):
             raise LockRefusal("runtime identity is malformed")
+        deployment_binding = load_model_deployment_binding(
+            args.model_weight_receipt,
+            upstream_endpoint=args.upstream_endpoint,
+            served_model=model,
+            model_revision=model_revision,
+            verify_live_process=True,
+        )
 
         expected_paths = r8_dependency_paths(
             protocol_path=args.protocol,
@@ -306,7 +321,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             python_lock_path=args.python_lock,
         )
         expected_labels = r8_environment_labels(
-            endpoint=args.endpoint,
+            spool_endpoint=args.endpoint,
+            model_upstream_endpoint=deployment_binding.upstream_endpoint,
+            model_deployment_receipt_sha256=(
+                deployment_binding.deployment_receipt_sha256
+            ),
             model=model,
             model_revision=model_revision,
             run_id=run_id,
@@ -356,6 +375,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             result_contract_sha256=result_contract_sha,
             judge_core_sha256=judge_core_sha,
             judge_core_file_sha256=judge_core_file_sha,
+            deployment_binding=deployment_binding,
             forbidden_prior_item_ids=sorted(aggregate.get("prior_item_ids", [])),
             forbidden_prior_source_entity_ids=sorted(
                 aggregate.get("prior_source_entity_ids", [])

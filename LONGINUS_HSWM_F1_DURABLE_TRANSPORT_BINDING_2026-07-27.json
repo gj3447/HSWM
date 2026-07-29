@@ -1,9 +1,9 @@
 {
-  "schema": "longinus-hswm-f1-r8-premeasurement-binding/v2",
-  "binding_id": "longinus-hswm-f1-r8-premeasurement-c1-successor-20260729",
+  "schema": "longinus-hswm-f1-r8-premeasurement-binding/v3",
+  "binding_id": "longinus-hswm-f1-r8-deployment-power-v3-20260729",
   "binding_state": "PIERCED_LOCAL_NO_KG_WRITE",
-  "generated_at": "2026-07-29T13:18:00+09:00",
-  "baseline_scope": "HSWM F1 r8 premeasurement environment, lock, power, public source, private output, runner, terminal transport audit, result spool, and their exact tests",
+  "generated_at": "2026-07-29T14:39:56+09:00",
+  "baseline_scope": "HSWM F1 r8 premeasurement target-deployment probe, official deployment receipt/process attestation, durable spool identity, environment and lock closures, evidence-derived power receipt, private output, runner, source, terminal transport audit, and their exact tests",
   "scientific_status": "UNJUDGED",
   "evidence_class": "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE",
   "r7_status": "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE",
@@ -12,18 +12,18 @@
   "git": {
     "remote": "https://github.com/gj3447/HSWM.git",
     "branch": "main",
-    "implementation_commit": "7ebffbb8fb07673f1e7a5d5c284edafd1286878a",
-    "implementation_parent": "62ad67b039512edfcb4dca6dd19e2e52228ef514",
+    "implementation_commit": "b75a2a5bddf0960ae22707d059005cd8393da0c7",
+    "implementation_parent": "51d0f3ea86c0ff0521f1ca5f3d66f73d1a1aa9dc",
     "blob_authority": "Every source SHA, AST symbol, signature, and line range is read from implementation_commit via git cat-file, never from the worktree.",
-    "ancestry_rule": "implementation_commit must exist and be an ancestor of HEAD"
+    "ancestry_rule": "implementation_parent must be an ancestor of implementation_commit; implementation_commit must be an ancestor of HEAD; every changed Python path in that baseline diff must be reverse-bound."
   },
   "kg": {
     "write_state": "NOT_AUTHORIZED_NOT_WRITTEN",
     "anchor_status": "LOCAL_PROPOSED_REFERENCE_IDENTITY",
     "provenance_actor": "Codex",
     "source_path": "LONGINUS_HSWM_F1_DURABLE_TRANSPORT_BINDING_2026-07-27.json",
-    "timestamp": "2026-07-29T13:18:00+09:00",
-    "baseline_scope": "7ebffbb8fb07673f1e7a5d5c284edafd1286878a"
+    "timestamp": "2026-07-29T14:39:56+09:00",
+    "baseline_scope": "b75a2a5bddf0960ae22707d059005cd8393da0c7"
   },
   "layers": [
     "KG_NODE",
@@ -35,8 +35,8 @@
     "CRATE_SCRIPT"
   ],
   "required_target_paths": [
+    "prom_search_hswm/f1_target_deployment_probe.py",
     "prom_search_hswm/hswm_result_spool.py",
-    "prom_search_hswm/test_f1_durable_transport.py",
     "prom_search_hswm/prom9_f1_r8_environment.py",
     "prom_search_hswm/prom9_f1_r8_lock.py",
     "prom_search_hswm/prom9_f1_r8_power.py",
@@ -45,6 +45,8 @@
     "prom_search_hswm/prom9_f1_r8_runner.py",
     "prom_search_hswm/prom9_f1_r8_source.py",
     "prom_search_hswm/prom9_f1_r8_transport_audit.py",
+    "prom_search_hswm/test_f1_durable_transport.py",
+    "prom_search_hswm/test_hswm_result_spool_attestation.py",
     "prom_search_hswm/test_prom9_f1_r8_environment.py",
     "prom_search_hswm/test_prom9_f1_r8_lock.py",
     "prom_search_hswm/test_prom9_f1_r8_power.py",
@@ -56,63 +58,136 @@
   ],
   "bindings": [
     {
-      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_RESULT_SPOOL",
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_TARGET_DEPLOYMENT_PROBE",
       "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
-      "code_symbol": {"qualified": "prom_search_hswm.hswm_result_spool.SQLiteResultSpool", "name": "SQLiteResultSpool", "kind": "class", "parameters": []},
-      "file_line": "prom_search_hswm/hswm_result_spool.py:126",
-      "line_range": "126-393",
-      "sha256": "8e62a3f6a995ea3c2237d57f3b20a153d1cb6b373287c66d1ca4be256d44ad54",
-      "crate_script": "python -m pytest -q prom_search_hswm/test_f1_durable_transport.py"
+      "code_symbol": {
+        "qualified": "prom_search_hswm.f1_target_deployment_probe.main",
+        "name": "main",
+        "kind": "function",
+        "parameters": [
+          "argv"
+        ]
+      },
+      "file_line": "prom_search_hswm/f1_target_deployment_probe.py:556",
+      "line_range": "556-655",
+      "sha256": "5283fdb14a35238203336dea05f31bcfd5f434ac52fce52c9df396ac6ec6fd0f",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_hswm_result_spool_attestation.py"
     },
     {
-      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_RESULT_SPOOL_TEST",
-      "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
-      "code_symbol": {"qualified": "prom_search_hswm.test_f1_durable_transport.test_disconnect_after_spool_commit_replays_identical_bytes_once", "name": "test_disconnect_after_spool_commit_replays_identical_bytes_once", "kind": "function", "parameters": ["tmp_path", "monkeypatch"]},
-      "file_line": "prom_search_hswm/test_f1_durable_transport.py:294",
-      "line_range": "294-348",
-      "sha256": "9edf914d4118939f01191b7f9f0a57a7a69af2dde5d0289ec4845d8543becb00",
-      "crate_script": "python -m pytest -q prom_search_hswm/test_f1_durable_transport.py"
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_RESULT_SPOOL",
+      "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.hswm_result_spool.load_model_deployment_binding",
+        "name": "load_model_deployment_binding",
+        "kind": "function",
+        "parameters": [
+          "path",
+          "upstream_endpoint",
+          "served_model",
+          "model_revision",
+          "verify_live_process"
+        ]
+      },
+      "file_line": "prom_search_hswm/hswm_result_spool.py:199",
+      "line_range": "199-262",
+      "sha256": "40a02942f92c4ca284649372df841ad3e0b622352848dc2b6272582e7bf87a7e",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_hswm_result_spool_attestation.py"
     },
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_ENVIRONMENT",
       "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
-      "code_symbol": {"qualified": "prom_search_hswm.prom9_f1_r8_environment.verify_r8_preimage_bundle", "name": "verify_r8_preimage_bundle", "kind": "function", "parameters": ["value", "expected_paths", "expected_labels", "repo_root", "symposium_repo_root", "verify_live", "environ"]},
-      "file_line": "prom_search_hswm/prom9_f1_r8_environment.py:1123",
-      "line_range": "1123-1172",
-      "sha256": "cd6ce46da7366fbaa5ec47f19fb4b67c5f6e462039b69964f5db92284041758e",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_environment.verify_r8_preimage_bundle",
+        "name": "verify_r8_preimage_bundle",
+        "kind": "function",
+        "parameters": [
+          "value",
+          "expected_paths",
+          "expected_labels",
+          "repo_root",
+          "symposium_repo_root",
+          "verify_live",
+          "environ"
+        ]
+      },
+      "file_line": "prom_search_hswm/prom9_f1_r8_environment.py:1160",
+      "line_range": "1160-1215",
+      "sha256": "199b96a22e0f457fb964a98a7c4903eda760a9cde32b60339e1f02d43a8604ab",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_environment.py"
     },
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_LOCK",
       "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
-      "code_symbol": {"qualified": "prom_search_hswm.prom9_f1_r8_lock._validate_artifact_graph", "name": "_validate_artifact_graph", "kind": "function", "parameters": ["manifest", "selection", "selection_sha", "public_source", "evaluator"]},
-      "file_line": "prom_search_hswm/prom9_f1_r8_lock.py:86",
-      "line_range": "86-219",
-      "sha256": "72ccd4ef29d3f8dc1486c0e69e251bb3ebecd7dd9643a3b4825bc1a4b9fc3b8a",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_lock.main",
+        "name": "main",
+        "kind": "function",
+        "parameters": [
+          "argv"
+        ]
+      },
+      "file_line": "prom_search_hswm/prom9_f1_r8_lock.py:224",
+      "line_range": "224-410",
+      "sha256": "c4bc47ebfff190bb0636e345e6f68d9e0f700b2dfe2309b8c9ed6ff6c8c61de0",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_lock.py"
     },
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_POWER",
       "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
-      "code_symbol": {"qualified": "prom_search_hswm.prom9_f1_r8_power.build_power_receipt", "name": "build_power_receipt", "kind": "function", "parameters": ["manifest", "execution_lock", "public_source_receipt", "selection_receipt", "gold_source_receipt", "prior_exposure_receipt", "suite", "evaluator_receipt", "gold", "db_genesis_receipt", "environment_dependency_bundle", "judge_core_path"]},
-      "file_line": "prom_search_hswm/prom9_f1_r8_power.py:1006",
-      "line_range": "1006-1274",
-      "sha256": "7418d3aec4a537837ef58558889bafefd87ccaa213f2560cc13ddda504ff0512",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_power.build_power_receipt",
+        "name": "build_power_receipt",
+        "kind": "function",
+        "parameters": [
+          "manifest",
+          "execution_lock",
+          "public_source_receipt",
+          "selection_receipt",
+          "gold_source_receipt",
+          "prior_exposure_receipt",
+          "suite",
+          "evaluator_receipt",
+          "gold",
+          "db_genesis_receipt",
+          "environment_dependency_bundle",
+          "judge_core_path"
+        ]
+      },
+      "file_line": "prom_search_hswm/prom9_f1_r8_power.py:1056",
+      "line_range": "1056-1317",
+      "sha256": "1746c863238ab85584abe0f99fa2feb761846134d349d76e05981b070915fead",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_power.py"
     },
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_POWER_VERIFIER",
       "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
-      "code_symbol": {"qualified": "prom_search_hswm.prom9_f1_r8_power_cli.verify_power_operating_characteristics", "name": "verify_power_operating_characteristics", "kind": "function", "parameters": ["receipt", "judge_core_path"]},
-      "file_line": "prom_search_hswm/prom9_f1_r8_power_cli.py:192",
-      "line_range": "192-369",
-      "sha256": "d8ed0c0473138e38ee74323a5c138fd1f7f121810d56d4e601ed1fca9590a1da",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_power_cli.verify_power_operating_characteristics",
+        "name": "verify_power_operating_characteristics",
+        "kind": "function",
+        "parameters": [
+          "receipt",
+          "judge_core_path"
+        ]
+      },
+      "file_line": "prom_search_hswm/prom9_f1_r8_power_cli.py:259",
+      "line_range": "259-479",
+      "sha256": "bf8e36d2547f7ac06ae1ed89db0d6ce852007aaee69c4f21e6107dd68c789ab4",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_power_receipt.py"
     },
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_PRIVATE_OUTPUT",
       "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
-      "code_symbol": {"qualified": "prom_search_hswm.prom9_f1_r8_private_output.reserve_private_outputs", "name": "reserve_private_outputs", "kind": "function", "parameters": ["outputs", "run_id", "forbidden_paths"]},
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_private_output.reserve_private_outputs",
+        "name": "reserve_private_outputs",
+        "kind": "function",
+        "parameters": [
+          "outputs",
+          "run_id",
+          "forbidden_paths"
+        ]
+      },
       "file_line": "prom_search_hswm/prom9_f1_r8_private_output.py:185",
       "line_range": "185-219",
       "sha256": "01ff14646e2a9a8faf420799ef8aa95f579d9c3a989b570b66b3ba3c3a15f8d8",
@@ -121,16 +196,57 @@
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_RUNNER",
       "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
-      "code_symbol": {"qualified": "prom_search_hswm.prom9_f1_r8_runner.run_suite_v3_draft", "name": "run_suite_v3_draft", "kind": "function", "parameters": ["manifest", "execution_lock", "protocol_path", "model_port", "token_meter", "max_workers", "environment_dependency_bundle", "result_contract_path", "judge_core_path", "symposium_repo_root", "tokenizer_dir", "model_catalog_path", "model_weight_receipt_path", "python_lock_path", "spool_identity_preflight", "preregistration_artifact", "preregistration_readback", "anchored_judge_path"]},
-      "file_line": "prom_search_hswm/prom9_f1_r8_runner.py:2562",
-      "line_range": "2562-2786",
-      "sha256": "f9567784eb860f7d2cfd37debb6e6dcf1225f11200b5ff896aadc01c24968e78",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_runner.run_suite_v3_draft",
+        "name": "run_suite_v3_draft",
+        "kind": "function",
+        "parameters": [
+          "manifest",
+          "execution_lock",
+          "protocol_path",
+          "model_port",
+          "token_meter",
+          "max_workers",
+          "environment_dependency_bundle",
+          "result_contract_path",
+          "judge_core_path",
+          "symposium_repo_root",
+          "tokenizer_dir",
+          "model_catalog_path",
+          "model_weight_receipt_path",
+          "python_lock_path",
+          "spool_identity_preflight",
+          "preregistration_artifact",
+          "preregistration_readback",
+          "anchored_judge_path"
+        ]
+      },
+      "file_line": "prom_search_hswm/prom9_f1_r8_runner.py:2692",
+      "line_range": "2692-2931",
+      "sha256": "e4570ea99663850f16e6bbd8805c20bcfff4583eb6a8462d32318ea9a97b0a08",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_runner.py"
     },
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_PUBLIC_SOURCE",
       "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
-      "code_symbol": {"qualified": "prom_search_hswm.prom9_f1_r8_source.build_public_artifacts", "name": "build_public_artifacts", "kind": "function", "parameters": ["public_entries", "public_selection_receipt_sha256", "dataset", "config", "split", "run_id", "mode", "model", "model_revision", "token_envelope", "preregistration_artifact_sha256"]},
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_source.build_public_artifacts",
+        "name": "build_public_artifacts",
+        "kind": "function",
+        "parameters": [
+          "public_entries",
+          "public_selection_receipt_sha256",
+          "dataset",
+          "config",
+          "split",
+          "run_id",
+          "mode",
+          "model",
+          "model_revision",
+          "token_envelope",
+          "preregistration_artifact_sha256"
+        ]
+      },
       "file_line": "prom_search_hswm/prom9_f1_r8_source.py:515",
       "line_range": "515-646",
       "sha256": "f4312bd17cdbaaf6502bcd7193940fbb5e1cdd3d0177c298a8940f5ef7520c83",
@@ -139,52 +255,134 @@
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_TRANSPORT_AUDIT",
       "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
-      "code_symbol": {"qualified": "prom_search_hswm.prom9_f1_r8_transport_audit.export_terminal_bindings", "name": "export_terminal_bindings", "kind": "function", "parameters": ["run_id", "genesis_receipt", "attempt_db", "spool_db", "expected_calls", "expected_item_runs", "expected_attempt_events"]},
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_transport_audit.export_terminal_bindings",
+        "name": "export_terminal_bindings",
+        "kind": "function",
+        "parameters": [
+          "run_id",
+          "genesis_receipt",
+          "attempt_db",
+          "spool_db",
+          "expected_calls",
+          "expected_item_runs",
+          "expected_attempt_events"
+        ]
+      },
       "file_line": "prom_search_hswm/prom9_f1_r8_transport_audit.py:700",
       "line_range": "700-890",
       "sha256": "33b4aa1e5c50546e86bd4610bf03eb60f42a33582f2313f4f5bdd49b85ff3129",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_transport_audit.py"
     },
     {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_RESULT_SPOOL_TEST",
+      "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_f1_durable_transport.test_disconnect_after_spool_commit_replays_identical_bytes_once",
+        "name": "test_disconnect_after_spool_commit_replays_identical_bytes_once",
+        "kind": "function",
+        "parameters": [
+          "tmp_path",
+          "monkeypatch"
+        ]
+      },
+      "file_line": "prom_search_hswm/test_f1_durable_transport.py:310",
+      "line_range": "310-372",
+      "sha256": "5abd2a34a5cc50d57d6acbd58787b6ee3556d368646645e1eb1845bfe9c6a435",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_f1_durable_transport.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_SPOOL_ATTESTATION_TEST",
+      "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_hswm_result_spool_attestation.test_identity_v2_is_closed_and_dispatch_drift_leaves_no_row",
+        "name": "test_identity_v2_is_closed_and_dispatch_drift_leaves_no_row",
+        "kind": "function",
+        "parameters": [
+          "tmp_path",
+          "monkeypatch"
+        ]
+      },
+      "file_line": "prom_search_hswm/test_hswm_result_spool_attestation.py:149",
+      "line_range": "149-196",
+      "sha256": "adc33c259d3c2835f107a8dd1bbdeb4ebb46eb66ce24eedac1db85bc8fabfee1",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_hswm_result_spool_attestation.py"
+    },
+    {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_ENVIRONMENT_TEST",
       "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
-      "code_symbol": {"qualified": "prom_search_hswm.test_prom9_f1_r8_environment.test_r8_dependency_path_inventory_covers_every_runtime_module", "name": "test_r8_dependency_path_inventory_covers_every_runtime_module", "kind": "function", "parameters": ["tmp_path"]},
-      "file_line": "prom_search_hswm/test_prom9_f1_r8_environment.py:449",
-      "line_range": "449-487",
-      "sha256": "4b253408d0d90fdbb1348a5e6637f956e67f4c5451bf00baf1f087fcacc6d907",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_environment.test_r8_labels_and_live_repository_commit_are_exact",
+        "name": "test_r8_labels_and_live_repository_commit_are_exact",
+        "kind": "function",
+        "parameters": []
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_environment.py:380",
+      "line_range": "380-431",
+      "sha256": "cc4526b94b2ee4ae3d0af871bf0ed58b3dfe6ec6ec708ca8311b2bb3dfc322ba",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_environment.py"
     },
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_LOCK_TEST",
       "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
-      "code_symbol": {"qualified": "prom_search_hswm.test_prom9_f1_r8_lock.test_lock_cli_has_no_gold_path_and_rebuilds_only_the_public_graph", "name": "test_lock_cli_has_no_gold_path_and_rebuilds_only_the_public_graph", "kind": "function", "parameters": ["tmp_path", "monkeypatch"]},
-      "file_line": "prom_search_hswm/test_prom9_f1_r8_lock.py:281",
-      "line_range": "281-334",
-      "sha256": "5c081f5222dc9cb08e2e9d7a5342d89d9867da813a8a7fd8e4195b54f52716ad",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_lock.test_lock_cli_has_no_gold_path_and_rebuilds_only_the_public_graph",
+        "name": "test_lock_cli_has_no_gold_path_and_rebuilds_only_the_public_graph",
+        "kind": "function",
+        "parameters": [
+          "tmp_path",
+          "monkeypatch"
+        ]
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_lock.py:305",
+      "line_range": "305-358",
+      "sha256": "73feaa80dbdaaf58d265b1cb46488995de54fab16c28e952853bc81f6ccdf37d",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_lock.py"
     },
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_POWER_TEST",
       "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
-      "code_symbol": {"qualified": "prom_search_hswm.test_prom9_f1_r8_power.test_public_selection_v2_and_private_gold_source_are_physically_separate", "name": "test_public_selection_v2_and_private_gold_source_are_physically_separate", "kind": "function", "parameters": ["tmp_path"]},
-      "file_line": "prom_search_hswm/test_prom9_f1_r8_power.py:104",
-      "line_range": "104-130",
-      "sha256": "b78ad603caf92cdb048a578836f4775764ccc611a1a1876dbeeab7dc206019af",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_power.test_power_builder_success_rederives_full_embedded_development_evidence",
+        "name": "test_power_builder_success_rederives_full_embedded_development_evidence",
+        "kind": "function",
+        "parameters": [
+          "tmp_path",
+          "monkeypatch"
+        ]
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_power.py:268",
+      "line_range": "268-465",
+      "sha256": "118564331b6b79a6e329a30c15dd221985b43705a665d6dd027e170d12d0a1ea",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_power.py"
     },
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_POWER_RECEIPT_TEST",
       "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
-      "code_symbol": {"qualified": "prom_search_hswm.test_prom9_f1_r8_power_receipt.test_actual_prospective_judge_semantics_pass_v3_power_gates_but_old_schema_refuses", "name": "test_actual_prospective_judge_semantics_pass_v3_power_gates_but_old_schema_refuses", "kind": "function", "parameters": []},
-      "file_line": "prom_search_hswm/test_prom9_f1_r8_power_receipt.py:290",
-      "line_range": "290-322",
-      "sha256": "80a0425f0a17a3ddf081768effe35c5f19ef5f7ee1d77e3cf8e88ccf970265c4",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_power_receipt.test_rehashed_detached_component_contrast_is_refused_by_evidence_rederivation",
+        "name": "test_rehashed_detached_component_contrast_is_refused_by_evidence_rederivation",
+        "kind": "function",
+        "parameters": [
+          "monkeypatch"
+        ]
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_power_receipt.py:542",
+      "line_range": "542-569",
+      "sha256": "407fdae537bc1983524c16b7bb72ee556f52c9d279408758e3a6b37b3c3d48ae",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_power_receipt.py"
     },
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_PRIVATE_OUTPUT_TEST",
       "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
-      "code_symbol": {"qualified": "prom_search_hswm.test_prom9_f1_r8_private_output.test_reservation_is_0600_marker_then_same_inode_commit", "name": "test_reservation_is_0600_marker_then_same_inode_commit", "kind": "function", "parameters": ["tmp_path"]},
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_private_output.test_reservation_is_0600_marker_then_same_inode_commit",
+        "name": "test_reservation_is_0600_marker_then_same_inode_commit",
+        "kind": "function",
+        "parameters": [
+          "tmp_path"
+        ]
+      },
       "file_line": "prom_search_hswm/test_prom9_f1_r8_private_output.py:17",
       "line_range": "17-27",
       "sha256": "f23ea65370930b8ceccfcfcea7fa3acb5263851fdf5f9f60ccbfd82ed3897142",
@@ -193,16 +391,29 @@
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_RUNNER_TEST",
       "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
-      "code_symbol": {"qualified": "prom_search_hswm.test_prom9_f1_r8_runner.test_cli_preexisting_output_refuses_before_endpoint_transport", "name": "test_cli_preexisting_output_refuses_before_endpoint_transport", "kind": "function", "parameters": ["tmp_path", "monkeypatch"]},
-      "file_line": "prom_search_hswm/test_prom9_f1_r8_runner.py:1464",
-      "line_range": "1464-1537",
-      "sha256": "dc10d8708264a96bb0d9eea925ca4d213af7436d0fd839a5a37a4050769cd104",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_runner.test_runtime_policy_and_live_spool_identity_are_exact",
+        "name": "test_runtime_policy_and_live_spool_identity_are_exact",
+        "kind": "function",
+        "parameters": [
+          "tmp_path",
+          "monkeypatch"
+        ]
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_runner.py:1469",
+      "line_range": "1469-1525",
+      "sha256": "e7fe5f88d6c9f816c8afdf2db8c8cb5a3c1519a3ee6248b6c89a0ab78c48ed1a",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_runner.py"
     },
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_SOURCE_TEST",
       "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
-      "code_symbol": {"qualified": "prom_search_hswm.test_prom9_f1_r8_source.test_answer_mutation_changes_only_evaluator_side_hashes", "name": "test_answer_mutation_changes_only_evaluator_side_hashes", "kind": "function", "parameters": []},
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_source.test_answer_mutation_changes_only_evaluator_side_hashes",
+        "name": "test_answer_mutation_changes_only_evaluator_side_hashes",
+        "kind": "function",
+        "parameters": []
+      },
       "file_line": "prom_search_hswm/test_prom9_f1_r8_source.py:167",
       "line_range": "167-182",
       "sha256": "88de7dc8231ad4cc7dd1d9a6bdc7cb970426ddfe9acb167c3c0cfaaa9381c8f5",
@@ -211,7 +422,14 @@
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_TRANSPORT_AUDIT_TEST",
       "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
-      "code_symbol": {"qualified": "prom_search_hswm.test_prom9_f1_r8_transport_audit.test_empty_genesis_is_read_only_exact_and_deterministic", "name": "test_empty_genesis_is_read_only_exact_and_deterministic", "kind": "function", "parameters": ["tmp_path"]},
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_transport_audit.test_empty_genesis_is_read_only_exact_and_deterministic",
+        "name": "test_empty_genesis_is_read_only_exact_and_deterministic",
+        "kind": "function",
+        "parameters": [
+          "tmp_path"
+        ]
+      },
       "file_line": "prom_search_hswm/test_prom9_f1_r8_transport_audit.py:230",
       "line_range": "230-262",
       "sha256": "6411c6ac40c0d32252d8aac3b081a8a88a57c290aa58b079ec687ccfaac46f3c",

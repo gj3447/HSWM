@@ -24,12 +24,13 @@ def test_checked_in_f1_r8_binding_is_exact_git_blob_bound() -> None:
     result = verify()
     assert result == {
         "status": "PASS",
-        "binding_id": "longinus-hswm-f1-r8-premeasurement-c1-successor-20260729",
-        "implementation_commit": "7ebffbb8fb07673f1e7a5d5c284edafd1286878a",
-        "bindings_checked": 18,
-        "files_checked": 18,
-        "implementation_bindings": 9,
-        "test_bindings": 9,
+        "binding_id": "longinus-hswm-f1-r8-deployment-power-v3-20260729",
+        "implementation_commit": "b75a2a5bddf0960ae22707d059005cd8393da0c7",
+        "bindings_checked": 20,
+        "files_checked": 20,
+        "implementation_bindings": 10,
+        "test_bindings": 10,
+        "baseline_changed_paths": 14,
         "longinus_layers": 7,
         "classifications": {
             "MISSING": 0,
@@ -73,6 +74,39 @@ def test_reverse_orphan_scan_is_classified(tmp_path: Path) -> None:
     assert caught.value.classification == "ORPHANED"
 
 
+@pytest.mark.parametrize(
+    "path",
+    [
+        "prom_search_hswm/f1_target_deployment_probe.py",
+        "prom_search_hswm/test_hswm_result_spool_attestation.py",
+    ],
+)
+def test_deployment_attestation_diff_paths_are_reverse_bound(
+    tmp_path: Path, path: str
+) -> None:
+    def mutate(value: dict[str, object]) -> None:
+        value["required_target_paths"].remove(path)
+        value["bindings"] = [
+            binding
+            for binding in value["bindings"]
+            if not binding["file_line"].startswith(f"{path}:")
+        ]
+        if path.endswith("test_hswm_result_spool_attestation.py"):
+            for binding in value["bindings"]:
+                if binding["crate_script"].endswith(path):
+                    binding["crate_script"] = (
+                        "python -m pytest -q "
+                        "prom_search_hswm/test_f1_durable_transport.py"
+                    )
+
+    changed = _changed_manifest(tmp_path, mutate)
+    with pytest.raises(
+        BindingError, match="ORPHANED: implementation baseline diff is not reverse-bound"
+    ) as caught:
+        verify(changed)
+    assert caught.value.classification == "ORPHANED"
+
+
 def test_signature_mismatch_is_classified(tmp_path: Path) -> None:
     def mutate(value: dict[str, object]) -> None:
         value["bindings"][1]["code_symbol"]["parameters"] = ["wrong"]
@@ -94,10 +128,15 @@ def test_label_rot_is_classified(tmp_path: Path) -> None:
 
 def test_directory_target_is_missing_not_file_hashed(tmp_path: Path) -> None:
     def mutate(value: dict[str, object]) -> None:
-        old = value["required_target_paths"][0]
-        value["required_target_paths"][0] = "prom_search_hswm"
-        value["bindings"][0]["file_line"] = "prom_search_hswm:126"
-        assert old == "prom_search_hswm/hswm_result_spool.py"
+        old = "prom_search_hswm/hswm_result_spool.py"
+        index = value["required_target_paths"].index(old)
+        value["required_target_paths"][index] = "prom_search_hswm"
+        binding = next(
+            item
+            for item in value["bindings"]
+            if item["file_line"].startswith(f"{old}:")
+        )
+        binding["file_line"] = "prom_search_hswm:199"
 
     changed = _changed_manifest(tmp_path, mutate)
     with pytest.raises(BindingError, match="MISSING: directory/non-blob") as caught:

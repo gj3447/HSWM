@@ -13,7 +13,10 @@ from typing import Any, Mapping, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = REPO_ROOT / "LONGINUS_HSWM_F1_DURABLE_TRANSPORT_BINDING_2026-07-27.json"
-SCHEMA = "longinus-hswm-f1-r8-premeasurement-binding/v2"
+SCHEMA = "longinus-hswm-f1-r8-premeasurement-binding/v3"
+EXPECTED_BINDING_ID = "longinus-hswm-f1-r8-deployment-power-v3-20260729"
+EXPECTED_IMPLEMENTATION_COMMIT = "b75a2a5bddf0960ae22707d059005cd8393da0c7"
+EXPECTED_IMPLEMENTATION_PARENT = "51d0f3ea86c0ff0521f1ca5f3d66f73d1a1aa9dc"
 REQUIRED_LAYERS = (
     "KG_NODE",
     "CONTRACT_BINDING",
@@ -76,7 +79,7 @@ def _load(path: Path) -> dict[str, Any]:
 
 def _git(arguments: Sequence[str], *, classification: str, label: str) -> bytes:
     completed = subprocess.run(
-        ["git", *arguments],
+        ["git", "--no-replace-objects", *arguments],
         cwd=REPO_ROOT,
         check=False,
         stdout=subprocess.PIPE,
@@ -158,6 +161,8 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
     manifest = _load(manifest_path)
     if manifest.get("schema") != SCHEMA:
         _fail("LABEL_ROT", f"schema must be {SCHEMA}")
+    if manifest.get("binding_id") != EXPECTED_BINDING_ID:
+        _fail("LABEL_ROT", "binding identity drifted")
     if manifest.get("binding_state") != "PIERCED_LOCAL_NO_KG_WRITE":
         _fail("LABEL_ROT", "local/no-KG-write boundary drifted")
     if manifest.get("scientific_status") != "UNJUDGED":
@@ -182,7 +187,26 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
     commit = git.get("implementation_commit")
     if not isinstance(commit, str) or COMMIT_RE.fullmatch(commit) is None:
         _fail("MISSING", "implementation commit is missing")
+    parent = git.get("implementation_parent")
+    if not isinstance(parent, str) or COMMIT_RE.fullmatch(parent) is None:
+        _fail("MISSING", "implementation baseline parent is missing")
+    if (
+        commit != EXPECTED_IMPLEMENTATION_COMMIT
+        or parent != EXPECTED_IMPLEMENTATION_PARENT
+        or kg.get("baseline_scope") != commit
+    ):
+        _fail("LABEL_ROT", "implementation commit/baseline identity drifted")
     _git(["cat-file", "-e", f"{commit}^{{commit}}"], classification="MISSING", label="commit missing")
+    _git(
+        ["cat-file", "-e", f"{parent}^{{commit}}"],
+        classification="MISSING",
+        label="baseline parent missing",
+    )
+    _git(
+        ["merge-base", "--is-ancestor", parent, commit],
+        classification="DIVERGENT",
+        label="baseline parent is not an ancestor of implementation commit",
+    )
     _git(
         ["merge-base", "--is-ancestor", commit, "HEAD"],
         classification="DIVERGENT",
@@ -262,8 +286,32 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
     extra = seen_paths - set(target_paths)
     if missing or extra:
         _fail("ORPHANED", f"target reverse scan mismatch missing={sorted(missing)} extra={sorted(extra)}")
-    if implementation_count != 9 or test_count != 9:
-        _fail("LABEL_ROT", "implementation/test binding labels are not 9/9")
+    changed_paths = {
+        path
+        for path in _git(
+            [
+                "diff-tree",
+                "--no-commit-id",
+                "--name-only",
+                "-r",
+                parent,
+                commit,
+            ],
+            classification="DIVERGENT",
+            label="cannot derive implementation baseline diff",
+        )
+        .decode("utf-8", "strict")
+        .splitlines()
+        if path
+    }
+    unbound_changes = changed_paths - seen_paths
+    if unbound_changes:
+        _fail(
+            "ORPHANED",
+            f"implementation baseline diff is not reverse-bound: {sorted(unbound_changes)}",
+        )
+    if implementation_count != 10 or test_count != 10:
+        _fail("LABEL_ROT", "implementation/test binding labels are not 10/10")
 
     return {
         "status": "PASS",
@@ -273,6 +321,7 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
         "files_checked": len(seen_paths),
         "implementation_bindings": implementation_count,
         "test_bindings": test_count,
+        "baseline_changed_paths": len(changed_paths),
         "longinus_layers": len(REQUIRED_LAYERS),
         "classifications": {
             "MISSING": 0,

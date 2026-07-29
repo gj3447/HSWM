@@ -2244,6 +2244,7 @@ import os
 import socket
 import subprocess
 import sys
+import urllib.request
 
 def denied(*_args, **_kwargs):
     raise RuntimeError("historical replay external effect denied")

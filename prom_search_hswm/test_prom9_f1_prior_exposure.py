@@ -6,6 +6,8 @@ import json
 import os
 from pathlib import Path
 import sqlite3
+import subprocess
+import sys
 from urllib import request as urllib_request
 
 import pytest
@@ -1307,6 +1309,19 @@ def test_current_producer_import_closure_is_exact() -> None:
     assert prior_exposure._discover_current_producer_import_lfp(REPO_ROOT) == (
         prior_exposure._CURRENT_PRODUCER_IMPORT_LFP
     )
+
+
+def test_historical_replay_child_preloads_ssl_before_network_denial() -> None:
+    completed = subprocess.run(
+        [sys.executable, "-I", "-S", "-c", prior_exposure._HISTORICAL_REPLAY_CHILD],
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    assert completed.returncode != 0
+    assert "IndexError" in completed.stderr
+    assert "SSLSocket" not in completed.stderr
 
 
 def test_untouched_public_manifest_mutation_is_refused_after_coherent_resign(

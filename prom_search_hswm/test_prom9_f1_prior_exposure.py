@@ -28,6 +28,7 @@ from prom_search_hswm.prom9_f1_prior_exposure import (
     inventory_stable_tree,
     merge_exposure_boundaries,
     verify_aborted_attempt_exposure_receipt,
+    verify_aborted_attempt_private_witness,
     verify_forbidden_exposure_union,
     verify_prior_exposure_receipt,
     write_private_once,
@@ -138,7 +139,38 @@ def _incident_receipt() -> dict[str, object]:
 def _resign_incident(value: dict[str, object]) -> None:
     unsigned = copy.deepcopy(value)
     unsigned.pop("aborted_attempt_exposure_receipt_sha256", None)
+    if value.get("schema_version") == ABORTED_ATTEMPT_EXPOSURE_SCHEMA:
+        commitment = unsigned["private_witness_commitment"]
+        public_preimage = copy.deepcopy(unsigned)
+        public_preimage.pop("assurance")
+        public_preimage.pop("private_witness_commitment")
+        preimage_root = canonical_sha256(public_preimage)
+        commitment["incident_preimage_root_sha256"] = preimage_root
+        value["private_witness_commitment"][
+            "incident_preimage_root_sha256"
+        ] = preimage_root
     value["aborted_attempt_exposure_receipt_sha256"] = canonical_sha256(unsigned)
+
+
+def _rebind_private_witness(
+    receipt: dict[str, object], witness_path: Path, witness: dict[str, object]
+) -> None:
+    public_preimage = copy.deepcopy(receipt)
+    public_preimage.pop("aborted_attempt_exposure_receipt_sha256")
+    public_preimage.pop("assurance")
+    public_preimage.pop("private_witness_commitment")
+    witness["incident_preimage_root_sha256"] = canonical_sha256(public_preimage)
+    witness_unsigned = copy.deepcopy(witness)
+    witness_unsigned.pop("private_witness_sha256")
+    witness["private_witness_sha256"] = canonical_sha256(witness_unsigned)
+    witness_path.write_text(
+        json.dumps(witness, sort_keys=True), encoding="utf-8"
+    )
+    witness_path.chmod(0o600)
+    receipt["private_witness_commitment"]["private_witness_sha256"] = witness[
+        "private_witness_sha256"
+    ]
+    _resign_incident(receipt)
 
 
 def _minimal_prior(
@@ -173,6 +205,9 @@ class _SyntheticCrash(BaseException):
 
 def _public_incident_artifacts(
     public_selection_receipt_sha256: str,
+    *,
+    include_untouched: bool = False,
+    two_shared_items: bool = False,
 ) -> dict[str, dict[str, object]]:
     full = [
         {
@@ -191,6 +226,33 @@ def _public_incident_artifacts(
             },
         }
     ]
+    if include_untouched and two_shared_items:
+        raise ValueError("synthetic public fixture modes are mutually exclusive")
+    if include_untouched:
+        full.append(
+            {
+                "dataset_row_index": 125,
+                "row": {
+                    "id": "incident-item-untouched",
+                    "question": "Untouched question?",
+                    "answer": "PRIVATE_UNTOUCHED_GOLD",
+                    "context": {
+                        "title": ["Untouched public title"],
+                        "sentences": [["Untouched public sentence."]],
+                    },
+                    "supporting_facts": {"title": [], "sent_id": []},
+                    "evidences": [],
+                    "type": "comparison",
+                },
+            }
+        )
+    elif two_shared_items:
+        shared = copy.deepcopy(full[0])
+        shared["dataset_row_index"] = 125
+        shared["row"]["id"] = "incident-item-shared"
+        shared["row"]["question"] = "Shared question?"
+        shared["row"]["answer"] = "PRIVATE_SHARED_GOLD"
+        full.append(shared)
     public = redact_entries(full)
     return build_public_artifacts(
         public,
@@ -338,6 +400,10 @@ def _build_synthetic_incident(
     monkeypatch: pytest.MonkeyPatch,
     *,
     qf_prompt_override: str | None = None,
+    verify_private_witness_before_close: bool = False,
+    verify_private_sidecar_tamper_before_close: bool = False,
+    include_untouched: bool = False,
+    two_shared_items: bool = False,
 ) -> dict[str, object]:
     selection_unsigned = {
         "schema_version": "hswm-prom9-f1-r8-cohort-selection/v2"
@@ -347,7 +413,9 @@ def _build_synthetic_incident(
         "selection_receipt_sha256": canonical_sha256(selection_unsigned),
     }
     artifacts = _public_incident_artifacts(
-        str(selection_value["selection_receipt_sha256"])
+        str(selection_value["selection_receipt_sha256"]),
+        include_untouched=include_untouched,
+        two_shared_items=two_shared_items,
     )
     arm_id = "typed_hswm_three_function_network"
     manifest_item = artifacts["manifest"]["items"][0]
@@ -361,7 +429,7 @@ def _build_synthetic_incident(
     )[:8]
     attempt_db = tmp_path / "incident" / "attempt.sqlite3"
     spool_db = tmp_path / "incident" / "spool.sqlite3"
-    attempt_db.parent.mkdir()
+    attempt_db.parent.mkdir(mode=0o700)
 
     def fault(stage: str, call: ModelCallV1) -> None:
         if stage == "after_sent" and call.call_index == 2:
@@ -385,6 +453,25 @@ def _build_synthetic_incident(
         max_output_tokens=768,
         model_port=port,
     )
+    if two_shared_items:
+        shared_item = artifacts["manifest"]["items"][1]
+        shared_request_id = "req-" + canonical_sha256(
+            {
+                "run_id": artifacts["manifest"]["run_id"],
+                "arm_id": arm_id,
+                "item_id": shared_item["item_id"],
+            }
+        )[:8]
+        invoke_function(
+            run_id=str(artifacts["manifest"]["run_id"]),
+            arm_id=arm_id,
+            item_id=str(shared_item["item_id"]),
+            call_index=1,
+            function=_incident_function(1),
+            input_payload=_incident_input(shared_request_id, shared_item),
+            max_output_tokens=768,
+            model_port=port,
+        )
     with pytest.raises(_SyntheticCrash):
         invoke_function(
             run_id=str(artifacts["manifest"]["run_id"]),
@@ -398,28 +485,29 @@ def _build_synthetic_incident(
             max_output_tokens=1536,
             model_port=port,
         )
-    accepted = port.ledger._connection.execute(
+    accepted_rows = port.ledger._connection.execute(
         "SELECT physical_call_id,intent_sha256,request_sha256,request_bytes,"
         "response_status,response_sha256 FROM call_state WHERE status='ACCEPTED'"
-    ).fetchone()
-    assert accepted is not None
+    ).fetchall()
+    assert accepted_rows
     spool = SQLiteResultSpool(spool_db)
     spool._connection.execute("PRAGMA wal_autocheckpoint=0")
-    spool._connection.execute(
-        "INSERT INTO spool_calls(physical_call_id,intent_sha256,request_sha256,"
-        "request_bytes,status,response_status,response_headers,response_body,"
-        "response_sha256,error_class) VALUES(?,?,?,?,'COMPLETE',?,?,?,?,NULL)",
-        (
-            accepted["physical_call_id"],
-            accepted["intent_sha256"],
-            accepted["request_sha256"],
-            accepted["request_bytes"],
-            accepted["response_status"],
-            b'{"protected":"headers"}',
-            PROTECTED_RESPONSE_SENTINEL,
-            accepted["response_sha256"],
-        ),
-    )
+    for accepted in accepted_rows:
+        spool._connection.execute(
+            "INSERT INTO spool_calls(physical_call_id,intent_sha256,request_sha256,"
+            "request_bytes,status,response_status,response_headers,response_body,"
+            "response_sha256,error_class) VALUES(?,?,?,?,'COMPLETE',?,?,?,?,NULL)",
+            (
+                accepted["physical_call_id"],
+                accepted["intent_sha256"],
+                accepted["request_sha256"],
+                accepted["request_bytes"],
+                accepted["response_status"],
+                b'{"protected":"headers"}',
+                PROTECTED_RESPONSE_SENTINEL,
+                accepted["response_sha256"],
+            ),
+        )
 
     inputs = tmp_path / "inputs"
     inputs.mkdir()
@@ -428,9 +516,13 @@ def _build_synthetic_incident(
     )
     manifest = _private_artifact(inputs / "manifest.json", artifacts["manifest"])
     source = _private_artifact(inputs / "source.json", artifacts["source_receipt"])
-    executable_commit = "a" * 40
-    carrier_commit = "b" * 40
-    symposium_commit = "c" * 40
+    executable_commit = prior_exposure._HISTORICAL_RUNTIME_COMMITS[
+        "hswm_executable"
+    ]
+    carrier_commit = prior_exposure._HISTORICAL_RUNTIME_COMMITS[
+        "hswm_carrier"
+    ]
+    symposium_commit = prior_exposure._HISTORICAL_RUNTIME_COMMITS["symposium"]
     def db_identity(path: Path) -> dict[str, object]:
         info = path.stat()
         return {
@@ -462,14 +554,23 @@ def _build_synthetic_incident(
     spool_db_identity = db_identity(spool_db)
     genesis_unsigned = {
         "schema_version": "hswm-prom9-f1-r8-transport-genesis/v1",
+        "run_id": artifacts["manifest"]["run_id"],
         "attempt_db_identity": attempt_identity,
         "spool_db_identity": spool_db_identity,
         "attempt_schema_sha256": schema_sha(port.ledger._connection),
         "spool_schema_sha256": schema_sha(spool._connection),
+        "attempt_integrity": "ok",
+        "spool_integrity": "ok",
         "attempt_journal_mode": "wal",
         "spool_journal_mode": "wal",
+        "attempt_audit_connection_synchronous": "2",
+        "spool_audit_connection_synchronous": "2",
         "attempt_user_version": 1,
         "spool_user_version": 1,
+        "call_count": 0,
+        "item_run_count": 0,
+        "attempt_event_count": 0,
+        "spool_call_count": 0,
     }
     genesis_value = {
         **genesis_unsigned,
@@ -541,6 +642,32 @@ def _build_synthetic_incident(
     deployment = _private_artifact(
         inputs / "deployment.json", deployment_value,
     )
+    spool_audit_unsigned = {
+        "schema_version": "hswm-f1-result-spool/v1",
+        "journal_mode": "wal",
+        "synchronous": 2,
+        "call_count": 0,
+        "status_counts": {},
+        "completed_root_sha256": canonical_sha256([]),
+    }
+    spool_audit = {
+        **spool_audit_unsigned,
+        "audit_sha256": canonical_sha256(spool_audit_unsigned),
+    }
+    endpoint_identity_unsigned = {
+        "schema_version": "hswm-f1-result-spool-identity/v2",
+        "normalized_upstream_endpoint": lock_unsigned["upstream_endpoint"],
+        "deployment_receipt_sha256": deployment_value["receipt_sha256"],
+        "deployment_id": lock_unsigned["deployment_id"],
+        "served_model": lock_unsigned["served_model"],
+        "model_revision": artifacts["manifest"]["model_revision"],
+        "db_identity": spool_db_identity,
+        "audit": spool_audit,
+    }
+    endpoint_identity = {
+        **endpoint_identity_unsigned,
+        "identity_sha256": canonical_sha256(endpoint_identity_unsigned),
+    }
     spool_unsigned = {
         "schema_version": "hswm-prom9-f1-r8-spool-endpoint-preflight/v2",
         "run_id": artifacts["manifest"]["run_id"],
@@ -554,7 +681,7 @@ def _build_synthetic_incident(
         "served_model": lock_unsigned["served_model"],
         "upstream_endpoint": lock_unsigned["upstream_endpoint"],
         "endpoint": "http://spool",
-        "endpoint_identity": {"db_identity": spool_db_identity},
+        "endpoint_identity": endpoint_identity,
     }
     spool_identity = _private_artifact(
         inputs / "spool-identity.json",
@@ -605,8 +732,86 @@ def _build_synthetic_incident(
         return git_bindings[str(Path(root).resolve())]
 
     monkeypatch.setattr(prior_exposure, "_git_binding", fake_git_binding)
+    producer_files = [
+        {
+            "relative_path": relative_path,
+            "size_bytes": 1,
+            "sha256": "0" * 64,
+            "blob_mode": "100644",
+            "blob_oid": "f" * 40,
+        }
+        for relative_path in prior_exposure._CURRENT_PRODUCER_IMPORT_LFP
+    ]
     monkeypatch.setattr(
-        prior_exposure, "_verify_incident_artifact_semantics", lambda _values: None
+        prior_exposure,
+        "_current_producer_authority",
+        lambda _root: {
+            "commit": "d" * 40,
+            "tree": "e" * 40,
+            "entrypoint": "prom_search_hswm/prom9_f1_prior_exposure.py",
+            "closure_policy": "MODULE_SCOPE_LOCAL_AST_LFP_V1",
+            "files": producer_files,
+            "file_count": len(producer_files),
+            "closure_root_sha256": canonical_sha256(producer_files),
+        },
+    )
+    historical_files = [
+        {
+            "relative_path": relative_path,
+            "size_bytes": 1,
+            "sha256": "1" * 64,
+            "blob_mode": "100644",
+            "blob_oid": "a" * 40,
+        }
+        for relative_path in prior_exposure._HISTORICAL_REPLAY_IMPORT_LFP
+    ]
+    historical_result = {
+        "manifest": artifacts["manifest"],
+        "source_receipt": artifacts["source_receipt"],
+        "protocol_roots": ["2" * 64],
+        "registries_root_sha256": "3" * 64,
+        "prompts": [
+            {
+                "arm_id": arm_id,
+                "function_id": "QF_QUERY_COMPILER",
+                "prompt": "Execute QF_QUERY_COMPILER.",
+            },
+            {
+                "arm_id": arm_id,
+                "function_id": "BF_BOND_PROPOSER",
+                "prompt": "Execute BF_BOND_PROPOSER.",
+            },
+        ],
+        "python": {"implementation": "cpython", "version": "3.12.0"},
+    }
+    historical_authority = {
+        "repositories": {
+            name: git_bindings[str(roots[alias].resolve())]
+            for name, alias in (
+                ("hswm_executable", "exec"),
+                ("hswm_carrier", "carrier"),
+                ("symposium", "symposium"),
+            )
+        },
+        "replay_policy": "COMMIT_BLOBS_PYTHON_ISOLATED_NO_NETWORK_V1",
+        "replay_files": historical_files,
+        "replay_file_count": len(historical_files),
+        "replay_closure_root_sha256": canonical_sha256(historical_files),
+        "python_runtime": {
+            "implementation": "CPython",
+            "version": "3.12.0",
+            "executable_size_bytes": 1,
+            "executable_sha256": "4" * 64,
+        },
+        "replay_result_sha256": canonical_sha256(historical_result),
+    }
+    monkeypatch.setattr(
+        prior_exposure,
+        "_historical_runtime_replay",
+        lambda **_kwargs: (historical_result, historical_authority),
+    )
+    monkeypatch.setattr(
+        prior_exposure, "_verify_incident_artifact_semantics", lambda *_values: None
     )
     monkeypatch.setattr(
         prior_exposure,
@@ -616,6 +821,8 @@ def _build_synthetic_incident(
             (arm_id, "BF_BOND_PROPOSER"): "Execute BF_BOND_PROPOSER.",
         },
     )
+    witness_parent = tmp_path / "private-witness"
+    witness_parent.mkdir(mode=0o700)
     try:
         receipt = build_aborted_attempt_exposure_receipt(
             attempt_db=attempt_db,
@@ -635,7 +842,24 @@ def _build_synthetic_incident(
             hswm_carrier_root=roots["carrier"],
             symposium_root=roots["symposium"],
             snapshot_dir=tmp_path / "snapshot",
+            private_witness_output=witness_parent / "witness.v1.json",
         )
+        if verify_private_witness_before_close:
+            assert (
+                verify_aborted_attempt_private_witness(
+                    receipt, witness_parent / "witness.v1.json"
+                )
+                == "RAW_WITNESS_VERIFIED"
+            )
+        if verify_private_sidecar_tamper_before_close:
+            witness_path = witness_parent / "witness.v1.json"
+            witness = json.loads(witness_path.read_text(encoding="utf-8"))
+            sidecar = witness["databases"]["attempt"]["generation"]["shm"]
+            assert isinstance(sidecar, dict)
+            sidecar["sha256"] = "f" * 64
+            _rebind_private_witness(receipt, witness_path, witness)
+            with pytest.raises(PriorExposureRefusal, match="live generation drifted"):
+                verify_aborted_attempt_private_witness(receipt, witness_path)
     finally:
         spool.close()
         port.close()
@@ -740,7 +964,9 @@ def test_private_write_is_0600_and_write_once(tmp_path: Path) -> None:
 def test_aborted_attempt_builder_replays_structural_evidence_without_blobs(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    receipt = _build_synthetic_incident(tmp_path, monkeypatch)
+    receipt = _build_synthetic_incident(
+        tmp_path, monkeypatch, verify_private_witness_before_close=True
+    )
     assert receipt["schema_version"] == ABORTED_ATTEMPT_EXPOSURE_SCHEMA
     assert receipt["status"] == ABORTED_ATTEMPT_STATUS
     assert receipt["complete"] is True
@@ -781,19 +1007,13 @@ def test_aborted_attempt_builder_replays_structural_evidence_without_blobs(
     assert PROTECTED_RESPONSE_SENTINEL.decode("ascii") not in serialized
     assert "PRIVATE_GOLD_NEVER_PASSED_TO_PRODUCER" not in serialized
     assert "shm" not in canonical_json(receipt["database_snapshots"]).casefold()
-    assert set(receipt["evidence_bindings"]["producer_dependencies"]) == {
-        "prom9_f1_prior_exposure.py",
-        "hswm_function_network.py",
-        "hswm_function_registry.py",
-        "hswm_typed_ports.py",
-        "prom_f1_function_network.py",
-        "prom9_protocol.py",
-        "prom9_prepare_2wiki_f1.py",
-        "prom9_f1_r8_source.py",
-        "prom9_f1_r8_environment.py",
-        "model_deployment_receipt.py",
-        "bge_m3_embed.py",
-    }
+    producer_authority = receipt["evidence_bindings"][
+        "current_producer_authority"
+    ]
+    assert producer_authority["file_count"] == 20
+    assert tuple(
+        entry["relative_path"] for entry in producer_authority["files"]
+    ) == prior_exposure._CURRENT_PRODUCER_IMPORT_LFP
     assert all(
         database["canonical_schema_sha256"]
         == prior_exposure.canonical_schema_sha256(name)
@@ -818,6 +1038,178 @@ def test_aborted_attempt_builder_replays_structural_evidence_without_blobs(
     assert not {"stage_path", "capture_host", "resolved_path", "source_identity"} & set(
         public_strings
     )
+    witness_path = tmp_path / "private-witness" / "witness.v1.json"
+    assert witness_path.stat().st_mode & 0o777 == 0o600
+    witness = json.loads(witness_path.read_text(encoding="utf-8"))
+    assert witness["nonce_hex"] not in serialized
+    assert witness["stage_path"] not in serialized
+    for database in witness["databases"].values():
+        assert database["resolved_path"] not in serialized
+        assert str(database["st_dev"]) not in public_strings
+        assert str(database["st_ino"]) not in public_strings
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    ["stage_relative", "database_path", "generation", "role_swap"],
+)
+def test_aborted_attempt_private_witness_coherent_tamper_is_refused(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mutation: str
+) -> None:
+    receipt = _build_synthetic_incident(tmp_path, monkeypatch)
+    witness_path = tmp_path / "private-witness" / "witness.v1.json"
+    witness = json.loads(witness_path.read_text(encoding="utf-8"))
+    if mutation == "stage_relative":
+        witness["stage_path"] = "relative/stage"
+    elif mutation == "database_path":
+        witness["databases"]["attempt"]["resolved_path"] = "relative.sqlite3"
+    elif mutation == "generation":
+        witness["databases"]["attempt"]["generation"]["main"]["sha256"] = (
+            "f" * 64
+        )
+    else:
+        witness["databases"]["attempt"], witness["databases"]["spool"] = (
+            witness["databases"]["spool"],
+            witness["databases"]["attempt"],
+        )
+    witness_unsigned = copy.deepcopy(witness)
+    witness_unsigned.pop("private_witness_sha256")
+    witness["private_witness_sha256"] = canonical_sha256(witness_unsigned)
+    witness_path.write_text(
+        json.dumps(witness, sort_keys=True), encoding="utf-8"
+    )
+    witness_path.chmod(0o600)
+    receipt["private_witness_commitment"]["private_witness_sha256"] = witness[
+        "private_witness_sha256"
+    ]
+    _resign_incident(receipt)
+    with pytest.raises(PriorExposureRefusal):
+        verify_aborted_attempt_private_witness(receipt, witness_path)
+
+
+def test_aborted_attempt_private_witness_commitment_tamper_is_refused(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    receipt = _build_synthetic_incident(tmp_path, monkeypatch)
+    receipt["private_witness_commitment"]["private_witness_sha256"] = "f" * 64
+    _resign_incident(receipt)
+    with pytest.raises(PriorExposureRefusal, match="commitment mismatch"):
+        verify_aborted_attempt_private_witness(
+            receipt, tmp_path / "private-witness" / "witness.v1.json"
+        )
+
+
+def test_private_genesis_cannot_be_coherently_rewritten_against_public_run(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    receipt = _build_synthetic_incident(tmp_path, monkeypatch)
+    witness_path = tmp_path / "private-witness" / "witness.v1.json"
+    witness = json.loads(witness_path.read_text(encoding="utf-8"))
+    genesis = witness["db_genesis_receipt"]
+    genesis["run_id"] = "foreign-run"
+    genesis_unsigned = copy.deepcopy(genesis)
+    genesis_unsigned.pop("genesis_sha256")
+    genesis["genesis_sha256"] = canonical_sha256(genesis_unsigned)
+    preflight = witness["spool_identity_receipt"]
+    preflight["db_genesis_sha256"] = genesis["genesis_sha256"]
+    preflight_unsigned = copy.deepcopy(preflight)
+    preflight_unsigned.pop("preflight_sha256")
+    preflight["preflight_sha256"] = canonical_sha256(preflight_unsigned)
+    artifacts = receipt["evidence_bindings"]["artifacts"]
+    for artifact_name, value, self_field in (
+        ("db_genesis_receipt", genesis, "genesis_sha256"),
+        ("spool_identity_receipt", preflight, "preflight_sha256"),
+    ):
+        binding = artifacts[artifact_name]
+        raw = (canonical_json(value) + "\n").encode("utf-8")
+        binding["size_bytes"] = len(raw)
+        binding["raw_sha256"] = hashlib.sha256(raw).hexdigest()
+        binding["canonical_sha256"] = canonical_sha256(value)
+        binding["declared_hashes"][self_field] = value[self_field]
+    _rebind_private_witness(receipt, witness_path, witness)
+    with pytest.raises(PriorExposureRefusal, match="public run authority"):
+        verify_aborted_attempt_private_witness(receipt, witness_path)
+
+
+def test_private_generation_is_bound_to_public_snapshot_members(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    receipt = _build_synthetic_incident(tmp_path, monkeypatch)
+    witness_path = tmp_path / "private-witness" / "witness.v1.json"
+    witness = json.loads(witness_path.read_text(encoding="utf-8"))
+    database = receipt["database_snapshots"]["attempt"]
+    database["members"]["main"]["sha256"] = "f" * 64
+    database["authority_root_sha256"] = canonical_sha256(database["members"])
+    _rebind_private_witness(receipt, witness_path, witness)
+    with pytest.raises(PriorExposureRefusal, match="public snapshot"):
+        verify_aborted_attempt_private_witness(receipt, witness_path)
+
+
+@pytest.mark.parametrize(
+    ("field", "replacement"),
+    [
+        ("deployment_id", "foreign-deployment"),
+        ("upstream_endpoint", "http://foreign-model"),
+    ],
+)
+def test_private_preflight_roles_cannot_diverge_from_endpoint_identity(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    field: str,
+    replacement: str,
+) -> None:
+    receipt = _build_synthetic_incident(tmp_path, monkeypatch)
+    witness_path = tmp_path / "private-witness" / "witness.v1.json"
+    witness = json.loads(witness_path.read_text(encoding="utf-8"))
+    preflight = witness["spool_identity_receipt"]
+    preflight[field] = replacement
+    preflight_unsigned = copy.deepcopy(preflight)
+    preflight_unsigned.pop("preflight_sha256")
+    preflight["preflight_sha256"] = canonical_sha256(preflight_unsigned)
+    binding = receipt["evidence_bindings"]["artifacts"][
+        "spool_identity_receipt"
+    ]
+    raw = (canonical_json(preflight) + "\n").encode("utf-8")
+    binding["size_bytes"] = len(raw)
+    binding["raw_sha256"] = hashlib.sha256(raw).hexdigest()
+    binding["canonical_sha256"] = canonical_sha256(preflight)
+    binding["declared_hashes"]["preflight_sha256"] = preflight[
+        "preflight_sha256"
+    ]
+    _rebind_private_witness(receipt, witness_path, witness)
+    with pytest.raises(PriorExposureRefusal, match="public run authority"):
+        verify_aborted_attempt_private_witness(receipt, witness_path)
+
+
+def test_current_producer_root_must_be_the_executing_checkout(
+    tmp_path: Path,
+) -> None:
+    alternate = tmp_path / "alternate-checkout"
+    alternate.mkdir()
+    with pytest.raises(PriorExposureRefusal, match="executing module root"):
+        prior_exposure._current_producer_root(alternate)
+
+
+def test_private_sidecar_tamper_reaches_live_family_gate(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _build_synthetic_incident(
+        tmp_path,
+        monkeypatch,
+        verify_private_sidecar_tamper_before_close=True,
+    )
+
+
+def test_private_stage_cannot_be_broadened_after_coherent_resign(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    receipt = _build_synthetic_incident(tmp_path, monkeypatch)
+    witness_path = tmp_path / "private-witness" / "witness.v1.json"
+    witness = json.loads(witness_path.read_text(encoding="utf-8"))
+    witness["stage_path"] = str(Path(witness["stage_path"]).parent)
+    _rebind_private_witness(receipt, witness_path, witness)
+    with pytest.raises(PriorExposureRefusal, match="stage"):
+        verify_aborted_attempt_private_witness(receipt, witness_path)
 
 
 def test_attempt_input_preimages_are_bound_to_the_declared_manifest_item() -> None:
@@ -887,6 +1279,103 @@ def test_attempt_input_preimages_are_bound_to_the_declared_manifest_item() -> No
     }
     with pytest.raises(PriorExposureRefusal, match="answer input"):
         prior_exposure._verify_call_input_manifest_binding(answer_call, manifest)
+
+
+def test_candidate_serializer_matches_canonical_network_for_every_arm() -> None:
+    selection_unsigned = {
+        "schema_version": "hswm-prom9-f1-r8-cohort-selection/v2"
+    }
+    artifacts = _public_incident_artifacts(canonical_sha256(selection_unsigned))
+    item = artifacts["manifest"]["items"][0]
+    candidates = [
+        prior_exposure.EvidenceCandidateV1(
+            bond_id=value["bond_id"],
+            evidence_id=value["evidence_id"],
+            source_entity_id=value["source_entity_id"],
+            content=value["content"],
+            observable=dict(value["observable"]),
+        )
+        for value in item["candidates"]
+    ]
+    for arm_id in prior_exposure._F1_ARMS:
+        assert prior_exposure._candidate_table_for_manifest_item(
+            item, arm_id
+        ) == prior_exposure.candidate_table_for_arm(arm_id, candidates)
+
+
+def test_current_producer_import_closure_is_exact() -> None:
+    assert prior_exposure._discover_current_producer_import_lfp(REPO_ROOT) == (
+        prior_exposure._CURRENT_PRODUCER_IMPORT_LFP
+    )
+
+
+def test_untouched_public_manifest_mutation_is_refused_after_coherent_resign(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    receipt = _build_synthetic_incident(
+        tmp_path, monkeypatch, include_untouched=True
+    )
+    source_binding = receipt["source_binding"]
+    manifest = source_binding["public_manifest"]
+    assert len(manifest["items"]) == 2
+    manifest["items"] = [manifest["items"][0]]
+    source_binding["manifest_canonical_sha256"] = canonical_sha256(manifest)
+    _resign_incident(receipt)
+    with pytest.raises(PriorExposureRefusal, match="public source authority"):
+        verify_aborted_attempt_exposure_receipt(receipt)
+
+
+def test_two_touched_items_with_shared_source_form_one_component(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    receipt = _build_synthetic_incident(
+        tmp_path, monkeypatch, two_shared_items=True
+    )
+    assert (
+        verify_aborted_attempt_exposure_receipt(receipt)
+        == receipt["aborted_attempt_exposure_receipt_sha256"]
+    )
+    calls = receipt["call_observations"]
+    metadata = {
+        call["item_id"]: (
+            tuple(call["source_entity_ids"]), call["component_id"]
+        )
+        for call in calls
+    }
+    assert set(metadata) == {"incident-item", "incident-item-shared"}
+    assert metadata["incident-item"][0] == metadata["incident-item-shared"][0]
+    assert metadata["incident-item"][1] == metadata["incident-item-shared"][1]
+    assert receipt["counts"] == {
+        "attempt_calls": 3,
+        "attempt_events": 14,
+        "item_runs": 0,
+        "spool_calls": 2,
+        "attempt_states": {"ACCEPTED": 2, "SENT": 1},
+        "spool_complete_calls": 2,
+        "spool_absent_calls": 1,
+        "items": 2,
+        "source_entities": 1,
+        "components": 1,
+    }
+
+
+@pytest.mark.parametrize(
+    "target", ["producer", "job_command", "job_log"]
+)
+def test_aborted_attempt_recorded_files_require_positive_size_after_resign(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, target: str
+) -> None:
+    receipt = _build_synthetic_incident(tmp_path, monkeypatch)
+    evidence = receipt["evidence_bindings"]
+    if target == "producer":
+        authority = evidence["current_producer_authority"]
+        authority["files"][0]["size_bytes"] = 0
+        authority["closure_root_sha256"] = canonical_sha256(authority["files"])
+    else:
+        evidence[target]["size_bytes"] = 0
+    _resign_incident(receipt)
+    with pytest.raises(PriorExposureRefusal):
+        verify_aborted_attempt_exposure_receipt(receipt)
 
 
 def test_aborted_attempt_replay_refuses_foreign_system_prompt(
@@ -1067,6 +1556,7 @@ def test_aborted_attempt_tamper_and_resign_is_refused(
         "raw_stage_path",
         "raw_capture_host",
         "database_identity_hash",
+        "hswm_f1_sqlite_schema.py",
         "hswm_function_network.py",
         "hswm_function_registry.py",
         "prom_f1_function_network.py",
@@ -1095,9 +1585,15 @@ def test_aborted_attempt_public_identity_and_producer_inventory_are_closed(
     else:
         evidence = receipt["evidence_bindings"]
         assert isinstance(evidence, dict)
-        dependencies = evidence["producer_dependencies"]
-        assert isinstance(dependencies, dict)
-        dependencies.pop(mutation)
+        authority = evidence["current_producer_authority"]
+        assert isinstance(authority, dict)
+        files = authority["files"]
+        assert isinstance(files, list)
+        authority["files"] = [
+            entry
+            for entry in files
+            if not str(entry["relative_path"]).endswith(mutation)
+        ]
     _resign_incident(receipt)
     with pytest.raises(PriorExposureRefusal):
         verify_aborted_attempt_exposure_receipt(receipt)

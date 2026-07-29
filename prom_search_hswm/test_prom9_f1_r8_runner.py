@@ -2009,6 +2009,7 @@ def _frozen_genesis(attempt_db: Path, spool_db: Path, run_id: str):
 def test_full_genesis_validator_and_runner_local_0600_initialization(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    tmp_path.chmod(0o700)
     attempt_db = tmp_path / "attempt.sqlite3"
     spool_db = tmp_path / "spool.sqlite3"
     observed_entries: list[tuple[str, int]] = []
@@ -2016,12 +2017,14 @@ def test_full_genesis_validator_and_runner_local_0600_initialization(
     original_spool = runner.SQLiteResultSpool
 
     def checked_attempt(path):
+        store = original_attempt(path)
         observed_entries.append(("attempt", os.stat(path).st_mode & 0o777))
-        return original_attempt(path)
+        return store
 
     def checked_spool(path):
+        store = original_spool(path)
         observed_entries.append(("spool", os.stat(path).st_mode & 0o777))
-        return original_spool(path)
+        return store
 
     monkeypatch.setattr(runner, "SQLiteF1CallLedger", checked_attempt)
     monkeypatch.setattr(runner, "SQLiteResultSpool", checked_spool)

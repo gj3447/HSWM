@@ -10,12 +10,14 @@ and are never JSON-decoded by this module.
 from __future__ import annotations
 
 import argparse
+import ast
 import base64
 import hashlib
 import json
 import os
 from pathlib import Path
 import re
+import secrets
 import sqlite3
 import stat
 import subprocess
@@ -34,6 +36,11 @@ import prom_search_hswm.prom9_f1_r8_source as _source_module
 import prom_search_hswm.prom9_f1_r8_environment as _environment_module
 import prom_search_hswm.prom_f1_function_network as _network_adapter_module
 from prom_search_hswm.hswm_function_registry import build_registry
+from prom_search_hswm.hswm_function_network import (
+    EvidenceCandidateV1,
+    FunctionNetworkError,
+    candidate_table_for_arm,
+)
 from prom_search_hswm.hswm_typed_ports import (
     canonical_json,
     canonical_sha256,
@@ -53,14 +60,28 @@ from prom_search_hswm.prom9_f1_r8_transport_audit import (
     canonical_schema_sha256,
     exact_schema_readback,
 )
+from prom_search_hswm.hswm_f1_sqlite_schema import (
+    SQLiteAuthorityRefusal,
+    database_generation,
+)
 from prom_search_hswm.prom_f1_function_network import _arm_overrides
 
 
 SCHEMA = "hswm-prom9-f1-prior-exposure/v1"
-ABORTED_ATTEMPT_EXPOSURE_SCHEMA = (
+ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2 = (
     "hswm-prom9-f1-aborted-attempt-exposure/v2"
 )
+ABORTED_ATTEMPT_EXPOSURE_SCHEMA = (
+    "hswm-prom9-f1-aborted-attempt-exposure/v3"
+)
 ABORTED_ATTEMPT_STATUS = "ABORTED_QUARANTINED"
+ABORTED_ATTEMPT_PRIVATE_WITNESS_SCHEMA = (
+    "hswm-prom9-f1-aborted-attempt-private-witness/v1"
+)
+_ABORTED_ATTEMPT_V2_CANONICAL_SCHEMA_SHA256 = {
+    "attempt": "29f19831499bddea83595ddce2fd97613d03d4b0b498531beeab6f195dc44139",
+    "spool": "4e65e2756c820d6d0e36f9e02dbe796ae0e5c0933409aaec86133770543057be",
+}
 DATASET_SERVER = "https://datasets-server.huggingface.co"
 EXPECTED_PAGE_SPECS = ((0, 1), (0, 4), (0, 8), (4, 100))
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
@@ -76,6 +97,48 @@ _F1_ARMS = (
     "vector_memory_three_call_workflow",
     "typed_network_role_removed_schema_preserving_null",
     "typed_network_with_role_instructions_shuffled_but_ports_preserved",
+)
+_CURRENT_PRODUCER_IMPORT_LFP = (
+    "bge_m3_embed.py",
+    "hswm_next_research_harness.py",
+    "model_deployment_receipt.py",
+    "prom_search_hswm/hswm_call_receipt.py",
+    "prom_search_hswm/hswm_f1_durable_transport.py",
+    "prom_search_hswm/hswm_f1_sqlite_schema.py",
+    "prom_search_hswm/hswm_function_network.py",
+    "prom_search_hswm/hswm_function_registry.py",
+    "prom_search_hswm/hswm_result_spool.py",
+    "prom_search_hswm/hswm_token_meter.py",
+    "prom_search_hswm/hswm_typed_ports.py",
+    "prom_search_hswm/prom9_f1_envelope.py",
+    "prom_search_hswm/prom9_f1_prior_exposure.py",
+    "prom_search_hswm/prom9_f1_r8_environment.py",
+    "prom_search_hswm/prom9_f1_r8_private_output.py",
+    "prom_search_hswm/prom9_f1_r8_source.py",
+    "prom_search_hswm/prom9_f1_r8_transport_audit.py",
+    "prom_search_hswm/prom9_prepare_2wiki_f1.py",
+    "prom_search_hswm/prom9_protocol.py",
+    "prom_search_hswm/prom_f1_function_network.py",
+)
+_HISTORICAL_RUNTIME_COMMITS = {
+    "hswm_executable": "63a03623d98220800e9921527510d02971b882dc",
+    "hswm_carrier": "4da21495ed52d8c85ae112fdf5cf732c14fabaf9",
+    "symposium": "09a14b3231b07d94533032efcfdbb24173143ebd",
+}
+_HISTORICAL_REPLAY_IMPORT_LFP = (
+    "hswm_next_research_harness.py",
+    "prom_search_hswm/hswm_call_receipt.py",
+    "prom_search_hswm/hswm_f1_durable_transport.py",
+    "prom_search_hswm/hswm_function_network.py",
+    "prom_search_hswm/hswm_function_registry.py",
+    "prom_search_hswm/hswm_result_spool.py",
+    "prom_search_hswm/hswm_token_meter.py",
+    "prom_search_hswm/hswm_typed_ports.py",
+    "prom_search_hswm/prom9_f1_envelope.py",
+    "prom_search_hswm/prom9_f1_r8_source.py",
+    "prom_search_hswm/prom9_prepare_2wiki_f1.py",
+    "prom_search_hswm/prom9_protocol.py",
+    "prom_search_hswm/prom_f1_function_network.py",
 )
 _CALL_CONTRACTS = {
     1: ("QF_QUERY_COMPILER", "QueryEnvelopeV1", "QueryPlanV1"),
@@ -1503,6 +1566,7 @@ def _verify_historical_selection(
 
 def _verify_incident_artifact_semantics(
     values: Mapping[str, Mapping[str, object]],
+    historical_replay: Mapping[str, object] | None = None,
 ) -> None:
     selection = values["selection_receipt"]
     manifest = values["manifest"]
@@ -1620,26 +1684,32 @@ def _verify_incident_artifact_semantics(
         if not isinstance(items, list) or items != sorted(set(items)):
             raise PriorExposureRefusal("historical forbidden boundary drifted")
     development_entries = _verify_historical_selection(selection, lock)
-    try:
-        rebuilt = _source_module.build_public_artifacts(
-            development_entries,
-            public_selection_receipt_sha256=str(
-                selection["selection_receipt_sha256"]
-            ),
-            dataset=str(source_receipt.get("dataset")),
-            config=str(source_receipt.get("config")),
-            split=str(source_receipt.get("split")),
-            run_id=str(manifest.get("run_id")),
-            mode="development",
-            model=str(manifest.get("model")),
-            model_revision=str(manifest.get("model_revision")),
-            token_envelope=manifest.get("token_envelope", {}),
-            preregistration_artifact_sha256=None,
-        )
-    except Exception as error:
-        raise PriorExposureRefusal(
-            "historical public selection cannot rebuild manifest/source"
-        ) from error
+    if historical_replay is None:
+        try:
+            rebuilt = _source_module.build_public_artifacts(
+                development_entries,
+                public_selection_receipt_sha256=str(
+                    selection["selection_receipt_sha256"]
+                ),
+                dataset=str(source_receipt.get("dataset")),
+                config=str(source_receipt.get("config")),
+                split=str(source_receipt.get("split")),
+                run_id=str(manifest.get("run_id")),
+                mode="development",
+                model=str(manifest.get("model")),
+                model_revision=str(manifest.get("model_revision")),
+                token_envelope=manifest.get("token_envelope", {}),
+                preregistration_artifact_sha256=None,
+            )
+        except Exception as error:
+            raise PriorExposureRefusal(
+                "historical public selection cannot rebuild manifest/source"
+            ) from error
+    else:
+        rebuilt = {
+            "manifest": historical_replay.get("manifest"),
+            "source_receipt": historical_replay.get("source_receipt"),
+        }
     if (
         not _exact_json_equal(rebuilt.get("manifest"), manifest)
         or not _exact_json_equal(rebuilt.get("source_receipt"), source_receipt)
@@ -1898,48 +1968,581 @@ def _verify_incident_artifact_semantics(
 
 def _git_binding(root: Path, label: str) -> dict[str, str]:
     resolved = Path(root).resolve(strict=True)
-
-    def git(*arguments: str) -> str:
-        completed = subprocess.run(
-            ["git", "-C", str(resolved), *arguments],
-            check=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
+    try:
+        repository_root = Path(
+            str(_git_output(resolved, "rev-parse", "--show-toplevel")).strip()
+        ).resolve(strict=True)
+        commit = str(_git_output(resolved, "rev-parse", "HEAD")).strip()
+        tree = str(_git_output(resolved, "rev-parse", "HEAD^{tree}")).strip()
+        status = str(
+            _git_output(
+                resolved,
+                "status",
+                "--porcelain=v1",
+                "--untracked-files=all",
+            )
         )
-        if completed.returncode != 0:
-            raise PriorExposureRefusal(f"{label} Git binding cannot be read")
-        return completed.stdout.strip()
-
-    commit = git("rev-parse", "HEAD")
-    tree = git("rev-parse", "HEAD^{tree}")
+    except (OSError, PriorExposureRefusal) as error:
+        raise PriorExposureRefusal(f"{label} Git binding cannot be read") from error
+    if repository_root != resolved:
+        raise PriorExposureRefusal(f"{label} Git root drifted")
     if _GIT_COMMIT.fullmatch(commit) is None or _GIT_COMMIT.fullmatch(tree) is None:
         raise PriorExposureRefusal(f"{label} Git identity drifted")
-    if git("status", "--porcelain", "--untracked-files=no"):
+    if status:
         raise PriorExposureRefusal(f"{label} Git worktree is not clean")
     return {"commit": commit, "tree": tree}
 
 
-def _producer_dependency_paths() -> dict[str, Path]:
-    return {
-        "prom9_f1_prior_exposure.py": Path(__file__),
-        "hswm_function_network.py": Path(
-            str(_function_network_module.__file__)
-        ),
-        "hswm_function_registry.py": Path(str(_registry_module.__file__)),
-        "hswm_typed_ports.py": Path(str(_typed_ports_module.__file__)),
-        "prom_f1_function_network.py": Path(
-            str(_network_adapter_module.__file__)
-        ),
-        "prom9_protocol.py": Path(str(_protocol_module.__file__)),
-        "prom9_prepare_2wiki_f1.py": Path(
-            str(_data_preparer_core_module.__file__)
-        ),
-        "prom9_f1_r8_source.py": Path(str(_source_module.__file__)),
-        "prom9_f1_r8_environment.py": Path(str(_environment_module.__file__)),
-        "model_deployment_receipt.py": Path(str(_deployment_module.__file__)),
-        "bge_m3_embed.py": Path(str(_bge_module.__file__)),
+def _current_producer_root(candidate: Path | None) -> Path:
+    executing_root = Path(__file__).resolve(strict=True).parents[1]
+    if candidate is None:
+        return executing_root
+    try:
+        supplied_root = Path(candidate).resolve(strict=True)
+    except OSError as error:
+        raise PriorExposureRefusal("current producer root cannot be resolved") from error
+    if supplied_root != executing_root:
+        raise PriorExposureRefusal(
+            "current producer root differs from the executing module root"
+        )
+    return supplied_root
+
+
+def _isolated_git_environment() -> dict[str, str]:
+    environment = {
+        key: value
+        for key, value in os.environ.items()
+        if not key.startswith("GIT_")
     }
+    environment.update(
+        {
+            "GIT_CONFIG_NOSYSTEM": "1",
+            "GIT_CONFIG_GLOBAL": os.devnull,
+            "GIT_TERMINAL_PROMPT": "0",
+        }
+    )
+    return environment
+
+
+def _git_output(root: Path, *arguments: str, text: bool = True) -> str | bytes:
+    completed = subprocess.run(
+        ["git", "--no-replace-objects", "-C", str(root), *arguments],
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=text,
+        env=_isolated_git_environment(),
+    )
+    if completed.returncode != 0:
+        raise PriorExposureRefusal("current producer Git authority cannot be read")
+    return completed.stdout
+
+
+def _module_for_python_path(relative_path: str) -> str:
+    if relative_path.endswith("/__init__.py"):
+        return relative_path[: -len("/__init__.py")].replace("/", ".")
+    return relative_path[:-3].replace("/", ".")
+
+
+class _ImportTimeVisitor(ast.NodeVisitor):
+    def __init__(self) -> None:
+        self.imports: list[tuple[str | None, int, tuple[str, ...]]] = []
+        self.dynamic_import = False
+
+    def visit_Import(self, node: ast.Import) -> None:
+        for alias in node.names:
+            self.imports.append((alias.name, 0, ()))
+
+    def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
+        self.imports.append(
+            (node.module, node.level, tuple(alias.name for alias in node.names))
+        )
+
+    def visit_Call(self, node: ast.Call) -> None:
+        function = node.func
+        if (
+            isinstance(function, ast.Name)
+            and function.id == "__import__"
+        ) or (
+            isinstance(function, ast.Attribute)
+            and isinstance(function.value, ast.Name)
+            and function.value.id == "importlib"
+            and function.attr == "import_module"
+        ):
+            self.dynamic_import = True
+        self.generic_visit(node)
+
+    def _visit_definition_expressions(
+        self, node: ast.FunctionDef | ast.AsyncFunctionDef
+    ) -> None:
+        for decorator in node.decorator_list:
+            self.visit(decorator)
+        for default in (*node.args.defaults, *node.args.kw_defaults):
+            if default is not None:
+                self.visit(default)
+        if node.returns is not None:
+            self.visit(node.returns)
+        for argument in (
+            *node.args.posonlyargs,
+            *node.args.args,
+            *node.args.kwonlyargs,
+        ):
+            if argument.annotation is not None:
+                self.visit(argument.annotation)
+
+    def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
+        self._visit_definition_expressions(node)
+
+    def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef) -> None:
+        self._visit_definition_expressions(node)
+
+    def visit_Lambda(self, node: ast.Lambda) -> None:
+        for default in (*node.args.defaults, *node.args.kw_defaults):
+            if default is not None:
+                self.visit(default)
+
+
+def _resolve_import_module(
+    importing_module: str, module: str | None, level: int
+) -> str:
+    if level == 0:
+        return module or ""
+    package = importing_module.rsplit(".", 1)[0]
+    parts = package.split(".") if package else []
+    if level > len(parts) + 1:
+        raise PriorExposureRefusal("current producer relative import escapes package")
+    prefix = parts[: len(parts) - level + 1]
+    if module:
+        prefix.extend(module.split("."))
+    return ".".join(prefix)
+
+
+def _discover_current_producer_import_lfp(root: Path) -> tuple[str, ...]:
+    raw = _git_output(
+        root,
+        "ls-files",
+        "-z",
+        "--cached",
+        "--others",
+        "--exclude-standard",
+        "--",
+        "*.py",
+        text=False,
+    )
+    assert isinstance(raw, bytes)
+    paths = [item.decode("utf-8") for item in raw.split(b"\0") if item]
+    module_to_path: dict[str, str] = {}
+    for relative in paths:
+        module = _module_for_python_path(relative)
+        if module in module_to_path:
+            raise PriorExposureRefusal("current producer module mapping repeats")
+        module_to_path[module] = relative
+
+    entrypoint = "prom_search_hswm.prom9_f1_prior_exposure"
+    pending = [entrypoint]
+    discovered: set[str] = set()
+    while pending:
+        module = pending.pop()
+        if module in discovered:
+            continue
+        relative = module_to_path.get(module)
+        if relative is None:
+            raise PriorExposureRefusal("current producer entrypoint is absent")
+        try:
+            tree = ast.parse(
+                _read_stable_public_bytes(root / relative), filename=relative
+            )
+        except (SyntaxError, ValueError) as error:
+            raise PriorExposureRefusal(
+                "current producer Python source cannot be parsed"
+            ) from error
+        visitor = _ImportTimeVisitor()
+        visitor.visit(tree)
+        if visitor.dynamic_import:
+            raise PriorExposureRefusal(
+                "current producer has an unmodeled import-time dynamic import"
+            )
+        discovered.add(module)
+        for imported, level, names in visitor.imports:
+            base = _resolve_import_module(module, imported, level)
+            candidates = [base] if base else []
+            candidates.extend(
+                f"{base}.{name}" if base else name
+                for name in names
+                if name != "*"
+            )
+            for candidate in candidates:
+                if candidate in module_to_path and candidate not in discovered:
+                    pending.append(candidate)
+    return tuple(sorted(module_to_path[module] for module in discovered))
+
+
+def _producer_dependency_paths(root: Path | None = None) -> dict[str, Path]:
+    producer_root = (
+        Path(root).resolve(strict=True)
+        if root is not None
+        else Path(__file__).resolve(strict=True).parents[1]
+    )
+    discovered = _discover_current_producer_import_lfp(producer_root)
+    if discovered != _CURRENT_PRODUCER_IMPORT_LFP:
+        raise PriorExposureRefusal("current producer import closure drifted")
+    return {
+        relative: producer_root / relative
+        for relative in _CURRENT_PRODUCER_IMPORT_LFP
+    }
+
+
+def _current_producer_authority(root: Path) -> dict[str, object]:
+    producer_root = Path(root).resolve(strict=True)
+    git_binding = _git_binding(producer_root, "current producer")
+    commit = git_binding["commit"]
+    files: list[dict[str, object]] = []
+    for relative, path in _producer_dependency_paths(producer_root).items():
+        raw = _read_stable_public_bytes(path)
+        if not raw:
+            raise PriorExposureRefusal("current producer file is empty")
+        blob = _git_output(
+            producer_root, "show", f"{commit}:{relative}", text=False
+        )
+        assert isinstance(blob, bytes)
+        if raw != blob:
+            raise PriorExposureRefusal("current producer differs from committed blob")
+        tree_row = str(
+            _git_output(
+                producer_root, "ls-tree", commit, "--", relative, text=True
+            )
+        ).strip()
+        parts = tree_row.split(None, 3)
+        if len(parts) != 4 or parts[1] != "blob" or parts[3] != relative:
+            raise PriorExposureRefusal("current producer Git blob identity drifted")
+        mode, _kind, oid, _path = parts
+        if mode not in {"100644", "100755"} or _GIT_COMMIT.fullmatch(oid) is None:
+            raise PriorExposureRefusal("current producer Git blob mode drifted")
+        files.append(
+            {
+                "relative_path": relative,
+                "size_bytes": len(raw),
+                "sha256": hashlib.sha256(raw).hexdigest(),
+                "blob_mode": mode,
+                "blob_oid": oid,
+            }
+        )
+    return {
+        "commit": commit,
+        "tree": git_binding["tree"],
+        "entrypoint": "prom_search_hswm/prom9_f1_prior_exposure.py",
+        "closure_policy": "MODULE_SCOPE_LOCAL_AST_LFP_V1",
+        "files": files,
+        "file_count": len(files),
+        "closure_root_sha256": canonical_sha256(files),
+    }
+
+
+_HISTORICAL_REPLAY_CHILD = r'''
+import json
+import os
+import socket
+import subprocess
+import sys
+
+def denied(*_args, **_kwargs):
+    raise RuntimeError("historical replay external effect denied")
+
+socket.socket = denied
+socket.create_connection = denied
+subprocess.Popen = denied
+subprocess.run = denied
+subprocess.call = denied
+subprocess.check_call = denied
+subprocess.check_output = denied
+
+tree = sys.argv[1]
+sys.path.insert(0, tree)
+from prom_search_hswm.hswm_function_registry import build_registry
+from prom_search_hswm.prom9_f1_r8_source import build_public_artifacts
+from prom_search_hswm.prom_f1_function_network import _arm_overrides
+from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
+
+payload = json.load(sys.stdin)
+protocol_path = os.path.join(tree, "protocol.replay.json")
+descriptor = os.open(
+    protocol_path,
+    os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_CLOEXEC", 0),
+    0o600,
+)
+raw_protocol = (canonical_json(payload["protocol"]) + "\n").encode("utf-8")
+try:
+    offset = 0
+    while offset < len(raw_protocol):
+        written = os.write(descriptor, raw_protocol[offset:])
+        if written <= 0:
+            raise RuntimeError("historical replay write made no progress")
+        offset += written
+    os.fsync(descriptor)
+finally:
+    os.close(descriptor)
+
+rebuilt = build_public_artifacts(
+    payload["development_entries"],
+    public_selection_receipt_sha256=payload["selection_receipt_sha256"],
+    dataset=payload["dataset"],
+    config=payload["config"],
+    split=payload["split"],
+    run_id=payload["run_id"],
+    mode="development",
+    model=payload["model"],
+    model_revision=payload["model_revision"],
+    token_envelope=payload["token_envelope"],
+    preregistration_artifact_sha256=None,
+)
+arms = payload["arms"]
+registries = {
+    arm: build_registry(
+        protocol_path,
+        model=payload["model"],
+        model_revision=payload["model_revision"],
+        prompt_overrides=_arm_overrides(arm),
+    )
+    for arm in arms
+}
+result = {
+    "manifest": rebuilt["manifest"],
+    "source_receipt": rebuilt["source_receipt"],
+    "protocol_roots": sorted({registry.protocol_sha256 for registry in registries.values()}),
+    "registries_root_sha256": canonical_sha256(
+        {arm: registries[arm].registry_sha256 for arm in arms}
+    ),
+    "prompts": [
+        {
+            "arm_id": arm,
+            "function_id": function.function_id,
+            "prompt": function.prompt,
+        }
+        for arm in arms
+        for function in registries[arm].functions
+    ],
+    "python": {
+        "implementation": sys.implementation.name,
+        "version": ".".join(str(value) for value in sys.version_info[:3]),
+    },
+}
+sys.stdout.write(json.dumps(result, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
+'''
+
+
+def _git_commit_binding(
+    root: Path, expected_commit: str, label: str
+) -> dict[str, str]:
+    repository = Path(root).resolve(strict=True)
+    if _GIT_COMMIT.fullmatch(expected_commit) is None:
+        raise PriorExposureRefusal(f"{label} historical commit drifted")
+    object_type = str(
+        _git_output(repository, "cat-file", "-t", expected_commit, text=True)
+    ).strip()
+    tree = str(
+        _git_output(
+            repository, "rev-parse", f"{expected_commit}^{{tree}}", text=True
+        )
+    ).strip()
+    if object_type != "commit" or _GIT_COMMIT.fullmatch(tree) is None:
+        raise PriorExposureRefusal(f"{label} historical Git object drifted")
+    return {"commit": expected_commit, "tree": tree}
+
+
+def _materialize_historical_replay_tree(
+    repository: Path, destination: Path
+) -> list[dict[str, object]]:
+    commit = _HISTORICAL_RUNTIME_COMMITS["hswm_executable"]
+    files: list[dict[str, object]] = []
+    for relative in _HISTORICAL_REPLAY_IMPORT_LFP:
+        raw = _git_output(repository, "show", f"{commit}:{relative}", text=False)
+        assert isinstance(raw, bytes)
+        if not raw:
+            raise PriorExposureRefusal("historical replay blob is empty")
+        tree_row = str(
+            _git_output(repository, "ls-tree", commit, "--", relative, text=True)
+        ).strip()
+        parts = tree_row.split(None, 3)
+        if len(parts) != 4 or parts[1] != "blob" or parts[3] != relative:
+            raise PriorExposureRefusal("historical replay blob identity drifted")
+        mode, _kind, oid, _path = parts
+        if mode not in {"100644", "100755"} or _GIT_COMMIT.fullmatch(oid) is None:
+            raise PriorExposureRefusal("historical replay blob mode drifted")
+        target = destination / relative
+        target.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+        target.parent.chmod(0o700)
+        descriptor = os.open(
+            target,
+            os.O_WRONLY
+            | os.O_CREAT
+            | os.O_EXCL
+            | getattr(os, "O_CLOEXEC", 0)
+            | getattr(os, "O_NOFOLLOW", 0),
+            0o600,
+        )
+        try:
+            offset = 0
+            while offset < len(raw):
+                written = os.write(descriptor, raw[offset:])
+                if written <= 0:
+                    raise PriorExposureRefusal(
+                        "historical replay materialization made no progress"
+                    )
+                offset += written
+            os.fsync(descriptor)
+        finally:
+            os.close(descriptor)
+        files.append(
+            {
+                "relative_path": relative,
+                "size_bytes": len(raw),
+                "sha256": hashlib.sha256(raw).hexdigest(),
+                "blob_mode": mode,
+                "blob_oid": oid,
+            }
+        )
+    return files
+
+
+def _historical_runtime_replay(
+    *,
+    hswm_root: Path,
+    carrier_root: Path,
+    symposium_root: Path,
+    historical_python: Path,
+    selection: Mapping[str, object],
+    manifest: Mapping[str, object],
+    source_receipt: Mapping[str, object],
+    lock: Mapping[str, object],
+    environment: Mapping[str, object],
+) -> tuple[dict[str, object], dict[str, object]]:
+    repositories = {
+        "hswm_executable": _git_commit_binding(
+            hswm_root,
+            _HISTORICAL_RUNTIME_COMMITS["hswm_executable"],
+            "HSWM executable",
+        ),
+        "hswm_carrier": _git_commit_binding(
+            carrier_root,
+            _HISTORICAL_RUNTIME_COMMITS["hswm_carrier"],
+            "HSWM carrier",
+        ),
+        "symposium": _git_commit_binding(
+            symposium_root,
+            _HISTORICAL_RUNTIME_COMMITS["symposium"],
+            "SYMPOSIUM",
+        ),
+    }
+    if lock.get("hswm_commit") != repositories["hswm_executable"]["commit"]:
+        raise PriorExposureRefusal("historical HSWM lock commit drifted")
+    environment_receipt = environment.get("environment_receipt")
+    runtime = (
+        environment_receipt.get("runtime")
+        if isinstance(environment_receipt, Mapping)
+        else None
+    )
+    python_runtime = runtime.get("python") if isinstance(runtime, Mapping) else None
+    executable_receipt = (
+        python_runtime.get("executable")
+        if isinstance(python_runtime, Mapping)
+        else None
+    )
+    interpreter = Path(historical_python).resolve(strict=True)
+    interpreter_raw = _read_stable_public_bytes(interpreter)
+    if (
+        not isinstance(executable_receipt, Mapping)
+        or executable_receipt.get("size_bytes") != len(interpreter_raw)
+        or executable_receipt.get("sha256")
+        != hashlib.sha256(interpreter_raw).hexdigest()
+    ):
+        raise PriorExposureRefusal("historical Python interpreter drifted")
+    development_entries = _verify_historical_selection(selection, lock)
+    dependency = environment.get("dependency_receipt")
+    dependency_files = (
+        dependency.get("files") if isinstance(dependency, Mapping) else None
+    )
+    if not isinstance(dependency_files, Mapping):
+        raise PriorExposureRefusal("historical dependency files are absent")
+    protocol = _strict_object(
+        _inline_dependency_bytes(dependency_files, "protocol_json"),
+        "historical protocol preimage",
+    )
+    payload = {
+        "development_entries": development_entries,
+        "selection_receipt_sha256": selection.get("selection_receipt_sha256"),
+        "dataset": source_receipt.get("dataset"),
+        "config": source_receipt.get("config"),
+        "split": source_receipt.get("split"),
+        "run_id": manifest.get("run_id"),
+        "model": manifest.get("model"),
+        "model_revision": manifest.get("model_revision"),
+        "token_envelope": manifest.get("token_envelope"),
+        "arms": list(_F1_ARMS),
+        "protocol": protocol,
+    }
+    temporary = tempfile.TemporaryDirectory(prefix="hswm-f1-historical-replay-")
+    try:
+        tree = Path(temporary.name)
+        tree.chmod(0o700)
+        replay_files = _materialize_historical_replay_tree(
+            Path(hswm_root).resolve(strict=True), tree
+        )
+        completed = subprocess.run(
+            [str(interpreter), "-I", "-S", "-c", _HISTORICAL_REPLAY_CHILD, str(tree)],
+            input=canonical_json(payload).encode("utf-8"),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+            timeout=60,
+            cwd=tree,
+            env={"LANG": "C.UTF-8", "LC_ALL": "C.UTF-8"},
+            close_fds=True,
+        )
+        if completed.returncode != 0 or not completed.stdout:
+            raise PriorExposureRefusal("historical isolated replay failed")
+        try:
+            result = json.loads(completed.stdout.decode("utf-8"))
+        except (UnicodeError, json.JSONDecodeError) as error:
+            raise PriorExposureRefusal(
+                "historical isolated replay output drifted"
+            ) from error
+    except (OSError, subprocess.SubprocessError) as error:
+        raise PriorExposureRefusal("historical isolated replay failed") from error
+    finally:
+        temporary.cleanup()
+    if not isinstance(result, Mapping):
+        raise PriorExposureRefusal("historical isolated replay result drifted")
+    result_python = result.get("python")
+    if (
+        not isinstance(python_runtime, Mapping)
+        or not isinstance(result_python, Mapping)
+        or str(result_python.get("implementation", "")).casefold()
+        != str(python_runtime.get("implementation", "")).casefold()
+        or result_python.get("version") != python_runtime.get("version")
+    ):
+        raise PriorExposureRefusal("historical Python runtime replay drifted")
+    protocol_roots = result.get("protocol_roots")
+    if (
+        protocol_roots != [lock.get("protocol_sha256")]
+        or result.get("registries_root_sha256")
+        != lock.get("registries_root_sha256")
+    ):
+        raise PriorExposureRefusal("historical registry replay differs from lock")
+    authority = {
+        "repositories": repositories,
+        "replay_policy": "COMMIT_BLOBS_PYTHON_ISOLATED_NO_NETWORK_V1",
+        "replay_files": replay_files,
+        "replay_file_count": len(replay_files),
+        "replay_closure_root_sha256": canonical_sha256(replay_files),
+        "python_runtime": {
+            "implementation": python_runtime.get("implementation"),
+            "version": python_runtime.get("version"),
+            "executable_size_bytes": len(interpreter_raw),
+            "executable_sha256": hashlib.sha256(interpreter_raw).hexdigest(),
+        },
+        "replay_result_sha256": canonical_sha256(result),
+    }
+    return dict(result), authority
 
 
 def _public_database_snapshot(
@@ -1949,6 +2552,46 @@ def _public_database_snapshot(
     source_identity = public.pop("source_identity", None)
     _verify_database_identity_value(source_identity, f"{kind} source")
     return public
+
+
+def _private_database_witness(path: Path, label: str) -> dict[str, object]:
+    database_path = Path(path)
+    try:
+        info = database_path.lstat()
+        resolved_path = database_path.resolve(strict=True)
+        generation = database_generation(database_path, label)
+    except (OSError, SQLiteAuthorityRefusal) as error:
+        raise PriorExposureRefusal(
+            f"{label} private witness cannot be captured"
+        ) from error
+    if (
+        stat.S_ISLNK(info.st_mode)
+        or not stat.S_ISREG(info.st_mode)
+        or stat.S_IMODE(info.st_mode) != 0o600
+        or info.st_uid != os.geteuid()
+        or info.st_nlink != 1
+        or not resolved_path.is_absolute()
+    ):
+        raise PriorExposureRefusal(f"{label} private witness identity drifted")
+    main = generation.get("main")
+    if (
+        not isinstance(main, Mapping)
+        or (main.get("st_dev"), main.get("st_ino"))
+        != (info.st_dev, info.st_ino)
+    ):
+        raise PriorExposureRefusal(f"{label} private generation drifted")
+    return {
+        "resolved_path": str(resolved_path),
+        "st_dev": int(info.st_dev),
+        "st_ino": int(info.st_ino),
+        "mode": oct(stat.S_IMODE(info.st_mode)),
+        "uid": int(info.st_uid),
+        "nlink": int(info.st_nlink),
+        "size_bytes": int(info.st_size),
+        "mtime_ns": int(info.st_mtime_ns),
+        "ctime_ns": int(info.st_ctime_ns),
+        "generation": generation,
+    }
 
 
 def _inline_dependency_bytes(
@@ -2175,59 +2818,53 @@ def _candidate_table_for_manifest_item(
     candidates = item.get("candidates")
     if not isinstance(candidates, list) or not candidates:
         raise PriorExposureRefusal("attempt item candidate universe drifted")
-    projected: list[tuple[str, str, dict[str, object]]] = []
+    canonical_candidates: list[EvidenceCandidateV1] = []
     for candidate in candidates:
-        if not isinstance(candidate, Mapping):
+        if not isinstance(candidate, Mapping) or set(candidate) != {
+            "bond_id",
+            "evidence_id",
+            "source_entity_id",
+            "content",
+            "observable",
+        }:
             raise PriorExposureRefusal("attempt manifest candidate drifted")
         bond_id = candidate.get("bond_id")
         evidence_id = candidate.get("evidence_id")
+        source_entity = candidate.get("source_entity_id")
+        content = candidate.get("content")
         observable = candidate.get("observable")
         if (
             not isinstance(bond_id, str)
             or not bond_id
             or not isinstance(evidence_id, str)
             or not evidence_id
+            or not isinstance(source_entity, str)
+            or _SHA256.fullmatch(source_entity) is None
+            or not isinstance(content, str)
+            or not content
             or not isinstance(observable, Mapping)
         ):
             raise PriorExposureRefusal("attempt manifest candidate drifted")
-        if arm_id == "flat_single_llm_three_call_workflow":
-            allowed = {"flat_position", "source_type", "flat_score"}
-            values = {
-                key: observable[key]
-                for key in sorted(observable)
-                if key in allowed
-            }
-        elif arm_id == "vector_memory_three_call_workflow":
-            allowed = {"vector_score", "source_type"}
-            values = {
-                key: observable[key]
-                for key in sorted(observable)
-                if key in allowed
-            }
-        else:
-            values = {key: observable[key] for key in sorted(observable)}
-        projected.append((bond_id, evidence_id, values))
-    key_sets = {tuple(values) for _bond, _evidence, values in projected}
-    if len(key_sets) != 1:
-        raise PriorExposureRefusal("attempt candidate observables are non-uniform")
-    keys = list(key_sets.pop())
-    constants: dict[str, object] = {}
-    varying: list[str] = []
-    for key in keys:
-        values = {canonical_json(observable[key]) for _, _, observable in projected}
-        if len(values) == 1:
-            constants[key] = projected[0][2][key]
-        else:
-            varying.append(key)
-    return {
-        "constants": constants,
-        "columns": ["bond_id", "evidence_id", *varying],
-        "rows": [
-            [bond_id, evidence_id]
-            + [observable[key] for key in varying]
-            for bond_id, evidence_id, observable in projected
-        ],
-    }
+        try:
+            canonical_candidates.append(
+                EvidenceCandidateV1(
+                    bond_id=bond_id,
+                    evidence_id=evidence_id,
+                    source_entity_id=source_entity,
+                    content=content,
+                    observable=dict(observable),
+                )
+            )
+        except FunctionNetworkError as error:
+            raise PriorExposureRefusal(
+                "attempt manifest candidate drifted"
+            ) from error
+    try:
+        return candidate_table_for_arm(arm_id, canonical_candidates)
+    except FunctionNetworkError as error:
+        raise PriorExposureRefusal(
+            "attempt candidate table cannot be serialized"
+        ) from error
 
 
 def _verify_call_input_manifest_binding(
@@ -2868,9 +3505,13 @@ def build_aborted_attempt_exposure_receipt(
     hswm_carrier_root: Path,
     symposium_root: Path,
     snapshot_dir: Path,
+    private_witness_output: Path,
+    producer_hswm_root: Path | None = None,
+    historical_python: Path | None = None,
 ) -> dict[str, object]:
     """Derive a quarantine boundary from copied structural evidence only."""
 
+    resolved_producer_root = _current_producer_root(producer_hswm_root)
     job_rc_raw = _read_stable_public_bytes(job_rc)
     try:
         job_rc_value = int(job_rc_raw.decode("ascii").strip())
@@ -2928,24 +3569,51 @@ def build_aborted_attempt_exposure_receipt(
         value, binding = _artifact_binding(name, Path(path))
         artifact_values[name] = value
         artifacts[name] = binding
-    _verify_incident_artifact_semantics(artifact_values)
     manifest_value = artifact_values["manifest"]
     source_value = artifact_values["source_receipt"]
+    historical_replay, historical_authority = _historical_runtime_replay(
+        hswm_root=hswm_executable_root,
+        carrier_root=hswm_carrier_root,
+        symposium_root=symposium_root,
+        historical_python=(
+            Path(sys.executable) if historical_python is None else historical_python
+        ),
+        selection=artifact_values["selection_receipt"],
+        manifest=manifest_value,
+        source_receipt=source_value,
+        lock=artifact_values["execution_lock"],
+        environment=artifact_values["environment_dependency_bundle"],
+    )
+    _verify_incident_artifact_semantics(artifact_values, historical_replay)
     metadata = _source_metadata(manifest_value, source_value)
-    repositories = {
-        "hswm_executable": _git_binding(hswm_executable_root, "HSWM executable"),
-        "hswm_carrier": _git_binding(hswm_carrier_root, "HSWM carrier"),
-        "symposium": _git_binding(symposium_root, "SYMPOSIUM"),
-    }
+    repositories = historical_authority["repositories"]
+    assert isinstance(repositories, Mapping)
+    producer_authority = _current_producer_authority(resolved_producer_root)
     lock_value = artifact_values["execution_lock"]
     selection_value = artifact_values["selection_receipt"]
     genesis_value = artifact_values["db_genesis_receipt"]
     environment_value = artifact_values["environment_dependency_bundle"]
     deployment_value = artifact_values["model_deployment_receipt"]
     spool_identity_value = artifact_values["spool_identity_receipt"]
-    expected_prompts = _registry_prompt_authority(
-        environment_value, manifest_value, lock_value
-    )
+    prompt_rows = historical_replay.get("prompts")
+    if not isinstance(prompt_rows, list):
+        raise PriorExposureRefusal("historical replay prompts are absent")
+    expected_prompts: dict[tuple[str, str], str] = {}
+    for prompt_row in prompt_rows:
+        if (
+            not isinstance(prompt_row, Mapping)
+            or set(prompt_row) != {"arm_id", "function_id", "prompt"}
+            or prompt_row.get("arm_id") not in _F1_ARMS
+            or not isinstance(prompt_row.get("function_id"), str)
+            or not prompt_row.get("function_id")
+            or not isinstance(prompt_row.get("prompt"), str)
+            or not prompt_row.get("prompt")
+        ):
+            raise PriorExposureRefusal("historical replay prompt drifted")
+        key = (str(prompt_row["arm_id"]), str(prompt_row["function_id"]))
+        if key in expected_prompts:
+            raise PriorExposureRefusal("historical replay prompt repeats")
+        expected_prompts[key] = str(prompt_row["prompt"])
     incident_environment_receipt = environment_value.get("environment_receipt")
     incident_environment_labels = (
         incident_environment_receipt.get("labels")
@@ -3115,15 +3783,6 @@ def build_aborted_attempt_exposure_receipt(
         raise PriorExposureRefusal("DT job log does not corroborate SIGBUS")
     _verify_sqlite_source_pair(attempt_db, attempt_snapshot)
     _verify_sqlite_source_pair(spool_db, spool_snapshot)
-    producer_dependencies: dict[str, dict[str, object]] = {}
-    for name, dependency_path in _producer_dependency_paths().items():
-        dependency_raw = _read_stable_public_bytes(dependency_path)
-        producer_dependencies[name] = {
-            "basename": dependency_path.name,
-            "size_bytes": len(dependency_raw),
-            "sha256": hashlib.sha256(dependency_raw).hexdigest(),
-        }
-
     touched_items = sorted(
         {str(row["item_id"]) for row in call_observations}
         | {str(row["item_id"]) for row in item_runs}
@@ -3195,7 +3854,11 @@ def build_aborted_attempt_exposure_receipt(
         "source_binding": {
             "source_receipt_sha256": source_declared,
             "public_source_receipt": source_value,
+            "public_manifest": manifest_value,
             "manifest_canonical_sha256": canonical_sha256(manifest_value),
+            "all_metadata_root_sha256": canonical_sha256(
+                [metadata[item] for item in sorted(metadata)]
+            ),
             "touched_metadata_root_sha256": canonical_sha256(
                 [metadata[item] for item in touched_items]
             ),
@@ -3212,8 +3875,10 @@ def build_aborted_attempt_exposure_receipt(
         },
         "evidence_bindings": {
             "artifacts": artifacts,
-            "repositories": repositories,
-            "producer_dependencies": producer_dependencies,
+            "historical_runtime_authority": {
+                **historical_authority,
+            },
+            "current_producer_authority": producer_authority,
             "job_command": {
                 "basename": Path(job_command).name,
                 "size_bytes": len(command_raw),
@@ -3252,9 +3917,88 @@ def build_aborted_attempt_exposure_receipt(
         "aggregate": aggregate,
         "complete": True,
     }
-    return {
+    attempt_witness = _private_database_witness(attempt_db, "attempt ledger")
+    spool_witness = _private_database_witness(spool_db, "result spool")
+    if (
+        (attempt_witness["st_dev"], attempt_witness["st_ino"])
+        == (spool_witness["st_dev"], spool_witness["st_ino"])
+        or attempt_witness["resolved_path"] == spool_witness["resolved_path"]
+    ):
+        raise PriorExposureRefusal("private database identities alias")
+    incident_stage_path = Path(incident_root)
+    for database_witness in (attempt_witness, spool_witness):
+        database_path = Path(str(database_witness["resolved_path"]))
+        try:
+            database_path.relative_to(incident_stage_path)
+        except ValueError as error:
+            raise PriorExposureRefusal(
+                "private database is outside the incident stage"
+            ) from error
+        if database_path == incident_stage_path:
+            raise PriorExposureRefusal("private database path is not a file child")
+        if database_path.parent.parent != incident_stage_path:
+            raise PriorExposureRefusal(
+                "private database does not identify the exact incident stage"
+            )
+    witness_destination = Path(private_witness_output).resolve(strict=False)
+    witness_parent = witness_destination.parent
+    try:
+        parent_info = witness_parent.lstat()
+    except OSError as error:
+        raise PriorExposureRefusal(
+            "private witness parent must already exist"
+        ) from error
+    if (
+        stat.S_ISLNK(parent_info.st_mode)
+        or not stat.S_ISDIR(parent_info.st_mode)
+        or stat.S_IMODE(parent_info.st_mode) != 0o700
+        or parent_info.st_uid != os.geteuid()
+    ):
+        raise PriorExposureRefusal("private witness parent must be owner-private 0700")
+    for repository_root in (
+        hswm_executable_root,
+        hswm_carrier_root,
+        symposium_root,
+        resolved_producer_root,
+    ):
+        resolved_repository = Path(repository_root).resolve(strict=True)
+        if os.path.commonpath(
+            (str(witness_destination), str(resolved_repository))
+        ) == str(resolved_repository):
+            raise PriorExposureRefusal("private witness must remain outside Git roots")
+    incident_preimage_root = canonical_sha256(unsigned)
+    witness_unsigned = {
+        "schema_version": ABORTED_ATTEMPT_PRIVATE_WITNESS_SCHEMA,
+        "nonce_hex": secrets.token_hex(32),
+        "incident_preimage_root_sha256": incident_preimage_root,
+        "stage_path": incident_root,
+        "databases": {
+            "attempt": attempt_witness,
+            "spool": spool_witness,
+        },
+        "db_genesis_receipt": genesis_value,
+        "spool_identity_receipt": spool_identity_value,
+    }
+    witness = {
+        **witness_unsigned,
+        "private_witness_sha256": canonical_sha256(witness_unsigned),
+    }
+    write_private_once(witness_destination, witness)
+    public_unsigned = {
         **unsigned,
-        "aborted_attempt_exposure_receipt_sha256": canonical_sha256(unsigned),
+        "assurance": "PRODUCER_ATTESTED",
+        "private_witness_commitment": {
+            "schema_version": ABORTED_ATTEMPT_PRIVATE_WITNESS_SCHEMA,
+            "algorithm": "SHA256_CANONICAL_JSON_V1",
+            "incident_preimage_root_sha256": incident_preimage_root,
+            "private_witness_sha256": witness["private_witness_sha256"],
+        },
+    }
+    return {
+        **public_unsigned,
+        "aborted_attempt_exposure_receipt_sha256": canonical_sha256(
+            public_unsigned
+        ),
     }
 
 
@@ -3290,10 +4034,138 @@ def _verify_recorded_file(
         or not value.get("basename")
         or isinstance(value.get("size_bytes"), bool)
         or not isinstance(value.get("size_bytes"), int)
-        or int(value["size_bytes"]) < 0
+        or int(value["size_bytes"]) < 1
         or not _is_sha256(value.get("sha256"))
     ):
         raise PriorExposureRefusal(f"aborted-attempt {label} identity drifted")
+    return value
+
+
+def _verify_current_producer_authority(value: object) -> Mapping[str, object]:
+    fields = {
+        "commit", "tree", "entrypoint", "closure_policy", "files",
+        "file_count", "closure_root_sha256",
+    }
+    if not isinstance(value, Mapping) or set(value) != fields:
+        raise PriorExposureRefusal("current producer authority shape drifted")
+    if (
+        any(
+            not isinstance(value.get(key), str)
+            or _GIT_COMMIT.fullmatch(str(value.get(key))) is None
+            for key in ("commit", "tree")
+        )
+        or value.get("entrypoint")
+        != "prom_search_hswm/prom9_f1_prior_exposure.py"
+        or value.get("closure_policy") != "MODULE_SCOPE_LOCAL_AST_LFP_V1"
+    ):
+        raise PriorExposureRefusal("current producer authority identity drifted")
+    files = value.get("files")
+    if (
+        not isinstance(files, list)
+        or isinstance(value.get("file_count"), bool)
+        or value.get("file_count") != len(_CURRENT_PRODUCER_IMPORT_LFP)
+        or len(files) != len(_CURRENT_PRODUCER_IMPORT_LFP)
+        or value.get("closure_root_sha256") != canonical_sha256(files)
+    ):
+        raise PriorExposureRefusal("current producer authority root drifted")
+    observed_paths: list[str] = []
+    for entry in files:
+        if (
+            not isinstance(entry, Mapping)
+            or set(entry)
+            != {
+                "relative_path", "size_bytes", "sha256", "blob_mode", "blob_oid",
+            }
+            or not isinstance(entry.get("relative_path"), str)
+            or not entry.get("relative_path")
+            or isinstance(entry.get("size_bytes"), bool)
+            or not isinstance(entry.get("size_bytes"), int)
+            or int(entry["size_bytes"]) < 1
+            or not _is_sha256(entry.get("sha256"))
+            or entry.get("blob_mode") not in {"100644", "100755"}
+            or not isinstance(entry.get("blob_oid"), str)
+            or _GIT_COMMIT.fullmatch(str(entry.get("blob_oid"))) is None
+        ):
+            raise PriorExposureRefusal("current producer file binding drifted")
+        observed_paths.append(str(entry["relative_path"]))
+    if tuple(observed_paths) != _CURRENT_PRODUCER_IMPORT_LFP:
+        raise PriorExposureRefusal("current producer import closure drifted")
+    return value
+
+
+def _verify_historical_runtime_authority(value: object) -> Mapping[str, object]:
+    fields = {
+        "repositories", "replay_policy", "replay_files", "replay_file_count",
+        "replay_closure_root_sha256", "python_runtime", "replay_result_sha256",
+    }
+    if not isinstance(value, Mapping) or set(value) != fields:
+        raise PriorExposureRefusal("historical runtime authority shape drifted")
+    repositories = value.get("repositories")
+    if not isinstance(repositories, Mapping) or set(repositories) != set(
+        _HISTORICAL_RUNTIME_COMMITS
+    ):
+        raise PriorExposureRefusal("historical repository inventory drifted")
+    for name, expected_commit in _HISTORICAL_RUNTIME_COMMITS.items():
+        binding = repositories.get(name)
+        if (
+            not isinstance(binding, Mapping)
+            or set(binding) != {"commit", "tree"}
+            or binding.get("commit") != expected_commit
+            or not isinstance(binding.get("tree"), str)
+            or _GIT_COMMIT.fullmatch(str(binding.get("tree"))) is None
+        ):
+            raise PriorExposureRefusal("historical repository binding drifted")
+    replay_files = value.get("replay_files")
+    if (
+        value.get("replay_policy")
+        != "COMMIT_BLOBS_PYTHON_ISOLATED_NO_NETWORK_V1"
+        or not isinstance(replay_files, list)
+        or value.get("replay_file_count") != len(_HISTORICAL_REPLAY_IMPORT_LFP)
+        or len(replay_files) != len(_HISTORICAL_REPLAY_IMPORT_LFP)
+        or value.get("replay_closure_root_sha256")
+        != canonical_sha256(replay_files)
+        or not _is_sha256(value.get("replay_result_sha256"))
+    ):
+        raise PriorExposureRefusal("historical replay authority root drifted")
+    observed_paths: list[str] = []
+    for entry in replay_files:
+        if (
+            not isinstance(entry, Mapping)
+            or set(entry)
+            != {
+                "relative_path", "size_bytes", "sha256", "blob_mode", "blob_oid",
+            }
+            or not isinstance(entry.get("relative_path"), str)
+            or isinstance(entry.get("size_bytes"), bool)
+            or not isinstance(entry.get("size_bytes"), int)
+            or int(entry["size_bytes"]) < 1
+            or not _is_sha256(entry.get("sha256"))
+            or entry.get("blob_mode") not in {"100644", "100755"}
+            or not isinstance(entry.get("blob_oid"), str)
+            or _GIT_COMMIT.fullmatch(str(entry.get("blob_oid"))) is None
+        ):
+            raise PriorExposureRefusal("historical replay file binding drifted")
+        observed_paths.append(str(entry["relative_path"]))
+    if tuple(observed_paths) != _HISTORICAL_REPLAY_IMPORT_LFP:
+        raise PriorExposureRefusal("historical replay import closure drifted")
+    python_runtime = value.get("python_runtime")
+    if (
+        not isinstance(python_runtime, Mapping)
+        or set(python_runtime)
+        != {
+            "implementation", "version", "executable_size_bytes",
+            "executable_sha256",
+        }
+        or not isinstance(python_runtime.get("implementation"), str)
+        or not python_runtime.get("implementation")
+        or not isinstance(python_runtime.get("version"), str)
+        or not python_runtime.get("version")
+        or isinstance(python_runtime.get("executable_size_bytes"), bool)
+        or not isinstance(python_runtime.get("executable_size_bytes"), int)
+        or int(python_runtime["executable_size_bytes"]) < 1
+        or not _is_sha256(python_runtime.get("executable_sha256"))
+    ):
+        raise PriorExposureRefusal("historical Python authority drifted")
     return value
 
 
@@ -3301,6 +4173,7 @@ def verify_aborted_attempt_exposure_receipt(
     value: Mapping[str, object],
 ) -> str:
     """Verify a producer-derived quarantine receipt without reading private blobs."""
+    receipt_schema = value.get("schema_version") if isinstance(value, Mapping) else None
     expected_top_level = {
         "schema_version",
         "status",
@@ -3319,10 +4192,16 @@ def verify_aborted_attempt_exposure_receipt(
         "complete",
         "aborted_attempt_exposure_receipt_sha256",
     }
+    if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA:
+        expected_top_level |= {"assurance", "private_witness_commitment"}
     if not isinstance(value, Mapping) or set(value) != expected_top_level:
         raise PriorExposureRefusal("aborted-attempt receipt shape drifted")
     if (
-        value.get("schema_version") != ABORTED_ATTEMPT_EXPOSURE_SCHEMA
+        receipt_schema
+        not in {
+            ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2,
+            ABORTED_ATTEMPT_EXPOSURE_SCHEMA,
+        }
         or value.get("status") != ABORTED_ATTEMPT_STATUS
         or value.get("complete") is not True
     ):
@@ -3342,6 +4221,30 @@ def verify_aborted_attempt_exposure_receipt(
         or computed != declared
     ):
         raise PriorExposureRefusal("aborted-attempt receipt self-hash drifted")
+    if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA:
+        commitment = value.get("private_witness_commitment")
+        if (
+            value.get("assurance") != "PRODUCER_ATTESTED"
+            or not isinstance(commitment, Mapping)
+            or set(commitment)
+            != {
+                "schema_version", "algorithm",
+                "incident_preimage_root_sha256", "private_witness_sha256",
+            }
+            or commitment.get("schema_version")
+            != ABORTED_ATTEMPT_PRIVATE_WITNESS_SCHEMA
+            or commitment.get("algorithm") != "SHA256_CANONICAL_JSON_V1"
+            or not _is_sha256(commitment.get("incident_preimage_root_sha256"))
+            or not _is_sha256(commitment.get("private_witness_sha256"))
+        ):
+            raise PriorExposureRefusal("private witness commitment drifted")
+        public_preimage = dict(unsigned)
+        public_preimage.pop("assurance", None)
+        public_preimage.pop("private_witness_commitment", None)
+        if canonical_sha256(public_preimage) != commitment.get(
+            "incident_preimage_root_sha256"
+        ):
+            raise PriorExposureRefusal("private witness preimage root drifted")
     run_identity = value.get("run_identity")
     termination = value.get("termination")
     source_binding = value.get("source_binding")
@@ -3416,29 +4319,54 @@ def verify_aborted_attempt_exposure_receipt(
     }
     if not _exact_json_equal(policy, expected_policy):
         raise PriorExposureRefusal("aborted-attempt capture policy drifted")
+    v2_source_fields = {
+        "source_receipt_sha256", "public_source_receipt",
+        "manifest_canonical_sha256", "touched_metadata_root_sha256",
+    }
+    v3_source_fields = v2_source_fields | {
+        "public_manifest", "all_metadata_root_sha256",
+    }
+    expected_source_fields = (
+        v2_source_fields
+        if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2
+        else v3_source_fields
+    )
     if (
         not isinstance(source_binding, Mapping)
-        or set(source_binding)
-        != {
-            "source_receipt_sha256",
-            "public_source_receipt",
-            "manifest_canonical_sha256",
-            "touched_metadata_root_sha256",
-        }
+        or set(source_binding) != expected_source_fields
         or any(
             not _is_sha256(source_binding.get(key))
             for key in (
-                "source_receipt_sha256",
-                "manifest_canonical_sha256",
+                "source_receipt_sha256", "manifest_canonical_sha256",
                 "touched_metadata_root_sha256",
             )
+        )
+        or (
+            receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA
+            and not _is_sha256(source_binding.get("all_metadata_root_sha256"))
         )
     ):
         raise PriorExposureRefusal("aborted-attempt source binding drifted")
     public_source_receipt = source_binding.get("public_source_receipt")
     try:
         public_source_sha = verify_public_source_receipt(public_source_receipt)
-        authoritative_metadata = _source_receipt_metadata(public_source_receipt)
+        if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2:
+            authoritative_metadata = _source_receipt_metadata(public_source_receipt)
+        else:
+            public_manifest = source_binding.get("public_manifest")
+            if (
+                not isinstance(public_manifest, Mapping)
+                or canonical_sha256(public_manifest)
+                != source_binding.get("manifest_canonical_sha256")
+            ):
+                raise PriorExposureRefusal("public manifest authority drifted")
+            authoritative_metadata = _source_metadata(
+                public_manifest, public_source_receipt
+            )
+            if canonical_sha256(
+                [authoritative_metadata[item] for item in sorted(authoritative_metadata)]
+            ) != source_binding.get("all_metadata_root_sha256"):
+                raise PriorExposureRefusal("global public metadata root drifted")
     except Exception as error:
         raise PriorExposureRefusal(
             "aborted-attempt public source authority drifted"
@@ -3447,10 +4375,18 @@ def verify_aborted_attempt_exposure_receipt(
         raise PriorExposureRefusal(
             "aborted-attempt public source authority hash drifted"
         )
-    if not isinstance(evidence, Mapping) or set(evidence) != {
-        "artifacts", "repositories", "producer_dependencies", "job_command",
-        "job_log",
-    }:
+    v2_evidence_fields = {
+        "artifacts", "repositories", "producer_dependencies", "job_command", "job_log",
+    }
+    v3_evidence_fields = {
+        "artifacts", "historical_runtime_authority", "current_producer_authority",
+        "job_command", "job_log",
+    }
+    if not isinstance(evidence, Mapping) or set(evidence) != (
+        v2_evidence_fields
+        if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2
+        else v3_evidence_fields
+    ):
         raise PriorExposureRefusal("aborted-attempt evidence inventory drifted")
     artifacts = evidence.get("artifacts")
     if not isinstance(artifacts, Mapping) or set(artifacts) != set(
@@ -3479,7 +4415,13 @@ def verify_aborted_attempt_exposure_receipt(
             or any(not _is_sha256(item) for item in declared_hashes.values())
         ):
             raise PriorExposureRefusal("aborted-attempt artifact binding drifted")
-    repositories = evidence.get("repositories")
+    if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2:
+        repositories = evidence.get("repositories")
+    else:
+        historical_runtime = _verify_historical_runtime_authority(
+            evidence.get("historical_runtime_authority")
+        )
+        repositories = historical_runtime.get("repositories")
     if not isinstance(repositories, Mapping) or set(repositories) != {
         "hswm_executable", "hswm_carrier", "symposium",
     }:
@@ -3504,26 +4446,29 @@ def verify_aborted_attempt_exposure_receipt(
         != repositories["symposium"]["commit"]
     ):
         raise PriorExposureRefusal("aborted-attempt repository identity drifted")
-    producer_dependencies = evidence.get("producer_dependencies")
-    if not isinstance(producer_dependencies, Mapping) or set(
-        producer_dependencies
-    ) != {
-        "prom9_f1_prior_exposure.py", "hswm_function_network.py",
-        "hswm_function_registry.py",
-        "hswm_typed_ports.py", "prom_f1_function_network.py",
-        "prom9_protocol.py", "prom9_prepare_2wiki_f1.py",
-        "prom9_f1_r8_source.py", "prom9_f1_r8_environment.py",
-        "model_deployment_receipt.py", "bge_m3_embed.py",
-    }:
-        raise PriorExposureRefusal("aborted-attempt producer inventory drifted")
-    for dependency_name, dependency in producer_dependencies.items():
-        _verify_recorded_file(
-            dependency,
-            fields={"basename", "size_bytes", "sha256"},
-            label="producer dependency",
-        )
-        if dependency.get("basename") != dependency_name:
-            raise PriorExposureRefusal("producer dependency basename drifted")
+    if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2:
+        producer_dependencies = evidence.get("producer_dependencies")
+        if not isinstance(producer_dependencies, Mapping) or set(
+            producer_dependencies
+        ) != {
+            "prom9_f1_prior_exposure.py", "hswm_function_network.py",
+            "hswm_function_registry.py", "hswm_typed_ports.py",
+            "prom_f1_function_network.py", "prom9_protocol.py",
+            "prom9_prepare_2wiki_f1.py", "prom9_f1_r8_source.py",
+            "prom9_f1_r8_environment.py", "model_deployment_receipt.py",
+            "bge_m3_embed.py",
+        }:
+            raise PriorExposureRefusal("aborted-attempt producer inventory drifted")
+        for dependency_name, dependency in producer_dependencies.items():
+            _verify_recorded_file(
+                dependency,
+                fields={"basename", "size_bytes", "sha256"},
+                label="producer dependency",
+            )
+            if dependency.get("basename") != dependency_name:
+                raise PriorExposureRefusal("producer dependency basename drifted")
+    else:
+        _verify_current_producer_authority(evidence.get("current_producer_authority"))
     for label in ("job_command", "job_log"):
         _verify_recorded_file(
             evidence.get(label),
@@ -3560,7 +4505,11 @@ def verify_aborted_attempt_exposure_receipt(
             or not isinstance(database.get("schema_sha256"), str)
             or _SHA256.fullmatch(str(database.get("schema_sha256"))) is None
             or database.get("canonical_schema_sha256")
-            != canonical_schema_sha256(database_name)
+            != (
+                _ABORTED_ATTEMPT_V2_CANONICAL_SCHEMA_SHA256[database_name]
+                if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2
+                else canonical_schema_sha256(database_name)
+            )
         ):
             raise PriorExposureRefusal("aborted-attempt database snapshot drifted")
         for member in members.values():
@@ -3845,6 +4794,18 @@ def verify_aborted_attempt_exposure_receipt(
         raise PriorExposureRefusal(
             "aborted-attempt metadata differs from public source authority"
         )
+    component_by_source: dict[str, str] = {}
+    for item_id in sorted(metadata_by_item):
+        metadata = metadata_by_item[item_id]
+        component_id = str(metadata["component_id"])
+        for source_id in metadata["source_entity_ids"]:
+            prior_component = component_by_source.setdefault(
+                str(source_id), component_id
+            )
+            if prior_component != component_id:
+                raise PriorExposureRefusal(
+                    "shared source entity crosses incident components"
+                )
     expected_terminal_states = {
         key: next(
             str(call["raw_attempt_state"])
@@ -3971,6 +4932,340 @@ def verify_aborted_attempt_exposure_receipt(
     return declared
 
 
+def _verify_private_database_generation(
+    value: object, label: str
+) -> Mapping[str, object]:
+    members = {"main", "wal", "shm", "journal"}
+    generation_fields = {
+        "st_dev", "st_ino", "st_size", "st_mtime_ns", "st_ctime_ns",
+        "sha256",
+    }
+    if not isinstance(value, Mapping) or set(value) != members:
+        raise PriorExposureRefusal(f"{label} generation shape drifted")
+    for member in sorted(members):
+        observed = value.get(member)
+        if observed is None and member != "main":
+            continue
+        if (
+            not isinstance(observed, Mapping)
+            or set(observed) != generation_fields
+            or any(
+                isinstance(observed.get(key), bool)
+                or not isinstance(observed.get(key), int)
+                or int(observed[key]) < minimum
+                for key, minimum in (
+                    ("st_dev", 0),
+                    ("st_ino", 1),
+                    ("st_size", 0),
+                    ("st_mtime_ns", 0),
+                    ("st_ctime_ns", 0),
+                )
+            )
+            or not _is_sha256(observed.get("sha256"))
+        ):
+            raise PriorExposureRefusal(
+                f"{label} {member} generation drifted"
+            )
+    return value
+
+
+def _verify_private_database_witness(
+    value: object, label: str
+) -> Mapping[str, object]:
+    fields = {
+        "resolved_path", "st_dev", "st_ino", "mode", "uid", "nlink",
+        "size_bytes", "mtime_ns", "ctime_ns", "generation",
+    }
+    if not isinstance(value, Mapping) or set(value) != fields:
+        raise PriorExposureRefusal(f"{label} private witness shape drifted")
+    resolved_path = value.get("resolved_path")
+    if (
+        not isinstance(resolved_path, str)
+        or not Path(resolved_path).is_absolute()
+        or value.get("mode") != "0o600"
+        or value.get("uid") != os.geteuid()
+        or value.get("nlink") != 1
+        or any(
+            isinstance(value.get(key), bool)
+            or not isinstance(value.get(key), int)
+            or int(value[key]) < minimum
+            for key, minimum in (
+                ("st_dev", 0),
+                ("st_ino", 1),
+                ("size_bytes", 0),
+                ("mtime_ns", 0),
+                ("ctime_ns", 0),
+            )
+        )
+    ):
+        raise PriorExposureRefusal(f"{label} private witness identity drifted")
+    generation = _verify_private_database_generation(
+        value.get("generation"), label
+    )
+    main = generation.get("main")
+    assert isinstance(main, Mapping)
+    if any(
+        main.get(generation_key) != value.get(witness_key)
+        for generation_key, witness_key in (
+            ("st_dev", "st_dev"),
+            ("st_ino", "st_ino"),
+            ("st_size", "size_bytes"),
+            ("st_mtime_ns", "mtime_ns"),
+            ("st_ctime_ns", "ctime_ns"),
+        )
+    ):
+        raise PriorExposureRefusal(f"{label} main generation identity drifted")
+    return value
+
+
+def verify_aborted_attempt_private_witness(
+    public_receipt: Mapping[str, object], witness_path: Path
+) -> str:
+    """Privileged verification of raw SQLite identities kept outside Git."""
+
+    verify_aborted_attempt_exposure_receipt(public_receipt)
+    if public_receipt.get("schema_version") != ABORTED_ATTEMPT_EXPOSURE_SCHEMA:
+        raise PriorExposureRefusal("private witness requires a v3 public receipt")
+    witness = _strict_object(
+        _read_private_bytes(Path(witness_path)), "aborted-attempt private witness"
+    )
+    witness_fields = {
+        "schema_version", "nonce_hex", "incident_preimage_root_sha256",
+        "stage_path", "databases", "db_genesis_receipt",
+        "spool_identity_receipt", "private_witness_sha256",
+    }
+    if (
+        set(witness) != witness_fields
+        or witness.get("schema_version")
+        != ABORTED_ATTEMPT_PRIVATE_WITNESS_SCHEMA
+        or not isinstance(witness.get("nonce_hex"), str)
+        or _SHA256.fullmatch(str(witness.get("nonce_hex"))) is None
+    ):
+        raise PriorExposureRefusal("private witness shape drifted")
+    _verify_self_hash_mapping(
+        witness, "private_witness_sha256", "private witness"
+    )
+    commitment = public_receipt.get("private_witness_commitment")
+    assert isinstance(commitment, Mapping)
+    if (
+        witness.get("incident_preimage_root_sha256")
+        != commitment.get("incident_preimage_root_sha256")
+        or witness.get("private_witness_sha256")
+        != commitment.get("private_witness_sha256")
+    ):
+        raise PriorExposureRefusal("private witness commitment mismatch")
+
+    stage_text = witness.get("stage_path")
+    if not isinstance(stage_text, str) or not Path(stage_text).is_absolute():
+        raise PriorExposureRefusal("private witness stage path drifted")
+    stage_path = Path(stage_text)
+    try:
+        stage_info = stage_path.lstat()
+        canonical_stage = stage_path.resolve(strict=True)
+    except OSError as error:
+        raise PriorExposureRefusal("private witness stage is unavailable") from error
+    if (
+        canonical_stage != stage_path
+        or stat.S_ISLNK(stage_info.st_mode)
+        or not stat.S_ISDIR(stage_info.st_mode)
+        or stat.S_IMODE(stage_info.st_mode) != 0o700
+        or stage_info.st_uid != os.geteuid()
+    ):
+        raise PriorExposureRefusal("private witness stage identity drifted")
+    databases = witness.get("databases")
+    if not isinstance(databases, Mapping) or set(databases) != {"attempt", "spool"}:
+        raise PriorExposureRefusal("private witness database roles drifted")
+    attempt = _verify_private_database_witness(
+        databases.get("attempt"), "attempt database"
+    )
+    spool = _verify_private_database_witness(
+        databases.get("spool"), "spool database"
+    )
+    for database in (attempt, spool):
+        database_path = Path(str(database["resolved_path"]))
+        try:
+            canonical_database_path = database_path.resolve(strict=True)
+        except OSError as error:
+            raise PriorExposureRefusal(
+                "private database path is unavailable"
+            ) from error
+        if canonical_database_path != database_path:
+            raise PriorExposureRefusal("private database path is not canonical")
+        try:
+            database_path.relative_to(stage_path)
+        except ValueError as error:
+            raise PriorExposureRefusal(
+                "private database is outside the incident stage"
+            ) from error
+        if database_path == stage_path:
+            raise PriorExposureRefusal("private database path is not a file child")
+        if database_path.parent.parent != stage_path:
+            raise PriorExposureRefusal(
+                "private database does not identify the exact incident stage"
+            )
+    if (
+        attempt["resolved_path"] == spool["resolved_path"]
+        or (attempt["st_dev"], attempt["st_ino"])
+        == (spool["st_dev"], spool["st_ino"])
+    ):
+        raise PriorExposureRefusal("private database identities alias")
+
+    genesis = witness.get("db_genesis_receipt")
+    if (
+        not isinstance(genesis, Mapping)
+        or set(genesis) != _INCIDENT_GENESIS_FIELDS
+        or genesis.get("schema_version")
+        != _INCIDENT_ARTIFACT_SCHEMAS["db_genesis_receipt"]
+    ):
+        raise PriorExposureRefusal("private genesis receipt shape drifted")
+    _verify_self_hash_mapping(genesis, "genesis_sha256", "private genesis")
+    expected_attempt_identity = {
+        "resolved_path": attempt["resolved_path"],
+        "st_dev": attempt["st_dev"],
+        "st_ino": attempt["st_ino"],
+    }
+    expected_spool_identity = {
+        "resolved_path": spool["resolved_path"],
+        "st_dev": spool["st_dev"],
+        "st_ino": spool["st_ino"],
+    }
+    if (
+        genesis.get("attempt_db_identity") != expected_attempt_identity
+        or genesis.get("spool_db_identity") != expected_spool_identity
+    ):
+        raise PriorExposureRefusal("private genesis database roles drifted")
+
+    preflight = witness.get("spool_identity_receipt")
+    if (
+        not isinstance(preflight, Mapping)
+        or set(preflight) != _INCIDENT_SPOOL_PREFLIGHT_FIELDS
+        or preflight.get("schema_version")
+        != _INCIDENT_ARTIFACT_SCHEMAS["spool_identity_receipt"]
+    ):
+        raise PriorExposureRefusal("private spool preflight shape drifted")
+    _verify_self_hash_mapping(
+        preflight, "preflight_sha256", "private spool preflight"
+    )
+    endpoint_identity = preflight.get("endpoint_identity")
+    if (
+        not isinstance(endpoint_identity, Mapping)
+        or set(endpoint_identity) != _INCIDENT_SPOOL_IDENTITY_FIELDS
+    ):
+        raise PriorExposureRefusal("private spool endpoint identity drifted")
+    _verify_self_hash_mapping(
+        endpoint_identity, "identity_sha256", "private spool endpoint identity"
+    )
+    audit = endpoint_identity.get("audit")
+    if not isinstance(audit, Mapping) or set(audit) != _INCIDENT_SPOOL_AUDIT_FIELDS:
+        raise PriorExposureRefusal("private spool audit shape drifted")
+    _verify_self_hash_mapping(audit, "audit_sha256", "private spool audit")
+    if endpoint_identity.get("db_identity") != expected_spool_identity:
+        raise PriorExposureRefusal("private spool preflight role drifted")
+
+    evidence = public_receipt.get("evidence_bindings")
+    public_databases = public_receipt.get("database_snapshots")
+    run_identity = public_receipt.get("run_identity")
+    assert isinstance(evidence, Mapping)
+    assert isinstance(public_databases, Mapping)
+    assert isinstance(run_identity, Mapping)
+    artifacts = evidence.get("artifacts")
+    assert isinstance(artifacts, Mapping)
+    for artifact_name, preimage, self_hash_field in (
+        ("db_genesis_receipt", genesis, "genesis_sha256"),
+        ("spool_identity_receipt", preflight, "preflight_sha256"),
+    ):
+        binding = artifacts.get(artifact_name)
+        if not isinstance(binding, Mapping):
+            raise PriorExposureRefusal("private artifact binding is absent")
+        declared_hashes = binding.get("declared_hashes")
+        if (
+            not isinstance(declared_hashes, Mapping)
+            or canonical_sha256(preimage) != binding.get("canonical_sha256")
+            or declared_hashes.get(self_hash_field)
+            != preimage.get(self_hash_field)
+        ):
+            raise PriorExposureRefusal("private artifact preimage binding drifted")
+
+    for role, private_database in (("attempt", attempt), ("spool", spool)):
+        public_database = public_databases.get(role)
+        if not isinstance(public_database, Mapping):
+            raise PriorExposureRefusal("public database role is absent")
+        public_members = public_database.get("members")
+        private_generation = private_database.get("generation")
+        assert isinstance(private_generation, Mapping)
+        if not isinstance(public_members, Mapping):
+            raise PriorExposureRefusal("public database members are absent")
+        for member_name in ("main", "wal"):
+            public_member = public_members.get(member_name)
+            private_member = private_generation.get(member_name)
+            if (
+                not isinstance(public_member, Mapping)
+                or not isinstance(private_member, Mapping)
+                or private_member.get("st_size")
+                != public_member.get("size_bytes")
+                or private_member.get("sha256") != public_member.get("sha256")
+            ):
+                raise PriorExposureRefusal(
+                    "private database generation differs from public snapshot"
+                )
+        if (
+            genesis.get(f"{role}_schema_sha256")
+            != public_database.get("schema_sha256")
+            or genesis.get(f"{role}_journal_mode")
+            != public_database.get("journal_mode")
+            or genesis.get(f"{role}_user_version")
+            != public_database.get("user_version")
+        ):
+            raise PriorExposureRefusal(
+                "private genesis differs from public database authority"
+            )
+
+    execution_lock_binding = artifacts.get("execution_lock")
+    deployment_binding = artifacts.get("model_deployment_receipt")
+    assert isinstance(execution_lock_binding, Mapping)
+    assert isinstance(deployment_binding, Mapping)
+    execution_lock_hashes = execution_lock_binding.get("declared_hashes")
+    deployment_hashes = deployment_binding.get("declared_hashes")
+    if (
+        genesis.get("run_id") != run_identity.get("run_id")
+        or preflight.get("run_id") != run_identity.get("run_id")
+        or preflight.get("model_revision") != run_identity.get("model_revision")
+        or preflight.get("served_model") != run_identity.get("model")
+        or preflight.get("db_genesis_sha256") != genesis.get("genesis_sha256")
+        or not isinstance(execution_lock_hashes, Mapping)
+        or preflight.get("execution_lock_sha256")
+        != execution_lock_hashes.get("lock_sha256")
+        or not isinstance(deployment_hashes, Mapping)
+        or preflight.get("deployment_receipt_sha256")
+        != deployment_hashes.get("receipt_sha256")
+        or endpoint_identity.get("model_revision")
+        != preflight.get("model_revision")
+        or endpoint_identity.get("served_model") != preflight.get("served_model")
+        or endpoint_identity.get("deployment_id")
+        != preflight.get("deployment_id")
+        or endpoint_identity.get("deployment_receipt_sha256")
+        != preflight.get("deployment_receipt_sha256")
+        or endpoint_identity.get("normalized_upstream_endpoint")
+        != preflight.get("upstream_endpoint")
+    ):
+        raise PriorExposureRefusal(
+            "private witness differs from public run authority"
+        )
+
+    for database, label in ((attempt, "attempt database"), (spool, "spool database")):
+        try:
+            live_generation = database_generation(
+                Path(str(database["resolved_path"])), label
+            )
+        except SQLiteAuthorityRefusal as error:
+            raise PriorExposureRefusal(
+                f"{label} live generation cannot be verified"
+            ) from error
+        if not _exact_json_equal(live_generation, database["generation"]):
+            raise PriorExposureRefusal(f"{label} live generation drifted")
+    return "RAW_WITNESS_VERIFIED"
+
+
 def verify_forbidden_exposure_union(
     prior: Mapping[str, object],
     incident: Mapping[str, object],
@@ -4094,9 +5389,12 @@ def _build_aborted_attempt_main(argv: Sequence[str]) -> int:
     parser.add_argument("--job-log", type=Path, required=True)
     parser.add_argument("--job-rc", type=Path, required=True)
     parser.add_argument("--hswm-executable-root", type=Path, required=True)
+    parser.add_argument("--producer-hswm-root", type=Path, required=True)
+    parser.add_argument("--historical-python", type=Path, required=True)
     parser.add_argument("--hswm-carrier-root", type=Path, required=True)
     parser.add_argument("--symposium-root", type=Path, required=True)
     parser.add_argument("--snapshot-dir", type=Path, required=True)
+    parser.add_argument("--private-witness-output", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
@@ -4115,16 +5413,19 @@ def _build_aborted_attempt_main(argv: Sequence[str]) -> int:
             job_log=args.job_log,
             job_rc=args.job_rc,
             hswm_executable_root=args.hswm_executable_root,
+            producer_hswm_root=args.producer_hswm_root,
+            historical_python=args.historical_python,
             hswm_carrier_root=args.hswm_carrier_root,
             symposium_root=args.symposium_root,
             snapshot_dir=args.snapshot_dir,
+            private_witness_output=args.private_witness_output,
         )
         verify_aborted_attempt_exposure_receipt(receipt)
         write_private_once(args.output, receipt)
         print(
             json.dumps(
                 {
-                    "status": "COMPLETE_STRUCTURAL_REPLAY_NO_PRIVATE_BLOBS",
+                    "status": "PRODUCER_ATTESTED_STRUCTURAL_REPLAY",
                     "counts": receipt["counts"],
                     "database_roots": {
                         name: value["authority_root_sha256"]
@@ -4216,6 +5517,7 @@ if __name__ == "__main__":
 
 __all__ = [
     "ABORTED_ATTEMPT_EXPOSURE_SCHEMA",
+    "ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2",
     "ABORTED_ATTEMPT_STATUS",
     "EXPECTED_PAGE_SPECS",
     "PriorExposureRefusal",
@@ -4225,6 +5527,7 @@ __all__ = [
     "inventory_stable_tree",
     "merge_exposure_boundaries",
     "verify_aborted_attempt_exposure_receipt",
+    "verify_aborted_attempt_private_witness",
     "verify_forbidden_exposure_union",
     "verify_prior_exposure_receipt",
     "write_private_once",

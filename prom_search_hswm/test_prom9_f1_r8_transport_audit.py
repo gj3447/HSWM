@@ -544,11 +544,13 @@ def test_resume_prefix_refuses_foreign_job_and_scheduler_gap(tmp_path: Path) -> 
             "(SELECT physical_call_id FROM call_state LIMIT 1)",
             "non-ACCEPTED",
         ),
-        (
-            "spool",
-            "UPDATE spool_calls SET status='UNKNOWN', error_class='TEST_UNKNOWN' "
-            "WHERE physical_call_id=(SELECT physical_call_id FROM spool_calls LIMIT 1)",
-            "UNKNOWN|incomplete",
+            (
+                "spool",
+                "UPDATE spool_calls SET status='UNKNOWN', response_status=NULL, "
+                "response_headers=NULL, response_body=NULL, response_sha256=NULL, "
+                "error_class='TEST_UNKNOWN' "
+                "WHERE physical_call_id=(SELECT physical_call_id FROM spool_calls LIMIT 1)",
+                "UNKNOWN|incomplete",
         ),
         (
             "attempt",
@@ -907,8 +909,15 @@ def test_terminal_refuses_unknown_and_cross_database_identity_conflict(
 ) -> None:
     attempt_db, spool_db, genesis, _live, _spool = _populate_terminal_pair(tmp_path)
     connection = sqlite3.connect(spool_db)
+    complete_fields = connection.execute(
+        "SELECT response_status,response_headers,response_body,response_sha256 "
+        "FROM spool_calls LIMIT 1"
+    ).fetchone()
+    assert complete_fields is not None
     connection.execute(
-        "UPDATE spool_calls SET status='UNKNOWN', error_class='TEST_UNKNOWN' "
+        "UPDATE spool_calls SET status='UNKNOWN', response_status=NULL, "
+        "response_headers=NULL, response_body=NULL, response_sha256=NULL, "
+        "error_class='TEST_UNKNOWN' "
         "WHERE physical_call_id=(SELECT physical_call_id FROM spool_calls LIMIT 1)"
     )
     connection.commit()
@@ -918,9 +927,10 @@ def test_terminal_refuses_unknown_and_cross_database_identity_conflict(
 
     connection = sqlite3.connect(spool_db)
     connection.execute(
-        "UPDATE spool_calls SET status='COMPLETE', error_class=NULL, intent_sha256=? "
+        "UPDATE spool_calls SET status='COMPLETE', error_class=NULL, intent_sha256=?, "
+        "response_status=?, response_headers=?, response_body=?, response_sha256=? "
         "WHERE physical_call_id=(SELECT physical_call_id FROM spool_calls LIMIT 1)",
-        ("f" * 64,),
+        ("f" * 64, *complete_fields),
     )
     connection.commit()
     connection.close()

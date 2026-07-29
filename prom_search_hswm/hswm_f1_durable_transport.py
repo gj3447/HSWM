@@ -22,6 +22,7 @@ from collections.abc import Callable, Mapping
 from typing import Any
 from urllib import error as urllib_error
 from urllib import request as urllib_request
+from urllib.parse import quote
 
 from prom_search_hswm.hswm_call_receipt import (
     CallReceiptV1,
@@ -29,6 +30,21 @@ from prom_search_hswm.hswm_call_receipt import (
     ModelCallV1,
     ModelResponseV1,
     verify_call_receipt,
+)
+from prom_search_hswm.hswm_f1_sqlite_schema import (
+    LEDGER_SCHEMA_SQL,
+    LEDGER_USER_VERSION,
+    SQLiteAuthorityRefusal,
+    assert_database_generation,
+    create_exclusive_main,
+    database_generation,
+    exact_schema_readback,
+    integrity_readback,
+    open_frozen_sqlite_read_only,
+    open_private_parent,
+    require_sqlite_family_absent,
+    require_wal_full,
+    verify_private_parent,
 )
 from prom_search_hswm.hswm_result_spool import (
     RawHTTPResponse,
@@ -69,48 +85,6 @@ _EVENT_TRANSITIONS = {
     ),
     "AMBIGUOUS_ABORT": ("PREPARED", "SENT", "DELIVERY_AMBIGUOUS"),
 }
-LEDGER_USER_VERSION = 1
-LEDGER_SCHEMA_SQL = """
-CREATE TABLE IF NOT EXISTS call_state (
-    physical_call_id TEXT PRIMARY KEY,
-    intent_sha256 TEXT NOT NULL,
-    intent_bytes BLOB NOT NULL,
-    request_sha256 TEXT NOT NULL,
-    endpoint TEXT NOT NULL,
-    request_bytes BLOB NOT NULL,
-    status TEXT NOT NULL CHECK(status IN (
-        'PREPARED','SENT','DELIVERY_AMBIGUOUS','RAW_COMPLETE',
-        'ENVELOPE_VALID','SCHEMA_VALID','ACCEPTED',
-        'REJECTED_PROTOCOL','AMBIGUOUS_ABORT'
-    )),
-    response_status INTEGER,
-    response_headers BLOB,
-    response_body BLOB,
-    response_sha256 TEXT,
-    model_response BLOB,
-    model_response_sha256 TEXT,
-    call_receipt BLOB,
-    call_receipt_sha256 TEXT,
-    terminal_code TEXT
-);
-CREATE TABLE IF NOT EXISTS attempt_events (
-    sequence INTEGER PRIMARY KEY,
-    physical_call_id TEXT NOT NULL,
-    event_type TEXT NOT NULL,
-    event_bytes BLOB NOT NULL,
-    previous_event_sha256 TEXT NOT NULL,
-    event_sha256 TEXT NOT NULL,
-    FOREIGN KEY (physical_call_id) REFERENCES call_state(physical_call_id)
-);
-CREATE TABLE IF NOT EXISTS item_runs (
-    run_id TEXT NOT NULL,
-    arm_id TEXT NOT NULL,
-    item_id TEXT NOT NULL,
-    run_receipt_sha256 TEXT NOT NULL,
-    item_run_bytes BLOB NOT NULL,
-    PRIMARY KEY (run_id,arm_id,item_id)
-);
-"""
 _INTENT_FIELDS = {
     "schema_version",
     "spool_route",
@@ -262,7 +236,7 @@ def _logical_call_slot(
     if any(not isinstance(item, str) or not item for item in logical_values):
         raise DurableLedgerIntegrityError(f"{label} logical identity drifted")
     call_index = call.get("call_index")
-    if isinstance(call_index, bool) or not isinstance(call_index, int) or call_index < 1:
+    if type(call_index) is not int or call_index not in {1, 2, 3}:
         raise DurableLedgerIntegrityError(f"{label} call index drifted")
     return (*logical_values, call_index)
 
@@ -277,70 +251,144 @@ class SQLiteF1CallLedger:
             raise DurableLedgerIntegrityError(
                 "F1 ledger path is not canonical"
             ) from error
-        try:
-            self.path.lstat()
-            existed = True
-        except FileNotFoundError:
-            existed = False
-        except OSError as error:
-            raise DurableLedgerIntegrityError("cannot stat F1 ledger path") from error
-        if not existed:
-            descriptor = -1
-            try:
-                descriptor = os.open(
-                    self.path,
-                    os.O_WRONLY
-                    | os.O_CREAT
-                    | os.O_EXCL
-                    | getattr(os, "O_CLOEXEC", 0)
-                    | getattr(os, "O_NOFOLLOW", 0),
-                    0o600,
-                )
-                os.fchmod(descriptor, 0o600)
-                os.fsync(descriptor)
-            except OSError as error:
-                raise DurableLedgerIntegrityError(
-                    "cannot create private F1 ledger"
-                ) from error
-            finally:
-                if descriptor >= 0:
-                    os.close(descriptor)
-            _fsync_parent(self.path)
-        try:
-            validate_private_sqlite_family(self.path, "F1 call ledger")
-        except SpoolIntegrityError as error:
-            raise DurableLedgerIntegrityError(
-                "F1 call ledger is not owner-private"
-            ) from error
         self._lock = threading.RLock()
-        self._connection = sqlite3.connect(
-            str(self.path), isolation_level=None, timeout=10.0, check_same_thread=False
-        )
+        self._parent_fd = -1
+        connection: sqlite3.Connection | None = None
         try:
-            self._connection.row_factory = sqlite3.Row
-            self._connection.execute("PRAGMA busy_timeout=10000")
-            self._connection.execute("PRAGMA journal_mode=WAL")
-            self._connection.execute("PRAGMA synchronous=FULL")
-            self._connection.execute("PRAGMA foreign_keys=ON")
-            version = int(self._connection.execute("PRAGMA user_version").fetchone()[0])
-            if version not in (0, 1):
-                raise DurableLedgerIntegrityError(
-                    f"unsupported F1 ledger schema version {version}"
+            self._parent_fd = open_private_parent(self.path, "F1 call ledger")
+            try:
+                self.path.lstat()
+                existed = True
+            except FileNotFoundError:
+                existed = False
+            except OSError as error:
+                raise SQLiteAuthorityRefusal(
+                    "cannot stat F1 ledger path"
+                ) from error
+
+            frozen_generation: dict[str, object] | None = None
+            if existed:
+                frozen_store = open_frozen_sqlite_read_only(
+                    self.path, "F1 call ledger"
                 )
-            self._connection.executescript(LEDGER_SCHEMA_SQL)
-            self._connection.execute(f"PRAGMA user_version={LEDGER_USER_VERSION}")
+                frozen_generation = dict(frozen_store.generation)
+                with frozen_store as frozen:
+                    exact_schema_readback(frozen, "attempt", "F1 call ledger")
+                    integrity_readback(frozen, "F1 call ledger")
+                    require_wal_full(frozen, "F1 call ledger")
+                    self._audit_connection(frozen)
+            else:
+                require_sqlite_family_absent(self.path, "F1 call ledger")
+                create_exclusive_main(
+                    self.path, self._parent_fd, "F1 call ledger"
+                )
+
+            verify_private_parent(self.path, self._parent_fd, "F1 call ledger")
+            uri = f"file:{quote(str(self.path), safe='/')}?mode=rw"
+            connection = sqlite3.connect(
+                uri,
+                uri=True,
+                isolation_level=None,
+                timeout=10.0,
+                check_same_thread=False,
+            )
+            # No mutating PRAGMA or DDL precedes these namespace/generation checks.
+            verify_private_parent(self.path, self._parent_fd, "F1 call ledger")
+            if frozen_generation is not None:
+                assert_database_generation(
+                    self.path, "F1 call ledger", frozen_generation
+                )
+            connection.row_factory = sqlite3.Row
+
+            if existed:
+                exact_schema_readback(connection, "attempt", "F1 call ledger")
+                integrity_readback(connection, "F1 call ledger")
+                require_wal_full(connection, "F1 call ledger")
+                self._audit_connection(connection)
+                live_generation = database_generation(self.path, "F1 call ledger")
+                expected_wal = frozen_generation.get("wal")
+                observed_wal = live_generation.get("wal")
+                wal_is_unchanged_or_empty_audit_sidecar = (
+                    observed_wal == expected_wal
+                    or (
+                        expected_wal is None
+                        and isinstance(observed_wal, Mapping)
+                        and observed_wal.get("st_size") == 0
+                        and observed_wal.get("sha256") == hashlib.sha256(b"").hexdigest()
+                    )
+                )
+                if (
+                    live_generation.get("main")
+                    != frozen_generation.get("main")
+                    or not wal_is_unchanged_or_empty_audit_sidecar
+                    or live_generation.get("journal") is not None
+                ):
+                    raise SQLiteAuthorityRefusal(
+                        "F1 call ledger changed during live pre-write audit"
+                    )
+                verify_private_parent(
+                    self.path, self._parent_fd, "F1 call ledger"
+                )
+                connection.execute("PRAGMA busy_timeout=10000")
+                connection.execute("PRAGMA synchronous=FULL")
+                connection.execute("PRAGMA foreign_keys=ON")
+            else:
+                connection.execute("PRAGMA busy_timeout=10000")
+                connection.execute("PRAGMA journal_mode=WAL")
+                connection.execute("PRAGMA synchronous=FULL")
+                connection.execute("PRAGMA foreign_keys=ON")
+                connection.executescript(LEDGER_SCHEMA_SQL)
+                connection.execute(f"PRAGMA user_version={LEDGER_USER_VERSION}")
+                exact_schema_readback(connection, "attempt", "F1 call ledger")
+                integrity_readback(connection, "F1 call ledger")
+                require_wal_full(connection, "F1 call ledger")
+                self._audit_connection(connection)
+
             try:
                 validate_private_sqlite_family(self.path, "F1 call ledger")
             except SpoolIntegrityError as error:
-                raise DurableLedgerIntegrityError(
-                    "F1 call ledger is not owner-private"
-                ) from error
-            self.verify_event_chain()
-        except BaseException:
-            self._connection.close()
+                raise SQLiteAuthorityRefusal(str(error)) from error
+            verify_private_parent(self.path, self._parent_fd, "F1 call ledger")
+            os.fsync(self._parent_fd)
+        except (SQLiteAuthorityRefusal, sqlite3.Error) as error:
+            if connection is not None:
+                connection.close()
+            if self._parent_fd >= 0:
+                os.close(self._parent_fd)
+                self._parent_fd = -1
+            raise DurableLedgerIntegrityError(str(error)) from error
+        except DurableLedgerIntegrityError:
+            if connection is not None:
+                connection.close()
+            if self._parent_fd >= 0:
+                os.close(self._parent_fd)
+                self._parent_fd = -1
             raise
-        if not existed:
-            _fsync_parent(self.path)
+        except Exception as error:
+            if connection is not None:
+                connection.close()
+            if self._parent_fd >= 0:
+                os.close(self._parent_fd)
+                self._parent_fd = -1
+            raise DurableLedgerIntegrityError(
+                "F1 call ledger failed its pre-write logical audit"
+            ) from error
+        except BaseException:
+            if connection is not None:
+                connection.close()
+            if self._parent_fd >= 0:
+                os.close(self._parent_fd)
+                self._parent_fd = -1
+            raise
+        self._connection = connection
+
+    @classmethod
+    def _audit_connection(cls, connection: sqlite3.Connection) -> dict[str, object]:
+        probe = object.__new__(cls)
+        probe._connection = connection
+        probe._lock = threading.RLock()
+        probe._parent_fd = -1
+        return probe.audit()
 
     @property
     def journal_mode(self) -> str:
@@ -567,6 +615,7 @@ class SQLiteF1CallLedger:
             try:
                 self._connection.execute("BEGIN IMMEDIATE")
                 row = None
+                seen_slots: dict[tuple[str, str, str, int], str] = {}
                 for existing in self._connection.execute(
                     "SELECT * FROM call_state ORDER BY physical_call_id"
                 ).fetchall():
@@ -576,6 +625,15 @@ class SQLiteF1CallLedger:
                         expected_physical_call_id=str(existing["physical_call_id"]),
                         label="stored F1 intent",
                     )
+                    prior_physical_id = seen_slots.get(existing_slot)
+                    if (
+                        prior_physical_id is not None
+                        and prior_physical_id != str(existing["physical_call_id"])
+                    ):
+                        raise DurableLedgerIntegrityError(
+                            "F1 ledger repeats a logical call slot"
+                        )
+                    seen_slots[existing_slot] = str(existing["physical_call_id"])
                     if str(existing["physical_call_id"]) == physical_call_id:
                         row = existing
                     elif existing_slot == logical_slot:
@@ -1142,7 +1200,12 @@ class SQLiteF1CallLedger:
 
     def close(self) -> None:
         with self._lock:
-            self._connection.close()
+            try:
+                self._connection.close()
+            finally:
+                if self._parent_fd >= 0:
+                    os.close(self._parent_fd)
+                    self._parent_fd = -1
 
 
 Transport = Callable[[urllib_request.Request, float], RawHTTPResponse]

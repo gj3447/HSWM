@@ -135,7 +135,7 @@ def invoke_function(
 ) -> tuple[dict[str, object], CallReceiptV1]:
     """Validate, execute once, validate again, and mint a self-hashed receipt."""
 
-    if call_index not in {1, 2, 3}:
+    if type(call_index) is not int or call_index not in {1, 2, 3}:
         raise FunctionCallError("call_index must be 1, 2, or 3")
     if isinstance(max_output_tokens, bool) or not isinstance(max_output_tokens, int) or max_output_tokens < 1:
         raise FunctionCallError("max_output_tokens must be positive")

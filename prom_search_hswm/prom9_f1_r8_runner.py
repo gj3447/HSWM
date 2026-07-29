@@ -25,6 +25,7 @@ from urllib import request as urllib_request
 
 from prom_search_hswm.hswm_f1_durable_transport import (
     DURABLE_CALL_SCHEMA,
+    DurableLedgerIntegrityError,
     DurableSpoolJSONPort,
     SQLiteF1CallLedger,
 )
@@ -47,6 +48,7 @@ from prom_search_hswm.hswm_function_registry import (
 )
 from prom_search_hswm.hswm_result_spool import (
     ModelDeploymentBinding,
+    SpoolIntegrityError,
     SQLiteResultSpool,
     load_model_deployment_binding,
     normalize_upstream_endpoint,
@@ -1556,38 +1558,14 @@ def _fsync_parent(path: Path) -> None:
         os.close(descriptor)
 
 
-def _precreate_private_sqlite(path: Path, label: str) -> Path:
-    target = _private_sqlite_path(path, label)
-    flags = (
-        os.O_RDWR | os.O_CREAT | os.O_EXCL
-        | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
-    )
-    try:
-        descriptor = os.open(target, flags, 0o600)
-    except FileExistsError as error:
-        raise R8RunnerRefusal(f"{label} path is already occupied") from error
-    except OSError as error:
-        raise R8RunnerRefusal(f"cannot reserve {label}") from error
-    try:
-        os.fchmod(descriptor, 0o600)
-        info = os.fstat(descriptor)
-        if (
-            not stat.S_ISREG(info.st_mode)
-            or stat.S_IMODE(info.st_mode) != 0o600
-            or info.st_uid != os.geteuid()
-            or info.st_nlink != 1
-        ):
-            raise R8RunnerRefusal(f"{label} reservation is not private")
-        os.fsync(descriptor)
-    finally:
-        os.close(descriptor)
-    _fsync_parent(target)
-    return target
-
-
 def _seal_private_sqlite_family(path: Path, label: str) -> None:
     target = _private_sqlite_path(path, label)
-    for member in (target, Path(f"{target}-wal"), Path(f"{target}-shm")):
+    for member in (
+        target,
+        Path(f"{target}-wal"),
+        Path(f"{target}-shm"),
+        Path(f"{target}-journal"),
+    ):
         try:
             before = member.lstat()
         except FileNotFoundError:
@@ -1596,6 +1574,10 @@ def _seal_private_sqlite_family(path: Path, label: str) -> None:
             continue
         except OSError as error:
             raise R8RunnerRefusal(f"cannot stat {label} SQLite family") from error
+        if member == Path(f"{target}-journal"):
+            raise R8RunnerRefusal(
+                f"{label} rollback journal exists; recovery is not authorized"
+            )
         member_label = f"{label} SQLite family member"
         try:
             identity = private_database_identity(member, member_label)
@@ -1630,8 +1612,6 @@ def initialize_transport_pair(attempt_db: Path, spool_db: Path) -> None:
     spool = _private_sqlite_path(spool_db, "result spool")
     if attempt == spool:
         raise R8RunnerRefusal("attempt and spool databases must be different files")
-    _precreate_private_sqlite(attempt, "attempt ledger")
-    _precreate_private_sqlite(spool, "result spool")
     attempt_store: SQLiteF1CallLedger | None = None
     spool_store: SQLiteResultSpool | None = None
     try:
@@ -1643,6 +1623,10 @@ def initialize_transport_pair(attempt_db: Path, spool_db: Path) -> None:
             or spool_store.audit().get("call_count") != 0
         ):
             raise R8RunnerRefusal("new transport pair is not logically empty")
+    except (DurableLedgerIntegrityError, SpoolIntegrityError) as error:
+        raise R8RunnerRefusal(
+            "transport database is already occupied or invalid"
+        ) from error
     finally:
         if attempt_store is not None:
             attempt_store.close()

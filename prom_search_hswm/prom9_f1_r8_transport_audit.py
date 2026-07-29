@@ -30,6 +30,13 @@ from functools import lru_cache
 from typing import Any
 from urllib.parse import quote
 
+from prom_search_hswm.hswm_f1_sqlite_schema import (
+    LEDGER_COLUMNS,
+    SPOOL_COLUMNS,
+    SQLiteAuthorityRefusal,
+    canonical_schema_sha256 as _authority_schema_sha256,
+    exact_schema_readback as _authority_schema_readback,
+)
 from prom_search_hswm.hswm_f1_durable_transport import (
     DURABLE_CALL_SCHEMA,
     LEDGER_SCHEMA_SQL,
@@ -57,56 +64,8 @@ TRANSPORT_BINDINGS_SCHEMA = "hswm-prom9-f1-r8-transport-bindings/v1"
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _EVENT_GENESIS = "0" * 64
 
-_ATTEMPT_COLUMNS = {
-    "call_state": [
-        "physical_call_id",
-        "intent_sha256",
-        "intent_bytes",
-        "request_sha256",
-        "endpoint",
-        "request_bytes",
-        "status",
-        "response_status",
-        "response_headers",
-        "response_body",
-        "response_sha256",
-        "model_response",
-        "model_response_sha256",
-        "call_receipt",
-        "call_receipt_sha256",
-        "terminal_code",
-    ],
-    "item_runs": [
-        "run_id",
-        "arm_id",
-        "item_id",
-        "run_receipt_sha256",
-        "item_run_bytes",
-    ],
-    "attempt_events": [
-        "sequence",
-        "physical_call_id",
-        "event_type",
-        "event_bytes",
-        "previous_event_sha256",
-        "event_sha256",
-    ],
-}
-
-_SPOOL_COLUMNS = {
-    "spool_calls": [
-        "physical_call_id",
-        "intent_sha256",
-        "request_sha256",
-        "request_bytes",
-        "status",
-        "response_status",
-        "response_headers",
-        "response_body",
-        "response_sha256",
-        "error_class",
-    ]
-}
+_ATTEMPT_COLUMNS = LEDGER_COLUMNS
+_SPOOL_COLUMNS = SPOOL_COLUMNS
 
 _EVENT_TRANSITIONS = {
     "PREPARED": (None,),
@@ -368,6 +327,11 @@ def _database_generation(path: Path, label: str) -> dict[str, object]:
         "shm": _file_generation(
             Path(f"{resolved}-shm"), f"{label} SHM", required=False
         ),
+        "journal": _file_generation(
+            Path(f"{resolved}-journal"),
+            f"{label} rollback journal",
+            required=False,
+        ),
     }
 
 
@@ -501,6 +465,10 @@ class FrozenSQLiteReadOnly:
 def _open_read_only(
     path: Path, label: str, generation: Mapping[str, object]
 ) -> FrozenSQLiteReadOnly:
+    if generation.get("journal") is not None:
+        raise TransportAuditRefusal(
+            f"{label} has a rollback journal; recovery is not authorized"
+        )
     identity = private_database_identity(path, label)
     resolved = Path(str(identity["resolved_path"]))
     temporary = tempfile.TemporaryDirectory(prefix="hswm-f1-sqlite-audit-")
@@ -703,23 +671,19 @@ def exact_schema_readback(
     authority: str,
     label: str,
 ) -> tuple[int, str]:
-    """Require byte-independent logical DDL equality to the runtime authority."""
+    """Translate the shared low-level schema authority into audit refusal."""
 
-    _schema_sql, expected_version, columns = _schema_authority(authority)
-    observed = _schema_payload(connection, columns, label)
-    version = int(observed["user_version"])
-    if version != expected_version:
-        raise TransportAuditRefusal(
-            f"{label} user_version is {version}, expected {expected_version}"
-        )
-    if observed != _canonical_schema_payload(authority):
-        raise TransportAuditRefusal(f"{label} canonical schema drifted")
-    return version, canonical_sha256(observed)
+    try:
+        return _authority_schema_readback(connection, authority, label)
+    except SQLiteAuthorityRefusal as error:
+        raise TransportAuditRefusal(str(error)) from error
 
 
 def canonical_schema_sha256(authority: str) -> str:
-    _schema_authority(authority)
-    return canonical_sha256(_canonical_schema_payload(authority))
+    try:
+        return _authority_schema_sha256(authority)
+    except SQLiteAuthorityRefusal as error:
+        raise TransportAuditRefusal(str(error)) from error
 
 
 def _integrity_readback(connection: sqlite3.Connection, label: str) -> str:

@@ -14,10 +14,10 @@ from typing import Any, Mapping, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = REPO_ROOT / "LONGINUS_HSWM_F1_DURABLE_TRANSPORT_BINDING_2026-07-27.json"
-SCHEMA = "longinus-hswm-f1-r8-premeasurement-binding/v5"
-EXPECTED_BINDING_ID = "longinus-hswm-f1-r8-git-preimage-v5-20260729"
-EXPECTED_IMPLEMENTATION_COMMIT = "694d27131ad6856f01a657c61564b7174abde1b6"
-EXPECTED_IMPLEMENTATION_PARENT = "15772fa368b7be319b2ae6c82bbfccc839f766cc"
+SCHEMA = "longinus-hswm-f1-r8-premeasurement-binding/v6"
+EXPECTED_BINDING_ID = "longinus-hswm-f1-r8-git-preimage-v6-20260729"
+EXPECTED_IMPLEMENTATION_COMMIT = "190265b699ce482e1814cbce838fbf948fcbe54b"
+EXPECTED_IMPLEMENTATION_PARENT = "0701da8ed9b2558bb25d8273b9d924e01e7d368d"
 REQUIRED_LAYERS = (
     "KG_NODE",
     "CONTRACT_BINDING",
@@ -317,8 +317,8 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
             "ORPHANED",
             f"implementation baseline diff is not reverse-bound: {sorted(unbound_changes)}",
         )
-    if implementation_count != 10 or test_count != 10:
-        _fail("LABEL_ROT", "implementation/test binding labels are not 10/10")
+    if implementation_count != 12 or test_count != 12:
+        _fail("LABEL_ROT", "implementation/test binding labels are not 12/12")
 
     return {
         "status": "PASS",

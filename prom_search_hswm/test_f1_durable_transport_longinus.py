@@ -24,13 +24,13 @@ def test_checked_in_f1_r8_binding_is_exact_git_blob_bound() -> None:
     result = verify()
     assert result == {
         "status": "PASS",
-        "binding_id": "longinus-hswm-f1-r8-git-preimage-v5-20260729",
-        "implementation_commit": "694d27131ad6856f01a657c61564b7174abde1b6",
-        "bindings_checked": 20,
-        "files_checked": 20,
-        "implementation_bindings": 10,
-        "test_bindings": 10,
-        "baseline_changed_paths": 2,
+        "binding_id": "longinus-hswm-f1-r8-git-preimage-v6-20260729",
+        "implementation_commit": "190265b699ce482e1814cbce838fbf948fcbe54b",
+        "bindings_checked": 24,
+        "files_checked": 24,
+        "implementation_bindings": 12,
+        "test_bindings": 12,
+        "baseline_changed_paths": 6,
         "longinus_layers": 7,
         "classifications": {
             "MISSING": 0,
@@ -87,8 +87,12 @@ def test_reverse_orphan_scan_is_classified(tmp_path: Path) -> None:
 @pytest.mark.parametrize(
     "path",
     [
-        "prom_search_hswm/prom9_f1_r8_environment.py",
-        "prom_search_hswm/test_prom9_f1_r8_environment.py",
+        "prom_search_hswm/prom9_f1_r8_envelope.py",
+        "prom_search_hswm/prom9_f1_r8_source.py",
+        "prom_search_hswm/test_prom9_f1_r8_envelope.py",
+        "prom_search_hswm/test_prom9_f1_r8_source.py",
+        "prom_search_hswm/test_prom9_f1_r8_lock.py",
+        "prom_search_hswm/test_prom9_f1_r8_power.py",
     ],
 )
 def test_git_preimage_diff_paths_are_reverse_bound(
@@ -101,7 +105,7 @@ def test_git_preimage_diff_paths_are_reverse_bound(
             for binding in value["bindings"]
             if not binding["file_line"].startswith(f"{path}:")
         ]
-        if path.endswith("test_prom9_f1_r8_environment.py"):
+        if Path(path).name.startswith("test_"):
             for binding in value["bindings"]:
                 if binding["crate_script"].endswith(path):
                     binding["crate_script"] = (

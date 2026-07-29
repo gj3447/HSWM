@@ -1,9 +1,9 @@
 {
-  "schema": "longinus-hswm-f1-r8-premeasurement-binding/v5",
-  "binding_id": "longinus-hswm-f1-r8-git-preimage-v5-20260729",
+  "schema": "longinus-hswm-f1-r8-premeasurement-binding/v6",
+  "binding_id": "longinus-hswm-f1-r8-git-preimage-v6-20260729",
   "binding_state": "PIERCED_LOCAL_NO_KG_WRITE",
-  "generated_at": "2026-07-29T15:24:30+09:00",
-  "baseline_scope": "HSWM F1 r8 premeasurement deployment, spool, environment, lock, power, runner, source, transport, and exact replace-ref-immune repository path, tree-mode, blob, index, and foreign-dirt boundary tests",
+  "generated_at": "2026-07-29T21:38:13+09:00",
+  "baseline_scope": "HSWM F1 r8 premeasurement deployment, public-only tight-envelope derivation, spool, environment, lock, power, runner, source, transport, and exact replace-ref-immune repository path, tree-mode, blob, index, and foreign-dirt boundary tests",
   "scientific_status": "UNJUDGED",
   "evidence_class": "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE",
   "r7_status": "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE",
@@ -12,8 +12,8 @@
   "git": {
     "remote": "https://github.com/gj3447/HSWM.git",
     "branch": "main",
-    "implementation_commit": "694d27131ad6856f01a657c61564b7174abde1b6",
-    "implementation_parent": "15772fa368b7be319b2ae6c82bbfccc839f766cc",
+    "implementation_commit": "190265b699ce482e1814cbce838fbf948fcbe54b",
+    "implementation_parent": "0701da8ed9b2558bb25d8273b9d924e01e7d368d",
     "blob_authority": "Every source SHA, AST symbol, signature, and line range is read from implementation_commit via git cat-file, never from the worktree.",
     "ancestry_rule": "implementation_parent must be an ancestor of implementation_commit; implementation_commit must be an ancestor of HEAD; every changed Python path in that baseline diff must be reverse-bound."
   },
@@ -22,8 +22,8 @@
     "anchor_status": "LOCAL_PROPOSED_REFERENCE_IDENTITY",
     "provenance_actor": "Codex",
     "source_path": "LONGINUS_HSWM_F1_DURABLE_TRANSPORT_BINDING_2026-07-27.json",
-    "timestamp": "2026-07-29T15:24:30+09:00",
-    "baseline_scope": "694d27131ad6856f01a657c61564b7174abde1b6"
+    "timestamp": "2026-07-29T21:38:13+09:00",
+    "baseline_scope": "190265b699ce482e1814cbce838fbf948fcbe54b"
   },
   "layers": [
     "KG_NODE",
@@ -35,8 +35,10 @@
     "CRATE_SCRIPT"
   ],
   "required_target_paths": [
+    "model_deployment_receipt.py",
     "prom_search_hswm/f1_target_deployment_probe.py",
     "prom_search_hswm/hswm_result_spool.py",
+    "prom_search_hswm/prom9_f1_r8_envelope.py",
     "prom_search_hswm/prom9_f1_r8_environment.py",
     "prom_search_hswm/prom9_f1_r8_lock.py",
     "prom_search_hswm/prom9_f1_r8_power.py",
@@ -47,6 +49,7 @@
     "prom_search_hswm/prom9_f1_r8_transport_audit.py",
     "prom_search_hswm/test_f1_durable_transport.py",
     "prom_search_hswm/test_hswm_result_spool_attestation.py",
+    "prom_search_hswm/test_prom9_f1_r8_envelope.py",
     "prom_search_hswm/test_prom9_f1_r8_environment.py",
     "prom_search_hswm/test_prom9_f1_r8_lock.py",
     "prom_search_hswm/test_prom9_f1_r8_power.py",
@@ -54,9 +57,32 @@
     "prom_search_hswm/test_prom9_f1_r8_private_output.py",
     "prom_search_hswm/test_prom9_f1_r8_runner.py",
     "prom_search_hswm/test_prom9_f1_r8_source.py",
-    "prom_search_hswm/test_prom9_f1_r8_transport_audit.py"
+    "prom_search_hswm/test_prom9_f1_r8_transport_audit.py",
+    "tests/test_model_deployment_receipt.py"
   ],
   "bindings": [
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_MODEL_DEPLOYMENT_RECEIPT_V2",
+      "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
+      "code_symbol": {
+        "qualified": "model_deployment_receipt.build_receipt",
+        "name": "build_receipt",
+        "kind": "function",
+        "parameters": [
+          "endpoint",
+          "served_model",
+          "model_id",
+          "model_revision",
+          "snapshot_path",
+          "server_pid",
+          "timeout_seconds"
+        ]
+      },
+      "file_line": "model_deployment_receipt.py:321",
+      "line_range": "321-383",
+      "sha256": "c1f0b98deb43af4d2c584661fb22aaa2ea55c839183e77a07818e0d431c9d0dc",
+      "crate_script": "python -m pytest -q tests/test_model_deployment_receipt.py"
+    },
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_TARGET_DEPLOYMENT_PROBE",
       "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
@@ -92,6 +118,34 @@
       "line_range": "199-262",
       "sha256": "40a02942f92c4ca284649372df841ad3e0b622352848dc2b6272582e7bf87a7e",
       "crate_script": "python -m pytest -q prom_search_hswm/test_hswm_result_spool_attestation.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_TIGHT_ENVELOPE_PRODUCER_V1",
+      "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_envelope.build_token_envelope_artifacts",
+        "name": "build_token_envelope_artifacts",
+        "kind": "function",
+        "parameters": [
+          "selection",
+          "historical_manifest",
+          "validation_receipt",
+          "projected_outputs_receipt",
+          "meter",
+          "protocol_path",
+          "model",
+          "model_revision",
+          "development_run_id",
+          "confirmatory_run_id",
+          "token_tolerance",
+          "expected_development_items",
+          "expected_confirmatory_items"
+        ]
+      },
+      "file_line": "prom_search_hswm/prom9_f1_r8_envelope.py:159",
+      "line_range": "159-332",
+      "sha256": "5e47773ee6050977f45d3e4a967415d626814acfdfb9e3c07603ccef9de64192",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_envelope.py"
     },
     {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_ENVIRONMENT",
@@ -244,9 +298,9 @@
           "preregistration_artifact_sha256"
         ]
       },
-      "file_line": "prom_search_hswm/prom9_f1_r8_source.py:515",
-      "line_range": "515-646",
-      "sha256": "f4312bd17cdbaaf6502bcd7193940fbb5e1cdd3d0177c298a8940f5ef7520c83",
+      "file_line": "prom_search_hswm/prom9_f1_r8_source.py:516",
+      "line_range": "516-647",
+      "sha256": "143799b9eebe8b22f915b6d0b3f742c2539145b2758599e1a6d608d52a2154d1",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_source.py"
     },
     {
@@ -306,6 +360,22 @@
       "crate_script": "python -m pytest -q prom_search_hswm/test_hswm_result_spool_attestation.py"
     },
     {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_TIGHT_ENVELOPE_TEST_V1",
+      "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_envelope.test_public_only_builder_derives_tight_common_caps",
+        "name": "test_public_only_builder_derives_tight_common_caps",
+        "kind": "function",
+        "parameters": [
+          "tmp_path"
+        ]
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_envelope.py:125",
+      "line_range": "125-146",
+      "sha256": "a9149ecab46bcea995a1bee24d530840d42ff9cf70440aed363d26c716fce653",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_envelope.py"
+    },
+    {
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_ENVIRONMENT_TEST",
       "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
       "code_symbol": {
@@ -336,7 +406,7 @@
       },
       "file_line": "prom_search_hswm/test_prom9_f1_r8_lock.py:305",
       "line_range": "305-358",
-      "sha256": "73feaa80dbdaaf58d265b1cb46488995de54fab16c28e952853bc81f6ccdf37d",
+      "sha256": "196b073724cc050244ed38099aeb9facfbabd266de39b7c216989adc6bdedd96",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_lock.py"
     },
     {
@@ -353,7 +423,7 @@
       },
       "file_line": "prom_search_hswm/test_prom9_f1_r8_power.py:268",
       "line_range": "268-465",
-      "sha256": "118564331b6b79a6e329a30c15dd221985b43705a665d6dd027e170d12d0a1ea",
+      "sha256": "979172c80fe236ddf029b7377f84093b543e15fc41dbcba42c42c877bdba78cd",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_power.py"
     },
     {
@@ -414,9 +484,9 @@
         "kind": "function",
         "parameters": []
       },
-      "file_line": "prom_search_hswm/test_prom9_f1_r8_source.py:167",
-      "line_range": "167-182",
-      "sha256": "88de7dc8231ad4cc7dd1d9a6bdc7cb970426ddfe9acb167c3c0cfaaa9381c8f5",
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_source.py:170",
+      "line_range": "170-185",
+      "sha256": "d13e29ae9c7fc4eea039cd8bf88096475c1c761e87a21482ede6c2f315e50533",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_source.py"
     },
     {
@@ -434,6 +504,22 @@
       "line_range": "230-262",
       "sha256": "6411c6ac40c0d32252d8aac3b081a8a88a57c290aa58b079ec687ccfaac46f3c",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_transport_audit.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_MODEL_DEPLOYMENT_RECEIPT_TEST_V2",
+      "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "tests.test_model_deployment_receipt.test_python_vllm_module_exact_options_are_supported",
+        "name": "test_python_vllm_module_exact_options_are_supported",
+        "kind": "function",
+        "parameters": [
+          "tmp_path"
+        ]
+      },
+      "file_line": "tests/test_model_deployment_receipt.py:163",
+      "line_range": "163-174",
+      "sha256": "fccaafdd41c7956e49a8ab4a97874f262913ebdc2d6a92b4323bbc483d9e0ac5",
+      "crate_script": "python -m pytest -q tests/test_model_deployment_receipt.py"
     }
   ]
 }

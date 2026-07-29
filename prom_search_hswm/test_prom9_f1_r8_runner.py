@@ -70,7 +70,39 @@ from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-SYMPOSIUM_ROOT = REPO_ROOT.parents[1]
+_JUDGE_RELATIVE_PATH = Path(
+    "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
+)
+
+
+def _resolve_symposium_root() -> Path:
+    candidates = (
+        REPO_ROOT.parents[1],
+        REPO_ROOT.parent / "SYMPOSIUM",
+        REPO_ROOT.parent / "symposium",
+    )
+    matches: list[Path] = []
+    match_identities: set[tuple[int, int]] = set()
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if (resolved / ".git").exists() and (
+            resolved / _JUDGE_RELATIVE_PATH
+        ).is_file():
+            stat = resolved.stat()
+            identity = (stat.st_dev, stat.st_ino)
+            if identity in match_identities:
+                continue
+            matches.append(resolved)
+            match_identities.add(identity)
+    if len(matches) != 1:
+        raise RuntimeError(
+            f"expected exactly one SYMPOSIUM checkout for {REPO_ROOT}; "
+            f"found {matches}"
+        )
+    return matches[0]
+
+
+SYMPOSIUM_ROOT = _resolve_symposium_root()
 HSWM_COMMIT = subprocess.check_output(
     ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"], text=True
 ).strip()
@@ -342,10 +374,7 @@ def _genesis(run_id: str) -> dict[str, object]:
 
 
 def _bundle(tmp_path: Path, manifest: dict[str, object], result_contract: Path):
-    judge_core = (
-        SYMPOSIUM_ROOT
-        / "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
-    )
+    judge_core = SYMPOSIUM_ROOT / _JUDGE_RELATIVE_PATH
     model_catalog = tmp_path / "model_catalog.json"
     model_weight_receipt = tmp_path / "model_weight_receipt.json"
     python_lock = tmp_path / "requirements.lock"

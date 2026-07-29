@@ -31,11 +31,40 @@ from prom_search_hswm.test_prom9_f1_r8_power import SENTINEL, _pages, _prior
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-SYMPOSIUM_ROOT = REPO_ROOT.parents[1]
-DEFAULT_JUDGE_CORE = (
-    SYMPOSIUM_ROOT
-    / "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
+_JUDGE_RELATIVE_PATH = Path(
+    "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
 )
+
+
+def _resolve_symposium_root() -> Path:
+    candidates = (
+        REPO_ROOT.parents[1],
+        REPO_ROOT.parent / "SYMPOSIUM",
+        REPO_ROOT.parent / "symposium",
+    )
+    matches: list[Path] = []
+    match_identities: set[tuple[int, int]] = set()
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if (resolved / ".git").exists() and (
+            resolved / _JUDGE_RELATIVE_PATH
+        ).is_file():
+            stat = resolved.stat()
+            identity = (stat.st_dev, stat.st_ino)
+            if identity in match_identities:
+                continue
+            matches.append(resolved)
+            match_identities.add(identity)
+    if len(matches) != 1:
+        raise RuntimeError(
+            f"expected exactly one SYMPOSIUM checkout for {REPO_ROOT}; "
+            f"found {matches}"
+        )
+    return matches[0]
+
+
+SYMPOSIUM_ROOT = _resolve_symposium_root()
+DEFAULT_JUDGE_CORE = SYMPOSIUM_ROOT / _JUDGE_RELATIVE_PATH
 RUN_ID = "f1-2wiki-r8-development-lock-test"
 ENDPOINT = "http://127.0.0.1:8011"
 UPSTREAM_ENDPOINT = "http://127.0.0.1:18002/v1/chat/completions"

@@ -288,6 +288,7 @@ _PREREGISTRATION_ARTIFACT_FIELDS = {
     "environment_dependency_compatibility_root_sha256",
     "environment_dependency_bundle_sha256", "protocol_sha256",
     "registries_root_sha256", "token_envelope_sha256",
+    "token_envelope_derivation_receipt_sha256",
     "generation_policy_sha256", "cohort_root_sha256",
     "candidate_universe_root_sha256", "forbidden_prior_item_ids",
     "forbidden_prior_source_entity_ids", "forbidden_prior_component_ids",

@@ -536,6 +536,7 @@ def _sealed_preregistration_context(context: dict[str, object], tmp_path: Path):
         "protocol_sha256": lock["protocol_sha256"],
         "registries_root_sha256": lock["registries_root_sha256"],
         "token_envelope_sha256": lock["token_envelope_sha256"],
+        "token_envelope_derivation_receipt_sha256": "f" * 64,
         "generation_policy_sha256": lock["generation_policy_sha256"],
         "cohort_root_sha256": lock["cohort_root_sha256"],
         "candidate_universe_root_sha256": lock[

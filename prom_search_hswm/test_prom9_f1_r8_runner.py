@@ -505,6 +505,10 @@ def _sealed_preregistration_context(context: dict[str, object], tmp_path: Path):
         "credence": {"alpha": 0.05},
         "bootstrap": {"replicates": 1000},
         "gates": copy.deepcopy(lock["gates"]),
+        "predicted_outcome": copy.deepcopy(runner.PREDICTED_OUTCOME),
+        "falsification_condition": copy.deepcopy(
+            runner.FALSIFICATION_CONDITION
+        ),
         "manifest_core_sha256": runner.manifest_core_sha256(manifest),
         "judge_core_sha256": judge_core_sha,
         "result_contract_sha256": lock["result_contract_sha256"],
@@ -1040,6 +1044,20 @@ def test_sealed_preregistration_readback_and_manifest_core_are_exact(
         symposium_repo_root=SYMPOSIUM_ROOT,
         result_contract_path=context["result_contract"],
     )
+    drifted_prediction = copy.deepcopy(artifact)
+    drifted_prediction["predicted_outcome"]["operator"] = ">="
+    with pytest.raises(R8RunnerRefusal, match="prediction/falsifier"):
+        runner._validate_preregistration_gate(
+            mode="sealed",
+            manifest=manifest,
+            execution_lock=lock,
+            preregistration_artifact=drifted_prediction,
+            preregistration_readback=readback,
+            anchored_judge_path=judge,
+            judge_core_path=context["judge_core_path"],
+            symposium_repo_root=SYMPOSIUM_ROOT,
+            result_contract_path=context["result_contract"],
+        )
     with pytest.raises(R8RunnerRefusal, match="complete preregistration"):
         runner._validate_preregistration_gate(
             mode="sealed",

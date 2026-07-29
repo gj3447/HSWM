@@ -107,6 +107,18 @@ GENERATION_POLICY = {
     "enable_thinking": False,
     "structured_output_backend": "json_schema",
 }
+PREDICTED_OUTCOME = {
+    "metric": "f1_min_paired_component_cluster_bootstrap_lcb",
+    "operator": ">",
+    "threshold": 0,
+    "claim": "all_four_frozen_control_lcbs_strictly_positive",
+}
+FALSIFICATION_CONDITION = {
+    "metric": "f1_min_paired_component_cluster_bootstrap_lcb",
+    "operator": "<=",
+    "threshold": 0,
+    "trigger": "at_least_one_frozen_control_lcb_nonpositive",
+}
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _GIT_COMMIT = re.compile(r"^[0-9a-f]{40}$")
 REQUIRED_DEPENDENCY_FILES = R8_DEPENDENCY_NAMES
@@ -264,6 +276,7 @@ _PREREGISTRATION_ARTIFACT_FIELDS = {
     "schema_version", "purpose", "experiment_tag", "closes_question", "run_id",
     "mode", "hswm_commit", "model", "model_revision", "metric", "baseline",
     "direction", "noise_band", "credence", "bootstrap", "gates",
+    "predicted_outcome", "falsification_condition",
     "manifest_core_sha256", "judge_core_sha256", "result_contract_sha256",
     "measurement_lock_schema_sha256", "result_bundle_builder_sha256",
     "power_operating_characteristic_receipt_sha256",
@@ -897,6 +910,13 @@ def _validate_preregistration_gate(
         or artifact.get("mode") != "sealed"
     ):
         raise R8RunnerRefusal("sealed preregistration artifact shape drifted")
+    if (
+        artifact.get("predicted_outcome") != PREDICTED_OUTCOME
+        or artifact.get("falsification_condition") != FALSIFICATION_CONDITION
+    ):
+        raise R8RunnerRefusal(
+            "sealed preregistration prediction/falsifier drifted"
+        )
     artifact_sha = _self_hash(
         artifact, "preregistration_artifact_sha256", "preregistration artifact"
     )

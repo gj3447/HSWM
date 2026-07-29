@@ -560,6 +560,47 @@ def open_frozen_sqlite_read_only(
     return _open_read_only(path, label, generation)
 
 
+def _canonical_sql(sql: str) -> str:
+    """Collapse formatting whitespace without changing quoted SQL tokens."""
+
+    output: list[str] = []
+    quote_end: str | None = None
+    pending_space = False
+    index = 0
+    while index < len(sql):
+        character = sql[index]
+        if quote_end is not None:
+            output.append(character)
+            if character == quote_end:
+                if (
+                    quote_end != "]"
+                    and index + 1 < len(sql)
+                    and sql[index + 1] == quote_end
+                ):
+                    output.append(sql[index + 1])
+                    index += 1
+                else:
+                    quote_end = None
+            index += 1
+            continue
+        if character.isspace():
+            pending_space = bool(output)
+            index += 1
+            continue
+        if pending_space:
+            output.append(" ")
+            pending_space = False
+        output.append(character)
+        if character in {"'", '"', "`"}:
+            quote_end = character
+        elif character == "[":
+            quote_end = "]"
+        index += 1
+    if quote_end is not None:
+        raise TransportAuditRefusal("SQLite schema contains an unterminated quote")
+    return "".join(output).strip()
+
+
 def _schema_payload(
     connection: sqlite3.Connection,
     expected: Mapping[str, list[str]],
@@ -609,7 +650,7 @@ def _schema_payload(
             "type": str(row[0]),
             "name": str(row[1]),
             "tbl_name": str(row[2]),
-            "sql": None if row[3] is None else str(row[3]),
+            "sql": None if row[3] is None else _canonical_sql(str(row[3])),
         }
         for row in connection.execute(
             "SELECT type,name,tbl_name,sql FROM sqlite_master "

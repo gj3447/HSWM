@@ -710,6 +710,24 @@ def test_genesis_refuses_same_columns_with_weakened_constraints(
         )
 
 
+def test_exact_schema_ignores_formatting_whitespace_but_not_tokens() -> None:
+    connection = sqlite3.connect(":memory:", isolation_level=None)
+    connection.row_factory = sqlite3.Row
+    try:
+        formatted = transport_audit.SPOOL_SCHEMA_SQL.replace("\n", "\n        ")
+        connection.executescript(formatted)
+        connection.execute(
+            f"PRAGMA user_version={transport_audit.SPOOL_USER_VERSION}"
+        )
+        version, digest = transport_audit.exact_schema_readback(
+            connection, "spool", "formatted spool"
+        )
+    finally:
+        connection.close()
+    assert version == transport_audit.SPOOL_USER_VERSION
+    assert digest == transport_audit.canonical_schema_sha256("spool")
+
+
 def _rechain_events(
     attempt_db: Path,
     mutate,

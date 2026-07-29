@@ -20,6 +20,7 @@ import sqlite3
 import stat
 import subprocess
 import sys
+import tempfile
 from collections.abc import Mapping, Sequence
 
 import bge_m3_embed as _bge_module
@@ -32,7 +33,7 @@ import prom_search_hswm.prom9_protocol as _protocol_module
 import prom_search_hswm.prom9_f1_r8_source as _source_module
 import prom_search_hswm.prom9_f1_r8_environment as _environment_module
 import prom_search_hswm.prom_f1_function_network as _network_adapter_module
-from prom_search_hswm.hswm_function_registry import build_registry_from_protocol
+from prom_search_hswm.hswm_function_registry import build_registry
 from prom_search_hswm.hswm_typed_ports import (
     canonical_json,
     canonical_sha256,
@@ -2013,10 +2014,34 @@ def _registry_prompt_authority(
         _inline_dependency_bytes(files, "protocol_json"),
         "incident protocol preimage",
     )
+    temporary = tempfile.TemporaryDirectory(prefix="hswm-f1-registry-replay-")
+    protocol_path = Path(temporary.name) / "protocol.json"
+    descriptor = -1
     try:
+        descriptor = os.open(
+            protocol_path,
+            os.O_WRONLY
+            | os.O_CREAT
+            | os.O_EXCL
+            | getattr(os, "O_CLOEXEC", 0)
+            | getattr(os, "O_NOFOLLOW", 0),
+            0o600,
+        )
+        payload = (canonical_json(protocol) + "\n").encode("utf-8")
+        offset = 0
+        while offset < len(payload):
+            written = os.write(descriptor, payload[offset:])
+            if written <= 0:
+                raise PriorExposureRefusal(
+                    "incident protocol replay write made no progress"
+                )
+            offset += written
+        os.fsync(descriptor)
+        os.close(descriptor)
+        descriptor = -1
         registries = {
-            arm: build_registry_from_protocol(
-                protocol,
+            arm: build_registry(
+                protocol_path,
                 model=str(manifest["model"]),
                 model_revision=str(manifest["model_revision"]),
                 prompt_overrides=_arm_overrides(arm),
@@ -2027,6 +2052,10 @@ def _registry_prompt_authority(
         raise PriorExposureRefusal(
             "incident registry authority cannot be rebuilt"
         ) from error
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
+        temporary.cleanup()
     protocol_roots = {registry.protocol_sha256 for registry in registries.values()}
     registry_root = canonical_sha256(
         {arm: registries[arm].registry_sha256 for arm in _F1_ARMS}

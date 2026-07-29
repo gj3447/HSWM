@@ -1048,6 +1048,17 @@ def r8_environment_labels(
     return _labels(labels)
 
 
+def _isolated_git_environment() -> dict[str, str]:
+    """Keep ambient Git control variables outside frozen-authority reads."""
+
+    environ = {
+        key: value for key, value in os.environ.items() if not key.startswith("GIT_")
+    }
+    environ["GIT_NO_REPLACE_OBJECTS"] = "1"
+    environ["GIT_LITERAL_PATHSPECS"] = "1"
+    return environ
+
+
 def verify_repository_commit(repo_root: Path, expected_commit: str) -> str:
     """Bind the non-secret commit label to the live checkout without requiring clean foreign state."""
 
@@ -1055,10 +1066,19 @@ def verify_repository_commit(repo_root: Path, expected_commit: str) -> str:
         raise EnvironmentPreimageError("HSWM commit label is not a full lowercase commit")
     try:
         result = subprocess.run(
-            ["git", "-C", str(Path(repo_root).resolve(strict=True)), "rev-parse", "--verify", "HEAD^{commit}"],
+            [
+                "git",
+                "--no-replace-objects",
+                "-C",
+                str(Path(repo_root).resolve(strict=True)),
+                "rev-parse",
+                "--verify",
+                "HEAD^{commit}",
+            ],
             check=True,
             capture_output=True,
             text=True,
+            env=_isolated_git_environment(),
             timeout=10,
         )
     except (OSError, subprocess.SubprocessError) as error:
@@ -1067,6 +1087,31 @@ def verify_repository_commit(repo_root: Path, expected_commit: str) -> str:
     if _GIT_COMMIT.fullmatch(observed) is None or observed != expected_commit:
         raise EnvironmentPreimageError("live HSWM commit differs from the environment label")
     return observed
+
+
+def _git_repository_bytes(
+    repo: Path, *arguments: str, check: bool = True
+) -> subprocess.CompletedProcess[bytes]:
+    """Run one replace-ref-immune Git read against an already resolved repo."""
+
+    try:
+        return subprocess.run(
+            [
+                "git",
+                "--no-replace-objects",
+                "-C",
+                str(repo),
+                *arguments,
+            ],
+            check=check,
+            capture_output=True,
+            env=_isolated_git_environment(),
+            timeout=10,
+        )
+    except (OSError, subprocess.SubprocessError) as error:
+        raise EnvironmentPreimageError(
+            "cannot read repository dependency from the frozen commit"
+        ) from error
 
 
 def verify_repository_dependency_blobs(
@@ -1089,54 +1134,113 @@ def verify_repository_dependency_blobs(
     for name, raw_path in expected_paths.items():
         if name not in required_names:
             continue
+        declared = Path(os.path.abspath(os.fspath(Path(raw_path))))
         try:
-            resolved = Path(raw_path).resolve(strict=True)
+            declared_stat = declared.lstat()
+            canonical = declared.resolve(strict=True)
         except OSError as error:
             raise EnvironmentPreimageError(
                 f"dependency semantic path is unavailable: {name}"
             ) from error
-        if not resolved.is_relative_to(repo):
+        if stat.S_ISLNK(declared_stat.st_mode) or not stat.S_ISREG(
+            declared_stat.st_mode
+        ):
+            raise EnvironmentPreimageError(
+                f"commit-bound dependency must be a regular non-symlink file: {name}"
+            )
+        if canonical != declared:
+            raise EnvironmentPreimageError(
+                f"commit-bound dependency path is not canonical: {name}"
+            )
+        if not canonical.is_relative_to(repo):
             raise EnvironmentPreimageError(
                 f"commit-bound dependency is outside its declared repository: {name}"
             )
-        relative = resolved.relative_to(repo).as_posix()
-        try:
-            subprocess.run(
-                ["git", "-C", str(repo), "cat-file", "-e", f"{expected_commit}:{relative}"],
-                check=True,
-                capture_output=True,
-                timeout=10,
-            )
-        except (OSError, subprocess.SubprocessError) as error:
+        relative = declared.relative_to(repo).as_posix()
+        tree = _git_repository_bytes(
+            repo, "ls-tree", "-z", expected_commit, "--", relative
+        ).stdout
+        entries = [entry for entry in tree.split(b"\0") if entry]
+        if len(entries) != 1:
             raise EnvironmentPreimageError(
                 f"repository dependency is absent from the frozen commit: {name}"
+            )
+        metadata, separator, committed_path = entries[0].partition(b"\t")
+        fields = metadata.split(b" ")
+        if (
+            separator != b"\t"
+            or len(fields) != 3
+            or committed_path != os.fsencode(relative)
+        ):
+            raise EnvironmentPreimageError(
+                f"repository dependency tree entry is ambiguous: {name}"
+            )
+        tree_mode, object_type, object_id = fields
+        if object_type != b"blob" or tree_mode not in {b"100644", b"100755"}:
+            rendered_mode = tree_mode.decode("ascii", errors="replace")
+            raise EnvironmentPreimageError(
+                f"unsupported committed tree mode {rendered_mode}: {name}"
+            )
+        expected_mode = 0o755 if tree_mode == b"100755" else 0o644
+        observed = _capture_file(
+            declared,
+            inline_limit_bytes=DEFAULT_INLINE_LIMIT_BYTES,
+            chunk_size_bytes=DEFAULT_CHUNK_SIZE_BYTES,
+        )
+        if observed["resolved_path"] != str(declared):
+            raise EnvironmentPreimageError(
+                f"repository dependency path changed while hashing: {name}"
+            )
+        if observed["mode"] != oct(expected_mode):
+            raise EnvironmentPreimageError(
+                f"repository dependency mode differs from the frozen commit: {name}"
+            )
+        try:
+            object_name = object_id.decode("ascii")
+        except UnicodeDecodeError as error:
+            raise EnvironmentPreimageError(
+                f"repository dependency object ID is invalid: {name}"
             ) from error
+        committed_blob = _git_repository_bytes(
+            repo, "cat-file", "blob", object_name
+        ).stdout
+        if (
+            len(committed_blob) != observed["size_bytes"]
+            or hashlib.sha256(committed_blob).hexdigest() != observed["sha256"]
+        ):
+            raise EnvironmentPreimageError(
+                f"repository dependency blob differs from the frozen commit: {name}"
+            )
         relative_paths.append(relative)
     if relative_paths:
-        try:
-            result = subprocess.run(
-                [
-                    "git",
-                    "-C",
-                    str(repo),
-                    "diff",
-                    "--quiet",
-                    expected_commit,
-                    "--",
-                    *relative_paths,
-                ],
-                check=False,
-                capture_output=True,
-                timeout=10,
-            )
-        except (OSError, subprocess.SubprocessError) as error:
+        worktree = _git_repository_bytes(
+            repo,
+            "diff",
+            "--quiet",
+            expected_commit,
+            "--",
+            *relative_paths,
+            check=False,
+        )
+        staged = _git_repository_bytes(
+            repo,
+            "diff",
+            "--cached",
+            "--quiet",
+            expected_commit,
+            "--",
+            *relative_paths,
+            check=False,
+        )
+        if worktree.returncode not in {0, 1} or staged.returncode not in {0, 1}:
             raise EnvironmentPreimageError(
                 "cannot compare repository dependencies with the frozen commit"
-            ) from error
-        if result.returncode != 0:
+            )
+        if worktree.returncode != 0 or staged.returncode != 0:
             raise EnvironmentPreimageError(
                 "an r8 repository dependency differs from the frozen commit"
             )
+    verify_repository_commit(repo, expected_commit)
     return tuple(sorted(relative_paths))
 
 

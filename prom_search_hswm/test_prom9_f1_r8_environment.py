@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import shutil
 import stat
 import subprocess
 import sys
@@ -459,8 +460,22 @@ def test_repository_dependency_blobs_are_exact_but_foreign_dirt_is_allowed(
     assert environment.verify_repository_dependency_blobs(
         repo, commit, {"runner": dependency}
     ) == ("dependency.py",)
+    subprocess.run(["git", "-C", str(repo), "add", "foreign.txt"], check=True)
+    (repo / "untracked-foreign.txt").write_text(
+        "untracked foreign drift\n", encoding="utf-8"
+    )
+    assert environment.verify_repository_dependency_blobs(
+        repo, commit, {"runner": dependency}
+    ) == ("dependency.py",)
 
     dependency.write_text("VALUE = 2\n", encoding="utf-8")
+    with pytest.raises(environment.EnvironmentPreimageError, match="blob differs"):
+        environment.verify_repository_dependency_blobs(
+            repo, commit, {"runner": dependency}
+        )
+
+    subprocess.run(["git", "-C", str(repo), "add", "dependency.py"], check=True)
+    dependency.write_text("VALUE = 1\n", encoding="utf-8")
     with pytest.raises(environment.EnvironmentPreimageError, match="differs"):
         environment.verify_repository_dependency_blobs(
             repo, commit, {"runner": dependency}
@@ -472,6 +487,253 @@ def test_repository_dependency_blobs_are_exact_but_foreign_dirt_is_allowed(
         environment.verify_repository_dependency_blobs(
             repo, commit, {"runner": untracked}
         )
+
+
+@pytest.mark.parametrize(
+    ("committed_mode", "live_mode"),
+    [(0o755, 0o644), (0o644, 0o755)],
+)
+def test_repository_dependency_tree_mode_is_exact_with_core_filemode_false(
+    tmp_path: Path, committed_mode: int, live_mode: int
+) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.email", "test@example.invalid"],
+        check=True,
+    )
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.name", "HSWM test"],
+        check=True,
+    )
+    dependency = repo / "dependency.py"
+    dependency.write_text("VALUE = 1\n", encoding="utf-8")
+    dependency.chmod(committed_mode)
+    subprocess.run(["git", "-C", str(repo), "add", "dependency.py"], check=True)
+    subprocess.run(["git", "-C", str(repo), "commit", "-qm", "freeze"], check=True)
+    commit = subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", "HEAD"], text=True
+    ).strip()
+
+    assert environment.verify_repository_dependency_blobs(
+        repo, commit, {"runner": dependency}
+    ) == ("dependency.py",)
+
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "core.filemode", "false"],
+        check=True,
+    )
+    dependency.chmod(live_mode)
+    assert subprocess.run(
+        ["git", "-C", str(repo), "diff", "--quiet", commit, "--", "dependency.py"],
+        check=False,
+    ).returncode == 0
+    with pytest.raises(environment.EnvironmentPreimageError, match="mode differs"):
+        environment.verify_repository_dependency_blobs(
+            repo, commit, {"runner": dependency}
+        )
+
+
+def test_repository_dependency_committed_symlink_mode_is_refused(
+    tmp_path: Path,
+) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.email", "test@example.invalid"],
+        check=True,
+    )
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.name", "HSWM test"],
+        check=True,
+    )
+    dependency = repo / "dependency.py"
+    dependency.symlink_to("target.py")
+    subprocess.run(["git", "-C", str(repo), "add", "dependency.py"], check=True)
+    subprocess.run(["git", "-C", str(repo), "commit", "-qm", "freeze"], check=True)
+    commit = subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", "HEAD"], text=True
+    ).strip()
+
+    dependency.unlink()
+    dependency.write_bytes(b"target.py")
+    dependency.chmod(0o644)
+    with pytest.raises(
+        environment.EnvironmentPreimageError,
+        match="unsupported committed tree mode 120000",
+    ):
+        environment.verify_repository_dependency_blobs(
+            repo, commit, {"runner": dependency}
+        )
+
+
+def test_repository_dependency_parent_symlink_escape_is_refused(
+    tmp_path: Path,
+) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.email", "test@example.invalid"],
+        check=True,
+    )
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.name", "HSWM test"],
+        check=True,
+    )
+    committed_parent = repo / "code"
+    committed_parent.mkdir()
+    dependency = committed_parent / "dependency.py"
+    dependency.write_text("VALUE = 1\n", encoding="utf-8")
+    subprocess.run(["git", "-C", str(repo), "add", "code/dependency.py"], check=True)
+    subprocess.run(["git", "-C", str(repo), "commit", "-qm", "freeze"], check=True)
+    commit = subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", "HEAD"], text=True
+    ).strip()
+
+    committed_parent.rename(repo / "displaced-code")
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    (outside / "dependency.py").write_text("VALUE = 1\n", encoding="utf-8")
+    committed_parent.symlink_to(outside, target_is_directory=True)
+    with pytest.raises(environment.EnvironmentPreimageError, match="not canonical"):
+        environment.verify_repository_dependency_blobs(
+            repo, commit, {"runner": dependency}
+        )
+
+
+def test_repository_dependency_ignores_forged_git_index_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.email", "test@example.invalid"],
+        check=True,
+    )
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.name", "HSWM test"],
+        check=True,
+    )
+    dependency = repo / "dependency.py"
+    dependency.write_text("VALUE = 1\n", encoding="utf-8")
+    subprocess.run(["git", "-C", str(repo), "add", "dependency.py"], check=True)
+    subprocess.run(["git", "-C", str(repo), "commit", "-qm", "freeze"], check=True)
+    commit = subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", "HEAD"], text=True
+    ).strip()
+    forged_index = tmp_path / "forged-clean-index"
+    shutil.copy2(repo / ".git" / "index", forged_index)
+
+    dependency.write_text("VALUE = 2\n", encoding="utf-8")
+    subprocess.run(["git", "-C", str(repo), "add", "dependency.py"], check=True)
+    dependency.write_text("VALUE = 1\n", encoding="utf-8")
+    monkeypatch.setenv("GIT_INDEX_FILE", str(forged_index))
+    assert subprocess.run(
+        ["git", "-C", str(repo), "diff", "--cached", "--quiet", commit],
+        check=False,
+    ).returncode == 0
+    with pytest.raises(environment.EnvironmentPreimageError, match="differs"):
+        environment.verify_repository_dependency_blobs(
+            repo, commit, {"runner": dependency}
+        )
+
+
+def test_repository_dependency_git_reads_ignore_replace_refs(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.email", "test@example.invalid"],
+        check=True,
+    )
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.name", "HSWM test"],
+        check=True,
+    )
+    dependency = repo / "dependency.py"
+    original = b"VALUE = 1\n"
+    replacement = b"VALUE = 2\n"
+    dependency.write_bytes(original)
+    subprocess.run(["git", "-C", str(repo), "add", "dependency.py"], check=True)
+    subprocess.run(["git", "-C", str(repo), "commit", "-qm", "original"], check=True)
+    original_commit = subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", "HEAD"], text=True
+    ).strip()
+    dependency.write_bytes(replacement)
+    subprocess.run(["git", "-C", str(repo), "add", "dependency.py"], check=True)
+    subprocess.run(["git", "-C", str(repo), "commit", "-qm", "replacement"], check=True)
+    replacement_commit = subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", "HEAD"], text=True
+    ).strip()
+    dependency.write_bytes(original)
+    subprocess.run(["git", "-C", str(repo), "add", "dependency.py"], check=True)
+    subprocess.run(
+        ["git", "-C", str(repo), "update-ref", "HEAD", original_commit],
+        check=True,
+    )
+    subprocess.run(
+        ["git", "-C", str(repo), "replace", original_commit, replacement_commit],
+        check=True,
+    )
+
+    naive_env = dict(os.environ)
+    naive_env.pop("GIT_NO_REPLACE_OBJECTS", None)
+    assert subprocess.check_output(
+        ["git", "-C", str(repo), "show", f"{original_commit}:dependency.py"],
+        env=naive_env,
+    ) == replacement
+    assert environment.verify_repository_dependency_blobs(
+        repo, original_commit, {"runner": dependency}
+    ) == ("dependency.py",)
+
+
+def test_repository_dependency_blob_reads_ignore_replace_refs(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.email", "test@example.invalid"],
+        check=True,
+    )
+    subprocess.run(
+        ["git", "-C", str(repo), "config", "user.name", "HSWM test"],
+        check=True,
+    )
+    dependency = repo / "dependency.py"
+    original = b"VALUE = 1\n"
+    replacement = b"VALUE = 2\n"
+    dependency.write_bytes(original)
+    subprocess.run(["git", "-C", str(repo), "add", "dependency.py"], check=True)
+    subprocess.run(["git", "-C", str(repo), "commit", "-qm", "freeze"], check=True)
+    commit = subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", "HEAD"], text=True
+    ).strip()
+    original_blob = subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", f"{commit}:dependency.py"],
+        text=True,
+    ).strip()
+    replacement_blob = subprocess.check_output(
+        ["git", "-C", str(repo), "hash-object", "-w", "--stdin"],
+        input=replacement,
+    ).decode("ascii").strip()
+    subprocess.run(
+        ["git", "-C", str(repo), "replace", original_blob, replacement_blob],
+        check=True,
+    )
+
+    naive_env = dict(os.environ)
+    naive_env.pop("GIT_NO_REPLACE_OBJECTS", None)
+    assert subprocess.check_output(
+        ["git", "-C", str(repo), "cat-file", "blob", original_blob],
+        env=naive_env,
+    ) == replacement
+    assert environment.verify_repository_dependency_blobs(
+        repo, commit, {"runner": dependency}
+    ) == ("dependency.py",)
 
 
 def test_r8_dependency_path_inventory_covers_every_runtime_module(

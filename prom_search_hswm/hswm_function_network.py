@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from collections.abc import Mapping, Sequence
+import re
 
 from prom_search_hswm.hswm_call_receipt import (
     CallReceiptV1,
@@ -21,6 +22,7 @@ from prom_search_hswm.hswm_typed_ports import (
 
 
 RUN_SCHEMA = "hswm-prom9-f1-item-run/v1"
+_SHA256 = re.compile(r"^[0-9a-f]{64}$")
 
 TYPED_ARM = "typed_hswm_three_function_network"
 FLAT_ARM = "flat_single_llm_three_call_workflow"
@@ -40,17 +42,30 @@ class EvidenceCandidateV1:
     evidence_id: str
     content: str
     observable: dict[str, object]
+    source_entity_id: str | None = None
 
     def __post_init__(self) -> None:
         if not self.bond_id or not self.evidence_id or not self.content:
             raise FunctionNetworkError("candidate IDs and content must be non-empty")
+        if self.source_entity_id is not None and not _SHA256.fullmatch(
+            self.source_entity_id
+        ):
+            raise FunctionNetworkError(
+                "source_entity_id must be a lowercase SHA-256 when supplied"
+            )
 
     def universe_identity(self) -> dict[str, str]:
-        return {
+        identity = {
             "bond_id": self.bond_id,
             "evidence_id": self.evidence_id,
             "content_sha256": canonical_sha256({"content": self.content}),
         }
+        # Historical v2 manifests did not carry source identity.  Omitting the
+        # optional key in that case preserves their exact candidate-universe
+        # hashes while v3 cohorts bind the immutable paragraph preimage.
+        if self.source_entity_id is not None:
+            identity["source_entity_id"] = self.source_entity_id
+        return identity
 
 
 @dataclass(frozen=True)
@@ -62,6 +77,7 @@ class FunctionNetworkItemV1:
     max_evidence_items: int
     max_input_tokens: int
     max_output_tokens_per_call: int
+    component_id: str | None = None
 
     def __post_init__(self) -> None:
         if not self.item_id or not self.query_text or not self.allowed_evidence_types:
@@ -81,6 +97,10 @@ class FunctionNetworkItemV1:
                 raise FunctionNetworkError(f"{label} must be positive")
         if self.max_evidence_items > len(self.candidates):
             raise FunctionNetworkError("max_evidence_items exceeds candidate count")
+        if self.component_id is not None and not _SHA256.fullmatch(self.component_id):
+            raise FunctionNetworkError(
+                "component_id must be a lowercase SHA-256 when supplied"
+            )
 
     @property
     def candidate_universe_sha256(self) -> str:

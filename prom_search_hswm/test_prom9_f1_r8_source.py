@@ -70,7 +70,7 @@ def _full_entries(viewer: dict[str, object]) -> list[dict[str, object]]:
 
 def _envelope() -> dict[str, object]:
     return {
-        "per_call_input_caps": {"1": 280, "2": 1713, "3": 2152},
+        "per_call_input_caps": {"1": 275, "2": 1691, "3": 2359},
         "per_call_output_caps": {"1": 768, "2": 1536, "3": 768},
     }
 
@@ -144,6 +144,9 @@ def test_public_source_v3_and_gold_v2_have_exact_separated_shapes() -> None:
         set(entry["row"]) == {"id", "question", "context", "type"}
         for entry in artifacts["source_receipt"]["redacted_rows"]
     )
+    assert {
+        item["max_input_tokens"] for item in artifacts["manifest"]["items"]
+    } == {4325}
 
 
 def test_transitive_shared_paragraphs_form_one_source_component() -> None:

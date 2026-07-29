@@ -100,7 +100,7 @@ def _pages(tmp_path: Path, *, answer: str | None = None):
 
 def _envelope() -> dict[str, object]:
     return {
-        "per_call_input_caps": {"1": 280, "2": 1713, "3": 2152},
+        "per_call_input_caps": {"1": 275, "2": 1691, "3": 2359},
         "per_call_output_caps": {"1": 768, "2": 1536, "3": 768},
     }
 

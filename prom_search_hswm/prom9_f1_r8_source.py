@@ -44,6 +44,7 @@ GENERATION_POLICY = {
     "enable_thinking": False,
     "structured_output_backend": "json_schema",
 }
+R8_TIGHT_COMMON_INPUT_BUDGET = 4325
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _ROW_KEYS = {
     "id", "question", "answer", "context", "supporting_facts",
@@ -325,7 +326,7 @@ def verify_exact_entry_alignment(
 def derive_public_rows(
     entries: Sequence[Mapping[str, object]],
     *,
-    max_input_tokens: int = 4145,
+    max_input_tokens: int = R8_TIGHT_COMMON_INPUT_BUDGET,
     max_output_tokens_per_call: int = 1536,
 ) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
     """Return manifest items and source projections from redacted rows only."""

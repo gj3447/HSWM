@@ -24,6 +24,7 @@ from prom_search_hswm.prom9_f1_r8_envelope import (
     R8_DERIVATION_PREIMAGE_FILE_SHA256,
     R8_SELECTION_RECEIPT_SHA256,
     R8EnvelopeRefusal,
+    _verify_frozen_selection_identity,
     build_token_envelope_artifacts,
     verify_token_envelope_derivation,
     write_artifacts_once,
@@ -253,7 +254,9 @@ def test_meter_or_projection_drift_refuses_before_output(tmp_path: Path) -> None
         )
 
 
-def test_production_selection_preimage_binds_final_v2_incident() -> None:
+def test_production_selection_preimage_binds_final_v2_incident(
+    tmp_path: Path,
+) -> None:
     assert R8_DERIVATION_PREIMAGE_FILE_SHA256["selection_receipt"] == (
         "52f63a5cf4fdd04e7ca01c2af2caca8e0a68c54e51a6208e50bff6da01a929dc"
     )
@@ -270,6 +273,41 @@ def test_production_selection_preimage_binds_final_v2_incident() -> None:
         R8_DERIVATION_PREIMAGE_FILE_SHA256["selection_receipt"]
         != "999d5c38f0e0ccfe594a8c69cc0b697fb2a6972835f3472144b2d51fcce2fcab"
     )
+    assert (
+        R8_DERIVATION_PREIMAGE_CANONICAL_SHA256["selection_receipt"]
+        != "03143d6e84e1d0c787d49db3e16f73b7833630b16f3a8f44a19d84fd5ed5a846"
+    )
+    assert R8_SELECTION_RECEIPT_SHA256 != (
+        "0cea21ecaaa7bb6ac19047326029120c84a8fcbdda8ff6f4141634d8279be641"
+    )
+    assert R8_ABORTED_ATTEMPT_EXPOSURE_RECEIPT_SHA256 != (
+        "6d3f2f8978a8502c0f01135ad7b998841dbb4bd61462934927f735e3932bad7d"
+    )
+    assert R8_ABORTED_ATTEMPT_EXPOSURE_RECEIPT_SHA256 != (
+        "200e0708f556231b8ee4d83dea76ec923fb27071a76e2a27045e6ee218578fb0"
+    )
+
+    resigned = copy.deepcopy(_public_selection(tmp_path))
+    resigned["aborted_attempt_exposure_receipt_sha256"] = (
+        "6d3f2f8978a8502c0f01135ad7b998841dbb4bd61462934927f735e3932bad7d"
+    )
+    unsigned = dict(resigned)
+    unsigned.pop("selection_receipt_sha256")
+    resigned["selection_receipt_sha256"] = canonical_sha256(unsigned)
+    synthetic_file_sha = "7" * 64
+    with pytest.raises(
+        R8EnvelopeRefusal, match="selection exposure binding is not final v2"
+    ):
+        _verify_frozen_selection_identity(
+            resigned,
+            file_sha256=synthetic_file_sha,
+            expected_file_sha256=synthetic_file_sha,
+            expected_canonical_sha256=canonical_sha256(resigned),
+            expected_receipt_sha256=str(resigned["selection_receipt_sha256"]),
+            expected_aborted_exposure_sha256=(
+                R8_ABORTED_ATTEMPT_EXPOSURE_RECEIPT_SHA256
+            ),
+        )
 
 
 def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(

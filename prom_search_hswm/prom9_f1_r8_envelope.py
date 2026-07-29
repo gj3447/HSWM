@@ -138,7 +138,7 @@ def _verify_frozen_selection_identity(
         R8_ABORTED_ATTEMPT_EXPOSURE_RECEIPT_SHA256
     ),
 ) -> str:
-    """Require the frozen selection to bind the final v2 exposure boundary."""
+    """Bind the selection to v2's canonical self-hash, not receipt-file bytes."""
 
     if file_sha256 != expected_file_sha256:
         raise R8EnvelopeRefusal("selection file preimage drifted")

@@ -54,9 +54,15 @@ EXPECTED_CONFIRMATORY_COMPONENTS = 100
 DEFAULT_TOKEN_TOLERANCE = 512
 DEVELOPMENT_RUN_ID = "f1-2wiki-development-r8-try3-a2"
 CONFIRMATORY_RUN_ID = "f1-2wiki-sealed-r8-try3"
+R8_SELECTION_RECEIPT_SHA256 = (
+    "e2d36903dafb6b5e1387c9969ce9fb60cbd315c24f1d51e30618579291d9d6b8"
+)
+R8_ABORTED_ATTEMPT_EXPOSURE_RECEIPT_SHA256 = (
+    "f97634c0c4185b9bdbe983d6fe5fffc672e6c625923f027a780433acfc714afd"
+)
 R8_DERIVATION_PREIMAGE_FILE_SHA256 = {
     "selection_receipt": (
-        "999d5c38f0e0ccfe594a8c69cc0b697fb2a6972835f3472144b2d51fcce2fcab"
+        "52f63a5cf4fdd04e7ca01c2af2caca8e0a68c54e51a6208e50bff6da01a929dc"
     ),
     "historical_manifest": (
         "02e453dc25d7ec657494105d5d1592358501ac3a1fdd179e2b7e032dc890ebcc"
@@ -79,7 +85,7 @@ R8_PROTOCOL_CANONICAL_SHA256 = (
 )
 R8_DERIVATION_PREIMAGE_CANONICAL_SHA256 = {
     "selection_receipt": (
-        "03143d6e84e1d0c787d49db3e16f73b7833630b16f3a8f44a19d84fd5ed5a846"
+        "5605545627dd00f547e0a159cef59c5570a5c120186ce7b73d9938a4877a9921"
     ),
     "historical_manifest": (
         "bf047193f84ca1888cc5e9d2527f6d6e2a89bc5c049ae3e4b7c73766e8fc5957"
@@ -115,6 +121,38 @@ def _read_bound_json(path: Path, label: str) -> tuple[dict[str, object], str]:
         return read_stable_json(path, label)
     except Exception as error:
         raise R8EnvelopeRefusal(f"cannot capture stable {label}") from error
+
+
+def _verify_frozen_selection_identity(
+    value: Mapping[str, object],
+    *,
+    file_sha256: str,
+    expected_file_sha256: str = R8_DERIVATION_PREIMAGE_FILE_SHA256[
+        "selection_receipt"
+    ],
+    expected_canonical_sha256: str = R8_DERIVATION_PREIMAGE_CANONICAL_SHA256[
+        "selection_receipt"
+    ],
+    expected_receipt_sha256: str = R8_SELECTION_RECEIPT_SHA256,
+    expected_aborted_exposure_sha256: str = (
+        R8_ABORTED_ATTEMPT_EXPOSURE_RECEIPT_SHA256
+    ),
+) -> str:
+    """Require the frozen selection to bind the final v2 exposure boundary."""
+
+    if file_sha256 != expected_file_sha256:
+        raise R8EnvelopeRefusal("selection file preimage drifted")
+    if canonical_sha256(value) != expected_canonical_sha256:
+        raise R8EnvelopeRefusal("selection canonical preimage drifted")
+    receipt_sha = verify_selection_receipt(value)
+    if receipt_sha != expected_receipt_sha256:
+        raise R8EnvelopeRefusal("selection receipt identity drifted")
+    if (
+        value.get("aborted_attempt_exposure_receipt_sha256")
+        != expected_aborted_exposure_sha256
+    ):
+        raise R8EnvelopeRefusal("selection exposure binding is not final v2")
+    return receipt_sha
 
 
 def _validate_source_suite(
@@ -513,6 +551,10 @@ def verify_token_envelope_derivation(
     expected_canonical_sha256s: Mapping[str, str] = (
         R8_DERIVATION_PREIMAGE_CANONICAL_SHA256
     ),
+    expected_selection_receipt_sha256: str = R8_SELECTION_RECEIPT_SHA256,
+    expected_aborted_exposure_sha256: str = (
+        R8_ABORTED_ATTEMPT_EXPOSURE_RECEIPT_SHA256
+    ),
     development_run_id: str = DEVELOPMENT_RUN_ID,
     confirmatory_run_id: str = CONFIRMATORY_RUN_ID,
     expected_development_items: int = EXPECTED_DEVELOPMENT_ITEMS,
@@ -542,6 +584,16 @@ def verify_token_envelope_derivation(
     }
     if observed_canonical != dict(expected_canonical_sha256s):
         raise R8EnvelopeRefusal("token-envelope canonical preimages drifted")
+    _verify_frozen_selection_identity(
+        selection,
+        file_sha256=file_sha256s.get("selection_receipt", ""),
+        expected_file_sha256=expected_file_sha256s.get("selection_receipt", ""),
+        expected_canonical_sha256=expected_canonical_sha256s.get(
+            "selection_receipt", ""
+        ),
+        expected_receipt_sha256=expected_selection_receipt_sha256,
+        expected_aborted_exposure_sha256=expected_aborted_exposure_sha256,
+    )
     model = manifest.get("model")
     model_revision = manifest.get("model_revision")
     tolerance = manifest.get("token_tolerance")
@@ -645,6 +697,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         }
         if observed_files != R8_DERIVATION_PREIMAGE_FILE_SHA256:
             raise R8EnvelopeRefusal("token-envelope derivation file preimages drifted")
+        _verify_frozen_selection_identity(
+            selection,
+            file_sha256=selection_file_sha,
+        )
         artifacts = build_token_envelope_artifacts(
             selection=selection,
             historical_manifest=historical,
@@ -697,9 +753,11 @@ __all__ = [
     "CONFIRMATORY_RUN_ID",
     "DEVELOPMENT_RUN_ID",
     "DERIVATION_SCHEMA",
+    "R8_ABORTED_ATTEMPT_EXPOSURE_RECEIPT_SHA256",
     "R8_DERIVATION_PREIMAGE_FILE_SHA256",
     "R8_DERIVATION_PREIMAGE_CANONICAL_SHA256",
     "R8_PROTOCOL_CANONICAL_SHA256",
+    "R8_SELECTION_RECEIPT_SHA256",
     "R8EnvelopeRefusal",
     "build_token_envelope_artifacts",
     "verify_token_envelope_derivation",

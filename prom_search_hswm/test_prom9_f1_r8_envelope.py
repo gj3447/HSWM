@@ -19,6 +19,10 @@ from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
 from prom_search_hswm.prom9_f1_r8_envelope import (
     DEVELOPMENT_RUN_ID,
     EXPECTED_DEVELOPMENT_ITEMS,
+    R8_ABORTED_ATTEMPT_EXPOSURE_RECEIPT_SHA256,
+    R8_DERIVATION_PREIMAGE_CANONICAL_SHA256,
+    R8_DERIVATION_PREIMAGE_FILE_SHA256,
+    R8_SELECTION_RECEIPT_SHA256,
     R8EnvelopeRefusal,
     build_token_envelope_artifacts,
     verify_token_envelope_derivation,
@@ -249,6 +253,25 @@ def test_meter_or_projection_drift_refuses_before_output(tmp_path: Path) -> None
         )
 
 
+def test_production_selection_preimage_binds_final_v2_incident() -> None:
+    assert R8_DERIVATION_PREIMAGE_FILE_SHA256["selection_receipt"] == (
+        "52f63a5cf4fdd04e7ca01c2af2caca8e0a68c54e51a6208e50bff6da01a929dc"
+    )
+    assert R8_DERIVATION_PREIMAGE_CANONICAL_SHA256["selection_receipt"] == (
+        "5605545627dd00f547e0a159cef59c5570a5c120186ce7b73d9938a4877a9921"
+    )
+    assert R8_SELECTION_RECEIPT_SHA256 == (
+        "e2d36903dafb6b5e1387c9969ce9fb60cbd315c24f1d51e30618579291d9d6b8"
+    )
+    assert R8_ABORTED_ATTEMPT_EXPOSURE_RECEIPT_SHA256 == (
+        "f97634c0c4185b9bdbe983d6fe5fffc672e6c625923f027a780433acfc714afd"
+    )
+    assert (
+        R8_DERIVATION_PREIMAGE_FILE_SHA256["selection_receipt"]
+        != "999d5c38f0e0ccfe594a8c69cc0b697fb2a6972835f3472144b2d51fcce2fcab"
+    )
+
+
 def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
     tmp_path: Path,
 ) -> None:
@@ -300,6 +323,14 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
             "e5715049e427cd1a12b92eab950d7679ca94038fdbe6167ef42ff5ac72b747bf"
         ),
     }
+    selection_identity = {
+        "expected_selection_receipt_sha256": selection[
+            "selection_receipt_sha256"
+        ],
+        "expected_aborted_exposure_sha256": selection[
+            "aborted_attempt_exposure_receipt_sha256"
+        ],
+    }
     assert verify_token_envelope_derivation(
         receipt=receipt,
         manifest=manifest,
@@ -313,6 +344,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
         file_sha256s=fixed_files,
         expected_file_sha256s=fixed_files,
         expected_canonical_sha256s=fixed_canonical,
+        **selection_identity,
         expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
         expected_confirmatory_items=100,
     ) == receipt["receipt_sha256"]
@@ -336,6 +368,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
             file_sha256s=fixed_files,
             expected_file_sha256s=fixed_files,
             expected_canonical_sha256s=fixed_canonical,
+            **selection_identity,
             expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
             expected_confirmatory_items=100,
         )
@@ -355,6 +388,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
             file_sha256s=drifted_files,
             expected_file_sha256s=fixed_files,
             expected_canonical_sha256s=fixed_canonical,
+            **selection_identity,
             expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
             expected_confirmatory_items=100,
         )
@@ -380,6 +414,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
             file_sha256s=fixed_files,
             expected_file_sha256s=fixed_files,
             expected_canonical_sha256s=fixed_canonical,
+            **selection_identity,
             expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
             expected_confirmatory_items=100,
         )
@@ -400,6 +435,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
             file_sha256s=fixed_files,
             expected_file_sha256s=fixed_files,
             expected_canonical_sha256s=fixed_canonical,
+            **selection_identity,
             expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
             expected_confirmatory_items=100,
         )

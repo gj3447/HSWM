@@ -9,7 +9,11 @@ import pytest
 from prom_search_hswm.hswm_f1_sqlite_schema import (
     LEDGER_SCHEMA_SQL,
     LEDGER_USER_VERSION,
+    SPOOL_HISTORICAL_V8_SCHEMA_SQL,
+    SPOOL_SCHEMA_SQL,
+    SPOOL_USER_VERSION,
     SQLiteAuthorityRefusal,
+    canonical_schema_sha256,
     exact_schema_readback,
 )
 
@@ -23,6 +27,50 @@ def _canonical_attempt_database(path: Path) -> None:
     finally:
         connection.close()
     path.chmod(0o600)
+
+
+def _spool_database(path: Path, schema_sql: str) -> None:
+    connection = sqlite3.connect(path, isolation_level=None)
+    try:
+        connection.execute("PRAGMA foreign_keys=ON")
+        connection.executescript(schema_sql)
+        connection.execute(f"PRAGMA user_version={SPOOL_USER_VERSION}")
+    finally:
+        connection.close()
+    path.chmod(0o600)
+
+
+def test_historical_v8_spool_schema_is_a_separate_exact_authority(
+    tmp_path: Path,
+) -> None:
+    historical = tmp_path / "historical.sqlite3"
+    current = tmp_path / "current.sqlite3"
+    _spool_database(historical, SPOOL_HISTORICAL_V8_SCHEMA_SQL)
+    _spool_database(current, SPOOL_SCHEMA_SQL)
+
+    historical_connection = sqlite3.connect(historical, isolation_level=None)
+    current_connection = sqlite3.connect(current, isolation_level=None)
+    try:
+        _, historical_sha = exact_schema_readback(
+            historical_connection,
+            "spool_historical_v8",
+            "historical v8 spool",
+        )
+        _, current_sha = exact_schema_readback(
+            current_connection, "spool", "current spool"
+        )
+        assert historical_sha == canonical_schema_sha256("spool_historical_v8")
+        assert current_sha == canonical_schema_sha256("spool")
+        assert historical_sha != current_sha
+        with pytest.raises(SQLiteAuthorityRefusal, match="canonical schema drifted"):
+            exact_schema_readback(historical_connection, "spool", "historical")
+        with pytest.raises(SQLiteAuthorityRefusal, match="canonical schema drifted"):
+            exact_schema_readback(
+                current_connection, "spool_historical_v8", "current"
+            )
+    finally:
+        historical_connection.close()
+        current_connection.close()
 
 
 def _rewrite_table_sql(path: Path, table: str, mutate) -> None:

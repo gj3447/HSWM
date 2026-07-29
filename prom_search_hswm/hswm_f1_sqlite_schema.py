@@ -98,6 +98,32 @@ CREATE TABLE IF NOT EXISTS spool_calls (
 );
 """
 
+# Exact schema used by the quarantined F1 r8/v8 incident.  It remains a
+# separate read-only evidence authority: live constructors must never fall
+# back to this weaker historical CHECK constraint.
+SPOOL_HISTORICAL_V8_SCHEMA_SQL = """
+CREATE TABLE IF NOT EXISTS spool_calls (
+    physical_call_id TEXT PRIMARY KEY,
+    intent_sha256 TEXT NOT NULL,
+    request_sha256 TEXT NOT NULL,
+    request_bytes BLOB NOT NULL,
+    status TEXT NOT NULL CHECK(status IN (
+        'DISPATCHING', 'COMPLETE', 'UNKNOWN'
+    )),
+    response_status INTEGER,
+    response_headers BLOB,
+    response_body BLOB,
+    response_sha256 TEXT,
+    error_class TEXT,
+    CHECK (
+        (status = 'COMPLETE' AND response_status IS NOT NULL
+         AND response_headers IS NOT NULL AND response_body IS NOT NULL
+         AND response_sha256 IS NOT NULL)
+        OR status != 'COMPLETE'
+    )
+);
+"""
+
 LEDGER_COLUMNS: Mapping[str, list[str]] = {
     "call_state": [
         "physical_call_id",
@@ -207,6 +233,12 @@ def _schema_authority(
         return LEDGER_SCHEMA_SQL, LEDGER_USER_VERSION, LEDGER_COLUMNS
     if authority == "spool":
         return SPOOL_SCHEMA_SQL, SPOOL_USER_VERSION, SPOOL_COLUMNS
+    if authority == "spool_historical_v8":
+        return (
+            SPOOL_HISTORICAL_V8_SCHEMA_SQL,
+            SPOOL_USER_VERSION,
+            SPOOL_COLUMNS,
+        )
     raise SQLiteAuthorityRefusal(f"unknown SQLite schema authority {authority}")
 
 
@@ -283,7 +315,7 @@ def _schema_payload(
     }
 
 
-@lru_cache(maxsize=2)
+@lru_cache(maxsize=3)
 def canonical_schema_payload(authority: str) -> dict[str, object]:
     schema_sql, user_version, columns = _schema_authority(authority)
     connection = sqlite3.connect(":memory:", isolation_level=None)

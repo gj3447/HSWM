@@ -82,6 +82,10 @@ _ABORTED_ATTEMPT_V2_CANONICAL_SCHEMA_SHA256 = {
     "attempt": "29f19831499bddea83595ddce2fd97613d03d4b0b498531beeab6f195dc44139",
     "spool": "4e65e2756c820d6d0e36f9e02dbe796ae0e5c0933409aaec86133770543057be",
 }
+_HISTORICAL_V8_SCHEMA_AUTHORITIES = {
+    "attempt": "attempt",
+    "spool": "spool_historical_v8",
+}
 DATASET_SERVER = "https://datasets-server.huggingface.co"
 EXPECTED_PAGE_SPECS = ((0, 1), (0, 4), (0, 8), (4, 100))
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
@@ -1207,7 +1211,9 @@ def _open_snapshot_read_only(
             connection.close()
         except UnboundLocalError:
             pass
-        raise PriorExposureRefusal(f"{label} snapshot cannot be opened read-only") from error
+        raise PriorExposureRefusal(
+            f"{label} snapshot read-only validation refused: {error}"
+        ) from error
     if integrity != "ok" or journal_mode != "wal" or user_version != 1:
         connection.close()
         raise PriorExposureRefusal(f"{label} snapshot integrity or WAL identity drifted")
@@ -3711,7 +3717,7 @@ def build_aborted_attempt_exposure_receipt(
     spool_connection, spool_database = _open_snapshot_read_only(
         spool_snapshot_path,
         expected_columns=_SPOOL_COLUMNS,
-        authority="spool",
+        authority=_HISTORICAL_V8_SCHEMA_AUTHORITIES["spool"],
         label="spool",
     )
     try:
@@ -3723,7 +3729,7 @@ def build_aborted_attempt_exposure_receipt(
     attempt_connection, attempt_database = _open_snapshot_read_only(
         attempt_snapshot_path,
         expected_columns=_ATTEMPT_COLUMNS,
-        authority="attempt",
+        authority=_HISTORICAL_V8_SCHEMA_AUTHORITIES["attempt"],
         label="attempt",
     )
     try:
@@ -4509,7 +4515,9 @@ def verify_aborted_attempt_exposure_receipt(
             != (
                 _ABORTED_ATTEMPT_V2_CANONICAL_SCHEMA_SHA256[database_name]
                 if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2
-                else canonical_schema_sha256(database_name)
+                else canonical_schema_sha256(
+                    _HISTORICAL_V8_SCHEMA_AUTHORITIES[database_name]
+                )
             )
         ):
             raise PriorExposureRefusal("aborted-attempt database snapshot drifted")

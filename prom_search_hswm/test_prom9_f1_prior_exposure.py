@@ -18,6 +18,9 @@ from prom_search_hswm.hswm_call_receipt import ModelCallV1, invoke_function
 from prom_search_hswm.hswm_f1_durable_transport import DurableSpoolJSONPort
 from prom_search_hswm.hswm_function_registry import FunctionSpecV1
 from prom_search_hswm.hswm_result_spool import RawHTTPResponse, SQLiteResultSpool
+from prom_search_hswm.hswm_f1_sqlite_schema import (
+    SPOOL_HISTORICAL_V8_SCHEMA_SQL,
+)
 from prom_search_hswm.hswm_typed_ports import canonical_json
 from prom_search_hswm.prom9_f1_prior_exposure import (
     ABORTED_ATTEMPT_EXPOSURE_SCHEMA,
@@ -52,6 +55,23 @@ INCIDENT_RECEIPT_PATH = (
 INCIDENT_RECEIPT_SHA256 = (
     "6d3f2f8978a8502c0f01135ad7b998841dbb4bd61462934927f735e3932bad7d"
 )
+
+
+class _HistoricalV8Spool:
+    """Minimal exact historical spool used only by the incident fixture."""
+
+    def __init__(self, path: Path) -> None:
+        self._connection = sqlite3.connect(path, isolation_level=None)
+        self._connection.row_factory = sqlite3.Row
+        self._connection.execute("PRAGMA journal_mode=WAL")
+        self._connection.execute("PRAGMA synchronous=FULL")
+        self._connection.execute("PRAGMA foreign_keys=ON")
+        self._connection.executescript(SPOOL_HISTORICAL_V8_SCHEMA_SQL)
+        self._connection.execute("PRAGMA user_version=1")
+        path.chmod(0o600)
+
+    def close(self) -> None:
+        self._connection.close()
 
 
 def _row(index: int) -> dict[str, object]:
@@ -492,7 +512,7 @@ def _build_synthetic_incident(
         "response_status,response_sha256 FROM call_state WHERE status='ACCEPTED'"
     ).fetchall()
     assert accepted_rows
-    spool = SQLiteResultSpool(spool_db)
+    spool = _HistoricalV8Spool(spool_db)
     spool._connection.execute("PRAGMA wal_autocheckpoint=0")
     for accepted in accepted_rows:
         spool._connection.execute(
@@ -510,6 +530,9 @@ def _build_synthetic_incident(
                 accepted["response_sha256"],
             ),
         )
+    for member in (spool_db, Path(f"{spool_db}-wal"), Path(f"{spool_db}-shm")):
+        if member.exists():
+            member.chmod(0o600)
 
     inputs = tmp_path / "inputs"
     inputs.mkdir()
@@ -1018,7 +1041,9 @@ def test_aborted_attempt_builder_replays_structural_evidence_without_blobs(
     ) == prior_exposure._CURRENT_PRODUCER_IMPORT_LFP
     assert all(
         database["canonical_schema_sha256"]
-        == prior_exposure.canonical_schema_sha256(name)
+        == prior_exposure.canonical_schema_sha256(
+            prior_exposure._HISTORICAL_V8_SCHEMA_AUTHORITIES[name]
+        )
         and "source_identity" not in database
         and "source_identity_sha256" not in database
         for name, database in receipt["database_snapshots"].items()
@@ -1484,7 +1509,7 @@ def test_snapshot_sqlite_authorizer_denies_protected_columns(
     spool, _spool_metadata = prior_exposure._open_snapshot_read_only(
         tmp_path / "snapshot" / "spool.sqlite3",
         expected_columns=prior_exposure._SPOOL_COLUMNS,
-        authority="spool",
+        authority=prior_exposure._HISTORICAL_V8_SCHEMA_AUTHORITIES["spool"],
         label="spool",
     )
     try:

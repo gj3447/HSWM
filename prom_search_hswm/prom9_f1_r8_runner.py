@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Gold-blind HSWM F1 manifest/suite v3 runner and terminal finalizer.
+"""Gold-blind HSWM F1 manifest-v3/suite-v4 runner and terminal finalizer.
 
 The runner accepts only a pre-call self-hashed execution lock and never has a
 gold option.  It writes a private draft after all item runs are durable.  A
 separate finalization step binds an independently exported terminal SQLite
-transport package, producing the suite v3 consumed by the preregistered judge.
+transport package, producing the suite v4 consumed by the preregistered judge.
 """
 from __future__ import annotations
 
@@ -43,6 +43,7 @@ from prom_search_hswm.hswm_function_registry import (
     REGISTRY_SCHEMA,
     FunctionRegistryV1,
     build_registry,
+    build_registry_from_protocol,
 )
 from prom_search_hswm.hswm_result_spool import (
     ModelDeploymentBinding,
@@ -86,14 +87,15 @@ from prom_search_hswm.prom_f1_function_network import (
 
 
 MANIFEST_SCHEMA = "hswm-prom9-f1-manifest/v3"
-SUITE_DRAFT_SCHEMA = "hswm-prom9-f1-suite-draft/v3"
-SUITE_SCHEMA = "hswm-prom9-f1-suite/v3"
-EXECUTION_LOCK_SCHEMA = "hswm-prom9-f1-r8-execution-lock/v2"
-SEALED_LOCK_SCHEMA = "hswm-prom9-f1-r8-measurement-lock/v4"
+SUITE_DRAFT_SCHEMA = "hswm-prom9-f1-suite-draft/v4"
+SUITE_SCHEMA = "hswm-prom9-f1-suite/v4"
+EXECUTION_LOCK_SCHEMA = "hswm-prom9-f1-r8-execution-lock/v3"
+SEALED_LOCK_SCHEMA = "hswm-prom9-f1-r8-measurement-lock/v5"
 SEALED_LOCK_PURPOSE = "CONFIRMATORY_R8_TRY3_MEASUREMENT"
 SEALED_EXPERIMENT_TAG = "Q-f1-actual-compute-parity-try3"
 SEALED_CLOSES_QUESTION = "Q-f1-actual-compute-parity"
 SEALED_RUN_ID = "f1-2wiki-sealed-r8-try3"
+DEVELOPMENT_RUN_ID = "f1-2wiki-development-r8-try3"
 TRANSPORT_SCHEMA = "hswm-f1-durable-call-ledger/v1"
 TRANSPORT_BINDINGS_SCHEMA = "hswm-prom9-f1-r8-transport-bindings/v1"
 GENESIS_SCHEMA = "hswm-prom9-f1-r8-transport-genesis/v1"
@@ -157,6 +159,7 @@ _DEVELOPMENT_LOCK_FIELDS = {
     "deployment_receipt_sha256", "deployment_id", "served_model",
     "protocol_sha256",
     "registries_root_sha256", "token_envelope_sha256",
+    "token_envelope_derivation_receipt_sha256",
     "generation_policy_sha256", "cohort_root_sha256",
     "candidate_universe_root_sha256", "forbidden_prior_item_ids",
     "forbidden_prior_source_entity_ids", "forbidden_prior_component_ids",
@@ -234,7 +237,8 @@ _DRAFT_FIELDS = {
     "environment_dependency_compatibility_root_sha256",
     "environment_dependency_bundle_sha256", "hswm_commit",
     "db_genesis_receipt_sha256", "protocol_sha256",
-    "registries_root_sha256", "token_envelope_sha256", "cohort_root_sha256",
+    "registries_root_sha256", "token_envelope_sha256",
+    "token_envelope_derivation_receipt_sha256", "cohort_root_sha256",
     "candidate_universe_root_sha256", "generation_policy",
     "generation_policy_sha256", "token_envelope", "envelope_projection",
     "token_parity", "execution_policy", "execution_gates", "max_workers",
@@ -302,6 +306,32 @@ _PREREGISTRATION_READBACK_FIELDS = {
     "anchored_judge_file_sha256", "judge_core_sha256",
     "result_contract_sha256", "receipt_sha256",
 }
+_DERIVATION_INPUT_FIELDS = {
+    "receipt", "selection_receipt", "historical_manifest",
+    "validation_receipt", "projected_outputs_receipt", "source_suite",
+    "protocol", "file_sha256s",
+}
+_DERIVATION_FILE_FIELDS = {
+    "selection_receipt", "historical_manifest", "validation_receipt",
+    "projected_outputs_receipt", "source_suite", "protocol",
+}
+_DERIVATION_RECEIPT_FIELDS = {
+    "schema_version", "derivation_policy", "selection_receipt_sha256",
+    "historical_token_envelope_sha256",
+    "historical_input_caps_used_as_floor", "model", "model_revision",
+    "protocol_sha256", "registries_root_sha256",
+    "token_meter_validation_receipt_sha256", "token_meter",
+    "projected_outputs_receipt_sha256", "source_suite_receipt_sha256",
+    "development", "confirmatory", "per_call_input_caps",
+    "per_call_output_caps", "total_input_tokens_per_run",
+    "total_allowed_output_tokens_per_run", "projection_slack_tokens",
+    "token_tolerance", "token_envelope_sha256", "gold_inputs_read",
+    "model_calls", "receipt_sha256",
+}
+_DERIVATION_COHORT_FIELDS = {
+    "run_id", "items", "components", "minimum_input_caps",
+    "projection_sha256", "projected_spread",
+}
 _EVENT_GENESIS = "0" * 64
 _EVENT_TRANSITIONS = {
     "PREPARED": (None,),
@@ -343,6 +373,86 @@ def read_json(path: Path, label: str) -> dict[str, object]:
     if not isinstance(value, dict):
         raise R8RunnerRefusal(f"{label} must be an object")
     return value
+
+
+def read_stable_bytes(
+    path: Path,
+    label: str,
+    *,
+    max_bytes: int = 64 * 1024 * 1024,
+) -> tuple[bytes, str]:
+    """Capture one bounded regular file and its digest through one stable FD."""
+
+    if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or max_bytes < 0:
+        raise R8RunnerRefusal("stable-read byte bound must be a nonnegative integer")
+    target = Path(path)
+    try:
+        before = target.lstat()
+    except OSError as error:
+        raise R8RunnerRefusal(f"cannot stat {label}") from error
+    if stat.S_ISLNK(before.st_mode) or not stat.S_ISREG(before.st_mode):
+        raise R8RunnerRefusal(f"{label} must be a regular non-symlink file")
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(target, flags)
+    except OSError as error:
+        raise R8RunnerRefusal(f"cannot open {label}") from error
+    payload = bytearray()
+    try:
+        opened = os.fstat(descriptor)
+        if (
+            not stat.S_ISREG(opened.st_mode)
+            or opened.st_dev != before.st_dev
+            or opened.st_ino != before.st_ino
+        ):
+            raise R8RunnerRefusal(f"{label} changed before reading")
+        while True:
+            block = os.read(descriptor, 1024 * 1024)
+            if not block:
+                break
+            payload.extend(block)
+            if len(payload) > max_bytes:
+                raise R8RunnerRefusal(f"{label} exceeds the stable-read byte bound")
+        after_fd = os.fstat(descriptor)
+    finally:
+        os.close(descriptor)
+    try:
+        after_path = target.lstat()
+    except OSError as error:
+        raise R8RunnerRefusal(f"cannot restat {label}") from error
+    identity = lambda value: (  # noqa: E731 - compact immutable projection
+        value.st_dev, value.st_ino, value.st_mode, value.st_size,
+        value.st_mtime_ns, value.st_ctime_ns,
+    )
+    if (
+        identity(before) != identity(after_fd)
+        or identity(before) != identity(after_path)
+        or len(payload) != before.st_size
+    ):
+        raise R8RunnerRefusal(f"{label} changed while reading")
+    raw = bytes(payload)
+    return raw, hashlib.sha256(raw).hexdigest()
+
+
+def read_stable_json(path: Path, label: str) -> tuple[dict[str, object], str]:
+    """Parse one JSON object from the exact bytes captured by ``read_stable_bytes``."""
+
+    raw, digest = read_stable_bytes(path, label)
+    try:
+        value = json.loads(
+            raw.decode("utf-8"),
+            object_pairs_hook=_pairs,
+            parse_constant=lambda _value: (_ for _ in ()).throw(
+                R8RunnerRefusal(f"non-finite JSON number in {label}")
+            ),
+        )
+    except R8RunnerRefusal:
+        raise
+    except (UnicodeError, json.JSONDecodeError) as error:
+        raise R8RunnerRefusal(f"cannot parse {label}") from error
+    if not isinstance(value, dict):
+        raise R8RunnerRefusal(f"{label} must be an object")
+    return value, digest
 
 
 def write_private_once(path: Path, value: Mapping[str, object]) -> None:
@@ -711,38 +821,27 @@ def _validate_spool_identity_preflight(
 
 
 def _stable_file_sha256(path: Path, label: str) -> str:
-    target = Path(path).resolve()
     try:
-        before = target.stat()
-        digest = hashlib.sha256()
-        with target.open("rb") as handle:
-            for block in iter(lambda: handle.read(1024 * 1024), b""):
-                digest.update(block)
-        after = target.stat()
-    except OSError as error:
+        _raw, digest = read_stable_bytes(path, label)
+    except R8RunnerRefusal:
+        raise
+    except Exception as error:
         raise R8RunnerRefusal(f"cannot hash {label}") from error
-    identity_before = (
-        before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns,
-    )
-    identity_after = (
-        after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns,
-    )
-    if identity_before != identity_after or not target.is_file():
-        raise R8RunnerRefusal(f"{label} changed while hashing")
-    return digest.hexdigest()
+    return digest
 
 
-def _judge_hashes(
+def capture_judge_hashes(
     path: Path,
-    measurement_lock_sha256: str,
+    label: str,
     *,
-    label: str = "anchored judge",
+    expected_measurement_lock_sha256: str | None = None,
 ) -> tuple[str, str]:
-    target = Path(path).resolve()
-    full_sha = _stable_file_sha256(target, label)
+    """Hash and normalize judge authority from one immutable byte capture."""
+
+    raw, full_sha = read_stable_bytes(path, label)
     try:
-        source = target.read_text(encoding="utf-8")
-    except (OSError, UnicodeError) as error:
+        source = raw.decode("utf-8")
+    except UnicodeError as error:
         raise R8RunnerRefusal(f"cannot read {label} as UTF-8") from error
     marker = "__F1_R8_MEASUREMENT_LOCK_SHA256_UNFROZEN__"
     pattern = re.compile(
@@ -752,12 +851,182 @@ def _judge_hashes(
         re.MULTILINE,
     )
     matches = pattern.findall(source)
-    if matches != [measurement_lock_sha256]:
+    if len(matches) != 1:
+        raise R8RunnerRefusal(f"{label} lock-anchor assignment is ambiguous")
+    if (
+        expected_measurement_lock_sha256 is not None
+        and matches != [expected_measurement_lock_sha256]
+    ):
         raise R8RunnerRefusal(f"{label} does not carry the exact lock anchor")
     normalized = pattern.sub(
         f'EXPECTED_MEASUREMENT_LOCK_SHA256 = "{marker}"', source
     )
     return full_sha, hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+
+
+def _replay_token_envelope_derivation(
+    *,
+    derivation_inputs: Mapping[str, object],
+    manifest: Mapping[str, object],
+    token_meter: TokenMeter,
+    protocol_path: Path,
+) -> str:
+    # Local import avoids the producer's intentional use of runner item and
+    # registry constructors during module initialization.
+    from prom_search_hswm.prom9_f1_r8_envelope import (
+        verify_token_envelope_derivation,
+    )
+
+    return verify_token_envelope_derivation(
+        receipt=derivation_inputs["receipt"],
+        manifest=manifest,
+        selection=derivation_inputs["selection_receipt"],
+        historical_manifest=derivation_inputs["historical_manifest"],
+        validation_receipt=derivation_inputs["validation_receipt"],
+        projected_outputs_receipt=derivation_inputs[
+            "projected_outputs_receipt"
+        ],
+        source_suite=derivation_inputs["source_suite"],
+        protocol=derivation_inputs["protocol"],
+        meter=token_meter,
+        file_sha256s=derivation_inputs["file_sha256s"],
+    )
+
+
+def _validate_token_envelope_derivation_gate(
+    derivation_inputs: Mapping[str, object],
+    *,
+    manifest: Mapping[str, object],
+    execution_lock: Mapping[str, object],
+    token_meter: TokenMeter,
+    protocol_path: Path,
+    preregistration_artifact: Mapping[str, object] | None,
+) -> str:
+    if set(derivation_inputs) != _DERIVATION_INPUT_FIELDS:
+        raise R8RunnerRefusal("token-envelope derivation input set drifted")
+    receipt = derivation_inputs.get("receipt")
+    file_sha256s = derivation_inputs.get("file_sha256s")
+    if (
+        not isinstance(receipt, Mapping)
+        or set(receipt) != _DERIVATION_RECEIPT_FIELDS
+        or not isinstance(file_sha256s, Mapping)
+        or set(file_sha256s) != _DERIVATION_FILE_FIELDS
+        or any(
+            not isinstance(derivation_inputs.get(name), Mapping)
+            for name in _DERIVATION_FILE_FIELDS
+        )
+    ):
+        raise R8RunnerRefusal("token-envelope derivation artifact shape drifted")
+    for name, digest in file_sha256s.items():
+        _sha(digest, f"token-envelope derivation file {name}")
+    receipt_sha = _self_hash(
+        receipt, "receipt_sha256", "token-envelope derivation receipt"
+    )
+    if (
+        receipt.get("schema_version")
+        != "hswm-prom9-f1-r8-token-envelope-derivation/v1"
+        or receipt.get("derivation_policy")
+        != "tight_common_componentwise_max_of_both_frozen_cohorts/v1"
+        or receipt.get("historical_input_caps_used_as_floor") is not False
+        or receipt.get("gold_inputs_read") is not False
+        or receipt.get("model_calls") != 0
+    ):
+        raise R8RunnerRefusal("token-envelope derivation policy drifted")
+    envelope = manifest.get("token_envelope")
+    if not isinstance(envelope, Mapping):
+        raise R8RunnerRefusal("manifest token envelope is absent")
+    input_caps = envelope.get("per_call_input_caps")
+    output_caps = envelope.get("per_call_output_caps")
+    if not isinstance(input_caps, Mapping) or not isinstance(output_caps, Mapping):
+        raise R8RunnerRefusal("manifest token-envelope caps are absent")
+    expected_bindings = {
+        "selection_receipt_sha256": execution_lock.get(
+            "selection_receipt_sha256"
+        ),
+        "model": manifest.get("model"),
+        "model_revision": manifest.get("model_revision"),
+        "protocol_sha256": execution_lock.get("protocol_sha256"),
+        "registries_root_sha256": execution_lock.get(
+            "registries_root_sha256"
+        ),
+        "token_envelope_sha256": execution_lock.get("token_envelope_sha256"),
+        "per_call_input_caps": dict(input_caps),
+        "per_call_output_caps": dict(output_caps),
+        "total_input_tokens_per_run": sum(int(value) for value in input_caps.values()),
+        "total_allowed_output_tokens_per_run": sum(
+            int(value) for value in output_caps.values()
+        ),
+        "projection_slack_tokens": envelope.get("projection_slack_tokens"),
+        "token_tolerance": manifest.get("token_tolerance"),
+        "token_meter": token_meter.identity(),
+    }
+    if any(receipt.get(key) != value for key, value in expected_bindings.items()):
+        raise R8RunnerRefusal("token-envelope derivation differs from frozen execution")
+    if (
+        canonical_sha256(envelope) != receipt.get("token_envelope_sha256")
+        or receipt_sha
+        != execution_lock.get("token_envelope_derivation_receipt_sha256")
+    ):
+        raise R8RunnerRefusal("token-envelope derivation lock binding drifted")
+    expected_cohorts = {
+        "development": (DEVELOPMENT_RUN_ID, 55, 48),
+        "confirmatory": (SEALED_RUN_ID, 100, 100),
+    }
+    for cohort, (run_id, items, components) in expected_cohorts.items():
+        value = receipt.get(cohort)
+        if (
+            not isinstance(value, Mapping)
+            or set(value) != _DERIVATION_COHORT_FIELDS
+            or value.get("run_id") != run_id
+            or value.get("items") != items
+            or value.get("components") != components
+            or not isinstance(value.get("minimum_input_caps"), Mapping)
+            or set(value.get("minimum_input_caps", {})) != {"1", "2", "3"}
+        ):
+            raise R8RunnerRefusal(
+                f"token-envelope derivation {cohort} cohort drifted"
+            )
+        _sha(value.get("projection_sha256"), f"{cohort} derivation projection")
+    mode = manifest.get("mode")
+    expected_run = DEVELOPMENT_RUN_ID if mode == "development" else SEALED_RUN_ID
+    if manifest.get("run_id") != expected_run:
+        raise R8RunnerRefusal("manifest run ID differs from the derivation cohort")
+    if preregistration_artifact is not None and (
+        preregistration_artifact.get(
+            "token_envelope_derivation_receipt_sha256"
+        )
+        != receipt_sha
+    ):
+        raise R8RunnerRefusal(
+            "preregistration artifact differs from the derivation receipt"
+        )
+    try:
+        replayed_sha = _replay_token_envelope_derivation(
+            derivation_inputs=derivation_inputs,
+            manifest=manifest,
+            token_meter=token_meter,
+            protocol_path=protocol_path,
+        )
+    except Exception as error:
+        raise R8RunnerRefusal(
+            "token-envelope derivation replay failed"
+        ) from error
+    if replayed_sha != receipt_sha:
+        raise R8RunnerRefusal("token-envelope derivation replay SHA drifted")
+    return receipt_sha
+
+
+def _judge_hashes(
+    path: Path,
+    measurement_lock_sha256: str,
+    *,
+    label: str = "anchored judge",
+) -> tuple[str, str]:
+    return capture_judge_hashes(
+        path,
+        label,
+        expected_measurement_lock_sha256=measurement_lock_sha256,
+    )
 
 
 def _validate_environment_dependency_bundle(
@@ -1869,14 +2138,29 @@ def _derive_components(
 
 
 def _registries(
-    *, protocol_path: Path, model: str, model_revision: str
+    *,
+    protocol_path: Path | None = None,
+    protocol: Mapping[str, object] | None = None,
+    model: str,
+    model_revision: str,
 ) -> dict[str, FunctionRegistryV1]:
+    if protocol is None and protocol_path is None:
+        raise R8RunnerRefusal("protocol preimage is absent")
     return {
-        arm: build_registry(
-            protocol_path,
-            model=model,
-            model_revision=model_revision,
-            prompt_overrides=_arm_overrides(arm),
+        arm: (
+            build_registry_from_protocol(
+                protocol,
+                model=model,
+                model_revision=model_revision,
+                prompt_overrides=_arm_overrides(arm),
+            )
+            if protocol is not None
+            else build_registry(
+                Path(protocol_path),
+                model=model,
+                model_revision=model_revision,
+                prompt_overrides=_arm_overrides(arm),
+            )
         )
         for arm in F1_ARMS
     }
@@ -1886,6 +2170,7 @@ def build_development_execution_lock(
     manifest: Mapping[str, object],
     *,
     protocol_path: Path,
+    protocol: Mapping[str, object] | None = None,
     selection_receipt_sha256: str,
     prior_exposure_receipt_sha256: str,
     public_source_receipt_sha256: str,
@@ -1901,6 +2186,7 @@ def build_development_execution_lock(
     result_contract_sha256: str,
     judge_core_sha256: str,
     judge_core_file_sha256: str,
+    token_envelope_derivation_receipt_sha256: str,
     deployment_binding: ModelDeploymentBinding,
     forbidden_prior_item_ids: Sequence[str],
     forbidden_prior_source_entity_ids: Sequence[str],
@@ -1930,6 +2216,10 @@ def build_development_execution_lock(
         (result_contract_sha256, "result contract"),
         (judge_core_sha256, "judge core"),
         (judge_core_file_sha256, "judge core file"),
+        (
+            token_envelope_derivation_receipt_sha256,
+            "token-envelope derivation receipt",
+        ),
     ):
         _sha(value, label)
     if not isinstance(hswm_commit, str) or _GIT_COMMIT.fullmatch(hswm_commit) is None:
@@ -1944,7 +2234,10 @@ def build_development_execution_lock(
             "deployment identity differs from the development manifest"
         )
     registries = _registries(
-        protocol_path=protocol_path, model=model, model_revision=revision
+        protocol_path=protocol_path,
+        protocol=protocol,
+        model=model,
+        model_revision=revision,
     )
     raw_items = manifest.get("items")
     if not isinstance(raw_items, list) or not raw_items or any(
@@ -2033,6 +2326,9 @@ def build_development_execution_lock(
             {arm: registries[arm].registry_sha256 for arm in F1_ARMS}
         ),
         "token_envelope_sha256": canonical_sha256(envelope),
+        "token_envelope_derivation_receipt_sha256": (
+            token_envelope_derivation_receipt_sha256
+        ),
         "generation_policy_sha256": canonical_sha256(GENERATION_POLICY),
         "cohort_root_sha256": cohort_root,
         "candidate_universe_root_sha256": candidate_root,
@@ -2555,6 +2851,7 @@ def _verify_execution_structure(
         "environment_dependency_compatibility_root_sha256",
         "environment_dependency_bundle_sha256", "db_genesis_receipt_sha256",
         "protocol_sha256", "registries_root_sha256", "token_envelope_sha256",
+        "token_envelope_derivation_receipt_sha256",
         "cohort_root_sha256", "candidate_universe_root_sha256",
         "generation_policy_sha256", "spool_identity_preflight_sha256",
     ):
@@ -2698,6 +2995,7 @@ def run_suite_v3_draft(
     model_port,
     token_meter: TokenMeter,
     max_workers: int,
+    token_envelope_derivation: Mapping[str, object],
     environment_dependency_bundle: Mapping[str, object],
     result_contract_path: Path,
     judge_core_path: Path,
@@ -2711,13 +3009,21 @@ def run_suite_v3_draft(
     preregistration_readback: Mapping[str, object] | None = None,
     anchored_judge_path: Path | None = None,
 ) -> dict[str, object]:
+    """Internal executor for inputs captured and validated by the CLI boundary.
+
+    The supported live entrypoint is :func:`main`; direct mapping callers are
+    intentionally outside the raw-file provenance authority and are used only
+    by deterministic in-process tests with a non-network model port.
+    """
+
     if isinstance(max_workers, bool) or not isinstance(max_workers, int) or not 1 <= max_workers <= 8:
         raise R8RunnerRefusal("max_workers must be in [1,8]")
     ledger_path = getattr(getattr(model_port, "ledger", None), "path", None)
-    if ledger_path is not None:
-        _seal_private_sqlite_family(Path(ledger_path), "attempt ledger")
     registries = _registries(
         protocol_path=protocol_path,
+        protocol=token_envelope_derivation.get("protocol")
+        if isinstance(token_envelope_derivation, Mapping)
+        else None,
         model=str(manifest.get("model")),
         model_revision=str(manifest.get("model_revision")),
     )
@@ -2728,6 +3034,14 @@ def run_suite_v3_draft(
         registries=registries,
     )
     execution_lock_sha = str(projection_record.pop("execution_lock_sha256"))
+    derivation_sha = _validate_token_envelope_derivation_gate(
+        token_envelope_derivation,
+        manifest=normalized,
+        execution_lock=execution_lock,
+        token_meter=token_meter,
+        protocol_path=protocol_path,
+        preregistration_artifact=preregistration_artifact,
+    )
     deployment_binding = load_model_deployment_binding(
         model_weight_receipt_path,
         upstream_endpoint=str(execution_lock.get("upstream_endpoint", "")),
@@ -2792,6 +3106,8 @@ def run_suite_v3_draft(
         db_genesis_sha256=str(execution_lock["db_genesis_receipt_sha256"]),
         endpoint=str(policy["endpoint"]),
     )
+    if ledger_path is not None:
+        _seal_private_sqlite_family(Path(ledger_path), "attempt ledger")
     audit = getattr(model_port, "audit", None)
     if not callable(audit):
         raise R8RunnerRefusal("model port does not expose a durable audit")
@@ -2906,6 +3222,7 @@ def run_suite_v3_draft(
         "protocol_sha256": protocol_sha,
         "registries_root_sha256": registry_root,
         "token_envelope_sha256": canonical_sha256(normalized["token_envelope"]),
+        "token_envelope_derivation_receipt_sha256": derivation_sha,
         "cohort_root_sha256": cohort_root,
         "candidate_universe_root_sha256": candidate_root,
         "generation_policy": normalized["generation_policy"],
@@ -3127,6 +3444,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     run.add_argument("--spool-db", type=Path, required=True)
     run.add_argument("--db-genesis-receipt", type=Path, required=True)
     run.add_argument("--environment-dependency-bundle", type=Path, required=True)
+    run.add_argument(
+        "--token-envelope-derivation-receipt", type=Path, required=True
+    )
+    run.add_argument("--selection-receipt", type=Path, required=True)
+    run.add_argument("--historical-manifest", type=Path, required=True)
+    run.add_argument("--token-meter-validation-receipt", type=Path, required=True)
+    run.add_argument("--projected-outputs-receipt", type=Path, required=True)
+    run.add_argument("--token-meter-source-suite", type=Path, required=True)
     run.add_argument("--result-contract", type=Path, required=True)
     run.add_argument("--judge-core", type=Path, required=True)
     run.add_argument("--symposium-repo-root", type=Path, required=True)
@@ -3179,6 +3504,37 @@ def main(argv: Sequence[str] | None = None) -> int:
                 if args.preregistration_readback_receipt is not None
                 else None
             )
+            receipt, _receipt_file_sha = read_stable_json(
+                args.token_envelope_derivation_receipt,
+                "token-envelope derivation receipt",
+            )
+            derivation_values: dict[str, object] = {"receipt": receipt}
+            derivation_file_specs = {
+                "selection_receipt": (
+                    args.selection_receipt, "public selection receipt"
+                ),
+                "historical_manifest": (
+                    args.historical_manifest, "historical manifest"
+                ),
+                "validation_receipt": (
+                    args.token_meter_validation_receipt,
+                    "token-meter validation receipt",
+                ),
+                "projected_outputs_receipt": (
+                    args.projected_outputs_receipt,
+                    "projected-output receipt",
+                ),
+                "source_suite": (
+                    args.token_meter_source_suite, "token-meter source suite"
+                ),
+                "protocol": (args.protocol, "PROM-9 protocol"),
+            }
+            derivation_file_sha256s: dict[str, str] = {}
+            for name, (path, label) in derivation_file_specs.items():
+                value, digest = read_stable_json(path, label)
+                derivation_values[name] = value
+                derivation_file_sha256s[name] = digest
+            derivation_values["file_sha256s"] = derivation_file_sha256s
             meter = QwenBpeMeter(
                 args.tokenizer_dir / "vocab.json",
                 args.tokenizer_dir / "merges.txt",
@@ -3186,6 +3542,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
             registries = _registries(
                 protocol_path=args.protocol,
+                protocol=derivation_values.get("protocol")
+                if isinstance(derivation_values.get("protocol"), Mapping)
+                else None,
                 model=str(manifest.get("model")),
                 model_revision=str(manifest.get("model_revision")),
             )
@@ -3196,6 +3555,14 @@ def main(argv: Sequence[str] | None = None) -> int:
                 registries=registries,
             )
             lock_sha = str(projection["execution_lock_sha256"])
+            _validate_token_envelope_derivation_gate(
+                derivation_values,
+                manifest=normalized,
+                execution_lock=execution_lock,
+                token_meter=meter,
+                protocol_path=args.protocol,
+                preregistration_artifact=preregistration_artifact,
+            )
             deployment_binding = load_model_deployment_binding(
                 args.model_weight_receipt,
                 upstream_endpoint=str(
@@ -3258,7 +3625,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                 args.spool_db, args.db_genesis_receipt,
                 args.environment_dependency_bundle, args.result_contract,
                 args.judge_core, args.model_catalog, args.model_weight_receipt,
-                args.python_lock,
+                args.python_lock, args.token_envelope_derivation_receipt,
+                args.selection_receipt, args.historical_manifest,
+                args.token_meter_validation_receipt,
+                args.projected_outputs_receipt, args.token_meter_source_suite,
                 args.tokenizer_dir / "vocab.json",
                 args.tokenizer_dir / "merges.txt",
                 args.tokenizer_dir / "tokenizer_config.json",
@@ -3312,6 +3682,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                         model_port=port,
                         token_meter=meter,
                         max_workers=args.max_workers,
+                        token_envelope_derivation=derivation_values,
                         environment_dependency_bundle=environment_bundle,
                         result_contract_path=args.result_contract,
                         judge_core_path=args.judge_core,
@@ -3396,15 +3767,21 @@ if __name__ == "__main__":
 
 
 __all__ = [
+    "DEVELOPMENT_RUN_ID",
     "EXECUTION_LOCK_SCHEMA",
     "MANIFEST_SCHEMA",
     "R8RunnerRefusal",
+    "SEALED_LOCK_SCHEMA",
+    "SEALED_RUN_ID",
+    "SUITE_DRAFT_SCHEMA",
     "SUITE_SCHEMA",
     "build_development_execution_lock",
+    "capture_judge_hashes",
     "finalize_suite_v3",
     "initialize_transport_pair",
     "manifest_core_sha256",
-    "run_suite_v3_draft",
+    "read_stable_bytes",
+    "read_stable_json",
     "validate_manifest_v3",
     "validate_execution_policy",
     "verify_fresh_transport_genesis",

@@ -65,28 +65,52 @@ def _read_private_bytes(path: Path) -> bytes:
         raise PriorExposureRefusal("private input must be a regular non-symlink file")
     if stat.S_IMODE(info.st_mode) & 0o077:
         raise PriorExposureRefusal("private input must not be group/world accessible")
-    flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
-    descriptor = os.open(target, flags)
+    flags = (
+        os.O_RDONLY
+        | getattr(os, "O_CLOEXEC", 0)
+        | getattr(os, "O_NOFOLLOW", 0)
+    )
     try:
-        before = os.fstat(descriptor)
-        raw = b""
+        descriptor = os.open(target, flags)
+    except OSError as error:
+        raise PriorExposureRefusal("private input cannot be opened") from error
+    payload = bytearray()
+    try:
+        opened = os.fstat(descriptor)
+        if (
+            not stat.S_ISREG(opened.st_mode)
+            or opened.st_dev != info.st_dev
+            or opened.st_ino != info.st_ino
+            or stat.S_IMODE(opened.st_mode) & 0o077
+        ):
+            raise PriorExposureRefusal("private input changed before being read")
         while True:
             chunk = os.read(descriptor, 1024 * 1024)
             if not chunk:
                 break
-            raw += chunk
-        after = os.fstat(descriptor)
+            payload.extend(chunk)
+        after_fd = os.fstat(descriptor)
     finally:
         os.close(descriptor)
+    try:
+        after_path = target.lstat()
+    except OSError as error:
+        raise PriorExposureRefusal("private input cannot be restated") from error
+    identity = lambda value: (  # noqa: E731 - compact immutable projection
+        value.st_dev,
+        value.st_ino,
+        value.st_mode,
+        value.st_size,
+        value.st_mtime_ns,
+        value.st_ctime_ns,
+    )
     if (
-        before.st_dev != after.st_dev
-        or before.st_ino != after.st_ino
-        or before.st_size != after.st_size
-        or before.st_mtime_ns != after.st_mtime_ns
-        or len(raw) != before.st_size
+        identity(info) != identity(after_fd)
+        or identity(info) != identity(after_path)
+        or len(payload) != info.st_size
     ):
         raise PriorExposureRefusal("private input changed while being read")
-    return raw
+    return bytes(payload)
 
 
 def _strict_object(raw: bytes, label: str) -> dict[str, object]:

@@ -35,6 +35,36 @@ from prom_search_hswm.prom9_f1_r8_source import build_artifacts
 
 
 SENTINEL = "PRIVATE_SENTINEL_ANSWER"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+_JUDGE_RELATIVE_PATH = Path(
+    "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
+)
+
+
+def _resolve_symposium_root() -> Path:
+    candidates = (
+        REPO_ROOT.parents[1],
+        REPO_ROOT.parent / "SYMPOSIUM",
+        REPO_ROOT.parent / "symposium",
+    )
+    matches: dict[tuple[int, int], Path] = {}
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if (resolved / ".git").exists() and (
+            resolved / _JUDGE_RELATIVE_PATH
+        ).is_file():
+            info = resolved.stat()
+            matches.setdefault((info.st_dev, info.st_ino), resolved)
+    if len(matches) != 1:
+        raise RuntimeError(
+            f"expected exactly one SYMPOSIUM checkout for {REPO_ROOT}; "
+            f"found {sorted(str(path) for path in matches.values())}"
+        )
+    return next(iter(matches.values()))
+
+
+SYMPOSIUM_ROOT = _resolve_symposium_root()
+JUDGE_PATH = SYMPOSIUM_ROOT / _JUDGE_RELATIVE_PATH
 
 
 def _prior() -> dict[str, object]:
@@ -320,12 +350,7 @@ def test_power_builder_success_rederives_full_embedded_development_evidence(
         for arm in F1_ARMS
     ]
 
-    judge_path = (
-        Path(__file__).resolve().parents[3]
-        / "FINDINGS"
-        / "hswm-f1-r8-try3-2026-07-28"
-        / "f1_r8_lakatotree_judge.py"
-    )
+    judge_path = JUDGE_PATH
     judge_file_sha = hashlib.sha256(judge_path.read_bytes()).hexdigest()
     judge_semantic_sha = str(_load_judge_core(judge_path).judge_core_sha256(judge_path))
     environment_sha = "a" * 64

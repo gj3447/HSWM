@@ -65,7 +65,7 @@ def _resolve_symposium_root() -> Path:
 
 SYMPOSIUM_ROOT = _resolve_symposium_root()
 DEFAULT_JUDGE_CORE = SYMPOSIUM_ROOT / _JUDGE_RELATIVE_PATH
-RUN_ID = "f1-2wiki-r8-development-lock-test"
+RUN_ID = "f1-2wiki-development-r8-try3"
 ENDPOINT = "http://127.0.0.1:8011"
 UPSTREAM_ENDPOINT = "http://127.0.0.1:18002/v1/chat/completions"
 DEPLOYMENT_SHA256 = "d" * 64
@@ -203,6 +203,16 @@ def _allow_pre_c1_dependencies(monkeypatch: pytest.MonkeyPatch) -> None:
         "load_model_deployment_binding",
         lambda *_args, **_kwargs: _deployment_binding(),
     )
+    monkeypatch.setattr(
+        lock_module,
+        "QwenBpeMeter",
+        lambda *_args, **_kwargs: object(),
+    )
+    monkeypatch.setattr(
+        lock_module,
+        "verify_token_envelope_derivation",
+        lambda **kwargs: str(kwargs["receipt"]["receipt_sha256"]),
+    )
 
 
 def _valid_judge_source(marker: str = "a") -> str:
@@ -269,7 +279,22 @@ def _public_pipeline(tmp_path: Path, *, answer: str) -> tuple[dict[str, Path], d
     genesis = {**genesis_unsigned, "genesis_sha256": canonical_sha256(genesis_unsigned)}
     paths = {
         name: tmp_path / f"{name}.json"
-        for name in ("manifest", "selection", "source", "evaluator", "genesis", "prior")
+        for name in (
+            "manifest",
+            "selection",
+            "source",
+            "evaluator",
+            "genesis",
+            "prior",
+            "derivation",
+            "historical",
+            "validation",
+            "projected",
+            "source_suite",
+        )
+    }
+    derivation_unsigned = {
+        "schema_version": "hswm-test-token-envelope-derivation/v1",
     }
     values = {
         "manifest": artifacts["manifest"],
@@ -278,6 +303,14 @@ def _public_pipeline(tmp_path: Path, *, answer: str) -> tuple[dict[str, Path], d
         "evaluator": artifacts["evaluator_receipt"],
         "genesis": genesis,
         "prior": prior,
+        "derivation": {
+            **derivation_unsigned,
+            "receipt_sha256": canonical_sha256(derivation_unsigned),
+        },
+        "historical": {"schema_version": "hswm-test-historical/v1"},
+        "validation": {"schema_version": "hswm-test-validation/v1"},
+        "projected": {"schema_version": "hswm-test-projected/v1"},
+        "source_suite": {"schema_version": "hswm-test-source-suite/v1"},
     }
     for name, value in values.items():
         _write(paths[name], value)
@@ -310,6 +343,11 @@ def _invoke_lock(
             "--evaluator-receipt", str(paths["evaluator"]),
             "--db-genesis-receipt", str(paths["genesis"]),
             "--environment-dependency-bundle", str(bundle),
+            "--token-envelope-derivation-receipt", str(paths["derivation"]),
+            "--historical-manifest", str(paths["historical"]),
+            "--token-meter-validation-receipt", str(paths["validation"]),
+            "--projected-outputs-receipt", str(paths["projected"]),
+            "--token-meter-source-suite", str(paths["source_suite"]),
             "--prior-exposure-receipt", str(paths["prior"]),
             "--protocol", str(dependencies["protocol_json"]),
             "--judge-core", str(dependencies["judge_core"]),

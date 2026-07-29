@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 
+import prom_search_hswm.hswm_token_meter as token_meter_module
 from prom_search_hswm.hswm_token_meter import (
     CHAT_TEMPLATE_ID,
     METER_KIND,
@@ -92,7 +93,7 @@ def test_meter_is_deterministic_across_loads(tmp_path: Path) -> None:
 
 
 def test_meter_refuses_missing_files_and_hash_drift(tmp_path: Path) -> None:
-    with pytest.raises(TokenMeterError, match="cannot read"):
+    with pytest.raises(TokenMeterError, match="cannot stat"):
         QwenBpeMeter(
             tmp_path / "none.json", tmp_path / "none.txt", tmp_path / "none.json"
         )
@@ -110,6 +111,40 @@ def test_meter_refuses_missing_files_and_hash_drift(tmp_path: Path) -> None:
             tmp_path / "merges.txt",
             tmp_path / "tokenizer_config.json",
             expected_sha256={**good, "vocab_sha256": "0" * 64},
+        )
+
+
+def test_meter_uses_one_stable_fd_per_file_and_refuses_symlinks(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _mini_tokenizer(tmp_path)
+    original_open = token_meter_module.os.open
+    opened: list[Path] = []
+
+    def counted_open(path, flags, *args):
+        opened.append(Path(path))
+        return original_open(path, flags, *args)
+
+    monkeypatch.setattr(token_meter_module.os, "open", counted_open)
+    QwenBpeMeter(
+        tmp_path / "vocab.json",
+        tmp_path / "merges.txt",
+        tmp_path / "tokenizer_config.json",
+    )
+    assert opened == [
+        tmp_path / "vocab.json",
+        tmp_path / "merges.txt",
+        tmp_path / "tokenizer_config.json",
+    ]
+
+    vocab_link = tmp_path / "vocab-link.json"
+    vocab_link.symlink_to(tmp_path / "vocab.json")
+    with pytest.raises(TokenMeterError, match="non-symlink"):
+        QwenBpeMeter(
+            vocab_link,
+            tmp_path / "merges.txt",
+            tmp_path / "tokenizer_config.json",
         )
 
 

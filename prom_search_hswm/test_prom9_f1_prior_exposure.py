@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+import prom_search_hswm.prom9_f1_prior_exposure as prior_exposure
 from prom_search_hswm.hswm_typed_ports import canonical_sha256
 from prom_search_hswm.prom9_f1_prior_exposure import (
     EXPECTED_PAGE_SPECS,
@@ -158,6 +159,28 @@ def test_artifact_tree_refuses_symlinks(tmp_path: Path) -> None:
     (root / "link").symlink_to(target)
     with pytest.raises(PriorExposureRefusal, match="symlink"):
         inventory_stable_tree("fixture", root)
+
+
+def test_private_reader_refuses_lstat_to_open_identity_swap(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = tmp_path / "private.json"
+    replacement = tmp_path / "replacement.json"
+    _private_json(target, {"identity": "before"})
+    _private_json(replacement, {"identity": "after"})
+    original_open = os.open
+    swapped = False
+
+    def swapping_open(path, flags, *args):
+        nonlocal swapped
+        if not swapped and Path(path) == target:
+            os.replace(replacement, target)
+            swapped = True
+        return original_open(path, flags, *args)
+
+    monkeypatch.setattr(prior_exposure.os, "open", swapping_open)
+    with pytest.raises(PriorExposureRefusal, match="changed before"):
+        prior_exposure._read_private_bytes(target)
 
 
 def test_private_write_is_0600_and_write_once(tmp_path: Path) -> None:

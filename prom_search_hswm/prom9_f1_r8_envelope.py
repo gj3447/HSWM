@@ -29,22 +29,72 @@ from prom_search_hswm.prom9_f1_r8_power import (
     selected_entries,
     verify_selection_receipt,
 )
-from prom_search_hswm.prom9_f1_r8_runner import _item, _registries
+from prom_search_hswm.prom9_f1_r8_runner import (
+    _item,
+    _registries,
+    read_stable_json,
+)
 from prom_search_hswm.prom9_f1_r8_source import (
     build_public_artifacts,
-    read_json,
     write_json_once,
 )
 from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
-from prom_search_hswm.prom9_validate_token_meter import RECEIPT_SCHEMA
+from prom_search_hswm.prom9_validate_token_meter import (
+    RECEIPT_SCHEMA,
+    validate_meter_against_suite,
+)
 
 
 DERIVATION_SCHEMA = "hswm-prom9-f1-r8-token-envelope-derivation/v1"
 PROJECTED_OUTPUTS_SCHEMA = "hswm-prom9-f1-projected-outputs/v1"
+SOURCE_SUITE_SCHEMA = "hswm-prom9-f1-suite/v1"
 EXPECTED_DEVELOPMENT_ITEMS = 55
 EXPECTED_CONFIRMATORY_ITEMS = 100
 EXPECTED_CONFIRMATORY_COMPONENTS = 100
 DEFAULT_TOKEN_TOLERANCE = 512
+DEVELOPMENT_RUN_ID = "f1-2wiki-development-r8-try3"
+CONFIRMATORY_RUN_ID = "f1-2wiki-sealed-r8-try3"
+R8_DERIVATION_PREIMAGE_FILE_SHA256 = {
+    "selection_receipt": (
+        "8b16158db888ed0023056af85e204db8e0f9e3eb307ee53dc02be2ff9674ac91"
+    ),
+    "historical_manifest": (
+        "02e453dc25d7ec657494105d5d1592358501ac3a1fdd179e2b7e032dc890ebcc"
+    ),
+    "validation_receipt": (
+        "03309261a7fc187a2891dedcc56c0cbccd4c569d363f06e656cad4b7ae516b24"
+    ),
+    "projected_outputs_receipt": (
+        "f59f85dbd60b17fa2c3f344f05bcd749f5fa693e81c2b6e9736b6e6d94620e85"
+    ),
+    "source_suite": (
+        "18b2754312c85dc9b5e225df68ad2303d9ce30a45e61b9cffb00266d2282a5bd"
+    ),
+    "protocol": (
+        "835f1c3543838405dcff97315da86b1cc185f0a1d7758df8b0cfdf380f2f518e"
+    ),
+}
+R8_PROTOCOL_CANONICAL_SHA256 = (
+    "e5715049e427cd1a12b92eab950d7679ca94038fdbe6167ef42ff5ac72b747bf"
+)
+R8_DERIVATION_PREIMAGE_CANONICAL_SHA256 = {
+    "selection_receipt": (
+        "2a98eb24d683c304af4561a6463dfa6683a9945d1d028845af4c448e2d915bd1"
+    ),
+    "historical_manifest": (
+        "bf047193f84ca1888cc5e9d2527f6d6e2a89bc5c049ae3e4b7c73766e8fc5957"
+    ),
+    "validation_receipt": (
+        "e678ef48c7292a1ed03fced8ad096c7903c9a826563f476cc2a524ac0250f143"
+    ),
+    "projected_outputs_receipt": (
+        "49f3b76061d3ea49d9f32d85d1d121ab8a68f4398df42d93cc37964c40fed250"
+    ),
+    "source_suite": (
+        "094743d9d2059a2cf2c3e68b34122ad0c332bfdaa22383c834791f695119708c"
+    ),
+    "protocol": R8_PROTOCOL_CANONICAL_SHA256,
+}
 _COMMIT = re.compile(r"^[0-9a-f]{40}$")
 
 
@@ -60,8 +110,83 @@ def _self_hash(value: Mapping[str, object], field: str, label: str) -> str:
     return declared
 
 
+def _read_bound_json(path: Path, label: str) -> tuple[dict[str, object], str]:
+    try:
+        return read_stable_json(path, label)
+    except Exception as error:
+        raise R8EnvelopeRefusal(f"cannot capture stable {label}") from error
+
+
+def _validate_source_suite(
+    value: Mapping[str, object],
+) -> tuple[str, int, dict[str, dict[str, int]]]:
+    expected = {
+        "schema_version", "run_id", "mode", "model", "model_revision",
+        "manifest_sha256", "preregistration_receipt_sha256",
+        "token_tolerance", "state_capacity_bytes", "max_workers",
+        "registries", "item_runs", "gold_opened",
+        "scientific_verdict_emitted", "suite_receipt_sha256",
+    }
+    if (
+        set(value) != expected
+        or value.get("schema_version") != SOURCE_SUITE_SCHEMA
+        or value.get("mode") != "development"
+        or value.get("gold_opened") is not False
+        or value.get("scientific_verdict_emitted") is not False
+    ):
+        raise R8EnvelopeRefusal("token-meter source suite shape drifted")
+    suite_sha = _self_hash(value, "suite_receipt_sha256", "token-meter source suite")
+    registries = value.get("registries")
+    rows = value.get("item_runs")
+    if (
+        not isinstance(registries, Mapping)
+        or set(registries) != set(F1_ARMS)
+        or not isinstance(rows, list)
+        or not rows
+    ):
+        raise R8EnvelopeRefusal("token-meter source suite coverage drifted")
+    maxima = {arm: {call: 0 for call in ("1", "2", "3")} for arm in F1_ARMS}
+    calls_checked = 0
+    for index, row in enumerate(rows):
+        if not isinstance(row, Mapping):
+            raise R8EnvelopeRefusal(f"source-suite item run {index} is malformed")
+        arm = row.get("arm_id")
+        calls = row.get("calls")
+        if arm not in F1_ARMS or not isinstance(calls, list) or len(calls) != 3:
+            raise R8EnvelopeRefusal(f"source-suite item run {index} coverage drifted")
+        by_call: dict[str, int] = {}
+        for raw in calls:
+            if not isinstance(raw, Mapping) or raw.get("arm_id") != arm:
+                raise R8EnvelopeRefusal("source-suite call identity drifted")
+            call_index = raw.get("call_index")
+            output_tokens = raw.get("output_tokens")
+            if (
+                isinstance(call_index, bool)
+                or not isinstance(call_index, int)
+                or call_index not in (1, 2, 3)
+                or str(call_index) in by_call
+                or isinstance(output_tokens, bool)
+                or not isinstance(output_tokens, int)
+                or output_tokens < 1
+            ):
+                raise R8EnvelopeRefusal("source-suite call token record drifted")
+            by_call[str(call_index)] = output_tokens
+            calls_checked += 1
+        if set(by_call) != {"1", "2", "3"}:
+            raise R8EnvelopeRefusal("source-suite call indices drifted")
+        for call, output_tokens in by_call.items():
+            maxima[str(arm)][call] = max(maxima[str(arm)][call], output_tokens)
+    if any(value < 1 for triplet in maxima.values() for value in triplet.values()):
+        raise R8EnvelopeRefusal("source-suite projection coverage is incomplete")
+    return suite_sha, calls_checked, maxima
+
+
 def _validate_meter_receipt(
-    value: Mapping[str, object], meter: TokenMeter
+    value: Mapping[str, object],
+    meter: TokenMeter,
+    *,
+    source_suite_sha256: str,
+    calls_checked: int,
 ) -> tuple[str, str]:
     expected = {
         "schema_version", "meter", "suite_receipt_sha256", "calls_checked",
@@ -78,19 +203,22 @@ def _validate_meter_receipt(
     if (
         isinstance(checked, bool)
         or not isinstance(checked, int)
-        or checked < 1
+        or checked != calls_checked
         or value.get("mismatches") != 0
         or value.get("result") != f"EXACT_MATCH_{checked}_OF_{checked}"
     ):
         raise R8EnvelopeRefusal("token-meter validation is not an exact match")
     source_suite = value.get("suite_receipt_sha256")
-    if not isinstance(source_suite, str) or len(source_suite) != 64:
+    if source_suite != source_suite_sha256:
         raise R8EnvelopeRefusal("token-meter validation source suite is invalid")
     return receipt_sha, source_suite
 
 
 def _validate_projected_outputs(
-    value: Mapping[str, object], *, source_suite_sha256: str
+    value: Mapping[str, object],
+    *,
+    source_suite_sha256: str,
+    observed: Mapping[str, Mapping[str, int]],
 ) -> dict[str, dict[str, int]]:
     expected = {
         "schema_version", "derivation", "projected_output_tokens_by_arm",
@@ -119,6 +247,8 @@ def _validate_projected_outputs(
                 )
             normalized[call] = count
         result[arm] = normalized
+    if result != {arm: dict(observed[arm]) for arm in F1_ARMS}:
+        raise R8EnvelopeRefusal("projected outputs differ from the source suite")
     return result
 
 
@@ -162,8 +292,10 @@ def build_token_envelope_artifacts(
     historical_manifest: Mapping[str, object],
     validation_receipt: Mapping[str, object],
     projected_outputs_receipt: Mapping[str, object],
+    source_suite: Mapping[str, object],
     meter: TokenMeter,
-    protocol_path: Path,
+    protocol_path: Path | None = None,
+    protocol: Mapping[str, object] | None = None,
     model: str,
     model_revision: str,
     development_run_id: str,
@@ -178,6 +310,16 @@ def build_token_envelope_artifacts(
         raise R8EnvelopeRefusal("model and immutable 40-hex revision are required")
     if not development_run_id or not confirmatory_run_id:
         raise R8EnvelopeRefusal("both cohort run IDs are required")
+    if protocol is None:
+        if protocol_path is None:
+            raise R8EnvelopeRefusal("protocol preimage is required")
+        protocol, protocol_file_sha = _read_bound_json(
+            protocol_path, "PROM-9 protocol"
+        )
+        if protocol_file_sha != R8_DERIVATION_PREIMAGE_FILE_SHA256["protocol"]:
+            raise R8EnvelopeRefusal("protocol file preimage drifted")
+    if canonical_sha256(protocol) != R8_PROTOCOL_CANONICAL_SHA256:
+        raise R8EnvelopeRefusal("protocol canonical preimage drifted")
     if (
         isinstance(token_tolerance, bool)
         or not isinstance(token_tolerance, int)
@@ -187,8 +329,26 @@ def build_token_envelope_artifacts(
     selection_sha = verify_selection_receipt(selection)
     historical_raw = historical_manifest.get("token_envelope")
     historical = validate_token_envelope(historical_raw, arms=F1_ARMS)
+    source_suite_sha, calls_checked, observed_projected = _validate_source_suite(
+        source_suite
+    )
+    try:
+        replayed_validation = validate_meter_against_suite(
+            meter=meter, suite=source_suite
+        )
+    except Exception as error:
+        raise R8EnvelopeRefusal(
+            "token meter does not reproduce the source suite"
+        ) from error
+    if replayed_validation != dict(validation_receipt):
+        raise R8EnvelopeRefusal(
+            "token-meter validation receipt is not reproducible"
+        )
     validation_sha, source_suite_sha = _validate_meter_receipt(
-        validation_receipt, meter
+        validation_receipt,
+        meter,
+        source_suite_sha256=source_suite_sha,
+        calls_checked=calls_checked,
     )
     check_tokenizer_identity(
         {
@@ -203,16 +363,20 @@ def build_token_envelope_artifacts(
     }:
         raise R8EnvelopeRefusal("historical envelope tokenizer binding drifted")
     projected = _validate_projected_outputs(
-        projected_outputs_receipt, source_suite_sha256=source_suite_sha
+        projected_outputs_receipt,
+        source_suite_sha256=source_suite_sha,
+        observed=observed_projected,
     )
     if historical.get("projected_output_tokens_by_arm") != projected:
         raise R8EnvelopeRefusal("historical and committed output projections differ")
 
     registries = _registries(
-        protocol_path=protocol_path, model=model, model_revision=model_revision
+        protocol=protocol,
+        model=model,
+        model_revision=model_revision,
     )
     registry_root = canonical_sha256(
-        {arm: registries[arm].canonical() for arm in sorted(registries)}
+        {arm: registries[arm].registry_sha256 for arm in sorted(registries)}
     )
     minima: dict[str, dict[str, int]] = {}
     for cohort, run_id in (
@@ -332,6 +496,85 @@ def build_token_envelope_artifacts(
     return {"token_envelope": envelope, "derivation_receipt": receipt}
 
 
+def verify_token_envelope_derivation(
+    *,
+    receipt: Mapping[str, object],
+    manifest: Mapping[str, object],
+    selection: Mapping[str, object],
+    historical_manifest: Mapping[str, object],
+    validation_receipt: Mapping[str, object],
+    projected_outputs_receipt: Mapping[str, object],
+    source_suite: Mapping[str, object],
+    protocol: Mapping[str, object] | None = None,
+    meter: TokenMeter,
+    protocol_path: Path | None = None,
+    file_sha256s: Mapping[str, str],
+    expected_file_sha256s: Mapping[str, str] = R8_DERIVATION_PREIMAGE_FILE_SHA256,
+    expected_canonical_sha256s: Mapping[str, str] = (
+        R8_DERIVATION_PREIMAGE_CANONICAL_SHA256
+    ),
+    development_run_id: str = DEVELOPMENT_RUN_ID,
+    confirmatory_run_id: str = CONFIRMATORY_RUN_ID,
+    expected_development_items: int = EXPECTED_DEVELOPMENT_ITEMS,
+    expected_confirmatory_items: int = EXPECTED_CONFIRMATORY_ITEMS,
+) -> str:
+    """Replay the exact public producer and require byte-semantic identity."""
+
+    if protocol is None:
+        if protocol_path is None:
+            raise R8EnvelopeRefusal("protocol preimage is required")
+        protocol, protocol_file_sha = _read_bound_json(
+            protocol_path, "PROM-9 protocol"
+        )
+        if file_sha256s.get("protocol") != protocol_file_sha:
+            raise R8EnvelopeRefusal("protocol file preimage drifted")
+    if dict(file_sha256s) != dict(expected_file_sha256s):
+        raise R8EnvelopeRefusal("token-envelope derivation file preimages drifted")
+    observed_canonical = {
+        "selection_receipt": canonical_sha256(selection),
+        "historical_manifest": canonical_sha256(historical_manifest),
+        "validation_receipt": canonical_sha256(validation_receipt),
+        "projected_outputs_receipt": canonical_sha256(
+            projected_outputs_receipt
+        ),
+        "source_suite": canonical_sha256(source_suite),
+        "protocol": canonical_sha256(protocol),
+    }
+    if observed_canonical != dict(expected_canonical_sha256s):
+        raise R8EnvelopeRefusal("token-envelope canonical preimages drifted")
+    model = manifest.get("model")
+    model_revision = manifest.get("model_revision")
+    tolerance = manifest.get("token_tolerance")
+    if (
+        not isinstance(model, str)
+        or not isinstance(model_revision, str)
+        or isinstance(tolerance, bool)
+        or not isinstance(tolerance, int)
+    ):
+        raise R8EnvelopeRefusal("manifest derivation identity drifted")
+    artifacts = build_token_envelope_artifacts(
+        selection=selection,
+        historical_manifest=historical_manifest,
+        validation_receipt=validation_receipt,
+        projected_outputs_receipt=projected_outputs_receipt,
+        source_suite=source_suite,
+        protocol=protocol,
+        meter=meter,
+        model=model,
+        model_revision=model_revision,
+        development_run_id=development_run_id,
+        confirmatory_run_id=confirmatory_run_id,
+        token_tolerance=tolerance,
+        expected_development_items=expected_development_items,
+        expected_confirmatory_items=expected_confirmatory_items,
+    )
+    if artifacts["token_envelope"] != manifest.get("token_envelope"):
+        raise R8EnvelopeRefusal("replayed token envelope differs from the manifest")
+    if artifacts["derivation_receipt"] != dict(receipt):
+        raise R8EnvelopeRefusal("token-envelope derivation receipt is not reproducible")
+    return _self_hash(receipt, "receipt_sha256", "token-envelope derivation receipt")
+
+
 def write_artifacts_once(
     *, envelope_path: Path, receipt_path: Path, artifacts: Mapping[str, object]
 ) -> None:
@@ -358,6 +601,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--tokenizer-dir", type=Path, required=True)
     parser.add_argument("--validation-receipt", type=Path, required=True)
     parser.add_argument("--projected-outputs-receipt", type=Path, required=True)
+    parser.add_argument("--source-suite", type=Path, required=True)
     parser.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
     parser.add_argument("--model", required=True)
     parser.add_argument("--model-revision", required=True)
@@ -373,19 +617,42 @@ def main(argv: Sequence[str] | None = None) -> int:
             args.tokenizer_dir / "merges.txt",
             args.tokenizer_dir / "tokenizer_config.json",
         )
-        selection = read_json(args.selection_receipt, "public selection receipt")
-        historical = read_json(args.historical_manifest, "historical manifest")
-        validation = read_json(args.validation_receipt, "token-meter validation receipt")
-        projected = read_json(
+        selection, selection_file_sha = _read_bound_json(
+            args.selection_receipt, "public selection receipt"
+        )
+        historical, historical_file_sha = _read_bound_json(
+            args.historical_manifest, "historical manifest"
+        )
+        validation, validation_file_sha = _read_bound_json(
+            args.validation_receipt, "token-meter validation receipt"
+        )
+        projected, projected_file_sha = _read_bound_json(
             args.projected_outputs_receipt, "projected-output receipt"
         )
+        source_suite, source_suite_file_sha = _read_bound_json(
+            args.source_suite, "token-meter source suite"
+        )
+        protocol, protocol_file_sha = _read_bound_json(
+            args.protocol, "PROM-9 protocol"
+        )
+        observed_files = {
+            "selection_receipt": selection_file_sha,
+            "historical_manifest": historical_file_sha,
+            "validation_receipt": validation_file_sha,
+            "projected_outputs_receipt": projected_file_sha,
+            "source_suite": source_suite_file_sha,
+            "protocol": protocol_file_sha,
+        }
+        if observed_files != R8_DERIVATION_PREIMAGE_FILE_SHA256:
+            raise R8EnvelopeRefusal("token-envelope derivation file preimages drifted")
         artifacts = build_token_envelope_artifacts(
             selection=selection,
             historical_manifest=historical,
             validation_receipt=validation,
             projected_outputs_receipt=projected,
+            source_suite=source_suite,
+            protocol=protocol,
             meter=meter,
-            protocol_path=args.protocol,
             model=args.model,
             model_revision=args.model_revision,
             development_run_id=args.development_run_id,
@@ -427,8 +694,14 @@ if __name__ == "__main__":
 
 
 __all__ = [
+    "CONFIRMATORY_RUN_ID",
+    "DEVELOPMENT_RUN_ID",
     "DERIVATION_SCHEMA",
+    "R8_DERIVATION_PREIMAGE_FILE_SHA256",
+    "R8_DERIVATION_PREIMAGE_CANONICAL_SHA256",
+    "R8_PROTOCOL_CANONICAL_SHA256",
     "R8EnvelopeRefusal",
     "build_token_envelope_artifacts",
+    "verify_token_envelope_derivation",
     "write_artifacts_once",
 ]

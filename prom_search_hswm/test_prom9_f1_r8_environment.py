@@ -792,6 +792,7 @@ def test_r8_dependency_path_inventory_covers_every_runtime_module(
         "prior_exposure": "prom9_f1_prior_exposure.py",
         "data_preparer_core": "prom9_prepare_2wiki_f1.py",
         "function_network_adapter": "prom_f1_function_network.py",
+        "protocol_json": "prom9_semantic_neural_network.v1.json",
         "protocol_loader": "prom9_protocol.py",
         "terminal_transport_exporter": "prom9_f1_r8_transport_audit.py",
         "function_network": "hswm_function_network.py",
@@ -802,6 +803,8 @@ def test_r8_dependency_path_inventory_covers_every_runtime_module(
         "token_meter": "hswm_token_meter.py",
         "typed_ports": "hswm_typed_ports.py",
         "token_envelope": "prom9_f1_envelope.py",
+        "token_envelope_derivation": "prom9_f1_r8_envelope.py",
+        "token_meter_validator": "prom9_validate_token_meter.py",
         "model_deployment_receipt_code": "model_deployment_receipt.py",
         "model_snapshot_attestation_core": "bge_m3_embed.py",
         "data_preparer": "prom9_f1_r8_source.py",
@@ -813,14 +816,16 @@ def test_r8_dependency_path_inventory_covers_every_runtime_module(
         if name not in {
             "model_deployment_receipt_code",
             "model_snapshot_attestation_core",
+            "protocol_json",
         }
     )
+    assert paths["protocol_json"] == tmp_path / "protocol.json"
     assert paths["model_deployment_receipt_code"] == (
         module_dir.parent / "model_deployment_receipt.py"
     )
     assert paths["model_snapshot_attestation_core"] == (
         module_dir.parent / "bge_m3_embed.py"
     )
-    assert len(paths) == 31
+    assert len(paths) == 33
     assert "model_weight_receipt" not in paths
     assert paths["model_deployment_receipt"] == tmp_path / "model-weight.json"

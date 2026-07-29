@@ -3,15 +3,14 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 from pathlib import Path
 import re
-import stat
 import sys
 from collections.abc import Mapping, Sequence
 
 from prom_search_hswm.hswm_typed_ports import canonical_sha256
+from prom_search_hswm.hswm_token_meter import QwenBpeMeter
 from prom_search_hswm.hswm_result_spool import load_model_deployment_binding
 from prom_search_hswm.prom9_f1_prior_exposure import (
     _read_private_bytes,
@@ -27,11 +26,18 @@ from prom_search_hswm.prom9_f1_r8_environment import (
     verify_r8_preimage_bundle,
 )
 from prom_search_hswm.prom9_f1_r8_power import (
-    _load_judge_core,
     replay_selection_receipt,
     selected_entries,
 )
-from prom_search_hswm.prom9_f1_r8_runner import build_development_execution_lock
+from prom_search_hswm.prom9_f1_r8_runner import (
+    build_development_execution_lock,
+    capture_judge_hashes,
+    read_stable_bytes,
+    read_stable_json,
+)
+from prom_search_hswm.prom9_f1_r8_envelope import (
+    verify_token_envelope_derivation,
+)
 from prom_search_hswm.prom9_f1_r8_source import (
     build_public_artifacts,
     candidate_universe_sha256,
@@ -58,6 +64,13 @@ def _read(path: Path, label: str) -> dict[str, object]:
     return _strict_object(_read_private_bytes(path), label)
 
 
+def _read_with_sha(path: Path, label: str) -> tuple[dict[str, object], str]:
+    try:
+        return read_stable_json(path, label)
+    except Exception as error:
+        raise LockRefusal(f"cannot capture stable {label}") from error
+
+
 def _self_hash(value: Mapping[str, object], field: str, label: str) -> str:
     unsigned = dict(value)
     declared = unsigned.pop(field, None)
@@ -67,21 +80,10 @@ def _self_hash(value: Mapping[str, object], field: str, label: str) -> str:
 
 
 def _stable_file_sha256(path: Path, label: str) -> str:
-    target = Path(path)
     try:
-        before = target.lstat()
-    except OSError as error:
-        raise LockRefusal(f"{label} is unavailable") from error
-    if stat.S_ISLNK(before.st_mode) or not stat.S_ISREG(before.st_mode):
-        raise LockRefusal(f"{label} must be a regular non-symlink file")
-    digest = hashlib.sha256(target.read_bytes()).hexdigest()
-    after = target.lstat()
-    if (
-        before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns
-    ) != (
-        after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns
-    ):
-        raise LockRefusal(f"{label} changed while hashing")
+        _raw, digest = read_stable_bytes(path, label)
+    except Exception as error:
+        raise LockRefusal(f"cannot capture stable {label}") from error
     return digest
 
 
@@ -229,6 +231,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--evaluator-receipt", type=Path, required=True)
     parser.add_argument("--db-genesis-receipt", type=Path, required=True)
     parser.add_argument("--environment-dependency-bundle", type=Path, required=True)
+    parser.add_argument(
+        "--token-envelope-derivation-receipt", type=Path, required=True
+    )
+    parser.add_argument("--historical-manifest", type=Path, required=True)
+    parser.add_argument("--token-meter-validation-receipt", type=Path, required=True)
+    parser.add_argument("--projected-outputs-receipt", type=Path, required=True)
+    parser.add_argument("--token-meter-source-suite", type=Path, required=True)
     parser.add_argument("--prior-exposure-receipt", type=Path, required=True)
     parser.add_argument("--protocol", type=Path, required=True)
     parser.add_argument("--judge-core", type=Path, required=True)
@@ -253,11 +262,33 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         manifest = _read(args.manifest, "development manifest")
-        selection = _read(args.selection_receipt, "public cohort selection receipt")
+        selection, selection_file_sha = _read_with_sha(
+            args.selection_receipt, "public cohort selection receipt"
+        )
         public_source = _read(args.source_receipt, "public source receipt")
         evaluator = _read(args.evaluator_receipt, "evaluator seal")
         genesis = _read(args.db_genesis_receipt, "DB genesis receipt")
         prior = _read(args.prior_exposure_receipt, "prior-exposure receipt")
+        derivation_receipt, _derivation_file_sha = _read_with_sha(
+            args.token_envelope_derivation_receipt,
+            "token-envelope derivation receipt",
+        )
+        historical, historical_file_sha = _read_with_sha(
+            args.historical_manifest, "historical manifest"
+        )
+        validation, validation_file_sha = _read_with_sha(
+            args.token_meter_validation_receipt,
+            "token-meter validation receipt",
+        )
+        projected, projected_file_sha = _read_with_sha(
+            args.projected_outputs_receipt, "projected-output receipt"
+        )
+        source_suite, source_suite_file_sha = _read_with_sha(
+            args.token_meter_source_suite, "token-meter source suite"
+        )
+        protocol, protocol_file_sha = _read_with_sha(
+            args.protocol, "PROM-9 protocol"
+        )
         bundle = load_private_receipt(
             args.environment_dependency_bundle, verify_live=True
         )
@@ -266,6 +297,37 @@ def main(argv: Sequence[str] | None = None) -> int:
         selection_sha = replay_selection_receipt(selection, prior_receipt=prior)
         if selection.get("prior_exposure_receipt_sha256") != prior_sha:
             raise LockRefusal("selection is not bound to prior exposure")
+        derivation_sha = _self_hash(
+            derivation_receipt,
+            "receipt_sha256",
+            "token-envelope derivation receipt",
+        )
+        meter = QwenBpeMeter(
+            args.tokenizer_dir / "vocab.json",
+            args.tokenizer_dir / "merges.txt",
+            args.tokenizer_dir / "tokenizer_config.json",
+        )
+        replayed_derivation_sha = verify_token_envelope_derivation(
+            receipt=derivation_receipt,
+            manifest=manifest,
+            selection=selection,
+            historical_manifest=historical,
+            validation_receipt=validation,
+            projected_outputs_receipt=projected,
+            source_suite=source_suite,
+            protocol=protocol,
+            meter=meter,
+            file_sha256s={
+                "selection_receipt": selection_file_sha,
+                "historical_manifest": historical_file_sha,
+                "validation_receipt": validation_file_sha,
+                "projected_outputs_receipt": projected_file_sha,
+                "source_suite": source_suite_file_sha,
+                "protocol": protocol_file_sha,
+            },
+        )
+        if replayed_derivation_sha != derivation_sha:
+            raise LockRefusal("token-envelope derivation replay SHA drifted")
         run_id, source_sha, evaluator_sha, gold_source_sha, gold_sha = (
             _validate_artifact_graph(
                 manifest=manifest,
@@ -345,14 +407,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         compatibility_root = verified_bundle["compatibility_root_sha256"]
         bundle_sha = verified_bundle["bundle_sha256"]
 
-        judge_core_file_sha = _stable_file_sha256(args.judge_core, "judge core")
+        judge_core_file_sha, judge_core_sha = capture_judge_hashes(
+            args.judge_core,
+            "judge core",
+        )
         result_contract_sha = _stable_file_sha256(
             args.result_contract, "result contract"
         )
-        judge = _load_judge_core(args.judge_core)
-        judge_core_sha = str(judge.judge_core_sha256(args.judge_core))
-        if _stable_file_sha256(args.judge_core, "judge core") != judge_core_file_sha:
-            raise LockRefusal("judge core changed while freezing the execution lock")
 
         aggregate = prior.get("aggregate")
         if not isinstance(aggregate, Mapping):
@@ -360,6 +421,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         lock = build_development_execution_lock(
             manifest,
             protocol_path=args.protocol,
+            protocol=protocol,
             selection_receipt_sha256=selection_sha,
             prior_exposure_receipt_sha256=prior_sha,
             public_source_receipt_sha256=source_sha,
@@ -375,6 +437,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             result_contract_sha256=result_contract_sha,
             judge_core_sha256=judge_core_sha,
             judge_core_file_sha256=judge_core_file_sha,
+            token_envelope_derivation_receipt_sha256=derivation_sha,
             deployment_binding=deployment_binding,
             forbidden_prior_item_ids=sorted(aggregate.get("prior_item_ids", [])),
             forbidden_prior_source_entity_ids=sorted(

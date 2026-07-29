@@ -69,12 +69,33 @@ def build_registry(
     model_revision: str,
     prompt_overrides: Mapping[str, str] | None = None,
 ) -> FunctionRegistryV1:
+    protocol_path = Path(protocol_path)
+    protocol = read_json(protocol_path, "PROM-9 protocol")
+    return build_registry_from_protocol(
+        protocol,
+        model=model,
+        model_revision=model_revision,
+        prompt_overrides=prompt_overrides,
+    )
+
+
+def build_registry_from_protocol(
+    raw_protocol: Mapping[str, object],
+    *,
+    model: str,
+    model_revision: str,
+    prompt_overrides: Mapping[str, str] | None = None,
+) -> FunctionRegistryV1:
+    """Build a registry from one already captured protocol object."""
+
     if not isinstance(model, str) or not model.strip():
         raise FunctionRegistryError("model must be non-empty")
     if not isinstance(model_revision, str) or not model_revision.strip():
         raise FunctionRegistryError("model_revision must be non-empty")
-    protocol_path = Path(protocol_path)
-    protocol = validate_protocol(read_json(protocol_path, "PROM-9 protocol"))
+    try:
+        protocol = validate_protocol(raw_protocol)
+    except Exception as error:
+        raise FunctionRegistryError("invalid protocol preimage") from error
     overrides = dict(prompt_overrides or {})
     known = {str(item["id"]) for item in protocol["llm_functions"]}
     if set(overrides) - known:
@@ -131,5 +152,6 @@ __all__ = [
     "FunctionSpecV1",
     "REGISTRY_SCHEMA",
     "build_registry",
+    "build_registry_from_protocol",
     "verify_registry",
 ]

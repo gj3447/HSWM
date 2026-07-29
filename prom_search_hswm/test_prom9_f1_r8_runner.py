@@ -115,6 +115,28 @@ DEPLOYMENT_SHA256 = "d" * 64
 TEST_REVISION = "f" * 40
 
 
+def test_stable_reader_refuses_lstat_to_open_identity_swap(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = tmp_path / "authority.py"
+    replacement = tmp_path / "replacement.py"
+    target.write_bytes(b"before\n")
+    replacement.write_bytes(b"after\n")
+    original_open = os.open
+    swapped = False
+
+    def swapping_open(path, flags, *args):
+        nonlocal swapped
+        if not swapped and Path(path) == target:
+            os.replace(replacement, target)
+            swapped = True
+        return original_open(path, flags, *args)
+
+    monkeypatch.setattr(runner.os, "open", swapping_open)
+    with pytest.raises(R8RunnerRefusal, match="changed before"):
+        runner.read_stable_bytes(target, "authority")
+
+
 def _deployment_binding() -> ModelDeploymentBinding:
     return ModelDeploymentBinding(
         upstream_endpoint=UPSTREAM_ENDPOINT,
@@ -184,6 +206,13 @@ def _verify_dirty_owned_paths_without_weakening_runner(
         "load_model_deployment_binding",
         lambda *_args, **_kwargs: _deployment_binding(),
     )
+    monkeypatch.setattr(
+        runner,
+        "_replay_token_envelope_derivation",
+        lambda *, manifest, token_meter, **_kwargs: _derivation_receipt(
+            manifest, token_meter
+        )["receipt_sha256"],
+    )
 
 
 def _registries() -> dict[str, object]:
@@ -246,7 +275,7 @@ def _manifest(meter: FakeMeter) -> dict[str, object]:
     items = _items()
     projected = {arm: {"1": 5, "2": 5, "3": 5} for arm in F1_ARMS}
     caps = compute_minimum_input_caps(
-        run_id="f1-2wiki-power-pilot-test",
+        run_id=runner.DEVELOPMENT_RUN_ID,
         items=[runner._item(value, "fixture") for value in items],
         arms=F1_ARMS,
         registries=_registries(),
@@ -258,7 +287,7 @@ def _manifest(meter: FakeMeter) -> dict[str, object]:
         item["max_input_tokens"] = sum(caps.values())
     return {
         "schema_version": runner.MANIFEST_SCHEMA,
-        "run_id": "f1-2wiki-power-pilot-test",
+        "run_id": runner.DEVELOPMENT_RUN_ID,
         "mode": "development",
         "model": "fake-model",
         "model_revision": TEST_REVISION,
@@ -281,6 +310,78 @@ def _manifest(meter: FakeMeter) -> dict[str, object]:
             "projection_slack_tokens": 4,
         },
         "items": items,
+    }
+
+
+def _derivation_receipt(
+    manifest: dict[str, object], meter: FakeMeter
+) -> dict[str, object]:
+    registries = _registries()
+    envelope = manifest["token_envelope"]
+    assert isinstance(envelope, dict)
+    input_caps = dict(envelope["per_call_input_caps"])
+    output_caps = dict(envelope["per_call_output_caps"])
+    cohort = lambda run_id, items, components, marker: {  # noqa: E731
+        "run_id": run_id,
+        "items": items,
+        "components": components,
+        "minimum_input_caps": dict(input_caps),
+        "projection_sha256": marker * 64,
+        "projected_spread": 0,
+    }
+    unsigned = {
+        "schema_version": "hswm-prom9-f1-r8-token-envelope-derivation/v1",
+        "derivation_policy": (
+            "tight_common_componentwise_max_of_both_frozen_cohorts/v1"
+        ),
+        "selection_receipt_sha256": "1" * 64,
+        "historical_token_envelope_sha256": "2" * 64,
+        "historical_input_caps_used_as_floor": False,
+        "model": manifest["model"],
+        "model_revision": manifest["model_revision"],
+        "protocol_sha256": next(iter(registries.values())).protocol_sha256,
+        "registries_root_sha256": canonical_sha256(
+            {arm: registries[arm].registry_sha256 for arm in F1_ARMS}
+        ),
+        "token_meter_validation_receipt_sha256": "3" * 64,
+        "token_meter": meter.identity(),
+        "projected_outputs_receipt_sha256": "4" * 64,
+        "source_suite_receipt_sha256": "5" * 64,
+        "development": cohort(runner.DEVELOPMENT_RUN_ID, 55, 48, "6"),
+        "confirmatory": cohort(runner.SEALED_RUN_ID, 100, 100, "7"),
+        "per_call_input_caps": input_caps,
+        "per_call_output_caps": output_caps,
+        "total_input_tokens_per_run": sum(input_caps.values()),
+        "total_allowed_output_tokens_per_run": sum(output_caps.values()),
+        "projection_slack_tokens": envelope["projection_slack_tokens"],
+        "token_tolerance": manifest["token_tolerance"],
+        "token_envelope_sha256": canonical_sha256(envelope),
+        "gold_inputs_read": False,
+        "model_calls": 0,
+    }
+    return {**unsigned, "receipt_sha256": canonical_sha256(unsigned)}
+
+
+def _derivation_inputs(
+    manifest: dict[str, object], meter: FakeMeter
+) -> dict[str, object]:
+    protocol_path = REPO_ROOT / DEFAULT_PROTOCOL
+    return {
+        "receipt": _derivation_receipt(manifest, meter),
+        "selection_receipt": {},
+        "historical_manifest": {},
+        "validation_receipt": {},
+        "projected_outputs_receipt": {},
+        "source_suite": {},
+        "protocol": json.loads(protocol_path.read_text(encoding="utf-8")),
+        "file_sha256s": {
+            "selection_receipt": "8" * 64,
+            "historical_manifest": "9" * 64,
+            "validation_receipt": "a" * 64,
+            "projected_outputs_receipt": "b" * 64,
+            "source_suite": "c" * 64,
+            "protocol": hashlib.sha256(protocol_path.read_bytes()).hexdigest(),
+        },
     }
 
 
@@ -428,6 +529,7 @@ def _lock(
     bundle: dict[str, object],
     result_contract: Path,
     genesis_sha: str,
+    derivation_receipt_sha256: str,
 ) -> dict[str, object]:
     environment = bundle["environment_receipt"]
     dependencies = bundle["dependency_receipt"]
@@ -452,6 +554,9 @@ def _lock(
         result_contract_sha256=hashlib.sha256(result_contract.read_bytes()).hexdigest(),
         judge_core_sha256="a" * 64,
         judge_core_file_sha256="b" * 64,
+        token_envelope_derivation_receipt_sha256=(
+            derivation_receipt_sha256
+        ),
         deployment_binding=_deployment_binding(),
         forbidden_prior_item_ids=["prior-item"],
         forbidden_prior_source_entity_ids=["8" * 64],
@@ -464,6 +569,7 @@ def _context(tmp_path: Path) -> dict[str, object]:
     tmp_path.mkdir(parents=True, exist_ok=True)
     meter = FakeMeter()
     manifest = _manifest(meter)
+    derivation = _derivation_inputs(manifest, meter)
     result_contract = tmp_path / "result_contract.v1.json"
     result_contract.write_text('{"schema_version":"result-contract/v1"}\n')
     bundle, dependency_args = _bundle(tmp_path, manifest, result_contract)
@@ -473,6 +579,9 @@ def _context(tmp_path: Path) -> dict[str, object]:
         bundle=bundle,
         result_contract=result_contract,
         genesis_sha=str(genesis["genesis_sha256"]),
+        derivation_receipt_sha256=str(
+            derivation["receipt"]["receipt_sha256"]
+        ),
     )
     return {
         "meter": meter,
@@ -481,6 +590,7 @@ def _context(tmp_path: Path) -> dict[str, object]:
         "bundle": bundle,
         "genesis": genesis,
         "lock": lock,
+        "derivation": derivation,
         "preflight": _preflight(
             str(manifest["run_id"]),
             str(lock["lock_sha256"]),
@@ -565,7 +675,9 @@ def _sealed_preregistration_context(context: dict[str, object], tmp_path: Path):
         "protocol_sha256": lock["protocol_sha256"],
         "registries_root_sha256": lock["registries_root_sha256"],
         "token_envelope_sha256": lock["token_envelope_sha256"],
-        "token_envelope_derivation_receipt_sha256": "f" * 64,
+        "token_envelope_derivation_receipt_sha256": lock[
+            "token_envelope_derivation_receipt_sha256"
+        ],
         "generation_policy_sha256": lock["generation_policy_sha256"],
         "cohort_root_sha256": lock["cohort_root_sha256"],
         "candidate_universe_root_sha256": lock[
@@ -861,6 +973,7 @@ def _run(context: dict[str, object]) -> tuple[dict[str, object], FakeDurablePort
         model_port=port,
         token_meter=context["meter"],
         max_workers=2,
+        token_envelope_derivation=context["derivation"],
         environment_dependency_bundle=context["bundle"],
         result_contract_path=context["result_contract"],
         **_dependency_kwargs(context),
@@ -1172,6 +1285,7 @@ def test_all_pure_drift_refuses_before_first_model_call(tmp_path: Path) -> None:
                 model_port=port,
                 token_meter=context["meter"],
                 max_workers=2,
+                token_envelope_derivation=context["derivation"],
                 environment_dependency_bundle=bundle,
                 result_contract_path=context["result_contract"],
                 **_dependency_kwargs(context),
@@ -1190,10 +1304,90 @@ def test_all_pure_drift_refuses_before_first_model_call(tmp_path: Path) -> None:
             model_port=port,
             token_meter=context["meter"],
             max_workers=2,
+            token_envelope_derivation=context["derivation"],
             environment_dependency_bundle=context["bundle"],
             result_contract_path=context["result_contract"],
             **wrong_root_args,
             spool_identity_preflight=context["preflight"],
+        )
+    assert port.calls == {}
+
+
+def test_derivation_missing_tampered_and_resigned_refuse_before_calls(
+    tmp_path: Path,
+) -> None:
+    context = _context(tmp_path)
+
+    missing = copy.deepcopy(context["derivation"])
+    missing.pop("receipt")
+    port = FakeDurablePort(context["meter"])
+    untouched_ledger = tmp_path / "untouched-attempt.sqlite3"
+    untouched_ledger.write_bytes(b"gate must not touch this ledger")
+    untouched_ledger.chmod(0o644)
+    port.ledger = type("LedgerPath", (), {"path": untouched_ledger})()
+    with pytest.raises(R8RunnerRefusal, match="derivation input set"):
+        run_suite_v3_draft(
+            context["manifest"],
+            execution_lock=context["lock"],
+            protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+            model_port=port,
+            token_meter=context["meter"],
+            max_workers=2,
+            token_envelope_derivation=missing,
+            environment_dependency_bundle=context["bundle"],
+            result_contract_path=context["result_contract"],
+            **_dependency_kwargs(context),
+            spool_identity_preflight=context["preflight"],
+        )
+    assert port.calls == {}
+    assert untouched_ledger.stat().st_mode & 0o777 == 0o644
+
+    tampered = copy.deepcopy(context["derivation"])
+    tampered["receipt"]["model_calls"] = 1
+    port = FakeDurablePort(context["meter"])
+    with pytest.raises(R8RunnerRefusal, match="self-hash"):
+        run_suite_v3_draft(
+            context["manifest"],
+            execution_lock=context["lock"],
+            protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+            model_port=port,
+            token_meter=context["meter"],
+            max_workers=2,
+            token_envelope_derivation=tampered,
+            environment_dependency_bundle=context["bundle"],
+            result_contract_path=context["result_contract"],
+            **_dependency_kwargs(context),
+            spool_identity_preflight=context["preflight"],
+        )
+    assert port.calls == {}
+
+    resigned = copy.deepcopy(context["derivation"])
+    resigned["receipt"]["historical_token_envelope_sha256"] = "f" * 64
+    _rehash(resigned["receipt"], "receipt_sha256")
+    resigned_lock = copy.deepcopy(context["lock"])
+    resigned_lock["token_envelope_derivation_receipt_sha256"] = resigned[
+        "receipt"
+    ]["receipt_sha256"]
+    _rehash(resigned_lock, "lock_sha256")
+    resigned_preflight = _preflight(
+        str(context["manifest"]["run_id"]),
+        str(resigned_lock["lock_sha256"]),
+        str(context["genesis"]["genesis_sha256"]),
+    )
+    port = FakeDurablePort(context["meter"])
+    with pytest.raises(R8RunnerRefusal, match="replay SHA drifted"):
+        run_suite_v3_draft(
+            context["manifest"],
+            execution_lock=resigned_lock,
+            protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+            model_port=port,
+            token_meter=context["meter"],
+            max_workers=2,
+            token_envelope_derivation=resigned,
+            environment_dependency_bundle=context["bundle"],
+            result_contract_path=context["result_contract"],
+            **_dependency_kwargs(context),
+            spool_identity_preflight=resigned_preflight,
         )
     assert port.calls == {}
 
@@ -1233,6 +1427,9 @@ def test_dummy_runner_dependency_is_rejected_before_first_model_call(
         bundle=bundle,
         result_contract=context["result_contract"],
         genesis_sha=context["genesis"]["genesis_sha256"],
+        derivation_receipt_sha256=context["derivation"]["receipt"][
+            "receipt_sha256"
+        ],
     )
     port = FakeDurablePort(context["meter"])
     with pytest.raises(R8RunnerRefusal, match="bundle verification"):
@@ -1243,6 +1440,7 @@ def test_dummy_runner_dependency_is_rejected_before_first_model_call(
             model_port=port,
             token_meter=context["meter"],
             max_workers=2,
+            token_envelope_derivation=context["derivation"],
             environment_dependency_bundle=bundle,
             result_contract_path=context["result_contract"],
             **_dependency_kwargs(context),
@@ -1266,6 +1464,7 @@ def test_direct_api_max_workers_is_lock_bound_before_calls(tmp_path: Path) -> No
             model_port=port,
             token_meter=context["meter"],
             max_workers=1,
+            token_envelope_derivation=context["derivation"],
             environment_dependency_bundle=context["bundle"],
             result_contract_path=context["result_contract"],
             **_dependency_kwargs(context),
@@ -1563,6 +1762,14 @@ def test_cli_preexisting_output_refuses_before_endpoint_transport(
     lock_path = tmp_path / "lock.json"
     genesis_path = tmp_path / "genesis.json"
     bundle_path = tmp_path / "bundle.json"
+    derivation_paths = {
+        "receipt": tmp_path / "derivation.json",
+        "selection_receipt": tmp_path / "selection.json",
+        "historical_manifest": tmp_path / "historical.json",
+        "validation_receipt": tmp_path / "validation.json",
+        "projected_outputs_receipt": tmp_path / "projected.json",
+        "source_suite": tmp_path / "source-suite.json",
+    }
     for path, value in (
         (manifest_path, context["manifest"]),
         (lock_path, context["lock"]),
@@ -1570,6 +1777,8 @@ def test_cli_preexisting_output_refuses_before_endpoint_transport(
         (bundle_path, {}),
     ):
         path.write_text(json.dumps(value))
+    for name, path in derivation_paths.items():
+        path.write_text(json.dumps(context["derivation"][name]))
     tokenizer = context["tokenizer_dir"]
     attempt_db = tmp_path / "attempt.sqlite3"
     spool_db = tmp_path / "spool.sqlite3"
@@ -1611,6 +1820,15 @@ def test_cli_preexisting_output_refuses_before_endpoint_transport(
             "--spool-db", str(spool_db),
             "--db-genesis-receipt", str(genesis_path),
             "--environment-dependency-bundle", str(bundle_path),
+            "--token-envelope-derivation-receipt",
+            str(derivation_paths["receipt"]),
+            "--selection-receipt", str(derivation_paths["selection_receipt"]),
+            "--historical-manifest", str(derivation_paths["historical_manifest"]),
+            "--token-meter-validation-receipt",
+            str(derivation_paths["validation_receipt"]),
+            "--projected-outputs-receipt",
+            str(derivation_paths["projected_outputs_receipt"]),
+            "--token-meter-source-suite", str(derivation_paths["source_suite"]),
             "--result-contract", str(context["result_contract"]),
             "--judge-core", str(context["judge_core_path"]),
             "--symposium-repo-root", str(SYMPOSIUM_ROOT),

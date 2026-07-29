@@ -18,7 +18,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 import json
+import os
 from pathlib import Path
+import stat
 import unicodedata
 from collections.abc import Mapping
 from typing import Protocol
@@ -40,6 +42,63 @@ class TokenMeter(Protocol):
     def count_chat_prompt(self, system_prompt: str, user_text: str) -> int: ...
 
     def identity(self) -> dict[str, object]: ...
+
+
+def _read_stable_bytes(path: Path, label: str) -> bytes:
+    """Read one bounded regular file once through a stable no-follow FD."""
+
+    target = Path(path)
+    try:
+        before = target.lstat()
+    except OSError as error:
+        raise TokenMeterError(f"cannot stat meter {label} file: {error}") from error
+    if stat.S_ISLNK(before.st_mode) or not stat.S_ISREG(before.st_mode):
+        raise TokenMeterError(
+            f"meter {label} file must be a regular non-symlink file"
+        )
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(target, flags)
+    except OSError as error:
+        raise TokenMeterError(f"cannot open meter {label} file: {error}") from error
+    payload = bytearray()
+    try:
+        opened = os.fstat(descriptor)
+        if (
+            not stat.S_ISREG(opened.st_mode)
+            or opened.st_dev != before.st_dev
+            or opened.st_ino != before.st_ino
+        ):
+            raise TokenMeterError(f"meter {label} file changed before reading")
+        while True:
+            block = os.read(descriptor, 1024 * 1024)
+            if not block:
+                break
+            payload.extend(block)
+            if len(payload) > 64 * 1024 * 1024:
+                raise TokenMeterError(f"meter {label} file exceeds 64 MiB")
+        after_fd = os.fstat(descriptor)
+    finally:
+        os.close(descriptor)
+    try:
+        after_path = target.lstat()
+    except OSError as error:
+        raise TokenMeterError(f"cannot restat meter {label} file: {error}") from error
+    identity = lambda value: (  # noqa: E731 - immutable stat projection
+        value.st_dev,
+        value.st_ino,
+        value.st_mode,
+        value.st_size,
+        value.st_mtime_ns,
+        value.st_ctime_ns,
+    )
+    if (
+        identity(before) != identity(after_fd)
+        or identity(before) != identity(after_path)
+        or len(payload) != before.st_size
+    ):
+        raise TokenMeterError(f"meter {label} file changed while reading")
+    return bytes(payload)
 
 
 def _bytes_to_unicode() -> dict[int, str]:
@@ -182,29 +241,30 @@ class QwenBpeMeter:
             "merges": Path(merges_path),
             "config": Path(config_path),
         }
-        hashes: dict[str, str] = {}
-        for name, path in self._paths.items():
-            try:
-                raw = path.read_bytes()
-            except OSError as error:
-                raise TokenMeterError(f"cannot read meter {name} file: {error}") from error
-            hashes[f"{name}_sha256"] = hashlib.sha256(raw).hexdigest()
+        raw_files = {
+            name: _read_stable_bytes(path, name)
+            for name, path in self._paths.items()
+        }
+        hashes = {
+            f"{name}_sha256": hashlib.sha256(raw).hexdigest()
+            for name, raw in raw_files.items()
+        }
         if expected_sha256 is not None:
             for key, expected in expected_sha256.items():
                 if hashes.get(key) != expected:
                     raise TokenMeterError(f"meter file hash drifted: {key}")
         self._files_sha256 = hashes
         try:
-            vocab = json.loads(self._paths["vocab"].read_text(encoding="utf-8"))
-        except (OSError, UnicodeError, json.JSONDecodeError) as error:
+            vocab = json.loads(raw_files["vocab"].decode("utf-8"))
+        except (UnicodeError, json.JSONDecodeError) as error:
             raise TokenMeterError(f"cannot parse meter vocab: {error}") from error
         if not isinstance(vocab, dict) or not vocab:
             raise TokenMeterError("meter vocab must be a non-empty object")
         self._vocab: dict[str, int] = {str(token): int(index) for token, index in vocab.items()}
         merges: dict[tuple[str, str], int] = {}
         try:
-            lines = self._paths["merges"].read_text(encoding="utf-8").splitlines()
-        except (OSError, UnicodeError) as error:
+            lines = raw_files["merges"].decode("utf-8").splitlines()
+        except UnicodeError as error:
             raise TokenMeterError(f"cannot parse meter merges: {error}") from error
         rank = 0
         for line in lines:
@@ -219,8 +279,8 @@ class QwenBpeMeter:
             raise TokenMeterError("meter merges must be non-empty")
         self._merges = merges
         try:
-            config = json.loads(self._paths["config"].read_text(encoding="utf-8"))
-        except (OSError, UnicodeError, json.JSONDecodeError) as error:
+            config = json.loads(raw_files["config"].decode("utf-8"))
+        except (UnicodeError, json.JSONDecodeError) as error:
             raise TokenMeterError(f"cannot parse meter config: {error}") from error
         added = config.get("added_tokens_decoder")
         specials: dict[str, int] = {}

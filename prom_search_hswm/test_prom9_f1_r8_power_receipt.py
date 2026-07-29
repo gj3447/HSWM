@@ -38,12 +38,36 @@ from prom_search_hswm.prom9_f1_r8_power_cli import (
 )
 
 
-JUDGE_PATH = (
-    Path(__file__).resolve().parents[3]
-    / "FINDINGS"
-    / "hswm-f1-r8-try3-2026-07-28"
-    / "f1_r8_lakatotree_judge.py"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+_JUDGE_RELATIVE_PATH = Path(
+    "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
 )
+
+
+def _resolve_symposium_root() -> Path:
+    candidates = (
+        REPO_ROOT.parents[1],
+        REPO_ROOT.parent / "SYMPOSIUM",
+        REPO_ROOT.parent / "symposium",
+    )
+    matches: dict[tuple[int, int], Path] = {}
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if (resolved / ".git").exists() and (
+            resolved / _JUDGE_RELATIVE_PATH
+        ).is_file():
+            info = resolved.stat()
+            matches.setdefault((info.st_dev, info.st_ino), resolved)
+    if len(matches) != 1:
+        raise RuntimeError(
+            f"expected exactly one SYMPOSIUM checkout for {REPO_ROOT}; "
+            f"found {sorted(str(path) for path in matches.values())}"
+        )
+    return next(iter(matches.values()))
+
+
+SYMPOSIUM_ROOT = _resolve_symposium_root()
+JUDGE_PATH = SYMPOSIUM_ROOT / _JUDGE_RELATIVE_PATH
 SENSITIVITY_SCENARIOS = (
     "unequal_cluster",
     "heavy_tail",
@@ -510,10 +534,12 @@ def test_actual_prospective_judge_semantics_pass_v3_power_gates_but_incomplete_j
                 "power_operating_characteristic_receipt_sha256": receipt[
                     "receipt_sha256"
                 ]
-            },
-            bootstrap=dict(BOOTSTRAP),
-            selection={},
-        )
+                },
+                bootstrap=dict(BOOTSTRAP),
+                outer_manifest={},
+                outer_environment_bundle={},
+                selection={},
+            )
 
 
 def test_power_gate_rejects_a_subthreshold_actual_judge_characteristic(
@@ -599,7 +625,7 @@ def test_measured_environment_bundle_requires_all_four_execution_lock_hashes(
 ) -> None:
     _allow_pre_c1_dependencies(monkeypatch)
     repo_root = Path(__file__).resolve().parents[1]
-    symposium_repo_root = Path(__file__).resolve().parents[3]
+    symposium_repo_root = SYMPOSIUM_ROOT
     expected_paths = _r8_dependency_paths(tmp_path)
     bundle, lock, manifest, expected_hashes = _bundle_context(
         expected_paths,
@@ -652,7 +678,7 @@ def test_measured_environment_bundle_refuses_runtime_semantic_path_substitution(
 ) -> None:
     _allow_pre_c1_dependencies(monkeypatch)
     repo_root = Path(__file__).resolve().parents[1]
-    symposium_repo_root = Path(__file__).resolve().parents[3]
+    symposium_repo_root = SYMPOSIUM_ROOT
     expected_paths = _r8_dependency_paths(tmp_path / "expected")
     dummy = _write_text(tmp_path / f"dummy-{substituted_name}.py", "# substitution\n")
     substituted_paths = {**expected_paths, substituted_name: dummy}
@@ -679,7 +705,7 @@ def test_measured_environment_bundle_refuses_live_commit_mismatch(
 ) -> None:
     _allow_pre_c1_dependencies(monkeypatch)
     repo_root = Path(__file__).resolve().parents[1]
-    symposium_repo_root = Path(__file__).resolve().parents[3]
+    symposium_repo_root = SYMPOSIUM_ROOT
     expected_paths = _r8_dependency_paths(tmp_path)
     non_live_commit = "0" * 40
     assert non_live_commit != _head_commit(repo_root)
@@ -706,7 +732,7 @@ def test_measured_environment_bundle_refuses_wrong_symposium_head(
 ) -> None:
     _allow_pre_c1_dependencies(monkeypatch)
     repo_root = Path(__file__).resolve().parents[1]
-    symposium_repo_root = Path(__file__).resolve().parents[3]
+    symposium_repo_root = SYMPOSIUM_ROOT
     expected_paths = _r8_dependency_paths(tmp_path)
     non_live_symposium_commit = "0" * 40
     assert non_live_symposium_commit != _head_commit(symposium_repo_root)

@@ -1,0 +1,3226 @@
+#!/usr/bin/env python3
+"""Gold-blind HSWM F1 manifest/suite v3 runner and terminal finalizer.
+
+The runner accepts only a pre-call self-hashed execution lock and never has a
+gold option.  It writes a private draft after all item runs are durable.  A
+separate finalization step binds an independently exported terminal SQLite
+transport package, producing the suite v3 consumed by the preregistered judge.
+"""
+from __future__ import annotations
+
+import argparse
+import base64
+from concurrent.futures import FIRST_EXCEPTION, ThreadPoolExecutor, wait
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import sqlite3
+import stat
+import sys
+from collections.abc import Mapping, Sequence
+from urllib import error as urllib_error
+from urllib import request as urllib_request
+
+from prom_search_hswm.hswm_f1_durable_transport import (
+    DURABLE_CALL_SCHEMA,
+    DurableSpoolJSONPort,
+    SQLiteF1CallLedger,
+)
+from prom_search_hswm.hswm_call_receipt import (
+    CALL_RECEIPT_SCHEMA,
+    ModelCallV1,
+)
+from prom_search_hswm.hswm_function_network import (
+    EvidenceCandidateV1,
+    F1_ARMS,
+    FunctionNetworkItemV1,
+    RUN_SCHEMA,
+    run_item,
+)
+from prom_search_hswm.hswm_function_registry import (
+    REGISTRY_SCHEMA,
+    FunctionRegistryV1,
+    build_registry,
+)
+from prom_search_hswm.hswm_result_spool import SQLiteResultSpool
+from prom_search_hswm.hswm_token_meter import QwenBpeMeter, TokenMeter
+from prom_search_hswm.hswm_result_spool import (
+    SPOOL_IDENTITY_ROUTE,
+    SPOOL_IDENTITY_SCHEMA,
+    SPOOL_SCHEMA,
+)
+from prom_search_hswm.hswm_typed_ports import (
+    canonical_json,
+    canonical_sha256,
+    output_schema_sha256,
+    port_digest,
+    validate_port,
+)
+from prom_search_hswm.prom9_f1_envelope import (
+    check_tokenizer_identity,
+    enforce_projection,
+    envelope_spec,
+    validate_token_envelope,
+)
+from prom_search_hswm.prom9_f1_r8_environment import (
+    R8_DEPENDENCY_NAMES,
+    load_private_receipt,
+    r8_dependency_paths,
+    verify_r8_preimage_bundle,
+)
+from prom_search_hswm.prom9_f1_r8_private_output import (
+    canonical_output_path,
+    reserve_private_outputs,
+)
+from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
+from prom_search_hswm.prom_f1_function_network import (
+    _arm_overrides,
+)
+
+
+MANIFEST_SCHEMA = "hswm-prom9-f1-manifest/v3"
+SUITE_DRAFT_SCHEMA = "hswm-prom9-f1-suite-draft/v3"
+SUITE_SCHEMA = "hswm-prom9-f1-suite/v3"
+EXECUTION_LOCK_SCHEMA = "hswm-prom9-f1-r8-execution-lock/v1"
+SEALED_LOCK_SCHEMA = "hswm-prom9-f1-r8-measurement-lock/v3"
+SEALED_LOCK_PURPOSE = "CONFIRMATORY_R8_TRY3_MEASUREMENT"
+SEALED_EXPERIMENT_TAG = "Q-f1-actual-compute-parity-try3"
+SEALED_CLOSES_QUESTION = "Q-f1-actual-compute-parity"
+SEALED_RUN_ID = "f1-2wiki-sealed-r8-try3"
+TRANSPORT_SCHEMA = "hswm-f1-durable-call-ledger/v1"
+TRANSPORT_BINDINGS_SCHEMA = "hswm-prom9-f1-r8-transport-bindings/v1"
+GENESIS_SCHEMA = "hswm-prom9-f1-r8-transport-genesis/v1"
+SPOOL_PREFLIGHT_SCHEMA = "hswm-prom9-f1-r8-spool-endpoint-preflight/v1"
+PREREGISTRATION_ARTIFACT_SCHEMA = (
+    "hswm-prom9-f1-r8-preregistration-artifact/v3"
+)
+PREREGISTRATION_READBACK_SCHEMA = "hswm-prom9-f1-r8-prereg-readback/v1"
+GENERATION_POLICY = {
+    "temperature": 0,
+    "enable_thinking": False,
+    "structured_output_backend": "json_schema",
+}
+_SHA256 = re.compile(r"^[0-9a-f]{64}$")
+_GIT_COMMIT = re.compile(r"^[0-9a-f]{40}$")
+REQUIRED_DEPENDENCY_FILES = R8_DEPENDENCY_NAMES
+MANIFEST_PREREGISTRATION_UNFROZEN = "0" * 64
+_ATTEMPT_COLUMNS = {
+    "call_state": [
+        "physical_call_id", "intent_sha256", "intent_bytes", "request_sha256",
+        "endpoint", "request_bytes", "status", "response_status", "response_headers",
+        "response_body", "response_sha256", "model_response", "model_response_sha256",
+        "call_receipt", "call_receipt_sha256", "terminal_code",
+    ],
+    "item_runs": ["run_id", "arm_id", "item_id", "run_receipt_sha256", "item_run_bytes"],
+    "attempt_events": [
+        "sequence", "physical_call_id", "event_type", "event_bytes",
+        "previous_event_sha256", "event_sha256",
+    ],
+}
+_SPOOL_COLUMNS = {
+    "spool_calls": [
+        "physical_call_id", "intent_sha256", "request_sha256", "request_bytes",
+        "status", "response_status", "response_headers", "response_body",
+        "response_sha256", "error_class",
+    ]
+}
+_DEVELOPMENT_LOCK_FIELDS = {
+    "schema_version", "purpose", "run_id", "mode", "manifest_sha256",
+    "preregistration_artifact_sha256", "selection_receipt_sha256",
+    "prior_exposure_receipt_sha256", "public_source_receipt_sha256",
+    "gold_source_receipt_sha256", "gold_sha256", "evaluator_receipt_sha256",
+    "db_genesis_receipt_sha256", "environment_receipt_sha256",
+    "dependency_receipt_sha256",
+    "environment_dependency_compatibility_root_sha256",
+    "environment_dependency_bundle_sha256", "hswm_commit",
+    "result_contract_sha256", "judge_core_sha256", "judge_core_file_sha256",
+    "model", "model_revision",
+    "protocol_sha256",
+    "registries_root_sha256", "token_envelope_sha256",
+    "generation_policy_sha256", "cohort_root_sha256",
+    "candidate_universe_root_sha256", "forbidden_prior_item_ids",
+    "forbidden_prior_source_entity_ids", "forbidden_prior_component_ids",
+    "execution_policy", "gates", "lock_sha256",
+}
+_SEALED_LOCK_FIELDS = _DEVELOPMENT_LOCK_FIELDS | {
+    "experiment_tag", "closes_question",
+}
+_EXECUTION_POLICY_FIELDS = {
+    "endpoint", "max_workers", "timeout_seconds", "max_delivery_attempts",
+    "spool_token_env",
+}
+_GATE_FIELDS = {
+    "expected_items", "expected_arms", "expected_item_runs", "expected_calls",
+    "per_call_input_caps", "per_call_output_caps",
+    "total_input_tokens_per_run", "total_allowed_output_tokens_per_run",
+    "token_spread_max",
+}
+_GENESIS_FIELDS = {
+    "schema_version", "run_id", "attempt_integrity", "spool_integrity",
+    "attempt_journal_mode", "attempt_audit_connection_synchronous",
+    "spool_journal_mode", "spool_audit_connection_synchronous",
+    "attempt_user_version", "spool_user_version", "attempt_schema_sha256",
+    "spool_schema_sha256", "attempt_db_identity", "spool_db_identity",
+    "call_count", "item_run_count", "attempt_event_count", "spool_call_count",
+    "genesis_sha256",
+}
+_LIVE_ATTEMPT_AUDIT_FIELDS = {
+    "schema_version", "journal_mode", "synchronous", "event_chain_tip_sha256",
+    "call_count", "status_counts", "accepted_call_root_sha256",
+    "spool_binding_root_sha256", "item_run_count", "item_run_root_sha256",
+    "audit_sha256",
+}
+_SPOOL_AUDIT_FIELDS = {
+    "schema_version", "journal_mode", "synchronous", "call_count",
+    "status_counts", "completed_root_sha256", "audit_sha256",
+}
+_SPOOL_IDENTITY_FIELDS = {
+    "schema_version", "server_revision", "db_identity", "audit",
+    "identity_sha256",
+}
+_SPOOL_PREFLIGHT_FIELDS = {
+    "schema_version", "run_id", "execution_lock_sha256", "db_genesis_sha256",
+    "endpoint", "endpoint_identity", "preflight_sha256",
+}
+_TRANSPORT_BINDING_FIELDS = {
+    "schema_version", "run_id", "db_genesis_sha256", "attempt_integrity",
+    "spool_integrity", "attempt_journal_mode",
+    "attempt_audit_connection_synchronous", "spool_journal_mode",
+    "spool_audit_connection_synchronous", "attempt_user_version",
+    "spool_user_version", "attempt_schema_sha256", "spool_schema_sha256",
+    "attempt_db_identity", "spool_db_identity", "call_count", "item_run_count",
+    "attempt_event_count", "spool_call_count", "attempt_status_counts",
+    "spool_status_counts", "spool_unknown_count", "identity_conflict_count",
+    "event_chain_tip_sha256", "accepted_call_root_sha256",
+    "accepted_call_export_root_sha256", "accepted_call_auxiliary_root_sha256",
+    "spool_binding_root_sha256", "spool_preimage_root_sha256",
+    "item_run_root_sha256", "item_run_preimage_root_sha256",
+    "attempt_event_root_sha256", "accepted_calls",
+    "accepted_call_auxiliary_preimages", "spool_bindings",
+    "spool_call_preimages", "item_run_bindings", "item_run_preimages",
+    "attempt_events", "bindings_sha256",
+}
+_DRAFT_FIELDS = {
+    "schema_version", "run_id", "mode", "manifest_sha256", "model",
+    "model_revision", "token_tolerance", "state_capacity_bytes",
+    "state_bytes_by_arm", "preregistration_artifact_sha256",
+    "preregistration_readback_sha256", "anchored_judge_file_sha256",
+    "measurement_lock_sha256", "result_contract_sha256",
+    "environment_receipt_sha256", "dependency_receipt_sha256",
+    "environment_dependency_compatibility_root_sha256",
+    "environment_dependency_bundle_sha256", "hswm_commit",
+    "db_genesis_receipt_sha256", "protocol_sha256",
+    "registries_root_sha256", "token_envelope_sha256", "cohort_root_sha256",
+    "candidate_universe_root_sha256", "generation_policy",
+    "generation_policy_sha256", "token_envelope", "envelope_projection",
+    "token_parity", "execution_policy", "execution_gates", "max_workers",
+    "spool_identity_preflight", "spool_identity_preflight_sha256",
+    "registries", "pre_call_transport_audit", "live_transport_audit",
+    "item_runs", "gold_opened", "scientific_verdict_emitted",
+    "draft_receipt_sha256",
+}
+_SUITE_FIELDS = (
+    _DRAFT_FIELDS
+    - {"schema_version", "pre_call_transport_audit", "live_transport_audit", "draft_receipt_sha256"}
+    | {"schema_version", "transport_audit", "transport_bindings", "suite_receipt_sha256"}
+)
+_FUNCTION_IDS = (
+    "QF_QUERY_COMPILER", "BF_BOND_PROPOSER", "AF_ANSWER_SYNTHESIZER",
+)
+_FUNCTION_FIELDS = {
+    "function_id", "model", "model_revision", "input_type", "output_type",
+    "prompt", "prompt_sha256",
+}
+_REGISTRY_FIELDS = {
+    "schema_version", "protocol_sha256", "functions", "registry_sha256",
+}
+_CALL_RECEIPT_FIELDS = {
+    "schema_version", "physical_call_id", "run_id", "arm_id", "item_id",
+    "call_index", "function_id", "model", "model_revision", "prompt_sha256",
+    "input_type", "input_port_sha256", "input_payload", "output_type",
+    "output_port_sha256", "output_payload", "allowed_output_tokens",
+    "input_tokens", "output_tokens", "latency_ms", "cache_status", "retries",
+    "receipt_sha256",
+}
+_ITEM_RUN_FIELDS = {
+    "schema_version", "run_id", "arm_id", "item_id", "registry_sha256",
+    "candidate_universe_sha256", "calls", "answer", "selected_bond_ids",
+    "total_input_tokens", "total_output_tokens", "total_allowed_output_tokens",
+    "persistent_state_bytes", "run_receipt_sha256",
+}
+_PREREGISTRATION_ARTIFACT_FIELDS = {
+    "schema_version", "purpose", "experiment_tag", "closes_question", "run_id",
+    "mode", "hswm_commit", "model", "model_revision", "metric", "baseline",
+    "direction", "noise_band", "credence", "bootstrap", "gates",
+    "manifest_core_sha256", "judge_core_sha256", "result_contract_sha256",
+    "measurement_lock_schema_sha256", "result_bundle_builder_sha256",
+    "power_operating_characteristic_receipt_sha256",
+    "calibration_receipt_sha256", "selection_receipt_sha256",
+    "prior_exposure_receipt_sha256", "public_source_receipt_sha256",
+    "gold_source_receipt_sha256", "gold_sha256", "evaluator_receipt_sha256",
+    "db_genesis_receipt_sha256", "environment_receipt_sha256",
+    "dependency_receipt_sha256",
+    "environment_dependency_compatibility_root_sha256",
+    "environment_dependency_bundle_sha256", "protocol_sha256",
+    "registries_root_sha256", "token_envelope_sha256",
+    "generation_policy_sha256", "cohort_root_sha256",
+    "candidate_universe_root_sha256", "forbidden_prior_item_ids",
+    "forbidden_prior_source_entity_ids", "forbidden_prior_component_ids",
+    "preregistration_artifact_sha256",
+}
+_PREREGISTRATION_READBACK_FIELDS = {
+    "schema_version", "purpose", "experiment_tag", "closes_question", "run_id",
+    "measurement_lock_sha256", "preregistration_artifact_sha256",
+    "external_prediction_receipt_sha256", "external_record_identity",
+    "canonical_readback_sha256", "pred_script_sha256",
+    "anchored_judge_file_sha256", "judge_core_sha256",
+    "result_contract_sha256", "receipt_sha256",
+}
+_EVENT_GENESIS = "0" * 64
+_EVENT_TRANSITIONS = {
+    "PREPARED": (None,),
+    "SENT": ("PREPARED", "DELIVERY_AMBIGUOUS", "SENT"),
+    "DELIVERY_AMBIGUOUS": ("SENT",),
+    "RAW_COMPLETE": ("SENT",),
+    "ENVELOPE_VALID": ("RAW_COMPLETE",),
+    "SCHEMA_VALID": ("ENVELOPE_VALID",),
+    "ACCEPTED": ("SCHEMA_VALID",),
+}
+
+
+class R8RunnerRefusal(RuntimeError):
+    """No model call or suite promotion is authorized."""
+
+
+def _pairs(values: list[tuple[str, object]]) -> dict[str, object]:
+    result: dict[str, object] = {}
+    for key, value in values:
+        if key in result:
+            raise R8RunnerRefusal(f"duplicate JSON key: {key}")
+        result[key] = value
+    return result
+
+
+def read_json(path: Path, label: str) -> dict[str, object]:
+    try:
+        value = json.loads(
+            Path(path).read_text(encoding="utf-8"),
+            object_pairs_hook=_pairs,
+            parse_constant=lambda _value: (_ for _ in ()).throw(
+                R8RunnerRefusal(f"non-finite JSON number in {label}")
+            ),
+        )
+    except R8RunnerRefusal:
+        raise
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        raise R8RunnerRefusal(f"cannot read {label}: {error}") from error
+    if not isinstance(value, dict):
+        raise R8RunnerRefusal(f"{label} must be an object")
+    return value
+
+
+def write_private_once(path: Path, value: Mapping[str, object]) -> None:
+    destination = Path(path)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    payload = (
+        json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2, allow_nan=False)
+        + "\n"
+    ).encode("utf-8")
+    temporary = destination.with_name(f".{destination.name}.partial-{os.getpid()}")
+    descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        try:
+            os.link(temporary, destination)
+        except FileExistsError as error:
+            raise R8RunnerRefusal(f"refusing to replace output: {destination}") from error
+        directory = os.open(str(destination.parent), os.O_RDONLY)
+        try:
+            os.fsync(directory)
+        finally:
+            os.close(directory)
+    finally:
+        try:
+            temporary.unlink()
+        except FileNotFoundError:
+            pass
+
+
+def _sha(value: object, label: str) -> str:
+    if not isinstance(value, str) or not _SHA256.fullmatch(value):
+        raise R8RunnerRefusal(f"{label} must be a lowercase SHA-256")
+    return value
+
+
+def _positive(value: object, label: str) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or value < 1:
+        raise R8RunnerRefusal(f"{label} must be a positive integer")
+    return value
+
+
+def _nonnegative(value: object, label: str) -> int:
+    if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+        raise R8RunnerRefusal(f"{label} must be a non-negative integer")
+    return value
+
+
+def _self_hash(value: Mapping[str, object], field: str, label: str) -> str:
+    unsigned = dict(value)
+    declared = unsigned.pop(field, None)
+    if not isinstance(declared, str) or canonical_sha256(unsigned) != declared:
+        raise R8RunnerRefusal(f"{label} self-hash drifted")
+    return declared
+
+
+def manifest_core_sha256(manifest: Mapping[str, object]) -> str:
+    """Hash the final manifest with only its preregistration back-edge unfrozen."""
+
+    if "preregistration_artifact_sha256" not in manifest:
+        raise R8RunnerRefusal("manifest preregistration field is absent")
+    core = dict(manifest)
+    core["preregistration_artifact_sha256"] = MANIFEST_PREREGISTRATION_UNFROZEN
+    return canonical_sha256(core)
+
+
+def _database_identity_value(value: object, label: str) -> dict[str, object]:
+    if not isinstance(value, Mapping) or set(value) != {
+        "resolved_path", "st_dev", "st_ino",
+    }:
+        raise R8RunnerRefusal(f"{label} database identity shape drifted")
+    path = value.get("resolved_path")
+    device = value.get("st_dev")
+    inode = value.get("st_ino")
+    if (
+        not isinstance(path, str)
+        or not path
+        or isinstance(device, bool)
+        or not isinstance(device, int)
+        or device < 0
+        or isinstance(inode, bool)
+        or not isinstance(inode, int)
+        or inode < 1
+    ):
+        raise R8RunnerRefusal(f"{label} database identity values drifted")
+    return dict(value)
+
+
+def _validate_execution_policy_value(value: object) -> dict[str, object]:
+    if not isinstance(value, Mapping) or set(value) != _EXECUTION_POLICY_FIELDS:
+        raise R8RunnerRefusal("execution policy fields drifted")
+    endpoint = value.get("endpoint")
+    max_workers = value.get("max_workers")
+    timeout = value.get("timeout_seconds")
+    attempts = value.get("max_delivery_attempts")
+    token_env = value.get("spool_token_env")
+    if (
+        not isinstance(endpoint, str)
+        or not endpoint.startswith(("http://", "https://"))
+        or isinstance(max_workers, bool)
+        or not isinstance(max_workers, int)
+        or not 1 <= max_workers <= 8
+        or isinstance(timeout, bool)
+        or not isinstance(timeout, (int, float))
+        or not float(timeout) > 0
+        or isinstance(attempts, bool)
+        or not isinstance(attempts, int)
+        or attempts < 1
+        or not isinstance(token_env, str)
+        or not token_env.strip()
+    ):
+        raise R8RunnerRefusal("execution policy values are invalid")
+    return dict(value)
+
+
+def _validate_prior_list(
+    value: object, label: str, *, sha_values: bool
+) -> list[str]:
+    if not isinstance(value, list) or any(
+        not isinstance(item, str) or not item for item in value
+    ):
+        raise R8RunnerRefusal(f"{label} must be a string array")
+    if value != sorted(value) or len(value) != len(set(value)):
+        raise R8RunnerRefusal(f"{label} must be sorted and unique")
+    if sha_values:
+        for item in value:
+            _sha(item, label)
+    return list(value)
+
+
+def _validate_lock_gates(
+    value: object,
+    *,
+    item_count: int,
+    token_envelope: Mapping[str, object],
+    token_tolerance: int,
+) -> dict[str, object]:
+    if not isinstance(value, Mapping) or set(value) != _GATE_FIELDS:
+        raise R8RunnerRefusal("execution-lock gate shape drifted")
+    input_caps = token_envelope.get("per_call_input_caps")
+    output_caps = token_envelope.get("per_call_output_caps")
+    if not isinstance(input_caps, Mapping) or not isinstance(output_caps, Mapping):
+        raise R8RunnerRefusal("token envelope caps are absent")
+    expected = {
+        "expected_items": item_count,
+        "expected_arms": len(F1_ARMS),
+        "expected_item_runs": item_count * len(F1_ARMS),
+        "expected_calls": item_count * len(F1_ARMS) * len(_FUNCTION_IDS),
+        "per_call_input_caps": dict(input_caps),
+        "per_call_output_caps": dict(output_caps),
+        "total_input_tokens_per_run": sum(int(item) for item in input_caps.values()),
+        "total_allowed_output_tokens_per_run": sum(
+            int(item) for item in output_caps.values()
+        ),
+        "token_spread_max": token_tolerance,
+    }
+    if dict(value) != expected:
+        raise R8RunnerRefusal("execution-lock gates differ from the manifest")
+    return dict(value)
+
+
+def _validate_transport_genesis_receipt(
+    value: Mapping[str, object],
+    *,
+    run_id: str,
+    expected_sha256: str | None = None,
+) -> str:
+    if (
+        set(value) != _GENESIS_FIELDS
+        or value.get("schema_version") != GENESIS_SCHEMA
+        or value.get("run_id") != run_id
+    ):
+        raise R8RunnerRefusal("transport genesis identity or schema drifted")
+    declared = _self_hash(value, "genesis_sha256", "transport genesis")
+    if expected_sha256 is not None and declared != expected_sha256:
+        raise R8RunnerRefusal("transport genesis differs from its frozen binding")
+    if (
+        value.get("attempt_integrity") != "ok"
+        or value.get("spool_integrity") != "ok"
+        or str(value.get("attempt_journal_mode")).casefold() != "wal"
+        or str(value.get("spool_journal_mode")).casefold() != "wal"
+        or str(value.get("attempt_audit_connection_synchronous")) != "2"
+        or str(value.get("spool_audit_connection_synchronous")) != "2"
+        or value.get("attempt_user_version") != 1
+        or value.get("spool_user_version") != 1
+        or any(
+            value.get(field) != 0
+            for field in (
+                "call_count", "item_run_count", "attempt_event_count",
+                "spool_call_count",
+            )
+        )
+    ):
+        raise R8RunnerRefusal(
+            "transport genesis is not empty WAL with FULL audit connections"
+        )
+    _sha(value.get("attempt_schema_sha256"), "genesis attempt schema")
+    _sha(value.get("spool_schema_sha256"), "genesis spool schema")
+    attempt_identity = _database_identity_value(
+        value.get("attempt_db_identity"), "attempt ledger"
+    )
+    spool_identity = _database_identity_value(
+        value.get("spool_db_identity"), "result spool"
+    )
+    if (
+        attempt_identity["st_dev"], attempt_identity["st_ino"]
+    ) == (
+        spool_identity["st_dev"], spool_identity["st_ino"]
+    ):
+        raise R8RunnerRefusal("transport genesis aliases one database inode")
+    return declared
+
+
+def _validate_live_attempt_audit(
+    value: object,
+    *,
+    expected_calls: int,
+    expected_item_runs: int,
+) -> dict[str, object]:
+    if not isinstance(value, Mapping) or set(value) != _LIVE_ATTEMPT_AUDIT_FIELDS:
+        raise R8RunnerRefusal("live attempt audit shape drifted")
+    _self_hash(value, "audit_sha256", "live attempt audit")
+    expected_status = {} if expected_calls == 0 else {"ACCEPTED": expected_calls}
+    if (
+        value.get("schema_version") != TRANSPORT_SCHEMA
+        or str(value.get("journal_mode")).casefold() != "wal"
+        or value.get("synchronous") != 2
+        or value.get("call_count") != expected_calls
+        or value.get("item_run_count") != expected_item_runs
+        or value.get("status_counts") != expected_status
+    ):
+        raise R8RunnerRefusal("live attempt audit durability or counts drifted")
+    for field in (
+        "event_chain_tip_sha256", "accepted_call_root_sha256",
+        "spool_binding_root_sha256", "item_run_root_sha256",
+    ):
+        _sha(value.get(field), f"live attempt audit {field}")
+    if expected_calls == 0 and any(
+        value.get(field) != canonical_sha256([])
+        for field in (
+            "accepted_call_root_sha256", "spool_binding_root_sha256",
+            "item_run_root_sha256",
+        )
+    ):
+        raise R8RunnerRefusal("pre-call attempt audit is not empty")
+    if expected_calls == 0 and value.get("event_chain_tip_sha256") != _EVENT_GENESIS:
+        raise R8RunnerRefusal("pre-call attempt event chain is not at genesis")
+    return dict(value)
+
+
+def _validate_spool_audit(value: object) -> dict[str, object]:
+    if not isinstance(value, Mapping) or set(value) != _SPOOL_AUDIT_FIELDS:
+        raise R8RunnerRefusal("result-spool audit shape drifted")
+    _self_hash(value, "audit_sha256", "result-spool audit")
+    if (
+        value.get("schema_version") != SPOOL_SCHEMA
+        or str(value.get("journal_mode")).casefold() != "wal"
+        or value.get("synchronous") != 2
+        or value.get("call_count") != 0
+        or value.get("status_counts") != {}
+        or value.get("completed_root_sha256") != canonical_sha256([])
+    ):
+        raise R8RunnerRefusal("result-spool preflight audit is not empty WAL/FULL")
+    return dict(value)
+
+
+def _validate_spool_identity_preflight(
+    value: object,
+    *,
+    run_id: str,
+    model_revision: str,
+    execution_lock_sha256: str,
+    db_genesis_sha256: str,
+    endpoint: str,
+) -> str:
+    if not isinstance(value, Mapping) or set(value) != _SPOOL_PREFLIGHT_FIELDS:
+        raise R8RunnerRefusal("spool identity preflight shape drifted")
+    declared = _self_hash(value, "preflight_sha256", "spool identity preflight")
+    identity = value.get("endpoint_identity")
+    if not isinstance(identity, Mapping) or set(identity) != _SPOOL_IDENTITY_FIELDS:
+        raise R8RunnerRefusal("result-spool identity shape drifted")
+    _self_hash(identity, "identity_sha256", "result-spool identity")
+    _database_identity_value(identity.get("db_identity"), "result spool")
+    _validate_spool_audit(identity.get("audit"))
+    if (
+        value.get("schema_version") != SPOOL_PREFLIGHT_SCHEMA
+        or value.get("run_id") != run_id
+        or value.get("execution_lock_sha256") != execution_lock_sha256
+        or value.get("db_genesis_sha256") != db_genesis_sha256
+        or value.get("endpoint") != endpoint
+        or identity.get("schema_version") != SPOOL_IDENTITY_SCHEMA
+        or identity.get("server_revision") != model_revision
+    ):
+        raise R8RunnerRefusal("spool identity preflight differs from frozen execution")
+    return declared
+
+
+def _stable_file_sha256(path: Path, label: str) -> str:
+    target = Path(path).resolve()
+    try:
+        before = target.stat()
+        digest = hashlib.sha256()
+        with target.open("rb") as handle:
+            for block in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(block)
+        after = target.stat()
+    except OSError as error:
+        raise R8RunnerRefusal(f"cannot hash {label}") from error
+    identity_before = (
+        before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns,
+    )
+    identity_after = (
+        after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns,
+    )
+    if identity_before != identity_after or not target.is_file():
+        raise R8RunnerRefusal(f"{label} changed while hashing")
+    return digest.hexdigest()
+
+
+def _judge_hashes(
+    path: Path,
+    measurement_lock_sha256: str,
+    *,
+    label: str = "anchored judge",
+) -> tuple[str, str]:
+    target = Path(path).resolve()
+    full_sha = _stable_file_sha256(target, label)
+    try:
+        source = target.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as error:
+        raise R8RunnerRefusal(f"cannot read {label} as UTF-8") from error
+    marker = "__F1_R8_MEASUREMENT_LOCK_SHA256_UNFROZEN__"
+    pattern = re.compile(
+        r'^EXPECTED_MEASUREMENT_LOCK_SHA256 = "([0-9a-f]{64}|'
+        + re.escape(marker)
+        + r')"$',
+        re.MULTILINE,
+    )
+    matches = pattern.findall(source)
+    if matches != [measurement_lock_sha256]:
+        raise R8RunnerRefusal(f"{label} does not carry the exact lock anchor")
+    normalized = pattern.sub(
+        f'EXPECTED_MEASUREMENT_LOCK_SHA256 = "{marker}"', source
+    )
+    return full_sha, hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+
+
+def _validate_environment_dependency_bundle(
+    value: object,
+    *,
+    execution_lock: Mapping[str, object],
+    run_id: str,
+    model: str,
+    model_revision: str,
+    endpoint: str,
+    dependency_paths: Mapping[str, Path],
+    symposium_repo_root: Path,
+) -> str:
+    if not isinstance(value, Mapping):
+        raise R8RunnerRefusal("environment/dependency bundle is absent")
+    environment = value.get("environment_receipt")
+    dependencies = value.get("dependency_receipt")
+    if not isinstance(environment, Mapping) or not isinstance(dependencies, Mapping):
+        raise R8RunnerRefusal("environment/dependency receipts are absent")
+    bundle_labels = environment.get("labels")
+    symposium_commit = (
+        bundle_labels.get("symposium_commit")
+        if isinstance(bundle_labels, Mapping)
+        else None
+    )
+    if (
+        not isinstance(symposium_commit, str)
+        or _GIT_COMMIT.fullmatch(symposium_commit) is None
+    ):
+        raise R8RunnerRefusal(
+            "environment symposium_commit is not an exact Git SHA"
+        )
+    labels = {
+        "endpoint": endpoint,
+        "hswm_commit": execution_lock.get("hswm_commit"),
+        "model": model,
+        "model_revision": model_revision,
+        "run_id": run_id,
+        "symposium_commit": symposium_commit,
+    }
+    try:
+        verified = verify_r8_preimage_bundle(
+            value,
+            expected_paths=dependency_paths,
+            expected_labels=labels,
+            repo_root=Path(__file__).resolve().parents[1],
+            symposium_repo_root=symposium_repo_root,
+            verify_live=True,
+        )
+    except Exception as error:
+        raise R8RunnerRefusal("environment/dependency bundle verification failed") from error
+    if environment.get("labels") != labels:
+        raise R8RunnerRefusal("environment labels differ from frozen execution")
+    hswm_commit = execution_lock.get("hswm_commit")
+    if not isinstance(hswm_commit, str) or _GIT_COMMIT.fullmatch(hswm_commit) is None:
+        raise R8RunnerRefusal("execution-lock hswm_commit is not an exact Git SHA")
+    files = dependencies.get("files")
+    expected_names = set(REQUIRED_DEPENDENCY_FILES)
+    if not isinstance(files, Mapping) or set(files) != expected_names:
+        raise R8RunnerRefusal("dependency semantic-name inventory drifted")
+    result_row = files.get("result_contract")
+    result_contract_path = dependency_paths.get("result_contract")
+    if not isinstance(result_contract_path, Path):
+        raise R8RunnerRefusal("result contract semantic path is absent")
+    result_sha = _stable_file_sha256(result_contract_path, "result contract")
+    if (
+        not isinstance(result_row, Mapping)
+        or result_row.get("resolved_path")
+        != str(Path(result_contract_path).resolve(strict=True))
+        or result_row.get("sha256") != result_sha
+    ):
+        raise R8RunnerRefusal("result contract differs from dependency preimage")
+    expected_bindings = {
+        "environment_receipt_sha256": verified["environment_receipt_sha256"],
+        "dependency_receipt_sha256": verified["dependency_receipt_sha256"],
+        "environment_dependency_compatibility_root_sha256": verified[
+            "compatibility_root_sha256"
+        ],
+        "environment_dependency_bundle_sha256": verified["bundle_sha256"],
+        "result_contract_sha256": result_sha,
+    }
+    if any(execution_lock.get(key) != item for key, item in expected_bindings.items()):
+        raise R8RunnerRefusal("environment/dependency bundle differs from execution lock")
+    return verified["bundle_sha256"]
+
+
+def _validate_preregistration_gate(
+    *,
+    mode: str,
+    manifest: Mapping[str, object],
+    execution_lock: Mapping[str, object],
+    preregistration_artifact: Mapping[str, object] | None,
+    preregistration_readback: Mapping[str, object] | None,
+    anchored_judge_path: Path | None,
+    judge_core_path: Path,
+    symposium_repo_root: Path,
+    result_contract_path: Path,
+) -> None:
+    if mode == "development":
+        if any(
+            value is not None
+            for value in (
+                preregistration_artifact, preregistration_readback,
+                anchored_judge_path,
+            )
+        ):
+            raise R8RunnerRefusal("development execution rejects sealed preregistration inputs")
+        return
+    if (
+        not isinstance(preregistration_artifact, Mapping)
+        or not isinstance(preregistration_readback, Mapping)
+        or anchored_judge_path is None
+    ):
+        raise R8RunnerRefusal("sealed execution requires the complete preregistration gate")
+    try:
+        symposium_root = Path(symposium_repo_root).resolve(strict=True)
+        committed_judge_core = Path(judge_core_path).resolve(strict=True)
+    except OSError as error:
+        raise R8RunnerRefusal("sealed judge-core repository path is unavailable") from error
+    if (
+        not symposium_root.is_dir()
+        or not committed_judge_core.is_relative_to(symposium_root)
+    ):
+        raise R8RunnerRefusal(
+            "sealed judge core is outside the declared SYMPOSIUM repository"
+        )
+    marker = "__F1_R8_MEASUREMENT_LOCK_SHA256_UNFROZEN__"
+    judge_core_file_sha, committed_core_sha = _judge_hashes(
+        committed_judge_core,
+        marker,
+        label="judge core",
+    )
+    if (
+        execution_lock.get("judge_core_file_sha256") != judge_core_file_sha
+        or execution_lock.get("judge_core_sha256") != committed_core_sha
+    ):
+        raise R8RunnerRefusal("sealed judge core differs from the execution lock")
+    artifact = preregistration_artifact
+    if (
+        set(artifact) != _PREREGISTRATION_ARTIFACT_FIELDS
+        or artifact.get("schema_version") != PREREGISTRATION_ARTIFACT_SCHEMA
+        or artifact.get("purpose") != SEALED_LOCK_PURPOSE
+        or artifact.get("experiment_tag") != SEALED_EXPERIMENT_TAG
+        or artifact.get("closes_question") != SEALED_CLOSES_QUESTION
+        or artifact.get("run_id") != SEALED_RUN_ID
+        or artifact.get("mode") != "sealed"
+    ):
+        raise R8RunnerRefusal("sealed preregistration artifact shape drifted")
+    artifact_sha = _self_hash(
+        artifact, "preregistration_artifact_sha256", "preregistration artifact"
+    )
+    if (
+        artifact_sha != manifest.get("preregistration_artifact_sha256")
+        or artifact_sha != execution_lock.get("preregistration_artifact_sha256")
+        or artifact.get("manifest_core_sha256") != manifest_core_sha256(manifest)
+    ):
+        raise R8RunnerRefusal("preregistration artifact is not manifest/lock-bound")
+    for key in _PREREGISTRATION_ARTIFACT_FIELDS & set(execution_lock):
+        if key not in {"schema_version", "purpose"} and artifact.get(key) != execution_lock.get(key):
+            raise R8RunnerRefusal(f"preregistration artifact differs from lock: {key}")
+    for key in _PREREGISTRATION_ARTIFACT_FIELDS:
+        if key.endswith("_sha256"):
+            _sha(artifact.get(key), f"preregistration {key}")
+    _validate_prior_list(
+        artifact.get("forbidden_prior_item_ids"),
+        "preregistration forbidden item IDs",
+        sha_values=False,
+    )
+    _validate_prior_list(
+        artifact.get("forbidden_prior_source_entity_ids"),
+        "preregistration forbidden source-entity IDs",
+        sha_values=True,
+    )
+    _validate_prior_list(
+        artifact.get("forbidden_prior_component_ids"),
+        "preregistration forbidden component IDs",
+        sha_values=True,
+    )
+    _validate_lock_gates(
+        artifact.get("gates"),
+        item_count=len(manifest.get("items", [])),
+        token_envelope=manifest.get("token_envelope", {}),
+        token_tolerance=int(manifest.get("token_tolerance", -1)),
+    )
+    readback = preregistration_readback
+    if (
+        set(readback) != _PREREGISTRATION_READBACK_FIELDS
+        or readback.get("schema_version") != PREREGISTRATION_READBACK_SCHEMA
+        or readback.get("purpose") != SEALED_LOCK_PURPOSE
+        or readback.get("experiment_tag") != SEALED_EXPERIMENT_TAG
+        or readback.get("closes_question") != SEALED_CLOSES_QUESTION
+        or readback.get("run_id") != SEALED_RUN_ID
+    ):
+        raise R8RunnerRefusal("sealed preregistration readback shape drifted")
+    _self_hash(readback, "receipt_sha256", "preregistration readback")
+    for key in _PREREGISTRATION_READBACK_FIELDS:
+        if key.endswith("_sha256"):
+            _sha(readback.get(key), f"preregistration readback {key}")
+    lock_sha = str(execution_lock.get("lock_sha256"))
+    full_judge_sha, core_judge_sha = _judge_hashes(anchored_judge_path, lock_sha)
+    result_contract_sha = _stable_file_sha256(result_contract_path, "result contract")
+    if (
+        readback.get("measurement_lock_sha256") != lock_sha
+        or readback.get("preregistration_artifact_sha256") != artifact_sha
+        or readback.get("pred_script_sha256") != full_judge_sha
+        or readback.get("anchored_judge_file_sha256") != full_judge_sha
+        or readback.get("judge_core_sha256") != core_judge_sha
+        or artifact.get("judge_core_sha256") != core_judge_sha
+        or execution_lock.get("judge_core_sha256") != core_judge_sha
+        or core_judge_sha != committed_core_sha
+        or readback.get("result_contract_sha256") != result_contract_sha
+        or artifact.get("result_contract_sha256") != result_contract_sha
+        or execution_lock.get("result_contract_sha256") != result_contract_sha
+    ):
+        raise R8RunnerRefusal("preregistration judge/result-contract binding drifted")
+    external_identity = readback.get("external_record_identity")
+    if not (
+        isinstance(external_identity, str) and external_identity.strip()
+        or isinstance(external_identity, Mapping) and bool(external_identity)
+    ):
+        raise R8RunnerRefusal("preregistration external record identity is absent")
+
+
+def _database_identity(path: Path, label: str) -> dict[str, object]:
+    resolved = Path(path).resolve()
+    try:
+        info = resolved.stat()
+    except OSError as error:
+        raise R8RunnerRefusal(f"cannot stat {label}: {error}") from error
+    if not resolved.is_file():
+        raise R8RunnerRefusal(f"{label} is not a regular file: {resolved}")
+    return {
+        "resolved_path": str(resolved),
+        "st_dev": int(info.st_dev),
+        "st_ino": int(info.st_ino),
+    }
+
+
+def _read_only_database(path: Path, label: str) -> sqlite3.Connection:
+    resolved = Path(path).resolve()
+    try:
+        connection = sqlite3.connect(
+            f"file:{resolved}?mode=ro", uri=True, isolation_level=None
+        )
+        connection.row_factory = sqlite3.Row
+        connection.execute("PRAGMA query_only=ON")
+        # This is deliberately the audit connection setting, not a claim that
+        # a closed writer's connection-scoped synchronous mode was recovered.
+        connection.execute("PRAGMA synchronous=FULL")
+        connection.execute("BEGIN")
+    except sqlite3.Error as error:
+        try:
+            connection.close()
+        except UnboundLocalError:
+            pass
+        raise R8RunnerRefusal(f"cannot open {label} read-only: {error}") from error
+    return connection
+
+
+def _database_schema(
+    connection: sqlite3.Connection,
+    expected: Mapping[str, list[str]],
+    label: str,
+) -> tuple[int, str]:
+    tables = {
+        str(row[0])
+        for row in connection.execute(
+            "SELECT name FROM sqlite_master "
+            "WHERE type='table' AND name NOT LIKE 'sqlite_%'"
+        )
+    }
+    if tables != set(expected):
+        raise R8RunnerRefusal(f"{label} table set drifted")
+    observed: dict[str, list[str]] = {}
+    for table, columns in expected.items():
+        observed[table] = [
+            str(row[1]) for row in connection.execute(f"PRAGMA table_info({table})")
+        ]
+        if observed[table] != columns:
+            raise R8RunnerRefusal(f"{label} columns drifted for {table}")
+    user_version = int(connection.execute("PRAGMA user_version").fetchone()[0])
+    return user_version, canonical_sha256(
+        {"user_version": user_version, "tables": observed}
+    )
+
+
+def _private_sqlite_path(path: Path, label: str) -> Path:
+    try:
+        target = canonical_output_path(Path(path))
+        parent_mode = stat.S_IMODE(target.parent.stat().st_mode)
+    except Exception as error:
+        raise R8RunnerRefusal(f"{label} parent is not a canonical directory") from error
+    if parent_mode & 0o022:
+        raise R8RunnerRefusal(f"{label} parent is group/world writable")
+    return target
+
+
+def _fsync_parent(path: Path) -> None:
+    descriptor = os.open(
+        path.parent,
+        os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) | getattr(os, "O_CLOEXEC", 0),
+    )
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
+def _precreate_private_sqlite(path: Path, label: str) -> Path:
+    target = _private_sqlite_path(path, label)
+    flags = (
+        os.O_RDWR | os.O_CREAT | os.O_EXCL
+        | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+    )
+    try:
+        descriptor = os.open(target, flags, 0o600)
+    except FileExistsError as error:
+        raise R8RunnerRefusal(f"{label} path is already occupied") from error
+    except OSError as error:
+        raise R8RunnerRefusal(f"cannot reserve {label}") from error
+    try:
+        os.fchmod(descriptor, 0o600)
+        info = os.fstat(descriptor)
+        if not stat.S_ISREG(info.st_mode) or stat.S_IMODE(info.st_mode) != 0o600:
+            raise R8RunnerRefusal(f"{label} reservation is not private")
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+    _fsync_parent(target)
+    return target
+
+
+def _seal_private_sqlite_family(path: Path, label: str) -> None:
+    target = _private_sqlite_path(path, label)
+    for member in (target, Path(f"{target}-wal"), Path(f"{target}-shm")):
+        try:
+            before = member.lstat()
+        except FileNotFoundError:
+            if member == target:
+                raise R8RunnerRefusal(f"{label} database is absent")
+            continue
+        except OSError as error:
+            raise R8RunnerRefusal(f"cannot stat {label} SQLite family") from error
+        if stat.S_ISLNK(before.st_mode) or not stat.S_ISREG(before.st_mode):
+            raise R8RunnerRefusal(f"{label} SQLite family member is unsafe")
+        flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+        try:
+            descriptor = os.open(member, flags)
+            os.fchmod(descriptor, 0o600)
+            after = os.fstat(descriptor)
+            if (
+                (before.st_dev, before.st_ino) != (after.st_dev, after.st_ino)
+                or stat.S_IMODE(after.st_mode) != 0o600
+            ):
+                raise R8RunnerRefusal(f"{label} SQLite family identity drifted")
+            os.fsync(descriptor)
+        finally:
+            try:
+                os.close(descriptor)
+            except UnboundLocalError:
+                pass
+    _fsync_parent(target)
+
+
+def initialize_transport_pair(attempt_db: Path, spool_db: Path) -> None:
+    attempt = _private_sqlite_path(attempt_db, "attempt ledger")
+    spool = _private_sqlite_path(spool_db, "result spool")
+    if attempt == spool:
+        raise R8RunnerRefusal("attempt and spool databases must be different files")
+    _precreate_private_sqlite(attempt, "attempt ledger")
+    _precreate_private_sqlite(spool, "result spool")
+    attempt_store: SQLiteF1CallLedger | None = None
+    spool_store: SQLiteResultSpool | None = None
+    try:
+        attempt_store = SQLiteF1CallLedger(attempt)
+        spool_store = SQLiteResultSpool(spool)
+        if (
+            attempt_store.audit().get("call_count") != 0
+            or attempt_store.audit().get("item_run_count") != 0
+            or spool_store.audit().get("call_count") != 0
+        ):
+            raise R8RunnerRefusal("new transport pair is not logically empty")
+    finally:
+        if attempt_store is not None:
+            attempt_store.close()
+        if spool_store is not None:
+            spool_store.close()
+    _seal_private_sqlite_family(attempt, "attempt ledger")
+    _seal_private_sqlite_family(spool, "result spool")
+
+
+def verify_fresh_transport_genesis(
+    genesis_receipt: Mapping[str, object],
+    *,
+    execution_lock: Mapping[str, object],
+    run_id: str,
+    attempt_db: Path,
+    spool_db: Path,
+) -> str:
+    lock_sha = _self_hash(execution_lock, "lock_sha256", "execution lock")
+    _sha(lock_sha, "execution lock")
+    lock_genesis_sha = execution_lock.get("db_genesis_receipt_sha256")
+    _sha(lock_genesis_sha, "execution-lock DB genesis receipt")
+    genesis_sha = _validate_transport_genesis_receipt(
+        genesis_receipt,
+        run_id=run_id,
+        expected_sha256=str(lock_genesis_sha),
+    )
+    observed_identities = {
+        "attempt_db_identity": _database_identity(attempt_db, "attempt ledger"),
+        "spool_db_identity": _database_identity(spool_db, "result spool"),
+    }
+    if any(
+        genesis_receipt.get(key) != value
+        for key, value in observed_identities.items()
+    ):
+        raise R8RunnerRefusal("transport database identity changed after genesis freeze")
+    attempt = _read_only_database(attempt_db, "attempt ledger")
+    spool = _read_only_database(spool_db, "result spool")
+    try:
+        if [str(row[0]) for row in attempt.execute("PRAGMA integrity_check")] != ["ok"]:
+            raise R8RunnerRefusal("attempt ledger integrity_check failed")
+        if [str(row[0]) for row in spool.execute("PRAGMA integrity_check")] != ["ok"]:
+            raise R8RunnerRefusal("result spool integrity_check failed")
+        attempt_version, attempt_schema = _database_schema(
+            attempt, _ATTEMPT_COLUMNS, "attempt ledger"
+        )
+        spool_version, spool_schema = _database_schema(
+            spool, _SPOOL_COLUMNS, "result spool"
+        )
+        observed = {
+            "attempt_integrity": "ok",
+            "spool_integrity": "ok",
+            "attempt_user_version": attempt_version,
+            "spool_user_version": spool_version,
+            "attempt_schema_sha256": attempt_schema,
+            "spool_schema_sha256": spool_schema,
+            "attempt_journal_mode": str(
+                attempt.execute("PRAGMA journal_mode").fetchone()[0]
+            ),
+            "attempt_audit_connection_synchronous": str(
+                attempt.execute("PRAGMA synchronous").fetchone()[0]
+            ),
+            "spool_journal_mode": str(spool.execute("PRAGMA journal_mode").fetchone()[0]),
+            "spool_audit_connection_synchronous": str(
+                spool.execute("PRAGMA synchronous").fetchone()[0]
+            ),
+            "call_count": int(attempt.execute("SELECT COUNT(*) FROM call_state").fetchone()[0]),
+            "item_run_count": int(attempt.execute("SELECT COUNT(*) FROM item_runs").fetchone()[0]),
+            "attempt_event_count": int(
+                attempt.execute("SELECT COUNT(*) FROM attempt_events").fetchone()[0]
+            ),
+            "spool_call_count": int(
+                spool.execute("SELECT COUNT(*) FROM spool_calls").fetchone()[0]
+            ),
+        }
+        if any(genesis_receipt.get(key) != value for key, value in observed.items()):
+            raise R8RunnerRefusal("live transport pair no longer equals frozen genesis")
+    finally:
+        attempt.close()
+        spool.close()
+    if any(
+        observed_identities[key] != _database_identity(
+            attempt_db if key == "attempt_db_identity" else spool_db,
+            "attempt ledger" if key == "attempt_db_identity" else "result spool",
+        )
+        for key in observed_identities
+    ):
+        raise R8RunnerRefusal("transport identity changed during pre-call genesis audit")
+    return genesis_sha
+
+
+def validate_execution_policy(
+    execution_lock: Mapping[str, object],
+    *,
+    endpoint: str,
+    max_workers: int,
+    timeout_seconds: float,
+    max_delivery_attempts: int,
+    spool_token_env: str | None,
+) -> None:
+    expected = _validate_execution_policy_value(execution_lock.get("execution_policy"))
+    observed = {
+        "endpoint": endpoint,
+        "max_workers": max_workers,
+        "timeout_seconds": timeout_seconds,
+        "max_delivery_attempts": max_delivery_attempts,
+        "spool_token_env": spool_token_env,
+    }
+    if expected != observed:
+        raise R8RunnerRefusal("runtime execution policy differs from the frozen lock")
+
+
+def verify_spool_endpoint_identity(
+    *,
+    endpoint: str,
+    spool_db: Path,
+    model_revision: str,
+    spool_token_env: str,
+    timeout_seconds: float,
+    run_id: str,
+    execution_lock_sha256: str,
+    db_genesis_sha256: str,
+) -> dict[str, object]:
+    token = os.environ.get(spool_token_env)
+    if not token:
+        raise R8RunnerRefusal("result-spool bearer token is absent")
+    request = urllib_request.Request(
+        f"{endpoint.rstrip('/')}{SPOOL_IDENTITY_ROUTE}",
+        headers={"Authorization": f"Bearer {token}"},
+        method="GET",
+    )
+    try:
+        with urllib_request.urlopen(request, timeout=timeout_seconds) as response:
+            if int(response.status) != 200:
+                raise R8RunnerRefusal("result-spool identity endpoint refused preflight")
+            raw = response.read(128 * 1024 + 1)
+    except (OSError, urllib_error.URLError) as error:
+        raise R8RunnerRefusal("cannot read result-spool identity endpoint") from error
+    if len(raw) > 128 * 1024:
+        raise R8RunnerRefusal("result-spool identity response is oversized")
+    try:
+        identity = json.loads(
+            raw.decode("utf-8"), object_pairs_hook=_pairs,
+            parse_constant=lambda _value: (_ for _ in ()).throw(
+                R8RunnerRefusal("non-finite spool identity value")
+            ),
+        )
+    except (UnicodeError, json.JSONDecodeError) as error:
+        raise R8RunnerRefusal("result-spool identity is not strict JSON") from error
+    if not isinstance(identity, Mapping) or set(identity) != _SPOOL_IDENTITY_FIELDS:
+        raise R8RunnerRefusal("result-spool identity shape drifted")
+    _self_hash(identity, "identity_sha256", "result-spool identity")
+    audit = identity.get("audit")
+    _validate_spool_audit(audit)
+    if (
+        identity.get("schema_version") != SPOOL_IDENTITY_SCHEMA
+        or identity.get("server_revision") != model_revision
+        or identity.get("db_identity") != _database_identity(spool_db, "result spool")
+    ):
+        raise R8RunnerRefusal("endpoint service does not own the frozen empty spool DB")
+    unsigned = {
+        "schema_version": SPOOL_PREFLIGHT_SCHEMA,
+        "run_id": run_id,
+        "execution_lock_sha256": execution_lock_sha256,
+        "db_genesis_sha256": db_genesis_sha256,
+        "endpoint": endpoint,
+        "endpoint_identity": dict(identity),
+    }
+    result = {**unsigned, "preflight_sha256": canonical_sha256(unsigned)}
+    _validate_spool_identity_preflight(
+        result,
+        run_id=run_id,
+        model_revision=model_revision,
+        execution_lock_sha256=execution_lock_sha256,
+        db_genesis_sha256=db_genesis_sha256,
+        endpoint=endpoint,
+    )
+    return result
+
+
+def _decoded_bytes(value: object, label: str) -> bytes:
+    if not isinstance(value, str):
+        raise R8RunnerRefusal(f"{label} is not base64 text")
+    try:
+        raw = base64.b64decode(value, validate=True)
+    except ValueError as error:
+        raise R8RunnerRefusal(f"{label} is invalid base64") from error
+    return raw
+
+
+def _strict_json_bytes(raw: bytes, label: str, *, canonical: bool) -> object:
+    try:
+        value = json.loads(
+            raw.decode("utf-8"), object_pairs_hook=_pairs,
+            parse_constant=lambda _value: (_ for _ in ()).throw(
+                R8RunnerRefusal(f"non-finite JSON number in {label}")
+            ),
+        )
+    except (UnicodeError, json.JSONDecodeError) as error:
+        raise R8RunnerRefusal(f"{label} is not strict JSON") from error
+    if canonical and canonical_json(value).encode("utf-8") != raw:
+        raise R8RunnerRefusal(f"{label} is not canonical JSON")
+    return value
+
+
+def _verify_transport_bindings_against_rows(
+    rows: Sequence[Mapping[str, object]],
+    bindings: Mapping[str, object],
+    *,
+    expected_endpoint: str | None = None,
+) -> dict[str, object]:
+    if (
+        set(bindings) != _TRANSPORT_BINDING_FIELDS
+        or bindings.get("schema_version") != TRANSPORT_BINDINGS_SCHEMA
+    ):
+        raise R8RunnerRefusal("transport binding top-level schema drifted")
+    _self_hash(bindings, "bindings_sha256", "transport bindings")
+    expected_calls: dict[str, str] = {}
+    suite_calls_by_id: dict[str, Mapping[str, object]] = {}
+    rows_by_identity: dict[tuple[str, str, str, str], Mapping[str, object]] = {}
+    expected_items: set[tuple[str, str, str, str]] = set()
+    for row in rows:
+        receipt_sha = _self_hash(row, "run_receipt_sha256", "item-run receipt")
+        item_identity = (
+            str(row.get("run_id")), str(row.get("arm_id")),
+            str(row.get("item_id")), receipt_sha,
+        )
+        if item_identity in expected_items:
+            raise R8RunnerRefusal("draft repeats an item-run identity")
+        expected_items.add(item_identity)
+        rows_by_identity[item_identity] = row
+        calls = row.get("calls")
+        assert isinstance(calls, list)
+        for call in calls:
+            assert isinstance(call, Mapping)
+            physical_id = str(call.get("physical_call_id"))
+            call_sha = str(call.get("receipt_sha256"))
+            if physical_id in expected_calls:
+                raise R8RunnerRefusal("draft repeats a physical call identity")
+            expected_calls[physical_id] = call_sha
+            suite_calls_by_id[physical_id] = call
+
+    accepted = bindings.get("accepted_calls")
+    spool = bindings.get("spool_bindings")
+    item_bindings = bindings.get("item_run_bindings")
+    if not all(isinstance(value, list) for value in (accepted, spool, item_bindings)):
+        raise R8RunnerRefusal("transport binding arrays are absent")
+    accepted_by_id: dict[str, Mapping[str, object]] = {}
+    accepted_keys = {
+        "physical_call_id", "intent_sha256", "request_sha256", "response_sha256",
+        "model_response_sha256", "call_receipt_sha256", "response_status",
+        "intent_bytes_b64", "request_bytes_b64", "response_body_b64",
+        "model_response_bytes_b64",
+    }
+    for raw in accepted:
+        if not isinstance(raw, Mapping) or set(raw) != accepted_keys:
+            raise R8RunnerRefusal("accepted-call binding shape drifted")
+        physical_id = str(raw.get("physical_call_id"))
+        if physical_id in accepted_by_id or physical_id not in expected_calls:
+            raise R8RunnerRefusal("accepted-call identity repeats or is foreign")
+        preimages: dict[str, bytes] = {}
+        for field, payload in (
+            ("intent_sha256", "intent_bytes_b64"),
+            ("request_sha256", "request_bytes_b64"),
+            ("response_sha256", "response_body_b64"),
+            ("model_response_sha256", "model_response_bytes_b64"),
+        ):
+            preimage = _decoded_bytes(raw.get(payload), payload)
+            if hashlib.sha256(preimage).hexdigest() != raw.get(field):
+                raise R8RunnerRefusal("accepted-call byte preimage drifted")
+            preimages[field] = preimage
+        if (
+            raw.get("call_receipt_sha256") != expected_calls[physical_id]
+            or raw.get("response_status") != 200
+        ):
+            raise R8RunnerRefusal("accepted-call receipt differs from suite draft")
+        suite_call = suite_calls_by_id[physical_id]
+        intent = _strict_json_bytes(
+            preimages["intent_sha256"], "accepted intent", canonical=True
+        )
+        if not isinstance(intent, Mapping) or set(intent) != {
+            "schema_version", "spool_route", "call", "request_sha256",
+            "output_schema_sha256",
+        } or intent.get("schema_version") != TRANSPORT_SCHEMA:
+            raise R8RunnerRefusal("accepted intent schema drifted")
+        intent_call = intent.get("call")
+        if not isinstance(intent_call, Mapping) or set(intent_call) != {
+            "physical_call_id", "run_id", "arm_id", "item_id", "call_index",
+            "function_id", "model", "model_revision", "system_prompt",
+            "input_type", "input_payload", "output_type", "max_output_tokens",
+        }:
+            raise R8RunnerRefusal("accepted intent call shape drifted")
+        for key in (
+            "physical_call_id", "run_id", "arm_id", "item_id", "call_index",
+            "function_id", "model", "model_revision", "input_type",
+            "input_payload", "output_type",
+        ):
+            if intent_call.get(key) != suite_call.get(key):
+                raise R8RunnerRefusal(f"accepted intent differs from suite call: {key}")
+        prompt = intent_call.get("system_prompt")
+        if (
+            not isinstance(prompt, str)
+            or canonical_sha256({"prompt": prompt}) != suite_call.get("prompt_sha256")
+            or intent_call.get("max_output_tokens")
+            != suite_call.get("allowed_output_tokens")
+            or intent.get("request_sha256") != raw.get("request_sha256")
+            or not str(intent.get("spool_route", "")).endswith(physical_id)
+            or intent.get("output_schema_sha256")
+            != output_schema_sha256(str(suite_call.get("output_type")))
+        ):
+            raise R8RunnerRefusal("accepted intent prompt/request contract drifted")
+        try:
+            model_call = ModelCallV1(**dict(intent_call))
+        except TypeError as error:
+            raise R8RunnerRefusal("accepted intent cannot reconstruct the model call") from error
+        expected_request = canonical_json(
+            DurableSpoolJSONPort._request_body(model_call)
+        ).encode("utf-8")
+        if preimages["request_sha256"] != expected_request:
+            raise R8RunnerRefusal("accepted HTTP request differs from model call")
+
+        model_response = _strict_json_bytes(
+            preimages["model_response_sha256"],
+            "accepted normalized model response",
+            canonical=True,
+        )
+        if not isinstance(model_response, Mapping) or set(model_response) != {
+            "payload", "model", "model_revision", "input_tokens", "output_tokens",
+            "latency_ms", "cache_status", "retries",
+        }:
+            raise R8RunnerRefusal("accepted normalized model response shape drifted")
+        response_to_call = {
+            "payload": "output_payload", "model": "model",
+            "model_revision": "model_revision", "input_tokens": "input_tokens",
+            "output_tokens": "output_tokens", "latency_ms": "latency_ms",
+            "cache_status": "cache_status", "retries": "retries",
+        }
+        if any(
+            model_response.get(response_key) != suite_call.get(call_key)
+            for response_key, call_key in response_to_call.items()
+        ):
+            raise R8RunnerRefusal("normalized model response differs from suite call")
+        validate_port(str(suite_call.get("output_type")), model_response.get("payload"))
+
+        response = _strict_json_bytes(
+            preimages["response_sha256"], "accepted raw HTTP response", canonical=False
+        )
+        if not isinstance(response, Mapping):
+            raise R8RunnerRefusal("accepted raw HTTP response is not an object")
+        choices = response.get("choices")
+        usage = response.get("usage")
+        if (
+            response.get("model") != suite_call.get("model")
+            or not isinstance(choices, list)
+            or len(choices) != 1
+            or not isinstance(usage, Mapping)
+            or not isinstance(choices[0], Mapping)
+            or choices[0].get("finish_reason") != "stop"
+            or not isinstance(choices[0].get("message"), Mapping)
+            or not isinstance(choices[0]["message"].get("content"), str)
+        ):
+            raise R8RunnerRefusal("accepted raw HTTP response envelope drifted")
+        raw_payload = _strict_json_bytes(
+            choices[0]["message"]["content"].encode("utf-8"),
+            "accepted raw response content",
+            canonical=False,
+        )
+        if (
+            raw_payload != model_response.get("payload")
+            or usage.get("prompt_tokens") != suite_call.get("input_tokens")
+            or usage.get("completion_tokens") != suite_call.get("output_tokens")
+        ):
+            raise R8RunnerRefusal("raw HTTP response differs from normalized suite output")
+        accepted_by_id[physical_id] = raw
+    if set(accepted_by_id) != set(expected_calls):
+        raise R8RunnerRefusal("accepted-call bindings do not exactly cover the draft")
+
+    spool_by_id: dict[str, Mapping[str, object]] = {}
+    spool_keys = {
+        "physical_call_id", "intent_sha256", "request_sha256", "response_sha256",
+    }
+    for raw in spool:
+        if not isinstance(raw, Mapping) or set(raw) != spool_keys:
+            raise R8RunnerRefusal("spool binding shape drifted")
+        physical_id = str(raw.get("physical_call_id"))
+        counterpart = accepted_by_id.get(physical_id)
+        if physical_id in spool_by_id or counterpart is None or any(
+            raw.get(key) != counterpart.get(key)
+            for key in ("intent_sha256", "request_sha256", "response_sha256")
+        ):
+            raise R8RunnerRefusal("spool and accepted-call bindings differ")
+        spool_by_id[physical_id] = raw
+    if set(spool_by_id) != set(expected_calls):
+        raise R8RunnerRefusal("spool bindings do not exactly cover the draft")
+
+    observed_items: set[tuple[str, str, str, str]] = set()
+    for raw in item_bindings:
+        if not isinstance(raw, Mapping) or set(raw) != {
+            "run_id", "arm_id", "item_id", "run_receipt_sha256",
+        }:
+            raise R8RunnerRefusal("item-run binding shape drifted")
+        identity = (
+            str(raw.get("run_id")), str(raw.get("arm_id")),
+            str(raw.get("item_id")), str(raw.get("run_receipt_sha256")),
+        )
+        if identity in observed_items:
+            raise R8RunnerRefusal("item-run binding repeats")
+        observed_items.add(identity)
+    if observed_items != expected_items:
+        raise R8RunnerRefusal("durable item-run bindings differ from suite rows")
+
+    auxiliary = bindings.get("accepted_call_auxiliary_preimages")
+    spool_preimages = bindings.get("spool_call_preimages")
+    item_preimages = bindings.get("item_run_preimages")
+    events = bindings.get("attempt_events")
+    if not all(
+        isinstance(value, list)
+        for value in (auxiliary, spool_preimages, item_preimages, events)
+    ):
+        raise R8RunnerRefusal("transport enriched preimage arrays are absent")
+    assert isinstance(auxiliary, list)
+    assert isinstance(spool_preimages, list)
+    assert isinstance(item_preimages, list)
+    assert isinstance(events, list)
+    if accepted != sorted(accepted, key=lambda item: str(item["physical_call_id"])):
+        raise R8RunnerRefusal("accepted-call exports are not canonically sorted")
+    if spool != sorted(spool, key=lambda item: str(item["physical_call_id"])):
+        raise R8RunnerRefusal("spool bindings are not canonically sorted")
+    if item_bindings != sorted(
+        item_bindings,
+        key=lambda item: (
+            str(item["run_id"]), str(item["arm_id"]), str(item["item_id"]),
+        ),
+    ):
+        raise R8RunnerRefusal("item-run bindings are not canonically sorted")
+
+    auxiliary_by_id: dict[str, Mapping[str, object]] = {}
+    for raw in auxiliary:
+        if not isinstance(raw, Mapping) or set(raw) != {
+            "physical_call_id", "endpoint", "response_headers_sha256",
+            "response_headers_b64", "call_receipt_bytes_sha256",
+            "call_receipt_bytes_b64",
+        }:
+            raise R8RunnerRefusal("accepted-call auxiliary shape drifted")
+        physical_id = str(raw.get("physical_call_id"))
+        if physical_id in auxiliary_by_id or physical_id not in suite_calls_by_id:
+            raise R8RunnerRefusal("accepted-call auxiliary identity drifted")
+        headers = _decoded_bytes(raw.get("response_headers_b64"), "response headers")
+        receipt_bytes = _decoded_bytes(
+            raw.get("call_receipt_bytes_b64"), "call receipt bytes"
+        )
+        if (
+            hashlib.sha256(headers).hexdigest()
+            != raw.get("response_headers_sha256")
+            or hashlib.sha256(receipt_bytes).hexdigest()
+            != raw.get("call_receipt_bytes_sha256")
+        ):
+            raise R8RunnerRefusal("accepted-call auxiliary byte hash drifted")
+        receipt = _strict_json_bytes(
+            receipt_bytes, "accepted call receipt", canonical=True
+        )
+        if (
+            not isinstance(receipt, Mapping)
+            or dict(receipt) != dict(suite_calls_by_id[physical_id])
+            or _self_hash(receipt, "receipt_sha256", "accepted call receipt")
+            != accepted_by_id[physical_id].get("call_receipt_sha256")
+        ):
+            raise R8RunnerRefusal("accepted call-receipt bytes differ from suite semantics")
+        if expected_endpoint is not None and raw.get("endpoint") != (
+            f"{expected_endpoint.rstrip('/')}/v1/hswm/calls/{physical_id}"
+        ):
+            raise R8RunnerRefusal("accepted-call endpoint differs from execution policy")
+        auxiliary_by_id[physical_id] = raw
+    if set(auxiliary_by_id) != set(expected_calls):
+        raise R8RunnerRefusal("accepted-call auxiliaries do not cover the draft")
+
+    spool_preimages_by_id: dict[str, Mapping[str, object]] = {}
+    for raw in spool_preimages:
+        if not isinstance(raw, Mapping) or set(raw) != {
+            "physical_call_id", "intent_sha256", "request_sha256",
+            "response_sha256", "status", "response_status", "request_bytes_b64",
+            "response_headers_sha256", "response_headers_b64", "response_body_b64",
+            "error_class",
+        }:
+            raise R8RunnerRefusal("spool preimage shape drifted")
+        physical_id = str(raw.get("physical_call_id"))
+        accepted_row = accepted_by_id.get(physical_id)
+        if physical_id in spool_preimages_by_id or accepted_row is None:
+            raise R8RunnerRefusal("spool preimage identity drifted")
+        request_bytes = _decoded_bytes(raw.get("request_bytes_b64"), "spool request")
+        response_headers = _decoded_bytes(
+            raw.get("response_headers_b64"), "spool response headers"
+        )
+        response_body = _decoded_bytes(raw.get("response_body_b64"), "spool response")
+        if (
+            raw.get("status") != "COMPLETE"
+            or raw.get("response_status") != 200
+            or raw.get("error_class") is not None
+            or any(
+                raw.get(key) != accepted_row.get(key)
+                for key in (
+                    "intent_sha256", "request_sha256", "response_sha256",
+                )
+            )
+            or hashlib.sha256(request_bytes).hexdigest() != raw.get("request_sha256")
+            or hashlib.sha256(response_headers).hexdigest()
+            != raw.get("response_headers_sha256")
+            or hashlib.sha256(response_body).hexdigest() != raw.get("response_sha256")
+            or raw.get("request_bytes_b64") != accepted_row.get("request_bytes_b64")
+            or raw.get("response_body_b64") != accepted_row.get("response_body_b64")
+        ):
+            raise R8RunnerRefusal("spool preimage differs from accepted-call bytes")
+        spool_preimages_by_id[physical_id] = raw
+    if set(spool_preimages_by_id) != set(expected_calls):
+        raise R8RunnerRefusal("spool preimages do not cover the draft")
+
+    item_preimages_by_identity: dict[tuple[str, str, str, str], Mapping[str, object]] = {}
+    for raw in item_preimages:
+        if not isinstance(raw, Mapping) or set(raw) != {
+            "run_id", "arm_id", "item_id", "run_receipt_sha256",
+            "item_run_bytes_sha256", "item_run_bytes_b64",
+        }:
+            raise R8RunnerRefusal("item-run preimage shape drifted")
+        identity = (
+            str(raw.get("run_id")), str(raw.get("arm_id")),
+            str(raw.get("item_id")), str(raw.get("run_receipt_sha256")),
+        )
+        item_bytes = _decoded_bytes(raw.get("item_run_bytes_b64"), "item-run bytes")
+        item_value = _strict_json_bytes(item_bytes, "item-run bytes", canonical=True)
+        if (
+            identity in item_preimages_by_identity
+            or identity not in rows_by_identity
+            or hashlib.sha256(item_bytes).hexdigest()
+            != raw.get("item_run_bytes_sha256")
+            or not isinstance(item_value, Mapping)
+            or dict(item_value) != dict(rows_by_identity[identity])
+            or _self_hash(item_value, "run_receipt_sha256", "item-run preimage")
+            != identity[3]
+        ):
+            raise R8RunnerRefusal("item-run preimage differs from suite row")
+        item_preimages_by_identity[identity] = raw
+    if set(item_preimages_by_identity) != expected_items:
+        raise R8RunnerRefusal("item-run preimages do not cover the suite")
+
+    previous = _EVENT_GENESIS
+    event_states: dict[str, str | None] = {}
+    for sequence, raw in enumerate(events):
+        if not isinstance(raw, Mapping) or set(raw) != {
+            "sequence", "physical_call_id", "event_type",
+            "previous_event_sha256", "event_sha256", "event_bytes_b64",
+        }:
+            raise R8RunnerRefusal("attempt-event export shape drifted")
+        physical_id = str(raw.get("physical_call_id"))
+        event_type = str(raw.get("event_type"))
+        event_bytes = _decoded_bytes(raw.get("event_bytes_b64"), "attempt event")
+        event_value = _strict_json_bytes(event_bytes, "attempt event", canonical=True)
+        allowed = _EVENT_TRANSITIONS.get(event_type)
+        if (
+            raw.get("sequence") != sequence
+            or physical_id not in expected_calls
+            or raw.get("previous_event_sha256") != previous
+            or hashlib.sha256(event_bytes).hexdigest() != raw.get("event_sha256")
+            or not isinstance(event_value, Mapping)
+            or set(event_value) != {
+                "schema_version", "sequence", "physical_call_id", "event_type",
+                "detail", "previous_event_sha256",
+            }
+            or event_value.get("schema_version") != DURABLE_CALL_SCHEMA
+            or event_value.get("sequence") != sequence
+            or event_value.get("physical_call_id") != physical_id
+            or event_value.get("event_type") != event_type
+            or event_value.get("previous_event_sha256") != previous
+            or not isinstance(event_value.get("detail"), Mapping)
+            or allowed is None
+            or event_states.get(physical_id) not in allowed
+        ):
+            raise R8RunnerRefusal("attempt-event chain semantics drifted")
+        event_states[physical_id] = event_type
+        previous = str(raw.get("event_sha256"))
+    if set(event_states) != set(expected_calls) or any(
+        state != "ACCEPTED" for state in event_states.values()
+    ):
+        raise R8RunnerRefusal("attempt-event tails do not cover accepted calls")
+
+    accepted_minimal = [
+        {
+            key: raw[key]
+            for key in (
+                "physical_call_id", "intent_sha256", "request_sha256",
+                "response_sha256", "call_receipt_sha256",
+            )
+        }
+        for raw in accepted
+    ]
+    roots = {
+        "accepted_call_root_sha256": canonical_sha256(accepted_minimal),
+        "accepted_call_export_root_sha256": canonical_sha256(accepted),
+        "accepted_call_auxiliary_root_sha256": canonical_sha256(auxiliary),
+        "spool_binding_root_sha256": canonical_sha256(spool),
+        "spool_preimage_root_sha256": canonical_sha256(spool_preimages),
+        "item_run_root_sha256": canonical_sha256(item_bindings),
+        "item_run_preimage_root_sha256": canonical_sha256(item_preimages),
+        "attempt_event_root_sha256": canonical_sha256(events),
+        "event_chain_tip_sha256": previous,
+    }
+    if any(bindings.get(key) != value for key, value in roots.items()):
+        raise R8RunnerRefusal("transport canonical or enriched root drifted")
+    return roots
+
+
+def _candidate(raw: Mapping[str, object], label: str) -> EvidenceCandidateV1:
+    expected = {"bond_id", "evidence_id", "source_entity_id", "content", "observable"}
+    if set(raw) != expected or not isinstance(raw.get("observable"), dict):
+        raise R8RunnerRefusal(f"{label} candidate schema drifted")
+    return EvidenceCandidateV1(
+        bond_id=str(raw["bond_id"]),
+        evidence_id=str(raw["evidence_id"]),
+        source_entity_id=_sha(raw["source_entity_id"], f"{label} source entity"),
+        content=str(raw["content"]),
+        observable=dict(raw["observable"]),
+    )
+
+
+def _item(raw: Mapping[str, object], label: str) -> FunctionNetworkItemV1:
+    expected = {
+        "item_id", "query_text", "allowed_evidence_types", "candidates",
+        "component_id", "max_evidence_items", "max_input_tokens",
+        "max_output_tokens_per_call",
+    }
+    if set(raw) != expected:
+        raise R8RunnerRefusal(f"{label} item schema drifted")
+    candidates_raw = raw.get("candidates")
+    evidence_types = raw.get("allowed_evidence_types")
+    if not isinstance(candidates_raw, list) or not candidates_raw:
+        raise R8RunnerRefusal(f"{label} has no candidates")
+    if any(not isinstance(value, Mapping) for value in candidates_raw):
+        raise R8RunnerRefusal(f"{label} candidate is not an object")
+    if not isinstance(evidence_types, list) or not evidence_types or any(
+        not isinstance(value, str) or not value for value in evidence_types
+    ):
+        raise R8RunnerRefusal(f"{label} evidence types drifted")
+    return FunctionNetworkItemV1(
+        item_id=str(raw["item_id"]),
+        query_text=str(raw["query_text"]),
+        allowed_evidence_types=tuple(evidence_types),
+        candidates=tuple(_candidate(value, label) for value in candidates_raw),
+        max_evidence_items=_positive(raw["max_evidence_items"], "max_evidence_items"),
+        max_input_tokens=_positive(raw["max_input_tokens"], "max_input_tokens"),
+        max_output_tokens_per_call=_positive(
+            raw["max_output_tokens_per_call"], "max_output_tokens_per_call"
+        ),
+        component_id=_sha(raw["component_id"], f"{label} component"),
+    )
+
+
+def _derive_components(
+    raw_items: Sequence[Mapping[str, object]],
+) -> tuple[dict[str, str], set[str]]:
+    parent = {str(item["item_id"]): str(item["item_id"]) for item in raw_items}
+
+    def find(item_id: str) -> str:
+        while parent[item_id] != item_id:
+            parent[item_id] = parent[parent[item_id]]
+            item_id = parent[item_id]
+        return item_id
+
+    def union(left: str, right: str) -> None:
+        left_root, right_root = find(left), find(right)
+        if left_root != right_root:
+            parent[max(left_root, right_root)] = min(left_root, right_root)
+
+    owner: dict[str, str] = {}
+    entities_by_item: dict[str, set[str]] = {}
+    for raw in raw_items:
+        item_id = str(raw["item_id"])
+        candidates = raw["candidates"]
+        assert isinstance(candidates, list)
+        entities = {_sha(value["source_entity_id"], "source entity") for value in candidates}
+        entities_by_item[item_id] = entities
+        for entity in entities:
+            union(item_id, owner.setdefault(entity, item_id))
+    entities_by_root: dict[str, set[str]] = {}
+    for item_id, entities in entities_by_item.items():
+        entities_by_root.setdefault(find(item_id), set()).update(entities)
+    component_by_root = {
+        root: canonical_sha256(
+            {
+                "schema_version": "hswm-source-entity-connected-component/v1",
+                "source_entity_ids": sorted(entities),
+            }
+        )
+        for root, entities in entities_by_root.items()
+    }
+    by_item = {item_id: component_by_root[find(item_id)] for item_id in parent}
+    return by_item, set(owner)
+
+
+def _registries(
+    *, protocol_path: Path, model: str, model_revision: str
+) -> dict[str, FunctionRegistryV1]:
+    return {
+        arm: build_registry(
+            protocol_path,
+            model=model,
+            model_revision=model_revision,
+            prompt_overrides=_arm_overrides(arm),
+        )
+        for arm in F1_ARMS
+    }
+
+
+def build_development_execution_lock(
+    manifest: Mapping[str, object],
+    *,
+    protocol_path: Path,
+    selection_receipt_sha256: str,
+    prior_exposure_receipt_sha256: str,
+    public_source_receipt_sha256: str,
+    gold_source_receipt_sha256: str,
+    gold_sha256: str,
+    evaluator_receipt_sha256: str,
+    db_genesis_receipt_sha256: str,
+    environment_receipt_sha256: str,
+    dependency_receipt_sha256: str,
+    environment_dependency_compatibility_root_sha256: str,
+    environment_dependency_bundle_sha256: str,
+    hswm_commit: str,
+    result_contract_sha256: str,
+    judge_core_sha256: str,
+    judge_core_file_sha256: str,
+    forbidden_prior_item_ids: Sequence[str],
+    forbidden_prior_source_entity_ids: Sequence[str],
+    forbidden_prior_component_ids: Sequence[str],
+    execution_policy: Mapping[str, object],
+) -> dict[str, object]:
+    if manifest.get("schema_version") != MANIFEST_SCHEMA or manifest.get("mode") != "development":
+        raise R8RunnerRefusal("development execution lock requires manifest v3/development")
+    if manifest.get("preregistration_artifact_sha256") is not None:
+        raise R8RunnerRefusal("development execution lock cannot bind preregistration")
+    normalized_policy = _validate_execution_policy_value(execution_policy)
+    for value, label in (
+        (selection_receipt_sha256, "selection receipt"),
+        (prior_exposure_receipt_sha256, "prior-exposure receipt"),
+        (public_source_receipt_sha256, "public-source receipt"),
+        (gold_source_receipt_sha256, "gold-source receipt"),
+        (gold_sha256, "gold"),
+        (evaluator_receipt_sha256, "evaluator receipt"),
+        (db_genesis_receipt_sha256, "DB genesis receipt"),
+        (environment_receipt_sha256, "environment receipt"),
+        (dependency_receipt_sha256, "dependency receipt"),
+        (
+            environment_dependency_compatibility_root_sha256,
+            "environment/dependency compatibility root",
+        ),
+        (environment_dependency_bundle_sha256, "environment/dependency bundle"),
+        (result_contract_sha256, "result contract"),
+        (judge_core_sha256, "judge core"),
+        (judge_core_file_sha256, "judge core file"),
+    ):
+        _sha(value, label)
+    if not isinstance(hswm_commit, str) or _GIT_COMMIT.fullmatch(hswm_commit) is None:
+        raise R8RunnerRefusal("hswm_commit must be an exact lowercase Git SHA")
+    model = str(manifest.get("model"))
+    revision = str(manifest.get("model_revision"))
+    registries = _registries(
+        protocol_path=protocol_path, model=model, model_revision=revision
+    )
+    raw_items = manifest.get("items")
+    if not isinstance(raw_items, list) or not raw_items or any(
+        not isinstance(value, Mapping) for value in raw_items
+    ):
+        raise R8RunnerRefusal("development manifest items are invalid")
+    items = [_item(value, f"item {index}") for index, value in enumerate(raw_items)]
+    component_by_item, source_entities = _derive_components(raw_items)
+    if any(
+        value.get("component_id") != component_by_item[str(value["item_id"])]
+        for value in raw_items
+    ):
+        raise R8RunnerRefusal("development manifest component identity drifted")
+    item_ids = sorted(item.item_id for item in items)
+    cohort_root = canonical_sha256(item_ids)
+    candidate_root = canonical_sha256(
+        [
+            {
+                "item_id": item.item_id,
+                "candidate_universe_sha256": item.candidate_universe_sha256,
+            }
+            for item in sorted(items, key=lambda value: value.item_id)
+        ]
+    )
+    envelope = manifest.get("token_envelope")
+    if not isinstance(envelope, Mapping):
+        raise R8RunnerRefusal("development manifest token envelope is absent")
+    input_caps = envelope.get("per_call_input_caps")
+    output_caps = envelope.get("per_call_output_caps")
+    if not isinstance(input_caps, Mapping) or not isinstance(output_caps, Mapping):
+        raise R8RunnerRefusal("development envelope caps are absent")
+    protocol_roots = {registry.protocol_sha256 for registry in registries.values()}
+    if len(protocol_roots) != 1:
+        raise R8RunnerRefusal("development registries disagree on protocol")
+    prior_items = _validate_prior_list(
+        list(forbidden_prior_item_ids), "forbidden prior item IDs", sha_values=False
+    )
+    prior_entities = _validate_prior_list(
+        list(forbidden_prior_source_entity_ids),
+        "forbidden prior source-entity IDs",
+        sha_values=True,
+    )
+    prior_components = _validate_prior_list(
+        list(forbidden_prior_component_ids),
+        "forbidden prior component IDs",
+        sha_values=True,
+    )
+    if set(item_ids) & set(prior_items) or source_entities & set(prior_entities) or set(component_by_item.values()) & set(prior_components):
+        raise R8RunnerRefusal("development manifest overlaps prior exposure")
+    unsigned = {
+        "schema_version": EXECUTION_LOCK_SCHEMA,
+        "purpose": "DEVELOPMENT_POWER_PILOT",
+        "run_id": manifest["run_id"],
+        "mode": "development",
+        "manifest_sha256": canonical_sha256(manifest),
+        "preregistration_artifact_sha256": None,
+        "selection_receipt_sha256": selection_receipt_sha256,
+        "prior_exposure_receipt_sha256": prior_exposure_receipt_sha256,
+        "public_source_receipt_sha256": public_source_receipt_sha256,
+        "gold_source_receipt_sha256": gold_source_receipt_sha256,
+        "gold_sha256": gold_sha256,
+        "evaluator_receipt_sha256": evaluator_receipt_sha256,
+        "db_genesis_receipt_sha256": db_genesis_receipt_sha256,
+        "environment_receipt_sha256": environment_receipt_sha256,
+        "dependency_receipt_sha256": dependency_receipt_sha256,
+        "environment_dependency_compatibility_root_sha256": (
+            environment_dependency_compatibility_root_sha256
+        ),
+        "environment_dependency_bundle_sha256": (
+            environment_dependency_bundle_sha256
+        ),
+        "hswm_commit": hswm_commit,
+        "result_contract_sha256": result_contract_sha256,
+        "judge_core_sha256": judge_core_sha256,
+        "judge_core_file_sha256": judge_core_file_sha256,
+        "model": model,
+        "model_revision": revision,
+        "protocol_sha256": next(iter(protocol_roots)),
+        "registries_root_sha256": canonical_sha256(
+            {arm: registries[arm].registry_sha256 for arm in F1_ARMS}
+        ),
+        "token_envelope_sha256": canonical_sha256(envelope),
+        "generation_policy_sha256": canonical_sha256(GENERATION_POLICY),
+        "cohort_root_sha256": cohort_root,
+        "candidate_universe_root_sha256": candidate_root,
+        "forbidden_prior_item_ids": prior_items,
+        "forbidden_prior_source_entity_ids": prior_entities,
+        "forbidden_prior_component_ids": prior_components,
+        "execution_policy": normalized_policy,
+        "gates": {
+            "expected_items": len(items),
+            "expected_arms": len(F1_ARMS),
+            "expected_item_runs": len(items) * len(F1_ARMS),
+            "expected_calls": len(items) * len(F1_ARMS) * 3,
+            "per_call_input_caps": dict(input_caps),
+            "per_call_output_caps": dict(output_caps),
+            "total_input_tokens_per_run": sum(int(value) for value in input_caps.values()),
+            "total_allowed_output_tokens_per_run": sum(int(value) for value in output_caps.values()),
+            "token_spread_max": int(manifest["token_tolerance"]),
+        },
+    }
+    return {**unsigned, "lock_sha256": canonical_sha256(unsigned)}
+
+
+def validate_manifest_v3(
+    manifest: Mapping[str, object],
+    *,
+    execution_lock: Mapping[str, object],
+    token_meter: TokenMeter,
+    registries: Mapping[str, FunctionRegistryV1],
+) -> tuple[dict[str, object], list[FunctionNetworkItemV1], dict[str, object]]:
+    expected = {
+        "schema_version", "run_id", "mode", "model", "model_revision",
+        "token_tolerance", "state_capacity_bytes", "state_bytes_by_arm",
+        "preregistration_artifact_sha256", "generation_policy", "token_envelope",
+        "items",
+    }
+    if set(manifest) != expected or manifest.get("schema_version") != MANIFEST_SCHEMA:
+        raise R8RunnerRefusal("unsupported manifest v3 shape")
+    lock_sha = _self_hash(execution_lock, "lock_sha256", "execution lock")
+    mode = manifest.get("mode")
+    if mode == "development":
+        if (
+            set(execution_lock) != _DEVELOPMENT_LOCK_FIELDS
+            or execution_lock.get("schema_version") != EXECUTION_LOCK_SCHEMA
+            or execution_lock.get("purpose") != "DEVELOPMENT_POWER_PILOT"
+        ):
+            raise R8RunnerRefusal("development execution-lock shape drifted")
+    elif mode == "sealed":
+        if (
+            set(execution_lock) != _SEALED_LOCK_FIELDS
+            or execution_lock.get("schema_version") != SEALED_LOCK_SCHEMA
+            or execution_lock.get("purpose") != SEALED_LOCK_PURPOSE
+            or execution_lock.get("experiment_tag") != SEALED_EXPERIMENT_TAG
+            or execution_lock.get("closes_question") != SEALED_CLOSES_QUESTION
+            or execution_lock.get("run_id") != SEALED_RUN_ID
+            or manifest.get("run_id") != SEALED_RUN_ID
+        ):
+            raise R8RunnerRefusal("unsupported sealed r8/try3 measurement lock")
+    else:
+        raise R8RunnerRefusal("manifest mode must be development or sealed")
+    _validate_execution_policy_value(execution_lock.get("execution_policy"))
+    for field in _DEVELOPMENT_LOCK_FIELDS:
+        if field.endswith("_sha256") and field != "preregistration_artifact_sha256":
+            _sha(execution_lock.get(field), f"execution-lock {field}")
+    hswm_commit = execution_lock.get("hswm_commit")
+    if not isinstance(hswm_commit, str) or _GIT_COMMIT.fullmatch(hswm_commit) is None:
+        raise R8RunnerRefusal("execution-lock hswm_commit is not exact")
+    _validate_prior_list(
+        execution_lock.get("forbidden_prior_item_ids"),
+        "forbidden prior item IDs",
+        sha_values=False,
+    )
+    _validate_prior_list(
+        execution_lock.get("forbidden_prior_source_entity_ids"),
+        "forbidden prior source-entity IDs",
+        sha_values=True,
+    )
+    _validate_prior_list(
+        execution_lock.get("forbidden_prior_component_ids"),
+        "forbidden prior component IDs",
+        sha_values=True,
+    )
+    manifest_sha = canonical_sha256(manifest)
+    for key in ("run_id", "mode", "model", "model_revision", "preregistration_artifact_sha256"):
+        if manifest.get(key) != execution_lock.get(key):
+            raise R8RunnerRefusal(f"manifest {key} differs from execution lock")
+    if manifest_sha != execution_lock.get("manifest_sha256"):
+        raise R8RunnerRefusal("manifest bytes differ from execution lock")
+    if mode == "sealed":
+        _sha(manifest.get("preregistration_artifact_sha256"), "preregistration artifact")
+    elif mode == "development":
+        if manifest.get("preregistration_artifact_sha256") is not None:
+            raise R8RunnerRefusal("development pilot cannot claim preregistration")
+    if manifest.get("generation_policy") != GENERATION_POLICY:
+        raise R8RunnerRefusal("generation policy drifted")
+    if canonical_sha256(GENERATION_POLICY) != execution_lock.get("generation_policy_sha256"):
+        raise R8RunnerRefusal("generation policy is not lock-bound")
+    envelope = validate_token_envelope(manifest.get("token_envelope"), arms=F1_ARMS)
+    check_tokenizer_identity(envelope["tokenizer"], token_meter)
+    if canonical_sha256(envelope) != execution_lock.get("token_envelope_sha256"):
+        raise R8RunnerRefusal("token envelope differs from execution lock")
+    state_rows = manifest.get("state_bytes_by_arm")
+    capacity = manifest.get("state_capacity_bytes")
+    if (
+        isinstance(capacity, bool)
+        or not isinstance(capacity, int)
+        or capacity < 0
+        or not isinstance(state_rows, dict)
+        or set(state_rows) != set(F1_ARMS)
+        or any(
+            isinstance(value, bool) or not isinstance(value, int) or not 0 <= value <= capacity
+            for value in state_rows.values()
+        )
+    ):
+        raise R8RunnerRefusal("persistent-state contract drifted")
+    raw_items = manifest.get("items")
+    gates = execution_lock.get("gates")
+    if not isinstance(raw_items, list) or not isinstance(gates, Mapping):
+        raise R8RunnerRefusal("manifest items or lock gates are absent")
+    tolerance = _nonnegative(manifest.get("token_tolerance"), "token_tolerance")
+    _validate_lock_gates(
+        gates,
+        item_count=len(raw_items),
+        token_envelope=envelope,
+        token_tolerance=tolerance,
+    )
+    if any(not isinstance(value, Mapping) for value in raw_items):
+        raise R8RunnerRefusal("manifest item is not an object")
+    source_input_budget = sum(
+        int(value) for value in envelope["per_call_input_caps"].values()
+    )
+    source_output_budget = max(
+        int(value) for value in envelope["per_call_output_caps"].values()
+    )
+    if any(
+        value.get("max_input_tokens") != source_input_budget
+        or value.get("max_output_tokens_per_call") != source_output_budget
+        for value in raw_items
+    ):
+        raise R8RunnerRefusal("manifest source budgets differ from the frozen envelope")
+    item_ids = [str(value["item_id"]) for value in raw_items]
+    if len(set(item_ids)) != len(item_ids):
+        raise R8RunnerRefusal("manifest item IDs repeat")
+    items = [_item(value, f"item {index}") for index, value in enumerate(raw_items)]
+    component_by_item, source_entities = _derive_components(raw_items)
+    for value in raw_items:
+        if value.get("component_id") != component_by_item[str(value["item_id"])]:
+            raise R8RunnerRefusal("manifest component was not source-derived")
+    cohort_root = canonical_sha256(sorted(item_ids))
+    candidate_root = canonical_sha256(
+        [
+            {
+                "item_id": item.item_id,
+                "candidate_universe_sha256": item.candidate_universe_sha256,
+            }
+            for item in sorted(items, key=lambda value: value.item_id)
+        ]
+    )
+    if (
+        cohort_root != execution_lock.get("cohort_root_sha256")
+        or candidate_root != execution_lock.get("candidate_universe_root_sha256")
+    ):
+        raise R8RunnerRefusal("cohort or candidate root differs from execution lock")
+    forbidden_items = set(execution_lock.get("forbidden_prior_item_ids", []))
+    forbidden_entities = set(execution_lock.get("forbidden_prior_source_entity_ids", []))
+    forbidden_components = set(execution_lock.get("forbidden_prior_component_ids", []))
+    if (
+        set(item_ids) & forbidden_items
+        or source_entities & forbidden_entities
+        or set(component_by_item.values()) & forbidden_components
+    ):
+        raise R8RunnerRefusal("manifest overlaps a forbidden prior exposure")
+    projection = enforce_projection(
+        run_id=str(manifest["run_id"]),
+        items=items,
+        arms=F1_ARMS,
+        registries=registries,
+        meter=token_meter,
+        envelope=envelope,
+        token_tolerance=int(manifest["token_tolerance"]),
+    )
+    protocol_roots = {registry.protocol_sha256 for registry in registries.values()}
+    if len(protocol_roots) != 1 or next(iter(protocol_roots)) != execution_lock.get("protocol_sha256"):
+        raise R8RunnerRefusal("protocol differs from execution lock")
+    registry_root = canonical_sha256(
+        {arm: registries[arm].registry_sha256 for arm in F1_ARMS}
+    )
+    if registry_root != execution_lock.get("registries_root_sha256"):
+        raise R8RunnerRefusal("registry root differs from execution lock")
+    normalized = json.loads(json.dumps(manifest, ensure_ascii=False))
+    normalized["token_envelope"] = envelope
+    return normalized, items, {**projection, "execution_lock_sha256": lock_sha}
+
+
+def _validate_registry_bundle(
+    value: object, *, model: str, model_revision: str
+) -> tuple[dict[str, dict[str, Mapping[str, object]]], str, str]:
+    if not isinstance(value, Mapping) or set(value) != set(F1_ARMS):
+        raise R8RunnerRefusal("suite registries do not exactly cover F1 arms")
+    functions_by_arm: dict[str, dict[str, Mapping[str, object]]] = {}
+    registry_hashes: dict[str, str] = {}
+    protocol_hashes: set[str] = set()
+    for arm in F1_ARMS:
+        registry = value.get(arm)
+        if (
+            not isinstance(registry, Mapping)
+            or set(registry) != _REGISTRY_FIELDS
+            or registry.get("schema_version") != REGISTRY_SCHEMA
+        ):
+            raise R8RunnerRefusal(f"registry shape drifted for {arm}")
+        registry_sha = _self_hash(registry, "registry_sha256", f"registry {arm}")
+        protocol_hashes.add(_sha(registry.get("protocol_sha256"), "protocol"))
+        raw_functions = registry.get("functions")
+        if not isinstance(raw_functions, list) or len(raw_functions) != len(_FUNCTION_IDS):
+            raise R8RunnerRefusal(f"registry function count drifted for {arm}")
+        indexed: dict[str, Mapping[str, object]] = {}
+        for index, raw in enumerate(raw_functions):
+            if not isinstance(raw, Mapping) or set(raw) != _FUNCTION_FIELDS:
+                raise R8RunnerRefusal(f"registry function shape drifted for {arm}")
+            function_id = raw.get("function_id")
+            prompt = raw.get("prompt")
+            if (
+                function_id != _FUNCTION_IDS[index]
+                or function_id in indexed
+                or raw.get("model") != model
+                or raw.get("model_revision") != model_revision
+                or not isinstance(prompt, str)
+                or not prompt.strip()
+                or raw.get("prompt_sha256") != canonical_sha256({"prompt": prompt})
+                or not isinstance(raw.get("input_type"), str)
+                or not isinstance(raw.get("output_type"), str)
+            ):
+                raise R8RunnerRefusal(f"registry function semantics drifted for {arm}")
+            indexed[str(function_id)] = raw
+        functions_by_arm[arm] = indexed
+        registry_hashes[arm] = registry_sha
+    if len(protocol_hashes) != 1:
+        raise R8RunnerRefusal("suite registries disagree on protocol")
+    return (
+        functions_by_arm,
+        next(iter(protocol_hashes)),
+        canonical_sha256(registry_hashes),
+    )
+
+
+def _verify_call_receipt_local(
+    value: object,
+    *,
+    run_id: str,
+    arm_id: str,
+    item_id: str,
+    call_index: int,
+    function: Mapping[str, object],
+    input_cap: int,
+    output_cap: int,
+) -> str:
+    if (
+        not isinstance(value, Mapping)
+        or set(value) != _CALL_RECEIPT_FIELDS
+        or value.get("schema_version") != CALL_RECEIPT_SCHEMA
+    ):
+        raise R8RunnerRefusal("call receipt shape drifted")
+    declared = _self_hash(value, "receipt_sha256", "call receipt")
+    if (
+        value.get("run_id") != run_id
+        or value.get("arm_id") != arm_id
+        or value.get("item_id") != item_id
+        or value.get("call_index") != call_index
+        or value.get("function_id") != function.get("function_id")
+        or value.get("model") != function.get("model")
+        or value.get("model_revision") != function.get("model_revision")
+        or value.get("prompt_sha256") != function.get("prompt_sha256")
+        or value.get("input_type") != function.get("input_type")
+        or value.get("output_type") != function.get("output_type")
+        or value.get("allowed_output_tokens") != output_cap
+        or value.get("input_tokens") != input_cap
+    ):
+        raise R8RunnerRefusal("call receipt differs from registry or token envelope")
+    try:
+        normalized_input = validate_port(
+            str(value.get("input_type")), value.get("input_payload")
+        )
+        normalized_output = validate_port(
+            str(value.get("output_type")), value.get("output_payload")
+        )
+        input_digest = port_digest(str(value.get("input_type")), normalized_input)
+        output_digest = port_digest(str(value.get("output_type")), normalized_output)
+    except Exception as error:
+        raise R8RunnerRefusal("call receipt typed-port validation failed") from error
+    if (
+        normalized_input != value.get("input_payload")
+        or normalized_output != value.get("output_payload")
+        or value.get("input_port_sha256") != input_digest
+        or value.get("output_port_sha256") != output_digest
+    ):
+        raise R8RunnerRefusal("call receipt typed-port digest drifted")
+    expected_physical_id = canonical_sha256(
+        {
+            "run_id": run_id,
+            "arm_id": arm_id,
+            "item_id": item_id,
+            "call_index": call_index,
+            "function_id": function["function_id"],
+            "registry_prompt_sha256": function["prompt_sha256"],
+            "input_port_sha256": input_digest,
+        }
+    )
+    output_tokens = _nonnegative(value.get("output_tokens"), "output tokens")
+    if (
+        value.get("physical_call_id") != expected_physical_id
+        or output_tokens > output_cap
+        or value.get("cache_status") not in {"miss", "hit", "provider-unknown"}
+    ):
+        raise R8RunnerRefusal("call identity or output budget drifted")
+    _nonnegative(value.get("latency_ms"), "call latency")
+    _nonnegative(value.get("retries"), "call retries")
+    return declared
+
+
+def _verify_item_run_local(
+    value: object,
+    *,
+    run_id: str,
+    registry: Mapping[str, object],
+    functions: Mapping[str, Mapping[str, object]],
+    input_caps: Mapping[str, object],
+    output_caps: Mapping[str, object],
+    persistent_state_bytes: int,
+) -> str:
+    if (
+        not isinstance(value, Mapping)
+        or set(value) != _ITEM_RUN_FIELDS
+        or value.get("schema_version") != RUN_SCHEMA
+    ):
+        raise R8RunnerRefusal("item-run receipt shape drifted")
+    declared = _self_hash(value, "run_receipt_sha256", "item-run receipt")
+    arm_id = value.get("arm_id")
+    item_id = value.get("item_id")
+    if (
+        value.get("run_id") != run_id
+        or not isinstance(arm_id, str)
+        or arm_id not in F1_ARMS
+        or not isinstance(item_id, str)
+        or not item_id
+        or value.get("registry_sha256") != registry.get("registry_sha256")
+        or value.get("persistent_state_bytes") != persistent_state_bytes
+    ):
+        raise R8RunnerRefusal("item-run identity or registry binding drifted")
+    _sha(value.get("candidate_universe_sha256"), "candidate universe")
+    calls = value.get("calls")
+    if not isinstance(calls, list) or len(calls) != len(_FUNCTION_IDS):
+        raise R8RunnerRefusal("item run does not contain exactly three calls")
+    for index, (call, function_id) in enumerate(zip(calls, _FUNCTION_IDS), start=1):
+        _verify_call_receipt_local(
+            call,
+            run_id=run_id,
+            arm_id=arm_id,
+            item_id=item_id,
+            call_index=index,
+            function=functions[function_id],
+            input_cap=_positive(input_caps.get(str(index)), "input cap"),
+            output_cap=_positive(output_caps.get(str(index)), "output cap"),
+        )
+    try:
+        answer = validate_port("AnswerEnvelopeV1", value.get("answer"))
+    except Exception as error:
+        raise R8RunnerRefusal("item-run answer port is invalid") from error
+    if answer != calls[2].get("output_payload"):
+        raise R8RunnerRefusal("item-run answer differs from third call output")
+    selected = value.get("selected_bond_ids")
+    proposal = calls[1].get("output_payload")
+    if (
+        not isinstance(selected, list)
+        or any(not isinstance(item, str) or not item for item in selected)
+        or len(selected) != len(set(selected))
+        or not isinstance(proposal, Mapping)
+    ):
+        raise R8RunnerRefusal("item-run selected bonds are malformed")
+    expected_selected = (
+        [] if proposal.get("abstain") else list(proposal.get("ordered_bond_ids", []))
+    )
+    if selected != expected_selected:
+        raise R8RunnerRefusal("item-run selected bonds differ from BF output")
+    totals = {
+        "total_input_tokens": sum(int(call["input_tokens"]) for call in calls),
+        "total_output_tokens": sum(int(call["output_tokens"]) for call in calls),
+        "total_allowed_output_tokens": sum(
+            int(call["allowed_output_tokens"]) for call in calls
+        ),
+    }
+    if any(value.get(key) != expected for key, expected in totals.items()):
+        raise R8RunnerRefusal("item-run token totals drifted")
+    return declared
+
+
+def _token_parity_local(
+    rows: Sequence[Mapping[str, object]],
+    *,
+    tolerance: int,
+    envelope: Mapping[str, object],
+) -> dict[str, object]:
+    indexed: dict[str, dict[str, Mapping[str, object]]] = {}
+    for row in rows:
+        item_id, arm_id = str(row["item_id"]), str(row["arm_id"])
+        if arm_id in indexed.setdefault(item_id, {}):
+            raise R8RunnerRefusal("item/arm row repeats")
+        indexed[item_id][arm_id] = row
+    items: list[dict[str, object]] = []
+    for item_id in sorted(indexed):
+        arms = indexed[item_id]
+        if set(arms) != set(F1_ARMS):
+            raise R8RunnerRefusal("item rows do not exactly cover F1 arms")
+        inputs = {arm: int(arms[arm]["total_input_tokens"]) for arm in F1_ARMS}
+        outputs = {arm: int(arms[arm]["total_output_tokens"]) for arm in F1_ARMS}
+        totals = {arm: inputs[arm] + outputs[arm] for arm in F1_ARMS}
+        spread = max(totals.values()) - min(totals.values())
+        input_spread = max(inputs.values()) - min(inputs.values())
+        items.append(
+            {
+                "item_id": item_id,
+                "input_tokens_by_arm": inputs,
+                "output_tokens_by_arm": outputs,
+                "total_tokens_by_arm": totals,
+                "spread": spread,
+                "input_spread": input_spread,
+                "within_tolerance": spread <= tolerance,
+            }
+        )
+    return {
+        "per_call_input_caps": dict(envelope["per_call_input_caps"]),
+        "per_call_output_caps": dict(envelope["per_call_output_caps"]),
+        "input_spread_max": max(item["input_spread"] for item in items),
+        "spread_max": max(item["spread"] for item in items),
+        "all_within_tolerance": all(item["within_tolerance"] for item in items),
+        "items": items,
+    }
+
+
+def _validate_projection_record(
+    value: object,
+    *,
+    item_ids: Sequence[str],
+    envelope: Mapping[str, object],
+) -> None:
+    if not isinstance(value, Mapping) or set(value) != {
+        "projected_total_tokens_by_arm", "projected_spread", "items",
+    }:
+        raise R8RunnerRefusal("envelope projection shape drifted")
+    totals = value.get("projected_total_tokens_by_arm")
+    records = value.get("items")
+    if (
+        not isinstance(totals, Mapping)
+        or set(totals) != set(F1_ARMS)
+        or not isinstance(records, list)
+        or len(records) != len(item_ids)
+    ):
+        raise R8RunnerRefusal("envelope projection coverage drifted")
+    input_total = sum(int(item) for item in envelope["per_call_input_caps"].values())
+    projections = envelope["projected_output_tokens_by_arm"]
+    expected_totals = {
+        arm: input_total + sum(int(item) for item in projections[arm].values())
+        for arm in F1_ARMS
+    }
+    if (
+        dict(totals) != expected_totals
+        or value.get("projected_spread")
+        != max(expected_totals.values()) - min(expected_totals.values())
+    ):
+        raise R8RunnerRefusal("envelope projected totals drifted")
+    seen: set[str] = set()
+    input_caps = envelope["per_call_input_caps"]
+    for record in records:
+        if not isinstance(record, Mapping) or set(record) != {
+            "item_id", "projected_upper_bounds",
+        }:
+            raise R8RunnerRefusal("envelope projection item shape drifted")
+        item_id = record.get("item_id")
+        bounds = record.get("projected_upper_bounds")
+        if (
+            not isinstance(item_id, str)
+            or item_id in seen
+            or item_id not in item_ids
+            or not isinstance(bounds, Mapping)
+            or set(bounds) != set(F1_ARMS)
+        ):
+            raise R8RunnerRefusal("envelope projection item identity drifted")
+        seen.add(item_id)
+        for arm in F1_ARMS:
+            triplet = bounds.get(arm)
+            if (
+                not isinstance(triplet, list)
+                or len(triplet) != 3
+                or any(
+                    isinstance(bound, bool)
+                    or not isinstance(bound, int)
+                    or bound < 0
+                    or bound > int(input_caps[str(index)])
+                    for index, bound in enumerate(triplet, start=1)
+                )
+            ):
+                raise R8RunnerRefusal("envelope projection upper bound drifted")
+    if seen != set(item_ids):
+        raise R8RunnerRefusal("envelope projection does not cover the cohort")
+
+
+def _verify_execution_structure(
+    value: Mapping[str, object],
+) -> tuple[list[Mapping[str, object]], dict[str, object], dict[str, object]]:
+    run_id, model, model_revision = (
+        value.get("run_id"), value.get("model"), value.get("model_revision")
+    )
+    if any(not isinstance(item, str) or not item for item in (run_id, model, model_revision)):
+        raise R8RunnerRefusal("suite execution identity is incomplete")
+    mode = value.get("mode")
+    if mode not in {"development", "sealed"}:
+        raise R8RunnerRefusal("suite execution mode drifted")
+    for field in (
+        "manifest_sha256", "measurement_lock_sha256", "result_contract_sha256",
+        "environment_receipt_sha256", "dependency_receipt_sha256",
+        "environment_dependency_compatibility_root_sha256",
+        "environment_dependency_bundle_sha256", "db_genesis_receipt_sha256",
+        "protocol_sha256", "registries_root_sha256", "token_envelope_sha256",
+        "cohort_root_sha256", "candidate_universe_root_sha256",
+        "generation_policy_sha256", "spool_identity_preflight_sha256",
+    ):
+        _sha(value.get(field), f"suite {field}")
+    hswm_commit = value.get("hswm_commit")
+    if not isinstance(hswm_commit, str) or _GIT_COMMIT.fullmatch(hswm_commit) is None:
+        raise R8RunnerRefusal("suite HSWM commit is not exact")
+    prereg = value.get("preregistration_artifact_sha256")
+    readback_sha = value.get("preregistration_readback_sha256")
+    anchored_sha = value.get("anchored_judge_file_sha256")
+    if mode == "development":
+        if any(item is not None for item in (prereg, readback_sha, anchored_sha)):
+            raise R8RunnerRefusal("development suite claims sealed preregistration")
+    else:
+        for item, label in (
+            (prereg, "preregistration artifact"),
+            (readback_sha, "preregistration readback"),
+            (anchored_sha, "anchored judge"),
+        ):
+            _sha(item, label)
+    if value.get("generation_policy") != GENERATION_POLICY or value.get(
+        "generation_policy_sha256"
+    ) != canonical_sha256(GENERATION_POLICY):
+        raise R8RunnerRefusal("suite generation policy drifted")
+    tolerance = _nonnegative(value.get("token_tolerance"), "token tolerance")
+    envelope = validate_token_envelope(value.get("token_envelope"), arms=F1_ARMS)
+    if canonical_sha256(envelope) != value.get("token_envelope_sha256"):
+        raise R8RunnerRefusal("suite token envelope hash drifted")
+    capacity = _nonnegative(value.get("state_capacity_bytes"), "state capacity")
+    states = value.get("state_bytes_by_arm")
+    if (
+        not isinstance(states, Mapping)
+        or set(states) != set(F1_ARMS)
+        or any(
+            isinstance(item, bool) or not isinstance(item, int) or not 0 <= item <= capacity
+            for item in states.values()
+        )
+    ):
+        raise R8RunnerRefusal("suite persistent-state contract drifted")
+    functions, protocol_sha, registry_root = _validate_registry_bundle(
+        value.get("registries"), model=model, model_revision=model_revision
+    )
+    if (
+        protocol_sha != value.get("protocol_sha256")
+        or registry_root != value.get("registries_root_sha256")
+    ):
+        raise R8RunnerRefusal("suite registry/protocol roots drifted")
+    rows = value.get("item_runs")
+    if not isinstance(rows, list) or not rows or any(
+        not isinstance(row, Mapping) for row in rows
+    ):
+        raise R8RunnerRefusal("suite item runs are absent")
+    row_mappings = [row for row in rows if isinstance(row, Mapping)]
+    item_ids = sorted({str(row.get("item_id")) for row in row_mappings})
+    gates = value.get("execution_gates")
+    _validate_lock_gates(
+        gates,
+        item_count=len(item_ids),
+        token_envelope=envelope,
+        token_tolerance=tolerance,
+    )
+    assert isinstance(gates, Mapping)
+    if len(rows) != gates.get("expected_item_runs"):
+        raise R8RunnerRefusal("suite item-run count differs from gates")
+    policy = _validate_execution_policy_value(value.get("execution_policy"))
+    if value.get("max_workers") != policy.get("max_workers"):
+        raise R8RunnerRefusal("suite max_workers differs from execution policy")
+    preflight_sha = _validate_spool_identity_preflight(
+        value.get("spool_identity_preflight"),
+        run_id=str(run_id),
+        model_revision=str(model_revision),
+        execution_lock_sha256=str(value.get("measurement_lock_sha256")),
+        db_genesis_sha256=str(value.get("db_genesis_receipt_sha256")),
+        endpoint=str(policy.get("endpoint")),
+    )
+    if preflight_sha != value.get("spool_identity_preflight_sha256"):
+        raise R8RunnerRefusal("suite spool preflight digest drifted")
+    expected_order = [(item_id, arm) for item_id in item_ids for arm in F1_ARMS]
+    observed_order = [
+        (str(row.get("item_id")), str(row.get("arm_id"))) for row in row_mappings
+    ]
+    if observed_order != expected_order:
+        raise R8RunnerRefusal("suite item runs are not exact canonical coverage")
+    candidate_by_item: dict[str, str] = {}
+    registries = value.get("registries")
+    assert isinstance(registries, Mapping)
+    for row in row_mappings:
+        arm = str(row.get("arm_id"))
+        item_id = str(row.get("item_id"))
+        candidate = str(row.get("candidate_universe_sha256"))
+        previous = candidate_by_item.setdefault(item_id, candidate)
+        if previous != candidate:
+            raise R8RunnerRefusal("candidate universe differs across arms")
+        registry = registries[arm]
+        assert isinstance(registry, Mapping)
+        _verify_item_run_local(
+            row,
+            run_id=str(run_id),
+            registry=registry,
+            functions=functions[arm],
+            input_caps=envelope["per_call_input_caps"],
+            output_caps=envelope["per_call_output_caps"],
+            persistent_state_bytes=int(states[arm]),
+        )
+    cohort_root = canonical_sha256(item_ids)
+    candidate_root = canonical_sha256(
+        [
+            {
+                "item_id": item_id,
+                "candidate_universe_sha256": candidate_by_item[item_id],
+            }
+            for item_id in item_ids
+        ]
+    )
+    if (
+        value.get("cohort_root_sha256") != cohort_root
+        or value.get("candidate_universe_root_sha256") != candidate_root
+    ):
+        raise R8RunnerRefusal("suite cohort/candidate root drifted")
+    expected_parity = _token_parity_local(
+        row_mappings, tolerance=tolerance, envelope=envelope
+    )
+    if value.get("token_parity") != expected_parity:
+        raise R8RunnerRefusal("suite token-parity record drifted")
+    _validate_projection_record(
+        value.get("envelope_projection"), item_ids=item_ids, envelope=envelope
+    )
+    if value.get("gold_opened") is not False or value.get(
+        "scientific_verdict_emitted"
+    ) is not False:
+        raise R8RunnerRefusal("suite crossed evaluator authority")
+    return row_mappings, dict(gates), policy
+
+
+def run_suite_v3_draft(
+    manifest: Mapping[str, object],
+    *,
+    execution_lock: Mapping[str, object],
+    protocol_path: Path,
+    model_port,
+    token_meter: TokenMeter,
+    max_workers: int,
+    environment_dependency_bundle: Mapping[str, object],
+    result_contract_path: Path,
+    judge_core_path: Path,
+    symposium_repo_root: Path,
+    tokenizer_dir: Path,
+    model_catalog_path: Path,
+    model_weight_receipt_path: Path,
+    python_lock_path: Path,
+    spool_identity_preflight: Mapping[str, object],
+    preregistration_artifact: Mapping[str, object] | None = None,
+    preregistration_readback: Mapping[str, object] | None = None,
+    anchored_judge_path: Path | None = None,
+) -> dict[str, object]:
+    if isinstance(max_workers, bool) or not isinstance(max_workers, int) or not 1 <= max_workers <= 8:
+        raise R8RunnerRefusal("max_workers must be in [1,8]")
+    ledger_path = getattr(getattr(model_port, "ledger", None), "path", None)
+    if ledger_path is not None:
+        _seal_private_sqlite_family(Path(ledger_path), "attempt ledger")
+    registries = _registries(
+        protocol_path=protocol_path,
+        model=str(manifest.get("model")),
+        model_revision=str(manifest.get("model_revision")),
+    )
+    normalized, items, projection_record = validate_manifest_v3(
+        manifest,
+        execution_lock=execution_lock,
+        token_meter=token_meter,
+        registries=registries,
+    )
+    execution_lock_sha = str(projection_record.pop("execution_lock_sha256"))
+    policy = _validate_execution_policy_value(execution_lock.get("execution_policy"))
+    if max_workers != policy.get("max_workers"):
+        raise R8RunnerRefusal("direct API max_workers differs from execution lock")
+    port_policy = {
+        "endpoint": getattr(model_port, "spool_endpoint", None),
+        "timeout_seconds": getattr(model_port, "timeout_seconds", None),
+        "max_delivery_attempts": getattr(model_port, "max_delivery_attempts", None),
+        "spool_token_env": getattr(model_port, "spool_token_env", None),
+    }
+    expected_port_policy = {
+        "endpoint": str(policy["endpoint"]).rstrip("/"),
+        "timeout_seconds": policy["timeout_seconds"],
+        "max_delivery_attempts": policy["max_delivery_attempts"],
+        "spool_token_env": policy["spool_token_env"],
+    }
+    if port_policy != expected_port_policy:
+        raise R8RunnerRefusal("direct model-port policy differs from execution lock")
+    dependency_paths = r8_dependency_paths(
+        protocol_path=protocol_path,
+        judge_core_path=judge_core_path,
+        result_contract_path=result_contract_path,
+        tokenizer_dir=tokenizer_dir,
+        model_catalog_path=model_catalog_path,
+        model_weight_receipt_path=model_weight_receipt_path,
+        python_lock_path=python_lock_path,
+    )
+    bundle_sha = _validate_environment_dependency_bundle(
+        environment_dependency_bundle,
+        execution_lock=execution_lock,
+        run_id=str(normalized["run_id"]),
+        model=str(normalized["model"]),
+        model_revision=str(normalized["model_revision"]),
+        endpoint=str(policy["endpoint"]),
+        dependency_paths=dependency_paths,
+        symposium_repo_root=symposium_repo_root,
+    )
+    _validate_preregistration_gate(
+        mode=str(normalized["mode"]),
+        manifest=normalized,
+        execution_lock=execution_lock,
+        preregistration_artifact=preregistration_artifact,
+        preregistration_readback=preregistration_readback,
+        anchored_judge_path=anchored_judge_path,
+        judge_core_path=judge_core_path,
+        symposium_repo_root=symposium_repo_root,
+        result_contract_path=result_contract_path,
+    )
+    preflight_sha = _validate_spool_identity_preflight(
+        spool_identity_preflight,
+        run_id=str(normalized["run_id"]),
+        model_revision=str(normalized["model_revision"]),
+        execution_lock_sha256=execution_lock_sha,
+        db_genesis_sha256=str(execution_lock["db_genesis_receipt_sha256"]),
+        endpoint=str(policy["endpoint"]),
+    )
+    audit = getattr(model_port, "audit", None)
+    if not callable(audit):
+        raise R8RunnerRefusal("model port does not expose a durable audit")
+    pre_call_audit = _validate_live_attempt_audit(
+        audit(), expected_calls=0, expected_item_runs=0
+    )
+    envelope = envelope_spec(normalized["token_envelope"], token_meter)
+    jobs = [
+        (item, arm)
+        for item in sorted(items, key=lambda item: item.item_id)
+        for arm in F1_ARMS
+    ]
+
+    def execute(job):
+        item, arm = job
+        return run_item(
+            run_id=str(normalized["run_id"]),
+            arm_id=arm,
+            item=item,
+            registry=registries[arm],
+            model_port=model_port,
+            envelope=envelope,
+            persistent_state_bytes=int(normalized["state_bytes_by_arm"][arm]),
+        ).canonical()
+
+    if max_workers == 1:
+        rows = [execute(job) for job in jobs]
+    else:
+        rows = []
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            for offset in range(0, len(jobs), max_workers):
+                futures = [executor.submit(execute, job) for job in jobs[offset : offset + max_workers]]
+                done, pending = wait(futures, return_when=FIRST_EXCEPTION)
+                failure = next(
+                    (future.exception() for future in done if future.exception() is not None),
+                    None,
+                )
+                if failure is not None:
+                    for future in pending:
+                        future.cancel()
+                    raise failure
+                rows.extend(future.result() for future in futures)
+    rows.sort(key=lambda row: (str(row["item_id"]), F1_ARMS.index(str(row["arm_id"]))))
+    gates = execution_lock["gates"]
+    live_audit = _validate_live_attempt_audit(
+        audit(),
+        expected_calls=int(gates["expected_calls"]),
+        expected_item_runs=int(gates["expected_item_runs"]),
+    )
+    if ledger_path is not None:
+        _seal_private_sqlite_family(Path(ledger_path), "attempt ledger")
+    if len(rows) != gates["expected_item_runs"]:
+        raise R8RunnerRefusal("terminal durable rows differ from execution lock")
+    parity = _token_parity_local(
+        rows,
+        tolerance=int(normalized["token_tolerance"]),
+        envelope=normalized["token_envelope"],
+    )
+    items_by_id = {item.item_id: item for item in items}
+    cohort_root = canonical_sha256(sorted(items_by_id))
+    candidate_root = canonical_sha256(
+        [
+            {"item_id": item_id, "candidate_universe_sha256": items_by_id[item_id].candidate_universe_sha256}
+            for item_id in sorted(items_by_id)
+        ]
+    )
+    registry_values = {arm: registries[arm].canonical() for arm in F1_ARMS}
+    _, protocol_sha, registry_root = _validate_registry_bundle(
+        registry_values,
+        model=str(normalized["model"]),
+        model_revision=str(normalized["model_revision"]),
+    )
+    readback_sha = None
+    anchored_sha = None
+    if preregistration_readback is not None:
+        readback_sha = _self_hash(
+            preregistration_readback, "receipt_sha256", "preregistration readback"
+        )
+    if anchored_judge_path is not None:
+        anchored_sha = _stable_file_sha256(anchored_judge_path, "anchored judge")
+    unsigned = {
+        "schema_version": SUITE_DRAFT_SCHEMA,
+        "run_id": normalized["run_id"],
+        "mode": normalized["mode"],
+        "manifest_sha256": canonical_sha256(normalized),
+        "model": normalized["model"],
+        "model_revision": normalized["model_revision"],
+        "token_tolerance": normalized["token_tolerance"],
+        "state_capacity_bytes": normalized["state_capacity_bytes"],
+        "state_bytes_by_arm": normalized["state_bytes_by_arm"],
+        "preregistration_artifact_sha256": normalized["preregistration_artifact_sha256"],
+        "preregistration_readback_sha256": readback_sha,
+        "anchored_judge_file_sha256": anchored_sha,
+        "measurement_lock_sha256": execution_lock_sha,
+        "result_contract_sha256": execution_lock["result_contract_sha256"],
+        "environment_receipt_sha256": execution_lock[
+            "environment_receipt_sha256"
+        ],
+        "dependency_receipt_sha256": execution_lock["dependency_receipt_sha256"],
+        "environment_dependency_compatibility_root_sha256": execution_lock[
+            "environment_dependency_compatibility_root_sha256"
+        ],
+        "environment_dependency_bundle_sha256": bundle_sha,
+        "hswm_commit": execution_lock["hswm_commit"],
+        "db_genesis_receipt_sha256": execution_lock["db_genesis_receipt_sha256"],
+        "protocol_sha256": protocol_sha,
+        "registries_root_sha256": registry_root,
+        "token_envelope_sha256": canonical_sha256(normalized["token_envelope"]),
+        "cohort_root_sha256": cohort_root,
+        "candidate_universe_root_sha256": candidate_root,
+        "generation_policy": normalized["generation_policy"],
+        "generation_policy_sha256": canonical_sha256(normalized["generation_policy"]),
+        "token_envelope": normalized["token_envelope"],
+        "envelope_projection": projection_record,
+        "token_parity": parity,
+        "execution_policy": policy,
+        "execution_gates": dict(gates),
+        "max_workers": max_workers,
+        "spool_identity_preflight": dict(spool_identity_preflight),
+        "spool_identity_preflight_sha256": preflight_sha,
+        "registries": registry_values,
+        "pre_call_transport_audit": pre_call_audit,
+        "live_transport_audit": live_audit,
+        "item_runs": rows,
+        "gold_opened": False,
+        "scientific_verdict_emitted": False,
+    }
+    result = {**unsigned, "draft_receipt_sha256": canonical_sha256(unsigned)}
+    if set(result) != _DRAFT_FIELDS:
+        raise R8RunnerRefusal("suite draft field set drifted")
+    _verify_execution_structure(result)
+    return result
+
+
+def _validate_terminal_transport(
+    *,
+    rows: Sequence[Mapping[str, object]],
+    gates: Mapping[str, object],
+    policy: Mapping[str, object],
+    bindings: Mapping[str, object],
+    audit: object,
+) -> dict[str, object]:
+    expected_calls = int(gates["expected_calls"])
+    expected_runs = int(gates["expected_item_runs"])
+    roots = _verify_transport_bindings_against_rows(
+        rows, bindings, expected_endpoint=str(policy["endpoint"])
+    )
+    arrays = {
+        "accepted_calls": expected_calls,
+        "accepted_call_auxiliary_preimages": expected_calls,
+        "spool_bindings": expected_calls,
+        "spool_call_preimages": expected_calls,
+        "item_run_bindings": expected_runs,
+        "item_run_preimages": expected_runs,
+        "attempt_events": int(bindings.get("attempt_event_count", -1)),
+    }
+    if any(
+        not isinstance(bindings.get(key), list)
+        or len(bindings[key]) != expected
+        for key, expected in arrays.items()
+    ):
+        raise R8RunnerRefusal("terminal transport array coverage drifted")
+    if (
+        bindings.get("attempt_integrity") != "ok"
+        or bindings.get("spool_integrity") != "ok"
+        or str(bindings.get("attempt_journal_mode")).casefold() != "wal"
+        or str(bindings.get("spool_journal_mode")).casefold() != "wal"
+        or str(bindings.get("attempt_audit_connection_synchronous")) != "2"
+        or str(bindings.get("spool_audit_connection_synchronous")) != "2"
+        or bindings.get("attempt_user_version") != 1
+        or bindings.get("spool_user_version") != 1
+        or bindings.get("call_count") != expected_calls
+        or bindings.get("item_run_count") != expected_runs
+        or bindings.get("spool_call_count") != expected_calls
+        or bindings.get("attempt_status_counts") != {"ACCEPTED": expected_calls}
+        or bindings.get("spool_status_counts") != {"COMPLETE": expected_calls}
+        or bindings.get("spool_unknown_count") != 0
+        or bindings.get("identity_conflict_count") != 0
+        or int(bindings.get("attempt_event_count", -1)) < expected_calls * 6
+    ):
+        raise R8RunnerRefusal("terminal transport durability or count summary drifted")
+    for field in (
+        "attempt_schema_sha256", "spool_schema_sha256", "db_genesis_sha256",
+    ):
+        _sha(bindings.get(field), f"terminal transport {field}")
+    attempt_identity = _database_identity_value(
+        bindings.get("attempt_db_identity"), "terminal attempt ledger"
+    )
+    spool_identity = _database_identity_value(
+        bindings.get("spool_db_identity"), "terminal result spool"
+    )
+    if (attempt_identity["st_dev"], attempt_identity["st_ino"]) == (
+        spool_identity["st_dev"], spool_identity["st_ino"]
+    ):
+        raise R8RunnerRefusal("terminal transport databases alias one inode")
+    live = _validate_live_attempt_audit(
+        audit, expected_calls=expected_calls, expected_item_runs=expected_runs
+    )
+    expected_live = {
+        "journal_mode": bindings["attempt_journal_mode"],
+        "synchronous": int(bindings["attempt_audit_connection_synchronous"]),
+        "event_chain_tip_sha256": roots["event_chain_tip_sha256"],
+        "call_count": expected_calls,
+        "status_counts": bindings["attempt_status_counts"],
+        "accepted_call_root_sha256": roots["accepted_call_root_sha256"],
+        "spool_binding_root_sha256": roots["spool_binding_root_sha256"],
+        "item_run_count": expected_runs,
+        "item_run_root_sha256": roots["item_run_root_sha256"],
+    }
+    if any(live.get(key) != expected for key, expected in expected_live.items()):
+        raise R8RunnerRefusal("live SQLite audit differs from terminal byte export")
+    return roots
+
+
+def finalize_suite_v3(
+    draft: Mapping[str, object],
+    *,
+    transport_bindings: Mapping[str, object],
+    genesis_receipt: Mapping[str, object],
+) -> dict[str, object]:
+    if set(draft) != _DRAFT_FIELDS or draft.get("schema_version") != SUITE_DRAFT_SCHEMA:
+        raise R8RunnerRefusal("suite draft schema drifted")
+    _self_hash(draft, "draft_receipt_sha256", "suite draft")
+    rows, gates, policy = _verify_execution_structure(draft)
+    _validate_live_attempt_audit(
+        draft.get("pre_call_transport_audit"), expected_calls=0, expected_item_runs=0
+    )
+    genesis_sha = _validate_transport_genesis_receipt(
+        genesis_receipt,
+        run_id=str(draft["run_id"]),
+        expected_sha256=str(draft["db_genesis_receipt_sha256"]),
+    )
+    genesis_fields = (
+        "attempt_integrity", "spool_integrity", "attempt_journal_mode",
+        "attempt_audit_connection_synchronous", "spool_journal_mode",
+        "spool_audit_connection_synchronous", "attempt_user_version",
+        "spool_user_version", "attempt_schema_sha256", "spool_schema_sha256",
+        "attempt_db_identity", "spool_db_identity",
+    )
+    if (
+        transport_bindings.get("run_id") != draft.get("run_id")
+        or transport_bindings.get("db_genesis_sha256") != genesis_sha
+        or any(
+            transport_bindings.get(field) != genesis_receipt.get(field)
+            for field in genesis_fields
+        )
+    ):
+        raise R8RunnerRefusal("terminal transport does not continue DB genesis")
+    _validate_terminal_transport(
+        rows=rows,
+        gates=gates,
+        policy=policy,
+        bindings=transport_bindings,
+        audit=draft.get("live_transport_audit"),
+    )
+    unsigned = {
+        key: value
+        for key, value in draft.items()
+        if key not in {
+            "schema_version", "pre_call_transport_audit", "live_transport_audit",
+            "draft_receipt_sha256",
+        }
+    }
+    unsigned = {
+        "schema_version": SUITE_SCHEMA,
+        **unsigned,
+        "transport_audit": dict(draft["live_transport_audit"]),
+        "transport_bindings": dict(transport_bindings),
+    }
+    result = {**unsigned, "suite_receipt_sha256": canonical_sha256(unsigned)}
+    if set(result) != _SUITE_FIELDS:
+        raise R8RunnerRefusal("suite v3 field set drifted")
+    verify_suite_v3_without_gold(result)
+    return result
+
+
+def verify_suite_v3_without_gold(value: Mapping[str, object]) -> str:
+    if set(value) != _SUITE_FIELDS or value.get("schema_version") != SUITE_SCHEMA:
+        raise R8RunnerRefusal("suite v3 schema drifted")
+    declared = _self_hash(value, "suite_receipt_sha256", "suite v3")
+    rows, gates, policy = _verify_execution_structure(value)
+    bindings = value.get("transport_bindings")
+    audit = value.get("transport_audit")
+    if not isinstance(bindings, Mapping) or not isinstance(audit, Mapping):
+        raise R8RunnerRefusal("suite transport evidence is absent")
+    if (
+        bindings.get("run_id") != value.get("run_id")
+        or bindings.get("db_genesis_sha256")
+        != value.get("db_genesis_receipt_sha256")
+    ):
+        raise R8RunnerRefusal("suite transport identity drifted")
+    _validate_terminal_transport(
+        rows=rows,
+        gates=gates,
+        policy=policy,
+        bindings=bindings,
+        audit=audit,
+    )
+    return declared
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    run = subparsers.add_parser("run")
+    run.add_argument("--manifest", type=Path, required=True)
+    run.add_argument("--execution-lock", type=Path, required=True)
+    run.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
+    run.add_argument("--endpoint", required=True)
+    run.add_argument("--attempt-db", type=Path, required=True)
+    run.add_argument("--spool-db", type=Path, required=True)
+    run.add_argument("--db-genesis-receipt", type=Path, required=True)
+    run.add_argument("--environment-dependency-bundle", type=Path, required=True)
+    run.add_argument("--result-contract", type=Path, required=True)
+    run.add_argument("--judge-core", type=Path, required=True)
+    run.add_argument("--symposium-repo-root", type=Path, required=True)
+    run.add_argument("--model-catalog", type=Path, required=True)
+    run.add_argument("--model-weight-receipt", type=Path, required=True)
+    run.add_argument("--python-lock", type=Path, required=True)
+    run.add_argument("--preregistration-artifact", type=Path)
+    run.add_argument("--preregistration-readback-receipt", type=Path)
+    run.add_argument("--anchored-judge", type=Path)
+    run.add_argument("--spool-token-env", required=True)
+    run.add_argument("--spool-identity-receipt", type=Path, required=True)
+    run.add_argument("--timeout-seconds", type=float, default=180.0)
+    run.add_argument("--max-workers", type=int, default=1)
+    run.add_argument("--max-delivery-attempts", type=int, default=8)
+    run.add_argument("--tokenizer-dir", type=Path, required=True)
+    run.add_argument("--output", type=Path, required=True)
+    finalize = subparsers.add_parser("finalize")
+    finalize.add_argument("--draft", type=Path, required=True)
+    finalize.add_argument("--transport-bindings", type=Path, required=True)
+    finalize.add_argument("--db-genesis-receipt", type=Path, required=True)
+    finalize.add_argument("--output", type=Path, required=True)
+    verify = subparsers.add_parser("verify")
+    verify.add_argument("--suite", type=Path, required=True)
+    initialize = subparsers.add_parser("init-transport")
+    initialize.add_argument("--attempt-db", type=Path, required=True)
+    initialize.add_argument("--spool-db", type=Path, required=True)
+    args = parser.parse_args(argv)
+    try:
+        if args.command == "run":
+            manifest = read_json(args.manifest, "manifest")
+            execution_lock = read_json(args.execution_lock, "execution lock")
+            environment_bundle = load_private_receipt(
+                args.environment_dependency_bundle, verify_live=True
+            )
+            preregistration_artifact = (
+                read_json(args.preregistration_artifact, "preregistration artifact")
+                if args.preregistration_artifact is not None
+                else None
+            )
+            preregistration_readback = (
+                read_json(
+                    args.preregistration_readback_receipt,
+                    "preregistration readback",
+                )
+                if args.preregistration_readback_receipt is not None
+                else None
+            )
+            meter = QwenBpeMeter(
+                args.tokenizer_dir / "vocab.json",
+                args.tokenizer_dir / "merges.txt",
+                args.tokenizer_dir / "tokenizer_config.json",
+            )
+            registries = _registries(
+                protocol_path=args.protocol,
+                model=str(manifest.get("model")),
+                model_revision=str(manifest.get("model_revision")),
+            )
+            normalized, _items_value, projection = validate_manifest_v3(
+                manifest,
+                execution_lock=execution_lock,
+                token_meter=meter,
+                registries=registries,
+            )
+            lock_sha = str(projection["execution_lock_sha256"])
+            dependency_paths = r8_dependency_paths(
+                protocol_path=args.protocol,
+                judge_core_path=args.judge_core,
+                result_contract_path=args.result_contract,
+                tokenizer_dir=args.tokenizer_dir,
+                model_catalog_path=args.model_catalog,
+                model_weight_receipt_path=args.model_weight_receipt,
+                python_lock_path=args.python_lock,
+            )
+            _validate_environment_dependency_bundle(
+                environment_bundle,
+                execution_lock=execution_lock,
+                run_id=str(normalized["run_id"]),
+                model=str(normalized["model"]),
+                model_revision=str(normalized["model_revision"]),
+                endpoint=args.endpoint,
+                dependency_paths=dependency_paths,
+                symposium_repo_root=args.symposium_repo_root,
+            )
+            _validate_preregistration_gate(
+                mode=str(normalized["mode"]),
+                manifest=normalized,
+                execution_lock=execution_lock,
+                preregistration_artifact=preregistration_artifact,
+                preregistration_readback=preregistration_readback,
+                anchored_judge_path=args.anchored_judge,
+                judge_core_path=args.judge_core,
+                symposium_repo_root=args.symposium_repo_root,
+                result_contract_path=args.result_contract,
+            )
+            validate_execution_policy(
+                execution_lock,
+                endpoint=args.endpoint,
+                max_workers=args.max_workers,
+                timeout_seconds=args.timeout_seconds,
+                max_delivery_attempts=args.max_delivery_attempts,
+                spool_token_env=args.spool_token_env,
+            )
+            genesis = read_json(args.db_genesis_receipt, "DB genesis receipt")
+            genesis_sha = verify_fresh_transport_genesis(
+                genesis,
+                execution_lock=execution_lock,
+                run_id=str(manifest.get("run_id")),
+                attempt_db=args.attempt_db,
+                spool_db=args.spool_db,
+            )
+            forbidden_paths = [
+                args.manifest, args.execution_lock, args.protocol, args.attempt_db,
+                args.spool_db, args.db_genesis_receipt,
+                args.environment_dependency_bundle, args.result_contract,
+                args.judge_core, args.model_catalog, args.model_weight_receipt,
+                args.python_lock,
+                args.tokenizer_dir / "vocab.json",
+                args.tokenizer_dir / "merges.txt",
+                args.tokenizer_dir / "tokenizer_config.json",
+            ]
+            forbidden_paths.extend(
+                path
+                for path in (
+                    args.preregistration_artifact,
+                    args.preregistration_readback_receipt,
+                    args.anchored_judge,
+                )
+                if path is not None
+            )
+            reservations = reserve_private_outputs(
+                [
+                    ("spool_identity_receipt", args.spool_identity_receipt),
+                    ("suite_draft", args.output),
+                ],
+                run_id=str(manifest["run_id"]),
+                forbidden_paths=forbidden_paths,
+            )
+            try:
+                endpoint_preflight = verify_spool_endpoint_identity(
+                    endpoint=args.endpoint,
+                    spool_db=args.spool_db,
+                    model_revision=str(manifest.get("model_revision")),
+                    spool_token_env=args.spool_token_env,
+                    timeout_seconds=args.timeout_seconds,
+                    run_id=str(manifest.get("run_id")),
+                    execution_lock_sha256=lock_sha,
+                    db_genesis_sha256=genesis_sha,
+                )
+                reservations["spool_identity_receipt"].commit(endpoint_preflight)
+                previous_umask = os.umask(0o077)
+                try:
+                    port = DurableSpoolJSONPort(
+                        args.endpoint,
+                        args.attempt_db,
+                        spool_token_env=args.spool_token_env,
+                        timeout_seconds=args.timeout_seconds,
+                        max_delivery_attempts=args.max_delivery_attempts,
+                    )
+                finally:
+                    os.umask(previous_umask)
+                try:
+                    _seal_private_sqlite_family(args.attempt_db, "attempt ledger")
+                    result = run_suite_v3_draft(
+                        manifest,
+                        execution_lock=execution_lock,
+                        protocol_path=args.protocol,
+                        model_port=port,
+                        token_meter=meter,
+                        max_workers=args.max_workers,
+                        environment_dependency_bundle=environment_bundle,
+                        result_contract_path=args.result_contract,
+                        judge_core_path=args.judge_core,
+                        symposium_repo_root=args.symposium_repo_root,
+                        tokenizer_dir=args.tokenizer_dir,
+                        model_catalog_path=args.model_catalog,
+                        model_weight_receipt_path=args.model_weight_receipt,
+                        python_lock_path=args.python_lock,
+                        spool_identity_preflight=endpoint_preflight,
+                        preregistration_artifact=preregistration_artifact,
+                        preregistration_readback=preregistration_readback,
+                        anchored_judge_path=args.anchored_judge,
+                    )
+                finally:
+                    port.close()
+                reservations["suite_draft"].commit(result)
+            finally:
+                for reservation in reservations.values():
+                    reservation.close()
+            output = {
+                "status": "TERMINAL_DRAFT_NO_GOLD_OPENED",
+                "draft_receipt_sha256": result["draft_receipt_sha256"],
+                "item_runs": len(result["item_runs"]),
+                "calls": result["live_transport_audit"]["call_count"],
+            }
+        elif args.command == "finalize":
+            draft_value = read_json(args.draft, "suite draft")
+            bindings_value = read_json(args.transport_bindings, "transport bindings")
+            genesis_value = read_json(args.db_genesis_receipt, "DB genesis receipt")
+            reservations = reserve_private_outputs(
+                [("suite", args.output)],
+                run_id=str(draft_value.get("run_id", "")),
+                forbidden_paths=(
+                    args.draft, args.transport_bindings, args.db_genesis_receipt,
+                ),
+            )
+            try:
+                result = finalize_suite_v3(
+                    draft_value,
+                    transport_bindings=bindings_value,
+                    genesis_receipt=genesis_value,
+                )
+                reservations["suite"].commit(result)
+            finally:
+                for reservation in reservations.values():
+                    reservation.close()
+            output = {
+                "status": "FINALIZED_NO_GOLD_OPENED",
+                "suite_receipt_sha256": result["suite_receipt_sha256"],
+                "item_runs": len(result["item_runs"]),
+                "calls": result["transport_audit"]["call_count"],
+            }
+        elif args.command == "verify":
+            result = read_json(args.suite, "suite")
+            output = {
+                "status": "VERIFIED_NO_GOLD_OPENED",
+                "suite_receipt_sha256": verify_suite_v3_without_gold(result),
+                "item_runs": len(result["item_runs"]),
+                "calls": result["transport_audit"]["call_count"],
+            }
+        else:
+            initialize_transport_pair(args.attempt_db, args.spool_db)
+            output = {
+                "status": "INITIALIZED_EMPTY_WAL_PAIR_NO_MODEL_CALLS",
+                "attempt_db_identity": _database_identity(
+                    args.attempt_db, "attempt ledger"
+                ),
+                "spool_db_identity": _database_identity(args.spool_db, "result spool"),
+            }
+        print(json.dumps(output, sort_keys=True))
+        return 0
+    except Exception as error:
+        print(
+            json.dumps({"status": "REFUSED", "reason": str(error)}, sort_keys=True),
+            file=sys.stderr,
+        )
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+
+__all__ = [
+    "EXECUTION_LOCK_SCHEMA",
+    "MANIFEST_SCHEMA",
+    "R8RunnerRefusal",
+    "SUITE_SCHEMA",
+    "build_development_execution_lock",
+    "finalize_suite_v3",
+    "initialize_transport_pair",
+    "manifest_core_sha256",
+    "run_suite_v3_draft",
+    "validate_manifest_v3",
+    "validate_execution_policy",
+    "verify_fresh_transport_genesis",
+    "verify_spool_endpoint_identity",
+    "verify_suite_v3_without_gold",
+]

@@ -33,6 +33,8 @@ from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
 
 SPOOL_SCHEMA = "hswm-f1-result-spool/v1"
 SPOOL_ROUTE_PREFIX = "/v1/hswm/calls/"
+SPOOL_IDENTITY_SCHEMA = "hswm-f1-result-spool-identity/v1"
+SPOOL_IDENTITY_ROUTE = "/v1/hswm/spool-identity"
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _GENESIS = "0" * 64
 _FORWARDED_RESPONSE_HEADERS = frozenset(
@@ -88,6 +90,14 @@ def _sha256_bytes(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
 
 
+def _make_private(path: Path) -> None:
+    for candidate in (Path(path), Path(f"{path}-wal"), Path(f"{path}-shm")):
+        try:
+            candidate.chmod(0o600)
+        except FileNotFoundError:
+            continue
+
+
 def _require_sha256(value: str, label: str) -> str:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
         raise ResultSpoolError(f"{label} must be a lowercase SHA-256 digest")
@@ -120,6 +130,12 @@ class SQLiteResultSpool:
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         existed = self.path.exists()
+        if not existed:
+            descriptor = os.open(
+                self.path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600
+            )
+            os.close(descriptor)
+            _fsync_parent(self.path)
         self._lock = threading.RLock()
         self._connection = sqlite3.connect(
             str(self.path), isolation_level=None, timeout=10.0, check_same_thread=False
@@ -157,6 +173,7 @@ class SQLiteResultSpool:
             """
         )
         self._connection.execute("PRAGMA user_version=1")
+        _make_private(self.path)
         # A DISPATCHING row cannot still have a live authoritative owner after
         # this store has been reopened.  Preserve it as UNKNOWN and never
         # redispatch that physical inference identity.
@@ -406,6 +423,25 @@ class ResultSpoolService:
         self.max_response_bytes = max_response_bytes
         self.upstream_transport = upstream_transport or self._urlopen
 
+    def identity(self) -> dict[str, object]:
+        resolved = self.store.path.resolve()
+        try:
+            info = resolved.stat()
+        except OSError as error:
+            raise SpoolIntegrityError("cannot stat live spool database") from error
+        audit = self.store.audit()
+        unsigned = {
+            "schema_version": SPOOL_IDENTITY_SCHEMA,
+            "server_revision": self.server_revision,
+            "db_identity": {
+                "resolved_path": str(resolved),
+                "st_dev": int(info.st_dev),
+                "st_ino": int(info.st_ino),
+            },
+            "audit": audit,
+        }
+        return {**unsigned, "identity_sha256": canonical_sha256(unsigned)}
+
     def _urlopen(self, request: urllib_request.Request, timeout: float) -> RawHTTPResponse:
         try:
             with urllib_request.urlopen(request, timeout=timeout) as response:
@@ -498,6 +534,37 @@ class _ResultSpoolHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _authorized(self) -> bool:
+        if self.server.service.client_token is None:
+            return True
+        supplied = self.headers.get("Authorization", "")
+        expected = f"Bearer {self.server.service.client_token}"
+        if hmac.compare_digest(supplied, expected):
+            return True
+        self._json_error(
+            HTTPStatus.UNAUTHORIZED,
+            "UNAUTHORIZED",
+            "result-spool bearer token is missing or invalid",
+        )
+        return False
+
+    def do_GET(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler API
+        if self.path != SPOOL_IDENTITY_ROUTE:
+            self._json_error(HTTPStatus.NOT_FOUND, "NOT_FOUND", "unknown spool route")
+            return
+        if not self._authorized():
+            return
+        try:
+            body = _canonical_bytes(self.server.service.identity())
+        except ResultSpoolError as error:
+            self._json_error(HTTPStatus.INTERNAL_SERVER_ERROR, "IDENTITY_ERROR", str(error))
+            return
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
     def do_PUT(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler API
         if not self.path.startswith(SPOOL_ROUTE_PREFIX):
             self._json_error(HTTPStatus.NOT_FOUND, "NOT_FOUND", "unknown spool route")
@@ -505,16 +572,8 @@ class _ResultSpoolHandler(BaseHTTPRequestHandler):
         physical_call_id = self.path[len(SPOOL_ROUTE_PREFIX) :]
         intent_sha256 = self.headers.get("X-HSWM-Intent-SHA256", "")
         try:
-            if self.server.service.client_token is not None:
-                supplied = self.headers.get("Authorization", "")
-                expected = f"Bearer {self.server.service.client_token}"
-                if not hmac.compare_digest(supplied, expected):
-                    self._json_error(
-                        HTTPStatus.UNAUTHORIZED,
-                        "UNAUTHORIZED",
-                        "result-spool bearer token is missing or invalid",
-                    )
-                    return
+            if not self._authorized():
+                return
             _require_sha256(physical_call_id, "physical_call_id")
             _require_sha256(intent_sha256, "intent_sha256")
             if self.headers.get("X-HSWM-Model-Revision") != self.server.service.server_revision:
@@ -610,6 +669,8 @@ __all__ = [
     "ResultSpoolError",
     "ResultSpoolHTTPServer",
     "ResultSpoolService",
+    "SPOOL_IDENTITY_ROUTE",
+    "SPOOL_IDENTITY_SCHEMA",
     "SPOOL_ROUTE_PREFIX",
     "SPOOL_SCHEMA",
     "SQLiteResultSpool",

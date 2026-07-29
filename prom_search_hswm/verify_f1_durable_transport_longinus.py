@@ -1,18 +1,20 @@
-"""Verify the local Longinus binding for the F1 durable transport slice."""
+"""Verify the seven-layer Longinus binding from an immutable Git commit."""
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 from pathlib import Path
 import re
-from typing import Any
+import subprocess
+from typing import Any, Mapping, Sequence
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = REPO_ROOT / "LONGINUS_HSWM_F1_DURABLE_TRANSPORT_BINDING_2026-07-27.json"
-SCHEMA = "longinus-hswm-f1-durable-transport-binding/v1"
-REQUIRED_LAYERS = {
+SCHEMA = "longinus-hswm-f1-r8-premeasurement-binding/v2"
+REQUIRED_LAYERS = (
     "KG_NODE",
     "CONTRACT_BINDING",
     "CODE_SYMBOL",
@@ -20,143 +22,285 @@ REQUIRED_LAYERS = {
     "LINE_RANGE",
     "SHA256",
     "CRATE_SCRIPT",
+)
+REQUIRED_BINDING_KEYS = {
+    "kg_node",
+    "contract_binding",
+    "code_symbol",
+    "file_line",
+    "line_range",
+    "sha256",
+    "crate_script",
+}
+ALLOWED_CONTRACT_BINDINGS = {
+    "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
+    "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
 }
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
-GIT_COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
-LINE_RANGE_RE = re.compile(r"^(0|[1-9][0-9]*)-(0|[1-9][0-9]*)$")
+COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
+LINE_RANGE_RE = re.compile(r"^([1-9][0-9]*)-([1-9][0-9]*)$")
 
 
 class BindingError(ValueError):
-    """The checked-in binding is incomplete, unsafe, or byte-drifted."""
+    """A classified Longinus binding failure."""
+
+    def __init__(self, classification: str, message: str) -> None:
+        self.classification = classification
+        super().__init__(f"{classification}: {message}")
+
+
+def _fail(classification: str, message: str) -> None:
+    raise BindingError(classification, message)
 
 
 def _reject_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     value: dict[str, Any] = {}
     for key, item in pairs:
         if key in value:
-            raise BindingError(f"duplicate JSON key: {key}")
+            _fail("LABEL_ROT", f"duplicate JSON key: {key}")
         value[key] = item
     return value
 
 
 def _load(path: Path) -> dict[str, Any]:
     try:
-        value = json.loads(
-            path.read_text(encoding="utf-8"), object_pairs_hook=_reject_duplicates
-        )
+        value = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_reject_duplicates)
+    except BindingError:
+        raise
     except (OSError, UnicodeError, json.JSONDecodeError) as error:
-        raise BindingError(f"cannot load binding manifest: {error}") from error
+        _fail("MISSING", f"cannot load binding manifest: {error}")
     if not isinstance(value, dict):
-        raise BindingError("binding manifest must be one JSON object")
+        _fail("LABEL_ROT", "binding manifest must be one JSON object")
     return value
 
 
-def _safe_file(relative: object) -> Path:
-    if not isinstance(relative, str) or not relative:
-        raise BindingError("binding source_path must be a non-empty string")
-    candidate_path = Path(relative)
-    if candidate_path.is_absolute() or ".." in candidate_path.parts:
-        raise BindingError(f"unsafe binding source path: {relative}")
-    root = REPO_ROOT.resolve()
-    candidate = (root / candidate_path).resolve()
-    if not candidate.is_relative_to(root) or not candidate.is_file():
-        raise BindingError(f"binding source is missing or escapes repository: {relative}")
-    return candidate
+def _git(arguments: Sequence[str], *, classification: str, label: str) -> bytes:
+    completed = subprocess.run(
+        ["git", *arguments],
+        cwd=REPO_ROOT,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if completed.returncode != 0:
+        detail = completed.stderr.decode("utf-8", "replace").strip()
+        _fail(classification, f"{label}: {detail or 'git command failed'}")
+    return completed.stdout
 
 
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for block in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(block)
-    return digest.hexdigest()
+def _commit_blob(commit: str, relative: str) -> bytes:
+    path = Path(relative)
+    if not relative or path.is_absolute() or ".." in path.parts:
+        _fail("MISSING", f"unsafe source path: {relative!r}")
+    object_type = _git(
+        ["cat-file", "-t", f"{commit}:{relative}"],
+        classification="MISSING",
+        label=f"missing Git object {relative}",
+    ).decode("ascii", "strict").strip()
+    if object_type != "blob":
+        _fail("MISSING", f"directory/non-blob binding forbidden: {relative}")
+    return _git(
+        ["show", f"{commit}:{relative}"],
+        classification="MISSING",
+        label=f"cannot read Git blob {relative}",
+    )
+
+
+def _parameters(node: ast.FunctionDef | ast.AsyncFunctionDef) -> list[str]:
+    result = [item.arg for item in (*node.args.posonlyargs, *node.args.args)]
+    if node.args.vararg is not None:
+        result.append(f"*{node.args.vararg.arg}")
+    result.extend(item.arg for item in node.args.kwonlyargs)
+    if node.args.kwarg is not None:
+        result.append(f"**{node.args.kwarg.arg}")
+    return result
+
+
+def _symbol(blob: bytes, path: str, expected: Mapping[str, object]) -> ast.AST:
+    try:
+        tree = ast.parse(blob.decode("utf-8"), filename=path)
+    except (UnicodeError, SyntaxError) as error:
+        _fail("SIGNATURE_MISMATCHED", f"cannot parse {path}: {error}")
+    name = expected.get("name")
+    kind = expected.get("kind")
+    if not isinstance(name, str) or kind not in {"class", "function"}:
+        _fail("LABEL_ROT", f"invalid code_symbol label for {path}")
+    matches = [
+        node
+        for node in tree.body
+        if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
+        and node.name == name
+    ]
+    if len(matches) != 1:
+        _fail("ORPHANED", f"top-level symbol {name!r} occurs {len(matches)} times in {path}")
+    node = matches[0]
+    actual_kind = "class" if isinstance(node, ast.ClassDef) else "function"
+    if actual_kind != kind:
+        _fail("SIGNATURE_MISMATCHED", f"{path}:{name} kind {actual_kind} != {kind}")
+    expected_parameters = expected.get("parameters")
+    if not isinstance(expected_parameters, list) or not all(
+        isinstance(item, str) for item in expected_parameters
+    ):
+        _fail("LABEL_ROT", f"invalid parameter labels for {path}:{name}")
+    actual_parameters = [] if isinstance(node, ast.ClassDef) else _parameters(node)
+    if actual_parameters != expected_parameters:
+        _fail(
+            "SIGNATURE_MISMATCHED",
+            f"{path}:{name} parameters {actual_parameters!r} != {expected_parameters!r}",
+        )
+    module = path[:-3].replace("/", ".") if path.endswith(".py") else path.replace("/", ".")
+    if expected.get("qualified") != f"{module}.{name}":
+        _fail("LABEL_ROT", f"qualified symbol label rotated for {path}:{name}")
+    return node
 
 
 def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
     manifest = _load(manifest_path)
     if manifest.get("schema") != SCHEMA:
-        raise BindingError(f"schema must be {SCHEMA}")
+        _fail("LABEL_ROT", f"schema must be {SCHEMA}")
     if manifest.get("binding_state") != "PIERCED_LOCAL_NO_KG_WRITE":
-        raise BindingError("binding_state must preserve the local/no-KG-write boundary")
-    if set(manifest.get("layers", [])) != REQUIRED_LAYERS:
-        raise BindingError("Longinus seven-layer inventory drifted")
+        _fail("LABEL_ROT", "local/no-KG-write boundary drifted")
+    if manifest.get("scientific_status") != "UNJUDGED":
+        _fail("LABEL_ROT", "scientific status must remain UNJUDGED")
+    inadmissible = "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE"
+    if manifest.get("evidence_class") != inadmissible or manifest.get("r7_status") != inadmissible:
+        _fail("LABEL_ROT", "r7 exploratory/inadmissible boundary drifted")
+    if manifest.get("b22_gate") != "LOCKED" or manifest.get("model_calls") != 0:
+        _fail("LABEL_ROT", "B22/model-call premeasurement boundary drifted")
+    if manifest.get("layers") != list(REQUIRED_LAYERS):
+        _fail("LABEL_ROT", "Longinus seven-layer order drifted")
     kg = manifest.get("kg")
     if not isinstance(kg, dict) or kg.get("write_state") != "NOT_AUTHORIZED_NOT_WRITTEN":
-        raise BindingError("KG write boundary drifted")
+        _fail("LABEL_ROT", "KG write boundary drifted")
+    for field in ("provenance_actor", "source_path", "timestamp", "baseline_scope"):
+        if not isinstance(kg.get(field), str) or not kg[field]:
+            _fail("LABEL_ROT", f"KG provenance field missing: {field}")
+
     git = manifest.get("git")
-    if not isinstance(git, dict) or not GIT_COMMIT_RE.fullmatch(
-        str(git.get("implementation_commit", ""))
+    if not isinstance(git, dict):
+        _fail("MISSING", "git binding is missing")
+    commit = git.get("implementation_commit")
+    if not isinstance(commit, str) or COMMIT_RE.fullmatch(commit) is None:
+        _fail("MISSING", "implementation commit is missing")
+    _git(["cat-file", "-e", f"{commit}^{{commit}}"], classification="MISSING", label="commit missing")
+    _git(
+        ["merge-base", "--is-ancestor", commit, "HEAD"],
+        classification="DIVERGENT",
+        label="implementation commit is not an ancestor of HEAD",
+    )
+
+    target_paths = manifest.get("required_target_paths")
+    if not isinstance(target_paths, list) or not target_paths or not all(
+        isinstance(path, str) and path for path in target_paths
     ):
-        raise BindingError("implementation commit binding is missing")
+        _fail("MISSING", "required target inventory is missing")
+    if len(target_paths) != len(set(target_paths)):
+        _fail("ORPHANED", "required target inventory contains duplicates")
     bindings = manifest.get("bindings")
     if not isinstance(bindings, list) or not bindings:
-        raise BindingError("bindings must be a non-empty array")
+        _fail("MISSING", "bindings are missing")
 
-    seen_ids: set[str] = set()
-    files: set[str] = set()
-    roles: set[str] = set()
+    seen_paths: set[str] = set()
+    seen_nodes: set[str] = set()
+    implementation_count = 0
+    test_count = 0
     for index, binding in enumerate(bindings):
         if not isinstance(binding, dict):
-            raise BindingError(f"binding {index} must be an object")
-        source_id = binding.get("sourceId")
-        if not isinstance(source_id, str) or not source_id or source_id in seen_ids:
-            raise BindingError(f"binding {index} sourceId is missing or duplicated")
-        seen_ids.add(source_id)
-        relative = binding.get("source_path")
-        path = _safe_file(relative)
+            _fail("MISSING", f"binding {index} is not an object")
+        if set(binding) != REQUIRED_BINDING_KEYS:
+            _fail("LABEL_ROT", f"binding {index} does not expose exactly seven layers")
+        kg_node = binding.get("kg_node")
+        if not isinstance(kg_node, str) or not kg_node.startswith("LOCAL_PROPOSED_"):
+            _fail("LABEL_ROT", f"binding {index} invents or omits a local KG identity")
+        if kg_node in seen_nodes:
+            _fail("ORPHANED", f"duplicate local KG identity: {kg_node}")
+        seen_nodes.add(kg_node)
+        contract = binding.get("contract_binding")
+        if contract not in ALLOWED_CONTRACT_BINDINGS:
+            _fail("LABEL_ROT", f"binding {index} contract label rotated")
+        implementation_count += contract.endswith("__UNJUDGED")
+        test_count += contract.endswith("__ENGINEERING_ONLY")
+
+        file_line = binding.get("file_line")
+        if not isinstance(file_line, str) or ":" not in file_line:
+            _fail("MISSING", f"binding {index} file_line is missing")
+        relative, line_text = file_line.rsplit(":", 1)
+        if relative in seen_paths:
+            _fail("ORPHANED", f"multiple bindings target one file: {relative}")
+        seen_paths.add(relative)
+        if relative not in target_paths:
+            _fail("ORPHANED", f"binding targets an unregistered path: {relative}")
+        blob = _commit_blob(commit, relative)
         expected_sha = binding.get("sha256")
         if not isinstance(expected_sha, str) or SHA256_RE.fullmatch(expected_sha) is None:
-            raise BindingError(f"binding {source_id} has invalid SHA-256")
-        if binding.get("sha256_baseline") != expected_sha or _sha256(path) != expected_sha:
-            raise BindingError(f"binding {source_id} source bytes drifted")
-        match = LINE_RANGE_RE.fullmatch(str(binding.get("line_range", "")))
-        if match is None:
-            raise BindingError(f"binding {source_id} line range is invalid")
-        start, end = (int(match.group(1)), int(match.group(2)))
-        lines = path.read_text(encoding="utf-8").splitlines()
-        if start < 1 or end < start or end > len(lines):
-            raise BindingError(f"binding {source_id} line range escapes source")
-        token = binding.get("symbol_token")
-        if not isinstance(token, str) or not token or token not in "\n".join(lines[start - 1 : end]):
-            raise BindingError(f"binding {source_id} symbol token is absent from range")
-        if binding.get("sourcePath") != f"{relative}:{start}":
-            raise BindingError(f"binding {source_id} sourcePath drifted")
-        role = binding.get("layer")
-        if not isinstance(role, str) or not role:
-            raise BindingError(f"binding {source_id} role is missing")
-        roles.add(role)
-        files.add(str(relative))
+            _fail("MISSING", f"invalid SHA-256 label for {relative}")
+        actual_sha = hashlib.sha256(blob).hexdigest()
+        if actual_sha != expected_sha:
+            _fail("DIVERGENT", f"Git blob SHA drifted for {relative}")
 
-    required_roles = {
-        "L1_CONTRACT",
-        "L2_PROTOCOL",
-        "L3_STORE",
-        "L4_INTEGRATION",
-        "L5_TEST",
-        "L6_RECEIPT",
-        "L7_VERIFIER",
-    }
-    if not required_roles.issubset(roles):
-        raise BindingError("artifact-role coverage is incomplete")
+        code_symbol = binding.get("code_symbol")
+        if not isinstance(code_symbol, dict):
+            _fail("MISSING", f"code symbol binding missing for {relative}")
+        node = _symbol(blob, relative, code_symbol)
+        line_range = binding.get("line_range")
+        match = LINE_RANGE_RE.fullmatch(str(line_range))
+        if match is None:
+            _fail("MISSING", f"line range missing for {relative}")
+        start, end = int(match.group(1)), int(match.group(2))
+        node_end = getattr(node, "end_lineno", None)
+        if start != getattr(node, "lineno", None) or end != node_end or line_text != str(start):
+            _fail("DIVERGENT", f"AST/file line range drifted for {relative}")
+
+        crate_script = binding.get("crate_script")
+        if not isinstance(crate_script, str) or not crate_script.startswith("python -m pytest -q "):
+            _fail("LABEL_ROT", f"unsafe or missing crate script for {relative}")
+        test_path = crate_script.removeprefix("python -m pytest -q ")
+        if test_path not in target_paths or not Path(test_path).name.startswith("test_"):
+            _fail("ORPHANED", f"crate script for {relative} is not bound to a target test")
+
+    missing = set(target_paths) - seen_paths
+    extra = seen_paths - set(target_paths)
+    if missing or extra:
+        _fail("ORPHANED", f"target reverse scan mismatch missing={sorted(missing)} extra={sorted(extra)}")
+    if implementation_count != 9 or test_count != 9:
+        _fail("LABEL_ROT", "implementation/test binding labels are not 9/9")
+
     return {
         "status": "PASS",
         "binding_id": manifest.get("binding_id"),
+        "implementation_commit": commit,
         "bindings_checked": len(bindings),
-        "files_checked": len(files),
+        "files_checked": len(seen_paths),
+        "implementation_bindings": implementation_count,
+        "test_bindings": test_count,
         "longinus_layers": len(REQUIRED_LAYERS),
-        "artifact_roles": sorted(roles),
+        "classifications": {
+            "MISSING": 0,
+            "ORPHANED": 0,
+            "SIGNATURE_MISMATCHED": 0,
+            "DIVERGENT": 0,
+            "LABEL_ROT": 0,
+        },
+        "blob_authority": "GIT_COMMIT_ONLY",
         "kg_write_state": kg["write_state"],
+        "scientific_status": manifest["scientific_status"],
+        "b22_gate": manifest["b22_gate"],
     }
 
 
-def main() -> int:
+def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("manifest", type=Path, nargs="?", default=DEFAULT_MANIFEST)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     try:
         result = verify(args.manifest)
     except BindingError as error:
-        print(json.dumps({"status": "FAIL", "error": str(error)}, sort_keys=True))
+        print(
+            json.dumps(
+                {"status": "FAIL", "classification": error.classification, "error": str(error)},
+                sort_keys=True,
+            )
+        )
         return 1
     print(json.dumps(result, sort_keys=True))
     return 0

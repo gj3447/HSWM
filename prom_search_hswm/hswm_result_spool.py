@@ -31,12 +31,39 @@ from urllib import request as urllib_request
 from urllib.parse import urlsplit, urlunsplit
 
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
+from prom_search_hswm.prom9_f1_r8_private_output import (
+    PrivateOutputRefusal,
+    canonical_output_path,
+)
 
 
 SPOOL_SCHEMA = "hswm-f1-result-spool/v1"
 SPOOL_ROUTE_PREFIX = "/v1/hswm/calls/"
 SPOOL_IDENTITY_SCHEMA = "hswm-f1-result-spool-identity/v2"
 SPOOL_IDENTITY_ROUTE = "/v1/hswm/spool-identity"
+SPOOL_USER_VERSION = 1
+SPOOL_SCHEMA_SQL = """
+CREATE TABLE IF NOT EXISTS spool_calls (
+    physical_call_id TEXT PRIMARY KEY,
+    intent_sha256 TEXT NOT NULL,
+    request_sha256 TEXT NOT NULL,
+    request_bytes BLOB NOT NULL,
+    status TEXT NOT NULL CHECK(status IN (
+        'DISPATCHING', 'COMPLETE', 'UNKNOWN'
+    )),
+    response_status INTEGER,
+    response_headers BLOB,
+    response_body BLOB,
+    response_sha256 TEXT,
+    error_class TEXT,
+    CHECK (
+        (status = 'COMPLETE' AND response_status IS NOT NULL
+         AND response_headers IS NOT NULL AND response_body IS NOT NULL
+         AND response_sha256 IS NOT NULL)
+        OR status != 'COMPLETE'
+    )
+);
+"""
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _MODEL_REVISION = re.compile(r"^[0-9a-f]{40}$")
 _GENESIS = "0" * 64
@@ -123,12 +150,55 @@ def _sha256_bytes(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
 
 
-def _make_private(path: Path) -> None:
-    for candidate in (Path(path), Path(f"{path}-wal"), Path(f"{path}-shm")):
+def _private_file_identity(path: Path, label: str) -> tuple[int, int]:
+    try:
+        before = path.lstat()
+    except OSError as error:
+        raise SpoolIntegrityError(f"cannot stat {label}") from error
+    flags = (
+        os.O_RDONLY
+        | getattr(os, "O_CLOEXEC", 0)
+        | getattr(os, "O_NOFOLLOW", 0)
+    )
+    descriptor = -1
+    try:
+        descriptor = os.open(path, flags)
+        opened = os.fstat(descriptor)
+        after = path.lstat()
+    except OSError as error:
+        raise SpoolIntegrityError(f"cannot open {label}") from error
+    finally:
+        if descriptor >= 0:
+            os.close(descriptor)
+    identity = (before.st_dev, before.st_ino)
+    observations = (before, opened, after)
+    if (
+        any(
+            stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode)
+            for info in observations
+        )
+        or any((info.st_dev, info.st_ino) != identity for info in observations)
+        or any(info.st_uid != os.geteuid() for info in observations)
+        or any(info.st_nlink != 1 for info in observations)
+        or any(stat.S_IMODE(info.st_mode) != 0o600 for info in observations)
+    ):
+        raise SpoolIntegrityError(
+            f"{label} must be one owner-private unique regular file"
+        )
+    return identity
+
+
+def validate_private_sqlite_family(path: Path, label: str) -> None:
+    for index, candidate in enumerate(
+        (Path(path), Path(f"{path}-wal"), Path(f"{path}-shm"))
+    ):
         try:
-            candidate.chmod(0o600)
+            candidate.lstat()
         except FileNotFoundError:
+            if index == 0:
+                raise SpoolIntegrityError(f"{label} database is absent")
             continue
+        _private_file_identity(candidate, f"{label} SQLite family member")
 
 
 def _require_sha256(value: str, label: str) -> str:
@@ -285,64 +355,68 @@ class SQLiteResultSpool:
     """SQLite WAL/FULL authority for one-result-per-physical-call replay."""
 
     def __init__(self, path: str | Path) -> None:
-        self.path = Path(path)
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        existed = self.path.exists()
+        try:
+            self.path = canonical_output_path(Path(path))
+        except PrivateOutputRefusal as error:
+            raise SpoolIntegrityError("result-spool path is not canonical") from error
+        try:
+            self.path.lstat()
+            existed = True
+        except FileNotFoundError:
+            existed = False
+        except OSError as error:
+            raise SpoolIntegrityError("cannot stat result-spool path") from error
         if not existed:
-            descriptor = os.open(
-                self.path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600
-            )
-            os.close(descriptor)
+            descriptor = -1
+            try:
+                descriptor = os.open(
+                    self.path,
+                    os.O_WRONLY
+                    | os.O_CREAT
+                    | os.O_EXCL
+                    | getattr(os, "O_CLOEXEC", 0)
+                    | getattr(os, "O_NOFOLLOW", 0),
+                    0o600,
+                )
+                os.fchmod(descriptor, 0o600)
+                os.fsync(descriptor)
+            except OSError as error:
+                raise SpoolIntegrityError("cannot create private result spool") from error
+            finally:
+                if descriptor >= 0:
+                    os.close(descriptor)
             _fsync_parent(self.path)
+        validate_private_sqlite_family(self.path, "result spool")
         self._lock = threading.RLock()
         self._connection = sqlite3.connect(
             str(self.path), isolation_level=None, timeout=10.0, check_same_thread=False
         )
-        self._connection.row_factory = sqlite3.Row
-        self._connection.execute("PRAGMA busy_timeout=10000")
-        self._connection.execute("PRAGMA journal_mode=WAL")
-        self._connection.execute("PRAGMA synchronous=FULL")
-        self._connection.execute("PRAGMA foreign_keys=ON")
-        version = int(self._connection.execute("PRAGMA user_version").fetchone()[0])
-        if version not in (0, 1):
-            raise SpoolIntegrityError(f"unsupported result-spool schema version {version}")
-        self._connection.executescript(
-            """
-            CREATE TABLE IF NOT EXISTS spool_calls (
-                physical_call_id TEXT PRIMARY KEY,
-                intent_sha256 TEXT NOT NULL,
-                request_sha256 TEXT NOT NULL,
-                request_bytes BLOB NOT NULL,
-                status TEXT NOT NULL CHECK(status IN (
-                    'DISPATCHING', 'COMPLETE', 'UNKNOWN'
-                )),
-                response_status INTEGER,
-                response_headers BLOB,
-                response_body BLOB,
-                response_sha256 TEXT,
-                error_class TEXT,
-                CHECK (
-                    (status = 'COMPLETE' AND response_status IS NOT NULL
-                     AND response_headers IS NOT NULL AND response_body IS NOT NULL
-                     AND response_sha256 IS NOT NULL)
-                    OR status != 'COMPLETE'
-                )
-            );
-            """
-        )
-        self._connection.execute("PRAGMA user_version=1")
-        _make_private(self.path)
-        # A DISPATCHING row cannot still have a live authoritative owner after
-        # this store has been reopened.  Preserve it as UNKNOWN and never
-        # redispatch that physical inference identity.
-        self._connection.execute("BEGIN IMMEDIATE")
-        self._connection.execute(
-            """
-            UPDATE spool_calls SET status='UNKNOWN', error_class='SERVER_RESTART'
-            WHERE status='DISPATCHING'
-            """
-        )
-        self._connection.execute("COMMIT")
+        try:
+            self._connection.row_factory = sqlite3.Row
+            self._connection.execute("PRAGMA busy_timeout=10000")
+            self._connection.execute("PRAGMA journal_mode=WAL")
+            self._connection.execute("PRAGMA synchronous=FULL")
+            self._connection.execute("PRAGMA foreign_keys=ON")
+            version = int(self._connection.execute("PRAGMA user_version").fetchone()[0])
+            if version not in (0, 1):
+                raise SpoolIntegrityError(f"unsupported result-spool schema version {version}")
+            self._connection.executescript(SPOOL_SCHEMA_SQL)
+            self._connection.execute(f"PRAGMA user_version={SPOOL_USER_VERSION}")
+            validate_private_sqlite_family(self.path, "result spool")
+            # A DISPATCHING row cannot still have a live authoritative owner after
+            # this store has been reopened.  Preserve it as UNKNOWN and never
+            # redispatch that physical inference identity.
+            self._connection.execute("BEGIN IMMEDIATE")
+            self._connection.execute(
+                """
+                UPDATE spool_calls SET status='UNKNOWN', error_class='SERVER_RESTART'
+                WHERE status='DISPATCHING'
+                """
+            )
+            self._connection.execute("COMMIT")
+        except BaseException:
+            self._connection.close()
+            raise
         if not existed:
             _fsync_parent(self.path)
 

@@ -24,6 +24,8 @@ from prom_search_hswm.prom9_f1_prior_exposure import (
     _read_private_bytes,
     _strict_object,
     verify_aborted_attempt_exposure_receipt,
+    verify_forbidden_exposure_union,
+    verify_prior_exposure_receipt,
     write_private_once,
 )
 from prom_search_hswm.prom9_f1_r8_environment import (
@@ -532,17 +534,34 @@ def verify_receipt_aborted_attempt_exposure_binding(
     artifacts = _mapping(evidence.get("artifact_receipts"), "artifact receipts")
     selection = _mapping(evidence.get("selection_receipt"), "selection receipt")
     execution_lock = _mapping(evidence.get("execution_lock"), "execution lock")
+    prior = _mapping(
+        evidence.get("prior_exposure_receipt"), "prior-exposure receipt"
+    )
+    try:
+        prior_sha256 = verify_prior_exposure_receipt(prior)
+    except Exception as error:
+        raise PowerCLIRefusal(
+            "prior-exposure receipt failed exact verification"
+        ) from error
     for container, label in (
         (artifacts, "artifact receipts"),
         (selection, "selection receipt"),
         (execution_lock, "execution lock"),
     ):
-        if container.get("aborted_attempt_exposure_receipt_sha256") != (
-            incident_sha256
+        if (
+            container.get("prior_exposure_receipt_sha256") != prior_sha256
+            or container.get("aborted_attempt_exposure_receipt_sha256")
+            != incident_sha256
         ):
             raise PowerCLIRefusal(
-                f"{label} aborted-attempt exposure binding drifted"
+                f"{label} exposure receipt binding drifted"
             )
+    try:
+        verify_forbidden_exposure_union(prior, incident, execution_lock)
+    except Exception as error:
+        raise PowerCLIRefusal(
+            "execution-lock forbidden exposure union verification failed"
+        ) from error
     return incident_sha256
 
 

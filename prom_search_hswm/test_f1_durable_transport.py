@@ -11,6 +11,7 @@ import pytest
 
 from prom_search_hswm.hswm_call_receipt import ModelCallV1, invoke_function
 from prom_search_hswm.hswm_f1_durable_transport import (
+    AmbiguousModelOutcome,
     DurableIntentConflict,
     DurableLedgerIntegrityError,
     DurableSpoolJSONPort,
@@ -25,6 +26,7 @@ from prom_search_hswm.hswm_result_spool import (
     ResultSpoolHTTPServer,
     ResultSpoolService,
     SQLiteResultSpool,
+    SpoolIntegrityError,
 )
 import prom_search_hswm.hswm_result_spool as result_spool
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
@@ -33,6 +35,71 @@ from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
 
 DEPLOYMENT_SHA256 = "d" * 64
 MODEL_REVISION = "f" * 40
+
+
+@pytest.mark.parametrize(
+    ("constructor", "error_type", "filename"),
+    (
+        (SQLiteF1CallLedger, DurableLedgerIntegrityError, "attempt.sqlite3"),
+        (SQLiteResultSpool, SpoolIntegrityError, "spool.sqlite3"),
+    ),
+)
+@pytest.mark.parametrize("unsafe_kind", ("public_mode", "hardlink", "symlink"))
+def test_sqlite_authorities_refuse_unsafe_existing_inodes_without_repair(
+    tmp_path: Path,
+    constructor,
+    error_type: type[Exception],
+    filename: str,
+    unsafe_kind: str,
+) -> None:
+    path = tmp_path / filename
+    backing = tmp_path / f"backing-{filename}"
+    payload = b"do-not-mutate"
+    if unsafe_kind == "public_mode":
+        path.write_bytes(payload)
+        path.chmod(0o644)
+        observed = path
+    else:
+        backing.write_bytes(payload)
+        backing.chmod(0o600)
+        if unsafe_kind == "hardlink":
+            os.link(backing, path)
+        else:
+            path.symlink_to(backing)
+        observed = backing
+    before_mode = observed.stat().st_mode & 0o777
+    before_payload = observed.read_bytes()
+
+    with pytest.raises(error_type):
+        constructor(path)
+
+    assert observed.read_bytes() == before_payload
+    assert observed.stat().st_mode & 0o777 == before_mode
+    if unsafe_kind == "public_mode":
+        assert before_mode == 0o644
+    elif unsafe_kind == "hardlink":
+        assert observed.stat().st_nlink == 2
+    else:
+        assert path.is_symlink()
+
+
+@pytest.mark.parametrize(
+    ("constructor", "filename"),
+    (
+        (SQLiteF1CallLedger, "attempt.sqlite3"),
+        (SQLiteResultSpool, "spool.sqlite3"),
+    ),
+)
+def test_sqlite_authorities_create_owner_private_main_files(
+    tmp_path: Path, constructor, filename: str
+) -> None:
+    path = tmp_path / filename
+    store = constructor(path)
+    try:
+        assert path.stat().st_mode & 0o777 == 0o600
+        assert path.stat().st_nlink == 1
+    finally:
+        store.close()
 
 
 def _deployment_binding(endpoint: str) -> ModelDeploymentBinding:
@@ -205,6 +272,131 @@ def test_same_physical_id_with_different_intent_is_rejected(tmp_path: Path) -> N
     assert transport.calls == 1
 
 
+def test_different_physical_id_cannot_reuse_a_logical_call_slot(
+    tmp_path: Path,
+) -> None:
+    transport = AttestedTransport()
+    port = DurableSpoolJSONPort(
+        "http://spool", tmp_path / "logical-slot.db", transport=transport
+    )
+    first = ModelCallV1(
+        physical_call_id="a" * 64,
+        run_id="run",
+        arm_id="arm",
+        item_id="item",
+        call_index=1,
+        function_id="QF_QUERY_COMPILER",
+        model="fixed-model",
+        model_revision=MODEL_REVISION,
+        system_prompt="one",
+        input_type="QueryEnvelopeV1",
+        input_payload=_input(),
+        output_type="QueryPlanV1",
+        max_output_tokens=256,
+    )
+    port(first)
+    before = port.audit()
+    with pytest.raises(DurableIntentConflict, match="logical call slot"):
+        port(ModelCallV1(**{**first.__dict__, "physical_call_id": "b" * 64}))
+    after = port.audit()
+    port.close()
+    assert after == before
+    assert transport.calls == 1
+
+
+def test_existing_physical_id_refuses_a_preexisting_duplicate_logical_slot(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "preexisting-logical-slot.db"
+    first = ModelCallV1(
+        physical_call_id="a" * 64,
+        run_id="run",
+        arm_id="arm",
+        item_id="item",
+        call_index=1,
+        function_id="QF_QUERY_COMPILER",
+        model="fixed-model",
+        model_revision=MODEL_REVISION,
+        system_prompt="one",
+        input_type="QueryEnvelopeV1",
+        input_payload=_input(),
+        output_type="QueryPlanV1",
+        max_output_tokens=256,
+    )
+    second = ModelCallV1(**{**first.__dict__, "physical_call_id": "b" * 64})
+    seed = DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=lambda *_args: pytest.fail("seed touched transport"),
+    )
+    first_request = canonical_json(seed._request_body(first)).encode("utf-8")
+    first_route, first_request_sha, first_intent_sha, first_intent = seed._intent(
+        first, first_request
+    )
+    assert seed.ledger.prepare(
+        physical_call_id=first.physical_call_id,
+        intent_sha256=first_intent_sha,
+        intent_bytes=first_intent,
+        request_sha256=first_request_sha,
+        endpoint=first_route,
+        request_bytes=first_request,
+    ) == "PREPARED"
+    second_request = canonical_json(seed._request_body(second)).encode("utf-8")
+    second_route, second_request_sha, second_intent_sha, second_intent = seed._intent(
+        second, second_request
+    )
+    connection = seed.ledger._connection
+    connection.execute("BEGIN IMMEDIATE")
+    connection.execute(
+        """
+        INSERT INTO call_state(
+            physical_call_id,intent_sha256,intent_bytes,request_sha256,
+            endpoint,request_bytes,status
+        ) VALUES(?,?,?,?,?,?,'PREPARED')
+        """,
+        (
+            second.physical_call_id,
+            second_intent_sha,
+            second_intent,
+            second_request_sha,
+            second_route,
+            second_request,
+        ),
+    )
+    seed.ledger._append_event_tx(
+        second.physical_call_id,
+        "PREPARED",
+        {
+            "intent_sha256": second_intent_sha,
+            "request_sha256": second_request_sha,
+        },
+    )
+    connection.execute("COMMIT")
+    seed.close()
+
+    before = __import__("sqlite3").connect(path)
+    try:
+        counts = (
+            before.execute("SELECT COUNT(*) FROM call_state").fetchone()[0],
+            before.execute("SELECT COUNT(*) FROM attempt_events").fetchone()[0],
+        )
+    finally:
+        before.close()
+    transport = AttestedTransport()
+    with DurableSpoolJSONPort("http://spool", path, transport=transport) as reopened:
+        with pytest.raises(DurableIntentConflict, match="logical call slot"):
+            reopened(first)
+    after = __import__("sqlite3").connect(path)
+    try:
+        assert (
+            after.execute("SELECT COUNT(*) FROM call_state").fetchone()[0],
+            after.execute("SELECT COUNT(*) FROM attempt_events").fetchone()[0],
+        ) == counts
+    finally:
+        after.close()
+    assert transport.calls == 0
+
+
 @pytest.mark.parametrize(
     "body",
     [
@@ -272,6 +464,96 @@ def test_crash_after_raw_commit_recovers_offline(tmp_path: Path) -> None:
         output, _receipt = _invoke(reopened)
         assert output == _query_plan()
         assert reopened.audit()["status_counts"] == {"ACCEPTED": 1}
+
+
+def _sent_ordinals(path: Path) -> list[int]:
+    connection = __import__("sqlite3").connect(path)
+    try:
+        rows = connection.execute(
+            "SELECT event_bytes FROM attempt_events "
+            "WHERE event_type='SENT' ORDER BY sequence"
+        ).fetchall()
+    finally:
+        connection.close()
+    return [json.loads(bytes(row[0]).decode("utf-8"))["detail"]["delivery_ordinal"] for row in rows]
+
+
+def test_crash_after_sent_resumes_with_the_next_lifetime_ordinal(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "after-sent.db"
+    fired = {"value": False}
+
+    def crash(stage: str, _call: ModelCallV1) -> None:
+        if stage == "after_sent" and not fired["value"]:
+            fired["value"] = True
+            raise SimulatedCrash
+
+    first_transport = AttestedTransport()
+    port = DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=first_transport,
+        max_delivery_attempts=2,
+        delivery_backoff_s=(0.0,),
+        fault_injector=crash,
+    )
+    with pytest.raises(SimulatedCrash):
+        _invoke(port)
+    port.close()
+    assert first_transport.calls == 0
+
+    resumed_transport = AttestedTransport()
+    with DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=resumed_transport,
+        max_delivery_attempts=2,
+        delivery_backoff_s=(0.0,),
+    ) as reopened:
+        output, _receipt = _invoke(reopened)
+        assert output == _query_plan()
+        assert reopened.audit()["status_counts"] == {"ACCEPTED": 1}
+    assert resumed_transport.calls == 1
+    assert _sent_ordinals(path) == [1, 2]
+
+
+def test_crash_after_last_sent_aborts_before_any_restart_transport(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "after-last-sent.db"
+
+    def crash(stage: str, _call: ModelCallV1) -> None:
+        if stage == "after_sent":
+            raise SimulatedCrash
+
+    first_transport = AttestedTransport()
+    port = DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=first_transport,
+        max_delivery_attempts=1,
+        delivery_backoff_s=(0.0,),
+        fault_injector=crash,
+    )
+    with pytest.raises(SimulatedCrash):
+        _invoke(port)
+    port.close()
+    assert first_transport.calls == 0
+
+    resumed_transport = AttestedTransport()
+    with DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=resumed_transport,
+        max_delivery_attempts=1,
+        delivery_backoff_s=(0.0,),
+    ) as reopened:
+        with pytest.raises(AmbiguousModelOutcome, match="lifetime budget"):
+            _invoke(reopened)
+        assert reopened.audit()["status_counts"] == {"AMBIGUOUS_ABORT": 1}
+    assert resumed_transport.calls == 0
+    assert _sent_ordinals(path) == [1]
 
 
 def test_pending_spool_result_is_reconciled_without_new_call_identity(

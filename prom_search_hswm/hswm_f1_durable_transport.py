@@ -30,13 +30,22 @@ from prom_search_hswm.hswm_call_receipt import (
     ModelResponseV1,
     verify_call_receipt,
 )
-from prom_search_hswm.hswm_result_spool import RawHTTPResponse, SPOOL_ROUTE_PREFIX
+from prom_search_hswm.hswm_result_spool import (
+    RawHTTPResponse,
+    SPOOL_ROUTE_PREFIX,
+    SpoolIntegrityError,
+    validate_private_sqlite_family,
+)
 from prom_search_hswm.hswm_typed_ports import (
     canonical_json,
     canonical_sha256,
     output_json_schema,
     output_schema_sha256,
     validate_port,
+)
+from prom_search_hswm.prom9_f1_r8_private_output import (
+    PrivateOutputRefusal,
+    canonical_output_path,
 )
 
 
@@ -59,6 +68,70 @@ _EVENT_TRANSITIONS = {
         "SENT",
     ),
     "AMBIGUOUS_ABORT": ("PREPARED", "SENT", "DELIVERY_AMBIGUOUS"),
+}
+LEDGER_USER_VERSION = 1
+LEDGER_SCHEMA_SQL = """
+CREATE TABLE IF NOT EXISTS call_state (
+    physical_call_id TEXT PRIMARY KEY,
+    intent_sha256 TEXT NOT NULL,
+    intent_bytes BLOB NOT NULL,
+    request_sha256 TEXT NOT NULL,
+    endpoint TEXT NOT NULL,
+    request_bytes BLOB NOT NULL,
+    status TEXT NOT NULL CHECK(status IN (
+        'PREPARED','SENT','DELIVERY_AMBIGUOUS','RAW_COMPLETE',
+        'ENVELOPE_VALID','SCHEMA_VALID','ACCEPTED',
+        'REJECTED_PROTOCOL','AMBIGUOUS_ABORT'
+    )),
+    response_status INTEGER,
+    response_headers BLOB,
+    response_body BLOB,
+    response_sha256 TEXT,
+    model_response BLOB,
+    model_response_sha256 TEXT,
+    call_receipt BLOB,
+    call_receipt_sha256 TEXT,
+    terminal_code TEXT
+);
+CREATE TABLE IF NOT EXISTS attempt_events (
+    sequence INTEGER PRIMARY KEY,
+    physical_call_id TEXT NOT NULL,
+    event_type TEXT NOT NULL,
+    event_bytes BLOB NOT NULL,
+    previous_event_sha256 TEXT NOT NULL,
+    event_sha256 TEXT NOT NULL,
+    FOREIGN KEY (physical_call_id) REFERENCES call_state(physical_call_id)
+);
+CREATE TABLE IF NOT EXISTS item_runs (
+    run_id TEXT NOT NULL,
+    arm_id TEXT NOT NULL,
+    item_id TEXT NOT NULL,
+    run_receipt_sha256 TEXT NOT NULL,
+    item_run_bytes BLOB NOT NULL,
+    PRIMARY KEY (run_id,arm_id,item_id)
+);
+"""
+_INTENT_FIELDS = {
+    "schema_version",
+    "spool_route",
+    "call",
+    "request_sha256",
+    "output_schema_sha256",
+}
+_MODEL_CALL_FIELDS = {
+    "physical_call_id",
+    "run_id",
+    "arm_id",
+    "item_id",
+    "call_index",
+    "function_id",
+    "model",
+    "model_revision",
+    "system_prompt",
+    "input_type",
+    "input_payload",
+    "output_type",
+    "max_output_tokens",
 }
 
 
@@ -160,72 +233,114 @@ def _model_response_from_value(value: object) -> ModelResponseV1:
         raise DurableLedgerIntegrityError("stored model response fields drifted") from error
 
 
+def _logical_call_slot(
+    intent_bytes: bytes,
+    *,
+    expected_physical_call_id: str,
+    label: str,
+) -> tuple[str, str, str, int]:
+    """Strictly recover the one logical execution slot bound by an intent."""
+
+    value = _strict_json(intent_bytes, label)
+    if (
+        not isinstance(value, dict)
+        or set(value) != _INTENT_FIELDS
+        or value.get("schema_version") != DURABLE_CALL_SCHEMA
+        or not isinstance(value.get("call"), dict)
+        or set(value["call"]) != _MODEL_CALL_FIELDS
+    ):
+        raise DurableLedgerIntegrityError(f"{label} schema drifted")
+    call = value["call"]
+    physical_call_id = call.get("physical_call_id")
+    if (
+        physical_call_id != expected_physical_call_id
+        or not isinstance(physical_call_id, str)
+        or _SHA256.fullmatch(physical_call_id) is None
+    ):
+        raise DurableLedgerIntegrityError(f"{label} physical identity drifted")
+    logical_values = (call.get("run_id"), call.get("arm_id"), call.get("item_id"))
+    if any(not isinstance(item, str) or not item for item in logical_values):
+        raise DurableLedgerIntegrityError(f"{label} logical identity drifted")
+    call_index = call.get("call_index")
+    if isinstance(call_index, bool) or not isinstance(call_index, int) or call_index < 1:
+        raise DurableLedgerIntegrityError(f"{label} call index drifted")
+    return (*logical_values, call_index)
+
+
 class SQLiteF1CallLedger:
     """Append-audited projection store for calls and completed item-arms."""
 
     def __init__(self, path: str | Path) -> None:
-        self.path = Path(path)
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        existed = self.path.exists()
+        try:
+            self.path = canonical_output_path(Path(path))
+        except PrivateOutputRefusal as error:
+            raise DurableLedgerIntegrityError(
+                "F1 ledger path is not canonical"
+            ) from error
+        try:
+            self.path.lstat()
+            existed = True
+        except FileNotFoundError:
+            existed = False
+        except OSError as error:
+            raise DurableLedgerIntegrityError("cannot stat F1 ledger path") from error
+        if not existed:
+            descriptor = -1
+            try:
+                descriptor = os.open(
+                    self.path,
+                    os.O_WRONLY
+                    | os.O_CREAT
+                    | os.O_EXCL
+                    | getattr(os, "O_CLOEXEC", 0)
+                    | getattr(os, "O_NOFOLLOW", 0),
+                    0o600,
+                )
+                os.fchmod(descriptor, 0o600)
+                os.fsync(descriptor)
+            except OSError as error:
+                raise DurableLedgerIntegrityError(
+                    "cannot create private F1 ledger"
+                ) from error
+            finally:
+                if descriptor >= 0:
+                    os.close(descriptor)
+            _fsync_parent(self.path)
+        try:
+            validate_private_sqlite_family(self.path, "F1 call ledger")
+        except SpoolIntegrityError as error:
+            raise DurableLedgerIntegrityError(
+                "F1 call ledger is not owner-private"
+            ) from error
         self._lock = threading.RLock()
         self._connection = sqlite3.connect(
             str(self.path), isolation_level=None, timeout=10.0, check_same_thread=False
         )
-        self._connection.row_factory = sqlite3.Row
-        self._connection.execute("PRAGMA busy_timeout=10000")
-        self._connection.execute("PRAGMA journal_mode=WAL")
-        self._connection.execute("PRAGMA synchronous=FULL")
-        self._connection.execute("PRAGMA foreign_keys=ON")
-        version = int(self._connection.execute("PRAGMA user_version").fetchone()[0])
-        if version not in (0, 1):
-            raise DurableLedgerIntegrityError(f"unsupported F1 ledger schema version {version}")
-        self._connection.executescript(
-            """
-            CREATE TABLE IF NOT EXISTS call_state (
-                physical_call_id TEXT PRIMARY KEY,
-                intent_sha256 TEXT NOT NULL,
-                intent_bytes BLOB NOT NULL,
-                request_sha256 TEXT NOT NULL,
-                endpoint TEXT NOT NULL,
-                request_bytes BLOB NOT NULL,
-                status TEXT NOT NULL CHECK(status IN (
-                    'PREPARED','SENT','DELIVERY_AMBIGUOUS','RAW_COMPLETE',
-                    'ENVELOPE_VALID','SCHEMA_VALID','ACCEPTED',
-                    'REJECTED_PROTOCOL','AMBIGUOUS_ABORT'
-                )),
-                response_status INTEGER,
-                response_headers BLOB,
-                response_body BLOB,
-                response_sha256 TEXT,
-                model_response BLOB,
-                model_response_sha256 TEXT,
-                call_receipt BLOB,
-                call_receipt_sha256 TEXT,
-                terminal_code TEXT
-            );
-            CREATE TABLE IF NOT EXISTS attempt_events (
-                sequence INTEGER PRIMARY KEY,
-                physical_call_id TEXT NOT NULL,
-                event_type TEXT NOT NULL,
-                event_bytes BLOB NOT NULL,
-                previous_event_sha256 TEXT NOT NULL,
-                event_sha256 TEXT NOT NULL,
-                FOREIGN KEY (physical_call_id) REFERENCES call_state(physical_call_id)
-            );
-            CREATE TABLE IF NOT EXISTS item_runs (
-                run_id TEXT NOT NULL,
-                arm_id TEXT NOT NULL,
-                item_id TEXT NOT NULL,
-                run_receipt_sha256 TEXT NOT NULL,
-                item_run_bytes BLOB NOT NULL,
-                PRIMARY KEY (run_id,arm_id,item_id)
-            );
-            """
-        )
-        self._connection.execute("PRAGMA user_version=1")
+        try:
+            self._connection.row_factory = sqlite3.Row
+            self._connection.execute("PRAGMA busy_timeout=10000")
+            self._connection.execute("PRAGMA journal_mode=WAL")
+            self._connection.execute("PRAGMA synchronous=FULL")
+            self._connection.execute("PRAGMA foreign_keys=ON")
+            version = int(self._connection.execute("PRAGMA user_version").fetchone()[0])
+            if version not in (0, 1):
+                raise DurableLedgerIntegrityError(
+                    f"unsupported F1 ledger schema version {version}"
+                )
+            self._connection.executescript(LEDGER_SCHEMA_SQL)
+            self._connection.execute(f"PRAGMA user_version={LEDGER_USER_VERSION}")
+            try:
+                validate_private_sqlite_family(self.path, "F1 call ledger")
+            except SpoolIntegrityError as error:
+                raise DurableLedgerIntegrityError(
+                    "F1 call ledger is not owner-private"
+                ) from error
+            self.verify_event_chain()
+        except BaseException:
+            self._connection.close()
+            raise
         if not existed:
             _fsync_parent(self.path)
-        self.verify_event_chain()
 
     @property
     def journal_mode(self) -> str:
@@ -243,6 +358,11 @@ class SQLiteF1CallLedger:
         intent_value = _strict_json(intent_bytes, "stored F1 intent")
         if not isinstance(intent_value, dict) or _canonical_bytes(intent_value) != intent_bytes:
             raise DurableLedgerIntegrityError("stored F1 intent is not canonical")
+        _logical_call_slot(
+            intent_bytes,
+            expected_physical_call_id=str(row["physical_call_id"]),
+            label="stored F1 intent",
+        )
         request_bytes = bytes(row["request_bytes"])
         if _sha256_bytes(request_bytes) != row["request_sha256"]:
             raise DurableLedgerIntegrityError("stored F1 request bytes drifted")
@@ -432,18 +552,37 @@ class SQLiteF1CallLedger:
         _require_sha256(intent_sha256, "intent_sha256")
         if _sha256_bytes(intent_bytes) != intent_sha256:
             raise DurableTransportError("intent_sha256 does not match intent bytes")
+        intent_value = _strict_json(intent_bytes, "new F1 intent")
+        if not isinstance(intent_value, dict) or _canonical_bytes(intent_value) != intent_bytes:
+            raise DurableTransportError("new F1 intent is not canonical")
+        logical_slot = _logical_call_slot(
+            intent_bytes,
+            expected_physical_call_id=physical_call_id,
+            label="new F1 intent",
+        )
         _require_sha256(request_sha256, "request_sha256")
         if _sha256_bytes(request_bytes) != request_sha256:
             raise DurableTransportError("request_sha256 does not match request bytes")
         with self._lock:
             try:
                 self._connection.execute("BEGIN IMMEDIATE")
-                row = self._connection.execute(
-                    "SELECT * FROM call_state WHERE physical_call_id=?",
-                    (physical_call_id,),
-                ).fetchone()
+                row = None
+                for existing in self._connection.execute(
+                    "SELECT * FROM call_state ORDER BY physical_call_id"
+                ).fetchall():
+                    self._verify_call_row(existing)
+                    existing_slot = _logical_call_slot(
+                        bytes(existing["intent_bytes"]),
+                        expected_physical_call_id=str(existing["physical_call_id"]),
+                        label="stored F1 intent",
+                    )
+                    if str(existing["physical_call_id"]) == physical_call_id:
+                        row = existing
+                    elif existing_slot == logical_slot:
+                        raise DurableIntentConflict(
+                            "logical call slot already has a different physical_call_id"
+                        )
                 if row is not None:
-                    self._verify_call_row(row)
                     if (
                         row["intent_sha256"] != intent_sha256
                         or bytes(row["intent_bytes"]) != intent_bytes
@@ -551,6 +690,99 @@ class SQLiteF1CallLedger:
             "SENT",
             {"delivery_ordinal": delivery_ordinal, "same_inference_identity": True},
         )
+
+    def reserve_next_delivery(
+        self, physical_call_id: str, *, max_delivery_attempts: int
+    ) -> int | None:
+        """Persist the next lifetime delivery ordinal, or exhaust atomically."""
+
+        if (
+            isinstance(max_delivery_attempts, bool)
+            or not isinstance(max_delivery_attempts, int)
+            or max_delivery_attempts < 1
+        ):
+            raise DurableTransportError("max_delivery_attempts must be positive")
+        with self._lock:
+            try:
+                self._connection.execute("BEGIN IMMEDIATE")
+                self.verify_event_chain()
+                row = self._connection.execute(
+                    "SELECT * FROM call_state WHERE physical_call_id=?",
+                    (physical_call_id,),
+                ).fetchone()
+                if row is None:
+                    raise DurableLedgerIntegrityError(
+                        "delivery reservation target is absent"
+                    )
+                self._verify_call_row(row)
+                current = str(row["status"])
+                if current not in _EVENT_TRANSITIONS["SENT"]:
+                    raise DurableLedgerIntegrityError(
+                        f"invalid F1 delivery reservation from {current}"
+                    )
+                sent_rows = self._connection.execute(
+                    """
+                    SELECT * FROM attempt_events
+                    WHERE physical_call_id=? AND event_type='SENT'
+                    ORDER BY sequence
+                    """,
+                    (physical_call_id,),
+                ).fetchall()
+                for expected_ordinal, event_row in enumerate(sent_rows, start=1):
+                    raw = bytes(event_row["event_bytes"])
+                    value = _strict_json(raw, "stored F1 SENT event")
+                    detail = value.get("detail") if isinstance(value, dict) else None
+                    if (
+                        not isinstance(value, dict)
+                        or _canonical_bytes(value) != raw
+                        or _sha256_bytes(raw) != event_row["event_sha256"]
+                        or value.get("physical_call_id") != physical_call_id
+                        or value.get("event_type") != "SENT"
+                        or not isinstance(detail, dict)
+                        or set(detail)
+                        != {"delivery_ordinal", "same_inference_identity"}
+                        or detail.get("delivery_ordinal") != expected_ordinal
+                        or detail.get("same_inference_identity") is not True
+                    ):
+                        raise DurableLedgerIntegrityError(
+                            "stored F1 delivery ordinals drifted"
+                        )
+                used = len(sent_rows)
+                if used > max_delivery_attempts:
+                    raise DurableLedgerIntegrityError(
+                        "stored F1 deliveries exceed the configured lifetime budget"
+                    )
+                if used == max_delivery_attempts:
+                    code = "SPOOL_RECONCILIATION_EXHAUSTED"
+                    self._connection.execute(
+                        "UPDATE call_state SET status='AMBIGUOUS_ABORT', terminal_code=? "
+                        "WHERE physical_call_id=?",
+                        (code, physical_call_id),
+                    )
+                    self._append_event_tx(
+                        physical_call_id, "AMBIGUOUS_ABORT", {"code": code}
+                    )
+                    self._connection.execute("COMMIT")
+                    return None
+                ordinal = used + 1
+                self._connection.execute(
+                    "UPDATE call_state SET status='SENT' WHERE physical_call_id=?",
+                    (physical_call_id,),
+                )
+                self._append_event_tx(
+                    physical_call_id,
+                    "SENT",
+                    {
+                        "delivery_ordinal": ordinal,
+                        "same_inference_identity": True,
+                    },
+                )
+                self._connection.execute("COMMIT")
+                return ordinal
+            except BaseException:
+                if self._connection.in_transaction:
+                    self._connection.execute("ROLLBACK")
+                raise
 
     def mark_delivery_ambiguous(
         self, physical_call_id: str, delivery_ordinal: int, error_class: str
@@ -803,8 +1035,19 @@ class SQLiteF1CallLedger:
             statuses: dict[str, int] = {}
             accepted = []
             spool_bindings = []
+            logical_slots: set[tuple[str, str, str, int]] = set()
             for row in rows:
                 self._verify_accepted_row_binding(row)
+                logical_slot = _logical_call_slot(
+                    bytes(row["intent_bytes"]),
+                    expected_physical_call_id=str(row["physical_call_id"]),
+                    label="stored F1 intent",
+                )
+                if logical_slot in logical_slots:
+                    raise DurableLedgerIntegrityError(
+                        "F1 ledger repeats a logical call slot"
+                    )
+                logical_slots.add(logical_slot)
                 status = str(row["status"])
                 last_event = self._connection.execute(
                     """
@@ -1162,9 +1405,15 @@ class DurableSpoolJSONPort:
                 )
             headers["Authorization"] = f"Bearer {spool_token}"
 
-        last_error: BaseException | None = None
-        for ordinal in range(1, self.max_delivery_attempts + 1):
-            self.ledger.mark_sent(call.physical_call_id, ordinal)
+        while True:
+            ordinal = self.ledger.reserve_next_delivery(
+                call.physical_call_id,
+                max_delivery_attempts=self.max_delivery_attempts,
+            )
+            if ordinal is None:
+                raise AmbiguousModelOutcome(
+                    "result-spool reconciliation lifetime budget was already exhausted"
+                )
             self._fault("after_sent", call)
             request = urllib_request.Request(
                 route, data=request_bytes, headers=headers, method="PUT"
@@ -1180,7 +1429,6 @@ class DurableSpoolJSONPort:
                 OSError,
                 http.client.IncompleteRead,
             ) as error:
-                last_error = error
                 self.ledger.mark_delivery_ambiguous(
                     call.physical_call_id, ordinal, type(error).__name__
                 )
@@ -1238,7 +1486,6 @@ class DurableSpoolJSONPort:
             self.ledger.store_raw(call.physical_call_id, response)
             self._fault("after_raw", call)
             return self._parse_durable_raw(call)
-        raise AmbiguousModelOutcome(f"unreachable delivery exhaustion: {last_error}")
 
     def accept_call_receipt(self, receipt: CallReceiptV1) -> None:
         self.ledger.accept_call_receipt(receipt)

@@ -295,7 +295,18 @@ def _verify_incident_component_preimage(
             "aborted-attempt exposure does not match exactly one development component"
         )
 
-    accepted_calls = incident_receipt.get("accepted_upstream_calls")
+    observations = incident_receipt.get("call_observations")
+    accepted_calls = (
+        [
+            call
+            for call in observations
+            if isinstance(call, Mapping)
+            and call.get("raw_attempt_state") == "ACCEPTED"
+            and call.get("spool_snapshot_state") == "COMPLETE"
+        ]
+        if isinstance(observations, list)
+        else []
+    )
     if (
         not isinstance(accepted_calls, list)
         or len(accepted_calls) != 1

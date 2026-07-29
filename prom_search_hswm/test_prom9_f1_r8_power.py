@@ -15,6 +15,7 @@ from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
 from prom_search_hswm.prom9_f1_prior_exposure import (
     PriorExposureRefusal,
     SCHEMA as PRIOR_SCHEMA,
+    merge_exposure_boundaries,
 )
 from prom_search_hswm.prom9_f1_r8_environment import R8_DEPENDENCY_NAMES
 from prom_search_hswm.prom9_f1_r8_power import (
@@ -48,7 +49,7 @@ from prom_search_hswm.prom9_f1_r8_source import (
 SENTINEL = "PRIVATE_SENTINEL_ANSWER"
 REPO_ROOT = Path(__file__).resolve().parents[1]
 INCIDENT_RECEIPT_PATH = (
-    REPO_ROOT / "receipts/hswm_f1_r8_v8_aborted_exposure.v1.json"
+    REPO_ROOT / "receipts/hswm_f1_r8_v8_aborted_exposure.v2.json"
 )
 _JUDGE_RELATIVE_PATH = Path(
     "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
@@ -83,6 +84,19 @@ JUDGE_PATH = SYMPOSIUM_ROOT / _JUDGE_RELATIVE_PATH
 
 def _incident() -> dict[str, object]:
     return json.loads(INCIDENT_RECEIPT_PATH.read_text(encoding="utf-8"))
+
+
+def _accepted_incident_call(incident: Mapping[str, object]) -> dict[str, object]:
+    observations = incident.get("call_observations")
+    accepted = [
+        call
+        for call in observations
+        if isinstance(call, dict)
+        and call.get("raw_attempt_state") == "ACCEPTED"
+        and call.get("spool_snapshot_state") == "COMPLETE"
+    ] if isinstance(observations, list) else []
+    assert len(accepted) == 1
+    return accepted[0]
 
 
 _INCIDENT_AGGREGATE = _incident()["aggregate"]
@@ -415,7 +429,7 @@ def test_incident_component_is_excluded_and_replacement_is_selected(
         ),
     )
     incident_aggregate = incident["aggregate"]
-    accepted_call = incident["accepted_upstream_calls"][0]
+    accepted_call = _accepted_incident_call(incident)
     assert [
         item["dataset_row_index"]
         for item in projected_items
@@ -488,7 +502,7 @@ def test_missing_tampered_and_resigned_incident_are_refused(
     resigned["aborted_attempt_exposure_receipt_sha256"] = canonical_sha256(
         unsigned
     )
-    with pytest.raises(PriorExposureRefusal, match="run identity"):
+    with pytest.raises(PriorExposureRefusal, match="call observation drifted"):
         replay_selection_receipt(
             selection,
             prior_receipt=_prior(),
@@ -504,7 +518,7 @@ def test_incident_must_reproduce_one_candidate_component_even_if_preverified(
     prior = _prior()
     wrong = _incident()
     wrong_item = "re-signed-but-not-in-candidate-pages"
-    wrong["accepted_upstream_calls"][0]["item_id"] = wrong_item
+    _accepted_incident_call(wrong)["item_id"] = wrong_item
     wrong["aggregate"]["prior_item_ids"] = [wrong_item]
     wrong["aggregate"]["item_root_sha256"] = canonical_sha256([wrong_item])
     _allow_resigned_incident_for_preimage_test(monkeypatch, wrong)
@@ -523,7 +537,7 @@ def test_resigned_incident_row_index_must_match_candidate_preimage(
 ) -> None:
     development, confirmatory = _pages(tmp_path)
     wrong = _incident()
-    accepted_call = wrong["accepted_upstream_calls"][0]
+    accepted_call = _accepted_incident_call(wrong)
     assert accepted_call["dataset_row_index"] == 124
     accepted_call["dataset_row_index"] = 125
     _allow_resigned_incident_for_preimage_test(monkeypatch, wrong)
@@ -585,12 +599,15 @@ def test_select_cli_requires_public_incident_and_separate_gold_output(
     prior_path = tmp_path / "prior.json"
     prior_path.write_text(json.dumps(_prior()), encoding="utf-8")
     prior_path.chmod(0o600)
+    incident_path = tmp_path / "incident.json"
+    incident_path.write_text(json.dumps(_incident()), encoding="utf-8")
+    incident_path.chmod(0o600)
     public_path = tmp_path / "selection.json"
     gold_source_path = tmp_path / "gold-source.json"
     command = [
         "select",
         "--prior-exposure-receipt", str(prior_path),
-        "--aborted-attempt-exposure-receipt", str(INCIDENT_RECEIPT_PATH),
+        "--aborted-attempt-exposure-receipt", str(incident_path),
     ]
     for offset, path in development.items():
         command.extend(["--development-page", f"{offset}:{path}"])
@@ -608,7 +625,7 @@ def test_select_cli_requires_public_incident_and_separate_gold_output(
         main(missing_incident)
     assert "--aborted-attempt-exposure-receipt" in capsys.readouterr().err
 
-    assert os.stat(INCIDENT_RECEIPT_PATH).st_mode & 0o077 == 0o044
+    assert os.stat(incident_path).st_mode & 0o077 == 0
     assert main(command) == 0
     captured = capsys.readouterr()
     assert SENTINEL not in captured.out + captured.err
@@ -776,6 +793,7 @@ def test_power_builder_success_rederives_full_embedded_development_evidence(
         for name in R8_DEPENDENCY_NAMES
     }
     dependency_files["judge_core"] = {"sha256": judge_file_sha}
+    exposure_union = merge_exposure_boundaries(prior, incident)
     environment = {
         "labels": {
             "spool_endpoint": "https://spool.invalid",
@@ -825,6 +843,11 @@ def test_power_builder_success_rederives_full_embedded_development_evidence(
         "deployment_receipt_sha256": deployment_sha,
         "deployment_id": f"hswm:model_deployment:v2:{deployment_sha}",
         "served_model": manifest["model"],
+        "forbidden_prior_item_ids": exposure_union["item_ids"],
+        "forbidden_prior_source_entity_ids": exposure_union[
+            "source_entity_ids"
+        ],
+        "forbidden_prior_component_ids": exposure_union["component_ids"],
         "execution_policy": {"endpoint": "https://spool.invalid", "max_workers": 1},
     }
     execution_lock = {

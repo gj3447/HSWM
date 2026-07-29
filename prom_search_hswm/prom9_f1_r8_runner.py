@@ -80,8 +80,18 @@ from prom_search_hswm.prom9_f1_r8_private_output import (
     canonical_output_path,
     reserve_private_outputs,
 )
+from prom_search_hswm.prom9_f1_r8_transport_audit import (
+    FrozenSQLiteReadOnly,
+    RESUME_PREFIX_SCHEMA,
+    TransportAuditRefusal,
+    exact_schema_readback,
+    export_resume_prefix,
+    open_frozen_sqlite_read_only,
+    private_database_identity,
+)
 from prom_search_hswm.prom9_f1_prior_exposure import (
     verify_aborted_attempt_exposure_receipt,
+    verify_forbidden_exposure_union,
 )
 from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
 from prom_search_hswm.prom_f1_function_network import (
@@ -128,26 +138,6 @@ _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _GIT_COMMIT = re.compile(r"^[0-9a-f]{40}$")
 REQUIRED_DEPENDENCY_FILES = R8_DEPENDENCY_NAMES
 MANIFEST_PREREGISTRATION_UNFROZEN = "0" * 64
-_ATTEMPT_COLUMNS = {
-    "call_state": [
-        "physical_call_id", "intent_sha256", "intent_bytes", "request_sha256",
-        "endpoint", "request_bytes", "status", "response_status", "response_headers",
-        "response_body", "response_sha256", "model_response", "model_response_sha256",
-        "call_receipt", "call_receipt_sha256", "terminal_code",
-    ],
-    "item_runs": ["run_id", "arm_id", "item_id", "run_receipt_sha256", "item_run_bytes"],
-    "attempt_events": [
-        "sequence", "physical_call_id", "event_type", "event_bytes",
-        "previous_event_sha256", "event_sha256",
-    ],
-}
-_SPOOL_COLUMNS = {
-    "spool_calls": [
-        "physical_call_id", "intent_sha256", "request_sha256", "request_bytes",
-        "status", "response_status", "response_headers", "response_body",
-        "response_sha256", "error_class",
-    ]
-}
 _DEVELOPMENT_LOCK_FIELDS = {
     "schema_version", "purpose", "run_id", "mode", "manifest_sha256",
     "preregistration_artifact_sha256", "selection_receipt_sha256",
@@ -212,6 +202,19 @@ _SPOOL_PREFLIGHT_FIELDS = {
     "endpoint", "upstream_endpoint", "deployment_receipt_sha256",
     "deployment_id", "served_model", "model_revision", "endpoint_identity",
     "preflight_sha256",
+}
+_RESUME_PREFIX_FIELDS = {
+    "schema_version", "run_id", "db_genesis_sha256", "attempt_integrity",
+    "spool_integrity", "attempt_db_identity", "spool_db_identity",
+    "ordered_job_root_sha256", "job_count", "max_workers",
+    "frontier_batch", "call_positions", "call_count", "item_run_count",
+    "attempt_event_count", "spool_call_count", "event_chain_tip_sha256",
+    "attempt_event_root_sha256", "attempt_live_audit", "spool_live_audit",
+    "zero_count_genesis", "resume_prefix_sha256",
+}
+_RESUME_CALL_POSITION_FIELDS = {
+    "job_ordinal", "item_id", "arm_id", "call_indices",
+    "item_run_committed",
 }
 _TRANSPORT_BINDING_FIELDS = {
     "schema_version", "run_id", "db_genesis_sha256", "attempt_integrity",
@@ -680,21 +683,28 @@ def _validate_transport_genesis_receipt(
     declared = _self_hash(value, "genesis_sha256", "transport genesis")
     if expected_sha256 is not None and declared != expected_sha256:
         raise R8RunnerRefusal("transport genesis differs from its frozen binding")
+    count_fields = (
+        "call_count",
+        "item_run_count",
+        "attempt_event_count",
+        "spool_call_count",
+    )
     if (
         value.get("attempt_integrity") != "ok"
         or value.get("spool_integrity") != "ok"
+        or not isinstance(value.get("attempt_journal_mode"), str)
+        or not isinstance(value.get("spool_journal_mode"), str)
         or str(value.get("attempt_journal_mode")).casefold() != "wal"
         or str(value.get("spool_journal_mode")).casefold() != "wal"
-        or str(value.get("attempt_audit_connection_synchronous")) != "2"
-        or str(value.get("spool_audit_connection_synchronous")) != "2"
+        or value.get("attempt_audit_connection_synchronous") != "2"
+        or value.get("spool_audit_connection_synchronous") != "2"
+        or type(value.get("attempt_user_version")) is not int
+        or type(value.get("spool_user_version")) is not int
         or value.get("attempt_user_version") != 1
         or value.get("spool_user_version") != 1
         or any(
-            value.get(field) != 0
-            for field in (
-                "call_count", "item_run_count", "attempt_event_count",
-                "spool_call_count",
-            )
+            type(value.get(field)) is not int or value.get(field) != 0
+            for field in count_fields
         )
     ):
         raise R8RunnerRefusal(
@@ -754,20 +764,193 @@ def _validate_live_attempt_audit(
     return dict(value)
 
 
-def _validate_spool_audit(value: object) -> dict[str, object]:
+def _validate_spool_audit(
+    value: object, *, expected_calls: int = 0
+) -> dict[str, object]:
     if not isinstance(value, Mapping) or set(value) != _SPOOL_AUDIT_FIELDS:
         raise R8RunnerRefusal("result-spool audit shape drifted")
     _self_hash(value, "audit_sha256", "result-spool audit")
+    _nonnegative(expected_calls, "expected result-spool calls")
+    expected_status = {} if expected_calls == 0 else {"COMPLETE": expected_calls}
     if (
         value.get("schema_version") != SPOOL_SCHEMA
         or str(value.get("journal_mode")).casefold() != "wal"
         or value.get("synchronous") != 2
-        or value.get("call_count") != 0
-        or value.get("status_counts") != {}
-        or value.get("completed_root_sha256") != canonical_sha256([])
+        or value.get("call_count") != expected_calls
+        or value.get("status_counts") != expected_status
     ):
-        raise R8RunnerRefusal("result-spool preflight audit is not empty WAL/FULL")
+        raise R8RunnerRefusal("result-spool live audit durability or counts drifted")
+    _sha(value.get("completed_root_sha256"), "result-spool completed root")
+    if (
+        expected_calls == 0
+        and value.get("completed_root_sha256") != canonical_sha256([])
+    ):
+        raise R8RunnerRefusal("result-spool preflight audit is not empty")
     return dict(value)
+
+
+def _resume_job_values(
+    items: Sequence[FunctionNetworkItemV1],
+) -> list[tuple[str, str]]:
+    return [
+        (item.item_id, arm)
+        for item in sorted(items, key=lambda value: value.item_id)
+        for arm in F1_ARMS
+    ]
+
+
+def _validate_resume_prefix(
+    value: object,
+    *,
+    run_id: str,
+    db_genesis_sha256: str,
+    ordered_jobs: Sequence[tuple[str, str]],
+    max_workers: int,
+) -> dict[str, object]:
+    if (
+        not isinstance(value, Mapping)
+        or set(value) != _RESUME_PREFIX_FIELDS
+        or value.get("schema_version") != RESUME_PREFIX_SCHEMA
+        or value.get("run_id") != run_id
+    ):
+        raise R8RunnerRefusal("resume prefix schema or run identity drifted")
+    _self_hash(value, "resume_prefix_sha256", "resume prefix")
+    if value.get("db_genesis_sha256") != db_genesis_sha256:
+        raise R8RunnerRefusal("resume prefix differs from frozen DB genesis")
+    if value.get("attempt_integrity") != "ok" or value.get("spool_integrity") != "ok":
+        raise R8RunnerRefusal("resume prefix database integrity drifted")
+    _database_identity_value(value.get("attempt_db_identity"), "attempt ledger")
+    _database_identity_value(value.get("spool_db_identity"), "result spool")
+    jobs = list(ordered_jobs)
+    if not jobs or len(set(jobs)) != len(jobs):
+        raise R8RunnerRefusal("canonical resume job universe is invalid")
+    job_values = [
+        {"item_id": item_id, "arm_id": arm_id}
+        for item_id, arm_id in jobs
+    ]
+    if (
+        value.get("job_count") != len(jobs)
+        or value.get("ordered_job_root_sha256") != canonical_sha256(job_values)
+        or value.get("max_workers") != max_workers
+    ):
+        raise R8RunnerRefusal(
+            "resume prefix job universe or worker width differs from the frozen run"
+        )
+    call_count = _nonnegative(value.get("call_count"), "resume call count")
+    item_run_count = _nonnegative(
+        value.get("item_run_count"), "resume item-run count"
+    )
+    event_count = _nonnegative(
+        value.get("attempt_event_count"), "resume event count"
+    )
+    spool_count = _nonnegative(
+        value.get("spool_call_count"), "resume spool count"
+    )
+    if spool_count != call_count:
+        raise R8RunnerRefusal("resume attempt/spool call counts conflict")
+    attempt_audit = _validate_live_attempt_audit(
+        value.get("attempt_live_audit"),
+        expected_calls=call_count,
+        expected_item_runs=item_run_count,
+    )
+    spool_audit = _validate_spool_audit(
+        value.get("spool_live_audit"), expected_calls=call_count
+    )
+    if (
+        value.get("event_chain_tip_sha256")
+        != attempt_audit["event_chain_tip_sha256"]
+    ):
+        raise R8RunnerRefusal("resume event tip differs from live attempt audit")
+    _sha(value.get("attempt_event_root_sha256"), "resume event root")
+    positions = value.get("call_positions")
+    if not isinstance(positions, list):
+        raise R8RunnerRefusal("resume call positions are absent")
+    job_ordinal = {job: ordinal for ordinal, job in enumerate(jobs)}
+    seen: set[tuple[str, str]] = set()
+    total_calls = 0
+    committed_runs = 0
+    observed_ordinals: list[int] = []
+    for position in positions:
+        if not isinstance(position, Mapping) or set(position) != _RESUME_CALL_POSITION_FIELDS:
+            raise R8RunnerRefusal("resume call-position shape drifted")
+        item_id = position.get("item_id")
+        arm_id = position.get("arm_id")
+        job = (item_id, arm_id)
+        ordinal = position.get("job_ordinal")
+        indices = position.get("call_indices")
+        committed = position.get("item_run_committed")
+        if (
+            not isinstance(item_id, str)
+            or not isinstance(arm_id, str)
+            or job not in job_ordinal
+            or job in seen
+            or type(ordinal) is not int
+            or ordinal != job_ordinal[job]
+            or not isinstance(indices, list)
+            or any(type(index) is not int for index in indices)
+            or indices != list(range(1, len(indices) + 1))
+            or not 1 <= len(indices) <= 3
+            or not isinstance(committed, bool)
+            or (committed and indices != [1, 2, 3])
+        ):
+            raise R8RunnerRefusal("resume call-position identity drifted")
+        seen.add(job)
+        observed_ordinals.append(ordinal)
+        total_calls += len(indices)
+        committed_runs += int(committed)
+    frontier = max(observed_ordinals) // max_workers if observed_ordinals else -1
+    if observed_ordinals != sorted(observed_ordinals) or value.get("frontier_batch") != frontier:
+        raise R8RunnerRefusal("resume scheduler frontier drifted")
+    for ordinal in range(max(0, frontier * max_workers)):
+        prior = next(
+            (
+                position
+                for position in positions
+                if position.get("job_ordinal") == ordinal
+            ),
+            None,
+        )
+        if (
+            not isinstance(prior, Mapping)
+            or prior.get("call_indices") != [1, 2, 3]
+            or prior.get("item_run_committed") is not True
+        ):
+            raise R8RunnerRefusal("resume scheduler batch order drifted")
+    if (
+        total_calls != call_count
+        or committed_runs != item_run_count
+        or (call_count > 0 and event_count < call_count * 6)
+    ):
+        raise R8RunnerRefusal("resume call-position coverage drifted")
+    zero = call_count == item_run_count == event_count == spool_count == 0
+    if (
+        value.get("zero_count_genesis") is not zero
+        or (zero and (positions or frontier != -1))
+    ):
+        raise R8RunnerRefusal("resume zero-count identity drifted")
+    del spool_audit
+    return dict(value)
+
+
+def _empty_attempt_audit_from(
+    value: Mapping[str, object],
+) -> dict[str, object]:
+    unsigned = {
+        "schema_version": TRANSPORT_SCHEMA,
+        "journal_mode": value["journal_mode"],
+        "synchronous": value["synchronous"],
+        "event_chain_tip_sha256": _EVENT_GENESIS,
+        "call_count": 0,
+        "status_counts": {},
+        "accepted_call_root_sha256": canonical_sha256([]),
+        "spool_binding_root_sha256": canonical_sha256([]),
+        "item_run_count": 0,
+        "item_run_root_sha256": canonical_sha256([]),
+    }
+    result = {**unsigned, "audit_sha256": canonical_sha256(unsigned)}
+    return _validate_live_attempt_audit(
+        result, expected_calls=0, expected_item_runs=0
+    )
 
 
 def _spool_preflight_database_identity(value: object) -> dict[str, object]:
@@ -777,6 +960,38 @@ def _spool_preflight_database_identity(value: object) -> dict[str, object]:
     if not isinstance(identity, Mapping):
         raise R8RunnerRefusal("result-spool identity shape drifted")
     return _database_identity_value(identity.get("db_identity"), "result spool")
+
+
+def _validate_resume_database_identity_continuity(
+    *,
+    genesis: Mapping[str, object],
+    resume_prefix: Mapping[str, object],
+    spool_identity_preflight: Mapping[str, object] | None = None,
+) -> None:
+    """Bind every restart authority to the same frozen database pair."""
+
+    for field, label in (
+        ("attempt_db_identity", "attempt ledger"),
+        ("spool_db_identity", "result spool"),
+    ):
+        genesis_identity = _database_identity_value(genesis.get(field), label)
+        prefix_identity = _database_identity_value(
+            resume_prefix.get(field), f"resume {label}"
+        )
+        if prefix_identity != genesis_identity:
+            raise R8RunnerRefusal(
+                f"resume {label} identity differs from frozen genesis"
+            )
+    if (
+        spool_identity_preflight is not None
+        and _spool_preflight_database_identity(spool_identity_preflight)
+        != _database_identity_value(
+            genesis.get("spool_db_identity"), "genesis result spool"
+        )
+    ):
+        raise R8RunnerRefusal(
+            "spool identity preflight differs from frozen genesis"
+        )
 
 
 def _validate_spool_identity_preflight(
@@ -1128,6 +1343,7 @@ def _validate_environment_dependency_bundle(
 def _validate_aborted_attempt_exposure_gate(
     value: Mapping[str, object],
     *,
+    prior_exposure_receipt: Mapping[str, object],
     execution_lock: Mapping[str, object],
 ) -> str:
     try:
@@ -1142,6 +1358,14 @@ def _validate_aborted_attempt_exposure_gate(
         raise R8RunnerRefusal(
             "aborted-attempt exposure receipt differs from execution lock"
         )
+    try:
+        verify_forbidden_exposure_union(
+            prior_exposure_receipt, value, execution_lock
+        )
+    except Exception as error:
+        raise R8RunnerRefusal(
+            "execution-lock forbidden exposure union verification failed"
+        ) from error
     return receipt_sha
 
 
@@ -1290,77 +1514,35 @@ def _validate_preregistration_gate(
 
 
 def _database_identity(path: Path, label: str) -> dict[str, object]:
-    resolved = Path(path).resolve()
     try:
-        info = resolved.stat()
-    except OSError as error:
-        raise R8RunnerRefusal(f"cannot stat {label}: {error}") from error
-    if not resolved.is_file():
-        raise R8RunnerRefusal(f"{label} is not a regular file: {resolved}")
-    return {
-        "resolved_path": str(resolved),
-        "st_dev": int(info.st_dev),
-        "st_ino": int(info.st_ino),
-    }
+        return private_database_identity(path, label)
+    except TransportAuditRefusal as error:
+        raise R8RunnerRefusal(str(error)) from error
 
 
-def _read_only_database(path: Path, label: str) -> sqlite3.Connection:
-    resolved = Path(path).resolve()
+def _read_only_database(path: Path, label: str) -> FrozenSQLiteReadOnly:
     try:
-        connection = sqlite3.connect(
-            f"file:{resolved}?mode=ro", uri=True, isolation_level=None
-        )
-        connection.row_factory = sqlite3.Row
-        connection.execute("PRAGMA query_only=ON")
-        # This is deliberately the audit connection setting, not a claim that
-        # a closed writer's connection-scoped synchronous mode was recovered.
-        connection.execute("PRAGMA synchronous=FULL")
-        connection.execute("BEGIN")
-    except sqlite3.Error as error:
-        try:
-            connection.close()
-        except UnboundLocalError:
-            pass
+        return open_frozen_sqlite_read_only(path, label)
+    except TransportAuditRefusal as error:
         raise R8RunnerRefusal(f"cannot open {label} read-only: {error}") from error
-    return connection
 
 
 def _database_schema(
     connection: sqlite3.Connection,
-    expected: Mapping[str, list[str]],
+    authority: str,
     label: str,
 ) -> tuple[int, str]:
-    tables = {
-        str(row[0])
-        for row in connection.execute(
-            "SELECT name FROM sqlite_master "
-            "WHERE type='table' AND name NOT LIKE 'sqlite_%'"
-        )
-    }
-    if tables != set(expected):
-        raise R8RunnerRefusal(f"{label} table set drifted")
-    observed: dict[str, list[str]] = {}
-    for table, columns in expected.items():
-        observed[table] = [
-            str(row[1]) for row in connection.execute(f"PRAGMA table_info({table})")
-        ]
-        if observed[table] != columns:
-            raise R8RunnerRefusal(f"{label} columns drifted for {table}")
-    user_version = int(connection.execute("PRAGMA user_version").fetchone()[0])
-    return user_version, canonical_sha256(
-        {"user_version": user_version, "tables": observed}
-    )
+    try:
+        return exact_schema_readback(connection, authority, label)
+    except TransportAuditRefusal as error:
+        raise R8RunnerRefusal(str(error)) from error
 
 
 def _private_sqlite_path(path: Path, label: str) -> Path:
     try:
-        target = canonical_output_path(Path(path))
-        parent_mode = stat.S_IMODE(target.parent.stat().st_mode)
+        return canonical_output_path(Path(path))
     except Exception as error:
         raise R8RunnerRefusal(f"{label} parent is not a canonical directory") from error
-    if parent_mode & 0o022:
-        raise R8RunnerRefusal(f"{label} parent is group/world writable")
-    return target
 
 
 def _fsync_parent(path: Path) -> None:
@@ -1389,7 +1571,12 @@ def _precreate_private_sqlite(path: Path, label: str) -> Path:
     try:
         os.fchmod(descriptor, 0o600)
         info = os.fstat(descriptor)
-        if not stat.S_ISREG(info.st_mode) or stat.S_IMODE(info.st_mode) != 0o600:
+        if (
+            not stat.S_ISREG(info.st_mode)
+            or stat.S_IMODE(info.st_mode) != 0o600
+            or info.st_uid != os.geteuid()
+            or info.st_nlink != 1
+        ):
             raise R8RunnerRefusal(f"{label} reservation is not private")
         os.fsync(descriptor)
     finally:
@@ -1409,24 +1596,32 @@ def _seal_private_sqlite_family(path: Path, label: str) -> None:
             continue
         except OSError as error:
             raise R8RunnerRefusal(f"cannot stat {label} SQLite family") from error
-        if stat.S_ISLNK(before.st_mode) or not stat.S_ISREG(before.st_mode):
-            raise R8RunnerRefusal(f"{label} SQLite family member is unsafe")
+        member_label = f"{label} SQLite family member"
+        try:
+            identity = private_database_identity(member, member_label)
+        except TransportAuditRefusal as error:
+            raise R8RunnerRefusal(str(error)) from error
         flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+        descriptor = -1
         try:
             descriptor = os.open(member, flags)
-            os.fchmod(descriptor, 0o600)
             after = os.fstat(descriptor)
             if (
-                (before.st_dev, before.st_ino) != (after.st_dev, after.st_ino)
+                (identity["st_dev"], identity["st_ino"])
+                != (after.st_dev, after.st_ino)
                 or stat.S_IMODE(after.st_mode) != 0o600
+                or after.st_uid != os.geteuid()
+                or after.st_nlink != 1
             ):
                 raise R8RunnerRefusal(f"{label} SQLite family identity drifted")
             os.fsync(descriptor)
+            if private_database_identity(member, member_label) != identity:
+                raise R8RunnerRefusal(f"{label} SQLite family identity drifted")
+        except OSError as error:
+            raise R8RunnerRefusal(f"cannot open {label} SQLite family") from error
         finally:
-            try:
+            if descriptor >= 0:
                 os.close(descriptor)
-            except UnboundLocalError:
-                pass
     _fsync_parent(target)
 
 
@@ -1464,7 +1659,10 @@ def verify_fresh_transport_genesis(
     run_id: str,
     attempt_db: Path,
     spool_db: Path,
+    require_live_empty: bool = True,
 ) -> str:
+    if not isinstance(require_live_empty, bool):
+        raise R8RunnerRefusal("require_live_empty must be boolean")
     lock_sha = _self_hash(execution_lock, "lock_sha256", "execution lock")
     _sha(lock_sha, "execution lock")
     lock_genesis_sha = execution_lock.get("db_genesis_receipt_sha256")
@@ -1491,10 +1689,10 @@ def verify_fresh_transport_genesis(
         if [str(row[0]) for row in spool.execute("PRAGMA integrity_check")] != ["ok"]:
             raise R8RunnerRefusal("result spool integrity_check failed")
         attempt_version, attempt_schema = _database_schema(
-            attempt, _ATTEMPT_COLUMNS, "attempt ledger"
+            attempt, "attempt", "attempt ledger"
         )
         spool_version, spool_schema = _database_schema(
-            spool, _SPOOL_COLUMNS, "result spool"
+            spool, "spool", "result spool"
         )
         observed = {
             "attempt_integrity": "ok",
@@ -1513,8 +1711,18 @@ def verify_fresh_transport_genesis(
             "spool_audit_connection_synchronous": str(
                 spool.execute("PRAGMA synchronous").fetchone()[0]
             ),
-            "call_count": int(attempt.execute("SELECT COUNT(*) FROM call_state").fetchone()[0]),
-            "item_run_count": int(attempt.execute("SELECT COUNT(*) FROM item_runs").fetchone()[0]),
+        }
+        if any(genesis_receipt.get(key) != value for key, value in observed.items()):
+            raise R8RunnerRefusal(
+                "live transport identity or schema no longer equals frozen genesis"
+            )
+        live_counts = {
+            "call_count": int(
+                attempt.execute("SELECT COUNT(*) FROM call_state").fetchone()[0]
+            ),
+            "item_run_count": int(
+                attempt.execute("SELECT COUNT(*) FROM item_runs").fetchone()[0]
+            ),
             "attempt_event_count": int(
                 attempt.execute("SELECT COUNT(*) FROM attempt_events").fetchone()[0]
             ),
@@ -1522,7 +1730,9 @@ def verify_fresh_transport_genesis(
                 spool.execute("SELECT COUNT(*) FROM spool_calls").fetchone()[0]
             ),
         }
-        if any(genesis_receipt.get(key) != value for key, value in observed.items()):
+        if require_live_empty and any(
+            genesis_receipt.get(key) != value for key, value in live_counts.items()
+        ):
             raise R8RunnerRefusal("live transport pair no longer equals frozen genesis")
     finally:
         attempt.close()
@@ -1559,16 +1769,14 @@ def validate_execution_policy(
         raise R8RunnerRefusal("runtime execution policy differs from the frozen lock")
 
 
-def verify_spool_endpoint_identity(
+def _read_spool_endpoint_identity(
     *,
     endpoint: str,
     spool_db: Path,
     deployment_binding: ModelDeploymentBinding,
     spool_token_env: str,
     timeout_seconds: float,
-    run_id: str,
-    execution_lock_sha256: str,
-    db_genesis_sha256: str,
+    expected_live_audit: Mapping[str, object],
 ) -> dict[str, object]:
     token = os.environ.get(spool_token_env)
     if not token:
@@ -1600,7 +1808,15 @@ def verify_spool_endpoint_identity(
         raise R8RunnerRefusal("result-spool identity shape drifted")
     _self_hash(identity, "identity_sha256", "result-spool identity")
     audit = identity.get("audit")
-    _validate_spool_audit(audit)
+    expected_calls = _nonnegative(
+        expected_live_audit.get("call_count"), "expected result-spool calls"
+    )
+    _validate_spool_audit(audit, expected_calls=expected_calls)
+    _validate_spool_audit(expected_live_audit, expected_calls=expected_calls)
+    if audit != expected_live_audit:
+        raise R8RunnerRefusal(
+            "result-spool endpoint audit differs from the resume prefix"
+        )
     if (
         identity.get("schema_version") != SPOOL_IDENTITY_SCHEMA
         or identity.get("db_identity") != _database_identity(spool_db, "result spool")
@@ -1626,6 +1842,49 @@ def verify_spool_endpoint_identity(
         raise R8RunnerRefusal(
             "endpoint service deployment differs from the frozen lock"
         )
+    return dict(identity)
+
+
+def verify_spool_endpoint_identity(
+    *,
+    endpoint: str,
+    spool_db: Path,
+    deployment_binding: ModelDeploymentBinding,
+    spool_token_env: str,
+    timeout_seconds: float,
+    run_id: str,
+    execution_lock_sha256: str,
+    db_genesis_sha256: str,
+) -> dict[str, object]:
+    empty_audit_unsigned = {
+        "schema_version": SPOOL_SCHEMA,
+        "journal_mode": "wal",
+        "synchronous": 2,
+        "call_count": 0,
+        "status_counts": {},
+        "completed_root_sha256": canonical_sha256([]),
+    }
+    empty_audit = {
+        **empty_audit_unsigned,
+        "audit_sha256": canonical_sha256(empty_audit_unsigned),
+    }
+    identity = _read_spool_endpoint_identity(
+        endpoint=endpoint,
+        spool_db=spool_db,
+        deployment_binding=deployment_binding,
+        spool_token_env=spool_token_env,
+        timeout_seconds=timeout_seconds,
+        expected_live_audit=empty_audit,
+    )
+    expected_deployment = {
+        "upstream_endpoint": deployment_binding.upstream_endpoint,
+        "deployment_receipt_sha256": (
+            deployment_binding.deployment_receipt_sha256
+        ),
+        "deployment_id": deployment_binding.deployment_id,
+        "served_model": deployment_binding.served_model,
+        "model_revision": deployment_binding.model_revision,
+    }
     unsigned = {
         "schema_version": SPOOL_PREFLIGHT_SCHEMA,
         "run_id": run_id,
@@ -1645,6 +1904,27 @@ def verify_spool_endpoint_identity(
         endpoint=endpoint,
     )
     return result
+
+
+def verify_spool_endpoint_resume_identity(
+    *,
+    endpoint: str,
+    spool_db: Path,
+    deployment_binding: ModelDeploymentBinding,
+    spool_token_env: str,
+    timeout_seconds: float,
+    expected_live_audit: Mapping[str, object],
+) -> dict[str, object]:
+    """Verify the live spool service against a previously exported prefix."""
+
+    return _read_spool_endpoint_identity(
+        endpoint=endpoint,
+        spool_db=spool_db,
+        deployment_binding=deployment_binding,
+        spool_token_env=spool_token_env,
+        timeout_seconds=timeout_seconds,
+        expected_live_audit=expected_live_audit,
+    )
 
 
 def _decoded_bytes(value: object, label: str) -> bytes:
@@ -3031,6 +3311,7 @@ def run_suite_v3_draft(
     token_meter: TokenMeter,
     max_workers: int,
     token_envelope_derivation: Mapping[str, object],
+    prior_exposure_receipt: Mapping[str, object],
     aborted_attempt_exposure_receipt: Mapping[str, object],
     environment_dependency_bundle: Mapping[str, object],
     result_contract_path: Path,
@@ -3041,6 +3322,8 @@ def run_suite_v3_draft(
     model_weight_receipt_path: Path,
     python_lock_path: Path,
     spool_identity_preflight: Mapping[str, object],
+    resume_prefix: Mapping[str, object] | None = None,
+    offline_complete_resume: bool = False,
     preregistration_artifact: Mapping[str, object] | None = None,
     preregistration_readback: Mapping[str, object] | None = None,
     anchored_judge_path: Path | None = None,
@@ -3080,14 +3363,37 @@ def run_suite_v3_draft(
     )
     _validate_aborted_attempt_exposure_gate(
         aborted_attempt_exposure_receipt,
+        prior_exposure_receipt=prior_exposure_receipt,
         execution_lock=execution_lock,
     )
+    validated_resume_prefix: dict[str, object] | None = None
+    if resume_prefix is not None:
+        validated_resume_prefix = _validate_resume_prefix(
+            resume_prefix,
+            run_id=str(normalized["run_id"]),
+            db_genesis_sha256=str(
+                execution_lock["db_genesis_receipt_sha256"]
+            ),
+            ordered_jobs=_resume_job_values(items),
+            max_workers=max_workers,
+        )
+    if offline_complete_resume:
+        gates = execution_lock.get("gates")
+        if (
+            validated_resume_prefix is None
+            or not isinstance(gates, Mapping)
+            or validated_resume_prefix.get("call_count")
+            != gates.get("expected_calls")
+        ):
+            raise R8RunnerRefusal(
+                "offline resume requires the exact complete call prefix"
+            )
     deployment_binding = load_model_deployment_binding(
         model_weight_receipt_path,
         upstream_endpoint=str(execution_lock.get("upstream_endpoint", "")),
         served_model=str(normalized["model"]),
         model_revision=str(normalized["model_revision"]),
-        verify_live_process=True,
+        verify_live_process=not offline_complete_resume,
     )
     _validate_deployment_binding(execution_lock, deployment_binding)
     policy = _validate_execution_policy_value(execution_lock.get("execution_policy"))
@@ -3151,15 +3457,29 @@ def run_suite_v3_draft(
     audit = getattr(model_port, "audit", None)
     if not callable(audit):
         raise R8RunnerRefusal("model port does not expose a durable audit")
-    pre_call_audit = _validate_live_attempt_audit(
-        audit(), expected_calls=0, expected_item_runs=0
-    )
-    envelope = envelope_spec(normalized["token_envelope"], token_meter)
     jobs = [
         (item, arm)
         for item in sorted(items, key=lambda item: item.item_id)
         for arm in F1_ARMS
     ]
+    observed_pre_call_audit = audit()
+    if resume_prefix is None:
+        pre_call_audit = _validate_live_attempt_audit(
+            observed_pre_call_audit, expected_calls=0, expected_item_runs=0
+        )
+    else:
+        assert validated_resume_prefix is not None
+        if (
+            observed_pre_call_audit
+            != validated_resume_prefix["attempt_live_audit"]
+        ):
+            raise R8RunnerRefusal(
+                "live attempt ledger differs from the resume prefix"
+            )
+        pre_call_audit = _empty_attempt_audit_from(
+            validated_resume_prefix["attempt_live_audit"]
+        )
+    envelope = envelope_spec(normalized["token_envelope"], token_meter)
 
     def execute(job):
         item, arm = job
@@ -3369,19 +3689,108 @@ def _validate_terminal_transport(
     return roots
 
 
+def verify_suite_draft_without_gold(value: Mapping[str, object]) -> str:
+    if set(value) != _DRAFT_FIELDS or value.get("schema_version") != SUITE_DRAFT_SCHEMA:
+        raise R8RunnerRefusal("suite draft schema drifted")
+    declared = _self_hash(value, "draft_receipt_sha256", "suite draft")
+    rows, gates, policy = _verify_execution_structure(value)
+    _validate_live_attempt_audit(
+        value.get("pre_call_transport_audit"),
+        expected_calls=0,
+        expected_item_runs=0,
+    )
+    live_audit = _validate_live_attempt_audit(
+        value.get("live_transport_audit"),
+        expected_calls=int(gates["expected_calls"]),
+        expected_item_runs=int(gates["expected_item_runs"]),
+    )
+    item_run_bindings = sorted(
+        (
+            {
+                "run_id": str(row.get("run_id")),
+                "arm_id": str(row.get("arm_id")),
+                "item_id": str(row.get("item_id")),
+                "run_receipt_sha256": str(row.get("run_receipt_sha256")),
+            }
+            for row in rows
+        ),
+        key=lambda row: (row["run_id"], row["arm_id"], row["item_id"]),
+    )
+    if live_audit.get("item_run_root_sha256") != canonical_sha256(
+        item_run_bindings
+    ):
+        raise R8RunnerRefusal(
+            "suite draft rows differ from the durable item-run root"
+        )
+    try:
+        binding = ModelDeploymentBinding(
+            upstream_endpoint=str(value.get("upstream_endpoint", "")),
+            deployment_receipt_sha256=str(
+                value.get("deployment_receipt_sha256", "")
+            ),
+            deployment_id=str(value.get("deployment_id", "")),
+            served_model=str(value.get("served_model", "")),
+            model_revision=str(value.get("model_revision", "")),
+        )
+    except Exception as error:
+        raise R8RunnerRefusal("suite draft deployment binding drifted") from error
+    _validate_spool_identity_preflight(
+        value.get("spool_identity_preflight"),
+        run_id=str(value["run_id"]),
+        deployment_binding=binding,
+        execution_lock_sha256=str(value["measurement_lock_sha256"]),
+        db_genesis_sha256=str(value["db_genesis_receipt_sha256"]),
+        endpoint=str(policy["endpoint"]),
+    )
+    if len(rows) != int(gates["expected_item_runs"]):
+        raise R8RunnerRefusal("suite draft item-run coverage drifted")
+    return declared
+
+
+def _verify_committed_draft_resume(
+    draft: Mapping[str, object],
+    *,
+    resume_prefix: Mapping[str, object],
+    spool_identity_preflight: Mapping[str, object],
+    expected_authority: Mapping[str, object],
+) -> str:
+    declared = verify_suite_draft_without_gold(draft)
+    gates = draft["execution_gates"]
+    assert isinstance(gates, Mapping)
+    positions = resume_prefix.get("call_positions")
+    if any(draft.get(key) != expected for key, expected in expected_authority.items()):
+        raise R8RunnerRefusal(
+            "committed suite draft differs from current frozen authority"
+        )
+    if (
+        draft.get("spool_identity_preflight") != spool_identity_preflight
+        or draft.get("live_transport_audit")
+        != resume_prefix.get("attempt_live_audit")
+        or resume_prefix.get("call_count") != gates.get("expected_calls")
+        or resume_prefix.get("item_run_count") != gates.get("expected_item_runs")
+        or not isinstance(positions, list)
+        or len(positions) != gates.get("expected_item_runs")
+        or any(
+            not isinstance(position, Mapping)
+            or position.get("call_indices") != [1, 2, 3]
+            or position.get("item_run_committed") is not True
+            for position in positions
+        )
+    ):
+        raise R8RunnerRefusal(
+            "committed suite draft differs from the full resume prefix"
+        )
+    return declared
+
+
 def finalize_suite_v3(
     draft: Mapping[str, object],
     *,
     transport_bindings: Mapping[str, object],
     genesis_receipt: Mapping[str, object],
 ) -> dict[str, object]:
-    if set(draft) != _DRAFT_FIELDS or draft.get("schema_version") != SUITE_DRAFT_SCHEMA:
-        raise R8RunnerRefusal("suite draft schema drifted")
-    _self_hash(draft, "draft_receipt_sha256", "suite draft")
+    verify_suite_draft_without_gold(draft)
     rows, gates, policy = _verify_execution_structure(draft)
-    _validate_live_attempt_audit(
-        draft.get("pre_call_transport_audit"), expected_calls=0, expected_item_runs=0
-    )
     genesis_sha = _validate_transport_genesis_receipt(
         genesis_receipt,
         run_id=str(draft["run_id"]),
@@ -3488,6 +3897,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         "--token-envelope-derivation-receipt", type=Path, required=True
     )
     run.add_argument("--selection-receipt", type=Path, required=True)
+    run.add_argument("--prior-exposure-receipt", type=Path, required=True)
     run.add_argument(
         "--aborted-attempt-exposure-receipt", type=Path, required=True
     )
@@ -3511,6 +3921,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     run.add_argument("--anchored-judge", type=Path)
     run.add_argument("--spool-token-env", required=True)
     run.add_argument("--spool-identity-receipt", type=Path, required=True)
+    run.add_argument("--reservation-journal", type=Path, required=True)
+    run.add_argument("--resume", action="store_true")
     run.add_argument("--timeout-seconds", type=float, default=180.0)
     run.add_argument("--max-workers", type=int, default=1)
     run.add_argument("--max-delivery-attempts", type=int, default=8)
@@ -3521,6 +3933,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     finalize.add_argument("--transport-bindings", type=Path, required=True)
     finalize.add_argument("--db-genesis-receipt", type=Path, required=True)
     finalize.add_argument("--output", type=Path, required=True)
+    finalize.add_argument("--reservation-journal", type=Path, required=True)
+    finalize.add_argument("--resume", action="store_true")
     verify = subparsers.add_parser("verify")
     verify.add_argument("--suite", type=Path, required=True)
     initialize = subparsers.add_parser("init-transport")
@@ -3560,6 +3974,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             aborted_exposure, _aborted_exposure_file_sha = read_stable_json(
                 args.aborted_attempt_exposure_receipt,
                 "aborted-attempt exposure receipt",
+            )
+            prior_exposure, _prior_exposure_file_sha = read_stable_json(
+                args.prior_exposure_receipt,
+                "prior-exposure receipt",
             )
             derivation_values: dict[str, object] = {"receipt": receipt}
             derivation_file_specs = {
@@ -3601,14 +4019,14 @@ def main(argv: Sequence[str] | None = None) -> int:
                 model=str(manifest.get("model")),
                 model_revision=str(manifest.get("model_revision")),
             )
-            normalized, _items_value, projection = validate_manifest_v3(
+            normalized, items, projection = validate_manifest_v3(
                 manifest,
                 execution_lock=execution_lock,
                 token_meter=meter,
                 registries=registries,
             )
             lock_sha = str(projection["execution_lock_sha256"])
-            _validate_token_envelope_derivation_gate(
+            derivation_sha = _validate_token_envelope_derivation_gate(
                 derivation_values,
                 manifest=normalized,
                 execution_lock=execution_lock,
@@ -3618,6 +4036,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
             _validate_aborted_attempt_exposure_gate(
                 aborted_exposure,
+                prior_exposure_receipt=prior_exposure,
                 execution_lock=execution_lock,
             )
             deployment_binding = load_model_deployment_binding(
@@ -3627,7 +4046,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 ),
                 served_model=str(normalized["model"]),
                 model_revision=str(normalized["model_revision"]),
-                verify_live_process=True,
+                verify_live_process=False,
             )
             _validate_deployment_binding(execution_lock, deployment_binding)
             dependency_paths = r8_dependency_paths(
@@ -3639,7 +4058,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 model_weight_receipt_path=args.model_weight_receipt,
                 python_lock_path=args.python_lock,
             )
-            _validate_environment_dependency_bundle(
+            bundle_sha = _validate_environment_dependency_bundle(
                 environment_bundle,
                 execution_lock=execution_lock,
                 run_id=str(normalized["run_id"]),
@@ -3672,13 +4091,6 @@ def main(argv: Sequence[str] | None = None) -> int:
             genesis, _genesis_file_sha = read_stable_json(
                 args.db_genesis_receipt, "DB genesis receipt"
             )
-            genesis_sha = verify_fresh_transport_genesis(
-                genesis,
-                execution_lock=execution_lock,
-                run_id=str(manifest.get("run_id")),
-                attempt_db=args.attempt_db,
-                spool_db=args.spool_db,
-            )
             forbidden_paths = [
                 args.manifest, args.execution_lock, args.protocol, args.attempt_db,
                 args.spool_db, args.db_genesis_receipt,
@@ -3686,6 +4098,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 args.judge_core, args.model_catalog, args.model_weight_receipt,
                 args.python_lock, args.token_envelope_derivation_receipt,
                 args.aborted_attempt_exposure_receipt,
+                args.prior_exposure_receipt,
                 args.selection_receipt, args.historical_manifest,
                 args.token_meter_validation_receipt,
                 args.projected_outputs_receipt, args.token_meter_source_suite,
@@ -3708,61 +4121,293 @@ def main(argv: Sequence[str] | None = None) -> int:
                     ("suite_draft", args.output),
                 ],
                 run_id=str(manifest["run_id"]),
+                journal_path=args.reservation_journal,
+                resume=args.resume,
                 forbidden_paths=forbidden_paths,
             )
             try:
-                endpoint_preflight = verify_spool_endpoint_identity(
-                    endpoint=args.endpoint,
+                genesis_sha = verify_fresh_transport_genesis(
+                    genesis,
+                    execution_lock=execution_lock,
+                    run_id=str(normalized["run_id"]),
+                    attempt_db=args.attempt_db,
                     spool_db=args.spool_db,
-                    deployment_binding=deployment_binding,
-                    spool_token_env=args.spool_token_env,
-                    timeout_seconds=args.timeout_seconds,
-                    run_id=str(manifest.get("run_id")),
-                    execution_lock_sha256=lock_sha,
-                    db_genesis_sha256=genesis_sha,
+                    require_live_empty=not args.resume,
                 )
-                reservations["spool_identity_receipt"].commit(endpoint_preflight)
-                previous_umask = os.umask(0o077)
-                try:
-                    port = DurableSpoolJSONPort(
-                        args.endpoint,
-                        args.attempt_db,
-                        spool_token_env=args.spool_token_env,
-                        timeout_seconds=args.timeout_seconds,
-                        max_delivery_attempts=args.max_delivery_attempts,
-                    )
-                finally:
-                    os.umask(previous_umask)
-                try:
-                    _seal_private_sqlite_family(args.attempt_db, "attempt ledger")
-                    result = run_suite_v3_draft(
-                        manifest,
-                        execution_lock=execution_lock,
-                        protocol_path=args.protocol,
-                        model_port=port,
-                        token_meter=meter,
+                ordered_jobs = _resume_job_values(items)
+                resume_prefix = _validate_resume_prefix(
+                    export_resume_prefix(
+                        run_id=str(normalized["run_id"]),
+                        genesis_receipt=genesis,
+                        attempt_db=args.attempt_db,
+                        spool_db=args.spool_db,
+                        ordered_jobs=ordered_jobs,
                         max_workers=args.max_workers,
-                        token_envelope_derivation=derivation_values,
-                        aborted_attempt_exposure_receipt=aborted_exposure,
-                        environment_dependency_bundle=environment_bundle,
-                        result_contract_path=args.result_contract,
-                        judge_core_path=args.judge_core,
-                        symposium_repo_root=args.symposium_repo_root,
-                        tokenizer_dir=args.tokenizer_dir,
-                        model_catalog_path=args.model_catalog,
-                        model_weight_receipt_path=args.model_weight_receipt,
-                        python_lock_path=args.python_lock,
-                        spool_identity_preflight=endpoint_preflight,
-                        preregistration_artifact=preregistration_artifact,
-                        preregistration_readback=preregistration_readback,
-                        anchored_judge_path=args.anchored_judge,
+                    ),
+                    run_id=str(normalized["run_id"]),
+                    db_genesis_sha256=genesis_sha,
+                    ordered_jobs=ordered_jobs,
+                    max_workers=args.max_workers,
+                )
+                _validate_resume_database_identity_continuity(
+                    genesis=genesis,
+                    resume_prefix=resume_prefix,
+                )
+                gates = execution_lock["gates"]
+                assert isinstance(gates, Mapping)
+                all_calls_complete = (
+                    resume_prefix["call_count"] == gates["expected_calls"]
+                )
+                reservations.record_resume_audit(resume_prefix)
+                endpoint_preflight = reservations[
+                    "spool_identity_receipt"
+                ].prepared_value()
+                committed_draft = reservations["suite_draft"].prepared_value()
+                if endpoint_preflight is not None:
+                    _validate_spool_identity_preflight(
+                        endpoint_preflight,
+                        run_id=str(normalized["run_id"]),
+                        deployment_binding=deployment_binding,
+                        execution_lock_sha256=lock_sha,
+                        db_genesis_sha256=genesis_sha,
+                        endpoint=args.endpoint,
                     )
-                finally:
-                    port.close()
-                reservations["suite_draft"].commit(result)
+                    _validate_resume_database_identity_continuity(
+                        genesis=genesis,
+                        resume_prefix=resume_prefix,
+                        spool_identity_preflight=endpoint_preflight,
+                    )
+                if committed_draft is not None:
+                    if endpoint_preflight is None:
+                        raise R8RunnerRefusal(
+                            "committed draft lacks a committed spool preflight"
+                        )
+                    _verify_committed_draft_resume(
+                        committed_draft,
+                        resume_prefix=resume_prefix,
+                        spool_identity_preflight=endpoint_preflight,
+                        expected_authority={
+                            "run_id": normalized["run_id"],
+                            "mode": normalized["mode"],
+                            "manifest_sha256": canonical_sha256(normalized),
+                            "model": normalized["model"],
+                            "model_revision": normalized["model_revision"],
+                            "upstream_endpoint": (
+                                deployment_binding.upstream_endpoint
+                            ),
+                            "deployment_receipt_sha256": (
+                                deployment_binding.deployment_receipt_sha256
+                            ),
+                            "deployment_id": deployment_binding.deployment_id,
+                            "served_model": deployment_binding.served_model,
+                            "token_tolerance": normalized["token_tolerance"],
+                            "state_capacity_bytes": normalized[
+                                "state_capacity_bytes"
+                            ],
+                            "state_bytes_by_arm": normalized["state_bytes_by_arm"],
+                            "preregistration_artifact_sha256": normalized[
+                                "preregistration_artifact_sha256"
+                            ],
+                            "preregistration_readback_sha256": (
+                                _self_hash(
+                                    preregistration_readback,
+                                    "receipt_sha256",
+                                    "preregistration readback",
+                                )
+                                if preregistration_readback is not None
+                                else None
+                            ),
+                            "anchored_judge_file_sha256": (
+                                _stable_file_sha256(
+                                    args.anchored_judge, "anchored judge"
+                                )
+                                if args.anchored_judge is not None
+                                else None
+                            ),
+                            "measurement_lock_sha256": lock_sha,
+                            "result_contract_sha256": execution_lock[
+                                "result_contract_sha256"
+                            ],
+                            "environment_receipt_sha256": execution_lock[
+                                "environment_receipt_sha256"
+                            ],
+                            "dependency_receipt_sha256": execution_lock[
+                                "dependency_receipt_sha256"
+                            ],
+                            "environment_dependency_compatibility_root_sha256": (
+                                execution_lock[
+                                    "environment_dependency_compatibility_root_sha256"
+                                ]
+                            ),
+                            "environment_dependency_bundle_sha256": bundle_sha,
+                            "hswm_commit": execution_lock["hswm_commit"],
+                            "db_genesis_receipt_sha256": genesis_sha,
+                            "protocol_sha256": execution_lock["protocol_sha256"],
+                            "registries_root_sha256": execution_lock[
+                                "registries_root_sha256"
+                            ],
+                            "token_envelope_sha256": canonical_sha256(
+                                normalized["token_envelope"]
+                            ),
+                            "token_envelope_derivation_receipt_sha256": (
+                                derivation_sha
+                            ),
+                            "cohort_root_sha256": execution_lock[
+                                "cohort_root_sha256"
+                            ],
+                            "candidate_universe_root_sha256": execution_lock[
+                                "candidate_universe_root_sha256"
+                            ],
+                            "generation_policy": normalized["generation_policy"],
+                            "generation_policy_sha256": canonical_sha256(
+                                normalized["generation_policy"]
+                            ),
+                            "token_envelope": normalized["token_envelope"],
+                            "execution_policy": execution_lock[
+                                "execution_policy"
+                            ],
+                            "execution_gates": execution_lock["gates"],
+                            "max_workers": args.max_workers,
+                            "spool_identity_preflight": endpoint_preflight,
+                            "spool_identity_preflight_sha256": (
+                                endpoint_preflight["preflight_sha256"]
+                            ),
+                        },
+                    )
+                    reservations["spool_identity_receipt"].commit(
+                        endpoint_preflight
+                    )
+                    reservations["suite_draft"].commit(committed_draft)
+                    result = committed_draft
+                else:
+                    if not all_calls_complete:
+                        live_deployment_binding = load_model_deployment_binding(
+                            args.model_weight_receipt,
+                            upstream_endpoint=str(
+                                execution_lock.get("upstream_endpoint", "")
+                            ),
+                            served_model=str(normalized["model"]),
+                            model_revision=str(normalized["model_revision"]),
+                            verify_live_process=True,
+                        )
+                        _validate_deployment_binding(
+                            execution_lock, live_deployment_binding
+                        )
+                        if live_deployment_binding != deployment_binding:
+                            raise R8RunnerRefusal(
+                                "live deployment differs from its offline attestation"
+                            )
+                    created_preflight = endpoint_preflight is None
+                    if endpoint_preflight is None:
+                        if resume_prefix["call_count"] != 0:
+                            raise R8RunnerRefusal(
+                                "nonzero resume prefix lacks a committed spool preflight"
+                            )
+                        endpoint_preflight = verify_spool_endpoint_identity(
+                            endpoint=args.endpoint,
+                            spool_db=args.spool_db,
+                            deployment_binding=deployment_binding,
+                            spool_token_env=args.spool_token_env,
+                            timeout_seconds=args.timeout_seconds,
+                            run_id=str(normalized["run_id"]),
+                            execution_lock_sha256=lock_sha,
+                            db_genesis_sha256=genesis_sha,
+                        )
+                        _validate_resume_database_identity_continuity(
+                            genesis=genesis,
+                            resume_prefix=resume_prefix,
+                            spool_identity_preflight=endpoint_preflight,
+                        )
+                        reservations["spool_identity_receipt"].commit(
+                            endpoint_preflight
+                        )
+                    else:
+                        reservations["spool_identity_receipt"].commit(
+                            endpoint_preflight
+                        )
+                    if (
+                        args.resume
+                        and not created_preflight
+                        and not all_calls_complete
+                    ):
+                        spool_audit = resume_prefix.get("spool_live_audit")
+                        if not isinstance(spool_audit, Mapping):
+                            raise R8RunnerRefusal(
+                                "resume prefix lacks a spool live audit"
+                            )
+                        live_spool_identity = verify_spool_endpoint_resume_identity(
+                            endpoint=args.endpoint,
+                            spool_db=args.spool_db,
+                            deployment_binding=deployment_binding,
+                            spool_token_env=args.spool_token_env,
+                            timeout_seconds=args.timeout_seconds,
+                            expected_live_audit=spool_audit,
+                        )
+                        if _database_identity_value(
+                            live_spool_identity.get("db_identity"),
+                            "live result spool",
+                        ) != _database_identity_value(
+                            genesis.get("spool_db_identity"),
+                            "genesis result spool",
+                        ):
+                            raise R8RunnerRefusal(
+                                "live result spool differs from frozen genesis"
+                            )
+                    previous_umask = os.umask(0o077)
+                    try:
+                        def completed_resume_transport(*_args, **_kwargs):
+                            raise R8RunnerRefusal(
+                                "completed resume attempted forbidden network traffic"
+                            )
+
+                        port = DurableSpoolJSONPort(
+                            args.endpoint,
+                            args.attempt_db,
+                            spool_token_env=args.spool_token_env,
+                            timeout_seconds=args.timeout_seconds,
+                            transport=(
+                                completed_resume_transport
+                                if all_calls_complete
+                                else None
+                            ),
+                            max_delivery_attempts=args.max_delivery_attempts,
+                        )
+                    finally:
+                        os.umask(previous_umask)
+                    try:
+                        _seal_private_sqlite_family(
+                            args.attempt_db, "attempt ledger"
+                        )
+                        result = run_suite_v3_draft(
+                            manifest,
+                            execution_lock=execution_lock,
+                            protocol_path=args.protocol,
+                            model_port=port,
+                            token_meter=meter,
+                            max_workers=args.max_workers,
+                            token_envelope_derivation=derivation_values,
+                            prior_exposure_receipt=prior_exposure,
+                            aborted_attempt_exposure_receipt=aborted_exposure,
+                            environment_dependency_bundle=environment_bundle,
+                            result_contract_path=args.result_contract,
+                            judge_core_path=args.judge_core,
+                            symposium_repo_root=args.symposium_repo_root,
+                            tokenizer_dir=args.tokenizer_dir,
+                            model_catalog_path=args.model_catalog,
+                            model_weight_receipt_path=args.model_weight_receipt,
+                            python_lock_path=args.python_lock,
+                            spool_identity_preflight=endpoint_preflight,
+                            resume_prefix=resume_prefix,
+                            offline_complete_resume=all_calls_complete,
+                            preregistration_artifact=preregistration_artifact,
+                            preregistration_readback=preregistration_readback,
+                            anchored_judge_path=args.anchored_judge,
+                        )
+                    finally:
+                        port.close()
+                    reservations["suite_draft"].commit(result)
             finally:
-                for reservation in reservations.values():
-                    reservation.close()
+                reservations.close()
             output = {
                 "status": "TERMINAL_DRAFT_NO_GOLD_OPENED",
                 "draft_receipt_sha256": result["draft_receipt_sha256"],
@@ -3776,6 +4421,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             reservations = reserve_private_outputs(
                 [("suite", args.output)],
                 run_id=str(draft_value.get("run_id", "")),
+                journal_path=args.reservation_journal,
+                resume=args.resume,
                 forbidden_paths=(
                     args.draft, args.transport_bindings, args.db_genesis_receipt,
                 ),
@@ -3788,8 +4435,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 )
                 reservations["suite"].commit(result)
             finally:
-                for reservation in reservations.values():
-                    reservation.close()
+                reservations.close()
             output = {
                 "status": "FINALIZED_NO_GOLD_OPENED",
                 "suite_receipt_sha256": result["suite_receipt_sha256"],
@@ -3847,5 +4493,7 @@ __all__ = [
     "validate_execution_policy",
     "verify_fresh_transport_genesis",
     "verify_spool_endpoint_identity",
+    "verify_spool_endpoint_resume_identity",
+    "verify_suite_draft_without_gold",
     "verify_suite_v3_without_gold",
 ]

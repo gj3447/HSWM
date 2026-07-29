@@ -11,6 +11,10 @@ import pytest
 
 from prom_search_hswm.hswm_result_spool import ModelDeploymentBinding
 from prom_search_hswm.hswm_typed_ports import canonical_sha256
+from prom_search_hswm.prom9_f1_prior_exposure import (
+    SCHEMA as PRIOR_EXPOSURE_SCHEMA,
+    merge_exposure_boundaries,
+)
 from prom_search_hswm.prom9_f1_r8_environment import (
     R8_DEPENDENCY_NAMES,
     build_preimage_bundle,
@@ -41,7 +45,7 @@ from prom_search_hswm.prom9_f1_r8_power_cli import (
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 INCIDENT_RECEIPT_PATH = (
-    REPO_ROOT / "receipts/hswm_f1_r8_v8_aborted_exposure.v1.json"
+    REPO_ROOT / "receipts/hswm_f1_r8_v8_aborted_exposure.v2.json"
 )
 _JUDGE_RELATIVE_PATH = Path(
     "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
@@ -452,18 +456,49 @@ def _v4_receipt(
 ) -> dict[str, object]:
     incident = json.loads(INCIDENT_RECEIPT_PATH.read_text(encoding="utf-8"))
     incident_sha256 = incident["aborted_attempt_exposure_receipt_sha256"]
+    prior_items = ["prior-item"]
+    prior_sources = ["8" * 64]
+    prior_components = ["9" * 64]
+    prior_unsigned = {
+        "schema_version": PRIOR_EXPOSURE_SCHEMA,
+        "aggregate": {
+            "prior_item_ids": prior_items,
+            "prior_source_entity_ids": prior_sources,
+            "prior_component_ids": prior_components,
+            "item_root_sha256": canonical_sha256(prior_items),
+            "source_entity_root_sha256": canonical_sha256(prior_sources),
+            "component_root_sha256": canonical_sha256(prior_components),
+        },
+        "complete": True,
+    }
+    prior = {
+        **prior_unsigned,
+        "prior_exposure_receipt_sha256": canonical_sha256(prior_unsigned),
+    }
+    exposure_union = merge_exposure_boundaries(prior, incident)
     evidence = {
         "schema_version": "hswm-prom9-f1-r8-development-evidence/v2",
         "manifest": {},
         "execution_lock": {
-            "aborted_attempt_exposure_receipt_sha256": incident_sha256
+            "prior_exposure_receipt_sha256": prior[
+                "prior_exposure_receipt_sha256"
+            ],
+            "aborted_attempt_exposure_receipt_sha256": incident_sha256,
+            "forbidden_prior_item_ids": exposure_union["item_ids"],
+            "forbidden_prior_source_entity_ids": exposure_union[
+                "source_entity_ids"
+            ],
+            "forbidden_prior_component_ids": exposure_union["component_ids"],
         },
         "public_source_receipt": {},
         "selection_receipt": {
+            "prior_exposure_receipt_sha256": prior[
+                "prior_exposure_receipt_sha256"
+            ],
             "aborted_attempt_exposure_receipt_sha256": incident_sha256
         },
         "gold_source_receipt": {},
-        "prior_exposure_receipt": {},
+        "prior_exposure_receipt": prior,
         "aborted_attempt_exposure_receipt": incident,
         "suite": {},
         "evaluator_receipt": {},
@@ -478,6 +513,9 @@ def _v4_receipt(
     evidence["artifact_receipts"][
         "aborted_attempt_exposure_receipt_sha256"
     ] = incident_sha256
+    evidence["artifact_receipts"]["prior_exposure_receipt_sha256"] = prior[
+        "prior_exposure_receipt_sha256"
+    ]
     analysis = {
         "schema_version": POWER_DEVELOPMENT_SCHEMA,
         "development_components": components,
@@ -875,6 +913,17 @@ def test_terminal_power_write_exact_verifies_and_binds_incident(
         "artifact_binding",
         "selection_binding",
         "execution_lock_binding",
+        "empty_prior",
+        "incomplete_prior",
+        "prior_artifact_binding",
+        "prior_selection_binding",
+        "prior_execution_lock_binding",
+        "union_item_subset",
+        "union_item_superset",
+        "union_source_subset",
+        "union_source_superset",
+        "union_component_subset",
+        "union_component_superset",
     ],
 )
 def test_terminal_power_write_refuses_invalid_or_unbound_incident_before_write(
@@ -895,12 +944,14 @@ def test_terminal_power_write_refuses_invalid_or_unbound_incident_before_write(
     assert isinstance(evidence, dict)
     incident = evidence["aborted_attempt_exposure_receipt"]
     assert isinstance(incident, dict)
+    prior = evidence["prior_exposure_receipt"]
+    assert isinstance(prior, dict)
     if failure == "empty_incident":
         evidence["aborted_attempt_exposure_receipt"] = {
             "aborted_attempt_exposure_receipt_sha256": canonical_sha256({})
         }
     elif failure == "incomplete_incident":
-        incident.pop("evidence")
+        incident.pop("evidence_bindings")
         unsigned = dict(incident)
         unsigned.pop("aborted_attempt_exposure_receipt_sha256")
         incident["aborted_attempt_exposure_receipt_sha256"] = canonical_sha256(
@@ -913,6 +964,38 @@ def test_terminal_power_write_refuses_invalid_or_unbound_incident_before_write(
         incident["aborted_attempt_exposure_receipt_sha256"] = canonical_sha256(
             unsigned
         )
+    elif failure == "empty_prior":
+        evidence["prior_exposure_receipt"] = {}
+    elif failure == "incomplete_prior":
+        prior["complete"] = False
+        unsigned = dict(prior)
+        unsigned.pop("prior_exposure_receipt_sha256")
+        prior["prior_exposure_receipt_sha256"] = canonical_sha256(unsigned)
+    elif failure.startswith("prior_"):
+        target_name = {
+            "prior_artifact_binding": "artifact_receipts",
+            "prior_selection_binding": "selection_receipt",
+            "prior_execution_lock_binding": "execution_lock",
+        }[failure]
+        target = evidence[target_name]
+        assert isinstance(target, dict)
+        target["prior_exposure_receipt_sha256"] = "0" * 64
+    elif failure.startswith("union_"):
+        execution_lock = evidence["execution_lock"]
+        assert isinstance(execution_lock, dict)
+        dimension, operation = failure.removeprefix("union_").rsplit("_", 1)
+        field = {
+            "item": "forbidden_prior_item_ids",
+            "source": "forbidden_prior_source_entity_ids",
+            "component": "forbidden_prior_component_ids",
+        }[dimension]
+        values = list(execution_lock[field])
+        if operation == "subset":
+            values.pop(0)
+        else:
+            extra = "union-extra" if dimension == "item" else "7" * 64
+            values = sorted({*values, extra})
+        execution_lock[field] = values
     else:
         target_name = {
             "artifact_binding": "artifact_receipts",
@@ -934,7 +1017,7 @@ def test_terminal_power_write_refuses_invalid_or_unbound_incident_before_write(
         cli, "write_private_once", lambda path, value: writes.append((path, value))
     )
 
-    with pytest.raises(PowerCLIRefusal, match="aborted-attempt exposure"):
+    with pytest.raises(PowerCLIRefusal, match="exposure"):
         write_validated_power_receipt(
             Path("must-not-exist.json"),
             receipt,

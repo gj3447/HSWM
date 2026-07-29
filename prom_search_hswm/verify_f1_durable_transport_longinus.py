@@ -14,18 +14,28 @@ from typing import Any, Mapping, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = (
-    REPO_ROOT / "LONGINUS_HSWM_F1_ABORTED_EXPOSURE_BINDING_2026-07-30.json"
+    REPO_ROOT / "LONGINUS_HSWM_F1_DURABLE_RESUME_BINDING_2026-07-30.json"
 )
-SCHEMA = "longinus-hswm-f1-r8-premeasurement-binding/v9"
-EXPECTED_BINDING_ID = "longinus-hswm-f1-r8-aborted-exposure-v9-20260730"
-EXPECTED_IMPLEMENTATION_COMMIT = "f117cfdd6b058d1e6db131a19425084d642cdf0c"
-EXPECTED_IMPLEMENTATION_PARENT = "6f25ce51cfae5a6d86a4a0bc5c385bd073356094"
+SCHEMA = "longinus-hswm-f1-r8-premeasurement-binding/v10"
+EXPECTED_BINDING_ID = "longinus-hswm-f1-r8-durable-resume-v10-20260730"
+EXPECTED_BASELINE_ANCESTOR = "a18a7e233da6b968c382a88c9ed9e9bf962b7576"
+EXPECTED_IMPLEMENTATION_COMMIT = "624cab85f794ee4b64bb8616ae172c1bf2e9c985"
+EXPECTED_IMPLEMENTATION_ACTUAL_PARENT = "1dbdce8f403e91355161b47a246e336bd5d43872"
+EXPECTED_ARTIFACT_COMMIT = "d5a918da4fc691d4e47a320e23fc6ba5c42065db"
+EXPECTED_ARTIFACT_COMMIT_PARENT = EXPECTED_IMPLEMENTATION_COMMIT
+EXPECTED_BINDING_SOURCE_COMMIT = EXPECTED_ARTIFACT_COMMIT
 EXPECTED_INCIDENT_RECEIPT_SHA256 = (
-    "6d3f2f8978a8502c0f01135ad7b998841dbb4bd61462934927f735e3932bad7d"
+    "f97634c0c4185b9bdbe983d6fe5fffc672e6c625923f027a780433acfc714afd"
 )
-EXPECTED_IMPLEMENTATION_BINDINGS = 6
+EXPECTED_IMPLEMENTATION_BINDINGS = 8
 EXPECTED_TEST_BINDINGS = 8
 EXPECTED_ARTIFACT_BINDINGS = 1
+EXPECTED_IMPLEMENTATION_CHANGED_PATHS = 15
+EXPECTED_ARTIFACT_CHANGED_PATHS = 1
+EXPECTED_BINDING_SOURCE_CHANGED_PATHS = 16
+EXPECTED_UNCHANGED_RELEVANT_PATHS = (
+    "prom_search_hswm/test_hswm_result_spool_attestation.py",
+)
 REQUIRED_LAYERS = (
     "KG_NODE",
     "CONTRACT_BINDING",
@@ -95,7 +105,7 @@ def _exact_json_equal(actual: object, expected: object) -> bool:
             and len(actual) == len(expected)
             and all(
                 _exact_json_equal(left, right)
-                for left, right in zip(actual, expected, strict=True)
+                for left, right in zip(actual, expected)
             )
         )
     return type(actual) is type(expected) and actual == expected
@@ -165,6 +175,129 @@ def _parameters(node: ast.FunctionDef | ast.AsyncFunctionDef) -> list[str]:
     return result
 
 
+def _source_segment(source: str, node: ast.AST, *, label: str) -> str:
+    segment = ast.get_source_segment(source, node)
+    if not isinstance(segment, str) or not segment:
+        _fail("SIGNATURE_MISMATCHED", f"cannot recover {label} source")
+    return segment
+
+
+def _argument_descriptor(
+    source: str, argument: ast.arg, *, default: ast.expr | None = None
+) -> dict[str, object]:
+    return {
+        "name": argument.arg,
+        "annotation": (
+            None
+            if argument.annotation is None
+            else _source_segment(source, argument.annotation, label="annotation")
+        ),
+        "type_comment": getattr(argument, "type_comment", None),
+        "default": (
+            None
+            if default is None
+            else _source_segment(source, default, label="default")
+        ),
+    }
+
+
+def _signature_descriptor(
+    source: str, node: ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef
+) -> dict[str, object]:
+    type_params = [
+        _source_segment(source, item, label="type parameter")
+        for item in getattr(node, "type_params", ())
+    ]
+    decorators = [
+        _source_segment(source, item, label="decorator")
+        for item in node.decorator_list
+    ]
+    if isinstance(node, ast.ClassDef):
+        return {
+            "kind": "class",
+            "bases": [
+                _source_segment(source, item, label="class base")
+                for item in node.bases
+            ],
+            "keywords": [
+                {
+                    "name": item.arg,
+                    "value": _source_segment(source, item.value, label="class keyword"),
+                }
+                for item in node.keywords
+            ],
+            "decorators": decorators,
+            "type_params": type_params,
+        }
+
+    positional = [*node.args.posonlyargs, *node.args.args]
+    positional_defaults: list[ast.expr | None] = [None] * (
+        len(positional) - len(node.args.defaults)
+    ) + list(node.args.defaults)
+    posonly_count = len(node.args.posonlyargs)
+    positional_descriptors = [
+        _argument_descriptor(source, item, default=default)
+        for item, default in zip(positional, positional_defaults)
+    ]
+    return {
+        "kind": "async_function" if isinstance(node, ast.AsyncFunctionDef) else "function",
+        "positional_only": positional_descriptors[:posonly_count],
+        "positional_or_keyword": positional_descriptors[posonly_count:],
+        "vararg": (
+            None
+            if node.args.vararg is None
+            else _argument_descriptor(source, node.args.vararg)
+        ),
+        "keyword_only": [
+            _argument_descriptor(source, item, default=default)
+            for item, default in zip(node.args.kwonlyargs, node.args.kw_defaults)
+        ],
+        "kwarg": (
+            None
+            if node.args.kwarg is None
+            else _argument_descriptor(source, node.args.kwarg)
+        ),
+        "returns": (
+            None
+            if node.returns is None
+            else _source_segment(source, node.returns, label="return annotation")
+        ),
+        "type_comment": node.type_comment,
+        "decorators": decorators,
+        "type_params": type_params,
+    }
+
+
+def _signature_sha256(
+    source: str, node: ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef
+) -> str:
+    canonical = json.dumps(
+        _signature_descriptor(source, node),
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        allow_nan=False,
+    ).encode("utf-8")
+    return hashlib.sha256(canonical).hexdigest()
+
+
+def _definition_start(node: ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionDef) -> int:
+    return min(
+        [int(node.lineno), *(int(item.lineno) for item in node.decorator_list)]
+    )
+
+
+def _single_parent(commit: str, *, label: str) -> str:
+    parts = _git(
+        ["rev-list", "--parents", "-n", "1", commit],
+        classification="DIVERGENT",
+        label=f"cannot resolve {label}",
+    ).decode("ascii", "strict").strip().split()
+    if len(parts) != 2 or parts[0] != commit:
+        _fail("DIVERGENT", f"{label} must be a single-parent commit")
+    return parts[1]
+
+
 def _symbol_range(
     blob: bytes, path: str, expected: Mapping[str, object]
 ) -> tuple[int, int]:
@@ -211,14 +344,15 @@ def _symbol_range(
         schema_lines = [
             index
             for index, line in enumerate(decoded.splitlines(), start=1)
-            if '"schema_version"' in line
+            if line.startswith('  "schema_version":')
         ]
         if len(schema_lines) != 1:
             _fail("SIGNATURE_MISMATCHED", f"JSON receipt schema line drifted for {path}")
         return schema_lines[0], schema_lines[0]
 
     try:
-        tree = ast.parse(blob.decode("utf-8"), filename=path)
+        source = blob.decode("utf-8")
+        tree = ast.parse(source, filename=path)
     except (UnicodeError, SyntaxError) as error:
         _fail("SIGNATURE_MISMATCHED", f"cannot parse {path}: {error}")
     if not isinstance(name, str) or kind not in {"class", "function"}:
@@ -241,13 +375,25 @@ def _symbol_range(
             "SIGNATURE_MISMATCHED",
             f"{path}:{name} parameters {actual_parameters!r} != {expected_parameters!r}",
         )
+    expected_signature = expected.get("signature_sha256")
+    if (
+        not isinstance(expected_signature, str)
+        or SHA256_RE.fullmatch(expected_signature) is None
+    ):
+        _fail("LABEL_ROT", f"signature SHA-256 label missing for {path}:{name}")
+    actual_signature = _signature_sha256(source, node)
+    if actual_signature != expected_signature:
+        _fail(
+            "SIGNATURE_MISMATCHED",
+            f"{path}:{name} canonical signature drifted",
+        )
     module = path[:-3].replace("/", ".") if path.endswith(".py") else path.replace("/", ".")
     if expected.get("qualified") != f"{module}.{name}":
         _fail("LABEL_ROT", f"qualified symbol label rotated for {path}:{name}")
     node_end = getattr(node, "end_lineno", None)
     if not isinstance(node_end, int):
         _fail("SIGNATURE_MISMATCHED", f"symbol end line missing for {path}:{name}")
-    return int(node.lineno), node_end
+    return _definition_start(node), node_end
 
 
 def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
@@ -294,33 +440,74 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
     git = manifest.get("git")
     if not isinstance(git, dict):
         _fail("MISSING", "git binding is missing")
-    commit = git.get("implementation_commit")
-    if not isinstance(commit, str) or COMMIT_RE.fullmatch(commit) is None:
+    baseline_ancestor = git.get("baseline_ancestor")
+    implementation_commit = git.get("implementation_commit")
+    implementation_actual_parent = git.get("implementation_actual_parent")
+    artifact_commit = git.get("artifact_commit")
+    artifact_commit_parent = git.get("artifact_commit_parent")
+    binding_source_commit = git.get("binding_source_commit")
+    commit_fields = {
+        "baseline ancestor": baseline_ancestor,
+        "implementation commit": implementation_commit,
+        "implementation actual parent": implementation_actual_parent,
+        "artifact commit": artifact_commit,
+        "artifact commit parent": artifact_commit_parent,
+        "binding source commit": binding_source_commit,
+    }
+    for label, value in commit_fields.items():
+        if not isinstance(value, str) or COMMIT_RE.fullmatch(value) is None:
+            _fail("MISSING", f"{label} is missing")
+    if not isinstance(implementation_commit, str):
         _fail("MISSING", "implementation commit is missing")
-    parent = git.get("implementation_parent")
-    if not isinstance(parent, str) or COMMIT_RE.fullmatch(parent) is None:
-        _fail("MISSING", "implementation baseline parent is missing")
     if (
-        commit != EXPECTED_IMPLEMENTATION_COMMIT
-        or parent != EXPECTED_IMPLEMENTATION_PARENT
-        or kg.get("baseline_scope") != commit
+        baseline_ancestor != EXPECTED_BASELINE_ANCESTOR
+        or implementation_commit != EXPECTED_IMPLEMENTATION_COMMIT
+        or implementation_actual_parent != EXPECTED_IMPLEMENTATION_ACTUAL_PARENT
+        or artifact_commit != EXPECTED_ARTIFACT_COMMIT
+        or artifact_commit_parent != EXPECTED_ARTIFACT_COMMIT_PARENT
+        or binding_source_commit != EXPECTED_BINDING_SOURCE_COMMIT
+        or kg.get("baseline_scope")
+        != (
+            f"{EXPECTED_BASELINE_ANCESTOR}..{EXPECTED_IMPLEMENTATION_COMMIT};"
+            f"{EXPECTED_ARTIFACT_COMMIT_PARENT}..{EXPECTED_ARTIFACT_COMMIT}"
+        )
     ):
-        _fail("LABEL_ROT", "implementation commit/baseline identity drifted")
-    _git(["cat-file", "-e", f"{commit}^{{commit}}"], classification="MISSING", label="commit missing")
+        _fail("LABEL_ROT", "implementation/artifact/baseline identity drifted")
+    for label, value in commit_fields.items():
+        _git(
+            ["cat-file", "-e", f"{value}^{{commit}}"],
+            classification="MISSING",
+            label=f"{label} missing",
+        )
     _git(
-        ["cat-file", "-e", f"{parent}^{{commit}}"],
-        classification="MISSING",
-        label="baseline parent missing",
+        ["merge-base", "--is-ancestor", baseline_ancestor, implementation_commit],
+        classification="DIVERGENT",
+        label="baseline ancestor is not an ancestor of implementation commit",
+    )
+    actual_implementation_parent = _single_parent(
+        implementation_commit, label="implementation actual parent"
+    )
+    if actual_implementation_parent != implementation_actual_parent:
+        _fail("LABEL_ROT", "implementation actual parent label rotated")
+    actual_artifact_parent = _single_parent(
+        artifact_commit, label="artifact commit parent"
+    )
+    if actual_artifact_parent != artifact_commit_parent:
+        _fail("LABEL_ROT", "artifact commit parent label rotated")
+    _git(
+        ["merge-base", "--is-ancestor", implementation_commit, artifact_commit],
+        classification="DIVERGENT",
+        label="implementation commit is not an ancestor of artifact commit",
     )
     _git(
-        ["merge-base", "--is-ancestor", parent, commit],
+        ["merge-base", "--is-ancestor", artifact_commit, binding_source_commit],
         classification="DIVERGENT",
-        label="baseline parent is not an ancestor of implementation commit",
+        label="artifact commit is not an ancestor of binding source commit",
     )
     _git(
-        ["merge-base", "--is-ancestor", commit, "HEAD"],
+        ["merge-base", "--is-ancestor", binding_source_commit, "HEAD"],
         classification="DIVERGENT",
-        label="implementation commit is not an ancestor of HEAD",
+        label="binding source commit is not an ancestor of HEAD",
     )
 
     target_paths = manifest.get("required_target_paths")
@@ -339,6 +526,9 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
     implementation_count = 0
     test_count = 0
     artifact_count = 0
+    implementation_paths: set[str] = set()
+    test_paths: set[str] = set()
+    artifact_paths: set[str] = set()
     for index, binding in enumerate(bindings):
         if not isinstance(binding, dict):
             _fail("MISSING", f"binding {index} is not an object")
@@ -366,7 +556,13 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
         seen_paths.add(relative)
         if relative not in target_paths:
             _fail("ORPHANED", f"binding targets an unregistered path: {relative}")
-        blob = _commit_blob(commit, relative)
+        if contract.endswith("__UNJUDGED"):
+            implementation_paths.add(relative)
+        elif contract.endswith("__ENGINEERING_ONLY"):
+            test_paths.add(relative)
+        else:
+            artifact_paths.add(relative)
+        blob = _commit_blob(binding_source_commit, relative)
         expected_sha = binding.get("sha256")
         if not isinstance(expected_sha, str) or SHA256_RE.fullmatch(expected_sha) is None:
             _fail("MISSING", f"invalid SHA-256 label for {relative}")
@@ -397,7 +593,7 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
     extra = seen_paths - set(target_paths)
     if missing or extra:
         _fail("ORPHANED", f"target reverse scan mismatch missing={sorted(missing)} extra={sorted(extra)}")
-    changed_paths = {
+    implementation_changed_paths = {
         path
         for path in _git(
             [
@@ -405,8 +601,8 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
                 "--no-commit-id",
                 "--name-only",
                 "-r",
-                parent,
-                commit,
+                baseline_ancestor,
+                implementation_commit,
             ],
             classification="DIVERGENT",
             label="cannot derive implementation baseline diff",
@@ -415,12 +611,95 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
         .splitlines()
         if path
     }
+    artifact_changed_paths = {
+        path
+        for path in _git(
+            [
+                "diff-tree",
+                "--no-commit-id",
+                "--name-only",
+                "-r",
+                artifact_commit_parent,
+                artifact_commit,
+            ],
+            classification="DIVERGENT",
+            label="cannot derive artifact publication diff",
+        )
+        .decode("utf-8", "strict")
+        .splitlines()
+        if path
+    }
+    binding_source_changed_paths = {
+        path
+        for path in _git(
+            [
+                "diff-tree",
+                "--no-commit-id",
+                "--name-only",
+                "-r",
+                baseline_ancestor,
+                binding_source_commit,
+            ],
+            classification="DIVERGENT",
+            label="cannot derive aggregate binding-source diff",
+        )
+        .decode("utf-8", "strict")
+        .splitlines()
+        if path
+    }
+    change_inventory = manifest.get("change_inventory")
+    expected_change_inventory = {
+        "implementation_changed_paths": EXPECTED_IMPLEMENTATION_CHANGED_PATHS,
+        "artifact_changed_paths": EXPECTED_ARTIFACT_CHANGED_PATHS,
+        "binding_source_changed_paths": EXPECTED_BINDING_SOURCE_CHANGED_PATHS,
+        "unchanged_relevant_paths": list(EXPECTED_UNCHANGED_RELEVANT_PATHS),
+    }
+    if not _exact_json_equal(change_inventory, expected_change_inventory):
+        _fail("LABEL_ROT", "implementation/artifact change inventory drifted")
+    if len(implementation_changed_paths) != EXPECTED_IMPLEMENTATION_CHANGED_PATHS:
+        _fail("DIVERGENT", "implementation baseline diff count drifted")
+    if len(artifact_changed_paths) != EXPECTED_ARTIFACT_CHANGED_PATHS:
+        _fail("DIVERGENT", "artifact publication diff count drifted")
+    if len(binding_source_changed_paths) != EXPECTED_BINDING_SOURCE_CHANGED_PATHS:
+        _fail("DIVERGENT", "aggregate binding-source diff count drifted")
+    changed_paths = implementation_changed_paths | artifact_changed_paths
+    unchanged_relevant_paths = set(EXPECTED_UNCHANGED_RELEVANT_PATHS)
+    if implementation_changed_paths & artifact_changed_paths:
+        _fail("DIVERGENT", "implementation and artifact change spans overlap")
+    if binding_source_changed_paths != changed_paths:
+        _fail("DIVERGENT", "aggregate binding-source diff does not equal both spans")
+    if changed_paths & unchanged_relevant_paths:
+        _fail("LABEL_ROT", "unchanged relevant path is present in a changed span")
     unbound_changes = changed_paths - seen_paths
     if unbound_changes:
         _fail(
             "ORPHANED",
-            f"implementation baseline diff is not reverse-bound: {sorted(unbound_changes)}",
+            f"implementation/artifact diff is not reverse-bound: {sorted(unbound_changes)}",
         )
+    unexplained_bindings = seen_paths - changed_paths - unchanged_relevant_paths
+    missing_unchanged = unchanged_relevant_paths - seen_paths
+    if unexplained_bindings or missing_unchanged:
+        _fail(
+            "ORPHANED",
+            "binding inventory is not explained by changed plus explicitly unchanged paths: "
+            f"unexplained={sorted(unexplained_bindings)} "
+            f"missing_unchanged={sorted(missing_unchanged)}",
+        )
+    expected_implementation_paths = implementation_paths | (
+        test_paths - unchanged_relevant_paths
+    )
+    if implementation_changed_paths != expected_implementation_paths:
+        _fail(
+            "LABEL_ROT",
+            "implementation diff paths do not match implementation/test contract roles",
+        )
+    if artifact_changed_paths != artifact_paths:
+        _fail(
+            "LABEL_ROT",
+            "artifact diff paths do not match quarantined artifact contract roles",
+        )
+    if test_paths & unchanged_relevant_paths != unchanged_relevant_paths:
+        _fail("LABEL_ROT", "unchanged relevant path is not labeled as a test binding")
     if (
         implementation_count != EXPECTED_IMPLEMENTATION_BINDINGS
         or test_count != EXPECTED_TEST_BINDINGS
@@ -428,19 +707,27 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
     ):
         _fail(
             "LABEL_ROT",
-            "implementation/test/artifact binding labels are not 6/8/1",
+            "implementation/test/artifact binding labels are not 8/8/1",
         )
 
     return {
         "status": "PASS",
         "binding_id": manifest.get("binding_id"),
-        "implementation_commit": commit,
+        "baseline_ancestor": baseline_ancestor,
+        "implementation_commit": implementation_commit,
+        "implementation_actual_parent": implementation_actual_parent,
+        "artifact_commit": artifact_commit,
+        "artifact_commit_parent": artifact_commit_parent,
+        "binding_source_commit": binding_source_commit,
         "bindings_checked": len(bindings),
         "files_checked": len(seen_paths),
         "implementation_bindings": implementation_count,
         "test_bindings": test_count,
         "artifact_bindings": artifact_count,
-        "baseline_changed_paths": len(changed_paths),
+        "implementation_changed_paths": len(implementation_changed_paths),
+        "artifact_changed_paths": len(artifact_changed_paths),
+        "binding_source_changed_paths": len(binding_source_changed_paths),
+        "unchanged_relevant_paths": len(unchanged_relevant_paths),
         "longinus_layers": len(REQUIRED_LAYERS),
         "classifications": {
             "MISSING": 0,

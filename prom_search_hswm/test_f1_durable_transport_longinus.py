@@ -24,8 +24,8 @@ def test_checked_in_f1_r8_binding_is_exact_git_blob_bound() -> None:
     result = verify()
     assert result == {
         "status": "PASS",
-        "binding_id": "longinus-hswm-f1-r8-git-preimage-v4-20260729",
-        "implementation_commit": "eafe64b1f58064cc0f1239a5dc86f41bc5f76d2e",
+        "binding_id": "longinus-hswm-f1-r8-git-preimage-v5-20260729",
+        "implementation_commit": "694d27131ad6856f01a657c61564b7174abde1b6",
         "bindings_checked": 20,
         "files_checked": 20,
         "implementation_bindings": 10,

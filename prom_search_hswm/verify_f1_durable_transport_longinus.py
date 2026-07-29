@@ -14,10 +14,10 @@ from typing import Any, Mapping, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = REPO_ROOT / "LONGINUS_HSWM_F1_DURABLE_TRANSPORT_BINDING_2026-07-27.json"
-SCHEMA = "longinus-hswm-f1-r8-premeasurement-binding/v4"
-EXPECTED_BINDING_ID = "longinus-hswm-f1-r8-git-preimage-v4-20260729"
-EXPECTED_IMPLEMENTATION_COMMIT = "eafe64b1f58064cc0f1239a5dc86f41bc5f76d2e"
-EXPECTED_IMPLEMENTATION_PARENT = "4e02605a0444d742bb1565e2933407d0c83b8147"
+SCHEMA = "longinus-hswm-f1-r8-premeasurement-binding/v5"
+EXPECTED_BINDING_ID = "longinus-hswm-f1-r8-git-preimage-v5-20260729"
+EXPECTED_IMPLEMENTATION_COMMIT = "694d27131ad6856f01a657c61564b7174abde1b6"
+EXPECTED_IMPLEMENTATION_PARENT = "15772fa368b7be319b2ae6c82bbfccc839f766cc"
 REQUIRED_LAYERS = (
     "KG_NODE",
     "CONTRACT_BINDING",

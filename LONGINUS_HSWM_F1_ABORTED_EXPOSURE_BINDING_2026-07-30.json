@@ -1,0 +1,273 @@
+{
+  "schema": "longinus-hswm-f1-r8-premeasurement-binding/v9",
+  "binding_id": "longinus-hswm-f1-r8-aborted-exposure-v9-20260730",
+  "binding_state": "PIERCED_LOCAL_NO_KG_WRITE",
+  "generated_at": "2026-07-30T01:01:33+09:00",
+  "baseline_scope": "HSWM F1 r8 aborted-attempt quarantine, exact exposure receipt, three-dimensional reselection, public-only token-envelope derivation, lock, power, runner, source tests, and the one historical upstream call boundary",
+  "scientific_status": "UNJUDGED",
+  "evidence_class": "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE",
+  "r7_status": "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE",
+  "b22_gate": "LOCKED",
+  "model_calls": 1,
+  "incident_boundary": {
+    "aborted_attempt_exposure_receipt_sha256": "6d3f2f8978a8502c0f01135ad7b998841dbb4bd61462934927f735e3932bad7d",
+    "historical_upstream_model_calls": 1,
+    "prospective_successor_model_calls": 0,
+    "confirmatory_upstream_model_calls": 0,
+    "scientific_verdicts": 0
+  },
+  "git": {
+    "remote": "https://github.com/gj3447/HSWM.git",
+    "branch": "main",
+    "implementation_commit": "f117cfdd6b058d1e6db131a19425084d642cdf0c",
+    "implementation_parent": "6f25ce51cfae5a6d86a4a0bc5c385bd073356094",
+    "blob_authority": "Every source and artifact SHA, symbol or schema identity, signature, and line range is read from implementation_commit via git cat-file, never from the worktree.",
+    "ancestry_rule": "implementation_parent must be an ancestor of implementation_commit; implementation_commit must be an ancestor of HEAD; every changed path in that exact baseline diff must be reverse-bound."
+  },
+  "kg": {
+    "write_state": "NOT_AUTHORIZED_NOT_WRITTEN",
+    "anchor_status": "LOCAL_PROPOSED_REFERENCE_IDENTITY",
+    "provenance_actor": "Codex",
+    "source_path": "LONGINUS_HSWM_F1_ABORTED_EXPOSURE_BINDING_2026-07-30.json",
+    "timestamp": "2026-07-30T01:01:33+09:00",
+    "baseline_scope": "f117cfdd6b058d1e6db131a19425084d642cdf0c"
+  },
+  "layers": [
+    "KG_NODE",
+    "CONTRACT_BINDING",
+    "CODE_SYMBOL",
+    "FILE_LINE",
+    "LINE_RANGE",
+    "SHA256",
+    "CRATE_SCRIPT"
+  ],
+  "required_target_paths": [
+    "prom_search_hswm/prom9_f1_prior_exposure.py",
+    "prom_search_hswm/prom9_f1_r8_envelope.py",
+    "prom_search_hswm/prom9_f1_r8_lock.py",
+    "prom_search_hswm/prom9_f1_r8_power.py",
+    "prom_search_hswm/prom9_f1_r8_power_cli.py",
+    "prom_search_hswm/prom9_f1_r8_runner.py",
+    "prom_search_hswm/test_hswm_result_spool_attestation.py",
+    "prom_search_hswm/test_prom9_f1_prior_exposure.py",
+    "prom_search_hswm/test_prom9_f1_r8_envelope.py",
+    "prom_search_hswm/test_prom9_f1_r8_lock.py",
+    "prom_search_hswm/test_prom9_f1_r8_power.py",
+    "prom_search_hswm/test_prom9_f1_r8_power_receipt.py",
+    "prom_search_hswm/test_prom9_f1_r8_runner.py",
+    "prom_search_hswm/test_prom9_f1_r8_source.py",
+    "receipts/hswm_f1_r8_v8_aborted_exposure.v1.json"
+  ],
+  "bindings": [
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_ABORTED_EXPOSURE_VERIFIER",
+      "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_prior_exposure.verify_aborted_attempt_exposure_receipt",
+        "name": "verify_aborted_attempt_exposure_receipt",
+        "kind": "function",
+        "parameters": ["value"]
+      },
+      "file_line": "prom_search_hswm/prom9_f1_prior_exposure.py:780",
+      "line_range": "780-926",
+      "sha256": "7398aa38d7a5c2170d5d5dfb6d04b9efc585b0b62b7108c58ae686a8433c6f57",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_prior_exposure.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_TOKEN_ENVELOPE_A2",
+      "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_envelope.build_token_envelope_artifacts",
+        "name": "build_token_envelope_artifacts",
+        "kind": "function",
+        "parameters": ["selection", "historical_manifest", "validation_receipt", "projected_outputs_receipt", "source_suite", "meter", "protocol_path", "protocol", "model", "model_revision", "development_run_id", "confirmatory_run_id", "token_tolerance", "expected_development_items", "expected_confirmatory_items"]
+      },
+      "file_line": "prom_search_hswm/prom9_f1_r8_envelope.py:289",
+      "line_range": "289-496",
+      "sha256": "26f193b441709add4dd682bb67be3886d651b3e9530a16f31cf5f7e571fb349e",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_envelope.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_LOCK_V4",
+      "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_lock.main",
+        "name": "main",
+        "kind": "function",
+        "parameters": ["argv"]
+      },
+      "file_line": "prom_search_hswm/prom9_f1_r8_lock.py:228",
+      "line_range": "228-490",
+      "sha256": "4d8fb24fc39a9484195f2c6e52b766521e339537e360b7fe4e9b6a0d11d6e24d",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_lock.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_POWER_V4",
+      "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_power.build_power_receipt",
+        "name": "build_power_receipt",
+        "kind": "function",
+        "parameters": ["manifest", "execution_lock", "public_source_receipt", "selection_receipt", "gold_source_receipt", "prior_exposure_receipt", "aborted_attempt_exposure_receipt", "suite", "evaluator_receipt", "gold", "db_genesis_receipt", "environment_dependency_bundle", "judge_core_path"]
+      },
+      "file_line": "prom_search_hswm/prom9_f1_r8_power.py:1191",
+      "line_range": "1191-1459",
+      "sha256": "f4be2752de0bd060e4f7b72c040453ae54651d5f429c630917d8dd29c0540973",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_power.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_TERMINAL_POWER_INCIDENT_GATE",
+      "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_power_cli.write_validated_power_receipt",
+        "name": "write_validated_power_receipt",
+        "kind": "function",
+        "parameters": ["path", "receipt", "expected_environment_hashes", "judge_core_path"]
+      },
+      "file_line": "prom_search_hswm/prom9_f1_r8_power_cli.py:549",
+      "line_range": "549-564",
+      "sha256": "a5013a2b702efab21b58370f5b3941dbee339fa517bf7fc6e99ee6589310514d",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_power_receipt.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_RUNNER_ABORTED_EXPOSURE_GATE",
+      "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_r8_runner.run_suite_v3_draft",
+        "name": "run_suite_v3_draft",
+        "kind": "function",
+        "parameters": ["manifest", "execution_lock", "protocol_path", "model_port", "token_meter", "max_workers", "token_envelope_derivation", "aborted_attempt_exposure_receipt", "environment_dependency_bundle", "result_contract_path", "judge_core_path", "symposium_repo_root", "tokenizer_dir", "model_catalog_path", "model_weight_receipt_path", "python_lock_path", "spool_identity_preflight", "preregistration_artifact", "preregistration_readback", "anchored_judge_path"]
+      },
+      "file_line": "prom_search_hswm/prom9_f1_r8_runner.py:3025",
+      "line_range": "3025-3289",
+      "sha256": "8386b032d2295280eb9ca576d79ea3be68a187f1ecc7808e72c268c6f5a42163",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_runner.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_ABORTED_EXPOSURE_RECEIPT",
+      "contract_binding": "R8_ABORTED_EXPOSURE_ARTIFACT__QUARANTINED",
+      "code_symbol": {
+        "qualified": "receipts/hswm_f1_r8_v8_aborted_exposure.v1.json#schema_version",
+        "name": "hswm-prom9-f1-aborted-attempt-exposure/v1",
+        "kind": "json_receipt",
+        "parameters": []
+      },
+      "file_line": "receipts/hswm_f1_r8_v8_aborted_exposure.v1.json:151",
+      "line_range": "151-151",
+      "sha256": "c359c6b342fb812aeb145a3658c856dc009e79cf4dc8a8e1217bcca88aa6b6ad",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_prior_exposure.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_SCHEMA_RATCHET_TEST",
+      "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_hswm_result_spool_attestation.test_schema_versions_advance_fail_closed",
+        "name": "test_schema_versions_advance_fail_closed",
+        "kind": "function",
+        "parameters": []
+      },
+      "file_line": "prom_search_hswm/test_hswm_result_spool_attestation.py:414",
+      "line_range": "414-420",
+      "sha256": "057988f9925bcf3fb7a4134fb18607d7100a4a2f77733c5da69f81054a614c82",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_hswm_result_spool_attestation.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_ABORTED_EXPOSURE_RECEIPT_TEST",
+      "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_prior_exposure.test_aborted_attempt_receipt_is_exact_complete_public_metadata",
+        "name": "test_aborted_attempt_receipt_is_exact_complete_public_metadata",
+        "kind": "function",
+        "parameters": []
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_prior_exposure.py:247",
+      "line_range": "247-298",
+      "sha256": "cea7187d8adfac895c050b14332a2945960a1a760f490f47f794de5e09a4c262",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_prior_exposure.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_ENVELOPE_A2_TEST",
+      "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_envelope.test_public_only_builder_derives_tight_common_caps",
+        "name": "test_public_only_builder_derives_tight_common_caps",
+        "kind": "function",
+        "parameters": ["tmp_path"]
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_envelope.py:203",
+      "line_range": "203-224",
+      "sha256": "308c4d2d2336d3aa2f596fb644a56158208b0c139664788786176d00c817a27c",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_envelope.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_LOCK_V4_TEST",
+      "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_lock.test_lock_cli_has_no_gold_path_and_rebuilds_only_the_public_graph",
+        "name": "test_lock_cli_has_no_gold_path_and_rebuilds_only_the_public_graph",
+        "kind": "function",
+        "parameters": ["tmp_path", "monkeypatch"]
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_lock.py:383",
+      "line_range": "383-436",
+      "sha256": "bb791307fc2758453afc94a3cf21dad1f3be3affaa24af1fa06d6b776872b03b",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_lock.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_INCIDENT_RESELECTION_TEST",
+      "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_power.test_incident_component_is_excluded_and_replacement_is_selected",
+        "name": "test_incident_component_is_excluded_and_replacement_is_selected",
+        "kind": "function",
+        "parameters": ["tmp_path"]
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_power.py:389",
+      "line_range": "389-454",
+      "sha256": "f819d0cb28639af384df3419b70f1404e73fa22290c03c7d07b9363bfd6e2277",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_power.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_TERMINAL_POWER_INCIDENT_TEST",
+      "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_power_receipt.test_terminal_power_write_refuses_invalid_or_unbound_incident_before_write",
+        "name": "test_terminal_power_write_refuses_invalid_or_unbound_incident_before_write",
+        "kind": "function",
+        "parameters": ["failure", "monkeypatch"]
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_power_receipt.py:880",
+      "line_range": "880-944",
+      "sha256": "be847310460493ab667f6bbfdab00614ca9e5d84b4dc659f75020c70fd4cd8af",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_power_receipt.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_RUNNER_ABORTED_EXPOSURE_TEST",
+      "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_runner.test_aborted_attempt_receipt_missing_tampered_and_resigned_refuse_cleanly",
+        "name": "test_aborted_attempt_receipt_missing_tampered_and_resigned_refuse_cleanly",
+        "kind": "function",
+        "parameters": ["tmp_path"]
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_runner.py:1432",
+      "line_range": "1432-1495",
+      "sha256": "8b8582551349855152e79d35f5e5790e5babd47e5c7eb103a832a398b780956e",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_runner.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_SOURCE_A2_TEST",
+      "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_source.test_cli_consumes_both_receipts_and_never_prints_answers",
+        "name": "test_cli_consumes_both_receipts_and_never_prints_answers",
+        "kind": "function",
+        "parameters": ["tmp_path", "capsys"]
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_source.py:193",
+      "line_range": "193-244",
+      "sha256": "b6dd2349af6ef37e5703f2e9250e0fc10dd9c0a49710ddc4d9d026f89f02abf4",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_source.py"
+    }
+  ]
+}

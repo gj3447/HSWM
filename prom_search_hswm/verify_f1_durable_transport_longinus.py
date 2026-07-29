@@ -13,11 +13,19 @@ from typing import Any, Mapping, Sequence
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_MANIFEST = REPO_ROOT / "LONGINUS_HSWM_F1_DURABLE_TRANSPORT_BINDING_2026-07-27.json"
-SCHEMA = "longinus-hswm-f1-r8-premeasurement-binding/v8"
-EXPECTED_BINDING_ID = "longinus-hswm-f1-r8-git-preimage-v8-20260729"
-EXPECTED_IMPLEMENTATION_COMMIT = "63a03623d98220800e9921527510d02971b882dc"
-EXPECTED_IMPLEMENTATION_PARENT = "77dd253676081985e8503dc0ce0ee9b358b388b6"
+DEFAULT_MANIFEST = (
+    REPO_ROOT / "LONGINUS_HSWM_F1_ABORTED_EXPOSURE_BINDING_2026-07-30.json"
+)
+SCHEMA = "longinus-hswm-f1-r8-premeasurement-binding/v9"
+EXPECTED_BINDING_ID = "longinus-hswm-f1-r8-aborted-exposure-v9-20260730"
+EXPECTED_IMPLEMENTATION_COMMIT = "f117cfdd6b058d1e6db131a19425084d642cdf0c"
+EXPECTED_IMPLEMENTATION_PARENT = "6f25ce51cfae5a6d86a4a0bc5c385bd073356094"
+EXPECTED_INCIDENT_RECEIPT_SHA256 = (
+    "6d3f2f8978a8502c0f01135ad7b998841dbb4bd61462934927f735e3932bad7d"
+)
+EXPECTED_IMPLEMENTATION_BINDINGS = 6
+EXPECTED_TEST_BINDINGS = 8
+EXPECTED_ARTIFACT_BINDINGS = 1
 REQUIRED_LAYERS = (
     "KG_NODE",
     "CONTRACT_BINDING",
@@ -39,6 +47,7 @@ REQUIRED_BINDING_KEYS = {
 ALLOWED_CONTRACT_BINDINGS = {
     "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
     "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
+    "R8_ABORTED_EXPOSURE_ARTIFACT__QUARANTINED",
 }
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
@@ -66,9 +75,39 @@ def _reject_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     return value
 
 
+def _reject_constant(value: str) -> object:
+    _fail("LABEL_ROT", f"non-finite JSON number: {value}")
+
+
+def _exact_json_equal(actual: object, expected: object) -> bool:
+    if isinstance(expected, dict):
+        return (
+            isinstance(actual, Mapping)
+            and set(actual) == set(expected)
+            and all(
+                _exact_json_equal(actual[key], expected[key])
+                for key in expected
+            )
+        )
+    if isinstance(expected, list):
+        return (
+            isinstance(actual, list)
+            and len(actual) == len(expected)
+            and all(
+                _exact_json_equal(left, right)
+                for left, right in zip(actual, expected, strict=True)
+            )
+        )
+    return type(actual) is type(expected) and actual == expected
+
+
 def _load(path: Path) -> dict[str, Any]:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_reject_duplicates)
+        value = json.loads(
+            path.read_text(encoding="utf-8"),
+            object_pairs_hook=_reject_duplicates,
+            parse_constant=_reject_constant,
+        )
     except BindingError:
         raise
     except (OSError, UnicodeError, json.JSONDecodeError) as error:
@@ -126,13 +165,62 @@ def _parameters(node: ast.FunctionDef | ast.AsyncFunctionDef) -> list[str]:
     return result
 
 
-def _symbol(blob: bytes, path: str, expected: Mapping[str, object]) -> ast.AST:
+def _symbol_range(
+    blob: bytes, path: str, expected: Mapping[str, object]
+) -> tuple[int, int]:
+    name = expected.get("name")
+    kind = expected.get("kind")
+    expected_parameters = expected.get("parameters")
+    if not isinstance(expected_parameters, list) or not all(
+        isinstance(item, str) for item in expected_parameters
+    ):
+        _fail("LABEL_ROT", f"invalid parameter labels for {path}:{name}")
+    if kind == "json_receipt":
+        if expected_parameters:
+            _fail("LABEL_ROT", f"JSON receipt parameters must be empty for {path}")
+        try:
+            decoded = blob.decode("utf-8")
+            value = json.loads(
+                decoded,
+                object_pairs_hook=_reject_duplicates,
+                parse_constant=_reject_constant,
+            )
+        except BindingError:
+            raise
+        except (UnicodeError, json.JSONDecodeError) as error:
+            _fail("SIGNATURE_MISMATCHED", f"cannot parse JSON receipt {path}: {error}")
+        if not isinstance(value, dict) or value.get("schema_version") != name:
+            _fail("SIGNATURE_MISMATCHED", f"JSON receipt schema drifted for {path}")
+        if expected.get("qualified") != f"{path}#schema_version":
+            _fail("LABEL_ROT", f"qualified JSON symbol rotated for {path}")
+        declared = value.get("aborted_attempt_exposure_receipt_sha256")
+        unsigned = dict(value)
+        unsigned.pop("aborted_attempt_exposure_receipt_sha256", None)
+        canonical = json.dumps(
+            unsigned,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        ).encode("utf-8")
+        if (
+            declared != EXPECTED_INCIDENT_RECEIPT_SHA256
+            or hashlib.sha256(canonical).hexdigest() != declared
+        ):
+            _fail("DIVERGENT", f"JSON receipt self-hash drifted for {path}")
+        schema_lines = [
+            index
+            for index, line in enumerate(decoded.splitlines(), start=1)
+            if '"schema_version"' in line
+        ]
+        if len(schema_lines) != 1:
+            _fail("SIGNATURE_MISMATCHED", f"JSON receipt schema line drifted for {path}")
+        return schema_lines[0], schema_lines[0]
+
     try:
         tree = ast.parse(blob.decode("utf-8"), filename=path)
     except (UnicodeError, SyntaxError) as error:
         _fail("SIGNATURE_MISMATCHED", f"cannot parse {path}: {error}")
-    name = expected.get("name")
-    kind = expected.get("kind")
     if not isinstance(name, str) or kind not in {"class", "function"}:
         _fail("LABEL_ROT", f"invalid code_symbol label for {path}")
     matches = [
@@ -147,11 +235,6 @@ def _symbol(blob: bytes, path: str, expected: Mapping[str, object]) -> ast.AST:
     actual_kind = "class" if isinstance(node, ast.ClassDef) else "function"
     if actual_kind != kind:
         _fail("SIGNATURE_MISMATCHED", f"{path}:{name} kind {actual_kind} != {kind}")
-    expected_parameters = expected.get("parameters")
-    if not isinstance(expected_parameters, list) or not all(
-        isinstance(item, str) for item in expected_parameters
-    ):
-        _fail("LABEL_ROT", f"invalid parameter labels for {path}:{name}")
     actual_parameters = [] if isinstance(node, ast.ClassDef) else _parameters(node)
     if actual_parameters != expected_parameters:
         _fail(
@@ -161,7 +244,10 @@ def _symbol(blob: bytes, path: str, expected: Mapping[str, object]) -> ast.AST:
     module = path[:-3].replace("/", ".") if path.endswith(".py") else path.replace("/", ".")
     if expected.get("qualified") != f"{module}.{name}":
         _fail("LABEL_ROT", f"qualified symbol label rotated for {path}:{name}")
-    return node
+    node_end = getattr(node, "end_lineno", None)
+    if not isinstance(node_end, int):
+        _fail("SIGNATURE_MISMATCHED", f"symbol end line missing for {path}:{name}")
+    return int(node.lineno), node_end
 
 
 def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
@@ -177,8 +263,25 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
     inadmissible = "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE"
     if manifest.get("evidence_class") != inadmissible or manifest.get("r7_status") != inadmissible:
         _fail("LABEL_ROT", "r7 exploratory/inadmissible boundary drifted")
-    if manifest.get("b22_gate") != "LOCKED" or manifest.get("model_calls") != 0:
-        _fail("LABEL_ROT", "B22/model-call premeasurement boundary drifted")
+    incident_boundary = manifest.get("incident_boundary")
+    expected_incident_boundary = {
+        "aborted_attempt_exposure_receipt_sha256": (
+            EXPECTED_INCIDENT_RECEIPT_SHA256
+        ),
+        "historical_upstream_model_calls": 1,
+        "prospective_successor_model_calls": 0,
+        "confirmatory_upstream_model_calls": 0,
+        "scientific_verdicts": 0,
+    }
+    if (
+        manifest.get("b22_gate") != "LOCKED"
+        or type(manifest.get("model_calls")) is not int
+        or manifest.get("model_calls") != 1
+        or not _exact_json_equal(
+            incident_boundary, expected_incident_boundary
+        )
+    ):
+        _fail("LABEL_ROT", "B22/quarantined model-call boundary drifted")
     if manifest.get("layers") != list(REQUIRED_LAYERS):
         _fail("LABEL_ROT", "Longinus seven-layer order drifted")
     kg = manifest.get("kg")
@@ -235,6 +338,7 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
     seen_nodes: set[str] = set()
     implementation_count = 0
     test_count = 0
+    artifact_count = 0
     for index, binding in enumerate(bindings):
         if not isinstance(binding, dict):
             _fail("MISSING", f"binding {index} is not an object")
@@ -251,6 +355,7 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
             _fail("LABEL_ROT", f"binding {index} contract label rotated")
         implementation_count += contract.endswith("__UNJUDGED")
         test_count += contract.endswith("__ENGINEERING_ONLY")
+        artifact_count += contract.endswith("__QUARANTINED")
 
         file_line = binding.get("file_line")
         if not isinstance(file_line, str) or ":" not in file_line:
@@ -272,14 +377,13 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
         code_symbol = binding.get("code_symbol")
         if not isinstance(code_symbol, dict):
             _fail("MISSING", f"code symbol binding missing for {relative}")
-        node = _symbol(blob, relative, code_symbol)
+        symbol_start, symbol_end = _symbol_range(blob, relative, code_symbol)
         line_range = binding.get("line_range")
         match = LINE_RANGE_RE.fullmatch(str(line_range))
         if match is None:
             _fail("MISSING", f"line range missing for {relative}")
         start, end = int(match.group(1)), int(match.group(2))
-        node_end = getattr(node, "end_lineno", None)
-        if start != getattr(node, "lineno", None) or end != node_end or line_text != str(start):
+        if start != symbol_start or end != symbol_end or line_text != str(start):
             _fail("DIVERGENT", f"AST/file line range drifted for {relative}")
 
         crate_script = binding.get("crate_script")
@@ -317,8 +421,15 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
             "ORPHANED",
             f"implementation baseline diff is not reverse-bound: {sorted(unbound_changes)}",
         )
-    if implementation_count != 12 or test_count != 12:
-        _fail("LABEL_ROT", "implementation/test binding labels are not 12/12")
+    if (
+        implementation_count != EXPECTED_IMPLEMENTATION_BINDINGS
+        or test_count != EXPECTED_TEST_BINDINGS
+        or artifact_count != EXPECTED_ARTIFACT_BINDINGS
+    ):
+        _fail(
+            "LABEL_ROT",
+            "implementation/test/artifact binding labels are not 6/8/1",
+        )
 
     return {
         "status": "PASS",
@@ -328,6 +439,7 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
         "files_checked": len(seen_paths),
         "implementation_bindings": implementation_count,
         "test_bindings": test_count,
+        "artifact_bindings": artifact_count,
         "baseline_changed_paths": len(changed_paths),
         "longinus_layers": len(REQUIRED_LAYERS),
         "classifications": {
@@ -341,6 +453,12 @@ def verify(manifest_path: Path = DEFAULT_MANIFEST) -> dict[str, object]:
         "kg_write_state": kg["write_state"],
         "scientific_status": manifest["scientific_status"],
         "b22_gate": manifest["b22_gate"],
+        "historical_upstream_model_calls": incident_boundary[
+            "historical_upstream_model_calls"
+        ],
+        "prospective_successor_model_calls": incident_boundary[
+            "prospective_successor_model_calls"
+        ],
     }
 
 

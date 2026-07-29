@@ -24,13 +24,14 @@ def test_checked_in_f1_r8_binding_is_exact_git_blob_bound() -> None:
     result = verify()
     assert result == {
         "status": "PASS",
-        "binding_id": "longinus-hswm-f1-r8-git-preimage-v8-20260729",
-        "implementation_commit": "63a03623d98220800e9921527510d02971b882dc",
-        "bindings_checked": 24,
-        "files_checked": 24,
-        "implementation_bindings": 12,
-        "test_bindings": 12,
-        "baseline_changed_paths": 2,
+        "binding_id": "longinus-hswm-f1-r8-aborted-exposure-v9-20260730",
+        "implementation_commit": "f117cfdd6b058d1e6db131a19425084d642cdf0c",
+        "bindings_checked": 15,
+        "files_checked": 15,
+        "implementation_bindings": 6,
+        "test_bindings": 8,
+        "artifact_bindings": 1,
+        "baseline_changed_paths": 15,
         "longinus_layers": 7,
         "classifications": {
             "MISSING": 0,
@@ -43,6 +44,8 @@ def test_checked_in_f1_r8_binding_is_exact_git_blob_bound() -> None:
         "kg_write_state": "NOT_AUTHORIZED_NOT_WRITTEN",
         "scientific_status": "UNJUDGED",
         "b22_gate": "LOCKED",
+        "historical_upstream_model_calls": 1,
+        "prospective_successor_model_calls": 0,
     }
 
 
@@ -106,7 +109,7 @@ def test_git_preimage_diff_paths_are_reverse_bound(
                 if binding["crate_script"].endswith(path):
                     binding["crate_script"] = (
                         "python -m pytest -q "
-                        "prom_search_hswm/test_f1_durable_transport.py"
+                        "prom_search_hswm/test_prom9_f1_prior_exposure.py"
                     )
 
     changed = _changed_manifest(tmp_path, mutate)
@@ -127,6 +130,23 @@ def test_signature_mismatch_is_classified(tmp_path: Path) -> None:
     assert caught.value.classification == "SIGNATURE_MISMATCHED"
 
 
+def test_json_incident_receipt_schema_symbol_is_bound(tmp_path: Path) -> None:
+    def mutate(value: dict[str, object]) -> None:
+        binding = next(
+            item
+            for item in value["bindings"]
+            if item["code_symbol"]["kind"] == "json_receipt"
+        )
+        binding["code_symbol"]["name"] = "hswm-prom9-f1-aborted-attempt-exposure/v0"
+
+    changed = _changed_manifest(tmp_path, mutate)
+    with pytest.raises(
+        BindingError, match="SIGNATURE_MISMATCHED: JSON receipt schema drifted"
+    ) as caught:
+        verify(changed)
+    assert caught.value.classification == "SIGNATURE_MISMATCHED"
+
+
 def test_label_rot_is_classified(tmp_path: Path) -> None:
     changed = _changed_manifest(
         tmp_path, lambda value: value.__setitem__("scientific_status", "CONFIRMED")
@@ -138,7 +158,7 @@ def test_label_rot_is_classified(tmp_path: Path) -> None:
 
 def test_directory_target_is_missing_not_file_hashed(tmp_path: Path) -> None:
     def mutate(value: dict[str, object]) -> None:
-        old = "prom_search_hswm/hswm_result_spool.py"
+        old = "prom_search_hswm/prom9_f1_r8_lock.py"
         index = value["required_target_paths"].index(old)
         value["required_target_paths"][index] = "prom_search_hswm"
         binding = next(
@@ -146,7 +166,7 @@ def test_directory_target_is_missing_not_file_hashed(tmp_path: Path) -> None:
             for item in value["bindings"]
             if item["file_line"].startswith(f"{old}:")
         )
-        binding["file_line"] = "prom_search_hswm:199"
+        binding["file_line"] = "prom_search_hswm:228"
 
     changed = _changed_manifest(tmp_path, mutate)
     with pytest.raises(BindingError, match="MISSING: directory/non-blob") as caught:

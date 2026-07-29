@@ -1003,6 +1003,56 @@ def _load_judge_core(path: Path):
     return module
 
 
+def _verify_deployment_environment_binding(
+    labels: object,
+    *,
+    execution_lock: Mapping[str, object],
+    manifest: Mapping[str, object],
+) -> dict[str, object]:
+    expected_fields = {
+        "spool_endpoint",
+        "model_upstream_endpoint",
+        "model_deployment_receipt_sha256",
+        "model",
+        "model_revision",
+        "run_id",
+        "hswm_commit",
+        "symposium_commit",
+    }
+    policy = execution_lock.get("execution_policy")
+    deployment_sha = execution_lock.get("deployment_receipt_sha256")
+    hswm_commit = execution_lock.get("hswm_commit")
+    model_revision = manifest.get("model_revision")
+    if (
+        not isinstance(labels, Mapping)
+        or set(labels) != expected_fields
+        or not isinstance(policy, Mapping)
+        or labels.get("spool_endpoint") != policy.get("endpoint")
+        or labels.get("model_upstream_endpoint")
+        != execution_lock.get("upstream_endpoint")
+        or labels.get("model_deployment_receipt_sha256") != deployment_sha
+        or labels.get("model") != manifest.get("model")
+        or execution_lock.get("model") != manifest.get("model")
+        or execution_lock.get("served_model") != manifest.get("model")
+        or labels.get("model_revision") != model_revision
+        or execution_lock.get("model_revision") != model_revision
+        or not isinstance(model_revision, str)
+        or _COMMIT.fullmatch(model_revision) is None
+        or not isinstance(deployment_sha, str)
+        or _SHA256.fullmatch(deployment_sha) is None
+        or execution_lock.get("deployment_id")
+        != f"hswm:model_deployment:v2:{deployment_sha}"
+        or labels.get("run_id") != manifest.get("run_id")
+        or labels.get("hswm_commit") != hswm_commit
+        or not isinstance(hswm_commit, str)
+        or _COMMIT.fullmatch(hswm_commit) is None
+        or not isinstance(labels.get("symposium_commit"), str)
+        or _COMMIT.fullmatch(str(labels.get("symposium_commit"))) is None
+    ):
+        raise PowerRefusal("environment deployment semantic binding drifted")
+    return dict(labels)
+
+
 def build_power_receipt(
     *,
     manifest: Mapping[str, object],
@@ -1092,28 +1142,11 @@ def build_power_receipt(
     }
     labels = environment.get("labels")
     dependency_files = dependencies.get("files")
-    hswm_commit = execution_lock.get("hswm_commit")
-    frozen_policy = execution_lock.get("execution_policy")
+    _verify_deployment_environment_binding(
+        labels, execution_lock=execution_lock, manifest=manifest
+    )
     if (
-        not isinstance(labels, Mapping)
-        or set(labels)
-        != {
-            "endpoint",
-            "model",
-            "model_revision",
-            "run_id",
-            "hswm_commit",
-            "symposium_commit",
-        }
-        or not isinstance(frozen_policy, Mapping)
-        or labels.get("endpoint") != frozen_policy.get("endpoint")
-        or labels.get("model") != manifest.get("model")
-        or labels.get("model_revision") != manifest.get("model_revision")
-        or labels.get("run_id") != manifest.get("run_id")
-        or labels.get("hswm_commit") != hswm_commit
-        or not isinstance(hswm_commit, str)
-        or _COMMIT.fullmatch(hswm_commit) is None
-        or not isinstance(dependency_files, Mapping)
+        not isinstance(dependency_files, Mapping)
         or set(dependency_files) != set(REQUIRED_DEPENDENCY_NAMES)
     ):
         raise PowerRefusal("environment/dependency semantic binding drifted")
@@ -1137,6 +1170,16 @@ def build_power_receipt(
         or execution_lock.get("environment_dependency_compatibility_root_sha256")
         != compatibility_root
         or execution_lock.get("environment_dependency_bundle_sha256") != bundle_sha
+        or any(
+            suite.get(field) != execution_lock.get(field)
+            for field in (
+                "upstream_endpoint",
+                "deployment_receipt_sha256",
+                "deployment_id",
+                "served_model",
+                "model_revision",
+            )
+        )
         or evaluator_receipt.get("cohort_root_sha256") != cohort_root
         or evaluator_receipt.get("raw_source_sha256")
         != public_source_receipt.get("raw_source_sha256")

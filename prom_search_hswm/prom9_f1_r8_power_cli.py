@@ -15,7 +15,11 @@ from pathlib import Path
 import re
 import sys
 
-from prom_search_hswm.hswm_typed_ports import canonical_sha256
+from prom_search_hswm.hswm_result_spool import (
+    ResultSpoolError,
+    load_model_deployment_binding,
+)
+from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
 from prom_search_hswm.prom9_f1_prior_exposure import (
     _read_private_bytes,
     _strict_object,
@@ -33,14 +37,17 @@ from prom_search_hswm.prom9_f1_r8_power import (
     BOOTSTRAP,
     DEVELOPMENT_COMPONENTS,
     POWER_DEVELOPMENT_SCHEMA,
+    POWER_EVIDENCE_SCHEMA,
     POWER_RECEIPT_SCHEMA,
     POWER_SCENARIOS,
     POWER_SIMULATOR_SCHEMA,
     SELECTION_SEED,
     SELECTED_CLUSTERS,
     TRIALS,
+    PowerRefusal,
     _load_judge_core,
     build_power_receipt,
+    derive_development_components,
 )
 
 
@@ -123,6 +130,48 @@ def _exact_integer(value: object, expected: int, label: str) -> int:
     return value
 
 
+def _verify_model_deployment_receipt(
+    path: Path,
+    *,
+    execution_lock: Mapping[str, object],
+    manifest: Mapping[str, object],
+) -> dict[str, str]:
+    """Verify the official deployment receipt and its frozen lock projection."""
+
+    upstream_endpoint = _text(
+        execution_lock.get("upstream_endpoint"), "model upstream endpoint"
+    )
+    model = _text(manifest.get("model"), "manifest model")
+    model_revision = _text(
+        manifest.get("model_revision"), "manifest model revision"
+    )
+    try:
+        binding = load_model_deployment_binding(
+            path,
+            upstream_endpoint=upstream_endpoint,
+            served_model=model,
+            model_revision=model_revision,
+            verify_live_process=False,
+        )
+    except ResultSpoolError as error:
+        raise PowerCLIRefusal("model deployment receipt semantics failed") from error
+    observed = {
+        "upstream_endpoint": binding.upstream_endpoint,
+        "deployment_receipt_sha256": binding.deployment_receipt_sha256,
+        "deployment_id": binding.deployment_id,
+        "served_model": binding.served_model,
+        "model_revision": binding.model_revision,
+    }
+    if (
+        execution_lock.get("model") != model
+        or any(execution_lock.get(field) != value for field, value in observed.items())
+    ):
+        raise PowerCLIRefusal(
+            "model deployment receipt differs from the frozen execution lock"
+        )
+    return observed
+
+
 def verify_measured_environment_bundle(
     bundle: Mapping[str, object],
     *,
@@ -140,11 +189,29 @@ def verify_measured_environment_bundle(
         R8_DEPENDENCY_NAMES
     ):
         raise PowerCLIRefusal("measured r8 dependency inventory drifted")
+    deployment_receipt_path = expected_paths.get("model_deployment_receipt")
+    if not isinstance(deployment_receipt_path, Path):
+        raise PowerCLIRefusal("model deployment receipt path is absent")
+    _verify_model_deployment_receipt(
+        deployment_receipt_path,
+        execution_lock=execution_lock,
+        manifest=manifest,
+    )
     policy = _mapping(execution_lock.get("execution_policy"), "execution policy")
     bundle_labels = _mapping(environment.get("labels"), "environment labels")
     try:
         expected_labels = r8_environment_labels(
-            endpoint=_text(policy.get("endpoint"), "execution endpoint"),
+            spool_endpoint=_text(
+                policy.get("endpoint"), "execution spool endpoint"
+            ),
+            model_upstream_endpoint=_text(
+                execution_lock.get("upstream_endpoint"),
+                "model upstream endpoint",
+            ),
+            model_deployment_receipt_sha256=_sha256(
+                execution_lock.get("deployment_receipt_sha256"),
+                "model deployment receipt",
+            ),
             model=_text(manifest.get("model"), "manifest model"),
             model_revision=_text(
                 manifest.get("model_revision"), "manifest model revision"
@@ -229,7 +296,26 @@ def verify_power_operating_characteristics(
     ):
         _sha256(receipt.get(field), f"power receipt {field}")
     evidence = _mapping(receipt.get("development_evidence"), "development evidence")
-    if canonical_sha256(evidence) != receipt.get("development_evidence_sha256"):
+    expected_evidence_keys = {
+        "schema_version",
+        "manifest",
+        "execution_lock",
+        "public_source_receipt",
+        "selection_receipt",
+        "gold_source_receipt",
+        "prior_exposure_receipt",
+        "suite",
+        "evaluator_receipt",
+        "gold",
+        "db_genesis_receipt",
+        "environment_dependency_bundle",
+        "artifact_receipts",
+    }
+    if (
+        set(evidence) != expected_evidence_keys
+        or evidence.get("schema_version") != POWER_EVIDENCE_SCHEMA
+        or canonical_sha256(evidence) != receipt.get("development_evidence_sha256")
+    ):
         raise PowerCLIRefusal("development evidence self-hash drifted")
     if (
         receipt.get("inference_unit") != "component_cluster_macro"
@@ -251,6 +337,30 @@ def verify_power_operating_characteristics(
         raise PowerCLIRefusal("power development-component count drifted")
     if canonical_sha256(components) != receipt.get("development_data_sha256"):
         raise PowerCLIRefusal("power development-data preimage drifted")
+    try:
+        rederived_components = derive_development_components(
+            manifest=_mapping(evidence.get("manifest"), "development manifest"),
+            suite=_mapping(evidence.get("suite"), "development suite"),
+            gold=_mapping(evidence.get("gold"), "development gold"),
+            selection_receipt=_mapping(
+                evidence.get("selection_receipt"), "development selection receipt"
+            ),
+        )
+    except (
+        PowerCLIRefusal,
+        PowerRefusal,
+        IndexError,
+        KeyError,
+        TypeError,
+        ValueError,
+    ) as error:
+        raise PowerCLIRefusal(
+            "development components were not rederived from evidence"
+        ) from error
+    if canonical_json(components) != canonical_json(rederived_components):
+        raise PowerCLIRefusal(
+            "development components were not rederived from evidence"
+        )
     plan = _mapping(analysis.get("simulation_plan"), "power simulation plan")
     if set(plan) != {
         "schema_version",
@@ -420,7 +530,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--result-contract", type=Path, required=True)
     parser.add_argument("--tokenizer-dir", type=Path, required=True)
     parser.add_argument("--model-catalog", type=Path, required=True)
-    parser.add_argument("--model-weight-receipt", type=Path, required=True)
+    parser.add_argument(
+        "--model-deployment-receipt",
+        dest="model_weight_receipt",
+        type=Path,
+        required=True,
+    )
     parser.add_argument("--python-lock", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)

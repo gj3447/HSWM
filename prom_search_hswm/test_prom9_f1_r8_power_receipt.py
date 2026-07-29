@@ -8,6 +8,7 @@ import subprocess
 
 import pytest
 
+from prom_search_hswm.hswm_result_spool import ModelDeploymentBinding
 from prom_search_hswm.hswm_typed_ports import canonical_sha256
 from prom_search_hswm.prom9_f1_r8_environment import (
     R8_DEPENDENCY_NAMES,
@@ -22,11 +23,14 @@ from prom_search_hswm.prom9_f1_r8_power import (
     POWER_SIMULATOR_SCHEMA,
     SELECTED_CLUSTERS,
     TRIALS,
+    PowerRefusal,
     _load_judge_core,
+    _verify_deployment_environment_binding,
 )
 from prom_search_hswm.prom9_f1_r8_power_cli import (
     ENVIRONMENT_HASH_FIELDS,
     PowerCLIRefusal,
+    _verify_model_deployment_receipt,
     main,
     verify_measured_environment_bundle,
     verify_power_operating_characteristics,
@@ -186,9 +190,13 @@ def _bundle_context(
     symposium_commit: str,
 ) -> tuple[dict[str, object], dict[str, object], dict[str, object], dict[str, str]]:
     labels = r8_environment_labels(
-        endpoint="https://inference.invalid/v1",
+        spool_endpoint="https://spool.invalid",
+        model_upstream_endpoint=(
+            "https://inference.invalid/v1/chat/completions"
+        ),
+        model_deployment_receipt_sha256="d" * 64,
         model="measured-model",
-        model_revision="measured-revision",
+        model_revision="f" * 40,
         run_id="f1-r8-environment-test",
         hswm_commit=hswm_commit,
         symposium_commit=symposium_commit,
@@ -202,7 +210,15 @@ def _bundle_context(
     lock: dict[str, object] = {
         **hashes,
         "hswm_commit": hswm_commit,
-        "execution_policy": {"endpoint": labels["endpoint"]},
+        "execution_policy": {"endpoint": labels["spool_endpoint"]},
+        "upstream_endpoint": labels["model_upstream_endpoint"],
+        "deployment_receipt_sha256": labels[
+            "model_deployment_receipt_sha256"
+        ],
+        "deployment_id": f"hswm:model_deployment:v2:{'d' * 64}",
+        "model": labels["model"],
+        "served_model": labels["model"],
+        "model_revision": labels["model_revision"],
     }
     manifest: dict[str, object] = {
         "model": labels["model"],
@@ -212,10 +228,131 @@ def _bundle_context(
     return bundle, lock, manifest, hashes
 
 
+def test_power_builder_requires_exact_eight_label_deployment_binding() -> None:
+    labels = r8_environment_labels(
+        spool_endpoint="https://spool.invalid",
+        model_upstream_endpoint=(
+            "https://inference.invalid/v1/chat/completions"
+        ),
+        model_deployment_receipt_sha256="d" * 64,
+        model="measured-model",
+        model_revision="f" * 40,
+        run_id="run",
+        hswm_commit="a" * 40,
+        symposium_commit="b" * 40,
+    )
+    lock = {
+        "execution_policy": {"endpoint": labels["spool_endpoint"]},
+        "upstream_endpoint": labels["model_upstream_endpoint"],
+        "deployment_receipt_sha256": labels[
+            "model_deployment_receipt_sha256"
+        ],
+        "deployment_id": f"hswm:model_deployment:v2:{'d' * 64}",
+        "model": labels["model"],
+        "served_model": labels["model"],
+        "model_revision": labels["model_revision"],
+        "hswm_commit": labels["hswm_commit"],
+    }
+    manifest = {
+        "model": labels["model"],
+        "model_revision": labels["model_revision"],
+        "run_id": labels["run_id"],
+    }
+    assert _verify_deployment_environment_binding(
+        labels, execution_lock=lock, manifest=manifest
+    ) == labels
+
+    old = dict(labels)
+    old["endpoint"] = old.pop("spool_endpoint")
+    with pytest.raises(PowerRefusal, match="deployment semantic"):
+        _verify_deployment_environment_binding(
+            old, execution_lock=lock, manifest=manifest
+        )
+    extra = {**labels, "extra": "drift"}
+    with pytest.raises(PowerRefusal, match="deployment semantic"):
+        _verify_deployment_environment_binding(
+            extra, execution_lock=lock, manifest=manifest
+        )
+    alternate = {**lock, "deployment_receipt_sha256": "e" * 64}
+    alternate["deployment_id"] = f"hswm:model_deployment:v2:{'e' * 64}"
+    with pytest.raises(PowerRefusal, match="deployment semantic"):
+        _verify_deployment_environment_binding(
+            labels, execution_lock=alternate, manifest=manifest
+        )
+    wrong_model = {**lock, "model": "other-model"}
+    with pytest.raises(PowerRefusal, match="deployment semantic"):
+        _verify_deployment_environment_binding(
+            labels, execution_lock=wrong_model, manifest=manifest
+        )
+    malformed_symposium = {**labels, "symposium_commit": "not-a-commit"}
+    with pytest.raises(PowerRefusal, match="deployment semantic"):
+        _verify_deployment_environment_binding(
+            malformed_symposium, execution_lock=lock, manifest=manifest
+        )
+
+
+def test_power_cli_verifies_official_deployment_receipt_projection(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import prom_search_hswm.prom9_f1_r8_power_cli as cli
+
+    path = _write_text(tmp_path / "deployment.json", "{}\n")
+    manifest = {"model": "measured-model", "model_revision": "f" * 40}
+    lock = {
+        "model": manifest["model"],
+        "upstream_endpoint": "https://inference.invalid/v1/chat/completions",
+        "deployment_receipt_sha256": "d" * 64,
+        "deployment_id": f"hswm:model_deployment:v2:{'d' * 64}",
+        "served_model": manifest["model"],
+        "model_revision": manifest["model_revision"],
+    }
+    calls: list[tuple[Path, bool]] = []
+
+    def load_exact(
+        raw_path: Path,
+        *,
+        upstream_endpoint: str,
+        served_model: str,
+        model_revision: str,
+        verify_live_process: bool,
+    ) -> ModelDeploymentBinding:
+        calls.append((raw_path, verify_live_process))
+        return ModelDeploymentBinding(
+            upstream_endpoint=upstream_endpoint,
+            deployment_receipt_sha256="d" * 64,
+            deployment_id=f"hswm:model_deployment:v2:{'d' * 64}",
+            served_model=served_model,
+            model_revision=model_revision,
+        )
+
+    monkeypatch.setattr(cli, "load_model_deployment_binding", load_exact)
+    assert _verify_model_deployment_receipt(
+        path, execution_lock=lock, manifest=manifest
+    )["deployment_receipt_sha256"] == "d" * 64
+    assert calls == [(path, False)]
+
+    def load_wrong(*_args: object, **_kwargs: object) -> ModelDeploymentBinding:
+        return ModelDeploymentBinding(
+            upstream_endpoint=str(lock["upstream_endpoint"]),
+            deployment_receipt_sha256="e" * 64,
+            deployment_id=f"hswm:model_deployment:v2:{'e' * 64}",
+            served_model=str(manifest["model"]),
+            model_revision=str(manifest["model_revision"]),
+        )
+
+    monkeypatch.setattr(cli, "load_model_deployment_binding", load_wrong)
+    with pytest.raises(PowerCLIRefusal, match="frozen execution lock"):
+        _verify_model_deployment_receipt(
+            path, execution_lock=lock, manifest=manifest
+        )
+
+
 def _allow_pre_c1_dependencies(monkeypatch: pytest.MonkeyPatch) -> None:
     """Bypass only pre-C1 HSWM blobs; keep SYMPOSIUM judge binding live."""
 
     import prom_search_hswm.prom9_f1_r8_environment as environment
+    import prom_search_hswm.prom9_f1_r8_power_cli as cli
 
     original = environment.verify_repository_dependency_blobs
 
@@ -244,6 +381,38 @@ def _allow_pre_c1_dependencies(monkeypatch: pytest.MonkeyPatch) -> None:
         verify_live_commit_only,
     )
 
+    def verified_deployment(
+        _path: Path,
+        *,
+        upstream_endpoint: str,
+        served_model: str,
+        model_revision: str,
+        verify_live_process: bool,
+    ) -> ModelDeploymentBinding:
+        assert verify_live_process is False
+        return ModelDeploymentBinding(
+            upstream_endpoint=upstream_endpoint,
+            deployment_receipt_sha256="d" * 64,
+            deployment_id=f"hswm:model_deployment:v2:{'d' * 64}",
+            served_model=served_model,
+            model_revision=model_revision,
+        )
+
+    monkeypatch.setattr(cli, "load_model_deployment_binding", verified_deployment)
+
+
+def _allow_synthetic_components(
+    monkeypatch: pytest.MonkeyPatch,
+    components: list[dict[str, object]],
+) -> None:
+    import prom_search_hswm.prom9_f1_r8_power_cli as cli
+
+    monkeypatch.setattr(
+        cli,
+        "derive_development_components",
+        lambda **_kwargs: copy.deepcopy(components),
+    )
+
 
 def _v3_receipt(
     *,
@@ -255,6 +424,17 @@ def _v3_receipt(
 ) -> dict[str, object]:
     evidence = {
         "schema_version": "hswm-prom9-f1-r8-development-evidence/v1",
+        "manifest": {},
+        "execution_lock": {},
+        "public_source_receipt": {},
+        "selection_receipt": {},
+        "gold_source_receipt": {},
+        "prior_exposure_receipt": {},
+        "suite": {},
+        "evaluator_receipt": {},
+        "gold": {},
+        "db_genesis_receipt": {},
+        "environment_dependency_bundle": {},
         "artifact_receipts": dict(
             environment_hashes
             or {field: canonical_sha256(field) for field in ENVIRONMENT_HASH_FIELDS}
@@ -287,7 +467,9 @@ def _rehash(receipt: dict[str, object]) -> dict[str, object]:
     return {**unsigned, "receipt_sha256": canonical_sha256(unsigned)}
 
 
-def test_actual_prospective_judge_semantics_pass_v3_power_gates_but_old_schema_refuses() -> None:
+def test_actual_prospective_judge_semantics_pass_v3_power_gates_but_incomplete_judge_evidence_refuses(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     assert POWER_RECEIPT_SCHEMA == "hswm-prom9-f1-r8-power-operating-characteristic/v3"
     judge, components, plan, characteristics = _actual_judge_power()
     judge_sha = str(judge.judge_core_sha256(JUDGE_PATH))
@@ -297,6 +479,7 @@ def test_actual_prospective_judge_semantics_pass_v3_power_gates_but_old_schema_r
         characteristics=characteristics,
         judge_sha256=judge_sha,
     )
+    _allow_synthetic_components(monkeypatch, components)
 
     assert verify_power_operating_characteristics(
         receipt,
@@ -309,8 +492,9 @@ def test_actual_prospective_judge_semantics_pass_v3_power_gates_but_old_schema_r
         for scenario in SENSITIVITY_SCENARIOS
     )
 
-    # The checked-in prospective judge is still v2.  The durable HSWM test must
-    # fail closed instead of treating a temporary v1/v2 receipt as acceptable.
+    # The anchored prospective judge must fail closed on this deliberately
+    # incomplete synthetic receipt instead of treating simulator replay alone
+    # as sufficient power evidence.
     old_lock = {
         "dependency_hashes": {
             "power_operating_characteristic_receipt": receipt["receipt_sha256"]
@@ -319,10 +503,22 @@ def test_actual_prospective_judge_semantics_pass_v3_power_gates_but_old_schema_r
         "bootstrap": dict(BOOTSTRAP),
     }
     with pytest.raises(judge.JudgeRefusal):
-        judge._verify_power_receipt(receipt, lock=old_lock)
+        judge._verify_power_receipt(
+            receipt,
+            lock=old_lock,
+            prereg={
+                "power_operating_characteristic_receipt_sha256": receipt[
+                    "receipt_sha256"
+                ]
+            },
+            bootstrap=dict(BOOTSTRAP),
+            selection={},
+        )
 
 
-def test_power_gate_rejects_a_subthreshold_actual_judge_characteristic() -> None:
+def test_power_gate_rejects_a_subthreshold_actual_judge_characteristic(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     judge, components, plan, characteristics = _actual_judge_power()
     receipt = _v3_receipt(
         components=components,
@@ -330,6 +526,7 @@ def test_power_gate_rejects_a_subthreshold_actual_judge_characteristic() -> None
         characteristics=characteristics,
         judge_sha256=str(judge.judge_core_sha256(JUDGE_PATH)),
     )
+    _allow_synthetic_components(monkeypatch, components)
     failing = copy.deepcopy(receipt)
     assert isinstance(failing["operating_characteristics"], dict)
     failing["operating_characteristics"]["observed_power_lower_95"] = 0.79
@@ -342,38 +539,56 @@ def test_power_gate_rejects_a_subthreshold_actual_judge_characteristic() -> None
         )
 
 
-def test_fabricated_components_and_all_pass_scalars_are_refused_by_judge_replay() -> None:
+def test_rehashed_detached_component_contrast_is_refused_by_evidence_rederivation(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     judge, components, plan, characteristics = _actual_judge_power()
-    fabricated_characteristics = {
-        **characteristics,
-        "observed_power_at_mde": 1.0,
-        "observed_power_lower_95": 1.0,
-        "null_false_support_rate": 0.0,
-        "null_false_support_upper_95": 0.0,
-        "interval_coverage": 1.0,
-        "interval_coverage_lower_95": 1.0,
-        "expected_interval_width": 0.01,
-    }
-    for scenario in SENSITIVITY_SCENARIOS:
-        fabricated_characteristics[f"{scenario}_support_rate"] = 1.0
-        fabricated_characteristics[f"{scenario}_support_lower_95"] = 1.0
-        fabricated_characteristics[f"{scenario}_sensitivity_pass"] = True
     receipt = _v3_receipt(
         components=components,
         plan=plan,
-        characteristics=fabricated_characteristics,
+        characteristics=characteristics,
         judge_sha256=str(judge.judge_core_sha256(JUDGE_PATH)),
     )
-    fabricated = copy.deepcopy(receipt)
-    fabricated_components = [None] * 48
-    assert isinstance(fabricated["analysis_input"], dict)
-    fabricated["analysis_input"]["development_components"] = fabricated_components
-    fabricated["development_data_sha256"] = canonical_sha256(fabricated_components)
-    fabricated = _rehash(fabricated)
+    _allow_synthetic_components(monkeypatch, components)
+    detached = copy.deepcopy(receipt)
+    assert isinstance(detached["analysis_input"], dict)
+    detached_components = detached["analysis_input"]["development_components"]
+    assert isinstance(detached_components, list)
+    assert isinstance(detached_components[0], dict)
+    contrasts = detached_components[0]["contrasts"]
+    assert isinstance(contrasts, dict)
+    arm = next(iter(contrasts))
+    contrasts[arm] = float(contrasts[arm]) + 0.125
+    detached["development_data_sha256"] = canonical_sha256(detached_components)
+    detached = _rehash(detached)
 
-    with pytest.raises(PowerCLIRefusal, match="independent power replay failed"):
+    with pytest.raises(PowerCLIRefusal, match="not rederived from evidence"):
         verify_power_operating_characteristics(
-            fabricated,
+            detached,
+            judge_core_path=JUDGE_PATH,
+        )
+
+
+def test_terminal_power_verifier_rejects_incomplete_evidence_shape(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    judge, components, plan, characteristics = _actual_judge_power()
+    receipt = _v3_receipt(
+        components=components,
+        plan=plan,
+        characteristics=characteristics,
+        judge_sha256=str(judge.judge_core_sha256(JUDGE_PATH)),
+    )
+    _allow_synthetic_components(monkeypatch, components)
+    incomplete = copy.deepcopy(receipt)
+    evidence = incomplete["development_evidence"]
+    assert isinstance(evidence, dict)
+    evidence.pop("manifest")
+    incomplete["development_evidence_sha256"] = canonical_sha256(evidence)
+    incomplete = _rehash(incomplete)
+    with pytest.raises(PowerCLIRefusal, match="development evidence self-hash"):
+        verify_power_operating_characteristics(
+            incomplete,
             judge_core_path=JUDGE_PATH,
         )
 
@@ -460,7 +675,9 @@ def test_measured_environment_bundle_refuses_runtime_semantic_path_substitution(
 
 def test_measured_environment_bundle_refuses_live_commit_mismatch(
     tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    _allow_pre_c1_dependencies(monkeypatch)
     repo_root = Path(__file__).resolve().parents[1]
     symposium_repo_root = Path(__file__).resolve().parents[3]
     expected_paths = _r8_dependency_paths(tmp_path)
@@ -555,6 +772,7 @@ def test_subthreshold_receipt_is_refused_before_private_write(
         judge_sha256=str(judge.judge_core_sha256(JUDGE_PATH)),
         environment_hashes=hashes,
     )
+    _allow_synthetic_components(monkeypatch, components)
     failing = copy.deepcopy(receipt)
     assert isinstance(failing["operating_characteristics"], dict)
     failing["operating_characteristics"]["null_false_support_upper_95"] = 0.051
@@ -622,7 +840,7 @@ def test_cli_refusal_does_not_echo_private_error_text(
         "tokenizer",
         "--model-catalog",
         "model-catalog",
-        "--model-weight-receipt",
+        "--model-deployment-receipt",
         "model-weight",
         "--python-lock",
         "python-lock",

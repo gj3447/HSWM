@@ -24,13 +24,13 @@ def test_checked_in_f1_r8_binding_is_exact_git_blob_bound() -> None:
     result = verify()
     assert result == {
         "status": "PASS",
-        "binding_id": "longinus-hswm-f1-r8-git-preimage-v6-20260729",
-        "implementation_commit": "190265b699ce482e1814cbce838fbf948fcbe54b",
+        "binding_id": "longinus-hswm-f1-r8-git-preimage-v7-20260729",
+        "implementation_commit": "53dab1dd8b6938acd4ecea98d054c4565769102d",
         "bindings_checked": 24,
         "files_checked": 24,
         "implementation_bindings": 12,
         "test_bindings": 12,
-        "baseline_changed_paths": 6,
+        "baseline_changed_paths": 2,
         "longinus_layers": 7,
         "classifications": {
             "MISSING": 0,
@@ -87,12 +87,8 @@ def test_reverse_orphan_scan_is_classified(tmp_path: Path) -> None:
 @pytest.mark.parametrize(
     "path",
     [
-        "prom_search_hswm/prom9_f1_r8_envelope.py",
-        "prom_search_hswm/prom9_f1_r8_source.py",
-        "prom_search_hswm/test_prom9_f1_r8_envelope.py",
-        "prom_search_hswm/test_prom9_f1_r8_source.py",
-        "prom_search_hswm/test_prom9_f1_r8_lock.py",
-        "prom_search_hswm/test_prom9_f1_r8_power.py",
+        "prom_search_hswm/prom9_f1_r8_runner.py",
+        "prom_search_hswm/test_prom9_f1_r8_runner.py",
     ],
 )
 def test_git_preimage_diff_paths_are_reverse_bound(

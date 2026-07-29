@@ -260,7 +260,7 @@ def _preflight(run_id: str, lock_sha: str, genesis_sha: str) -> dict[str, object
         "schema_version": SPOOL_IDENTITY_SCHEMA,
         "server_revision": "fake-revision",
         "db_identity": {
-            "resolved_path": "/private/result-spool.sqlite3",
+            "resolved_path": "/private/spool.sqlite3",
             "st_dev": 7,
             "st_ino": 11,
         },
@@ -1232,6 +1232,47 @@ def test_terminal_finalizer_binds_minimal_roots_and_enriched_preimages(
             transport_bindings=tampered,
             genesis_receipt=context["genesis"],
         )
+
+
+def test_spool_preflight_identity_continues_through_genesis_and_terminal(
+    tmp_path: Path,
+) -> None:
+    context = _context(tmp_path)
+    draft, port = _run(context)
+    bindings = _transport_bindings(draft, port, context["genesis"])
+
+    mismatched_draft = copy.deepcopy(draft)
+    preflight = mismatched_draft["spool_identity_preflight"]
+    identity = preflight["endpoint_identity"]
+    identity["db_identity"]["st_ino"] += 1
+    _rehash(identity, "identity_sha256")
+    _rehash(preflight, "preflight_sha256")
+    mismatched_draft["spool_identity_preflight_sha256"] = preflight[
+        "preflight_sha256"
+    ]
+    _rehash(mismatched_draft, "draft_receipt_sha256")
+    with pytest.raises(R8RunnerRefusal, match="preflight.*genesis"):
+        finalize_suite_v3(
+            mismatched_draft,
+            transport_bindings=bindings,
+            genesis_receipt=context["genesis"],
+        )
+
+    suite = finalize_suite_v3(
+        draft,
+        transport_bindings=bindings,
+        genesis_receipt=context["genesis"],
+    )
+    forged = copy.deepcopy(suite)
+    preflight = forged["spool_identity_preflight"]
+    identity = preflight["endpoint_identity"]
+    identity["db_identity"]["resolved_path"] = "/private/alternate-spool.sqlite3"
+    _rehash(identity, "identity_sha256")
+    _rehash(preflight, "preflight_sha256")
+    forged["spool_identity_preflight_sha256"] = preflight["preflight_sha256"]
+    _rehash(forged, "suite_receipt_sha256")
+    with pytest.raises(R8RunnerRefusal, match="preflight.*terminal"):
+        verify_suite_v3_without_gold(forged)
 
 
 def test_runner_local_verifier_recomputes_physical_id_and_token_parity(

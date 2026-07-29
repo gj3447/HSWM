@@ -587,6 +587,15 @@ def _validate_spool_audit(value: object) -> dict[str, object]:
     return dict(value)
 
 
+def _spool_preflight_database_identity(value: object) -> dict[str, object]:
+    if not isinstance(value, Mapping):
+        raise R8RunnerRefusal("spool identity preflight shape drifted")
+    identity = value.get("endpoint_identity")
+    if not isinstance(identity, Mapping):
+        raise R8RunnerRefusal("result-spool identity shape drifted")
+    return _database_identity_value(identity.get("db_identity"), "result spool")
+
+
 def _validate_spool_identity_preflight(
     value: object,
     *,
@@ -603,7 +612,7 @@ def _validate_spool_identity_preflight(
     if not isinstance(identity, Mapping) or set(identity) != _SPOOL_IDENTITY_FIELDS:
         raise R8RunnerRefusal("result-spool identity shape drifted")
     _self_hash(identity, "identity_sha256", "result-spool identity")
-    _database_identity_value(identity.get("db_identity"), "result spool")
+    _spool_preflight_database_identity(value)
     _validate_spool_audit(identity.get("audit"))
     if (
         value.get("schema_version") != SPOOL_PREFLIGHT_SCHEMA
@@ -2891,6 +2900,14 @@ def finalize_suite_v3(
         )
     ):
         raise R8RunnerRefusal("terminal transport does not continue DB genesis")
+    if _spool_preflight_database_identity(
+        draft.get("spool_identity_preflight")
+    ) != _database_identity_value(
+        genesis_receipt.get("spool_db_identity"), "genesis result spool"
+    ):
+        raise R8RunnerRefusal(
+            "spool preflight database identity differs from genesis"
+        )
     _validate_terminal_transport(
         rows=rows,
         gates=gates,
@@ -2934,6 +2951,14 @@ def verify_suite_v3_without_gold(value: Mapping[str, object]) -> str:
         != value.get("db_genesis_receipt_sha256")
     ):
         raise R8RunnerRefusal("suite transport identity drifted")
+    if _spool_preflight_database_identity(
+        value.get("spool_identity_preflight")
+    ) != _database_identity_value(
+        bindings.get("spool_db_identity"), "terminal result spool"
+    ):
+        raise R8RunnerRefusal(
+            "spool preflight database identity differs from terminal transport"
+        )
     _validate_terminal_transport(
         rows=rows,
         gates=gates,

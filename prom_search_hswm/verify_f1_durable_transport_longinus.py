@@ -5,6 +5,7 @@ import argparse
 import ast
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -13,10 +14,10 @@ from typing import Any, Mapping, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = REPO_ROOT / "LONGINUS_HSWM_F1_DURABLE_TRANSPORT_BINDING_2026-07-27.json"
-SCHEMA = "longinus-hswm-f1-r8-premeasurement-binding/v3"
-EXPECTED_BINDING_ID = "longinus-hswm-f1-r8-deployment-power-v3-20260729"
-EXPECTED_IMPLEMENTATION_COMMIT = "b75a2a5bddf0960ae22707d059005cd8393da0c7"
-EXPECTED_IMPLEMENTATION_PARENT = "51d0f3ea86c0ff0521f1ca5f3d66f73d1a1aa9dc"
+SCHEMA = "longinus-hswm-f1-r8-premeasurement-binding/v4"
+EXPECTED_BINDING_ID = "longinus-hswm-f1-r8-git-preimage-v4-20260729"
+EXPECTED_IMPLEMENTATION_COMMIT = "eafe64b1f58064cc0f1239a5dc86f41bc5f76d2e"
+EXPECTED_IMPLEMENTATION_PARENT = "4e02605a0444d742bb1565e2933407d0c83b8147"
 REQUIRED_LAYERS = (
     "KG_NODE",
     "CONTRACT_BINDING",
@@ -78,12 +79,18 @@ def _load(path: Path) -> dict[str, Any]:
 
 
 def _git(arguments: Sequence[str], *, classification: str, label: str) -> bytes:
+    environ = {
+        key: value for key, value in os.environ.items() if not key.startswith("GIT_")
+    }
+    environ["GIT_NO_REPLACE_OBJECTS"] = "1"
+    environ["GIT_LITERAL_PATHSPECS"] = "1"
     completed = subprocess.run(
         ["git", "--no-replace-objects", *arguments],
         cwd=REPO_ROOT,
         check=False,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        env=environ,
     )
     if completed.returncode != 0:
         detail = completed.stderr.decode("utf-8", "replace").strip()

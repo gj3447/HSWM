@@ -1,9 +1,9 @@
 {
-  "schema": "longinus-hswm-f1-r8-premeasurement-binding/v3",
-  "binding_id": "longinus-hswm-f1-r8-deployment-power-v3-20260729",
+  "schema": "longinus-hswm-f1-r8-premeasurement-binding/v4",
+  "binding_id": "longinus-hswm-f1-r8-git-preimage-v4-20260729",
   "binding_state": "PIERCED_LOCAL_NO_KG_WRITE",
-  "generated_at": "2026-07-29T14:39:56+09:00",
-  "baseline_scope": "HSWM F1 r8 premeasurement target-deployment probe, official deployment receipt/process attestation, durable spool identity, environment and lock closures, evidence-derived power receipt, private output, runner, source, terminal transport audit, and their exact tests",
+  "generated_at": "2026-07-29T15:09:50+09:00",
+  "baseline_scope": "HSWM F1 r8 premeasurement deployment, spool, environment, lock, power, runner, source, transport, and exact replace-ref-immune repository path, tree-mode, blob, index, and foreign-dirt boundary tests",
   "scientific_status": "UNJUDGED",
   "evidence_class": "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE",
   "r7_status": "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE",
@@ -12,8 +12,8 @@
   "git": {
     "remote": "https://github.com/gj3447/HSWM.git",
     "branch": "main",
-    "implementation_commit": "b75a2a5bddf0960ae22707d059005cd8393da0c7",
-    "implementation_parent": "51d0f3ea86c0ff0521f1ca5f3d66f73d1a1aa9dc",
+    "implementation_commit": "eafe64b1f58064cc0f1239a5dc86f41bc5f76d2e",
+    "implementation_parent": "4e02605a0444d742bb1565e2933407d0c83b8147",
     "blob_authority": "Every source SHA, AST symbol, signature, and line range is read from implementation_commit via git cat-file, never from the worktree.",
     "ancestry_rule": "implementation_parent must be an ancestor of implementation_commit; implementation_commit must be an ancestor of HEAD; every changed Python path in that baseline diff must be reverse-bound."
   },
@@ -22,8 +22,8 @@
     "anchor_status": "LOCAL_PROPOSED_REFERENCE_IDENTITY",
     "provenance_actor": "Codex",
     "source_path": "LONGINUS_HSWM_F1_DURABLE_TRANSPORT_BINDING_2026-07-27.json",
-    "timestamp": "2026-07-29T14:39:56+09:00",
-    "baseline_scope": "b75a2a5bddf0960ae22707d059005cd8393da0c7"
+    "timestamp": "2026-07-29T15:09:50+09:00",
+    "baseline_scope": "eafe64b1f58064cc0f1239a5dc86f41bc5f76d2e"
   },
   "layers": [
     "KG_NODE",
@@ -97,22 +97,19 @@
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_ENVIRONMENT",
       "contract_binding": "R8_PREMEASUREMENT_IMPLEMENTATION__UNJUDGED",
       "code_symbol": {
-        "qualified": "prom_search_hswm.prom9_f1_r8_environment.verify_r8_preimage_bundle",
-        "name": "verify_r8_preimage_bundle",
+        "qualified": "prom_search_hswm.prom9_f1_r8_environment.verify_repository_dependency_blobs",
+        "name": "verify_repository_dependency_blobs",
         "kind": "function",
         "parameters": [
-          "value",
-          "expected_paths",
-          "expected_labels",
           "repo_root",
-          "symposium_repo_root",
-          "verify_live",
-          "environ"
+          "expected_commit",
+          "expected_paths",
+          "required_names"
         ]
       },
-      "file_line": "prom_search_hswm/prom9_f1_r8_environment.py:1160",
-      "line_range": "1160-1215",
-      "sha256": "199b96a22e0f457fb964a98a7c4903eda760a9cde32b60339e1f02d43a8604ab",
+      "file_line": "prom_search_hswm/prom9_f1_r8_environment.py:1117",
+      "line_range": "1117-1244",
+      "sha256": "310e075050feb553540d2c7b2155fcb460a5ca1b8070951dc96b62a7c7470a4a",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_environment.py"
     },
     {
@@ -312,14 +309,17 @@
       "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_ENVIRONMENT_TEST",
       "contract_binding": "R8_PREMEASUREMENT_TEST__ENGINEERING_ONLY",
       "code_symbol": {
-        "qualified": "prom_search_hswm.test_prom9_f1_r8_environment.test_r8_labels_and_live_repository_commit_are_exact",
-        "name": "test_r8_labels_and_live_repository_commit_are_exact",
+        "qualified": "prom_search_hswm.test_prom9_f1_r8_environment.test_repository_dependency_ignores_forged_git_index_file",
+        "name": "test_repository_dependency_ignores_forged_git_index_file",
         "kind": "function",
-        "parameters": []
+        "parameters": [
+          "tmp_path",
+          "monkeypatch"
+        ]
       },
-      "file_line": "prom_search_hswm/test_prom9_f1_r8_environment.py:380",
-      "line_range": "380-431",
-      "sha256": "cc4526b94b2ee4ae3d0af871bf0ed58b3dfe6ec6ec708ca8311b2bb3dfc322ba",
+      "file_line": "prom_search_hswm/test_prom9_f1_r8_environment.py:607",
+      "line_range": "607-642",
+      "sha256": "67475f1b6fc64a84d1dfdb172783d0bbc16d37eab43415fee41228ca7b625809",
       "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_r8_environment.py"
     },
     {

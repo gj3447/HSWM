@@ -24,13 +24,13 @@ def test_checked_in_f1_r8_binding_is_exact_git_blob_bound() -> None:
     result = verify()
     assert result == {
         "status": "PASS",
-        "binding_id": "longinus-hswm-f1-r8-deployment-power-v3-20260729",
-        "implementation_commit": "b75a2a5bddf0960ae22707d059005cd8393da0c7",
+        "binding_id": "longinus-hswm-f1-r8-git-preimage-v4-20260729",
+        "implementation_commit": "eafe64b1f58064cc0f1239a5dc86f41bc5f76d2e",
         "bindings_checked": 20,
         "files_checked": 20,
         "implementation_bindings": 10,
         "test_bindings": 10,
-        "baseline_changed_paths": 14,
+        "baseline_changed_paths": 2,
         "longinus_layers": 7,
         "classifications": {
             "MISSING": 0,
@@ -58,6 +58,16 @@ def test_verifier_never_reads_bound_python_from_worktree(monkeypatch: pytest.Mon
     assert verify()["blob_authority"] == "GIT_COMMIT_ONLY"
 
 
+def test_verifier_ignores_ambient_git_control_variables(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("GIT_DIR", str(tmp_path / "forged-git-dir"))
+    monkeypatch.setenv("GIT_WORK_TREE", str(tmp_path / "forged-work-tree"))
+    monkeypatch.setenv("GIT_INDEX_FILE", str(tmp_path / "forged-index"))
+    monkeypatch.setenv("GIT_OBJECT_DIRECTORY", str(tmp_path / "forged-objects"))
+    assert verify()["status"] == "PASS"
+
+
 def test_divergent_blob_sha_is_classified(tmp_path: Path) -> None:
     changed = _changed_manifest(
         tmp_path, lambda value: value["bindings"][0].__setitem__("sha256", "0" * 64)
@@ -77,11 +87,11 @@ def test_reverse_orphan_scan_is_classified(tmp_path: Path) -> None:
 @pytest.mark.parametrize(
     "path",
     [
-        "prom_search_hswm/f1_target_deployment_probe.py",
-        "prom_search_hswm/test_hswm_result_spool_attestation.py",
+        "prom_search_hswm/prom9_f1_r8_environment.py",
+        "prom_search_hswm/test_prom9_f1_r8_environment.py",
     ],
 )
-def test_deployment_attestation_diff_paths_are_reverse_bound(
+def test_git_preimage_diff_paths_are_reverse_bound(
     tmp_path: Path, path: str
 ) -> None:
     def mutate(value: dict[str, object]) -> None:
@@ -91,7 +101,7 @@ def test_deployment_attestation_diff_paths_are_reverse_bound(
             for binding in value["bindings"]
             if not binding["file_line"].startswith(f"{path}:")
         ]
-        if path.endswith("test_hswm_result_spool_attestation.py"):
+        if path.endswith("test_prom9_f1_r8_environment.py"):
             for binding in value["bindings"]:
                 if binding["crate_script"].endswith(path):
                     binding["crate_script"] = (

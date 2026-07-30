@@ -45,6 +45,7 @@ from prom_search_hswm.prom9_f1_r8_environment import (
     verify_repository_dependency_blobs,
 )
 from prom_search_hswm.prom9_f1_prior_exposure import (
+    ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2,
     SCHEMA as PRIOR_EXPOSURE_SCHEMA,
     merge_exposure_boundaries,
 )
@@ -120,6 +121,82 @@ ENDPOINT = "http://127.0.0.1:8011"
 UPSTREAM_ENDPOINT = "http://127.0.0.1:18002/v1/chat/completions"
 DEPLOYMENT_SHA256 = "d" * 64
 TEST_REVISION = "f" * 40
+
+
+@pytest.fixture(autouse=True)
+def _historical_singular_incident_is_test_only_successor_stub(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Keep runner-unit history fixtures without reopening production A2."""
+
+    exact_successor = runner.verify_f1_r8_successor_exposure_set
+
+    def verify_test_fixture(value):
+        if (
+            isinstance(value, dict)
+            and value.get("schema_version") == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2
+        ):
+            return runner.verify_aborted_attempt_exposure_receipt(value)
+        return exact_successor(value)
+
+    monkeypatch.setattr(
+        runner, "verify_f1_r8_successor_exposure_set", verify_test_fixture
+    )
+
+
+def test_a3_exposure_gate_requires_exact_successor_wrapper(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    receipt_sha = "a" * 64
+    calls: list[str] = []
+
+    def exact(_value):
+        calls.append("exact")
+        return receipt_sha
+
+    def generic(_value):
+        calls.append("generic")
+        return receipt_sha
+
+    monkeypatch.setattr(runner, "verify_f1_r8_successor_exposure_set", exact)
+    monkeypatch.setattr(runner, "verify_aborted_attempt_exposure_receipt", generic)
+    monkeypatch.setattr(
+        runner, "verify_forbidden_exposure_union", lambda *_args: {}
+    )
+    assert runner._validate_aborted_attempt_exposure_gate(
+        {"kind": "successor-wrapper"},
+        prior_exposure_receipt={},
+        execution_lock={
+            "schema_version": runner.EXECUTION_LOCK_SCHEMA,
+            "run_id": runner.F1_R8_A3_SUCCESSOR_RUN_ID,
+            "aborted_attempt_exposure_receipt_sha256": receipt_sha,
+        },
+    ) == receipt_sha
+    assert calls == ["exact"]
+
+    calls.clear()
+    with pytest.raises(runner.R8RunnerRefusal, match="fresh a3"):
+        runner._validate_aborted_attempt_exposure_gate(
+            {"kind": "legacy-incident"},
+            prior_exposure_receipt={},
+            execution_lock={
+                "schema_version": runner.EXECUTION_LOCK_SCHEMA,
+                "run_id": "f1-2wiki-development-r8-try3-a2",
+                "aborted_attempt_exposure_receipt_sha256": receipt_sha,
+            },
+        )
+    assert calls == []
+
+    assert runner._validate_aborted_attempt_exposure_gate(
+        {"kind": "sealed-historical-incident"},
+        prior_exposure_receipt={},
+        execution_lock={
+            "schema_version": runner.SEALED_LOCK_SCHEMA,
+            "run_id": runner.SEALED_RUN_ID,
+            "aborted_attempt_exposure_receipt_sha256": receipt_sha,
+        },
+    ) == receipt_sha
+    assert calls == ["generic"]
 
 
 def test_stable_reader_refuses_lstat_to_open_identity_swap(
@@ -321,7 +398,10 @@ def _manifest(meter: FakeMeter) -> dict[str, object]:
 
 
 def _derivation_receipt(
-    manifest: dict[str, object], meter: FakeMeter
+    manifest: dict[str, object],
+    meter: FakeMeter,
+    *,
+    development_run_id: str = runner.DEVELOPMENT_RUN_ID,
 ) -> dict[str, object]:
     registries = _registries()
     envelope = manifest["token_envelope"]
@@ -354,7 +434,7 @@ def _derivation_receipt(
         "token_meter": meter.identity(),
         "projected_outputs_receipt_sha256": "4" * 64,
         "source_suite_receipt_sha256": "5" * 64,
-        "development": cohort(runner.DEVELOPMENT_RUN_ID, 55, 48, "6"),
+        "development": cohort(development_run_id, 55, 48, "6"),
         "confirmatory": cohort(runner.SEALED_RUN_ID, 100, 100, "7"),
         "per_call_input_caps": input_caps,
         "per_call_output_caps": output_caps,
@@ -375,7 +455,9 @@ def _derivation_inputs(
     protocol_path = REPO_ROOT / DEFAULT_PROTOCOL
     return {
         "receipt": _derivation_receipt(manifest, meter),
-        "selection_receipt": {},
+        "selection_receipt": {
+            "schema_version": runner.SUCCESSOR_SELECTION_SCHEMA,
+        },
         "historical_manifest": {},
         "validation_receipt": {},
         "projected_outputs_receipt": {},
@@ -1272,7 +1354,7 @@ def _rehash(value: dict[str, object], field: str) -> None:
 
 def test_run_is_full_preflight_bound_and_gold_blind(tmp_path: Path) -> None:
     context = _context(tmp_path)
-    assert context["manifest"]["run_id"] == "f1-2wiki-development-r8-try3-a2"
+    assert context["manifest"]["run_id"] == runner.F1_R8_A3_SUCCESSOR_RUN_ID
     assert context["lock"]["schema_version"] == (
         "hswm-prom9-f1-r8-execution-lock/v4"
     )
@@ -1471,6 +1553,53 @@ def test_sealed_preregistration_readback_and_manifest_core_are_exact(
             symposium_repo_root=SYMPOSIUM_ROOT,
             result_contract_path=context["result_contract"],
         )
+
+
+@pytest.mark.parametrize(
+    ("selection_schema", "development_run_id"),
+    (
+        (
+            runner.HISTORICAL_SELECTION_SCHEMA,
+            runner.HISTORICAL_DERIVATION_DEVELOPMENT_RUN_ID,
+        ),
+        (runner.SUCCESSOR_SELECTION_SCHEMA, runner.DEVELOPMENT_RUN_ID),
+    ),
+)
+def test_sealed_derivation_replay_routes_by_selection_generation(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    selection_schema: str,
+    development_run_id: str,
+) -> None:
+    context = _context(tmp_path / "development")
+    manifest, lock, _artifact, _readback, _judge = (
+        _sealed_preregistration_context(context, tmp_path)
+    )
+    derivation = copy.deepcopy(context["derivation"])
+    derivation["selection_receipt"] = {"schema_version": selection_schema}
+    receipt = _derivation_receipt(
+        manifest,
+        context["meter"],
+        development_run_id=development_run_id,
+    )
+    derivation["receipt"] = receipt
+    lock["token_envelope_derivation_receipt_sha256"] = receipt["receipt_sha256"]
+    replayed_run_ids: list[str] = []
+
+    def replay(*, development_run_id: str, **_kwargs: object) -> str:
+        replayed_run_ids.append(development_run_id)
+        return str(receipt["receipt_sha256"])
+
+    monkeypatch.setattr(runner, "_replay_token_envelope_derivation", replay)
+    assert runner._validate_token_envelope_derivation_gate(
+        derivation,
+        manifest=manifest,
+        execution_lock=lock,
+        token_meter=context["meter"],
+        protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+        preregistration_artifact=None,
+    ) == receipt["receipt_sha256"]
+    assert replayed_run_ids == [development_run_id]
 
 
 def test_all_pure_drift_refuses_before_first_model_call(tmp_path: Path) -> None:

@@ -797,6 +797,7 @@ def test_r8_dependency_path_inventory_covers_every_runtime_module(
         "terminal_transport_exporter": "prom9_f1_r8_transport_audit.py",
         "function_network": "hswm_function_network.py",
         "durable_transport": "hswm_f1_durable_transport.py",
+        "sqlite_schema_authority": "hswm_f1_sqlite_schema.py",
         "result_spool": "hswm_result_spool.py",
         "call_receipt": "hswm_call_receipt.py",
         "function_registry": "hswm_function_registry.py",
@@ -826,6 +827,6 @@ def test_r8_dependency_path_inventory_covers_every_runtime_module(
     assert paths["model_snapshot_attestation_core"] == (
         module_dir.parent / "bge_m3_embed.py"
     )
-    assert len(paths) == 33
+    assert len(paths) == 34
     assert "model_weight_receipt" not in paths
     assert paths["model_deployment_receipt"] == tmp_path / "model-weight.json"

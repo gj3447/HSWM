@@ -13,8 +13,11 @@ import pytest
 from prom_search_hswm.hswm_function_network import F1_ARMS, TYPED_ARM, VECTOR_ARM
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
 from prom_search_hswm.prom9_f1_prior_exposure import (
+    ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4,
+    F1_R8_A3_SUCCESSOR_RUN_ID,
     PriorExposureRefusal,
     SCHEMA as PRIOR_SCHEMA,
+    build_f1_r8_successor_exposure_set,
     merge_exposure_boundaries,
 )
 from prom_search_hswm.prom9_f1_r8_environment import R8_DEPENDENCY_NAMES
@@ -25,11 +28,12 @@ from prom_search_hswm.prom9_f1_r8_power import (
     POWER_EVIDENCE_SCHEMA,
     POWER_RECEIPT_SCHEMA,
     SELECTION_SCHEMA,
+    SUCCESSOR_SELECTION_SCHEMA,
     PowerRefusal,
     _component_key,
     _load_judge_core,
     build_power_receipt,
-    build_selection_receipts,
+    build_selection_receipts as _build_selection_receipts,
     derive_development_components,
     evaluator_selected_entries,
     replay_selection_receipt,
@@ -82,8 +86,99 @@ SYMPOSIUM_ROOT = _resolve_symposium_root()
 JUDGE_PATH = SYMPOSIUM_ROOT / _JUDGE_RELATIVE_PATH
 
 
+def build_selection_receipts(**kwargs):
+    kwargs.setdefault("forensic_legacy_replay", True)
+    return _build_selection_receipts(**kwargs)
+
+
 def _incident() -> dict[str, object]:
     return json.loads(INCIDENT_RECEIPT_PATH.read_text(encoding="utf-8"))
+
+
+def _successor_wrapper(
+    monkeypatch: pytest.MonkeyPatch, *, distinct_component: bool = False
+) -> tuple[dict[str, object], str]:
+    import prom_search_hswm.prom9_f1_prior_exposure as prior_exposure
+    import prom_search_hswm.prom9_f1_r8_power as power
+
+    historical = _incident()
+    synthetic = copy.deepcopy(historical)
+    synthetic_sha = "a" * 64
+    synthetic["schema_version"] = ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4
+    synthetic["aborted_attempt_exposure_receipt_sha256"] = synthetic_sha
+    synthetic["counts"] = {
+        **synthetic["counts"],
+        "attempt_calls": 27,
+        "spool_complete_calls": 26,
+    }
+    synthetic["profile_evidence"] = {
+        "canary_counter_receipt": {
+            "historical_baseline": 1,
+            "terminal_total": 27,
+            "incident_delta": 26,
+        }
+    }
+    target_component = _INCIDENT_COMPONENT_ID
+    if distinct_component:
+        row = _row(21, development=True)
+        titles = row["context"]["title"]
+        sentences = row["context"]["sentences"]
+        sources = sorted(
+            source_entity_id(str(title), sentence)
+            for title, sentence in zip(titles, sentences, strict=True)
+        )
+        target_component = canonical_sha256(
+            {
+                "schema_version": COMPONENT_SCHEMA,
+                "source_entity_ids": sources,
+            }
+        )
+        metadata = {
+            "item_id": str(row["id"]),
+            "dataset_row_index": DEVELOPMENT_OFFSETS[0] + 21,
+            "source_entity_ids": sources,
+            "component_id": target_component,
+        }
+        for collection in ("call_observations", "item_run_observations"):
+            observations = synthetic.get(collection)
+            assert isinstance(observations, list)
+            for observation in observations:
+                assert isinstance(observation, dict)
+                observation.update(metadata)
+        aggregate = synthetic["aggregate"]
+        assert isinstance(aggregate, dict)
+        aggregate.update(
+            {
+                "prior_item_ids": [metadata["item_id"]],
+                "prior_source_entity_ids": sources,
+                "prior_component_ids": [target_component],
+                "item_root_sha256": canonical_sha256([metadata["item_id"]]),
+                "source_entity_root_sha256": canonical_sha256(sources),
+                "component_root_sha256": canonical_sha256([target_component]),
+            }
+        )
+    original_verify = prior_exposure.verify_aborted_attempt_exposure_receipt
+
+    def verify_member(value: Mapping[str, object]) -> str:
+        if value.get("aborted_attempt_exposure_receipt_sha256") == synthetic_sha:
+            return synthetic_sha
+        return original_verify(value)
+
+    def verify_exact(value: Mapping[str, object]) -> str:
+        if value.get("aborted_attempt_exposure_receipt_sha256") != synthetic_sha:
+            raise PriorExposureRefusal("wrong synthetic a2 member")
+        return synthetic_sha
+
+    monkeypatch.setattr(
+        prior_exposure, "verify_aborted_attempt_exposure_receipt", verify_member
+    )
+    monkeypatch.setattr(
+        prior_exposure, "verify_f1_r8_successor_incident", verify_exact
+    )
+    monkeypatch.setattr(
+        power, "verify_aborted_attempt_exposure_receipt", verify_member
+    )
+    return build_f1_r8_successor_exposure_set([historical, synthetic]), target_component
 
 
 def _accepted_incident_call(incident: Mapping[str, object]) -> dict[str, object]:
@@ -224,6 +319,13 @@ def _allow_resigned_incident_for_preimage_test(
         }
 
     monkeypatch.setattr(power, "merge_exposure_boundaries", preverified_merge)
+    import prom_search_hswm.prom9_f1_prior_exposure as prior_exposure
+
+    monkeypatch.setattr(
+        prior_exposure,
+        "verify_aborted_attempt_exposure_receipt",
+        lambda _value: incident_sha,
+    )
     return incident_sha
 
 
@@ -510,6 +612,54 @@ def test_missing_tampered_and_resigned_incident_are_refused(
         )
 
 
+def test_default_selection_api_refuses_singular_incident(
+    tmp_path: Path,
+) -> None:
+    development, confirmatory = _pages(tmp_path)
+    with pytest.raises(PriorExposureRefusal, match="successor exposure-set"):
+        _build_selection_receipts(
+            prior_receipt=_prior(),
+            aborted_attempt_exposure_receipt=_incident(),
+            development_pages=development,
+            confirmatory_pages=confirmatory,
+        )
+
+
+def test_successor_exposure_wrapper_reaches_selection_preimage_gate(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    wrapper, second_component = _successor_wrapper(
+        monkeypatch, distinct_component=True
+    )
+    development, confirmatory = _pages(tmp_path)
+    selection, _gold_source = build_selection_receipts(
+        prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=wrapper,
+        development_pages=development,
+        confirmatory_pages=confirmatory,
+        forensic_legacy_replay=False,
+    )
+    assert selection["aborted_attempt_exposure_receipt_sha256"] == wrapper[
+        "aborted_attempt_exposure_receipt_sha256"
+    ]
+    assert selection["schema_version"] == SUCCESSOR_SELECTION_SCHEMA
+    selected_components = {
+        row["component_id"] for row in selection["development"]["component_schedule"]
+    }
+    assert second_component != _INCIDENT_COMPONENT_ID
+    assert _INCIDENT_COMPONENT_ID not in selected_components
+    assert second_component not in selected_components
+    assert len(selection["development"]["item_ids"]) == sum(
+        int(row["cluster_size"])
+        for row in selection["development"]["component_schedule"]
+    )
+    assert replay_selection_receipt(
+        selection,
+        prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=wrapper,
+    ) == selection["selection_receipt_sha256"]
+
+
 def test_incident_must_reproduce_one_candidate_component_even_if_preverified(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -522,7 +672,7 @@ def test_incident_must_reproduce_one_candidate_component_even_if_preverified(
     wrong["aggregate"]["prior_item_ids"] = [wrong_item]
     wrong["aggregate"]["item_root_sha256"] = canonical_sha256([wrong_item])
     _allow_resigned_incident_for_preimage_test(monkeypatch, wrong)
-    with pytest.raises(PowerRefusal, match="exactly one development component"):
+    with pytest.raises(PowerRefusal, match="cumulative aggregate"):
         build_selection_receipts(
             prior_receipt=prior,
             aborted_attempt_exposure_receipt=wrong,
@@ -542,7 +692,7 @@ def test_resigned_incident_row_index_must_match_candidate_preimage(
     accepted_call["dataset_row_index"] = 125
     _allow_resigned_incident_for_preimage_test(monkeypatch, wrong)
 
-    with pytest.raises(PowerRefusal, match="development candidate preimage"):
+    with pytest.raises(PowerRefusal, match="item metadata conflicts"):
         build_selection_receipts(
             prior_receipt=_prior(),
             aborted_attempt_exposure_receipt=wrong,
@@ -594,13 +744,15 @@ def test_all_identity_dimensions_filter_development_and_confirmatory_components(
 def test_select_cli_requires_public_incident_and_separate_gold_output(
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     development, confirmatory = _pages(tmp_path, answer=SENTINEL)
+    successor, _second_component = _successor_wrapper(monkeypatch)
     prior_path = tmp_path / "prior.json"
     prior_path.write_text(json.dumps(_prior()), encoding="utf-8")
     prior_path.chmod(0o600)
     incident_path = tmp_path / "incident.json"
-    incident_path.write_text(json.dumps(_incident()), encoding="utf-8")
+    incident_path.write_text(json.dumps(successor), encoding="utf-8")
     incident_path.chmod(0o600)
     public_path = tmp_path / "selection.json"
     gold_source_path = tmp_path / "gold-source.json"
@@ -728,12 +880,13 @@ def test_power_builder_success_rederives_full_embedded_development_evidence(
 
     development, confirmatory = _pages(tmp_path)
     prior = _prior()
-    incident = _incident()
+    incident, _second_component = _successor_wrapper(monkeypatch)
     selection, gold_source = build_selection_receipts(
         prior_receipt=prior,
         aborted_attempt_exposure_receipt=incident,
         development_pages=development,
         confirmatory_pages=confirmatory,
+        forensic_legacy_replay=False,
     )
     public_rows = selected_entries(selection, "development")
     full_rows = evaluator_selected_entries(selection, gold_source, "development")
@@ -745,7 +898,7 @@ def test_power_builder_success_rederives_full_embedded_development_evidence(
         dataset="dataset",
         config="default",
         split="validation",
-        run_id="f1-2wiki-r8-development-builder-test",
+        run_id=F1_R8_A3_SUCCESSOR_RUN_ID,
         mode="development",
         model="measured-model",
         model_revision="f" * 40,
@@ -815,6 +968,7 @@ def test_power_builder_success_rederives_full_embedded_development_evidence(
         "bundle_sha256": bundle_sha,
     }
     lock_unsigned = {
+        "run_id": F1_R8_A3_SUCCESSOR_RUN_ID,
         "manifest_sha256": canonical_sha256(manifest),
         "selection_receipt_sha256": selection["selection_receipt_sha256"],
         "prior_exposure_receipt_sha256": prior[

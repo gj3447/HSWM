@@ -9,6 +9,7 @@ import pytest
 
 from prom_search_hswm.hswm_function_network import EvidenceCandidateV1
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
+from prom_search_hswm.prom9_f1_prior_exposure import F1_R8_A3_SUCCESSOR_RUN_ID
 from prom_search_hswm.prom9_f1_r8_power import (
     build_selection_receipts,
     evaluator_selected_entries,
@@ -29,9 +30,9 @@ from prom_search_hswm.prom9_f1_r8_source import (
 )
 from prom_search_hswm.test_prom9_f1_r8_power import (
     SENTINEL,
-    _incident,
     _pages,
     _prior,
+    _successor_wrapper,
     _synthetic_incident_source_entities,
 )
 
@@ -193,11 +194,13 @@ def test_answer_mutation_changes_only_evaluator_side_hashes() -> None:
 def test_cli_consumes_both_receipts_and_never_prints_answers(
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     development, confirmatory = _pages(tmp_path, answer=SENTINEL)
+    successor, _second_component = _successor_wrapper(monkeypatch)
     selection, gold_source = build_selection_receipts(
         prior_receipt=_prior(),
-        aborted_attempt_exposure_receipt=_incident(),
+        aborted_attempt_exposure_receipt=successor,
         development_pages=development,
         confirmatory_pages=confirmatory,
     )
@@ -223,7 +226,7 @@ def test_cli_consumes_both_receipts_and_never_prints_answers(
         "--gold-source-receipt", str(inputs["gold_source"]),
         "--selection-cohort", "development",
         "--length", str(len(public_rows)),
-        "--run-id", "f1-2wiki-r8-development-cli-test",
+        "--run-id", F1_R8_A3_SUCCESSOR_RUN_ID,
         "--mode", "development",
         "--model", "fixed-model",
         "--model-revision", "fixed-revision",

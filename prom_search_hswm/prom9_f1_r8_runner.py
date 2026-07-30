@@ -92,7 +92,9 @@ from prom_search_hswm.prom9_f1_r8_transport_audit import (
     private_database_identity,
 )
 from prom_search_hswm.prom9_f1_prior_exposure import (
+    F1_R8_A3_SUCCESSOR_RUN_ID,
     verify_aborted_attempt_exposure_receipt,
+    verify_f1_r8_successor_exposure_set,
     verify_forbidden_exposure_union,
 )
 from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
@@ -110,7 +112,10 @@ SEALED_LOCK_PURPOSE = "CONFIRMATORY_R8_TRY3_MEASUREMENT"
 SEALED_EXPERIMENT_TAG = "Q-f1-actual-compute-parity-try3"
 SEALED_CLOSES_QUESTION = "Q-f1-actual-compute-parity"
 SEALED_RUN_ID = "f1-2wiki-sealed-r8-try3"
-DEVELOPMENT_RUN_ID = "f1-2wiki-development-r8-try3-a2"
+DEVELOPMENT_RUN_ID = F1_R8_A3_SUCCESSOR_RUN_ID
+HISTORICAL_DERIVATION_DEVELOPMENT_RUN_ID = "f1-2wiki-development-r8-try3-a2"
+HISTORICAL_SELECTION_SCHEMA = "hswm-prom9-f1-r8-cohort-selection/v3"
+SUCCESSOR_SELECTION_SCHEMA = "hswm-prom9-f1-r8-cohort-selection/v4"
 TRANSPORT_SCHEMA = "hswm-f1-durable-call-ledger/v1"
 TRANSPORT_BINDINGS_SCHEMA = "hswm-prom9-f1-r8-transport-bindings/v1"
 GENESIS_SCHEMA = "hswm-prom9-f1-r8-transport-genesis/v1"
@@ -1094,6 +1099,7 @@ def _replay_token_envelope_derivation(
     manifest: Mapping[str, object],
     token_meter: TokenMeter,
     protocol_path: Path,
+    development_run_id: str,
 ) -> str:
     # Local import avoids the producer's intentional use of runner item and
     # registry constructors during module initialization.
@@ -1114,7 +1120,19 @@ def _replay_token_envelope_derivation(
         protocol=derivation_inputs["protocol"],
         meter=token_meter,
         file_sha256s=derivation_inputs["file_sha256s"],
+        development_run_id=development_run_id,
     )
+
+
+def _derivation_development_run_id(
+    selection_receipt: Mapping[str, object],
+) -> str:
+    schema = selection_receipt.get("schema_version")
+    if schema == HISTORICAL_SELECTION_SCHEMA:
+        return HISTORICAL_DERIVATION_DEVELOPMENT_RUN_ID
+    if schema == SUCCESSOR_SELECTION_SCHEMA:
+        return DEVELOPMENT_RUN_ID
+    raise R8RunnerRefusal("token-envelope derivation selection generation drifted")
 
 
 def _validate_token_envelope_derivation_gate(
@@ -1141,6 +1159,11 @@ def _validate_token_envelope_derivation_gate(
         )
     ):
         raise R8RunnerRefusal("token-envelope derivation artifact shape drifted")
+    selection_receipt = derivation_inputs["selection_receipt"]
+    assert isinstance(selection_receipt, Mapping)
+    derivation_development_run_id = _derivation_development_run_id(
+        selection_receipt
+    )
     for name, digest in file_sha256s.items():
         _sha(digest, f"token-envelope derivation file {name}")
     receipt_sha = _self_hash(
@@ -1193,7 +1216,7 @@ def _validate_token_envelope_derivation_gate(
     ):
         raise R8RunnerRefusal("token-envelope derivation lock binding drifted")
     expected_cohorts = {
-        "development": (DEVELOPMENT_RUN_ID, 55, 48),
+        "development": (derivation_development_run_id, 55, 48),
         "confirmatory": (SEALED_RUN_ID, 100, 100),
     }
     for cohort, (run_id, items, components) in expected_cohorts.items():
@@ -1230,6 +1253,7 @@ def _validate_token_envelope_derivation_gate(
             manifest=manifest,
             token_meter=token_meter,
             protocol_path=protocol_path,
+            development_run_id=derivation_development_run_id,
         )
     except Exception as error:
         raise R8RunnerRefusal(
@@ -1348,8 +1372,20 @@ def _validate_aborted_attempt_exposure_gate(
     prior_exposure_receipt: Mapping[str, object],
     execution_lock: Mapping[str, object],
 ) -> str:
+    development_execution = execution_lock.get("schema_version") == EXECUTION_LOCK_SCHEMA
+    if (
+        development_execution
+        and execution_lock.get("run_id") != F1_R8_A3_SUCCESSOR_RUN_ID
+    ):
+        raise R8RunnerRefusal(
+            "development execution requires the fresh a3 successor identity"
+        )
     try:
-        receipt_sha = verify_aborted_attempt_exposure_receipt(value)
+        receipt_sha = (
+            verify_f1_r8_successor_exposure_set(value)
+            if development_execution
+            else verify_aborted_attempt_exposure_receipt(value)
+        )
     except Exception as error:
         raise R8RunnerRefusal(
             "aborted-attempt exposure receipt verification failed"

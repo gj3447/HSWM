@@ -70,6 +70,7 @@ def _public_selection(tmp_path: Path) -> dict[str, object]:
         aborted_attempt_exposure_receipt=_incident(),
         development_pages=development,
         confirmatory_pages=confirmatory,
+        forensic_legacy_replay=True,
     )
     assert SENTINEL not in json.dumps(selection, ensure_ascii=False)
     return selection

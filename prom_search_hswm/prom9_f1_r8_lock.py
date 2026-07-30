@@ -13,10 +13,11 @@ from prom_search_hswm.hswm_typed_ports import canonical_sha256
 from prom_search_hswm.hswm_token_meter import QwenBpeMeter
 from prom_search_hswm.hswm_result_spool import load_model_deployment_binding
 from prom_search_hswm.prom9_f1_prior_exposure import (
+    F1_R8_A3_SUCCESSOR_RUN_ID,
     _read_private_bytes,
     _strict_object,
     merge_exposure_boundaries,
-    verify_aborted_attempt_exposure_receipt,
+    verify_f1_r8_successor_exposure_set,
     verify_prior_exposure_receipt,
     write_private_once,
 )
@@ -28,6 +29,7 @@ from prom_search_hswm.prom9_f1_r8_environment import (
     verify_r8_preimage_bundle,
 )
 from prom_search_hswm.prom9_f1_r8_power import (
+    SUCCESSOR_SELECTION_SCHEMA,
     replay_selection_receipt,
     selected_entries,
 )
@@ -303,7 +305,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
 
         prior_sha = verify_prior_exposure_receipt(prior)
-        aborted_exposure_sha = verify_aborted_attempt_exposure_receipt(
+        successor_selection = (
+            selection.get("schema_version") == SUCCESSOR_SELECTION_SCHEMA
+        )
+        if (
+            not successor_selection
+            or manifest.get("run_id") != F1_R8_A3_SUCCESSOR_RUN_ID
+        ):
+            raise LockRefusal(
+                "development lock requires successor-v4 selection and a3 run identity"
+            )
+        aborted_exposure_sha = verify_f1_r8_successor_exposure_set(
             aborted_exposure
         )
         exposure_boundary = merge_exposure_boundaries(prior, aborted_exposure)
@@ -346,6 +358,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "source_suite": source_suite_file_sha,
                 "protocol": protocol_file_sha,
             },
+            development_run_id=F1_R8_A3_SUCCESSOR_RUN_ID,
         )
         if replayed_derivation_sha != derivation_sha:
             raise LockRefusal("token-envelope derivation replay SHA drifted")

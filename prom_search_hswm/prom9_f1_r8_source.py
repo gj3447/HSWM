@@ -857,10 +857,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         from prom_search_hswm.prom9_f1_prior_exposure import (
+            F1_R8_A3_SUCCESSOR_RUN_ID,
             _read_private_bytes,
             _strict_object,
         )
         from prom_search_hswm.prom9_f1_r8_power import (
+            SUCCESSOR_SELECTION_SCHEMA,
             evaluator_selected_entries,
             selected_entries,
             verify_selection_receipt,
@@ -868,6 +870,24 @@ def main(argv: Sequence[str] | None = None) -> int:
 
         selection = read_json(args.selection_receipt, "public cohort selection receipt")
         selection_sha = verify_selection_receipt(selection)
+        successor_selection = (
+            selection.get("schema_version") == SUCCESSOR_SELECTION_SCHEMA
+        )
+        if args.mode == "development" and (
+            args.selection_cohort != "development"
+            or not successor_selection
+            or args.run_id != F1_R8_A3_SUCCESSOR_RUN_ID
+        ):
+            raise R8SourceRefusal(
+                "development source requires successor-v4 selection and a3 run identity"
+            )
+        if args.mode == "sealed" and (
+            args.selection_cohort != "confirmatory"
+            or args.run_id == F1_R8_A3_SUCCESSOR_RUN_ID
+        ):
+            raise R8SourceRefusal(
+                "sealed source requires the non-development confirmatory cohort"
+            )
         gold_source = _strict_object(
             _read_private_bytes(args.gold_source_receipt),
             "evaluator-only gold-source receipt",

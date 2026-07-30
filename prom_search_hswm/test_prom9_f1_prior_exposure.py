@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+from collections.abc import Mapping
 import hashlib
 import json
 import os
@@ -24,17 +25,24 @@ from prom_search_hswm.hswm_f1_sqlite_schema import (
 from prom_search_hswm.hswm_typed_ports import canonical_json
 from prom_search_hswm.prom9_f1_prior_exposure import (
     ABORTED_ATTEMPT_EXPOSURE_SCHEMA,
+    ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4,
+    ABORTED_ATTEMPT_EXPOSURE_SET_SCHEMA,
     ABORTED_ATTEMPT_STATUS,
+    F1_R8_SUCCESSOR_EXPOSURE_SET_SCHEMA,
     EXPECTED_PAGE_SPECS,
     PriorExposureRefusal,
     SCHEMA,
     build_aborted_attempt_exposure_receipt,
+    build_aborted_attempt_exposure_set,
+    build_canary_counter_receipt,
+    build_f1_r8_successor_exposure_set,
     build_prior_exposure_receipt,
     inventory_stable_tree,
     merge_exposure_boundaries,
     verify_aborted_attempt_exposure_receipt,
     verify_aborted_attempt_private_witness,
     verify_forbidden_exposure_union,
+    verify_f1_r8_successor_exposure_set,
     verify_prior_exposure_receipt,
     write_private_once,
 )
@@ -92,6 +100,18 @@ def _row(index: int) -> dict[str, object]:
 def _private_json(path: Path, value: object) -> None:
     path.write_text(json.dumps(value), encoding="utf-8")
     path.chmod(0o600)
+
+
+def _all_strings(value: object):
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for key, item in value.items():
+            yield key
+            yield from _all_strings(item)
+    elif isinstance(value, list):
+        for item in value:
+            yield from _all_strings(item)
 
 
 def _fixture(tmp_path: Path):
@@ -161,7 +181,10 @@ def _incident_receipt() -> dict[str, object]:
 def _resign_incident(value: dict[str, object]) -> None:
     unsigned = copy.deepcopy(value)
     unsigned.pop("aborted_attempt_exposure_receipt_sha256", None)
-    if value.get("schema_version") == ABORTED_ATTEMPT_EXPOSURE_SCHEMA:
+    if value.get("schema_version") in {
+        ABORTED_ATTEMPT_EXPOSURE_SCHEMA,
+        ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4,
+    }:
         commitment = unsigned["private_witness_commitment"]
         public_preimage = copy.deepcopy(unsigned)
         public_preimage.pop("assurance")
@@ -426,6 +449,7 @@ def _build_synthetic_incident(
     verify_private_sidecar_tamper_before_close: bool = False,
     include_untouched: bool = False,
     two_shared_items: bool = False,
+    incident_profile: Mapping[str, object] | None = None,
 ) -> dict[str, object]:
     selection_unsigned = {
         "schema_version": "hswm-prom9-f1-r8-cohort-selection/v2"
@@ -652,7 +676,7 @@ def _build_synthetic_incident(
         "deployment_id": "test-deployment-id",
         "served_model": artifacts["manifest"]["model"],
         "upstream_endpoint": "http://model",
-        "execution_policy": {"endpoint": "http://spool"},
+        "execution_policy": {"endpoint": "http://spool", "max_workers": 1},
     }
     lock = _private_artifact(
         inputs / "lock.json",
@@ -836,7 +860,9 @@ def _build_synthetic_incident(
         lambda **_kwargs: (historical_result, historical_authority),
     )
     monkeypatch.setattr(
-        prior_exposure, "_verify_incident_artifact_semantics", lambda *_values: None
+        prior_exposure,
+        "_verify_incident_artifact_semantics",
+        lambda *_values, **_kwargs: None,
     )
     monkeypatch.setattr(
         prior_exposure,
@@ -848,6 +874,35 @@ def _build_synthetic_incident(
     )
     witness_parent = tmp_path / "private-witness"
     witness_parent.mkdir(mode=0o700)
+    canary_counter_path = None
+    if incident_profile is not None:
+        canary_counts = incident_profile["canary_counts"]
+        assert isinstance(canary_counts, Mapping)
+        canary_root = tmp_path / "dt-jobs"
+        canary_root.mkdir()
+        monkeypatch.setattr(prior_exposure, "_CANARY_DT_JOB_ROOT", canary_root)
+        canary_dir = canary_root / str(incident_profile["canary_job_alias"])
+        canary_dir.mkdir()
+        canary_command = b"#!/bin/sh\nexec synthetic-canary\n"
+        (canary_dir / "cmd.sh").write_bytes(canary_command)
+        assert hashlib.sha256(canary_command).hexdigest() == incident_profile[
+            "canary_command_sha256"
+        ]
+        canary_log = canary_dir / "log"
+        canary_log.write_bytes(
+            b'(APIServer pid=1234) INFO:     127.0.0.1:12345 - '
+            b'"POST /v1/chat/completions HTTP/1.1" 200 OK\n'
+            * int(canary_counts["terminal_total"])
+        )
+        canary_counter_path = tmp_path / "canary-counter.json"
+        _private_json(
+            canary_counter_path,
+            build_canary_counter_receipt(
+                canary_log,
+                historical_baseline=int(canary_counts["historical_baseline"]),
+                source_job_alias=str(incident_profile["canary_job_alias"]),
+            ),
+        )
     try:
         receipt = build_aborted_attempt_exposure_receipt(
             attempt_db=attempt_db,
@@ -868,6 +923,8 @@ def _build_synthetic_incident(
             symposium_root=roots["symposium"],
             snapshot_dir=tmp_path / "snapshot",
             private_witness_output=witness_parent / "witness.v1.json",
+            incident_profile=incident_profile,
+            canary_counter_receipt=canary_counter_path,
         )
         if verify_private_witness_before_close:
             assert (
@@ -1048,19 +1105,7 @@ def test_aborted_attempt_builder_replays_structural_evidence_without_blobs(
         and "source_identity_sha256" not in database
         for name, database in receipt["database_snapshots"].items()
     )
-
-    def strings(value: object):
-        if isinstance(value, str):
-            yield value
-        elif isinstance(value, dict):
-            for key, item in value.items():
-                yield key
-                yield from strings(item)
-        elif isinstance(value, list):
-            for item in value:
-                yield from strings(item)
-
-    public_strings = list(strings(receipt))
+    public_strings = list(_all_strings(receipt))
     assert not any(value.startswith("/") for value in public_strings)
     assert not {"stage_path", "capture_host", "resolved_path", "source_identity"} & set(
         public_strings
@@ -1075,6 +1120,310 @@ def test_aborted_attempt_builder_replays_structural_evidence_without_blobs(
         assert str(database["st_dev"]) not in public_strings
         assert str(database["st_ino"]) not in public_strings
 
+
+def test_profile_bound_v4_incident_refuses_count_and_identity_drift(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    profile = {
+        "profile_id": "synthetic-profile",
+        "job_directory": "hswm-f1-r8-v8-development-test",
+        "job_alias": "HSWM_F1_R8_SYNTHETIC_SIGBUS",
+        "run_id": "f1-2wiki-development-r8-incident-test",
+        "canary_job_alias": "synthetic-canary-job",
+        "canary_command_sha256": hashlib.sha256(
+            b"#!/bin/sh\nexec synthetic-canary\n"
+        ).hexdigest(),
+        "max_workers": 1,
+        "canary_counts": {
+            "historical_baseline": 0,
+            "terminal_total": 1,
+            "incident_delta": 1,
+        },
+        "canary_http_status_counts": {"200": 1},
+        "runtime_commits": dict(prior_exposure._HISTORICAL_RUNTIME_COMMITS),
+        "expected_counts": {
+            "attempt_calls": 2,
+            "attempt_events": 8,
+            "item_runs": 0,
+            "spool_calls": 1,
+            "attempt_states": {"ACCEPTED": 1, "SENT": 1},
+            "spool_complete_calls": 1,
+            "spool_absent_calls": 1,
+        },
+        "expected_dependency_names": tuple(
+            sorted(prior_exposure._HISTORICAL_DEPENDENCY_NAMES)
+        ),
+    }
+    monkeypatch.setitem(
+        prior_exposure.INCIDENT_PROFILES, str(profile["profile_id"]), profile
+    )
+    receipt = _build_synthetic_incident(
+        tmp_path, monkeypatch, incident_profile=profile
+    )
+    assert receipt["schema_version"] == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4
+    assert receipt["run_identity"]["incident_profile_id"] == "synthetic-profile"
+    assert receipt["run_identity"]["job_alias"] == profile["job_alias"]
+    assert "incident_runtime_authority" in receipt["evidence_bindings"]
+    assert verify_aborted_attempt_exposure_receipt(receipt) == receipt[
+        "aborted_attempt_exposure_receipt_sha256"
+    ]
+
+    wrong_counts = copy.deepcopy(profile)
+    wrong_counts["expected_counts"]["attempt_calls"] = 3
+    wrong_counts["expected_counts"]["attempt_states"] = {
+        "ACCEPTED": 1,
+        "SENT": 2,
+    }
+    wrong_counts["expected_counts"]["spool_absent_calls"] = 2
+    monkeypatch.setitem(
+        prior_exposure.INCIDENT_PROFILES,
+        str(wrong_counts["profile_id"]),
+        wrong_counts,
+    )
+    with pytest.raises(PriorExposureRefusal, match="structural counts"):
+        wrong_counts_root = tmp_path / "wrong-counts"
+        wrong_counts_root.mkdir()
+        _build_synthetic_incident(
+            wrong_counts_root,
+            monkeypatch,
+            incident_profile=wrong_counts,
+        )
+
+
+def test_unregistered_incident_profile_is_refused_before_replay() -> None:
+    profile = copy.deepcopy(prior_exposure._A2_INCIDENT_PROFILE)
+    profile["profile_id"] = "unregistered-a2-lookalike"
+    with pytest.raises(PriorExposureRefusal, match="not registered"):
+        prior_exposure._registered_incident_profile(profile)
+
+
+def test_incident_profile_malformed_dependency_names_refuse_cleanly() -> None:
+    profile = copy.deepcopy(prior_exposure._A2_INCIDENT_PROFILE)
+    profile["expected_dependency_names"] = ["valid", {"not": "hashable"}]
+    with pytest.raises(PriorExposureRefusal, match="dependency inventory"):
+        prior_exposure._validated_incident_profile(profile)
+
+
+def test_canary_counter_requires_exact_dt_access_records_and_origin(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = tmp_path / "dt-jobs"
+    alias = "hswm-canary-test"
+    job = root / alias
+    job.mkdir(parents=True)
+    (job / "cmd.sh").write_bytes(b"#!/bin/sh\nexec canary\n")
+    access_line = (
+        b'(APIServer pid=1234) INFO:     127.0.0.1:12345 - '
+        b'"POST /v1/chat/completions HTTP/1.1" 200 OK\n'
+    )
+    (job / "log").write_bytes(b"x" * (1024 * 1024 - 20) + b"\n" + access_line)
+    monkeypatch.setattr(prior_exposure, "_CANARY_DT_JOB_ROOT", root)
+    receipt = build_canary_counter_receipt(
+        job / "log", historical_baseline=0, source_job_alias=alias
+    )
+    assert receipt["terminal_total"] == 1
+    assert receipt["http_status_counts"] == {"200": 1}
+    public_counter = canonical_json(receipt)
+    assert str(root) not in public_counter
+    assert not any(
+        private_name in public_counter
+        for private_name in ("resolved_path", "st_dev", "st_ino", "mtime_ns", "ctime_ns")
+    )
+
+    (job / "log").write_bytes(b"echo POST /v1/chat/completions\n")
+    with pytest.raises(PriorExposureRefusal, match="exact access-log"):
+        build_canary_counter_receipt(
+            job / "log", historical_baseline=0, source_job_alias=alias
+        )
+
+    (job / "log").write_bytes(access_line.rstrip(b"\n"))
+    with pytest.raises(PriorExposureRefusal, match="unterminated"):
+        build_canary_counter_receipt(
+            job / "log", historical_baseline=0, source_job_alias=alias
+        )
+
+    copied = tmp_path / "outside" / alias
+    copied.mkdir(parents=True)
+    (copied / "log").write_bytes(access_line)
+    with pytest.raises(PriorExposureRefusal, match="exact DT job authority"):
+        build_canary_counter_receipt(
+            copied / "log", historical_baseline=0, source_job_alias=alias
+        )
+
+    for traversal_alias in (".", ".."):
+        with pytest.raises(PriorExposureRefusal, match="alias"):
+            build_canary_counter_receipt(
+                job / "log",
+                historical_baseline=0,
+                source_job_alias=traversal_alias,
+            )
+
+
+def test_successor_incident_requires_post_production_hash_pin(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    receipt_sha = "e" * 64
+    monkeypatch.setattr(
+        prior_exposure,
+        "verify_aborted_attempt_exposure_receipt",
+        lambda _value: receipt_sha,
+    )
+    monkeypatch.setattr(
+        prior_exposure,
+        "_verify_f1_r8_a2_structural_evidence",
+        lambda _value: None,
+    )
+    monkeypatch.setattr(
+        prior_exposure, "F1_R8_A2_INCIDENT_RECEIPT_SHA256", None
+    )
+    with pytest.raises(PriorExposureRefusal, match="not pinned"):
+        prior_exposure.verify_f1_r8_successor_incident({})
+    monkeypatch.setattr(
+        prior_exposure, "F1_R8_A2_INCIDENT_RECEIPT_SHA256", receipt_sha
+    )
+    assert prior_exposure.verify_f1_r8_successor_incident({}) == receipt_sha
+
+
+def _exact_a2_successor_evidence(tmp_path: Path) -> dict[str, object]:
+    calls: list[dict[str, object]] = []
+    per_call_counts: dict[str, int] = {}
+    positions: list[dict[str, object]] = []
+    physical_ordinal = 0
+    for job_ordinal in range(9):
+        job_calls: list[dict[str, object]] = []
+        for call_index in (1, 2, 3):
+            physical_call_id = f"{physical_ordinal + 1:064x}"
+            physical_ordinal += 1
+            prepared = job_ordinal == 8 and call_index == 3
+            state = "PREPARED" if prepared else "ACCEPTED"
+            row = {
+                "physical_call_id": physical_call_id,
+                "raw_attempt_state": state,
+                "response_status": None if prepared else 200,
+                "response_sha256": None if prepared else "a" * 64,
+                "model_response_sha256": None if prepared else "b" * 64,
+                "call_receipt_sha256": None if prepared else "c" * 64,
+                "terminal_code": None,
+                "spool_snapshot_state": None if prepared else "COMPLETE",
+                "spool_response_status": None if prepared else 200,
+                "spool_response_sha256": None if prepared else "a" * 64,
+            }
+            calls.append(row)
+            job_calls.append(row)
+            per_call_counts[physical_call_id] = 1 if prepared else 6
+        positions.append(
+            {
+                "job_ordinal": job_ordinal,
+                "call_indices": [1, 2, 3],
+                "call_states": [
+                    str(row["raw_attempt_state"]) for row in job_calls
+                ],
+                "per_call_event_counts": [
+                    per_call_counts[str(row["physical_call_id"])]
+                    for row in job_calls
+                ],
+                "item_run_committed": job_ordinal < 8,
+            }
+        )
+    canary_unsigned = {
+        "schema_version": prior_exposure.CANARY_COUNTER_SCHEMA,
+        "method": "DT_VLLM_ACCESS_LOG_EXACT_V1",
+        "source_provider": "PI/dt.sh",
+        "source_job_alias": str(
+            prior_exposure._A2_INCIDENT_PROFILE["canary_job_alias"]
+        ),
+        "request_route": "/v1/chat/completions",
+        "access_record_pattern_sha256": hashlib.sha256(
+            prior_exposure._CANARY_ACCESS_RECORD.pattern
+        ).hexdigest(),
+        "job_command": {
+            "basename": "cmd.sh",
+            "size_bytes": 1,
+            "sha256": prior_exposure._A2_INCIDENT_PROFILE[
+                "canary_command_sha256"
+            ],
+        },
+        "log_snapshot": {
+            "basename": "log",
+            "size_bytes": 1,
+            "sha256": "d" * 64,
+        },
+        "origin_commitment_sha256": "e" * 64,
+        "http_status_counts": {"200": 27},
+        "historical_baseline": 1,
+        "terminal_total": 27,
+        "incident_delta": 26,
+        "complete": True,
+    }
+    canary = {
+        **canary_unsigned,
+        "receipt_sha256": canonical_sha256(canary_unsigned),
+    }
+    prepared_id = str(calls[-1]["physical_call_id"])
+    profile = prior_exposure._public_incident_profile(
+        prior_exposure._A2_INCIDENT_PROFILE
+    )
+    return {
+        "schema_version": ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4,
+        "profile_evidence": {
+            "profile": profile,
+            "canary_counter_receipt": canary,
+            "scheduler": {
+                "max_workers": 1,
+                "observed_job_ordinals": list(range(9)),
+                "frontier_batch": 8,
+                "prior_batches_committed": True,
+                "positions": positions,
+            },
+        },
+        "successor_disposition": prior_exposure._successor_disposition(
+            str(prior_exposure._A2_INCIDENT_PROFILE["profile_id"])
+        ),
+        "call_observations": calls,
+        "item_run_observations": [{"ordinal": index} for index in range(8)],
+        "event_chain": {
+            "event_count": 157,
+            "per_call_event_counts": per_call_counts,
+            "final_structural_event": {
+                "physical_call_id": prepared_id,
+                "event_type": "PREPARED",
+            },
+        },
+        "derived_inferences": [
+            {
+                "claim": "MATCHING_SPOOL_ROW_ABSENT",
+                "epistemic_status": "DERIVED_FROM_BOUND_SNAPSHOTS",
+                "physical_call_id": prepared_id,
+                "raw_attempt_state": "PREPARED",
+            }
+        ],
+    }
+
+
+def test_exact_a2_successor_frontier_and_coherent_tamper_refusal(
+    tmp_path: Path,
+) -> None:
+    evidence = _exact_a2_successor_evidence(tmp_path)
+    assert prior_exposure._verify_f1_r8_a2_structural_evidence(evidence) is None
+
+    prepared_with_spool = copy.deepcopy(evidence)
+    prepared_with_spool["call_observations"][-1][
+        "spool_snapshot_state"
+    ] = "COMPLETE"
+    with pytest.raises(PriorExposureRefusal, match="terminal event"):
+        prior_exposure._verify_f1_r8_a2_structural_evidence(
+            prepared_with_spool
+        )
+
+    redistributed_events = copy.deepcopy(evidence)
+    first = redistributed_events["call_observations"][0]["physical_call_id"]
+    second = redistributed_events["call_observations"][1]["physical_call_id"]
+    redistributed_events["event_chain"]["per_call_event_counts"][first] = 5
+    redistributed_events["event_chain"]["per_call_event_counts"][second] = 7
+    with pytest.raises(PriorExposureRefusal, match="terminal event"):
+        prior_exposure._verify_f1_r8_a2_structural_evidence(
+            redistributed_events
+        )
 
 @pytest.mark.parametrize(
     "mutation",
@@ -1773,6 +2122,169 @@ def test_merge_exposure_boundaries_returns_sorted_canonical_union(
         "source_entity_root_sha256": canonical_sha256(expected_sources),
         "component_root_sha256": canonical_sha256(expected_components),
     }
+
+
+def test_cumulative_exposure_set_preserves_both_incidents_and_refuses_deletion(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    historical, _raw_sha256 = read_stable_json(
+        REPO_ROOT / "receipts" / "hswm_f1_r8_v8_aborted_exposure.v2.json",
+        "v2 aborted-attempt exposure receipt",
+    )
+    current = _build_synthetic_incident(tmp_path, monkeypatch)
+    cumulative = build_aborted_attempt_exposure_set([historical, current])
+    assert cumulative["schema_version"] == ABORTED_ATTEMPT_EXPOSURE_SET_SCHEMA
+    assert cumulative["incident_receipt_sha256s"] == [
+        historical["aborted_attempt_exposure_receipt_sha256"],
+        current["aborted_attempt_exposure_receipt_sha256"],
+    ]
+    assert cumulative["counts"] == {
+        "incidents": 2,
+        "attempt_calls": (
+            historical["counts"]["attempt_calls"]
+            + current["counts"]["attempt_calls"]
+        ),
+        "spool_complete_calls": (
+            historical["counts"]["spool_complete_calls"]
+            + current["counts"]["spool_complete_calls"]
+        ),
+        "upstream_model_calls": (
+            historical["counts"]["spool_complete_calls"]
+            + current["counts"]["spool_complete_calls"]
+        ),
+    }
+    assert (
+        verify_aborted_attempt_exposure_receipt(cumulative)
+        == cumulative["aborted_attempt_exposure_receipt_sha256"]
+    )
+    deleted = copy.deepcopy(cumulative)
+    deleted["incidents"].pop(0)
+    deleted["incident_receipt_sha256s"].pop(0)
+    unsigned = dict(deleted)
+    unsigned.pop("aborted_attempt_exposure_receipt_sha256")
+    deleted["aborted_attempt_exposure_receipt_sha256"] = canonical_sha256(
+        unsigned
+    )
+    with pytest.raises(PriorExposureRefusal, match="at least two|inventory"):
+        verify_aborted_attempt_exposure_receipt(deleted)
+
+    malformed_hashes = copy.deepcopy(cumulative)
+    malformed_hashes["incident_receipt_sha256s"][0] = {"unhashable": True}
+    malformed_unsigned = dict(malformed_hashes)
+    malformed_unsigned.pop("aborted_attempt_exposure_receipt_sha256")
+    malformed_hashes["aborted_attempt_exposure_receipt_sha256"] = (
+        canonical_sha256(malformed_unsigned)
+    )
+    with pytest.raises(PriorExposureRefusal, match="inventory"):
+        verify_aborted_attempt_exposure_receipt(malformed_hashes)
+
+
+def test_successor_exposure_wrapper_pins_order_member_and_disposition(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    historical, _raw_sha256 = read_stable_json(
+        REPO_ROOT / "receipts" / "hswm_f1_r8_v8_aborted_exposure.v2.json",
+        "v2 aborted-attempt exposure receipt",
+    )
+    synthetic_sha = "a" * 64
+    aggregate = {
+        "prior_item_ids": ["synthetic-a2-item"],
+        "prior_source_entity_ids": ["b" * 64],
+        "prior_component_ids": ["c" * 64],
+        "item_root_sha256": canonical_sha256(["synthetic-a2-item"]),
+        "source_entity_root_sha256": canonical_sha256(["b" * 64]),
+        "component_root_sha256": canonical_sha256(["c" * 64]),
+    }
+    synthetic = {
+        "schema_version": ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4,
+        "aborted_attempt_exposure_receipt_sha256": synthetic_sha,
+        "aggregate": aggregate,
+        "counts": {"attempt_calls": 27, "spool_complete_calls": 26},
+        "profile_evidence": {
+            "canary_counter_receipt": {
+                "historical_baseline": 1,
+                "terminal_total": 27,
+                "incident_delta": 26,
+            }
+        },
+    }
+    original_verify = prior_exposure.verify_aborted_attempt_exposure_receipt
+
+    def verify_member(value: Mapping[str, object]) -> str:
+        if value.get("schema_version") == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4:
+            declared = value.get("aborted_attempt_exposure_receipt_sha256")
+            assert isinstance(declared, str)
+            return declared
+        return original_verify(value)
+
+    def verify_exact_member(value: Mapping[str, object]) -> str:
+        if value.get("aborted_attempt_exposure_receipt_sha256") != synthetic_sha:
+            raise PriorExposureRefusal("replacement a2 member")
+        return synthetic_sha
+
+    monkeypatch.setattr(
+        prior_exposure, "verify_aborted_attempt_exposure_receipt", verify_member
+    )
+    monkeypatch.setattr(
+        prior_exposure, "verify_f1_r8_successor_incident", verify_exact_member
+    )
+    wrapper = build_f1_r8_successor_exposure_set([historical, synthetic])
+    assert wrapper["schema_version"] == F1_R8_SUCCESSOR_EXPOSURE_SET_SCHEMA
+    assert verify_f1_r8_successor_exposure_set(wrapper) == wrapper[
+        "aborted_attempt_exposure_receipt_sha256"
+    ]
+    with pytest.raises(PriorExposureRefusal, match="leaf incidents"):
+        build_aborted_attempt_exposure_set([historical, wrapper])
+
+    disposition_flip = copy.deepcopy(wrapper)
+    disposition_flip["successor_disposition"]["resume_authorized"] = True
+    unsigned = dict(disposition_flip)
+    unsigned.pop("aborted_attempt_exposure_receipt_sha256")
+    disposition_flip["aborted_attempt_exposure_receipt_sha256"] = (
+        canonical_sha256(unsigned)
+    )
+    with pytest.raises(PriorExposureRefusal, match="binding"):
+        verify_f1_r8_successor_exposure_set(disposition_flip)
+
+    reversed_members = copy.deepcopy(wrapper)
+    inner = reversed_members["exposure_set"]
+    inner["incidents"].reverse()
+    inner["incident_receipt_sha256s"].reverse()
+    inner_unsigned = dict(inner)
+    inner_unsigned.pop("aborted_attempt_exposure_receipt_sha256")
+    inner["aborted_attempt_exposure_receipt_sha256"] = canonical_sha256(
+        inner_unsigned
+    )
+    reversed_members["exposure_set_sha256"] = inner[
+        "aborted_attempt_exposure_receipt_sha256"
+    ]
+    outer_unsigned = dict(reversed_members)
+    outer_unsigned.pop("aborted_attempt_exposure_receipt_sha256")
+    reversed_members["aborted_attempt_exposure_receipt_sha256"] = (
+        canonical_sha256(outer_unsigned)
+    )
+    with pytest.raises(PriorExposureRefusal, match="chain"):
+        verify_f1_r8_successor_exposure_set(reversed_members)
+
+    replacement = copy.deepcopy(wrapper)
+    replacement_member = replacement["exposure_set"]["incidents"][1]
+    replacement_member["aborted_attempt_exposure_receipt_sha256"] = "d" * 64
+    replacement["exposure_set"]["incident_receipt_sha256s"][1] = "d" * 64
+    replacement_inner_unsigned = dict(replacement["exposure_set"])
+    replacement_inner_unsigned.pop("aborted_attempt_exposure_receipt_sha256")
+    replacement["exposure_set"][
+        "aborted_attempt_exposure_receipt_sha256"
+    ] = canonical_sha256(replacement_inner_unsigned)
+    replacement["exposure_set_sha256"] = replacement["exposure_set"][
+        "aborted_attempt_exposure_receipt_sha256"
+    ]
+    replacement_unsigned = dict(replacement)
+    replacement_unsigned.pop("aborted_attempt_exposure_receipt_sha256")
+    replacement["aborted_attempt_exposure_receipt_sha256"] = canonical_sha256(
+        replacement_unsigned
+    )
+    with pytest.raises(PriorExposureRefusal, match="replacement a2 member"):
+        verify_f1_r8_successor_exposure_set(replacement)
 
 
 def test_forbidden_union_requires_exact_lock_lists(

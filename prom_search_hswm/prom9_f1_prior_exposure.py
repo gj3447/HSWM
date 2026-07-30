@@ -23,7 +23,7 @@ import stat
 import subprocess
 import sys
 import tempfile
-from collections.abc import Mapping, Sequence
+from collections.abc import Collection, Mapping, Sequence
 
 import bge_m3_embed as _bge_module
 import model_deployment_receipt as _deployment_module
@@ -74,6 +74,29 @@ ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2 = (
 ABORTED_ATTEMPT_EXPOSURE_SCHEMA = (
     "hswm-prom9-f1-aborted-attempt-exposure/v3"
 )
+ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4 = (
+    "hswm-prom9-f1-aborted-attempt-exposure/v4"
+)
+ABORTED_ATTEMPT_EXPOSURE_SET_SCHEMA = (
+    "hswm-prom9-f1-aborted-attempt-exposure-set/v1"
+)
+F1_R8_SUCCESSOR_EXPOSURE_SET_SCHEMA = (
+    "hswm-prom9-f1-successor-exposure-set/v1"
+)
+_ABORTED_ATTEMPT_LEAF_SCHEMAS = frozenset(
+    {
+        ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2,
+        ABORTED_ATTEMPT_EXPOSURE_SCHEMA,
+        ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4,
+    }
+)
+CANARY_COUNTER_SCHEMA = "hswm-prom9-f1-canary-post-counter/v1"
+INCIDENT_PROFILE_EVIDENCE_SCHEMA = (
+    "hswm-prom9-f1-incident-profile-evidence/v1"
+)
+SUCCESSOR_DISPOSITION_SCHEMA = (
+    "hswm-prom9-f1-successor-disposition/v1"
+)
 ABORTED_ATTEMPT_STATUS = "ABORTED_QUARANTINED"
 ABORTED_ATTEMPT_PRIVATE_WITNESS_SCHEMA = (
     "hswm-prom9-f1-aborted-attempt-private-witness/v1"
@@ -95,6 +118,18 @@ _ROW_KEYS = {
 }
 _GIT_COMMIT = re.compile(r"^[0-9a-f]{40}$")
 _GENESIS = "0" * 64
+_CANARY_POST_MARKER = b"POST /v1/chat/completions"
+_CANARY_DT_JOB_ROOT = Path("/data/kjra/.dt/jobs")
+_CANARY_ACCESS_RECORD = re.compile(
+    rb'^\(APIServer pid=([1-9][0-9]*)\) INFO:\s+'
+    rb'(127\.0\.0\.1|\[::1\]):([1-9][0-9]{0,4}) - '
+    rb'"POST /v1/chat/completions HTTP/1\.1" ([1-5][0-9][0-9])(?: [A-Za-z ]+)?$'
+)
+_HISTORICAL_V8_INCIDENT_SHA256 = (
+    "f97634c0c4185b9bdbe983d6fe5fffc672e6c625923f027a780433acfc714afd"
+)
+F1_R8_A3_SUCCESSOR_RUN_ID = "f1-2wiki-development-r8-try3-a3"
+F1_R8_A2_INCIDENT_RECEIPT_SHA256: str | None = None
 _F1_ARMS = (
     "typed_hswm_three_function_network",
     "flat_single_llm_three_call_workflow",
@@ -173,6 +208,44 @@ _HISTORICAL_DEPENDENCY_NAMES = frozenset(
         "python_lock",
     }
 )
+_A2_INCIDENT_PROFILE = {
+    "profile_id": "hswm-f1-r8-a2-v11-development-sigbus-20260730",
+    "job_directory": "hswm-f1-r8-a2-v11-development-825-20260730",
+    "job_alias": "HSWM_F1_R8_A2_V11_DEVELOPMENT_SIGBUS",
+    "canary_job_alias": "hswm-f1-r8-vllm-canary-triton",
+    "canary_command_sha256": (
+        "95e018951836b4a7fa1730e2c846dfd24171e9c81aca691a838bd16be22cb8dd"
+    ),
+    "run_id": "f1-2wiki-development-r8-try3-a2",
+    "max_workers": 1,
+    "canary_counts": {
+        "historical_baseline": 1,
+        "terminal_total": 27,
+        "incident_delta": 26,
+    },
+    "canary_http_status_counts": {"200": 27},
+    "runtime_commits": {
+        "hswm_executable": "5f4aab5f87af2b28bb5e0d1cb7f3b62dc59abf23",
+        "hswm_carrier": "5f4aab5f87af2b28bb5e0d1cb7f3b62dc59abf23",
+        "symposium": "54aeaa02f867617756004793e8d4fd6c7b7d9b0e",
+    },
+    "expected_counts": {
+        "attempt_calls": 27,
+        "attempt_events": 157,
+        "item_runs": 8,
+        "spool_calls": 26,
+        "attempt_states": {"ACCEPTED": 26, "PREPARED": 1},
+        "spool_complete_calls": 26,
+        "spool_absent_calls": 1,
+    },
+    "expected_dependency_names": tuple(sorted(
+        set(_HISTORICAL_DEPENDENCY_NAMES)
+        | {"token_envelope_derivation", "token_meter_validator"}
+    )),
+}
+INCIDENT_PROFILES = {
+    str(_A2_INCIDENT_PROFILE["profile_id"]): _A2_INCIDENT_PROFILE,
+}
 _LINUX_SIGNAL_NAMES = {
     1: "SIGHUP", 2: "SIGINT", 3: "SIGQUIT", 4: "SIGILL", 5: "SIGTRAP",
     6: "SIGABRT", 7: "SIGBUS", 8: "SIGFPE", 9: "SIGKILL", 10: "SIGUSR1",
@@ -311,6 +384,181 @@ _INCIDENT_SPOOL_AUDIT_FIELDS = {
 
 class PriorExposureRefusal(RuntimeError):
     """The historical exposure boundary is incomplete or mutable."""
+
+
+def _validated_incident_profile(
+    value: Mapping[str, object],
+) -> dict[str, object]:
+    fields = {
+        "profile_id", "job_directory", "job_alias", "run_id",
+        "canary_job_alias", "canary_command_sha256",
+        "runtime_commits", "expected_counts", "expected_dependency_names",
+        "max_workers", "canary_counts", "canary_http_status_counts",
+    }
+    if not isinstance(value, Mapping) or set(value) != fields:
+        raise PriorExposureRefusal("incident profile shape drifted")
+    for key in (
+        "profile_id", "job_directory", "job_alias", "run_id",
+        "canary_job_alias",
+    ):
+        if not isinstance(value.get(key), str) or not value.get(key):
+            raise PriorExposureRefusal("incident profile identity drifted")
+    job_directory = str(value["job_directory"])
+    canary_job_alias = str(value["canary_job_alias"])
+    if (
+        Path(job_directory).name != job_directory
+        or not job_directory.startswith("hswm-f1-r8-")
+        or not re.fullmatch(r"[A-Za-z0-9._-]+", job_directory)
+        or not re.fullmatch(r"[A-Za-z0-9._-]+", canary_job_alias)
+        or canary_job_alias in {".", ".."}
+    ):
+        raise PriorExposureRefusal("incident profile job directory drifted")
+    commits = value.get("runtime_commits")
+    if not isinstance(commits, Mapping) or set(commits) != set(
+        _HISTORICAL_RUNTIME_COMMITS
+    ) or any(
+        not isinstance(commit, str) or _GIT_COMMIT.fullmatch(commit) is None
+        for commit in commits.values()
+    ):
+        raise PriorExposureRefusal("incident profile commit authority drifted")
+    if not _is_sha256(value.get("canary_command_sha256")):
+        raise PriorExposureRefusal("incident profile canary command drifted")
+    max_workers = value.get("max_workers")
+    canary_counts = value.get("canary_counts")
+    canary_status_counts = value.get("canary_http_status_counts")
+    if (
+        isinstance(max_workers, bool)
+        or not isinstance(max_workers, int)
+        or not 1 <= max_workers <= 8
+        or not isinstance(canary_counts, Mapping)
+        or set(canary_counts)
+        != {"historical_baseline", "terminal_total", "incident_delta"}
+        or any(
+            isinstance(count, bool) or not isinstance(count, int) or count < 0
+            for count in canary_counts.values()
+        )
+        or canary_counts["terminal_total"]
+        - canary_counts["historical_baseline"]
+        != canary_counts["incident_delta"]
+        or not isinstance(canary_status_counts, Mapping)
+        or not canary_status_counts
+        or any(
+            not isinstance(status, str)
+            or re.fullmatch(r"[1-5][0-9][0-9]", status) is None
+            or isinstance(count, bool)
+            or not isinstance(count, int)
+            or count < 1
+            for status, count in canary_status_counts.items()
+        )
+        or list(canary_status_counts) != sorted(canary_status_counts)
+        or sum(int(count) for count in canary_status_counts.values())
+        != int(canary_counts["terminal_total"])
+    ):
+        raise PriorExposureRefusal("incident profile canary/worker authority drifted")
+    expected = value.get("expected_counts")
+    scalar_fields = {
+        "attempt_calls", "attempt_events", "item_runs", "spool_calls",
+        "spool_complete_calls", "spool_absent_calls",
+    }
+    if (
+        not isinstance(expected, Mapping)
+        or set(expected) != scalar_fields | {"attempt_states"}
+        or any(
+            isinstance(expected.get(key), bool)
+            or not isinstance(expected.get(key), int)
+            or int(expected[key]) < 0
+            for key in scalar_fields
+        )
+        or not isinstance(expected.get("attempt_states"), Mapping)
+        or any(
+            state not in _EVENT_TRANSITIONS
+            or isinstance(count, bool)
+            or not isinstance(count, int)
+            or count < 1
+            for state, count in expected["attempt_states"].items()
+        )
+        or sum(int(count) for count in expected["attempt_states"].values())
+        != int(expected["attempt_calls"])
+        or int(expected["spool_complete_calls"])
+        + int(expected["spool_absent_calls"])
+        != int(expected["attempt_calls"])
+        or int(expected["spool_calls"])
+        != int(expected["spool_complete_calls"])
+    ):
+        raise PriorExposureRefusal("incident profile count authority drifted")
+    names = value.get("expected_dependency_names")
+    if (
+        not isinstance(names, (tuple, list))
+        or any(not isinstance(name, str) or not name for name in names)
+        or list(names) != sorted(set(names))
+    ):
+        raise PriorExposureRefusal("incident profile dependency inventory drifted")
+    return {
+        **dict(value),
+        "runtime_commits": dict(commits),
+        "expected_counts": {
+            **dict(expected),
+            "attempt_states": dict(expected["attempt_states"]),
+        },
+        "expected_dependency_names": tuple(names),
+        "canary_counts": dict(canary_counts),
+        "canary_http_status_counts": dict(canary_status_counts),
+    }
+
+
+def _registered_incident_profile(
+    value: Mapping[str, object],
+) -> dict[str, object]:
+    """Accept only a source-registered incident profile and its pinned commits."""
+
+    profile = _validated_incident_profile(value)
+    registered = INCIDENT_PROFILES.get(str(profile["profile_id"]))
+    if registered is None:
+        raise PriorExposureRefusal("incident profile is not registered")
+    expected = _validated_incident_profile(registered)
+    if not _exact_json_equal(profile, expected):
+        raise PriorExposureRefusal("registered incident profile authority drifted")
+    return expected
+
+
+def _public_incident_profile(
+    value: Mapping[str, object],
+) -> dict[str, object]:
+    profile = _validated_incident_profile(value)
+    return {
+        **profile,
+        "expected_dependency_names": list(
+            profile["expected_dependency_names"]
+        ),
+    }
+
+
+def _successor_disposition(profile_id: str) -> dict[str, object]:
+    return {
+        "schema_version": SUCCESSOR_DISPOSITION_SCHEMA,
+        "incident_profile_id": profile_id,
+        "forensic_only": True,
+        "resume_authorized": False,
+        "successor_required": True,
+        "legacy_database_mutation_authorized": False,
+        "legacy_database_import_authorized": False,
+        "accepted_result_import_authorized": False,
+    }
+
+
+def _successor_set_disposition() -> dict[str, object]:
+    return {
+        "schema_version": "hswm-prom9-f1-successor-set-disposition/v1",
+        "historical_v8_quarantined": True,
+        "a2_quarantined": True,
+        "resume_authorized": False,
+        "successor_required": True,
+        "successor_must_start_zero": True,
+        "successor_run_id": F1_R8_A3_SUCCESSOR_RUN_ID,
+        "legacy_database_mutation_authorized": False,
+        "legacy_database_import_authorized": False,
+        "accepted_result_import_authorized": False,
+    }
 
 
 def _pairs(values: list[tuple[str, object]]) -> dict[str, object]:
@@ -940,6 +1188,368 @@ def _read_stable_public_bytes(path: Path) -> bytes:
     ):
         raise PriorExposureRefusal("evidence input changed while being read")
     return bytes(payload)
+
+
+def _stable_canary_log_count(
+    path: Path,
+) -> tuple[dict[str, object], dict[str, int], dict[str, object]]:
+    """Hash a stable DT log while counting only exact complete access records."""
+
+    target = Path(path)
+    try:
+        before_path = target.lstat()
+    except OSError as error:
+        raise PriorExposureRefusal("canary job log is unavailable") from error
+    if stat.S_ISLNK(before_path.st_mode) or not stat.S_ISREG(before_path.st_mode):
+        raise PriorExposureRefusal("canary job log must be a regular non-symlink file")
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        descriptor = os.open(target, flags)
+    except OSError as error:
+        raise PriorExposureRefusal("canary job log cannot be opened") from error
+    digest = hashlib.sha256()
+    pending = bytearray()
+    total = 0
+    status_counts: dict[str, int] = {}
+
+    def consume(line: bytes) -> None:
+        if line.endswith(b"\r"):
+            line = line[:-1]
+        if _CANARY_POST_MARKER not in line:
+            return
+        match = _CANARY_ACCESS_RECORD.fullmatch(line)
+        if match is None:
+            raise PriorExposureRefusal(
+                "canary request marker is not an exact access-log record"
+            )
+        port = int(match.group(3))
+        if not 1 <= port <= 65535:
+            raise PriorExposureRefusal("canary access-log client port drifted")
+        status = match.group(4).decode("ascii")
+        status_counts[status] = status_counts.get(status, 0) + 1
+
+    try:
+        before_fd = os.fstat(descriptor)
+        if (before_fd.st_dev, before_fd.st_ino) != (
+            before_path.st_dev,
+            before_path.st_ino,
+        ):
+            raise PriorExposureRefusal("canary job log changed before capture")
+        while True:
+            chunk = os.read(descriptor, 1024 * 1024)
+            if not chunk:
+                break
+            total += len(chunk)
+            digest.update(chunk)
+            pending.extend(chunk)
+            while True:
+                boundary = pending.find(b"\n")
+                if boundary < 0:
+                    break
+                consume(bytes(pending[:boundary]))
+                del pending[: boundary + 1]
+            if len(pending) > 1024 * 1024:
+                raise PriorExposureRefusal("canary job log contains an oversized line")
+        if _CANARY_POST_MARKER in pending:
+            raise PriorExposureRefusal("canary access-log record is unterminated")
+        after_fd = os.fstat(descriptor)
+    finally:
+        os.close(descriptor)
+    try:
+        after_path = target.lstat()
+    except OSError as error:
+        raise PriorExposureRefusal("canary job log cannot be restated") from error
+
+    def identity(value: os.stat_result) -> tuple[int, int, int, int, int, int]:
+        return (
+            value.st_dev,
+            value.st_ino,
+            value.st_mode,
+            value.st_size,
+            value.st_mtime_ns,
+            value.st_ctime_ns,
+        )
+
+    if (
+        identity(before_path) != identity(before_fd)
+        or identity(before_path) != identity(after_fd)
+        or identity(before_path) != identity(after_path)
+        or total != before_path.st_size
+    ):
+        raise PriorExposureRefusal("canary job log changed during capture")
+    return (
+        {
+            "basename": target.name,
+            "size_bytes": total,
+            "sha256": digest.hexdigest(),
+        },
+        {status: status_counts[status] for status in sorted(status_counts)},
+        {
+            "resolved_path": str(target.resolve(strict=True)),
+            "st_dev": before_path.st_dev,
+            "st_ino": before_path.st_ino,
+            "mode": before_path.st_mode,
+            "size_bytes": before_path.st_size,
+            "mtime_ns": before_path.st_mtime_ns,
+            "ctime_ns": before_path.st_ctime_ns,
+        },
+    )
+
+
+def verify_canary_counter_receipt(value: Mapping[str, object]) -> str:
+    fields = {
+        "schema_version", "method", "source_provider", "source_job_alias",
+        "request_route", "access_record_pattern_sha256", "job_command",
+        "log_snapshot", "origin_commitment_sha256", "http_status_counts",
+        "historical_baseline",
+        "terminal_total", "incident_delta", "complete", "receipt_sha256",
+    }
+    if not isinstance(value, Mapping) or set(value) != fields:
+        raise PriorExposureRefusal("canary counter receipt shape drifted")
+    unsigned = dict(value)
+    declared = unsigned.pop("receipt_sha256", None)
+    command = value.get("job_command")
+    snapshot = value.get("log_snapshot")
+    status_counts = value.get("http_status_counts")
+    counts = (
+        value.get("historical_baseline"),
+        value.get("terminal_total"),
+        value.get("incident_delta"),
+    )
+    file_fields = {"basename", "size_bytes", "sha256"}
+    if (
+        value.get("schema_version") != CANARY_COUNTER_SCHEMA
+        or value.get("method") != "DT_VLLM_ACCESS_LOG_EXACT_V1"
+        or value.get("source_provider") != "PI/dt.sh"
+        or not isinstance(value.get("source_job_alias"), str)
+        or re.fullmatch(
+            r"[A-Za-z0-9._-]+", str(value.get("source_job_alias"))
+        ) is None
+        or value.get("source_job_alias") in {".", ".."}
+        or value.get("request_route") != "/v1/chat/completions"
+        or value.get("access_record_pattern_sha256")
+        != hashlib.sha256(_CANARY_ACCESS_RECORD.pattern).hexdigest()
+        or value.get("complete") is not True
+        or not _is_sha256(declared)
+        or canonical_sha256(unsigned) != declared
+        or not isinstance(command, Mapping)
+        or set(command) != file_fields
+        or command.get("basename") != "cmd.sh"
+        or isinstance(command.get("size_bytes"), bool)
+        or not isinstance(command.get("size_bytes"), int)
+        or int(command["size_bytes"]) < 1
+        or not _is_sha256(command.get("sha256"))
+        or not isinstance(snapshot, Mapping)
+        or set(snapshot) != file_fields
+        or snapshot.get("basename") != "log"
+        or isinstance(snapshot.get("size_bytes"), bool)
+        or not isinstance(snapshot.get("size_bytes"), int)
+        or int(snapshot["size_bytes"]) < 0
+        or not _is_sha256(snapshot.get("sha256"))
+        or not _is_sha256(value.get("origin_commitment_sha256"))
+        or not isinstance(status_counts, Mapping)
+        or any(
+            not isinstance(status, str)
+            or re.fullmatch(r"[1-5][0-9][0-9]", status) is None
+            or isinstance(count, bool)
+            or not isinstance(count, int)
+            or count < 1
+            for status, count in status_counts.items()
+        )
+        or list(status_counts) != sorted(status_counts)
+        or any(
+            isinstance(count, bool) or not isinstance(count, int) or count < 0
+            for count in counts
+        )
+        or sum(int(count) for count in status_counts.values())
+        != int(value["terminal_total"])
+        or int(value["terminal_total"]) - int(value["historical_baseline"])
+        != int(value["incident_delta"])
+    ):
+        raise PriorExposureRefusal("canary counter receipt drifted")
+    return str(declared)
+
+
+def build_canary_counter_receipt(
+    job_log: Path, *, historical_baseline: int, source_job_alias: str
+) -> dict[str, object]:
+    if (
+        isinstance(historical_baseline, bool)
+        or not isinstance(historical_baseline, int)
+        or historical_baseline < 0
+    ):
+        raise PriorExposureRefusal("canary historical baseline drifted")
+    if (
+        not isinstance(source_job_alias, str)
+        or re.fullmatch(r"[A-Za-z0-9._-]+", source_job_alias) is None
+        or source_job_alias in {".", ".."}
+    ):
+        raise PriorExposureRefusal("canary job alias drifted")
+    try:
+        trusted_root = _CANARY_DT_JOB_ROOT.resolve(strict=True)
+        trusted_root_info = _CANARY_DT_JOB_ROOT.lstat()
+        job_directory = trusted_root / source_job_alias
+        job_directory_info = job_directory.lstat()
+        expected_log = job_directory / "log"
+        supplied_log = Path(job_log).resolve(strict=True)
+    except OSError as error:
+        raise PriorExposureRefusal("canary DT job authority is unavailable") from error
+    if (
+        stat.S_ISLNK(trusted_root_info.st_mode)
+        or not stat.S_ISDIR(trusted_root_info.st_mode)
+        or stat.S_ISLNK(job_directory_info.st_mode)
+        or not stat.S_ISDIR(job_directory_info.st_mode)
+        or job_directory.parent != trusted_root
+        or supplied_log != expected_log.resolve(strict=True)
+    ):
+        raise PriorExposureRefusal("canary log is not the exact DT job authority")
+    command_path = job_directory / "cmd.sh"
+    command_raw = _read_stable_public_bytes(command_path)
+    log_binding, status_counts, private_log_identity = _stable_canary_log_count(
+        expected_log
+    )
+    after_job_directory = job_directory.lstat()
+    if (
+        after_job_directory.st_dev,
+        after_job_directory.st_ino,
+        after_job_directory.st_mode,
+    ) != (
+        job_directory_info.st_dev,
+        job_directory_info.st_ino,
+        job_directory_info.st_mode,
+    ):
+        raise PriorExposureRefusal("canary DT job directory changed during capture")
+    terminal_total = sum(status_counts.values())
+    if terminal_total < historical_baseline:
+        raise PriorExposureRefusal("canary count precedes historical baseline")
+    unsigned = {
+        "schema_version": CANARY_COUNTER_SCHEMA,
+        "method": "DT_VLLM_ACCESS_LOG_EXACT_V1",
+        "source_provider": "PI/dt.sh",
+        "source_job_alias": source_job_alias,
+        "request_route": "/v1/chat/completions",
+        "access_record_pattern_sha256": hashlib.sha256(
+            _CANARY_ACCESS_RECORD.pattern
+        ).hexdigest(),
+        "job_command": {
+            "basename": command_path.name,
+            "size_bytes": len(command_raw),
+            "sha256": hashlib.sha256(command_raw).hexdigest(),
+        },
+        "log_snapshot": log_binding,
+        "origin_commitment_sha256": canonical_sha256(
+            {
+                "provider_root": str(trusted_root),
+                "job_directory": {
+                    "resolved_path": str(job_directory.resolve(strict=True)),
+                    "st_dev": job_directory_info.st_dev,
+                    "st_ino": job_directory_info.st_ino,
+                    "mode": job_directory_info.st_mode,
+                },
+                "job_log": private_log_identity,
+                "job_command_resolved_path": str(
+                    command_path.resolve(strict=True)
+                ),
+            }
+        ),
+        "http_status_counts": status_counts,
+        "historical_baseline": historical_baseline,
+        "terminal_total": terminal_total,
+        "incident_delta": terminal_total - historical_baseline,
+        "complete": True,
+    }
+    result = {**unsigned, "receipt_sha256": canonical_sha256(unsigned)}
+    verify_canary_counter_receipt(result)
+    return result
+
+
+def _incident_scheduler_evidence(
+    *,
+    profile: Mapping[str, object],
+    calls: Sequence[Mapping[str, object]],
+    item_runs: Sequence[Mapping[str, object]],
+    item_ids: Sequence[str],
+    event_chain: Mapping[str, object],
+) -> dict[str, object]:
+    max_workers = int(profile["max_workers"])
+    jobs = [
+        (item_id, arm_id)
+        for item_id in sorted(item_ids)
+        for arm_id in _F1_ARMS
+    ]
+    ordinal_by_job = {job: ordinal for ordinal, job in enumerate(jobs)}
+    groups: dict[tuple[str, str], list[Mapping[str, object]]] = {}
+    for call in calls:
+        job = (str(call["item_id"]), str(call["arm_id"]))
+        if job not in ordinal_by_job:
+            raise PriorExposureRefusal("incident scheduler contains a foreign job")
+        groups.setdefault(job, []).append(call)
+    item_run_jobs = {
+        (str(row["item_id"]), str(row["arm_id"])) for row in item_runs
+    }
+    if len(item_run_jobs) != len(item_runs) or item_run_jobs - set(groups):
+        raise PriorExposureRefusal("incident scheduler item-run identity drifted")
+    per_call_counts = event_chain.get("per_call_event_counts")
+    call_ids = {str(row["physical_call_id"]) for row in calls}
+    if (
+        not isinstance(per_call_counts, Mapping)
+        or set(per_call_counts) != call_ids
+        or any(
+            isinstance(count, bool) or not isinstance(count, int) or count < 1
+            for count in per_call_counts.values()
+        )
+    ):
+        raise PriorExposureRefusal("incident scheduler event counts are absent")
+    positions: list[dict[str, object]] = []
+    for job, group in sorted(groups.items(), key=lambda entry: ordinal_by_job[entry[0]]):
+        ordered = sorted(group, key=lambda row: int(row["call_index"]))
+        indices = [int(row["call_index"]) for row in ordered]
+        if indices != list(range(1, len(indices) + 1)) or len(indices) > 3:
+            raise PriorExposureRefusal("incident scheduler call prefix drifted")
+        positions.append(
+            {
+                "job_ordinal": ordinal_by_job[job],
+                "item_id": job[0],
+                "arm_id": job[1],
+                "call_indices": indices,
+                "call_states": [str(row["raw_attempt_state"]) for row in ordered],
+                "per_call_event_counts": [
+                    int(per_call_counts[str(row["physical_call_id"])])
+                    for row in ordered
+                ],
+                "item_run_committed": job in item_run_jobs,
+            }
+        )
+    observed_ordinals = [int(row["job_ordinal"]) for row in positions]
+    frontier = max(observed_ordinals) // max_workers if observed_ordinals else -1
+    positions_by_ordinal = {
+        int(row["job_ordinal"]): row for row in positions
+    }
+    prior_batches_committed = all(
+        ordinal in positions_by_ordinal
+        and positions_by_ordinal[ordinal]["call_indices"] == [1, 2, 3]
+        and positions_by_ordinal[ordinal]["call_states"]
+        == ["ACCEPTED", "ACCEPTED", "ACCEPTED"]
+        and positions_by_ordinal[ordinal]["item_run_committed"] is True
+        for ordinal in range(max(0, frontier * max_workers))
+    )
+    if not prior_batches_committed:
+        raise PriorExposureRefusal("incident scheduler prior batch is incomplete")
+    return {
+        "schema_version": "hswm-prom9-f1-incident-scheduler-prefix/v1",
+        "job_count": len(jobs),
+        "ordered_job_root_sha256": canonical_sha256(
+            [
+                {"item_id": item_id, "arm_id": arm_id}
+                for item_id, arm_id in jobs
+            ]
+        ),
+        "max_workers": max_workers,
+        "positions": positions,
+        "observed_job_ordinals": observed_ordinals,
+        "frontier_batch": frontier,
+        "prior_batches_committed": True,
+    }
 
 
 def _stable_public_file_binding(path: Path) -> dict[str, object]:
@@ -1573,6 +2183,8 @@ def _verify_historical_selection(
 def _verify_incident_artifact_semantics(
     values: Mapping[str, Mapping[str, object]],
     historical_replay: Mapping[str, object] | None = None,
+    *,
+    expected_dependency_names: Collection[str] = _HISTORICAL_DEPENDENCY_NAMES,
 ) -> None:
     selection = values["selection_receipt"]
     manifest = values["manifest"]
@@ -1874,7 +2486,7 @@ def _verify_incident_artifact_semantics(
     if (
         not isinstance(environment_labels, Mapping)
         or not isinstance(dependency_files, Mapping)
-        or set(dependency_files) != _HISTORICAL_DEPENDENCY_NAMES
+        or set(dependency_files) != set(expected_dependency_names)
     ):
         raise PriorExposureRefusal(
             "historical environment labels/dependency inventory drifted"
@@ -2357,9 +2969,10 @@ def _git_commit_binding(
 
 
 def _materialize_historical_replay_tree(
-    repository: Path, destination: Path
+    repository: Path, destination: Path, *, commit: str
 ) -> list[dict[str, object]]:
-    commit = _HISTORICAL_RUNTIME_COMMITS["hswm_executable"]
+    if _GIT_COMMIT.fullmatch(commit) is None:
+        raise PriorExposureRefusal("incident replay commit drifted")
     files: list[dict[str, object]] = []
     for relative in _HISTORICAL_REPLAY_IMPORT_LFP:
         raw = _git_output(repository, "show", f"{commit}:{relative}", text=False)
@@ -2422,21 +3035,31 @@ def _historical_runtime_replay(
     source_receipt: Mapping[str, object],
     lock: Mapping[str, object],
     environment: Mapping[str, object],
+    runtime_commits: Mapping[str, str] | None = None,
 ) -> tuple[dict[str, object], dict[str, object]]:
+    commits = (
+        dict(_HISTORICAL_RUNTIME_COMMITS)
+        if runtime_commits is None
+        else dict(runtime_commits)
+    )
+    if set(commits) != set(_HISTORICAL_RUNTIME_COMMITS) or any(
+        _GIT_COMMIT.fullmatch(value) is None for value in commits.values()
+    ):
+        raise PriorExposureRefusal("incident runtime commit inventory drifted")
     repositories = {
         "hswm_executable": _git_commit_binding(
             hswm_root,
-            _HISTORICAL_RUNTIME_COMMITS["hswm_executable"],
+            commits["hswm_executable"],
             "HSWM executable",
         ),
         "hswm_carrier": _git_commit_binding(
             carrier_root,
-            _HISTORICAL_RUNTIME_COMMITS["hswm_carrier"],
+            commits["hswm_carrier"],
             "HSWM carrier",
         ),
         "symposium": _git_commit_binding(
             symposium_root,
-            _HISTORICAL_RUNTIME_COMMITS["symposium"],
+            commits["symposium"],
             "SYMPOSIUM",
         ),
     }
@@ -2492,7 +3115,9 @@ def _historical_runtime_replay(
         tree = Path(temporary.name)
         tree.chmod(0o700)
         replay_files = _materialize_historical_replay_tree(
-            Path(hswm_root).resolve(strict=True), tree
+            Path(hswm_root).resolve(strict=True),
+            tree,
+            commit=commits["hswm_executable"],
         )
         completed = subprocess.run(
             [str(interpreter), "-I", "-S", "-c", _HISTORICAL_REPLAY_CHILD, str(tree)],
@@ -3187,6 +3812,7 @@ def _replay_attempt_event_chain(
     per_call_state: dict[str, str] = {}
     per_call_counts: dict[str, int] = {}
     delivery_ordinals: dict[str, int] = {}
+    final_structural_event: dict[str, object] | None = None
     for expected_sequence, row in enumerate(rows):
         raw = bytes(row["event_bytes"])
         value = _strict_canonical_blob(raw, "attempt event")
@@ -3312,6 +3938,12 @@ def _replay_attempt_event_chain(
         per_call_state[physical_call_id] = event_type
         per_call_counts[physical_call_id] = per_call_counts.get(physical_call_id, 0) + 1
         previous = str(row["event_sha256"])
+        final_structural_event = {
+            "sequence": expected_sequence,
+            "physical_call_id": physical_call_id,
+            "event_type": event_type,
+            "event_sha256": previous,
+        }
     if per_call_state != dict(call_states):
         raise PriorExposureRefusal("attempt event terminal states differ from call rows")
     return {
@@ -3323,6 +3955,7 @@ def _replay_attempt_event_chain(
         "per_call_terminal_states": {
             key: per_call_state[key] for key in sorted(per_call_state)
         },
+        "final_structural_event": final_structural_event,
     }
 
 
@@ -3515,9 +4148,58 @@ def build_aborted_attempt_exposure_receipt(
     private_witness_output: Path,
     producer_hswm_root: Path | None = None,
     historical_python: Path | None = None,
+    incident_profile: Mapping[str, object] | None = None,
+    canary_counter_receipt: Path | None = None,
 ) -> dict[str, object]:
     """Derive a quarantine boundary from copied structural evidence only."""
 
+    profile = (
+        None
+        if incident_profile is None
+        else _registered_incident_profile(incident_profile)
+    )
+    canary_counter_value: dict[str, object] | None = None
+    if profile is None:
+        if canary_counter_receipt is not None:
+            raise PriorExposureRefusal(
+                "legacy incident cannot accept a canary counter receipt"
+            )
+    else:
+        if canary_counter_receipt is None:
+            raise PriorExposureRefusal(
+                "profile-bound incident requires a canary counter receipt"
+            )
+        canary_counter_value = _strict_object(
+            _read_stable_public_bytes(Path(canary_counter_receipt)),
+            "canary counter receipt",
+        )
+        verify_canary_counter_receipt(canary_counter_value)
+        observed_canary_counts = {
+            key: canary_counter_value[key]
+            for key in (
+                "historical_baseline", "terminal_total", "incident_delta"
+            )
+        }
+        if not _exact_json_equal(
+            observed_canary_counts, profile["canary_counts"]
+        ) or (
+            canary_counter_value.get("source_job_alias")
+            != profile["canary_job_alias"]
+            or canary_counter_value.get("job_command", {}).get("sha256")
+            != profile["canary_command_sha256"]
+            or not _exact_json_equal(
+                canary_counter_value.get("http_status_counts"),
+                profile["canary_http_status_counts"],
+            )
+        ):
+            raise PriorExposureRefusal(
+                "canary counter receipt differs from incident profile"
+            )
+    receipt_schema = (
+        ABORTED_ATTEMPT_EXPOSURE_SCHEMA
+        if profile is None
+        else ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4
+    )
     resolved_producer_root = _current_producer_root(producer_hswm_root)
     job_rc_raw = _read_stable_public_bytes(job_rc)
     try:
@@ -3530,8 +4212,15 @@ def build_aborted_attempt_exposure_receipt(
         job_rc_value != 135
         or len(job_parents) != 1
         or [path.name for path in job_paths] != ["cmd.sh", "log", "rc"]
-        or not job_paths[0].parent.name.startswith(
-            "hswm-f1-r8-v8-development-"
+        or (
+            profile is None
+            and not job_paths[0].parent.name.startswith(
+                "hswm-f1-r8-v8-development-"
+            )
+        )
+        or (
+            profile is not None
+            and job_paths[0].parent.name != profile["job_directory"]
         )
     ):
         raise PriorExposureRefusal("aborted DT job evidence set drifted")
@@ -3590,8 +4279,21 @@ def build_aborted_attempt_exposure_receipt(
         source_receipt=source_value,
         lock=artifact_values["execution_lock"],
         environment=artifact_values["environment_dependency_bundle"],
+        runtime_commits=(
+            None
+            if profile is None
+            else profile["runtime_commits"]
+        ),
     )
-    _verify_incident_artifact_semantics(artifact_values, historical_replay)
+    _verify_incident_artifact_semantics(
+        artifact_values,
+        historical_replay,
+        expected_dependency_names=(
+            _HISTORICAL_DEPENDENCY_NAMES
+            if profile is None
+            else profile["expected_dependency_names"]
+        ),
+    )
     metadata = _source_metadata(manifest_value, source_value)
     repositories = historical_authority["repositories"]
     assert isinstance(repositories, Mapping)
@@ -3637,6 +4339,17 @@ def build_aborted_attempt_exposure_receipt(
         raise PriorExposureRefusal(
             "incident lock/repository provenance differs from captured artifacts"
         )
+    if profile is not None and (
+        manifest_value.get("run_id") != profile["run_id"]
+        or not isinstance(lock_value.get("execution_policy"), Mapping)
+        or lock_value["execution_policy"].get("max_workers")
+        != profile["max_workers"]
+        or any(
+            repositories[name]["commit"] != commit
+            for name, commit in profile["runtime_commits"].items()
+        )
+    ):
+        raise PriorExposureRefusal("incident profile differs from captured authority")
     for key in ("run_id", "mode", "model", "model_revision"):
         if manifest_value.get(key) != lock_value.get(key):
             raise PriorExposureRefusal(f"incident manifest/lock {key} drifted")
@@ -3834,19 +4547,46 @@ def build_aborted_attempt_exposure_receipt(
     public_spool_snapshot = _public_database_snapshot(
         {**spool_snapshot, **spool_database}, kind="spool"
     )
+    structural_counts = {
+        "attempt_calls": len(call_observations),
+        "attempt_events": int(event_chain["event_count"]),
+        "item_runs": len(item_runs),
+        "spool_calls": len(spool_rows),
+        "attempt_states": {key: state_counts[key] for key in sorted(state_counts)},
+        "spool_complete_calls": sum(
+            row["spool_snapshot_state"] == "COMPLETE" for row in call_observations
+        ),
+        "spool_absent_calls": sum(
+            row["spool_snapshot_state"] is None for row in call_observations
+        ),
+    }
+    if profile is not None and not _exact_json_equal(
+        structural_counts, profile["expected_counts"]
+    ):
+        raise PriorExposureRefusal("incident structural counts differ from profile")
+    public_event_chain = dict(event_chain)
+    if profile is None:
+        public_event_chain.pop("final_structural_event", None)
+    run_identity = {
+        "run_id": manifest_value.get("run_id"),
+        "mode": manifest_value.get("mode"),
+        "model": manifest_value.get("model"),
+        "model_revision": manifest_value.get("model_revision"),
+        "job_alias": (
+            "HSWM_F1_R8_V8_DEVELOPMENT_SIGBUS"
+            if profile is None
+            else profile["job_alias"]
+        ),
+        "implementation_commit": repositories["hswm_executable"]["commit"],
+        "carrier_commit": repositories["hswm_carrier"]["commit"],
+        "symposium_commit": repositories["symposium"]["commit"],
+    }
+    if profile is not None:
+        run_identity["incident_profile_id"] = profile["profile_id"]
     unsigned = {
-        "schema_version": ABORTED_ATTEMPT_EXPOSURE_SCHEMA,
+        "schema_version": receipt_schema,
         "status": ABORTED_ATTEMPT_STATUS,
-        "run_identity": {
-            "run_id": manifest_value.get("run_id"),
-            "mode": manifest_value.get("mode"),
-            "model": manifest_value.get("model"),
-            "model_revision": manifest_value.get("model_revision"),
-            "job_alias": "HSWM_F1_R8_V8_DEVELOPMENT_SIGBUS",
-            "implementation_commit": repositories["hswm_executable"]["commit"],
-            "carrier_commit": repositories["hswm_carrier"]["commit"],
-            "symposium_commit": repositories["symposium"]["commit"],
-        },
+        "run_identity": run_identity,
         "termination": {
             "evidence_status": "OBSERVED_DT_JOB_DIRECTORY",
             "signal": signal_name,
@@ -3882,7 +4622,11 @@ def build_aborted_attempt_exposure_receipt(
         },
         "evidence_bindings": {
             "artifacts": artifacts,
-            "historical_runtime_authority": {
+            (
+                "historical_runtime_authority"
+                if profile is None
+                else "incident_runtime_authority"
+            ): {
                 **historical_authority,
             },
             "current_producer_authority": producer_authority,
@@ -3903,20 +4647,10 @@ def build_aborted_attempt_exposure_receipt(
         },
         "call_observations": call_observations,
         "item_run_observations": item_runs,
-        "event_chain": event_chain,
+        "event_chain": public_event_chain,
         "derived_inferences": derived,
         "counts": {
-            "attempt_calls": len(call_observations),
-            "attempt_events": int(event_chain["event_count"]),
-            "item_runs": len(item_runs),
-            "spool_calls": len(spool_rows),
-            "attempt_states": {key: state_counts[key] for key in sorted(state_counts)},
-            "spool_complete_calls": sum(
-                row["spool_snapshot_state"] == "COMPLETE" for row in call_observations
-            ),
-            "spool_absent_calls": sum(
-                row["spool_snapshot_state"] is None for row in call_observations
-            ),
+            **structural_counts,
             "items": len(touched_items),
             "source_entities": len(touched_sources),
             "components": len(touched_components),
@@ -3924,6 +4658,27 @@ def build_aborted_attempt_exposure_receipt(
         "aggregate": aggregate,
         "complete": True,
     }
+    if profile is not None:
+        assert canary_counter_value is not None
+        public_profile = _public_incident_profile(profile)
+        unsigned["profile_evidence"] = {
+            "schema_version": INCIDENT_PROFILE_EVIDENCE_SCHEMA,
+            "profile": public_profile,
+            "profile_sha256": canonical_sha256(public_profile),
+            "canary_counter_receipt": canary_counter_value,
+            "scheduler": _incident_scheduler_evidence(
+                profile=profile,
+                calls=call_observations,
+                item_runs=item_runs,
+                item_ids=sorted(metadata),
+                event_chain=event_chain,
+            ),
+        }
+        unsigned["successor_disposition"] = _successor_disposition(
+            str(profile["profile_id"])
+        )
+        if profile["profile_id"] == _A2_INCIDENT_PROFILE["profile_id"]:
+            _verify_f1_r8_a2_structural_evidence(unsigned)
     attempt_witness = _private_database_witness(attempt_db, "attempt ledger")
     spool_witness = _private_database_witness(spool_db, "result spool")
     if (
@@ -4001,12 +4756,15 @@ def build_aborted_attempt_exposure_receipt(
             "private_witness_sha256": witness["private_witness_sha256"],
         },
     }
-    return {
+    result = {
         **public_unsigned,
         "aborted_attempt_exposure_receipt_sha256": canonical_sha256(
             public_unsigned
         ),
     }
+    if profile is not None:
+        verify_aborted_attempt_exposure_receipt(result)
+    return result
 
 
 def _valid_call_observation_scalars(call: Mapping[str, object]) -> bool:
@@ -4100,7 +4858,11 @@ def _verify_current_producer_authority(value: object) -> Mapping[str, object]:
     return value
 
 
-def _verify_historical_runtime_authority(value: object) -> Mapping[str, object]:
+def _verify_historical_runtime_authority(
+    value: object,
+    *,
+    expected_commits: Mapping[str, str] = _HISTORICAL_RUNTIME_COMMITS,
+) -> Mapping[str, object]:
     fields = {
         "repositories", "replay_policy", "replay_files", "replay_file_count",
         "replay_closure_root_sha256", "python_runtime", "replay_result_sha256",
@@ -4112,7 +4874,9 @@ def _verify_historical_runtime_authority(value: object) -> Mapping[str, object]:
         _HISTORICAL_RUNTIME_COMMITS
     ):
         raise PriorExposureRefusal("historical repository inventory drifted")
-    for name, expected_commit in _HISTORICAL_RUNTIME_COMMITS.items():
+    if set(expected_commits) != set(_HISTORICAL_RUNTIME_COMMITS):
+        raise PriorExposureRefusal("historical repository inventory drifted")
+    for name, expected_commit in expected_commits.items():
         binding = repositories.get(name)
         if (
             not isinstance(binding, Mapping)
@@ -4181,6 +4945,14 @@ def verify_aborted_attempt_exposure_receipt(
 ) -> str:
     """Verify a producer-derived quarantine receipt without reading private blobs."""
     receipt_schema = value.get("schema_version") if isinstance(value, Mapping) else None
+    if receipt_schema == F1_R8_SUCCESSOR_EXPOSURE_SET_SCHEMA:
+        return verify_f1_r8_successor_exposure_set(value)
+    if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SET_SCHEMA:
+        return _verify_aborted_attempt_exposure_set(value)
+    producer_attested = receipt_schema in {
+        ABORTED_ATTEMPT_EXPOSURE_SCHEMA,
+        ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4,
+    }
     expected_top_level = {
         "schema_version",
         "status",
@@ -4199,8 +4971,10 @@ def verify_aborted_attempt_exposure_receipt(
         "complete",
         "aborted_attempt_exposure_receipt_sha256",
     }
-    if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA:
+    if producer_attested:
         expected_top_level |= {"assurance", "private_witness_commitment"}
+    if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4:
+        expected_top_level |= {"profile_evidence", "successor_disposition"}
     if not isinstance(value, Mapping) or set(value) != expected_top_level:
         raise PriorExposureRefusal("aborted-attempt receipt shape drifted")
     if (
@@ -4208,6 +4982,7 @@ def verify_aborted_attempt_exposure_receipt(
         not in {
             ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2,
             ABORTED_ATTEMPT_EXPOSURE_SCHEMA,
+            ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4,
         }
         or value.get("status") != ABORTED_ATTEMPT_STATUS
         or value.get("complete") is not True
@@ -4228,7 +5003,7 @@ def verify_aborted_attempt_exposure_receipt(
         or computed != declared
     ):
         raise PriorExposureRefusal("aborted-attempt receipt self-hash drifted")
-    if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA:
+    if producer_attested:
         commitment = value.get("private_witness_commitment")
         if (
             value.get("assurance") != "PRODUCER_ATTESTED"
@@ -4264,16 +5039,30 @@ def verify_aborted_attempt_exposure_receipt(
     derived = value.get("derived_inferences")
     counts = value.get("counts")
     aggregate = value.get("aggregate")
-    if not isinstance(run_identity, Mapping) or set(run_identity) != {
+    run_identity_fields = {
         "run_id", "mode", "model", "model_revision", "job_alias",
         "implementation_commit",
         "carrier_commit", "symposium_commit",
-    }:
+    }
+    if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4:
+        run_identity_fields.add("incident_profile_id")
+    if not isinstance(run_identity, Mapping) or set(run_identity) != run_identity_fields:
         raise PriorExposureRefusal("aborted-attempt run identity shape drifted")
     if any(
         not isinstance(run_identity.get(key), str) or not run_identity.get(key)
         for key in ("run_id", "mode", "model", "model_revision")
-    ) or run_identity.get("job_alias") != "HSWM_F1_R8_V8_DEVELOPMENT_SIGBUS" or any(
+    ) or (
+        receipt_schema != ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4
+        and run_identity.get("job_alias") != "HSWM_F1_R8_V8_DEVELOPMENT_SIGBUS"
+    ) or (
+        receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4
+        and (
+            not isinstance(run_identity.get("incident_profile_id"), str)
+            or not run_identity.get("incident_profile_id")
+            or not isinstance(run_identity.get("job_alias"), str)
+            or not re.fullmatch(r"[A-Z0-9_]+", str(run_identity.get("job_alias")))
+        )
+    ) or any(
         not isinstance(run_identity.get(key), str)
         or _GIT_COMMIT.fullmatch(str(run_identity.get(key))) is None
         for key in ("implementation_commit", "carrier_commit", "symposium_commit")
@@ -4349,7 +5138,7 @@ def verify_aborted_attempt_exposure_receipt(
             )
         )
         or (
-            receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA
+            producer_attested
             and not _is_sha256(source_binding.get("all_metadata_root_sha256"))
         )
     ):
@@ -4389,10 +5178,18 @@ def verify_aborted_attempt_exposure_receipt(
         "artifacts", "historical_runtime_authority", "current_producer_authority",
         "job_command", "job_log",
     }
+    v4_evidence_fields = {
+        "artifacts", "incident_runtime_authority", "current_producer_authority",
+        "job_command", "job_log",
+    }
     if not isinstance(evidence, Mapping) or set(evidence) != (
         v2_evidence_fields
         if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2
-        else v3_evidence_fields
+        else (
+            v4_evidence_fields
+            if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4
+            else v3_evidence_fields
+        )
     ):
         raise PriorExposureRefusal("aborted-attempt evidence inventory drifted")
     artifacts = evidence.get("artifacts")
@@ -4425,8 +5222,22 @@ def verify_aborted_attempt_exposure_receipt(
     if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2:
         repositories = evidence.get("repositories")
     else:
+        expected_commits = (
+            {
+                "hswm_executable": str(run_identity["implementation_commit"]),
+                "hswm_carrier": str(run_identity["carrier_commit"]),
+                "symposium": str(run_identity["symposium_commit"]),
+            }
+            if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4
+            else _HISTORICAL_RUNTIME_COMMITS
+        )
         historical_runtime = _verify_historical_runtime_authority(
-            evidence.get("historical_runtime_authority")
+            evidence.get(
+                "incident_runtime_authority"
+                if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4
+                else "historical_runtime_authority"
+            ),
+            expected_commits=expected_commits,
         )
         repositories = historical_runtime.get("repositories")
     if not isinstance(repositories, Mapping) or set(repositories) != {
@@ -4824,12 +5635,14 @@ def verify_aborted_attempt_exposure_receipt(
         for key in sorted(call_ids)
     }
     per_call_event_counts = event_chain.get("per_call_event_counts")
+    expected_event_chain_fields = {
+        "event_count", "event_chain_tip_sha256", "per_call_event_counts",
+        "per_call_terminal_states",
+    }
+    if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4:
+        expected_event_chain_fields.add("final_structural_event")
     if (
-        set(event_chain)
-        != {
-            "event_count", "event_chain_tip_sha256", "per_call_event_counts",
-            "per_call_terminal_states",
-        }
+        set(event_chain) != expected_event_chain_fields
         or isinstance(event_chain.get("event_count"), bool)
         or not isinstance(event_chain.get("event_count"), int)
         or int(event_chain["event_count"]) < len(call_ids)
@@ -4845,6 +5658,24 @@ def verify_aborted_attempt_exposure_receipt(
         or event_chain.get("per_call_terminal_states") != expected_terminal_states
     ):
         raise PriorExposureRefusal("aborted-attempt event summary drifted")
+    if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4:
+        final_event = event_chain.get("final_structural_event")
+        if (
+            not isinstance(final_event, Mapping)
+            or set(final_event)
+            != {"sequence", "physical_call_id", "event_type", "event_sha256"}
+            or isinstance(final_event.get("sequence"), bool)
+            or not isinstance(final_event.get("sequence"), int)
+            or final_event.get("sequence") != int(event_chain["event_count"]) - 1
+            or final_event.get("physical_call_id") not in call_ids
+            or final_event.get("event_type")
+            != expected_terminal_states.get(
+                str(final_event.get("physical_call_id"))
+            )
+            or final_event.get("event_sha256")
+            != event_chain.get("event_chain_tip_sha256")
+        ):
+            raise PriorExposureRefusal("final structural event drifted")
     expected_count_keys = {
         "attempt_calls", "attempt_events", "item_runs", "spool_calls",
         "attempt_states", "spool_complete_calls", "spool_absent_calls",
@@ -4938,6 +5769,214 @@ def verify_aborted_attempt_exposure_receipt(
         or counts["components"] != len(component_ids)
     ):
         raise PriorExposureRefusal("aborted-attempt aggregate count drifted")
+    if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4:
+        _verify_profile_bound_incident(
+            value,
+            calls=calls,
+            item_runs=item_runs,
+            event_chain=event_chain,
+            authoritative_item_ids=sorted(authoritative_metadata),
+        )
+    return declared
+
+
+def _verify_profile_bound_incident(
+    value: Mapping[str, object],
+    *,
+    calls: Sequence[Mapping[str, object]],
+    item_runs: Sequence[Mapping[str, object]],
+    event_chain: Mapping[str, object],
+    authoritative_item_ids: Sequence[str],
+) -> dict[str, object]:
+    evidence = value.get("profile_evidence")
+    disposition = value.get("successor_disposition")
+    if not isinstance(evidence, Mapping) or set(evidence) != {
+        "schema_version", "profile", "profile_sha256",
+        "canary_counter_receipt", "scheduler",
+    }:
+        raise PriorExposureRefusal("incident profile evidence shape drifted")
+    raw_profile = evidence.get("profile")
+    if not isinstance(raw_profile, Mapping):
+        raise PriorExposureRefusal("incident profile authority is absent")
+    profile = _registered_incident_profile(raw_profile)
+    public_profile = _public_incident_profile(profile)
+    if (
+        evidence.get("schema_version") != INCIDENT_PROFILE_EVIDENCE_SCHEMA
+        or not _exact_json_equal(raw_profile, public_profile)
+        or evidence.get("profile_sha256") != canonical_sha256(public_profile)
+    ):
+        raise PriorExposureRefusal("incident profile authority drifted")
+    counter = evidence.get("canary_counter_receipt")
+    if not isinstance(counter, Mapping):
+        raise PriorExposureRefusal("incident canary counter is absent")
+    verify_canary_counter_receipt(counter)
+    observed_canary_counts = {
+        key: counter.get(key)
+        for key in ("historical_baseline", "terminal_total", "incident_delta")
+    }
+    structural_count_keys = set(profile["expected_counts"])
+    counts = value.get("counts")
+    run_identity = value.get("run_identity")
+    runtime = profile["runtime_commits"]
+    if (
+        not _exact_json_equal(observed_canary_counts, profile["canary_counts"])
+        or counter.get("source_job_alias") != profile["canary_job_alias"]
+        or not isinstance(counter.get("job_command"), Mapping)
+        or counter["job_command"].get("sha256")
+        != profile["canary_command_sha256"]
+        or not _exact_json_equal(
+            counter.get("http_status_counts"),
+            profile["canary_http_status_counts"],
+        )
+        or not isinstance(counts, Mapping)
+        or not _exact_json_equal(
+            {key: counts.get(key) for key in structural_count_keys},
+            profile["expected_counts"],
+        )
+        or not isinstance(run_identity, Mapping)
+        or run_identity.get("incident_profile_id") != profile["profile_id"]
+        or run_identity.get("run_id") != profile["run_id"]
+        or run_identity.get("job_alias") != profile["job_alias"]
+        or run_identity.get("implementation_commit")
+        != runtime["hswm_executable"]
+        or run_identity.get("carrier_commit") != runtime["hswm_carrier"]
+        or run_identity.get("symposium_commit") != runtime["symposium"]
+    ):
+        raise PriorExposureRefusal("incident profile evidence drifted")
+    expected_scheduler = _incident_scheduler_evidence(
+        profile=profile,
+        calls=calls,
+        item_runs=item_runs,
+        item_ids=authoritative_item_ids,
+        event_chain=event_chain,
+    )
+    if not _exact_json_equal(evidence.get("scheduler"), expected_scheduler):
+        raise PriorExposureRefusal("incident scheduler evidence drifted")
+    expected_disposition = _successor_disposition(str(profile["profile_id"]))
+    if not _exact_json_equal(disposition, expected_disposition):
+        raise PriorExposureRefusal("incident successor disposition drifted")
+    if profile["profile_id"] == _A2_INCIDENT_PROFILE["profile_id"]:
+        _verify_f1_r8_a2_structural_evidence(value)
+    return profile
+
+
+def _verify_f1_r8_a2_structural_evidence(
+    value: Mapping[str, object],
+) -> None:
+    if value.get("schema_version") != ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4:
+        raise PriorExposureRefusal("successor incident is not profile-bound v4")
+    evidence = value.get("profile_evidence")
+    if not isinstance(evidence, Mapping):
+        raise PriorExposureRefusal("successor incident profile evidence is absent")
+    expected_profile = _public_incident_profile(_A2_INCIDENT_PROFILE)
+    if not _exact_json_equal(evidence.get("profile"), expected_profile):
+        raise PriorExposureRefusal("successor incident is not the exact a2 profile")
+    calls = value.get("call_observations")
+    item_runs = value.get("item_run_observations")
+    event_chain = value.get("event_chain")
+    derived = value.get("derived_inferences")
+    scheduler = evidence.get("scheduler")
+    if (
+        not isinstance(calls, list)
+        or not isinstance(item_runs, list)
+        or not isinstance(event_chain, Mapping)
+        or not isinstance(derived, list)
+        or not isinstance(scheduler, Mapping)
+    ):
+        raise PriorExposureRefusal("successor incident evidence is incomplete")
+    prepared = [row for row in calls if row.get("raw_attempt_state") == "PREPARED"]
+    accepted = [row for row in calls if row.get("raw_attempt_state") == "ACCEPTED"]
+    if len(prepared) != 1 or len(accepted) != 26 or len(item_runs) != 8:
+        raise PriorExposureRefusal("successor incident structural frontier drifted")
+    prepared_call = prepared[0]
+    prepared_id = str(prepared_call.get("physical_call_id"))
+    terminal_metadata = (
+        "response_status", "response_sha256", "model_response_sha256",
+        "call_receipt_sha256", "terminal_code", "spool_snapshot_state",
+        "spool_response_status", "spool_response_sha256",
+    )
+    per_call_counts = event_chain.get("per_call_event_counts")
+    final_event = event_chain.get("final_structural_event")
+    if (
+        any(prepared_call.get(field) is not None for field in terminal_metadata)
+        or not isinstance(per_call_counts, Mapping)
+        or per_call_counts.get(prepared_id) != 1
+        or any(
+            per_call_counts.get(str(row.get("physical_call_id"))) != 6
+            or row.get("spool_snapshot_state") != "COMPLETE"
+            for row in accepted
+        )
+        or not isinstance(final_event, Mapping)
+        or final_event.get("physical_call_id") != prepared_id
+        or final_event.get("event_type") != "PREPARED"
+        or event_chain.get("event_count") != 157
+    ):
+        raise PriorExposureRefusal("successor incident terminal event drifted")
+    if len(derived) != 1 or derived[0] != {
+        "claim": "MATCHING_SPOOL_ROW_ABSENT",
+        "epistemic_status": "DERIVED_FROM_BOUND_SNAPSHOTS",
+        "physical_call_id": prepared_id,
+        "raw_attempt_state": "PREPARED",
+    }:
+        raise PriorExposureRefusal("successor incident absent-spool inference drifted")
+    positions = scheduler.get("positions")
+    if (
+        scheduler.get("max_workers") != 1
+        or scheduler.get("observed_job_ordinals") != list(range(9))
+        or scheduler.get("frontier_batch") != 8
+        or scheduler.get("prior_batches_committed") is not True
+        or not isinstance(positions, list)
+        or len(positions) != 9
+    ):
+        raise PriorExposureRefusal("successor incident scheduler frontier drifted")
+    for ordinal, position in enumerate(positions):
+        expected_states = (
+            ["ACCEPTED", "ACCEPTED", "ACCEPTED"]
+            if ordinal < 8
+            else ["ACCEPTED", "ACCEPTED", "PREPARED"]
+        )
+        expected_events = [6, 6, 6] if ordinal < 8 else [6, 6, 1]
+        if (
+            not isinstance(position, Mapping)
+            or position.get("job_ordinal") != ordinal
+            or position.get("call_indices") != [1, 2, 3]
+            or position.get("call_states") != expected_states
+            or position.get("per_call_event_counts") != expected_events
+            or position.get("item_run_committed") is (ordinal == 8)
+        ):
+            raise PriorExposureRefusal("successor incident scheduler prefix drifted")
+    counter = evidence.get("canary_counter_receipt")
+    expected_canary = _A2_INCIDENT_PROFILE["canary_counts"]
+    if (
+        not isinstance(counter, Mapping)
+        or any(counter.get(key) != value for key, value in expected_canary.items())
+        or counter.get("source_job_alias")
+        != _A2_INCIDENT_PROFILE["canary_job_alias"]
+        or not isinstance(counter.get("job_command"), Mapping)
+        or counter["job_command"].get("sha256")
+        != _A2_INCIDENT_PROFILE["canary_command_sha256"]
+        or not _exact_json_equal(
+            counter.get("http_status_counts"),
+            _A2_INCIDENT_PROFILE["canary_http_status_counts"],
+        )
+        or not _exact_json_equal(
+            value.get("successor_disposition"),
+            _successor_disposition(str(_A2_INCIDENT_PROFILE["profile_id"])),
+        )
+    ):
+        raise PriorExposureRefusal("successor incident disposition/canary drifted")
+    return None
+
+
+def verify_f1_r8_successor_incident(value: Mapping[str, object]) -> str:
+    """Require the exact a2 forensic boundary before a fresh a3 selection."""
+
+    declared = verify_aborted_attempt_exposure_receipt(value)
+    _verify_f1_r8_a2_structural_evidence(value)
+    if not _is_sha256(F1_R8_A2_INCIDENT_RECEIPT_SHA256):
+        raise PriorExposureRefusal("successor incident authority is not pinned")
+    if declared != F1_R8_A2_INCIDENT_RECEIPT_SHA256:
+        raise PriorExposureRefusal("successor incident receipt identity drifted")
     return declared
 
 
@@ -5033,8 +6072,11 @@ def verify_aborted_attempt_private_witness(
     """Privileged verification of raw SQLite identities kept outside Git."""
 
     verify_aborted_attempt_exposure_receipt(public_receipt)
-    if public_receipt.get("schema_version") != ABORTED_ATTEMPT_EXPOSURE_SCHEMA:
-        raise PriorExposureRefusal("private witness requires a v3 public receipt")
+    if public_receipt.get("schema_version") not in {
+        ABORTED_ATTEMPT_EXPOSURE_SCHEMA,
+        ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4,
+    }:
+        raise PriorExposureRefusal("private witness requires a producer-attested receipt")
     witness = _strict_object(
         _read_private_bytes(Path(witness_path)), "aborted-attempt private witness"
     )
@@ -5298,6 +6340,334 @@ def verify_forbidden_exposure_union(
     return merged
 
 
+def _exposure_aggregate(
+    item_ids: Sequence[str],
+    source_entity_ids: Sequence[str],
+    component_ids: Sequence[str],
+) -> dict[str, object]:
+    items = sorted(set(item_ids))
+    sources = sorted(set(source_entity_ids))
+    components = sorted(set(component_ids))
+    return {
+        "prior_item_ids": items,
+        "prior_source_entity_ids": sources,
+        "prior_component_ids": components,
+        "item_root_sha256": canonical_sha256(items),
+        "source_entity_root_sha256": canonical_sha256(sources),
+        "component_root_sha256": canonical_sha256(components),
+    }
+
+
+def _verify_aborted_attempt_exposure_set(
+    value: Mapping[str, object],
+) -> str:
+    fields = {
+        "schema_version", "status", "incident_receipt_sha256s", "incidents",
+        "counts", "aggregate", "complete",
+        "aborted_attempt_exposure_receipt_sha256",
+    }
+    if not isinstance(value, Mapping) or set(value) != fields:
+        raise PriorExposureRefusal("aborted-attempt exposure-set shape drifted")
+    unsigned = dict(value)
+    declared = unsigned.pop("aborted_attempt_exposure_receipt_sha256", None)
+    if (
+        value.get("schema_version") != ABORTED_ATTEMPT_EXPOSURE_SET_SCHEMA
+        or value.get("status") != ABORTED_ATTEMPT_STATUS
+        or value.get("complete") is not True
+        or not _is_sha256(declared)
+        or canonical_sha256(unsigned) != declared
+    ):
+        raise PriorExposureRefusal("aborted-attempt exposure-set self-binding drifted")
+    incidents = value.get("incidents")
+    declared_hashes = value.get("incident_receipt_sha256s")
+    if (
+        not isinstance(incidents, list)
+        or len(incidents) < 2
+        or not isinstance(declared_hashes, list)
+        or len(declared_hashes) != len(incidents)
+        or any(not _is_sha256(item) for item in declared_hashes)
+        or len(set(declared_hashes)) != len(declared_hashes)
+    ):
+        raise PriorExposureRefusal("aborted-attempt exposure-set inventory drifted")
+    observed_hashes: list[str] = []
+    item_ids: set[str] = set()
+    source_ids: set[str] = set()
+    component_ids: set[str] = set()
+    attempt_calls = 0
+    spool_complete_calls = 0
+    for incident in incidents:
+        if (
+            not isinstance(incident, Mapping)
+            or incident.get("schema_version") not in _ABORTED_ATTEMPT_LEAF_SCHEMAS
+        ):
+            raise PriorExposureRefusal("exposure-set members must be leaf incidents")
+        incident_sha = verify_aborted_attempt_exposure_receipt(incident)
+        observed_hashes.append(incident_sha)
+        aggregate = incident.get("aggregate")
+        counts = incident.get("counts")
+        if not isinstance(aggregate, Mapping) or not isinstance(counts, Mapping):
+            raise PriorExposureRefusal("aborted-attempt exposure-set member drifted")
+        item_ids.update(
+            _strict_boundary_values(aggregate, "prior_item_ids", "item ids")
+        )
+        source_ids.update(
+            _strict_boundary_values(
+                aggregate, "prior_source_entity_ids", "source entity ids"
+            )
+        )
+        component_ids.update(
+            _strict_boundary_values(
+                aggregate, "prior_component_ids", "component ids"
+            )
+        )
+        for field, target in (
+            ("attempt_calls", "attempt"),
+            ("spool_complete_calls", "spool"),
+        ):
+            count = counts.get(field)
+            if isinstance(count, bool) or not isinstance(count, int) or count < 0:
+                raise PriorExposureRefusal(
+                    f"aborted-attempt exposure-set {target} count drifted"
+                )
+            if field == "attempt_calls":
+                attempt_calls += count
+            else:
+                spool_complete_calls += count
+    if observed_hashes != declared_hashes:
+        raise PriorExposureRefusal("aborted-attempt exposure-set order drifted")
+    expected_aggregate = _exposure_aggregate(
+        sorted(item_ids), sorted(source_ids), sorted(component_ids)
+    )
+    expected_counts = {
+        "incidents": len(incidents),
+        "attempt_calls": attempt_calls,
+        "spool_complete_calls": spool_complete_calls,
+        "upstream_model_calls": spool_complete_calls,
+    }
+    if (
+        not _exact_json_equal(value.get("aggregate"), expected_aggregate)
+        or not _exact_json_equal(value.get("counts"), expected_counts)
+    ):
+        raise PriorExposureRefusal("aborted-attempt exposure-set aggregate drifted")
+    return str(declared)
+
+
+def build_aborted_attempt_exposure_set(
+    incidents: Sequence[Mapping[str, object]],
+) -> dict[str, object]:
+    """Bind an ordered, cumulative quarantine boundary without erasing history."""
+
+    if not isinstance(incidents, Sequence) or isinstance(incidents, (str, bytes)):
+        raise PriorExposureRefusal("exposure-set incidents must be a sequence")
+    if any(not isinstance(value, Mapping) for value in incidents):
+        raise PriorExposureRefusal("exposure-set members must be leaf incidents")
+    incident_values = [dict(value) for value in incidents]
+    if len(incident_values) < 2:
+        raise PriorExposureRefusal("an exposure set requires at least two incidents")
+    hashes: list[str] = []
+    item_ids: set[str] = set()
+    source_ids: set[str] = set()
+    component_ids: set[str] = set()
+    attempt_calls = 0
+    spool_complete_calls = 0
+    for incident in incident_values:
+        if incident.get("schema_version") not in _ABORTED_ATTEMPT_LEAF_SCHEMAS:
+            raise PriorExposureRefusal("exposure-set members must be leaf incidents")
+        hashes.append(verify_aborted_attempt_exposure_receipt(incident))
+        aggregate = incident.get("aggregate")
+        counts = incident.get("counts")
+        if not isinstance(aggregate, Mapping) or not isinstance(counts, Mapping):
+            raise PriorExposureRefusal("aborted-attempt exposure-set member drifted")
+        item_ids.update(_strict_boundary_values(aggregate, "prior_item_ids", "item ids"))
+        source_ids.update(
+            _strict_boundary_values(
+                aggregate, "prior_source_entity_ids", "source entity ids"
+            )
+        )
+        component_ids.update(
+            _strict_boundary_values(aggregate, "prior_component_ids", "component ids")
+        )
+        for field in ("attempt_calls", "spool_complete_calls"):
+            count = counts.get(field)
+            if isinstance(count, bool) or not isinstance(count, int) or count < 0:
+                raise PriorExposureRefusal(
+                    "aborted-attempt exposure-set member count drifted"
+                )
+        attempt_calls += int(counts["attempt_calls"])
+        spool_complete_calls += int(counts["spool_complete_calls"])
+    if len(set(hashes)) != len(hashes):
+        raise PriorExposureRefusal("exposure-set incident receipt repeats")
+    unsigned = {
+        "schema_version": ABORTED_ATTEMPT_EXPOSURE_SET_SCHEMA,
+        "status": ABORTED_ATTEMPT_STATUS,
+        "incident_receipt_sha256s": hashes,
+        "incidents": incident_values,
+        "counts": {
+            "incidents": len(incident_values),
+            "attempt_calls": attempt_calls,
+            "spool_complete_calls": spool_complete_calls,
+            "upstream_model_calls": spool_complete_calls,
+        },
+        "aggregate": _exposure_aggregate(
+            sorted(item_ids), sorted(source_ids), sorted(component_ids)
+        ),
+        "complete": True,
+    }
+    result = {
+        **unsigned,
+        "aborted_attempt_exposure_receipt_sha256": canonical_sha256(unsigned),
+    }
+    _verify_aborted_attempt_exposure_set(result)
+    return result
+
+
+def verify_f1_r8_successor_exposure_set(
+    value: Mapping[str, object],
+) -> str:
+    """Require the ordered historical-v8 plus exact a2 quarantine chain."""
+
+    fields = {
+        "schema_version", "exposure_set", "exposure_set_sha256",
+        "successor_disposition", "complete",
+        "aborted_attempt_exposure_receipt_sha256",
+    }
+    if not isinstance(value, Mapping) or set(value) != fields:
+        raise PriorExposureRefusal("successor exposure-set shape drifted")
+    unsigned = dict(value)
+    declared = unsigned.pop("aborted_attempt_exposure_receipt_sha256", None)
+    exposure_set = value.get("exposure_set")
+    if (
+        value.get("schema_version") != F1_R8_SUCCESSOR_EXPOSURE_SET_SCHEMA
+        or value.get("complete") is not True
+        or not _is_sha256(declared)
+        or canonical_sha256(unsigned) != declared
+        or not isinstance(exposure_set, Mapping)
+        or value.get("exposure_set_sha256")
+        != verify_aborted_attempt_exposure_receipt(exposure_set)
+        or not _exact_json_equal(
+            value.get("successor_disposition"), _successor_set_disposition()
+        )
+    ):
+        raise PriorExposureRefusal("successor exposure-set binding drifted")
+    incidents = exposure_set.get("incidents")
+    hashes = exposure_set.get("incident_receipt_sha256s")
+    counts = exposure_set.get("counts")
+    if (
+        not isinstance(incidents, list)
+        or len(incidents) != 2
+        or hashes
+        != [
+            _HISTORICAL_V8_INCIDENT_SHA256,
+            incidents[1].get("aborted_attempt_exposure_receipt_sha256")
+            if isinstance(incidents[1], Mapping)
+            else None,
+        ]
+        or not isinstance(incidents[0], Mapping)
+        or incidents[0].get("aborted_attempt_exposure_receipt_sha256")
+        != _HISTORICAL_V8_INCIDENT_SHA256
+        or not isinstance(incidents[1], Mapping)
+        or not isinstance(counts, Mapping)
+    ):
+        raise PriorExposureRefusal("successor exposure-set chain drifted")
+    verify_f1_r8_successor_incident(incidents[1])
+    evidence = incidents[1].get("profile_evidence")
+    counter = (
+        evidence.get("canary_counter_receipt")
+        if isinstance(evidence, Mapping)
+        else None
+    )
+    first_counts = incidents[0].get("counts")
+    if (
+        not isinstance(counter, Mapping)
+        or not isinstance(first_counts, Mapping)
+        or counter.get("historical_baseline")
+        != first_counts.get("spool_complete_calls")
+        or counter.get("terminal_total") != counts.get("upstream_model_calls")
+        or counts.get("upstream_model_calls") != 27
+    ):
+        raise PriorExposureRefusal("successor exposure-set canary continuity drifted")
+    return declared
+
+
+def build_f1_r8_successor_exposure_set(
+    incidents: Sequence[Mapping[str, object]],
+) -> dict[str, object]:
+    exposure_set = build_aborted_attempt_exposure_set(incidents)
+    unsigned = {
+        "schema_version": F1_R8_SUCCESSOR_EXPOSURE_SET_SCHEMA,
+        "exposure_set": exposure_set,
+        "exposure_set_sha256": exposure_set[
+            "aborted_attempt_exposure_receipt_sha256"
+        ],
+        "successor_disposition": _successor_set_disposition(),
+        "complete": True,
+    }
+    result = {
+        **unsigned,
+        "aborted_attempt_exposure_receipt_sha256": canonical_sha256(unsigned),
+    }
+    verify_f1_r8_successor_exposure_set(result)
+    return result
+
+
+def iter_aborted_attempt_incidents(
+    value: Mapping[str, object],
+) -> tuple[Mapping[str, object], ...]:
+    """Return detailed incident members after exact public verification."""
+
+    verify_aborted_attempt_exposure_receipt(value)
+    if value.get("schema_version") == F1_R8_SUCCESSOR_EXPOSURE_SET_SCHEMA:
+        verify_f1_r8_successor_exposure_set(value)
+        exposure_set = value.get("exposure_set")
+        assert isinstance(exposure_set, Mapping)
+        incidents = exposure_set.get("incidents")
+        assert isinstance(incidents, list)
+        return tuple(incident for incident in incidents if isinstance(incident, Mapping))
+    if value.get("schema_version") == ABORTED_ATTEMPT_EXPOSURE_SET_SCHEMA:
+        raise PriorExposureRefusal(
+            "generic exposure set is not an F1 r8 successor authority"
+        )
+    profile_id = (
+        value.get("run_identity", {}).get("incident_profile_id")
+        if isinstance(value.get("run_identity"), Mapping)
+        else None
+    )
+    if profile_id == _A2_INCIDENT_PROFILE["profile_id"]:
+        verify_f1_r8_successor_incident(value)
+    return (value,)
+
+
+def verified_aborted_attempt_aggregate(
+    value: Mapping[str, object],
+) -> dict[str, object]:
+    """Return the verified aggregate across singular or successor evidence."""
+
+    verify_aborted_attempt_exposure_receipt(value)
+    if value.get("schema_version") == ABORTED_ATTEMPT_EXPOSURE_SET_SCHEMA:
+        raise PriorExposureRefusal(
+            "generic exposure set is not an F1 r8 successor authority"
+        )
+    payload = (
+        value.get("exposure_set")
+        if value.get("schema_version") == F1_R8_SUCCESSOR_EXPOSURE_SET_SCHEMA
+        else value
+    )
+    aggregate = payload.get("aggregate") if isinstance(payload, Mapping) else None
+    if not isinstance(aggregate, Mapping):
+        raise PriorExposureRefusal("aborted-attempt exposure aggregate is absent")
+    item_ids = _strict_boundary_values(aggregate, "prior_item_ids", "item ids")
+    source_ids = _strict_boundary_values(
+        aggregate, "prior_source_entity_ids", "source entity ids"
+    )
+    component_ids = _strict_boundary_values(
+        aggregate, "prior_component_ids", "component ids"
+    )
+    expected = _exposure_aggregate(item_ids, source_ids, component_ids)
+    if not _exact_json_equal(aggregate, expected):
+        raise PriorExposureRefusal("aborted-attempt exposure aggregate drifted")
+    return expected
+
+
 def merge_exposure_boundaries(
     prior: Mapping[str, object], incident: Mapping[str, object]
 ) -> dict[str, object]:
@@ -5305,7 +6675,7 @@ def merge_exposure_boundaries(
     prior_sha = verify_prior_exposure_receipt(prior)
     incident_sha = verify_aborted_attempt_exposure_receipt(incident)
     prior_aggregate = prior.get("aggregate")
-    incident_aggregate = incident.get("aggregate")
+    incident_aggregate = verified_aborted_attempt_aggregate(incident)
     if not isinstance(prior_aggregate, Mapping) or not isinstance(
         incident_aggregate, Mapping
     ):
@@ -5404,6 +6774,8 @@ def _build_aborted_attempt_main(argv: Sequence[str]) -> int:
     parser.add_argument("--symposium-root", type=Path, required=True)
     parser.add_argument("--snapshot-dir", type=Path, required=True)
     parser.add_argument("--private-witness-output", type=Path, required=True)
+    parser.add_argument("--incident-profile", choices=sorted(INCIDENT_PROFILES))
+    parser.add_argument("--canary-counter-receipt", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
@@ -5428,6 +6800,12 @@ def _build_aborted_attempt_main(argv: Sequence[str]) -> int:
             symposium_root=args.symposium_root,
             snapshot_dir=args.snapshot_dir,
             private_witness_output=args.private_witness_output,
+            incident_profile=(
+                None
+                if args.incident_profile is None
+                else INCIDENT_PROFILES[args.incident_profile]
+            ),
+            canary_counter_receipt=args.canary_counter_receipt,
         )
         verify_aborted_attempt_exposure_receipt(receipt)
         write_private_once(args.output, receipt)
@@ -5467,10 +6845,91 @@ def _build_aborted_attempt_main(argv: Sequence[str]) -> int:
         return 1
 
 
+def _build_exposure_set_main(argv: Sequence[str]) -> int:
+    parser = argparse.ArgumentParser(
+        description="Bind an ordered cumulative set of quarantined F1 incidents."
+    )
+    parser.add_argument("--incident", type=Path, action="append", required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args(argv)
+    try:
+        incidents = [
+            _strict_object(
+                _read_private_bytes(path), "aborted-attempt incident"
+            )
+            for path in args.incident
+        ]
+        result = build_f1_r8_successor_exposure_set(incidents)
+        write_private_once(args.output, result)
+        exposure_set = result["exposure_set"]
+        print(
+            json.dumps(
+                {
+                    "status": "CUMULATIVE_EXPOSURE_SET_BOUND",
+                    "counts": exposure_set["counts"],
+                    "aggregate_roots": {
+                        key: exposure_set["aggregate"][key]
+                        for key in (
+                            "item_root_sha256",
+                            "source_entity_root_sha256",
+                            "component_root_sha256",
+                        )
+                    },
+                    "aborted_attempt_exposure_receipt_sha256": result[
+                        "aborted_attempt_exposure_receipt_sha256"
+                    ],
+                },
+                sort_keys=True,
+            )
+        )
+        return 0
+    except Exception:
+        print(json.dumps({"status": "REFUSED"}), file=sys.stderr)
+        return 1
+
+
+def _build_canary_counter_main(argv: Sequence[str]) -> int:
+    parser = argparse.ArgumentParser(
+        description="Count only the fixed chat-completions marker in a log snapshot."
+    )
+    parser.add_argument("--log-snapshot", type=Path, required=True)
+    parser.add_argument("--source-job-alias", required=True)
+    parser.add_argument("--historical-baseline", type=int, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args(argv)
+    try:
+        result = build_canary_counter_receipt(
+            args.log_snapshot,
+            historical_baseline=args.historical_baseline,
+            source_job_alias=args.source_job_alias,
+        )
+        write_private_once(args.output, result)
+        print(
+            json.dumps(
+                {
+                    "status": "CANARY_COUNTER_BOUND",
+                    "historical_baseline": result["historical_baseline"],
+                    "terminal_total": result["terminal_total"],
+                    "incident_delta": result["incident_delta"],
+                    "receipt_sha256": result["receipt_sha256"],
+                },
+                sort_keys=True,
+            )
+        )
+        return 0
+    except Exception:
+        print(json.dumps({"status": "REFUSED"}), file=sys.stderr)
+        return 1
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     arguments = list(sys.argv[1:] if argv is None else argv)
     if arguments and arguments[0] == "build-aborted-attempt":
         return _build_aborted_attempt_main(arguments[1:])
+    if arguments and arguments[0] == "build-exposure-set":
+        return _build_exposure_set_main(arguments[1:])
+    if arguments and arguments[0] == "build-canary-counter":
+        return _build_canary_counter_main(arguments[1:])
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--page", action="append", type=_page_arg, required=True)
     parser.add_argument("--artifact-root", action="append", type=_root_arg, required=True)
@@ -5527,17 +6986,30 @@ if __name__ == "__main__":
 __all__ = [
     "ABORTED_ATTEMPT_EXPOSURE_SCHEMA",
     "ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2",
+    "ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4",
+    "ABORTED_ATTEMPT_EXPOSURE_SET_SCHEMA",
     "ABORTED_ATTEMPT_STATUS",
+    "CANARY_COUNTER_SCHEMA",
+    "F1_R8_SUCCESSOR_EXPOSURE_SET_SCHEMA",
+    "F1_R8_A3_SUCCESSOR_RUN_ID",
     "EXPECTED_PAGE_SPECS",
     "PriorExposureRefusal",
     "SCHEMA",
     "build_aborted_attempt_exposure_receipt",
+    "build_aborted_attempt_exposure_set",
+    "build_canary_counter_receipt",
+    "build_f1_r8_successor_exposure_set",
     "build_prior_exposure_receipt",
     "inventory_stable_tree",
     "merge_exposure_boundaries",
+    "iter_aborted_attempt_incidents",
     "verify_aborted_attempt_exposure_receipt",
     "verify_aborted_attempt_private_witness",
     "verify_forbidden_exposure_union",
+    "verify_canary_counter_receipt",
+    "verify_f1_r8_successor_exposure_set",
+    "verify_f1_r8_successor_incident",
     "verify_prior_exposure_receipt",
+    "verified_aborted_attempt_aggregate",
     "write_private_once",
 ]

@@ -97,6 +97,37 @@ def _configure_checkpoint_policy(
     return checkpoint_on_close_disabled
 
 
+def _require_checkpoint_on_close_capability(label: str) -> None:
+    """Prove the sealed close policy before opening an authority database."""
+
+    no_checkpoint_on_close = getattr(
+        sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE", None
+    )
+    if no_checkpoint_on_close is None:
+        raise SQLiteAuthorityRefusal(
+            f"{label} sealed runtime lacks checkpoint-on-close control"
+        )
+    probe = sqlite3.connect(":memory:", isolation_level=None)
+    try:
+        setconfig = getattr(probe, "setconfig", None)
+        getconfig = getattr(probe, "getconfig", None)
+        if not callable(setconfig) or not callable(getconfig):
+            raise SQLiteAuthorityRefusal(
+                f"{label} sealed runtime lacks checkpoint-on-close control"
+            )
+        setconfig(no_checkpoint_on_close, True)
+        if getconfig(no_checkpoint_on_close) is not True:
+            raise SQLiteAuthorityRefusal(
+                f"{label} sealed runtime cannot disable checkpoint-on-close"
+            )
+    except sqlite3.Error as error:
+        raise SQLiteAuthorityRefusal(
+            f"{label} sealed runtime cannot disable checkpoint-on-close"
+        ) from error
+    finally:
+        probe.close()
+
+
 class ResultSpoolError(RuntimeError):
     pass
 
@@ -335,11 +366,26 @@ def _fsync_parent(path: Path) -> None:
 class SQLiteResultSpool:
     """SQLite WAL/FULL authority for one-result-per-physical-call replay."""
 
-    def __init__(self, path: str | Path) -> None:
+    def __init__(
+        self,
+        path: str | Path,
+        *,
+        require_no_checkpoint_on_close: bool = False,
+    ) -> None:
+        if type(require_no_checkpoint_on_close) is not bool:
+            raise SpoolIntegrityError(
+                "require_no_checkpoint_on_close must be boolean"
+            )
         try:
             self.path = canonical_output_path(Path(path))
         except PrivateOutputRefusal as error:
             raise SpoolIntegrityError("result-spool path is not canonical") from error
+        if require_no_checkpoint_on_close:
+            try:
+                _require_checkpoint_on_close_capability("result spool")
+            except SQLiteAuthorityRefusal as error:
+                raise SpoolIntegrityError(str(error)) from error
+        self._require_no_checkpoint_on_close = require_no_checkpoint_on_close
         self._lock = threading.RLock()
         self._parent_fd = -1
         connection: sqlite3.Connection | None = None
@@ -384,6 +430,10 @@ class SQLiteResultSpool:
             checkpoint_on_close_disabled = _configure_checkpoint_policy(
                 connection, "result spool"
             )
+            if require_no_checkpoint_on_close and not checkpoint_on_close_disabled:
+                raise SQLiteAuthorityRefusal(
+                    "result-spool sealed close policy is unavailable"
+                )
             # sqlite3.connect has not executed DDL or a mutating PRAGMA yet.
             # Detect a cooperative namespace swap before touching that handle.
             verify_private_parent(self.path, self._parent_fd, "result spool")
@@ -487,7 +537,31 @@ class SQLiteResultSpool:
 
     @property
     def checkpoint_on_close_disabled(self) -> bool:
-        return self._checkpoint_on_close_disabled
+        no_checkpoint_on_close = getattr(
+            sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE", None
+        )
+        getconfig = getattr(self._connection, "getconfig", None)
+        if no_checkpoint_on_close is None or not callable(getconfig):
+            return False
+        try:
+            return getconfig(no_checkpoint_on_close) is True
+        except sqlite3.Error as error:
+            raise SpoolIntegrityError(
+                "result-spool close policy cannot be read back"
+            ) from error
+
+    def require_checkpoint_policy(self) -> None:
+        if self.wal_autocheckpoint != 0:
+            raise SpoolIntegrityError(
+                "result-spool automatic WAL checkpointing is enabled"
+            )
+        if (
+            self._require_no_checkpoint_on_close
+            and not self.checkpoint_on_close_disabled
+        ):
+            raise SpoolIntegrityError(
+                "result-spool checkpoint-on-close control drifted"
+            )
 
     @staticmethod
     def _verify_row(row: sqlite3.Row) -> None:
@@ -598,6 +672,7 @@ class SQLiteResultSpool:
             raise ResultSpoolError("request_bytes must be non-empty bytes")
         request_sha256 = _sha256_bytes(request_bytes)
         with self._lock:
+            self.require_checkpoint_policy()
             try:
                 self._connection.execute("BEGIN IMMEDIATE")
                 row = self._connection.execute(
@@ -733,6 +808,13 @@ class SQLiteResultSpool:
     def close(self) -> None:
         with self._lock:
             try:
+                if self._require_no_checkpoint_on_close:
+                    if not _configure_checkpoint_policy(
+                        self._connection, "result spool"
+                    ):
+                        raise SpoolIntegrityError(
+                            "result-spool sealed close policy drifted"
+                        )
                 self._connection.close()
             finally:
                 if self._parent_fd >= 0:
@@ -1051,7 +1133,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
     except ResultSpoolError as error:
         parser.error(str(error))
-    store = SQLiteResultSpool(args.db)
+    try:
+        store = SQLiteResultSpool(
+            args.db, require_no_checkpoint_on_close=True
+        )
+    except SpoolIntegrityError as error:
+        parser.error(str(error))
     service = ResultSpoolService(
         store,
         upstream_endpoint=deployment_binding.upstream_endpoint,

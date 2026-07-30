@@ -4391,6 +4391,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                                 else None
                             ),
                             max_delivery_attempts=args.max_delivery_attempts,
+                            require_no_checkpoint_on_close=True,
                         )
                     finally:
                         os.umask(previous_umask)

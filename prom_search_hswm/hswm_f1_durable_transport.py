@@ -132,6 +132,37 @@ def _configure_checkpoint_policy(
     return checkpoint_on_close_disabled
 
 
+def _require_checkpoint_on_close_capability(label: str) -> None:
+    """Prove the sealed close policy before opening an authority database."""
+
+    no_checkpoint_on_close = getattr(
+        sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE", None
+    )
+    if no_checkpoint_on_close is None:
+        raise SQLiteAuthorityRefusal(
+            f"{label} sealed runtime lacks checkpoint-on-close control"
+        )
+    probe = sqlite3.connect(":memory:", isolation_level=None)
+    try:
+        setconfig = getattr(probe, "setconfig", None)
+        getconfig = getattr(probe, "getconfig", None)
+        if not callable(setconfig) or not callable(getconfig):
+            raise SQLiteAuthorityRefusal(
+                f"{label} sealed runtime lacks checkpoint-on-close control"
+            )
+        setconfig(no_checkpoint_on_close, True)
+        if getconfig(no_checkpoint_on_close) is not True:
+            raise SQLiteAuthorityRefusal(
+                f"{label} sealed runtime cannot disable checkpoint-on-close"
+            )
+    except sqlite3.Error as error:
+        raise SQLiteAuthorityRefusal(
+            f"{label} sealed runtime cannot disable checkpoint-on-close"
+        ) from error
+    finally:
+        probe.close()
+
+
 _MODEL_CALL_FIELDS = {
     "physical_call_id",
     "run_id",
@@ -284,13 +315,28 @@ def _logical_call_slot(
 class SQLiteF1CallLedger:
     """Append-audited projection store for calls and completed item-arms."""
 
-    def __init__(self, path: str | Path) -> None:
+    def __init__(
+        self,
+        path: str | Path,
+        *,
+        require_no_checkpoint_on_close: bool = False,
+    ) -> None:
+        if type(require_no_checkpoint_on_close) is not bool:
+            raise DurableLedgerIntegrityError(
+                "require_no_checkpoint_on_close must be boolean"
+            )
         try:
             self.path = canonical_output_path(Path(path))
         except PrivateOutputRefusal as error:
             raise DurableLedgerIntegrityError(
                 "F1 ledger path is not canonical"
             ) from error
+        if require_no_checkpoint_on_close:
+            try:
+                _require_checkpoint_on_close_capability("F1 call ledger")
+            except SQLiteAuthorityRefusal as error:
+                raise DurableLedgerIntegrityError(str(error)) from error
+        self._require_no_checkpoint_on_close = require_no_checkpoint_on_close
         self._lock = threading.RLock()
         self._parent_fd = -1
         connection: sqlite3.Connection | None = None
@@ -335,7 +381,11 @@ class SQLiteF1CallLedger:
             checkpoint_on_close_disabled = _configure_checkpoint_policy(
                 connection, "F1 call ledger"
             )
-            # No mutating PRAGMA or DDL precedes these namespace/generation checks.
+            if require_no_checkpoint_on_close and not checkpoint_on_close_disabled:
+                raise SQLiteAuthorityRefusal(
+                    "F1 call ledger sealed close policy is unavailable"
+                )
+            # No database-mutating PRAGMA or DDL precedes these checks.
             verify_private_parent(self.path, self._parent_fd, "F1 call ledger")
             if frozen_generation is not None:
                 assert_database_generation(
@@ -453,7 +503,31 @@ class SQLiteF1CallLedger:
 
     @property
     def checkpoint_on_close_disabled(self) -> bool:
-        return self._checkpoint_on_close_disabled
+        no_checkpoint_on_close = getattr(
+            sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE", None
+        )
+        getconfig = getattr(self._connection, "getconfig", None)
+        if no_checkpoint_on_close is None or not callable(getconfig):
+            return False
+        try:
+            return getconfig(no_checkpoint_on_close) is True
+        except sqlite3.Error as error:
+            raise DurableLedgerIntegrityError(
+                "F1 call ledger close policy cannot be read back"
+            ) from error
+
+    def require_checkpoint_policy(self) -> None:
+        if self.wal_autocheckpoint != 0:
+            raise DurableLedgerIntegrityError(
+                "F1 call ledger automatic WAL checkpointing is enabled"
+            )
+        if (
+            self._require_no_checkpoint_on_close
+            and not self.checkpoint_on_close_disabled
+        ):
+            raise DurableLedgerIntegrityError(
+                "F1 call ledger checkpoint-on-close control drifted"
+            )
 
     @staticmethod
     def _verify_call_row(row: sqlite3.Row) -> None:
@@ -669,6 +743,7 @@ class SQLiteF1CallLedger:
         if _sha256_bytes(request_bytes) != request_sha256:
             raise DurableTransportError("request_sha256 does not match request bytes")
         with self._lock:
+            self.require_checkpoint_policy()
             try:
                 self._connection.execute("BEGIN IMMEDIATE")
                 row = None
@@ -1258,6 +1333,13 @@ class SQLiteF1CallLedger:
     def close(self) -> None:
         with self._lock:
             try:
+                if self._require_no_checkpoint_on_close:
+                    if not _configure_checkpoint_policy(
+                        self._connection, "F1 call ledger"
+                    ):
+                        raise DurableLedgerIntegrityError(
+                            "F1 call ledger sealed close policy drifted"
+                        )
                 self._connection.close()
             finally:
                 if self._parent_fd >= 0:
@@ -1284,6 +1366,7 @@ class DurableSpoolJSONPort:
         delivery_backoff_s: tuple[float, ...] = (1.0, 2.0, 5.0, 10.0, 20.0, 30.0, 60.0, 60.0),
         max_response_bytes: int = 4_000_000,
         fault_injector: FaultInjector | None = None,
+        require_no_checkpoint_on_close: bool = False,
     ) -> None:
         if not spool_endpoint.startswith(("http://", "https://")):
             raise DurableTransportError("spool endpoint must be HTTP(S)")
@@ -1303,7 +1386,10 @@ class DurableSpoolJSONPort:
         self.max_response_bytes = max_response_bytes
         self._transport = transport or self._urlopen
         self.fault_injector = fault_injector
-        self.ledger = SQLiteF1CallLedger(ledger_path)
+        self.ledger = SQLiteF1CallLedger(
+            ledger_path,
+            require_no_checkpoint_on_close=require_no_checkpoint_on_close,
+        )
         self._call_lock_guard = threading.Lock()
         self._call_locks: dict[str, threading.RLock] = {}
 

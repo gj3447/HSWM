@@ -32,6 +32,7 @@ from prom_search_hswm.hswm_result_spool import (
     SpoolIntegrityError,
 )
 import prom_search_hswm.hswm_result_spool as result_spool
+import prom_search_hswm.hswm_f1_durable_transport as durable_transport
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
 from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
 
@@ -132,6 +133,40 @@ def test_sqlite_authorities_disable_implicit_checkpoints_on_fresh_and_reopen(
             store.close()
 
 
+@pytest.mark.parametrize(
+    ("module", "constructor", "error_type", "filename"),
+    (
+        (
+            durable_transport,
+            SQLiteF1CallLedger,
+            DurableLedgerIntegrityError,
+            "attempt.sqlite3",
+        ),
+        (
+            result_spool,
+            SQLiteResultSpool,
+            SpoolIntegrityError,
+            "spool.sqlite3",
+        ),
+    ),
+)
+def test_required_close_policy_refuses_before_authority_database_open(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    module,
+    constructor,
+    error_type: type[Exception],
+    filename: str,
+) -> None:
+    monkeypatch.delattr(
+        module.sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE", raising=False
+    )
+    path = tmp_path / filename
+    with pytest.raises(error_type, match="lacks checkpoint-on-close control"):
+        constructor(path, require_no_checkpoint_on_close=True)
+    assert not path.exists()
+
+
 def _wal_frame_count(path: Path, page_size: int) -> int:
     wal_path = Path(f"{path}-wal")
     size = wal_path.stat().st_size
@@ -179,6 +214,7 @@ def test_result_spool_crosses_default_checkpoint_boundary_without_checkpoint(
                 break
         frames_before_close = _wal_frame_count(path, page_size)
         checkpoint_on_close_disabled = store.checkpoint_on_close_disabled
+        wal_preclose = Path(f"{path}-wal").read_bytes()
         assert frames_before_close > 1000
         assert path.read_bytes() == main_preimage
         assert upstream_calls == index + 1
@@ -187,6 +223,8 @@ def test_result_spool_crosses_default_checkpoint_boundary_without_checkpoint(
 
     if checkpoint_on_close_disabled:
         assert _wal_frame_count(path, page_size) == frames_before_close
+        assert path.read_bytes() == main_preimage
+        assert Path(f"{path}-wal").read_bytes() == wal_preclose
         reopened = SQLiteResultSpool(path)
         try:
             replay = reopened.get(last_physical_call_id)
@@ -197,6 +235,94 @@ def test_result_spool_crosses_default_checkpoint_boundary_without_checkpoint(
             assert upstream_calls == index + 1
         finally:
             reopened.close()
+
+
+def test_call_ledger_prepared_commit_crosses_checkpoint_boundary_and_reopens(
+    tmp_path: Path,
+) -> None:
+    if not all(
+        (
+            hasattr(sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE"),
+            hasattr(sqlite3.Connection, "setconfig"),
+            hasattr(sqlite3.Connection, "getconfig"),
+        )
+    ):
+        pytest.skip("sealed close policy requires Python 3.12 sqlite3 controls")
+
+    path = tmp_path / "attempt-checkpoint-boundary.sqlite3"
+    forbidden_transport_calls = 0
+
+    def forbidden_transport(*_args, **_kwargs):
+        nonlocal forbidden_transport_calls
+        forbidden_transport_calls += 1
+        raise AssertionError("checkpoint canary attempted network transport")
+
+    port = DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=forbidden_transport,
+        require_no_checkpoint_on_close=True,
+    )
+    main_preimage = path.read_bytes()
+    page_size = int(port.ledger._connection.execute("PRAGMA page_size").fetchone()[0])
+    last_physical_call_id = ""
+    try:
+        for index in range(700):
+            last_physical_call_id = hashlib.sha256(
+                f"ledger-checkpoint-call-{index}".encode("ascii")
+            ).hexdigest()
+            call = ModelCallV1(
+                physical_call_id=last_physical_call_id,
+                run_id="checkpoint-canary",
+                arm_id="typed_hswm_three_function_network",
+                item_id=f"item-{index}",
+                call_index=1,
+                function_id="QF_QUERY_COMPILER",
+                model="fixed-model",
+                model_revision=MODEL_REVISION,
+                system_prompt="checkpoint boundary canary",
+                input_type="QueryEnvelopeV1",
+                input_payload=_input(),
+                output_type="QueryPlanV1",
+                max_output_tokens=256,
+            )
+            request_bytes = canonical_json(port._request_body(call)).encode("utf-8")
+            route, request_sha256, intent_sha256, intent_bytes = port._intent(
+                call, request_bytes
+            )
+            assert port.ledger.prepare(
+                physical_call_id=last_physical_call_id,
+                intent_sha256=intent_sha256,
+                intent_bytes=intent_bytes,
+                request_sha256=request_sha256,
+                endpoint=route,
+                request_bytes=request_bytes,
+            ) == "PREPARED"
+            if _wal_frame_count(path, page_size) > 1000:
+                break
+        frames_before_close = _wal_frame_count(path, page_size)
+        wal_preclose = Path(f"{path}-wal").read_bytes()
+        assert frames_before_close > 1000
+        assert port.ledger.status(last_physical_call_id) == "PREPARED"
+        assert path.read_bytes() == main_preimage
+        assert forbidden_transport_calls == 0
+    finally:
+        port.close()
+
+    assert path.read_bytes() == main_preimage
+    assert Path(f"{path}-wal").read_bytes() == wal_preclose
+    reopened = DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=forbidden_transport,
+        require_no_checkpoint_on_close=True,
+    )
+    try:
+        assert reopened.ledger.status(last_physical_call_id) == "PREPARED"
+        assert reopened.audit()["call_count"] == index + 1
+        assert forbidden_transport_calls == 0
+    finally:
+        reopened.close()
 
 
 def _sqlite_family_snapshot(path: Path) -> dict[str, tuple[bytes, int, int, int]]:

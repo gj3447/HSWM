@@ -1,5 +1,11 @@
 """ooptdd v2.6 — auditor assignment / rotation / budget policy.
 
+v2.9: ed25519 identity (G1). register accepts a pubkey (rotation-refusing);
+record_audit signs inside append()'s lock when a key exists; policy.signature
+∈ {verified, untrusted, absent} and a registry-contradicting key is refused.
+CLI gains genkey / verify-sigs. Crypto lives in ooptdd/signing.py (RFC 8032,
+pure stdlib, RFC test-vector-pinned).
+
 Closes the policy half of `ooptdd-v2-auditor-budget` (v2 design §8, KG
 OpenQuestion 2026-07-23). audit.py gives the workflow (prepare/review/record);
 this module decides WHO may audit next, WITH WHAT minimum budget, and refuses
@@ -64,25 +70,56 @@ def load_registry(registry_path: str = DEFAULT_REGISTRY) -> list[dict]:
 
 
 def register_auditor(auditor_id: str, kind: str = "agent",
-                     registry_path: str = DEFAULT_REGISTRY) -> dict:
-    """Idempotent by auditor_id; re-registering updates kind only."""
+                     registry_path: str = DEFAULT_REGISTRY,
+                     pubkey: str | None = None) -> dict:
+    """Idempotent by auditor_id; re-registering updates kind only.
+
+    v2.9: an optional ed25519 pubkey binds the identity cryptographically.
+    A registered pubkey is NEVER silently rotated — a conflicting re-register
+    raises (deliberate rotation = remove the entry first, on purpose)."""
     if kind not in ("agent", "human"):
         raise ValueError(f"kind must be agent|human, got {kind!r}")
+    if pubkey is not None:
+        try:
+            raw = bytes.fromhex(pubkey)
+        except ValueError:
+            raise ValueError("pubkey must be hex") from None
+        if len(raw) != 32:
+            raise ValueError(f"pubkey must be 32 bytes (ed25519), got {len(raw)}")
     auditors = load_registry(registry_path)
     for a in auditors:
         if a["auditor_id"] == auditor_id:
             a["kind"] = kind
+            if pubkey is not None:
+                existing = a.get("pubkey")
+                if existing and existing != pubkey:
+                    raise ValueError(
+                        f"pubkey rotation refused for {auditor_id}: registry has "
+                        f"{existing[:12]}…, got {pubkey[:12]}… (remove the entry deliberately to rotate)")
+                a["pubkey"] = pubkey
+                a["pubkey_registered_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
             break
     else:
-        auditors.append({
+        entry = {
             "auditor_id": auditor_id,
             "kind": kind,
             "registered_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        })
+        }
+        if pubkey is not None:
+            entry["pubkey"] = pubkey
+            entry["pubkey_registered_at"] = entry["registered_at"]
+        auditors.append(entry)
     os.makedirs(os.path.dirname(os.path.abspath(registry_path)), exist_ok=True)
     with open(registry_path, "w", encoding="utf-8") as f:
         json.dump({"auditors": auditors}, f, indent=1, ensure_ascii=False)
-    return {"auditor_id": auditor_id, "kind": kind}
+    return {"auditor_id": auditor_id, "kind": kind, "pubkey": pubkey}
+
+
+def registry_pubkey(auditor_id: str, registry_path: str = DEFAULT_REGISTRY) -> str | None:
+    for a in load_registry(registry_path):
+        if a["auditor_id"] == auditor_id:
+            return a.get("pubkey")
+    return None
 
 
 # --- derived chain facts -----------------------------------------------------
@@ -166,7 +203,16 @@ def record_audit(receipt_path: str, log_path: str, auditor_id: str, verdict: str
                  notes: str, budget: dict | str | None,
                  registry_path: str = DEFAULT_REGISTRY) -> dict:
     """The enforced audit-record path. Refuses (raises) on R1/R3 violations;
-    append() itself re-verifies the chain first (corrupt chain = no audit)."""
+    append() itself re-verifies the chain first (corrupt chain = no audit).
+
+    v2.9: if a private key exists for auditor_id (OOPTDD_KEY_DIR or
+    ~/.config/ooptdd/keys), the record is ed25519-signed inside append()'s
+    lock, so the signature binds the exact chained content. A registry pubkey
+    that contradicts the local key is refused (impersonation-shaped);
+    a missing registry pubkey chains as policy.signature="untrusted";
+    no key at all chains as "absent" (flagged, never silently trusted)."""
+    from ooptdd import signing
+
     receipt_id = os.path.splitext(os.path.basename(receipt_path))[0]
     records = load(log_path)
     target = latest_receipt_record(records, receipt_id)
@@ -174,6 +220,21 @@ def record_audit(receipt_path: str, log_path: str, auditor_id: str, verdict: str
         raise ValueError(f"{log_path}: no receipt record for {receipt_id} — run the harness first")
     policy = enforce(target, auditor_id, verdict, budget, records)
     policy["assigned"] = next_assignment(records, load_registry(registry_path), receipt_id)
+
+    signer = None
+    sig_status = "absent"
+    sk = signing.load_secret(auditor_id)
+    if sk is not None:
+        pk_hex = signing.publickey(sk).hex()
+        reg_pk = registry_pubkey(auditor_id, registry_path)
+        if reg_pk and reg_pk != pk_hex:
+            raise PolicyRefusal(
+                f"key mismatch for {auditor_id}: local key pubkey {pk_hex[:12]}… "
+                f"!= registry {reg_pk[:12]}… (impersonation-shaped; fail-closed)")
+        sig_status = "verified" if reg_pk == pk_hex else "untrusted"
+        signer = lambda rh: signing.sign_record(rh, sk)  # noqa: E731
+    policy["signature"] = sig_status
+
     rec = append(log_path, {
         "kind": "audit",
         "receipt_id": receipt_id,
@@ -192,8 +253,40 @@ def record_audit(receipt_path: str, log_path: str, auditor_id: str, verdict: str
         "mutation_score": None,
         "attestation": None,
         "policy": policy,
-    })
+    }, signer=signer)
     return rec
+
+
+def verify_signatures(log_path: str, registry_path: str = DEFAULT_REGISTRY) -> tuple[bool, list[str]]:
+    """Walk every audit record and verify its signature block (v2.9).
+
+    Returns (ok, lines). A record with policy.signature="absent" is reported
+    (not failed); an invalid or registry-contradicting signature FAILS."""
+    from ooptdd import signing
+
+    records = load(log_path)
+    lines: list[str] = []
+    ok = True
+    for r in records:
+        if r.get("kind") != "audit":
+            continue
+        who = r.get("auditor_id", "?")
+        block = r.get("signature")
+        if block is None:
+            lines.append(f"seq={r['seq']} {who}: absent (legacy/unsigned)")
+            continue
+        if not signing.verify_record_signature(r):
+            lines.append(f"seq={r['seq']} {who}: *** INVALID SIGNATURE ***")
+            ok = False
+            continue
+        reg_pk = registry_pubkey(who, registry_path)
+        if reg_pk and reg_pk != block.get("pubkey"):
+            lines.append(f"seq={r['seq']} {who}: *** pubkey contradicts registry ***")
+            ok = False
+        else:
+            trust = "verified" if reg_pk else "untrusted (no registry pubkey)"
+            lines.append(f"seq={r['seq']} {who}: sig OK — {trust}")
+    return ok, lines
 
 
 def main() -> int:
@@ -203,6 +296,12 @@ def main() -> int:
     g.add_argument("--auditor-id", required=True)
     g.add_argument("--kind", default="agent", choices=["agent", "human"])
     g.add_argument("--registry", default=DEFAULT_REGISTRY)
+    g.add_argument("--pubkey", default=None, help="ed25519 pubkey hex (v2.9; refuses silent rotation)")
+    k = sub.add_parser("genkey")
+    k.add_argument("--auditor-id", required=True)
+    v = sub.add_parser("verify-sigs")
+    v.add_argument("--log", default=DEFAULT_LOG)
+    v.add_argument("--registry", default=DEFAULT_REGISTRY)
     for name in ("assign", "budget"):
         p = sub.add_parser(name)
         p.add_argument("receipt")
@@ -211,9 +310,32 @@ def main() -> int:
     args = ap.parse_args()
 
     if args.cmd == "register":
-        entry = register_auditor(args.auditor_id, args.kind, args.registry)
-        print(f"registered: {entry['auditor_id']} ({entry['kind']})")
+        try:
+            entry = register_auditor(args.auditor_id, args.kind, args.registry, pubkey=args.pubkey)
+        except ValueError as e:
+            print(f"register refused: {e}", file=sys.stderr)
+            return 2
+        print(f"registered: {entry['auditor_id']} ({entry['kind']})"
+              + (f" pubkey={entry['pubkey'][:16]}…" if entry.get("pubkey") else ""))
         return 0
+    if args.cmd == "genkey":
+        from ooptdd import signing
+        try:
+            info = signing.genkey(args.auditor_id)
+        except ValueError as e:
+            print(f"genkey refused: {e}", file=sys.stderr)
+            return 2
+        print(f"key written: {info['key_path']} (0600 — never commit it)")
+        print(f"pubkey: {info['pubkey']}")
+        print(f"next: python -m ooptdd.audit_policy register --auditor-id {args.auditor_id} "
+              f"--pubkey {info['pubkey']}")
+        return 0
+    if args.cmd == "verify-sigs":
+        ok, lines = verify_signatures(args.log, args.registry)
+        for line in lines:
+            print(line)
+        print("SIGNATURES:", "ALL OK" if ok else "FAILURES PRESENT")
+        return 0 if ok else 1
     receipt_id = os.path.splitext(os.path.basename(args.receipt))[0]
     records = load(args.log)
     if latest_receipt_record(records, receipt_id) is None:

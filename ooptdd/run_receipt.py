@@ -127,6 +127,23 @@ def anchor_chain_head(tree_name: str, node_tag: str, rec: dict, log_path: str,
         return False, str(e)
 
 
+def parse_measured(stdout: str) -> tuple[dict | None, bool]:
+    """v2.10 (G3): extract the receipt's LAST well-formed `MEASURED {json}` line.
+
+    Returns (payload, saw_line). payload is None when no line parsed — the
+    record then carries measured=None (honest absence), never a guessed value.
+    """
+    payload, saw = None, False
+    for line in stdout.splitlines():
+        if line.startswith("MEASURED "):
+            saw = True
+            try:
+                payload = json.loads(line[len("MEASURED "):])
+            except json.JSONDecodeError:
+                pass  # keep the last GOOD parse; a broken trailing line degrades to the previous one
+    return payload, saw
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="run an ooptdd receipt and chain the result")
     ap.add_argument("receipt", help="path to the receipt .py")
@@ -148,6 +165,17 @@ def main() -> int:
     receipt_id = os.path.splitext(os.path.basename(args.receipt))[0]
     lock = extract_lock(args.receipt)
     binding, binding_problems = verify_lock_binding(args.receipt, lock)
+    # v3 XLOCKS: migrated claims bind prose to predicate SOURCE (docstring ==
+    # prose, drift = broken). Static extraction only — the receipt is never
+    # imported by the harness.
+    from ooptdd.xlocks import extract_xlocks, parse_xlocks_result, verify_xlock_prose
+    xlocks_meta = extract_xlocks(args.receipt)
+    if xlocks_meta:
+        prose_problems = verify_xlock_prose(lock, xlocks_meta)
+        if prose_problems:
+            binding, binding_problems = "broken", binding_problems + prose_problems
+        else:
+            print(f"xlocks: {len(xlocks_meta)} predicate lock(s) — prose bound to predicate source")
     print(f"lock-binding: {binding}" + (f" — {binding_problems}" if binding_problems else ""))
     if binding == "broken":
         return 2
@@ -161,6 +189,8 @@ def main() -> int:
         "lock_binding": binding,
         "status": "self-valid",
         "mutation_score": None,
+        "measured": None,
+        "xlocks": None,
         "attestation": None,
     }
     if args.author:
@@ -172,9 +202,42 @@ def main() -> int:
         record["auditor_id"] = args.auditor_id
         record["target_hash"] = args.target_hash
 
-    proc = subprocess.run([sys.executable, args.receipt])
+    # v2.10: capture stdout to harvest the MEASURED line (G3), then echo it
+    # back so the operator's readback is unchanged.
+    proc = subprocess.run([sys.executable, args.receipt], capture_output=True, text=True)
+    sys.stdout.write(proc.stdout)
+    sys.stderr.write(proc.stderr)
     record["exit_code"] = proc.returncode
     record["verdict"] = "VALID" if proc.returncode == 0 else ("INVALID" if proc.returncode == 1 else "ERROR")
+    measured, saw_measured = parse_measured(proc.stdout)
+    record["measured"] = measured
+    if measured is not None:
+        print(f"measured: {len(measured)} metrics captured into the chain record")
+    elif saw_measured:
+        print("measured: WARNING — MEASURED line(s) present but none parsed; recorded as absent")
+    else:
+        print("measured: absent (receipt emits no MEASURED line; flagged, not trusted)")
+
+    if xlocks_meta:
+        xr = parse_xlocks_result(proc.stdout) or {}
+        merged = {}
+        for key, meta in xlocks_meta.items():
+            runtime = xr.get(key)
+            entry = {"predicate_sha": meta["predicate_sha"], "strategy": meta["strategy"]}
+            if runtime is None:
+                entry["engine"] = "missing"
+                entry["ok"] = False  # declared but not executed: fail-closed, not silently trusted
+            else:
+                entry.update(runtime)  # receipt-emitted evidence (incl. signed-oracle riders)
+                entry.setdefault("ok", False)
+                entry.setdefault("engine", "unknown")
+            merged[key] = entry
+        record["xlocks"] = merged
+        bad = {k: v for k, v in merged.items() if not v.get("ok") and proc.returncode == 0}
+        print(f"xlocks chained: " + ", ".join(
+            f"{k}[{v.get('engine')} ok={v.get('ok')}]" for k, v in merged.items()))
+        if bad:
+            print(f"xlocks WARNING: receipt exited 0 but predicate lock(s) not green: {list(bad)}", file=sys.stderr)
 
     if args.mutation_target:
         from ooptdd.mutate import mutation_score
@@ -184,9 +247,21 @@ def main() -> int:
             repo_root = os.path.dirname(repo_root)
         ms = mutation_score(args.mutation_target, os.path.abspath(args.receipt),
                             repo_root=repo_root, max_mutants=args.max_mutants)
-        record["mutation_score"] = {"killed": ms["killed"], "total": ms["total"]}
+        # v2.7: chain the FULL picture, not just killed/total — a raw 8/12 reads
+        # weak unless the record also carries the allowlist-adjusted denominator
+        # (documented equivalents) and the open-gap count (honest holes).
+        record["mutation_score"] = {
+            "killed": ms["killed"],
+            "total": ms["total"],
+            "effective_total": ms["effective_total"],
+            "equivalents": len(ms["equivalents"]),
+            "open_gaps": len(ms["survivors"]),
+            "survivors": ms["survivors"],
+            "errors": ms["errors"],
+        }
         print(f"\nMUTATION SCORE: {ms['killed']}/{ms['total']} killed"
-              + (f" | survivors: {ms['survivors']}" if ms["survivors"] else "")
+              f" (effective {ms['killed']}/{ms['effective_total']} after {len(ms['equivalents'])} documented equivalents)"
+              + (f" | open gaps: {ms['survivors']}" if ms["survivors"] else "")
               + (f" | errors: {ms['errors']}" if ms["errors"] else ""))
 
     try:

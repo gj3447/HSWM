@@ -127,6 +127,14 @@ def _fsync_parent(path: Path) -> None:
         os.close(descriptor)
 
 
+def _make_private_sqlite_files(path: Path) -> None:
+    for candidate in (Path(path), Path(f"{path}-wal"), Path(f"{path}-shm")):
+        try:
+            candidate.chmod(0o600)
+        except FileNotFoundError:
+            continue
+
+
 def _model_response_value(response: ModelResponseV1) -> dict[str, object]:
     return {
         "payload": response.payload,
@@ -167,6 +175,12 @@ class SQLiteF1CallLedger:
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         existed = self.path.exists()
+        if not existed:
+            descriptor = os.open(
+                self.path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600
+            )
+            os.close(descriptor)
+            _fsync_parent(self.path)
         self._lock = threading.RLock()
         self._connection = sqlite3.connect(
             str(self.path), isolation_level=None, timeout=10.0, check_same_thread=False
@@ -223,6 +237,7 @@ class SQLiteF1CallLedger:
             """
         )
         self._connection.execute("PRAGMA user_version=1")
+        _make_private_sqlite_files(self.path)
         if not existed:
             _fsync_parent(self.path)
         self.verify_event_chain()

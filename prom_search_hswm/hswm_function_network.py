@@ -498,7 +498,24 @@ def verify_run(value: Mapping[str, object]) -> str:
         if not isinstance(call, Mapping):
             raise FunctionNetworkError("invalid call receipt")
         verify_call_receipt(call)
-    validate_port("AnswerEnvelopeV1", data.get("answer"))
+        if (
+            call.get("run_id") != data.get("run_id")
+            or call.get("arm_id") != data.get("arm_id")
+            or call.get("item_id") != data.get("item_id")
+        ):
+            raise FunctionNetworkError("item-run call identity drifted")
+    answer = validate_port("AnswerEnvelopeV1", data.get("answer"))
+    if answer != calls[2].get("output_payload"):
+        raise FunctionNetworkError("item-run answer differs from the third call output")
+    if (
+        data.get("total_input_tokens")
+        != sum(int(call.get("input_tokens", -1)) for call in calls)
+        or data.get("total_output_tokens")
+        != sum(int(call.get("output_tokens", -1)) for call in calls)
+        or data.get("total_allowed_output_tokens")
+        != sum(int(call.get("allowed_output_tokens", -1)) for call in calls)
+    ):
+        raise FunctionNetworkError("item-run token totals differ from call receipts")
     return declared
 
 

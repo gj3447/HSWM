@@ -1,0 +1,37 @@
+{
+ "note": "WITHDRAWN 2026-07-28 (errata by kimi-code): the 4 entries below describe transcription artifacts of a LOCAL copy, not canonical-chain corruption — the canonical records hash-verify clean without any skiplist (direct record_hash recomputation). Kept as historical record of a misdiagnosis; see ERRATA in OOPTDD_CHAIN_INCIDENT_2026-07-28.md. Entries are no-ops against the clean chain by design (stale/wrong repairs change nothing).",
+ "repairs": [
+  {
+   "seq": 14,
+   "receipt_id": "test_entity_binding",
+   "stored_hash": "dcefcc9488cc57611cfe571cd68edcfb3a1b36915abe92e65a032b98fcfa6126",
+   "reason": "2026-07-28 bulk harvest import (61 records, backdated 2026-07-24T01:55 UTC) bypassed receipt_log.append(); body no longer matches stored hash while prev_hash/seq linkage stayed intact. Original body unrecoverable (no archive exists). Tooling defect, not adversarial tamper — see OOPTDD_CHAIN_INCIDENT_2026-07-28.md",
+   "attested_by": "kimi-k2.5",
+   "attested_at": "2026-07-28T05:30:00+00:00"
+  },
+  {
+   "seq": 22,
+   "receipt_id": "test_h3_b3_end_to_end",
+   "stored_hash": "fe89ec336aac4712df69d9230888299e1f223835953f02d9b7c67abfa958e831",
+   "reason": "same incident as seq=14 (2026-07-28 bulk harvest import bypassed append(); body/hash mismatch, linkage intact, original unrecoverable) — see OOPTDD_CHAIN_INCIDENT_2026-07-28.md",
+   "attested_by": "kimi-k2.5",
+   "attested_at": "2026-07-28T05:30:00+00:00"
+  },
+  {
+   "seq": 25,
+   "receipt_id": "test_h3_b3_manifest",
+   "stored_hash": "5215296e1c219c6dfecb8c2f4f0d128b580c75f3135",
+   "reason": "same incident as seq=14 (2026-07-28 bulk harvest import bypassed append(); body/hash mismatch, linkage intact, original unrecoverable) — see OOPTDD_CHAIN_INCIDENT_2026-07-28.md",
+   "attested_by": "kimi-k2.5",
+   "attested_at": "2026-07-28T05:30:00+00:00"
+  },
+  {
+   "seq": 26,
+   "receipt_id": "test_h3_b3_preflight",
+   "stored_hash": "e5a9a4730535e0dc1792eb1aedbe7a1a879a7a7f55ad69c2d5810b209b1d4a90",
+   "reason": "same incident as seq=14 (2026-07-28 bulk harvest import bypassed append(); body/hash mismatch, linkage intact, original unrecoverable) — see OOPTDD_CHAIN_INCIDENT_2026-07-28.md",
+   "attested_by": "kimi-k2.5",
+   "attested_at": "2026-07-28T05:30:00+00:00"
+  }
+ ]
+}

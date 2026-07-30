@@ -62,6 +62,7 @@ from __future__ import annotations
 
 import ast
 import hashlib
+import json
 import sys
 
 import numpy as np
@@ -71,6 +72,12 @@ import synth
 from learned_v3_additive import (LAMBDA_GRID, _ndcg_for, _train_score_and_gate,
                                  score_additive, train_additive_j)
 from weight_field import _unit
+
+import os as _os
+import sys as _sys
+# ooptdd is not in the editable-install py-modules list; receipts self-anchor
+_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+from ooptdd import xlocks
 
 
 def _sha(path: str) -> str:
@@ -107,6 +114,36 @@ LOCK_CHECKS = {
 
 CURSE_BOUND = 0.25
 CURSE_SEEDS = tuple(range(101, 109))
+
+
+# v3 XLOCK (G2 closure, 2026-07-28): F1's authority moved from prose to this
+# predicate's SOURCE. The LOCK prose for F1 is this docstring verbatim —
+# the harness refuses any drift (edit the predicate, not the prose).
+def pred_f1_pointwise(case) -> bool:
+    """W = cosine + lam*ReLU(r) >= cosine for every edge (j>=0)"""
+    peu = _unit(case["pe"])
+    qu = case["q"] / max(np.linalg.norm(case["q"]), 1e-12)
+    W = score_additive(case["pe"], case["q"], case["M"], case["lam"])
+    return bool((W - (peu @ qu)).min() >= -1e-9)
+
+
+XLOCKS = {"F1_pointwise": "pred_f1_pointwise",
+          "F3_zero_boost_exact": "pred_f3_zero_boost_exact"}
+XLOCK_STRATEGIES = {"F1_pointwise": {"seed": 0, "max_examples": 200, "dim": 16, "edges": 32},
+                    "F3_zero_boost_exact": {"seed": 1, "max_examples": 200, "dim": 16, "edges": 32}}
+
+
+def pred_f3_zero_boost_exact(case) -> bool:
+    """resid <= 0 => W == cosine exactly (boost-only = no-change)"""
+    peu = _unit(case["pe"])
+    qu = case["q"] / max(np.linalg.norm(case["q"]), 1e-12)
+    cos = peu @ qu
+    resid = (peu @ case["M"]) @ qu
+    W = score_additive(case["pe"], case["q"], case["M"], case["lam"])
+    neg = resid <= 0.0
+    if not neg.any():
+        return True  # vacuously true for this case (measure-zero in practice)
+    return bool(np.abs((W - cos)[neg]).max() <= 1e-12)
 
 
 def _f7_within_bound(rate: float, bound: float = CURSE_BOUND) -> bool:
@@ -147,17 +184,28 @@ def main() -> int:
     pooled = _unit(ds.hg.pooled_emb("mean"))
     M, lam, diag = train_additive_j(ds, train_q, seed=0)
 
-    # (F1) POINTWISE floor — over ALL edges, many queries, on a random M too
+    # (F1) POINTWISE floor — v3 XLOCK: the GATE is the predicate above,
+    # falsified by Hypothesis over generated adversarial cases (random
+    # pe/q/M, lam in [0,8]) plus forced deployed instances. This loop now
+    # only produces the measured readback margin (G3), not the gate.
     worst_pointwise = np.inf
     rngM = np.random.default_rng(1)
-    for trial_M in (M, rngM.standard_normal((ds.hg.d, ds.hg.d))):
+    rand_M = rngM.standard_normal((ds.hg.d, ds.hg.d))
+    for trial_M in (M, rand_M):
         for q in list(test_q)[:20]:
             pool = np.arange(ds.hg.M)
             cos = _unit(pooled[pool]) @ (ds.query_emb[int(q)] / np.linalg.norm(ds.query_emb[int(q)]))
             W = score_additive(pooled[pool], ds.query_emb[int(q)], trial_M, lam=max(lam, 1.0))
             worst_pointwise = min(worst_pointwise, float((W - cos).min()))
-    f1_ok = worst_pointwise >= -1e-9
-    print(f"F1 positive: worst pointwise (W - cosine) = {worst_pointwise:+.2e}  -> {'OK' if f1_ok else 'FAIL'}")
+    forced_f1 = [{"pe": pooled[np.arange(ds.hg.M)], "q": ds.query_emb[int(q)], "M": M, "lam": lam}
+                 for q in list(test_q)[:5]]
+    forced_f1.append({"pe": pooled[np.arange(ds.hg.M)], "q": ds.query_emb[int(test_q[0])],
+                      "M": rand_M, "lam": lam})
+    xr1 = xlocks.run_xlock(pred_f1_pointwise, XLOCK_STRATEGIES["F1_pointwise"], forced=forced_f1)
+    f1_ok = xr1["ok"] and (lam >= 0)
+    print(f"F1 xlock: {xr1['engine']} {xr1['examples']} examples seed={xr1['seed']} "
+          f"+ {len(forced_f1)} forced, counterexample={xr1['counterexample'] or 'none'}; "
+          f"readback margin {worst_pointwise:+.2e} -> {'OK' if f1_ok else 'FAIL'}")
 
     # (F2) MEAN-nDCG floor on the val-selected lam
     def mean_ndcg(l):
@@ -170,7 +218,9 @@ def main() -> int:
     f2_ok = mean_add >= mean_cos - 1e-4
     print(f"F2 positive: mean nDCG cosine={mean_cos:.4f} additive(lam={lam})={mean_add:.4f} -> {'OK' if f2_ok else 'FAIL'}")
 
-    # (F3) EXACT ZERO-BOOST — resid <= 0 edges must score EXACTLY cosine
+    # (F3) EXACT ZERO-BOOST — v3 XLOCK: the GATE is pred_f3_zero_boost_exact
+    # (Hypothesis-generated cases + forced deployed instances). The loop below
+    # only produces the measured readback (G3); it is no longer the gate.
     f3_worst = 0.0
     for q in list(test_q)[:20]:
         pool = np.arange(ds.hg.M)
@@ -182,8 +232,14 @@ def main() -> int:
         neg = resid <= 0.0
         if neg.any():
             f3_worst = max(f3_worst, float(np.abs((W - cos)[neg]).max()))
-    f3_ok = f3_worst <= 1e-12
-    print(f"F3 positive: max |W - cosine| over resid<=0 edges = {f3_worst:.2e} (must be <= 1e-12) -> {'OK' if f3_ok else 'FAIL'}")
+    forced_f3 = [{"pe": pooled[np.arange(ds.hg.M)], "q": ds.query_emb[int(q)], "M": M, "lam": lam}
+                 for q in list(test_q)[:5]]
+    xr3 = xlocks.run_xlock(pred_f3_zero_boost_exact, XLOCK_STRATEGIES["F3_zero_boost_exact"],
+                           forced=forced_f3)
+    f3_ok = xr3["ok"]
+    print(f"F3 xlock: {xr3['engine']} {xr3['examples']} examples seed={xr3['seed']} "
+          f"+ {len(forced_f3)} forced, counterexample={xr3['counterexample'] or 'none'}; "
+          f"readback max |W - cosine| on resid<=0 = {f3_worst:.2e} -> {'OK' if f3_ok else 'FAIL'}")
 
     # (F4) PREREGISTERED EFFICACY — dev1 synthetic gain >= +0.03 (prereg prediction ii)
     gain = mean_add - mean_cos
@@ -278,8 +334,20 @@ def main() -> int:
         cos = _unit(pooled[pool]) @ (ds.query_emb[int(q)] / np.linalg.norm(ds.query_emb[int(q)]))
         Ws = score_signed(pooled[pool], ds.query_emb[int(q)], M, 3.0)
         worst_signed = min(worst_signed, float((Ws - cos).min()))
-    neg_breaks = worst_signed < 0.0
-    print(f"negative-oracle: signed-j worst pointwise (W - cosine) = {worst_signed:+.4f} (must be < 0) -> {'breaks' if neg_breaks else 'FAILED-to-break'}")
+
+    # property-level non-vacuity (v3): the falsification ENGINE itself must
+    # also break signed-j — a property nothing can break is ceremony
+    def _pred_signed_f1(case):
+        peu = _unit(case["pe"])
+        qu = case["q"] / max(np.linalg.norm(case["q"]), 1e-12)
+        W = (peu @ qu) + case["lam"] * ((peu @ case["M"]) @ qu)  # NO ReLU
+        return bool((W - (peu @ qu)).min() >= -1e-9)
+
+    neg_prop = xlocks.run_xlock(_pred_signed_f1, XLOCK_STRATEGIES["F1_pointwise"])
+    neg_breaks = worst_signed < 0.0 and not neg_prop["ok"]
+    print(f"negative-oracle: signed-j worst pointwise (W - cosine) = {worst_signed:+.4f} (must be < 0); "
+          f"property engine falsified signed-j: {not neg_prop['ok']} ({neg_prop['engine']}) "
+          f"-> {'breaks' if neg_breaks else 'FAILED-to-break'}")
 
     # (5b) NEGATIVE ORACLE for F3 — constant-shift (lam + ReLU) must violate exact zero-boost
     def score_shifted(pe, q, M, l):
@@ -296,8 +364,25 @@ def main() -> int:
         neg = resid <= 0.0
         if neg.any():
             shift_worst = max(shift_worst, float(np.abs((Wsh - cos)[neg]).max()))
-    neg3_breaks = shift_worst > 1e-12
-    print(f"negative-oracle-F3: constant-shift max |W - cosine| on resid<=0 = {shift_worst:.4f} (must be > 1e-12) -> {'breaks' if neg3_breaks else 'FAILED-to-break'}")
+
+    # property-level non-vacuity for F3 (v3): the engine must also break the
+    # constant-shift mutant shape — a property nothing can break is ceremony
+    def _pred_shifted_f3(case):
+        peu = _unit(case["pe"])
+        qu = case["q"] / max(np.linalg.norm(case["q"]), 1e-12)
+        cos = peu @ qu
+        resid = (peu @ case["M"]) @ qu
+        W = (peu @ qu) + case["lam"] + np.maximum(0.0, resid)  # binop@47 mutant shape
+        neg = resid <= 0.0
+        if not neg.any():
+            return True
+        return bool(np.abs((W - cos)[neg]).max() <= 1e-12)
+
+    neg3_prop = xlocks.run_xlock(_pred_shifted_f3, XLOCK_STRATEGIES["F3_zero_boost_exact"])
+    neg3_breaks = shift_worst > 1e-12 and not neg3_prop["ok"]
+    print(f"negative-oracle-F3: constant-shift max |W - cosine| on resid<=0 = {shift_worst:.4f} (must be > 1e-12); "
+          f"property engine falsified shifted-F3: {not neg3_prop['ok']} ({neg3_prop['engine']}) "
+          f"-> {'breaks' if neg3_breaks else 'FAILED-to-break'}")
 
     # (5c) NEGATIVE ORACLE for F5 — all three rejection branches must fire
     # (claude-code audit finding d: the single bookkeeping oracle was narrow).
@@ -314,6 +399,31 @@ def main() -> int:
     # (5d) NEGATIVE ORACLE for F7 — an over-bound curse rate must be rejected
     neg7_breaks = not _f7_within_bound(CURSE_BOUND + 0.5)
     print(f"negative-oracle-F7: over-bound curse rate ({CURSE_BOUND + 0.5:.2f}) -> {'rejected' if neg7_breaks else 'ACCEPTED (vacuous)'}")
+
+    # v3: xlock outcomes ride the chain (harness merges per declared key)
+    xr1_out = dict(xr1)
+    xr1_out["signed_oracle"] = neg_prop
+    xr3_out = dict(xr3)
+    xr3_out["shift_oracle"] = neg3_prop
+    print("XLOCKS_RESULT " + json.dumps({"F1_pointwise": xr1_out,
+                                        "F3_zero_boost_exact": xr3_out}, default=str))
+
+    # v2.10 (G3 closure, 2026-07-28): machine-readable measurement emission.
+    # The harness (run_receipt) captures the LAST MEASURED line into the chained
+    # record, so the NUMBERS behind the verdicts are pinned to the chain, not
+    # just the booleans. schema: {name: {value, unit, gate, threshold?}}.
+    measured = {
+        "f1_worst_pointwise_margin": {"value": worst_pointwise, "unit": "W-cos", "gate": "F1", "threshold": ">=-1e-9"},
+        "f2_mean_ndcg_cosine": {"value": mean_cos, "unit": "nDCG", "gate": "F2"},
+        "f2_mean_ndcg_additive": {"value": mean_add, "unit": "nDCG", "gate": "F2", "threshold": ">= cosine - 1e-4"},
+        "f3_max_abs_dev": {"value": f3_worst, "unit": "|W-cos|", "gate": "F3", "threshold": "<=1e-12"},
+        "f4_gain": {"value": gain, "unit": "nDCG", "gate": "F4", "threshold": ">=+0.03 (prereg prediction ii)"},
+        "f5_val_at_lam": {"value": recomputed[lam], "unit": "nDCG", "gate": "F5"},
+        "f5_val_at_zero": {"value": recomputed[0.0], "unit": "nDCG", "gate": "F5", "threshold": "val[lam*] >= val[0]"},
+        "f7_curse_rate": {"value": curse_rate, "unit": "rate/8 fresh splits", "gate": "F7", "threshold": f"<={CURSE_BOUND}"},
+        "documented_per_query_min_gap": {"value": per_q_min, "unit": "nDCG", "gate": None},
+    }
+    print("MEASURED " + json.dumps(measured, sort_keys=True))
 
     ok = f1_ok and f2_ok and f3_ok and f4_ok and f5_ok and f6_ok and f6b_ok and f7_ok and neg_breaks and neg3_breaks and neg5_breaks and neg7_breaks
     print("\nRECEIPT:", "VALID ✅" if ok else "INVALID ❌",

@@ -1,0 +1,45 @@
+{
+ "schema": "hswm-p1-prepare-manifest/v1",
+ "prereg": {
+  "path": "PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json",
+  "sha256": "136405ba5d0006195e9fe4c1a9899eb4ef098bbe22fa725599936479baa0e91d"
+ },
+ "universe": "sparse_t200_fk1",
+ "universe_flags": "--num-family-trees 200 --friendship-k 1 --num-questions-per-type 30 --question-depth 10 --seed 1 --friendship-seed 1 --article-format json",
+ "universe_provenance": {
+  "origin": "regenerated_locally_after_gm_disk_failure",
+  "date": "2026-07-24",
+  "reason": "/Volumes/GM (ExFAT) stopped serving data reads (metadata stat instant, 2KB content read timeout)",
+  "tool": "phantom-wiki 1.0.3 (.venv_phantom pw-generate), SWI-Prolog /opt/homebrew/bin/swipl",
+  "verification": {
+   "articles_json_bytes": 5595416,
+   "matches_prefailure_gm_stat": true,
+   "articles_and_facts_sha256_match_prior_local_regen": true,
+   "solution_trace_sets_match_prior_regen": "600/600",
+   "note": "question ids are unseeded UUID4s and trace ordering varies between regenerations; question texts, answers, prolog, templates and solution-trace SETS are identical"
+  },
+  "universe_artifacts_sha256": {
+   "articles.json": "240f14387ac920bb49b11cf46801e77674b35eeb5eb7888d2dc2e3c7473449a6",
+   "facts.pl": "14103b60bdd5ba833c9bd74ca9b524af9ceadb622e8280ca09a10045bd7e9013"
+  }
+ },
+ "articles": 5057,
+ "questions_total": 600,
+ "eligible_questions": 390,
+ "episodes": {
+  "e1": 40,
+  "e2": 40,
+  "e3": 40,
+  "e4": 40,
+  "e5": 40
+ },
+ "disjoint_qids": true,
+ "model": "all-MiniLM-L6-v2",
+ "split_seed": 20260723,
+ "artifacts": {
+  "P1_SPLIT_2026-07-23.json": "f395de25d05d0b33cf6998ec6e02fb71f3abe4e221f00018157915bbb1e2fb45",
+  "P1_EMBEDDINGS_2026-07-23.npz": "d0ebb44f96c424b6f59b8794b3cc9c5d31bddbeadd9e806be9a267db2be57ebc"
+ },
+ "gold_isolation": "build_graph/build_world and the walk never read question gold. The splitter reads solution_traces/answer only for the walkability filter (same as r3_walk_regime.main). Answer gold is consumed solely in the harness post-hoc scoring phase.",
+ "arm_outcome_inspected": false
+}

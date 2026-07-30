@@ -24,10 +24,25 @@ import sys
 import tempfile
 import urllib.request
 
-from ooptdd.receipt_log import load, verify
+from ooptdd.receipt_log import load, repairs_path_for, verify
 
 DEFAULT_LOG = os.path.join("receipts", "receipt_log.jsonl")
 DEFAULT_LAKATOS_URL = "http://127.0.0.1:55170"
+
+
+def _write_copy(path: str, records: list[dict], repairs_src: str) -> None:
+    """Write a drill copy of the chain, carrying its attestation context.
+
+    v2.8: a chain with a repairs skiplist only verifies WITH that context —
+    a bare copy would flag documented repairs as tampering and make the
+    control case vacuous (seen live on 2026-07-28). Tamper/deletion drills
+    still fire: their targets are not the repaired records.
+    """
+    with open(path, "w", encoding="utf-8") as f:
+        for r in records:
+            f.write(json.dumps(r, ensure_ascii=False, sort_keys=True) + "\n")
+    if os.path.exists(repairs_src):
+        shutil.copyfile(repairs_src, repairs_path_for(path))
 
 
 def drill(log_path: str) -> int:
@@ -36,14 +51,13 @@ def drill(log_path: str) -> int:
         print("empty chain — nothing to drill", file=sys.stderr)
         return 2
     failures = 0
+    repairs_src = repairs_path_for(log_path)
     with tempfile.TemporaryDirectory() as td:
         # drill 1: flip a past verdict -> must be detected
         p1 = os.path.join(td, "tampered_verdict.jsonl")
         tampered = [dict(r) for r in records]
         tampered[0]["verdict"] = "INVALID" if tampered[0]["verdict"] == "VALID" else "VALID"
-        with open(p1, "w", encoding="utf-8") as f:
-            for r in tampered:
-                f.write(json.dumps(r, ensure_ascii=False, sort_keys=True) + "\n")
+        _write_copy(p1, tampered, repairs_src)
         ok1, errs1 = verify(p1)
         print(f"drill verdict-tamper: {'DETECTED' if not ok1 else 'MISSED — chain decorative!'} {errs1[:1]}")
         failures += 0 if not ok1 else 1
@@ -52,9 +66,7 @@ def drill(log_path: str) -> int:
         if len(records) >= 3:
             p2 = os.path.join(td, "deleted.jsonl")
             deleted = records[: len(records) // 2] + records[len(records) // 2 + 1:]
-            with open(p2, "w", encoding="utf-8") as f:
-                for r in deleted:
-                    f.write(json.dumps(r, ensure_ascii=False, sort_keys=True) + "\n")
+            _write_copy(p2, deleted, repairs_src)
             ok2, errs2 = verify(p2)
             print(f"drill deletion:       {'DETECTED' if not ok2 else 'MISSED — chain decorative!'} {errs2[:1]}")
             failures += 0 if not ok2 else 1
@@ -62,6 +74,8 @@ def drill(log_path: str) -> int:
         # control: untouched copy MUST verify (a drill that fires on everything is vacuous)
         p3 = os.path.join(td, "control.jsonl")
         shutil.copyfile(log_path, p3)
+        if os.path.exists(repairs_src):
+            shutil.copyfile(repairs_src, repairs_path_for(p3))
         ok3, _ = verify(p3)
         print(f"control (untouched):  {'OK — verifies' if ok3 else 'BROKEN — drill vacuous!'}")
         failures += 0 if ok3 else 1

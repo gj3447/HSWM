@@ -451,9 +451,21 @@ def _build_synthetic_incident(
     two_shared_items: bool = False,
     incident_profile: Mapping[str, object] | None = None,
 ) -> dict[str, object]:
+    artifact_schemas = (
+        prior_exposure._INCIDENT_ARTIFACT_SCHEMAS
+        if incident_profile is None
+        else incident_profile["artifact_schemas"]
+    )
+    assert isinstance(artifact_schemas, Mapping)
     selection_unsigned = {
-        "schema_version": "hswm-prom9-f1-r8-cohort-selection/v2"
+        "schema_version": artifact_schemas["selection_receipt"]
     }
+    if selection_unsigned["schema_version"] == (
+        "hswm-prom9-f1-r8-cohort-selection/v3"
+    ):
+        selection_unsigned["aborted_attempt_exposure_receipt_sha256"] = (
+            prior_exposure._HISTORICAL_V8_INCIDENT_SHA256
+        )
     selection_value = {
         **selection_unsigned,
         "selection_receipt_sha256": canonical_sha256(selection_unsigned),
@@ -652,7 +664,7 @@ def _build_synthetic_incident(
         "bundle_sha256": canonical_sha256(environment_unsigned),
     }
     lock_unsigned = {
-        "schema_version": "hswm-prom9-f1-r8-execution-lock/v2",
+        "schema_version": artifact_schemas["execution_lock"],
         "run_id": artifacts["manifest"]["run_id"],
         "mode": artifacts["manifest"]["mode"],
         "model": artifacts["manifest"]["model"],
@@ -678,6 +690,19 @@ def _build_synthetic_incident(
         "upstream_endpoint": "http://model",
         "execution_policy": {"endpoint": "http://spool", "max_workers": 1},
     }
+    if lock_unsigned["schema_version"] == (
+        "hswm-prom9-f1-r8-execution-lock/v4"
+    ):
+        lock_unsigned.update(
+            {
+                "aborted_attempt_exposure_receipt_sha256": (
+                    selection_unsigned[
+                        "aborted_attempt_exposure_receipt_sha256"
+                    ]
+                ),
+                "token_envelope_derivation_receipt_sha256": "8" * 64,
+            }
+        )
     lock = _private_artifact(
         inputs / "lock.json",
         {**lock_unsigned, "lock_sha256": canonical_sha256(lock_unsigned)},
@@ -1141,6 +1166,9 @@ def test_profile_bound_v4_incident_refuses_count_and_identity_drift(
         },
         "canary_http_status_counts": {"200": 1},
         "runtime_commits": dict(prior_exposure._HISTORICAL_RUNTIME_COMMITS),
+        "artifact_schemas": dict(
+            prior_exposure._INCIDENT_ARTIFACT_SCHEMAS
+        ),
         "expected_counts": {
             "attempt_calls": 2,
             "attempt_events": 8,
@@ -1195,6 +1223,26 @@ def test_unregistered_incident_profile_is_refused_before_replay() -> None:
     profile["profile_id"] = "unregistered-a2-lookalike"
     with pytest.raises(PriorExposureRefusal, match="not registered"):
         prior_exposure._registered_incident_profile(profile)
+
+
+def test_registered_a2_profile_pins_actual_artifact_generations() -> None:
+    profile = prior_exposure._registered_incident_profile(
+        prior_exposure._A2_INCIDENT_PROFILE
+    )
+    schemas = profile["artifact_schemas"]
+    assert schemas["selection_receipt"] == (
+        "hswm-prom9-f1-r8-cohort-selection/v3"
+    )
+    assert schemas["execution_lock"] == (
+        "hswm-prom9-f1-r8-execution-lock/v4"
+    )
+
+    drifted = copy.deepcopy(prior_exposure._A2_INCIDENT_PROFILE)
+    drifted["artifact_schemas"]["selection_receipt"] = (
+        "hswm-prom9-f1-r8-cohort-selection/v2"
+    )
+    with pytest.raises(PriorExposureRefusal, match="registered.*authority"):
+        prior_exposure._registered_incident_profile(drifted)
 
 
 def test_incident_profile_malformed_dependency_names_refuse_cleanly() -> None:

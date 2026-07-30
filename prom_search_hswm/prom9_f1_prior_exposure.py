@@ -229,6 +229,20 @@ _A2_INCIDENT_PROFILE = {
         "hswm_carrier": "5f4aab5f87af2b28bb5e0d1cb7f3b62dc59abf23",
         "symposium": "54aeaa02f867617756004793e8d4fd6c7b7d9b0e",
     },
+    "artifact_schemas": {
+        "selection_receipt": "hswm-prom9-f1-r8-cohort-selection/v3",
+        "manifest": "hswm-prom9-f1-manifest/v3",
+        "source_receipt": "hswm-prom9-f1-r8-source-receipt/v3",
+        "execution_lock": "hswm-prom9-f1-r8-execution-lock/v4",
+        "db_genesis_receipt": "hswm-prom9-f1-r8-transport-genesis/v1",
+        "environment_dependency_bundle": (
+            "hswm-prom9-f1-r8-environment-dependency-bundle/v1"
+        ),
+        "model_deployment_receipt": "hswm-openai-deployment-attestation/v2",
+        "spool_identity_receipt": (
+            "hswm-prom9-f1-r8-spool-endpoint-preflight/v2"
+        ),
+    },
     "expected_counts": {
         "attempt_calls": 27,
         "attempt_events": 157,
@@ -394,6 +408,7 @@ def _validated_incident_profile(
         "canary_job_alias", "canary_command_sha256",
         "runtime_commits", "expected_counts", "expected_dependency_names",
         "max_workers", "canary_counts", "canary_http_status_counts",
+        "artifact_schemas",
     }
     if not isinstance(value, Mapping) or set(value) != fields:
         raise PriorExposureRefusal("incident profile shape drifted")
@@ -423,6 +438,31 @@ def _validated_incident_profile(
         raise PriorExposureRefusal("incident profile commit authority drifted")
     if not _is_sha256(value.get("canary_command_sha256")):
         raise PriorExposureRefusal("incident profile canary command drifted")
+    artifact_schemas = value.get("artifact_schemas")
+    allowed_artifact_schemas = {
+        **{
+            name: {schema}
+            for name, schema in _INCIDENT_ARTIFACT_SCHEMAS.items()
+        },
+        "selection_receipt": {
+            _INCIDENT_ARTIFACT_SCHEMAS["selection_receipt"],
+            "hswm-prom9-f1-r8-cohort-selection/v3",
+        },
+        "execution_lock": {
+            _INCIDENT_ARTIFACT_SCHEMAS["execution_lock"],
+            "hswm-prom9-f1-r8-execution-lock/v4",
+        },
+    }
+    if (
+        not isinstance(artifact_schemas, Mapping)
+        or set(artifact_schemas) != set(_INCIDENT_ARTIFACT_SCHEMAS)
+        or any(
+            not isinstance(schema, str)
+            or schema not in allowed_artifact_schemas[name]
+            for name, schema in artifact_schemas.items()
+        )
+    ):
+        raise PriorExposureRefusal("incident profile artifact schema drifted")
     max_workers = value.get("max_workers")
     canary_counts = value.get("canary_counts")
     canary_status_counts = value.get("canary_http_status_counts")
@@ -501,6 +541,7 @@ def _validated_incident_profile(
             "attempt_states": dict(expected["attempt_states"]),
         },
         "expected_dependency_names": tuple(names),
+        "artifact_schemas": dict(artifact_schemas),
         "canary_counts": dict(canary_counts),
         "canary_http_status_counts": dict(canary_status_counts),
     }
@@ -1853,11 +1894,11 @@ def _strict_canonical_blob(raw: bytes, label: str) -> dict[str, object]:
 
 
 def _artifact_binding(
-    name: str, path: Path
+    name: str, path: Path, *, expected_schema: str
 ) -> tuple[dict[str, object], dict[str, object]]:
     raw = _read_private_bytes(path)
     value = _strict_object(raw, name.replace("_", " "))
-    if value.get("schema_version") != _INCIDENT_ARTIFACT_SCHEMAS[name]:
+    if value.get("schema_version") != expected_schema:
         raise PriorExposureRefusal(f"{name} schema version drifted")
     declared: dict[str, str] = {}
     for field in _ARTIFACT_SELF_HASH_FIELDS[name]:
@@ -2185,6 +2226,7 @@ def _verify_incident_artifact_semantics(
     historical_replay: Mapping[str, object] | None = None,
     *,
     expected_dependency_names: Collection[str] = _HISTORICAL_DEPENDENCY_NAMES,
+    expected_artifact_schemas: Mapping[str, str] = _INCIDENT_ARTIFACT_SCHEMAS,
 ) -> None:
     selection = values["selection_receipt"]
     manifest = values["manifest"]
@@ -2195,7 +2237,32 @@ def _verify_incident_artifact_semantics(
     deployment = values["model_deployment_receipt"]
     preflight = values["spool_identity_receipt"]
     if (
-        set(selection) != _INCIDENT_SELECTION_FIELDS
+        set(expected_artifact_schemas) != set(_INCIDENT_ARTIFACT_SCHEMAS)
+        or any(
+            values[name].get("schema_version") != schema
+            for name, schema in expected_artifact_schemas.items()
+        )
+    ):
+        raise PriorExposureRefusal("historical artifact schema authority drifted")
+    selection_fields = set(_INCIDENT_SELECTION_FIELDS)
+    if (
+        expected_artifact_schemas["selection_receipt"]
+        == "hswm-prom9-f1-r8-cohort-selection/v3"
+    ):
+        selection_fields.add("aborted_attempt_exposure_receipt_sha256")
+    lock_fields = set(_INCIDENT_LOCK_FIELDS)
+    if (
+        expected_artifact_schemas["execution_lock"]
+        == "hswm-prom9-f1-r8-execution-lock/v4"
+    ):
+        lock_fields.update(
+            {
+                "aborted_attempt_exposure_receipt_sha256",
+                "token_envelope_derivation_receipt_sha256",
+            }
+        )
+    if (
+        set(selection) != selection_fields
         or selection.get("answers_disclosed_to_stdout") is not False
         or selection.get("pairwise_disjoint")
         != {"item_ids": True, "source_entity_ids": True, "component_ids": True}
@@ -2262,7 +2329,7 @@ def _verify_incident_artifact_semantics(
             raise PriorExposureRefusal("historical selection page repeats")
         seen_pages.add(key)
     if (
-        set(lock) != _INCIDENT_LOCK_FIELDS
+        set(lock) != lock_fields
         or lock.get("purpose") != "DEVELOPMENT_POWER_PILOT"
         or lock.get("mode") != "development"
         or not isinstance(lock.get("execution_policy"), Mapping)
@@ -2278,7 +2345,7 @@ def _verify_incident_artifact_semantics(
         }
     ):
         raise PriorExposureRefusal("historical execution lock semantics drifted")
-    for field in _INCIDENT_LOCK_FIELDS - {
+    for field in lock_fields - {
         "schema_version", "purpose", "run_id", "mode", "model", "model_revision",
         "upstream_endpoint", "deployment_id", "served_model", "hswm_commit",
         "preregistration_artifact_sha256",
@@ -2287,6 +2354,16 @@ def _verify_incident_artifact_semantics(
     }:
         if not _is_sha256(lock.get(field)):
             raise PriorExposureRefusal("historical execution-lock digest drifted")
+    if "aborted_attempt_exposure_receipt_sha256" in selection_fields and (
+        not _is_sha256(
+            selection.get("aborted_attempt_exposure_receipt_sha256")
+        )
+        or lock.get("aborted_attempt_exposure_receipt_sha256")
+        != selection.get("aborted_attempt_exposure_receipt_sha256")
+    ):
+        raise PriorExposureRefusal(
+            "historical aborted-exposure artifact binding drifted"
+        )
     if lock.get("preregistration_artifact_sha256") is not None:
         raise PriorExposureRefusal("historical development lock preregistration drifted")
     if (
@@ -4261,8 +4338,17 @@ def build_aborted_attempt_exposure_receipt(
         "model_deployment_receipt": model_deployment_receipt,
         "spool_identity_receipt": spool_identity_receipt,
     }
+    artifact_schemas = (
+        _INCIDENT_ARTIFACT_SCHEMAS
+        if profile is None
+        else profile["artifact_schemas"]
+    )
     for name, path in artifact_paths.items():
-        value, binding = _artifact_binding(name, Path(path))
+        value, binding = _artifact_binding(
+            name,
+            Path(path),
+            expected_schema=str(artifact_schemas[name]),
+        )
         artifact_values[name] = value
         artifacts[name] = binding
     manifest_value = artifact_values["manifest"]
@@ -4293,6 +4379,7 @@ def build_aborted_attempt_exposure_receipt(
             if profile is None
             else profile["expected_dependency_names"]
         ),
+        expected_artifact_schemas=artifact_schemas,
     )
     metadata = _source_metadata(manifest_value, source_value)
     repositories = historical_authority["repositories"]

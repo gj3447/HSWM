@@ -1746,6 +1746,45 @@ def test_historical_replay_child_preloads_ssl_before_network_denial() -> None:
     assert "SSLSocket" not in completed.stderr
 
 
+def test_a2_historical_replay_tree_has_a_closed_import_frontier(
+    tmp_path: Path,
+) -> None:
+    tree = tmp_path / "historical-tree"
+    tree.mkdir(mode=0o700)
+    files = prior_exposure._materialize_historical_replay_tree(
+        REPO_ROOT,
+        tree,
+        commit=prior_exposure._A2_INCIDENT_PROFILE["runtime_commits"][
+            "hswm_executable"
+        ],
+    )
+    assert [row["relative_path"] for row in files] == list(
+        prior_exposure._HISTORICAL_REPLAY_IMPORT_LFP
+    )
+    assert (
+        "prom_search_hswm/prom9_f1_r8_private_output.py"
+        in prior_exposure._HISTORICAL_REPLAY_IMPORT_LFP
+    )
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "-I",
+            "-S",
+            "-c",
+            prior_exposure._HISTORICAL_REPLAY_CHILD,
+            str(tree),
+        ],
+        input="{}",
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    assert completed.returncode != 0
+    assert "ModuleNotFoundError" not in completed.stderr
+    assert "KeyError" in completed.stderr
+
+
 def test_untouched_public_manifest_mutation_is_refused_after_coherent_resign(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

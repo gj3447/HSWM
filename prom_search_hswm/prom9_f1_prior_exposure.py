@@ -174,6 +174,7 @@ _HISTORICAL_REPLAY_IMPORT_LFP = (
     "prom_search_hswm/hswm_token_meter.py",
     "prom_search_hswm/hswm_typed_ports.py",
     "prom_search_hswm/prom9_f1_envelope.py",
+    "prom_search_hswm/prom9_f1_r8_private_output.py",
     "prom_search_hswm/prom9_f1_r8_source.py",
     "prom_search_hswm/prom9_prepare_2wiki_f1.py",
     "prom_search_hswm/prom9_protocol.py",

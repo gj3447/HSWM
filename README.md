@@ -42,6 +42,17 @@ inside the function implementation, while HSWM weights describe the semantic
 connections *between* functions and states. The whole hypergraph-weighted
 function network is HSWM. It is not “an LLM plus an external memory”.
 
+### Core Motivation: Replacing Hardcoded Agent Glue with Learned Neural Topology
+
+Just as autonomous driving made a historic paradigm shift by discarding rule-based C++ stacks (hardcoded state machines for lane-keeping, obstacle logic, and edge-case handling) in favor of end-to-end differentiable neural networks, the current AI agent/MCP ecosystem faces an identical complexity wall:
+
+- **The Hardcoding Trap**: Modern LLM agents, MCP (Model Context Protocol) tools, and CLI pipelines are currently glued together using brittle, hardcoded `if-else` routers, prompt chains, and hand-written orchestration scripts.
+- **Combinatorial Collapse**: As the number of agents, tools, and environments scales, static rule-based glue code collapses under combinatorial edge cases and rigid maintenance overhead.
+
+**HSWM addresses this fundamental bottleneck at its origin:**
+
+Rather than relying on hand-written agent-orchestration scripts or static IF/ELSE pipelines, HSWM replaces hardcoded agent glue with a plastic, learnable semantic hypergraph field ($H_t, W_t$). The routing, collaboration, credit assignment, and memory transport between typed LLM functions ($f_i$) are governed by learnable fast/slow weights and dynamic topology rewrites, evaluated continuously against cryptographic evidence receipts.
+
 HSWM therefore owns the persistent hypergraph state, global routing, recurrence,
 credit assignment, acceptance, and weight/topology rewrites. CAS, CRDT, replay,
 and validation reducers form its deterministic safety/control plane; they are

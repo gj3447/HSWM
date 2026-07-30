@@ -129,7 +129,9 @@ _HISTORICAL_V8_INCIDENT_SHA256 = (
     "f97634c0c4185b9bdbe983d6fe5fffc672e6c625923f027a780433acfc714afd"
 )
 F1_R8_A3_SUCCESSOR_RUN_ID = "f1-2wiki-development-r8-try3-a3"
-F1_R8_A2_INCIDENT_RECEIPT_SHA256: str | None = None
+F1_R8_A2_INCIDENT_RECEIPT_SHA256: str | None = (
+    "2a42ba116cb4d478c4f223ad62f7c29214ebe6f9ca730053d4504cd5ad9d3f23"
+)
 _F1_ARMS = (
     "typed_hswm_three_function_network",
     "flat_single_llm_three_call_workflow",

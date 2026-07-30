@@ -65,6 +65,13 @@ weight/topology rewrite를 소유한다. 이는 목표 정체성이며 현재 �
 `USER_PRIMARY` 방향과 `SECONDARY_AI_FORMALIZATION`을 분리하며, 현재 효능이나 구현 완료를
 주장하지 않는다.
 
+왜 하드코딩된 에이전트/MCP glue를 학습되는 신경 토폴로지로 대체해야 하는가, 그리고
+왜 HSWM 자체가 거시 신경망이고 LLM이 그 활성화 함수인가라는 두 존재 이유는 위치 논문
+[`PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md`](PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md)에
+정식화했다. 자율주행 End-to-End 전환 비유와 그 비유가 깨지는 세 지점(미분 불가능성,
+희소 보상, 비정상성)이 HSWM의 설계 과제를 결정한다. 동기·정체성 선언이며 장부 승격이나
+현재 효능 주장이 아니다.
+
 정본 설계는
 [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md),
 반례 기반 수리는

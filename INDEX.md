@@ -59,6 +59,12 @@ weight/topology rewrite를 소유한다. 이는 목표 정체성이며 현재 �
 함수 계약, 실행 cycle, 코드 대응, 구현 가능성, 실패 모드와 결정적 실험은
 [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md)에 고정했다.
 
+세계의 재귀 기억·자기모델이라는 목적과 MCP/Skill 외부 인지배선을 가소적 신경망으로
+전환한다는 공학 방향은 상위 통합 정전
+[`THE_WORLD_REMEMBERS.md`](THE_WORLD_REMEMBERS.md)에 묶었다. 문서 안에서
+`USER_PRIMARY` 방향과 `SECONDARY_AI_FORMALIZATION`을 분리하며, 현재 효능이나 구현 완료를
+주장하지 않는다.
+
 정본 설계는
 [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md),
 반례 기반 수리는

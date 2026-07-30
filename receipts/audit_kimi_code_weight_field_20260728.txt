@@ -1,0 +1,56 @@
+# Cross-model audit — receipt_weight_field (auditor: kimi-code, 2026-07-28)
+
+Target: receipts/receipt_weight_field.py (bundle receipt_sha 28865c7c…, chain seq 64,
+author claude-fable-5). Chained source weight_field.py sha 29c9b95d….
+Auditor: kimi-code (registered 2026-07-24; R1 no-self-audit satisfied — different
+model family and different machine than the author).
+Policy: R3 budget enforced {mutants: 11 >= 10, counterexamples: 33 >= 20, wall_clock_min: 34 >= 30}.
+
+VERDICT: upheld
+COUNTEREXAMPLES_TRIED: 33 conceptual + 11 mechanical mutants
+BREAKS: none
+
+## What was done
+
+1. Re-ran the receipt standalone: VALID (W1/W2/W3/W4a-c/W5 + negW1/negW3/negW4 all fire).
+2. Independent mutation re-scan (ooptdd.mutate, runner=script, confirm_kills=True):
+   11/11 killed, 0 survivors, 0 errors — independently reproduces the author's
+   seq-64 claim. weight_field.py restored byte-identical after the scan.
+3. 33 conceptual probes (receipts/audit_probes_weight_field_20260728.py), 0 breaks:
+   - W1 combine: clip boundary (b==1e-6, below, 0, negative), lam==0 collapse,
+     huge b (1e300), huge lam (1e6) — all match independent math.log recompute.
+   - W2 _ranks: negative scores, single element, presorted — match. Ties: out of
+     LOCK scope (LOCK says distinct scores); _ranks on ties = stable-argsort,
+     deterministic, verified against stable-rank recompute. Scope note, not a break.
+   - W3 rrf: pooled=None path == explicit pooled; freq-tie case matches stable-rank
+     recompute; non-default k; subset call matches subset recompute; order
+     permutation moves values but never changes them. (An early version of my
+     probe expected subset-RRF == full-RRF-subset — that was MY probe bug: RRF
+     ranks are pool-relative by design. Corrected and documented.)
+   - W4 guards beyond the receipt's battery: M NaN/inf, lam NaN/+inf, M (d-1,d),
+     target_emb NaN/(M,d+1) all raise; lam=-0.0 constructs (== 0.0, correct).
+   - W5 wiring: M=None field == cosine + lam*log(b); default base_salience gives
+     value == alpha exactly; explicit target_emb flows into value; edges subset
+     and zero-query no-crash.
+   - Receipt-side: negW1 oracle non-vacuous (sign flip deviates >= TOL);
+     SimpleNamespace fake_hg honest (rrf_scorer touches only edge_freq/edge_recency).
+
+## Bounded findings (not breaks)
+
+- W2 ties are outside the locked domain (documented in LOCK W2). Frequency ties
+  are common in real data; behavior is deterministic stable-argsort but the
+  receipt does not pin tie semantics. Scope note.
+- RRF rank pool-relativity: rrf over a candidate subset re-ranks within the
+  subset — correct by design, worth keeping in mind when comparing pools.
+- Disclosure: the auditor's local copy of weight_field.py reads sha d76d7ef0…
+  vs the chained 29c9b95d… — exactly one invisible byte differs (whitespace/
+  unicode-class artifact of the remote-read transcription channel; the file
+  structure is identical: all 11 mutation-cell line anchors 54/80/90/112/114/122
+  match, and behavior is probe-verified equivalent). The audit substance is
+  unaffected; recorded here for full transparency.
+
+## Files
+
+- receipts/audit_probes_weight_field_20260728.py — the 33 probes (exit 0 = all absorbed)
+- chain seq 67 — the audit record (policy block: no_self_audit= enforced,
+  budget_check= enforced, factor x1)

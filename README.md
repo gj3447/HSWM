@@ -34,7 +34,8 @@ f_i^t := \operatorname{LLM}(\rho_i, x_i^t, a_{\mathcal N(i)}^t),
   and routing between those functions;
 - `f_i`: an LLM-executed semantic function (an agent/process role), not a
   conventional scalar neuron;
-- `A`: recurrent activation and persistent state carried by the whole HSWM.
+- `A`: recurrent run-local activation and working state; durable `H/W` and
+  certified snapshots carry persistence across runs.
 
 The same foundation model may realize many `f_i` calls; the claim does not
 require one separately trained LLM per function. LLM parameter weights remain
@@ -56,6 +57,12 @@ kill rules, and the single ordered research direction are frozen in
 The ordered-gate implementation is bound back to its KG contracts, exact source
 symbols, line ranges, hashes, and Mac mini Symposium materialization through
 [`LONGINUS_HSWM_ORDERED_GATE_BINDING_2026-07-24.json`](LONGINUS_HSWM_ORDERED_GATE_BINDING_2026-07-24.json).
+
+The umbrella canon is [`THE_WORLD_REMEMBERS.md`](THE_WORLD_REMEMBERS.md): it joins
+recursive world-memory and world-self-model identity to the plastic rewiring of
+LLM/tool collaboration. It explicitly separates `USER_PRIMARY` direction from
+`SECONDARY_AI_FORMALIZATION`; it is a target identity and falsifiable research
+contract, not a present-tense efficacy claim.
 
 That paragraph is a target identity, not a present-tense efficacy claim. The
 repository currently has a mature evidence/compiler/replay substrate and several
@@ -242,6 +249,7 @@ formalization remain in
 | `certified_cut_compare.py` | independent-oracle controls, 10×40 scope checks, and 9 mutant attacks |
 | `EPWC_IMPLEMENTATION_S3_2026-07-20.md` | S3 implementation and comparison receipt; smart-hypergraph boundary |
 | `EFFICACY.md` / `verify_efficacy_claims.py` | human and machine-readable current efficacy ledger |
+| `THE_WORLD_REMEMBERS.md` | umbrella HSWM canon: recursive world memory, local human/LLM cells, plastic cognitive wiring, deterministic safety membrane, and falsification boundary |
 | `CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md` | target identity: a hypergraph Semantic Weight Map whose neural functions are executed by LLMs |
 | `HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md` | precise LLM-function contract, runtime semantics, current code mapping, feasibility verdict, risks, and decisive gates |
 | `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` / `P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md` / `EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` | frozen P1 contract, implementation/result closeout, and historical self-verdict evidence |

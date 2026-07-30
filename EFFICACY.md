@@ -302,7 +302,7 @@ recall by **12.69 points on MuSiQue** and **31.0 points on 2Wiki**. Deployment
 would need durable replay, correction/compensation, and operator-visible
 provenance next to the positive behavior.
 
-Source: `STALE_POISONING_RESULTS_2026-07-19.md` and the two real-data stale
+Source: `results/STALE_POISONING_RESULTS_2026-07-19.md` and the two real-data stale
 poisoning JSON receipts.
 
 ## 6. Long documents: mechanism sufficiency only
@@ -313,7 +313,7 @@ additive-j advantage can grow with unit length. That establishes mechanism
 sufficiency in the constructed world. It does not show that real books satisfy
 the premise. No real NoCha, QASPER, NarrativeQA, or book-scale run has landed.
 
-Source: `EXPB_LONGDOC_RESULTS_2026-07-19.md`.
+Source: `results/EXPB_LONGDOC_RESULTS_2026-07-19.md`.
 
 ## 7. Compiler and certified readout: conformance, not quality
 

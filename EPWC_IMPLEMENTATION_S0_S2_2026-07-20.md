@@ -142,7 +142,7 @@ Repaired implementation, claims, results, and packaging:
 - `readouts.py`
 - `tests/test_readout_identity.py`
 - `stale_poisoning_{musique,2wiki,fixture}_result.json`
-- `STALE_POISONING_RESULTS_2026-07-19.md`
+- `results/STALE_POISONING_RESULTS_2026-07-19.md`
 - `README.md`
 - `pyproject.toml`
 

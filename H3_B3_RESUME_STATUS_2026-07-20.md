@@ -17,7 +17,7 @@ zero STARTs and zero endpoint calls. V5 is the active successor. Fresh remains
 forbidden. There is still no H3-B3 efficacy result.
 
 The checked-in `H3_B3_RUN_MANIFEST_2026-07-20.json` and
-`H3_B3_RUN_MANIFEST_V2_2026-07-20.json` are historical receipts. The current
+`manifests/H3_B3_RUN_MANIFEST_V2_2026-07-20.json` are historical receipts. The current
 loader rejects them. Preserve them; do not resume from them or merge their
 partial caches into a new run.
 
@@ -101,7 +101,7 @@ Deployment receipt:
 
 ## Historical V3 manifest
 
-`H3_B3_RUN_MANIFEST_V3_2026-07-20.json` is the exclusive-created historical
+`manifests/H3_B3_RUN_MANIFEST_V3_2026-07-20.json` is the exclusive-created historical
 manifest. It has status `PRE_RUN_FROZEN`, file SHA
 `7f9ec247afbdd11066706837a921159da6480d1c013995dea23b7c3907c284bb`
 and output prefix
@@ -237,7 +237,7 @@ Both safety gates passed.  The development report is SHA-256
 `8cc7b3b04295ceee26f210dc15201d325e258a4f415a1d1a09a2c5381f748896`.
 
 The durable efficacy receipt is
-`H3_B3_V5_DEVELOPMENT_REFUSAL_2026-07-20.md`.  No certificate transition was
+`docs/research/H3_B3_V5_DEVELOPMENT_REFUSAL_2026-07-20.md`.  No certificate transition was
 written; fresh remains absent and unauthorized.  V5 is closed and must not be
 tuned or rerun.
 

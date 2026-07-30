@@ -1,0 +1,188 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_HSWM_20260719",
+  "branch": "P1v3v4-L1-causal-lesson-learning",
+  "question": "Q-p1v3v4-l1-causal-typed-lesson-learning",
+  "status_note": "DRAFT for USER ratify (layer SECONDARY_AI). This file was authored by an AI agent as a proposal; it registers nothing, freezes nothing, and authorizes nothing. No server registration has been performed and no module implementing L1 exists yet. It becomes binding only after explicit user ratification and server registration.",
+  "registration_state": "DRAFT_NOT_REGISTERED",
+  "registered_before_measurement": true,
+  "measurement_authorized_for_stage": "NONE_UNTIL_REGISTERED",
+  "conjecture": "On a newly generated untouched PhantomWiki universe (seed >= 6) in the source-trust/conflict-resolution policy environment that passed L0 twice, a frozen answer model receiving admitted typed lessons compiled only from prior training-episode outcomes improves heldout exact answer-set match over BOTH an equal-budget no-memory arm (T3) and an equal-budget raw-transcript memory arm (T2), and the gain erases when lesson-to-task bindings are shuffled (T4a) or the lesson content is removed (T4b), without exceeding the retention-loss cap. Beating T3 but not T2 is operational compression only, not HSWM-specific learning.",
+  "l0_precondition": {
+    "rule_source": "The rule 'L0 PASS in a different environment transfers the precondition' is NOT in the original P1v2 draft (its stages.L1.depends_on only says 'L0 PASS'); it comes from the executed p1v2 r2 closeout, which killed the Type-6 environment and required a policy environment instead.",
+    "closeout_receipt": "receipts/p1v2_l0_r2_512_closeout_20260724.json",
+    "closeout_file_sha256": "68740121cd9bb9171805daba46eedc86a7bfc7eca86eecee018d05a14a754a3a",
+    "diagnosis_receipt": "receipts/p1v2_l0_diagnosis_r2_512_20260724.json",
+    "diagnosis_file_sha256": "89a30d0566e19525bf9881dc57ea745a05e781b31cb7a70bcadd8caa8763646b",
+    "diagnosis": "BASELINE_CEILING_AND_INTERVENTION_INERT; same_environment_reuse_allowed = false; the Type-6 complete-set environment is FORBIDDEN for this programme.",
+    "pass_receipts": [
+      {
+        "stage": "p1v3 policy actuation (PhantomWiki seed 3)",
+        "file": "receipts/p1v3_policy_heldout_judge_seed3_20260724.json",
+        "file_sha256": "f1f105063ad7e37a5f83c3f48117adf8db61c89272939162d65ea01087a2ee74",
+        "judge_receipt_sha256": "956b93ece30288bfb9cb0876968dc433b57da7b4e8803f6eb7989f03c8792fd6",
+        "verdict": "PASS",
+        "primary_metric": "typed_improvement_count_vs_no_memory",
+        "value": 6
+      },
+      {
+        "stage": "p1v4 fresh policy replication (PhantomWiki seed 5, r2)",
+        "file": "receipts/p1v4_policy_heldout_judge_seed5_r2_20260724.json",
+        "file_sha256": "9f2ad214835fd5d7f54a5171b12ceaa2d120c32d3ca0c1362b251133ed115973",
+        "judge_receipt_sha256": "649b926b81f2cd439b7e181c1b94abd202ae397daec01783fb907733dc3c3db2",
+        "verdict": "PASS",
+        "primary_metric": "typed_improvement_count_vs_no_memory",
+        "value": 4
+      }
+    ]
+  },
+  "environment_lock": {
+    "environment": "source-trust/conflict-resolution policy environment: p1v3_policy_environment.py with its development-only calibration gate (non-ceiling baseline and at least one lesson-caused answer disagreement must be proven before any heldout freeze).",
+    "forbidden_environment": "p1v2_type6_environment.py (Type-6 complete-set) — forbidden by the p1v2 r2 closeout (same_environment_reuse_allowed: false). Any L1 measurement on Type-6 is void.",
+    "calibration_gate": "Development split only; calibration artifacts may not inspect heldout answers, answer cardinality, or any arm outcome."
+  },
+  "stages": {
+    "L1_causal_learning": {
+      "purpose": "Test whether admitted typed lessons add causal value beyond transcript access and token budget.",
+      "depends_on": "l0_precondition above (satisfied by two independent PASS receipts)"
+    },
+    "L2_agent_transfer": {
+      "purpose": "Expose Agent A's immutable lesson artifact to frozen Agent B on disjoint tasks.",
+      "depends_on": "L1 passes BOTH primary margins (T1-T3 and T1-T2) and both causal contrasts (T1-T4a, T1-T4b).",
+      "claim_boundary": "Not authorized by this preregistration; requires a separate server registration."
+    }
+  },
+  "arms": {
+    "T1_typed_lesson": "Prior training-episode outcomes compiled into schema-valid typed lesson records (evidence IDs, scope, polarity, confidence, supersession target, forbidden-use constraints). Only admitted lessons are retrieved.",
+    "T2_raw_transcript": "Same prior episode evidence in minimally transformed transcript form, retrieved under the same retrieval budget and padded to exact input-token parity.",
+    "T3_no_memory": "No prior episode information. Inert tokens with no task semantics preserve exact input-token and model-call parity.",
+    "T4a_shuffled_bindings": "Admitted lessons retrieved with lesson-to-task bindings shuffled within the frozen split (same lesson multiset, wrong tasks). Tests binding causality.",
+    "T4b_removed_lesson": "Admitted lessons removed and replaced with inert parity padding (same input-token count, no lesson content). Tests content causality.",
+    "t4_split_note": "The P1v2 draft fused these into one T4 arm ('half shuffled, half removed'), which confounds binding-causality with content-causality: a mid-range T1-T4 margin cannot be attributed. This preregistration separates them; each causal contrast is reported against its own arm."
+  },
+  "lesson_schema_required_fields": [
+    "lesson_id",
+    "source_episode_ids",
+    "evidence_ids",
+    "verdict_type",
+    "scope_predicate",
+    "instruction",
+    "polarity",
+    "confidence",
+    "supersedes",
+    "forbidden_uses",
+    "compiler_receipt_sha256"
+  ],
+  "prediction": {
+    "primary_metric": "min(mean_paired_exact_set_match_T1_minus_T3, mean_paired_exact_set_match_T1_minus_T2)",
+    "success_threshold": 0.03,
+    "required_bootstrap95_lower_for_each_primary_contrast": 0.0,
+    "causal_ablation_metrics": {
+      "binding_causality": "mean_paired_exact_set_match_T1_minus_T4a",
+      "content_causality": "mean_paired_exact_set_match_T1_minus_T4b"
+    },
+    "causal_ablation_threshold_for_each": 0.02,
+    "secondary_metrics": [
+      "support_recall_at_10",
+      "lesson_retrieval_precision",
+      "lesson_acceptance_rate",
+      "contradiction_refusal_rate",
+      "per-episode improvement slope"
+    ],
+    "retention_loss_cap": 0.02,
+    "bootstrap_reps": 10000,
+    "bootstrap_seed": 9173,
+    "direction": "higher",
+    "credence": 0.3,
+    "credence_note": "L0 actuation passed twice on this environment (6 and 4 improving cases), so the action space is demonstrably non-inert here — unlike the null Type-6 environment and P1's null scalar belt. But no typed-lesson causal result exists anywhere yet, T2 raw-transcript is a strong equal-budget control, and the dual causal contrasts add failure surface. Deliberately below 0.5."
+  },
+  "comparison_interpretation": {
+    "T1_beats_T3_but_not_T2": "Operational compression only. Do not claim HSWM-specific learning and keep P2 closed.",
+    "T1_beats_T3_and_T2_and_T4a_and_T4b": "Causal typed-lesson learning result on this synthetic policy environment; permits a separate L2/P2 transfer preregistration.",
+    "T1_fails_T3_and_T2": "Stop P2, P3, and P4; retain the narrower compiler plus safe graph-memory claim.",
+    "T4a_not_worse_than_T1": "Lesson binding is non-causal or leaks task identity; reject the binding mechanism.",
+    "T4b_not_worse_than_T1": "Lesson content carries no causal information beyond parity padding; reject the lesson mechanism."
+  },
+  "equal_compute_lock": {
+    "model": "same frozen model ID, revision, serving arguments, temperature, seed policy, and maximum output tokens in every arm",
+    "calls": "exact same logical and physical model-call count in every arm",
+    "input_tokens": "exact per-item deployed-tokenizer-count parity via inert non-semantic padding; arm labels are hidden from the model",
+    "output_tokens": "same maximum and stop policy; actual output-token counts are reported by arm",
+    "retrieval": "same candidate count, top-k, embedding model/revision, and retrieval-call count in every arm",
+    "latency": "reported but not a success metric",
+    "gold": "heldout gold is opened only by the environment after the answer is sealed"
+  },
+  "data_lock": {
+    "universe": "new PhantomWiki universe, phantom-wiki 1.0.3, same scale flags as P1, seed >= 6, friendship-seed == seed. The seed-1 P1 universe and all 390 previously inspected eligible questions are forbidden; the p1v2 seed-2, p1v3 seed-3, p1v4 seed-4/seed-5 universes and all their inspected cuts are likewise forbidden.",
+    "preflight": "eligibility counts and schema validity only; no arm answer, reward, recall, delta, or verdict may be inspected before freeze",
+    "split": "training, lesson-calibration, heldout target, and retention canary IDs are disjoint and content-addressed",
+    "future_information_refusal": "lesson compiler and retriever must reject future episode IDs, heldout answer values, evaluation labels, and gold-derived strings"
+  },
+  "judge_lock": {
+    "measurement_artifact": "must contain observations and provenance but no verdict field; the exact scientific verdict key is forbidden in measurement output",
+    "judge": "separate pure deterministic judge module, not imported by or callable from the measurement harness; only the judge output may say progressive, equivalent, rejected, or degenerating",
+    "budget_manifest": "must carry scientific_judgment_emitted: false at freeze time",
+    "required_receipts": [
+      "server-owned prediction receipt and live experiment tag",
+      "public manifest (universe + disjoint split, content-addressed)",
+      "budget manifest with scientific_judgment_emitted: false",
+      "model deployment receipt",
+      "judge script SHA-256",
+      "positive fixture receipt",
+      "injected-negative fixture receipt",
+      "exact measured command, cwd, git commit, module hashes, split hash, deployment hash, budget hash"
+    ]
+  },
+  "kill_conditions": [
+    "K1: development calibration fails to show non-ceiling baseline behavior and at least one lesson-caused answer disagreement -> stop before heldout freeze; the environment is inert for this lesson plane.",
+    "K2: either primary contrast (T1-T3 or T1-T2) is <= 0.03 or its paired-bootstrap 95% lower bound is <= 0 -> no causal-learning claim.",
+    "K3: either causal contrast (T1-T4a or T1-T4b) is < 0.02 -> lesson binding (T4a) or lesson content (T4b) is not causal; reject the corresponding mechanism.",
+    "K4: retention loss > 0.02 -> stop and repair admission/supersession before any retry.",
+    "K5: any model/call/token/retrieval/split/gold parity violation -> void the run.",
+    "K6: any future ID, heldout answer, evaluation label, or gold-derived string enters a lesson -> void the run and quarantine all outputs.",
+    "K7: T1 beats T3 but not T2 -> classify as operational compression only, not HSWM-specific learning; keep P2/P3/P4 closed. T1 fails both -> stop P2/P3/P4 and narrow to the compiler plus safe graph-memory claim."
+  ],
+  "void_conditions": [
+    "measurement begins before this preregistration is user-ratified and SERVER_REGISTERED_FROZEN_UNRUN",
+    "measurement code emits or imports a scientific verdict",
+    "heldout gold is visible during retrieval, walk, or answer generation (gold opens only after the answer is sealed)",
+    "any previously inspected question cut is reused (seed-1 390-question pool; p1v2 seed-2, p1v3 seed-3, p1v4 seed-4/seed-5 cuts)",
+    "any measurement on the forbidden Type-6 complete-set environment",
+    "the neutral judge cannot reject the injected-negative fixture",
+    "server registration uses a direction enum other than 'higher' or 'lower' (the p1v2 r2 adjudication was BLOCKED_BEFORE_WRITE because register_prediction accepted '>' but submit_result rejected it)",
+    "any outcome-affecting module, split, prompt, budget, or deployment hash changes after registration"
+  ],
+  "scope_boundary": {
+    "claimed_if_passed": "causal heldout improvement from an evidence-bound typed lesson plane on one synthetic PhantomWiki policy environment",
+    "not_claimed": [
+      "foundation-model parameter learning",
+      "general intelligence",
+      "real-prose transfer",
+      "Agent A to Agent B transfer",
+      "learned topology rewiring",
+      "sleep or long-term consolidation"
+    ]
+  },
+  "measurement_forbidden_until": [
+    "user ratification of this draft",
+    "server experiment tag and prediction receipt are retrievable (direction enum 'higher')",
+    "all outcome-affecting module hashes are frozen in module_sha256",
+    "new universe (seed >= 6) and disjoint split manifests are frozen",
+    "exact parity budget manifest is frozen with scientific_judgment_emitted: false",
+    "deployment receipt is frozen",
+    "development calibration gate has passed and its receipt is frozen",
+    "neutral judge and injected-negative receipts pass",
+    "the p1v2 r2 server adjudication (BLOCKED_BEFORE_WRITE) is closed out on the server"
+  ],
+  "known_build_items": [
+    "10k-rep paired bootstrap: no module currently implements it — stats_protocol.py and r3_walk_regime.paired_bootstrap are fixed at 2,000 reps; a 10,000-rep implementation (seed 9173) must be built and frozen.",
+    "lesson compiler: training-episode outcomes -> schema-valid typed lessons with admission, supersession, and future-information refusal (K6); must be built.",
+    "T-arm harness: T1/T2/T3/T4a/T4b execution under the equal_compute_lock; must be built.",
+    "retention canary: disjoint canary slice with loss measurement against the 0.02 cap; must be built.",
+    "server registration repair: re-submit the p1v2 r2 KILL adjudication with direction 'higher' and judge script_sha bound (closeout registration_repairs) before this registration is attempted.",
+    "reusable as-is (freeze by hash): p1v2_typed_lesson.py (lesson schema, all 11 required fields present), p1v2_prompt_parity.py, p1v2_tokenizer_adapter.py, p1v3_policy_environment.py + p1v3_calibration_gate.py, feedback_store.py, stats_protocol.py."
+  ],
+  "module_sha256": {
+    "status": "PENDING — L1 modules (lesson compiler, T-arm harness, retention canary, 10k bootstrap, L1 judge) do not exist yet. sha256 must be appended at implementation freeze, before any measurement. Any outcome inspected before freeze voids the experiment."
+  }
+}

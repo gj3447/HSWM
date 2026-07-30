@@ -73,7 +73,7 @@ T0-T3/H3는 그 treatment의 검증이다.
 공개 [HippoRAG MuSiQue OpenIE 출력](https://github.com/OSU-NLP-Group/HippoRAG/tree/main/outputs/musique)을
 받아 frozen V5 journal과 exact material intersection에서 직접 비교했다.
 비교기는 `oss_extraction_compare.py`, 결과 정본은
-`WORLD_COMPILER_V2_HIPPORAG_COMPARISON_2026-07-21.json`이다. 새 model call이나
+`evidence/WORLD_COMPILER_V2_HIPPORAG_COMPARISON_2026-07-21.json`이다. 새 model call이나
 remote compute는 사용하지 않았다.
 
 비교 범위는 title과 body가 NFKC/casefold/whitespace normalization 뒤 완전히
@@ -118,7 +118,7 @@ HSWM의 evidence discipline 사이의 Pareto frontier를 compiler에서 여는 �
 8. license, runtime, maintenance, safety와 causal evaluation.
 
 정확한 upstream commit과 license-file digest는
-`WORLD_COMPILER_V2_OSS_LOCK_2026-07-21.json`에 고정했다.
+`evidence/WORLD_COMPILER_V2_OSS_LOCK_2026-07-21.json`에 고정했다.
 
 ### 3.1 바로 채택할 계층
 
@@ -581,9 +581,9 @@ Expected input digests:
 ## Artifact set
 
 - `WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md` — this decision report;
-- `WORLD_COMPILER_V2_OSS_LOCK_2026-07-21.json` — exact upstream and license
+- `evidence/WORLD_COMPILER_V2_OSS_LOCK_2026-07-21.json` — exact upstream and license
   source lock;
-- `WORLD_COMPILER_V2_HIPPORAG_COMPARISON_2026-07-21.json` — direct comparison
+- `evidence/WORLD_COMPILER_V2_HIPPORAG_COMPARISON_2026-07-21.json` — direct comparison
   receipt;
 - `oss_extraction_compare.py` — deterministic comparison tool;
 - `tests/test_oss_extraction_compare.py` — synthetic contract test.

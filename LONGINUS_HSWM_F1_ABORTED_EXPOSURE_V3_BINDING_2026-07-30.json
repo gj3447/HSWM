@@ -1,0 +1,326 @@
+{
+  "schema": "longinus-hswm-f1-r8-aborted-exposure-v3-binding/v12",
+  "binding_id": "longinus-hswm-f1-r8-aborted-exposure-v3-v12-20260730",
+  "binding_state": "PIERCED_LOCAL_NO_KG_WRITE",
+  "generated_at": "2026-07-30T08:55:00+09:00",
+  "baseline_scope": "HSWM F1 r8 v8 aborted-attempt public v3 receipt, exact current producer AST closure, historical-v8 SQLite schema gate, and zero-successor-call quarantine boundary",
+  "scientific_status": "UNJUDGED",
+  "evidence_class": "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE",
+  "r7_status": "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE",
+  "b22_gate": "LOCKED",
+  "model_calls": 1,
+  "incident_boundary": {
+    "aborted_attempt_exposure_receipt_sha256": "0b59515be42ad3f86c03a6c7a0664be3e275ea6a349267653608c238b12b12d8",
+    "counts": {
+      "attempt_calls": 2,
+      "attempt_events": 8,
+      "attempt_states": {
+        "ACCEPTED": 1,
+        "SENT": 1
+      },
+      "components": 1,
+      "item_runs": 0,
+      "items": 1,
+      "source_entities": 10,
+      "spool_absent_calls": 1,
+      "spool_calls": 1,
+      "spool_complete_calls": 1
+    },
+    "historical_upstream_model_calls": 1,
+    "prospective_successor_model_calls": 0,
+    "confirmatory_upstream_model_calls": 0,
+    "scientific_verdicts": 0
+  },
+  "git": {
+    "remote": "https://github.com/gj3447/HSWM.git",
+    "branch": "main",
+    "producer_commit": "5de77e9a0701139b1875ed017b691c8ea9e11650",
+    "producer_parent": "5dc6b7f3e46bf563fd31ebafa164eb269fa9f798",
+    "artifact_commit": "21a1b0da9f462a57746d7a6d170616f47ded329c",
+    "artifact_parent": "5de77e9a0701139b1875ed017b691c8ea9e11650",
+    "binding_source_commit": "21a1b0da9f462a57746d7a6d170616f47ded329c",
+    "blob_authority": "Receipt bytes and all producer/binding target bytes are read with git cat-file from exact immutable commits; receipt and producer object identities are independently checked with ls-tree; worktree source is never read.",
+    "ancestry_rule": "The producer commit is the exact parent of the one-path artifact publication commit, and the artifact commit must be an ancestor of HEAD."
+  },
+  "receipt_binding": {
+    "path": "receipts/hswm_f1_r8_v8_aborted_exposure.v3.json",
+    "schema_version": "hswm-prom9-f1-aborted-attempt-exposure/v3",
+    "schema_line": 584,
+    "size_bytes": 998645,
+    "raw_sha256": "8e87c09c90651d56cd2cc7e246488fec2f34c664ed5be2e8a72d93b4f2af5d88",
+    "self_sha256": "0b59515be42ad3f86c03a6c7a0664be3e275ea6a349267653608c238b12b12d8",
+    "blob_mode": "100644",
+    "blob_oid": "bd3a9a480ac0a82a995edde0c40d89af505e14cb"
+  },
+  "producer_authority": {
+    "commit": "5de77e9a0701139b1875ed017b691c8ea9e11650",
+    "tree": "84dccad8c542466a8dd46ab4e60d1b3ea7e98fe2",
+    "entrypoint": "prom_search_hswm/prom9_f1_prior_exposure.py",
+    "closure_policy": "MODULE_SCOPE_LOCAL_AST_LFP_V1",
+    "files": [
+      {
+        "relative_path": "bge_m3_embed.py",
+        "size_bytes": 41944,
+        "sha256": "3300d2d5cdbd79f61d5520de8453f830e278958c2c02b7823c5566c9e0940801",
+        "blob_mode": "100644",
+        "blob_oid": "7c987520e98ee64171ee6f0bb0baaf5d02cf8984"
+      },
+      {
+        "relative_path": "hswm_next_research_harness.py",
+        "size_bytes": 38372,
+        "sha256": "0c6825b442c0485bb3b3dbaa2a8cfb1bcdadc3fbf859ba2c1ac80c0610c72ef2",
+        "blob_mode": "100644",
+        "blob_oid": "3c5d64d25a9f96166daeecbf9bc93f6d7c72fb19"
+      },
+      {
+        "relative_path": "model_deployment_receipt.py",
+        "size_bytes": 24220,
+        "sha256": "c1f0b98deb43af4d2c584661fb22aaa2ea55c839183e77a07818e0d431c9d0dc",
+        "blob_mode": "100644",
+        "blob_oid": "d94074fe5d5a029e737c6896b4f32b05c22a8879"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_call_receipt.py",
+        "size_bytes": 12762,
+        "sha256": "eb544dab0b817feca03d1061f65273c3c8162b1fa40b12a56f25d37fcf5ea9af",
+        "blob_mode": "100644",
+        "blob_oid": "9819026e1bb65302d88a9ffa16df26b65fa8605d"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_f1_durable_transport.py",
+        "size_bytes": 68239,
+        "sha256": "0af70b36b558b6e974cda6733e9ec794da0f7363b6fb3f0d4055c46eb715d586",
+        "blob_mode": "100644",
+        "blob_oid": "1d1864a0e12d6723dd94f223b420a288a5bbcfb7"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_f1_sqlite_schema.py",
+        "size_bytes": 23311,
+        "sha256": "e136b2006bc00c6bd96d2b1454c958ede1fbccd07b574dd792d71bf76c59cb56",
+        "blob_mode": "100644",
+        "blob_oid": "963a2f14319ce8798bee936a2d0ccc42f300ac25"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_function_network.py",
+        "size_bytes": 19838,
+        "sha256": "e96ec9fd9b4958ab6543b1031ee5831882214d552ccf2930c33248b1c344a1d3",
+        "blob_mode": "100644",
+        "blob_oid": "cbb425c52314b7496bbe98d7db1b189fe2217f8d"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_function_registry.py",
+        "size_bytes": 5294,
+        "sha256": "b9d858a8d84ba1b6ed1c88250a2f8936cbe78c459987a155c1f3fba8a77aede1",
+        "blob_mode": "100644",
+        "blob_oid": "540b282b65b5de1826f5d1f66d258b045f61f93d"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_result_spool.py",
+        "size_bytes": 42495,
+        "sha256": "e63ca8d4ddaf7665d8062af9e602cc21b99a972f7bfe597e8d8ceff0df27ee50",
+        "blob_mode": "100644",
+        "blob_oid": "8822f2979f7123f71ac2e5e1776b655828211158"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_token_meter.py",
+        "size_bytes": 18138,
+        "sha256": "5149473c7ca3efea865d97cee324ff2c9ccca5d4d637c66a049f34eae15da274",
+        "blob_mode": "100644",
+        "blob_oid": "c41abbec861e8a69ec55f478e850691fb1786d3c"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_typed_ports.py",
+        "size_bytes": 16942,
+        "sha256": "ff5dff3be6abf646ed0694839a5181bb8033a6ee4bcdc25966e7808e7cbd0937",
+        "blob_mode": "100644",
+        "blob_oid": "bdd09292f19178a6b125964c919bf407778b660e"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_f1_envelope.py",
+        "size_bytes": 13984,
+        "sha256": "d96793530133391f42be298eb5a742e92aada92cae1e61e23981eafdf2237fc2",
+        "blob_mode": "100644",
+        "blob_oid": "62a3d4aeae1c76b401fcabea60cde4fdb3e0edfe"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_f1_prior_exposure.py",
+        "size_bytes": 233075,
+        "sha256": "f28e0a2a4c90c3e0c0523510ceebbf2e8a9b23df9a46aec835da6f539bfc91bf",
+        "blob_mode": "100644",
+        "blob_oid": "062311f7c16536722a2e1025faa41b43e8ff2ca8"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_f1_r8_environment.py",
+        "size_bytes": 58879,
+        "sha256": "f1ab8ffb7e7cb6a1eff2cec45a5a1b65b9549b02aaf03e9f8819e8cfeea6f899",
+        "blob_mode": "100644",
+        "blob_oid": "378eba0e7791f6e4cdb63caacab8c4556a0abc25"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_f1_r8_private_output.py",
+        "size_bytes": 67907,
+        "sha256": "ddf0621bca63a323652c75e8bccef2dc90e7a2c92d3962efaf87d39932213bbb",
+        "blob_mode": "100644",
+        "blob_oid": "92d95837c0520d0ab0e30aafe86005898b2ec052"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_f1_r8_source.py",
+        "size_bytes": 36541,
+        "sha256": "143799b9eebe8b22f915b6d0b3f742c2539145b2758599e1a6d608d52a2154d1",
+        "blob_mode": "100644",
+        "blob_oid": "11f33d67af747d047f925f2cf6cf16a6edb2b61d"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_f1_r8_transport_audit.py",
+        "size_bytes": 73876,
+        "sha256": "3e735b9e557765afcd776a7912f1653a82e30c23b425d8d7be45406a4cf139e8",
+        "blob_mode": "100644",
+        "blob_oid": "2b5ce9bf92516dcad6f7d0746af471d3ddd429e5"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_prepare_2wiki_f1.py",
+        "size_bytes": 17482,
+        "sha256": "f7d3613180d79f08a6bd82eeefa9e91016ea651c117efe336eef992b7a9d22bd",
+        "blob_mode": "100644",
+        "blob_oid": "5b9bc341f43135933420d6f7cc1ef434d4a0c9af"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_protocol.py",
+        "size_bytes": 22783,
+        "sha256": "cd9f09737937026970c628ab226d519042817ea83322892b1ebc84d4c70aff77",
+        "blob_mode": "100644",
+        "blob_oid": "172a667a4dd8c5130a3932e067154524a9a2f1cb"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom_f1_function_network.py",
+        "size_bytes": 36152,
+        "sha256": "59e88cda18061bf312697b48e1df4639dae5b31be25dd1bfade6602db0468bfe",
+        "blob_mode": "100644",
+        "blob_oid": "53c3f6a8cb6843b4f8ce7b994e373a156184e2f8"
+      }
+    ],
+    "file_count": 20,
+    "closure_root_sha256": "be67419b266f8c5ef8bec701fd91457ad188595467e78e14ce50a4ea16392842"
+  },
+  "required_target_paths": [
+    "prom_search_hswm/prom9_f1_prior_exposure.py",
+    "prom_search_hswm/hswm_f1_sqlite_schema.py",
+    "prom_search_hswm/test_prom9_f1_prior_exposure.py",
+    "prom_search_hswm/test_hswm_f1_sqlite_schema.py",
+    "receipts/hswm_f1_r8_v8_aborted_exposure.v3.json"
+  ],
+  "bindings": [
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_V3_INCIDENT_PRODUCER",
+      "contract_binding": "R8_V3_INCIDENT_PRODUCER__UNJUDGED",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_prior_exposure.build_aborted_attempt_exposure_receipt",
+        "name": "build_aborted_attempt_exposure_receipt",
+        "kind": "function",
+        "parameters": [
+          "attempt_db",
+          "spool_db",
+          "selection_receipt",
+          "manifest",
+          "source_receipt",
+          "execution_lock",
+          "db_genesis_receipt",
+          "environment_dependency_bundle",
+          "model_deployment_receipt",
+          "spool_identity_receipt",
+          "job_command",
+          "job_log",
+          "job_rc",
+          "hswm_executable_root",
+          "hswm_carrier_root",
+          "symposium_root",
+          "snapshot_dir",
+          "private_witness_output",
+          "producer_hswm_root",
+          "historical_python"
+        ],
+        "signature_sha256": "38e86296f8758a51e675fa95f58afcf08b20e353950a556218c7ce01dd5681da"
+      },
+      "file_line": "prom_search_hswm/prom9_f1_prior_exposure.py:3496",
+      "line_range": "3496-4009",
+      "sha256": "f28e0a2a4c90c3e0c0523510ceebbf2e8a9b23df9a46aec835da6f539bfc91bf",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_prior_exposure.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_HISTORICAL_V8_SCHEMA_GATE",
+      "contract_binding": "R8_HISTORICAL_V8_SCHEMA_GATE__UNJUDGED",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.hswm_f1_sqlite_schema.exact_schema_readback",
+        "name": "exact_schema_readback",
+        "kind": "function",
+        "parameters": ["connection", "authority", "label"],
+        "signature_sha256": "5a56d13e074db59cd2ad3407a8b59b919dd5fd66d7167883a22aed9320590ae6"
+      },
+      "file_line": "prom_search_hswm/hswm_f1_sqlite_schema.py:332",
+      "line_range": "332-351",
+      "sha256": "e136b2006bc00c6bd96d2b1454c958ede1fbccd07b574dd792d71bf76c59cb56",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_hswm_f1_sqlite_schema.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_V3_INCIDENT_PRODUCER_TEST",
+      "contract_binding": "R8_V3_INCIDENT_PRODUCER_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_prior_exposure.test_aborted_attempt_public_identity_and_producer_inventory_are_closed",
+        "name": "test_aborted_attempt_public_identity_and_producer_inventory_are_closed",
+        "kind": "function",
+        "parameters": ["tmp_path", "monkeypatch", "mutation"],
+        "signature_sha256": "b40795253f97a98b0c9e79940eadebf1ed8bc04ace8bcc471c356fd0532d90e0"
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_prior_exposure.py:1593",
+      "line_range": "1593-1639",
+      "sha256": "9c33327e0b69290762b7617d2bb9ed3feec6d73013cfc63b0d13ba1f0e2b14cf",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_prior_exposure.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_HISTORICAL_V8_SCHEMA_TEST",
+      "contract_binding": "R8_HISTORICAL_V8_SCHEMA_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_hswm_f1_sqlite_schema.test_historical_v8_spool_schema_is_a_separate_exact_authority",
+        "name": "test_historical_v8_spool_schema_is_a_separate_exact_authority",
+        "kind": "function",
+        "parameters": ["tmp_path"],
+        "signature_sha256": "3b0b85b53b279d5fc4df9dac62ff684d7b15ceec69bad7fc27ec0bed1823d411"
+      },
+      "file_line": "prom_search_hswm/test_hswm_f1_sqlite_schema.py:43",
+      "line_range": "43-73",
+      "sha256": "d53db64db3cc2deaefc54fcc215d0398fb6e3ed88991b42acc237cfd7d9881ca",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_hswm_f1_sqlite_schema.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_ABORTED_EXPOSURE_V3_RECEIPT",
+      "contract_binding": "R8_ABORTED_EXPOSURE_V3_ARTIFACT__QUARANTINED",
+      "code_symbol": {
+        "qualified": "receipts/hswm_f1_r8_v8_aborted_exposure.v3.json#schema_version",
+        "name": "hswm-prom9-f1-aborted-attempt-exposure/v3",
+        "kind": "json_receipt",
+        "parameters": []
+      },
+      "file_line": "receipts/hswm_f1_r8_v8_aborted_exposure.v3.json:584",
+      "line_range": "584-584",
+      "sha256": "8e87c09c90651d56cd2cc7e246488fec2f34c664ed5be2e8a72d93b4f2af5d88",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_prior_exposure.py"
+    }
+  ],
+  "kg": {
+    "write_state": "NOT_AUTHORIZED_NOT_WRITTEN",
+    "anchor_status": "LOCAL_PROPOSED_REFERENCE_IDENTITY",
+    "provenance_actor": "Codex",
+    "source_path": "LONGINUS_HSWM_F1_ABORTED_EXPOSURE_V3_BINDING_2026-07-30.json",
+    "timestamp": "2026-07-30T08:55:00+09:00"
+  },
+  "layers": [
+    "KG_NODE",
+    "CONTRACT_BINDING",
+    "CODE_SYMBOL",
+    "FILE_LINE",
+    "LINE_RANGE",
+    "SHA256",
+    "CRATE_SCRIPT"
+  ],
+  "crate_script": "python -m pytest -q prom_search_hswm/test_f1_aborted_exposure_v3_longinus.py"
+}

@@ -5303,6 +5303,19 @@ def verify_aborted_attempt_exposure_receipt(
         _ARTIFACT_SELF_HASH_FIELDS
     ):
         raise PriorExposureRefusal("aborted-attempt artifact inventory drifted")
+    expected_artifact_schemas: Mapping[str, str] = _INCIDENT_ARTIFACT_SCHEMAS
+    if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4:
+        profile_evidence = value.get("profile_evidence")
+        raw_profile = (
+            profile_evidence.get("profile")
+            if isinstance(profile_evidence, Mapping)
+            else None
+        )
+        if not isinstance(raw_profile, Mapping):
+            raise PriorExposureRefusal("incident profile authority is absent")
+        expected_artifact_schemas = _registered_incident_profile(raw_profile)[
+            "artifact_schemas"
+        ]
     for name, artifact in artifacts.items():
         if not isinstance(artifact, Mapping) or set(artifact) != {
             "basename", "size_bytes", "raw_sha256", "canonical_sha256",
@@ -5319,7 +5332,7 @@ def verify_aborted_attempt_exposure_receipt(
             or not _is_sha256(artifact.get("raw_sha256"))
                 or not _is_sha256(artifact.get("canonical_sha256"))
                 or artifact.get("schema_version")
-                != _INCIDENT_ARTIFACT_SCHEMAS[str(name)]
+                != expected_artifact_schemas[str(name)]
             or not isinstance(declared_hashes, Mapping)
             or set(declared_hashes) != set(_ARTIFACT_SELF_HASH_FIELDS[str(name)])
             or any(not _is_sha256(item) for item in declared_hashes.values())

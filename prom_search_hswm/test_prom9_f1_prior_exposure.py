@@ -1180,7 +1180,7 @@ def test_profile_bound_v4_incident_refuses_count_and_identity_drift(
         "canary_http_status_counts": {"200": 1},
         "runtime_commits": dict(prior_exposure._HISTORICAL_RUNTIME_COMMITS),
         "artifact_schemas": dict(
-            prior_exposure._INCIDENT_ARTIFACT_SCHEMAS
+            prior_exposure._A2_INCIDENT_PROFILE["artifact_schemas"]
         ),
         "expected_counts": {
             "attempt_calls": 2,
@@ -1211,6 +1211,16 @@ def test_profile_bound_v4_incident_refuses_count_and_identity_drift(
     assert verify_aborted_attempt_exposure_receipt(receipt) == receipt[
         "aborted_attempt_exposure_receipt_sha256"
     ]
+
+    wrong_artifact_schema = copy.deepcopy(receipt)
+    wrong_artifact_schema["evidence_bindings"]["artifacts"][
+        "selection_receipt"
+    ]["schema_version"] = prior_exposure._INCIDENT_ARTIFACT_SCHEMAS[
+        "selection_receipt"
+    ]
+    _resign_incident(wrong_artifact_schema)
+    with pytest.raises(PriorExposureRefusal, match="artifact binding drifted"):
+        verify_aborted_attempt_exposure_receipt(wrong_artifact_schema)
 
     witness_path = tmp_path / "private-witness" / "witness.v1.json"
     witness = json.loads(witness_path.read_text(encoding="utf-8"))

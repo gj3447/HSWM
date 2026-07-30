@@ -12,7 +12,10 @@ import prom_search_hswm.prom9_f1_r8_environment as environment
 import prom_search_hswm.prom9_f1_r8_lock as lock_module
 from prom_search_hswm.hswm_result_spool import ModelDeploymentBinding
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
-from prom_search_hswm.prom9_f1_prior_exposure import write_private_once
+from prom_search_hswm.prom9_f1_prior_exposure import (
+    F1_R8_A3_SUCCESSOR_RUN_ID,
+    write_private_once,
+)
 from prom_search_hswm.prom9_f1_r8_environment import (
     build_preimage_bundle,
     r8_dependency_paths,
@@ -27,16 +30,51 @@ from prom_search_hswm.prom9_f1_r8_power import (
 )
 from prom_search_hswm.prom9_f1_r8_source import build_artifacts
 from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
-from prom_search_hswm.test_prom9_f1_r8_power import SENTINEL, _pages, _prior
+from prom_search_hswm.test_prom9_f1_r8_power import (
+    SENTINEL,
+    _pages,
+    _prior,
+    _successor_wrapper,
+    _synthetic_incident_source_entities,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-SYMPOSIUM_ROOT = REPO_ROOT.parents[1]
-DEFAULT_JUDGE_CORE = (
-    SYMPOSIUM_ROOT
-    / "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
+_JUDGE_RELATIVE_PATH = Path(
+    "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
 )
-RUN_ID = "f1-2wiki-r8-development-lock-test"
+
+
+def _resolve_symposium_root() -> Path:
+    candidates = (
+        REPO_ROOT.parents[1],
+        REPO_ROOT.parent / "SYMPOSIUM",
+        REPO_ROOT.parent / "symposium",
+    )
+    matches: list[Path] = []
+    match_identities: set[tuple[int, int]] = set()
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if (resolved / ".git").exists() and (
+            resolved / _JUDGE_RELATIVE_PATH
+        ).is_file():
+            stat = resolved.stat()
+            identity = (stat.st_dev, stat.st_ino)
+            if identity in match_identities:
+                continue
+            matches.append(resolved)
+            match_identities.add(identity)
+    if len(matches) != 1:
+        raise RuntimeError(
+            f"expected exactly one SYMPOSIUM checkout for {REPO_ROOT}; "
+            f"found {matches}"
+        )
+    return matches[0]
+
+
+SYMPOSIUM_ROOT = _resolve_symposium_root()
+DEFAULT_JUDGE_CORE = SYMPOSIUM_ROOT / _JUDGE_RELATIVE_PATH
+RUN_ID = F1_R8_A3_SUCCESSOR_RUN_ID
 ENDPOINT = "http://127.0.0.1:8011"
 UPSTREAM_ENDPOINT = "http://127.0.0.1:18002/v1/chat/completions"
 DEPLOYMENT_SHA256 = "d" * 64
@@ -59,7 +97,7 @@ def _write(path: Path, value: dict[str, object]) -> None:
 
 def _envelope() -> dict[str, object]:
     return {
-        "per_call_input_caps": {"1": 280, "2": 1713, "3": 2152},
+        "per_call_input_caps": {"1": 275, "2": 1691, "3": 2359},
         "per_call_output_caps": {"1": 768, "2": 1536, "3": 768},
     }
 
@@ -174,6 +212,16 @@ def _allow_pre_c1_dependencies(monkeypatch: pytest.MonkeyPatch) -> None:
         "load_model_deployment_binding",
         lambda *_args, **_kwargs: _deployment_binding(),
     )
+    monkeypatch.setattr(
+        lock_module,
+        "QwenBpeMeter",
+        lambda *_args, **_kwargs: object(),
+    )
+    monkeypatch.setattr(
+        lock_module,
+        "verify_token_envelope_derivation",
+        lambda **kwargs: str(kwargs["receipt"]["receipt_sha256"]),
+    )
 
 
 def _valid_judge_source(marker: str = "a") -> str:
@@ -206,12 +254,16 @@ def _init_git_repo(path: Path) -> str:
     return _head_commit(path)
 
 
-def _public_pipeline(tmp_path: Path, *, answer: str) -> tuple[dict[str, Path], dict[str, object]]:
+def _public_pipeline(
+    tmp_path: Path, *, answer: str, monkeypatch: pytest.MonkeyPatch
+) -> tuple[dict[str, Path], dict[str, object]]:
     tmp_path.mkdir(parents=True, exist_ok=True)
     development, confirmatory = _pages(tmp_path, answer=answer)
     prior = _prior()
+    successor, _second_component = _successor_wrapper(monkeypatch)
     selection, gold_source = build_selection_receipts(
         prior_receipt=prior,
+        aborted_attempt_exposure_receipt=successor,
         development_pages=development,
         confirmatory_pages=confirmatory,
     )
@@ -240,7 +292,23 @@ def _public_pipeline(tmp_path: Path, *, answer: str) -> tuple[dict[str, Path], d
     genesis = {**genesis_unsigned, "genesis_sha256": canonical_sha256(genesis_unsigned)}
     paths = {
         name: tmp_path / f"{name}.json"
-        for name in ("manifest", "selection", "source", "evaluator", "genesis", "prior")
+        for name in (
+            "manifest",
+            "selection",
+            "source",
+            "evaluator",
+            "genesis",
+            "prior",
+            "derivation",
+            "historical",
+            "validation",
+            "projected",
+            "source_suite",
+        )
+    }
+    paths["incident"] = tmp_path / "incident.json"
+    derivation_unsigned = {
+        "schema_version": "hswm-test-token-envelope-derivation/v1",
     }
     values = {
         "manifest": artifacts["manifest"],
@@ -249,6 +317,15 @@ def _public_pipeline(tmp_path: Path, *, answer: str) -> tuple[dict[str, Path], d
         "evaluator": artifacts["evaluator_receipt"],
         "genesis": genesis,
         "prior": prior,
+        "incident": successor,
+        "derivation": {
+            **derivation_unsigned,
+            "receipt_sha256": canonical_sha256(derivation_unsigned),
+        },
+        "historical": {"schema_version": "hswm-test-historical/v1"},
+        "validation": {"schema_version": "hswm-test-validation/v1"},
+        "projected": {"schema_version": "hswm-test-projected/v1"},
+        "source_suite": {"schema_version": "hswm-test-source-suite/v1"},
     }
     for name, value in values.items():
         _write(paths[name], value)
@@ -281,7 +358,13 @@ def _invoke_lock(
             "--evaluator-receipt", str(paths["evaluator"]),
             "--db-genesis-receipt", str(paths["genesis"]),
             "--environment-dependency-bundle", str(bundle),
+            "--token-envelope-derivation-receipt", str(paths["derivation"]),
+            "--historical-manifest", str(paths["historical"]),
+            "--token-meter-validation-receipt", str(paths["validation"]),
+            "--projected-outputs-receipt", str(paths["projected"]),
+            "--token-meter-source-suite", str(paths["source_suite"]),
             "--prior-exposure-receipt", str(paths["prior"]),
+            "--aborted-attempt-exposure-receipt", str(paths["incident"]),
             "--protocol", str(dependencies["protocol_json"]),
             "--judge-core", str(dependencies["judge_core"]),
             "--result-contract", str(dependencies["result_contract"]),
@@ -307,6 +390,19 @@ def test_lock_cli_has_no_gold_path_and_rebuilds_only_the_public_graph(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     _allow_pre_c1_dependencies(monkeypatch)
+    derivation_run_ids: list[str] = []
+
+    def verify_derivation(**kwargs: object) -> str:
+        derivation_run_ids.append(str(kwargs.get("development_run_id")))
+        receipt = kwargs["receipt"]
+        assert isinstance(receipt, dict)
+        return str(receipt["receipt_sha256"])
+
+    monkeypatch.setattr(
+        lock_module,
+        "verify_token_envelope_derivation",
+        verify_derivation,
+    )
     dependencies = _semantic_dependency_paths(tmp_path / "dependencies")
     bundle = _dependency_bundle(
         tmp_path / "environment-dependency-bundle.json",
@@ -314,7 +410,9 @@ def test_lock_cli_has_no_gold_path_and_rebuilds_only_the_public_graph(
         hswm_commit=_head_commit(),
         symposium_commit=_head_commit(SYMPOSIUM_ROOT),
     )
-    paths, artifacts = _public_pipeline(tmp_path / "public", answer=SENTINEL)
+    paths, artifacts = _public_pipeline(
+        tmp_path / "public", answer=SENTINEL, monkeypatch=monkeypatch
+    )
     output = tmp_path / "execution-lock.json"
     assert _invoke_lock(
         paths=paths,
@@ -322,6 +420,7 @@ def test_lock_cli_has_no_gold_path_and_rebuilds_only_the_public_graph(
         dependencies=dependencies,
         output=output,
     ) == 0
+    assert derivation_run_ids == [lock_module.F1_R8_A3_SUCCESSOR_RUN_ID]
     lock = json.loads(output.read_text(encoding="utf-8"))
     bundle_value = json.loads(bundle.read_text(encoding="utf-8"))
     assert output.stat().st_mode & 0o777 == 0o600
@@ -378,7 +477,9 @@ def test_lock_refuses_runtime_semantic_path_substitution(
         hswm_commit=_head_commit(),
         symposium_commit=_head_commit(SYMPOSIUM_ROOT),
     )
-    paths, _artifacts = _public_pipeline(tmp_path / "public", answer=SENTINEL)
+    paths, _artifacts = _public_pipeline(
+        tmp_path / "public", answer=SENTINEL, monkeypatch=monkeypatch
+    )
     output = tmp_path / f"lock-{substituted_name}.json"
     assert _invoke_lock(
         paths=paths,
@@ -389,7 +490,9 @@ def test_lock_refuses_runtime_semantic_path_substitution(
     assert not output.exists()
 
 
-def test_lock_refuses_live_commit_mismatch(tmp_path: Path) -> None:
+def test_lock_refuses_live_commit_mismatch(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     dependencies = _semantic_dependency_paths(tmp_path / "dependencies")
     non_live_commit = "0" * 40
     assert non_live_commit != _head_commit()
@@ -399,7 +502,9 @@ def test_lock_refuses_live_commit_mismatch(tmp_path: Path) -> None:
         hswm_commit=non_live_commit,
         symposium_commit=_head_commit(SYMPOSIUM_ROOT),
     )
-    paths, _artifacts = _public_pipeline(tmp_path / "public", answer=SENTINEL)
+    paths, _artifacts = _public_pipeline(
+        tmp_path / "public", answer=SENTINEL, monkeypatch=monkeypatch
+    )
     output = tmp_path / "wrong-commit-lock.json"
     assert _invoke_lock(
         paths=paths,
@@ -425,7 +530,9 @@ def test_lock_refuses_wrong_symposium_head(
     )
     wrong_symposium_root = tmp_path / "wrong-symposium"
     assert _init_git_repo(wrong_symposium_root) != symposium_commit
-    paths, _artifacts = _public_pipeline(tmp_path / "public", answer=SENTINEL)
+    paths, _artifacts = _public_pipeline(
+        tmp_path / "public", answer=SENTINEL, monkeypatch=monkeypatch
+    )
     output = tmp_path / "wrong-symposium-lock.json"
     assert _invoke_lock(
         paths=paths,
@@ -467,7 +574,9 @@ def test_lock_refuses_unfrozen_symposium_judge_template(
         hswm_commit=_head_commit(),
         symposium_commit=symposium_commit,
     )
-    paths, _artifacts = _public_pipeline(tmp_path / "public", answer=SENTINEL)
+    paths, _artifacts = _public_pipeline(
+        tmp_path / "public", answer=SENTINEL, monkeypatch=monkeypatch
+    )
     output = tmp_path / f"lock-{judge_state}.json"
     assert _invoke_lock(
         paths=paths,
@@ -491,8 +600,12 @@ def test_answer_mutation_keeps_public_hashes_but_changes_evaluator_and_lock(
         hswm_commit=_head_commit(),
         symposium_commit=_head_commit(SYMPOSIUM_ROOT),
     )
-    first_paths, first = _public_pipeline(tmp_path / "first", answer="FIRST_PRIVATE")
-    second_paths, second = _public_pipeline(tmp_path / "second", answer="SECOND_PRIVATE")
+    first_paths, first = _public_pipeline(
+        tmp_path / "first", answer="FIRST_PRIVATE", monkeypatch=monkeypatch
+    )
+    second_paths, second = _public_pipeline(
+        tmp_path / "second", answer="SECOND_PRIVATE", monkeypatch=monkeypatch
+    )
     assert first["selection"] == second["selection"]
     assert first["source"] == second["source"]
     assert first["manifest"] == second["manifest"]

@@ -28,9 +28,29 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 from urllib import error as urllib_error
 from urllib import request as urllib_request
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import quote, urlsplit, urlunsplit
 
+from prom_search_hswm.hswm_f1_sqlite_schema import (
+    SPOOL_SCHEMA_SQL,
+    SPOOL_USER_VERSION,
+    SQLiteAuthorityRefusal,
+    assert_database_generation,
+    create_exclusive_main,
+    database_generation,
+    exact_schema_readback,
+    integrity_readback,
+    open_frozen_sqlite_read_only,
+    open_private_parent,
+    require_sqlite_family_absent,
+    require_wal_full,
+    validate_private_sqlite_family as _validate_private_sqlite_family,
+    verify_private_parent,
+)
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
+from prom_search_hswm.prom9_f1_r8_private_output import (
+    PrivateOutputRefusal,
+    canonical_output_path,
+)
 
 
 SPOOL_SCHEMA = "hswm-f1-result-spool/v1"
@@ -43,6 +63,69 @@ _GENESIS = "0" * 64
 _FORWARDED_RESPONSE_HEADERS = frozenset(
     {"content-type", "content-length", "x-request-id", "x-client-request-id"}
 )
+
+
+def _configure_checkpoint_policy(
+    connection: sqlite3.Connection, label: str
+) -> bool:
+    """Disable implicit checkpoints before the connection can commit."""
+
+    no_checkpoint_on_close = getattr(
+        sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE", None
+    )
+    setconfig = getattr(connection, "setconfig", None)
+    getconfig = getattr(connection, "getconfig", None)
+    checkpoint_on_close_disabled = False
+    if (
+        no_checkpoint_on_close is not None
+        and callable(setconfig)
+        and callable(getconfig)
+    ):
+        setconfig(no_checkpoint_on_close, True)
+        if getconfig(no_checkpoint_on_close) is not True:
+            raise SQLiteAuthorityRefusal(
+                f"{label} checkpoint-on-close could not be disabled"
+            )
+        checkpoint_on_close_disabled = True
+
+    connection.execute("PRAGMA wal_autocheckpoint=0")
+    row = connection.execute("PRAGMA wal_autocheckpoint").fetchone()
+    if row is None or int(row[0]) != 0:
+        raise SQLiteAuthorityRefusal(
+            f"{label} automatic WAL checkpointing is enabled"
+        )
+    return checkpoint_on_close_disabled
+
+
+def _require_checkpoint_on_close_capability(label: str) -> None:
+    """Prove the sealed close policy before opening an authority database."""
+
+    no_checkpoint_on_close = getattr(
+        sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE", None
+    )
+    if no_checkpoint_on_close is None:
+        raise SQLiteAuthorityRefusal(
+            f"{label} sealed runtime lacks checkpoint-on-close control"
+        )
+    probe = sqlite3.connect(":memory:", isolation_level=None)
+    try:
+        setconfig = getattr(probe, "setconfig", None)
+        getconfig = getattr(probe, "getconfig", None)
+        if not callable(setconfig) or not callable(getconfig):
+            raise SQLiteAuthorityRefusal(
+                f"{label} sealed runtime lacks checkpoint-on-close control"
+            )
+        setconfig(no_checkpoint_on_close, True)
+        if getconfig(no_checkpoint_on_close) is not True:
+            raise SQLiteAuthorityRefusal(
+                f"{label} sealed runtime cannot disable checkpoint-on-close"
+            )
+    except sqlite3.Error as error:
+        raise SQLiteAuthorityRefusal(
+            f"{label} sealed runtime cannot disable checkpoint-on-close"
+        ) from error
+    finally:
+        probe.close()
 
 
 class ResultSpoolError(RuntimeError):
@@ -123,12 +206,11 @@ def _sha256_bytes(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
 
 
-def _make_private(path: Path) -> None:
-    for candidate in (Path(path), Path(f"{path}-wal"), Path(f"{path}-shm")):
-        try:
-            candidate.chmod(0o600)
-        except FileNotFoundError:
-            continue
+def validate_private_sqlite_family(path: Path, label: str) -> None:
+    try:
+        _validate_private_sqlite_family(Path(path), label)
+    except SQLiteAuthorityRefusal as error:
+        raise SpoolIntegrityError(str(error)) from error
 
 
 def _require_sha256(value: str, label: str) -> str:
@@ -284,67 +366,157 @@ def _fsync_parent(path: Path) -> None:
 class SQLiteResultSpool:
     """SQLite WAL/FULL authority for one-result-per-physical-call replay."""
 
-    def __init__(self, path: str | Path) -> None:
-        self.path = Path(path)
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        existed = self.path.exists()
-        if not existed:
-            descriptor = os.open(
-                self.path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600
+    def __init__(
+        self,
+        path: str | Path,
+        *,
+        require_no_checkpoint_on_close: bool = False,
+    ) -> None:
+        if type(require_no_checkpoint_on_close) is not bool:
+            raise SpoolIntegrityError(
+                "require_no_checkpoint_on_close must be boolean"
             )
-            os.close(descriptor)
-            _fsync_parent(self.path)
+        try:
+            self.path = canonical_output_path(Path(path))
+        except PrivateOutputRefusal as error:
+            raise SpoolIntegrityError("result-spool path is not canonical") from error
+        if require_no_checkpoint_on_close:
+            try:
+                _require_checkpoint_on_close_capability("result spool")
+            except SQLiteAuthorityRefusal as error:
+                raise SpoolIntegrityError(str(error)) from error
+        self._require_no_checkpoint_on_close = require_no_checkpoint_on_close
         self._lock = threading.RLock()
-        self._connection = sqlite3.connect(
-            str(self.path), isolation_level=None, timeout=10.0, check_same_thread=False
-        )
-        self._connection.row_factory = sqlite3.Row
-        self._connection.execute("PRAGMA busy_timeout=10000")
-        self._connection.execute("PRAGMA journal_mode=WAL")
-        self._connection.execute("PRAGMA synchronous=FULL")
-        self._connection.execute("PRAGMA foreign_keys=ON")
-        version = int(self._connection.execute("PRAGMA user_version").fetchone()[0])
-        if version not in (0, 1):
-            raise SpoolIntegrityError(f"unsupported result-spool schema version {version}")
-        self._connection.executescript(
-            """
-            CREATE TABLE IF NOT EXISTS spool_calls (
-                physical_call_id TEXT PRIMARY KEY,
-                intent_sha256 TEXT NOT NULL,
-                request_sha256 TEXT NOT NULL,
-                request_bytes BLOB NOT NULL,
-                status TEXT NOT NULL CHECK(status IN (
-                    'DISPATCHING', 'COMPLETE', 'UNKNOWN'
-                )),
-                response_status INTEGER,
-                response_headers BLOB,
-                response_body BLOB,
-                response_sha256 TEXT,
-                error_class TEXT,
-                CHECK (
-                    (status = 'COMPLETE' AND response_status IS NOT NULL
-                     AND response_headers IS NOT NULL AND response_body IS NOT NULL
-                     AND response_sha256 IS NOT NULL)
-                    OR status != 'COMPLETE'
+        self._parent_fd = -1
+        connection: sqlite3.Connection | None = None
+        try:
+            self._parent_fd = open_private_parent(self.path, "result spool")
+            try:
+                self.path.lstat()
+                existed = True
+            except FileNotFoundError:
+                existed = False
+            except OSError as error:
+                raise SQLiteAuthorityRefusal(
+                    "cannot stat result-spool path"
+                ) from error
+
+            frozen_generation: dict[str, object] | None = None
+            if existed:
+                frozen_store = open_frozen_sqlite_read_only(
+                    self.path, "result spool"
                 )
-            );
-            """
-        )
-        self._connection.execute("PRAGMA user_version=1")
-        _make_private(self.path)
-        # A DISPATCHING row cannot still have a live authoritative owner after
-        # this store has been reopened.  Preserve it as UNKNOWN and never
-        # redispatch that physical inference identity.
-        self._connection.execute("BEGIN IMMEDIATE")
-        self._connection.execute(
-            """
-            UPDATE spool_calls SET status='UNKNOWN', error_class='SERVER_RESTART'
-            WHERE status='DISPATCHING'
-            """
-        )
-        self._connection.execute("COMMIT")
-        if not existed:
-            _fsync_parent(self.path)
+                frozen_generation = dict(frozen_store.generation)
+                with frozen_store as frozen:
+                    exact_schema_readback(frozen, "spool", "result spool")
+                    integrity_readback(frozen, "result spool")
+                    require_wal_full(frozen, "result spool")
+                    self._verify_connection_rows(frozen)
+            else:
+                require_sqlite_family_absent(self.path, "result spool")
+                create_exclusive_main(
+                    self.path, self._parent_fd, "result spool"
+                )
+
+            verify_private_parent(self.path, self._parent_fd, "result spool")
+            uri = f"file:{quote(str(self.path), safe='/')}?mode=rw"
+            connection = sqlite3.connect(
+                uri,
+                uri=True,
+                isolation_level=None,
+                timeout=10.0,
+                check_same_thread=False,
+            )
+            checkpoint_on_close_disabled = _configure_checkpoint_policy(
+                connection, "result spool"
+            )
+            if require_no_checkpoint_on_close and not checkpoint_on_close_disabled:
+                raise SQLiteAuthorityRefusal(
+                    "result-spool sealed close policy is unavailable"
+                )
+            # sqlite3.connect has not executed DDL or a mutating PRAGMA yet.
+            # Detect a cooperative namespace swap before touching that handle.
+            verify_private_parent(self.path, self._parent_fd, "result spool")
+            if frozen_generation is not None:
+                assert_database_generation(
+                    self.path, "result spool", frozen_generation
+                )
+            connection.row_factory = sqlite3.Row
+
+            if existed:
+                exact_schema_readback(connection, "spool", "result spool")
+                integrity_readback(connection, "result spool")
+                require_wal_full(connection, "result spool")
+                self._verify_connection_rows(connection)
+                live_generation = database_generation(self.path, "result spool")
+                expected_wal = frozen_generation.get("wal")
+                observed_wal = live_generation.get("wal")
+                wal_is_unchanged_or_empty_audit_sidecar = (
+                    observed_wal == expected_wal
+                    or (
+                        expected_wal is None
+                        and isinstance(observed_wal, Mapping)
+                        and observed_wal.get("st_size") == 0
+                        and observed_wal.get("sha256") == hashlib.sha256(b"").hexdigest()
+                    )
+                )
+                if (
+                    live_generation.get("main")
+                    != frozen_generation.get("main")
+                    or not wal_is_unchanged_or_empty_audit_sidecar
+                    or live_generation.get("journal") is not None
+                ):
+                    raise SQLiteAuthorityRefusal(
+                        "result spool changed during live pre-write audit"
+                    )
+                verify_private_parent(self.path, self._parent_fd, "result spool")
+                connection.execute("PRAGMA busy_timeout=10000")
+                connection.execute("PRAGMA synchronous=FULL")
+                connection.execute("PRAGMA foreign_keys=ON")
+            else:
+                connection.execute("PRAGMA busy_timeout=10000")
+                connection.execute("PRAGMA journal_mode=WAL")
+                connection.execute("PRAGMA synchronous=FULL")
+                connection.execute("PRAGMA foreign_keys=ON")
+                connection.executescript(SPOOL_SCHEMA_SQL)
+                connection.execute(f"PRAGMA user_version={SPOOL_USER_VERSION}")
+                exact_schema_readback(connection, "spool", "result spool")
+                integrity_readback(connection, "result spool")
+                require_wal_full(connection, "result spool")
+                self._verify_connection_rows(connection)
+
+            # A DISPATCHING row cannot still have a live authoritative owner after
+            # this store has been reopened.  Preserve it as UNKNOWN and never
+            # redispatch that physical inference identity.
+            connection.execute("BEGIN IMMEDIATE")
+            connection.execute(
+                """
+                UPDATE spool_calls SET status='UNKNOWN', error_class='SERVER_RESTART'
+                WHERE status='DISPATCHING'
+                """
+            )
+            connection.execute("COMMIT")
+            self._verify_connection_rows(connection)
+            exact_schema_readback(connection, "spool", "result spool")
+            validate_private_sqlite_family(self.path, "result spool")
+            verify_private_parent(self.path, self._parent_fd, "result spool")
+            os.fsync(self._parent_fd)
+        except (SQLiteAuthorityRefusal, sqlite3.Error) as error:
+            if connection is not None:
+                connection.close()
+            if self._parent_fd >= 0:
+                os.close(self._parent_fd)
+                self._parent_fd = -1
+            raise SpoolIntegrityError(str(error)) from error
+        except BaseException:
+            if connection is not None:
+                connection.close()
+            if self._parent_fd >= 0:
+                os.close(self._parent_fd)
+                self._parent_fd = -1
+            raise
+        self._connection = connection
+        self._checkpoint_on_close_disabled = checkpoint_on_close_disabled
 
     @property
     def journal_mode(self) -> str:
@@ -354,12 +526,96 @@ class SQLiteResultSpool:
     def synchronous(self) -> int:
         return int(self._connection.execute("PRAGMA synchronous").fetchone()[0])
 
+    @property
+    def wal_autocheckpoint(self) -> int:
+        row = self._connection.execute("PRAGMA wal_autocheckpoint").fetchone()
+        if row is None:
+            raise SpoolIntegrityError(
+                "result-spool WAL auto-checkpoint policy disappeared"
+            )
+        return int(row[0])
+
+    @property
+    def checkpoint_on_close_disabled(self) -> bool:
+        no_checkpoint_on_close = getattr(
+            sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE", None
+        )
+        getconfig = getattr(self._connection, "getconfig", None)
+        if no_checkpoint_on_close is None or not callable(getconfig):
+            return False
+        try:
+            return getconfig(no_checkpoint_on_close) is True
+        except sqlite3.Error as error:
+            raise SpoolIntegrityError(
+                "result-spool close policy cannot be read back"
+            ) from error
+
+    def require_checkpoint_policy(self) -> None:
+        if self.wal_autocheckpoint != 0:
+            raise SpoolIntegrityError(
+                "result-spool automatic WAL checkpointing is enabled"
+            )
+        if (
+            self._require_no_checkpoint_on_close
+            and not self.checkpoint_on_close_disabled
+        ):
+            raise SpoolIntegrityError(
+                "result-spool checkpoint-on-close control drifted"
+            )
+
     @staticmethod
     def _verify_row(row: sqlite3.Row) -> None:
+        for field in ("physical_call_id", "intent_sha256", "request_sha256"):
+            value = row[field]
+            if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
+                raise SpoolIntegrityError(f"stored spool {field} drifted")
         request_bytes = bytes(row["request_bytes"])
+        if not request_bytes:
+            raise SpoolIntegrityError("stored spool request bytes are empty")
         if _sha256_bytes(request_bytes) != row["request_sha256"]:
             raise SpoolIntegrityError("stored spool request bytes drifted")
-        if row["status"] == "COMPLETE":
+        status_value = row["status"]
+        if not isinstance(status_value, str) or status_value not in {
+            "DISPATCHING",
+            "UNKNOWN",
+            "COMPLETE",
+        }:
+            raise SpoolIntegrityError("stored spool status drifted")
+        response_fields = (
+            "response_status",
+            "response_headers",
+            "response_body",
+            "response_sha256",
+        )
+        if status_value == "DISPATCHING":
+            if any(row[field] is not None for field in response_fields) or row[
+                "error_class"
+            ] is not None:
+                raise SpoolIntegrityError(
+                    "DISPATCHING spool row contains outcome fields"
+                )
+            return
+        if status_value == "UNKNOWN":
+            error_class = row["error_class"]
+            if (
+                any(row[field] is not None for field in response_fields)
+                or not isinstance(error_class, str)
+                or not error_class
+            ):
+                raise SpoolIntegrityError("UNKNOWN spool row semantics drifted")
+            return
+        if status_value == "COMPLETE":
+            response_status = row["response_status"]
+            if (
+                isinstance(response_status, bool)
+                or not isinstance(response_status, int)
+                or not 100 <= response_status <= 599
+                or any(row[field] is None for field in response_fields[1:])
+                or row["error_class"] is not None
+                or not isinstance(row["response_sha256"], str)
+                or _SHA256.fullmatch(row["response_sha256"]) is None
+            ):
+                raise SpoolIntegrityError("COMPLETE spool row semantics drifted")
             response = bytes(row["response_body"])
             if _sha256_bytes(response) != row["response_sha256"]:
                 raise SpoolIntegrityError("stored spool response bytes drifted")
@@ -369,6 +625,15 @@ class SQLiteResultSpool:
                 raise SpoolIntegrityError("stored spool response headers drifted") from error
             if not isinstance(headers, dict) or _canonical_bytes(headers) != bytes(row["response_headers"]):
                 raise SpoolIntegrityError("stored spool response headers are not canonical")
+
+    @classmethod
+    def _verify_connection_rows(cls, connection: sqlite3.Connection) -> list[sqlite3.Row]:
+        rows = connection.execute(
+            "SELECT * FROM spool_calls ORDER BY physical_call_id"
+        ).fetchall()
+        for row in rows:
+            cls._verify_row(row)
+        return rows
 
     @staticmethod
     def _result(row: sqlite3.Row, *, replayed: bool) -> SpoolResult:
@@ -407,6 +672,7 @@ class SQLiteResultSpool:
             raise ResultSpoolError("request_bytes must be non-empty bytes")
         request_sha256 = _sha256_bytes(request_bytes)
         with self._lock:
+            self.require_checkpoint_policy()
             try:
                 self._connection.execute("BEGIN IMMEDIATE")
                 row = self._connection.execute(
@@ -514,11 +780,7 @@ class SQLiteResultSpool:
 
     def audit(self) -> dict[str, object]:
         with self._lock:
-            rows = self._connection.execute(
-                "SELECT * FROM spool_calls ORDER BY physical_call_id"
-            ).fetchall()
-            for row in rows:
-                self._verify_row(row)
+            rows = self._verify_connection_rows(self._connection)
             statuses: dict[str, int] = {}
             completed = []
             for row in rows:
@@ -545,7 +807,19 @@ class SQLiteResultSpool:
 
     def close(self) -> None:
         with self._lock:
-            self._connection.close()
+            try:
+                if self._require_no_checkpoint_on_close:
+                    if not _configure_checkpoint_policy(
+                        self._connection, "result spool"
+                    ):
+                        raise SpoolIntegrityError(
+                            "result-spool sealed close policy drifted"
+                        )
+                self._connection.close()
+            finally:
+                if self._parent_fd >= 0:
+                    os.close(self._parent_fd)
+                    self._parent_fd = -1
 
     def __enter__(self) -> "SQLiteResultSpool":
         return self
@@ -859,7 +1133,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
     except ResultSpoolError as error:
         parser.error(str(error))
-    store = SQLiteResultSpool(args.db)
+    try:
+        store = SQLiteResultSpool(
+            args.db, require_no_checkpoint_on_close=True
+        )
+    except SpoolIntegrityError as error:
+        parser.error(str(error))
     service = ResultSpoolService(
         store,
         upstream_endpoint=deployment_binding.upstream_endpoint,

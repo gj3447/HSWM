@@ -44,6 +44,7 @@ GENERATION_POLICY = {
     "enable_thinking": False,
     "structured_output_backend": "json_schema",
 }
+R8_TIGHT_COMMON_INPUT_BUDGET = 4325
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _ROW_KEYS = {
     "id", "question", "answer", "context", "supporting_facts",
@@ -325,7 +326,7 @@ def verify_exact_entry_alignment(
 def derive_public_rows(
     entries: Sequence[Mapping[str, object]],
     *,
-    max_input_tokens: int = 4145,
+    max_input_tokens: int = R8_TIGHT_COMMON_INPUT_BUDGET,
     max_output_tokens_per_call: int = 1536,
 ) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
     """Return manifest items and source projections from redacted rows only."""
@@ -856,10 +857,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         from prom_search_hswm.prom9_f1_prior_exposure import (
+            F1_R8_A3_SUCCESSOR_RUN_ID,
             _read_private_bytes,
             _strict_object,
         )
         from prom_search_hswm.prom9_f1_r8_power import (
+            SUCCESSOR_SELECTION_SCHEMA,
             evaluator_selected_entries,
             selected_entries,
             verify_selection_receipt,
@@ -867,6 +870,24 @@ def main(argv: Sequence[str] | None = None) -> int:
 
         selection = read_json(args.selection_receipt, "public cohort selection receipt")
         selection_sha = verify_selection_receipt(selection)
+        successor_selection = (
+            selection.get("schema_version") == SUCCESSOR_SELECTION_SCHEMA
+        )
+        if args.mode == "development" and (
+            args.selection_cohort != "development"
+            or not successor_selection
+            or args.run_id != F1_R8_A3_SUCCESSOR_RUN_ID
+        ):
+            raise R8SourceRefusal(
+                "development source requires successor-v4 selection and a3 run identity"
+            )
+        if args.mode == "sealed" and (
+            args.selection_cohort != "confirmatory"
+            or args.run_id == F1_R8_A3_SUCCESSOR_RUN_ID
+        ):
+            raise R8SourceRefusal(
+                "sealed source requires the non-development confirmatory cohort"
+            )
         gold_source = _strict_object(
             _read_private_bytes(args.gold_source_receipt),
             "evaluator-only gold-source receipt",

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 from functools import lru_cache
+import json
 import os
 from pathlib import Path
 import subprocess
@@ -10,6 +11,10 @@ import pytest
 
 from prom_search_hswm.hswm_result_spool import ModelDeploymentBinding
 from prom_search_hswm.hswm_typed_ports import canonical_sha256
+from prom_search_hswm.prom9_f1_prior_exposure import (
+    SCHEMA as PRIOR_EXPOSURE_SCHEMA,
+    merge_exposure_boundaries,
+)
 from prom_search_hswm.prom9_f1_r8_environment import (
     R8_DEPENDENCY_NAMES,
     build_preimage_bundle,
@@ -38,12 +43,39 @@ from prom_search_hswm.prom9_f1_r8_power_cli import (
 )
 
 
-JUDGE_PATH = (
-    Path(__file__).resolve().parents[3]
-    / "FINDINGS"
-    / "hswm-f1-r8-try3-2026-07-28"
-    / "f1_r8_lakatotree_judge.py"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+INCIDENT_RECEIPT_PATH = (
+    REPO_ROOT / "receipts/hswm_f1_r8_v8_aborted_exposure.v2.json"
 )
+_JUDGE_RELATIVE_PATH = Path(
+    "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
+)
+
+
+def _resolve_symposium_root() -> Path:
+    candidates = (
+        REPO_ROOT.parents[1],
+        REPO_ROOT.parent / "SYMPOSIUM",
+        REPO_ROOT.parent / "symposium",
+    )
+    matches: dict[tuple[int, int], Path] = {}
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if (resolved / ".git").exists() and (
+            resolved / _JUDGE_RELATIVE_PATH
+        ).is_file():
+            info = resolved.stat()
+            matches.setdefault((info.st_dev, info.st_ino), resolved)
+    if len(matches) != 1:
+        raise RuntimeError(
+            f"expected exactly one SYMPOSIUM checkout for {REPO_ROOT}; "
+            f"found {sorted(str(path) for path in matches.values())}"
+        )
+    return next(iter(matches.values()))
+
+
+SYMPOSIUM_ROOT = _resolve_symposium_root()
+JUDGE_PATH = SYMPOSIUM_ROOT / _JUDGE_RELATIVE_PATH
 SENSITIVITY_SCENARIOS = (
     "unequal_cluster",
     "heavy_tail",
@@ -414,7 +446,7 @@ def _allow_synthetic_components(
     )
 
 
-def _v3_receipt(
+def _v4_receipt(
     *,
     components: list[dict[str, object]],
     plan: dict[str, object],
@@ -422,14 +454,52 @@ def _v3_receipt(
     judge_sha256: str,
     environment_hashes: dict[str, str] | None = None,
 ) -> dict[str, object]:
+    incident = json.loads(INCIDENT_RECEIPT_PATH.read_text(encoding="utf-8"))
+    incident_sha256 = incident["aborted_attempt_exposure_receipt_sha256"]
+    prior_items = ["prior-item"]
+    prior_sources = ["8" * 64]
+    prior_components = ["9" * 64]
+    prior_unsigned = {
+        "schema_version": PRIOR_EXPOSURE_SCHEMA,
+        "aggregate": {
+            "prior_item_ids": prior_items,
+            "prior_source_entity_ids": prior_sources,
+            "prior_component_ids": prior_components,
+            "item_root_sha256": canonical_sha256(prior_items),
+            "source_entity_root_sha256": canonical_sha256(prior_sources),
+            "component_root_sha256": canonical_sha256(prior_components),
+        },
+        "complete": True,
+    }
+    prior = {
+        **prior_unsigned,
+        "prior_exposure_receipt_sha256": canonical_sha256(prior_unsigned),
+    }
+    exposure_union = merge_exposure_boundaries(prior, incident)
     evidence = {
-        "schema_version": "hswm-prom9-f1-r8-development-evidence/v1",
+        "schema_version": "hswm-prom9-f1-r8-development-evidence/v2",
         "manifest": {},
-        "execution_lock": {},
+        "execution_lock": {
+            "prior_exposure_receipt_sha256": prior[
+                "prior_exposure_receipt_sha256"
+            ],
+            "aborted_attempt_exposure_receipt_sha256": incident_sha256,
+            "forbidden_prior_item_ids": exposure_union["item_ids"],
+            "forbidden_prior_source_entity_ids": exposure_union[
+                "source_entity_ids"
+            ],
+            "forbidden_prior_component_ids": exposure_union["component_ids"],
+        },
         "public_source_receipt": {},
-        "selection_receipt": {},
+        "selection_receipt": {
+            "prior_exposure_receipt_sha256": prior[
+                "prior_exposure_receipt_sha256"
+            ],
+            "aborted_attempt_exposure_receipt_sha256": incident_sha256
+        },
         "gold_source_receipt": {},
-        "prior_exposure_receipt": {},
+        "prior_exposure_receipt": prior,
+        "aborted_attempt_exposure_receipt": incident,
         "suite": {},
         "evaluator_receipt": {},
         "gold": {},
@@ -440,6 +510,12 @@ def _v3_receipt(
             or {field: canonical_sha256(field) for field in ENVIRONMENT_HASH_FIELDS}
         ),
     }
+    evidence["artifact_receipts"][
+        "aborted_attempt_exposure_receipt_sha256"
+    ] = incident_sha256
+    evidence["artifact_receipts"]["prior_exposure_receipt_sha256"] = prior[
+        "prior_exposure_receipt_sha256"
+    ]
     analysis = {
         "schema_version": POWER_DEVELOPMENT_SCHEMA,
         "development_components": components,
@@ -467,13 +543,13 @@ def _rehash(receipt: dict[str, object]) -> dict[str, object]:
     return {**unsigned, "receipt_sha256": canonical_sha256(unsigned)}
 
 
-def test_actual_prospective_judge_semantics_pass_v3_power_gates_but_incomplete_judge_evidence_refuses(
+def test_actual_prospective_judge_semantics_pass_v4_power_gates_but_incomplete_judge_evidence_refuses(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    assert POWER_RECEIPT_SCHEMA == "hswm-prom9-f1-r8-power-operating-characteristic/v3"
+    assert POWER_RECEIPT_SCHEMA == "hswm-prom9-f1-r8-power-operating-characteristic/v4"
     judge, components, plan, characteristics = _actual_judge_power()
     judge_sha = str(judge.judge_core_sha256(JUDGE_PATH))
-    receipt = _v3_receipt(
+    receipt = _v4_receipt(
         components=components,
         plan=plan,
         characteristics=characteristics,
@@ -510,17 +586,19 @@ def test_actual_prospective_judge_semantics_pass_v3_power_gates_but_incomplete_j
                 "power_operating_characteristic_receipt_sha256": receipt[
                     "receipt_sha256"
                 ]
-            },
-            bootstrap=dict(BOOTSTRAP),
-            selection={},
-        )
+                },
+                bootstrap=dict(BOOTSTRAP),
+                outer_manifest={},
+                outer_environment_bundle={},
+                selection={},
+            )
 
 
 def test_power_gate_rejects_a_subthreshold_actual_judge_characteristic(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     judge, components, plan, characteristics = _actual_judge_power()
-    receipt = _v3_receipt(
+    receipt = _v4_receipt(
         components=components,
         plan=plan,
         characteristics=characteristics,
@@ -543,7 +621,7 @@ def test_rehashed_detached_component_contrast_is_refused_by_evidence_rederivatio
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     judge, components, plan, characteristics = _actual_judge_power()
-    receipt = _v3_receipt(
+    receipt = _v4_receipt(
         components=components,
         plan=plan,
         characteristics=characteristics,
@@ -573,7 +651,7 @@ def test_terminal_power_verifier_rejects_incomplete_evidence_shape(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     judge, components, plan, characteristics = _actual_judge_power()
-    receipt = _v3_receipt(
+    receipt = _v4_receipt(
         components=components,
         plan=plan,
         characteristics=characteristics,
@@ -599,7 +677,7 @@ def test_measured_environment_bundle_requires_all_four_execution_lock_hashes(
 ) -> None:
     _allow_pre_c1_dependencies(monkeypatch)
     repo_root = Path(__file__).resolve().parents[1]
-    symposium_repo_root = Path(__file__).resolve().parents[3]
+    symposium_repo_root = SYMPOSIUM_ROOT
     expected_paths = _r8_dependency_paths(tmp_path)
     bundle, lock, manifest, expected_hashes = _bundle_context(
         expected_paths,
@@ -652,7 +730,7 @@ def test_measured_environment_bundle_refuses_runtime_semantic_path_substitution(
 ) -> None:
     _allow_pre_c1_dependencies(monkeypatch)
     repo_root = Path(__file__).resolve().parents[1]
-    symposium_repo_root = Path(__file__).resolve().parents[3]
+    symposium_repo_root = SYMPOSIUM_ROOT
     expected_paths = _r8_dependency_paths(tmp_path / "expected")
     dummy = _write_text(tmp_path / f"dummy-{substituted_name}.py", "# substitution\n")
     substituted_paths = {**expected_paths, substituted_name: dummy}
@@ -679,7 +757,7 @@ def test_measured_environment_bundle_refuses_live_commit_mismatch(
 ) -> None:
     _allow_pre_c1_dependencies(monkeypatch)
     repo_root = Path(__file__).resolve().parents[1]
-    symposium_repo_root = Path(__file__).resolve().parents[3]
+    symposium_repo_root = SYMPOSIUM_ROOT
     expected_paths = _r8_dependency_paths(tmp_path)
     non_live_commit = "0" * 40
     assert non_live_commit != _head_commit(repo_root)
@@ -706,7 +784,7 @@ def test_measured_environment_bundle_refuses_wrong_symposium_head(
 ) -> None:
     _allow_pre_c1_dependencies(monkeypatch)
     repo_root = Path(__file__).resolve().parents[1]
-    symposium_repo_root = Path(__file__).resolve().parents[3]
+    symposium_repo_root = SYMPOSIUM_ROOT
     expected_paths = _r8_dependency_paths(tmp_path)
     non_live_symposium_commit = "0" * 40
     assert non_live_symposium_commit != _head_commit(symposium_repo_root)
@@ -765,7 +843,7 @@ def test_subthreshold_receipt_is_refused_before_private_write(
 ) -> None:
     judge, components, plan, characteristics = _actual_judge_power()
     hashes = {field: canonical_sha256(field) for field in ENVIRONMENT_HASH_FIELDS}
-    receipt = _v3_receipt(
+    receipt = _v4_receipt(
         components=components,
         plan=plan,
         characteristics=characteristics,
@@ -788,6 +866,161 @@ def test_subthreshold_receipt_is_refused_before_private_write(
         write_validated_power_receipt(
             Path("must-not-exist.json"),
             failing,
+            expected_environment_hashes=hashes,
+            judge_core_path=JUDGE_PATH,
+        )
+    assert writes == []
+
+
+def test_terminal_power_write_exact_verifies_and_binds_incident(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import prom_search_hswm.prom9_f1_r8_power_cli as cli
+
+    hashes = {field: canonical_sha256(field) for field in ENVIRONMENT_HASH_FIELDS}
+    receipt = _v4_receipt(
+        components=[],
+        plan={},
+        characteristics={},
+        judge_sha256="a" * 64,
+        environment_hashes=hashes,
+    )
+    writes: list[tuple[Path, object]] = []
+    monkeypatch.setattr(cli, "verify_receipt_environment_hashes", lambda *_args: None)
+    monkeypatch.setattr(
+        cli, "verify_power_operating_characteristics", lambda *_args, **_kwargs: "ok"
+    )
+    monkeypatch.setattr(
+        cli, "write_private_once", lambda path, value: writes.append((path, value))
+    )
+
+    output = Path("validated-power.json")
+    write_validated_power_receipt(
+        output,
+        receipt,
+        expected_environment_hashes=hashes,
+        judge_core_path=JUDGE_PATH,
+    )
+    assert writes == [(output, receipt)]
+
+
+@pytest.mark.parametrize(
+    "failure",
+    [
+        "empty_incident",
+        "incomplete_incident",
+        "resigned_incident",
+        "artifact_binding",
+        "selection_binding",
+        "execution_lock_binding",
+        "empty_prior",
+        "incomplete_prior",
+        "prior_artifact_binding",
+        "prior_selection_binding",
+        "prior_execution_lock_binding",
+        "union_item_subset",
+        "union_item_superset",
+        "union_source_subset",
+        "union_source_superset",
+        "union_component_subset",
+        "union_component_superset",
+    ],
+)
+def test_terminal_power_write_refuses_invalid_or_unbound_incident_before_write(
+    failure: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import prom_search_hswm.prom9_f1_r8_power_cli as cli
+
+    hashes = {field: canonical_sha256(field) for field in ENVIRONMENT_HASH_FIELDS}
+    receipt = _v4_receipt(
+        components=[],
+        plan={},
+        characteristics={},
+        judge_sha256="a" * 64,
+        environment_hashes=hashes,
+    )
+    evidence = receipt["development_evidence"]
+    assert isinstance(evidence, dict)
+    incident = evidence["aborted_attempt_exposure_receipt"]
+    assert isinstance(incident, dict)
+    prior = evidence["prior_exposure_receipt"]
+    assert isinstance(prior, dict)
+    if failure == "empty_incident":
+        evidence["aborted_attempt_exposure_receipt"] = {
+            "aborted_attempt_exposure_receipt_sha256": canonical_sha256({})
+        }
+    elif failure == "incomplete_incident":
+        incident.pop("evidence_bindings")
+        unsigned = dict(incident)
+        unsigned.pop("aborted_attempt_exposure_receipt_sha256")
+        incident["aborted_attempt_exposure_receipt_sha256"] = canonical_sha256(
+            unsigned
+        )
+    elif failure == "resigned_incident":
+        incident["complete"] = False
+        unsigned = dict(incident)
+        unsigned.pop("aborted_attempt_exposure_receipt_sha256")
+        incident["aborted_attempt_exposure_receipt_sha256"] = canonical_sha256(
+            unsigned
+        )
+    elif failure == "empty_prior":
+        evidence["prior_exposure_receipt"] = {}
+    elif failure == "incomplete_prior":
+        prior["complete"] = False
+        unsigned = dict(prior)
+        unsigned.pop("prior_exposure_receipt_sha256")
+        prior["prior_exposure_receipt_sha256"] = canonical_sha256(unsigned)
+    elif failure.startswith("prior_"):
+        target_name = {
+            "prior_artifact_binding": "artifact_receipts",
+            "prior_selection_binding": "selection_receipt",
+            "prior_execution_lock_binding": "execution_lock",
+        }[failure]
+        target = evidence[target_name]
+        assert isinstance(target, dict)
+        target["prior_exposure_receipt_sha256"] = "0" * 64
+    elif failure.startswith("union_"):
+        execution_lock = evidence["execution_lock"]
+        assert isinstance(execution_lock, dict)
+        dimension, operation = failure.removeprefix("union_").rsplit("_", 1)
+        field = {
+            "item": "forbidden_prior_item_ids",
+            "source": "forbidden_prior_source_entity_ids",
+            "component": "forbidden_prior_component_ids",
+        }[dimension]
+        values = list(execution_lock[field])
+        if operation == "subset":
+            values.pop(0)
+        else:
+            extra = "union-extra" if dimension == "item" else "7" * 64
+            values = sorted({*values, extra})
+        execution_lock[field] = values
+    else:
+        target_name = {
+            "artifact_binding": "artifact_receipts",
+            "selection_binding": "selection_receipt",
+            "execution_lock_binding": "execution_lock",
+        }[failure]
+        target = evidence[target_name]
+        assert isinstance(target, dict)
+        target["aborted_attempt_exposure_receipt_sha256"] = "0" * 64
+    receipt["development_evidence_sha256"] = canonical_sha256(evidence)
+    receipt = _rehash(receipt)
+
+    writes: list[tuple[Path, object]] = []
+    monkeypatch.setattr(cli, "verify_receipt_environment_hashes", lambda *_args: None)
+    monkeypatch.setattr(
+        cli, "verify_power_operating_characteristics", lambda *_args, **_kwargs: "ok"
+    )
+    monkeypatch.setattr(
+        cli, "write_private_once", lambda path, value: writes.append((path, value))
+    )
+
+    with pytest.raises(PowerCLIRefusal, match="exposure"):
+        write_validated_power_receipt(
+            Path("must-not-exist.json"),
+            receipt,
             expected_environment_hashes=hashes,
             judge_core_path=JUDGE_PATH,
         )
@@ -818,6 +1051,8 @@ def test_cli_refusal_does_not_echo_private_error_text(
         "c",
         "--prior-exposure-receipt",
         "p",
+        "--aborted-attempt-exposure-receipt",
+        "a",
         "--suite",
         "u",
         "--evaluator-receipt",

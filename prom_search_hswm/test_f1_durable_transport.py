@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 from pathlib import Path
+import re
+import sqlite3
 import subprocess
 import sys
 from urllib import request as urllib_request
@@ -11,6 +14,7 @@ import pytest
 
 from prom_search_hswm.hswm_call_receipt import ModelCallV1, invoke_function
 from prom_search_hswm.hswm_f1_durable_transport import (
+    AmbiguousModelOutcome,
     DurableIntentConflict,
     DurableLedgerIntegrityError,
     DurableSpoolJSONPort,
@@ -25,14 +29,541 @@ from prom_search_hswm.hswm_result_spool import (
     ResultSpoolHTTPServer,
     ResultSpoolService,
     SQLiteResultSpool,
+    SpoolIntegrityError,
 )
 import prom_search_hswm.hswm_result_spool as result_spool
+import prom_search_hswm.hswm_f1_durable_transport as durable_transport
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
 from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
 
 
 DEPLOYMENT_SHA256 = "d" * 64
 MODEL_REVISION = "f" * 40
+
+
+@pytest.mark.parametrize(
+    ("constructor", "error_type", "filename"),
+    (
+        (SQLiteF1CallLedger, DurableLedgerIntegrityError, "attempt.sqlite3"),
+        (SQLiteResultSpool, SpoolIntegrityError, "spool.sqlite3"),
+    ),
+)
+@pytest.mark.parametrize("unsafe_kind", ("public_mode", "hardlink", "symlink"))
+def test_sqlite_authorities_refuse_unsafe_existing_inodes_without_repair(
+    tmp_path: Path,
+    constructor,
+    error_type: type[Exception],
+    filename: str,
+    unsafe_kind: str,
+) -> None:
+    path = tmp_path / filename
+    backing = tmp_path / f"backing-{filename}"
+    payload = b"do-not-mutate"
+    if unsafe_kind == "public_mode":
+        path.write_bytes(payload)
+        path.chmod(0o644)
+        observed = path
+    else:
+        backing.write_bytes(payload)
+        backing.chmod(0o600)
+        if unsafe_kind == "hardlink":
+            os.link(backing, path)
+        else:
+            path.symlink_to(backing)
+        observed = backing
+    before_mode = observed.stat().st_mode & 0o777
+    before_payload = observed.read_bytes()
+
+    with pytest.raises(error_type):
+        constructor(path)
+
+    assert observed.read_bytes() == before_payload
+    assert observed.stat().st_mode & 0o777 == before_mode
+    if unsafe_kind == "public_mode":
+        assert before_mode == 0o644
+    elif unsafe_kind == "hardlink":
+        assert observed.stat().st_nlink == 2
+    else:
+        assert path.is_symlink()
+
+
+@pytest.mark.parametrize(
+    ("constructor", "filename"),
+    (
+        (SQLiteF1CallLedger, "attempt.sqlite3"),
+        (SQLiteResultSpool, "spool.sqlite3"),
+    ),
+)
+def test_sqlite_authorities_create_owner_private_main_files(
+    tmp_path: Path, constructor, filename: str
+) -> None:
+    path = tmp_path / filename
+    store = constructor(path)
+    try:
+        assert path.stat().st_mode & 0o777 == 0o600
+        assert path.stat().st_nlink == 1
+    finally:
+        store.close()
+
+
+@pytest.mark.parametrize(
+    ("constructor", "filename"),
+    (
+        (SQLiteF1CallLedger, "attempt.sqlite3"),
+        (SQLiteResultSpool, "spool.sqlite3"),
+    ),
+)
+def test_sqlite_authorities_disable_implicit_checkpoints_on_fresh_and_reopen(
+    tmp_path: Path, constructor, filename: str
+) -> None:
+    path = tmp_path / filename
+    feature_available = all(
+        (
+            hasattr(sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE"),
+            hasattr(sqlite3.Connection, "setconfig"),
+            hasattr(sqlite3.Connection, "getconfig"),
+        )
+    )
+    for _ in range(2):
+        store = constructor(path)
+        try:
+            assert store.wal_autocheckpoint == 0
+            assert store.checkpoint_on_close_disabled is feature_available
+        finally:
+            store.close()
+
+
+@pytest.mark.parametrize(
+    ("module", "constructor", "error_type", "filename"),
+    (
+        (
+            durable_transport,
+            SQLiteF1CallLedger,
+            DurableLedgerIntegrityError,
+            "attempt.sqlite3",
+        ),
+        (
+            result_spool,
+            SQLiteResultSpool,
+            SpoolIntegrityError,
+            "spool.sqlite3",
+        ),
+    ),
+)
+def test_required_close_policy_refuses_before_authority_database_open(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    module,
+    constructor,
+    error_type: type[Exception],
+    filename: str,
+) -> None:
+    monkeypatch.delattr(
+        module.sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE", raising=False
+    )
+    path = tmp_path / filename
+    with pytest.raises(error_type, match="lacks checkpoint-on-close control"):
+        constructor(path, require_no_checkpoint_on_close=True)
+    assert not path.exists()
+
+
+def _wal_frame_count(path: Path, page_size: int) -> int:
+    wal_path = Path(f"{path}-wal")
+    size = wal_path.stat().st_size
+    assert size >= 32
+    frame_size = page_size + 24
+    assert (size - 32) % frame_size == 0
+    return (size - 32) // frame_size
+
+
+def test_result_spool_crosses_default_checkpoint_boundary_without_checkpoint(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "checkpoint-boundary.sqlite3"
+    store = SQLiteResultSpool(path)
+    main_preimage = path.read_bytes()
+    page_size = int(store._connection.execute("PRAGMA page_size").fetchone()[0])
+    upstream_calls = 0
+    last_physical_call_id = ""
+
+    def upstream(_request: bytes) -> RawHTTPResponse:
+        nonlocal upstream_calls
+        upstream_calls += 1
+        return RawHTTPResponse(
+            status=200,
+            headers={"content-type": "application/json"},
+            body=b'{"ok":true}',
+        )
+
+    try:
+        for index in range(700):
+            last_physical_call_id = hashlib.sha256(
+                f"checkpoint-call-{index}".encode("ascii")
+            ).hexdigest()
+            intent_sha256 = hashlib.sha256(
+                f"checkpoint-intent-{index}".encode("ascii")
+            ).hexdigest()
+            request_bytes = canonical_json({"index": index}).encode("utf-8")
+            store.execute(
+                physical_call_id=last_physical_call_id,
+                intent_sha256=intent_sha256,
+                request_bytes=request_bytes,
+                upstream=upstream,
+            )
+            if _wal_frame_count(path, page_size) > 1000:
+                break
+        frames_before_close = _wal_frame_count(path, page_size)
+        checkpoint_on_close_disabled = store.checkpoint_on_close_disabled
+        wal_preclose = Path(f"{path}-wal").read_bytes()
+        assert frames_before_close > 1000
+        assert path.read_bytes() == main_preimage
+        assert upstream_calls == index + 1
+    finally:
+        store.close()
+
+    if checkpoint_on_close_disabled:
+        assert _wal_frame_count(path, page_size) == frames_before_close
+        assert path.read_bytes() == main_preimage
+        assert Path(f"{path}-wal").read_bytes() == wal_preclose
+        reopened = SQLiteResultSpool(path)
+        try:
+            replay = reopened.get(last_physical_call_id)
+            assert replay.body == b'{"ok":true}'
+            assert replay.replayed is True
+            assert reopened.wal_autocheckpoint == 0
+            assert reopened.checkpoint_on_close_disabled is True
+            assert upstream_calls == index + 1
+        finally:
+            reopened.close()
+
+
+def test_call_ledger_prepared_commit_crosses_checkpoint_boundary_and_reopens(
+    tmp_path: Path,
+) -> None:
+    if not all(
+        (
+            hasattr(sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE"),
+            hasattr(sqlite3.Connection, "setconfig"),
+            hasattr(sqlite3.Connection, "getconfig"),
+        )
+    ):
+        pytest.skip("sealed close policy requires Python 3.12 sqlite3 controls")
+
+    path = tmp_path / "attempt-checkpoint-boundary.sqlite3"
+    forbidden_transport_calls = 0
+
+    def forbidden_transport(*_args, **_kwargs):
+        nonlocal forbidden_transport_calls
+        forbidden_transport_calls += 1
+        raise AssertionError("checkpoint canary attempted network transport")
+
+    port = DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=forbidden_transport,
+        require_no_checkpoint_on_close=True,
+    )
+    main_preimage = path.read_bytes()
+    page_size = int(port.ledger._connection.execute("PRAGMA page_size").fetchone()[0])
+    last_physical_call_id = ""
+    try:
+        for index in range(700):
+            last_physical_call_id = hashlib.sha256(
+                f"ledger-checkpoint-call-{index}".encode("ascii")
+            ).hexdigest()
+            call = ModelCallV1(
+                physical_call_id=last_physical_call_id,
+                run_id="checkpoint-canary",
+                arm_id="typed_hswm_three_function_network",
+                item_id=f"item-{index}",
+                call_index=1,
+                function_id="QF_QUERY_COMPILER",
+                model="fixed-model",
+                model_revision=MODEL_REVISION,
+                system_prompt="checkpoint boundary canary",
+                input_type="QueryEnvelopeV1",
+                input_payload=_input(),
+                output_type="QueryPlanV1",
+                max_output_tokens=256,
+            )
+            request_bytes = canonical_json(port._request_body(call)).encode("utf-8")
+            route, request_sha256, intent_sha256, intent_bytes = port._intent(
+                call, request_bytes
+            )
+            assert port.ledger.prepare(
+                physical_call_id=last_physical_call_id,
+                intent_sha256=intent_sha256,
+                intent_bytes=intent_bytes,
+                request_sha256=request_sha256,
+                endpoint=route,
+                request_bytes=request_bytes,
+            ) == "PREPARED"
+            if _wal_frame_count(path, page_size) > 1000:
+                break
+        frames_before_close = _wal_frame_count(path, page_size)
+        wal_preclose = Path(f"{path}-wal").read_bytes()
+        assert frames_before_close > 1000
+        assert port.ledger.status(last_physical_call_id) == "PREPARED"
+        assert path.read_bytes() == main_preimage
+        assert forbidden_transport_calls == 0
+    finally:
+        port.close()
+
+    assert path.read_bytes() == main_preimage
+    assert Path(f"{path}-wal").read_bytes() == wal_preclose
+    reopened = DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=forbidden_transport,
+        require_no_checkpoint_on_close=True,
+    )
+    try:
+        assert reopened.ledger.status(last_physical_call_id) == "PREPARED"
+        assert reopened.audit()["call_count"] == index + 1
+        assert forbidden_transport_calls == 0
+    finally:
+        reopened.close()
+
+
+def _sqlite_family_snapshot(path: Path) -> dict[str, tuple[bytes, int, int, int]]:
+    result: dict[str, tuple[bytes, int, int, int]] = {}
+    for suffix in ("", "-wal", "-shm", "-journal"):
+        member = Path(f"{path}{suffix}")
+        try:
+            info = member.lstat()
+        except FileNotFoundError:
+            continue
+        result[suffix] = (
+            member.read_bytes(),
+            info.st_mode & 0o777,
+            info.st_dev,
+            info.st_ino,
+        )
+    return result
+
+
+@pytest.mark.parametrize(
+    ("constructor", "error_type", "filename"),
+    (
+        (SQLiteF1CallLedger, DurableLedgerIntegrityError, "attempt.sqlite3"),
+        (SQLiteResultSpool, SpoolIntegrityError, "spool.sqlite3"),
+    ),
+)
+@pytest.mark.parametrize("invalid_existing", ("zero-byte", "version-2", "journal"))
+def test_sqlite_authorities_refuse_unknown_existing_lifecycle_without_mutation(
+    tmp_path: Path,
+    constructor,
+    error_type: type[Exception],
+    filename: str,
+    invalid_existing: str,
+) -> None:
+    path = tmp_path / filename
+    if invalid_existing == "zero-byte":
+        path.write_bytes(b"")
+        path.chmod(0o600)
+    else:
+        store = constructor(path)
+        store.close()
+        if invalid_existing == "version-2":
+            connection = sqlite3.connect(path)
+            connection.execute("PRAGMA user_version=2")
+            connection.commit()
+            connection.close()
+        else:
+            journal = Path(f"{path}-journal")
+            journal.write_bytes(b"rollback-journal-must-be-preserved")
+            journal.chmod(0o600)
+    before = _sqlite_family_snapshot(path)
+
+    with pytest.raises(error_type):
+        constructor(path)
+
+    assert _sqlite_family_snapshot(path) == before
+
+
+@pytest.mark.parametrize(
+    ("constructor", "error_type", "filename", "table"),
+    (
+        (
+            SQLiteF1CallLedger,
+            DurableLedgerIntegrityError,
+            "weak-attempt.sqlite3",
+            "call_state",
+        ),
+        (SQLiteResultSpool, SpoolIntegrityError, "weak-spool.sqlite3", "spool_calls"),
+    ),
+)
+def test_sqlite_authorities_refuse_weakened_check_before_mutation(
+    tmp_path: Path,
+    constructor,
+    error_type: type[Exception],
+    filename: str,
+    table: str,
+) -> None:
+    path = tmp_path / filename
+    store = constructor(path)
+    store.close()
+    connection = sqlite3.connect(path)
+    sql = str(
+        connection.execute(
+            "SELECT sql FROM sqlite_master WHERE type='table' AND name=?", (table,)
+        ).fetchone()[0]
+    )
+    weakened = re.sub(
+        r"CHECK\s*\(status\s+IN\s*\([^)]*\)\)",
+        "",
+        sql,
+        count=1,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    assert weakened != sql
+    connection.execute("PRAGMA writable_schema=ON")
+    connection.execute(
+        "UPDATE sqlite_master SET sql=? WHERE type='table' AND name=?",
+        (weakened, table),
+    )
+    connection.execute("PRAGMA writable_schema=OFF")
+    connection.commit()
+    connection.close()
+    before = _sqlite_family_snapshot(path)
+
+    with pytest.raises(error_type):
+        constructor(path)
+
+    assert _sqlite_family_snapshot(path) == before
+
+
+@pytest.mark.parametrize(
+    ("constructor", "error_type", "filename"),
+    (
+        (SQLiteF1CallLedger, DurableLedgerIntegrityError, "attempt.sqlite3"),
+        (SQLiteResultSpool, SpoolIntegrityError, "spool.sqlite3"),
+    ),
+)
+def test_sqlite_authorities_detect_parent_swap_before_mutating_replacement(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    constructor,
+    error_type: type[Exception],
+    filename: str,
+) -> None:
+    active_parent = tmp_path / "active"
+    replacement_parent = tmp_path / "replacement"
+    active_parent.mkdir(mode=0o700)
+    replacement_parent.mkdir(mode=0o700)
+    active_path = active_parent / filename
+    replacement_path = replacement_parent / filename
+    active = constructor(active_path)
+    active.close()
+    replacement = constructor(replacement_path)
+    replacement.close()
+    replacement_before = _sqlite_family_snapshot(replacement_path)
+    original_connect = sqlite3.connect
+    swapped = {"done": False}
+
+    def swapping_connect(database, *args, **kwargs):
+        if (
+            not swapped["done"]
+            and isinstance(database, str)
+            and str(active_path) in database
+        ):
+            active_parent.rename(tmp_path / "old-active")
+            replacement_parent.rename(active_parent)
+            swapped["done"] = True
+        return original_connect(database, *args, **kwargs)
+
+    monkeypatch.setattr(sqlite3, "connect", swapping_connect)
+    with pytest.raises(error_type, match="parent identity drifted"):
+        constructor(active_path)
+
+    assert swapped["done"] is True
+    assert _sqlite_family_snapshot(active_path) == replacement_before
+
+
+@pytest.mark.parametrize("call_index", (True, 0, 4))
+def test_invalid_call_index_is_refused_before_ledger_or_transport_mutation(
+    tmp_path: Path, call_index: object
+) -> None:
+    transport = AttestedTransport()
+    with DurableSpoolJSONPort(
+        "http://spool", tmp_path / "invalid-call-index.sqlite3", transport=transport
+    ) as port:
+        call = ModelCallV1(
+            physical_call_id="a" * 64,
+            run_id="run",
+            arm_id="arm",
+            item_id="item",
+            call_index=call_index,
+            function_id="QF_QUERY_COMPILER",
+            model="fixed-model",
+            model_revision=MODEL_REVISION,
+            system_prompt="one",
+            input_type="QueryEnvelopeV1",
+            input_payload=_input(),
+            output_type="QueryPlanV1",
+            max_output_tokens=256,
+        )
+        with pytest.raises(DurableLedgerIntegrityError, match="call index"):
+            port(call)
+        assert port.audit()["call_count"] == 0
+    assert transport.calls == 0
+
+
+@pytest.mark.parametrize(
+    ("status", "response_status", "response_headers", "response_body", "response_sha", "error"),
+    (
+        ("DISPATCHING", 200, None, None, None, None),
+        ("DISPATCHING", None, None, None, None, "unexpected-error"),
+        ("UNKNOWN", None, None, None, None, None),
+        ("UNKNOWN", 200, None, None, None, "server-restart"),
+        ("COMPLETE", 200, None, b"{}", hashlib.sha256(b"{}").hexdigest(), None),
+        (
+            "COMPLETE",
+            200,
+            b"{}",
+            b"{}",
+            hashlib.sha256(b"{}").hexdigest(),
+            "unexpected-error",
+        ),
+    ),
+)
+def test_spool_schema_refuses_inverse_state_field_combinations(
+    tmp_path: Path,
+    status: str,
+    response_status: int | None,
+    response_headers: bytes | None,
+    response_body: bytes | None,
+    response_sha: str | None,
+    error: str | None,
+) -> None:
+    store = SQLiteResultSpool(tmp_path / "semantic-spool.sqlite3")
+    request = b"{}"
+    try:
+        with pytest.raises(sqlite3.IntegrityError):
+            store._connection.execute(
+                """
+                INSERT INTO spool_calls(
+                    physical_call_id,intent_sha256,request_sha256,request_bytes,
+                    status,response_status,response_headers,response_body,
+                    response_sha256,error_class
+                ) VALUES(?,?,?,?,?,?,?,?,?,?)
+                """,
+                (
+                    "a" * 64,
+                    "b" * 64,
+                    hashlib.sha256(request).hexdigest(),
+                    request,
+                    status,
+                    response_status,
+                    response_headers,
+                    response_body,
+                    response_sha,
+                    error,
+                ),
+            )
+        assert store.audit()["call_count"] == 0
+    finally:
+        store.close()
 
 
 def _deployment_binding(endpoint: str) -> ModelDeploymentBinding:
@@ -205,6 +736,133 @@ def test_same_physical_id_with_different_intent_is_rejected(tmp_path: Path) -> N
     assert transport.calls == 1
 
 
+def test_different_physical_id_cannot_reuse_a_logical_call_slot(
+    tmp_path: Path,
+) -> None:
+    transport = AttestedTransport()
+    port = DurableSpoolJSONPort(
+        "http://spool", tmp_path / "logical-slot.db", transport=transport
+    )
+    first = ModelCallV1(
+        physical_call_id="a" * 64,
+        run_id="run",
+        arm_id="arm",
+        item_id="item",
+        call_index=1,
+        function_id="QF_QUERY_COMPILER",
+        model="fixed-model",
+        model_revision=MODEL_REVISION,
+        system_prompt="one",
+        input_type="QueryEnvelopeV1",
+        input_payload=_input(),
+        output_type="QueryPlanV1",
+        max_output_tokens=256,
+    )
+    port(first)
+    before = port.audit()
+    with pytest.raises(DurableIntentConflict, match="logical call slot"):
+        port(ModelCallV1(**{**first.__dict__, "physical_call_id": "b" * 64}))
+    after = port.audit()
+    port.close()
+    assert after == before
+    assert transport.calls == 1
+
+
+def test_existing_physical_id_refuses_a_preexisting_duplicate_logical_slot(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "preexisting-logical-slot.db"
+    first = ModelCallV1(
+        physical_call_id="a" * 64,
+        run_id="run",
+        arm_id="arm",
+        item_id="item",
+        call_index=1,
+        function_id="QF_QUERY_COMPILER",
+        model="fixed-model",
+        model_revision=MODEL_REVISION,
+        system_prompt="one",
+        input_type="QueryEnvelopeV1",
+        input_payload=_input(),
+        output_type="QueryPlanV1",
+        max_output_tokens=256,
+    )
+    second = ModelCallV1(**{**first.__dict__, "physical_call_id": "b" * 64})
+    seed = DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=lambda *_args: pytest.fail("seed touched transport"),
+    )
+    first_request = canonical_json(seed._request_body(first)).encode("utf-8")
+    first_route, first_request_sha, first_intent_sha, first_intent = seed._intent(
+        first, first_request
+    )
+    assert seed.ledger.prepare(
+        physical_call_id=first.physical_call_id,
+        intent_sha256=first_intent_sha,
+        intent_bytes=first_intent,
+        request_sha256=first_request_sha,
+        endpoint=first_route,
+        request_bytes=first_request,
+    ) == "PREPARED"
+    second_request = canonical_json(seed._request_body(second)).encode("utf-8")
+    second_route, second_request_sha, second_intent_sha, second_intent = seed._intent(
+        second, second_request
+    )
+    connection = seed.ledger._connection
+    connection.execute("BEGIN IMMEDIATE")
+    connection.execute(
+        """
+        INSERT INTO call_state(
+            physical_call_id,intent_sha256,intent_bytes,request_sha256,
+            endpoint,request_bytes,status
+        ) VALUES(?,?,?,?,?,?,'PREPARED')
+        """,
+        (
+            second.physical_call_id,
+            second_intent_sha,
+            second_intent,
+            second_request_sha,
+            second_route,
+            second_request,
+        ),
+    )
+    seed.ledger._append_event_tx(
+        second.physical_call_id,
+        "PREPARED",
+        {
+            "intent_sha256": second_intent_sha,
+            "request_sha256": second_request_sha,
+        },
+    )
+    connection.execute("COMMIT")
+    counts = (
+        connection.execute("SELECT COUNT(*) FROM call_state").fetchone()[0],
+        connection.execute("SELECT COUNT(*) FROM attempt_events").fetchone()[0],
+    )
+    unrelated = ModelCallV1(
+        **{
+            **first.__dict__,
+            "physical_call_id": "c" * 64,
+            "item_id": "unrelated-item",
+        }
+    )
+    with pytest.raises(DurableLedgerIntegrityError, match="repeats a logical call slot"):
+        seed(unrelated)
+    assert (
+        connection.execute("SELECT COUNT(*) FROM call_state").fetchone()[0],
+        connection.execute("SELECT COUNT(*) FROM attempt_events").fetchone()[0],
+    ) == counts
+    seed.close()
+
+    before = _sqlite_family_snapshot(path)
+    transport = AttestedTransport()
+    with pytest.raises(DurableLedgerIntegrityError, match="repeats a logical call slot"):
+        DurableSpoolJSONPort("http://spool", path, transport=transport)
+    assert _sqlite_family_snapshot(path) == before
+    assert transport.calls == 0
+
+
 @pytest.mark.parametrize(
     "body",
     [
@@ -272,6 +930,96 @@ def test_crash_after_raw_commit_recovers_offline(tmp_path: Path) -> None:
         output, _receipt = _invoke(reopened)
         assert output == _query_plan()
         assert reopened.audit()["status_counts"] == {"ACCEPTED": 1}
+
+
+def _sent_ordinals(path: Path) -> list[int]:
+    connection = __import__("sqlite3").connect(path)
+    try:
+        rows = connection.execute(
+            "SELECT event_bytes FROM attempt_events "
+            "WHERE event_type='SENT' ORDER BY sequence"
+        ).fetchall()
+    finally:
+        connection.close()
+    return [json.loads(bytes(row[0]).decode("utf-8"))["detail"]["delivery_ordinal"] for row in rows]
+
+
+def test_crash_after_sent_resumes_with_the_next_lifetime_ordinal(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "after-sent.db"
+    fired = {"value": False}
+
+    def crash(stage: str, _call: ModelCallV1) -> None:
+        if stage == "after_sent" and not fired["value"]:
+            fired["value"] = True
+            raise SimulatedCrash
+
+    first_transport = AttestedTransport()
+    port = DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=first_transport,
+        max_delivery_attempts=2,
+        delivery_backoff_s=(0.0,),
+        fault_injector=crash,
+    )
+    with pytest.raises(SimulatedCrash):
+        _invoke(port)
+    port.close()
+    assert first_transport.calls == 0
+
+    resumed_transport = AttestedTransport()
+    with DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=resumed_transport,
+        max_delivery_attempts=2,
+        delivery_backoff_s=(0.0,),
+    ) as reopened:
+        output, _receipt = _invoke(reopened)
+        assert output == _query_plan()
+        assert reopened.audit()["status_counts"] == {"ACCEPTED": 1}
+    assert resumed_transport.calls == 1
+    assert _sent_ordinals(path) == [1, 2]
+
+
+def test_crash_after_last_sent_aborts_before_any_restart_transport(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "after-last-sent.db"
+
+    def crash(stage: str, _call: ModelCallV1) -> None:
+        if stage == "after_sent":
+            raise SimulatedCrash
+
+    first_transport = AttestedTransport()
+    port = DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=first_transport,
+        max_delivery_attempts=1,
+        delivery_backoff_s=(0.0,),
+        fault_injector=crash,
+    )
+    with pytest.raises(SimulatedCrash):
+        _invoke(port)
+    port.close()
+    assert first_transport.calls == 0
+
+    resumed_transport = AttestedTransport()
+    with DurableSpoolJSONPort(
+        "http://spool",
+        path,
+        transport=resumed_transport,
+        max_delivery_attempts=1,
+        delivery_backoff_s=(0.0,),
+    ) as reopened:
+        with pytest.raises(AmbiguousModelOutcome, match="lifetime budget"):
+            _invoke(reopened)
+        assert reopened.audit()["status_counts"] == {"AMBIGUOUS_ABORT": 1}
+    assert resumed_transport.calls == 0
+    assert _sent_ordinals(path) == [1]
 
 
 def test_pending_spool_result_is_reconciled_without_new_call_identity(
@@ -439,12 +1187,8 @@ def test_item_run_byte_tamper_is_detected_by_audit(tmp_path: Path) -> None:
     connection.execute("UPDATE item_runs SET item_run_bytes=?", (bytes(raw),))
     connection.commit()
     connection.close()
-    ledger = SQLiteF1CallLedger(path)
-    try:
-        with pytest.raises(Exception):
-            ledger.audit()
-    finally:
-        ledger.close()
+    with pytest.raises(DurableLedgerIntegrityError, match="pre-write logical audit"):
+        SQLiteF1CallLedger(path)
 
 
 def test_server_process_kill_after_dispatch_never_redispatches(tmp_path: Path) -> None:

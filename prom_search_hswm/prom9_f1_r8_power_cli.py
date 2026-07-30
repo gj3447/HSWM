@@ -23,6 +23,9 @@ from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
 from prom_search_hswm.prom9_f1_prior_exposure import (
     _read_private_bytes,
     _strict_object,
+    verify_aborted_attempt_exposure_receipt,
+    verify_forbidden_exposure_union,
+    verify_prior_exposure_receipt,
     write_private_once,
 )
 from prom_search_hswm.prom9_f1_r8_environment import (
@@ -49,10 +52,11 @@ from prom_search_hswm.prom9_f1_r8_power import (
     build_power_receipt,
     derive_development_components,
 )
+from prom_search_hswm.prom9_f1_r8_runner import read_stable_json
 
 
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
-EXPECTED_POWER_RECEIPT_SCHEMA = "hswm-prom9-f1-r8-power-operating-characteristic/v3"
+EXPECTED_POWER_RECEIPT_SCHEMA = "hswm-prom9-f1-r8-power-operating-characteristic/v4"
 ENVIRONMENT_HASH_FIELDS = (
     "environment_receipt_sha256",
     "dependency_receipt_sha256",
@@ -95,6 +99,14 @@ class PowerCLIRefusal(RuntimeError):
 
 def _read(path: Path, label: str) -> dict[str, object]:
     return _strict_object(_read_private_bytes(path), label)
+
+
+def _read_public(path: Path, label: str) -> dict[str, object]:
+    try:
+        value, _file_sha256 = read_stable_json(path, label)
+    except Exception as error:
+        raise PowerCLIRefusal(f"cannot capture stable {label}") from error
+    return value
 
 
 def _sha256(value: object, label: str) -> str:
@@ -304,6 +316,7 @@ def verify_power_operating_characteristics(
         "selection_receipt",
         "gold_source_receipt",
         "prior_exposure_receipt",
+        "aborted_attempt_exposure_receipt",
         "suite",
         "evaluator_receipt",
         "gold",
@@ -494,6 +507,64 @@ def verify_receipt_environment_hashes(
             raise PowerCLIRefusal(f"power receipt {field} drifted")
 
 
+def verify_receipt_aborted_attempt_exposure_binding(
+    receipt: Mapping[str, object],
+) -> str:
+    """Exact-verify and cross-bind the quarantined-attempt receipt.
+
+    ``build_power_receipt`` performs the same checks while constructing a
+    receipt, but this exported terminal gate also accepts an already-built
+    mapping.  Repeating the verification here prevents a caller from
+    re-signing the outer power receipt around an empty, incomplete, or
+    independently re-signed incident receipt.
+    """
+
+    evidence = _mapping(receipt.get("development_evidence"), "development evidence")
+    incident = _mapping(
+        evidence.get("aborted_attempt_exposure_receipt"),
+        "aborted-attempt exposure receipt",
+    )
+    try:
+        incident_sha256 = verify_aborted_attempt_exposure_receipt(incident)
+    except Exception as error:
+        raise PowerCLIRefusal(
+            "aborted-attempt exposure receipt failed exact verification"
+        ) from error
+
+    artifacts = _mapping(evidence.get("artifact_receipts"), "artifact receipts")
+    selection = _mapping(evidence.get("selection_receipt"), "selection receipt")
+    execution_lock = _mapping(evidence.get("execution_lock"), "execution lock")
+    prior = _mapping(
+        evidence.get("prior_exposure_receipt"), "prior-exposure receipt"
+    )
+    try:
+        prior_sha256 = verify_prior_exposure_receipt(prior)
+    except Exception as error:
+        raise PowerCLIRefusal(
+            "prior-exposure receipt failed exact verification"
+        ) from error
+    for container, label in (
+        (artifacts, "artifact receipts"),
+        (selection, "selection receipt"),
+        (execution_lock, "execution lock"),
+    ):
+        if (
+            container.get("prior_exposure_receipt_sha256") != prior_sha256
+            or container.get("aborted_attempt_exposure_receipt_sha256")
+            != incident_sha256
+        ):
+            raise PowerCLIRefusal(
+                f"{label} exposure receipt binding drifted"
+            )
+    try:
+        verify_forbidden_exposure_union(prior, incident, execution_lock)
+    except Exception as error:
+        raise PowerCLIRefusal(
+            "execution-lock forbidden exposure union verification failed"
+        ) from error
+    return incident_sha256
+
+
 def write_validated_power_receipt(
     path: Path,
     receipt: Mapping[str, object],
@@ -503,6 +574,7 @@ def write_validated_power_receipt(
 ) -> None:
     """Run every terminal gate before the first-write-wins filesystem effect."""
 
+    verify_receipt_aborted_attempt_exposure_binding(receipt)
     verify_receipt_environment_hashes(receipt, expected_environment_hashes)
     verify_power_operating_characteristics(
         receipt,
@@ -519,6 +591,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--gold-source-receipt", type=Path, required=True)
     parser.add_argument("--selection-receipt", type=Path, required=True)
     parser.add_argument("--prior-exposure-receipt", type=Path, required=True)
+    parser.add_argument(
+        "--aborted-attempt-exposure-receipt", type=Path, required=True
+    )
     parser.add_argument("--suite", type=Path, required=True)
     parser.add_argument("--evaluator-receipt", type=Path, required=True)
     parser.add_argument("--gold", type=Path, required=True)
@@ -576,6 +651,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             prior_exposure_receipt=_read(
                 args.prior_exposure_receipt, "prior-exposure receipt"
             ),
+            aborted_attempt_exposure_receipt=_read_public(
+                args.aborted_attempt_exposure_receipt,
+                "aborted-attempt exposure receipt",
+            ),
             suite=_read(args.suite, "terminal development suite"),
             evaluator_receipt=_read(args.evaluator_receipt, "evaluator receipt"),
             gold=_read(args.gold, "private development gold"),
@@ -624,6 +703,7 @@ __all__ = [
     "main",
     "verify_measured_environment_bundle",
     "verify_power_operating_characteristics",
+    "verify_receipt_aborted_attempt_exposure_binding",
     "verify_receipt_environment_hashes",
     "write_validated_power_receipt",
 ]

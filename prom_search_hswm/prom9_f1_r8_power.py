@@ -2,7 +2,7 @@
 """Freeze outcome-blind F1 r8 cohorts and build the development power receipt.
 
 Selection reads only Dataset Viewer IDs/questions/context/type.  Public
-selection v2 contains only those redacted rows; exact answer-bearing page and
+selection v3 contains only those redacted rows; exact answer-bearing page and
 selected-row preimages live in a separate evaluator-only receipt.  Development components are frozen before
 any model call as 12 equal blocks of four; the confirmatory cohort is selected
 from complete singleton components so exactly 100 raw items are retained.
@@ -41,16 +41,23 @@ from prom_search_hswm.prom9_f1_prior_exposure import (
     _page_projection,
     _read_private_bytes,
     _strict_object,
+    F1_R8_A3_SUCCESSOR_RUN_ID,
+    iter_aborted_attempt_incidents,
+    merge_exposure_boundaries,
+    verify_aborted_attempt_exposure_receipt,
+    verify_f1_r8_successor_exposure_set,
+    verified_aborted_attempt_aggregate,
     verify_prior_exposure_receipt,
     write_private_once,
 )
 
 
-SELECTION_SCHEMA = "hswm-prom9-f1-r8-cohort-selection/v2"
+SELECTION_SCHEMA = "hswm-prom9-f1-r8-cohort-selection/v3"
+SUCCESSOR_SELECTION_SCHEMA = "hswm-prom9-f1-r8-cohort-selection/v4"
 GOLD_SOURCE_SCHEMA = "hswm-prom9-f1-r8-gold-source-receipt/v1"
-POWER_RECEIPT_SCHEMA = "hswm-prom9-f1-r8-power-operating-characteristic/v3"
+POWER_RECEIPT_SCHEMA = "hswm-prom9-f1-r8-power-operating-characteristic/v4"
 POWER_DEVELOPMENT_SCHEMA = "hswm-prom9-f1-r8-power-development-data/v2"
-POWER_EVIDENCE_SCHEMA = "hswm-prom9-f1-r8-development-evidence/v1"
+POWER_EVIDENCE_SCHEMA = "hswm-prom9-f1-r8-development-evidence/v2"
 POWER_SIMULATOR_SCHEMA = "hswm-prom9-f1-r8-power-simulator-spec/v1"
 BLOCK_ASSIGNMENT_SCHEMA = "hswm-f1-r8-power-block-assignment/v1"
 SELECTION_KEY_SCHEMA = "hswm-f1-r8-component-selection/v1"
@@ -247,28 +254,154 @@ def _verify_disjoint(left: Mapping[str, object], right: Mapping[str, object], la
             raise PowerRefusal(f"{label} overlaps on {key}")
 
 
+def _component_overlaps_boundary(
+    component: Mapping[str, object], boundary: Mapping[str, object]
+) -> bool:
+    """Return whether any frozen identity dimension crosses the boundary."""
+
+    return bool(
+        str(component["component_id"])
+        in {str(value) for value in boundary["component_ids"]}
+        or set(str(value) for value in component["source_entity_ids"])
+        & {str(value) for value in boundary["source_entity_ids"]}
+        or set(str(value) for value in component["item_ids"])
+        & {str(value) for value in boundary["item_ids"]}
+    )
+
+
+def _verify_incident_component_preimage(
+    projected_items: Sequence[Mapping[str, object]],
+    components: Sequence[Mapping[str, object]],
+    incident_receipt: Mapping[str, object],
+) -> None:
+    try:
+        aggregate = verified_aborted_attempt_aggregate(incident_receipt)
+    except Exception as error:
+        raise PowerRefusal("aborted-attempt exposure aggregate is absent") from error
+    expected = {
+        "item_ids": sorted(str(value) for value in aggregate["prior_item_ids"]),
+        "source_entity_ids": sorted(
+            str(value) for value in aggregate["prior_source_entity_ids"]
+        ),
+        "component_ids": sorted(
+            str(value) for value in aggregate["prior_component_ids"]
+        ),
+    }
+    component_by_id = {
+        str(component["component_id"]): component for component in components
+    }
+    metadata_by_item: dict[str, dict[str, object]] = {}
+    for detailed_incident in iter_aborted_attempt_incidents(incident_receipt):
+        observations = detailed_incident.get("call_observations")
+        item_runs = detailed_incident.get("item_run_observations")
+        if not isinstance(observations, list) or not isinstance(item_runs, list):
+            raise PowerRefusal("aborted-attempt detailed observations are absent")
+        for observation in [*observations, *item_runs]:
+            if not isinstance(observation, Mapping):
+                raise PowerRefusal("aborted-attempt observation is malformed")
+            item_id = observation.get("item_id")
+            dataset_row_index = observation.get("dataset_row_index")
+            source_entity_ids = observation.get("source_entity_ids")
+            component_id = observation.get("component_id")
+            if (
+                not isinstance(item_id, str)
+                or not item_id
+                or type(dataset_row_index) is not int
+                or not isinstance(source_entity_ids, list)
+                or source_entity_ids != sorted(set(source_entity_ids))
+                or any(not isinstance(value, str) for value in source_entity_ids)
+                or not isinstance(component_id, str)
+                or component_id not in component_by_id
+            ):
+                raise PowerRefusal("aborted-attempt observation identity is malformed")
+            metadata = {
+                "item_id": item_id,
+                "dataset_row_index": dataset_row_index,
+                "source_entity_ids": list(source_entity_ids),
+                "component_id": component_id,
+            }
+            prior = metadata_by_item.setdefault(item_id, metadata)
+            if prior != metadata:
+                raise PowerRefusal("aborted-attempt item metadata conflicts")
+    observed = {
+        "item_ids": sorted(metadata_by_item),
+        "source_entity_ids": sorted(
+            {
+                str(source)
+                for metadata in metadata_by_item.values()
+                for source in metadata["source_entity_ids"]
+            }
+        ),
+        "component_ids": sorted(
+            {str(metadata["component_id"]) for metadata in metadata_by_item.values()}
+        ),
+    }
+    if observed != expected:
+        raise PowerRefusal(
+            "aborted-attempt observations differ from the cumulative aggregate"
+        )
+    for metadata in metadata_by_item.values():
+        component = component_by_id[str(metadata["component_id"])]
+        if str(metadata["item_id"]) not in {
+            str(value) for value in component["item_ids"]
+        }:
+            raise PowerRefusal("aborted-attempt item differs from its component")
+        row_matches = [
+            item
+            for item in projected_items
+            if item.get("dataset_row_index") == metadata["dataset_row_index"]
+            and str(item.get("item_id")) == metadata["item_id"]
+            and sorted(str(value) for value in item.get("source_entity_ids", []))
+            == metadata["source_entity_ids"]
+            and str(item.get("component_id")) == metadata["component_id"]
+        ]
+        if len(row_matches) != 1:
+            raise PowerRefusal(
+                "aborted-attempt observation does not match exactly one "
+                "development candidate preimage"
+            )
+
+
 def _build_selection_receipt(
     *,
     prior_receipt: Mapping[str, object],
+    aborted_attempt_exposure_receipt: Mapping[str, object],
     development_pages: Mapping[int, object],
     confirmatory_pages: Mapping[int, object],
     page_loader,
+    successor_authority: bool,
 ) -> dict[str, object]:
     prior_sha = verify_prior_exposure_receipt(prior_receipt)
+    aborted_sha = (
+        verify_f1_r8_successor_exposure_set(
+            aborted_attempt_exposure_receipt
+        )
+        if successor_authority
+        else verify_aborted_attempt_exposure_receipt(
+            aborted_attempt_exposure_receipt
+        )
+    )
+    exposure_boundary = merge_exposure_boundaries(
+        prior_receipt, aborted_attempt_exposure_receipt
+    )
+    if (
+        exposure_boundary.get("prior_exposure_receipt_sha256") != prior_sha
+        or exposure_boundary.get("aborted_attempt_exposure_receipt_sha256")
+        != aborted_sha
+    ):
+        raise PowerRefusal("merged exposure boundary identity drifted")
     if set(development_pages) != set(DEVELOPMENT_OFFSETS):
         raise PowerRefusal("development candidate pages drifted")
     if set(confirmatory_pages) != set(CONFIRMATORY_POOL_OFFSETS):
         raise PowerRefusal("confirmatory candidate pages drifted")
-    aggregate = prior_receipt.get("aggregate")
-    if not isinstance(aggregate, Mapping):
-        raise PowerRefusal("prior exposure aggregate is missing")
-    prior = {
-        "item_ids": list(aggregate["prior_item_ids"]),
-        "source_entity_ids": list(aggregate["prior_source_entity_ids"]),
-        "component_ids": list(aggregate["prior_component_ids"]),
+    exposed = {
+        "item_ids": list(exposure_boundary["item_ids"]),
+        "source_entity_ids": list(exposure_boundary["source_entity_ids"]),
+        "component_ids": list(exposure_boundary["component_ids"]),
     }
-    prior_entities = set(str(value) for value in prior["source_entity_ids"])
-    prior_items = set(str(value) for value in prior["item_ids"])
+    exposed_entities = set(str(value) for value in exposed["source_entity_ids"])
+    exposed_items = set(str(value) for value in exposed["item_ids"])
+    exposed_components = set(str(value) for value in exposed["component_ids"])
 
     page_receipts: list[dict[str, object]] = []
     development_rows: list[dict[str, object]] = []
@@ -282,11 +415,13 @@ def _build_selection_receipt(
         development_entries.extend(entries)
     dev_items = [dict(row) for row in development_rows]
     dev_components = _assign_components(dev_items)
+    _verify_incident_component_preimage(
+        dev_items, dev_components, aborted_attempt_exposure_receipt
+    )
     eligible_dev = [
         component
         for component in dev_components
-        if not (set(component["source_entity_ids"]) & prior_entities)
-        and not (set(component["item_ids"]) & prior_items)
+        if not _component_overlaps_boundary(component, exposed)
     ]
     if len(eligible_dev) < DEVELOPMENT_COMPONENTS:
         raise PowerRefusal("development pool has fewer than 48 prior-fresh components")
@@ -342,12 +477,17 @@ def _build_selection_receipt(
     confirmatory_components = _assign_components(confirmatory_items)
     dev_entities = set(development_block["source_entity_ids"])
     dev_item_ids = set(development_block["item_ids"])
+    dev_component_ids = set(development_block["component_ids"])
+    confirmatory_forbidden = {
+        "item_ids": exposed_items | dev_item_ids,
+        "source_entity_ids": exposed_entities | dev_entities,
+        "component_ids": exposed_components | dev_component_ids,
+    }
     eligible_confirmatory = [
         component
         for component in confirmatory_components
         if len(component["item_ids"]) == 1
-        and not (set(component["source_entity_ids"]) & (prior_entities | dev_entities))
-        and not (set(component["item_ids"]) & (prior_items | dev_item_ids))
+        and not _component_overlaps_boundary(component, confirmatory_forbidden)
     ]
     if len(eligible_confirmatory) < 100:
         raise PowerRefusal("confirmatory pool has fewer than 100 fresh singleton components")
@@ -370,8 +510,8 @@ def _build_selection_receipt(
     confirmatory_block = _selected_rows_block(
         confirmatory_schedule, confirmatory_entries_by_item
     )
-    _verify_disjoint(prior, development_block, "prior/development")
-    _verify_disjoint(prior, confirmatory_block, "prior/confirmatory")
+    _verify_disjoint(exposed, development_block, "exposure/development")
+    _verify_disjoint(exposed, confirmatory_block, "exposure/confirmatory")
     _verify_disjoint(development_block, confirmatory_block, "development/confirmatory")
     if len(confirmatory_block["item_ids"]) != 100 or len(confirmatory_schedule) != 100:
         raise PowerRefusal("confirmatory selection is not exactly 100 complete components")
@@ -388,12 +528,20 @@ def _build_selection_receipt(
         "confirmatory_component_size": 1,
         "selection_key_schema": SELECTION_KEY_SCHEMA,
         "block_assignment_schema": BLOCK_ASSIGNMENT_SCHEMA,
+        "exclusion_dimensions": [
+            "item_ids",
+            "source_entity_ids",
+            "component_ids",
+        ],
         "derived_fields": ["id", "question", "context", "type"],
         "answers_used_for_selection": False,
     }
     unsigned = {
-        "schema_version": SELECTION_SCHEMA,
+        "schema_version": (
+            SUCCESSOR_SELECTION_SCHEMA if successor_authority else SELECTION_SCHEMA
+        ),
         "prior_exposure_receipt_sha256": prior_sha,
+        "aborted_attempt_exposure_receipt_sha256": aborted_sha,
         "selection_policy": policy,
         "source_pages": page_receipts,
         "development": {
@@ -423,6 +571,7 @@ def _build_selection_receipt(
 def build_selection_receipt(
     *,
     prior_receipt: Mapping[str, object],
+    aborted_attempt_exposure_receipt: Mapping[str, object],
     development_pages: Mapping[int, Path],
     confirmatory_pages: Mapping[int, Path],
 ) -> dict[str, object]:
@@ -430,6 +579,7 @@ def build_selection_receipt(
 
     selection, _gold_source = build_selection_receipts(
         prior_receipt=prior_receipt,
+        aborted_attempt_exposure_receipt=aborted_attempt_exposure_receipt,
         development_pages=development_pages,
         confirmatory_pages=confirmatory_pages,
     )
@@ -466,10 +616,15 @@ def _gold_selected_block(
 def build_selection_receipts(
     *,
     prior_receipt: Mapping[str, object],
+    aborted_attempt_exposure_receipt: Mapping[str, object],
     development_pages: Mapping[int, Path],
     confirmatory_pages: Mapping[int, Path],
+    forensic_legacy_replay: bool = False,
 ) -> tuple[dict[str, object], dict[str, object]]:
-    """Build the public v2 selection and evaluator-only gold-source v1 pair."""
+    """Build a successor-v4 selection, or an explicit forensic v3 replay."""
+
+    if not isinstance(forensic_legacy_replay, bool):
+        raise PowerRefusal("forensic legacy replay flag must be boolean")
 
     if set(development_pages) != set(DEVELOPMENT_OFFSETS):
         raise PowerRefusal("development candidate pages drifted")
@@ -485,9 +640,11 @@ def build_selection_receipts(
     }
     selection = _build_selection_receipt(
         prior_receipt=prior_receipt,
+        aborted_attempt_exposure_receipt=aborted_attempt_exposure_receipt,
         development_pages=development_raw,
         confirmatory_pages=confirmatory_raw,
         page_loader=lambda raw, offset: _page_input_bytes(bytes(raw), offset),
+        successor_authority=not forensic_legacy_replay,
     )
     selection_sha = verify_selection_receipt(selection)
     page_receipts: list[dict[str, object]] = []
@@ -567,7 +724,8 @@ def _verify_development_block_assignment(
 
 
 def replay_selection_receipt(
-    value: Mapping[str, object], *, prior_receipt: Mapping[str, object]
+    value: Mapping[str, object], *, prior_receipt: Mapping[str, object],
+    aborted_attempt_exposure_receipt: Mapping[str, object]
 ) -> str:
     """Replay the selector from public redacted pages only."""
 
@@ -611,9 +769,13 @@ def replay_selection_receipt(
         target[offset] = [dict(row) for row in rows]
     rebuilt = _build_selection_receipt(
         prior_receipt=prior_receipt,
+        aborted_attempt_exposure_receipt=aborted_attempt_exposure_receipt,
         development_pages=development,
         confirmatory_pages=confirmatory,
         page_loader=lambda rows, offset: _page_input_redacted(rows, offset),
+        successor_authority=(
+            value.get("schema_version") == SUCCESSOR_SELECTION_SCHEMA
+        ),
     )
     if rebuilt != dict(value):
         raise PowerRefusal("selection receipt does not replay from sealed source pages")
@@ -621,12 +783,24 @@ def replay_selection_receipt(
 
 
 def verify_selection_receipt(value: Mapping[str, object]) -> str:
-    if value.get("schema_version") != SELECTION_SCHEMA:
+    if value.get("schema_version") not in {
+        SELECTION_SCHEMA,
+        SUCCESSOR_SELECTION_SCHEMA,
+    }:
         raise PowerRefusal("selection receipt schema drifted")
     unsigned = dict(value)
     declared = unsigned.pop("selection_receipt_sha256", None)
     if not isinstance(declared, str) or canonical_sha256(unsigned) != declared:
         raise PowerRefusal("selection receipt self-hash drifted")
+    if any(
+        not isinstance(value.get(field), str)
+        or _SHA256.fullmatch(str(value.get(field))) is None
+        for field in (
+            "prior_exposure_receipt_sha256",
+            "aborted_attempt_exposure_receipt_sha256",
+        )
+    ):
+        raise PowerRefusal("selection exposure receipt binding drifted")
     if value.get("pairwise_disjoint") != {
         "item_ids": True,
         "source_entity_ids": True,
@@ -1061,6 +1235,7 @@ def build_power_receipt(
     selection_receipt: Mapping[str, object],
     gold_source_receipt: Mapping[str, object],
     prior_exposure_receipt: Mapping[str, object],
+    aborted_attempt_exposure_receipt: Mapping[str, object],
     suite: Mapping[str, object],
     evaluator_receipt: Mapping[str, object],
     gold: Mapping[str, object],
@@ -1080,8 +1255,33 @@ def build_power_receipt(
 
     selection_sha = verify_selection_receipt(selection_receipt)
     prior_sha = verify_prior_exposure_receipt(prior_exposure_receipt)
-    if selection_receipt.get("prior_exposure_receipt_sha256") != prior_sha:
-        raise PowerRefusal("selection is not bound to the supplied prior exposure receipt")
+    successor_selection = (
+        selection_receipt.get("schema_version") == SUCCESSOR_SELECTION_SCHEMA
+    )
+    if not successor_selection:
+        raise PowerRefusal(
+            "development power receipt requires successor-v4 selection"
+        )
+    aborted_sha = verify_f1_r8_successor_exposure_set(
+        aborted_attempt_exposure_receipt
+    )
+    exposure_boundary = merge_exposure_boundaries(
+        prior_exposure_receipt, aborted_attempt_exposure_receipt
+    )
+    if (
+        manifest.get("run_id") != F1_R8_A3_SUCCESSOR_RUN_ID
+        or execution_lock.get("run_id") != F1_R8_A3_SUCCESSOR_RUN_ID
+        or
+        selection_receipt.get("prior_exposure_receipt_sha256") != prior_sha
+        or selection_receipt.get("aborted_attempt_exposure_receipt_sha256")
+        != aborted_sha
+        or exposure_boundary.get("prior_exposure_receipt_sha256") != prior_sha
+        or exposure_boundary.get("aborted_attempt_exposure_receipt_sha256")
+        != aborted_sha
+    ):
+        raise PowerRefusal(
+            "selection is not bound to the supplied complete exposure boundary"
+        )
     suite_sha = verify_suite_v3_without_gold(suite)
     execution_lock_sha = _self_hash(
         execution_lock, "lock_sha256", "development execution lock"
@@ -1160,6 +1360,8 @@ def build_power_receipt(
         or execution_lock.get("manifest_sha256") != canonical_sha256(manifest)
         or execution_lock.get("selection_receipt_sha256") != selection_sha
         or execution_lock.get("prior_exposure_receipt_sha256") != prior_sha
+        or execution_lock.get("aborted_attempt_exposure_receipt_sha256")
+        != aborted_sha
         or execution_lock.get("public_source_receipt_sha256") != source_sha
         or execution_lock.get("gold_source_receipt_sha256") != gold_source_sha
         or execution_lock.get("gold_sha256") != gold_sha
@@ -1217,26 +1419,11 @@ def build_power_receipt(
         gold=gold,
         selection_receipt=selection_receipt,
     )
-    prior = prior_exposure_receipt.get("aggregate")
-    if not isinstance(prior, Mapping):
-        raise PowerRefusal("prior exposure aggregate is absent")
-    if (
-        {value["component_id"] for value in components}
-        & set(prior.get("prior_component_ids", []))
-        or {
-            entity
-            for component in components
-            for entity in component["source_entity_ids"]
-        }
-        & set(prior.get("prior_source_entity_ids", []))
-        or {
-            item_id
-            for component in components
-            for item_id in component["item_ids"]
-        }
-        & set(prior.get("prior_item_ids", []))
+    if any(
+        _component_overlaps_boundary(component, exposure_boundary)
+        for component in components
     ):
-        raise PowerRefusal("development evidence overlaps prior measured exposure")
+        raise PowerRefusal("development evidence overlaps measured exposure boundary")
 
     plan = {
         "schema_version": POWER_SIMULATOR_SCHEMA,
@@ -1261,6 +1448,9 @@ def build_power_receipt(
         "selection_receipt": dict(selection_receipt),
         "gold_source_receipt": dict(gold_source_receipt),
         "prior_exposure_receipt": dict(prior_exposure_receipt),
+        "aborted_attempt_exposure_receipt": dict(
+            aborted_attempt_exposure_receipt
+        ),
         "suite": dict(suite),
         "evaluator_receipt": dict(evaluator_receipt),
         "gold": dict(gold),
@@ -1269,6 +1459,7 @@ def build_power_receipt(
         "artifact_receipts": {
             "selection_receipt_sha256": selection_sha,
             "prior_exposure_receipt_sha256": prior_sha,
+            "aborted_attempt_exposure_receipt_sha256": aborted_sha,
             "execution_lock_sha256": execution_lock_sha,
             "public_source_receipt_sha256": source_sha,
             "gold_source_receipt_sha256": gold_source_sha,
@@ -1330,6 +1521,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     subparsers = parser.add_subparsers(dest="command", required=True)
     select = subparsers.add_parser("select")
     select.add_argument("--prior-exposure-receipt", type=Path, required=True)
+    select.add_argument(
+        "--aborted-attempt-exposure-receipt", type=Path, required=True
+    )
     select.add_argument("--development-page", action="append", type=_page_arg, required=True)
     select.add_argument("--confirmatory-page", action="append", type=_page_arg, required=True)
     select.add_argument("--output", type=Path, required=True)
@@ -1340,6 +1534,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             raise PowerRefusal("unsupported command")
         prior_raw = _read_private_bytes(args.prior_exposure_receipt)
         prior = _strict_object(prior_raw, "prior-exposure receipt")
+        from prom_search_hswm.prom9_f1_r8_runner import read_stable_json
+
+        aborted, _aborted_file_sha = read_stable_json(
+            args.aborted_attempt_exposure_receipt,
+            "aborted-attempt-exposure receipt",
+        )
         development = dict(args.development_page)
         confirmatory = dict(args.confirmatory_page)
         if len(development) != len(args.development_page) or len(confirmatory) != len(args.confirmatory_page):
@@ -1348,6 +1548,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             raise PowerRefusal("public and gold-source outputs must be distinct")
         receipt, gold_source = build_selection_receipts(
             prior_receipt=prior,
+            aborted_attempt_exposure_receipt=aborted,
             development_pages=development,
             confirmatory_pages=confirmatory,
         )
@@ -1386,6 +1587,7 @@ __all__ = [
     "PowerRefusal",
     "GOLD_SOURCE_SCHEMA",
     "SELECTION_SCHEMA",
+    "SUCCESSOR_SELECTION_SCHEMA",
     "build_selection_receipt",
     "build_selection_receipts",
     "evaluator_selected_entries",

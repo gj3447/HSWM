@@ -4,13 +4,12 @@ import copy
 import json
 import os
 from pathlib import Path
-import subprocess
-import sys
 
 import pytest
 
 from prom_search_hswm.hswm_function_network import EvidenceCandidateV1
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
+from prom_search_hswm.prom9_f1_prior_exposure import F1_R8_A3_SUCCESSOR_RUN_ID
 from prom_search_hswm.prom9_f1_r8_power import (
     build_selection_receipts,
     evaluator_selected_entries,
@@ -25,10 +24,17 @@ from prom_search_hswm.prom9_f1_r8_source import (
     build_artifacts,
     redact_entries,
     source_entity_id,
+    main as source_main,
     verify_evaluator_seal,
     verify_public_source_receipt,
 )
-from prom_search_hswm.test_prom9_f1_r8_power import SENTINEL, _pages, _prior
+from prom_search_hswm.test_prom9_f1_r8_power import (
+    SENTINEL,
+    _pages,
+    _prior,
+    _successor_wrapper,
+    _synthetic_incident_source_entities,
+)
 
 
 def _row(item_id: str, question: str, answer: str, paragraphs: list[tuple[str, list[str]]]):
@@ -70,7 +76,7 @@ def _full_entries(viewer: dict[str, object]) -> list[dict[str, object]]:
 
 def _envelope() -> dict[str, object]:
     return {
-        "per_call_input_caps": {"1": 280, "2": 1713, "3": 2152},
+        "per_call_input_caps": {"1": 275, "2": 1691, "3": 2359},
         "per_call_output_caps": {"1": 768, "2": 1536, "3": 768},
     }
 
@@ -144,6 +150,9 @@ def test_public_source_v3_and_gold_v2_have_exact_separated_shapes() -> None:
         set(entry["row"]) == {"id", "question", "context", "type"}
         for entry in artifacts["source_receipt"]["redacted_rows"]
     )
+    assert {
+        item["max_input_tokens"] for item in artifacts["manifest"]["items"]
+    } == {4325}
 
 
 def test_transitive_shared_paragraphs_form_one_source_component() -> None:
@@ -182,10 +191,16 @@ def test_answer_mutation_changes_only_evaluator_side_hashes() -> None:
     ]["gold_source_receipt_sha256"]
 
 
-def test_cli_consumes_both_receipts_and_never_prints_answers(tmp_path: Path) -> None:
+def test_cli_consumes_both_receipts_and_never_prints_answers(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     development, confirmatory = _pages(tmp_path, answer=SENTINEL)
+    successor, _second_component = _successor_wrapper(monkeypatch)
     selection, gold_source = build_selection_receipts(
         prior_receipt=_prior(),
+        aborted_attempt_exposure_receipt=successor,
         development_pages=development,
         confirmatory_pages=confirmatory,
     )
@@ -207,12 +222,11 @@ def test_cli_consumes_both_receipts_and_never_prints_answers(tmp_path: Path) -> 
         for name in ("manifest", "gold", "source", "evaluator")
     }
     command = [
-        sys.executable, "-m", "prom_search_hswm.prom9_f1_r8_source",
         "--selection-receipt", str(inputs["selection"]),
         "--gold-source-receipt", str(inputs["gold_source"]),
         "--selection-cohort", "development",
         "--length", str(len(public_rows)),
-        "--run-id", "f1-2wiki-r8-development-cli-test",
+        "--run-id", F1_R8_A3_SUCCESSOR_RUN_ID,
         "--mode", "development",
         "--model", "fixed-model",
         "--model-revision", "fixed-revision",
@@ -223,9 +237,9 @@ def test_cli_consumes_both_receipts_and_never_prints_answers(tmp_path: Path) -> 
         "--source-receipt", str(outputs["source"]),
         "--evaluator-receipt", str(outputs["evaluator"]),
     ]
-    result = subprocess.run(command, check=False, capture_output=True, text=True)
-    assert result.returncode == 0, result.stderr
-    assert SENTINEL not in result.stdout + result.stderr
+    assert source_main(command) == 0
+    captured = capsys.readouterr()
+    assert SENTINEL not in captured.out + captured.err
     assert SENTINEL not in outputs["manifest"].read_text(encoding="utf-8")
     assert SENTINEL not in outputs["source"].read_text(encoding="utf-8")
     assert SENTINEL not in outputs["evaluator"].read_text(encoding="utf-8")

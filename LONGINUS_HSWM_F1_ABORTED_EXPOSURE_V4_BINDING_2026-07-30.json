@@ -1,0 +1,388 @@
+{
+  "schema": "longinus-hswm-f1-r8-aborted-exposure-v4-binding/v12",
+  "binding_id": "longinus-hswm-f1-r8-a2-v11-aborted-exposure-v4-v12-20260730",
+  "binding_state": "PIERCED_LOCAL_NO_KG_WRITE",
+  "generated_at": "2026-07-30T11:41:25+09:00",
+  "baseline_scope": "HSWM F1 r8 A2 v11 aborted-attempt public v4 receipt, exact profile-bound producer AST closure, exact P-A-B receipt/pin topology, and fresh-zero-successor quarantine boundary",
+  "scientific_status": "UNJUDGED",
+  "evidence_class": "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE",
+  "r7_status": "EXPLORATORY_ENGINEERING_ONLY__PREREGISTRATION_INADMISSIBLE",
+  "b22_gate": "LOCKED",
+  "model_calls": 26,
+  "incident_boundary": {
+    "aborted_attempt_exposure_receipt_sha256": "2a42ba116cb4d478c4f223ad62f7c29214ebe6f9ca730053d4504cd5ad9d3f23",
+    "counts": {
+      "attempt_calls": 27,
+      "attempt_events": 157,
+      "attempt_states": {
+        "ACCEPTED": 26,
+        "PREPARED": 1
+      },
+      "components": 2,
+      "item_runs": 8,
+      "items": 2,
+      "source_entities": 20,
+      "spool_absent_calls": 1,
+      "spool_calls": 26,
+      "spool_complete_calls": 26
+    },
+    "incident_profile_sha256": "5c8f245686515c2bc0716eb72e9b49469c9cc3c779ddca5fcaf9b0087abd1386",
+    "historical_v8_upstream_model_calls": 1,
+    "a2_upstream_model_calls": 26,
+    "cumulative_terminal_upstream_model_calls": 27,
+    "prospective_a3_upstream_model_calls": 0,
+    "confirmatory_upstream_model_calls": 0,
+    "scientific_verdicts": 0,
+    "canary_counter": {
+      "schema_version": "hswm-prom9-f1-canary-post-counter/v1",
+      "method": "DT_VLLM_ACCESS_LOG_EXACT_V1",
+      "source_provider": "PI/dt.sh",
+      "source_job_alias": "hswm-f1-r8-vllm-canary-triton",
+      "request_route": "/v1/chat/completions",
+      "access_record_pattern_sha256": "55fc21ae6a1109881957fec636caf5e66593185c04ab235fae997b60e97cb738",
+      "job_command": {
+        "basename": "cmd.sh",
+        "size_bytes": 652,
+        "sha256": "95e018951836b4a7fa1730e2c846dfd24171e9c81aca691a838bd16be22cb8dd"
+      },
+      "log_snapshot": {
+        "basename": "log",
+        "size_bytes": 60031,
+        "sha256": "1b4be90649ec3ca9be4a56be551492808c3937d4796a0311147a8dde8dcdc1a1"
+      },
+      "origin_commitment_sha256": "5740c8c416ca6bf283aeae82bfadbdc473a5733777a2c04d1ca030dc7f44fd2d",
+      "http_status_counts": {
+        "200": 27
+      },
+      "historical_baseline": 1,
+      "terminal_total": 27,
+      "incident_delta": 26,
+      "complete": true,
+      "receipt_sha256": "9867e7f5a274c0f5090b450fbf034baa9f5c6e90da29eb35fd7a004c14f4ddf9"
+    },
+    "successor_disposition": {
+      "schema_version": "hswm-prom9-f1-successor-disposition/v1",
+      "incident_profile_id": "hswm-f1-r8-a2-v11-development-sigbus-20260730",
+      "forensic_only": true,
+      "resume_authorized": false,
+      "successor_required": true,
+      "legacy_database_mutation_authorized": false,
+      "legacy_database_import_authorized": false,
+      "accepted_result_import_authorized": false
+    }
+  },
+  "git": {
+    "remote": "https://github.com/gj3447/HSWM.git",
+    "branch": "main",
+    "producer_commit": "f82bc41ff1615b4f5a9231deca8a90be99ae5b9c",
+    "producer_parent": "8d23053f730be09852102e5b38437ebee4a4b409",
+    "artifact_commit": "86f3b17380585cbab1c861dbbd65418c17074038",
+    "artifact_parent": "f82bc41ff1615b4f5a9231deca8a90be99ae5b9c",
+    "artifact_tree": "02ac7f6157b8d0e8175aba3c928d41b9c74b72b4",
+    "pin_commit": "fb95ac0fd2bde91c4a0b3358c8e46f44cd9b6895",
+    "pin_parent": "86f3b17380585cbab1c861dbbd65418c17074038",
+    "pin_tree": "1f308b709ef24b8f55dc197ce6809a2469552be7",
+    "binding_source_commit": "86f3b17380585cbab1c861dbbd65418c17074038",
+    "blob_authority": "Receipt bytes, producer targets, and the pre/post pin source are read with git cat-file from exact immutable commits; object identities are independently checked with ls-tree; worktree source is never read.",
+    "ancestry_rule": "The producer is the exact parent of the one-path receipt publication; that artifact commit is the exact parent of the one-path pin commit; the pin commit must be an ancestor of HEAD."
+  },
+  "receipt_binding": {
+    "path": "receipts/hswm_f1_r8_a2_v11_aborted_exposure.v4.json",
+    "schema_version": "hswm-prom9-f1-aborted-attempt-exposure/v4",
+    "schema_line": 2124,
+    "size_bytes": 1071401,
+    "raw_sha256": "68c6a29082505072acf0ec6166de191b45ea34e1b43acd384c2cf74442292c2f",
+    "self_sha256": "2a42ba116cb4d478c4f223ad62f7c29214ebe6f9ca730053d4504cd5ad9d3f23",
+    "blob_mode": "100644",
+    "blob_oid": "4aae424312e72fead6f093b11d0741638b620e7f"
+  },
+  "pin_binding": {
+    "path": "prom_search_hswm/prom9_f1_prior_exposure.py",
+    "symbol": "F1_R8_A2_INCIDENT_RECEIPT_SHA256",
+    "line": 132,
+    "producer_value": null,
+    "pinned_value": "2a42ba116cb4d478c4f223ad62f7c29214ebe6f9ca730053d4504cd5ad9d3f23",
+    "pre_pin_blob_mode": "100644",
+    "pre_pin_blob_oid": "8b1d54057031f343f521f0901e68d9e722c158f7",
+    "pre_pin_size_bytes": 298193,
+    "pre_pin_sha256": "9f0a65df44e4097a3008b1834168ef3d7c745570a8c88d7efb7a02f25a7692e9",
+    "pin_blob_mode": "100644",
+    "pin_blob_oid": "9229ac08661d1b041a41841bf32875b77849429f",
+    "pin_size_bytes": 298263,
+    "pin_sha256": "37e63bdb49cc8acc5c30cac08dc45ee208aa9b85b5375f678f5466373747cf40",
+    "replacement_policy": "EXACT_UTF8_LITERAL_REPLACEMENT_ONLY"
+  },
+  "producer_authority": {
+    "commit": "f82bc41ff1615b4f5a9231deca8a90be99ae5b9c",
+    "tree": "543bdeb168a63d8c21bd2d17f271b6d691653e2c",
+    "entrypoint": "prom_search_hswm/prom9_f1_prior_exposure.py",
+    "closure_policy": "MODULE_SCOPE_LOCAL_AST_LFP_V1",
+    "files": [
+      {
+        "relative_path": "bge_m3_embed.py",
+        "size_bytes": 41944,
+        "sha256": "3300d2d5cdbd79f61d5520de8453f830e278958c2c02b7823c5566c9e0940801",
+        "blob_mode": "100644",
+        "blob_oid": "7c987520e98ee64171ee6f0bb0baaf5d02cf8984"
+      },
+      {
+        "relative_path": "hswm_next_research_harness.py",
+        "size_bytes": 38372,
+        "sha256": "0c6825b442c0485bb3b3dbaa2a8cfb1bcdadc3fbf859ba2c1ac80c0610c72ef2",
+        "blob_mode": "100644",
+        "blob_oid": "3c5d64d25a9f96166daeecbf9bc93f6d7c72fb19"
+      },
+      {
+        "relative_path": "model_deployment_receipt.py",
+        "size_bytes": 24220,
+        "sha256": "c1f0b98deb43af4d2c584661fb22aaa2ea55c839183e77a07818e0d431c9d0dc",
+        "blob_mode": "100644",
+        "blob_oid": "d94074fe5d5a029e737c6896b4f32b05c22a8879"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_call_receipt.py",
+        "size_bytes": 12762,
+        "sha256": "eb544dab0b817feca03d1061f65273c3c8162b1fa40b12a56f25d37fcf5ea9af",
+        "blob_mode": "100644",
+        "blob_oid": "9819026e1bb65302d88a9ffa16df26b65fa8605d"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_f1_durable_transport.py",
+        "size_bytes": 73876,
+        "sha256": "855e3513ab0205adb887a759e78cb6f9aafbdacc5b6a02059cb3c369e9c7a918",
+        "blob_mode": "100644",
+        "blob_oid": "83a528a08dfcd01e4636c431b27a3b7f7508fb7f"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_f1_sqlite_schema.py",
+        "size_bytes": 23311,
+        "sha256": "e136b2006bc00c6bd96d2b1454c958ede1fbccd07b574dd792d71bf76c59cb56",
+        "blob_mode": "100644",
+        "blob_oid": "963a2f14319ce8798bee936a2d0ccc42f300ac25"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_function_network.py",
+        "size_bytes": 19838,
+        "sha256": "e96ec9fd9b4958ab6543b1031ee5831882214d552ccf2930c33248b1c344a1d3",
+        "blob_mode": "100644",
+        "blob_oid": "cbb425c52314b7496bbe98d7db1b189fe2217f8d"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_function_registry.py",
+        "size_bytes": 5294,
+        "sha256": "b9d858a8d84ba1b6ed1c88250a2f8936cbe78c459987a155c1f3fba8a77aede1",
+        "blob_mode": "100644",
+        "blob_oid": "540b282b65b5de1826f5d1f66d258b045f61f93d"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_result_spool.py",
+        "size_bytes": 47751,
+        "sha256": "993b5d004e1c877f61d7f460ebd7782f531ebef771e69bd4f86497d97b82d762",
+        "blob_mode": "100644",
+        "blob_oid": "a6e6b889304441311fc48f86152168d2ba6f3a1b"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_token_meter.py",
+        "size_bytes": 18138,
+        "sha256": "5149473c7ca3efea865d97cee324ff2c9ccca5d4d637c66a049f34eae15da274",
+        "blob_mode": "100644",
+        "blob_oid": "c41abbec861e8a69ec55f478e850691fb1786d3c"
+      },
+      {
+        "relative_path": "prom_search_hswm/hswm_typed_ports.py",
+        "size_bytes": 16942,
+        "sha256": "ff5dff3be6abf646ed0694839a5181bb8033a6ee4bcdc25966e7808e7cbd0937",
+        "blob_mode": "100644",
+        "blob_oid": "bdd09292f19178a6b125964c919bf407778b660e"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_f1_envelope.py",
+        "size_bytes": 13984,
+        "sha256": "d96793530133391f42be298eb5a742e92aada92cae1e61e23981eafdf2237fc2",
+        "blob_mode": "100644",
+        "blob_oid": "62a3d4aeae1c76b401fcabea60cde4fdb3e0edfe"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_f1_prior_exposure.py",
+        "size_bytes": 298193,
+        "sha256": "9f0a65df44e4097a3008b1834168ef3d7c745570a8c88d7efb7a02f25a7692e9",
+        "blob_mode": "100644",
+        "blob_oid": "8b1d54057031f343f521f0901e68d9e722c158f7"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_f1_r8_environment.py",
+        "size_bytes": 59021,
+        "sha256": "daad27450dbd4f79b1a6719064cce9aa2b8d4efb8b92af9ec7f516702d5468f7",
+        "blob_mode": "100644",
+        "blob_oid": "2b3d64b1b33e3cc3100791ddc5a552b94c8a072f"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_f1_r8_private_output.py",
+        "size_bytes": 67907,
+        "sha256": "ddf0621bca63a323652c75e8bccef2dc90e7a2c92d3962efaf87d39932213bbb",
+        "blob_mode": "100644",
+        "blob_oid": "92d95837c0520d0ab0e30aafe86005898b2ec052"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_f1_r8_source.py",
+        "size_bytes": 37363,
+        "sha256": "3164fe9562ec659dc4825acf4d8caa4526a27f909299d8f8f258268c73b7f5e9",
+        "blob_mode": "100644",
+        "blob_oid": "7672b0e4962382b0dede9e21eb1730f305d41629"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_f1_r8_transport_audit.py",
+        "size_bytes": 73876,
+        "sha256": "3e735b9e557765afcd776a7912f1653a82e30c23b425d8d7be45406a4cf139e8",
+        "blob_mode": "100644",
+        "blob_oid": "2b5ce9bf92516dcad6f7d0746af471d3ddd429e5"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_prepare_2wiki_f1.py",
+        "size_bytes": 17482,
+        "sha256": "f7d3613180d79f08a6bd82eeefa9e91016ea651c117efe336eef992b7a9d22bd",
+        "blob_mode": "100644",
+        "blob_oid": "5b9bc341f43135933420d6f7cc1ef434d4a0c9af"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom9_protocol.py",
+        "size_bytes": 22783,
+        "sha256": "cd9f09737937026970c628ab226d519042817ea83322892b1ebc84d4c70aff77",
+        "blob_mode": "100644",
+        "blob_oid": "172a667a4dd8c5130a3932e067154524a9a2f1cb"
+      },
+      {
+        "relative_path": "prom_search_hswm/prom_f1_function_network.py",
+        "size_bytes": 36152,
+        "sha256": "59e88cda18061bf312697b48e1df4639dae5b31be25dd1bfade6602db0468bfe",
+        "blob_mode": "100644",
+        "blob_oid": "53c3f6a8cb6843b4f8ce7b994e373a156184e2f8"
+      }
+    ],
+    "file_count": 20,
+    "closure_root_sha256": "b204b6cfcfbf622853b832048dae1f541ec6038a05a6747994c2bcf54441f9b9"
+  },
+  "required_target_paths": [
+    "prom_search_hswm/prom9_f1_prior_exposure.py",
+    "prom_search_hswm/hswm_f1_sqlite_schema.py",
+    "prom_search_hswm/test_prom9_f1_prior_exposure.py",
+    "prom_search_hswm/test_hswm_f1_sqlite_schema.py",
+    "receipts/hswm_f1_r8_a2_v11_aborted_exposure.v4.json"
+  ],
+  "bindings": [
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_A2_V4_INCIDENT_PRODUCER",
+      "contract_binding": "R8_A2_V4_INCIDENT_PRODUCER__UNJUDGED",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.prom9_f1_prior_exposure.build_aborted_attempt_exposure_receipt",
+        "name": "build_aborted_attempt_exposure_receipt",
+        "kind": "function",
+        "parameters": [
+          "attempt_db",
+          "spool_db",
+          "selection_receipt",
+          "manifest",
+          "source_receipt",
+          "execution_lock",
+          "db_genesis_receipt",
+          "environment_dependency_bundle",
+          "model_deployment_receipt",
+          "spool_identity_receipt",
+          "job_command",
+          "job_log",
+          "job_rc",
+          "hswm_executable_root",
+          "hswm_carrier_root",
+          "symposium_root",
+          "snapshot_dir",
+          "private_witness_output",
+          "producer_hswm_root",
+          "historical_python",
+          "incident_profile",
+          "canary_counter_receipt"
+        ],
+        "signature_sha256": "99625a4f54e7fe16560e93bf353d694f6e3d1831528a1f2b0d04c973d555acf5"
+      },
+      "file_line": "prom_search_hswm/prom9_f1_prior_exposure.py:4215",
+      "line_range": "4215-4873",
+      "sha256": "9f0a65df44e4097a3008b1834168ef3d7c745570a8c88d7efb7a02f25a7692e9",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_prior_exposure.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_HISTORICAL_V8_SCHEMA_GATE",
+      "contract_binding": "R8_HISTORICAL_V8_SCHEMA_GATE__UNJUDGED",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.hswm_f1_sqlite_schema.exact_schema_readback",
+        "name": "exact_schema_readback",
+        "kind": "function",
+        "parameters": ["connection", "authority", "label"],
+        "signature_sha256": "5a56d13e074db59cd2ad3407a8b59b919dd5fd66d7167883a22aed9320590ae6"
+      },
+      "file_line": "prom_search_hswm/hswm_f1_sqlite_schema.py:332",
+      "line_range": "332-351",
+      "sha256": "e136b2006bc00c6bd96d2b1454c958ede1fbccd07b574dd792d71bf76c59cb56",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_hswm_f1_sqlite_schema.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_A2_V4_SUCCESSOR_FRONTIER_TEST",
+      "contract_binding": "R8_A2_V4_SUCCESSOR_FRONTIER_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_prom9_f1_prior_exposure.test_exact_a2_successor_frontier_and_coherent_tamper_refusal",
+        "name": "test_exact_a2_successor_frontier_and_coherent_tamper_refusal",
+        "kind": "function",
+        "parameters": ["tmp_path"],
+        "signature_sha256": "3b0b85b53b279d5fc4df9dac62ff684d7b15ceec69bad7fc27ec0bed1823d411"
+      },
+      "file_line": "prom_search_hswm/test_prom9_f1_prior_exposure.py:1507",
+      "line_range": "1507-1530",
+      "sha256": "f71ef23963af13f32605000b903bb10da9afe4292945bef33a524426687ea0ae",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_prior_exposure.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_HISTORICAL_V8_SCHEMA_TEST",
+      "contract_binding": "R8_HISTORICAL_V8_SCHEMA_TEST__ENGINEERING_ONLY",
+      "code_symbol": {
+        "qualified": "prom_search_hswm.test_hswm_f1_sqlite_schema.test_historical_v8_spool_schema_is_a_separate_exact_authority",
+        "name": "test_historical_v8_spool_schema_is_a_separate_exact_authority",
+        "kind": "function",
+        "parameters": ["tmp_path"],
+        "signature_sha256": "3b0b85b53b279d5fc4df9dac62ff684d7b15ceec69bad7fc27ec0bed1823d411"
+      },
+      "file_line": "prom_search_hswm/test_hswm_f1_sqlite_schema.py:43",
+      "line_range": "43-73",
+      "sha256": "d53db64db3cc2deaefc54fcc215d0398fb6e3ed88991b42acc237cfd7d9881ca",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_hswm_f1_sqlite_schema.py"
+    },
+    {
+      "kg_node": "LOCAL_PROPOSED_HSWM_F1_R8_A2_ABORTED_EXPOSURE_V4_RECEIPT",
+      "contract_binding": "R8_A2_ABORTED_EXPOSURE_V4_ARTIFACT__QUARANTINED",
+      "code_symbol": {
+        "qualified": "receipts/hswm_f1_r8_a2_v11_aborted_exposure.v4.json#schema_version",
+        "name": "hswm-prom9-f1-aborted-attempt-exposure/v4",
+        "kind": "json_receipt",
+        "parameters": []
+      },
+      "file_line": "receipts/hswm_f1_r8_a2_v11_aborted_exposure.v4.json:2124",
+      "line_range": "2124-2124",
+      "sha256": "68c6a29082505072acf0ec6166de191b45ea34e1b43acd384c2cf74442292c2f",
+      "crate_script": "python -m pytest -q prom_search_hswm/test_prom9_f1_prior_exposure.py"
+    }
+  ],
+  "kg": {
+    "write_state": "NOT_AUTHORIZED_NOT_WRITTEN",
+    "anchor_status": "LOCAL_PROPOSED_REFERENCE_IDENTITY",
+    "provenance_actor": "Codex",
+    "source_path": "LONGINUS_HSWM_F1_ABORTED_EXPOSURE_V4_BINDING_2026-07-30.json",
+    "timestamp": "2026-07-30T11:41:25+09:00"
+  },
+  "layers": [
+    "KG_NODE",
+    "CONTRACT_BINDING",
+    "CODE_SYMBOL",
+    "FILE_LINE",
+    "LINE_RANGE",
+    "SHA256",
+    "CRATE_SCRIPT"
+  ],
+  "crate_script": "python -m pytest -q prom_search_hswm/test_f1_aborted_exposure_v4_longinus.py"
+}

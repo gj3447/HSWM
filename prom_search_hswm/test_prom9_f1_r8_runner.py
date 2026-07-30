@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import sqlite3
+import stat
 import subprocess
 import threading
 
@@ -43,15 +44,19 @@ from prom_search_hswm.prom9_f1_r8_environment import (
     verify_preimage_bundle,
     verify_repository_dependency_blobs,
 )
+from prom_search_hswm.prom9_f1_prior_exposure import (
+    ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2,
+    SCHEMA as PRIOR_EXPOSURE_SCHEMA,
+    merge_exposure_boundaries,
+)
 import prom_search_hswm.prom9_f1_r8_runner as runner
+import prom_search_hswm.prom9_f1_r8_private_output as private_output
 from prom_search_hswm.prom9_f1_r8_runner import (
     GENERATION_POLICY,
     GENESIS_SCHEMA,
     REQUIRED_DEPENDENCY_FILES,
     R8RunnerRefusal,
     TRANSPORT_BINDINGS_SCHEMA,
-    _ATTEMPT_COLUMNS,
-    _SPOOL_COLUMNS,
     _database_identity,
     _database_schema,
     _read_only_database,
@@ -70,7 +75,42 @@ from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-SYMPOSIUM_ROOT = REPO_ROOT.parents[1]
+ABORTED_ATTEMPT_EXPOSURE_PATH = (
+    REPO_ROOT / "receipts/hswm_f1_r8_v8_aborted_exposure.v2.json"
+)
+_JUDGE_RELATIVE_PATH = Path(
+    "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
+)
+
+
+def _resolve_symposium_root() -> Path:
+    candidates = (
+        REPO_ROOT.parents[1],
+        REPO_ROOT.parent / "SYMPOSIUM",
+        REPO_ROOT.parent / "symposium",
+    )
+    matches: list[Path] = []
+    match_identities: set[tuple[int, int]] = set()
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if (resolved / ".git").exists() and (
+            resolved / _JUDGE_RELATIVE_PATH
+        ).is_file():
+            stat = resolved.stat()
+            identity = (stat.st_dev, stat.st_ino)
+            if identity in match_identities:
+                continue
+            matches.append(resolved)
+            match_identities.add(identity)
+    if len(matches) != 1:
+        raise RuntimeError(
+            f"expected exactly one SYMPOSIUM checkout for {REPO_ROOT}; "
+            f"found {matches}"
+        )
+    return matches[0]
+
+
+SYMPOSIUM_ROOT = _resolve_symposium_root()
 HSWM_COMMIT = subprocess.check_output(
     ["git", "-C", str(REPO_ROOT), "rev-parse", "HEAD"], text=True
 ).strip()
@@ -81,6 +121,104 @@ ENDPOINT = "http://127.0.0.1:8011"
 UPSTREAM_ENDPOINT = "http://127.0.0.1:18002/v1/chat/completions"
 DEPLOYMENT_SHA256 = "d" * 64
 TEST_REVISION = "f" * 40
+
+
+@pytest.fixture(autouse=True)
+def _historical_singular_incident_is_test_only_successor_stub(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Keep runner-unit history fixtures without reopening production A2."""
+
+    exact_successor = runner.verify_f1_r8_successor_exposure_set
+
+    def verify_test_fixture(value):
+        if (
+            isinstance(value, dict)
+            and value.get("schema_version") == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V2
+        ):
+            return runner.verify_aborted_attempt_exposure_receipt(value)
+        return exact_successor(value)
+
+    monkeypatch.setattr(
+        runner, "verify_f1_r8_successor_exposure_set", verify_test_fixture
+    )
+
+
+def test_a3_exposure_gate_requires_exact_successor_wrapper(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    receipt_sha = "a" * 64
+    calls: list[str] = []
+
+    def exact(_value):
+        calls.append("exact")
+        return receipt_sha
+
+    def generic(_value):
+        calls.append("generic")
+        return receipt_sha
+
+    monkeypatch.setattr(runner, "verify_f1_r8_successor_exposure_set", exact)
+    monkeypatch.setattr(runner, "verify_aborted_attempt_exposure_receipt", generic)
+    monkeypatch.setattr(
+        runner, "verify_forbidden_exposure_union", lambda *_args: {}
+    )
+    assert runner._validate_aborted_attempt_exposure_gate(
+        {"kind": "successor-wrapper"},
+        prior_exposure_receipt={},
+        execution_lock={
+            "schema_version": runner.EXECUTION_LOCK_SCHEMA,
+            "run_id": runner.F1_R8_A3_SUCCESSOR_RUN_ID,
+            "aborted_attempt_exposure_receipt_sha256": receipt_sha,
+        },
+    ) == receipt_sha
+    assert calls == ["exact"]
+
+    calls.clear()
+    with pytest.raises(runner.R8RunnerRefusal, match="fresh a3"):
+        runner._validate_aborted_attempt_exposure_gate(
+            {"kind": "legacy-incident"},
+            prior_exposure_receipt={},
+            execution_lock={
+                "schema_version": runner.EXECUTION_LOCK_SCHEMA,
+                "run_id": "f1-2wiki-development-r8-try3-a2",
+                "aborted_attempt_exposure_receipt_sha256": receipt_sha,
+            },
+        )
+    assert calls == []
+
+    assert runner._validate_aborted_attempt_exposure_gate(
+        {"kind": "sealed-historical-incident"},
+        prior_exposure_receipt={},
+        execution_lock={
+            "schema_version": runner.SEALED_LOCK_SCHEMA,
+            "run_id": runner.SEALED_RUN_ID,
+            "aborted_attempt_exposure_receipt_sha256": receipt_sha,
+        },
+    ) == receipt_sha
+    assert calls == ["generic"]
+
+
+def test_stable_reader_refuses_lstat_to_open_identity_swap(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = tmp_path / "authority.py"
+    replacement = tmp_path / "replacement.py"
+    target.write_bytes(b"before\n")
+    replacement.write_bytes(b"after\n")
+    original_open = os.open
+    swapped = False
+
+    def swapping_open(path, flags, *args):
+        nonlocal swapped
+        if not swapped and Path(path) == target:
+            os.replace(replacement, target)
+            swapped = True
+        return original_open(path, flags, *args)
+
+    monkeypatch.setattr(runner.os, "open", swapping_open)
+    with pytest.raises(R8RunnerRefusal, match="changed before"):
+        runner.read_stable_bytes(target, "authority")
 
 
 def _deployment_binding() -> ModelDeploymentBinding:
@@ -152,6 +290,13 @@ def _verify_dirty_owned_paths_without_weakening_runner(
         "load_model_deployment_binding",
         lambda *_args, **_kwargs: _deployment_binding(),
     )
+    monkeypatch.setattr(
+        runner,
+        "_replay_token_envelope_derivation",
+        lambda *, manifest, token_meter, **_kwargs: _derivation_receipt(
+            manifest, token_meter
+        )["receipt_sha256"],
+    )
 
 
 def _registries() -> dict[str, object]:
@@ -214,7 +359,7 @@ def _manifest(meter: FakeMeter) -> dict[str, object]:
     items = _items()
     projected = {arm: {"1": 5, "2": 5, "3": 5} for arm in F1_ARMS}
     caps = compute_minimum_input_caps(
-        run_id="f1-2wiki-power-pilot-test",
+        run_id=runner.DEVELOPMENT_RUN_ID,
         items=[runner._item(value, "fixture") for value in items],
         arms=F1_ARMS,
         registries=_registries(),
@@ -226,7 +371,7 @@ def _manifest(meter: FakeMeter) -> dict[str, object]:
         item["max_input_tokens"] = sum(caps.values())
     return {
         "schema_version": runner.MANIFEST_SCHEMA,
-        "run_id": "f1-2wiki-power-pilot-test",
+        "run_id": runner.DEVELOPMENT_RUN_ID,
         "mode": "development",
         "model": "fake-model",
         "model_revision": TEST_REVISION,
@@ -249,6 +394,83 @@ def _manifest(meter: FakeMeter) -> dict[str, object]:
             "projection_slack_tokens": 4,
         },
         "items": items,
+    }
+
+
+def _derivation_receipt(
+    manifest: dict[str, object],
+    meter: FakeMeter,
+    *,
+    development_run_id: str = runner.DEVELOPMENT_RUN_ID,
+) -> dict[str, object]:
+    registries = _registries()
+    envelope = manifest["token_envelope"]
+    assert isinstance(envelope, dict)
+    input_caps = dict(envelope["per_call_input_caps"])
+    output_caps = dict(envelope["per_call_output_caps"])
+    cohort = lambda run_id, items, components, marker: {  # noqa: E731
+        "run_id": run_id,
+        "items": items,
+        "components": components,
+        "minimum_input_caps": dict(input_caps),
+        "projection_sha256": marker * 64,
+        "projected_spread": 0,
+    }
+    unsigned = {
+        "schema_version": "hswm-prom9-f1-r8-token-envelope-derivation/v1",
+        "derivation_policy": (
+            "tight_common_componentwise_max_of_both_frozen_cohorts/v1"
+        ),
+        "selection_receipt_sha256": "1" * 64,
+        "historical_token_envelope_sha256": "2" * 64,
+        "historical_input_caps_used_as_floor": False,
+        "model": manifest["model"],
+        "model_revision": manifest["model_revision"],
+        "protocol_sha256": next(iter(registries.values())).protocol_sha256,
+        "registries_root_sha256": canonical_sha256(
+            {arm: registries[arm].registry_sha256 for arm in F1_ARMS}
+        ),
+        "token_meter_validation_receipt_sha256": "3" * 64,
+        "token_meter": meter.identity(),
+        "projected_outputs_receipt_sha256": "4" * 64,
+        "source_suite_receipt_sha256": "5" * 64,
+        "development": cohort(development_run_id, 55, 48, "6"),
+        "confirmatory": cohort(runner.SEALED_RUN_ID, 100, 100, "7"),
+        "per_call_input_caps": input_caps,
+        "per_call_output_caps": output_caps,
+        "total_input_tokens_per_run": sum(input_caps.values()),
+        "total_allowed_output_tokens_per_run": sum(output_caps.values()),
+        "projection_slack_tokens": envelope["projection_slack_tokens"],
+        "token_tolerance": manifest["token_tolerance"],
+        "token_envelope_sha256": canonical_sha256(envelope),
+        "gold_inputs_read": False,
+        "model_calls": 0,
+    }
+    return {**unsigned, "receipt_sha256": canonical_sha256(unsigned)}
+
+
+def _derivation_inputs(
+    manifest: dict[str, object], meter: FakeMeter
+) -> dict[str, object]:
+    protocol_path = REPO_ROOT / DEFAULT_PROTOCOL
+    return {
+        "receipt": _derivation_receipt(manifest, meter),
+        "selection_receipt": {
+            "schema_version": runner.SUCCESSOR_SELECTION_SCHEMA,
+        },
+        "historical_manifest": {},
+        "validation_receipt": {},
+        "projected_outputs_receipt": {},
+        "source_suite": {},
+        "protocol": json.loads(protocol_path.read_text(encoding="utf-8")),
+        "file_sha256s": {
+            "selection_receipt": "8" * 64,
+            "historical_manifest": "9" * 64,
+            "validation_receipt": "a" * 64,
+            "projected_outputs_receipt": "b" * 64,
+            "source_suite": "c" * 64,
+            "protocol": hashlib.sha256(protocol_path.read_bytes()).hexdigest(),
+        },
     }
 
 
@@ -342,10 +564,7 @@ def _genesis(run_id: str) -> dict[str, object]:
 
 
 def _bundle(tmp_path: Path, manifest: dict[str, object], result_contract: Path):
-    judge_core = (
-        SYMPOSIUM_ROOT
-        / "FINDINGS/hswm-f1-r8-try3-2026-07-28/f1_r8_lakatotree_judge.py"
-    )
+    judge_core = SYMPOSIUM_ROOT / _JUDGE_RELATIVE_PATH
     model_catalog = tmp_path / "model_catalog.json"
     model_weight_receipt = tmp_path / "model_weight_receipt.json"
     python_lock = tmp_path / "requirements.lock"
@@ -393,21 +612,56 @@ def _bundle(tmp_path: Path, manifest: dict[str, object], result_contract: Path):
     }
 
 
+def _prior_exposure() -> dict[str, object]:
+    items = ["prior-item"]
+    source_entities = ["8" * 64]
+    components = ["9" * 64]
+    unsigned = {
+        "schema_version": PRIOR_EXPOSURE_SCHEMA,
+        "aggregate": {
+            "prior_item_ids": items,
+            "prior_source_entity_ids": source_entities,
+            "prior_component_ids": components,
+            "item_root_sha256": canonical_sha256(items),
+            "source_entity_root_sha256": canonical_sha256(source_entities),
+            "component_root_sha256": canonical_sha256(components),
+        },
+        "complete": True,
+    }
+    return {
+        **unsigned,
+        "prior_exposure_receipt_sha256": canonical_sha256(unsigned),
+    }
+
+
 def _lock(
     manifest: dict[str, object],
     *,
+    prior_exposure_receipt: dict[str, object],
+    aborted_attempt_exposure_receipt: dict[str, object],
     bundle: dict[str, object],
     result_contract: Path,
     genesis_sha: str,
+    derivation_receipt_sha256: str,
 ) -> dict[str, object]:
     environment = bundle["environment_receipt"]
     dependencies = bundle["dependency_receipt"]
     assert isinstance(environment, dict) and isinstance(dependencies, dict)
+    exposure_union = merge_exposure_boundaries(
+        prior_exposure_receipt, aborted_attempt_exposure_receipt
+    )
     return build_development_execution_lock(
         manifest,
         protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
         selection_receipt_sha256="1" * 64,
-        prior_exposure_receipt_sha256="2" * 64,
+        prior_exposure_receipt_sha256=str(
+            exposure_union["prior_exposure_receipt_sha256"]
+        ),
+        aborted_attempt_exposure_receipt_sha256=str(
+            aborted_attempt_exposure_receipt[
+                "aborted_attempt_exposure_receipt_sha256"
+            ]
+        ),
         public_source_receipt_sha256="3" * 64,
         gold_source_receipt_sha256="4" * 64,
         gold_sha256="5" * 64,
@@ -423,10 +677,15 @@ def _lock(
         result_contract_sha256=hashlib.sha256(result_contract.read_bytes()).hexdigest(),
         judge_core_sha256="a" * 64,
         judge_core_file_sha256="b" * 64,
+        token_envelope_derivation_receipt_sha256=(
+            derivation_receipt_sha256
+        ),
         deployment_binding=_deployment_binding(),
-        forbidden_prior_item_ids=["prior-item"],
-        forbidden_prior_source_entity_ids=["8" * 64],
-        forbidden_prior_component_ids=["9" * 64],
+        forbidden_prior_item_ids=list(exposure_union["item_ids"]),
+        forbidden_prior_source_entity_ids=list(
+            exposure_union["source_entity_ids"]
+        ),
+        forbidden_prior_component_ids=list(exposure_union["component_ids"]),
         execution_policy=_policy(),
     )
 
@@ -435,15 +694,29 @@ def _context(tmp_path: Path) -> dict[str, object]:
     tmp_path.mkdir(parents=True, exist_ok=True)
     meter = FakeMeter()
     manifest = _manifest(meter)
+    derivation = _derivation_inputs(manifest, meter)
     result_contract = tmp_path / "result_contract.v1.json"
     result_contract.write_text('{"schema_version":"result-contract/v1"}\n')
     bundle, dependency_args = _bundle(tmp_path, manifest, result_contract)
     genesis = _genesis(str(manifest["run_id"]))
+    aborted_exposure = json.loads(
+        ABORTED_ATTEMPT_EXPOSURE_PATH.read_text(encoding="utf-8")
+    )
+    assert isinstance(aborted_exposure, dict)
+    prior_exposure = _prior_exposure()
+    exposure_union = merge_exposure_boundaries(
+        prior_exposure, aborted_exposure
+    )
     lock = _lock(
         manifest,
+        prior_exposure_receipt=prior_exposure,
+        aborted_attempt_exposure_receipt=aborted_exposure,
         bundle=bundle,
         result_contract=result_contract,
         genesis_sha=str(genesis["genesis_sha256"]),
+        derivation_receipt_sha256=str(
+            derivation["receipt"]["receipt_sha256"]
+        ),
     )
     return {
         "meter": meter,
@@ -452,6 +725,10 @@ def _context(tmp_path: Path) -> dict[str, object]:
         "bundle": bundle,
         "genesis": genesis,
         "lock": lock,
+        "prior_exposure": prior_exposure,
+        "aborted_exposure": aborted_exposure,
+        "exposure_union": exposure_union,
+        "derivation": derivation,
         "preflight": _preflight(
             str(manifest["run_id"]),
             str(lock["lock_sha256"]),
@@ -520,6 +797,9 @@ def _sealed_preregistration_context(context: dict[str, object], tmp_path: Path):
         "calibration_receipt_sha256": "e" * 64,
         "selection_receipt_sha256": lock["selection_receipt_sha256"],
         "prior_exposure_receipt_sha256": lock["prior_exposure_receipt_sha256"],
+        "aborted_attempt_exposure_receipt_sha256": lock[
+            "aborted_attempt_exposure_receipt_sha256"
+        ],
         "public_source_receipt_sha256": lock["public_source_receipt_sha256"],
         "gold_source_receipt_sha256": lock["gold_source_receipt_sha256"],
         "gold_sha256": lock["gold_sha256"],
@@ -536,6 +816,9 @@ def _sealed_preregistration_context(context: dict[str, object], tmp_path: Path):
         "protocol_sha256": lock["protocol_sha256"],
         "registries_root_sha256": lock["registries_root_sha256"],
         "token_envelope_sha256": lock["token_envelope_sha256"],
+        "token_envelope_derivation_receipt_sha256": lock[
+            "token_envelope_derivation_receipt_sha256"
+        ],
         "generation_policy_sha256": lock["generation_policy_sha256"],
         "cohort_root_sha256": lock["cohort_root_sha256"],
         "candidate_universe_root_sha256": lock[
@@ -831,12 +1114,93 @@ def _run(context: dict[str, object]) -> tuple[dict[str, object], FakeDurablePort
         model_port=port,
         token_meter=context["meter"],
         max_workers=2,
+        token_envelope_derivation=context["derivation"],
+        prior_exposure_receipt=context["prior_exposure"],
+        aborted_attempt_exposure_receipt=context["aborted_exposure"],
         environment_dependency_bundle=context["bundle"],
         result_contract_path=context["result_contract"],
         **_dependency_kwargs(context),
         spool_identity_preflight=context["preflight"],
     )
     return draft, port
+
+
+def _resume_prefix_for_draft(
+    context: dict[str, object],
+    draft: dict[str, object],
+    port: FakeDurablePort,
+) -> tuple[dict[str, object], list[tuple[str, str]]]:
+    items = context["manifest"]["items"]
+    assert isinstance(items, list)
+    jobs = [
+        (str(item["item_id"]), arm)
+        for item in sorted(items, key=lambda value: str(value["item_id"]))
+        for arm in F1_ARMS
+    ]
+    attempt_audit = port.audit()
+    spool_unsigned = {
+        "schema_version": SPOOL_SCHEMA,
+        "journal_mode": "wal",
+        "synchronous": 2,
+        "call_count": attempt_audit["call_count"],
+        "status_counts": {"COMPLETE": attempt_audit["call_count"]},
+        "completed_root_sha256": attempt_audit["spool_binding_root_sha256"],
+    }
+    spool_audit = {
+        **spool_unsigned,
+        "audit_sha256": canonical_sha256(spool_unsigned),
+    }
+    call_positions = [
+        {
+            "job_ordinal": ordinal,
+            "item_id": item_id,
+            "arm_id": arm_id,
+            "call_indices": [1, 2, 3],
+            "item_run_committed": True,
+        }
+        for ordinal, (item_id, arm_id) in enumerate(jobs)
+    ]
+    events = _events(sorted(port.receipts))
+    unsigned = {
+        "schema_version": runner.RESUME_PREFIX_SCHEMA,
+        "run_id": draft["run_id"],
+        "db_genesis_sha256": context["genesis"]["genesis_sha256"],
+        "attempt_integrity": "ok",
+        "spool_integrity": "ok",
+        "attempt_db_identity": context["genesis"]["attempt_db_identity"],
+        "spool_db_identity": context["genesis"]["spool_db_identity"],
+        "ordered_job_root_sha256": canonical_sha256(
+            [
+                {"item_id": item_id, "arm_id": arm_id}
+                for item_id, arm_id in jobs
+            ]
+        ),
+        "job_count": len(jobs),
+        "max_workers": 2,
+        "frontier_batch": (len(jobs) - 1) // 2,
+        "call_positions": call_positions,
+        "call_count": attempt_audit["call_count"],
+        "item_run_count": len(jobs),
+        "attempt_event_count": len(events),
+        "spool_call_count": attempt_audit["call_count"],
+        "event_chain_tip_sha256": attempt_audit["event_chain_tip_sha256"],
+        "attempt_event_root_sha256": canonical_sha256(events),
+        "attempt_live_audit": attempt_audit,
+        "spool_live_audit": spool_audit,
+        "zero_count_genesis": False,
+    }
+    return {
+        **unsigned,
+        "resume_prefix_sha256": canonical_sha256(unsigned),
+    }, jobs
+
+
+def _resign_resume_prefix(value: dict[str, object]) -> dict[str, object]:
+    result = copy.deepcopy(value)
+    unsigned = dict(result)
+    unsigned.pop("resume_prefix_sha256", None)
+    result["resume_prefix_sha256"] = canonical_sha256(unsigned)
+    return result
 
 
 def _transport_bindings(
@@ -990,6 +1354,27 @@ def _rehash(value: dict[str, object], field: str) -> None:
 
 def test_run_is_full_preflight_bound_and_gold_blind(tmp_path: Path) -> None:
     context = _context(tmp_path)
+    assert context["manifest"]["run_id"] == runner.F1_R8_A3_SUCCESSOR_RUN_ID
+    assert context["lock"]["schema_version"] == (
+        "hswm-prom9-f1-r8-execution-lock/v4"
+    )
+    assert context["lock"]["aborted_attempt_exposure_receipt_sha256"] == (
+        context["aborted_exposure"][
+            "aborted_attempt_exposure_receipt_sha256"
+        ]
+    )
+    assert context["lock"]["prior_exposure_receipt_sha256"] == context[
+        "prior_exposure"
+    ]["prior_exposure_receipt_sha256"]
+    assert context["lock"]["forbidden_prior_item_ids"] == context[
+        "exposure_union"
+    ]["item_ids"]
+    assert context["lock"]["forbidden_prior_source_entity_ids"] == context[
+        "exposure_union"
+    ]["source_entity_ids"]
+    assert context["lock"]["forbidden_prior_component_ids"] == context[
+        "exposure_union"
+    ]["component_ids"]
     draft, port = _run(context)
     assert len(draft["item_runs"]) == 10
     assert len(port.receipts) == 30
@@ -1013,12 +1398,82 @@ def test_run_is_full_preflight_bound_and_gold_blind(tmp_path: Path) -> None:
     assert all(value not in prompt_bytes for value in forbidden)
 
 
+def test_resume_prefix_binds_frozen_jobs_workers_and_precedes_model_calls(
+    tmp_path: Path,
+) -> None:
+    context = _context(tmp_path)
+    draft, completed_port = _run(context)
+    prefix, jobs = _resume_prefix_for_draft(context, draft, completed_port)
+    validated = runner._validate_resume_prefix(
+        prefix,
+        run_id=str(draft["run_id"]),
+        db_genesis_sha256=str(context["genesis"]["genesis_sha256"]),
+        ordered_jobs=jobs,
+        max_workers=2,
+    )
+    assert validated == prefix
+
+    wrong_width = copy.deepcopy(prefix)
+    wrong_width["max_workers"] = 1
+    wrong_width = _resign_resume_prefix(wrong_width)
+    with pytest.raises(R8RunnerRefusal, match="job universe or worker width"):
+        runner._validate_resume_prefix(
+            wrong_width,
+            run_id=str(draft["run_id"]),
+            db_genesis_sha256=str(context["genesis"]["genesis_sha256"]),
+            ordered_jobs=jobs,
+            max_workers=2,
+        )
+
+    truncated = copy.deepcopy(prefix)
+    truncated["job_count"] = len(jobs) - 1
+    truncated["ordered_job_root_sha256"] = canonical_sha256(
+        [
+            {"item_id": item_id, "arm_id": arm_id}
+            for item_id, arm_id in jobs[:-1]
+        ]
+    )
+    truncated = _resign_resume_prefix(truncated)
+    with pytest.raises(R8RunnerRefusal, match="job universe or worker width"):
+        runner._validate_resume_prefix(
+            truncated,
+            run_id=str(draft["run_id"]),
+            db_genesis_sha256=str(context["genesis"]["genesis_sha256"]),
+            ordered_jobs=jobs,
+            max_workers=2,
+        )
+
+    empty_port = FakeDurablePort(context["meter"])
+    with pytest.raises(R8RunnerRefusal, match="differs from the resume prefix"):
+        run_suite_v3_draft(
+            context["manifest"],
+            execution_lock=context["lock"],
+            protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+            model_port=empty_port,
+            token_meter=context["meter"],
+            max_workers=2,
+            token_envelope_derivation=context["derivation"],
+            prior_exposure_receipt=context["prior_exposure"],
+            aborted_attempt_exposure_receipt=context["aborted_exposure"],
+            environment_dependency_bundle=context["bundle"],
+            result_contract_path=context["result_contract"],
+            **_dependency_kwargs(context),
+            spool_identity_preflight=context["preflight"],
+            resume_prefix=prefix,
+        )
+    assert empty_port.calls == {}
+
+
 def test_sealed_preregistration_readback_and_manifest_core_are_exact(
     tmp_path: Path,
 ) -> None:
     context = _context(tmp_path / "development")
     manifest, lock, artifact, readback, judge = _sealed_preregistration_context(
         context, tmp_path
+    )
+    assert lock["schema_version"] == "hswm-prom9-f1-r8-measurement-lock/v6"
+    assert artifact["schema_version"] == (
+        "hswm-prom9-f1-r8-preregistration-artifact/v4"
     )
     placeholder = copy.deepcopy(manifest)
     placeholder["preregistration_artifact_sha256"] = (
@@ -1100,6 +1555,53 @@ def test_sealed_preregistration_readback_and_manifest_core_are_exact(
         )
 
 
+@pytest.mark.parametrize(
+    ("selection_schema", "development_run_id"),
+    (
+        (
+            runner.HISTORICAL_SELECTION_SCHEMA,
+            runner.HISTORICAL_DERIVATION_DEVELOPMENT_RUN_ID,
+        ),
+        (runner.SUCCESSOR_SELECTION_SCHEMA, runner.DEVELOPMENT_RUN_ID),
+    ),
+)
+def test_sealed_derivation_replay_routes_by_selection_generation(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    selection_schema: str,
+    development_run_id: str,
+) -> None:
+    context = _context(tmp_path / "development")
+    manifest, lock, _artifact, _readback, _judge = (
+        _sealed_preregistration_context(context, tmp_path)
+    )
+    derivation = copy.deepcopy(context["derivation"])
+    derivation["selection_receipt"] = {"schema_version": selection_schema}
+    receipt = _derivation_receipt(
+        manifest,
+        context["meter"],
+        development_run_id=development_run_id,
+    )
+    derivation["receipt"] = receipt
+    lock["token_envelope_derivation_receipt_sha256"] = receipt["receipt_sha256"]
+    replayed_run_ids: list[str] = []
+
+    def replay(*, development_run_id: str, **_kwargs: object) -> str:
+        replayed_run_ids.append(development_run_id)
+        return str(receipt["receipt_sha256"])
+
+    monkeypatch.setattr(runner, "_replay_token_envelope_derivation", replay)
+    assert runner._validate_token_envelope_derivation_gate(
+        derivation,
+        manifest=manifest,
+        execution_lock=lock,
+        token_meter=context["meter"],
+        protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+        preregistration_artifact=None,
+    ) == receipt["receipt_sha256"]
+    assert replayed_run_ids == [development_run_id]
+
+
 def test_all_pure_drift_refuses_before_first_model_call(tmp_path: Path) -> None:
     context = _context(tmp_path)
 
@@ -1142,6 +1644,9 @@ def test_all_pure_drift_refuses_before_first_model_call(tmp_path: Path) -> None:
                 model_port=port,
                 token_meter=context["meter"],
                 max_workers=2,
+                token_envelope_derivation=context["derivation"],
+                prior_exposure_receipt=context["prior_exposure"],
+                aborted_attempt_exposure_receipt=context["aborted_exposure"],
                 environment_dependency_bundle=bundle,
                 result_contract_path=context["result_contract"],
                 **_dependency_kwargs(context),
@@ -1160,12 +1665,230 @@ def test_all_pure_drift_refuses_before_first_model_call(tmp_path: Path) -> None:
             model_port=port,
             token_meter=context["meter"],
             max_workers=2,
+            token_envelope_derivation=context["derivation"],
+            prior_exposure_receipt=context["prior_exposure"],
+            aborted_attempt_exposure_receipt=context["aborted_exposure"],
             environment_dependency_bundle=context["bundle"],
             result_contract_path=context["result_contract"],
             **wrong_root_args,
             spool_identity_preflight=context["preflight"],
         )
     assert port.calls == {}
+
+
+def test_derivation_missing_tampered_and_resigned_refuse_before_calls(
+    tmp_path: Path,
+) -> None:
+    context = _context(tmp_path)
+
+    missing = copy.deepcopy(context["derivation"])
+    missing.pop("receipt")
+    port = FakeDurablePort(context["meter"])
+    untouched_ledger = tmp_path / "untouched-attempt.sqlite3"
+    untouched_ledger.write_bytes(b"gate must not touch this ledger")
+    untouched_ledger.chmod(0o644)
+    port.ledger = type("LedgerPath", (), {"path": untouched_ledger})()
+    with pytest.raises(R8RunnerRefusal, match="derivation input set"):
+        run_suite_v3_draft(
+            context["manifest"],
+            execution_lock=context["lock"],
+            protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+            model_port=port,
+            token_meter=context["meter"],
+            max_workers=2,
+            token_envelope_derivation=missing,
+            prior_exposure_receipt=context["prior_exposure"],
+            aborted_attempt_exposure_receipt=context["aborted_exposure"],
+            environment_dependency_bundle=context["bundle"],
+            result_contract_path=context["result_contract"],
+            **_dependency_kwargs(context),
+            spool_identity_preflight=context["preflight"],
+        )
+    assert port.calls == {}
+    assert untouched_ledger.stat().st_mode & 0o777 == 0o644
+
+    tampered = copy.deepcopy(context["derivation"])
+    tampered["receipt"]["model_calls"] = 1
+    port = FakeDurablePort(context["meter"])
+    with pytest.raises(R8RunnerRefusal, match="self-hash"):
+        run_suite_v3_draft(
+            context["manifest"],
+            execution_lock=context["lock"],
+            protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+            model_port=port,
+            token_meter=context["meter"],
+            max_workers=2,
+            token_envelope_derivation=tampered,
+            prior_exposure_receipt=context["prior_exposure"],
+            aborted_attempt_exposure_receipt=context["aborted_exposure"],
+            environment_dependency_bundle=context["bundle"],
+            result_contract_path=context["result_contract"],
+            **_dependency_kwargs(context),
+            spool_identity_preflight=context["preflight"],
+        )
+    assert port.calls == {}
+
+    resigned = copy.deepcopy(context["derivation"])
+    resigned["receipt"]["historical_token_envelope_sha256"] = "f" * 64
+    _rehash(resigned["receipt"], "receipt_sha256")
+    resigned_lock = copy.deepcopy(context["lock"])
+    resigned_lock["token_envelope_derivation_receipt_sha256"] = resigned[
+        "receipt"
+    ]["receipt_sha256"]
+    _rehash(resigned_lock, "lock_sha256")
+    resigned_preflight = _preflight(
+        str(context["manifest"]["run_id"]),
+        str(resigned_lock["lock_sha256"]),
+        str(context["genesis"]["genesis_sha256"]),
+    )
+    port = FakeDurablePort(context["meter"])
+    with pytest.raises(R8RunnerRefusal, match="replay SHA drifted"):
+        run_suite_v3_draft(
+            context["manifest"],
+            execution_lock=resigned_lock,
+            protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+            model_port=port,
+            token_meter=context["meter"],
+            max_workers=2,
+            token_envelope_derivation=resigned,
+            prior_exposure_receipt=context["prior_exposure"],
+            aborted_attempt_exposure_receipt=context["aborted_exposure"],
+            environment_dependency_bundle=context["bundle"],
+            result_contract_path=context["result_contract"],
+            **_dependency_kwargs(context),
+            spool_identity_preflight=resigned_preflight,
+        )
+    assert port.calls == {}
+
+
+def test_aborted_attempt_receipt_missing_tampered_and_resigned_refuse_cleanly(
+    tmp_path: Path,
+) -> None:
+    context = _context(tmp_path / "context")
+    tampered = copy.deepcopy(context["aborted_exposure"])
+    tampered["termination"]["exit_code"] = 1
+
+    resigned = copy.deepcopy(context["aborted_exposure"])
+    resigned["run_identity"]["run_id"] = "forged-aborted-attempt"
+    _rehash(resigned, "aborted_attempt_exposure_receipt_sha256")
+    resigned_lock = copy.deepcopy(context["lock"])
+    resigned_lock["aborted_attempt_exposure_receipt_sha256"] = resigned[
+        "aborted_attempt_exposure_receipt_sha256"
+    ]
+    _rehash(resigned_lock, "lock_sha256")
+    resigned_preflight = _preflight(
+        str(context["manifest"]["run_id"]),
+        str(resigned_lock["lock_sha256"]),
+        str(context["genesis"]["genesis_sha256"]),
+    )
+
+    cases = (
+        ("missing", {}, context["lock"], context["preflight"]),
+        ("tampered", tampered, context["lock"], context["preflight"]),
+        ("resigned", resigned, resigned_lock, resigned_preflight),
+    )
+    for label, receipt, lock, preflight in cases:
+        attempt_ledger = tmp_path / f"{label}-attempt.sqlite3"
+        spool_ledger = tmp_path / f"{label}-spool.sqlite3"
+        attempt_ledger.write_bytes(b"attempt-ledger-must-remain-unchanged")
+        spool_ledger.write_bytes(b"spool-ledger-must-remain-unchanged")
+        attempt_ledger.chmod(0o644)
+        spool_ledger.chmod(0o644)
+        before_attempt = attempt_ledger.read_bytes()
+        before_spool = spool_ledger.read_bytes()
+        port = FakeDurablePort(context["meter"])
+        port.ledger = type("LedgerPath", (), {"path": attempt_ledger})()
+        before_audit = port.audit()
+
+        with pytest.raises(
+            R8RunnerRefusal,
+            match="aborted-attempt exposure receipt verification failed",
+        ):
+            run_suite_v3_draft(
+                context["manifest"],
+                execution_lock=lock,
+                protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+                model_port=port,
+                token_meter=context["meter"],
+                max_workers=2,
+                token_envelope_derivation=context["derivation"],
+                prior_exposure_receipt=context["prior_exposure"],
+                aborted_attempt_exposure_receipt=receipt,
+                environment_dependency_bundle=context["bundle"],
+                result_contract_path=context["result_contract"],
+                **_dependency_kwargs(context),
+                spool_identity_preflight=preflight,
+            )
+
+        assert port.calls == {}
+        assert port.audit() == before_audit
+        assert attempt_ledger.read_bytes() == before_attempt
+        assert spool_ledger.read_bytes() == before_spool
+        assert attempt_ledger.stat().st_mode & 0o777 == 0o644
+        assert spool_ledger.stat().st_mode & 0o777 == 0o644
+
+
+def test_prior_receipt_and_exact_exposure_union_drift_refuse_before_calls(
+    tmp_path: Path,
+) -> None:
+    context = _context(tmp_path)
+
+    def refuse(
+        prior: dict[str, object], lock: dict[str, object]
+    ) -> None:
+        port = FakeDurablePort(context["meter"])
+        with pytest.raises(
+            R8RunnerRefusal,
+            match="execution-lock forbidden exposure union verification failed",
+        ):
+            run_suite_v3_draft(
+                context["manifest"],
+                execution_lock=lock,
+                protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+                model_port=port,
+                token_meter=context["meter"],
+                max_workers=2,
+                token_envelope_derivation=context["derivation"],
+                prior_exposure_receipt=prior,
+                aborted_attempt_exposure_receipt=context["aborted_exposure"],
+                environment_dependency_bundle=context["bundle"],
+                result_contract_path=context["result_contract"],
+                **_dependency_kwargs(context),
+                spool_identity_preflight=context["preflight"],
+            )
+        assert port.calls == {}
+
+    refuse({}, context["lock"])
+    tampered = copy.deepcopy(context["prior_exposure"])
+    tampered["aggregate"]["prior_item_ids"].append("tampered-prior-item")
+    refuse(tampered, context["lock"])
+    resigned = copy.deepcopy(context["prior_exposure"])
+    resigned_items = sorted(
+        [*resigned["aggregate"]["prior_item_ids"], "resigned-prior-item"]
+    )
+    resigned["aggregate"]["prior_item_ids"] = resigned_items
+    resigned["aggregate"]["item_root_sha256"] = canonical_sha256(
+        resigned_items
+    )
+    _rehash(resigned, "prior_exposure_receipt_sha256")
+    refuse(resigned, context["lock"])
+
+    extra_by_field = {
+        "forbidden_prior_item_ids": "union-extra-item",
+        "forbidden_prior_source_entity_ids": "7" * 64,
+        "forbidden_prior_component_ids": "6" * 64,
+    }
+    for field, extra in extra_by_field.items():
+        for operation in ("subset", "superset"):
+            lock = copy.deepcopy(context["lock"])
+            values = list(lock[field])
+            if operation == "subset":
+                values.pop(0)
+            else:
+                values = sorted({*values, extra})
+            lock[field] = values
+            _rehash(lock, "lock_sha256")
+            refuse(context["prior_exposure"], lock)
 
 
 def test_dummy_runner_dependency_is_rejected_before_first_model_call(
@@ -1200,9 +1923,14 @@ def test_dummy_runner_dependency_is_rejected_before_first_model_call(
     )
     lock = _lock(
         context["manifest"],
+        prior_exposure_receipt=context["prior_exposure"],
+        aborted_attempt_exposure_receipt=context["aborted_exposure"],
         bundle=bundle,
         result_contract=context["result_contract"],
         genesis_sha=context["genesis"]["genesis_sha256"],
+        derivation_receipt_sha256=context["derivation"]["receipt"][
+            "receipt_sha256"
+        ],
     )
     port = FakeDurablePort(context["meter"])
     with pytest.raises(R8RunnerRefusal, match="bundle verification"):
@@ -1213,6 +1941,9 @@ def test_dummy_runner_dependency_is_rejected_before_first_model_call(
             model_port=port,
             token_meter=context["meter"],
             max_workers=2,
+            token_envelope_derivation=context["derivation"],
+            prior_exposure_receipt=context["prior_exposure"],
+            aborted_attempt_exposure_receipt=context["aborted_exposure"],
             environment_dependency_bundle=bundle,
             result_contract_path=context["result_contract"],
             **_dependency_kwargs(context),
@@ -1236,6 +1967,9 @@ def test_direct_api_max_workers_is_lock_bound_before_calls(tmp_path: Path) -> No
             model_port=port,
             token_meter=context["meter"],
             max_workers=1,
+            token_envelope_derivation=context["derivation"],
+            prior_exposure_receipt=context["prior_exposure"],
+            aborted_attempt_exposure_receipt=context["aborted_exposure"],
             environment_dependency_bundle=context["bundle"],
             result_contract_path=context["result_contract"],
             **_dependency_kwargs(context),
@@ -1358,10 +2092,10 @@ def _frozen_genesis(attempt_db: Path, spool_db: Path, run_id: str):
     spool = _read_only_database(spool_db, "result spool")
     try:
         attempt_version, attempt_schema = _database_schema(
-            attempt, _ATTEMPT_COLUMNS, "attempt ledger"
+            attempt, "attempt", "attempt ledger"
         )
         spool_version, spool_schema = _database_schema(
-            spool, _SPOOL_COLUMNS, "result spool"
+            spool, "spool", "result spool"
         )
         unsigned = {
             "schema_version": GENESIS_SCHEMA,
@@ -1404,6 +2138,7 @@ def _frozen_genesis(attempt_db: Path, spool_db: Path, run_id: str):
 def test_full_genesis_validator_and_runner_local_0600_initialization(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    tmp_path.chmod(0o700)
     attempt_db = tmp_path / "attempt.sqlite3"
     spool_db = tmp_path / "spool.sqlite3"
     observed_entries: list[tuple[str, int]] = []
@@ -1411,12 +2146,14 @@ def test_full_genesis_validator_and_runner_local_0600_initialization(
     original_spool = runner.SQLiteResultSpool
 
     def checked_attempt(path):
+        store = original_attempt(path)
         observed_entries.append(("attempt", os.stat(path).st_mode & 0o777))
-        return original_attempt(path)
+        return store
 
     def checked_spool(path):
+        store = original_spool(path)
         observed_entries.append(("spool", os.stat(path).st_mode & 0o777))
-        return original_spool(path)
+        return store
 
     monkeypatch.setattr(runner, "SQLiteF1CallLedger", checked_attempt)
     monkeypatch.setattr(runner, "SQLiteResultSpool", checked_spool)
@@ -1451,11 +2188,15 @@ def test_full_genesis_validator_and_runner_local_0600_initialization(
         member = Path(f"{attempt_db}{suffix}")
         member.write_bytes(b"sidecar")
         member.chmod(0o644)
-    runner._seal_private_sqlite_family(attempt_db, "attempt ledger")
+    with pytest.raises(R8RunnerRefusal, match="owner-private unique"):
+        runner._seal_private_sqlite_family(attempt_db, "attempt ledger")
     assert all(
-        os.stat(f"{attempt_db}{suffix}").st_mode & 0o777 == 0o600
+        os.stat(f"{attempt_db}{suffix}").st_mode & 0o777 == 0o644
         for suffix in ("-wal", "-shm")
     )
+    for suffix in ("-wal", "-shm"):
+        Path(f"{attempt_db}{suffix}").chmod(0o600)
+    runner._seal_private_sqlite_family(attempt_db, "attempt ledger")
 
     occupied_spool = tmp_path / "occupied-spool.sqlite3"
     occupied_spool.write_bytes(b"occupied")
@@ -1464,6 +2205,35 @@ def test_full_genesis_validator_and_runner_local_0600_initialization(
         initialize_transport_pair(preserved_attempt, occupied_spool)
     assert preserved_attempt.exists()
     assert os.stat(preserved_attempt).st_mode & 0o777 == 0o600
+
+
+def test_transport_database_family_refuses_public_or_hardlinked_members(
+    tmp_path: Path,
+) -> None:
+    attempt_db = tmp_path / "attempt.sqlite3"
+    spool_db = tmp_path / "spool.sqlite3"
+    initialize_transport_pair(attempt_db, spool_db)
+
+    attempt_db.chmod(0o644)
+    with pytest.raises(R8RunnerRefusal, match="owner-private unique"):
+        _database_identity(attempt_db, "attempt ledger")
+    assert stat.S_IMODE(attempt_db.stat().st_mode) == 0o644
+    attempt_db.chmod(0o600)
+
+    main_alias = tmp_path / "attempt-alias.sqlite3"
+    os.link(attempt_db, main_alias)
+    with pytest.raises(R8RunnerRefusal, match="owner-private unique"):
+        _database_identity(attempt_db, "attempt ledger")
+    main_alias.unlink()
+
+    wal = Path(f"{attempt_db}-wal")
+    wal.write_bytes(b"sidecar")
+    wal.chmod(0o600)
+    wal_alias = tmp_path / "attempt-wal-alias"
+    os.link(wal, wal_alias)
+    with pytest.raises(R8RunnerRefusal, match="owner-private unique"):
+        runner._seal_private_sqlite_family(attempt_db, "attempt ledger")
+    wal_alias.unlink()
 
 
 def test_runtime_policy_and_live_spool_identity_are_exact(
@@ -1533,13 +2303,29 @@ def test_cli_preexisting_output_refuses_before_endpoint_transport(
     lock_path = tmp_path / "lock.json"
     genesis_path = tmp_path / "genesis.json"
     bundle_path = tmp_path / "bundle.json"
+    prior_exposure_path = tmp_path / "prior-exposure.json"
+    aborted_exposure_path = tmp_path / "aborted-exposure.json"
+    derivation_paths = {
+        "receipt": tmp_path / "derivation.json",
+        "selection_receipt": tmp_path / "selection.json",
+        "historical_manifest": tmp_path / "historical.json",
+        "validation_receipt": tmp_path / "validation.json",
+        "projected_outputs_receipt": tmp_path / "projected.json",
+        "source_suite": tmp_path / "source-suite.json",
+    }
     for path, value in (
         (manifest_path, context["manifest"]),
         (lock_path, context["lock"]),
         (genesis_path, {}),
         (bundle_path, {}),
+        (prior_exposure_path, context["prior_exposure"]),
+        (aborted_exposure_path, context["aborted_exposure"]),
     ):
         path.write_text(json.dumps(value))
+    prior_exposure_path.chmod(0o600)
+    aborted_exposure_path.chmod(0o600)
+    for name, path in derivation_paths.items():
+        path.write_text(json.dumps(context["derivation"][name]))
     tokenizer = context["tokenizer_dir"]
     attempt_db = tmp_path / "attempt.sqlite3"
     spool_db = tmp_path / "spool.sqlite3"
@@ -1581,6 +2367,18 @@ def test_cli_preexisting_output_refuses_before_endpoint_transport(
             "--spool-db", str(spool_db),
             "--db-genesis-receipt", str(genesis_path),
             "--environment-dependency-bundle", str(bundle_path),
+            "--token-envelope-derivation-receipt",
+            str(derivation_paths["receipt"]),
+            "--selection-receipt", str(derivation_paths["selection_receipt"]),
+            "--prior-exposure-receipt", str(prior_exposure_path),
+            "--aborted-attempt-exposure-receipt",
+            str(aborted_exposure_path),
+            "--historical-manifest", str(derivation_paths["historical_manifest"]),
+            "--token-meter-validation-receipt",
+            str(derivation_paths["validation_receipt"]),
+            "--projected-outputs-receipt",
+            str(derivation_paths["projected_outputs_receipt"]),
+            "--token-meter-source-suite", str(derivation_paths["source_suite"]),
             "--result-contract", str(context["result_contract"]),
             "--judge-core", str(context["judge_core_path"]),
             "--symposium-repo-root", str(SYMPOSIUM_ROOT),
@@ -1589,8 +2387,9 @@ def test_cli_preexisting_output_refuses_before_endpoint_transport(
             str(context["model_weight_receipt_path"]),
             "--python-lock", str(context["python_lock_path"]),
             "--spool-token-env", "SPOOL_CLIENT_TOKEN",
-            "--spool-identity-receipt", str(tmp_path / "spool-identity.json"),
-            "--timeout-seconds", "180",
+                "--spool-identity-receipt", str(tmp_path / "spool-identity.json"),
+                "--reservation-journal", str(tmp_path / "reservation.sqlite3"),
+                "--timeout-seconds", "180",
             "--max-workers", "2",
             "--max-delivery-attempts", "8",
             "--tokenizer-dir", str(tokenizer),
@@ -1600,3 +2399,290 @@ def test_cli_preexisting_output_refuses_before_endpoint_transport(
     assert result == 1
     assert endpoint_calls == 0
     assert output.read_text() == "keep-me"
+
+
+def _resume_cli_case(
+    tmp_path: Path, context: dict[str, object]
+) -> tuple[list[str], dict[str, Path]]:
+    root = tmp_path / "cli"
+    root.mkdir(parents=True)
+    paths = {
+        "manifest": root / "manifest.json",
+        "lock": root / "lock.json",
+        "genesis": root / "genesis.json",
+        "bundle": root / "bundle.json",
+        "prior": root / "prior.json",
+        "aborted": root / "aborted.json",
+        "derivation": root / "derivation.json",
+        "selection": root / "selection.json",
+        "historical": root / "historical.json",
+        "validation": root / "validation.json",
+        "projected": root / "projected.json",
+        "source_suite": root / "source-suite.json",
+        "attempt_db": root / "attempt.sqlite3",
+        "spool_db": root / "spool.sqlite3",
+        "spool_identity": root / "spool-identity.json",
+        "draft": root / "draft.json",
+        "journal": root / "reservation.sqlite3",
+    }
+    values = {
+        "manifest": context["manifest"],
+        "lock": context["lock"],
+        "genesis": context["genesis"],
+        "bundle": context["bundle"],
+        "prior": context["prior_exposure"],
+        "aborted": context["aborted_exposure"],
+        "derivation": context["derivation"]["receipt"],
+        "selection": context["derivation"]["selection_receipt"],
+        "historical": context["derivation"]["historical_manifest"],
+        "validation": context["derivation"]["validation_receipt"],
+        "projected": context["derivation"]["projected_outputs_receipt"],
+        "source_suite": context["derivation"]["source_suite"],
+    }
+    for name, value in values.items():
+        paths[name].write_text(json.dumps(value), encoding="utf-8")
+    paths["prior"].chmod(0o600)
+    paths["aborted"].chmod(0o600)
+    paths["attempt_db"].write_bytes(b"")
+    paths["spool_db"].write_bytes(b"")
+    argv = [
+        "run",
+        "--resume",
+        "--manifest", str(paths["manifest"]),
+        "--execution-lock", str(paths["lock"]),
+        "--protocol", str(REPO_ROOT / DEFAULT_PROTOCOL),
+        "--endpoint", ENDPOINT,
+        "--attempt-db", str(paths["attempt_db"]),
+        "--spool-db", str(paths["spool_db"]),
+        "--db-genesis-receipt", str(paths["genesis"]),
+        "--environment-dependency-bundle", str(paths["bundle"]),
+        "--token-envelope-derivation-receipt", str(paths["derivation"]),
+        "--selection-receipt", str(paths["selection"]),
+        "--prior-exposure-receipt", str(paths["prior"]),
+        "--aborted-attempt-exposure-receipt", str(paths["aborted"]),
+        "--historical-manifest", str(paths["historical"]),
+        "--token-meter-validation-receipt", str(paths["validation"]),
+        "--projected-outputs-receipt", str(paths["projected"]),
+        "--token-meter-source-suite", str(paths["source_suite"]),
+        "--result-contract", str(context["result_contract"]),
+        "--judge-core", str(context["judge_core_path"]),
+        "--symposium-repo-root", str(SYMPOSIUM_ROOT),
+        "--model-catalog", str(context["model_catalog_path"]),
+        "--model-deployment-receipt", str(context["model_weight_receipt_path"]),
+        "--python-lock", str(context["python_lock_path"]),
+        "--spool-token-env", "SPOOL_CLIENT_TOKEN",
+        "--spool-identity-receipt", str(paths["spool_identity"]),
+        "--reservation-journal", str(paths["journal"]),
+        "--timeout-seconds", "180",
+        "--max-workers", "2",
+        "--max-delivery-attempts", "8",
+        "--tokenizer-dir", str(context["tokenizer_dir"]),
+        "--output", str(paths["draft"]),
+    ]
+    return argv, paths
+
+
+def _patch_resume_cli_authorities(
+    monkeypatch: pytest.MonkeyPatch,
+    context: dict[str, object],
+    prefix: dict[str, object],
+) -> list[bool]:
+    live_flags: list[bool] = []
+    monkeypatch.setattr(
+        runner, "load_private_receipt", lambda *_args, **_kwargs: context["bundle"]
+    )
+    monkeypatch.setattr(runner, "QwenBpeMeter", lambda *_args: context["meter"])
+    monkeypatch.setattr(
+        runner,
+        "_validate_environment_dependency_bundle",
+        lambda *_args, **_kwargs: context["bundle"]["bundle_sha256"],
+    )
+    monkeypatch.setattr(
+        runner,
+        "verify_fresh_transport_genesis",
+        lambda *_args, **_kwargs: context["genesis"]["genesis_sha256"],
+    )
+    monkeypatch.setattr(
+        runner, "export_resume_prefix", lambda **_kwargs: copy.deepcopy(prefix)
+    )
+
+    def deployment(*_args, **kwargs):
+        live_flags.append(bool(kwargs.get("verify_live_process")))
+        return _deployment_binding()
+
+    monkeypatch.setattr(runner, "load_model_deployment_binding", deployment)
+    monkeypatch.setattr(
+        runner, "_seal_private_sqlite_family", lambda *_args, **_kwargs: None
+    )
+    return live_flags
+
+
+def _seed_resume_journal(
+    paths: dict[str, Path],
+    context: dict[str, object],
+    *,
+    preflight: dict[str, object],
+    draft: dict[str, object] | None = None,
+    prepare_draft_only: bool = False,
+) -> None:
+    with private_output.reserve_private_outputs(
+        [
+            ("spool_identity_receipt", paths["spool_identity"]),
+            ("suite_draft", paths["draft"]),
+        ],
+        run_id=str(context["manifest"]["run_id"]),
+        journal_path=paths["journal"],
+    ) as journal:
+        journal["spool_identity_receipt"].commit(preflight)
+        if draft is not None:
+            if prepare_draft_only:
+                payload = private_output._json_payload(draft)
+                journal._prepare_commit(
+                    "suite_draft", payload, hashlib.sha256(payload).hexdigest()
+                )
+            else:
+                journal["suite_draft"].commit(draft)
+
+
+def _forbid_endpoint_or_port(monkeypatch: pytest.MonkeyPatch) -> None:
+    def forbidden(*_args, **_kwargs):
+        raise AssertionError("offline resume crossed a network/port boundary")
+
+    monkeypatch.setattr(runner, "verify_spool_endpoint_identity", forbidden)
+    monkeypatch.setattr(
+        runner, "verify_spool_endpoint_resume_identity", forbidden
+    )
+    monkeypatch.setattr(runner, "DurableSpoolJSONPort", forbidden)
+
+
+def test_committed_draft_resume_is_offline_and_rebound_to_current_authority(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    context = _context(tmp_path / "context")
+    draft, completed_port = _run(context)
+    prefix, _jobs = _resume_prefix_for_draft(context, draft, completed_port)
+    argv, paths = _resume_cli_case(tmp_path, context)
+    _seed_resume_journal(
+        paths, context, preflight=context["preflight"], draft=draft
+    )
+    live_flags = _patch_resume_cli_authorities(monkeypatch, context, prefix)
+    _forbid_endpoint_or_port(monkeypatch)
+
+    assert runner.main(argv) == 0
+    assert live_flags == [False]
+    assert json.loads(paths["draft"].read_text(encoding="utf-8")) == draft
+
+
+def test_resigned_preflight_db_identity_refuses_before_live_or_endpoint(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    context = _context(tmp_path / "context")
+    draft, completed_port = _run(context)
+    prefix, _jobs = _resume_prefix_for_draft(context, draft, completed_port)
+    preflight = copy.deepcopy(context["preflight"])
+    preflight["endpoint_identity"]["db_identity"]["st_ino"] += 97
+    _rehash(preflight["endpoint_identity"], "identity_sha256")
+    _rehash(preflight, "preflight_sha256")
+    argv, paths = _resume_cli_case(tmp_path, context)
+    _seed_resume_journal(paths, context, preflight=preflight)
+    live_flags = _patch_resume_cli_authorities(monkeypatch, context, prefix)
+    _forbid_endpoint_or_port(monkeypatch)
+
+    assert runner.main(argv) == 1
+    assert live_flags == [False]
+
+
+def test_resigned_prepared_draft_drift_never_reconciles_output(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    context = _context(tmp_path / "context")
+    draft, completed_port = _run(context)
+    prefix, _jobs = _resume_prefix_for_draft(context, draft, completed_port)
+    drifted = copy.deepcopy(draft)
+    drifted["result_contract_sha256"] = "f" * 64
+    _rehash(drifted, "draft_receipt_sha256")
+    argv, paths = _resume_cli_case(tmp_path, context)
+    _seed_resume_journal(
+        paths,
+        context,
+        preflight=context["preflight"],
+        draft=drifted,
+        prepare_draft_only=True,
+    )
+    marker = paths["draft"].read_bytes()
+    live_flags = _patch_resume_cli_authorities(monkeypatch, context, prefix)
+    _forbid_endpoint_or_port(monkeypatch)
+
+    assert runner.main(argv) == 1
+    assert live_flags == [False]
+    assert paths["draft"].read_bytes() == marker
+    with private_output.reserve_private_outputs(
+        [
+            ("spool_identity_receipt", paths["spool_identity"]),
+            ("suite_draft", paths["draft"]),
+        ],
+        run_id=str(context["manifest"]["run_id"]),
+        journal_path=paths["journal"],
+        resume=True,
+    ) as journal:
+        assert journal["suite_draft"].state == "COMMIT_PREPARED"
+        assert journal["suite_draft"].prepared_value() == drifted
+
+
+def test_complete_call_prefix_rebuilds_draft_without_live_endpoint(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    context = _context(tmp_path / "context")
+    expected_draft, completed_port = _run(context)
+    prefix, _jobs = _resume_prefix_for_draft(
+        context, expected_draft, completed_port
+    )
+    argv, paths = _resume_cli_case(tmp_path, context)
+    _seed_resume_journal(paths, context, preflight=context["preflight"])
+    live_flags = _patch_resume_cli_authorities(monkeypatch, context, prefix)
+
+    def forbidden_endpoint(*_args, **_kwargs):
+        raise AssertionError("complete prefix attempted endpoint access")
+
+    monkeypatch.setattr(
+        runner, "verify_spool_endpoint_identity", forbidden_endpoint
+    )
+    monkeypatch.setattr(
+        runner, "verify_spool_endpoint_resume_identity", forbidden_endpoint
+    )
+
+    class IdempotentReplayPort(FakeDurablePort):
+        def accept_item_run(self, value: dict[str, object]) -> None:
+            identity = (value["run_id"], value["arm_id"], value["item_id"])
+            with self._lock:
+                for existing in self.item_runs:
+                    observed = (
+                        existing["run_id"], existing["arm_id"], existing["item_id"]
+                    )
+                    if observed == identity:
+                        assert existing == value
+                        return
+                self.item_runs.append(value)
+
+        def close(self) -> None:
+            return None
+
+    replay = IdempotentReplayPort(context["meter"])
+    replay.calls = copy.deepcopy(completed_port.calls)
+    replay.receipts = copy.deepcopy(completed_port.receipts)
+    replay.item_runs = copy.deepcopy(completed_port.item_runs)
+    transports: list[object] = []
+
+    def port_factory(*_args, **kwargs):
+        transports.append(kwargs.get("transport"))
+        return replay
+
+    monkeypatch.setattr(runner, "DurableSpoolJSONPort", port_factory)
+
+    assert runner.main(argv) == 0
+    assert live_flags and all(flag is False for flag in live_flags)
+    assert len(transports) == 1 and callable(transports[0])
+    rebuilt = json.loads(paths["draft"].read_text(encoding="utf-8"))
+    assert runner.verify_suite_draft_without_gold(rebuilt) == rebuilt[
+        "draft_receipt_sha256"
+    ]

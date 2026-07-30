@@ -34,6 +34,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
 
+from hswm_artifact_layout import default_artifact_path
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from hypergraph import Hypergraph          # repo
@@ -355,7 +357,7 @@ def main() -> None:
     ap.add_argument("--books", default="", help="comma-separated subset of book names")
     ap.add_argument("--parallel", type=int, default=8)
     ap.add_argument("--no-judge", action="store_true", help="retrieval only, no LLM calls")
-    ap.add_argument("--out", default=os.path.join(HERE, "EVIDENCE_C1_PRELUDE_BOOKSCALE_2026-07-23.json"))
+    ap.add_argument("--out", default=str(default_artifact_path("EVIDENCE_C1_PRELUDE_BOOKSCALE_2026-07-23.json")))
     args = ap.parse_args()
 
     import pandas as pd

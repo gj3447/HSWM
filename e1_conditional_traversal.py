@@ -28,9 +28,11 @@ from pathlib import Path
 
 import numpy as np
 
+from hswm_artifact_layout import default_artifact_path
+
 REPO = Path(__file__).resolve().parent
 INPUT = REPO / "traversal_bench_results.json"
-OUT_JSON = REPO / "EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json"
+OUT_JSON = default_artifact_path("EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json")
 
 METRIC = "sup_recall_at_3"
 STATIC_ARM = "hswm_static"

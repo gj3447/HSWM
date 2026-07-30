@@ -22,12 +22,14 @@ from pathlib import Path
 
 import numpy as np
 
+from hswm_artifact_layout import default_artifact_path
+
 REPO = Path(__file__).resolve().parent
 EPSILON = 0.01
 SEED = 20260723
 N_BOOT = 10000
 
-OUT_JSON = REPO / "EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json"
+OUT_JSON = default_artifact_path("EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json")
 
 
 def sha256(path: Path) -> str:

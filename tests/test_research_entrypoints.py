@@ -7,7 +7,7 @@ def test_e1_artifact_paths_are_repository_relative():
     repo = Path(e1.__file__).resolve().parent
 
     assert e1.INPUT == repo / "traversal_bench_results.json"
-    assert e1.OUT_JSON == repo / "EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json"
+    assert e1.OUT_JSON == repo / "evidence" / "EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json"
 
 
 # --- v2.4.3 oracle strengthening (vacuity 0/8: the module emits the numbers the

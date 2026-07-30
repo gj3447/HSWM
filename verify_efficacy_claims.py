@@ -14,6 +14,8 @@ import math
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
+from hswm_artifact_layout import resolve_artifact_path
+
 
 SCHEMA_VERSION = "hswm-efficacy-snapshot/v3"
 DEFAULT_ROOT = Path(__file__).resolve().parent
@@ -24,7 +26,7 @@ class EfficacyClaimError(RuntimeError):
 
 
 def _load(root: Path, name: str) -> dict[str, Any]:
-    path = root / name
+    path = resolve_artifact_path(name, root=root, must_exist=False)
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
@@ -513,7 +515,10 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
         p1_prereg_path == "PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json",
         "P1 preregistration path drifted",
     )
-    p1_prereg_sha = _file_sha256(repo / p1_prereg_path, label=p1_prereg_path)
+    p1_prereg_sha = _file_sha256(
+        resolve_artifact_path(p1_prereg_path, root=repo, must_exist=False),
+        label=p1_prereg_path,
+    )
     _require(
         p1_prereg.get("sha256") == p1_prereg_sha,
         "P1 preregistration file binding drifted",
@@ -583,7 +588,10 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
     )
 
     p1_evidence_sha = _file_sha256(
-        repo / "EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json",
+        resolve_artifact_path(
+            "EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json",
+            root=repo, must_exist=False,
+        ),
         label="P1 evidence",
     )
     _require(

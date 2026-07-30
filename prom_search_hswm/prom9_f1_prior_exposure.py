@@ -2081,6 +2081,14 @@ def _verify_historical_selection(
         "derived_fields": ["id", "question", "context", "type"],
         "answers_used_for_selection": False,
     }
+    if selection.get("schema_version") == (
+        "hswm-prom9-f1-r8-cohort-selection/v3"
+    ):
+        expected_policy["exclusion_dimensions"] = [
+            "item_ids",
+            "source_entity_ids",
+            "component_ids",
+        ]
     if (
         not _exact_json_equal(selection.get("selection_policy"), expected_policy)
         or selection.get("prior_exposure_receipt_sha256")

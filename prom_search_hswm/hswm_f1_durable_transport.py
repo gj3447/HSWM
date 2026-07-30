@@ -92,6 +92,46 @@ _INTENT_FIELDS = {
     "request_sha256",
     "output_schema_sha256",
 }
+
+
+def _configure_checkpoint_policy(
+    connection: sqlite3.Connection, label: str
+) -> bool:
+    """Disable implicit checkpoints before the connection can commit.
+
+    ``wal_autocheckpoint`` is available on every supported Python runtime.
+    Python 3.12 additionally exposes SQLite's no-checkpoint-on-close setting;
+    feature-detect it so the library remains importable on Python 3.11 while
+    allowing the sealed runtime to require the stronger policy explicitly.
+    """
+
+    no_checkpoint_on_close = getattr(
+        sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE", None
+    )
+    setconfig = getattr(connection, "setconfig", None)
+    getconfig = getattr(connection, "getconfig", None)
+    checkpoint_on_close_disabled = False
+    if (
+        no_checkpoint_on_close is not None
+        and callable(setconfig)
+        and callable(getconfig)
+    ):
+        setconfig(no_checkpoint_on_close, True)
+        if getconfig(no_checkpoint_on_close) is not True:
+            raise SQLiteAuthorityRefusal(
+                f"{label} checkpoint-on-close could not be disabled"
+            )
+        checkpoint_on_close_disabled = True
+
+    connection.execute("PRAGMA wal_autocheckpoint=0")
+    row = connection.execute("PRAGMA wal_autocheckpoint").fetchone()
+    if row is None or int(row[0]) != 0:
+        raise SQLiteAuthorityRefusal(
+            f"{label} automatic WAL checkpointing is enabled"
+        )
+    return checkpoint_on_close_disabled
+
+
 _MODEL_CALL_FIELDS = {
     "physical_call_id",
     "run_id",
@@ -292,6 +332,9 @@ class SQLiteF1CallLedger:
                 timeout=10.0,
                 check_same_thread=False,
             )
+            checkpoint_on_close_disabled = _configure_checkpoint_policy(
+                connection, "F1 call ledger"
+            )
             # No mutating PRAGMA or DDL precedes these namespace/generation checks.
             verify_private_parent(self.path, self._parent_fd, "F1 call ledger")
             if frozen_generation is not None:
@@ -381,6 +424,7 @@ class SQLiteF1CallLedger:
                 self._parent_fd = -1
             raise
         self._connection = connection
+        self._checkpoint_on_close_disabled = checkpoint_on_close_disabled
 
     @classmethod
     def _audit_connection(cls, connection: sqlite3.Connection) -> dict[str, object]:
@@ -397,6 +441,19 @@ class SQLiteF1CallLedger:
     @property
     def synchronous(self) -> int:
         return int(self._connection.execute("PRAGMA synchronous").fetchone()[0])
+
+    @property
+    def wal_autocheckpoint(self) -> int:
+        row = self._connection.execute("PRAGMA wal_autocheckpoint").fetchone()
+        if row is None:
+            raise DurableLedgerIntegrityError(
+                "F1 call ledger WAL auto-checkpoint policy disappeared"
+            )
+        return int(row[0])
+
+    @property
+    def checkpoint_on_close_disabled(self) -> bool:
+        return self._checkpoint_on_close_disabled
 
     @staticmethod
     def _verify_call_row(row: sqlite3.Row) -> None:

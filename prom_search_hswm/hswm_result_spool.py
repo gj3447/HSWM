@@ -65,6 +65,38 @@ _FORWARDED_RESPONSE_HEADERS = frozenset(
 )
 
 
+def _configure_checkpoint_policy(
+    connection: sqlite3.Connection, label: str
+) -> bool:
+    """Disable implicit checkpoints before the connection can commit."""
+
+    no_checkpoint_on_close = getattr(
+        sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE", None
+    )
+    setconfig = getattr(connection, "setconfig", None)
+    getconfig = getattr(connection, "getconfig", None)
+    checkpoint_on_close_disabled = False
+    if (
+        no_checkpoint_on_close is not None
+        and callable(setconfig)
+        and callable(getconfig)
+    ):
+        setconfig(no_checkpoint_on_close, True)
+        if getconfig(no_checkpoint_on_close) is not True:
+            raise SQLiteAuthorityRefusal(
+                f"{label} checkpoint-on-close could not be disabled"
+            )
+        checkpoint_on_close_disabled = True
+
+    connection.execute("PRAGMA wal_autocheckpoint=0")
+    row = connection.execute("PRAGMA wal_autocheckpoint").fetchone()
+    if row is None or int(row[0]) != 0:
+        raise SQLiteAuthorityRefusal(
+            f"{label} automatic WAL checkpointing is enabled"
+        )
+    return checkpoint_on_close_disabled
+
+
 class ResultSpoolError(RuntimeError):
     pass
 
@@ -349,6 +381,9 @@ class SQLiteResultSpool:
                 timeout=10.0,
                 check_same_thread=False,
             )
+            checkpoint_on_close_disabled = _configure_checkpoint_policy(
+                connection, "result spool"
+            )
             # sqlite3.connect has not executed DDL or a mutating PRAGMA yet.
             # Detect a cooperative namespace swap before touching that handle.
             verify_private_parent(self.path, self._parent_fd, "result spool")
@@ -431,6 +466,7 @@ class SQLiteResultSpool:
                 self._parent_fd = -1
             raise
         self._connection = connection
+        self._checkpoint_on_close_disabled = checkpoint_on_close_disabled
 
     @property
     def journal_mode(self) -> str:
@@ -439,6 +475,19 @@ class SQLiteResultSpool:
     @property
     def synchronous(self) -> int:
         return int(self._connection.execute("PRAGMA synchronous").fetchone()[0])
+
+    @property
+    def wal_autocheckpoint(self) -> int:
+        row = self._connection.execute("PRAGMA wal_autocheckpoint").fetchone()
+        if row is None:
+            raise SpoolIntegrityError(
+                "result-spool WAL auto-checkpoint policy disappeared"
+            )
+        return int(row[0])
+
+    @property
+    def checkpoint_on_close_disabled(self) -> bool:
+        return self._checkpoint_on_close_disabled
 
     @staticmethod
     def _verify_row(row: sqlite3.Row) -> None:

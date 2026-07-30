@@ -105,6 +105,100 @@ def test_sqlite_authorities_create_owner_private_main_files(
         store.close()
 
 
+@pytest.mark.parametrize(
+    ("constructor", "filename"),
+    (
+        (SQLiteF1CallLedger, "attempt.sqlite3"),
+        (SQLiteResultSpool, "spool.sqlite3"),
+    ),
+)
+def test_sqlite_authorities_disable_implicit_checkpoints_on_fresh_and_reopen(
+    tmp_path: Path, constructor, filename: str
+) -> None:
+    path = tmp_path / filename
+    feature_available = all(
+        (
+            hasattr(sqlite3, "SQLITE_DBCONFIG_NO_CKPT_ON_CLOSE"),
+            hasattr(sqlite3.Connection, "setconfig"),
+            hasattr(sqlite3.Connection, "getconfig"),
+        )
+    )
+    for _ in range(2):
+        store = constructor(path)
+        try:
+            assert store.wal_autocheckpoint == 0
+            assert store.checkpoint_on_close_disabled is feature_available
+        finally:
+            store.close()
+
+
+def _wal_frame_count(path: Path, page_size: int) -> int:
+    wal_path = Path(f"{path}-wal")
+    size = wal_path.stat().st_size
+    assert size >= 32
+    frame_size = page_size + 24
+    assert (size - 32) % frame_size == 0
+    return (size - 32) // frame_size
+
+
+def test_result_spool_crosses_default_checkpoint_boundary_without_checkpoint(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "checkpoint-boundary.sqlite3"
+    store = SQLiteResultSpool(path)
+    main_preimage = path.read_bytes()
+    page_size = int(store._connection.execute("PRAGMA page_size").fetchone()[0])
+    upstream_calls = 0
+    last_physical_call_id = ""
+
+    def upstream(_request: bytes) -> RawHTTPResponse:
+        nonlocal upstream_calls
+        upstream_calls += 1
+        return RawHTTPResponse(
+            status=200,
+            headers={"content-type": "application/json"},
+            body=b'{"ok":true}',
+        )
+
+    try:
+        for index in range(700):
+            last_physical_call_id = hashlib.sha256(
+                f"checkpoint-call-{index}".encode("ascii")
+            ).hexdigest()
+            intent_sha256 = hashlib.sha256(
+                f"checkpoint-intent-{index}".encode("ascii")
+            ).hexdigest()
+            request_bytes = canonical_json({"index": index}).encode("utf-8")
+            store.execute(
+                physical_call_id=last_physical_call_id,
+                intent_sha256=intent_sha256,
+                request_bytes=request_bytes,
+                upstream=upstream,
+            )
+            if _wal_frame_count(path, page_size) > 1000:
+                break
+        frames_before_close = _wal_frame_count(path, page_size)
+        checkpoint_on_close_disabled = store.checkpoint_on_close_disabled
+        assert frames_before_close > 1000
+        assert path.read_bytes() == main_preimage
+        assert upstream_calls == index + 1
+    finally:
+        store.close()
+
+    if checkpoint_on_close_disabled:
+        assert _wal_frame_count(path, page_size) == frames_before_close
+        reopened = SQLiteResultSpool(path)
+        try:
+            replay = reopened.get(last_physical_call_id)
+            assert replay.body == b'{"ok":true}'
+            assert replay.replayed is True
+            assert reopened.wal_autocheckpoint == 0
+            assert reopened.checkpoint_on_close_disabled is True
+            assert upstream_calls == index + 1
+        finally:
+            reopened.close()
+
+
 def _sqlite_family_snapshot(path: Path) -> dict[str, tuple[bytes, int, int, int]]:
     result: dict[str, tuple[bytes, int, int, int]] = {}
     for suffix in ("", "-wal", "-shm", "-journal"):

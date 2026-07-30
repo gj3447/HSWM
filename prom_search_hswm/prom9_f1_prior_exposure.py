@@ -4554,10 +4554,20 @@ def build_aborted_attempt_exposure_receipt(
         if attempt_connection.in_transaction:
             attempt_connection.execute("ROLLBACK")
         attempt_connection.close()
+    attempt_genesis_schema = (
+        attempt_database.get("canonical_schema_sha256")
+        if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4
+        else attempt_database.get("schema_sha256")
+    )
+    spool_genesis_schema = (
+        spool_database.get("canonical_schema_sha256")
+        if receipt_schema == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4
+        else spool_database.get("schema_sha256")
+    )
     if (
-        attempt_database.get("schema_sha256")
+        attempt_genesis_schema
         != genesis_value.get("attempt_schema_sha256")
-        or spool_database.get("schema_sha256")
+        or spool_genesis_schema
         != genesis_value.get("spool_schema_sha256")
         or attempt_database.get("journal_mode")
         != genesis_value.get("attempt_journal_mode")
@@ -6355,9 +6365,15 @@ def verify_aborted_attempt_private_witness(
                 raise PriorExposureRefusal(
                     "private database generation differs from public snapshot"
                 )
+        public_genesis_schema = (
+            public_database.get("canonical_schema_sha256")
+            if public_receipt.get("schema_version")
+            == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4
+            else public_database.get("schema_sha256")
+        )
         if (
             genesis.get(f"{role}_schema_sha256")
-            != public_database.get("schema_sha256")
+            != public_genesis_schema
             or genesis.get(f"{role}_journal_mode")
             != public_database.get("journal_mode")
             or genesis.get(f"{role}_user_version")

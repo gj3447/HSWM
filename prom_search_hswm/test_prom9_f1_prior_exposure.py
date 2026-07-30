@@ -613,13 +613,26 @@ def _build_synthetic_incident(
 
     attempt_identity = db_identity(attempt_db)
     spool_db_identity = db_identity(spool_db)
+    profile_bound = incident_profile is not None
     genesis_unsigned = {
         "schema_version": "hswm-prom9-f1-r8-transport-genesis/v1",
         "run_id": artifacts["manifest"]["run_id"],
         "attempt_db_identity": attempt_identity,
         "spool_db_identity": spool_db_identity,
-        "attempt_schema_sha256": schema_sha(port.ledger._connection),
-        "spool_schema_sha256": schema_sha(spool._connection),
+        "attempt_schema_sha256": (
+            prior_exposure.canonical_schema_sha256(
+                prior_exposure._HISTORICAL_V8_SCHEMA_AUTHORITIES["attempt"]
+            )
+            if profile_bound
+            else schema_sha(port.ledger._connection)
+        ),
+        "spool_schema_sha256": (
+            prior_exposure.canonical_schema_sha256(
+                prior_exposure._HISTORICAL_V8_SCHEMA_AUTHORITIES["spool"]
+            )
+            if profile_bound
+            else schema_sha(spool._connection)
+        ),
         "attempt_integrity": "ok",
         "spool_integrity": "ok",
         "attempt_journal_mode": "wal",
@@ -1186,7 +1199,10 @@ def test_profile_bound_v4_incident_refuses_count_and_identity_drift(
         prior_exposure.INCIDENT_PROFILES, str(profile["profile_id"]), profile
     )
     receipt = _build_synthetic_incident(
-        tmp_path, monkeypatch, incident_profile=profile
+        tmp_path,
+        monkeypatch,
+        incident_profile=profile,
+        verify_private_witness_before_close=True,
     )
     assert receipt["schema_version"] == ABORTED_ATTEMPT_EXPOSURE_SCHEMA_V4
     assert receipt["run_identity"]["incident_profile_id"] == "synthetic-profile"
@@ -1195,6 +1211,36 @@ def test_profile_bound_v4_incident_refuses_count_and_identity_drift(
     assert verify_aborted_attempt_exposure_receipt(receipt) == receipt[
         "aborted_attempt_exposure_receipt_sha256"
     ]
+
+    witness_path = tmp_path / "private-witness" / "witness.v1.json"
+    witness = json.loads(witness_path.read_text(encoding="utf-8"))
+    genesis = witness["db_genesis_receipt"]
+    genesis["attempt_schema_sha256"] = "f" * 64
+    genesis_unsigned = copy.deepcopy(genesis)
+    genesis_unsigned.pop("genesis_sha256")
+    genesis["genesis_sha256"] = canonical_sha256(genesis_unsigned)
+    preflight = witness["spool_identity_receipt"]
+    preflight["db_genesis_sha256"] = genesis["genesis_sha256"]
+    preflight_unsigned = copy.deepcopy(preflight)
+    preflight_unsigned.pop("preflight_sha256")
+    preflight["preflight_sha256"] = canonical_sha256(preflight_unsigned)
+    artifacts = receipt["evidence_bindings"]["artifacts"]
+    for artifact_name, value, self_field in (
+        ("db_genesis_receipt", genesis, "genesis_sha256"),
+        ("spool_identity_receipt", preflight, "preflight_sha256"),
+    ):
+        binding = artifacts[artifact_name]
+        raw = (canonical_json(value) + "\n").encode("utf-8")
+        binding["size_bytes"] = len(raw)
+        binding["raw_sha256"] = hashlib.sha256(raw).hexdigest()
+        binding["canonical_sha256"] = canonical_sha256(value)
+        binding["declared_hashes"][self_field] = value[self_field]
+    _rebind_private_witness(receipt, witness_path, witness)
+    with pytest.raises(
+        PriorExposureRefusal,
+        match="private genesis differs from public database authority",
+    ):
+        verify_aborted_attempt_private_witness(receipt, witness_path)
 
     wrong_counts = copy.deepcopy(profile)
     wrong_counts["expected_counts"]["attempt_calls"] = 3

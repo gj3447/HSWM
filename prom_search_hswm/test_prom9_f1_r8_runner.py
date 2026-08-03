@@ -434,7 +434,7 @@ def _derivation_receipt(
         "token_meter": meter.identity(),
         "projected_outputs_receipt_sha256": "4" * 64,
         "source_suite_receipt_sha256": "5" * 64,
-        "development": cohort(development_run_id, 55, 48, "6"),
+        "development": cohort(development_run_id, 54, 48, "6"),
         "confirmatory": cohort(runner.SEALED_RUN_ID, 100, 100, "7"),
         "per_call_input_caps": input_caps,
         "per_call_output_caps": output_caps,

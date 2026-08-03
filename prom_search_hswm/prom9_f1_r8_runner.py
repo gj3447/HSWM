@@ -1216,7 +1216,7 @@ def _validate_token_envelope_derivation_gate(
     ):
         raise R8RunnerRefusal("token-envelope derivation lock binding drifted")
     expected_cohorts = {
-        "development": (derivation_development_run_id, 55, 48),
+        "development": (derivation_development_run_id, 54, 48),
         "confirmatory": (SEALED_RUN_ID, 100, 100),
     }
     for cohort, (run_id, items, components) in expected_cohorts.items():

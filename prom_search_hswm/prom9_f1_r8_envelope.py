@@ -48,21 +48,21 @@ from prom_search_hswm.prom9_validate_token_meter import (
 DERIVATION_SCHEMA = "hswm-prom9-f1-r8-token-envelope-derivation/v1"
 PROJECTED_OUTPUTS_SCHEMA = "hswm-prom9-f1-projected-outputs/v1"
 SOURCE_SUITE_SCHEMA = "hswm-prom9-f1-suite/v1"
-EXPECTED_DEVELOPMENT_ITEMS = 55
+EXPECTED_DEVELOPMENT_ITEMS = 54
 EXPECTED_CONFIRMATORY_ITEMS = 100
 EXPECTED_CONFIRMATORY_COMPONENTS = 100
 DEFAULT_TOKEN_TOLERANCE = 512
-DEVELOPMENT_RUN_ID = "f1-2wiki-development-r8-try3-a2"
+DEVELOPMENT_RUN_ID = "f1-2wiki-development-r8-try3-a3"
 CONFIRMATORY_RUN_ID = "f1-2wiki-sealed-r8-try3"
 R8_SELECTION_RECEIPT_SHA256 = (
-    "e2d36903dafb6b5e1387c9969ce9fb60cbd315c24f1d51e30618579291d9d6b8"
+    "7cc231d965ee21618481fe8af2fbbd06641c536c514aef5e2f4d9a2fe0f2b1bc"
 )
 R8_ABORTED_ATTEMPT_EXPOSURE_RECEIPT_SHA256 = (
-    "f97634c0c4185b9bdbe983d6fe5fffc672e6c625923f027a780433acfc714afd"
+    "59a9a1cd4b54517b7b2193fff17acd5402f84525b40cbbd628af1ab4fd38fd0a"
 )
 R8_DERIVATION_PREIMAGE_FILE_SHA256 = {
     "selection_receipt": (
-        "52f63a5cf4fdd04e7ca01c2af2caca8e0a68c54e51a6208e50bff6da01a929dc"
+        "47d1cc8095564d1efe2aae5e6c9de1da00c5eb24f7cf0063c9350313b8886c6c"
     ),
     "historical_manifest": (
         "02e453dc25d7ec657494105d5d1592358501ac3a1fdd179e2b7e032dc890ebcc"
@@ -85,7 +85,7 @@ R8_PROTOCOL_CANONICAL_SHA256 = (
 )
 R8_DERIVATION_PREIMAGE_CANONICAL_SHA256 = {
     "selection_receipt": (
-        "5605545627dd00f547e0a159cef59c5570a5c120186ce7b73d9938a4877a9921"
+        "e7408d8be7ad6d1ea5a2a31779c0d3968dbf4a3bc1e19c45e59cf57ad8db711d"
     ),
     "historical_manifest": (
         "bf047193f84ca1888cc5e9d2527f6d6e2a89bc5c049ae3e4b7c73766e8fc5957"

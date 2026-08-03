@@ -38,6 +38,7 @@ from prom_search_hswm.test_prom9_f1_r8_power import (
     _incident,
     _pages,
     _prior,
+    _successor_wrapper,
     _synthetic_incident_source_entities,
 )
 
@@ -63,14 +64,19 @@ class FakeMeter:
         }
 
 
-def _public_selection(tmp_path: Path) -> dict[str, object]:
+def _public_selection(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> dict[str, object]:
     development, confirmatory = _pages(tmp_path, answer=SENTINEL)
+    successor, _second_component = _successor_wrapper(
+        monkeypatch, distinct_component=True
+    )
     selection, _gold_source = build_selection_receipts(
         prior_receipt=_prior(),
-        aborted_attempt_exposure_receipt=_incident(),
+        aborted_attempt_exposure_receipt=successor,
         development_pages=development,
         confirmatory_pages=confirmatory,
-        forensic_legacy_replay=True,
+        forensic_legacy_replay=False,
     )
     assert SENTINEL not in json.dumps(selection, ensure_ascii=False)
     return selection
@@ -185,12 +191,15 @@ def _historical(
     }
 
 
-def _artifacts(tmp_path: Path) -> dict[str, dict[str, object]]:
+def _artifacts(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> tuple[dict[str, dict[str, object]], dict[str, object]]:
     meter = FakeMeter()
     source_suite = _source_suite(meter)
     validation = _validation(meter, source_suite)
-    return build_token_envelope_artifacts(
-        selection=_public_selection(tmp_path),
+    selection = _public_selection(tmp_path, monkeypatch)
+    artifacts = build_token_envelope_artifacts(
+        selection=selection,
         historical_manifest=_historical(meter, validation, source_suite),
         validation_receipt=validation,
         projected_outputs_receipt=_projected(source_suite),
@@ -201,13 +210,16 @@ def _artifacts(tmp_path: Path) -> dict[str, dict[str, object]]:
         model_revision=REVISION,
         development_run_id=DEVELOPMENT_RUN_ID,
         confirmatory_run_id="f1-2wiki-sealed-r8-try3",
-        expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
+        expected_development_items=len(selection["development"]["item_ids"]),
         expected_confirmatory_items=100,
     )
+    return artifacts, selection
 
 
-def test_public_only_builder_derives_tight_common_caps(tmp_path: Path) -> None:
-    artifacts = _artifacts(tmp_path)
+def test_public_only_builder_derives_tight_common_caps(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    artifacts, selection = _artifacts(tmp_path, monkeypatch)
     receipt = artifacts["derivation_receipt"]
     development = receipt["development"]["minimum_input_caps"]
     confirmatory = receipt["confirmatory"]["minimum_input_caps"]
@@ -219,7 +231,9 @@ def test_public_only_builder_derives_tight_common_caps(tmp_path: Path) -> None:
     assert artifacts["token_envelope"]["per_call_input_caps"] == expected
     assert expected != {"1": 9000, "2": 9000, "3": 9000}
     assert receipt["historical_input_caps_used_as_floor"] is False
-    assert receipt["development"]["items"] == EXPECTED_DEVELOPMENT_ITEMS
+    assert receipt["development"]["items"] == len(
+        selection["development"]["item_ids"]
+    )
     assert receipt["development"]["components"] == 48
     assert receipt["confirmatory"]["items"] == 100
     assert receipt["confirmatory"]["components"] == 100
@@ -230,14 +244,16 @@ def test_public_only_builder_derives_tight_common_caps(tmp_path: Path) -> None:
     assert canonical_sha256(unsigned) == declared
 
 
-def test_meter_or_projection_drift_refuses_before_output(tmp_path: Path) -> None:
+def test_meter_or_projection_drift_refuses_before_output(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     meter = FakeMeter()
     source_suite = _source_suite(meter)
     validation = _validation(meter, source_suite)
     validation["meter"] = {**meter.identity(), "source": "mutated"}
     with pytest.raises(R8EnvelopeRefusal, match="not reproducible"):
         build_token_envelope_artifacts(
-            selection=_public_selection(tmp_path),
+            selection=_public_selection(tmp_path, monkeypatch),
             historical_manifest=_historical(
                 meter, _validation(meter, source_suite), source_suite
             ),
@@ -256,19 +272,19 @@ def test_meter_or_projection_drift_refuses_before_output(tmp_path: Path) -> None
 
 
 def test_production_selection_preimage_binds_final_v2_incident(
-    tmp_path: Path,
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     assert R8_DERIVATION_PREIMAGE_FILE_SHA256["selection_receipt"] == (
-        "52f63a5cf4fdd04e7ca01c2af2caca8e0a68c54e51a6208e50bff6da01a929dc"
+        "47d1cc8095564d1efe2aae5e6c9de1da00c5eb24f7cf0063c9350313b8886c6c"
     )
     assert R8_DERIVATION_PREIMAGE_CANONICAL_SHA256["selection_receipt"] == (
-        "5605545627dd00f547e0a159cef59c5570a5c120186ce7b73d9938a4877a9921"
+        "e7408d8be7ad6d1ea5a2a31779c0d3968dbf4a3bc1e19c45e59cf57ad8db711d"
     )
     assert R8_SELECTION_RECEIPT_SHA256 == (
-        "e2d36903dafb6b5e1387c9969ce9fb60cbd315c24f1d51e30618579291d9d6b8"
+        "7cc231d965ee21618481fe8af2fbbd06641c536c514aef5e2f4d9a2fe0f2b1bc"
     )
     assert R8_ABORTED_ATTEMPT_EXPOSURE_RECEIPT_SHA256 == (
-        "f97634c0c4185b9bdbe983d6fe5fffc672e6c625923f027a780433acfc714afd"
+        "59a9a1cd4b54517b7b2193fff17acd5402f84525b40cbbd628af1ab4fd38fd0a"
     )
     assert (
         R8_DERIVATION_PREIMAGE_FILE_SHA256["selection_receipt"]
@@ -288,7 +304,7 @@ def test_production_selection_preimage_binds_final_v2_incident(
         "200e0708f556231b8ee4d83dea76ec923fb27071a76e2a27045e6ee218578fb0"
     )
 
-    resigned = copy.deepcopy(_public_selection(tmp_path))
+    resigned = copy.deepcopy(_public_selection(tmp_path, monkeypatch))
     resigned["aborted_attempt_exposure_receipt_sha256"] = (
         "6d3f2f8978a8502c0f01135ad7b998841dbb4bd61462934927f735e3932bad7d"
     )
@@ -312,10 +328,10 @@ def test_production_selection_preimage_binds_final_v2_incident(
 
 
 def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
-    tmp_path: Path,
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     meter = FakeMeter()
-    selection = _public_selection(tmp_path)
+    selection = _public_selection(tmp_path, monkeypatch)
     source_suite = _source_suite(meter)
     validation = _validation(meter, source_suite)
     projected = _projected(source_suite)
@@ -332,7 +348,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
         model_revision=REVISION,
         development_run_id=DEVELOPMENT_RUN_ID,
         confirmatory_run_id="f1-2wiki-sealed-r8-try3",
-        expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
+        expected_development_items=len(selection["development"]["item_ids"]),
         expected_confirmatory_items=100,
     )
     receipt = artifacts["derivation_receipt"]
@@ -384,7 +400,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
         expected_file_sha256s=fixed_files,
         expected_canonical_sha256s=fixed_canonical,
         **selection_identity,
-        expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
+        expected_development_items=len(selection["development"]["item_ids"]),
         expected_confirmatory_items=100,
     ) == receipt["receipt_sha256"]
 
@@ -408,7 +424,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
             expected_file_sha256s=fixed_files,
             expected_canonical_sha256s=fixed_canonical,
             **selection_identity,
-            expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
+            expected_development_items=len(selection["development"]["item_ids"]),
             expected_confirmatory_items=100,
         )
 
@@ -428,7 +444,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
             expected_file_sha256s=fixed_files,
             expected_canonical_sha256s=fixed_canonical,
             **selection_identity,
-            expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
+            expected_development_items=len(selection["development"]["item_ids"]),
             expected_confirmatory_items=100,
         )
 
@@ -454,7 +470,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
             expected_file_sha256s=fixed_files,
             expected_canonical_sha256s=fixed_canonical,
             **selection_identity,
-            expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
+            expected_development_items=len(selection["development"]["item_ids"]),
             expected_confirmatory_items=100,
         )
 
@@ -475,13 +491,15 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
             expected_file_sha256s=fixed_files,
             expected_canonical_sha256s=fixed_canonical,
             **selection_identity,
-            expected_development_items=EXPECTED_DEVELOPMENT_ITEMS,
+            expected_development_items=len(selection["development"]["item_ids"]),
             expected_confirmatory_items=100,
         )
 
 
-def test_first_write_is_private_and_never_replaced(tmp_path: Path) -> None:
-    artifacts = _artifacts(tmp_path)
+def test_first_write_is_private_and_never_replaced(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    artifacts, _selection = _artifacts(tmp_path, monkeypatch)
     envelope = tmp_path / "out" / "token-envelope.v1.json"
     receipt = tmp_path / "out" / "token-envelope-derivation.v1.json"
     write_artifacts_once(

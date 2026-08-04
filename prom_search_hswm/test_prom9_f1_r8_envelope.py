@@ -365,7 +365,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
         "projected_outputs_receipt": "b" * 64,
         "source_suite": "c" * 64,
         "protocol": (
-            "398c519a25b576110da56d336191cef354479cd8f7dda8e48b7b4209c2a2cbbb"
+            "dcb0165be53f4ec9a7632f30a27b88e0000f21328b21d7202c5c4fbe1d771f4c"
         ),
     }
     fixed_canonical = {
@@ -375,7 +375,7 @@ def test_verifier_replays_receipt_and_rejects_resigned_preimage_drift(
         "projected_outputs_receipt": canonical_sha256(projected),
         "source_suite": canonical_sha256(source_suite),
         "protocol": (
-            "3aeb7d484e23a0661a3163aac9c09aac15c9f361306f584fc11ac3a293999389"
+            "db26345905733856bd0460dda87fbcb5d490126fb693943b92bd068bb4bcc940"
         ),
     }
     selection_identity = {

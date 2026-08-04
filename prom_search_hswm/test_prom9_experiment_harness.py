@@ -779,16 +779,18 @@ def test_typed_composition_links_reach_answer_context() -> None:
     assert result.answer["answer"] == "Lyon"
 
 
-def test_typed_composition_link_outside_selection_degrades_to_abstain() -> None:
+def test_typed_composition_link_outside_selection_is_stripped_not_rewritten() -> None:
     result = _links_run("bad_ref")
-    assert result.answer["abstain"] is True
+    # receipt-consistent: the run completes, the BF output is never rewritten,
+    # and the invalid link never reaches the typed answer context.
     assert "composition_links" not in result.calls[2].input_payload
+    assert result.selected_bond_ids == ("bond-a", "bond-b")
 
 
-def test_typed_missing_composition_links_with_two_selected_degrades_to_abstain() -> None:
+def test_typed_missing_composition_links_leaves_channel_empty() -> None:
     result = _links_run("missing")
-    assert result.answer["abstain"] is True
     assert "composition_links" not in result.calls[2].input_payload
+    assert result.selected_bond_ids == ("bond-a", "bond-b")
 
 
 def test_null_arm_composition_links_are_not_forwarded() -> None:

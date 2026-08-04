@@ -439,18 +439,12 @@ def run_item(
                 for link in raw_links
             )
         )
-        if (len(selected) >= 2 and not raw_links) or not links_ok:
-            proposal = {
-                "request_id": proposal["request_id"],
-                "ordered_bond_ids": [],
-                "bond_potentials": {},
-                "evidence_refs": [],
-                "abstain": True,
-                "composition_links": [],
-            }
-            selected = []
-            selected_evidence_ids = set()
-        else:
+        # Receipt-consistent semantics: the BF output is never rewritten.  Only
+        # intact links are forwarded into the typed answer context; malformed or
+        # absent links leave the channel empty and the typed answer role decides
+        # (its instruction requires abstention when links are absent but the
+        # selection holds two or more evidence items).
+        if links_ok:
             composition_links = raw_links or None
 
     answer_context = fit(

@@ -616,7 +616,7 @@ def build_public_artifacts(
         "mode": mode,
         "model": model,
         "model_revision": model_revision,
-        "token_tolerance": 512,
+        "token_tolerance": 768,
         "state_capacity_bytes": 4096,
         "state_bytes_by_arm": {arm: 4096 for arm in F1_ARMS},
         "preregistration_artifact_sha256": preregistration_artifact_sha256,

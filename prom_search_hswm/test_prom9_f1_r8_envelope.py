@@ -133,7 +133,7 @@ def _source_suite(meter: FakeMeter) -> dict[str, object]:
         "model_revision": REVISION,
         "manifest_sha256": "4" * 64,
         "preregistration_receipt_sha256": None,
-        "token_tolerance": 512,
+        "token_tolerance": 768,
         "state_capacity_bytes": 4096,
         "max_workers": 1,
         "registries": registries,

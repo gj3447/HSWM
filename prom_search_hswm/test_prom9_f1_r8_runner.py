@@ -358,9 +358,26 @@ def _items() -> list[dict[str, object]]:
 def _manifest(meter: FakeMeter) -> dict[str, object]:
     items = _items()
     projected = {arm: {"1": 5, "2": 5, "3": 5} for arm in F1_ARMS}
+    cap_items = [runner._item(value, "fixture") for value in items]
     caps = compute_minimum_input_caps(
         run_id=runner.DEVELOPMENT_RUN_ID,
-        items=[runner._item(value, "fixture") for value in items],
+        items=cap_items,
+        arms=F1_ARMS,
+        registries=_registries(),
+        meter=meter,
+        projected_outputs=projected,
+        slack=4,
+    )
+    for item in items:
+        item["max_input_tokens"] = sum(caps.values())
+    # second pass: the payload budget field embeds max_input_tokens, whose
+    # width feeds back into the projected call-1 bound; rebuild the projection
+    # items from the patched budgets and recompute so the registered envelope
+    # is self-consistent.
+    cap_items = [runner._item(value, "fixture") for value in items]
+    caps = compute_minimum_input_caps(
+        run_id=runner.DEVELOPMENT_RUN_ID,
+        items=cap_items,
         arms=F1_ARMS,
         registries=_registries(),
         meter=meter,

@@ -14,7 +14,7 @@ from hswm_weight_snapshot import (
 )
 from p1_eligibility_tag import derive_eligibility_tags, make_activation_trace
 from prom_search_hswm.hswm_call_receipt import ModelCallV1, ModelResponseV1
-from prom_search_hswm.hswm_function_network import F1_ARMS, TYPED_ARM
+from prom_search_hswm.hswm_function_network import FLAT_ARM, F1_ARMS, TYPED_ARM, run_item
 from prom_search_hswm.hswm_function_registry import build_registry
 from prom_search_hswm.hswm_token_meter import FakeMeter
 from prom_search_hswm.hswm_typed_ports import (
@@ -24,7 +24,7 @@ from prom_search_hswm.hswm_typed_ports import (
     canonical_sha256,
     validate_port,
 )
-from prom_search_hswm.prom9_f1_envelope import compute_minimum_input_caps
+from prom_search_hswm.prom9_f1_envelope import compute_minimum_input_caps, envelope_spec
 from prom_search_hswm.prom_f1_function_network import (
     F1HarnessError,
     GOLD_SCHEMA,
@@ -642,3 +642,200 @@ def test_legacy_port_rejects_automatic_post_retry_configuration() -> None:
             max_retries=1,
             retry_backoff_s=(0.0,),
         )
+
+
+# ---------------------------------------------------------------------------
+# typed composition_links channel (a4 design change, 2026-08-04)
+
+
+def _two_candidate_manifest_item() -> dict:
+    entity_a = canonical_sha256(
+        {"schema_version": "hswm-2wiki-paragraph-source/v1", "title": "Alpha", "sentences": ["Alpha sentence."]}
+    )
+    entity_b = canonical_sha256(
+        {"schema_version": "hswm-2wiki-paragraph-source/v1", "title": "Beta", "sentences": ["Beta sentence."]}
+    )
+    return {
+        "item_id": "item-links",
+        "query_text": "Where did Alpha meet Beta?",
+        "allowed_evidence_types": ["text"],
+        "candidates": [
+            {
+                "bond_id": "bond-a",
+                "evidence_id": "evidence-a",
+                "content": "Alpha met Beta in Lyon.",
+                "observable": {"flat_position": 0, "flat_score": 1.0, "vector_score": 1.0, "source_type": "text"},
+            },
+            {
+                "bond_id": "bond-b",
+                "evidence_id": "evidence-b",
+                "content": "Beta later confirmed the Lyon meeting.",
+                "observable": {"flat_position": 1, "flat_score": 0.5, "vector_score": 0.5, "source_type": "text"},
+            },
+        ],
+        "component_id": canonical_sha256(
+            {"schema_version": "hswm-source-entity-connected-component/v1", "source_entity_ids": [entity_a, entity_b]}
+        ),
+        "max_evidence_items": 2,
+        "max_input_tokens": 4096,
+        "max_output_tokens_per_call": 64,
+    }
+
+
+class _TwoBondLinkPort:
+    """Deterministic port: QF plans; BF selects both bonds (link mode varies); AF answers."""
+
+    def __init__(self, *, link_mode: str) -> None:
+        self._link_mode = link_mode
+
+    def __call__(self, call: ModelCallV1) -> ModelResponseV1:
+        request_id = str(call.input_payload["request_id"])
+        if call.function_id == "QF_QUERY_COMPILER":
+            payload = {
+                "request_id": request_id,
+                "objectives": ["locate the meeting"],
+                "required_evidence_types": ["text"],
+                "constraints": ["evidence only"],
+                "abstain": False,
+            }
+        elif call.function_id == "BF_BOND_PROPOSER":
+            payload = {
+                "request_id": request_id,
+                "ordered_bond_ids": ["bond-a", "bond-b"],
+                "bond_potentials": {"bond-a": 0.0, "bond-b": -0.1},
+                "evidence_refs": ["evidence-a", "evidence-b"],
+                "abstain": False,
+            }
+            if self._link_mode != "missing":
+                b_ref = "evidence-b" if self._link_mode == "valid" else "evidence-outside"
+                payload["composition_links"] = [
+                    {"evidence_id_a": "evidence-a", "evidence_id_b": b_ref, "bridge": "Lyon"}
+                ]
+        else:
+            evidence = call.input_payload["selected_evidence"]
+            payload = {
+                "request_id": request_id,
+                "answer": "Lyon" if evidence else "",
+                "supporting_evidence_ids": [row["evidence_id"] for row in evidence],
+                "uncertainty": "" if evidence else "no evidence",
+                "abstain": not bool(evidence),
+            }
+        return ModelResponseV1(
+            payload=payload,
+            model=call.model,
+            model_revision=call.model_revision,
+            input_tokens=10,
+            output_tokens=5,
+            latency_ms=1,
+        )
+
+
+def _links_envelope(item, meter: FakeMeter):
+    caps = compute_minimum_input_caps(
+        run_id="f1-links",
+        items=[item],
+        arms=F1_ARMS,
+        registries=_registries(),
+        meter=meter,
+        projected_outputs=_FAKE_PROJECTED_OUTPUTS,
+        slack=8,
+    )
+    return envelope_spec(
+        {
+            "schema_version": "hswm-prom9-f1-token-envelope/v1",
+            "tokenizer": {**meter.identity(), "validation_receipt_sha256": "b" * 64},
+            "filler": {"field": PARITY_FILLER_FIELD, "unit": "0", "max_filler_chars": 60000},
+            "per_call_input_caps": caps,
+            "per_call_output_caps": {"1": 64, "2": 64, "3": 64},
+            "projected_output_tokens_by_arm": deepcopy(_FAKE_PROJECTED_OUTPUTS),
+            "projection_slack_tokens": 8,
+        },
+        meter=meter,
+    )
+
+
+def _links_run(link_mode: str, arm_id: str = TYPED_ARM):
+    meter = FakeMeter()
+    item = _item(_two_candidate_manifest_item())
+    registry = _registries()[arm_id]
+    spec = _links_envelope(item, meter)
+    return run_item(
+        run_id="f1-links",
+        arm_id=arm_id,
+        item=item,
+        registry=registry,
+        model_port=_TwoBondLinkPort(link_mode=link_mode),
+        envelope=spec,
+    )
+
+
+def test_typed_composition_links_reach_answer_context() -> None:
+    result = _links_run("valid")
+    af_call = result.calls[2]
+    assert af_call.input_payload.get("composition_links") == [
+        {"evidence_id_a": "evidence-a", "evidence_id_b": "evidence-b", "bridge": "Lyon"}
+    ]
+    assert result.answer["abstain"] is False
+    assert result.answer["answer"] == "Lyon"
+
+
+def test_typed_composition_link_outside_selection_degrades_to_abstain() -> None:
+    result = _links_run("bad_ref")
+    assert result.answer["abstain"] is True
+    assert "composition_links" not in result.calls[2].input_payload
+
+
+def test_typed_missing_composition_links_with_two_selected_degrades_to_abstain() -> None:
+    result = _links_run("missing")
+    assert result.answer["abstain"] is True
+    assert "composition_links" not in result.calls[2].input_payload
+
+
+def test_null_arm_composition_links_are_not_forwarded() -> None:
+    result = _links_run("valid", arm_id=FLAT_ARM)
+    assert "composition_links" not in result.calls[2].input_payload
+
+
+def test_bond_proposal_composition_links_round_trip_and_strictness() -> None:
+    base = {
+        "request_id": "req-x",
+        "ordered_bond_ids": ["b1"],
+        "bond_potentials": {"b1": 0.0},
+        "evidence_refs": ["e1"],
+        "abstain": False,
+    }
+    without = validate_port("BondProposalV1", dict(base))
+    assert "composition_links" not in without
+    with_links = validate_port(
+        "BondProposalV1",
+        {**base, "composition_links": [{"evidence_id_a": "e1", "evidence_id_b": "e2", "bridge": "x"}]},
+    )
+    assert with_links["composition_links"] == [
+        {"evidence_id_a": "e1", "evidence_id_b": "e2", "bridge": "x"}
+    ]
+    with pytest.raises(TypedPortError):
+        validate_port("BondProposalV1", {**base, "composition_links": [{"evidence_id_a": "e1"}]})
+    with pytest.raises(TypedPortError):
+        validate_port("BondProposalV1", {**base, "unknown_field": 1})
+
+
+def test_answer_context_accepts_composition_links() -> None:
+    payload = {
+        "request_id": "req-x",
+        "query_text": "q",
+        "query_plan": {
+            "request_id": "req-x",
+            "objectives": ["o"],
+            "required_evidence_types": ["text"],
+            "constraints": [],
+            "abstain": False,
+        },
+        "selected_evidence": [{"evidence_id": "e1", "content": "c"}],
+        "max_answer_tokens": 16,
+        "composition_links": [{"evidence_id_a": "e1", "evidence_id_b": "e2", "bridge": "b"}],
+        PARITY_FILLER_FIELD: "",
+    }
+    normalized = validate_port("AnswerContextV1", payload)
+    assert normalized["composition_links"] == [
+        {"evidence_id_a": "e1", "evidence_id_b": "e2", "bridge": "b"}
+    ]

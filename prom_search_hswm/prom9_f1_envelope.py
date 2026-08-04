@@ -19,6 +19,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 
 from prom_search_hswm.hswm_function_network import (
+    TYPED_ARM,
     CallEnvelopeV1,
     FunctionNetworkItemV1,
     answer_context_payload,
@@ -238,6 +239,24 @@ def project_item_call_upper_bounds(
         key=lambda candidate: meter.count_text(candidate.content),
         reverse=True,
     )[: item.max_evidence_items]
+    worst_links = None
+    if arm_id == TYPED_ARM and len(worst) >= 2:
+        worst_links = [
+            {
+                "evidence_id_a": first.evidence_id,
+                "evidence_id_b": second.evidence_id,
+                "bridge": "0" * 64,
+            }
+            for first, second in zip(worst, worst[1:], strict=False)
+        ]
+        if len(worst) >= 3:
+            worst_links.append(
+                {
+                    "evidence_id_a": worst[0].evidence_id,
+                    "evidence_id_b": worst[2].evidence_id,
+                    "bridge": "0" * 64,
+                }
+            )
     bound_3 = (
         meter.count_chat_prompt(
             registry.by_id("AF_ANSWER_SYNTHESIZER").prompt,
@@ -247,6 +266,7 @@ def project_item_call_upper_bounds(
                     request_id=request_id,
                     query_plan=_minimal_plan(request_id),
                     selected=worst,
+                    composition_links=worst_links,
                 )
             ),
         )

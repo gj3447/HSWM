@@ -29,6 +29,11 @@ FLAT_ARM = "flat_single_llm_three_call_workflow"
 VECTOR_ARM = "vector_memory_three_call_workflow"
 REMOVAL_ARM = "typed_network_role_removed_schema_preserving_null"
 SHUFFLE_ARM = "typed_network_with_role_instructions_shuffled_but_ports_preserved"
+
+# Orchestration budget for the typed composition channel: a BF composition_links
+# payload larger than this degrades the typed run to a calibrated abstain instead
+# of letting the downstream answer-context envelope overflow mid-run.
+COMPOSITION_LINKS_MAX_CANONICAL_CHARS = 512
 F1_ARMS = (TYPED_ARM, FLAT_ARM, VECTOR_ARM, REMOVAL_ARM, SHUFFLE_ARM)
 
 
@@ -282,11 +287,12 @@ def answer_context_payload(
     request_id: str,
     query_plan: Mapping[str, object],
     selected: Sequence[EvidenceCandidateV1],
+    composition_links: Sequence[Mapping[str, object]] | None = None,
     parity_filler: str = "",
 ) -> dict[str, object]:
     """Build the (not yet port-validated) AnswerContextV1 payload."""
 
-    return {
+    payload = {
         "request_id": request_id,
         "query_text": item.query_text,
         "query_plan": dict(query_plan),
@@ -297,6 +303,9 @@ def answer_context_payload(
         "max_answer_tokens": item.max_output_tokens_per_call,
         PARITY_FILLER_FIELD: parity_filler,
     }
+    if composition_links is not None:
+        payload["composition_links"] = [dict(link) for link in composition_links]
+    return payload
 
 
 def request_id_for(run_id: str, arm_id: str, item_id: str) -> str:
@@ -419,6 +428,31 @@ def run_item(
     if not set(proposal["evidence_refs"]).issubset(selected_evidence_ids):
         raise FunctionNetworkError("BF cited evidence outside its selected bonds")
 
+    composition_links = None
+    if arm_id == TYPED_ARM and not proposal["abstain"]:
+        raw_links = proposal.get("composition_links", [])
+        links_ok = (
+            len(canonical_json(raw_links)) <= COMPOSITION_LINKS_MAX_CANONICAL_CHARS
+            and all(
+                link.get("evidence_id_a") in selected_evidence_ids
+                and link.get("evidence_id_b") in selected_evidence_ids
+                for link in raw_links
+            )
+        )
+        if (len(selected) >= 2 and not raw_links) or not links_ok:
+            proposal = {
+                "request_id": proposal["request_id"],
+                "ordered_bond_ids": [],
+                "bond_potentials": {},
+                "evidence_refs": [],
+                "abstain": True,
+                "composition_links": [],
+            }
+            selected = []
+            selected_evidence_ids = set()
+        else:
+            composition_links = raw_links or None
+
     answer_context = fit(
         af.prompt,
         answer_context_payload(
@@ -426,6 +460,7 @@ def run_item(
             request_id=request_id,
             query_plan=query_plan,
             selected=selected,
+            composition_links=composition_links,
         ),
         3,
     )

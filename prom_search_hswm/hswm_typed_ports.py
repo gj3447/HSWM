@@ -84,6 +84,19 @@ OUTPUT_JSON_SCHEMAS: dict[str, dict[str, object]] = {
                 "type": "array",
                 "items": {"type": "string", "minLength": 1},
             },
+            "composition_links": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["evidence_id_a", "evidence_id_b", "bridge"],
+                    "properties": {
+                        "evidence_id_a": {"type": "string", "minLength": 1},
+                        "evidence_id_b": {"type": "string", "minLength": 1},
+                        "bridge": {"type": "string", "minLength": 1},
+                    },
+                },
+            },
             "abstain": {"type": "boolean"},
         },
     },
@@ -345,6 +358,7 @@ def _bond_scoring_envelope(value: object) -> dict[str, object]:
 
 def _bond_proposal(value: object) -> dict[str, object]:
     data = _object(value, "BondProposalV1")
+    raw_links = data.pop("composition_links", None)
     _keys(
         data,
         {"request_id", "ordered_bond_ids", "bond_potentials", "evidence_refs", "abstain"},
@@ -360,17 +374,35 @@ def _bond_proposal(value: object) -> dict[str, object]:
     }
     if set(normalized_potentials) != set(ordered):
         raise TypedPortError("bond_potentials must exactly cover ordered_bond_ids")
-    return {
+    links = [] if raw_links is None else raw_links
+    if not isinstance(links, list):
+        raise TypedPortError("composition_links must be an array")
+    normalized_links = []
+    for index, raw in enumerate(links):
+        row = _object(raw, f"composition link {index}")
+        _keys(row, {"evidence_id_a", "evidence_id_b", "bridge"}, f"composition link {index}")
+        normalized_links.append(
+            {
+                "evidence_id_a": _text(row["evidence_id_a"], f"composition link {index} a"),
+                "evidence_id_b": _text(row["evidence_id_b"], f"composition link {index} b"),
+                "bridge": _text(row["bridge"], f"composition link {index} bridge"),
+            }
+        )
+    result = {
         "request_id": _text(data["request_id"], "request_id"),
         "ordered_bond_ids": ordered,
         "bond_potentials": normalized_potentials,
         "evidence_refs": _text_list(data["evidence_refs"], "evidence_refs"),
         "abstain": _boolean(data["abstain"], "abstain"),
     }
+    if raw_links is not None:
+        result["composition_links"] = normalized_links
+    return result
 
 
 def _answer_context(value: object) -> dict[str, object]:
     data = _object(value, "AnswerContextV1")
+    raw_links = data.pop("composition_links", None)
     _keys(
         data,
         {"request_id", "query_text", "query_plan", "selected_evidence", "max_answer_tokens", PARITY_FILLER_FIELD},
@@ -392,7 +424,21 @@ def _answer_context(value: object) -> dict[str, object]:
     ids = [row["evidence_id"] for row in normalized]
     if len(ids) != len(set(ids)):
         raise TypedPortError("selected evidence IDs must be unique")
-    return {
+    links = [] if raw_links is None else raw_links
+    if not isinstance(links, list):
+        raise TypedPortError("composition_links must be an array")
+    normalized_links = []
+    for index, raw in enumerate(links):
+        row = _object(raw, f"composition link {index}")
+        _keys(row, {"evidence_id_a", "evidence_id_b", "bridge"}, f"composition link {index}")
+        normalized_links.append(
+            {
+                "evidence_id_a": _text(row["evidence_id_a"], f"composition link {index} a"),
+                "evidence_id_b": _text(row["evidence_id_b"], f"composition link {index} b"),
+                "bridge": _text(row["bridge"], f"composition link {index} bridge"),
+            }
+        )
+    result = {
         "request_id": _text(data["request_id"], "request_id"),
         "query_text": _text(data["query_text"], "query_text"),
         "query_plan": _query_plan(data["query_plan"]),
@@ -400,6 +446,9 @@ def _answer_context(value: object) -> dict[str, object]:
         "max_answer_tokens": _positive_int(data["max_answer_tokens"], "max_answer_tokens"),
         PARITY_FILLER_FIELD: _parity_filler(data[PARITY_FILLER_FIELD], PARITY_FILLER_FIELD),
     }
+    if raw_links is not None:
+        result["composition_links"] = normalized_links
+    return result
 
 
 def _answer_envelope(value: object) -> dict[str, object]:

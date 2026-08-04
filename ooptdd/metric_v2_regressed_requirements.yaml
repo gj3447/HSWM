@@ -1,0 +1,96 @@
+# NEGATIVE ORACLE spec — intentionally regressed machinery (coverage-only scoring
+# via metric_v2_regressed_probe).  Scoring-sensitive gates MUST go RED here;
+# if they stay green the gate suite is vacuous.  Never merge this verdict with
+# the canonical green run (metric_v2_requirements.yaml).
+#
+# ooptdd-loop spec — verify the REAL HSWM F1 metric v2 machinery on the REAL
+# frozen development suites (ouroboros: the new metric measures the program's
+# own development history — t2 vs t3b — and the suite measures the metric).
+# Each gate binds (Longinus) to an event literal that run_metric_v2_probe ships
+# ONLY when the behaviour is genuinely observed from a verified computation on
+# the real suite bytes (suite self-hash + manifest binding + component
+# source-derivation all re-verified; sha256 of every input in the probe summary).
+# A regressed metric (coverage-only scoring / silent identity acceptance /
+# drifted goldens) -> the bound gate goes RED.
+#
+# Run (Mac):  cd <HSWM checkout @ f4571da> && \
+#   HSWM_METRIC_V2_EVIDENCE_DIR=<frozen evidence dir> PYTHONPATH=$PWD \
+#   <ooptdd-venv>/bin/ooptdd-loop run ooptdd/metric_v2_requirements.yaml --json
+name: hswm-f1-metric-v2-conformance-REGRESSED-negative-oracle
+
+target:
+  mode: in_process
+  callable: metric_v2_regressed_probe:run_metric_v2_probe   # run_metric_v2_probe(backend, cid)
+  backend: memory
+  root: ooptdd
+
+requirements:
+  - id: REQ-V2-TYPED-BEATS-ALL-CONTROLS-T2
+    description: on the real t2 suite, all 4 paired typed−control utility contrasts (component-macro, c=2) are strictly positive
+    gate:
+      - {event: v2_typed_beats_all_controls_t2, op: "==", count: 1}
+    longinus:
+      kg_anchor: hswm-f1-req-v2-typed-beats-all-controls-t2-20260804
+      source: metric_v2_conformance_adapter.py
+      symbol: _emit_v2_typed_beats_all_controls_t2
+      must_emit: v2_typed_beats_all_controls_t2
+
+  - id: REQ-V2-ROBUST-ACROSS-C
+    description: the t2 minimum paired contrast stays strictly positive for every fabrication cost c in {1,2,3}
+    gate:
+      - {event: v2_robust_across_c, op: "==", count: 1}
+    longinus:
+      kg_anchor: hswm-f1-req-v2-robust-across-c-20260804
+      source: metric_v2_conformance_adapter.py
+      symbol: _emit_v2_robust_across_c
+      must_emit: v2_robust_across_c
+
+  - id: REQ-V2-ALPHA-GATE-IS-NET-REGRESSION
+    description: the α v1 gate regression is measured both ways — t3b typed utility (+0.185) is strictly below t2 typed utility (+0.296) while still strictly above every t3b control arm
+    gate:
+      - {event: v2_alpha_gate_is_net_regression, op: "==", count: 1}
+    longinus:
+      kg_anchor: hswm-f1-req-v2-alpha-gate-is-net-regression-20260804
+      source: metric_v2_conformance_adapter.py
+      symbol: _emit_v2_alpha_gate_is_net_regression
+      must_emit: v2_alpha_gate_is_net_regression
+
+  - id: REQ-V2-ABSTAIN-ONLY-SCORES-ZERO
+    description: the role-removed schema-preserving null arm (abstain-only) scores utility exactly 0 on both suites — degenerate-arm discipline
+    gate:
+      - {event: v2_abstain_only_scores_zero, op: "==", count: 1}
+    longinus:
+      kg_anchor: hswm-f1-req-v2-abstain-only-scores-zero-20260804
+      source: metric_v2_conformance_adapter.py
+      symbol: _emit_v2_abstain_only_scores_zero
+      must_emit: v2_abstain_only_scores_zero
+
+  - id: REQ-V2-FABRICATION-IS-REFUSED
+    description: a byte-tampered t2 suite copy (one typed answer flipped correct→wrong inside item_run bytes) is REFUSED by the loader identity checks, and the honest typed utility exceeds the tampered implication
+    gate:
+      - {event: v2_fabrication_is_refused, op: "==", count: 1}
+    longinus:
+      kg_anchor: hswm-f1-req-v2-fabrication-is-refused-20260804
+      source: metric_v2_conformance_adapter.py
+      symbol: _emit_v2_fabrication_is_refused
+      must_emit: v2_fabrication_is_refused
+
+  - id: REQ-V2-GOLDEN-REPLAY
+    description: computed per-arm utilities (c=2, both suites) and per-c minimum contrasts replay the frozen golden values within epsilon
+    gate:
+      - {event: v2_golden_replay, op: "==", count: 1}
+    longinus:
+      kg_anchor: hswm-f1-req-v2-golden-replay-20260804
+      source: metric_v2_conformance_adapter.py
+      symbol: _emit_v2_golden_replay
+      must_emit: v2_golden_replay
+
+  - id: REQ-V2-OUROBOROS-SELF-MEASURE
+    description: the ouroboros tail — the machinery scores itself (suites as items, metric versions as arms); v2 must out-rank v1-coverage on the same bytes where v1's own min contrast is exactly 0.000 (the old metric was blind)
+    gate:
+      - {event: v2_ouroboros_self_measure, op: "==", count: 1}
+    longinus:
+      kg_anchor: hswm-f1-req-v2-ouroboros-self-measure-20260804
+      source: metric_v2_conformance_adapter.py
+      symbol: _emit_v2_ouroboros_self_measure
+      must_emit: v2_ouroboros_self_measure

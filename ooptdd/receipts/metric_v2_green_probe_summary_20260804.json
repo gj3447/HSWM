@@ -1,0 +1,76 @@
+{
+ "events_shipped": [
+  "v2_typed_beats_all_controls_t2",
+  "v2_robust_across_c",
+  "v2_alpha_gate_is_net_regression",
+  "v2_abstain_only_scores_zero",
+  "v2_fabrication_is_refused",
+  "v2_golden_replay",
+  "v2_ouroboros_self_measure"
+ ],
+ "evidence_dir": "/Users/lagyeongjun/CD/SYMPOSIUM/GIT/HSWM/.ooptdd-metric-v2-evidence",
+ "fabrication": {
+  "flipped_item_id": "0a71ec9f08e511ebbda4ac1f6bf848b6",
+  "honest_typed_utility": "8/27",
+  "ok": true,
+  "refusal": "development suite self-hash drifted",
+  "tampered_implied_typed_utility": "13/54"
+ },
+ "golden_failures": [],
+ "normalize_source": "vendored",
+ "ouroboros": {
+  "self_outcomes": {
+   "t2/v1_coverage": "abstain",
+   "t2/v2_utility": "correct",
+   "t3b/v1_coverage": "wrong",
+   "t3b/v2_utility": "correct"
+  },
+  "self_utility": {
+   "v1_coverage": "-1",
+   "v2_utility": "1"
+  }
+ },
+ "provenance_sha256": {
+  "common/selection.v4.json": "47d1cc8095564d1efe2aae5e6c9de1da00c5eb24f7cf0063c9350313b8886c6c",
+  "development-a3-t2/gold.v2.json": "28a6db26d533c724d8d3967160933a2f403fbc36d5ceb60a30c613f8f645613f",
+  "development-a3-t2/manifest.v3.json": "4d1938b5af401160c0bb7bf65325b0d20d9eb327e98b16cd881b8341af619368",
+  "development-a3-t2/suite.v4.json": "bff12cbfdc9f4fc26f40db6965404c284698f87a037c3c8b90a7510183118aae",
+  "development-a3-t3b/gold.v2.json": "28a6db26d533c724d8d3967160933a2f403fbc36d5ceb60a30c613f8f645613f",
+  "development-a3-t3b/manifest.v3.json": "968e923475039dadaa9f8bfc7f74c7be52f202833ef3ec42bf57d675a5182b81",
+  "development-a3-t3b/suite.v4.json": "ff2d772d4850c1a38c3af2142c3211484d0576cd3027df2c586a1f7a2de9a992"
+ },
+ "t2": {
+  "gold_sha256": "f974f100ef2490b4e3f8874fc204697914ef24f420da116277f37040235d98db",
+  "min_contrast_by_c": {
+   "1": 0.083333,
+   "2": 0.166667,
+   "3": 0.229167
+  },
+  "per_arm_utility_c2": {
+   "flat_single_llm_three_call_workflow": 0.092593,
+   "typed_hswm_three_function_network": 0.296296,
+   "typed_network_role_removed_schema_preserving_null": 0.0,
+   "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.148148,
+   "vector_memory_three_call_workflow": 0.12963
+  },
+  "suite_sha256": "feb408864980d41acf7a7526cb3b31d6366c9450918608f6a5dbc1e5bc9ff556",
+  "v1_coverage_min_contrast": 0.0
+ },
+ "t3b": {
+  "gold_sha256": "f974f100ef2490b4e3f8874fc204697914ef24f420da116277f37040235d98db",
+  "min_contrast_by_c": {
+   "1": -0.03125,
+   "2": 0.083333,
+   "3": 0.083333
+  },
+  "per_arm_utility_c2": {
+   "flat_single_llm_three_call_workflow": 0.111111,
+   "typed_hswm_three_function_network": 0.185185,
+   "typed_network_role_removed_schema_preserving_null": 0.0,
+   "typed_network_with_role_instructions_shuffled_but_ports_preserved": 0.111111,
+   "vector_memory_three_call_workflow": 0.018519
+  },
+  "suite_sha256": "ed6fa0804b8701cb0d485d54f983d5daa5a47a0ef6d4787f3d7a38dbd5d773c1",
+  "v1_coverage_min_contrast": -0.145833
+ }
+}

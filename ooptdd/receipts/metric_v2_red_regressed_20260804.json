@@ -1,0 +1,372 @@
+{
+  "cid": "loop-a470590e990e",
+  "backend": "memory",
+  "complete": false,
+  "done": 2,
+  "total": 7,
+  "loop_reason": "single_pass",
+  "loop_note": null,
+  "transcript": [
+    {
+      "pass_no": 1,
+      "cid": "loop-a470590e990e",
+      "complete": false,
+      "n_done": 2,
+      "total": 7,
+      "red": [
+        "REQ-V2-TYPED-BEATS-ALL-CONTROLS-T2",
+        "REQ-V2-ROBUST-ACROSS-C",
+        "REQ-V2-ALPHA-GATE-IS-NET-REGRESSION",
+        "REQ-V2-GOLDEN-REPLAY",
+        "REQ-V2-OUROBOROS-SELF-MEASURE"
+      ],
+      "progressed": true,
+      "fix_cmd": null,
+      "fix_ran": false,
+      "fix_exit": null,
+      "fix_timed_out": false,
+      "resumed": false,
+      "writeset_outside": [],
+      "writeset_error": null
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-V2-TYPED-BEATS-ALL-CONTROLS-T2",
+      "gate_ok": false,
+      "reachable": true,
+      "bound": true,
+      "done": false,
+      "checks": [
+        {
+          "event": "v2_typed_beats_all_controls_t2",
+          "where": {},
+          "op": "==",
+          "want": 1,
+          "got": 0,
+          "passed": false,
+          "tautological": false,
+          "verdict": "pend",
+          "settled_at": null,
+          "optional": false,
+          "pending": false,
+          "weight": 1.0,
+          "strength": "bounded",
+          "kind": "count",
+          "grounding": "derived-self",
+          "charged": false
+        }
+      ],
+      "binding": {
+        "kg_anchor": "hswm-f1-req-v2-typed-beats-all-controls-t2-20260804",
+        "source_path": "metric_v2_conformance_adapter.py",
+        "symbol": "_emit_v2_typed_beats_all_controls_t2",
+        "line_range": [
+          96,
+          99
+        ],
+        "sha256": "d3ad6442376da77c",
+        "emits": "v2_typed_beats_all_controls_t2",
+        "bound": true,
+        "reason": "bound",
+        "commit": "f4571dae44cffeeb52156c0fd8b2802c6acdd8aa",
+        "blob_oid": "5ae4657727549d1ac46913fa01b220ba5b7d7c11",
+        "remote": "https://github.com/gj3447/HSWM.git",
+        "repo_relpath": "ooptdd/metric_v2_conformance_adapter.py",
+        "via": [],
+        "emit_path": "ooptdd/metric_v2_conformance_adapter.py",
+        "emit_line": 98,
+        "runtime_reached": null
+      }
+    },
+    {
+      "id": "REQ-V2-ROBUST-ACROSS-C",
+      "gate_ok": false,
+      "reachable": true,
+      "bound": true,
+      "done": false,
+      "checks": [
+        {
+          "event": "v2_robust_across_c",
+          "where": {},
+          "op": "==",
+          "want": 1,
+          "got": 0,
+          "passed": false,
+          "tautological": false,
+          "verdict": "pend",
+          "settled_at": null,
+          "optional": false,
+          "pending": false,
+          "weight": 1.0,
+          "strength": "bounded",
+          "kind": "count",
+          "grounding": "derived-self",
+          "charged": false
+        }
+      ],
+      "binding": {
+        "kg_anchor": "hswm-f1-req-v2-robust-across-c-20260804",
+        "source_path": "metric_v2_conformance_adapter.py",
+        "symbol": "_emit_v2_robust_across_c",
+        "line_range": [
+          102,
+          105
+        ],
+        "sha256": "d3ad6442376da77c",
+        "emits": "v2_robust_across_c",
+        "bound": true,
+        "reason": "bound",
+        "commit": "f4571dae44cffeeb52156c0fd8b2802c6acdd8aa",
+        "blob_oid": "5ae4657727549d1ac46913fa01b220ba5b7d7c11",
+        "remote": "https://github.com/gj3447/HSWM.git",
+        "repo_relpath": "ooptdd/metric_v2_conformance_adapter.py",
+        "via": [],
+        "emit_path": "ooptdd/metric_v2_conformance_adapter.py",
+        "emit_line": 104,
+        "runtime_reached": null
+      }
+    },
+    {
+      "id": "REQ-V2-ALPHA-GATE-IS-NET-REGRESSION",
+      "gate_ok": false,
+      "reachable": true,
+      "bound": true,
+      "done": false,
+      "checks": [
+        {
+          "event": "v2_alpha_gate_is_net_regression",
+          "where": {},
+          "op": "==",
+          "want": 1,
+          "got": 0,
+          "passed": false,
+          "tautological": false,
+          "verdict": "pend",
+          "settled_at": null,
+          "optional": false,
+          "pending": false,
+          "weight": 1.0,
+          "strength": "bounded",
+          "kind": "count",
+          "grounding": "derived-self",
+          "charged": false
+        }
+      ],
+      "binding": {
+        "kg_anchor": "hswm-f1-req-v2-alpha-gate-is-net-regression-20260804",
+        "source_path": "metric_v2_conformance_adapter.py",
+        "symbol": "_emit_v2_alpha_gate_is_net_regression",
+        "line_range": [
+          108,
+          111
+        ],
+        "sha256": "d3ad6442376da77c",
+        "emits": "v2_alpha_gate_is_net_regression",
+        "bound": true,
+        "reason": "bound",
+        "commit": "f4571dae44cffeeb52156c0fd8b2802c6acdd8aa",
+        "blob_oid": "5ae4657727549d1ac46913fa01b220ba5b7d7c11",
+        "remote": "https://github.com/gj3447/HSWM.git",
+        "repo_relpath": "ooptdd/metric_v2_conformance_adapter.py",
+        "via": [],
+        "emit_path": "ooptdd/metric_v2_conformance_adapter.py",
+        "emit_line": 110,
+        "runtime_reached": null
+      }
+    },
+    {
+      "id": "REQ-V2-ABSTAIN-ONLY-SCORES-ZERO",
+      "gate_ok": true,
+      "reachable": true,
+      "bound": true,
+      "done": true,
+      "checks": [
+        {
+          "event": "v2_abstain_only_scores_zero",
+          "where": {},
+          "op": "==",
+          "want": 1,
+          "got": 1,
+          "passed": true,
+          "tautological": false,
+          "verdict": "pend",
+          "settled_at": null,
+          "optional": false,
+          "pending": false,
+          "weight": 1.0,
+          "strength": "bounded",
+          "kind": "count",
+          "grounding": "derived-self",
+          "charged": true
+        }
+      ],
+      "binding": {
+        "kg_anchor": "hswm-f1-req-v2-abstain-only-scores-zero-20260804",
+        "source_path": "metric_v2_conformance_adapter.py",
+        "symbol": "_emit_v2_abstain_only_scores_zero",
+        "line_range": [
+          114,
+          117
+        ],
+        "sha256": "d3ad6442376da77c",
+        "emits": "v2_abstain_only_scores_zero",
+        "bound": true,
+        "reason": "bound",
+        "commit": "f4571dae44cffeeb52156c0fd8b2802c6acdd8aa",
+        "blob_oid": "5ae4657727549d1ac46913fa01b220ba5b7d7c11",
+        "remote": "https://github.com/gj3447/HSWM.git",
+        "repo_relpath": "ooptdd/metric_v2_conformance_adapter.py",
+        "via": [],
+        "emit_path": "ooptdd/metric_v2_conformance_adapter.py",
+        "emit_line": 116,
+        "runtime_reached": null
+      }
+    },
+    {
+      "id": "REQ-V2-FABRICATION-IS-REFUSED",
+      "gate_ok": true,
+      "reachable": true,
+      "bound": true,
+      "done": true,
+      "checks": [
+        {
+          "event": "v2_fabrication_is_refused",
+          "where": {},
+          "op": "==",
+          "want": 1,
+          "got": 1,
+          "passed": true,
+          "tautological": false,
+          "verdict": "pend",
+          "settled_at": null,
+          "optional": false,
+          "pending": false,
+          "weight": 1.0,
+          "strength": "bounded",
+          "kind": "count",
+          "grounding": "derived-self",
+          "charged": true
+        }
+      ],
+      "binding": {
+        "kg_anchor": "hswm-f1-req-v2-fabrication-is-refused-20260804",
+        "source_path": "metric_v2_conformance_adapter.py",
+        "symbol": "_emit_v2_fabrication_is_refused",
+        "line_range": [
+          120,
+          123
+        ],
+        "sha256": "d3ad6442376da77c",
+        "emits": "v2_fabrication_is_refused",
+        "bound": true,
+        "reason": "bound",
+        "commit": "f4571dae44cffeeb52156c0fd8b2802c6acdd8aa",
+        "blob_oid": "5ae4657727549d1ac46913fa01b220ba5b7d7c11",
+        "remote": "https://github.com/gj3447/HSWM.git",
+        "repo_relpath": "ooptdd/metric_v2_conformance_adapter.py",
+        "via": [],
+        "emit_path": "ooptdd/metric_v2_conformance_adapter.py",
+        "emit_line": 122,
+        "runtime_reached": null
+      }
+    },
+    {
+      "id": "REQ-V2-GOLDEN-REPLAY",
+      "gate_ok": false,
+      "reachable": true,
+      "bound": true,
+      "done": false,
+      "checks": [
+        {
+          "event": "v2_golden_replay",
+          "where": {},
+          "op": "==",
+          "want": 1,
+          "got": 0,
+          "passed": false,
+          "tautological": false,
+          "verdict": "pend",
+          "settled_at": null,
+          "optional": false,
+          "pending": false,
+          "weight": 1.0,
+          "strength": "bounded",
+          "kind": "count",
+          "grounding": "derived-self",
+          "charged": false
+        }
+      ],
+      "binding": {
+        "kg_anchor": "hswm-f1-req-v2-golden-replay-20260804",
+        "source_path": "metric_v2_conformance_adapter.py",
+        "symbol": "_emit_v2_golden_replay",
+        "line_range": [
+          126,
+          129
+        ],
+        "sha256": "d3ad6442376da77c",
+        "emits": "v2_golden_replay",
+        "bound": true,
+        "reason": "bound",
+        "commit": "f4571dae44cffeeb52156c0fd8b2802c6acdd8aa",
+        "blob_oid": "5ae4657727549d1ac46913fa01b220ba5b7d7c11",
+        "remote": "https://github.com/gj3447/HSWM.git",
+        "repo_relpath": "ooptdd/metric_v2_conformance_adapter.py",
+        "via": [],
+        "emit_path": "ooptdd/metric_v2_conformance_adapter.py",
+        "emit_line": 128,
+        "runtime_reached": null
+      }
+    },
+    {
+      "id": "REQ-V2-OUROBOROS-SELF-MEASURE",
+      "gate_ok": false,
+      "reachable": true,
+      "bound": true,
+      "done": false,
+      "checks": [
+        {
+          "event": "v2_ouroboros_self_measure",
+          "where": {},
+          "op": "==",
+          "want": 1,
+          "got": 0,
+          "passed": false,
+          "tautological": false,
+          "verdict": "pend",
+          "settled_at": null,
+          "optional": false,
+          "pending": false,
+          "weight": 1.0,
+          "strength": "bounded",
+          "kind": "count",
+          "grounding": "derived-self",
+          "charged": false
+        }
+      ],
+      "binding": {
+        "kg_anchor": "hswm-f1-req-v2-ouroboros-self-measure-20260804",
+        "source_path": "metric_v2_conformance_adapter.py",
+        "symbol": "_emit_v2_ouroboros_self_measure",
+        "line_range": [
+          132,
+          135
+        ],
+        "sha256": "d3ad6442376da77c",
+        "emits": "v2_ouroboros_self_measure",
+        "bound": true,
+        "reason": "bound",
+        "commit": "f4571dae44cffeeb52156c0fd8b2802c6acdd8aa",
+        "blob_oid": "5ae4657727549d1ac46913fa01b220ba5b7d7c11",
+        "remote": "https://github.com/gj3447/HSWM.git",
+        "repo_relpath": "ooptdd/metric_v2_conformance_adapter.py",
+        "via": [],
+        "emit_path": "ooptdd/metric_v2_conformance_adapter.py",
+        "emit_line": 134,
+        "runtime_reached": null
+      }
+    }
+  ],
+  "methodology_checks": []
+}

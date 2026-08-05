@@ -101,8 +101,12 @@ def drill(log_path: str, strict_repairs: bool = False, verbose: bool = True) -> 
                 outcome = "DETECTED (stronger than claimed)" if detected else "INVISIBLE — anchor required"
                 bad = False
             else:  # LEGACY_BLIND
-                outcome = ("DETECTED (exposure retired)" if detected
-                           else "BLIND — no verifier, no anchor; re-sign to retire")
+                # Detected here means a `resign` record vouches for the signature.
+                # That is a relocation, not a retirement: the attestation lives in a
+                # LATER record, so truncating it away makes the strip invisible again.
+                # The class the exposure moves to is anchor_only.
+                outcome = ("DETECTED via resign attestation (now anchor_only, not closed)"
+                           if detected else "BLIND — no verifier, no anchor; resign to relocate")
                 bad = False
 
             failures += 1 if bad else 0
@@ -183,17 +187,39 @@ def anchor_check(tree: str, node: str, receipt_id: str, log_path: str,
     high_water = max(anchored_seqs) if anchored_seqs else None
     regressed = high_water is not None and local_seq < high_water
 
+    # v3.1 — PREFIX CONSISTENCY. Every anchor is a claim about what this chain
+    # looked like at some past length; the local chain must still agree with ALL
+    # of them, not only the newest. v3.0 compared the latest and discarded the
+    # rest, which is exactly the gap a rewriter walks through: edit an old record,
+    # rehash the tail, re-anchor the new head, and the head comparison says MATCH
+    # while every earlier anchor silently contradicts the file.
+    #
+    # This is a poor cousin of a transparency log's consistency proof — those are
+    # O(log N) Merkle proofs a witness checks BEFORE co-signing, and a quorum of
+    # independent witnesses is what actually defeats a split view. Here the log
+    # hands over whole record hashes and we compare them. It closes the cheap
+    # rewrite, not the general case; see docs and the tree's problemshift node.
+    by_seq = {r["seq"]: r["hash"] for r in mine}
+    inconsistent = [(int(a["seq"]), str(a["hash"])[:12])
+                    for a in anchors
+                    if str(a.get("seq", "")).isdigit() and a.get("hash")
+                    and int(a["seq"]) in by_seq and by_seq[int(a["seq"])] != a["hash"]]
+
     print(f"local head:  {head[:16]}… (seq {local_seq})")
     print(f"tree anchor: {str(latest.get('hash'))[:16]}… (seq {latest.get('seq')})")
-    if high_water is not None:
-        print(f"anchored high-water seq: {high_water}")
+    print(f"anchors seen: {len(anchors)}"
+          + (f", high-water seq {high_water}" if high_water is not None else ""))
     if regressed:
         print(f"TRUNCATION: local seq {local_seq} < anchored high-water {high_water} — "
               f"records were removed after being anchored ❌")
+    if inconsistent:
+        print(f"PREFIX INCONSISTENT at {inconsistent} — the local chain contradicts anchors it "
+              f"already published; a head that still matches means the tail was rehashed ❌")
     print("ANCHOR:", "MATCH ✅" if match else "MISMATCH ❌ — chain tampered, rebuilt, or tree behind")
     detail = {"local_head": head, "local_seq": local_seq, "anchor_head": latest.get("hash"),
-              "anchored_high_water": high_water, "match": match, "truncation_detected": regressed}
-    return (0 if (match and not regressed) else 1), detail
+              "anchored_high_water": high_water, "match": match, "truncation_detected": regressed,
+              "anchors_seen": len(anchors), "prefix_inconsistent": inconsistent}
+    return (0 if (match and not regressed and not inconsistent) else 1), detail
 
 
 def main() -> int:

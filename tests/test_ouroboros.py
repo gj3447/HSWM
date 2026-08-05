@@ -261,6 +261,74 @@ def test_legacy_signature_strip_remains_blind(chain):
         "and the anchored head still matches — re-signing is the only remedy")
 
 
+def test_resign_record_makes_a_legacy_strip_visible(chain):
+    """v3.1 — a later `resign` record vouches for what a v2.9 record's signature is."""
+    records = load(chain["log"])
+    legacy = next(r for r in records
+                  if isinstance(r.get("signature"), dict) and not r.get("signer_pubkey"))
+    append(chain["log"], {
+        "kind": "resign", "receipt_id": "attestation",
+        "attests": [{"seq": legacy["seq"], "target_hash": legacy["hash"],
+                     "signer_pubkey": legacy["signature"]["pubkey"]}],
+    })
+    assert verify(chain["log"])[0], "attesting must not disturb an intact chain"
+
+    records = load(chain["log"])
+    target = next(i for i, r in enumerate(records) if r["hash"] == legacy["hash"])
+    records[target].pop("signature")
+    out = str(chain["tmp"] / "legacystrip_attested.jsonl")
+    with open(out, "w", encoding="utf-8") as f:
+        for r in records:
+            f.write(json.dumps(r, ensure_ascii=False, sort_keys=True) + "\n")
+    ok, errors = verify(out)
+    assert not ok and any("attests signer" in e for e in errors), errors
+
+
+def test_resign_attestation_is_relocation_not_closure(chain):
+    """The honest limit: cut the resign record off and the strip is invisible again.
+
+    Asserted, not hoped. The attestation lives in a LATER record, so the exposure
+    moves from legacy_blind to anchor_only — a class that needs expect_head /
+    expect_min_len. A test that stopped at the previous one would be claiming a
+    closure this mechanism cannot deliver.
+    """
+    records = load(chain["log"])
+    legacy = next(r for r in records
+                  if isinstance(r.get("signature"), dict) and not r.get("signer_pubkey"))
+    append(chain["log"], {
+        "kind": "resign", "receipt_id": "attestation",
+        "attests": [{"seq": legacy["seq"], "target_hash": legacy["hash"],
+                     "signer_pubkey": legacy["signature"]["pubkey"]}],
+    })
+    full = load(chain["log"])
+    anchored_head, anchored_len = full[-1]["hash"], len(full)
+
+    truncated = [dict(r) for r in full[:-1]]                 # drop the resign record
+    target = next(i for i, r in enumerate(truncated) if r["hash"] == legacy["hash"])
+    truncated[target].pop("signature")                       # and strip, unopposed
+    out = str(chain["tmp"] / "resign_truncated.jsonl")
+    with open(out, "w", encoding="utf-8") as f:
+        for r in truncated:
+            f.write(json.dumps(r, ensure_ascii=False, sort_keys=True) + "\n")
+
+    assert verify(out)[0], "relocation, not closure — local verification is quiet again"
+    assert not verify(out, expect_min_len=anchored_len)[0]
+    assert not verify(out, expect_head=anchored_head)[0]
+
+
+def test_resign_pubkey_mismatch_is_detected(chain):
+    records = load(chain["log"])
+    legacy = next(r for r in records
+                  if isinstance(r.get("signature"), dict) and not r.get("signer_pubkey"))
+    append(chain["log"], {
+        "kind": "resign", "receipt_id": "attestation",
+        "attests": [{"seq": legacy["seq"], "target_hash": legacy["hash"],
+                     "signer_pubkey": "f" * 64}],       # names the wrong signer
+    })
+    ok, errors = verify(chain["log"])
+    assert not ok and any("contradicts resign attestation" in e for e in errors), errors
+
+
 def test_grafted_signature_is_detected(chain):
     records = load(chain["log"])
     donor = next(r for r in records if isinstance(r.get("signature"), dict))

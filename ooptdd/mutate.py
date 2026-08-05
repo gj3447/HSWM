@@ -22,6 +22,7 @@ from __future__ import annotations
 import ast
 import json
 import os
+import random
 import shutil
 import subprocess
 import sys
@@ -122,6 +123,38 @@ def collect_sites(module_path: str) -> list[MutationSite]:
     return collector.sites
 
 
+SAMPLE_SEED = 20260805
+
+
+def sample_sites(sites: list[MutationSite], k: int,
+                 seed: int = SAMPLE_SEED) -> list[MutationSite]:
+    """Pick k sites spread across the file, deterministically.
+
+    The cap used to be a prefix slice — `collect_sites(...)[:max_mutants]` — which
+    is not a sample, it is the top of the file. Measured on the repo's own target
+    (receipts/receipt_cosine_floor.py): 70 sites over lines 127-442, of which the
+    first 12 all sit in 127-169. **83% of the module had never been mutated**, and
+    every mutation_score ever chained (total 11 or 12) is a score for its first
+    forty lines.
+
+    Stratified by line: split the ordered sites into k buckets and take one from
+    each, so coverage is spread by construction rather than by luck. The choice
+    inside a bucket is seeded so a rerun reproduces the same mutants; the seed is
+    recorded alongside the score, because a sampled score without its seed is not
+    reproducible and should not be compared across runs.
+    """
+    if k <= 0 or len(sites) <= k:
+        return list(sites)
+    ordered = sorted(sites, key=lambda s: (s.lineno, s.col, s.kind, s.site_id))
+    rng = random.Random(seed)
+    n = len(ordered)
+    out: list[MutationSite] = []
+    for b in range(k):
+        lo, hi = (b * n) // k, ((b + 1) * n) // k
+        out.append(ordered[rng.randrange(lo, max(hi, lo + 1))])
+    return out
+
+
 def render_mutant(module_path: str, site: MutationSite) -> str | None:
     tree = ast.parse(open(module_path, "r", encoding="utf-8").read(), filename=module_path)
     mutator = _Mutator(site)
@@ -165,7 +198,7 @@ def mutation_score(
                     "-p", "no:cacheprovider", "--import-mode=importlib"]
     else:
         base_cmd = [sys.executable, receipt_path]
-    sites = collect_sites(module_path)[:max_mutants]
+    sites = sample_sites(collect_sites(module_path), max_mutants)
     killed, survivor_sites, errors = 0, [], []
     pyc_dir = os.path.join(os.path.dirname(os.path.abspath(module_path)), "__pycache__")
     module_stem = os.path.splitext(os.path.basename(module_path))[0]
@@ -220,6 +253,12 @@ def mutation_score(
             open_gaps.append(label)
     return {"killed": killed, "total": len(sites),
             "effective_total": len(sites) - len(equivalents),
+            # A sampled score is not comparable across runs without the sample it
+            # scored. `sites_available` says how much of the module was in scope and
+            # `sample_seed` makes the selection reproducible; a bare killed/total
+            # hides that this may be 12 of 70.
+            "sites_available": len(collect_sites(module_path)),
+            "sample_seed": SAMPLE_SEED,
             "survivors": open_gaps, "equivalents": equivalents, "errors": errors}
 
 

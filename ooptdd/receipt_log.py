@@ -271,6 +271,42 @@ def _verify_records(records: list[dict], repairs: dict | None = None,
             errors.append(f"{where}: signer_pubkey {str(claimed_pubkey)[:12]}… declared but signature stripped")
         prev = rec.get("hash", prev)
 
+    # v3.1 — second pass: a later `resign` record can attest a legacy signature.
+    #
+    # v2.9 records carry a signature but no signer_pubkey, so stripping the block
+    # moves no digest and the anchored head still matches — nothing in the system
+    # sees it (ooptdd.attacks: legacy_blind). Re-signing in place is impossible:
+    # record_hash would move and every prev_hash after it would break, and the
+    # original signer's key is generally gone.
+    #
+    # Instead a `resign` record names, inside ITS hashed body, which record hashes
+    # are supposed to carry which pubkey. Strip the old signature and the chain now
+    # holds an attestation about a record that no longer matches it.
+    #
+    # This does NOT retire the exposure, it relocates it: truncate the resign
+    # record away and local verification is quiet again. legacy_blind becomes
+    # anchor_only — which is the class expect_head/expect_min_len exist for.
+    attested: dict[str, dict] = {}
+    for rec in records:
+        if rec.get("kind") != "resign":
+            continue
+        for a in rec.get("attests") or []:
+            if isinstance(a, dict) and a.get("target_hash"):
+                attested[a["target_hash"]] = {**a, "by_seq": rec.get("seq")}
+    for rec in records:
+        entry = attested.get(rec.get("hash") or "")
+        if not entry:
+            continue
+        where = f"seq={rec.get('seq', '?')} receipt={rec.get('receipt_id', '?')}"
+        block = rec.get("signature")
+        want = entry.get("signer_pubkey")
+        if not isinstance(block, dict):
+            errors.append(f"{where}: resign record (seq={entry['by_seq']}) attests signer "
+                          f"{str(want)[:12]}… but the signature is gone")
+        elif want and block.get("pubkey") != want:
+            errors.append(f"{where}: signature pubkey {str(block.get('pubkey'))[:12]}… "
+                          f"contradicts resign attestation {str(want)[:12]}… (seq={entry['by_seq']})")
+
     if expect_min_len is not None and len(records) < expect_min_len:
         errors.append(f"truncation: {len(records)} records < externally expected {expect_min_len} "
                       f"(local verification cannot see this on its own)")

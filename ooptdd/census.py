@@ -88,12 +88,34 @@ _dim("audit_signature", _is_audit,
 # signer_pubkey in the hashed body can be stripped invisibly (see
 # ooptdd.attacks signature_strip_legacy). Counted so the debt has a size.
 _dim("signer_commitment", lambda r: isinstance(r.get("signature"), dict),
-     lambda r: "committed" if r.get("signer_pubkey") else "strip_exposed",
-     ("committed",))
+     lambda r: ("committed" if r.get("signer_pubkey")
+                else ("resign_attested" if r.get("__resign_attested") else "strip_exposed")),
+     ("committed", "resign_attested"))
+
+
+def resign_attested_hashes(records: list[dict]) -> set[str]:
+    """Record hashes a later `resign` record vouches for (v3.1).
+
+    Counted as covered, but the grade is deliberately its own name rather than
+    `committed`: a resign attestation lives in a LATER record, so truncating the
+    tail removes it. The exposure moves from legacy_blind to anchor_only, and the
+    census should not let that read as fully closed.
+    """
+    out: set[str] = set()
+    for rec in records:
+        if rec.get("kind") != "resign":
+            continue
+        for a in rec.get("attests") or []:
+            if isinstance(a, dict) and a.get("target_hash"):
+                out.add(a["target_hash"])
+    return out
 
 
 def census(records: list[dict], repairs: dict | None = None) -> dict:
     """Grade every record on every applicable dimension. Pure; no I/O."""
+    vouched = resign_attested_hashes(records)
+    records = [dict(r, __resign_attested=True) if r.get("hash") in vouched else r
+               for r in records]
     out: dict = {"records": len(records),
                  "receipts": sum(1 for r in records if _is_receipt(r)),
                  "audits": sum(1 for r in records if _is_audit(r)),

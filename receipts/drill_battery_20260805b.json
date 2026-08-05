@@ -1,0 +1,116 @@
+{
+ "battery": "878f820fb09917adee23f493c15c739516540c8c878c06991db0b6e61b120510",
+ "attacks": 16,
+ "strict_repairs": true,
+ "control_ok": true,
+ "counts": {
+  "DETECTED": 12,
+  "MISSED": 0,
+  "SKIPPED": 1
+ },
+ "anchor_only_invisible": [
+  "tail_truncate",
+  "full_rewrite",
+  "rewrite_middle"
+ ],
+ "whitewashed_by_permissive_repairs": [],
+ "legacy_blind": [],
+ "results": [
+  {
+   "attack": "verdict_flip",
+   "class": "local",
+   "outcome": "DETECTED",
+   "first_error": "seq=0 receipt=receipt_cosine_floor: hash mismatch (post-hoc edit)"
+  },
+  {
+   "attack": "field_edit",
+   "class": "local",
+   "outcome": "DETECTED",
+   "first_error": "seq=38 receipt=test_qkv_b1_probe: hash mismatch (post-hoc edit)"
+  },
+  {
+   "attack": "field_drop",
+   "class": "local",
+   "outcome": "DETECTED",
+   "first_error": "seq=38 receipt=test_qkv_b1_probe: hash mismatch (post-hoc edit)"
+  },
+  {
+   "attack": "middle_delete",
+   "class": "local",
+   "outcome": "DETECTED",
+   "first_error": "seq=39 receipt=test_qkv_routing: seq gap/reorder (expected 38)"
+  },
+  {
+   "attack": "reorder_swap",
+   "class": "local",
+   "outcome": "DETECTED",
+   "first_error": "seq=39 receipt=test_qkv_routing: seq gap/reorder (expected 38)"
+  },
+  {
+   "attack": "replay_append",
+   "class": "local",
+   "outcome": "DETECTED",
+   "first_error": "seq=76 receipt=chain_signer_attestation: seq gap/reorder (expected 77)"
+  },
+  {
+   "attack": "genesis_forge",
+   "class": "local",
+   "outcome": "DETECTED",
+   "first_error": "seq=1 receipt=receipt_cosine_floor: seq gap/reorder (expected 0)"
+  },
+  {
+   "attack": "backdate",
+   "class": "local",
+   "outcome": "DETECTED",
+   "first_error": "seq=38 receipt=test_qkv_b1_probe: hash mismatch (post-hoc edit)"
+  },
+  {
+   "attack": "signature_strip",
+   "class": "local",
+   "outcome": "SKIPPED",
+   "why": "no v3.0-signed record (signer_pubkey) to strip; 4 legacy-signed record(s) present"
+  },
+  {
+   "attack": "signature_strip_legacy",
+   "class": "legacy_blind",
+   "outcome": "DETECTED via resign attestation (now anchor_only, not closed)",
+   "first_error": "seq=69 receipt=receipt_cosine_floor: resign record (seq=76) attests signer f2536eb41af3… but the signature is gone"
+  },
+  {
+   "attack": "signature_swap",
+   "class": "local",
+   "outcome": "DETECTED",
+   "first_error": "seq=76 receipt=chain_signer_attestation: signature does not verify against this record's hash (forged, or grafted from another record)"
+  },
+  {
+   "attack": "repairs_forgery",
+   "class": "local_strict",
+   "outcome": "DETECTED",
+   "first_error": "seq=38 receipt=test_qkv_b1_probe: hash mismatch, repair entry rejected (trust=unsigned)"
+  },
+  {
+   "attack": "repairs_forgery_impersonation",
+   "class": "local_strict",
+   "outcome": "DETECTED",
+   "first_error": "seq=38 receipt=test_qkv_b1_probe: hash mismatch, repair entry rejected (trust=unsigned)"
+  },
+  {
+   "attack": "tail_truncate",
+   "class": "anchor_only",
+   "outcome": "INVISIBLE — anchor required",
+   "first_error": null
+  },
+  {
+   "attack": "full_rewrite",
+   "class": "anchor_only",
+   "outcome": "INVISIBLE — anchor required",
+   "first_error": null
+  },
+  {
+   "attack": "rewrite_middle",
+   "class": "anchor_only",
+   "outcome": "INVISIBLE — anchor required",
+   "first_error": null
+  }
+ ]
+}

@@ -15,7 +15,13 @@ import threading
 
 import pytest
 
-from ooptdd.receipt_log import append, load_repairs, verify
+from ooptdd.receipt_log import (
+    HONOURED_REPAIR_TRUST,
+    append,
+    load_repairs,
+    repairs_path_for,
+    verify,
+)
 
 
 def _record(rid: str, seq_salt: str = "x") -> dict:
@@ -70,10 +76,37 @@ def test_repairs_skiplist_roundtrip(tmp_path):
 
 
 def test_repairs_file_requires_reason_and_attestor(tmp_path):
+    """v3.0 contract: a malformed entry is graded `invalid` and ignored, not raised.
+
+    v2.8 raised, which meant one bad line in an advisory sidecar made every receipt
+    in the repo unverifiable — an availability hole wearing strictness as a costume.
+    The requirement itself has not moved: an entry missing reason/attested_by still
+    absolves nothing. Only the failure mode changed, from taking the chain down to
+    being counted (ooptdd.census reports the grade).
+
+    `stored_hash` is valid hex here on purpose. "x"*64 would be graded invalid by the
+    charset check before reason/attested_by are ever looked at, so the test would pass
+    while covering nothing of what its name claims.
+    """
     bad = tmp_path / "rep.json"
-    bad.write_text(json.dumps({"repairs": [{"stored_hash": "x" * 64}]}))
-    with pytest.raises(ValueError, match="stored_hash, reason, attested_by"):
-        load_repairs(str(bad))
+    bad.write_text(json.dumps({"repairs": [{"stored_hash": "a" * 64}]}))
+    entries = load_repairs(str(bad))
+    assert entries["a" * 64]["trust"] == "invalid"
+    assert "invalid" not in HONOURED_REPAIR_TRUST
+
+    # and it must not suppress a real mismatch — grading is worthless if it still absolves
+    log = str(tmp_path / "chain.jsonl")
+    for i in range(3):
+        append(log, {"receipt_id": f"r{i}", "verdict": "VALID"})
+    lines = open(log).read().splitlines()
+    rec = json.loads(lines[1])
+    rec["verdict"] = "INVALID"                      # body changes, stored hash left alone
+    lines[1] = json.dumps(rec, ensure_ascii=False, sort_keys=True)
+    open(log, "w").write("\n".join(lines) + "\n")
+    open(repairs_path_for(log), "w").write(
+        json.dumps({"repairs": [{"stored_hash": rec["hash"]}]}))   # forged, malformed
+    ok, errs = verify(log)
+    assert not ok and any("seq=1" in e for e in errs), errs
 
 
 def test_concurrent_appends_never_corrupt(tmp_path):

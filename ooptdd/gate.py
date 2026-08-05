@@ -25,7 +25,9 @@ So this gate exists, and it is fail-closed on the outside world:
   3. the latest receipt record is VALID with lock_binding=verified
   4. the LakatoTree anchor MATCHES, and the local seq has not regressed below
      the anchored high-water mark (the truncation detector)
-  5. optionally: cross-model audit upheld, census floors / ratchet held
+  5. optionally: --git-witness (a SECOND custodian — GitHub — still holds copies
+     of this chain that are prefixes of it), cross-model audit upheld, census
+     floors / ratchet held
 
 An unreachable tree is NOT a pass. `--allow-unanchored` exists so you can see
 the other four conditions while the tree is down, but it can never return 0 —
@@ -85,7 +87,11 @@ def evaluate(receipt_id: str, log_path: str, tree: str | None, node: str | None,
              base_url: str, allow_unanchored: bool = False,
              require_audit: bool = False,
              census_floors: dict | None = None,
-             census_baseline: dict | None = None) -> Conditions:
+             census_baseline: dict | None = None,
+             git_witness: bool = False,
+             git_repo: str = ".",
+             git_path_in_repo: str = "receipts/receipt_log.jsonl",
+             git_remote: str | None = "origin") -> Conditions:
     c = Conditions()
 
     ok, errors = verify(log_path, strict_repairs=True)
@@ -152,6 +158,33 @@ def evaluate(receipt_id: str, log_path: str, tree: str | None, node: str | None,
                    f"seq={latest.get('seq')} was never anchored ({len(anchored)} other anchor(s) "
                    f"exist) — run run_receipt --anchor-tree/--anchor-node --require-anchor"))
 
+    # --- v3.3: the SECOND witness, opt-in on purpose -------------------------
+    #
+    # git/GitHub holds copies of this chain at past lengths, in a trust domain
+    # the author does not control. ooptdd.witness_git checks each published copy
+    # is still a PREFIX of the live chain. It is off by default and that is a
+    # decision with a stated reason, not laziness:
+    #
+    #   1. It structurally CANNOT witness the record being judged. run_receipt
+    #      appends to the working file; commits happen later and pushes later
+    #      still. The newest records are always uncommitted, so a git witness
+    #      that gated every receipt would gate on a claim it cannot make.
+    #      Condition 5 ("this record anchored") already covers that question,
+    #      and only LakatoTree can answer it.
+    #   2. It requires the network, and UNVERIFIABLE is a failure here. Turning
+    #      it on by default means no offline run can ever reach DONE — a real
+    #      cost, paid for a witness that by (1) is about the past, not the claim.
+    #
+    # So it is `--git-witness`, and what it buys is worth stating exactly: it
+    # detects a rewritten or truncated PAST that both verify() and the
+    # LakatoTree anchor could miss if the tree were unavailable or complicit.
+    # Two witnesses is two, not a quorum; a disagreement is reported, not voted on.
+    if git_witness:
+        from ooptdd.witness_git import gate_condition as _git_witness_condition
+        wstatus, wdetail = _git_witness_condition(log_path, git_path_in_repo, git_repo,
+                                                  remote=git_remote)
+        c.add("git witness (2nd domain)", wstatus, wdetail)
+
     if require_audit:
         status = audited_status(log_path, receipt_id)
         c.add("cross-model audit", PASS if status == "audited" else FAIL,
@@ -181,6 +214,13 @@ def main() -> int:
     ap.add_argument("--allow-unanchored", action="store_true",
                     help="report the other conditions with the tree down; can never exit 0")
     ap.add_argument("--require-audit", action="store_true", help="also require an upheld cross-model audit")
+    ap.add_argument("--git-witness", action="store_true",
+                    help="also require the git/GitHub copies of the chain to still be prefixes "
+                         "of it (second trust domain). Needs the network: offline this is "
+                         "UNVERIFIABLE and therefore NOT DONE — that is the price, stated up front")
+    ap.add_argument("--git-repo", default=".")
+    ap.add_argument("--git-path-in-repo", default="receipts/receipt_log.jsonl")
+    ap.add_argument("--git-remote", default="origin")
     ap.add_argument("--ratchet", default=None, help="previous census json; coverage may not decrease")
     ap.add_argument("--min-coverage", action="append", default=[], metavar="DIM=RATIO")
     ap.add_argument("--json", default=None, help="write the gate decision to this path")
@@ -210,7 +250,9 @@ def main() -> int:
     print(f"\n=== ooptdd gate: {receipt_id} ===")
     c = evaluate(receipt_id, args.log, args.tree, args.node, args.url,
                  allow_unanchored=args.allow_unanchored, require_audit=args.require_audit,
-                 census_floors=floors or None, census_baseline=baseline)
+                 census_floors=floors or None, census_baseline=baseline,
+                 git_witness=args.git_witness, git_repo=args.git_repo,
+                 git_path_in_repo=args.git_path_in_repo, git_remote=args.git_remote)
     print(c.render())
     done = c.done
     print(f"\nVERDICT: {'DONE ✅' if done else 'NOT DONE ❌'}")

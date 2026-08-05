@@ -48,6 +48,11 @@ from prom_search_hswm.prom9_f1_r8_selection_v5 import (
 )
 from prom_search_hswm.prom9_f1_r8_source import build_public_artifacts
 from prom_search_hswm.prom9_f1_r8_power import _selected_entries_unverified
+from prom_search_hswm.prom9_f1_r8_runner import (
+    R8RunnerRefusal,
+    _pairs,
+    read_stable_bytes,
+)
 from prom_search_hswm.prom9_validate_token_meter import (
     validate_meter_against_suite,
 )
@@ -57,6 +62,36 @@ DEVELOPMENT_RUN_ID_C800 = "f1-2wiki-development-r8-c800"
 CONFIRMATORY_RUN_ID_C800 = "f1-2wiki-sealed-r8-c800"
 DATASET_C800 = "framolfese/2WikiMultihopQA"
 DATASET_CONFIG_C800 = "default"
+
+# The v5 selection receipt embeds every redacted pool page (450 pages for the
+# ratified 800/800 train cohorts, ~240 MB), so the 64 MiB default stable-read
+# bound refuses it.  The bound stays explicit and fail-closed — only this one
+# input is allowed the larger ceiling, and its self-hash is still verified by
+# verify_selection_receipt_v5 after parsing.
+SELECTION_RECEIPT_MAX_BYTES = 512 * 1024 * 1024
+
+
+def _read_bound_selection_json(
+    path: Path, label: str
+) -> tuple[dict[str, object], str]:
+    """`_read_bound_json` with the v5 selection-receipt byte ceiling."""
+
+    try:
+        raw, digest = read_stable_bytes(
+            path, label, max_bytes=SELECTION_RECEIPT_MAX_BYTES
+        )
+        value = json.loads(
+            raw.decode("utf-8"),
+            object_pairs_hook=_pairs,
+            parse_constant=lambda _value: (_ for _ in ()).throw(
+                R8RunnerRefusal(f"non-finite JSON number in {label}")
+            ),
+        )
+    except Exception as error:
+        raise R8EnvelopeRefusal(f"cannot capture stable {label}") from error
+    if not isinstance(value, dict):
+        raise R8EnvelopeRefusal(f"{label} must be a JSON object")
+    return value, digest
 
 
 def _cohort_items_v5(
@@ -345,7 +380,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output-receipt", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
-        selection, selection_file_sha = _read_bound_json(
+        selection, selection_file_sha = _read_bound_selection_json(
             args.selection_receipt, "v5 selection receipt"
         )
         source_suite, _suite_sha = _read_bound_json(

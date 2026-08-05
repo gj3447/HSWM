@@ -142,6 +142,14 @@ def blob_sha(commit: str, path_in_repo: str, repo: str = ".") -> str:
     return out
 
 
+def _have_object(sha: str, repo: str = ".") -> bool:
+    try:
+        _git(["cat-file", "-e", f"{sha}^{{commit}}"], repo)
+        return True
+    except GitError:
+        return False
+
+
 def commits_touching(path_in_repo: str, repo: str = ".", limit: int = 20,
                      rev: str = "HEAD") -> list[str]:
     out = _git(["log", f"-{int(limit)}", "--format=%H", rev, "--", path_in_repo], repo)
@@ -218,7 +226,20 @@ def prefix_compare(witness: list[dict], current: list[dict]) -> dict:
       misseq    — the seq field itself moved. Reordering.
     """
     wlen, clen = len(witness), len(current)
-    shrunk = clen < wlen
+    # v2 — "shorter than a published copy" is TWO different situations and
+    # calling both a violation trains people to ignore the tool.
+    #
+    #   current is a strict PREFIX of witness  -> BEHIND. The local checkout has
+    #     not caught up with what was published. Normal for a worktree or an old
+    #     clone; nothing was destroyed. Reported, not failed.
+    #   shorter AND not a prefix               -> SHRUNK. Records that were
+    #     published are gone and what remains does not continue them. Truncation.
+    #
+    # Measured 2026-08-05: the first run of the fixed witness flagged VIOLATION
+    # on a worktree at 0e3587a (79 records) against the remote tip 8114c8e (81),
+    # where 79 is a clean prefix of 81. A false alarm here costs the same as a
+    # false all-clear — both end with the operator not reading the output.
+    shorter = clen < wlen
     overlap = min(wlen, clen)
     divergent: list[dict] = []
     misseq: list[dict] = []
@@ -236,10 +257,11 @@ def prefix_compare(witness: list[dict], current: list[dict]) -> dict:
         "grew_by": clen - wlen,
         "witness_head": (witness[-1].get("hash") if witness else None),
         "witness_head_seq": (witness[-1].get("seq") if witness else None),
-        "shrunk": shrunk,
+        "shrunk": shorter and bool(divergent or misseq),
+        "behind": shorter and not divergent and not misseq,
         "divergent": divergent,
         "misseq": misseq,
-        "is_prefix": (not shrunk) and not divergent and not misseq,
+        "is_prefix": (not shorter) and not divergent and not misseq,
     }
 
 
@@ -323,10 +345,32 @@ def witness_commit(commit: str, current: list[dict], path_in_repo: str = DEFAULT
             result["grade_detail"] = ("not an ancestor of any live remote tip — this commit exists "
                                       "only locally and is rewritable by its author")
 
-    if not cmp["is_prefix"]:
+    # ★ "local is shorter than a published copy" is benign ONLY when that copy is
+    # not something this checkout already claims to contain. Split on ancestry:
+    #
+    #   witness commit is an ANCESTOR of local HEAD (or HEAD itself)
+    #       -> we assert we contain its history, so missing its records is
+    #          TRUNCATION. This is the case the whole module exists for.
+    #   witness commit is NOT an ancestor (sibling branch, newer push)
+    #       -> we never claimed to have it. BEHIND. Pull, do not panic.
+    #
+    # Without this split the BEHIND rule would forgive exactly the truncation it
+    # was added next to — a fix that reopens the hole beside it. (Caught while
+    # writing it: the first draft passed every prefix-shorter case.)
+    behind_is_benign = cmp.get("behind") and is_ancestor(commit, "HEAD", repo) is False
+    if behind_is_benign and not cmp["divergent"] and not cmp["misseq"]:
+        result["status"] = PASS
+        result["detail"] = (f"BEHIND (not a violation): commit is not an ancestor of local HEAD "
+                            f"and published {cmp['witness_len']} records; local has "
+                            f"{cmp['current_len']} and they match — pull. [{result['grade']}]")
+        result["behind_by"] = cmp["witness_len"] - cmp["current_len"]
+    elif not cmp["is_prefix"]:
         why = []
         if cmp["shrunk"]:
             why.append(f"SHRUNK {cmp['witness_len']}→{cmp['current_len']} records (truncation)")
+        elif cmp.get("behind"):
+            why.append(f"TRUNCATED {cmp['witness_len']}→{cmp['current_len']} records: this commit "
+                       f"IS an ancestor of local HEAD, so we assert we contain what it published")
         if cmp["divergent"]:
             d = cmp["divergent"][0]
             why.append(f"{len(cmp['divergent'])} divergent record(s), first at seq={d['seq']} "
@@ -367,6 +411,31 @@ def witness(log_path: str = DEFAULT_LOG, path_in_repo: str = DEFAULT_PATH_IN_REP
             commits = commits_touching(path_in_repo, repo, limit=limit)
         except GitError as e:
             return 2, {"error": f"cannot list commits: {e}"}
+        # v2 — the tips THEMSELVES must be consulted, not merely used as labels.
+        #
+        # v1 walked `git log HEAD` and then graded those commits "remote-confirmed"
+        # if they were ancestors of an ls-remote tip. It never read the blob the
+        # remote actually publishes. So the whole claim — a second, independent
+        # custodian — rested on the local object store, which this module's own
+        # docstring calls non-independent because rebase/amend rewrite it.
+        #
+        # Measured kill (2026-08-05, adversarial verification): destroy two
+        # already-published receipts and `git commit --amend`. The published copy
+        # leaves HEAD's ancestry and stays on the remote. v1 returned exit 0
+        # "AGREES OK", violations 0. The one operation the docstring names as the
+        # threat defeated the detector.
+        #
+        # Fetching is required, not optional: a tip that is not in the local object
+        # store cannot be read, and silently skipping it reproduces the bug.
+        for tip in sorted((tips or {}).values()):
+            if tip in commits:
+                continue
+            if not _have_object(tip, repo):
+                try:
+                    _git(["fetch", "--quiet", remote or DEFAULT_REMOTE, tip], repo, timeout=timeout)
+                except GitError:
+                    pass                      # graded UNVERIFIABLE below, never skipped silently
+            commits.insert(0, tip)
     if not commits:
         return 2, {"error": f"no commit in this repo ever touched {path_in_repo} — "
                             f"there is no second witness to consult"}
@@ -392,6 +461,15 @@ def witness(log_path: str = DEFAULT_LOG, path_in_repo: str = DEFAULT_PATH_IN_REP
         "local_only_witnessed": len(local_ok),
         "unverifiable": len(unver),
         "deepest_remote_witness": (max((r["witness_len"] for r in remote_ok), default=0)),
+        # The tips are the second custodian's CURRENT copy. If one of them could
+        # not be read, the independence claim is unverifiable no matter how many
+        # ancestors agreed.
+        "tips_consulted": sorted(t for t in (tips or {}).values()
+                                 if any(r["commit"].startswith(t[:12]) or t.startswith(r["commit"][:12])
+                                        for r in results)),
+        "tips_unreadable": sorted(t for t in (tips or {}).values()
+                                  if not any(r["commit"].startswith(t[:12]) or t.startswith(r["commit"][:12])
+                                             for r in results)),
         "results": results,
         # Said out loud so no caller has to infer it from the numbers.
         "scope": ("A second custodian (git/GitHub) holds copies of this chain at past lengths; "

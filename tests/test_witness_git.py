@@ -183,9 +183,13 @@ def test_truncation_below_published_length_is_caught(repo):
     code, rep = witness(repo["log"], PATH_IN_REPO, repo["dir"], remote=None)
     assert code == 1
     at8 = [r for r in rep["results"] if r["commit"] == repo["c8"]][0]
-    assert at8["shrunk"] is True
+    # v2: prefix_compare 는 사실만 보고하고(짧고 접두사 = behind), 위반 판정은
+    # witness_commit 이 **조상 관계**로 내린다 — c8 은 HEAD 의 조상이므로 그것이
+    # 발행한 레코드가 없는 것은 뒤처짐이 아니라 절단이다.
+    assert at8["behind"] is True and at8["is_prefix"] is False
     assert at8["status"] == FAIL
-    assert "SHRUNK 8→6" in at8["detail"]
+    assert "TRUNCATED 8→6" in at8["detail"]
+    assert "ancestor of local HEAD" in at8["detail"]
     # the older, shorter copy is still a legitimate prefix — precision matters
     at5 = [r for r in rep["results"] if r["commit"] == repo["c5"]][0]
     assert at5["is_prefix"] is True
@@ -312,8 +316,10 @@ def test_prefix_compare_distinguishes_failure_modes():
     w = [{"seq": 0, "hash": "a"}, {"seq": 1, "hash": "b"}, {"seq": 2, "hash": "c"}]
     assert prefix_compare(w, w + [{"seq": 3, "hash": "d"}])["is_prefix"] is True
     assert prefix_compare(w, w)["grew_by"] == 0
-    shrunk = prefix_compare(w, w[:2])
-    assert shrunk["shrunk"] is True and shrunk["is_prefix"] is False
+    short = prefix_compare(w, w[:2])
+    assert short["behind"] is True and short["shrunk"] is False, (
+        "짧지만 접두사이면 behind — 위반 여부는 조상 관계가 정한다")
+    assert short["is_prefix"] is False
     edited = prefix_compare(w, [{"seq": 0, "hash": "a"}, {"seq": 1, "hash": "X"},
                                 {"seq": 2, "hash": "c"}])
     assert edited["divergent"] == [{"index": 1, "seq": 1, "witness_hash": "b",
@@ -385,7 +391,7 @@ def test_live_chain_negative_control_forged_witness():
     assert r["is_prefix"] is False and r["divergent"]
 
     r = prefix_compare(published, cur[: len(published) - 1])
-    assert r["shrunk"] is True
+    assert r["behind"] is True or r["shrunk"] is True
 
 
 # ------------------------------------------------------------- gate integration
@@ -422,4 +428,36 @@ def test_gate_git_witness_reports_fail_on_rewritten_past(repo, monkeypatch):
                        git_path_in_repo=PATH_IN_REPO, git_remote=None)
     cond = [i for i in on.items if i["condition"].startswith("git witness")][0]
     assert cond["status"] == FAIL
-    assert "SHRUNK" in cond["detail"]
+    assert "TRUNCATED" in cond["detail"] or "SHRUNK" in cond["detail"]
+
+
+def test_behind_a_non_ancestor_commit_is_not_a_violation(repo, monkeypatch):
+    """★새로 낸 구멍을 막는 테스트.
+
+    "발행된 것보다 짧다"를 전부 위반으로 치면 워크트리/옛 클론이 거짓 경보를 내고,
+    전부 봐주면 절단이 통과한다. 가르는 것은 그 커밋이 로컬 HEAD 의 조상인가다.
+    (2026-08-05 실측: 0e3587a 워크트리가 원격 tip 8114c8e 에 대해 거짓 VIOLATION 을
+    냈고, 그걸 봐주게 고쳤더니 이번엔 절단이 통과했다. 두 번째 시도가 이 규칙이다.)
+    """
+    import subprocess
+    from ooptdd import witness_git as W
+
+    # HEAD 조상이 아닌 커밋을 만든다 — 별도 브랜치에 더 긴 체인을 발행
+    records = load(repo["log"])
+    subprocess.run(["git", "checkout", "-q", "-b", "sibling"], cwd=repo["dir"], check=True)
+    with open(repo["log"], "w", encoding="utf-8") as f:
+        for rec in records + [dict(records[-1], seq=len(records), hash="f" * 64)]:
+            f.write(json.dumps(rec, ensure_ascii=False, sort_keys=True) + "\n")
+    subprocess.run(["git", "add", "-A"], cwd=repo["dir"], check=True)
+    subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@t",
+                    "commit", "-qm", "sibling publishes more"], cwd=repo["dir"], check=True)
+    sib = subprocess.run(["git", "rev-parse", "HEAD"], cwd=repo["dir"],
+                         capture_output=True, text=True).stdout.strip()
+    subprocess.run(["git", "checkout", "-q", "-"], cwd=repo["dir"], check=True)
+    with open(repo["log"], "w", encoding="utf-8") as f:   # 원래 체인으로 되돌린다
+        for rec in records:
+            f.write(json.dumps(rec, ensure_ascii=False, sort_keys=True) + "\n")
+
+    r = W.witness_commit(sib, records, PATH_IN_REPO, repo["dir"], tips=None, remote_checked=False)
+    assert r["status"] == W.PASS, r["detail"]
+    assert "BEHIND" in r["detail"] and "not an ancestor" in r["detail"]

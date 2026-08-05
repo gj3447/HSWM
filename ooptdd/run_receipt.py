@@ -160,6 +160,12 @@ def main() -> int:
     ap.add_argument("--anchor-tree", default=None, help="LakatoTree tree name for chain-head anchoring")
     ap.add_argument("--anchor-node", default=None, help="LakatoTree node tag for chain-head anchoring")
     ap.add_argument("--anchor-url", default=DEFAULT_LAKATOS_URL, help="LakatoTree base URL")
+    ap.add_argument("--require-anchor", action="store_true",
+                    default=os.environ.get("OOPTDD_REQUIRE_ANCHOR") == "1",
+                    help="a failed anchor post fails the run (exit 3). Default from "
+                         "OOPTDD_REQUIRE_ANCHOR=1. Without it the anchor is decoration: "
+                         "v2 printed 'receipt verdict unaffected' and exited on the receipt's "
+                         "own code, so a green run proved nothing outside this process.")
     args = ap.parse_args()
 
     receipt_id = os.path.splitext(os.path.basename(args.receipt))[0]
@@ -279,7 +285,43 @@ def main() -> int:
             return 2
         anchored, detail = anchor_chain_head(args.anchor_tree, args.anchor_node, rec,
                                              args.log, base_url=args.anchor_url)
-        print(f"anchor: {'OK ' + detail if anchored else 'FAILED (receipt verdict unaffected): ' + detail}")
+        print(f"anchor: {'OK ' + detail if anchored else 'FAILED: ' + detail}")
+        # v3.0 — chain the anchoring attempt as its own record, success or not.
+        # The anchored payload lives on another machine; the chain deserves a
+        # local, hash-linked statement of whether that hand-off happened, so
+        # "was this ever anchored?" is answerable from the chain instead of
+        # from someone's memory of a console line.
+        try:
+            append(args.log, {
+                "kind": "anchor",
+                "receipt_id": receipt_id,
+                "receipt_sha": rec["receipt_sha"],
+                "source_shas": {},
+                "lock_sha": rec["lock_sha"],
+                "lock_binding": rec.get("lock_binding", "absent"),
+                "verdict": "VALID" if anchored else "INVALID",
+                "exit_code": 0 if anchored else 1,
+                "status": "anchored" if anchored else "anchor-failed",
+                "target_hash": rec["hash"],
+                "anchor_tree": args.anchor_tree,
+                "anchor_node": args.anchor_node,
+                "anchor_url": args.anchor_url,
+                "anchor_detail": detail[:300],
+                "mutation_score": None,
+                "attestation": None,
+            })
+        except ValueError as e:
+            print(f"anchor record not chained: {e}", file=sys.stderr)
+        if not anchored and args.require_anchor:
+            print("anchor REQUIRED and not established — the run is not green outside this "
+                  "process (exit 3)", file=sys.stderr)
+            return 3
+        if not anchored:
+            print("NOTE: anchor failed and --require-anchor was not set; this receipt rests on "
+                  "local evidence alone. ooptdd.gate will not call it DONE.", file=sys.stderr)
+    elif args.require_anchor:
+        print("--require-anchor given without --anchor-tree/--anchor-node", file=sys.stderr)
+        return 2
     return proc.returncode
 
 

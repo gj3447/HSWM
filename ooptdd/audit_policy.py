@@ -223,9 +223,11 @@ def record_audit(receipt_path: str, log_path: str, auditor_id: str, verdict: str
 
     signer = None
     sig_status = "absent"
+    signer_pubkey = None
     sk = signing.load_secret(auditor_id)
     if sk is not None:
         pk_hex = signing.publickey(sk).hex()
+        signer_pubkey = pk_hex  # v3.0: inside the hashed body, so a stripped signature is an error
         reg_pk = registry_pubkey(auditor_id, registry_path)
         if reg_pk and reg_pk != pk_hex:
             raise PolicyRefusal(
@@ -253,7 +255,7 @@ def record_audit(receipt_path: str, log_path: str, auditor_id: str, verdict: str
         "mutation_score": None,
         "attestation": None,
         "policy": policy,
-    }, signer=signer)
+    }, signer=signer, signer_pubkey=signer_pubkey)
     return rec
 
 

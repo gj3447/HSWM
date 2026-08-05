@@ -1,18 +1,27 @@
-"""ooptdd v2.5 — integrity fire drill (Q5).
+"""ooptdd v3.0 — integrity fire drill (Q5).
 
 Two integrity claims, each with a drill that must prove it:
 
-  drill       — LOCAL tamper-evidence: copy the chain, flip a past verdict,
-                delete a record; verify() MUST detect both. If a drill pass
-                fails, the chain is decorative.
+  drill        — LOCAL tamper-evidence. v2.5 tried two hand-picked faults;
+                 v3.0 runs the machine-generated battery in ooptdd.attacks and
+                 checks every result against a DECLARED detectability class.
+                 A `local` fault that slips through fails the drill: the chain
+                 is decorative for that class. An `anchor_only` fault that
+                 slips through is expected — and is reported loudly, because
+                 that is precisely the hole the anchor exists to fill.
   anchor-check — CROSS-MACHINE evidence: the chain head hash must equal the
-                newest LakatoTree anchor for this receipt. A tampered or
-                rebuilt chain yields a different head -> MISMATCH.
+                 newest LakatoTree anchor for this receipt, and the local seq
+                 must not have gone BACKWARDS relative to it. The seq check is
+                 the truncation detector: a chain missing its tail verifies
+                 perfectly on its own and only an external memory can object.
 
   .venv/bin/python -m ooptdd.fire_drill drill --log receipts/receipt_log.jsonl
+  .venv/bin/python -m ooptdd.fire_drill drill --strict-repairs
   .venv/bin/python -m ooptdd.fire_drill anchor-check \
       --tree LakatosTree_HSWM_20260719 --node d1-ooptdd-floor-scope-correction \
       --receipt-id receipt_cosine_floor
+
+Exit codes: 0 clean, 1 a claim failed, 2 could not run (empty chain, no anchor).
 """
 from __future__ import annotations
 
@@ -24,72 +33,126 @@ import sys
 import tempfile
 import urllib.request
 
+from ooptdd.attacks import ANCHOR_ONLY, ATTACKS, LOCAL, LOCAL_STRICT, Skip, battery_fingerprint, materialize
 from ooptdd.receipt_log import load, repairs_path_for, verify
 
 DEFAULT_LOG = os.path.join("receipts", "receipt_log.jsonl")
 DEFAULT_LAKATOS_URL = "http://127.0.0.1:55170"
 
 
-def _write_copy(path: str, records: list[dict], repairs_src: str) -> None:
-    """Write a drill copy of the chain, carrying its attestation context.
-
-    v2.8: a chain with a repairs skiplist only verifies WITH that context —
-    a bare copy would flag documented repairs as tampering and make the
-    control case vacuous (seen live on 2026-07-28). Tamper/deletion drills
-    still fire: their targets are not the repaired records.
-    """
-    with open(path, "w", encoding="utf-8") as f:
-        for r in records:
-            f.write(json.dumps(r, ensure_ascii=False, sort_keys=True) + "\n")
-    if os.path.exists(repairs_src):
-        shutil.copyfile(repairs_src, repairs_path_for(path))
+def _load_repairs_file(path: str) -> dict:
+    if not os.path.exists(path):
+        return {}
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
-def drill(log_path: str) -> int:
+def drill(log_path: str, strict_repairs: bool = False, verbose: bool = True) -> tuple[int, dict]:
+    """Run the whole battery. Returns (exit_code, summary) for chaining."""
+    def out(*a, **kw):
+        if verbose:
+            print(*a, **kw)
+
     records = load(log_path)
     if not records:
         print("empty chain — nothing to drill", file=sys.stderr)
-        return 2
-    failures = 0
+        return 2, {}
     repairs_src = repairs_path_for(log_path)
+    repairs_file = _load_repairs_file(repairs_src)
+
+    results: list[dict] = []
+    failures = 0
     with tempfile.TemporaryDirectory() as td:
-        # drill 1: flip a past verdict -> must be detected
-        p1 = os.path.join(td, "tampered_verdict.jsonl")
-        tampered = [dict(r) for r in records]
-        tampered[0]["verdict"] = "INVALID" if tampered[0]["verdict"] == "VALID" else "VALID"
-        _write_copy(p1, tampered, repairs_src)
-        ok1, errs1 = verify(p1)
-        print(f"drill verdict-tamper: {'DETECTED' if not ok1 else 'MISSED — chain decorative!'} {errs1[:1]}")
-        failures += 0 if not ok1 else 1
-
-        # drill 2: delete a middle record -> must be detected
-        if len(records) >= 3:
-            p2 = os.path.join(td, "deleted.jsonl")
-            deleted = records[: len(records) // 2] + records[len(records) // 2 + 1:]
-            _write_copy(p2, deleted, repairs_src)
-            ok2, errs2 = verify(p2)
-            print(f"drill deletion:       {'DETECTED' if not ok2 else 'MISSED — chain decorative!'} {errs2[:1]}")
-            failures += 0 if not ok2 else 1
-
-        # control: untouched copy MUST verify (a drill that fires on everything is vacuous)
-        p3 = os.path.join(td, "control.jsonl")
-        shutil.copyfile(log_path, p3)
+        # Control first: a battery whose control case fails is measuring nothing.
+        control = os.path.join(td, "00_control.jsonl")
+        shutil.copyfile(log_path, control)
         if os.path.exists(repairs_src):
-            shutil.copyfile(repairs_src, repairs_path_for(p3))
-        ok3, _ = verify(p3)
-        print(f"control (untouched):  {'OK — verifies' if ok3 else 'BROKEN — drill vacuous!'}")
-        failures += 0 if ok3 else 1
-    return 1 if failures else 0
+            shutil.copyfile(repairs_src, repairs_path_for(control))
+        control_ok, control_errs = verify(control, strict_repairs=strict_repairs)
+        out(f"control (untouched): {'OK — verifies' if control_ok else 'BROKEN — battery vacuous!'}"
+            + ("" if control_ok else f" {control_errs[:2]}"))
+        if not control_ok:
+            failures += 1
+
+        for i, attack in enumerate(ATTACKS, start=1):
+            try:
+                path = materialize(attack, records, repairs_file, td, i)
+            except Skip as e:
+                results.append({"attack": attack.name, "class": attack.detectability,
+                                "outcome": "SKIPPED", "why": str(e)})
+                out(f"  {attack.name:<32} {attack.detectability:<12} SKIPPED ({e})")
+                continue
+            ok, errs = verify(path, strict_repairs=strict_repairs)
+            detected = not ok
+
+            if attack.detectability == LOCAL:
+                outcome = "DETECTED" if detected else "MISSED"
+                bad = not detected
+            elif attack.detectability == LOCAL_STRICT:
+                if strict_repairs:
+                    outcome = "DETECTED" if detected else "MISSED"
+                    bad = not detected
+                else:
+                    # Permissive mode is the documented v2.8 behaviour; a miss
+                    # here is the known indulgence, not a surprise.
+                    outcome = "DETECTED" if detected else "WHITEWASHED (permissive repairs)"
+                    bad = False
+            elif attack.detectability == ANCHOR_ONLY:
+                outcome = "DETECTED (stronger than claimed)" if detected else "INVISIBLE — anchor required"
+                bad = False
+            else:  # LEGACY_BLIND
+                outcome = ("DETECTED (exposure retired)" if detected
+                           else "BLIND — no verifier, no anchor; re-sign to retire")
+                bad = False
+
+            failures += 1 if bad else 0
+            results.append({"attack": attack.name, "class": attack.detectability,
+                            "outcome": outcome, "first_error": errs[0] if errs else None})
+            mark = "!!" if bad else "  "
+            out(f"{mark}{attack.name:<32} {attack.detectability:<12} {outcome}"
+                + (f"  [{errs[0][:70]}]" if errs else ""))
+
+    counts = {k: sum(1 for r in results if r["outcome"].startswith(k)) for k in ("DETECTED", "MISSED", "SKIPPED")}
+    invisible = [r["attack"] for r in results if r["outcome"].startswith("INVISIBLE")]
+    whitewashed = [r["attack"] for r in results if r["outcome"].startswith("WHITEWASHED")]
+    blind = [r["attack"] for r in results if r["outcome"].startswith("BLIND")]
+    summary = {
+        "battery": battery_fingerprint(),
+        "attacks": len(ATTACKS),
+        "strict_repairs": strict_repairs,
+        "control_ok": control_ok,
+        "counts": counts,
+        "anchor_only_invisible": invisible,
+        "whitewashed_by_permissive_repairs": whitewashed,
+        "legacy_blind": blind,
+        "results": results,
+    }
+    out(f"\nBATTERY {battery_fingerprint()[:12]}… — {len(ATTACKS)} attacks, "
+        f"{counts['DETECTED']} detected, {counts['MISSED']} missed, {counts['SKIPPED']} skipped")
+    if whitewashed:
+        out(f"WHITEWASHED by permissive repairs: {whitewashed} — rerun with --strict-repairs "
+            f"(the gate does); an unsigned skiplist entry is an unauthenticated override")
+    if blind:
+        out(f"LEGACY-BLIND: {blind} — records signed before v3.0 carry no commitment to their\n"
+            f"  own signer, so a stripped signature moves no digest and the anchored head still\n"
+            f"  matches. Not closable by verification; ooptdd.census counts the exposed records.")
+    if invisible:
+        out(f"ANCHOR-ONLY, INVISIBLE LOCALLY: {invisible}\n"
+            f"  These are not drill failures. They are the bootstrap limit: the file cannot\n"
+            f"  testify that nothing was cut off its end. Only the cross-machine anchor can,\n"
+            f"  which is why ooptdd.gate refuses DONE without one.")
+    return (1 if failures else 0), summary
 
 
 def anchor_check(tree: str, node: str, receipt_id: str, log_path: str,
-                 base_url: str = DEFAULT_LAKATOS_URL) -> int:
+                 base_url: str = DEFAULT_LAKATOS_URL) -> tuple[int, dict]:
     records = load(log_path)
     mine = [r for r in records if r.get("receipt_id") == receipt_id]
     if not mine:
         print(f"no local records for {receipt_id}", file=sys.stderr)
-        return 2
+        return 2, {}
     head = mine[-1]["hash"]
+    local_seq = mine[-1]["seq"]
     token = os.environ.get("LAKATOS_API_TOKEN", "")
     req = urllib.request.Request(
         f"{base_url}/api/tree/{tree}/node/{node}/events",
@@ -100,7 +163,7 @@ def anchor_check(tree: str, node: str, receipt_id: str, log_path: str,
             events = json.loads(r.read().decode())
     except Exception as e:
         print(f"anchor fetch failed: {e}", file=sys.stderr)
-        return 2
+        return 2, {"error": str(e)}
     anchors = []
     for ev in events if isinstance(events, list) else events.get("events", []):
         payload = ev.get("payload", {})
@@ -108,13 +171,29 @@ def anchor_check(tree: str, node: str, receipt_id: str, log_path: str,
             anchors.append(payload)
     if not anchors:
         print(f"no anchors for {receipt_id} on {tree}/{node}", file=sys.stderr)
-        return 2
+        return 2, {"error": "no anchors"}
+
     latest = anchors[-1]
     match = latest.get("hash") == head
-    print(f"local head:  {head[:16]}… (seq {mine[-1]['seq']})")
+    # v3.0 — the truncation detector. Anchored seq numbers are a monotonic
+    # external memory of how long this chain has ever been; a local head that
+    # sits BELOW the high-water mark means records were removed, and no amount
+    # of local verification would have said so.
+    anchored_seqs = [int(a["seq"]) for a in anchors if str(a.get("seq", "")).isdigit()]
+    high_water = max(anchored_seqs) if anchored_seqs else None
+    regressed = high_water is not None and local_seq < high_water
+
+    print(f"local head:  {head[:16]}… (seq {local_seq})")
     print(f"tree anchor: {str(latest.get('hash'))[:16]}… (seq {latest.get('seq')})")
+    if high_water is not None:
+        print(f"anchored high-water seq: {high_water}")
+    if regressed:
+        print(f"TRUNCATION: local seq {local_seq} < anchored high-water {high_water} — "
+              f"records were removed after being anchored ❌")
     print("ANCHOR:", "MATCH ✅" if match else "MISMATCH ❌ — chain tampered, rebuilt, or tree behind")
-    return 0 if match else 1
+    detail = {"local_head": head, "local_seq": local_seq, "anchor_head": latest.get("hash"),
+              "anchored_high_water": high_water, "match": match, "truncation_detected": regressed}
+    return (0 if (match and not regressed) else 1), detail
 
 
 def main() -> int:
@@ -122,6 +201,9 @@ def main() -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     d = sub.add_parser("drill")
     d.add_argument("--log", default=DEFAULT_LOG)
+    d.add_argument("--strict-repairs", action="store_true",
+                   help="honour only cryptographically signed repair entries")
+    d.add_argument("--json", default=None, help="write the battery summary to this path")
     a = sub.add_parser("anchor-check")
     a.add_argument("--tree", required=True)
     a.add_argument("--node", required=True)
@@ -130,8 +212,13 @@ def main() -> int:
     a.add_argument("--url", default=DEFAULT_LAKATOS_URL)
     args = ap.parse_args()
     if args.cmd == "drill":
-        return drill(args.log)
-    return anchor_check(args.tree, args.node, args.receipt_id, args.log, args.url)
+        code, summary = drill(args.log, strict_repairs=args.strict_repairs)
+        if args.json and summary:
+            with open(args.json, "w", encoding="utf-8") as f:
+                json.dump(summary, f, ensure_ascii=False, indent=1)
+        return code
+    code, _detail = anchor_check(args.tree, args.node, args.receipt_id, args.log, args.url)
+    return code
 
 
 if __name__ == "__main__":

@@ -442,3 +442,68 @@ def test_declared_classes_are_exhaustive():
     known = {LOCAL, LOCAL_STRICT, ANCHOR_ONLY, LEGACY_BLIND}
     unknown = [a.name for a in ATTACKS if a.detectability not in known]
     assert not unknown, f"an unclassified attack has no expected outcome to fail against: {unknown}"
+
+
+def test_anchor_payload_links_to_its_predecessor(chain):
+    """v3.1 — 앵커가 독립 스냅샷이 아니라 선행 앵커를 가리키는 사슬이어야 한다."""
+    from ooptdd.run_receipt import anchor_chain_head, previous_anchor
+
+    records = load(chain["log"])
+    target = records[-1]
+    assert previous_anchor(chain["log"], target["receipt_id"]) is None
+
+    append(chain["log"], {
+        "kind": "anchor", "receipt_id": target["receipt_id"], "verdict": "VALID",
+        "target_hash": target["hash"], "target_seq": target["seq"],
+    })
+    prev = previous_anchor(chain["log"], target["receipt_id"])
+    assert prev is not None and prev["target_hash"] == target["hash"]
+
+    captured = {}
+
+    def fake_urlopen(req, timeout=0):
+        captured.update(json.loads(req.data.decode()))
+        raise OSError("no server — payload is what this test is about")
+
+    import urllib.request as u
+    real = u.urlopen
+    u.urlopen = fake_urlopen
+    try:
+        anchor_chain_head("t", "n", dict(target, receipt_sha="0" * 64), chain["log"])
+    finally:
+        u.urlopen = real
+
+    assert captured["payload"]["prev_anchor_hash"] == target["hash"]
+    assert captured["payload"]["prev_anchor_seq"] == str(target["seq"])
+
+
+def test_first_anchor_has_an_empty_link_not_a_missing_one(chain):
+    """부재와 파손이 같아 보이면 안 된다 — 첫 앵커는 빈 문자열을 명시한다."""
+    from ooptdd.run_receipt import anchor_chain_head
+
+    target = load(chain["log"])[-1]
+    captured = {}
+
+    def fake_urlopen(req, timeout=0):
+        captured.update(json.loads(req.data.decode()))
+        raise OSError("no server")
+
+    import urllib.request as u
+    real = u.urlopen
+    u.urlopen = fake_urlopen
+    try:
+        anchor_chain_head("t", "n", dict(target, receipt_sha="0" * 64), chain["log"])
+    finally:
+        u.urlopen = real
+
+    assert captured["payload"]["prev_anchor_hash"] == ""
+    assert "prev_anchor_hash" in captured["payload"]
+
+
+def test_census_counts_never_anchored(chain):
+    """앵커 0건이 어떤 표에도 안 나오던 게 문제였다."""
+    from ooptdd.census import census
+
+    c = census(load(chain["log"]), {})
+    assert c["dimensions"]["anchored"]["counts"].get("never_anchored")
+    assert c["dimensions"]["anchored"]["coverage"] == 0.0

@@ -93,6 +93,20 @@ _dim("signer_commitment", lambda r: isinstance(r.get("signature"), dict),
      ("committed", "resign_attested"))
 
 
+# 앵커는 지금까지 census 에 없었다 — 그래서 kind='anchor' 레코드가 **0건**이라는
+# 사실이 어떤 표에도 안 나왔다. gate 는 앵커를 요구하는데 아무도 앵커한 적이 없으면
+# 그 게이트는 영구 거절기이고, 그 상태가 보이지 않으면 요구는 장식이다.
+_dim("anchored", _is_receipt,
+     lambda r: "anchored" if r.get("__anchored") else "never_anchored",
+     ("anchored",))
+
+
+def anchored_record_hashes(records: list[dict]) -> set[str]:
+    """kind='anchor' 레코드가 성공적으로 앵커했다고 기록한 대상 레코드 해시."""
+    return {a["target_hash"] for a in records
+            if a.get("kind") == "anchor" and a.get("verdict") == "VALID" and a.get("target_hash")}
+
+
 def resign_attested_hashes(records: list[dict]) -> set[str]:
     """Record hashes a later `resign` record vouches for (v3.1).
 
@@ -114,7 +128,10 @@ def resign_attested_hashes(records: list[dict]) -> set[str]:
 def census(records: list[dict], repairs: dict | None = None) -> dict:
     """Grade every record on every applicable dimension. Pure; no I/O."""
     vouched = resign_attested_hashes(records)
-    records = [dict(r, __resign_attested=True) if r.get("hash") in vouched else r
+    anchored = anchored_record_hashes(records)
+    records = [dict(r,
+                    __resign_attested=r.get("hash") in vouched,
+                    __anchored=r.get("hash") in anchored)
                for r in records]
     out: dict = {"records": len(records),
                  "receipts": sum(1 for r in records if _is_receipt(r)),

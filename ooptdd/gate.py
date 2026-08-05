@@ -128,6 +128,10 @@ def evaluate(receipt_id: str, log_path: str, tree: str | None, node: str | None,
             c.add("external anchor", FAIL,
                   f"TRUNCATION: local seq {detail['local_seq']} < anchored high-water "
                   f"{detail['anchored_high_water']}")
+        elif detail.get("broken_anchor_links"):
+            c.add("external anchor", FAIL,
+                  f"ANCHOR LINK BROKEN at {detail['broken_anchor_links']} — an anchor names a "
+                  f"predecessor it does not extend")
         elif detail.get("prefix_inconsistent"):
             c.add("external anchor", FAIL,
                   f"PREFIX INCONSISTENT at {detail['prefix_inconsistent']} — head matches but "

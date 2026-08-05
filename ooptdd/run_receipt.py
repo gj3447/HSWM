@@ -28,7 +28,7 @@ import subprocess
 import sys
 import urllib.request
 
-from ooptdd.receipt_log import append, canonical, file_sha, sha256_hex, verify
+from ooptdd.receipt_log import append, canonical, file_sha, load, sha256_hex, verify
 
 DEFAULT_LOG = os.path.join("receipts", "receipt_log.jsonl")
 DEFAULT_LAKATOS_URL = "http://127.0.0.1:55170"
@@ -95,10 +95,39 @@ def verify_lock_binding(receipt_path: str, lock: dict) -> tuple[str, list[str]]:
     return ("broken" if problems else "verified"), problems
 
 
+def previous_anchor(log_path: str, receipt_id: str) -> dict | None:
+    """The last anchor this chain recorded for `receipt_id`, from the chain itself.
+
+    v3.1 chains every anchoring attempt as kind="anchor" (run_receipt below), so
+    the local file remembers what it has already published without asking the
+    tree. That memory is what lets a new anchor carry a link to its predecessor.
+    """
+    prev = None
+    for r in load(log_path):
+        if r.get("kind") == "anchor" and r.get("receipt_id") == receipt_id \
+                and r.get("verdict") == "VALID":
+            prev = r
+    return prev
+
+
 def anchor_chain_head(tree_name: str, node_tag: str, rec: dict, log_path: str,
                       base_url: str = DEFAULT_LAKATOS_URL) -> tuple[bool, str]:
     """Post the chain head as a LakatoTree research event (tamper-evidence anchor)."""
     token = os.environ.get("LAKATOS_API_TOKEN", "")
+    # v3.1 — carry a link to the anchor this one extends. Anchors used to be
+    # independent snapshots, so a rewriter could edit an old record, rehash the
+    # tail and publish a fresh head: each anchor was individually consistent with
+    # the file at the moment it was posted, and nothing said they had to form a
+    # chain. prev_anchor_seq/hash make each anchor a claim about its predecessor,
+    # so the sequence can be walked (fire_drill anchor-check).
+    #
+    # Honest scope: this is a link, not a proof. A transparency-log witness gets
+    # an O(log N) Merkle consistency proof and verifies it BEFORE co-signing, and
+    # a quorum of independent witnesses is what actually defeats a split view.
+    # Here the log states its own predecessor and the checker compares. It raises
+    # the cost of a rewrite (every anchor must be re-posted coherently) rather
+    # than making one impossible.
+    prev = previous_anchor(log_path, rec["receipt_id"])
     payload = {
         "event_id": f"ooptdd-chain-head-{rec['receipt_id']}-seq{rec['seq']}",
         "realm": "agent",
@@ -112,6 +141,10 @@ def anchor_chain_head(tree_name: str, node_tag: str, rec: dict, log_path: str,
             "verdict": rec["verdict"],
             "lock_sha": rec["lock_sha"],
             "mutation_score": json.dumps(rec.get("mutation_score")),
+            # "" when this is the first anchor — an absent link and a broken one
+            # must not look alike.
+            "prev_anchor_seq": str(prev.get("target_seq", "")) if prev else "",
+            "prev_anchor_hash": str(prev.get("target_hash", "")) if prev else "",
         },
     }
     req = urllib.request.Request(
@@ -303,6 +336,7 @@ def main() -> int:
                 "exit_code": 0 if anchored else 1,
                 "status": "anchored" if anchored else "anchor-failed",
                 "target_hash": rec["hash"],
+                "target_seq": rec["seq"],
                 "anchor_tree": args.anchor_tree,
                 "anchor_node": args.anchor_node,
                 "anchor_url": args.anchor_url,

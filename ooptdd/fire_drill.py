@@ -205,6 +205,23 @@ def anchor_check(tree: str, node: str, receipt_id: str, log_path: str,
                     if str(a.get("seq", "")).isdigit() and a.get("hash")
                     and int(a["seq"]) in by_seq and by_seq[int(a["seq"])] != a["hash"]]
 
+    # v3.1 — walk the anchors' own prev links. Each anchor states which anchor it
+    # extends (run_receipt.anchor_chain_head), so the published sequence must form
+    # a chain and not just a set of snapshots. A rewriter who re-anchors a fresh
+    # head after rehashing the tail now has to make every predecessor claim line
+    # up too. Anchors written before v3.1 carry no link and are skipped rather
+    # than counted as broken — absent and contradicted must not look alike.
+    broken_links = []
+    expected_prev = None
+    for a in anchors:
+        claimed = a.get("prev_anchor_hash")
+        if claimed is None:
+            expected_prev = a.get("hash")
+            continue                                   # pre-v3.1 anchor: no claim to check
+        if expected_prev is not None and claimed and claimed != expected_prev:
+            broken_links.append((a.get("seq"), str(claimed)[:12], str(expected_prev)[:12]))
+        expected_prev = a.get("hash")
+
     print(f"local head:  {head[:16]}… (seq {local_seq})")
     print(f"tree anchor: {str(latest.get('hash'))[:16]}… (seq {latest.get('seq')})")
     print(f"anchors seen: {len(anchors)}"
@@ -215,11 +232,16 @@ def anchor_check(tree: str, node: str, receipt_id: str, log_path: str,
     if inconsistent:
         print(f"PREFIX INCONSISTENT at {inconsistent} — the local chain contradicts anchors it "
               f"already published; a head that still matches means the tail was rehashed ❌")
+    if broken_links:
+        print(f"ANCHOR LINK BROKEN at {broken_links} (seq, claimed_prev, actual_prev) — an anchor "
+              f"names a predecessor it does not actually extend ❌")
     print("ANCHOR:", "MATCH ✅" if match else "MISMATCH ❌ — chain tampered, rebuilt, or tree behind")
     detail = {"local_head": head, "local_seq": local_seq, "anchor_head": latest.get("hash"),
               "anchored_high_water": high_water, "match": match, "truncation_detected": regressed,
-              "anchors_seen": len(anchors), "prefix_inconsistent": inconsistent}
-    return (0 if (match and not regressed and not inconsistent) else 1), detail
+              "anchors_seen": len(anchors), "prefix_inconsistent": inconsistent,
+              "broken_anchor_links": broken_links,
+              "anchors_with_prev_link": sum(1 for a in anchors if a.get("prev_anchor_hash") is not None)}
+    return (0 if (match and not regressed and not inconsistent and not broken_links) else 1), detail
 
 
 def main() -> int:

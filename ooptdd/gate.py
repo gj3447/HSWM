@@ -138,8 +138,19 @@ def evaluate(receipt_id: str, log_path: str, tree: str | None, node: str | None,
                   f"earlier anchors do not; the tail was rehashed")
         else:
             c.add("external anchor", PASS if detail.get("match") else FAIL,
-                  ("head matches tree anchor" if detail.get("match")
-                   else "head does NOT match the tree anchor"))
+                  (f"consistent with {detail.get('anchors_seen', 0)} anchor(s), no regression"
+                   if detail.get("match") else "local chain contradicts its own anchors"))
+            # v3.2 — consistency is necessary, not sufficient. A chain can agree
+            # with every anchor it ever published and still have never anchored
+            # THE record being judged. The gate asks that separately, because
+            # "the chain is coherent" and "this claim was witnessed" are
+            # different sentences and only the second one licenses DONE.
+            anchored = set(detail.get("anchored_hashes") or [])
+            c.add("this record anchored", PASS if latest.get("hash") in anchored else FAIL,
+                  (f"seq={latest.get('seq')} hash={str(latest.get('hash'))[:12]}… is anchored"
+                   if latest.get("hash") in anchored else
+                   f"seq={latest.get('seq')} was never anchored ({len(anchored)} other anchor(s) "
+                   f"exist) — run run_receipt --anchor-tree/--anchor-node --require-anchor"))
 
     if require_audit:
         status = audited_status(log_path, receipt_id)

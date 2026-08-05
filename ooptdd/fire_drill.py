@@ -178,7 +178,23 @@ def anchor_check(tree: str, node: str, receipt_id: str, log_path: str,
         return 2, {"error": "no anchors"}
 
     latest = anchors[-1]
-    match = latest.get("hash") == head
+    # v3.2 — the pass condition is CONSISTENCY, not head equality.
+    #
+    # v3.0/v3.1 required the newest anchor to equal the current head, which the
+    # harness itself breaks: run_receipt anchors record N and then chains the
+    # anchoring attempt as record N+1, so the act of recording the anchor moved
+    # the head past what was anchored. Measured 2026-08-05 on the first real
+    # anchor ever posted — anchored seq 77, head seq 78, MISMATCH.
+    #
+    # The rule was wrong independently of that bug: a chain that GROWS after
+    # being anchored is normal, and the tree is always behind by construction.
+    # What integrity actually requires is that every anchor still agrees with
+    # the local chain at the seq it describes, that nothing was truncated below
+    # the anchored high-water mark, and that the anchors form a chain. Whether
+    # the newest anchor is stale is a freshness policy, not tamper evidence —
+    # so the gate asks the separate question "is the record I am judging
+    # anchored?" via anchored_hashes.
+    head_equals_latest_anchor = latest.get("hash") == head
     # v3.0 — the truncation detector. Anchored seq numbers are a monotonic
     # external memory of how long this chain has ever been; a local head that
     # sits BELOW the high-water mark means records were removed, and no amount
@@ -222,6 +238,7 @@ def anchor_check(tree: str, node: str, receipt_id: str, log_path: str,
             broken_links.append((a.get("seq"), str(claimed)[:12], str(expected_prev)[:12]))
         expected_prev = a.get("hash")
 
+    anchored_hashes = {str(a["hash"]) for a in anchors if a.get("hash")}
     print(f"local head:  {head[:16]}… (seq {local_seq})")
     print(f"tree anchor: {str(latest.get('hash'))[:16]}… (seq {latest.get('seq')})")
     print(f"anchors seen: {len(anchors)}"
@@ -235,13 +252,20 @@ def anchor_check(tree: str, node: str, receipt_id: str, log_path: str,
     if broken_links:
         print(f"ANCHOR LINK BROKEN at {broken_links} (seq, claimed_prev, actual_prev) — an anchor "
               f"names a predecessor it does not actually extend ❌")
-    print("ANCHOR:", "MATCH ✅" if match else "MISMATCH ❌ — chain tampered, rebuilt, or tree behind")
+    consistent = not inconsistent and not broken_links and not regressed
+    print("ANCHOR:", "CONSISTENT ✅" if consistent else "INCONSISTENT ❌")
+    if consistent and not head_equals_latest_anchor:
+        print(f"  (head seq {local_seq} is ahead of the newest anchor seq {latest.get('seq')} — "
+              f"normal growth, not tampering. Whether the record you care about is anchored is "
+              f"a separate question: see anchored_hashes / ooptdd.gate)")
     detail = {"local_head": head, "local_seq": local_seq, "anchor_head": latest.get("hash"),
-              "anchored_high_water": high_water, "match": match, "truncation_detected": regressed,
+              "anchored_high_water": high_water, "match": consistent,
+              "head_equals_latest_anchor": head_equals_latest_anchor,
+              "anchored_hashes": sorted(anchored_hashes), "truncation_detected": regressed,
               "anchors_seen": len(anchors), "prefix_inconsistent": inconsistent,
               "broken_anchor_links": broken_links,
               "anchors_with_prev_link": sum(1 for a in anchors if a.get("prev_anchor_hash") is not None)}
-    return (0 if (match and not regressed and not inconsistent and not broken_links) else 1), detail
+    return (0 if consistent else 1), detail
 
 
 def main() -> int:

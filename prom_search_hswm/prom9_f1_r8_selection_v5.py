@@ -60,15 +60,23 @@ COMPONENTS_PER_BLOCK_V5 = 4
 CONFIRMATORY_ITEMS_V5 = 800
 DEV_PURPOSE_V5 = "development_power_c800"
 CONF_PURPOSE_V5 = "confirmatory_c800"
-# Every page offset ever used by the v3/v4 pools; v5 pools must be fresh.
+DATASET_SPLITS_V5 = ("validation", "train")
+# Every VALIDATION page offset ever used by the v3/v4 pools; v5 validation
+# pools must be fresh.  The train split has no historical pool pages, so its
+# offset space carries no such exclusion.
 HISTORICAL_POOL_OFFSETS = frozenset(
     {104, 204, 304, 404, 504, 604, 704, 804, 904, 1004, 1104, 1204, 1304, 1404}
 )
 
 
 def _verify_offset_grid(
-    development_offsets: Sequence[int], confirmatory_offsets: Sequence[int]
+    development_offsets: Sequence[int],
+    confirmatory_offsets: Sequence[int],
+    *,
+    dataset_split: str = "validation",
 ) -> None:
+    if dataset_split not in DATASET_SPLITS_V5:
+        raise PowerRefusal("v5 dataset split is not a recognized pool split")
     dev = list(development_offsets)
     conf = list(confirmatory_offsets)
     for label, offsets in (("development", dev), ("confirmatory", conf)):
@@ -81,7 +89,7 @@ def _verify_offset_grid(
                 raise PowerRefusal(
                     f"v5 {label} offset breaks the Dataset Viewer page grid"
                 )
-            if offset in HISTORICAL_POOL_OFFSETS:
+            if dataset_split == "validation" and offset in HISTORICAL_POOL_OFFSETS:
                 raise PowerRefusal(
                     f"v5 {label} offset reuses a historical v3/v4 pool page"
                 )
@@ -128,6 +136,7 @@ def _build_selection_receipt_v5(
     page_loader,
     development_components: int = DEVELOPMENT_COMPONENTS_V5,
     confirmatory_items: int = CONFIRMATORY_ITEMS_V5,
+    dataset_split: str = "validation",
 ) -> dict[str, object]:
     if development_components % COMPONENTS_PER_BLOCK_V5:
         raise PowerRefusal("v5 development components do not form equal seed blocks")
@@ -150,7 +159,9 @@ def _build_selection_receipt_v5(
 
     development_offsets = sorted(int(value) for value in development_pages)
     confirmatory_offsets = sorted(int(value) for value in confirmatory_pages)
-    _verify_offset_grid(development_offsets, confirmatory_offsets)
+    _verify_offset_grid(
+        development_offsets, confirmatory_offsets, dataset_split=dataset_split
+    )
 
     exposed = {
         "item_ids": sorted(
@@ -299,6 +310,7 @@ def _build_selection_receipt_v5(
 
     policy = {
         "selection_seed": 20260728,
+        "dataset_split": dataset_split,
         "development_pool_offsets": development_offsets,
         "confirmatory_pool_offsets": confirmatory_offsets,
         "page_length": 100,
@@ -433,7 +445,10 @@ def verify_selection_receipt_v5(value: Mapping[str, object]) -> str:
     conf_offsets = policy.get("confirmatory_pool_offsets")
     if not isinstance(dev_offsets, list) or not isinstance(conf_offsets, list):
         raise PowerRefusal("v5 selection policy offsets are absent")
-    _verify_offset_grid(dev_offsets, conf_offsets)
+    dataset_split = policy.get("dataset_split")
+    if dataset_split not in DATASET_SPLITS_V5:
+        raise PowerRefusal("v5 selection policy split drifted")
+    _verify_offset_grid(dev_offsets, conf_offsets, dataset_split=dataset_split)
     development = value.get("development")
     confirmatory = value.get("confirmatory")
     if not isinstance(development, Mapping) or not isinstance(confirmatory, Mapping):
@@ -516,6 +531,7 @@ def replay_selection_receipt_v5(
         page_loader=lambda rows, offset: _page_input_redacted(rows, offset),
         development_components=int(policy["development_components"]),
         confirmatory_items=int(policy["confirmatory_items"]),
+        dataset_split=str(policy["dataset_split"]),
     )
     if rebuilt != dict(value):
         raise PowerRefusal("v5 selection receipt does not replay from source pages")
@@ -635,6 +651,7 @@ def build_selection_receipts_v5(
     confirmatory_pages: Mapping[int, Path],
     development_components: int = DEVELOPMENT_COMPONENTS_V5,
     confirmatory_items: int = CONFIRMATORY_ITEMS_V5,
+    dataset_split: str = "validation",
 ) -> tuple[dict[str, object], dict[str, object]]:
     development_raw = {
         int(offset): _read_private_bytes(Path(development_pages[offset]))
@@ -653,6 +670,7 @@ def build_selection_receipts_v5(
         page_loader=lambda raw, offset: _page_input_bytes(bytes(raw), offset),
         development_components=development_components,
         confirmatory_items=confirmatory_items,
+        dataset_split=dataset_split,
     )
     selection_sha = verify_selection_receipt_v5(selection)
     page_receipts: list[dict[str, object]] = []
@@ -718,6 +736,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     select.add_argument(
         "--confirmatory-page", action="append", type=_page_arg, required=True
     )
+    select.add_argument(
+        "--dataset-split", choices=DATASET_SPLITS_V5, required=True
+    )
     select.add_argument("--output", type=Path, required=True)
     select.add_argument("--gold-source-output", type=Path, required=True)
     args = parser.parse_args(argv)
@@ -748,6 +769,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             predecessor_selection=predecessor,
             development_pages=development,
             confirmatory_pages=confirmatory,
+            dataset_split=args.dataset_split,
         )
         verify_selection_receipt_v5(receipt)
         verify_gold_source_receipt_v5(gold_source, receipt)

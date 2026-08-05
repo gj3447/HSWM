@@ -364,6 +364,66 @@ def test_v5_answer_only_mutation_keeps_public_receipt_identical(
     assert first[1] != second[1]
 
 
+def test_v5_policy_records_dataset_split(tmp_path: Path) -> None:
+    selection, _gold = _build_small(tmp_path)
+    assert selection["selection_policy"]["dataset_split"] == "validation"
+    train_selection, _train_gold = _build_small_train(tmp_path)
+    assert train_selection["selection_policy"]["dataset_split"] == "train"
+
+
+def _build_small_train(tmp_path: Path):
+    train_dir = tmp_path / "train-pages"
+    train_dir.mkdir()
+    development, confirmatory = {}, {}
+    # Offset 104 is historical for VALIDATION only; the train split may use it.
+    path = train_dir / "dev-104.json"
+    _write_page(path, [_dev_row(0, index) for index in range(100)])
+    development[104] = path
+    conf_path = train_dir / "conf-5004.json"
+    _write_page(conf_path, [_conf_row(0, index) for index in range(100)])
+    confirmatory[5004] = conf_path
+    return build_selection_receipts_v5(
+        prior_receipt=_prior(),
+        successor_exposure_set=_successor_set(),
+        predecessor_selection=_predecessor(),
+        development_pages=development,
+        confirmatory_pages=confirmatory,
+        development_components=8,
+        confirmatory_items=10,
+        dataset_split="train",
+    )
+
+
+def test_v5_train_split_allows_validation_historical_offsets(
+    tmp_path: Path,
+) -> None:
+    selection, gold = _build_small_train(tmp_path)
+    assert selection["selection_policy"]["development_pool_offsets"] == [104]
+    assert verify_selection_receipt_v5(selection)
+    assert verify_gold_source_receipt_v5(gold, selection)
+    assert replay_selection_receipt_v5(
+        selection,
+        prior_receipt=_prior(),
+        successor_exposure_set=_successor_set(),
+        predecessor_selection=_predecessor(),
+    )
+
+
+def test_v5_unknown_split_is_refused(tmp_path: Path) -> None:
+    development, confirmatory = _pages(tmp_path)
+    with pytest.raises(PowerRefusal):
+        build_selection_receipts_v5(
+            prior_receipt=_prior(),
+            successor_exposure_set=_successor_set(),
+            predecessor_selection=_predecessor(),
+            development_pages=development,
+            confirmatory_pages=confirmatory,
+            development_components=8,
+            confirmatory_items=10,
+            dataset_split="test",
+        )
+
+
 def test_v5_ratified_scale_800_by_800(tmp_path: Path) -> None:
     scale_dir = tmp_path / "scale"
     scale_dir.mkdir()

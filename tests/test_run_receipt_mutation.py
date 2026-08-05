@@ -3,14 +3,21 @@
 v2.7 — the chained record must carry the allowlist-adjusted picture
 (effective_total / equivalents / open_gaps / survivors), not only killed/total.
 
-Fixture: a tiny module with exactly three single-fault sites and a receipt that
+v3.3 — the operator table is derived from the ast spec (ordering comparisons are
+family-closed, arithmetic replaces within {Add, Sub, Mult}), so the same fixture
+now yields FIVE sites instead of three. The old expectation (2/3) was a
+transcript of the hand-written dict; it is restated here from the derived set.
+
+Fixture: a tiny module with exactly five single-fault sites and a receipt that
 holds against the original. Expected mutant outcomes:
 
-  cmp GtE->Gt   : pick(10) -> 0  != 11  -> KILLED
-  cmp GtE->LtE  : pick(10) -> 11 == 11  -> SURVIVES (documented equivalent shape)
-  binop Add->Sub: pick(10) -> 9  != 11  -> KILLED
+  cmp GtE->Gt    : pick(10) -> 0  != 11  -> KILLED
+  cmp GtE->Lt    : pick(10) -> 0  != 11  -> KILLED
+  cmp GtE->LtE   : pick(10) -> 11 == 11  -> SURVIVES (boundary is not observed)
+  binop Add->Sub : pick(10) -> 9  != 11  -> KILLED
+  binop Add->Mult: pick(10) -> 10 != 11  -> KILLED
 
-so the chained score must be killed=2, total=3, open_gaps=1.
+so the chained score must be killed=4, total=5, open_gaps=1.
 """
 from __future__ import annotations
 
@@ -59,24 +66,30 @@ def test_run_receipt_chains_full_mutation_score(tmp_path):
     r = subprocess.run(
         [sys.executable, "-m", "ooptdd.run_receipt", str(receipt),
          "--source", str(mod), "--mutation-target", str(mod),
-         "--max-mutants", "5", "--log", str(log)],
+         "--max-mutants", "8", "--log", str(log)],
         cwd=ROOT, env=env, capture_output=True, text=True, timeout=120,
     )
     assert r.returncode == 0, r.stdout + r.stderr
-    assert "MUTATION SCORE: 2/3 killed" in r.stdout
+    assert "MUTATION SCORE: 4/5 killed" in r.stdout
 
     records = [json.loads(line) for line in log.read_text().splitlines()]
     assert len(records) == 1
     ms = records[0]["mutation_score"]
-    assert ms["killed"] == 2
-    assert ms["total"] == 3
+    assert ms["killed"] == 4
+    assert ms["total"] == 5
     # tiny_mod has no allowlist entries: no documented equivalents, the
     # GtE->LtE survivor must show up as an honest open gap
-    assert ms["effective_total"] == 3
+    assert ms["effective_total"] == 5
     assert ms["equivalents"] == 0
     assert ms["open_gaps"] == 1
-    assert any("LtE" in s for s in ms["survivors"])
+    assert any("GtE->LtE" in s for s in ms["survivors"])
     assert ms["errors"] == []
+    # a chained score must carry the pool it was sampled from and the operator
+    # table that built the pool, or two scores cannot be told apart
+    assert ms["sites_available"] == 5
+    assert ms["sample_seed"] == 20260805
+    assert len(ms["operator_set"]) == 12
+    assert ms["operator_set"] in r.stdout
 
     # module under mutation must be restored byte-identical after the run
     assert mod.read_text() == TINY_MOD

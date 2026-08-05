@@ -134,6 +134,7 @@ def main() -> int:
                                 repo_root=os.path.abspath("."), max_mutants=args.max_mutants,
                                 runner="pytest")
             print(f"      mutation: {ms['killed']}/{ms['total']} killed"
+                  f" [of {ms['sites_available']} sites, ops={ms['operator_set']}]"
                   + (f" | survivors {ms['survivors'][:3]}" if ms["survivors"] else ""))
 
     print(f"\nHARVEST: {n_valid} VALID, {n_invalid} INVALID, {n_error} ERROR "

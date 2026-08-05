@@ -96,9 +96,25 @@ _dim("signer_commitment", lambda r: isinstance(r.get("signature"), dict),
 # 앵커는 지금까지 census 에 없었다 — 그래서 kind='anchor' 레코드가 **0건**이라는
 # 사실이 어떤 표에도 안 나왔다. gate 는 앵커를 요구하는데 아무도 앵커한 적이 없으면
 # 그 게이트는 영구 거절기이고, 그 상태가 보이지 않으면 요구는 장식이다.
-_dim("anchored", _is_receipt,
+#
+# ★적용 대상은 receipt_id 별 **최신** receipt 레코드다. 이건 숫자를 예쁘게 만들려는
+# 좁히기가 아니라 앵커가 하는 일의 정의다 — 앵커는 외부가 위조된 *주장*을 거절하게
+# 하는 장치이고, 대체된 과거 기록은 아무도 그걸 근거로 행동하지 않는다. 그 기록의
+# 무결성은 이미 두 겹으로 덮여 있다: 손대면 해시 사슬이 로컬에서 깨지고, 꼬리까지
+# 재해싱한 전면 위조는 최신 앵커의 prefix consistency 가 잡는다(2026-08-05 실측).
+#
+# 그래도 좁힌 사실 자체는 숨기지 않는다 — superseded 개수를 별도 차원으로 계속 센다.
+# 지표를 바꿀 땐 바뀐 범위가 보여야 한다.
+def _is_current_receipt(r: dict) -> bool:
+    return bool(r.get("__is_current_receipt"))
+
+
+_dim("anchored", _is_current_receipt,
      lambda r: "anchored" if r.get("__anchored") else "never_anchored",
      ("anchored",))
+_dim("superseded_receipts", _is_receipt,
+     lambda r: "current" if r.get("__is_current_receipt") else "superseded",
+     ("current", "superseded"))          # 둘 다 정상 — 이 차원은 게이트가 아니라 가시성용
 
 
 def anchored_record_hashes(records: list[dict]) -> set[str]:
@@ -129,9 +145,15 @@ def census(records: list[dict], repairs: dict | None = None) -> dict:
     """Grade every record on every applicable dimension. Pure; no I/O."""
     vouched = resign_attested_hashes(records)
     anchored = anchored_record_hashes(records)
+    current: dict[str, str] = {}
+    for r in records:
+        if _is_receipt(r) and r.get("receipt_id"):
+            current[r["receipt_id"]] = r.get("hash")      # 마지막 것이 남는다
+    live = set(current.values())
     records = [dict(r,
                     __resign_attested=r.get("hash") in vouched,
-                    __anchored=r.get("hash") in anchored)
+                    __anchored=r.get("hash") in anchored,
+                    __is_current_receipt=_is_receipt(r) and r.get("hash") in live)
                for r in records]
     out: dict = {"records": len(records),
                  "receipts": sum(1 for r in records if _is_receipt(r)),

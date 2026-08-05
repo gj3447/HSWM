@@ -8,10 +8,14 @@ against each mutant, and reports killed/total.
 Killed = the receipt exits non-zero (INVALID or ERROR) against the mutant.
 Survived = the receipt still prints VALID — a hole in the oracle set.
 
-Mutant operators (single-fault, stdlib only):
-  - comparison flips:  >= → >,  >= → <=,  <= → <,  > → >=,  < → <=,  == → !=,  != → ==
-  - arithmetic swaps:  + ↔ -,  * → +
-  - domain mutant:     np.maximum(x, 0) → x   (ReLU/clipping removal)
+Mutant operators (single-fault, stdlib only). The operator table is DERIVED
+from the `ast` spec (`ast.cmpop/operator/boolop/unaryop.__subclasses__()`) and
+partitioned into semantic families; see OPERATOR POLICY below. Kinds:
+  - compare:       within-family relational/equality/identity/membership swaps
+  - binop:         within-family arithmetic and bitwise swaps
+  - boolop:        and ↔ or
+  - unaryop:       `not x` → `x`,  `-x` → `x`,  `~x` → `x`
+  - clip-removal:  np.maximum(x, 0) → x   (ReLU/clipping removal)
 
 Runner mechanics: the mutated module is written to a temp dir with the same
 module name and prepended to PYTHONPATH, so the receipt subprocess imports the
@@ -29,15 +33,136 @@ import sys
 import tempfile
 from dataclasses import dataclass
 
-COMPARE_FLIPS = {
-    ast.GtE: [ast.Gt, ast.LtE],
-    ast.LtE: [ast.Lt],
-    ast.Gt: [ast.GtE],
-    ast.Lt: [ast.LtE],
-    ast.Eq: [ast.NotEq],
-    ast.NotEq: [ast.Eq],
+# ---------------------------------------------------------------------------
+# OPERATOR POLICY
+#
+# The tables below used to be hand-written dicts:
+#     COMPARE_FLIPS = {GtE: [Gt, LtE], LtE: [Lt], Gt: [GtE], Lt: [LtE], ...}
+#     BINOP_FLIPS   = {Add: [Sub], Sub: [Add], Mult: [Add]}
+# A hand list has a silent failure mode: an operator nobody thought of is not
+# "not mutated", it is INVISIBLE. A module written with `/`, `%`, `//`, `&`,
+# `<<`, `is`, `in`, `and`, `not` had ZERO sites for those operators and no
+# report said so — the mutation score looked like a score for the module when
+# it was a score for its `+ - * < <= > >= == !=` subset.
+#
+# So the operator set is now derived from the spec and CHECKED against it:
+# every subclass of ast.cmpop / ast.operator / ast.boolop / ast.unaryop must be
+# classified into a family, or import fails (_assert_spec_classified). A future
+# Python that adds an operator breaks the build instead of quietly shrinking
+# coverage, and reverting to a hand dict cannot satisfy the check.
+#
+# Derivation is family-closed: an operator may only be replaced by another
+# member of its own family. Exhaustive cross-product would be worse, not
+# better, and the exclusions are recorded here rather than in a commit message:
+#
+#   * CROSS-FAMILY replacements are excluded (`x is None` → `x < None`,
+#     `k in d` → `k > d`, `a + b` → `a & b` on floats). These raise TypeError,
+#     so ANY test that merely executes the line kills them. They do not measure
+#     the oracle, they inflate the score — the opposite of the point.
+#   * EXCLUDED_AS_REPLACEMENT: partial/unbounded targets (see the dict). Same
+#     inflation argument (ZeroDivisionError is a free kill), plus `**` can turn
+#     a bounded run into a timeout, which lands in errors[] and is not a kill
+#     at all. They remain SOURCES: `a / b` → `a * b` is a real fault and the
+#     old hand dict could not see it.
+#   * EXCLUDED_AS_SOURCE: mutants that are equivalent by construction. Note
+#     that allowlist.py does NOT absorb these automatically — it matches
+#     hand-written (kind, detail, lineno, col) entries with a written reason.
+#     A generator that mass-produces equivalents therefore mass-produces
+#     undocumented survivors, so equivalence is refused at the source instead.
+# ---------------------------------------------------------------------------
+
+CMP_FAMILIES = {
+    "ordering": (ast.Lt, ast.LtE, ast.Gt, ast.GtE),
+    "equality": (ast.Eq, ast.NotEq),
+    "identity": (ast.Is, ast.IsNot),
+    "membership": (ast.In, ast.NotIn),
 }
-BINOP_FLIPS = {ast.Add: [ast.Sub], ast.Sub: [ast.Add], ast.Mult: [ast.Add]}
+BIN_FAMILIES = {
+    "arithmetic": (ast.Add, ast.Sub, ast.Mult, ast.Div, ast.FloorDiv, ast.Mod, ast.Pow),
+    "bitwise": (ast.LShift, ast.RShift, ast.BitOr, ast.BitXor, ast.BitAnd),
+    "matmul": (ast.MatMult,),
+}
+BOOL_FAMILIES = {"logical": (ast.And, ast.Or)}
+UNARY_FAMILIES = {"removal": (ast.Not, ast.USub, ast.Invert, ast.UAdd)}
+
+EXCLUDED_AS_REPLACEMENT = {
+    ast.Div: "partial function: introduces a ZeroDivisionError the original could not "
+             "raise; a crash mutant is killed by any test that reaches the line",
+    ast.FloorDiv: "partial function: same ZeroDivisionError free-kill as Div",
+    ast.Mod: "partial function: same ZeroDivisionError free-kill as Div",
+    ast.Pow: "unbounded cost: a ** b on ints can hang the mutant run; a hang is "
+             "recorded in errors[], not as a kill, so it degrades the run instead",
+    ast.MatMult: "@ against scalar/1-D operands is a shape error, i.e. a crash mutant",
+}
+EXCLUDED_AS_SOURCE = {
+    ast.MatMult: "no total-function peer in its family — every replacement for @ is a "
+                 "shape error, so mutating it can only produce crash mutants",
+    ast.UAdd: "removing unary + is a no-op for every builtin numeric type, so the "
+              "mutant is equivalent by construction (pure allowlist noise)",
+}
+
+
+def _assert_spec_classified(base: type, families: dict[str, tuple[type, ...]]) -> None:
+    """Fail closed when the ast spec has an operator no family claims."""
+    declared = {op for members in families.values() for op in members}
+    spec = set(base.__subclasses__())
+    missing = sorted(c.__name__ for c in spec - declared)
+    extra = sorted(c.__name__ for c in declared - spec)
+    if missing or extra:
+        raise RuntimeError(
+            f"ooptdd.mutate: {base.__name__} families are out of sync with the ast spec "
+            f"(unclassified={missing}, not-in-spec={extra}). Classify it or exclude it "
+            "with a reason — silently dropping an operator hides mutation coverage.")
+
+
+def _derive_flips(families: dict[str, tuple[type, ...]]) -> dict[type, list[type]]:
+    """Family-closed replacement table, sorted for reproducible site order."""
+    flips: dict[type, list[type]] = {}
+    for members in families.values():
+        for op in members:
+            if op in EXCLUDED_AS_SOURCE:
+                continue
+            repls = sorted(
+                (o for o in members if o is not op and o not in EXCLUDED_AS_REPLACEMENT),
+                key=lambda c: c.__name__)
+            if repls:
+                flips[op] = repls
+    return flips
+
+
+def operator_set_digest() -> str:
+    """Fingerprint of the active operator table.
+
+    A mutation score is only comparable to another score produced by the SAME
+    operators. `sites_available` says how big the pool was; this says what the
+    pool was made of, so a 9/12 chained under `+ - * < <= > >= == !=` cannot be
+    read as a 9/12 chained under the derived set.
+    """
+    import hashlib
+    parts = []
+    for name, flips in (("cmp", COMPARE_FLIPS), ("bin", BINOP_FLIPS),
+                        ("bool", BOOLOP_FLIPS)):
+        for op in sorted(flips, key=lambda c: c.__name__):
+            parts.append(f"{name}:{op.__name__}->"
+                         + ",".join(r.__name__ for r in flips[op]))
+    parts.append("unary:" + ",".join(c.__name__ for c in UNARYOP_REMOVALS))
+    parts.append("clip:maximum,clip")
+    return hashlib.sha256("|".join(parts).encode()).hexdigest()[:12]
+
+
+def _derive_removals(families: dict[str, tuple[type, ...]]) -> tuple[type, ...]:
+    return tuple(sorted((op for members in families.values() for op in members
+                         if op not in EXCLUDED_AS_SOURCE), key=lambda c: c.__name__))
+
+
+for _base, _fams in ((ast.cmpop, CMP_FAMILIES), (ast.operator, BIN_FAMILIES),
+                     (ast.boolop, BOOL_FAMILIES), (ast.unaryop, UNARY_FAMILIES)):
+    _assert_spec_classified(_base, _fams)
+
+COMPARE_FLIPS = _derive_flips(CMP_FAMILIES)
+BINOP_FLIPS = _derive_flips(BIN_FAMILIES)
+BOOLOP_FLIPS = _derive_flips(BOOL_FAMILIES)
+UNARYOP_REMOVALS = _derive_removals(UNARY_FAMILIES)
 
 
 @dataclass
@@ -47,25 +172,56 @@ class MutationSite:
     kind: str
     detail: str
     col: int = 0
+    op_index: int = 0
+    node_ord: int = -1
+
+
+def _parse_indexed(module_path: str) -> ast.AST:
+    """Parse and stamp every node with a stable ordinal.
+
+    (lineno, col_offset) does NOT identify a node: left-associative chains share
+    them. `(a @ b) + c + d` is BinOp(BinOp(...)) where BOTH Add nodes report the
+    column of `(a`. Measured on receipts/receipt_cosine_floor.py: 4 of 215 sites
+    were exact duplicates, i.e. two sample slots buying one mutant, and the outer
+    node was unreachable because the transformer stops at the first match. The
+    ordinal comes from ast.walk over a fresh parse of the same bytes, so the
+    collector and the transformer agree.
+    """
+    tree = ast.parse(open(module_path, "r", encoding="utf-8").read(), filename=module_path)
+    for i, node in enumerate(ast.walk(tree)):
+        node._mut_ord = i
+    return tree
 
 
 class _SiteCollector(ast.NodeVisitor):
     def __init__(self) -> None:
         self.sites: list[MutationSite] = []
 
+    def _add(self, node: ast.AST, kind: str, detail: str, op_index: int = 0) -> None:
+        ordinal = node._mut_ord
+        self.sites.append(MutationSite(
+            f"{kind}@{node.lineno}.{node.col_offset}#{ordinal}.{op_index}:{detail}",
+            node.lineno, kind, detail, node.col_offset, op_index, ordinal))
+
     def visit_Compare(self, node: ast.Compare) -> None:
         for i, op in enumerate(node.ops):
             for repl in COMPARE_FLIPS.get(type(op), []):
-                self.sites.append(MutationSite(
-                    f"cmp@{node.lineno}.{node.col_offset}.{i}", node.lineno, "compare",
-                    f"{type(op).__name__}->{repl.__name__}", node.col_offset))
+                self._add(node, "compare", f"{type(op).__name__}->{repl.__name__}", i)
         self.generic_visit(node)
 
     def visit_BinOp(self, node: ast.BinOp) -> None:
         for repl in BINOP_FLIPS.get(type(node.op), []):
-            self.sites.append(MutationSite(
-                f"binop@{node.lineno}.{node.col_offset}", node.lineno, "binop",
-                f"{type(node.op).__name__}->{repl.__name__}", node.col_offset))
+            self._add(node, "binop", f"{type(node.op).__name__}->{repl.__name__}")
+        self.generic_visit(node)
+
+    def visit_BoolOp(self, node: ast.BoolOp) -> None:
+        for repl in BOOLOP_FLIPS.get(type(node.op), []):
+            self._add(node, "boolop", f"{type(node.op).__name__}->{repl.__name__}")
+        self.generic_visit(node)
+
+    def visit_UnaryOp(self, node: ast.UnaryOp) -> None:
+        if type(node.op) in UNARYOP_REMOVALS:
+            self._add(node, "unaryop", f"{type(node.op).__name__}->remove")
         self.generic_visit(node)
 
     def visit_Call(self, node: ast.Call) -> None:
@@ -76,9 +232,7 @@ class _SiteCollector(ast.NodeVisitor):
             and isinstance(node.args[1], ast.Constant) and node.args[1].value == 0
         )
         if is_clip:
-            self.sites.append(MutationSite(
-                f"clip@{node.lineno}.{node.col_offset}", node.lineno, "clip-removal",
-                f"{func.attr}(x, 0) -> x", node.col_offset))
+            self._add(node, "clip-removal", f"{func.attr}(x, 0) -> x")
         self.generic_visit(node)
 
 
@@ -88,15 +242,17 @@ class _Mutator(ast.NodeTransformer):
         self.applied = False
 
     def _hit(self, node: ast.AST) -> bool:
+        if self.target.node_ord >= 0:
+            return getattr(node, "_mut_ord", -1) == self.target.node_ord
+        # sites built by hand (no ordinal) keep the old positional match
         return (getattr(node, "lineno", None) == self.target.lineno
                 and getattr(node, "col_offset", None) == self.target.col)
 
     def visit_Compare(self, node: ast.Compare) -> ast.AST:
         self.generic_visit(node)
         if not self.applied and self.target.kind == "compare" and self._hit(node):
-            idx = int(self.target.site_id.rsplit(".", 1)[1])
             repl = getattr(ast, self.target.detail.split("->")[1])
-            node.ops[idx] = repl()
+            node.ops[self.target.op_index] = repl()
             self.applied = True
         return node
 
@@ -108,6 +264,21 @@ class _Mutator(ast.NodeTransformer):
             self.applied = True
         return node
 
+    def visit_BoolOp(self, node: ast.BoolOp) -> ast.AST:
+        self.generic_visit(node)
+        if not self.applied and self.target.kind == "boolop" and self._hit(node):
+            repl = getattr(ast, self.target.detail.split("->")[1])
+            node.op = repl()
+            self.applied = True
+        return node
+
+    def visit_UnaryOp(self, node: ast.UnaryOp) -> ast.AST:
+        self.generic_visit(node)
+        if not self.applied and self.target.kind == "unaryop" and self._hit(node):
+            self.applied = True
+            return node.operand
+        return node
+
     def visit_Call(self, node: ast.Call) -> ast.AST:
         self.generic_visit(node)
         if not self.applied and self.target.kind == "clip-removal" and self._hit(node):
@@ -117,7 +288,7 @@ class _Mutator(ast.NodeTransformer):
 
 
 def collect_sites(module_path: str) -> list[MutationSite]:
-    tree = ast.parse(open(module_path, "r", encoding="utf-8").read(), filename=module_path)
+    tree = _parse_indexed(module_path)
     collector = _SiteCollector()
     collector.visit(tree)
     return collector.sites
@@ -156,7 +327,7 @@ def sample_sites(sites: list[MutationSite], k: int,
 
 
 def render_mutant(module_path: str, site: MutationSite) -> str | None:
-    tree = ast.parse(open(module_path, "r", encoding="utf-8").read(), filename=module_path)
+    tree = _parse_indexed(module_path)
     mutator = _Mutator(site)
     new_tree = mutator.visit(tree)
     if not mutator.applied:
@@ -246,7 +417,7 @@ def mutation_score(
     equivalents, open_gaps = [], []
     for site in survivor_sites:
         reason = is_equivalent(site, module_entries)
-        label = f"{site.site_id} {site.detail}"
+        label = site.site_id  # already carries kind@line.col#ord:Src->Dst
         if reason:
             equivalents.append({"site": label, "reason": reason})
         else:
@@ -259,6 +430,9 @@ def mutation_score(
             # hides that this may be 12 of 70.
             "sites_available": len(collect_sites(module_path)),
             "sample_seed": SAMPLE_SEED,
+            # …and which operators built that pool. Without it a score cannot be
+            # compared across a change to the operator table (see the docstring).
+            "operator_set": operator_set_digest(),
             "survivors": open_gaps, "equivalents": equivalents, "errors": errors}
 
 

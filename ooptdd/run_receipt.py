@@ -297,8 +297,16 @@ def main() -> int:
             "open_gaps": len(ms["survivors"]),
             "survivors": ms["survivors"],
             "errors": ms["errors"],
+            # a sampled score is meaningless without the pool it sampled and the
+            # operator table that built the pool; both are chained so two scores
+            # can be told apart instead of silently compared
+            "sites_available": ms["sites_available"],
+            "sample_seed": ms["sample_seed"],
+            "operator_set": ms["operator_set"],
         }
         print(f"\nMUTATION SCORE: {ms['killed']}/{ms['total']} killed"
+              f" [sampled from {ms['sites_available']} sites,"
+              f" seed={ms['sample_seed']}, ops={ms['operator_set']}]"
               f" (effective {ms['killed']}/{ms['effective_total']} after {len(ms['equivalents'])} documented equivalents)"
               + (f" | open gaps: {ms['survivors']}" if ms["survivors"] else "")
               + (f" | errors: {ms['errors']}" if ms["errors"] else ""))

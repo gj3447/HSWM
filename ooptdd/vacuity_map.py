@@ -61,7 +61,11 @@ def scan_one(job: dict) -> dict:
         runner="pytest", confirm_kills=True,
     )
     return {**job, "killed": ms["killed"], "total": ms["total"],
-            "survivors": ms["survivors"], "errors": ms["errors"]}
+            "survivors": ms["survivors"], "errors": ms["errors"],
+            # the pool and the operator table that built it: a 0/8 under one
+            # operator set is not the same finding as a 0/8 under another
+            "sites_available": ms["sites_available"],
+            "sample_seed": ms["sample_seed"], "operator_set": ms["operator_set"]}
 
 
 def scan_group(jobs: list[dict]) -> list[dict]:

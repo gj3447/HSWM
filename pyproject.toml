@@ -19,7 +19,10 @@ build-backend = "setuptools.build_meta"
 # ooptdd/ is a real package, not a flat module — without this it is absent from the
 # sdist and every test importing it fails to collect there (18 collection errors in
 # the source-distribution CI job, of which tests/test_ouroboros.py was one).
-packages = ["ooptdd"]
+# scripts/ is the same omission one directory over: tests/test_hswm_research_ledger.py
+# and tests/test_hswm_semantic_weight_metric.py import `scripts.validate_*` and were
+# the last 2 collection errors. Both directories must also be listed in MANIFEST.in.
+packages = ["ooptdd", "scripts"]
 py-modules = [
   "synth",
   "hypergraph",

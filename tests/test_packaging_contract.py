@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import hashlib
 import json
 from pathlib import Path
@@ -7,6 +8,43 @@ import tomllib
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def _manifest_lines() -> list[str]:
+    text = (REPO_ROOT / "MANIFEST.in").read_text(encoding="utf-8")
+    return [
+        line.strip()
+        for line in text.splitlines()
+        if line.strip() and not line.strip().startswith("#")
+    ]
+
+
+def _recursive_includes() -> dict[str, set[str]]:
+    """directory -> glob patterns declared by `recursive-include <dir> <patterns...>`."""
+    covered: dict[str, set[str]] = {}
+    for line in _manifest_lines():
+        parts = line.split()
+        if len(parts) >= 3 and parts[0] == "recursive-include":
+            covered.setdefault(parts[1], set()).update(parts[2:])
+    return covered
+
+
+def _test_suite_import_roots() -> set[str]:
+    """Top-level import names used by tests/ that are directories in this repo.
+
+    These are exactly the directories an sdist must carry or the test suite cannot
+    even be collected there. Computed, not enumerated, so the next one is caught
+    automatically — ooptdd/ was missed once and scripts/ was missed a second time.
+    """
+    roots: set[str] = set()
+    for path in sorted((REPO_ROOT / "tests").glob("*.py")):
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                roots.update(alias.name.split(".")[0] for alias in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.level == 0 and node.module:
+                roots.add(node.module.split(".")[0])
+    return {name for name in roots if (REPO_ROOT / name).is_dir()}
 
 
 def test_h3_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
@@ -89,12 +127,69 @@ def test_required_prom_fixture_is_content_addressed() -> None:
 
 
 def test_source_distribution_carries_the_default_test_surface() -> None:
-    manifest = (REPO_ROOT / "MANIFEST.in").read_text(encoding="utf-8").splitlines()
+    manifest = _manifest_lines()
+    covered = _recursive_includes()
 
     assert "include *.json" in manifest
     assert "include *.py" in manifest
-    assert "recursive-include receipts *.py *.json" in manifest
-    assert "recursive-include prom_search_hswm *.py *.json *.md *.mmd" in manifest
     assert "recursive-exclude prom_search_hswm/data *" in manifest
     assert "include prom_search_hswm/data/gold_badiou24.json" in manifest
-    assert "recursive-include _research *.py *.json *.md *.sh *.tsv" in manifest
+
+    # Patterns are asserted as a subset so that widening a line (adding *.sh, say)
+    # is not a test failure, while dropping a pattern still is.
+    required: dict[str, set[str]] = {
+        "receipts": {"*.py", "*.json"},
+        "prom_search_hswm": {"*.py", "*.json", "*.md", "*.mmd"},
+        "_research": {"*.py", "*.json", "*.md", "*.sh", "*.tsv"},
+    }
+    for directory, patterns in required.items():
+        assert patterns <= covered.get(directory, set()), (
+            f"MANIFEST.in dropped patterns for {directory}/: "
+            f"missing {sorted(patterns - covered.get(directory, set()))}"
+        )
+
+
+def test_sdist_carries_every_directory_the_test_suite_imports() -> None:
+    """The ooptdd/ and scripts/ omissions were the same bug twice. Ratchet it."""
+    import_roots = _test_suite_import_roots()
+
+    # Guard against a vacuous pass: if the scanner silently stops finding anything,
+    # this test must fail rather than green out.
+    assert {"ooptdd", "scripts"} <= import_roots, import_roots
+
+    covered = _recursive_includes()
+    project = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    packages = set(project["tool"]["setuptools"]["packages"])
+
+    for directory in sorted(import_roots):
+        assert "*.py" in covered.get(directory, set()), (
+            f"tests/ imports from {directory}/ but MANIFEST.in has no "
+            f"`recursive-include {directory} *.py` — it will be absent from the sdist"
+        )
+        if directory == "tests":
+            continue
+        assert directory in packages, (
+            f"tests/ imports from {directory}/ but [tool.setuptools].packages does "
+            f"not list it — it will be absent from the wheel"
+        )
+
+
+def test_sdist_carries_the_data_directories_the_tests_read() -> None:
+    """Non-importable directories the suite reads by path. Import scanning cannot
+    see these, so they are enumerated; each entry is a gap that was measured."""
+    covered = _recursive_includes()
+    required: dict[str, str] = {
+        "research": "*.json",  # HSWM_RESEARCH_LEDGER.v1.json + metric contract
+        "schemas": "*.json",  # schemas the two validators load
+        "docs": "*.md",  # docs/research/ARTIFACT_LAYOUT.md
+        "prereg": "*.json",
+        "evidence": "*.json",
+        "formal": "*.lean",
+        "results": "*.md",
+        "manifests": "*.json",
+    }
+    for directory, pattern in required.items():
+        assert (REPO_ROOT / directory).is_dir(), directory
+        assert pattern in covered.get(directory, set()), (
+            f"MANIFEST.in does not ship {directory}/{pattern} into the sdist"
+        )

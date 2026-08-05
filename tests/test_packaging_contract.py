@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 import tomllib
 
+import pytest
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -193,3 +195,44 @@ def test_sdist_carries_the_data_directories_the_tests_read() -> None:
         assert pattern in covered.get(directory, set()), (
             f"MANIFEST.in does not ship {directory}/{pattern} into the sdist"
         )
+
+
+def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
+    """★래칫이 실제로 래칫인가 — 산출물을 연다.
+
+    형제 테스트들은 MANIFEST.in/pyproject.toml 의 **텍스트**만 파싱한다. 그래서
+    MANIFEST.in 끝에 `prune scripts` 두 줄을 붙여도 전부 초록인데 빌드된 sdist 에는
+    scripts/ 가 0개이고 수집오류 2건이 되살아난다(2026-08-05 적대검증 실측).
+    텍스트를 읽는 계약은 계약이 아니라 주석이다.
+
+    여기서는 실제로 빌드해서 tar 안을 본다. 빌드 도구가 없으면 **시끄럽게** 건너뛴다 —
+    조용한 skip 은 통과와 구별되지 않는다.
+    """
+    import shutil
+    import subprocess
+    import tarfile
+    import tempfile
+
+    if shutil.which("uv") is None:
+        pytest.skip("uv 없음 — 이 래칫은 실제 빌드를 요구한다. 커버리지 구멍이며 통과가 아니다")
+
+    root = Path(__file__).resolve().parent.parent
+    with tempfile.TemporaryDirectory() as td:
+        proc = subprocess.run(["uv", "build", "--sdist", "--out-dir", td],
+                              cwd=root, capture_output=True, text=True, timeout=600)
+        assert proc.returncode == 0, proc.stderr[-2000:]
+        tarballs = list(Path(td).glob("*.tar.gz"))
+        assert len(tarballs) == 1, tarballs
+        with tarfile.open(tarballs[0]) as tar:
+            names = tar.getnames()
+
+    inner = [n.split("/", 1)[1] for n in names if "/" in n]
+    scripts_py = [n for n in inner if n.startswith("scripts/") and n.endswith(".py")]
+    assert scripts_py, "scripts/*.py 가 sdist 에 없다 — tests/ 가 그걸 import 한다"
+    assert any(n.startswith("ooptdd/") and n.endswith(".py") for n in inner), \
+        "ooptdd/ 가 sdist 에 없다"
+
+    # 루트 *.sh 는 배포하지 않는다: f3v2_smoke_preflight.sh 와
+    # bin_hswm_cellular_lakatotree_apply_remote.sh 가 SSH 호스트명을 담고 있다.
+    root_sh = [n for n in inner if "/" not in n and n.endswith(".sh")]
+    assert not root_sh, f"루트 셸 스크립트가 배포물에 실렸다(호스트명 유출): {root_sh}"

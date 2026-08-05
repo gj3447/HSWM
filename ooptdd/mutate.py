@@ -196,6 +196,7 @@ def _parse_indexed(module_path: str) -> ast.AST:
 class _SiteCollector(ast.NodeVisitor):
     def __init__(self) -> None:
         self.sites: list[MutationSite] = []
+        self.skip: set[int] = set()          # annotation subtrees — see _annotation_nodes
 
     def _add(self, node: ast.AST, kind: str, detail: str, op_index: int = 0) -> None:
         ordinal = node._mut_ord
@@ -204,27 +205,42 @@ class _SiteCollector(ast.NodeVisitor):
             node.lineno, kind, detail, node.col_offset, op_index, ordinal))
 
     def visit_Compare(self, node: ast.Compare) -> None:
+        if id(node) in self.skip:
+            self.generic_visit(node)
+            return
         for i, op in enumerate(node.ops):
             for repl in COMPARE_FLIPS.get(type(op), []):
                 self._add(node, "compare", f"{type(op).__name__}->{repl.__name__}", i)
         self.generic_visit(node)
 
     def visit_BinOp(self, node: ast.BinOp) -> None:
+        if id(node) in self.skip:
+            self.generic_visit(node)
+            return
         for repl in BINOP_FLIPS.get(type(node.op), []):
             self._add(node, "binop", f"{type(node.op).__name__}->{repl.__name__}")
         self.generic_visit(node)
 
     def visit_BoolOp(self, node: ast.BoolOp) -> None:
+        if id(node) in self.skip:
+            self.generic_visit(node)
+            return
         for repl in BOOLOP_FLIPS.get(type(node.op), []):
             self._add(node, "boolop", f"{type(node.op).__name__}->{repl.__name__}")
         self.generic_visit(node)
 
     def visit_UnaryOp(self, node: ast.UnaryOp) -> None:
+        if id(node) in self.skip:
+            self.generic_visit(node)
+            return
         if type(node.op) in UNARYOP_REMOVALS:
             self._add(node, "unaryop", f"{type(node.op).__name__}->remove")
         self.generic_visit(node)
 
     def visit_Call(self, node: ast.Call) -> None:
+        if id(node) in self.skip:
+            self.generic_visit(node)
+            return
         func = node.func
         is_clip = (
             isinstance(func, ast.Attribute) and func.attr in ("maximum", "clip")
@@ -287,9 +303,39 @@ class _Mutator(ast.NodeTransformer):
         return node
 
 
+def _annotation_nodes(tree: ast.AST) -> set[int]:
+    """id() of every node living inside a type annotation.
+
+    PEP 604 unions (`np.ndarray | None`) parse as BinOp(BitOr), so a spec-derived
+    operator table mutates them — and under `from __future__ import annotations`
+    the annotation is never evaluated, making every such mutant a PROVABLE no-op:
+    a guaranteed survivor reported as an undocumented open gap.
+
+    Measured 2026-08-05 (adversarial verification): weight_field.py went from
+    11 sites / 11 killed / 0 survivors — an exhaustive battery whose receipt is
+    chained at seq 64 declaring "Declared exclusions: none" — to 83 sites and
+    5 fabricated gaps, all BitOr mutations of `np.ndarray | None` at lines
+    37/67/85/107. Repo-wide, 602 of 750 bitwise BinOp nodes (80%) sit in
+    annotations, every one of them in a file carrying the future import.
+
+    This is the same rule the module already applies to UAdd: an operator that
+    mass-produces equivalents mass-produces undocumented survivors, so it is
+    refused at the source rather than left to the allowlist.
+    """
+    out: set[int] = set()
+    for node in ast.walk(tree):
+        for field in ("annotation", "returns"):
+            sub = getattr(node, field, None)
+            if sub is not None:
+                for n in ast.walk(sub):
+                    out.add(id(n))
+    return out
+
+
 def collect_sites(module_path: str) -> list[MutationSite]:
     tree = _parse_indexed(module_path)
     collector = _SiteCollector()
+    collector.skip = _annotation_nodes(tree)
     collector.visit(tree)
     return collector.sites
 

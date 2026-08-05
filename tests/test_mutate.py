@@ -303,3 +303,43 @@ def test_score_records_pool_and_operator_set(toy_repo):
 
 if __name__ == "__main__":
     raise SystemExit(pytest.main([__file__, "-q"]))
+
+
+def test_type_annotations_are_never_mutated(tmp_path):
+    """PEP 604 union 은 BinOp(BitOr) 로 파싱된다 — 명세 유도가 이걸 잡아먹는다.
+
+    `from __future__ import annotations` 하에서 어노테이션은 평가되지 않으므로
+    그 변이는 **증명 가능한 no-op** = 보장된 생존자 = 조작된 open gap 이다.
+    이건 UAdd 를 소스에서 배제한 것과 같은 규칙이다: 등가를 대량생산하는 연산자는
+    allowlist 에 맡기지 않고 원천에서 거절한다.
+
+    실측(2026-08-05 적대검증): 배제 전 weight_field.py 가 11 sites/11 killed/0 생존
+    (체인 seq 64, "Declared exclusions: none") → 83 sites/5 조작된 gap.
+    레포 전체로는 비트연산 BinOp 750개 중 602개(80%)가 어노테이션 안이었다.
+    """
+    mod = tmp_path / "m.py"
+    mod.write_text(
+        "from __future__ import annotations\n"
+        "import numpy as np\n"
+        "\n"
+        "def f(a: np.ndarray | None, b: int | None = None) -> np.ndarray | None:\n"
+        "    if a is None:\n"
+        "        return None\n"
+        "    return a + 1\n",
+        encoding="utf-8")
+    sites = collect_sites(str(mod))
+    lines = {s.lineno for s in sites}
+    assert 4 not in lines, f"어노테이션 행이 변이됐다: {[vars(s) for s in sites if s.lineno == 4]}"
+    # 본문의 진짜 연산자는 여전히 잡혀야 한다 — 배제가 과하면 그것도 죽는다
+    assert any(s.lineno == 7 and s.kind == "binop" for s in sites), \
+        "본문 `a + 1` 이 사라졌다 — 배제가 어노테이션 밖까지 먹었다"
+    assert any(s.lineno == 5 and s.kind == "compare" for s in sites), \
+        "본문 `a is None` 이 사라졌다"
+
+
+def test_annotation_exclusion_restores_the_weight_field_battery():
+    """배제가 실제로 그 영수증을 되살리는가 — 대상 파일로 직접 확인."""
+    sites = collect_sites("weight_field.py")
+    ann_lines = {37, 67, 85, 107}       # 반증이 지목한 `np.ndarray | None` 행
+    hit = [s for s in sites if s.lineno in ann_lines and s.kind == "binop"]
+    assert not hit, f"어노테이션 행의 binop 이 남아 있다: {[(s.lineno, s.detail) for s in hit]}"

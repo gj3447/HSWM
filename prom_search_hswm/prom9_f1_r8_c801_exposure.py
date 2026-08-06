@@ -179,7 +179,9 @@ _EVIDENCE_SHA256 = {
     "job_log": "ce5c4fd3e64d2cfb7aebb52d43310a1da4473fb4d01b154de9b8f0ae93628f95",
     "job_rc": "9d9b18720961e9b4689fd763b85e7b6f36160ccd3a8a1c9ddc5103bb0f66c396",
     "systemd_journal": "b542b62eab08d1f16b1e4878700392b2abc77e3a509d5c119687543afaec1630",
-    "runner_command": "7c28691ddfaf0815f1239d8f37715247113251472c9f602154c5f5bef89415c0",
+    # The launch wrapper only creates the tmux session.  The job body is the
+    # authority that carries the frozen run ID, roots, and runner arguments.
+    "runner_command": "724e075b69a57f293d27c0191fa380c1a217f3e42171d02312dc8782a064b01e",
     "post_oom_runner_log": "bad3cb89691419026840a1ffec4bb8a67cc28d9d7c5d46695c2bf76b1964842d",
     "post_oom_spool_log": "cd047bef0d23fb8e73487127f5afdd8efb9c40d18d3a9cbc524e62d7cc33d6bf",
 }

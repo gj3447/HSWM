@@ -1449,12 +1449,12 @@ def _validate_aborted_attempt_exposure_gate(
     execution_lock: Mapping[str, object],
 ) -> str:
     development_execution = execution_lock.get("schema_version") == EXECUTION_LOCK_SCHEMA
-    if (
-        development_execution
-        and execution_lock.get("run_id") != F1_R8_A3_SUCCESSOR_RUN_ID
+    if development_execution and execution_lock.get("run_id") not in (
+        F1_R8_A3_SUCCESSOR_RUN_ID,
+        C800_DEVELOPMENT_RUN_ID,
     ):
         raise R8RunnerRefusal(
-            "development execution requires the fresh a3 successor identity"
+            "development execution requires a ratified development identity"
         )
     try:
         receipt_sha = (

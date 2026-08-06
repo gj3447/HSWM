@@ -932,6 +932,8 @@ def _sealed_preregistration_context(
         }
     )
     c801_generation = run_id == runner.C801_SEALED_RUN_ID
+    if c801_generation:
+        lock["execution_policy"] = _c801_policy()
     artifact_unsigned = {
         "schema_version": runner.PREREGISTRATION_ARTIFACT_SCHEMA,
         "purpose": sealed_contract["purpose"],

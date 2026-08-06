@@ -29,8 +29,8 @@ from prom_search_hswm.prom9_f1_r8_envelope_v5 import (
     DEVELOPMENT_RUN_ID_C800,
 )
 from prom_search_hswm.prom9_f1_r8_power import (
-    evaluator_selected_entries,
-    selected_entries,
+    _decode_gold_selected_block,
+    _selected_entries_unverified,
 )
 from prom_search_hswm.prom9_f1_r8_selection_v5 import (
     verify_gold_source_receipt_v5,
@@ -106,9 +106,15 @@ def main(argv: list[str] | None = None) -> int:
         verify_gold_source_receipt_v5(gold_source, selection)
         gold_source_sha = str(gold_source["gold_source_receipt_sha256"])
 
-        public_rows = selected_entries(selection, args.selection_cohort)
-        evaluator_rows = evaluator_selected_entries(
-            selection, gold_source, args.selection_cohort
+        # The v4 accessors (selected_entries / evaluator_selected_entries)
+        # re-verify against the v3/v4 schemas; both v5 receipts were already
+        # verified above, so read the blocks with the unverified accessors.
+        cohort_block = selection.get(args.selection_cohort)
+        if not isinstance(cohort_block, dict):
+            raise R8SourceRefusal("v5 selection cohort block is absent")
+        public_rows = _selected_entries_unverified(cohort_block)
+        evaluator_rows = _decode_gold_selected_block(
+            gold_source, args.selection_cohort
         )
         if (
             len(public_rows) != contract["length"]

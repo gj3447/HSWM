@@ -52,9 +52,11 @@ from prom_search_hswm.prom9_f1_r8_power import (
 from prom_search_hswm.prom9_f1_r8_power_v6 import (
     JUDGE_CAPABILITY_V1,
     _load_c801_judge_core,
+    _validate_c801_judge_capability_value,
 )
 from prom_search_hswm.prom9_f1_r8_runner import (
     EXECUTION_LOCK_SCHEMA,
+    _validate_execution_policy_for_run,
     build_development_execution_lock,
     capture_judge_hashes,
     read_stable_bytes,
@@ -147,6 +149,7 @@ def _validate_c801_judge_capability(
     *,
     expected_file_sha256: str | None = None,
     expected_core_sha256: str | None = None,
+    expected_derivation_sha256: str | None = None,
 ) -> None:
     """Import the frozen judge and require its exact zero-call c801 contract."""
 
@@ -154,12 +157,17 @@ def _validate_c801_judge_capability(
         judge = _load_c801_judge_core(
             judge_core_path,
             expected_file_sha256=expected_file_sha256,
+            expected_derivation_sha256=expected_derivation_sha256,
         )
         capability = judge.c801_preflight_contract()
     except Exception as error:
         raise LockRefusal("c801 judge capability preflight failed") from error
-    if capability != JUDGE_CAPABILITY_V1:
-        raise LockRefusal("frozen judge is not c801 scientific authority")
+    try:
+        _validate_c801_judge_capability_value(
+            capability, expected_derivation_sha256=expected_derivation_sha256
+        )
+    except Exception as error:
+        raise LockRefusal("frozen judge is not c801 scientific authority") from error
     if (
         expected_core_sha256 is not None
         and getattr(judge, "__hswm_captured_core_sha256__", None)
@@ -409,6 +417,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
+        execution_policy = {
+            "endpoint": args.endpoint,
+            "max_workers": args.max_workers,
+            "timeout_seconds": args.timeout_seconds,
+            "max_delivery_attempts": args.max_delivery_attempts,
+            "spool_token_env": args.spool_token_env,
+        }
+        _validate_execution_policy_for_run(
+            execution_policy, run_id=C801_DEVELOPMENT_RUN_ID
+        )
         manifest = _read(args.manifest, "development manifest")
         selection, _selection_file_sha = _read_bound_selection_json(
             args.selection_receipt, "v6 cohort selection receipt"
@@ -595,6 +613,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             args.judge_core,
             expected_file_sha256=judge_core_file_sha,
             expected_core_sha256=judge_core_sha,
+            expected_derivation_sha256=derivation_sha,
         )
         _validate_fresh_judge_authority(
             dependencies,
@@ -634,13 +653,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "source_entity_ids"
             ],
             forbidden_prior_component_ids=exposure_boundary["component_ids"],
-            execution_policy={
-                "endpoint": args.endpoint,
-                "max_workers": args.max_workers,
-                "timeout_seconds": args.timeout_seconds,
-                "max_delivery_attempts": args.max_delivery_attempts,
-                "spool_token_env": args.spool_token_env,
-            },
+            execution_policy=execution_policy,
         )
         write_private_once(args.output, lock)
     except Exception as error:

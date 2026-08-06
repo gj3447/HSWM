@@ -33,6 +33,7 @@ from prom_search_hswm.prom9_f1_r8_power_v6 import (
     UTILITY_METRIC,
     PowerRefusal,
     _load_c801_judge_core,
+    _validate_c801_judge_capability_value,
 )
 
 
@@ -105,17 +106,32 @@ def _receipt() -> tuple[
 ]:
     components = _components()
     characteristics = _characteristics()
+    execution_policy = {
+        "endpoint": "https://spool.invalid",
+        "max_workers": 1,
+        "timeout_seconds": 180,
+        "max_delivery_attempts": 8,
+        "spool_token_env": "SPOOL_CLIENT_TOKEN",
+    }
     evidence = {
         "schema_version": POWER_EVIDENCE_SCHEMA_V6,
         "manifest": {},
-        "execution_lock": {"judge_core_file_sha256": JUDGE_FILE_SHA},
+        "execution_lock": {
+            "run_id": "f1-2wiki-development-r8-c801",
+            "judge_core_file_sha256": JUDGE_FILE_SHA,
+            "token_envelope_derivation_receipt_sha256": "d" * 64,
+            "execution_policy": execution_policy,
+        },
         "public_source_receipt": {},
         "selection_receipt": {},
         "predecessor_selection_receipt": {},
         "gold_source_receipt": {},
         "prior_exposure_receipt": {},
         "aborted_attempt_exposure_receipt": {},
-        "suite": {},
+        "suite": {
+            "execution_policy": copy.deepcopy(execution_policy),
+            "max_workers": 1,
+        },
         "evaluator_receipt": {},
         "gold": {},
         "db_genesis_receipt": {},
@@ -200,6 +216,32 @@ def test_power_gate_accepts_exact_c801_receipt(
     assert cli.verify_power_operating_characteristics(
         receipt, judge_core_path=Path("judge.py")
     ) == receipt["receipt_sha256"]
+
+
+def test_power_gate_refuses_coordinated_c801_policy_drift(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    receipt, components, characteristics = _receipt()
+    evidence = receipt["development_evidence"]
+    assert isinstance(evidence, dict)
+    execution_lock = evidence["execution_lock"]
+    suite = evidence["suite"]
+    assert isinstance(execution_lock, dict) and isinstance(suite, dict)
+    lock_policy = execution_lock["execution_policy"]
+    assert isinstance(lock_policy, dict)
+    lock_policy["max_workers"] = 2
+    suite["execution_policy"] = copy.deepcopy(lock_policy)
+    suite["max_workers"] = 2
+    _resign(receipt)
+    monkeypatch.setattr(
+        cli,
+        "_load_c801_judge_core",
+        lambda *_args, **_kwargs: _judge(components, characteristics),
+    )
+    with pytest.raises(cli.PowerCLIRefusal, match="c801 execution policy drifted"):
+        cli.verify_power_operating_characteristics(
+            receipt, judge_core_path=Path("judge.py")
+        )
 
 
 @pytest.mark.parametrize(
@@ -287,6 +329,19 @@ def test_stable_judge_loader_executes_only_the_captured_authority(
     assert len(module.__hswm_captured_core_sha256__) == 64
     with pytest.raises(PowerRefusal, match="dependency receipt"):
         _load_c801_judge_core(path, expected_file_sha256="f" * 64)
+
+
+def test_judge_capability_binds_the_prospective_derivation_pin() -> None:
+    derivation_sha = "d" * 64
+    capability = copy.deepcopy(JUDGE_CAPABILITY_V1)
+    capability["token_envelope_derivation_receipt_sha256"] = derivation_sha
+    assert _validate_c801_judge_capability_value(
+        capability, expected_derivation_sha256=derivation_sha
+    ) == capability
+    with pytest.raises(PowerRefusal, match="differs from the execution lock"):
+        _validate_c801_judge_capability_value(
+            capability, expected_derivation_sha256="e" * 64
+        )
 
 
 def test_private_reader_refuses_oversize_before_allocation(tmp_path: Path) -> None:

@@ -175,6 +175,9 @@ UTILITY_FALSIFICATION_CONDITION = {
 C801_CREDENCE_ALTERNATIVES = (0.25, 0.50)
 # This stays fail-closed until the user ratifies exactly one alternative.
 C801_CREDENCE_SELECTED: float | None = None
+C801_MAX_WORKERS = 1
+C801_TIMEOUT_SECONDS = 180
+C801_MAX_DELIVERY_ATTEMPTS = 8
 C801_BOOTSTRAP = {
     "reps": 10000,
     "seed": 20260724,
@@ -743,6 +746,23 @@ def _validate_execution_policy_value(value: object) -> dict[str, object]:
     ):
         raise R8RunnerRefusal("execution policy values are invalid")
     return dict(value)
+
+
+def _validate_execution_policy_for_run(
+    value: object, *, run_id: object
+) -> dict[str, object]:
+    """Validate the generic policy and the stricter c801 execution contract."""
+
+    policy = _validate_execution_policy_value(value)
+    if run_id in {C801_DEVELOPMENT_RUN_ID, C801_SEALED_RUN_ID} and (
+        policy["max_workers"] != C801_MAX_WORKERS
+        or float(policy["timeout_seconds"]) != float(C801_TIMEOUT_SECONDS)
+        or policy["max_delivery_attempts"] != C801_MAX_DELIVERY_ATTEMPTS
+    ):
+        raise R8RunnerRefusal(
+            "c801 execution policy must be exactly 1 worker / 180s / 8 attempts"
+        )
+    return policy
 
 
 def _validate_deployment_binding(
@@ -2137,7 +2157,10 @@ def validate_execution_policy(
     max_delivery_attempts: int,
     spool_token_env: str | None,
 ) -> None:
-    expected = _validate_execution_policy_value(execution_lock.get("execution_policy"))
+    expected = _validate_execution_policy_for_run(
+        execution_lock.get("execution_policy"),
+        run_id=execution_lock.get("run_id"),
+    )
     observed = {
         "endpoint": endpoint,
         "max_workers": max_workers,
@@ -2885,7 +2908,9 @@ def build_development_execution_lock(
         raise R8RunnerRefusal("development execution lock requires manifest v3/development")
     if manifest.get("preregistration_artifact_sha256") is not None:
         raise R8RunnerRefusal("development execution lock cannot bind preregistration")
-    normalized_policy = _validate_execution_policy_value(execution_policy)
+    normalized_policy = _validate_execution_policy_for_run(
+        execution_policy, run_id=manifest.get("run_id")
+    )
     for value, label in (
         (selection_receipt_sha256, "selection receipt"),
         (prior_exposure_receipt_sha256, "prior-exposure receipt"),
@@ -3085,7 +3110,9 @@ def validate_manifest_v3(
             raise R8RunnerRefusal("unsupported sealed r8/try3 measurement lock")
     else:
         raise R8RunnerRefusal("manifest mode must be development or sealed")
-    _validate_execution_policy_value(execution_lock.get("execution_policy"))
+    _validate_execution_policy_for_run(
+        execution_lock.get("execution_policy"), run_id=manifest.get("run_id")
+    )
     _deployment_binding_from_lock(execution_lock)
     for field in _DEVELOPMENT_LOCK_FIELDS:
         if field.endswith("_sha256") and field != "preregistration_artifact_sha256":
@@ -3613,7 +3640,9 @@ def _verify_execution_structure(
     assert isinstance(gates, Mapping)
     if len(rows) != gates.get("expected_item_runs"):
         raise R8RunnerRefusal("suite item-run count differs from gates")
-    policy = _validate_execution_policy_value(value.get("execution_policy"))
+    policy = _validate_execution_policy_for_run(
+        value.get("execution_policy"), run_id=run_id
+    )
     if value.get("max_workers") != policy.get("max_workers"):
         raise R8RunnerRefusal("suite max_workers differs from execution policy")
     deployment_binding = _deployment_binding_from_lock(value)
@@ -3778,7 +3807,10 @@ def run_suite_v3_draft(
         verify_live_process=not offline_complete_resume,
     )
     _validate_deployment_binding(execution_lock, deployment_binding)
-    policy = _validate_execution_policy_value(execution_lock.get("execution_policy"))
+    policy = _validate_execution_policy_for_run(
+        execution_lock.get("execution_policy"),
+        run_id=execution_lock.get("run_id"),
+    )
     if max_workers != policy.get("max_workers"):
         raise R8RunnerRefusal("direct API max_workers differs from execution lock")
     port_policy = {

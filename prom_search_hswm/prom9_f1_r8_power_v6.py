@@ -57,6 +57,12 @@ from prom_search_hswm.prom9_f1_r8_selection_v6 import (
     replay_selection_receipt_v6,
     verify_gold_source_receipt_v6,
 )
+from prom_search_hswm.prom9_f1_r8_runner import (
+    C801_MAX_DELIVERY_ATTEMPTS,
+    C801_MAX_WORKERS,
+    C801_TIMEOUT_SECONDS,
+    _validate_execution_policy_for_run,
+)
 
 
 POWER_RECEIPT_SCHEMA_V6 = (
@@ -116,9 +122,46 @@ JUDGE_CAPABILITY_V1 = {
     "minimum_clusters": SELECTED_CLUSTERS_V6,
     "mde": MDE_V6,
     "target_power": TARGET_POWER_V6,
+    "max_workers": C801_MAX_WORKERS,
+    "timeout_seconds": C801_TIMEOUT_SECONDS,
+    "max_delivery_attempts": C801_MAX_DELIVERY_ATTEMPTS,
+    # The prospective judge changes this field from None to the exact
+    # zero-call derivation receipt.  Fixed capability fields remain immutable.
+    "token_envelope_derivation_receipt_sha256": None,
 }
 _MAX_JUDGE_BYTES = 8 * 1024 * 1024
 _JUDGE_LOCK_ANCHOR = "__F1_R8_MEASUREMENT_LOCK_SHA256_UNFROZEN__"
+_SHA256 = re.compile(r"^[0-9a-f]{64}$")
+
+
+def _validate_c801_judge_capability_value(
+    value: object, *, expected_derivation_sha256: str | None = None
+) -> dict[str, object]:
+    """Validate fixed judge authority plus its prospective derivation pin."""
+
+    if not isinstance(value, Mapping) or set(value) != set(JUDGE_CAPABILITY_V1):
+        raise PowerRefusal("frozen judge is not c801 scientific authority")
+    dynamic_field = "token_envelope_derivation_receipt_sha256"
+    if any(
+        value.get(field) != expected
+        for field, expected in JUDGE_CAPABILITY_V1.items()
+        if field != dynamic_field
+    ):
+        raise PowerRefusal("frozen judge is not c801 scientific authority")
+    declared = value.get(dynamic_field)
+    if expected_derivation_sha256 is None:
+        if declared is not None and (
+            not isinstance(declared, str) or _SHA256.fullmatch(declared) is None
+        ):
+            raise PowerRefusal("frozen judge derivation capability is malformed")
+    elif (
+        _SHA256.fullmatch(expected_derivation_sha256) is None
+        or declared != expected_derivation_sha256
+    ):
+        raise PowerRefusal(
+            "frozen judge derivation capability differs from the execution lock"
+        )
+    return dict(value)
 
 
 def _capture_judge_bytes(path: Path) -> tuple[bytes, str, str]:
@@ -180,7 +223,10 @@ def _capture_judge_bytes(path: Path) -> tuple[bytes, str, str]:
 
 
 def _load_c801_judge_core(
-    path: Path, *, expected_file_sha256: str | None = None
+    path: Path,
+    *,
+    expected_file_sha256: str | None = None,
+    expected_derivation_sha256: str | None = None,
 ):
     raw, file_sha256, core_sha256 = _capture_judge_bytes(path)
     if expected_file_sha256 is not None and file_sha256 != expected_file_sha256:
@@ -205,8 +251,9 @@ def _load_c801_judge_core(
         capability = module.c801_preflight_contract()
     except Exception as error:
         raise PowerRefusal("frozen c801 judge capability preflight failed") from error
-    if capability != JUDGE_CAPABILITY_V1:
-        raise PowerRefusal("frozen judge is not c801 scientific authority")
+    _validate_c801_judge_capability_value(
+        capability, expected_derivation_sha256=expected_derivation_sha256
+    )
     module.__hswm_captured_file_sha256__ = file_sha256
     module.__hswm_captured_core_sha256__ = core_sha256
     return module
@@ -288,6 +335,13 @@ def build_power_receipt_v6(
         or execution_lock.get("purpose") != "DEVELOPMENT_POWER_PILOT"
     ):
         raise PowerRefusal("power inputs are not the ratified c801 development graph")
+    try:
+        execution_policy = _validate_execution_policy_for_run(
+            execution_lock.get("execution_policy"),
+            run_id=execution_lock.get("run_id"),
+        )
+    except Exception as error:
+        raise PowerRefusal("c801 execution policy drifted") from error
     for lock_field, boundary_field in (
         ("forbidden_prior_item_ids", "item_ids"),
         ("forbidden_prior_source_entity_ids", "source_entity_ids"),
@@ -416,13 +470,11 @@ def build_power_receipt_v6(
     parity = suite.get("token_parity")
     transport = suite.get("transport_audit")
     runs = suite.get("item_runs")
-    execution_policy = execution_lock.get("execution_policy")
     if (
         not isinstance(parity, Mapping)
         or parity.get("all_within_tolerance") is not True
         or not isinstance(transport, Mapping)
         or not isinstance(runs, list)
-        or not isinstance(execution_policy, Mapping)
     ):
         raise PowerRefusal("c801 terminal transport or token parity is absent")
     _verify_token_blocks(suite, runs)
@@ -430,6 +482,7 @@ def build_power_receipt_v6(
         transport.get("call_count") != len(runs) * 3
         or transport.get("item_run_count") != len(runs)
         or transport.get("status_counts") != {"ACCEPTED": len(runs) * 3}
+        or suite.get("execution_policy") != execution_policy
         or suite.get("max_workers") != execution_policy.get("max_workers")
     ):
         raise PowerRefusal("c801 terminal counts or execution policy drifted")
@@ -480,6 +533,9 @@ def build_power_receipt_v6(
     judge = _load_c801_judge_core(
         judge_core_path,
         expected_file_sha256=str(judge_row["sha256"]),
+        expected_derivation_sha256=str(
+            execution_lock.get("token_envelope_derivation_receipt_sha256")
+        ),
     )
     judge_core_sha = str(judge.__hswm_captured_core_sha256__)
     if judge_core_sha != execution_lock.get("judge_core_sha256"):

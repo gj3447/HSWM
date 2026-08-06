@@ -498,6 +498,56 @@ def _policy() -> dict[str, object]:
     }
 
 
+def _c801_policy() -> dict[str, object]:
+    value = _policy()
+    value["max_workers"] = runner.C801_MAX_WORKERS
+    value["timeout_seconds"] = runner.C801_TIMEOUT_SECONDS
+    value["max_delivery_attempts"] = runner.C801_MAX_DELIVERY_ATTEMPTS
+    return value
+
+
+def test_c801_execution_policy_is_exact_without_rewriting_historical_runs() -> None:
+    assert runner._validate_execution_policy_for_run(
+        _c801_policy(), run_id=runner.C801_DEVELOPMENT_RUN_ID
+    ) == _c801_policy()
+    assert runner._validate_execution_policy_for_run(
+        _c801_policy(), run_id=runner.C801_SEALED_RUN_ID
+    ) == _c801_policy()
+    assert runner._validate_execution_policy_for_run(
+        _policy(), run_id=runner.DEVELOPMENT_RUN_ID
+    ) == _policy()
+
+    for field, replacement in (
+        ("max_workers", 2),
+        ("timeout_seconds", 181.0),
+        ("max_delivery_attempts", 7),
+    ):
+        drifted = _c801_policy()
+        drifted[field] = replacement
+        with pytest.raises(R8RunnerRefusal, match="exactly 1 worker / 180s / 8"):
+            runner._validate_execution_policy_for_run(
+                drifted, run_id=runner.C801_DEVELOPMENT_RUN_ID
+            )
+
+
+def test_c801_runtime_policy_rejects_coordinated_lock_and_cli_drift() -> None:
+    drifted = _c801_policy()
+    drifted["max_workers"] = 2
+    lock = {
+        "run_id": runner.C801_DEVELOPMENT_RUN_ID,
+        "execution_policy": drifted,
+    }
+    with pytest.raises(R8RunnerRefusal, match="exactly 1 worker / 180s / 8"):
+        validate_execution_policy(
+            lock,
+            endpoint=str(drifted["endpoint"]),
+            max_workers=int(drifted["max_workers"]),
+            timeout_seconds=float(drifted["timeout_seconds"]),
+            max_delivery_attempts=int(drifted["max_delivery_attempts"]),
+            spool_token_env=str(drifted["spool_token_env"]),
+        )
+
+
 def _empty_spool_audit() -> dict[str, object]:
     unsigned = {
         "schema_version": SPOOL_SCHEMA,

@@ -142,6 +142,28 @@ def test_c801_judge_capability_preflight_is_exact(
     )
     lock_v6._validate_c801_judge_capability(tmp_path / "judge.py")
 
+    derivation_sha = "8" * 64
+
+    class PinnedJudge:
+        @staticmethod
+        def c801_preflight_contract() -> dict[str, object]:
+            value = copy.deepcopy(lock_v6.JUDGE_CAPABILITY_V1)
+            value["token_envelope_derivation_receipt_sha256"] = derivation_sha
+            return value
+
+    monkeypatch.setattr(
+        lock_v6,
+        "_load_c801_judge_core",
+        lambda _path, **_kwargs: PinnedJudge(),
+    )
+    lock_v6._validate_c801_judge_capability(
+        tmp_path / "judge.py", expected_derivation_sha256=derivation_sha
+    )
+    with pytest.raises(lock_v6.LockRefusal, match="not c801 scientific authority"):
+        lock_v6._validate_c801_judge_capability(
+            tmp_path / "judge.py", expected_derivation_sha256="9" * 64
+        )
+
     class DriftedJudge:
         @staticmethod
         def c801_preflight_contract() -> dict[str, object]:
@@ -161,6 +183,64 @@ def test_c801_judge_capability_preflight_is_exact(
     monkeypatch.setattr(lock_v6, "_load_c801_judge_core", refuse)
     with pytest.raises(lock_v6.LockRefusal, match="capability preflight failed"):
         lock_v6._validate_c801_judge_capability(tmp_path / "judge.py")
+
+
+def test_lock_cli_refuses_c801_policy_drift_before_reading_inputs(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    reads: list[Path] = []
+    monkeypatch.setattr(
+        lock_v6,
+        "_read",
+        lambda path, _label: reads.append(path),
+    )
+    path_options = (
+        "manifest",
+        "selection-receipt",
+        "predecessor-selection-receipt",
+        "predecessor-execution-lock",
+        "source-receipt",
+        "evaluator-receipt",
+        "db-genesis-receipt",
+        "environment-dependency-bundle",
+        "token-envelope-derivation-receipt",
+        "historical-manifest",
+        "token-meter-validation-receipt",
+        "projected-outputs-receipt",
+        "token-meter-source-suite",
+        "prior-exposure-receipt",
+        "aborted-attempt-exposure-receipt",
+        "protocol",
+        "judge-core",
+        "result-contract",
+        "tokenizer-dir",
+        "model-catalog",
+        "model-weight-receipt",
+        "python-lock",
+        "symposium-repo-root",
+        "output",
+    )
+    argv: list[str] = []
+    for option in path_options:
+        argv.extend((f"--{option}", str(tmp_path / option)))
+    argv.extend(
+        (
+            "--endpoint",
+            "https://spool.invalid",
+            "--upstream-endpoint",
+            "https://model.invalid/v1/chat/completions",
+            "--max-workers",
+            "2",
+            "--timeout-seconds",
+            "180",
+            "--max-delivery-attempts",
+            "8",
+            "--spool-token-env",
+            "SPOOL_CLIENT_TOKEN",
+        )
+    )
+    assert lock_v6.main(argv) == 1
+    assert reads == []
 
 
 def test_result_contract_authority_is_receipt_bound() -> None:

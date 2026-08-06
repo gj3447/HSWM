@@ -28,6 +28,7 @@ from prom_search_hswm.prom9_f1_prior_exposure import (
     write_private_once,
 )
 from prom_search_hswm.prom9_f1_r8_c801_exposure import (
+    C801_DEVELOPMENT_RUN_ID,
     merge_c801_exposure_boundaries,
     verify_f1_r8_successor_exposure_set_v2,
 )
@@ -64,7 +65,10 @@ from prom_search_hswm.prom9_f1_r8_power_v6 import (
 from prom_search_hswm.prom9_f1_r8_selection_v5 import (
     verify_selection_receipt_v5,
 )
-from prom_search_hswm.prom9_f1_r8_runner import read_stable_json
+from prom_search_hswm.prom9_f1_r8_runner import (
+    _validate_execution_policy_for_run,
+    read_stable_json,
+)
 
 
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
@@ -431,6 +435,21 @@ def verify_power_operating_characteristics(
     execution_lock = _mapping(
         evidence.get("execution_lock"), "development execution lock"
     )
+    if execution_lock.get("run_id") != C801_DEVELOPMENT_RUN_ID:
+        raise PowerCLIRefusal("power receipt is not c801 development evidence")
+    try:
+        execution_policy = _validate_execution_policy_for_run(
+            execution_lock.get("execution_policy"),
+            run_id=execution_lock.get("run_id"),
+        )
+    except Exception as error:
+        raise PowerCLIRefusal("c801 execution policy drifted") from error
+    suite = _mapping(evidence.get("suite"), "terminal development suite")
+    if (
+        suite.get("execution_policy") != execution_policy
+        or suite.get("max_workers") != execution_policy.get("max_workers")
+    ):
+        raise PowerCLIRefusal("c801 terminal execution policy drifted")
     environment_bundle = _mapping(
         evidence.get("environment_dependency_bundle"),
         "environment/dependency bundle",
@@ -446,12 +465,17 @@ def verify_power_operating_characteristics(
         execution_lock.get("judge_core_file_sha256"),
         "execution-lock judge file",
     )
+    expected_derivation_sha = _sha256(
+        execution_lock.get("token_envelope_derivation_receipt_sha256"),
+        "execution-lock token-envelope derivation receipt",
+    )
     if judge_row.get("sha256") != expected_judge_file_sha:
         raise PowerCLIRefusal("judge file differs from the frozen dependency graph")
     try:
         judge = _load_c801_judge_core(
             judge_core_path,
             expected_file_sha256=expected_judge_file_sha,
+            expected_derivation_sha256=expected_derivation_sha,
         )
         selection = _mapping(
             evidence.get("selection_receipt"), "development selection receipt"

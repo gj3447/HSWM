@@ -1846,15 +1846,9 @@ def verify_f1_r8_successor_exposure_set_v2(value: Mapping[str, object]) -> str:
 def build_f1_r8_successor_exposure_set_v2(
     predecessor_exposure_set: Mapping[str, object],
     c800_incident: Mapping[str, object],
-    *,
-    require_c800_pin: bool = True,
 ) -> dict[str, object]:
     predecessor_sha = verify_f1_r8_successor_exposure_set(predecessor_exposure_set)
-    incident_sha = (
-        verify_c800_incident_exposure(c800_incident)
-        if require_c800_pin
-        else _verify_c800_incident_unpinned(c800_incident)
-    )
+    incident_sha = verify_c800_incident_exposure(c800_incident)
     predecessor_aggregate = verified_aborted_attempt_aggregate(predecessor_exposure_set)
     incident_aggregate = _verify_exposure_aggregate(c800_incident.get("aggregate"))
     unsigned = {
@@ -1889,7 +1883,7 @@ def build_f1_r8_successor_exposure_set_v2(
         **unsigned,
         "aborted_attempt_exposure_receipt_sha256": canonical_sha256(unsigned),
     }
-    _verify_successor_v2_unpinned(result)
+    verify_f1_r8_successor_exposure_set_v2(result)
     return result
 
 

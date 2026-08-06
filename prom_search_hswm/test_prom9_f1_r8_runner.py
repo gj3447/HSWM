@@ -175,7 +175,21 @@ def test_a3_exposure_gate_requires_exact_successor_wrapper(
     assert calls == ["exact"]
 
     calls.clear()
-    with pytest.raises(runner.R8RunnerRefusal, match="fresh a3"):
+    assert runner._validate_aborted_attempt_exposure_gate(
+        {"kind": "successor-wrapper"},
+        prior_exposure_receipt={},
+        execution_lock={
+            "schema_version": runner.EXECUTION_LOCK_SCHEMA,
+            "run_id": runner.C800_DEVELOPMENT_RUN_ID,
+            "aborted_attempt_exposure_receipt_sha256": receipt_sha,
+        },
+    ) == receipt_sha
+    assert calls == ["exact"]
+
+    calls.clear()
+    with pytest.raises(
+        runner.R8RunnerRefusal, match="ratified development identity"
+    ):
         runner._validate_aborted_attempt_exposure_gate(
             {"kind": "legacy-incident"},
             prior_exposure_receipt={},

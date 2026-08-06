@@ -1641,7 +1641,8 @@ def build_c800_incident_exposure(
         or b"dt-hswm-f1-r8-vllm-canary-triton-1025982.scope" not in journal_raw
         or b"kernel OOM killer killed some processes in this unit" not in journal_raw
         or b"Failed with result 'oom-kill'" not in journal_raw
-        or C800_RUN_ID.encode() not in runner_raw
+        or b"-m prom_search_hswm.prom9_f1_r8_runner run" not in runner_raw
+        or b'--manifest "$DEV/manifest.json"' not in runner_raw
         or b"ROOT=/data/kjra/PROJECT/PI/hswm_f1_r8_c800_20260805" not in runner_raw
         or b"--attempt-db" not in runner_raw
         or b"--spool-db" not in runner_raw

@@ -265,7 +265,8 @@ def _build_selection_receipt_v6(
     if len(eligible_dev) < development_components:
         raise PowerRefusal(
             "v6 development pool has fewer prior-fresh components than the "
-            "ratified cohort"
+            f"ratified cohort ({len(eligible_dev)} available; "
+            f"{development_components} required)"
         )
     development_selected = sorted(
         eligible_dev,
@@ -342,7 +343,8 @@ def _build_selection_receipt_v6(
     if len(eligible_confirmatory) < confirmatory_items:
         raise PowerRefusal(
             "v6 confirmatory pool has fewer fresh singleton components than the "
-            "ratified cohort"
+            f"ratified cohort ({len(eligible_confirmatory)} available; "
+            f"{confirmatory_items} required)"
         )
     confirmatory_selected = sorted(
         eligible_confirmatory,

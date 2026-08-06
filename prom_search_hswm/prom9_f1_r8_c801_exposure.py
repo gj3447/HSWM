@@ -102,7 +102,9 @@ _C800_SCHEMA_AUTHORITIES = {"attempt": "attempt", "spool": "spool"}
 # Filled only after the real public receipt has been generated twice from the
 # frozen c800 evidence and exact read back.  Production verification fails
 # closed while the pin is absent.
-C800_INCIDENT_RECEIPT_SHA256: str | None = None
+C800_INCIDENT_RECEIPT_SHA256: str | None = (
+    "31aec883400a2c3b67991092c6e584b06fab8fc4550ced7d1385e628571dc90d"
+)
 
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _GIT_COMMIT = re.compile(r"^[0-9a-f]{40}$")

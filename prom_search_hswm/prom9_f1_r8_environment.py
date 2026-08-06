@@ -125,6 +125,10 @@ R8_DEPENDENCY_NAMES: tuple[str, ...] = (
 # Compatibility name for in-flight consumers; this is an alias, not a second
 # inventory.  All measured paths compare against the same tuple above.
 R8_REQUIRED_DEPENDENCY_NAMES = R8_DEPENDENCY_NAMES
+R8_C801_DEPENDENCY_NAMES: tuple[str, ...] = (
+    *R8_DEPENDENCY_NAMES,
+    "selection_builder",
+)
 R8_COMMIT_BOUND_DEPENDENCY_NAMES = frozenset(
     {
         "runner",
@@ -154,6 +158,9 @@ R8_COMMIT_BOUND_DEPENDENCY_NAMES = frozenset(
         "model_snapshot_attestation_core",
         "data_preparer",
     }
+)
+R8_C801_ADDITIONAL_COMMIT_BOUND_DEPENDENCY_NAMES = frozenset(
+    {"selection_builder"}
 )
 R8_SYMPOSIUM_COMMIT_BOUND_DEPENDENCY_NAMES = frozenset({"judge_core"})
 
@@ -1019,6 +1026,43 @@ def r8_dependency_paths(
     return paths
 
 
+def r8_c801_dependency_paths(
+    *,
+    protocol_path: Path,
+    judge_core_path: Path,
+    result_contract_path: Path,
+    tokenizer_dir: Path,
+    model_catalog_path: Path,
+    model_weight_receipt_path: Path,
+    python_lock_path: Path,
+) -> dict[str, Path]:
+    """Return the c801 generation's closed-world semantic dependency map."""
+
+    module_dir = Path(__file__).resolve().parent
+    paths = r8_dependency_paths(
+        protocol_path=protocol_path,
+        judge_core_path=judge_core_path,
+        result_contract_path=result_contract_path,
+        tokenizer_dir=tokenizer_dir,
+        model_catalog_path=model_catalog_path,
+        model_weight_receipt_path=model_weight_receipt_path,
+        python_lock_path=python_lock_path,
+    )
+    paths.update(
+        {
+            "lock_builder": module_dir / "prom9_f1_r8_lock_v6.py",
+            "token_envelope_derivation": (
+                module_dir / "prom9_f1_r8_envelope_v6.py"
+            ),
+            "data_preparer": module_dir / "prom9_f1_r8_source_v6.py",
+            "selection_builder": module_dir / "prom9_f1_r8_selection_v6.py",
+        }
+    )
+    if tuple(paths) != R8_C801_DEPENDENCY_NAMES:
+        raise EnvironmentPreimageError("r8 c801 dependency inventory drifted")
+    return paths
+
+
 def r8_environment_labels(
     *,
     spool_endpoint: str,
@@ -1327,6 +1371,38 @@ def verify_r8_preimage_bundle(
         "environment_receipt_sha256": environment_sha,
         "dependency_receipt_sha256": dependency_sha,
     }
+
+
+def verify_r8_c801_preimage_bundle(
+    value: Mapping[str, object],
+    *,
+    expected_paths: Mapping[str, Path],
+    expected_labels: Mapping[str, str],
+    repo_root: Path,
+    symposium_repo_root: Path,
+    verify_live: bool = False,
+    environ: Mapping[str, str] | None = None,
+) -> dict[str, str]:
+    """Verify the c801 v6 dependency inventory without widening older runs."""
+
+    if tuple(expected_paths) != R8_C801_DEPENDENCY_NAMES:
+        raise EnvironmentPreimageError("r8 c801 dependency inventory drifted")
+    verified = verify_r8_preimage_bundle(
+        value,
+        expected_paths=expected_paths,
+        expected_labels=expected_labels,
+        repo_root=repo_root,
+        symposium_repo_root=symposium_repo_root,
+        verify_live=verify_live,
+        environ=environ,
+    )
+    verify_repository_dependency_blobs(
+        repo_root,
+        str(expected_labels.get("hswm_commit", "")),
+        expected_paths,
+        required_names=R8_C801_ADDITIONAL_COMMIT_BOUND_DEPENDENCY_NAMES,
+    )
+    return verified
 
 
 def verify_preimage_bundle(

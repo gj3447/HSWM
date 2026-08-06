@@ -830,3 +830,53 @@ def test_r8_dependency_path_inventory_covers_every_runtime_module(
     assert len(paths) == 34
     assert "model_weight_receipt" not in paths
     assert paths["model_deployment_receipt"] == tmp_path / "model-weight.json"
+
+
+def test_c801_dependency_inventory_forks_only_generation_modules(
+    tmp_path: Path,
+) -> None:
+    tokenizer = tmp_path / "tokenizer"
+    arguments = {
+        "protocol_path": tmp_path / "protocol.json",
+        "judge_core_path": tmp_path / "judge.py",
+        "result_contract_path": tmp_path / "result-contract.json",
+        "tokenizer_dir": tokenizer,
+        "model_catalog_path": tmp_path / "model-catalog.json",
+        "model_weight_receipt_path": tmp_path / "model-weight.json",
+        "python_lock_path": tmp_path / "requirements.lock",
+    }
+    legacy = environment.r8_dependency_paths(**arguments)
+    c801 = environment.r8_c801_dependency_paths(**arguments)
+
+    assert tuple(legacy) == environment.R8_DEPENDENCY_NAMES
+    assert tuple(c801) == environment.R8_C801_DEPENDENCY_NAMES
+    assert len(legacy) == 34
+    assert len(c801) == 35
+    assert {
+        name: path
+        for name, path in c801.items()
+        if name not in {
+            "lock_builder",
+            "token_envelope_derivation",
+            "data_preparer",
+            "selection_builder",
+        }
+    } == {
+        name: path
+        for name, path in legacy.items()
+        if name not in {
+            "lock_builder",
+            "token_envelope_derivation",
+            "data_preparer",
+        }
+    }
+    assert c801["lock_builder"].name == "prom9_f1_r8_lock_v6.py"
+    assert (
+        c801["token_envelope_derivation"].name
+        == "prom9_f1_r8_envelope_v6.py"
+    )
+    assert c801["data_preparer"].name == "prom9_f1_r8_source_v6.py"
+    assert c801["selection_builder"].name == "prom9_f1_r8_selection_v6.py"
+    assert environment.R8_C801_ADDITIONAL_COMMIT_BOUND_DEPENDENCY_NAMES == {
+        "selection_builder"
+    }

@@ -38,9 +38,9 @@ from prom_search_hswm.prom9_f1_r8_c801_exposure import (
 )
 from prom_search_hswm.prom9_f1_r8_environment import (
     load_private_receipt,
-    r8_dependency_paths,
+    r8_c801_dependency_paths,
     r8_environment_labels,
-    verify_r8_preimage_bundle,
+    verify_r8_c801_preimage_bundle,
 )
 from prom_search_hswm.prom9_f1_r8_envelope_v6 import (
     _read_bound_selection_json,
@@ -469,7 +469,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             verify_live_process=True,
         )
 
-        expected_paths = r8_dependency_paths(
+        expected_paths = r8_c801_dependency_paths(
             protocol_path=args.protocol,
             judge_core_path=args.judge_core,
             result_contract_path=args.result_contract,
@@ -490,7 +490,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             hswm_commit=hswm_commit,
             symposium_commit=symposium_commit,
         )
-        verified_bundle = verify_r8_preimage_bundle(
+        verified_bundle = verify_r8_c801_preimage_bundle(
             bundle,
             expected_paths=expected_paths,
             expected_labels=expected_labels,

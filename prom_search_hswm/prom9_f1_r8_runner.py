@@ -75,7 +75,9 @@ from prom_search_hswm.prom9_f1_envelope import (
 from prom_search_hswm.prom9_f1_r8_environment import (
     R8_DEPENDENCY_NAMES,
     load_private_receipt,
+    r8_c801_dependency_paths,
     r8_dependency_paths,
+    verify_r8_c801_preimage_bundle,
     verify_r8_preimage_bundle,
 )
 from prom_search_hswm.prom9_f1_r8_private_output import (
@@ -184,6 +186,35 @@ _DEVELOPMENT_LOCK_FIELDS = {
     "forbidden_prior_source_entity_ids", "forbidden_prior_component_ids",
     "execution_policy", "gates", "lock_sha256",
 }
+
+
+def _r8_dependency_paths_for_run(
+    *,
+    run_id: str,
+    protocol_path: Path,
+    judge_core_path: Path,
+    result_contract_path: Path,
+    tokenizer_dir: Path,
+    model_catalog_path: Path,
+    model_weight_receipt_path: Path,
+    python_lock_path: Path,
+) -> dict[str, Path]:
+    builder = (
+        r8_c801_dependency_paths
+        if run_id in {C801_DEVELOPMENT_RUN_ID, C801_SEALED_RUN_ID}
+        else r8_dependency_paths
+    )
+    return builder(
+        protocol_path=protocol_path,
+        judge_core_path=judge_core_path,
+        result_contract_path=result_contract_path,
+        tokenizer_dir=tokenizer_dir,
+        model_catalog_path=model_catalog_path,
+        model_weight_receipt_path=model_weight_receipt_path,
+        python_lock_path=python_lock_path,
+    )
+
+
 _SEALED_LOCK_FIELDS = _DEVELOPMENT_LOCK_FIELDS | {
     "experiment_tag", "closes_question",
 }
@@ -1504,7 +1535,12 @@ def _validate_environment_dependency_bundle(
         "symposium_commit": symposium_commit,
     }
     try:
-        verified = verify_r8_preimage_bundle(
+        verifier = (
+            verify_r8_c801_preimage_bundle
+            if run_id in {C801_DEVELOPMENT_RUN_ID, C801_SEALED_RUN_ID}
+            else verify_r8_preimage_bundle
+        )
+        verified = verifier(
             value,
             expected_paths=dependency_paths,
             expected_labels=labels,
@@ -1520,7 +1556,7 @@ def _validate_environment_dependency_bundle(
     if not isinstance(hswm_commit, str) or _GIT_COMMIT.fullmatch(hswm_commit) is None:
         raise R8RunnerRefusal("execution-lock hswm_commit is not an exact Git SHA")
     files = dependencies.get("files")
-    expected_names = set(REQUIRED_DEPENDENCY_FILES)
+    expected_names = set(dependency_paths)
     if not isinstance(files, Mapping) or set(files) != expected_names:
         raise R8RunnerRefusal("dependency semantic-name inventory drifted")
     result_row = files.get("result_contract")
@@ -3644,7 +3680,8 @@ def run_suite_v3_draft(
     }
     if port_policy != expected_port_policy:
         raise R8RunnerRefusal("direct model-port policy differs from execution lock")
-    dependency_paths = r8_dependency_paths(
+    dependency_paths = _r8_dependency_paths_for_run(
+        run_id=str(normalized["run_id"]),
         protocol_path=protocol_path,
         judge_core_path=judge_core_path,
         result_contract_path=result_contract_path,
@@ -4287,7 +4324,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                 verify_live_process=False,
             )
             _validate_deployment_binding(execution_lock, deployment_binding)
-            dependency_paths = r8_dependency_paths(
+            dependency_paths = _r8_dependency_paths_for_run(
+                run_id=str(normalized["run_id"]),
                 protocol_path=args.protocol,
                 judge_core_path=args.judge_core,
                 result_contract_path=args.result_contract,

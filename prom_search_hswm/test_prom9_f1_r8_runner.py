@@ -626,6 +626,35 @@ def _bundle(tmp_path: Path, manifest: dict[str, object], result_contract: Path):
     }
 
 
+@pytest.mark.parametrize(
+    ("run_id", "expected_lock", "expected_count"),
+    (
+        (runner.C800_DEVELOPMENT_RUN_ID, "prom9_f1_r8_lock.py", 34),
+        (runner.C801_DEVELOPMENT_RUN_ID, "prom9_f1_r8_lock_v6.py", 35),
+        (runner.C801_SEALED_RUN_ID, "prom9_f1_r8_lock_v6.py", 35),
+    ),
+)
+def test_dependency_path_dispatch_is_generation_exact(
+    tmp_path: Path,
+    run_id: str,
+    expected_lock: str,
+    expected_count: int,
+) -> None:
+    paths = runner._r8_dependency_paths_for_run(
+        run_id=run_id,
+        protocol_path=tmp_path / "protocol.json",
+        judge_core_path=tmp_path / "judge.py",
+        result_contract_path=tmp_path / "result-contract.json",
+        tokenizer_dir=tmp_path / "tokenizer",
+        model_catalog_path=tmp_path / "model-catalog.json",
+        model_weight_receipt_path=tmp_path / "model-weight.json",
+        python_lock_path=tmp_path / "requirements.lock",
+    )
+    assert paths["lock_builder"].name == expected_lock
+    assert len(paths) == expected_count
+    assert ("selection_builder" in paths) == (expected_count == 35)
+
+
 def _prior_exposure() -> dict[str, object]:
     items = ["prior-item"]
     source_entities = ["8" * 64]

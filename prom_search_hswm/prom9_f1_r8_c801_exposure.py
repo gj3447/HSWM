@@ -34,7 +34,6 @@ from prom_search_hswm.prom9_f1_prior_exposure import (
     _CALL_CONTRACTS,
     _CALL_KEYS,
     _DURABLE_CALL_SCHEMA,
-    _HISTORICAL_V8_SCHEMA_AUTHORITIES,
     _SPOOL_COLUMNS,
     _SPOOL_ROUTE_PREFIX,
     _open_snapshot_read_only,
@@ -95,6 +94,10 @@ C800_JUDGE_CORE_SHA256 = (
 C800_JUDGE_CORE_FILE_SHA256 = (
     "92384767bfb7e2e7be83cd3320a99d31993a57e5a07e784fad4300248ef6db98"
 )
+
+# c800 was initialized with the current attempt/spool schema authorities.  The
+# historical-v8 spool authority belongs only to the older predecessor capture.
+_C800_SCHEMA_AUTHORITIES = {"attempt": "attempt", "spool": "spool"}
 
 # Filled only after the real public receipt has been generated twice from the
 # frozen c800 evidence and exact read back.  Production verification fails
@@ -737,13 +740,13 @@ def _read_structural_observations(
         attempt, attempt_database = _open_snapshot_read_only(
             attempt_path,
             expected_columns=_ATTEMPT_COLUMNS,
-            authority=_HISTORICAL_V8_SCHEMA_AUTHORITIES["attempt"],
+            authority=_C800_SCHEMA_AUTHORITIES["attempt"],
             label="c800 attempt",
         )
         spool, spool_database = _open_snapshot_read_only(
             spool_path,
             expected_columns=_SPOOL_COLUMNS,
-            authority=_HISTORICAL_V8_SCHEMA_AUTHORITIES["spool"],
+            authority=_C800_SCHEMA_AUTHORITIES["spool"],
             label="c800 spool",
         )
         try:
@@ -822,11 +825,6 @@ def _read_structural_observations(
                 {**spool_snapshot, **spool_database}, kind="spool"
             ),
         }
-        source_identities = {
-            "attempt": dict(attempt_snapshot["source_identity"]),
-            "spool": dict(spool_snapshot["source_identity"]),
-        }
-
     status_counts: dict[str, int] = {}
     for call in calls:
         status_counts[call["status"]] = status_counts.get(call["status"], 0) + 1
@@ -964,7 +962,6 @@ def _read_structural_observations(
 
     return {
         "database_snapshots": database_snapshots,
-        "source_identities": source_identities,
         "counts": counts,
         "observed_item_ids": sorted(
             {str(row["item_id"]) for row in calls}
@@ -1581,13 +1578,15 @@ def build_c800_incident_exposure(
         spool_endpoint=C800_SPOOL_ENDPOINT,
         expected_prompts=expected_prompts,
     )
-    for label, genesis_key, schema_key in (
-        ("attempt", "attempt_db_identity", "attempt_schema_sha256"),
-        ("spool", "spool_db_identity", "spool_schema_sha256"),
+    # Genesis path/device/inode identify the original Dell files and therefore
+    # cannot survive an intentional forensic relocation.  Relocated inputs are
+    # authorized by the canonical schema plus the pinned main/WAL hashes below.
+    for label, schema_key in (
+        ("attempt", "attempt_schema_sha256"),
+        ("spool", "spool_schema_sha256"),
     ):
         if (
-            structural["source_identities"][label] != genesis.get(genesis_key)
-            or structural["database_snapshots"][label][
+            structural["database_snapshots"][label][
                 "canonical_schema_sha256"
             ]
             != genesis.get(schema_key)
@@ -2018,6 +2017,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
         )
         return 0
+    except PriorExposureRefusal as error:
+        print(
+            json.dumps({"status": "REFUSED", "reason": str(error)}, sort_keys=True),
+            file=sys.stderr,
+        )
+        return 1
     except Exception:
         print(json.dumps({"status": "REFUSED"}), file=sys.stderr)
         return 1

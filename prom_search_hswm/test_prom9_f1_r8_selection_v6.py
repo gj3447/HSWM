@@ -192,3 +192,55 @@ def test_v6_builder_and_standalone_verifier_freeze_ratified_800_by_800(
             confirmatory_pages=confirmatory,
             development_components=796,
         )
+
+
+def test_v6_cli_reports_only_contract_refusal_reason(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    monkeypatch.setattr(
+        selection_v6,
+        "_read_private_bytes",
+        lambda _path: b"{}",
+    )
+    monkeypatch.setattr(
+        selection_v6,
+        "_strict_object",
+        lambda _raw, _label: {},
+    )
+    monkeypatch.setattr(
+        "prom_search_hswm.prom9_f1_r8_runner.read_stable_json",
+        lambda _path, _label: ({}, "f" * 64),
+    )
+    monkeypatch.setattr(
+        selection_v6,
+        "build_selection_receipts_v6",
+        lambda **_kwargs: (_ for _ in ()).throw(PowerRefusal("safe contract reason")),
+    )
+
+    exit_code = selection_v6.main(
+        [
+            "select",
+            "--prior-exposure-receipt",
+            "prior.json",
+            "--successor-exposure-set",
+            "successor.json",
+            "--predecessor-selection",
+            "predecessor.json",
+            "--development-page",
+            "1504:dev.json",
+            "--confirmatory-page",
+            "5004:conf.json",
+            "--dataset-split",
+            "train",
+            "--output",
+            "selection.json",
+            "--gold-source-output",
+            "gold.json",
+        ]
+    )
+
+    assert exit_code == 1
+    assert json.loads(capsys.readouterr().err) == {
+        "reason": "safe contract reason",
+        "status": "REFUSED",
+    }

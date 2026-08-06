@@ -1076,6 +1076,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
         )
         return 0
+    except PowerRefusal as error:
+        print(
+            json.dumps({"status": "REFUSED", "reason": str(error)}, sort_keys=True),
+            file=sys.stderr,
+        )
+        return 1
     except Exception:
         print(json.dumps({"status": "REFUSED"}), file=sys.stderr)
         return 1

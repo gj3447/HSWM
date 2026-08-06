@@ -191,10 +191,11 @@ def test_power_gate_accepts_exact_c801_receipt(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     receipt, components, characteristics = _receipt()
+    expected_components = copy.deepcopy(components)
     monkeypatch.setattr(
         cli,
         "_load_c801_judge_core",
-        lambda *_args, **_kwargs: _judge(components, characteristics),
+        lambda *_args, **_kwargs: _judge(expected_components, characteristics),
     )
     assert cli.verify_power_operating_characteristics(
         receipt, judge_core_path=Path("judge.py")
@@ -242,6 +243,7 @@ def test_rehashed_detached_component_is_refused(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     receipt, components, characteristics = _receipt()
+    expected_components = copy.deepcopy(components)
     analysis = receipt["analysis_input"]
     assert isinstance(analysis, dict)
     stored = analysis["development_components"]
@@ -251,7 +253,7 @@ def test_rehashed_detached_component_is_refused(
     monkeypatch.setattr(
         cli,
         "_load_c801_judge_core",
-        lambda *_args, **_kwargs: _judge(components, characteristics),
+        lambda *_args, **_kwargs: _judge(expected_components, characteristics),
     )
     with pytest.raises(cli.PowerCLIRefusal, match="not rederived"):
         cli.verify_power_operating_characteristics(

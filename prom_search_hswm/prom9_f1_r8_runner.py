@@ -97,6 +97,16 @@ from prom_search_hswm.prom9_f1_prior_exposure import (
     verify_f1_r8_successor_exposure_set,
     verify_forbidden_exposure_union,
 )
+from prom_search_hswm.prom9_f1_r8_c801_exposure import (
+    C801_DEVELOPMENT_RUN_ID,
+    C801_SEALED_RUN_ID,
+    merge_c801_exposure_boundaries,
+    verify_f1_r8_successor_exposure_set_v2,
+)
+from prom_search_hswm.prom9_f1_r8_selection_v6 import (
+    SELECTION_SCHEMA_V6,
+    verify_selection_receipt_v6,
+)
 from prom_search_hswm.prom9_protocol import DEFAULT_PROTOCOL
 from prom_search_hswm.prom_f1_function_network import (
     _arm_overrides,
@@ -1119,6 +1129,36 @@ def _replay_token_envelope_derivation(
     selection = derivation_inputs["selection_receipt"]
     if (
         isinstance(selection, Mapping)
+        and selection.get("schema_version") == SELECTION_SCHEMA_V6
+    ):
+        from prom_search_hswm.prom9_f1_r8_envelope_v6 import (
+            build_token_envelope_artifacts_v6,
+        )
+
+        receipt = derivation_inputs["receipt"]
+        rebuilt = build_token_envelope_artifacts_v6(
+            selection=selection,
+            historical_manifest=derivation_inputs["historical_manifest"],
+            validation_receipt=derivation_inputs["validation_receipt"],
+            projected_outputs_receipt=derivation_inputs[
+                "projected_outputs_receipt"
+            ],
+            source_suite=derivation_inputs["source_suite"],
+            meter=token_meter,
+            protocol_path=protocol_path,
+            model=str(manifest.get("model")),
+            model_revision=str(manifest.get("model_revision")),
+        )
+        if (
+            rebuilt["derivation_receipt"] != dict(receipt)
+            or manifest.get("token_envelope") != rebuilt["token_envelope"]
+        ):
+            raise R8RunnerRefusal(
+                "c801 token-envelope derivation replay drifted"
+            )
+        return str(dict(receipt)["receipt_sha256"])
+    if (
+        isinstance(selection, Mapping)
         and selection.get("schema_version") == SELECTION_SCHEMA_V5
     ):
         # The c800 derivation is verified by deterministic full rebuild: the
@@ -1182,6 +1222,8 @@ def _derivation_development_run_id(
         return DEVELOPMENT_RUN_ID
     if schema == SELECTION_SCHEMA_V5:
         return C800_DEVELOPMENT_RUN_ID
+    if schema == SELECTION_SCHEMA_V6:
+        return C801_DEVELOPMENT_RUN_ID
     raise R8RunnerRefusal("token-envelope derivation selection generation drifted")
 
 
@@ -1202,9 +1244,10 @@ def _validate_token_envelope_derivation_gate(
     expected_receipt_fields = _DERIVATION_RECEIPT_FIELDS
     if (
         isinstance(selection_for_shape, Mapping)
-        and selection_for_shape.get("schema_version") == SELECTION_SCHEMA_V5
+        and selection_for_shape.get("schema_version")
+        in (SELECTION_SCHEMA_V5, SELECTION_SCHEMA_V6)
     ):
-        # The v5 derivation receipt additionally records its dataset split
+        # The v5/v6 derivation receipts additionally record their dataset split
         # and the selection generation it was derived from.
         expected_receipt_fields = _DERIVATION_RECEIPT_FIELDS | {
             "dataset_split", "selection_generation",
@@ -1225,6 +1268,51 @@ def _validate_token_envelope_derivation_gate(
     derivation_development_run_id = _derivation_development_run_id(
         selection_receipt
     )
+    v5_generation = selection_receipt.get("schema_version") == SELECTION_SCHEMA_V5
+    v6_generation = selection_receipt.get("schema_version") == SELECTION_SCHEMA_V6
+    v6_counts: tuple[int, int, int] | None = None
+    if v6_generation:
+        try:
+            selection_sha = verify_selection_receipt_v6(selection_receipt)
+        except Exception as error:
+            raise R8RunnerRefusal("c801 selection receipt verification failed") from error
+        policy = selection_receipt.get("selection_policy")
+        development = selection_receipt.get("development")
+        development_item_ids = (
+            development.get("item_ids") if isinstance(development, Mapping) else None
+        )
+        development_components = (
+            policy.get("development_components")
+            if isinstance(policy, Mapping)
+            else None
+        )
+        confirmatory_items = (
+            policy.get("confirmatory_items")
+            if isinstance(policy, Mapping)
+            else None
+        )
+        if (
+            not isinstance(development_item_ids, list)
+            or not development_item_ids
+            or isinstance(development_components, bool)
+            or not isinstance(development_components, int)
+            or development_components < 1
+            or isinstance(confirmatory_items, bool)
+            or not isinstance(confirmatory_items, int)
+            or confirmatory_items < 1
+        ):
+            raise R8RunnerRefusal("c801 selection cohort scale is malformed")
+        if (
+            receipt.get("selection_generation") != SELECTION_SCHEMA_V6
+            or receipt.get("dataset_split") != policy.get("dataset_split")
+            or receipt.get("selection_receipt_sha256") != selection_sha
+        ):
+            raise R8RunnerRefusal("c801 derivation selection binding drifted")
+        v6_counts = (
+            len(development_item_ids),
+            development_components,
+            confirmatory_items,
+        )
     for name, digest in file_sha256s.items():
         _sha(digest, f"token-envelope derivation file {name}")
     receipt_sha = _self_hash(
@@ -1276,11 +1364,22 @@ def _validate_token_envelope_derivation_gate(
         != execution_lock.get("token_envelope_derivation_receipt_sha256")
     ):
         raise R8RunnerRefusal("token-envelope derivation lock binding drifted")
-    v5_generation = (
-        isinstance(selection_receipt, Mapping)
-        and selection_receipt.get("schema_version") == SELECTION_SCHEMA_V5
-    )
-    if v5_generation:
+    if v6_generation:
+        assert v6_counts is not None
+        development_items, development_components, confirmatory_items = v6_counts
+        expected_cohorts = {
+            "development": (
+                C801_DEVELOPMENT_RUN_ID,
+                development_items,
+                development_components,
+            ),
+            "confirmatory": (
+                C801_SEALED_RUN_ID,
+                confirmatory_items,
+                confirmatory_items,
+            ),
+        }
+    elif v5_generation:
         expected_cohorts = {
             "development": (derivation_development_run_id, 959, 800),
             "confirmatory": (C800_SEALED_RUN_ID, 800, 800),
@@ -1307,11 +1406,19 @@ def _validate_token_envelope_derivation_gate(
         _sha(value.get("projection_sha256"), f"{cohort} derivation projection")
     mode = manifest.get("mode")
     if mode == "development":
-        expected_run = (
-            C800_DEVELOPMENT_RUN_ID if v5_generation else DEVELOPMENT_RUN_ID
-        )
+        if v6_generation:
+            expected_run = C801_DEVELOPMENT_RUN_ID
+        elif v5_generation:
+            expected_run = C800_DEVELOPMENT_RUN_ID
+        else:
+            expected_run = DEVELOPMENT_RUN_ID
     else:
-        expected_run = C800_SEALED_RUN_ID if v5_generation else SEALED_RUN_ID
+        if v6_generation:
+            expected_run = C801_SEALED_RUN_ID
+        elif v5_generation:
+            expected_run = C800_SEALED_RUN_ID
+        else:
+            expected_run = SEALED_RUN_ID
     if manifest.get("run_id") != expected_run:
         raise R8RunnerRefusal("manifest run ID differs from the derivation cohort")
     if preregistration_artifact is not None and (
@@ -1449,19 +1556,22 @@ def _validate_aborted_attempt_exposure_gate(
     execution_lock: Mapping[str, object],
 ) -> str:
     development_execution = execution_lock.get("schema_version") == EXECUTION_LOCK_SCHEMA
-    if development_execution and execution_lock.get("run_id") not in (
+    run_id = execution_lock.get("run_id")
+    if development_execution and run_id not in (
         F1_R8_A3_SUCCESSOR_RUN_ID,
         C800_DEVELOPMENT_RUN_ID,
+        C801_DEVELOPMENT_RUN_ID,
     ):
         raise R8RunnerRefusal(
             "development execution requires a ratified development identity"
         )
     try:
-        receipt_sha = (
-            verify_f1_r8_successor_exposure_set(value)
-            if development_execution
-            else verify_aborted_attempt_exposure_receipt(value)
-        )
+        if development_execution and run_id == C801_DEVELOPMENT_RUN_ID:
+            receipt_sha = verify_f1_r8_successor_exposure_set_v2(value)
+        elif development_execution:
+            receipt_sha = verify_f1_r8_successor_exposure_set(value)
+        else:
+            receipt_sha = verify_aborted_attempt_exposure_receipt(value)
     except Exception as error:
         raise R8RunnerRefusal(
             "aborted-attempt exposure receipt verification failed"
@@ -1473,9 +1583,34 @@ def _validate_aborted_attempt_exposure_gate(
             "aborted-attempt exposure receipt differs from execution lock"
         )
     try:
-        verify_forbidden_exposure_union(
-            prior_exposure_receipt, value, execution_lock
-        )
+        if development_execution and run_id == C801_DEVELOPMENT_RUN_ID:
+            merged = merge_c801_exposure_boundaries(
+                prior_exposure_receipt, value
+            )
+            expected_bindings = {
+                "prior_exposure_receipt_sha256": merged[
+                    "prior_exposure_receipt_sha256"
+                ],
+                "aborted_attempt_exposure_receipt_sha256": merged[
+                    "aborted_attempt_exposure_receipt_sha256"
+                ],
+                "forbidden_prior_item_ids": merged["item_ids"],
+                "forbidden_prior_source_entity_ids": merged[
+                    "source_entity_ids"
+                ],
+                "forbidden_prior_component_ids": merged["component_ids"],
+            }
+            if any(
+                execution_lock.get(key) != expected
+                for key, expected in expected_bindings.items()
+            ):
+                raise R8RunnerRefusal(
+                    "c801 execution-lock forbidden exposure union drifted"
+                )
+        else:
+            verify_forbidden_exposure_union(
+                prior_exposure_receipt, value, execution_lock
+            )
     except Exception as error:
         raise R8RunnerRefusal(
             "execution-lock forbidden exposure union verification failed"
@@ -4099,8 +4234,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             derivation_file_sha256s: dict[str, str] = {}
             for name, (path, label) in derivation_file_specs.items():
                 if name == "selection_receipt":
-                    # v5 selection receipts embed 450 pool pages (~240 MB),
-                    # above the 64 MiB default stable-read bound.
+                    # v5/v6 selection receipts embed their complete redacted
+                    # page pools (~240 MB), above the 64 MiB default bound.
                     value, digest = _read_json_with_bound(
                         path, label, max_bytes=SELECTION_RECEIPT_MAX_BYTES
                     )

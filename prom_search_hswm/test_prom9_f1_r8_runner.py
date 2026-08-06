@@ -2700,3 +2700,203 @@ def test_complete_call_prefix_rebuilds_draft_without_live_endpoint(
     assert runner.verify_suite_draft_without_gold(rebuilt) == rebuilt[
         "draft_receipt_sha256"
     ]
+
+
+@pytest.mark.parametrize(
+    (
+        "selection_schema",
+        "run_id",
+        "sealed_run_id",
+        "development_items",
+        "dynamic",
+    ),
+    (
+        (
+            runner.SELECTION_SCHEMA_V5,
+            runner.C800_DEVELOPMENT_RUN_ID,
+            runner.C800_SEALED_RUN_ID,
+            959,
+            False,
+        ),
+        (
+            runner.SELECTION_SCHEMA_V6,
+            runner.C801_DEVELOPMENT_RUN_ID,
+            runner.C801_SEALED_RUN_ID,
+            17,
+            True,
+        ),
+    ),
+)
+def test_derivation_cohort_counts_are_dynamic_only_for_v6(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    selection_schema: str,
+    run_id: str,
+    sealed_run_id: str,
+    development_items: int,
+    dynamic: bool,
+) -> None:
+    context = _context(tmp_path)
+    manifest = copy.deepcopy(context["manifest"])
+    manifest["run_id"] = run_id
+    lock = copy.deepcopy(context["lock"])
+    selection_sha = "d" * 64
+    lock["selection_receipt_sha256"] = selection_sha
+
+    selection: dict[str, object] = {"schema_version": selection_schema}
+    if dynamic:
+        selection.update(
+            {
+                "selection_receipt_sha256": selection_sha,
+                "selection_policy": {
+                    "dataset_split": "train",
+                    "development_components": 800,
+                    "confirmatory_items": 800,
+                },
+                "development": {
+                    "item_ids": [
+                        f"item-{index}" for index in range(development_items)
+                    ]
+                },
+            }
+        )
+        monkeypatch.setattr(
+            runner,
+            "verify_selection_receipt_v6",
+            lambda value: str(value["selection_receipt_sha256"]),
+        )
+
+    receipt = _derivation_receipt(
+        manifest,
+        context["meter"],
+        development_run_id=run_id,
+    )
+    receipt["selection_generation"] = selection_schema
+    receipt["dataset_split"] = "train"
+    receipt["selection_receipt_sha256"] = selection_sha
+    receipt["development"]["run_id"] = run_id
+    receipt["development"]["items"] = development_items
+    receipt["development"]["components"] = 800
+    receipt["confirmatory"]["run_id"] = sealed_run_id
+    receipt["confirmatory"]["items"] = 800
+    receipt["confirmatory"]["components"] = 800
+    _rehash(receipt, "receipt_sha256")
+    lock["token_envelope_derivation_receipt_sha256"] = receipt[
+        "receipt_sha256"
+    ]
+
+    derivation = copy.deepcopy(context["derivation"])
+    derivation["selection_receipt"] = selection
+    derivation["receipt"] = receipt
+    monkeypatch.setattr(
+        runner,
+        "_replay_token_envelope_derivation",
+        lambda **_kwargs: str(receipt["receipt_sha256"]),
+    )
+
+    assert runner._validate_token_envelope_derivation_gate(
+        derivation,
+        manifest=manifest,
+        execution_lock=lock,
+        token_meter=context["meter"],
+        protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+        preregistration_artifact=None,
+    ) == receipt["receipt_sha256"]
+
+    drifted = copy.deepcopy(receipt)
+    drifted["development"]["items"] = development_items + 1
+    _rehash(drifted, "receipt_sha256")
+    drifted_lock = copy.deepcopy(lock)
+    drifted_lock["token_envelope_derivation_receipt_sha256"] = drifted[
+        "receipt_sha256"
+    ]
+    derivation["receipt"] = drifted
+    with pytest.raises(R8RunnerRefusal, match="development cohort drifted"):
+        runner._validate_token_envelope_derivation_gate(
+            derivation,
+            manifest=manifest,
+            execution_lock=drifted_lock,
+            token_meter=context["meter"],
+            protocol_path=REPO_ROOT / DEFAULT_PROTOCOL,
+            preregistration_artifact=None,
+        )
+
+
+def test_c801_successor_v2_union_accepts_exact_lock_and_refuses_drift_before_calls(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    receipt_sha = "a" * 64
+    prior_sha = "b" * 64
+    merged = {
+        "prior_exposure_receipt_sha256": prior_sha,
+        "aborted_attempt_exposure_receipt_sha256": receipt_sha,
+        "item_ids": ["item-c800"],
+        "source_entity_ids": ["c" * 64],
+        "component_ids": ["d" * 64],
+    }
+    calls: list[str] = []
+
+    def verify_v2(_value: object) -> str:
+        calls.append("verify-v2")
+        return receipt_sha
+
+    def merge(_prior: object, _value: object) -> dict[str, object]:
+        calls.append("merge-c801")
+        return copy.deepcopy(merged)
+
+    def forbidden(*_args: object, **_kwargs: object) -> object:
+        raise AssertionError("legacy exposure verifier or model call reached")
+
+    monkeypatch.setattr(runner, "verify_f1_r8_successor_exposure_set_v2", verify_v2)
+    monkeypatch.setattr(runner, "merge_c801_exposure_boundaries", merge)
+    monkeypatch.setattr(runner, "verify_f1_r8_successor_exposure_set", forbidden)
+    monkeypatch.setattr(runner, "verify_aborted_attempt_exposure_receipt", forbidden)
+    monkeypatch.setattr(runner, "verify_forbidden_exposure_union", forbidden)
+    monkeypatch.setattr(runner, "run_item", forbidden)
+
+    lock = {
+        "schema_version": runner.EXECUTION_LOCK_SCHEMA,
+        "run_id": runner.C801_DEVELOPMENT_RUN_ID,
+        "prior_exposure_receipt_sha256": prior_sha,
+        "aborted_attempt_exposure_receipt_sha256": receipt_sha,
+        "forbidden_prior_item_ids": merged["item_ids"],
+        "forbidden_prior_source_entity_ids": merged["source_entity_ids"],
+        "forbidden_prior_component_ids": merged["component_ids"],
+    }
+    assert runner._validate_aborted_attempt_exposure_gate(
+        {"kind": "successor-v2"},
+        prior_exposure_receipt={"kind": "prior"},
+        execution_lock=lock,
+    ) == receipt_sha
+    assert calls == ["verify-v2", "merge-c801"]
+
+    drifted = copy.deepcopy(lock)
+    drifted["forbidden_prior_item_ids"] = []
+    calls.clear()
+    with pytest.raises(
+        R8RunnerRefusal,
+        match="execution-lock forbidden exposure union verification failed",
+    ):
+        runner._validate_aborted_attempt_exposure_gate(
+            {"kind": "successor-v2"},
+            prior_exposure_receipt={"kind": "prior"},
+            execution_lock=drifted,
+        )
+    assert calls == ["verify-v2", "merge-c801"]
+
+    monkeypatch.setattr(
+        runner,
+        "verify_f1_r8_successor_exposure_set_v2",
+        lambda _value: (_ for _ in ()).throw(RuntimeError("pin missing")),
+    )
+    calls.clear()
+    with pytest.raises(
+        R8RunnerRefusal,
+        match="aborted-attempt exposure receipt verification failed",
+    ):
+        runner._validate_aborted_attempt_exposure_gate(
+            {"kind": "successor-v2"},
+            prior_exposure_receipt={"kind": "prior"},
+            execution_lock=lock,
+        )
+    assert calls == []

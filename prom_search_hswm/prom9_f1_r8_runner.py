@@ -116,6 +116,13 @@ DEVELOPMENT_RUN_ID = F1_R8_A3_SUCCESSOR_RUN_ID
 HISTORICAL_DERIVATION_DEVELOPMENT_RUN_ID = "f1-2wiki-development-r8-try3-a2"
 HISTORICAL_SELECTION_SCHEMA = "hswm-prom9-f1-r8-cohort-selection/v3"
 SUCCESSOR_SELECTION_SCHEMA = "hswm-prom9-f1-r8-cohort-selection/v4"
+# c800 generation (C-recontract ratified 2026-08-05): selection v5 receipts
+# carry their own run identities and 959/800 · 800/800 cohort scales, and the
+# ~240 MB receipt needs a dedicated stable-read ceiling.
+SELECTION_SCHEMA_V5 = "hswm-prom9-f1-r8-cohort-selection/v5"
+C800_DEVELOPMENT_RUN_ID = "f1-2wiki-development-r8-c800"
+C800_SEALED_RUN_ID = "f1-2wiki-sealed-r8-c800"
+SELECTION_RECEIPT_MAX_BYTES = 512 * 1024 * 1024
 TRANSPORT_SCHEMA = "hswm-f1-durable-call-ledger/v1"
 TRANSPORT_BINDINGS_SCHEMA = "hswm-prom9-f1-r8-transport-bindings/v1"
 GENESIS_SCHEMA = "hswm-prom9-f1-r8-transport-genesis/v1"
@@ -454,7 +461,13 @@ def read_stable_bytes(
 def read_stable_json(path: Path, label: str) -> tuple[dict[str, object], str]:
     """Parse one JSON object from the exact bytes captured by ``read_stable_bytes``."""
 
-    raw, digest = read_stable_bytes(path, label)
+    return _read_json_with_bound(path, label, max_bytes=64 * 1024 * 1024)
+
+
+def _read_json_with_bound(
+    path: Path, label: str, *, max_bytes: int
+) -> tuple[dict[str, object], str]:
+    raw, digest = read_stable_bytes(path, label, max_bytes=max_bytes)
     try:
         value = json.loads(
             raw.decode("utf-8"),
@@ -1103,6 +1116,41 @@ def _replay_token_envelope_derivation(
 ) -> str:
     # Local import avoids the producer's intentional use of runner item and
     # registry constructors during module initialization.
+    selection = derivation_inputs["selection_receipt"]
+    if (
+        isinstance(selection, Mapping)
+        and selection.get("schema_version") == SELECTION_SCHEMA_V5
+    ):
+        # The c800 derivation is verified by deterministic full rebuild: the
+        # policy-driven v5 producer must reproduce the presented receipt
+        # byte-identically and the manifest must embed exactly its envelope.
+        from prom_search_hswm.prom9_f1_r8_envelope_v5 import (
+            build_token_envelope_artifacts_v5,
+        )
+
+        receipt = derivation_inputs["receipt"]
+        rebuilt = build_token_envelope_artifacts_v5(
+            selection=selection,
+            historical_manifest=derivation_inputs["historical_manifest"],
+            validation_receipt=derivation_inputs["validation_receipt"],
+            projected_outputs_receipt=derivation_inputs[
+                "projected_outputs_receipt"
+            ],
+            source_suite=derivation_inputs["source_suite"],
+            meter=token_meter,
+            protocol_path=protocol_path,
+            model=str(manifest.get("model")),
+            model_revision=str(manifest.get("model_revision")),
+        )
+        if (
+            rebuilt["derivation_receipt"] != dict(receipt)
+            or manifest.get("token_envelope") != rebuilt["token_envelope"]
+        ):
+            raise R8RunnerRefusal(
+                "c800 token-envelope derivation replay drifted"
+            )
+        return str(dict(receipt)["receipt_sha256"])
+
     from prom_search_hswm.prom9_f1_r8_envelope import (
         verify_token_envelope_derivation,
     )
@@ -1132,6 +1180,8 @@ def _derivation_development_run_id(
         return HISTORICAL_DERIVATION_DEVELOPMENT_RUN_ID
     if schema == SUCCESSOR_SELECTION_SCHEMA:
         return DEVELOPMENT_RUN_ID
+    if schema == SELECTION_SCHEMA_V5:
+        return C800_DEVELOPMENT_RUN_ID
     raise R8RunnerRefusal("token-envelope derivation selection generation drifted")
 
 
@@ -1215,10 +1265,20 @@ def _validate_token_envelope_derivation_gate(
         != execution_lock.get("token_envelope_derivation_receipt_sha256")
     ):
         raise R8RunnerRefusal("token-envelope derivation lock binding drifted")
-    expected_cohorts = {
-        "development": (derivation_development_run_id, 54, 48),
-        "confirmatory": (SEALED_RUN_ID, 100, 100),
-    }
+    v5_generation = (
+        isinstance(selection_receipt, Mapping)
+        and selection_receipt.get("schema_version") == SELECTION_SCHEMA_V5
+    )
+    if v5_generation:
+        expected_cohorts = {
+            "development": (derivation_development_run_id, 959, 800),
+            "confirmatory": (C800_SEALED_RUN_ID, 800, 800),
+        }
+    else:
+        expected_cohorts = {
+            "development": (derivation_development_run_id, 54, 48),
+            "confirmatory": (SEALED_RUN_ID, 100, 100),
+        }
     for cohort, (run_id, items, components) in expected_cohorts.items():
         value = receipt.get(cohort)
         if (
@@ -1235,7 +1295,12 @@ def _validate_token_envelope_derivation_gate(
             )
         _sha(value.get("projection_sha256"), f"{cohort} derivation projection")
     mode = manifest.get("mode")
-    expected_run = DEVELOPMENT_RUN_ID if mode == "development" else SEALED_RUN_ID
+    if mode == "development":
+        expected_run = (
+            C800_DEVELOPMENT_RUN_ID if v5_generation else DEVELOPMENT_RUN_ID
+        )
+    else:
+        expected_run = C800_SEALED_RUN_ID if v5_generation else SEALED_RUN_ID
     if manifest.get("run_id") != expected_run:
         raise R8RunnerRefusal("manifest run ID differs from the derivation cohort")
     if preregistration_artifact is not None and (
@@ -4022,7 +4087,14 @@ def main(argv: Sequence[str] | None = None) -> int:
             }
             derivation_file_sha256s: dict[str, str] = {}
             for name, (path, label) in derivation_file_specs.items():
-                value, digest = read_stable_json(path, label)
+                if name == "selection_receipt":
+                    # v5 selection receipts embed 450 pool pages (~240 MB),
+                    # above the 64 MiB default stable-read bound.
+                    value, digest = _read_json_with_bound(
+                        path, label, max_bytes=SELECTION_RECEIPT_MAX_BYTES
+                    )
+                else:
+                    value, digest = read_stable_json(path, label)
                 derivation_values[name] = value
                 derivation_file_sha256s[name] = digest
             derivation_values["file_sha256s"] = derivation_file_sha256s

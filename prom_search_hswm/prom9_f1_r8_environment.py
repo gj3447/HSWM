@@ -128,6 +128,7 @@ R8_REQUIRED_DEPENDENCY_NAMES = R8_DEPENDENCY_NAMES
 R8_C801_DEPENDENCY_NAMES: tuple[str, ...] = (
     *R8_DEPENDENCY_NAMES,
     "selection_builder",
+    "selection_primitives",
 )
 R8_COMMIT_BOUND_DEPENDENCY_NAMES = frozenset(
     {
@@ -160,7 +161,7 @@ R8_COMMIT_BOUND_DEPENDENCY_NAMES = frozenset(
     }
 )
 R8_C801_ADDITIONAL_COMMIT_BOUND_DEPENDENCY_NAMES = frozenset(
-    {"selection_builder"}
+    {"selection_builder", "selection_primitives"}
 )
 R8_SYMPOSIUM_COMMIT_BOUND_DEPENDENCY_NAMES = frozenset({"judge_core"})
 
@@ -1051,11 +1052,17 @@ def r8_c801_dependency_paths(
     paths.update(
         {
             "lock_builder": module_dir / "prom9_f1_r8_lock_v6.py",
+            "power_builder": module_dir / "prom9_f1_r8_power_v6.py",
+            "power_cli": module_dir / "prom9_f1_r8_power_cli_v6.py",
             "token_envelope_derivation": (
                 module_dir / "prom9_f1_r8_envelope_v6.py"
             ),
             "data_preparer": module_dir / "prom9_f1_r8_source_v6.py",
             "selection_builder": module_dir / "prom9_f1_r8_selection_v6.py",
+            # The v6 selector/source intentionally reuse outcome-neutral parsing
+            # and component helpers from the historical module.  Bind that
+            # import explicitly so it cannot remain a hidden semantic input.
+            "selection_primitives": module_dir / "prom9_f1_r8_power.py",
         }
     )
     if tuple(paths) != R8_C801_DEPENDENCY_NAMES:

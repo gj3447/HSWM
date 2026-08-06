@@ -76,3 +76,100 @@ def test_predecessor_execution_lock_requires_exact_quarantined_binding(
         lock_v6._predecessor_execution_lock_authority(
             wrong_path, _successor_binding(wrong, wrong_raw)
         )
+
+
+def test_fresh_judge_authority_is_receipt_bound_and_not_predecessor() -> None:
+    fresh_file = "1" * 64
+    fresh_core = "2" * 64
+    dependencies = {"files": {"judge_core": {"sha256": fresh_file}}}
+    predecessor = {
+        "judge_core_file_sha256": "3" * 64,
+        "judge_core_sha256": "4" * 64,
+    }
+    lock_v6._validate_fresh_judge_authority(
+        dependencies,
+        predecessor,
+        judge_core_file_sha256=fresh_file,
+        judge_core_sha256=fresh_core,
+    )
+
+    wrong_receipt = copy.deepcopy(dependencies)
+    wrong_receipt["files"]["judge_core"]["sha256"] = "5" * 64
+    with pytest.raises(lock_v6.LockRefusal, match="verified c801 dependency"):
+        lock_v6._validate_fresh_judge_authority(
+            wrong_receipt,
+            predecessor,
+            judge_core_file_sha256=fresh_file,
+            judge_core_sha256=fresh_core,
+        )
+
+    for field, value in (
+        ("judge_core_file_sha256", fresh_file),
+        ("judge_core_sha256", fresh_core),
+    ):
+        reused = copy.deepcopy(predecessor)
+        reused[field] = value
+        with pytest.raises(lock_v6.LockRefusal, match="not fresh"):
+            lock_v6._validate_fresh_judge_authority(
+                dependencies,
+                reused,
+                judge_core_file_sha256=fresh_file,
+                judge_core_sha256=fresh_core,
+            )
+
+    for malformed in ({}, {"judge_core_file_sha256": "x", "judge_core_sha256": "4" * 64}):
+        with pytest.raises(lock_v6.LockRefusal, match="predecessor judge"):
+            lock_v6._validate_fresh_judge_authority(
+                dependencies,
+                malformed,
+                judge_core_file_sha256=fresh_file,
+                judge_core_sha256=fresh_core,
+            )
+
+
+def test_c801_judge_capability_preflight_is_exact(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    class Judge:
+        @staticmethod
+        def c801_preflight_contract() -> dict[str, object]:
+            return copy.deepcopy(lock_v6.JUDGE_CAPABILITY_V1)
+
+    monkeypatch.setattr(
+        lock_v6,
+        "_load_c801_judge_core",
+        lambda _path, **_kwargs: Judge(),
+    )
+    lock_v6._validate_c801_judge_capability(tmp_path / "judge.py")
+
+    class DriftedJudge:
+        @staticmethod
+        def c801_preflight_contract() -> dict[str, object]:
+            value = copy.deepcopy(lock_v6.JUDGE_CAPABILITY_V1)
+            value["sealed_run_id"] = "f1-2wiki-sealed-r8-c800"
+            return value
+
+    monkeypatch.setattr(
+        lock_v6, "_load_c801_judge_core", lambda _path, **_kwargs: DriftedJudge()
+    )
+    with pytest.raises(lock_v6.LockRefusal, match="not c801 scientific authority"):
+        lock_v6._validate_c801_judge_capability(tmp_path / "judge.py")
+
+    def refuse(_path: Path, **_kwargs: object) -> object:
+        raise RuntimeError("private judge import detail")
+
+    monkeypatch.setattr(lock_v6, "_load_c801_judge_core", refuse)
+    with pytest.raises(lock_v6.LockRefusal, match="capability preflight failed"):
+        lock_v6._validate_c801_judge_capability(tmp_path / "judge.py")
+
+
+def test_result_contract_authority_is_receipt_bound() -> None:
+    digest = "6" * 64
+    lock_v6._validate_result_contract_authority(
+        {"files": {"result_contract": {"sha256": digest}}}, digest
+    )
+    with pytest.raises(lock_v6.LockRefusal, match="result contract differs"):
+        lock_v6._validate_result_contract_authority(
+            {"files": {"result_contract": {"sha256": "7" * 64}}},
+            digest,
+        )

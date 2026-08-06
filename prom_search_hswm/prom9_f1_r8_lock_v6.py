@@ -49,6 +49,10 @@ from prom_search_hswm.prom9_f1_r8_envelope_v6 import (
 from prom_search_hswm.prom9_f1_r8_power import (
     _selected_entries_unverified,
 )
+from prom_search_hswm.prom9_f1_r8_power_v6 import (
+    JUDGE_CAPABILITY_V1,
+    _load_c801_judge_core,
+)
 from prom_search_hswm.prom9_f1_r8_runner import (
     EXECUTION_LOCK_SCHEMA,
     build_development_execution_lock,
@@ -100,6 +104,86 @@ def _stable_file_sha256(path: Path, label: str) -> str:
     except Exception as error:
         raise LockRefusal(f"cannot capture stable {label}") from error
     return digest
+
+
+def _validate_fresh_judge_authority(
+    dependencies: Mapping[str, object],
+    predecessor_lock: Mapping[str, object],
+    *,
+    judge_core_file_sha256: str,
+    judge_core_sha256: str,
+) -> None:
+    files = dependencies.get("files")
+    judge_row = files.get("judge_core") if isinstance(files, Mapping) else None
+    predecessor_file_sha = predecessor_lock.get("judge_core_file_sha256")
+    predecessor_core_sha = predecessor_lock.get("judge_core_sha256")
+    if (
+        not isinstance(judge_row, Mapping)
+        or not isinstance(judge_row.get("sha256"), str)
+        or _SHA256.fullmatch(str(judge_row.get("sha256"))) is None
+        or judge_core_file_sha256 != judge_row.get("sha256")
+    ):
+        raise LockRefusal(
+            "judge authority differs from verified c801 dependency receipt"
+        )
+    if (
+        not isinstance(predecessor_file_sha, str)
+        or _SHA256.fullmatch(predecessor_file_sha) is None
+        or not isinstance(predecessor_core_sha, str)
+        or _SHA256.fullmatch(predecessor_core_sha) is None
+    ):
+        raise LockRefusal("c800 predecessor judge authority is malformed")
+    if (
+        judge_core_file_sha256 == predecessor_file_sha
+        or judge_core_sha256 == predecessor_core_sha
+    ):
+        raise LockRefusal(
+            "c801 judge authority is not fresh from c800 predecessor"
+        )
+
+
+def _validate_c801_judge_capability(
+    judge_core_path: Path,
+    *,
+    expected_file_sha256: str | None = None,
+    expected_core_sha256: str | None = None,
+) -> None:
+    """Import the frozen judge and require its exact zero-call c801 contract."""
+
+    try:
+        judge = _load_c801_judge_core(
+            judge_core_path,
+            expected_file_sha256=expected_file_sha256,
+        )
+        capability = judge.c801_preflight_contract()
+    except Exception as error:
+        raise LockRefusal("c801 judge capability preflight failed") from error
+    if capability != JUDGE_CAPABILITY_V1:
+        raise LockRefusal("frozen judge is not c801 scientific authority")
+    if (
+        expected_core_sha256 is not None
+        and getattr(judge, "__hswm_captured_core_sha256__", None)
+        != expected_core_sha256
+    ):
+        raise LockRefusal("c801 judge semantic core changed during preflight")
+
+
+def _validate_result_contract_authority(
+    dependencies: Mapping[str, object], result_contract_sha256: str
+) -> None:
+    files = dependencies.get("files")
+    result_row = (
+        files.get("result_contract") if isinstance(files, Mapping) else None
+    )
+    if (
+        not isinstance(result_row, Mapping)
+        or not isinstance(result_row.get("sha256"), str)
+        or _SHA256.fullmatch(str(result_row.get("sha256"))) is None
+        or result_contract_sha256 != result_row.get("sha256")
+    ):
+        raise LockRefusal(
+            "result contract differs from verified c801 dependency receipt"
+        )
 
 
 def _predecessor_execution_lock_authority(
@@ -507,15 +591,21 @@ def main(argv: Sequence[str] | None = None) -> int:
             args.judge_core,
             "judge core",
         )
-        if (
-            judge_core_sha != predecessor_lock.get("judge_core_sha256")
-            or judge_core_file_sha
-            != predecessor_lock.get("judge_core_file_sha256")
-        ):
-            raise LockRefusal("judge authority differs from c800 predecessor lock")
+        _validate_c801_judge_capability(
+            args.judge_core,
+            expected_file_sha256=judge_core_file_sha,
+            expected_core_sha256=judge_core_sha,
+        )
+        _validate_fresh_judge_authority(
+            dependencies,
+            predecessor_lock,
+            judge_core_file_sha256=judge_core_file_sha,
+            judge_core_sha256=judge_core_sha,
+        )
         result_contract_sha = _stable_file_sha256(
             args.result_contract, "result contract"
         )
+        _validate_result_contract_authority(dependencies, result_contract_sha)
 
         lock = build_development_execution_lock(
             manifest,

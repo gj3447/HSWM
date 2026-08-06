@@ -160,6 +160,53 @@ FALSIFICATION_CONDITION = {
     "threshold": 0,
     "trigger": "at_least_one_frozen_control_lcb_nonpositive",
 }
+UTILITY_PREDICTED_OUTCOME = {
+    "metric": "utility_c2_min_paired_component_cluster_bootstrap_lcb",
+    "operator": ">",
+    "threshold": 0,
+    "claim": "all_four_frozen_control_lcbs_strictly_positive",
+}
+UTILITY_FALSIFICATION_CONDITION = {
+    "metric": "utility_c2_min_paired_component_cluster_bootstrap_lcb",
+    "operator": "<=",
+    "threshold": 0,
+    "trigger": "at_least_one_frozen_control_lcb_nonpositive",
+}
+C801_CREDENCE_ALTERNATIVES = (0.25, 0.50)
+# This stays fail-closed until the user ratifies exactly one alternative.
+C801_CREDENCE_SELECTED: float | None = None
+C801_BOOTSTRAP = {
+    "reps": 10000,
+    "seed": 20260724,
+    "lower_index": 249,
+    "upper_index": 9749,
+    "paired": True,
+    "unit": "component_cluster_macro",
+    "method": "paired_cluster_percentile_bootstrap_v1",
+    "minimum_clusters": 800,
+    "metric": "min_of_four_paired_cluster_bootstrap_lcbs",
+}
+_SEALED_GENERATION_CONTRACTS = {
+    SEALED_RUN_ID: {
+        "purpose": SEALED_LOCK_PURPOSE,
+        "experiment_tag": SEALED_EXPERIMENT_TAG,
+        "closes_question": SEALED_CLOSES_QUESTION,
+        "predicted_outcome": PREDICTED_OUTCOME,
+        "falsification_condition": FALSIFICATION_CONDITION,
+    },
+    C801_SEALED_RUN_ID: {
+        "purpose": "CONFIRMATORY_R8_C801_MEASUREMENT",
+        "experiment_tag": "Q-f1-selective-utility-parity-c801",
+        "closes_question": "Q-f1-selective-utility-parity",
+        "predicted_outcome": UTILITY_PREDICTED_OUTCOME,
+        "falsification_condition": UTILITY_FALSIFICATION_CONDITION,
+        "metric": "utility_c2_min_paired_component_cluster_bootstrap_lcb",
+        "baseline": 0,
+        "direction": "higher",
+        "noise_band": 0,
+        "bootstrap": C801_BOOTSTRAP,
+    },
+}
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _GIT_COMMIT = re.compile(r"^[0-9a-f]{40}$")
 REQUIRED_DEPENDENCY_FILES = R8_DEPENDENCY_NAMES
@@ -411,6 +458,63 @@ _EVENT_TRANSITIONS = {
 
 class R8RunnerRefusal(RuntimeError):
     """No model call or suite promotion is authorized."""
+
+
+def _sealed_generation_contract(run_id: object) -> Mapping[str, object]:
+    if not isinstance(run_id, str):
+        raise R8RunnerRefusal("sealed execution requires a ratified run identity")
+    contract = _SEALED_GENERATION_CONTRACTS.get(run_id)
+    if contract is None:
+        raise R8RunnerRefusal("sealed execution requires a ratified run identity")
+    return contract
+
+
+def _validate_c801_preregistration_scientific_contract(
+    artifact: Mapping[str, object], *, run_id: object
+) -> None:
+    """Require the exact utility preregistration before any c801 sealed call."""
+
+    if run_id != C801_SEALED_RUN_ID:
+        return
+    contract = _sealed_generation_contract(run_id)
+    if (
+        artifact.get("metric") != contract["metric"]
+        or type(artifact.get("baseline")) is not int
+        or artifact.get("baseline") != contract["baseline"]
+        or artifact.get("direction") != contract["direction"]
+        or type(artifact.get("noise_band")) is not int
+        or artifact.get("noise_band") != contract["noise_band"]
+    ):
+        raise R8RunnerRefusal("c801 preregistration scientific scalar contract drifted")
+    bootstrap = artifact.get("bootstrap")
+    expected_bootstrap = contract["bootstrap"]
+    if (
+        not isinstance(bootstrap, Mapping)
+        or not isinstance(expected_bootstrap, Mapping)
+        or set(bootstrap) != set(expected_bootstrap)
+        or any(
+            type(bootstrap.get(key)) is not int
+            for key in (
+                "reps",
+                "seed",
+                "lower_index",
+                "upper_index",
+                "minimum_clusters",
+            )
+        )
+        or type(bootstrap.get("paired")) is not bool
+        or any(
+            type(bootstrap.get(key)) is not str
+            for key in ("unit", "method", "metric")
+        )
+        or dict(bootstrap) != dict(expected_bootstrap)
+    ):
+        raise R8RunnerRefusal("c801 paired-bootstrap preregistration drifted")
+    if C801_CREDENCE_SELECTED not in C801_CREDENCE_ALTERNATIVES:
+        raise R8RunnerRefusal("c801 credence requires an explicit user verdict")
+    credence = artifact.get("credence")
+    if type(credence) is not float or credence != C801_CREDENCE_SELECTED:
+        raise R8RunnerRefusal("c801 preregistration credence drifted")
 
 
 def _pairs(values: list[tuple[str, object]]) -> dict[str, object]:
@@ -1601,8 +1705,12 @@ def _validate_aborted_attempt_exposure_gate(
         raise R8RunnerRefusal(
             "development execution requires a ratified development identity"
         )
+    c801_generation = run_id in {
+        C801_DEVELOPMENT_RUN_ID,
+        C801_SEALED_RUN_ID,
+    }
     try:
-        if development_execution and run_id == C801_DEVELOPMENT_RUN_ID:
+        if c801_generation:
             receipt_sha = verify_f1_r8_successor_exposure_set_v2(value)
         elif development_execution:
             receipt_sha = verify_f1_r8_successor_exposure_set(value)
@@ -1619,7 +1727,7 @@ def _validate_aborted_attempt_exposure_gate(
             "aborted-attempt exposure receipt differs from execution lock"
         )
     try:
-        if development_execution and run_id == C801_DEVELOPMENT_RUN_ID:
+        if c801_generation:
             merged = merge_c801_exposure_boundaries(
                 prior_exposure_receipt, value
             )
@@ -1682,6 +1790,7 @@ def _validate_preregistration_gate(
         or anchored_judge_path is None
     ):
         raise R8RunnerRefusal("sealed execution requires the complete preregistration gate")
+    sealed_contract = _sealed_generation_contract(manifest.get("run_id"))
     try:
         symposium_root = Path(symposium_repo_root).resolve(strict=True)
         committed_judge_core = Path(judge_core_path).resolve(strict=True)
@@ -1709,20 +1818,24 @@ def _validate_preregistration_gate(
     if (
         set(artifact) != _PREREGISTRATION_ARTIFACT_FIELDS
         or artifact.get("schema_version") != PREREGISTRATION_ARTIFACT_SCHEMA
-        or artifact.get("purpose") != SEALED_LOCK_PURPOSE
-        or artifact.get("experiment_tag") != SEALED_EXPERIMENT_TAG
-        or artifact.get("closes_question") != SEALED_CLOSES_QUESTION
-        or artifact.get("run_id") != SEALED_RUN_ID
+        or artifact.get("purpose") != sealed_contract["purpose"]
+        or artifact.get("experiment_tag") != sealed_contract["experiment_tag"]
+        or artifact.get("closes_question") != sealed_contract["closes_question"]
+        or artifact.get("run_id") != manifest.get("run_id")
         or artifact.get("mode") != "sealed"
     ):
         raise R8RunnerRefusal("sealed preregistration artifact shape drifted")
     if (
-        artifact.get("predicted_outcome") != PREDICTED_OUTCOME
-        or artifact.get("falsification_condition") != FALSIFICATION_CONDITION
+        artifact.get("predicted_outcome") != sealed_contract["predicted_outcome"]
+        or artifact.get("falsification_condition")
+        != sealed_contract["falsification_condition"]
     ):
         raise R8RunnerRefusal(
             "sealed preregistration prediction/falsifier drifted"
         )
+    _validate_c801_preregistration_scientific_contract(
+        artifact, run_id=manifest.get("run_id")
+    )
     artifact_sha = _self_hash(
         artifact, "preregistration_artifact_sha256", "preregistration artifact"
     )
@@ -1763,10 +1876,10 @@ def _validate_preregistration_gate(
     if (
         set(readback) != _PREREGISTRATION_READBACK_FIELDS
         or readback.get("schema_version") != PREREGISTRATION_READBACK_SCHEMA
-        or readback.get("purpose") != SEALED_LOCK_PURPOSE
-        or readback.get("experiment_tag") != SEALED_EXPERIMENT_TAG
-        or readback.get("closes_question") != SEALED_CLOSES_QUESTION
-        or readback.get("run_id") != SEALED_RUN_ID
+        or readback.get("purpose") != sealed_contract["purpose"]
+        or readback.get("experiment_tag") != sealed_contract["experiment_tag"]
+        or readback.get("closes_question") != sealed_contract["closes_question"]
+        or readback.get("run_id") != manifest.get("run_id")
     ):
         raise R8RunnerRefusal("sealed preregistration readback shape drifted")
     _self_hash(readback, "receipt_sha256", "preregistration readback")
@@ -2958,14 +3071,16 @@ def validate_manifest_v3(
         ):
             raise R8RunnerRefusal("development execution-lock shape drifted")
     elif mode == "sealed":
+        sealed_contract = _sealed_generation_contract(manifest.get("run_id"))
         if (
             set(execution_lock) != _SEALED_LOCK_FIELDS
             or execution_lock.get("schema_version") != SEALED_LOCK_SCHEMA
-            or execution_lock.get("purpose") != SEALED_LOCK_PURPOSE
-            or execution_lock.get("experiment_tag") != SEALED_EXPERIMENT_TAG
-            or execution_lock.get("closes_question") != SEALED_CLOSES_QUESTION
-            or execution_lock.get("run_id") != SEALED_RUN_ID
-            or manifest.get("run_id") != SEALED_RUN_ID
+            or execution_lock.get("purpose") != sealed_contract["purpose"]
+            or execution_lock.get("experiment_tag")
+            != sealed_contract["experiment_tag"]
+            or execution_lock.get("closes_question")
+            != sealed_contract["closes_question"]
+            or execution_lock.get("run_id") != manifest.get("run_id")
         ):
             raise R8RunnerRefusal("unsupported sealed r8/try3 measurement lock")
     else:

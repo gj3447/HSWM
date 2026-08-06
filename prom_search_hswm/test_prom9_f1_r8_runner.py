@@ -630,8 +630,8 @@ def _bundle(tmp_path: Path, manifest: dict[str, object], result_contract: Path):
     ("run_id", "expected_lock", "expected_count"),
     (
         (runner.C800_DEVELOPMENT_RUN_ID, "prom9_f1_r8_lock.py", 34),
-        (runner.C801_DEVELOPMENT_RUN_ID, "prom9_f1_r8_lock_v6.py", 35),
-        (runner.C801_SEALED_RUN_ID, "prom9_f1_r8_lock_v6.py", 35),
+        (runner.C801_DEVELOPMENT_RUN_ID, "prom9_f1_r8_lock_v6.py", 36),
+        (runner.C801_SEALED_RUN_ID, "prom9_f1_r8_lock_v6.py", 36),
     ),
 )
 def test_dependency_path_dispatch_is_generation_exact(
@@ -652,7 +652,15 @@ def test_dependency_path_dispatch_is_generation_exact(
     )
     assert paths["lock_builder"].name == expected_lock
     assert len(paths) == expected_count
-    assert ("selection_builder" in paths) == (expected_count == 35)
+    c801 = run_id in {
+        runner.C801_DEVELOPMENT_RUN_ID,
+        runner.C801_SEALED_RUN_ID,
+    }
+    assert ("selection_builder" in paths) == c801
+    assert ("selection_primitives" in paths) == c801
+    if c801:
+        assert paths["power_builder"].name == "prom9_f1_r8_power_v6.py"
+        assert paths["power_cli"].name == "prom9_f1_r8_power_cli_v6.py"
 
 
 def _prior_exposure() -> dict[str, object]:
@@ -781,9 +789,15 @@ def _context(tmp_path: Path) -> dict[str, object]:
     }
 
 
-def _sealed_preregistration_context(context: dict[str, object], tmp_path: Path):
+def _sealed_preregistration_context(
+    context: dict[str, object],
+    tmp_path: Path,
+    *,
+    run_id: str = runner.SEALED_RUN_ID,
+):
+    sealed_contract = runner._sealed_generation_contract(run_id)
     manifest = copy.deepcopy(context["manifest"])
-    manifest["run_id"] = runner.SEALED_RUN_ID
+    manifest["run_id"] = run_id
     manifest["mode"] = "sealed"
     manifest["preregistration_artifact_sha256"] = (
         runner.MANIFEST_PREREGISTRATION_UNFROZEN
@@ -799,35 +813,48 @@ def _sealed_preregistration_context(context: dict[str, object], tmp_path: Path):
     lock.update(
         {
             "schema_version": runner.SEALED_LOCK_SCHEMA,
-            "purpose": runner.SEALED_LOCK_PURPOSE,
-            "experiment_tag": runner.SEALED_EXPERIMENT_TAG,
-            "closes_question": runner.SEALED_CLOSES_QUESTION,
-            "run_id": runner.SEALED_RUN_ID,
+            "purpose": sealed_contract["purpose"],
+            "experiment_tag": sealed_contract["experiment_tag"],
+            "closes_question": sealed_contract["closes_question"],
+            "run_id": run_id,
             "mode": "sealed",
             "judge_core_sha256": judge_core_sha,
             "judge_core_file_sha256": hashlib.sha256(template.encode()).hexdigest(),
         }
     )
+    c801_generation = run_id == runner.C801_SEALED_RUN_ID
     artifact_unsigned = {
         "schema_version": runner.PREREGISTRATION_ARTIFACT_SCHEMA,
-        "purpose": runner.SEALED_LOCK_PURPOSE,
-        "experiment_tag": runner.SEALED_EXPERIMENT_TAG,
-        "closes_question": runner.SEALED_CLOSES_QUESTION,
-        "run_id": runner.SEALED_RUN_ID,
+        "purpose": sealed_contract["purpose"],
+        "experiment_tag": sealed_contract["experiment_tag"],
+        "closes_question": sealed_contract["closes_question"],
+        "run_id": run_id,
         "mode": "sealed",
         "hswm_commit": lock["hswm_commit"],
         "model": lock["model"],
         "model_revision": lock["model_revision"],
-        "metric": {"name": "exact_match"},
-        "baseline": {"arm": "flat_single_llm_three_call_workflow"},
-        "direction": "higher",
-        "noise_band": {"absolute": 0.01},
-        "credence": {"alpha": 0.05},
-        "bootstrap": {"replicates": 1000},
+        "metric": (
+            sealed_contract["metric"]
+            if c801_generation
+            else {"name": "exact_match"}
+        ),
+        "baseline": sealed_contract["baseline"] if c801_generation else {
+            "arm": "flat_single_llm_three_call_workflow"
+        },
+        "direction": sealed_contract["direction"] if c801_generation else "higher",
+        "noise_band": sealed_contract["noise_band"] if c801_generation else {
+            "absolute": 0.01
+        },
+        "credence": 0.25 if c801_generation else {"alpha": 0.05},
+        "bootstrap": (
+            copy.deepcopy(sealed_contract["bootstrap"])
+            if c801_generation
+            else {"replicates": 1000}
+        ),
         "gates": copy.deepcopy(lock["gates"]),
-        "predicted_outcome": copy.deepcopy(runner.PREDICTED_OUTCOME),
+        "predicted_outcome": copy.deepcopy(sealed_contract["predicted_outcome"]),
         "falsification_condition": copy.deepcopy(
-            runner.FALSIFICATION_CONDITION
+            sealed_contract["falsification_condition"]
         ),
         "manifest_core_sha256": runner.manifest_core_sha256(manifest),
         "judge_core_sha256": judge_core_sha,
@@ -896,10 +923,10 @@ def _sealed_preregistration_context(context: dict[str, object], tmp_path: Path):
     full_judge_sha = hashlib.sha256(judge.read_bytes()).hexdigest()
     readback_unsigned = {
         "schema_version": runner.PREREGISTRATION_READBACK_SCHEMA,
-        "purpose": runner.SEALED_LOCK_PURPOSE,
-        "experiment_tag": runner.SEALED_EXPERIMENT_TAG,
-        "closes_question": runner.SEALED_CLOSES_QUESTION,
-        "run_id": runner.SEALED_RUN_ID,
+        "purpose": sealed_contract["purpose"],
+        "experiment_tag": sealed_contract["experiment_tag"],
+        "closes_question": sealed_contract["closes_question"],
+        "run_id": run_id,
         "measurement_lock_sha256": lock["lock_sha256"],
         "preregistration_artifact_sha256": artifact[
             "preregistration_artifact_sha256"
@@ -1596,6 +1623,153 @@ def test_sealed_preregistration_readback_and_manifest_core_are_exact(
             symposium_repo_root=SYMPOSIUM_ROOT,
             result_contract_path=context["result_contract"],
         )
+
+
+def test_c801_sealed_preregistration_uses_exact_utility_contract(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    context = _context(tmp_path / "development")
+    manifest, lock, artifact, readback, judge = _sealed_preregistration_context(
+        context,
+        tmp_path,
+        run_id=runner.C801_SEALED_RUN_ID,
+    )
+    assert artifact["predicted_outcome"] == runner.UTILITY_PREDICTED_OUTCOME
+    assert (
+        artifact["falsification_condition"]
+        == runner.UTILITY_FALSIFICATION_CONDITION
+    )
+    assert artifact["metric"] == runner._SEALED_GENERATION_CONTRACTS[
+        runner.C801_SEALED_RUN_ID
+    ]["metric"]
+    assert artifact["baseline"] == 0
+    assert artifact["direction"] == "higher"
+    assert artifact["noise_band"] == 0
+    assert artifact["bootstrap"] == runner.C801_BOOTSTRAP
+    validate_manifest_v3(
+        manifest,
+        execution_lock=lock,
+        token_meter=context["meter"],
+        registries=_registries(),
+    )
+    with pytest.raises(R8RunnerRefusal, match="explicit user verdict"):
+        runner._validate_preregistration_gate(
+            mode="sealed",
+            manifest=manifest,
+            execution_lock=lock,
+            preregistration_artifact=artifact,
+            preregistration_readback=readback,
+            anchored_judge_path=judge,
+            judge_core_path=context["judge_core_path"],
+            symposium_repo_root=SYMPOSIUM_ROOT,
+            result_contract_path=context["result_contract"],
+        )
+    monkeypatch.setattr(runner, "C801_CREDENCE_SELECTED", 0.25)
+    runner._validate_preregistration_gate(
+        mode="sealed",
+        manifest=manifest,
+        execution_lock=lock,
+        preregistration_artifact=artifact,
+        preregistration_readback=readback,
+        anchored_judge_path=judge,
+        judge_core_path=context["judge_core_path"],
+        symposium_repo_root=SYMPOSIUM_ROOT,
+        result_contract_path=context["result_contract"],
+    )
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    (
+        ("metric", "f1_min_paired_component_cluster_bootstrap_lcb", "scalar"),
+        ("baseline", False, "scalar"),
+        ("baseline", 1, "scalar"),
+        ("direction", "lower", "scalar"),
+        ("noise_band", False, "scalar"),
+        ("noise_band", 0.01, "scalar"),
+        ("credence", 0.50, "credence"),
+        ("credence", False, "credence"),
+    ),
+)
+def test_c801_preregistration_refuses_scientific_scalar_drift(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    field: str,
+    value: object,
+    message: str,
+) -> None:
+    context = _context(tmp_path / "development")
+    manifest, lock, artifact, readback, judge = _sealed_preregistration_context(
+        context,
+        tmp_path,
+        run_id=runner.C801_SEALED_RUN_ID,
+    )
+    monkeypatch.setattr(runner, "C801_CREDENCE_SELECTED", 0.25)
+    artifact[field] = value
+    with pytest.raises(R8RunnerRefusal, match=message):
+        runner._validate_preregistration_gate(
+            mode="sealed",
+            manifest=manifest,
+            execution_lock=lock,
+            preregistration_artifact=artifact,
+            preregistration_readback=readback,
+            anchored_judge_path=judge,
+            judge_core_path=context["judge_core_path"],
+            symposium_repo_root=SYMPOSIUM_ROOT,
+            result_contract_path=context["result_contract"],
+        )
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    (
+        ("reps", 9999),
+        ("seed", 20260725),
+        ("lower_index", 250),
+        ("upper_index", 9750),
+        ("paired", False),
+        ("paired", 1),
+        ("unit", "item_macro"),
+        ("method", "unpaired_bootstrap"),
+        ("minimum_clusters", 799),
+        ("metric", "one_control_lcb"),
+    ),
+)
+def test_c801_preregistration_refuses_bootstrap_drift(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    field: str,
+    value: object,
+) -> None:
+    context = _context(tmp_path / "development")
+    manifest, lock, artifact, readback, judge = _sealed_preregistration_context(
+        context,
+        tmp_path,
+        run_id=runner.C801_SEALED_RUN_ID,
+    )
+    monkeypatch.setattr(runner, "C801_CREDENCE_SELECTED", 0.25)
+    artifact["bootstrap"][field] = value
+    with pytest.raises(R8RunnerRefusal, match="paired-bootstrap"):
+        runner._validate_preregistration_gate(
+            mode="sealed",
+            manifest=manifest,
+            execution_lock=lock,
+            preregistration_artifact=artifact,
+            preregistration_readback=readback,
+            anchored_judge_path=judge,
+            judge_core_path=context["judge_core_path"],
+            symposium_repo_root=SYMPOSIUM_ROOT,
+            result_contract_path=context["result_contract"],
+        )
+
+
+@pytest.mark.parametrize(
+    "run_id",
+    (runner.C800_SEALED_RUN_ID, "f1-2wiki-sealed-r8-unknown"),
+)
+def test_unratified_sealed_generation_is_refused(run_id: str) -> None:
+    with pytest.raises(R8RunnerRefusal, match="ratified run identity"):
+        runner._sealed_generation_contract(run_id)
 
 
 @pytest.mark.parametrize(
@@ -2851,8 +3025,17 @@ def test_derivation_cohort_counts_are_dynamic_only_for_v6(
         )
 
 
+@pytest.mark.parametrize(
+    ("lock_schema", "run_id"),
+    (
+        (runner.EXECUTION_LOCK_SCHEMA, runner.C801_DEVELOPMENT_RUN_ID),
+        (runner.SEALED_LOCK_SCHEMA, runner.C801_SEALED_RUN_ID),
+    ),
+)
 def test_c801_successor_v2_union_accepts_exact_lock_and_refuses_drift_before_calls(
     monkeypatch: pytest.MonkeyPatch,
+    lock_schema: str,
+    run_id: str,
 ) -> None:
     receipt_sha = "a" * 64
     prior_sha = "b" * 64
@@ -2884,8 +3067,8 @@ def test_c801_successor_v2_union_accepts_exact_lock_and_refuses_drift_before_cal
     monkeypatch.setattr(runner, "run_item", forbidden)
 
     lock = {
-        "schema_version": runner.EXECUTION_LOCK_SCHEMA,
-        "run_id": runner.C801_DEVELOPMENT_RUN_ID,
+        "schema_version": lock_schema,
+        "run_id": run_id,
         "prior_exposure_receipt_sha256": prior_sha,
         "aborted_attempt_exposure_receipt_sha256": receipt_sha,
         "forbidden_prior_item_ids": merged["item_ids"],

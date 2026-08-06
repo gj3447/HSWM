@@ -851,32 +851,41 @@ def test_c801_dependency_inventory_forks_only_generation_modules(
     assert tuple(legacy) == environment.R8_DEPENDENCY_NAMES
     assert tuple(c801) == environment.R8_C801_DEPENDENCY_NAMES
     assert len(legacy) == 34
-    assert len(c801) == 35
+    assert len(c801) == 36
     assert {
         name: path
         for name, path in c801.items()
         if name not in {
             "lock_builder",
+            "power_builder",
+            "power_cli",
             "token_envelope_derivation",
             "data_preparer",
             "selection_builder",
+            "selection_primitives",
         }
     } == {
         name: path
         for name, path in legacy.items()
         if name not in {
             "lock_builder",
+            "power_builder",
+            "power_cli",
             "token_envelope_derivation",
             "data_preparer",
         }
     }
     assert c801["lock_builder"].name == "prom9_f1_r8_lock_v6.py"
+    assert c801["power_builder"].name == "prom9_f1_r8_power_v6.py"
+    assert c801["power_cli"].name == "prom9_f1_r8_power_cli_v6.py"
     assert (
         c801["token_envelope_derivation"].name
         == "prom9_f1_r8_envelope_v6.py"
     )
     assert c801["data_preparer"].name == "prom9_f1_r8_source_v6.py"
     assert c801["selection_builder"].name == "prom9_f1_r8_selection_v6.py"
+    assert c801["selection_primitives"].name == "prom9_f1_r8_power.py"
     assert environment.R8_C801_ADDITIONAL_COMMIT_BOUND_DEPENDENCY_NAMES == {
-        "selection_builder"
+        "selection_builder",
+        "selection_primitives",
     }

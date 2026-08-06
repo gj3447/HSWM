@@ -1198,9 +1198,20 @@ def _validate_token_envelope_derivation_gate(
         raise R8RunnerRefusal("token-envelope derivation input set drifted")
     receipt = derivation_inputs.get("receipt")
     file_sha256s = derivation_inputs.get("file_sha256s")
+    selection_for_shape = derivation_inputs.get("selection_receipt")
+    expected_receipt_fields = _DERIVATION_RECEIPT_FIELDS
+    if (
+        isinstance(selection_for_shape, Mapping)
+        and selection_for_shape.get("schema_version") == SELECTION_SCHEMA_V5
+    ):
+        # The v5 derivation receipt additionally records its dataset split
+        # and the selection generation it was derived from.
+        expected_receipt_fields = _DERIVATION_RECEIPT_FIELDS | {
+            "dataset_split", "selection_generation",
+        }
     if (
         not isinstance(receipt, Mapping)
-        or set(receipt) != _DERIVATION_RECEIPT_FIELDS
+        or set(receipt) != expected_receipt_fields
         or not isinstance(file_sha256s, Mapping)
         or set(file_sha256s) != _DERIVATION_FILE_FIELDS
         or any(

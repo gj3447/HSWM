@@ -4361,6 +4361,19 @@ def main(argv: Sequence[str] | None = None) -> int:
             manifest, _manifest_file_sha = read_stable_json(
                 args.manifest, "manifest"
             )
+            # The run identity is available from the small public manifest.
+            # Enforce the c801 tuple before lock/private/live or large-selection
+            # reads so coordinated CLI/lock drift cannot advance preflight.
+            _validate_execution_policy_for_run(
+                {
+                    "endpoint": args.endpoint,
+                    "max_workers": args.max_workers,
+                    "timeout_seconds": args.timeout_seconds,
+                    "max_delivery_attempts": args.max_delivery_attempts,
+                    "spool_token_env": args.spool_token_env,
+                },
+                run_id=manifest.get("run_id"),
+            )
             execution_lock, _execution_lock_file_sha = read_stable_json(
                 args.execution_lock, "execution lock"
             )

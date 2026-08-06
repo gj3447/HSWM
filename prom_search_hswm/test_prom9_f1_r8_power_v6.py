@@ -344,6 +344,37 @@ def test_judge_capability_binds_the_prospective_derivation_pin() -> None:
         )
 
 
+def test_captured_judge_loader_requires_the_exact_derivation_pin(
+    tmp_path: Path,
+) -> None:
+    derivation_sha = "d" * 64
+    capability = copy.deepcopy(JUDGE_CAPABILITY_V1)
+    capability["token_envelope_derivation_receipt_sha256"] = derivation_sha
+    path = tmp_path / "pinned_judge.py"
+    source = "\n".join(
+        (
+            "from pathlib import Path",
+            'EXPECTED_MEASUREMENT_LOCK_SHA256 = "__F1_R8_MEASUREMENT_LOCK_SHA256_UNFROZEN__"',
+            f"CAPABILITY = {capability!r}",
+            "def judge_core_sha256(path: Path): return '0' * 64",
+            "def c801_preflight_contract(): return dict(CAPABILITY)",
+            "def _derive_power_development_components(*args, **kwargs): return []",
+            "def _recompute_power_characteristics(*args, **kwargs): return {}",
+            "",
+        )
+    )
+    path.write_text(source, encoding="utf-8")
+    path.chmod(0o600)
+    module = _load_c801_judge_core(
+        path, expected_derivation_sha256=derivation_sha
+    )
+    assert module.c801_preflight_contract() == capability
+    with pytest.raises(PowerRefusal, match="differs from the execution lock"):
+        _load_c801_judge_core(
+            path, expected_derivation_sha256="e" * 64
+        )
+
+
 def test_private_reader_refuses_oversize_before_allocation(tmp_path: Path) -> None:
     path = tmp_path / "private.json"
     path.write_bytes(b"12345")

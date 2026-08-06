@@ -548,6 +548,65 @@ def test_c801_runtime_policy_rejects_coordinated_lock_and_cli_drift() -> None:
         )
 
 
+def test_c801_runner_cli_refuses_policy_drift_after_only_manifest_read(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    reads: list[str] = []
+
+    def stable_read(_path: Path, label: str) -> tuple[dict[str, object], str]:
+        reads.append(label)
+        if label == "manifest":
+            return {"run_id": runner.C801_DEVELOPMENT_RUN_ID}, "0" * 64
+        raise AssertionError(f"unexpected read after policy drift: {label}")
+
+    monkeypatch.setattr(runner, "read_stable_json", stable_read)
+    path_options = (
+        "manifest",
+        "execution-lock",
+        "attempt-db",
+        "spool-db",
+        "db-genesis-receipt",
+        "environment-dependency-bundle",
+        "token-envelope-derivation-receipt",
+        "selection-receipt",
+        "prior-exposure-receipt",
+        "aborted-attempt-exposure-receipt",
+        "historical-manifest",
+        "token-meter-validation-receipt",
+        "projected-outputs-receipt",
+        "token-meter-source-suite",
+        "result-contract",
+        "judge-core",
+        "symposium-repo-root",
+        "model-catalog",
+        "model-deployment-receipt",
+        "python-lock",
+        "spool-identity-receipt",
+        "reservation-journal",
+        "tokenizer-dir",
+        "output",
+    )
+    argv = ["run"]
+    for option in path_options:
+        argv.extend((f"--{option}", str(tmp_path / option)))
+    argv.extend(
+        (
+            "--endpoint",
+            "https://spool.invalid",
+            "--spool-token-env",
+            "SPOOL_CLIENT_TOKEN",
+            "--max-workers",
+            "2",
+            "--timeout-seconds",
+            "180",
+            "--max-delivery-attempts",
+            "8",
+        )
+    )
+    assert runner.main(argv) == 1
+    assert reads == ["manifest"]
+
+
 def _empty_spool_audit() -> dict[str, object]:
     unsigned = {
         "schema_version": SPOOL_SCHEMA,

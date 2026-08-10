@@ -1,0 +1,42 @@
+{
+ "findingId": "finding-prom16-hswm4-b3-pitfalls-20260725",
+ "domain": "agent-ab-transfer::pitfalls",
+ "rootCause": "A→B 전이 주장이 오탐에 취약한 근본 이유는 '전이 채널'과 '정답 유출 채널'이 물리적으로 동일하기 때문이다. receiver 성능 향상은 (i) donor 산출물/코퍼스에의 직접 접근(retrieval/누수), (ii) 공유 사전분포(같은 base model, 같은 pretraining 데이터, 같은 system prompt/few-shot), (iii) 진짜 증류된 절차 지식, 의 세 성분으로 분해되는데 표준 평가는 이를 분리하지 않는다. 문헌상 실패 사례가 재현 가능하게 보고되어 있다: (1) 벤치마크 오염 — 'Don't Make Your LLM an Evaluation Benchmark Cheater'(arXiv:2311.01964)는 소규모 누수만으로 평가가 무의미해짐을 실증; (2) 메모리 벤치마크 위장 — LoCoMo(~20k token)는 모델 컨텍스트 안에 들어가 외부 메모리 자체가 불필요하고(arXiv:2602.19320), LongMemEval ~5% / LoCoMo 6-7% 라벨 노이즈(arXiv:2604.22085), 프로덕션 엔진 >90% vs 학계 베이스라인 25-40점 차는 게이밍/포화 신호; (3) 공유 prior를 합의/전이로 오독 — stage-gated 리뷰 실험에서 80+ 에이전트가 존재하지 않는 취약점을 만장일치로 지지(공유 training-data prior), 'PoC self-contamination'(자기 산출물을 측정하고 표적 행동으로 오인)이 명명된 실패 모드(arXiv:2604.19049); (4) 채널 공유 = 무엇이든 전파 — LLM-to-LLM prompt infection(arXiv:2505.23847)과 메모리 추출 공격 MEXTRA(arXiv:2502.13172, ACL 2025 acl-long.1227)는 donor→receiver 채널이 열리면 '학습된 지식'이 아니라 임의 콘텐츠가 이동함을 보인다; (5) RAG 평가에서 eval 케이스와 코퍼스 중복이 알려진 confound라 decontamination이 표준 절차가 됨(emergentmind 2605.03344), retrieve-then-filter에서 29.5% answer leakage(ACL 2026 trustnlp-main.15); (6) Voyager 계열 'lifelong learning'은 실제로는 외부 코드 라이브러리 검색+주입이지 가중치 업데이트가 아니라는 점이 커뮤니티에서 자체 지적됨 — '검색을 학습/전이로 위장'한 원조 사례.",
+ "recommendation": "HSWM의 A→frozen-B 전이 sealed 실험에 다음 오탐 차단 장치를 게이트로 박는다. (1) 카나리 레슨: donor store에만 합성 고유 사실(watermark lesson, 실제 태스크와 무관)을 주입하고 채널 차단 상태에서 receiver가 답하면 즉시 누수 판정 → run void. (2) 4-cell 분해 설계: {donor-store on/off} × {eval 항목-코퍼스 overlap/disjoint} — 전이 주장은 on/disjoint > off/disjoint 일 때만 유효하고, on/overlap − on/disjoint 차이가 크면 그 차이는 전이가 아니라 검색으로 라벨링(claim boundary에 명시). (3) closed-book receiver 베이스라인(DRIFT식 parametric control)으로 공유 사전분포 성분을 감산하고, xvendor receiver(다른 base model) 팔을 유지해 same-base-model prior 부풀림을 격리. (4) sham-transfer 음성대조: 무관 도메인 랜덤 레슨 주입 팔이 진짜 팔과 통계적으로 구분되지 않으면 KILL. (5) prereg kill 조건: eval 항목이 donor store와 n-gram/embedding 유사도 임계 초과 시 해당 항목 격리, 격리율 >k%면 sealed run 전체 무효; donor 경험 생성 시각이 eval 세트 확정 이전임을 receipt로 봉인(시간적 누수 차단). (6) retrieval-only 팔을 명시적 대조군으로 두고, 전이 팔이 이를 못 넘으면 p1v2와 동일하게 '개입 효과 0' KILL — '검색≠전이' 선언을 결과가 아니라 설계가 강제하게 만든다.",
+ "alternatives": [
+  "주장 경계를 낮추는 대안: retrieval을 전이의 정당한 기질로 인정하되 명명을 'actuation-level transfer'(L0 typed actuation 확장)로 강등하고 ΔW/지식전이 주장은 별도 parametric 증거(파인튠 후 채널 차단 평가)가 있을 때만 허용",
+  "카나리 주입 대신 membership-inference 스타일 사후 감사: receiver 출력에서 donor store 고유 엔트로피 시퀀스 검출 — 개입 없이 기존 run을 감사 가능하지만 검출력이 낮고 사후성이라 sealed prereg 체계와는 (1)안을 병용하는 것이 적합"
+ ],
+ "references": [
+  "https://arxiv.org/pdf/2311.01964v1",
+  "https://arxiv.org/html/2406.04244v1",
+  "https://www.arxiv.org/pdf/2602.19320",
+  "https://www.arxiv.org/pdf/2604.22085",
+  "https://arxiv.org/html/2604.19049v1",
+  "https://arxiv.org/pdf/2505.23847",
+  "https://pdf.arxiv.org/pdf/2502.13172",
+  "https://aclanthology.org/2025.acl-long.1227.pdf",
+  "https://aclanthology.org/2026.trustnlp-main.15.pdf",
+  "https://www.emergentmind.com/papers/2605.03344",
+  "https://arxiv.org/html/2510.10815v4",
+  "https://arxiv.org/abs/2305.16291",
+  "https://www.giskard.ai/knowledge/cross-session-leak-when-your-ai-assistant-becomes-a-data-breach",
+  "https://arxiv.org/html/2601.08237v1"
+ ],
+ "caveats": "다수 1차 소스가 2025-2026 arXiv 프리프린트로 피어리뷰 미완. 80+ 에이전트 오합의 사례·PoC self-contamination 수치는 단일 논문(arXiv:2604.19049)의 자기보고. Giskard cross-session leak는 벤더 블로그(2차 소스). LongMemEval/LoCoMo 라벨 노이즈 비율은 수동 검사 기반 추정치. '검색=위장 전이' 판정 기준(유사도 임계, 격리율 k)의 구체 수치는 HSWM 자체 pilot에서 캘리브레이션 필요.",
+ "confidence": "HIGH",
+ "oneLineSummary": "A→B 전이 주장의 오탐은 채널 공유·공유 prior·평가 오염의 세 경로로 구조적으로 발생하며, 카나리 레슨+4-cell 분해+closed-book/xvendor 대조+sham 음성대조를 prereg kill 조건으로 박아야 '검색을 전이로 위장'하는 자기기만을 설계 수준에서 차단할 수 있다.",
+ "agentId": "prom-prom16-hswm-unproven-claims-20260725-B3",
+ "researchedAt": "2026-07-25",
+ "sourceKgBindings": [
+  "multi-agent-transfer-harness",
+  "semantic-weight-metric-contract",
+  "p1v2-typed-lesson-kill",
+  "lesson-prom-tribunal-phasor-20260724",
+  "rf-prom-next-move-20260724",
+  "hswm-l0-answer-interface-typed-actuation",
+  "c1-book-scale-hypergraph-falsification",
+  "lakatotree-ledger-prereg-kill-condition",
+  "b21-router-only-falsified"
+ ]
+}

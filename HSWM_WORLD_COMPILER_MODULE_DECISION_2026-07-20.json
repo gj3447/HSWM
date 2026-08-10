@@ -1,0 +1,76 @@
+{
+  "schema_version": "engine-decision/v1",
+  "name": "hswm-evidence-preserving-world-compiler",
+  "verdict": "module",
+  "purpose": "Deterministically compile frozen sources and recorded extraction, linking, and embedding observations into an immutable evidence-preserving HSWM world artifact or a typed rejection.",
+  "current_consumers": [
+    "world_builder corpus path",
+    "traversal_cert certification path",
+    "stale_poisoning falsifier path",
+    "doc_builder and expB research path"
+  ],
+  "planned_consumers": [
+    "CHU world adapter",
+    "LakatoTree evidence adapter",
+    "bhgman_tool readout adapter"
+  ],
+  "rationale": [
+    "The current semantics are still changing and the repository has several disconnected execution paths.",
+    "No authoritative mutable-state owner, durable ingestion service, scheduler, queue, or recovery obligation exists yet.",
+    "A pure compiler creates the required evidence and identity seam without prematurely manufacturing runtime machinery.",
+    "The planned ecosystem consumers are named in research canon but are not yet independent production consumers of one stable IR."
+  ],
+  "boundary": {
+    "owns": "Evidence validation, stable identity, lossless source-to-assertion topology, deterministic projections, quarantine, technical statistics, and a content-addressed build manifest",
+    "mechanism": "Compile canonical source snapshots, frozen observations, and an explicit policy into WorldArtifactV1 with paragraph, binary, and role-aware n-ary projections",
+    "policy_outside": [
+      "Extractor, linker, embedder, and ontology-provider selection",
+      "Entity merge thresholds and contradiction policy",
+      "Supersession approval and decay dose",
+      "Field parameters, readout policy, and certification thresholds",
+      "Persistence backend, scheduling, retry, authentication, and deployment"
+    ],
+    "non_goals": [
+      "Live model or network calls inside the compiler",
+      "Automatic truth judgment or automatic supersession",
+      "Full RDF or OWL inference",
+      "Query-time agent reasoning",
+      "Mutable runtime ownership, queues, retries, or durable execution"
+    ],
+    "state_authority": "The compiler owns no mutable state; callers own frozen inputs and published artifacts, while accepted supersession decisions are supplied as a separate ledger snapshot"
+  },
+  "contract": "compile_world(SourceBundleV1, ObservationBundleV1, CompilePolicyV1) -> WorldArtifactV1 | CompileRejectionV1",
+  "invariants": [
+    "Identical canonical inputs produce an identical build ID and identical projections.",
+    "Every accepted mention, assertion, entity mapping, and field target traces to at least one source digest and exact evidence selector.",
+    "Question, answer, supporting flags, and gold labels are excluded from compiler inputs.",
+    "Stable IDs are independent of dense-array order; every dense projection records a bijective stable-ID map.",
+    "Entity resolution never deletes source mentions or source-specific assertions.",
+    "Argument roles, order, polarity, modality, qualifiers, and time are not collapsed into unordered incidence.",
+    "Missing observations, dangling references, invalid spans, incompatible schemas, non-finite vectors, and duplicate IDs with different payloads are rejected without mutation."
+  ],
+  "failure_model": [
+    "Malformed or incompatible input returns a typed CompileRejectionV1 without an artifact.",
+    "A source hash, span, observation, model revision, or policy mismatch fails closed rather than triggering an implicit external call.",
+    "Unsupported or low-confidence semantic material is quarantined with evidence instead of silently merged or discarded."
+  ],
+  "verification": [
+    "Golden parity tests compare the current BuiltWorld, field values, retrieve order, selection distribution, and mu-zero traversal against the legacy projection.",
+    "Property tests cover input-order invariance, stable IDs, canonical hashes, evidence round trips, and tamper rejection.",
+    "Leakage tests prove that evaluation labels cannot affect the world artifact.",
+    "Projection tests compare paragraph, binary, and role-aware n-ary views from the same immutable IR."
+  ],
+  "promotion_gates": [
+    "At least two independent current consumers use the same stable WorldArtifact contract.",
+    "Incremental ingestion is required because full deterministic rebuilds are no longer practical.",
+    "Concurrent writers require one authoritative mutable-state owner and explicit ordering.",
+    "Crash recovery, durable deduplication, atomic publication, cancellation, or outbox delivery becomes a real obligation.",
+    "Bounded queues, backpressure, scheduling, and schema migration are required by measured operations.",
+    "The IR remains stable across at least two datasets and two artifact releases."
+  ],
+  "falsifiers": [
+    "If the compatibility adapter is more complex than the current consumers or leaks consumer policy into the IR, keep separate modules instead.",
+    "If two real consumers require incompatible core semantics, do not promote a false common engine boundary.",
+    "If deterministic full rebuild remains cheap and sufficient, retain the pure module indefinitely."
+  ]
+}

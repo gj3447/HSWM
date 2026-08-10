@@ -1,0 +1,578 @@
+[
+ {
+  "findingId": "finding_4d4bb93e8a5d3c55",
+  "domain": "history-benchmarks",
+  "rootCause": "Read-time 재조립의 골든 넘버는 1차 소스에서 확보됐다: Infini-Memory(2606.10677, 실재 확인)는 MemoryAgentBench overall 64.7%(agentic reader, Accurate Retrieval 81.2%)로, 쿼리 시점 iterative evidence inspection + local context expansion + provenance 메타(<seq,time,source>)가 F5v2 arm B 패턴의 직접 선행 사례다. 단 Infini-Memory는 write측 topic 유지보수와 read측 agentic reading의 결합체이며 자체 ablation도 두 기여가 'complementary'라고 명시 — 순수 read-time 고유기여는 분리되지 않았다(K2 리스크 실재). 반대 증거도 확보: Neuromem(2602.13967) F4는 생성형 retrieval-time 연산(query decomposition/multi-query expansion)이 지연 10배(>1s/turn)에 정확도 이득 ~0 또는 음수, F1 finding은 LLM 주도 consolidation이 unmaintained와 동일한 ~22% 열화율을 보인다고 보고. sleep-time compute(2504.13171, 실재 확인)는 동일 정확도 test-time compute ~5× 절감, sleep compute 스케일 시 +13%(GSM-Symbolic)/+18%(AIME), multi-query amortization 2.5× — 그리고 'query predictability와 효능이 잘 상관'이라는 원문 발견이 F5v2 K3(regime 한정 규칙)의 직접 선례다. 배경 인용 수치 대조 결과: CogCanvas 2601.00821 verbatim 43.9% vs extracted 28.0%(+15.9pp, LongMemEval-S 67.4 vs 45.4) 일치, 2605.12978 'GT 투입에도 이전에 푼 ARC-AGI의 54% 실패' 일치, Neuromem '구조화 압축 F1 −50%' 일치(F3 'reducing F1 scores by over 50%'), Auto-Dreamer 2605.20616 '+7pts·bank 12× 축소(ALFWorld 6×)' 일치 — 6개 arXiv ID 전원 실재 확인.",
+  "recommendation": "ratify + 2개 amend. (1) arm B는 Infini-Memory 수치가 지지하므로 진행 타당 — 단 Infini-Memory 자체가 read/write 결합이고 Neuromem F4가 streaming regime에서 생성형 read 연산 이득 ~0을 보이므로, arm B에 latency/token-cost를 의무 2차 metric으로 등록하고(MemoryAgentBench형 multi-hop/temporal regime vs LoCoMo형 streaming regime 분리 보고) regime별 효과를 사전 명시할 것. (2) K3는 이미 prereg에 있으나 sleep-time compute 원문이 'predictability 상관' 선례를 주므로 query-predictability 측정을 사후 분석이 아니라 사전 산정 지표로 격상. 명명 리스크(RT=검색 개선과 동형 시 'retrieval 재조직' 정정 규칙)는 그대로 유지 — Infini-Memory도 자신을 'consolidation'이 아니라 'lifecycle maintenance(read: evidence assembly)'로 명명한다는 점이 이 규칙을 지지.",
+  "alternatives": [
+   "Infini Memory-H(hybrid summary+BM25 reader)가 long-range detailed QA에서 agentic 변형보다 유용하다는 원문 결론 — agentic read-time 재조립이 전 영역 우위가 아니므로, arm B 대신 단순 hybrid reader가 동일 이득을 낼 가능성(K2 무고유기여 kill 발동 시나리오를 파워 산정에 반영)",
+   "write측 위생 가치는 arm C(dedup+gated supersession)가 담당하고 arm B는 순수 read-path로 한정하는 2-arm 분리 설계 — Auto-Dreamer가 보여주듯 '이기는 consolidation'은 학습된 write측 연산이므로, read-time arm이 kill돼도 phase-2 GRPO 경로는 독립 생존 가능하게 prereg 종속성을 끊는 안"
+  ],
+  "references": [
+   "https://arxiv.org/abs/2606.10677",
+   "https://arxiv.org/html/2606.10677v1",
+   "https://github.com/infinigence/Infini-Memory",
+   "https://arxiv.org/abs/2504.13171",
+   "https://arxiv.org/abs/2601.00821",
+   "https://arxiv.org/abs/2605.12978",
+   "https://arxiv.org/html/2602.13967",
+   "https://arxiv.org/abs/2605.20616"
+  ],
+  "caveats": "미검증/2차 소스 항목: (1) CogCanvas 'p<1e-15'는 abstract에 없어 미검증(+15.9pp·+22.0pp만 원문 확인, v4 2026-07-22 기준 제목이 'Verbatim Chunks Beat Extracted Artifacts'로 개정됨 — 인용 시 v4 기준 필요). (2) Infini-Memory의 per-competency 델타(AR +12.5/TTL +4.4/LRU +25.4/SF +26.5, +19.2pp over strongest baseline)는 themoonlight 리뷰 경유 2차 인용 — 64.7%/81.2%는 arXiv HTML 결론에서 직접 확인. (3) Neuromem은 소형 백본(pangu-1b, Llama-3.1-8B) 기준이라 F4 '생성형 retrieval=latency trap'이 gpt-5급으로 일반화되는지는 불명(Infini-Memory gpt-5-mini 결과와 긴장 관계 — 이 긴장 자체가 regime 의존 증거). (4) sleep-time compute는 수학추론 태스크(Stateful GSM-Symbolic/AIME)라 메모리 레짐으로의 전이는 가정. (5) 2605.12978의 'ScienceWorld ~20 updates 정점 후 step 100에 baseline 이하' 세부는 Arize 블로그(2차) 경유, abstract급 claim(utility 상승 후 하락·baseline 이하, 54% 실패)은 원문 확인.",
+  "confidence": "HIGH",
+  "oneLineSummary": "Infini-Memory 64.7%·sleep-time 5×/+13~18%·Neuromem F4 이득~0 — read-time 재조립 효과는 regime 의존, ratify+latency metric amend.",
+  "agentId": "prom-f5v2-0",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "hswm-f5v2-prereg-2026-07-26",
+   "hswm-f5-downscale-paradox-kill-2026-07-25",
+   "paper-infini-memory-2606.10677",
+   "paper-sleep-time-compute-2504.13171",
+   "paper-cogcanvas-2601.00821",
+   "paper-faulty-memory-consolidation-2605.12978",
+   "paper-neuromem-2602.13967",
+   "paper-auto-dreamer-2605.20616",
+   "k3-query-predictability-regime-limit",
+   "user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23"
+  ]
+ },
+ {
+  "findingId": "finding_d871dd03674a2971",
+  "domain": "history-alternatives",
+  "rootCause": "4개 역사 계열(append-only log/LSM, MVCC, event-sourcing, CRDT)은 모두 detail 보존 vs 저장 효율 딜레마를 동일한 구조로 해결했다: (1) 무손실 append가 항상 default이고, (2) 손실 연산(compaction/VACUUM/snapshot fold/tombstone GC)은 write path에서 분리된 background·policy-driven 연산이며, (3) 폐기의 안전 전제가 저장량이 아니라 '관찰자 안전(observer safety)'으로 정의된다 — MVCC는 어떤 활성 스냅샷도 볼 수 없는 튜플만 회수(xmin/xmax horizon), Kafka compaction은 키당 최신값을 절대 폐기하지 않고 min.compaction.lag.ms·delete.retention.ms로 진행 중인 reader를 보호, event sourcing은 snapshot이 '로그로부터 재계산 가능'하기에 폐기 가능(권위는 로그에 잔류), CRDT tombstone GC는 causal stability(전 replica 확인) 후에만 허용. 선택 기준은 워크로드 형태다: write-heavy ingest→LSM(대가: write amp 10~30×, leveled vs tiered 정책으로 read/write/space 조절), OLTP 동시성→MVCC(대가: bloat+vacuum), 감사·시간질의·replay→event sourcing(대가: 무한 성장+replay 비용+스키마 진화), coordination-free 다중작성→CRDT(대가: 메타데이터 오버헤드, rich-text 벤치마크 2.3× 측정됨). 어느 계열도 '저장 효율을 위해 write 시점에 권위 레코드를 파괴 압축'하는 설계로 수렴하지 않았다 — F5 downscale이 정확히 그 폐기된 안티패턴이다.",
+  "recommendation": "ratify (소규모 amend 권장). F5v2의 A(append-only)=event log default, B(RT 재조립)=event sourcing의 derived read-model(로그 권위 유지, Fowler: 'state is purely derivable, cache it anywhere'), C(dedup+gated supersession, invalid_at 비파괴 마킹)=MVCC xmax/Kafka compaction 모델로, 세 arm 모두 역사적으로 검증된 비파괴 패턴과 1:1 대응한다 — arm 구성 자체가 역사적 수렴 지식과 일치. Amend 제안: arm C에 명시적 'observer-gate 불변식' 문구 추가(Kafka compaction 보장 #4 '모든 키의 최종 상태는 최소한 항상 열람 가능' + delete.retention.ms식 reader 보호 창에 대응하는, 향후 물리 삭제 단계의 형식 전제조건). 또한 arm B를 'retrieval 재조직'으로 정정하는 규칙은 유지 — 역사적으로도 read-model reassembly는 consolidation(권위 이동)과 구별되는 개념임이 확인됨.",
+  "alternatives": [
+   "CRDT 관점 반론: 다중 writer/분산 환경에서는 '관찰자 안전' 확정 자체가 합의 라운드 비용이라 gate가 비쌈 — HSWM이 단일 writer면 MVCC식 gate가 저렴하지만, federated(Phase B) 확장 시 gate 비용이 지배적 요소가 되므로 prereg의 2단계 범위를 단일 노드로 한정할 근거가 됨",
+   "Kafka compaction 하이브리드(시간 기반 retention + 키 기반 compaction을 토픽별 선택)는 A와 C의 중간 설계 공간이 존재함을 시사 — arm C를 이원법적 'supersession 유/무'가 아니라 per-referent 정책(키별 최신 N개 보존)으로 일반화하는 변형 arm 가능",
+   "Event sourcing의 진짜 교훈은 '스냅샷은 재계산 가능해서 버릴 수 있다'는 조건부 폐기 — LLM memory의 consolidation 출력이 원본에서 결정론적으로 재계산 불가능하면(생성 모델 비결정성) snapshot이 아니라 권위 복사본이 되므로, B arm의 재조립 출력을 저장할지 여부는 이 재계산 가능성 기준으로 판정해야 함"
+  ],
+  "references": [
+   "https://martinfowler.com/eaaDev/EventSourcing.html",
+   "https://docs.confluent.io/kafka/design/log_compaction.html",
+   "https://www.postgresql.org/docs/current/mvcc-intro.html",
+   "https://arxiv.org/abs/1603.01529",
+   "https://en.wikipedia.org/wiki/Log-structured_merge-tree",
+   "https://cs-people.bu.edu/mathan/publications/fnt23-athanassoulis.pdf",
+   "https://arxiv.org/abs/2606.10677",
+   "https://www.enterprisedb.com/postgres-tutorials/why-we-need-vacuum-implement-mvcc-postgresql",
+   "https://arxiv.org/pdf/2212.02618v2"
+  ],
+  "caveats": "Shapiro 2011 CRDT 원전(INRIA RR-7506/SSS LNCS)은 HAL Anubis 차단 및 lip6 네트워크 오류로 직접 fetch 실패 — SEC 정의와 tombstone 메타데이터 비용은 파생 1차 소스(δ-CRDT arXiv 1603.01529 초록, Collabs arXiv 2212.02618의 측정치 2.3×)와 2차 소스로 검증. LSM write amp 10~30× 수치는 arXiv 2602.01873 검색 스니펫 기반(전문 미fetch). Apache Kafka 공식 문서 compaction 섹션은 페이지 절단으로 미도달, Confluent 문서(Apache 문서 미러)로 대체 검증. 배경 인용 arXiv 중 2606.10677만 실재 확인(단, Infini-Memory는 배경의 'RT consolidation 참조' 프레이밍과 달리 buffer→주제문서 주기적 write-side consolidation+추론시 agentic retrieval 구조 — 참조 해석 주의). 나머지 배경 ID(2601.00821, 2605.12978, 2602.13967, 2504.13171, 2605.20616)는 본 셀 범위 밖이라 미검증. 역사 저장시스템 불변식→LLM memory 매핑은 유추이지 정리가 아님.",
+  "confidence": "HIGH",
+  "oneLineSummary": "4계열 모두 무손실 append가 default, 폐기는 observer-gated background 연산 — A/B/C arm은 이 수렴 패턴의 직계",
+  "agentId": "prom-f5v2-1",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "hswm-f5v2-prereg-2026-07",
+   "f5-downscale-paradox-kill-2026-07-25",
+   "occam-kam-canonical-2026-05-26",
+   "CONTRACT_OccamArchiveRecord_v1_2026-05-27",
+   "lsm-tree-oneil-1996",
+   "kafka-log-compaction-guarantees",
+   "mvcc-visibility-horizon-vacuum",
+   "event-sourcing-fowler-2005-derived-snapshot",
+   "crdt-shapiro-2011-sec-tombstone-gc-causal-stability",
+   "rum-conjecture-athanassoulis-2016",
+   "observer-gated-reclamation-pattern"
+  ]
+ },
+ {
+  "findingId": "finding_a6dc968598542047",
+  "domain": "history-pitfalls",
+  "rootCause": "write-side consolidation의 실패 사례는 전 분야에서 동일한 메커니즘으로 문서화되어 있다: write 시점의 lossy rewrite가 applicability condition·시간 마커·표면 텍스처를 폐기하고, 반복 갱신 시 초기 추상화가 후기 rewrite의 앵커가 되어 오류가 누적된다. 1차 검증: (1) CogCanvas ablation(arXiv 2601.00821 v4) — 동일 파이프라인에서 저장 표현만 교체 시 verbatim chunk 43.9% vs LLM 추출 artifact 28.0%(LoCoMo, +15.9pp), 67.4% vs 45.4%(LongMemEval-S, +22.0pp), 메커니즘은 'lossy distillation'이며 artifact는 replace가 아니라 augment일 때만 무해. (2) Zhang et al.(arXiv 2605.12978) — GT 해를 매 단계 투입해도 GPT-5.4가 무메모리에서 100% 풀던 ARC-AGI 19문제가 consolidation 후 54%로 회귀; 강제 consolidation 대비 raw episode 보존 자율 regime이 정확도 2배, episodic-only가 auto와 동격; stream 갱신은 one-shot 대비 17~38pts 손실; 실패 기제 3종(misgrouping·적용조건 탈각·협소 스트림 과적합). (3) Neuromem(arXiv 2602.13967) — Finding F3: 구조화 스키마 압축은 F1을 50% 이상 붕괴('functional collapse'); F1: LLM 주도 consolidation 정책은 무유지 baseline과 동일한 ~22% 열화율을 보여 'ingestion 시점 의미 충돌 해소는 premature optimization'; F2: 저장 단계 정보 손실은 downstream 최적화로 보상 불가. DB/인프라도 동형: Kafka log compaction은 키당 최신값만 남겨 history를 설계상 파괴하며 misconfiguration 시 문서화된 데이터 유실 시나리오가 있고, 모니터링 다운샘플링/rollup은 'loss of detail'이 공인된 primary downside(평균화가 스파이크를 숨겨 postmortem을 방해). 인지과학 원형은 Bartlett(1932)·fuzzy-trace theory(Brainerd & Reyna): 인간 기억의 schema consolidation이 verbatim을 벗기는 것이 원조 문서화 사례로 2605.12978이 직접 인용.",
+  "recommendation": "ratify 방향 지지. (a) F5의 K1 kill(downscale 폐기)은 외부 문헌 3종+DB/모니터링 관행과 정합 — write-side lossy rewrite의 detail 파괴는 재현된 보편 법칙이므로 prereg의 arm 구성(A/B/C 비파괴 계열 + D 적대 대조)이 역사적 실패 모드와 정확히 정렬된다. (b) 단 ratify 시 amend 1건 권고: arm B의 참조 문헌 정정 — Infini-Memory(2606.10677, 실재 확인)는 'buffer에 stage 후 주기적으로 topic document로 consolidate'하는 사실상 write-side 주기 consolidation이므로 순수 read-time 재조립의 선례로 인용하면 안 되며, 'RT가 검색 개선과 동형이면 retrieval 재조직으로 정정' 규칙을 유지하는 한 문서화된 실패 사례가 RT 재조립에는 존재하지 않는다는 점(실패는 전부 write-side)이 arm B/C의 사전 우위 근거임을 prereg에 명시할 것. (c) Neuromem F1('ingestion-time consolidation은 baseline과 동일 열화율')은 arm C(dedup+gated supersession)에 대한 사전 경고로 등록 — supersession 판정을 ingestion이 아니라 read/감사 시점으로 미루는 설계 제약을 prereg에 반영 권고.",
+  "alternatives": [
+   "반대 관점: 이들 실패 사례는 전부 'replace형' consolidation이며 augment형(verbatim 유지+요약 추가, CogCanvas의 artifacts-alongside-chunks)은 정확도를 포기하지 않았으므로, write-side라도 비파괴 augment는 여전히 유효한 설계 공간 — F5v2의 B/C가 이 구간에 해당",
+   "인지과학 관점: gist 추출 자체는 인간에서도 유용(전이·일반화)하며 문제는 metacognitive control(무엇을 묶고 언제 구분을 보존할지)의 부재 — 2605.12978도 'gate consolidation explicitly'를 처방으로 제시하므로 consolidation 전면 폐기가 아니라 gating이 해법일 수 있음",
+   "DB 관점: Kafka compaction·rollup은 'history가 필요 없다고 확정된' 키 공간에서는 성공적 장기 운용 사례 — 실패는 lossy 연산 자체가 아니라 lossy를 history-needed 도메인에 잘못 적용한 category error이므로, F5v2는 lossy 연산의 domain-of-validity 측정까지 scope에 넣을 수 있음"
+  ],
+  "references": [
+   "https://arxiv.org/abs/2601.00821",
+   "https://arxiv.org/pdf/2605.12978",
+   "https://arxiv.org/abs/2602.13967",
+   "https://arxiv.org/html/2602.13967v1",
+   "https://arxiv.org/abs/2603.07670",
+   "https://arxiv.org/abs/2606.10677",
+   "https://github.com/MemPalace/mempalace/blob/develop/benchmarks/BENCHMARKS.md",
+   "https://www.kannika.io/kannika-stories/scenarios-for-data-loss-in-kafka/",
+   "https://last9.io/blog/downsampling-aggregating-metrics-in-prometheus-practical-strategies-to-manage-cardinality-and-query-performance/"
+  ],
+  "caveats": "배경 인용 수치 중 CogCanvas 'p<1e-15'는 v4 abstract에서 확인 불가(수치 43.9/28.0/67.4/45.4는 원문 대조 완료, p값은 본문 미열람으로 미검증). 2605.12978은 abstract('fails on 54%')와 본문('down to 54%', 즉 fails on 46%) 간 내부 불일치가 있음 — 배경의 '54% 회귀'는 본문 기준 정확. Neuromem 'F1 −50%'는 F3 원문('reducing F1 scores by over 50%') 확인 완료. MemPalace 96.6% R@5는 프로젝트 자체 벤치마크(비독립·self-reported)이며 검색 스니펫 수준 확인. 2504.13171(sleep-time compute)·2605.20616(Auto-Dreamer)는 본 셀 범위(역사적 실패 사례) 밖이라 미검증. Bartlett 1932·fuzzy-trace theory는 2605.12978 내부 인용 경유 확인으로 원전 직접 대조는 아님. Kafka/다운샘플링 사례는 공학 블로그·벤더 문서 수준(학술 1차 소스 아님).",
+  "confidence": "HIGH",
+  "oneLineSummary": "write-side lossy consolidation의 detail 파괴는 LLM메모리 3논문·DB·모니터링·인지과학 전 분야에서 동일 메커니즘으로 재현 — F5v2 ratify 지지",
+  "agentId": "prom-f5v2-2",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "hswm-f5-downscale-paradox-k1-kill-2026-07-25",
+   "hswm-f5v2-prereg-retrieval-time-consolidation-2026-07-26",
+   "downscale-operator-deprecated-canon",
+   "verbatim-vs-gist-duality",
+   "append-only-baseline-armA",
+   "external-replication-cogcanvas-2601.00821",
+   "external-replication-faulty-memory-2605.12978",
+   "external-replication-neuromem-2602.13967"
+  ]
+ },
+ {
+  "findingId": "finding_461181116c48e796",
+  "domain": "history-theory",
+  "rootCause": "생물학적 systems consolidation의 답: detail store는 건드리지 않고, replay로 gist 파생층을 추가하며, read는 인덱스 기반 재조립이다. CLS(McClelland et al. 1995)와 transformation hypothesis(Winocur & Moscovitch 2011; Sekeres et al. 2018 리뷰)에 따르면 consolidation은 수면 중 해마 trace의 반복 재활성화(replay)로 신피질에 gist/도식적 표현을 점진 구축하는 과정이며, 맥락 풍부한 episodic detail은 해마에 평생 잔존한다 — 삭제·압축 연산이 아니라 파생 표현의 *추가*. 인출 자체는 hippocampal indexing theory(Teyler & DiScenna 1986)대로 cue→해마 인덱스→신피질 fragment 재조립이라는 본질적 read-side 재조립이다. 기존 trace를 실제로 건드리는 유일한 경로는 reconsolidation(Nader et al. 2000)인데, 그것조차 retrieval이 trigger하고 prediction error가 gate하는 국소적·표적화된 write다. SHY(Tononi & Cirelli)의 수면 downscale조차 내용 압축이 아니라 시냅스 가중치의 비례 정규화+약(노이즈) 시냅스 가지치기이므로, F5의 내용 수준 lossy downscale 실패(detail slope −0.158)는 생물학적 선례로도 예측 가능하다.",
+  "recommendation": "ratify (소규모 amend 권고). 신경과학 계보는 F5v2의 핵심 베팅을 지지한다: arm B(쿼리별 주제 블록 재조립+출처 메타)는 indexing theory + reconstructive retrieval의 직접 구현체이고, arm C(동일 referent gated supersession)는 reconsolidation의 analogue(retrieval-triggered, prediction-error-gated, 표적화)로 정당화된다. arm D는 SHY 관점에서도 생물학적으로 부정확한(내용 압축 ≠ 연결 노이즈 가지치기) 적대 대조로서 유지 가치가 있다. Amend 2건: (1) 생물학적 consolidation은 엄밀히는 오프라인 파생층 *생성*(write-side replay)이므로, 순수 read-only B는 'consolidation'보다 'reconstructive retrieval'에 가깝다는 사실이 신경과학 자체에서 확인됨 — prereg의 명명 정정 규칙(RT가 검색 개선과 동형이면 'retrieval 재조직'으로 정정)과 K3 regime check를 반드시 유지할 것; (2) C의 supersession gate를 reconsolidation analogue로 명시(동일 referent + 불일치/prediction-error 조건에서만 invalid_at 마킹)해 write 허용 범위를 생물학적 선례 수준으로 제한할 것. 2단계 GRPO consolidator는 '학습된 오프라인 replay 연산'으로 생물학적 consolidation에 더 충실한 방향이라 우선순위 근거가 강화됨.",
+  "alternatives": [
+   "반대 해석: 생물학적 consolidation은 명백한 오프라인 write 과정(수면 replay→피질-피질 연결 강화)이므로, write 무접촉 read-only arm B는 생물학적 'consolidation'이 아니라 인덱싱/검색 최적화다. 이 관점에서는 진짜 CLS analogue는 별도 오프라인 단계에서 gist층을 *추가 기록*하는 2단계 학습 consolidator뿐이며, B는 명명부터 정정하고 기대치를 낮춰야 한다.",
+   "SHY 기반 재설계안: downscale을 내용 수준이 아니라 연결/노이즈 수준으로 재정의하면(정보 무손실 dedup·중복 레코드 가지치기 = 약시냅스 pruning analogue) 생물학적으로 정당한 write-side 연산이 성립하므로, arm D의 내용 압축만 폐기하고 'dedup' 부분은 arm C에 흡수해 별도 arm으로 승격하지 않는 선에서 consolidation 계열을 완전 shelve하지 않는다.",
+   "MTT(multiple trace theory) 극단 해석: 재활성화마다 새 trace가 추가되므로 append-only(arm A) 자체가 이미 생물학적 consolidation의 trace 축적 측면을 구현하고 있으며, B/C의 추가 복잡도가 무고유기여(K2 kill)일 가능성을 열어둬야 한다."
+  ],
+  "references": [
+   "https://pubmed.ncbi.nlm.nih.gov/22141588/ (O'Reilly et al. 2014, Complementary Learning Systems 리뷰 — CLS 프레임워크 검증)",
+   "https://neuropsychologylab.psych.utoronto.ca/files/Systems%20consolidation,%20transformation%20and%20reorganization%20Multiple%20Trace%20Theory,%20Trace%20Transformation%20Theory%20and%20their%20Competitors.pdf (Sekeres/Winocur/Moscovitch systems consolidation·transformation 리뷰)",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC5060006/ (Moscovitch 2016, Episodic Memory and Beyond — 해마 pointer/인덱스·재구성적 인출)",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC4526749/ (Memory Consolidation 리뷰 — MTT/transformation: detail은 신피질로 consolidate되지 않음)",
+   "https://pubmed.ncbi.nlm.nih.gov/3008780/ (Teyler & DiScenna 1986, hippocampal memory indexing theory 원전)",
+   "https://pubmed.ncbi.nlm.nih.gov/17696170/ (Teyler & Rudy 2007, indexing theory 업데이트)",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC4588064/ (Nader 2015, Reconsolidation and the Dynamic Nature of Memory — retrieval-gated write)",
+   "https://www.frontiersin.org/journals/molecular-neuroscience/articles/10.3389/fnmol.2021.767384/full (수면 consolidation 분자기제 리뷰 — active systems consolidation replay + SHY 비례 downscaling 대조)",
+   "doi:10.1038/s41593-019-0467-3 (Klinzing, Niethard & Born 2019, Nat Neurosci 22:1598-1610 — 수면 systems consolidation 기제, 다수 문헌에서 서지 검증)",
+   "doi:10.1037/0033-295X.102.3.419 (McClelland, McNaughton & O'Reilly 1995, Psychol Rev 102(3):419-457 — CLS 원전, 다수 문헌 서지 검증)",
+   "https://arxiv.org/abs/2605.10537 (Mela: Test-Time Memory Consolidation based on Transformation Hypothesis — gist+detail 이중 메모리를 read 시 맥락의존 재구성으로 결합하는 아키텍처, abstract 직접 확인)"
+  ],
+  "caveats": "생물학→소프트웨어 analogical transfer의 근본 한계: 시냅스 가중치 ≠ JSONL 레코드, replay ≠ retrieval re-rank이므로 방향성 근거지 효과 크기 근거는 아님. Mela(2605.10537)는 LM 아키텍처 실험이지 에이전트 메모리 벤치마크가 아니라 detail-preservation slope에 직접 대입 불가. 배경 인용 ID 중 내 셀과 직접 관련된 sleep-time compute(2504.13171)·Infini-Memory(2606.10677)는 원문 미검증(별 셀 담당 가정) — 내 리스트에 미포함. Kumaran, Hassabis & McClelland 2016(TiCS 20(7):512-534, CLS for intelligent agents)은 다수 arXiv 서지목록으로 존재 확인했으나 원문 full text는 미열람. SHY 1차 논문(Tononi & Cirelli 2003/2006)은 2차 리뷰 경유 확인이며 '비례 정규화로 상대 차이 보존' 주장은 리뷰 인용 기반. arXiv 2607.01988(Episodic-to-Semantic Consolidation Without Identity Drift) 존재를 목격했으나 내용 미검증으로 references에서 제외.",
+  "confidence": "HIGH",
+  "oneLineSummary": "생물학적 consolidation=detail 보존+gist 파생층 추가+read 시 인덱스 재조립, write는 retrieval-gated 국소 갱신뿐 → arm B+C 지지, D는 생물학적 선례 없음",
+  "agentId": "prom-f5v2-3",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "hswm-f5v2-prereg-retrieval-time-consolidation",
+   "f5-downscale-paradox-k1-kill-2026-07-25",
+   "complementary-learning-systems-mcclelland-1995",
+   "transformation-hypothesis-winocur-moscovitch",
+   "hippocampal-indexing-theory-teyler-discenna",
+   "reconsolidation-nader-retrieval-gated-write",
+   "synaptic-homeostasis-hypothesis-noise-pruning-not-content-compression",
+   "hswm-arm-b-read-side-reassembly",
+   "hswm-arm-c-gated-supersession",
+   "user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23"
+  ]
+ },
+ {
+  "findingId": "finding_39ba4dc5b47838fe",
+  "domain": "principle-benchmarks",
+  "rootCause": "Write-path 무접촉(불변 로그+read-time view) 설계의 정량적 승리 사례는 스토리지 엔진 도메인에 견고하게 존재한다. LMDB(COW B+tree+MVCC, 단일 writer, overwrite 없음)는 random read 751k ops/s로 LevelDB 174k(4.3x)·BerkeleyDB 102k(7.4x)·SQLite 83k(9.1x)를 압도하고, 100KB 대형 값 random read에서는 LevelDB 대비 ~113x(1.72M vs 15.2k), batch write에서도 2.48M entries/s로 전체 최고다. LSM 계열은 WiscKey가 LevelDB 대비 load 2.5~111x·lookup 1.6~14x + YCSB 6종 전부 우승, MyRocks가 InnoDB 대비 2x 공간 절감·~10x 낮은 write amplification(기록 바이트 수는 수량级 차이)·HDD에서 >6x QPS·프로덕션 50% 스토리지 절감을 보였다. 단 승리는 workload-gated다: Uber는 Postgres의 append-style MVCC(갱신 시 새 tuple version+전 인덱스 갱신)가 update-heavy OLTP에서 write/replication amplification을 일으켜 in-place+undo-log InnoDB로 회귀했고, event sourcing/bitemporal은 처리량 승리 벤치마크가 없고(가치는 감사·시간질의이며 TPC-BiH는 오버헤드 측정용) snapshotting이 존재하는 이유 자체가 unbounded replay가 지는 증거다. 즉 무접촉 설계는 '읽기 비용을 구조(levels/index/materialized view)로 상한을 두는 경우'에만 이기며, lossy consolidation이 이긴 DB 사례는 존재하지 않는다(모든 GC/compaction은 동일 referent의 superseded 버전만 버리는 gated supersession이다).",
+  "recommendation": "ratify (단 2건 amend 권고). (1) arm B/C는 DB 선례상 유일하게 정량 승리가 입증된 consolidation-adjacent family다 — RT consolidation은 LSM read-time merge·MVCC snapshot read·LMDB zero-copy read의 동형이고, arm C(gated supersession)는 MVCC vacuum/LSM compaction의 정확한 대응물로 산업 표준 lossless 관행이다. 반면 F5에서 kill된 downscale(파괴적 요약)에 해당하는 승리 사례는 DB 도메인에 없으므로 K1 kill 판정과 방향이 일치한다. (2) amend: DB 선례에서 append-only가 지는 지점은 항상 read 측(read amplification/replay cost)이므로 arm B에 RT 재조립 latency/token cost를 측정 secondary metric으로 추가해야 한다(현재 prereg은 detail slope+QA acc만). (3) K3 지지 근거 확인: sleep-time compute(2504.13171, 원문 대조 완료)는 동일 정확도에서 test-time compute ~5x 절감·+13~18% 정확도를 보고하되 효능이 query predictability와 상관함을 명시 — prereg의 predictability 상관 분석 사전등록은 타당하다.",
+  "alternatives": [
+   "Uber 반례는 regime risk를 시사한다: HSWM 워크로드가 update-heavy(lesson 잦은 개정)이면 append+RT 설계가 Postgres식 증폭을 read 측에서 재현할 수 있으므로 arm C를 단순 arm이 아니라 A/B 공통 안전장치로 상승 배치하는 해석도 가능하다",
+   "Infini-Memory(2606.10677, 실재 확인)는 배경의 인용과 달리 순수 RT가 아니라 '주기적 write-side consolidation(topic 문서 재조직)+agentic iterative retrieval' 하이브리드다 — 실전 승리 설계는 write/read 시점이 아니라 '무손실 재조직이냐 lossy 요약이냐'가 결정 변수임을 시사하므로, B의 명명을 'retrieval 재조직'으로 정정하는 기존 규칙보다 'lossless reorganization' 축으로 arms를 재정의하는 대안이 있다",
+   "Event sourcing의 snapshotting 관행은 순수 replay가 스케일에서 진다는 실무 합의의 증거이다 — arm B도 반복 쿼리에 대해 재조립 블록 캐시/구체화 계층이 필요해질 것이며, 이를 사전에 설계 변수로 명시하지 않으면 B가 이겨도 '캐시 덕'인지 'RT 자체 덕'인지 귀인이 불가능해진다"
+  ],
+  "references": [
+   "http://www.lmdb.tech/bench/microbench/",
+   "https://www.usenix.org/conference/fast16/technical-sessions/presentation/lu",
+   "https://engineering.fb.com/2016/08/31/core-infra/myrocks-a-space-and-write-optimized-mysql-database/",
+   "https://www.uber.com/us/en/blog/postgres-to-mysql-migration/",
+   "arXiv:2504.13171",
+   "arXiv:2606.10677"
+  ],
+  "caveats": "LMDB·MyRocks·WiscKey 수치는 스토리지 엔진 계층의 벤치마크로 HSWM의 detail-preservation slope/QA acc로의 전이는 유비적이다. Uber 사례는 공식 블로그의 정성 서술(정량 수치 미공개)이며 페이지 실재·내용은 검색 스니펫으로 확인했으나 전문 fetch는 하지 않았다. Event sourcing/bitemporal의 '처리량 승리' 1차 벤치마크는 발견 못 함 — 12,450 events/s 같은 산발 수치(IJSAT 2025 등 2차)만 존재하며 TPC-BiH는 temporal 오버헤드 측정 벤치마크로 우월성 증거가 아니다. Infini-Memory(2606.10677)는 실재 확인됐으나 배경 기술과 달리 순수 RT 참조가 아닌 하이브리드 — 인용 태그 부정확. sleep-time compute(2504.13171)는 RT가 아닌 offline 사전계산으로, K3 설계 근거로는 유효하나 arm B의 직접 선례는 아니다. 배경의 나머지 arXiv ID(2601.00821, 2605.12978, 2602.13967, 2605.20616)는 본 셀 범위(DB 원리 벤치마크) 밖이라 본 에이전트는 실재성 미검증.",
+  "confidence": "HIGH",
+  "oneLineSummary": "불변로그+read-time view는 LMDB 4~113x·LSM 2~111x·MyRocks 10x로 검증, 단 workload-gated(Uber 반례) — ratify+RT 비용 metric 추가 권고",
+  "agentId": "prom-f5v2-4",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "f5v2-prereg-retrieval-time-consolidation",
+   "f5-sealed-downscale-paradox-2026-07-25",
+   "k1-kill-two-strike-belt-canon",
+   "user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23",
+   "precedent-lmdb-cow-mvcc-read-benchmark",
+   "precedent-lsm-append-only-wisckey-myrocks",
+   "counterexample-uber-postgres-mvcc-write-amplification",
+   "concept-gated-supersession-is-mvcc-vacuum-analog",
+   "arxiv-sleep-time-compute-2504.13171-query-predictability",
+   "arxiv-infini-memory-2606.10677-hybrid-consolidation"
+  ]
+ },
+ {
+  "findingId": "finding_e503263251a58397",
+  "domain": "principle-alternatives",
+  "rootCause": "B/C 외 대안 설계공간은 3축으로 정리된다. (1) Bitemporal versioning: TOKI(arXiv 2606.06240)가 모순 해소 = write-time 동시성 제어임을 정식화 — LWW/evidence-merge/await-confirmation/per-rule 4종 휴리스틱을 bitemporal operator로 타이핑하고 isolation 전제조건+audit row(judge 패배 사실 보존) 요구를 증명했으며, judge를 write 경로에 둔 모든 감사 대상 시스템이 replay inconsistency/belief-drift skew/audit erasure 중 ≥1개 이상 anomaly를 가짐을 verdict matrix로 확인. Graphiti(arXiv 2501.13956)의 valid_at/invalid_at 비파괴 무효화는 사실상 arm C의 프로덕션 레퍼런스(valid-time-only bitemporal-lite)다. (2) CRDT supersession: Shapiro et al.의 semilattice 이론상 append-only(A)와 자연 호환되나(OR-Set tombstone/LWW), 에이전트 메모리 문헌에서 검증된 1차 소스가 없고 단일-writer 벤치에서는 메타데이터 오버헤드만 추가 — multi-writer(HSWM Phase B federated)에서만 선택 근거 발생. (3) 충돌시점 발화 게이트 변형: ForgetEval(arXiv 2606.15903) 13개 구성 비교에서 게이트 배치가 결정적 — inscribe-time LLM은 canonicalization 100% 회복이나 intent-aware deletion 0%, mutation-time hook은 intent-aware deletion 78–85%·전체 91.7–93.2%·recall 경로 무접촉. 즉 '언제 발화하는가'(inscribe/mutation/await-confirmation/retrieval)가 '무엇을 하는가'보다 실패모드를 좌우한다.",
+  "recommendation": "amend 방향 권고. (a) arm C를 Graphiti식 bitemporal-lite로 명시 재명명하고, TOKI 기준의 full bitemporal(transaction+valid 이중축 + judge audit row)을 C의 변형으로 사전등록 — C가 '파괴적이지 않다'는 주장은 audit row 보존까지 포함해야만 성립(TOKI tightness: judge keyed logging 없으면 replay inconsistency 필연). (b) 게이트 발화 시점을 사전등록 변수로 추가: ForgetEval 증거상 mutation-time > inscribe-time이므로 C의 supersession 판정은 write가 아닌 mutation 요청 시점 발화로 고정하고, B(RT)는 발화 시점 축에서 retrieval-time 극단으로 위치시켜 4개 arm이 '시점×연산' 2축 설계임을 명시. (c) CRDT supersession은 F5v2 스코프에서 제외하되 Phase B federated 전용 arm으로 명시적 유보(단일-writer에서 근거 없음). shelve 근거는 없음 — 비파괴 supersession의 프로덕션 실효(Graphiti LongMemEval 63.8 vs Mem0 49.0, 단 이 수치는 2차 인용)가 arms 전제를 지지.",
+  "alternatives": [
+   "Bitemporal full-versioning arm (TOKI식 dual-row + audit row): point-in-time belief replay·소급 정정이 필요할 때만 선택 — 그 외에는 C(bitemporal-lite)로 충분, 스키마 복잡도가 선택 비용",
+   "CRDT supersession (OR-Set tombstone / LWW+audit log): 다중-writer 합의 없는 환경에서는 채택 근거 없음, Phase B federated HSWM 전용으로 유보. remove-wins vs add-wins가 supersession 의미론을 결정",
+   "Await-confirmation 게이트 (Memanto식, arXiv 2604.22085): 충돌 탐지 후 persist 전 명시적 해소 요구 — 고위험 referent에만 선택적 적용하는 hybrid gate로 C와 결합 가능",
+   "Prediction-error/reconsolidation 발화 조건: 모든 write가 아니라 불일치·surprise 탐지 시에만 게이트 발화(생물학적 재고 consolidation 유사) — FadeMem류 decay와 결합 시 게이트 발화 빈도 절감",
+   "Content-addressed comparator (judge 제거): TOKI verdict matrix에서 anomaly 3종을 피하는 유일한 judge-free 경로 — judge catch-rate(K4) 리스크를 구조적으로 소거하나 의미 판정 능력 상실"
+  ],
+  "references": [
+   "https://arxiv.org/abs/2606.06240",
+   "https://arxiv.org/abs/2501.13956",
+   "https://arxiv.org/abs/2606.15903",
+   "https://arxiv.org/abs/2504.19413",
+   "https://arxiv.org/abs/2504.13171",
+   "https://arxiv.org/abs/2604.22085",
+   "https://arxiv.org/html/2606.10677v1",
+   "https://crdt.tech/",
+   "https://docs.xtdb.com/intro/what-is-xtdb.html"
+  ],
+  "caveats": "CRDT-for-agent-memory는 arXiv 1차 소스 부재(블로그·라이브러리 수준만 확인) — '근거 없음' 자체가 발견. Graphiti LongMemEval 63.8 vs Mem0 49.0 수치는 2차 인용(Atlan/llms3)이며 원문 PDF 대조 미완. TOKI 자체가 cross-system 비교는 underpowered라고 명시(우월성 주장 아님, 계약 기여). 배경 인용 ID 중 2601.00821/2605.12978/2602.13967/2605.20616은 본 셀과 직접 관련 낮아 미검증으로 남김. 2504.13171은 검증 완료 — query predictability와 sleep-time 효능 상관이 K3 조항의 사전 근거로 직접 인용 가능. Sleep-time compute 수치(~5x 절감, +13~18%)는 reasoning task 기준이라 memory consolidation으로의 외삽 주의.",
+  "confidence": "HIGH",
+  "oneLineSummary": "대안 3축 정리: bitemporal(감사 필요시)·CRDT(federated 전용 유보)·게이트 발화시점(mutation-time 우월) — amend 권고",
+  "agentId": "prom-f5v2-5",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "hswm-f5v2-prereg-2026-07-26",
+   "hswm-f5-sealed-downscale-paradox-2026-07-25",
+   "ref-toki-bitemporal-operator-algebra-2606-06240",
+   "ref-zep-graphiti-bitemporal-invalidation-2501-13956",
+   "ref-forgeteval-control-plane-placement-2606-15903",
+   "ref-mem0-llm-routed-add-update-delete-2504-19413",
+   "ref-sleep-time-compute-query-predictability-2504-13171",
+   "concept-crdt-supersession-deferred-to-federated-phase-b",
+   "concept-gate-firing-time-axis-inscribe-vs-mutation-vs-retrieval"
+  ]
+ },
+ {
+  "findingId": "finding_a87a9bad43258fe7",
+  "domain": "principle-pitfalls",
+  "rootCause": "명명 과장 위험은 실재하며, 판별 기준은 문헌상 명확하다. 표준 taxonomy(Zhang et al., ACM TOIS/arXiv 2404.13501)는 memory를 writing/management/reading 3연산으로 나누고 consolidation을 write/manage 측에, retrieval을 read 측에 둔다 — Infini Memory(2606.10677)도 consolidation=buffer의 주기적 write-side 재구성, retrieval=inference-time agentic reading으로 동일하게 분리한다. Transformation signature는 3축으로 조작화 가능: (1) 지속성 — 산출물이 store에 durable하게 남아 후속 쿼리에 재사용되는가(Generative Agents 2304.03442의 reflection이 signature 사례: 기존에 없던 상위 추상 노드를 write-back), (2) 파생 신규성 — 출력이 저장 아이템의 재배열/부분집합이 아니라 어떤 단일 아이템에도 없던 명제를 포함하는가, (3) 쿼리 비조건성 — 쿼리 도착 전 query-agnostic으로 수행되는가(sleep-time compute 2504.13171의 정의 자체가 'think offline BEFORE queries are presented'). 현 F5v2 arm B('read 시 쿼리별 재조립, write 무접촉')는 (1) 비지속·(3) 쿼리 조건화에서 retrieval 측으로 판정되므로, 현 스펙대로는 'retrieval-time consolidation'은 명명 과장이 맞고 'retrieval-time synthesis'가 정확하다.",
+  "recommendation": "amend 방향 ratify. (1) prereg에 위 3축 transformation-signature 판정 테스트를 사전 고정하고, 기존 '명명 정정 규칙'을 이 판정에 기계적으로 연결(3축 중 2축 미달 시 'retrieval reorganization'로 강제 정정). (2) arm B의 대조군을 naive top-k가 아닌 strong retrieval baseline(tuned reranker 또는 Infini Memory식 iterative agentic reading)으로 명시 — 그렇지 않으면 K2(무고유기여) 판정이 baseline 약함과 confound된다. (3) 'consolidation' 명명을 유지하고 싶다면 arm B를 B'로 재정의: query-agnostic 사전 주제블록 재조립 + durable cache(후속 쿼리 재사용) — 이는 3축을 충족해 진짜 consolidation signature를 가지며, sleep-time compute의 amortization(2.5×/쿼리) 결과와도 정합적이다. K3의 query-predictability ρ 기준은 2504.13171이 query 예측가능성과 효능의 상관을 직접 보고하므로 그대로 유지 타당.",
+  "alternatives": [
+   "기능 정의 관점: 'consolidation'을 시간축(write/read)이 아닌 연산 기능(통합·요약 생성)으로 정의하면 RT consolidation 명명도 정당 — 단 이 경우 검색 개선과의 구분 부담이 전적으로 K2 실증으로 이동하므로 strong retrieval baseline 요구가 더 엄격해져야 함",
+   "단일 기준 관점: 비가역적 many-to-one 변환(lossy abstraction)만을 signature로 쓰면 selection(가역·무손실)과 깔끔히 구분되지만, dedup+gated supersession(arm C)까지 consolidation으로 흡수되어 B/C 경계가 무너짐",
+   "신경과학 차용 관점: transformation hypothesis(consolidation=detail 보존과 병존하는 gist/schema 변환)에 따르면 consolidation의 정의 자체가 detail slope metric과 양립 — F5의 'downscale=detail 파괴' kill이 consolidation 전체가 아니라 손실형 구현에 대한 것임을 정당화"
+  ],
+  "references": [
+   "https://arxiv.org/abs/2606.10677",
+   "https://arxiv.org/abs/2504.13171",
+   "https://arxiv.org/abs/2304.03442",
+   "https://dl.acm.org/doi/10.1145/3748302"
+  ],
+  "caveats": "배경 인용 ID 중 본 셀 관련 2종(2606.10677, 2504.13171)만 원문 abstract 대조 완료. CogCanvas 2601.00821 / ARC-AGI 2605.12978 / Neuromem 2602.13967 / Auto-Dreamer 2605.20616은 명명-판별 셀과 무관해 미검증(타 셀 소관). Infini Memory는 arm B의 '참조'로 인용됐으나 실제로는 write-side consolidation/read-side agentic retrieval을 분리하는 구조라, arm B 정당화 근거로는 부분 부합 — 오히려 명명 과장의 반례 증거에 가까움. Winocur & Moscovitch transformation hypothesis는 이번 세션에서 1차 소스 미검증. memory survey는 ACM 출간본(DOI 10.1145/3748302)으로 확인했고 arXiv 번호 2404.13501은 제3자 인용 경유라 abs 페이지 직접 대조는 안 함.",
+  "confidence": "HIGH",
+  "oneLineSummary": "판별 기준=지속성·파생신규성·쿼리비조건성 3축; 현 arm B는 retrieval 재조직으로 판정 — 명명 정정+strong baseline 명시로 amend ratify",
+  "agentId": "prom-f5v2-6",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "prom16-hswm-f5v2-ratify-20260726",
+   "hswm-f5v2-arm-b-rt-consolidation",
+   "transformation-signature-3axis-criterion",
+   "hswm-f5-sealed-downscale-paradox-2026-07-25",
+   "ref-infini-memory-2606.10677",
+   "ref-sleep-time-compute-2504.13171",
+   "lesson-rt-consolidation-naming-inflation-guard-2026-07-26"
+  ]
+ },
+ {
+  "findingId": "finding_6c24366902530b86",
+  "domain": "principle-theory",
+  "rootCause": "인지이론은 '건전한 consolidation = detail 유지 + gist 향상' 이중서명을 직접 지지한다. Fuzzy-trace theory(Reyna & Brainerd 1995; Reyna 2012)는 verbatim/gist trace가 병렬 인코딩·분리 저장·독립 검색되며 verbatim이 gist보다 빨리 부패한다는 것이 확립된 정전이고, 이 두 과정은 conjoint recognition multinomial 모델(Brainerd, Reyna & Mojardin 1999; Stahl & Klauer 2008 단순화판)로 identity(verbatim)·similarity(gist)·recollection rejection 파라미터로 분리 측정 가능하다. 신경과학 측 transformation hypothesis(Winocur & Moscovitch 2011; Moscovitch et al. 2016)는 건전한 systems consolidation에서 detail-rich(hippocampal)와 schematic-gist(neocortical) 표상이 공존하며 검색 cue가 어느 쪽을 회복할지 결정한다고 본다 — detail만 소실되고 gist만 남는 상태는 건전한 consolidation이 아니라 해마 병변의 서명이다. F5의 downscale 역설(detail slope −0.158)은 정확히 이 'hippocampectomy 서명'을 재현한 것으로 읽히며, 이를 LLM 메모리로 옮긴 Mela(arXiv 2605.10537)는 저주파 gist 모듈 + 고주파 detail 모듈의 이중trace + 검색시 문맥의존 재결합 설계가 실제로 Transformer baseline을 이김을 보여 이중추적 원리가 공학적으로도 유효함을 입증한다.",
+  "recommendation": "ratify-with-amend. 방향은 유지하되 prereg metric을 FTT conjoint-recognition식 2파라미터 서명으로 형식화할 것: (1) detail 파라미터 = verbatim-answerable probe(정확 사실/수치 인용, identity judgment 유사), (2) gist 파라미터 = 주제·관계·추론 QA(similarity judgment 유사). 성공 서명을 'detail slope ≥ arm A (기존 K1) AND gist-side downstream acc > A (K2의 양의 요건으로 명식화)'의 결합 조건으로 정의해 gist 이득을 detail 손실로 사지 않았음을 구조적으로 강제. arm B(RT consolidation)는 MTT/TTT의 reactivation-recombination과 동형(저장 무접촉, 검색시 재조립)이므로 이론적으로 가장 건전한 후보. 추가 amend: gist 강화는 false memory를 키운다는 FTT의 정전 경고(phantom recollection)를 반영해 K4 judge에 DRM식 related-but-unstated lure probe를 포함 — gist acc 향상과 hallucination rate를 동시 보고하지 않는 run은 유효하지 않게 할 것.",
+  "alternatives": [
+   "단일 scalar metric 유지 + 사후 decomposition: 지금 metric(slope + QA acc)을 그대로 두고 분석 단계에서만 detail/gist로 분해 — simpler하지만 gist-detail trade-off가 aggregate에서 상쇄되어 kill 조건이 늦게 발동할 위험",
+   "transformation hypothesis를 norm이 아니라 descriptive으로만 사용: 자연 망각에서는 detail 소실이 정상이므로 'detail 유지'를 절대 요건으로 두지 말고, detail 회복 가능성(retrievability, invalid_at 비파괴 마킹처럼)만 요건화 — arm C(dedup+gated supersession)와 더 잘 맞는 완화된 서명",
+   "FTT 대신 complementary learning systems(CLS, McClelland) 프레임으로 형식화 — hippocampus fast/instance vs neocortex slow/statistical 이중학습은 동일한 이중추적 구조를 주되 수리모델링 전통이 더 강함"
+  ],
+  "references": [
+   "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4268540/",
+   "https://neuropsychologylab.psych.utoronto.ca/files/Memory%20transformation%20and%20systems%20consolidation.pdf",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC5060006/",
+   "https://www.sciencedirect.com/science/article/pii/S0749596X08000739",
+   "https://arxiv.org/abs/2605.10537"
+  ],
+  "caveats": "Stahl & Klauer 2008(conjoint recognition 단순화)과 Winocur & Moscovitch 2011 PDF는 검색 스니펫/초록 수준 확인이며 본문 수치는 미대조. Mela(2605.10537)는 arXiv abstract를 직접 fetch해 실재·주장 확인했으나 실험 수치는 본문 미검독이고, test-time consolidation이지만 파라미터 업데이트 방식이라 F5v2 arm B(비파괴 검색 재조립)와 정확히 동형은 아님. 배경 인용 ID 6종(2601.00821, 2605.12978, 2602.13967, 2606.10677, 2504.13171, 2605.20616)은 이 셀 소관이 아니라 미검증 — parent 측 타 셀 확인 필요. 인지이론→LLM 메모리 아날로지 자체는 유추이며, verbatim 부패 속도 > gist라는 인간 결과가 append-only store에는 구조적으로 적용되지 않는다는 반론 가능(LLM store는 자연부패가 없음).",
+  "confidence": "HIGH",
+  "oneLineSummary": "FTT·transformation hypothesis가 detail유지+gist향상 이중서명을 지지 — conjoint-recognition식 2파라미터 metric으로 ratify-with-amend 권고",
+  "agentId": "prom-f5v2-7",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "fuzzy-trace-theory-verbatim-gist-dual-trace",
+   "transformation-hypothesis-winocur-moscovitch-2011",
+   "conjoint-recognition-model-brainerd-reyna-mojardin-1999",
+   "hswm-f5-downscale-paradox-k1-kill",
+   "hswm-f5v2-prereg-retrieval-time-consolidation",
+   "mela-hmm-test-time-consolidation-2605.10537",
+   "gist-false-memory-phantom-recollection-risk"
+  ]
+ },
+ {
+  "findingId": "finding_6088a7250353bc03",
+  "domain": "implementation-benchmarks",
+  "rootCause": "5종 arXiv ID 전부 실재하며 F5v2 prereg 인용 수치가 원문과 정확히 일치한다. (1) CogCanvas(2601.00821, v3 'Verbatim Chunks Beat Extracted Artifacts'): LoCoMo verbatim chunks 43.9% vs extracted artifacts 28.0% = +15.9pp, McNemar p<10^-15 원문 그대로; 추가로 LongMemEval-S 67.4% vs 45.4%(+22.0pp), union store 42.5%≈chunks('대체가 아닌 치환'이 손실 원인) 확인. (2) Auto-Dreamer(2605.20616): GRPO 학습 offline consolidator, ScienceWorld +7 points, active bank 12× smaller than strongest baseline — abstract 문구 그대로; held-out ALFWorld/WebArena 무재학습 우위(6× 적은 메모리). (3) Neuromem(2602.13967): Finding F3 'rigid structured schemas ... reducing F1 scores by over 50%' 원문 확인; F1 finding(LLM 구동 consolidation 정책도 unmaintained와 동일 ~22% degradation)은 F5 downscale 역설의 외부 독립 corroboration. (4) sleep-time(2504.13171): test-time compute ~5× 절감, 정확도 +13~18%, multi-query amortize 2.5× — 그리고 'query predictability와 sleep-time 효능이 잘 상관' 문구가 F5v2 K3 kill 조건(ρ<0.3 regime 한정)의 직접적 원전임을 확인. 단 Infini-Memory(2606.10677)는 read-time consolidation이 아니라 buffer→topic document 주기적 write-side consolidation + agentic iterative retrieval 구조라서, arm B의 'read 시 재조립' 참조로는 부분 부적합.",
+  "recommendation": "ratify — prereg이 근거로 인용한 5종 소스의 arXiv ID와 핵심 수치(43.9/28.0/+15.9pp/p<1e-15, +7pts/12×, F1 −50%)가 전부 원문과 일치하므로 외부 증거 기반은 견고하다. 단 1개 amend 권고: Infini-Memory 2606.10677의 arm B 참조 역할을 'read-time consolidation'에서 'agentic iterative retrieval(반복 tool-call read)'로 정정할 것 — 실제로는 주기적 write-side consolidation(buffer→topic doc) 논문이므로, 현재 표기대로면 외부 검증 시 인용 부정확 지적 가능. 순수 read-time 재조직 근거는 CogCanvas의 'defer the decision to query time' 원리 + sleep-time compute가 더 정확한 참조다.",
+  "alternatives": [
+   "Auto-Dreamer의 12× 축소는 'supersession 기반 write-side 재작성(단 region은 read-only 취급 + provenance 검사)'의 학습된 버전이므로, F5v2 arm C(gated supersession)의 근거로도 읽을 수 있음 — arm B만의 독점 근거가 아니라 B/C 양쪽을 지지하는 중간 증거로 재분류 가능",
+   "Neuromem F1(consolidation 정책이 unmaintained와 동일 열화율)을 F5 downscale 역설보다 더 강한 일반법으로 해석하면, arm B조차 'read 시 재조립 비용이 retrieval 개선 이상의 이득을 내는가'를 K2(무고유기여)로 별도 측정해야 한다는 주장 가능 — RT가 검색 개선과 동형이라는 열린 리스크와 직결"
+  ],
+  "references": [
+   "https://arxiv.org/abs/2601.00821",
+   "https://arxiv.org/html/2601.00821",
+   "https://arxiv.org/abs/2605.20616",
+   "https://arxiv.org/abs/2602.13967",
+   "https://arxiv.org/html/2602.13967",
+   "https://arxiv.org/abs/2606.10677",
+   "https://arxiv.org/abs/2504.13171"
+  ],
+  "caveats": "배경의 ARC-AGI 계열 arXiv 2605.12978은 내 셀 범위 밖이라 미검증(별도 셀 확인 필요). CogCanvas v1(2025-12)은 34.7% 긍정 결과 논문이었고 v3(2026-05-27)에서 자기자신을 부정하는 controlled ablation으로 개정된 이력이 있음 — 인용 시 v3 기준임을 명시해야 함. Infini-Memory의 MemoryAgentBench 64.7은 본문 수치를 끝까지 대조하지 못했고(abstract/scirate 스니펫 수준), 'RT consolidation' 참조 부적합 지적은 abstract+개요 기반. Auto-Dreamer +7pts/12× 는 abstract 원문 확인이나 실험 세부(어느 baseline 대비인지 표 단위 대조)는 HTML 본문 미대조. Neuromem F3의 −50%는 LoCoMo normalization ablation 기준으로 데이터셋 일반 법칙이 아님.",
+  "confidence": "HIGH",
+  "oneLineSummary": "5종 arXiv ID·수치 전부 원문 일치(43.9/28.0, +7pts/12×, F1−50%) — ratify, 단 Infini-Memory는 read-time이 아닌 write-side consolidation이라 인용 역할 정정 필요",
+  "agentId": "prom-f5v2-8",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "hswm-f5-sealed-downscale-paradox-2026-07-25",
+   "hswm-f5v2-prereg-retrieval-time-consolidation",
+   "hswm-external-replication-cogcanvas-2601.00821",
+   "hswm-external-replication-autodreamer-2605.20616",
+   "hswm-external-replication-neuromem-2602.13967",
+   "hswm-ref-infini-memory-2606.10677",
+   "hswm-ref-sleep-time-compute-2504.13171",
+   "k3-query-predictability-regime-limit"
+  ]
+ },
+ {
+  "findingId": "finding_743ee56785c35571",
+  "domain": "implementation-alternatives",
+  "rootCause": "6개 후보 중 read-side 재조립(write 무접촉)을 실제 지원하는 것은 HippoRAG2뿐이다 — 오프라인 KG 구축은 write-side지만 질의 시 query-to-triple 매칭 + Personalized PageRank + recognition filtering으로 저장소를 변경하지 않고 쿼리별로 연관 단편을 재조립한다(평균 +7pts on associativity, factuality 퇴보 없음). MemGPT/Letta(자기편집 memory blocks·archival), A-MEM(memory evolution — 신규 노트가 기존 노트 속성을 갱신), Mem0(ADD/UPDATE/DELETE write-path consolidation)는 모두 write-side 연산자이며, Zep/Graphiti는 episode→entity/edge 추출이 write-side이고 read-side는 hybrid search+rerank(재조립이 아닌 검색)에 그친다. MemDelta는 메모리 시스템이 아니라 통제 ablation 평가 프로토콜이다.",
+  "recommendation": "ratify 유지 + 구현 주석 amend. (1) arm B(read-time consolidation)는 조사한 6개 상용/연구 구현체 어디에도 first-class 연산자로 존재하지 않으므로 novelty 침해(K2 무고유기여 리스크)가 낮다 — prereg 그대로 진행 가치 있음. (2) 단 arm B의 구현은 HippoRAG2식 query-seeded 그래프 확산 + passage 통합 패턴을 기반으로 하되 '주제 블록 재조립+출처 메타'를 얹는 형태가 현실적이며, K3(query-predictability 상관) 검정은 HippoRAG2의 PPR이 사실상 query-conditioned retrieval이라는 점에서 필수적 — read-side 재조립이 retrieval 개선과 동형일 경우 'retrieval 재조직' 정정 규칙이 발동될 가능성이 구현체 비교에서도 확인됨. (3) arm C(dedup+gated supersession)는 Graphiti의 bi-temporal invalid_at(valid_to) 마킹과 Mem0 v3의 ADD-only 마이그레이션이 이미 산업 선례 — 신규성 주장보다 HSWM 컨텍스트에서의 detail-slope 기여 측정으로 위치 조정 권고.",
+  "alternatives": [
+   "HippoRAG2를 arm B의 baseline 구현체로 직접 채택하고, F5v2 고유 기여를 'PPR 재조립 vs 주제-블록 재조립(출처 메타 부가)'의 head-to-head로 재정의 — 그러면 '구현 가능성'은 해소되나 K3 regime-한정 리스크가 더 커짐",
+   "Letta의 sleep-time agent 패턴(백그라운드 에이전트가 shared memory를 비동기 갱신)은 write-side이지만 사용자 체감상 read-time처럼 동작 — arm B와의 혼동을 피하려면 prereg에 '재조립 산출물이 저장소에 재기록되지 않음'을 검사 가능한 불변조건으로 명시해야 함",
+   "MemDelta 프로토콜(한 번에 한 컴포넌트만 변경, pairwise ablation, LongMemEval-S)을 F5v2의 평가 하네스로 차용 — arm 간 비교가 retrieval 품질/임베딩/LLM 차이와 오염되지 않도록 통제"
+  ],
+  "references": [
+   "https://arxiv.org/abs/2502.14802",
+   "https://arxiv.org/abs/2501.13956",
+   "https://arxiv.org/abs/2502.12110",
+   "https://arxiv.org/abs/2504.19413",
+   "https://arxiv.org/html/2606.29914v1",
+   "https://docs.mem0.ai/migration/oss-v2-to-v3",
+   "https://www.getzep.com/ai-agents/temporal-knowledge-graph/"
+  ],
+  "caveats": "MemGPT 원논문(2310.08560)과 Letta sleep-time agents 문서는 이번 셀에서 1차 소스 직접 확인 대신 2차 소스(letta teardown 블로그들)로 대체 — 수치 인용은 안 함. 배경 인용 ID 2606.10677(Infini-Memory), 2504.13171(sleep-time compute)는 본 셀의 6개 구현체에 해당하지 않아 실재성 미검증. MemDelta(arXiv 2606.29914)는 평가 프로토콜이지 구현체가 아니므로 'read-side 재조립 지원 여부' 질문에는 N/A. δ-mem(2605.12357)은 MemDelta와 무관한 별개 파라미터-메모리 시스템으로 이름 혼동 주의. HippoRAG2의 KG 구축 자체는 write-side(오프라인 인덱싱)이므로 'read-side' 판정은 인덱싱 완료 후 질의 시점 한정.",
+  "confidence": "MEDIUM",
+  "oneLineSummary": "6종 중 read-side 재조립은 HippoRAG2(PPR 쿼리시 재조립)뿐 — arm B novelty 안전, 구현 패턴으로 채택 권고",
+  "agentId": "prom-f5v2-9",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "MERGE (f:ResearchFinding {findingId:'finding_743ee56785c35571'})-[:SUPPORTS]->(:Prereg {name:'hswm-f5v2-retrieval-time-consolidation'})",
+   "MERGE (sys:MemorySystem {name:'HippoRAG2'})-[:IMPLEMENTS]->(:Pattern {name:'read-side-reassembly-via-ppr'})",
+   "MERGE (f)-[:CITES]->(:Paper {arxiv:'2502.14802'})",
+   "MERGE (f)-[:CITES]->(:Paper {arxiv:'2501.13956'})",
+   "MERGE (f)-[:CITES]->(:Paper {arxiv:'2502.12110'})",
+   "MERGE (f)-[:CITES]->(:Paper {arxiv:'2504.19413'})",
+   "MERGE (f)-[:CITES]->(:Paper {arxiv:'2606.29914'})",
+   "MERGE (armC:Arm {name:'f5v2-armC-dedup-gated-supersession'})-[:HAS_PRECEDENT]->(:Pattern {name:'graphiti-bitemporal-invalid-at'})",
+   "연결 추정: hswm-f5-downscale-paradox-kill-2026-07-25, K2-no-unique-contribution-kill-condition, user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23"
+  ]
+ },
+ {
+  "findingId": "finding_bccdc682cd73bddb",
+  "domain": "implementation-pitfalls",
+  "rootCause": "RT consolidation의 4대 함정은 모두 외부 문헌에서 확인됨: (1) 쿼리당 재조립 호출은 test-time compute를 매 쿼리에 추가 — sleep-time compute(2504.13171)가 증명한 바는 정확히 그 반대 방향(오프라인 사전계산 amortize 시 쿼리당 비용 2.5× 절감, 동일 정확도에 test-time ~5× 절감)이며, 효능이 쿼리 예측가능성과 상관한다는 것도 같은 논문 결론(F5v2 K3의 외부 근거). (2) 재조립 = 검색 결과에 대한 추상적 요약이므로 요약 hallucination을 계승 — 추상요약의 ~30%가 원문 불일치(Kryscinski 2019, Falsesum 2205.06009 인용), FaithBench(2410.13210)는 최신 모델도 도전적 케이스에서 SOTA 탐지기조차 ~50% 정확도임을 보임. (3) 출처 메타는 프롬프트 장식이 아니라 스키마 필드여야 함 — ALCE(2305.14627)는 인용 전용 설계 시스템조차 인용 정밀/재현이 불완전함을 정량화. (4) 재조립 품질은 모델 능력에 강하게 의존(FaithBench의 모델 간 격차, LLMLingua의 분포 정렬 필요성) — arm B 결과가 연산자 효과인지 재조립 모델 효과인지 교란될 위험.",
+  "recommendation": "AMEND 후 ratify. 연산 자체는 유효하나 prereg에 4개 방어 조항 추가: (a) 쿼리당 토큰 비용·지연을 2차 metric으로 강제 로깅하고 비용 상한을 사전 고정(품질 승리+경제성 패배 조합 차단; LLMLingua 20× 압축/1.5pt 손실을 비용 완화 레퍼런스로 명기). (b) 재조립 블록의 출처 스키마를 의무화(lesson ID + verbatim span offset, Infini-Memory의 entry-level metadata 패턴)하고 ALCE식 인용 검증을 submetric으로 추가 — 출처 메타 '첨부'가 아니라 '검증'. (c) 재조립 모델을 prereg 고정 인자로 기록 + 저가 모델 ablation 1개 추가해 연산자 효과와 모델 품질 효과 분리. (d) 재조립 블록의 원문 entailment 체크를 게이트로 추가하고, FaithBench의 탐지기 ~50% 정확도를 근거로 K4 judge catch-rate 90% 요구에 대한 파워 산정·인간 감사 서브샘플을 명시. K3(query-predictability ρ)는 sleep-time compute의 외부 재확인이 있으므로 유지.",
+  "alternatives": [
+   "재조립을 쿼리당 수행 대신 오프라인(sleep-time) 주제 블록 사전구축 + read 시 조립 없이 주입 — 비용 함정 회피, 단 그러면 arm B가 사실상 write-side consolidation과 동형화되어 F5 sealed 교훈과 충돌",
+   "재조립 모델 없이 구조적 재배열(정렬·그루핑·헤더 삽입)만 수행 — hallucination 유입 원천 차단, 단 '재조립 언어화' 이득 포기",
+   "비용 문제는 KV-cache/접두어 캐싱으로 흡수 가능하다는 관점 — 반복 쿼리 패턴에서 쿼리당 비용 폭증이 실측보다 과대평가될 수 있음"
+  ],
+  "references": [
+   "https://arxiv.org/abs/2504.13171",
+   "https://arxiv.org/abs/2606.10677",
+   "https://arxiv.org/abs/2307.03172",
+   "https://arxiv.org/abs/2305.14627",
+   "https://arxiv.org/abs/2410.13210",
+   "https://arxiv.org/abs/2310.05736"
+  ],
+  "caveats": "배경 인용 arXiv 2601.00821, 2605.12978, 2602.13967, 2605.20616은 본 셀에서 미검증(원문 대조 안 함). 2606.10677(Infini Memory, MemoryAgentBench 64.7%, entry-level metadata 보존)과 2504.13171(~5× test-time 절감, +13/18%, 쿼리당 2.5× 비용 절감, 예측가능성 상관)은 abs 페이지 원문 확인 완료. '~30% 요약 불일치'는 Kryscinski et al. 2019의 2차 인용(Falsesum 서론 경유)으로 원문 직접 대조는 안 함. FaithBench '~50% 탐지 정확도'는 도전적(disagreement) 서브셋 기준이라 일반 재조립 트래픽의 탐지율을 과소추정할 수 있음. RT 비용 폭증의 실측 규모(배율)는 인용 문헌에 직접 수치 없음 — 추론적 일반화.",
+  "confidence": "MEDIUM",
+  "oneLineSummary": "RT 재조립의 비용·hallucination·출처·모델의존 4함정 모두 문헌 실재 — prereg에 비로깅·출처검증·모델고정·entailment 게이트 추가 후 ratify",
+  "agentId": "prom-f5v2-10",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "hswm-f5-downscale-paradox-2026-07-25",
+   "hswm-f5v2-prereg-retrieval-time-consolidation",
+   "hswm-f5v2-kill-conditions-k1-k4",
+   "arxiv-2504.13171-sleep-time-compute",
+   "arxiv-2606.10677-infini-memory",
+   "arxiv-2410.13210-faithbench",
+   "arxiv-2305.14627-alce",
+   "arxiv-2307.03172-lost-in-the-middle",
+   "arxiv-2310.05736-llmlingua",
+   "rt-consolidation-implementation-pitfalls-2026-07-26",
+   "retrieval-reorganization-naming-rule"
+  ]
+ },
+ {
+  "findingId": "finding_923809cfcea86f9b",
+  "domain": "implementation-theory",
+  "rootCause": "Query-dependent reassembly (F5v2 arm B) has three precise formal homes in the literature, and none of them is called 'consolidation': (1) query-focused summarization — RECOMP (arXiv 2310.04408) explicitly formalizes compressing retrieved evidence as multi-document QFS, with an extractive variant (query-similarity sentence selection trained contrastively on end-task signal) and an abstractive variant (distilled generator), plus selective augmentation returning an empty string when retrieval adds nothing; (2) late interaction — ColBERT MaxSim (arXiv 2004.12832) decomposes relevance as Σ_i max_j ⟨q_i,d_j⟩, whose argmax alignments identify exactly which spans are load-bearing per query, i.e. a principled extractive reassembly operator with offline-precomputed document side; (3) MoE retrieval — RouterRetriever (arXiv 2409.02685) routes queries to domain experts, formally equivalent to choosing which topical sub-store to assemble from. The theoretical optimality condition is sufficiency: the reassembled block c=R(q,M) is optimal iff I(c;Y|q) ≈ I(M;Y|q) at minimal |c| (information-bottleneck / sufficient-statistic framing). By the data processing inequality, read-time transformation cannot add information, so RT reassembly can only beat append-only by (a) relieving context-budget pressure, (b) removing distractors that degrade generator readout (lost-in-the-middle U-curve, arXiv 2307.03172), (c) position re-ranking — never by creating content. Extractive reassembly additionally enjoys a provable (1−1/e) greedy optimality guarantee via monotone submodular budgeted maximization (Lin & Bilmes, NAACL 2010); abstractive QFS has no such guarantee and is exactly where detail loss (the F5-sealed failure mode) enters.",
+  "recommendation": "Amend, then ratify. Three concrete amendments: (1) Rename arm B from 'RT consolidation' to 'query-focused reassembly (QFR)' — the formal literature (RECOMP/QFS/late-interaction) unambiguously classifies read-time query-conditioned assembly as retrieval reorganization + QFS, so the prereg's existing naming-correction rule should be applied preemptively, not post-hoc. (2) Add a decomposition control arm B0 = extractive-only reassembly (MaxSim/dual-encoder sentence selection + provenance, no abstractive synthesis): without it, if B beats A you cannot attribute the gain to reassembly vs mere re-ranking, and K2 (무고유기여) becomes undecidable; B0 also isolates the submodular-guaranteed component from the hallucination-prone abstractive component. (3) Pre-register the sufficiency criterion explicitly: B survives iff detail slope ≥ A AND its QA gain concentrates in the long-context/distractor-heavy regime; theory (DPI + lost-in-the-middle) predicts B≈A when append-only context fits comfortably in-window, so K3's query-predictability/regime analysis should also stratify by context pressure, not just query predictability. With these amendments the prereg is theoretically well-posed and K1 (detail slope < A) is exactly the formal sufficiency-violation test — ratify.",
+  "alternatives": [
+   "Shelve arm B entirely and reframe the whole question as retrieval-engineering: since DPI says read-time work adds no information, one can argue the honest hypothesis is 'retrieval quality under context pressure', making F5v2 a reranker study, not a memory-consolidation study — but this forfeits the write-untouched safety property that distinguishes B from the killed downscale arm.",
+   "Keep the current 4-arm design unchanged and rely on the post-hoc naming-correction rule: simpler, but risks an uninterpretable B-vs-A result (selection vs synthesis confound) that would force a re-run — the B0 control is cheap insurance.",
+   "Skip extractive baselines and go straight to the learned consolidator (phase-2 GRPO): the Auto-Dreamer claim 'only trained operators beat append-only' suggests heuristic reassembly is dominated, but without an untrained QFR baseline the GRPO gain cannot be attributed to learning vs to the reassembly mechanism itself."
+  ],
+  "references": [
+   "https://arxiv.org/abs/2310.04408",
+   "https://arxiv.org/abs/2004.12832",
+   "https://arxiv.org/abs/2409.02685",
+   "https://arxiv.org/abs/2307.03172",
+   "https://aclanthology.org/N10-1134.pdf",
+   "https://arxiv.org/abs/2404.16130",
+   "https://arxiv.org/abs/2504.13171",
+   "https://arxiv.org/abs/2606.10677"
+  ],
+  "caveats": "Background arXiv IDs 2601.00821 (CogCanvas), 2605.12978 (ARC-AGI), 2602.13967 (Neuromem), 2605.20616 (Auto-Dreamer) are not directly load-bearing for this cell's formal-model question and were NOT independently verified by me — left to other cells. Infini-Memory (2606.10677) and sleep-time compute (2504.13171) verified real. The Nemhauser–Wolsey–Fisher (1978) (1−1/e) guarantee is cited as classical knowledge, not URL-verified this session. The sufficiency/DPI framing is my synthesis (standard information theory applied to RAG), not a quoted theorem from a single paper. ColBERT's argmax-alignment-as-extractive-reassembly reading is an interpretation, not a claim made by Khattab & Zaharia.",
+  "confidence": "HIGH",
+  "oneLineSummary": "RT 재조립 = QFS/late-interaction의 충분통계량 문제 — DPI상 정보증가 불가, 이득은 distractor 제거·예산 완화뿐; B0(extractive-only) 대조군 추가 후 ratify 권고.",
+  "agentId": "prom-f5v2-11",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "prom16-hswm-f5v2-ratify-20260726",
+   "hswm-f5-sealed-downscale-paradox-2026-07-25 (추정명)",
+   "f5v2-arm-b-rt-consolidation (추정명)",
+   "user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23",
+   "hswm-kill-criteria-k1-k4 (추정명)",
+   "concept-query-focused-reassembly-vs-consolidation-naming (신규 제안)"
+  ]
+ },
+ {
+  "findingId": "finding_e4515c6ce9236f78",
+  "domain": "limitations-benchmarks",
+  "rootCause": "longitudinal LLM 메모리 평가에는 slope CI 판정의 '골든 넘버' 선례가 존재하지 않는다. F5v2가 인용하는 SeqMem-Eval(arXiv 2605.15384, 원문 확인)의 Trend_HO는 eq.(8)로 정규화 hold-out 궤적 {(τ/T, H(τ))}의 least-squares slope로 정의되지만, 논문 본문/표 5 어디에도 slope에 대한 CI·유의성 검정·임계값이 없다 — 순수 기술(diagnostic) 지표다. LongMemEval(accuracy)·LoCoMo(F1/judge)도 endpoint 집계 지표뿐이라, F5v2의 'slope CI가 0을 유해 방향으로 제외하면 kill'은 문헌에서 빌려온 판정이 아니라 이 프로그램이 새로 세우는 추론 층이다. 따라서 정당화는 외부 선례가 아니라 자체 파워 산정과 CI 산정 방식의 통계적 정합성에서 나와야 한다. E=8 등간격 정규화 시점에서 slope 레버리지는 Σ(x−x̄)²=(E²−1)/(12E)=0.656으로 고정되어, SE(β̂)=σ_ε/√(0.656·n) — 파워는 E가 아니라 (a) epoch당 프로브 수(σ_ε 축소)와 (b) 독립 run 수 n으로 결정되며, 두 arm의 탐지 가능 최소 slope 차이는 α=.05·power .8 기준 Δ_min≈4.9·σ_ε/√n이다. F5 sealed의 차이 CI [−0.098,−0.024](폭 0.074, Δ=−0.061)는 SE_diff≈0.019를 시사하므로 동일 섀시 재사용 시 MDE는 slope 단위 ~0.05–0.07 수준 — 즉 RT의 진짜 이득이 F5의 위해(0.061)보다 작으면 K1이 '보호 방향'에서 제2종 오류(억울한 kill)를 범할 경계에 있다. 추가로 순차 메모리 상태는 lag 간 자기상관이 구조적으로 발생하므로 naive OLS slope CI는 반보수적(anti-conservative)이며, T=8에서는 Newey-West HAC도 점근론이라 신뢰 불가 — run-수준 cluster bootstrap(CogCanvas가 이미 사용한 방식)이나 probe-level mixed-effects 모델(arm×lag interaction)이 정답이다.",
+  "recommendation": "AMEND 후 ratify. 설계(E=8, F5 world 재사용, dual probe) 자체는 건전하나 통계 판정층 3가지를 prereg에 명문화해야 한다: (1) K1을 단순 'CI 0 제외'가 아니라 F5 캐논의 δ와 일치하는 비열등성(non-inferiority) 판정으로 재기술 — 'B/C slope − A slope의 95% CI 하한 > −δ' (FDA NI guidance / Walker 2019 표준 프레임; CI가 0을 포함한다고 동등이 아니라는 혼동 차단). (2) CI 산정 방식 사전등록: naive OLS 금지, run-level cluster bootstrap(≥1,000 resamples) 또는 probe-level mixed model 중 택일 — F5의 CI가 어느 방식이었는지 sealed receipt에서 확인 후 동일 방식 고정(방식이 다르면 F5와의 비교 자체가 무효). (3) MDE 명시 의무(기존 C6 캐논): σ_ε를 F5 sealed receipt의 잔차로 추정하고 Δ_min≈4.9σ_ε/√n 공식으로 n을 사전 산정 — 산정된 MDE가 F5 위해 크기(0.061)보다 크면 'K1 보호 방향 검정력 부족'을 prereg 리스크에 기재하고 n을 올리거나 MDE를 완화할 것. 이 3종은 이번 PROM 16의 C6 결론(파워·judge·noise floor 공통 섀시 신설)과 정확히 같은 축이라 추가 비용 없이 이식 가능하다.",
+  "alternatives": [
+   "Two-stage(실험별 slope 추정 후 비교) 대신 probe-level mixed-effects 모델(arm×lag interaction + run random slope)로 1차 분석 자체를 교체 — F5 prereg의 'hierarchical model fit' 문구와 계보가 같고 자기상관·run 간 변이를 한 번에 처리, 두 추정 단계의 오차 전파 제거",
+   "빈도론 CI 대신 Bayesian(Bowyer 2503.01747 캐논) — P(slope_B/C − slope_A < −δ) 사후확률을 보고하고 kill은 P>0.95 같은 사전등록 임계로 판정, 소표본에서 CLT 의존 회피",
+   "Theil-Sen/Mann-Kendall robust trend를 강건성 체크로 병기 — 단 E=8이면 MK는 28쌍뿐이라 검정력이 매우 낮아 1차 지표로는 부적합, OLS 결과의 방향 확인용으로만"
+  ],
+  "references": [
+   "https://arxiv.org/html/2605.15384v1",
+   "https://arxiv.org/abs/2605.15384",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC7808096/",
+   "https://www.fda.gov/media/78504/download",
+   "https://arxiv.org/pdf/2203.04080"
+  ],
+  "caveats": "SeqMem-Eval appendix(C/F) 전문은 미확인 — 본문·표 3~5 기준 Trend_HO에 추론 통계 없음을 확인했으나 appendix에 bootstrap CI 등이 있을 가능성 잔존. 파워 수치(Δ_min≈4.9σ_ε/√n, MDE ~0.05–0.07)는 공식 유도값이며 F5 sealed receipt의 실제 σ_ε·프로브 수·run 수를 이번 조사에서 열어보지 않았으므로 추정치다 — 정확한 사전 파워 산정은 receipt 대조가 선행되어야 함. F5의 CI [−0.098,−0.024]가 naive OLS인지 bootstrap인지 로컬 문서에서 확인 불가 — 이것이 naive라면 F5 kill 자체의 CI가 좁게 보고됐을 리스크가 있어 별도 감사 셀이 필요할 수 있음. 배경 인용 arXiv ID 6종(2601.00821 등)은 내 셀 범위 밖이라 재검증하지 않았음(로컬 b2_benchmarks.md에 CogCanvas 수치·CI 대조 기록 있음). FDA guidance와 Walker 2019는 검색 스니펫으로 내용 확인, 전문 fetch는 미수행.",
+  "confidence": "MEDIUM",
+  "oneLineSummary": "slope CI 골든넘버 선례는 없음(SeqMem Trend_HO는 기술지표) — K1을 비열등성(δ)+bootstrap CI+MDE 사전산정으로 amend 후 ratify",
+  "agentId": "prom-f5v2-12",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "hswm-f5v2-prereg-retrieval-time-consolidation-20260726",
+   "seqmem-eval-trend-ho-least-squares-slope-metric",
+   "f5-sealed-downscale-paradox-k1-kill-20260725",
+   "hswm-power-analysis-canon-miller-bowyer-20260726",
+   "non-inferiority-margin-delta-k1-reframe",
+   "kill-condition-statistical-validity-cluster-bootstrap",
+   "prom16-hswm-f5v2-ratify-20260726"
+  ]
+ },
+ {
+  "findingId": "finding_aefc71b93ffea735",
+  "domain": "limitations-alternatives",
+  "rootCause": "'2연속 kill=belt 중단'은 표준 순차검정 이론의 canonical rule이 아니라 휴리스틱이며, 가장 정확한 통계적 해석은 arm-level 검정들의 2-stage futility design(Simon 1989 류)이다. 이 해석에서 거짓 belt-중단 확률은 α²이 아니라 **β²**(살아있는 arm들이 모두 거짓 kill될 확률, 독립 가정)이며, 임상 문헌의 최적 futility 설계에서 HA 하 중단 확률 ξ는 0.03~0.13 수준으로 관리된다(Chang & Ivanova 2020). Futility 중단은 Type I error를 증가시키지 않고 오히려 감소시키므로(conservative 방향) 조기 중단 자체는 통계적으로 안전하나, (1) 실험 간 독립 가정(공유 judge/파이프라인이면 β² 논증 붕괴), (2) kill을 이진화해 slope CI라는 연속 증거를 버리는 비효율, (3) B·C 2개 연산자 kill을 'consolidation 계열 전체'로 일반화하는 것은 통계가 아니라 construct validity 도약이라는 세 약점이 있다.",
+  "recommendation": "amend(조건부 ratify). K1~K4 per-experiment gate(slope CI + judge catch-rate + 사전 파워 산정)는 이미 통계적으로 정당하므로 유지. 단 belt-halt meta-rule을 다음과 같이 정정: (a) 정당화 프레임을 'α² 직관'이 아니라 'β-budget 2-stage futility'로 명시 — 각 arm power ≥80%(β≤0.2) 시 독립 가정 하 거짓 belt-halt ≤ ~0.04, 공유 judge로 인한 양의 상관이 있으면 상한 상승을 caveat로 기록. (b) halt 발동 전 conditional-power/posterior check 1회 의무화: '남은 arm이 A를 이길 확률 < 0.15~0.20'(Lan-Simon-Halperin stochastic curtailment, Proschan 기준치)일 때만 halt — 2연속 kill이라도 잔여 arm의 사후 성공 확률이 높으면 belt 계속. (c) shelve 범위를 '검정된 연산자의 부모 클래스'로 한정 — 2개 kill을 계열 전체 영구 shelve의 근거로 쓰지 말 것. (d) 선택적으로 arm 간 증거 누적은 e-value 곱 결합(Safe Testing, Grünwald et al.)으로 — optional continuation 하 Type I 보존되어 실험 수 미고정인 연구 프로그램에 구조적으로 적합.",
+  "alternatives": [
+   "SPRT/mSPRT: 각 실험 결과를 'belt 유효 vs 무효' 가설의 조건부 log-LR로 누적, 경계 A=ln((1-β)/α), B=ln(β/(1-α)) — Wald-Wolfowitz 최적성(기대 실험 수 최소). Johari mSPRT는 always-valid p-value로 peeking을 합법화",
+   "Bayesian sequential: 사후확률 P(belt viable|data) < ε 또는 predictive probability 중단 — F5 sealed + 외부 3종 재현이라는 풍부한 사전정보를 명시적으로 활용 가능, 컴퓨트 비용을 손실함수에 넣는 의사결정이론 프레임과 자연스럽게 결합",
+   "alpha/beta-spending (Lan-DeMets 1983 + OBF/Pocock): 정보 비율별 오류 예산 지출 — look 시점이 유동적인 prereg에 적합. 단 efficacy 측은 alpha-spending, futility 측은 beta-spending이 대응물임을 구분할 것",
+   "IUT(intersection-union) 해석: B·C 각각 kill → 계열 무효 채택은 IUT 구조라 별도 다중성 보정 없이 size ≤ α로 conservative — 다만 계열 대표성(construct validity)은 별도 방어 필요"
+  ],
+  "references": [
+   "https://arxiv.org/abs/1512.04922",
+   "https://arxiv.org/abs/1810.08240",
+   "https://arxiv.org/abs/1906.07801",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC7954786/",
+   "Lan & DeMets 1983, Discrete sequential boundaries for clinical trials, Biometrika 70(3):659-663, doi:10.2307/2336502 (인용 원문 확인: https://arxiv.org/html/2502.10380v1 reference list)",
+   "Pocock 1977 Biometrika 64:191-199 / O'Brien & Fleming 1979 Biometrics 35:549-556 / Lan, Simon & Halperin 1982 Seq Anal 1(3):207-219 (원문 인용 확인: PMC7954786 reference list)"
+  ],
+  "caveats": "배경의 arXiv ID 6종(2601.00821, 2605.12978, 2602.13967, 2606.10677, 2504.13171, 2605.20616)은 본 셀(중단 규칙 통계)과 무관해 미검증 — 다른 셀 소관. β² 거짓-halt 상한은 arm 간 독립 가정이며 HSWM은 공유 KG/judge/코드베이스로 양의 상관이 사실상 확실하므로 실제 거짓-halt 확률은 더 높음. Conditional power 0.15~0.20 기준치는 임상시험 관행(Proschan)으로 ML 벤치마크 실험에 대한 직접 근거는 아님. Wald-Wolfowitz 최적성 원전(1948)은 교과서 정리로 URL 미첨부. IUT 해석은 '계열 전체'가 아닌 '검정된 연산자들의 교집합 가설'에만 엄밀히 적용됨.",
+  "confidence": "HIGH",
+  "oneLineSummary": "'2연속 kill'은 α²이 아니라 β-budget futility 설계로 정당화되며, halt 전 conditional-power<0.2 확인과 shelve 범위 한정을 amend 권고",
+  "agentId": "prom-f5v2-13",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "hswm-f5v2-prereg-2026-07-26",
+   "hswm-belt-halt-2consecutive-kill-canon",
+   "hswm-f5-sealed-downscale-paradox-2026-07-25",
+   "kill-condition-K1-detail-slope",
+   "kill-condition-K4-judge-catch-rate",
+   "SequentialTest:SPRT-Wald",
+   "Method:LanDeMets-AlphaSpending-1983",
+   "Method:ConditionalPower-StochasticCurtailment-LanSimonHalperin-1982",
+   "Method:SafeTesting-EValue-Grunwald",
+   "Method:AlwaysValidInference-mSPRT-Johari",
+   "Method:ConfidenceSequence-Howard-Ramdas"
+  ]
+ },
+ {
+  "findingId": "finding_4e6368672701d61c",
+  "domain": "limitations-pitfalls",
+  "rootCause": "셀 질문의 4가지 측정 함정 모두 선행 사례가 확인됐다. (1) Judge catch-rate: Penfield Labs 감사(Nous 논문 arXiv:2606.22030이 인용)에서 LoCoMo의 GPT-4o judge가 의도적 오답의 최대 63%를 정답으로 수용(catch-rate ≈37%)하고 답안키의 6.4%가 오류 — F5v2의 catch-rate<90% 무효화 조항이 실제 리더보드급 벤치마크에서 발동될 수 있었던 직접 사례. LongMemEval(arXiv:2410.10813)은 GPT-4o judge를 채택하기 전 meta-evaluation으로 인간 전문가와 97% 일치를 검증해, 'judge 검증 선행'이 이 서브필드의 사실상 표준임을 보여준다. Zheng et al.(2306.05685)은 강한 judge(GPT-4)도 인간 일치 80%+에 그치고 position/verbosity/self-enhancement 편향이 있음을 문서화. (2) Noise floor: MMLU-Redux(2406.04127)는 MMLU 문항 ~6.5%가 오류(Virology 서브셋은 과반)라는 것을 보여, 벤치마크 자체 오류율이 유의미한 효과 크기의 하한(noise floor)을 결정한다는 선례. (3) 파워: Miller/Anthropic(2411.00640)은 eval을 실험으로 취급해 파워 기반 표본 설계·paired 분석 공식을 제시 — 사전 n 산정 없이 작은 slope 차이를 검정하는 것은 underpowered라는 방법론 정본. (4) Gist metric 과잉해석: Nous(2606.22030)는 동일 출력에서 관대한 LLM judge 59.97 vs strict token-F1 32.45로 27.5pt 괴리를 실측했고, judge는 retriever가 뒷받침하지 않은 답(open-domain 62.5 vs F1 10.5)도 정답 처리 — gist/의미론 judge 점수 상승을 '기억 보존 개선'으로 읽는 것의 위험을 정량화한 사례. Fuzzy-trace theory(Reyna, PMC4268540)는 gist 기억이 의미 기반이지만 false memory를 증가시킨다는 인지과학적 근거를 제공한다.",
+  "recommendation": "ratify 방향 — K4 조항은 선행 사례로 충분히 정당화되므로 유지하되, 실행 방식을 선례에 맞춰 구체화(amend 수준의 보강)할 것: (a) judge catch-rate는 Penfield 감사 방식의 '의도적 오답 주입(adversarial canary)'으로 사전 측정하고, LongMemEval처럼 인간 라벨 대비 일치율 meta-evaluation을 run 시작 전 게이트로 둔다(90% 미만 시 run 무효는 그대로). (b) noise floor는 GT 품질 감사(답안키 오류율)와 동일 설정 반복 재실행의 측정 분산으로 정량화해, kill/생존 판정에 쓸 최소 유의 효과(MDE)의 하한으로 명시. (c) n 산정은 Miller(2411.00640)의 파워 공식으로 slope 차이 검정의 MDE를 CI 폭에 매핑해 prereg에 기입 — F5의 CI [−0.098,−0.024] 폭을 기준 효과 크기로 역산하는 식. (d) gist/의미론 judge 지표는 Nous식 이중 렌즈(verbatim/strict 지표와 관대한 judge를 동시 보고)로 강제하고, gist 지표 단독 상승은 'detail 보존 개선' 주장의 근거로 사용 금지. 단 90% 임계의 기준선은 '인간-인간 일치율'을 같이 재서 judge가 인간 수준 이하로 깎이지 않는지 확인하는 절차를 추가하는 편이 방어 가능하다.",
+  "alternatives": [
+   "catch-rate 90%는 과도하게 엄격하다는 관점: Zheng(2306.05685)에서 인간 평가자 간 일치율도 ~80% 수준이므로, 절대 임계 대신 'judge-인간 일치 ≥ 인간-인간 일치'의 상대 기준을 쓰고 부족분은 측정 오차로 CI에 반영하는 설계도 가능",
+   "LLM judge 자체를 포기하고 strict token-F1/프로그래머틱 채점만 쓰는 관점: judge 편향·catch-rate 문제를 원천 제거하지만, detail 보존 slope 같은 의미론 metric과 open-ended QA에는 부적합하므로 이중 렌즈(두 metric 동시 보고 + 불일치 시 strict 우선)가 현실적 절충",
+   "noise-floor kill을 '벤치마크 오류율'이 아니라 'harness 재현성'(동일 시드 반복 run의 점수 분산)으로 정의하는 관점: GT 오류는 system bias라 CI로 못 잡지만, 재현 분산은 직접 측정 가능하고 F5v2처럼 자체 harness를 쓰는 설정에 더 적합"
+  ],
+  "references": [
+   "https://arxiv.org/abs/2306.05685",
+   "https://arxiv.org/abs/2410.10813",
+   "https://arxiv.org/abs/2411.00640",
+   "https://arxiv.org/abs/2406.04127",
+   "https://arxiv.org/abs/2606.22030",
+   "https://arxiv.org/abs/2601.00821",
+   "https://arxiv.org/abs/2602.13967",
+   "https://arxiv.org/abs/2504.13171",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC4268540/"
+  ],
+  "caveats": "미검증 사항: (1) Penfield Labs LoCoMo 감사 원문(substack URL + github.com/dial481/locomo-audit)은 Nous 논문(2606.22030)의 참고문헌 인용을 통해 확인했을 뿐 원문을 직접 fetch하지 못함 — 6.4%/63% 수치는 2차 인용. (2) 배경의 CogCanvas(2601.00821)는 abstract에서 verbatim 43.9% vs extracted 28.0%(+15.9pp, LoCoMo) 및 LongMemEval-S 67.4% vs 45.4%(+22pp)까지 원문 대조됐으나 'p<1e-15'는 abstract에 없어 미검증. (3) 배경의 Neuromem(2602.13967) '구조화 압축 F1 −50%'는 abstract에 해당 수치가 없음(abstract는 'aggressive compression이 비용만 이동시키고 accuracy gain은 제한적' 수준의 서술) — −50% 수치 미검증, 본문 확인 필요. (4) ARC-AGI 계열 2605.12978 / Infini-Memory 2606.10677 / Auto-Dreamer 2605.20616은 본 셀 범위 밖이라 실재성 미검증. (5) MMLU-Redux의 ~6.5% 오류율과 Virology 57%는 검색 스니펫·2차 소스 기반이며 논문 본문 수치 직접 대조는 못 함. (6) Zheng 2306.05685의 '>80% agreement'는 pairwise preference 태스크 기준이라 F5v2의 사실형 QA judge catch-rate와 과제 형태가 다름.",
+  "confidence": "HIGH",
+  "oneLineSummary": "Judge catch-rate·noise floor·파워·gist 과잉해석 4종 함정 모두 선례 존재(LoCoMo 오답 63% 수용, MMLU 6.5% 오류, Miller 파워 공식, Nous 27.5pt judge-F1 괴리) — K4 ratify + canary·이중렌즈 보강 권고.",
+  "agentId": "prom-f5v2-14",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "prom16-hswm-f5v2-ratify-20260726",
+   "HSWM F5v2 prereg K4 measurement kill conditions",
+   "LongMemEval-2410.10813 (benchmark node)",
+   "LoCoMo benchmark node",
+   "MMLU-Redux-2406.04127 noise floor precedent",
+   "lesson-judge-catch-rate-canary-gate (신규 Lesson 후보)",
+   "lesson-gist-verbatim-dual-lens-metric (신규 Lesson 후보, fuzzy-trace theory 연결)",
+   "agent-feedback-loop-canonical-2026-04-27 (Verdict/측정 검증 루프 연결)",
+   "Anthropic-2411.00640 eval power analysis method node"
+  ]
+ },
+ {
+  "findingId": "finding_055d99bc82ff47fc",
+  "domain": "limitations-theory",
+  "rootCause": "K3의 ρ≥0.3 규칙은 본질적으로 상호작용(moderation) 주장 — 'RT consolidation 효과는 쿼리 예측가능성에 의해 조절된다' — 을 상관 계수의 점추정에 대한硬결정규칙으로 코딩한 것이다. 이론적으로 regime-conditional claim의 정식 형식화는 arm×predictability 상호작용 검정이며, McClelland & Judd (1993)과 Gelman의 16× 규칙이 보이듯 상호작용 추정은 주효과의 최대 16배 표본을 요구한다 — 벤치마크 규모 n에서 Spearman ρ의 Fisher-z CI는 ρ=0.3 기준 ±0.3 이상으로 넓어, K3가 점추정 하나로 claim 축소/유지를 갈라 Type M 오류(과대추정)에 노출된다. 두 번째 함정은 조절변수 'query predictability'의 조작화(operationalization)가 사전등록되지 않으면 regime 경계 자체가 사후 적합 가능한 연구자 자유도(Wicherts et al. 2016, 34 DoF; HARKing)가 되고, 예측가능성을 효과 추정과 동일 데이터에서 추정하면 post-selection inference 순환성이 생긴다. 세 번째는 Gelman & Stern (2006)의 오류 — '예측가능 regime에서 유의 / 불가능 regime에서 비유의'를 비교하는 것 자체가 유의한 차이가 아니며, SeqMem류 템플릿 쿼리는 예측가능성 범위 제한(restriction of range)으로 ρ를 인위적으로 감쇠시켜 K3를 허위 발동시킬 수 있다.",
+  "recommendation": "amend — K3 규칙의 방향(regime 한정 claim 회피용 안전장치)은 타당하므로 유지하되 4점을 수정: (1) query predictability의 조작화를 사전등록에 명시(예: 효과 추정 데이터와 분리된 holdout 쿼리 집합에서 frozen 분류기/엔트로피 측정치로 산정, 사전 고정된 임계로 예측가능/불가능 층화); (2) ρ<0.3 점추정 단일 hard kill 대신 'ρ의 CI 전체가 0.3 미만일 때만 regime 한정으로 claim 축소'로 재정의하고 상호작용 항의 형식 검정을 병행 보고; (3) 상호작용 검정의 사전 power 산정을 prereg에 포함 — 16× 규칙상 현 계획 n으로 ρ 차이 검정이 불가능하면 K3를 kill이 아닌 exploratory scope-note로 강등; (4) 쿼리 스위트에 의도적으로 저예측성(nonce/adversarial) 쿼리를 포함해 예측가능성의 변동 범위를 확보, 범위제한 감쇠 방지. ρ=0.3 자체는 Cohen의 기술적 관습이지 결정론적 경계가 아니므로, 임계의 출처를 prereg에 명시하거나 손실함수(잘못된 범위 일반화 비용)에서 유도해야 한다.",
+  "alternatives": [
+   "이진 kill 대신 베이지안 계층모형(regime별 부분풀링)으로 regime 간 효과를 shrinkage 추정 — 경계 결정 자체를 회피",
+   "상관 대신 사전 층화 설계(예측가능 vs 불가능 쿼리를 층화 무작위 배정)로 조절효과를 인과적으로 식별",
+   "K3를 kill에서 제외하고 predictability를 specification curve/multiverse의 기술적 축으로만 보고"
+  ],
+  "references": [
+   "https://uopsych.github.io/psy612/readings/McClelland-1993-Psychol%20Bull.pdf",
+   "https://statmodeling.stat.columbia.edu/2023/11/09/you-need-16-times-the-sample-size-to-estimate-an-interaction-than-to-estimate-a-main-effect-explained/",
+   "https://ditraglia.com/erm/Gelman-Stern-2006.pdf",
+   "https://pages.cs.wisc.edu/~jerryzhu/HAMLET/psyreplicability/van_'t_Veer&Giner-Sorolla2016.pdf",
+   "https://pmc.ncbi.nlm.nih.gov/articles/PMC5122713/",
+   "https://www.rwi-essen.de/fileadmin/user_upload/RWI/Publikationen/I4R_Discussion_Paper_Series/101_I4R_Brodeur_Cook_Heyes_Hartley.pdf",
+   "arXiv:2504.13171"
+  ],
+  "caveats": "배경 인용 arXiv 중 2504.13171(sleep-time compute)만 독립 인용으로 실재 확인. 2606.10677(Infini-Memory)은 제3자 GitHub 리포(mnemo) 언급 1건만 — 약한 확인. 2601.00821/2605.12978/2602.13967/2605.20616은 본 셀(이론)과 직접 관련이 낮아 미검증으로 둠. Kerr (1998) HARKing, Gelman & Carlin (2014) Type S/M, Lee et al. (2016) post-selection inference는 정전 지식에서 인용했으나 URL 직접 fetch는 안 함. ρ=0.3 임계의 '이식 원천'(어느 선행 작업에서 가져왔는지)이 셀 배경에 명시되지 않아, 임계 자체의 empirical 근거는 평가 불가.",
+  "confidence": "HIGH",
+  "oneLineSummary": "K3의 ρ≥0.3 규칙은 저전력 상호작용 검정을 점추정 hard kill로 오코딩 — CI 기반 판정+조절변수 사전 조작화로 amend 필요",
+  "agentId": "prom-f5v2-15",
+  "researchedAt": "2026-07-26",
+  "sourceKgBindings": [
+   "HSWM-F5v2-prereg-K3-query-predictability-threshold",
+   "regime-conditional-claim-formalization-moderation",
+   "hswm-f5-sealed-downscale-paradox-2026-07-25",
+   "agent-feedback-loop-canonical-2026-04-27",
+   "lesson-moderation-power-16x-rule-mcclelland-judd",
+   "post-selection-inference-regime-labeling-circularity"
+  ]
+ }
+]

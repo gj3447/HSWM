@@ -1,0 +1,36 @@
+{
+ "findingId": "finding_743ee56785c35571",
+ "domain": "implementation-alternatives",
+ "rootCause": "6개 후보 중 read-side 재조립(write 무접촉)을 실제 지원하는 것은 HippoRAG2뿐이다 — 오프라인 KG 구축은 write-side지만 질의 시 query-to-triple 매칭 + Personalized PageRank + recognition filtering으로 저장소를 변경하지 않고 쿼리별로 연관 단편을 재조립한다(평균 +7pts on associativity, factuality 퇴보 없음). MemGPT/Letta(자기편집 memory blocks·archival), A-MEM(memory evolution — 신규 노트가 기존 노트 속성을 갱신), Mem0(ADD/UPDATE/DELETE write-path consolidation)는 모두 write-side 연산자이며, Zep/Graphiti는 episode→entity/edge 추출이 write-side이고 read-side는 hybrid search+rerank(재조립이 아닌 검색)에 그친다. MemDelta는 메모리 시스템이 아니라 통제 ablation 평가 프로토콜이다.",
+ "recommendation": "ratify 유지 + 구현 주석 amend. (1) arm B(read-time consolidation)는 조사한 6개 상용/연구 구현체 어디에도 first-class 연산자로 존재하지 않으므로 novelty 침해(K2 무고유기여 리스크)가 낮다 — prereg 그대로 진행 가치 있음. (2) 단 arm B의 구현은 HippoRAG2식 query-seeded 그래프 확산 + passage 통합 패턴을 기반으로 하되 '주제 블록 재조립+출처 메타'를 얹는 형태가 현실적이며, K3(query-predictability 상관) 검정은 HippoRAG2의 PPR이 사실상 query-conditioned retrieval이라는 점에서 필수적 — read-side 재조립이 retrieval 개선과 동형일 경우 'retrieval 재조직' 정정 규칙이 발동될 가능성이 구현체 비교에서도 확인됨. (3) arm C(dedup+gated supersession)는 Graphiti의 bi-temporal invalid_at(valid_to) 마킹과 Mem0 v3의 ADD-only 마이그레이션이 이미 산업 선례 — 신규성 주장보다 HSWM 컨텍스트에서의 detail-slope 기여 측정으로 위치 조정 권고.",
+ "alternatives": [
+  "HippoRAG2를 arm B의 baseline 구현체로 직접 채택하고, F5v2 고유 기여를 'PPR 재조립 vs 주제-블록 재조립(출처 메타 부가)'의 head-to-head로 재정의 — 그러면 '구현 가능성'은 해소되나 K3 regime-한정 리스크가 더 커짐",
+  "Letta의 sleep-time agent 패턴(백그라운드 에이전트가 shared memory를 비동기 갱신)은 write-side이지만 사용자 체감상 read-time처럼 동작 — arm B와의 혼동을 피하려면 prereg에 '재조립 산출물이 저장소에 재기록되지 않음'을 검사 가능한 불변조건으로 명시해야 함",
+  "MemDelta 프로토콜(한 번에 한 컴포넌트만 변경, pairwise ablation, LongMemEval-S)을 F5v2의 평가 하네스로 차용 — arm 간 비교가 retrieval 품질/임베딩/LLM 차이와 오염되지 않도록 통제"
+ ],
+ "references": [
+  "https://arxiv.org/abs/2502.14802",
+  "https://arxiv.org/abs/2501.13956",
+  "https://arxiv.org/abs/2502.12110",
+  "https://arxiv.org/abs/2504.19413",
+  "https://arxiv.org/html/2606.29914v1",
+  "https://docs.mem0.ai/migration/oss-v2-to-v3",
+  "https://www.getzep.com/ai-agents/temporal-knowledge-graph/"
+ ],
+ "caveats": "MemGPT 원논문(2310.08560)과 Letta sleep-time agents 문서는 이번 셀에서 1차 소스 직접 확인 대신 2차 소스(letta teardown 블로그들)로 대체 — 수치 인용은 안 함. 배경 인용 ID 2606.10677(Infini-Memory), 2504.13171(sleep-time compute)는 본 셀의 6개 구현체에 해당하지 않아 실재성 미검증. MemDelta(arXiv 2606.29914)는 평가 프로토콜이지 구현체가 아니므로 'read-side 재조립 지원 여부' 질문에는 N/A. δ-mem(2605.12357)은 MemDelta와 무관한 별개 파라미터-메모리 시스템으로 이름 혼동 주의. HippoRAG2의 KG 구축 자체는 write-side(오프라인 인덱싱)이므로 'read-side' 판정은 인덱싱 완료 후 질의 시점 한정.",
+ "confidence": "MEDIUM",
+ "oneLineSummary": "6종 중 read-side 재조립은 HippoRAG2(PPR 쿼리시 재조립)뿐 — arm B novelty 안전, 구현 패턴으로 채택 권고",
+ "agentId": "prom-f5v2-9",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "MERGE (f:ResearchFinding {findingId:'finding_743ee56785c35571'})-[:SUPPORTS]->(:Prereg {name:'hswm-f5v2-retrieval-time-consolidation'})",
+  "MERGE (sys:MemorySystem {name:'HippoRAG2'})-[:IMPLEMENTS]->(:Pattern {name:'read-side-reassembly-via-ppr'})",
+  "MERGE (f)-[:CITES]->(:Paper {arxiv:'2502.14802'})",
+  "MERGE (f)-[:CITES]->(:Paper {arxiv:'2501.13956'})",
+  "MERGE (f)-[:CITES]->(:Paper {arxiv:'2502.12110'})",
+  "MERGE (f)-[:CITES]->(:Paper {arxiv:'2504.19413'})",
+  "MERGE (f)-[:CITES]->(:Paper {arxiv:'2606.29914'})",
+  "MERGE (armC:Arm {name:'f5v2-armC-dedup-gated-supersession'})-[:HAS_PRECEDENT]->(:Pattern {name:'graphiti-bitemporal-invalid-at'})",
+  "연결 추정: hswm-f5-downscale-paradox-kill-2026-07-25, K2-no-unique-contribution-kill-condition, user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23"
+ ]
+}

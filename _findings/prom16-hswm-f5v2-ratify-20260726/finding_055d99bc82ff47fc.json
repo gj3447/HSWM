@@ -1,0 +1,33 @@
+{
+ "findingId": "finding_055d99bc82ff47fc",
+ "domain": "limitations-theory",
+ "rootCause": "K3의 ρ≥0.3 규칙은 본질적으로 상호작용(moderation) 주장 — 'RT consolidation 효과는 쿼리 예측가능성에 의해 조절된다' — 을 상관 계수의 점추정에 대한硬결정규칙으로 코딩한 것이다. 이론적으로 regime-conditional claim의 정식 형식화는 arm×predictability 상호작용 검정이며, McClelland & Judd (1993)과 Gelman의 16× 규칙이 보이듯 상호작용 추정은 주효과의 최대 16배 표본을 요구한다 — 벤치마크 규모 n에서 Spearman ρ의 Fisher-z CI는 ρ=0.3 기준 ±0.3 이상으로 넓어, K3가 점추정 하나로 claim 축소/유지를 갈라 Type M 오류(과대추정)에 노출된다. 두 번째 함정은 조절변수 'query predictability'의 조작화(operationalization)가 사전등록되지 않으면 regime 경계 자체가 사후 적합 가능한 연구자 자유도(Wicherts et al. 2016, 34 DoF; HARKing)가 되고, 예측가능성을 효과 추정과 동일 데이터에서 추정하면 post-selection inference 순환성이 생긴다. 세 번째는 Gelman & Stern (2006)의 오류 — '예측가능 regime에서 유의 / 불가능 regime에서 비유의'를 비교하는 것 자체가 유의한 차이가 아니며, SeqMem류 템플릿 쿼리는 예측가능성 범위 제한(restriction of range)으로 ρ를 인위적으로 감쇠시켜 K3를 허위 발동시킬 수 있다.",
+ "recommendation": "amend — K3 규칙의 방향(regime 한정 claim 회피용 안전장치)은 타당하므로 유지하되 4점을 수정: (1) query predictability의 조작화를 사전등록에 명시(예: 효과 추정 데이터와 분리된 holdout 쿼리 집합에서 frozen 분류기/엔트로피 측정치로 산정, 사전 고정된 임계로 예측가능/불가능 층화); (2) ρ<0.3 점추정 단일 hard kill 대신 'ρ의 CI 전체가 0.3 미만일 때만 regime 한정으로 claim 축소'로 재정의하고 상호작용 항의 형식 검정을 병행 보고; (3) 상호작용 검정의 사전 power 산정을 prereg에 포함 — 16× 규칙상 현 계획 n으로 ρ 차이 검정이 불가능하면 K3를 kill이 아닌 exploratory scope-note로 강등; (4) 쿼리 스위트에 의도적으로 저예측성(nonce/adversarial) 쿼리를 포함해 예측가능성의 변동 범위를 확보, 범위제한 감쇠 방지. ρ=0.3 자체는 Cohen의 기술적 관습이지 결정론적 경계가 아니므로, 임계의 출처를 prereg에 명시하거나 손실함수(잘못된 범위 일반화 비용)에서 유도해야 한다.",
+ "alternatives": [
+  "이진 kill 대신 베이지안 계층모형(regime별 부분풀링)으로 regime 간 효과를 shrinkage 추정 — 경계 결정 자체를 회피",
+  "상관 대신 사전 층화 설계(예측가능 vs 불가능 쿼리를 층화 무작위 배정)로 조절효과를 인과적으로 식별",
+  "K3를 kill에서 제외하고 predictability를 specification curve/multiverse의 기술적 축으로만 보고"
+ ],
+ "references": [
+  "https://uopsych.github.io/psy612/readings/McClelland-1993-Psychol%20Bull.pdf",
+  "https://statmodeling.stat.columbia.edu/2023/11/09/you-need-16-times-the-sample-size-to-estimate-an-interaction-than-to-estimate-a-main-effect-explained/",
+  "https://ditraglia.com/erm/Gelman-Stern-2006.pdf",
+  "https://pages.cs.wisc.edu/~jerryzhu/HAMLET/psyreplicability/van_'t_Veer&Giner-Sorolla2016.pdf",
+  "https://pmc.ncbi.nlm.nih.gov/articles/PMC5122713/",
+  "https://www.rwi-essen.de/fileadmin/user_upload/RWI/Publikationen/I4R_Discussion_Paper_Series/101_I4R_Brodeur_Cook_Heyes_Hartley.pdf",
+  "arXiv:2504.13171"
+ ],
+ "caveats": "배경 인용 arXiv 중 2504.13171(sleep-time compute)만 독립 인용으로 실재 확인. 2606.10677(Infini-Memory)은 제3자 GitHub 리포(mnemo) 언급 1건만 — 약한 확인. 2601.00821/2605.12978/2602.13967/2605.20616은 본 셀(이론)과 직접 관련이 낮아 미검증으로 둠. Kerr (1998) HARKing, Gelman & Carlin (2014) Type S/M, Lee et al. (2016) post-selection inference는 정전 지식에서 인용했으나 URL 직접 fetch는 안 함. ρ=0.3 임계의 '이식 원천'(어느 선행 작업에서 가져왔는지)이 셀 배경에 명시되지 않아, 임계 자체의 empirical 근거는 평가 불가.",
+ "confidence": "HIGH",
+ "oneLineSummary": "K3의 ρ≥0.3 규칙은 저전력 상호작용 검정을 점추정 hard kill로 오코딩 — CI 기반 판정+조절변수 사전 조작화로 amend 필요",
+ "agentId": "prom-f5v2-15",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "HSWM-F5v2-prereg-K3-query-predictability-threshold",
+  "regime-conditional-claim-formalization-moderation",
+  "hswm-f5-sealed-downscale-paradox-2026-07-25",
+  "agent-feedback-loop-canonical-2026-04-27",
+  "lesson-moderation-power-16x-rule-mcclelland-judd",
+  "post-selection-inference-regime-labeling-circularity"
+ ]
+}

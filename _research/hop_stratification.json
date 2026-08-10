@@ -1,0 +1,62 @@
+{
+ "source": "gj3447/HSWM substrate_bench_results.json (n=300)",
+ "thesis": "HSWM margin over cosine grows with logical chain length (multi-hop)",
+ "by_n_gold": {
+  "sup_recall_at_3": {
+   "2": {
+    "hswm": 0.7826,
+    "cosine": 0.769,
+    "margin": 0.0136,
+    "n": 184
+   },
+   "3": {
+    "hswm": 0.6199,
+    "cosine": 0.538,
+    "margin": 0.0819,
+    "n": 57
+   },
+   "4": {
+    "hswm": 0.5508,
+    "cosine": 0.4873,
+    "margin": 0.0636,
+    "n": 59
+   }
+  },
+  "ndcg10": {
+   "2": {
+    "hswm": 0.852,
+    "cosine": 0.8487,
+    "margin": 0.0033,
+    "n": 184
+   },
+   "3": {
+    "hswm": 0.8016,
+    "cosine": 0.7508,
+    "margin": 0.0509,
+    "n": 57
+   },
+   "4": {
+    "hswm": 0.8332,
+    "cosine": 0.7611,
+    "margin": 0.0722,
+    "n": 59
+   }
+  }
+ },
+ "by_dataset": {
+  "sup_recall_at_3": {
+   "2wiki": {
+    "hswm": 0.88,
+    "cosine": 0.8425,
+    "margin": 0.0375,
+    "n": 100
+   },
+   "musique": {
+    "hswm": 0.6192,
+    "cosine": 0.5833,
+    "margin": 0.0358,
+    "n": 200
+   }
+  }
+ }
+}

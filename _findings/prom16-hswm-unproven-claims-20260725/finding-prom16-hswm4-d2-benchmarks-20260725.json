@@ -1,0 +1,35 @@
+{
+ "findingId": "finding-prom16-hswm4-d2-benchmarks-20260725",
+ "domain": "consolidation::benchmarks",
+ "rootCause": "Claim ④(장기 consolidation) 증명이 어려운 근본 구조: continual learning과 LLM agent memory 두 문헌이 서로 다른 측정 축을 쓴다. 전통 CL(Split CIFAR/MNIST, CORe50)은 AA/BWT로 '새 태스크 학습 후 옛 태스크 성능'을 재는 반면, agent memory 벤치마크(LOCOMO, LongMemEval)는 단일 정적 히스토리에서의 recall 품질만 재고 '나중에 주입된 지식이 이전 지식을 간섭하는' 진짜 forgetting 상황을 만들지 않는다. 그 결과 append-only retrieval이 이미 천장에 도달해(p1v2 typed lesson KILL과 동일 구조) consolidation 개입 효과가 0으로 측정되거나, 반대로 간섭이 없어 forgetting 자체가 발생하지 않는 프로토콜이 된다. 또한 수치상 regularization/consolidation이 역효과를 낼 수 있음이 실증됨 — Split CIFAR-100 10-task에서 sequential FT 7.27%인데 EWC는 6.16%로 FT보다 나쁘고(SI 8.15%, ER 7.4%, TFC-SR 13.17%), 잘못된 축의 anchoring/merging은 성능을 갉아먹는다. sleep-time compute(Letta/Berkeley, 2504.13171)는 오프라인 단계 효과가 query predictability와 상관한다는 것을 보였다 — 예측 불가 쿼리에서는 sleep 단계 이득이 증발. 즉 consolidation 벤치마크의 핵심 설계 변수는 (a) 진짜 간섭 유발(knowledge update/conflict) (b) base-retrieval 천장 회피 (c) unpredictable heldout 포함, 셋이다.",
+ "recommendation": "HSWM claim ④ sealed 실험을 다음과 같이 설계한다. (1) 태스크 스위트: episode를 시간순 주입하되 후반 episode가 전반 사실을 덮어쓰는 knowledge-update(KU) + temporal-reasoning(TR) 문항을 LongMemEval 스타일로 최소 40% 포함시켜 진짜 간섭을 인위 생성한다(간섭 없는 프로토콜=append-only 승리=p1v2 재발). (2) 3-arm 비교: A) no-consolidation append-only store, B) decay-only(Ebbinghaus R=e^{-t/S} 스타일 strength 감쇠, MemoryBank식), C) offline sleep-phase(lesson merging/abstraction/topology 정리) — C arm에 sleep-time compute 설계를 이식하되 query 예측 가능성을 두 구간(predictable/unpredictable heldout)으로 쪼갠다. (3) Metric: episode별 probe 세트에 대한 Average Accuracy와 BWT(후반 학습 후 초기 episode 성능 변화)를 주 metric으로, LOCOSTyle F1/LLM-judge는 보조. semantic-weight-metric-contract에 BWT/AA 정의를 선등록. (4) Prereg kill 조건: ① C arm의 BWT 개선폭이 B 대비 5점 미만이면 claim ④ as-measured KILL; ② A arm이 이미 probe 천장(≥95%)이면 개입 효과 0 → 프로토콜 무효로 판정하고 간섭 강도를 올려 재시행(1회만); ③ C arm이 A/B보다 유의하게 나쁘면(EWC<FT 사례처럼) intervention-harm으로 기록, consolidation 로직에 harm-check 게이트 추가. (5) LakatoTree 장부에 arm별 BWT 곡선(시간축)을 sealed run + replay 검증으로 봉인.",
+ "alternatives": [
+  "기존 벤치마크 그대로 사용: LOCOMO/MemBench/LongMemEval에 HSWM을 그대로 올려 Mem0(LOCOMO LLM-judge 26% 상대개선, p95 latency 91% 절감)이나 Zep(LongMemEval 최대 +18.5%)과 비교 — 빠르지만 static recall만 재므로 claim ④(시간경과 consolidation) 직접 증명에는 부적합",
+  "생물학적 replay 유사 설계: generative replay/DER++ 스타일로 오프라인 단계에서 합성 쿼리를 생성해 store를 rehearsal — buffer 크기 effect(ER이 tiny buffer로도 joint training 근접)를 HSWM lesson 수 예산에 매핑하는 실험으로 전환",
+  "claim 축소: consolidation을 성능 claim이 아니라 비용 claim으로 재정의(sleep-time compute처럼 test-time 비용 2.5~5x 절감 측정) — 증명 난이도가 낮고 선행 수치 존재"
+ ],
+ "references": [
+  "https://arxiv.org/abs/2504.13171",
+  "https://arxiv.org/html/2507.21109v1",
+  "https://arxiv.org/abs/2305.10250",
+  "https://xiaowu0162.github.io/long-mem-eval/",
+  "https://arxiv.org/html/2504.19413v1",
+  "https://arxiv.org/pdf/2112.08654v1.pdf",
+  "https://arxiv.org/html/2606.30067v1",
+  "https://arxiv.org/html/2510.27246v2",
+  "https://arxiv.org/pdf/2604.11243"
+ ],
+ "caveats": "TFC-SR의 Split CIFAR-100 수치(FT 7.27% 등)는 표준 mammoth protocol보다 훨씬 낮아 protocol 의존성이 큼 — 절대 수치 비교보다 arm 간 상대 비교 구조만 인용해야 함. MemoryBank의 Ebbinghaus 곡선은 정량 forgetting 벤치마크가 아니라 디자인 휴리스틱(실측 시간곡선 미공개). LongMemEval '30~60% 성능 하락'은 프로젝트 페이지 요약 수치. Letta/MemGPT 자체는 공식 LongMemEval 수치 미공개(2026-04 기준). Mem0 26%는 자사 논문 LLM-as-judge 상대개선치로 독립 재현 제한적. Memori 81.95%/1294 tokens는 2차 인용(arXiv 2604.11243 서베이) 경유.",
+ "confidence": "MEDIUM",
+ "oneLineSummary": "Consolidation 실측 문헌은 풍부하나(BWT/AA, replay 효과 크기, LongMemEval 30-60% 하락, sleep-time compute 13-18% 개선) 모두 '진짜 간섭+천장 회피'를 동시에 만족하는 프로토콜이 없어, HSWM claim ④는 KU/TR 간섭 주입 + 3-arm BWT 측정 + 선등록 kill로만 증명 가능하다.",
+ "agentId": "prom-prom16-hswm-unproven-claims-20260725-D2",
+ "researchedAt": "2026-07-25",
+ "sourceKgBindings": [
+  "hswm-consolidation-claim-4",
+  "multi-agent-transfer-harness",
+  "semantic-weight-metric-contract",
+  "lesson-prom-tribunal-phasor-20260724",
+  "p1v2-typed-lesson-kill-base-retrieval-ceiling",
+  "rf-prom-next-move-20260724"
+ ]
+}

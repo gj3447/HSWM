@@ -1,0 +1,40 @@
+{
+ "findingId": "finding_d871dd03674a2971",
+ "domain": "history-alternatives",
+ "rootCause": "4개 역사 계열(append-only log/LSM, MVCC, event-sourcing, CRDT)은 모두 detail 보존 vs 저장 효율 딜레마를 동일한 구조로 해결했다: (1) 무손실 append가 항상 default이고, (2) 손실 연산(compaction/VACUUM/snapshot fold/tombstone GC)은 write path에서 분리된 background·policy-driven 연산이며, (3) 폐기의 안전 전제가 저장량이 아니라 '관찰자 안전(observer safety)'으로 정의된다 — MVCC는 어떤 활성 스냅샷도 볼 수 없는 튜플만 회수(xmin/xmax horizon), Kafka compaction은 키당 최신값을 절대 폐기하지 않고 min.compaction.lag.ms·delete.retention.ms로 진행 중인 reader를 보호, event sourcing은 snapshot이 '로그로부터 재계산 가능'하기에 폐기 가능(권위는 로그에 잔류), CRDT tombstone GC는 causal stability(전 replica 확인) 후에만 허용. 선택 기준은 워크로드 형태다: write-heavy ingest→LSM(대가: write amp 10~30×, leveled vs tiered 정책으로 read/write/space 조절), OLTP 동시성→MVCC(대가: bloat+vacuum), 감사·시간질의·replay→event sourcing(대가: 무한 성장+replay 비용+스키마 진화), coordination-free 다중작성→CRDT(대가: 메타데이터 오버헤드, rich-text 벤치마크 2.3× 측정됨). 어느 계열도 '저장 효율을 위해 write 시점에 권위 레코드를 파괴 압축'하는 설계로 수렴하지 않았다 — F5 downscale이 정확히 그 폐기된 안티패턴이다.",
+ "recommendation": "ratify (소규모 amend 권장). F5v2의 A(append-only)=event log default, B(RT 재조립)=event sourcing의 derived read-model(로그 권위 유지, Fowler: 'state is purely derivable, cache it anywhere'), C(dedup+gated supersession, invalid_at 비파괴 마킹)=MVCC xmax/Kafka compaction 모델로, 세 arm 모두 역사적으로 검증된 비파괴 패턴과 1:1 대응한다 — arm 구성 자체가 역사적 수렴 지식과 일치. Amend 제안: arm C에 명시적 'observer-gate 불변식' 문구 추가(Kafka compaction 보장 #4 '모든 키의 최종 상태는 최소한 항상 열람 가능' + delete.retention.ms식 reader 보호 창에 대응하는, 향후 물리 삭제 단계의 형식 전제조건). 또한 arm B를 'retrieval 재조직'으로 정정하는 규칙은 유지 — 역사적으로도 read-model reassembly는 consolidation(권위 이동)과 구별되는 개념임이 확인됨.",
+ "alternatives": [
+  "CRDT 관점 반론: 다중 writer/분산 환경에서는 '관찰자 안전' 확정 자체가 합의 라운드 비용이라 gate가 비쌈 — HSWM이 단일 writer면 MVCC식 gate가 저렴하지만, federated(Phase B) 확장 시 gate 비용이 지배적 요소가 되므로 prereg의 2단계 범위를 단일 노드로 한정할 근거가 됨",
+  "Kafka compaction 하이브리드(시간 기반 retention + 키 기반 compaction을 토픽별 선택)는 A와 C의 중간 설계 공간이 존재함을 시사 — arm C를 이원법적 'supersession 유/무'가 아니라 per-referent 정책(키별 최신 N개 보존)으로 일반화하는 변형 arm 가능",
+  "Event sourcing의 진짜 교훈은 '스냅샷은 재계산 가능해서 버릴 수 있다'는 조건부 폐기 — LLM memory의 consolidation 출력이 원본에서 결정론적으로 재계산 불가능하면(생성 모델 비결정성) snapshot이 아니라 권위 복사본이 되므로, B arm의 재조립 출력을 저장할지 여부는 이 재계산 가능성 기준으로 판정해야 함"
+ ],
+ "references": [
+  "https://martinfowler.com/eaaDev/EventSourcing.html",
+  "https://docs.confluent.io/kafka/design/log_compaction.html",
+  "https://www.postgresql.org/docs/current/mvcc-intro.html",
+  "https://arxiv.org/abs/1603.01529",
+  "https://en.wikipedia.org/wiki/Log-structured_merge-tree",
+  "https://cs-people.bu.edu/mathan/publications/fnt23-athanassoulis.pdf",
+  "https://arxiv.org/abs/2606.10677",
+  "https://www.enterprisedb.com/postgres-tutorials/why-we-need-vacuum-implement-mvcc-postgresql",
+  "https://arxiv.org/pdf/2212.02618v2"
+ ],
+ "caveats": "Shapiro 2011 CRDT 원전(INRIA RR-7506/SSS LNCS)은 HAL Anubis 차단 및 lip6 네트워크 오류로 직접 fetch 실패 — SEC 정의와 tombstone 메타데이터 비용은 파생 1차 소스(δ-CRDT arXiv 1603.01529 초록, Collabs arXiv 2212.02618의 측정치 2.3×)와 2차 소스로 검증. LSM write amp 10~30× 수치는 arXiv 2602.01873 검색 스니펫 기반(전문 미fetch). Apache Kafka 공식 문서 compaction 섹션은 페이지 절단으로 미도달, Confluent 문서(Apache 문서 미러)로 대체 검증. 배경 인용 arXiv 중 2606.10677만 실재 확인(단, Infini-Memory는 배경의 'RT consolidation 참조' 프레이밍과 달리 buffer→주제문서 주기적 write-side consolidation+추론시 agentic retrieval 구조 — 참조 해석 주의). 나머지 배경 ID(2601.00821, 2605.12978, 2602.13967, 2504.13171, 2605.20616)는 본 셀 범위 밖이라 미검증. 역사 저장시스템 불변식→LLM memory 매핑은 유추이지 정리가 아님.",
+ "confidence": "HIGH",
+ "oneLineSummary": "4계열 모두 무손실 append가 default, 폐기는 observer-gated background 연산 — A/B/C arm은 이 수렴 패턴의 직계",
+ "agentId": "prom-f5v2-1",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "hswm-f5v2-prereg-2026-07",
+  "f5-downscale-paradox-kill-2026-07-25",
+  "occam-kam-canonical-2026-05-26",
+  "CONTRACT_OccamArchiveRecord_v1_2026-05-27",
+  "lsm-tree-oneil-1996",
+  "kafka-log-compaction-guarantees",
+  "mvcc-visibility-horizon-vacuum",
+  "event-sourcing-fowler-2005-derived-snapshot",
+  "crdt-shapiro-2011-sec-tombstone-gc-causal-stability",
+  "rum-conjecture-athanassoulis-2016",
+  "observer-gated-reclamation-pattern"
+ ]
+}

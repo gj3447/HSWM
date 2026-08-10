@@ -1,0 +1,32 @@
+{
+ "findingId": "finding_6c24366902530b86",
+ "domain": "principle-theory",
+ "rootCause": "인지이론은 '건전한 consolidation = detail 유지 + gist 향상' 이중서명을 직접 지지한다. Fuzzy-trace theory(Reyna & Brainerd 1995; Reyna 2012)는 verbatim/gist trace가 병렬 인코딩·분리 저장·독립 검색되며 verbatim이 gist보다 빨리 부패한다는 것이 확립된 정전이고, 이 두 과정은 conjoint recognition multinomial 모델(Brainerd, Reyna & Mojardin 1999; Stahl & Klauer 2008 단순화판)로 identity(verbatim)·similarity(gist)·recollection rejection 파라미터로 분리 측정 가능하다. 신경과학 측 transformation hypothesis(Winocur & Moscovitch 2011; Moscovitch et al. 2016)는 건전한 systems consolidation에서 detail-rich(hippocampal)와 schematic-gist(neocortical) 표상이 공존하며 검색 cue가 어느 쪽을 회복할지 결정한다고 본다 — detail만 소실되고 gist만 남는 상태는 건전한 consolidation이 아니라 해마 병변의 서명이다. F5의 downscale 역설(detail slope −0.158)은 정확히 이 'hippocampectomy 서명'을 재현한 것으로 읽히며, 이를 LLM 메모리로 옮긴 Mela(arXiv 2605.10537)는 저주파 gist 모듈 + 고주파 detail 모듈의 이중trace + 검색시 문맥의존 재결합 설계가 실제로 Transformer baseline을 이김을 보여 이중추적 원리가 공학적으로도 유효함을 입증한다.",
+ "recommendation": "ratify-with-amend. 방향은 유지하되 prereg metric을 FTT conjoint-recognition식 2파라미터 서명으로 형식화할 것: (1) detail 파라미터 = verbatim-answerable probe(정확 사실/수치 인용, identity judgment 유사), (2) gist 파라미터 = 주제·관계·추론 QA(similarity judgment 유사). 성공 서명을 'detail slope ≥ arm A (기존 K1) AND gist-side downstream acc > A (K2의 양의 요건으로 명식화)'의 결합 조건으로 정의해 gist 이득을 detail 손실로 사지 않았음을 구조적으로 강제. arm B(RT consolidation)는 MTT/TTT의 reactivation-recombination과 동형(저장 무접촉, 검색시 재조립)이므로 이론적으로 가장 건전한 후보. 추가 amend: gist 강화는 false memory를 키운다는 FTT의 정전 경고(phantom recollection)를 반영해 K4 judge에 DRM식 related-but-unstated lure probe를 포함 — gist acc 향상과 hallucination rate를 동시 보고하지 않는 run은 유효하지 않게 할 것.",
+ "alternatives": [
+  "단일 scalar metric 유지 + 사후 decomposition: 지금 metric(slope + QA acc)을 그대로 두고 분석 단계에서만 detail/gist로 분해 — simpler하지만 gist-detail trade-off가 aggregate에서 상쇄되어 kill 조건이 늦게 발동할 위험",
+  "transformation hypothesis를 norm이 아니라 descriptive으로만 사용: 자연 망각에서는 detail 소실이 정상이므로 'detail 유지'를 절대 요건으로 두지 말고, detail 회복 가능성(retrievability, invalid_at 비파괴 마킹처럼)만 요건화 — arm C(dedup+gated supersession)와 더 잘 맞는 완화된 서명",
+  "FTT 대신 complementary learning systems(CLS, McClelland) 프레임으로 형식화 — hippocampus fast/instance vs neocortex slow/statistical 이중학습은 동일한 이중추적 구조를 주되 수리모델링 전통이 더 강함"
+ ],
+ "references": [
+  "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4268540/",
+  "https://neuropsychologylab.psych.utoronto.ca/files/Memory%20transformation%20and%20systems%20consolidation.pdf",
+  "https://pmc.ncbi.nlm.nih.gov/articles/PMC5060006/",
+  "https://www.sciencedirect.com/science/article/pii/S0749596X08000739",
+  "https://arxiv.org/abs/2605.10537"
+ ],
+ "caveats": "Stahl & Klauer 2008(conjoint recognition 단순화)과 Winocur & Moscovitch 2011 PDF는 검색 스니펫/초록 수준 확인이며 본문 수치는 미대조. Mela(2605.10537)는 arXiv abstract를 직접 fetch해 실재·주장 확인했으나 실험 수치는 본문 미검독이고, test-time consolidation이지만 파라미터 업데이트 방식이라 F5v2 arm B(비파괴 검색 재조립)와 정확히 동형은 아님. 배경 인용 ID 6종(2601.00821, 2605.12978, 2602.13967, 2606.10677, 2504.13171, 2605.20616)은 이 셀 소관이 아니라 미검증 — parent 측 타 셀 확인 필요. 인지이론→LLM 메모리 아날로지 자체는 유추이며, verbatim 부패 속도 > gist라는 인간 결과가 append-only store에는 구조적으로 적용되지 않는다는 반론 가능(LLM store는 자연부패가 없음).",
+ "confidence": "HIGH",
+ "oneLineSummary": "FTT·transformation hypothesis가 detail유지+gist향상 이중서명을 지지 — conjoint-recognition식 2파라미터 metric으로 ratify-with-amend 권고",
+ "agentId": "prom-f5v2-7",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "fuzzy-trace-theory-verbatim-gist-dual-trace",
+  "transformation-hypothesis-winocur-moscovitch-2011",
+  "conjoint-recognition-model-brainerd-reyna-mojardin-1999",
+  "hswm-f5-downscale-paradox-k1-kill",
+  "hswm-f5v2-prereg-retrieval-time-consolidation",
+  "mela-hmm-test-time-consolidation-2605.10537",
+  "gist-false-memory-phantom-recollection-risk"
+ ]
+}

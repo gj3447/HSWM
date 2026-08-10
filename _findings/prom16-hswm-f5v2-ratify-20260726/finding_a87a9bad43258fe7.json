@@ -1,0 +1,31 @@
+{
+ "findingId": "finding_a87a9bad43258fe7",
+ "domain": "principle-pitfalls",
+ "rootCause": "명명 과장 위험은 실재하며, 판별 기준은 문헌상 명확하다. 표준 taxonomy(Zhang et al., ACM TOIS/arXiv 2404.13501)는 memory를 writing/management/reading 3연산으로 나누고 consolidation을 write/manage 측에, retrieval을 read 측에 둔다 — Infini Memory(2606.10677)도 consolidation=buffer의 주기적 write-side 재구성, retrieval=inference-time agentic reading으로 동일하게 분리한다. Transformation signature는 3축으로 조작화 가능: (1) 지속성 — 산출물이 store에 durable하게 남아 후속 쿼리에 재사용되는가(Generative Agents 2304.03442의 reflection이 signature 사례: 기존에 없던 상위 추상 노드를 write-back), (2) 파생 신규성 — 출력이 저장 아이템의 재배열/부분집합이 아니라 어떤 단일 아이템에도 없던 명제를 포함하는가, (3) 쿼리 비조건성 — 쿼리 도착 전 query-agnostic으로 수행되는가(sleep-time compute 2504.13171의 정의 자체가 'think offline BEFORE queries are presented'). 현 F5v2 arm B('read 시 쿼리별 재조립, write 무접촉')는 (1) 비지속·(3) 쿼리 조건화에서 retrieval 측으로 판정되므로, 현 스펙대로는 'retrieval-time consolidation'은 명명 과장이 맞고 'retrieval-time synthesis'가 정확하다.",
+ "recommendation": "amend 방향 ratify. (1) prereg에 위 3축 transformation-signature 판정 테스트를 사전 고정하고, 기존 '명명 정정 규칙'을 이 판정에 기계적으로 연결(3축 중 2축 미달 시 'retrieval reorganization'로 강제 정정). (2) arm B의 대조군을 naive top-k가 아닌 strong retrieval baseline(tuned reranker 또는 Infini Memory식 iterative agentic reading)으로 명시 — 그렇지 않으면 K2(무고유기여) 판정이 baseline 약함과 confound된다. (3) 'consolidation' 명명을 유지하고 싶다면 arm B를 B'로 재정의: query-agnostic 사전 주제블록 재조립 + durable cache(후속 쿼리 재사용) — 이는 3축을 충족해 진짜 consolidation signature를 가지며, sleep-time compute의 amortization(2.5×/쿼리) 결과와도 정합적이다. K3의 query-predictability ρ 기준은 2504.13171이 query 예측가능성과 효능의 상관을 직접 보고하므로 그대로 유지 타당.",
+ "alternatives": [
+  "기능 정의 관점: 'consolidation'을 시간축(write/read)이 아닌 연산 기능(통합·요약 생성)으로 정의하면 RT consolidation 명명도 정당 — 단 이 경우 검색 개선과의 구분 부담이 전적으로 K2 실증으로 이동하므로 strong retrieval baseline 요구가 더 엄격해져야 함",
+  "단일 기준 관점: 비가역적 many-to-one 변환(lossy abstraction)만을 signature로 쓰면 selection(가역·무손실)과 깔끔히 구분되지만, dedup+gated supersession(arm C)까지 consolidation으로 흡수되어 B/C 경계가 무너짐",
+  "신경과학 차용 관점: transformation hypothesis(consolidation=detail 보존과 병존하는 gist/schema 변환)에 따르면 consolidation의 정의 자체가 detail slope metric과 양립 — F5의 'downscale=detail 파괴' kill이 consolidation 전체가 아니라 손실형 구현에 대한 것임을 정당화"
+ ],
+ "references": [
+  "https://arxiv.org/abs/2606.10677",
+  "https://arxiv.org/abs/2504.13171",
+  "https://arxiv.org/abs/2304.03442",
+  "https://dl.acm.org/doi/10.1145/3748302"
+ ],
+ "caveats": "배경 인용 ID 중 본 셀 관련 2종(2606.10677, 2504.13171)만 원문 abstract 대조 완료. CogCanvas 2601.00821 / ARC-AGI 2605.12978 / Neuromem 2602.13967 / Auto-Dreamer 2605.20616은 명명-판별 셀과 무관해 미검증(타 셀 소관). Infini Memory는 arm B의 '참조'로 인용됐으나 실제로는 write-side consolidation/read-side agentic retrieval을 분리하는 구조라, arm B 정당화 근거로는 부분 부합 — 오히려 명명 과장의 반례 증거에 가까움. Winocur & Moscovitch transformation hypothesis는 이번 세션에서 1차 소스 미검증. memory survey는 ACM 출간본(DOI 10.1145/3748302)으로 확인했고 arXiv 번호 2404.13501은 제3자 인용 경유라 abs 페이지 직접 대조는 안 함.",
+ "confidence": "HIGH",
+ "oneLineSummary": "판별 기준=지속성·파생신규성·쿼리비조건성 3축; 현 arm B는 retrieval 재조직으로 판정 — 명명 정정+strong baseline 명시로 amend ratify",
+ "agentId": "prom-f5v2-6",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "prom16-hswm-f5v2-ratify-20260726",
+  "hswm-f5v2-arm-b-rt-consolidation",
+  "transformation-signature-3axis-criterion",
+  "hswm-f5-sealed-downscale-paradox-2026-07-25",
+  "ref-infini-memory-2606.10677",
+  "ref-sleep-time-compute-2504.13171",
+  "lesson-rt-consolidation-naming-inflation-guard-2026-07-26"
+ ]
+}

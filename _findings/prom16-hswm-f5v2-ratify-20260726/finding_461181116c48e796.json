@@ -1,0 +1,41 @@
+{
+ "findingId": "finding_461181116c48e796",
+ "domain": "history-theory",
+ "rootCause": "생물학적 systems consolidation의 답: detail store는 건드리지 않고, replay로 gist 파생층을 추가하며, read는 인덱스 기반 재조립이다. CLS(McClelland et al. 1995)와 transformation hypothesis(Winocur & Moscovitch 2011; Sekeres et al. 2018 리뷰)에 따르면 consolidation은 수면 중 해마 trace의 반복 재활성화(replay)로 신피질에 gist/도식적 표현을 점진 구축하는 과정이며, 맥락 풍부한 episodic detail은 해마에 평생 잔존한다 — 삭제·압축 연산이 아니라 파생 표현의 *추가*. 인출 자체는 hippocampal indexing theory(Teyler & DiScenna 1986)대로 cue→해마 인덱스→신피질 fragment 재조립이라는 본질적 read-side 재조립이다. 기존 trace를 실제로 건드리는 유일한 경로는 reconsolidation(Nader et al. 2000)인데, 그것조차 retrieval이 trigger하고 prediction error가 gate하는 국소적·표적화된 write다. SHY(Tononi & Cirelli)의 수면 downscale조차 내용 압축이 아니라 시냅스 가중치의 비례 정규화+약(노이즈) 시냅스 가지치기이므로, F5의 내용 수준 lossy downscale 실패(detail slope −0.158)는 생물학적 선례로도 예측 가능하다.",
+ "recommendation": "ratify (소규모 amend 권고). 신경과학 계보는 F5v2의 핵심 베팅을 지지한다: arm B(쿼리별 주제 블록 재조립+출처 메타)는 indexing theory + reconstructive retrieval의 직접 구현체이고, arm C(동일 referent gated supersession)는 reconsolidation의 analogue(retrieval-triggered, prediction-error-gated, 표적화)로 정당화된다. arm D는 SHY 관점에서도 생물학적으로 부정확한(내용 압축 ≠ 연결 노이즈 가지치기) 적대 대조로서 유지 가치가 있다. Amend 2건: (1) 생물학적 consolidation은 엄밀히는 오프라인 파생층 *생성*(write-side replay)이므로, 순수 read-only B는 'consolidation'보다 'reconstructive retrieval'에 가깝다는 사실이 신경과학 자체에서 확인됨 — prereg의 명명 정정 규칙(RT가 검색 개선과 동형이면 'retrieval 재조직'으로 정정)과 K3 regime check를 반드시 유지할 것; (2) C의 supersession gate를 reconsolidation analogue로 명시(동일 referent + 불일치/prediction-error 조건에서만 invalid_at 마킹)해 write 허용 범위를 생물학적 선례 수준으로 제한할 것. 2단계 GRPO consolidator는 '학습된 오프라인 replay 연산'으로 생물학적 consolidation에 더 충실한 방향이라 우선순위 근거가 강화됨.",
+ "alternatives": [
+  "반대 해석: 생물학적 consolidation은 명백한 오프라인 write 과정(수면 replay→피질-피질 연결 강화)이므로, write 무접촉 read-only arm B는 생물학적 'consolidation'이 아니라 인덱싱/검색 최적화다. 이 관점에서는 진짜 CLS analogue는 별도 오프라인 단계에서 gist층을 *추가 기록*하는 2단계 학습 consolidator뿐이며, B는 명명부터 정정하고 기대치를 낮춰야 한다.",
+  "SHY 기반 재설계안: downscale을 내용 수준이 아니라 연결/노이즈 수준으로 재정의하면(정보 무손실 dedup·중복 레코드 가지치기 = 약시냅스 pruning analogue) 생물학적으로 정당한 write-side 연산이 성립하므로, arm D의 내용 압축만 폐기하고 'dedup' 부분은 arm C에 흡수해 별도 arm으로 승격하지 않는 선에서 consolidation 계열을 완전 shelve하지 않는다.",
+  "MTT(multiple trace theory) 극단 해석: 재활성화마다 새 trace가 추가되므로 append-only(arm A) 자체가 이미 생물학적 consolidation의 trace 축적 측면을 구현하고 있으며, B/C의 추가 복잡도가 무고유기여(K2 kill)일 가능성을 열어둬야 한다."
+ ],
+ "references": [
+  "https://pubmed.ncbi.nlm.nih.gov/22141588/ (O'Reilly et al. 2014, Complementary Learning Systems 리뷰 — CLS 프레임워크 검증)",
+  "https://neuropsychologylab.psych.utoronto.ca/files/Systems%20consolidation,%20transformation%20and%20reorganization%20Multiple%20Trace%20Theory,%20Trace%20Transformation%20Theory%20and%20their%20Competitors.pdf (Sekeres/Winocur/Moscovitch systems consolidation·transformation 리뷰)",
+  "https://pmc.ncbi.nlm.nih.gov/articles/PMC5060006/ (Moscovitch 2016, Episodic Memory and Beyond — 해마 pointer/인덱스·재구성적 인출)",
+  "https://pmc.ncbi.nlm.nih.gov/articles/PMC4526749/ (Memory Consolidation 리뷰 — MTT/transformation: detail은 신피질로 consolidate되지 않음)",
+  "https://pubmed.ncbi.nlm.nih.gov/3008780/ (Teyler & DiScenna 1986, hippocampal memory indexing theory 원전)",
+  "https://pubmed.ncbi.nlm.nih.gov/17696170/ (Teyler & Rudy 2007, indexing theory 업데이트)",
+  "https://pmc.ncbi.nlm.nih.gov/articles/PMC4588064/ (Nader 2015, Reconsolidation and the Dynamic Nature of Memory — retrieval-gated write)",
+  "https://www.frontiersin.org/journals/molecular-neuroscience/articles/10.3389/fnmol.2021.767384/full (수면 consolidation 분자기제 리뷰 — active systems consolidation replay + SHY 비례 downscaling 대조)",
+  "doi:10.1038/s41593-019-0467-3 (Klinzing, Niethard & Born 2019, Nat Neurosci 22:1598-1610 — 수면 systems consolidation 기제, 다수 문헌에서 서지 검증)",
+  "doi:10.1037/0033-295X.102.3.419 (McClelland, McNaughton & O'Reilly 1995, Psychol Rev 102(3):419-457 — CLS 원전, 다수 문헌 서지 검증)",
+  "https://arxiv.org/abs/2605.10537 (Mela: Test-Time Memory Consolidation based on Transformation Hypothesis — gist+detail 이중 메모리를 read 시 맥락의존 재구성으로 결합하는 아키텍처, abstract 직접 확인)"
+ ],
+ "caveats": "생물학→소프트웨어 analogical transfer의 근본 한계: 시냅스 가중치 ≠ JSONL 레코드, replay ≠ retrieval re-rank이므로 방향성 근거지 효과 크기 근거는 아님. Mela(2605.10537)는 LM 아키텍처 실험이지 에이전트 메모리 벤치마크가 아니라 detail-preservation slope에 직접 대입 불가. 배경 인용 ID 중 내 셀과 직접 관련된 sleep-time compute(2504.13171)·Infini-Memory(2606.10677)는 원문 미검증(별 셀 담당 가정) — 내 리스트에 미포함. Kumaran, Hassabis & McClelland 2016(TiCS 20(7):512-534, CLS for intelligent agents)은 다수 arXiv 서지목록으로 존재 확인했으나 원문 full text는 미열람. SHY 1차 논문(Tononi & Cirelli 2003/2006)은 2차 리뷰 경유 확인이며 '비례 정규화로 상대 차이 보존' 주장은 리뷰 인용 기반. arXiv 2607.01988(Episodic-to-Semantic Consolidation Without Identity Drift) 존재를 목격했으나 내용 미검증으로 references에서 제외.",
+ "confidence": "HIGH",
+ "oneLineSummary": "생물학적 consolidation=detail 보존+gist 파생층 추가+read 시 인덱스 재조립, write는 retrieval-gated 국소 갱신뿐 → arm B+C 지지, D는 생물학적 선례 없음",
+ "agentId": "prom-f5v2-3",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "hswm-f5v2-prereg-retrieval-time-consolidation",
+  "f5-downscale-paradox-k1-kill-2026-07-25",
+  "complementary-learning-systems-mcclelland-1995",
+  "transformation-hypothesis-winocur-moscovitch",
+  "hippocampal-indexing-theory-teyler-discenna",
+  "reconsolidation-nader-retrieval-gated-write",
+  "synaptic-homeostasis-hypothesis-noise-pruning-not-content-compression",
+  "hswm-arm-b-read-side-reassembly",
+  "hswm-arm-c-gated-supersession",
+  "user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23"
+ ]
+}

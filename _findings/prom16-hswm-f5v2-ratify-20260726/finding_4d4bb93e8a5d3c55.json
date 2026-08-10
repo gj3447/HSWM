@@ -1,0 +1,37 @@
+{
+ "findingId": "finding_4d4bb93e8a5d3c55",
+ "domain": "history-benchmarks",
+ "rootCause": "Read-time 재조립의 골든 넘버는 1차 소스에서 확보됐다: Infini-Memory(2606.10677, 실재 확인)는 MemoryAgentBench overall 64.7%(agentic reader, Accurate Retrieval 81.2%)로, 쿼리 시점 iterative evidence inspection + local context expansion + provenance 메타(<seq,time,source>)가 F5v2 arm B 패턴의 직접 선행 사례다. 단 Infini-Memory는 write측 topic 유지보수와 read측 agentic reading의 결합체이며 자체 ablation도 두 기여가 'complementary'라고 명시 — 순수 read-time 고유기여는 분리되지 않았다(K2 리스크 실재). 반대 증거도 확보: Neuromem(2602.13967) F4는 생성형 retrieval-time 연산(query decomposition/multi-query expansion)이 지연 10배(>1s/turn)에 정확도 이득 ~0 또는 음수, F1 finding은 LLM 주도 consolidation이 unmaintained와 동일한 ~22% 열화율을 보인다고 보고. sleep-time compute(2504.13171, 실재 확인)는 동일 정확도 test-time compute ~5× 절감, sleep compute 스케일 시 +13%(GSM-Symbolic)/+18%(AIME), multi-query amortization 2.5× — 그리고 'query predictability와 효능이 잘 상관'이라는 원문 발견이 F5v2 K3(regime 한정 규칙)의 직접 선례다. 배경 인용 수치 대조 결과: CogCanvas 2601.00821 verbatim 43.9% vs extracted 28.0%(+15.9pp, LongMemEval-S 67.4 vs 45.4) 일치, 2605.12978 'GT 투입에도 이전에 푼 ARC-AGI의 54% 실패' 일치, Neuromem '구조화 압축 F1 −50%' 일치(F3 'reducing F1 scores by over 50%'), Auto-Dreamer 2605.20616 '+7pts·bank 12× 축소(ALFWorld 6×)' 일치 — 6개 arXiv ID 전원 실재 확인.",
+ "recommendation": "ratify + 2개 amend. (1) arm B는 Infini-Memory 수치가 지지하므로 진행 타당 — 단 Infini-Memory 자체가 read/write 결합이고 Neuromem F4가 streaming regime에서 생성형 read 연산 이득 ~0을 보이므로, arm B에 latency/token-cost를 의무 2차 metric으로 등록하고(MemoryAgentBench형 multi-hop/temporal regime vs LoCoMo형 streaming regime 분리 보고) regime별 효과를 사전 명시할 것. (2) K3는 이미 prereg에 있으나 sleep-time compute 원문이 'predictability 상관' 선례를 주므로 query-predictability 측정을 사후 분석이 아니라 사전 산정 지표로 격상. 명명 리스크(RT=검색 개선과 동형 시 'retrieval 재조직' 정정 규칙)는 그대로 유지 — Infini-Memory도 자신을 'consolidation'이 아니라 'lifecycle maintenance(read: evidence assembly)'로 명명한다는 점이 이 규칙을 지지.",
+ "alternatives": [
+  "Infini Memory-H(hybrid summary+BM25 reader)가 long-range detailed QA에서 agentic 변형보다 유용하다는 원문 결론 — agentic read-time 재조립이 전 영역 우위가 아니므로, arm B 대신 단순 hybrid reader가 동일 이득을 낼 가능성(K2 무고유기여 kill 발동 시나리오를 파워 산정에 반영)",
+  "write측 위생 가치는 arm C(dedup+gated supersession)가 담당하고 arm B는 순수 read-path로 한정하는 2-arm 분리 설계 — Auto-Dreamer가 보여주듯 '이기는 consolidation'은 학습된 write측 연산이므로, read-time arm이 kill돼도 phase-2 GRPO 경로는 독립 생존 가능하게 prereg 종속성을 끊는 안"
+ ],
+ "references": [
+  "https://arxiv.org/abs/2606.10677",
+  "https://arxiv.org/html/2606.10677v1",
+  "https://github.com/infinigence/Infini-Memory",
+  "https://arxiv.org/abs/2504.13171",
+  "https://arxiv.org/abs/2601.00821",
+  "https://arxiv.org/abs/2605.12978",
+  "https://arxiv.org/html/2602.13967",
+  "https://arxiv.org/abs/2605.20616"
+ ],
+ "caveats": "미검증/2차 소스 항목: (1) CogCanvas 'p<1e-15'는 abstract에 없어 미검증(+15.9pp·+22.0pp만 원문 확인, v4 2026-07-22 기준 제목이 'Verbatim Chunks Beat Extracted Artifacts'로 개정됨 — 인용 시 v4 기준 필요). (2) Infini-Memory의 per-competency 델타(AR +12.5/TTL +4.4/LRU +25.4/SF +26.5, +19.2pp over strongest baseline)는 themoonlight 리뷰 경유 2차 인용 — 64.7%/81.2%는 arXiv HTML 결론에서 직접 확인. (3) Neuromem은 소형 백본(pangu-1b, Llama-3.1-8B) 기준이라 F4 '생성형 retrieval=latency trap'이 gpt-5급으로 일반화되는지는 불명(Infini-Memory gpt-5-mini 결과와 긴장 관계 — 이 긴장 자체가 regime 의존 증거). (4) sleep-time compute는 수학추론 태스크(Stateful GSM-Symbolic/AIME)라 메모리 레짐으로의 전이는 가정. (5) 2605.12978의 'ScienceWorld ~20 updates 정점 후 step 100에 baseline 이하' 세부는 Arize 블로그(2차) 경유, abstract급 claim(utility 상승 후 하락·baseline 이하, 54% 실패)은 원문 확인.",
+ "confidence": "HIGH",
+ "oneLineSummary": "Infini-Memory 64.7%·sleep-time 5×/+13~18%·Neuromem F4 이득~0 — read-time 재조립 효과는 regime 의존, ratify+latency metric amend.",
+ "agentId": "prom-f5v2-0",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "hswm-f5v2-prereg-2026-07-26",
+  "hswm-f5-downscale-paradox-kill-2026-07-25",
+  "paper-infini-memory-2606.10677",
+  "paper-sleep-time-compute-2504.13171",
+  "paper-cogcanvas-2601.00821",
+  "paper-faulty-memory-consolidation-2605.12978",
+  "paper-neuromem-2602.13967",
+  "paper-auto-dreamer-2605.20616",
+  "k3-query-predictability-regime-limit",
+  "user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23"
+ ]
+}

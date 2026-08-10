@@ -1,0 +1,39 @@
+{
+ "findingId": "finding-prom16-hswm4-c1-theory-20260725",
+ "domain": "topology-learning::theory",
+ "rootCause": "구조학습 이론은 두 계열로 갈리며, HSWM claim ③(topology rewiring)가 미증명인 근본 이유가 여기 있다. (1) 미분가능 계열 — DARTS(1806.09055, bilevel: min_α L_val(w*(α),α)), Gumbel-softmax/Concrete(1611.01144), L0 hard-concrete 게이트(1712.01312), LDS 그래프 구조학습(1903.11960, Bernoulli edge 확률의 hypergradient), Learnable Hypergraph Laplacian(2106.06666, incidence matrix H 파라미터화): 전부 '구조 변수를 연속완화 후 내부 가중치 해를 통해 역전파'를 요구한다. HSWM은 함수 노드=블랙박스 LLM 호출이라 ∂w*/∂α 자체가 정의 불가 → 이 계열의 정식화는 직접 이전 불가하고, 다만 (a) bilevel 분리(외부=토폴로지, 내부=lesson store ΔW) 프레임과 (b) DARTS의 대표 실패모드(α가 skip-connection으로 붕괴, soft score와 이산화 후 성능의 discretization gap)는 경고로 이전된다. (2) 무gradient 계열 — NEAT(Stanley & Miikkulainen 2002, 최소 구조에서 complexification + 역사적 표지 + speciation으로 혁신 보호), WANN(1906.04358, 가중치 학습 없이 공유 랜덤 가중치로 토폴로지 자체 기여 측정), SET(1707.04780)/RigL(1911.11134)(고정 예산 하 주기적 prune-regrow, RigL의 핵심 발견: gradient-informed regrowth > random regrowth), GPTSwarm(2402.16823, LLM 에이전트 그래프의 edge 최적화를 REINFORCE류 score-function으로): 이 계열만 블랙박스 노드에 적용 가능하다. 추가로 C1 book-scale 반증(hswm 0.427 vs clique 0.447)이 보인 '구조 고유 기여 미검출'은 이론상 두 교란으로 설명된다: ① 토폴로지 효과와 가중치/검색 효과의 confound(WANN식 분리 프로토콜 부재), ② 토폴로지 탐색의 퇴화 최소해(chain/skip 붕괴 — DARTS와 에이전트-그래프 문헌 공통 보고). 즉 claim ③은 '측정 변수 미정의 + confound 미분리'이지 개념적 불가능이 아니다.",
+ "recommendation": "sealed 실험 T-REWIRE(claim ③ 게이트)를 다음과 같이 설계한다. 사전등록 측정 변수를 semantic-weight-metric-contract에 먼저 등록: (변수) 하이퍼엣지별 존재확률 π_e(Bernoulli 파라미터, L0 hard-concrete식), drop fraction p, 갱신 주기 ΔT, 밀도 ρ, incidence matrix H, 하이퍼그래프 modularity·spectral gap·diameter, discretization gap(soft π 점수 vs hard 토폴로지 성능차). (고정) p1v4 승자 lesson store를 frozen — 가중치 교란 차단(WANN 원칙: 토폴로지만 변동시켜 효과 귀속). (4 arms, 밀도·갱신횟수 매칭) (i) 학습된 rewiring: credit 상위 유지 + counterfactual-gradient 유사량(lesson 유무 시 heldout 보상차, replay로 측정) 상위 후보에 regrow — RigL analog; (ii) random rewiring — SET control, 이 대조군을 못 이기면 kill; (iii) static 토폴로지 — negative control; (iv) WANN arm: lesson 내용을 run마다 무작위 치환한 상태에서 토폴로지 순위가 안정적인지 — 안정이면 구조 고유 기여 존재, 불안정이면 C1의 clique 근접 결과 재현 확인. (kill 조건, prereg) ① learned ≤ random rewiring → topology-learning 신호 부재로 claim ③ KILL; ② 학습 토폴로지가 chain/star로 퇴화(modularity·diameter 붕괴 감지)하면서 성능 동등 → NUMEROLOGY_HOLD(퇴화 최소해로의 수렴이지 학습 아님); ③ discretization gap > 사전등록 δ → soft 구조 점수 폐기. (게이트 통과 최소조건) learned > random > static의 단조 서열 + replay 검증 + 2 seeds 재현. 비용 상한은 GPTSwarm 사례(edge-opt 수백 달러)를 참조해 사전등록.",
+ "alternatives": [
+  "NEAT식 점진 복잡화 arm: 완전그래프에서 prune하는 대신 최소 하이퍼그래프(단일 검색 노드)에서 출발해 hyperedge 추가·노드 분할 돌연변이만 허용, speciation analog로 '신규 구조는 N회 평가 전 kill 금지' 보호기간 부여 — 완전그래프 초기화의 퇴화 붕괴 회피, 단 population 비용 증가",
+  "bilevel 대리(surrogate) 해석: LLM 노드의 국소 입출력을 저비용 미분가능 프록시(소형 모델/스코어러)로 근사해 DARTS/LDS식 연속완화 α를 프록시 위에서 학습 후 hard 토폴로지만 실제 HSWM에 이식 — discretization gap을 prereg δ로 강제하는 조건부 채택",
+  "해석적 대안: claim ③을 '강건성 명제'로 재진술 — 토폴로지가 성능을 올린다가 아니라 '동일 lesson store에서 적대적 rewire(random arm) 대비 학습된 rewire가 성능 저하를 덜 받는다'로 — 반증이 더 쉽고 C1 book-scale 결과와 직접 대화함"
+ ],
+ "references": [
+  "https://arxiv.org/abs/1806.09055",
+  "https://arxiv.org/abs/1611.01144",
+  "https://arxiv.org/abs/1712.01312",
+  "https://arxiv.org/abs/1911.11134",
+  "https://arxiv.org/abs/1707.04780",
+  "https://arxiv.org/abs/1906.04358",
+  "https://arxiv.org/abs/1903.11960",
+  "https://arxiv.org/abs/2106.06666",
+  "https://arxiv.org/abs/2402.16823",
+  "https://arxiv.org/abs/2408.08435",
+  "Stanley & Miikkulainen 2002, Evolving Neural Networks through Augmenting Topologies, Evolutionary Computation 10(2)"
+ ],
+ "caveats": "NEAT 원전(2002)은 2차 인용들로만 확인, PDF 직접 열람 안 함(내용은 학계 정설 수준으로 교차 확인됨). GPTSwarm의 'edge-opt가 chain으로 퇴화' 경향은 후속 서베이(2차 소스) 경유이며 원문 Appendix G는 '내부 노드 토폴로지·스케일 한계'만 명시 — 퇴화 붕괴 주장은 DARTS 측 문헌이 1차 근거. counterfactual-gradient 유사량(lesson 유무 replay 보상차)은 엄밀한 gradient가 아니라 유한차분 추정량으로, 노이즈 분산은 미측정 — semantic-weight-metric-contract에서 신뢰구간 규약 필요. 미분가능 계열(DARTS/LDS/hypergraph Laplacian)은 HSWM 블랙박스 노드에 직접 적용 불가라는 판정은 본 연구의 종합(추론)이며, LLM 호출의 미분가능 프록시 구축 성공 사례가 나오면 재평가 필요.",
+ "confidence": "HIGH",
+ "oneLineSummary": "구조학습 이론은 무gradient 계열(NEAT/WANN/SET-RigL/GPTSwarm)만 HSWM에 이전 가능하며, claim ③ 증명의 열쇠는 WANN식 토폴로지-가중치 분리 프로토콜 + random-rewire 대조군 + 퇴화(chain 붕괴) kill 조건이다.",
+ "agentId": "prom-prom16-hswm-unproven-claims-20260725-C1",
+ "researchedAt": "2026-07-25",
+ "sourceKgBindings": [
+  "HSWM_ORDERED_GATES_CURRENT",
+  "semantic-weight-metric-contract",
+  "multi-agent-transfer-harness",
+  "lesson-prom-tribunal-phasor-20260724",
+  "rf-prom-next-move-f1-20260724",
+  "NUMEROLOGY_HOLD",
+  "LakatoTree",
+  "claim-hswm-topology-rewiring-unproven"
+ ]
+}

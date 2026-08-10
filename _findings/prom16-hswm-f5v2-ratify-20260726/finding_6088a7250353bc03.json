@@ -1,0 +1,34 @@
+{
+ "findingId": "finding_6088a7250353bc03",
+ "domain": "implementation-benchmarks",
+ "rootCause": "5종 arXiv ID 전부 실재하며 F5v2 prereg 인용 수치가 원문과 정확히 일치한다. (1) CogCanvas(2601.00821, v3 'Verbatim Chunks Beat Extracted Artifacts'): LoCoMo verbatim chunks 43.9% vs extracted artifacts 28.0% = +15.9pp, McNemar p<10^-15 원문 그대로; 추가로 LongMemEval-S 67.4% vs 45.4%(+22.0pp), union store 42.5%≈chunks('대체가 아닌 치환'이 손실 원인) 확인. (2) Auto-Dreamer(2605.20616): GRPO 학습 offline consolidator, ScienceWorld +7 points, active bank 12× smaller than strongest baseline — abstract 문구 그대로; held-out ALFWorld/WebArena 무재학습 우위(6× 적은 메모리). (3) Neuromem(2602.13967): Finding F3 'rigid structured schemas ... reducing F1 scores by over 50%' 원문 확인; F1 finding(LLM 구동 consolidation 정책도 unmaintained와 동일 ~22% degradation)은 F5 downscale 역설의 외부 독립 corroboration. (4) sleep-time(2504.13171): test-time compute ~5× 절감, 정확도 +13~18%, multi-query amortize 2.5× — 그리고 'query predictability와 sleep-time 효능이 잘 상관' 문구가 F5v2 K3 kill 조건(ρ<0.3 regime 한정)의 직접적 원전임을 확인. 단 Infini-Memory(2606.10677)는 read-time consolidation이 아니라 buffer→topic document 주기적 write-side consolidation + agentic iterative retrieval 구조라서, arm B의 'read 시 재조립' 참조로는 부분 부적합.",
+ "recommendation": "ratify — prereg이 근거로 인용한 5종 소스의 arXiv ID와 핵심 수치(43.9/28.0/+15.9pp/p<1e-15, +7pts/12×, F1 −50%)가 전부 원문과 일치하므로 외부 증거 기반은 견고하다. 단 1개 amend 권고: Infini-Memory 2606.10677의 arm B 참조 역할을 'read-time consolidation'에서 'agentic iterative retrieval(반복 tool-call read)'로 정정할 것 — 실제로는 주기적 write-side consolidation(buffer→topic doc) 논문이므로, 현재 표기대로면 외부 검증 시 인용 부정확 지적 가능. 순수 read-time 재조직 근거는 CogCanvas의 'defer the decision to query time' 원리 + sleep-time compute가 더 정확한 참조다.",
+ "alternatives": [
+  "Auto-Dreamer의 12× 축소는 'supersession 기반 write-side 재작성(단 region은 read-only 취급 + provenance 검사)'의 학습된 버전이므로, F5v2 arm C(gated supersession)의 근거로도 읽을 수 있음 — arm B만의 독점 근거가 아니라 B/C 양쪽을 지지하는 중간 증거로 재분류 가능",
+  "Neuromem F1(consolidation 정책이 unmaintained와 동일 열화율)을 F5 downscale 역설보다 더 강한 일반법으로 해석하면, arm B조차 'read 시 재조립 비용이 retrieval 개선 이상의 이득을 내는가'를 K2(무고유기여)로 별도 측정해야 한다는 주장 가능 — RT가 검색 개선과 동형이라는 열린 리스크와 직결"
+ ],
+ "references": [
+  "https://arxiv.org/abs/2601.00821",
+  "https://arxiv.org/html/2601.00821",
+  "https://arxiv.org/abs/2605.20616",
+  "https://arxiv.org/abs/2602.13967",
+  "https://arxiv.org/html/2602.13967",
+  "https://arxiv.org/abs/2606.10677",
+  "https://arxiv.org/abs/2504.13171"
+ ],
+ "caveats": "배경의 ARC-AGI 계열 arXiv 2605.12978은 내 셀 범위 밖이라 미검증(별도 셀 확인 필요). CogCanvas v1(2025-12)은 34.7% 긍정 결과 논문이었고 v3(2026-05-27)에서 자기자신을 부정하는 controlled ablation으로 개정된 이력이 있음 — 인용 시 v3 기준임을 명시해야 함. Infini-Memory의 MemoryAgentBench 64.7은 본문 수치를 끝까지 대조하지 못했고(abstract/scirate 스니펫 수준), 'RT consolidation' 참조 부적합 지적은 abstract+개요 기반. Auto-Dreamer +7pts/12× 는 abstract 원문 확인이나 실험 세부(어느 baseline 대비인지 표 단위 대조)는 HTML 본문 미대조. Neuromem F3의 −50%는 LoCoMo normalization ablation 기준으로 데이터셋 일반 법칙이 아님.",
+ "confidence": "HIGH",
+ "oneLineSummary": "5종 arXiv ID·수치 전부 원문 일치(43.9/28.0, +7pts/12×, F1−50%) — ratify, 단 Infini-Memory는 read-time이 아닌 write-side consolidation이라 인용 역할 정정 필요",
+ "agentId": "prom-f5v2-8",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "hswm-f5-sealed-downscale-paradox-2026-07-25",
+  "hswm-f5v2-prereg-retrieval-time-consolidation",
+  "hswm-external-replication-cogcanvas-2601.00821",
+  "hswm-external-replication-autodreamer-2605.20616",
+  "hswm-external-replication-neuromem-2602.13967",
+  "hswm-ref-infini-memory-2606.10677",
+  "hswm-ref-sleep-time-compute-2504.13171",
+  "k3-query-predictability-regime-limit"
+ ]
+}

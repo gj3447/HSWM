@@ -1,0 +1,55 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_HSWM_20260719",
+  "branch": "F3-agent-ab-transfer",
+  "question": "Q-hswm-neural-substrate-causal-transfer",
+  "conjecture": "A sealed typed packet (lessons + deltaW, sha256 + Merkle provenance) accumulated by donor agent A on corpus D_A causally improves frozen receiver B on disjoint heldout beyond every control: B-self lessons, placebo lessons, and A's raw log. Transfer is dark-knowledge only if B1's response distribution (including errors) correlates with A's more than B5's does.",
+  "prediction": {
+    "metric": "f3_full_packet_minus_max_control_heldout_acc",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0.02,
+    "novel_metric": "f3_transfer_gain_G",
+    "novel_direction": "higher",
+    "novel_threshold": 0,
+    "credence": 0.35
+  },
+  "arms": {
+    "B0": "no experience",
+    "B1": "full packet (lessons + deltaW, sealed)",
+    "B2": "placebo lessons (same schema/tokens, unrelated-domain content)",
+    "B3": "A raw log only (token-equivalent)",
+    "B4": "component decomposition (lessons-only, deltaW-only)",
+    "B5": "B-self lessons (B generated from same experience)"
+  },
+  "secondary_discriminators": {
+    "G": "Acc(B1) - Acc(B5): cross-agent transfer surplus over self-generated lessons",
+    "S": "corr(B1 response distribution incl. errors, A distribution) - corr(B5 distribution, A distribution): dark-knowledge signature"
+  },
+  "common_chassis": {
+    "freeze_ablation": true,
+    "headroom_band": [0.3, 0.7],
+    "heterogeneous_judge": true,
+    "disjoint_level": "at least cross-split (3-tier: cross-task > cross-split > cross-domain)",
+    "leakage_audit": "exact-query/entity/template overlap=0 + embedding near-dup threshold; leakage>0 voids run",
+    "n_per_arm_min": 100,
+    "token_envelope": "equal across arms",
+    "replay": "server-regenerated (p1v4 pattern)",
+    "scope_note": "API-only B = input channel only; logit/activation channel (T2/T3) out of scope until local open-model pair"
+  },
+  "already_public_before_registration": {
+    "note": "Literature: naive memory transfer hurts (-1.6 to -8.6pt MATH500); abstracted/contrast-distilled memory transfers +12~15pt across families. No HSWM arm output measured.",
+    "harness_provenance": "foundation multi-agent-transfer-harness spec is filled by this gate (finding b1)"
+  },
+  "kill_conditions": [
+    "f3_k1 G <= 0 -> claim 2 reduces to claim 1 (novel kill)",
+    "f3_k2 S <= 0 -> no dark-knowledge transfer; effect is generic priming - do not call it transfer",
+    "f3_k3 B1 <= max(B0,B2,B3) -> sub-claim dies; B1 <= B3 -> 'typed packet necessary' dies, demote to raw-data sharing effect (C1 precedent)",
+    "f3_k4 saturation (B0 >= 5/6) -> re-register with harder F2 family"
+  ],
+  "pass_conditions": [
+    "paired bootstrap LCB > 0 vs all controls",
+    "prereg minimum improvements met (p1v4 format)",
+    "G > 0 AND S > 0"
+  ]
+}

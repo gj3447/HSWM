@@ -1,0 +1,38 @@
+{
+ "findingId": "finding-prom16-hswm4-d3-pitfalls-20260725",
+ "domain": "consolidation::pitfalls",
+ "rootCause": "Consolidation 주장이 오탐에 취약한 근본 구조는 '통합(consolidation)'의 행동적 정의가 문헌마다 부재하고, 측정 가능한 프록시(store 크기, 로그 누적, 재검색 정확도)가 진짜 표상 변화와 구조적으로 혼동되기 때문이다. Xu et al.(arXiv:2604.27707)이 정식화했듯 현재 배포된 모든 agentic memory는 C(context)만 바꾸고 θ(가중치)는 frozen이라 'memo vs mind' 범주 오류를 범하며, Letta의 sleep-time compute조차 가중치가 아닌 context token을 재작성한다('잘 정리된 초보'). 신경과학의 통합 행동 기준(추가 학습 없는 offline improvement + 간섭 저항성 + episodic→semantic gist 변환, 48h~수주 시간 스케일)을 LLM 에이전트 평가에 적용한 연구는 사실상 없다. 두 번째 구조는 CL 평가 자체의 함정: GDumb(ECCV 2020)과 RanDumb(arXiv:2402.08823)이 보였듯 naive baseline(탐욕적 버퍼 재학습, 심지어 랜덤 표상)이 SOTA continual 방법을 능가해, 매칭된 trivial baseline 없는 '개선'은 진보가 아니라 착시다. 세 번째는 벤치마크 설계 결함(arXiv:2511.10523): LongMemEval의 filler/evidence 문체 불일치는 모델이 기억이 아닌 스타일 단서로 풀게 하고, 카테고리당 n<100(LoCoMo 10개 대화)은 통계적 비교를 불가능하게 하며, 단순 full-context baseline이 Mem0 등 정교한 시스템을 70-82% vs 30-45%로 압도한다. 네 번째는 시간 confound: 과제 순서 민감성·나중 데이터가 쉬워지는 난이도 drift·평가 시점 편향이 있고, concept drift(분포 변화)와 forgetting(간섭)은 별개 현상인데 장기 연구에서는 drift를 '통합' 또는 '망각'으로 오독한다. 다섯 번째는 ΔW 측정 오류(Yao et al. 2024, Ye et al. 2025 — 2604.27707 §5.2 인용): 표준 SFT는 fact memory unit이 아닌 attention router만 수정하므로 '지식 갱신'을 측정한다며 실제로는 접근 재배열을 측정하는 경우가 흔하다. 결론적으로 consolidation claim은 ① store 없이도 살아남는가(통합 vs 재검색) ② trivial baseline을 이기는가 ③ 시간/drift를 분리했는가 — 세 테스트 없이는 반증 불가능한 서사가 된다.",
+ "recommendation": "HSWM claim ④(장기 consolidation)의 sealed 실험은 다음 4개 게이트를 prereg kill 조건으로 등록해야 한다. G1 store-ablation(결정 테스트): consolidation pass 후 t0 이전 raw store의 retrieval을 sealed 상태에서 차단하고 frozen heldout을 평가한다. 차단 상태에서 성능 유지≥prereg threshold일 때만 '통합' — 붕괴하면 재검색이므로 KILL(p1v2 typed lesson KILL과 동일한 개입효과-0 논리를 축 ④에 적용). G2 offline improvement + 간섭 저항: 신경과학 행동 기준을 채택해 consolidation pass 전후 동일 frozen probe 세트로 추가 데이터 없이 개선을 측정하고, 이후 상충 경험 주입 시 통합 지식의 유지율을 비통합 통제군과 비교한다. G3 trivial-baseline 게이트(GDumb/RanDumb 교훈): (a) full-log-dump retrieval baseline, (b) no-op consolidation arm, (c) random topology rewiring arm 3개 통제군을 두고, 어느 하나라도 동률이면 KILL. G4 시간·drift 분리: 과제 순서 counterbalance, 전 시점에 고정난이도 canary probe 삽입, frozen-at-t0 holdout과 fresh-at-tk holdout을 이중 운용해 drift(둘의 괴리)와 학습(frozen에서의 개선)을 분리하고, evidence와 heldout을 동일 생성 파이프라인에서 뽑아 LongMemEval식 문체 누출을 차단하며 카테고리당 n≥100을 확보한다. metric은 store 크기/로그 수가 아니라 구조 델타(topology/가중치 변화량 + semantic-weight-metric-contract 상의 typed metric) × 행동 전이의 결합이어야 하며, replay 검증은 consolidation 전후 store 스냅샷의 sha256 차이와 함께 봉인한다. 현재 HSWM은 L0 answer-interface만 성립하므로, 위 게이트 전부를 통과하기 전에는 claim boundary에 'consolidation 미지원'을 명시 유지하는 것이 LakatoTree 장부상 정직한 상태다.",
+ "alternatives": [
+  "주장 격하 경로: consolidation을 증명하려 하지 말고 '외부 store 위의 typed actuation'으로 claim을 한정한다 — 2604.27707의 결론처럼 retrieval-only 시스템은 compositional novelty에서 구조적 상한이 있으므로, HSWM의 정당성을 통합이 아닌 다른 축(재현성·감사가능성)에서 방어하는 전략.",
+  "CGT(Compositional Generalization over Time) metric 채택: T 세션 동안 개념을 격리 노출한 뒤 미견 조합 쿼리로 평가 — 순수 retrieval agent는 flat, 진짜 통합은 T에 대해 단조 증가해야 한다는 2604.27707 §5.2 제안을 HSWM heldout 설계에 직접 이식.",
+  "Trace→distill→adapter 통합 채널 + 버전드 체크포인트: consolidation pass를 LoRA/self-distillation으로 구현하고 regression guard(통합 후 downstream metric 저하 시 자동 롤백)를 달아, ΔW claim(축 ①)과 consolidation claim(축 ④)을 하나의 sealed 파이프라인으로 동시 검증."
+ ],
+ "references": [
+  "https://arxiv.org/html/2604.27707v1",
+  "https://arxiv.org/abs/2511.10523",
+  "https://arxiv.org/pdf/2410.10813",
+  "https://arxiv.org/html/2402.08823",
+  "https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123470511.pdf",
+  "https://proceedings.mlr.press/v232/lesort23a/lesort23a.pdf",
+  "https://homes.esat.kuleuven.be/~konijn/publications/2021/Verwimp1.pdf",
+  "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2019.02312/full",
+  "https://www.sciencedirect.com/science/article/pii/S0896627323002015",
+  "https://arxiv.org/html/2604.20006v1"
+ ],
+ "caveats": "2604.27707('Memo, Not True Memory')는 position paper로 Theorem 1의 분리 결과가 Assumption(유계 in-context composition)에 의존하며 ᾱ→1 영역(강한 사전학습 커버리지)에서는 separation이 소멸한다고 저자 스스로 인정 — HSWM의 도메인이 이 영역이면 G1의 변별력이 떨어질 수 있다. Sleep-time compute(arXiv:2504.13171)는 2차 소스(Glasp/implicator 요약)로만 확인했고 원문 미열람. arXiv:2604.20006과 Lesort 2023, Verwimp 2021은 스니펫/초록 수준 확인. GDumb·RanDumb은 이미지 분류 CL 맥락이라 LLM 에이전트 맥락으로의 외삽은 유추다. 신경과학 offline improvement 기준의 LLM 적용은 유사성에 기반한 설계 원칙이지 확립된 표준이 아니다. '드리프트 vs 망각 구분'은 RCCDA(arXiv:2505.24149) 등에서 개념적 구분만 확인했고, 장기 에이전트 연구에서 drift를 통합으로 오독한 구체적 사례 논문은 확보하지 못했다(문헌 공백 자체가 시사점).",
+ "confidence": "HIGH",
+ "oneLineSummary": "Consolidation 오탐의 5대 함정(재검색을 통합으로 오인·trivial baseline 미배치·벤치마크 문체 누출·시간/drift confound·SFT식 ΔW 측정 오류)을 막으려면 store-ablation·offline improvement·trivial-baseline·dual-holdout 4게이트를 prereg kill 조건으로 봉인해야 한다.",
+ "agentId": "prom-prom16-hswm-unproven-claims-20260725-D3",
+ "researchedAt": "2026-07-25",
+ "sourceKgBindings": [
+  "user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23",
+  "HSWM_ORDERED_GATES_CURRENT",
+  "semantic-weight-metric-contract",
+  "multi-agent-transfer-harness",
+  "lesson-prom-tribunal-phasor-20260724",
+  "p1v2-typed-lesson-kill",
+  "C1-book-scale-hypergraph-kill",
+  "B21-router-only-falsified"
+ ]
+}

@@ -1,0 +1,46 @@
+{
+ "findingId": "finding-prom16-hswm4-a1-theory-20260725",
+ "domain": "delta-w-credit::theory",
+ "rootCause": "claim ①(결과→신용배분→ΔW)가 증명 어려운 근본 구조는 '파라미터 공간의 이산성 + 이중 귀속 문제'다. frozen-LLM에서 외부 가중치 W는 실수 벡터가 아니라 이산 텍스트 객체 집합(레슨/엣지)이라 ∇J(W)가 정의되지 않고, 귀속도 2단계다: (a) 결과→어떤 레슨 탓인가(localization), (b) 어떤 편집이 그 행동 변화를 만들었는가(mechanism). 문헌상 5개 후보 이론의 적합성 판정: (1) policy gradient(REINFORCE, Williams 1992)는 W의 '레슨 포함 여부'를 확률적 마스크로 재매개변수화하면 원리상 불편 추정 가능하나 분산이 치명적 — baseline 필수; (2) REBAR(1703.07370)는 미분가능 relaxation을 전제하므로 텍스트 보상에 직접 부적합, RELAX식 학습된 critic으로 퇴화시키면 미검증 학습자를 하나 더 믿어야 해 최약 후보; (3) ES(1703.03864)는 0차 추정이라 frozen-LLM에 원리상 적합하나 섭동 공간(의미 미터릭)이 필요 — 정확히 미해결 foundation 'semantic-weight-metric-contract'에 블록됨; (4) black-box credit(Data Shapley 1904.02868, LOO)은 V(S)=스토어 부분집합 S로의 held-out 기대성능으로 정의되므로 frozen-LLM에 가장 자연스럽고 검증독립적, 단 비용과 pairwise 상호작용(hyperedge) 귀속이 한계 — C1(clique>hypergraph) 결과와 정합: 엣지 귀속 측정 전까지 아이템 단위 귀속만 신뢰; (5) weight-diff probe(DIT 2510.05092, Watch the Weights 2508.00161, Task Arithmetic)는 ΔW를 1급 관측 객체로 다루는 형식 입장을 제공하되, HSWM은 오히려 이 문제가 반전됨 — 외부 스토어라 ΔW 관측성은 버전 해시+편집 로그로 공짜로 해결되고, 어려운 것은 'ΔW의 의미론(어떤 편집→어떤 행동변화)' 즉 인과 귀속이다. 결론적으로 claim ①의 정확한 형식화는: W_t=버전 해시된 typed 스토어 스냅샷, ΔW=편집 연산자 집합 {insert,delete,reweight,add_edge,remove_edge}의 커밋된 레코드(ΔW 자체가 완전 관측 가능 변수), 신용 φ_i = Shapley/LOO 또는 확률적 포함-REINFORCE 추정치, 업데이트 = 검증 게이트를 통과한 argmax 편집. 입증된 선행 구현체들(ExpeL 2308.10144, DSPy 2310.03714, OPRO 2309.03409, Promptbreeder 2309.16797, TextGrad 2406.07496, Trace 2406.16218, GEPA 2507.19457)은 모두 형식 신용이론 없이 '결과→편집' 루프가 frozen-LLM에서 작동함을 보여주므로, HSWM이 증명해야 할 것은 루프의 존재가 아니라 '신용 추정치가 무작위 편집 대비 예측력을 갖는가'다.",
+ "recommendation": "다음 sealed 실험 'delta-w-credit-1' 설계: (1) 태스크 선정에 난이도 게이트 — p1v2 킬(base retrieval이 이미 6/6 해결해 개입효과 0) 재발 방지로, frozen+base retrieval 정답률 30~70% 구간의 heldout만 채택. (2) 3-arm prereg: (a) credit-informed 편집 — TMC-Shapley(예산 캡) 또는 Bernoulli 포함마스크 REINFORCE+baseline으로 검색된 레슨별 φ_i 추정 후 상위 신용/하위 반신용에만 편집 적용; (b) 동일 크기 무작위 편집(삽입/삭제/reweight 수 동일, 타깃만 랜덤) — '아무 변화나 도움' 대조; (c) verbal-gradient arm(TextGrad/Trace식 LLM critic이 trace 보고 편집 제안) — 휴리스틱 귀속 vs 기계적 귀속 비교. (3) 신용 자체의 falsifiable metric 신설: credit-validation gate — 추정 φ_i와 probe 부분집합 실측 LOO ΔV의 순위상관(Spearman)을 사전등록하고, 상관 ρ<0.2면 '신용 추정치가 무정보'로 해당 arm 폐기. (4) 최종 kill 조건: fresh heldout(서버 replay 검증, p1v4 방식)에서 (a)−(b) ≤ 0 이면 claim ① 미증명 유지; (a)−(b)>0 AND ρ≥0.2 AND (a)≥(c) 시에만 '기계적 신용배분 성립' 1차 판정. (5) ΔW 관측성은 Longinus sha256 결합 그대로: 스토어 스냅샷 해시 + typed 편집 로그를 장부에 기록해 ΔW를 replay 가능한 1급 변수로 고정. (6) 하이퍼엣지 귀속은 금지(C1 교훈) — 아이템 단위만, 엣지 귀속은 Shapley interaction index 비용이 감당될 때 별도 사이클. (7) 보조 해석: ES/GEPA 계열은 진화론적 프레임(레슨 population fitness)이므로, 그래디언트 유사 ΔW가 반증되더라도 계통 기반 변형으로 claim ①을 재서술하는 escape hatch를 prereg에 명시.",
+ "alternatives": [
+  "진화론적 재서술: ΔW를 그래디언트 유사 업데이트가 아니라 Promptbreeder/GEPA식 population-based 진화로 형식화 — 레슨 계통(lineage)에 fitness를 붙이고 신용배분 문제 자체를 우회. DSPy/MIPRO가 이미 이 경로로 실용 성공, 단 '학습'의 최소 정의(fitness 단조 증가 재현)만 요구하도록 claim을 약화해야 함",
+  "학습된 critic 경로(RELAX 변형): outcome→텍스트 피드백 critic을 별도 학습해 control variate로 쓰면 분산 감소 가능하나, critic 검증이 새로운 미증명 claim을 추가하므로 sealed 체계와 충돌 위험 — 2순위",
+  "조합 게임 프레임 확장: Shapley interaction index로 (레슨, 엣지) 쌍 귀속까지 확장 — hypergraph 고유 기여를 직접 측정하는 유일한 정통 경로이나 비용이 지수적이라 Monte Carlo truncation + 소규모 probe 스토어(≤30 레슨)에서만 실행 가능"
+ ],
+ "references": [
+  "https://arxiv.org/abs/2406.07496",
+  "https://arxiv.org/abs/2406.16218",
+  "https://arxiv.org/abs/2507.19457",
+  "https://arxiv.org/abs/2309.16797",
+  "https://arxiv.org/abs/2309.08532",
+  "https://arxiv.org/abs/2309.03409",
+  "https://arxiv.org/abs/2310.03714",
+  "https://arxiv.org/abs/1703.03864",
+  "https://arxiv.org/abs/1703.07370",
+  "https://arxiv.org/abs/1904.02868",
+  "https://arxiv.org/abs/2510.05092",
+  "https://arxiv.org/abs/2508.00161",
+  "https://arxiv.org/abs/2308.10144",
+  "https://arxiv.org/abs/2502.16863",
+  "https://arxiv.org/abs/2604.09459",
+  "https://arxiv.org/abs/2605.02801",
+  "https://doi.org/10.1007/BF00992696"
+ ],
+ "caveats": "① Data Shapley와 LLM-MAS credit 서베이(2605.02801), credit 서베이(2604.09459)는 초록/초록+HTML 일부 확인, 전문 정독 아님. ② GEPA(2507.19457)는 타 논문 참조문헌 인용으로 확인, 원문 미열람 — 'RL outperform' 주장은 저자 자체 보고. ③ TextGrad의 Nature 게재는 2차 블로그 출처라 미검증, arXiv 본문 기준으로만 인용. ④ 제안한 Bernoulli 포함마스크 REINFORCE 추정치는 본 셀의 신규 합성(직접 검증된 선행 구현 아님) — 불편성은 score-function 항등식에서 따라오나 실제 분산/수렴은 미측정. ⑤ REBAR '최약' 판정은 frozen-LLM에 미분가능 surrogate가 없다는 구조 논증이며, 텍스트 연속완화 연구가 생기면 재평가 필요. ⑥ Shapley 비용: V(S) 평가 1회 = rollout 배치라 예산 현실성은 sealed run 설계 시 별도 산정 필요.",
+ "confidence": "MEDIUM",
+ "oneLineSummary": "frozen-LLM+외부 스토어의 ΔW는 '버전 해시+typed 편집 로그'로 관측성은 공짜이고, 진짜 미증명은 신용 추정치의 예측력 — Shapley/LOO(최적합) 또는 포함마스크 REINFORCE로 추정한 신용이 동일 크기 무작위 편집을 fresh heldout에서 이기는가가 claim ①의 유일한 결정 실험이다.",
+ "agentId": "prom-prom16-hswm-unproven-claims-20260725-A1",
+ "researchedAt": "2026-07-25",
+ "sourceKgBindings": [
+  "hswm-delta-w-credit-claim",
+  "multi-agent-transfer-harness",
+  "semantic-weight-metric-contract",
+  "lesson-prom-tribunal-phasor-20260724",
+  "rf-prom-next-move-f1-20260724",
+  "rf-prom-next-move-b22-20260724",
+  "hswm-c1-bookscale-kill",
+  "hswm-p1v2-typed-lesson-kill",
+  "hswm-p1v4-l0-answer-interface"
+ ]
+}

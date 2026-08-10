@@ -1,0 +1,38 @@
+{
+ "findingId": "finding-prom16-hswm4-b4-alternatives-20260725",
+ "domain": "agent-ab-transfer::alternatives",
+ "rootCause": "A→frozen-B 전이가 증명 어려운 근본 이유는 'B가 좋아졌다'는 관측이 전이 claim 외 최소 4개 경쟁 가설로 설명되기 때문이다. (1) 코퍼스 유출 — donor 경험과 receiver 평가 항목의 겹침. AgentHER(arXiv 2603.21357)도 held-out에서 task overlap을 제거하고도 cross-environment 잔존 겹침이 지적됐다. (2) generic-context 효과 — Crossover 실험(arXiv 2605.04361, 10과제×7조건×2700런)은 무관 문서(irrelevant document)가 관련 artifact만큼 성능을 올리거나(최대 20×) 해치는(최대 -46%) 것을 실증했고 방향이 baseline 수준 하나로 예측됨(r=-0.82). 즉 '내용 주입 자체'의 효과와 'A의 지식'의 효과를 통제 arm으로 분리하지 않으면 단일 개선은 증거가 아니다. (3) raw-log 충분성 — A의 원시 로그만 줘도 동일하게 좋아지면 typed lesson/ΔW 패킷의 고유 기여는 0이 되는데, 이는 우리 C1 book-scale(hswm 0.427 vs clique 0.447)과 p1v2 typed lesson KILL에서 이미 겪은 동형 함정이다. (4) receiver 오염 — B의 prompt/tools/readout/budget이 미세하게라도 달라지면 개선은 전이가 아니라 receiver 재구성이다. 결국 증명력은 donor 알고리즘이 아니라 통제 arm 배치와 disjoint 감사에서 나오며, arm 설계가 곧 claim boundary다.",
+ "recommendation": "P2 게이트를 5-arm sealed factorial로 확정하라. 절차: (1) DONOR — A만 코퍼스 D_A(시드 s_A)에서 경험, 생성된 typed lesson+ΔW packet을 p2-transfer-packet.json으로 봉인(sha256 + Merkle provenance root + donor corpus manifest hash — Portable Agent Memory, arXiv 2605.11032의 provenance-DAG 패턴 차용). (2) FREEZE — B의 deployment/prompt/tools/readout/budget manifest를 byte-freeze(기존 Gate C 요건 그대로)하고 PREREG_P2_TRANSFER_<date>.json을 판정 전 등록: claim_boundary.included='byte-frozen B가 모든 통제 arm 대비 disjoint heldout에서 개선', excluded=[ΔW 메커니즘 단정, topology, consolidation], credence/direction/minimum_improvements(p1v4식) 명시. (3) ARMS — B0=무경험, B1=full packet, B2=placebo lesson(스키마·토큰 동일·타 도메인 내용; crossover 논문의 irrelevant-doc 조건), B3=A raw log만(토큰 등가), B4=성분분해(lessons-only / ΔW-only). n≥100/arm, 사전 생성된 동일 token envelope(F1 교훈), arm당 동일 call 수. (4) DISJOINT — Mind2Web식 3등급(cross-task→cross-split→cross-domain) 중 최소 cross-split 이상을 prereg에 지정 + exact-query/entity/template overlap=0 + 임베딩 near-dup 감사 임계값 사전등록(2607.05458의 Appendix D leakage-control 패턴). (5) KILL — B1≤max(B0,B2,B3) 중 하나라도 성립 시 해당 하위 claim 사망(특히 B1≤B3이면 'typed 패킷 필요' 사망 → 'raw 데이터 공유 효과'로 강등, C1 판례와 동일 처리); leakage>0이면 run 무효; freeze 해시 변경 시 무효. (6) PASS — paired bootstrap LCB>0 AND prereg 최소 개선 수 AND deterministic judge sha256 lock + server replay(기존 p1v4 replay 계열 재사용).",
+ "alternatives": [
+  "Cross-model receiver (예: A=qwen3.5, B=llama 계열) — Portable Agent Memory가 GPT-4/Claude/Gemini/Llama 간 이식을 시연한 선례; 일반성 주장은 강해지지만 rehydration(모델별 lesson 재서식화)이 새 교란이 되므로 동일모델 P2 통과 후 Phase-2로 분리",
+  "Isomorphic reproduction held-out — donor task와 워크플로 동형·엔티티만 재표본화한 receiver 평가셋을 생성해 '절차 전이 vs 정답 암기'를 분리 (SPARK, arXiv 2605.09192의 300 task-variants 패턴; Voyager 2305.16291의 fresh-world zero-shot과 같은 계열이지만 통제 강화판)",
+  "Shuffled-ΔW placebo arm — packet의 ΔW를 엣지 permutation으로 norm은 유지하고 구조만 파괴한 가중치 위약 (Phasor tribunal에서 수입한 timestamp-shuffle falsifier의 가중치판). B1 > shuffled-ΔW여야만 '가중치의 topology-의존 내용'이 active ingredient라는 주장이 서며, 이는 lesson-text 전이(ExpeL 2308.10144/AWM 2409.07429 선례로 novelty 낮음)와 weight 전이(우리 생존 슬롯)를 가르는 결정적 arm",
+  "Round-trip / multi-hop transfer (A→B→fresh A′) — hop 누적 열화 곡선으로 패킷 안정성과 provenance 추적성을 동시 측정; Memory Sharing(INMS, 2404.09982)의 pool 공유 선례를 hop-제한 실험으로 엄밀화"
+ ],
+ "references": [
+  "https://arxiv.org/abs/2605.04361",
+  "https://arxiv.org/abs/2605.11032",
+  "https://arxiv.org/html/2607.05458v1",
+  "https://arxiv.org/abs/2308.10144",
+  "https://arxiv.org/abs/2409.07429",
+  "https://arxiv.org/abs/2509.25140",
+  "https://arxiv.org/abs/2505.23187",
+  "https://arxiv.org/html/2603.21357v4",
+  "https://arxiv.org/abs/2404.09982",
+  "https://arxiv.org/abs/2305.16291",
+  "https://arxiv.org/html/2605.09192"
+ ],
+ "caveats": "Voyager/ExpeL/AWM/ReasoningBank/MAEL 모두 주 평가가 '같은 에이전트의 자기 경험 재사용'이고, 위약 lesson·raw-log 통제를 갖춘 엄밀한 A→frozen-B RCT는 문헌에서 미발견 — 본 5-arm 설계는 선례 조합의 extrapolation이지 기검증 프로토콜이 아니다. Crossover 논문(2605.04361)은 소프트웨어 설계 탐색 과제라 정답형 QA로의 외연은 제한적(2차 소스 없이 abstract만 확인, full text 미정독). Portable Agent Memory는 54개 단위테스트 수준의 공학 프로토콜 데모이며 인과적 전이 효능 증거는 아니다. 2607.05458(harness offline RL)은 frozen LLM + disjoint split + leakage-control 부록의 가장 가까운 방법론 템플릿이나 '학습된 controller'라 수동 packet 전이와 메커니즘이 다르다. SPARK(2605.09192)는 2차 소스(Bytez 요약) 경유 확인 — 300 variants 수치는 원문 재확인 권장.",
+ "confidence": "HIGH",
+ "oneLineSummary": "A→frozen-B 전이는 5-arm(무경험/full packet/placebo lesson/raw-log/성분분해) sealed factorial + 3등급 disjoint 코퍼스 감사 + 사전등록 kill 조건으로만 증명 가능 — 단일 arm 개선은 crossover(무관 문서도 효과)와 raw-data 충분성 때문에 증거가 안 된다.",
+ "agentId": "prom-prom16-hswm-unproven-claims-20260725-B4",
+ "researchedAt": "2026-07-25",
+ "sourceKgBindings": [
+  "hswm-ordered-research-harness-20260724",
+  "multi-agent-transfer-harness",
+  "semantic-weight-metric-contract",
+  "lesson-prom-tribunal-phasor-20260724",
+  "p1v4-fresh-policy-replication-seed5-r2-20260724",
+  "user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23"
+ ]
+}

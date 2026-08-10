@@ -1,0 +1,414 @@
+<agent_swarm_result>
+<summary>completed: 16</summary>
+<subagent agent_id="agent-0" item="AXIS A (과학적 미증명 게이트) × LENS 1 (낶부 증거): F2~F5 각 게이트의 현재 블로커와 미증명 핵심을 as-is 증거로 정리하라. PREREG 마스터+머신락 4종, gate status JSON, KG 트리 노드(f2-delta-w-credit-dev-harness-20260725 = partial@L0 replay_refuted 포함)를 근거로 게이트별 (주장, 현재 증거, 부족한 것) 표를 만들어라." outcome="completed"># AXIS A × LENS 1: F2~F5 게이트 내부 증거 감사
+
+## 게이트별 (주장 / 현재 증거 / 부족한 것)
+
+| 게이트 | 주장 (미증명 핵심) | 현재 증거 (as-is) | 부족한 것 |
+|---|---|---|---|
+| **F2** ΔW 신용 | 추정 φ(Shapley)가 실측 인과기여 예측, ρ≥0.2, credit>random | dev n=12/arm: base 0.500, (a).750/(b).667, Δ+0.083, ρ=0.414 — 단 KG `f2-delta-w-credit-dev-harness-20260725` = **partial, client_asserted, replay_status=mismatch, notebook tier** | sealed(n=100×4) 15:23 KST 기동 중이나 **장부에 sealed 노드 0건**; 서버 replay 검증; null battery 배선 미완 |
+| **F3** A→B 전이 | G=Acc(B1)−Acc(B5)>0 AND S(dark-knowledge)>0 | **측정 0건.** KG `FoundationRequirement multi-agent-transfer-harness` = `needed`; `Q-hswm-neural-substrate-causal-transfer` OPEN | **전이 하네스 자체가 미존재 실험**(CONTINUATION 07-25: "현상 유지"); 게이트가 자기 스펙을 자체 충족해야 하는 순환(finding b1); ORDERED상 P1V5 선행 |
+| **F4** topology 학습 | 동결가중치 하 학습위상이 셔플/clique/랜덤 상회 | **사전 증거가 부정적**: C1 clique 0.447 > hswm 0.427 (novel kill, PREREG_f4 json:36); credence 0.25로 4게이트 최저 | 긍정 증거 전무; ORDERED상 P2(전이) 선행이라 이중 블록 |
+| **F5** consolidation | sleep 재구조화가 append-only 대비 lag≥4에서 δ≥10pp 지배 | **"반증 아니라 측정 불가"**(PREREG_f5 json:43); longitudinal 하네스 신규 필요; KG `semantic-weight-metric-contract` = `needed` | 하네스+metric 계약 둘 다 부재; 8-lag 종단 설계로 비용 최대; ORDERED상 최종 게이트 |
+
+## FINDINGS
+
+- [SEV: high] **F3·F5는 실행 수단 자체가 없다.** 두 foundation 모두 KG상 `status=needed`(LakatosTree_HSWM_20260719), waiver 부적절·현상 유지 판정(CONTINUATION.md:72). PREREG 잠금(`PreregLock prereg-f2-f5-unproven-claims-20260725` REGISTERED)만 있고 실험 인프라가 없음.
+- [SEV: high] **ΔW 신용의 유일한 측정치가 replay 불통과.** F2 dev 노드 `measurement_grade=client_asserted`, `replay_status=mismatch`, `temporal_witness_verified=false`, `lakatos_status=ambiguous` — +0.083은 noise band 0.02 상회하나 서버 재생성 검증 실패로 진보로 인정 불가. 트리 전체 eureka hallucination 1.0 경고와 정합.
+- [SEV: med] **공통 선행조건(F1 sealed) 미충족.** PREREG §0: 모든 게이트가 F1 패리티 수리 상속. dev-4에서 parity_failures=[] 수리됐으나 sealed n=100은 공유 vLLM 윈도(192.168.0.23:8000, EngineCore 54GB 점유) 대기 중; ORDERED JSON상 F1=`ACTION_REQUIRED`, 하위 5게이트 전부 `BLOCKED` (gate status json:211-218).
+- [SEV: med] **이중 게이트 체계 드리프트.** ORDERED v2(P1V5≈F2, P2≈F3, P3≈F4, P4≈F5)는 순차 잠금(`sequence_locked`)인데 PREREG F2~F5 트랙은 F2 sealed를 F1 sealed 완료 전에 기동 — 두 장부의 선행조건 해석이 불일치(추측: PREREG는 "패리티 수리"=dev 수준 충족으로 해석한 듯).
+- [SEV: low] **자체 credence가 전부 0.5 미만**(F2 0.4 / F3 0.35 / F4 0.25 / F5 0.3, 머신락 4종) — 프로그램 스스로 4 claim 모두 참보다 거짓 쪽에 베팅.
+
+## TOP-3 PROBLEMS
+
+1. **F3/F5 foundation 공백** — 하네스 미존재 + KG `needed` ×2 → 두 게이트는 PREREG만 있고 실행 불가.
+2. **F2 유일 증거의 replay_refuted** — 신용 예측력 지지 데이터가 서버 검증을 통과 못 함(client_asserted+replay mismatch).
+3. **F1 sealed 지연이 전 게이트 병목** — 공유 vLLM 윈도 점유로 공통 섀시 선행조건이 미충족 상태로 하위 실행이 진행 중.
+
+## RECOMMENDATION
+
+**F2 sealed 완료 시 producer/judge 아티팩트 분리 패턴(레슨 `lesson-replay-exec-container-artifact-separation-2026-07-24`, R3에서 replay verified 달성한 동일 수법)으로 서버 재생성 replay 제출** — 유일하게 실행 중인 게이트의 replay 체인을 복구하면 (a) ΔW claim의 첫 verified 측정, (b) F3~F5가 상속할 replay 선례, (c) eureka hallucination 1.0 경고 해소의 3중 레버리지가 생긴다.</subagent>
+<subagent agent_id="agent-1" item="AXIS A × LENS 2 (외부 기준): ΔW credit(TMC-Shapley/LOLO)/agent A→B transfer/topology learning/consolidation 4개 claim이 2025-2026 문헌 기준으로 새로운 게 정확히 뭔지, 그리고 우리 실험 설계(arm 구성, metric ρ≥0.2 등)가 선행 벤치마크 대비 약한 곳을 WebSearch로 확인하라." outcome="completed">외부 검증 완료. 최종 보고서를 작성한다.
+
+---
+
+## FINDINGS
+
+- **[SEV: high] F3 novelty 주장("placebo+raw-log 통제 A→frozen-B RCT 문헌 미발견", b4)은 사실상 기각.** [Memory Transplants for LLM Agents (MemAgents WS @ ICLR 2026)](https://openreview.net/attachment?id=AIJsjIqfsp&name=pdf)가 이미 **사전등록 6-gate + 4종 음성대조(random retrieval, placebo context 토큰매칭, write-only, frozen-store MU) + prompt-freeze SHA-256 게이트 + 2×2 factorial(architecture×content) + 360+ run**을 실행했다 — PREREG F3의 B2(placebo)/B3(raw-log)/freeze-sha 설계와 거의 1:1 대응. 잔여 novelty는 ①교차 **모델** donor→frozen-receiver 방향(MemCollab 2603.23234은 교차모델이지만 placebo RCT 없음, MemTransplants는 RCT지만 교차도메인·동일solver) ②오류구조 서명 S ③ΔW-packet 성분분해뿐. 즉 novelty는 "요소"가 아니라 "교집합"으로 재기술해야 함.
+- **[SEV: high] F3 통과 확률에 대한 부정적 선행증거.** MemTransplants 결과: static mode(=frozen receiver 유사) content transfer는 no-memory 대비 이득이 제한적이고 negative transfer가 흔하며, 이득은 약한 solver에 집중(+15pp 3B vs +7pp 7B). F3는 receiver capability 층화를 prereg에 박지 않음(30~70% headroom band가 부분 커버).
+- **[SEV: high] F2 "레슨 단위 인과 신용 공백"(a2) 주장도 과장.** [SEDM (2509.09498)](https://arxiv.org/html/2509.09498v3)이 environment-free A/B replay로 **후보 메모리 아이템별 marginal utility 추정 → 양수만 admission → outcome 관측으로 가중치 갱신 + 유해 항목 pruning**을 이미 수행. 에이전트/워크플로 수준에서는 SCAR(Shapley), [Agents-that-Matter (2605.27621, removal-based attribution→MAS 최적화)](https://arxiv.org/html/2605.27621v1), ShapleyFlow가 attribution→edit 루프를 보임. 잔여 novelty는 "루프"가 아니라 **추정기 검증 게이트**(Spearman ρ vs 실측 LOO + planted ground truth) 하나.
+- **[SEV: med] F2 metric ρ≥0.2는 통계적으로 취약.** prereg에 probe 부분집합 n·CI 요구 없음 — 레슨 ~20-30개면 SE(ρ)≈0.2라 게이트 자체가 노이즈 지배. 참고로 data-valuation 문헌에서 인정된 추정기도 ground-truth 대비 rank 상관 0.14~0.60 범위([Unlearning-Shapley 표](https://openreview.net/pdf?id=zrT8hzB3IE)) — ρ≥0.2는 "무정보 아님"의 바닥 수준. 또한 arm 구성에 저비용 추정기 대조(KNN-Shapley/Data-OOB, [OpenDataVal](https://arxiv.org/pdf/2306.10577v3.pdf)이 경쟁력 확인) 부재, arm (c)가 TextGrad 수준 — 현 SOTA 휴리스틱은 [GEPA (2507.19457, GRPO 대비 평균 +10%, MIPROv2 대비 ~+10%)](https://arxiv.org/abs/2507.19457)이므로 (a)≥(c) 판정이 straw-man 위험.
+- **[SEV: med] F5 "BWT/FWT agent-memory 미측정"(d1/d2) 서사도 시대착오.** [AgentMemoryBench (OpenReview)](https://openreview.net/pdf?id=MSXbrNExax)가 이미 **backward transfer(forgetting rate)·forward transfer·knowledge-conflict correction success rate** 지표를 정의, MemoryAgentBench(ICLR 2026)도 incremental multi-turn stream + test-time learning + selective forgetting 평가. 잔여 novelty: gist-detail 분기 서명, decay slope 계층모형 비교, sham-consolidation arm. 또한 F5 arm이 내부 A/B/C뿐 — Mem0/Zep급 외부 SOTA 앵커 부재로 선행 벤치와 비교불가.
+- **[SEV: med] F4 잔여 novelty는 실재하지만 대상이 부정적 선행 누적.** 학습된 n-ary hyperedge rewiring + WANN식 가중치동결 + random/shuffle RCT는 LLM-MAS 문헌(GPTSwarm/AFlow/G-Designer/MaAS/SC-MAS — 전부 pairwise, 대부분 offline search)에 없음. 단 C1(hswm−clique −2.00pp) + OpenGSL/GSLB(GSL이 random/kNN baseline에 지는 구간) + AgentPrune null + ["strong single agent baseline" (2601.12307)](https://arxiv.org/html/2601.12307v1)이 중첩 부정 prior. F4 arms에 강한 단일검색(dense) arm 부재 — K1 kill이 shuffle/clique/random만 커버하고 C1 최강 정적 대조를 누락.
+
+## TOP-3 PROBLEMS
+
+1. **F3 novelty 오기술 + 부정 prior 미반영** — placebo-RCT 선행(MemTransplants)이 존재하고 그 결과가 "frozen-receiver 이득 제한적"이라 claim 경계·기대효과 전면 재작성 필요.
+2. **F2 novelty가 "검증 게이트" 하나로 축소됐는데 그 게이트(ρ≥0.2)가 무력** — n/CI 부재 + GEPA·저비용 추정기 대조선 부재로 pass/fail 판정의 설득력 부족.
+3. **"문헌 공백" 서사 전반의 부실**(F2·F3·F5 공통) — SEDM/Agents-that-Matter/AgentMemoryBench 반영 시 잔여 novelty는 검증 절차(validation gate·causal placebo RCT)뿐이며, KG 장부의 novelty 서사가 외부 검증을 통과 못 함.
+
+## RECOMMENDATION
+
+**F3 PREREG을 MemTransplants 프로토콜과 정합화하고 novelty를 재기술하는 것**이 최대 레버리지: (i) F3 claim_boundary를 "교차모델×placebo-RCT 교집합 + S 서명 + ΔW 성분분해"로 축소 기술하고 MemTransplants를 1차 선행 대조선으로 인용, (ii) receiver capability 층화(weak/strong)를 prereg arm에 추가, (iii) 그들의 static-mode null을 F3 prereg 위험요소로 명시해 kill 기대확률을 사전 반영. novelty 오기술은 외부 리뷰어가 즉시 반증 가능한 신뢰도 리스크이며, 그들의 null 결과는 F3 실행 여부 의사결정 자체를 바꾸는 정보이기 때문. (모든 2026년 프리프린트 인용은 peer-review 미완 — 추측 아닌 확인된 사실과 구분해 표기함.)</subagent>
+<subagent agent_id="agent-2" item="AXIS A × LENS 3 (함정·오탐): 측정이 거짓 진보를 낼 경로를 찾아라. null battery B0 설계(HSWM/prom_search_hswm/hswm_null_battery.py) 검토 — placebo/shuffle/canary/disjoint 감사가 충분한가? PhantomWiki dedup 문제(t200 3형제), judge 이종성, headroom band 30~70% 근거, F2 dev replay_refuted의 원인." outcome="completed">모든 증거 수집 완료. 최종 보고서를 작성한다.
+
+---
+
+## AXIS A × LENS 3 (함정·오탐) — HSWM PROM 16 셀 보고
+
+### FINDINGS
+
+- **[SEV: high] F2 dev의 "headroom 통과"는 VOID leakage split 위의 측정이었다.** dev 영수증 `f2_delta_w_credit_dev_20260725_1784953230.json`: train=sparse_t200_fk1 / dev=large_t200_fk3은 t200 3형제로 질문텍스트 동일 → `disjoint_audit.leakage=102, verdict="VOID"` (L63-556)인데도 run이 계속되어 base 0.500 / ρ=0.414 "통과"로 보고됨 (L614-642, CONTINUATION.md:35). VOID가 기록만 되고 집행이 안 됨 — `run_verdict`가 null battery에 정의(`hswm_null_battery.py:154-168`)만 있고 F2 하네스에서 import조차 안 됨 (`f2_delta_w_credit.py:93-98`).
+
+- **[SEV: high] headroom band는 집행되지 않고, 바닥(floor) kill 조건이 아예 없다.** dedup 수리 후 smoke(`..._smoke_1784960113.json:315-321`): `dev_base_accuracy=0.0, headroom_band_ok=false` — 그런데도 run 계속. kill 조건은 포화(f2_k3 ≥5/6)만 있고 바닥(≤0.3)은 무효화 조건이 아님 (`PREREG_f2_delta_w_credit_20260725.json:40-44`). 정책충돌 태스크는 레슨 없이 거의 불응답이라 base≈0에서 측정되는 "credit 효과"는 사실 레슨 내용 존재 효과(actuation) — 현재 진행 중인 sealed run(15:23 KST 기동)이 이 함정에 해당할 수 있음 (추측: sealed dev_base 미확인).
+
+- **[SEV: high] credit-validation 게이트 ρ가 독립 검증이 아니다.** Spearman(phi_TMC, LOO)가 **같은 dev 케이스·같은 공유 V_cache 평가**에서 계산됨 (`f2_delta_w_credit.py:848-910`) — 같은 데이터의 두 추정치 일관성 검사라 기계적으로 부풀려짐. smoke에서 pairs=3으로 ρ=1.0 통과(L344-347). dev φ vs **fresh** LOO 상관이어야 예측력 검증. 현 설계는 예측력 0이어도 통과 가능.
+
+- **[SEV: med] headroom 30~70% 근거 불명 + 내부 불일치 3종.** 근거는 "p1v2 KILL 재발 방지"(상한만 정당화, `PREREG_F2_F5_UNPROVEN_CLAIMS_2026-07-25.md:20`); 하한 0.3은 근거 인용 없음. 같은 프로그램 안에서 a3 문서는 [0.2,0.8] 권고(`PROM_16_UNPROVEN_A_DELTA_W_CREDIT_2026-07-25.md:87`), prereg/코드는 [0.3,0.7], f2_k3는 5/6≈0.833 — base=0.75면 band 위반인데 재등록 kill은 미발동하는 모순.
+
+- **[SEV: med] Jaccard near-dup 감사가 type6 템플릿에 무력화.** 템플릿 공유 7/9토큰 → 모든 쌍이 0.8≥0.6 (dev 영수증 leakage 26/102 전부 VOID). 해결책은 binding을 exact+attr|value로 강등하고 raw 감사는 "artifact" 주석 처리 (`f2_delta_w_credit.py:710-715`) — 결과적으로 진짜 paraphrase 중복이 artifact 속에 숨을 수 있고, dedup 키가 질문 *텍스트*라 **정답 엔티티 수준 누수**(같은 인물, 다른 속성 질문)는 감사 대상이 아님.
+
+- **[SEV: med] 이종 judge/critic 계열 분리 위반 + answerer 계보 단절.** prereg `heterogeneous_judge:true`·"계열 분리" 명시이나 arm-c critic=qwen3:14b vs answerer=qwen3.6-27b — **같은 Qwen 계열**. F2 answerer는 p1v4 sealed answerer(Qwen3.6-35B-A3B-FP8)와 다른 모델 — 의존 게이트 P1V4의 증거와 측정 기반이 불일치 (lineage_note 공시는 있음, smoke L34). C1은 judge=qwen3.6-27b를 producer와 공유하고, PROM_6이 "HSWM 성적이 judge F1을 그대로 따라간다"(`PROM_6_EFFICACY_RESEARCH_2026-07-19.md:25`)고 자인.
+
+- **[SEV: med] 장부의 self-report 진보 부풀림 (KG read-only 실측).** `tree_metrics(LakatosTree_HSWM_20260719)`: eureka hallucination_rate=1.0 (15/15 measurement_failed), 영수증 없는 self-report 진보 11건(inconclusive-excluded), 서버앵커 novel 비율 0.211, note_only_ratio 0.558, fertility 0.2 (15예측 3적중), Laudan 폐기후보 5가지(전부 "예산 5노드 소진, 예측 적중 0").
+
+- **[SEV: low] replay_refuted의 원인은 3종 모두 "서버 재생성 불가 영수증".** B21: replay 템플릿이 필수 인자 없이 하네스 호출(`B21_LEARNED_ROUTER_RESULTS_2026-07-23.md:262`). C1: sync 경합으로 records 미동기화(`C1_PRELUDE_BOOKSCALE_RESULTS_2026-07-25.md:37`). F2 dev: API 직접 제출로 producer/judge 아티팩트 분리 부재(CONTINUATION.md:31) → `f2-delta-w-credit-dev-harness-20260725` = partial@L0(client_asserted, replay_refuted). R3/C1식 3단 분리는 사례별 수리이지 제도화 아님.
+
+### TOP-3 PROBLEMS
+
+1. **headroom 바닥 미집행 + dedup 후 base=0.0** — F2 sealed가 floor-confounded(actuation) 효과를 ΔW credit으로 오판할 통로가 열려 있고, VOID를 막는 kill 조건이 없다.
+2. **credit-validation ρ의 자기데이터 일관성 검사** — dev-φ vs dev-LOO(공유 V_cache)라 예측력 0이어도 ρ≥0.2 통과 가능; 거짓 진보의 직접 경로.
+3. **감사 판정의 런타임 미집행(run_verdict 미배선) + Jaccard 무력화** — leakage VOID가 run을 멈추지 않고, near-dup 감사는 템플릿 artifact로 실효성 상실.
+
+### RECOMMENDATION
+
+레버리지 최대 수정 1개: **F2 sealed 판정 전에 `run_verdict`를 fail-closed로 하네스에 배선하고, void 조건에 headroom band 양쪽 위반(특히 base<0.3)을 추가할 것.** sealed run의 dev_base가 0.3 미만이면 게이트 판정 전에 run 무효 처리 → 태스크 난이도 재설계(또는 claim을 actuation 범위로 강등). 이 한 줄 배선이 위 1·2·3번 오탐 경로를 동시에 닫고, 판정은 dev-φ vs fresh-LOO ρ로 재계산해야 유효하다.</subagent>
+<subagent agent_id="agent-3" item="AXIS A × LENS 4 (처방): F1 sealed → F2 sealed → F3/F4/F5 순서에서 최소비용 최대정보 경로를 제시하라. n=100 파워 분석, kill 조건(ρ≥0.2 등) 적절성, vLLM 윈도 제약 하의 현실적 스케줄." outcome="completed">분석 완료. 최종 소견을 정리합니다.
+
+---
+
+## AXIS A × LENS 4 (처방) — F1→F2→F3/F4/F5 최소비용·최대정보 경로 감사
+
+### FINDINGS
+
+- **[SEV: high] 이중 정본 서열 충돌 (ledger fork 위험).** 같은 claim 4개(ΔW/전이/topology/consolidation)가 두 gate 체계에 중복 등록: ORDERED v2(`receipts/HSWM_ORDERED_GATE_STATUS_20260724.json` — `sequence_locked:true`, F1 ACTION_REQUIRED, P1v5/P2/P3/P4 전부 BLOCKED, P1v5는 B22_GATE0_REAL_PACKS 의존) vs PREREG F2~F5(`PREREG_F2_F5_UNPROVEN_CLAIMS_2026-07-25.md:15` — F2→F3→F4→F5, F2는 선행 없음). F2 sealed는 F1 미충족·B22 미등록 상태로 이미 실행 중(PID 34916, 15:23 KST~, KG `PreregLock prereg-f2-f5-unproven-claims-20260725` REGISTERED). 어느 체계의 영수증이 claim ①을 여는지 규정 없음 → 사후 cherry-pick 가능.
+
+- **[SEV: high] n=100 파워 부족 — dev 효과크기 기준 ~50% (추정).** F2 dev: δ(a−b)=+0.083 (`f2_delta_w_credit_dev_20260725_1784953230.json`, 단 n_fresh=12). sealed n=100/arm, McNemar 근사(discordant 0.16~0.25 가정) 시 bootstrap95 LCB>0 통과 파워 ≈ 40~60%. 즉 claim이 참(δ≈0.08)이어도 절반 확률로 LCB≤0 → "미증명 유지"와 "low-power"를 구분 못 함. C1 book-scale +3.16pp low-power 판정(`INDEX.md:15`)이 동일 실패 모드의 선례. 결정규칙 사각지대: f2_k1 kill=점추정 ≤0, pass=LCB>0 (`PREREG_f2...json:40-49`) — "δ̂>0이지만 LCB≤0" 구간의 판정이 정의돼 있지 않음. noise_band 0.02도 실제 표본 SE(≈0.05)의 1/3으로 과소 설정.
+
+- **[SEV: high] ρ≥0.2 credit 게이트가 구조적으로 무력.** Spearman 입력 = 레슨 6개(`f2_delta_w_credit.py:36-40` — worlds 6, 레슨/world 1). n=6에서 Spearman 임계치(단측 α=.05)≈0.83 — ρ≥0.2 게이트는 n=100으로 스케일해도 해상도가 6점 고정이라 검정력 없음. dev ρ=0.414도 n=6이면 p≈0.36 (비유의, 추정). 게이트 통과/폐기가 사실상 난수.
+
+- **[SEV: med] F4 머신락 n=30 vs 마스터 문서 n≥100 모순.** `PREREG_f4_topology_learning_20260725.json:32` `"n_per_arm_min": 30` vs 마스터 MD line 23 "n≥100/arm (F5는 시계열 설계로 예외)" — F4는 예외가 아닌데 30. 두 아티팩트 모두 잠금 등록됨. 추가로 F4 arm A의 W*(학습 체크포인트)는 F2 통과를 전제하는데 의존 미선언, LOO 곡선 k=0..|E|에 상한 없음(비용 무제한), f4_k1 "CI margin" 값 미기재.
+
+- **[SEV: med] vLLM 윈도 스케줄 미비.** 공유 서버(192.168.0.23:8000, EngineCore 54GB 타 세션 점유)에서 F2가 윈도를 먼저 점유, 전제 게이트 F1(1500콜, dev-4 실측 60콜/900s×2w 포화 처리량 ≈ 3h+)이 대기(`CONTINUATION.md:22`). F2가 실패하면 F1의 typed 전제가 흔들려 F2 결과 해석도 강등 — 순서 역전 비용이 이미 발생 중. 야간 03:47 sync와 judge-cache 쓰기 경합으로 MANIFEST MISMATCH 1회 이력(`CONTINUATION.md:57-59`) — 장시간 run은 이 창을 피해야 함.
+
+- **[SEV: low] F3/F5 foundation 공백은 GPU 비용 0으로 해소 가능.** transfer-harness spec(finding b1)과 metric-contract는 설계/CPU 작업인데 실행 시점까지 미착수 — GPU 대기 중 병행하지 않으면 캘린더만 지연.
+
+### TOP-3 PROBLEMS
+
+1. **이중 서열(ORDERED v2 vs PREREG F2~F5)** — 같은 claim에 두 개의 "정본 순서", 어떤 영수증이 유효한지 무규정.
+2. **통계 무력 2종** — n=100 파워 ~50%(δ=0.08 기준, 추정) + ρ 게이트 n=6 고정: kill/pass 판정이 신호가 아니라 잡음에 걸림.
+3. **F4 락 모순(n=30) + F2→F4 의존 미선언** — F2 실패 시 F4는 학습된 W* 없이 무의미해지는데 중단 조건이 없음.
+
+### RECOMMENDATION (최대 레버리지 1개)
+
+**F2 완료 직후·F1 fire 전에 "통합 서열+파워 addendum" 1건을 prereg 수정등록하라.** 내용: (a) 두 체계 병합 — F1 sealed를 모든 claim의 전제 게이트로 확정하고 다음 vLLM 윈도 최우선 배정(1500콜 ≈ 3h, 03:47 sync 회피); (b) 판정 규칙을 2단계 sequential로 교체 — interim n=100에서 0<δ̂·LCB≤0(미결 구간)이면 n=250으로 확장, LCB>0이면 pass, δ̂≤0이면 kill (현 미정의 구간 해소); (c) ρ 게이트 폐기 또는 레슨 ≥20개로 확장+CI 기반; (d) F4를 n=100·F2-통과 조건부로 재등록, k 상한 명시. 근거: 이 수정 1건이 kill/pass 판정의 검정력 문제(2번)와 서열 모순(1번)·F4 무의미 실행(3번)을 동시에 막고, 비용은 문서 작업뿐 — 반대로 지금 상태로 F2~F5를 순차 실행하면 각 게이트가 ~50% 파워의 coin-flip 판정을 4회 반복할 위험이 있음. (파워 수치는 McNemar 근사 추정치 — 실제 discordance는 F2 sealed 영수증으로 확정 필요.)</subagent>
+<subagent agent_id="agent-4" item="AXIS B (장부·재현성) × LENS 1 (낶부 증거): 트리 메트릭 심층 분석 — eureka hallucination 1.0(measurement_failed), unreceipted self-report 11+25건, Laudan abandon 후보 12가지가 '진짜 연구 부실'인지 '영수증 관리 문제'인지를 실제 노드 조회로 구분하라 (mcp__lakatotree__tree_metrics, get_tree 사용)." outcome="completed">분석 완료. 증거가 충분히 모였다 — 최종 정리.
+
+---
+
+## FINDINGS (AXIS B × LENS 1: 장부 내부 증거)
+
+- **[SEV: high] "eureka hallucination 1.0"은 허구 보고가 아니라 *정직하게 기록된 반증*이다 — 단, 효과크기가 전부 ~1σ 박약.** felt 15+31건 전부 `measurement_failed`. 스팟체크: C1(receipt `3c68dfa2…`)은 novel_confirmed=false·equivalent로 "novel kill"이 장부에 정확히 반영; R3 v2/v3는 bf=0.584≤3.162 marginal; r2-ledger-repair 4건은 bf=0.167로 *rejected* (tree_metrics layer_flips popper/bayes 4). 즉 refutation machinery는 작동 중. 다만 진짜 신호는: **substantial(BF≥3.162) 확증된 novel 예측이 0건** — fertility HSWM 3/15=0.20, PromSearch 1/31=0.032 (양 트리 tree_metrics).
+
+- **[SEV: high] "영수증 없는 self-report 11+25건" 알림은 오탐 포함 — 실제는 "영수증은 있으나 client_asserted 등급" 문제.** ML16-true-hypergraph-beats-binary는 alert 리스트에 있으나 receipt `6c9ffb7c…`로 verdict_source=**scripted**, progressive, novel_confirmed=true가 존재. P5도 scripted degenerating receipt 보유. 진짜 문제는 measurement_grade: 양 트리 모두 **assurance_tier=notebook**이라 FF1 파일앵커 미적용 → anchored_ratio 0.211(4/19)·0.077(2/26), 대부분 client float (tree_metrics `anchored`, 알림 "P3b notebook-drift"). 디스크 영수증(GIT/HSWM/receipts/ 73파일, EVIDENCE_R3/C1 json)은 실재 — 연구 부실이 아니라 **앵커링 관리 문제**.
+
+- **[SEV: high] 디스크 내러티브 ↔ 장부 판결 불일치 (R3 v3).** R3_WALK_REGIME_RESULTS_2026-07-24.md:3은 "metric **progressive** (2/2), 걷기 lane 생존" 선언 (prereg: 0.011054>0.01, bootstrap 하한 0.00085>0). 같은 값·같은 script_sha(`5960a851…`)의 트리 영수증 `a8725a88…`은 **degenerating + novel_confirmed=true + bf 0.584** — prereg 포인트룰(>noise band)과 엔진 BF 룰이 충돌하고, 어느 쪽도 reconcile 안 됨. measurement_grade=server_regenerated라 데이터 자체는 신뢰 가능 — **판결 기준 이중성**이 정본의 자기모순을 만듦.
+
+- **[SEV: high] Laudan 폐기후보 5+7 중 상당수가 살아있는 본류.** hswm-ordered-causal-gates-20260724(=오늘 F1/F2가 돌고 있는 ORDERED 게이트 하네스; f2 dev/smoke 영수증 오늘 13:18~15:21), R3-walk-regime-density-dial-v3(novel_confirmed=true인데 사유가 "예측 적중 0" — 카운터가 영수증 내용과 모순), tribunal-phasor-agents(완료된 prior-art). 반면 T1-entrance-reach-c3(값 0.0), P5(값 0.0)는 진짜 사망 가지로 올바른 플래그. **12건 중 최소 3건은 오탐, 그중 1건은 현재 활성 본류** — 폐기 의사결정에 쓰면 위험.
+
+- **[SEV: med] 구조적 장부 미비.** 양 트리 canonical=null·progress=null(정본 경로 부재, CANONICAL 승격 0건); frontier open 33/19 vs closed 4/0 (질문만 축적); HSWM트리 honesty note_only_ratio=0.558 (노드 56%가 무측정 노트); closes_question 미선언 습관(f2 dev 노드는 `""`)으로 eureka 문제수지 다리 사망 (register_prediction 스펙상 사후 close는 balance 0).
+
+## TOP-3 PROBLEMS
+
+1. **측정 앵커링 부재 (notebook tier)** — 영수증은 있는데 값이 client float라 "self-report" 의심을 구조적으로 못 벗어남 (anchored_ratio 0.08~0.21).
+2. **판결 이중 기준 + 디스크↔장부 verdict 모순 (R3: progressive vs degenerating)** — 정본이 자기모순이면 모든 downstream 판정(폐기후보 포함)이 오염.
+3. **알람 오탐 — 활성 본류(ORDERED gates)가 폐기후보, 진짜 죽은 가지와 동일 사유 문자열** — 알람 피로 + 잘못된 폐기 위험.
+
+결론: 이 셀의 진단은 **"진짜 연구 부실"이 아니라 지배적으로 "영수증·판결 관리 문제"** — 단, 알람이 울리는 방식이 틀렸을 뿐, 저 beneath의 박약 효과크기(BF<1급, fertility 3~20%)는 진짜 연구 리스크로 별도 추적 필요 (추측 아님: bf 값들이 영수증에 명시).
+
+## RECOMMENDATION (최대 레버리지 1개)
+
+**양 트리 notebook→receipted 격상 + client_asserted 측정 전수(11+25건) server_regenerated 재제출을 1회 배치로 수행.** r2-ledger-repair가 이미 그 패턴을 증명(4건 정직하게 rejected — 장부 신뢰도는 *상승*). 이 한 작업이 ① self-report 알람 소거 ② anchored_ratio 1.0 ③ 재판결 시점에 prereg-룰 vs BF-룰 충돌(R3형 모순)을 강제 표면화시켜 폐기후보 재계산까지 한 번에 해소한다.</subagent>
+<subagent agent_id="agent-5" item="AXIS B × LENS 2 (외부 기준): HSWM의 replay/server_regenerated/producer-judge 아티팩트 분리 패턴이 재현성 표준(ACM artifact badging, NeurIPS reproducibility checklist 등) 대비 어느 수준인지 WebSearch로 평가하라." outcome="completed">조사 완료. HSWM의 replay/server_regenerated/producer-judge 패턴과 외부 표준(ACM badging, NeurIPS checklist)을 대조 평가한 결과입니다.
+
+---
+
+**AXIS B × LENS 2 — 재현성 표준 대비 평가 (2026-07-25)**
+
+### FINDINGS
+
+- **[SEV: high] 공개 아카이브 부재 = ACM "Artifacts Available" 구조적 미달.** 코드 원격은 `https://github.com/gj3447/HSWM.git`(공개 여부 미확인 — 추측), 핵심 데이터(universe 5종)는 `~/hswm_lab/phantomwiki_r3` 로컬 홈에만 존재(`GIT/HSWM/R3_WALK_REGIME_RESULTS_2026-07-24.md:53`). DOI/Zenodo형 영구 아카이브+고유 식별자 없음. 표준: [ACM Artifact Review and Badging v1.1](https://www.acm.org/publications/policies/artifact-review-and-badging-current) — Available = 공개 archival repository + unique identifier.
+
+- **[SEV: high] `server_regenerated`는 독립 재현이 아니라 자가 재실행.** ACM "Results Reproduced"는 *독립 인물/팀*이 저자 아티팩트로 결과를 얻는 것([arXiv 2504.08684](https://www.arxiv.org/pdf/2504.08684)). HSWM의 replay verified는 자체 lakatotree 서버 컨테이너 재유도(R3 `-v3`, `KG lesson-replay-exec-container-artifact-separation-2026-07-24`) — 내부 검증으론 강하나 외부 독립 재현 0건. 같은 팀이 통제하는 서버가 judge이므로 producer/judge "분리"는 조직 분리가 아닌 프로세스 분리.
+
+- **[SEV: high] 환경 미고정 → 제3자 exercisability 낮음.** producer(Mac/torch) 환경 매니페스트 없이 script sha만 잠금; 컨테이너에 torch가 없어 replay가 mismatch(-v2) → 아티팩트 분리로 우회(`R3…md:61-62`). 공유 vLLM `192.168.0.23:8000`(LAN 무인증, 비표준 모델명 `qwen3.6-27b`, EngineCore 54GB 점유로 sealed 대기), ollama thinking 파라미터 무시 같은 로컬 인프라 의존(`docs/CONTINUATION.md:21,35-36`). NeurIPS checklist §4(코드/데이터/지침, [가이드](https://neurips.cc/public/guides/PaperChecklist))·ACM Functional(complete/exercisable) 부분 미달.
+
+- **[SEV: med] 자체 인증서가 reproducibility 게이트를 스스로 실패.** `HSWM/prom_search_hswm/judgments/B21_learned_router/certificate.json`: `certified=false`, `reproducible`(계보 미기록 — DatasetManifest 부재), `calibrated`(ECE=0.1771>0.1), `measurement_owned`(client_asserted) 3게이트 미달. 장부 전체에 영수증 없는 self-report 진보 11+25건 + eureka hallucination 1.0(`CONTINUATION.md:16`) — 자체 표준의 준수율 자체가 문제.
+
+- **[SEV: med] 결정론 예외·영수증↔작업트리 불일치.** 질문 id는 unseeded UUID4라 checksum 대조 제외(`R3…md:73`); repo에 미커밋 수정(`M INDEX.md` 등)과 미추적 `.f2_cache/` 존재(git status 30d351a) — 영수증 sha 시점과 재현 시점 트리가 어긋날 위험.
+
+- **[SEV: low] 강점(표준 초과분) 균형 기록.** 기계잠금 prereg+측정 전 amendment(R3 7/24), 이종 judge sha256 잠금, null battery/canary/leakage 감사(`HSWM/PREREG_F2_F5_UNPROVEN_CLAIMS_2026-07-25.md:20-24`), append-only verdict 체인, 일일 CI(`tier1-scheduled.yml`, CONTINUATION.md:54) — NeurIPS checklist의 분석·투명성 항목은 표준 이상.
+
+### TOP-3 PROBLEMS
+
+1. **공개 아카이브(DOI) 부재** — Available 배지 요건과 외부 재현 진입점이 둘 다 없음(가장 구조적).
+2. **독립 재현 0건** — server_regenerated = 자가 재실행; Results Reproduced 계층 공백.
+3. **환경 미고정 + 로컬 인프라(vLLM/ollama/GM 디스크) 의존** — 제3자 exercisability 불가, 자체 인증서 reproducible 게이트도 적색.
+
+### RECOMMENDATION
+
+**sealed 결과 1건당 Zenodo DOI 번들 1개 발행** — 코드 태그 + universe 데이터 + replay 아티팩트(`_research/r3_replay` 스타일, 이미 producer/judge 분리돼 있어 그대로 업로드 가능) + prereg JSON + judge 스크립트 + env manifest(requirements/모델 버전 고정)를 한 묶음으로. Available 배지 요건 충족과 외부 독립 재현 진입점(→ Results Reproduced 경로)을 단일 작업으로 동시 해소하는 최대 레버리지.</subagent>
+<subagent agent_id="agent-6" item="AXIS B × LENS 3 (함정): 장부가 진실을 왜곡하는 경로 — client_asserted/replay_refuted 노드 처리, partial@L0의 의미, noise_band 1σ 근사, multiplicity 미보정(보정은 판결을 안 바꾼다는 주석의 함정), eureka measurement_failed의 구조적 원인." outcome="completed">조사 완료. AXIS B × LENS 3 (함정) 결과를 반환한다.
+
+---
+
+**CELL: AXIS B × LENS 3 — 장부가 진실을 왜곡하는 경로**
+
+**FINDINGS**
+
+- **[SEV: high] eureka 대시보드 ↔ 노드 불일치 + `measurement_failed`의 라벨 오독.** `tree_metrics(LakatosTree_PromSearchHSWM_20260721)` = eureka true 0/31, hallucination_rate 1.0, 전부 `measurement_failed`. 그러나 같은 트리 노드 `B2-crossfield-merge-payoff`에 대한 `eureka` 호출 = **true, BF 6.0, hallucinated false** (판결 progressive). 동일 트리의 두 read-only 표면이 직접 모순 — 브리핑의 "eureka hallucination 1.0" 알림은 최소 1건의 진짜 진보를 삼킨다 (메커니즘은 추측: 집계=저장 필드, 단건=라이브 재유도로 추정). 구조적 원인 3종은 문서 자체에 명시: closes_question 미선언 seam, novel_script 서버앵커 부재, replay 컨테이너 제약 (`GIT/HSWM/R3_WALK_REGIME_RESULTS_2026-07-24.md:64`). 서버앵커 비율: PromSearch 2/26=0.077, HSWM 4/19=0.211, 양 트리 모두 `assurance_tier: notebook` — 이 tier에선 client float novel이 구조적으로 "확증 불가"이므로 hallucinated 1.0은 **인식론적 판정이 아니라 tier 아티팩트**.
+
+- **[SEV: high] client_asserted/replay_refuted의 방향-비대칭.** B21은 `replay_boundary: client_asserted/replay_refuted`인 채 gate **SATISFIED** + "do not tune its abstention threshold again"으로 동결 (`GIT/HSWM/receipts/HSWM_ORDERED_GATE_STATUS_20260724.json:33-50`). 같은 파일 :9는 "SATISFIED means … revalidated"라 명시하고 :107은 "self-asserted judgment cannot unlock the next gate"라 한다 — **양성 결과에만 적용되는 규칙**. 반대로 P1v3은 파생 판결 progressive·prereg 임계 3/관측 6·judge PASS인데 `partial@L0(client_asserted,replay_refuted)`로 저장 (`GIT/HSWM/_research/p1v3_policy_actuation/CLOSEOUT_20260724.md:67-72`, "replay-interface contract mismatch, not a heldout metric failure"). 음성(refutation)은 면제, 양성은 강등 — B21 문서 스스로 "assurance failures do not change the locally audited scientific failure"라 면책 (`B21_LEARNED_ROUTER_RESULTS_2026-07-23.md:263-266`).
+
+- **[SEV: high] multiplicity "보정은 판결을 바꾸지 않는다" 주석의 공회전.** HSWM 트리 multiplicity 블록: 추적 family 단 1개(`typed_improvement_count_vs_no_memory/None`), **family_size=0**, survivors 0, untestable 2건인데 상시 캡션 "보정은 판결을 바꾸지 않는다" — 공집합 위의 공허한 진술. PromSearch 트리는 `"multiplicity": {}` (예측 31건 등록됐는데 family 추적 0). 실제 다중검정 표면 — C1 (2 primary 대비 + kill 4), R3 (예측 2 + kill 4 × 5 universes, primary 하한 0.00085로 박약), B21 54 cells, F2~F5 16 arms — 전부 미등록. R3 "생존" 판정은 familywise 보정 시 뒤집힐 수 있는 마진 (추측 — 재계산 불가). 설계 문서의 보정 규율 (`HSWM/PROM_TRAVERSAL_DESIGN_2026-07-19.md:56-57` SELECT_Z_ADJ=2.5, max-t/Bonferroni)은 장부에 도달하지 않음.
+
+- **[SEV: med] noise_band: 1σ "정책 가정" + 0-밴드.** 최소 7건의 prereg/영수증이 `noise_band: 0` (`PREREG_R2_ML_WALK_2026-07-22.json:11`, `p1v3_policy_prediction_receipt_seed3_20260724.json:7` 등) — equivalent 불가, 임의의 양수 delta = improved. 나머지는 0.01/0.02/0.03 선언 상수로 노드 간 불비교. 장부는 이를 "p = noise_band=1σ 근사(정책 가정)"로 간주 (tree_metrics multiplicity.note). 결과: R2_ML_WALK 같은 "metric progressive / 프로그램 degenerating (BF 0.167)" 이중라벨이 `HSWM/INDEX.md:21` 헤드라인에 그대로 인용.
+
+- **[SEV: med] partial@L0 의미 혼합 + 장부 유지물이 과학 층을 뒤집음.** verdict 문자열에 assurance(L0/replay grade)가 접미 — "partial"이 약한 증거로 읽히나 실제는 플러밍 미스매치. HSWM 트리 rejected 4건 전부가 `*-r2-ledger-repair` 노드이고, popper/bayes layer flip 4건도 정확히 그 가지들 — **장부 수리 재제출이 과학 층 판정을 flip**. Laudan 폐기후보엔 replay verified 최강 앵커 `R3-walk-regime-density-dial-v3`까지 포함 (사유 "예산 5노드 소진, 예측 적중 0").
+
+- **[SEV: low] canonical 공백 + self-report 그린.** 52+38노드 후에도 양 트리 `canonical: null, canonical_path: []`; 영수증 없는 진보어휘 노드 11+25건이 inconclusive-excluded — 여기에 기함급 결과 `exp-c1-prelude-bookscale-20260723`과 `f2-delta-w-credit-dev-harness-20260725` 포함.
+
+**TOP-3 PROBLEMS**
+
+1. **장부 집계 알림이 노드-수준 진실과 모순** — eureka "hallucination 1.0"은 notebook-tier 플러밍 산물인데 인식론적 경보로 소비되고, 진짜 진보(B2, BF 6.0)가 집계서 유실.
+2. **client_asserted 음성 면제 비대칭** — replay 미검증 refutation(B21)이 프로그램 제약("튜닝 금지")으로 동결되는 반면 동급 양성은 partial로 강등.
+3. **multiplicity/noise_band의 무측정 정책화** — "보정 무영향" 캡션은 빈 family 위에서 나오고, noise_band는 측정된 적 없는 선언값(0 포함)이 1σ로 간주.
+
+**RECOMMENDATION (레버리지 최대 1개)**
+
+**판결(증거) 축과 보증(assurance) 축을 verdict 문자열에서 분리하라** — `partial@L0(client_asserted,replay_refuted)` 형태의 혼합 라벨을 폐기하고, (a) eureka reason을 plumbing(novel_unconfirmed-미앵커/closes_question/replay 컨테이너) vs epistemic(bf_marginal)으로 분리 공시, (b) SATISFIED/폐기후보/진보 집계는 replay-verified 또는 명시적 waiver 없인 양·음 방향 무관하게 잠금 불가. 이 한 가지 분리가 partial@L0 오독·비대칭 면제·measurement_failed 오남용이라는 3대 왜곡 경로를 동시에 끊는다.</subagent>
+<subagent agent_id="agent-7" item="AXIS B × LENS 4 (처방): 영수증 사슬 수리 우선순위 — 어떤 노드부터 run-the-receipt 해야 하는지, abandon 후보 12가지의 폐기/유지 기준안, eureka hallucination을 낮추는 최소 조치." outcome="completed">조사 완료. 증거 기반으로 처방안을 정리합니다.
+
+---
+
+## AXIS B × LENS 4 (처방) — HSWM 영수증 사슬 수리
+
+### FINDINGS
+
+- **[SEV: high] 헤드라인 결과가 집계에서 제외돼 있음.** 영수증 없는 self-report 36건(11+25)에 C1 bookscale(`exp-c1-prelude-bookscale-20260723`, equivalent, eureka bf 1.0)과 P5 반증(`prediction-p5-cognitive-uplift-vs-directllm`)이 포함 — 프로그램의 가장 중요한 최근 판정들이 "inconclusive-excluded". (tree_metrics `provenance.inconclusive_progress`, lakatotree `eureka`)
+- **[SEV: high] run-the-receipt은 작동이 증명됨.** r2-ledger-repair 4노드 재검증 → 전원 `rejected` 반전(popper/bayes layer flip 각 4건, tree_metrics `layer_flips`). R3-v3는 producer/judge 아티팩트 분리 패턴으로 replay verified+server_regenerated 달성(INDEX.md:16, `lesson-replay-exec-container-artifact-separation-2026-07-24`). 수리 레시피는 이미 존재.
+- **[SEV: high] 폐기후보 12가지 중 다수가 오탐.** `hswm-ordered-causal-gates-20260724`(정본 ORDERED v2, sequence_locked, 게이트 JSON), `prom9-f1-actual-development-r4-20260724`(활성 F1 수리선, CONTINUATION), `R3-walk-regime-density-dial-v3`(유일한 replay-verified 생존 가지)가 "예산 소진+예측적중 0"으로 폐기후보. 원인: 예측적중 집계가 영수증 의존이라 client-asserted 노드는 구조적으로 0적중 — 휴리스틱이 영수증 부채를 연구 정체로 오독함.
+- **[SEV: med] eureka 계측 불일치.** `B2-crossfield-merge-payoff`는 per-node eureka **true (BF 6.0)**인데 tree_metrics 집계는 true 0/hallucinated 31(전부 measurement_failed). 집계 vs 개별 판정 어긋남 — hallucination 1.0 알림의 일부는 계측 아티팩트(추측: 집계가 standing까지 요구하거나 staleness).
+- **[SEV: med] foundation gap 오범위 차단.** `p1v4-replay-seam-synthetic-probe-20260724` standing이 F3/F5용 foundation 2건(`multi-agent-transfer-harness`, `semantic-weight-metric-contract`)+`lineage:missing`으로 blocked — F3/F5 전용 요건이 P1v4까지 막고 있음. (claim_standing)
+- **[SEV: low] 수리 실행 경로 제약.** Mac lakatotree MCP는 read-only — 쓰기는 lxc-301 컨테이너(server.env 토큰) 경유 필수 (CONTINUATION.md:17). 배치 수리 잡이 필요.
+
+### TOP-3 PROBLEMS
+
+1. **영수증 사슬 부채 36건** — 진보집계·Laudan·eureka 세 경보가 전부 이 하나의 부채에서 오염됨. 세 알림은 사실 한 문제.
+2. **Laudan 폐기 휴리스틱의 오독** — 영수증 부채를 정체로 읽어 활성 정본 가지(ordered-gates/F1/R3)를 죽일 위험. 지금 폐기 실행하면 정본 게이트 시퀀스가 날아감.
+3. **eureka 계측 불일치 + closes_question 미등록** — hallucination 1.0이 실제보다 과장(최소 1건은 true인데 0으로 집계).
+
+### RECOMMENDATION (최대 레버리지 1개)
+
+**"run-the-receipt 배치 1회"를 R3-v3 패턴(producer/judge 아티팩트 분리)으로 lxc-301 컨테이너 경유 실행.** 우선순위: ① `exp-c1-prelude-bookscale-20260723`(헤드라인) ② p1v4+p1v2/p1v3(ORDERED 게이트 기둥, 동시에 `record_derivation`으로 lineage:missing 해소, foundation은 F3/F5 노드로 스코프 축소) ③ `prediction-p5` ④ walk-lane 계보(R1/R2/T3/B1) ⑤ `B2-crossfield-merge-payoff`(seam 정합). 완료 후 Laudan 재계산 → 12가지 재분류: **KEEP 3**(ordered-gates, prom9-f1, R3-v3) / **CLOSE 7**(tribunal·p1v3-r2·B2.2·P4·P5·T1-c3·T5d — 판결 완료 가지는 폐기가 아니라 종결 처리) / **ABANDON 2**(novelty-supersession-times-traversal-soft-stale-routing — 순회 절은 T5/add1584 양 substrate서 측정 반증, supersession 절은 분리 유지 / ML1 — ML19까지 진행된 계보로 supersede). eureka는 closes_question 사전등록 + 서버앵커(현 0.077~0.211) + 집계-개별 불일치 수정이 최소 조치.</subagent>
+<subagent agent_id="agent-8" item="AXIS C (인프라·운영) × LENS 1 (낶부 증거): 현재 운영 블로커 전수 — vLLM 공유 윈도(54GB 점유) 대기, F2 sealed 진행 상태(GIT/HSWM/.f2_cache, receipts/ 최신 파일로 추정), GM ExFAT 디스크 불안정(hang 이력), nightly sync 경합 MISMATCH, ollama thinking 무시 이슈. 각각의 과학적 영향(무엇이 얼마나 지연/오염되는가)." outcome="completed">조사 완료. 모든 증거를 확보했다.
+
+---
+
+## AXIS C (인프라·운영) × LENS 1 (내부 증거) — HSWM 현재 운영 블로커 전수
+
+**FINDINGS**
+
+- **[SEV: high] 단일 공유 vLLM 윈도 직렬화 = 프로그램 critical path 병목.** dgx `192.168.0.23:8000` (qwen3.6-27b) 1개 엔드포인트에 F2 sealed(실행 중) + 타 세션 배치 + F1 sealed(대기)가 직렬. 18:46 KST 실측: 6 running + 9 waiting, KV cache 23.3% (`/metrics`). F1 sealed n=100(1500콜)은 미착수 대기 (`docs/CONTINUATION.md:22` "공유 vLLM 윈도 필요, 타 세션 배치 점유 중"). 게이트 JSON 상 F1=ACTION_REQUIRED, 하위 B22_GATE0_REAL_PACKS·P1v5·P2·P3·P4 전부 `missing_dependencies=[F1,...]` BLOCKED (`GIT/HSWM/receipts/HSWM_ORDERED_GATE_STATUS_20260724.json:108-198`) — 즉 GPU 대기열 1개가 서열 전체를 지연. Mac은 ssh 터널(127.0.0.1:18000→dgx:8000) 경유라 터널도 SPOF (ps PID 57534).
+
+- **[SEV: med] F2 sealed 예상 상한 근접 초과, 완료 후처리가 수동.** PID 34916, 15:23 KST 기동 → 18:46 현재 3h23m (예상 2.5~4h). `.f2_cache` 4233건 중 3034건이 시작 후 생성, 처리율 ~16콜/min (286건/16분 실측). sealed 영수증 미착지. 완료 후 Mac MCP lakatotree는 read-only라 lxc-301 컨테이너 경유 수동 제출 필요 (`CONTINUATION.md:17`). 또한 F2 dev는 이미 `partial@L0(replay_refuted)` 전력 — producer/judge 분리(레슨 `lesson-replay-exec-container-artifact-separation-2026-07-24`) 미적용 시 sealed 제출도 같은 함정 가능.
+
+- **[SEV: med] sync↔라이브 실험 경합 MISMATCH — 오늘 밤 재발 조건 충족.** 07-25 03:47 nightly가 C1 prelude의 `judge_*.json` 야간 기록과 경합해 MISMATCH → fail-closed 정상 동작, 12:56 자기치유 (`CONTINUATION.md:15,57-59`). 오염 0·장부 9h 지연 1회. 단 F2 sealed가 오늘 밤에도 캐시 수천 건을 쓰는 중이면 재발 가능 (추측 — 근거: "어떤 고정 settle도 뚫린다", `CONTINUATION.md:59`). quiet-window/hot-log exclude 제안 미해결 (`CONTINUATION.md:93`).
+
+- **[SEV: med] GM ExFAT 물리 불안정 잔존 (데이터 리스크는 해소).** hang 2회 이력, 현재 미마운트 (mount 출력에 GM 없음). R3 원본은 checksum 10/10 + questions 2992/2992 의미론 일치로 봉인 (`CONTINUATION.md:87`), tarball 15/15 → lxc-301 이중화 완료. 잔여: 7/27 물리 재연결 판단 보류 (`CONTINUATION.md:118`), dd 스크립트 `/tmp/gm_rescue_dd.sh`는 사용자 sudo 대기.
+
+- **[SEV: low] ollama OpenAI-compat thinking 무시 — 우회 적용 완료.** ollama 0.17.7 /v1이 thinking-off 전부 무시 (KG `lesson-ollama-openai-compat-thinking-not-honored-20260725`). F2 하네스는 critic=native `/api/chat`, answerer=vLLM(검증됨)으로 우회 반영 (`GIT/HSWM/f2_delta_w_credit.py:179-253`). 과거 ollama 경유 dev 측정의 빈-content 오염 가능성만 잔존(추측).
+
+**TOP-3 PROBLEMS**
+1. **vLLM 단일 윈도 직렬화** — 활성 게이트 F1 sealed가 F2 뒤에 밀려 F1→B22→P1v5→P2 서열 전체가 GPU 대기열 1개에 종속.
+2. **F2 sealed 완료 후 수동 제출 + replay_refuted 재발 위험** — read-only MCP + producer/judge 미분리로 sealed 판정 승격이 다시 막힐 수 있음.
+3. **sync 경합 재발 조건 상존** — 오늘 밤 03:47에 F2 캐시 기록 중이면 MISMATCH·장부 지연 재발 (fail-closed라 오염은 0).
+
+**RECOMMENDATION**
+**vLLM 윈도 배치 큐잉 도입**: F2 sealed 완료(또는 영수증 착지)를 트리거로 F1 sealed 1500콜을 자동 fire하는 단일 스케줄러. 코드 변경 최소(완료 감지 + `prom9_prepare_2wiki_f1 --length 100` → prereg → run 순서 고정은 이미 합의됨)로 TOP-1의 대기 낭비와 TOP-3의 야간 경합(큐에서 sync 윈도 회피)을 동시 해소한다.</subagent>
+<subagent agent_id="agent-9" item="AXIS C × LENS 2 (외부 기준): 동급 규모 연구팀의 로컬 LLM 실험 인프라 관행(WebSearch: vLLM 스케줄링, GPU 셰어링, 실험 격리)과 비교해 우리 인프라의 구조적 약점." outcome="completed">## AXIS C × LENS 2 — 외부 기준 대비 인프라 구조적 약점
+
+### FINDINGS
+
+- **[SEV: high] 공유 vLLM 무격리 → sealed 실험의 수치 오염 위험.** F1 sealed(n=100, 1500콜)가 "공유 vLLM 윈도 필요, 타 세션 배치 점유 중"이라 대기(`docs/CONTINUATION.md:22`), F2 sealed도 같은 서버에서 실행 중(동 파일:36). 하네스는 `temperature=0, top_p=1.0, seed`만 고정(`GIT/HSWM/f2_delta_w_credit.py:211-214, 277-280`)하는데, Thinking Machines의 [Defeating Nondeterminism in LLM Inference](https://joshuaberkowitz.us/blog/papers-7/defeating-nondeterminism-in-llM-inference-1201)(2025-09)와 [MemX 실측](https://memx.app/blog/llm-determinism-is-a-lie-29-flapping-cases/)(2026-05: 동일 프롬프트 1000회 중 80개 상이 완료, temp 0에서)이 보이듯 **동적 배칭은 temp=0+seed에서도 수치를 바꾼다.** 공유 서버의 타 세션 요청이 배치 구성을 바꾸면 "replay verified" 주장의 기반이 흔들림. vLLM은 이미 [batch invariance 기능](https://docs.vllm.ai/en/latest/features/batch_invariance/)을 제공하나 우리 측 적용 증거 없음.
+
+- **[SEV: high] 스케줄링/큐잉 계층 부재 — 수동 "윈도 조율".** 게이트 크리티컬 패스(F1)가 대화 로그 상의 수동 조율에 매달려 정체(`CONTINUATION.md:41` "EngineCore 54GB 점유 중이라 윈도 조율"), dev-4 라이브 런도 "서버 포화로 900s×2워커 재시도"(동 파일:21). 동급 연구팀 관행은 SLURM+MIG 하드웨어 격리([Microsoft HPC 블로그](https://techcommunity.microsoft.com/blog/azurehighperformancecomputingblog/creating-a-slurm-cluster-for-scheduling-nvidia-mig-based-gpu-accelerated-workloa/4183835), [arXiv 2602.23722](https://arxiv.org/pdf/2602.23722) "MIG isolation contract: 실험 중 공유 금지·고정 파티션") 또는 vLLM production-stack/llm-d식 우선순위 큐([llm-d](https://llm-d.ai/blog/kvcache-wins-you-can-see)).
+
+- **[SEV: med] 백업↔실험 경합.** nightly sync가 C1 실험의 `judge_*.json` 연속 기록과 경합해 MANIFEST MISMATCH 1회(`CONTINUATION.md:57-59`; 자기치유됐으나 "어떤 고정 settle도 뚫린다"고 스스로 기록). 동급 관행은 실험 산출물을 백업 제외 scratch로 분리하거나 ZFS/스냅샷 기반 일관 백업.
+
+- **[SEV: med] LAN 무인증 + 멀티테넌시 통제 0.** vLLM이 "LAN 무인증"(`CONTINUATION.md:45`)이라 누구든 부하 투입 가능 — 실제로 세션 간 포화가 반복 발생. 동급 관행: API 키+우선순위 큐잉([vLLM production-stack](https://cloudthrill.ca/vllm-production-stack-llm-inference-for-enterprises-p1)).
+
+- **[SEV: med] 엔진/API 표면 drift.** ollama OpenAI-compat가 thinking 파라미터 무시 → sealed 직전 ollama판 중단·vLLM판 교체(`CONTINUATION.md:35-36`). [bit-exact 검증 논문](https://arxiv.org/html/2606.00279v2)은 bitwise 재현에 "소프트웨어 스택·엔진 버전 고정"을 요구 — dev(ollama)↔sealed(vLLM) 비교가능성에 구조적 흠집.
+
+- **[SEV: low] 단일 실행 점추정.** MemX: "multi-run + flap-rate 보고가 신뢰 가능한 평가의 하한." 우리 sealed는 아이템 레벨 n=100 통제가 있으나 엔진 레벨 flap은 미측정(추측 아님 — flap 측정 설계 부재).
+
+### TOP-3 PROBLEMS
+
+1. **공유 vLLM 무격리** — sealed 실험의 재현성 주장이 배치 불변성 미확보 상태에서 세워짐 (외부 기준 대비 가장 큰 갭).
+2. **스케줄러 부재** — 수동 윈도 조율이 F1 크리티컬 패스를 정체시키고 포화 재시도를 유발.
+3. **멀티테넌시 통제 0(무인증+큐 없음)** — 1·2번의 근본 원인; 누구든 언제든 경합 투입 가능.
+
+### RECOMMENDATION
+
+**실험 전용 vLLM 인스턴스 1개를 예약제로 분리하라** (레버리지 최대, 1건): 별도 포트/모델 복제 + batch invariance 활성화 + 고정 max-concurrency + 파일락/예약 캘린더, 엔진 버전 핀. 이렇게 하면 스케줄러 부재(2번)와 무인증 경합(3번)이 sealed 경로에서는 동시에 소거되고, temp0+seed 주장이 외부 재현성 기준(batch invariance)과 정합해진다.</subagent>
+<subagent agent_id="agent-10" item="AXIS C × LENS 3 (함정): 인프라가 과학 결과를 오염시키는 경로 — judge 모델 드리프트(모델 업데이트/교체 시 prereg와의 관계), 토큰 계측 정확도, 라이브 경합이 만드는 측정 노이즈, 캐시(.f2_cache) 재사용의 sealed 오염 가능성." outcome="completed">## AXIS C × LENS 3 (함정) — 인프라가 과학 결과를 오염시키는 경로
+
+**FINDINGS**
+
+- **[SEV: high] F2 sealed의 "frozen answerer"는 이미 대체된 모델이며 리비전 미핀.** `f2_delta_w_credit.py:795-801` lineage_note: p1v4 sealed answerer = `Qwen3.6-35B-A3B-FP8`(dell vLLM 18002), dgx에 없음 → `qwen3.6-27b`를 "같은 패밀리 최근접"으로 대체. `PREREG_f2_delta_w_credit_20260725.json`에는 모델/체크포인트 필드 자체가 없음. 선례는 있는데 후퇴: p1v2/p1v3 manifest는 `model_revision: 95a723d0…`를 핀(`receipts/p1v2_l0_budget_manifest_seed2_20260724.json:38`). vLLM이 같은 이름으로 재배포되면 "frozen"이 무법으로 깨짐.
+- **[SEV: high] `.f2_cache`를 dev↔sealed가 공유, purge 경로 없음.** 캐시 4246건, mtime 13:12(dev)~18:50(sealed 진행) 연속 기록 확인. 키 = sha256(backend+endpoint+모델*이름*+body) (`f2:217-221, 284-288`) — 가중치 리비전 미포함. PREREG common_chassis는 `replay: server-regenerated`(`PREREG json:33`)인데 캐시 히트는 클라이언트 재생이고 budget은 miss만 계수(`f2:227,294`). 완화장치: 행별 `cached` 플래그 기록(`f2:569`) — 감사는 가능하나 verdict 산출에서 미제외.
+- **[SEV: med] C1 novel kill(−2.00pp) 판정이 미핀·비독립 LLM judge 위에 서 있음.** judge=`qwen3.6-27b` temp0(`C1_PRELUDE_BOOKSCALE_RESULTS_2026-07-25.md` 실측 헤더) — 생성 arm과 동일 서빙 모델(자기채점). judge 캐시 758건+emb 3071건=39M이 git 제외, Proxmox 스냅샷에만 존재(동 문서:45). 비트 재현 검증은 캐시된 judge 출력에서의 numpy 채점뿐(:36-37) — 스냅샷 소실·모델 드리프트 시 judge 재생 불가.
+- **[SEV: med] 라이브 경합 노이즈가 코드에 내장.** auto-degrade 사다리 "degraded value sticks for later subsets"(`f2:546-548, 571-586`) → 부분집합마다 다른 병렬폭으로 측정. vLLM은 temp0+seed라도 배치 크기 의존 수치 비결정(**추측** — vLLM 공지된 batching 비결정성; 로컬 정황: dev-4 "서버 포화로 900s×2워커 재시도", `docs/CONTINUATION.md` 2026-07-25 F1 엔트리). C1 실례: ollama 16-way 500 에러→`EMB_PARALLEL`, bge-m3 NaN 1/262→fallback(결과문서:31-32).
+- **[SEV: low] 토큰 계측 검증은 prompt 쪽만.** `prom9_validate_token_meter.py` docstring: 서버 `prompt_tokens`와의 정확 일치만 요구(60/60, `receipts/token_meter_validation_qwen36_vs_r4_20260725.json`). 패리티 게이트는 input+output 합산(`prom_f1:578-587`)인데 output 토큰은 서버 usage 일방 신뢰. 샘플 60콜·단일 엔드포인트 상태.
+- **[SEV: low] ollama OpenAI-compat thinking-off 무시 함정은 잔존.** `/v1` 경로는 모든 thinking-off 스위치 무시(`f2:179-185`) — critic을 `/v1`로 바꾸는 순간 reasoning이 num_predict를 소진→빈 content→parse failure가 오답으로 계수(`f2:556-567` "counts, never repairs").
+- **[SEV: low] 실험 출력이 sync 트리 안에 공존.** C1 judge 캐시 야간 기록 ↔ nightly sync 경합 → MANIFEST MISMATCH 1회(자기치유, `CONTINUATION.md` nightly 엔트리). fail-closed는 동작했으나 재발 경로 열림.
+
+**TOP-3 PROBLEMS**
+
+1. **F2 frozen-answerer 대체+미핀** — prereg이 모델을 명시하지 않아 "frozen"이 인스턴스가 아닌 패밀리 수준; p1 계보의 revision-핀 관례를 F2가 이어받지 못함.
+2. **`.f2_cache` dev↔sealed 공유(purge 없음)** — 등록된 "server-regenerated replay"와 정면충돌; sealed 결과 일부가 outcome-inspected dev 응답일 수 있음.
+3. **C1 kill 판정의 judge 취약성** — 미핀·동일모델·git 제외 캐시 의존; 스냅샷 소실 시 프로그램급 판정(novel kill)이 재생 불가 아티팩트로 전락.
+
+**RECOMMENDATION (레버리지 최대 1개)**
+
+모델 정체성을 체크포인트 리비전으로 핀하고 그 리비전을 캐시 키에 포함하는 단일 패치: ① PREREG F2~F5에 answerer/critic/judge의 `model_revision`(HF sha 또는 ollama digest) 명시 — F1 manifest/p1v2 선례(`model_revision: 95a723d0…`)를 공통 계약으로 격상, ② `.f2_cache` 키에 revision 추가 + `--purge-cache` 플래그(또는 run_id 네임스페이스 캐시)로 sealed 개시 시 dev 캐시 격리, ③ C1 judge 영수증에도 revision 기록 후 judge 캐시를 git-LFS/MinIO로 정전화. 이 한 벌로 findings 1·2·3·6이 동시에 닫히고, 진행 중인 F2 sealed(15:23 KST~)도 재기동 비용 없이 *다음* 게이트부터 적용 가능.</subagent>
+<subagent agent_id="agent-11" item="AXIS C × LENS 4 (처방): vLLM 윈도 확보 전략(예약/우선순위/소형 모델 fallback), GM 디스크 교체 판단, sync quiet-window 또는 hot-log exclude, judge pinning — 우선순위와 비용." outcome="completed">조사 완료. 최종 보고합니다.
+
+---
+
+**AXIS C × LENS 4 (처방) — HSWM PROM 16 셀 보고**
+
+## FINDINGS
+
+- **[SEV: high] 공유 vLLM 윈도에 예약/우선순위 메커니즘 부재.** F1 sealed(1500콜)가 타 세션 배치(EngineCore 54GB 점유) 때문에 대기 중이고, dev-4 라이브 60콜조차 "서버 포화로 900s×2워커 재시도"가 필요했다 (`docs/CONTINUATION.md:21-22,41`). F2 sealed run이 동일 윈도를 15:23 KST부터 2.5~4h 점유 (`CONTINUATION.md:36`). 서버는 LAN 무인증·큐 없음 (`CONTINUATION.md:45`). 비용 = active gate 전체의 벽시계 지연 + sealed run 중단 시 abort (p1v2 r1 output-cap abort 전례 있음).
+
+- **[SEV: high] judge/모델 pinning이 mutable 공유 인프라 위에 서 있음.** F1 manifest는 `model`+`model_revision` 문자열만 핀 (`prom_f1_function_network.py:197,574-575`)이고, PREREG run 무효 조건에 "judge sha 변경"이 있음 (`PREREG_F2_F5_UNPROVEN_CLAIMS_2026-07-25.md:24`). 모델 대체는 이미 2회 발생: p1v3=Qwen3.6-35B-A3B-FP8 → F2=qwen3.6-27b("closest available", `f2_delta_w_credit.py:53,799`). **소형 모델(qwen3-4b) fallback은 무료가 아니다** — prereg상 모델 identity가 핀이라 교체 = 재등록(amendment) 비용. 윈도 미확보 상태에서 fallback 논의는 시기상조.
+
+- **[SEV: med] thinking-무시 결함은 vLLM 이전으로 1차 해소, 그러나 pinning 표면이 2개로 분산.** answerer=vLLM(enable_thinking=false 인식, `f2_delta_w_credit.py:44-45`), critic=judge는 ollama native /api/chat(qwen3:14b, `:181-187,741-742`) — ollama 0.17.7의 /v1 compat는 thinking 스위치 전부 무시 (`:181`). 백엔드 2개 = 핀 포인트 2개.
+
+- **[SEV: med] GM 디스크: HSWM 관점 교체 근거 소멸.** hang 2회(7/25 R3 읽기 무응답→자연회복→USB 레벨 정지, `CONTINUATION.md:115-118,133-135`), 물리 재연결/교체 판단은 7/27. 그러나 실데이터는 전량 구출 완료(15/15 tarball 7.1G→Proxmox `/data/GM-RESTORE`, 사진 39G→dgx NAS) + ExFAT cold-only 정전 (`lesson-gm-exfat-cold-only-2026-07-21`). **교체 구매 비용을 HSWM 프로그램이 정당화할 근거 없음** — dd 이미지(사용자 보류) 후 폐기/반납 판단이 합리적.
+
+- **[SEV: med] sync hot-log 미배제 — 오늘 밤 재발 가능(추측).** settle 에스컬레이션(45s→5m→15m)+carry-forward로 자기치유 설계는 동작했으나 (`lakatotree-sync-now.sh:120-158`, 1회 MISMATCH 자동회복), `.f2_cache/`(3140파일, 증가 중)·`data/prelude/cache/judge_*.json`가 EXCLUDES/PRUNE에 없음 (`lakatotree-sync-now.sh:27-40`). F2 sealed가 03:47 nightly와 충돌하면 stale_mappings 누적 예상.
+
+- **[SEV: low] quiet-window는 취약.** C1 prelude가 야간 연속 기록한 것이 원인 (`CONTINUATION.md:58`) — 실험 시간대가 불규칙이라 고정 조용창은 실효성 낮음. hot-log exclude(2줄)가 더 결정적·저비용.
+
+## TOP-3 PROBLEMS
+
+1. **vLLM 윈도 무예약** — F1(active gate)의 유일한 외부 블로커; 지연 비용이 게이트 서열 전체(B22→P1v5→P2→P3)에 직렬 전파.
+2. **judge/model pinning의 mutable 인프라 의존** — sealed run 무효화 리스크가 prereg 무효 조건과 직결; fallback은 재등록 비용 동반.
+3. **hot-log 미배제** — 재발 예정인 MISMATCH; 자기치유가 있어도 stale 누적은 sync 신선도를 갉아먹음.
+
+## RECOMMENDATION
+
+**OMD 세마포어로 vLLM 윈도 예약**: `sem_declare "dgx-vllm-window" max_permits=1` + sealed run 전 `acquire`(F1에 priority 부여) + 보유자/시각을 run 영수증에 기록. 기존 OMD 인프라 재사용으로 비용 사실상 0, 참여자가 전부 자기 에이전트라 advisory로 충분, judge pinning 감사축(누가 GPU를 쥐고 있었나)과 자연 연결. 차선: sync EXCLUDES에 `.f2_cache/`, `data/prelude/cache/` 추가(2줄, 비용 무시 수준).</subagent>
+<subagent agent_id="agent-12" item="AXIS D (방향·가치) × LENS 1 (낶부 증거): HSWM의 핵심 가치 정체 — substrate 사다리 1위지만 리프트 본체가 임베딩(~95%)이고, C1에서 clique arm에 패배(n-ary 고유 기여 미검출)라면 '하이퍼그래프 구조'의 실제 기여가 무엇인지 HSWM/INDEX.md/R3 결과/GIT/HSWM 정전 문서의 증거만으로 정직하게 서술하라." outcome="completed">증거 수집 완료. AXIS D × LENS 1 결과를 정리합니다.
+
+---
+
+**FINDINGS**
+
+- **[SEV: high] n-ary 하이퍼그래프 고유 기여 = 현재 측정값 0.** C1 PRELUDE(n=262, 4권): clique(같은 하이퍼그래프의 pairwise 축약, 동일 walk) 0.447 > hswm 0.427, hswm−clique −2.00pp → prereg novel kill 발동. 문서 자체 해석: dense 대비 이득은 "n-ary 구조"가 아니라 "용어-공유 확산 재료"에서 나옴 (`GIT/HSWM/C1_PRELUDE_BOOKSCALE_RESULTS_2026-07-25.md:4,17,23`). 게다가 hswm−dense +3.16pp도 low_power(CI가 임계·0 양쪽 걸침)라 책-단위 우위 주장 자체가 보류 상태 (`HSWM/INDEX.md:92`).
+- **[SEV: high] 증명된 가치(substrate 사다리 1위)의 분해가 "하이퍼그래프 불필요"로 수렴.** KG 정전 노드 `result-substrate-ladder-hswm-rank1-embeddings-carry` (verdict=proof)의 자체 단서 3종: ① 리프트 본체 = 임베딩 정렬 ~95% ② 순수 구조 PPR(확산활성)은 **전 arm 최악**(0.373) — 구조 단독은 부하 못 짐 ③ 예산 비대칭(HSWM만 offline LLM 100콜) — 잔여 ~5%마저 LLM-판정 예산과 혼재. 즉 ladder 1위에서조차 "구조가 지능 만듦 아님"이 명시됨.
+- **[SEV: high] 정체성·흡수 목표가 미검출 성분에 걸려 있음.** tribunal 생존 슬롯 4개(n-ary credit / LLM 판정 변조 / 구조 가소성 / 다중 agent 망)는 **전원 미증명 claim = F2~F5 prereg 대상** (`TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md:29-32,44-47`). novelty(선행연구 공백) ≠ 효능. F4(토폴로지 인과 기여)는 credence **0.25로 최하** 등록됐고, prereg 문서가 인용하는 문헌 사전확률도 "structure learning often fails to beat static/random controls (TGB/OpenGSL/G-Designer/DyLAN)" (`PREREG_f4_topology_learning_20260725.json:15,37`). §5 흡수 단위("가중장 readout")는 이 미증명 슬롯들을 전제로 함.
+- **[SEV: med] 구조 차선의 잔여 양의 증거는 박약·협소.** R3 걷기 승리 regime: hard-hop recall@10 +0.0111, bootstrap95 하한 0.00085(간신히 양수), eureka bf_marginal 0.584 = 장부가 "효과 크기가 실제로 박약"이라 자체 판정 (`R3_WALK_REGIME_RESULTS_2026-07-24.md:12,65`). dense 유니버스에선 부호 반전(−0.0048), retrieval-side recall이지 answer accuracy 아님, synthetic template. 또한 R3 walk 대상은 PhantomWiki **pairwise** person_arcs — n-ary 증거가 아니라 "그래프 걷기" 증거.
+- **[SEV: med] 최강 친-구조 증거(홉 층화 마진)도 clique 대조 미실시.** 2홉 +0.014(무승부) → 3홉 +0.082 / 4홉 nDCG +0.072 (`HSWM/_research/hop_stratification.json`). 그러나 clique 투영은 multi-hop 경로를 보존하므로(추측) 이 마진도 pairwise로 재현될 가능성이 높음 — C1 kill과 같은 논리가 미시험 상태로 남아 있음.
+- **[SEV: low] "웨이트로 돌아다님"(query-time 전파) 비전은 2회 반증.** add1584 traversal bench(정적 +0.241 < 순회 +0.354 hop_drop) + T5 양 데이터셋 TRAVERSAL_OFF(μ곡선 단조악화) — 구조의 *동적* 사용은 측정 regime에서 사망, 정적 필드만 생존 (`HSWM/INDEX.md:77,80`).
+- **[SEV: low — 비문제 명시]** 문서 정직성은 문제 아님: INDEX §1:54·§4:91이 이 한계를 전부 자체 공시, C1 kill은 prereg대로 집행, F2~F5에 placebo/shuffle 강한 null 배선됨. 문제는 부정직이 아니라 **방향 잔여 리스크**.
+
+**TOP-3 PROBLEMS**
+
+1. **프로그램 이름의 핵심 성분("hyper"graph)이 측정값 기여 0** — 유일한 book-scale 검정에서 clique가 전량 흡수(kill 발동), F4 credence 0.25 + 부정적 문헌 사전확률로 반전 가능성 낮음.
+2. **증명된 가치의 분해가 구조-무관으로 수렴** — substrate 1위 = 임베딩(~95%) + clique가 다 흡수하는 확산 재료 + CRDT 원장(구조 무관, T4/S1). 현 상태에서 하이퍼그래프를 제거해도 측정값이 변하지 않음.
+3. **구조 옹호 잔여 증거가 방향 결정 근거로 부족** — R3 +0.011(bf 0.584, retrieval-side, synthetic), 홉 층화는 clique 대조 없음. answer-side·실산문 전이 전무.
+
+**RECOMMENDATION (최대 레버리지 1개)**
+
+**substrate 사다리 + 홉 층화 분석에 clique arm을 추가한 재분석을 F2~F5 sealed 소진 전에 실행하라.** 현재 n-ary 옹호의 최강 잔여 증거(홉↑ 마진 4~5배)가 C1을 죽인 바로 그 강한 null에 한 번도 대조된 적 없다. 기존 frozen 코퍼스/데이터 재사용이라 sealed F4보다 훨씬 저렴하고, 결과가 어느 쪽이든 방향을 결정한다: clique가 홉 마진도 재현 → "graph not hypergraph"가 양 스케일에서 확정, 흡수 단위(§5)를 n-ary claim에서 분리해 "확산 재료 + supersession-safe 원장 readout"으로 조기 재정위(F2~F5 sealed 예산 낭비·정체성 리스크 헤지); hswm만 홉 마진 생존 → n-ary 최초의 검출된 고유 기여로 F4 credence 상향 근거. (단, clique arm이 홉 경로를 얼마나 보존하는지는 재분석 전 확인 필요 — 이 부분은 추측.)</subagent>
+<subagent agent_id="agent-13" item="AXIS D × LENS 2 (외부 기준): HippoRAG(1·2), GraphRAG, Letta/MemGPT, A-MEM 등 2025-2026 메모리/그래프 RAG 대비 HSWM의 남은 슬롯이 있는지 WebSearch로 — tribunal 문서(슬롯 4 생존) 이후 변화가 있는지." outcome="completed"># AXIS D × LENS 2 — 외부 메모리/그래프-RAG 대비 슬롯 재판정 (2026-07-25)
+
+## FINDINGS
+
+- **[high] F2(ΔW credit) 대조군이 이미 stale.** 2026년에 "엣지/메모리 크레딧을 outcome으로 학습"하는 직접 선행이 등장: [HAGE — RL-Driven Weighted Graph Evolution](https://arxiv.org/abs/2605.09942) (2026-05, 엣지별 trainable feature vector + query-조건 순회), MERIT([2606.00547](https://arxiv.org/html/2606.00547v1) 인용, intermediate+terminal reward로 메모리 검색 학습), Memento/MemRL. PREREG F2의 arm은 Shapley/random-edit/verbal-gradient 3종뿐(`HSWM/PREREG_F2_F5_UNPROVEN_CLAIMS_2026-07-25.md:30`) — PROM_16 C2 합의("강한 null이 결정적") 관점에서 outcome-기반 외부 arm 부재는 구조적 약점.
+
+- **[high] F5(consolidation) 외부 경쟁 급증 + 부정적 사전확률 상승.** D축 문서 스스로 "2026-04-22 이후 신작은 SCM/Mela/SleepGate만 확인"이라 한계 명시(`HSWM/PROM_16_UNPROVEN_D_CONSOLIDATION_2026-07-25.md:38`) — 그 이후 미반영분: [Human-Inspired Memory Architecture](https://arxiv.org/abs/2605.08538) (sleep-phase consolidation+reconsolidation 6메커니즘, VSCode 120K 이벤트 +21.8pp retention), [Retain or Consolidate?](https://arxiv.org/html/2607.17545v1) (2026-07-20 — budget 고정 시 consolidation 이득은 **조건적**), [MemTier](https://arxiv.org/html/2605.03675v1) (LoCoMo가 메모리 아키텍처에 둔감함을 보고), [Panini](https://arxiv.org/html/2602.15156) (encoding-time consolidation). sleep-time compute도 SWE-Features 고예산서 test-time scaling에 패배([mnemoverse 정리](https://mnemoverse.com/docs/library/agent-memory-consolidation)).
+
+- **[high] n-ary 표현 슬롯의 외부 혼잡 + 내부 kill 이중 압박.** [HyperGraphRAG](https://arxiv.org/abs/2503.21322) (cited 64+), [CG-HyperRAG](https://arxiv.org/html/2508.11247v1), [Hyper-KGGen](https://arxiv.org/html/2602.19543v2) 등 hypergraph RAG 군집 정착. tribunal 슬롯 C3는 "n-ary **credit assignment**"로 좁혀 생존 중이나, 외부 독자에게는 "HyperGraphRAG + weights"로 읽힐 위험. C1 PRELUDE clique −2.00pp kill(`HSWM/INDEX.md:15`)과 합쳐, 고유 기여는 F2의 ρ≥0.2 단일 증거에 전량 의존.
+
+- **[med] C6(다중 agent 공유 망) 제품화 압박.** [Letta Context Repositories](https://www.letta.com/blog/context-repositories/) (2026-02, git-backed memory + multi-agent worktrees + merge 충돌해소), memforks("Git for AI memory", 2026-06), Kumiho graph-native versioned memory, [HNSW gossip 다중agent 토폴로지](https://arxiv.org/html/2606.28781v1). CRDT+판결영수증+시맨틱 하이퍼그래프 결합은 미선점이나 "버전드 공유 메모리" 일반 청구는 제품이 선점 중. C5도 A-MEM(NeurIPS 2025, 링크 진화)·HAGE(그래프 진화)로 부분 압박.
+
+- **[med] 벤치마크 유효성 위기.** memPalace 감사 — LongMemEval 96.6%→66.8% 붕괴, LoCoMo 정답키 6.4% 오류, LLM judge 오답 63% 수용([2604.11364](https://arxiv.org/html/2604.11364v2) 참조 인용); LongMemEval 문체 누출(2511.10523, D축 문서 반영済). F2~F5의 이종 judge+leakage 감사(`INDEX.md:13`)는 정당한 대응이나, 외부 인용 수치 전부 할인 필요.
+
+- **[low] 확산활성 차선 신규 선행.** SYNAPSE(2026-01, spreading activation + lateral inhibition + temporal decay) — R3 walk lane과 메커니즘 인접, watch 대상.
+
+## TOP-3 PROBLEMS
+
+1. **F5 prereg이 최신 선행 미인용** — 2607.17545/2605.08538/MemTier가 예측하는 "budget-조건부 이득" 때문에 F5 kill 조건 발동 확률이 작성 시점보다 높고, "consolidation 메커니즘 자체"는 이미 청구 불가.
+2. **F2 대조군에 outcome-기반 엣지 크레딧 외부 arm 부재** — sealed run(15:23 KST) 진행 중이라 arm 추가 불가, 사후 비교 부재 시 novel 판정이 흔들림.
+3. **방어 가능 청구가 "하이퍼엣지 위 크레딧 학습" 하나로 수렴** — F2가 사실상 프로그램 존립 증거가 됐으나, 외부(HAGE류)와의 분별 실험이 설계에 없음.
+
+## RECOMMENDATION
+
+F2 sealed run 완료 즉시 **HAGE·MERIT·"Retain or Consolidate"·2605.08538 4편에 tribunal급 Naesengmoon 재판** 1회 집행: (a) F2/F5 kill 조건·대조군의 사후 정합성 감사, (b) 슬롯 C3/C6 청구항 갱신. 리딩 4편 비용으로 F2/F5 결과의 novelty 방어선을 확보하는 최대 레버리지.</subagent>
+<subagent agent_id="agent-14" item="AXIS D × LENS 3 (함정): '생태계 흡수' 최종 목표의 함정 — substrate 인터페이스(C1+C3)가 실측 유효 전에 흡수 논의를 진행하는 리스크, 범주 오류 가능성, 흡수가 연구를 premature convergence로 몰 위험." outcome="completed"># AXIS D × LENS 3 — '생태계 흡수' 최종 목표의 함정
+
+## FINDINGS
+
+- **[SEV: high] 흡수 단위(C1+C3 인터페이스)의 정당화 실험이 게이트 서열 어디에도 없다.** Tribunal이 C1 방어 조건으로 명시한 "통합 場 vs 분리 場(planning-only/supersession-only 독립 場 대비 측정 이득) ablation"(`HSWM/PROM_PRIOR_ART_TRIBUNAL_2026-07-19.md:66`)은 PREREG F2~F5(ΔW credit/전이/topology/consolidation, `HSWM/INDEX.md:13`)에 해당 없음. F2~F5를 전부 통과해도 "흡수할 가치가 있는가"는 영구 미측정으로 남는다. INDEX §5 선결조건("실측 유효 전제", `INDEX.md:103`)을 집행하는 실험이 서열 밖.
+- **[SEV: high] 정전화된 정체성이 측정 범주를 추월 — §4가 경고한 범주오류의 제도화.** KG `user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23`(status=CANONICAL)·`hswm-canon-direction-neural-cognitive-entity-20260723`은 HSWM을 "더 큰 AI/신경 인지체"로 규정하나, 측정 범주는 memory substrate CONFIRMED / reasoner REFUTED / n-ary 고유 기여 kill(`GIT/HSWM/C1_PRELUDE_BOOKSCALE_RESULTS_2026-07-25.md:3`, hswm−clique −2.00pp). INDEX §4 스스로 "이 측정 범주에 IQ 묻기=범주오류"(`INDEX.md:90`)라 적어두고 §5·정전은 상위 범주로 서술.
+- **[SEV: high] 흡수 설계·구현이 검증을 앞서는 시간 역전 + 진보 구배 역전.** 흡수 설계 3종(7군단장 07-21, lens-duality 07-21, Phase B federated 07-22)은 C1 clique kill(07-25) 이전에 작성. 그중 readout 표는 `plan(goal)`에 측정 근거 없는 ✅ 표기(`HSWM/HARNESS_7COMMANDER_HSWM_SUBSTRATE_2026-07-21.md:54`). 한편 흡수 인접 트랙(B2 federated merge +0.214, 첫 완전 progressive, `INDEX.md:37`)만 영수증을 내고 코어 F1은 vLLM 윈도에 봉쇄 — "진보가 측정되는 곳"으로 연구가 끌려가는 premature convergence 동역학.
+- **[SEV: med] "흡수" 동음이의 — 방향이 반대인 두 claim이 한 슬로건 공유.** §5 = 생태계가 HSWM을 흡수(PENDING) vs P6 = HSWM이 지식을 흡수(3/3 기각, degenerating, `INDEX.md:41`; 사용자 발화 "흡수흡수흡수" `PROM_MACRO_NEURAL_COGNITIVE_ENTITY_2026-07-23.md:18`). 한쪽 실패 판정이 다른 쪽 목표로 오염·전이될 등가화(equivocation) 리스크.
+- **[SEV: med] 흡수 설계가 HSWM 핵을 자기소거.** 7군단장 문서의 Field 스키마(field_id+current_locator+supersede_state, `HARNESS_7COMMANDER:38-46`)는 하이퍼그래프·시맨틱 웨이트 불요 — 사실상 CRDT 필드 저장소이며, 이는 tribunal이 혼잡·선점으로 판정한 Zep/WorldDB 영역(`TRIBUNAL:35-36`). 흡수를 밀면 측정된 핵(pointwise retrieval)이 아니라 미측정 포장을 흡수하게 됨.
+- **[SEV: low] CHU 흡수 leg("가중장을 하이퍼우주 타입 층으로", `INDEX.md:102`)은 측정 기준 자체 부재.** 설계 문서 간 SUBSUME 관계(lens-duality §5가 7군단장 초안 흡수)가 ratify 전에 적층 — 미확정 아키텍처 churn.
+
+## TOP-3 PROBLEMS
+
+1. **흡수 전제 실험의 부재** — C1 통합-場 ablation이 F1~F5 서열 밖이라, 흡수 find条件이 영구 공회전.
+2. **정체성-측정 범주 괴리의 정전화** — "더 큰 AI" CANONICAL vs substrate/kill 실측 = 자체 규정한 범주오류.
+3. **진보 구배 역전** — 흡수 트랙만 progressive 영수증, 코어 게이트 봉쇄 → 연구가 흡수 쪽으로 조기 수렴.
+
+## RECOMMENDATION
+
+Tribunal이 이미 명시한 **"통합 場 vs 분리 場 ablation"을 신규 게이트(F0-absorption-precondition)로 서열에 삽입**하고, INDEX §5 상태를 `PENDING` → `BLOCKED-BY(해당 게이트)`로 명시. kill 조건까지 잠그면(분리 場 ≥ 통합 場 시 흡수 단위를 CRDT 필드 저장소로 재한정) 흡수 목표가 고정 attractor에서 반증 가능 claim으로 전환된다. 부수 조치: `plan(goal)` ✅ 제거, §5/P6 두 "흡수" 의미 분리 표기.</subagent>
+<subagent agent_id="agent-15" item="AXIS D × LENS 4 (처방): 방향 옵션 4개의 기회비용 평가 — (a) substrate 특화 심화 (b) walk lane(R3 regime) 확장 (c) clique 근접(n-ary 기여 재설계) (d) 흡수 인터페이스 선행. 각 옵션의 성공 조건과 kill 조건." outcome="completed">조사 완료. 네 옵션의 증거를 파일에서 확인했고, 기회비용 평가를 정리한다.
+
+---
+
+**FINDINGS**
+
+- **(a) substrate 특화 심화** — 유일 CONFIRMED 범주(사다리 1위, +0.073 p<0.0001, `HSWM/INDEX.md:50-54`)이나 리프트 본체=임베딩 정렬(~95%), 순수 구조 기여 미입증(INDEX:54). C1 book-scale hswm−dense +3.16pp는 CI[−1.5,+7.9] low_power(`GIT/HSWM/C1_PRELUDE_BOOKSCALE_RESULTS_2026-07-25.md:16`). 성공조건: powered n 재측정 CI 하한>0 + 성분 분석(확산 재료 vs 구조). kill: 재측정도 CI 0 걸침. 기회비용: 천장이 "cosine+확산" 수렴점일 위험. [SEV: med]
+- **(b) walk lane 확장** — 유일한 구조-기여 양성 신호(+0.0111 hard-hop, density 단조 +0.0158, 예측 2/2)나 효과 박약: bootstrap 하한 0.00085, eureka bf 0.584≤3.162("효과 크기가 실제로 박약" — `R3_WALK_REGIME_RESULTS_2026-07-24.md:26,65`). synthetic 한정, retrieval-side만(R3:46). 성공조건: answer-side 환산 + 실산문(NoCha/QASPER) 전이(R3:47). kill: powered replication도 BF 미달. 기회비용: 0.01 규모 효과에 compute 추가 투입. [SEV: med]
+- **(c) clique 근접(n-ary 재설계)** — hard core 방어의 유일 경로(F4 prereg 잠금, K1~K3 = C1 kill 후속판, `HSWM/PREREG_F2_F5_UNPROVEN_CLAIMS_2026-07-25.md:49-57`)이나 credence 0.25 최저(CONTINUATION.md:69), 선행문헌 null 다수(OpenGSL 7/12만 우위, AgentPrune 평탄곡선=디폴트 귀무 — `PROM_16_UNPROVEN_C_...md:45,108`). ORDERED 서열상 P3 BLOCKED(P2 의존, `receipts/HSWM_ORDERED_GATE_STATUS_20260724.json:169-183`) — ΔW/전이 미증명 상태에서 착수하면 W 동결 자체가 불가(측정 변수 미정의, C 이론축:11). [SEV: high]
+- **(d) 흡수 인터페이스 선행** — 사용자 최종 목표(INDEX:6)지만 정전상 선결="substrate 핵 실측 유효 + 인터페이스 확정 후 착수"(INDEX:103) 미충족; 7군단장 초안·SPEC 모두 ratify 대기(INDEX:19,43). B2 merge L5 no-harm 위반(in-field −0.065, INDEX:37) = 흡수 비용의 실측 선례. 선동결 시 F2~F5 반증 결과와 불일치로 재설계 비용. [SEV: high]
+- **공통 병목**: F1 sealed n=100 = 공유 vLLM 윈도(EngineCore 54GB 점유) 대기(CONTINUATION:21-22); F1 parity는 F2~F5 공통 섀시 선행(PREREG:11) — 네 옵션 모두의 실행 게이트. [SEV: high]
+- **장부 오염**: 영수증 없는 self-report 11+25건, eureka hallucination 1.0(CONTINUATION:16) — 옵션 비교의 입력(효과 크기) 신뢰도 자체 하락. [SEV: high]
+
+**TOP-3 PROBLEMS**
+
+1. 방향 선택의 증거 기반 박약 — 유일 양성 lane(걷기)마저 효과 0.01/BF 0.584이고 n-ary hard core는 C1서 반증: 어느 옵션이든 "심화할 대상"이 미확정.
+2. 순서 역전 리스크 — (c)(d)는 매력적이나 선행(F1 sealed, F2/F3, foundation 2건 OPEN) 미충족 상태의 조기 착수는 측정-불가 설계 재발(p1v2 전례).
+3. 실행 병목 이중화 — vLLM 공유 윈도(물리) + 오염된 장부(판정)가 모든 옵션의 착수·판정을 동시 지연.
+
+**RECOMMENDATION**
+
+레버리지 최대 수정 1개 = **`semantic-weight-metric-contract` foundation ratify**. (a) 성분 분석의 변수 정의, (c) G2 metric-감도 선행게이트(C pitfalls:79), (d) 인터페이스 계약, F5 hard dependency(PREREG:14) — 네 옵션 전부가 이 한 건에 블록됨. 순서: F1 sealed + F2(실행 중) 완료 → metric-contract ratify → (a)+(b) 결합 슬롯(powered book-scale + walk answer-side) → (c)는 F4 prereg대로 F2/F3 이후, (d)는 최소 consumer 1개 dogfood로.</subagent>
+</agent_swarm_result>

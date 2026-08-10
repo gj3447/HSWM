@@ -1,0 +1,56 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_HSWM_20260719",
+  "branch": "F5-consolidation",
+  "question": "Q-f5-consolidation-beyond-append-only",
+  "conjecture": "Offline restructuring (sleep consolidation pass: store reorganization + compression + deltaW refresh) improves long-lag retention AND generalization beyond both raw-log append-only preservation and consolidation-off HSWM. Consolidation is established only if arm A dominates B and C at lag >= 4 by delta >= 10pp AND A's decay slope is significantly shallower in hierarchical model fit (intercept-only differences do not count).",
+  "prediction": {
+    "metric": "f5_retention_curve_dominance_lag4plus",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0.1,
+    "novel_metric": "f5_decay_slope_difference",
+    "novel_direction": "higher",
+    "novel_threshold": 0,
+    "credence": 0.3
+  },
+  "arms": {
+    "A": "full HSWM (wake: typed actuation; sleep: consolidation pass - restructure/compress/deltaW)",
+    "B": "raw-log append-only control (everything preserved, same retrieval budget - isolates preservation)",
+    "C": "consolidation-off HSWM (store exists, sleep phase no-op - offline-phase ablation)"
+  },
+  "design": {
+    "longitudinal_lags": "t = 1..8 (weekly or simulated-lag)",
+    "probe_set": "preregistered held-out probe set, retention curve R(t)",
+    "hierarchical_decay_model": "savings/function-form comparison per Murre & Dros 2015"
+  },
+  "secondary_discriminators": {
+    "gist_detail_branch": "transformation hypothesis signature: detail accuracy decreases, gist accuracy preserved/increases",
+    "schema_generalization_probe": "transfer to novel compositions of learned episodes (CLS prediction)",
+    "BWT_FWT": "GEM-format backward/forward transfer",
+    "conflict_density": "contradictory lesson injection; rho = |E_contradicts|/|E| resolution as second endpoint",
+    "cost_metric": "latency/token cost per correct answer (sleep-time compute precedent)"
+  },
+  "common_chassis": {
+    "freeze_ablation": true,
+    "headroom_band": [0.3, 0.7],
+    "heterogeneous_judge": true,
+    "leakage_audit": "benchmark style leakage + time/drift confound audit",
+    "replay": "server-regenerated (p1v4 pattern)",
+    "hard_dependency": "foundation semantic-weight-metric-contract (edge weight interpretability, finding d1)"
+  },
+  "already_public_before_registration": {
+    "note": "Current state is NOT refuted but UNMEASURABLE (finding d1). Literature: LongMemEval 30-60% drops, sleep-time compute 13-18% gains, replay effect sizes - none combine true interference + ceiling avoidance.",
+    "harness_provenance": "longitudinal harness new; null battery shared (plan-hswm4-null-battery-harness-20260725)"
+  },
+  "kill_conditions": [
+    "f5_k1 B within delta of A at all lags -> preservation suffices; restructuring unnecessary (C1 pattern kill)",
+    "f5_k2 A - C gap <= delta at all lags -> offline phase contributes 0, kill",
+    "f5_k3 A advantage only at lag 0 with no time dependence -> effect is retrieval selection, reclassify claim as retrieval claim"
+  ],
+  "pass_conditions": [
+    "A dominates B and C at lag >= 4 by delta >= 10pp",
+    "A decay slope significantly shallower (hierarchical model fit)",
+    "gist-detail branch detected (transformation signature)"
+  ]
+}

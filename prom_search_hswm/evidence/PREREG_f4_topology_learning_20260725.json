@@ -1,0 +1,50 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_HSWM_20260719",
+  "branch": "F4-topology-learning",
+  "question": "Q-f4-learned-topology-causal-contribution",
+  "conjecture": "With the typed store frozen at checkpoint W* (WANN-style topology/weight separation), the learned topology E_learned does causal work: it beats degree-sequence-preserved shuffle, clique completion, and |E|-matched random sparse topologies on fresh heldout, its edge LOO-importance removal curve dominates random removal (AUC gap > 0), and topology edit distance correlates with heldout delta across learning checkpoints (Spearman rho CI excludes 0).",
+  "prediction": {
+    "metric": "f4_learned_topology_minus_best_control_heldout",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0.02,
+    "novel_metric": "f4_edge_ablation_auc_gap",
+    "novel_direction": "higher",
+    "novel_threshold": 0,
+    "credence": 0.25
+  },
+  "arms": {
+    "A": "learned topology E_learned (weights frozen at W*)",
+    "B": "shuffled topology (same degree sequence, same hyperedge count, random rewiring)",
+    "C": "clique completion (C1 baseline reproduction)",
+    "D": "|E|-matched random sparse"
+  },
+  "secondary_discriminators": {
+    "edge_ablation_causal_curve": "top-k removal by edge LOO importance (k=0..|E|) vs random removal at same k - preregistered AUC gap effect size",
+    "structure_performance_correlation": "Spearman rho(topology edit distance between checkpoints, heldout delta) + CI"
+  },
+  "common_chassis": {
+    "freeze_ablation": true,
+    "headroom_band": [0.3, 0.7],
+    "heterogeneous_judge": true,
+    "leakage_audit": "exact-query/entity/template overlap=0 + embedding near-dup threshold",
+    "n_per_arm_min": 30,
+    "token_envelope": "equal across arms",
+    "replay": "server-regenerated (p1v4 pattern)"
+  },
+  "already_public_before_registration": {
+    "note": "C1 book-scale kill is public receipt: clique 0.447 > hswm 0.427 (novel kill) - this gate is its direct follow-up. Literature: structure learning often fails to beat static/random controls (TGB/OpenGSL/G-Designer/DyLAN).",
+    "harness_provenance": "existing gate harness; no new infra required (finding c4)"
+  },
+  "kill_conditions": [
+    "f4_k1 any of B/C/D catches A within CI margin -> topology-learning claim killed (structure does no causal work)",
+    "f4_k2 AUC gap CI includes 0 -> flat causal curve killed (AgentPrune-style null reproduction)",
+    "f4_k3 rho CI includes 0 -> only the 'learning' part killed; demote to static-structure effect"
+  ],
+  "pass_conditions": [
+    "A > B,C,D with CI lower > 0",
+    "edge ablation AUC gap > 0 (prereg effect size)",
+    "rho CI excludes 0"
+  ]
+}

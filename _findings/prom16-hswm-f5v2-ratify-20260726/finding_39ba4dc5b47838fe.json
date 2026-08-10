@@ -1,0 +1,36 @@
+{
+ "findingId": "finding_39ba4dc5b47838fe",
+ "domain": "principle-benchmarks",
+ "rootCause": "Write-path 무접촉(불변 로그+read-time view) 설계의 정량적 승리 사례는 스토리지 엔진 도메인에 견고하게 존재한다. LMDB(COW B+tree+MVCC, 단일 writer, overwrite 없음)는 random read 751k ops/s로 LevelDB 174k(4.3x)·BerkeleyDB 102k(7.4x)·SQLite 83k(9.1x)를 압도하고, 100KB 대형 값 random read에서는 LevelDB 대비 ~113x(1.72M vs 15.2k), batch write에서도 2.48M entries/s로 전체 최고다. LSM 계열은 WiscKey가 LevelDB 대비 load 2.5~111x·lookup 1.6~14x + YCSB 6종 전부 우승, MyRocks가 InnoDB 대비 2x 공간 절감·~10x 낮은 write amplification(기록 바이트 수는 수량级 차이)·HDD에서 >6x QPS·프로덕션 50% 스토리지 절감을 보였다. 단 승리는 workload-gated다: Uber는 Postgres의 append-style MVCC(갱신 시 새 tuple version+전 인덱스 갱신)가 update-heavy OLTP에서 write/replication amplification을 일으켜 in-place+undo-log InnoDB로 회귀했고, event sourcing/bitemporal은 처리량 승리 벤치마크가 없고(가치는 감사·시간질의이며 TPC-BiH는 오버헤드 측정용) snapshotting이 존재하는 이유 자체가 unbounded replay가 지는 증거다. 즉 무접촉 설계는 '읽기 비용을 구조(levels/index/materialized view)로 상한을 두는 경우'에만 이기며, lossy consolidation이 이긴 DB 사례는 존재하지 않는다(모든 GC/compaction은 동일 referent의 superseded 버전만 버리는 gated supersession이다).",
+ "recommendation": "ratify (단 2건 amend 권고). (1) arm B/C는 DB 선례상 유일하게 정량 승리가 입증된 consolidation-adjacent family다 — RT consolidation은 LSM read-time merge·MVCC snapshot read·LMDB zero-copy read의 동형이고, arm C(gated supersession)는 MVCC vacuum/LSM compaction의 정확한 대응물로 산업 표준 lossless 관행이다. 반면 F5에서 kill된 downscale(파괴적 요약)에 해당하는 승리 사례는 DB 도메인에 없으므로 K1 kill 판정과 방향이 일치한다. (2) amend: DB 선례에서 append-only가 지는 지점은 항상 read 측(read amplification/replay cost)이므로 arm B에 RT 재조립 latency/token cost를 측정 secondary metric으로 추가해야 한다(현재 prereg은 detail slope+QA acc만). (3) K3 지지 근거 확인: sleep-time compute(2504.13171, 원문 대조 완료)는 동일 정확도에서 test-time compute ~5x 절감·+13~18% 정확도를 보고하되 효능이 query predictability와 상관함을 명시 — prereg의 predictability 상관 분석 사전등록은 타당하다.",
+ "alternatives": [
+  "Uber 반례는 regime risk를 시사한다: HSWM 워크로드가 update-heavy(lesson 잦은 개정)이면 append+RT 설계가 Postgres식 증폭을 read 측에서 재현할 수 있으므로 arm C를 단순 arm이 아니라 A/B 공통 안전장치로 상승 배치하는 해석도 가능하다",
+  "Infini-Memory(2606.10677, 실재 확인)는 배경의 인용과 달리 순수 RT가 아니라 '주기적 write-side consolidation(topic 문서 재조직)+agentic iterative retrieval' 하이브리드다 — 실전 승리 설계는 write/read 시점이 아니라 '무손실 재조직이냐 lossy 요약이냐'가 결정 변수임을 시사하므로, B의 명명을 'retrieval 재조직'으로 정정하는 기존 규칙보다 'lossless reorganization' 축으로 arms를 재정의하는 대안이 있다",
+  "Event sourcing의 snapshotting 관행은 순수 replay가 스케일에서 진다는 실무 합의의 증거이다 — arm B도 반복 쿼리에 대해 재조립 블록 캐시/구체화 계층이 필요해질 것이며, 이를 사전에 설계 변수로 명시하지 않으면 B가 이겨도 '캐시 덕'인지 'RT 자체 덕'인지 귀인이 불가능해진다"
+ ],
+ "references": [
+  "http://www.lmdb.tech/bench/microbench/",
+  "https://www.usenix.org/conference/fast16/technical-sessions/presentation/lu",
+  "https://engineering.fb.com/2016/08/31/core-infra/myrocks-a-space-and-write-optimized-mysql-database/",
+  "https://www.uber.com/us/en/blog/postgres-to-mysql-migration/",
+  "arXiv:2504.13171",
+  "arXiv:2606.10677"
+ ],
+ "caveats": "LMDB·MyRocks·WiscKey 수치는 스토리지 엔진 계층의 벤치마크로 HSWM의 detail-preservation slope/QA acc로의 전이는 유비적이다. Uber 사례는 공식 블로그의 정성 서술(정량 수치 미공개)이며 페이지 실재·내용은 검색 스니펫으로 확인했으나 전문 fetch는 하지 않았다. Event sourcing/bitemporal의 '처리량 승리' 1차 벤치마크는 발견 못 함 — 12,450 events/s 같은 산발 수치(IJSAT 2025 등 2차)만 존재하며 TPC-BiH는 temporal 오버헤드 측정 벤치마크로 우월성 증거가 아니다. Infini-Memory(2606.10677)는 실재 확인됐으나 배경 기술과 달리 순수 RT 참조가 아닌 하이브리드 — 인용 태그 부정확. sleep-time compute(2504.13171)는 RT가 아닌 offline 사전계산으로, K3 설계 근거로는 유효하나 arm B의 직접 선례는 아니다. 배경의 나머지 arXiv ID(2601.00821, 2605.12978, 2602.13967, 2605.20616)는 본 셀 범위(DB 원리 벤치마크) 밖이라 본 에이전트는 실재성 미검증.",
+ "confidence": "HIGH",
+ "oneLineSummary": "불변로그+read-time view는 LMDB 4~113x·LSM 2~111x·MyRocks 10x로 검증, 단 workload-gated(Uber 반례) — ratify+RT 비용 metric 추가 권고",
+ "agentId": "prom-f5v2-4",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "f5v2-prereg-retrieval-time-consolidation",
+  "f5-sealed-downscale-paradox-2026-07-25",
+  "k1-kill-two-strike-belt-canon",
+  "user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23",
+  "precedent-lmdb-cow-mvcc-read-benchmark",
+  "precedent-lsm-append-only-wisckey-myrocks",
+  "counterexample-uber-postgres-mvcc-write-amplification",
+  "concept-gated-supersession-is-mvcc-vacuum-analog",
+  "arxiv-sleep-time-compute-2504.13171-query-predictability",
+  "arxiv-infini-memory-2606.10677-hybrid-consolidation"
+ ]
+}

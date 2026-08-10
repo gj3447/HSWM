@@ -1,0 +1,50 @@
+{
+  "schema": "hswm-preregistration/v1",
+  "programme": "LakatosTree_HSWM_20260719",
+  "branch": "F2-delta-w-credit",
+  "question": "Q-f2-delta-w-credit-predictive-power",
+  "conjecture": "In the typed lesson store (weights = external typed records), credit estimated by budget-capped TMC-Shapley (phi_i per lesson) predicts measured causal contribution: credit-informed edits beat same-size random edits on fresh heldout accuracy, and estimated phi ranks agree with measured LOO delta-V (Spearman rho >= 0.2). deltaW itself is fully observed (version hash + typed edit log); the unproven part is credit predictive power.",
+  "prediction": {
+    "metric": "f2_credit_informed_minus_random_edit_heldout_acc",
+    "baseline": 0,
+    "direction": "higher",
+    "noise_band": 0.02,
+    "novel_metric": "f2_credit_estimate_vs_measured_loo_spearman",
+    "novel_direction": "higher",
+    "novel_threshold": 0.2,
+    "credence": 0.4
+  },
+  "arms": {
+    "a_credit_informed": "TMC-Shapley phi_i per lesson, edits only on top-credit / bottom anti-credit lessons",
+    "b_random_edit": "same-size random edits (identical insert/delete/reweight counts, random targets)",
+    "c_verbal_gradient": "TextGrad-style LLM critic proposed edits (heuristic attribution control)"
+  },
+  "secondary_discriminators": {
+    "credit_validation_gate": "Spearman rho(phi_i, measured LOO delta-V) >= 0.2 required to keep the arm; rho < 0.2 -> estimator arm discarded before main run",
+    "planted_ground_truth_testbed": "signal->content 2-gate + SHA-deranged placebo store (same schema/tokens, unrelated content)"
+  },
+  "common_chassis": {
+    "freeze_ablation": true,
+    "headroom_band": [0.3, 0.7],
+    "heterogeneous_judge": true,
+    "leakage_audit": "exact-query/entity/template overlap=0 + embedding near-dup threshold",
+    "n_per_arm_min": 100,
+    "token_envelope": "equal across arms (F1 parity lesson)",
+    "replay": "server-regenerated (p1v4 pattern)",
+    "hyperedge_attribution": "forbidden (C1 lesson) - item-level credit only"
+  },
+  "already_public_before_registration": {
+    "note": "16 findings are literature/design knowledge only; no arm output was measured or inspected. Existing gate receipts (p1v3/p1v4/F1/C1) are cited as public receipts only.",
+    "harness_provenance": "p1v4 actuation harness reused; null battery harness pending (plan-hswm4-null-battery-harness-20260725)"
+  },
+  "kill_conditions": [
+    "f2_k1 credit_informed - random_edit <= 0 -> claim 1 (result->credit->deltaW) remains UNPROVEN",
+    "f2_k2 improvement with deltaW = 0 (placebo store >= credit arm, form==content effect) -> immediate kill",
+    "f2_k3 saturation (no-memory arm >= 5/6) -> re-register with harder split (p1v2 lesson)"
+  ],
+  "pass_conditions": [
+    "credit_informed > random_edit with bootstrap95 LCB > 0",
+    "credit-validation rho >= 0.2",
+    "credit_informed >= verbal_gradient"
+  ]
+}

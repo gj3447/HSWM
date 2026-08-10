@@ -1,0 +1,37 @@
+{
+ "findingId": "finding_a6dc968598542047",
+ "domain": "history-pitfalls",
+ "rootCause": "write-side consolidation의 실패 사례는 전 분야에서 동일한 메커니즘으로 문서화되어 있다: write 시점의 lossy rewrite가 applicability condition·시간 마커·표면 텍스처를 폐기하고, 반복 갱신 시 초기 추상화가 후기 rewrite의 앵커가 되어 오류가 누적된다. 1차 검증: (1) CogCanvas ablation(arXiv 2601.00821 v4) — 동일 파이프라인에서 저장 표현만 교체 시 verbatim chunk 43.9% vs LLM 추출 artifact 28.0%(LoCoMo, +15.9pp), 67.4% vs 45.4%(LongMemEval-S, +22.0pp), 메커니즘은 'lossy distillation'이며 artifact는 replace가 아니라 augment일 때만 무해. (2) Zhang et al.(arXiv 2605.12978) — GT 해를 매 단계 투입해도 GPT-5.4가 무메모리에서 100% 풀던 ARC-AGI 19문제가 consolidation 후 54%로 회귀; 강제 consolidation 대비 raw episode 보존 자율 regime이 정확도 2배, episodic-only가 auto와 동격; stream 갱신은 one-shot 대비 17~38pts 손실; 실패 기제 3종(misgrouping·적용조건 탈각·협소 스트림 과적합). (3) Neuromem(arXiv 2602.13967) — Finding F3: 구조화 스키마 압축은 F1을 50% 이상 붕괴('functional collapse'); F1: LLM 주도 consolidation 정책은 무유지 baseline과 동일한 ~22% 열화율을 보여 'ingestion 시점 의미 충돌 해소는 premature optimization'; F2: 저장 단계 정보 손실은 downstream 최적화로 보상 불가. DB/인프라도 동형: Kafka log compaction은 키당 최신값만 남겨 history를 설계상 파괴하며 misconfiguration 시 문서화된 데이터 유실 시나리오가 있고, 모니터링 다운샘플링/rollup은 'loss of detail'이 공인된 primary downside(평균화가 스파이크를 숨겨 postmortem을 방해). 인지과학 원형은 Bartlett(1932)·fuzzy-trace theory(Brainerd & Reyna): 인간 기억의 schema consolidation이 verbatim을 벗기는 것이 원조 문서화 사례로 2605.12978이 직접 인용.",
+ "recommendation": "ratify 방향 지지. (a) F5의 K1 kill(downscale 폐기)은 외부 문헌 3종+DB/모니터링 관행과 정합 — write-side lossy rewrite의 detail 파괴는 재현된 보편 법칙이므로 prereg의 arm 구성(A/B/C 비파괴 계열 + D 적대 대조)이 역사적 실패 모드와 정확히 정렬된다. (b) 단 ratify 시 amend 1건 권고: arm B의 참조 문헌 정정 — Infini-Memory(2606.10677, 실재 확인)는 'buffer에 stage 후 주기적으로 topic document로 consolidate'하는 사실상 write-side 주기 consolidation이므로 순수 read-time 재조립의 선례로 인용하면 안 되며, 'RT가 검색 개선과 동형이면 retrieval 재조직으로 정정' 규칙을 유지하는 한 문서화된 실패 사례가 RT 재조립에는 존재하지 않는다는 점(실패는 전부 write-side)이 arm B/C의 사전 우위 근거임을 prereg에 명시할 것. (c) Neuromem F1('ingestion-time consolidation은 baseline과 동일 열화율')은 arm C(dedup+gated supersession)에 대한 사전 경고로 등록 — supersession 판정을 ingestion이 아니라 read/감사 시점으로 미루는 설계 제약을 prereg에 반영 권고.",
+ "alternatives": [
+  "반대 관점: 이들 실패 사례는 전부 'replace형' consolidation이며 augment형(verbatim 유지+요약 추가, CogCanvas의 artifacts-alongside-chunks)은 정확도를 포기하지 않았으므로, write-side라도 비파괴 augment는 여전히 유효한 설계 공간 — F5v2의 B/C가 이 구간에 해당",
+  "인지과학 관점: gist 추출 자체는 인간에서도 유용(전이·일반화)하며 문제는 metacognitive control(무엇을 묶고 언제 구분을 보존할지)의 부재 — 2605.12978도 'gate consolidation explicitly'를 처방으로 제시하므로 consolidation 전면 폐기가 아니라 gating이 해법일 수 있음",
+  "DB 관점: Kafka compaction·rollup은 'history가 필요 없다고 확정된' 키 공간에서는 성공적 장기 운용 사례 — 실패는 lossy 연산 자체가 아니라 lossy를 history-needed 도메인에 잘못 적용한 category error이므로, F5v2는 lossy 연산의 domain-of-validity 측정까지 scope에 넣을 수 있음"
+ ],
+ "references": [
+  "https://arxiv.org/abs/2601.00821",
+  "https://arxiv.org/pdf/2605.12978",
+  "https://arxiv.org/abs/2602.13967",
+  "https://arxiv.org/html/2602.13967v1",
+  "https://arxiv.org/abs/2603.07670",
+  "https://arxiv.org/abs/2606.10677",
+  "https://github.com/MemPalace/mempalace/blob/develop/benchmarks/BENCHMARKS.md",
+  "https://www.kannika.io/kannika-stories/scenarios-for-data-loss-in-kafka/",
+  "https://last9.io/blog/downsampling-aggregating-metrics-in-prometheus-practical-strategies-to-manage-cardinality-and-query-performance/"
+ ],
+ "caveats": "배경 인용 수치 중 CogCanvas 'p<1e-15'는 v4 abstract에서 확인 불가(수치 43.9/28.0/67.4/45.4는 원문 대조 완료, p값은 본문 미열람으로 미검증). 2605.12978은 abstract('fails on 54%')와 본문('down to 54%', 즉 fails on 46%) 간 내부 불일치가 있음 — 배경의 '54% 회귀'는 본문 기준 정확. Neuromem 'F1 −50%'는 F3 원문('reducing F1 scores by over 50%') 확인 완료. MemPalace 96.6% R@5는 프로젝트 자체 벤치마크(비독립·self-reported)이며 검색 스니펫 수준 확인. 2504.13171(sleep-time compute)·2605.20616(Auto-Dreamer)는 본 셀 범위(역사적 실패 사례) 밖이라 미검증. Bartlett 1932·fuzzy-trace theory는 2605.12978 내부 인용 경유 확인으로 원전 직접 대조는 아님. Kafka/다운샘플링 사례는 공학 블로그·벤더 문서 수준(학술 1차 소스 아님).",
+ "confidence": "HIGH",
+ "oneLineSummary": "write-side lossy consolidation의 detail 파괴는 LLM메모리 3논문·DB·모니터링·인지과학 전 분야에서 동일 메커니즘으로 재현 — F5v2 ratify 지지",
+ "agentId": "prom-f5v2-2",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "hswm-f5-downscale-paradox-k1-kill-2026-07-25",
+  "hswm-f5v2-prereg-retrieval-time-consolidation-2026-07-26",
+  "downscale-operator-deprecated-canon",
+  "verbatim-vs-gist-duality",
+  "append-only-baseline-armA",
+  "external-replication-cogcanvas-2601.00821",
+  "external-replication-faulty-memory-2605.12978",
+  "external-replication-neuromem-2602.13967"
+ ]
+}

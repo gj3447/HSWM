@@ -1,0 +1,34 @@
+{
+ "findingId": "finding-prom16-hswm4-a3-pitfalls-20260725",
+ "domain": "delta-w-credit::pitfalls",
+ "rootCause": "ΔW 학습 주장의 오탐은 구조적이다: HSWM류 시스템에서 '가중치'는 외부 스토어의 메타데이터이고, 그것을 쓰고·읽고·평가하는 주체가 전부 같은 LLM 계열이라 네 단계(검색→행동→결과해석→갱신) 모두가 분리 불가능하게 얽힌다. 문헌상 동형 함정이 확인된다: (1) actuation을 learning으로 표기 — Reflexion(2303.11366)은 스스로 '가중치를 갱신하지 않고 언어적 피드백으로 강화'한다고 명시하고, ACE/Dynamic Cheatsheet(2510.04618)도 'weights를 바꾸지 않는 context adaptation'으로 자기 분류하는데, 2차 인용에서는 둘 다 'self-improving/learning'으로 뭉뚱그려진다. (2) headroom 소멸 — Supersede(2606.27472)에서 full-context 정확도는 92%로 포화하고 bounded memory는 77%로 떨어지는데, 이는 우리 p1v2 KILL(base retrieval이 이미 6/6)과 정확히 동형: base가 포화하면 개입효과는 정의상 0이고, 포화 태스크에서의 '학습 성공' 보고는 측정 불가능한 claim이다. (3) 순환 평가 — Dietz의 Evaluation Tropes(dietz2025principles) 'Eval Trope 1: Circularity'는 시스템 내부 LLM judge를 공식 평가자로 쓰면 최적화=평가 목표가 동일해져 자기강화된다고 명시; ICLR26 리뷰 사례(teacher가 테스트셋 생성+ judge 겸임 → 성능 부풀림)와 emergentmind의 leakage 사례(F1이 leak 비율에 선형 상승)가 실증 사례다. (4) frozen vs learned 구분 실패 — OpenReview structured-memory 연구(2cbf...)만이 'weight update disable' ablation(uniform edge weight 동결)으로 learned 신용배분의 필요성을 보였는데, 이 절차가 없는 메모리 에이전트 논문 대부분은 frozen-store 개선(순수 actuation)을 ΔW 효과로 보고할 위험이 있다. 즉 증명 어려움의 근본은: 신용배분 대상(어느 레슨이 원인인가)과 신용배분 행위(가중치 갱신)와 신용배분 평가(성능 향상 판정)가 하나의 LLM 루프 안에서 동질 집단(homogeneous)으로 실행된다는 점이다.",
+ "recommendation": "HSWM의 ΔW claim(①)을 게이트화하려면 다음 4-arm sealed 설계를 prereg할 것: (A) no-memory, (B) memory-frozen(레슨 존재·가중치 uniform·결과피드백 차단 — actuation만 측정), (C) memory-learned(결과→신용배분→가중치 갱신), (D) learned+weight-shuffle(학습 후 가중치를 레슨 간 셔플/부호반전 — 인과성 검증). ΔW 성립 조건 = C>B AND D<C(셔플이 frozen 이하로 떨어져야 신용이 가중치에 실재); B>A는 actuation 효과로 별도 보고(이것은 이미 p1v4에서 확보됨). 태스크 선정에 headroom 스크린 의무화: no-memory와 base-retrieval 베이스라인이 모두 [0.2, 0.8] 밴드 안에 있는 항목만 sealed run에 포함, base retrieval ≥0.9 시 해당 태스크셋 kill(p1v2 규칙의 일반화). 순환성 차단 3조: (i) 신용배분의 결과 신호는 반드시 programmatic verifier/환경 ground truth(LLM self-judge 금지), (ii) 평가 judge는 레슨 생성·갱신에 쓰인 모델과 다른 패밀리, (iii) 레슨 스토어에 provenance 태그를 남겨 평가 항목에서 유래한 레슨이 그 항목 검색에 쓰이지 않도록 store-level train/test 분리(Dietz contamination 경로 차단). Kill 조건: learned−frozen Δ의 95% CI가 0 포함, 셔플 테스트 비유의, judge 교체 시 verdict 반전 중 하나라도 해당되면 claim 폐기. claim ②(전이)에는 frozen-B arm을 추가해 B가 스토어에 재기록 불가능하게 봉인.",
+ "alternatives": [
+  "대안 해석 1 — actuation-first 포지셔닝: ΔW를 아예 주장하지 않고 HSWM을 'typed actuation 시스템'으로 재정의(claim 축소). 이 경우 B-arm 강화 + 전이 시 read-only export만으로 라인업 완성 가능. 단, 이는 프로그램의 핵심 야심(신경망 유사 학습) 포기이므로 fallback으로만.",
+  "대안 설계 2 — counterfactual credit assignment 차용: RL의 CCA(Mesnard et al. 2021)처럼 개별 레슨을 one-at-a-time 제거/주입하는 leave-one-lesson-out(LOLO) 절차로 레슨별 한계기여를 측정, 셔플 테스트보다 세분화된 신용 지도 작성. 비용이 크지만 레슨 수가 적을 때(초기 HSWM) 실행 가능.",
+  "대안 설계 3 — Supersede형 supersession 태스크를 ΔW 전용 벤치로: 사실이 갱신되는 multi-session 시나리오에서 stale 가중치가 유지되는지 갱신되는지를 직접 관측. actuation과 learning을 시간축으로 분리할 수 있어 headroom 문제를 우회함."
+ ],
+ "references": [
+  "https://arxiv.org/abs/2303.11366",
+  "https://arxiv.org/pdf/2510.04618",
+  "https://arxiv.org/abs/2606.27472",
+  "https://www.cs.unh.edu/~dietz/papers/dietz2025principles.pdf",
+  "https://cseweb.ucsd.edu/~jmcauley/reviews/iclr26c.pdf",
+  "https://openreview.net/pdf/2cbf3ea7143fd3d382533081b9d28376c99ba3aa.pdf",
+  "https://www.emergentmind.com/topics/pitfalls-in-llm-security-research",
+  "https://arxiv.org/html/2605.03354v2"
+ ],
+ "caveats": "Supersede(2606.27472)와 ICLR26 리뷰 인용은 검색 스니펫/초록 수준 확인이며 본문 전체 정독은 못했다(수치는 초록에 명시된 것만 인용). OpenReview structured-memory ablation 논문의 제목·저자를 확정하지 못해 URL로만 식별. '대부분의 메모리 에이전트 논문이 freeze ablation을 생략한다'는 주장은 표본 조사가 아니라 대표 사례 기반 추론이다. Reflexion/ACE가 '학습이 아니다'는 것은 저자들 자신의 명시적 한정이지 반증이 아니며, 2차 커뮤니티 인용에서의 혼동은 체계적 서베이 없이 관찰된 것임.",
+ "confidence": "HIGH",
+ "oneLineSummary": "ΔW 오탐의 4대 함정(actuation↔learning 혼동, headroom 포화, judge 순환성, freeze ablation 생략)은 문헌상 실증되어 있고, 4-arm(frozen/learned/shuffle/no-memory)+headroom 밴드+이종 judge 설계가 유일한 차단책이다.",
+ "agentId": "prom-prom16-hswm-unproven-claims-20260725-A3",
+ "researchedAt": "2026-07-25",
+ "sourceKgBindings": [
+  "p1v2-typed-lesson-kill",
+  "hswm-p1v4-typed-actuation",
+  "claim-boundary-delta-w",
+  "semantic-weight-metric-contract",
+  "multi-agent-transfer-harness",
+  "lesson-prom-tribunal-phasor-20260724"
+ ]
+}

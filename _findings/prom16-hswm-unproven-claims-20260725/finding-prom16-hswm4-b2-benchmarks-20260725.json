@@ -1,0 +1,31 @@
+{
+ "findingId": "finding-prom16-hswm4-b2-benchmarks-20260725",
+ "domain": "agent-ab-transfer::benchmarks",
+ "rootCause": "Cross-LLM 전이의 성패는 '무엇을 옮기는가'가 아니라 '기억이 task-relevant structure(s)와 model-specific bias(b)를 얼마나 분리하는가'에 달려 있다. MemCollab(2603.23234)이 실측으로 보여준 핵심: 한 모델의 trajectory에서 만든 기억을 그대로 다른 모델에 주입하면 b가 딸려가서 오히려 성능이 하락한다 (Qwen2.5-7B + 32B-기억: MATH500 50.6 vs vanilla 52.2, HumanEval 34.1 vs 42.7; Llama3-8B + Qwen32B-기억: MATH500 18.8 vs 27.4). 반면 대조(contrast)로 s만 증류한 기억은 family를 넘어서도 유효하다 (7B 52.2→67.0, Llama3-8B 평균 41.7→53.9, Qwen32B 70.8→78.2). MTL(2604.14004, ICML)도 같은 구조를 도메인 축에서 확인: 추상 Insight 형식은 cross-model 양방향 유효(+2.6% DeepSeek V3.2, +1.8% Qwen3-Coder)하지만 저추상 Trajectory는 negative transfer를 유발하고, 자기생성 기억이 항상 최고(모델 편향 잔존). 즉 HSWM claim ②(A→frozen-B)가 증명 어려운 이유는 전이 자체가 아니라 'naive ΔW 주입은 순음수가 될 수 있다'는 반증 가능성이 선행 문헌에서 이미 실측됐기 때문이며, 증명하려면 s/b 분리를 실험 설계에 통제변수로 박아야 한다.",
+ "recommendation": "HSWM A→B 전이 sealed 실험을 다음과 같이 설계하라. (1) 교차 family 필수: source A와 frozen B는 서로 다른 모델 family(예: Claude→Qwen 또는 GPT→DeepSeek) — 같은 family면 b 공유로 전이 효과가 과대추정된다(MemCollab 교훈). (2) 4-arm 구조: (a) B no-memory baseline, (b) B + A의 raw lesson 그대로 주입(naive), (c) B + A lesson을 abstraction/contrast로 재작성한 typed lesson, (d) B + B 자기생성 lesson(상한). MemCollab/MTL이 모두 (c)>(d)>(b) 순서이고 (b)는 (a) 아래로 떨어질 수 있음을 보였으므로 이 순서 자체가 검증 대상. (3) Metric을 prereg contract로: Transfer Retention Ratio TRR = (score_arm − score_no-memory)/(score_self − score_no-memory) (PAM의 TCS=target_after/source_before 일반화) + negative-transfer rate(heldout 항목 중 memory arm이 no-memory보다 나쁜 비율). 이것이 미해결 foundation 'semantic-weight-metric-contract'의 구체 후보다. (4) Kill 조건 사전등록: naive arm TRR<0이면 'HSWM typed store는 naive와 구별 안 됨'으로 해당 설계 KILL; abstraction arm TRR≥0.5 & negative-transfer rate≤10%를 성립 기준으로. (5) lesson type별 층별 측정: PAM에서 semantic이 가장 잘 전이되고 working/procedural이 가장 많이 degrade했으므로 HSWM typed lesson도 type별 TRR을 분리 보고. (6) 임베딩 모델은 전 arm에서 고정(Voyager 커뮤니티의 embedding-mixing 실패 재발 방지) + retrieval top-k=3 부근에서 비단조 곡선 확인(MemCollab: k 초과 시 성능 하락).",
+ "alternatives": [
+  "Contrastive 경로 채택: A와 B(또는 제3의 강한 모델)의 쌍 trajectory를 대조해 (enforce invariant; avoid violation) 형태의 normative lesson만 저장 — MemCollab이 cross-family에서 유일하게 음수 전이를 피한 방식이며 HSWM lesson store의 생성 절차로 직접 이식 가능",
+  "전이를 '지식'이 아니라 '메타-지식'으로 한정: MTL에서 알고리즘 전략 전이는 이득의 5.5%에 불과하고 검증 루틴·워크플로 등 meta-knowledge가 주된 이득 원천 — HSWM claim ②의 scope를 'procedural meta-knowledge 전이'로 좁혀 prereg하면 증명 난이도가 낮아짐",
+  "PAM식 protocol-level 전이(직렬화+re-hydration)를 baseline arm으로 추가 — 모델 교체 시 TCS 0.83~0.92 재현 여부를 HSWM store와 비교해 '구조화 포맷만으로 충분한가 vs hypergraph 구조가 추가 기여하는가'를 C1 반증(hypergraph 고유 기여 미검출)과 연결해 재시험"
+ ],
+ "references": [
+  "https://arxiv.org/html/2603.23234v2",
+  "https://arxiv.org/html/2604.14004v1",
+  "https://arxiv.org/html/2605.11032v1",
+  "https://arxiv.org/pdf/2603.02766",
+  "https://memorytransfer.github.io/"
+ ],
+ "caveats": "PAM(2605.11032)은 N=50 pilot으로 저자 스스로 'directional not definitive'라 명시했고 arXiv ID/날짜 표기에 이상(2025-01-15 접근일 vs 2026-05-10 v1)이 있어 수치 신뢰도는 낮게 봐야 함. MemCollab 수치는 단일 seed(42), temperature 0, 500 heldout 기준 — 분산은 appendix에만. MTL은 gpt-5-mini가 기억 생성·judge·agent를 겸해 self-preference 편향 가능. Voyager→AutoGPT 스킬 전이(+) 및 self-verification 제거 시 -73%는 2차 소스(beancount 리서치 로그)라 미검증. EvoSkill의 +5.3pp(SealQA→BrowseComp)는 단일 스킬 사례. 이들 모두 '전이가 된다'는 존재 증명이지 HSWM 식 credit-assigned ΔW의 전이를 직접 검증한 것은 아님 — 모두 inference-time memory 주입이며 가중치 갱신 실험은 없음.",
+ "confidence": "HIGH",
+ "oneLineSummary": "선행 실측: 모델 간 naive 기억 전이는 성능을 깎지만(MATH500 -1.6~-8.6pt), 추상화/대조 증류된 기억은 family를 넘어 +12~15pt까지 유효 — HSWM A→B claim은 s/b 분리를 통제한 4-arm TRR 게이트로만 증명 가능.",
+ "agentId": "prom-prom16-hswm-unproven-claims-20260725-B2",
+ "researchedAt": "2026-07-25",
+ "sourceKgBindings": [
+  "multi-agent-transfer-harness",
+  "semantic-weight-metric-contract",
+  "lesson-prom-tribunal-phasor-20260724",
+  "rf-prom-next-move-20260724",
+  "p1v2-typed-lesson-kill",
+  "c1-book-scale-hypergraph-novel-kill"
+ ]
+}

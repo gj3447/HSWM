@@ -1,0 +1,34 @@
+{
+ "findingId": "finding_923809cfcea86f9b",
+ "domain": "implementation-theory",
+ "rootCause": "Query-dependent reassembly (F5v2 arm B) has three precise formal homes in the literature, and none of them is called 'consolidation': (1) query-focused summarization — RECOMP (arXiv 2310.04408) explicitly formalizes compressing retrieved evidence as multi-document QFS, with an extractive variant (query-similarity sentence selection trained contrastively on end-task signal) and an abstractive variant (distilled generator), plus selective augmentation returning an empty string when retrieval adds nothing; (2) late interaction — ColBERT MaxSim (arXiv 2004.12832) decomposes relevance as Σ_i max_j ⟨q_i,d_j⟩, whose argmax alignments identify exactly which spans are load-bearing per query, i.e. a principled extractive reassembly operator with offline-precomputed document side; (3) MoE retrieval — RouterRetriever (arXiv 2409.02685) routes queries to domain experts, formally equivalent to choosing which topical sub-store to assemble from. The theoretical optimality condition is sufficiency: the reassembled block c=R(q,M) is optimal iff I(c;Y|q) ≈ I(M;Y|q) at minimal |c| (information-bottleneck / sufficient-statistic framing). By the data processing inequality, read-time transformation cannot add information, so RT reassembly can only beat append-only by (a) relieving context-budget pressure, (b) removing distractors that degrade generator readout (lost-in-the-middle U-curve, arXiv 2307.03172), (c) position re-ranking — never by creating content. Extractive reassembly additionally enjoys a provable (1−1/e) greedy optimality guarantee via monotone submodular budgeted maximization (Lin & Bilmes, NAACL 2010); abstractive QFS has no such guarantee and is exactly where detail loss (the F5-sealed failure mode) enters.",
+ "recommendation": "Amend, then ratify. Three concrete amendments: (1) Rename arm B from 'RT consolidation' to 'query-focused reassembly (QFR)' — the formal literature (RECOMP/QFS/late-interaction) unambiguously classifies read-time query-conditioned assembly as retrieval reorganization + QFS, so the prereg's existing naming-correction rule should be applied preemptively, not post-hoc. (2) Add a decomposition control arm B0 = extractive-only reassembly (MaxSim/dual-encoder sentence selection + provenance, no abstractive synthesis): without it, if B beats A you cannot attribute the gain to reassembly vs mere re-ranking, and K2 (무고유기여) becomes undecidable; B0 also isolates the submodular-guaranteed component from the hallucination-prone abstractive component. (3) Pre-register the sufficiency criterion explicitly: B survives iff detail slope ≥ A AND its QA gain concentrates in the long-context/distractor-heavy regime; theory (DPI + lost-in-the-middle) predicts B≈A when append-only context fits comfortably in-window, so K3's query-predictability/regime analysis should also stratify by context pressure, not just query predictability. With these amendments the prereg is theoretically well-posed and K1 (detail slope < A) is exactly the formal sufficiency-violation test — ratify.",
+ "alternatives": [
+  "Shelve arm B entirely and reframe the whole question as retrieval-engineering: since DPI says read-time work adds no information, one can argue the honest hypothesis is 'retrieval quality under context pressure', making F5v2 a reranker study, not a memory-consolidation study — but this forfeits the write-untouched safety property that distinguishes B from the killed downscale arm.",
+  "Keep the current 4-arm design unchanged and rely on the post-hoc naming-correction rule: simpler, but risks an uninterpretable B-vs-A result (selection vs synthesis confound) that would force a re-run — the B0 control is cheap insurance.",
+  "Skip extractive baselines and go straight to the learned consolidator (phase-2 GRPO): the Auto-Dreamer claim 'only trained operators beat append-only' suggests heuristic reassembly is dominated, but without an untrained QFR baseline the GRPO gain cannot be attributed to learning vs to the reassembly mechanism itself."
+ ],
+ "references": [
+  "https://arxiv.org/abs/2310.04408",
+  "https://arxiv.org/abs/2004.12832",
+  "https://arxiv.org/abs/2409.02685",
+  "https://arxiv.org/abs/2307.03172",
+  "https://aclanthology.org/N10-1134.pdf",
+  "https://arxiv.org/abs/2404.16130",
+  "https://arxiv.org/abs/2504.13171",
+  "https://arxiv.org/abs/2606.10677"
+ ],
+ "caveats": "Background arXiv IDs 2601.00821 (CogCanvas), 2605.12978 (ARC-AGI), 2602.13967 (Neuromem), 2605.20616 (Auto-Dreamer) are not directly load-bearing for this cell's formal-model question and were NOT independently verified by me — left to other cells. Infini-Memory (2606.10677) and sleep-time compute (2504.13171) verified real. The Nemhauser–Wolsey–Fisher (1978) (1−1/e) guarantee is cited as classical knowledge, not URL-verified this session. The sufficiency/DPI framing is my synthesis (standard information theory applied to RAG), not a quoted theorem from a single paper. ColBERT's argmax-alignment-as-extractive-reassembly reading is an interpretation, not a claim made by Khattab & Zaharia.",
+ "confidence": "HIGH",
+ "oneLineSummary": "RT 재조립 = QFS/late-interaction의 충분통계량 문제 — DPI상 정보증가 불가, 이득은 distractor 제거·예산 완화뿐; B0(extractive-only) 대조군 추가 후 ratify 권고.",
+ "agentId": "prom-f5v2-11",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "prom16-hswm-f5v2-ratify-20260726",
+  "hswm-f5-sealed-downscale-paradox-2026-07-25 (추정명)",
+  "f5v2-arm-b-rt-consolidation (추정명)",
+  "user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23",
+  "hswm-kill-criteria-k1-k4 (추정명)",
+  "concept-query-focused-reassembly-vs-consolidation-naming (신규 제안)"
+ ]
+}

@@ -1,0 +1,38 @@
+{
+ "findingId": "finding_4e6368672701d61c",
+ "domain": "limitations-pitfalls",
+ "rootCause": "셀 질문의 4가지 측정 함정 모두 선행 사례가 확인됐다. (1) Judge catch-rate: Penfield Labs 감사(Nous 논문 arXiv:2606.22030이 인용)에서 LoCoMo의 GPT-4o judge가 의도적 오답의 최대 63%를 정답으로 수용(catch-rate ≈37%)하고 답안키의 6.4%가 오류 — F5v2의 catch-rate<90% 무효화 조항이 실제 리더보드급 벤치마크에서 발동될 수 있었던 직접 사례. LongMemEval(arXiv:2410.10813)은 GPT-4o judge를 채택하기 전 meta-evaluation으로 인간 전문가와 97% 일치를 검증해, 'judge 검증 선행'이 이 서브필드의 사실상 표준임을 보여준다. Zheng et al.(2306.05685)은 강한 judge(GPT-4)도 인간 일치 80%+에 그치고 position/verbosity/self-enhancement 편향이 있음을 문서화. (2) Noise floor: MMLU-Redux(2406.04127)는 MMLU 문항 ~6.5%가 오류(Virology 서브셋은 과반)라는 것을 보여, 벤치마크 자체 오류율이 유의미한 효과 크기의 하한(noise floor)을 결정한다는 선례. (3) 파워: Miller/Anthropic(2411.00640)은 eval을 실험으로 취급해 파워 기반 표본 설계·paired 분석 공식을 제시 — 사전 n 산정 없이 작은 slope 차이를 검정하는 것은 underpowered라는 방법론 정본. (4) Gist metric 과잉해석: Nous(2606.22030)는 동일 출력에서 관대한 LLM judge 59.97 vs strict token-F1 32.45로 27.5pt 괴리를 실측했고, judge는 retriever가 뒷받침하지 않은 답(open-domain 62.5 vs F1 10.5)도 정답 처리 — gist/의미론 judge 점수 상승을 '기억 보존 개선'으로 읽는 것의 위험을 정량화한 사례. Fuzzy-trace theory(Reyna, PMC4268540)는 gist 기억이 의미 기반이지만 false memory를 증가시킨다는 인지과학적 근거를 제공한다.",
+ "recommendation": "ratify 방향 — K4 조항은 선행 사례로 충분히 정당화되므로 유지하되, 실행 방식을 선례에 맞춰 구체화(amend 수준의 보강)할 것: (a) judge catch-rate는 Penfield 감사 방식의 '의도적 오답 주입(adversarial canary)'으로 사전 측정하고, LongMemEval처럼 인간 라벨 대비 일치율 meta-evaluation을 run 시작 전 게이트로 둔다(90% 미만 시 run 무효는 그대로). (b) noise floor는 GT 품질 감사(답안키 오류율)와 동일 설정 반복 재실행의 측정 분산으로 정량화해, kill/생존 판정에 쓸 최소 유의 효과(MDE)의 하한으로 명시. (c) n 산정은 Miller(2411.00640)의 파워 공식으로 slope 차이 검정의 MDE를 CI 폭에 매핑해 prereg에 기입 — F5의 CI [−0.098,−0.024] 폭을 기준 효과 크기로 역산하는 식. (d) gist/의미론 judge 지표는 Nous식 이중 렌즈(verbatim/strict 지표와 관대한 judge를 동시 보고)로 강제하고, gist 지표 단독 상승은 'detail 보존 개선' 주장의 근거로 사용 금지. 단 90% 임계의 기준선은 '인간-인간 일치율'을 같이 재서 judge가 인간 수준 이하로 깎이지 않는지 확인하는 절차를 추가하는 편이 방어 가능하다.",
+ "alternatives": [
+  "catch-rate 90%는 과도하게 엄격하다는 관점: Zheng(2306.05685)에서 인간 평가자 간 일치율도 ~80% 수준이므로, 절대 임계 대신 'judge-인간 일치 ≥ 인간-인간 일치'의 상대 기준을 쓰고 부족분은 측정 오차로 CI에 반영하는 설계도 가능",
+  "LLM judge 자체를 포기하고 strict token-F1/프로그래머틱 채점만 쓰는 관점: judge 편향·catch-rate 문제를 원천 제거하지만, detail 보존 slope 같은 의미론 metric과 open-ended QA에는 부적합하므로 이중 렌즈(두 metric 동시 보고 + 불일치 시 strict 우선)가 현실적 절충",
+  "noise-floor kill을 '벤치마크 오류율'이 아니라 'harness 재현성'(동일 시드 반복 run의 점수 분산)으로 정의하는 관점: GT 오류는 system bias라 CI로 못 잡지만, 재현 분산은 직접 측정 가능하고 F5v2처럼 자체 harness를 쓰는 설정에 더 적합"
+ ],
+ "references": [
+  "https://arxiv.org/abs/2306.05685",
+  "https://arxiv.org/abs/2410.10813",
+  "https://arxiv.org/abs/2411.00640",
+  "https://arxiv.org/abs/2406.04127",
+  "https://arxiv.org/abs/2606.22030",
+  "https://arxiv.org/abs/2601.00821",
+  "https://arxiv.org/abs/2602.13967",
+  "https://arxiv.org/abs/2504.13171",
+  "https://pmc.ncbi.nlm.nih.gov/articles/PMC4268540/"
+ ],
+ "caveats": "미검증 사항: (1) Penfield Labs LoCoMo 감사 원문(substack URL + github.com/dial481/locomo-audit)은 Nous 논문(2606.22030)의 참고문헌 인용을 통해 확인했을 뿐 원문을 직접 fetch하지 못함 — 6.4%/63% 수치는 2차 인용. (2) 배경의 CogCanvas(2601.00821)는 abstract에서 verbatim 43.9% vs extracted 28.0%(+15.9pp, LoCoMo) 및 LongMemEval-S 67.4% vs 45.4%(+22pp)까지 원문 대조됐으나 'p<1e-15'는 abstract에 없어 미검증. (3) 배경의 Neuromem(2602.13967) '구조화 압축 F1 −50%'는 abstract에 해당 수치가 없음(abstract는 'aggressive compression이 비용만 이동시키고 accuracy gain은 제한적' 수준의 서술) — −50% 수치 미검증, 본문 확인 필요. (4) ARC-AGI 계열 2605.12978 / Infini-Memory 2606.10677 / Auto-Dreamer 2605.20616은 본 셀 범위 밖이라 실재성 미검증. (5) MMLU-Redux의 ~6.5% 오류율과 Virology 57%는 검색 스니펫·2차 소스 기반이며 논문 본문 수치 직접 대조는 못 함. (6) Zheng 2306.05685의 '>80% agreement'는 pairwise preference 태스크 기준이라 F5v2의 사실형 QA judge catch-rate와 과제 형태가 다름.",
+ "confidence": "HIGH",
+ "oneLineSummary": "Judge catch-rate·noise floor·파워·gist 과잉해석 4종 함정 모두 선례 존재(LoCoMo 오답 63% 수용, MMLU 6.5% 오류, Miller 파워 공식, Nous 27.5pt judge-F1 괴리) — K4 ratify + canary·이중렌즈 보강 권고.",
+ "agentId": "prom-f5v2-14",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "prom16-hswm-f5v2-ratify-20260726",
+  "HSWM F5v2 prereg K4 measurement kill conditions",
+  "LongMemEval-2410.10813 (benchmark node)",
+  "LoCoMo benchmark node",
+  "MMLU-Redux-2406.04127 noise floor precedent",
+  "lesson-judge-catch-rate-canary-gate (신규 Lesson 후보)",
+  "lesson-gist-verbatim-dual-lens-metric (신규 Lesson 후보, fuzzy-trace theory 연결)",
+  "agent-feedback-loop-canonical-2026-04-27 (Verdict/측정 검증 루프 연결)",
+  "Anthropic-2411.00640 eval power analysis method node"
+ ]
+}

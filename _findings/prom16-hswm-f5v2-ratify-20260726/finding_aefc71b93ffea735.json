@@ -1,0 +1,38 @@
+{
+ "findingId": "finding_aefc71b93ffea735",
+ "domain": "limitations-alternatives",
+ "rootCause": "'2연속 kill=belt 중단'은 표준 순차검정 이론의 canonical rule이 아니라 휴리스틱이며, 가장 정확한 통계적 해석은 arm-level 검정들의 2-stage futility design(Simon 1989 류)이다. 이 해석에서 거짓 belt-중단 확률은 α²이 아니라 **β²**(살아있는 arm들이 모두 거짓 kill될 확률, 독립 가정)이며, 임상 문헌의 최적 futility 설계에서 HA 하 중단 확률 ξ는 0.03~0.13 수준으로 관리된다(Chang & Ivanova 2020). Futility 중단은 Type I error를 증가시키지 않고 오히려 감소시키므로(conservative 방향) 조기 중단 자체는 통계적으로 안전하나, (1) 실험 간 독립 가정(공유 judge/파이프라인이면 β² 논증 붕괴), (2) kill을 이진화해 slope CI라는 연속 증거를 버리는 비효율, (3) B·C 2개 연산자 kill을 'consolidation 계열 전체'로 일반화하는 것은 통계가 아니라 construct validity 도약이라는 세 약점이 있다.",
+ "recommendation": "amend(조건부 ratify). K1~K4 per-experiment gate(slope CI + judge catch-rate + 사전 파워 산정)는 이미 통계적으로 정당하므로 유지. 단 belt-halt meta-rule을 다음과 같이 정정: (a) 정당화 프레임을 'α² 직관'이 아니라 'β-budget 2-stage futility'로 명시 — 각 arm power ≥80%(β≤0.2) 시 독립 가정 하 거짓 belt-halt ≤ ~0.04, 공유 judge로 인한 양의 상관이 있으면 상한 상승을 caveat로 기록. (b) halt 발동 전 conditional-power/posterior check 1회 의무화: '남은 arm이 A를 이길 확률 < 0.15~0.20'(Lan-Simon-Halperin stochastic curtailment, Proschan 기준치)일 때만 halt — 2연속 kill이라도 잔여 arm의 사후 성공 확률이 높으면 belt 계속. (c) shelve 범위를 '검정된 연산자의 부모 클래스'로 한정 — 2개 kill을 계열 전체 영구 shelve의 근거로 쓰지 말 것. (d) 선택적으로 arm 간 증거 누적은 e-value 곱 결합(Safe Testing, Grünwald et al.)으로 — optional continuation 하 Type I 보존되어 실험 수 미고정인 연구 프로그램에 구조적으로 적합.",
+ "alternatives": [
+  "SPRT/mSPRT: 각 실험 결과를 'belt 유효 vs 무효' 가설의 조건부 log-LR로 누적, 경계 A=ln((1-β)/α), B=ln(β/(1-α)) — Wald-Wolfowitz 최적성(기대 실험 수 최소). Johari mSPRT는 always-valid p-value로 peeking을 합법화",
+  "Bayesian sequential: 사후확률 P(belt viable|data) < ε 또는 predictive probability 중단 — F5 sealed + 외부 3종 재현이라는 풍부한 사전정보를 명시적으로 활용 가능, 컴퓨트 비용을 손실함수에 넣는 의사결정이론 프레임과 자연스럽게 결합",
+  "alpha/beta-spending (Lan-DeMets 1983 + OBF/Pocock): 정보 비율별 오류 예산 지출 — look 시점이 유동적인 prereg에 적합. 단 efficacy 측은 alpha-spending, futility 측은 beta-spending이 대응물임을 구분할 것",
+  "IUT(intersection-union) 해석: B·C 각각 kill → 계열 무효 채택은 IUT 구조라 별도 다중성 보정 없이 size ≤ α로 conservative — 다만 계열 대표성(construct validity)은 별도 방어 필요"
+ ],
+ "references": [
+  "https://arxiv.org/abs/1512.04922",
+  "https://arxiv.org/abs/1810.08240",
+  "https://arxiv.org/abs/1906.07801",
+  "https://pmc.ncbi.nlm.nih.gov/articles/PMC7954786/",
+  "Lan & DeMets 1983, Discrete sequential boundaries for clinical trials, Biometrika 70(3):659-663, doi:10.2307/2336502 (인용 원문 확인: https://arxiv.org/html/2502.10380v1 reference list)",
+  "Pocock 1977 Biometrika 64:191-199 / O'Brien & Fleming 1979 Biometrics 35:549-556 / Lan, Simon & Halperin 1982 Seq Anal 1(3):207-219 (원문 인용 확인: PMC7954786 reference list)"
+ ],
+ "caveats": "배경의 arXiv ID 6종(2601.00821, 2605.12978, 2602.13967, 2606.10677, 2504.13171, 2605.20616)은 본 셀(중단 규칙 통계)과 무관해 미검증 — 다른 셀 소관. β² 거짓-halt 상한은 arm 간 독립 가정이며 HSWM은 공유 KG/judge/코드베이스로 양의 상관이 사실상 확실하므로 실제 거짓-halt 확률은 더 높음. Conditional power 0.15~0.20 기준치는 임상시험 관행(Proschan)으로 ML 벤치마크 실험에 대한 직접 근거는 아님. Wald-Wolfowitz 최적성 원전(1948)은 교과서 정리로 URL 미첨부. IUT 해석은 '계열 전체'가 아닌 '검정된 연산자들의 교집합 가설'에만 엄밀히 적용됨.",
+ "confidence": "HIGH",
+ "oneLineSummary": "'2연속 kill'은 α²이 아니라 β-budget futility 설계로 정당화되며, halt 전 conditional-power<0.2 확인과 shelve 범위 한정을 amend 권고",
+ "agentId": "prom-f5v2-13",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "hswm-f5v2-prereg-2026-07-26",
+  "hswm-belt-halt-2consecutive-kill-canon",
+  "hswm-f5-sealed-downscale-paradox-2026-07-25",
+  "kill-condition-K1-detail-slope",
+  "kill-condition-K4-judge-catch-rate",
+  "SequentialTest:SPRT-Wald",
+  "Method:LanDeMets-AlphaSpending-1983",
+  "Method:ConditionalPower-StochasticCurtailment-LanSimonHalperin-1982",
+  "Method:SafeTesting-EValue-Grunwald",
+  "Method:AlwaysValidInference-mSPRT-Johari",
+  "Method:ConfidenceSequence-Howard-Ramdas"
+ ]
+}

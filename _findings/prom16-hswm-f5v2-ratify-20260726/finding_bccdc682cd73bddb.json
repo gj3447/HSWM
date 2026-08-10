@@ -1,0 +1,37 @@
+{
+ "findingId": "finding_bccdc682cd73bddb",
+ "domain": "implementation-pitfalls",
+ "rootCause": "RT consolidation의 4대 함정은 모두 외부 문헌에서 확인됨: (1) 쿼리당 재조립 호출은 test-time compute를 매 쿼리에 추가 — sleep-time compute(2504.13171)가 증명한 바는 정확히 그 반대 방향(오프라인 사전계산 amortize 시 쿼리당 비용 2.5× 절감, 동일 정확도에 test-time ~5× 절감)이며, 효능이 쿼리 예측가능성과 상관한다는 것도 같은 논문 결론(F5v2 K3의 외부 근거). (2) 재조립 = 검색 결과에 대한 추상적 요약이므로 요약 hallucination을 계승 — 추상요약의 ~30%가 원문 불일치(Kryscinski 2019, Falsesum 2205.06009 인용), FaithBench(2410.13210)는 최신 모델도 도전적 케이스에서 SOTA 탐지기조차 ~50% 정확도임을 보임. (3) 출처 메타는 프롬프트 장식이 아니라 스키마 필드여야 함 — ALCE(2305.14627)는 인용 전용 설계 시스템조차 인용 정밀/재현이 불완전함을 정량화. (4) 재조립 품질은 모델 능력에 강하게 의존(FaithBench의 모델 간 격차, LLMLingua의 분포 정렬 필요성) — arm B 결과가 연산자 효과인지 재조립 모델 효과인지 교란될 위험.",
+ "recommendation": "AMEND 후 ratify. 연산 자체는 유효하나 prereg에 4개 방어 조항 추가: (a) 쿼리당 토큰 비용·지연을 2차 metric으로 강제 로깅하고 비용 상한을 사전 고정(품질 승리+경제성 패배 조합 차단; LLMLingua 20× 압축/1.5pt 손실을 비용 완화 레퍼런스로 명기). (b) 재조립 블록의 출처 스키마를 의무화(lesson ID + verbatim span offset, Infini-Memory의 entry-level metadata 패턴)하고 ALCE식 인용 검증을 submetric으로 추가 — 출처 메타 '첨부'가 아니라 '검증'. (c) 재조립 모델을 prereg 고정 인자로 기록 + 저가 모델 ablation 1개 추가해 연산자 효과와 모델 품질 효과 분리. (d) 재조립 블록의 원문 entailment 체크를 게이트로 추가하고, FaithBench의 탐지기 ~50% 정확도를 근거로 K4 judge catch-rate 90% 요구에 대한 파워 산정·인간 감사 서브샘플을 명시. K3(query-predictability ρ)는 sleep-time compute의 외부 재확인이 있으므로 유지.",
+ "alternatives": [
+  "재조립을 쿼리당 수행 대신 오프라인(sleep-time) 주제 블록 사전구축 + read 시 조립 없이 주입 — 비용 함정 회피, 단 그러면 arm B가 사실상 write-side consolidation과 동형화되어 F5 sealed 교훈과 충돌",
+  "재조립 모델 없이 구조적 재배열(정렬·그루핑·헤더 삽입)만 수행 — hallucination 유입 원천 차단, 단 '재조립 언어화' 이득 포기",
+  "비용 문제는 KV-cache/접두어 캐싱으로 흡수 가능하다는 관점 — 반복 쿼리 패턴에서 쿼리당 비용 폭증이 실측보다 과대평가될 수 있음"
+ ],
+ "references": [
+  "https://arxiv.org/abs/2504.13171",
+  "https://arxiv.org/abs/2606.10677",
+  "https://arxiv.org/abs/2307.03172",
+  "https://arxiv.org/abs/2305.14627",
+  "https://arxiv.org/abs/2410.13210",
+  "https://arxiv.org/abs/2310.05736"
+ ],
+ "caveats": "배경 인용 arXiv 2601.00821, 2605.12978, 2602.13967, 2605.20616은 본 셀에서 미검증(원문 대조 안 함). 2606.10677(Infini Memory, MemoryAgentBench 64.7%, entry-level metadata 보존)과 2504.13171(~5× test-time 절감, +13/18%, 쿼리당 2.5× 비용 절감, 예측가능성 상관)은 abs 페이지 원문 확인 완료. '~30% 요약 불일치'는 Kryscinski et al. 2019의 2차 인용(Falsesum 서론 경유)으로 원문 직접 대조는 안 함. FaithBench '~50% 탐지 정확도'는 도전적(disagreement) 서브셋 기준이라 일반 재조립 트래픽의 탐지율을 과소추정할 수 있음. RT 비용 폭증의 실측 규모(배율)는 인용 문헌에 직접 수치 없음 — 추론적 일반화.",
+ "confidence": "MEDIUM",
+ "oneLineSummary": "RT 재조립의 비용·hallucination·출처·모델의존 4함정 모두 문헌 실재 — prereg에 비로깅·출처검증·모델고정·entailment 게이트 추가 후 ratify",
+ "agentId": "prom-f5v2-10",
+ "researchedAt": "2026-07-26",
+ "sourceKgBindings": [
+  "hswm-f5-downscale-paradox-2026-07-25",
+  "hswm-f5v2-prereg-retrieval-time-consolidation",
+  "hswm-f5v2-kill-conditions-k1-k4",
+  "arxiv-2504.13171-sleep-time-compute",
+  "arxiv-2606.10677-infini-memory",
+  "arxiv-2410.13210-faithbench",
+  "arxiv-2305.14627-alce",
+  "arxiv-2307.03172-lost-in-the-middle",
+  "arxiv-2310.05736-llmlingua",
+  "rt-consolidation-implementation-pitfalls-2026-07-26",
+  "retrieval-reorganization-naming-rule"
+ ]
+}

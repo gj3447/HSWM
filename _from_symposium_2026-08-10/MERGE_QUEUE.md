@@ -37,3 +37,35 @@ SYMPOSIUM 은 아래 3개를 추적하고 있었다. 정책을 몰래 우회하�
 
 원래 경로는 `prom_search_hswm/data/` 였다. `.gitignore` 의 `data/` 규칙이 **모든 depth 의**
 `data` 디렉터리를 잡아서 대기열 안에서도 무시되므로 디렉터리명을 바꿔 보관한다.
+
+---
+
+## 미비준 Longinus 드리프트 — `INDEX.md` (2026-08-10 발견)
+
+`LONGINUS_HSWM_HUMAN_COMPLEMENTATION_BINDING_2026-07-29.json` 이 묶는 5개 아티팩트 중
+`INDEX.md` **하나만** 바인딩과 어긋난다. 나머지 4개(charter / benchmark / 검증기 / 테스트)는
+sha 일치.
+
+| | sha (앞 16) | 줄 |
+|---|---|---|
+| manifest 가 요구 | `d62a4e32b89952dd` | 119 |
+| 이 저장소 현재 `INDEX.md` | `1cbc700c87cd6fe2` | 221 |
+| SYMPOSIUM 판본 (위 대기열) | `05ee8af26c680e90` | 126 |
+
+**이 저장소의 어느 히스토리 리비전도 요구 sha 와 일치하지 않는다.** 즉 2026-07-29 직후부터
+양쪽 다 어긋난 채 아무도 재비준하지 않았다. 2026-08-10 의 SYMPOSIUM→HSWM 이관이 만든 문제가
+아니라, 이관이 **드러낸** 기존 상태다 (이관 전 검증기는 `bound file missing` 으로 죽어서
+이 불일치까지 도달하지도 못했다).
+
+`verification/verify_hswm_human_complementation_v0.py` 는 현재
+`{"error": "SHA mismatch: INDEX.md", "status": "FAIL"}` 로 실패하며,
+`tests/test_verify_hswm_human_complementation_v0.py` 도 같이 red 다.
+(참고: 이 저장소는 이관 전에도 이미 red 였다 — `2c2b93f` 기준 `test_f3v2_arms.py` /
+`test_f3v2_sealed.py` 4건 실패, 1682 passed. 이관은 그 수치를 바꾸지 않았다.)
+
+**해소 방법은 둘 중 하나이며 둘 다 내용 판단이다. 자동으로 재해시하지 않았다.**
+
+1. 바인딩이 가리키던 119줄 `INDEX.md` 를 복원한다.
+2. 현재 `INDEX.md` 를 검토한 뒤 manifest 의 sha/lineCount 를 **의도적으로** 갱신한다.
+
+검토 없이 (2) 를 하는 것은 미검토 드리프트를 비준하는 것이므로 이 이관에서는 하지 않았다.

@@ -1,7 +1,8 @@
 """F3v2 arms harness (slice 2) — prereg §3 arms over the procedural testbed.
 
 PREREG (draft, sha-pinned in every receipt):
-  /Users/lagyeongjun/CD/SYMPOSIUM/HSWM/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md §3-§5.
+  PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md §3-§5, resolved relative
+  to this module so the harness is portable across execution tiers.
 
 Slice 1 (f3v2_procedural_worlds.py) built the foundry-world testbed and the
 canary gate adopted it (receipt f3v2_canary_gate_dev_1785040277.json: receiver
@@ -148,8 +149,7 @@ sys.path.insert(0, str(HERE))
 
 fw = importlib.import_module("f3v2_procedural_worlds")
 
-PREREG_PATH = Path(
-    "/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md")
+PREREG_PATH = HERE / "PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md"
 
 TOP_K = 3                  # prereg §3: MemCollab non-monotonic top-k
 BOOT_REPS = 10000          # prereg §5 K2: paired bootstrap replicates

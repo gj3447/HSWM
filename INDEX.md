@@ -59,6 +59,15 @@ weight/topology rewrite를 소유한다. 이는 목표 정체성이며 현재 �
 함수 계약, 실행 cycle, 코드 대응, 구현 가능성, 실패 모드와 결정적 실험은
 [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md)에 고정했다.
 
+2026-08-14 사용자 정전은 이 방향을 `LX3 라그나로크`와 직접 연결한다. 정적인 시멘틱
+하네스 규칙의 증식이 아니라 AI 토큰·행동·도구 사용·외부 결과가 HSWM의 지속적인
+weight/routing/topology 변화로 압축되어야 하며, HSWM 자체가 LLM 함수로 움직이는 거대한
+멀티에이전트 신경망이라는 선언이다. 원문과 권위 경계는
+[`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md),
+토큰 저장을 학습으로 오인하지 않게 하는 fail-closed 인과 계약은
+[`hswm_token_learning_contract.py`](hswm_token_learning_contract.py)에 있다. 이는 목표 정체성과
+engineering contract이며 현재 효능·과학적 유일성 주장이 아니다.
+
 세계의 재귀 기억·자기모델이라는 목적과 MCP/Skill 외부 인지배선을 가소적 신경망으로
 전환한다는 공학 방향은 상위 통합 정전
 [`THE_WORLD_REMEMBERS.md`](THE_WORLD_REMEMBERS.md)에 묶었다. 문서 안에서
@@ -171,6 +180,7 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 | [`prom_search_hswm/fsm/hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json) | weight→routing→topology 후보의 bounded proposal/evaluation/activation 계약 |
 | [`hswm_next_research_harness.py`](hswm_next_research_harness.py) / [`HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md`](HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md) | P1v4·B2.1·B2.2 영수증을 검증하고 실 Gate-0 없이는 P1v5를 열지 않는 다음 관문 하네스와 피드백 |
 | [`PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md`](PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) / [`prom9_semantic_neural_network.v1.json`](prom_search_hswm/prom9_semantic_neural_network.v1.json) / [`prom9_protocol.py`](prom_search_hswm/prom9_protocol.py) | LLM 3-role typed 함수망→외부 outcome→eligibility→fast bond→slow weight 승격을 동등예산 대조군과 함께 고정한 PROM-9 |
+| [`hswm_token_learning_contract.py`](hswm_token_learning_contract.py) / [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) | 결과 전 token/action trajectory seal을 기존 eligibility→outcome→candidate→CAS에 결속하고 causal removal 전에는 학습 규칙 주장을 막는 계약과 사용자 정전 |
 | [`prom_search_hswm/evidence/`](prom_search_hswm/evidence/) | preregistration, evidence, neutral judge packet, injected negative |
 | [`_research/competitor_absorption/`](_research/competitor_absorption/) | 외부 paper–code source lock, license gate, default-off absorption manifest |
 | [`_research/shared_field_hypothesis/`](_research/shared_field_hypothesis/) | shared field 대 separate heads의 fail-closed 동등예산 실험 계약 |

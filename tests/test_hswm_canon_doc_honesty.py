@@ -10,6 +10,8 @@ CANON = ROOT / "THE_WORLD_REMEMBERS.md"
 WORLD_SOURCE = ROOT / "USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt"
 WIRING_SOURCE = ROOT / "USER_INSPIRATION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.txt"
 WIRING_FORMALIZATION = ROOT / "DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md"
+TOKEN_RAGNAROK_CANON = ROOT / "USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md"
+TOKEN_RAGNAROK_SOURCE = ROOT / "USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.txt"
 
 
 def _sha256(path: Path) -> str:
@@ -74,3 +76,30 @@ def test_canon_pins_exact_user_sources_and_secondary_formalization() -> None:
         assert path.is_file()
         assert _sha256(path) == digest
         assert digest in canon_text
+
+
+def test_token_learning_ragnarok_canon_preserves_authority_and_evidence_boundary() -> None:
+    source_digest = "b3a6592f94564bbb308cf01a259a0b368dadf8667e49dffab6f075bc2d1d79a0"
+    assert TOKEN_RAGNAROK_CANON.is_file()
+    assert TOKEN_RAGNAROK_SOURCE.is_file()
+    assert _sha256(TOKEN_RAGNAROK_SOURCE) == source_digest
+
+    text = TOKEN_RAGNAROK_CANON.read_text(encoding="utf-8")
+    for required in (
+        "CANONICAL_USER_DIRECTION",
+        "USER_PRIMARY 정전",
+        "SECONDARY_AI_FORMALIZATION",
+        "검색 후 선택 기록",
+        "OBSERVED_ONLY",
+        "CAUSALLY_VALIDATED",
+        "현재 구현 완료·효능·과학적 유일성의 판정은 아님",
+        "prompt rule 편집",
+        "고정 문맥 counterfactual replay",
+        source_digest,
+        "sym:AbstractNode:user-canon-hswm-token-learning-ragnarok-2026-08-14",
+    ):
+        assert required in text
+
+    index = (ROOT / "INDEX.md").read_text(encoding="utf-8")
+    assert TOKEN_RAGNAROK_CANON.name in index
+    assert "hswm_token_learning_contract.py" in index

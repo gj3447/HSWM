@@ -14,7 +14,7 @@
 | 2026-08-15 | bhgman에서 전용 adapter·gate·seed·judge 계층을 제거했다. canonical branch와 Mac의 진행 중인 16개 수정 파일을 분리해 각각 반영했고 생성 캐시도 격리했다. 전체 회귀는 **2189 passed, 32 skipped**, 기존 AMIE Java 환경 실패 1건은 동일하다. | canonical `1363385` · Mac `925a9bc` |
 | 2026-08-15 | Mac의 오래된 HSWM checkout을 현재 `main`으로 fast-forward하고, 전역 Claude/Codex skill·MCP 설정·플러그인 캐시·세션 메모에서 폐기 계보를 격리했다. 갱신 플러그인은 46개 skill을 포팅하며 **75 passed** 및 공식 구조 검증을 통과했다. | HSWM `25e7661` · plugin `0.1.0+codex.20260815082829` · 활성 경로 문자열 재검사 0 |
 | 2026-08-15 | 현재 호스트의 Orca runtime-home에 숨어 있던 폐기 MCP block과 skew pair를 제거하고 관련 telemetry/cache/backups를 휴지통에 격리했다. 실시간 status telemetry는 현재 대화 텍스트이므로 실행 설정과 분리했다. | 활성 Orca config 재검사 0 |
-| 2026-08-15 | Dell canonical checkout과 전용 이름의 별도 worktree는 정리했다. 다만 별개의 Claude 작업 worktree 18개에는 서로 다른 미완료 변경이 있어 역사 복사본을 강제로 덮어쓰지 않았다. 해당 경로를 cwd로 쓰는 프로세스는 0이다. | dirty worktree 보존 경계 · 프로세스 cwd 전수 검사 |
+| 2026-08-15 | Dell canonical checkout과 전용 이름의 별도 worktree는 정리했다. 다만 별개의 Claude 작업 worktree 19개에는 서로 다른 미완료 변경이 있어 역사 복사본을 강제로 덮어쓰지 않았다. 해당 경로를 cwd로 쓰는 프로세스는 0이다. | dirty worktree 보존 경계 · 프로세스 cwd 전수 검사 |
 | 2026-08-15 | 현재 머신의 root 소유 55170 relay만 sudo 권한 부재로 unit 제거가 막혀 있다. upstream은 제거되어 기능하지 않지만 unit과 로컬 listener 자체는 남아 있다. | `systemctl show`와 `ss` 직접 검사 |
 | 2026-08-15 | Sheaf의 local-to-global 수학, cellular/Hodge 연산자와 HSWM 후보 대응을 분리해 정리했다. 효능 주장은 하지 않는다. | [`research note`](HSWM_SHEAF_RESEARCH_ONTOLOGY_2026-08-15.md) · [`ontology`](research/HSWM_SHEAF_ONTOLOGY.v1.json) |
 | 2026-08-04 | selective utility 개발 측정에서 typed arm이 네 대조군보다 높았지만 탐색 결과이며 sealed 과학 판정이 아니다. | [`EFFICACY.md`](EFFICACY.md) |

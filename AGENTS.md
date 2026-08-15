@@ -36,8 +36,10 @@
   감사에만 선택적으로 사용한다. 일반 구현·로컬 회귀·탐색 실험의 선행 관문으로 요구하지
   않는다. **OMD는 RETIRED다.** 등록·호출·DB/lease/heartbeat/health·조건부 재활성화를 금지하며
   과거 코드·DB·보고서만 역사 자료로 읽는다.
-- MCP는 Google MCP Toolbox의 고정 `ontology_*` 조회면만 사용한다. raw Cypher와 canonical
-  write는 금지하며, HSWM 인지·토큰 학습·매 단계 routing의 필수 경로로 만들지 않는다.
+- MCP의 HSWM 기본 경로는 Google MCP Toolbox의 고정 `ontology_*` 조회면만 사용한다.
+  교차 저장소의 `ontology_propose_ragnarok_fusion_split`은 고정된 `PENDING` 제안만 만드는
+  유일한 예외이며 HSWM이나 정본을 변경하지 않는다. raw Cypher와 canonical write는
+  금지하며, HSWM 인지·토큰 학습·매 단계 routing의 필수 경로로 만들지 않는다.
 - 명시적 사유가 없으면 한 작업에 선택 거버넌스 층을 둘 이상 중첩하지 않는다. 과거 장부와
   영수증은 보존하지만 기본 실행 정책은
   `research/HSWM_MINIMAL_GOVERNANCE.v1.json`을 따른다.

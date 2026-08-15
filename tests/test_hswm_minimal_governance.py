@@ -56,6 +56,7 @@ def test_complex_governance_is_optional_and_causal_evidence_is_one_receipt():
         "ontology_drift_report",
     ]
     assert {"raw Cypher", "canonical write", "ratification"} <= set(mcp["forbidden"])
+    assert "PENDING-only" in mcp["cross_repo_pending_exception"]
     assert data["causal_learning_receipt"]["count"] == 1
     assert data["causal_learning_receipt"]["field"] == "causal_test_receipt_sha256"
     assert set(data["causal_learning_receipt"]["must_attest"]) == {

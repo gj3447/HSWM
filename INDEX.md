@@ -76,6 +76,18 @@ engineering contract이며 현재 효능·과학적 유일성 주장이 아니�
 원문·실측 MCP 상태·보존 경계는
 [`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md)에 있다.
 
+## 2026-08-15 — Sheaf 연구 온톨로지
+
+Sheaf의 local-to-global 구조를 HSWM에 곧바로 정답으로 선언하지 않고, 수학 정본과 HSWM
+후보 대응을 분리한 연구 묶음을 추가했다. [`연구 노트`](HSWM_SHEAF_RESEARCH_ONTOLOGY_2026-08-15.md)는
+stalk·restriction·global section·cohomology·Laplacian·diffusion부터 knowledge sheaf와
+sheaf hypergraph network까지 설명한다. 기계 판독 정본은
+[`research/HSWM_SHEAF_ONTOLOGY.v1.json`](research/HSWM_SHEAF_ONTOLOGY.v1.json)이며 개념 28개,
+1차 출처 12개, 비정본 HSWM 매핑 8개, 개념 관계 32개를 담는다. Neo4j 재반영은
+[`scripts/upsert_sheaf_ontology.py`](scripts/upsert_sheaf_ontology.py)로 수행한다. `global section =
+진실/강제 합의`, `모든 hyperedge = simplex`, `sheaf 도입 = HSWM 효능 향상`은 모두 명시적
+비주장이다.
+
 세계의 재귀 기억·자기모델이라는 목적과 MCP/Skill 외부 인지배선을 가소적 신경망으로
 전환한다는 공학 방향은 상위 통합 정전
 [`THE_WORLD_REMEMBERS.md`](THE_WORLD_REMEMBERS.md)에 묶었다. 문서 안에서

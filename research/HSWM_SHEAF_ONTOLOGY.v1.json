@@ -1,0 +1,462 @@
+{
+  "schema_version": "hswm-sheaf-ontology/v1",
+  "status": "SECONDARY_AI_RESEARCH_MAP",
+  "created_at": "2026-08-15",
+  "bundle_uid": "sym:AbstractNode:hswm-sheaf-research-ontology-2026-08-15",
+  "module_uid": "sym:ArtificialIntelligence:hswm_sheaf_research_module",
+  "authority_boundary": "Source-backed mathematical definitions are separated from proposed HSWM analogies. No HSWM efficacy claim is made.",
+  "kg_schema_binding": {
+    "bundle_labels": ["AbstractNode", "ResearchArtifact"],
+    "concept_labels": ["Concept", "KG_AI", "ArtificialIntelligence", "TopologyConcept"],
+    "module_extra_label": "OntologyModule",
+    "source_labels": ["AbstractNode", "SourceDocument", "AcademicPaper"],
+    "mapping_labels": ["AbstractNode", "AnalogyMapping"],
+    "bundle_relations": {
+      "concept": "HAS_CONCEPT",
+      "module": "HAS_MODULE",
+      "source": "HAS_SOURCE",
+      "mapping": "HAS_ANALOGY"
+    },
+    "mapping_target_relation": "MAPS_TO",
+    "source_support_relation": "SUPPORTS",
+    "mapping_source_relation": "SUPPORTED_BY",
+    "relationship_type_aliases": {
+      "HAS_LOCAL_DATA": "HAS",
+      "TRANSPORTS_BETWEEN": "CONNECTS",
+      "ASSIGNS": "MAPS_TO",
+      "IS_SECTION_OVER_ALL": "SPECIALIZES",
+      "COMPUTABLE_PRESENTATION_OF": "SPECIAL_CASE_OF",
+      "INDEXED_BY": "DEFINED_ON",
+      "DUAL_DIRECTION_TO": "DUAL_OF",
+      "LIES_IN_KERNEL_OF": "DEFINED_BY"
+    },
+    "note": "Semantic relation names remain in concept_relations; kg_type is obtained through relationship_type_aliases only when the frozen KG registry lacks the semantic token."
+  },
+  "concepts": [
+    {
+      "uid": "sym:ArtificialIntelligence:hswm_sheaf_research_module",
+      "name": "HSWM Sheaf Research Module",
+      "kind": "ONTOLOGY_MODULE",
+      "definition": "HSWM 연구를 위해 일반 sheaf, cellular sheaf, spectral operators, neural sheaf, hypergraph/KG applications, HSWM candidate mappings를 분리한 모듈."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:sheaf",
+      "name": "Sheaf",
+      "kind": "MATHEMATICAL_CONCEPT",
+      "definition": "각 국소 영역에 데이터를 배정하고 포함 관계에 restriction map을 주며, 겹침에서 호환되는 국소 section이 유일한 전역 section으로 glue되도록 하는 local-to-global 구조."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:presheaf",
+      "name": "Presheaf",
+      "kind": "MATHEMATICAL_CONCEPT",
+      "definition": "국소 데이터와 restriction map의 합성 규칙은 가지지만 compatible local data의 존재·유일한 gluing을 아직 요구하지 않는 구조."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:sheaf_gluing_axiom",
+      "name": "Sheaf Gluing Axiom",
+      "kind": "MATHEMATICAL_CONCEPT",
+      "definition": "cover 위의 local sections가 모든 overlap에서 일치하면 그것들을 restriction으로 갖는 유일한 section이 합집합 위에 존재한다는 locality와 gluing 조건."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:stalk",
+      "name": "Sheaf Stalk",
+      "kind": "MATHEMATICAL_CONCEPT",
+      "definition": "한 점 또는 cellular presentation의 한 cell에 부착된 가능한 local data의 공간. Vector-space cellular sheaf에서는 각 vertex, edge, hyperedge마다 차원이 달라도 된다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:restriction_map",
+      "name": "Restriction Map",
+      "kind": "MATHEMATICAL_CONCEPT",
+      "definition": "서로 다른 local data spaces를 incidence 또는 영역 포함에 따라 비교 가능한 공간으로 운반하는 map. Ordinary sheaf는 큰 open set에서 작은 open set으로 제한하고, cellular face-poset convention은 face stalk에서 coface stalk로 map을 표기한다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:local_section",
+      "name": "Local Section",
+      "kind": "MATHEMATICAL_CONCEPT",
+      "definition": "base space의 일부 영역에 걸쳐 선택된 local data assignment."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:global_section",
+      "name": "Global Section",
+      "kind": "MATHEMATICAL_CONCEPT",
+      "definition": "모든 local assignment가 각 incidence의 restriction compatibility를 동시에 만족하는 전역 assignment. 존재하지 않을 수도 있고 여러 개일 수도 있다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:cellular_sheaf",
+      "name": "Cellular Sheaf",
+      "kind": "MATHEMATICAL_CONCEPT",
+      "definition": "regular cell complex의 face poset에서 vector spaces와 incidence maps로 계산 가능하게 표현한 sheaf. Face-poset functor F:P_X→Vect로 압축된다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:cellular_cosheaf",
+      "name": "Cellular Cosheaf",
+      "kind": "MATHEMATICAL_CONCEPT",
+      "definition": "cellular sheaf와 같은 stalk data를 가지되 face-poset 방향을 뒤집은 F:P_X^op→Vect 구조. Local pieces를 colimit 방식으로 합치는 outward aggregation에 자연스럽다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:face_poset",
+      "name": "Face Incidence Poset",
+      "kind": "MATHEMATICAL_CONCEPT",
+      "definition": "cell σ가 cell τ의 face일 때 σ≤τ로 두는 부분순서. Cellular sheaf의 base category가 된다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:sheaf_cochain",
+      "name": "Sheaf Cochain",
+      "kind": "MATHEMATICAL_CONCEPT",
+      "definition": "같은 차수의 모든 cell stalk에서 하나씩 값을 고른 assignment. C^k(X;F)는 k-cell stalk들의 direct sum이다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:sheaf_coboundary",
+      "name": "Sheaf Coboundary Operator",
+      "kind": "MATHEMATICAL_OPERATOR",
+      "definition": "Incidence orientation과 restriction maps를 결합해 k-cochain의 local incompatibility를 (k+1)-cochain으로 보내는 operator δ^k. δ^(k+1)δ^k=0을 만족한다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:sheaf_cohomology",
+      "name": "Sheaf Cohomology",
+      "kind": "MATHEMATICAL_CONCEPT",
+      "definition": "H^k(X;F)=ker δ^k / im δ^(k-1). H^0는 global sections이고 higher degree는 local data를 전역화할 때 남는 구조적 obstruction 또는 자유도를 나타낸다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:sheaf_laplacian",
+      "name": "Sheaf Laplacian",
+      "kind": "MATHEMATICAL_OPERATOR",
+      "definition": "Sheaf coboundary로 만든 Hodge Laplacian L_F^k=(δ^k)*δ^k+δ^(k-1)(δ^(k-1))*. Graph의 degree zero에서는 L_F=δ*δ이며 ordinary graph Laplacian을 일반화한다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:sheaf_consistency_energy",
+      "name": "Sheaf Consistency Energy",
+      "kind": "DIAGNOSTIC_METRIC",
+      "definition": "E_F(x)=||δx||²=<x,L_Fx>. Incidence seams에서 transported local states가 얼마나 불일치하는지 측정하지만, semantic truth나 합의의 바람직함을 자동 판정하지 않는다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:harmonic_section",
+      "name": "Harmonic Section",
+      "kind": "MATHEMATICAL_CONCEPT",
+      "definition": "Sheaf Laplacian의 kernel에 있는 cochain. Degree zero에서 ker L_F=ker δ=global section space이다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:cohomological_obstruction",
+      "name": "Cohomological Obstruction",
+      "kind": "DIAGNOSTIC_CONCEPT",
+      "definition": "각 local assignment가 개별적으로 타당해도 하나의 global section으로 glue되지 못하게 하는 구조적 incompatibility를 cohomology class로 표현한 것."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:sheaf_diffusion",
+      "name": "Sheaf Diffusion",
+      "kind": "MATHEMATICAL_DYNAMICS",
+      "definition": "Sheaf Laplacian을 이용해 local signals를 restriction-aware하게 확산하는 dynamics. Trivial sheaf diffusion은 ordinary graph diffusion의 특수 경우다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:sheaf_neural_network",
+      "name": "Sheaf Neural Network",
+      "kind": "LEARNING_METHOD",
+      "definition": "Sheaf Laplacian 기반 diffusion/convolution을 neural layer로 사용해 non-constant, asymmetric, signed, dimension-varying relations를 처리하는 graph learning architecture."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:neural_sheaf_diffusion",
+      "name": "Neural Sheaf Diffusion",
+      "kind": "LEARNING_METHOD",
+      "definition": "Restriction maps와 parametric diffusion을 data에서 학습하는 sheaf neural model. NeurIPS 2022 연구는 heterophily와 oversmoothing에 대한 표현력·실험적 이점을 보고한다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:learned_restriction_map",
+      "name": "Learned Restriction Map",
+      "kind": "LEARNED_PARAMETER",
+      "definition": "Domain rule로 고정하지 않고 local endpoint/hyperedge features에서 예측되는 transport map. Full matrices는 expressive하지만 overfit·계산비·최적화 난도가 증가한다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:heterophily",
+      "name": "Graph Heterophily",
+      "kind": "LEARNING_PROBLEM",
+      "definition": "연결된 노드들이 서로 비슷하다는 homophily 가정이 깨지고 이질적이거나 반대되는 states가 관계를 이루는 현상."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:oversmoothing",
+      "name": "Graph Oversmoothing",
+      "kind": "LEARNING_FAILURE_MODE",
+      "definition": "반복 diffusion/message passing 뒤 node representations가 서로 지나치게 유사해져 구별 능력을 잃는 현상."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:knowledge_sheaf",
+      "name": "Knowledge Sheaf",
+      "kind": "LEARNING_METHOD",
+      "definition": "KG entity embeddings를 approximate global section, relation schema를 restriction compatibility로 표현하는 cellular-sheaf framework. Zero embedding 같은 trivial minimum을 별도 objective/control로 막아야 한다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:approximate_global_section",
+      "name": "Approximate Global Section",
+      "kind": "LEARNING_CONCEPT",
+      "definition": "Exact restriction compatibility 대신 낮지만 0이 아닐 수 있는 sheaf consistency energy를 갖는 assignment. Noisy data와 learned embeddings에 사용된다."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:sheaf_hypergraph_network",
+      "name": "Sheaf Hypergraph Network",
+      "kind": "LEARNING_METHOD",
+      "definition": "각 node와 hyperedge에 stalk를, 각 incidence v∈e에 restriction F(v)→F(e)를 두어 higher-order connectivity를 보존하는 neural hypergraph model."
+    },
+    {
+      "uid": "sym:ArtificialIntelligence:discourse_sheaf",
+      "name": "Discourse Sheaf",
+      "kind": "NETWORK_MODEL",
+      "definition": "Agent의 internal opinion과 edge별 표현·선택·왜곡을 서로 다른 stalk/restriction으로 모델링하는 sheaf. 단순 평균 consensus와 달리 communication transform을 표현한다."
+    }
+  ],
+  "sources": [
+    {
+      "uid": "sym:ResearchSource:sheaves-cosheaves-applications-2013",
+      "title": "Sheaves, Cosheaves and Applications",
+      "authors": ["Justin Curry"],
+      "year": 2013,
+      "url": "https://arxiv.org/abs/1303.3255",
+      "arxiv_id": "1303.3255",
+      "publication_status": "PHD_THESIS_PRIMARY",
+      "supports": ["cellular sheaf", "cellular cosheaf", "local-to-global", "network coding", "sensor networks"]
+    },
+    {
+      "uid": "sym:ResearchSource:spectral-theory-cellular-sheaves-2019",
+      "title": "Toward a Spectral Theory of Cellular Sheaves",
+      "authors": ["Jakob Hansen", "Robert Ghrist"],
+      "year": 2019,
+      "url": "https://doi.org/10.1007/s41468-019-00038-7",
+      "arxiv_id": "1808.01513",
+      "publication_status": "PEER_REVIEWED_PRIMARY",
+      "supports": ["cellular sheaf definition", "global section", "sheaf Laplacian", "spectral theory", "cosheaf"]
+    },
+    {
+      "uid": "sym:ResearchSource:sheaf-neural-networks-2020",
+      "title": "Sheaf Neural Networks",
+      "authors": ["Jakob Hansen", "Thomas Gebhart"],
+      "year": 2020,
+      "url": "https://arxiv.org/abs/2012.06333",
+      "arxiv_id": "2012.06333",
+      "publication_status": "PEER_REVIEWED_WORKSHOP_PRIMARY",
+      "supports": ["sheaf neural network", "asymmetric relations", "signed relations", "dimension-varying relations"]
+    },
+    {
+      "uid": "sym:ResearchSource:opinion-dynamics-discourse-sheaves-2021",
+      "title": "Opinion Dynamics on Discourse Sheaves",
+      "authors": ["Jakob Hansen", "Robert Ghrist"],
+      "year": 2021,
+      "url": "https://doi.org/10.1137/20M1341088",
+      "arxiv_id": "2005.12798",
+      "publication_status": "PEER_REVIEWED_PRIMARY",
+      "supports": ["discourse sheaf", "communication transforms", "opinion diffusion", "harmonic extension"]
+    },
+    {
+      "uid": "sym:ResearchSource:knowledge-sheaves-2021",
+      "title": "Knowledge Sheaves: A Sheaf-Theoretic Framework for Knowledge Graph Embedding",
+      "authors": ["Thomas Gebhart", "Jakob Hansen", "Paul Schrater"],
+      "year": 2021,
+      "url": "https://arxiv.org/abs/2110.03789",
+      "arxiv_id": "2110.03789",
+      "publication_status": "PREPRINT_PRIMARY",
+      "supports": ["knowledge sheaf", "approximate global section", "KG embedding", "composite relation reasoning", "trivial-minimum caveat"]
+    },
+    {
+      "uid": "sym:ResearchSource:neural-sheaf-diffusion-2022",
+      "title": "Neural Sheaf Diffusion: A Topological Perspective on Heterophily and Oversmoothing in GNNs",
+      "authors": ["Cristian Bodnar", "Francesco Di Giovanni", "Benjamin Chamberlain", "Pietro Lio", "Michael Bronstein"],
+      "year": 2022,
+      "url": "https://proceedings.neurips.cc/paper_files/paper/2022/hash/75c45fca2aa416ada062b26cc4fb7641-Abstract-Conference.html",
+      "arxiv_id": "2202.04579",
+      "publication_status": "PEER_REVIEWED_PRIMARY",
+      "supports": ["neural sheaf diffusion", "learned sheaf", "heterophily", "oversmoothing", "harmonic space"]
+    },
+    {
+      "uid": "sym:ResearchSource:sheaf-connection-laplacians-2022",
+      "title": "Sheaf Neural Networks with Connection Laplacians",
+      "authors": ["Federico Barbero", "Cristian Bodnar", "Haitz Saez de Ocariz Borde", "Michael Bronstein", "Petar Velickovic", "Pietro Lio"],
+      "year": 2022,
+      "url": "https://arxiv.org/abs/2206.08702",
+      "arxiv_id": "2206.08702",
+      "publication_status": "PEER_REVIEWED_WORKSHOP_PRIMARY",
+      "supports": ["connection Laplacian", "manual-vs-learned sheaf tradeoff", "overfit risk", "computational overhead"]
+    },
+    {
+      "uid": "sym:ResearchSource:topological-deep-learning-2022",
+      "title": "Topological Deep Learning: Going Beyond Graph Data",
+      "authors": ["Mustafa Hajij", "Ghada Zamzmi", "Theodore Papamarkou", "Nina Miolane", "et al."],
+      "year": 2022,
+      "url": "https://arxiv.org/abs/2206.00606",
+      "arxiv_id": "2206.00606",
+      "publication_status": "PREPRINT_PRIMARY",
+      "supports": ["combinatorial complex", "higher-order message passing", "hypergraph and cell-complex unification"]
+    },
+    {
+      "uid": "sym:ResearchSource:sheaf-hypergraph-networks-2023",
+      "title": "Sheaf Hypergraph Networks",
+      "authors": ["Iulia Duta", "Giulia Cassara", "Fabrizio Silvestri", "Pietro Lio"],
+      "year": 2023,
+      "url": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/27f243af2887d7f248f518d9b967a882-Abstract-Conference.html",
+      "arxiv_id": "2309.17116",
+      "publication_status": "PEER_REVIEWED_PRIMARY",
+      "supports": ["hypergraph sheaf", "node-to-hyperedge restriction", "linear and nonlinear Laplacian", "optimization caveat"]
+    },
+    {
+      "uid": "sym:ResearchSource:joint-diffusion-sheaf-neural-networks-2024",
+      "title": "Joint Diffusion Processes as an Inductive Bias in Sheaf Neural Networks",
+      "authors": ["Ferran Hernandez Caralt", "Guillermo Bernardez Gil", "Iulia Duta", "Pietro Lio", "Eduard Alarcon Cot"],
+      "year": 2024,
+      "url": "https://proceedings.mlr.press/v251/hernandez-caralt24a.html",
+      "publication_status": "PEER_REVIEWED_WORKSHOP_PRIMARY",
+      "supports": ["joint diffusion", "parameter reduction", "benchmark limitations"]
+    },
+    {
+      "uid": "sym:ResearchSource:game-sheaf-multi-agent-2026",
+      "title": "A Sheaf Framework for Strategic Multi-Agent Systems: From Consensus to Nash Equilibria",
+      "authors": ["Manuel Hernandez", "Eduardo Sanchez-Soto"],
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2606.01663",
+      "arxiv_id": "2606.01663",
+      "publication_status": "RECENT_PREPRINT_EXPLORATORY",
+      "supports": ["game sheaf", "multi-agent policy stalk", "strategic consistency"]
+    },
+    {
+      "uid": "sym:ResearchSource:sheaf-semantics-knowledge-digraphs-2026",
+      "title": "From Line Knowledge Digraphs to Sheaf Semantics: A Categorical Framework for Knowledge Graphs",
+      "authors": ["Moses Boudourides"],
+      "year": 2026,
+      "url": "https://arxiv.org/abs/2603.05685",
+      "arxiv_id": "2603.05685",
+      "publication_status": "RECENT_PREPRINT_EXPLORATORY",
+      "supports": ["Grothendieck topology on KG paths", "context-dependent semantics", "local-to-global KG reasoning"]
+    }
+  ],
+  "concept_relations": [
+    {"from_uid": "sym:ArtificialIntelligence:sheaf", "type": "SPECIALIZES", "to_uid": "sym:ArtificialIntelligence:presheaf"},
+    {"from_uid": "sym:ArtificialIntelligence:sheaf", "type": "SATISFIES", "to_uid": "sym:ArtificialIntelligence:sheaf_gluing_axiom"},
+    {"from_uid": "sym:ArtificialIntelligence:sheaf", "type": "HAS_LOCAL_DATA", "to_uid": "sym:ArtificialIntelligence:stalk"},
+    {"from_uid": "sym:ArtificialIntelligence:restriction_map", "type": "TRANSPORTS_BETWEEN", "to_uid": "sym:ArtificialIntelligence:stalk"},
+    {"from_uid": "sym:ArtificialIntelligence:local_section", "type": "ASSIGNS", "to_uid": "sym:ArtificialIntelligence:stalk"},
+    {"from_uid": "sym:ArtificialIntelligence:global_section", "type": "IS_SECTION_OVER_ALL", "to_uid": "sym:ArtificialIntelligence:local_section"},
+    {"from_uid": "sym:ArtificialIntelligence:global_section", "type": "SATISFIES", "to_uid": "sym:ArtificialIntelligence:restriction_map"},
+    {"from_uid": "sym:ArtificialIntelligence:cellular_sheaf", "type": "COMPUTABLE_PRESENTATION_OF", "to_uid": "sym:ArtificialIntelligence:sheaf"},
+    {"from_uid": "sym:ArtificialIntelligence:cellular_sheaf", "type": "INDEXED_BY", "to_uid": "sym:ArtificialIntelligence:face_poset"},
+    {"from_uid": "sym:ArtificialIntelligence:cellular_cosheaf", "type": "DUAL_DIRECTION_TO", "to_uid": "sym:ArtificialIntelligence:cellular_sheaf"},
+    {"from_uid": "sym:ArtificialIntelligence:cellular_cosheaf", "type": "INDEXED_BY", "to_uid": "sym:ArtificialIntelligence:face_poset"},
+    {"from_uid": "sym:ArtificialIntelligence:sheaf_cochain", "type": "BUILT_FROM", "to_uid": "sym:ArtificialIntelligence:stalk"},
+    {"from_uid": "sym:ArtificialIntelligence:sheaf_coboundary", "type": "ACTS_ON", "to_uid": "sym:ArtificialIntelligence:sheaf_cochain"},
+    {"from_uid": "sym:ArtificialIntelligence:sheaf_coboundary", "type": "COMPUTES", "to_uid": "sym:ArtificialIntelligence:sheaf_cohomology"},
+    {"from_uid": "sym:ArtificialIntelligence:sheaf_laplacian", "type": "DERIVED_FROM", "to_uid": "sym:ArtificialIntelligence:sheaf_coboundary"},
+    {"from_uid": "sym:ArtificialIntelligence:sheaf_consistency_energy", "type": "DERIVED_FROM", "to_uid": "sym:ArtificialIntelligence:sheaf_laplacian"},
+    {"from_uid": "sym:ArtificialIntelligence:global_section", "type": "LIES_IN_KERNEL_OF", "to_uid": "sym:ArtificialIntelligence:sheaf_coboundary"},
+    {"from_uid": "sym:ArtificialIntelligence:harmonic_section", "type": "LIES_IN_KERNEL_OF", "to_uid": "sym:ArtificialIntelligence:sheaf_laplacian"},
+    {"from_uid": "sym:ArtificialIntelligence:cohomological_obstruction", "type": "DETECTED_BY", "to_uid": "sym:ArtificialIntelligence:sheaf_cohomology"},
+    {"from_uid": "sym:ArtificialIntelligence:sheaf_diffusion", "type": "USES_OPERATOR", "to_uid": "sym:ArtificialIntelligence:sheaf_laplacian"},
+    {"from_uid": "sym:ArtificialIntelligence:sheaf_neural_network", "type": "USES_OPERATOR", "to_uid": "sym:ArtificialIntelligence:sheaf_laplacian"},
+    {"from_uid": "sym:ArtificialIntelligence:neural_sheaf_diffusion", "type": "SPECIALIZES", "to_uid": "sym:ArtificialIntelligence:sheaf_neural_network"},
+    {"from_uid": "sym:ArtificialIntelligence:neural_sheaf_diffusion", "type": "LEARNS", "to_uid": "sym:ArtificialIntelligence:learned_restriction_map"},
+    {"from_uid": "sym:ArtificialIntelligence:learned_restriction_map", "type": "SPECIALIZES", "to_uid": "sym:ArtificialIntelligence:restriction_map"},
+    {"from_uid": "sym:ArtificialIntelligence:neural_sheaf_diffusion", "type": "ADDRESSES", "to_uid": "sym:ArtificialIntelligence:heterophily"},
+    {"from_uid": "sym:ArtificialIntelligence:neural_sheaf_diffusion", "type": "ADDRESSES", "to_uid": "sym:ArtificialIntelligence:oversmoothing"},
+    {"from_uid": "sym:ArtificialIntelligence:knowledge_sheaf", "type": "APPLIES", "to_uid": "sym:ArtificialIntelligence:sheaf"},
+    {"from_uid": "sym:ArtificialIntelligence:knowledge_sheaf", "type": "LEARNS", "to_uid": "sym:ArtificialIntelligence:approximate_global_section"},
+    {"from_uid": "sym:ArtificialIntelligence:approximate_global_section", "type": "APPROXIMATES", "to_uid": "sym:ArtificialIntelligence:global_section"},
+    {"from_uid": "sym:ArtificialIntelligence:sheaf_hypergraph_network", "type": "APPLIES", "to_uid": "sym:ArtificialIntelligence:cellular_sheaf"},
+    {"from_uid": "sym:ArtificialIntelligence:sheaf_hypergraph_network", "type": "USES_OPERATOR", "to_uid": "sym:ArtificialIntelligence:sheaf_laplacian"},
+    {"from_uid": "sym:ArtificialIntelligence:discourse_sheaf", "type": "APPLIES", "to_uid": "sym:ArtificialIntelligence:sheaf_diffusion"}
+  ],
+  "source_concept_links": [
+    {"source_uid": "sym:ResearchSource:sheaves-cosheaves-applications-2013", "concept_uids": ["sym:ArtificialIntelligence:sheaf", "sym:ArtificialIntelligence:presheaf", "sym:ArtificialIntelligence:cellular_sheaf", "sym:ArtificialIntelligence:cellular_cosheaf"]},
+    {"source_uid": "sym:ResearchSource:spectral-theory-cellular-sheaves-2019", "concept_uids": ["sym:ArtificialIntelligence:cellular_sheaf", "sym:ArtificialIntelligence:global_section", "sym:ArtificialIntelligence:sheaf_cohomology", "sym:ArtificialIntelligence:sheaf_laplacian", "sym:ArtificialIntelligence:harmonic_section"]},
+    {"source_uid": "sym:ResearchSource:sheaf-neural-networks-2020", "concept_uids": ["sym:ArtificialIntelligence:sheaf_neural_network", "sym:ArtificialIntelligence:sheaf_laplacian", "sym:ArtificialIntelligence:learned_restriction_map", "sym:ArtificialIntelligence:heterophily"]},
+    {"source_uid": "sym:ResearchSource:opinion-dynamics-discourse-sheaves-2021", "concept_uids": ["sym:ArtificialIntelligence:discourse_sheaf", "sym:ArtificialIntelligence:sheaf_diffusion", "sym:ArtificialIntelligence:restriction_map"]},
+    {"source_uid": "sym:ResearchSource:knowledge-sheaves-2021", "concept_uids": ["sym:ArtificialIntelligence:knowledge_sheaf", "sym:ArtificialIntelligence:approximate_global_section", "sym:ArtificialIntelligence:global_section"]},
+    {"source_uid": "sym:ResearchSource:neural-sheaf-diffusion-2022", "concept_uids": ["sym:ArtificialIntelligence:neural_sheaf_diffusion", "sym:ArtificialIntelligence:learned_restriction_map", "sym:ArtificialIntelligence:heterophily", "sym:ArtificialIntelligence:oversmoothing", "sym:ArtificialIntelligence:harmonic_section"]},
+    {"source_uid": "sym:ResearchSource:sheaf-connection-laplacians-2022", "concept_uids": ["sym:ArtificialIntelligence:sheaf_neural_network", "sym:ArtificialIntelligence:learned_restriction_map", "sym:ArtificialIntelligence:sheaf_laplacian"]},
+    {"source_uid": "sym:ResearchSource:topological-deep-learning-2022", "concept_uids": ["sym:ArtificialIntelligence:sheaf_hypergraph_network", "sym:ArtificialIntelligence:face_poset"]},
+    {"source_uid": "sym:ResearchSource:sheaf-hypergraph-networks-2023", "concept_uids": ["sym:ArtificialIntelligence:sheaf_hypergraph_network", "sym:ArtificialIntelligence:restriction_map", "sym:ArtificialIntelligence:sheaf_laplacian"]},
+    {"source_uid": "sym:ResearchSource:joint-diffusion-sheaf-neural-networks-2024", "concept_uids": ["sym:ArtificialIntelligence:neural_sheaf_diffusion", "sym:ArtificialIntelligence:sheaf_diffusion"]},
+    {"source_uid": "sym:ResearchSource:game-sheaf-multi-agent-2026", "concept_uids": ["sym:ArtificialIntelligence:stalk", "sym:ArtificialIntelligence:global_section"]},
+    {"source_uid": "sym:ResearchSource:sheaf-semantics-knowledge-digraphs-2026", "concept_uids": ["sym:ArtificialIntelligence:knowledge_sheaf", "sym:ArtificialIntelligence:global_section"]}
+  ],
+  "hswm_mappings": [
+    {
+      "uid": "sym:AbstractNode:hswm-sheaf-map-function-stalk",
+      "name": "HSWM Function State to Stalk Mapping",
+      "hswm_component": "typed LLM function local state",
+      "sheaf_concept_uid": "sym:ArtificialIntelligence:stalk",
+      "correspondence": "각 함수/agent가 서로 다른 dimension과 schema의 local semantic state를 갖는다는 후보 대응.",
+      "status": "CANDIDATE_ANALOGY",
+      "caveat": "LLM state is nonlinear and partially observed; it is not literally a finite vector-space stalk without an explicit encoder."
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-sheaf-map-hyperedge-stalk",
+      "name": "HSWM Hyperedge to Relation Stalk Mapping",
+      "hswm_component": "typed n-ary connector/hyperedge state",
+      "sheaf_concept_uid": "sym:ArtificialIntelligence:sheaf_hypergraph_network",
+      "correspondence": "각 n-ary connector가 참여 함수들의 state를 비교하는 relation-local space를 갖는 후보 대응.",
+      "status": "HIGH_PRIORITY_PROBE",
+      "caveat": "Do not impose simplicial downward closure; general hyperedges remain primary."
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-sheaf-map-port-restriction",
+      "name": "HSWM Typed Port to Restriction Map Mapping",
+      "hswm_component": "typed port adapter and semantic transport",
+      "sheaf_concept_uid": "sym:ArtificialIntelligence:restriction_map",
+      "correspondence": "port-specific projection/translation이 각 endpoint state를 connector comparison space로 운반한다는 후보 대응.",
+      "status": "HIGH_PRIORITY_PROBE",
+      "caveat": "Restriction maps should be learned or measured; static semantic rules risk Ragnarok."
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-sheaf-map-global-section",
+      "name": "HSWM Coherent Macrostate to Global Section Mapping",
+      "hswm_component": "episode-level coherent function assignment",
+      "sheaf_concept_uid": "sym:ArtificialIntelligence:global_section",
+      "correspondence": "모든 active seam에서 compatibility를 만족하는 HSWM macrostate를 global section으로 보는 후보 해석.",
+      "status": "DIAGNOSTIC_ONLY",
+      "caveat": "Global consistency is not semantic truth and must not force all agents to agree."
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-sheaf-map-seam-energy",
+      "name": "HSWM Seam Inconsistency to Sheaf Energy Mapping",
+      "hswm_component": "typed port/hyperedge mismatch residual",
+      "sheaf_concept_uid": "sym:ArtificialIntelligence:sheaf_consistency_energy",
+      "correspondence": "E_F를 error, productive disagreement, translation loss를 구분하기 위한 observation feature로 사용.",
+      "status": "IMPLEMENT_FIRST_AS_OBSERVATION",
+      "caveat": "Never minimize automatically; high energy can encode legitimate heterophily."
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-sheaf-map-cohomology",
+      "name": "HSWM Unglobalizable Conflict to Cohomology Mapping",
+      "hswm_component": "locally valid but globally incompatible claims/actions",
+      "sheaf_concept_uid": "sym:ArtificialIntelligence:cohomological_obstruction",
+      "correspondence": "국소적으로 유효한 state들이 전역화되지 않는 구조적 conflict를 higher cohomology로 진단하는 연구 가설.",
+      "status": "LATER_RESEARCH",
+      "caveat": "Requires a justified cell/cochain model; graph-level H1 must not be overinterpreted as meaning."
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-sheaf-map-learned-routing",
+      "name": "HSWM Learned Routing to Learned Restriction Mapping",
+      "hswm_component": "learned routing and relation-conditioned transport",
+      "sheaf_concept_uid": "sym:ArtificialIntelligence:learned_restriction_map",
+      "correspondence": "routing이 단순 edge 선택을 넘어 어떤 semantic coordinates가 전달되는지도 학습한다는 후보 대응.",
+      "status": "EXPERIMENT_AFTER_DURABLE_W",
+      "caveat": "Compare diagonal, low-rank, general, identity, and attention baselines under equal budget."
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-sheaf-map-cosheaf-aggregation",
+      "name": "HSWM Outward Aggregation to Cosheaf Mapping",
+      "hswm_component": "local outputs aggregated into larger coalition artifacts",
+      "sheaf_concept_uid": "sym:ArtificialIntelligence:cellular_cosheaf",
+      "correspondence": "국소 산출물을 상위 coalition/world artifact로 합치는 방향은 sheaf restriction보다 cosheaf aggregation에 가까울 수 있다는 후보 대응.",
+      "status": "CONCEPTUAL_DISTINCTION",
+      "caveat": "Do not call every bidirectional message flow a sheaf; direction and universal construction matter."
+    }
+  ],
+  "implementation_order": [
+    "OBSERVE: compute typed seam residuals without changing decisions",
+    "PROBE: compare identity, scalar attention, diagonal, low-rank, and general restriction maps",
+    "ABLATE: remove or shuffle learned maps under equal token/compute budget",
+    "ONLY_THEN: consider persistent activation and higher cohomology"
+  ],
+  "nonclaims": [
+    "Sheaf consistency is not factual truth.",
+    "A global section is not forced consensus.",
+    "Every HSWM hyperedge is not a simplex or cell.",
+    "Existing neural-sheaf benchmark gains do not establish HSWM gains.",
+    "Linear vector-space stalks do not directly model full LLM hidden state.",
+    "Recent 2026 preprints are frontier leads, not ratified foundations."
+  ]
+}

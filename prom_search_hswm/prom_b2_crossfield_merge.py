@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """B2: cross-field merge payoff — merge(A,B)가 cross-field 질의에서 best-single을 이기나.
 
-Programme: LakatosTree_PromSearchHSWM_20260721
+Programme: HSWM_LOCAL_RECORD
 Branch:    B2-crossfield-merge-payoff  (질문: Q-federated-hswm-merge-crossfield)
 Spec:      ../DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md §3(L5 no-harm)·§6(F-B2a/b/c)
 
@@ -43,7 +43,7 @@ from hswm_hypergraph import build_hypergraph  # noqa: E402
 from hswm_hypergraph_readout import readout  # noqa: E402
 from hswm_field_algebra import Field, SeamArc, compose, field_id, merge  # noqa: E402
 
-TREE = "LakatosTree_PromSearchHSWM_20260721"
+TREE = "HSWM_LOCAL_RECORD"
 BRANCH = "B2-crossfield-merge-payoff"
 QUESTION = "Q-federated-hswm-merge-crossfield"
 CONJECTURE = (
@@ -429,7 +429,7 @@ def main() -> int:
 
     core = run_experiment(rows, embed_fn, n_q=N_Q, seed=SEED)
     evidence = {
-        "schema": "lakato-evidence-record/v1",
+        "schema": "local_record-evidence-record/v1",
         "programme": TREE, "branch": BRANCH, "question": QUESTION,
         "conjecture": CONJECTURE,
         "preregistration": {

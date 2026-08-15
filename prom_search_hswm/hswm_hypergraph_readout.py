@@ -10,8 +10,8 @@ KQV T5(../PROM_KQV_ATTENTION_BACKBONE §3): 하이퍼엣지를 1급 채점단위
     엣지 히트는 그 members(정점)로, 정점 히트는 incident_edges(엣지)로 1-hop 확장 가능.
 
 정직 경계: 여기까지는 *프리미티브*. "v_union_e > node_only/edge_only"라는 성능 주장은
-  LakatoTree T5 예측 사전등록 + held-out gold + MC-null z>3 + equal-compute control 뒤에서만
-  (LakatosTree_PromSearchHSWM_20260721, 실험 B). 이 self-test는 smoke이지 판정이 아니다.
+  HSWM_LOCAL_RECORD T5 예측 사전등록 + held-out gold + MC-null z>3 + equal-compute control 뒤에서만
+  (HSWM_LOCAL_RECORD, 실험 B). 이 self-test는 smoke이지 판정이 아니다.
 """
 from __future__ import annotations
 

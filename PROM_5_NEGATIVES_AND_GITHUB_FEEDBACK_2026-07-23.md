@@ -2,7 +2,7 @@
 
 > 트리거: USER "reasoner REFUTED / traversal OFF / 리프트=임베딩 95% / 책-단위 미실측 / P6 degenerating — 이 부분 어케 해결할지 PROM + Git repo 피드백 확인"
 > 5축 병렬 리서치 (축A traversal/구조, 축B reasoner/routing, 축C 책-단위, 축D absorption, 축E 외부피드백 실험설계).
-> 상태: SECONDARY_AI 리서치 종합. 실험 채택은 사용자 ratify + LakatoTree prereg 필요.
+> 상태: SECONDARY_AI 리서치 종합. 실험 채택은 사용자 ratify + HSWM_LOCAL_RECORD prereg 필요.
 
 ## 0. GitHub 피드백 현황 (확인 완료)
 
@@ -10,7 +10,7 @@
 |---|---|---|
 | Issue #1 (OPEN) | **미해결 — 이번 PROM의 주 대상** | 외부 리뷰어: "범용 Hypergraph RAG 주장은 혼잡(HyperGraphRAG·SiReRAG·HippoRAG2·GFM-RAG·Zep·AriGraph). 방어 가능한 유일 가설 = **하나의 버전드 시맨틱 웨이트 場이 retrieval+selection+revision을 분리 헤드보다 낫게 서빙하는가**". 현 미확립 근거 3점: `plan()`은 alias일 뿐 / `supersede()`는 단순 decay / additive-j 실험서 HSWM만 offline LLM judgment 수혜(불공정). 요구: equal-budget 5-arm prereg. 성공 경계: equal cost 품질↑ **또는** 품질 유지 + cross-head inconsistency↓ + audit/replay↑. |
 | Issue #2 (CLOSED) | 해결됨 | 기본 pytest가 `prom_search_hswm/` 120테스트 조용히 제외 + `gold_badiou24.json` fixture 부재 + README 라이선스 불일치(Apache 표기 vs AGPL/상용 듀얼). → PR #5 머지로 흡수 완료. |
-| PR #3 (DRAFT) | 진행 중 | "endogenous hypergraph agent" thesis + `GENERIC_FEEDBACK_RUNTIME_ACCEPTANCE.md` — LakatoTree verdict이 다음 dispatch를 인과적으로 바꾸는 수직 슬라이스를 완료 게이트로. |
+| PR #3 (DRAFT) | 진행 중 | "endogenous hypergraph agent" thesis + `GENERIC_FEEDBACK_RUNTIME_ACCEPTANCE.md` — HSWM_LOCAL_RECORD verdict이 다음 dispatch를 인과적으로 바꾸는 수직 슬라이스를 완료 게이트로. |
 
 ## 1. 문제 ① — reasoner REFUTED / P5·B2.1 routing REJECTED (축B)
 

@@ -29,7 +29,7 @@ verified via /v1/models).  Both endpoints' /v1/models listings are recorded
 verbatim in the receipt for served-model identity honesty.
 
 Receipts are always mode="development" measurements, DEVELOPMENT_ONLY stage;
-the scientific judgment belongs to the LakatosTree gate, never to this file.
+the scientific judgment belongs to the HSWM_LOCAL_RECORD gate, never to this file.
 
 Usage:
   .venv/bin/python f3v2_canary_gate.py                      # n=8, 16 calls

@@ -103,4 +103,4 @@ engineering observation이다. vector baseline을 넘어서는 HSWM 고유 effic
 - protocol file SHA-256: `2caf7011214557fffde0b60c13c5a394343a0a1f3097ccab0618cfd6a2b2a2bc`
 
 Raw artifacts are under `_research/prom9_runs/f1-2wiki-dev-r4/`. This is a local
-development receipt chain, not a preregistered or LakatoTree-judged result.
+development receipt chain, not a preregistered or HSWM_LOCAL_RECORD-judged result.

@@ -3,7 +3,7 @@
 - 작성일: 2026-07-23
 - 관측 기준: `main@f2bf364090c926e8aceaaa17983fa61142711891`
 - 상태: `SECONDARY_AI / RESEARCH_AND_ENGINEERING_SYNTHESIS`
-- 범위: GitHub issue #1, draft PR #3, B2.2 Gate 0, shared-field v2, LakatoTree 판정 장부
+- 범위: GitHub issue #1, draft PR #3, B2.2 Gate 0, shared-field v2, HSWM_LOCAL_RECORD 판정 장부
 - 주장 경계: 이 문서는 구현·효능·신규성·USER_PRIMARY 정전의 완료 선언이 아니다.
 
 ## 0. 결론 먼저
@@ -18,7 +18,7 @@ G-1  주장/권위 경계 고정
  ├── G2  독립 retrieve/select/revise task + shared/separate arms
  └── G3  E1 experimental harness + budget/parameter authority
                   ↓ scientific join
-G4  shared-field protocol v2 + 외부 LakatoTree 사전등록
+G4  shared-field protocol v2 + 외부 HSWM_LOCAL_RECORD 사전등록
                   ↓
 G5  development/freeze → G6 confirmatory run
                   ↓
@@ -57,11 +57,11 @@ null을 채우거나 status 문자열만 바꾸어 승격하면 안 되며, 새 
 ### 1.2 권위
 
 - USER_PRIMARY/KG 정전은 HSWM을 입체운행구름 군단의 HSWM commander로 둔다.
-- `LakatosTree_HSWM_20260719`의 hard core는 retrieval/dispatch/supersession을 한 semantic
+- `HSWM_LOCAL_RECORD`의 hard core는 retrieval/dispatch/supersession을 한 semantic
   field에서 다룰 가능성을 열지만, 효능은 matched-budget A/B 전까지 미측정이다.
 - PR #3의 “agent 자체가 evolving hypergraph”라는 넓은 문구와 이 문서의 수식·설계는
   `SECONDARY_AI`다. 사용자가 승인하기 전 USER_PRIMARY로 승격하지 않는다.
-- LakatoTree는 protocol registration, immutable receipt, final scientific verdict를 소유한다.
+- HSWM_LOCAL_RECORD는 protocol registration, immutable receipt, final scientific verdict를 소유한다.
   HSWM은 실험 대상 mechanism을 소유한다.
 - 이 PROM cycle은 KG를 쓰지 않았고 Naesengmoon을 자동 실행하지 않았다.
 
@@ -183,9 +183,9 @@ arm에만 주고 “coherence 승리”라고 부르는 구조적 불공정이 �
 - Issue #1의 separate-head control이 이 thesis를 실제로 반증할 수 있음을 적는다.
 - 사용자 ratify/reject 전 정전이나 present-tense architecture로 병합하지 않는다.
 
-### 5.2 LakatoTree online hard dependency를 제거한다
+### 5.2 HSWM_LOCAL_RECORD online hard dependency를 제거한다
 
-현재 PR 문구는 LakatoTree verdict가 매 action의 next dispatch를 직접 바꾸게 한다. 이는 과학적
+현재 PR 문구는 HSWM_LOCAL_RECORD verdict가 매 action의 next dispatch를 직접 바꾸게 한다. 이는 과학적
 progress judge와 operational outcome evaluator를 섞을 위험이 있다. 다음 두 port로 분리한다.
 
 ```text
@@ -193,13 +193,13 @@ JudgmentPort
   input: proposal receipt + external observation receipt + pinned cut
   output: signed JudgmentReceipt
 
-ScientificVerdictPort (LakatoTree)
+ScientificVerdictPort (HSWM_LOCAL_RECORD)
   input: frozen protocol/results/evidence packet
   output: registration or final scientific verdict receipt
 ```
 
 - runtime core는 generic `JudgmentPort`에만 의존한다.
-- `lakatotree_adapter.py`는 연구 demo에서 사용할 수 있는 opt-in adapter다.
+- `HSWM_LOCAL_RECORD`는 연구 demo에서 사용할 수 있는 opt-in adapter다.
 - Issue #1의 사전등록과 최종 verdict는 arm 밖의 `ScientificVerdictPort`가 담당한다.
 - proposer, executor, runtime judge, committer, scientific judge identity를 receipt에 따로 기록한다.
 
@@ -270,11 +270,11 @@ G1은 HSWM이 generic continual feedback runtime이라고 부르기 위한 제�
 | `feedback_runtime.py` | canonical event envelope, phase/authority guards, pure fold, cut/dispatch projection |
 | `feedback_store.py` | SQLite append-only stream, request idempotency, ordered replay, recovery |
 | `feedback_ports.py` | executor, judgment, committer, dispatcher capability interfaces |
-| `lakatotree_adapter.py` | optional receipt-verified research adapter, core hard dependency 아님 |
+| `HSWM_LOCAL_RECORD` | optional receipt-verified research adapter, core hard dependency 아님 |
 | `demo_feedback_runtime.py` | verdict-only A/B, restart, generated receipt |
 | `tests/test_feedback_runtime.py` | phase, causal divergence, stale cut, capability tests |
 | `tests/test_feedback_store.py` | duplicate/conflict/concurrency/tamper/restart tests |
-| `tests/test_feedback_lakatotree.py` | recorded contract + opt-in live integration |
+| `tests/test_feedback_HSWM_LOCAL_RECORD.py` | recorded contract + opt-in live integration |
 
 ### 7.2 event chain
 
@@ -302,7 +302,7 @@ conflicting duplicate refusal, canonical serialization, [WAL](https://sqlite.org
 - stored receipt 한 byte 변경은 verification failure다.
 - generated receipt가 real/recorded judgment adapter identity를 묶는다.
 
-예상 크기: 6–10 engineer-days. 안정된 LakatoTree transport가 없으면 adapter 통합만 별도 blocker로
+예상 크기: 6–10 engineer-days. 안정된 HSWM_LOCAL_RECORD transport가 없으면 adapter 통합만 별도 blocker로
 표시하고 core replay는 계속 진행한다.
 
 ## 8. G2 — 독립 task와 arm 구현
@@ -464,11 +464,11 @@ v1은 수정해 실행하지 않고 immutable predecessor로 남긴다. v2는 �
 7. frozen analysis code와 decision table;
 8. v1의 arms/tasks/metrics/success boundary와 달라진 모든 항목을 적은
    `semantic_delta.v1_to_v2.json`;
-9. external LakatoTree prediction receipt와 registration timestamp.
+9. external HSWM_LOCAL_RECORD prediction receipt와 registration timestamp.
 
 G1 runtime receipt는 available predecessor로 참조할 수 있지만 강제하지 않는다. 이 registration
 receipt 이전에 fresh generated confirmatory worlds를 만들거나 frozen public split의 arm outcome을
-보면 run은 `VOID`다. LakatoTree registration은 HSWM 효능이 아니라 protocol 존재만 증명한다.
+보면 run은 `VOID`다. HSWM_LOCAL_RECORD registration은 HSWM 효능이 아니라 protocol 존재만 증명한다.
 
 ## 11. G5–G6 — 실행 가능한 confirmatory design
 
@@ -606,13 +606,13 @@ state_digest_after_each_dispatch.jsonl
 raw_predictions_with_evidence_spans.jsonl
 analysis_output.json
 decision_packet_without_authored_verdict.json
-external_lakatotree_verdict.json
+external_HSWM_LOCAL_RECORD
 ```
 
 최종 verdict 뒤에만 다음을 한다.
 
 1. `EFFICACY.md`, `INDEX.md`, shared-field folder의 claim boundary를 같은 verdict로 맞춘다.
-2. canonical LakatoTree leaf, `closes_question`, source commit, script hash, server run receipt를 묶는다.
+2. canonical HSWM_LOCAL_RECORD leaf, `closes_question`, source commit, script hash, server run receipt를 묶는다.
 3. budget-exhausted predecessor branch는 abandon/hold verdict로 정리한다.
 4. Issue #1에 result packet과 exact reproduction command를 달고 닫는다.
 5. PR #3 thesis는 결과가 허용하는 범위만 병합·수정·폐기한다.

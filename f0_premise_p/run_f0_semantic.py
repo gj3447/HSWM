@@ -8,8 +8,8 @@ signal for premise P is the GAP = mean_matched - mean_mismatched: a positive gap
 means the regeneration is specifically closer to its own node's doc prose than to
 another node's — i.e. meaning is *specifically* derivable, not just topical.
 
-This produces a lakato-evidence-record/v1-shaped measurement with NO verdict —
-LakatoTree's deterministic judge derives the verdict (see PREREG.md, LAKATO_*).
+This produces a local_record-evidence-record/v1-shaped measurement with NO verdict —
+HSWM_LOCAL_RECORD's deterministic judge derives the verdict (see PREREG.md, LOCAL_RECORD_*).
 
 Usage:
     python run_f0_semantic.py --scorer mock                       # harness smoke
@@ -88,8 +88,8 @@ def main() -> None:
 
     result = run_semantic(pairs, regen, _SCORERS[args.scorer])
     result["scorer"] = args.scorer
-    result["evidence_kind"] = "lakato-evidence-record/v1-measurement"
-    result["note"] = "NO verdict here — LakatoTree deterministic judge derives it from the locked prediction."
+    result["evidence_kind"] = "local_record-evidence-record/v1-measurement"
+    result["note"] = "NO verdict here — HSWM_LOCAL_RECORD deterministic judge derives it from the locked prediction."
     print(json.dumps(result, ensure_ascii=False, indent=2))
     if args.out:
         Path(str(HERE / args.out)).write_text(json.dumps(result, ensure_ascii=False, indent=2))

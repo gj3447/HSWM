@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """prom_p1_binding_density — P1 binding density judge (W1-T2).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node P1-binding-density.
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node P1-binding-density.
 사전등록 원문 준수 (2026-07-21T03:59:44Z 등록, 무변경):
 - pred_metric        = held_out_binding_density   (baseline 0.05, noise 0.03, higher, ratio)
 - pred_novel_metric  = semantic_minus_lexical_binding_gap (threshold 0.2, higher)
@@ -47,7 +47,7 @@ HERE = Path(__file__).parent
 EVIDENCE_PATH = HERE / "evidence" / "EVIDENCE_p1_binding_density_2026-07-22.json"
 NODE = "P1-binding-density"
 
-# 사전등록 원문 (LakatoTree 노드에서 전사 — 변경 금지)
+# 사전등록 원문 (HSWM_LOCAL_RECORD 노드에서 전사 — 변경 금지)
 PREREG = {
     "metric": "held_out_binding_density",
     "baseline": 0.05,
@@ -185,7 +185,7 @@ def main():
                      "perms": C.NULL_PERMS,
                      "null": "eval gold 배정 순열 (top-1/τ 고정)"}
     ev["tau_sweep"] = sweep
-    # 사실만 기록 — 판정은 LakatoTree 서버 (자기채점 금지)
+    # 사실만 기록 — 판정은 HSWM_LOCAL_RECORD 서버 (자기채점 금지)
     ev["_facts"] = C.check_facts({
         "n_eval": n_eval,
         "n_calibration": n_cal,

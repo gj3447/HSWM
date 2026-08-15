@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """prom_p4_equalcompute_ab — P4 equal-compute control A/B judge (W1-T3).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node P4-equal-compute-control.
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node P4-equal-compute-control.
 사전등록 원문 준수 (2026-07-21T03:59:52Z 등록, 무변경):
 - pred_metric        = semantic_minus_equalcompute_binding_gain (baseline 0.0, noise 0.03,
                        higher, ratio)
@@ -68,7 +68,7 @@ HERE = Path(__file__).parent
 EVIDENCE_PATH = HERE / "evidence" / "EVIDENCE_p4_equalcompute_2026-07-22.json"
 NODE = "P4-equal-compute-control"
 
-# 사전등록 원문 (LakatoTree 노드에서 전사 — 변경 금지)
+# 사전등록 원문 (HSWM_LOCAL_RECORD 노드에서 전사 — 변경 금지)
 PREREG = {
     "metric": "semantic_minus_equalcompute_binding_gain",
     "baseline": 0.0,
@@ -325,7 +325,7 @@ def main():
                      "null_std": round(null_std, 4), "z": round(z, 3),
                      "perms": C.NULL_PERMS,
                      "null": "eval gold 배정 순열 (양 arm top-1/게이트 고정)"}
-    # 사실만 기록 — 판정은 LakatoTree 서버 (자기채점 금지)
+    # 사실만 기록 — 판정은 HSWM_LOCAL_RECORD 서버 (자기채점 금지)
     ev["_facts"] = C.check_facts({
         "n_eval": n_eval,
         "n_calibration": n_cal,

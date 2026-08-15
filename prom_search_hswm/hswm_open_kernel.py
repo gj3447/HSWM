@@ -6,7 +6,7 @@ field snapshots, mount-qualified interfaces, connector admission, flat normal
 form, reversible separation receipts, and explicit safe materialization.
 
 The frozen v1 prototype remains in ``hswm_open_composition.py`` with its partial
-LakatoTree receipt.  This module closes the counterexamples documented in
+HSWM_LOCAL_RECORD receipt.  This module closes the counterexamples documented in
 ``AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md`` without rewriting that history.
 """
 from __future__ import annotations

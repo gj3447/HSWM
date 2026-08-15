@@ -25,26 +25,21 @@ def test_minimal_governance_binds_user_source_and_small_default_path():
     ]
     assert data["budgets"] == {
         "material_result_receipts": 1,
-        "optional_governance_layers_without_explicit_escalation": 1,
+        "personal_governance_layers": 0,
     }
 
 
-def test_complex_governance_is_optional_and_causal_evidence_is_one_receipt():
+def test_personal_governance_is_deleted_and_causal_evidence_is_one_receipt():
     data = json.loads(CONTRACT.read_text(encoding="utf-8"))
 
-    assert data["optional_layers"]["lakatotree"]["default"] == "OFF"
-    assert data["optional_layers"]["ooptdd"]["default"] == "LEGACY_OPTIONAL_AUDIT"
-    assert data["optional_layers"]["omd"] == {
-        "default": "RETIRED_HISTORICAL_READ_ONLY",
-        "activation_allowed": False,
-        "forbidden_actions": [
-            "MCP registration or invocation",
-            "coordination database writes",
-            "declare, claim, heartbeat, release, or cancel leases",
-            "health, heal, or conditional reactivation",
-        ],
-    }
-    mcp = data["optional_layers"]["mcp"]
+    removed = data["removed_personal_governance"]
+    assert removed["status"] == "DELETED"
+    assert removed["restoration_allowed"] is False
+    assert removed["historical_verdict_authority"] == "NONE"
+    assert "tests and packaging hooks" in removed["removed_surfaces"]
+    assert "ordered-gate and research-ledger integrations" in removed["removed_surfaces"]
+
+    mcp = data["mcp"]
     assert mcp["default"] == "EXTERNAL_BOUNDED_ONTOLOGY_ADAPTER"
     assert mcp["provider"] == "Google MCP Toolbox 1.9.0"
     assert mcp["normal_read_tools"] == [
@@ -64,16 +59,3 @@ def test_complex_governance_is_optional_and_causal_evidence_is_one_receipt():
         "matched compute or token budget",
         "removal ablation",
     }
-
-
-def test_observed_mcp_surface_has_no_personal_or_raw_cypher_server():
-    data = json.loads(CONTRACT.read_text(encoding="utf-8"))
-    observed = data["observed_mcp_state_2026_08_15"]
-
-    assert observed["dev_01_claude"] == ["ontology"]
-    assert observed["dev_01_codex"] == ["ontology"]
-    assert observed["provider"] == "Google MCP Toolbox 1.9.0"
-    assert observed["codex_normal_enabled_tools"] == 6
-    assert observed["claude_server_tools"] == 7
-    assert observed["raw_cypher_tools"] == 0
-    assert observed["canonical_write_tools"] == 0

@@ -9,7 +9,7 @@
 > 하나의 더 큰 AI를 이룬다”를 고정한다. 아래 이론 선택·수식·층 구분은 반증 가능한
 > SECONDARY_AI synthesis이며 사용자 ratification 전에는 정전이 아니다.
 > **Naesengmoon**: 사용자 요청이 없었으므로 출격하지 않았다.
-> **live authority caveat**: 이 cycle의 KG/LakatoTree 동시 read는 응답 지연으로 완료되지 않아,
+> **live authority caveat**: 이 cycle의 KG/HSWM_LOCAL_RECORD 동시 read는 응답 지연으로 완료되지 않아,
 > 로컬 USER_CANON과 2026-07-26까지 봉인된 보고·receipt를 권위 경계로 사용했다.
 
 ## 0. 결론 — 하나의 이론이 아니라 제약된 이론 생태계로 만들어야 한다
@@ -55,7 +55,7 @@ embedding, hypergraph tensor 또는 뇌 비유 하나로 설명하면 다시 편
 | 인지과학 | workspace, 예측, 정보탐색 가설 | 의식 claim을 자동 부여 |
 | 게임·사회선택 | 합의, trust, dissent, 전략적 행위 | 합의를 진실로 동일시 |
 | 진화·발달 | 함수·topology 생성과 다양성 보존 | 무제한 self-modification을 허용 |
-| Lakatos·Popper | 연구프로그램 판정과 kill rule | 시스템 runtime policy를 대신함 |
+| Legacy programme·Popper | 연구프로그램 판정과 kill rule | 시스템 runtime policy를 대신함 |
 
 ## 1. 권위와 현재 과학적 경계
 
@@ -438,7 +438,7 @@ stability를 가진 regime을 고른다. “뇌가 critical일 수 있다”는 
 runtime `W/H` update와 과학적 claim update는 별개다.
 
 - runtime: outcome→credit→candidate state→canary→commit;
-- science: preregistration→real execution→receipt→independent judge→Lakatos verdict;
+- science: preregistration→real execution→receipt→independent judge→Legacy programme verdict;
 - canon: 사용자 ratification 또는 명시된 권위 gate.
 
 LLM self-report, 아름다운 수식, 설계 완성은 scientific progress가 아니다.

@@ -1,26 +1,22 @@
-"""Validate PROM-9 and prepare fail-closed engineering stage packets.
+"""Validate the local PROM-9 typed-function protocol.
 
 PROM-9 specifies how typed LLM functions and three-factor bond plasticity are
 to be tested.  This module does not run models, inspect benchmark outcomes,
-register predictions, or submit scientific results.  It checks the protocol's
-causal/equal-budget invariants and binds a requested stage to the independently
-generated next-research status receipt.
+register predictions, or submit scientific results. It checks only the local
+causal and equal-budget invariants; external adjudication and ordered-gate
+packet generation are intentionally absent.
 """
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
 import hashlib
 import json
-import os
 from pathlib import Path
+import sys
 from typing import Mapping, Sequence
-
-from hswm_next_research_harness import verify_status
 
 
 PROTOCOL_SCHEMA = "hswm-prom9-semantic-neural-network/v1"
-PACKET_SCHEMA = "hswm-prom9-stage-packet/v1"
 DEFAULT_PROTOCOL = Path("prom_search_hswm/prom9_semantic_neural_network.v1.json")
 
 REQUIRED_STAGE_IDS = (
@@ -34,12 +30,6 @@ REQUIRED_FUNCTION_IDS = (
     "BF_BOND_PROPOSER",
     "AF_ANSWER_SYNTHESIZER",
 )
-EXPECTED_STATUS_GATES = {
-    "G0_REAL_PACKS": "B22_GATE0_REAL_PACKS",
-    "F1_TYPED_FUNCTION_NETWORK": "F1_MULTI_LLM_FUNCTION_NETWORK",
-    "P1V5_FAST_TO_SLOW_PLASTICITY": "P1V5_THREE_FACTOR_BOND_PLASTICITY",
-    "P2_FROZEN_AGENT_TRANSFER": "P2_AGENT_A_TO_FROZEN_B_TRANSFER",
-}
 
 
 class Prom9ProtocolError(RuntimeError):
@@ -217,7 +207,7 @@ def validate_protocol(value: Mapping[str, object]) -> dict[str, object]:
             "evaluation",
             "conclusion_rules",
             "kill_conditions",
-            "lakatotree",
+            "external_governance",
         },
         "PROM-9 protocol",
     )
@@ -266,8 +256,6 @@ def validate_protocol(value: Mapping[str, object]) -> dict[str, object]:
     seen: set[str] = set()
     for stage in typed_stages:
         stage_id = str(stage["id"])
-        if stage["status_gate"] != EXPECTED_STATUS_GATES[stage_id]:
-            raise Prom9ProtocolError(f"{stage_id} status gate drifted")
         forward = [item for item in stage["depends_on"] if item not in seen]
         if forward:
             raise Prom9ProtocolError(f"{stage_id} has missing/forward dependencies: {forward}")
@@ -351,239 +339,44 @@ def validate_protocol(value: Mapping[str, object]) -> dict[str, object]:
     _text_list(value.get("conclusion_rules"), "conclusion_rules", minimum=6)
     _text_list(value.get("kill_conditions"), "kill_conditions", minimum=6)
 
-    lakatotree = value.get("lakatotree")
-    if not isinstance(lakatotree, dict):
-        raise Prom9ProtocolError("lakatotree must be an object")
+    external_governance = value.get("external_governance")
+    if not isinstance(external_governance, dict):
+        raise Prom9ProtocolError("external_governance must be an object")
     _strict_keys(
-        lakatotree,
+        external_governance,
         {
-            "tree",
-            "parent",
-            "registration_mode",
-            "prediction_registration_required_before",
-            "scientific_prediction_registered_by_this_protocol",
-            "scientific_result_submitted_by_this_protocol",
+            "authority",
+            "prediction_registration_required",
+            "result_submission_allowed",
         },
-        "lakatotree",
-    )
-    for field in ("tree", "parent", "registration_mode"):
-        _text(lakatotree.get(field), f"lakatotree {field}")
-    _text_list(
-        lakatotree.get("prediction_registration_required_before"),
-        "lakatotree prediction_registration_required_before",
-        minimum=2,
+        "external_governance",
     )
     if (
-        lakatotree.get("scientific_prediction_registered_by_this_protocol") is not False
-        or lakatotree.get("scientific_result_submitted_by_this_protocol") is not False
+        external_governance.get("authority") != "NONE"
+        or external_governance.get("prediction_registration_required") is not False
+        or external_governance.get("result_submission_allowed") is not False
     ):
-        raise Prom9ProtocolError("PROM-9 crossed its scientific authority boundary")
+        raise Prom9ProtocolError("PROM-9 must remain free of external governance")
 
     return json.loads(json.dumps(value, ensure_ascii=False))
 
 
-def _validate_recorded_at(value: str | None) -> str:
-    if value is None:
-        return datetime.now(timezone.utc).isoformat()
-    try:
-        parsed = datetime.fromisoformat(value)
-    except ValueError as error:
-        raise Prom9ProtocolError("recorded_at must be ISO-8601") from error
-    if parsed.tzinfo is None or parsed.utcoffset() != timezone.utc.utcoffset(parsed):
-        raise Prom9ProtocolError("recorded_at must carry a UTC offset")
-    return value
-
-
-def _status_rows(status: Mapping[str, object]) -> dict[str, Mapping[str, object]]:
-    try:
-        verify_status(status)
-    except Exception as error:
-        raise Prom9ProtocolError(f"invalid next-research status receipt: {error}") from error
-    rows = status.get("gates")
-    if not isinstance(rows, list):
-        raise Prom9ProtocolError("status receipt lacks gates")
-    indexed: dict[str, Mapping[str, object]] = {}
-    for index, row in enumerate(rows):
-        if not isinstance(row, dict):
-            raise Prom9ProtocolError(f"status gate {index} is invalid")
-        gate_id = _text(row.get("id"), f"status gate {index} id")
-        if gate_id in indexed:
-            raise Prom9ProtocolError(f"duplicate status gate: {gate_id}")
-        indexed[gate_id] = row
-    return indexed
-
-
-def build_stage_packet(
-    *,
-    protocol: Mapping[str, object],
-    protocol_sha256: str,
-    status: Mapping[str, object],
-    stage_id: str,
-    run_id: str,
-    recorded_at: str | None = None,
-) -> dict[str, object]:
-    """Bind one currently runnable stage to the verified status receipt.
-
-    The returned packet authorizes preparation only.  It can never authorize a
-    sealed scientific measurement or model/topology activation.
-    """
-
-    normalized = validate_protocol(protocol)
-    if (
-        not isinstance(protocol_sha256, str)
-        or len(protocol_sha256) != 64
-        or any(character not in "0123456789abcdef" for character in protocol_sha256)
-    ):
-        raise Prom9ProtocolError("protocol_sha256 must be a lowercase SHA-256")
-    run_id = _text(run_id, "run_id")
-    stages = {stage["id"]: stage for stage in normalized["stages"]}
-    if stage_id not in stages:
-        raise Prom9ProtocolError(f"unknown PROM-9 stage: {stage_id}")
-    stage = stages[stage_id]
-    rows = _status_rows(status)
-    status_gate = str(stage["status_gate"])
-    if status_gate not in rows:
-        raise Prom9ProtocolError(f"status receipt lacks PROM-9 gate: {status_gate}")
-    active_gate = status.get("active_gate")
-    if (
-        status.get("sequence_locked") is not True
-        or not isinstance(active_gate, dict)
-        or active_gate.get("id") != status_gate
-    ):
-        raise Prom9ProtocolError(
-            f"PROM-9 stage {stage_id} is not the single active status gate"
-        )
-    observed_state = rows[status_gate].get("state")
-    allowed_states = {"ACTION_REQUIRED", "READY"}
-    if observed_state not in allowed_states:
-        raise Prom9ProtocolError(
-            f"PROM-9 stage {stage_id} is not runnable: "
-            f"status gate {status_gate} is {observed_state}"
-        )
-    status_sha = verify_status(status)
-    included_functions = (
-        normalized["llm_functions"]
-        if stage_id in {"F1_TYPED_FUNCTION_NETWORK", "P2_FROZEN_AGENT_TRANSFER"}
-        else []
-    )
-    next_authority = {
-        "G0_REAL_PACKS": "Three-pack Gate-0 acceptance receipt",
-        "F1_TYPED_FUNCTION_NETWORK": (
-            "Frozen implementation, prompt, model, split, and equal-budget manifests "
-            "before any sealed F1 evaluation"
-        ),
-        "P1V5_FAST_TO_SLOW_PLASTICITY": (
-            "LakatoTree prediction receipt registered before sealed P1v5 measurement"
-        ),
-        "P2_FROZEN_AGENT_TRANSFER": (
-            "LakatoTree prediction receipt registered before sealed P2 measurement"
-        ),
-    }[stage_id]
-    unsigned: dict[str, object] = {
-        "schema_version": PACKET_SCHEMA,
-        "programme": normalized["programme"],
-        "run_id": run_id,
-        "recorded_at": _validate_recorded_at(recorded_at),
-        "stage": stage,
-        "status_gate_state": observed_state,
-        "protocol_sha256": protocol_sha256,
-        "status_receipt_sha256": status_sha,
-        "llm_functions": included_functions,
-        "arm_matrix": normalized["arm_matrix"],
-        "budget_contract": normalized["budget_contract"],
-        "evaluation": normalized["evaluation"],
-        "next_required_authority": next_authority,
-        "preparation_allowed": True,
-        "sealed_measurement_allowed": False,
-        "activation_allowed": False,
-        "scientific_prediction_registered": False,
-        "scientific_result_submitted": False,
-        "claim_boundary": normalized["claim_boundary"],
-    }
-    return {**unsigned, "packet_sha256": canonical_sha256(unsigned)}
-
-
-def verify_stage_packet(value: Mapping[str, object]) -> str:
-    if value.get("schema_version") != PACKET_SCHEMA:
-        raise Prom9ProtocolError("unsupported PROM-9 stage packet schema")
-    for field in (
-        "sealed_measurement_allowed",
-        "activation_allowed",
-        "scientific_prediction_registered",
-        "scientific_result_submitted",
-    ):
-        if value.get(field) is not False:
-            raise Prom9ProtocolError(f"PROM-9 stage packet crossed boundary: {field}")
-    unsigned = dict(value)
-    declared = unsigned.pop("packet_sha256", None)
-    if not isinstance(declared, str) or canonical_sha256(unsigned) != declared:
-        raise Prom9ProtocolError("PROM-9 stage packet self-hash drifted")
-    return declared
-
-
-def _write_once(path: Path, value: Mapping[str, object]) -> None:
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    payload = (json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n").encode(
-        "utf-8"
-    )
-    try:
-        descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644)
-    except FileExistsError as error:
-        raise Prom9ProtocolError(f"refusing to replace PROM-9 packet: {path}") from error
-    try:
-        with os.fdopen(descriptor, "wb") as handle:
-            handle.write(payload)
-            handle.flush()
-            os.fsync(handle.fileno())
-    except Exception:
-        try:
-            path.unlink()
-        except OSError:
-            pass
-        raise
-
-
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    subparsers = parser.add_subparsers(dest="command", required=True)
-
-    validate_parser = subparsers.add_parser("validate")
-    validate_parser.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
-
-    prepare_parser = subparsers.add_parser("prepare")
-    prepare_parser.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
-    prepare_parser.add_argument("--status", type=Path, required=True)
-    prepare_parser.add_argument("--stage", choices=REQUIRED_STAGE_IDS, required=True)
-    prepare_parser.add_argument("--run-id", required=True)
-    prepare_parser.add_argument("--recorded-at")
-    prepare_parser.add_argument("--output", type=Path)
+    parser.add_argument("--protocol", type=Path, default=DEFAULT_PROTOCOL)
 
     args = parser.parse_args(argv)
     try:
         protocol_path = Path(args.protocol).resolve()
         protocol = read_json(protocol_path, "PROM-9 protocol")
         normalized = validate_protocol(protocol)
-        if args.command == "validate":
-            result: dict[str, object] = {
-                "status": "PROM9_PROTOCOL_VALID",
-                "protocol_sha256": file_sha256(protocol_path),
-                "stage_ids": [stage["id"] for stage in normalized["stages"]],
-                "function_ids": [function["id"] for function in normalized["llm_functions"]],
-                "scientific_prediction_registered": False,
-            }
-        else:
-            status = read_json(Path(args.status), "next-research status")
-            result = build_stage_packet(
-                protocol=normalized,
-                protocol_sha256=file_sha256(protocol_path),
-                status=status,
-                stage_id=args.stage,
-                run_id=args.run_id,
-                recorded_at=args.recorded_at,
-            )
-            if args.output:
-                _write_once(args.output, result)
+        result: dict[str, object] = {
+            "status": "PROM9_PROTOCOL_VALID",
+            "protocol_sha256": file_sha256(protocol_path),
+            "stage_ids": [stage["id"] for stage in normalized["stages"]],
+            "function_ids": [function["id"] for function in normalized["llm_functions"]],
+            "external_governance_authority": "NONE",
+        }
         print(json.dumps(result, ensure_ascii=False, sort_keys=True, indent=2))
         return 0
     except Prom9ProtocolError as error:
@@ -593,7 +386,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 ensure_ascii=False,
                 sort_keys=True,
             ),
-            file=os.sys.stderr,
+            file=sys.stderr,
         )
         return 1
 
@@ -604,13 +397,10 @@ if __name__ == "__main__":
 
 __all__ = [
     "DEFAULT_PROTOCOL",
-    "PACKET_SCHEMA",
     "PROTOCOL_SCHEMA",
     "Prom9ProtocolError",
-    "build_stage_packet",
     "canonical_sha256",
     "file_sha256",
     "read_json",
     "validate_protocol",
-    "verify_stage_packet",
 ]

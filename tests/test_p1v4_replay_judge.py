@@ -110,7 +110,7 @@ def test_self_contained_scorer_matches_frozen_historic_metric():
         assert replay_metric(bundle) == float(historic["value"])
 
 
-def test_exact_lakatotree_positional_cli_prints_metric(tmp_path):
+def test_exact_HSWM_LOCAL_RECORD(tmp_path):
     evidence, budget = _sealed_fixture()
     result_path = tmp_path / "result.json"
     result_path.write_text(

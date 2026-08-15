@@ -29,7 +29,7 @@ Control arms: (i) absorb-all (every candidate committed, no gate), (ii) frozen
 (no absorption).  After 3 rounds, sealed holdout (180 queries) recall@10 is
 compared across arms with paired bootstrap.
 
-Preregistered prediction (LakatoTree, user-declared 2026-07-23):
+Preregistered prediction (HSWM_LOCAL_RECORD, user-declared 2026-07-23):
   rounds_passed >= 1 of 3; novel cross-metric: min canary_preservation >= 98%.
   Kill condition: 3 consecutive rounds with zero acceptance.
 
@@ -87,7 +87,7 @@ from prom_p5_multiview_hardhop import (
 )
 
 
-TREE = "LakatosTree_PromSearchHSWM_20260721"
+TREE = "HSWM_LOCAL_RECORD"
 BRANCH = "B3-shadow-gated-topology-absorption"
 QUESTION = "Q-continual-absorption-fsm-unseen"
 CONJECTURE = (
@@ -848,7 +848,7 @@ def main() -> int:
     }
 
     evidence = {
-        "schema": "lakato-evidence-record/v1",
+        "schema": "local_record-evidence-record/v1",
         "programme": TREE,
         "branch": BRANCH,
         "question": QUESTION,
@@ -949,7 +949,7 @@ def main() -> int:
         ],
         "limitations": [
             "Dataset and encoder substitutions: SiReRAG-converted 2Wiki (1000 rows) and deterministic lexical embeddings replace the P6 dataset/MiniLM because the external volume is unmounted and downloads are forbidden; absolute recall levels are not comparable to P6, only the paired gate logic carries over.",
-            "LakatoTree prediction was user-declared (2026-07-23); no server receipt sha was recorded in-repo.",
+            "HSWM_LOCAL_RECORD prediction was user-declared (2026-07-23); no server receipt sha was recorded in-repo.",
             "One benchmark, one deterministic split, one seed; training interactions use gold supporting passages (supervised learning-while-using).",
             "Canary/target slices are structural (candidate-touched gold documents); the target slice approximates the train distribution rather than matching it exactly.",
         ],

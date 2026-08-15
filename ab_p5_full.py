@@ -1,6 +1,6 @@
 """P5 FULL PREREG RUN — HSWM vs direct-LLM-rerank, matched LLM budget, strong judge.
 
-LakatoTree: LakatosTree_HSWM_20260719 / prediction-p5-cognitive-uplift-vs-directllm
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / prediction-p5-cognitive-uplift-vs-directllm
 This is the *full prereg* execution (pilot = ab_p5_pilot.py, gemma3:4b, INCONCLUSIVE
 with a 4B-judge-worse-than-cosine confound). Confound removal: strong judge/reader
 (qwen3.6-27b on dgx vLLM, OpenAI-compatible endpoint) for ALL LLM roles.
@@ -30,7 +30,7 @@ Run (per dataset x seed), then combine:
   .venv/bin/python ab_p5_full.py run --dataset 2wiki   --seed 7  --out ab_p5_full_2wiki_s7.json
   .venv/bin/python ab_p5_full.py combine --runs ab_p5_full_*.json --out ab_p5_full_results.json
 
-NO LakatoTree submit_result from here; parent verifies and judges. New file only.
+NO HSWM_LOCAL_RECORD submit_result from here; parent verifies and judges. New file only.
 """
 from __future__ import annotations
 
@@ -731,8 +731,8 @@ def cmd_run(args) -> None:
     result = {
         "label": "PREREG_CANDIDATE",
         "note": "full P5 run, single dataset+seed; combine across runs for the prereg "
-                "judgment; parent verifies before any LakatoTree submit_result",
-        "tree": "LakatosTree_HSWM_20260719",
+                "judgment; parent verifies before any HSWM_LOCAL_RECORD submit_result",
+        "tree": "HSWM_LOCAL_RECORD",
         "prereg_ref": "prediction-p5-cognitive-uplift-vs-directllm",
         "dataset": args.dataset,
         "config": {k: getattr(args, k) for k in
@@ -827,7 +827,7 @@ def cmd_combine(args) -> None:
 
     out = {
         "label": "PREREG_CANDIDATE",
-        "tree": "LakatosTree_HSWM_20260719",
+        "tree": "HSWM_LOCAL_RECORD",
         "prereg_ref": "prediction-p5-cognitive-uplift-vs-directllm",
         "prereg_criteria": {
             "metric": "hswm_answer_f1_minus_directllm",

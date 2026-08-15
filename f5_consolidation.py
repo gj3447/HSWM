@@ -4,7 +4,7 @@ PREREG (locked, read-only input): prom_search_hswm/evidence/
 PREREG_f5_consolidation_20260725.json (in the SYMPOSIUM/HSWM checkout).
 
 Receipts from this script are always mode="development" measurements; the
-scientific judgment belongs to the LakatosTree gate, never to this file.
+scientific judgment belongs to the HSWM_LOCAL_RECORD gate, never to this file.
 
 Design (parent-ratified 2026-07-26):
   episodes    E PhantomWiki source-class worlds, experienced in sequence

@@ -2,7 +2,7 @@
 
 > 세션 2026-07-21. **USER_PRIMARY 발화 = 정전, AI 해석 = 주석**(프로젝트 규율).
 > 상세 실험 레지스트리 = [`INDEX.md`](../INDEX.md) · 깊이 정전 = [`SOLID_SCAFFOLD_DEPTH.md`](SOLID_SCAFFOLD_DEPTH.md) · 종합 = [`CONCLUSION.md`](CONCLUSION.md).
-> LakatoTree = `LakatosTree_PromSearchHSWM_20260721` (예측 사전등록 → 실측 → 판정).
+> HSWM_LOCAL_RECORD = `HSWM_LOCAL_RECORD` (예측 사전등록 → 실측 → 판정).
 
 ---
 
@@ -12,7 +12,7 @@
 
 | # | USER 발화 (정전) | 낳은 것 |
 |---|---|---|
-| U1 | "PROM을 더 성능좋게 할 연구를 **자가비판 LakatoTree**에 개발. **PROM = 인터넷 + 내부 KG의 HSWM 레이어를 쌓는 연구**." | 연구 프레임 전체. LakatoTree 신설. |
+| U1 | "PROM을 더 성능좋게 할 연구를 **자가비판 HSWM_LOCAL_RECORD**에 개발. **PROM = 인터넷 + 내부 KG의 HSWM 레이어를 쌓는 연구**." | 연구 프레임 전체. HSWM_LOCAL_RECORD 신설. |
 | U2 | "왜 내 직관을 반증하지? 관련 **이론들이 있는건가**?" | THEORY_GROUNDING (over-smoothing 문헌 조사). 반증은 이론적 근거 있음. |
 | U3 | "층 **하나만** 있어야한다는거냐? HSWM 층 한개 구조냐?" | 복층 질문 → ML8/9 (복층·재귀 실측). |
 | U4 | "**가중치 있는 HSWM 복층**이 성능 좋도록 *형성*되야. HSWM의 시멘틱 연결이 **다른 HSWM과도 연결**. **트리구조**로도." | field-of-fields 재귀 정전. ML8(HSWM-of-HSWMs). |
@@ -46,7 +46,7 @@
 - **ML16** — 진짜 **n-ary 하이퍼그래프(Zhou 2006) > 이진 triple** (HippoRAG식). CI[+.012,+.057], hard-hop +6pp. BF 4.69. → **USER U11 주장 실증.**
 - **ML17** — **의미는 SEED에(+0.113 도움), EDGE엔 말것(−0.031 해침)**. multi-hop 다리는 의미-이질. BF 6.0. → 설계원리: 의미=시딩·구조=엣지, 분리.
 
-**◐ 확증됐으나 저정보 (metric progressive / lakatos degenerating):**
+**◐ 확증됐으나 저정보 (metric progressive / legacy_program degenerating):**
 - **ML18** — **구조깊이≠전파깊이**. residual(=GCNII teleport)이 붕괴 막음(naive recall 0.31→0.004 vs solid drop 0.031). config 이식(port_gap 0), attach 무손실. → **USER U16 "solid" 실증** but engineering virtue지 recall 이득 아님(flat 0.606 못이김). BF 0.167.
 
 **○ equivalent (순수 구조주장 fragile):**
@@ -78,22 +78,22 @@
 
 ## Part 4 — 다음 실험 (우선순위)
 
-> 판정 관문: 순수 구조주장은 fragile/domain-conditional(ML19)이라 **LakatoTree가 progressive 주려면 구조가 room 있는 판(multi-hop 합성/이식)서 유의+강건 payoff**를 보여야 함.
+> 판정 관문: 순수 구조주장은 fragile/domain-conditional(ML19)이라 **HSWM_LOCAL_RECORD가 progressive 주려면 구조가 room 있는 판(multi-hop 합성/이식)서 유의+강건 payoff**를 보여야 함.
 >
-> **Wave 1 판정 착지 (2026-07-22, `LakatosTree_PromSearchHSWM_20260721`)**:
+> **Wave 1 판정 착지 (2026-07-22, `HSWM_LOCAL_RECORD`)**:
 > - **P1-binding-density = `progressive`** — value(held_out_binding_density) 0.2121 (lexical CONTAINS 0.0), novel_measured(semantic_minus_lexical_binding_gap) 0.2121 ≥ 0.2, MC-null z 6.56, judged_at 2026-07-22T01:33:10.052334+00:00.
-> - **P4-equal-compute-control = `partial` / lakatos `degenerating`** — value(semantic_minus_equalcompute_binding_gain) 0.0303, novel_measured(semantic_layer_over_more_blind_search_gap) 0.0303 < 0.1, MC-null z 1.0, judged_at 2026-07-22T01:47:20.063251+00:00. arm 값: semantic 0.2121 / equal-compute RRF control 0.1818 / 1패스 Jaccard 0.4242(양쪽 arm을 이김).
-> - **축소**: semantic weave 이득은 equal-compute control을 이기지 못함(LakatoTree partial) — 전체 프로그램 degenerating, 이후 모든 semantic weave 주장은 이 한계 하에서만 유효. verdict 원문 인용 = `../README.md` §1 판정 블록 (수치 = `evidence/EVIDENCE_p1_binding_density_2026-07-22.json` · `evidence/EVIDENCE_p4_equalcompute_2026-07-22.json`).
+> - **P4-equal-compute-control = `partial` / legacy_program `degenerating`** — value(semantic_minus_equalcompute_binding_gain) 0.0303, novel_measured(semantic_layer_over_more_blind_search_gap) 0.0303 < 0.1, MC-null z 1.0, judged_at 2026-07-22T01:47:20.063251+00:00. arm 값: semantic 0.2121 / equal-compute RRF control 0.1818 / 1패스 Jaccard 0.4242(양쪽 arm을 이김).
+> - **축소**: semantic weave 이득은 equal-compute control을 이기지 못함(HSWM_LOCAL_RECORD partial) — 전체 프로그램 degenerating, 이후 모든 semantic weave 주장은 이 한계 하에서만 유효. verdict 원문 인용 = `../README.md` §1 판정 블록 (수치 = `evidence/EVIDENCE_p1_binding_density_2026-07-22.json` · `evidence/EVIDENCE_p4_equalcompute_2026-07-22.json`).
 
 > **Wave 2 P5 (2026-07-22, SECONDARY_AI가 설계하고 독립 judge가 판정)**:
-> - `P5-onefield-vs-multiview-hardhop` = metric `equivalent`, Lakatos `degenerating`, node `REJECTED`; receipt fold `ok=true`.
+> - `P5-onefield-vs-multiview-hardhop` = metric `equivalent`, Legacy programme `degenerating`, node `REJECTED`; receipt fold `ok=true`.
 > - equal-compute 2Wiki n=400에서 fixed query-routing late RRF는 hard-4 recall@10 Δ **0.0**, full-chain@20 Δ **−0.0125**, 2-support recall@10 Δ **−0.015625**(CI [−0.029687, −0.003125]).
 > - **축소**: "view를 나눠 late fusion하면 충분"과 `cheap_query_routing`만 폐기한다. n-ary substrate와 `semantic=SEED, structure=EDGE` hard core는 건드리지 않는다.
 > - 다음 frontier `Q-learned-gate-privateid-hardhop`를 열었다. learned specialist/query-aware gate + private-ID/direct-edge deletion + 두 벤치·3 seeds로 반증하며, frozen harness 전에는 prediction을 등록하지 않는다.
 > - 정본 보고서=`../../PROM_P5_MULTIVIEW_HARDHOP_2026-07-22.md`, packet=`../judgments/P5_multiview_hardhop/judgment_packet.json`.
 
 > **Wave 2 P6 (2026-07-22, USER_PRIMARY "흡수흡수흡수" 직접 시험)**:
-> - `P6-continual-absorption-fsm-unseen-r2` = metric `equivalent`, Lakatos `degenerating`; receipt fold `ok=true`.
+> - `P6-continual-absorption-fsm-unseen-r2` = metric `equivalent`, Legacy programme `degenerating`; receipt fold `ok=true`.
 > - Phase A(의미 key-value residual 흡수, FSM-gated 3라운드, 2Wiki n=900 query-disjoint): fresh unseen validation에서 3라운드 전부 해침(R1 −0.0604 CI[−0.0938,−0.0292] / R2 −0.0188 / R3 −0.0583 CI 완전 음수) → 승격 게이트 전부 기각 → sealed holdout(n=180) Δ **0.0**, novel −1.0. kill #1 발동.
 > - **축소**: "흡수하면 성능 발전"에서 *의미 residual 경유* 경로만 폐기(exception-barring). USER 원문은 "구조나 fsm 을 개선시키면서" — **Phase B n-ary topology 흡수(ADD/SPLIT/MERGE/SUPERSEDE)는 미시험**, 그게 다음 시험대. FSM 승격 게이트·CAS receipt 규율은 살아남은 공학 가치(해로운 후보 3/3 차단, retention·canary 무손상).
 > - amendment 이력: 원 sha 크래시(관측 0) → 표현-전용 수정 → 자식노드 r2 재등록. 전문=`../evidence/PREREG_p6_continual_absorption_fsm_20260722.json` amendments.
@@ -115,7 +115,7 @@
 - **F. solid 다층 hard-problem 셋** (USER U16 "어려운 문제는 딥스택") — 3-hop+ 초난도 subset 구성, solid GCNII 깊이가 얕음 대비 이기는 regime 탐색. ML19는 2-hop서 깊이 반증 → 진짜 어려운 판에서 재시험.
 - **G. clean 엔티티 추출** — regex NER → LLM 추출로 하이퍼엣지 노이즈 제거. ML15/16의 "노이즈 다리가 signal 상쇄" 완화 → 하이퍼그래프 이득 확대 여부.
 - **H. 완전 통합 PROM primitive** — fuse(ML19) + semantic-seed(ML17) + n-ary(ML16)를 실제 PROM Step3/4에 배선, 레전드repo 결합(U1 원목표) 재측정.
-  - **판정 상태 (2026-07-22, Wave 1)**: 배선 전 관문 실험 실측 완료 — **P1 binding density = `progressive`** (semantic 0.2121 vs lexical CONTAINS 0.0, gap 0.2121 ≥ 0.2, z 6.56) / **P4 equal-compute = `partial` · lakatos `degenerating`** (gain 0.0303, novel 0.0303 < 0.1, z 1.0; 1패스 Jaccard 0.4242가 semantic 0.2121·control 0.1818 양쪽을 이김). **축소**: semantic weave 이득은 equal-compute control을 이기지 못함(LakatoTree partial) — 전체 프로그램 degenerating, 이후 모든 semantic weave 주장은 이 한계 하에서만 유효 → SKILL 배선은 opt-in 강도로만 (기본 = v6.3 lexical 경로, W1-T5 규칙). verdict 원문 = `../README.md` §1 판정 블록.
+  - **판정 상태 (2026-07-22, Wave 1)**: 배선 전 관문 실험 실측 완료 — **P1 binding density = `progressive`** (semantic 0.2121 vs lexical CONTAINS 0.0, gap 0.2121 ≥ 0.2, z 6.56) / **P4 equal-compute = `partial` · legacy_program `degenerating`** (gain 0.0303, novel 0.0303 < 0.1, z 1.0; 1패스 Jaccard 0.4242가 semantic 0.2121·control 0.1818 양쪽을 이김). **축소**: semantic weave 이득은 equal-compute control을 이기지 못함(HSWM_LOCAL_RECORD partial) — 전체 프로그램 degenerating, 이후 모든 semantic weave 주장은 이 한계 하에서만 유효 → SKILL 배선은 opt-in 강도로만 (기본 = v6.3 lexical 경로, W1-T5 규칙). verdict 원문 = `../README.md` §1 판정 블록.
 
 ### 열린 질문 (닫지 말 것)
 - 구조깊이(solid 다층)의 **이식성·steerability 이득이 recall 아닌 어떤 지표로 잡히나** (유지보수·전이 축, ML18 §6).

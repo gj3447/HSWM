@@ -3,17 +3,14 @@
 > HSWM = Hypergraph Semantic Weight Map. 지향 정체성은 함수 단위가 LLM으로 실행되는 하이퍼그래프 시멘틱 신경망이다. 현재 측정으로 방어 가능한 범위는 **evidence-preserving memory substrate + 좁은 L0 typed-policy actuation 재현**까지이며, durable weight/topology learning은 아직 미폐쇄다. 이 인덱스는 공개 저장소의 코드·설계·실험
 > 영수증만 가리킨다.
 
-## 2026-07-27 — 실행 정본과 연구 장부
+## 2026-08-15 — 실행 정본과 직접 측정 기록
 
-이 인덱스는 카탈로그다. F1–F5의 **역사적 엄격 연구 장부**는
-[`research/HSWM_RESEARCH_LEDGER.v1.json`](research/HSWM_RESEARCH_LEDGER.v1.json)이고,
-그 프로그램의 판정 기록층은 Proxmox LXC-301의 `LakatosTree_HSWM_20260719` 하나다. 아래
-`state` 값은 장부 원문 그대로이며, 이 문서가 임의로 승격하지 않는다. 일반 구현의 활성
-기계 정책은 [`research/HSWM_MINIMAL_GOVERNANCE.v1.json`](research/HSWM_MINIMAL_GOVERNANCE.v1.json)이다.
-LakatoTree·OOPtDD는 전역 선행 관문이 아니라 명시적 위험에만 켜는 선택 감사층이다.
-OMD는 RETIRED이며 과거 자료만 읽는다.
+이 인덱스는 체크인 코드·테스트·측정물의 카탈로그다. 현재 상태는 외부 판정 서비스나
+개인 거버넌스 계층이 아니라 각 행에 연결된 로컬 증거에서만 읽는다. 활성 기계 정책은
+[`research/HSWM_MINIMAL_GOVERNANCE.v1.json`](research/HSWM_MINIMAL_GOVERNANCE.v1.json)이며,
+삭제된 판정·감사·오케스트레이션 도구의 기록에는 현재 권위가 없다.
 
-| 가설 (`hypothesis_id`) | 장부 `state` | 영수증·경계 |
+| 가설 (`hypothesis_id`) | 현재 상태 | 직접 증거·경계 |
 |---|---|---|
 | `F1-larger-ai-baselines-and-retention` | `running` | r3 는 physical HTTP 200 721/1500 뒤 transport 오류로 `REFUSED` 되어 suite·verdict 가 0건이다. [durable transport](prom_search_hswm/docs/F1_DURABLE_TRANSPORT_CONTRACT_20260727.md)는 로컬 fault battery를 통과했지만 DGX 실배치·actual-upstream disconnect·successor prereg가 남았다 |
 | `durable-cell-runtime` | `engineering_validated` | SQLite event store·outbox·typed CellPort·replay. 인프라이며 효능 증거가 아니다 |
@@ -23,10 +20,9 @@ OMD는 RETIRED이며 과거 자료만 읽는다.
 | `weight-only-agent-transfer` | `exploratory_refuted` | [F3 r3 sealed](receipts/f3r3_agent_ab_transfer_sealed_1784996298.json). 해당 testbed 한정 반증이다 |
 | `long-term-consolidation-sleep` | `exploratory_refuted` | [F5 sealed](receipts/f5_consolidation_sealed_1784998952.json). 시험한 downscale 연산자를 기각한 것이다 |
 
-프로그램 전체의 `scientific_status` 는 여전히 **`UNJUDGED`** 다. 장부의 승격 게이트는
-freeze → SHA-256 pin → git commit pin → 음성대조 포함 영수증 → 생산자와 분리된 독립 judge →
-Proxmox LakatoTree exact readback → Longinus 바인딩의 7단계를 모두 요구하고, engineering PASS
-단독 승격과 로컬 자가선언 `progressive`/`canonical` 을 금지한다.
+프로그램 전체의 `scientific_status` 는 여전히 **`UNJUDGED`** 다. 상태 승격은 고정 입력,
+내용 해시, 음성대조, 재현 가능한 측정과 명시적 claim boundary로만 정당화하며,
+engineering PASS 단독으로 과학적 효능을 선언하지 않는다.
 
 ## 현재 설계 결론
 
@@ -71,9 +67,9 @@ weight/routing/topology 변화로 압축되어야 하며, HSWM 자체가 LLM 함
 [`hswm_token_learning_contract.py`](hswm_token_learning_contract.py)에 있다. 이는 목표 정체성과
 engineering contract이며 현재 효능·과학적 유일성 주장이 아니다.
 
-2026-08-15 사용자 정전은 한 단계 더 나아가 LakatoTree·OOPtDD·OMD의 절차 증식 자체도
-라그나로크가 될 수 있다고 명시했다. 기본 경로를 `실행 → 직접 측정 → 중요한 결과 영수증
-하나 → commit/push`로 줄이고, MCP는 외부 Toolbox의 bounded ontology I/O로 제한한다.
+2026-08-15 사용자 정전은 개인 거버넌스 도구와 절차 증식 자체도 라그나로크가 될 수 있다고
+명시했다. 기본 경로를 `실행 → 직접 측정 → 중요한 결과 영수증 하나 → commit/push`로
+줄이고, MCP는 bounded ontology I/O로 제한한다.
 원문·실측 MCP 상태·보존 경계는
 [`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md)에 있다.
 
@@ -118,29 +114,18 @@ sheaf hypergraph network까지 설명한다. 기계 판독 정본은
 - 첫 실험 결과: [`B21_LEARNED_ROUTER_RESULTS_2026-07-23.md`](prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) — B2.1 router-only `REJECTED`
 - 다음 설계: [`B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md`](prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md) — fast query-bond attention을 먼저 검증하고 반복 효과만 slow `Delta ell`로 증류
 - 결정적 비교 설계 lock: [`_research/shared_field_hypothesis/`](_research/shared_field_hypothesis/) — shared field 대 separate heads에서 비교할 예산 차원·카운터 계약과 독립 selection·revision·감사 지표를 잠금. 현재 `DESIGN_LOCKED_NOT_PREREGISTERED`이며 v1은 모든 run을 거부한다
-- 경계: 설계 수식은 `SECONDARY_AI_RESEARCH_AND_DESIGN`; B2.1 수치는 별도 prereg·실측·감사·LakatoTree receipt에 근거한다.
+- 경계: 설계 수식은 `SECONDARY_AI_RESEARCH_AND_DESIGN`; B2.1 수치는 체크인 prereg와 직접 측정에 근거한다.
 
 ### P0–P4 전환 상태와 최신 falsifier
 
 | 단계/실험 | 현재 판정 | 산출물 |
 |---|---|---|
 | P0 identity/metric | 목표 정체성 고정. 함수/agent process가 LLM으로 실행되고 `H,W`가 그 거시 신경망을 구성. 인지체 metric(slope>0)·baseline 3종·평가 3종 잠금 초안 (ratify 대기) | [canon](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) · [P0 prereg](PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md) |
-| P1 learning actuation | scalar slow-weight P1은 **과학적 RED / LakatoTree 절차상 UNJUDGED**(12 candidates, active 0, A1−A2=0, rank 변화 0/456). typed-policy 표현으로 이동한 P1v3은 `6/6 vs 0/6`, 독립 P1v4는 `6/6 vs 2/6`, 개선 4/6으로 재현됐고 `partial@L2(replay_verified)`를 받음. 단 n=6 L0이며 일반 compiler·durable `Delta W`는 미확증 | [failure analysis](RESEARCH_P1_FAILURE_LAKATOTREE_2026-07-24.md) · [P1v4 closeout](_research/p1v4_fresh_replication/CLOSEOUT_20260724.md) · [P1v4 result](receipts/p1v4_policy_lakatotree_result_seed5_r2_20260724.json) · [prereg](PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json) |
+| P1 learning actuation | scalar slow-weight P1은 **과학적 RED**(12 candidates, active 0, A1−A2=0, rank 변화 0/456). typed-policy 표현으로 이동한 P1v3은 `6/6 vs 0/6`, 독립 P1v4는 `6/6 vs 2/6`, 개선 4/6으로 재현됐다. 단 n=6 L0이며 일반 compiler·durable `Delta W`는 미확증 | [efficacy record](EFFICACY.md) · [P1v4 closeout](_research/p1v4_fresh_replication/CLOSEOUT_20260724.md) · [prereg](PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json) |
 | B2 routing signal | 최선 slice oracle +9.92pp, tie 75%; pooled 분포는 tie kill. 얇은 oracle signal이지 learned 성공 아님 | [result](B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md) · [evidence](EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json) |
 | E1 conditional traversal | bridge −13.89pp, factoid −7.27pp. 전면 OFF 유지 | [result](E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md) · [evidence](EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json) |
 | P3 shadow topology absorption | 0/3 수용, canary 100%, sealed Δ0. 안전하지만 후보가 무득 | [result](SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md) · [evidence](prom_search_hswm/evidence/EVIDENCE_shadow_gated_absorption_20260723.json) |
 | prior-art tribunal | generic graph three-factor+sleep novelty는 사망; n-ary credit/LLM verdict/topology/shared persistent field 슬롯 생존 | [tribunal](TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md) |
-
-### F5v2 B-prime 오프라인 준비 (2026-07-26)
-
-F5v2는 query-conditioned QFR을 비영속 retrieval 대조군으로 분리하고,
-query 공개 전 CPL1 numeric packet+provenance로 만드는 content-addressed B-prime을
-consolidation treatment로 시험하도록 재설계됐다. 현재는 exact packet 경계, query leakage
-차단, durable no-derived B0, B-prime file-cache candidate, provenance/canary/DRM judge,
-ordered-gate offline integrity seal만 구현됐다. self-hash는 권위로 취급하지 않으며,
-prereg은 DRAFT이고 F1이 active라 측정과 machine lock은 의도적으로 거부된다. 정확한 구현
-범위와 미구현 경계는
-[`F5V2_BPRIME_OFFLINE_PREP_2026-07-26.md`](F5V2_BPRIME_OFFLINE_PREP_2026-07-26.md)에 있다.
 
 ## 2026-07-23 paper–code absorption gate
 
@@ -181,7 +166,7 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 | B2.1 learned router | 2벤치 × 3 partition × 3 k × 3 seed = 54셀 전부 abstain; primary Δ0, oracle ceiling min +0.01087로 router-only `REJECTED / degenerating` | [result](prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) |
 | B2.2 bond weighting 진단 | fine top-20 oracle +0.0489/+0.0833; train-only static sparse patch는 6/6 calibration·test Δ0. query-bond 쪽 room만 확인, confirmatory claim 아님 | [design](prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md) · [diagnostic](prom_search_hswm/evidence/DIAG_b22_fine_bond_action_headroom_20260723.json) |
 | PROM-8 / R1 | dynamic two-lane 처방. R1 T1 minimum 0→2, 2Wiki depth-2 0→4, MuSiQue 0 | [PROM-8](PROM_8_DYNAMIC_TWO_LANES_2026-07-22.md) · [R1](R1_T1_RETRY_RESULTS_2026-07-22.md) |
-| open composition v2r3 | target 59/59, expanded 78/78, injected negative 2/2. 구조 closure는 통과했지만 LakatoTree는 `partial`, certificate=false | [amendment](AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md) · [judgment](prom_search_hswm/judgments/OPEN_COMPOSITION_20260722/V2_JUDGMENT.md) |
+| open composition v2r3 | target 59/59, expanded 78/78, injected negative 2/2. 로컬 구조 closure만 통과했으며 과학적 효능은 미판정 | [amendment](AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md) |
 
 ## 저장소 지도
 
@@ -189,7 +174,6 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 |---|---|
 | [`README.md`](README.md) | 공개 구현의 현재 claim boundary와 실행법 |
 | [`EFFICACY.md`](EFFICACY.md) | 효능 주장과 반증 결과의 장부 |
-| [`RESEARCH_P1_FAILURE_LAKATOTREE_2026-07-24.md`](RESEARCH_P1_FAILURE_LAKATOTREE_2026-07-24.md) | P1 실패의 신호·credit·actuation·판정 절차 분해와 다음 falsifier |
 | [`world_ir.py`](world_ir.py), [`world_compiler.py`](world_compiler.py) | evidence-preserving world compiler |
 | [`field_snapshot.py`](field_snapshot.py), [`certified_readout.py`](certified_readout.py) | immutable field cut와 fail-closed readout |
 | [`prom_search_hswm/`](prom_search_hswm/) | PROM→HSWM, field algebra, federated merge, open-composition 연구 코드와 영수증 |
@@ -199,7 +183,6 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 | [`prom_search_hswm/hswm_bond_readout.py`](prom_search_hswm/hswm_bond_readout.py) | slow `ell`과 volatile query-bond potential을 분리 적용하는 pure deterministic module |
 | [`prom_search_hswm/test_hswm_bond_readout.py`](prom_search_hswm/test_hswm_bond_readout.py) | neutral parity·coverage·monotonic suppression·shift invariance 19 tests |
 | [`prom_search_hswm/fsm/hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json) | weight→routing→topology 후보의 bounded proposal/evaluation/activation 계약 |
-| [`hswm_next_research_harness.py`](hswm_next_research_harness.py) / [`HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md`](HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md) | 명시적 confirmatory 프로그램에서만 쓰는 선택형 엄격 하네스. 일반 구현의 기본 관문이 아님 |
 | [`PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md`](PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) / [`prom9_semantic_neural_network.v1.json`](prom_search_hswm/prom9_semantic_neural_network.v1.json) / [`prom9_protocol.py`](prom_search_hswm/prom9_protocol.py) | LLM 3-role typed 함수망→외부 outcome→eligibility→fast bond→slow weight 승격을 동등예산 대조군과 함께 고정한 PROM-9 |
 | [`hswm_token_learning_contract.py`](hswm_token_learning_contract.py) / [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) | 최소 token/action trajectory를 eligibility→outcome→activated candidate에 결속하고 단일 causal-test receipt 전에는 학습 규칙 주장을 막는 계약과 사용자 정전 |
 | [`prom_search_hswm/evidence/`](prom_search_hswm/evidence/) | preregistration, evidence, neutral judge packet, injected negative |
@@ -227,11 +210,8 @@ python3 -m pytest \
 2026-07-23 재실행 결과는 `132 passed`다.
 테스트 통과는 harness/불변식 closure이고, 성능 판정은 별도 evidence와 receipt를 따른다.
 
-LakatoTree `LakatosTree_HSWM_SolidMultiAgent_20260722 /
-ENG-open-composition-kernel-v2r3`의 receipt-chain verdict는 `partial`이고 receipt는
-`c000bd063ded7d89b4123bb50cc34a7c38ef66a244514e9a555f3edb38e97a60`이다.
-`verify_verdict`는 `ok=true`지만 server-owned measurement, calibration, reproducibility
-certificate가 닫히지 않아 `certified=false`다.
+이 회귀는 구조·불변식의 로컬 closure만 증명한다. 성능과 과학적 효능은 각 직접 측정과
+claim boundary를 따로 확인해야 한다.
 
 ## 다음 frontier
 
@@ -241,7 +221,7 @@ certificate가 닫히지 않아 `certified=false`다.
 4. P1v5+F1 뒤 Agent-A write → frozen Agent-B unseen transfer; transcript·exact-cache·B-update 금지
 5. 전이 뒤에만 typed `CONNECT` 한 종류를 열고 weight-only/router-only/flat-memory 및 removal ablation과 비교
 6. 그 뒤 homeostasis·forgetting·collapse·recursion·cost·rollback·sleep/consolidation 장기판
-7. shared-field v2의 독립 selection/evolving-knowledge cohort와 server-owned fresh-clone certification은 위 관문의 공통 기반으로 계속 구현
+7. shared-field v2의 독립 selection/evolving-knowledge cohort와 재현 가능한 fresh-clone 검증을 공통 기반으로 구현
 
 ## 공개 경계
 

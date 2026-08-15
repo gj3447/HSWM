@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """B-2 routing signal existence — measurement only, no learning.
 
-Preregistered (LakatoTree): does a per-query routing signal exist in our query
+Preregistered (HSWM_LOCAL_RECORD): does a per-query routing signal exist in our query
 distribution at all? Computed from EXISTING per-query result JSONs.
 
 Metrics per dataset:

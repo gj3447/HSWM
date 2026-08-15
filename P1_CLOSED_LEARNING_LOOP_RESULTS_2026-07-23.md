@@ -1,6 +1,6 @@
-# P1 closed learning loop — implementation GREEN, scientific RED, LakatoTree unjudged
+# P1 closed learning loop — implementation GREEN, scientific RED, HSWM_LOCAL_RECORD unjudged
 
-> **한 줄 판정:** `outcome → eligibility → M → ΔW candidate → fresh/canary → CAS` 실행 경로는 구현됐지만, 실측 후보 12개가 fresh recall@10을 단 한 건도 움직이지 못해 전부 기각됐다. A1과 no-commit A2의 paired gain은 정확히 `0.0`; prereg K1에 따라 이 substrate의 three-factor slow-weight 경로는 중단하고 typed verdict-to-lesson baseline으로 돌아간다. 단, 역사 evidence가 measurement 자체에서 `FAIL`을 썼으므로 LakatoTree kernel 상태는 공식 `rejected`가 아니라 절차상 `unjudged`다.
+> **한 줄 판정:** `outcome → eligibility → M → ΔW candidate → fresh/canary → CAS` 실행 경로는 구현됐지만, 실측 후보 12개가 fresh recall@10을 단 한 건도 움직이지 못해 전부 기각됐다. A1과 no-commit A2의 paired gain은 정확히 `0.0`; prereg K1에 따라 이 substrate의 three-factor slow-weight 경로는 중단하고 typed verdict-to-lesson baseline으로 돌아간다. 단, 역사 evidence가 measurement 자체에서 `FAIL`을 썼으므로 HSWM_LOCAL_RECORD kernel 상태는 공식 `rejected`가 아니라 절차상 `unjudged`다.
 
 ## 1. 무엇이 실제로 구현됐나
 
@@ -53,18 +53,17 @@ final receipt가 gate 숫자를 직접 노출하지 않은 관측성 결손을 �
 
 두 post-hoc 진단은 새 arm outcome이 아니다. 원 실험의 staged bytes와 disjoint fresh retrieval 비교만 재생했다. 다만 다음 harness는 gate delta/CI와 rank actuation을 final measurement 본문에 직접 넣어야 한다.
 
-## 5. LakatoTree 절차 경계
+## 5. HSWM_LOCAL_RECORD 절차 경계
 
 위 수치는 이 보호대의 scientific RED를 지지한다. 그러나 당시
 `p1_phantom_environment.py`가 measurement artifact에 `verdict: FAIL`을 직접
 기록했고, 현재 retrievable한 server experiment tag, neutral judge-script
 receipt, injected-negative judge receipt가 없다. measurement와 judgment의
-분리가 깨졌으므로 유효한 LakatoTree kernel 상태는 **UNJUDGED — procedural
+분리가 깨졌으므로 유효한 HSWM_LOCAL_RECORD kernel 상태는 **UNJUDGED — procedural
 block**이다. 사후 adapter는 prereg chronology와 judge independence를 복구할
 수 없다.
 
-독립 audit와 정확한 신호/credit/actuation 분해, 다음 falsifier는
-[`RESEARCH_P1_FAILURE_LAKATOTREE_2026-07-24.md`](RESEARCH_P1_FAILURE_LAKATOTREE_2026-07-24.md)에 있다.
+신호/credit/actuation 분해와 현재 claim boundary는 [`EFFICACY.md`](EFFICACY.md)에 있다.
 
 ## 6. 정직한 현재 상태
 

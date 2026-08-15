@@ -2,7 +2,7 @@
 """
 ML10 — publishable급 HSWM 재실험: α-nDCG + 임베딩 수평엣지 + depth ablation + split-benefit + 통계.
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML10-hswm-publishable
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML10-hswm-publishable
 적대검증 6결함 반영: (1)공정 baseline flat+MMR (2)α-nDCG(게임불가 diversity) (3)gold 스코프명시
 (4)depth ablation multi-seed 에러바 (5)임베딩 수평엣지(dense regex 대체) (6)bootstrap CI + N확대.
 
@@ -236,7 +236,7 @@ def main():
     diff_edge=[pq_edge[i]-pq_tree[i] for i in range(len(concepts))]
 
     ev={
-      "experiment":"hswm_publishable_ml10","tree":"LakatosTree_PromSearchHSWM_20260721","node":"ML10-hswm-publishable",
+      "experiment":"hswm_publishable_ml10","tree":"HSWM_LOCAL_RECORD","node":"ML10-hswm-publishable",
       "setup":{"n_queries":len(concepts),"metric":"alpha-nDCG@20 (alpha=0.5, subtopic=chapter, blind-proof)",
                "seeds":SEEDS,"gold":"anchor-string presence (scope: string-level, crude)","corpus":"ai-agent-book 1425 chunks",
                "tree":"RAPTOR-style KMeans branch=6, minsize=6, maxlvl=8","edges":f"embedding cross-chapter top-{EDGE_M} beta={EDGE_BETA}"},

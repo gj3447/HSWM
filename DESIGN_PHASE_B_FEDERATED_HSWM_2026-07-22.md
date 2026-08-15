@@ -119,7 +119,7 @@ H3-C0 진단: MuSiQue/2Wiki에서 admissible legal 2-edge chain이 **0** — ker
 - 벤치 **2개** (2Wiki + MuSiQue) × seed **3개** — P6 kill에서 미룬 것.
 - **private-ID 통제** + **direct-answer-edge deletion 통제** (답을 직통으로 잇는 엣지를 지워도 이기는지 — 순회가 아니라 지름길 암기였는지 분리).
 - sealed unseen 프로토콜 P6과 동일. exact-ID cache 진단 유지.
-- **숫자(threshold·n·seed값)는 여기서 안 박는다** — harness 동결 후 prereg에서만 (LakatoTree 규율: frozen 전 prediction 등록 금지).
+- **숫자(threshold·n·seed값)는 여기서 안 박는다** — harness 동결 후 prereg에서만 (HSWM_LOCAL_RECORD 규율: frozen 전 prediction 등록 금지).
 
 ### 4.4 kill conditions (설계 시점 확정분)
 
@@ -140,7 +140,7 @@ H3-C0 진단: MuSiQue/2Wiki에서 admissible legal 2-edge chain이 **0** — ker
 | **B2** | cross-field merge payoff: merge(A,B)가 cross-field 질의에서 best(A,B) 단독을 이기나 + L5 no-harm | 망 주장의 본판 | B0, B1의 seam 검증 |
 | **B3** | continual topology 흡수 full: FSM-gated 라운드 × 2벤치 × 3seed | P6의 정당한 후속 (Q-continual-absorption 재도전) | B1 (payload 검증) |
 
-- 각 단계 독립 prereg + 독립 LakatoTree 노드. B1이 죽으면 B2/B3 설계 재검토 (identity가 병목이 아니었다는 뜻).
+- 각 단계 독립 prereg + 독립 HSWM_LOCAL_RECORD 노드. B1이 죽으면 B2/B3 설계 재검토 (identity가 병목이 아니었다는 뜻).
 - ML8/ML10 교훈 필수 반영: cross-field "coverage 승"은 metric artifact였음 — B2는 **α-nDCG blind-proof 프로토콜**로만 판정.
 
 ---
@@ -174,4 +174,4 @@ H3-C0 진단: MuSiQue/2Wiki에서 admissible legal 2-edge chain이 **0** — ker
 
 - 코드 둥지: `prom_search_hswm/` (B0: `hswm_field_algebra.py` + `test_hswm_field_algebra.py` L1–L4)
 - 공개 미러: `gj3447/HSWM` (publish.sh)
-- LakatoTree: 질문 `Q-federated-hswm-merge-crossfield` 신설 (B2), `Q-continual-absorption-fsm-unseen`은 B3가 회수.
+- HSWM_LOCAL_RECORD: 질문 `Q-federated-hswm-merge-crossfield` 신설 (B2), `Q-continual-absorption-fsm-unseen`은 B3가 회수.

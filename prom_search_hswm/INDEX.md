@@ -2,14 +2,14 @@
 
 > **질문**: PROM(프로메테우스) 검색을 더 성능 좋게 — "인터넷 + 내부 KG의 HSWM 레이어를 쌓는 연구".
 > **HSWM** = Hypergraph Semantic Weight Map — 정전상 **함수 단위가 LLM으로 실행되는 하이퍼그래프 기반 시멘틱 신경망**(지향 정체성이며, 학습 루프는 아직 미완). 본 레지스트리는 그중 검색·구조 축 실험을 다룬다. (재배맨 v3 canon, 場-of-場, weight-semantic 롱기누스 엣지).
-> **방법**: 자가비판 LakatoTree(`LakatosTree_PromSearchHSWM_20260721`) — 예측 사전등록 → 실측 → 판정.
+> **방법**: 자가비판 HSWM_LOCAL_RECORD(`HSWM_LOCAL_RECORD`) — 예측 사전등록 → 실측 → 판정.
 > **정본 문서**: [`docs/USER_CANON_AND_ROADMAP.md`](docs/USER_CANON_AND_ROADMAP.md) (마스터) · [`docs/CONCLUSION.md`](docs/CONCLUSION.md) · [`docs/THEORY_GROUNDING.md`](docs/THEORY_GROUNDING.md) · [`docs/SOLID_SCAFFOLD_DEPTH.md`](docs/SOLID_SCAFFOLD_DEPTH.md) · [`README.md`](README.md)
 >
 > **레이아웃**: `docs/`(정본 문서) · `experiments`(루트 `*.py`) · `data/`(입력 gold/소스) · `evidence/`(영수증 `EVIDENCE_*.json`). 실행 = `./run_on_gm.sh <script.py>`.
 
 ---
 
-## 1. 실험 아크 (ML = LakatoTree 노드, PROM = 초기 프로브)
+## 1. 실험 아크 (ML = HSWM_LOCAL_RECORD 노드, PROM = 초기 프로브)
 
 | # | 실험 파일 | 영수증 | 판정 | 한 줄 |
 |---|---|---|---|---|
@@ -29,11 +29,11 @@
 | ML15 | `test_hswm_entity_bench.py` | `EVIDENCE_hswm_entity_bench_ml15_*` | flat 최고 | 공유엔티티 엣지 8변종, regex NER 노이즈 다리가 signal 상쇄 |
 | **ML16** | `test_hswm_true_hypergraph.py` | `EVIDENCE_hswm_true_hypergraph_ml16_*` | **progressive** BF 4.69 | ★ 진짜 n-ary 하이퍼그래프(Zhou 2006) > 이진 CI[+.012,+.057], hard-hop +6pp |
 | **ML17** | `test_hswm_semantic_ablation.py` | `EVIDENCE_hswm_semantic_ablation_ml17_*` | **progressive** BF 6.0 | ★ semantic SEED +0.113 도움 / semantic EDGE −0.031 해침 → 의미=시딩·구조=엣지 |
-| **ML18** | `test_hswm_solid_scaffold.py` | `EVIDENCE_hswm_solid_scaffold_ml18_*` | metric prog / lakatos **degen** BF 0.167 | ★ 구조깊이≠전파깊이. residual=solid 붕괴막음(S)·config 이식(P)·attach 무손실(A) — but flat 못이김 (engineering virtue) |
-| **P5** | `prom_p5_multiview_hardhop.py` | `EVIDENCE_p5_multiview_hardhop_20260722.json` + `judgments/P5_multiview_hardhop/` | metric **equivalent** / Lakatos **degenerating**, node `REJECTED` | equal-compute fixed late RRF: hard-4 Δ0, full-chain −0.0125, 2-support −0.015625. cheap query routing만 폐기; learned specialist는 미검. |
-| **P6** | `prom_p6_continual_absorption_fsm.py` + `hswm_absorption_fsm.py` + `fsm/` | `EVIDENCE_p6_continual_absorption_fsm_20260722.json` + `judgments/P6_continual_absorption_fsm/` | metric **equivalent** / Lakatos **degenerating** (node `-r2`) | Phase A 의미 KV residual 흡수: 3라운드 전부 fresh unseen 해침(R1 −0.060, R3 −0.058, CI 음수) → FSM 게이트 전부 기각 → sealed Δ=0, novel −1. 가드레일은 작동(손해 0 실림). 재도전은 Phase B topology 흡수로만. |
+| **ML18** | `test_hswm_solid_scaffold.py` | `EVIDENCE_hswm_solid_scaffold_ml18_*` | metric prog / legacy_program **degen** BF 0.167 | ★ 구조깊이≠전파깊이. residual=solid 붕괴막음(S)·config 이식(P)·attach 무손실(A) — but flat 못이김 (engineering virtue) |
+| **P5** | `prom_p5_multiview_hardhop.py` | `EVIDENCE_p5_multiview_hardhop_20260722.json` + `judgments/P5_multiview_hardhop/` | metric **equivalent** / Legacy programme **degenerating**, node `REJECTED` | equal-compute fixed late RRF: hard-4 Δ0, full-chain −0.0125, 2-support −0.015625. cheap query routing만 폐기; learned specialist는 미검. |
+| **P6** | `prom_p6_continual_absorption_fsm.py` + `hswm_absorption_fsm.py` + `fsm/` | `EVIDENCE_p6_continual_absorption_fsm_20260722.json` + `judgments/P6_continual_absorption_fsm/` | metric **equivalent** / Legacy programme **degenerating** (node `-r2`) | Phase A 의미 KV residual 흡수: 3라운드 전부 fresh unseen 해침(R1 −0.060, R3 −0.058, CI 음수) → FSM 게이트 전부 기각 → sealed Δ=0, novel −1. 가드레일은 작동(손해 0 실림). 재도전은 Phase B topology 흡수로만. |
 | **B2** | `prom_b2_crossfield_merge.py` + `hswm_field_algebra.py` | `EVIDENCE_b2_crossfield_merge_20260722.json` | **progressive** (eureka true BF 6.0) / L5 위반 lemma 편입 | ★ federated merge: cross-field +0.2137 CI[.183,.244] + seam 유의 +0.034 / in-field −0.065 간섭비용. 첫 완전 progressive. `docs/B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md` |
-| **B2.1** | `prom_b21_learned_router.py` | `EVIDENCE_b21_learned_router_20260723.json` + `AUDIT_*` + `judgments/B21_learned_router/` | scientific **REJECTED** / metric **equivalent** / Lakatos **degenerating** | 2벤치×3 partition×3 k×3 seed=54셀 전부 `ABSTAIN->MERGED`; primary Δ0, in-field min −0.0351. gold oracle도 primary min headroom +0.01087로 목표 >+.02 불가능. router-only 폐기, semantic-weight/topology 행동공간으로 이동. [`result`](docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) |
+| **B2.1** | `prom_b21_learned_router.py` | `EVIDENCE_b21_learned_router_20260723.json` + `AUDIT_*` + `judgments/B21_learned_router/` | scientific **REJECTED** / metric **equivalent** / Legacy programme **degenerating** | 2벤치×3 partition×3 k×3 seed=54셀 전부 `ABSTAIN->MERGED`; primary Δ0, in-field min −0.0351. gold oracle도 primary min headroom +0.01087로 목표 >+.02 불가능. router-only 폐기, semantic-weight/topology 행동공간으로 이동. [`result`](docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) |
 | **B2.2 diag** | `hswm_bond_readout.py` + `diag_b22_weight_action_space.py` | `DIAG_b22_fine_bond_action_headroom_20260723.json` | `DIAGNOSTIC_NO_CLAIM` | pure weight-combination kernel 착지; B2/OpenHSWM adapter는 다음. fine query-edge oracle +.0489/+.0833 room, static edge-ID patch는 6/6 cal/test Δ0. full pack 뒤 fast bond learner를 개발하고 반복 효과만 slow weight로 증류. [`design`](docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md) |
 | **PROM-9** | `prom9_protocol.py` + `prom9_semantic_neural_network.v1.json` | `RECEIPT_prom9_engineering_tests_20260724.json` — targeted 8/8, full 857 pass·1 skip, Gate0/F1 prepare PASS, P1v5 BLOCKED | `DESIGN_LOCKED_NOT_PREREGISTERED` / engineering closure only | QF query compiler→BF bond proposer→AF answer synthesizer의 typed LLM 함수망, equal-call/token flat·vector·removal·shuffle 통제, external outcome→eligibility→fast→slow 승격과 P2 frozen-agent transfer를 fail-closed로 고정. 효능·prediction·scientific result 없음. [`protocol`](../PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) |
 | — | `prom_vunione_ab.py` / `_gated_ab.py` | `EVIDENCE_vunione_*` | 종결 | V=V∪E readout, entity 정점추가 blind+gated 兩 RED |
@@ -50,7 +50,7 @@
 `run_on_gm.sh` = 러너 래퍼. 모델캐시(HF/sentence-transformers)·tmp·scratch 를 **GM 외장**
 (`/Volumes/GM/hswm_lab/`)으로 재지정 → Mac 내장 APFS 압박 회피. venv 는 Mac 유지(ExFAT 에
 venv=fatal crash, CLAUDE.md GM 정전). 벤치(musique)도 `/Volumes/GM/bench/` 에서 읽음.
-영수증(`EVIDENCE_*.json`)만 repo(KB 단위)에 남겨 git·LakatoTree result_path 앵커 유지.
+영수증(`EVIDENCE_*.json`)만 repo(KB 단위)에 남겨 git·HSWM_LOCAL_RECORD result_path 앵커 유지.
 잔여 Mac 소모 = 하네스 자체 스크래치패드(`/private/tmp/claude-*`), 래퍼 범위 밖(세션 인프라).
 
 ---

@@ -43,7 +43,7 @@
 
 - 데이터셋/인코더 대체로 절대 수치는 P6와 비교 불가. 외장볼륨 복귀 후 MiniLM + 원본 2Wiki로 재현 필요(prereg deferred에 명시).
 - target 슬라이스 = 후보에 gold 문서가 접촉된 validation 질의(n=11–17) — "train 분포"의 구조적 근사.
-- 단일 벤치마크/단일 시드. LakatoTree 예측은 user 선언(2026-07-23), 서버 영수증 sha 미기록.
+- 단일 벤치마크/단일 시드. HSWM_LOCAL_RECORD 예측은 user 선언(2026-07-23), 서버 영수증 sha 미기록.
 - train 흡수는 gold 지도 기반(supervised learning-while-using).
 
 ## 6. 산출물

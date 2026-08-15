@@ -1,6 +1,6 @@
 # T1 entrance-reach 결과 — RED (2026-07-22)
 
-> **판정**: metric `equivalent`(0=baseline) / Lakatos `degenerating`. 노드 `T1-entrance-reach-c3` (예측 receipt `e3cc80aa…`), receipt fold `ok=true`.
+> **판정**: metric `equivalent`(0=baseline) / Legacy programme `degenerating`. 노드 `T1-entrance-reach-c3` (예측 receipt `e3cc80aa…`), receipt fold `ok=true`.
 > **한 줄**: B1이 해금한 결정론 weave chain은 **frozen seed에서 도달·계속 불가** — MuSiQue는 top-3 seed가 입구에 한 번도 안 닿고(0/200), 2Wiki는 5/200 질의가 입구에 닿지만 **typed kernel의 predicate 게이트(T2)에서 전멸**(legal depth-2 = 0/200 양쪽). 사전등록 kill #1(도달불가)·#2(T2 병목 이동) 정확히 발동.
 
 ## 실측 (n=200/dataset, frozen V5 dev 임베딩 재사용, 신규 spend 0)

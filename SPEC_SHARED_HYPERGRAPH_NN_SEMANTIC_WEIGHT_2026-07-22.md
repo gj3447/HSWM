@@ -2,7 +2,7 @@
 
 > **status**: SECONDARY_AI crystallisation of USER dialogue 2026-07-22
 > **USER intent**: HSWM should get smarter; the hypergraph hosts a neural substrate multi-agents use.
-> **LakatoTree**: `LakatosTree_HSWM_20260719` + `LakatosTree_HSWM_SolidMultiAgent_20260722`
+> **HSWM_LOCAL_RECORD**: `HSWM_LOCAL_RECORD` + `HSWM_LOCAL_RECORD`
 > **Not a progressive claim** — theory lock + open frontiers only. No backfilled measurement.
 
 ## 0. One-line hard-core candidate (protective-belt promotion pending measurement)
@@ -71,7 +71,7 @@ Learning = **circuit rewiring** (use / judgment / topology ops), not deep GNN ba
 - Query-time deep traversal often TRAVERSAL_OFF on dense substrates; multi-hop win lives in static field + sparse entity graphs.
 - P6 semantic residual absorption RED; Phase B **topology** absorption still open.
 
-## 5. Open frontiers (for LakatoTree open_question)
+## 5. Open frontiers (for HSWM_LOCAL_RECORD open_question)
 
 1. **Q-shared-net-transfer**: Does Agent-A write produce Agent-B gain over shared-transcript / vector-DB baselines?
 2. **Q-W-first-class**: Does ablating explicit \(W\) (structure-only / emb-only) destroy multi-agent transfer while preserving single-query cosine floor?

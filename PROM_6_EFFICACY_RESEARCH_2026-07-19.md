@@ -63,7 +63,7 @@
 
 ## 3. Divergence / 정직한 반증 위험 (닫지 않고 남김)
 
-- **D1 (프레임 이중성)**: reasoner 기준 → cognitive uplift **REFUTED**(§0.3 LakatoTree `rejected`, MuSiQue −0.26). substrate 기준(같은 reader, cosine=vector-RAG) → §0.4 **POOLED +0.073 p<0.0001 유효**. 둘 다 참. 어떤 질문을 하느냐가 답을 정한다. HSWM은 #8 입체운행구름 substrate 군단장이라 substrate 기준이 본령(인프라에 IQ 묻기=범주오류).
+- **D1 (프레임 이중성)**: reasoner 기준 → cognitive uplift **REFUTED**(§0.3 HSWM_LOCAL_RECORD `rejected`, MuSiQue −0.26). substrate 기준(같은 reader, cosine=vector-RAG) → §0.4 **POOLED +0.073 p<0.0001 유효**. 둘 다 참. 어떤 질문을 하느냐가 답을 정한다. HSWM은 #8 입체운행구름 substrate 군단장이라 substrate 기준이 본령(인프라에 IQ 묻기=범주오류).
 - **D2 (2wiki win 귀속)**: +0.04가 (a)진짜 구조weight 우수성인지 (b)variance-reduction인지 (c)template artifact exploit인지 **미분리**. 축3·축5 둘 다 (b)(c) 가능성 경고. → matched-budget 2×2 통제 없이는 귀속 불가.
 - **D3 (novelty 방어선)**: 공식·하이퍼그래프·supersession 데이터모델·"학습된 場" 각각은 전부 반증가능. NOVEL 주장은 오직 "supersession-as-field-readout" 코너로 좁혀야 생존.
 - **D4 (통계 미충족)**: §0.4 POOLED는 n=300으로 축6 few-query 우려를 일부 넘지만, **seed variance 미보고 + prereg 미등록 + RRF/강baseline 미비교**는 여전히 열림.
@@ -123,4 +123,4 @@
 1. 이 문서 = HSWM 폴더 첫 결정화. 실험 B(긴문서)가 사용자 직관의 유일 미검증 가설 → **최우선 착수**.
 2. 실험 C 통계 프로토콜을 `gj3447/HSWM` repo `falsifier.py`에 prereg로 배선(paired permutation + power + seed).
 3. KG 결정화는 홈 KG MCP 복구(P3 이관 컷오버) 후 replay. 현재는 이 md가 정본.
-4. 최종 흡수(사용자 txt): CHU/라카토트리/비행기맨이 하네스표준 흡수했듯 HSWM 흡수 = 실험 B/A가 substrate 우위를 확증한 *후*의 작업.
+4. 최종 흡수(사용자 txt): CHU/폐기된 외부 판정기/비행기맨이 하네스표준 흡수했듯 HSWM 흡수 = 실험 B/A가 substrate 우위를 확증한 *후*의 작업.

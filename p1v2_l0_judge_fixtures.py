@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 
 from hswm_weight_snapshot import canonical_sha256
-from p1v2_l0_harness import build_lakato_evidence_record
+from p1v2_l0_harness import build_local_record_evidence_record
 from p1v2_l0_judge import judge_l0, make_contradiction_receipt
 from p1v2_prompt_parity import ARM_IDS
 from p1v2_type6_environment import Type6EnvironmentError, verify_type6_oracle_admission
@@ -62,8 +62,8 @@ def _fixture_observation() -> dict[str, object]:
 
 
 def _fixture_evidence() -> dict[str, object]:
-    return build_lakato_evidence_record(
-        programme="LakatosTree_HSWM_20260719",
+    return build_local_record_evidence_record(
+        programme="HSWM_LOCAL_RECORD",
         branch="P1v2-typed-verdict-lesson",
         conjecture="fixture typed lesson actuates heldout behavior",
         preregistration_sha256="3" * 64,

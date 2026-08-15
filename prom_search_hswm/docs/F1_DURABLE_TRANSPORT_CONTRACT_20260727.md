@@ -32,11 +32,11 @@ The implementation is an F1 transport module with two durable stores:
   materialization.
 
 It does not own scientific judgment, model scheduling, generic workflows,
-LakatoTree registration, or HSWM cellular execution. A second independent
+HSWM_LOCAL_RECORD registration, or HSWM cellular execution. A second independent
 consumer, multi-host writers, admission policy, or multiple durable backends
 would be evidence for later engine promotion. None is present now.
 
-OMD, leases, linked worktrees, and distributed writers are outside this design.
+LOCAL_WORKFLOW, leases, linked worktrees, and distributed writers are outside this design.
 One F1 runner owns one client ledger, and one spool process owns one spool
 database.
 
@@ -196,7 +196,7 @@ Before any successor sealed F1 observation:
    [atomic commit](https://www.sqlite.org/atomiccommit.html).
 7. Only after the successor registration is exactly read back may the runner
    pursue `1500/1500`, `500/500`, and `1/1`, followed by an independent judge
-   and LakatoTree exact readback.
+   and HSWM_LOCAL_RECORD exact readback.
 
 ## Claim boundary
 

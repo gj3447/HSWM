@@ -170,19 +170,19 @@ AND removal이 no-A 수준으로 돌아가며 HSWM-removal LCB > 0
 ```text
 F1 development
   → prompts/ports/budget tolerance freeze
-  → LakatoTree prediction registration
+  → HSWM_LOCAL_RECORD prediction registration
   → F1 sealed once
 
 Gate-0 acceptance
   → P1v5 development
   → learner/promotion/rules freeze
-  → LakatoTree prediction registration
+  → HSWM_LOCAL_RECORD prediction registration
   → P1v5 sealed once
 
 F1 + P1v5 support
   → Agent B freeze + P2 development
   → transfer split/rules freeze
-  → LakatoTree prediction registration
+  → HSWM_LOCAL_RECORD prediction registration
   → P2 sealed once
 ```
 
@@ -194,6 +194,6 @@ sealed 결과를 본 뒤 prompt, lambda, token tolerance, removal definition, sp
 - 구현됨: typed port, immutable registry, OpenAI-compatible model port, physical-call receipt,
   five-arm F1 executor, independent F1 judge, P1v5/P2 snapshot-bound causal judges, tests.
 - 외부 자산 필요: 실제 F1 split/candidates, real Gate-0 packs, frozen learner, independent evaluator,
-  LakatoTree preregistration, model deployment receipt.
+  HSWM_LOCAL_RECORD preregistration, model deployment receipt.
 - 아직 결과 아님: 현재 repository test PASS는 하네스가 거짓 결론을 fail-closed로 막는다는
   engineering evidence일 뿐이다.

@@ -3,7 +3,7 @@
 > **상태**: REGISTERED (문서 잠금). 실행은 게이트별 선행조건 충족 후.
 > 산출: `plan-hswm4-prereg-f2-f5-20260725` (PROM 16 cycle `prom16-hswm-unproven-claims-20260725`, findings 16/16 KG).
 > 머신락: `prom_search_hswm/evidence/PREREG_f{2,3,4,5}_*_20260725.json` (schema `hswm-preregistration/v1`).
-> 프로그램: `LakatosTree_HSWM_20260719`.
+> 프로그램: `HSWM_LOCAL_RECORD`.
 
 ## 0. 전제와 실행 순서
 
@@ -20,7 +20,7 @@
 2. **headroom band**: base/frozen 정답률 30~70% 구간만 채택 (p1v2 KILL 재발 방지). 포화(no-memory ≥5/6) 시 더 어려운 split으로 재등록.
 3. **이종 judge**: judge 모델/계열을 producer와 분리, sha256 잠금.
 4. **leakage 감사**: exact-query/entity/template overlap=0 + 임베딩 near-dup 감사 임계 사전등록. leakage>0 → run 무효.
-5. n≥100/arm (F5는 시계열 설계로 예외), 동일 token envelope, deterministic judge, 서버 replay (p1v4 방식), LakatoTree 장부 선기록.
+5. n≥100/arm (F5는 시계열 설계로 예외), 동일 token envelope, deterministic judge, 서버 replay (p1v4 방식), HSWM_LOCAL_RECORD 장부 선기록.
 6. **run 무효 조건**: freeze 해시 변경 / judge sha 변경 / replay 실패 / leakage>0.
 
 ## F2 — 결과→신용배분→ΔW 학습 (claim ①)

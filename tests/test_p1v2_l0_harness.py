@@ -8,7 +8,7 @@ from p1_llm_answerer import RetrievedDocumentV1
 from p1v2_l0_harness import (
     L0AnswerReceiptV1,
     L0HarnessError,
-    build_lakato_evidence_record,
+    build_local_record_evidence_record,
     render_answer_prompt,
     run_l0_observation,
 )
@@ -154,7 +154,7 @@ def test_bad_padder_and_bad_answer_receipt_fail_before_evidence():
         )
 
 
-def test_lakato_evidence_record_has_provenance_and_no_verdict():
+def test_local_record_evidence_record_has_provenance_and_no_verdict():
     question, documents, padder, plan = _plan()
     observation = run_l0_observation(
         case_id="case:1",
@@ -164,8 +164,8 @@ def test_lakato_evidence_record_has_provenance_and_no_verdict():
         parity_plan=plan,
         answerer=FakeAnswerer(padder),
     )
-    evidence = build_lakato_evidence_record(
-        programme="LakatosTree_HSWM_20260719",
+    evidence = build_local_record_evidence_record(
+        programme="HSWM_LOCAL_EXPERIMENT",
         branch="P1v2-typed-verdict-lesson",
         conjecture="typed lessons change heldout behavior",
         preregistration_sha256="1" * 64,
@@ -178,7 +178,7 @@ def test_lakato_evidence_record_has_provenance_and_no_verdict():
         observations=(observation,),
     )
 
-    assert evidence["schema_version"] == "lakato-evidence-record/v1"
+    assert evidence["schema_version"] == "hswm-local-evidence-record/v1"
     assert evidence["grounded_status"] == "GROUNDED_MEASUREMENT_NO_SCIENTIFIC_VERDICT"
     assert not _has_verdict_key(evidence)
     assert len(evidence["evidence_sha256"]) == 64

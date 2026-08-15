@@ -114,7 +114,7 @@ def build_heldout_evidence(
         raise P1V3HeldoutMeasurementError("heldout evidence identity is incomplete")
     evidence: dict[str, object] = {
         "schema_version": EVIDENCE_SCHEMA_VERSION,
-        "programme": "LakatosTree_HSWM_20260719",
+        "programme": "HSWM_LOCAL_RECORD",
         "branch": "p1v3-nonredundant-policy-actuation",
         "conjecture": (
             "A training-derived typed source policy changes and improves frozen-model "

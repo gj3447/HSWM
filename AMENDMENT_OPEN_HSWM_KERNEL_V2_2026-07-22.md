@@ -7,7 +7,7 @@
 
 ## 1. Why v2 exists
 
-The v1 preregistered fixture passed, and LakatoTree correctly returned `partial`. Independent
+The v1 preregistered fixture passed, and HSWM_LOCAL_RECORD correctly returned `partial`. Independent
 counterexample review then found five blockers outside that frozen fixture.
 
 1. bare local port names collide globally during composition;
@@ -161,4 +161,4 @@ expanded run was `78 passed`.
 - learned CONNECT/SEPARATE/SPECIALIZE policies and event persistence;
 - multi-agent transfer and B2.1 interference-control performance.
 
-Those remain LakatoTree foundation/frontier gaps. Passing v2 is an engineering closure result only.
+Those remain HSWM_LOCAL_RECORD foundation/frontier gaps. Passing v2 is an engineering closure result only.

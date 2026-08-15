@@ -2,7 +2,7 @@
 """
 ML11 — HSWM을 딥러닝처럼 깊게 쌓기 (GNN message-passing 깊이) + multi-hop + over-smoothing.
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML11-hswm-deep-gnn
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML11-hswm-deep-gnn
 USER: "HSWM을 딥러닝 모델처럼 깊게 쌓으면? 깊이 따라 어떻게 되나? multi-hop 도. HSWM 자체 수정 가능."
 
 핵심 구분: ML9/10=클러스터링 트리 깊이. 이번=**표현변환 깊이**(각 층이 이웃 정보 섞음=GNN).
@@ -132,7 +132,7 @@ def main():
         "deep_stacking_helps_multihop": max(appnp[L]["multihop_hardgold_recall@40"] for L in appnp)>appnp[0]["multihop_hardgold_recall@40"]+0.02,
         "pure_oversmooths": pure[10]["oversmooth_meancos"]>0.9,
     }
-    ev={"experiment":"hswm_deep_gnn_ml11","tree":"LakatosTree_PromSearchHSWM_20260721","node":"ML11-hswm-deep-gnn",
+    ev={"experiment":"hswm_deep_gnn_ml11","tree":"HSWM_LOCAL_RECORD","node":"ML11-hswm-deep-gnn",
         "setup":{"n_queries":len(concepts),"graph":f"kNN={KNN} cosine-weighted sym-norm","modes":["pure ÂX","appnp (1-β)ÂX+βX0 β=0.1"],
                  "metrics":"alpha-nDCG@20 + multihop_hardgold_recall@40 + oversmooth_meancos","corpus":"ai-agent-book 1425 chunks"},
         "pure_stacking_by_depth":pure,"appnp_stacking_by_depth":appnp,"conclusion":conclusion,

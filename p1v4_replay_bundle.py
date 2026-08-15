@@ -1,4 +1,4 @@
-"""Seal a P1v4 evidence-and-budget pair for LakatoTree producer replay."""
+"""Seal a P1v4 evidence-and-budget pair for HSWM_LOCAL_RECORD producer replay."""
 from __future__ import annotations
 
 import argparse

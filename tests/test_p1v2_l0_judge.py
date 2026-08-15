@@ -5,7 +5,7 @@ from copy import deepcopy
 import pytest
 
 from hswm_weight_snapshot import canonical_sha256
-from p1v2_l0_harness import build_lakato_evidence_record
+from p1v2_l0_harness import build_local_record_evidence_record
 from p1v2_l0_judge import L0JudgeError, judge_l0, make_contradiction_receipt
 from p1v2_prompt_parity import ARM_IDS
 
@@ -50,8 +50,8 @@ def _observation():
 
 
 def _evidence():
-    return build_lakato_evidence_record(
-        programme="LakatosTree_HSWM_20260719",
+    return build_local_record_evidence_record(
+        programme="HSWM_LOCAL_EXPERIMENT",
         branch="P1v2-typed-verdict-lesson",
         conjecture="typed lesson actuates heldout behavior",
         preregistration_sha256="3" * 64,

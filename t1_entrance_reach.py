@@ -18,7 +18,7 @@ Gold labels are never consumed — only qid (embedding lookup) and raw
 question text (kernel input, as the kernel itself mandates).
 
 Do not run before PREREG_T1_ENTRANCE_REACH_2026-07-22.json records a live
-LakatoTree prediction and freezes the hashes this guard checks.
+HSWM_LOCAL_RECORD prediction and freezes the hashes this guard checks.
 """
 from __future__ import annotations
 
@@ -163,7 +163,7 @@ def main() -> int:
 
     evidence = {
         "schema": "hswm-t1-entrance-reach-evidence/v1",
-        "programme": "LakatosTree_PromSearchHSWM_20260721",
+        "programme": "HSWM_LOCAL_RECORD",
         "branch": "T1-entrance-reach-c3",
         "preregistration": {
             "path": PREREG.name,

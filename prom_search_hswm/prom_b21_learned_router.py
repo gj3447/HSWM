@@ -55,7 +55,7 @@ from prom_b2_crossfield_merge import (  # noqa: E402
     stratify as b2_stratify,
 )
 
-TREE = "LakatosTree_PromSearchHSWM_20260721"
+TREE = "HSWM_LOCAL_RECORD"
 BRANCH = "B2.1r1-query-byte-equivalence-repair"
 QUESTION = "Q-b21-learned-router-interference-control"
 PREREG = HERE / "evidence" / "PREREG_b21r1_query_byte_repair_20260723.json"
@@ -917,7 +917,7 @@ def preregistration_guard(data_paths: dict[str, Path], model_path: Path) -> tupl
     if locked.get("registered_before_measurement") is not True:
         raise RuntimeError("preregistration is not server-confirmed")
     if not locked.get("prediction_receipt_sha256"):
-        raise RuntimeError("missing LakatoTree prediction receipt")
+        raise RuntimeError("missing HSWM_LOCAL_RECORD prediction receipt")
     if locked.get("locked_parameters") != locked_parameters():
         raise RuntimeError("locked parameter drift")
     model_manifest = directory_manifest(model_path)
@@ -1108,7 +1108,7 @@ def run_full_experiment(data_paths: dict[str, Path], scorepack_dir: Path, model_
         conclusion = "REJECTED"
     min_primary_delta = min(c["metrics"]["overall_vs_merged"]["delta"] for c in primary)
     return {
-        "schema": "lakato-evidence-record/v1",
+        "schema": "local_record-evidence-record/v1",
         "programme": TREE, "branch": BRANCH, "question": QUESTION,
         "measurement": {
             "metric": "min_over_datasets_primary_router_minus_merged_recall10",

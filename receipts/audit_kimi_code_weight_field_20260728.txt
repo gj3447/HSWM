@@ -13,7 +13,7 @@ BREAKS: none
 ## What was done
 
 1. Re-ran the receipt standalone: VALID (W1/W2/W3/W4a-c/W5 + negW1/negW3/negW4 all fire).
-2. Independent mutation re-scan (ooptdd.mutate, runner=script, confirm_kills=True):
+2. Independent mutation re-scan (LOCAL_INTEGRITY_CHECK.mutate, runner=script, confirm_kills=True):
    11/11 killed, 0 survivors, 0 errors — independently reproduces the author's
    seq-64 claim. weight_field.py restored byte-identical after the scan.
 3. 33 conceptual probes (receipts/audit_probes_weight_field_20260728.py), 0 breaks:

@@ -1,7 +1,7 @@
 # HSWM P5 — 단일 場 대 역할분리 멀티뷰 hard-hop 재판
 
 > 날짜: 2026-07-22
-> 프로그램: `LakatosTree_PromSearchHSWM_20260721`
+> 프로그램: `HSWM_LOCAL_RECORD`
 > 가지: `P5-onefield-vs-multiview-hardhop`
 > 층위: 실측·서버 영수증은 EVIDENCE, 문헌 종합과 다음 설계는 `SECONDARY_AI`
 > 결론: **고정 규칙 late fusion은 기각. HSWM hard core는 건드리지 않고 `cheap_query_routing` 보조가정만 폐기.**
@@ -14,7 +14,7 @@ HSWM은 여기서 일반적인 world model이 아니라 **Hypergraph Semantic We
 2. semantic은 `SEED`, 구조는 `EDGE`로 분리해야 했다(ML17).
 3. 구조깊이는 solidity·이식성의 발판이지 전파를 깊게 쌓아 recall을 올리는 장치가 아니었다(ML18–19).
 
-실험 당시 추적 정본은 private SYMPOSIUM의 `HSWM/prom_search_hswm/`이었고, 동시 작업 중이던 공개 저장소 변경은 그 write-set에서 제외했다. 이 공개본에서는 코드·증거를 [`prom_search_hswm/`](prom_search_hswm/) 아래로 통합했다. 라이브 LakatoTree는 로컬 `:55170` relay가 가리키는 서버이며 boot/disk SHA가 clean `PI/lakatotree@71915a52ee934e20943bfa33ad934711f0eceb4e`와 일치했다.
+실험 당시 추적 정본은 private SYMPOSIUM의 `HSWM/prom_search_hswm/`이었고, 동시 작업 중이던 공개 저장소 변경은 그 write-set에서 제외했다. 이 공개본에서는 코드·증거를 [`prom_search_hswm/`](prom_search_hswm/) 아래로 통합했다. 라이브 HSWM_LOCAL_RECORD는 로컬 `:55170` relay가 가리키는 서버이며 boot/disk SHA가 clean `PI/HSWM_LOCAL_RECORD@71915a52ee934e20943bfa33ad934711f0eceb4e`와 일치했다.
 
 ## 2. 문헌 충돌로 만든 P5
 
@@ -64,7 +64,7 @@ P5는 이 중 가장 싼 설명을 먼저 쳤다.
 
 - node state: `REJECTED`
 - metric verdict: `equivalent`
-- dialectical/Lakatos verdict: `degenerating`
+- dialectical/Legacy programme verdict: `degenerating`
 - verdict receipt: `04085674…bfaed`
 - previous prediction receipt: `6d53bf5e…9dd67`
 - receipt fold: `ok=true`, rederived=`degenerating`
@@ -117,7 +117,7 @@ P5는 이 중 가장 싼 설명을 먼저 쳤다.
 
 - evidence schema: `errors=[]`, `grounded=true`, authored verdict 없음.
 - local pure record judge: `equivalent`.
-- `symposium-lakatotree-judgment/v1`: complete, linked artifact hashes verified.
+- `symposium-HSWM_LOCAL_RECORD-judgment/v1`: complete, linked artifact hashes verified.
 - live receipt fold: `ok=true`, scripted source confirmed.
 
 이 문서는 사용자 발화를 새 정전으로 만들지 않는다. 실측과 영수증을 제외한 해석·다음 설계는 사용자 ratification 전까지 `SECONDARY_AI`다.

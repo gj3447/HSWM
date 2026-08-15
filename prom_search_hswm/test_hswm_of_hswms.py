@@ -2,7 +2,7 @@
 """
 ML8 — HSWM-of-HSWMs 실측: 재귀 2-level 구조가 문맥(cross-chapter coverage)을 높이나.
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML8-hswm-of-hswms
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML8-hswm-of-hswms
 USER 심화 정전: "가중 복층 HSWM이 다른 HSWM과 연결=문맥 생김, 많을수록 좋다, 트리로도 형성."
 구조: L2=paragraph 청크 / L1=章-HSWM(각 章=한 하네스문서, centroid) / 트리=book→章→para,
       + 章간 sibling weight-semantic 엣지(centroid cosine).
@@ -112,7 +112,7 @@ def main():
                      "coverage": round(statistics.mean(agg[m][k]["cov"]), 4)} for k in KS} for m in methods}
     ev = {
         "experiment": "hswm_of_hswms_ml8",
-        "tree": "LakatosTree_PromSearchHSWM_20260721", "node": "ML8-hswm-of-hswms",
+        "tree": "HSWM_LOCAL_RECORD", "node": "ML8-hswm-of-hswms",
         "structure": {"L1_chapters": len(chapters), "L2_chunks": len(chunks),
                       "concepts": len(CONCEPTS), "corpus": "ai-agent-book"},
         "metric_note": "chapter_coverage@k = 개념이 흩어진 章 중 top-k에 대표된 비율 = 문맥. recall@k도 병기.",

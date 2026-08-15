@@ -1,7 +1,7 @@
 # 두 종류의 "깊이" — Solid Scaffold 정전 (USER_PRIMARY 2026-07-21)
 
 > `verdict-user-hswm-two-kinds-of-depth-solid-scaffold-2026-07-21`
-> LakatoTree: `LakatosTree_PromSearchHSWM_20260721` / node `ML18-solid-scaffold-depth`
+> HSWM_LOCAL_RECORD: `HSWM_LOCAL_RECORD` / node `ML18-solid-scaffold-depth`
 
 ## 1. 경위
 

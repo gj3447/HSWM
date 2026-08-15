@@ -17,7 +17,7 @@ SIGN-CONSTRAINED residual:
 The residual M is trained by the judgment loop (judge-supplied labels; here the
 simulated oracle = ds.gold), exactly as llm_judgment_loop but on the additive score.
 
-Pre-registered on LakatoTree: prediction-d1-additive-j-frozen-cosine.
+Pre-registered on HSWM_LOCAL_RECORD: prediction-d1-additive-j-frozen-cosine.
 Prediction: (i) floor holds (test nDCG ≥ cosine − ε), (ii) synthetic dev1 gain ≥ 0.03.
 Risk: j≥0 can only boost gold, cannot suppress high-cosine non-gold → may under-recover.
 """

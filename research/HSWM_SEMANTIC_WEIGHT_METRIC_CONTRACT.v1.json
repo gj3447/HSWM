@@ -8,7 +8,7 @@
     "scientific_status": "UNJUDGED",
     "scientific_judgment_emitted": false,
     "kg_write_state": "NOT_WRITTEN",
-    "lakatotree_write_state": "NOT_REGISTERED"
+    "external_governance": "NONE"
   },
   "scope": {
     "implemented_weight_scope": "scalar_slow_efficacy_v1",
@@ -248,7 +248,7 @@
     "fresh_cohort_frozen": false,
     "strongest_baseline_selected": false,
     "independent_judge_frozen": false,
-    "lakatotree_prediction_registered": false
+    "external_governance_required": false
   },
   "source_artifacts": [
     {
@@ -266,7 +266,7 @@
     {
       "artifact_id": "causal-plasticity-cpl1-draft",
       "path": "prom_search_hswm/evidence/PREREG_CPL1_hswm_causal_plasticity_20260726.draft.json",
-      "sha256": "bb1ab0a3d4e844ce1e86c4d96ee91d9c8d062a13fbeaedb73957850cee7975fa",
+      "sha256": "3d6af46ef96312fc37a349f92e46536aca0e6484f2980cca86a741c2ff39c920",
       "role": "preserved predecessor draft requiring user ratification"
     },
     {
@@ -298,19 +298,19 @@
     {
       "artifact_id": "semantic-weight-contract-validator",
       "path": "scripts/validate_hswm_semantic_weight_metric_contract.py",
-      "sha256": "875d932f631068256efa4f7a3e7017092fa15e9768ed1a6222567e0f47ea05b2",
+      "sha256": "3c645e1246b1e1dfc52161c4cda9df4dc0299220d0bd24483ac4553aed26509f",
       "role": "fail-closed contract and preregistration validation"
     },
     {
       "artifact_id": "semantic-weight-negative-tests",
       "path": "tests/test_hswm_semantic_weight_metric.py",
-      "sha256": "86ddcdf04910117c1064eae1b8b31608730f97e94282017348a45c2dc440f9ca",
+      "sha256": "915aa33e64ea2d62fc8992da9fcb11dd1fc5907699b8f1211023c4a19aa62584",
       "role": "positive fixture and injected-negative enforcement"
     },
     {
       "artifact_id": "scalar-w-causal-judge",
       "path": "hswm_scalar_w_causal_judge.py",
-      "sha256": "d87be1006cb13ba7d7dfb3d5f1028e9c6dd5cb4b95eedd74a75b401ad878ae91",
+      "sha256": "02747bac05691a1a449754716d378a86ca9e69e6dbd97ee41c652070846e6cb4",
       "role": "frozen pure judge for narrow scalar-W causal mediation only"
     },
     {
@@ -323,7 +323,7 @@
   "schema_binding": {
     "artifact_id": "semantic-weight-metric-schema",
     "path": "schemas/hswm_semantic_weight_metric_contract.v1.schema.json",
-    "sha256": "6a4e53d9ae5385893ddb119978b646cc9368780ecb5683ee2da9ec422dd23d98",
+    "sha256": "86fb78a46b29702e93b993aa10284ab5d63c8ea79171f9f9494a07ad5ff78d1b",
     "role": "JSON interchange schema"
   }
 }

@@ -41,7 +41,7 @@
 
 - **명제**: LLM은 미분 불가라 거시망에 역전파가 통하지 않는다(프랙탈 구조의 귀결). 따라서 영수증 기반 Hebbian/Fast-Weight 국소 학습은 선택이 아니라 **구조적 필연**이며, 영수증은 단순 로그가 아니라 희소·지연 보상을 조밀하게 바꾸는 **credit assignment 장치**다.
 - **이미 해설된 곳**: PROM-17 §2.1, §2.2, §4.
-- **새로 잇는 부분**: 이 레포의 sealed receipt·prereg·fail-closed 7단계 승격·LakatoTree 판결 체인·replay 게이트 전체를 **거시 신경망의 학습 신호 인프라**로 재해석 — 과학 위생 장치와 학습 루프의 데이터 엔진이 동일 물질이라는 등식. F2(ΔW credit, ρ=0.8857, kill 3종 미발동)는 이 인프라 위에서 "결과→신용→ΔW" claim의 첫 측정등급 통과 후보다.
+- **새로 잇는 부분**: 이 레포의 outcome trace·로컬 prereg·음성대조·replay를 **거시 신경망의 학습 신호 인프라**로 재해석한다. F2(ΔW credit, ρ=0.8857, kill 3종 미발동)는 이 인프라 위에서 "결과→신용→ΔW" claim의 첫 측정등급 통과 후보다.
 - **상태**: synthesis (사용자 ratify 2026-08-03; 기제는 PROM-17 정전 후보, "인프라 전체 = 학습 신호" 해석 ratify — 효능 non-claim 유지).
 
 ### C5. 합의 = 프로토콜이 아니라 동역학
@@ -78,7 +78,7 @@
 - **L0 메모리 substrate — CONFIRMED** (HSWM F1 0.541 vs cosine 0.469, +0.073, p<0.0001, n=300, 추론 LLM콜 0). 자율주행 비유로는 perception stack이 먼저 검증된 단계.
 - **L1 LLM-함수 신경망 — TARGET**. PROM-17 §6.2의 세 falsifiable 질문(경험-품질 곡선 단조 향상 / 계열 A→B 전이 / 가중치 장 절제 시 하드코딩 라우터로 퇴화)이 F1~F5 게이트·장부로 사전등록돼 있다. 현 최전선 = F1 r8/try3 (`FINDINGS/hswm-f1-r8-try3-2026-07-28/REPORT.md` — 모델콜 0, B22 LOCKED, fail-closed 재시작 준비).
 - **L3 합의 포함 더 큰 AI — OPEN**. C5의 merge 대수가 유일 공학 경로이고 L5 위반이 현 블로커.
-- 프로그램 전체 `scientific_status` = **UNJUDGED** (기계 정본 `GIT/HSWM/research/HSWM_RESEARCH_LEDGER.v1.json`).
+- 프로그램 전체 `scientific_status` = **UNJUDGED**. 현재 주장은 [`EFFICACY.md`](EFFICACY.md)의 체크인 직접 측정 경계를 따른다.
 
 ## 3. Claims and Non-claims
 
@@ -89,8 +89,8 @@
 
 ## 4. 관계 문서
 
-- **PROM-17 (전방)**: [`../GIT/HSWM/PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md`](../GIT/HSWM/PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md)
-- **PROM-17 §8 관계 문서**: [`../GIT/HSWM/CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../GIT/HSWM/CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) (정체성 정전) / [`../GIT/HSWM/PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md`](../GIT/HSWM/PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) (최소 구현 계약) / [`../GIT/HSWM/PROM_16_HSWM_HOLISTIC_SCIENTIFIC_ARCHITECTURE_2026-07-26.md`](../GIT/HSWM/PROM_16_HSWM_HOLISTIC_SCIENTIFIC_ARCHITECTURE_2026-07-26.md) (총체 과학 구조)
+- **PROM-17 (전방)**: [`PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md`](PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md)
+- **PROM-17 §8 관계 문서**: [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) (정체성 정전) / [`PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md`](PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) (최소 구현 계약) / [`PROM_16_HSWM_HOLISTIC_SCIENTIFIC_ARCHITECTURE_2026-07-26.md`](PROM_16_HSWM_HOLISTIC_SCIENTIFIC_ARCHITECTURE_2026-07-26.md) (총체 과학 구조)
 - **HSWM/ 카탈로그**: HARNESS_7COMMANDER (C2·C7) / LENS_DUALITY (C7) / PHASE_B (C5) / MATH_DEFINITION_UNIFIED (C6) / 헌장 HC-08 (C5) / B2 결과 (C5) / PROM_16_UNPROVEN_B (C8)
 - **AGENTS.md 정전**: `7cmd-measurement-driven-conditional-dispatch-2026-05-30` (C2) / `apt-contract-root-axiom-2026-05-27` (C3)
 - **KG**: `user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23` / `user-canon-hswm-functions-are-llm-executed-neural-net-2026-07-23` / `user-canon-legioncommanders-operate-on-hswm-neural-net-2026-07-23` (VerdictPending) / `commander-hswm-omc-2026-07-19`

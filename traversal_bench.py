@@ -42,7 +42,7 @@ Honesty:
   * Reproduction gate first: cosine + hswm sup_recall@3 must match stored substrate_bench.
   * Retrieval only (sup_recall@3, nDCG@10). F1 / strong baselines / inductive = follow-up.
 
-NO commit / NO LakatoTree (parent). New file only; ab_p5_full.py & substrate_bench.py untouched.
+NO commit / NO HSWM_LOCAL_RECORD (parent). New file only; ab_p5_full.py & substrate_bench.py untouched.
 Output: printed markdown report + traversal_bench_results.json.
 """
 

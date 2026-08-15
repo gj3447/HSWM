@@ -1,6 +1,6 @@
 {
   "schema": "hswm-preregistration/v1",
-  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "programme": "HSWM_LOCAL_RECORD",
   "branch": "T3-score-digest-null",
   "question": "Q-t3-k2-digest-and-null",
   "conjecture": "On the A5 ML-woven graph with strict kernel-canonical claim continuity (no lenient fallback), K2 changes the K1 score digest for >=1 query on BOTH datasets, and the continuity-destroying null (deterministic target_claim_id shuffle, seed 4242) collapses those changes (real minus null sum > 0). Simultaneously the strict re-audit either sustains R2's depth-2 thaw or exposes it as lenient-fallback overcounting.",
@@ -17,7 +17,7 @@
   },
   "self_audit_commitment": {
     "issue": "R1/R2 walker hop-2 contains a lenient fallback (any outgoing arc when no claim-continuous arc exists) that is NOT kernel-canonical.",
-    "commitment": "strict and lenient depth-2 counts are both published; if strict_depth2_min = 0, R2's progressive metric verdict is treated as overcounted and a correction fan-out (R2 results doc + LakatoTree annotation + INDEX) is executed regardless of T3's own outcome."
+    "commitment": "strict and lenient depth-2 counts are both published; if strict_depth2_min = 0, R2's progressive metric verdict is treated as overcounted and a correction fan-out (R2 results doc + HSWM_LOCAL_RECORD annotation + INDEX) is executed regardless of T3's own outcome."
   },
   "kill_conditions": [
     "primary = 0 -> depth-2 walks exist structurally but never move scores; walking lane dies on this substrate, R3 only.",

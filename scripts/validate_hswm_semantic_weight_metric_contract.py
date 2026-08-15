@@ -2,7 +2,7 @@
 """Fail-closed validator for the HSWM semantic-weight metric draft.
 
 This validates engineering identity and measurement authorization boundaries.
-It has no model endpoint, KG write, LakatoTree write, or scientific-judgment
+It has no model endpoint, KG write, external-governance write, or scientific-judgment
 path.
 """
 from __future__ import annotations
@@ -57,7 +57,7 @@ PREREG_FIELDS = {
     "preregistration_id",
     "experiment_id",
     "experiment_tag",
-    "active_tree",
+    "experiment_record",
     "status",
     "created_at",
     "title",
@@ -76,7 +76,7 @@ PREREG_FIELDS = {
     "statistics",
     "firewalls",
     "judge_binding",
-    "server_registration",
+    "external_governance",
     "kill_conditions",
     "void_conditions",
     "required_before_lock",
@@ -417,7 +417,7 @@ def validate_contract(
         "scientific_status": "UNJUDGED",
         "scientific_judgment_emitted": False,
         "kg_write_state": "NOT_WRITTEN",
-        "lakatotree_write_state": "NOT_REGISTERED",
+        "external_governance": "NONE",
     }:
         _fail("authority block is not fail-closed")
 
@@ -547,13 +547,15 @@ def validate_preregistration(
     _text(prereg.get("title"), "prereg.title")
     if prereg.get("status") != "DRAFT_UNRATIFIED_NO_MEASUREMENT":
         _fail("preregistration was promoted or measurement-enabled")
-    active_tree = _mapping(prereg.get("active_tree"), "prereg.active_tree")
-    if active_tree != {
-        "tree_id": "LakatosTree_HSWM_20260719",
-        "authority_uri": "lakatotree://proxmox-lxc-301/LakatosTree_HSWM_20260719",
-        "role": "PREDICTION_AND_ADJUDICATION_RECORD",
+    experiment_record = _mapping(
+        prereg.get("experiment_record"), "prereg.experiment_record"
+    )
+    if experiment_record != {
+        "record_id": "LOCAL_ONLY",
+        "external_authority": "NONE",
+        "role": "PREDICTION_AND_MEASUREMENT_RECORD",
     }:
-        _fail("preregistration active-tree binding drift")
+        _fail("preregistration local record binding drift")
     authority = _mapping(prereg.get("authority"), "prereg.authority")
     if authority != {
         "user_ratified": False,
@@ -709,14 +711,15 @@ def validate_preregistration(
     ) or judge["judgment_schema"] != "hswm-scalar-w-causal-judgment/v1":
         _fail("preregistration judge replay contract drift")
 
-    server = _mapping(prereg.get("server_registration"), "prereg.server_registration")
-    if server != {
-        "tree_id": "LakatosTree_HSWM_20260719",
-        "experiment_tag": "hswm-scalar-w-causal-mediation-v1",
-        "state": "NOT_REGISTERED_BLOCKS_MEASUREMENT",
-        "receipt_sha256": None,
+    external_governance = _mapping(
+        prereg.get("external_governance"), "prereg.external_governance"
+    )
+    if external_governance != {
+        "authority": "NONE",
+        "required": False,
+        "state": "DISABLED",
     }:
-        _fail("server preregistration boundary drift")
+        _fail("external governance boundary drift")
 
     for field, minimum in (
         ("kill_conditions", 8),
@@ -738,10 +741,10 @@ def validate_preregistration(
         "preregistration_id": prereg.get("preregistration_id"),
         "experiment_id": prereg.get("experiment_id"),
         "experiment_tag": prereg.get("experiment_tag"),
-        "active_tree": active_tree["tree_id"],
+        "experiment_record": experiment_record["record_id"],
         "arms_checked": len(arms),
         "judge_sha256": judge["sha256"],
-        "server_registration": server["state"],
+        "external_governance": external_governance["state"],
         "measurement_authorized": False,
         "scientific_status": "UNJUDGED",
     }

@@ -12,7 +12,7 @@ from pathlib import Path
 from collections.abc import Mapping
 
 from hswm_weight_snapshot import canonical_sha256
-from p1v2_l0_harness import ARM_IDS, verify_lakato_evidence_record
+from p1v2_l0_harness import ARM_IDS, verify_local_record_evidence_record
 
 
 DIAGNOSIS_SCHEMA_VERSION = "hswm-p1v2-l0-inertness-diagnosis/v1"
@@ -37,7 +37,7 @@ def diagnose_l0_inertness(
 ) -> dict[str, object]:
     """Return a deterministic failure-mode diagnosis without a new verdict."""
 
-    verify_lakato_evidence_record(evidence)
+    verify_local_record_evidence_record(evidence)
     _verify_judge_receipt(judge_receipt)
     if judge_receipt.get("evidence_sha256") != evidence.get("evidence_sha256"):
         raise L0DiagnosisError("judge receipt does not bind the evidence")
@@ -118,7 +118,7 @@ def diagnose_l0_inertness(
             "Use development-only calibration cases to prove non-ceiling no-memory behavior before freezing a new heldout cut.",
             "The typed lesson must encode an outcome-relevant source-trust or conflict-resolution rule absent from the base system prompt.",
             "Require at least one calibration answer disagreement caused by that lesson; do not inspect the new heldout outcomes.",
-            "Register LakatoTree direction as higher and bind the independent judge script SHA before measurement.",
+            "Freeze the local prediction direction and bind the independent judge script SHA before measurement.",
         ],
         "scientific_judgment_reused_not_reissued": True,
     }

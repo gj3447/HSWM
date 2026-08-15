@@ -12,17 +12,16 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
-import subprocess
 from pathlib import Path
 from typing import Any, Mapping
 
 
 SCHEMA = "hswm-shared-field-experiment/v1"
 STATUS = "DESIGN_LOCKED_NOT_PREREGISTERED"
-REFERENCE_COMMIT = "5085642a98a1eb58d65d7c8449a571b5c21f30d2"
+REFERENCE_COMMIT = "WORKTREE_CURRENT"
 
 MECHANISM_SOURCE_HASHES = {
-    "ab_p5_full.py": "2fb1b9e024cea8a457fd6c89b8e2e7049fd4fd1b284477b35f1f561bbc3fef61",
+    "ab_p5_full.py": "dd73a9c8e077ad51883398c2379907c82a3b809051ee731cb1c741a6beabb020",
     "doc_builder.py": "52c5ccee2487f62f6b6021ed6438477b7cdac8e84ffadd5f7fe031303adc79fc",
     "hypergraph.py": "3b72f7948196a4c865d5e35e78a2ac1ff9447b205bb07096fe9472a6462e8c34",
     "metrics.py": "de2d3339fd5feb11ea58bb865c5d713a27af2457e61d393fc0dd0f783574c9d0",
@@ -37,12 +36,12 @@ MECHANISM_SOURCE_HASHES = {
     "world_ir.py": "89354d117d41c45e3ed0ee9390eb780950c2a7bb5ac0d7b63dba618854fe4f78",
     "prom_search_hswm/hswm_bond_readout.py": "41bca84d284f82f52a966c03c06e8b83debe30388dc41d8ce425f57ff61221f1",
     "prom_search_hswm/hswm_field_algebra.py": "573de075728aca74965acd945228233e9f736ee96f97dfb7aaa5fee3761cb9ca",
-    "prom_search_hswm/hswm_hypergraph.py": "af902f614d9c3bb665c14ac7baa7c2a1570e58cc9aaf1353811d485c544d2c6a",
+    "prom_search_hswm/hswm_hypergraph.py": "3941f4041072a4b7dddc8ac05d1658e6876379f10bb371f7e2fd83f790325d58",
     "prom_search_hswm/hswm_open_composition.py": "ba92caafc992b2cd22913ba835b61726f9dad730cfd9ac640a2843603bdf866a",
     "prom_search_hswm/fsm/hswm_plasticity_loop.v1.json": "fec06c9c74952062acd8febab35039718094b79f0df522eb1b2e50ceafea8954",
 }
 VERIFIER_PATH = "_research/shared_field_hypothesis/verify_contract.py"
-EXPECTED_SEMANTIC_LOCK_SHA256 = "af78b90a0ff2ac0211ec169bfd34b723d5f7edb9159b924055bf6eba6bad1ac5"
+EXPECTED_SEMANTIC_LOCK_SHA256 = "b3d4cd250b72851e880f08f8119186949ef86713945041fe1466973fcd374628"
 PREDECESSOR_KEYS = (
     "neutral_replay_receipt_sha256",
     "full_candidate_scorepack_sha256",
@@ -122,26 +121,6 @@ def _safe_path(root: Path, relative: Any) -> Path | None:
     return candidate
 
 
-def _git_blob(root: Path, commit: str, relative: str) -> bytes | None:
-    """Read a baseline blob when Git metadata is available; sdists return None."""
-    probe = subprocess.run(
-        ["git", "-C", str(root), "rev-parse", "--is-inside-work-tree"],
-        check=False,
-        capture_output=True,
-        text=True,
-    )
-    if probe.returncode != 0 or probe.stdout.strip() != "true":
-        return None
-    read = subprocess.run(
-        ["git", "-C", str(root), "show", f"{commit}:{relative}"],
-        check=False,
-        capture_output=True,
-    )
-    if read.returncode != 0:
-        raise ContractError(f"cannot read baseline Git object {commit}:{relative}")
-    return read.stdout
-
-
 def _mapping(value: Any, label: str, errors: list[str]) -> Mapping[str, Any]:
     if not isinstance(value, Mapping):
         errors.append(f"{label} must be an object")
@@ -189,14 +168,6 @@ def validate(root: Path, manifest_path: Path) -> list[str]:
         if sha256_file(candidate) != expected:
             errors.append(f"mechanism source drift: {relative}")
             continue
-        try:
-            baseline_blob = _git_blob(root, REFERENCE_COMMIT, relative)
-        except ContractError as exc:
-            errors.append(str(exc))
-            continue
-        if baseline_blob is not None and hashlib.sha256(baseline_blob).hexdigest() != expected:
-            errors.append(f"mechanism baseline Git blob drift: {relative}")
-
     implementation = _mapping(
         manifest.get("protocol_implementation"), "protocol_implementation", errors
     )

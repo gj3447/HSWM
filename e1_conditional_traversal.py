@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """E1 query-type conditional traversal measurement.
 
-Prereg (LakatoTree, 2026-07-23):
+Prereg (HSWM_LOCAL_RECORD, 2026-07-23):
   - bridge subset (gold hop >= 3):  mean(best traversal arm - static) >= +2.0pp
     would trigger a 'conditional OFF' revision proposal.
   - factoid subset (gold hop <= 2): mean(best traversal arm - static) < 0pp

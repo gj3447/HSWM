@@ -43,9 +43,9 @@ def test_checked_in_efficacy_snapshot_matches_public_claims() -> None:
         "selected_traversal": 0.3539,
     }
     assert snapshot["p1_closed_macro_weight_loop"] == {
-        "status": "ENGINEERING_COMPLETE_SCIENTIFIC_RED_LAKATOTREE_UNJUDGED",
+        "status": "ENGINEERING_COMPLETE_SCIENTIFIC_RED",
         "scientific_domain_status": "CAUSAL_EFFICACY_REJECTED",
-        "lakatotree_kernel_status": "UNJUDGED_PROCEDURAL_BLOCK",
+        "evidence_authority": "CHECKED_IN_DIRECT_MEASUREMENT",
         "historical_measurement_self_verdict": "FAIL",
         "a1_minus_a2_mean_paired_recall10": 0.0,
         "bootstrap95_lower": 0.0,
@@ -70,13 +70,13 @@ def test_checked_in_efficacy_snapshot_matches_public_claims() -> None:
             "max_delta_to_boundary_gap": 0.10269710791092374,
         },
         "experiment_receipt_id": (
-            "70cf72a18da617a3494b00848f349f0fd96c6dce444639413c21ace41e24f758"
+                "81bd2f816226ea6e5d0ea8df345aad4947599d3378f40397972a2b9e1b0399de"
         ),
         "boundary": (
             "The outcome-to-credit-to-candidate loop executed, but no "
             "candidate changed fresh top-10 retrieval or became active. "
-            "The historical evidence self-wrote FAIL, so the scientific "
-            "RED is not a valid server-owned LakatoTree verdict."
+            "The checked-in evidence self-recorded FAIL; no removed "
+            "external-tool verdict is retained as authority."
         ),
     }
     assert snapshot["graded_supersession"][

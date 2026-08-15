@@ -4,7 +4,7 @@
 > **lane**: ENGINEERING / HSWM
 > **status**: `SECONDARY_AI_RESEARCH_AND_DESIGN`
 > **USER_PRIMARY question**: “연결분리 전문화 학습 여기서 학습한다는게 hswm 의 웨이트 조절을 한다는거지 ㅇㅇ?”
-> **claim boundary**: 기존 정전·코드·실측과 1차 문헌을 종합한 설계안이다. 새 성능 실험이나 LakatoTree 판정을 만들지 않았다.
+> **claim boundary**: 기존 정전·코드·실측과 1차 문헌을 종합한 설계안이다. 새 성능 실험이나 HSWM_LOCAL_RECORD 판정을 만들지 않았다.
 
 ## 0. 바로 답
 

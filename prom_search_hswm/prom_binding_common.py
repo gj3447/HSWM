@@ -2,7 +2,7 @@
 """
 prom_binding_common — P1(binding density) / P4(equal-compute) 공용 하니스 (W1-T1).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 — P1-binding-density / P4-equal-compute-control
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD — P1-binding-density / P4-equal-compute-control
 공용 부품 모듈. **이 모듈은 측정하지 않는다** — frozen gold 로드, τ MC-null 캘리브레이션,
 검증된 부품 재사용, evidence JSON 헬퍼만 제공. 사전등록 metric 정의는 각 judge
 스크립트(prom_p1_binding_density.py / prom_p4_equalcompute_ab.py)가 소유한다.
@@ -44,7 +44,7 @@ MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
 RRF_K = 60
 TAU_K_SIGMA = 3.0
 N_DISTRACTORS_PER_FINDING = 20
-TREE = "LakatosTree_PromSearchHSWM_20260721"
+TREE = "HSWM_LOCAL_RECORD"
 HERE = Path(__file__).parent
 GOLD_PATH = HERE / "data" / "binding_gold_p1.json"
 

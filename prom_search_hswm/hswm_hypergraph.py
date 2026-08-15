@@ -15,8 +15,8 @@ HSWM 하이퍼그래프 빌더 — 문서 → (정점 V ∪ 하이퍼엣지 E) �
     구조 검증은 torch 없이, 실측은 sentence-transformers로.
 
 정직 경계: 이 모듈은 *구조를 짓기만* 한다. "V∪E가 node-only보다 낫다"는 주장은
-  LakatoTree T5 예측 사전등록 + held-out gold + MC-null + equal-compute 게이트(실험 B) 뒤에서만.
-  LakatoTree: LakatosTree_PromSearchHSWM_20260721 (P0 = 이 빌더가 닫음).
+  HSWM_LOCAL_RECORD T5 예측 사전등록 + held-out gold + MC-null + equal-compute 게이트(실험 B) 뒤에서만.
+  HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD (P0 = 이 빌더가 닫음).
 """
 from __future__ import annotations
 

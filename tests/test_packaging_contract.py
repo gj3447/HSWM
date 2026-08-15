@@ -35,8 +35,8 @@ def _test_suite_import_roots() -> set[str]:
     """Top-level import names used by tests/ that are directories in this repo.
 
     These are exactly the directories an sdist must carry or the test suite cannot
-    even be collected there. Computed, not enumerated, so the next one is caught
-    automatically — ooptdd/ was missed once and scripts/ was missed a second time.
+    even be collected there. Computed rather than enumerated so future package
+    additions are caught automatically.
     """
     roots: set[str] = set()
     for path in sorted((REPO_ROOT / "tests").glob("*.py")):
@@ -82,7 +82,6 @@ def test_h3_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "p1v2_l0_judge_fixtures",
         "p1v2_l0_refreeze",
         "p1v2_l0_diagnose",
-        "p1v2_ooptdd_receipt",
         "p1v3_policy_environment",
         "p1v3_calibration_gate",
         "p1v3_calibration_preflight",
@@ -90,19 +89,16 @@ def test_h3_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "p1v3_heldout_preflight",
         "p1v3_heldout_measure",
         "p1v3_heldout_judge",
-        "p1v3_ooptdd_receipt",
         "p1v3_prepare",
         "p1v4_replay_judge",
         "p1v4_replay_bundle",
         "p1v4_heldout_measure",
-        "hswm_next_research_harness",
     } <= shipped
 
     assert {
         "f5v2_operators",
         "f5v2_topic_cache",
         "f5v2_judge",
-        "f5v2_sealed_prep",
     } <= shipped
 
 
@@ -152,12 +148,12 @@ def test_source_distribution_carries_the_default_test_surface() -> None:
 
 
 def test_sdist_carries_every_directory_the_test_suite_imports() -> None:
-    """The ooptdd/ and scripts/ omissions were the same bug twice. Ratchet it."""
+    """Every repository package imported by tests must ship in the sdist."""
     import_roots = _test_suite_import_roots()
 
     # Guard against a vacuous pass: if the scanner silently stops finding anything,
     # this test must fail rather than green out.
-    assert {"ooptdd", "scripts"} <= import_roots, import_roots
+    assert {"scripts"} <= import_roots, import_roots
 
     covered = _recursive_includes()
     project = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
@@ -181,8 +177,8 @@ def test_sdist_carries_the_data_directories_the_tests_read() -> None:
     see these, so they are enumerated; each entry is a gap that was measured."""
     covered = _recursive_includes()
     required: dict[str, str] = {
-        "research": "*.json",  # HSWM_RESEARCH_LEDGER.v1.json + metric contract
-        "schemas": "*.json",  # schemas the two validators load
+        "research": "*.json",  # checked-in metric and runtime contracts
+        "schemas": "*.json",  # schemas loaded by contract validators
         "docs": "*.md",  # docs/research/ARTIFACT_LAYOUT.md
         "prereg": "*.json",
         "evidence": "*.json",
@@ -229,12 +225,7 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
     inner = [n.split("/", 1)[1] for n in names if "/" in n]
     scripts_py = [n for n in inner if n.startswith("scripts/") and n.endswith(".py")]
     assert scripts_py, "scripts/*.py 가 sdist 에 없다 — tests/ 가 그걸 import 한다"
-    assert any(n.startswith("ooptdd/") and n.endswith(".py") for n in inner), \
-        "ooptdd/ 가 sdist 에 없다"
-
-    # 루트 *.sh 는 배포하지 않는다: f3v2_smoke_preflight.sh 와
-    # bin_hswm_cellular_lakatotree_apply_remote.sh 가 SSH 호스트명을 담고 있다.
+    # 루트 *.sh 는 배포하지 않는다. 일부 운영 스크립트가 장비별 호스트명을
+    # 포함할 수 있으므로 source distribution의 공용 표면에서 제외한다.
     root_sh = [n for n in inner if "/" not in n and n.endswith(".sh")]
     assert not root_sh, f"루트 셸 스크립트가 배포물에 실렸다(호스트명 유출): {root_sh}"
-    assert "bin_hswm_cellular_lakatotree_upload.py" not in inner, \
-        "retired personal LakatoTree writer가 sdist 에 실렸다"

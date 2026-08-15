@@ -1,6 +1,6 @@
 {
-  "schema": "lakato-evidence-record/v1",
-  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "schema": "local_record-evidence-record/v1",
+  "programme": "HSWM_LOCAL_RECORD",
   "branch": "P6-continual-absorption-fsm-unseen",
   "question": "Q-continual-absorption-fsm-unseen",
   "conjecture": "Three immutable, FSM-gated absorption rounds over semantic key-value residuals improve sealed unseen-query 2Wiki recall@10 by at least 0.03 versus a frozen equal-budget HSWM readout, without retention regression or exact-ID lookup.",
@@ -341,7 +341,7 @@
     }
   ],
   "limitations": [
-    "One English benchmark, one encoder, and one deterministic split; the final LakatoTree judge must not generalize beyond this scope.",
+    "One English benchmark, one encoder, and one deterministic split; the final HSWM_LOCAL_RECORD judge must not generalize beyond this scope.",
     "Phase A absorbs semantic key-value associations but does not yet modify n-ary topology or run ADD/SPLIT/MERGE/SUPERSEDE fact arbitration.",
     "The CAS registry and canary are deterministic offline adapters, not a production active-pointer service.",
     "Private-ID and direct-answer-edge deletion are deferred to the topology phase; the current anti-memorization controls are query-disjoint splits, no ID feature, exact-cache control, and unseen-document stratification.",

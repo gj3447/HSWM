@@ -2,7 +2,7 @@
 """
 PROM 검색 P2 falsifier — lexical vs semantic consensus detection (TOY receipt).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node P2-semantic-consensus-recall
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node P2-semantic-consensus-recall
 Pre-registered: metric=consensus_recall_goldset baseline=0.4,
                 novel=semantic_minus_lexical_consensus_recall_gap threshold>=0.15 (higher)
 Closes: Q-binding-density
@@ -155,7 +155,7 @@ def main():
 
     ev = {
         "experiment": "prom_consensus_bench_toy",
-        "tree": "LakatosTree_PromSearchHSWM_20260721",
+        "tree": "HSWM_LOCAL_RECORD",
         "node": "P2-semantic-consensus-recall",
         "a_priori": {"tau": TAU, "null_perms": NULL_PERMS, "seed": SEED},
         "gold": {"n_findings": len(GOLD), "n_clusters": len(set(labels)),
@@ -173,7 +173,7 @@ def main():
                    "novel_metric": "semantic_minus_lexical_consensus_recall_gap",
                    "novel_threshold": 0.15, "direction": "higher"},
     }
-    # verdict 판정(자기채점 아님 — 사실만 기록; LakatoTree 가 판정)
+    # verdict 판정(자기채점 아님 — 사실만 기록; HSWM_LOCAL_RECORD 가 판정)
     ev["_facts"] = {
         "novel_gap_ge_threshold": gap >= 0.15,
         "semantic_above_null": z > 3.0,

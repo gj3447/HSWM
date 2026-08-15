@@ -32,7 +32,7 @@ CHU 관계: 리라이팅-온톨로지 층은 CHU 소유(기존 흡수), HSWM은 
 | 8 | "우주=하이퍼그래프 ⇒ 물리 결과 전이" (창발기하·곡률) | W(e\|c) 필드 관측량 | **NUMEROLOGY_REJECT** | 없음 — 공유되는 건 컨테이너 타입뿐 |
 | 9 | 양자 독법 (superposition/entanglement/measurement collapse) | judgment 분기 / 검색 readout | **NUMEROLOGY_REJECT** | 없음 — readout은 비파괴·결정론·반복가능, 매핑이 자기모순 |
 | 10 | 창발 차원 V(r)~r^d | "의미 차원" 지표 | **NUMEROLOGY_REJECT** | 없음 — 조밀-소풀 substrate서 2–3홉에 포화(INDEX.md §3 실측), 추정기가 정의불능 |
-| 11 | Ruliad | "모든 가능한 judgment 위의 필드" | **NUMEROLOGY_REJECT** | 없음 — CHU가 더 강한 버전을 3축 반증 완료(LakatoTree `rejected`), a fortiori 상속 |
+| 11 | Ruliad | "모든 가능한 judgment 위의 필드" | **NUMEROLOGY_REJECT** | 없음 — CHU가 더 강한 버전을 3축 반증 완료(HSWM_LOCAL_RECORD `rejected`), a fortiori 상속 |
 | 12 | 창발 시간 (리라이팅=시간) | 필드 진화=시간 | **NUMEROLOGY_REJECT** | 없음 — HSWM엔 자율적 규칙 적용이 없음(외생 LLM-judgment가 예약 발화), 창발할 것이 없음 |
 | 13 | Observer theory (계산적으로 유계인 관찰자) | LLM reader = 필드의 유계 coarse-graining | **ANALOGY_ONLY** | 문서에 태그된 프레이밍 한 문장까지만; 설계 결정의 근거로 인용 금지 (근거는 prereg 실측만) |
 | 14 | 보존법칙/열역학 전이 + "THE rule 탐색" | weight flux 보존 / update-rule 학습 | **NUMEROLOGY_REJECT** | 없음 — 후자는 사내에서 이미 실측 반증됨 (cosine 0.956 ≫ learned 0.649, jaebaeman v3 2026-07-19); 재제안은 회귀 |
@@ -93,7 +93,7 @@ CHU 관계: 리라이팅-온톨로지 층은 CHU 소유(기존 흡수), HSWM은 
 2. **Branchial space → 의미 유사도** — 이중 실패: (a) branchial 구조는 foliation 선택에 불변이 아님(Wolfram 문헌 스스로 인정 — causal graph와 결정적 비대칭); (b) HSWM엔 시점당 필드가 하나뿐, branchial graph가 될 분기 모집단이 존재하지 않음. HSWM 유사도=콘텐츠 임베딩 기하 / branchial 인접=반사실 상태 간 공유 리라이트 조상 — 생성 메커니즘 무공유, 상호 예측 0. 접지된 잔여(Winskel conflict relation)는 §3이 이미 전달.
 3. **양자 비유 전반 (공유 hyperedge=entanglement, 검색=측정/붕괴)** — 자기 항에서부터 모순: HSWM readout은 비파괴·결정론(필드 given)·반복가능; 양자 측정은 파괴·확률·비반복. Gorard의 QM 유도는 causal invariance + 물리 해석 둘 다 필요하며 둘 다 contested (Aaronson "infinitely flexible", Harlow "at best qualitative" — Becker, SciAm 2020). 양자 어휘는 명시 태그된 rejected-correspondences 부록 밖에서 금지.
 4. **창발 차원 V(r)~r^d → "의미 차원"** — 추정기가 정의불능: 대형·희소·근사균질 그래프의 manifold 극한을 전제하는데, HSWM substrate는 실측상 조밀-소풀로 ball 성장이 2–3홉에 포화 (traversal 반증과 같은 원인: hop_drop 정적 +0.241 < 순회 +0.354, 9/9 config, INDEX.md §3). d를 소비하는 readout도, d↔F1 prereg 예측도 없음. 기하 진단이 필요하면 이미 반증가능·이미 측정된 hop stratification(`_research/hop_stratification.json`)을 확장할 것.
-5. **Ruliad → "모든 judgment 위의 메모리 ruliad"** — 사내 판례로 기각: CHU=Ruliad는 3개 독립 축(범주 오류 / limit-computable 비폐쇄 Limit Lemma witness / CUH-plenitude vs 유일-총체 존재양화 충돌)으로 반증 완료, LakatoTree 결정론 엔진 `rejected` (prereg 1.0 → 실측 0.0, `prom16-chu-ruliad-grounding-2026-07-15`). HSWM 버전(유한·코퍼스-조건 가중장)은 엄격히 더 약하므로 a fortiori 상속. 재개는 정전 drift.
+5. **Ruliad → "모든 judgment 위의 메모리 ruliad"** — 사내 판례로 기각: CHU=Ruliad는 3개 독립 축(범주 오류 / limit-computable 비폐쇄 Limit Lemma witness / CUH-plenitude vs 유일-총체 존재양화 충돌)으로 반증 완료, HSWM_LOCAL_RECORD 결정론 엔진 `rejected` (prereg 1.0 → 실측 0.0, `prom16-chu-ruliad-grounding-2026-07-15`). HSWM 버전(유한·코퍼스-조건 가중장)은 엄격히 더 약하므로 a fortiori 상속. 재개는 정전 drift.
 6. **창발 시간 → "필드 진화 = 창발 시간"** — 자율성 전제 불일치: Wolfram에서 시간은 자율 규칙 적용의 진행 그 자체; HSWM에서 시간은 decay/log(b)로 들어오는 외생 wall-clock이고 진화는 외부 루프가 예약·판정. 전체 내용이 "둘 다 시간에 따라 변한다"인 대응 = 예측 0, 코드 변경 0. supersession 타임스탬프 부분순서는 평범한 PROV 부기이며 물리 광택이 필요 없음.
 7. **보존법칙/열역학 + "THE rule 탐색"** — W(e|c)는 보존량이 아님(judgment가 비국소로 가중을 임의 주입·제거); Noether-풍 주장은 Gorard 유도의 모든 가설(자율성·파괴성·causal invariance)을 위반하는 시스템 위의 장식. rule-탐색 변형("HSWM도 자기 갱신규칙을 학습해야")은 **이미 실측 반증** — learned-weight 축은 실KG 측정(cosine 0.956 ≫ learned 0.649)으로 철회됨(jaebaeman v3, 2026-07-19). 재제안 = 연구가 아니라 회귀.
 

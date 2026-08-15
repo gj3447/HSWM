@@ -2,7 +2,7 @@
 """
 PROM 검색 ML5 — 진짜 판정: REAL 독립 소스場 융합 (인터넷場 + 내부KG場).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML5-real-fields-ab
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML5-real-fields-ab
 USER 정의: "PROM = 인터넷場 + 내부KG場의 HSWM 레이어를 쌓는". ML4는 lexical 프록시로 방향만 지지.
 이번엔 REAL: web=WebSearch(2026-07-21) / kg=Neo4j 홈canon 노드. task=legend recall on ai-agent-book(中).
 
@@ -90,7 +90,7 @@ def main():
     means = {k: round(statistics.mean(v), 4) for k, v in agg.items()}
     ev = {
         "experiment": "prom_realfields_ab",
-        "tree": "LakatosTree_PromSearchHSWM_20260721",
+        "tree": "HSWM_LOCAL_RECORD",
         "node": "ML5-real-fields-ab",
         "sources": {"web": "WebSearch 2026-07-21 (real internet)", "kg": "Neo4j home canon 0.25 (real internal KG)",
                     "corpus": "ai-agent-book chapters (Chinese)", "n_book_chunks": len(chunks), "n_concepts": n},

@@ -59,7 +59,7 @@ from prom_search_hswm.hswm_typed_ports import (
     output_schema_sha256,
     validate_port,
 )
-from prom_search_hswm.prom9_f1_r8_private_output import (
+from prom_search_hswm.hswm_private_output import (
     PrivateOutputRefusal,
     canonical_output_path,
 )

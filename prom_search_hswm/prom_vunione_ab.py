@@ -2,7 +2,7 @@
 """
 실험 B (step 3) — T5 V∪E readout 판정: 하이퍼엣지 1급 채점 + 정점 확장이 findings-only를 이기나.
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node T5-vunione-firstclass-readout (사전등록됨).
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node T5-vunione-firstclass-readout (사전등록됨).
 사전등록 예측: metric=vunione_minus_edgeonly_recall_gap, baseline 0, direction higher, noise 0.02,
   novel=vunione_recall_above_mc_null_z ≥ 3, credence 0.4.
 
@@ -156,7 +156,7 @@ def main():
 
     ev = {
         "experiment": "vunione_readout_ab_stepB",
-        "tree": "LakatosTree_PromSearchHSWM_20260721",
+        "tree": "HSWM_LOCAL_RECORD",
         "node": "T5-vunione-firstclass-readout",
         "design": "entity-only graph (leakage-free), gold=topic co-membership held-out, "
                   "leave-one-out, finding-level aggregation (candidate-inflation neutral)",

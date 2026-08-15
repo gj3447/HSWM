@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 hswm_hypergraph 빌더 구조 불변식 테스트 (torch-free — embedding 미주입).
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / P0 doc→hypergraph builder.
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / P0 doc→hypergraph builder.
 
 부정 오라클 포함(feedback: 주입된 negative oracle) — 잘못 구성하면 실패해야 하는 검사.
 """

@@ -32,7 +32,7 @@ for cosine/hswm/direct; computed for bm25/ppr/rrf with a (query, top-3 id set) c
 reasoner* (100 rerank calls AT inference), NOT a memory substrate — excluded from the
 substrate ranking per the task framing.
 
-NO commit / NO LakatoTree submit (parent does that). New file only; ab_p5_full.py untouched.
+NO commit / NO HSWM_LOCAL_RECORD submit (parent does that). New file only; ab_p5_full.py untouched.
 Output: printed tables + substrate_bench_results.json.
 """
 from __future__ import annotations

@@ -12,7 +12,7 @@ no admissible chain on a dataset the verdict there is PRECOMPUTE_NOOP_DEPTH2
 and downstream (T1-T3, efficacy) must not run for that dataset.
 
 Do not run before PREREG_B1_IDENTITY_UNLOCK_2026-07-22.json records a live
-LakatoTree prediction and freezes the module hashes this guard checks.
+HSWM_LOCAL_RECORD prediction and freezes the module hashes this guard checks.
 """
 from __future__ import annotations
 
@@ -159,7 +159,7 @@ def main() -> int:
 
     evidence = {
         "schema": "hswm-b1-identity-unlock-evidence/v1",
-        "programme": "LakatosTree_PromSearchHSWM_20260721",
+        "programme": "HSWM_LOCAL_RECORD",
         "branch": "B1-identity-material-unlock-t0",
         "preregistration": {
             "path": PREREG.name,

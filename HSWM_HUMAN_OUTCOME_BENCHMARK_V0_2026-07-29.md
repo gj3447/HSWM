@@ -6,10 +6,10 @@
 > **measurement_authorized**: `false`
 > **scientific_status**: `UNJUDGED`
 > **human_subjects_approval**: `NOT_OBTAINED`
-> **programme**: `LakatosTree_HSWM_20260719`
+> **programme**: `HSWM_LOCAL_RECORD`
 > **parent contract**: [`HSWM_HUMAN_COMPLEMENTATION_CHARTER_V0_2026-07-29.md`](HSWM_HUMAN_COMPLEMENTATION_CHARTER_V0_2026-07-29.md)
 > **claim boundary**: 이 문서는 preregistration 후보 protocol이다. 인간 모집, 실행, prediction,
-> 결과, 효능 또는 Lakatos 진전 판결이 아니다.
+> 결과, 효능 또는 Legacy programme 진전 판결이 아니다.
 
 ## 0. 연구 질문
 
@@ -215,7 +215,7 @@ counterbalanced participant block `60`, 과제군별 독립 task/component clust
 - [ ] strongest baseline selection code와 causal intervention SHA 동결.
 - [ ] primary metric, `δ_f`, harm margin, power, missingness와 multiplicity rule 동결.
 - [ ] independent judge와 injected-negative receipt 동결.
-- [ ] LakatoTree exact readback 뒤에만 prediction 등록.
+- [ ] HSWM_LOCAL_RECORD exact readback 뒤에만 prediction 등록.
 
 현재는 모든 항목이 미충족이므로 `measurement_authorized: false`다.
 
@@ -226,6 +226,5 @@ counterbalanced participant block `60`, 과제군별 독립 task/component clust
 - 핵심 findings: `finding_f244e3d722a70b1e`, `finding_1704888f9904aad1`,
   `finding_6ed795f9eb57ad6e`, `finding_46d6172a67f8113f`, `finding_717ed8ccefad7b80`,
   `finding_30e66c69d1d67a0c`, `finding_57fa5baf68153ae3`.
-- 기존 cognitive metric draft: [`../GIT/HSWM/PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md`](../GIT/HSWM/PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md)
-- 현재 효능 경계: [`../GIT/HSWM/README.md`](../GIT/HSWM/README.md)
-- F1 prospective blocker: [`../FINDINGS/hswm-f1-r8-try3-2026-07-28/REPORT.md`](../FINDINGS/hswm-f1-r8-try3-2026-07-28/REPORT.md)
+- 기존 cognitive metric draft: [`PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md`](PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md)
+- 현재 효능 경계: [`README.md`](README.md) · [`EFFICACY.md`](EFFICACY.md)

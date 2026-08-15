@@ -2,7 +2,7 @@
 
 > **Status**: LOCKED for stack absorption (2026-07-22)
 >
-> **Tree**: `LakatosTree_HSWM_SolidMultiAgent_20260722`
+> **Tree**: `HSWM_LOCAL_RECORD`
 >
 > **Evidence anchors**: SAGPM, M2, S3, multi-seed MuSiQue, **2Wiki external**
 
@@ -32,7 +32,7 @@ Equal-compute: fuse/gate **must not** open extra top-k/encode slots vs flat cont
 | L4 late supersede gate | CHU multi-writer WAL | query-time traversal ON as multi-hop fix |
 | L1 static residual field opt-in | learning-while-using stream | cognitive uplift vs direct LLM |
 | TRAVERSAL_OFF default | 나생문 auto into PROM | deep propagation stack for recall |
-| LakatoTree prereg→measure→submit | true 2Wiki multi-seed beyond n=200 | default-on semantic weave (PROM P4 partial) |
+| HSWM_LOCAL_RECORD prereg→measure→submit | true 2Wiki multi-seed beyond n=200 | default-on semantic weave (PROM P4 partial) |
 | S3 dual-channel write identity | | progressive from markdown alone |
 
 ## Layer ports (agent operators)

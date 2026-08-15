@@ -16,13 +16,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-# ooptdd/ is a real package, not a flat module — without this it is absent from the
-# sdist and every test importing it fails to collect there (18 collection errors in
-# the source-distribution CI job, of which tests/test_ouroboros.py was one).
-# scripts/ is the same omission one directory over: tests/test_hswm_research_ledger.py
-# and tests/test_hswm_semantic_weight_metric.py import `scripts.validate_*` and were
-# the last 2 collection errors. Both directories must also be listed in MANIFEST.in.
-packages = ["ooptdd", "scripts"]
+# scripts/ is an implicit namespace package used by the checked-in contract
+# validators and must be present in both wheels and source distributions.
+packages = ["scripts"]
 py-modules = [
   "synth",
   "hypergraph",
@@ -97,7 +93,6 @@ py-modules = [
   "p1v2_l0_judge_fixtures",
   "p1v2_l0_refreeze",
   "p1v2_l0_diagnose",
-  "p1v2_ooptdd_receipt",
   "p1v3_policy_environment",
   "p1v3_calibration_gate",
   "p1v3_calibration_preflight",
@@ -105,19 +100,16 @@ py-modules = [
   "p1v3_heldout_preflight",
   "p1v3_heldout_measure",
   "p1v3_heldout_judge",
-  "p1v3_ooptdd_receipt",
   "p1v3_prepare",
   "p1v4_replay_judge",
   "p1v4_replay_bundle",
   "p1v4_heldout_measure",
-  "hswm_next_research_harness",
   "hswm_cellular_runtime",
   "hswm_cellular_store",
   "hswm_cellular_openai",
   "hswm_cellular_live_probe",
   "f5v2_operators",
   "f5v2_topic_cache",
-  "f5v2_sealed_prep",
   "f5v2_judge",
 ]
 
@@ -125,25 +117,3 @@ py-modules = [
 testpaths = ["tests", "prom_search_hswm", "_research/shared_field_hypothesis"]
 python_files = "test_*.py"
 pythonpath = ["."]
-# OOPtDD is preserved as a legacy audit surface, but it is not an ordinary HSWM
-# correctness gate. Run these files explicitly with `pytest -o addopts='' ...`
-# when receipt integrity itself is under audit.
-addopts = [
-  "--ignore=tests/test_audit_policy.py",
-  "--ignore=tests/test_lock_binding.py",
-  "--ignore=tests/test_measured.py",
-  "--ignore=tests/test_mutate.py",
-  "--ignore=tests/test_ouroboros.py",
-  "--ignore=tests/test_receipt_log.py",
-  "--ignore=tests/test_repair_and_locking.py",
-  "--ignore=tests/test_run_receipt_mutation.py",
-  "--ignore=tests/test_signing.py",
-  "--ignore=tests/test_v25_harnesses.py",
-  "--ignore=tests/test_witness_git.py",
-  "--ignore=tests/test_xlocks.py",
-  # Preserved strict confirmatory-program governance, not the default dev loop.
-  "--ignore=tests/test_f5v2_sealed.py",
-  "--ignore=tests/test_hswm_next_research_harness.py",
-  "--ignore=tests/test_hswm_research_ledger.py",
-  "--ignore=tests/test_longinus_ordered_gate_binding.py",
-]

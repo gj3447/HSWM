@@ -5,7 +5,7 @@ A4 조사 결론: 게이트 실험(prereg) 전에 oracle 상한을 먼저 재야
 (in-field 복구 ∧ cross-field 유지)를 못 하면 문제는 라우팅이 아니라 merge 자체.
 
 이 스크립트는 판정된 B2 하니스(prom_b2_crossfield_merge.py, sha 동결)를 수정하지
-않고 그 함수들을 import해 같은 seed(7332)로 결정론 재계산만 한다. LakatoTree
+않고 그 함수들을 import해 같은 seed(7332)로 결정론 재계산만 한다. HSWM_LOCAL_RECORD
 제출 없음, PREREG 없음 — 산출물은 게이트 실험 설계의 입력일 뿐이다.
 
 산출:

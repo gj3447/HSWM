@@ -14,7 +14,7 @@ from collections.abc import Mapping
 
 from p1_llm_answerer import P1AnswererConfigV1
 from p1v2_l0_harness import (
-    build_lakato_evidence_record,
+    build_local_record_evidence_record,
     render_answer_prompt,
     run_l0_observation,
 )
@@ -250,7 +250,7 @@ def main() -> int:
     prediction_sha = prediction.get("prediction_receipt_sha256")
     if not isinstance(prediction_sha, str):
         prediction_sha = _file_sha(args.prediction_receipt)
-    evidence = build_lakato_evidence_record(
+    evidence = build_local_record_evidence_record(
         programme=prereg["programme"],
         branch=prereg["branch"],
         conjecture=prereg["conjecture"],

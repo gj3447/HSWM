@@ -2,7 +2,7 @@
 """
 ML7 — HSWM 완성: LLM-judge 場-품질 가중 (DAT식). PROM→HSWM의 마지막 크럭스.
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML7-hswm-llm-judge
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML7-hswm-llm-judge
 ML6: 값싼 통계 가중(agreement/confidence)은 blind를 못 이김(helpful/harmful 구분 불가).
 DAT(arXiv:2503.23013): LLM이 각 場의 검색결과를 판정해 per-query 가중 → uniform 능가.
 구현: 각 場의 top-1 검색청크를 vLLM(qwen3.6-27b, enable_thinking=false)이 "질의에 답하나 0-10" 판정
@@ -102,7 +102,7 @@ def main():
     means = {k: round(statistics.mean(v), 4) for k, v in agg.items()}
     ev = {
         "experiment": "hswm_llm_judge_ml7",
-        "tree": "LakatosTree_PromSearchHSWM_20260721",
+        "tree": "HSWM_LOCAL_RECORD",
         "node": "ML7-hswm-llm-judge",
         "method": "DAT-style LLM-judge per-field top-1 relevance → external-weighted RRF (qwen3.6-27b, thinking off)",
         "sources": {"web": "real WebSearch", "kg": "real Neo4j", "judge": "dgx vLLM qwen3.6-27b", "corpus_chunks": len(chunks)},

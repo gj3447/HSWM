@@ -64,7 +64,7 @@ PhantomWiki 생성기 확장 — **procedural split 추가** (기존 semantic wo
 1. canary 채택 게이트 (§2) — 미달 시 하네스만 조정, sealed 금지.
 2. dev-4 스모크 (parity + judge catch-rate 측정) → K4 통과 확인.
 3. sealed prep (offset/length, caps, slack — F1/F2 관습) → 머신락 → sealed run (공유 vLLM 윈도 확보 후, 밤새).
-4. judge (cache-only 비트일치) → r2 replay 승격 → LakatoTree 제출.
+4. judge (cache-only 비트일치) → r2 replay 승격 → HSWM_LOCAL_RECORD 제출.
 
 ## 8. 의존·리스크
 

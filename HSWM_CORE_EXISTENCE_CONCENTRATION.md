@@ -91,7 +91,7 @@ python3 HSWM/hswm_core_existence_harness.py json --user-approved-focus --identit
 **실패 (세지 않음)**
 
 - Longinus 버전만 올라감
-- 333 ooptdd green을 HSWM 성과로 보고
+- 333 LOCAL_INTEGRITY_CHECK green을 HSWM 성과로 보고
 - 문서·연결성만 추가
 
 ## 6. non-claim

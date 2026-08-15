@@ -2,7 +2,7 @@
 """
 ML9 — HSWM 종합 연구: 재귀 10-level 트리 + 실제 수평 HSWM↔HSWM 엣지 + 깊이 sweep + 다중지표.
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML9-hswm-comprehensive
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML9-hswm-comprehensive
 USER: "수평 HSWM↔HSWM 제대로 만들고, 재귀 10-level 도 해보고, 다방면 연구 후 결론."
 
 구조:
@@ -202,7 +202,7 @@ def main():
     }
     ev = {
         "experiment": "hswm_comprehensive_ml9",
-        "tree": "LakatosTree_PromSearchHSWM_20260721", "node": "ML9-hswm-comprehensive",
+        "tree": "HSWM_LOCAL_RECORD", "node": "ML9-hswm-comprehensive",
         "structure": {"chunks": len(chunks), "tree_nodes": len(store), "tree_max_depth": max_depth,
                       "xref_edges": {str(k): v for k, v in xref.items() if v}, "concepts": len(CONCEPTS)},
         "F1_depth_sweep": depth_sweep,

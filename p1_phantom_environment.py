@@ -634,7 +634,7 @@ class PhantomP1Environment:
         }
         return {
             "schema_version": "hswm-p1-closed-loop-evidence/v1",
-            "programme": "LakatosTree_HSWM_20260719",
+            "programme": "HSWM_LOCAL_RECORD",
             "branch": "P1-closed-learning-loop",
             "preregistration": {
                 "path": PREREGISTRATION.name,

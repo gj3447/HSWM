@@ -2,7 +2,7 @@
 """
 ML15 — 롱기누스식 엔티티/참조 엣지 HSWM 재판정 (다양한 변종) on MuSiQue.
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML15-entity-graph-bench
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML15-entity-graph-bench
 ML14: 임베딩-코사인 엣지 HSWM = flat 못이김(멀티홉엔 유사도 아니라 공유엔티티=참조 필요).
 USER 정전 "weight-semantic 롱기누스(참조 바인딩) 엣지" 제대로 구현: 엣지=공유 엔티티(co-reference).
 확인됨: MuSiQue 2-hop 두 supporting이 공유엔티티('steve hillage')로 이어짐 — 코사인은 못 잇던 다리.
@@ -139,7 +139,7 @@ def main():
         d=[per[mm]["r@10"][i]-per["flat"]["r@10"][i] for i in range(len(qtext))]
         return {"mean":round(statistics.mean(d),4),"CI":boot(d)}
     cis={mm:ci_vs_flat(mm) for mm in methods if mm!="flat"}
-    ev={"experiment":"hswm_entity_bench_ml15","tree":"LakatosTree_PromSearchHSWM_20260721","node":"ML15-entity-graph-bench",
+    ev={"experiment":"hswm_entity_bench_ml15","tree":"HSWM_LOCAL_RECORD","node":"ML15-entity-graph-bench",
         "setup":{"benchmark":"MuSiQue-ans dev","n_questions":len(qtext),"corpus_paragraphs":len(pool),"model":mu,
                  "entity_edges":"regex proper-noun NER, shared-entity graph, df 2..40","gold":"official is_supporting"},
         "recall_by_method":summary,

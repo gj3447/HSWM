@@ -2,7 +2,7 @@
 """
 ML12 — over-smoothing을 *푼다*: 깊은 HSWM을 가능하게 (USER: 문제는 해결할 job이다).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML12-oversmooth-fix
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML12-oversmooth-fix
 ML11: 순수 스택 → over-smoothing(cos 0.37→0.97) 붕괴. USER 지적: 이건 단정할 벽이 아니라
   딥러닝이 ResNet으로 vanishing gradient 풀었듯 *풀어야 할 문제*.
 알려진 over-smoothing 해법 구현·실측:
@@ -128,7 +128,7 @@ def main():
       "jk_beats_L0": bestA(jk)>L0+0.005,
       "best_multihop":{n:round(max(methods[n][L]["mh"] for L in methods[n]),4) for n in methods},
     }
-    ev={"experiment":"hswm_oversmooth_fix_ml12","tree":"LakatosTree_PromSearchHSWM_20260721","node":"ML12-oversmooth-fix",
+    ev={"experiment":"hswm_oversmooth_fix_ml12","tree":"HSWM_LOCAL_RECORD","node":"ML12-oversmooth-fix",
         "premise":"USER: over-smoothing은 단정할 벽이 아니라 풀 job (ResNet이 vanishing gradient 풀었듯).",
         "setup":{"n_queries":len(concepts),"graph":f"kNN={KNN}","depths":DEPTHS,"methods":list(methods),
                  "mitigations":"pairnorm(Zhao2020)/dropedge(Rong2020)/gcnii-ir(Chen2020)/JK(Xu2018)"},

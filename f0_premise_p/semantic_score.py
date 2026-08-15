@@ -4,7 +4,7 @@ the token-F1 artifact (does the regeneration recover MEANING, not just vocabular
 Two independent instruments (not the token-F1 that fooled us; not the generator
 model either):
 - ``embedding_cosines`` : deterministic multilingual sentence-embedding cosine.
-  Independent architecture from the qwen generator. PRIMARY for LakatoTree.
+  Independent architecture from the qwen generator. PRIMARY for HSWM_LOCAL_RECORD.
 - ``llm_judge_scores``  : qwen 0..1 semantic-equivalence score (cross-check).
 - ``mock_cosines``      : deterministic char-set proxy for harness tests (no model).
 

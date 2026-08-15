@@ -57,7 +57,7 @@ P0 주장 고정  →  P1 루프 닫기  →  P2 전이 증명  →  P3 구조 �
 - **M 신호**: 외부 verdict 도착 시 `ΔW = (verdict − baseline) × tag_strength` 커밋. baseline 없으면 systematic drift (LLM-as-judge 교정 필수).
 - **regression canary**: 모든 ΔW/Δ구조 커밋 전에 "기존에 맞던 회상 N개" 재질의 (GRASP 형태).
 - **homeostasis**: W norm 성장 감시 + 활동-의존 가변 임계 — learning 켜기 전 설치.
-- 완료 게이트 = PR #3이 요구하는 것과 동일: "LakatoTree verdict이 다음 dispatch를 인과적으로 바꾸는" 영수증 1건.
+- 완료 게이트 = PR #3이 요구하는 것과 동일: "HSWM_LOCAL_RECORD verdict이 다음 dispatch를 인과적으로 바꾸는" 영수증 1건.
 - **K1**: tagged vs untagged 대조로 N라운드 내 다음-에피소드 개선 없으면 → three-factor 라인 접고 ExpeL식 텍스트 lesson baseline으로 회귀.
 
 ### P2 — 공유망 전이 증명 (헤드라인 과학 주장)

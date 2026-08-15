@@ -2,7 +2,7 @@
 """
 ML13 (JOB2) — 진짜 multi-hop task서 PPR/APPNP 딥 HSWM vs flat vs iterative.
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML13-job2-multihop
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML13-job2-multihop
 PROM 3-agent 종합: PPR/APPNP(teleport restart)가 최선 training-free 딥전파(정규화강화 아님,
   Oversmoothing Fallacy). 단일책 스케일 이득 사전확률 +3~5pp or null. 필수 대조군=flat+iterative.
 
@@ -101,7 +101,7 @@ def main():
 
     summary={k:round(statistics.mean(v),4) for k,v in res.items()}
     best=max(summary,key=lambda k:summary[k])
-    ev={"experiment":"hswm_job2_multihop_ml13","tree":"LakatosTree_PromSearchHSWM_20260721","node":"ML13-job2-multihop",
+    ev={"experiment":"hswm_job2_multihop_ml13","tree":"HSWM_LOCAL_RECORD","node":"ML13-job2-multihop",
         "prior":"단일책 스케일 그래프 이득 사전확률 +3~5pp or null (Agent3 문헌). >이면 가짜multi-hop/약baseline 의심.",
         "task":{"n_real_multihop_pairs":len(tasks),"gold":"A·B 동시포함 bridge청크(≥2 章)","metric":"bridge recall@20",
                 "pairs":[{"A":t["A"],"B":t["B"],"n_bridge":t["n_bridge"],"n_chap":t["n_chap"]} for t in tasks]},

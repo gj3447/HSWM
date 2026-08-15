@@ -1,6 +1,6 @@
-"""LakatoTree-compatible replay adapter for frozen HSWM heldout judges.
+"""HSWM_LOCAL_RECORD-compatible replay adapter for frozen HSWM heldout judges.
 
-LakatoTree replays a producer with exactly one positional result path and
+HSWM_LOCAL_RECORD replays a producer with exactly one positional result path and
 expects ``metric=<number>`` on stdout.  The result path accepted here is a
 self-contained bundle: it embeds the measurement evidence and budget, binds
 both by their canonical hashes, and binds the frozen P1v3 scoring contract by
@@ -17,7 +17,7 @@ from collections.abc import Mapping
 from pathlib import Path
 import sys
 
-SCHEMA_VERSION = "hswm-p1v4-lakatotree-replay-bundle/v1"
+SCHEMA_VERSION = "hswm-p1v4-HSWM_LOCAL_RECORD-replay-bundle/v1"
 SCORER_CONTRACT_ID = "p1v3-policy-heldout-judge/v1"
 PRIMARY_METRIC = "typed_improvement_count_vs_no_memory"
 P1V3_FROZEN_SCORER_SHA256 = (

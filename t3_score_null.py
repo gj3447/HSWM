@@ -243,7 +243,7 @@ def main() -> int:
 
     evidence = {
         "schema": "hswm-t3-score-null-evidence/v1",
-        "programme": "LakatosTree_PromSearchHSWM_20260721",
+        "programme": "HSWM_LOCAL_RECORD",
         "branch": "T3-score-digest-null",
         "preregistration": {"path": PREREG.name, "sha256": _sha(PREREG),
                             "prediction_receipt_sha256": locked["prediction_receipt_sha256"]},

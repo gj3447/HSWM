@@ -2,7 +2,7 @@
 """
 ML16 — 진짜 하이퍼그래프 HSWM 재판정 (USER 핵심주장: n-ary 하이퍼그래프의 유용성).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML16-true-hypergraph
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML16-true-hypergraph
 지적 정정: ML13-15는 전부 pairwise(이진) 그래프=HippoRAG식. USER 주장=하이퍼그래프(n-ary) SWM.
 이번엔 진짜 하이퍼그래프: 노드=passage, 하이퍼엣지=엔티티(그 엔티티 담은 passage들의 n-ary 집합).
 
@@ -111,7 +111,7 @@ def main():
     def ci(mm,base):
         d=[per[mm]["r@10"][i]-per[base]["r@10"][i] for i in range(len(qt))]
         return {"mean":round(statistics.mean(d),4),"CI":boot(d)}
-    ev={"experiment":"hswm_true_hypergraph_ml16","tree":"LakatosTree_PromSearchHSWM_20260721","node":"ML16-true-hypergraph",
+    ev={"experiment":"hswm_true_hypergraph_ml16","tree":"HSWM_LOCAL_RECORD","node":"ML16-true-hypergraph",
         "correction":"ML13-15는 pairwise(이진)=HippoRAG식. 이번이 진짜 n-ary 하이퍼그래프(Zhou 2006 정규화).",
         "setup":{"benchmark":"MuSiQue-ans dev","n_questions":len(qt),"corpus_paragraphs":len(pool),"n_hyperedges(entities)":me,"model":mu},
         "recall_by_method":summary,

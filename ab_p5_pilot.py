@@ -1,6 +1,6 @@
 """P5 PILOT (EXPLORATORY, NOT the prereg run) — HSWM vs direct-LLM-rerank, matched LLM budget.
 
-LakatoTree: LakatosTree_HSWM_20260719 / prediction-p5-cognitive-uplift-vs-directllm
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / prediction-p5-cognitive-uplift-vs-directllm
   (this pilot does NOT judge the prereg node; results are exploratory only).
 
 QUESTION
@@ -569,7 +569,7 @@ def main() -> None:
     result = {
         "label": "EXPLORATORY_PILOT — not the prereg P5 run; do not judge "
                  "prediction-p5-cognitive-uplift-vs-directllm with this",
-        "tree": "LakatosTree_HSWM_20260719",
+        "tree": "HSWM_LOCAL_RECORD",
         "prereg_ref": "prediction-p5-cognitive-uplift-vs-directllm",
         "config": {k: getattr(args, k.replace("-", "_")) for k in
                    ("n_train", "n_eval", "budget", "top_k", "proj_dim", "seed",

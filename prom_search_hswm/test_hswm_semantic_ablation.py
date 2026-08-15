@@ -2,7 +2,7 @@
 """
 ML17 — "Semantic Weight Mapper" 유의성 ablation on MuSiQue.
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML17-semantic-weight-ablation
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML17-semantic-weight-ablation
 ML16: n-ary 하이퍼그래프(구조) > 이진, hard-hop>flat. 이제 HSWM의 "Semantic Weight" 성분 분리:
   그래프 엣지/시드에 의미(임베딩) 가중을 넣는 게 구조-only 대비 값 더하나?
   예측: 멀티홉 다리는 의미가 *다른* 문단을 잇는 것 → semantic 엣지가중이 다리를 죽일 수도(hard-hop↓).
@@ -103,7 +103,7 @@ def main():
     summ={mm:{"recall@10":round(statistics.mean(per[mm]),4),"hardhop@10":round(statistics.mean(hard[mm]),4)} for mm in methods}
     def ci(a,b):
         d=[per[a][i]-per[b][i] for i in range(len(qt))];return {"mean":round(statistics.mean(d),4),"CI":boot(d)}
-    ev={"experiment":"hswm_semantic_ablation_ml17","tree":"LakatosTree_PromSearchHSWM_20260721","node":"ML17-semantic-weight-ablation",
+    ev={"experiment":"hswm_semantic_ablation_ml17","tree":"HSWM_LOCAL_RECORD","node":"ML17-semantic-weight-ablation",
         "setup":{"benchmark":"MuSiQue-ans dev","n_questions":len(qt),"corpus":N,"hyperedges":me,"model":mu},
         "recall_and_hardhop":summ,
         "ablation_CI":{

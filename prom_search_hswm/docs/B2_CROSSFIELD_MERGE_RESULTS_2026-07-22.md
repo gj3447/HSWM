@@ -1,6 +1,6 @@
 # B2 cross-field merge payoff — 결과 (2026-07-22)
 
-> **판정**: LakatoTree **`progressive`** — 프로그램(`LakatosTree_PromSearchHSWM_20260721`) 첫 완전 progressive, eureka seam **true** (BF 6.0, hallucinated=false). receipt fold `ok=true`. 노드 `B2-crossfield-merge-payoff` (예측 receipt `ba0c3718…`).
+> **판정**: HSWM_LOCAL_RECORD **`progressive`** — 프로그램(`HSWM_LOCAL_RECORD`) 첫 완전 progressive, eureka seam **true** (BF 6.0, hallucinated=false). receipt fold `ok=true`. 노드 `B2-crossfield-merge-payoff` (예측 receipt `ba0c3718…`).
 > **단 복합 conjecture 원문은 불성립**: L5 no-harm이 위반돼 lemma_incorporation으로 편입 — "merge는 cross-field에서 크게 이기지만 in-field에 측정된 비용을 낸다"로 주장 축소. USER 정전 "여러 HSWM 연결로 큰 망"의 **첫 실측 긍정 증거이자 첫 실측 비용**.
 
 ## 실측 (2Wiki n_q=400, title-parity 2필드, seam arc 2,355개, prereg 동결 후 실행)

@@ -42,7 +42,7 @@ def test_umbrella_canon_keeps_authority_and_nonclaim_boundaries() -> None:
         "UMBRELLA_CANON / USER_REQUESTED_SYNTHESIS",
         "USER_PRIMARY",
         "SECONDARY_AI_FORMALIZATION",
-        "MACHINE_LEDGER",
+        "DIRECT_MEASUREMENT_RECORD",
         "과학적 지위**: `UNJUDGED`",
         "포괄 비준이 아니다",
         "성능, 개인 동일성, 물리학 또는 구현 완성을 판결하지 않는다",
@@ -67,9 +67,9 @@ def test_umbrella_canon_keeps_authority_and_nonclaim_boundaries() -> None:
 
 def test_canon_pins_exact_user_sources_and_secondary_formalization() -> None:
     expected = {
-        WORLD_SOURCE: "ff51701555bd780d88de3b2ee9c339a42dd7b829592d21bcbb31028dcea14912",
+        WORLD_SOURCE: "590b28979ae9d1376bb7edad0b88da1ff0d613c1403f59071de4082985255844",
         WIRING_SOURCE: "e99c99c05e5de1a4dee4e291a2a39747a4036465ed23455ad4051add65a01d29",
-        WIRING_FORMALIZATION: "884734b1b3aafd789257c4b63f5b30a3b3ebfe3084acc2800b0f6a1875febfb2",
+        WIRING_FORMALIZATION: "ad789dcbea1e816f9ed21b9b4cc39013f313e6add774bb350634007d81f7fc7f",
     }
     canon_text = CANON.read_text(encoding="utf-8")
     for path, digest in expected.items():

@@ -136,14 +136,14 @@ cosine 말고 **ColBERTv2 / HippoRAG2 / RAPTOR / late-chunking** 대비 이겨�
 
 ## 6. 흡수 core (USER line 6) — 무엇을 흡수하나
 
-> "CHU·라카토트리·비행기맨 툴이 하네스표준을 흡수했듯 HSWM을 완전히 흡수해버려야 한다."
+> "CHU·폐기된 외부 판정기·비행기맨 툴이 하네스표준을 흡수했듯 HSWM을 완전히 흡수해버려야 한다."
 
 이 4축이 **흡수 가능한 core를 정확히 확정**했다 — vapor 말고 solid만 흡수한다:
 
 - **흡수할 solid core** = ① readout 인터페이스(`retrieve/plan/dispatch = 한 유사도 場의 top-k/softmax/argmax`, Universal Hopfield 항등) + ② `α=pooledᵀMq`(RESCAL/attention 항등) + ③ base-rate 사전분포(`log b`, ACT-R 동형) + ④ supersession을 場 write로. 이건 형식적으로 방어된다.
 - **흡수 전 켜야 할 엔진** = cosine-seeded 순회(§5 P5). 이게 님 비전의 심장이자 흡수의 진짜 가치. 순회 없이 흡수하면 "cosine + 얇은 잔여"만 흡수하는 것.
 - **흡수하면 안 되는 vapor** = "완전한 연상기억"/"논리 계산기"/"무경사" 라벨. 흡수 시 정확 어휘로: *단일관계 metric + 1-hop(→K-hop) 場 + 선호신호 학습*.
-- **3면 흡수 경로**: bhgman(롱기누스=bind/재배맨=plan/오캄=supersede가 場 위 operator로 readout 호출, engineboy와 substrate 공유) / LakatoTree(검색·계획 readout을 판정 substrate로) / CHU(場을 계산가능 하이퍼우주 타입 한 층으로).
+- **3면 흡수 경로**: bhgman(롱기누스=bind/재배맨=plan/오캄=supersede가 場 위 operator로 readout 호출, engineboy와 substrate 공유) / HSWM_LOCAL_RECORD(검색·계획 readout을 판정 substrate로) / CHU(場을 계산가능 하이퍼우주 타입 한 층으로).
 - **선결 조건**: §5 P4·P5·P6 통과 = "solid core가 강baseline을 이기고, 순회가 필요하고, 이식 가능"임을 실측한 뒤에만 흡수 착수. (좋은 substrate가 실측 유효임을 전제로만 — INDEX §5.)
 
 ---

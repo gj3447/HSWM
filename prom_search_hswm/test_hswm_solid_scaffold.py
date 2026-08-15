@@ -2,7 +2,7 @@
 """
 ML18 — Solid Scaffold 딥스택 falsifier (USER 정전: 층=solidity/모듈성/이식성, NOT 전파깊이).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML18-solid-scaffold-depth
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML18-solid-scaffold-depth
 정전: SOLID_SCAFFOLD_DEPTH.md — "깊이" 두 종류. 전파깊이=over-smooth(막다른길) vs 구조깊이=solid발판.
 USER: "solid 해야 방향수정 쉽다. 하나만 딱 있으면 붙이기·이식 어렵다."
 weight-free 대응: solid 메커니즘 = APPNP teleport(α=initial residual=GCNII). naive=teleport無 power iter.
@@ -167,7 +167,7 @@ def main():
            "incremental":round(statistics.mean([recall(list(np.argsort(-incremental[:,qi])),qg[qi],10) for qi in range(len(qt))]),4),
            "full_rebuild":round(statistics.mean([recall(list(np.argsort(-full_rebuild[:,qi])),qg[qi],10) for qi in range(len(qt))]),4)}
 
-    ev={"experiment":"hswm_solid_scaffold_ml18","tree":"LakatosTree_PromSearchHSWM_20260721","node":"ML18-solid-scaffold-depth",
+    ev={"experiment":"hswm_solid_scaffold_ml18","tree":"HSWM_LOCAL_RECORD","node":"ML18-solid-scaffold-depth",
         "canon":"SOLID_SCAFFOLD_DEPTH.md — 깊이 두 종류. 전파깊이=over-smooth, 구조깊이=solid발판. USER: solid해야 방향수정·붙이기·이식.",
         "setup":{"benchmark":"MuSiQue-ans dev","n_questions":len(qt),"corpus":npool,"hyperedges":me,"model":mu,"flat_recall@10":flat_r10},
         "S_solidity":{

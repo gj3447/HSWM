@@ -10,7 +10,7 @@ This is Phase A: semantic associative residuals only.  It does not claim topolog
 learning.  Structural ADD/SPLIT/MERGE/SUPERSEDE is a later experiment contingent
 on this transaction/FSM layer surviving falsification.
 
-Do not run before the sibling PREREG JSON records a live LakatoTree prediction and
+Do not run before the sibling PREREG JSON records a live HSWM_LOCAL_RECORD prediction and
 all frozen artifact hashes.  The output contains evidence, never an authored
 verdict.
 """
@@ -43,7 +43,7 @@ from prom_p5_multiview_hardhop import (
 )
 
 
-TREE = "LakatosTree_PromSearchHSWM_20260721"
+TREE = "HSWM_LOCAL_RECORD"
 BRANCH = "P6-continual-absorption-fsm-unseen"
 QUESTION = "Q-continual-absorption-fsm-unseen"
 CONJECTURE = (
@@ -730,7 +730,7 @@ def main() -> int:
     )
 
     evidence = {
-        "schema": "lakato-evidence-record/v1",
+        "schema": "local_record-evidence-record/v1",
         "programme": TREE,
         "branch": BRANCH,
         "question": QUESTION,
@@ -832,7 +832,7 @@ def main() -> int:
             },
         ],
         "limitations": [
-            "One English benchmark, one encoder, and one deterministic split; the final LakatoTree judge must not generalize beyond this scope.",
+            "One English benchmark, one encoder, and one deterministic split; the final HSWM_LOCAL_RECORD judge must not generalize beyond this scope.",
             "Phase A absorbs semantic key-value associations but does not yet modify n-ary topology or run ADD/SPLIT/MERGE/SUPERSEDE fact arbitration.",
             "The CAS registry and canary are deterministic offline adapters, not a production active-pointer service.",
             "Private-ID and direct-answer-edge deletion are deferred to the topology phase; the current anti-memorization controls are query-disjoint splits, no ID feature, exact-cache control, and unseen-document stratification.",

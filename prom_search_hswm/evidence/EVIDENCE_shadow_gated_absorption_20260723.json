@@ -1,6 +1,6 @@
 {
-  "schema": "lakato-evidence-record/v1",
-  "programme": "LakatosTree_PromSearchHSWM_20260721",
+  "schema": "local_record-evidence-record/v1",
+  "programme": "HSWM_LOCAL_RECORD",
   "branch": "B3-shadow-gated-topology-absorption",
   "question": "Q-continual-absorption-fsm-unseen",
   "conjecture": "Three shadow-gated n-ary topology absorption rounds (ADD/SPLIT/MERGE/SUPERSEDE) pass the canary+fresh+target gate in at least one round while preserving canary knowledge at >= 98%, separating harmful from useless absorption - the diagnostic Phase A could not produce.",
@@ -344,7 +344,7 @@
   ],
   "limitations": [
     "Dataset and encoder substitutions: SiReRAG-converted 2Wiki (1000 rows) and deterministic lexical embeddings replace the P6 dataset/MiniLM because the external volume is unmounted and downloads are forbidden; absolute recall levels are not comparable to P6, only the paired gate logic carries over.",
-    "LakatoTree prediction was user-declared (2026-07-23); no server receipt sha was recorded in-repo.",
+    "HSWM_LOCAL_RECORD prediction was user-declared (2026-07-23); no server receipt sha was recorded in-repo.",
     "One benchmark, one deterministic split, one seed; training interactions use gold supporting passages (supervised learning-while-using).",
     "Canary/target slices are structural (candidate-touched gold documents); the target slice approximates the train distribution rather than matching it exactly."
   ],

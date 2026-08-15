@@ -4,7 +4,7 @@ PREREG (locked, read-only input): prom_search_hswm/evidence/
 PREREG_f2_delta_w_credit_20260725.json (in the SYMPOSIUM/HSWM checkout).
 
 Receipts from this script are always mode="development" measurements; the
-scientific judgment belongs to the LakatosTree gate, never to this file.
+scientific judgment belongs to the HSWM_LOCAL_RECORD gate, never to this file.
 
 Changes vs the 2026-07-25 dev edition (receipt ..._1784953230.json):
 

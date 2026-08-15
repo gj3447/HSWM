@@ -2,7 +2,7 @@
 
 > **cycle**: `apt-hswm-open-self-similar-2026-07-22`
 > **status**: USER_PRIMARY 방향 승인 + SECONDARY_AI 형식화
-> **LakatoTree**: `LakatosTree_HSWM_SolidMultiAgent_20260722`
+> **HSWM_LOCAL_RECORD**: `HSWM_LOCAL_RECORD`
 > **claim boundary**: 이 문서는 구조 계약이다. 과학적 `progressive` 판정을 주장하지 않는다.
 
 ## 0. 권위가 섞이지 않게 먼저 분리한다
@@ -13,7 +13,7 @@
 
 > “1층이 딱 있는게 아니라 어케 연결해도 연결할수 있는 느낌이 되야하는데 ㅇㅇ;”
 
-> “그 렇게 해서 라카토트리 위에 올려주고 진행해줘봐봐 ㅇㅇ”
+> “그 렇게 해서 폐기된 외부 판정기 위에 올려주고 진행해줘봐봐 ㅇㅇ”
 
 사용자가 승인한 방향은 다음 네 문장이다.
 
@@ -196,7 +196,7 @@ B2에서 cross-field merge는 `+0.2137`이었지만 in-field interference는 `-0
 | `AS-open-hswm-semantic-spec` | 0 | 이 문서 | USER/AI 권위 분리, keyAssertion, laws, falsifiers |
 | `AS-open-hswm-test-contract` | 1 | `test_hswm_open_composition.py` | closure, regrouping, weights, conflicts, round-trip |
 | `AS-open-hswm-kernel` | 2 | `hswm_open_composition.py` | tests만 만족하는 stdlib-only pure module |
-| `AS-open-hswm-evidence` | 3 | evidence JSON + LakatoTree receipt | exact command, SHA, pass counts, unresolved gates |
+| `AS-open-hswm-evidence` | 3 | evidence JSON + HSWM_LOCAL_RECORD receipt | exact command, SHA, pass counts, unresolved gates |
 
 의존 파동은 `spec → tests/prereg → implementation → frozen evidence`다. 각 span은 한 파일 또는
 한 receipt 범위로 국소화되고, 다른 세션의 `INDEX.md`나 기존 B0 파일을 수정하지 않는다.

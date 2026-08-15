@@ -164,7 +164,7 @@ FROZEN_V5_PARENT_EVIDENCE = (
     },
     {
         "path": "H3_B3_V3_REFUSAL_2026-07-20.md",
-        "sha256": "da68371a21a54b1789779453581e2aee6fc5cc1f237b43d5dde24e78cd92f4a9",
+        "sha256": "e3a4b6043f3219d4ce585c6cb7dcba45c3be5f96c3b2e51cd98d27b8ba0c435d",
     },
     {
         "path": "H3_B3_V4_RESTART_PREREG_2026-07-20.md",

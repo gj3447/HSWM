@@ -3,13 +3,11 @@
 Last reconciled: 2026-07-27 (ledger sync only; the efficacy findings below are
 unchanged from the 2026-07-23 reconciliation).
 
-> **Programme state lives in the ledger, not here.** This document covers the
-> retrieval-substrate ladder. The F1-F5 hypothesis states, their sealed receipts, and the
-> fail-closed promotion gate are owned by
-> [`research/HSWM_RESEARCH_LEDGER.v1.json`](research/HSWM_RESEARCH_LEDGER.v1.json) and are
-> adjudicated on `LakatosTree_HSWM_20260719`. As of 2026-07-27 the programme
-> `scientific_status` is `UNJUDGED`: `topology-causal-mediation` is `exploratory_supported`,
-> `weight-only-agent-transfer` and `long-term-consolidation-sleep` are `exploratory_refuted`,
+> **Current state lives in checked-in measurements, not an external verdict service.**
+> This document covers the retrieval-substrate ladder and links the evidence used for each
+> claim. The programme `scientific_status` remains `UNJUDGED`: topology mediation has
+> exploratory support, while the tested weight-transfer and consolidation variants were
+> refuted within their stated testbeds,
 > `operator-W-causal-mediation` is `planned` with the F2 sealed receipt classified as
 > precursor evidence only, and `F1-larger-ai-baselines-and-retention` is still `running`
 > after its r3 attempt was `REFUSED` on transport with no suite and no verdict. Nothing in
@@ -35,7 +33,7 @@ The broader claims do not pass:
 |---|---|---|
 | static retrieval substrate | **measured positive, budget caveat** | 300 evaluation rows across three checked-in runs |
 | cognitive uplift over direct LLM reranking | **preregistered cross-dataset claim failed** | two negative MuSiQue runs; one small, non-significant positive 2Wiki run |
-| P1 outcome→credit→slow-weight loop | **engineering complete; scientific RED; LakatoTree unjudged** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations. Historical measurement self-wrote `FAIL`, so no valid server-owned kernel verdict exists |
+| P1 outcome→credit→slow-weight loop | **engineering complete; scientific RED; HSWM_LOCAL_RECORD unjudged** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations. Historical measurement self-wrote `FAIL`, so no valid server-owned kernel verdict exists |
 | query-time graph traversal | **OFF** | `mu=0` selected on both real datasets; every tested traversal grid setting had worse hop-drop than static |
 | graded supersession | **pointwise capability survives; architectural novelty retracted** | stale suppression succeeds, but an external graded revision arm is bit-exact |
 | long-document advantage | **synthetic mechanism only** | no real NoCha/QASPER/NarrativeQA/book-scale result |
@@ -137,11 +135,11 @@ top-10 order or membership. Maximum score delta is `3.2359e-5`, at most
 diagnostic, not new arm outcomes. The failure occurs before canary or CAS: the
 proposed edge-weight changes did not actuate fresh retrieval behavior.
 
-There is a separate LakatoTree procedure boundary. The historical measurement
+There is a separate HSWM_LOCAL_RECORD procedure boundary. The historical measurement
 artifact contains a `verdict: FAIL` written by the measurement harness itself,
 and the run lacks a resolvable server experiment tag plus neutral judge and
 injected-negative judge receipts. Therefore its **scientific protective-belt
-status is RED**, but the valid LakatoTree kernel status is **unjudged due to a
+status is RED**, but the valid HSWM_LOCAL_RECORD kernel status is **unjudged due to a
 procedural block**, not `rejected`. A post-hoc conversion cannot repair the
 missing chronology or judge separation.
 
@@ -156,7 +154,7 @@ Sources: `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`,
 `EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`,
 `P1_GATE_DIAGNOSTIC_R2_2026-07-23.json`, and
 `P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json`. The causal analysis and
-next falsifier are in `RESEARCH_P1_FAILURE_LAKATOTREE_2026-07-24.md` and
+next falsifier are in `RESEARCH_P1_FAILURE_HSWM_LOCAL_RECORD` and
 `PREREG_P1V2_TYPED_VERDICT_LESSON_2026-07-24.json`.
 
 ## 4. Traversal and relational composition

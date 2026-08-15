@@ -2,7 +2,7 @@
 
 > **이 이름이 정본 라벨이다.**
 > 누가 “HSWM 뭐 하냐?”고 물으면 → **HSWM core 개발** 이라고 말하면 된다.
-> (라카토트리 운영, 333 p2p, public 서비스, KG 청소와 **다른 일**.)
+> (폐기된 외부 판정기 운영, 333 p2p, public 서비스, KG 청소와 **다른 일**.)
 
 ---
 
@@ -13,7 +13,7 @@
 | 이름 | 포함 | 제외 (나중 / 다른 트랙) |
 |---|---|---|
 | **HSWM core 개발** | 코어 코드·typed function path·W/readout·실존 측정(F1 등)·계획 개정 | 333 committee / 거대 public p2p / Metahumo 론칭 / federation 본구현 |
-| 라카토트리 | 판결 장부 (도구) | HSWM 본체 아님 |
+| 폐기된 외부 판정기 | 판결 장부 (도구) | HSWM 본체 아님 |
 | 333 / public | 배포·서비스 층 | core 개발 고유 개념 아님 |
 
 ---
@@ -88,7 +88,7 @@ python3 HSWM/hswm_core_existence_harness.py next \
 
 **이렇게 말하지 않음:**
 
-> HSWM = 라카토트리 돌리는 것
+> HSWM = 폐기된 외부 판정기 돌리는 것
 > HSWM = 333 p2p
 > HSWM = 문서/연결성 지도만
 

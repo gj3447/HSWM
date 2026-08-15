@@ -122,7 +122,7 @@ exactly three endpoint calls: one recovered to `partial/stop`, and two repeated
 the same length-truncated content.  Only 3,597 sources are compiler-admissible.
 
 The V3 cache is no longer resumable.  Preserve its OPEN receipt, inode, and
-JSONL exactly; never create its CLOSE.  Its OMD production task is ABORTED and
+JSONL exactly; never create its CLOSE.  Its LOCAL_WORKFLOW production task is ABORTED and
 no live V3 write lease remains.
 
 ## V4 hardening completion

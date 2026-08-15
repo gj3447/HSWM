@@ -10,9 +10,9 @@
     "run_admission": "BLOCKED"
   },
   "mechanism_baseline": {
-    "reference_commit": "5085642a98a1eb58d65d7c8449a571b5c21f30d2",
+    "reference_commit": "WORKTREE_CURRENT",
     "source_hashes": {
-      "ab_p5_full.py": "2fb1b9e024cea8a457fd6c89b8e2e7049fd4fd1b284477b35f1f561bbc3fef61",
+      "ab_p5_full.py": "dd73a9c8e077ad51883398c2379907c82a3b809051ee731cb1c741a6beabb020",
       "doc_builder.py": "52c5ccee2487f62f6b6021ed6438477b7cdac8e84ffadd5f7fe031303adc79fc",
       "hypergraph.py": "3b72f7948196a4c865d5e35e78a2ac1ff9447b205bb07096fe9472a6462e8c34",
       "metrics.py": "de2d3339fd5feb11ea58bb865c5d713a27af2457e61d393fc0dd0f783574c9d0",
@@ -27,15 +27,15 @@
       "world_ir.py": "89354d117d41c45e3ed0ee9390eb780950c2a7bb5ac0d7b63dba618854fe4f78",
       "prom_search_hswm/hswm_bond_readout.py": "41bca84d284f82f52a966c03c06e8b83debe30388dc41d8ce425f57ff61221f1",
       "prom_search_hswm/hswm_field_algebra.py": "573de075728aca74965acd945228233e9f736ee96f97dfb7aaa5fee3761cb9ca",
-      "prom_search_hswm/hswm_hypergraph.py": "af902f614d9c3bb665c14ac7baa7c2a1570e58cc9aaf1353811d485c544d2c6a",
+      "prom_search_hswm/hswm_hypergraph.py": "3941f4041072a4b7dddc8ac05d1658e6876379f10bb371f7e2fd83f790325d58",
       "prom_search_hswm/hswm_open_composition.py": "ba92caafc992b2cd22913ba835b61726f9dad730cfd9ac640a2843603bdf866a",
       "prom_search_hswm/fsm/hswm_plasticity_loop.v1.json": "fec06c9c74952062acd8febab35039718094b79f0df522eb1b2e50ceafea8954"
     }
   },
   "protocol_implementation": {
     "verifier_path": "_research/shared_field_hypothesis/verify_contract.py",
-    "verifier_sha256": "5cb99dca4c1cac2e948502454a092747a31a45ed03f43d3b1f8d4445b5738604",
-    "semantic_lock_sha256": "af78b90a0ff2ac0211ec169bfd34b723d5f7edb9159b924055bf6eba6bad1ac5",
+    "verifier_sha256": "973ed1cfb25024a84cbda9584458ce97379640b0260990dcd7eabfbec539d093",
+    "semantic_lock_sha256": "b3d4cd250b72851e880f08f8119186949ef86713945041fe1466973fcd374628",
     "run_verifier_capability": "UNIMPLEMENTED_ARTIFACT_DERIVATION"
   },
   "predecessors": {
@@ -183,9 +183,9 @@
     "unresolved_statistics": ["sample_sizes", "seeds", "aggregation_units", "paired_resampling_procedure", "multiplicity_control", "numeric_thresholds"]
   },
   "governance": {
-    "experiment_registration_and_verdict": "LakatoTree",
+    "external_authority": "NONE",
     "mechanism_under_test": "HSWM",
-    "attribution": "LakatoTree owns preregistration, receipt, and scientific verdict; HSWM owns only the field mechanism under test."
+    "attribution": "Checked-in preregistration, measurements, and claim boundaries own the scientific record; HSWM owns only the field mechanism under test."
   },
   "claim_boundary": {
     "result_claimed": false,
@@ -196,7 +196,7 @@
     "statement": "This design lock fixes the comparison surface. It is neither a preregistration nor evidence for the shared-field hypothesis."
   },
   "unresolved_before_preregistration": [
-    "external LakatoTree prediction receipt binding the final manifest bytes and registration time",
+    "local prediction record binding the final manifest bytes and freeze time",
     "neutral replay and full-candidate score-pack artifacts with verified schemas and hashes",
     "frozen input artifacts with verified schemas and hashes",
     "event-ledger-derived call/token/candidate/revision counters",

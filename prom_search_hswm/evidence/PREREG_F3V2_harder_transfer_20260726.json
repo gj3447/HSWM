@@ -7,7 +7,7 @@
  "preregistration_doc": {
   "path": "SYMPOSIUM/HSWM/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md",
   "sha256": "e4e9c90652b1a8ad2a2de10909b6254ca6d476db2d935fe3536778a6b94f9a88",
-  "status": "RATIFIED by user 2026-07-26 (LakatoTree node f3v2-harder-transfer-prereg-20260726 on LakatosTree_HSWM_20260719; prediction trr_hard_min>0 credence 0.45 registered). MD 헤더는 DRAFT 표기 그대로 — 사본 해시 고정을 위해 원본 미수정.",
+  "status": "RATIFIED by user 2026-07-26 (HSWM_LOCAL_RECORD node f3v2-harder-transfer-prereg-20260726 on HSWM_LOCAL_RECORD; prediction trr_hard_min>0 credence 0.45 registered). MD 헤더는 DRAFT 표기 그대로 — 사본 해시 고정을 위해 원본 미수정.",
   "adoption_gate_evidence": "canary PASS receipt receipts/f3v2_canary_gate_dev_1785040277.json (prereg §2: receiver ZS hard 12.5% <= 30, donor 87.5% >= 70, gap 75pp >= 15)",
   "dev_smoke_evidence": "receipts/f3v2_dev_smoke_live_1785051784.json (dev-4 live, 28 calls, aborted=null; n=4 TRR degenerate — 판정 아닌 파이프라인 검증)"
  },
@@ -46,7 +46,7 @@
   "estimation": "paired bootstrap 95% CI (reps=10000, seed=20260727) + Bowyer Bayesian CI (n<수백 구간 백업)"
  },
  "predictions": [
-  {"metric": "trr_hard_min (min(TRR_c, TRR_d) hard)", "direction": "higher", "threshold": 0.0, "credence": 0.45, "note": "LakatoTree 사전등록과 동일 — MemCollab cross-family +12~15pp 유효 vs naive 열화 실측, 절반 이하가 정직"},
+  {"metric": "trr_hard_min (min(TRR_c, TRR_d) hard)", "direction": "higher", "threshold": 0.0, "credence": 0.45, "note": "HSWM_LOCAL_RECORD 사전등록과 동일 — MemCollab cross-family +12~15pp 유효 vs naive 열화 실측, 절반 이하가 정직"},
   {"metric": "naive_trr_hard", "direction": "lower_or_null", "threshold": 0.0, "credence": 0.55, "note": "MemCollab naive 이식 열화(50.6<52.2) 재현 예상"},
   {"metric": "placebo_minus_no_mem", "direction": "near_zero", "threshold": 0.05, "credence": 0.7},
   {"metric": "fact_trr", "direction": "near_zero", "threshold": 0.05, "credence": 0.75, "note": "②③(workflow/norm)만 양수여야 '환경 아닌 전이'"}
@@ -87,6 +87,6 @@
   "2. dev-4 라이브 스모크 — DONE (receipt 1785051784, 파이프라인 검증)",
   "3. 이 머신락 + sealed prep (cohort manifest, sha 봉인)",
   "4. sealed run (F1 sealed 완료 후 vLLM 윈도 확보, 밤새 — dgx 자체 실행)",
-  "5. TRR/kills 판정 (cache-only) → r2 replay 승격 → LakatoTree 제출"
+  "5. TRR/kills 판정 (cache-only) → r2 replay 승격 → HSWM_LOCAL_RECORD 제출"
  ]
 }

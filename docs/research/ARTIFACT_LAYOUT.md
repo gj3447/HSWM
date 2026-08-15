@@ -42,7 +42,7 @@ still applies.
 ## Hash-bound legacy writers
 
 Many historical harness scripts are hash-locked: their sha256 is bound in
-`receipts/`, `ooptdd/`, or root `PREREG_*.json` records, so they **must not be
+`receipts/`, `LOCAL_INTEGRITY_CHECK/`, or root `PREREG_*.json` records, so they **must not be
 edited**. They keep their root-relative output constants as historical record.
 Do not rerun them against the locked root artifacts — a rerun with new data
 would break the receipt bindings. New experiments must write new scripts that

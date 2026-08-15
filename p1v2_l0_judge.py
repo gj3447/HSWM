@@ -8,7 +8,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from hswm_weight_snapshot import canonical_sha256
-from p1v2_l0_harness import ARM_IDS, verify_lakato_evidence_record
+from p1v2_l0_harness import ARM_IDS, verify_local_record_evidence_record
 
 
 JUDGE_SCHEMA_VERSION = "hswm-p1v2-l0-judge-receipt/v1"
@@ -66,7 +66,7 @@ def judge_l0(
     budget: Mapping[str, object],
     contradiction_receipt: Mapping[str, object],
 ) -> dict[str, object]:
-    verify_lakato_evidence_record(evidence)
+    verify_local_record_evidence_record(evidence)
     _verify_budget(budget)
     verify_contradiction_receipt(contradiction_receipt)
     measurement = evidence.get("measurement")

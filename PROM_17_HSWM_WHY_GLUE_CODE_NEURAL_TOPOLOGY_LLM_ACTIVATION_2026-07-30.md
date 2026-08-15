@@ -4,8 +4,7 @@
 > **date**: 2026-07-30
 > **authority**: USER_CANON 대화(2026-07-30)에서 출발한 SECONDARY_AI synthesis.
 > 이 문서는 **동기·정체성 선언**이며 측정된 효능 주장이 아니다. 실험적 승격은
-> [`research/HSWM_RESEARCH_LEDGER.v1.json`](research/HSWM_RESEARCH_LEDGER.v1.json)의
-> fail-closed 7단계 게이트를 별도로 통과해야 한다.
+> 고정 입력·내용 해시·음성대조·재현 가능한 직접 측정을 별도로 통과해야 한다.
 > **relation**: README의 `Core Motivation: Replacing Hardcoded Agent Glue with
 > Learned Neural Topology` 절(2026-07-30)을 확장·정식화한다. 목표 아키텍처의
 > 수식 정합은 PROM-9, 총체 과학 구조는 PROM-16, 정체성 정전은
@@ -179,8 +178,8 @@ FSD도 순수 신경망이 아니라 rule-based 안전 봉투(safety envelope)�
 3. **절제(ablation)**: 가중치 장을 제거하면 하드코딩 라우터 기준선 수준으로
    퇴보하는가?
 
-이 세 질문은 기존 F1–F5 게이트와 같은 장부(ledger) 절차로 사전등록·봉인되어야
-하며, 이 문서 자체는 어떤 실험 결과도 주장하지 않는다.
+이 세 질문은 로컬 사전등록, 내용 해시, 음성대조와 직접 측정 절차로 고정되어야 하며,
+이 문서 자체는 어떤 실험 결과도 주장하지 않는다.
 
 ## 7. Claims and Non-claims
 
@@ -200,4 +199,4 @@ FSD도 순수 신경망이 아니라 rule-based 안전 봉투(safety envelope)�
 - `CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md` — 정체성 정전
 - `PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md` — 최소 구현 계약
 - `PROM_16_HSWM_HOLISTIC_SCIENTIFIC_ARCHITECTURE_2026-07-26.md` — 총체 과학 구조
-- `research/HSWM_RESEARCH_LEDGER.v1.json` — 실험 승격의 유일한 기계 정본
+- `EFFICACY.md` — 현재 효능 주장과 직접 증거의 경계

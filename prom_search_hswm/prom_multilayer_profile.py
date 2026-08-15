@@ -2,7 +2,7 @@
 """
 PROM 검색 ML3 — 과활성 없는 multi-layer: 층-프로파일 벡터 유사도 (USER "여러 층" 공정 재판).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML3-multilayer-profile-badiou
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML3-multilayer-profile-badiou
 ML2 실패원인 = binary co-activation(∃층 both>=t)이 과활성 → null 붙음. 이번엔 continuous:
   각 RF → 층-프로파일 p_i = [cos(RF_i, L_1..K)] (K차원). 유사도 = cosine(p_i, p_j).
   threshold 없이 AUC(same-pair sim > diff-pair sim 확률)로 arm 비교 = 공정.
@@ -114,7 +114,7 @@ def main():
 
     ev = {
         "experiment": "prom_multilayer_profile_badiou24",
-        "tree": "LakatosTree_PromSearchHSWM_20260721",
+        "tree": "HSWM_LOCAL_RECORD",
         "node": "ML3-multilayer-profile-badiou",
         "method": "layer-profile vector cosine (continuous, threshold-free AUC) — ML2 binary co-activation 과활성 수정",
         "a_priori": {"k_blind": K_BLIND, "seed": SEED},

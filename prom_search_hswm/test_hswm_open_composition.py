@@ -2,7 +2,7 @@
 """Executable contract for fixed-depth-free OpenHSWM composition.
 
 Pure engineering properties only.  Passing this suite is not a retrieval-quality
-or Lakatos progressive result.
+or Legacy programme progressive result.
 """
 from __future__ import annotations
 

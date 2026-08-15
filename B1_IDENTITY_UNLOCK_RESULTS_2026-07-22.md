@@ -1,7 +1,7 @@
 # B1 identity-material unlock — T0 결과 (2026-07-22)
 
-> **판정**: metric **`progressive`** (preregistered 예측 2개 모두 적중) / 프로그램 레벨 Lakatos `degenerating` (BF 0.167 — 누적 RED 이력 하중, ML18과 동일 이중 판정 패턴). receipt fold `ok=true`.
-> **노드**: `LakatosTree_PromSearchHSWM_20260721 / B1-identity-material-unlock-t0` (예측 receipt `3373440d…`).
+> **판정**: metric **`progressive`** (preregistered 예측 2개 모두 적중) / 프로그램 레벨 Legacy programme `degenerating` (BF 0.167 — 누적 RED 이력 하중, ML18과 동일 이중 판정 패턴). receipt fold `ok=true`.
+> **노드**: `HSWM_LOCAL_RECORD / B1-identity-material-unlock-t0` (예측 receipt `3373440d…`).
 > **한 줄**: H3-C0이 진단한 "legal 2-edge chain 0 = identity material 결핍"이 **정확히 맞았다** — 결정론 weave만으로 MuSiQue 0→**6**, 2Wiki 0→**25** chain 해금. LLM/network/embedding 호출 0.
 
 ## 사전등록 (PREREG_B1_IDENTITY_UNLOCK_2026-07-22.json, 실행 전 동결)

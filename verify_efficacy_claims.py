@@ -733,9 +733,9 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
             "any_grid_configuration_beats_static_hopdrop": False,
         },
         "p1_closed_macro_weight_loop": {
-            "status": "ENGINEERING_COMPLETE_SCIENTIFIC_RED_LAKATOTREE_UNJUDGED",
+            "status": "ENGINEERING_COMPLETE_SCIENTIFIC_RED",
             "scientific_domain_status": "CAUSAL_EFFICACY_REJECTED",
-            "lakatotree_kernel_status": "UNJUDGED_PROCEDURAL_BLOCK",
+            "evidence_authority": "CHECKED_IN_DIRECT_MEASUREMENT",
             "historical_measurement_self_verdict": "FAIL",
             "a1_minus_a2_mean_paired_recall10": p1_primary,
             "bootstrap95_lower": p1_lower,
@@ -753,8 +753,8 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
             "boundary": (
                 "The outcome-to-credit-to-candidate loop executed, but no "
                 "candidate changed fresh top-10 retrieval or became active. "
-                "The historical evidence self-wrote FAIL, so the scientific "
-                "RED is not a valid server-owned LakatoTree verdict."
+                "The checked-in evidence self-recorded FAIL; no removed "
+                "external-tool verdict is retained as authority."
             ),
         },
         "graded_supersession": {

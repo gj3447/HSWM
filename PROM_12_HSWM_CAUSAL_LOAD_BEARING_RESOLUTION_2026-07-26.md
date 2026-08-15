@@ -44,9 +44,9 @@ topology가 서로 분리된 실험으로 존재하여 **HSWM 고유 구조가 �
   LLM 호출, prompt 변경, static memory가 아니라 결과가 `W/H`를 바꾸고 그 변화가 다음
   dispatch를 바꿀 때만 HSWM 학습이다.
 
-### 1.2 LakatoTree 상태
+### 1.2 HSWM_LOCAL_RECORD 상태
 
-`LakatosTree_HSWM_20260719` live read 기준:
+`HSWM_LOCAL_RECORD` live read 기준:
 
 - 62 nodes, open questions 39, closed 4;
 - registered novel predictions 19, confirmed 3 (`fertility=0.158`);

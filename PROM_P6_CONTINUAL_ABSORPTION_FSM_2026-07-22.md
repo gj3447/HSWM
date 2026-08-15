@@ -1,7 +1,7 @@
 # P6 — Continual Absorption FSM (Phase A: semantic KV residual) 재판 (2026-07-22)
 
 > **USER_PRIMARY (2026-07-22)**: "hswm 은 고정된게 아니라 흡수흡수흡수 하면서 성능을 발전시켜야해 구조나 fsm 을 개선시키면서"
-> **판정**: metric `equivalent` / Lakatos **`degenerating`** — 노드 `P6-continual-absorption-fsm-unseen-r2`, receipt fold `ok=true` (rederived=degenerating).
+> **판정**: metric `equivalent` / Legacy programme **`degenerating`** — 노드 `P6-continual-absorption-fsm-unseen-r2`, receipt fold `ok=true` (rederived=degenerating).
 > **한 줄**: 의미 key-value residual 흡수(Phase A)는 unseen 질의에 전이 안 됨 — 3라운드 전부 fresh validation에서 **오히려 해침** → FSM 승격 게이트가 전부 기각 → sealed Δ=0. **FSM 가드레일 자체는 설계대로 작동** (손해를 한 번도 안 실음).
 
 ## 1. 설계 (사전등록 `PREREG_p6_continual_absorption_fsm_20260722.json`)

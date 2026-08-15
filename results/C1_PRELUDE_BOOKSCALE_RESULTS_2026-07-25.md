@@ -1,6 +1,6 @@
 # C1 PRELUDE book-scale 결과 — 하네스 첫 완주 + novel kill 발동 (2026-07-25)
 
-> **판정**: novel(하이퍼그래프 네이티브 > 쌍 축약) **REFUTED — kill condition 발동**. primary(hswm−dense ≥ +3.0pp)는 점추정 +3.16pp로 임계 통과하나 CI가 임계·0 양쪽으로 걸침 = prereg 규정상 **low_power**. LakatoTree 노드 `exp-c1-prelude-bookscale-20260723`: metric `equivalent`(noise 1.0 내) / 프로그램 `degenerating`.
+> **판정**: novel(하이퍼그래프 네이티브 > 쌍 축약) **REFUTED — kill condition 발동**. primary(hswm−dense ≥ +3.0pp)는 점추정 +3.16pp로 임계 통과하나 CI가 임계·0 양쪽으로 걸침 = prereg 규정상 **low_power**. HSWM_LOCAL_RECORD 노드 `exp-c1-prelude-bookscale-20260723`: metric `equivalent`(noise 1.0 내) / 프로그램 `degenerating`.
 > **한 줄**: book-scale 첫 실측에서 dense 대비 이득의 **전부가 pairwise clique 축약으로 재현**된다 — 하이퍼그래프 "네이티브 구조"의 고유 기여는 PRELUDE 공개 split에서 검출되지 않았다. "리프트 몸통=임베딩 정렬" 진단(§1)과 일치.
 
 ## 실측 (n=262, 4권, 3 arms, judge=qwen3.6-27b temp0, bge-m3)
@@ -41,5 +41,5 @@
 
 - `c1_prelude_bookscale.py` (수리 4건), `c1_replay_judge.py` (신규, sha `8d8ca5a6…`)
 - `EVIDENCE_C1_PRELUDE_BOOKSCALE_2026-07-23.json` (sha `42e6bf78…`), `data/prelude/c1_replay_records.json`
-- 장부: `LakatosTree_HSWM_20260719/exp-c1-prelude-bookscale-20260723` (equivalent/degenerating, novel_unconfirmed) + lineage 7건
+- 장부: `HSWM_LOCAL_RECORD/exp-c1-prelude-bookscale-20260723` (equivalent/degenerating, novel_unconfirmed) + lineage 7건
 - 잔여: `data/prelude/cache/` (39M, 임베딩+judge 캐시) — git 제외, Proxmox 스냅샷 보존

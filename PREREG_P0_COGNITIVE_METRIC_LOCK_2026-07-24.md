@@ -2,7 +2,7 @@
 
 > **status**: SECONDARY_AI_DRAFT — USER ratify 대상. ratify 시 `CANONICAL_USER_DIRECTION` 하위 실행층으로 편입.
 > **schema**: hswm-preregistration/v1 (program-level; 실험 prereg은 JSON 관례, 본 건은 측정 없는 metric/주장 잠금이라 MD).
-> **programme**: `LakatosTree_HSWM_20260719` · branch `canon-direction-neural-cognitive-entity-20260723`.
+> **programme**: `HSWM_LOCAL_RECORD` · branch `canon-direction-neural-cognitive-entity-20260723`.
 > **상위 정전**: [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) §3–§4 — 본 문서는 그 §3(인지체 metric)·§4(로드맵 kill)의 **집행 잠금**이다. 정전 텍스트와 충돌 시 정전이 이긴다.
 > **registered_before_measurement**: true — 아래 metric으로 계산된 값은 어떤 arm에서도 아직 존재하지 않는다 (2026-07-24 현재 P1 모듈 미구현, `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` module_sha256 = PENDING).
 
@@ -69,7 +69,7 @@
 ## 6. 완료 조건 (P0 exit)
 
 - [ ] 본 문서 USER ratify
-- [ ] LakatoTree `LakatosTree_HSWM_20260719`에 P0 노드 등록 (theory lock, 판결 없음 — 측정은 P1부터)
+- [ ] HSWM_LOCAL_RECORD `HSWM_LOCAL_RECORD`에 P0 노드 등록 (theory lock, 판결 없음 — 측정은 P1부터)
 - [ ] 정전 §7 "즉시 다음 행동 2" 완료 표기
 
 P0는 측정을 만들지 않는다. 첫 측정 = P1 (`PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`, 모듈 구현 대기).

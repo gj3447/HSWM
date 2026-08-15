@@ -1,12 +1,12 @@
 # PROM 16 — HSWM 현재 문제점 전수 감사 (2026-07-25)
 
-> **2026-08-15 운영 정정:** 이 문서는 당시 상태의 역사 snapshot이다. 아래 OMD 세마포어
-> 처방은 현재 규약에서 superseded되었으며 OMD는 RETIRED·역사 읽기 전용이다.
+> **2026-08-15 운영 정정:** 이 문서는 당시 상태의 역사 snapshot이다. 아래 LOCAL_WORKFLOW 세마포어
+> 처방은 현재 규약에서 superseded되었으며 LOCAL_WORKFLOW는 RETIRED·역사 읽기 전용이다.
 
 > 질문: **"지금 HSWM에서 문제점이 뭐냐?"** — 16 subagent (4축 × 4렌즈), read-only 감사.
 > 축: A 과학적 미증명 게이트 / B 장부·재현성 / C 인프라·운영 / D 방향·가치. 렌즈: ①낶부 증거 ②외부 기준 ③함정·오탐 ④처방.
 > Raw: [`_findings/prom16-hswm-current-problems-20260725/swarm_raw_16.txt`](_findings/prom16-hswm-current-problems-20260725/swarm_raw_16.txt) (16/16 완주, 충돌 0).
-> 관련 장부: `LakatosTree_HSWM_20260719` (52노드), `LakatosTree_PromSearchHSWM_20260721` (38노드), `hswm-ordered-research-harness-20260724`.
+> 관련 장부: `HSWM_LOCAL_RECORD` (52노드), `HSWM_LOCAL_RECORD` (38노드), `hswm-ordered-research-harness-20260724`.
 
 ---
 
@@ -85,7 +85,7 @@
 **P0 — F2 sealed 완료 전, 비용 ≈ 0 (판정 무결성)**:
 1. `run_verdict` fail-closed 배선 + headroom floor(base<0.3) void 조건 — `f2_delta_w_credit.py` (A③). 진행 중 run의 dev_base 확인 포함(Q2).
 2. F2 sealed 완료 시 **producer/judge 아티팩트 분리 패턴**으로 제출(레슨 `lesson-replay-exec-container-artifact-separation-2026-07-24`) — replay_refuted 재발 방지 (A①).
-3. OMD 세마포어 `dgx-vllm-window`(max 1, F1 우선) + sync EXCLUDES에 `.f2_cache/`·`data/prelude/cache/` 2줄 (C④).
+3. LOCAL_WORKFLOW 세마포어 `dgx-vllm-window`(max 1, F1 우선) + sync EXCLUDES에 `.f2_cache/`·`data/prelude/cache/` 2줄 (C④).
 
 **P1 — F2 완료 직후 (서열·방향 확정)**:
 4. **통합 서열+파워 addendum 수정등록** (C6+C3 통합): F1 sealed를 전 claim 전제로 확정(다음 윈도 최우선, 03:47 회피) / 판정 2단계 sequential(interim n=100 미결 시 n=250 확장) / ρ 게이트 재설계(레슨 ≥20, dev-φ vs fresh-LOO) / F4 n=100·F2-조걶로 재등록.

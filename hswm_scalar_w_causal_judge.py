@@ -1,6 +1,6 @@
 """Frozen pure judge for the HSWM scalar-W causal-shadow preregistration.
 
-This module performs no model calls and has no KG or LakatoTree write path.  It
+This module performs no model calls and has no KG or HSWM_LOCAL_RECORD write path.  It
 interprets a content-addressed metric artifact using only the thresholds frozen
 in the preregistration.  The judge is intentionally incapable of promoting the
 result to operator-valued semantic W.

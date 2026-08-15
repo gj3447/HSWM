@@ -4,7 +4,7 @@
 > **authority**: `USER_PRIMARY goal naming + SECONDARY_AI normative formalization`
 > **user_ratified**: `false`
 > **scientific_status**: `UNJUDGED`
-> **programme**: `LakatosTree_HSWM_20260719`
+> **programme**: `HSWM_LOCAL_RECORD`
 > **parent goal**: `goal-hswm-human-complementation-knowledge-program-20260729`
 > **PROM evidence**: `prom16-hswm-human-complementation-knowledge-map-20260729` (`16/16`)
 > **claim boundary**: 이 문서는 장기 목표를 권리·검증 계약으로 옮긴 초안이다. 표준, 법률,
@@ -169,7 +169,7 @@ HSWM-human은 같은 과제와 공개된 resource vector 아래 `human-only`, `A
 - [ ] 개인정보·인간 대상 연구 관할과 독립 윤리 심사 경로를 정한다.
 - [ ] [`HSWM_HUMAN_OUTCOME_BENCHMARK_V0_2026-07-29.md`](HSWM_HUMAN_OUTCOME_BENCHMARK_V0_2026-07-29.md)의
   임계치, 비교군과 hard guardrail을 ratify한다.
-- [ ] exact file SHA와 LakatoTree `DRAFT` readback을 확인한다.
+- [ ] exact file SHA와 HSWM_LOCAL_RECORD `DRAFT` readback을 확인한다.
 
 Ratification 전에는 인간 모집, prediction 등록, 측정 실행, 효능·진전 판결과 `CANONICAL` 승격을
 하지 않는다.
@@ -182,8 +182,7 @@ Ratification 전에는 인간 모집, prediction 등록, 측정 실행, 효능·
 - Lesson: `lesson-prom16-hswm-human-complementation-knowledge-map-20260729` (`PROVISIONAL`)
 - Goal node: `goal-hswm-human-complementation-knowledge-program-20260729` (`DRAFT`)
 - HSWM 공학 층 경계: [`HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md`](HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md)
-- 연구 통합 계약: [`../docs/HSWM_RESEARCH_PROGRAMME_CONSOLIDATION_2026-07-26.md`](../docs/HSWM_RESEARCH_PROGRAMME_CONSOLIDATION_2026-07-26.md)
-- 실행 정본 경계: [`../GIT/HSWM/README.md`](../GIT/HSWM/README.md)
+- 실행·효능 경계: [`README.md`](README.md) · [`EFFICACY.md`](EFFICACY.md)
 
 ### PROM 16 finding IDs
 

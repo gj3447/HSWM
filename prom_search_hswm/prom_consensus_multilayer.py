@@ -2,7 +2,7 @@
 """
 PROM 검색 ML1 — USER 가설: "레이어가 여러 층이 아니어서 P2b가 실패했다."
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML1-multilayer-hypothesis
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML1-multilayer-hypothesis
 P2b(단일층: recommendation 텍스트 1개 임베딩) = cosine separation −0.038(음수), z=0.19(랜덤무구별).
 진단: 단일층이 overlapping hypergraph(한 RF가 thesis 여럿 소속)를 뭉갰다.
 가설: 각 RF를 8개 thesis 층에 투영(multi-layer co-activation) → 겹침 구조 되살아난다.
@@ -105,7 +105,7 @@ def main():
 
     ev = {
         "experiment": "prom_consensus_multilayer_gfs",
-        "tree": "LakatosTree_PromSearchHSWM_20260721",
+        "tree": "HSWM_LOCAL_RECORD",
         "node": "ML1-multilayer-hypothesis",
         "a_priori": {"tau": TAU, "layer_t": LAYER_T, "null_perms": NULL_PERMS, "seed": SEED},
         "gold": {"n_rf": n, "overlapping": True, "gold_same_pairs": len(gold_same),

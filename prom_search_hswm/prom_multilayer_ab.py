@@ -2,7 +2,7 @@
 """
 PROM 검색 ML2 — 제대로 된 multi-layer A/B (balanced gold, USER "여러 층" 가설).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML2-multilayer-ab-badiou
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML2-multilayer-ab-badiou
 Gold = prom-24-badiou-expanded (24 RF, 10 consensus), 2축 role×topic hypergraph, 균형(GFS 미지배).
 
 3 arms (동일 gold, 동일 co-membership 판정틀):
@@ -120,7 +120,7 @@ def main():
 
     ev = {
         "experiment": "prom_multilayer_ab_badiou24",
-        "tree": "LakatosTree_PromSearchHSWM_20260721",
+        "tree": "HSWM_LOCAL_RECORD",
         "node": "ML2-multilayer-ab-badiou",
         "a_priori": {"tau": TAU, "layer_t": LAYER_T, "k_blind": K_BLIND, "seed": SEED},
         "gold": {"n_rf": n, "gold_same_pairs": len(gold_same), "gold_diff_pairs": len(gold_diff),

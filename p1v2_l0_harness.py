@@ -12,7 +12,7 @@ from p1v2_prompt_parity import ARM_IDS, PromptParityPlanV1
 
 
 OBSERVATION_SCHEMA_VERSION = "hswm-p1v2-l0-observation/v1"
-EVIDENCE_SCHEMA_VERSION = "lakato-evidence-record/v1"
+EVIDENCE_SCHEMA_VERSION = "hswm-local-evidence-record/v1"
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _GIT_SHA = re.compile(r"^[0-9a-f]{40}$")
 
@@ -163,7 +163,7 @@ def run_l0_observation(
     return observations
 
 
-def build_lakato_evidence_record(
+def build_local_record_evidence_record(
     *,
     programme: str,
     branch: str,
@@ -218,15 +218,15 @@ def build_lakato_evidence_record(
     if any(key == "verdict" for key in _recursive_keys(record)):
         raise L0HarnessError("measurement evidence must not contain a verdict")
     record["evidence_sha256"] = canonical_sha256(record)
-    verify_lakato_evidence_record(record)
+    verify_local_record_evidence_record(record)
     return record
 
 
-def verify_lakato_evidence_record(record: Mapping[str, object]) -> None:
+def verify_local_record_evidence_record(record: Mapping[str, object]) -> None:
     """Read back a measurement record and reject tamper or self-judgment."""
 
     if record.get("schema_version") != EVIDENCE_SCHEMA_VERSION:
-        raise L0HarnessError("unsupported Lakato evidence schema")
+        raise L0HarnessError("unsupported Local record evidence schema")
     if any(key == "verdict" for key in _recursive_keys(record)):
         raise L0HarnessError("measurement evidence must not contain a verdict")
     unsigned = dict(record)

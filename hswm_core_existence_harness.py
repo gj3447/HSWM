@@ -366,7 +366,7 @@ def print_status(r: dict[str, Any]) -> None:
     name = r.get("speak_as") or r.get("program_name") or "HSWM core 개발"
     print(f"=== {name} ===")
     print(f"generated_at: {r['generated_at']}")
-    print(f"speak_as: {name}  (라카토트리/333/public 아님)")
+    print(f"speak_as: {name}  (폐기된 외부 판정기/333/public 아님)")
     print(f"focus_state: {r['focus_state']}")
     print(f"active_track: {r['active_track']}")
     print(f"identity: {r.get('identity_decision')}")
@@ -481,7 +481,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "name":
         print(config.get("speak_as") or config.get("program_name") or "HSWM core 개발")
         print("pillars: BUILD (개발) + ELEVATE (고도화)")
-        print("not: LakatoTree ops, 333 p2p, public service as this program")
+        print("not: HSWM_LOCAL_RECORD ops, 333 p2p, public service as this program")
         print("entry:", config.get("authority", {}).get("canonical_entry", "HSWM/HSWM_CORE_DEV.md"))
         return EXIT_OK
     if args.command == "bans":

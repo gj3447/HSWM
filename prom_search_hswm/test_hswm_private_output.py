@@ -11,8 +11,8 @@ import sys
 
 import pytest
 
-import prom_search_hswm.prom9_f1_r8_private_output as private_output
-from prom_search_hswm.prom9_f1_r8_private_output import (
+import prom_search_hswm.hswm_private_output as private_output
+from prom_search_hswm.hswm_private_output import (
     JOURNAL_SCHEMA,
     PrivateOutputRefusal,
     RESERVATION_SCHEMA,
@@ -666,7 +666,7 @@ def test_abrupt_process_exit_recovers_exact_prepared_payload(
 import os
 from pathlib import Path
 import sys
-import prom_search_hswm.prom9_f1_r8_private_output as module
+import prom_search_hswm.hswm_private_output as module
 
 output = Path(sys.argv[1])
 journal_path = Path(sys.argv[2])

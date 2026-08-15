@@ -2,7 +2,7 @@
 
 Status: **ENGINEERING HARNESS / NO EFFICACY CLAIM**
 Lane: HSWM engineering research
-Programme: `LakatosTree_PromSearchHSWM_20260721`
+Programme: `HSWM_LOCAL_RECORD`
 Parent: `B2.2-query-bond-weight-groundwork`
 
 ## Decision

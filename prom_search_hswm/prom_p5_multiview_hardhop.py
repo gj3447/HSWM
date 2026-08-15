@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """P5: equal-compute single scalar vs role-separated multi-view late fusion.
 
-Programme: LakatosTree_PromSearchHSWM_20260721
+Programme: HSWM_LOCAL_RECORD
 Branch: P5-onefield-vs-multiview-hardhop
 
 The measurement deliberately keeps the expensive views identical between arms:
@@ -16,8 +16,8 @@ query-only routing weights.  Therefore any delta is a fusion/representation delt
 not an embedding-call or candidate-scan delta.
 
 This script must not be run until the sibling PREREG JSON contains a live
-LakatoTree prediction receipt and ``registered_before_measurement=true``.
-It emits a ``lakato-evidence-record/v1`` object with no authored verdict.
+HSWM_LOCAL_RECORD prediction receipt and ``registered_before_measurement=true``.
+It emits a ``local_record-evidence-record/v1`` object with no authored verdict.
 """
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ from typing import Iterable
 import numpy as np
 
 
-TREE = "LakatosTree_PromSearchHSWM_20260721"
+TREE = "HSWM_LOCAL_RECORD"
 BRANCH = "P5-onefield-vs-multiview-hardhop"
 CONJECTURE = (
     "On 2Wiki questions with four supporting passages, preserving anchor, evidence, "
@@ -384,7 +384,7 @@ def main() -> int:
 
     finished_at = utc_now()
     evidence = {
-        "schema": "lakato-evidence-record/v1",
+        "schema": "local_record-evidence-record/v1",
         "programme": TREE,
         "branch": BRANCH,
         "conjecture": CONJECTURE,

@@ -2,7 +2,7 @@
 """
 ML6 — HSWM fusion 실검증: 가중/게이트 융합이 blind RRF(ML5 net-zero)를 이기나.
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML6-hswm-fusion-impl
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML6-hswm-fusion-impl
 엔진 = hswm_fusion.py (PROM Step3/4 프리미티브). 데이터 = sources_realfields.json + ai-agent-book.
 전략 4종: blind(=ML5) / confidence / agreement / gated_agreement.
 예측(사전등록): gated_agreement/agreement가 multi-agent web-이득은 지키고 coding/rag/eval 노이즈場은
@@ -70,7 +70,7 @@ def main():
     means = {s: round(statistics.mean(agg[s]), 4) for s in ["raw_only"] + STRATS}
     ev = {
         "experiment": "hswm_fusion_impl_ml6",
-        "tree": "LakatosTree_PromSearchHSWM_20260721",
+        "tree": "HSWM_LOCAL_RECORD",
         "node": "ML6-hswm-fusion-impl",
         "engine": "hswm_fusion.py (PROM Step3/4 primitive)",
         "sources": {"web": "real WebSearch 2026-07-21", "kg": "real Neo4j home canon", "corpus_chunks": len(chunks)},

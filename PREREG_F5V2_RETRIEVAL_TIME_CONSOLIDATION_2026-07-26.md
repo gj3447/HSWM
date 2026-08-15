@@ -147,7 +147,7 @@ query text/hash, hidden cache, 새 prompt instruction이다. 금지 필드가 �
 6. deterministic fixture와 injected-negative를 통과한 뒤에만 live dev smoke를 수행한다.
 7. dev가 설계를 바꾸면 amend -> ratify -> 새 lock을 반복한다.
 8. sealed manifest mode flip 후 단 한 번 실행하고 cache-only replay judge로 재생한다.
-9. 결과 제출과 LakatoTree 판정은 별도 독립 단계이며 이 문서는 progress verdict를 내지 않는다.
+9. 결과 제출과 HSWM_LOCAL_RECORD 판정은 별도 독립 단계이며 이 문서는 progress verdict를 내지 않는다.
 
 ## 9. 이번 amend가 반영한 PROM 16 10종
 

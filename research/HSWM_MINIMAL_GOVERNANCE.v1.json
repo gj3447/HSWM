@@ -5,8 +5,8 @@
   "authority": {
     "class": "USER_PRIMARY",
     "source": "USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.txt",
-    "source_sha256": "c82139e1a9f44f748a156ba32950cc1abd5ee01d5870de49858f72db6b6d0e89",
-    "interpretation": "Complex static governance around HSWM can itself cause LX3 Ragnarok; reduce it from the default path."
+    "source_sha256": "6ab2e3221bff1cfe1b9a2a197bf24521453e4781ddffdfafffc3c6d9fc78ae6f",
+    "interpretation": "The three named personal governance tool families are removed, not optional."
   },
   "default_path": [
     "IMPLEMENT_OR_RUN",
@@ -16,63 +16,41 @@
   ],
   "budgets": {
     "material_result_receipts": 1,
-    "optional_governance_layers_without_explicit_escalation": 1
+    "personal_governance_layers": 0
   },
-  "optional_layers": {
-    "lakatotree": {
-      "default": "OFF",
-      "activate_only_when": [
-        "the user explicitly requests independent adjudication",
-        "a public or high-stakes scientific promotion claim is being made"
-      ],
-      "not_required_for": [
-        "ordinary implementation",
-        "local regression tests",
-        "exploratory experiments"
-      ]
-    },
-    "ooptdd": {
-      "default": "LEGACY_OPTIONAL_AUDIT",
-      "activate_only_when": [
-        "receipt integrity or observability is the tested hypothesis",
-        "an explicit adversarial audit is requested"
-      ],
-      "not_required_for": [
-        "ordinary behavioral claims",
-        "the default pytest suite"
-      ]
-    },
-    "omd": {
-      "default": "RETIRED_HISTORICAL_READ_ONLY",
-      "activation_allowed": false,
-      "forbidden_actions": [
-        "MCP registration or invocation",
-        "coordination database writes",
-        "declare, claim, heartbeat, release, or cancel leases",
-        "health, heal, or conditional reactivation"
-      ]
-    },
-    "mcp": {
-      "default": "EXTERNAL_BOUNDED_ONTOLOGY_ADAPTER",
-      "provider": "Google MCP Toolbox 1.9.0",
-      "normal_read_tools": [
-        "ontology_contract_get",
-        "ontology_search",
-        "ontology_get",
-        "ontology_neighbors",
-        "ontology_claim_history",
-        "ontology_drift_report"
-      ],
-      "forbidden": [
-        "raw Cypher",
-        "canonical write",
-        "ratification",
-        "HSWM inference",
-        "HSWM token learning",
-        "per-step cognition or routing"
-      ],
-      "cross_repo_pending_exception": "ontology_propose_ragnarok_fusion_split is fixed, PENDING-only, and cannot mutate canon"
-    }
+  "removed_personal_governance": {
+    "status": "DELETED",
+    "restoration_allowed": false,
+    "removed_surfaces": [
+      "implementation packages and entrypoints",
+      "tests and packaging hooks",
+      "receipt chains and remote judgment packets",
+      "ordered-gate and research-ledger integrations",
+      "MCP registration and conditional reactivation rules"
+    ],
+    "historical_verdict_authority": "NONE",
+    "raw_measurement_policy": "PRESERVE_ONLY_IF_INDEPENDENTLY_READABLE_AND_REPRODUCIBLE"
+  },
+  "mcp": {
+    "default": "EXTERNAL_BOUNDED_ONTOLOGY_ADAPTER",
+    "provider": "Google MCP Toolbox 1.9.0",
+    "normal_read_tools": [
+      "ontology_contract_get",
+      "ontology_search",
+      "ontology_get",
+      "ontology_neighbors",
+      "ontology_claim_history",
+      "ontology_drift_report"
+    ],
+    "forbidden": [
+      "raw Cypher",
+      "canonical write",
+      "ratification",
+      "HSWM inference",
+      "HSWM token learning",
+      "per-step cognition or routing"
+    ],
+    "cross_repo_pending_exception": "ontology_propose_ragnarok_fusion_split is fixed, PENDING-only, and cannot mutate canon"
   },
   "causal_learning_receipt": {
     "count": 1,
@@ -82,27 +60,5 @@
       "matched compute or token budget",
       "removal ablation"
     ]
-  },
-  "preservation": {
-    "historical_lakatotree_verdicts": "PRESERVE",
-    "historical_ooptdd_receipts": "PRESERVE",
-    "historical_research_ledger": "PRESERVE_AS_STRICT_PROGRAM_RECORD",
-    "hswm_next_research_harness": "PRESERVE_AS_OPTIONAL_STRICT_HARNESS"
-  },
-  "observed_mcp_state_2026_08_15": {
-    "dev_01_claude": [
-      "ontology"
-    ],
-    "dev_01_codex": [
-      "ontology"
-    ],
-    "provider": "Google MCP Toolbox 1.9.0",
-    "codex_normal_enabled_tools": 6,
-    "claude_server_tools": 7,
-    "raw_cypher_tools": 0,
-    "canonical_write_tools": 0,
-    "macmini_lakatotree_present": false,
-    "delltower_lakatotree_present": false,
-    "note": "The seventh Claude-visible tool is the fixed PENDING-only Ragnarok split proposal; it cannot ratify or apply canon."
   }
 }

@@ -1,7 +1,7 @@
 # R2 ML-material walk 결과 — depth-2 첫 해빙 (2026-07-22→23 심야)
 
-> **판정**: metric **`progressive`** (preregistered 예측 2/2 적중) / 프로그램 Lakatos `degenerating` (BF 0.167 — 누적 하중, B1·ML18과 동일 이중판정). assurance L0(client_asserted, 서버측 replay 환경 부재로 replay_refuted 표시). receipt fold `ok=true`.
-> **노드**: `LakatosTree_PromSearchHSWM_20260721 / R2-ml-material-walk` (예측 receipt `a8f0c717…`).
+> **판정**: metric **`progressive`** (preregistered 예측 2/2 적중) / 프로그램 Legacy programme `degenerating` (BF 0.167 — 누적 하중, B1·ML18과 동일 이중판정). assurance L0(client_asserted, 서버측 replay 환경 부재로 replay_refuted 표시). receipt fold `ok=true`.
+> **노드**: `HSWM_LOCAL_RECORD / R2-ml-material-walk` (예측 receipt `a8f0c717…`).
 > **한 줄**: P6→B1→T1→R1 내내 0에 박혀 있던 **min kernel-legal depth-2가 처음으로 움직였다** — MuSiQue 0→**3**, 2Wiki 4→6. USER 정전 "연산 많이 해도 똑똑해지면 된다"의 첫 집행이 값을 냈다.
 
 ## 사전등록 대비 실측 (PREREG_R2_ML_WALK_2026-07-22.json, 실행 전 동결)

@@ -7,7 +7,7 @@ per-stream chain:
 
 `ATTACH → PROPOSE → OBSERVE → JUDGE → COMMIT → DISPATCH`
 
-The kernel has no LakatoTree, HSWM, scientific-progress, or domain-model
+The kernel has no HSWM_LOCAL_RECORD, HSWM, scientific-progress, or domain-model
 dependency. `JudgmentPort` means an injected operational evaluator. It is not a
 scientific judge and the runtime does not claim that a verdict establishes
 truth, progress, efficacy, or self-correction.

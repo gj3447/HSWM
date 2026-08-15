@@ -2,7 +2,7 @@
 """
 PROM 검색 P2b — REAL KG data: lexical vs semantic consensus (overlapping gold).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node P2b-real-kg-gfs
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node P2b-real-kg-gfs
 Gold = Neo4j home canon 0.25, cycle prom16-gfs-2026-05-21 의 :SUPPORTED_BY consensus.
        13 unique RF, 8 consensus, **OVERLAPPING**(한 RF 여러 consensus = hypergraph, not partition).
 
@@ -105,7 +105,7 @@ def main():
     gap = sem_r - lex_r
     ev = {
         "experiment": "prom_consensus_real_gfs",
-        "tree": "LakatosTree_PromSearchHSWM_20260721",
+        "tree": "HSWM_LOCAL_RECORD",
         "node": "P2b-real-kg-gfs",
         "a_priori": {"tau": TAU, "null_perms": NULL_PERMS, "seed": SEED},
         "gold": {"source": "Neo4j 0.25 prom16-gfs-2026-05-21 :SUPPORTED_BY", "n_rf": len(rfs),

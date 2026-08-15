@@ -2,7 +2,7 @@
 """
 ML14 — 실 벤치 재현: MuSiQue multi-hop서 PPR 딥HSWM vs flat vs iterative (bootstrap CI).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML14-musique-bench
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML14-musique-bench
 ML13(toy)=PPR +5.8pp. 이걸 실 벤치(MuSiQue-ans dev, Trivedi 2022)로 꼼꼼히 재현.
 세팅(HippoRAG식): N질문 paragraph를 한 corpus로 풀링 → 질문마다 gold supporting(≥2 문서 multi-hop) recall.
 방법: flat / ppr α{0.15,0.3,0.5} APPNP / ppr_rerank(flat top-100 위 2-stage) / iterative(PRF 1-step, 그래프無 대조).
@@ -102,7 +102,7 @@ def main():
     diff_pf=[per["ppr_rerank_a0.3"]["r@10"][i]-per["flat"]["r@10"][i] for i in range(len(qtext))]
     diff_pi=[per["ppr_rerank_a0.3"]["r@10"][i]-per["iterative"]["r@10"][i] for i in range(len(qtext))]
     ci_pf=boot(diff_pf); ci_pi=boot(diff_pi)
-    ev={"experiment":"hswm_musique_bench_ml14","tree":"LakatosTree_PromSearchHSWM_20260721","node":"ML14-musique-bench",
+    ev={"experiment":"hswm_musique_bench_ml14","tree":"HSWM_LOCAL_RECORD","node":"ML14-musique-bench",
         "setup":{"benchmark":"MuSiQue-ans dev (Trivedi 2022)","n_questions":len(qtext),"corpus_paragraphs":len(pool),
                  "model":model_used,"graph":f"kNN={KNN}","gold":"official is_supporting (multi-hop chain, >=2 docs)"},
         "recall_by_method":summary,

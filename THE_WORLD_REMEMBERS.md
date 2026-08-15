@@ -22,8 +22,9 @@
     방향 명제. 정규화된 문장은 원문의 뜻을 보존한 요약이지 새로운 사용자 발화가 아니다.
   - `SECONDARY_AI_FORMALIZATION`: 나머지 연결 서술, 윤리·권리 경계, 생태계 매핑, 수식,
     파생 설계 불변식, 실험계약·비주장과 구현 투영.
-  - `MACHINE_LEDGER`: 실제 구현·실험 상태는
-    [`research/HSWM_RESEARCH_LEDGER.v1.json`](research/HSWM_RESEARCH_LEDGER.v1.json)이 소유한다.
+  - `DIRECT_MEASUREMENT_RECORD`: 실제 구현·실험 상태는
+    [`EFFICACY.md`](EFFICACY.md)와 [`INDEX.md`](INDEX.md)가 연결하는 체크인 측정물에서만 읽는다.
+    삭제된 외부 판정 기록은 현재 과학적 권위를 갖지 않는다.
 - **정본 관계**: 이 문서는 기존 정전을 지우지 않는 **상위 통합 진입점**이다.
   [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md),
   [`DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md`](DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md),
@@ -412,7 +413,8 @@ outbox, replay와 일부 좁은 실험 기반이다. 다음은 완료 주장할 
 - 세계 전체의 완전한 포착
 
 `Touch the sky`가 높이를 자기보고하지 않듯, HSWM은 “세계가 기억한다”는 선언을 현재 구현의
-완료 보고로 위조하지 않는다. 정전은 하늘의 방향이고, ledger와 receipt가 실제로 오른 높이다.
+완료 보고로 위조하지 않는다. 정전은 하늘의 방향이고, 직접 측정과 재현 가능한 결과물이
+실제로 오른 높이다.
 
 ---
 
@@ -422,8 +424,8 @@ outbox, replay와 일부 좁은 실험 기반이다. 다음은 완료 주장할 
 
 - 2026-07-29 세계 자기모델·재귀적 세계기억·인류보완 정식
   - [`USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt`](USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt)
-  - SHA-256: `ff51701555bd780d88de3b2ee9c339a42dd7b829592d21bcbb31028dcea14912`
-  - LakatoTree tag: `hswm-world-self-model-recursive-memory-canon-20260729`
+  - SHA-256: `590b28979ae9d1376bb7edad0b88da1ff0d613c1403f59071de4082985255844`
+  - local provenance label: `hswm-world-self-model-recursive-memory-canon-20260729`
 - 2026-07-29 룰베이스 인지 도구를 HSWM으로 신경망화한다는 영감 원문
   - [`USER_INSPIRATION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.txt`](USER_INSPIRATION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.txt)
   - SHA-256: `e99c99c05e5de1a4dee4e291a2a39747a4036465ed23455ad4051add65a01d29`
@@ -431,8 +433,8 @@ outbox, replay와 일부 좁은 실험 기반이다. 다음은 완료 주장할 
 ### SECONDARY_AI 형식화
 
 - [`DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md`](DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md)
-  - SHA-256: `884734b1b3aafd789257c4b63f5b30a3b3ebfe3084acc2800b0f6a1875febfb2`
-- LakatoTree tags:
+  - SHA-256: `ad789dcbea1e816f9ed21b9b4cc39013f313e6add774bb350634007d81f7fc7f`
+- local provenance labels:
   - `hswm-plastic-cognitive-wiring-over-deterministic-contracts-20260729`
   - `hswm-plastic-cognitive-wiring-research-formalization-20260729`
 - 열린 질문:
@@ -444,7 +446,8 @@ outbox, replay와 일부 좁은 실험 기반이다. 다음은 완료 주장할 
 - [`HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md`](HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md)
 - [`DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md`](DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md)
 - [`PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md`](PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md)
-- [`research/HSWM_RESEARCH_LEDGER.v1.json`](research/HSWM_RESEARCH_LEDGER.v1.json)
+- [`EFFICACY.md`](EFFICACY.md)
+- [`research/HSWM_MINIMAL_GOVERNANCE.v1.json`](research/HSWM_MINIMAL_GOVERNANCE.v1.json)
 
 ---
 

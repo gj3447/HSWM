@@ -61,7 +61,7 @@
 | `…-v2` | degenerating, replay **mismatch**, grade client_asserted | 7/22 replay-exec 기본 ON 진단 확정: 서버가 `python <script> <result_path>`를 컨테이너 재실행 → torch 없어 값 재현 불가 → client 값 refute |
 | `…-v3` | degenerating(프로그램, BF 하중) / **replay verified, grade server_regenerated, novel_server_anchored=true** | producer(Mac/torch)→아티팩트(`_research/r3_replay`: static 행렬+rows+universe 사본)→judge(순수 numpy `r3_replay_judge.py`) 3단 분리 — 컨테이너 재실행 **동일값 재현 성공** |
 
-- 장부 전멸 원인 3종 중 closes_question✓·novel_script 앵커✓에 이어 **replay 컨테이너 제약**까지 봉합 — KG `lesson-replay-exec-container-artifact-separation-2026-07-24` (lakatos_mechanism=lemma-incorporation).
+- 장부 전멸 원인 3종 중 closes_question✓·novel_script 앵커✓에 이어 **replay 컨테이너 제약**까지 봉합 — KG `lesson-replay-exec-container-artifact-separation-2026-07-24` (legacy_program_mechanism=lemma-incorporation).
 - eureka 는 `bf_marginal (0.584 ≤ 3.162)` 하나만 남음 — 장부 고장이 아니라 **효과 크기가 실제로 박약**하다는 정직한 판정. 다음 판(BF 강화)은 더 큰 효과의 replication 설계로.
 - 재사용: book-scale/P1 등 무거운 실험도 같은 producer/judge 분리 계약으로 제출하면 replay verified 가 선다.
 - `…-v2` 노드는 정직한 흔적으로 보존 (삭제 없음).

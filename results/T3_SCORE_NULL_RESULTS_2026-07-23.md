@@ -1,6 +1,6 @@
 # T3 결과 — K2 mechanism 확증 + null 완벽 사멸 + R1/R2 관대집계 정정 (2026-07-23)
 
-> **판정**: metric **`progressive`** (예측 2/2) / 프로그램 Lakatos `degenerating` (BF 하중, 동일 이중판정). receipt fold `ok=true`. 노드 `T3-score-digest-null` (예측 receipt `47fffa24…`).
+> **판정**: metric **`progressive`** (예측 2/2) / 프로그램 Legacy programme `degenerating` (BF 하중, 동일 이중판정). receipt fold `ok=true`. 노드 `T3-score-digest-null` (예측 receipt `47fffa24…`).
 > **한 줄**: A5(ML-woven) 그래프에서 K2가 K1 score digest를 실제로 바꾸고(양 데이터셋), **연속성-파괴 null에서 변화가 0으로 완전 소멸** — 걷기의 이득이 진짜 claim 연속을 타고 흐른다는 mechanism 확증. H3-C0 waterfall (T0→T1→T2→T3) 전 rung 완주.
 
 ## 실측 (strict kernel-canonical continuity, n=200/dataset)
@@ -19,7 +19,7 @@ R1/R2 워커의 hop-2에는 **lenient fallback**(연속 arc 부재 시 임의 ou
 
 - **R2의 핵심 주장(min depth-2 > 0)은 생존** — strict min = 2 (2Wiki 3 / MuSiQue 2). R2 판정 철회 불필요.
 - **단 수치는 부풀려져 있었다**: 2Wiki 6→3, MuSiQue 3→2 (lenient→strict). R1의 "2Wiki d2 0→4"도 같은 워커라 lenient 수치다.
-- 정정 조치: 본 문서 + R2 결과 문서 주석 + LakatoTree 본 노드 touched_assumptions에 `r1_r2_lenient_fallback_inflation` 박제. 이후 걷기 실험은 strict 워커(`t3_score_null.walk_scores_strict`)를 정본으로 사용할 것.
+- 정정 조치: 본 문서 + R2 결과 문서 주석 + HSWM_LOCAL_RECORD 본 노드 touched_assumptions에 `r1_r2_lenient_fallback_inflation` 박제. 이후 걷기 실험은 strict 워커(`t3_score_null.walk_scores_strict`)를 정본으로 사용할 것.
 
 ## 의미
 

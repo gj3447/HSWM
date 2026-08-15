@@ -2,7 +2,7 @@
 """
 PROM 검색 ML4 — field-of-fields: 독립 소스 場 융합 (USER "여러 층" 마지막·정당 판정).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML4-fieldoffields-badiou
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML4-fieldoffields-badiou
 ML3 결론: 같은 텍스트를 층에 재투영 = 정보손실(refuted). 이번엔 *다른 모달리티* 場을 엮는다:
   발견: 이 KG는 RF마다 비-consensus 이웃이 균일(SubagentTaskSpec:3+Lesson:1)=구조場 판별력 0.
   → 진짜 KG-엣지 구조場 부재. 차선 독립場 = 텍스트서 뽑은 *인용-엔티티場*(학자이름 exact-match Jaccard,
@@ -121,7 +121,7 @@ def main():
 
     ev = {
         "experiment": "prom_fieldoffields_badiou24",
-        "tree": "LakatosTree_PromSearchHSWM_20260721",
+        "tree": "HSWM_LOCAL_RECORD",
         "node": "ML4-fieldoffields-badiou",
         "kg_structure_finding": "이 KG는 RF마다 비-consensus 이웃 균일(SubagentTaskSpec:3+Lesson:1) = 판별 구조場 부재. 엔티티場은 텍스트서 lexical 추출한 최소 독립-모달리티 프록시.",
         "gold": {"n_rf": n, "same_pairs": len(same), "diff_pairs": len(diff)},

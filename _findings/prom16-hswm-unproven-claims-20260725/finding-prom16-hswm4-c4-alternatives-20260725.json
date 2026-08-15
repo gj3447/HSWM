@@ -2,7 +2,7 @@
  "findingId": "finding-prom16-hswm4-c4-alternatives-20260725",
  "domain": "topology-learning::alternatives",
  "rootCause": "토폴로지 학습(③)이 증명 어려운 근본 이유는 3중 교란(confound)이다. (i) ΔW(lesson store 내용 변화)와 ΔE(엣지/위상 변화)가 학습 중 공변하므로 성능 향상을 위상 탓으로 돌릴 수 없음 — WANN(Gaier & Ha 2019)이 보여주듯 위상+랜덤공유가중치만으로도 태스크가 풀리고, 반대로 내용만 좋아져도 풀리므로 어느 쪽이 인과인지 분리 필수. (ii) LLM-MAS 선행의 null 결과들 — AgentPrune(ICLR 2025)은 통신 그래프의 대부분 엣지가 인과적으로 불활성(제거해도 성능 유지)임을 formal하게 보였고, 우리 C1 book-scale에서도 clique 축약이 hypergraph-native를 역전(0.447 vs 0.427)했다. 즉 '평탄한 ablation 곡선'이 이 도메인의 디폴트 귀무이며, 관측적 상관(학습과 함께 위상도 바뀌고 성능도 좋아짐)으로는 절대 증명 불가. (iii) 따라서 유일한 증명 경로는 인과 개입 설계뿐: W를 동결하고 위상만 변수로 둔 뒤 (a) 엣지 제거 인과곡선이 학습된 엣지에서 단조·유의하게 가파르고, (b) 학습된 위상이 degree-matched 셔플/랜덤/clique 대조군을 prereg CI margin 밖에서 이기고, (c) 체크포인트 간 위상 편집거리 변화량과 heldout 성능 변화가 상관해야 한다. 이 3개축 각각이 독립 kill 조건을 구성한다.",
- "recommendation": "최소 sealed 프로토콜 'T1-topo'를 제안한다. (1) 교란 차단: typed lesson store를 체크포인트 W*에서 동결, LLM·예산·시드 고정, 위상만 변수(WANN식 통제). (2) 4개 arm × fresh heldout n≥30 태스크: A=학습된 위상 E_learned / B=셔플 위상(동일 degree sequence·동일 hyperedge 수, 랜덤 재배선 — C1 clique kill의 직계 후속 대조군) / C=clique 완전그래프(C1 기저 재현) / D=|E| 매칭 랜덤 sparse. (3) 엣지 ablation 인과곡선: arm A에서 hyperedge를 leave-one-out Δ성능(화이트박스 아니므로 EAP 직접 적용 불가, 블랙박스 LOO 중요도) 순위로 정렬, top-k 제거 k=0..|E| 곡선 vs 동일 k의 랜덤 엣지 제거 곡선 비교 — prereg된 AUC gap 효과크기 요구. (4) 구조-성능 상관: 학습 전 과정 체크포인트 간 위상 편집거리와 heldout Δ성능의 Spearman ρ + CI 사전등록. (5) Kill 조건(C1 clique kill 후속판, 전부 prereg): K1=arm B/C/D 중 하나라도 A를 CI margin 내에서 따라잡으면 topology-learning claim kill(구조가 인과적 일을 안 함); K2=top-ranked 엣지 제거와 랜덤 엣지 제거의 AUC gap CI가 0을 포함하면 kill(평탄 곡선=AgentPrune식 null 재현); K3=ρ CI가 0 포함이면 '학습' 부분만 kill(정적 구조 효과로 강등). (6) 봉인: prereg을 LakatoTree 장부에 선기록, 프롬프트/가중치/시드 sha256, 서버측 replay로 표본 재검증(p1v4 방식). 비용: 4arm×n30 + 곡선용 ~|E|스텝×n30 — 대규모 신규 인프라 불요, 기존 게이트 체계에 그대로 탑재 가능.",
+ "recommendation": "최소 sealed 프로토콜 'T1-topo'를 제안한다. (1) 교란 차단: typed lesson store를 체크포인트 W*에서 동결, LLM·예산·시드 고정, 위상만 변수(WANN식 통제). (2) 4개 arm × fresh heldout n≥30 태스크: A=학습된 위상 E_learned / B=셔플 위상(동일 degree sequence·동일 hyperedge 수, 랜덤 재배선 — C1 clique kill의 직계 후속 대조군) / C=clique 완전그래프(C1 기저 재현) / D=|E| 매칭 랜덤 sparse. (3) 엣지 ablation 인과곡선: arm A에서 hyperedge를 leave-one-out Δ성능(화이트박스 아니므로 EAP 직접 적용 불가, 블랙박스 LOO 중요도) 순위로 정렬, top-k 제거 k=0..|E| 곡선 vs 동일 k의 랜덤 엣지 제거 곡선 비교 — prereg된 AUC gap 효과크기 요구. (4) 구조-성능 상관: 학습 전 과정 체크포인트 간 위상 편집거리와 heldout Δ성능의 Spearman ρ + CI 사전등록. (5) Kill 조건(C1 clique kill 후속판, 전부 prereg): K1=arm B/C/D 중 하나라도 A를 CI margin 내에서 따라잡으면 topology-learning claim kill(구조가 인과적 일을 안 함); K2=top-ranked 엣지 제거와 랜덤 엣지 제거의 AUC gap CI가 0을 포함하면 kill(평탄 곡선=AgentPrune식 null 재현); K3=ρ CI가 0 포함이면 '학습' 부분만 kill(정적 구조 효과로 강등). (6) 봉인: prereg을 HSWM_LOCAL_RECORD 장부에 선기록, 프롬프트/가중치/시드 sha256, 서버측 replay로 표본 재검증(p1v4 방식). 비용: 4arm×n30 + 곡선용 ~|E|스텝×n30 — 대규모 신규 인프라 불요, 기존 게이트 체계에 그대로 탑재 가능.",
  "alternatives": [
   "DyLAN식 기여도-메트릭 재배선(unsupervised importance score로 엣지/노드 선별): 인과곡선보다 싸지만 관측적이라 인과 보증이 약함 — K2를 통과 못할 때 fallback 스크리너로 사용",
   "AgentDropout Table 6식 전이-증거: 분포 P에서 학습된 위상을 분포 Q에서 랜덤 위상과 대조 — 학습된 구조의 일반화를 보여주는 보조 축이나 인과곡선을 대체하진 못함(multi-agent-transfer-harness foundation과 결합 가능)",
@@ -31,7 +31,7 @@
   "hswm-p1v4-typed-actuation-verified",
   "multi-agent-transfer-harness",
   "semantic-weight-metric-contract",
-  "lakatotree-ledger-prereg-kill-convention",
+  "HSWM_LOCAL_RECORD-ledger-prereg-kill-convention",
   "lesson-prom-tribunal-phasor-20260724"
  ]
 }

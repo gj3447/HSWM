@@ -11,12 +11,9 @@ H3 artifact production is a separately attested GPU/LLM workflow.
 
 The repository-wide research map, including the 2026-07-22 open self-similar
 composition work and the 2026-07-23 learned-router result, is in
-[`INDEX.md`](INDEX.md). The machine-readable programme ledger, which owns the F1-F5
-hypothesis states, their sealed receipts, and the fail-closed promotion gate, is
-[`research/HSWM_RESEARCH_LEDGER.v1.json`](research/HSWM_RESEARCH_LEDGER.v1.json); its
-programme-level `scientific_status` is `UNJUDGED` as of 2026-07-27. That strict
-ledger is a preserved scientific-program record, not the ordinary development
-gate. The active default is the four-step
+[`INDEX.md`](INDEX.md). Current claims are grounded only in checked-in direct
+measurements and reproducible local tests; deleted external judgment records have
+no scientific authority. The active default is the four-step
 [`minimal-governance contract`](research/HSWM_MINIMAL_GOVERNANCE.v1.json): run,
 measure directly, emit one receipt for a material result, then commit and push.
 
@@ -56,7 +53,7 @@ Just as autonomous driving made a historic paradigm shift by discarding rule-bas
 
 **HSWM addresses this fundamental bottleneck at its origin:**
 
-Rather than relying on hand-written agent-orchestration scripts or static IF/ELSE pipelines, HSWM replaces hardcoded agent glue with a plastic, learnable semantic hypergraph field ($H_t, W_t$). The routing, collaboration, credit assignment, and memory transport between typed LLM functions ($f_i$) are governed by learnable fast/slow weights and dynamic topology rewrites, evaluated continuously against cryptographic evidence receipts.
+Rather than relying on hand-written agent-orchestration scripts or static IF/ELSE pipelines, HSWM replaces hardcoded agent glue with a plastic, learnable semantic hypergraph field ($H_t, W_t$). The routing, collaboration, credit assignment, and memory transport between typed LLM functions ($f_i$) are governed by learnable fast/slow weights and dynamic topology rewrites, evaluated against outcome-bound traces and direct measurements.
 
 HSWM therefore owns the persistent hypergraph state, global routing, recurrence,
 credit assignment, acceptance, and weight/topology rewrites. CAS, CRDT, replay,
@@ -69,10 +66,6 @@ feasibility verdict, failure modes, and decisive P1–P4 experiments are in
 The preserved hard core, replaceable protective belt, current evidence table,
 kill rules, and the single ordered research direction are frozen in
 [`HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md`](HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md).
-The ordered-gate implementation is bound back to its KG contracts, exact source
-symbols, line ranges, hashes, and Mac mini Symposium materialization through
-[`LONGINUS_HSWM_ORDERED_GATE_BINDING_2026-07-24.json`](LONGINUS_HSWM_ORDERED_GATE_BINDING_2026-07-24.json).
-
 The umbrella canon is [`THE_WORLD_REMEMBERS.md`](THE_WORLD_REMEMBERS.md): it joins
 recursive world-memory and world-self-model identity to the plastic rewiring of
 LLM/tool collaboration. It explicitly separates `USER_PRIMARY` direction from
@@ -82,18 +75,19 @@ contract, not a present-tense efficacy claim.
 That paragraph is a target identity, not a present-tense efficacy claim. The
 repository currently has a mature evidence/compiler/replay substrate and several
 measured field mechanisms. The P1 engineering loop is now closed; its first
-causal efficacy trial is scientifically RED, while its LakatoTree kernel state
-remains unjudged because the historical measurement violated judge separation:
+causal efficacy trial is scientifically RED based on the checked-in direct
+measurements. Outputs from the removed personal governance tools carry no
+scientific authority:
 
 | phase | repository state | completion gate |
 |---|---|---|
 | P0 — identity and metrics | **specified** in the [canonical direction](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md): neural functions are LLM-executed; `H` and `W` form their macro-network | target identity, claim boundary, and learning metric are explicit |
-| P1 — learning actuation | scalar slow-weight P1 is **scientific RED / LakatoTree unjudged**: 12/12 candidates had fresh Δ=0 and rank replay found 0/456 top-10 changes. The typed-policy fallback then produced a narrow L0 pass in P1v3 and independently replicated in P1v4: typed/no-memory `6/6 vs 2/6`, four improvements, `partial@L2(replay_verified)` | preserve the L0 claim boundary; build real B2.2 Gate-0 packs, then test outcome→used-bond credit→fast candidate→slow `Delta ell` promotion with removal and negative controls |
+| P1 — learning actuation | scalar slow-weight P1 is **scientific RED**: 12/12 candidates had fresh Δ=0 and rank replay found 0/456 top-10 changes. The typed-policy fallback then produced a narrow local L0 result in P1v3 and independently replicated in P1v4: typed/no-memory `6/6 vs 2/6`, four improvements | preserve the L0 claim boundary; build real B2.2 Gate-0 packs, then test outcome→used-bond credit→fast candidate→slow `Delta ell` promotion with removal and negative controls |
 | P2 — shared-network transfer | **not implemented or measured** | Agent A writes; frozen Agent B gains on sealed unseen work under equal compute |
 | P3 — structural plasticity | deterministic edits and a shadow gate exist; the first candidate policy was **rejected** | a learned candidate policy passes fresh, target, and canary gates |
 | P4 — federation and sleep | field federation is partial; consolidation/homeostasis remain design work | recover in-field interference and demonstrate stable long-horizon learning |
 
-### Checked-in experiment ledger (2026-07-23)
+### Checked-in experiment record (2026-07-23)
 
 These results constrain the next implementation; none establishes a general
 intelligence or production claim.
@@ -105,7 +99,7 @@ intelligence or production claim.
 | [E1 conditional traversal](E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md) | bridge −13.89pp, CI95 [−19.44, −8.33]; factoid −7.27pp | **rejected**; traversal remains deployment-OFF |
 | [shadow-gated topology absorption](SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md) | 0/3 rounds accepted, 100% canary preservation, sealed Δ=0 | **rejected for no target gain**; the gate was safe, the candidate generator was ineffective |
 | cognitive-uplift reranking | pooled F1 Δ=−0.1489 | **rejected** |
-| [P1 eligibility/judgment learning](P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md) | loop/runtime implemented; 12 candidates proposed, 0 fresh-gate passes, A1−A2=0, slope −0.0271; rank replay 0/456 top-10 changes | **scientific RED, LakatoTree unjudged**; canary/CAS safety held, typed lesson is the next local-draft falsifier |
+| [P1 eligibility/judgment learning](P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md) | loop/runtime implemented; 12 candidates proposed, 0 fresh-gate passes, A1−A2=0, slope −0.0271; rank replay 0/456 top-10 changes | **scientific RED**; canary/CAS safety held, typed lesson is the next local-draft falsifier |
 
 The [Phasor Agents prior-art tribunal](TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md)
 also narrows novelty: generic graph three-factor plasticity and sleep-staged
@@ -150,19 +144,9 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
   registered or made.
 - ✅/⚠️ **P1v3/P1v4 typed-policy actuation:** one training-derived source policy
   changed a frozen model on fresh heldout questions and replicated on seed-5 R2
-  (`6/6` typed vs `2/6` no memory; four improvements). LakatoTree regenerated
-  the P1v4 metric server-side. This is L0 answer-interface actuation at `n=6`,
+  (`6/6` typed vs `2/6` no memory; four improvements). This is a local L0
+  answer-interface observation at `n=6`,
   not a general learned compiler, durable `Delta W`, transfer, or topology.
-- 🧭 **Optional strict ordered-gate harness:** `hswm_next_research_harness.py` preserves
-  P1v4/B2.1/B2.2 evidence and exposes exactly one active step in the order
-  `actual-compute F1 → real Gate-0 packs → persistent Delta-W/removal →
-  Agent-A weight-only frozen-B transfer → one topology edit → long-horizon
-  stability`. It rejudges F1 suite+gold and raw P1v5/P2 packets, refuses
-  out-of-order evidence, and emits no prediction or scientific verdict. The
-  It is used only for an explicitly selected confirmatory research programme;
-  ordinary implementation and exploratory experiments do not enter it. Its
-  current recorded step is F1 token-parity repair because R4 tied vector and
-  failed consumed-token parity on all four items.
 - 🧠 **PROM-9 semantic neural network protocol:** three frozen typed LLM
   functions (`query compiler -> bond proposer -> answer synthesizer`) now have
   hashable prompts, port boundaries, matched-budget baselines, role
@@ -187,8 +171,8 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
   an actual-upstream disconnect falsifier, successor preregistration, and all
   `1500/500/1` observation/judgment gates remain blocked. See the
   [`durable transport contract`](prom_search_hswm/docs/F1_DURABLE_TRANSPORT_CONTRACT_20260727.md).
-- ⚠️ **Open-kernel claim boundary:** LakatoTree judged the composition receipt
-  chain `partial` and `certified=false`. Learned semantic-weight deltas and
+- ⚠️ **Open-kernel claim boundary:** local structural tests cover composition,
+  but no removed external-tool verdict is retained as authority. Learned semantic-weight deltas and
   CONNECT/SEPARATE/SPECIALIZE topology edits, bounded cyclic readout,
   multi-agent transfer, and retrieval uplift remain unimplemented or unmeasured.
 - ✅ **Measured efficacy:** the static additive-j field beats the listed cosine,
@@ -215,7 +199,7 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
   `ATTACH → PROPOSE → OBSERVE → JUDGE → COMMIT → DISPATCH` kernel now provides
   canonical replay, request conflict refusal, verdict-bound cuts, and restart
   recovery. It is an operational mechanism, not a live outer dispatcher,
-  LakatoTree dependency, scientific verdict, or external exactly-once claim.
+  scientific verdict, or external exactly-once claim.
 
 These engineering mechanisms do not establish that the HSWM function network is intelligent or already learns continually; its plasticity loop is not yet closed. That stronger claim still requires a
 preregistered frozen-model comparison of no memory, transcript/vector memory,
@@ -270,7 +254,7 @@ formalization remain in
 | `CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md` | target identity: a hypergraph Semantic Weight Map whose neural functions are executed by LLMs |
 | `HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md` | precise LLM-function contract, runtime semantics, current code mapping, feasibility verdict, risks, and decisive gates |
 | `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` / `P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md` / `EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` | frozen P1 contract, implementation/result closeout, and historical self-verdict evidence |
-| `RESEARCH_P1_FAILURE_LAKATOTREE_2026-07-24.md` / `P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json` / `PREREG_P1V2_TYPED_VERDICT_LESSON_2026-07-24.json` | LakatoTree-layered failure analysis, frozen retrieval rank replay, and measurement-forbidden typed-lesson draft |
+| `P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json` / `PREREG_P1V2_TYPED_VERDICT_LESSON_2026-07-24.json` | frozen retrieval rank replay and measurement-forbidden typed-lesson draft |
 | `B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md` / `b2_routing_signal.py` | oracle routing-signal audit and deterministic evidence generator |
 | `E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md` / `e1_conditional_traversal.py` | bridge/factoid traversal falsifier and evidence generator |
 | `SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md` / `prom_search_hswm/hswm_shadow_gate.py` | topology-candidate shadow-gate result, reducer, preregistration, and receipt |
@@ -280,12 +264,11 @@ formalization remain in
 | `AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md` | v2r3 counterexamples, repairs, tests, and claim boundary |
 | `prom_search_hswm/hswm_open_kernel.py` | deterministic open-composition v2r3 kernel |
 | `prom_search_hswm/prom_b21_learned_router.py` | B2.1 frozen-arm learned router and conformal-abstention harness |
-| `prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md` | 54-cell result, oracle ceiling diagnosis, LakatoTree disposition, and B2.2 direction |
+| `prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md` | 54-cell result, oracle ceiling diagnosis, and B2.2 direction |
 | `prom_search_hswm/hswm_bond_readout.py` | pure slow-salience + volatile query-bond potential application and deterministic ranking |
 | `prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md` | refined B2.2 design, action-space diagnostics, full-score-pack requirement, and fresh confirmation boundary |
 | `prom_search_hswm/hswm_b22_gate0_harness.py` / `prom_search_hswm/docs/B22_GATE0_HARNESS_CONTRACT_20260723.md` | full-candidate Gate-0 compiler, replay, locked acceptance, and trusted-ingestion boundary |
-| `hswm_next_research_harness.py` / `HSWM_NEXT_RESEARCH_HARNESS_AND_FEEDBACK_2026-07-24.md` | fail-closed single-frontier `F1→Gate-0→Delta-W/removal→A-to-B weight-only transfer→topology→stability` graph, raw-evidence rejudgment, and LakatoTree DRAFT packet |
-| `PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md` / `prom_search_hswm/prom9_semantic_neural_network.v1.json` / `prom_search_hswm/prom9_protocol.py` | typed LLM function network, fast-to-slow bond plasticity, matched controls, and preparation-only PROM-9 contract |
+| `PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md` | typed LLM function-network design, fast-to-slow bond plasticity, and matched controls |
 | `PROM9_DECISIVE_EXPERIMENT_HARNESS_2026-07-24.md` / `prom_search_hswm/prom_f1_function_network.py` / `prom_search_hswm/prom9_causal_harness.py` | executable F1 equal-budget runner plus P1v5 weight-removal and P2 frozen-agent-transfer causal judges; development output cannot mint a scientific verdict |
 | `_research/shared_field_hypothesis/task_contracts.v1.json` / `e1_contract.v1.json` | independent task/control roles and engineering-only replay/budget receipt contracts |
 | `prom_search_hswm/docs/PROM_HSWM_REMAINING_ISSUES_RESOLUTION_20260723.md` | evidence-backed dependency graph from implemented gates to G4 preregistration |
@@ -307,13 +290,12 @@ formalization remain in
 | `neo4j_loader.py` / `real_run.py` | real-KG loader + link-prediction run (SECONDARY) |
 | `diagnose.py` | capacity sweep + headroom knob ("why learning ≠ cosine") |
 | `metrics.py` | fair-tie nDCG@k, answer-EM, paired bootstrap |
-| `receipts/` | ooptdd behavior receipts (executable, source-bound, negative-oracle) |
+| `receipts/` | content-addressed experiment and runtime result artifacts |
 
 ## Verification tiers
 
 Tier 1 is the fresh-clone/CI boundary. The default pytest command collects the
-core suite, the PROM research suite, and the shared-field contract suite while
-leaving the legacy OOPtDD audit battery off. Its
+core suite, the PROM research suite, and the shared-field contract suite. Its
 only PROM data dependency is the tracked, content-addressed Badiou structure
 fixture.
 
@@ -321,19 +303,6 @@ fixture.
 uv sync --extra dev
 uv run --extra dev pytest -q
 uv run python verify_efficacy_claims.py --pretty
-```
-
-When receipt integrity itself is the subject of an explicit audit, run the
-preserved OOPtDD battery separately:
-
-```bash
-uv run pytest -o addopts='' tests/test_{audit_policy,lock_binding,measured,mutate,ouroboros,receipt_log,repair_and_locking,run_receipt_mutation,signing,v25_harnesses,witness_git,xlocks}.py -q
-```
-
-The historical strict programme gate is likewise opt-in:
-
-```bash
-uv run pytest -o addopts='' tests/test_{f5v2_sealed,hswm_next_research_harness,hswm_research_ledger,longinus_ordered_gate_binding}.py -q
 ```
 
 Tier 2 is deterministic extended verification over checked-in artifacts:
@@ -362,13 +331,10 @@ session; missing explicit credentials fail closed.
 ## Methodology
 
 - **Minimal default:** implementation or execution → direct measurement → one
-  content-addressed receipt for a material result → commit/push. LakatoTree and
-  OOPtDD are optional escalation layers; OMD is retired, and MCP is limited to
+  content-addressed receipt for a material result → commit/push. The removed
+  personal governance tools have no optional or historical execution path. MCP is limited to
   the external bounded ontology adapter under
   [`HSWM_MINIMAL_GOVERNANCE.v1.json`](research/HSWM_MINIMAL_GOVERNANCE.v1.json).
-- **OOPtDD (legacy optional audit):** use its executable trace/readback/source-binding/
-  negative-oracle battery only when receipt integrity or observability is itself
-  under explicit audit. Historical receipts remain in `receipts/`.
 - **Deployment claims:** a passing source-tree test is not a production
   certificate. S3 implements exact local scope/admission and fail-closed
   refusal, but its trusted certificate-ID allowlist is not a signature system;

@@ -5,7 +5,7 @@
 - 사용자 영감 원문: `hswm_plastic_cognitive_wiring_user_inspiration_raw_20260729.txt`
 - 원문 SHA-256: `e99c99c05e5de1a4dee4e291a2a39747a4036465ed23455ad4051add65a01d29`
 - 상위 정전: `hswm-world-self-model-recursive-memory-canon-20260729`
-- 대상 트리: `LakatosTree_HSWM_LargerAI_20260728_v2`
+- 대상 트리: `HSWM_LOCAL_RECORD`
 - 상태: 사용자 방향 정전 + 반증 가능한 연구 프로그램. 성능·학습효능 판결은 아직 없다.
 
 ## 1. 핵심 정식
@@ -182,7 +182,7 @@ Agent A의 실행 결과에서 승인된 `ΔW/ΔH`만 동결된 Agent B에 전�
 - `hswm-durable-runtime-ledger`: 학습된 협업 회로가 모델 수명 밖에서 지속되기 위한 상태·receipt 기반을 제공한다.
 - `hswm-exp-operator-w-mediation`, `hswm-exp-topology-mediation`, `hswm-exp-cross-agent-transfer`: 기존 결과들은 전구체이지만 이 새로운 전체 협업 주장 자체의 판결은 아니다.
 
-## 10. 라카토스적 지위와 한계
+## 10. 연구프로그램으로서의 지위와 한계
 
 권위는 둘로 분리한다. “기존 룰베이스 인지 도구를 HSWM으로 신경망화한다”는 방향은 원문 그대로 `user_canon`에 두고, 이 문서의 MCP·Skill·도구 매핑, 상태식, 대조군, kill 조건은 `secondary_formalization`에 둔다. 현재 MCP/Skill 협업보다 실제로 우월하다는 측정은 아직 없다.
 

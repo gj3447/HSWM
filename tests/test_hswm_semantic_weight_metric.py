@@ -445,13 +445,13 @@ def test_preregistration_rejects_missing_required_sections(field: str) -> None:
         validate_preregistration(prereg, contract_path=CONTRACT_PATH)
 
 
-def test_preregistration_rejects_judge_and_server_identity_drift() -> None:
+def test_preregistration_rejects_judge_and_external_governance_drift() -> None:
     prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
     prereg["judge_binding"]["sha256"] = "0" * 64
     with pytest.raises(MetricContractValidationError, match="judge SHA drift"):
         validate_preregistration(prereg, contract_path=CONTRACT_PATH)
 
     prereg = json.loads(PREREG_PATH.read_text(encoding="utf-8"))
-    prereg["server_registration"]["state"] = "REGISTERED"
-    with pytest.raises(MetricContractValidationError, match="server preregistration"):
+    prereg["external_governance"]["state"] = "ENABLED"
+    with pytest.raises(MetricContractValidationError, match="external governance"):
         validate_preregistration(prereg, contract_path=CONTRACT_PATH)

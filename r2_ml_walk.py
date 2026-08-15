@@ -181,7 +181,7 @@ def main() -> int:
 
     evidence = {
         "schema": "hswm-r2-ml-walk-evidence/v1",
-        "programme": "LakatosTree_PromSearchHSWM_20260721",
+        "programme": "HSWM_LOCAL_RECORD",
         "branch": "R2-ml-material-walk",
         "preregistration": {
             "path": PREREG.name, "sha256": _sha(PREREG),

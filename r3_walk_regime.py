@@ -214,7 +214,7 @@ def main() -> int:
 
     evidence = {
         "schema": "hswm-r3-walk-regime-evidence/v1",
-        "programme": "LakatosTree_PromSearchHSWM_20260721",
+        "programme": "HSWM_LOCAL_RECORD",
         "branch": "R3-walk-regime-density-dial",
         "preregistration": {"path": PREREG.name, "sha256": _sha(PREREG),
                             "prediction_receipt_sha256": locked["prediction_receipt_sha256"]},

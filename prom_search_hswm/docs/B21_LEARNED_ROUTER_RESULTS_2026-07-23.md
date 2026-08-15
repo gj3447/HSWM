@@ -4,7 +4,7 @@
 >
 > Scientific result: **REJECTED**
 >
-> LakatoTree result: **metric equivalent / degenerating**, node `REJECTED`
+> HSWM_LOCAL_RECORD result: **metric equivalent / degenerating**, node `REJECTED`
 >
 > Scope: frozen `A / B / MERGED` arms plus a learned router. This is not a test of
 > semantic-edge-weight learning or topology learning.
@@ -241,9 +241,9 @@ This ordering tests the smallest internal change first while preserving the user
 larger target: an agent-completed semantic neural network whose maps can be combined,
 detached, and specialized without a privileged “first layer.”
 
-## LakatoTree disposition
+## HSWM_LOCAL_RECORD disposition
 
-Tree `LakatosTree_PromSearchHSWM_20260721`, node
+Tree `HSWM_LOCAL_RECORD`, node
 `B2.1r1-query-byte-equivalence-repair`:
 
 - official scripted verdict: `degenerating`;
@@ -278,7 +278,7 @@ server-owned certified result.
   `../evidence/INVALIDATED_b21_preflight_numeric_equivalence_20260723.json`
 - repair preregistration:
   `../evidence/PREREG_b21r1_query_byte_repair_20260723.json`
-- LakatoTree packet: `../judgments/B21_learned_router/`
+- HSWM_LOCAL_RECORD packet: `../judgments/B21_learned_router/`
 
 The full relevant regression suite passed `113` tests. All 9 compressed scorepacks
 and their payload hashes matched the evidence manifest; the large scorepacks remain

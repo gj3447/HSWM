@@ -2,7 +2,7 @@
 """
 PROM 검색 P3 — legend-repo recall: 현 lexical 검색이 왜 레전드(ai-agent-book)와 안 엮였나.
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node P3-legend-recall-at-k
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node P3-legend-recall-at-k
 가설: 책은 중국어, 우리 KG 질의는 한/영 → lexical(token overlap)은 교차언어서 0 수렴.
       단 라틴 전문어(harness/RAG/KV Cache/Coding Agent) 공유 토큰만 lexical 통과.
       semantic(multilingual embedding)은 교차언어 개념 매칭 → 레전드 surface.
@@ -129,7 +129,7 @@ def main():
     sem_recall = sem_hits / nq
     ev = {
         "experiment": "prom_legend_recall_crosslingual",
-        "tree": "LakatosTree_PromSearchHSWM_20260721",
+        "tree": "HSWM_LOCAL_RECORD",
         "node": "P3-legend-recall-at-k",
         "corpus": {"book_chunks": n_book, "distractors": len(DISTRACTORS), "total": len(chunks),
                    "legend": "bojieli/ai-agent-book (Chinese)"},

@@ -29,7 +29,7 @@ repeated revisions, and confluence.
 The current manifest is intentionally not run-admissible. Before any measurement
 it still needs:
 
-1. an external LakatoTree prediction receipt;
+1. an external HSWM_LOCAL_RECORD prediction receipt;
 2. a neutral exact-replay receipt and full-candidate score pack;
 3. frozen dataset, split, query, candidate, model, topology, revision-stream,
    and evaluator hashes; and
@@ -58,6 +58,6 @@ non-inferiority plus materially lower cross-port inconsistency and stronger
 audit/replay behavior.
 Otherwise the claim is rejected or narrowed.
 
-LakatoTree owns registration, receipts, and scientific verdicts. HSWM owns the
+HSWM_LOCAL_RECORD owns registration, receipts, and scientific verdicts. HSWM owns the
 mechanism under test. This folder contains no result, winner, efficacy,
 production, or novelty claim.

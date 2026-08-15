@@ -209,7 +209,7 @@ P1v5는 Gate-0 acceptance 뒤에만 연다.
 2. 하나의 작은 A/B-renaming-invariant fast scorer를 학습한다.
 3. `lambda_q=0`을 calibration grid에 넣어 neutral fallback을 보장한다.
 4. 2Wiki/MuSiQue development에서 feature, lambda, sparsity, abstention을 한 번 동결한다.
-5. sealed 결과를 열기 전에 fresh regime, 통계, promotion rule, prediction을 LakatoTree에 등록한다.
+5. sealed 결과를 열기 전에 fresh regime, 통계, promotion rule, prediction을 HSWM_LOCAL_RECORD에 등록한다.
 
 허용 feature는 observable score component, provenance, incidence/seam 통계다. query ID, edge-ID
 embedding, hop label, answer 문자열, test gold는 금지한다.

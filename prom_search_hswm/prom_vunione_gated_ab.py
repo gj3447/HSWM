@@ -2,7 +2,7 @@
 """
 실험 B-2 (step 3 변주) — measurement-driven entity gating. T5b(blind union) 반증 후속.
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node T5c-vunione-gated.
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node T5c-vunione-gated.
 T5b 발견: blind max(edge,entity)는 비변별 hub(hallward deg11)가 엉뚱 finding 승격 → gap −0.028.
 가설(문제이동): entity를 **idf로 hub 억제 + edge에 보너스로만 가산**하면 그 해악이 사라지고
   edge_only를 넘거나 최소 tie. = 7cmd measurement-driven conditional dispatch(변별적일 때만 기여)와 동형.
@@ -163,7 +163,7 @@ def main():
 
     ev = {
         "experiment": "vunione_gated_readout_ab_stepB2",
-        "tree": "LakatosTree_PromSearchHSWM_20260721",
+        "tree": "HSWM_LOCAL_RECORD",
         "node": "T5c-vunione-gated",
         "design": "measurement-driven entity gating (idf hub-suppression + edge-dominant bonus). "
                   "entity-only graph, gold=topic held-out, leave-one-out, LAMBDA=0.3 fixed (untuned).",

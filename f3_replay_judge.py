@@ -1,6 +1,6 @@
-"""LakatoTree-compatible replay judge for the F3-r3 sealed measurement.
+"""HSWM_LOCAL_RECORD-compatible replay judge for the F3-r3 sealed measurement.
 
-LakatoTree replays a producer with exactly one positional result path and
+HSWM_LOCAL_RECORD replays a producer with exactly one positional result path and
 expects ``metric=<number>`` on stdout (f2/f4/f5_replay_judge.py pattern).
 The result path accepted here is the sealed F3-r3 receipt
 (``hswm-f3-agent-ab-transfer-r3-receipt/v1``).  The judge:

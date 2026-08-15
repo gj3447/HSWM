@@ -3,10 +3,10 @@
   "preregistration_id": "PREREG_HSWM_SCALAR_W_CAUSAL_MEDIATION_V1_20260726",
   "experiment_id": "HSWM-SWCM-1",
   "experiment_tag": "hswm-scalar-w-causal-mediation-v1",
-  "active_tree": {
-    "tree_id": "LakatosTree_HSWM_20260719",
-    "authority_uri": "lakatotree://proxmox-lxc-301/LakatosTree_HSWM_20260719",
-    "role": "PREDICTION_AND_ADJUDICATION_RECORD"
+  "experiment_record": {
+    "record_id": "LOCAL_ONLY",
+    "external_authority": "NONE",
+    "role": "PREDICTION_AND_MEASUREMENT_RECORD"
   },
   "status": "DRAFT_UNRATIFIED_NO_MEASUREMENT",
   "created_at": "2026-07-26",
@@ -22,7 +22,7 @@
   "predecessors": [
     {
       "path": "prom_search_hswm/evidence/PREREG_CPL1_hswm_causal_plasticity_20260726.draft.json",
-      "sha256": "bb1ab0a3d4e844ce1e86c4d96ee91d9c8d062a13fbeaedb73957850cee7975fa",
+      "sha256": "3d6af46ef96312fc37a349f92e46536aca0e6484f2980cca86a741c2ff39c920",
       "relation": "REFINES_PHASE_B_WITHOUT_RATIFYING_CPL1"
     },
     {
@@ -33,7 +33,7 @@
   ],
   "contract_binding": {
     "path": "research/HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT.v1.json",
-    "sha256": "61a54265a2a424d32889721214eb0ec8a13a6c39de9ac78e4e8f40e7ca786ec3"
+    "sha256": "8fd0a1aa0b1742033f4b3df9ba22d9a9a2abdf88bdc8172106e004e3376aaf4d"
   },
   "hypothesis": {
     "primary": "On a fresh frozen cohort, W_FULL_LEARNED improves utility over one development-selected strongest baseline by at least 0.05 with paired cluster-bootstrap LCB95 greater than zero.",
@@ -155,15 +155,14 @@
   },
   "judge_binding": {
     "path": "hswm_scalar_w_causal_judge.py",
-    "sha256": "d87be1006cb13ba7d7dfb3d5f1028e9c6dd5cb4b95eedd74a75b401ad878ae91",
+    "sha256": "02747bac05691a1a449754716d378a86ca9e69e6dbd97ee41c652070846e6cb4",
     "replay_command": "python3 hswm_scalar_w_causal_judge.py --metrics <sealed_metrics.json>",
     "judgment_schema": "hswm-scalar-w-causal-judgment/v1"
   },
-  "server_registration": {
-    "tree_id": "LakatosTree_HSWM_20260719",
-    "experiment_tag": "hswm-scalar-w-causal-mediation-v1",
-    "state": "NOT_REGISTERED_BLOCKS_MEASUREMENT",
-    "receipt_sha256": null
+  "external_governance": {
+    "authority": "NONE",
+    "required": false,
+    "state": "DISABLED"
   },
   "kill_conditions": [
     "learned gain is below 0.05 or paired LCB95 is not greater than zero",
@@ -196,7 +195,7 @@
     "development-only strongest-baseline selection receipt",
     "power receipt and five frozen independent seeds",
     "independent pure-judge code and injected-negative fixtures",
-    "LakatoTree prediction registration and exact readback"
+    "local prediction record freeze and exact content-hash readback"
   ],
   "measurement_gate": {
     "measurement_authorized": false,
@@ -206,6 +205,6 @@
     "fresh_cohort_frozen": false,
     "strongest_baseline_selected": false,
     "independent_judge_frozen": false,
-    "lakatotree_prediction_registered": false
+    "external_governance_required": false
   }
 }

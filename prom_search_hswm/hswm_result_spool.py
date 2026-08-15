@@ -47,7 +47,7 @@ from prom_search_hswm.hswm_f1_sqlite_schema import (
     verify_private_parent,
 )
 from prom_search_hswm.hswm_typed_ports import canonical_json, canonical_sha256
-from prom_search_hswm.prom9_f1_r8_private_output import (
+from prom_search_hswm.hswm_private_output import (
     PrivateOutputRefusal,
     canonical_output_path,
 )

@@ -32,17 +32,16 @@
 
 - 기본 경로는 **구현/실행 → 직접 측정 → 중요한 결과면 content-addressed 영수증 하나 →
   commit/push**다.
-- LakatoTree는 명시적 독립 판정 또는 공개·고위험 과학 승격, OOPtDD는 영수증 무결성 자체의
-  감사에만 선택적으로 사용한다. 일반 구현·로컬 회귀·탐색 실험의 선행 관문으로 요구하지
-  않는다. **OMD는 RETIRED다.** 등록·호출·DB/lease/heartbeat/health·조건부 재활성화를 금지하며
-  과거 코드·DB·보고서만 역사 자료로 읽는다.
+- 사용자가 2026-08-15에 지목한 세 개인 거버넌스 도구 계열은 **완전 삭제 상태**다.
+  선택 감사층, 역사 read-only 도구, 원격 판정기 또는 조건부 재활성화 경로로 복원하지
+  않는다. 그 도구들이 만든 판정은 HSWM 주장에 대한 권위를 갖지 않는다.
 - MCP의 HSWM 기본 경로는 Google MCP Toolbox의 고정 `ontology_*` 조회면만 사용한다.
   교차 저장소의 `ontology_propose_ragnarok_fusion_split`은 고정된 `PENDING` 제안만 만드는
   유일한 예외이며 HSWM이나 정본을 변경하지 않는다. raw Cypher와 canonical write는
   금지하며, HSWM 인지·토큰 학습·매 단계 routing의 필수 경로로 만들지 않는다.
-- 명시적 사유가 없으면 한 작업에 선택 거버넌스 층을 둘 이상 중첩하지 않는다. 과거 장부와
-  영수증은 보존하지만 기본 실행 정책은
-  `research/HSWM_MINIMAL_GOVERNANCE.v1.json`을 따른다.
+- 독립적으로 읽고 재현할 수 있는 원시 측정값은 보존할 수 있지만, 제거된 개인 도구의
+  패키지·테스트·영수증 체인·판정 패킷·ordered-gate·연구 ledger는 복구하지 않는다.
+  기본 실행 정책은 `research/HSWM_MINIMAL_GOVERNANCE.v1.json`을 따른다.
 
 ## 용어 주의
 

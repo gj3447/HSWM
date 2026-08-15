@@ -796,7 +796,7 @@ Gate: utility와 safety co-primary 동시 통과. `mu=0`은 정상적인 합격 
 
 ### S8 — ecosystem adapters
 
-- LakatoTree: artifact/evidence/certificate read adapter
+- HSWM_LOCAL_RECORD: artifact/evidence/certificate read adapter
 - bhgman_tool: stable-ID selection/readout adapter
 - CHU: leaf-world reference adapter
 - Longinus: source-specific evidence binding adapter

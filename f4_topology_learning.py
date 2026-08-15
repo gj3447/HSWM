@@ -4,7 +4,7 @@ PREREG (locked, read-only input): prom_search_hswm/evidence/
 PREREG_f4_topology_learning_20260725.json (in the SYMPOSIUM/HSWM checkout).
 
 Receipts from this script are always mode="development" measurements; the
-scientific judgment belongs to the LakatosTree gate, never to this file.
+scientific judgment belongs to the HSWM_LOCAL_RECORD gate, never to this file.
 
 Design (WANN-style W-freeze):
   store       L typed source-policy lessons (frozen content, compiled once

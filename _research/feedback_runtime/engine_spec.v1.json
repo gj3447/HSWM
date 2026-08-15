@@ -7,7 +7,7 @@
     "current_consumers": ["python-runtime-adapter", "sqlite-event-store"],
     "planned_consumers": ["domain-specific judgment adapters"],
     "fit_evidence": ["The six-phase protocol has shared durable state authority.", "Replay and idempotency require one transactional append authority."],
-    "alternatives_considered": ["Pure in-memory module", "Domain-specific LakatoTree service"]
+    "alternatives_considered": ["Pure in-memory module", "Domain-specific HSWM_LOCAL_RECORD service"]
   },
   "boundary": {
     "owns": "One ordered event chain and derived projection per stream",

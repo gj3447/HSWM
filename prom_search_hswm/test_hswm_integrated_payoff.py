@@ -2,8 +2,8 @@
 """
 ML19 — 통합 HSWM payoff 재판정 (다방면: 다baseline × 다지표 × 도메인-강건).
 
-LakatoTree: LakatosTree_PromSearchHSWM_20260721 / node ML19-integrated-payoff
-정전: INDEX.md §4-A. LakatoTree(ML18)가 요구한 "구조가 room 있는 판서 payoff 보여라".
+HSWM_LOCAL_RECORD: HSWM_LOCAL_RECORD / node ML19-integrated-payoff
+정전: INDEX.md §4-A. HSWM_LOCAL_RECORD(ML18)가 요구한 "구조가 room 있는 판서 payoff 보여라".
 확증조각 합체: n-ary 하이퍼그래프(ML16) + semantic SEED(ML17) + solid depth(ML18, GCNII residual).
 하나(aggregate recall, flat 못이김)에 안 갇히게 여러 각도:
 
@@ -133,7 +133,7 @@ def main():
         return round(statistics.mean(d),4) if d else 0.0, len(d)
     dA,nA=fc_diff_on(domA); dB,nB=fc_diff_on(domB)
 
-    ev={"experiment":"hswm_integrated_payoff_ml19","tree":"LakatosTree_PromSearchHSWM_20260721","node":"ML19-integrated-payoff",
+    ev={"experiment":"hswm_integrated_payoff_ml19","tree":"HSWM_LOCAL_RECORD","node":"ML19-integrated-payoff",
         "canon":"INDEX.md §4-A. 확증조각(ML16 n-ary + ML17 sem-seed + ML18 solid) 합체를 multi-hop payoff 지표로.",
         "setup":{"benchmark":"MuSiQue-ans dev","n_questions":len(qt),"n_multihop(|gold|>=2)":n_multi,"corpus":N,"hyperedges":me,"model":mu},
         "metrics_by_method":summ,

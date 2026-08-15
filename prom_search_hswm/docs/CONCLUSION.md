@@ -70,7 +70,7 @@ weighted>blind(ML9 결합지표) + LLM-judge 기제(ML7). 그리고 "문맥(cove
 > **얕은(3-5) 가중 재귀 트리 + 선별적 의미 수평엣지(multi-hop 전용) + measurement 가중 + 각 노드=문서.**
 > "10-level·무조건 많이·blind 융합"은 실험·문헌 둘 다 반박한다. "가중·다층·문맥·연결"이라는 네 핵심 4단어는 전부 옳다.
 
-**증거**: LakatoTree `LakatosTree_PromSearchHSWM_20260721` (ML1-9). 코드 `HSWM/prom_search_hswm/`. 문헌: RAPTOR(arXiv:2401.18059)/GraphRAG(2404.16130)/HippoRAG(NeurIPS24)/SiReRAG(2412.06206)/CoverageBench(2603.20034). SECONDARY_AI 연구 — USER ratify 시 정전화.
+**증거**: HSWM_LOCAL_RECORD `HSWM_LOCAL_RECORD` (ML1-9). 코드 `HSWM/prom_search_hswm/`. 문헌: RAPTOR(arXiv:2401.18059)/GraphRAG(2404.16130)/HippoRAG(NeurIPS24)/SiReRAG(2412.06206)/CoverageBench(2603.20034). SECONDARY_AI 연구 — USER ratify 시 정전화.
 
 ---
 

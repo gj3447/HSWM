@@ -1,6 +1,6 @@
 // KG WRITES PENDING — prom16-hswm-negative-improvement-20260726
 // KG(data-01, 192.168.0.25) SSH 타임아웃으로 미기록 (2026-07-26 세션). KG 복구 후 이 파일 통째로 실행.
-// 관례: PromReport + Lesson(lakatos_mechanism 필수, HR20) + ResearchFinding 16 (verified=true)
+// 관례: PromReport + Lesson(legacy_program_mechanism 필수, HR20) + ResearchFinding 16 (verified=true)
 
 MERGE (p:PromReport {name: 'prom16-hswm-negative-improvement-20260726'})
 SET p += {date: '2026-07-26', n_subagents: 16, conflicts: 0, axes: 'A transfer/B consolidation/C n-ary/D methodology',
@@ -13,7 +13,7 @@ MERGE (l:Lesson {name: 'lesson-prom16-negative-improvement-20260726'})
 SET l += {date: '2026-07-26', actor: 'kimi-code-cli',
   wrongAssumption: 'F3 G=0, F5 K1 kill, C1 clique kill은 연산자/구조의 결함이다',
   truth: '세 kill 모두 "측정 축 부재"의 측정값이다 — capability(F3는 procedural로)/query-predictability(F5는 read-time으로)/불가분성(C1은 clique-불가분 쌍으로) 축을 심으면 재시험 가능. 외부 2025~26 문헌이 독립 재현: naive cross-model 이식은 열화(MemCollab 50.6<52.2), lossy consolidation은 detail 파괴(CogCanvas verbatim +15.9pp, ARC-AGI 54% 회귀), clique expansion이 hypergraph를 자주 능가(Pellegrin NeurIPS25). 전이되는 것은 추상 메타지식뿐(MTL: 알고리즘 전이 5.5%), append-only를 이기는 건 augment-not-replace/dedup+gating/학습된 compact replacement뿐',
-  lakatos_mechanism: 'lemma-incorporation',
+  legacy_program_mechanism: 'lemma-incorporation',
   evidence: 'HSWM/PROM_16_NEGATIVE_RESULT_IMPROVEMENT_2026-07-26.md + _findings/prom16-hswm-negative-improvement-20260726/ (16건, URL fetch 검증)',
   followup: 'PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md (ratify 대기)'}
 WITH l

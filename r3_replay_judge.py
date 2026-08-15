@@ -4,7 +4,7 @@ r3_dump_replay_artifacts.py 가 저장한 아티팩트(static 점수행렬 + row
 primary metric(sparse hard-hop walk−flat best-trace recall@10)을 재생성해 stdout 에
 `metric=<값>` 한 줄만 출력한다(파서 계약, 부가정보는 stderr).
 
-torch/네트워크/임베딩 모델 없음 — numpy 만 있는 컨테이너(lakatotree-01)에서 실행 가능.
+torch/네트워크/임베딩 모델 없음 — numpy 만 있는 컨테이너(HSWM_LOCAL_RECORD-01)에서 실행 가능.
 argv 의 result_path 는 재현명령 형식상 전달되지만 본 judge 는 아티팩트 자급이라 무시한다.
 결정론: np.load 바이트 동일 + IEEE per-op 동일 + argsort stable + Python random(seed 고정).
 """

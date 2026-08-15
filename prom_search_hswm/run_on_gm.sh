@@ -8,7 +8,7 @@
 #   또는 ./run_on_gm.sh test_hswm_solid_scaffold.py
 #
 # 영수증(EVIDENCE_*.json)은 각 스크립트가 repo 디렉터리(HERE)에 쓴다 — KB 단위라
-# Mac 압박 무시가능 + git/LakatoTree result_path 앵커 유지 목적. 무거운 것만 GM.
+# Mac 압박 무시가능 + git/HSWM_LOCAL_RECORD result_path 앵커 유지 목적. 무거운 것만 GM.
 set -e
 LAB=/Volumes/GM/hswm_lab
 if [ ! -d "$LAB" ]; then echo "ERROR: $LAB 없음 (GM 안 붙음?)" >&2; exit 1; fi

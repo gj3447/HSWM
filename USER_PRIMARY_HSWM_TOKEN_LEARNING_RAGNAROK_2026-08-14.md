@@ -51,20 +51,21 @@ LLM 토큰/행동/도구 궤적
   → 해당 변화를 제거했을 때 효과도 사라지는 인과 절제
 ```
 
-따라서 네 증거 등급을 분리한다.
+2026-08-15 최소 거버넌스 정전에 따라 후보 생성만을 별도 학습 등급으로 세지 않고 세 증거
+등급으로 줄인다. 후보는 활성화와 함께 있을 때만 학습 영수증에 들어간다.
 
 | 등급 | 의미 | “학습된 조정 규칙” 주장 |
 |---|---|---|
 | `OBSERVED_ONLY` | 토큰·행동·outcome을 묶었지만 지속 변화 없음 | 금지 |
-| `CANDIDATE_ONLY` | ΔW 후보만 생성 | 금지 |
 | `DURABLE_UPDATE` | 후보가 CAS로 새 snapshot에 활성화 | 아직 금지 |
 | `CAUSALLY_VALIDATED` | context-fixed replay·동등예산 fresh 평가·removal ablation까지 결속 | 허용 가능한 최소 증거 |
 
 이 구분을 실행 가능한 코드 계약
 [`hswm_token_learning_contract.py`](hswm_token_learning_contract.py)으로 만들었다. 계약은 raw
-prompt/response를 영수증에 넣지 않고 digest와 token count만 보존하며, 기존 eligibility,
+prompt/response를 영수증에 넣지 않고 digest와 합산 token count만 보존하며, 기존 eligibility,
 external outcome, immutable weight candidate, CAS activation을 하나의 provenance chain으로
-묶는다.
+묶는다. 세 인과 검사는 `causal_test_receipt_sha256` 하나가 함께 증명한다. 최소화 정본은
+[`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md)다.
 
 ### 2.1 검색 후 선택 기록 (2026-08-14, SECONDARY_AI_RESEARCH)
 
@@ -127,7 +128,7 @@ HSWM의 해법은 관료제를 더 잘 쓰는 상위 규칙이 아니라, 유용
 
 ## 6. 다음 작업 축
 
-1. 모든 LLM function call을 결과 전 `TokenTrajectoryV1`으로 seal한다.
+1. 모든 LLM function call을 결과 전 최소 `TokenTrajectoryV2`로 seal한다.
 2. 각 trajectory를 `SPAWN / DELEGATE / COMMUNICATE / TOOL_USE / AGGREGATE / STOP /
    TASK_ACTION` 결정 및 parent trajectory에 결속해 temporal orchestration graph로 만든다.
 3. token 수가 아니라 outcome-bound eligibility와 durable delta를 학습량으로 계측한다.

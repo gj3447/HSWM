@@ -1,0 +1,94 @@
+{
+  "schema_version": "hswm-minimal-governance/v1",
+  "status": "ACTIVE_DEFAULT",
+  "effective_date": "2026-08-15",
+  "authority": {
+    "class": "USER_PRIMARY",
+    "source": "USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.txt",
+    "source_sha256": "c82139e1a9f44f748a156ba32950cc1abd5ee01d5870de49858f72db6b6d0e89",
+    "interpretation": "Complex static governance around HSWM can itself cause LX3 Ragnarok; reduce it from the default path."
+  },
+  "default_path": [
+    "IMPLEMENT_OR_RUN",
+    "DIRECT_MEASUREMENT",
+    "ONE_CONTENT_ADDRESSED_RECEIPT_IF_RESULT_IS_MATERIAL",
+    "COMMIT_AND_PUSH"
+  ],
+  "budgets": {
+    "material_result_receipts": 1,
+    "optional_governance_layers_without_explicit_escalation": 1
+  },
+  "optional_layers": {
+    "lakatotree": {
+      "default": "OFF",
+      "activate_only_when": [
+        "the user explicitly requests independent adjudication",
+        "a public or high-stakes scientific promotion claim is being made"
+      ],
+      "not_required_for": [
+        "ordinary implementation",
+        "local regression tests",
+        "exploratory experiments"
+      ]
+    },
+    "ooptdd": {
+      "default": "LEGACY_OPTIONAL_AUDIT",
+      "activate_only_when": [
+        "receipt integrity or observability is the tested hypothesis",
+        "an explicit adversarial audit is requested"
+      ],
+      "not_required_for": [
+        "ordinary behavioral claims",
+        "the default pytest suite"
+      ]
+    },
+    "omd": {
+      "default": "OFF",
+      "activate_only_when": [
+        "multiple real writers contend for the same mutable resource"
+      ],
+      "not_required_for": [
+        "single-writer work",
+        "read-only parallelism",
+        "ordinary HSWM execution"
+      ]
+    },
+    "mcp": {
+      "default": "OPTIONAL_IO_ADAPTER",
+      "activate_only_when": [
+        "an external system must actually be read or written"
+      ],
+      "not_required_for": [
+        "HSWM inference",
+        "HSWM token learning",
+        "per-step cognition or routing"
+      ]
+    }
+  },
+  "causal_learning_receipt": {
+    "count": 1,
+    "field": "causal_test_receipt_sha256",
+    "must_attest": [
+      "fixed-context replay",
+      "matched compute or token budget",
+      "removal ablation"
+    ]
+  },
+  "preservation": {
+    "historical_lakatotree_verdicts": "PRESERVE",
+    "historical_ooptdd_receipts": "PRESERVE",
+    "historical_research_ledger": "PRESERVE_AS_STRICT_PROGRAM_RECORD",
+    "hswm_next_research_harness": "PRESERVE_AS_OPTIONAL_STRICT_HARNESS"
+  },
+  "observed_mcp_state_2026_08_15": {
+    "dev_01_claude": [
+      "neo4j"
+    ],
+    "dev_01_codex": [
+      "neo4j"
+    ],
+    "macmini_lakatotree_present": false,
+    "delltower_lakatotree_present": false,
+    "note": "Remote inventory records server names only. Mac mini has unrelated Codex MCPs; Dell tower has airo-neo4j and isaac-manager."
+  }
+}

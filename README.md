@@ -14,7 +14,11 @@ composition work and the 2026-07-23 learned-router result, is in
 [`INDEX.md`](INDEX.md). The machine-readable programme ledger, which owns the F1-F5
 hypothesis states, their sealed receipts, and the fail-closed promotion gate, is
 [`research/HSWM_RESEARCH_LEDGER.v1.json`](research/HSWM_RESEARCH_LEDGER.v1.json); its
-programme-level `scientific_status` is `UNJUDGED` as of 2026-07-27.
+programme-level `scientific_status` is `UNJUDGED` as of 2026-07-27. That strict
+ledger is a preserved scientific-program record, not the ordinary development
+gate. The active default is the four-step
+[`minimal-governance contract`](research/HSWM_MINIMAL_GOVERNANCE.v1.json): run,
+measure directly, emit one receipt for a material result, then commit and push.
 
 ## Target architecture and present boundary
 
@@ -149,13 +153,15 @@ reasoner or a proven production runtime. What is real as of 2026-07-23:
   (`6/6` typed vs `2/6` no memory; four improvements). LakatoTree regenerated
   the P1v4 metric server-side. This is L0 answer-interface actuation at `n=6`,
   not a general learned compiler, durable `Delta W`, transfer, or topology.
-- 🧭 **Strict ordered-gate harness:** `hswm_next_research_harness.py` preserves
+- 🧭 **Optional strict ordered-gate harness:** `hswm_next_research_harness.py` preserves
   P1v4/B2.1/B2.2 evidence and exposes exactly one active step in the order
   `actual-compute F1 → real Gate-0 packs → persistent Delta-W/removal →
   Agent-A weight-only frozen-B transfer → one topology edit → long-horizon
   stability`. It rejudges F1 suite+gold and raw P1v5/P2 packets, refuses
   out-of-order evidence, and emits no prediction or scientific verdict. The
-  current active step is F1 token-parity repair because R4 tied vector and
+  It is used only for an explicitly selected confirmatory research programme;
+  ordinary implementation and exploratory experiments do not enter it. Its
+  current recorded step is F1 token-parity repair because R4 tied vector and
   failed consumed-token parity on all four items.
 - 🧠 **PROM-9 semantic neural network protocol:** three frozen typed LLM
   functions (`query compiler -> bond proposer -> answer synthesizer`) now have
@@ -306,7 +312,8 @@ formalization remain in
 ## Verification tiers
 
 Tier 1 is the fresh-clone/CI boundary. The default pytest command collects the
-core suite, the PROM research suite, and the shared-field contract suite. Its
+core suite, the PROM research suite, and the shared-field contract suite while
+leaving the legacy OOPtDD audit battery off. Its
 only PROM data dependency is the tracked, content-addressed Badiou structure
 fixture.
 
@@ -314,6 +321,19 @@ fixture.
 uv sync --extra dev
 uv run --extra dev pytest -q
 uv run python verify_efficacy_claims.py --pretty
+```
+
+When receipt integrity itself is the subject of an explicit audit, run the
+preserved OOPtDD battery separately:
+
+```bash
+uv run pytest -o addopts='' tests/test_{audit_policy,lock_binding,measured,mutate,ouroboros,receipt_log,repair_and_locking,run_receipt_mutation,signing,v25_harnesses,witness_git,xlocks}.py -q
+```
+
+The historical strict programme gate is likewise opt-in:
+
+```bash
+uv run pytest -o addopts='' tests/test_{f5v2_sealed,hswm_next_research_harness,hswm_research_ledger,longinus_ordered_gate_binding}.py -q
 ```
 
 Tier 2 is deterministic extended verification over checked-in artifacts:
@@ -339,9 +359,13 @@ Real-KG (needs Neo4j): `uv sync --extra kg && NEO4J_URI=bolt://127.0.0.1:7687 uv
 
 ## Methodology
 
-- **ooptdd** (measurement): every behavioral claim carries an executable receipt with a
-  pre-run locked trace gate, real-code execution, positive readback, source binding, and an
-  injected negative oracle. See `receipts/`.
+- **Minimal default:** implementation or execution → direct measurement → one
+  content-addressed receipt for a material result → commit/push. LakatoTree,
+  OOPtDD, OMD, and MCP are optional escalation layers under
+  [`HSWM_MINIMAL_GOVERNANCE.v1.json`](research/HSWM_MINIMAL_GOVERNANCE.v1.json).
+- **OOPtDD (legacy optional audit):** use its executable trace/readback/source-binding/
+  negative-oracle battery only when receipt integrity or observability is itself
+  under explicit audit. Historical receipts remain in `receipts/`.
 - **Deployment claims:** a passing source-tree test is not a production
   certificate. S3 implements exact local scope/admission and fail-closed
   refusal, but its trusted certificate-ID allowlist is not a signature system;

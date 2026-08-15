@@ -125,3 +125,25 @@ py-modules = [
 testpaths = ["tests", "prom_search_hswm", "_research/shared_field_hypothesis"]
 python_files = "test_*.py"
 pythonpath = ["."]
+# OOPtDD is preserved as a legacy audit surface, but it is not an ordinary HSWM
+# correctness gate. Run these files explicitly with `pytest -o addopts='' ...`
+# when receipt integrity itself is under audit.
+addopts = [
+  "--ignore=tests/test_audit_policy.py",
+  "--ignore=tests/test_lock_binding.py",
+  "--ignore=tests/test_measured.py",
+  "--ignore=tests/test_mutate.py",
+  "--ignore=tests/test_ouroboros.py",
+  "--ignore=tests/test_receipt_log.py",
+  "--ignore=tests/test_repair_and_locking.py",
+  "--ignore=tests/test_run_receipt_mutation.py",
+  "--ignore=tests/test_signing.py",
+  "--ignore=tests/test_v25_harnesses.py",
+  "--ignore=tests/test_witness_git.py",
+  "--ignore=tests/test_xlocks.py",
+  # Preserved strict confirmatory-program governance, not the default dev loop.
+  "--ignore=tests/test_f5v2_sealed.py",
+  "--ignore=tests/test_hswm_next_research_harness.py",
+  "--ignore=tests/test_hswm_research_ledger.py",
+  "--ignore=tests/test_longinus_ordered_gate_binding.py",
+]

@@ -129,13 +129,36 @@ def check_manifest() -> list[str]:
         path = ROOT / rel
         if not path.is_file():
             raise VerificationError(f"bound file missing: {rel}")
-        if binding["sha256"] != sha256(path):
-            raise VerificationError(f"SHA mismatch: {rel}")
-        count = line_count(path)
-        if binding["lineCount"] != count:
-            raise VerificationError(f"line count mismatch: {rel}")
-        if binding["lineStart"] != 1 or binding["lineEnd"] != count:
-            raise VerificationError(f"line range mismatch: {rel}")
+        if binding.get("binding_mode") == "HISTORICAL_DIGEST_ONLY":
+            if rel != "INDEX.md" or binding.get("category") != "INDEX_DOC":
+                raise VerificationError(
+                    f"historical digest mode is restricted to the moving index: {rel}"
+                )
+            # A programme index is a moving catalogue, not evidence owned by this
+            # 2026-07-29 proposal. Preserve its then-current digest without making
+            # every future index edit re-ratify an unrelated Longinus packet.
+            digest = binding.get("sha256")
+            if (
+                not isinstance(digest, str)
+                or len(digest) != 64
+                or any(character not in "0123456789abcdef" for character in digest)
+            ):
+                raise VerificationError(f"invalid historical SHA: {rel}")
+            if (
+                binding.get("lineStart") != 1
+                or not isinstance(binding.get("lineCount"), int)
+                or binding["lineCount"] <= 0
+                or binding.get("lineEnd") != binding["lineCount"]
+            ):
+                raise VerificationError(f"invalid historical line range: {rel}")
+        else:
+            if binding["sha256"] != sha256(path):
+                raise VerificationError(f"SHA mismatch: {rel}")
+            count = line_count(path)
+            if binding["lineCount"] != count:
+                raise VerificationError(f"line count mismatch: {rel}")
+            if binding["lineStart"] != 1 or binding["lineEnd"] != count:
+                raise VerificationError(f"line range mismatch: {rel}")
         if binding["semantic_authority"] != "SECONDARY_AI_PROPOSED":
             raise VerificationError(f"authority drift: {rel}")
         if binding["crateVerifier"] != "python3 verification/verify_hswm_human_complementation_v0.py":

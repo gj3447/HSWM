@@ -236,3 +236,5 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
     # bin_hswm_cellular_lakatotree_apply_remote.sh 가 SSH 호스트명을 담고 있다.
     root_sh = [n for n in inner if "/" not in n and n.endswith(".sh")]
     assert not root_sh, f"루트 셸 스크립트가 배포물에 실렸다(호스트명 유출): {root_sh}"
+    assert "bin_hswm_cellular_lakatotree_upload.py" not in inner, \
+        "retired personal LakatoTree writer가 sdist 에 실렸다"

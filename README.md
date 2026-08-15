@@ -355,13 +355,16 @@ PyArrow for 2Wiki decoding, PyTorch/Transformers plus the frozen BGE-M3
 snapshot, and an attested OpenAI-compatible LLM endpoint; source-tree tests do
 not substitute for those runtime receipts.
 
-Real-KG (needs Neo4j): `uv sync --extra kg && NEO4J_URI=bolt://127.0.0.1:7687 uv run --extra kg python neo4j_loader.py`.
+Real-KG batch read (explicit Tier 3 exception): `uv sync --extra kg && NEO4J_URI=... NEO4J_USER=... NEO4J_PW=... NEO4J_DATABASE=neo4j uv run --extra kg python neo4j_loader.py`.
+The loader never reads personal MCP configuration and opens a Neo4j `READ_ACCESS`
+session; missing explicit credentials fail closed.
 
 ## Methodology
 
 - **Minimal default:** implementation or execution → direct measurement → one
-  content-addressed receipt for a material result → commit/push. LakatoTree,
-  OOPtDD, OMD, and MCP are optional escalation layers under
+  content-addressed receipt for a material result → commit/push. LakatoTree and
+  OOPtDD are optional escalation layers; OMD is retired, and MCP is limited to
+  the external bounded ontology adapter under
   [`HSWM_MINIMAL_GOVERNANCE.v1.json`](research/HSWM_MINIMAL_GOVERNANCE.v1.json).
 - **OOPtDD (legacy optional audit):** use its executable trace/readback/source-binding/
   negative-oracle battery only when receipt integrity or observability is itself

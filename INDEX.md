@@ -10,7 +10,8 @@
 그 프로그램의 판정 기록층은 Proxmox LXC-301의 `LakatosTree_HSWM_20260719` 하나다. 아래
 `state` 값은 장부 원문 그대로이며, 이 문서가 임의로 승격하지 않는다. 일반 구현의 활성
 기계 정책은 [`research/HSWM_MINIMAL_GOVERNANCE.v1.json`](research/HSWM_MINIMAL_GOVERNANCE.v1.json)이다.
-LakatoTree·OOPtDD·OMD는 전역 선행 관문이 아니라 명시적 위험에만 켜는 선택 감사층이다.
+LakatoTree·OOPtDD는 전역 선행 관문이 아니라 명시적 위험에만 켜는 선택 감사층이다.
+OMD는 RETIRED이며 과거 자료만 읽는다.
 
 | 가설 (`hypothesis_id`) | 장부 `state` | 영수증·경계 |
 |---|---|---|
@@ -72,7 +73,7 @@ engineering contract이며 현재 효능·과학적 유일성 주장이 아니�
 
 2026-08-15 사용자 정전은 한 단계 더 나아가 LakatoTree·OOPtDD·OMD의 절차 증식 자체도
 라그나로크가 될 수 있다고 명시했다. 기본 경로를 `실행 → 직접 측정 → 중요한 결과 영수증
-하나 → commit/push`로 줄이고, MCP는 외부 KG 등 실제 I/O에만 쓰는 선택 어댑터로 제한한다.
+하나 → commit/push`로 줄이고, MCP는 외부 Toolbox의 bounded ontology I/O로 제한한다.
 원문·실측 MCP 상태·보존 경계는
 [`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md)에 있다.
 

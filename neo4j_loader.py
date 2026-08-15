@@ -14,13 +14,12 @@ leakage is controlled by a context/query split (query findings are removed from
 every hyperedge's member pool so a query never sees itself).
 
 Usage:
-    NEO4J_URI=bolt://127.0.0.1:7687 NEO4J_PW=... uv run --extra kg python neo4j_loader.py
+    NEO4J_URI=... NEO4J_USER=... NEO4J_PW=... NEO4J_DATABASE=neo4j \
+      uv run --extra kg python neo4j_loader.py
 """
 from __future__ import annotations
 
-import json
 import os
-import sys
 
 import numpy as np
 
@@ -30,46 +29,49 @@ REL_TYPES = "PARTICIPATES_IN|CONTAINS|AGGREGATES|DISPATCHED"
 
 
 def _creds():
-    uri = os.environ.get("NEO4J_URI")
-    user = os.environ.get("NEO4J_USER", "neo4j")
-    pw = os.environ.get("NEO4J_PW")
-    if not (uri and pw):
-        # fall back to CD/.mcp.json
-        try:
-            d = json.load(open(os.path.expanduser("~/CD/.mcp.json")))
-            env = d["mcpServers"]["neo4j"]["env"]
-            uri = uri or env.get("NEO4J_URI") or env.get("NEO4J_URL")
-            user = env.get("NEO4J_USERNAME") or env.get("NEO4J_USER") or user
-            pw = pw or env.get("NEO4J_PASSWORD")
-        except Exception as e:  # noqa: BLE001
-            print(f"no creds ({e}); set NEO4J_URI/NEO4J_PW", file=sys.stderr)
-    return uri, user, pw
+    names = ("NEO4J_URI", "NEO4J_USER", "NEO4J_PW", "NEO4J_DATABASE")
+    values = {name: os.environ.get(name) for name in names}
+    missing = [name for name, value in values.items() if not value]
+    if missing:
+        raise RuntimeError(
+            "explicit read-only Neo4j configuration required; missing "
+            + ", ".join(missing)
+        )
+    return (
+        values["NEO4J_URI"],
+        values["NEO4J_USER"],
+        values["NEO4J_PW"],
+        values["NEO4J_DATABASE"],
+    )
 
 
 def load_and_cache(max_hyperedges: int = 1500, min_arity: int = 3, path: str = CACHE) -> dict:
-    from neo4j import GraphDatabase  # optional dep (extra 'kg')
+    from neo4j import GraphDatabase, READ_ACCESS  # optional dep (extra 'kg')
 
-    uri, user, pw = _creds()
+    uri, user, pw, database = _creds()
     driver = GraphDatabase.driver(uri, auth=(user, pw))
-    with driver.session() as s:
-        rows = s.run(
-            f"""
-            MATCH (h:Hyperedge)-[:{REL_TYPES}]-(m:ResearchFinding)
-            WHERE m.embedding IS NOT NULL AND size(m.embedding) = {DIM}
-            WITH h, collect(DISTINCT elementId(m)) AS members
-            WHERE size(members) >= {min_arity}
-            RETURN elementId(h) AS hid, members
-            LIMIT {max_hyperedges}
-            """
-        ).data()
-        member_id_set = sorted({mid for r in rows for mid in r["members"]})
-        # pull embeddings for all member findings, server-side into numpy
-        emb_rows = s.run(
-            "MATCH (m:ResearchFinding) WHERE elementId(m) IN $ids "
-            "RETURN elementId(m) AS mid, m.embedding AS emb",
-            ids=member_id_set,
-        ).data()
-    driver.close()
+    try:
+        with driver.session(database=database, default_access_mode=READ_ACCESS) as s:
+            rows = s.run(
+                f"""
+                MATCH (h:Hyperedge)-[:{REL_TYPES}]-(m:ResearchFinding)
+                WHERE m.embedding IS NOT NULL AND size(m.embedding) = {DIM}
+                WITH h, collect(DISTINCT elementId(m)) AS members
+                WHERE size(members) >= {min_arity}
+                RETURN elementId(h) AS hid, members
+                LIMIT {max_hyperedges}
+                """
+            ).data()
+            member_id_set = sorted({mid for r in rows for mid in r["members"]})
+            # Pull embeddings in the dedicated batch-read exception. Values never
+            # enter an agent/MCP context.
+            emb_rows = s.run(
+                "MATCH (m:ResearchFinding) WHERE elementId(m) IN $ids "
+                "RETURN elementId(m) AS mid, m.embedding AS emb",
+                ids=member_id_set,
+            ).data()
+    finally:
+        driver.close()
 
     id2local = {}
     embs = []

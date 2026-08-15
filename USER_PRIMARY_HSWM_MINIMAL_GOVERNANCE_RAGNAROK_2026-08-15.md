@@ -29,8 +29,8 @@
 |---|---|---|
 | LakatoTree | OFF | 사용자가 독립 판정을 요청하거나 공개·고위험 과학 승격을 주장할 때 |
 | OOPtDD | 레거시 선택 감사 | 영수증 무결성/관측성이 실험 대상이거나 적대 감사가 명시됐을 때 |
-| OMD | OFF | 실제 복수 writer가 같은 mutable 자원에서 충돌할 때 |
-| MCP | 선택 I/O 어댑터 | 외부 시스템을 실제로 읽거나 써야 할 때 |
+| OMD | RETIRED · 역사 자료만 읽기 | 재활성 조건 없음 |
+| MCP | 외부 bounded ontology 어댑터 | 고정 조회 또는 `PENDING` 제안이 실제로 필요할 때 |
 
 평상시 작업에는 선택 거버넌스 층을 자동으로 중첩하지 않는다. 명시적 승격 사유가
 없으면 최대 한 층만 사용한다. 원인과 효과를 입증할 때도 fixed-context replay,
@@ -39,18 +39,19 @@ matched-budget, removal ablation을 네 파일로 쪼개지 않고, 그 세 검�
 
 ## MCP 실측 상태 — 2026-08-15
 
-- 현재 dev-01 Claude와 Codex의 기본 MCP는 `neo4j` 하나다. Claude 연결 점검도 성공했다.
-- LakatoTree MCP는 dev-01 Claude 비활성 목록에 있고 현재 HSWM 세션의 도구 표면에도 없다.
-  오래 열린 다른 Codex 세션의 LakatoTree 프로세스는 남아 있지만 이 작업의 기본 경로가
-  아니므로 강제 종료하지 않았다.
+- 현재 dev-01 Claude와 Codex의 기본 MCP 서버는 외부 Google MCP Toolbox 1.9.0 기반
+  `ontology` 하나다. Codex의 HSWM 기본면은 고정 조회 6개이며 Claude 서버의 일곱째 도구는
+  라그나로크 split을 `PENDING`으로만 제안하는 고정 도구다.
+- 개인 LakatoTree·raw Neo4j·symposium-memory MCP 등록과 잔류 프로세스는 2026-08-15
+  제거됐고, raw Cypher·canonical write·ratification 도구는 기본면에 없다.
 - Mac mini 설정에는 LakatoTree MCP가 없었다. 별개의 Codex MCP만 존재한다.
 - Dell tower 설정에도 LakatoTree MCP가 없었다. `airo-neo4j`, `isaac-manager` 같은 장비별
   어댑터만 존재한다.
-- OMD는 이 저장소의 실행 경로에 적용되어 있지 않다.
+- OMD는 RETIRED이며 이 저장소에서 조건부로 다시 켤 수 없다.
 
-따라서 “MCP가 아직 적용되어 있느냐”의 정확한 답은 **Neo4j 외부 KG I/O에는 적용되어
-있지만 HSWM의 인지·학습 코어에는 적용하지 않는다**이다. MCP나 KG가 매 토큰의 사고를
-지휘하는 정적 신경망 역할을 해서는 안 된다.
+따라서 “MCP가 아직 적용되어 있느냐”의 정확한 답은 **외부 Toolbox를 bounded ontology
+I/O에만 적용하며 HSWM의 인지·학습 코어에는 적용하지 않는다**이다. MCP나 KG가 매 토큰의
+사고를 지휘하는 정적 신경망 역할을 해서는 안 된다.
 
 ## 보존 경계
 

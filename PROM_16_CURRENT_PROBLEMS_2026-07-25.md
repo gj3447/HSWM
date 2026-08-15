@@ -1,5 +1,8 @@
 # PROM 16 — HSWM 현재 문제점 전수 감사 (2026-07-25)
 
+> **2026-08-15 운영 정정:** 이 문서는 당시 상태의 역사 snapshot이다. 아래 OMD 세마포어
+> 처방은 현재 규약에서 superseded되었으며 OMD는 RETIRED·역사 읽기 전용이다.
+
 > 질문: **"지금 HSWM에서 문제점이 뭐냐?"** — 16 subagent (4축 × 4렌즈), read-only 감사.
 > 축: A 과학적 미증명 게이트 / B 장부·재현성 / C 인프라·운영 / D 방향·가치. 렌즈: ①낶부 증거 ②외부 기준 ③함정·오탐 ④처방.
 > Raw: [`_findings/prom16-hswm-current-problems-20260725/swarm_raw_16.txt`](_findings/prom16-hswm-current-problems-20260725/swarm_raw_16.txt) (16/16 완주, 충돌 0).

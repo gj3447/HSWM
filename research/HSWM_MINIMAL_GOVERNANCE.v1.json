@@ -43,26 +43,35 @@
       ]
     },
     "omd": {
-      "default": "OFF",
-      "activate_only_when": [
-        "multiple real writers contend for the same mutable resource"
-      ],
-      "not_required_for": [
-        "single-writer work",
-        "read-only parallelism",
-        "ordinary HSWM execution"
+      "default": "RETIRED_HISTORICAL_READ_ONLY",
+      "activation_allowed": false,
+      "forbidden_actions": [
+        "MCP registration or invocation",
+        "coordination database writes",
+        "declare, claim, heartbeat, release, or cancel leases",
+        "health, heal, or conditional reactivation"
       ]
     },
     "mcp": {
-      "default": "OPTIONAL_IO_ADAPTER",
-      "activate_only_when": [
-        "an external system must actually be read or written"
+      "default": "EXTERNAL_BOUNDED_ONTOLOGY_ADAPTER",
+      "provider": "Google MCP Toolbox 1.9.0",
+      "normal_read_tools": [
+        "ontology_contract_get",
+        "ontology_search",
+        "ontology_get",
+        "ontology_neighbors",
+        "ontology_claim_history",
+        "ontology_drift_report"
       ],
-      "not_required_for": [
+      "forbidden": [
+        "raw Cypher",
+        "canonical write",
+        "ratification",
         "HSWM inference",
         "HSWM token learning",
         "per-step cognition or routing"
-      ]
+      ],
+      "cross_repo_pending_exception": "ontology_propose_ragnarok_fusion_split is fixed, PENDING-only, and cannot mutate canon"
     }
   },
   "causal_learning_receipt": {
@@ -82,13 +91,18 @@
   },
   "observed_mcp_state_2026_08_15": {
     "dev_01_claude": [
-      "neo4j"
+      "ontology"
     ],
     "dev_01_codex": [
-      "neo4j"
+      "ontology"
     ],
+    "provider": "Google MCP Toolbox 1.9.0",
+    "codex_normal_enabled_tools": 6,
+    "claude_server_tools": 7,
+    "raw_cypher_tools": 0,
+    "canonical_write_tools": 0,
     "macmini_lakatotree_present": false,
     "delltower_lakatotree_present": false,
-    "note": "Remote inventory records server names only. Mac mini has unrelated Codex MCPs; Dell tower has airo-neo4j and isaac-manager."
+    "note": "The seventh Claude-visible tool is the fixed PENDING-only Ragnarok split proposal; it cannot ratify or apply canon."
   }
 }

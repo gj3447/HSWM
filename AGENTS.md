@@ -1,7 +1,7 @@
 # HSWM — 작업 규칙
 
-> `CLAUDE.md` 에서 분리 (2026-08-10 다이어트). HSWM 작업 규칙은 HSWM 안에 둔다.
-> 상위 규칙(단일 writer 토큰, 세션 핸드오프, KG 정본)은 저장소 루트 `AGENTS.md` 를 따른다.
+> `CLAUDE.md` 에서 분리 (2026-08-10 다이어트). 이 파일이 standalone HSWM 저장소의
+> 활성 작업 규칙이다. 존재하지 않는 상위 파일이나 sibling 저장소 규칙을 암묵 상속하지 않는다.
 
 ## 실행·저장 3-tier 규약 (2026-07-30 사용자 승인)
 
@@ -33,10 +33,11 @@
 - 기본 경로는 **구현/실행 → 직접 측정 → 중요한 결과면 content-addressed 영수증 하나 →
   commit/push**다.
 - LakatoTree는 명시적 독립 판정 또는 공개·고위험 과학 승격, OOPtDD는 영수증 무결성 자체의
-  감사, OMD는 실제 복수 writer 충돌에만 선택적으로 사용한다. 일반 구현·로컬 회귀·탐색
-  실험의 선행 관문으로 요구하지 않는다.
-- MCP는 외부 시스템이 실제로 필요할 때만 쓰는 I/O 어댑터다. HSWM 인지·토큰 학습·매 단계
-  routing의 필수 경로로 만들지 않는다.
+  감사에만 선택적으로 사용한다. 일반 구현·로컬 회귀·탐색 실험의 선행 관문으로 요구하지
+  않는다. **OMD는 RETIRED다.** 등록·호출·DB/lease/heartbeat/health·조건부 재활성화를 금지하며
+  과거 코드·DB·보고서만 역사 자료로 읽는다.
+- MCP는 Google MCP Toolbox의 고정 `ontology_*` 조회면만 사용한다. raw Cypher와 canonical
+  write는 금지하며, HSWM 인지·토큰 학습·매 단계 routing의 필수 경로로 만들지 않는다.
 - 명시적 사유가 없으면 한 작업에 선택 거버넌스 층을 둘 이상 중첩하지 않는다. 과거 장부와
   영수증은 보존하지만 기본 실행 정책은
   `research/HSWM_MINIMAL_GOVERNANCE.v1.json`을 따른다.
@@ -49,9 +50,8 @@
 ## 정전 위치
 
 HSWM 이 무엇인가(사도 #8 축, 합의 포함, 함수가 LLM 인 하이퍼그래프 신경망 등)는
-규칙이 아니라 정전이다. KG 와
-[`THEORY/00_공통/CLAUDE_archive_canon_summary_2026-08-10.md`](../THEORY/00_공통/CLAUDE_archive_canon_summary_2026-08-10.md)
-를 본다. 주요 KG 노드:
+규칙이 아니라 정전이다. 외부 ontology 조회면과 이 저장소의 `USER_PRIMARY_*` 문서를 본다.
+주요 KG 노드:
 
 - `user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23`
 - `verdict-omc-direct-commanders-and-lgm-reassignment-2026-07-21`

@@ -7,7 +7,7 @@
 |---|---|---|
 | 2026-08-15 | 폐기 도구 전용 원격 브랜치를 삭제했다. 현재 HSWM 작업 트리의 파일명·본문에서 폐기 대상 세 계열의 이름은 0건이며 `main`과 `origin/main`은 일치한다. | 현재 트리와 원격 ref 직접 검사 |
 | 2026-08-15 | 개인 거버넌스 계층과 결합된 코드·문서·테스트·영수증을 제거하고 기본 경로를 `실행 → 직접 측정 → 중요 결과 기록 → commit/push`로 단순화했다. 전체 회귀는 **1148 passed, 3 skipped**다. | [`minimal governance`](research/HSWM_MINIMAL_GOVERNANCE.v1.json) · [`user canon`](USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md) |
-| 2026-08-15 | 실제 KG에서 폐기 계보 노드 **3,234개**와 잔여 관계를 제거했다. 전용 라벨·관계 타입과 모든 속성을 다시 스캔한 결과 노드 0, 관계 0이다. | Neo4j 속성·라벨·관계 전수 검사와 삭제 후 재조회 |
+| 2026-08-15 | 실제 KG에서 폐기 계보 노드 **3,234개**와 잔여 관계를 제거했다. 전용 라벨·관계 타입과 모든 속성을 다시 스캔한 결과 노드 0, 관계 0이다. 누락돼 있던 개인 KG용 Neo4j launcher와 credential entry만 복원했고 폐기 서버는 복원하지 않았다. | Neo4j 속성·라벨·관계 전수 검사 · launcher preflight exit 0 |
 | 2026-08-15 | Dell tower의 사용자 서비스·코드·credential 디렉터리를 격리했고 Mac mini의 재생성 원인이던 SERVER installer/watchdog 항목을 제거했다. Mac은 watchdog 여러 주기 뒤에도 LaunchAgent·plist·55170 listener가 모두 0이며 Dell도 서비스·listener가 0이다. | 운영 readback · SERVER `7940743` · 한 주기 초과 재검사 |
 | 2026-08-15 | Dell의 3D 제품 저장소에서 외부 판정기·고정 manifest·mutation gate 3,077줄을 제거하고 실제 카메라·PLC·DB 통합 실행만 남겼다. 사용자 dirty diff는 별도 백업 뒤 그대로 보존했다. 정리 관련 회귀는 **88 passed**이며, 전체 e2e의 기존 artifact-path 실패 5건은 전후 동일하다. | Dell `776712bf` · clean HEAD 기준 전 7 fail/후 5 fail(폐기 테스트 2건 제거) |
 | 2026-08-15 | 333에서 외부 정적 gate와 별도 CLI wrapper를 제거하고 native Rust trace/test 경로로 통합했다. substrate 직렬 전체 회귀는 통과했고 transfer의 TCP round-trip 1건은 정리 전후 동일한 기존 실패다. | 333 `1095d93` · local/Mac 동기화 |

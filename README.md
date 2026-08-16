@@ -274,6 +274,11 @@ then gathers 29 checked-in evidence, preregistration, manifest, harness-config,
 diagnostic, and receipt JSONs into their typed artifact directories. Four
 path/SHA-bound JSONs remain at the root until their verifier clusters can move
 atomically.
+[`ROOT_ASSET_MIGRATIONS.W14.v1.json`](ontology/history/ROOT_ASSET_MIGRATIONS.W14.v1.json)
+then collects 15 current research/operations Markdown records and the final
+root maintenance shell command under `docs/research`, `prereg`, and `scripts`.
+The remaining legacy Markdown records are SHA-bound experiment/cellular
+clusters.
 **New Python modules or research artifacts must not be added to the root.** New
 code goes under `src/hswm/`; artifacts are routed by kind according to
 [`docs/research/ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).

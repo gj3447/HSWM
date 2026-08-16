@@ -57,7 +57,7 @@ def test_root_compatibility_surface_and_catalog_are_current() -> None:
     result = validate_checkout(data)
     assert result["concepts"] == 10
     assert result["paths"] > 1_000
-    assert result["legacy_root_paths"] == 109
+    assert result["legacy_root_paths"] == 93
     legacy = json.loads((ROOT / data["legacy_root_inventory"]).read_text(encoding="utf-8"))
     catalog = json.loads((ROOT / data["path_catalog"]).read_text(encoding="utf-8"))
     assert legacy["$schema"] == "../../schemas/hswm_legacy_root_paths.v1.schema.json"
@@ -113,8 +113,38 @@ def test_asset_root_migrations_are_source_pinned_and_leave_no_root_alias() -> No
             assert not (ROOT / row["old_path"]).exists()
             assert (ROOT / row["canonical_path"]).is_file()
 
-    assert expected_count == 112
+    assert expected_count == 128
     assert result["asset_root_migrations"] == expected_count
+
+
+def test_w14_research_moves_keep_their_typed_concepts() -> None:
+    data = load_repository_ontology()
+    _, legacy = load_legacy(data)
+    expected = {
+        "docs/research/ABSORB_CONTRACT_v1.md": "hswm:repo:boundary",
+        "docs/research/AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md": (
+            "hswm:repo:identity"
+        ),
+        "docs/research/H3_C0_CHAIN_VIABILITY_DIAGNOSIS_2026-07-20.md": (
+            "hswm:repo:cells"
+        ),
+        "docs/research/PROM_8_DYNAMIC_TWO_LANES_2026-07-22.md": (
+            "hswm:repo:learning"
+        ),
+        "docs/research/WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md": (
+            "hswm:repo:substrate"
+        ),
+        "docs/research/core-development/EXISTENCE_SCOREBOARD.v1.md": (
+            "hswm:repo:evaluation"
+        ),
+        "docs/research/core-development/HSWM_CORE_DEV.md": "hswm:repo:identity",
+        "prereg/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md": (
+            "hswm:repo:learning"
+        ),
+        "scripts/f3v2_smoke_preflight.sh": "hswm:repo:boundary",
+    }
+    for path, concept in expected.items():
+        assert concept in concepts_for_path(path, data, legacy)
 
 
 def test_w13_typed_json_paths_retain_their_semantic_mounts() -> None:

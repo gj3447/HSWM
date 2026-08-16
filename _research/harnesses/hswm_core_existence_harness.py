@@ -144,6 +144,8 @@ def diagnose(
         return root / pointer
 
     scoreboard = resolve_pointer(pointers["scoreboard"])
+    core_dev = resolve_pointer(pointers["canonical_name"])
+    concentration_doc = resolve_pointer(pointers["human_entry"])
     f1_report = resolve_pointer(pointers["f1_report"])
     f1_op = resolve_pointer(pointers["f1_operator"])
     continuation = root / "docs" / "CONTINUATION.md"
@@ -152,12 +154,11 @@ def diagnose(
 
     checks: list[Check] = []
 
-    core_dev = hswm / "HSWM_CORE_DEV.md"
     for label, p in [
         ("core_dev_name", core_dev),
         ("scoreboard", scoreboard),
         ("config", hswm / CONFIG_PATH),
-        ("concentration_doc", hswm / "HSWM_CORE_EXISTENCE_CONCENTRATION.md"),
+        ("concentration_doc", concentration_doc),
         ("f1_report", f1_report),
         ("f1_operator", f1_op),
     ]:
@@ -348,7 +349,7 @@ def diagnose(
     )
 
     hard = [c for c in checks if c.blocking and c.status in {"FAIL", "BLOCKED"}]
-    t0_ok = (hswm / "EXISTENCE_SCOREBOARD.v1.md").is_file()
+    t0_ok = scoreboard.is_file()
     t1_unblocked = (
         user_approved_focus
         and identity in {"KEEP_A2", "FORCE_A3"}
@@ -525,7 +526,13 @@ def main(argv: list[str] | None = None) -> int:
         print(config.get("speak_as") or config.get("program_name") or "HSWM core 개발")
         print("pillars: BUILD (개발) + ELEVATE (고도화)")
         print("not: HSWM_LOCAL_RECORD ops, 333 p2p, public service as this program")
-        print("entry:", config.get("authority", {}).get("canonical_entry", "HSWM/HSWM_CORE_DEV.md"))
+        print(
+            "entry:",
+            config.get("authority", {}).get(
+                "canonical_entry",
+                "HSWM/docs/research/core-development/HSWM_CORE_DEV.md",
+            ),
+        )
         return EXIT_OK
     if args.command == "bans":
         print_bans(config)

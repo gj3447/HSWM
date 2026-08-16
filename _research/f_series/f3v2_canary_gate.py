@@ -1,7 +1,7 @@
 """F3v2 canary adoption gate (prereg §2) — DEVELOPMENT_ONLY measurement.
 
 PREREG (draft, sha-pinned in the receipt):
-  PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md
+  prereg/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md
 
 Adoption gate (prereg §2, runs BEFORE any F3v2 arm experiment): the (2)(3)
 knowledge layers (workflow / norm) must not be derivable by the receiver
@@ -49,7 +49,7 @@ from . import REPO_ROOT, source_path
 from . import f2_delta_w_credit as f2
 from . import f3v2_procedural_worlds as fw
 
-PREREG_PATH = REPO_ROOT / "PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md"
+PREREG_PATH = REPO_ROOT / "prereg/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md"
 RECEIPT_DIR = REPO_ROOT / "receipts"
 
 RECEIVER_ZS_MAX = 0.30   # prereg §2: receiver zero-shot hard-tier ceiling

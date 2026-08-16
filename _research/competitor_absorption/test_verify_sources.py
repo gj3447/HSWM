@@ -34,6 +34,12 @@ class SourceGateTests(unittest.TestCase):
     def test_locked_manifest_passes_without_external_bundle(self) -> None:
         self.assertEqual(validate(ROOT, MANIFEST), [])
 
+    def test_deployment_contract_uses_canonical_research_path(self) -> None:
+        self.assertFalse((ROOT / "ABSORB_CONTRACT_v1.md").exists())
+        self.assertTrue(
+            (ROOT / "docs" / "research" / "ABSORB_CONTRACT_v1.md").is_file()
+        )
+
     def test_manifest_contains_no_user_absolute_path(self) -> None:
         serialized = MANIFEST.read_text(encoding="utf-8")
         self.assertNotIn("/Users/", serialized)

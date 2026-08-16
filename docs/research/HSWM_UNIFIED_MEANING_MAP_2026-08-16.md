@@ -475,7 +475,7 @@ learning을 거쳐야 한다.
 | 왜 static glue를 신경망화하나? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](../canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) | [`DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md`](../canon/DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md) |
 | `H/W/A/F`가 정확히 무엇인가? | [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](../canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) | [`HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md`](../canon/HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md) |
 | cell과 semantic synapse의 target은? | [`DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md`](../../DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md) | [`src/hswm/cells/`](../../src/hswm/cells/) |
-| fixed layer 없는 합성은? | [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](../canon/SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md) | [`AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md`](../../AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md) |
+| fixed layer 없는 합성은? | [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](../canon/SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md) | [`AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md`](AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md) |
 | 무엇을 learning이라 부르나? | [`README.md`](../../README.md#what-counts-as-learning) | [`token_learning_contract.py`](../../src/hswm/learning/token_learning_contract.py) |
 | 실제로 무엇이 성공·실패했나? | [`EFFICACY.md`](../../EFFICACY.md) | [`INDEX.md`](../../INDEX.md)와 결속 evidence/receipt |
 | 코드가 의미별로 어디 있나? | [`ontology/README.md`](../../ontology/README.md) | [`HSWM_PATH_CATALOG.v1.json`](../../ontology/HSWM_PATH_CATALOG.v1.json) |

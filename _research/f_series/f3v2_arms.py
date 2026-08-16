@@ -1,7 +1,7 @@
 """F3v2 arms harness (slice 2) — prereg §3 arms over the procedural testbed.
 
 PREREG (draft, sha-pinned in every receipt):
-  PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md §3-§5, resolved relative
+  prereg/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md §3-§5, resolved relative
   to this module so the harness is portable across execution tiers.
 
 Slice 1 (f3v2_procedural_worlds.py) built the foundry-world testbed and the
@@ -145,7 +145,7 @@ import re
 from . import REPO_ROOT, source_path
 from . import f3v2_procedural_worlds as fw
 
-PREREG_PATH = REPO_ROOT / "PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md"
+PREREG_PATH = REPO_ROOT / "prereg/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md"
 
 TOP_K = 3                  # prereg §3: MemCollab non-monotonic top-k
 BOOT_REPS = 10000          # prereg §5 K2: paired bootstrap replicates

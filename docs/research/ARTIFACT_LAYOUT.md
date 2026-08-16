@@ -94,6 +94,15 @@ the SHA lock: three `LONGINUS_HSWM_*_BINDING_*.json` files bind the exact
 verifiers that hardcode those paths, while `semantic_layer_fixture_manifest.json`
 and its sibling reader are both bound by the checked-in semantic-layer result.
 
+[`ROOT_ASSET_MIGRATIONS.W14.v1.json`](../../ontology/history/ROOT_ASSET_MIGRATIONS.W14.v1.json)
+moves 15 independent research/core-development Markdown records and the final
+root shell command into `docs/research/`, `prereg/`, and `scripts/`. Thirteen
+canonical files remain byte-exact; two current core documents update only link
+targets, and the shell command discovers the repository one directory above
+its new location. The manifest preserves every pre-move byte and digest.
+Source-locked F-series programs retain their recorded root-era document names
+and remain detached-replay-only.
+
 ## Escape hatch
 
 `HSWM_ARTIFACT_ROOT` redirects the artifact output root (tests, scratch runs):

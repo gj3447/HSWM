@@ -458,7 +458,7 @@ headline metric은 **Agent-A write → frozen Agent-B fresh unseen gain**이다.
 
 - [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](../canon/SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md)
 - [`SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md`](../canon/SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md)
-- [`DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md`](../../DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md)
+- [`DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md`](DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md)
 - [`weight_field.py`](../../weight_field.py), [`learned_v3_additive.py`](../../src/hswm/prototypes/learned_v3_additive.py),
   [`llm_judgment_loop.py`](../../src/hswm/prototypes/llm_judgment_loop.py)
 - [`EFFICACY.md`](../../EFFICACY.md)

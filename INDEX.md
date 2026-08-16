@@ -21,9 +21,10 @@ Python은 148개에서 73개로 줄었다. W10은 다시 비-Python root 자산 
 `scripts`로 옮겼다. W11은 raw result JSON 17개를 `results/raw`로 모았고, W12는 상위
 정전·plastic wiring·token-learning 문서 3개와 사용자 원문 TXT 5개를 `docs/canon`으로
 모았다. W13은 evidence·prereg·manifest·diagnostic·receipt JSON 29개를 각 typed
-directory로 옮겨 전체 root 파일을 236개에서 124개로 줄였다. 남은 109개 legacy
-표면은 Python 73개, Markdown 31개, path/SHA-bound JSON 4개, shell 1개로 전부
-설명된다. 옮긴 옛 경로는
+directory로 옮겼다. W14는 독립적인 연구·core-development 문서 15개와 마지막 root
+shell 명령을 `docs/research`, `prereg`, `scripts`로 옮겨 전체 root 파일을 236개에서
+108개로 줄였다. 남은 93개 legacy 표면은 Python 73개, SHA-bound Markdown 16개,
+path/SHA-bound JSON 4개로 전부 설명된다. 옮긴 옛 경로는
 `hswm-legacy-replay`가 manifest의 정확한 커밋 전체를 별도 detached clone으로 복원한다.
 
 이 온톨로지는 저장소의 의미 지도이지 HSWM의 인지 규칙이 아니다. AI 행동은 문서 경로가
@@ -128,7 +129,7 @@ sheaf hypergraph network까지 설명한다. 기계 판독 정본은
 정본 설계는
 [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](docs/canon/SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md),
 반례 기반 수리는
-[`AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md`](AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md)에 있다.
+[`AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md`](docs/research/AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md)에 있다.
 
 ## 2026-07-23 가소성 PROM
 
@@ -159,7 +160,7 @@ sheaf hypergraph network까지 설명한다. 기계 판독 정본은
 11개 외부 시스템을 이름이 아니라 paper–code pair로 고정했다. 현재 상태는
 `SOURCE-LOCKED / NOT ACTIVATED`이며, 외부 성능 수치를 HSWM 성과로 간주하지 않는다.
 
-- 배포 경계: [`ABSORB_CONTRACT_v1.md`](ABSORB_CONTRACT_v1.md)
+- 배포 경계: [`ABSORB_CONTRACT_v1.md`](docs/research/ABSORB_CONTRACT_v1.md)
 - 흡수 판단·우선순위·falsifier: [`PAPER_CODE_ABSORPTION_LEDGER_2026-07-23.md`](docs/research/PAPER_CODE_ABSORPTION_LEDGER_2026-07-23.md)
 - 기계 판독 게이트: [`manifest.v1.json`](_research/competitor_absorption/manifest.v1.json) · [`verify_sources.py`](_research/competitor_absorption/verify_sources.py)
 - 재현 provenance: [`source_locks/`](_research/competitor_absorption/source_locks/)
@@ -174,8 +175,8 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 
 | 묶음 | 공개 경계 | 산출물 |
 |---|---|---|
-| H3-B3 V5 재현성 | 이미 공개된 V5 run manifest가 고정한 source/prereg/test를 복구. 기존 refusal·효능 판정은 변경하지 않음 | [V5 prereg](H3_B3_V5_RESTART_PREREG_2026-07-20.md) · [C0 diagnosis](H3_C0_CHAIN_VIABILITY_DIAGNOSIS_2026-07-20.md) |
-| World Compiler S4.0 | 가역적 entity binding 수직 slice와 OSS 비교. `claim_weave`·`chain_viability`는 미구현 | [receipt](docs/research/S4_0_REVERSIBLE_ENTITY_BINDING_2026-07-21.md) · [PROM](WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md) |
+| H3-B3 V5 재현성 | 이미 공개된 V5 run manifest가 고정한 source/prereg/test를 복구. 기존 refusal·효능 판정은 변경하지 않음 | [V5 prereg](H3_B3_V5_RESTART_PREREG_2026-07-20.md) · [C0 diagnosis](docs/research/H3_C0_CHAIN_VIABILITY_DIAGNOSIS_2026-07-20.md) |
+| World Compiler S4.0 | 가역적 entity binding 수직 slice와 OSS 비교. `claim_weave`·`chain_viability`는 미구현 | [receipt](docs/research/S4_0_REVERSIBLE_ENTITY_BINDING_2026-07-21.md) · [PROM](docs/research/WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md) |
 | R3 walk-regime density dial | PhantomWiki large+sparse hard-hop에서 walk−flat `+0.0111`, LCB `+0.00085`; dense에서는 `-0.0048`. synthetic retrieval-side regime 관측이며 real-data answer uplift가 아니다 | [prereg](prereg/PREREG_R3_WALK_REGIME_2026-07-23.json) · [result](results/R3_WALK_REGIME_RESULTS_2026-07-24.md) · [`r3_walk_regime.py`](_research/f_series/r3_walk_regime.py) |
 
 ## 2026-07-22 연구 장부
@@ -187,13 +188,13 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 | P4 equal-compute | semantic−control 0.0303, novel 미달, `partial / degenerating`; 1-pass Jaccard 0.4242가 semantic 0.2121보다 높음 | [PROM mirror](prom_search_hswm/README.md) |
 | P5 fixed multi-view routing | hard-4 Δ0, full-chain −0.0125, `REJECTED / degenerating` | [report](docs/research/PROM_P5_MULTIVIEW_HARDHOP_2026-07-22.md) |
 | P6 semantic-residual absorption | fresh unseen 3회 모두 손해라 FSM이 3/3 거부; sealed Δ0, `equivalent / degenerating` | [report](docs/research/PROM_P6_CONTINUAL_ABSORPTION_FSM_2026-07-22.md) |
-| Phase B field algebra | immutable content-addressed Field, merge/split/compose, L1–L4 10/10 | [design](DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md) |
+| Phase B field algebra | immutable content-addressed Field, merge/split/compose, L1–L4 10/10 | [design](docs/research/DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md) |
 | B1 identity material | MuSiQue legal chain 0→6, 2Wiki 0→25; 후속 T1/T2 공통 성공은 미달 | [B1](results/B1_IDENTITY_UNLOCK_RESULTS_2026-07-22.md) · [T1](results/T1_ENTRANCE_REACH_RESULTS_2026-07-22.md) |
 | B2 federated merge | cross-field +0.2137, seam +0.0342, `progressive`; in-field −0.0648로 no-harm 위반 | [result](prom_search_hswm/docs/B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md) |
 | B2.1 learned router | 2벤치 × 3 partition × 3 k × 3 seed = 54셀 전부 abstain; primary Δ0, oracle ceiling min +0.01087로 router-only `REJECTED / degenerating` | [result](prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) |
 | B2.2 bond weighting 진단 | fine top-20 oracle +0.0489/+0.0833; train-only static sparse patch는 6/6 calibration·test Δ0. query-bond 쪽 room만 확인, confirmatory claim 아님 | [design](prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md) · [diagnostic](prom_search_hswm/evidence/DIAG_b22_fine_bond_action_headroom_20260723.json) |
-| PROM-8 / R1 | dynamic two-lane 처방. R1 T1 minimum 0→2, 2Wiki depth-2 0→4, MuSiQue 0 | [PROM-8](PROM_8_DYNAMIC_TWO_LANES_2026-07-22.md) · [R1](results/R1_T1_RETRY_RESULTS_2026-07-22.md) |
-| open composition v2r3 | target 59/59, expanded 78/78, injected negative 2/2. 로컬 구조 closure만 통과했으며 과학적 효능은 미판정 | [amendment](AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md) |
+| PROM-8 / R1 | dynamic two-lane 처방. R1 T1 minimum 0→2, 2Wiki depth-2 0→4, MuSiQue 0 | [PROM-8](docs/research/PROM_8_DYNAMIC_TWO_LANES_2026-07-22.md) · [R1](results/R1_T1_RETRY_RESULTS_2026-07-22.md) |
+| open composition v2r3 | target 59/59, expanded 78/78, injected negative 2/2. 로컬 구조 closure만 통과했으며 과학적 효능은 미판정 | [amendment](docs/research/AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md) |
 
 ## 저장소 지도
 

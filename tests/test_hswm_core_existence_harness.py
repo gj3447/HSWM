@@ -13,6 +13,7 @@ HSWM = REPO_ROOT
 ROOT = REPO_ROOT
 HARNESS = REPO_ROOT / "_research" / "harnesses" / "hswm_core_existence_harness.py"
 CONFIG = REPO_ROOT / "manifests" / "hswm_core_existence_harness.v1.json"
+CORE_DOCS = REPO_ROOT / "docs" / "research" / "core-development"
 
 
 class CoreExistenceHarnessSmoke(unittest.TestCase):
@@ -40,10 +41,10 @@ class CoreExistenceHarnessSmoke(unittest.TestCase):
         self.assertIn("ELEVATE", proc.stdout)
 
     def test_core_dev_entry_exists(self) -> None:
-        self.assertTrue((HSWM / "HSWM_CORE_DEV.md").is_file())
+        self.assertTrue((CORE_DOCS / "HSWM_CORE_DEV.md").is_file())
 
     def test_scoreboard_exists(self) -> None:
-        sb = HSWM / "EXISTENCE_SCOREBOARD.v1.md"
+        sb = CORE_DOCS / "EXISTENCE_SCOREBOARD.v1.md"
         self.assertTrue(sb.is_file())
         t = sb.read_text(encoding="utf-8")
         self.assertIn("X1", t)

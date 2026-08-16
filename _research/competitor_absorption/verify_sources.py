@@ -27,6 +27,8 @@ CANONICAL_LOCK_PATHS = {
     "repositories": "_research/competitor_absorption/source_locks/repos.lock.tsv",
     "papers": "_research/competitor_absorption/source_locks/papers.lock.tsv",
 }
+DEPLOYMENT_CONTRACT_NAME = "ABSORB_CONTRACT_v1.md"
+DEPLOYMENT_CONTRACT_PATH = "docs/research/ABSORB_CONTRACT_v1.md"
 REPOSITORY_LOCK_COLUMNS = {"name", "upstream", "branch", "commit"}
 PAPER_LOCK_COLUMNS = {
     "key",
@@ -195,19 +197,32 @@ def _validate_baseline(
             )
 
     contract_name = baseline.get("deployment_contract")
-    if contract_name != "ABSORB_CONTRACT_v1.md":
+    if contract_name != DEPLOYMENT_CONTRACT_NAME:
         issues.append(
             "hswm_baseline.deployment_contract must be ABSORB_CONTRACT_v1.md"
         )
     contract_base = baseline_repo if baseline_repo is not None else root
-    contract = _resolve_relative(
-        contract_base,
+    contract_candidates = (
+        DEPLOYMENT_CONTRACT_PATH,
         contract_name,
-        "hswm_baseline.deployment_contract",
-        issues,
     )
-    if contract is not None and not contract.is_file():
-        issues.append(f"missing HSWM deployment contract: {contract}")
+    contract = None
+    for raw_path in contract_candidates:
+        candidate = _resolve_relative(
+            contract_base,
+            raw_path,
+            "hswm_baseline.deployment_contract",
+            issues,
+        )
+        if candidate is not None and candidate.is_file():
+            contract = candidate
+            break
+    if contract is None:
+        issues.append(
+            "missing HSWM deployment contract: "
+            f"{contract_base / DEPLOYMENT_CONTRACT_PATH} "
+            f"(legacy fallback: {contract_base / DEPLOYMENT_CONTRACT_NAME})"
+        )
 
     defaults = baseline.get("defaults")
     if not isinstance(defaults, dict):

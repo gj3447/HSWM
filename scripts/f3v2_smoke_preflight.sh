@@ -10,9 +10,9 @@
 #      (the box may be busy with other sealed runs — this script never
 #      parallelizes and inherits the harness's bounded-retry timeouts)
 #
-# Usage: ./f3v2_smoke_preflight.sh [extra _research.f_series.f3v2_arms flags]
+# Usage: ./scripts/f3v2_smoke_preflight.sh [extra _research.f_series.f3v2_arms flags]
 set -euo pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 
 DONOR=http://192.168.219.102:8000
 RECV=http://192.168.219.102:8001

@@ -52,6 +52,14 @@ payloads keep their recorded commands and paths unchanged for detached replay.
 The frozen legacy inventory is now 109 paths: 73 Python files, 31 Markdown
 records, four path/SHA-bound JSON files, and one shell command.
 
+[`ROOT_ASSET_MIGRATIONS.W14.v1.json`](ROOT_ASSET_MIGRATIONS.W14.v1.json) moves
+15 independent research/core-development Markdown records and the final root
+shell command into typed directories. Current links, harness pointers, and the
+shell working-directory discovery follow the canonical paths; frozen F-series
+receipts retain their root-era names for detached replay. The legacy inventory
+is now 93 paths: 73 Python files, 16 SHA-bound Markdown records, and four
+path/SHA-bound JSON files.
+
 W4 moves the isolated OSS extraction comparison program into the existing
 `_research.material_extraction` namespace. Its historical root path and exact
 bytes remain reproducible from the source-pinned

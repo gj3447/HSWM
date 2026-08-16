@@ -17,12 +17,12 @@ epsilon=0.01).
 
 | 파일 | 내용 | 사용 |
 |---|---|---|
-| `substrate_bench_results.json` | 5 substrates(cosine/bm25/ppr/rrf/hswm) × sup_recall_at_3, ndcg10, 300쿼리(3 run × 100) | ✅ |
-| `traversal_bench_results.json` | 5 arms(cosine/hswm_static/hswm_traversal/ppr_pure/traversal_wseed) × sup_recall_at_3, ndcg10, test 179쿼리 (val 121 제외) | ✅ |
-| `ab_p5_full_results.json` | 3 arms(cosine/direct/hswm) × f1, em, 300쿼리 (3 run 파일 통합본) | ✅ |
-| `ab_p5_full_{2wiki_s7,musique_s7,musique_s13}.json` | 위 통합본의 run별 원천 (중복이므로 별도 집계 안 함) | (중복) |
-| `qkv_routing_result.json` | 집계 count/rate만, per-query 점수 없음 | ❌ 보고만 |
-| `qkv_b1_development_result.json` | arm별 집계 metric + score_matrix_sha256만, 원시 점수 행렬 미저장 | ❌ 보고만 |
+| `results/raw/substrate_bench_results.json` | 5 substrates(cosine/bm25/ppr/rrf/hswm) × sup_recall_at_3, ndcg10, 300쿼리(3 run × 100) | ✅ |
+| `results/raw/traversal_bench_results.json` | 5 arms(cosine/hswm_static/hswm_traversal/ppr_pure/traversal_wseed) × sup_recall_at_3, ndcg10, test 179쿼리 (val 121 제외) | ✅ |
+| `results/raw/ab_p5_full_results.json` | 3 arms(cosine/direct/hswm) × f1, em, 300쿼리 (3 run 파일 통합본) | ✅ |
+| `results/raw/ab_p5_full_{2wiki_s7,musique_s7,musique_s13}.json` | 위 통합본의 run별 원천 (중복이므로 별도 집계 안 함) | (중복) |
+| `results/raw/qkv_routing_result.json` | 집계 count/rate만, per-query 점수 없음 | ❌ 보고만 |
+| `results/raw/qkv_b1_development_result.json` | arm별 집계 metric + score_matrix_sha256만, 원시 점수 행렬 미저장 | ❌ 보고만 |
 
 ## 측정값 (primary metric: retrieval은 sup_recall_at_3, ab_p5는 f1)
 

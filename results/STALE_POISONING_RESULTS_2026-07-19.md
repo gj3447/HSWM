@@ -114,5 +114,5 @@ recall, or dose response by `>2*SE`. Therefore:
    5. prereg hop2–3 current/H-T3b had been averaged over hop-4 → primary/all-hop
    populations and n/composition now reported separately.
 
-Files: `stale_poisoning_{musique,2wiki}_result.json`. Focused S0 tests:
+Files: `results/raw/stale_poisoning_{musique,2wiki}_result.json`. Focused S0 tests:
 `13 passed` (`test_stale_poisoning.py` + `test_readout_identity.py`).

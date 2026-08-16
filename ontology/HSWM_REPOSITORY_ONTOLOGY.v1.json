@@ -96,19 +96,19 @@
     {
       "id": "substrate",
       "concepts": ["hswm:repo:substrate"],
-      "patterns": ["world_*.py", "world_builder.py", "entity_binding.py", "src/hswm/substrate/**", "src/doc_builder/**", "src/world_builder/**", "ontology/substrate/**", "f0_premise_p/**", "docs/research/EPWC_*.md", "research/HSWM_WORLD_COMPILER_*.json", "evidence/stale_*.json"],
+      "patterns": ["world_*.py", "world_builder.py", "entity_binding.py", "src/hswm/substrate/**", "src/doc_builder/**", "src/world_builder/**", "ontology/substrate/**", "f0_premise_p/**", "docs/research/EPWC_*.md", "research/HSWM_WORLD_COMPILER_*.json", "evidence/stale_*.json", "results/raw/cert*.json", "results/raw/stale_*.json", "results/raw/substrate_*.json", "results/raw/traversal*.json"],
       "root_patterns": ["EPWC_*.md", "WORLD_COMPILER_*.md", "HSWM_WORLD_COMPILER_*.json", "cert_*.json", "certified_*.json", "chain_viability.py", "claim_*.py", "doc_builder.py", "stale_*.py", "stale_*.json", "substrate_*.py", "substrate_*.json", "synth*.py", "title_anchor_builder.py", "traversal*.py", "traversal*.json", "r[1-3]_*.py"]
     },
     {
       "id": "field",
       "concepts": ["hswm:repo:field"],
-      "patterns": ["*field*.py", "hypergraph.py", "src/hswm/substrate/hypergraph.py", "src/hypergraph/**", "field_snapshot.py", "src/hswm/substrate/field_snapshot.py", "src/field_snapshot/**", "readouts.py", "prom_search_hswm/**", "ontology/field/**", "*TOPOLOGY*.md", "*SEMANTIC_WEIGHT*.md", "prereg/QKV_*.md", "results/QKV_*.md", "results/SEMANTIC_QKV*.md", "docs/research/PROM_*PLASTICITY*.md"],
+      "patterns": ["*field*.py", "hypergraph.py", "src/hswm/substrate/hypergraph.py", "src/hypergraph/**", "field_snapshot.py", "src/hswm/substrate/field_snapshot.py", "src/field_snapshot/**", "readouts.py", "prom_search_hswm/**", "ontology/field/**", "*TOPOLOGY*.md", "*SEMANTIC_WEIGHT*.md", "prereg/QKV_*.md", "results/QKV_*.md", "results/SEMANTIC_QKV*.md", "results/raw/qkv_*.json", "results/raw/semantic_layer*.json", "results/raw/traversal*.json", "docs/research/PROM_*PLASTICITY*.md"],
       "root_patterns": ["*FIELD*.md", "*TOPOLOGY*.md", "QKV_*.md", "SEMANTIC_QKV*.md", "qkv_*.py", "qkv_*.json", "semantic_layer*.py", "semantic_layer*.json", "traversal*.py"]
     },
     {
       "id": "cells",
       "concepts": ["hswm:repo:cells"],
-      "patterns": ["*cellular*.py", "feedback_*.py", "composition.py", "typed_composition.py", "src/hswm/cells/**", "ontology/cells/**", "_research/hswm_cellular_runtime/**", "_research/feedback_runtime/**", "docs/canon/*FUNCTION_NETWORK*.md", "docs/research/PROM9*.md", "docs/research/PROM_9*.md", "results/H3_*.md"],
+      "patterns": ["*cellular*.py", "feedback_*.py", "composition.py", "typed_composition.py", "src/hswm/cells/**", "ontology/cells/**", "_research/hswm_cellular_runtime/**", "_research/feedback_runtime/**", "docs/canon/*FUNCTION_NETWORK*.md", "docs/research/PROM9*.md", "docs/research/PROM_9*.md", "results/H3_*.md", "results/raw/h3_*.json"],
       "root_patterns": ["*CELLULAR*.md", "*CELLULAR*.json", "H3_*.md", "H3_*.json", "PROM9*.md", "PROM_9*.md", "h3_*.py", "h3_*.json", "hswm_*harness*.py", "hswm_*harness*.json"]
     },
     {
@@ -126,7 +126,7 @@
     {
       "id": "evaluation",
       "concepts": ["hswm:repo:evaluation"],
-      "patterns": ["EFFICACY.md", "tests/**", "verification/**", "_findings/**", "*falsifier*.py", "*judge*.py", "metrics.py", "scripts/verify_efficacy_claims.py", "src/hswm/diagnostics/**", "src/hswm/evaluation/**", "src/hswm/experiments/**/judge.py", "_research/efficacy/**", "ontology/evaluation/**", "results/*_RESULTS_*.md", "evidence/*_result*.json", "evidence/*_DIAGNOSTIC_*", "docs/research/PROM_6*.md", "docs/research/PROM_16_CURRENT*.md", "docs/research/PROM_16_NEGATIVE*.md", "docs/research/TRIBUNAL*.md"],
+      "patterns": ["EFFICACY.md", "tests/**", "verification/**", "_findings/**", "*falsifier*.py", "*judge*.py", "metrics.py", "scripts/verify_efficacy_claims.py", "src/hswm/diagnostics/**", "src/hswm/evaluation/**", "src/hswm/experiments/**/judge.py", "_research/efficacy/**", "ontology/evaluation/**", "results/*_RESULTS_*.md", "results/raw/**", "evidence/*_result*.json", "evidence/*_DIAGNOSTIC_*", "docs/research/PROM_6*.md", "docs/research/PROM_16_CURRENT*.md", "docs/research/PROM_16_NEGATIVE*.md", "docs/research/TRIBUNAL*.md"],
       "root_patterns": ["*_RESULTS_*.md", "*_result*.json", "EVIDENCE_*", "*_DIAGNOSTIC_*", "EXISTENCE_SCOREBOARD*", "PROM_5*", "PROM_6*", "PROM_16_CURRENT*", "PROM_16_NEGATIVE*", "TRIBUNAL*", "*falsifier.py", "*judge.py", "diagnose.py", "metrics.py", "*_bench.py", "test_*.py"]
     },
     {
@@ -182,7 +182,8 @@
     "ontology/history/PYTHON_ROOT_MIGRATIONS.W9.v2.json"
   ],
   "asset_root_migrations": [
-    "ontology/history/ROOT_ASSET_MIGRATIONS.W10.v1.json"
+    "ontology/history/ROOT_ASSET_MIGRATIONS.W10.v1.json",
+    "ontology/history/ROOT_ASSET_MIGRATIONS.W11.v1.json"
   ],
   "python_root_classification": "ontology/history/PYTHON_ROOT_CLASSIFICATION.v1.json",
   "path_catalog": "ontology/HSWM_PATH_CATALOG.v1.json",

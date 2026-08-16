@@ -28,7 +28,9 @@ def test_classify_artifact_kinds():
     assert layout.classify_artifact("PREREG_X_2026-01-01.md") == "prereg"
     assert layout.classify_artifact("H3_B3_RUN_MANIFEST_2026-01-01.json") == "manifest"
     assert layout.classify_artifact("B1_X_RESULTS_2026-01-01.md") == "results"
-    assert layout.classify_artifact("substrate_bench_results.json") is None
+    assert layout.classify_artifact("substrate_bench_results.json") == "raw_result"
+    assert layout.classify_artifact("ab_p5_full_musique_s7.json") == "raw_result"
+    assert layout.classify_artifact("stale_poisoning_fixture_result.json") is None
     assert layout.classify_artifact("README.md") is None
 
 
@@ -90,6 +92,18 @@ def test_moved_subdir_artifacts_resolve_via_fallback():
     assert path.is_file()
 
 
+def test_raw_results_prefer_typed_subdir_then_legacy_root(tmp_path):
+    name = "substrate_bench_results.json"
+    (tmp_path / "results" / "raw").mkdir(parents=True)
+    canonical = tmp_path / "results" / "raw" / name
+    legacy = tmp_path / name
+    canonical.write_text("{}", encoding="utf-8")
+    legacy.write_text("{}", encoding="utf-8")
+    assert layout.resolve_artifact_path(name, root=tmp_path) == canonical
+    canonical.unlink()
+    assert layout.resolve_artifact_path(name, root=tmp_path) == legacy
+
+
 def test_tracked_writers_route_through_helper():
     for script in (
         "_research/efficacy/b2_routing_signal.py",
@@ -99,6 +113,16 @@ def test_tracked_writers_route_through_helper():
         src = (REPO / script).read_text(encoding="utf-8")
         assert "from hswm.artifacts.layout import default_artifact_path" in src, script
         assert 'default_artifact_path("EVIDENCE_' in src, script
+
+    for script in (
+        "_research/substrate_bench/substrate_bench.py",
+        "_research/substrate_bench/traversal_bench.py",
+        "_research/substrate_bench/ab_p5_pilot.py",
+        "src/hswm/evaluation/h3/title_anchor_falsifier.py",
+    ):
+        src = (REPO / script).read_text(encoding="utf-8")
+        assert "default_artifact_path" in src, script
+        assert 'kind="raw_result"' in src, script
 
 
 def test_verify_loader_resolves_root_and_subdir(tmp_path):

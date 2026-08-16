@@ -18,8 +18,9 @@
 [`legacy inventory`](ontology/history/LEGACY_ROOT_PATHS.v1.json)에 닫혀 있다. W9까지 root
 Python은 148개에서 73개로 줄었다. W10은 다시 비-Python root 자산 58개를 의미별
 `docs/canon`, `docs/research`, `prereg`, `evidence`, `manifests`, `research`, `results`,
-`scripts`로 옮겨 전체 root 파일을 236개에서 178개로 줄였다. 남은 163개 legacy 표면은
-Python 73개와 path/SHA 의존군 90개로 전부 설명된다. 옮긴 옛 경로는
+`scripts`로 옮겼다. W11은 raw result JSON 17개를 `results/raw`로 모아 전체 root 파일을
+236개에서 161개로 줄였다. 남은 146개 legacy 표면은 Python 73개와 path/SHA 의존군
+73개로 전부 설명된다. 옮긴 옛 경로는
 `hswm-legacy-replay`가 manifest의 정확한 커밋 전체를 별도 detached clone으로 복원한다.
 
 이 온톨로지는 저장소의 의미 지도이지 HSWM의 인지 규칙이 아니다. AI 행동은 문서 경로가

@@ -39,6 +39,7 @@ import traversal as tv
 import traversal_cert as tcert
 import world_builder as wb
 from weight_field import WeightField
+from hswm.artifacts.layout import default_artifact_path
 
 
 N_ROWS = 200
@@ -749,7 +750,11 @@ def run_all(cache_dir: str = ".ab_p5_cache") -> dict[str, Any]:
 
 
 def main() -> None:
-    output = sys.argv[sys.argv.index("--out") + 1] if "--out" in sys.argv else "h3_title_anchor_result.json"
+    output = (
+        sys.argv[sys.argv.index("--out") + 1]
+        if "--out" in sys.argv
+        else str(default_artifact_path("h3_title_anchor_result.json", kind="raw_result"))
+    )
     cache = sys.argv[sys.argv.index("--cache") + 1] if "--cache" in sys.argv else ".ab_p5_cache"
     report = run_all(cache)
     with open(output, "w", encoding="utf-8") as handle:

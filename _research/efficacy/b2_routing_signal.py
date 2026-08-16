@@ -22,7 +22,7 @@ from pathlib import Path
 
 import numpy as np
 
-from hswm.artifacts.layout import default_artifact_path
+from hswm.artifacts.layout import default_artifact_path, resolve_artifact_path
 
 REPO = Path(__file__).resolve().parents[2]
 EPSILON = 0.01
@@ -30,6 +30,10 @@ SEED = 20260723
 N_BOOT = 10000
 
 OUT_JSON = default_artifact_path("EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json")
+
+
+def raw_result_path(name: str) -> Path:
+    return resolve_artifact_path(name, kind="raw_result", root=REPO)
 
 
 def sha256(path: Path) -> str:
@@ -40,7 +44,7 @@ def sha256(path: Path) -> str:
 
 def load_substrate_bench():
     """substrate_bench_results.json: 5 substrates x {sup_recall_at_3, ndcg10, hit_at_3, mrr}."""
-    d = json.loads((REPO / "substrate_bench_results.json").read_text())
+    d = json.loads(raw_result_path("substrate_bench_results.json").read_text())
     arms = ["cosine", "bm25", "ppr", "rrf", "hswm"]
     rows = []  # (group, {arm: {metric: float}})
     for e in d["per_query"]:
@@ -50,7 +54,7 @@ def load_substrate_bench():
 
 def load_traversal_bench():
     """traversal_bench_results.json: 5 arms x {sup_recall_at_3, ndcg10}; test split only."""
-    d = json.loads((REPO / "traversal_bench_results.json").read_text())
+    d = json.loads(raw_result_path("traversal_bench_results.json").read_text())
     arms = list(d["arms"])
     rows = []
     n_val_skipped = 0
@@ -64,7 +68,7 @@ def load_traversal_bench():
 
 def load_ab_p5():
     """ab_p5_full_results.json: per_query_by_run, arms cosine/direct/hswm, metric f1/em."""
-    d = json.loads((REPO / "ab_p5_full_results.json").read_text())
+    d = json.loads(raw_result_path("ab_p5_full_results.json").read_text())
     arms = ["cosine", "direct", "hswm"]
     rows = []
     for run, entries in d["per_query_by_run"].items():
@@ -141,7 +145,7 @@ def main():
     }
 
     # --- substrate bench ---
-    p = REPO / "substrate_bench_results.json"
+    p = raw_result_path("substrate_bench_results.json")
     report["inputs"][p.name] = sha256(p)
     rows, arms, metrics = load_substrate_bench()
     for name, sub in [("pooled", rows)] + sorted(group_rows(rows).items()):
@@ -150,7 +154,7 @@ def main():
             ds[m] = analyze(sub, arms, m)
 
     # --- traversal bench (test split only) ---
-    p = REPO / "traversal_bench_results.json"
+    p = raw_result_path("traversal_bench_results.json")
     report["inputs"][p.name] = sha256(p)
     rows, arms, metrics, n_val = load_traversal_bench()
     for name, sub in [("pooled_test", rows)] + sorted(group_rows(rows).items()):
@@ -160,7 +164,7 @@ def main():
             ds[m] = analyze(sub, arms, m)
 
     # --- ab_p5 full ---
-    p = REPO / "ab_p5_full_results.json"
+    p = raw_result_path("ab_p5_full_results.json")
     report["inputs"][p.name] = sha256(p)
     rows, arms, metrics = load_ab_p5()
     for name, sub in [("pooled", rows)] + sorted(group_rows(rows).items()):

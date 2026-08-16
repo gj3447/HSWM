@@ -12,6 +12,7 @@ findable.
 | Preregistration          | `PREREG_*.json`, `*.md` | `prereg/`        |
 | Run manifest             | `*_MANIFEST*.json`      | `manifests/`     |
 | Results narrative        | `*_RESULTS_*.md`        | `results/`       |
+| Raw checked-in result    | registered `*.json`    | `results/raw/`   |
 | Narrative research doc   | dated research `*.md`   | `docs/research/` |
 | Canon/identity document  | ratified direction or definition | `docs/canon/` |
 | Historical run log       | `*.log`                 | `results/logs/` |
@@ -46,6 +47,20 @@ root. Their old names, source commit, and SHA-256 values are recorded in
 so `hswm-legacy-replay` can materialize the exact pre-move checkout. The
 remaining root assets are not invitations for new output: each belongs to a
 path/SHA dependency cluster that must move atomically in a later wave.
+
+[`ROOT_ASSET_MIGRATIONS.W11.v1.json`](../../ontology/history/ROOT_ASSET_MIGRATIONS.W11.v1.json)
+moves the complete 17-file checked-in raw-result set to `results/raw/`.
+The allowlist is deliberately exact: generic `*_result.json` classification
+would incorrectly capture evidence fixtures with a different lifecycle. The
+artifact resolver checks `results/raw/` first and the historical root second.
+
+Five source-SHA-bound historical writers still contain their original root
+defaults: `ab_p5_full.py`, `traversal_cert.py`, `stale_poisoning.py`,
+`qkv_routing_falsifier.py`, and `qkv_b1_development_falsifier.py`. They are
+preserved for detached replay and are not examples for current writers. Do not
+run their default-output modes in the active checkout; use an explicit
+`--out results/raw/<name>` where supported, or reproduce the no-`--out`
+programs in the detached legacy-replay checkout.
 
 Byte-frozen or user-primary records keep five original root-relative links:
 two in `CANON_DIRECTION_...md`, two in

@@ -290,7 +290,7 @@ def test_source_distribution_carries_the_default_test_surface() -> None:
         "src": {"*.py"},
         "scripts": {"*.py", "*.sh"},
         "prereg": {"*.json", "*.md"},
-        "results": {"*.md", "*.log"},
+        "results": {"*.md", "*.log", "*.json"},
         "receipts": {"*.py", "*.json"},
         "prom_search_hswm": {"*.py", "*.json", "*.md", "*.mmd"},
         "_research": {"*.py", "*.json", "*.md", "*.sh", "*.tsv"},
@@ -381,6 +381,11 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
     inner = [n.split("/", 1)[1] for n in names if "/" in n]
     scripts_py = [n for n in inner if n.startswith("scripts/") and n.endswith(".py")]
     assert scripts_py, "scripts/*.py 가 sdist 에 없다 — tests/ 가 그걸 import 한다"
+    raw_results = [
+        n for n in inner
+        if n.startswith("results/raw/") and n.endswith(".json")
+    ]
+    assert len(raw_results) >= 17, "results/raw/*.json 이 sdist 에서 누락됐다"
     # 루트 *.sh 는 배포하지 않는다. 일부 운영 스크립트가 장비별 호스트명을
     # 포함할 수 있으므로 source distribution의 공용 표면에서 제외한다.
     root_sh = [n for n in inner if "/" not in n and n.endswith(".sh")]

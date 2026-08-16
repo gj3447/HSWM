@@ -162,7 +162,10 @@ def test_headline_drift_fails_closed(tmp_path: Path) -> None:
         "PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json",
     )
     for name in names:
-        (tmp_path / name).write_bytes((REPO_ROOT / name).read_bytes())
+        source = efficacy.resolve_artifact_path(
+            name, root=REPO_ROOT, must_exist=False,
+        )
+        (tmp_path / name).write_bytes(source.read_bytes())
 
     path = tmp_path / "substrate_bench_results.json"
     value = json.loads(path.read_text(encoding="utf-8"))

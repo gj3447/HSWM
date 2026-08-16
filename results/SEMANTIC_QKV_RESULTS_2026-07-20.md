@@ -74,7 +74,7 @@ Allowed claim:
 > program with branch-preserving map, typed reduction, value-bound lookup,
 > evidence receipts, and query-atomic refusal.
 
-Source: `semantic_layer_result.json`, result SHA-256
+Source: `results/raw/semantic_layer_result.json`, result SHA-256
 `09e91ef6e4030c676074aaa4a59baf2e3acf86f1d5e63f8b3330202469d53b29`.
 
 ## B. 2Wiki evaluator-supplied-memory probe
@@ -132,7 +132,7 @@ The 132/132 result therefore establishes only this:
 It is not HSWM retrieval, evidence discovery, label-blind reasoning, raw-language
 program induction, common-kernel real-data validation, or cognitive uplift.
 
-Source: `semantic_2wiki_oracle_result.json`, result SHA-256
+Source: `results/raw/semantic_2wiki_oracle_result.json`, result SHA-256
 `2f62a2926614f8bde4c0e5a9a467084fc8a07853b29ecd8b2682d22d16332500`.
 
 ## What changed in the theory verdict

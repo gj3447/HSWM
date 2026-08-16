@@ -14,7 +14,7 @@ def test_efficacy_artifact_paths_are_repository_relative(tmp_path, monkeypatch):
         REPO / "evidence" / "EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json"
     )
 
-    assert e1.INPUT == REPO / "traversal_bench_results.json"
+    assert e1.INPUT == REPO / "results" / "raw" / "traversal_bench_results.json"
     assert e1.OUT_JSON == (
         REPO / "evidence" / "EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json"
     )

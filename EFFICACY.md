@@ -95,8 +95,9 @@ ranking win.
   retriever are not in the checked-in ladder. No state-of-the-art claim is
   allowed from these results.
 
-Sources: `substrate_bench_results.json`, `ab_p5_full_results.json`, and the three
-`ab_p5_full_<dataset>_s<seed>.json` receipts.
+Sources: `results/raw/substrate_bench_results.json`,
+`results/raw/ab_p5_full_results.json`, and the three
+`results/raw/ab_p5_full_<dataset>_s<seed>.json` receipts.
 
 ## 2. Cognitive uplift over direct LLM: failed
 
@@ -224,8 +225,9 @@ only. Fresh production remains forbidden unless both development certificates
 pass. See `results/H3_B3_RESUME_STATUS_2026-07-20.md` for receipt hashes and the exact
 resume sequence.
 
-Sources: `traversal_bench_results.json`, `cert_musique_result.json`,
-`cert_2wiki_result.json`, `h3_title_anchor_result.json`, and
+Sources: `results/raw/traversal_bench_results.json`,
+`results/raw/cert_musique_result.json`, `results/raw/cert_2wiki_result.json`,
+`results/raw/h3_title_anchor_result.json`, and
 `H3_B3_COMPOSITION_PREREG_2026-07-20.md`.
 
 ### QKV structure probe
@@ -256,8 +258,9 @@ the cross-dataset real-data gate fails. The correct current statement is:
 available B1 reads does not establish reasoning uplift.**
 
 Sources: `prereg/QKV_STRUCTURE_EXPERIMENT_PLAN_2026-07-20.md`,
-`results/QKV_STRUCTURE_RESULTS_2026-07-20.md`, `qkv_routing_result.json`, and
-`qkv_b1_development_result.json`.
+`results/QKV_STRUCTURE_RESULTS_2026-07-20.md`,
+`results/raw/qkv_routing_result.json`, and
+`results/raw/qkv_b1_development_result.json`.
 
 ### Heterogeneous semantic layers
 
@@ -297,8 +300,9 @@ historical partial cache has zero queries with all required gold facts usable,
 so no gold-conditioned subset is allowed.
 
 Sources: `SEMANTIC_QKV_EXPERIMENT_PLAN_2026-07-20.md`,
-`results/SEMANTIC_QKV_RESULTS_2026-07-20.md`, `semantic_layer_result.json`, and
-`semantic_2wiki_oracle_result.json`.
+`results/SEMANTIC_QKV_RESULTS_2026-07-20.md`,
+`results/raw/semantic_layer_result.json`, and
+`results/raw/semantic_2wiki_oracle_result.json`.
 
 ## 5. Graded supersession: useful behavior, narrower novelty
 
@@ -354,7 +358,7 @@ These measurements establish deterministic local behavior for the tested cut.
 They do not establish retrieval quality, cryptographic authenticity, exhaustive
 security, crash-safe replay, or production readiness.
 
-Source: `certified_cut_comparison_result.json` and
+Source: `results/raw/certified_cut_comparison_result.json` and
 `docs/research/EPWC_IMPLEMENTATION_S3_2026-07-20.md`.
 
 ## Verification tiers

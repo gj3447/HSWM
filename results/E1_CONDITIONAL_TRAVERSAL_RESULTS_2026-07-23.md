@@ -9,7 +9,7 @@ bridge/multi-hop 질의에서만 이기고 factoid에선 진다고 보고하므�
 
 ## 설정 (사전등록 고정)
 
-- 입력: `traversal_bench_results.json` (test 179쿼리, val 제외)
+- 입력: `results/raw/traversal_bench_results.json` (test 179쿼리, val 제외)
   sha256 `5ead7a7e…998698`
 - hop 라벨: 파일 내 per-query `n_gold`(정답 evidence 문서 수). 파일 자체의
   `test_per_hop` 계층화와 1:1 일치(musique 2hop/3hop*/4hop* ↔ n_gold 2/3/4).

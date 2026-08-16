@@ -262,6 +262,10 @@ The first non-Python cleanup wave is source-pinned in
 [`ROOT_ASSET_MIGRATIONS.W10.v1.json`](ontology/history/ROOT_ASSET_MIGRATIONS.W10.v1.json):
 58 root documents, records, logs, and one maintenance shell entry now live in
 typed directories while their original layout remains replayable.
+The next source-pinned wave is
+[`ROOT_ASSET_MIGRATIONS.W11.v1.json`](ontology/history/ROOT_ASSET_MIGRATIONS.W11.v1.json):
+17 immutable raw result JSONs now live under `results/raw/`, with current
+readers routed through the typed artifact resolver.
 **New Python modules or research artifacts must not be added to the root.** New
 code goes under `src/hswm/`; artifacts are routed by kind according to
 [`docs/research/ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).

@@ -55,9 +55,9 @@ audit, and certified refusal.
 
 Result artifact SHA-256 values:
 
-- `stale_poisoning_musique_result.json`:
+- `results/raw/stale_poisoning_musique_result.json`:
   `f381d397594f2a6002f8f78b72ddbfc133acc0fa5fb7515a49dd073b2dd87381`
-- `stale_poisoning_2wiki_result.json`:
+- `results/raw/stale_poisoning_2wiki_result.json`:
   `ff7b218e7a893e60db187660512a23445e4353e96d73ac1c14f22f32138ecd12`
 - `stale_poisoning_fixture_result.json`:
   `6cc8500add201bf332df165675ef4fa80d15e5e7d16e7282fc2fa90ee2540a8f`

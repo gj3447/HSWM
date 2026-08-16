@@ -30,8 +30,13 @@ records, logs, and one maintenance shell entry into `docs/canon`,
 `docs/research`, `prereg`, `evidence`, `manifests`, `research`, `results`, and
 `scripts`. Historical preregistrations and machine-readable bindings remain
 byte-identical; current navigation documents point at the canonical paths.
-The frozen legacy inventory is now 163 paths: 73 Python files plus 90 assets
-whose active path/SHA dependency clusters require later atomic waves.
+
+[`ROOT_ASSET_MIGRATIONS.W11.v1.json`](ROOT_ASSET_MIGRATIONS.W11.v1.json) moves
+17 exact raw measurement JSONs together into `results/raw`. Current readers
+resolve the typed directory first and retain a root fallback for detached
+historical checkouts; hash-bound writers remain unchanged. The frozen legacy
+inventory is now 146 paths: 73 Python files plus 73 assets whose active
+path/SHA dependency clusters require later atomic waves.
 
 W4 moves the isolated OSS extraction comparison program into the existing
 `_research.material_extraction` namespace. Its historical root path and exact

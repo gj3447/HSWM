@@ -60,7 +60,7 @@ isomorphic worlds produce 64 programs.
 | unordered bag-control accuracy | 32 / 64 |
 
 Result: `PASS`, receipt
-`qkv_routing_result.json` (`result_sha256 =
+`results/raw/qkv_routing_result.json` (`result_sha256 =
 4004a0a455a7bdff05b5e65875111718f9601b34cf458864948ff376ae6cada0`).
 
 This proves only that the ordered address/value algebra has teeth. It does not
@@ -122,7 +122,7 @@ does not beat the five nulls. Both datasets preserve the `gamma=0` cosine floor
 bit-identically.
 
 Result: `B1_QKV_REAL_DATA_GATE_FAILED`, receipt
-`qkv_b1_development_result.json` (`result_sha256 =
+`results/raw/qkv_b1_development_result.json` (`result_sha256 =
 8c128bd1db96c7a2b00791b208c3c19a478cd6952edabcbce67b302385f0e955`).
 
 ## Interpretation

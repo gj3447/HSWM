@@ -97,7 +97,7 @@ uv run pytest -q
 ## 비변경 경계
 
 - 기존 H3/B3 코드, manifest, report, cache와
-  `h3_title_anchor_result.json`은 이 slice의 범위 밖이며 수정하지 않았다.
+  `results/raw/h3_title_anchor_result.json`은 이 slice의 범위 밖이며 수정하지 않았다.
 - `pyproject.toml`은 H3 V5 frozen execution root에 포함되어 있어 수정하지
   않았다. 따라서 package/module 등록은 해당 봉인이 해제되거나 별도 안전한
   packaging slice가 생길 때까지 보류한다.

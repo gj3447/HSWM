@@ -106,7 +106,7 @@ Fixture:
 
 The probe column is not a deployable baseline: `research_probe(...)` returns a
 different `ProbeResultV1` with mandatory `NOT_DEPLOYABLE` and intentionally
-does not check scope. Aggregate receipt: `certified_cut_comparison_result.json`.
+does not check scope. Aggregate receipt: `results/raw/certified_cut_comparison_result.json`.
 
 ```text
 valid vs oracle:       probe 40/40, CRE 40/40, golden digest matched

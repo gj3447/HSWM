@@ -44,6 +44,8 @@ from pathlib import Path
 
 import numpy as np
 
+from hswm.artifacts.layout import default_artifact_path
+
 
 def _discover_repository_root(anchor: str | Path = __file__) -> Path:
     """Find the checkout root so moving this entrypoint does not move artifacts."""
@@ -503,7 +505,12 @@ def main() -> None:
     ap.add_argument("--chat-model", default="gemma3:4b")
     ap.add_argument("--embed-model", default="bge-m3")
     ap.add_argument("--cache-dir", default=DEFAULT_CACHE)
-    ap.add_argument("--out", default=str(REPO_ROOT / "ab_p5_pilot_results.json"))
+    ap.add_argument(
+        "--out",
+        default=str(default_artifact_path(
+            "ab_p5_pilot_results.json", kind="raw_result",
+        )),
+    )
     args = ap.parse_args()
 
     if args.budget % args.n_eval != 0:

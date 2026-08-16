@@ -52,13 +52,13 @@ def test_c1_replay_root_discovery_follows_the_pyproject_marker(tmp_path):
     assert c1_replay_judge._discover_repository_root(nested) == checkout
 
 
-def test_benchmark_results_remain_root_relative():
-    assert Path(substrate_bench.HERE) / "substrate_bench_results.json" == (
-        REPO_ROOT / "substrate_bench_results.json"
-    )
-    assert Path(traversal_bench.HERE) / "traversal_bench_results.json" == (
-        REPO_ROOT / "traversal_bench_results.json"
-    )
+def test_benchmark_results_use_the_canonical_raw_result_layout():
+    assert substrate_bench.resolve_artifact_path(
+        "substrate_bench_results.json", kind="raw_result", root=REPO_ROOT,
+    ) == REPO_ROOT / "results" / "raw" / "substrate_bench_results.json"
+    assert traversal_bench.resolve_artifact_path(
+        "traversal_bench_results.json", kind="raw_result", root=REPO_ROOT,
+    ) == REPO_ROOT / "results" / "raw" / "traversal_bench_results.json"
     assert traversal_bench.S is substrate_bench
 
 

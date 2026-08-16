@@ -7,6 +7,7 @@ the repository root:
     PREREG_*.json | *.md     -> prereg/
     *_MANIFEST*.json         -> manifests/
     *_RESULTS_*.md           -> results/
+    checked-in raw results   -> results/raw/
     narrative research docs  -> docs/research/
 
 Backward compatibility: legacy root artifacts keep validating.  Readers should
@@ -53,8 +54,29 @@ ARTIFACT_DIRS = {
     "prereg": "prereg",
     "manifest": "manifests",
     "results": "results",
+    "raw_result": "results/raw",
     "research_doc": "docs/research",
 }
+
+RAW_RESULT_NAMES = frozenset({
+    "ab_p5_full_2wiki_s7.json",
+    "ab_p5_full_musique_s13.json",
+    "ab_p5_full_musique_s7.json",
+    "ab_p5_full_results.json",
+    "ab_p5_pilot_results.json",
+    "cert_2wiki_result.json",
+    "cert_musique_result.json",
+    "certified_cut_comparison_result.json",
+    "h3_title_anchor_result.json",
+    "qkv_b1_development_result.json",
+    "qkv_routing_result.json",
+    "semantic_2wiki_oracle_result.json",
+    "semantic_layer_result.json",
+    "stale_poisoning_2wiki_result.json",
+    "stale_poisoning_musique_result.json",
+    "substrate_bench_results.json",
+    "traversal_bench_results.json",
+})
 
 ENV_ARTIFACT_ROOT = "HSWM_ARTIFACT_ROOT"
 
@@ -70,6 +92,8 @@ def classify_artifact(name: str) -> str | None:
         return "manifest"
     if "_RESULTS_" in bare and bare.endswith(".md"):
         return "results"
+    if bare in RAW_RESULT_NAMES:
+        return "raw_result"
     return None
 
 

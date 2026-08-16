@@ -57,7 +57,7 @@ def test_root_compatibility_surface_and_catalog_are_current() -> None:
     result = validate_checkout(data)
     assert result["concepts"] == 10
     assert result["paths"] > 1_000
-    assert result["legacy_root_paths"] == 163
+    assert result["legacy_root_paths"] == 146
     legacy = json.loads((ROOT / data["legacy_root_inventory"]).read_text(encoding="utf-8"))
     catalog = json.loads((ROOT / data["path_catalog"]).read_text(encoding="utf-8"))
     assert legacy["$schema"] == "../../schemas/hswm_legacy_root_paths.v1.schema.json"
@@ -113,7 +113,7 @@ def test_asset_root_migrations_are_source_pinned_and_leave_no_root_alias() -> No
             assert not (ROOT / row["old_path"]).exists()
             assert (ROOT / row["canonical_path"]).is_file()
 
-    assert expected_count == 58
+    assert expected_count == 75
     assert result["asset_root_migrations"] == expected_count
 
 

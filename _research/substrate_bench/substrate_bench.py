@@ -39,7 +39,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 from pathlib import Path
 import re
 import string
@@ -48,8 +47,8 @@ import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 
-# Preserve the original root-relative input/output contract after this source
-# moves under _research, and keep direct execution from a checkout functional.
+# Discover the checkout independently of source depth; checked-in inputs and
+# outputs resolve through the typed raw-result artifact layout.
 REPO_ROOT = Path(__file__).resolve().parents[2]
 for _import_root in (REPO_ROOT, REPO_ROOT / "src"):
     if str(_import_root) not in sys.path:
@@ -58,8 +57,8 @@ for _import_root in (REPO_ROOT, REPO_ROOT / "src"):
 import numpy as np
 
 import ab_p5_full as A  # reuse Field / loaders / reader / metrics (offline, cache-backed)
+from hswm.artifacts.layout import default_artifact_path, resolve_artifact_path
 
-HERE = os.fspath(REPO_ROOT)
 CACHE_DIR = A.DEFAULT_CACHE
 RUNS = [
     ("musique", 7, "ab_p5_full_musique_s7.json"),
@@ -239,7 +238,10 @@ def compute_retrieval() -> dict:
         _, eval_rows = A.split_pool(pool, 100, 100, seed)
 
         # load stored per-query (for cosine/hswm cross-check + direct ceiling + reused F1)
-        with open(os.path.join(HERE, stored_json)) as f:
+        stored_path = resolve_artifact_path(
+            stored_json, kind="raw_result", root=REPO_ROOT,
+        )
+        with stored_path.open() as f:
             stored = json.load(f)
         stored_pq = {r["id"]: r for r in stored["per_query"]}
 
@@ -506,7 +508,12 @@ def main() -> None:
     ap.add_argument("--max-new-calls", type=int, default=600,
                     help="cap on NEW reader calls (cache hits are free/unbounded)")
     ap.add_argument("--parallel", type=int, default=4)
-    ap.add_argument("--out", default=os.path.join(HERE, "substrate_bench_results.json"))
+    ap.add_argument(
+        "--out",
+        default=str(default_artifact_path(
+            "substrate_bench_results.json", kind="raw_result",
+        )),
+    )
     args = ap.parse_args()
 
     t0 = time.time()

@@ -52,8 +52,8 @@ import argparse
 import json
 import time
 
-# Preserve root-relative stored-result/output behavior and make the source-only
-# module runnable directly from a checkout as well as with ``python -m``.
+# Discover the checkout independently of source depth; checked-in inputs and
+# outputs resolve through the typed raw-result artifact layout.
 REPO_ROOT = Path(__file__).resolve().parents[2]
 for _import_root in (REPO_ROOT, REPO_ROOT / "src"):
     if str(_import_root) not in sys.path:
@@ -63,8 +63,8 @@ import numpy as np
 
 import ab_p5_full as A          # Field / loaders / metrics (offline, cache-backed)
 from _research.substrate_bench import substrate_bench as S
+from hswm.artifacts.layout import default_artifact_path, resolve_artifact_path
 
-HERE = os.fspath(REPO_ROOT)
 CACHE = A.DEFAULT_CACHE
 
 # (a, K) grid — selected on VAL only (task spec: a in {.1,.15,.2}, K in {3,5,10}).
@@ -110,8 +110,13 @@ def build_records() -> tuple[list[dict], dict]:
     llm = A.OpenAIChat("qwen3.6-27b", cache, "http://127.0.0.1:18001/v1", think=False)  # cached reads only
 
     try:
-        stored = {r["id"]: r for r in
-                  json.load(open(os.path.join(HERE, "substrate_bench_results.json")))["per_query"]}
+        substrate_result = resolve_artifact_path(
+            "substrate_bench_results.json", kind="raw_result", root=REPO_ROOT,
+        )
+        stored = {
+            r["id"]: r
+            for r in json.loads(substrate_result.read_text(encoding="utf-8"))["per_query"]
+        }
     except Exception:
         stored = {}
 
@@ -377,7 +382,12 @@ def build_markdown(res: dict) -> str:
 # ------------------------------------------------------------- driver
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", default=os.path.join(HERE, "traversal_bench_results.json"))
+    ap.add_argument(
+        "--out",
+        default=str(default_artifact_path(
+            "traversal_bench_results.json", kind="raw_result",
+        )),
+    )
     ap.add_argument("--n-boot", type=int, default=10000)
     args = ap.parse_args()
 

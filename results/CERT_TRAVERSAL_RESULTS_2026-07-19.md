@@ -58,6 +58,8 @@ on both datasets (−0.012 / −0.044) — consistent with the down-payment dire
 
 ## Files
 
-`cert_musique_result.json` / `cert_2wiki_result.json` (full numbers incl. trip
+`results/raw/cert_musique_result.json` / `results/raw/cert_2wiki_result.json` (full numbers incl. trip
 rates, stats, fallback lists). Reproduce: `traversal_cert.py real --dataset {musique,2wiki}`
-with `OLLAMA_URL` pointing at a bge-m3 server.
+with `OLLAMA_URL` pointing at a bge-m3 server. The source-SHA-bound writer keeps
+its historical cwd-relative output and should be run in the detached
+legacy-replay checkout, not against the active root.

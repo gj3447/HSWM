@@ -48,6 +48,8 @@ def test_repository_design_lock_is_valid_and_explicitly_unregistered() -> None:
     [
         ("hypergraph.py", "src/hswm/substrate/hypergraph.py"),
         ("field_snapshot.py", "src/hswm/substrate/field_snapshot.py"),
+        ("doc_builder.py", "src/hswm/substrate/doc_builder.py"),
+        ("world_builder.py", "src/hswm/substrate/world_builder.py"),
     ],
 )
 def test_migrated_mechanism_source_resolves_to_exact_canonical_bytes(

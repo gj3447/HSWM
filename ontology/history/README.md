@@ -53,6 +53,13 @@ module object and source-file SHA used by installed static-kernel identities.
 The [`W8 manifest`](PYTHON_ROOT_MIGRATIONS.W8.v2.json) retains the old root
 layout and bytes for detached replay.
 
+W9 moves the exact dependency-closed document and corpus world builders beside
+the canonical hypergraph substrate. Their flat imports are module aliases, so
+legacy and canonical callers share module, class, function, and monkeypatch
+identity. The source-pinned
+[`W9 manifest`](PYTHON_ROOT_MIGRATIONS.W9.v2.json) preserves both old root
+paths and byte identities for detached replay.
+
 ```bash
 uv run hswm-legacy-replay list
 uv run hswm-legacy-replay verify OLD_ROOT_FILE.py
@@ -66,7 +73,7 @@ receipt binds the selected source commit, tree, old paths, and source hashes.
 [`PYTHON_ROOT_CLASSIFICATION.v1.json`](PYTHON_ROOT_CLASSIFICATION.v1.json)
 partitions every remaining root Python file into `SHA_LOCKED`,
 `REPLAY_HISTORY_LOCKED`, or `REVIEW_REQUIRED`. The partition is exhaustive and
-disjoint; the validator rejects a new or unexplained root module. After W8 the
+disjoint; the validator rejects a new or unexplained root module. After W9 the
 review class is empty: every remaining module has an explicit evidence or replay
 reason.
 

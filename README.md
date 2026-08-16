@@ -216,10 +216,11 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | `src/hswm/` | canonical package surface, organized by semantic responsibility |
 | `src/hswm/cells/` | cellular kernel, durable store, model ports, and bounded live probe |
 | `src/hswm/prototypes/` | bounded early learning and synthetic-world prototypes |
-| `src/hswm/substrate/` | canonical hypergraph, immutable field cuts, certified readout, and convergence substrate |
+| `src/hswm/substrate/` | canonical hypergraph, document/world construction, immutable field cuts, certified readout, and convergence substrate |
 | `src/hswm/learning/` | token-learning contracts and learning diagnostics |
 | `src/hswm/evaluation/`, `_research/` | falsification code and source-only experiment programs |
 | `world_ir.py`, `world_compiler.py` | immutable evidence model and deterministic world compilation |
+| `src/hswm/substrate/doc_builder.py`, `src/hswm/substrate/world_builder.py` | deterministic document and corpus hypergraph construction |
 | `src/hswm/substrate/field_snapshot.py`, `src/hswm/substrate/certified_readout.py` | certified field cuts and exact-scope admission |
 | `hswm_weight_store.py`, `src/hswm/learning/token_learning_contract.py` | durable weight state and causal-learning evidence boundary |
 | `prom_search_hswm/` | open composition, field algebra, retrieval, routing, and plasticity experiments |
@@ -228,8 +229,8 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | `evidence/`, `prereg/`, `manifests/`, `results/`, `receipts/` | typed research artifacts and direct measurements |
 | `docs/research/`, `docs/assets/` | narrative research material and public visual assets |
 
-The root Python count is now **75**, down from 148. The remaining files are an
-explicit compatibility surface: 65 are byte-bound by checked-in SHA evidence and
+The root Python count is now **73**, down from 148. The remaining files are an
+explicit compatibility surface: 63 are byte-bound by checked-in SHA evidence and
 10 belong to replay clusters that still share current root-relative topology.
 There are no unexplained review candidates. The exact disjoint partition is
 machine-readable in
@@ -253,8 +254,9 @@ with later replay-backed waves in
 [`PYTHON_ROOT_MIGRATIONS.W5.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W5.v2.json),
 [`PYTHON_ROOT_MIGRATIONS.W6.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W6.v2.json),
 [`PYTHON_ROOT_MIGRATIONS.W7.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W7.v2.json),
+[`PYTHON_ROOT_MIGRATIONS.W8.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W8.v2.json),
 and
-[`PYTHON_ROOT_MIGRATIONS.W8.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W8.v2.json).
+[`PYTHON_ROOT_MIGRATIONS.W9.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W9.v2.json).
 **New Python modules or research artifacts must not be added to the root.** New
 code goes under `src/hswm/`; artifacts are routed by kind according to
 [`docs/research/ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).

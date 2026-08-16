@@ -1,16 +1,16 @@
 {
   "$schema": "../schemas/hswm_path_catalog.v1.schema.json",
   "concept_counts": {
-    "hswm:repo:boundary": 81,
+    "hswm:repo:boundary": 82,
     "hswm:repo:cells": 60,
     "hswm:repo:evaluation": 240,
     "hswm:repo:evidence": 731,
     "hswm:repo:field": 214,
-    "hswm:repo:history": 277,
+    "hswm:repo:history": 278,
     "hswm:repo:identity": 36,
-    "hswm:repo:infrastructure": 335,
+    "hswm:repo:infrastructure": 337,
     "hswm:repo:learning": 502,
-    "hswm:repo:substrate": 48
+    "hswm:repo:substrate": 50
   },
   "entries": [
     {
@@ -6677,16 +6677,6 @@
     },
     {
       "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:substrate"
-      ],
-      "kind": "python",
-      "path": "doc_builder.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
         "hswm:repo:identity",
         "hswm:repo:infrastructure"
       ],
@@ -7357,6 +7347,15 @@
       ],
       "kind": "json",
       "path": "ontology/history/PYTHON_ROOT_MIGRATIONS.W8.v2.json",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:boundary",
+        "hswm:repo:history"
+      ],
+      "kind": "json",
+      "path": "ontology/history/PYTHON_ROOT_MIGRATIONS.W9.v2.json",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -10392,6 +10391,16 @@
     },
     {
       "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure",
+        "hswm:repo:substrate"
+      ],
+      "kind": "python",
+      "path": "src/doc_builder/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
         "hswm:repo:evaluation",
         "hswm:repo:history",
         "hswm:repo:infrastructure",
@@ -10875,6 +10884,15 @@
     },
     {
       "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:substrate"
+      ],
+      "kind": "python",
+      "path": "src/hswm/substrate/doc_builder.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
         "hswm:repo:field",
         "hswm:repo:infrastructure",
         "hswm:repo:substrate"
@@ -10909,6 +10927,15 @@
       ],
       "kind": "python",
       "path": "src/hswm/substrate/supersede_ledger.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:substrate"
+      ],
+      "kind": "python",
+      "path": "src/hswm/substrate/world_builder.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -11173,6 +11200,16 @@
       ],
       "kind": "python",
       "path": "src/synth_longdoc/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure",
+        "hswm:repo:substrate"
+      ],
+      "kind": "python",
+      "path": "src/world_builder/__init__.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -12199,16 +12236,6 @@
         "hswm:repo:substrate"
       ],
       "kind": "python",
-      "path": "world_builder.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:substrate"
-      ],
-      "kind": "python",
       "path": "world_compiler.py",
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     },
@@ -12233,7 +12260,7 @@
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     }
   ],
-  "entry_count": 1385,
+  "entry_count": 1388,
   "ontology": "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json",
   "schema_version": "hswm-path-catalog/v1"
 }

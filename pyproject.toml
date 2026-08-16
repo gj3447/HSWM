@@ -50,6 +50,7 @@ packages = [
   "certified_readout",
   "cli_provider_transport",
   "diagnose",
+  "doc_builder",
   "field_snapshot",
   "falsifier",
   "f5v2_operators",
@@ -78,13 +79,12 @@ packages = [
   "supersede_ledger",
   "synth",
   "synth_longdoc",
+  "world_builder",
 ]
 py-modules = [
   "weight_field",
   "readouts",
   "metrics",
-  "doc_builder",
-  "world_builder",
   "world_ir",
   "world_compiler",
   "traversal",
@@ -156,6 +156,7 @@ certified_cut_compare = "src/certified_cut_compare"
 certified_readout = "src/certified_readout"
 cli_provider_transport = "src/cli_provider_transport"
 diagnose = "src/diagnose"
+doc_builder = "src/doc_builder"
 field_snapshot = "src/field_snapshot"
 falsifier = "src/falsifier"
 f5v2_operators = "src/f5v2_operators"
@@ -184,6 +185,7 @@ stats_protocol = "src/stats_protocol"
 supersede_ledger = "src/supersede_ledger"
 synth = "src/synth"
 synth_longdoc = "src/synth_longdoc"
+world_builder = "src/world_builder"
 
 [tool.pytest.ini_options]
 testpaths = ["tests", "prom_search_hswm", "_research/shared_field_hypothesis"]

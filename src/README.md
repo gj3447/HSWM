@@ -13,7 +13,7 @@ semantic responsibility rather than experiment chronology:
 | `hswm.infrastructure` | provider and repository integration |
 | `hswm.learning` | outcome/credit/update contracts and diagnostics |
 | `hswm.prototypes` | early synthetic and judgment-loop prototypes |
-| `hswm.substrate` | hypergraph topology, immutable field cuts, certified reads, and convergence |
+| `hswm.substrate` | hypergraph topology, document/world construction, immutable field cuts, certified reads, and convergence |
 
 The other top-level directories under `src/` are compatibility import packages.
 They preserve selected historical imports without putting `.py` shims back in

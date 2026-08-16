@@ -113,6 +113,7 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "certified_readout",
         "cli_provider_transport",
         "diagnose",
+        "doc_builder",
         "field_snapshot",
         "falsifier",
         "f5v2_operators",
@@ -141,6 +142,7 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "supersede_ledger",
         "synth",
         "synth_longdoc",
+        "world_builder",
     }
     assert canonical_packages | compatibility_packages <= packages
     assert project["tool"]["setuptools"]["package-dir"]["hswm"] == "src/hswm"
@@ -223,6 +225,31 @@ def test_field_snapshot_compatibility_import_is_the_canonical_module() -> None:
     ).resolve()
     assert hashlib.sha256(Path(compatibility.__file__).read_bytes()).hexdigest() == (
         "17cd7251d6d0ff066b70dff89945cc46dac468040ceae0b9483f8b3e015b72f2"
+    )
+
+
+def test_builder_compatibility_imports_are_the_canonical_modules() -> None:
+    import doc_builder as compatibility_doc
+    import world_builder as compatibility_world
+    from hswm.substrate import doc_builder as canonical_doc
+    from hswm.substrate import world_builder as canonical_world
+
+    assert compatibility_doc is canonical_doc
+    assert compatibility_world is canonical_world
+    assert compatibility_doc.BuiltDoc is canonical_doc.BuiltDoc
+    assert compatibility_world.BuiltWorld is canonical_world.BuiltWorld
+    assert compatibility_world.hash_embed is canonical_doc.hash_embed
+    assert Path(compatibility_doc.__file__).resolve() == (
+        REPO_ROOT / "src/hswm/substrate/doc_builder.py"
+    ).resolve()
+    assert Path(compatibility_world.__file__).resolve() == (
+        REPO_ROOT / "src/hswm/substrate/world_builder.py"
+    ).resolve()
+    assert hashlib.sha256(Path(compatibility_doc.__file__).read_bytes()).hexdigest() == (
+        "52c5ccee2487f62f6b6021ed6438477b7cdac8e84ffadd5f7fe031303adc79fc"
+    )
+    assert hashlib.sha256(Path(compatibility_world.__file__).read_bytes()).hexdigest() == (
+        "a1082dbc4609df819f6395188897b6849d8d40854c993b9fb93882bb0f8fc40f"
     )
 
 

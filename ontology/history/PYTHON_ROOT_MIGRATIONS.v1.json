@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schemas/hswm_python_root_migrations.v1.schema.json",
+  "schema_version": "hswm-python-root-migrations/v1",
+  "status": "SOURCE_PINNED_PATH_MIGRATION",
+  "source_commit": "6b174370fb0dcb0134c52b122de9d598fb8f899d",
+  "policy": "A migrated source must be absent from the repository root; its pre-migration bytes remain pinned by source_commit and source_sha256 while canonical code may evolve.",
+  "migrations": [
+    {
+      "old_path": "f5v2_operators.py",
+      "canonical_path": "src/hswm/experiments/f5v2/operators.py",
+      "source_sha256": "47f8dd6f681c1d571343eaeb21ee82d7abd35876421825a82654291884741a4c"
+    },
+    {
+      "old_path": "f5v2_topic_cache.py",
+      "canonical_path": "src/hswm/experiments/f5v2/topic_cache.py",
+      "source_sha256": "84ea42bc97bb3df4dfd0a8513655bf2375fb1072090a214b8e4faaf079e32c68"
+    },
+    {
+      "old_path": "f5v2_judge.py",
+      "canonical_path": "src/hswm/experiments/f5v2/judge.py",
+      "source_sha256": "00b6d51c6eaee91bbcefc19d3d01db40dfbb7341f1604cca3c2f1942fdcc0c45"
+    },
+    {
+      "old_path": "p1_gate_diagnostic.py",
+      "canonical_path": "src/hswm/diagnostics/p1_gate.py",
+      "source_sha256": "e4b401bdaa92eedb3cdc0792f8a2a5913c70413ec97cb6373f86f0452b6d9ac0"
+    }
+  ]
+}

@@ -11,6 +11,9 @@ dependencies = [
 dev = ["pytest>=8.0", "hypothesis>=6.0"]
 kg = ["neo4j>=5.20"]
 
+[project.scripts]
+hswm-p1-gate-diagnostic = "hswm.diagnostics.p1_gate:main"
+
 [project.urls]
 Homepage = "https://github.com/gj3447/HSWM"
 Repository = "https://github.com/gj3447/HSWM.git"
@@ -23,7 +26,18 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 # scripts/ is an implicit namespace package used by the checked-in contract
 # validators and must be present in both wheels and source distributions.
-packages = ["scripts", "prom_search_hswm"]
+package-dir = { hswm = "src/hswm", f5v2_operators = "src/f5v2_operators", f5v2_topic_cache = "src/f5v2_topic_cache", f5v2_judge = "src/f5v2_judge" }
+packages = [
+  "scripts",
+  "prom_search_hswm",
+  "hswm",
+  "hswm.diagnostics",
+  "hswm.experiments",
+  "hswm.experiments.f5v2",
+  "f5v2_operators",
+  "f5v2_topic_cache",
+  "f5v2_judge",
+]
 py-modules = [
   "synth",
   "hypergraph",
@@ -116,12 +130,9 @@ py-modules = [
   "hswm_cellular_store",
   "hswm_cellular_openai",
   "hswm_cellular_live_probe",
-  "f5v2_operators",
-  "f5v2_topic_cache",
-  "f5v2_judge",
 ]
 
 [tool.pytest.ini_options]
 testpaths = ["tests", "prom_search_hswm", "_research/shared_field_hypothesis"]
 python_files = "test_*.py"
-pythonpath = ["."]
+pythonpath = ["src", "."]

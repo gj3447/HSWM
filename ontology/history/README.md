@@ -14,6 +14,10 @@ legacy root.
 exception set. [`root-tidy-move-map.v1.json`](root-tidy-move-map.v1.json)
 preserves the earlier migration record.
 
+[`PYTHON_ROOT_MIGRATIONS.v1.json`](PYTHON_ROOT_MIGRATIONS.v1.json) records each
+Python source removed from the legacy root, its canonical ontology path, the
+source commit, and the digest of the preserved pre-migration bytes.
+
 `quarantine/` contains non-executable historical mutation payloads whose old
 instructions conflict with the active bounded ontology policy. They are source
 material only, never runbooks.

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import fnmatch
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -228,6 +229,91 @@ def load_legacy(data: dict[str, Any]) -> tuple[dict[str, Any], set[str]]:
     return payload, set(listed)
 
 
+def validate_python_root_migrations(
+    data: dict[str, Any],
+    legacy: set[str],
+    *,
+    verify_git_source: bool,
+) -> int:
+    """Validate explicit root-to-package moves without rewriting old evidence.
+
+    A source checkout can also prove the old bytes against the pinned commit.
+    Source distributions lack Git objects, so they still enforce the structural
+    half of the contract: old root absent, canonical path present, and no stale
+    legacy-root exception.
+    """
+
+    relative = data.get("python_root_migrations")
+    if not isinstance(relative, str) or not relative:
+        raise OntologyError("python_root_migrations must name a manifest")
+    payload = _read_json(_resolve_from_repo(relative))
+    if payload.get("schema_version") != "hswm-python-root-migrations/v1":
+        raise OntologyError("unsupported Python root migration schema")
+    if payload.get("status") != "SOURCE_PINNED_PATH_MIGRATION":
+        raise OntologyError("unsupported Python root migration status")
+
+    source_commit = payload.get("source_commit")
+    if (
+        not isinstance(source_commit, str)
+        or len(source_commit) != 40
+        or any(ch not in "0123456789abcdef" for ch in source_commit)
+    ):
+        raise OntologyError("Python migration source_commit must be a full Git SHA")
+
+    rows = payload.get("migrations", [])
+    if not isinstance(rows, list) or not rows:
+        raise OntologyError("Python migration manifest must contain migrations")
+    old_paths: set[str] = set()
+    canonical_paths: set[str] = set()
+    for row in rows:
+        if not isinstance(row, dict):
+            raise OntologyError("Python migration row must be an object")
+        old_path = row.get("old_path")
+        canonical_path = row.get("canonical_path")
+        source_sha256 = row.get("source_sha256")
+        if (
+            not isinstance(old_path, str)
+            or "/" in old_path
+            or not old_path.endswith(".py")
+        ):
+            raise OntologyError(f"invalid migrated root path: {old_path!r}")
+        if (
+            not isinstance(canonical_path, str)
+            or not canonical_path.startswith("src/hswm/")
+            or not canonical_path.endswith(".py")
+        ):
+            raise OntologyError(f"invalid canonical Python path: {canonical_path!r}")
+        if (
+            not isinstance(source_sha256, str)
+            or len(source_sha256) != 64
+            or any(ch not in "0123456789abcdef" for ch in source_sha256)
+        ):
+            raise OntologyError(f"invalid source digest for {old_path}")
+        if old_path in old_paths or canonical_path in canonical_paths:
+            raise OntologyError("duplicated Python migration path")
+        old_paths.add(old_path)
+        canonical_paths.add(canonical_path)
+        if old_path in legacy or _resolve_from_repo(old_path).exists():
+            raise OntologyError(f"migrated Python path still occupies root: {old_path}")
+        if not _resolve_from_repo(canonical_path).is_file():
+            raise OntologyError(f"canonical Python path is missing: {canonical_path}")
+
+        if verify_git_source:
+            try:
+                source = subprocess.run(
+                    ["git", "-C", str(REPO_ROOT), "show", f"{source_commit}:{old_path}"],
+                    check=True,
+                    capture_output=True,
+                ).stdout
+            except (FileNotFoundError, subprocess.CalledProcessError) as exc:
+                raise OntologyError(
+                    f"cannot resolve migrated source {source_commit}:{old_path}"
+                ) from exc
+            if hashlib.sha256(source).hexdigest() != source_sha256:
+                raise OntologyError(f"migrated source digest mismatch: {old_path}")
+    return len(rows)
+
+
 def build_catalog(
     data: dict[str, Any],
     paths: Iterable[str],
@@ -278,6 +364,9 @@ def validate_root_surface(
 def validate_checkout(data: dict[str, Any]) -> dict[str, int | bool]:
     paths, from_git = repository_paths()
     _, legacy = load_legacy(data)
+    migration_count = validate_python_root_migrations(
+        data, legacy, verify_git_source=from_git
+    )
     if from_git:
         validate_root_surface(paths, data, legacy)
 
@@ -310,6 +399,7 @@ def validate_checkout(data: dict[str, Any]) -> dict[str, int | bool]:
         "paths": len(paths),
         "legacy_root_paths": len(legacy),
         "concepts": len(data["concepts"]),
+        "python_root_migrations": migration_count,
         "from_git": from_git,
     }
 

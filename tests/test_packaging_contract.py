@@ -49,9 +49,10 @@ def _test_suite_import_roots() -> set[str]:
     return {name for name in roots if (REPO_ROOT / name).is_dir()}
 
 
-def test_h3_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
+def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
     project = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     shipped = set(project["tool"]["setuptools"]["py-modules"])
+    packages = set(project["tool"]["setuptools"]["packages"])
 
     assert {
         "h3_artifact_lifecycle",
@@ -96,10 +97,34 @@ def test_h3_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
     } <= shipped
 
     assert {
+        "hswm",
+        "hswm.diagnostics",
+        "hswm.experiments",
+        "hswm.experiments.f5v2",
         "f5v2_operators",
         "f5v2_topic_cache",
         "f5v2_judge",
-    } <= shipped
+    } <= packages
+    assert project["tool"]["setuptools"]["package-dir"]["hswm"] == "src/hswm"
+    assert {
+        "f5v2_operators",
+        "f5v2_topic_cache",
+        "f5v2_judge",
+    }.isdisjoint(shipped)
+    assert project["project"]["scripts"]["hswm-p1-gate-diagnostic"] == (
+        "hswm.diagnostics.p1_gate:main"
+    )
+
+
+def test_f5v2_legacy_import_packages_resolve_to_canonical_objects() -> None:
+    import f5v2_judge
+    import f5v2_operators
+    import f5v2_topic_cache
+    from hswm.experiments.f5v2 import judge, operators, topic_cache
+
+    assert f5v2_operators.CPL1NumericPacket is operators.CPL1NumericPacket
+    assert f5v2_topic_cache.TopicBlockV1 is topic_cache.TopicBlockV1
+    assert f5v2_judge.JudgeContractError is judge.JudgeContractError
 
 
 def test_default_pytest_surface_includes_public_research() -> None:
@@ -136,6 +161,7 @@ def test_source_distribution_carries_the_default_test_surface() -> None:
     # Patterns are asserted as a subset so that widening a line (adding *.sh, say)
     # is not a test failure, while dropping a pattern still is.
     required: dict[str, set[str]] = {
+        "src": {"*.py"},
         "receipts": {"*.py", "*.json"},
         "prom_search_hswm": {"*.py", "*.json", "*.md", "*.mmd"},
         "_research": {"*.py", "*.json", "*.md", "*.sh", "*.tsv"},

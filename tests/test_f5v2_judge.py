@@ -4,7 +4,7 @@ import copy
 
 import pytest
 
-import f5v2_judge as judge
+from hswm.experiments.f5v2 import judge
 
 
 PACKET_A = "a" * 64

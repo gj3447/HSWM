@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from f5v2_operators import (
+from hswm.experiments.f5v2.operators import (
     F5V2ContractError,
     append_only_sha256,
     build_qfr_extractive_source,
@@ -13,7 +13,7 @@ from f5v2_operators import (
     parse_cpl1_numeric_packet,
     render_append_only,
 )
-from f5v2_topic_cache import (
+from hswm.experiments.f5v2.topic_cache import (
     B0_ARM_ID,
     BPRIME_ARM_ID,
     TopicCacheIntegrityError,

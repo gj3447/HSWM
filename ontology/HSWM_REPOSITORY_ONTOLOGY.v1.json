@@ -114,7 +114,7 @@
     {
       "id": "learning",
       "concepts": ["hswm:repo:learning"],
-      "patterns": ["hswm_token_learning_contract.py", "hswm_weight*.py", "p1*.py", "f[2-5]*.py", "learned*.py", "ontology/learning/**", "_research/p1*/**", "_research/f*/**", "prereg/**"],
+      "patterns": ["hswm_token_learning_contract.py", "hswm_weight*.py", "p1*.py", "f[2-5]*.py", "learned*.py", "src/hswm/experiments/**", "src/hswm/diagnostics/**", "src/f5v2_*/**", "ontology/learning/**", "_research/p1*/**", "_research/f*/**", "prereg/**"],
       "root_patterns": ["P1_*", "PREREG_P1*", "B[12]_*.md", "B[12]_*.json", "E1_*", "R[1-3]_*", "T[13]_*", "SHADOW_*", "PROM_*PLASTICITY*", "PROM_*ABSORPTION*", "PROM_*TRANSFER*", "PROM_*CONSOLIDATION*", "PROM_8*", "PROM_P[56]*", "learned*.py", "p1*.py", "p1*.json", "f[2-5]*.py"]
     },
     {
@@ -126,7 +126,7 @@
     {
       "id": "evaluation",
       "concepts": ["hswm:repo:evaluation"],
-      "patterns": ["EFFICACY.md", "tests/**", "verification/**", "_findings/**", "*falsifier*.py", "*judge*.py", "metrics.py", "verify_*.py", "ontology/evaluation/**"],
+      "patterns": ["EFFICACY.md", "tests/**", "verification/**", "_findings/**", "*falsifier*.py", "*judge*.py", "metrics.py", "verify_*.py", "src/hswm/diagnostics/**", "src/hswm/experiments/**/judge.py", "ontology/evaluation/**"],
       "root_patterns": ["*_RESULTS_*.md", "*_result*.json", "EVIDENCE_*", "*_DIAGNOSTIC_*", "EXISTENCE_SCOREBOARD*", "PROM_5*", "PROM_6*", "PROM_16_CURRENT*", "PROM_16_NEGATIVE*", "TRIBUNAL*", "*falsifier.py", "*judge.py", "diagnose.py", "metrics.py", "*_bench.py", "test_*.py"]
     },
     {
@@ -143,7 +143,7 @@
     {
       "id": "repository-support",
       "concepts": ["hswm:repo:infrastructure"],
-      "patterns": ["docs/**"],
+      "patterns": ["docs/**", "src/**"],
       "root_patterns": ["*.py", "*.md", "*.json", "*.txt", "*.log", "*.sh"]
     },
     {
@@ -170,6 +170,7 @@
     "uv.lock"
   ],
   "legacy_root_inventory": "ontology/history/LEGACY_ROOT_PATHS.v1.json",
+  "python_root_migrations": "ontology/history/PYTHON_ROOT_MIGRATIONS.v1.json",
   "path_catalog": "ontology/HSWM_PATH_CATALOG.v1.json",
   "learning_analogy": {
     "status": "TARGET_ARCHITECTURE_NOT_CURRENT_EFFICACY",

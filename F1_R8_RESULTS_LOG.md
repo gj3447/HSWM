@@ -5,6 +5,7 @@
 
 | 날짜 | 결과 | 경계 |
 |---|---|---|
+| 2026-08-16 | 로컬·원격 브랜치를 `main` 하나로 축약했다. 두 실험 브랜치의 고유 커밋은 현재 tree를 바꾸지 않는 ancestry merge로 보존하고 ref만 삭제했으며, 이미 `main`에 포함된 로컬 `HSWM` worktree/브랜치도 정리했다. 이어 SHA/path 비결합 Python 4개를 `src/hswm/`으로 이전해 root Python을 **148→144**로 줄이고 기존 F5v2 installed import는 명시적 compatibility package로 유지했다. 전체 회귀는 **1158 passed, 3 skipped**이며 wheel·sdist 외부 설치/CLI 검증도 통과했다. | [`Python migration`](ontology/history/PYTHON_ROOT_MIGRATIONS.v1.json) · [`repository ontology`](ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json) · SHA-locked 79개와 replay/path 결합 24개는 과거 증거 보존을 위해 아직 root에 유지 |
 | 2026-08-16 | 공개 README를 HSWM의 거시 신경망 정체성·Transformer 학습 비유·정직한 효능 경계 중심으로 다시 만들고, 제공된 심상 이미지를 provenance 보존 상태로 연결했다. 저장소 전체는 10개 개념의 온톨로지 projection으로 재편해 현재 1,292개 경로를 전수 분류했고, 신규 root 유입은 fail-closed로 만들었다. 깨진 외부 cohort와 wheel/sdist 폐쇄성도 복구했다. 전체 회귀는 **1156 passed, 3 skipped**, 최종 핵심 회귀는 **28 passed**다. | [`README`](README.md) · [`repository ontology`](ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json) · [`path catalog`](ontology/HSWM_PATH_CATALOG.v1.json) · 저장소 navigation/배포 구현이며 HSWM 학습 효능 결과가 아님 |
 | 2026-08-15 | 폐기 도구 전용 원격 브랜치를 삭제했다. 현재 HSWM 작업 트리의 파일명·본문에서 폐기 대상 세 계열의 이름은 0건이며 `main`과 `origin/main`은 일치한다. | 현재 트리와 원격 ref 직접 검사 |
 | 2026-08-15 | 개인 거버넌스 계층과 결합된 코드·문서·테스트·영수증을 제거하고 기본 경로를 `실행 → 직접 측정 → 중요 결과 기록 → commit/push`로 단순화했다. 전체 회귀는 **1148 passed, 3 skipped**다. | [`minimal governance`](research/HSWM_MINIMAL_GOVERNANCE.v1.json) · [`user canon`](USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md) |

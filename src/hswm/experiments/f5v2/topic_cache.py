@@ -18,7 +18,7 @@ import os
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
-from f5v2_operators import (
+from .operators import (
     CPL1NumericPacket,
     F5V2ContractError,
     append_only_sha256,

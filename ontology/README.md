@@ -12,6 +12,11 @@ The repository therefore uses two compatible views:
   HSWM, without copying it or pretending that a folder tree is the cognitive
   system itself.
 
+New Python implementation belongs under [`src/hswm/`](../src/hswm/). Root
+Python modules are a shrinking, explicitly frozen compatibility surface; each
+completed move is pinned in
+[`history/PYTHON_ROOT_MIGRATIONS.v1.json`](history/PYTHON_ROOT_MIGRATIONS.v1.json).
+
 ## Concept map
 
 | concept | question it answers |

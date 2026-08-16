@@ -62,6 +62,20 @@ def test_root_compatibility_surface_and_catalog_are_current() -> None:
     assert catalog["$schema"] == "../schemas/hswm_path_catalog.v1.schema.json"
 
 
+def test_python_root_migrations_are_pinned_and_root_count_only_decreases() -> None:
+    data = load_repository_ontology()
+    result = validate_checkout(data)
+    assert result["python_root_migrations"] == 4
+    assert len(list(ROOT.glob("*.py"))) <= 144
+
+    manifest = json.loads(
+        (ROOT / data["python_root_migrations"]).read_text(encoding="utf-8")
+    )
+    for row in manifest["migrations"]:
+        assert not (ROOT / row["old_path"]).exists()
+        assert (ROOT / row["canonical_path"]).is_file()
+
+
 def test_transformer_analogy_requires_an_optimizer_equivalent() -> None:
     data = load_repository_ontology()
     analogy = data["learning_analogy"]

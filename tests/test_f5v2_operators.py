@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from f5v2_operators import (
+from hswm.experiments.f5v2.operators import (
     F5V2ContractError,
     append_only_sha256,
     build_abstractive_qfr,

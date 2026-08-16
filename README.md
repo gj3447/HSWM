@@ -211,6 +211,7 @@ for their runtime receipts.
 | path | purpose |
 |---|---|
 | `ontology/` | canonical semantic navigation, path catalog, and concept relations |
+| `src/hswm/` | canonical package surface for newly migrated and future HSWM code |
 | `world_ir.py`, `world_compiler.py` | immutable evidence model and deterministic world compilation |
 | `field_snapshot.py`, `certified_readout.py` | certified field cuts and exact-scope admission |
 | `hswm_weight_store.py`, `hswm_token_learning_contract.py` | durable weight state and causal-learning evidence boundary |
@@ -227,8 +228,10 @@ hash-bound artifacts remain at the repository root only where old receipts,
 imports, or `__file__`-relative execution bind that location. The frozen
 exceptions are explicit in
 [`LEGACY_ROOT_PATHS.v1.json`](ontology/history/LEGACY_ROOT_PATHS.v1.json).
-**New research artifacts must not be added to the root.** They are routed by
-kind according to
+Completed Python moves are source-pinned in
+[`PYTHON_ROOT_MIGRATIONS.v1.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.v1.json).
+**New Python modules or research artifacts must not be added to the root.** New
+code goes under `src/hswm/`; artifacts are routed by kind according to
 [`docs/research/ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).
 
 ## Method and contribution boundary

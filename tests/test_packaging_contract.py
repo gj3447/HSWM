@@ -95,6 +95,7 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
     canonical_packages = {
         "hswm",
         "hswm.artifacts",
+        "hswm.cells",
         "hswm.diagnostics",
         "hswm.evaluation",
         "hswm.evaluation.h3",
@@ -119,6 +120,10 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "h3_b3_manifest",
         "h3_title_anchor_falsifier",
         "hswm_artifact_layout",
+        "hswm_cellular_live_probe",
+        "hswm_cellular_openai",
+        "hswm_cellular_runtime",
+        "hswm_cellular_store",
         "hswm_token_learning_contract",
         "learned",
         "learned_v2",
@@ -174,6 +179,21 @@ def test_w3_packaged_compatibility_imports_resolve_to_canonical_objects() -> Non
 
     assert p1v2_l0_refreeze.L0RefreezeError is refreeze.L0RefreezeError
     assert stats_protocol.paired_permutation_p is canonical_stats.paired_permutation_p
+
+
+def test_cellular_compatibility_imports_resolve_to_canonical_objects() -> None:
+    import hswm_cellular_live_probe as compatibility_probe
+    import hswm_cellular_openai as compatibility_openai
+    import hswm_cellular_runtime as compatibility_runtime
+    import hswm_cellular_store as compatibility_store
+    from hswm.cells import live_probe, openai, runtime, store
+
+    assert compatibility_runtime.KernelState is runtime.KernelState
+    assert compatibility_store.SqliteCellRuntime is store.SqliteCellRuntime
+    assert compatibility_openai.OpenAICompatibleCellPort is openai.OpenAICompatibleCellPort
+    assert compatibility_openai.urlrequest is openai.urlrequest
+    assert compatibility_probe.run_probe is live_probe.run_probe
+    assert (REPO_ROOT / "src/hswm_cellular_live_probe/__main__.py").is_file()
 
 
 def test_default_pytest_surface_includes_public_research() -> None:

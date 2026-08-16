@@ -4,7 +4,7 @@ from dataclasses import replace
 
 import pytest
 
-from hswm_cellular_runtime import (
+from hswm.cells.runtime import (
     Accepted,
     CellContract,
     CellStepCompleted,

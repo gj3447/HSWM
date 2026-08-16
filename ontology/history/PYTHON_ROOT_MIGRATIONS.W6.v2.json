@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schemas/hswm_python_root_migrations.v2.schema.json",
+  "schema_version": "hswm-python-root-migrations/v2",
+  "status": "SOURCE_PINNED_PATH_MIGRATION",
+  "source_commit": "c6094156580d0e64768d2c30903fdc85c65b07a9",
+  "policy": "The exact pre-migration repository is reproducible as a detached standalone clone through hswm-legacy-replay; canonical sources may move and evolve without rewriting historical receipts.",
+  "migrations": [
+    {
+      "old_path": "hswm_cellular_live_probe.py",
+      "canonical_path": "src/hswm/cells/live_probe.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "378ee4530735f15eeafd548eb8d3a4e40691503e22ea2614c996c84b389a6912"
+    },
+    {
+      "old_path": "hswm_cellular_openai.py",
+      "canonical_path": "src/hswm/cells/openai.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "a1098a8f95a4253205bf44da10d72cfa5f838ff047c706be5efa7d3e0cd13080"
+    },
+    {
+      "old_path": "hswm_cellular_runtime.py",
+      "canonical_path": "src/hswm/cells/runtime.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "f5704d5ed0e49cf5fc9b9f4fd05b8297e9d3fa69cb13cb4e8746e7c36f6c6a30"
+    },
+    {
+      "old_path": "hswm_cellular_store.py",
+      "canonical_path": "src/hswm/cells/store.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "341aadbd589a9f4222376511d8ec6d52c744981f5029b52b21cea7e82de48b04"
+    }
+  ]
+}

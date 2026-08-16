@@ -19,7 +19,7 @@ from pathlib import Path
 import sqlite3
 from typing import Any, Mapping
 
-from hswm_cellular_runtime import (
+from .runtime import (
     Accepted,
     CellContract,
     CellPort,

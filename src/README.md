@@ -6,6 +6,7 @@ semantic responsibility rather than experiment chronology:
 | package | responsibility |
 |---|---|
 | `hswm.artifacts` | artifact discovery and path compatibility |
+| `hswm.cells` | typed cellular execution, durable storage, and model ports |
 | `hswm.diagnostics` | bounded diagnostics |
 | `hswm.evaluation` | falsifiers and evidence-bound evaluation helpers |
 | `hswm.experiments` | packaged experiment components |

@@ -9,13 +9,13 @@ from pathlib import Path
 import tempfile
 from typing import Any
 
-from hswm_cellular_openai import (
+from .openai import (
     FixtureCellPort,
     OpenAICompatibleCellPort,
     OpenAICompatibleConfig,
 )
-from hswm_cellular_runtime import CellContract, RequestCellStep, make_packet
-from hswm_cellular_store import CommitReceipt, OutboxStatus, SqliteCellRuntime
+from .runtime import CellContract, RequestCellStep, make_packet
+from .store import CommitReceipt, OutboxStatus, SqliteCellRuntime
 
 
 def run_probe(

@@ -5,14 +5,14 @@ from urllib import error as urlerror
 
 import pytest
 
-from hswm_cellular_openai import (
+from hswm.cells.openai import (
     FixtureCellPort,
     ModelProtocolError,
     OpenAICompatibleCellPort,
     OpenAICompatibleConfig,
     UnknownModelOutcome,
 )
-from hswm_cellular_runtime import InvokeCellEffect, make_packet
+from hswm.cells.runtime import InvokeCellEffect, make_packet
 
 
 def effect(payload=None):
@@ -57,7 +57,7 @@ def test_openai_compatible_adapter_builds_typed_packet(monkeypatch) -> None:
             }
         )
 
-    monkeypatch.setattr("hswm_cellular_openai.urlrequest.urlopen", fake_urlopen)
+    monkeypatch.setattr("hswm.cells.openai.urlrequest.urlopen", fake_urlopen)
     port = OpenAICompatibleCellPort(
         OpenAICompatibleConfig(
             base_url="http://model.invalid",
@@ -82,7 +82,7 @@ def test_transport_failure_is_unknown_not_safe_retry(monkeypatch) -> None:
     def fail(request, timeout):
         raise urlerror.URLError("connection reset")
 
-    monkeypatch.setattr("hswm_cellular_openai.urlrequest.urlopen", fail)
+    monkeypatch.setattr("hswm.cells.openai.urlrequest.urlopen", fail)
     port = OpenAICompatibleCellPort(
         OpenAICompatibleConfig(base_url="http://model.invalid", model="m")
     )
@@ -98,7 +98,7 @@ def test_invalid_input_never_reaches_transport(monkeypatch) -> None:
         called = True
         return FakeResponse({})
 
-    monkeypatch.setattr("hswm_cellular_openai.urlrequest.urlopen", fake_urlopen)
+    monkeypatch.setattr("hswm.cells.openai.urlrequest.urlopen", fake_urlopen)
     port = OpenAICompatibleCellPort(
         OpenAICompatibleConfig(base_url="http://model.invalid", model="m")
     )
@@ -110,7 +110,7 @@ def test_invalid_input_never_reaches_transport(monkeypatch) -> None:
 
 def test_malformed_response_is_protocol_failure(monkeypatch) -> None:
     monkeypatch.setattr(
-        "hswm_cellular_openai.urlrequest.urlopen",
+        "hswm.cells.openai.urlrequest.urlopen",
         lambda request, timeout: FakeResponse({"choices": []}),
     )
     port = OpenAICompatibleCellPort(

@@ -11,17 +11,18 @@ import tempfile
 from typing import Any, Callable
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+for _import_root in (REPO_ROOT, REPO_ROOT / "src"):
+    if str(_import_root) not in sys.path:
+        sys.path.insert(0, str(_import_root))
 
-from hswm_cellular_openai import FixtureCellPort
-from hswm_cellular_runtime import (
+from hswm.cells.openai import FixtureCellPort
+from hswm.cells.runtime import (
     CellContract,
     RequestCellStep,
     make_packet,
     state_digest,
 )
-from hswm_cellular_store import (
+from hswm.cells.store import (
     CommandIntentConflict,
     CommitReceipt,
     OutboxStatus,

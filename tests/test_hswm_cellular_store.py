@@ -5,8 +5,8 @@ import sqlite3
 
 import pytest
 
-from hswm_cellular_openai import FixtureCellPort, UnknownModelOutcome
-from hswm_cellular_runtime import (
+from hswm.cells.openai import FixtureCellPort, UnknownModelOutcome
+from hswm.cells.runtime import (
     CellContract,
     KernelState,
     Rejected,
@@ -14,7 +14,7 @@ from hswm_cellular_runtime import (
     make_packet,
     state_digest,
 )
-from hswm_cellular_store import (
+from hswm.cells.store import (
     CommandIntentConflict,
     CommitReceipt,
     OutboxStateConflict,

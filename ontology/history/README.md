@@ -34,6 +34,12 @@ W5 co-locates the C1 book-scale replay judge with its canonical producer under
 reproducible from the source-pinned
 [`W5 manifest`](PYTHON_ROOT_MIGRATIONS.W5.v2.json).
 
+W6 moves the complete cellular runtime cluster into `hswm.cells` and retains
+the four installed flat imports as compatibility packages. Root-era bytes and
+commands remain reproducible from the source-pinned
+[`W6 manifest`](PYTHON_ROOT_MIGRATIONS.W6.v2.json); the older Longinus bindings
+and receipts remain immutable historical evidence.
+
 ```bash
 uv run hswm-legacy-replay list
 uv run hswm-legacy-replay verify OLD_ROOT_FILE.py
@@ -47,7 +53,7 @@ receipt binds the selected source commit, tree, old paths, and source hashes.
 [`PYTHON_ROOT_CLASSIFICATION.v1.json`](PYTHON_ROOT_CLASSIFICATION.v1.json)
 partitions every remaining root Python file into `SHA_LOCKED`,
 `REPLAY_HISTORY_LOCKED`, or `REVIEW_REQUIRED`. The partition is exhaustive and
-disjoint; the validator rejects a new or unexplained root module. After W5 the
+disjoint; the validator rejects a new or unexplained root module. After W6 the
 review class is empty: every remaining module has an explicit evidence or replay
 reason.
 

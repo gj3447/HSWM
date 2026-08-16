@@ -10,7 +10,7 @@ from typing import Any, Mapping
 from urllib import error as urlerror
 from urllib import request as urlrequest
 
-from hswm_cellular_runtime import (
+from .runtime import (
     InvokeCellEffect,
     PacketEnvelope,
     canonical_json_bytes,

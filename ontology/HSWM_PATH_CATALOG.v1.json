@@ -1,14 +1,14 @@
 {
   "$schema": "../schemas/hswm_path_catalog.v1.schema.json",
   "concept_counts": {
-    "hswm:repo:boundary": 78,
-    "hswm:repo:cells": 53,
-    "hswm:repo:evaluation": 239,
+    "hswm:repo:boundary": 79,
+    "hswm:repo:cells": 61,
+    "hswm:repo:evaluation": 240,
     "hswm:repo:evidence": 731,
     "hswm:repo:field": 212,
-    "hswm:repo:history": 273,
+    "hswm:repo:history": 276,
     "hswm:repo:identity": 36,
-    "hswm:repo:infrastructure": 327,
+    "hswm:repo:infrastructure": 334,
     "hswm:repo:learning": 502,
     "hswm:repo:substrate": 46
   },
@@ -7104,46 +7104,6 @@
     {
       "concepts": [
         "hswm:repo:cells",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "hswm_cellular_live_probe.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:cells",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "hswm_cellular_openai.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:cells",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "hswm_cellular_runtime.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:cells",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "hswm_cellular_store.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:cells",
         "hswm:repo:evidence",
         "hswm:repo:history",
         "hswm:repo:infrastructure"
@@ -7390,6 +7350,15 @@
       ],
       "kind": "json",
       "path": "ontology/history/PYTHON_ROOT_MIGRATIONS.W5.v2.json",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:boundary",
+        "hswm:repo:history"
+      ],
+      "kind": "json",
+      "path": "ontology/history/PYTHON_ROOT_MIGRATIONS.W6.v2.json",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -10528,6 +10497,51 @@
     },
     {
       "concepts": [
+        "hswm:repo:cells",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm/cells/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:cells",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm/cells/live_probe.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:cells",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm/cells/openai.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:cells",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm/cells/runtime.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:cells",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm/cells/store.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
         "hswm:repo:evaluation",
         "hswm:repo:infrastructure",
         "hswm:repo:learning"
@@ -10876,6 +10890,56 @@
       ],
       "kind": "python",
       "path": "src/hswm_artifact_layout/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:cells",
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm_cellular_live_probe/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:cells",
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm_cellular_live_probe/__main__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:cells",
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm_cellular_openai/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:cells",
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm_cellular_runtime/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:cells",
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm_cellular_store/__init__.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -11444,6 +11508,15 @@
       ],
       "kind": "python",
       "path": "tests/test_hswm_canon_doc_honesty.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:cells",
+        "hswm:repo:evaluation"
+      ],
+      "kind": "python",
+      "path": "tests/test_hswm_cellular_live_probe.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -12122,7 +12195,7 @@
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     }
   ],
-  "entry_count": 1373,
+  "entry_count": 1381,
   "ontology": "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json",
   "schema_version": "hswm-path-catalog/v1"
 }

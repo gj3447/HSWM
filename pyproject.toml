@@ -34,6 +34,7 @@ packages = [
   "prom_search_hswm",
   "hswm",
   "hswm.artifacts",
+  "hswm.cells",
   "hswm.diagnostics",
   "hswm.evaluation",
   "hswm.evaluation.h3",
@@ -56,6 +57,10 @@ packages = [
   "h3_b3_manifest",
   "h3_title_anchor_falsifier",
   "hswm_artifact_layout",
+  "hswm_cellular_live_probe",
+  "hswm_cellular_openai",
+  "hswm_cellular_runtime",
+  "hswm_cellular_store",
   "hswm_token_learning_contract",
   "learned",
   "learned_v2",
@@ -140,10 +145,6 @@ py-modules = [
   "p1v4_replay_judge",
   "p1v4_replay_bundle",
   "p1v4_heldout_measure",
-  "hswm_cellular_runtime",
-  "hswm_cellular_store",
-  "hswm_cellular_openai",
-  "hswm_cellular_live_probe",
 ]
 
 [tool.setuptools.package-data]
@@ -162,6 +163,10 @@ f5v2_judge = "src/f5v2_judge"
 h3_b3_manifest = "src/h3_b3_manifest"
 h3_title_anchor_falsifier = "src/h3_title_anchor_falsifier"
 hswm_artifact_layout = "src/hswm_artifact_layout"
+hswm_cellular_live_probe = "src/hswm_cellular_live_probe"
+hswm_cellular_openai = "src/hswm_cellular_openai"
+hswm_cellular_runtime = "src/hswm_cellular_runtime"
+hswm_cellular_store = "src/hswm_cellular_store"
 hswm_token_learning_contract = "src/hswm_token_learning_contract"
 learned = "src/learned"
 learned_v2 = "src/learned_v2"

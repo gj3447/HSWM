@@ -102,4 +102,4 @@ def test_token_learning_ragnarok_canon_preserves_authority_and_evidence_boundary
 
     index = (ROOT / "INDEX.md").read_text(encoding="utf-8")
     assert TOKEN_RAGNAROK_CANON.name in index
-    assert "hswm_token_learning_contract.py" in index
+    assert "src/hswm/learning/token_learning_contract.py" in index

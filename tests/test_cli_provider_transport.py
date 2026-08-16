@@ -549,4 +549,10 @@ def test_existing_extractor_seam_accepts_envelope_but_keeps_cli_arm_exploratory(
 def test_cli_transport_is_shipped_in_the_wheel():
     root = Path(__file__).resolve().parents[1]
     project = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
-    assert "cli_provider_transport" in project["tool"]["setuptools"]["py-modules"]
+    setuptools = project["tool"]["setuptools"]
+    assert "hswm.infrastructure" in setuptools["packages"]
+    assert "cli_provider_transport" in setuptools["packages"]
+    assert "cli_provider_transport" not in setuptools["py-modules"]
+    assert setuptools["package-dir"]["cli_provider_transport"] == (
+        "src/cli_provider_transport"
+    )

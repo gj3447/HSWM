@@ -1,12 +1,14 @@
 # HSWM — Hypergraph Semantic Weight Map
 
 **A research program for turning the fixed harness around LLMs into a persistent,
-learnable macro-network.** LLMs execute local semantic functions; HSWM is the
-plastic coordination harness through which those functions receive context,
-select tools and memory, communicate, verify, recover, and stop. Its target is
-to learn durable semantic weights, routing, and eventually topology from the
-trajectories and outcomes produced while it is used, instead of accumulating
-more hand-written workflow rules.
+learnable macro-network.** A tokenized experience stream is the learning input;
+the pretrained agent supplies the intelligence that interprets it. HSWM is the
+internal memory and plastic coordination substrate that persists what those
+LLM-executed functions induce, then uses it to select context, tools, memory,
+communication, verification, recovery, and stopping. Its target is to learn
+durable semantic weights, routing, and eventually topology while it is used,
+instead of importing a legacy rulebook or accumulating more hand-written
+workflow rules.
 
 > **Research status:** HSWM is not yet that complete system. This repository
 > contains a tested world/evidence substrate, deterministic field and runtime
@@ -48,8 +50,8 @@ model's internal parameters.
 
 | transformer training | HSWM macro-training |
 |---|---|
-| training data | token/action/tool/outcome trajectories |
-| learned parameters | durable `W`, routing policy, and `H` topology |
+| training stream | typed tokens: text, tool observations, actions, and later outcomes |
+| learned parameters | agent-organized memory content, durable `W`, routing policy, and `H` topology |
 | objective and optimizer | external outcome, eligibility, causal credit, and bounded update |
 | forward pass | recurrent activation across LLM function cells |
 | held-out validation | fresh/equal-budget evaluation and removal ablation |
@@ -80,9 +82,20 @@ A conventional harness fixes which model function, tool, memory, or verifier
 runs; what context it receives; in what order or coalition it runs; and how
 handoff, failure, retry, and stopping work. HSWM treats that cognitive
 coordination as learnable macro-state. The harness used for one episode is a
-bounded policy projected from the current `H`, `W`, and routing state. HSWM is
-the larger persistent runtime and learner that executes that projection,
+bounded policy projected from current memory content, `H`, `W`, and routing
+state. HSWM is the larger persistent runtime and learner that executes that projection,
 observes outcomes, assigns credit, and validates changes to later projections.
+
+The external learning payload is a stream of typed tokens. The pretrained
+agent supplies the semantic intelligence that interprets those tokens and
+induces episodic memories, concepts, relations, procedures, and coordination
+candidates inside HSWM. No legacy rulebook, historical repository document, or
+pre-built memory graph is imported as hidden learned state. In particular,
+[`_research/root_compat/`](_research/root_compat/) exists only to replay old
+software paths; it is never an HSWM memory corpus. Raw tokens may be retained as
+content-addressed evidence, but they are not the default future prompt. Useful
+internal memory is the agent-generated organization that changes what later
+episodes can retrieve or do.
 
 | learned cognitive wiring | fixed constitutional boundary |
 |---|---|
@@ -139,18 +152,74 @@ The hero image compresses the idea into one continuous field disturbed by a
 single activation trajectory. It is deliberately a mental image, not a
 one-to-one rendering of discrete hypergraph incidence or a learning claim.
 
+## Target token-to-memory architecture
+
+This is the target architecture, not a diagram of a completed implementation.
+Everything learnable enters as tokenized experience; the foundation agent is
+the induction engine, and HSWM is the persistent memory and coordination
+substrate. Observation memory can be recorded from a sealed token trajectory,
+while a claim that memory improved behavior still requires independent later
+measurement. “Memory content” below is operational payload inside a versioned
+HSWM snapshot, not a new canonical state coordinate and not the mount-set `M`
+of the open self-similar kernel.
+
+```mermaid
+flowchart TB
+  TOK["typed token stream<br/>text · observations · actions"] --> RUN
+  STATE["active HSWM memory snapshot<br/>agent-organized content · H · W · routing · epoch"] --> HARNESS
+  HARNESS["compile a bounded episode harness"] --> RUN["LLM / agent intelligence<br/>interpret · retrieve · coordinate · act"]
+  RUN --> SEALED["seal trajectory and output<br/>before the outcome"]
+
+  SEALED --> EVIDENCE["content-addressed episode evidence<br/>audit and replay; not default prompt context"]
+  SEALED --> INDUCE["agent semantic induction<br/>episode cue · concept · procedure"]
+  INDUCE --> MEMWRITE["budgeted versioned memory-content write<br/>payload / index only; not W, routing, or ΔH"]
+  MEMWRITE --> STATE
+
+  OUTCOME["later independent outcome token"] --> CREDIT
+  SEALED --> CREDIT["eligibility + causal credit"]
+  CREDIT --> CAND["one bounded behavioral candidate<br/>memory admission / use or ΔW or routing or ΔH"]
+  CAND --> GATE{"disjoint shadow / validation<br/>retention and safety gates"}
+  GATE -->|pass| CAS["versioned CAS activation"]
+  GATE -->|fail| ARCHIVE["retain evidence; do not activate"]
+  CAS --> STATE
+
+  STATE --> PROBE["disjoint read-only sealed test probes<br/>never used to select, activate, prune, or stop"]
+  PROBE --> METRICS["continual-use metrics<br/>online gain · FWT · BWT · forgetting<br/>tokens · calls · latency · state size"]
+  CONTROLS["matched controls<br/>reset · no-write · write-no-read<br/>raw-token recall · copied memory text · shuffled credit"] -. compare .-> METRICS
+
+  KERNEL["fixed constitutional kernel<br/>types · authority · effects · budgets<br/>provenance · safety · rollback"] -. constrains .-> RUN
+  KERNEL -. constrains .-> MEMWRITE
+  KERNEL -. constrains .-> GATE
+```
+
+The two write paths are deliberately different. Typed tokens alone can become
+agent-organized episodic, semantic, or procedural memory content under fixed
+provenance, size, and safety limits. An outcome is not required for memory to
+form. Such a write may add payload records and non-coordination indexes, but it
+cannot alter `W`, routing, or the incidence/coordination topology denoted by
+`ΔH`; content-store indexes are not coordination hyperedges. Outcome-bound
+changes to semantic weight, routing, or topology use a separate
+causal-credit and validation path. Neither path imports a hand-authored answer.
+Raw episode evidence stays available for audit and exact replay, but replaying
+that text into the LLM is a separate baseline, not the default HSWM
+mechanism. Final test probes are never exposed to candidate generation,
+selection, activation, pruning, or early stopping. The fixed kernel can reject
+unsafe effects but does not prescribe the cognitive route.
+
 ## What counts as learning
 
-Putting more tokens in a database is memory. Reinjecting them is retrieval.
-Editing a prompt rule is a useful baseline. HSWM counts a trajectory as learned
-only when it closes a causal loop:
+Putting more tokens in a database is storage. Reinjecting them is retrieval. A
+sealed observation can become agent-organized episodic memory without an
+external reward, but that alone does not show useful learning. Editing a prompt
+rule is a useful baseline. HSWM counts a behavioral change as learned only when
+it closes a causal loop:
 
 ```text
 token / action / tool trajectory
   → sealed run-local activation
   → external outcome
   → eligibility and causal credit
-  → bounded ΔW / routing / ΔH candidate
+  → bounded memory-use / ΔW / routing / ΔH candidate
   → fresh, retention, and canary evaluation
   → atomic activation in a new durable snapshot
   → changed future behavior
@@ -164,7 +233,103 @@ hash-binds a claimed causal-test receipt. The replay, equal-budget, and removal
 tests named by that receipt remain a separate evidence boundary; the current
 contract does not inspect their scientific contents.
 
-## The missing integrated macro-training loop
+## Continual use is the primary test
+
+One causally valid point update and continual learning are different claims.
+The main HSWM question is not whether an agent can look intelligent once. It is:
+
+> With the foundation model, tools, information, and budgets fixed, does the
+> same persistent HSWM become more useful across an ordered stream of unseen
+> episodes because its agent-induced internal memory accumulates—and does it do
+> so without unacceptable forgetting, interference, or state and inference
+> growth?
+
+At checkpoint `t`, let `R(t, j)` be the utility of active snapshot `S_t` on a
+sealed, read-only probe from task family `j`, measured before the next learning
+update. The primary endpoint should be preregistered over a finite horizon as
+the sum or area under paired per-instance gain plus a final-window gain. Raw
+within-arm slope is descriptive, neither necessary nor sufficient: heterogeneous
+difficulty, early plateaus, path dependence, a growing prompt, or curriculum
+drift can all distort it. Task-family utilities are either reported separately
+or combined only with a normalization fixed before the run.
+
+Following the paired logic of Continual Learning Bench, per-episode learning
+gain is `g_t = reward_stateful(t) - reward_stateless(t)` for the same agent on
+the same item. This controls for item-level base capability of the same model
+and system under reset state. That is the primary continual-use comparison.
+HSWM-specific attribution additionally preregisters one stateful alternative,
+normally agent-generated textual workflow/memory-copy, as a co-primary control;
+the remaining controls are multiplicity-adjusted diagnostics. Otherwise
+persistence helped, but the HSWM organization was not shown to be the reason.
+
+| mechanism | what a later episode receives | interpretation |
+|---|---|---|
+| raw token replay | selected old transcript or RAG chunks in the prompt | strong in-context memory baseline |
+| agent-generated textual memory | self-written lesson, workflow, playbook, or skill text in the prompt | continual context adaptation baseline |
+| HSWM internal-state mediation | the same external task prompt; only active internal memory content, `H/W`, and routing differ, and any memory packet is selected by HSWM under the same budget | primary HSWM hypothesis |
+
+The first two mechanisms can be useful products and valid continual-use effects,
+but they do not by themselves demonstrate HSWM's internal macro-state claim.
+
+| claim | minimum falsification-oriented measurement |
+|---|---|
+| experience improves later behavior | test-then-update stream; sealed-unseen prequential curve, final-window gain, adaptation speed, and peak-to-final regression |
+| the effect is HSWM memory, not base-agent ability | matched reset/static, no-write, write-no-read, raw-token recall, full-context/RAG, memory-copy, and agent-generated textual lesson/workflow arms |
+| credit or selection is meaningful | correct-credit/selective-use arm beats equal-size shuffled-credit, random-update, and append-everything controls |
+| old capabilities survive | repeated probe matrix with average performance, backward transfer (`BWT`), worst-family forgetting, and safety canaries |
+| useful structure transfers | forward transfer (`FWT`) to held-out related families; unrelated families serve as negative controls |
+| durable HSWM state mediates the gain | process restart preserves its hash and effect; targeted removal erases the gain and exact restoration returns it |
+| improvement scales economically | report active-state bytes, retrieved tokens, model/tool calls, latency, commit/replay cost, and failure rate beside utility |
+
+Every arm starts with empty HSWM memory and the same fixed kernel and foundation
+agent; no seed workflow, legacy document, or historical repository corpus is
+loaded into the learner. Task-family order must be counterbalanced with both
+helpful and interfering histories. Final read-only test probes never update
+memory and never participate in candidate selection, activation, pruning, or
+stopping. The statistical unit is an independent stream/order seed, not each
+episode inside one correlated stream. The no-write arm still pays the cost of
+proposing and checking an update before discarding it, and curves are plotted
+against both episodes and cumulative token/tool cost. Success means a
+preregistered finite-horizon gain over controls with acceptable retention and
+bounded resources; plateaus and negative results are valid.
+
+Improvement only after feedback on the same item is within-episode correction,
+not continual learning, and retries of that item stay outside the primary
+endpoint. Improvement that vanishes under order counterbalancing is curriculum
+or drift confounding. If raw recall ties HSWM, the result is a memory-context
+effect; if removal does not erase the gain, active HSWM state is not the
+demonstrated cause.
+
+### Primary research anchors
+
+These papers make agent-induced memory and continual-use improvement plausible,
+but none is evidence that HSWM works. They define strong baselines and failure
+modes that an HSWM experiment must beat.
+
+<details>
+<summary>Primary papers reviewed through 2026-08-16</summary>
+
+| primary source | result relevant to HSWM | consequence for the test |
+|---|---|---|
+| [Gradient Episodic Memory (NIPS 2017)](https://proceedings.neurips.cc/paper/2017/hash/f87522788a2be2d171666752f97ddebb-Abstract.html) | formalizes repeated task-by-time evaluation, average accuracy, `BWT`, and `FWT` | measure a probe matrix and forgetting, not only final success |
+| [StreamBench (NeurIPS 2024)](https://proceedings.neurips.cc/paper_files/paper/2024/hash/c189915371c4474fe9789be3728113fc-Abstract-Datasets_and_Benchmarks_Track.html) | reports online cumulative gains from retrieving correct prior trajectories | use it as a raw-replay baseline and add separate sealed probes |
+| [Voyager (TMLR 2024)](https://arxiv.org/abs/2305.16291) | an agent without foundation-model parameter updates self-generates a persistent skill library from environment feedback and transfers it to a new world | compare self-generated skill memory and test removal/transfer while matching its strong runtime scaffold and cost |
+| [ExpeL (AAAI 2024)](https://ojs.aaai.org/index.php/AAAI/article/view/29936) | an agent without foundation-model parameter updates extracts natural-language insights from accumulated experience | direct token-to-agent-induced-memory baseline |
+| [CLIN (COLM 2024)](https://openreview.net/forum?id=xS6zx1aBI9) | repeatedly refines persistent causal abstractions without parameter updates | positive task-bounded example for continual memory without foundation-model parameter updates, not for HSWM |
+| [Agent Workflow Memory (ICML 2025)](https://proceedings.mlr.press/v267/wang25bx.html) | induces reusable workflows online and offline from trajectories | a direct online learned-harness baseline; match induction/evaluator cost and rerun counterbalanced orders |
+| [ReasoningBank (ICLR 2026)](https://openreview.net/forum?id=jL7fwchScm) | self-curates reusable strategies from both success and failure | compare HSWM with agent-generated strategy memory, not only raw logs |
+| [Agentic Context Engineering (ICLR 2026)](https://arxiv.org/abs/2510.04618) | incrementally curates a self-written external playbook instead of repeatedly rewriting all context | compare against evolving text memory and monitor context/consolidation collapse |
+| [MemoryBench (ICML 2026)](https://openreview.net/forum?id=If4X4W2HWx) | repeatedly updates memory from interaction blocks and reevaluates a held-out set; advanced systems do not consistently beat simple RAG | reuse checkpointed held-out evaluation and keep RAG as a serious baseline |
+| [LifelongAgentBench (2025 preprint)](https://arxiv.org/abs/2505.11942) | uses strict sequential, skill-dependent interactive tasks and finds ordinary replay can be limited by irrelevant context | preserve task order and include raw-replay controls |
+| [Continual Learning Bench (2026 preprint)](https://arxiv.org/abs/2606.05661) | isolates gain over base capability in stateful real-world streams; dedicated memory systems can underperform naive in-context learning | memory machinery must beat a strong simple-context baseline |
+| [When Continual Learning Moves to Memory (2026 preprint)](https://arxiv.org/abs/2604.27003) | shows stability-plasticity reappears as retrieval interference; abstract procedures can transfer better than detailed trajectories | test representation, retrieval pollution, hard-case negative transfer, and forgetting |
+| [Useful Memories Become Faulty When Continuously Updated (2026 preprint)](https://arxiv.org/abs/2605.12978) | finds that repeated textual consolidation can reverse early gains and fall below no-memory performance | preserve raw evidence, validate immutable candidates, and report peak-to-final regression and rollback |
+| [PATH-Bench (2026 preprint)](https://arxiv.org/abs/2608.01149) | controlled helpful/interfering histories show transfer does not guarantee retention | counterbalance experience paths and repeatedly revisit probes |
+| [Scaling Teams or Scaling Time? (2026 preprint)](https://arxiv.org/abs/2604.03295) | performance is non-monotonic in team size, while the proposed memory design improves long-horizon results and reduces cost | sweep experience time, coordination size, and cost jointly |
+
+</details>
+
+## Current implementation gap and first slices
 
 The current tree has reusable but disconnected pieces: a one-cell event runtime
 and focused durable call replay, a fixed typed `QF → BF → AF` workflow,
@@ -173,51 +338,45 @@ outcome/eligibility/update loop, immutable snapshots and epoch CAS, structural
 composition, and separate evaluation mechanisms. It has no general live
 token/cell trainer that joins an episode-wide recurrent scheduler, a replayable
 decision dataset, live outcome adapters, general causal credit, and one atomic
-active bundle for `W`, routing, and later `H`. P1 ran its engineering path end
-to end, but activated no candidate and produced zero measured top-10 order or
-membership changes across 456 diagnostic cells; it remains scientific RED.
+active bundle for memory content, `W`, routing, and later `H`. P1 ran its
+engineering path end to end, but activated no candidate and produced zero
+measured top-10 order or membership changes across 456 diagnostic cells; it
+remains scientific RED.
 
-The committed next learning experiment remains the parity-controlled typed
-text-lesson baseline. Separately, one candidate engineering track for the
-integrated harness is to freeze the LLM, tools, cell registry, and topology and
-learn only a small routing policy in a task with genuine coordination headroom.
-It must not reuse the
+The committed next component experiment remains the parity-controlled typed
+text-lesson baseline. It is a precursor and comparison arm, not a substitute
+for the empty-memory continual-use protocol above. Separately, one candidate
+engineering track for the integrated harness is to freeze the LLM, tools, cell
+registry, and topology and learn only a small routing policy in a task with
+genuine coordination headroom. It must not reuse the
 [rejected B2.1 `A/B/MERGED` action space](prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md).
 Each decision record would seal the available actions, chosen action and
 probability, state/context references, used edges, and cost before the outcome.
-An independent outcome adapter and credit learner would propose one bounded routing
-update; shadow/fresh/retention/canary tests would precede a versioned CAS commit,
-and post-activation removal/restore would test causal mediation. This is a
-secondary engineering proposal, not a measured result or a replacement for the
-existing commitment.
+An independent outcome adapter and credit learner would propose one bounded
+routing update; shadow/fresh/retention/canary tests would precede a versioned
+CAS commit, and post-activation removal/restore would test causal mediation.
+This is a secondary engineering proposal, not a measured result or a
+replacement for the existing commitment.
 
-The target integrated design separates three explicit clocks:
+The target integrated design separates four explicit clocks:
 
-| clock | topology during the clock | permitted durable result |
+| clock | durable-state rule | permitted durable result |
 |---|---|---|
-| activation | frozen for the episode | sealed decision trajectory only |
-| plasticity | frozen while credit is evaluated | one validated fast routing or `W` candidate |
-| consolidation / morphogenesis | changed only at an episode boundary | repeated effects promoted to slow `W`, then one bounded `H` mutation class |
+| activation | memory content, `H/W`, and routing frozen for the episode | sealed decision trajectory only |
+| memory induction | `W`, routing, and coordination topology unchanged after the seal | one bounded versioned memory-content write |
+| plasticity | coordination topology frozen while outcome credit is evaluated | one validated memory-use, fast-routing, or `W` candidate |
+| consolidation / morphogenesis | changed only at a later episode boundary | repeated effects promoted to slow `W`, then one bounded `H` mutation class |
 
 Within that candidate track, scalar `W` actuation and then topology would be
 separate later experiments. Jointly changing weights, routing, and topology
 would make both credit assignment and failure diagnosis underdetermined.
 
 For scale, raw tokens can remain content-addressed episode evidence while the
-learnable substrate operates on spans, decisions, relations, and outcomes.
-Making every token a permanent graph node is not sufficient for learning;
-without an objective and update rule it is only a large log or retrieval store.
-A scalable loop also needs bounded active state, deduplication, trajectory
-sampling/replay, homeostasis or pruning, versioned snapshots, and deterministic
-commit order. Controlled multi-scale sweeps must report learning, cost,
-stability, and forgetting—including negative results—before any favorable
-scaling behavior is claimed.
-
-A decisive comparison keeps the model, tools, information, call count, token
-budget, and evaluator fixed. The learned-harness arm must be compared with a
-static harness, raw transcript/full-context, no-write, and shuffled-credit
-controls on held-out episodes; post-activation removal must remove any claimed
-gain.
+agent organizes bounded active spans, decisions, relations, and procedures.
+Making every token a permanent graph node is not sufficient: without selective
+induction and later-use measurement it is only a large log. A scalable loop also
+needs bounded active state, deduplication, trajectory sampling/replay,
+homeostasis or pruning, versioned snapshots, and deterministic commit order.
 
 ## Topology and sheaf: core versus research lens
 
@@ -252,7 +411,8 @@ Repository state as of 2026-08-16:
 | scalar slow-weight P1 | **scientific RED**: 12 staged candidates, 0 fresh-gate passes/activations, and 0/456 measured top-10 rank changes |
 | typed-policy P1v3/P1v4 | narrow local `n=6` L0 observation; not durable `ΔW`, transfer, or topology learning |
 | token-driven durable macro-learning | trajectory/eligibility/activation receipt binding implemented; no integrated causal optimizer or causally validated macro-update demonstrated |
-| integrated macro-training dynamics and scale | target requirement; no scaled end-to-end trainer, stable learning curve, or scaling result demonstrated |
+| agent-induced token-to-memory architecture | target only; no integrated runtime yet turns an initially empty HSWM into validated internal memory through continued use |
+| continual-use macro-learning and scale | no preregistered sequential learning curve, retention/forgetting result, or controlled scaling result demonstrated |
 | cross-agent transfer, learned topology, and consolidation | incomplete or unmeasured |
 
 Tests establish implementation and invariant closure, not intelligence or

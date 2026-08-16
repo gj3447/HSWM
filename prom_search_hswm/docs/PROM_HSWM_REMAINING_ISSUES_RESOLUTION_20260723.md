@@ -91,8 +91,8 @@ HSWM의 방어 가능한 신규성 후보는 “hypergraph RAG”, “temporal m
 
 코드상 이미 쓸 수 있는 기반도 분명하다.
 
-- [`weight_field.py`](../../weight_field.py)의 fast bilinear + slow salience field;
-- [`field_snapshot.py`](../../field_snapshot.py)의 immutable revision cuts와 hashes;
+- [`weight_field.py`](../../_research/root_compat/weight_field.py)의 fast bilinear + slow salience field;
+- [`field_snapshot.py`](../../src/hswm/substrate/field_snapshot.py)의 immutable revision cuts와 hashes;
 - [`certified_readout.py`](../../src/hswm/substrate/certified_readout.py)의 certified cut admission;
 - [`supersede_ledger.py`](../../src/hswm/substrate/supersede_ledger.py)의 제한된 duplicate-immune fold;
 - [`prom_search_hswm/hswm_bond_readout.py`](../hswm_bond_readout.py)의 pure bond ranking;

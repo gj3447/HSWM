@@ -151,9 +151,6 @@ py-modules = [
 prom_search_hswm = ["data/README.md", "data/gold_badiou24.json"]
 
 [tool.setuptools.package-dir]
-"" = "_research/root_compat"
-scripts = "scripts"
-prom_search_hswm = "prom_search_hswm"
 hswm = "src/hswm"
 certified_cut_compare = "src/certified_cut_compare"
 certified_readout = "src/certified_readout"
@@ -193,4 +190,4 @@ world_builder = "src/world_builder"
 [tool.pytest.ini_options]
 testpaths = ["tests", "prom_search_hswm", "_research/shared_field_hypothesis"]
 python_files = "test_*.py"
-pythonpath = ["src", "_research/root_compat", "."]
+pythonpath = ["src", "."]

@@ -23,10 +23,11 @@
           },
           "canonical_path": {
             "type": "string",
-            "pattern": "^(docs/(canon|research|archive)|evidence|prereg|manifests|research|results|receipts|scripts)/(?:(?!\\.{1,2}/)[^/\\\\]+/)*[^/\\\\]+\\.(md|json|txt|log|sh)$"
+            "pattern": "^(_research/root_compat|docs/(canon|research|archive)|evidence|prereg|manifests|research|results|receipts|scripts)/(?:(?!\\.{1,2}/)[^/\\\\]+/)*[^/\\\\]+\\.(md|json|txt|log|sh)$"
           },
           "destination_kind": {
             "enum": [
+              "compatibility-record",
               "canon-document",
               "research-document",
               "archive-document",

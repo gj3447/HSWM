@@ -38,6 +38,7 @@ _PYTHON_DESTINATION_PREFIXES = {
     "test": "tests/",
 }
 _ASSET_DESTINATION_PREFIXES = {
+    "compatibility-record": "_research/root_compat/",
     "canon-document": "docs/canon/",
     "research-document": "docs/research/",
     "archive-document": "docs/archive/",

@@ -20,7 +20,10 @@ They preserve selected historical imports without putting `.py` shims back in
 the repository root. New code must import the canonical `hswm.*` path.
 
 Source-only experiment programs belong under `_research/`; maintenance commands
-belong under `scripts/`. Root compatibility reasons are frozen in
+belong under `scripts/`. The remaining flat compatibility modules are sourced
+from [`_research/root_compat/`](../_research/root_compat/) through packaging;
+that closed cluster is not a canonical implementation namespace. Root
+compatibility reasons are frozen in
 [`ROOT_COMPATIBILITY_BASELINE.v1.json`](../ontology/history/ROOT_COMPATIBILITY_BASELINE.v1.json);
 their replay and migration policy is documented in
 [`ontology/history/README.md`](../ontology/history/README.md).

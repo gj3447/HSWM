@@ -3,7 +3,13 @@ from __future__ import annotations
 import importlib
 from pathlib import Path
 
-from _research.f_series import MODULES, REPO_ROOT, SOURCE_ROOT, source_path
+from _research.f_series import (
+    MODULES,
+    REPO_ROOT,
+    ROOT_COMPAT_SOURCE,
+    SOURCE_ROOT,
+    source_path,
+)
 
 
 EXPECTED_MODULES = {
@@ -34,11 +40,16 @@ def test_f_series_has_one_canonical_source_only_surface() -> None:
     assert set(MODULES) == EXPECTED_MODULES
     assert REPO_ROOT == Path(__file__).resolve().parents[1]
     assert SOURCE_ROOT == REPO_ROOT / "_research" / "f_series"
+    assert ROOT_COMPAT_SOURCE == REPO_ROOT / "_research" / "root_compat"
 
     for module_name in sorted(EXPECTED_MODULES):
         filename = f"{module_name}.py"
         assert not (REPO_ROOT / filename).exists()
         assert source_path(filename) == SOURCE_ROOT / filename
+
+    root_era_module = "p1v3_multi_environment.py"
+    assert not (REPO_ROOT / root_era_module).exists()
+    assert source_path(root_era_module) == ROOT_COMPAT_SOURCE / root_era_module
 
 
 def test_all_f_series_modules_import_by_canonical_name() -> None:

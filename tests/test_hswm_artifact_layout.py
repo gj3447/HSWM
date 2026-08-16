@@ -82,6 +82,30 @@ def test_resolve_prefers_subdir_then_legacy_root(tmp_path):
         layout.resolve_artifact_path("EVIDENCE_MISSING_2026-01-01.json", root=tmp_path)
 
 
+def test_resolve_prefers_root_compat_then_old_root_for_unclassified_names(tmp_path):
+    name = "root_era_source.py"
+    compatibility = tmp_path / "_research" / "root_compat" / name
+    compatibility.parent.mkdir(parents=True)
+    compatibility.write_text("canonical", encoding="utf-8")
+    old_root = tmp_path / name
+    old_root.write_text("old-root", encoding="utf-8")
+
+    assert layout.resolve_artifact_path(name, root=tmp_path) == compatibility
+    assert list(layout.iter_artifact_paths(name, root=tmp_path)) == [
+        compatibility,
+        old_root,
+    ]
+
+    compatibility.unlink()
+    assert layout.resolve_artifact_path(name, root=tmp_path) == old_root
+
+
+def test_migrated_root_source_resolves_from_canonical_compatibility_directory():
+    path = layout.resolve_artifact_path("semantic_layer_falsifier.py")
+    assert path == REPO / "_research" / "root_compat" / "semantic_layer_falsifier.py"
+    assert path.is_file()
+
+
 def test_moved_evidence_artifacts_resolve_from_typed_directory():
     path = layout.resolve_artifact_path("EVIDENCE_B1_IDENTITY_UNLOCK_2026-07-22.json")
     assert path == REPO / "evidence" / "EVIDENCE_B1_IDENTITY_UNLOCK_2026-07-22.json"

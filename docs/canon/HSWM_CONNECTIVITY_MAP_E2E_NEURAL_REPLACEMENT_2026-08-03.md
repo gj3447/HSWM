@@ -90,7 +90,7 @@
 ## 4. 관계 문서
 
 - **PROM-17 (전방)**: [`PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md`](../research/PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md)
-- **PROM-17 §8 관계 문서**: [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) (정체성 정전) / [`PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md`](../research/PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) (최소 구현 계약) / [`PROM_16_HSWM_HOLISTIC_SCIENTIFIC_ARCHITECTURE_2026-07-26.md`](../research/PROM_16_HSWM_HOLISTIC_SCIENTIFIC_ARCHITECTURE_2026-07-26.md) (총체 과학 구조)
+- **PROM-17 §8 관계 문서**: [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../_research/root_compat/CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) (정체성 정전) / [`PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md`](../research/PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) (최소 구현 계약) / [`PROM_16_HSWM_HOLISTIC_SCIENTIFIC_ARCHITECTURE_2026-07-26.md`](../research/PROM_16_HSWM_HOLISTIC_SCIENTIFIC_ARCHITECTURE_2026-07-26.md) (총체 과학 구조)
 - **HSWM/ 카탈로그**: HARNESS_7COMMANDER (C2·C7) / LENS_DUALITY (C7) / PHASE_B (C5) / MATH_DEFINITION_UNIFIED (C6) / 헌장 HC-08 (C5) / B2 결과 (C5) / PROM_16_UNPROVEN_B (C8)
 - **AGENTS.md 정전**: `7cmd-measurement-driven-conditional-dispatch-2026-05-30` (C2) / `apt-contract-root-axiom-2026-05-27` (C3)
 - **KG**: `user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23` / `user-canon-hswm-functions-are-llm-executed-neural-net-2026-07-23` / `user-canon-legioncommanders-operate-on-hswm-neural-net-2026-07-23` (VerdictPending) / `commander-hswm-omc-2026-07-19`

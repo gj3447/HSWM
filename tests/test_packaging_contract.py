@@ -394,6 +394,9 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
         "results/raw/*.json 이 sdist 에서 누락됐다: "
         f"{sorted(expected_raw_results - raw_results)}"
     )
+    assert "_research/root_compat/pyproject.toml" in inner, (
+        "H3 동결 실행 스냅샷의 pyproject.toml 이 sdist 에 없다"
+    )
     # 루트 *.sh 는 배포하지 않는다. 일부 운영 스크립트가 장비별 호스트명을
     # 포함할 수 있으므로 source distribution의 공용 표면에서 제외한다.
     root_sh = [n for n in inner if "/" not in n and n.endswith(".sh")]

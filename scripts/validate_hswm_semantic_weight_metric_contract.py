@@ -20,8 +20,10 @@ from typing import Any, Iterable, Mapping
 
 SCRIPT_PATH = Path(__file__).resolve()
 REPO_ROOT = SCRIPT_PATH.parents[1]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+ROOT_COMPAT_SOURCE = REPO_ROOT / "_research" / "root_compat"
+for import_root in (REPO_ROOT, ROOT_COMPAT_SOURCE):
+    if str(import_root) not in sys.path:
+        sys.path.insert(0, str(import_root))
 
 from hswm_semantic_weight_metric import PARITY_FIELDS, REQUIRED_ARMS  # noqa: E402
 
@@ -702,12 +704,13 @@ def validate_preregistration(
         "prereg.judge_binding",
     )
     judge_path = _safe_file(judge["path"], "prereg.judge_binding.path", REPO_ROOT)
-    if judge["path"] != "hswm_scalar_w_causal_judge.py":
+    if judge["path"] != "_research/root_compat/hswm_scalar_w_causal_judge.py":
         _fail("preregistration judge path drift")
     if sha256(judge_path) != _sha(judge["sha256"], "prereg.judge_binding.sha256"):
         _fail("preregistration judge SHA drift")
     if judge["replay_command"] != (
-        "python3 hswm_scalar_w_causal_judge.py --metrics <sealed_metrics.json>"
+        "python3 _research/root_compat/hswm_scalar_w_causal_judge.py "
+        "--metrics <sealed_metrics.json>"
     ) or judge["judgment_schema"] != "hswm-scalar-w-causal-judgment/v1":
         _fail("preregistration judge replay contract drift")
 

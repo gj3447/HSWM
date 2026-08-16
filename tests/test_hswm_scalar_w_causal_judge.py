@@ -17,6 +17,7 @@ from hswm_scalar_w_causal_judge import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+ROOT_COMPAT_SOURCE = ROOT / "_research" / "root_compat"
 
 
 def effect(mean: float, lcb: float, ucb: float) -> dict[str, object]:
@@ -302,7 +303,7 @@ def test_judge_cli_replays_a_frozen_metric_file(tmp_path: Path) -> None:
     completed = subprocess.run(
         [
             sys.executable,
-            "hswm_scalar_w_causal_judge.py",
+            str(ROOT_COMPAT_SOURCE / "hswm_scalar_w_causal_judge.py"),
             "--metrics",
             str(metric_path),
         ],

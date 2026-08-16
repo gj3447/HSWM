@@ -20,6 +20,7 @@ from p1v4_replay_judge import (
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+ROOT_COMPAT_SOURCE = REPO_ROOT / "_research" / "root_compat"
 
 
 def _sealed_fixture(*, typed_improvements: int = 1):
@@ -90,7 +91,7 @@ def test_bundle_recomputes_metric_without_a_reported_value():
 
 
 def test_bundle_contract_names_the_actual_frozen_historic_scorer():
-    scorer_bytes = (REPO_ROOT / "p1v3_heldout_judge.py").read_bytes()
+    scorer_bytes = (ROOT_COMPAT_SOURCE / "p1v3_heldout_judge.py").read_bytes()
 
     assert sha256(scorer_bytes).hexdigest() == P1V3_FROZEN_SCORER_SHA256
 
@@ -122,7 +123,7 @@ def test_exact_HSWM_LOCAL_RECORD(tmp_path):
         [
             sys.executable,
             "-I",
-            str(REPO_ROOT / "p1v4_replay_judge.py"),
+            str(ROOT_COMPAT_SOURCE / "p1v4_replay_judge.py"),
             str(result_path),
         ],
         capture_output=True,

@@ -354,9 +354,9 @@ P2는 typed text-lesson fallback이 먼저 fresh behavior를 움직일 때만 �
 ## 12. 관련 정본
 
 - [`README.md`](../../README.md) — 공개 claim boundary와 P0–P4 상태
-- [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) — 사용자 방향 정전
+- [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../_research/root_compat/CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) — 사용자 방향 정전
 - [`P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md`](../../results/P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md) — P1 구현·실측 RED closeout
 - [`prom_search_hswm/hswm_open_kernel.py`](../../prom_search_hswm/hswm_open_kernel.py) — open self-similar structural kernel
 - [`prom_search_hswm/hswm_bond_readout.py`](../../prom_search_hswm/hswm_bond_readout.py) — slow/fast weight binding
 - [`prom_search_hswm/fsm/hswm_plasticity_loop.v1.json`](../../prom_search_hswm/fsm/hswm_plasticity_loop.v1.json) — bounded plasticity workflow contract
-- [`feedback_runtime.py`](../../feedback_runtime.py), [`feedback_ports.py`](../../feedback_ports.py), [`feedback_store.py`](../../feedback_store.py) — deterministic safety/control plane
+- [`feedback_runtime.py`](../../_research/root_compat/feedback_runtime.py), [`feedback_ports.py`](../../_research/root_compat/feedback_ports.py), [`feedback_store.py`](../../_research/root_compat/feedback_store.py) — deterministic safety/control plane

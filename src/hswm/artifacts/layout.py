@@ -13,11 +13,12 @@ the repository root:
     checked-in raw results   -> results/raw/
     narrative research docs  -> docs/research/
 
-Backward compatibility: legacy root artifacts keep validating.  Readers should
-resolve names through :func:`resolve_artifact_path`, which checks the per-kind
-subdirectory first and then falls back to the legacy root location, so old
-root files and new subdir files both resolve.  Path+sha256 ledger entries name
-explicit repository-relative paths and are unaffected.
+Backward compatibility: root-era artifacts keep validating after their exact
+sources move to ``_research/root_compat``.  Readers should resolve names through
+:func:`resolve_artifact_path`, which checks the per-kind subdirectory first,
+then the canonical root-compat directory, and finally an old root location.
+Path+sha256 ledger entries name explicit repository-relative paths and are
+unaffected.
 
 Escape hatch: set ``HSWM_ARTIFACT_ROOT`` to redirect the artifact output root
 (useful for tests and scratch runs).  Paths then become
@@ -97,6 +98,7 @@ MANIFEST_NAMES = frozenset({
 })
 
 ENV_ARTIFACT_ROOT = "HSWM_ARTIFACT_ROOT"
+ROOT_COMPAT_DIR = "_research/root_compat"
 
 
 def classify_artifact(name: str) -> str | None:
@@ -165,15 +167,19 @@ def resolve_artifact_path(
     root: str | Path | None = None,
     must_exist: bool = True,
 ) -> Path:
-    """Resolve an artifact by bare filename: per-kind subdir first, legacy root
-    second.  With must_exist=False, return the preferred (subdir) candidate even
-    when nothing exists yet, so callers keep their own error handling."""
+    """Resolve a bare filename across typed, root-compat, and old-root paths.
+
+    With ``must_exist=False``, return the preferred candidate even when nothing
+    exists yet, so callers keep their own error handling.
+    """
     base = Path(root) if root is not None else artifact_root()
     kind = kind or classify_artifact(name)
     candidates = []
     if kind is not None:
         candidates.append(base / ARTIFACT_DIRS[kind] / name)
-    candidates.append(base / name)  # legacy root location
+    if Path(name).name == name:
+        candidates.append(base / ROOT_COMPAT_DIR / name)
+    candidates.append(base / name)  # root-era checkout or detached replay
     for candidate in candidates:
         if candidate.is_file():
             return candidate
@@ -186,14 +192,15 @@ def resolve_artifact_path(
 
 
 def iter_artifact_paths(name: str, kind: str | None = None, *, root: str | Path | None = None):
-    """Yield every existing location for an artifact name (subdir, then root),
-    de-duplicated.  For readers that must see both legacy and new files."""
+    """Yield existing typed, root-compat, and old-root paths, de-duplicated."""
     seen = set()
     base = Path(root) if root is not None else artifact_root()
     kind = kind or classify_artifact(name)
     candidates = []
     if kind is not None:
         candidates.append(base / ARTIFACT_DIRS[kind] / name)
+    if Path(name).name == name:
+        candidates.append(base / ROOT_COMPAT_DIR / name)
     candidates.append(base / name)
     for candidate in candidates:
         key = candidate.resolve()

@@ -207,6 +207,7 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | What is the broader world-memory purpose? | [`THE_WORLD_REMEMBERS.md`](docs/canon/THE_WORLD_REMEMBERS.md) |
 | Where is the full research chronology? | [`INDEX.md`](INDEX.md) |
 | How is the whole repository organized by meaning? | [`ontology/`](ontology/) |
+| Where did the root-era compatibility sources move? | [`_research/ROOT_COMPATIBILITY.md`](_research/ROOT_COMPATIBILITY.md) |
 | How might sheaf theory help without becoming another static harness? | [`ontology/field/sheaf/`](ontology/field/sheaf/) |
 
 ## Repository map
@@ -220,28 +221,36 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | `src/hswm/substrate/` | canonical hypergraph, document/world construction, immutable field cuts, certified readout, and convergence substrate |
 | `src/hswm/learning/` | token-learning contracts and learning diagnostics |
 | `src/hswm/evaluation/`, `_research/` | falsification code and source-only experiment programs |
-| `world_ir.py`, `world_compiler.py` | immutable evidence model and deterministic world compilation |
+| `_research/root_compat/` | source-pinned root-era compatibility cluster; closed to new work |
+| `_research/root_compat/world_ir.py`, `_research/root_compat/world_compiler.py` | flat compatibility modules for the immutable evidence model and deterministic world compilation |
 | `src/hswm/substrate/doc_builder.py`, `src/hswm/substrate/world_builder.py` | deterministic document and corpus hypergraph construction |
 | `src/hswm/substrate/field_snapshot.py`, `src/hswm/substrate/certified_readout.py` | certified field cuts and exact-scope admission |
-| `hswm_weight_store.py`, `src/hswm/learning/token_learning_contract.py` | durable weight state and causal-learning evidence boundary |
+| `_research/root_compat/hswm_weight_store.py`, `src/hswm/learning/token_learning_contract.py` | flat durable-weight compatibility source and the canonical causal-learning evidence boundary |
 | `prom_search_hswm/` | open composition, field algebra, retrieval, routing, and plasticity experiments |
 | `tests/`, `_research/shared_field_hypothesis/` | core regression and fail-closed research contracts |
 | `research/`, `schemas/`, `scripts/` | machine-readable contracts, schemas, and validators |
 | `evidence/`, `prereg/`, `manifests/`, `results/`, `receipts/` | typed research artifacts and direct measurements |
 | `docs/research/`, `docs/assets/` | narrative research material and public visual assets |
 
-The repository root now contains only public entry files and explicitly
-classified compatibility records. The compatibility records' single frozen source is
-[`ROOT_COMPATIBILITY_BASELINE.v1.json`](ontology/history/ROOT_COMPATIBILITY_BASELINE.v1.json).
-New code belongs under `src/hswm/`; documents and artifacts follow the typed directories in
+The repository root now contains only public entry files. The 93 files in the
+final root-era compatibility set moved together to
+[`_research/root_compat/`](_research/root_compat/) so their flat imports and
+same-directory references remain intact without occupying the public root. The
+set is closed to new work; its reasons are frozen in
+[`ROOT_COMPATIBILITY_BASELINE.v1.json`](ontology/history/ROOT_COMPATIBILITY_BASELINE.v1.json),
+and its canonical destinations are source-pinned by the final
+[`Python`](ontology/history/PYTHON_ROOT_MIGRATIONS.FINAL.v2.json) and
+[`asset`](ontology/history/ROOT_ASSET_MIGRATIONS.FINAL.v1.json) migration
+manifests. New code belongs under `src/hswm/`; documents and artifacts follow
+the typed directories in
 [`ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).
 
 Published historical paths that genuinely require exact replay remain covered
-by the retained migration manifests described in
+by the additive migration manifests described in
 [`ontology/history/`](ontology/history/README.md). Ordinary files absent from the
-baseline's `paths` array move through standard Git history. Moving a listed
-compatibility path requires one source-pinned manifest before its canonical copy
-can change. The repository
+baseline's `paths` array move through standard Git history. The compatibility
+cluster preserves current sibling-dependent imports and references; exact
+root-era commands still run only through detached replay. The repository
 ontology remains a semantic map, not a checked-in inventory of every path.
 
 Old commands are reproduced in their original root layout without restoring

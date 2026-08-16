@@ -12,13 +12,17 @@
 
 공개 탐색의 정본은 [`ontology/`](ontology/)다. `identity → substrate → field ↔ cells
 → learning`을 중심으로 boundary, evaluation, evidence, infrastructure, history를 관계로
-연결한다. 물리 루트에는 공개 진입 파일과 명시적으로 분류된 호환 기록만 남는다. 현재
-결박 기준과 사유의 단일 정본은
+연결한다. 물리 루트에는 공개 진입 파일만 남는다. 최종 root-era 호환 93개 파일은 flat
+import와 같은-directory 결박을 보존한 채
+[`_research/root_compat/`](_research/root_compat/)로 함께 이동했으며, 새 작업을 받지 않는
+폐쇄 집합이다. 결박 기준과 사유의 단일 정본은
 [`root compatibility baseline`](ontology/history/ROOT_COMPATIBILITY_BASELINE.v1.json)이다.
-새 코드와 산출물은 typed directory를 사용하며, 이미 발표된 옛 경로가 정확한 재현을
-요구할 때만 [`migration/replay history`](ontology/history/README.md)를 따른다. baseline의
-`paths` 배열에 없는 일반 파일은 표준 Git 이동을 사용하고, 배열에 있는 결박 파일을 옮길 때는 기존
-replay registry에 source-pinned manifest 하나를 추가한다.
+현재 canonical destination은 최종
+[`Python`](ontology/history/PYTHON_ROOT_MIGRATIONS.FINAL.v2.json)·
+[`asset`](ontology/history/ROOT_ASSET_MIGRATIONS.FINAL.v1.json) migration manifest가
+source-pinned한다. 새 코드와 산출물은 typed directory를 사용하며, 이미 발표된 옛 경로의
+정확한 재현은 [`migration/replay history`](ontology/history/README.md)를 통해 분리된
+checkout에서만 수행한다.
 
 이 온톨로지는 저장소의 의미 지도이지 HSWM의 인지 규칙이 아니다. AI 행동은 문서 경로가
 아니라 outcome에 결속된 token/action/tool trajectory가 durable `W/H/routing`을 바꾸고
@@ -75,7 +79,7 @@ engineering PASS 단독으로 과학적 효능을 선언하지 않는다.
 routing을 이룬다. HSWM 전체가 persistent recurrent state, credit, acceptance,
 weight/topology rewrite를 소유한다. 이는 목표 정체성이며 현재 효능 주장이 아니다.
 정본은
-[`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md)다.
+[`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](_research/root_compat/CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md)다.
 함수 계약, 실행 cycle, 코드 대응, 구현 가능성, 실패 모드와 결정적 실험은
 [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](docs/canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md)에 고정했다.
 
@@ -141,12 +145,12 @@ sheaf hypergraph network까지 설명한다. 기계 판독 정본은
 
 | 단계/실험 | 현재 판정 | 산출물 |
 |---|---|---|
-| P0 identity/metric | 목표 정체성 고정. 함수/agent process가 LLM으로 실행되고 `H,W`가 그 거시 신경망을 구성. 인지체 metric(slope>0)·baseline 3종·평가 3종 잠금 초안 (ratify 대기) | [canon](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) · [P0 prereg](prereg/PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md) |
+| P0 identity/metric | 목표 정체성 고정. 함수/agent process가 LLM으로 실행되고 `H,W`가 그 거시 신경망을 구성. 인지체 metric(slope>0)·baseline 3종·평가 3종 잠금 초안 (ratify 대기) | [canon](_research/root_compat/CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) · [P0 prereg](prereg/PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md) |
 | P1 learning actuation | scalar slow-weight P1은 **과학적 RED**(12 candidates, active 0, A1−A2=0, rank 변화 0/456). typed-policy 표현으로 이동한 P1v3은 `6/6 vs 0/6`, 독립 P1v4는 `6/6 vs 2/6`, 개선 4/6으로 재현됐다. 단 n=6 L0이며 일반 compiler·durable `Delta W`는 미확증 | [efficacy record](EFFICACY.md) · [P1v4 closeout](_research/p1v4_fresh_replication/CLOSEOUT_20260724.md) · [prereg](prereg/PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json) |
 | B2 routing signal | 최선 slice oracle +9.92pp, tie 75%; pooled 분포는 tie kill. 얇은 oracle signal이지 learned 성공 아님 | [result](results/B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md) · [evidence](evidence/EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json) |
 | E1 conditional traversal | bridge −13.89pp, factoid −7.27pp. 전면 OFF 유지 | [result](results/E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md) · [evidence](evidence/EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json) |
 | P3 shadow topology absorption | 0/3 수용, canary 100%, sealed Δ0. 안전하지만 후보가 무득 | [result](results/SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md) · [evidence](prom_search_hswm/evidence/EVIDENCE_shadow_gated_absorption_20260723.json) |
-| prior-art tribunal | generic graph three-factor+sleep novelty는 사망; n-ary credit/LLM verdict/topology/shared persistent field 슬롯 생존 | [tribunal](TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md) |
+| prior-art tribunal | generic graph three-factor+sleep novelty는 사망; n-ary credit/LLM verdict/topology/shared persistent field 슬롯 생존 | [tribunal](_research/root_compat/TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md) |
 
 ## 2026-07-23 paper–code absorption gate
 
@@ -168,7 +172,7 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 
 | 묶음 | 공개 경계 | 산출물 |
 |---|---|---|
-| H3-B3 V5 재현성 | 이미 공개된 V5 run manifest가 고정한 source/prereg/test를 복구. 기존 refusal·효능 판정은 변경하지 않음 | [V5 prereg](H3_B3_V5_RESTART_PREREG_2026-07-20.md) · [C0 diagnosis](docs/research/H3_C0_CHAIN_VIABILITY_DIAGNOSIS_2026-07-20.md) |
+| H3-B3 V5 재현성 | 이미 공개된 V5 run manifest가 고정한 source/prereg/test를 복구. 기존 refusal·효능 판정은 변경하지 않음 | [V5 prereg](_research/root_compat/H3_B3_V5_RESTART_PREREG_2026-07-20.md) · [C0 diagnosis](docs/research/H3_C0_CHAIN_VIABILITY_DIAGNOSIS_2026-07-20.md) |
 | World Compiler S4.0 | 가역적 entity binding 수직 slice와 OSS 비교. `claim_weave`·`chain_viability`는 미구현 | [receipt](docs/research/S4_0_REVERSIBLE_ENTITY_BINDING_2026-07-21.md) · [PROM](docs/research/WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md) |
 | R3 walk-regime density dial | PhantomWiki large+sparse hard-hop에서 walk−flat `+0.0111`, LCB `+0.00085`; dense에서는 `-0.0048`. synthetic retrieval-side regime 관측이며 real-data answer uplift가 아니다 | [prereg](prereg/PREREG_R3_WALK_REGIME_2026-07-23.json) · [result](results/R3_WALK_REGIME_RESULTS_2026-07-24.md) · [`r3_walk_regime.py`](_research/f_series/r3_walk_regime.py) |
 
@@ -195,7 +199,8 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 |---|---|
 | [`README.md`](README.md) | 공개 구현의 현재 claim boundary와 실행법 |
 | [`EFFICACY.md`](EFFICACY.md) | 효능 주장과 반증 결과의 장부 |
-| [`world_ir.py`](world_ir.py), [`world_compiler.py`](world_compiler.py) | evidence-preserving world compiler |
+| [`_research/root_compat/`](_research/root_compat/) | source-pinned root-era flat compatibility source; 새 작업 금지 |
+| [`world_ir.py`](_research/root_compat/world_ir.py), [`world_compiler.py`](_research/root_compat/world_compiler.py) | evidence-preserving world compiler의 flat 호환 모듈 |
 | [`doc_builder.py`](src/hswm/substrate/doc_builder.py), [`world_builder.py`](src/hswm/substrate/world_builder.py) | deterministic document/corpus hypergraph builders |
 | [`field_snapshot.py`](src/hswm/substrate/field_snapshot.py), [`certified_readout.py`](src/hswm/substrate/certified_readout.py) | immutable field cut와 fail-closed readout |
 | [`prom_search_hswm/`](prom_search_hswm/) | PROM→HSWM, field algebra, federated merge, open-composition 연구 코드와 영수증 |

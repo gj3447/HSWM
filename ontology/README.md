@@ -13,10 +13,15 @@ The repository therefore uses two compatible views:
   system itself.
 
 New Python implementation belongs under [`src/hswm/`](../src/hswm/). The root
-contains only public entry files and explicitly frozen compatibility records.
-Their single frozen source of truth is
+contains only public entry files. The final 93 root-era compatibility sources
+live together in the closed
+[`_research/root_compat/`](../_research/root_compat/) cluster so flat imports and
+same-directory bindings remain intact. Their reasons are frozen in
 [`ROOT_COMPATIBILITY_BASELINE.v1.json`](history/ROOT_COMPATIBILITY_BASELINE.v1.json).
-Published old commands can be recovered without polluting the active checkout with
+Their canonical destinations are source-pinned by the final
+[`Python`](history/PYTHON_ROOT_MIGRATIONS.FINAL.v2.json) and
+[`asset`](history/ROOT_ASSET_MIGRATIONS.FINAL.v1.json) manifests. Published old
+commands can be recovered without polluting the active checkout with
 `uv run hswm-legacy-replay materialize OLD_ROOT_FILE /tmp/hswm-replay`.
 
 ## Concept map
@@ -32,7 +37,7 @@ Published old commands can be recovered without polluting the active checkout wi
 | [`evaluation/`](evaluation/) | How are claims falsified and behavior changes measured? |
 | [`evidence/`](evidence/) | Where are preregistrations, manifests, results, and receipts? |
 | [`infrastructure/`](infrastructure/) | What builds, validates, packages, and documents the repository? |
-| [`history/`](history/) | Why do some legacy root paths remain frozen? |
+| [`history/`](history/) | How are root-era paths, digests, and detached replay preserved? |
 
 The machine-readable concept graph is
 [`HSWM_REPOSITORY_ONTOLOGY.v1.json`](HSWM_REPOSITORY_ONTOLOGY.v1.json). It

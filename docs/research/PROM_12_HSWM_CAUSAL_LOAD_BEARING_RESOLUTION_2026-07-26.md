@@ -38,9 +38,9 @@ topology가 서로 분리된 실험으로 존재하여 **HSWM 고유 구조가 �
 
 - KG `user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23`:
   **HSWM 자체가 합의를 포함하는 더 큰 범위의 AI**다.
-- [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md):
+- [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../_research/root_compat/CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md):
   HSWM = LLM-executed functions + `H` + `W` + recurrent plastic state.
-- [`HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md`](../../HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md):
+- [`HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md`](../../_research/root_compat/HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md):
   LLM 호출, prompt 변경, static memory가 아니라 결과가 `W/H`를 바꾸고 그 변화가 다음
   dispatch를 바꿀 때만 HSWM 학습이다.
 

@@ -77,7 +77,7 @@ def _verify_source_bindings(
         f"{label} source bindings are absent",
     )
     for name, declared in bindings.items():
-        path = root / str(name)
+        path = resolve_artifact_path(str(name), root=root, must_exist=False)
         try:
             actual = sha256(path.read_bytes()).hexdigest()
         except OSError as exc:

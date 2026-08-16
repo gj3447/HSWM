@@ -38,21 +38,32 @@ path = resolve_artifact_path("EVIDENCE_B1_IDENTITY_UNLOCK_2026-07-22.json")
 - `default_artifact_path(name, kind=None)` — write path in the per-kind
   subdir (creates the directory). Kind is inferred from the filename via
   `classify_artifact()`; pass `kind=` for anything non-standard.
-- `resolve_artifact_path(name, root=None)` — read resolution: per-kind subdir
-  first, **legacy root second**. Old root files and new subdir files both
-  resolve; path+sha256 ledger entries keep working unchanged.
-- `iter_artifact_paths(name)` — both locations, for listing-style readers.
+- `resolve_artifact_path(name, root=None)` — bare-name read resolution: per-kind
+  subdir first, [`_research/root_compat/`](../../_research/root_compat/) second,
+  and the old root last for older checkouts or detached replay. The active root
+  has no compatibility files. Explicit nested paths remain repository-relative.
+- `iter_artifact_paths(name)` — every existing location in that order, for
+  listing-style readers.
 
 ## Historical compatibility
 
-The frozen root compatibility set is recorded once in
+The reasons for the frozen root compatibility set are recorded once in
 [`ROOT_COMPATIBILITY_BASELINE.v1.json`](../../ontology/history/ROOT_COMPATIBILITY_BASELINE.v1.json).
-Existing source-pinned migration manifests remain available through the
+Its final 93 root-era files now live together in the closed
+[`_research/root_compat/`](../../_research/root_compat/) cluster. Their canonical
+destinations and source digests are bound by the final
+[`Python`](../../ontology/history/PYTHON_ROOT_MIGRATIONS.FINAL.v2.json) and
+[`asset`](../../ontology/history/ROOT_ASSET_MIGRATIONS.FINAL.v1.json) manifests.
+Keeping the set together preserves flat imports, `__file__`-relative readers,
+and same-directory document links; it is not a template or destination for new
+work.
+
+All source-pinned migration manifests remain available through the
 [`history index`](../../ontology/history/README.md) when a published command or
-receipt must be replayed at its original commit and path. They are archival
-compatibility records, not a template for ordinary unbound file moves. Files
-outside the baseline's `paths` array use standard Git moves; relocating a listed
-compatibility path adds one source-pinned manifest to the existing replay registry.
+receipt must be replayed at its original commit and path. Files outside the
+baseline's `paths` array use ordinary Git history. The active checkout uses the
+canonical cluster or typed directories; exact root-era paths are materialized
+only in a detached replay checkout.
 
 Some source-locked programs retain root-era input or output constants. Do not
 edit those programs merely to modernize a path or run their default-output mode
@@ -60,6 +71,12 @@ against active locked artifacts. Use an explicit typed output when supported;
 otherwise reproduce the historical program with `hswm-legacy-replay` in its
 detached checkout. Current general-purpose readers and writers should use the
 typed resolver above.
+
+The three `formal/verify_hswm_*_longinus.py` programs and their Longinus
+manifests and receipts are published root-era, SHA-bound records. Their embedded
+root paths are deliberately not rewritten to follow the active checkout, and
+they are not current-layout validators. Preserve them byte-for-byte and use the
+recorded source context or `hswm-legacy-replay` for exact historical execution.
 
 ## Escape hatch
 

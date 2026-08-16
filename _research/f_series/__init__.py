@@ -12,6 +12,7 @@ from pathlib import Path
 
 SOURCE_ROOT = Path(__file__).resolve().parent
 REPO_ROOT = Path(__file__).resolve().parents[2]
+ROOT_COMPAT_SOURCE = REPO_ROOT / "_research" / "root_compat"
 
 MODULES = (
     "b1_identity_unlock",
@@ -44,7 +45,20 @@ def source_path(filename: str) -> Path:
     if relative.name != filename or relative.suffix != ".py":
         raise ValueError(f"expected a Python module basename, got {filename!r}")
     packaged = SOURCE_ROOT / relative
-    return packaged if packaged.is_file() else REPO_ROOT / relative
+    if packaged.is_file():
+        return packaged
+    compatibility_source = ROOT_COMPAT_SOURCE / relative
+    return (
+        compatibility_source
+        if compatibility_source.is_file()
+        else REPO_ROOT / relative
+    )
 
 
-__all__ = ["MODULES", "REPO_ROOT", "SOURCE_ROOT", "source_path"]
+__all__ = [
+    "MODULES",
+    "REPO_ROOT",
+    "ROOT_COMPAT_SOURCE",
+    "SOURCE_ROOT",
+    "source_path",
+]

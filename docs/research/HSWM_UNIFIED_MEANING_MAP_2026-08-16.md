@@ -40,8 +40,8 @@ evidence-preserving substrate, 결정론적 field/runtime, 학습 영수증 계�
 |---|---|---|
 | 사용자 원문과 방향 | [`USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt`](../canon/sources/USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt), [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](../canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md), [`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](../canon/USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md) | `USER_PRIMARY` 방향은 파생 설명보다 우선한다 |
 | 상위 통합 정전 | [`THE_WORLD_REMEMBERS.md`](../canon/THE_WORLD_REMEMBERS.md) | 세계 자기기억, 인간·LLM의 위치, 두 번째 신경망화를 한 목적 아래 묶는다 |
-| 기술 정체성 | [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md), [`HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md`](../../HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md) | hard core와 교체 가능한 설계를 구분한다 |
-| 수학·세포 형식화 | [`HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md`](../canon/HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md), [`DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md`](../../DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md) | `SECONDARY_AI_FORMALIZATION`; 사용자 원문이나 실측을 대체하지 않는다 |
+| 기술 정체성 | [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../_research/root_compat/CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md), [`HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md`](../../_research/root_compat/HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md) | hard core와 교체 가능한 설계를 구분한다 |
+| 수학·세포 형식화 | [`HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md`](../canon/HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md), [`DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md`](../../_research/root_compat/DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md) | `SECONDARY_AI_FORMALIZATION`; 사용자 원문이나 실측을 대체하지 않는다 |
 | 현재 공개 상태 | [`README.md`](../../README.md), [`INDEX.md`](../../INDEX.md), [`EFFICACY.md`](../../EFFICACY.md) | 구현·실험·실패·미완료 여부의 현재 진입점이다 |
 | 실행 계약과 직접 증거 | `src/`, `tests/`, `research/`, `evidence/`, `receipts/`, `results/`, `prereg/` | 코드 PASS는 공학 closure이고, 효능은 결속된 측정 범위 안에서만 말한다 |
 | 저장소 의미 지도 | [`ontology/`](../../ontology/) | 경로와 개념의 탐색 장치다. HSWM의 두뇌나 행동 규칙이 아니다 |
@@ -324,16 +324,16 @@ learning이 아니다.
 
 | target 역할 | 현재 대표 경로 | 지금 방어 가능한 말 |
 |---|---|---|
-| world/evidence substrate | [`world_ir.py`](../../world_ir.py), [`world_compiler.py`](../../world_compiler.py), [`src/hswm/substrate/`](../../src/hswm/substrate/) | stable identity, immutable evidence, certified cut/readout의 공학 불변식 |
+| world/evidence substrate | [`world_ir.py`](../../_research/root_compat/world_ir.py), [`world_compiler.py`](../../_research/root_compat/world_compiler.py), [`src/hswm/substrate/`](../../src/hswm/substrate/) | stable identity, immutable evidence, certified cut/readout의 공학 불변식 |
 | `H`와 field | [`src/hswm/substrate/hypergraph.py`](../../src/hswm/substrate/hypergraph.py), [`prom_search_hswm/`](../../prom_search_hswm/) | n-ary structure, deterministic algebra, static field 실험 |
 | typed cells/runtime | [`src/hswm/cells/`](../../src/hswm/cells/) | typed ports, durable event/outbox/replay, bounded model probe |
-| `W` state와 readout | [`hswm_weight_store.py`](../../hswm_weight_store.py), [`weight_field.py`](../../weight_field.py), [`readouts.py`](../../readouts.py) | scalar/fast-slow 일부와 snapshot/readout; target operator 전체가 아님 |
+| `W` state와 readout | [`hswm_weight_store.py`](../../_research/root_compat/hswm_weight_store.py), [`weight_field.py`](../../_research/root_compat/weight_field.py), [`readouts.py`](../../_research/root_compat/readouts.py) | scalar/fast-slow 일부와 snapshot/readout; target operator 전체가 아님 |
 | certified field/readout state | [`src/hswm/substrate/field_snapshot.py`](../../src/hswm/substrate/field_snapshot.py) | static `H/W` readout preimage와 exact-scope admission; run-local `A` snapshot이 아님 |
 | causal-learning receipt | [`src/hswm/learning/token_learning_contract.py`](../../src/hswm/learning/token_learning_contract.py) | learning claim의 필요한 증거 형태; optimizer나 성공 결과가 아님 |
 | bounded prototypes | [`src/hswm/prototypes/`](../../src/hswm/prototypes/), [`_research/`](../../_research/) | mechanism, falsifier, narrow experiment |
 | typed function workflow | [`hswm_function_network.py`](../../prom_search_hswm/hswm_function_network.py) | QF→BF→AF의 strict 3-call workflow; general recurrent cell field가 아님 |
 | open structural composition | [`hswm_open_composition.py`](../../prom_search_hswm/hswm_open_composition.py) | flat mount/port/connector의 compose/separate/specialize closure; collective intelligence가 아님 |
-| Longinus binding | [`LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json`](../../LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json) | document span과 field의 identity/SHA alignment witness; multi-HSWM cognitive weave가 아님 |
+| Longinus binding | [`LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json`](../../_research/root_compat/LONGINUS_HSWM_CELLULAR_DEFINITION_BINDING_2026-07-26.json) | document span과 field의 identity/SHA alignment witness; multi-HSWM cognitive weave가 아님 |
 | evaluation/evidence | [`EFFICACY.md`](../../EFFICACY.md), [`evidence/`](../../evidence/), [`results/`](../../results/), [`receipts/`](../../receipts/) | 측정 범위 안의 양성·음성 결과와 claim boundary |
 | constitutional boundary | [`schemas/`](../../schemas/), [`research/`](../../research/), [`scripts/`](../../scripts/), [`.github/`](../../.github/) | 타입·권한·검증·배포 불변식; cognitive topology가 아님 |
 
@@ -474,7 +474,7 @@ learning을 거쳐야 한다.
 | 가장 깊은 목적은? | [`THE_WORLD_REMEMBERS.md`](../canon/THE_WORLD_REMEMBERS.md) | [`USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt`](../canon/sources/USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt) |
 | 왜 static glue를 신경망화하나? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](../canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) | [`DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md`](../canon/DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md) |
 | `H/W/A/F`가 정확히 무엇인가? | [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](../canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) | [`HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md`](../canon/HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md) |
-| cell과 semantic synapse의 target은? | [`DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md`](../../DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md) | [`src/hswm/cells/`](../../src/hswm/cells/) |
+| cell과 semantic synapse의 target은? | [`DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md`](../../_research/root_compat/DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md) | [`src/hswm/cells/`](../../src/hswm/cells/) |
 | fixed layer 없는 합성은? | [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](../canon/SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md) | [`AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md`](AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md) |
 | 무엇을 learning이라 부르나? | [`README.md`](../../README.md#what-counts-as-learning) | [`token_learning_contract.py`](../../src/hswm/learning/token_learning_contract.py) |
 | 실제로 무엇이 성공·실패했나? | [`EFFICACY.md`](../../EFFICACY.md) | [`INDEX.md`](../../INDEX.md)와 결속 evidence/receipt |

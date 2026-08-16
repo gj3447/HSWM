@@ -33,7 +33,7 @@
   ],
   "contract_binding": {
     "path": "research/HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT.v1.json",
-    "sha256": "8fd0a1aa0b1742033f4b3df9ba22d9a9a2abdf88bdc8172106e004e3376aaf4d"
+    "sha256": "caa77cfe84c59c2a12bc443b71deee718d49657fe191cef4b3ff3849763b7c61"
   },
   "hypothesis": {
     "primary": "On a fresh frozen cohort, W_FULL_LEARNED improves utility over one development-selected strongest baseline by at least 0.05 with paired cluster-bootstrap LCB95 greater than zero.",
@@ -154,9 +154,9 @@
     "hashes": "any post-lock change to model, prompt, tokenizer, function registry, topology, embedding, relation schema, candidate universe, W builder, metric reducer, or judge voids the run"
   },
   "judge_binding": {
-    "path": "hswm_scalar_w_causal_judge.py",
+    "path": "_research/root_compat/hswm_scalar_w_causal_judge.py",
     "sha256": "02747bac05691a1a449754716d378a86ca9e69e6dbd97ee41c652070846e6cb4",
-    "replay_command": "python3 hswm_scalar_w_causal_judge.py --metrics <sealed_metrics.json>",
+    "replay_command": "python3 _research/root_compat/hswm_scalar_w_causal_judge.py --metrics <sealed_metrics.json>",
     "judgment_schema": "hswm-scalar-w-causal-judgment/v1"
   },
   "external_governance": {

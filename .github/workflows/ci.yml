@@ -17,11 +17,11 @@ jobs:
       matrix:
         include:
           - name: core-tests
-            command: uv run --extra dev pytest -q tests
+            command: uv run --locked --extra dev pytest -q tests
           - name: prom-and-research-tests
-            command: uv run --extra dev pytest -q prom_search_hswm _research/shared_field_hypothesis
+            command: uv run --locked --extra dev pytest -q prom_search_hswm _research/shared_field_hypothesis
           - name: efficacy-ledger
-            command: uv run python verify_efficacy_claims.py --pretty
+            command: uv run --locked python verify_efficacy_claims.py --pretty
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -43,7 +43,27 @@ jobs:
           python-version: "3.11"
       - run: uv build --sdist --out-dir dist
       - run: mkdir sdist && tar -xzf dist/*.tar.gz -C sdist --strip-components=1
-      - run: uv run --extra dev pytest -q
+      - run: uv run --locked --extra dev pytest -q
         working-directory: sdist
-      - run: uv run python verify_efficacy_claims.py --pretty
+      - run: uv run --locked python verify_efficacy_claims.py --pretty
         working-directory: sdist
+
+  wheel-install:
+    name: wheel-install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1c # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          python-version: "3.11"
+      - run: uv build --wheel --out-dir "${{ runner.temp }}/wheel-dist"
+      - run: uv venv --python 3.11 "${{ runner.temp }}/wheel-venv"
+      - run: uv pip install --python "${{ runner.temp }}/wheel-venv/bin/python" "${{ runner.temp }}"/wheel-dist/*.whl
+      - name: Import installed surface outside the checkout
+        working-directory: ${{ runner.temp }}
+        run: |
+          wheel_python="${{ runner.temp }}/wheel-venv/bin/python"
+          "$wheel_python" -I -c 'import p1_loop_harness, p1_phantom_environment, p1_rank_invariance_diagnostic; import scripts.validate_hswm_semantic_weight_metric_contract'
+          "$wheel_python" -I -m traversal_cert teeth

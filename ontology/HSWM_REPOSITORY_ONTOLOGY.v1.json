@@ -1,0 +1,192 @@
+{
+  "$schema": "../schemas/hswm_repository_ontology.v1.schema.json",
+  "schema_version": "hswm-repository-ontology/v1",
+  "status": "ACTIVE_NAVIGATION_CONTRACT",
+  "updated_at": "2026-08-15",
+  "root_uid": "hswm:repository",
+  "purpose": "Give every repository path a semantic role without invalidating path- and SHA-bound research evidence.",
+  "principles": [
+    "Ontology is the canonical navigation view; physical paths remain the execution and provenance view.",
+    "A path may belong to more than one concept.",
+    "New files do not enter the legacy root compatibility surface.",
+    "Repository ontology organizes evidence; it does not prescribe HSWM cognition."
+  ],
+  "concepts": [
+    {
+      "uid": "hswm:repo:identity",
+      "label": "Identity and purpose",
+      "directory": "ontology/identity",
+      "definition": "User direction, HSWM identity, motivation, and non-claim boundaries."
+    },
+    {
+      "uid": "hswm:repo:substrate",
+      "label": "World and provenance substrate",
+      "directory": "ontology/substrate",
+      "definition": "Stable identity, immutable observations, evidence-preserving compilation, cuts, and readout."
+    },
+    {
+      "uid": "hswm:repo:field",
+      "label": "Semantic field",
+      "directory": "ontology/field",
+      "definition": "Mutable hypergraph H, semantic macro-weights W, recurrent activation A, and topology diagnostics."
+    },
+    {
+      "uid": "hswm:repo:cells",
+      "label": "LLM function cells",
+      "directory": "ontology/cells",
+      "definition": "Local semantic functions, roles, ports, composition, and cellular execution."
+    },
+    {
+      "uid": "hswm:repo:learning",
+      "label": "Outcome-bound macro-learning",
+      "directory": "ontology/learning",
+      "definition": "Trajectories, eligibility, credit, durable W/routing/H updates, retention, and ablation."
+    },
+    {
+      "uid": "hswm:repo:boundary",
+      "label": "Thin deterministic boundary",
+      "directory": "ontology/boundary",
+      "definition": "Types, authority, transactions, provenance, budgets, rollback, and safety."
+    },
+    {
+      "uid": "hswm:repo:evaluation",
+      "label": "Evaluation and falsification",
+      "directory": "ontology/evaluation",
+      "definition": "Tests, formal checks, direct measurements, baselines, judges, and falsifiers."
+    },
+    {
+      "uid": "hswm:repo:evidence",
+      "label": "Evidence lifecycle",
+      "directory": "ontology/evidence",
+      "definition": "Preregistrations, manifests, evidence, results, receipts, and sealed research bundles."
+    },
+    {
+      "uid": "hswm:repo:infrastructure",
+      "label": "Repository infrastructure",
+      "directory": "ontology/infrastructure",
+      "definition": "Build, packaging, documentation, schemas, CI, and maintenance surfaces that support research without defining cognition."
+    },
+    {
+      "uid": "hswm:repo:history",
+      "label": "Path-bound history",
+      "directory": "ontology/history",
+      "definition": "Legacy paths retained because imports, relative execution, manifests, or receipts bind their identity."
+    }
+  ],
+  "relations": [
+    {"from": "hswm:repo:identity", "type": "MOTIVATES", "to": "hswm:repo:learning"},
+    {"from": "hswm:repo:substrate", "type": "GROUNDS", "to": "hswm:repo:field"},
+    {"from": "hswm:repo:field", "type": "CONNECTS", "to": "hswm:repo:cells"},
+    {"from": "hswm:repo:cells", "type": "EMITS_TRAJECTORIES_TO", "to": "hswm:repo:learning"},
+    {"from": "hswm:repo:learning", "type": "UPDATES", "to": "hswm:repo:field"},
+    {"from": "hswm:repo:boundary", "type": "CONSTRAINS", "to": "hswm:repo:cells"},
+    {"from": "hswm:repo:boundary", "type": "CONSTRAINS", "to": "hswm:repo:learning"},
+    {"from": "hswm:repo:evaluation", "type": "FALSIFIES", "to": "hswm:repo:learning"},
+    {"from": "hswm:repo:evidence", "type": "SUPPORTS", "to": "hswm:repo:evaluation"},
+    {"from": "hswm:repo:infrastructure", "type": "SUPPORTS", "to": "hswm:repo:evidence"},
+    {"from": "hswm:repo:history", "type": "PRESERVES_PROVENANCE_FOR", "to": "hswm:repo:evidence"}
+  ],
+  "mounts": [
+    {
+      "id": "identity",
+      "concepts": ["hswm:repo:identity"],
+      "patterns": ["README.md", "INDEX.md", "THE_WORLD_REMEMBERS.md", "USER_*.md", "USER_*.txt", "CANON_*.md", "DEFINITION_*.md", "ontology/identity/**", "docs/canon/**", "docs/assets/**"],
+      "root_patterns": ["HSWM_*.md", "PROM_*HSWM*.md", "SPEC_*.md", "AMENDMENT_*.md", "SOURCES.md", "내가 주는 말.txt"]
+    },
+    {
+      "id": "substrate",
+      "concepts": ["hswm:repo:substrate"],
+      "patterns": ["world_*.py", "world_builder.py", "legacy_adapter.py", "certified_*.py", "entity_binding.py", "ontology/substrate/**", "f0_premise_p/**"],
+      "root_patterns": ["EPWC_*.md", "WORLD_COMPILER_*.md", "HSWM_WORLD_COMPILER_*.json", "cert_*.json", "certified_*.json", "chain_viability.py", "claim_*.py", "doc_builder.py", "stale_*.py", "stale_*.json", "substrate_*.py", "substrate_*.json", "synth*.py", "title_anchor_builder.py", "traversal*.py", "traversal*.json", "r[1-3]_*.py"]
+    },
+    {
+      "id": "field",
+      "concepts": ["hswm:repo:field"],
+      "patterns": ["*field*.py", "hypergraph.py", "field_snapshot.py", "readouts.py", "prom_search_hswm/**", "ontology/field/**", "*TOPOLOGY*.md", "*SEMANTIC_WEIGHT*.md"],
+      "root_patterns": ["*FIELD*.md", "*TOPOLOGY*.md", "QKV_*.md", "SEMANTIC_QKV*.md", "qkv_*.py", "qkv_*.json", "semantic_layer*.py", "semantic_layer*.json", "traversal*.py"]
+    },
+    {
+      "id": "cells",
+      "concepts": ["hswm:repo:cells"],
+      "patterns": ["*cellular*.py", "feedback_*.py", "composition.py", "typed_composition.py", "ontology/cells/**", "_research/hswm_cellular_runtime/**", "_research/feedback_runtime/**"],
+      "root_patterns": ["*CELLULAR*.md", "*CELLULAR*.json", "H3_*.md", "H3_*.json", "PROM9*.md", "PROM_9*.md", "h3_*.py", "h3_*.json", "hswm_*harness*.py", "hswm_*harness*.json"]
+    },
+    {
+      "id": "learning",
+      "concepts": ["hswm:repo:learning"],
+      "patterns": ["hswm_token_learning_contract.py", "hswm_weight*.py", "p1*.py", "f[2-5]*.py", "learned*.py", "ontology/learning/**", "_research/p1*/**", "_research/f*/**", "prereg/**"],
+      "root_patterns": ["P1_*", "PREREG_P1*", "B[12]_*.md", "B[12]_*.json", "E1_*", "R[1-3]_*", "T[13]_*", "SHADOW_*", "PROM_*PLASTICITY*", "PROM_*ABSORPTION*", "PROM_*TRANSFER*", "PROM_*CONSOLIDATION*", "PROM_8*", "PROM_P[56]*", "learned*.py", "p1*.py", "p1*.json", "f[2-5]*.py"]
+    },
+    {
+      "id": "boundary",
+      "concepts": ["hswm:repo:boundary"],
+      "patterns": ["AGENTS.md", "CONTRIBUTING.md", "CLA.md", "LICENSE", "LICENSING.md", "COPYRIGHT", "NOTICE", ".gitignore", "pyproject.toml", "uv.lock", "MANIFEST.in", ".github/**", "schemas/**", "formal/**", "scripts/**", "research/**", "ontology/boundary/**", "ontology/*.json", "ontology/README.md"],
+      "root_patterns": ["ABSORB_CONTRACT*", "*PREREG*", "*MANIFEST*", "*_DECISION_*.json", "CLI_PROVIDER*.md", "cli_provider*.py", "hswm_artifact_layout.py", "model_deployment_receipt.py", "*.sh"]
+    },
+    {
+      "id": "evaluation",
+      "concepts": ["hswm:repo:evaluation"],
+      "patterns": ["EFFICACY.md", "tests/**", "verification/**", "_findings/**", "*falsifier*.py", "*judge*.py", "metrics.py", "verify_*.py", "ontology/evaluation/**"],
+      "root_patterns": ["*_RESULTS_*.md", "*_result*.json", "EVIDENCE_*", "*_DIAGNOSTIC_*", "EXISTENCE_SCOREBOARD*", "PROM_5*", "PROM_6*", "PROM_16_CURRENT*", "PROM_16_NEGATIVE*", "TRIBUNAL*", "*falsifier.py", "*judge.py", "diagnose.py", "metrics.py", "*_bench.py", "test_*.py"]
+    },
+    {
+      "id": "evidence",
+      "concepts": ["hswm:repo:evidence"],
+      "patterns": ["F1_R8_RESULTS_LOG.md", "evidence/**", "prereg/**", "manifests/**", "results/**", "receipts/**", "_research/**", "EVIDENCE_*", "PREREG_*", "*_RESULTS_*.md", "*.log", "ontology/evidence/**", "docs/research/**"],
+      "root_patterns": ["*.json", "*.log", "PREREG_*.md", "*_RESULTS_*.md"]
+    },
+    {
+      "id": "history",
+      "concepts": ["hswm:repo:history"],
+      "patterns": ["ontology/history/**", "docs/archive/**"]
+    },
+    {
+      "id": "repository-support",
+      "concepts": ["hswm:repo:infrastructure"],
+      "patterns": ["docs/**"],
+      "root_patterns": ["*.py", "*.md", "*.json", "*.txt", "*.log", "*.sh"]
+    },
+    {
+      "id": "infrastructure-control",
+      "concepts": ["hswm:repo:infrastructure"],
+      "patterns": ["ontology/infrastructure/**"]
+    }
+  ],
+  "public_root_surface": [
+    ".gitignore",
+    "AGENTS.md",
+    "CLA.md",
+    "CONTRIBUTING.md",
+    "COPYRIGHT",
+    "EFFICACY.md",
+    "F1_R8_RESULTS_LOG.md",
+    "INDEX.md",
+    "LICENSE",
+    "LICENSING.md",
+    "MANIFEST.in",
+    "NOTICE",
+    "README.md",
+    "pyproject.toml",
+    "uv.lock"
+  ],
+  "legacy_root_inventory": "ontology/history/LEGACY_ROOT_PATHS.v1.json",
+  "path_catalog": "ontology/HSWM_PATH_CATALOG.v1.json",
+  "learning_analogy": {
+    "status": "TARGET_ARCHITECTURE_NOT_CURRENT_EFFICACY",
+    "statement": "As transformer training compresses data into learned micro-parameters, HSWM is intended to compress token/action/tool/outcome experience into learned macro-connectivity and coordination.",
+    "mapping": {
+      "training_data": "token/action/tool/outcome trajectories",
+      "parameters": "durable W, routing, and H",
+      "optimizer_signal": "external outcome plus eligibility and causal credit",
+      "forward_pass": "recurrent activation across LLM function cells",
+      "validation": "fresh equal-budget evaluation plus removal ablation"
+    },
+    "necessary_condition": "Tokens count as training observations only; a durable causally attributable behavior change is required for a learning claim."
+  },
+  "nonclaims": [
+    "The repository ontology is not the HSWM runtime graph.",
+    "Moving or classifying a file is not macro-learning.",
+    "More tokens alone do not create learned rules.",
+    "No checked-in run currently demonstrates causally validated general HSWM macro-learning."
+  ]
+}

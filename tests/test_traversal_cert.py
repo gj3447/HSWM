@@ -12,28 +12,8 @@ import world_builder as wb
 
 
 def _corpus_rows(seed=0, n_chains=12, noise=24):
-    """Synthetic corpus: chains A_i -> B_i -> C_i (paragraph about A mentions B;
-    about B mentions C) + noise paragraphs. Query i asks about A_i topic with
-    gold = {A_i, B_i} paragraphs (2-hop shape)."""
-    rng = np.random.default_rng(seed)
-    rows = []
-    for i in range(n_chains):
-        a, b, c = f"Alpha Keep {i}", f"Bram Vale {i}", f"Cinder Peak {i}"
-        pa = {"idx": 0, "title": a,
-              "paragraph_text": f"{a} stands north. Lord of {a} rode to {b} each spring. {b} kept the oath.",
-              "is_supporting": True}
-        pb = {"idx": 1, "title": b,
-              "paragraph_text": f"{b} lies east of the river. Scouts of {b} watched {c} burn.",
-              "is_supporting": True}
-        pc = {"idx": 2, "title": c,
-              "paragraph_text": f"{c} is a mountain of ash and old fire.", "is_supporting": False}
-        noise_p = {"idx": 3, "title": f"Dull Fen {rng.integers(noise)}",
-                   "paragraph_text": "Reeds and mud and quiet water lie here for many miles.",
-                   "is_supporting": False}
-        rows.append({"id": f"2hop__chain{i}", "hop": "2hop",
-                     "question": f"Where did the lord of {a} ride each spring?",
-                     "answer": b, "paragraphs": [pa, pb, pc, noise_p]})
-    return rows
+    """Compatibility alias for the installed runtime's deterministic fixture."""
+    return tc.synthetic_corpus_rows(seed=seed, n_chains=n_chains, noise=noise)
 
 
 def test_corpus_world_shape():

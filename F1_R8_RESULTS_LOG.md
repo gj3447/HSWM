@@ -5,6 +5,7 @@
 
 | 날짜 | 결과 | 경계 |
 |---|---|---|
+| 2026-08-16 | 공개 README를 HSWM의 거시 신경망 정체성·Transformer 학습 비유·정직한 효능 경계 중심으로 다시 만들고, 제공된 심상 이미지를 provenance 보존 상태로 연결했다. 저장소 전체는 10개 개념의 온톨로지 projection으로 재편해 현재 1,292개 경로를 전수 분류했고, 신규 root 유입은 fail-closed로 만들었다. 깨진 외부 cohort와 wheel/sdist 폐쇄성도 복구했다. 전체 회귀는 **1156 passed, 3 skipped**, 최종 핵심 회귀는 **28 passed**다. | [`README`](README.md) · [`repository ontology`](ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json) · [`path catalog`](ontology/HSWM_PATH_CATALOG.v1.json) · 저장소 navigation/배포 구현이며 HSWM 학습 효능 결과가 아님 |
 | 2026-08-15 | 폐기 도구 전용 원격 브랜치를 삭제했다. 현재 HSWM 작업 트리의 파일명·본문에서 폐기 대상 세 계열의 이름은 0건이며 `main`과 `origin/main`은 일치한다. | 현재 트리와 원격 ref 직접 검사 |
 | 2026-08-15 | 개인 거버넌스 계층과 결합된 코드·문서·테스트·영수증을 제거하고 기본 경로를 `실행 → 직접 측정 → 중요 결과 기록 → commit/push`로 단순화했다. 전체 회귀는 **1148 passed, 3 skipped**다. | [`minimal governance`](research/HSWM_MINIMAL_GOVERNANCE.v1.json) · [`user canon`](USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md) |
 | 2026-08-15 | 실제 KG에서 폐기 계보 노드 **3,234개**와 잔여 관계를 제거했다. 전용 라벨·관계 타입과 모든 속성을 다시 스캔한 결과 노드 0, 관계 0이다. 누락돼 있던 개인 KG용 Neo4j launcher와 credential entry만 복원했고 폐기 서버는 복원하지 않았다. | Neo4j 속성·라벨·관계 전수 검사 · launcher preflight exit 0 |
@@ -17,7 +18,7 @@
 | 2026-08-15 | 현재 호스트의 Orca runtime-home에 숨어 있던 폐기 MCP block과 skew pair를 제거하고 관련 telemetry/cache/backups를 휴지통에 격리했다. 실시간 status telemetry는 현재 대화 텍스트이므로 실행 설정과 분리했다. | 활성 Orca config 재검사 0 |
 | 2026-08-15 | Dell의 Claude 작업 worktree 19개를 공용 Git 이력 하나와 함께 현재 머신으로 복원했다. 원본 복원본은 HEAD·staged index·status·전체 파일 체크섬이 Dell과 모두 일치하며, 별도 정리 파생본 19개에서는 폐기 파일·의존성·생성 캐시만 제거했다. 큰 WIP 두 곳의 무관한 staged 제품 변경 117개는 그대로 보존했다. 세 tracked snapshot 대표의 전체 회귀는 각각 **164 passed**, Python 3.12 문법 파싱은 1,978파일 실패 0이다. | [로컬 import 보고서](/home/lagyeongjun/CD/delltower-jgbpc-worktrees-20260815/README.md) · raw/cleaned 분리 · working/index 전수 검사 |
 | 2026-08-15 | 현재 머신의 root 소유 55170 relay만 sudo 권한 부재로 unit 제거가 막혀 있다. upstream은 제거되어 기능하지 않지만 unit과 로컬 listener 자체는 남아 있다. | `systemctl show`와 `ss` 직접 검사 |
-| 2026-08-15 | Sheaf의 local-to-global 수학, cellular/Hodge 연산자와 HSWM 후보 대응을 분리해 정리했다. 효능 주장은 하지 않는다. | [`research note`](HSWM_SHEAF_RESEARCH_ONTOLOGY_2026-08-15.md) · [`ontology`](research/HSWM_SHEAF_ONTOLOGY.v1.json) |
+| 2026-08-15 | Sheaf의 local-to-global 수학, cellular/Hodge 연산자와 HSWM 후보 대응을 분리해 정리했다. 효능 주장은 하지 않는다. | [`research note`](ontology/field/sheaf/README.md) · [`ontology`](ontology/field/sheaf/HSWM_SHEAF_ONTOLOGY.v1.json) |
 | 2026-08-04 | selective utility 개발 측정에서 typed arm이 네 대조군보다 높았지만 탐색 결과이며 sealed 과학 판정이 아니다. | [`EFFICACY.md`](EFFICACY.md) |
 | 2026-07-23 | scalar slow-weight P1은 12개 candidate 중 fresh pass·activation 0, A1−A2 0, 456개 rank replay에서 top-10 변화 0으로 과학적 RED다. | [`EFFICACY.md`](EFFICACY.md) · [`evidence`](EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json) |
 

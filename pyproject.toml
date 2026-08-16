@@ -1,7 +1,7 @@
 [project]
 name = "hswm"
 version = "0.1.0"
-description = "HSWM — evidence-preserving world compiler and falsifiable hypergraph field/readout research substrate."
+description = "Research substrate for a plastic hypergraph semantic-weight field whose local functions are executed by LLMs."
 requires-python = ">=3.11"
 dependencies = [
   "numpy>=1.26",
@@ -11,6 +11,11 @@ dependencies = [
 dev = ["pytest>=8.0", "hypothesis>=6.0"]
 kg = ["neo4j>=5.20"]
 
+[project.urls]
+Homepage = "https://github.com/gj3447/HSWM"
+Repository = "https://github.com/gj3447/HSWM.git"
+Issues = "https://github.com/gj3447/HSWM/issues"
+
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
@@ -18,7 +23,7 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 # scripts/ is an implicit namespace package used by the checked-in contract
 # validators and must be present in both wheels and source distributions.
-packages = ["scripts"]
+packages = ["scripts", "prom_search_hswm"]
 py-modules = [
   "synth",
   "hypergraph",
@@ -70,6 +75,7 @@ py-modules = [
   "semantic_layer_routing",
   "semantic_layer_falsifier",
   "semantic_2wiki_oracle",
+  "hswm_semantic_weight_metric",
   "hswm_weight_snapshot",
   "hswm_weight_store",
   "hswm_token_learning_contract",
@@ -80,6 +86,8 @@ py-modules = [
   "p1_llm_answerer",
   "p1_phantom_environment",
   "p1_rank_invariance_diagnostic",
+  "r1_predicate_alias",
+  "r3_phantom_ingest",
   "p1v2_typed_lesson",
   "p1v2_prompt_parity",
   "p1v2_tokenizer_adapter",

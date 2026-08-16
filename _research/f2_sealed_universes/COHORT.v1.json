@@ -1,0 +1,68 @@
+{
+  "schema_version": "hswm-f2-sealed-cohort/v1",
+  "purpose": "Fail-closed membership and content locks for the 21-universe F2-F5 sealed cohort.",
+  "bundled_universes": [
+    "uni_s1001",
+    "uni_s1002",
+    "uni_s1003",
+    "uni_s1004",
+    "uni_s1005",
+    "uni_s1006",
+    "uni_s1007",
+    "uni_s1008",
+    "uni_s1009",
+    "uni_s1010",
+    "uni_s1011",
+    "uni_s1012",
+    "uni_s1013",
+    "uni_s1014",
+    "uni_s1015",
+    "uni_s1016"
+  ],
+  "external_universes": [
+    {
+      "name": "dense_t200_fk9",
+      "relative_target": "../r3_replay/universes/dense_t200_fk9",
+      "sha256": {
+        "articles.json": "c94cbc1153c9369640e3b830a2cc0a0d01f92f234ebb8c8d703ed2c08c9dd447",
+        "questions/type6.json": "b46e32d10f37bbc04a0ec66f872d5c3a040535bd17a4871222307bbb68405748"
+      }
+    },
+    {
+      "name": "large_t200_fk3",
+      "relative_target": "../r3_replay/universes/large_t200_fk3",
+      "sha256": {
+        "articles.json": "1ed06d53fe7368388c2b7457ba8b12498eb83cb771d090506c288c8db6ba578d",
+        "questions/type6.json": "1d373762cca167f17871abe0388636c99a95ca7e3c1b2e7a2b7ec9d09ccbff63"
+      }
+    },
+    {
+      "name": "mid_t20_fk3",
+      "relative_target": "../r3_replay/universes/mid_t20_fk3",
+      "sha256": {
+        "articles.json": "bf38c8eaa8449cdf7259e2deeaca6b92d75cc2a30d2b0a1fc7adc82213770bba",
+        "questions/type6.json": "71d1626831f6a97b2fa90db2bfa046a4817e4279709a6f0630ffeacd918cd239"
+      }
+    },
+    {
+      "name": "small_t2_fk3",
+      "relative_target": "../r3_replay/universes/small_t2_fk3",
+      "sha256": {
+        "articles.json": "a05d0fe224be077a53a74b1f3193c9cb90d06f2939850a8b2b449d1c08a76384",
+        "questions/type6.json": "74c1b8d1c02c2e6b9eca7fd8cde34280ea0296d638486bc2492446d8e65a9364"
+      }
+    },
+    {
+      "name": "sparse_t200_fk1",
+      "relative_target": "../r3_replay/universes/sparse_t200_fk1",
+      "sha256": {
+        "articles.json": "240f14387ac920bb49b11cf46801e77674b35eeb5eb7888d2dc2e3c7473449a6",
+        "questions/type6.json": "7f8fbb5845ea5509a80688471821916f3e6fe006fbdfdc93c406f27e36900b3c"
+      }
+    }
+  ],
+  "replay_manifest": {
+    "relative_path": "../r3_replay/manifest.json",
+    "sha256": "c814d85beacf5751bd4811e82648e37e4384705669687ddd8ef91f31518dd54e"
+  }
+}

@@ -178,6 +178,7 @@ def test_sdist_carries_the_data_directories_the_tests_read() -> None:
     covered = _recursive_includes()
     required: dict[str, str] = {
         "research": "*.json",  # checked-in metric and runtime contracts
+        "ontology": "*.json",  # repository and mathematical ontologies
         "schemas": "*.json",  # schemas loaded by contract validators
         "docs": "*.md",  # docs/research/ARTIFACT_LAYOUT.md
         "prereg": "*.json",

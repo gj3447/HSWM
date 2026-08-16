@@ -3,6 +3,19 @@
 > HSWM = Hypergraph Semantic Weight Map. 지향 정체성은 함수 단위가 LLM으로 실행되는 하이퍼그래프 시멘틱 신경망이다. 현재 측정으로 방어 가능한 범위는 **evidence-preserving memory substrate + 좁은 L0 typed-policy actuation 재현**까지이며, durable weight/topology learning은 아직 미폐쇄다. 이 인덱스는 공개 저장소의 코드·설계·실험
 > 영수증만 가리킨다.
 
+## 온톨로지 우선 저장소 지도
+
+공개 탐색의 정본은 [`ontology/`](ontology/)다. `identity → substrate → field ↔ cells
+→ learning`을 중심으로 boundary, evaluation, evidence, infrastructure, history를 관계로
+연결하며, [`path catalog`](ontology/HSWM_PATH_CATALOG.v1.json)가 모든 현재 파일을 하나
+이상의 개념에 투영한다. 물리 루트에 남은 과거 파일은 정리 실패가 아니라 import,
+`__file__` 상대경로, manifest 또는 SHA 영수증이 결속한 호환 표면이며
+[`legacy inventory`](ontology/history/LEGACY_ROOT_PATHS.v1.json)에 닫혀 있다.
+
+이 온톨로지는 저장소의 의미 지도이지 HSWM의 인지 규칙이 아니다. AI 행동은 문서 경로가
+아니라 outcome에 결속된 token/action/tool trajectory가 durable `W/H/routing`을 바꾸고
+다음 행동을 바꿀 때 학습된다.
+
 ## 2026-08-15 — 실행 정본과 직접 측정 기록
 
 이 인덱스는 체크인 코드·테스트·측정물의 카탈로그다. 현재 상태는 외부 판정 서비스나
@@ -76,10 +89,10 @@ engineering contract이며 현재 효능·과학적 유일성 주장이 아니�
 ## 2026-08-15 — Sheaf 연구 온톨로지
 
 Sheaf의 local-to-global 구조를 HSWM에 곧바로 정답으로 선언하지 않고, 수학 정본과 HSWM
-후보 대응을 분리한 연구 묶음을 추가했다. [`연구 노트`](HSWM_SHEAF_RESEARCH_ONTOLOGY_2026-08-15.md)는
+후보 대응을 분리한 연구 묶음을 추가했다. [`연구 노트`](ontology/field/sheaf/README.md)는
 stalk·restriction·global section·cohomology·Laplacian·diffusion부터 knowledge sheaf와
 sheaf hypergraph network까지 설명한다. 기계 판독 정본은
-[`research/HSWM_SHEAF_ONTOLOGY.v1.json`](research/HSWM_SHEAF_ONTOLOGY.v1.json)이며 개념 28개,
+[`ontology/field/sheaf/HSWM_SHEAF_ONTOLOGY.v1.json`](ontology/field/sheaf/HSWM_SHEAF_ONTOLOGY.v1.json)이며 개념 28개,
 1차 출처 12개, 비정본 HSWM 매핑 8개, 개념 관계 32개를 담는다. Neo4j 재반영은
 [`scripts/upsert_sheaf_ontology.py`](scripts/upsert_sheaf_ontology.py)로 수행한다. `global section =
 진실/강제 합의`, `모든 hyperedge = simplex`, `sheaf 도입 = HSWM 효능 향상`은 모두 명시적

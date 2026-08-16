@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/gj3447/HSWM/schemas/hswm_repository_ontology.v1.schema.json",
+  "title": "HSWM repository ontology v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "root_uid",
+    "concepts",
+    "relations",
+    "mounts",
+    "public_root_surface",
+    "legacy_root_inventory",
+    "path_catalog",
+    "learning_analogy",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": "hswm-repository-ontology/v1"},
+    "root_uid": {"type": "string", "minLength": 1},
+    "concepts": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["uid", "label", "directory", "definition"],
+        "properties": {
+          "uid": {"type": "string", "minLength": 1},
+          "label": {"type": "string", "minLength": 1},
+          "directory": {"type": "string", "minLength": 1},
+          "definition": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "relations": {"type": "array", "minItems": 1},
+    "mounts": {"type": "array", "minItems": 1},
+    "public_root_surface": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "legacy_root_inventory": {"type": "string"},
+    "path_catalog": {"type": "string"},
+    "learning_analogy": {"type": "object"},
+    "nonclaims": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}

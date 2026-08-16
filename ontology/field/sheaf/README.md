@@ -1,7 +1,8 @@
 # HSWM Sheaf 연구 온톨로지
 
-> 상태: `SECONDARY_AI_RESEARCH_MAP`  
-> 기계 정본: `research/HSWM_SHEAF_ONTOLOGY.v1.json`  
+> 상태: `SECONDARY_AI_RESEARCH_MAP`
+>
+> 기계 정본: `ontology/field/sheaf/HSWM_SHEAF_ONTOLOGY.v1.json`
 > 범위: 수학적 정의·1차 출처와 HSWM 후보 대응을 분리한다. HSWM 효능 주장이 아니다.
 
 ## 1. Sheaf가 무엇인가
@@ -174,4 +175,4 @@ sampling·non-collapse objective가 필요하다고 논문 자체가 경고한�
 | frontier | Boudourides, *Sheaf Semantics for Knowledge Graphs* (2026 preprint) | context-dependent KG semantics 아이디어만 탐색 |
 
 정확한 URL·저자·publication status와 KG UID는
-[`research/HSWM_SHEAF_ONTOLOGY.v1.json`](research/HSWM_SHEAF_ONTOLOGY.v1.json)에 있다.
+[`HSWM_SHEAF_ONTOLOGY.v1.json`](HSWM_SHEAF_ONTOLOGY.v1.json)에 있다.

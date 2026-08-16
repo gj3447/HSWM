@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Idempotently load the source-backed HSWM sheaf research ontology into Neo4j."""
+"""Validate the HSWM sheaf ontology and optionally run its legacy KG loader.
+
+Validation is the default. Direct KG mutation requires an explicit ``--apply``
+and source config because the active HSWM path uses the bounded external
+ontology adapter, not raw Cypher writes.
+"""
 
 from __future__ import annotations
 
@@ -9,9 +14,6 @@ import json
 from pathlib import Path
 import re
 from typing import Any
-
-from neo4j import GraphDatabase
-
 
 REGISTRY_UID = "sym:KG_INFRA:schema-registry-v1-2026-08-03"
 SAFE_LABEL = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
@@ -90,6 +92,11 @@ def cypher_labels(labels: list[str]) -> str:
 
 
 def load_ontology(data: dict[str, Any], config: dict[str, str]) -> dict[str, int]:
+    try:
+        from neo4j import GraphDatabase
+    except ImportError as exc:  # pragma: no cover - exercised only with --apply
+        raise RuntimeError("--apply requires the optional `kg` dependency") from exc
+
     binding = data["kg_schema_binding"]
     wanted_labels, wanted_relations = schema_tokens(data)
     all_uids = [
@@ -265,9 +272,26 @@ def _upsert_transaction(tx: Any, data: dict[str, Any], binding: dict[str, Any], 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ontology", type=Path, default=Path("research/HSWM_SHEAF_ONTOLOGY.v1.json"))
-    parser.add_argument("--source-config", type=Path, default=Path("/home/lagyeongjun/.config/symposium-ontology/source.yaml"))
-    parser.add_argument("--validate-only", action="store_true")
+    parser.add_argument(
+        "--ontology",
+        type=Path,
+        default=Path(__file__).resolve().parents[1]
+        / "ontology"
+        / "field"
+        / "sheaf"
+        / "HSWM_SHEAF_ONTOLOGY.v1.json",
+    )
+    parser.add_argument("--source-config", type=Path)
+    parser.add_argument(
+        "--apply",
+        action="store_true",
+        help="explicitly use the legacy direct Neo4j writer",
+    )
+    parser.add_argument(
+        "--validate-only",
+        action="store_true",
+        help="compatibility alias; validation is already the default",
+    )
     return parser.parse_args()
 
 
@@ -275,7 +299,7 @@ def main() -> None:
     args = parse_args()
     data = json.loads(args.ontology.read_text(encoding="utf-8"))
     validate_data(data)
-    if args.validate_only:
+    if not args.apply:
         print(json.dumps({
             "concepts": len(data["concepts"]),
             "sources": len(data["sources"]),
@@ -283,6 +307,8 @@ def main() -> None:
             "concept_relations": len(data["concept_relations"]),
         }, sort_keys=True))
         return
+    if args.source_config is None:
+        raise SystemExit("--apply requires --source-config; direct KG write is never implicit")
     result = load_ontology(data, read_flat_yaml(args.source_config))
     print(json.dumps(result, ensure_ascii=False, sort_keys=True))
 

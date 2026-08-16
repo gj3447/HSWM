@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/gj3447/HSWM/schemas/hswm_legacy_root_paths.v1.schema.json",
+  "title": "HSWM legacy root compatibility surface v1",
+  "type": "object",
+  "required": ["schema_version", "status", "policy", "count", "paths"],
+  "properties": {
+    "schema_version": {"const": "hswm-legacy-root-paths/v1"},
+    "status": {"const": "FROZEN_COMPATIBILITY_SURFACE"},
+    "policy": {"type": "string", "minLength": 1},
+    "count": {"type": "integer", "minimum": 0},
+    "paths": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "kind", "reason"],
+        "properties": {
+          "path": {"type": "string", "pattern": "^[^/]+$"},
+          "kind": {"type": "string", "minLength": 1},
+          "reason": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": true
+}

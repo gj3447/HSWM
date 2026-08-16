@@ -71,8 +71,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-# null battery lives in the sibling SYMPOSIUM/HSWM checkout (read-only import)
-NULL_BATTERY_DIR = Path("/Users/lagyeongjun/CD/SYMPOSIUM/HSWM/prom_search_hswm")
+# The standalone repository carries the frozen null battery locally.
+NULL_BATTERY_DIR = HERE / "prom_search_hswm"
 sys.path.insert(0, str(NULL_BATTERY_DIR))
 
 from hswm_weight_snapshot import canonical_sha256  # noqa: E402
@@ -348,9 +348,95 @@ def _norm_text(text: str) -> str:
     return " ".join(text.casefold().split())
 
 
+def _file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _validate_declared_cohort(universes_dir: Path) -> dict:
+    """Fail closed when a declared sealed cohort is only partly hydrated.
+
+    Custom experiment directories without ``COHORT.v1.json`` retain the
+    historical discovery behavior. The checked-in sealed cohort declares its
+    complete 16-bundled + 5-external membership and may never silently shrink.
+    """
+    manifest_path = universes_dir / "COHORT.v1.json"
+    if not manifest_path.is_file():
+        return {}
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as err:
+        raise PoolShortfall(f"sealed cohort manifest unreadable: {err}") from err
+    if manifest.get("schema_version") != "hswm-f2-sealed-cohort/v1":
+        raise PoolShortfall("sealed cohort manifest has an unsupported schema")
+
+    problems: list[str] = []
+    bundled = manifest.get("bundled_universes", [])
+    external = manifest.get("external_universes", [])
+    if not isinstance(bundled, list) or not isinstance(external, list):
+        raise PoolShortfall("sealed cohort manifest membership must be lists")
+
+    for name in bundled:
+        if not isinstance(name, str) or Path(name).name != name:
+            problems.append(f"invalid bundled universe name: {name!r}")
+            continue
+        udir = universes_dir / name
+        if not (udir / "articles.json").is_file() or not (
+            udir / "questions" / "type6.json"
+        ).is_file():
+            problems.append(f"bundled universe incomplete: {name}")
+
+    for record in external:
+        if not isinstance(record, dict):
+            problems.append("invalid external universe record")
+            continue
+        name = record.get("name")
+        if not isinstance(name, str) or Path(name).name != name:
+            problems.append(f"invalid external universe name: {name!r}")
+            continue
+        udir = universes_dir / name
+        if not udir.is_dir():
+            problems.append(f"external universe not hydrated: {name}")
+            continue
+        for relative_name, expected in record.get("sha256", {}).items():
+            artifact = udir / relative_name
+            if not artifact.is_file():
+                problems.append(f"external universe file missing: {name}/{relative_name}")
+            elif _file_sha256(artifact) != expected:
+                problems.append(f"external universe hash mismatch: {name}/{relative_name}")
+
+    replay = manifest.get("replay_manifest", {})
+    replay_relative = replay.get("relative_path") if isinstance(replay, dict) else None
+    replay_expected = replay.get("sha256") if isinstance(replay, dict) else None
+    if not isinstance(replay_relative, str) or not isinstance(replay_expected, str):
+        problems.append("replay manifest lock missing")
+    else:
+        replay_path = universes_dir / replay_relative
+        if not replay_path.is_file():
+            problems.append("external replay manifest not hydrated")
+        elif _file_sha256(replay_path) != replay_expected:
+            problems.append("external replay manifest hash mismatch")
+
+    if problems:
+        detail = "; ".join(problems)
+        raise PoolShortfall(
+            "sealed 21-universe cohort unavailable; hydrate the Tier-3 replay "
+            f"data as documented in {universes_dir / 'README.md'}: {detail}"
+        )
+    return {
+        "cohort_manifest_sha256": _file_sha256(manifest_path),
+        "declared_universe_count": len(bundled) + len(external),
+        "external_universe_count": len(external),
+    }
+
+
 def load_question_pool(universes_dir: Path, max_answers: int) -> tuple[list[dict], dict]:
     """All type6 questions with 1..max_answers answers, deduped by normalized
     question text (first occurrence wins), canonically ordered by text sha."""
+    cohort = _validate_declared_cohort(universes_dir)
     pool: dict[str, dict] = {}
     per_universe_raw: dict[str, int] = {}
     for udir in sorted(p for p in universes_dir.iterdir() if p.is_dir()):
@@ -380,6 +466,7 @@ def load_question_pool(universes_dir: Path, max_answers: int) -> tuple[list[dict
             "t200 dirs (sparse/large/dense) share identical articles and type6 "
             "texts+answers (verified 2026-07-25, titles_sha equal); dedup by "
             "normalized question text collapses them to one contributor."),
+        **cohort,
     }
     return [item for _key, item in ordered], stats
 

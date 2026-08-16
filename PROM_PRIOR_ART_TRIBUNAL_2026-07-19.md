@@ -88,7 +88,7 @@ Workflow: hswm-prior-art-tribunal (wf_b999f1ee-6fa), ultracode xhigh, 62 agents,
 
 **C6 (hypergraph+salience) — killed by HyperGraphRAG [2503.21322]**: eᵢ = (eᵢ^text, eᵢ^score), eᵢ^score = 쿼리-독립 고유 salience. 랭킹 sim(h_q,h_eH) ⊙ eH^score 가 cosine을 per-hyperedge 고유항으로 변조 = 정확 구현. 가산·log vs 곱셈 차이는 청구항 문언이 보호 못 함. 3/3 HIGH.
 
-**C7 (긴문서 spreading-activation) — killed by Beyond Chunking [2506.06313] (+ Spreading Activation KG-RAG [2512.15922], RAPTOR [2401.18059])**: regime(구조 readout>flat-cosine on long-doc)은 RAPTOR(+20% QuALITY)·Beyond Chunking(RST discourse tree)이 이미 증명. 메커니즘(spreading>cosine)은 [2512.15922](~39% over naive)·HippoRAG가 증명. 근원=Collins & Loftus 1975. 사용자 근거("긴 span에 논리/구조 가중치 vs word-embedding cosine")=그 고전 이분법의 near-verbatim 재진술. 2/3 MEDIUM.
+**C7 (긴문서 spreading-activation) — killed by Beyond Chunking [2506.06313] (+ Spreading Activation KG-RAG [2512.15922], RAPTOR [2401.18059])**: regime(구조 readout>flat-cosine on long-doc)은 RAPTOR(+20% QuALITY)·Beyond Chunking(RST discourse tree)이 이미 증명. 메커니즘(spreading>cosine)은 [2512.15922] (~39% over naive)·HippoRAG가 증명. 근원=Collins & Loftus 1975. 사용자 근거("긴 span에 논리/구조 가중치 vs word-embedding cosine")=그 고전 이분법의 near-verbatim 재진술. 2/3 MEDIUM.
 
 ---
 

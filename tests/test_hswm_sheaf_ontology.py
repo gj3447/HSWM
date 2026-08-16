@@ -4,7 +4,7 @@ import re
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ONTOLOGY_PATH = ROOT / "research" / "HSWM_SHEAF_ONTOLOGY.v1.json"
+ONTOLOGY_PATH = ROOT / "ontology" / "field" / "sheaf" / "HSWM_SHEAF_ONTOLOGY.v1.json"
 
 
 def load_ontology() -> dict:

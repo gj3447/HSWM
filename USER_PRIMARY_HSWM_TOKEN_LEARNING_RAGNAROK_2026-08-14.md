@@ -31,6 +31,32 @@ SHA-256은 `b3a6592f94564bbb308cf01a259a0b368dadf8667e49dffab6f075bc2d1d79a0`이
 [`HSWM_CONNECTIVITY_MAP_E2E_NEURAL_REPLACEMENT_2026-08-03.md`](HSWM_CONNECTIVITY_MAP_E2E_NEURAL_REPLACEMENT_2026-08-03.md)의
 “정적 glue의 E2E 신경망 대체”를 토큰 학습 및 LX3 라그나로크 축으로 확장한다.
 
+### 1.1 Transformer 학습과 HSWM 학습의 직접 비유
+
+사용자 비유를 가장 짧게 쓰면 다음과 같다.
+
+> 방대한 데이터를 Transformer에 학습시켜 사람이 열거하지 않은 언어·추론 패턴을
+> 파라미터 안에 압축하듯, AI의 토큰·행동·도구 사용·결과 궤적을 HSWM에 학습시켜
+> 사람이 일일이 작성하지 않은 협력·라우팅·기억·문제해결 규칙을 `W/H/routing` 안에
+> 압축한다. 개별 LLM 함수는 국소 계산 소자이고, 그 함수들의 지속 연결과 재귀 활성
+> 전체가 더 큰 멀티에이전트 신경망 HSWM이다.
+
+이것은 구조적 전환의 비유이지 “토큰 파일을 복사하면 곧 학습된다”는 동일성 주장이 아니다.
+
+| Transformer 학습 | HSWM 거시 학습 |
+|---|---|
+| 학습 corpus | token/action/tool/outcome trajectory |
+| 파라미터 | durable `W`, routing, `H` |
+| loss·optimizer | 외부 outcome, eligibility, causal credit, bounded update |
+| forward pass | LLM 함수 cell coalition의 재귀 활성 |
+| held-out 검증 | fresh·동등예산 평가와 removal ablation |
+
+따라서 목표는 가장 완벽한 정적 AI 규칙집을 쓰는 것이 아니라, 경험이 늘수록 더 나은
+동작 규칙을 내부 연결 상태로 암묵 학습하는 신경 장을 만드는 것이다. 사용자가 말한
+“가장 완벽한 AI 동작 규칙 체계”는 바로 이 경험 학습형 정책 장을 가리킨다. “완벽함”은
+방향이지 현재 성능 주장이 아니며, 아래 인과 사슬이 닫히기 전에는 학습 성공으로 부르지
+않는다.
+
 ## 2. SECONDARY_AI_FORMALIZATION — 깊게 묵상한 결과
 
 핵심 구분은 **토큰의 양**과 **학습 사건**이다. 토큰 원문을 많이 저장하거나 매번 프롬프트에

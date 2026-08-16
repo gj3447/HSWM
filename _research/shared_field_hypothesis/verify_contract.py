@@ -29,7 +29,7 @@ MECHANISM_SOURCE_HASHES = {
     "field_snapshot.py": "17cd7251d6d0ff066b70dff89945cc46dac468040ceae0b9483f8b3e015b72f2",
     "stale_poisoning.py": "f5fd4b13dd263a5355324d67774bbd097d8368a92ec9aec96bdfc8a4b55ca36d",
     "traversal.py": "f6e82099315cf3504d08f8d488f0092e071c3d614ee556a865dc0d11f8140b1c",
-    "traversal_cert.py": "d26cd1ab86e7bbf8f614fa917658440b58204784bde79674f857527be2f5638a",
+    "traversal_cert.py": "7eb672982f4fe800c1c40e11d65bc68eefb9598d96ec33cb8f395300ef3879b0",
     "weight_field.py": "29c9b95d4c8ec31c894c9aa74135b5cedbc55a471f21a4a47a6a62139aad542c",
     "world_builder.py": "a1082dbc4609df819f6395188897b6849d8d40854c993b9fb93882bb0f8fc40f",
     "world_compiler.py": "d11ed5c0e00567170e555cc773055fb58b67c0260dd945574e18ba71d52bcdc7",
@@ -41,7 +41,7 @@ MECHANISM_SOURCE_HASHES = {
     "prom_search_hswm/fsm/hswm_plasticity_loop.v1.json": "fec06c9c74952062acd8febab35039718094b79f0df522eb1b2e50ceafea8954",
 }
 VERIFIER_PATH = "_research/shared_field_hypothesis/verify_contract.py"
-EXPECTED_SEMANTIC_LOCK_SHA256 = "b3d4cd250b72851e880f08f8119186949ef86713945041fe1466973fcd374628"
+EXPECTED_SEMANTIC_LOCK_SHA256 = "49598298630f3cd486daebda6aeec7b6dbdf8ed41cfdf0a8924fdaceb56fe9dd"
 PREDECESSOR_KEYS = (
     "neutral_replay_receipt_sha256",
     "full_candidate_scorepack_sha256",

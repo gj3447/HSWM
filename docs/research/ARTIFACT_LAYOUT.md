@@ -13,6 +13,11 @@ findable.
 | Run manifest             | `*_MANIFEST*.json`      | `manifests/`     |
 | Results narrative        | `*_RESULTS_*.md`        | `results/`       |
 | Narrative research doc   | dated research `*.md`   | `docs/research/` |
+| Machine-readable ontology | `*_ONTOLOGY*.json`      | `ontology/`      |
+
+The repository-wide path/concept projection lives in `ontology/`. Ontology
+files organize meaning and navigation; they are not HSWM cognitive rules or
+evidence of learned behavior.
 
 ## Helper
 

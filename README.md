@@ -1,346 +1,253 @@
-# HSWM — Evidence-Preserving World Compiler and Neural-Substrate Research
+# HSWM — Hypergraph Semantic Weight Map
 
-> Frozen sources and recorded observations compile deterministically into an
-> immutable, evidence-addressable `WorldArtifactV1`. Stable IDs are projected
-> into the existing hypergraph field/readout prototype through an explicit
-> legacy layout rather than being confused with positional numpy indices.
+**A research program for turning hand-written AI coordination into a persistent,
+learnable semantic field.** LLMs execute local functions; HSWM is the larger
+recurrent network that connects them, remembers outcomes, and is intended to
+change its own routing and topology through experience.
 
-Standalone extraction of the `semantic_weight_mapper_prototype` from the SYMPOSIUM
-research programme. The compiler/field/readout core is NumPy-only; reproducing
-H3 artifact production is a separately attested GPU/LLM workflow.
+> **Research status:** HSWM is not yet that complete system. This repository
+> contains a tested world/evidence substrate, deterministic field and runtime
+> components, narrow measured results, and several failed or unfinished
+> plasticity experiments. No checked-in run has yet produced a
+> `CAUSALLY_VALIDATED` outcome → credit → durable `ΔW/ΔH` → changed-behavior
+> result.
 
-The repository-wide research map, including the 2026-07-22 open self-similar
-composition work and the 2026-07-23 learned-router result, is in
-[`INDEX.md`](INDEX.md). Current claims are grounded only in checked-in direct
-measurements and reproducible local tests; deleted external judgment records have
-no scientific authority. The active default is the four-step
-[`minimal-governance contract`](research/HSWM_MINIMAL_GOVERNANCE.v1.json): run,
-measure directly, emit one receipt for a material result, then commit and push.
+<p align="center">
+  <img src="docs/assets/hswm-semantic-weight-field-hero.png"
+       alt="A translucent semantic-weight landscape with one amber activation trajectory"
+       width="100%">
+</p>
 
-## Target architecture and present boundary
+<p align="center"><em>Conceptual illustration of a living semantic-weight field—not an architecture diagram or experimental result.</em></p>
 
-**HSWM means Hypergraph Semantic Weight Map.** Its target form is a giant
-hypergraph-based semantic neural network whose neural functional units are
-executed by LLMs:
+> **Target intuition:** an input activates a trajectory through the field. An
+> independently measured outcome may validate a bounded durable update. Only an
+> activated update conditions later behavior.
 
-\[
-f_i^t := \operatorname{LLM}(\rho_i, x_i^t, a_{\mathcal N(i)}^t),
-\qquad
-\mathrm{HSWM}_t := (H_t, W_t, A_t, \{f_i^t\})
-\]
+## Why HSWM
 
-- `H`: the hypergraph topology that binds semantic states and functions through
-  n-ary relations;
-- `W`: the Semantic Weight Map that controls macro-synaptic strength, activation,
-  and routing between those functions;
-- `f_i`: an LLM-executed semantic function (an agent/process role), not a
-  conventional scalar neuron;
-- `A`: recurrent run-local activation and working state; durable `H/W` and
-  certified snapshots carry persistence across runs.
+Modern agent systems commonly coordinate models, tools, memories, and roles with
+prompt rules, routers, workflow graphs, and exception handling. As their number
+of combinations grows, the coordination layer can consume more effort and model
+context than the task itself.
 
-The same foundation model may realize many `f_i` calls; the claim does not
-require one separately trained LLM per function. LLM parameter weights remain
-inside the function implementation, while HSWM weights describe the semantic
-connections *between* functions and states. The whole hypergraph-weighted
-function network is HSWM. It is not “an LLM plus an external memory”.
+### The transformer-training analogy
 
-### Core Motivation: Replacing Hardcoded Agent Glue with Learned Neural Topology
+HSWM starts from an analogy, not an equivalence. Rule-heavy AI systems shifted
+toward transformer networks whose behavior is shaped by data instead of an
+enumerated rulebook. HSWM applies that move one level above the foundation
+model: it is intended to turn AI token, action, tool-use, and outcome
+trajectories into the implicit coordination of a larger multi-agent neural
+system.
 
-Just as autonomous driving made a historic paradigm shift by discarding rule-based C++ stacks (hardcoded state machines for lane-keeping, obstacle logic, and edge-case handling) in favor of end-to-end differentiable neural networks, the current AI agent/MCP ecosystem faces an identical complexity wall:
-
-- **The Hardcoding Trap**: Modern LLM agents, MCP (Model Context Protocol) tools, and CLI pipelines are currently glued together using brittle, hardcoded `if-else` routers, prompt chains, and hand-written orchestration scripts.
-- **Combinatorial Collapse**: As the number of agents, tools, and environments scales, static rule-based glue code collapses under combinatorial edge cases and rigid maintenance overhead.
-
-**HSWM addresses this fundamental bottleneck at its origin:**
-
-Rather than relying on hand-written agent-orchestration scripts or static IF/ELSE pipelines, HSWM replaces hardcoded agent glue with a plastic, learnable semantic hypergraph field ($H_t, W_t$). The routing, collaboration, credit assignment, and memory transport between typed LLM functions ($f_i$) are governed by learnable fast/slow weights and dynamic topology rewrites, evaluated against outcome-bound traces and direct measurements.
-
-HSWM therefore owns the persistent hypergraph state, global routing, recurrence,
-credit assignment, acceptance, and weight/topology rewrites. CAS, CRDT, replay,
-and validation reducers form its deterministic safety/control plane; they are
-not being mislabeled as LLM neurons.
-
-The detailed function contract, runtime cycle, code-to-architecture map,
-feasibility verdict, failure modes, and decisive P1–P4 experiments are in
-[`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md).
-The preserved hard core, replaceable protective belt, current evidence table,
-kill rules, and the single ordered research direction are frozen in
-[`HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md`](HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md).
-The umbrella canon is [`THE_WORLD_REMEMBERS.md`](THE_WORLD_REMEMBERS.md): it joins
-recursive world-memory and world-self-model identity to the plastic rewiring of
-LLM/tool collaboration. It explicitly separates `USER_PRIMARY` direction from
-`SECONDARY_AI_FORMALIZATION`; it is a target identity and falsifiable research
-contract, not a present-tense efficacy claim.
-
-That paragraph is a target identity, not a present-tense efficacy claim. The
-repository currently has a mature evidence/compiler/replay substrate and several
-measured field mechanisms. The P1 engineering loop is now closed; its first
-causal efficacy trial is scientifically RED based on the checked-in direct
-measurements. Outputs from the removed personal governance tools carry no
-scientific authority:
-
-| phase | repository state | completion gate |
-|---|---|---|
-| P0 — identity and metrics | **specified** in the [canonical direction](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md): neural functions are LLM-executed; `H` and `W` form their macro-network | target identity, claim boundary, and learning metric are explicit |
-| P1 — learning actuation | scalar slow-weight P1 is **scientific RED**: 12/12 candidates had fresh Δ=0 and rank replay found 0/456 top-10 changes. The typed-policy fallback then produced a narrow local L0 result in P1v3 and independently replicated in P1v4: typed/no-memory `6/6 vs 2/6`, four improvements | preserve the L0 claim boundary; build real B2.2 Gate-0 packs, then test outcome→used-bond credit→fast candidate→slow `Delta ell` promotion with removal and negative controls |
-| P2 — shared-network transfer | **not implemented or measured** | Agent A writes; frozen Agent B gains on sealed unseen work under equal compute |
-| P3 — structural plasticity | deterministic edits and a shadow gate exist; the first candidate policy was **rejected** | a learned candidate policy passes fresh, target, and canary gates |
-| P4 — federation and sleep | field federation is partial; consolidation/homeostasis remain design work | recover in-field interference and demonstrate stable long-horizon learning |
-
-### Checked-in experiment record (2026-07-23)
-
-These results constrain the next implementation; none establishes a general
-intelligence or production claim.
-
-| experiment | measured result | disposition |
-|---|---|---|
-| B2.1 frozen-arm learned router | all 54 standard cells collapsed to `ABSTAIN→MERGED`; primary Δ=0 | **rejected**; router-only action space is insufficient |
-| [B2 routing-signal audit](B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md) | best MuSiQue slice oracle gap +9.92pp, 75% ties; pooled retrieval slices exceed the 80% tie kill line | a thin, concentrated oracle signal exists; this is not a learned-router success |
-| [E1 conditional traversal](E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md) | bridge −13.89pp, CI95 [−19.44, −8.33]; factoid −7.27pp | **rejected**; traversal remains deployment-OFF |
-| [shadow-gated topology absorption](SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md) | 0/3 rounds accepted, 100% canary preservation, sealed Δ=0 | **rejected for no target gain**; the gate was safe, the candidate generator was ineffective |
-| cognitive-uplift reranking | pooled F1 Δ=−0.1489 | **rejected** |
-| [P1 eligibility/judgment learning](P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md) | loop/runtime implemented; 12 candidates proposed, 0 fresh-gate passes, A1−A2=0, slope −0.0271; rank replay 0/456 top-10 changes | **scientific RED**; canary/CAS safety held, typed lesson is the next local-draft falsifier |
-
-The [Phasor Agents prior-art tribunal](TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md)
-also narrows novelty: generic graph three-factor plasticity and sleep-staged
-learning are adopted prior art, not HSWM claims. The remaining research slots
-are n-ary credit assignment, semantic LLM-operator verdicts, topology
-plasticity, and a persistent multi-agent field with provenance/CRDT receipts.
-
-## Honest status (read first)
-
-This is an implemented compiler boundary plus a measurement prototype, not a
-reasoner or a proven production runtime. What is real as of 2026-07-23:
-
-- ✅ **S0 falsifier repair:** separated-graded arm (e), actual
-  `readouts.supersede()` writes, kill(iii), write/trip receipts, and corrected
-  current-recall costs are implemented with regenerated result artifacts.
-- ✅ **S1 evidence compiler:** exact source selectors, content-addressed IDs,
-  immutable records, deterministic manifests, and typed fail-closed rejection.
-- ✅ **S2 legacy parity:** evaluation labels are separated from world inputs;
-  old paragraph ordering lives only in `LegacyProjectionLayoutV1`; valid legacy
-  field/retrieve/selection/μ=0 behavior remains bit-identical.
-- ✅ **S3 certified cut:** immutable byte-addressed `FieldSnapshotV1` records
-  bind world, dense layout, embeddings, topology, revision cut, kernel, field
-  policy, and candidates. `read_certified(...)` admits only the exact certified
-  tuple and otherwise returns a payload-free typed refusal before scoring.
-- ✅ **Field experiments:** additive-j, traversal certification, and stale
-  poisoning remain measured research paths with their checked-in receipts.
-- ✅ **Open self-similar composition kernel:** fixed layer numbers were removed
-  from the composition contract. Atomic and composed HSWMs share one
-  mount/typed-port/n-ary-connector type; v2r3 passes the 78-test expanded
-  structural regression and two injected-negative checks.
-- ❌ **B2.1 learned router:** a preregistered shared-ridge/conformal router over
-  frozen A/B/MERGED arms failed all 54 standard cells and reduced to
-  `ABSTAIN→MERGED` everywhere. Primary delta was 0 on both datasets; even the
-  posthoc gold oracle's minimum frozen-action headroom was only +0.01087, below
-  the registered >+0.02 target. This rejects router-only, not semantic-weight or
-  topology learning.
-- 🧪 **B2.2 Gate-0 metrology:** the full-candidate component-pack compiler,
-  exact neutral replay, frozen-B2 reproduction, pinned B2.1 continuity,
-  three-role acceptance lock, and detached learner view are implemented with
-  fail-closed synthetic/attack tests. The real 2Wiki/MuSiQue packs have not been
-  built; no learner has been fitted and no B2.2 efficacy claim has been
-  registered or made.
-- ✅/⚠️ **P1v3/P1v4 typed-policy actuation:** one training-derived source policy
-  changed a frozen model on fresh heldout questions and replicated on seed-5 R2
-  (`6/6` typed vs `2/6` no memory; four improvements). This is a local L0
-  answer-interface observation at `n=6`,
-  not a general learned compiler, durable `Delta W`, transfer, or topology.
-- 🧠 **PROM-9 semantic neural network protocol:** three frozen typed LLM
-  functions (`query compiler -> bond proposer -> answer synthesizer`) now have
-  hashable prompts, port boundaries, matched-budget baselines, role
-  removal/shuffle controls, and a fail-closed stage-packet compiler. The
-  executable vertical slice now includes exact typed-port validation, immutable
-  function registries, three-call model receipts, a five-arm F1 runner, an
-  independent gold judge, and snapshot-bound P1v5/P2 causal judges. This is
-  development-ready harness closure, not F1/P1v5/P2 efficacy; real Gate-0 packs,
-  preregistration, sealed splits, and independent evaluation remain required.
-- 🧪 **PROM-9 F1 actual-model development run:** the corrected 4-item 2Wiki run
-  executed 60 physical `Qwen3.6-27B` calls. Typed scored `2/4`, flat `1/4`,
-  vector `2/4`, role removal `0/4`, and role shuffle `1/4`; however every item
-  failed consumed-token parity and all paired lower bounds included zero.
-  The result is therefore `DEVELOPMENT_ONLY`, with no unique HSWM efficacy
-  claim. See
-  [`PROM9_F1_2WIKI_DEVELOPMENT_RESULTS_20260724.md`](prom_search_hswm/docs/PROM9_F1_2WIKI_DEVELOPMENT_RESULTS_20260724.md).
-- 🧰 **F1 durable transport repair:** the r3 sealed attempt ended `REFUSED`
-  after 721 observed HTTP 200 responses and produced no suite. A focused
-  SQLite WAL/FULL client ledger plus server result spool now passes local
-  disconnect, truncation, crash, replay, tamper, and `15/5/1` reconstruction
-  faults. This is local engineering infrastructure only: target DGX deployment,
-  an actual-upstream disconnect falsifier, successor preregistration, and all
-  `1500/500/1` observation/judgment gates remain blocked. See the
-  [`durable transport contract`](prom_search_hswm/docs/F1_DURABLE_TRANSPORT_CONTRACT_20260727.md).
-- ⚠️ **Open-kernel claim boundary:** local structural tests cover composition,
-  but no removed external-tool verdict is retained as authority. Learned semantic-weight deltas and
-  CONNECT/SEPARATE/SPECIALIZE topology edits, bounded cyclic readout,
-  multi-agent transfer, and retrieval uplift remain unimplemented or unmeasured.
-- ✅ **Measured efficacy:** the static additive-j field beats the listed cosine,
-  BM25, PPR, and RRF arms on support recall@3, nDCG@10, and downstream F1 in the
-  checked-in 300-row ladder. HSWM alone uses 100 offline LLM judgments per run.
-- ⚠️ **Traversal:** real MuSiQue and 2Wiki certification selected μ=0. It is
-  implemented but deployment-OFF on those worlds; S3 therefore falls back to
-  the same snapshot's static field instead of claiming a smart graph win.
-- ❌ **Cognitive uplift:** the preregistered cross-dataset claim over direct LLM
-  reranking failed (MuSiQue deltas −0.2566/−0.2317; 2Wiki +0.0414,
-  paired-bootstrap p=0.084; pooled delta −0.1489).
-- ⚠️ **H3:** B1 title-anchor composition is refuted/inconclusive. B3 is
-  implemented and preregistered but confirmatory efficacy is unmeasured; the
-  checked-in run manifests are historical and rejected by the current loader.
-- ⚠️ **QKV / semantic layers:** exact ordered routing passes 64/64 and the
-  heterogeneous typed branch/map/reduce/lookup kernel passes 128/128 synthetic
-  namespace cases over four templates. The no-label B1 recurrence gate still
-  fails. A 132/132 2Wiki comparison result uses evaluator-supplied facts/path
-  and is executor coverage, not HSWM reasoning efficacy.
-- ❌ **S4 durable revision runtime:** event-folded supersession, as-of replay,
-  compensation, concurrent publication, signatures, and external trust
-  distribution are not present-tense claims.
-- 🧰 **Generic feedback runtime:** a capability-separated, SQLite-backed
-  `ATTACH → PROPOSE → OBSERVE → JUDGE → COMMIT → DISPATCH` kernel now provides
-  canonical replay, request conflict refusal, verdict-bound cuts, and restart
-  recovery. It is an operational mechanism, not a live outer dispatcher,
-  scientific verdict, or external exactly-once claim.
-
-These engineering mechanisms do not establish that the HSWM function network is intelligent or already learns continually; its plasticity loop is not yet closed. That stronger claim still requires a
-preregistered frozen-model comparison of no memory, transcript/vector memory,
-dynamic KG/event-log memory, full HSWM, and causal-rewrite ablation under equal
-compute, held-out behavior, rejection controls, forgetting bounds, and receipt
-replay.
-
-See [`EFFICACY.md`](EFFICACY.md) for the full claim ledger, budgets, negative
-results, and reproduction boundaries. `verify_efficacy_claims.py` reconstructs
-the selected numeric headline directly from checked-in JSON receipts and fails
-closed when one of those declared metrics or boundaries drifts.
-
-Score-floor language is layered: the positive semantic residual is per-edge
-`S_sem >= cosine`; temporal decay may intentionally go below cosine, and a
-positive traversal residual does not guarantee ranking/nDCG improvement.
-
-## Falsifiable shared-field hypothesis
-
-The next discriminating question is narrower than “a new Hypergraph RAG”: can one
-versioned semantic field serve retrieval, independent selection, and knowledge
-revision better than three task-specific heads under the same measured budget?
-The current repository implements shared scoring only. `plan()` remains a
-compatibility alias, `supersede()` receives an externally chosen write, and a
-separated revision-metadata arm can reproduce the graded scores bit-exactly.
-
-The repository-local [shared-field research nest](_research/shared_field_hypothesis/)
-now contains independent selection and versioned-revision fixtures plus an E1
-replay, isolation, inventory, and budget verifier. It binds the canonical A/B/C/D
-roles, requires exact A/B parity, keeps C/D as explicitly different controls,
-and refuses missing shared immutable components or replay-counter drift. The
-retrieval fixture, executable model arms, frozen confirmatory inputs, numeric
-thresholds, and G4 preregistration remain unresolved; therefore no efficacy run
-is authorized. No winner, production, closed-learning, or novelty claim follows
-from these engineering receipts. The longer user direction and SECONDARY_AI
-formalization remain in
-[`SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md`](SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md).
-
-## Layout
-
-| file | role |
+| transformer training | HSWM macro-training |
 |---|---|
-| `world_ir.py` | immutable source/evidence/observation/entity/target records and stable IDs |
-| `world_compiler.py` | pure `compile_world(...) -> WorldArtifactV1 | CompileRejectionV1` |
-| `legacy_adapter.py` | QA-label split, two-call embed protocol, stable-ID ↔ dense-ID parity seam |
-| `EPWC_IMPLEMENTATION_S0_S2_2026-07-20.md` | implemented-scope, validation, falsifier result, and S3 boundary receipt |
-| `field_snapshot.py` | immutable float64 material, component receipts, and exact field hydration |
-| `certified_readout.py` | certificate-bound retrieve / selection / dispatch / traversal admission |
-| `certified_cut_compare.py` | independent-oracle controls, 10×40 scope checks, and 9 mutant attacks |
-| `EPWC_IMPLEMENTATION_S3_2026-07-20.md` | S3 implementation and comparison receipt; smart-hypergraph boundary |
-| `EFFICACY.md` / `verify_efficacy_claims.py` | human and machine-readable current efficacy ledger |
-| `THE_WORLD_REMEMBERS.md` | umbrella HSWM canon: recursive world memory, local human/LLM cells, plastic cognitive wiring, deterministic safety membrane, and falsification boundary |
-| `CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md` | target identity: a hypergraph Semantic Weight Map whose neural functions are executed by LLMs |
-| `HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md` | precise LLM-function contract, runtime semantics, current code mapping, feasibility verdict, risks, and decisive gates |
-| `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` / `P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md` / `EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json` | frozen P1 contract, implementation/result closeout, and historical self-verdict evidence |
-| `P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json` / `PREREG_P1V2_TYPED_VERDICT_LESSON_2026-07-24.json` | frozen retrieval rank replay and measurement-forbidden typed-lesson draft |
-| `B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md` / `b2_routing_signal.py` | oracle routing-signal audit and deterministic evidence generator |
-| `E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md` / `e1_conditional_traversal.py` | bridge/factoid traversal falsifier and evidence generator |
-| `SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md` / `prom_search_hswm/hswm_shadow_gate.py` | topology-candidate shadow-gate result, reducer, preregistration, and receipt |
-| `GENERIC_FEEDBACK_RUNTIME_ACCEPTANCE.md` / `feedback_runtime.py` / `feedback_store.py` | generic authority-separated feedback kernel, durable replay, and explicit non-claims |
-| `INDEX.md` | public research map, 2026-07-22 result ledger, and next frontier |
-| `SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md` | fixed-layer-free open weighted-hypergraph contract |
-| `AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md` | v2r3 counterexamples, repairs, tests, and claim boundary |
-| `prom_search_hswm/hswm_open_kernel.py` | deterministic open-composition v2r3 kernel |
-| `prom_search_hswm/prom_b21_learned_router.py` | B2.1 frozen-arm learned router and conformal-abstention harness |
-| `prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md` | 54-cell result, oracle ceiling diagnosis, and B2.2 direction |
-| `prom_search_hswm/hswm_bond_readout.py` | pure slow-salience + volatile query-bond potential application and deterministic ranking |
-| `prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md` | refined B2.2 design, action-space diagnostics, full-score-pack requirement, and fresh confirmation boundary |
-| `prom_search_hswm/hswm_b22_gate0_harness.py` / `prom_search_hswm/docs/B22_GATE0_HARNESS_CONTRACT_20260723.md` | full-candidate Gate-0 compiler, replay, locked acceptance, and trusted-ingestion boundary |
-| `PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md` | typed LLM function-network design, fast-to-slow bond plasticity, and matched controls |
-| `PROM9_DECISIVE_EXPERIMENT_HARNESS_2026-07-24.md` / `prom_search_hswm/prom_f1_function_network.py` / `prom_search_hswm/prom9_causal_harness.py` | executable F1 equal-budget runner plus P1v5 weight-removal and P2 frozen-agent-transfer causal judges; development output cannot mint a scientific verdict |
-| `_research/shared_field_hypothesis/task_contracts.v1.json` / `e1_contract.v1.json` | independent task/control roles and engineering-only replay/budget receipt contracts |
-| `prom_search_hswm/docs/PROM_HSWM_REMAINING_ISSUES_RESOLUTION_20260723.md` | evidence-backed dependency graph from implemented gates to G4 preregistration |
-| `H3_B3_RESUME_STATUS_2026-07-20.md` | corrected PRE_RUN boundary, local receipt hashes, and exact next sequence |
-| `QKV_STRUCTURE_EXPERIMENT_PLAN_2026-07-20.md` / `QKV_STRUCTURE_RESULTS_2026-07-20.md` | ordered-routing and B1-QKV development protocol, results, and claim boundary |
-| `qkv_routing.py` / `qkv_b1_probe.py` | exact symbolic QKV routing and no-label dense B1 value-read research kernels |
-| `SEMANTIC_QKV_EXPERIMENT_PLAN_2026-07-20.md` / `SEMANTIC_QKV_RESULTS_2026-07-20.md` | heterogeneous typed-layer protocol, synthetic result, 2Wiki oracle boundary, and next decisive test |
-| `semantic_layer_routing.py` / `semantic_layer_falsifier.py` | common evidence-bound branch/map/reduce/lookup kernel and its exhaustive four-template matrix |
-| `semantic_2wiki_oracle.py` | evaluator-supplied-memory development executor; explicitly not the common kernel or efficacy |
-| `world_builder.py` | legacy corpus builder retained as the parity oracle |
-| `hypergraph.py` | reified hypergraph (nodes+embeddings, incidence = field support) |
-| `weight_field.py` | `W(e|c)` = cosine ⊕ base-salience; heuristic scorers |
-| `readouts.py` | retrieve / selection distribution / dispatch / supersede prototype |
-| `traversal.py` / `traversal_cert.py` | optional traversal kernel, trip receipts, empirical μ gate |
-| `stale_poisoning.py` | five-arm temporal falsifier and wrong-write collateral |
-| `learned_v3_additive.py` | **D1**: additive-j on frozen cosine — the cosine-floor fix |
-| `llm_judgment_loop.py` | LLM-judgment weight loop (learning = judgment feedback, not SGD) |
-| `falsifier.py` | prereg falsifier harness (learned vs heuristic + null-head + gates) |
-| `neo4j_loader.py` / `real_run.py` | real-KG loader + link-prediction run (SECONDARY) |
-| `diagnose.py` | capacity sweep + headroom knob ("why learning ≠ cosine") |
-| `metrics.py` | fair-tie nDCG@k, answer-EM, paired bootstrap |
-| `receipts/` | content-addressed experiment and runtime result artifacts |
+| training data | token/action/tool/outcome trajectories |
+| learned parameters | durable `W`, routing policy, and `H` topology |
+| objective and optimizer | external outcome, eligibility, causal credit, and bounded update |
+| forward pass | recurrent activation across LLM function cells |
+| held-out validation | fresh/equal-budget evaluation and removal ablation |
 
-## Verification tiers
+The distinction matters: placing tokens in a transformer's context window does
+not train it. Likewise, pouring tokens into HSWM supplies candidate training
+observations, not learned rules by itself. The goal is not to write the
+“perfect AI rulebook”; it is to learn an increasingly capable behavioral field
+whose durable parameters change future behavior. In the intended sense, this
+is the pursuit of the most capable AI behavior-rule system that experience can
+teach—not a claim that the current HSWM is already perfect. A learning claim
+becomes valid only when an outcome-bound update survives fresh tests and its
+effect disappears when the update is removed.
 
-Tier 1 is the fresh-clone/CI boundary. The default pytest command collects the
-core suite, the PROM research suite, and the shared-field contract suite. Its
-only PROM data dependency is the tracked, content-addressed Badiou structure
-fixture.
+This repository calls that hypothesized failure mode **LX3 Ragnarok**: stronger
+models spend an increasing share of their reasoning budget interpreting and
+obeying a growing static harness. HSWM's research bet is that successful and
+failed trajectories can instead supply evidence for bounded semantic-weight,
+routing, and connectivity candidates; only independently validated candidates
+become persistent. This is a direction under test, not a demonstrated
+uniqueness or production claim.
 
-```bash
-uv sync --extra dev
-uv run --extra dev pytest -q
-uv run python verify_efficacy_claims.py --pretty
+HSWM does not try to remove every deterministic rule. Authority, types,
+transactions, provenance, budgets, rollback, and safety constraints remain a
+thin execution boundary. The part intended to become learned is the cognitive
+wiring: which functions should activate, communicate, and change together.
+
+The preserved user direction and its evidence boundary are recorded in
+[`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md).
+
+## One field, four coupled views
+
+The target state is:
+
+$$
+\mathrm{HSWM}_t = (H_t, W_t, A_t, \{f_i^t\}),
+\qquad
+f_i^t = \operatorname{LLM}(\rho_i, x_i^t, a_{\mathcal N(i)}^t)
+$$
+
+| view | role |
+|---|---|
+| `H` | mutable hypergraph topology: the n-ary relations that determine what can interact |
+| `W` | durable slow semantic coupling plus run-local fast/query potential; fast activation alone is not learning |
+| `A` | volatile current activation; persistence belongs to durable `H/W` and certified snapshots |
+| `f_i` | a local semantic function executed by an LLM under a typed port/role contract |
+
+`A`: recurrent run-local activation and working state. It is deliberately
+volatile; durable `H/W` and certified snapshots carry persistence across runs.
+
+These are coupled views, not four rigid floors. An HSWM may contain and compose
+smaller HSWMs through the same ports and connectors; the architecture is meant
+to remain open and self-similar rather than acquire a new fixed layer for every
+new capability. See the
+[`open self-similar kernel`](SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md).
+
+Foundation-model parameters are the **micro-weights inside** each `f_i`. HSWM's
+`W` and `H` are **macro-weights and connectivity between** those functions. The
+target is therefore not “an LLM plus an external memory” or a conventional
+multi-agent wrapper: the whole persistent function field is the neural system.
+
+One foundation model may execute many logical cells. Cell identity comes from
+role, ports, local state, position, and authority—not from requiring a separate
+model checkpoint per cell.
+
+The hero image compresses the idea into one continuous field disturbed by a
+single activation trajectory. It is deliberately a mental image, not a
+one-to-one rendering of discrete hypergraph incidence or a learning claim.
+
+## What counts as learning
+
+Putting more tokens in a database is memory. Reinjecting them is retrieval.
+Editing a prompt rule is a useful baseline. HSWM counts a trajectory as learned
+only when it closes a causal loop:
+
+```text
+token / action / tool trajectory
+  → sealed run-local activation
+  → external outcome
+  → eligibility and causal credit
+  → bounded ΔW / routing / ΔH candidate
+  → fresh, retention, and canary evaluation
+  → atomic activation in a new durable snapshot
+  → changed future behavior
+  → removal ablation that removes the effect
 ```
 
-Tier 2 is deterministic extended verification over checked-in artifacts:
+The executable receipt contract
+[`hswm_token_learning_contract.py`](hswm_token_learning_contract.py)
+distinguishes `OBSERVED_ONLY`, `DURABLE_UPDATE`, and `CAUSALLY_VALIDATED`, and
+hash-binds a claimed causal-test receipt. The replay, equal-budget, and removal
+tests named by that receipt remain a separate evidence boundary; the current
+contract does not inspect their scientific contents.
 
-```bash
-uv run python certified_cut_compare.py
-uv run python semantic_layer_falsifier.py --pretty
-uv run python b2_routing_signal.py
-uv run python e1_conditional_traversal.py
+## Topology and sheaf: core versus research lens
+
+Topology is central in the concrete sense of mutable hypergraph connectivity:
+HSWM must eventually learn not only bond strength but also which relations and
+coalitions should exist. This does not require importing all of topological
+geometry into the runtime.
+
+Sheaf theory is an optional research lens for heterogeneous local states. A
+stalk can model a cell's local state space, a restriction map can model transport
+through a typed port, and seam residuals can expose where local outputs fail to
+fit together. In HSWM, that residual should begin as an **observation feature**,
+not a hard-coded truth test, forced consensus rule, or efficacy claim:
+
+```text
+local states → port transports → seam residuals
+             → observation tokens → outcome-bound H/W/routing learning
 ```
 
-Tiers 1 and 2 need the core NumPy dependency plus the pytest development extra;
-they need no model endpoint, Neo4j, or untracked benchmark corpus. Tier 3 is the
-external/live research boundary: ignored benchmark inputs, the real-KG
-additive-j experiment, H3 model snapshots, GPU/LLM execution, and their runtime
-receipts. The real-KG entrypoint is:
-`uv run --extra kg python learned_v3_additive.py`. H3 production additionally needs
-PyArrow for 2Wiki decoding, PyTorch/Transformers plus the frozen BGE-M3
-snapshot, and an attested OpenAI-compatible LLM endpoint; source-tree tests do
-not substitute for those runtime receipts.
+The definitions, sources, caveats, and machine-readable ontology are in
+[`ontology/field/sheaf/README.md`](ontology/field/sheaf/README.md)
+and [`ontology/field/sheaf/HSWM_SHEAF_ONTOLOGY.v1.json`](ontology/field/sheaf/HSWM_SHEAF_ONTOLOGY.v1.json).
 
-Real-KG batch read (explicit Tier 3 exception): `uv sync --extra kg && NEO4J_URI=... NEO4J_USER=... NEO4J_PW=... NEO4J_DATABASE=neo4j uv run --extra kg python neo4j_loader.py`.
-The loader never reads personal MCP configuration and opens a Neo4j `READ_ACCESS`
-session; missing explicit credentials fail closed.
+## Current evidence boundary
 
-## Methodology
+Repository state as of 2026-08-15:
 
-- **Minimal default:** implementation or execution → direct measurement → one
-  content-addressed receipt for a material result → commit/push. The removed
-  personal governance tools have no optional or historical execution path. MCP is limited to
-  the external bounded ontology adapter under
-  [`HSWM_MINIMAL_GOVERNANCE.v1.json`](research/HSWM_MINIMAL_GOVERNANCE.v1.json).
-- **Deployment claims:** a passing source-tree test is not a production
-  certificate. S3 implements exact local scope/admission and fail-closed
-  refusal, but its trusted certificate-ID allowlist is not a signature system;
-  durable event replay and external trust remain S4+ work.
+| area | honest status |
+|---|---|
+| evidence-preserving world compiler, stable IDs, immutable cuts, and fail-closed readout | implemented and locally tested |
+| static additive semantic field | narrow positive checked-in retrieval measurement with an asymmetric budget: 100 offline LLM judgments for HSWM and zero for cosine/BM25/PPR/RRF; not continual learning |
+| scalar slow-weight P1 | **scientific RED**: 12 staged candidates, 0 fresh-gate passes/activations, and 0/456 measured top-10 rank changes |
+| typed-policy P1v3/P1v4 | narrow local `n=6` L0 observation; not durable `ΔW`, transfer, or topology learning |
+| token-driven durable macro-learning | trajectory/eligibility/activation receipt binding implemented; no optimizer or causally validated macro-update demonstrated |
+| cross-agent transfer, learned topology, and consolidation | incomplete or unmeasured |
+
+Tests establish implementation and invariant closure, not intelligence or
+production readiness. Numerical claims, negative results, budgets, and exact
+reproduction boundaries live in [`EFFICACY.md`](EFFICACY.md).
+
+## Quick start
+
+Requirements: Python 3.11+ and [`uv`](https://docs.astral.sh/uv/).
+
+```bash
+git clone https://github.com/gj3447/HSWM.git
+cd HSWM
+uv sync --locked --extra dev
+uv run --locked --extra dev pytest -q
+uv run --locked python verify_efficacy_claims.py --pretty
+```
+
+The default suite uses checked-in fixtures and does not require a live model,
+Neo4j, or an external benchmark corpus. GPU/LLM experiments and real-KG runs are
+a separate, explicitly configured boundary; source-tree tests do not substitute
+for their runtime receipts.
+
+## Read next
+
+| question | document |
+|---|---|
+| Why replace static agent glue, and what is token learning? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) |
+| What exactly are `H`, `W`, `A`, and the LLM functions? | [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) |
+| What is implemented, rejected, or still open? | [`EFFICACY.md`](EFFICACY.md) |
+| What is the broader world-memory purpose? | [`THE_WORLD_REMEMBERS.md`](THE_WORLD_REMEMBERS.md) |
+| Where is the full research chronology? | [`INDEX.md`](INDEX.md) |
+| How is the whole repository organized by meaning? | [`ontology/`](ontology/) |
+| How might sheaf theory help without becoming another static harness? | [`ontology/field/sheaf/`](ontology/field/sheaf/) |
+
+## Repository map
+
+| path | purpose |
+|---|---|
+| `ontology/` | canonical semantic navigation, path catalog, and concept relations |
+| `world_ir.py`, `world_compiler.py` | immutable evidence model and deterministic world compilation |
+| `field_snapshot.py`, `certified_readout.py` | certified field cuts and exact-scope admission |
+| `hswm_weight_store.py`, `hswm_token_learning_contract.py` | durable weight state and causal-learning evidence boundary |
+| `prom_search_hswm/` | open composition, field algebra, retrieval, routing, and plasticity experiments |
+| `tests/`, `_research/shared_field_hypothesis/` | core regression and fail-closed research contracts |
+| `research/`, `schemas/`, `scripts/` | machine-readable contracts, schemas, and validators |
+| `evidence/`, `prereg/`, `manifests/`, `results/`, `receipts/` | typed research artifacts and direct measurements |
+| `docs/research/`, `docs/assets/` | narrative research material and public visual assets |
+
+Every checked-in path is projected into the machine-readable
+[`repository ontology`](ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json) and
+[`path catalog`](ontology/HSWM_PATH_CATALOG.v1.json). Historical modules and
+hash-bound artifacts remain at the repository root only where old receipts,
+imports, or `__file__`-relative execution bind that location. The frozen
+exceptions are explicit in
+[`LEGACY_ROOT_PATHS.v1.json`](ontology/history/LEGACY_ROOT_PATHS.v1.json).
+**New research artifacts must not be added to the root.** They are routed by
+kind according to
+[`docs/research/ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).
+
+## Method and contribution boundary
+
+The maintainer research workflow is intentionally short:
+
+```text
+implement or run → measure directly → emit one receipt for a material result
+                 → commit and push
+```
+
+Current claims rely only on checked-in direct measurements and reproducible
+tests. The active bounded policy is
+[`research/HSWM_MINIMAL_GOVERNANCE.v1.json`](research/HSWM_MINIMAL_GOVERNANCE.v1.json).
+
+Contributions are welcome through [`CONTRIBUTING.md`](CONTRIBUTING.md) and require
+the contributor agreement in [`CLA.md`](CLA.md).
 
 ## License
 
 Dual-licensed under AGPL-3.0-or-later or a separate commercial license. See
-[`LICENSING.md`](LICENSING.md) and `LICENSE`.
+[`LICENSING.md`](LICENSING.md) and [`LICENSE`](LICENSE).

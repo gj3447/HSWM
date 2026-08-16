@@ -144,6 +144,58 @@ def shuffle_world(world: wb.BuiltWorld, seed: int) -> wb.BuiltWorld:
                          queries=world.queries, stats=dict(world.stats, shuffled=True))
 
 
+def synthetic_corpus_rows(seed: int = 0, n_chains: int = 12,
+                          noise: int = 24) -> list[dict]:
+    """Offline bridge corpus shared by the installed CLI and its tests.
+
+    Keeping this fixture in the runtime module prevents ``python -m
+    traversal_cert teeth`` from depending on the non-wheel ``tests`` tree.
+    """
+    rng = np.random.default_rng(seed)
+    rows = []
+    for i in range(n_chains):
+        a, b, c = f"Alpha Keep {i}", f"Bram Vale {i}", f"Cinder Peak {i}"
+        pa = {
+            "idx": 0,
+            "title": a,
+            "paragraph_text": (
+                f"{a} stands north. Lord of {a} rode to {b} each spring. "
+                f"{b} kept the oath."
+            ),
+            "is_supporting": True,
+        }
+        pb = {
+            "idx": 1,
+            "title": b,
+            "paragraph_text": (
+                f"{b} lies east of the river. Scouts of {b} watched {c} burn."
+            ),
+            "is_supporting": True,
+        }
+        pc = {
+            "idx": 2,
+            "title": c,
+            "paragraph_text": f"{c} is a mountain of ash and old fire.",
+            "is_supporting": False,
+        }
+        noise_p = {
+            "idx": 3,
+            "title": f"Dull Fen {rng.integers(noise)}",
+            "paragraph_text": (
+                "Reeds and mud and quiet water lie here for many miles."
+            ),
+            "is_supporting": False,
+        }
+        rows.append({
+            "id": f"2hop__chain{i}",
+            "hop": "2hop",
+            "question": f"Where did the lord of {a} ride each spring?",
+            "answer": b,
+            "paragraphs": [pa, pb, pc, noise_p],
+        })
+    return rows
+
+
 def null_gate(world: wb.BuiltWorld, q_embs: np.ndarray, seeds=SEEDS) -> dict:
     """H-T2: every seed must certify μ=0 on the shuffled world, else HARNESS_BROKEN."""
     chosen = []
@@ -314,8 +366,7 @@ def run_real(dataset: str, cache_dir: str = ".ab_p5_cache", n_rows: int | None =
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "teeth"
     if mode == "teeth":
-        from tests.test_traversal_cert import _corpus_rows
-        rows = _corpus_rows(seed=0)
+        rows = synthetic_corpus_rows(seed=0)
         world = wb.build(rows)
         q_e = wb.hash_embed([q.question for q in world.queries], wb.DEFAULT_DIM)
         print(json.dumps(null_gate(world, q_e), indent=1))

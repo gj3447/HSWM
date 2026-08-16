@@ -250,7 +250,7 @@ graph memory로 수렴할 가능성이 높다.
 
 ### Gate P1 — causal macro-weight loop
 
-[`PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`](PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json)을
+[`PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`](../../PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json)을
 R2 premeasurement amendment와 함께 실행 완료했다.
 
 - A1 tagged commit
@@ -260,7 +260,7 @@ R2 premeasurement amendment와 함께 실행 완료했다.
 - 성공: A1−A2 recall@10 > 0.01, bootstrap lower > 0, canary 유지
 
 결과는 A1−A2 `0.0`, bootstrap lower `0.0`, candidate fresh pass `0/12`로 **RED**다.
-상세는 [`P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md`](P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md).
+상세는 [`P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md`](../../results/P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md).
 K1에 따라 동일 slow-weight 경로 재시도 대신 typed text-lesson baseline으로 이동한다.
 
 ### Gate F1 — LLM 함수망 실행 증명
@@ -353,10 +353,10 @@ P2는 typed text-lesson fallback이 먼저 fresh behavior를 움직일 때만 �
 
 ## 12. 관련 정본
 
-- [`README.md`](README.md) — 공개 claim boundary와 P0–P4 상태
-- [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) — 사용자 방향 정전
-- [`P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md`](P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md) — P1 구현·실측 RED closeout
-- [`prom_search_hswm/hswm_open_kernel.py`](prom_search_hswm/hswm_open_kernel.py) — open self-similar structural kernel
-- [`prom_search_hswm/hswm_bond_readout.py`](prom_search_hswm/hswm_bond_readout.py) — slow/fast weight binding
-- [`prom_search_hswm/fsm/hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json) — bounded plasticity workflow contract
-- [`feedback_runtime.py`](feedback_runtime.py), [`feedback_ports.py`](feedback_ports.py), [`feedback_store.py`](feedback_store.py) — deterministic safety/control plane
+- [`README.md`](../../README.md) — 공개 claim boundary와 P0–P4 상태
+- [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) — 사용자 방향 정전
+- [`P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md`](../../results/P1_CLOSED_LEARNING_LOOP_RESULTS_2026-07-23.md) — P1 구현·실측 RED closeout
+- [`prom_search_hswm/hswm_open_kernel.py`](../../prom_search_hswm/hswm_open_kernel.py) — open self-similar structural kernel
+- [`prom_search_hswm/hswm_bond_readout.py`](../../prom_search_hswm/hswm_bond_readout.py) — slow/fast weight binding
+- [`prom_search_hswm/fsm/hswm_plasticity_loop.v1.json`](../../prom_search_hswm/fsm/hswm_plasticity_loop.v1.json) — bounded plasticity workflow contract
+- [`feedback_runtime.py`](../../feedback_runtime.py), [`feedback_ports.py`](../../feedback_ports.py), [`feedback_store.py`](../../feedback_store.py) — deterministic safety/control plane

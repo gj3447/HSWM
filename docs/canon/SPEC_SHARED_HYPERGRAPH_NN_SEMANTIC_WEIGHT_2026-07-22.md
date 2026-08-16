@@ -89,5 +89,5 @@ Learning = **circuit rewiring** (use / judgment / topology ops), not deep GNN ba
 ## 7. Provenance
 
 - USER dialogue 2026-07-22 (Grok session): multi-agent NN inside HSWM; missing semantic weight row; "must semantics be hypergraph?"
-- Prior canon: [`INDEX.md`](INDEX.md), `PROM_KQV_ATTENTION_BACKBONE`, ML16/17/18, SolidMultiAgent HC1–HC6, `correction-p5-category-substrate-not-reasoner`.
+- Prior canon: [`INDEX.md`](../../INDEX.md), `PROM_KQV_ATTENTION_BACKBONE`, ML16/17/18, SolidMultiAgent HC1–HC6, `correction-p5-category-substrate-not-reasoner`.
 - Layer: SECONDARY_AI until USER ratifies as hard-core amendment.

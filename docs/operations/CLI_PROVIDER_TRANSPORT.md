@@ -124,7 +124,7 @@ There is one current consumer and no measured need for durable scheduling,
 restart recovery, multi-client admission, authentication, or schema migration.
 Adding an HTTP daemon and job database now would manufacture a mutable runtime
 owner. The promotion gates are recorded in
-`CLI_PROVIDER_MODULE_DECISION_2026-07-20.json`; build a broker only when those
+`research/CLI_PROVIDER_MODULE_DECISION_2026-07-20.json`; build a broker only when those
 obligations are real.
 
 ## Verification

@@ -226,5 +226,5 @@ counterbalanced participant block `60`, 과제군별 독립 task/component clust
 - 핵심 findings: `finding_f244e3d722a70b1e`, `finding_1704888f9904aad1`,
   `finding_6ed795f9eb57ad6e`, `finding_46d6172a67f8113f`, `finding_717ed8ccefad7b80`,
   `finding_30e66c69d1d67a0c`, `finding_57fa5baf68153ae3`.
-- 기존 cognitive metric draft: [`PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md`](PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md)
-- 현재 효능 경계: [`README.md`](README.md) · [`EFFICACY.md`](EFFICACY.md)
+- 기존 cognitive metric draft: [`PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md`](../../prereg/PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md)
+- 현재 효능 경계: [`README.md`](../../README.md) · [`EFFICACY.md`](../../EFFICACY.md)

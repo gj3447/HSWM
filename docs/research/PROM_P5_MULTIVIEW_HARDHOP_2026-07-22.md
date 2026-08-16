@@ -14,7 +14,7 @@ HSWM은 여기서 일반적인 world model이 아니라 **Hypergraph Semantic We
 2. semantic은 `SEED`, 구조는 `EDGE`로 분리해야 했다(ML17).
 3. 구조깊이는 solidity·이식성의 발판이지 전파를 깊게 쌓아 recall을 올리는 장치가 아니었다(ML18–19).
 
-실험 당시 추적 정본은 private SYMPOSIUM의 `HSWM/prom_search_hswm/`이었고, 동시 작업 중이던 공개 저장소 변경은 그 write-set에서 제외했다. 이 공개본에서는 코드·증거를 [`prom_search_hswm/`](prom_search_hswm/) 아래로 통합했다. 라이브 HSWM_LOCAL_RECORD는 로컬 `:55170` relay가 가리키는 서버이며 boot/disk SHA가 clean `PI/HSWM_LOCAL_RECORD@71915a52ee934e20943bfa33ad934711f0eceb4e`와 일치했다.
+실험 당시 추적 정본은 private SYMPOSIUM의 `HSWM/prom_search_hswm/`이었고, 동시 작업 중이던 공개 저장소 변경은 그 write-set에서 제외했다. 이 공개본에서는 코드·증거를 [`prom_search_hswm/`](../../prom_search_hswm) 아래로 통합했다. 라이브 HSWM_LOCAL_RECORD는 로컬 `:55170` relay가 가리키는 서버이며 boot/disk SHA가 clean `PI/HSWM_LOCAL_RECORD@71915a52ee934e20943bfa33ad934711f0eceb4e`와 일치했다.
 
 ## 2. 문헌 충돌로 만든 P5
 

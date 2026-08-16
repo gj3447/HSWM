@@ -78,7 +78,7 @@
 - **L0 메모리 substrate — CONFIRMED** (HSWM F1 0.541 vs cosine 0.469, +0.073, p<0.0001, n=300, 추론 LLM콜 0). 자율주행 비유로는 perception stack이 먼저 검증된 단계.
 - **L1 LLM-함수 신경망 — TARGET**. PROM-17 §6.2의 세 falsifiable 질문(경험-품질 곡선 단조 향상 / 계열 A→B 전이 / 가중치 장 절제 시 하드코딩 라우터로 퇴화)이 F1~F5 게이트·장부로 사전등록돼 있다. 현 최전선 = F1 r8/try3 (`FINDINGS/hswm-f1-r8-try3-2026-07-28/REPORT.md` — 모델콜 0, B22 LOCKED, fail-closed 재시작 준비).
 - **L3 합의 포함 더 큰 AI — OPEN**. C5의 merge 대수가 유일 공학 경로이고 L5 위반이 현 블로커.
-- 프로그램 전체 `scientific_status` = **UNJUDGED**. 현재 주장은 [`EFFICACY.md`](EFFICACY.md)의 체크인 직접 측정 경계를 따른다.
+- 프로그램 전체 `scientific_status` = **UNJUDGED**. 현재 주장은 [`EFFICACY.md`](../../EFFICACY.md)의 체크인 직접 측정 경계를 따른다.
 
 ## 3. Claims and Non-claims
 
@@ -89,8 +89,8 @@
 
 ## 4. 관계 문서
 
-- **PROM-17 (전방)**: [`PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md`](PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md)
-- **PROM-17 §8 관계 문서**: [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) (정체성 정전) / [`PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md`](PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) (최소 구현 계약) / [`PROM_16_HSWM_HOLISTIC_SCIENTIFIC_ARCHITECTURE_2026-07-26.md`](PROM_16_HSWM_HOLISTIC_SCIENTIFIC_ARCHITECTURE_2026-07-26.md) (총체 과학 구조)
+- **PROM-17 (전방)**: [`PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md`](../research/PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md)
+- **PROM-17 §8 관계 문서**: [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) (정체성 정전) / [`PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md`](../research/PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) (최소 구현 계약) / [`PROM_16_HSWM_HOLISTIC_SCIENTIFIC_ARCHITECTURE_2026-07-26.md`](../research/PROM_16_HSWM_HOLISTIC_SCIENTIFIC_ARCHITECTURE_2026-07-26.md) (총체 과학 구조)
 - **HSWM/ 카탈로그**: HARNESS_7COMMANDER (C2·C7) / LENS_DUALITY (C7) / PHASE_B (C5) / MATH_DEFINITION_UNIFIED (C6) / 헌장 HC-08 (C5) / B2 결과 (C5) / PROM_16_UNPROVEN_B (C8)
 - **AGENTS.md 정전**: `7cmd-measurement-driven-conditional-dispatch-2026-05-30` (C2) / `apt-contract-root-axiom-2026-05-27` (C3)
 - **KG**: `user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23` / `user-canon-hswm-functions-are-llm-executed-neural-net-2026-07-23` / `user-canon-legioncommanders-operate-on-hswm-neural-net-2026-07-23` (VerdictPending) / `commander-hswm-omc-2026-07-19`

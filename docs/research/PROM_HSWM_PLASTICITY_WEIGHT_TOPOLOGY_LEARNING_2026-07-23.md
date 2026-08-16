@@ -47,7 +47,7 @@
 4. 이 가소성을 수행하며 semantic neural network를 완성하는 주체가 agent다.
 
 원문과 권위 경계는
-[`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md)에
+[`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](../canon/SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md)에
 보존돼 있다.
 
 ### SECONDARY_AI
@@ -67,14 +67,14 @@
 | route/gate \(\phi\) | fixed lexical/RRF 또는 직접 선택 | **learned router 없음** |
 | candidate 승격 | immutable candidate, fresh eval, canary, CAS | 고정 governance이며 learned policy는 아님 |
 
-현재 `W(e\mid c)`는 [`weight_field.py`](weight_field.py)의
-`fast contextual alpha + slow base salience`이고, [`learned_v3_additive.py`](src/hswm/prototypes/learned_v3_additive.py)는
+현재 `W(e\mid c)`는 [`weight_field.py`](../../weight_field.py)의
+`fast contextual alpha + slow base salience`이고, [`learned_v3_additive.py`](../../src/hswm/prototypes/learned_v3_additive.py)는
 frozen cosine 위의 boost-only residual을 offline으로 학습한다. 이 static additive-j는 공개
 효능 장부에서 cosine 대비 support recall@3 `+0.0364`, nDCG@10 `+0.0259`, downstream F1
-`+0.0729`를 냈다([`EFFICACY.md`](EFFICACY.md)). 이것은 **weight-plane의 실측**이지 learned
+`+0.0729`를 냈다([`EFFICACY.md`](../../EFFICACY.md)). 이것은 **weight-plane의 실측**이지 learned
 CONNECT/SEPARATE/SPECIALIZE의 실측이 아니다.
 
-또 [`llm_judgment_loop.py`](src/hswm/prototypes/llm_judgment_loop.py)는 주석에서 “gradient-free”라고 쓰지만 실제
+또 [`llm_judgment_loop.py`](../../src/hswm/prototypes/llm_judgment_loop.py)는 주석에서 “gradient-free”라고 쓰지만 실제
 구현은 judge label로 \(M\)에 gradient step을 수행하며, default judge도 real LLM이 아니라
 synthetic gold oracle다. 그러므로 이것은 loop 가능성의 prototype이지 운영 학습 증거가 아니다.
 
@@ -82,7 +82,7 @@ synthetic gold oracle다. 그러므로 이것은 loop 가능성의 prototype이�
 
 ### B2: 연결은 실제로 이기지만 간섭도 실제다
 
-[`B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md`](prom_search_hswm/docs/B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md):
+[`B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md`](../../prom_search_hswm/docs/B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md):
 
 - cross-field `merged − best_single = +0.2137`, bootstrap95 `[+0.183,+0.244]`;
 - seam ablation `+0.0342`, bootstrap95 `[+0.017,+0.052]`;
@@ -280,9 +280,9 @@ OBSERVE
 어느 gate라도 불명확/실패/동률/낡은 base면 NO_CHANGE 또는 REJECT
 ```
 
-기존 P6의 [`hswm_absorption_fsm.v1.json`](prom_search_hswm/fsm/hswm_absorption_fsm.v1.json)이
+기존 P6의 [`hswm_absorption_fsm.v1.json`](../../prom_search_hswm/fsm/hswm_absorption_fsm.v1.json)이
 `FREEZE → EVALUATE → CANARY → ACTIVATE → ROLLBACK/SUPERSEDE`를 이미 소유한다. 이를 복제하지
-않고, 새 [`hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json)이
+않고, 새 [`hswm_plasticity_loop.v1.json`](../../prom_search_hswm/fsm/hswm_plasticity_loop.v1.json)이
 앞단 `OBSERVE → CREDIT → PROPOSE → COMPILE`과 실행 예산·checkpoint·effect ledger를 묶는다.
 
 ### loop invariants
@@ -456,16 +456,16 @@ headline metric은 **Agent-A write → frozen Agent-B fresh unseen gain**이다.
 
 ### local canon / code / receipts
 
-- [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md)
-- [`SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md`](SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md)
-- [`DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md`](DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md)
-- [`weight_field.py`](weight_field.py), [`learned_v3_additive.py`](src/hswm/prototypes/learned_v3_additive.py),
-  [`llm_judgment_loop.py`](src/hswm/prototypes/llm_judgment_loop.py)
-- [`EFFICACY.md`](EFFICACY.md)
+- [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](../canon/SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md)
+- [`SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md`](../canon/SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md)
+- [`DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md`](../../DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md)
+- [`weight_field.py`](../../weight_field.py), [`learned_v3_additive.py`](../../src/hswm/prototypes/learned_v3_additive.py),
+  [`llm_judgment_loop.py`](../../src/hswm/prototypes/llm_judgment_loop.py)
+- [`EFFICACY.md`](../../EFFICACY.md)
 - [`PROM_P5_MULTIVIEW_HARDHOP_2026-07-22.md`](PROM_P5_MULTIVIEW_HARDHOP_2026-07-22.md)
 - [`PROM_P6_CONTINUAL_ABSORPTION_FSM_2026-07-22.md`](PROM_P6_CONTINUAL_ABSORPTION_FSM_2026-07-22.md)
-- [`B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md`](prom_search_hswm/docs/B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md)
-- [`hswm_absorption_fsm.v1.json`](prom_search_hswm/fsm/hswm_absorption_fsm.v1.json)
+- [`B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md`](../../prom_search_hswm/docs/B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md)
+- [`hswm_absorption_fsm.v1.json`](../../prom_search_hswm/fsm/hswm_absorption_fsm.v1.json)
 
 ### external primary sources
 

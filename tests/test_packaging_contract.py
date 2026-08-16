@@ -288,6 +288,9 @@ def test_source_distribution_carries_the_default_test_surface() -> None:
     # is not a test failure, while dropping a pattern still is.
     required: dict[str, set[str]] = {
         "src": {"*.py"},
+        "scripts": {"*.py", "*.sh"},
+        "prereg": {"*.json", "*.md"},
+        "results": {"*.md", "*.log"},
         "receipts": {"*.py", "*.json"},
         "prom_search_hswm": {"*.py", "*.json", "*.md", "*.mmd"},
         "_research": {"*.py", "*.json", "*.md", "*.sh", "*.tsv"},

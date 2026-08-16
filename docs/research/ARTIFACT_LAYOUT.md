@@ -13,6 +13,8 @@ findable.
 | Run manifest             | `*_MANIFEST*.json`      | `manifests/`     |
 | Results narrative        | `*_RESULTS_*.md`        | `results/`       |
 | Narrative research doc   | dated research `*.md`   | `docs/research/` |
+| Canon/identity document  | ratified direction or definition | `docs/canon/` |
+| Historical run log       | `*.log`                 | `results/logs/` |
 | Machine-readable ontology | `*_ONTOLOGY*.json`      | `ontology/`      |
 
 The repository-wide path/concept projection lives in `ontology/`. Ontology
@@ -37,6 +39,20 @@ path = resolve_artifact_path("EVIDENCE_B1_IDENTITY_UNLOCK_2026-07-22.json")
   first, **legacy root second**. Old root files and new subdir files both
   resolve; path+sha256 ledger entries keep working unchanged.
 - `iter_artifact_paths(name)` — both locations, for listing-style readers.
+
+W10 removed the first 58 audited non-Python legacy files from the physical
+root. Their old names, source commit, and SHA-256 values are recorded in
+[`ROOT_ASSET_MIGRATIONS.W10.v1.json`](../../ontology/history/ROOT_ASSET_MIGRATIONS.W10.v1.json),
+so `hswm-legacy-replay` can materialize the exact pre-move checkout. The
+remaining root assets are not invitations for new output: each belongs to a
+path/SHA dependency cluster that must move atomically in a later wave.
+
+Byte-frozen or user-primary records keep five original root-relative links:
+two in `CANON_DIRECTION_...md`, two in
+`USER_PRIMARY_HSWM_TOKEN_LEARNING_...md`, and one in
+`f0_premise_p/PREREG.md`. The moved `PREREG_P0_...md` keeps one reciprocal
+historical link. These links resolve in the detached replay checkout; their
+source records are intentionally not edited just to rewrite navigation.
 
 ## Escape hatch
 

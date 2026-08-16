@@ -57,7 +57,7 @@ def test_root_compatibility_surface_and_catalog_are_current() -> None:
     result = validate_checkout(data)
     assert result["concepts"] == 10
     assert result["paths"] > 1_000
-    assert result["legacy_root_paths"] == 221
+    assert result["legacy_root_paths"] == 163
     legacy = json.loads((ROOT / data["legacy_root_inventory"]).read_text(encoding="utf-8"))
     catalog = json.loads((ROOT / data["path_catalog"]).read_text(encoding="utf-8"))
     assert legacy["$schema"] == "../../schemas/hswm_legacy_root_paths.v1.schema.json"
@@ -87,9 +87,34 @@ def test_python_root_migrations_are_pinned_and_root_count_only_decreases() -> No
     assert classification["counts"]["partition_total"] == 73
 
     replay = data["legacy_replay"]
-    assert replay["source_of_truth"] == "python_root_migrations"
+    assert replay["source_of_truth"] == [
+        "python_root_migrations",
+        "asset_root_migrations",
+    ]
     assert replay["workspace_kind"] == "detached-standalone-clone"
     assert (ROOT / replay["tool"]).is_file()
+
+
+def test_asset_root_migrations_are_source_pinned_and_leave_no_root_alias() -> None:
+    data = load_repository_ontology()
+    result = validate_checkout(data)
+    manifests = data.get("asset_root_migrations", [])
+    expected_count = 0
+    for relative in manifests:
+        manifest = json.loads((ROOT / relative).read_text(encoding="utf-8"))
+        assert manifest["$schema"] == (
+            "../../schemas/hswm_root_asset_migrations.v1.schema.json"
+        )
+        assert manifest["schema_version"] == "hswm-root-asset-migrations/v1"
+        assert manifest["status"] == "SOURCE_PINNED_PATH_MIGRATION"
+        expected_count += len(manifest["migrations"])
+        for row in manifest["migrations"]:
+            assert "/" not in row["old_path"]
+            assert not (ROOT / row["old_path"]).exists()
+            assert (ROOT / row["canonical_path"]).is_file()
+
+    assert expected_count == 58
+    assert result["asset_root_migrations"] == expected_count
 
 
 def test_transformer_analogy_requires_an_optimizer_equivalent() -> None:

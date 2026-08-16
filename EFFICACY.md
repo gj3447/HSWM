@@ -167,7 +167,7 @@ Sources: `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`,
 `P1_GATE_DIAGNOSTIC_R2_2026-07-23.json`, and
 `P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json`. The causal analysis and
 next falsifier are in `RESEARCH_P1_FAILURE_HSWM_LOCAL_RECORD` and
-`PREREG_P1V2_TYPED_VERDICT_LESSON_2026-07-24.json`.
+`prereg/PREREG_P1V2_TYPED_VERDICT_LESSON_2026-07-24.json`.
 
 ## 4. Traversal and relational composition
 
@@ -221,7 +221,7 @@ been prepared. They are operational cache receipts, not efficacy results. The
 remaining valid continuation must bind a live Qwen deployment receipt, freeze a
 new schema-v2 manifest with unused first-write output paths, and run development
 only. Fresh production remains forbidden unless both development certificates
-pass. See `H3_B3_RESUME_STATUS_2026-07-20.md` for receipt hashes and the exact
+pass. See `results/H3_B3_RESUME_STATUS_2026-07-20.md` for receipt hashes and the exact
 resume sequence.
 
 Sources: `traversal_bench_results.json`, `cert_musique_result.json`,
@@ -255,8 +255,8 @@ the cross-dataset real-data gate fails. The correct current statement is:
 **HSWM has a coherent evidence-bound Q/K/V routing algebra, but stacking the
 available B1 reads does not establish reasoning uplift.**
 
-Sources: `QKV_STRUCTURE_EXPERIMENT_PLAN_2026-07-20.md`,
-`QKV_STRUCTURE_RESULTS_2026-07-20.md`, `qkv_routing_result.json`, and
+Sources: `prereg/QKV_STRUCTURE_EXPERIMENT_PLAN_2026-07-20.md`,
+`results/QKV_STRUCTURE_RESULTS_2026-07-20.md`, `qkv_routing_result.json`, and
 `qkv_b1_development_result.json`.
 
 ### Heterogeneous semantic layers
@@ -297,7 +297,7 @@ historical partial cache has zero queries with all required gold facts usable,
 so no gold-conditioned subset is allowed.
 
 Sources: `SEMANTIC_QKV_EXPERIMENT_PLAN_2026-07-20.md`,
-`SEMANTIC_QKV_RESULTS_2026-07-20.md`, `semantic_layer_result.json`, and
+`results/SEMANTIC_QKV_RESULTS_2026-07-20.md`, `semantic_layer_result.json`, and
 `semantic_2wiki_oracle_result.json`.
 
 ## 5. Graded supersession: useful behavior, narrower novelty
@@ -355,7 +355,7 @@ They do not establish retrieval quality, cryptographic authenticity, exhaustive
 security, crash-safe replay, or production readiness.
 
 Source: `certified_cut_comparison_result.json` and
-`EPWC_IMPLEMENTATION_S3_2026-07-20.md`.
+`docs/research/EPWC_IMPLEMENTATION_S3_2026-07-20.md`.
 
 ## Verification tiers
 

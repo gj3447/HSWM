@@ -3,8 +3,8 @@
 > 날짜: 2026-07-24
 > 상태: `DESIGN_LOCKED_NOT_PREREGISTERED`
 > 권위: `SECONDARY_AI_RESEARCH_AND_ENGINEERING_DESIGN`
-> 기계 계약: [`prom9_semantic_neural_network.v1.json`](prom_search_hswm/prom9_semantic_neural_network.v1.json)
-> 검증기: [`prom9_protocol.py`](prom_search_hswm/prom9_protocol.py)
+> 기계 계약: [`prom9_semantic_neural_network.v1.json`](../../prom_search_hswm/prom9_semantic_neural_network.v1.json)
+> 검증기: [`prom9_protocol.py`](../../prom_search_hswm/prom9_protocol.py)
 
 ## 0. 결론
 

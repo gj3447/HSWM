@@ -28,7 +28,7 @@ data만 다음 함수 입력으로 들어간다.
 
 ### 입력 준비
 
-[`f1_manifest.development.example.json`](_research/prom9_harness/f1_manifest.development.example.json)을
+[`f1_manifest.development.example.json`](../../_research/prom9_harness/f1_manifest.development.example.json)을
 복사해 실제 개발 split과 candidate로 교체한다. `observable`에는 다음을 넣는다.
 
 - typed arm용: base score, provenance, incidence/seam 등 등록된 observable component;
@@ -63,7 +63,7 @@ python3 -m prom_search_hswm.prom_f1_function_network run \
 ### 독립 gold 판정
 
 run 단계는 gold를 받지 않는다. 별도 evaluator가
-[`f1_gold.development.example.json`](_research/prom9_harness/f1_gold.development.example.json) 형식으로
+[`f1_gold.development.example.json`](../../_research/prom9_harness/f1_gold.development.example.json) 형식으로
 gold와 evaluator receipt를 만든 뒤 판정한다.
 
 ```bash

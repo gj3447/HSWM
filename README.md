@@ -98,7 +98,7 @@ These are coupled views, not four rigid floors. An HSWM may contain and compose
 smaller HSWMs through the same ports and connectors; the architecture is meant
 to remain open and self-similar rather than acquire a new fixed layer for every
 new capability. See the
-[`open self-similar kernel`](SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md).
+[`open self-similar kernel`](docs/canon/SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md).
 
 Foundation-model parameters are the **micro-weights inside** each `f_i`. HSWM's
 `W` and `H` are **macro-weights and connectivity between** those functions. The
@@ -202,7 +202,7 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 |---|---|
 | How do the fragmented identity, mathematics, runtime, learning, and evidence meanings fit together? | [`HSWM unified meaning map`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md) |
 | Why replace static agent glue, and what is token learning? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) |
-| What exactly are `H`, `W`, `A`, and the LLM functions? | [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) |
+| What exactly are `H`, `W`, `A`, and the LLM functions? | [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](docs/canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) |
 | What is implemented, rejected, or still open? | [`EFFICACY.md`](EFFICACY.md) |
 | What is the broader world-memory purpose? | [`THE_WORLD_REMEMBERS.md`](THE_WORLD_REMEMBERS.md) |
 | Where is the full research chronology? | [`INDEX.md`](INDEX.md) |
@@ -258,6 +258,10 @@ with later replay-backed waves in
 [`PYTHON_ROOT_MIGRATIONS.W8.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W8.v2.json),
 and
 [`PYTHON_ROOT_MIGRATIONS.W9.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W9.v2.json).
+The first non-Python cleanup wave is source-pinned in
+[`ROOT_ASSET_MIGRATIONS.W10.v1.json`](ontology/history/ROOT_ASSET_MIGRATIONS.W10.v1.json):
+58 root documents, records, logs, and one maintenance shell entry now live in
+typed directories while their original layout remains replayable.
 **New Python modules or research artifacts must not be added to the root.** New
 code goes under `src/hswm/`; artifacts are routed by kind according to
 [`docs/research/ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).

@@ -23,6 +23,16 @@ pin the exact commit from which its old paths were removed. They are also the
 single path registry consumed by `hswm-legacy-replay`; no second alias map can
 silently drift from the migration evidence.
 
+[`ROOT_ASSET_MIGRATIONS.W10.v1.json`](ROOT_ASSET_MIGRATIONS.W10.v1.json) extends
+the same source-pinned replay contract to non-Python root assets without
+changing the Python registry. W10 classifies 58 byte-preserved documents,
+records, logs, and one maintenance shell entry into `docs/canon`,
+`docs/research`, `prereg`, `evidence`, `manifests`, `research`, `results`, and
+`scripts`. Historical preregistrations and machine-readable bindings remain
+byte-identical; current navigation documents point at the canonical paths.
+The frozen legacy inventory is now 163 paths: 73 Python files plus 90 assets
+whose active path/SHA dependency clusters require later atomic waves.
+
 W4 moves the isolated OSS extraction comparison program into the existing
 `_research.material_extraction` namespace. Its historical root path and exact
 bytes remain reproducible from the source-pinned
@@ -62,8 +72,8 @@ paths and byte identities for detached replay.
 
 ```bash
 uv run hswm-legacy-replay list
-uv run hswm-legacy-replay verify OLD_ROOT_FILE.py
-uv run hswm-legacy-replay materialize OLD_ROOT_FILE.py /tmp/hswm-replay
+uv run hswm-legacy-replay verify OLD_ROOT_FILE
+uv run hswm-legacy-replay materialize OLD_ROOT_FILE /tmp/hswm-replay
 ```
 
 The resulting checkout includes Git metadata because several historical

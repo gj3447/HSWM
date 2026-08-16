@@ -1,6 +1,6 @@
 # 보충 감사 — Phasor Agents "open-source" 주장 실재 검증 (2026-07-24)
 
-> **status**: SECONDARY_AI 보충 감사. **정본 재판 = [`TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md`](TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md)** (Naesengmoon, 2026-07-23) — novelty 판정·슬롯 분석·시간척도 방어는 거기가 정본이다. 본 문서는 정본이 미검증으로 넘긴 **코드 공개 주장**만 감사한다.
+> **status**: SECONDARY_AI 보충 감사. **정본 재판 = [`TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md`](../../TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md)** (Naesengmoon, 2026-07-23) — novelty 판정·슬롯 분석·시간척도 방어는 거기가 정본이다. 본 문서는 정본이 미검증으로 넘긴 **코드 공개 주장**만 감사한다.
 
 ## 0. 한 줄
 

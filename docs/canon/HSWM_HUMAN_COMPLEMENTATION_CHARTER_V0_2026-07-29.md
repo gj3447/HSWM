@@ -182,7 +182,7 @@ Ratification 전에는 인간 모집, prediction 등록, 측정 실행, 효능·
 - Lesson: `lesson-prom16-hswm-human-complementation-knowledge-map-20260729` (`PROVISIONAL`)
 - Goal node: `goal-hswm-human-complementation-knowledge-program-20260729` (`DRAFT`)
 - HSWM 공학 층 경계: [`HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md`](HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md)
-- 실행·효능 경계: [`README.md`](README.md) · [`EFFICACY.md`](EFFICACY.md)
+- 실행·효능 경계: [`README.md`](../../README.md) · [`EFFICACY.md`](../../EFFICACY.md)
 
 ### PROM 16 finding IDs
 

@@ -38,9 +38,9 @@ topology가 서로 분리된 실험으로 존재하여 **HSWM 고유 구조가 �
 
 - KG `user-canon-hswm-is-the-larger-ai-containing-consensus-2026-07-23`:
   **HSWM 자체가 합의를 포함하는 더 큰 범위의 AI**다.
-- [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md):
+- [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md):
   HSWM = LLM-executed functions + `H` + `W` + recurrent plastic state.
-- [`HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md`](HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md):
+- [`HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md`](../../HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md):
   LLM 호출, prompt 변경, static memory가 아니라 결과가 `W/H`를 바꾸고 그 변화가 다음
   dispatch를 바꿀 때만 HSWM 학습이다.
 
@@ -229,7 +229,7 @@ prompt가 최종 readout에 영향을 주는 것은 허용한다. 증명할 것�
 ## 5. 다음 결정실험 — `HSWM-CPL1`
 
 상세 draft는
-[`prom_search_hswm/evidence/PREREG_CPL1_hswm_causal_plasticity_20260726.draft.json`](prom_search_hswm/evidence/PREREG_CPL1_hswm_causal_plasticity_20260726.draft.json)에 둔다.
+[`prom_search_hswm/evidence/PREREG_CPL1_hswm_causal_plasticity_20260726.draft.json`](../../prom_search_hswm/evidence/PREREG_CPL1_hswm_causal_plasticity_20260726.draft.json)에 둔다.
 
 ### 5.1 testbed adoption gate
 

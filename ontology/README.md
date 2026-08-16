@@ -17,8 +17,9 @@ Python modules are a shrinking, explicitly frozen compatibility surface; each
 completed move is source-pinned by the manifests in [`history/`](history/).
 Every remaining root module has exactly one reason class in
 [`PYTHON_ROOT_CLASSIFICATION.v1.json`](history/PYTHON_ROOT_CLASSIFICATION.v1.json).
-An old root command is recovered without polluting the active checkout with
-`uv run hswm-legacy-replay materialize OLD.py /tmp/hswm-replay`.
+An old root command or non-Python asset is recovered without polluting the
+active checkout with
+`uv run hswm-legacy-replay materialize OLD_ROOT_FILE /tmp/hswm-replay`.
 
 ## Concept map
 

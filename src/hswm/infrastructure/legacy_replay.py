@@ -29,7 +29,28 @@ ONTOLOGY_RELATIVE_PATH = Path("ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json")
 _REPOSITORY_MARKERS = (Path("pyproject.toml"), ONTOLOGY_RELATIVE_PATH)
 _COMMIT_RE = re.compile(r"[0-9a-f]{40}\Z")
 _SHA256_RE = re.compile(r"[0-9a-f]{64}\Z")
-_OLD_PATH_RE = re.compile(r"[^/\\]+\.py\Z")
+_PYTHON_OLD_PATH_RE = re.compile(r"[^/\\]+\.py\Z")
+_ASSET_OLD_PATH_RE = re.compile(r"[^/\\]+\.(?:md|json|txt|log|sh)\Z")
+_PYTHON_DESTINATION_PREFIXES = {
+    "canonical-package": "src/hswm/",
+    "research-source": "_research/",
+    "maintenance-script": "scripts/",
+    "test": "tests/",
+}
+_ASSET_DESTINATION_PREFIXES = {
+    "canon-document": "docs/canon/",
+    "research-document": "docs/research/",
+    "archive-document": "docs/archive/",
+    "evidence": "evidence/",
+    "preregistration": "prereg/",
+    "manifest": "manifests/",
+    "research-record": "research/",
+    "result": "results/",
+    "receipt": "receipts/",
+    "source-text": "docs/canon/sources/",
+    "run-log": "results/logs/",
+    "maintenance-shell": "scripts/",
+}
 
 
 class LegacyReplayError(RuntimeError):
@@ -157,6 +178,39 @@ def _require_git_checkout(repo_root: Path) -> Path:
     return root
 
 
+def _manifest_paths(
+    ontology: Mapping[str, Any],
+    key: str,
+    *,
+    required: bool,
+) -> list[str]:
+    value = ontology.get(key)
+    if isinstance(value, str) and value:
+        paths = [value]
+    elif (
+        isinstance(value, list)
+        and value
+        and all(isinstance(item, str) and item for item in value)
+    ):
+        paths = list(value)
+    elif not required and value is None:
+        return []
+    else:
+        raise LegacyReplayError(f"repository ontology has invalid {key}")
+    if len(paths) != len(set(paths)):
+        raise LegacyReplayError(f"repository ontology repeats a manifest in {key}")
+    return paths
+
+
+def _canonical_migration_path(value: Any) -> str | None:
+    if not isinstance(value, str) or not value or "\\" in value:
+        return None
+    path = Path(value)
+    if path.is_absolute() or ".." in path.parts or path.as_posix() != value:
+        return None
+    return value
+
+
 def load_migration_entries(repo_root: str | Path) -> tuple[MigrationEntry, ...]:
     """Load the ontology-selected migration rows with no parallel path registry."""
 
@@ -165,25 +219,46 @@ def load_migration_entries(repo_root: str | Path) -> tuple[MigrationEntry, ...]:
         root, ONTOLOGY_RELATIVE_PATH.as_posix(), label="repository ontology",
     )
     ontology = _strict_json_file(ontology_path, label="repository ontology")
-    manifest_value = ontology.get("python_root_migrations")
-    if isinstance(manifest_value, str):
-        manifest_paths = [manifest_value]
-    elif (
-        isinstance(manifest_value, list)
-        and manifest_value
-        and all(isinstance(item, str) for item in manifest_value)
-    ):
-        manifest_paths = list(manifest_value)
-    else:
-        raise LegacyReplayError("repository ontology has no Python migration manifests")
+    python_manifests = _manifest_paths(
+        ontology, "python_root_migrations", required=True,
+    )
+    asset_manifests = _manifest_paths(
+        ontology, "asset_root_migrations", required=False,
+    )
+    selected_manifests = [
+        (relative, "python") for relative in python_manifests
+    ]
+    selected_manifests.extend(
+        (relative, "asset") for relative in asset_manifests
+    )
+    manifest_paths = [relative for relative, _family in selected_manifests]
     if len(manifest_paths) != len(set(manifest_paths)):
         raise LegacyReplayError("repository ontology repeats a migration manifest")
 
     entries: list[MigrationEntry] = []
     seen_old_paths: set[str] = set()
-    for relative in manifest_paths:
+    seen_canonical_paths: set[str] = set()
+    for relative, family in selected_manifests:
         manifest_path = _safe_repository_file(root, relative, label="migration manifest")
         manifest = _strict_json_file(manifest_path, label="migration manifest")
+        schema_version = manifest.get("schema_version")
+        status = manifest.get("status")
+        if family == "python":
+            if schema_version not in {
+                "hswm-python-root-migrations/v1",
+                "hswm-python-root-migrations/v2",
+            }:
+                raise LegacyReplayError(f"invalid Python migration schema in {relative}")
+        elif (
+            schema_version != "hswm-root-asset-migrations/v1"
+            or manifest.get("$schema")
+            != "../../schemas/hswm_root_asset_migrations.v1.schema.json"
+        ):
+            raise LegacyReplayError(f"invalid asset migration schema in {relative}")
+        if status != "SOURCE_PINNED_PATH_MIGRATION":
+            raise LegacyReplayError(f"invalid migration status in {relative}")
+        if not isinstance(manifest.get("policy"), str) or not manifest["policy"]:
+            raise LegacyReplayError(f"invalid migration policy in {relative}")
         source_commit = manifest.get("source_commit")
         if not isinstance(source_commit, str) or not _COMMIT_RE.fullmatch(source_commit):
             raise LegacyReplayError(f"invalid source_commit in {relative}")
@@ -197,28 +272,56 @@ def load_migration_entries(repo_root: str | Path) -> tuple[MigrationEntry, ...]:
             canonical_path = row.get("canonical_path")
             source_sha256 = row.get("source_sha256")
             destination_kind = row.get("destination_kind")
-            if not isinstance(old_path, str) or not _OLD_PATH_RE.fullmatch(old_path):
+            old_path_re = (
+                _PYTHON_OLD_PATH_RE if family == "python" else _ASSET_OLD_PATH_RE
+            )
+            if not isinstance(old_path, str) or not old_path_re.fullmatch(old_path):
                 raise LegacyReplayError(f"invalid old_path in {relative}: {old_path!r}")
             if old_path in seen_old_paths:
                 raise LegacyReplayError(f"duplicate migrated old_path: {old_path}")
-            if (
-                not isinstance(canonical_path, str)
-                or Path(canonical_path).is_absolute()
-                or ".." in Path(canonical_path).parts
-                or Path(canonical_path).as_posix() != canonical_path
-                or not canonical_path.endswith(".py")
-            ):
+            canonical = _canonical_migration_path(canonical_path)
+            if canonical is None:
                 raise LegacyReplayError(
                     f"invalid canonical_path in {relative}: {canonical_path!r}"
                 )
+            if canonical in seen_canonical_paths:
+                raise LegacyReplayError(f"duplicate canonical_path: {canonical}")
+            if family == "python":
+                if not canonical.endswith(".py"):
+                    raise LegacyReplayError(
+                        f"invalid canonical_path in {relative}: {canonical!r}"
+                    )
+                if schema_version == "hswm-python-root-migrations/v1":
+                    prefix = "src/hswm/"
+                    if destination_kind is not None:
+                        raise LegacyReplayError(
+                            f"v1 migration may not declare destination_kind: {old_path}"
+                        )
+                else:
+                    prefix = _PYTHON_DESTINATION_PREFIXES.get(destination_kind)
+                if not isinstance(prefix, str) or not canonical.startswith(prefix):
+                    raise LegacyReplayError(
+                        f"migration destination kind/path mismatch: "
+                        f"{destination_kind!r} -> {canonical!r}"
+                    )
+            else:
+                prefix = _ASSET_DESTINATION_PREFIXES.get(destination_kind)
+                if (
+                    not isinstance(prefix, str)
+                    or not canonical.startswith(prefix)
+                    or Path(canonical).suffix != Path(old_path).suffix
+                ):
+                    raise LegacyReplayError(
+                        f"asset destination kind/path mismatch: "
+                        f"{destination_kind!r} -> {canonical!r}"
+                    )
             if not isinstance(source_sha256, str) or not _SHA256_RE.fullmatch(source_sha256):
                 raise LegacyReplayError(f"invalid source_sha256 for {old_path}")
-            if destination_kind is not None and not isinstance(destination_kind, str):
-                raise LegacyReplayError(f"invalid destination_kind for {old_path}")
             seen_old_paths.add(old_path)
+            seen_canonical_paths.add(canonical)
             entries.append(MigrationEntry(
                 old_path=old_path,
-                canonical_path=canonical_path,
+                canonical_path=canonical,
                 source_commit=source_commit,
                 source_sha256=source_sha256,
                 migration_manifest=relative,

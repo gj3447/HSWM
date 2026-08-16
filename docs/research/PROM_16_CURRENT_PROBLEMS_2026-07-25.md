@@ -5,7 +5,7 @@
 
 > 질문: **"지금 HSWM에서 문제점이 뭐냐?"** — 16 subagent (4축 × 4렌즈), read-only 감사.
 > 축: A 과학적 미증명 게이트 / B 장부·재현성 / C 인프라·운영 / D 방향·가치. 렌즈: ①낶부 증거 ②외부 기준 ③함정·오탐 ④처방.
-> Raw: [`_findings/prom16-hswm-current-problems-20260725/swarm_raw_16.txt`](_findings/prom16-hswm-current-problems-20260725/swarm_raw_16.txt) (16/16 완주, 충돌 0).
+> Raw: [`_findings/prom16-hswm-current-problems-20260725/swarm_raw_16.txt`](../../_findings/prom16-hswm-current-problems-20260725/swarm_raw_16.txt) (16/16 완주, 충돌 0).
 > 관련 장부: `HSWM_LOCAL_RECORD` (52노드), `HSWM_LOCAL_RECORD` (38노드), `hswm-ordered-research-harness-20260724`.
 
 ---

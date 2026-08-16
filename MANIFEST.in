@@ -10,18 +10,18 @@ include uv.lock
 recursive-include tests *.py
 # scripts/ is an implicit-namespace package imported by contract tests.
 # research/ and schemas/ contain the corresponding data contracts.
-recursive-include scripts *.py
+recursive-include scripts *.py *.sh
 recursive-include src *.py *.md
 recursive-include research *.json
 recursive-include ontology *.json *.md
 recursive-include schemas *.json
 recursive-include docs *.md
 recursive-include docs/assets *.png
-recursive-include prereg *.json
+recursive-include prereg *.json *.md
 recursive-include evidence *.json
 recursive-include formal *.py *.lean *.json *.toml
 recursive-include verification *.py *.json *.md
-recursive-include results *.md
+recursive-include results *.md *.log
 recursive-include manifests *.json
 recursive-include receipts *.py *.json
 recursive-include prom_search_hswm *.py *.json *.md *.mmd *.sh

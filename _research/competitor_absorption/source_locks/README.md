@@ -32,5 +32,5 @@ defaults. Supplying a missing or incomplete bundle fails closed.
 Absence of a license file is not permission to reuse code. HGRAG and T-GRAG are
 reference-only clean-room inputs; SiReRAG is CC BY-NC 4.0 and is likewise never
 copied into HSWM. See the
-[`PAPER_CODE_ABSORPTION_LEDGER_2026-07-23.md`](../../../PAPER_CODE_ABSORPTION_LEDGER_2026-07-23.md)
+[`PAPER_CODE_ABSORPTION_LEDGER_2026-07-23.md`](../../../docs/research/PAPER_CODE_ABSORPTION_LEDGER_2026-07-23.md)
 for the per-candidate disposition and falsifier.

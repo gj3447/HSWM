@@ -4,11 +4,11 @@
 >
 > HSWM comparison baseline: `gj3447/HSWM@6328de66e5bb`
 >
-> Source locks: [published provenance inventory](_research/competitor_absorption/source_locks/README.md)
+> Source locks: [published provenance inventory](../../_research/competitor_absorption/source_locks/README.md)
 >
 > Raw third-party bundle: retained locally; not vendored in this repository
 >
-> Machine-readable gate: [`_research/competitor_absorption/manifest.v1.json`](_research/competitor_absorption/manifest.v1.json)
+> Machine-readable gate: [`_research/competitor_absorption/manifest.v1.json`](../../_research/competitor_absorption/manifest.v1.json)
 
 ## Decision
 
@@ -40,9 +40,9 @@ merely because its source is present locally. The deployed HSWM defaults remain:
   PDFs, and extracted text are not committed here.
 
 The exact Git commits are in
-[`repos.lock.tsv`](_research/competitor_absorption/source_locks/repos.lock.tsv); paper identifiers,
+[`repos.lock.tsv`](../../_research/competitor_absorption/source_locks/repos.lock.tsv); paper identifiers,
 URLs, hashes, pages, PDFs, and extracted text are in
-[`papers.lock.tsv`](_research/competitor_absorption/source_locks/papers.lock.tsv).
+[`papers.lock.tsv`](../../_research/competitor_absorption/source_locks/papers.lock.tsv).
 
 ## What each pair actually offers HSWM
 
@@ -131,10 +131,10 @@ no-harm controls. Failure leaves `TRAVERSAL_OFF` and fuse weight `0` unchanged.
 The first implemented wedge is the **source-binding admission gate**, not a
 competitor algorithm:
 
-- [`manifest.v1.json`](_research/competitor_absorption/manifest.v1.json) binds
+- [`manifest.v1.json`](../../_research/competitor_absorption/manifest.v1.json) binds
   every candidate to paper keys, code clones, exact executable reference sites,
   license handling, HSWM surface, default-off disposition, and falsifier.
-- [`verify_sources.py`](_research/competitor_absorption/verify_sources.py)
+- [`verify_sources.py`](../../_research/competitor_absorption/verify_sources.py)
   checks the paper hashes/text, Git HEADs/cleanliness, code anchors, complete
   paper/repository coverage, restricted-license clean-room policy, and that no
   candidate is marked active.

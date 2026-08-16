@@ -66,7 +66,10 @@ def replay_repository(tmp_path: Path) -> dict[str, object]:
         "legacy_alpha.py": b"VALUE = 'alpha'\n",
         "legacy_beta.py": b"VALUE = 'beta'\n",
     }
-    for relative, content in old_sources.items():
+    old_assets = {
+        "legacy_notes.md": b"# Legacy notes\n",
+    }
+    for relative, content in {**old_sources, **old_assets}.items():
         (repository / relative).write_bytes(content)
     (repository / "pyproject.toml").write_text(
         "[project]\nname = 'legacy-replay-fixture'\nversion = '0'\n",
@@ -74,7 +77,7 @@ def replay_repository(tmp_path: Path) -> dict[str, object]:
     )
     source_commit = _commit(repository, "legacy root layout")
 
-    for relative in old_sources:
+    for relative in (*old_sources, *old_assets):
         (repository / relative).unlink()
     canonical_sources = {
         "src/hswm/alpha.py": old_sources["legacy_alpha.py"],
@@ -84,19 +87,28 @@ def replay_repository(tmp_path: Path) -> dict[str, object]:
         destination = repository / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_bytes(content)
+    canonical_assets = {
+        "docs/archive/legacy_notes.md": old_assets["legacy_notes.md"],
+    }
+    for relative, content in canonical_assets.items():
+        destination = repository / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(content)
 
     first_manifest = "ontology/migrations/PYTHON_ROOT_MIGRATION.v1.json"
     second_manifest = "ontology/migrations/PYTHON_ROOT_MIGRATION.w2.json"
     _write_json(
         repository / first_manifest,
         {
+            "schema_version": "hswm-python-root-migrations/v1",
+            "status": "SOURCE_PINNED_PATH_MIGRATION",
             "source_commit": source_commit,
+            "policy": "fixture source pin",
             "migrations": [
                 {
                     "old_path": "legacy_alpha.py",
                     "canonical_path": "src/hswm/alpha.py",
                     "source_sha256": sha256(old_sources["legacy_alpha.py"]).hexdigest(),
-                    "destination_kind": "package-module",
                 }
             ],
         },
@@ -104,7 +116,10 @@ def replay_repository(tmp_path: Path) -> dict[str, object]:
     _write_json(
         repository / second_manifest,
         {
+            "schema_version": "hswm-python-root-migrations/v2",
+            "status": "SOURCE_PINNED_PATH_MIGRATION",
             "source_commit": source_commit,
+            "policy": "fixture source pin",
             "migrations": [
                 {
                     "old_path": "legacy_beta.py",
@@ -115,9 +130,31 @@ def replay_repository(tmp_path: Path) -> dict[str, object]:
             ],
         },
     )
+    asset_manifest = "ontology/migrations/ROOT_ASSET_MIGRATION.w10.json"
+    _write_json(
+        repository / asset_manifest,
+        {
+            "$schema": "../../schemas/hswm_root_asset_migrations.v1.schema.json",
+            "schema_version": "hswm-root-asset-migrations/v1",
+            "status": "SOURCE_PINNED_PATH_MIGRATION",
+            "source_commit": source_commit,
+            "policy": "fixture source pin",
+            "migrations": [
+                {
+                    "old_path": "legacy_notes.md",
+                    "canonical_path": "docs/archive/legacy_notes.md",
+                    "source_sha256": sha256(old_assets["legacy_notes.md"]).hexdigest(),
+                    "destination_kind": "archive-document",
+                }
+            ],
+        },
+    )
     _write_json(
         repository / "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json",
-        {"python_root_migrations": [first_manifest, second_manifest]},
+        {
+            "python_root_migrations": [first_manifest, second_manifest],
+            "asset_root_migrations": [asset_manifest],
+        },
     )
     current_head = _commit(repository, "ontology migration")
     return {
@@ -125,7 +162,9 @@ def replay_repository(tmp_path: Path) -> dict[str, object]:
         "source_commit": source_commit,
         "current_head": current_head,
         "old_sources": old_sources,
+        "old_assets": old_assets,
         "first_manifest": first_manifest,
+        "asset_manifest": asset_manifest,
     }
 
 
@@ -137,10 +176,11 @@ def test_list_uses_only_ontology_selected_manifests(
     result = legacy_replay.list_migrations(repository)
 
     assert result["schema_version"] == legacy_replay.LIST_SCHEMA_VERSION
-    assert result["count"] == 2
+    assert result["count"] == 3
     assert [entry["old_path"] for entry in result["entries"]] == [
         "legacy_alpha.py",
         "legacy_beta.py",
+        "legacy_notes.md",
     ]
     assert {entry["source_commit"] for entry in result["entries"]} == {
         replay_repository["source_commit"]
@@ -158,13 +198,19 @@ def test_verify_proves_ancestry_and_exact_git_blob(
 
     assert all_result["schema_version"] == legacy_replay.VERIFY_SCHEMA_VERSION
     assert all_result["repository_head"] == replay_repository["current_head"]
-    assert all_result["count"] == 2
+    assert all_result["count"] == 3
     assert all(entry["verified"] for entry in all_result["entries"])
     assert one_result["count"] == 1
     assert one_result["entries"][0]["old_path"] == "legacy_beta.py"
     assert one_result["entries"][0]["observed_source_sha256"] == sha256(
         replay_repository["old_sources"]["legacy_beta.py"]
     ).hexdigest()
+
+    asset_result = legacy_replay.verify_migrations(repository, "legacy_notes.md")
+    assert asset_result["count"] == 1
+    assert asset_result["entries"][0]["canonical_path"] == (
+        "docs/archive/legacy_notes.md"
+    )
 
 
 def test_verify_refuses_manifest_digest_mismatch(
@@ -181,6 +227,41 @@ def test_verify_refuses_manifest_digest_mismatch(
 
     with pytest.raises(legacy_replay.LegacyReplayError, match="SHA-256 mismatch"):
         legacy_replay.verify_migrations(repository, "legacy_alpha.py")
+
+
+def test_asset_manifest_refuses_suffix_or_destination_mismatch(
+    replay_repository: dict[str, object],
+) -> None:
+    repository = replay_repository["repository"]
+    manifest_relative = replay_repository["asset_manifest"]
+    assert isinstance(repository, Path)
+    assert isinstance(manifest_relative, str)
+    manifest_path = repository / manifest_relative
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["migrations"][0]["canonical_path"] = "evidence/legacy_notes.json"
+    _write_json(manifest_path, manifest)
+
+    with pytest.raises(
+        legacy_replay.LegacyReplayError,
+        match="asset destination kind/path mismatch",
+    ):
+        legacy_replay.list_migrations(repository)
+
+
+def test_asset_and_python_manifests_share_one_unique_path_index(
+    replay_repository: dict[str, object],
+) -> None:
+    repository = replay_repository["repository"]
+    manifest_relative = replay_repository["asset_manifest"]
+    assert isinstance(repository, Path)
+    assert isinstance(manifest_relative, str)
+    manifest_path = repository / manifest_relative
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["migrations"].append(dict(manifest["migrations"][0]))
+    _write_json(manifest_path, manifest)
+
+    with pytest.raises(legacy_replay.LegacyReplayError, match="duplicate migrated old_path"):
+        legacy_replay.list_migrations(repository)
 
 
 def test_verify_refuses_commit_outside_head_ancestry(
@@ -219,9 +300,11 @@ def test_materialize_creates_clean_detached_standalone_clone_and_receipt(
     repository = replay_repository["repository"]
     source_commit = replay_repository["source_commit"]
     old_sources = replay_repository["old_sources"]
+    old_assets = replay_repository["old_assets"]
     assert isinstance(repository, Path)
     assert isinstance(source_commit, str)
     assert isinstance(old_sources, dict)
+    assert isinstance(old_assets, dict)
     destination = tmp_path / "detached-replay"
     source_status_before = _git(repository, "status", "--porcelain=v1").stdout
 
@@ -241,6 +324,8 @@ def test_materialize_creates_clean_detached_standalone_clone_and_receipt(
     assert not (destination / ".git/objects/info/alternates").exists()
     for relative, expected in old_sources.items():
         assert (destination / relative).read_bytes() == expected
+    for relative, expected in old_assets.items():
+        assert (destination / relative).read_bytes() == expected
 
     receipt_path = destination / ".git" / legacy_replay.RECEIPT_NAME
     stored_receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
@@ -250,10 +335,11 @@ def test_materialize_creates_clean_detached_standalone_clone_and_receipt(
     assert receipt["workspace_kind"] == "detached-standalone-clone"
     assert receipt["source_commit"] == source_commit
     assert receipt["requested_old_path"] == "legacy_alpha.py"
-    assert receipt["pre_materialization_verification_count"] == 2
+    assert receipt["pre_materialization_verification_count"] == 3
     assert [row["old_path"] for row in receipt["verified_sources"]] == [
         "legacy_alpha.py",
         "legacy_beta.py",
+        "legacy_notes.md",
     ]
     claimed_receipt_sha256 = receipt["receipt_sha256"]
     unhashed_receipt = {**receipt, "receipt_sha256": ""}
@@ -382,7 +468,7 @@ def test_cli_emits_json_and_refuses_unknown_path(
 
     assert legacy_replay.main(["--repo", str(repository), "list"]) == 0
     listed = json.loads(capsys.readouterr().out)
-    assert listed["count"] == 2
+    assert listed["count"] == 3
 
     assert legacy_replay.main(
         ["--repo", str(repository), "verify", "not-migrated.py"]

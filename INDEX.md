@@ -16,8 +16,11 @@
 이상의 개념에 투영한다. 물리 루트에 남은 과거 파일은 정리 실패가 아니라 import,
 `__file__` 상대경로, manifest 또는 SHA 영수증이 결속한 호환 표면이며
 [`legacy inventory`](ontology/history/LEGACY_ROOT_PATHS.v1.json)에 닫혀 있다. W9까지 root
-Python은 148개에서 73개로 줄었고, 옮긴 옛 경로는 `hswm-legacy-replay`가 manifest의
-정확한 커밋 전체를 별도 detached clone으로 복원한다.
+Python은 148개에서 73개로 줄었다. W10은 다시 비-Python root 자산 58개를 의미별
+`docs/canon`, `docs/research`, `prereg`, `evidence`, `manifests`, `research`, `results`,
+`scripts`로 옮겨 전체 root 파일을 236개에서 178개로 줄였다. 남은 163개 legacy 표면은
+Python 73개와 path/SHA 의존군 90개로 전부 설명된다. 옮긴 옛 경로는
+`hswm-legacy-replay`가 manifest의 정확한 커밋 전체를 별도 detached clone으로 복원한다.
 
 이 온톨로지는 저장소의 의미 지도이지 HSWM의 인지 규칙이 아니다. AI 행동은 문서 경로가
 아니라 outcome에 결속된 token/action/tool trajectory가 durable `W/H/routing`을 바꾸고
@@ -76,7 +79,7 @@ weight/topology rewrite를 소유한다. 이는 목표 정체성이며 현재 �
 정본은
 [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md)다.
 함수 계약, 실행 cycle, 코드 대응, 구현 가능성, 실패 모드와 결정적 실험은
-[`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md)에 고정했다.
+[`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](docs/canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md)에 고정했다.
 
 2026-08-14 사용자 정전은 이 방향을 `LX3 라그나로크`와 직접 연결한다. 정적인 시멘틱
 하네스 규칙의 증식이 아니라 AI 토큰·행동·도구 사용·외부 결과가 HSWM의 지속적인
@@ -91,7 +94,7 @@ engineering contract이며 현재 효능·과학적 유일성 주장이 아니�
 명시했다. 기본 경로를 `실행 → 직접 측정 → 중요한 결과 영수증 하나 → commit/push`로
 줄이고, MCP는 bounded ontology I/O로 제한한다.
 원문·실측 MCP 상태·보존 경계는
-[`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md)에 있다.
+[`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](docs/canon/USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md)에 있다.
 
 ## 2026-08-15 — Sheaf 연구 온톨로지
 
@@ -113,13 +116,13 @@ sheaf hypergraph network까지 설명한다. 기계 판독 정본은
 
 왜 하드코딩된 에이전트/MCP glue를 학습되는 신경 토폴로지로 대체해야 하는가, 그리고
 왜 HSWM 자체가 거시 신경망이고 LLM이 그 활성화 함수인가라는 두 존재 이유는 위치 논문
-[`PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md`](PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md)에
+[`PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md`](docs/research/PROM_17_HSWM_WHY_GLUE_CODE_NEURAL_TOPOLOGY_LLM_ACTIVATION_2026-07-30.md)에
 정식화했다. 자율주행 End-to-End 전환 비유와 그 비유가 깨지는 세 지점(미분 불가능성,
 희소 보상, 비정상성)이 HSWM의 설계 과제를 결정한다. 동기·정체성 선언이며 장부 승격이나
 현재 효능 주장이 아니다.
 
 정본 설계는
-[`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md),
+[`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](docs/canon/SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md),
 반례 기반 수리는
 [`AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md`](AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md)에 있다.
 
@@ -129,7 +132,7 @@ sheaf hypergraph network까지 설명한다. 기계 판독 정본은
 무엇이 실제로 묶이는지는 topology가, 지금 어떤 HSWM coalition을 실행할지는 routing policy가
 학습한다. query activation은 휘발 상태이며 durable learning으로 세지 않는다.
 
-- 종합 보고서: [`PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md`](PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md)
+- 종합 보고서: [`PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md`](docs/research/PROM_HSWM_PLASTICITY_WEIGHT_TOPOLOGY_LEARNING_2026-07-23.md)
 - 실행 루프 계약: [`hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json)
 - 첫 실험 결과: [`B21_LEARNED_ROUTER_RESULTS_2026-07-23.md`](prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) — B2.1 router-only `REJECTED`
 - 다음 설계: [`B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md`](prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md) — fast query-bond attention을 먼저 검증하고 반복 효과만 slow `Delta ell`로 증류
@@ -140,11 +143,11 @@ sheaf hypergraph network까지 설명한다. 기계 판독 정본은
 
 | 단계/실험 | 현재 판정 | 산출물 |
 |---|---|---|
-| P0 identity/metric | 목표 정체성 고정. 함수/agent process가 LLM으로 실행되고 `H,W`가 그 거시 신경망을 구성. 인지체 metric(slope>0)·baseline 3종·평가 3종 잠금 초안 (ratify 대기) | [canon](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) · [P0 prereg](PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md) |
+| P0 identity/metric | 목표 정체성 고정. 함수/agent process가 LLM으로 실행되고 `H,W`가 그 거시 신경망을 구성. 인지체 metric(slope>0)·baseline 3종·평가 3종 잠금 초안 (ratify 대기) | [canon](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) · [P0 prereg](prereg/PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md) |
 | P1 learning actuation | scalar slow-weight P1은 **과학적 RED**(12 candidates, active 0, A1−A2=0, rank 변화 0/456). typed-policy 표현으로 이동한 P1v3은 `6/6 vs 0/6`, 독립 P1v4는 `6/6 vs 2/6`, 개선 4/6으로 재현됐다. 단 n=6 L0이며 일반 compiler·durable `Delta W`는 미확증 | [efficacy record](EFFICACY.md) · [P1v4 closeout](_research/p1v4_fresh_replication/CLOSEOUT_20260724.md) · [prereg](PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json) |
-| B2 routing signal | 최선 slice oracle +9.92pp, tie 75%; pooled 분포는 tie kill. 얇은 oracle signal이지 learned 성공 아님 | [result](B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md) · [evidence](EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json) |
-| E1 conditional traversal | bridge −13.89pp, factoid −7.27pp. 전면 OFF 유지 | [result](E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md) · [evidence](EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json) |
-| P3 shadow topology absorption | 0/3 수용, canary 100%, sealed Δ0. 안전하지만 후보가 무득 | [result](SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md) · [evidence](prom_search_hswm/evidence/EVIDENCE_shadow_gated_absorption_20260723.json) |
+| B2 routing signal | 최선 slice oracle +9.92pp, tie 75%; pooled 분포는 tie kill. 얇은 oracle signal이지 learned 성공 아님 | [result](results/B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md) · [evidence](EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json) |
+| E1 conditional traversal | bridge −13.89pp, factoid −7.27pp. 전면 OFF 유지 | [result](results/E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md) · [evidence](EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json) |
+| P3 shadow topology absorption | 0/3 수용, canary 100%, sealed Δ0. 안전하지만 후보가 무득 | [result](results/SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md) · [evidence](prom_search_hswm/evidence/EVIDENCE_shadow_gated_absorption_20260723.json) |
 | prior-art tribunal | generic graph three-factor+sleep novelty는 사망; n-ary credit/LLM verdict/topology/shared persistent field 슬롯 생존 | [tribunal](TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md) |
 
 ## 2026-07-23 paper–code absorption gate
@@ -153,7 +156,7 @@ sheaf hypergraph network까지 설명한다. 기계 판독 정본은
 `SOURCE-LOCKED / NOT ACTIVATED`이며, 외부 성능 수치를 HSWM 성과로 간주하지 않는다.
 
 - 배포 경계: [`ABSORB_CONTRACT_v1.md`](ABSORB_CONTRACT_v1.md)
-- 흡수 판단·우선순위·falsifier: [`PAPER_CODE_ABSORPTION_LEDGER_2026-07-23.md`](PAPER_CODE_ABSORPTION_LEDGER_2026-07-23.md)
+- 흡수 판단·우선순위·falsifier: [`PAPER_CODE_ABSORPTION_LEDGER_2026-07-23.md`](docs/research/PAPER_CODE_ABSORPTION_LEDGER_2026-07-23.md)
 - 기계 판독 게이트: [`manifest.v1.json`](_research/competitor_absorption/manifest.v1.json) · [`verify_sources.py`](_research/competitor_absorption/verify_sources.py)
 - 재현 provenance: [`source_locks/`](_research/competitor_absorption/source_locks/)
 
@@ -168,24 +171,24 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 | 묶음 | 공개 경계 | 산출물 |
 |---|---|---|
 | H3-B3 V5 재현성 | 이미 공개된 V5 run manifest가 고정한 source/prereg/test를 복구. 기존 refusal·효능 판정은 변경하지 않음 | [V5 prereg](H3_B3_V5_RESTART_PREREG_2026-07-20.md) · [C0 diagnosis](H3_C0_CHAIN_VIABILITY_DIAGNOSIS_2026-07-20.md) |
-| World Compiler S4.0 | 가역적 entity binding 수직 slice와 OSS 비교. `claim_weave`·`chain_viability`는 미구현 | [receipt](S4_0_REVERSIBLE_ENTITY_BINDING_2026-07-21.md) · [PROM](WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md) |
+| World Compiler S4.0 | 가역적 entity binding 수직 slice와 OSS 비교. `claim_weave`·`chain_viability`는 미구현 | [receipt](docs/research/S4_0_REVERSIBLE_ENTITY_BINDING_2026-07-21.md) · [PROM](WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md) |
 | R3 walk-regime density dial | PhantomWiki large+sparse hard-hop에서 walk−flat `+0.0111`, LCB `+0.00085`; dense에서는 `-0.0048`. synthetic retrieval-side regime 관측이며 real-data answer uplift가 아니다 | [prereg](PREREG_R3_WALK_REGIME_2026-07-23.json) · [result](results/R3_WALK_REGIME_RESULTS_2026-07-24.md) · [`r3_walk_regime.py`](_research/f_series/r3_walk_regime.py) |
 
 ## 2026-07-22 연구 장부
 
 | 갈래 | 결과 | 산출물 |
 |---|---|---|
-| shared semantic hypergraph NN | 사용자 방향과 AI 형식화를 분리해 W/graph/agent-transfer 경계를 고정. 이론 lock이며 성능 판정 아님 | [spec](SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md) |
+| shared semantic hypergraph NN | 사용자 방향과 AI 형식화를 분리해 W/graph/agent-transfer 경계를 고정. 이론 lock이며 성능 판정 아님 | [spec](docs/canon/SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md) |
 | P1 binding density | semantic 0.2121, lexical CONTAINS 0.0, MC-null z 6.56, `progressive` | [PROM mirror](prom_search_hswm/INDEX.md) |
 | P4 equal-compute | semantic−control 0.0303, novel 미달, `partial / degenerating`; 1-pass Jaccard 0.4242가 semantic 0.2121보다 높음 | [PROM mirror](prom_search_hswm/README.md) |
-| P5 fixed multi-view routing | hard-4 Δ0, full-chain −0.0125, `REJECTED / degenerating` | [report](PROM_P5_MULTIVIEW_HARDHOP_2026-07-22.md) |
-| P6 semantic-residual absorption | fresh unseen 3회 모두 손해라 FSM이 3/3 거부; sealed Δ0, `equivalent / degenerating` | [report](PROM_P6_CONTINUAL_ABSORPTION_FSM_2026-07-22.md) |
+| P5 fixed multi-view routing | hard-4 Δ0, full-chain −0.0125, `REJECTED / degenerating` | [report](docs/research/PROM_P5_MULTIVIEW_HARDHOP_2026-07-22.md) |
+| P6 semantic-residual absorption | fresh unseen 3회 모두 손해라 FSM이 3/3 거부; sealed Δ0, `equivalent / degenerating` | [report](docs/research/PROM_P6_CONTINUAL_ABSORPTION_FSM_2026-07-22.md) |
 | Phase B field algebra | immutable content-addressed Field, merge/split/compose, L1–L4 10/10 | [design](DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md) |
-| B1 identity material | MuSiQue legal chain 0→6, 2Wiki 0→25; 후속 T1/T2 공통 성공은 미달 | [B1](B1_IDENTITY_UNLOCK_RESULTS_2026-07-22.md) · [T1](T1_ENTRANCE_REACH_RESULTS_2026-07-22.md) |
+| B1 identity material | MuSiQue legal chain 0→6, 2Wiki 0→25; 후속 T1/T2 공통 성공은 미달 | [B1](results/B1_IDENTITY_UNLOCK_RESULTS_2026-07-22.md) · [T1](results/T1_ENTRANCE_REACH_RESULTS_2026-07-22.md) |
 | B2 federated merge | cross-field +0.2137, seam +0.0342, `progressive`; in-field −0.0648로 no-harm 위반 | [result](prom_search_hswm/docs/B2_CROSSFIELD_MERGE_RESULTS_2026-07-22.md) |
 | B2.1 learned router | 2벤치 × 3 partition × 3 k × 3 seed = 54셀 전부 abstain; primary Δ0, oracle ceiling min +0.01087로 router-only `REJECTED / degenerating` | [result](prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md) |
 | B2.2 bond weighting 진단 | fine top-20 oracle +0.0489/+0.0833; train-only static sparse patch는 6/6 calibration·test Δ0. query-bond 쪽 room만 확인, confirmatory claim 아님 | [design](prom_search_hswm/docs/B22_QUERY_BOND_WEIGHTING_DESIGN_2026-07-23.md) · [diagnostic](prom_search_hswm/evidence/DIAG_b22_fine_bond_action_headroom_20260723.json) |
-| PROM-8 / R1 | dynamic two-lane 처방. R1 T1 minimum 0→2, 2Wiki depth-2 0→4, MuSiQue 0 | [PROM-8](PROM_8_DYNAMIC_TWO_LANES_2026-07-22.md) · [R1](R1_T1_RETRY_RESULTS_2026-07-22.md) |
+| PROM-8 / R1 | dynamic two-lane 처방. R1 T1 minimum 0→2, 2Wiki depth-2 0→4, MuSiQue 0 | [PROM-8](PROM_8_DYNAMIC_TWO_LANES_2026-07-22.md) · [R1](results/R1_T1_RETRY_RESULTS_2026-07-22.md) |
 | open composition v2r3 | target 59/59, expanded 78/78, injected negative 2/2. 로컬 구조 closure만 통과했으며 과학적 효능은 미판정 | [amendment](AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md) |
 
 ## 저장소 지도
@@ -204,7 +207,7 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 | [`prom_search_hswm/hswm_bond_readout.py`](prom_search_hswm/hswm_bond_readout.py) | slow `ell`과 volatile query-bond potential을 분리 적용하는 pure deterministic module |
 | [`prom_search_hswm/test_hswm_bond_readout.py`](prom_search_hswm/test_hswm_bond_readout.py) | neutral parity·coverage·monotonic suppression·shift invariance 19 tests |
 | [`prom_search_hswm/fsm/hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json) | weight→routing→topology 후보의 bounded proposal/evaluation/activation 계약 |
-| [`PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md`](PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) / [`prom9_semantic_neural_network.v1.json`](prom_search_hswm/prom9_semantic_neural_network.v1.json) / [`prom9_protocol.py`](prom_search_hswm/prom9_protocol.py) | LLM 3-role typed 함수망→외부 outcome→eligibility→fast bond→slow weight 승격을 동등예산 대조군과 함께 고정한 PROM-9 |
+| [`PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md`](docs/research/PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) / [`prom9_semantic_neural_network.v1.json`](prom_search_hswm/prom9_semantic_neural_network.v1.json) / [`prom9_protocol.py`](prom_search_hswm/prom9_protocol.py) | LLM 3-role typed 함수망→외부 outcome→eligibility→fast bond→slow weight 승격을 동등예산 대조군과 함께 고정한 PROM-9 |
 | [`token_learning_contract.py`](src/hswm/learning/token_learning_contract.py) / [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) | 최소 token/action trajectory를 eligibility→outcome→activated candidate에 결속하고 단일 causal-test receipt 전에는 학습 규칙 주장을 막는 계약과 사용자 정전 |
 | [`prom_search_hswm/evidence/`](prom_search_hswm/evidence/) | preregistration, evidence, neutral judge packet, injected negative |
 | [`_research/competitor_absorption/`](_research/competitor_absorption/) | 외부 paper–code source lock, license gate, default-off absorption manifest |

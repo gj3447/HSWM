@@ -25,6 +25,21 @@ IGNORED_FALLBACK_PARTS = {
     "hswm.egg-info",
 }
 IGNORED_FALLBACK_ROOT_FILES = {"PKG-INFO", "setup.cfg"}
+ASSET_MIGRATION_SUFFIXES = {".json", ".log", ".md", ".sh", ".txt"}
+ASSET_DESTINATION_PREFIXES = {
+    "canon-document": "docs/canon/",
+    "research-document": "docs/research/",
+    "archive-document": "docs/archive/",
+    "evidence": "evidence/",
+    "preregistration": "prereg/",
+    "manifest": "manifests/",
+    "research-record": "research/",
+    "result": "results/",
+    "receipt": "receipts/",
+    "source-text": "docs/canon/sources/",
+    "run-log": "results/logs/",
+    "maintenance-shell": "scripts/",
+}
 
 
 class OntologyError(ValueError):
@@ -83,6 +98,19 @@ def validate_graph(data: dict[str, Any]) -> None:
     public = data.get("public_root_surface", [])
     if len(public) != len(set(public)) or any("/" in path for path in public):
         raise OntologyError("public_root_surface must contain unique root paths")
+
+    assets = data.get("asset_root_migrations")
+    if (
+        not isinstance(assets, list)
+        or not assets
+        or any(not isinstance(path, str) or not path for path in assets)
+        or len(assets) != len(set(assets))
+    ):
+        raise OntologyError("asset_root_migrations must name unique manifests")
+    replay = data.get("legacy_replay", {})
+    expected_sources = ["python_root_migrations", "asset_root_migrations"]
+    if replay.get("source_of_truth") != expected_sources:
+        raise OntologyError("legacy replay migration sources are incomplete")
 
     analogy = data.get("learning_analogy", {})
     mapping = analogy.get("mapping", {})
@@ -372,9 +400,187 @@ def python_migration_manifest_paths(data: dict[str, Any]) -> list[str]:
     raise OntologyError("python_root_migrations must name one or more manifests")
 
 
+def asset_migration_manifest_paths(data: dict[str, Any]) -> list[str]:
+    """Return the additive non-Python root-asset migration manifests."""
+
+    value = data.get("asset_root_migrations")
+    if value is None:
+        return []
+    if (
+        isinstance(value, list)
+        and value
+        and all(isinstance(item, str) and item for item in value)
+        and len(value) == len(set(value))
+    ):
+        return value
+    raise OntologyError("asset_root_migrations must name unique manifests")
+
+
+def _manifest_path_sets(manifest_paths: Iterable[str]) -> tuple[set[str], set[str]]:
+    old_paths: set[str] = set()
+    canonical_paths: set[str] = set()
+    for relative in manifest_paths:
+        payload = _read_json(_resolve_from_repo(relative))
+        for row in payload.get("migrations", []):
+            if not isinstance(row, dict):
+                continue
+            old_path = row.get("old_path")
+            canonical_path = row.get("canonical_path")
+            if isinstance(old_path, str):
+                old_paths.add(old_path)
+            if isinstance(canonical_path, str):
+                canonical_paths.add(canonical_path)
+    return old_paths, canonical_paths
+
+
+def validate_asset_root_migrations(
+    data: dict[str, Any],
+    legacy: set[str],
+    *,
+    verify_git_source: bool,
+) -> int:
+    """Validate source-pinned moves for non-Python root assets."""
+
+    manifest_paths = asset_migration_manifest_paths(data)
+    if not manifest_paths:
+        return 0
+
+    python_old_paths, python_canonical_paths = _manifest_path_sets(
+        python_migration_manifest_paths(data)
+    )
+    old_paths = set(python_old_paths)
+    canonical_paths = set(python_canonical_paths)
+    migration_count = 0
+
+    for relative in manifest_paths:
+        payload = _read_json(_resolve_from_repo(relative))
+        if (
+            payload.get("schema_version") != "hswm-root-asset-migrations/v1"
+            or payload.get("$schema")
+            != "../../schemas/hswm_root_asset_migrations.v1.schema.json"
+        ):
+            raise OntologyError("unsupported root asset migration schema")
+        if payload.get("status") != "SOURCE_PINNED_PATH_MIGRATION":
+            raise OntologyError("unsupported root asset migration status")
+        if not isinstance(payload.get("policy"), str) or not payload["policy"]:
+            raise OntologyError("root asset migration policy must be non-empty")
+
+        source_commit = payload.get("source_commit")
+        if (
+            not isinstance(source_commit, str)
+            or len(source_commit) != 40
+            or any(ch not in "0123456789abcdef" for ch in source_commit)
+        ):
+            raise OntologyError("asset migration source_commit must be a full Git SHA")
+
+        if verify_git_source:
+            try:
+                resolved_commit = subprocess.run(
+                    [
+                        "git", "-C", str(REPO_ROOT), "rev-parse", "--verify",
+                        f"{source_commit}^{{commit}}",
+                    ],
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                ).stdout.strip()
+            except (FileNotFoundError, subprocess.CalledProcessError) as exc:
+                raise OntologyError(
+                    f"cannot resolve asset migration commit {source_commit}"
+                ) from exc
+            if resolved_commit != source_commit:
+                raise OntologyError("asset migration commit did not resolve exactly")
+            ancestry = subprocess.run(
+                [
+                    "git", "-C", str(REPO_ROOT), "merge-base", "--is-ancestor",
+                    source_commit, "HEAD",
+                ],
+                check=False,
+                capture_output=True,
+            )
+            if ancestry.returncode != 0:
+                raise OntologyError("asset migration commit is not reachable from HEAD")
+
+        rows = payload.get("migrations")
+        if not isinstance(rows, list) or not rows:
+            raise OntologyError("root asset migration manifest must contain migrations")
+        for row in rows:
+            if not isinstance(row, dict):
+                raise OntologyError("root asset migration row must be an object")
+            old_path = row.get("old_path")
+            canonical_path = row.get("canonical_path")
+            destination_kind = row.get("destination_kind")
+            source_sha256 = row.get("source_sha256")
+            if (
+                not isinstance(old_path, str)
+                or "/" in old_path
+                or "\\" in old_path
+                or Path(old_path).suffix not in ASSET_MIGRATION_SUFFIXES
+            ):
+                raise OntologyError(f"invalid migrated root asset: {old_path!r}")
+            if (
+                not isinstance(canonical_path, str)
+                or not canonical_path
+                or "\\" in canonical_path
+                or Path(canonical_path).is_absolute()
+                or ".." in Path(canonical_path).parts
+                or Path(canonical_path).as_posix() != canonical_path
+                or Path(canonical_path).suffix != Path(old_path).suffix
+            ):
+                raise OntologyError(
+                    f"invalid canonical asset path: {canonical_path!r}"
+                )
+            prefix = ASSET_DESTINATION_PREFIXES.get(destination_kind)
+            if prefix is None or not canonical_path.startswith(prefix):
+                raise OntologyError(
+                    "asset migration destination kind/path mismatch: "
+                    f"{destination_kind!r} -> {canonical_path!r}"
+                )
+            if (
+                not isinstance(source_sha256, str)
+                or len(source_sha256) != 64
+                or any(ch not in "0123456789abcdef" for ch in source_sha256)
+            ):
+                raise OntologyError(f"invalid source digest for {old_path}")
+            if old_path in old_paths or canonical_path in canonical_paths:
+                raise OntologyError("duplicated root migration path")
+            old_paths.add(old_path)
+            canonical_paths.add(canonical_path)
+            migration_count += 1
+
+            old = _resolve_from_repo(old_path)
+            if old_path in legacy or old.exists() or old.is_symlink():
+                raise OntologyError(f"migrated asset still occupies root: {old_path}")
+            canonical = _resolve_from_repo(canonical_path)
+            if canonical.is_symlink() or not canonical.is_file():
+                raise OntologyError(f"canonical asset is missing: {canonical_path}")
+
+            if verify_git_source:
+                try:
+                    source = subprocess.run(
+                        [
+                            "git", "-C", str(REPO_ROOT), "show",
+                            f"{source_commit}:{old_path}",
+                        ],
+                        check=True,
+                        capture_output=True,
+                    ).stdout
+                except (FileNotFoundError, subprocess.CalledProcessError) as exc:
+                    raise OntologyError(
+                        f"cannot resolve migrated asset {source_commit}:{old_path}"
+                    ) from exc
+                if hashlib.sha256(source).hexdigest() != source_sha256:
+                    raise OntologyError(f"migrated asset digest mismatch: {old_path}")
+    return migration_count
+
+
 def migration_old_paths(data: dict[str, Any]) -> set[str]:
     old_paths: set[str] = set()
-    for relative in python_migration_manifest_paths(data):
+    manifest_paths = [
+        *python_migration_manifest_paths(data),
+        *asset_migration_manifest_paths(data),
+    ]
+    for relative in manifest_paths:
         payload = _read_json(_resolve_from_repo(relative))
         for row in payload.get("migrations", []):
             old_path = row.get("old_path") if isinstance(row, dict) else None
@@ -515,6 +721,9 @@ def validate_checkout(data: dict[str, Any]) -> dict[str, int | bool]:
     migration_count = validate_python_root_migrations(
         data, legacy, verify_git_source=from_git
     )
+    asset_migration_count = validate_asset_root_migrations(
+        data, legacy, verify_git_source=from_git
+    )
     root_classes = validate_python_root_classification(data, paths)
     if from_git:
         validate_root_surface(paths, data, legacy)
@@ -549,6 +758,7 @@ def validate_checkout(data: dict[str, Any]) -> dict[str, int | bool]:
         "legacy_root_paths": len(legacy),
         "concepts": len(data["concepts"]),
         "python_root_migrations": migration_count,
+        "asset_root_migrations": asset_migration_count,
         "root_python_sha_locked": root_classes["SHA_LOCKED"],
         "root_python_replay_locked": root_classes["REPLAY_HISTORY_LOCKED"],
         "root_python_review_required": root_classes["REVIEW_REQUIRED"],

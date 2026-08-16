@@ -38,10 +38,10 @@ evidence-preserving substrate, 결정론적 field/runtime, 학습 영수증 계�
 
 | 역할 | 읽어야 할 출처 | 이 지도에서의 취급 |
 |---|---|---|
-| 사용자 원문과 방향 | [`USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt`](../../USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt), [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](../../USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md), [`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](../../USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md) | `USER_PRIMARY` 방향은 파생 설명보다 우선한다 |
+| 사용자 원문과 방향 | [`USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt`](../../USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt), [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](../../USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md), [`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](../canon/USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md) | `USER_PRIMARY` 방향은 파생 설명보다 우선한다 |
 | 상위 통합 정전 | [`THE_WORLD_REMEMBERS.md`](../../THE_WORLD_REMEMBERS.md) | 세계 자기기억, 인간·LLM의 위치, 두 번째 신경망화를 한 목적 아래 묶는다 |
 | 기술 정체성 | [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md), [`HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md`](../../HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md) | hard core와 교체 가능한 설계를 구분한다 |
-| 수학·세포 형식화 | [`HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md`](../../HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md), [`DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md`](../../DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md) | `SECONDARY_AI_FORMALIZATION`; 사용자 원문이나 실측을 대체하지 않는다 |
+| 수학·세포 형식화 | [`HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md`](../canon/HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md), [`DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md`](../../DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md) | `SECONDARY_AI_FORMALIZATION`; 사용자 원문이나 실측을 대체하지 않는다 |
 | 현재 공개 상태 | [`README.md`](../../README.md), [`INDEX.md`](../../INDEX.md), [`EFFICACY.md`](../../EFFICACY.md) | 구현·실험·실패·미완료 여부의 현재 진입점이다 |
 | 실행 계약과 직접 증거 | `src/`, `tests/`, `research/`, `evidence/`, `receipts/`, `results/`, `prereg/` | 코드 PASS는 공학 closure이고, 효능은 결속된 측정 범위 안에서만 말한다 |
 | 저장소 의미 지도 | [`ontology/`](../../ontology/) | 경로와 개념의 탐색 장치다. HSWM의 두뇌나 행동 규칙이 아니다 |
@@ -473,9 +473,9 @@ learning을 거쳐야 한다.
 | HSWM을 30초 안에 이해하려면? | [`README.md`](../../README.md) | 현재 통합 지도 |
 | 가장 깊은 목적은? | [`THE_WORLD_REMEMBERS.md`](../../THE_WORLD_REMEMBERS.md) | [`USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt`](../../USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt) |
 | 왜 static glue를 신경망화하나? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](../../USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) | [`DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md`](../../DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md) |
-| `H/W/A/F`가 정확히 무엇인가? | [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](../../HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) | [`HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md`](../../HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md) |
+| `H/W/A/F`가 정확히 무엇인가? | [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](../canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) | [`HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md`](../canon/HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md) |
 | cell과 semantic synapse의 target은? | [`DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md`](../../DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md) | [`src/hswm/cells/`](../../src/hswm/cells/) |
-| fixed layer 없는 합성은? | [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](../../SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md) | [`AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md`](../../AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md) |
+| fixed layer 없는 합성은? | [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](../canon/SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md) | [`AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md`](../../AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md) |
 | 무엇을 learning이라 부르나? | [`README.md`](../../README.md#what-counts-as-learning) | [`token_learning_contract.py`](../../src/hswm/learning/token_learning_contract.py) |
 | 실제로 무엇이 성공·실패했나? | [`EFFICACY.md`](../../EFFICACY.md) | [`INDEX.md`](../../INDEX.md)와 결속 evidence/receipt |
 | 코드가 의미별로 어디 있나? | [`ontology/README.md`](../../ontology/README.md) | [`HSWM_PATH_CATALOG.v1.json`](../../ontology/HSWM_PATH_CATALOG.v1.json) |

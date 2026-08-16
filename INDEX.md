@@ -12,20 +12,13 @@
 
 공개 탐색의 정본은 [`ontology/`](ontology/)다. `identity → substrate → field ↔ cells
 → learning`을 중심으로 boundary, evaluation, evidence, infrastructure, history를 관계로
-연결하며, [`path catalog`](ontology/HSWM_PATH_CATALOG.v1.json)가 모든 현재 파일을 하나
-이상의 개념에 투영한다. 물리 루트에 남은 과거 파일은 정리 실패가 아니라 import,
-`__file__` 상대경로, manifest 또는 SHA 영수증이 결속한 호환 표면이며
-[`legacy inventory`](ontology/history/LEGACY_ROOT_PATHS.v1.json)에 닫혀 있다. W9까지 root
-Python은 148개에서 73개로 줄었다. W10은 다시 비-Python root 자산 58개를 의미별
-`docs/canon`, `docs/research`, `prereg`, `evidence`, `manifests`, `research`, `results`,
-`scripts`로 옮겼다. W11은 raw result JSON 17개를 `results/raw`로 모았고, W12는 상위
-정전·plastic wiring·token-learning 문서 3개와 사용자 원문 TXT 5개를 `docs/canon`으로
-모았다. W13은 evidence·prereg·manifest·diagnostic·receipt JSON 29개를 각 typed
-directory로 옮겼다. W14는 독립적인 연구·core-development 문서 15개와 마지막 root
-shell 명령을 `docs/research`, `prereg`, `scripts`로 옮겨 전체 root 파일을 236개에서
-108개로 줄였다. 남은 93개 legacy 표면은 Python 73개, SHA-bound Markdown 16개,
-path/SHA-bound JSON 4개로 전부 설명된다. 옮긴 옛 경로는
-`hswm-legacy-replay`가 manifest의 정확한 커밋 전체를 별도 detached clone으로 복원한다.
+연결한다. 물리 루트에는 공개 진입 파일과 명시적으로 분류된 호환 기록만 남는다. 현재
+결박 기준과 사유의 단일 정본은
+[`root compatibility baseline`](ontology/history/ROOT_COMPATIBILITY_BASELINE.v1.json)이다.
+새 코드와 산출물은 typed directory를 사용하며, 이미 발표된 옛 경로가 정확한 재현을
+요구할 때만 [`migration/replay history`](ontology/history/README.md)를 따른다. baseline의
+`paths` 배열에 없는 일반 파일은 표준 Git 이동을 사용하고, 배열에 있는 결박 파일을 옮길 때는 기존
+replay registry에 source-pinned manifest 하나를 추가한다.
 
 이 온톨로지는 저장소의 의미 지도이지 HSWM의 인지 규칙이 아니다. AI 행동은 문서 경로가
 아니라 outcome에 결속된 token/action/tool trajectory가 durable `W/H/routing`을 바꾸고

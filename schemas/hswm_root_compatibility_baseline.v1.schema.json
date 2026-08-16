@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/gj3447/HSWM/schemas/hswm_root_compatibility_baseline.v1.schema.json",
+  "title": "HSWM frozen root compatibility baseline v1",
+  "type": "object",
+  "required": ["$schema", "schema_version", "status", "source_commit", "source_public_paths", "paths"],
+  "properties": {
+    "$schema": {"const": "../../schemas/hswm_root_compatibility_baseline.v1.schema.json"},
+    "schema_version": {"const": "hswm-root-compatibility-baseline/v1"},
+    "status": {"const": "FROZEN_BASELINE"},
+    "source_commit": {
+      "const": "33556a55530bdc0912154abc8c19897f89b0dcda"
+    },
+    "source_public_paths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[^/\\\\]+$"}
+    },
+    "paths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[^/\\\\]+$"}
+    }
+  },
+  "additionalProperties": false
+}

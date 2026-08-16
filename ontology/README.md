@@ -12,13 +12,11 @@ The repository therefore uses two compatible views:
   HSWM, without copying it or pretending that a folder tree is the cognitive
   system itself.
 
-New Python implementation belongs under [`src/hswm/`](../src/hswm/). Root
-Python modules are a shrinking, explicitly frozen compatibility surface; each
-completed move is source-pinned by the manifests in [`history/`](history/).
-Every remaining root module has exactly one reason class in
-[`PYTHON_ROOT_CLASSIFICATION.v1.json`](history/PYTHON_ROOT_CLASSIFICATION.v1.json).
-An old root command or non-Python asset is recovered without polluting the
-active checkout with
+New Python implementation belongs under [`src/hswm/`](../src/hswm/). The root
+contains only public entry files and explicitly frozen compatibility records.
+Their single frozen source of truth is
+[`ROOT_COMPATIBILITY_BASELINE.v1.json`](history/ROOT_COMPATIBILITY_BASELINE.v1.json).
+Published old commands can be recovered without polluting the active checkout with
 `uv run hswm-legacy-replay materialize OLD_ROOT_FILE /tmp/hswm-replay`.
 
 ## Concept map
@@ -36,14 +34,11 @@ active checkout with
 | [`infrastructure/`](infrastructure/) | What builds, validates, packages, and documents the repository? |
 | [`history/`](history/) | Why do some legacy root paths remain frozen? |
 
-The machine-readable graph is
-[`HSWM_REPOSITORY_ONTOLOGY.v1.json`](HSWM_REPOSITORY_ONTOLOGY.v1.json). Its
-generated path projection is
-[`HSWM_PATH_CATALOG.v1.json`](HSWM_PATH_CATALOG.v1.json). Validate both with:
-
-```bash
-uv run --locked python scripts/validate_repository_ontology.py
-```
+The machine-readable concept graph is
+[`HSWM_REPOSITORY_ONTOLOGY.v1.json`](HSWM_REPOSITORY_ONTOLOGY.v1.json). It
+defines concepts and relationships; the filesystem and typed-directory
+conventions remain the source of truth for current paths. A checked-in catalog
+of every repository path is intentionally not part of this navigation layer.
 
 ## Important boundary
 

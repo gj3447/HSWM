@@ -20,5 +20,7 @@ They preserve selected historical imports without putting `.py` shims back in
 the repository root. New code must import the canonical `hswm.*` path.
 
 Source-only experiment programs belong under `_research/`; maintenance commands
-belong under `scripts/`. Root paths that cannot yet move are classified and
-explained by [`ontology/history/PYTHON_ROOT_CLASSIFICATION.v1.json`](../ontology/history/PYTHON_ROOT_CLASSIFICATION.v1.json).
+belong under `scripts/`. Root compatibility reasons are frozen in
+[`ROOT_COMPATIBILITY_BASELINE.v1.json`](../ontology/history/ROOT_COMPATIBILITY_BASELINE.v1.json);
+their replay and migration policy is documented in
+[`ontology/history/README.md`](../ontology/history/README.md).

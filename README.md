@@ -213,7 +213,7 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 
 | path | purpose |
 |---|---|
-| `ontology/` | canonical semantic navigation, path catalog, and concept relations |
+| `ontology/` | canonical semantic navigation, concept relations, and path-bound history |
 | `src/hswm/` | canonical package surface, organized by semantic responsibility |
 | `src/hswm/cells/` | cellular kernel, durable store, model ports, and bounded live probe |
 | `src/hswm/prototypes/` | bounded early learning and synthetic-world prototypes |
@@ -230,58 +230,19 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | `evidence/`, `prereg/`, `manifests/`, `results/`, `receipts/` | typed research artifacts and direct measurements |
 | `docs/research/`, `docs/assets/` | narrative research material and public visual assets |
 
-The root Python count is now **73**, down from 148. The remaining files are an
-explicit compatibility surface: 63 are byte-bound by checked-in SHA evidence and
-10 belong to replay clusters that still share current root-relative topology.
-There are no unexplained review candidates. The exact disjoint partition is
-machine-readable in
-[`PYTHON_ROOT_CLASSIFICATION.v1.json`](ontology/history/PYTHON_ROOT_CLASSIFICATION.v1.json);
-new Python implementation may not enter the root compatibility inventory.
+The repository root now contains only public entry files and explicitly
+classified compatibility records. The compatibility records' single frozen source is
+[`ROOT_COMPATIBILITY_BASELINE.v1.json`](ontology/history/ROOT_COMPATIBILITY_BASELINE.v1.json).
+New code belongs under `src/hswm/`; documents and artifacts follow the typed directories in
+[`ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).
 
-Every checked-in path is projected into the machine-readable
-[`repository ontology`](ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json) and
-[`path catalog`](ontology/HSWM_PATH_CATALOG.v1.json). Historical modules and
-hash-bound artifacts remain at the repository root only where old receipts,
-imports, or `__file__`-relative execution bind that location. The frozen
-exceptions are explicit in
-[`LEGACY_ROOT_PATHS.v1.json`](ontology/history/LEGACY_ROOT_PATHS.v1.json).
-Completed Python moves are source-pinned in
-[`PYTHON_ROOT_MIGRATIONS.v1.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.v1.json)
-and
-[`PYTHON_ROOT_MIGRATIONS.W2.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W2.v2.json),
-with later replay-backed waves in
-[`PYTHON_ROOT_MIGRATIONS.W3.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W3.v2.json),
-[`PYTHON_ROOT_MIGRATIONS.W4.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W4.v2.json),
-[`PYTHON_ROOT_MIGRATIONS.W5.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W5.v2.json),
-[`PYTHON_ROOT_MIGRATIONS.W6.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W6.v2.json),
-[`PYTHON_ROOT_MIGRATIONS.W7.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W7.v2.json),
-[`PYTHON_ROOT_MIGRATIONS.W8.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W8.v2.json),
-and
-[`PYTHON_ROOT_MIGRATIONS.W9.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W9.v2.json).
-The first non-Python cleanup wave is source-pinned in
-[`ROOT_ASSET_MIGRATIONS.W10.v1.json`](ontology/history/ROOT_ASSET_MIGRATIONS.W10.v1.json):
-58 root documents, records, logs, and one maintenance shell entry now live in
-typed directories while their original layout remains replayable.
-The next source-pinned wave is
-[`ROOT_ASSET_MIGRATIONS.W11.v1.json`](ontology/history/ROOT_ASSET_MIGRATIONS.W11.v1.json):
-17 immutable raw result JSONs now live under `results/raw/`, with current
-readers routed through the typed artifact resolver.
-[`ROOT_ASSET_MIGRATIONS.W12.v1.json`](ontology/history/ROOT_ASSET_MIGRATIONS.W12.v1.json)
-then places the umbrella canon, plastic-wiring definition, token-learning
-direction, and all five preserved user source texts under `docs/canon/sources/`.
-[`ROOT_ASSET_MIGRATIONS.W13.v1.json`](ontology/history/ROOT_ASSET_MIGRATIONS.W13.v1.json)
-then gathers 29 checked-in evidence, preregistration, manifest, harness-config,
-diagnostic, and receipt JSONs into their typed artifact directories. Four
-path/SHA-bound JSONs remain at the root until their verifier clusters can move
-atomically.
-[`ROOT_ASSET_MIGRATIONS.W14.v1.json`](ontology/history/ROOT_ASSET_MIGRATIONS.W14.v1.json)
-then collects 15 current research/operations Markdown records and the final
-root maintenance shell command under `docs/research`, `prereg`, and `scripts`.
-The remaining legacy Markdown records are SHA-bound experiment/cellular
-clusters.
-**New Python modules or research artifacts must not be added to the root.** New
-code goes under `src/hswm/`; artifacts are routed by kind according to
-[`docs/research/ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).
+Published historical paths that genuinely require exact replay remain covered
+by the retained migration manifests described in
+[`ontology/history/`](ontology/history/README.md). Ordinary files absent from the
+baseline's `paths` array move through standard Git history. Moving a listed
+compatibility path requires one source-pinned manifest before its canonical copy
+can change. The repository
+ontology remains a semantic map, not a checked-in inventory of every path.
 
 Old commands are reproduced in their original root layout without restoring
 those files into the active checkout:

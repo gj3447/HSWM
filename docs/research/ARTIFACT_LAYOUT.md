@@ -20,9 +20,9 @@ findable.
 | Historical run log       | `*.log`                 | `results/logs/` |
 | Machine-readable ontology | `*_ONTOLOGY*.json`      | `ontology/`      |
 
-The repository-wide path/concept projection lives in `ontology/`. Ontology
-files organize meaning and navigation; they are not HSWM cognitive rules or
-evidence of learned behavior.
+Repository-wide semantic navigation lives in `ontology/`. Ontology files
+organize meaning; they are not a mandatory per-path ledger, an HSWM cognitive
+rule, or evidence of learned behavior.
 
 ## Helper
 
@@ -43,65 +43,23 @@ path = resolve_artifact_path("EVIDENCE_B1_IDENTITY_UNLOCK_2026-07-22.json")
   resolve; path+sha256 ledger entries keep working unchanged.
 - `iter_artifact_paths(name)` — both locations, for listing-style readers.
 
-W10 removed the first 58 audited non-Python legacy files from the physical
-root. Their old names, source commit, and SHA-256 values are recorded in
-[`ROOT_ASSET_MIGRATIONS.W10.v1.json`](../../ontology/history/ROOT_ASSET_MIGRATIONS.W10.v1.json),
-so `hswm-legacy-replay` can materialize the exact pre-move checkout. The
-remaining root assets are not invitations for new output: each belongs to a
-path/SHA dependency cluster that must move atomically in a later wave.
+## Historical compatibility
 
-[`ROOT_ASSET_MIGRATIONS.W11.v1.json`](../../ontology/history/ROOT_ASSET_MIGRATIONS.W11.v1.json)
-moves the complete 17-file checked-in raw-result set to `results/raw/`.
-The allowlist is deliberately exact: generic `*_result.json` classification
-would incorrectly capture evidence fixtures with a different lifecycle. The
-artifact resolver checks `results/raw/` first and the historical root second.
+The frozen root compatibility set is recorded once in
+[`ROOT_COMPATIBILITY_BASELINE.v1.json`](../../ontology/history/ROOT_COMPATIBILITY_BASELINE.v1.json).
+Existing source-pinned migration manifests remain available through the
+[`history index`](../../ontology/history/README.md) when a published command or
+receipt must be replayed at its original commit and path. They are archival
+compatibility records, not a template for ordinary unbound file moves. Files
+outside the baseline's `paths` array use standard Git moves; relocating a listed
+compatibility path adds one source-pinned manifest to the existing replay registry.
 
-Five source-SHA-bound historical writers still contain their original root
-defaults: `ab_p5_full.py`, `traversal_cert.py`, `stale_poisoning.py`,
-`qkv_routing_falsifier.py`, and `qkv_b1_development_falsifier.py`. They are
-preserved for detached replay and are not examples for current writers. Do not
-run their default-output modes in the active checkout; use an explicit
-`--out results/raw/<name>` where supported, or reproduce the no-`--out`
-programs in the detached legacy-replay checkout.
-
-[`ROOT_ASSET_MIGRATIONS.W12.v1.json`](../../ontology/history/ROOT_ASSET_MIGRATIONS.W12.v1.json)
-moves three current canon documents to `docs/canon/` and all five root
-user-source TXT files to `docs/canon/sources/`. Byte-frozen records keep three
-original root-relative links:
-two in `CANON_DIRECTION_...md` and one in `f0_premise_p/PREREG.md`. The moved
-`PREREG_P0_...md` keeps one reciprocal
-historical link. These links resolve in the detached replay checkout; their
-source records are intentionally not edited just to rewrite navigation.
-
-[`ROOT_ASSET_MIGRATIONS.W13.v1.json`](../../ontology/history/ROOT_ASSET_MIGRATIONS.W13.v1.json)
-moves the dependency-closed 29-file JSON set: checked-in evidence and P1
-diagnostics to `evidence/`, preregistrations to `prereg/`, run manifests,
-P1 split/prepare records, and harness configs to `manifests/`, and the B1
-receipt bundle to `receipts/`. All 29 payloads remain byte-identical to the
-source commit. Historical payload fields keep their original basenames and
-SHA bindings; detached replay restores those root paths exactly.
-
-Six source-locked F-series programs (`b1_identity_unlock.py`,
-`r1_t1_retry.py`, `r2_ml_walk.py`, `r3_walk_regime.py`,
-`t1_entrance_reach.py`, and `t3_score_null.py`) still contain their original
-root artifact constants. The locked `p1_phantom_environment.py` reader and
-the frozen H3-B3 V5 loader likewise require their inputs at the historical
-root. Run those contracts only in a detached legacy-replay checkout; current
-general-purpose readers use the typed resolver.
-
-Four JSON records remain at the active root because their readers are part of
-the SHA lock: three `LONGINUS_HSWM_*_BINDING_*.json` files bind the exact
-verifiers that hardcode those paths, while `semantic_layer_fixture_manifest.json`
-and its sibling reader are both bound by the checked-in semantic-layer result.
-
-[`ROOT_ASSET_MIGRATIONS.W14.v1.json`](../../ontology/history/ROOT_ASSET_MIGRATIONS.W14.v1.json)
-moves 15 independent research/core-development Markdown records and the final
-root shell command into `docs/research/`, `prereg/`, and `scripts/`. Thirteen
-canonical files remain byte-exact; two current core documents update only link
-targets, and the shell command discovers the repository one directory above
-its new location. The manifest preserves every pre-move byte and digest.
-Source-locked F-series programs retain their recorded root-era document names
-and remain detached-replay-only.
+Some source-locked programs retain root-era input or output constants. Do not
+edit those programs merely to modernize a path or run their default-output mode
+against active locked artifacts. Use an explicit typed output when supported;
+otherwise reproduce the historical program with `hswm-legacy-replay` in its
+detached checkout. Current general-purpose readers and writers should use the
+typed resolver above.
 
 ## Escape hatch
 

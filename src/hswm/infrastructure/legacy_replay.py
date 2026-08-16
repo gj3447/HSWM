@@ -249,6 +249,15 @@ def load_migration_entries(repo_root: str | Path) -> tuple[MigrationEntry, ...]:
                 "hswm-python-root-migrations/v2",
             }:
                 raise LegacyReplayError(f"invalid Python migration schema in {relative}")
+            expected_schema = (
+                "../../schemas/hswm_python_root_migrations.v1.schema.json"
+                if schema_version == "hswm-python-root-migrations/v1"
+                else "../../schemas/hswm_python_root_migrations.v2.schema.json"
+            )
+            if manifest.get("$schema") != expected_schema:
+                raise LegacyReplayError(
+                    f"invalid Python migration schema reference in {relative}"
+                )
         elif (
             schema_version != "hswm-root-asset-migrations/v1"
             or manifest.get("$schema")
@@ -257,8 +266,6 @@ def load_migration_entries(repo_root: str | Path) -> tuple[MigrationEntry, ...]:
             raise LegacyReplayError(f"invalid asset migration schema in {relative}")
         if status != "SOURCE_PINNED_PATH_MIGRATION":
             raise LegacyReplayError(f"invalid migration status in {relative}")
-        if not isinstance(manifest.get("policy"), str) or not manifest["policy"]:
-            raise LegacyReplayError(f"invalid migration policy in {relative}")
         source_commit = manifest.get("source_commit")
         if not isinstance(source_commit, str) or not _COMMIT_RE.fullmatch(source_commit):
             raise LegacyReplayError(f"invalid source_commit in {relative}")

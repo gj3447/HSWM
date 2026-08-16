@@ -3,8 +3,9 @@
   "$id": "https://github.com/gj3447/HSWM/schemas/hswm_python_root_migrations.v1.schema.json",
   "title": "HSWM Python root migrations v1",
   "type": "object",
-  "required": ["schema_version", "status", "source_commit", "policy", "migrations"],
+  "required": ["$schema", "schema_version", "status", "source_commit", "migrations"],
   "properties": {
+    "$schema": {"const": "../../schemas/hswm_python_root_migrations.v1.schema.json"},
     "schema_version": {"const": "hswm-python-root-migrations/v1"},
     "status": {"const": "SOURCE_PINNED_PATH_MIGRATION"},
     "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
@@ -16,8 +17,11 @@
         "type": "object",
         "required": ["old_path", "canonical_path", "source_sha256"],
         "properties": {
-          "old_path": {"type": "string", "pattern": "^[^/]+\\.py$"},
-          "canonical_path": {"type": "string", "pattern": "^src/hswm/.+\\.py$"},
+          "old_path": {"type": "string", "pattern": "^[^/\\\\]+\\.py$"},
+          "canonical_path": {
+            "type": "string",
+            "pattern": "^src/hswm/(?:(?!\\.{1,2}/)[^/\\\\]+/)*[^/\\\\]+\\.py$"
+          },
           "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
         },
         "additionalProperties": false

@@ -3,7 +3,7 @@
   "$id": "https://github.com/gj3447/HSWM/schemas/hswm_root_asset_migrations.v1.schema.json",
   "title": "HSWM non-Python root asset migrations v1",
   "type": "object",
-  "required": ["$schema", "schema_version", "status", "source_commit", "policy", "migrations"],
+  "required": ["$schema", "schema_version", "status", "source_commit", "migrations"],
   "properties": {
     "$schema": {"const": "../../schemas/hswm_root_asset_migrations.v1.schema.json"},
     "schema_version": {"const": "hswm-root-asset-migrations/v1"},
@@ -23,7 +23,7 @@
           },
           "canonical_path": {
             "type": "string",
-            "pattern": "^(docs/(canon|research|archive)|evidence|prereg|manifests|research|results|receipts|scripts)/.+\\.(md|json|txt|log|sh)$"
+            "pattern": "^(docs/(canon|research|archive)|evidence|prereg|manifests|research|results|receipts|scripts)/(?:(?!\\.{1,2}/)[^/\\\\]+/)*[^/\\\\]+\\.(md|json|txt|log|sh)$"
           },
           "destination_kind": {
             "enum": [

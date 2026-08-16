@@ -100,6 +100,7 @@ def replay_repository(tmp_path: Path) -> dict[str, object]:
     _write_json(
         repository / first_manifest,
         {
+            "$schema": "../../schemas/hswm_python_root_migrations.v1.schema.json",
             "schema_version": "hswm-python-root-migrations/v1",
             "status": "SOURCE_PINNED_PATH_MIGRATION",
             "source_commit": source_commit,
@@ -116,6 +117,7 @@ def replay_repository(tmp_path: Path) -> dict[str, object]:
     _write_json(
         repository / second_manifest,
         {
+            "$schema": "../../schemas/hswm_python_root_migrations.v2.schema.json",
             "schema_version": "hswm-python-root-migrations/v2",
             "status": "SOURCE_PINNED_PATH_MIGRATION",
             "source_commit": source_commit,
@@ -138,7 +140,6 @@ def replay_repository(tmp_path: Path) -> dict[str, object]:
             "schema_version": "hswm-root-asset-migrations/v1",
             "status": "SOURCE_PINNED_PATH_MIGRATION",
             "source_commit": source_commit,
-            "policy": "fixture source pin",
             "migrations": [
                 {
                     "old_path": "legacy_notes.md",

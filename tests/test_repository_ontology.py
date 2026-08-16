@@ -1,16 +1,17 @@
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 import subprocess
 
 import pytest
 
+from hswm.infrastructure import legacy_replay
 import scripts.validate_repository_ontology as repository_ontology
 from scripts.validate_repository_ontology import (
     ONTOLOGY_PATH,
     OntologyError,
-    concepts_for_path,
     load_legacy,
     repository_paths,
     validate_checkout,
@@ -27,172 +28,187 @@ def load_repository_ontology() -> dict:
 
 
 def test_repository_ontology_graph_is_closed() -> None:
+    validate_graph(load_repository_ontology())
+
+
+def test_checkout_summary_is_derived_from_the_frozen_baseline() -> None:
     data = load_repository_ontology()
-    validate_graph(data)
-    assert len(data["concepts"]) == 10
-    assert {row["uid"] for row in data["concepts"]} == {
-        "hswm:repo:identity",
-        "hswm:repo:substrate",
-        "hswm:repo:field",
-        "hswm:repo:cells",
-        "hswm:repo:learning",
-        "hswm:repo:boundary",
-        "hswm:repo:evaluation",
-        "hswm:repo:evidence",
-        "hswm:repo:infrastructure",
-        "hswm:repo:history",
-    }
-
-
-def test_every_checkout_path_has_an_ontology_concept() -> None:
-    data = load_repository_ontology()
-    _, legacy = load_legacy(data)
-    paths, _ = repository_paths()
-    unclassified = [path for path in paths if not concepts_for_path(path, data, legacy)]
-    assert unclassified == []
-
-
-def test_root_compatibility_surface_and_catalog_are_current() -> None:
-    data = load_repository_ontology()
+    paths, from_git = repository_paths()
+    entries = legacy_replay.load_migration_entries(ROOT)
+    baseline, legacy = load_legacy(data, entries)
     result = validate_checkout(data)
-    assert result["concepts"] == 10
-    assert result["paths"] > 1_000
-    assert result["legacy_root_paths"] == 93
-    legacy = json.loads((ROOT / data["legacy_root_inventory"]).read_text(encoding="utf-8"))
-    catalog = json.loads((ROOT / data["path_catalog"]).read_text(encoding="utf-8"))
-    assert legacy["$schema"] == "../../schemas/hswm_legacy_root_paths.v1.schema.json"
-    assert catalog["$schema"] == "../schemas/hswm_path_catalog.v1.schema.json"
 
-
-def test_python_root_migrations_are_pinned_and_root_count_only_decreases() -> None:
-    data = load_repository_ontology()
-    result = validate_checkout(data)
-    assert result["python_root_migrations"] == 75
-    assert len(list(ROOT.glob("*.py"))) == 73
-    assert result["root_python_sha_locked"] == 63
-    assert result["root_python_replay_locked"] == 10
-    assert result["root_python_review_required"] == 0
-
-    for relative in data["python_root_migrations"]:
-        manifest = json.loads((ROOT / relative).read_text(encoding="utf-8"))
-        for row in manifest["migrations"]:
-            assert not (ROOT / row["old_path"]).exists()
-            assert (ROOT / row["canonical_path"]).is_file()
-
-    classification = json.loads(
-        (ROOT / data["python_root_classification"]).read_text(encoding="utf-8")
+    assert baseline["$schema"] == (
+        "../../schemas/hswm_root_compatibility_baseline.v1.schema.json"
     )
-    assert classification["baseline_root_python_count"] == 144
-    assert classification["observed_root_python_count"] == 73
-    assert classification["counts"]["partition_total"] == 73
+    assert baseline["schema_version"] == "hswm-root-compatibility-baseline/v1"
+    assert baseline["status"] == "FROZEN_BASELINE"
+    assert baseline["source_commit"] == repository_ontology.ROOT_BASELINE_V1_COMMIT
 
-    replay = data["legacy_replay"]
-    assert replay["source_of_truth"] == [
-        "python_root_migrations",
-        "asset_root_migrations",
-    ]
-    assert replay["workspace_kind"] == "detached-standalone-clone"
-    assert (ROOT / replay["tool"]).is_file()
+    baseline_paths = set(baseline["paths"])
+    migrated_paths = {entry.old_path for entry in entries}
+    assert legacy == baseline_paths - migrated_paths
+
+    assert result["paths"] == len(paths)
+    assert result["legacy_root_paths"] == len(legacy)
+    assert result["concepts"] == len(data["concepts"])
+    assert result["from_git"] is from_git
 
 
-def test_asset_root_migrations_are_source_pinned_and_leave_no_root_alias() -> None:
+def test_migration_entries_leave_only_canonical_files() -> None:
     data = load_repository_ontology()
+    entries = legacy_replay.load_migration_entries(ROOT)
     result = validate_checkout(data)
-    manifests = data.get("asset_root_migrations", [])
-    expected_count = 0
-    for relative in manifests:
-        manifest = json.loads((ROOT / relative).read_text(encoding="utf-8"))
-        assert manifest["$schema"] == (
-            "../../schemas/hswm_root_asset_migrations.v1.schema.json"
+
+    python_entries = [entry for entry in entries if entry.old_path.endswith(".py")]
+    asset_entries = [entry for entry in entries if not entry.old_path.endswith(".py")]
+    assert result["python_root_migrations"] == len(python_entries)
+    assert result["asset_root_migrations"] == len(asset_entries)
+
+    for entry in entries:
+        old = ROOT / entry.old_path
+        canonical = ROOT / entry.canonical_path
+        assert not old.exists()
+        assert not old.is_symlink()
+        assert canonical.is_file()
+        assert not canonical.is_symlink()
+
+
+def test_frozen_migration_registry_is_additive() -> None:
+    _, from_git = repository_paths()
+    if not from_git:
+        pytest.skip("frozen registry comparison requires the source Git objects")
+    data = load_repository_ontology()
+    baseline, _ = load_legacy(data)
+    modified = copy.deepcopy(data)
+    modified["python_root_migrations"] = modified["python_root_migrations"][1:]
+
+    with pytest.raises(OntologyError, match="dropped frozen manifests"):
+        repository_ontology._validate_frozen_baseline(modified, baseline)
+
+
+def test_frozen_public_partition_cannot_absorb_a_locked_path() -> None:
+    _, from_git = repository_paths()
+    if not from_git:
+        pytest.skip("frozen root comparison requires the source Git objects")
+    data = load_repository_ontology()
+    baseline, _ = load_legacy(data)
+    modified = copy.deepcopy(baseline)
+    moved = modified["paths"].pop(0)
+    modified["source_public_paths"].append(moved)
+
+    with pytest.raises(OntologyError, match="frozen ontology"):
+        repository_ontology._validate_frozen_baseline(data, modified)
+
+
+def test_current_public_surface_matches_the_frozen_partition() -> None:
+    _, from_git = repository_paths()
+    if not from_git:
+        pytest.skip("frozen root comparison requires the source Git objects")
+    data = load_repository_ontology()
+    baseline, _ = load_legacy(data)
+    modified = copy.deepcopy(data)
+    modified["public_root_surface"] = modified["public_root_surface"][1:]
+
+    with pytest.raises(OntologyError, match="current public root surface"):
+        repository_ontology._validate_frozen_baseline(modified, baseline)
+
+
+def test_baseline_path_cannot_escape_the_repository(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repository = tmp_path / "repository"
+    repository.mkdir()
+    outside = tmp_path / "outside.json"
+    outside.write_text("{}\n", encoding="utf-8")
+    monkeypatch.setattr(repository_ontology, "REPO_ROOT", repository)
+
+    with pytest.raises(OntologyError, match="invalid root compatibility baseline"):
+        load_legacy(
+            {"root_compatibility_baseline": "../outside.json"},
+            entries=(),
         )
-        assert manifest["schema_version"] == "hswm-root-asset-migrations/v1"
-        assert manifest["status"] == "SOURCE_PINNED_PATH_MIGRATION"
-        expected_count += len(manifest["migrations"])
-        for row in manifest["migrations"]:
-            assert "/" not in row["old_path"]
-            assert not (ROOT / row["old_path"]).exists()
-            assert (ROOT / row["canonical_path"]).is_file()
-
-    assert expected_count == 128
-    assert result["asset_root_migrations"] == expected_count
 
 
-def test_w14_research_moves_keep_their_typed_concepts() -> None:
+def test_active_root_paths_must_be_regular_files(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repository = tmp_path / "repository"
+    repository.mkdir()
+    target = tmp_path / "README.md"
+    target.write_text("outside\n", encoding="utf-8")
+    (repository / "README.md").symlink_to(target)
+    monkeypatch.setattr(repository_ontology, "REPO_ROOT", repository)
+
+    with pytest.raises(OntologyError, match="not a regular file"):
+        validate_root_surface(
+            ["README.md"],
+            {"public_root_surface": ["README.md"]},
+            set(),
+        )
+
+
+def test_frozen_root_path_must_match_the_source_blob(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repository = tmp_path / "repository"
+    repository.mkdir()
+    (repository / "locked.py").write_text("current\n", encoding="utf-8")
+    monkeypatch.setattr(repository_ontology, "REPO_ROOT", repository)
+    monkeypatch.setattr(
+        repository_ontology,
+        "_git_blob",
+        lambda _commit, _relative: b"frozen\n",
+    )
+    payload = {
+        "source_commit": "0" * 40,
+        "paths": ["locked.py"],
+    }
+
+    with pytest.raises(OntologyError, match="frozen root path changed"):
+        repository_ontology._validate_active_baseline_bytes(payload, {"locked.py"})
+
+
+def test_git_checkout_errors_do_not_fall_back_to_a_partial_scan(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    repository = tmp_path / "repository"
+    (repository / ".git").mkdir(parents=True)
+    monkeypatch.setattr(repository_ontology, "REPO_ROOT", repository)
+
+    def fail_git(*_args, **_kwargs):
+        raise subprocess.CalledProcessError(1, ["git"])
+
+    monkeypatch.setattr(repository_ontology.subprocess, "run", fail_git)
+    with pytest.raises(OntologyError, match="Git checkout metadata cannot be read"):
+        repository_paths()
+
+
+@pytest.mark.parametrize("allow_missing", [False, True])
+def test_unknown_root_file_cannot_be_silently_classified_as_legacy(
+    allow_missing: bool,
+) -> None:
     data = load_repository_ontology()
     _, legacy = load_legacy(data)
-    expected = {
-        "docs/research/ABSORB_CONTRACT_v1.md": "hswm:repo:boundary",
-        "docs/research/AMENDMENT_OPEN_HSWM_KERNEL_V2_2026-07-22.md": (
-            "hswm:repo:identity"
-        ),
-        "docs/research/H3_C0_CHAIN_VIABILITY_DIAGNOSIS_2026-07-20.md": (
-            "hswm:repo:cells"
-        ),
-        "docs/research/PROM_8_DYNAMIC_TWO_LANES_2026-07-22.md": (
-            "hswm:repo:learning"
-        ),
-        "docs/research/WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md": (
-            "hswm:repo:substrate"
-        ),
-        "docs/research/core-development/EXISTENCE_SCOREBOARD.v1.md": (
-            "hswm:repo:evaluation"
-        ),
-        "docs/research/core-development/HSWM_CORE_DEV.md": "hswm:repo:identity",
-        "prereg/PREREG_F3V2_HARDER_TRANSFER_2026-07-26.md": (
-            "hswm:repo:learning"
-        ),
-        "scripts/f3v2_smoke_preflight.sh": "hswm:repo:boundary",
-    }
-    for path, concept in expected.items():
-        assert concept in concepts_for_path(path, data, legacy)
-
-
-def test_w13_typed_json_paths_retain_their_semantic_mounts() -> None:
-    data = load_repository_ontology()
-    expected = {
-        "evidence/EVIDENCE_B1_IDENTITY_UNLOCK_2026-07-22.json": {
-            "hswm:repo:evaluation", "hswm:repo:evidence", "hswm:repo:learning",
-        },
-        "manifests/H3_B3_RUN_MANIFEST_V5_2026-07-20.json": {
-            "hswm:repo:boundary", "hswm:repo:cells", "hswm:repo:evidence",
-        },
-        "manifests/hswm_core_existence_harness.v1.json": {
-            "hswm:repo:cells", "hswm:repo:evidence",
-        },
-        "manifests/P1_SPLIT_2026-07-23.json": {
-            "hswm:repo:evidence", "hswm:repo:learning",
-        },
-        "receipts/RECEIPTS_B1_IDENTITY_UNLOCK_2026-07-22.json": {
-            "hswm:repo:evidence", "hswm:repo:learning",
-        },
-        "prereg/PREREG_R1_T1_RETRY_2026-07-22.json": {
-            "hswm:repo:boundary", "hswm:repo:evidence", "hswm:repo:learning",
-        },
-    }
-    for path, concepts in expected.items():
-        assert concepts <= set(concepts_for_path(path, data, set())), path
-
-
-def test_transformer_analogy_requires_an_optimizer_equivalent() -> None:
-    data = load_repository_ontology()
-    analogy = data["learning_analogy"]
-    assert analogy["mapping"]["training_data"] == "token/action/tool/outcome trajectories"
-    assert analogy["mapping"]["parameters"] == "durable W, routing, and H"
-    assert "Tokens count as training observations only" in analogy["necessary_condition"]
-    assert analogy["status"] == "TARGET_ARCHITECTURE_NOT_CURRENT_EFFICACY"
-
-
-def test_unknown_root_file_cannot_be_silently_classified_as_legacy() -> None:
-    data = load_repository_ontology()
-    _, legacy = load_legacy(data)
-    assert "NEW_ROOT_RULEBOOK.md" not in legacy
+    unexpected = "NEW_ROOT_RULEBOOK.md"
+    assert unexpected not in legacy
     paths, _ = repository_paths()
     with pytest.raises(OntologyError, match="root surface drift"):
-        validate_root_surface([*paths, "NEW_ROOT_RULEBOOK.md"], data, legacy)
+        validate_root_surface(
+            [*paths, unexpected],
+            data,
+            legacy,
+            allow_missing=allow_missing,
+        )
 
 
 def test_nested_distribution_is_not_mistaken_for_parent_git_checkout(
-    tmp_path, monkeypatch
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     checkout = tmp_path / "checkout"
     distribution = checkout / "sdist"

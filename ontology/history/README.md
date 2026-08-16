@@ -1,101 +1,32 @@
 # Path-bound history
 
-Many early experiments bind a root-relative path and exact source SHA into a
-manifest or receipt. Moving those files would preserve their bytes but break
-the historical path identity and, in several harnesses, change `__file__`-based
-runtime behavior.
+Early experiments sometimes bind a repository-root path, exact source digest,
+or `__file__`-relative behavior into a manifest or receipt. Those bindings are
+historical evidence, not the layout for new work.
 
-They remain a frozen compatibility surface until their complete dependency
-cluster is migrated. The `hswm-legacy-replay` command now restores an exact old
-root layout as a clean detached standalone clone, verifies the manifest-bound
-commit and SHA-256 values, and never mutates the active checkout. New source,
-research documents, and artifacts must use their canonical directories instead
-of the legacy root.
+## Current compatibility surface
 
-[`LEGACY_ROOT_PATHS.v1.json`](LEGACY_ROOT_PATHS.v1.json) freezes the current
-exception set. [`root-tidy-move-map.v1.json`](root-tidy-move-map.v1.json)
-preserves the earlier migration record.
+[`ROOT_COMPATIBILITY_BASELINE.v1.json`](ROOT_COMPATIBILITY_BASELINE.v1.json) is
+the single frozen source of truth for root paths that had a concrete
+compatibility or evidence reason at its source commit. New implementation,
+documents, and artifacts use their typed directories instead of joining this
+baseline. Listed root files remain byte-frozen; relocate one with a source-pinned
+manifest before changing its canonical copy.
 
-The `PYTHON_ROOT_MIGRATIONS*.json` manifests record each Python source removed
-from the legacy root, its canonical ontology path, the source commit, and the
-digest of the preserved pre-migration bytes. Separate manifests let each wave
-pin the exact commit from which its old paths were removed. They are also the
-single path registry consumed by `hswm-legacy-replay`; no second alias map can
-silently drift from the migration evidence.
+## Archived migrations and replay
 
-[`ROOT_ASSET_MIGRATIONS.W10.v1.json`](ROOT_ASSET_MIGRATIONS.W10.v1.json) extends
-the same source-pinned replay contract to non-Python root assets without
-changing the Python registry. W10 classifies 58 byte-preserved documents,
-records, logs, and one maintenance shell entry into `docs/canon`,
-`docs/research`, `prereg`, `evidence`, `manifests`, `research`, `results`, and
-`scripts`. Historical preregistrations and machine-readable bindings remain
-byte-identical; current navigation documents point at the canonical paths.
+The existing `PYTHON_ROOT_MIGRATIONS*.json` and
+`ROOT_ASSET_MIGRATIONS*.json` files preserve old path, source-commit, and digest
+bindings for relocations that already promised exact detached replay.
+[`root-tidy-move-map.v1.json`](root-tidy-move-map.v1.json) preserves the earlier
+move record. These files are retained as read-only history.
 
-[`ROOT_ASSET_MIGRATIONS.W11.v1.json`](ROOT_ASSET_MIGRATIONS.W11.v1.json) moves
-17 exact raw measurement JSONs together into `results/raw`. Current readers
-resolve the typed directory first and retain a root fallback for detached
-historical checkouts; hash-bound writers remain unchanged. After W11 the frozen
-legacy inventory was 146 paths: 73 Python files plus 73 assets whose active
-path/SHA dependency clusters require later atomic waves.
+An ordinary file absent from the baseline's `paths` array moves through standard
+Git history and normal compatibility tests. Moving a listed compatibility path
+requires one source-pinned manifest in the existing replay registry so the old
+path, source commit, digest, and canonical destination remain reproducible.
 
-[`ROOT_ASSET_MIGRATIONS.W12.v1.json`](ROOT_ASSET_MIGRATIONS.W12.v1.json) places
-the umbrella canon, plastic-wiring definition, token-learning direction, and
-all five preserved user source texts under `docs/canon/sources`. Exact pre-move bytes
-remain replayable, while current navigation follows the canonical paths. The
-frozen legacy inventory is now 138 paths: 73 Python files plus 65 assets; no
-TXT file remains at the physical root.
-
-[`ROOT_ASSET_MIGRATIONS.W13.v1.json`](ROOT_ASSET_MIGRATIONS.W13.v1.json) moves
-29 byte-preserved JSON artifacts into `evidence`, `prereg`, `manifests`, and
-`receipts`. Current mutable consumers resolve the typed locations; historical
-payloads keep their recorded commands and paths unchanged for detached replay.
-The frozen legacy inventory is now 109 paths: 73 Python files, 31 Markdown
-records, four path/SHA-bound JSON files, and one shell command.
-
-[`ROOT_ASSET_MIGRATIONS.W14.v1.json`](ROOT_ASSET_MIGRATIONS.W14.v1.json) moves
-15 independent research/core-development Markdown records and the final root
-shell command into typed directories. Current links, harness pointers, and the
-shell working-directory discovery follow the canonical paths; frozen F-series
-receipts retain their root-era names for detached replay. The legacy inventory
-is now 93 paths: 73 Python files, 16 SHA-bound Markdown records, and four
-path/SHA-bound JSON files.
-
-W4 moves the isolated OSS extraction comparison program into the existing
-`_research.material_extraction` namespace. Its historical root path and exact
-bytes remain reproducible from the source-pinned
-[`W4 manifest`](PYTHON_ROOT_MIGRATIONS.W4.v2.json).
-
-W5 co-locates the C1 book-scale replay judge with its canonical producer under
-`_research.bookscale`. Current code discovers the repository root through
-`pyproject.toml`, while the historical root command and exact bytes remain
-reproducible from the source-pinned
-[`W5 manifest`](PYTHON_ROOT_MIGRATIONS.W5.v2.json).
-
-W6 moves the complete cellular runtime cluster into `hswm.cells` and retains
-the four installed flat imports as compatibility packages. Root-era bytes and
-commands remain reproducible from the source-pinned
-[`W6 manifest`](PYTHON_ROOT_MIGRATIONS.W6.v2.json); the older Longinus bindings
-and receipts remain immutable historical evidence.
-
-W7 moves the exact hypergraph topology implementation into `hswm.substrate`.
-The installed flat import is a module alias, so legacy callers, `__file__`-based
-kernel hashes, and canonical callers share one exact module object. The
-source-pinned [`W7 manifest`](PYTHON_ROOT_MIGRATIONS.W7.v2.json) preserves the
-old root layout, while the active shared-field verifier resolves the same locked
-bytes through the migration registry without rewriting its scientific baseline.
-
-W8 moves the exact immutable field-snapshot implementation beside the certified
-readout substrate. Its flat import is a module alias, preserving the canonical
-module object and source-file SHA used by installed static-kernel identities.
-The [`W8 manifest`](PYTHON_ROOT_MIGRATIONS.W8.v2.json) retains the old root
-layout and bytes for detached replay.
-
-W9 moves the exact dependency-closed document and corpus world builders beside
-the canonical hypergraph substrate. Their flat imports are module aliases, so
-legacy and canonical callers share module, class, function, and monkeypatch
-identity. The source-pinned
-[`W9 manifest`](PYTHON_ROOT_MIGRATIONS.W9.v2.json) preserves both old root
-paths and byte identities for detached replay.
+Use the retained registry without restoring old paths into the active checkout:
 
 ```bash
 uv run hswm-legacy-replay list
@@ -103,16 +34,15 @@ uv run hswm-legacy-replay verify OLD_ROOT_FILE
 uv run hswm-legacy-replay materialize OLD_ROOT_FILE /tmp/hswm-replay
 ```
 
-The resulting checkout includes Git metadata because several historical
-harnesses query commit ancestry while running. Its `.git/hswm-legacy-replay.json`
-receipt binds the selected source commit, tree, old paths, and source hashes.
+The materialized checkout is a clean detached clone with Git metadata for
+historical harnesses that inspect commit ancestry. Its replay receipt records
+the selected commit, tree, paths, and source hashes.
 
-[`PYTHON_ROOT_CLASSIFICATION.v1.json`](PYTHON_ROOT_CLASSIFICATION.v1.json)
-partitions every remaining root Python file into `SHA_LOCKED`,
-`REPLAY_HISTORY_LOCKED`, or `REVIEW_REQUIRED`. The partition is exhaustive and
-disjoint; the validator rejects a new or unexplained root module. After W9 the
-review class is empty: every remaining module has an explicit evidence or replay
-reason.
+## Boundary
+
+Do not edit hash-bound payload evidence merely to refresh a path or narrative.
+Current readers and writers should use canonical typed locations; historical
+programs that require the old layout run only in detached replay.
 
 `quarantine/` contains non-executable historical mutation payloads whose old
 instructions conflict with the active bounded ontology policy. They are source

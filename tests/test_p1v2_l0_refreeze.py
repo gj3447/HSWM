@@ -4,6 +4,16 @@ import json
 import subprocess
 import sys
 
+import pytest
+
+from hswm.learning.p1v2 import refreeze
+
+
+def test_refreeze_import_is_safe_without_a_source_checkout(monkeypatch):
+    monkeypatch.setattr(refreeze, "REPO_ROOT", None)
+    with pytest.raises(refreeze.L0RefreezeError, match="source checkout"):
+        refreeze._require_repository_root()
+
 
 def test_refreeze_refuses_non_abort_receipt_before_tokenizer_load(tmp_path):
     prior = tmp_path / "prior.json"

@@ -9,20 +9,24 @@ from pathlib import Path
 import sys
 
 
-def _discover_repository_root(anchor: str | Path = __file__) -> Path:
+def _discover_repository_root(anchor: str | Path = __file__) -> Path | None:
     """Find the checkout root containing the frozen modules hashed below."""
-    resolved = Path(anchor).resolve(strict=True)
+    try:
+        resolved = Path(anchor).resolve(strict=True)
+    except OSError:
+        return None
     start = resolved.parent if resolved.is_file() else resolved
     for candidate in (start, *start.parents):
         if (candidate / "pyproject.toml").is_file():
             return candidate
-    raise RuntimeError(f"cannot locate HSWM repository root from {resolved}")
+    return None
 
 
 REPO_ROOT = _discover_repository_root()
-for _import_root in (REPO_ROOT, REPO_ROOT / "src"):
-    if str(_import_root) not in sys.path:
-        sys.path.insert(0, str(_import_root))
+if REPO_ROOT is not None:
+    for _import_root in (REPO_ROOT, REPO_ROOT / "src"):
+        if str(_import_root) not in sys.path:
+            sys.path.insert(0, str(_import_root))
 
 from hswm_weight_snapshot import canonical_sha256
 from p1v2_l0_preflight import FROZEN_MODULES, build_budget_manifest, make_qwen_chat_padder
@@ -31,6 +35,15 @@ from p1v2_llm_answerer import P1V2_SYSTEM_PROMPT
 
 class L0RefreezeError(ValueError):
     pass
+
+
+def _require_repository_root() -> Path:
+    if REPO_ROOT is None:
+        raise L0RefreezeError(
+            "refreeze execution requires an HSWM source checkout containing "
+            "the frozen root modules"
+        )
+    return REPO_ROOT
 
 
 def _file_sha(path: Path) -> str:
@@ -89,6 +102,7 @@ def main(argv: list[str] | None = None) -> int:
     padder = make_qwen_chat_padder(
         args.tokenizer_snapshot, tokenizer_identity=tokenizer_identity
     )
+    repo_root = _require_repository_root()
     budget = build_budget_manifest(
         public=public,
         sealed=sealed,
@@ -97,7 +111,7 @@ def main(argv: list[str] | None = None) -> int:
         deployment_receipt_sha256=deployment["receipt_sha256"],
         deployment_file_sha256=_file_sha(args.deployment_receipt),
         generation_receipt_sha256=generation["generation_receipt_sha256"],
-        module_sha256={module: _file_sha(REPO_ROOT / module) for module in FROZEN_MODULES},
+        module_sha256={module: _file_sha(repo_root / module) for module in FROZEN_MODULES},
         model=deployment["served_model"],
         model_revision=deployment["server_process"]["revision_binding"],
         max_output_tokens=args.new_max_output_tokens,

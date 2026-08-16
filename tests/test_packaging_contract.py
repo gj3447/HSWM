@@ -106,6 +106,7 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "hswm.learning.p1",
         "hswm.learning.p1v2",
         "hswm.prototypes",
+        "hswm.selfmod",
         "hswm.substrate",
     }
     compatibility_packages = {

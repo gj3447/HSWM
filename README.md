@@ -222,6 +222,8 @@ for their runtime receipts.
 | `prom_search_hswm/` | open composition, field algebra, retrieval, routing, and plasticity experiments |
 | `tests/`, `_research/shared_field_hypothesis/` | core regression and fail-closed research contracts |
 | `research/`, `schemas/`, `scripts/` | machine-readable contracts, schemas, and validators |
+| `evidence/`, `prereg/`, `manifests/`, `results/`, `receipts/` | typed research artifacts and direct measurements |
+| `docs/research/`, `docs/assets/` | narrative research material and public visual assets |
 
 The root Python count is now **116**, down from 148. The remaining files are not
 all permanent architecture: 79 are byte-bound by checked-in SHA evidence, 24
@@ -230,8 +232,6 @@ and 13 remain under explicit per-module review. The exact disjoint partition is
 machine-readable in
 [`PYTHON_ROOT_CLASSIFICATION.v1.json`](ontology/history/PYTHON_ROOT_CLASSIFICATION.v1.json);
 new Python implementation may not enter the root compatibility inventory.
-| `evidence/`, `prereg/`, `manifests/`, `results/`, `receipts/` | typed research artifacts and direct measurements |
-| `docs/research/`, `docs/assets/` | narrative research material and public visual assets |
 
 Every checked-in path is projected into the machine-readable
 [`repository ontology`](ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json) and
@@ -241,7 +241,9 @@ imports, or `__file__`-relative execution bind that location. The frozen
 exceptions are explicit in
 [`LEGACY_ROOT_PATHS.v1.json`](ontology/history/LEGACY_ROOT_PATHS.v1.json).
 Completed Python moves are source-pinned in
-[`PYTHON_ROOT_MIGRATIONS.v1.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.v1.json).
+[`PYTHON_ROOT_MIGRATIONS.v1.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.v1.json)
+and
+[`PYTHON_ROOT_MIGRATIONS.W2.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W2.v2.json).
 **New Python modules or research artifacts must not be added to the root.** New
 code goes under `src/hswm/`; artifacts are routed by kind according to
 [`docs/research/ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).

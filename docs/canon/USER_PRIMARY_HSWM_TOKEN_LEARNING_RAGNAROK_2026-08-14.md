@@ -11,7 +11,7 @@
 
 원문은 맞춤법을 고치지 않고 그대로 보존한다.
 불변 원문 파일은
-[`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.txt`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.txt),
+[`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.txt`](sources/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.txt),
 SHA-256은 `b3a6592f94564bbb308cf01a259a0b368dadf8667e49dffab6f075bc2d1d79a0`이다.
 
 ## 1. USER_PRIMARY 정전
@@ -26,7 +26,7 @@ SHA-256은 `b3a6592f94564bbb308cf01a259a0b368dadf8667e49dffab6f075bc2d1d79a0`이
    연결하고, 이를 해결할 수 있는 것은 HSWM뿐이라고 선언했다.
 
 이 정전은 기존
-[`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md)의
+[`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md)의
 “LLM 실행 함수 + HSWM 거시 신경망”과
 [`HSWM_CONNECTIVITY_MAP_E2E_NEURAL_REPLACEMENT_2026-08-03.md`](HSWM_CONNECTIVITY_MAP_E2E_NEURAL_REPLACEMENT_2026-08-03.md)의
 “정적 glue의 E2E 신경망 대체”를 토큰 학습 및 LX3 라그나로크 축으로 확장한다.
@@ -87,7 +87,7 @@ LLM 토큰/행동/도구 궤적
 | `CAUSALLY_VALIDATED` | context-fixed replay·동등예산 fresh 평가·removal ablation까지 결속 | 허용 가능한 최소 증거 |
 
 이 구분을 실행 가능한 코드 계약
-[`token_learning_contract.py`](src/hswm/learning/token_learning_contract.py)으로 만들었다. 계약은 raw
+[`token_learning_contract.py`](../../src/hswm/learning/token_learning_contract.py)으로 만들었다. 계약은 raw
 prompt/response를 영수증에 넣지 않고 digest와 합산 token count만 보존하며, 기존 eligibility,
 external outcome, immutable weight candidate, CAS activation을 하나의 provenance chain으로
 묶는다. 세 인과 검사는 `causal_test_receipt_sha256` 하나가 함께 증명한다. 최소화 정본은
@@ -168,7 +168,7 @@ HSWM의 해법은 관료제를 더 잘 쓰는 상위 규칙이 아니라, 유용
 ## 7. provenance
 
 - 사용자 직접 발화: 본 문서 §0, 2026-08-14.
-- 불변 원문: `USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.txt`,
+- 불변 원문: `sources/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.txt`,
   SHA-256 `b3a6592f94564bbb308cf01a259a0b368dadf8667e49dffab6f075bc2d1d79a0`.
 - 기존 USER_PRIMARY 정본: `CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`,
   `HSWM_CONNECTIVITY_MAP_E2E_NEURAL_REPLACEMENT_2026-08-03.md`.

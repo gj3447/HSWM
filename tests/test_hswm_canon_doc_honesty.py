@@ -6,12 +6,15 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CANON = ROOT / "THE_WORLD_REMEMBERS.md"
-WORLD_SOURCE = ROOT / "USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt"
-WIRING_SOURCE = ROOT / "USER_INSPIRATION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.txt"
-WIRING_FORMALIZATION = ROOT / "DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md"
-TOKEN_RAGNAROK_CANON = ROOT / "USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md"
-TOKEN_RAGNAROK_SOURCE = ROOT / "USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.txt"
+CANON_DIR = ROOT / "docs" / "canon"
+SOURCE_DIR = CANON_DIR / "sources"
+CANON = CANON_DIR / "THE_WORLD_REMEMBERS.md"
+WORLD_SOURCE = SOURCE_DIR / "USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt"
+WIRING_SOURCE = SOURCE_DIR / "USER_INSPIRATION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.txt"
+WIRING_FORMALIZATION = CANON_DIR / "DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md"
+TOKEN_RAGNAROK_CANON = CANON_DIR / "USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md"
+TOKEN_RAGNAROK_SOURCE = SOURCE_DIR / "USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.txt"
+USER_UTTERANCE_SOURCE = SOURCE_DIR / "내가 주는 말.txt"
 
 
 def _sha256(path: Path) -> str:
@@ -23,7 +26,7 @@ def test_umbrella_canon_is_discoverable() -> None:
     for index_name in ("README.md", "INDEX.md"):
         text = (ROOT / index_name).read_text(encoding="utf-8")
         assert "THE_WORLD_REMEMBERS.md" in text
-        assert "(THE_WORLD_REMEMBERS.md)" in text
+        assert "(docs/canon/THE_WORLD_REMEMBERS.md)" in text
 
     links = re.findall(r"\]\(([^)]+)\)", CANON.read_text(encoding="utf-8"))
     missing = [
@@ -31,7 +34,7 @@ def test_umbrella_canon_is_discoverable() -> None:
         for target in links
         if "://" not in target
         and not target.startswith("#")
-        and not (ROOT / target.split("#", 1)[0]).exists()
+        and not (CANON.parent / target.split("#", 1)[0]).exists()
     ]
     assert missing == []
 
@@ -103,3 +106,10 @@ def test_token_learning_ragnarok_canon_preserves_authority_and_evidence_boundary
     index = (ROOT / "INDEX.md").read_text(encoding="utf-8")
     assert TOKEN_RAGNAROK_CANON.name in index
     assert "src/hswm/learning/token_learning_contract.py" in index
+
+
+def test_preserved_user_utterance_source_is_exact() -> None:
+    assert USER_UTTERANCE_SOURCE.is_file()
+    assert _sha256(USER_UTTERANCE_SOURCE) == (
+        "9667ecf2f49bf8e838f97d278af14fcd73fa5eec9ad7a1033af5da1530845244"
+    )

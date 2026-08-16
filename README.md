@@ -72,7 +72,7 @@ thin execution boundary. The part intended to become learned is the cognitive
 wiring: which functions should activate, communicate, and change together.
 
 The preserved user direction and its evidence boundary are recorded in
-[`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md).
+[`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md).
 
 ## One field, four coupled views
 
@@ -201,10 +201,10 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | question | document |
 |---|---|
 | How do the fragmented identity, mathematics, runtime, learning, and evidence meanings fit together? | [`HSWM unified meaning map`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md) |
-| Why replace static agent glue, and what is token learning? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) |
+| Why replace static agent glue, and what is token learning? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) |
 | What exactly are `H`, `W`, `A`, and the LLM functions? | [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](docs/canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) |
 | What is implemented, rejected, or still open? | [`EFFICACY.md`](EFFICACY.md) |
-| What is the broader world-memory purpose? | [`THE_WORLD_REMEMBERS.md`](THE_WORLD_REMEMBERS.md) |
+| What is the broader world-memory purpose? | [`THE_WORLD_REMEMBERS.md`](docs/canon/THE_WORLD_REMEMBERS.md) |
 | Where is the full research chronology? | [`INDEX.md`](INDEX.md) |
 | How is the whole repository organized by meaning? | [`ontology/`](ontology/) |
 | How might sheaf theory help without becoming another static harness? | [`ontology/field/sheaf/`](ontology/field/sheaf/) |
@@ -266,6 +266,9 @@ The next source-pinned wave is
 [`ROOT_ASSET_MIGRATIONS.W11.v1.json`](ontology/history/ROOT_ASSET_MIGRATIONS.W11.v1.json):
 17 immutable raw result JSONs now live under `results/raw/`, with current
 readers routed through the typed artifact resolver.
+[`ROOT_ASSET_MIGRATIONS.W12.v1.json`](ontology/history/ROOT_ASSET_MIGRATIONS.W12.v1.json)
+then places the umbrella canon, plastic-wiring definition, token-learning
+direction, and all five preserved user source texts under `docs/canon/sources/`.
 **New Python modules or research artifacts must not be added to the root.** New
 code goes under `src/hswm/`; artifacts are routed by kind according to
 [`docs/research/ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).

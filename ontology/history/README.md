@@ -34,9 +34,16 @@ byte-identical; current navigation documents point at the canonical paths.
 [`ROOT_ASSET_MIGRATIONS.W11.v1.json`](ROOT_ASSET_MIGRATIONS.W11.v1.json) moves
 17 exact raw measurement JSONs together into `results/raw`. Current readers
 resolve the typed directory first and retain a root fallback for detached
-historical checkouts; hash-bound writers remain unchanged. The frozen legacy
-inventory is now 146 paths: 73 Python files plus 73 assets whose active
+historical checkouts; hash-bound writers remain unchanged. After W11 the frozen
+legacy inventory was 146 paths: 73 Python files plus 73 assets whose active
 path/SHA dependency clusters require later atomic waves.
+
+[`ROOT_ASSET_MIGRATIONS.W12.v1.json`](ROOT_ASSET_MIGRATIONS.W12.v1.json) places
+the umbrella canon, plastic-wiring definition, token-learning direction, and
+all five preserved user source texts under `docs/canon/sources`. Exact pre-move bytes
+remain replayable, while current navigation follows the canonical paths. The
+frozen legacy inventory is now 138 paths: 73 Python files plus 65 assets; no
+TXT file remains at the physical root.
 
 W4 moves the isolated OSS extraction comparison program into the existing
 `_research.material_extraction` namespace. Its historical root path and exact

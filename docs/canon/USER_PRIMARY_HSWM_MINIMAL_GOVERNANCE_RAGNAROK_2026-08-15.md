@@ -3,7 +3,7 @@
 ## 권위
 
 - 권위: `USER_PRIMARY`
-- 원문 파일: `USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.txt`
+- 원문 파일: `docs/canon/sources/USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.txt`
 - 원문 SHA-256: `6ab2e3221bff1cfe1b9a2a197bf24521453e4781ddffdfafffc3c6d9fc78ae6f`
 
 ## 현재 정전

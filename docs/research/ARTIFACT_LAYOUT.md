@@ -15,6 +15,7 @@ findable.
 | Raw checked-in result    | registered `*.json`    | `results/raw/`   |
 | Narrative research doc   | dated research `*.md`   | `docs/research/` |
 | Canon/identity document  | ratified direction or definition | `docs/canon/` |
+| Preserved user source    | immutable canon preimage `*.txt` | `docs/canon/sources/` |
 | Historical run log       | `*.log`                 | `results/logs/` |
 | Machine-readable ontology | `*_ONTOLOGY*.json`      | `ontology/`      |
 
@@ -62,10 +63,12 @@ run their default-output modes in the active checkout; use an explicit
 `--out results/raw/<name>` where supported, or reproduce the no-`--out`
 programs in the detached legacy-replay checkout.
 
-Byte-frozen or user-primary records keep five original root-relative links:
-two in `CANON_DIRECTION_...md`, two in
-`USER_PRIMARY_HSWM_TOKEN_LEARNING_...md`, and one in
-`f0_premise_p/PREREG.md`. The moved `PREREG_P0_...md` keeps one reciprocal
+[`ROOT_ASSET_MIGRATIONS.W12.v1.json`](../../ontology/history/ROOT_ASSET_MIGRATIONS.W12.v1.json)
+moves three current canon documents to `docs/canon/` and all five root
+user-source TXT files to `docs/canon/sources/`. Byte-frozen records keep three
+original root-relative links:
+two in `CANON_DIRECTION_...md` and one in `f0_premise_p/PREREG.md`. The moved
+`PREREG_P0_...md` keeps one reciprocal
 historical link. These links resolve in the detached replay checkout; their
 source records are intentionally not edited just to rewrite navigation.
 

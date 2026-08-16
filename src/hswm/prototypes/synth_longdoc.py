@@ -2,7 +2,7 @@
 
 This is the canonical packaged location of the long-document prototype.
 
-Owner's untested intuition (HSWM/내가 주는 말.txt): HSWM beats cosine
+Owner's untested intuition (HSWM/docs/canon/sources/내가 주는 말.txt): HSWM beats cosine
 *specifically on long units* (paragraph → book) because structural weights
 survive where the mean-pooled embedding dilutes. Competing SR-lineage
 explanation (PROM_PRIOR_ART_TRIBUNAL §6): the win/loss pattern is about

@@ -289,6 +289,7 @@ def test_source_distribution_carries_the_default_test_surface() -> None:
     required: dict[str, set[str]] = {
         "src": {"*.py"},
         "scripts": {"*.py", "*.sh"},
+        "docs": {"*.md", "*.txt"},
         "prereg": {"*.json", "*.md"},
         "results": {"*.md", "*.log", "*.json"},
         "receipts": {"*.py", "*.json"},

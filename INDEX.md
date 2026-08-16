@@ -18,9 +18,10 @@
 [`legacy inventory`](ontology/history/LEGACY_ROOT_PATHS.v1.json)에 닫혀 있다. W9까지 root
 Python은 148개에서 73개로 줄었다. W10은 다시 비-Python root 자산 58개를 의미별
 `docs/canon`, `docs/research`, `prereg`, `evidence`, `manifests`, `research`, `results`,
-`scripts`로 옮겼다. W11은 raw result JSON 17개를 `results/raw`로 모아 전체 root 파일을
-236개에서 161개로 줄였다. 남은 146개 legacy 표면은 Python 73개와 path/SHA 의존군
-73개로 전부 설명된다. 옮긴 옛 경로는
+`scripts`로 옮겼다. W11은 raw result JSON 17개를 `results/raw`로 모았고, W12는 상위
+정전·plastic wiring·token-learning 문서 3개와 사용자 원문 TXT 5개를 `docs/canon`으로
+모아 전체 root 파일을 236개에서 153개로 줄였다. 남은 138개 legacy 표면은 Python
+73개와 path/SHA 의존 asset 65개로 전부 설명된다. 옮긴 옛 경로는
 `hswm-legacy-replay`가 manifest의 정확한 커밋 전체를 별도 detached clone으로 복원한다.
 
 이 온톨로지는 저장소의 의미 지도이지 HSWM의 인지 규칙이 아니다. AI 행동은 문서 경로가
@@ -86,7 +87,7 @@ weight/topology rewrite를 소유한다. 이는 목표 정체성이며 현재 �
 하네스 규칙의 증식이 아니라 AI 토큰·행동·도구 사용·외부 결과가 HSWM의 지속적인
 weight/routing/topology 변화로 압축되어야 하며, HSWM 자체가 LLM 함수로 움직이는 거대한
 멀티에이전트 신경망이라는 선언이다. 원문과 권위 경계는
-[`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md),
+[`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md),
 토큰 저장을 학습으로 오인하지 않게 하는 fail-closed 인과 계약은
 [`token_learning_contract.py`](src/hswm/learning/token_learning_contract.py)에 있다. 이는 목표 정체성과
 engineering contract이며 현재 효능·과학적 유일성 주장이 아니다.
@@ -111,7 +112,7 @@ sheaf hypergraph network까지 설명한다. 기계 판독 정본은
 
 세계의 재귀 기억·자기모델이라는 목적과 MCP/Skill 외부 인지배선을 가소적 신경망으로
 전환한다는 공학 방향은 상위 통합 정전
-[`THE_WORLD_REMEMBERS.md`](THE_WORLD_REMEMBERS.md)에 묶었다. 문서 안에서
+[`THE_WORLD_REMEMBERS.md`](docs/canon/THE_WORLD_REMEMBERS.md)에 묶었다. 문서 안에서
 `USER_PRIMARY` 방향과 `SECONDARY_AI_FORMALIZATION`을 분리하며, 현재 효능이나 구현 완료를
 주장하지 않는다.
 
@@ -209,7 +210,7 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 | [`prom_search_hswm/test_hswm_bond_readout.py`](prom_search_hswm/test_hswm_bond_readout.py) | neutral parity·coverage·monotonic suppression·shift invariance 19 tests |
 | [`prom_search_hswm/fsm/hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json) | weight→routing→topology 후보의 bounded proposal/evaluation/activation 계약 |
 | [`PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md`](docs/research/PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) / [`prom9_semantic_neural_network.v1.json`](prom_search_hswm/prom9_semantic_neural_network.v1.json) / [`prom9_protocol.py`](prom_search_hswm/prom9_protocol.py) | LLM 3-role typed 함수망→외부 outcome→eligibility→fast bond→slow weight 승격을 동등예산 대조군과 함께 고정한 PROM-9 |
-| [`token_learning_contract.py`](src/hswm/learning/token_learning_contract.py) / [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) | 최소 token/action trajectory를 eligibility→outcome→activated candidate에 결속하고 단일 causal-test receipt 전에는 학습 규칙 주장을 막는 계약과 사용자 정전 |
+| [`token_learning_contract.py`](src/hswm/learning/token_learning_contract.py) / [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) | 최소 token/action trajectory를 eligibility→outcome→activated candidate에 결속하고 단일 causal-test receipt 전에는 학습 규칙 주장을 막는 계약과 사용자 정전 |
 | [`prom_search_hswm/evidence/`](prom_search_hswm/evidence/) | preregistration, evidence, neutral judge packet, injected negative |
 | [`_research/competitor_absorption/`](_research/competitor_absorption/) | 외부 paper–code source lock, license gate, default-off absorption manifest |
 | [`_research/shared_field_hypothesis/`](_research/shared_field_hypothesis/) | shared field 대 separate heads의 fail-closed 동등예산 실험 계약 |

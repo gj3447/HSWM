@@ -1,10 +1,6 @@
 include *.json
 include *.md
 include *.py
-# root *.txt are the pinned user-source documents that
-# tests/test_hswm_canon_doc_honesty.py hashes; without them the sdist collects
-# them fine but fails 2 tests.
-include *.txt
 include COPYRIGHT
 include uv.lock
 recursive-include tests *.py
@@ -15,7 +11,7 @@ recursive-include src *.py *.md
 recursive-include research *.json
 recursive-include ontology *.json *.md
 recursive-include schemas *.json
-recursive-include docs *.md
+recursive-include docs *.md *.txt
 recursive-include docs/assets *.png
 recursive-include prereg *.json *.md
 recursive-include evidence *.json

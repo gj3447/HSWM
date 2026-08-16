@@ -43,12 +43,22 @@ def test_repository_design_lock_is_valid_and_explicitly_unregistered() -> None:
     assert contract.VERIFIER_PATH not in payload["mechanism_baseline"]["source_hashes"]
 
 
-def test_migrated_mechanism_source_resolves_to_exact_canonical_bytes() -> None:
-    expected = contract.MECHANISM_SOURCE_HASHES["hypergraph.py"]
+@pytest.mark.parametrize(
+    ("logical_path", "canonical_path"),
+    [
+        ("hypergraph.py", "src/hswm/substrate/hypergraph.py"),
+        ("field_snapshot.py", "src/hswm/substrate/field_snapshot.py"),
+    ],
+)
+def test_migrated_mechanism_source_resolves_to_exact_canonical_bytes(
+    logical_path: str,
+    canonical_path: str,
+) -> None:
+    expected = contract.MECHANISM_SOURCE_HASHES[logical_path]
 
-    resolved = contract._current_source_path(REPO_ROOT, "hypergraph.py", expected)
+    resolved = contract._current_source_path(REPO_ROOT, logical_path, expected)
 
-    assert resolved == REPO_ROOT / "src/hswm/substrate/hypergraph.py"
+    assert resolved == REPO_ROOT / canonical_path
     assert contract.sha256_file(resolved) == expected
 
 

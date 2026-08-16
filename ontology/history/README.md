@@ -47,6 +47,12 @@ source-pinned [`W7 manifest`](PYTHON_ROOT_MIGRATIONS.W7.v2.json) preserves the
 old root layout, while the active shared-field verifier resolves the same locked
 bytes through the migration registry without rewriting its scientific baseline.
 
+W8 moves the exact immutable field-snapshot implementation beside the certified
+readout substrate. Its flat import is a module alias, preserving the canonical
+module object and source-file SHA used by installed static-kernel identities.
+The [`W8 manifest`](PYTHON_ROOT_MIGRATIONS.W8.v2.json) retains the old root
+layout and bytes for detached replay.
+
 ```bash
 uv run hswm-legacy-replay list
 uv run hswm-legacy-replay verify OLD_ROOT_FILE.py
@@ -60,7 +66,7 @@ receipt binds the selected source commit, tree, old paths, and source hashes.
 [`PYTHON_ROOT_CLASSIFICATION.v1.json`](PYTHON_ROOT_CLASSIFICATION.v1.json)
 partitions every remaining root Python file into `SHA_LOCKED`,
 `REPLAY_HISTORY_LOCKED`, or `REVIEW_REQUIRED`. The partition is exhaustive and
-disjoint; the validator rejects a new or unexplained root module. After W7 the
+disjoint; the validator rejects a new or unexplained root module. After W8 the
 review class is empty: every remaining module has an explicit evidence or replay
 reason.
 

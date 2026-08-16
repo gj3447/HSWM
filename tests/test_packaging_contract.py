@@ -113,6 +113,7 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "certified_readout",
         "cli_provider_transport",
         "diagnose",
+        "field_snapshot",
         "falsifier",
         "f5v2_operators",
         "f5v2_topic_cache",
@@ -208,6 +209,20 @@ def test_hypergraph_compatibility_import_is_the_canonical_module() -> None:
     ).resolve()
     assert hashlib.sha256(Path(compatibility.__file__).read_bytes()).hexdigest() == (
         "3b72f7948196a4c865d5e35e78a2ac1ff9447b205bb07096fe9472a6462e8c34"
+    )
+
+
+def test_field_snapshot_compatibility_import_is_the_canonical_module() -> None:
+    import field_snapshot as compatibility
+    from hswm.substrate import field_snapshot as canonical
+
+    assert compatibility is canonical
+    assert compatibility.FieldSnapshotV1 is canonical.FieldSnapshotV1
+    assert Path(compatibility.__file__).resolve() == (
+        REPO_ROOT / "src/hswm/substrate/field_snapshot.py"
+    ).resolve()
+    assert hashlib.sha256(Path(compatibility.__file__).read_bytes()).hexdigest() == (
+        "17cd7251d6d0ff066b70dff89945cc46dac468040ceae0b9483f8b3e015b72f2"
     )
 
 

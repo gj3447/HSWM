@@ -57,7 +57,7 @@ def test_root_compatibility_surface_and_catalog_are_current() -> None:
     result = validate_checkout(data)
     assert result["concepts"] == 10
     assert result["paths"] > 1_000
-    assert result["legacy_root_paths"] == 224
+    assert result["legacy_root_paths"] == 223
     legacy = json.loads((ROOT / data["legacy_root_inventory"]).read_text(encoding="utf-8"))
     catalog = json.loads((ROOT / data["path_catalog"]).read_text(encoding="utf-8"))
     assert legacy["$schema"] == "../../schemas/hswm_legacy_root_paths.v1.schema.json"
@@ -67,9 +67,9 @@ def test_root_compatibility_surface_and_catalog_are_current() -> None:
 def test_python_root_migrations_are_pinned_and_root_count_only_decreases() -> None:
     data = load_repository_ontology()
     result = validate_checkout(data)
-    assert result["python_root_migrations"] == 72
-    assert len(list(ROOT.glob("*.py"))) == 76
-    assert result["root_python_sha_locked"] == 66
+    assert result["python_root_migrations"] == 73
+    assert len(list(ROOT.glob("*.py"))) == 75
+    assert result["root_python_sha_locked"] == 65
     assert result["root_python_replay_locked"] == 10
     assert result["root_python_review_required"] == 0
 
@@ -83,8 +83,8 @@ def test_python_root_migrations_are_pinned_and_root_count_only_decreases() -> No
         (ROOT / data["python_root_classification"]).read_text(encoding="utf-8")
     )
     assert classification["baseline_root_python_count"] == 144
-    assert classification["observed_root_python_count"] == 76
-    assert classification["counts"]["partition_total"] == 76
+    assert classification["observed_root_python_count"] == 75
+    assert classification["counts"]["partition_total"] == 75
 
     replay = data["legacy_replay"]
     assert replay["source_of_truth"] == "python_root_migrations"

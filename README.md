@@ -13,7 +13,7 @@ change its own routing and topology through experience.
 > result.
 
 <p align="center">
-  <img src="docs/assets/hswm-semantic-weight-field-hero.png"
+  <img src="https://raw.githubusercontent.com/gj3447/HSWM/main/docs/assets/hswm-semantic-weight-field-hero.png"
        alt="A translucent semantic-weight landscape with one amber activation trajectory"
        width="100%">
 </p>
@@ -78,11 +78,11 @@ The preserved user direction and its evidence boundary are recorded in
 
 The target state is:
 
-$$
+```math
 \mathrm{HSWM}_t = (H_t, W_t, A_t, \{f_i^t\}),
 \qquad
-f_i^t = \operatorname{LLM}(\rho_i, x_i^t, a_{\mathcal N(i)}^t)
-$$
+f_i^t = \mathrm{LLM}(\rho_i, x_i^t, a_{\mathcal N(i)}^t)
+```
 
 | view | role |
 |---|---|
@@ -132,7 +132,7 @@ token / action / tool trajectory
 ```
 
 The executable receipt contract
-[`hswm_token_learning_contract.py`](hswm_token_learning_contract.py)
+[`token_learning_contract.py`](src/hswm/learning/token_learning_contract.py)
 distinguishes `OBSERVED_ONLY`, `DURABLE_UPDATE`, and `CAUSALLY_VALIDATED`, and
 hash-binds a claimed causal-test receipt. The replay, equal-budget, and removal
 tests named by that receipt remain a separate evidence boundary; the current
@@ -162,7 +162,7 @@ and [`ontology/field/sheaf/HSWM_SHEAF_ONTOLOGY.v1.json`](ontology/field/sheaf/HS
 
 ## Current evidence boundary
 
-Repository state as of 2026-08-15:
+Repository state as of 2026-08-16:
 
 | area | honest status |
 |---|---|
@@ -186,7 +186,7 @@ git clone https://github.com/gj3447/HSWM.git
 cd HSWM
 uv sync --locked --extra dev
 uv run --locked --extra dev pytest -q
-uv run --locked python verify_efficacy_claims.py --pretty
+uv run --locked hswm-verify-efficacy --pretty
 ```
 
 The default suite uses checked-in fixtures and does not require a live model,
@@ -211,13 +211,25 @@ for their runtime receipts.
 | path | purpose |
 |---|---|
 | `ontology/` | canonical semantic navigation, path catalog, and concept relations |
-| `src/hswm/` | canonical package surface for newly migrated and future HSWM code |
+| `src/hswm/` | canonical package surface, organized by semantic responsibility |
+| `src/hswm/prototypes/` | bounded early learning and synthetic-world prototypes |
+| `src/hswm/substrate/` | world adaptation, certified readout, and convergence substrate |
+| `src/hswm/learning/` | token-learning contracts and learning diagnostics |
+| `src/hswm/evaluation/`, `_research/` | falsification code and source-only experiment programs |
 | `world_ir.py`, `world_compiler.py` | immutable evidence model and deterministic world compilation |
-| `field_snapshot.py`, `certified_readout.py` | certified field cuts and exact-scope admission |
-| `hswm_weight_store.py`, `hswm_token_learning_contract.py` | durable weight state and causal-learning evidence boundary |
+| `field_snapshot.py`, `src/hswm/substrate/certified_readout.py` | certified field cuts and exact-scope admission |
+| `hswm_weight_store.py`, `src/hswm/learning/token_learning_contract.py` | durable weight state and causal-learning evidence boundary |
 | `prom_search_hswm/` | open composition, field algebra, retrieval, routing, and plasticity experiments |
 | `tests/`, `_research/shared_field_hypothesis/` | core regression and fail-closed research contracts |
 | `research/`, `schemas/`, `scripts/` | machine-readable contracts, schemas, and validators |
+
+The root Python count is now **116**, down from 148. The remaining files are not
+all permanent architecture: 79 are byte-bound by checked-in SHA evidence, 24
+belong to replay/history clusters whose root topology still has runtime meaning,
+and 13 remain under explicit per-module review. The exact disjoint partition is
+machine-readable in
+[`PYTHON_ROOT_CLASSIFICATION.v1.json`](ontology/history/PYTHON_ROOT_CLASSIFICATION.v1.json);
+new Python implementation may not enter the root compatibility inventory.
 | `evidence/`, `prereg/`, `manifests/`, `results/`, `receipts/` | typed research artifacts and direct measurements |
 | `docs/research/`, `docs/assets/` | narrative research material and public visual assets |
 

@@ -1,8 +1,9 @@
 # B-2 Routing Signal Existence — 측정 결과 (2026-07-23)
 
 사전등록(HSWM_LOCAL_RECORD) 실험. 학습 없이 기존 per-query 결과 JSON에서 "우리 쿼리 분포에
-per-query routing이 이길 신호가 존재하는가"를 측정. 스크립트: `b2_routing_signal.py`
-(실행: `.venv/bin/python b2_routing_signal.py`, seed=20260723, bootstrap 10000 paired,
+per-query routing이 이길 신호가 존재하는가"를 측정. 현재 스크립트:
+`_research/efficacy/b2_routing_signal.py`
+(실행: `uv run --locked python -m _research.efficacy.b2_routing_signal`, seed=20260723, bootstrap 10000 paired,
 epsilon=0.01).
 
 ## 정의
@@ -69,5 +70,6 @@ router(B2.1) 재시도를 정당화하려면 이 ~15–25%의 비동점 쿼리�
 ## 산출물
 
 - `EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json` — 전수치 + 입력 파일 sha256 + seed/epsilon.
-- `b2_routing_signal.py` — 측정 스크립트 (재현: `.venv/bin/python b2_routing_signal.py`).
+- `_research/efficacy/b2_routing_signal.py` — 측정 스크립트
+  (재현: `uv run --locked python -m _research.efficacy.b2_routing_signal`).
 - 본 파일.

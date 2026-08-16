@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/gj3447/HSWM/schemas/hswm_python_root_classification.v1.schema.json",
+  "title": "HSWM Python root classification v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "status",
+    "history_baseline_commit",
+    "baseline_root_python_count",
+    "applied_migration_manifests",
+    "observed_root_python_count",
+    "counts",
+    "classes",
+    "class_definitions"
+  ],
+  "properties": {
+    "schema_version": {"const": "hswm-python-root-classification/v1"},
+    "status": {"const": "ACTIVE_MIGRATION_RATCHET"},
+    "history_baseline_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "baseline_root_python_count": {"type": "integer", "minimum": 0},
+    "applied_migration_manifests": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "observed_root_python_count": {"type": "integer", "minimum": 0},
+    "counts": {
+      "type": "object",
+      "required": ["SHA_LOCKED", "REPLAY_HISTORY_LOCKED", "REVIEW_REQUIRED", "partition_total"],
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "classes": {
+      "type": "object",
+      "required": ["SHA_LOCKED", "REPLAY_HISTORY_LOCKED", "REVIEW_REQUIRED"],
+      "additionalProperties": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {"type": "string", "pattern": "^[^/]+\\.py$"}
+      }
+    },
+    "class_definitions": {"type": "object"}
+  },
+  "additionalProperties": false
+}

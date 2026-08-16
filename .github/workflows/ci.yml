@@ -21,7 +21,7 @@ jobs:
           - name: prom-and-research-tests
             command: uv run --locked --extra dev pytest -q prom_search_hswm _research/shared_field_hypothesis
           - name: efficacy-ledger
-            command: uv run --locked python verify_efficacy_claims.py --pretty
+            command: uv run --locked hswm-verify-efficacy --pretty
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -45,7 +45,7 @@ jobs:
       - run: mkdir sdist && tar -xzf dist/*.tar.gz -C sdist --strip-components=1
       - run: uv run --locked --extra dev pytest -q
         working-directory: sdist
-      - run: uv run --locked python verify_efficacy_claims.py --pretty
+      - run: uv run --locked hswm-verify-efficacy --pretty
         working-directory: sdist
 
   wheel-install:
@@ -65,6 +65,7 @@ jobs:
         working-directory: ${{ runner.temp }}
         run: |
           wheel_python="${{ runner.temp }}/wheel-venv/bin/python"
-          "$wheel_python" -I -c 'import p1_loop_harness, p1_phantom_environment, p1_rank_invariance_diagnostic; import f5v2_judge, f5v2_operators, f5v2_topic_cache; from hswm.experiments.f5v2 import judge, operators, topic_cache; assert f5v2_operators.CPL1NumericPacket is operators.CPL1NumericPacket; assert f5v2_topic_cache.TopicBlockV1 is topic_cache.TopicBlockV1; assert f5v2_judge.JudgeContractError is judge.JudgeContractError; import scripts.validate_hswm_semantic_weight_metric_contract'
+          "$wheel_python" -I -c 'import p1_loop_harness, p1_phantom_environment, p1_rank_invariance_diagnostic; import certified_readout, cli_provider_transport, h3_b3_manifest, hswm_artifact_layout, hswm_token_learning_contract, synth; import f5v2_judge, f5v2_operators, f5v2_topic_cache; from hswm.artifacts import layout; from hswm.evaluation.h3 import b3_manifest; from hswm.experiments.f5v2 import judge, operators, topic_cache; from hswm.infrastructure import cli_provider_transport as provider; from hswm.learning import token_learning_contract; from hswm.prototypes import synth as canonical_synth; from hswm.substrate import certified_readout as canonical_readout; assert certified_readout.ReadoutCertificateV1 is canonical_readout.ReadoutCertificateV1; assert cli_provider_transport.CLIProvider is provider.CLIProvider; assert h3_b3_manifest.ManifestBuildError is b3_manifest.ManifestBuildError; assert hswm_artifact_layout.resolve_artifact_path is layout.resolve_artifact_path; assert hswm_token_learning_contract.TokenLearningContractError is token_learning_contract.TokenLearningContractError; assert synth.Dataset is canonical_synth.Dataset; assert f5v2_operators.CPL1NumericPacket is operators.CPL1NumericPacket; assert f5v2_topic_cache.TopicBlockV1 is topic_cache.TopicBlockV1; assert f5v2_judge.JudgeContractError is judge.JudgeContractError; import scripts.validate_hswm_semantic_weight_metric_contract'
           "$wheel_python" -I -m traversal_cert teeth
           "${{ runner.temp }}/wheel-venv/bin/hswm-p1-gate-diagnostic" --help
+          "${{ runner.temp }}/wheel-venv/bin/hswm-verify-efficacy" --help

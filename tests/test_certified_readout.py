@@ -7,9 +7,9 @@ from dataclasses import replace
 import numpy as np
 import pytest
 
-import certified_readout as cr
+from hswm.substrate import certified_readout as cr
 import field_snapshot as fs
-import legacy_adapter as la
+from hswm.substrate import legacy_adapter as la
 import readouts
 import world_builder as wb
 from tests.test_world_builder import _rows

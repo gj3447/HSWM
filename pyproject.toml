@@ -2,6 +2,7 @@
 name = "hswm"
 version = "0.1.0"
 description = "Research substrate for a plastic hypergraph semantic-weight field whose local functions are executed by LLMs."
+readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
   "numpy>=1.26",
@@ -13,6 +14,7 @@ kg = ["neo4j>=5.20"]
 
 [project.scripts]
 hswm-p1-gate-diagnostic = "hswm.diagnostics.p1_gate:main"
+hswm-verify-efficacy = "scripts.verify_efficacy_claims:main"
 
 [project.urls]
 Homepage = "https://github.com/gj3447/HSWM"
@@ -26,40 +28,57 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 # scripts/ is an implicit namespace package used by the checked-in contract
 # validators and must be present in both wheels and source distributions.
-package-dir = { hswm = "src/hswm", f5v2_operators = "src/f5v2_operators", f5v2_topic_cache = "src/f5v2_topic_cache", f5v2_judge = "src/f5v2_judge" }
 packages = [
   "scripts",
   "prom_search_hswm",
   "hswm",
+  "hswm.artifacts",
   "hswm.diagnostics",
+  "hswm.evaluation",
+  "hswm.evaluation.h3",
   "hswm.experiments",
   "hswm.experiments.f5v2",
+  "hswm.infrastructure",
+  "hswm.learning",
+  "hswm.learning.p1",
+  "hswm.learning.p1v2",
+  "hswm.prototypes",
+  "hswm.substrate",
+  "certified_cut_compare",
+  "certified_readout",
+  "cli_provider_transport",
+  "diagnose",
+  "falsifier",
   "f5v2_operators",
   "f5v2_topic_cache",
   "f5v2_judge",
+  "h3_b3_manifest",
+  "h3_title_anchor_falsifier",
+  "hswm_artifact_layout",
+  "hswm_token_learning_contract",
+  "learned",
+  "learned_v2",
+  "learned_v3_additive",
+  "legacy_adapter",
+  "llm_judgment_loop",
+  "neo4j_loader",
+  "p1_rank_invariance_diagnostic",
+  "p1v2_l0_diagnose",
+  "real_run",
+  "supersede_ledger",
+  "synth",
+  "synth_longdoc",
 ]
 py-modules = [
-  "synth",
   "hypergraph",
   "weight_field",
   "readouts",
-  "learned",
   "metrics",
-  "falsifier",
-  "neo4j_loader",
-  "real_run",
-  "learned_v2",
-  "diagnose",
-  "llm_judgment_loop",
-  "learned_v3_additive",
   "doc_builder",
   "world_builder",
   "world_ir",
   "world_compiler",
-  "legacy_adapter",
   "field_snapshot",
-  "certified_readout",
-  "certified_cut_compare",
   "traversal",
   "traversal_cert",
   "stale_poisoning",
@@ -79,9 +98,6 @@ py-modules = [
   "h3_b3_preflight",
   "h3_arc_adjudicator",
   "h3_artifact_lifecycle",
-  "h3_b3_manifest",
-  "h3_title_anchor_falsifier",
-  "cli_provider_transport",
   "qkv_routing",
   "qkv_routing_falsifier",
   "qkv_b1_probe",
@@ -92,14 +108,12 @@ py-modules = [
   "hswm_semantic_weight_metric",
   "hswm_weight_snapshot",
   "hswm_weight_store",
-  "hswm_token_learning_contract",
   "p1_eligibility_tag",
   "p1_weighted_walk",
   "p1_m_commit",
   "p1_loop_harness",
   "p1_llm_answerer",
   "p1_phantom_environment",
-  "p1_rank_invariance_diagnostic",
   "r1_predicate_alias",
   "r3_phantom_ingest",
   "p1v2_typed_lesson",
@@ -114,7 +128,6 @@ py-modules = [
   "p1v2_l0_judge",
   "p1v2_l0_judge_fixtures",
   "p1v2_l0_refreeze",
-  "p1v2_l0_diagnose",
   "p1v3_policy_environment",
   "p1v3_calibration_gate",
   "p1v3_calibration_preflight",
@@ -131,6 +144,33 @@ py-modules = [
   "hswm_cellular_openai",
   "hswm_cellular_live_probe",
 ]
+
+[tool.setuptools.package-dir]
+hswm = "src/hswm"
+certified_cut_compare = "src/certified_cut_compare"
+certified_readout = "src/certified_readout"
+cli_provider_transport = "src/cli_provider_transport"
+diagnose = "src/diagnose"
+falsifier = "src/falsifier"
+f5v2_operators = "src/f5v2_operators"
+f5v2_topic_cache = "src/f5v2_topic_cache"
+f5v2_judge = "src/f5v2_judge"
+h3_b3_manifest = "src/h3_b3_manifest"
+h3_title_anchor_falsifier = "src/h3_title_anchor_falsifier"
+hswm_artifact_layout = "src/hswm_artifact_layout"
+hswm_token_learning_contract = "src/hswm_token_learning_contract"
+learned = "src/learned"
+learned_v2 = "src/learned_v2"
+learned_v3_additive = "src/learned_v3_additive"
+legacy_adapter = "src/legacy_adapter"
+llm_judgment_loop = "src/llm_judgment_loop"
+neo4j_loader = "src/neo4j_loader"
+p1_rank_invariance_diagnostic = "src/p1_rank_invariance_diagnostic"
+p1v2_l0_diagnose = "src/p1v2_l0_diagnose"
+real_run = "src/real_run"
+supersede_ledger = "src/supersede_ledger"
+synth = "src/synth"
+synth_longdoc = "src/synth_longdoc"
 
 [tool.pytest.ini_options]
 testpaths = ["tests", "prom_search_hswm", "_research/shared_field_hypothesis"]

@@ -1,7 +1,7 @@
 """Deterministic aggregate teeth for the 40-control/400-fault S3 comparison."""
 from __future__ import annotations
 
-import certified_cut_compare as comparison
+from hswm.substrate import certified_cut_compare as comparison
 
 
 def test_comparison_preregistered_counts_and_verdict():

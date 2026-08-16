@@ -2,7 +2,8 @@
 
 ## Outcome
 
-`cli_provider_transport.py` lets HSWM invoke installed Claude, Grok, or Codex
+`hswm.infrastructure.cli_provider_transport` lets HSWM invoke installed Claude,
+Grok, or Codex
 CLIs through the same Python callable shape as an API transport. It is a local,
 one-call/one-process adapter, not an HTTP server and not an official provider
 API.
@@ -23,7 +24,7 @@ confirmatory work on an attested API/vLLM path.
 ## Contract
 
 ```python
-from cli_provider_transport import (
+from hswm.infrastructure.cli_provider_transport import (
     CLIProvider,
     CLIProviderConfigV1,
     OutputContract,

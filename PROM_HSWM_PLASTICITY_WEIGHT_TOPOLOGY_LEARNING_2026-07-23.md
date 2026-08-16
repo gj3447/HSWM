@@ -68,13 +68,13 @@
 | candidate 승격 | immutable candidate, fresh eval, canary, CAS | 고정 governance이며 learned policy는 아님 |
 
 현재 `W(e\mid c)`는 [`weight_field.py`](weight_field.py)의
-`fast contextual alpha + slow base salience`이고, [`learned_v3_additive.py`](learned_v3_additive.py)는
+`fast contextual alpha + slow base salience`이고, [`learned_v3_additive.py`](src/hswm/prototypes/learned_v3_additive.py)는
 frozen cosine 위의 boost-only residual을 offline으로 학습한다. 이 static additive-j는 공개
 효능 장부에서 cosine 대비 support recall@3 `+0.0364`, nDCG@10 `+0.0259`, downstream F1
 `+0.0729`를 냈다([`EFFICACY.md`](EFFICACY.md)). 이것은 **weight-plane의 실측**이지 learned
 CONNECT/SEPARATE/SPECIALIZE의 실측이 아니다.
 
-또 [`llm_judgment_loop.py`](llm_judgment_loop.py)는 주석에서 “gradient-free”라고 쓰지만 실제
+또 [`llm_judgment_loop.py`](src/hswm/prototypes/llm_judgment_loop.py)는 주석에서 “gradient-free”라고 쓰지만 실제
 구현은 judge label로 \(M\)에 gradient step을 수행하며, default judge도 real LLM이 아니라
 synthetic gold oracle다. 그러므로 이것은 loop 가능성의 prototype이지 운영 학습 증거가 아니다.
 
@@ -459,8 +459,8 @@ headline metric은 **Agent-A write → frozen Agent-B fresh unseen gain**이다.
 - [`SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md`](SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md)
 - [`SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md`](SPEC_SHARED_HYPERGRAPH_NN_SEMANTIC_WEIGHT_2026-07-22.md)
 - [`DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md`](DESIGN_PHASE_B_FEDERATED_HSWM_2026-07-22.md)
-- [`weight_field.py`](weight_field.py), [`learned_v3_additive.py`](learned_v3_additive.py),
-  [`llm_judgment_loop.py`](llm_judgment_loop.py)
+- [`weight_field.py`](weight_field.py), [`learned_v3_additive.py`](src/hswm/prototypes/learned_v3_additive.py),
+  [`llm_judgment_loop.py`](src/hswm/prototypes/llm_judgment_loop.py)
 - [`EFFICACY.md`](EFFICACY.md)
 - [`PROM_P5_MULTIVIEW_HARDHOP_2026-07-22.md`](PROM_P5_MULTIVIEW_HARDHOP_2026-07-22.md)
 - [`PROM_P6_CONTINUAL_ABSORPTION_FSM_2026-07-22.md`](PROM_P6_CONTINUAL_ABSORPTION_FSM_2026-07-22.md)

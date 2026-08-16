@@ -10,7 +10,7 @@
 import numpy as np
 
 import readouts
-import synth
+from hswm.prototypes import synth
 import traversal as tv
 from weight_field import WeightField
 

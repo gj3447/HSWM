@@ -11,7 +11,7 @@ recursive-include tests *.py
 # scripts/ is an implicit-namespace package imported by contract tests.
 # research/ and schemas/ contain the corresponding data contracts.
 recursive-include scripts *.py
-recursive-include src *.py
+recursive-include src *.py *.md
 recursive-include research *.json
 recursive-include ontology *.json *.md
 recursive-include schemas *.json
@@ -20,6 +20,7 @@ recursive-include docs/assets *.png
 recursive-include prereg *.json
 recursive-include evidence *.json
 recursive-include formal *.py *.lean *.json *.toml
+recursive-include verification *.py *.json *.md
 recursive-include results *.md
 recursive-include manifests *.json
 recursive-include receipts *.py *.json

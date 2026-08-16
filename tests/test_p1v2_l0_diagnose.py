@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from p1v2_l0_diagnose import L0DiagnosisError, diagnose_l0_inertness
+from hswm.learning.p1v2.l0_diagnose import L0DiagnosisError, diagnose_l0_inertness
 
 
 ROOT = Path(__file__).resolve().parents[1]

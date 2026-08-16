@@ -14,8 +14,9 @@ The repository therefore uses two compatible views:
 
 New Python implementation belongs under [`src/hswm/`](../src/hswm/). Root
 Python modules are a shrinking, explicitly frozen compatibility surface; each
-completed move is pinned in
-[`history/PYTHON_ROOT_MIGRATIONS.v1.json`](history/PYTHON_ROOT_MIGRATIONS.v1.json).
+completed move is source-pinned by the manifests in [`history/`](history/).
+Every remaining root module has exactly one reason class in
+[`PYTHON_ROOT_CLASSIFICATION.v1.json`](history/PYTHON_ROOT_CLASSIFICATION.v1.json).
 
 ## Concept map
 

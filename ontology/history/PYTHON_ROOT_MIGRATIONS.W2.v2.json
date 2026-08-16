@@ -1,0 +1,177 @@
+{
+  "$schema": "../../schemas/hswm_python_root_migrations.v2.schema.json",
+  "schema_version": "hswm-python-root-migrations/v2",
+  "status": "SOURCE_PINNED_PATH_MIGRATION",
+  "source_commit": "3cc7b72ecc18d1e924309ce4e20c6419552198b3",
+  "policy": "Each root source is absent after migration; its pre-migration bytes remain pinned by source_commit and source_sha256 while canonical code may evolve.",
+  "migrations": [
+    {
+      "old_path": "synth.py",
+      "canonical_path": "src/hswm/prototypes/synth.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "c03ff26d1b7d41be975a357df3f394a79c4c667a7b1500980984141d3e8e7514"
+    },
+    {
+      "old_path": "synth_longdoc.py",
+      "canonical_path": "src/hswm/prototypes/synth_longdoc.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "2759381f8f48b17742c528ebf8ca487f859d607a34b6b2ac2ec952e59547a64e"
+    },
+    {
+      "old_path": "learned.py",
+      "canonical_path": "src/hswm/prototypes/learned.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "2e55ec29b3e17b73be09ed313a4fdcb287d0dacbb0473b3c4779ed51f31d14d8"
+    },
+    {
+      "old_path": "learned_v2.py",
+      "canonical_path": "src/hswm/prototypes/learned_v2.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "67859222269dbe413115e16123d015abd55d939639767476b69693e4f9ca7407"
+    },
+    {
+      "old_path": "learned_v3_additive.py",
+      "canonical_path": "src/hswm/prototypes/learned_v3_additive.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "c2015502f96ad24b3316bb1682566710c3dcd5afb47a098f875528eb33a19f7c"
+    },
+    {
+      "old_path": "falsifier.py",
+      "canonical_path": "src/hswm/prototypes/falsifier.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "ab58b2778fc453c491318599f2939d03e192ba3143ed6becdb7babde060e513a"
+    },
+    {
+      "old_path": "neo4j_loader.py",
+      "canonical_path": "src/hswm/prototypes/neo4j_loader.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "69bb558ef5b5875ae0a3983af5cd256f6b74ec92b929d1893c3d2413d58f8012"
+    },
+    {
+      "old_path": "real_run.py",
+      "canonical_path": "src/hswm/prototypes/real_run.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "40dbd1831ec9e23692ad27ad30576e1a11c959564f24d91e9c4bfe405b87e48e"
+    },
+    {
+      "old_path": "diagnose.py",
+      "canonical_path": "src/hswm/prototypes/diagnose.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "14290f3916e0fbde55ae907067db0fb42a5ba7810d4de474dca3f554e35e8a58"
+    },
+    {
+      "old_path": "llm_judgment_loop.py",
+      "canonical_path": "src/hswm/prototypes/llm_judgment_loop.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "1ba7cd5b6a294b830a169280ae062358372235bebbcde8394e9d6fc43afddbb4"
+    },
+    {
+      "old_path": "legacy_adapter.py",
+      "canonical_path": "src/hswm/substrate/legacy_adapter.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "b0dcf303cde1c31376ef0bba9fa27b0b822806269ed0ee93e30569121125dc19"
+    },
+    {
+      "old_path": "certified_readout.py",
+      "canonical_path": "src/hswm/substrate/certified_readout.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "dcc1c95e720f7b35785e0f707452335553cded54f9149b2762e59e9ecb3f42ac"
+    },
+    {
+      "old_path": "certified_cut_compare.py",
+      "canonical_path": "src/hswm/substrate/certified_cut_compare.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "7b544131a3c94bff7f5c0f4d1402ec49b8d77538bc32d379568cc1b1b77d329d"
+    },
+    {
+      "old_path": "supersede_ledger.py",
+      "canonical_path": "src/hswm/substrate/supersede_ledger.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "da68cd3143588f24263a169cf3fa3652934c7f2fa817897cb3bbe67b218d608e"
+    },
+    {
+      "old_path": "hswm_token_learning_contract.py",
+      "canonical_path": "src/hswm/learning/token_learning_contract.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "acd6bb34ba3a25c67583a3b0ba3fa729d76e1300945747cffa3a82439e938537"
+    },
+    {
+      "old_path": "p1_rank_invariance_diagnostic.py",
+      "canonical_path": "src/hswm/learning/p1/rank_invariance.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "9b531039c541185383b808c813b6c89f4ceb6dbd569ee85b76909ea18d3d0b5c"
+    },
+    {
+      "old_path": "p1v2_l0_diagnose.py",
+      "canonical_path": "src/hswm/learning/p1v2/l0_diagnose.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "774f48a68f0c2ac93367805ca988274bf87ee3ca767c44d3fb46a6bda5a5ccae"
+    },
+    {
+      "old_path": "cli_provider_transport.py",
+      "canonical_path": "src/hswm/infrastructure/cli_provider_transport.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "6d1b163ad10e762e9ef6e0b8c7b1559e52fc20a635badf9d2147dd7e05f4bc55"
+    },
+    {
+      "old_path": "h3_b3_manifest.py",
+      "canonical_path": "src/hswm/evaluation/h3/b3_manifest.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "35819978b8d4f24730e25b41daac40d2803ff67f6aca87ceda7eccde99a1e860"
+    },
+    {
+      "old_path": "h3_title_anchor_falsifier.py",
+      "canonical_path": "src/hswm/evaluation/h3/title_anchor_falsifier.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "6cf562dd7120c7f07122e56cfce0fa9d6eccc7ae51ff848cb2ffaf8b02dc50d4"
+    },
+    {
+      "old_path": "hswm_artifact_layout.py",
+      "canonical_path": "src/hswm/artifacts/layout.py",
+      "destination_kind": "canonical-package",
+      "source_sha256": "4a40a2b8cf1d787f66bcbfa00b4270cada9d5f5625565198db895ab5c2f25f1a"
+    },
+    {
+      "old_path": "expB_longdoc.py",
+      "canonical_path": "_research/longdoc/expB_longdoc.py",
+      "destination_kind": "research-source",
+      "source_sha256": "016699b6f29de05d603a213ca9e25ff604625ee3ef15db0fd2d46dd8e908471d"
+    },
+    {
+      "old_path": "substrate_bench.py",
+      "canonical_path": "_research/substrate_bench/substrate_bench.py",
+      "destination_kind": "research-source",
+      "source_sha256": "7b223b8a10f558465e2165fe4217b0920c7ec04433021dd4ae5581261bcd296d"
+    },
+    {
+      "old_path": "traversal_bench.py",
+      "canonical_path": "_research/substrate_bench/traversal_bench.py",
+      "destination_kind": "research-source",
+      "source_sha256": "bc977a8d64412b0e8659eafbcd5319fa2166238a1a9ed7dcb248c6fad5e863e5"
+    },
+    {
+      "old_path": "r2_material_extract.py",
+      "canonical_path": "_research/material_extraction/r2_material_extract.py",
+      "destination_kind": "research-source",
+      "source_sha256": "43b576034a1f835defee6476295358015a1d63c89f776ea4ccb63b297f8092be"
+    },
+    {
+      "old_path": "b2_routing_signal.py",
+      "canonical_path": "_research/efficacy/b2_routing_signal.py",
+      "destination_kind": "research-source",
+      "source_sha256": "c293138c1e37ba1536dff7255de4303688e05b199593a4e1f40a89bdbe4e9285"
+    },
+    {
+      "old_path": "e1_conditional_traversal.py",
+      "canonical_path": "_research/efficacy/e1_conditional_traversal.py",
+      "destination_kind": "research-source",
+      "source_sha256": "593030f43f5af409df0eaf3c0ff1e7f7d4e5ba5409f9d97ad7cb90f0eac3aa38"
+    },
+    {
+      "old_path": "verify_efficacy_claims.py",
+      "canonical_path": "scripts/verify_efficacy_claims.py",
+      "destination_kind": "maintenance-script",
+      "source_sha256": "177a5d6ffc9f5739567f916cfbcc4704288906c6790d503e7651b0baf21665c3"
+    }
+  ]
+}

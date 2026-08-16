@@ -5,10 +5,15 @@ from pathlib import Path
 
 import pytest
 
-import verify_efficacy_claims as efficacy
+from scripts import verify_efficacy_claims as efficacy
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_default_root_tracks_repository_after_script_move(tmp_path, monkeypatch) -> None:
+    monkeypatch.chdir(tmp_path)
+    assert efficacy.DEFAULT_ROOT == REPO_ROOT
 
 
 def test_checked_in_efficacy_snapshot_matches_public_claims() -> None:

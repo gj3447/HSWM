@@ -21,10 +21,10 @@ evidence of learned behavior.
 
 ## Helper
 
-Use `hswm_artifact_layout.py` (repo root) instead of hardcoding paths:
+Use the canonical `hswm.artifacts.layout` package instead of hardcoding paths:
 
 ```python
-from hswm_artifact_layout import default_artifact_path, resolve_artifact_path
+from hswm.artifacts.layout import default_artifact_path, resolve_artifact_path
 
 out = default_artifact_path("EVIDENCE_EXAMPLE_2026-01-01.json")   # evidence/...
 path = resolve_artifact_path("EVIDENCE_B1_IDENTITY_UNLOCK_2026-07-22.json")
@@ -51,9 +51,11 @@ Many historical harness scripts are hash-locked: their sha256 is bound in
 edited**. They keep their root-relative output constants as historical record.
 Do not rerun them against the locked root artifacts — a rerun with new data
 would break the receipt bindings. New experiments must write new scripts that
-route through `hswm_artifact_layout.default_artifact_path`.
+route through `hswm.artifacts.layout.default_artifact_path`.
 
-Writers already routed through the helper: `b2_routing_signal.py`,
-`e1_conditional_traversal.py`, `c1_prelude_bookscale.py`. Untracked/WIP
+Writers already routed through the helper:
+`_research/efficacy/b2_routing_signal.py`,
+`_research/efficacy/e1_conditional_traversal.py`, and
+`c1_prelude_bookscale.py`. Untracked/WIP
 scripts (e.g. `p1_run_real.py`) are out of scope — route them when they are
 adopted as tracked.

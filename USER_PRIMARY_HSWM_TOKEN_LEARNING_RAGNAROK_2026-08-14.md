@@ -87,7 +87,7 @@ LLM 토큰/행동/도구 궤적
 | `CAUSALLY_VALIDATED` | context-fixed replay·동등예산 fresh 평가·removal ablation까지 결속 | 허용 가능한 최소 증거 |
 
 이 구분을 실행 가능한 코드 계약
-[`hswm_token_learning_contract.py`](hswm_token_learning_contract.py)으로 만들었다. 계약은 raw
+[`token_learning_contract.py`](src/hswm/learning/token_learning_contract.py)으로 만들었다. 계약은 raw
 prompt/response를 영수증에 넣지 않고 digest와 합산 token count만 보존하며, 기존 eligibility,
 external outcome, immutable weight candidate, CAS activation을 하나의 provenance chain으로
 묶는다. 세 인과 검사는 `causal_test_receipt_sha256` 하나가 함께 증명한다. 최소화 정본은

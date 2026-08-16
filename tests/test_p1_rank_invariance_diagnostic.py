@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 
-from p1_rank_invariance_diagnostic import rank_change_metrics
+from hswm.learning.p1.rank_invariance import rank_change_metrics
 
 
 def test_rank_change_metrics_separates_score_order_and_membership() -> None:

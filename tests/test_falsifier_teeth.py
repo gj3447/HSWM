@@ -7,7 +7,7 @@
   Verdict (SUPPORTED / REFUTED / INCONCLUSIVE), never EXCLUDED, and always
   reports the honest controls (null-head, param-free cosine).
 """
-from falsifier import run_falsifier
+from hswm.prototypes.falsifier import run_falsifier
 
 
 def test_frequency_regime_is_excluded():

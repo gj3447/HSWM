@@ -4,7 +4,7 @@ import json
 import sys
 import types
 
-import neo4j_loader
+from hswm.prototypes import neo4j_loader
 
 
 ENV_NAMES = ("NEO4J_URI", "NEO4J_USER", "NEO4J_PW", "NEO4J_DATABASE")

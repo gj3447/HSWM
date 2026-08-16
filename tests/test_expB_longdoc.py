@@ -7,10 +7,16 @@ Review wf_a931ba07-21a fixes locked in by test:
   artifact must be structurally impossible);
 - dilution must still be real (the length axis is live, not neutralized).
 """
+import importlib
+
 import numpy as np
 
-import synth_longdoc as sl
-from expB_longdoc import TOL, ExpBVerdict, run_expB
+from hswm.prototypes import synth_longdoc as sl
+
+eb = importlib.import_module("_research.longdoc.expB_longdoc")
+TOL = eb.TOL
+ExpBVerdict = eb.ExpBVerdict
+run_expB = eb.run_expB
 
 
 def test_world_gold_constant_base_rate_and_paired_across_strata():
@@ -94,7 +100,6 @@ def test_judge_bits_binary_and_track_owner(monkeypatch):
     cmp@97 Eq->NotEq (hop!=0 forces chain resolution when CHAIN_FOLLOW=0).
     Boundary twins (cmp@97.74 Lt->LtE, cmp@100 Gt->GtE) are measure-zero
     equivalents and are expected to survive by design."""
-    import expB_longdoc as eb
     monkeypatch.setattr(eb, "CHAIN_FOLLOW", 0.0)   # deterministic: target is always t0
     w = sl.generate("aboutness", seed=2)
     rng = np.random.default_rng(0)
@@ -113,7 +118,6 @@ def test_judge_bits_binary_and_track_owner(monkeypatch):
 def test_judge_never_resolves_chain_when_follow_rate_zero(monkeypatch):
     """cmp@97.62 (hop==0 -> hop!=0): with CHAIN_FOLLOW=0 the judge must NEVER
     resolve the chain for hop>0 queries. Counts actual _chain_target calls."""
-    import expB_longdoc as eb
     w = sl.generate("aboutness", seed=2)
     monkeypatch.setattr(eb, "CHAIN_FOLLOW", 0.0)
     calls = []
@@ -134,7 +138,6 @@ def test_spread_scores_nonneg_and_bounded():
     ((1-γ) -> (1+γ) amplification) and Mult->Add ((1-γ)*act -> (1-γ)+act).
     The sentence level (arity 1) exposes amplification that member-mean
     dilution hides at coarser levels."""
-    import expB_longdoc as eb
     w = sl.generate("aboutness", seed=4)
     pool = np.arange(60)
     for level in ("sentence", "chapter"):

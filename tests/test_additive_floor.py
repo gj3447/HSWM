@@ -7,8 +7,8 @@ grid including 0. These tests assert the floor actually holds.
 """
 import numpy as np
 
-import synth
-from learned_v3_additive import score_additive, train_additive_j
+from hswm.prototypes import synth
+from hswm.prototypes.learned_v3_additive import score_additive, train_additive_j
 from weight_field import _unit
 
 

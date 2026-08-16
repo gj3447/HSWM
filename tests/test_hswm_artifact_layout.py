@@ -7,16 +7,19 @@ resolvable through the fallback reader.  See docs/research/ARTIFACT_LAYOUT.md.
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
 
 import pytest
+import hswm_artifact_layout as legacy_layout
+from hswm.artifacts import layout
 
 REPO = Path(__file__).resolve().parents[1]
-if str(REPO) not in sys.path:
-    sys.path.insert(0, str(REPO))
 
-import hswm_artifact_layout as layout  # noqa: E402
+
+def test_legacy_layout_import_resolves_to_canonical_objects():
+    assert legacy_layout.default_artifact_path is layout.default_artifact_path
+    assert legacy_layout.resolve_artifact_path is layout.resolve_artifact_path
+    assert legacy_layout.REPO_ROOT == layout.REPO_ROOT == REPO
 
 
 def test_classify_artifact_kinds():
@@ -43,6 +46,12 @@ def test_env_override_redirects_output_root(tmp_path, monkeypatch):
     monkeypatch.delenv("HSWM_ARTIFACT_ROOT")
     plain = layout.default_artifact_path("PREREG_X_2026-01-01.json", create=False)
     assert plain == layout.REPO_ROOT / "prereg" / "PREREG_X_2026-01-01.json"
+
+
+def test_default_root_is_independent_of_current_working_directory(tmp_path, monkeypatch):
+    monkeypatch.delenv("HSWM_ARTIFACT_ROOT", raising=False)
+    monkeypatch.chdir(tmp_path)
+    assert layout.artifact_root() == REPO
 
 
 def test_resolve_prefers_subdir_then_legacy_root(tmp_path):
@@ -72,15 +81,18 @@ def test_moved_subdir_artifacts_resolve_via_fallback():
 
 
 def test_tracked_writers_route_through_helper():
-    for script in ("b2_routing_signal.py", "e1_conditional_traversal.py",
-                   "c1_prelude_bookscale.py"):
+    for script in (
+        "_research/efficacy/b2_routing_signal.py",
+        "_research/efficacy/e1_conditional_traversal.py",
+        "c1_prelude_bookscale.py",
+    ):
         src = (REPO / script).read_text(encoding="utf-8")
-        assert "from hswm_artifact_layout import default_artifact_path" in src, script
+        assert "from hswm.artifacts.layout import default_artifact_path" in src, script
         assert 'default_artifact_path("EVIDENCE_' in src, script
 
 
 def test_verify_loader_resolves_root_and_subdir(tmp_path):
-    from verify_efficacy_claims import _load
+    from scripts.verify_efficacy_claims import _load
 
     payload = {"schema_version": "fixture/v1", "value": 1}
     name = "EVIDENCE_FIXTURE_2026-01-01.json"

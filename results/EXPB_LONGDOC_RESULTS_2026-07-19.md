@@ -1,6 +1,7 @@
 # Experiment B — length vs hop attribution (synthetic, v2) · 2026-07-19
 
-> Files: `synth_longdoc.py` / `expB_longdoc.py` / `stats_protocol.py` (+tests, 30 pass).
+> Current files: `src/hswm/prototypes/synth_longdoc.py` /
+> `_research/longdoc/expB_longdoc.py` / `stats_protocol.py` (+tests, 30 pass).
 > Run log: `expB_longdoc_run.log`. Adversarial review: workflow `wf_a931ba07-21a`
 > (21 agents, 14 confirmed findings → v2 rebuild). Scope: **mechanism sufficiency
 > in a synthetic world** — NOT a real-document result. Real-data slot (NoCha /

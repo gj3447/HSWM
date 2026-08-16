@@ -15,4 +15,5 @@ outcome-linked update that becomes durable, changes later behavior, and loses
 its effect when removed counts as evidence of learning.
 
 See the [canonical direction](../../USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md)
-and the executable [`hswm_token_learning_contract.py`](../../hswm_token_learning_contract.py).
+and the executable
+[`token_learning_contract.py`](../../src/hswm/learning/token_learning_contract.py).

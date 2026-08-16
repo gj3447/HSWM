@@ -1,13 +1,23 @@
 from pathlib import Path
 
-import e1_conditional_traversal as e1
+from _research.efficacy import b2_routing_signal as b2
+from _research.efficacy import e1_conditional_traversal as e1
 
 
-def test_e1_artifact_paths_are_repository_relative():
-    repo = Path(e1.__file__).resolve().parent
+REPO = Path(__file__).resolve().parents[1]
 
-    assert e1.INPUT == repo / "traversal_bench_results.json"
-    assert e1.OUT_JSON == repo / "evidence" / "EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json"
+
+def test_efficacy_artifact_paths_are_repository_relative(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    assert b2.REPO == e1.REPO == REPO
+    assert b2.OUT_JSON == (
+        REPO / "evidence" / "EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json"
+    )
+
+    assert e1.INPUT == REPO / "traversal_bench_results.json"
+    assert e1.OUT_JSON == (
+        REPO / "evidence" / "EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json"
+    )
 
 
 # --- v2.4.3 oracle strengthening (vacuity 0/8: the module emits the numbers the
@@ -26,11 +36,14 @@ def test_e1_golden_values_reproduce_checked_in_evidence(tmp_path, monkeypatch):
 
     import pytest
 
-    repo = Path(e1.__file__).resolve().parent
     monkeypatch.setattr(e1, "OUT_JSON", tmp_path / "out.json")
     e1.main()
     out = json.loads((tmp_path / "out.json").read_text(encoding="utf-8"))
-    ev = json.loads((repo / "EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json").read_text(encoding="utf-8"))
+    ev = json.loads(
+        (REPO / "EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json").read_text(
+            encoding="utf-8"
+        )
+    )
 
     for subset in ("bridge", "factoid"):
         got, want = out["results"][subset], ev["results"][subset]

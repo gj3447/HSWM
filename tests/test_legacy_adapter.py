@@ -7,7 +7,7 @@ from dataclasses import replace
 import numpy as np
 import pytest
 
-import legacy_adapter as la
+from hswm.substrate import legacy_adapter as la
 import readouts
 import traversal as tv
 from tests.test_world_builder import _rows

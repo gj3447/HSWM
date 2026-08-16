@@ -59,5 +59,5 @@ bridge/multi-hop 질의에서만 이기고 factoid에선 진다고 보고하므�
 
 ## 산출물
 
-- 측정 스크립트: `e1_conditional_traversal.py`
+- 현재 측정 스크립트: `_research/efficacy/e1_conditional_traversal.py`
 - evidence: `EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json`

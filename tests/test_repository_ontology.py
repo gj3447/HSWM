@@ -65,15 +65,24 @@ def test_root_compatibility_surface_and_catalog_are_current() -> None:
 def test_python_root_migrations_are_pinned_and_root_count_only_decreases() -> None:
     data = load_repository_ontology()
     result = validate_checkout(data)
-    assert result["python_root_migrations"] == 4
-    assert len(list(ROOT.glob("*.py"))) <= 144
+    assert result["python_root_migrations"] == 32
+    assert len(list(ROOT.glob("*.py"))) == 116
+    assert result["root_python_sha_locked"] == 79
+    assert result["root_python_replay_locked"] == 24
+    assert result["root_python_review_required"] == 13
 
-    manifest = json.loads(
-        (ROOT / data["python_root_migrations"]).read_text(encoding="utf-8")
+    for relative in data["python_root_migrations"]:
+        manifest = json.loads((ROOT / relative).read_text(encoding="utf-8"))
+        for row in manifest["migrations"]:
+            assert not (ROOT / row["old_path"]).exists()
+            assert (ROOT / row["canonical_path"]).is_file()
+
+    classification = json.loads(
+        (ROOT / data["python_root_classification"]).read_text(encoding="utf-8")
     )
-    for row in manifest["migrations"]:
-        assert not (ROOT / row["old_path"]).exists()
-        assert (ROOT / row["canonical_path"]).is_file()
+    assert classification["baseline_root_python_count"] == 144
+    assert classification["observed_root_python_count"] == 116
+    assert classification["counts"]["partition_total"] == 116
 
 
 def test_transformer_analogy_requires_an_optimizer_equivalent() -> None:

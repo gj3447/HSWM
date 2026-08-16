@@ -57,9 +57,7 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
     assert {
         "h3_artifact_lifecycle",
         "h3_b3_falsifier",
-        "h3_b3_manifest",
         "h3_b3_preflight",
-        "h3_title_anchor_falsifier",
     } <= shipped
 
     assert {
@@ -82,7 +80,6 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "p1v2_l0_judge",
         "p1v2_l0_judge_fixtures",
         "p1v2_l0_refreeze",
-        "p1v2_l0_diagnose",
         "p1v3_policy_environment",
         "p1v3_calibration_gate",
         "p1v3_calibration_preflight",
@@ -96,23 +93,55 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "p1v4_heldout_measure",
     } <= shipped
 
-    assert {
+    canonical_packages = {
         "hswm",
+        "hswm.artifacts",
         "hswm.diagnostics",
+        "hswm.evaluation",
+        "hswm.evaluation.h3",
         "hswm.experiments",
         "hswm.experiments.f5v2",
+        "hswm.infrastructure",
+        "hswm.learning",
+        "hswm.learning.p1",
+        "hswm.learning.p1v2",
+        "hswm.prototypes",
+        "hswm.substrate",
+    }
+    compatibility_packages = {
+        "certified_cut_compare",
+        "certified_readout",
+        "cli_provider_transport",
+        "diagnose",
+        "falsifier",
         "f5v2_operators",
         "f5v2_topic_cache",
         "f5v2_judge",
-    } <= packages
+        "h3_b3_manifest",
+        "h3_title_anchor_falsifier",
+        "hswm_artifact_layout",
+        "hswm_token_learning_contract",
+        "learned",
+        "learned_v2",
+        "learned_v3_additive",
+        "legacy_adapter",
+        "llm_judgment_loop",
+        "neo4j_loader",
+        "p1_rank_invariance_diagnostic",
+        "p1v2_l0_diagnose",
+        "real_run",
+        "supersede_ledger",
+        "synth",
+        "synth_longdoc",
+    }
+    assert canonical_packages | compatibility_packages <= packages
     assert project["tool"]["setuptools"]["package-dir"]["hswm"] == "src/hswm"
-    assert {
-        "f5v2_operators",
-        "f5v2_topic_cache",
-        "f5v2_judge",
-    }.isdisjoint(shipped)
+    assert compatibility_packages.isdisjoint(shipped)
     assert project["project"]["scripts"]["hswm-p1-gate-diagnostic"] == (
         "hswm.diagnostics.p1_gate:main"
+    )
+    assert project["project"]["scripts"]["hswm-verify-efficacy"] == (
+        "scripts.verify_efficacy_claims:main"
     )
 
 
@@ -190,7 +219,7 @@ def test_sdist_carries_every_directory_the_test_suite_imports() -> None:
             f"tests/ imports from {directory}/ but MANIFEST.in has no "
             f"`recursive-include {directory} *.py` — it will be absent from the sdist"
         )
-        if directory == "tests":
+        if directory in {"tests", "_research"}:
             continue
         assert directory in packages, (
             f"tests/ imports from {directory}/ but [tool.setuptools].packages does "

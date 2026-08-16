@@ -30,9 +30,9 @@ Cellular sheaf는 cell complex 또는 graph/hypergraph의 incidence 위에서 �
 
 두 endpoint `u,v`가 edge `e`에서 호환된다는 뜻은
 
-\[
+```math
 F_{u\trianglelefteq e}x_u=F_{v\trianglelefteq e}x_v
-\]
+```
 
 이다. 같은 값을 가져야 한다는 말이 아니다. **각자 다른 좌표계의 값을 관계에 맞는
 번역기를 통과시킨 뒤 같아야 한다**는 뜻이다. 이것이 단순 consensus나 평균과 sheaf의
@@ -62,29 +62,29 @@ LLM function이 판단할 수 있다.
 Graph 위의 0-cochain `x`는 모든 vertex stalk에서 하나씩 값을 고른 것이다. Coboundary는
 각 edge에서 restriction mismatch를 만든다.
 
-\[
+```math
 (\delta x)_e=F_{v\trianglelefteq e}x_v-F_{u\trianglelefteq e}x_u
-\]
+```
 
 Degree-zero sheaf Laplacian과 consistency energy는
 
-\[
+```math
 L_F=\delta^*\delta,
 \qquad
 E_F(x)=\|\delta x\|^2=\langle x,L_Fx\rangle
-\]
+```
 
 이다. `E_F=0`이면 모든 seam에서 호환되며
 
-\[
+```math
 \Gamma(X;F)=\ker\delta=\ker L_F=H^0(X;F)
-\]
+```
 
 가 global section space다. Higher cohomology
 
-\[
-H^k(X;F)=\ker\delta^k/\operatorname{im}\delta^{k-1}
-\]
+```math
+H^k(X;F)=\ker\delta^k/\mathrm{im}\,\delta^{k-1}
+```
 
 는 local data가 globalize되지 못하는 obstruction이나 남는 자유도를 탐지한다. 단 이
 대수적 obstruction을 곧바로 “의미 모순”이라고 부르면 안 된다. 어떤 cell/cochain이 실제

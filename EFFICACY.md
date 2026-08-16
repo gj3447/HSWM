@@ -42,7 +42,7 @@ The broader claims do not pass:
 | QKV / semantic-layer query state | **heterogeneous supplied-program mechanism passes; deployable uplift unproved** | 128/128 synthetic namespace cases over 4 templates; B1 recurrence fails; 2Wiki 132/132 uses evaluator-supplied facts/path |
 | durable learned-state publication | **partial mechanism only** | P1 has immutable snapshots, WAL/FULL staging, epoch CAS, and activation receipts; broader S4 replay/signature runtime remains absent |
 
-Run `python verify_efficacy_claims.py --pretty` to reconstruct the selected
+Run `hswm-verify-efficacy --pretty` to reconstruct the selected
 machine-readable headline from the checked-in JSON receipts. The command fails
 closed if one of its declared metrics or claim boundaries drifts; qualitative
 non-claims still require this document and the linked receipts.
@@ -335,7 +335,7 @@ Core source-tree verification is lightweight:
 
 ```bash
 uv sync --extra dev
-uv run python verify_efficacy_claims.py --pretty
+uv run --locked hswm-verify-efficacy --pretty
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 uv run pytest -q -p no:cacheprovider
 ```
 

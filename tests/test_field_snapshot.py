@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 
 import field_snapshot as fs
-import legacy_adapter as la
+from hswm.substrate import legacy_adapter as la
 import readouts
 import traversal
 import world_builder as wb

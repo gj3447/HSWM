@@ -11,7 +11,7 @@ import pytest
 
 import bge_m3_embed as bge
 import h3_b3_falsifier as h3
-import h3_b3_manifest as manifest
+from hswm.evaluation.h3 import b3_manifest as manifest
 import h3_b3_prepare as prep
 import h3_fresh_manifest as fresh
 from world_ir import canonical_json
@@ -20,6 +20,24 @@ from world_ir import canonical_json
 def _write_canonical(path: Path, value) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(canonical_json(value) + "\n", encoding="utf-8")
+
+
+def test_repository_root_discovery_preserves_source_checkout_root():
+    expected = Path(__file__).resolve().parents[1]
+    assert manifest.REPO_ROOT == expected
+    assert manifest._discover_repository_root(manifest.__file__) == expected
+
+
+def test_repository_root_discovery_is_independent_of_module_depth(tmp_path):
+    (tmp_path / "pyproject.toml").write_text("[project]\n", encoding="utf-8")
+    ontology = tmp_path / "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json"
+    ontology.parent.mkdir()
+    ontology.write_text("{}\n", encoding="utf-8")
+    anchor = tmp_path / "src/hswm/evaluation/h3/deeper/module.py"
+    anchor.parent.mkdir(parents=True)
+    anchor.write_text("# anchor\n", encoding="utf-8")
+
+    assert manifest._discover_repository_root(anchor) == tmp_path
 
 
 def _snapshot(tmp_path: Path) -> Path:

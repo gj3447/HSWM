@@ -1,6 +1,6 @@
 import numpy as np
 
-import h3_title_anchor_falsifier as h3
+from hswm.evaluation.h3 import title_anchor_falsifier as h3
 
 
 def test_cluster_bootstrap_uses_components_and_detects_positive_delta():

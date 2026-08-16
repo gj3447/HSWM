@@ -1,16 +1,16 @@
 {
   "$schema": "../schemas/hswm_path_catalog.v1.schema.json",
   "concept_counts": {
-    "hswm:repo:boundary": 72,
-    "hswm:repo:cells": 57,
-    "hswm:repo:evaluation": 223,
-    "hswm:repo:evidence": 684,
-    "hswm:repo:field": 213,
-    "hswm:repo:history": 297,
+    "hswm:repo:boundary": 75,
+    "hswm:repo:cells": 55,
+    "hswm:repo:evaluation": 236,
+    "hswm:repo:evidence": 694,
+    "hswm:repo:field": 212,
+    "hswm:repo:history": 305,
     "hswm:repo:identity": 36,
-    "hswm:repo:infrastructure": 320,
-    "hswm:repo:learning": 485,
-    "hswm:repo:substrate": 54
+    "hswm:repo:infrastructure": 354,
+    "hswm:repo:learning": 496,
+    "hswm:repo:substrate": 51
   },
   "entries": [
     {
@@ -1863,6 +1863,33 @@
       ],
       "kind": "python",
       "path": "_research/competitor_absorption/verify_sources.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation",
+        "hswm:repo:evidence"
+      ],
+      "kind": "python",
+      "path": "_research/efficacy/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation",
+        "hswm:repo:evidence"
+      ],
+      "kind": "python",
+      "path": "_research/efficacy/b2_routing_signal.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation",
+        "hswm:repo:evidence"
+      ],
+      "kind": "python",
+      "path": "_research/efficacy/e1_conditional_traversal.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -5345,6 +5372,38 @@
     },
     {
       "concepts": [
+        "hswm:repo:evidence"
+      ],
+      "kind": "python",
+      "path": "_research/longdoc/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evidence"
+      ],
+      "kind": "python",
+      "path": "_research/longdoc/expB_longdoc.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evidence"
+      ],
+      "kind": "python",
+      "path": "_research/material_extraction/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evidence"
+      ],
+      "kind": "python",
+      "path": "_research/material_extraction/r2_material_extract.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
         "hswm:repo:evidence",
         "hswm:repo:learning"
       ],
@@ -6092,6 +6151,30 @@
     },
     {
       "concepts": [
+        "hswm:repo:evidence"
+      ],
+      "kind": "python",
+      "path": "_research/substrate_bench/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evidence"
+      ],
+      "kind": "python",
+      "path": "_research/substrate_bench/substrate_bench.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evidence"
+      ],
+      "kind": "python",
+      "path": "_research/substrate_bench/traversal_bench.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
         "hswm:repo:history",
         "hswm:repo:infrastructure"
       ],
@@ -6185,15 +6268,6 @@
         "hswm:repo:infrastructure"
       ],
       "kind": "python",
-      "path": "b2_routing_signal.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
       "path": "bge_m3_embed.py",
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     },
@@ -6252,16 +6326,6 @@
     },
     {
       "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:substrate"
-      ],
-      "kind": "python",
-      "path": "certified_cut_compare.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
         "hswm:repo:evaluation",
         "hswm:repo:evidence",
         "hswm:repo:history",
@@ -6270,16 +6334,6 @@
       ],
       "kind": "json",
       "path": "certified_cut_comparison_result.json",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:substrate"
-      ],
-      "kind": "python",
-      "path": "certified_readout.py",
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     },
     {
@@ -6324,32 +6378,12 @@
     },
     {
       "concepts": [
-        "hswm:repo:boundary",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "cli_provider_transport.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
         "hswm:repo:cells",
         "hswm:repo:history",
         "hswm:repo:infrastructure"
       ],
       "kind": "python",
       "path": "composition.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:evaluation",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "diagnose.py",
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     },
     {
@@ -6436,15 +6470,6 @@
     {
       "concepts": [
         "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "e1_conditional_traversal.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
         "hswm:repo:infrastructure",
         "hswm:repo:substrate"
       ],
@@ -6467,15 +6492,6 @@
       "kind": "json",
       "path": "evidence/WORLD_COMPILER_V2_OSS_LOCK_2026-07-21.json",
       "storage_role": "CANONICAL_DIRECTORY"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "expB_longdoc.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
     },
     {
       "concepts": [
@@ -6767,16 +6783,6 @@
     },
     {
       "concepts": [
-        "hswm:repo:evaluation",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "falsifier.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
         "hswm:repo:cells",
         "hswm:repo:history",
         "hswm:repo:infrastructure"
@@ -6935,16 +6941,6 @@
         "hswm:repo:infrastructure"
       ],
       "kind": "python",
-      "path": "h3_b3_manifest.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:cells",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
       "path": "h3_b3_preflight.py",
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     },
@@ -6972,33 +6968,12 @@
       "concepts": [
         "hswm:repo:cells",
         "hswm:repo:evaluation",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "h3_title_anchor_falsifier.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:cells",
-        "hswm:repo:evaluation",
         "hswm:repo:evidence",
         "hswm:repo:history",
         "hswm:repo:infrastructure"
       ],
       "kind": "json",
       "path": "h3_title_anchor_result.json",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:boundary",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "hswm_artifact_layout.py",
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     },
     {
@@ -7105,16 +7080,6 @@
     {
       "concepts": [
         "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:learning"
-      ],
-      "kind": "python",
-      "path": "hswm_token_learning_contract.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
         "hswm:repo:infrastructure"
       ],
       "kind": "python",
@@ -7153,55 +7118,6 @@
     },
     {
       "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:learning"
-      ],
-      "kind": "python",
-      "path": "learned.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:learning"
-      ],
-      "kind": "python",
-      "path": "learned_v2.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:learning"
-      ],
-      "kind": "python",
-      "path": "learned_v3_additive.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:substrate"
-      ],
-      "kind": "python",
-      "path": "legacy_adapter.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "llm_judgment_loop.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
         "hswm:repo:evidence"
       ],
       "kind": "json",
@@ -7234,15 +7150,6 @@
       ],
       "kind": "python",
       "path": "model_deployment_receipt.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "neo4j_loader.py",
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     },
     {
@@ -7333,6 +7240,24 @@
       ],
       "kind": "json",
       "path": "ontology/history/LEGACY_ROOT_PATHS.v1.json",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:boundary",
+        "hswm:repo:history"
+      ],
+      "kind": "json",
+      "path": "ontology/history/PYTHON_ROOT_CLASSIFICATION.v1.json",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:boundary",
+        "hswm:repo:history"
+      ],
+      "kind": "json",
+      "path": "ontology/history/PYTHON_ROOT_MIGRATIONS.W2.v2.json",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -7467,16 +7392,6 @@
         "hswm:repo:learning"
       ],
       "kind": "python",
-      "path": "p1_rank_invariance_diagnostic.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:learning"
-      ],
-      "kind": "python",
       "path": "p1_run_real.py",
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     },
@@ -7488,16 +7403,6 @@
       ],
       "kind": "python",
       "path": "p1_weighted_walk.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:learning"
-      ],
-      "kind": "python",
-      "path": "p1v2_l0_diagnose.py",
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     },
     {
@@ -9234,16 +9139,6 @@
         "hswm:repo:substrate"
       ],
       "kind": "python",
-      "path": "r2_material_extract.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:substrate"
-      ],
-      "kind": "python",
       "path": "r2_ml_walk.py",
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     },
@@ -9296,15 +9191,6 @@
       ],
       "kind": "python",
       "path": "readouts.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "real_run.py",
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     },
     {
@@ -10275,7 +10161,23 @@
         "hswm:repo:boundary"
       ],
       "kind": "json",
+      "path": "schemas/hswm_python_root_classification.v1.schema.json",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:boundary"
+      ],
+      "kind": "json",
       "path": "schemas/hswm_python_root_migrations.v1.schema.json",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:boundary"
+      ],
+      "kind": "json",
+      "path": "schemas/hswm_python_root_migrations.v2.schema.json",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -10316,6 +10218,15 @@
       ],
       "kind": "python",
       "path": "scripts/validate_repository_ontology.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:boundary",
+        "hswm:repo:evaluation"
+      ],
+      "kind": "python",
+      "path": "scripts/verify_efficacy_claims.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -10384,7 +10295,70 @@
     },
     {
       "concepts": [
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "markdown",
+      "path": "src/README.md",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/certified_cut_compare/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/certified_cut_compare/__main__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/certified_readout/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/cli_provider_transport/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/diagnose/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/diagnose/__main__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
         "hswm:repo:evaluation",
+        "hswm:repo:history",
         "hswm:repo:infrastructure",
         "hswm:repo:learning"
       ],
@@ -10394,6 +10368,7 @@
     },
     {
       "concepts": [
+        "hswm:repo:history",
         "hswm:repo:infrastructure",
         "hswm:repo:learning"
       ],
@@ -10403,6 +10378,7 @@
     },
     {
       "concepts": [
+        "hswm:repo:history",
         "hswm:repo:infrastructure",
         "hswm:repo:learning"
       ],
@@ -10412,10 +10388,74 @@
     },
     {
       "concepts": [
+        "hswm:repo:evaluation",
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/falsifier/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/h3_b3_manifest/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/h3_b3_manifest/__main__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation",
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/h3_title_anchor_falsifier/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation",
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/h3_title_anchor_falsifier/__main__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
         "hswm:repo:infrastructure"
       ],
       "kind": "python",
       "path": "src/hswm/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm/artifacts/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm/artifacts/layout.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -10436,6 +10476,42 @@
       ],
       "kind": "python",
       "path": "src/hswm/diagnostics/p1_gate.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm/evaluation/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm/evaluation/h3/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm/evaluation/h3/b3_manifest.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm/evaluation/h3/title_anchor_falsifier.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -10482,6 +10558,401 @@
       ],
       "kind": "python",
       "path": "src/hswm/experiments/f5v2/topic_cache.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm/infrastructure/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm/infrastructure/cli_provider_transport.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/learning/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/learning/p1/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/learning/p1/rank_invariance.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/learning/p1v2/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/learning/p1v2/l0_diagnose.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/learning/token_learning_contract.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/prototypes/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/prototypes/diagnose.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation",
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/prototypes/falsifier.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/prototypes/learned.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/prototypes/learned_v2.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/prototypes/learned_v3_additive.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/prototypes/llm_judgment_loop.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/prototypes/neo4j_loader.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/prototypes/real_run.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/prototypes/synth.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:learning"
+      ],
+      "kind": "python",
+      "path": "src/hswm/prototypes/synth_longdoc.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:substrate"
+      ],
+      "kind": "python",
+      "path": "src/hswm/substrate/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:substrate"
+      ],
+      "kind": "python",
+      "path": "src/hswm/substrate/certified_cut_compare.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:substrate"
+      ],
+      "kind": "python",
+      "path": "src/hswm/substrate/certified_readout.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:substrate"
+      ],
+      "kind": "python",
+      "path": "src/hswm/substrate/legacy_adapter.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:infrastructure",
+        "hswm:repo:substrate"
+      ],
+      "kind": "python",
+      "path": "src/hswm/substrate/supersede_ledger.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm_artifact_layout/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hswm_token_learning_contract/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/learned/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/learned_v2/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/learned_v3_additive/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/learned_v3_additive/__main__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/legacy_adapter/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/llm_judgment_loop/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/llm_judgment_loop/__main__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/neo4j_loader/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/neo4j_loader/__main__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/p1_rank_invariance_diagnostic/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/p1_rank_invariance_diagnostic/__main__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/p1v2_l0_diagnose/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/p1v2_l0_diagnose/__main__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/real_run/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/real_run/__main__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/supersede_ledger/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/synth/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/synth_longdoc/__init__.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -10541,17 +11012,6 @@
     },
     {
       "concepts": [
-        "hswm:repo:evaluation",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:substrate"
-      ],
-      "kind": "python",
-      "path": "substrate_bench.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
         "hswm:repo:evidence",
         "hswm:repo:history",
         "hswm:repo:infrastructure"
@@ -10570,35 +11030,6 @@
       ],
       "kind": "json",
       "path": "substrate_bench_results.json",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "supersede_ledger.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:substrate"
-      ],
-      "kind": "python",
-      "path": "synth.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:substrate"
-      ],
-      "kind": "python",
-      "path": "synth_longdoc.py",
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     },
     {
@@ -10733,6 +11164,14 @@
       ],
       "kind": "python",
       "path": "tests/test_entity_binding.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation"
+      ],
+      "kind": "python",
+      "path": "tests/test_evaluation_provider_import_compatibility.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -11016,7 +11455,23 @@
         "hswm:repo:evaluation"
       ],
       "kind": "python",
+      "path": "tests/test_learning_import_compatibility.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation"
+      ],
+      "kind": "python",
       "path": "tests/test_legacy_adapter.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation"
+      ],
+      "kind": "python",
+      "path": "tests/test_markdown_rendering_contract.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -11256,6 +11711,14 @@
         "hswm:repo:evaluation"
       ],
       "kind": "python",
+      "path": "tests/test_prototype_import_compatibility.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation"
+      ],
+      "kind": "python",
       "path": "tests/test_qkv_b1_development_falsifier.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
@@ -11328,6 +11791,14 @@
         "hswm:repo:evaluation"
       ],
       "kind": "python",
+      "path": "tests/test_research_source_layout.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation"
+      ],
+      "kind": "python",
       "path": "tests/test_semantic_2wiki_oracle.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
@@ -11361,6 +11832,14 @@
       ],
       "kind": "python",
       "path": "tests/test_stats_protocol.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation"
+      ],
+      "kind": "python",
+      "path": "tests/test_substrate_import_compatibility.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -11451,18 +11930,6 @@
     {
       "concepts": [
         "hswm:repo:evaluation",
-        "hswm:repo:field",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure",
-        "hswm:repo:substrate"
-      ],
-      "kind": "python",
-      "path": "traversal_bench.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:evaluation",
         "hswm:repo:evidence",
         "hswm:repo:history",
         "hswm:repo:infrastructure",
@@ -11503,13 +11970,11 @@
     },
     {
       "concepts": [
-        "hswm:repo:evaluation",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
+        "hswm:repo:evaluation"
       ],
-      "kind": "python",
-      "path": "verify_efficacy_claims.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
+      "kind": "markdown",
+      "path": "verification/README.md",
+      "storage_role": "CANONICAL_DIRECTORY"
     },
     {
       "concepts": [
@@ -11562,7 +12027,7 @@
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     }
   ],
-  "entry_count": 1301,
+  "entry_count": 1357,
   "ontology": "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json",
   "schema_version": "hswm-path-catalog/v1"
 }

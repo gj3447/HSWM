@@ -12,7 +12,7 @@ import tomllib
 
 import pytest
 
-import cli_provider_transport as cli
+from hswm.infrastructure import cli_provider_transport as cli
 import recorded_llm_extractor as rx
 from title_anchor_builder import ParagraphInputV1
 

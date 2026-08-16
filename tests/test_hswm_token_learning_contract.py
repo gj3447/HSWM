@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from hswm_token_learning_contract import (
+from hswm.learning.token_learning_contract import (
     TokenLearningContractError,
     make_token_learning_receipt,
     make_token_trajectory,

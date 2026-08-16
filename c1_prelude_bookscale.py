@@ -34,7 +34,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
 
-from hswm_artifact_layout import default_artifact_path
+from hswm.artifacts.layout import default_artifact_path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)

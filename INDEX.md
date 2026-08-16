@@ -41,9 +41,9 @@ engineering PASS 단독으로 과학적 효능을 선언하지 않는다.
 
 2026-07-22의 핵심 수정은 “고정된 1층/2층”을 없앤 것이다.
 
-\[
-\operatorname{compose}_{\beta}(H_1,\ldots,H_n)\in\mathsf{HSWM}
-\]
+```math
+\mathrm{compose}_{\beta}(H_1,\ldots,H_n)\in\mathsf{HSWM}
+```
 
 - HSWM은 typed ports와 evidence-bearing n-ary connectors를 가진 open weighted
   hypergraph다.
@@ -77,7 +77,7 @@ weight/routing/topology 변화로 압축되어야 하며, HSWM 자체가 LLM 함
 멀티에이전트 신경망이라는 선언이다. 원문과 권위 경계는
 [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md),
 토큰 저장을 학습으로 오인하지 않게 하는 fail-closed 인과 계약은
-[`hswm_token_learning_contract.py`](hswm_token_learning_contract.py)에 있다. 이는 목표 정체성과
+[`token_learning_contract.py`](src/hswm/learning/token_learning_contract.py)에 있다. 이는 목표 정체성과
 engineering contract이며 현재 효능·과학적 유일성 주장이 아니다.
 
 2026-08-15 사용자 정전은 개인 거버넌스 도구와 절차 증식 자체도 라그나로크가 될 수 있다고
@@ -188,7 +188,7 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 | [`README.md`](README.md) | 공개 구현의 현재 claim boundary와 실행법 |
 | [`EFFICACY.md`](EFFICACY.md) | 효능 주장과 반증 결과의 장부 |
 | [`world_ir.py`](world_ir.py), [`world_compiler.py`](world_compiler.py) | evidence-preserving world compiler |
-| [`field_snapshot.py`](field_snapshot.py), [`certified_readout.py`](certified_readout.py) | immutable field cut와 fail-closed readout |
+| [`field_snapshot.py`](field_snapshot.py), [`certified_readout.py`](src/hswm/substrate/certified_readout.py) | immutable field cut와 fail-closed readout |
 | [`prom_search_hswm/`](prom_search_hswm/) | PROM→HSWM, field algebra, federated merge, open-composition 연구 코드와 영수증 |
 | [`prom_search_hswm/hswm_open_kernel.py`](prom_search_hswm/hswm_open_kernel.py) | v2r3 open self-similar deterministic kernel |
 | [`prom_search_hswm/test_hswm_open_kernel.py`](prom_search_hswm/test_hswm_open_kernel.py) | v2r3 반례·불변식 테스트 |
@@ -197,7 +197,7 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 | [`prom_search_hswm/test_hswm_bond_readout.py`](prom_search_hswm/test_hswm_bond_readout.py) | neutral parity·coverage·monotonic suppression·shift invariance 19 tests |
 | [`prom_search_hswm/fsm/hswm_plasticity_loop.v1.json`](prom_search_hswm/fsm/hswm_plasticity_loop.v1.json) | weight→routing→topology 후보의 bounded proposal/evaluation/activation 계약 |
 | [`PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md`](PROM_9_HSWM_LLM_FUNCTION_SEMANTIC_NEURAL_NETWORK_2026-07-24.md) / [`prom9_semantic_neural_network.v1.json`](prom_search_hswm/prom9_semantic_neural_network.v1.json) / [`prom9_protocol.py`](prom_search_hswm/prom9_protocol.py) | LLM 3-role typed 함수망→외부 outcome→eligibility→fast bond→slow weight 승격을 동등예산 대조군과 함께 고정한 PROM-9 |
-| [`hswm_token_learning_contract.py`](hswm_token_learning_contract.py) / [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) | 최소 token/action trajectory를 eligibility→outcome→activated candidate에 결속하고 단일 causal-test receipt 전에는 학습 규칙 주장을 막는 계약과 사용자 정전 |
+| [`token_learning_contract.py`](src/hswm/learning/token_learning_contract.py) / [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) | 최소 token/action trajectory를 eligibility→outcome→activated candidate에 결속하고 단일 causal-test receipt 전에는 학습 규칙 주장을 막는 계약과 사용자 정전 |
 | [`prom_search_hswm/evidence/`](prom_search_hswm/evidence/) | preregistration, evidence, neutral judge packet, injected negative |
 | [`_research/competitor_absorption/`](_research/competitor_absorption/) | 외부 paper–code source lock, license gate, default-off absorption manifest |
 | [`_research/shared_field_hypothesis/`](_research/shared_field_hypothesis/) | shared field 대 separate heads의 fail-closed 동등예산 실험 계약 |

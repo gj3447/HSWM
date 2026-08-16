@@ -15,7 +15,7 @@ import pytest
 
 from hypergraph import Hypergraph
 from readouts import retrieve, supersede
-from supersede_ledger import (
+from hswm.substrate.supersede_ledger import (
     AdmissionError,
     LedgerConflictError,
     SupersedeEvent,

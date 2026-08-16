@@ -17,7 +17,8 @@ def test_refreeze_refuses_non_abort_receipt_before_tokenizer_load(tmp_path):
     result = subprocess.run(
         [
             sys.executable,
-            "p1v2_l0_refreeze.py",
+            "-m",
+            "p1v2_l0_refreeze",
             "--prior-budget", str(prior),
             "--abort-receipt", str(abort),
             "--public-manifest", "missing",

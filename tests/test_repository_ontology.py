@@ -57,7 +57,7 @@ def test_root_compatibility_surface_and_catalog_are_current() -> None:
     result = validate_checkout(data)
     assert result["concepts"] == 10
     assert result["paths"] > 1_000
-    assert result["legacy_root_paths"] > 250
+    assert result["legacy_root_paths"] > 225
     legacy = json.loads((ROOT / data["legacy_root_inventory"]).read_text(encoding="utf-8"))
     catalog = json.loads((ROOT / data["path_catalog"]).read_text(encoding="utf-8"))
     assert legacy["$schema"] == "../../schemas/hswm_legacy_root_paths.v1.schema.json"
@@ -67,11 +67,11 @@ def test_root_compatibility_surface_and_catalog_are_current() -> None:
 def test_python_root_migrations_are_pinned_and_root_count_only_decreases() -> None:
     data = load_repository_ontology()
     result = validate_checkout(data)
-    assert result["python_root_migrations"] == 32
-    assert len(list(ROOT.glob("*.py"))) == 116
-    assert result["root_python_sha_locked"] == 79
-    assert result["root_python_replay_locked"] == 24
-    assert result["root_python_review_required"] == 13
+    assert result["python_root_migrations"] == 65
+    assert len(list(ROOT.glob("*.py"))) == 83
+    assert result["root_python_sha_locked"] == 73
+    assert result["root_python_replay_locked"] == 10
+    assert result["root_python_review_required"] == 0
 
     for relative in data["python_root_migrations"]:
         manifest = json.loads((ROOT / relative).read_text(encoding="utf-8"))
@@ -83,8 +83,13 @@ def test_python_root_migrations_are_pinned_and_root_count_only_decreases() -> No
         (ROOT / data["python_root_classification"]).read_text(encoding="utf-8")
     )
     assert classification["baseline_root_python_count"] == 144
-    assert classification["observed_root_python_count"] == 116
-    assert classification["counts"]["partition_total"] == 116
+    assert classification["observed_root_python_count"] == 83
+    assert classification["counts"]["partition_total"] == 83
+
+    replay = data["legacy_replay"]
+    assert replay["source_of_truth"] == "python_root_migrations"
+    assert replay["workspace_kind"] == "detached-standalone-clone"
+    assert (ROOT / replay["tool"]).is_file()
 
 
 def test_transformer_analogy_requires_an_optimizer_equivalent() -> None:

@@ -6,7 +6,10 @@ from pathlib import Path
 
 import pytest
 
-from f2_delta_w_credit import PoolShortfall, _validate_declared_cohort
+from _research.f_series.f2_delta_w_credit import (
+    PoolShortfall,
+    _validate_declared_cohort,
+)
 
 
 def _sha256(path: Path) -> str:

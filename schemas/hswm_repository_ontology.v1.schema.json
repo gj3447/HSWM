@@ -14,6 +14,7 @@
     "python_root_migrations",
     "python_root_classification",
     "path_catalog",
+    "legacy_replay",
     "learning_analogy",
     "nonclaims"
   ],
@@ -52,6 +53,22 @@
     },
     "python_root_classification": {"type": "string", "minLength": 1},
     "path_catalog": {"type": "string"},
+    "legacy_replay": {
+      "type": "object",
+      "required": ["tool", "command", "source_of_truth", "workspace_kind", "invariants"],
+      "properties": {
+        "tool": {"type": "string", "minLength": 1},
+        "command": {"type": "string", "minLength": 1},
+        "source_of_truth": {"const": "python_root_migrations"},
+        "workspace_kind": {"const": "detached-standalone-clone"},
+        "invariants": {
+          "type": "array",
+          "minItems": 4,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false
+    },
     "learning_analogy": {"type": "object"},
     "nonclaims": {"type": "array", "items": {"type": "string"}}
   },

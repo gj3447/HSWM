@@ -1,7 +1,7 @@
 """P1 run-glue splitter: disjointness, sizes, determinism, eligibility rules."""
 import pytest
 
-from p1_run_real import split_episodes
+from _research.p1_closed_loop.p1_run_real import split_episodes
 
 TITLES = {f"P{i:03d}" for i in range(30)}
 

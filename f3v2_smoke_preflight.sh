@@ -10,7 +10,7 @@
 #      (the box may be busy with other sealed runs — this script never
 #      parallelizes and inherits the harness's bounded-retry timeouts)
 #
-# Usage: ./f3v2_smoke_preflight.sh [extra f3v2_arms.py flags]
+# Usage: ./f3v2_smoke_preflight.sh [extra _research.f_series.f3v2_arms flags]
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -53,7 +53,7 @@ echo -n "      receiver: "
 curl -s -m 10 "$RECV/v1/models" | python3 -c 'import json,sys; print([m["id"] for m in json.load(sys.stdin)["data"]])'
 
 echo "[4/4] arms smoke (planned new live calls: 16 <= 20, sequential) ..."
-exec .venv/bin/python f3v2_arms.py --smoke \
+exec .venv/bin/python -m _research.f_series.f3v2_arms --smoke \
   --endpoint "$DONOR" --donor-model qwen3.6-27b \
   --receiver-endpoint "$RECV" --receiver-model qwen3-4b-real \
   "$@"

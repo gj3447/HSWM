@@ -56,6 +56,6 @@ route through `hswm.artifacts.layout.default_artifact_path`.
 Writers already routed through the helper:
 `_research/efficacy/b2_routing_signal.py`,
 `_research/efficacy/e1_conditional_traversal.py`, and
-`c1_prelude_bookscale.py`. Untracked/WIP
-scripts (e.g. `p1_run_real.py`) are out of scope — route them when they are
-adopted as tracked.
+`_research/bookscale/c1_prelude_bookscale.py`. The relocated
+`_research/p1_closed_loop/p1_run_real.py` intentionally preserves its locked
+root artifact names through explicit repository-root discovery.

@@ -56,7 +56,7 @@ for _import_root in (REPO_ROOT, REPO_ROOT / "src"):
 import numpy as np
 
 import metrics
-import stats_protocol as sp
+from hswm.evaluation import stats_protocol as sp
 from hswm.prototypes import synth_longdoc as sl
 
 MARGIN = 0.03

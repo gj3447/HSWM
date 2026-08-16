@@ -79,7 +79,6 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "p1v2_l0_measure",
         "p1v2_l0_judge",
         "p1v2_l0_judge_fixtures",
-        "p1v2_l0_refreeze",
         "p1v3_policy_environment",
         "p1v3_calibration_gate",
         "p1v3_calibration_preflight",
@@ -129,7 +128,9 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "neo4j_loader",
         "p1_rank_invariance_diagnostic",
         "p1v2_l0_diagnose",
+        "p1v2_l0_refreeze",
         "real_run",
+        "stats_protocol",
         "supersede_ledger",
         "synth",
         "synth_longdoc",
@@ -142,6 +143,9 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
     )
     assert project["project"]["scripts"]["hswm-verify-efficacy"] == (
         "scripts.verify_efficacy_claims:main"
+    )
+    assert project["project"]["scripts"]["hswm-legacy-replay"] == (
+        "hswm.infrastructure.legacy_replay:main"
     )
     assert {
         "data/README.md",
@@ -160,6 +164,16 @@ def test_f5v2_legacy_import_packages_resolve_to_canonical_objects() -> None:
     assert f5v2_operators.CPL1NumericPacket is operators.CPL1NumericPacket
     assert f5v2_topic_cache.TopicBlockV1 is topic_cache.TopicBlockV1
     assert f5v2_judge.JudgeContractError is judge.JudgeContractError
+
+
+def test_w3_packaged_compatibility_imports_resolve_to_canonical_objects() -> None:
+    import p1v2_l0_refreeze
+    import stats_protocol
+    from hswm.evaluation import stats_protocol as canonical_stats
+    from hswm.learning.p1v2 import refreeze
+
+    assert p1v2_l0_refreeze.L0RefreezeError is refreeze.L0RefreezeError
+    assert stats_protocol.paired_permutation_p is canonical_stats.paired_permutation_p
 
 
 def test_default_pytest_surface_includes_public_research() -> None:

@@ -8,17 +8,14 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
-import sys
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import pytest
 
-import pytest  # noqa: E402
-
-import f3v2_arms as fa  # noqa: E402
-import f3v2_dev_smoke as smoke  # noqa: E402
-import f3v2_procedural_worlds as fw  # noqa: E402
-import f3v2_sealed_prep as prep  # noqa: E402
+from _research.f_series import SOURCE_ROOT
+from _research.f_series import f3v2_arms as fa
+from _research.f_series import f3v2_dev_smoke as smoke
+from _research.f_series import f3v2_procedural_worlds as fw
+from _research.f_series import f3v2_sealed_prep as prep
 
 SEED = 20260726
 MODEL = "scripted-model"
@@ -169,8 +166,7 @@ def test_flat_file_scores_but_stays_out_of_judgment():
     assert trr["hard"]["g_flat_file"]["trr"] == 0.5  # scored alongside
     kills = fa.evaluate_kills(trr["hard"], reps=200, seed=1)
     receipt = fa.build_receipt(
-        script_path=os.path.join(os.path.dirname(os.path.dirname(
-            os.path.abspath(__file__))), "f3v2_dev_smoke.py"),
+        script_path=SOURCE_ROOT / "f3v2_dev_smoke.py",
         config={"tier": "hard", "train_seed": SEED, "test_seed": SEED + 1},
         train_worlds=splits["train"], test_worlds=splits["test"],
         arm_results=results, trr=trr, kills=kills,

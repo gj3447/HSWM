@@ -10,16 +10,13 @@ receipt schema, and the dev-smoke dry-run end to end.
 from __future__ import annotations
 
 import json
-import os
 import re
-import sys
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import pytest
 
-import pytest  # noqa: E402
-
-import f3v2_arms as fa  # noqa: E402
-import f3v2_procedural_worlds as fw  # noqa: E402
+from _research.f_series import SOURCE_ROOT
+from _research.f_series import f3v2_arms as fa
+from _research.f_series import f3v2_procedural_worlds as fw
 
 SEED = 20260726
 MODEL = "scripted-model"
@@ -383,8 +380,7 @@ def test_receipt_schema_and_development_stage():
     trr = fa.trr_table(results)
     kills = fa.evaluate_kills(trr["hard"], reps=2000, seed=1)
     receipt = fa.build_receipt(
-        script_path=os.path.join(os.path.dirname(os.path.dirname(
-            os.path.abspath(__file__))), "f3v2_dev_smoke.py"),
+        script_path=SOURCE_ROOT / "f3v2_dev_smoke.py",
         config={"tier": "hard", "train_seed": SEED, "test_seed": SEED + 1},
         train_worlds=splits["train"], test_worlds=splits["test"],
         arm_results=results, trr=trr, kills=kills,
@@ -410,7 +406,7 @@ def test_receipt_schema_and_development_stage():
 
 # ------------------------------------------------------------- dev smoke
 def test_dev_smoke_dry_run_end_to_end(tmp_path):
-    import f3v2_dev_smoke as smoke
+    from _research.f_series import f3v2_dev_smoke as smoke
     out = tmp_path / "receipt.json"
     rc = smoke.main(["--out", str(out), "--gated"])
     assert rc == 0
@@ -437,7 +433,7 @@ def test_dev_smoke_dry_run_end_to_end(tmp_path):
 
 
 def test_dev_smoke_live_refuses_overspend_before_network(tmp_path):
-    import f3v2_dev_smoke as smoke
+    from _research.f_series import f3v2_dev_smoke as smoke
     # --live without a sealed manifest and without --dev is refused by the
     # sealed-run gate (argparse exit 2) BEFORE any endpoint is touched.
     with pytest.raises(SystemExit) as exc:

@@ -5,14 +5,15 @@
   "history_baseline_commit": "3cc7b72ecc18d1e924309ce4e20c6419552198b3",
   "baseline_root_python_count": 144,
   "applied_migration_manifests": [
-    "ontology/history/PYTHON_ROOT_MIGRATIONS.W2.v2.json"
+    "ontology/history/PYTHON_ROOT_MIGRATIONS.W2.v2.json",
+    "ontology/history/PYTHON_ROOT_MIGRATIONS.W3.v2.json"
   ],
-  "observed_root_python_count": 116,
+  "observed_root_python_count": 83,
   "counts": {
-    "SHA_LOCKED": 79,
-    "REPLAY_HISTORY_LOCKED": 24,
-    "REVIEW_REQUIRED": 13,
-    "partition_total": 116
+    "SHA_LOCKED": 73,
+    "REPLAY_HISTORY_LOCKED": 10,
+    "REVIEW_REQUIRED": 0,
+    "partition_total": 83
   },
   "classes": {
     "SHA_LOCKED": [
@@ -26,11 +27,6 @@
       "composition.py",
       "doc_builder.py",
       "entity_binding.py",
-      "f3_agent_ab_transfer_r2.py",
-      "f3_agent_ab_transfer_r3.py",
-      "f3v2_procedural_worlds.py",
-      "f3v2_sealed_prep.py",
-      "f4_topology_learning_r2.py",
       "feedback_ports.py",
       "feedback_runtime.py",
       "feedback_store.py",
@@ -78,7 +74,6 @@
       "qkv_routing.py",
       "qkv_routing_falsifier.py",
       "r1_predicate_alias.py",
-      "r3_dump_replay_artifacts.py",
       "r3_phantom_ingest.py",
       "readouts.py",
       "recorded_llm_extractor.py",
@@ -97,14 +92,6 @@
       "world_ir.py"
     ],
     "REPLAY_HISTORY_LOCKED": [
-      "b1_identity_unlock.py",
-      "f2_delta_w_credit.py",
-      "f3_agent_ab_transfer.py",
-      "f3v2_arms.py",
-      "f3v2_canary_gate.py",
-      "f3v2_dev_smoke.py",
-      "f4_topology_learning.py",
-      "f5_consolidation.py",
       "h3_artifact_lifecycle.py",
       "h3_b3_falsifier.py",
       "p1_phantom_environment.py",
@@ -114,33 +101,13 @@
       "p1v2_l0_measure.py",
       "p1v3_heldout_measure.py",
       "p1v4_replay_bundle.py",
-      "p1v4_replay_judge.py",
-      "r1_t1_retry.py",
-      "r2_ml_walk.py",
-      "r3_replay_judge.py",
-      "r3_walk_regime.py",
-      "t1_entrance_reach.py",
-      "t3_score_null.py"
+      "p1v4_replay_judge.py"
     ],
-    "REVIEW_REQUIRED": [
-      "ab_p5_pilot.py",
-      "c1_prelude_bookscale.py",
-      "f2_replay_judge.py",
-      "f3_replay_judge.py",
-      "f4_replay_judge.py",
-      "f5_replay_judge.py",
-      "hswm_core_existence_harness.py",
-      "hswm_giant_llm_harness.py",
-      "p1_run_real.py",
-      "p1v2_l0_refreeze.py",
-      "stats_protocol.py",
-      "test_hswm_core_existence_harness.py",
-      "test_hswm_giant_llm_harness.py"
-    ]
+    "REVIEW_REQUIRED": []
   },
   "class_definitions": {
-    "SHA_LOCKED": "Current source bytes are named by checked-in SHA-256 evidence; preserve the root path and bytes until a content-addressed legacy resolver exists.",
-    "REPLAY_HISTORY_LOCKED": "Replay, sibling lookup, or historical experiment topology binds the root location; migrate only as a separately versioned replay bundle.",
-    "REVIEW_REQUIRED": "No full current-source SHA lock was found, but imports, command paths, data roots, and external API compatibility still require a per-module migration audit."
+    "SHA_LOCKED": "Current source bytes are named by checked-in SHA-256 evidence; preserve each remaining root path until its whole dependency cluster has a source-pinned canonical migration.",
+    "REPLAY_HISTORY_LOCKED": "Replay or sibling topology still binds each remaining root location; exact migrated layouts are restored only in detached standalone replay workspaces.",
+    "REVIEW_REQUIRED": "No unexplained root module remains; this class must stay empty unless a newly audited migration candidate is explicitly recorded."
   }
 }

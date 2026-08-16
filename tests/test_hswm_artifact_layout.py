@@ -94,7 +94,7 @@ def test_tracked_writers_route_through_helper():
     for script in (
         "_research/efficacy/b2_routing_signal.py",
         "_research/efficacy/e1_conditional_traversal.py",
-        "c1_prelude_bookscale.py",
+        "_research/bookscale/c1_prelude_bookscale.py",
     ):
         src = (REPO / script).read_text(encoding="utf-8")
         assert "from hswm.artifacts.layout import default_artifact_path" in src, script

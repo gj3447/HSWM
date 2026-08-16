@@ -23,8 +23,8 @@
 | [`HSWM_CORE_DEV.md`](HSWM_CORE_DEV.md) | **이름 정본** — “HSWM core 개발” |
 | [`EXISTENCE_SCOREBOARD.v1.md`](EXISTENCE_SCOREBOARD.v1.md) | 부분 실존 한 장 (T0) |
 | [`hswm_core_existence_harness.v1.json`](hswm_core_existence_harness.v1.json) | 사다리·트랙·밴·dual pillars |
-| [`hswm_core_existence_harness.py`](hswm_core_existence_harness.py) | CLI (`name`/`status`/`next`/`bans`) |
-| [`test_hswm_core_existence_harness.py`](test_hswm_core_existence_harness.py) | 스모크 |
+| [`hswm_core_existence_harness.py`](_research/harnesses/hswm_core_existence_harness.py) | CLI (`name`/`status`/`next`/`bans`) |
+| [`test_hswm_core_existence_harness.py`](tests/test_hswm_core_existence_harness.py) | 스모크 |
 | F1 정본 | `FINDINGS/hswm-f1-r8-try3-2026-07-28/F1_R8_RUNBOOK.md` |
 | F1 운영 오버레이 | `…/f1_r8_operator_harness.py` |
 
@@ -32,25 +32,25 @@
 
 ```bash
 # 집중 상태 (기본)
-python3 HSWM/hswm_core_existence_harness.py status
+python3 HSWM/_research/harnesses/hswm_core_existence_harness.py status
 
 # 사람: “코어 집중 창 연다” + A2 유지 (추천 기본)
-python3 HSWM/hswm_core_existence_harness.py status \
+python3 HSWM/_research/harnesses/hswm_core_existence_harness.py status \
   --user-approved-focus \
   --identity KEEP_A2 \
   --active-track T1_F1_TYPED_FUNCTION_NETWORK
 
 # 빠른 성과만 (스코어보드 T0)
-python3 HSWM/hswm_core_existence_harness.py status --active-track T0_EXISTENCE_SCOREBOARD_CRYSTALLIZE
+python3 HSWM/_research/harnesses/hswm_core_existence_harness.py status --active-track T0_EXISTENCE_SCOREBOARD_CRYSTALLIZE
 
 # 오늘 할 일 3줄
-python3 HSWM/hswm_core_existence_harness.py next
+python3 HSWM/_research/harnesses/hswm_core_existence_harness.py next
 
 # 금지 목록
-python3 HSWM/hswm_core_existence_harness.py bans
+python3 HSWM/_research/harnesses/hswm_core_existence_harness.py bans
 
 # JSON receipt
-python3 HSWM/hswm_core_existence_harness.py json --user-approved-focus --identity KEEP_A2
+python3 HSWM/_research/harnesses/hswm_core_existence_harness.py json --user-approved-focus --identity KEEP_A2
 ```
 
 ### exit

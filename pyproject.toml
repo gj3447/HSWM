@@ -15,6 +15,7 @@ kg = ["neo4j>=5.20"]
 [project.scripts]
 hswm-p1-gate-diagnostic = "hswm.diagnostics.p1_gate:main"
 hswm-verify-efficacy = "scripts.verify_efficacy_claims:main"
+hswm-legacy-replay = "hswm.infrastructure.legacy_replay:main"
 
 [project.urls]
 Homepage = "https://github.com/gj3447/HSWM"
@@ -64,7 +65,9 @@ packages = [
   "neo4j_loader",
   "p1_rank_invariance_diagnostic",
   "p1v2_l0_diagnose",
+  "p1v2_l0_refreeze",
   "real_run",
+  "stats_protocol",
   "supersede_ledger",
   "synth",
   "synth_longdoc",
@@ -82,7 +85,6 @@ py-modules = [
   "traversal",
   "traversal_cert",
   "stale_poisoning",
-  "stats_protocol",
   "ab_p5_full",
   "recorded_llm_extractor",
   "h3_fresh_manifest",
@@ -127,7 +129,6 @@ py-modules = [
   "p1v2_l0_measure",
   "p1v2_l0_judge",
   "p1v2_l0_judge_fixtures",
-  "p1v2_l0_refreeze",
   "p1v3_policy_environment",
   "p1v3_calibration_gate",
   "p1v3_calibration_preflight",
@@ -170,7 +171,9 @@ llm_judgment_loop = "src/llm_judgment_loop"
 neo4j_loader = "src/neo4j_loader"
 p1_rank_invariance_diagnostic = "src/p1_rank_invariance_diagnostic"
 p1v2_l0_diagnose = "src/p1v2_l0_diagnose"
+p1v2_l0_refreeze = "src/p1v2_l0_refreeze"
 real_run = "src/real_run"
+stats_protocol = "src/stats_protocol"
 supersede_ledger = "src/supersede_ledger"
 synth = "src/synth"
 synth_longdoc = "src/synth_longdoc"

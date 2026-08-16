@@ -7,12 +7,7 @@ blast shortcut must fail there while passing on mid).
 """
 from __future__ import annotations
 
-import os
-import sys
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-import f3v2_procedural_worlds as fw  # noqa: E402
+from _research.f_series import f3v2_procedural_worlds as fw
 
 SEEDS = (1, 7, 20260726, 424242)
 

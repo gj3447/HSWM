@@ -1,7 +1,7 @@
 """stats_protocol must detect real effects, stay calm under null, and match hand math."""
 import numpy as np
 
-import stats_protocol as sp
+from hswm.evaluation import stats_protocol as sp
 
 
 def test_permutation_detects_real_effect_and_holds_under_null():

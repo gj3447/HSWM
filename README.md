@@ -227,10 +227,10 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | `evidence/`, `prereg/`, `manifests/`, `results/`, `receipts/` | typed research artifacts and direct measurements |
 | `docs/research/`, `docs/assets/` | narrative research material and public visual assets |
 
-The root Python count is now **116**, down from 148. The remaining files are not
-all permanent architecture: 79 are byte-bound by checked-in SHA evidence, 24
-belong to replay/history clusters whose root topology still has runtime meaning,
-and 13 remain under explicit per-module review. The exact disjoint partition is
+The root Python count is now **83**, down from 148. The remaining files are an
+explicit compatibility surface: 73 are byte-bound by checked-in SHA evidence and
+10 belong to replay clusters that still share current root-relative topology.
+There are no unexplained review candidates. The exact disjoint partition is
 machine-readable in
 [`PYTHON_ROOT_CLASSIFICATION.v1.json`](ontology/history/PYTHON_ROOT_CLASSIFICATION.v1.json);
 new Python implementation may not enter the root compatibility inventory.
@@ -245,10 +245,30 @@ exceptions are explicit in
 Completed Python moves are source-pinned in
 [`PYTHON_ROOT_MIGRATIONS.v1.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.v1.json)
 and
-[`PYTHON_ROOT_MIGRATIONS.W2.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W2.v2.json).
+[`PYTHON_ROOT_MIGRATIONS.W2.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W2.v2.json),
+with the replay-backed third wave in
+[`PYTHON_ROOT_MIGRATIONS.W3.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W3.v2.json).
 **New Python modules or research artifacts must not be added to the root.** New
 code goes under `src/hswm/`; artifacts are routed by kind according to
 [`docs/research/ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).
+
+Old commands are reproduced in their original root layout without restoring
+those files into the active checkout:
+
+```bash
+uv run hswm-legacy-replay verify f3_agent_ab_transfer_r3.py
+uv run hswm-legacy-replay materialize \
+  f3_agent_ab_transfer_r3.py /tmp/hswm-f3-r3-replay
+cd /tmp/hswm-f3-r3-replay
+uv run python f3_agent_ab_transfer_r3.py --smoke
+```
+
+The materializer creates a clean detached standalone clone at the manifest's
+exact source commit, verifies every bound source SHA-256, and writes its receipt
+inside `.git/`; it never writes an old path into this working tree. Git-tracked
+code and paths are reproduced exactly. External datasets, model services, and
+ignored caches remain separate evidence dependencies and are not invented by
+the materializer.
 
 ## Method and contribution boundary
 

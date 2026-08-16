@@ -64,15 +64,15 @@
 | **이 문서** | 이름·범위·두 축 (사람이 말하는 라벨) |
 | [`EXISTENCE_SCOREBOARD.v1.md`](EXISTENCE_SCOREBOARD.v1.md) | 실존 한 장 |
 | [`HSWM_CORE_EXISTENCE_CONCENTRATION.md`](HSWM_CORE_EXISTENCE_CONCENTRATION.md) | 7일 창·밴 리스트 상세 |
-| [`hswm_core_existence_harness.py`](hswm_core_existence_harness.py) | go/no-go CLI (`status` / `next` / `bans`) |
+| [`hswm_core_existence_harness.py`](_research/harnesses/hswm_core_existence_harness.py) | go/no-go CLI (`status` / `next` / `bans`) |
 | F1 실행 정본 | `FINDINGS/hswm-f1-r8-try3-2026-07-28/F1_R8_RUNBOOK.md` |
 
 ```bash
 # “HSWM core 개발 지금 어디?”
-python3 HSWM/hswm_core_existence_harness.py status \
+python3 HSWM/_research/harnesses/hswm_core_existence_harness.py status \
   --user-approved-focus --identity KEEP_A2
 
-python3 HSWM/hswm_core_existence_harness.py next \
+python3 HSWM/_research/harnesses/hswm_core_existence_harness.py next \
   --user-approved-focus --identity KEEP_A2
 ```
 

@@ -3,6 +3,11 @@
 > HSWM = Hypergraph Semantic Weight Map. 지향 정체성은 함수 단위가 LLM으로 실행되는 하이퍼그래프 시멘틱 신경망이다. 현재 측정으로 방어 가능한 범위는 **evidence-preserving memory substrate + 좁은 L0 typed-policy actuation 재현**까지이며, durable weight/topology learning은 아직 미폐쇄다. 이 인덱스는 공개 저장소의 코드·설계·실험
 > 영수증만 가리킨다.
 
+정체성, 수학, cellular runtime, 학습, 세계 자기기억, 실제 증거가 문서마다 달라 보이는
+이유와 현재의 한 통합 해석은
+[`HSWM 통합 의미 지도`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md)에 있다. 이 지도는
+새 정전이나 효능 승격이 아니라 기존 authority와 claim boundary를 연결하는 진입점이다.
+
 ## 온톨로지 우선 저장소 지도
 
 공개 탐색의 정본은 [`ontology/`](ontology/)다. `identity → substrate → field ↔ cells
@@ -27,7 +32,7 @@ Python은 148개에서 73개로 줄었고, 옮긴 옛 경로는 `hswm-legacy-rep
 
 | 가설 (`hypothesis_id`) | 현재 상태 | 직접 증거·경계 |
 |---|---|---|
-| `F1-larger-ai-baselines-and-retention` | `running` | r3 는 physical HTTP 200 721/1500 뒤 transport 오류로 `REFUSED` 되어 suite·verdict 가 0건이다. [durable transport](prom_search_hswm/docs/F1_DURABLE_TRANSPORT_CONTRACT_20260727.md)는 로컬 fault battery를 통과했지만 DGX 실배치·actual-upstream disconnect·successor prereg가 남았다 |
+| `F1-larger-ai-baselines-and-retention` | `running` | [checked-in historical prereg note](prom_search_hswm/evidence/PREREG_F1_sealed_typed_function_network_20260728_amend4_output_caps.json)는 r3의 목표 1500 calls 중 access-log HTTP 200 response 721건 뒤 `REFUSED`와 r4의 435/1500 output-cap `VOID`를 기록하지만 raw access/spool artifact는 현재 tracked tree에 없다. [durable transport](prom_search_hswm/docs/F1_DURABLE_TRANSPORT_CONTRACT_20260727.md)의 [target probe receipt](receipts/HSWM_F1_TARGET_DEPLOYMENT_PROBE_20260728.json)는 actual-upstream disconnect와 SIGKILL process-crash를 공학적으로 통과했지만 power loss는 미시험이다. 현재 tracked sealed-r5에는 manifest/gold만 있고 suite·judgment가 없으므로 과학적 observation은 여전히 0건이다 |
 | `durable-cell-runtime` | `engineering_validated` | SQLite event store·outbox·typed CellPort·replay. 인프라이며 효능 증거가 아니다 |
 | `semantic-weight-metric-contract` | `engineering_validated` | [contract](research/HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT.v1.json). scalar slow-W 한정이고 operator-valued W 는 미구현이다 |
 | `operator-W-causal-mediation` | `planned` | [F2 sealed](receipts/f2_delta_w_credit_sealed_1784960618.json) 는 장부 분류상 **precursor evidence only** 다 |
@@ -164,7 +169,7 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 |---|---|---|
 | H3-B3 V5 재현성 | 이미 공개된 V5 run manifest가 고정한 source/prereg/test를 복구. 기존 refusal·효능 판정은 변경하지 않음 | [V5 prereg](H3_B3_V5_RESTART_PREREG_2026-07-20.md) · [C0 diagnosis](H3_C0_CHAIN_VIABILITY_DIAGNOSIS_2026-07-20.md) |
 | World Compiler S4.0 | 가역적 entity binding 수직 slice와 OSS 비교. `claim_weave`·`chain_viability`는 미구현 | [receipt](S4_0_REVERSIBLE_ENTITY_BINDING_2026-07-21.md) · [PROM](WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md) |
-| R3 walk-regime density dial | PhantomWiki regime-swap 사전등록과 실행 코드. 결과·성능 주장은 아직 없음 | [prereg](PREREG_R3_WALK_REGIME_2026-07-23.json) · [`r3_walk_regime.py`](r3_walk_regime.py) |
+| R3 walk-regime density dial | PhantomWiki large+sparse hard-hop에서 walk−flat `+0.0111`, LCB `+0.00085`; dense에서는 `-0.0048`. synthetic retrieval-side regime 관측이며 real-data answer uplift가 아니다 | [prereg](PREREG_R3_WALK_REGIME_2026-07-23.json) · [result](results/R3_WALK_REGIME_RESULTS_2026-07-24.md) · [`r3_walk_regime.py`](_research/f_series/r3_walk_regime.py) |
 
 ## 2026-07-22 연구 장부
 

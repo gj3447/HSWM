@@ -1,7 +1,7 @@
 # HSWM efficacy status
 
-Last reconciled: 2026-07-27 (ledger sync only; the efficacy findings below are
-unchanged from the 2026-07-23 reconciliation).
+Last reconciled: 2026-08-16 (status and evidence-inventory reconciliation; no
+historical metric was recomputed).
 
 > **Current state lives in checked-in measurements, not an external verdict service.**
 > This document covers the retrieval-substrate ladder and links the evidence used for each
@@ -10,15 +10,27 @@ unchanged from the 2026-07-23 reconciliation).
 > refuted within their stated testbeds,
 > `operator-W-causal-mediation` is `planned` with the F2 sealed receipt classified as
 > precursor evidence only, and `F1-larger-ai-baselines-and-retention` is still `running`
-> after its r3 attempt was `REFUSED` on transport with no suite and no verdict. Nothing in
-> that set is promoted to `progressive` or `canonical`. The local durable-spool repair is
-> an engineering PASS only; it has not been deployed or measured against the target DGX
-> upstream and contributes no efficacy observation.
+> without a scientific suite or verdict. A checked-in historical preregistration
+> amendment records that r3 ended `REFUSED` after an access log showed 721 HTTP 200
+> responses toward a 1500-call target; unique logical calls were not identifiable. The
+> same note records r4 as `VOID` at 435/1500 accepted calls on an output cap. The raw r3
+> access log and r4 spool are not present in the current tracked tree, so these counts are
+> historical transport notes, not current raw measurements. The subsequent durable
+> transport passed target actual-upstream
+> disconnect and SIGKILL process-crash probes; electrical power loss was not exercised.
+> The currently tracked sealed-r5 directory contains only a manifest and gold files.
+> These are transport/preparation facts,
+> not efficacy observations. Nothing in that set is promoted to `progressive` or
+> `canonical`.
+
+F1 transport chronology sources:
+`prom_search_hswm/evidence/PREREG_F1_sealed_typed_function_network_20260728_amend4_output_caps.json`
+and `receipts/HSWM_F1_TARGET_DEPLOYMENT_PROBE_20260728.json`.
 
 ## Bottom line
 
-HSWM currently has one measured positive efficacy result: on the checked-in
-closed MuSiQue/2Wiki ladder, its **static additive-j retrieval field** beats the
+HSWM currently has one measured positive real-data retrieval result in the
+checked-in closed MuSiQue/2Wiki ladder: its **static additive-j retrieval field** beats the
 listed cosine/BM25/PPR/RRF retrieval arms on support recall, nDCG, and
 downstream answer F1. That result is useful but narrow. HSWM alone receives 100
 offline LLM judgments per run, query-time traversal is certified OFF, and no
@@ -34,9 +46,9 @@ The broader claims do not pass:
 | static retrieval substrate | **measured positive, budget caveat** | 300 evaluation rows across three checked-in runs |
 | cognitive uplift over direct LLM reranking | **preregistered cross-dataset claim failed** | two negative MuSiQue runs; one small, non-significant positive 2Wiki run |
 | P1 outcome→credit→slow-weight loop | **engineering complete; scientific RED; HSWM_LOCAL_RECORD unjudged** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations. Historical measurement self-wrote `FAIL`, so no valid server-owned kernel verdict exists |
-| query-time graph traversal | **OFF** | `mu=0` selected on both real datasets; every tested traversal grid setting had worse hop-drop than static |
+| query-time graph traversal | **real-data certificate OFF; separate synthetic sparse regime narrowly positive** | `mu=0` on both real datasets and all nine registered hop-drop grid settings worse than static; PhantomWiki large+sparse walk−flat `+0.0111`, LCB `+0.00085`, but no real-data answer uplift |
 | graded supersession | **pointwise capability survives; architectural novelty retracted** | stale suppression succeeds, but an external graded revision arm is bit-exact |
-| long-document advantage | **synthetic mechanism only** | no real NoCha/QASPER/NarrativeQA/book-scale result |
+| long-document advantage | **synthetic mechanism only; 4-book PRELUDE did not establish advantage** | no real NoCha/QASPER/NarrativeQA confirmatory result; C1 HSWM−clique `-2.00pp`, HSWM−dense `+3.16pp` with a CI crossing zero |
 | EPWC + certified readout | **local conformance, not efficacy** | deterministic compiler and fail-closed admission tests |
 | H3 relation composition | **not established** | B1 title-anchor result is refuted/inconclusive; B3 confirmatory efficacy is unmeasured |
 | QKV / semantic-layer query state | **heterogeneous supplied-program mechanism passes; deployable uplift unproved** | 128/128 synthetic namespace cases over 4 templates; B1 recurrence fails; 2Wiki 132/132 uses evaluator-supplied facts/path |
@@ -169,6 +181,14 @@ next falsifier are in `RESEARCH_P1_FAILURE_HSWM_LOCAL_RECORD` and
 
 S3 correctly falls back to the same snapshot's static field. It must not be
 described as successful graph reasoning.
+
+A separate preregistered PhantomWiki density-regime experiment found a narrow
+synthetic retrieval-side exception: in the large+sparse hard-hop regime,
+walk minus flat was `+0.0111` with lower confidence bound `+0.00085`; the dense
+regime was `-0.0048`. This does not change the two real-data certificates, and
+it is not a real-data answer-uplift result.
+
+Source: `results/R3_WALK_REGIME_RESULTS_2026-07-24.md`.
 
 ### H3
 
@@ -309,9 +329,17 @@ The synthetic aboutness experiment shows that, when a judge-readable aboutness
 signal is explicitly preserved while a single-vector embedding dilutes, the
 additive-j advantage can grow with unit length. That establishes mechanism
 sufficiency in the constructed world. It does not show that real books satisfy
-the premise. No real NoCha, QASPER, NarrativeQA, or book-scale run has landed.
+the premise.
 
-Source: `results/EXPB_LONGDOC_RESULTS_2026-07-19.md`.
+A later four-book C1 PRELUDE did land. It measured HSWM minus clique at
+`-2.00pp`; HSWM minus dense was `+3.16pp`, but its confidence interval
+`[-1.50,+7.89]` crossed zero. This refutes the tested native-hypergraph novelty
+claim and leaves dense uplift low-power. There is still no NoCha, QASPER, or
+NarrativeQA confirmatory result and no established real long-document
+advantage.
+
+Sources: `results/EXPB_LONGDOC_RESULTS_2026-07-19.md` and
+`results/C1_PRELUDE_BOOKSCALE_RESULTS_2026-07-25.md`.
 
 ## 7. Compiler and certified readout: conformance, not quality
 

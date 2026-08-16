@@ -35,7 +35,7 @@ mkdir -p "$run_root"
 
 cd "$code_root"
 "$python_bin" p1v4_heldout_measure.py \
-  --preregistration PREREG_P1V4_FRESH_POLICY_REPLICATION_2026-07-24.json \
+  --preregistration prereg/PREREG_P1V4_FRESH_POLICY_REPLICATION_2026-07-24.json \
   --prediction-receipt receipts/p1v4_policy_prediction_receipt_seed5_r2_20260724.json \
   --public-manifest receipts/p1v4_policy_public_manifest_seed5_r2_20260724.json \
   --development-sidecar "$development_sidecar" \

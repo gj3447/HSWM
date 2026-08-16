@@ -4,8 +4,11 @@ New research artifacts MUST be written into per-kind subdirectories instead of
 the repository root:
 
     EVIDENCE_*.json          -> evidence/
+    *_DIAGNOSTIC_*.json      -> evidence/
     PREREG_*.json | *.md     -> prereg/
     *_MANIFEST*.json         -> manifests/
+    registered configs/splits -> manifests/
+    RECEIPTS_*.json          -> receipts/
     *_RESULTS_*.md           -> results/
     checked-in raw results   -> results/raw/
     narrative research docs  -> docs/research/
@@ -53,6 +56,7 @@ ARTIFACT_DIRS = {
     "evidence": "evidence",
     "prereg": "prereg",
     "manifest": "manifests",
+    "receipt": "receipts",
     "results": "results",
     "raw_result": "results/raw",
     "research_doc": "docs/research",
@@ -78,6 +82,20 @@ RAW_RESULT_NAMES = frozenset({
     "traversal_bench_results.json",
 })
 
+# These names predate the typed-directory convention and cannot be classified
+# safely from a broad suffix alone.  Keep the exception sets exact, as with the
+# checked-in raw-result allowlist above.
+EVIDENCE_NAMES = frozenset({
+    "P1_GATE_DIAGNOSTIC_R2_2026-07-23.json",
+    "P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json",
+})
+
+MANIFEST_NAMES = frozenset({
+    "P1_SPLIT_2026-07-23.json",
+    "hswm_core_existence_harness.v1.json",
+    "hswm_giant_llm_harness.v1.json",
+})
+
 ENV_ARTIFACT_ROOT = "HSWM_ARTIFACT_ROOT"
 
 
@@ -86,10 +104,16 @@ def classify_artifact(name: str) -> str | None:
     bare = name.rsplit("/", 1)[-1]
     if bare.startswith("EVIDENCE_") and bare.endswith(".json"):
         return "evidence"
+    if bare in EVIDENCE_NAMES:
+        return "evidence"
     if bare.startswith("PREREG_") and bare.endswith((".json", ".md")):
         return "prereg"
     if "_MANIFEST" in bare and bare.endswith(".json"):
         return "manifest"
+    if bare in MANIFEST_NAMES:
+        return "manifest"
+    if bare.startswith("RECEIPTS_") and bare.endswith(".json"):
+        return "receipt"
     if "_RESULTS_" in bare and bare.endswith(".md"):
         return "results"
     if bare in RAW_RESULT_NAMES:

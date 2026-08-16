@@ -8,9 +8,10 @@ findable.
 
 | Artifact kind            | Filename pattern        | Directory        |
 | ------------------------ | ----------------------- | ---------------- |
-| Evidence receipt         | `EVIDENCE_*.json`       | `evidence/`      |
+| Evidence receipt         | `EVIDENCE_*.json`, registered diagnostics | `evidence/` |
 | Preregistration          | `PREREG_*.json`, `*.md` | `prereg/`        |
-| Run manifest             | `*_MANIFEST*.json`      | `manifests/`     |
+| Run manifest/config      | `*_MANIFEST*.json`, registered configs/splits | `manifests/` |
+| Receipt                  | `RECEIPTS_*.json`       | `receipts/`      |
 | Results narrative        | `*_RESULTS_*.md`        | `results/`       |
 | Raw checked-in result    | registered `*.json`    | `results/raw/`   |
 | Narrative research doc   | dated research `*.md`   | `docs/research/` |
@@ -72,6 +73,27 @@ two in `CANON_DIRECTION_...md` and one in `f0_premise_p/PREREG.md`. The moved
 historical link. These links resolve in the detached replay checkout; their
 source records are intentionally not edited just to rewrite navigation.
 
+[`ROOT_ASSET_MIGRATIONS.W13.v1.json`](../../ontology/history/ROOT_ASSET_MIGRATIONS.W13.v1.json)
+moves the dependency-closed 29-file JSON set: checked-in evidence and P1
+diagnostics to `evidence/`, preregistrations to `prereg/`, run manifests,
+P1 split/prepare records, and harness configs to `manifests/`, and the B1
+receipt bundle to `receipts/`. All 29 payloads remain byte-identical to the
+source commit. Historical payload fields keep their original basenames and
+SHA bindings; detached replay restores those root paths exactly.
+
+Six source-locked F-series programs (`b1_identity_unlock.py`,
+`r1_t1_retry.py`, `r2_ml_walk.py`, `r3_walk_regime.py`,
+`t1_entrance_reach.py`, and `t3_score_null.py`) still contain their original
+root artifact constants. The locked `p1_phantom_environment.py` reader and
+the frozen H3-B3 V5 loader likewise require their inputs at the historical
+root. Run those contracts only in a detached legacy-replay checkout; current
+general-purpose readers use the typed resolver.
+
+Four JSON records remain at the active root because their readers are part of
+the SHA lock: three `LONGINUS_HSWM_*_BINDING_*.json` files bind the exact
+verifiers that hardcode those paths, while `semantic_layer_fixture_manifest.json`
+and its sibling reader are both bound by the checked-in semantic-layer result.
+
 ## Escape hatch
 
 `HSWM_ARTIFACT_ROOT` redirects the artifact output root (tests, scratch runs):
@@ -81,7 +103,8 @@ still applies.
 ## Hash-bound legacy writers
 
 Many historical harness scripts are hash-locked: their sha256 is bound in
-`receipts/`, `LOCAL_INTEGRITY_CHECK/`, or root `PREREG_*.json` records, so they **must not be
+`receipts/`, `LOCAL_INTEGRITY_CHECK/`, or source-pinned root-era `PREREG_*.json`
+records, so they **must not be
 edited**. They keep their root-relative output constants as historical record.
 Do not rerun them against the locked root artifacts — a rerun with new data
 would break the receipt bindings. New experiments must write new scripts that
@@ -91,5 +114,5 @@ Writers already routed through the helper:
 `_research/efficacy/b2_routing_signal.py`,
 `_research/efficacy/e1_conditional_traversal.py`, and
 `_research/bookscale/c1_prelude_bookscale.py`. The relocated
-`_research/p1_closed_loop/p1_run_real.py` intentionally preserves its locked
-root artifact names through explicit repository-root discovery.
+`_research/p1_closed_loop/p1_run_real.py` preserves the historical basenames
+while resolving its inputs and new outputs through the typed layout.

@@ -20,7 +20,7 @@
 - **크기 축** (fk3 고정, hard-hop): small −0.006 → mid +0.004 → large +0.012 — **크기 단조 증가**.
 - **밀도 축** (5057 고정, hard-hop): sparse +0.011 / fk3 +0.012 / **dense −0.005** — 교량이 빽빽해지면 우위 소멸·반전.
 
-## prereg 대조 (`PREREG_R3_WALK_REGIME_2026-07-23.json`, credence 0.5)
+## prereg 대조 (`prereg/PREREG_R3_WALK_REGIME_2026-07-23.json`, credence 0.5)
 
 | 항목 | 잠정값 | 실측 | 판정 |
 |---|---|---|---|
@@ -49,9 +49,9 @@
 ## 산출물
 
 - `r3_walk_regime.py` (본실험, sha `f14472e9…` — env override 패치, prereg amendment 기록)
-- `EVIDENCE_R3_WALK_REGIME_2026-07-23.json` (sha `002e263d…`)
+- `evidence/EVIDENCE_R3_WALK_REGIME_2026-07-23.json` (sha `002e263d…`)
 - universe: `~/hswm_lab/phantomwiki_r3/{small_t2_fk3,mid_t20_fk3,large_t200_fk3,sparse_t200_fk1,dense_t200_fk9}` (로컬 재생성본)
-- prereg: `PREREG_R3_WALK_REGIME_2026-07-23.json` (amendment 2026-07-24 포함)
+- prereg: `prereg/PREREG_R3_WALK_REGIME_2026-07-23.json` (amendment 2026-07-24 포함)
 
 ## 부록 — 판정 장부 체인 (2026-07-24, 장부 수리 패턴 확립)
 

@@ -19,5 +19,5 @@
 
 ## 산출물
 
-- `t1_entrance_reach.py` (prereg guard + 무수정 kernel 재실행) · `PREREG_T1_ENTRANCE_REACH_2026-07-22.json` (실행 전 동결) · `EVIDENCE_T1_ENTRANCE_REACH_2026-07-22.json` (sha `92905c18…`)
+- `t1_entrance_reach.py` (prereg guard + 무수정 kernel 재실행) · `prereg/PREREG_T1_ENTRANCE_REACH_2026-07-22.json` (실행 전 동결) · `evidence/EVIDENCE_T1_ENTRANCE_REACH_2026-07-22.json` (sha `92905c18…`)
 - gold 라벨 무소비, LLM/network/신규 embedding 0.

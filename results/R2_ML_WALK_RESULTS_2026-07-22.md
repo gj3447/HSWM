@@ -4,7 +4,7 @@
 > **노드**: `HSWM_LOCAL_RECORD / R2-ml-material-walk` (예측 receipt `a8f0c717…`).
 > **한 줄**: P6→B1→T1→R1 내내 0에 박혀 있던 **min kernel-legal depth-2가 처음으로 움직였다** — MuSiQue 0→**3**, 2Wiki 4→6. USER 정전 "연산 많이 해도 똑똑해지면 된다"의 첫 집행이 값을 냈다.
 
-## 사전등록 대비 실측 (PREREG_R2_ML_WALK_2026-07-22.json, 실행 전 동결)
+## 사전등록 대비 실측 (prereg/PREREG_R2_ML_WALK_2026-07-22.json, 실행 전 동결)
 
 | metric | 예측 | 실측 | 판정 |
 |---|---|---:|---|

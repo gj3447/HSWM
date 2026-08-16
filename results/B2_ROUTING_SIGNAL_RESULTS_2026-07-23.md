@@ -69,7 +69,7 @@ router(B2.1) 재시도를 정당화하려면 이 ~15–25%의 비동점 쿼리�
 
 ## 산출물
 
-- `EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json` — 전수치 + 입력 파일 sha256 + seed/epsilon.
+- `evidence/EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json` — 전수치 + 입력 파일 sha256 + seed/epsilon.
 - `_research/efficacy/b2_routing_signal.py` — 측정 스크립트
   (재현: `uv run --locked python -m _research.efficacy.b2_routing_signal`).
 - 본 파일.

@@ -20,6 +20,7 @@ from typing import Any
 
 
 CONFIG_NAME = "hswm_giant_llm_harness.v1.json"
+CONFIG_PATH = Path("manifests") / CONFIG_NAME
 CONFIG_SCHEMA = "hswm-giant-llm-harness-config/v1"
 DUMP_SCHEMA = "hswm-research-source-dump/v1"
 RECEIPT_SCHEMA = "hswm-giant-llm-harness-receipt/v1"
@@ -84,7 +85,7 @@ def _discover_repository_root(anchor: str | Path = __file__) -> Path:
     resolved = Path(anchor).resolve(strict=True)
     start = resolved.parent if resolved.is_file() else resolved
     for candidate in (start, *start.parents):
-        if (candidate / CONFIG_NAME).is_file():
+        if (candidate / CONFIG_PATH).is_file():
             return candidate
     raise RuntimeError(f"cannot locate HSWM repository root from {resolved}")
 
@@ -99,9 +100,9 @@ def _utc_now() -> str:
 def _find_symposium_root(start: Path | None = None) -> Path:
     current = (start or Path.cwd()).resolve()
     for candidate in [current, *current.parents]:
-        if (candidate / "HSWM" / CONFIG_NAME).is_file():
+        if (candidate / "HSWM" / CONFIG_PATH).is_file():
             return candidate
-        if candidate.name == "HSWM" and (candidate / CONFIG_NAME).is_file():
+        if candidate.name == "HSWM" and (candidate / CONFIG_PATH).is_file():
             return candidate.parent
     return REPO_ROOT.parent
 
@@ -775,7 +776,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         root = (args.symposium_root or _find_symposium_root()).resolve()
         config_path = _resolve_from_root(
-            root, args.config or Path("HSWM") / CONFIG_NAME
+            root, args.config or Path("HSWM") / CONFIG_PATH
         )
         config = _load_json(
             config_path, exit_code=EXIT_CONFIG, label="CONFIG_ERROR"

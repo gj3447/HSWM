@@ -54,9 +54,12 @@ for _import_root in (REPO_ROOT, REPO_ROOT / "src"):
 
 from r3_phantom_ingest import load_universe
 from _research.f_series.r3_walk_regime import trace_golds
+from hswm.artifacts.layout import default_artifact_path, resolve_artifact_path
 
 HERE = REPO_ROOT
-PREREG = HERE / "PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json"
+PREREG = resolve_artifact_path(
+    "PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json",
+)
 # 2026-07-24: /Volumes/GM (ExFAT) stopped serving data reads, so the universe
 # was REGENERATED locally with the prereg-locked tool/flags/seeds (phantom-wiki
 # 1.0.3, SWI-Prolog, seed 1 / friendship-seed 1) and byte-verified against the
@@ -74,10 +77,14 @@ SPLIT_SEED = 20260723   # run-glue constant (not a locked parameter); recorded i
 EMBED_TORCH_SEED = 9173  # locked boot_seed reused for torch determinism, as r3 did
 EMBED_BATCH_SIZE = 64
 
-SPLIT_PATH = HERE / "P1_SPLIT_2026-07-23.json"
-EMBED_PATH = HERE / "P1_EMBEDDINGS_2026-07-23.npz"
-MANIFEST_PATH = HERE / "P1_PREPARE_MANIFEST_2026-07-23.json"
-RESULTS_PATH = HERE / "P1_RESULTS_2026-07-23.json"
+SPLIT_PATH = resolve_artifact_path("P1_SPLIT_2026-07-23.json")
+EMBED_PATH = default_artifact_path(
+    "P1_EMBEDDINGS_2026-07-23.npz", kind="raw_result", create=False,
+)
+MANIFEST_PATH = resolve_artifact_path("P1_PREPARE_MANIFEST_2026-07-23.json")
+RESULTS_PATH = default_artifact_path(
+    "P1_RESULTS_2026-07-23.json", kind="raw_result", create=False,
+)
 
 
 def _sha(path: Path) -> str:

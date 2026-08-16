@@ -40,6 +40,6 @@
 ## 산출물
 
 - `c1_prelude_bookscale.py` (수리 4건), `c1_replay_judge.py` (신규, sha `8d8ca5a6…`)
-- `EVIDENCE_C1_PRELUDE_BOOKSCALE_2026-07-23.json` (sha `42e6bf78…`), `data/prelude/c1_replay_records.json`
+- `evidence/EVIDENCE_C1_PRELUDE_BOOKSCALE_2026-07-23.json` (sha `42e6bf78…`), `data/prelude/c1_replay_records.json`
 - 장부: `HSWM_LOCAL_RECORD/exp-c1-prelude-bookscale-20260723` (equivalent/degenerating, novel_unconfirmed) + lineage 7건
 - 잔여: `data/prelude/cache/` (39M, 임베딩+judge 캐시) — git 제외, Proxmox 스냅샷 보존

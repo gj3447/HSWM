@@ -4,7 +4,7 @@
 > **노드**: `HSWM_LOCAL_RECORD / B1-identity-material-unlock-t0` (예측 receipt `3373440d…`).
 > **한 줄**: H3-C0이 진단한 "legal 2-edge chain 0 = identity material 결핍"이 **정확히 맞았다** — 결정론 weave만으로 MuSiQue 0→**6**, 2Wiki 0→**25** chain 해금. LLM/network/embedding 호출 0.
 
-## 사전등록 (PREREG_B1_IDENTITY_UNLOCK_2026-07-22.json, 실행 전 동결)
+## 사전등록 (prereg/PREREG_B1_IDENTITY_UNLOCK_2026-07-22.json, 실행 전 동결)
 
 - primary: `min_over_datasets_c3_admissible_depth2_chains` ≥ 1 (baseline 0) → **6** ✓
 - novel: `sum_c3_minus_c1` > 0 (C1 counterfactual은 H3-C0에 이미 공표라 novel 지위 없음) → **+23** ✓
@@ -20,7 +20,7 @@
 | **C3 = C1+C2+handoff** | **6** | **25** | **MuSiQue는 C2/C3 material만으로 해금** — canonical identity가 병목이었다는 직접 증거 |
 
 - 구현: `chain_viability.py` (T0 원장, 커널 admission 미러, 7 tests) + `claim_weave.py` (weave 3종, 전 arc 가역 receipt, strip=비트동일 복원, 7 tests) + `b1_identity_unlock.py` (prereg guard + 하니스).
-- 영수증: `EVIDENCE_B1_IDENTITY_UNLOCK_2026-07-22.json` (sha `3a81bfff…`) + 전체 chain/weave receipt = `RECEIPTS_B1_IDENTITY_UNLOCK_2026-07-22.json`.
+- 영수증: `evidence/EVIDENCE_B1_IDENTITY_UNLOCK_2026-07-22.json` (sha `3a81bfff…`) + 전체 chain/weave receipt = `receipts/RECEIPTS_B1_IDENTITY_UNLOCK_2026-07-22.json`.
 
 ## 정직 경계
 

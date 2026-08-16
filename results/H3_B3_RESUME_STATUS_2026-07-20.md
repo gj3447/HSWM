@@ -16,7 +16,7 @@ mandated values, and that non-2xx HTTP bodies were not preserved. V4 remains at
 zero STARTs and zero endpoint calls. V5 is the active successor. Fresh remains
 forbidden. There is still no H3-B3 efficacy result.
 
-The checked-in `H3_B3_RUN_MANIFEST_2026-07-20.json` and
+The checked-in `manifests/H3_B3_RUN_MANIFEST_2026-07-20.json` and
 `manifests/H3_B3_RUN_MANIFEST_V2_2026-07-20.json` are historical receipts. The current
 loader rejects them. Preserve them; do not resume from them or merge their
 partial caches into a new run.
@@ -173,7 +173,7 @@ passed 9/9:
 - receipt ID:
   `hswm:h3_b3_preflight_receipt:v1:6c11573b5009bd1f8e9cd2dfe2350e6faede56c5432cea8e9d8b84c91c7ed63d`.
 
-The first-write manifest is `H3_B3_RUN_MANIFEST_V4_2026-07-20.json` at
+The first-write manifest is `manifests/H3_B3_RUN_MANIFEST_V4_2026-07-20.json` at
 SHA-256
 `aca82aa77e81c15815562e4473ee4daae70778bba6e205cd78e5193a7c6a483c`.
 The production loader accepted it with status `PRE_RUN_FROZEN`; no temporary

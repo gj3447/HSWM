@@ -163,10 +163,10 @@ typed text-lesson baseline. Agent transfer, learned topology rewiring, and
 sleep/consolidation remain deferred because there is no surviving causal state
 to transfer, rewire, or consolidate.
 
-Sources: `PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`,
-`EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`,
-`P1_GATE_DIAGNOSTIC_R2_2026-07-23.json`, and
-`P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json`. The causal analysis and
+Sources: `prereg/PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`,
+`evidence/EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`,
+`evidence/P1_GATE_DIAGNOSTIC_R2_2026-07-23.json`, and
+`evidence/P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json`. The causal analysis and
 next falsifier are in `RESEARCH_P1_FAILURE_HSWM_LOCAL_RECORD` and
 `prereg/PREREG_P1V2_TYPED_VERDICT_LESSON_2026-07-24.json`.
 
@@ -198,7 +198,7 @@ The evidence-blind B1 title-anchor falsifier ends in
 claim builder, typed composition kernel, lifecycle gates, and preregistration,
 but it has **no valid confirmatory efficacy result**.
 
-The two checked-in `H3_B3_RUN_MANIFEST*.json` files are historical receipts and
+The checked-in `manifests/H3_B3_RUN_MANIFEST*.json` files are historical receipts and
 are rejected by the current schema-v2 loader. The partial 434/3,599 development
 extraction cache under `.ab_p5_cache/` predates a valid current manifest and
 lifecycle OPEN receipt; it is a pilot/negative receipt, not resumable

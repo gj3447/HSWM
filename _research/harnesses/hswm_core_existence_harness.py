@@ -20,6 +20,7 @@ from typing import Any
 
 SCHEMA = "hswm-core-existence-harness-receipt/v1"
 CONFIG_NAME = "hswm_core_existence_harness.v1.json"
+CONFIG_PATH = Path("manifests") / CONFIG_NAME
 
 EXIT_OK = 0
 EXIT_CONFIG = 1
@@ -33,7 +34,7 @@ def _discover_repository_root(anchor: str | Path = __file__) -> Path:
     resolved = Path(anchor).resolve(strict=True)
     start = resolved.parent if resolved.is_file() else resolved
     for candidate in (start, *start.parents):
-        if (candidate / CONFIG_NAME).is_file():
+        if (candidate / CONFIG_PATH).is_file():
             return candidate
     raise RuntimeError(f"cannot locate HSWM repository root from {resolved}")
 
@@ -56,9 +57,9 @@ def _utc_now() -> str:
 def _find_symposium_root(start: Path | None = None) -> Path:
     cur = (start or Path.cwd()).resolve()
     for p in [cur, *cur.parents]:
-        if (p / "HSWM" / CONFIG_NAME).is_file():
+        if (p / "HSWM" / CONFIG_PATH).is_file():
             return p
-        if p.name == "HSWM" and (p / CONFIG_NAME).is_file():
+        if p.name == "HSWM" and (p / CONFIG_PATH).is_file():
             return p.parent
     # A standalone clone is not required to be named exactly ``HSWM``.
     return REPO_ROOT
@@ -68,18 +69,18 @@ def _resolve_layout(candidate: Path) -> tuple[Path, Path]:
     """Return ``(outer_root, hswm_root)`` for monorepo or standalone layout."""
 
     resolved = candidate.resolve()
-    if (resolved / CONFIG_NAME).is_file():
+    if (resolved / CONFIG_PATH).is_file():
         return resolved.parent, resolved
     nested = resolved / "HSWM"
-    if (nested / CONFIG_NAME).is_file():
+    if (nested / CONFIG_PATH).is_file():
         return resolved, nested
     raise FileNotFoundError(
-        f"neither {resolved / CONFIG_NAME} nor {nested / CONFIG_NAME} exists"
+        f"neither {resolved / CONFIG_PATH} nor {nested / CONFIG_PATH} exists"
     )
 
 
 def load_config(hswm_dir: Path) -> dict[str, Any]:
-    path = hswm_dir / CONFIG_NAME
+    path = hswm_dir / CONFIG_PATH
     data = json.loads(path.read_text(encoding="utf-8"))
     if data.get("schema_version") != "hswm-core-existence-harness-config/v1":
         raise ValueError(f"bad schema: {data.get('schema_version')}")
@@ -155,7 +156,7 @@ def diagnose(
     for label, p in [
         ("core_dev_name", core_dev),
         ("scoreboard", scoreboard),
-        ("config", hswm / CONFIG_NAME),
+        ("config", hswm / CONFIG_PATH),
         ("concentration_doc", hswm / "HSWM_CORE_EXISTENCE_CONCENTRATION.md"),
         ("f1_report", f1_report),
         ("f1_operator", f1_op),

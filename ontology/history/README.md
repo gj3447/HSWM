@@ -45,6 +45,13 @@ remain replayable, while current navigation follows the canonical paths. The
 frozen legacy inventory is now 138 paths: 73 Python files plus 65 assets; no
 TXT file remains at the physical root.
 
+[`ROOT_ASSET_MIGRATIONS.W13.v1.json`](ROOT_ASSET_MIGRATIONS.W13.v1.json) moves
+29 byte-preserved JSON artifacts into `evidence`, `prereg`, `manifests`, and
+`receipts`. Current mutable consumers resolve the typed locations; historical
+payloads keep their recorded commands and paths unchanged for detached replay.
+The frozen legacy inventory is now 109 paths: 73 Python files, 31 Markdown
+records, four path/SHA-bound JSON files, and one shell command.
+
 W4 moves the isolated OSS extraction comparison program into the existing
 `_research.material_extraction` namespace. Its historical root path and exact
 bytes remain reproducible from the source-pinned

@@ -20,7 +20,7 @@ synthetic harness에서는 candidate가 FSM `active`까지 가고, 동시 candid
 
 ## 2. 사전등록과 preflight
 
-- prereg: [`PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`](../PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json), R2 SHA-256 `136405ba5d0006195e9fe4c1a9899eb4ef098bbe22fa725599936479baa0e91d`
+- prereg: [`PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`](../prereg/PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json), R2 SHA-256 `136405ba5d0006195e9fe4c1a9899eb4ef098bbe22fa725599936479baa0e91d`
 - frozen outcome-affecting modules: 17개 SHA-256, guard로 로컬·Dell 양쪽 확인
 - live model: `Qwen/Qwen3.6-35B-A3B-FP8` revision `95a723d...`, PID/argv/model snapshot을 deployment receipt로 재증명
 - R1은 outcome 전 split preflight에서 `eligible=390 < required=400`으로 fail-closed했다. [refusal](../evidence/P1_PREFLIGHT_REFUSAL_R1_2026-07-23.json)에 LLM call 0, arm outcome 0을 기록했다.
@@ -30,7 +30,7 @@ R2 substrate는 5,057 articles, 45,834 bound facts, 0 unbound facts, 25,606 pers
 
 ## 3. 측정 결과
 
-원본 evidence: [`EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`](../EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json), SHA-256 `880de2841d33d04a1e615984287dbd2ab855bd8e288fc7999f19687d57233bfe`, experiment receipt `70cf72a18da617a3494b00848f349f0fd96c6dce444639413c21ace41e24f758`.
+원본 evidence: [`EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`](../evidence/EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json), SHA-256 `880de2841d33d04a1e615984287dbd2ab855bd8e288fc7999f19687d57233bfe`, experiment receipt `70cf72a18da617a3494b00848f349f0fd96c6dce444639413c21ace41e24f758`.
 
 | metric | result | gate |
 |---|---:|---|
@@ -47,9 +47,9 @@ R2 substrate는 5,057 articles, 45,834 bound facts, 0 unbound facts, 25,606 pers
 
 A1은 episode 2–5에서 각각 L1 약 `0.005`, `0.00375`, `0.00125`, `0.0003125`인 tagged candidate를 실제로 만들었다. A3/A4까지 합쳐 후보는 12개였다. 그러나 12개 모두 absorption FSM의 fresh evaluation에서 `rejected`되어 active snapshot은 genesis에서 한 번도 바뀌지 않았다.
 
-final receipt가 gate 숫자를 직접 노출하지 않은 관측성 결손을 보완하기 위해 frozen staged snapshot과 frozen fresh split만 retrieval-only 재생했다. [`P1_GATE_DIAGNOSTIC_R2_2026-07-23.json`](../P1_GATE_DIAGNOSTIC_R2_2026-07-23.json)은 12/12에서 `unseen_delta=0.0`, `unseen_ci_low=0.0`, pass 0을 확인한다. 따라서 실패 원인은 canary나 CAS가 아니라 **eta-scaled edge update가 top-10 rank를 움직일 만큼 표현력/크기가 없었던 것**이다.
+final receipt가 gate 숫자를 직접 노출하지 않은 관측성 결손을 보완하기 위해 frozen staged snapshot과 frozen fresh split만 retrieval-only 재생했다. [`P1_GATE_DIAGNOSTIC_R2_2026-07-23.json`](../evidence/P1_GATE_DIAGNOSTIC_R2_2026-07-23.json)은 12/12에서 `unseen_delta=0.0`, `unseen_ci_low=0.0`, pass 0을 확인한다. 따라서 실패 원인은 canary나 CAS가 아니라 **eta-scaled edge update가 top-10 rank를 움직일 만큼 표현력/크기가 없었던 것**이다.
 
-추가 [`P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json`](../P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json)은 12 candidates × fresh 38 = 456 query-cell을 exact score 수준으로 재생했다. updated edge가 selected path에 닿은 것은 21/456, score가 조금이라도 바뀐 것도 21/456이었고, top-10 order/membership 변화는 모두 0이었다. 최대 score delta는 `3.2359e-5`, rank-10/11 gap 대비 최대 비율은 `0.102697`이었다.
+추가 [`P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json`](../evidence/P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json)은 12 candidates × fresh 38 = 456 query-cell을 exact score 수준으로 재생했다. updated edge가 selected path에 닿은 것은 21/456, score가 조금이라도 바뀐 것도 21/456이었고, top-10 order/membership 변화는 모두 0이었다. 최대 score delta는 `3.2359e-5`, rank-10/11 gap 대비 최대 비율은 `0.102697`이었다.
 
 두 post-hoc 진단은 새 arm outcome이 아니다. 원 실험의 staged bytes와 disjoint fresh retrieval 비교만 재생했다. 다만 다음 harness는 gate delta/CI와 rank actuation을 final measurement 본문에 직접 넣어야 한다.
 

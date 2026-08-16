@@ -22,7 +22,7 @@
 |---|---|
 | [`HSWM_CORE_DEV.md`](HSWM_CORE_DEV.md) | **이름 정본** — “HSWM core 개발” |
 | [`EXISTENCE_SCOREBOARD.v1.md`](EXISTENCE_SCOREBOARD.v1.md) | 부분 실존 한 장 (T0) |
-| [`hswm_core_existence_harness.v1.json`](hswm_core_existence_harness.v1.json) | 사다리·트랙·밴·dual pillars |
+| [`hswm_core_existence_harness.v1.json`](manifests/hswm_core_existence_harness.v1.json) | 사다리·트랙·밴·dual pillars |
 | [`hswm_core_existence_harness.py`](_research/harnesses/hswm_core_existence_harness.py) | CLI (`name`/`status`/`next`/`bans`) |
 | [`test_hswm_core_existence_harness.py`](tests/test_hswm_core_existence_harness.py) | 스모크 |
 | F1 정본 | `FINDINGS/hswm-f1-r8-try3-2026-07-28/F1_R8_RUNBOOK.md` |

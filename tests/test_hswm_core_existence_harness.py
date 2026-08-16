@@ -12,7 +12,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 HSWM = REPO_ROOT
 ROOT = REPO_ROOT
 HARNESS = REPO_ROOT / "_research" / "harnesses" / "hswm_core_existence_harness.py"
-CONFIG = REPO_ROOT / "hswm_core_existence_harness.v1.json"
+CONFIG = REPO_ROOT / "manifests" / "hswm_core_existence_harness.v1.json"
 
 
 class CoreExistenceHarnessSmoke(unittest.TestCase):

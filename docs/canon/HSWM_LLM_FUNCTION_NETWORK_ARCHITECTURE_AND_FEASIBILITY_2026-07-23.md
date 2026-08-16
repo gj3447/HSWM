@@ -250,7 +250,7 @@ graph memory로 수렴할 가능성이 높다.
 
 ### Gate P1 — causal macro-weight loop
 
-[`PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`](../../PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json)을
+[`PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`](../../prereg/PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json)을
 R2 premeasurement amendment와 함께 실행 완료했다.
 
 - A1 tagged commit

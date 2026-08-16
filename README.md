@@ -269,6 +269,11 @@ readers routed through the typed artifact resolver.
 [`ROOT_ASSET_MIGRATIONS.W12.v1.json`](ontology/history/ROOT_ASSET_MIGRATIONS.W12.v1.json)
 then places the umbrella canon, plastic-wiring definition, token-learning
 direction, and all five preserved user source texts under `docs/canon/sources/`.
+[`ROOT_ASSET_MIGRATIONS.W13.v1.json`](ontology/history/ROOT_ASSET_MIGRATIONS.W13.v1.json)
+then gathers 29 checked-in evidence, preregistration, manifest, harness-config,
+diagnostic, and receipt JSONs into their typed artifact directories. Four
+path/SHA-bound JSONs remain at the root until their verifier clusters can move
+atomically.
 **New Python modules or research artifacts must not be added to the root.** New
 code goes under `src/hswm/`; artifacts are routed by kind according to
 [`docs/research/ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).

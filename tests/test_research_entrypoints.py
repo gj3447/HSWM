@@ -40,7 +40,7 @@ def test_e1_golden_values_reproduce_checked_in_evidence(tmp_path, monkeypatch):
     e1.main()
     out = json.loads((tmp_path / "out.json").read_text(encoding="utf-8"))
     ev = json.loads(
-        (REPO / "EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json").read_text(
+        (REPO / "evidence" / "EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json").read_text(
             encoding="utf-8"
         )
     )

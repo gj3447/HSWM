@@ -20,8 +20,10 @@ Python은 148개에서 73개로 줄었다. W10은 다시 비-Python root 자산 
 `docs/canon`, `docs/research`, `prereg`, `evidence`, `manifests`, `research`, `results`,
 `scripts`로 옮겼다. W11은 raw result JSON 17개를 `results/raw`로 모았고, W12는 상위
 정전·plastic wiring·token-learning 문서 3개와 사용자 원문 TXT 5개를 `docs/canon`으로
-모아 전체 root 파일을 236개에서 153개로 줄였다. 남은 138개 legacy 표면은 Python
-73개와 path/SHA 의존 asset 65개로 전부 설명된다. 옮긴 옛 경로는
+모았다. W13은 evidence·prereg·manifest·diagnostic·receipt JSON 29개를 각 typed
+directory로 옮겨 전체 root 파일을 236개에서 124개로 줄였다. 남은 109개 legacy
+표면은 Python 73개, Markdown 31개, path/SHA-bound JSON 4개, shell 1개로 전부
+설명된다. 옮긴 옛 경로는
 `hswm-legacy-replay`가 manifest의 정확한 커밋 전체를 별도 detached clone으로 복원한다.
 
 이 온톨로지는 저장소의 의미 지도이지 HSWM의 인지 규칙이 아니다. AI 행동은 문서 경로가
@@ -146,9 +148,9 @@ sheaf hypergraph network까지 설명한다. 기계 판독 정본은
 | 단계/실험 | 현재 판정 | 산출물 |
 |---|---|---|
 | P0 identity/metric | 목표 정체성 고정. 함수/agent process가 LLM으로 실행되고 `H,W`가 그 거시 신경망을 구성. 인지체 metric(slope>0)·baseline 3종·평가 3종 잠금 초안 (ratify 대기) | [canon](CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md) · [P0 prereg](prereg/PREREG_P0_COGNITIVE_METRIC_LOCK_2026-07-24.md) |
-| P1 learning actuation | scalar slow-weight P1은 **과학적 RED**(12 candidates, active 0, A1−A2=0, rank 변화 0/456). typed-policy 표현으로 이동한 P1v3은 `6/6 vs 0/6`, 독립 P1v4는 `6/6 vs 2/6`, 개선 4/6으로 재현됐다. 단 n=6 L0이며 일반 compiler·durable `Delta W`는 미확증 | [efficacy record](EFFICACY.md) · [P1v4 closeout](_research/p1v4_fresh_replication/CLOSEOUT_20260724.md) · [prereg](PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json) |
-| B2 routing signal | 최선 slice oracle +9.92pp, tie 75%; pooled 분포는 tie kill. 얇은 oracle signal이지 learned 성공 아님 | [result](results/B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md) · [evidence](EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json) |
-| E1 conditional traversal | bridge −13.89pp, factoid −7.27pp. 전면 OFF 유지 | [result](results/E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md) · [evidence](EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json) |
+| P1 learning actuation | scalar slow-weight P1은 **과학적 RED**(12 candidates, active 0, A1−A2=0, rank 변화 0/456). typed-policy 표현으로 이동한 P1v3은 `6/6 vs 0/6`, 독립 P1v4는 `6/6 vs 2/6`, 개선 4/6으로 재현됐다. 단 n=6 L0이며 일반 compiler·durable `Delta W`는 미확증 | [efficacy record](EFFICACY.md) · [P1v4 closeout](_research/p1v4_fresh_replication/CLOSEOUT_20260724.md) · [prereg](prereg/PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json) |
+| B2 routing signal | 최선 slice oracle +9.92pp, tie 75%; pooled 분포는 tie kill. 얇은 oracle signal이지 learned 성공 아님 | [result](results/B2_ROUTING_SIGNAL_RESULTS_2026-07-23.md) · [evidence](evidence/EVIDENCE_B2_ROUTING_SIGNAL_2026-07-23.json) |
+| E1 conditional traversal | bridge −13.89pp, factoid −7.27pp. 전면 OFF 유지 | [result](results/E1_CONDITIONAL_TRAVERSAL_RESULTS_2026-07-23.md) · [evidence](evidence/EVIDENCE_E1_CONDITIONAL_TRAVERSAL_2026-07-23.json) |
 | P3 shadow topology absorption | 0/3 수용, canary 100%, sealed Δ0. 안전하지만 후보가 무득 | [result](results/SHADOW_GATED_ABSORPTION_RESULTS_2026-07-23.md) · [evidence](prom_search_hswm/evidence/EVIDENCE_shadow_gated_absorption_20260723.json) |
 | prior-art tribunal | generic graph three-factor+sleep novelty는 사망; n-ary credit/LLM verdict/topology/shared persistent field 슬롯 생존 | [tribunal](TRIBUNAL_PHASOR_AGENTS_PRIOR_ART_2026-07-23.md) |
 
@@ -174,7 +176,7 @@ paper URL/SHA-256, license route, code anchor와 default-off disposition만 둔�
 |---|---|---|
 | H3-B3 V5 재현성 | 이미 공개된 V5 run manifest가 고정한 source/prereg/test를 복구. 기존 refusal·효능 판정은 변경하지 않음 | [V5 prereg](H3_B3_V5_RESTART_PREREG_2026-07-20.md) · [C0 diagnosis](H3_C0_CHAIN_VIABILITY_DIAGNOSIS_2026-07-20.md) |
 | World Compiler S4.0 | 가역적 entity binding 수직 slice와 OSS 비교. `claim_weave`·`chain_viability`는 미구현 | [receipt](docs/research/S4_0_REVERSIBLE_ENTITY_BINDING_2026-07-21.md) · [PROM](WORLD_COMPILER_V2_OSS_PROM_2026-07-21.md) |
-| R3 walk-regime density dial | PhantomWiki large+sparse hard-hop에서 walk−flat `+0.0111`, LCB `+0.00085`; dense에서는 `-0.0048`. synthetic retrieval-side regime 관측이며 real-data answer uplift가 아니다 | [prereg](PREREG_R3_WALK_REGIME_2026-07-23.json) · [result](results/R3_WALK_REGIME_RESULTS_2026-07-24.md) · [`r3_walk_regime.py`](_research/f_series/r3_walk_regime.py) |
+| R3 walk-regime density dial | PhantomWiki large+sparse hard-hop에서 walk−flat `+0.0111`, LCB `+0.00085`; dense에서는 `-0.0048`. synthetic retrieval-side regime 관측이며 real-data answer uplift가 아니다 | [prereg](prereg/PREREG_R3_WALK_REGIME_2026-07-23.json) · [result](results/R3_WALK_REGIME_RESULTS_2026-07-24.md) · [`r3_walk_regime.py`](_research/f_series/r3_walk_regime.py) |
 
 ## 2026-07-22 연구 장부
 

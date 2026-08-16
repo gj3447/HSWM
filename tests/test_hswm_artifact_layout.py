@@ -27,6 +27,10 @@ def test_classify_artifact_kinds():
     assert layout.classify_artifact("PREREG_X_2026-01-01.json") == "prereg"
     assert layout.classify_artifact("PREREG_X_2026-01-01.md") == "prereg"
     assert layout.classify_artifact("H3_B3_RUN_MANIFEST_2026-01-01.json") == "manifest"
+    assert layout.classify_artifact("P1_SPLIT_2026-07-23.json") == "manifest"
+    assert layout.classify_artifact("hswm_core_existence_harness.v1.json") == "manifest"
+    assert layout.classify_artifact("P1_GATE_DIAGNOSTIC_R2_2026-07-23.json") == "evidence"
+    assert layout.classify_artifact("RECEIPTS_X_2026-01-01.json") == "receipt"
     assert layout.classify_artifact("B1_X_RESULTS_2026-01-01.md") == "results"
     assert layout.classify_artifact("substrate_bench_results.json") == "raw_result"
     assert layout.classify_artifact("ab_p5_full_musique_s7.json") == "raw_result"
@@ -78,11 +82,23 @@ def test_resolve_prefers_subdir_then_legacy_root(tmp_path):
         layout.resolve_artifact_path("EVIDENCE_MISSING_2026-01-01.json", root=tmp_path)
 
 
-def test_legacy_root_artifacts_still_resolve():
-    # Root-locked artifact kept at root by the tidy: must keep resolving.
+def test_moved_evidence_artifacts_resolve_from_typed_directory():
     path = layout.resolve_artifact_path("EVIDENCE_B1_IDENTITY_UNLOCK_2026-07-22.json")
-    assert path == REPO / "EVIDENCE_B1_IDENTITY_UNLOCK_2026-07-22.json"
+    assert path == REPO / "evidence" / "EVIDENCE_B1_IDENTITY_UNLOCK_2026-07-22.json"
     assert path.is_file()
+
+
+def test_w13_special_artifacts_resolve_from_typed_directories():
+    expected = {
+        "P1_GATE_DIAGNOSTIC_R2_2026-07-23.json": "evidence",
+        "P1_SPLIT_2026-07-23.json": "manifests",
+        "hswm_core_existence_harness.v1.json": "manifests",
+        "RECEIPTS_B1_IDENTITY_UNLOCK_2026-07-22.json": "receipts",
+    }
+    for name, directory in expected.items():
+        path = layout.resolve_artifact_path(name)
+        assert path == REPO / directory / name
+        assert path.is_file()
 
 
 def test_moved_subdir_artifacts_resolve_via_fallback():

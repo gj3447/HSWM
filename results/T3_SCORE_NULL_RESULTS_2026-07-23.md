@@ -29,4 +29,4 @@ R1/R2 워커의 hop-2에는 **lenient fallback**(연속 arc 부재 시 임의 ou
 
 ## 산출물
 
-`t3_score_null.py`(strict 워커+null) · `PREREG_T3_SCORE_NULL_2026-07-23.json`(자기감사 약속 포함 동결) · `EVIDENCE_T3_SCORE_NULL_2026-07-23.json` (sha `753e281d…`)
+`t3_score_null.py`(strict 워커+null) · `prereg/PREREG_T3_SCORE_NULL_2026-07-23.json`(자기감사 약속 포함 동결) · `evidence/EVIDENCE_T3_SCORE_NULL_2026-07-23.json` (sha `753e281d…`)

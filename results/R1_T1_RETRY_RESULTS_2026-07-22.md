@@ -2,8 +2,8 @@
 
 > **채택**: `PROM_8_DYNAMIC_TWO_LANES_2026-07-22.md` §4 R1
 > **코드**: [`r1_t1_retry.py`](../_research/f_series/r1_t1_retry.py) + [`r1_predicate_alias.py`](../r1_predicate_alias.py)
-> **prereg**: [`PREREG_R1_T1_RETRY_2026-07-22.json`](../PREREG_R1_T1_RETRY_2026-07-22.json) (receipt `f52d881b…`)
-> **evidence**: [`EVIDENCE_R1_T1_RETRY_2026-07-22.json`](../EVIDENCE_R1_T1_RETRY_2026-07-22.json) (sha `154e906a…`)
+> **prereg**: [`PREREG_R1_T1_RETRY_2026-07-22.json`](../prereg/PREREG_R1_T1_RETRY_2026-07-22.json) (receipt `f52d881b…`)
+> **evidence**: [`EVIDENCE_R1_T1_RETRY_2026-07-22.json`](../evidence/EVIDENCE_R1_T1_RETRY_2026-07-22.json) (sha `154e906a…`)
 > **HSWM_LOCAL_RECORD**: `HSWM_LOCAL_RECORD` / `R1-t1-retry-alias-soft-hipposeed`
 
 ## 한 줄

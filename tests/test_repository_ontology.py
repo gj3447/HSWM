@@ -57,7 +57,7 @@ def test_root_compatibility_surface_and_catalog_are_current() -> None:
     result = validate_checkout(data)
     assert result["concepts"] == 10
     assert result["paths"] > 1_000
-    assert result["legacy_root_paths"] == 138
+    assert result["legacy_root_paths"] == 109
     legacy = json.loads((ROOT / data["legacy_root_inventory"]).read_text(encoding="utf-8"))
     catalog = json.loads((ROOT / data["path_catalog"]).read_text(encoding="utf-8"))
     assert legacy["$schema"] == "../../schemas/hswm_legacy_root_paths.v1.schema.json"
@@ -113,8 +113,34 @@ def test_asset_root_migrations_are_source_pinned_and_leave_no_root_alias() -> No
             assert not (ROOT / row["old_path"]).exists()
             assert (ROOT / row["canonical_path"]).is_file()
 
-    assert expected_count == 83
+    assert expected_count == 112
     assert result["asset_root_migrations"] == expected_count
+
+
+def test_w13_typed_json_paths_retain_their_semantic_mounts() -> None:
+    data = load_repository_ontology()
+    expected = {
+        "evidence/EVIDENCE_B1_IDENTITY_UNLOCK_2026-07-22.json": {
+            "hswm:repo:evaluation", "hswm:repo:evidence", "hswm:repo:learning",
+        },
+        "manifests/H3_B3_RUN_MANIFEST_V5_2026-07-20.json": {
+            "hswm:repo:boundary", "hswm:repo:cells", "hswm:repo:evidence",
+        },
+        "manifests/hswm_core_existence_harness.v1.json": {
+            "hswm:repo:cells", "hswm:repo:evidence",
+        },
+        "manifests/P1_SPLIT_2026-07-23.json": {
+            "hswm:repo:evidence", "hswm:repo:learning",
+        },
+        "receipts/RECEIPTS_B1_IDENTITY_UNLOCK_2026-07-22.json": {
+            "hswm:repo:evidence", "hswm:repo:learning",
+        },
+        "prereg/PREREG_R1_T1_RETRY_2026-07-22.json": {
+            "hswm:repo:boundary", "hswm:repo:evidence", "hswm:repo:learning",
+        },
+    }
+    for path, concepts in expected.items():
+        assert concepts <= set(concepts_for_path(path, data, set())), path
 
 
 def test_transformer_analogy_requires_an_optimizer_equivalent() -> None:

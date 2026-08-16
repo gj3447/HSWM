@@ -14,7 +14,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 HSWM = REPO_ROOT
 ROOT = REPO_ROOT.parent
 HARNESS = Path(__file__).resolve().with_name("hswm_giant_llm_harness.py")
-CONFIG = REPO_ROOT / "hswm_giant_llm_harness.v1.json"
+CONFIG = REPO_ROOT / "manifests" / "hswm_giant_llm_harness.v1.json"
 DUMP = (
     ROOT
     / "FINDINGS"
@@ -161,7 +161,9 @@ class GiantLlmHarnessTest(unittest.TestCase):
             )
             temporary_hswm.mkdir(parents=True)
             temporary_dump_dir.mkdir(parents=True)
-            (temporary_hswm / CONFIG.name).write_text(
+            temporary_config = temporary_hswm / "manifests" / CONFIG.name
+            temporary_config.parent.mkdir()
+            temporary_config.write_text(
                 CONFIG.read_text(encoding="utf-8"), encoding="utf-8"
             )
             (temporary_dump_dir / DUMP.name).write_text(

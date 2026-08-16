@@ -28,6 +28,12 @@ W4 moves the isolated OSS extraction comparison program into the existing
 bytes remain reproducible from the source-pinned
 [`W4 manifest`](PYTHON_ROOT_MIGRATIONS.W4.v2.json).
 
+W5 co-locates the C1 book-scale replay judge with its canonical producer under
+`_research.bookscale`. Current code discovers the repository root through
+`pyproject.toml`, while the historical root command and exact bytes remain
+reproducible from the source-pinned
+[`W5 manifest`](PYTHON_ROOT_MIGRATIONS.W5.v2.json).
+
 ```bash
 uv run hswm-legacy-replay list
 uv run hswm-legacy-replay verify OLD_ROOT_FILE.py
@@ -41,7 +47,7 @@ receipt binds the selected source commit, tree, old paths, and source hashes.
 [`PYTHON_ROOT_CLASSIFICATION.v1.json`](PYTHON_ROOT_CLASSIFICATION.v1.json)
 partitions every remaining root Python file into `SHA_LOCKED`,
 `REPLAY_HISTORY_LOCKED`, or `REVIEW_REQUIRED`. The partition is exhaustive and
-disjoint; the validator rejects a new or unexplained root module. After W4 the
+disjoint; the validator rejects a new or unexplained root module. After W5 the
 review class is empty: every remaining module has an explicit evidence or replay
 reason.
 

@@ -9,6 +9,8 @@
 
 판정 장부 수리 패턴(R3와 동일): producer(c1_prelude_bookscale.py, dgx 임베딩/judge 캐시 적재)
 → 아티팩트(records json, sync 루트 안) → judge(본 파일, 컨테이너 재실행 가능).
+
+현재 진입점: python _research/bookscale/c1_replay_judge.py [--collect]
 """
 from __future__ import annotations
 
@@ -21,8 +23,23 @@ from pathlib import Path
 
 import numpy as np
 
-HERE = Path(__file__).parent
-RECORDS = HERE / "data" / "prelude" / "c1_replay_records.json"
+
+def _discover_repository_root(anchor: str | Path = __file__) -> Path:
+    """Find the checkout root that owns the replay records and source tree."""
+    resolved = Path(anchor).resolve(strict=True)
+    start = resolved.parent if resolved.is_file() else resolved
+    for candidate in (start, *start.parents):
+        if (candidate / "pyproject.toml").is_file():
+            return candidate
+    raise RuntimeError(f"cannot locate HSWM repository root from {resolved}")
+
+
+REPO_ROOT = _discover_repository_root()
+for _import_root in (REPO_ROOT, REPO_ROOT / "src"):
+    if str(_import_root) not in sys.path:
+        sys.path.insert(0, str(_import_root))
+
+RECORDS = REPO_ROOT / "data" / "prelude" / "c1_replay_records.json"
 
 BOOT = 10000
 SEED = 20260723
@@ -78,11 +95,17 @@ def score() -> int:
 
 
 # ---------------- collect 모드 (Mac, 캐시 전용 오프라인) ----------------
-def collect() -> int:
-    sys.path.insert(0, str(HERE))
-    import pandas as pd
-    import c1_prelude_bookscale as c1
+def _collect_dependencies():
+    from _research.bookscale import c1_prelude_bookscale as c1
     import traversal
+
+    return c1, traversal
+
+
+def collect() -> int:
+    import pandas as pd
+
+    c1, traversal = _collect_dependencies()
 
     def emb_cache_path(text: str) -> Path:
         return Path(c1.CACHE_DIR) / f"emb_{sha256((c1.EMBED_MODEL + '|' + text).encode('utf-8')).hexdigest()}.npy"

@@ -10,8 +10,8 @@
 연결하며, [`path catalog`](ontology/HSWM_PATH_CATALOG.v1.json)가 모든 현재 파일을 하나
 이상의 개념에 투영한다. 물리 루트에 남은 과거 파일은 정리 실패가 아니라 import,
 `__file__` 상대경로, manifest 또는 SHA 영수증이 결속한 호환 표면이며
-[`legacy inventory`](ontology/history/LEGACY_ROOT_PATHS.v1.json)에 닫혀 있다. W4까지 root
-Python은 148개에서 82개로 줄었고, 옮긴 옛 경로는 `hswm-legacy-replay`가 manifest의
+[`legacy inventory`](ontology/history/LEGACY_ROOT_PATHS.v1.json)에 닫혀 있다. W5까지 root
+Python은 148개에서 81개로 줄었고, 옮긴 옛 경로는 `hswm-legacy-replay`가 manifest의
 정확한 커밋 전체를 별도 detached clone으로 복원한다.
 
 이 온톨로지는 저장소의 의미 지도이지 HSWM의 인지 규칙이 아니다. AI 행동은 문서 경로가

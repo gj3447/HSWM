@@ -1,14 +1,14 @@
 {
   "$schema": "../schemas/hswm_path_catalog.v1.schema.json",
   "concept_counts": {
-    "hswm:repo:boundary": 77,
+    "hswm:repo:boundary": 78,
     "hswm:repo:cells": 53,
     "hswm:repo:evaluation": 239,
-    "hswm:repo:evidence": 730,
+    "hswm:repo:evidence": 731,
     "hswm:repo:field": 212,
     "hswm:repo:history": 273,
     "hswm:repo:identity": 36,
-    "hswm:repo:infrastructure": 328,
+    "hswm:repo:infrastructure": 327,
     "hswm:repo:learning": 502,
     "hswm:repo:substrate": 46
   },
@@ -1831,6 +1831,15 @@
       ],
       "kind": "python",
       "path": "_research/bookscale/c1_prelude_bookscale.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:evaluation",
+        "hswm:repo:evidence"
+      ],
+      "kind": "python",
+      "path": "_research/bookscale/c1_replay_judge.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -6583,16 +6592,6 @@
     {
       "concepts": [
         "hswm:repo:evaluation",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "c1_replay_judge.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
-        "hswm:repo:evaluation",
         "hswm:repo:evidence",
         "hswm:repo:history",
         "hswm:repo:infrastructure",
@@ -7382,6 +7381,15 @@
       ],
       "kind": "json",
       "path": "ontology/history/PYTHON_ROOT_MIGRATIONS.W4.v2.json",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:boundary",
+        "hswm:repo:history"
+      ],
+      "kind": "json",
+      "path": "ontology/history/PYTHON_ROOT_MIGRATIONS.W5.v2.json",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -12114,7 +12122,7 @@
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     }
   ],
-  "entry_count": 1372,
+  "entry_count": 1373,
   "ontology": "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json",
   "schema_version": "hswm-path-catalog/v1"
 }

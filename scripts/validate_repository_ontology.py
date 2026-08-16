@@ -97,8 +97,33 @@ def validate_graph(data: dict[str, Any]) -> None:
         raise OntologyError("learning analogy is incomplete")
 
 
+def _filesystem_repository_paths() -> tuple[list[str], bool]:
+    paths: list[str] = []
+    for path in REPO_ROOT.rglob("*"):
+        relative = path.relative_to(REPO_ROOT)
+        if any(part in IGNORED_FALLBACK_PARTS for part in relative.parts):
+            continue
+        if len(relative.parts) == 1 and relative.name in IGNORED_FALLBACK_ROOT_FILES:
+            continue
+        if path.is_file() or path.is_symlink():
+            paths.append(relative.as_posix())
+    return sorted(set(paths)), False
+
+
 def repository_paths() -> tuple[list[str], bool]:
     """Return repository-relative files and whether the list came from Git."""
+    try:
+        top_level = subprocess.run(
+            ["git", "-C", str(REPO_ROOT), "rev-parse", "--show-toplevel"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return _filesystem_repository_paths()
+    if Path(top_level.stdout.strip()).resolve() != REPO_ROOT.resolve():
+        return _filesystem_repository_paths()
+
     try:
         proc = subprocess.run(
             [
@@ -115,16 +140,7 @@ def repository_paths() -> tuple[list[str], bool]:
             capture_output=True,
         )
     except (FileNotFoundError, subprocess.CalledProcessError):
-        paths: list[str] = []
-        for path in REPO_ROOT.rglob("*"):
-            relative = path.relative_to(REPO_ROOT)
-            if any(part in IGNORED_FALLBACK_PARTS for part in relative.parts):
-                continue
-            if len(relative.parts) == 1 and relative.name in IGNORED_FALLBACK_ROOT_FILES:
-                continue
-            if path.is_file() or path.is_symlink():
-                paths.append(relative.as_posix())
-        return sorted(set(paths)), False
+        return _filesystem_repository_paths()
 
     candidates = proc.stdout.decode("utf-8").split("\0")
     paths = []

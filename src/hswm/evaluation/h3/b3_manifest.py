@@ -61,7 +61,21 @@ def _discover_repository_root(anchor: str | Path = __file__) -> Path:
     )
 
 
-REPO_ROOT = _discover_repository_root()
+try:
+    REPO_ROOT: Path | None = _discover_repository_root()
+except RuntimeError:
+    # An installed wheel has no research checkout.  Keep imports usable and
+    # fail only when a repository-bound manifest operation is requested.
+    REPO_ROOT = None
+
+
+def _require_repository_root() -> Path:
+    if REPO_ROOT is None:
+        raise RuntimeError(
+            "H3 manifest operations require an HSWM source checkout; "
+            "no repository root was found beside the installed package"
+        )
+    return REPO_ROOT
 FROZEN_BGE_DIMENSION = 1024
 MANIFEST_BUILDER_SCHEMA_VERSION = "hswm-h3-b3-manifest-builder/v3"
 FROZEN_V5_MANIFEST_PATH = "H3_B3_RUN_MANIFEST_V5_2026-07-20.json"
@@ -228,9 +242,10 @@ def _require_frozen_v5(actual: Any, expected: Any, *, label: str) -> None:
 def _validate_parent_evidence() -> None:
     """Require the exact parent protocols and refusals named by V5."""
 
+    root = _require_repository_root()
     for binding in FROZEN_V5_PARENT_EVIDENCE:
         evidence_file, relative = _existing_root_file(
-            REPO_ROOT / binding["path"], label="V5 parent evidence",
+            root / binding["path"], label="V5 parent evidence",
         )
         _require_frozen_v5(
             {"path": relative, "sha256": file_sha256(evidence_file)},
@@ -269,12 +284,13 @@ def _strict_json_file(path: Path, *, label: str) -> dict[str, Any]:
 
 
 def _existing_root_file(path: str | Path, *, label: str) -> tuple[Path, str]:
+    root = _require_repository_root()
     declared = Path(path).expanduser()
     if declared.is_symlink():
         raise ManifestBuildError(f"{label} may not be a symlink")
     try:
         resolved = declared.resolve(strict=True)
-        relative = resolved.relative_to(REPO_ROOT.resolve(strict=True))
+        relative = resolved.relative_to(root.resolve(strict=True))
     except (OSError, ValueError) as exc:
         raise ManifestBuildError(
             f"{label} must be an existing file under repository root"
@@ -294,7 +310,7 @@ def _future_root_path(value: str | Path, *, label: str) -> tuple[Path, str]:
         raise ManifestBuildError(
             f"{label} must be a canonical repository-root-relative path"
         )
-    root = REPO_ROOT.resolve(strict=True)
+    root = _require_repository_root().resolve(strict=True)
     candidate = root / relative
     try:
         candidate.relative_to(root)
@@ -314,15 +330,16 @@ def _future_root_path(value: str | Path, *, label: str) -> tuple[Path, str]:
 
 
 def _output_manifest_path(path: str | Path) -> Path:
+    root = _require_repository_root()
     declared = Path(path).expanduser()
-    absolute = declared if declared.is_absolute() else REPO_ROOT / declared
+    absolute = declared if declared.is_absolute() else root / declared
     if absolute.name in {"", ".", ".."}:
         raise ManifestBuildError("manifest output must name a root file")
     try:
         parent = absolute.parent.resolve(strict=True)
     except OSError as exc:
         raise ManifestBuildError("manifest output parent does not exist") from exc
-    if parent != REPO_ROOT.resolve(strict=True):
+    if parent != root.resolve(strict=True):
         raise ManifestBuildError("PRE_RUN manifest must be written at repository root")
     if absolute.name != FROZEN_V5_MANIFEST_PATH:
         raise ManifestBuildError(
@@ -551,7 +568,7 @@ def build_manifest(
     qwen27_absolute, qwen27_relative = _future_root_path(
         qwen27_deployment_path, label="future Qwen27 deployment receipt",
     )
-    prefix_absolute = REPO_ROOT.resolve(strict=True) / prefix_path
+    prefix_absolute = _require_repository_root().resolve(strict=True) / prefix_path
     try:
         qwen27_absolute.relative_to(prefix_absolute)
     except ValueError as exc:
@@ -844,12 +861,13 @@ def build_manifest(
 def publish_manifest(path: str | Path, manifest: Mapping[str, Any]) -> str:
     """Validate a temporary canonical file, then publish that inode once."""
 
+    root = _require_repository_root()
     output = _output_manifest_path(path)
     if output.exists() or output.is_symlink():
         raise FileExistsError(f"PRE_RUN manifest is first-write-wins: {output}")
     encoded = (canonical_json(dict(manifest)) + "\n").encode("utf-8")
     descriptor, raw_temporary = tempfile.mkstemp(
-        dir=REPO_ROOT, prefix=".h3-b3-manifest-validate-",
+        dir=root, prefix=".h3-b3-manifest-validate-",
     )
     temporary = Path(raw_temporary)
     temporary_inode: int | None = None
@@ -861,7 +879,7 @@ def publish_manifest(path: str | Path, manifest: Mapping[str, Any]) -> str:
             handle.flush()
             os.fsync(handle.fileno())
         temporary_inode = temporary.stat().st_ino
-        _fsync_directory(REPO_ROOT)
+        _fsync_directory(root)
         try:
             loaded = h3.load_run_manifest(
                 temporary, _allow_unpublished_candidate=True,
@@ -878,7 +896,7 @@ def publish_manifest(path: str | Path, manifest: Mapping[str, Any]) -> str:
             raise FileExistsError(
                 f"PRE_RUN manifest is first-write-wins: {output}"
             ) from exc
-        _fsync_directory(REPO_ROOT)
+        _fsync_directory(root)
         published = True
     finally:
         if descriptor >= 0:

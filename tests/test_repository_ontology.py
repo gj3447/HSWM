@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import subprocess
 
 import pytest
 
+import scripts.validate_repository_ontology as repository_ontology
 from scripts.validate_repository_ontology import (
     ONTOLOGY_PATH,
     OntologyError,
@@ -101,3 +103,21 @@ def test_unknown_root_file_cannot_be_silently_classified_as_legacy() -> None:
     paths, _ = repository_paths()
     with pytest.raises(OntologyError, match="root surface drift"):
         validate_root_surface([*paths, "NEW_ROOT_RULEBOOK.md"], data, legacy)
+
+
+def test_nested_distribution_is_not_mistaken_for_parent_git_checkout(
+    tmp_path, monkeypatch
+) -> None:
+    checkout = tmp_path / "checkout"
+    distribution = checkout / "sdist"
+    distribution.mkdir(parents=True)
+    subprocess.run(["git", "init", "-q", str(checkout)], check=True)
+    (distribution / "README.md").write_text("distribution\n", encoding="utf-8")
+    (distribution / "PKG-INFO").write_text("generated\n", encoding="utf-8")
+    (distribution / "setup.cfg").write_text("[metadata]\n", encoding="utf-8")
+    monkeypatch.setattr(repository_ontology, "REPO_ROOT", distribution)
+
+    paths, from_git = repository_ontology.repository_paths()
+
+    assert from_git is False
+    assert paths == ["README.md"]

@@ -40,6 +40,13 @@ def test_repository_root_discovery_is_independent_of_module_depth(tmp_path):
     assert manifest._discover_repository_root(anchor) == tmp_path
 
 
+def test_installed_import_defers_missing_repository_until_operation(monkeypatch):
+    monkeypatch.setattr(manifest, "REPO_ROOT", None)
+
+    with pytest.raises(RuntimeError, match="require an HSWM source checkout"):
+        manifest._require_repository_root()
+
+
 def _snapshot(tmp_path: Path) -> Path:
     repository = tmp_path / (
         "models--" + bge.FROZEN_MODEL_ID.replace("/", "--")

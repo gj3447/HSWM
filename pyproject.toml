@@ -145,6 +145,9 @@ py-modules = [
   "hswm_cellular_live_probe",
 ]
 
+[tool.setuptools.package-data]
+prom_search_hswm = ["data/README.md", "data/gold_badiou24.json"]
+
 [tool.setuptools.package-dir]
 hswm = "src/hswm"
 certified_cut_compare = "src/certified_cut_compare"

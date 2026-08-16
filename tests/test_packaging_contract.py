@@ -143,6 +143,12 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
     assert project["project"]["scripts"]["hswm-verify-efficacy"] == (
         "scripts.verify_efficacy_claims:main"
     )
+    assert {
+        "data/README.md",
+        "data/gold_badiou24.json",
+    } <= set(
+        project["tool"]["setuptools"]["package-data"]["prom_search_hswm"]
+    )
 
 
 def test_f5v2_legacy_import_packages_resolve_to_canonical_objects() -> None:

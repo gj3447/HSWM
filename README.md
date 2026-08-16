@@ -192,7 +192,9 @@ uv run --locked hswm-verify-efficacy --pretty
 The default suite uses checked-in fixtures and does not require a live model,
 Neo4j, or an external benchmark corpus. GPU/LLM experiments and real-KG runs are
 a separate, explicitly configured boundary; source-tree tests do not substitute
-for their runtime receipts.
+for their runtime receipts. `hswm-verify-efficacy` validates checkout-bound
+evidence; when invoked from an installed wheel outside that checkout, pass
+`--root /path/to/HSWM` explicitly.
 
 ## Read next
 

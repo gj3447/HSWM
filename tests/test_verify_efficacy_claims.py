@@ -16,6 +16,14 @@ def test_default_root_tracks_repository_after_script_move(tmp_path, monkeypatch)
     assert efficacy.DEFAULT_ROOT == REPO_ROOT
 
 
+def test_installed_verifier_requires_explicit_source_root() -> None:
+    with pytest.raises(
+        efficacy.EfficacyClaimError,
+        match="requires --root pointing to an HSWM source checkout",
+    ):
+        efficacy.build_snapshot(None)
+
+
 def test_checked_in_efficacy_snapshot_matches_public_claims() -> None:
     snapshot = efficacy.build_snapshot(REPO_ROOT)
 

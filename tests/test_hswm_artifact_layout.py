@@ -54,6 +54,16 @@ def test_default_root_is_independent_of_current_working_directory(tmp_path, monk
     assert layout.artifact_root() == REPO
 
 
+def test_installed_layout_requires_explicit_artifact_root(tmp_path, monkeypatch):
+    monkeypatch.setattr(layout, "REPO_ROOT", None)
+    monkeypatch.delenv("HSWM_ARTIFACT_ROOT", raising=False)
+    with pytest.raises(RuntimeError, match="require HSWM_ARTIFACT_ROOT"):
+        layout.artifact_root()
+
+    monkeypatch.setenv("HSWM_ARTIFACT_ROOT", str(tmp_path))
+    assert layout.artifact_root() == tmp_path
+
+
 def test_resolve_prefers_subdir_then_legacy_root(tmp_path):
     name = "EVIDENCE_X_2026-01-01.json"
     (tmp_path / "evidence").mkdir()

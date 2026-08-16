@@ -28,7 +28,25 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+
+_REPOSITORY_MARKERS = (
+    "pyproject.toml",
+    "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json",
+)
+
+
+def _discover_repository_root(anchor: str | Path = __file__) -> Path | None:
+    """Return the enclosing source checkout, or ``None`` in an installed wheel."""
+
+    resolved = Path(anchor).resolve(strict=True)
+    start = resolved.parent if resolved.is_file() else resolved
+    for candidate in (start, *start.parents):
+        if all((candidate / marker).is_file() for marker in _REPOSITORY_MARKERS):
+            return candidate
+    return None
+
+
+REPO_ROOT: Path | None = _discover_repository_root()
 
 ARTIFACT_DIRS = {
     "evidence": "evidence",
@@ -60,6 +78,11 @@ def artifact_root() -> Path:
     override = os.environ.get(ENV_ARTIFACT_ROOT)
     if override:
         return Path(override).expanduser()
+    if REPO_ROOT is None:
+        raise RuntimeError(
+            "artifact operations require HSWM_ARTIFACT_ROOT when the package "
+            "is installed outside an HSWM source checkout"
+        )
     return REPO_ROOT
 
 

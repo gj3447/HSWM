@@ -18,7 +18,22 @@ from hswm.artifacts.layout import resolve_artifact_path
 
 
 SCHEMA_VERSION = "hswm-efficacy-snapshot/v3"
-DEFAULT_ROOT = Path(__file__).resolve().parents[1]
+_REPOSITORY_MARKERS = (
+    "pyproject.toml",
+    "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json",
+)
+
+
+def _discover_repository_root(anchor: str | Path = __file__) -> Path | None:
+    resolved = Path(anchor).resolve(strict=True)
+    start = resolved.parent if resolved.is_file() else resolved
+    for candidate in (start, *start.parents):
+        if all((candidate / marker).is_file() for marker in _REPOSITORY_MARKERS):
+            return candidate
+    return None
+
+
+DEFAULT_ROOT: Path | None = _discover_repository_root()
 
 
 class EfficacyClaimError(RuntimeError):
@@ -115,9 +130,14 @@ def _per_query_mean_delta(
     return sum(values) / len(values)
 
 
-def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
+def build_snapshot(root: str | Path | None = DEFAULT_ROOT) -> dict[str, Any]:
     """Return a validated, JSON-serializable efficacy snapshot."""
 
+    if root is None:
+        raise EfficacyClaimError(
+            "efficacy verification requires --root pointing to an HSWM "
+            "source checkout"
+        )
     repo = Path(root).resolve()
     substrate = _load(repo, "substrate_bench_results.json")
     p5 = _load(repo, "ab_p5_full_results.json")
@@ -810,7 +830,12 @@ def build_snapshot(root: str | Path = DEFAULT_ROOT) -> dict[str, Any]:
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--root", type=Path, default=DEFAULT_ROOT)
+    parser.add_argument(
+        "--root",
+        type=Path,
+        default=DEFAULT_ROOT,
+        help="HSWM source checkout containing the checked-in evidence",
+    )
     parser.add_argument("--pretty", action="store_true")
     args = parser.parse_args(argv)
     snapshot = build_snapshot(args.root)

@@ -60,7 +60,22 @@ def _find_symposium_root(start: Path | None = None) -> Path:
             return p
         if p.name == "HSWM" and (p / CONFIG_NAME).is_file():
             return p.parent
-    return REPO_ROOT.parent
+    # A standalone clone is not required to be named exactly ``HSWM``.
+    return REPO_ROOT
+
+
+def _resolve_layout(candidate: Path) -> tuple[Path, Path]:
+    """Return ``(outer_root, hswm_root)`` for monorepo or standalone layout."""
+
+    resolved = candidate.resolve()
+    if (resolved / CONFIG_NAME).is_file():
+        return resolved.parent, resolved
+    nested = resolved / "HSWM"
+    if (nested / CONFIG_NAME).is_file():
+        return resolved, nested
+    raise FileNotFoundError(
+        f"neither {resolved / CONFIG_NAME} nor {nested / CONFIG_NAME} exists"
+    )
 
 
 def load_config(hswm_dir: Path) -> dict[str, Any]:
@@ -110,17 +125,29 @@ def diagnose(
     root: Path,
     config: dict[str, Any],
     *,
+    hswm_root: Path | None = None,
     active_track: str,
     user_approved_focus: bool,
     identity: str | None,
     claimed_main: str | None,
 ) -> dict[str, Any]:
-    hswm = root / "HSWM"
+    hswm = hswm_root or root / "HSWM"
     pointers = config["pointers"]
-    scoreboard = root / pointers["scoreboard"]
-    f1_report = root / pointers["f1_report"]
-    f1_op = root / pointers["f1_operator"]
+
+    def resolve_pointer(value: str) -> Path:
+        pointer = Path(value)
+        if pointer.is_absolute():
+            return pointer
+        if pointer.parts and pointer.parts[0] == "HSWM":
+            return hswm.joinpath(*pointer.parts[1:])
+        return root / pointer
+
+    scoreboard = resolve_pointer(pointers["scoreboard"])
+    f1_report = resolve_pointer(pointers["f1_report"])
+    f1_op = resolve_pointer(pointers["f1_operator"])
     continuation = root / "docs" / "CONTINUATION.md"
+    if not continuation.exists():
+        continuation = hswm / "docs" / "CONTINUATION.md"
 
     checks: list[Check] = []
 
@@ -370,7 +397,7 @@ def diagnose(
         "next_actions": next_actions,
         "t0_scoreboard_present": t0_ok,
         "t1_human_gates_clear": t1_unblocked,
-        "pointers": {k: str(root / v) if not str(v).startswith("/") else v for k, v in pointers.items()},
+        "pointers": {k: str(resolve_pointer(v)) for k, v in pointers.items()},
     }
     return receipt
 
@@ -480,8 +507,10 @@ def main(argv: list[str] | None = None) -> int:
     args = p.parse_args(argv)
 
     try:
-        root = (args.symposium_root or _find_symposium_root()).resolve()
-        config = load_config(root / "HSWM")
+        root, hswm_root = _resolve_layout(
+            args.symposium_root or _find_symposium_root()
+        )
+        config = load_config(hswm_root)
     except (OSError, ValueError, json.JSONDecodeError) as e:
         print(f"CONFIG_ERROR: {e}", file=sys.stderr)
         return EXIT_CONFIG
@@ -507,6 +536,7 @@ def main(argv: list[str] | None = None) -> int:
     receipt = diagnose(
         root,
         config,
+        hswm_root=hswm_root,
         active_track=args.active_track,
         user_approved_focus=args.user_approved_focus,
         identity=args.identity,

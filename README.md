@@ -1,14 +1,18 @@
 # HSWM — Hypergraph Semantic Weight Map
 
-**A research program for turning hand-written AI coordination into a persistent,
-learnable semantic field.** LLMs execute local functions; HSWM is the larger
-recurrent network that connects them, remembers outcomes, and is intended to
-change its own routing and topology through experience.
+**A research program for turning the fixed harness around LLMs into a persistent,
+learnable macro-network.** LLMs execute local semantic functions; HSWM is the
+plastic coordination harness through which those functions receive context,
+select tools and memory, communicate, verify, recover, and stop. Its target is
+to learn durable semantic weights, routing, and eventually topology from the
+trajectories and outcomes produced while it is used, instead of accumulating
+more hand-written workflow rules.
 
 > **Research status:** HSWM is not yet that complete system. This repository
 > contains a tested world/evidence substrate, deterministic field and runtime
 > components, narrow measured results, and several failed or unfinished
-> plasticity experiments. No checked-in run has yet produced a
+> plasticity experiments. It does not yet include an integrated, scaled
+> macro-training runtime. No checked-in run has yet produced a
 > `CAUSALLY_VALIDATED` outcome → credit → durable `ΔW/ΔH` → changed-behavior
 > result.
 
@@ -38,7 +42,9 @@ toward transformer networks whose behavior is shaped by data instead of an
 enumerated rulebook. HSWM applies that move one level above the foundation
 model: it is intended to turn AI token, action, tool-use, and outcome
 trajectories into the implicit coordination of a larger multi-agent neural
-system.
+system. “Macro-training” therefore means training the persistent coordination
+state among LLM-executed functions; it does not require changing the foundation
+model's internal parameters.
 
 | transformer training | HSWM macro-training |
 |---|---|
@@ -50,11 +56,13 @@ system.
 
 The distinction matters: placing tokens in a transformer's context window does
 not train it. Likewise, pouring tokens into HSWM supplies candidate training
-observations, not learned rules by itself. The goal is not to write the
-“perfect AI rulebook”; it is to learn an increasingly capable behavioral field
-whose durable parameters change future behavior. In the intended sense, this
-is the pursuit of the most capable AI behavior-rule system that experience can
-teach—not a claim that the current HSWM is already perfect. A learning claim
+observations, not learned rules by itself. Use and learning must close one loop:
+LLM functions use the current field during execution, while their sealed
+decision trajectories, independently measured outcomes, eligibility, and
+causal credit drive bounded update proposals to its macro-state. A credible
+integrated macro-training claim therefore requires a learning curve over
+diverse held-out episodes—not isolated post-hoc edits. The needed data, compute,
+and stability regime remains an open empirical question. A learning claim
 becomes valid only when an outcome-bound update survives fresh tests and its
 effect disappears when the update is removed.
 
@@ -66,10 +74,28 @@ routing, and connectivity candidates; only independently validated candidates
 become persistent. This is a direction under test, not a demonstrated
 uniqueness or production claim.
 
-HSWM does not try to remove every deterministic rule. Authority, types,
-transactions, provenance, budgets, rollback, and safety constraints remain a
-thin execution boundary. The part intended to become learned is the cognitive
-wiring: which functions should activate, communicate, and change together.
+### HSWM as a learning harness
+
+A conventional harness fixes which model function, tool, memory, or verifier
+runs; what context it receives; in what order or coalition it runs; and how
+handoff, failure, retry, and stopping work. HSWM treats that cognitive
+coordination as learnable macro-state. The harness used for one episode is a
+bounded policy projected from the current `H`, `W`, and routing state. HSWM is
+the larger persistent runtime and learner that executes that projection,
+observes outcomes, assigns credit, and validates changes to later projections.
+
+| learned cognitive wiring | fixed constitutional boundary |
+|---|---|
+| function, tool, memory, and verifier admission | port schemas and capability authority |
+| typed context and read-set selection | external-effect approval and transactions |
+| ordering, parallelism, handoff, retry, recovery, and stop | idempotency, retry ceilings, and budgets |
+| contextual trust, cost, inhibition, routing, and coalition | provenance, safety gates, and rollback |
+| eventually, validated relation and topology changes | independent outcome ownership |
+
+The system may learn **which** verifier or recovery path to invoke, but not
+rewrite the validity criterion or grant itself authority. If hand-written rules
+continue to decide the cognitive path while HSWM only logs or retrieves tokens,
+the result is still a static harness with memory.
 
 The preserved user direction and its evidence boundary are recorded in
 [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md).
@@ -138,6 +164,61 @@ hash-binds a claimed causal-test receipt. The replay, equal-budget, and removal
 tests named by that receipt remain a separate evidence boundary; the current
 contract does not inspect their scientific contents.
 
+## The missing integrated macro-training loop
+
+The current tree has reusable but disconnected pieces: a one-cell event runtime
+and focused durable call replay, a fixed typed `QF → BF → AF` workflow,
+content-addressed typed receipt contracts, one bounded scalar P1
+outcome/eligibility/update loop, immutable snapshots and epoch CAS, structural
+composition, and separate evaluation mechanisms. It has no general live
+token/cell trainer that joins an episode-wide recurrent scheduler, a replayable
+decision dataset, live outcome adapters, general causal credit, and one atomic
+active bundle for `W`, routing, and later `H`. P1 ran its engineering path end
+to end, but activated no candidate and produced zero measured top-10 order or
+membership changes across 456 diagnostic cells; it remains scientific RED.
+
+The committed next learning experiment remains the parity-controlled typed
+text-lesson baseline. Separately, one candidate engineering track for the
+integrated harness is to freeze the LLM, tools, cell registry, and topology and
+learn only a small routing policy in a task with genuine coordination headroom.
+It must not reuse the
+[rejected B2.1 `A/B/MERGED` action space](prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md).
+Each decision record would seal the available actions, chosen action and
+probability, state/context references, used edges, and cost before the outcome.
+An independent outcome adapter and credit learner would propose one bounded routing
+update; shadow/fresh/retention/canary tests would precede a versioned CAS commit,
+and post-activation removal/restore would test causal mediation. This is a
+secondary engineering proposal, not a measured result or a replacement for the
+existing commitment.
+
+The target integrated design separates three explicit clocks:
+
+| clock | topology during the clock | permitted durable result |
+|---|---|---|
+| activation | frozen for the episode | sealed decision trajectory only |
+| plasticity | frozen while credit is evaluated | one validated fast routing or `W` candidate |
+| consolidation / morphogenesis | changed only at an episode boundary | repeated effects promoted to slow `W`, then one bounded `H` mutation class |
+
+Within that candidate track, scalar `W` actuation and then topology would be
+separate later experiments. Jointly changing weights, routing, and topology
+would make both credit assignment and failure diagnosis underdetermined.
+
+For scale, raw tokens can remain content-addressed episode evidence while the
+learnable substrate operates on spans, decisions, relations, and outcomes.
+Making every token a permanent graph node is not sufficient for learning;
+without an objective and update rule it is only a large log or retrieval store.
+A scalable loop also needs bounded active state, deduplication, trajectory
+sampling/replay, homeostasis or pruning, versioned snapshots, and deterministic
+commit order. Controlled multi-scale sweeps must report learning, cost,
+stability, and forgetting—including negative results—before any favorable
+scaling behavior is claimed.
+
+A decisive comparison keeps the model, tools, information, call count, token
+budget, and evaluator fixed. The learned-harness arm must be compared with a
+static harness, raw transcript/full-context, no-write, and shuffled-credit
+controls on held-out episodes; post-activation removal must remove any claimed
+gain.
+
 ## Topology and sheaf: core versus research lens
 
 Topology is central in the concrete sense of mutable hypergraph connectivity:
@@ -170,7 +251,8 @@ Repository state as of 2026-08-16:
 | static additive semantic field | narrow positive checked-in retrieval measurement with an asymmetric budget: 100 offline LLM judgments for HSWM and zero for cosine/BM25/PPR/RRF; not continual learning |
 | scalar slow-weight P1 | **scientific RED**: 12 staged candidates, 0 fresh-gate passes/activations, and 0/456 measured top-10 rank changes |
 | typed-policy P1v3/P1v4 | narrow local `n=6` L0 observation; not durable `ΔW`, transfer, or topology learning |
-| token-driven durable macro-learning | trajectory/eligibility/activation receipt binding implemented; no optimizer or causally validated macro-update demonstrated |
+| token-driven durable macro-learning | trajectory/eligibility/activation receipt binding implemented; no integrated causal optimizer or causally validated macro-update demonstrated |
+| integrated macro-training dynamics and scale | target requirement; no scaled end-to-end trainer, stable learning curve, or scaling result demonstrated |
 | cross-agent transfer, learned topology, and consolidation | incomplete or unmeasured |
 
 Tests establish implementation and invariant closure, not intelligence or
@@ -203,6 +285,7 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | How do the fragmented identity, mathematics, runtime, learning, and evidence meanings fit together? | [`HSWM unified meaning map`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md) |
 | Why replace static agent glue, and what is token learning? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) |
 | What exactly are `H`, `W`, `A`, and the LLM functions? | [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](docs/canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) |
+| What should the harness learn, and what must remain deterministic? | [`DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md`](docs/canon/DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md) |
 | What is implemented, rejected, or still open? | [`EFFICACY.md`](EFFICACY.md) |
 | What is the broader world-memory purpose? | [`THE_WORLD_REMEMBERS.md`](docs/canon/THE_WORLD_REMEMBERS.md) |
 | Where is the full research chronology? | [`INDEX.md`](INDEX.md) |

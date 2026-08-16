@@ -216,7 +216,7 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | `src/hswm/` | canonical package surface, organized by semantic responsibility |
 | `src/hswm/cells/` | cellular kernel, durable store, model ports, and bounded live probe |
 | `src/hswm/prototypes/` | bounded early learning and synthetic-world prototypes |
-| `src/hswm/substrate/` | world adaptation, certified readout, and convergence substrate |
+| `src/hswm/substrate/` | canonical hypergraph, world adaptation, certified readout, and convergence substrate |
 | `src/hswm/learning/` | token-learning contracts and learning diagnostics |
 | `src/hswm/evaluation/`, `_research/` | falsification code and source-only experiment programs |
 | `world_ir.py`, `world_compiler.py` | immutable evidence model and deterministic world compilation |
@@ -228,8 +228,8 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | `evidence/`, `prereg/`, `manifests/`, `results/`, `receipts/` | typed research artifacts and direct measurements |
 | `docs/research/`, `docs/assets/` | narrative research material and public visual assets |
 
-The root Python count is now **77**, down from 148. The remaining files are an
-explicit compatibility surface: 67 are byte-bound by checked-in SHA evidence and
+The root Python count is now **76**, down from 148. The remaining files are an
+explicit compatibility surface: 66 are byte-bound by checked-in SHA evidence and
 10 belong to replay clusters that still share current root-relative topology.
 There are no unexplained review candidates. The exact disjoint partition is
 machine-readable in
@@ -251,8 +251,9 @@ with later replay-backed waves in
 [`PYTHON_ROOT_MIGRATIONS.W3.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W3.v2.json),
 [`PYTHON_ROOT_MIGRATIONS.W4.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W4.v2.json),
 [`PYTHON_ROOT_MIGRATIONS.W5.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W5.v2.json),
+[`PYTHON_ROOT_MIGRATIONS.W6.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W6.v2.json),
 and
-[`PYTHON_ROOT_MIGRATIONS.W6.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W6.v2.json).
+[`PYTHON_ROOT_MIGRATIONS.W7.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W7.v2.json).
 **New Python modules or research artifacts must not be added to the root.** New
 code goes under `src/hswm/`; artifacts are routed by kind according to
 [`docs/research/ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).

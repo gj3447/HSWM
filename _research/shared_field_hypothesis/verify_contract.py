@@ -41,6 +41,7 @@ MECHANISM_SOURCE_HASHES = {
     "prom_search_hswm/fsm/hswm_plasticity_loop.v1.json": "fec06c9c74952062acd8febab35039718094b79f0df522eb1b2e50ceafea8954",
 }
 VERIFIER_PATH = "_research/shared_field_hypothesis/verify_contract.py"
+MIGRATION_ONTOLOGY_PATH = "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json"
 EXPECTED_SEMANTIC_LOCK_SHA256 = "49598298630f3cd486daebda6aeec7b6dbdf8ed41cfdf0a8924fdaceb56fe9dd"
 PREDECESSOR_KEYS = (
     "neutral_replay_receipt_sha256",
@@ -121,6 +122,83 @@ def _safe_path(root: Path, relative: Any) -> Path | None:
     return candidate
 
 
+def _current_source_path(root: Path, relative: str, expected_sha256: str) -> Path | None:
+    """Resolve a logical root source through the source-pinned migration registry."""
+    candidate = _safe_path(root, relative)
+    if candidate is not None and candidate.is_file():
+        return candidate
+    if "/" in relative or not relative.endswith(".py"):
+        return None
+
+    ontology_path = _safe_path(root, MIGRATION_ONTOLOGY_PATH)
+    if ontology_path is None or not ontology_path.is_file():
+        return None
+    try:
+        ontology = load_json(ontology_path)
+    except ContractError:
+        return None
+
+    manifest_value = ontology.get("python_root_migrations")
+    if isinstance(manifest_value, str) and manifest_value:
+        manifest_paths = [manifest_value]
+    elif (
+        isinstance(manifest_value, list)
+        and manifest_value
+        and all(isinstance(item, str) and item for item in manifest_value)
+        and len(manifest_value) == len(set(manifest_value))
+    ):
+        manifest_paths = manifest_value
+    else:
+        return None
+
+    matches: list[Path] = []
+    destination_prefixes = {
+        "canonical-package": "src/hswm/",
+        "research-source": "_research/",
+        "maintenance-script": "scripts/",
+        "test": "tests/",
+    }
+    for manifest_relative in manifest_paths:
+        manifest_path = _safe_path(root, manifest_relative)
+        if manifest_path is None or not manifest_path.is_file():
+            return None
+        try:
+            migration = load_json(manifest_path)
+        except ContractError:
+            return None
+        schema_version = migration.get("schema_version")
+        if schema_version not in {
+            "hswm-python-root-migrations/v1",
+            "hswm-python-root-migrations/v2",
+        } or migration.get("status") != "SOURCE_PINNED_PATH_MIGRATION":
+            return None
+        rows = migration.get("migrations")
+        if not isinstance(rows, list) or any(not isinstance(row, Mapping) for row in rows):
+            return None
+        for row in rows:
+            if row.get("old_path") != relative:
+                continue
+            canonical_relative = row.get("canonical_path")
+            if row.get("source_sha256") != expected_sha256:
+                return None
+            if schema_version == "hswm-python-root-migrations/v1":
+                prefix = "src/hswm/"
+            else:
+                prefix = destination_prefixes.get(row.get("destination_kind"))
+            if (
+                not isinstance(canonical_relative, str)
+                or not isinstance(prefix, str)
+                or not canonical_relative.startswith(prefix)
+                or not canonical_relative.endswith(".py")
+            ):
+                return None
+            canonical = _safe_path(root, canonical_relative)
+            if canonical is None:
+                return None
+            matches.append(canonical)
+    return matches[0] if len(matches) == 1 else None
+
+
 def _mapping(value: Any, label: str, errors: list[str]) -> Mapping[str, Any]:
     if not isinstance(value, Mapping):
         errors.append(f"{label} must be an object")
@@ -161,7 +239,7 @@ def validate(root: Path, manifest_path: Path) -> list[str]:
     if baseline.get("source_hashes") != MECHANISM_SOURCE_HASHES:
         errors.append("mechanism baseline source inventory drifted")
     for relative, expected in MECHANISM_SOURCE_HASHES.items():
-        candidate = _safe_path(root, relative)
+        candidate = _current_source_path(root, relative, expected)
         if candidate is None or not candidate.is_file():
             errors.append(f"mechanism source missing or unsafe: {relative}")
             continue

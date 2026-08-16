@@ -43,6 +43,46 @@ def test_repository_design_lock_is_valid_and_explicitly_unregistered() -> None:
     assert contract.VERIFIER_PATH not in payload["mechanism_baseline"]["source_hashes"]
 
 
+def test_migrated_mechanism_source_resolves_to_exact_canonical_bytes() -> None:
+    expected = contract.MECHANISM_SOURCE_HASHES["hypergraph.py"]
+
+    resolved = contract._current_source_path(REPO_ROOT, "hypergraph.py", expected)
+
+    assert resolved == REPO_ROOT / "src/hswm/substrate/hypergraph.py"
+    assert contract.sha256_file(resolved) == expected
+
+
+def test_migration_registry_cannot_redirect_without_the_locked_source_pin(
+    tmp_path: Path,
+) -> None:
+    history = tmp_path / "ontology/history"
+    canonical = tmp_path / "src/hswm/substrate/hypergraph.py"
+    history.mkdir(parents=True)
+    canonical.parent.mkdir(parents=True)
+    canonical.write_text("different source\n", encoding="utf-8")
+    _write(
+        tmp_path / contract.MIGRATION_ONTOLOGY_PATH,
+        {"python_root_migrations": ["ontology/history/wave.json"]},
+    )
+    _write(
+        history / "wave.json",
+        {
+            "schema_version": "hswm-python-root-migrations/v2",
+            "status": "SOURCE_PINNED_PATH_MIGRATION",
+            "migrations": [
+                {
+                    "old_path": "hypergraph.py",
+                    "canonical_path": "src/hswm/substrate/hypergraph.py",
+                    "destination_kind": "canonical-package",
+                    "source_sha256": "f" * 64,
+                }
+            ],
+        },
+    )
+
+    assert contract._current_source_path(tmp_path, "hypergraph.py", "0" * 64) is None
+
+
 def test_self_reported_equal_budget_can_never_admit_a_v1_run(tmp_path: Path) -> None:
     run = _write(
         tmp_path / "run.json",

@@ -1,16 +1,16 @@
 {
   "$schema": "../schemas/hswm_path_catalog.v1.schema.json",
   "concept_counts": {
-    "hswm:repo:boundary": 79,
-    "hswm:repo:cells": 61,
+    "hswm:repo:boundary": 80,
+    "hswm:repo:cells": 60,
     "hswm:repo:evaluation": 240,
     "hswm:repo:evidence": 731,
-    "hswm:repo:field": 212,
+    "hswm:repo:field": 213,
     "hswm:repo:history": 276,
     "hswm:repo:identity": 36,
     "hswm:repo:infrastructure": 334,
     "hswm:repo:learning": 502,
-    "hswm:repo:substrate": 46
+    "hswm:repo:substrate": 47
   },
   "entries": [
     {
@@ -7173,16 +7173,6 @@
     },
     {
       "concepts": [
-        "hswm:repo:field",
-        "hswm:repo:history",
-        "hswm:repo:infrastructure"
-      ],
-      "kind": "python",
-      "path": "hypergraph.py",
-      "storage_role": "LEGACY_PATH_BOUND_ROOT"
-    },
-    {
-      "concepts": [
         "hswm:repo:evidence"
       ],
       "kind": "json",
@@ -7359,6 +7349,15 @@
       ],
       "kind": "json",
       "path": "ontology/history/PYTHON_ROOT_MIGRATIONS.W6.v2.json",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:boundary",
+        "hswm:repo:history"
+      ],
+      "kind": "json",
+      "path": "ontology/history/PYTHON_ROOT_MIGRATIONS.W7.v2.json",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -10867,6 +10866,16 @@
     },
     {
       "concepts": [
+        "hswm:repo:field",
+        "hswm:repo:infrastructure",
+        "hswm:repo:substrate"
+      ],
+      "kind": "python",
+      "path": "src/hswm/substrate/hypergraph.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
         "hswm:repo:infrastructure",
         "hswm:repo:substrate"
       ],
@@ -10949,6 +10958,16 @@
       ],
       "kind": "python",
       "path": "src/hswm_token_learning_contract/__init__.py",
+      "storage_role": "CANONICAL_DIRECTORY"
+    },
+    {
+      "concepts": [
+        "hswm:repo:field",
+        "hswm:repo:history",
+        "hswm:repo:infrastructure"
+      ],
+      "kind": "python",
+      "path": "src/hypergraph/__init__.py",
       "storage_role": "CANONICAL_DIRECTORY"
     },
     {
@@ -12195,7 +12214,7 @@
       "storage_role": "LEGACY_PATH_BOUND_ROOT"
     }
   ],
-  "entry_count": 1381,
+  "entry_count": 1383,
   "ontology": "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json",
   "schema_version": "hswm-path-catalog/v1"
 }

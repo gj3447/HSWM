@@ -20,8 +20,10 @@ repeated revisions, and confluence.
 - `manifest.v1.json` names eight candidate arms, three tasks, budget dimensions,
   capped resources, metrics, success paths, attribution, and claim boundary.
 - `verify_contract.py` checks the mechanism baseline, verifier bytes, and one
-  digest over every experimental meaning. Protocol v1 refuses every run: a
-  caller-supplied `equal_budget=true` or hash-shaped placeholder has no authority.
+  digest over every experimental meaning. A migrated logical root source is
+  resolved only through the ontology's source-pinned migration manifests, while
+  its locked bytes stay unchanged. Protocol v1 refuses every run: a caller-supplied
+  `equal_budget=true` or hash-shaped placeholder has no authority.
 - `test_verify_contract.py` injects self-reported budget parity, altered task and
   arm semantics, fake registration, source/protocol conflation, result leakage,
   and duplicate JSON keys.

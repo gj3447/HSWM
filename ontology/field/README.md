@@ -8,3 +8,5 @@ local states.
 - [`sheaf/`](sheaf/) contains the source-backed sheaf research bundle.
 - [`prom_search_hswm/`](../../prom_search_hswm/) contains field algebra,
   routing, retrieval, and plasticity experiments.
+- [`hswm.substrate.hypergraph`](../../src/hswm/substrate/hypergraph.py) is the
+  canonical exact-byte implementation of the mutable n-ary topology.

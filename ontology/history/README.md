@@ -40,6 +40,13 @@ commands remain reproducible from the source-pinned
 [`W6 manifest`](PYTHON_ROOT_MIGRATIONS.W6.v2.json); the older Longinus bindings
 and receipts remain immutable historical evidence.
 
+W7 moves the exact hypergraph topology implementation into `hswm.substrate`.
+The installed flat import is a module alias, so legacy callers, `__file__`-based
+kernel hashes, and canonical callers share one exact module object. The
+source-pinned [`W7 manifest`](PYTHON_ROOT_MIGRATIONS.W7.v2.json) preserves the
+old root layout, while the active shared-field verifier resolves the same locked
+bytes through the migration registry without rewriting its scientific baseline.
+
 ```bash
 uv run hswm-legacy-replay list
 uv run hswm-legacy-replay verify OLD_ROOT_FILE.py
@@ -53,7 +60,7 @@ receipt binds the selected source commit, tree, old paths, and source hashes.
 [`PYTHON_ROOT_CLASSIFICATION.v1.json`](PYTHON_ROOT_CLASSIFICATION.v1.json)
 partitions every remaining root Python file into `SHA_LOCKED`,
 `REPLAY_HISTORY_LOCKED`, or `REVIEW_REQUIRED`. The partition is exhaustive and
-disjoint; the validator rejects a new or unexplained root module. After W6 the
+disjoint; the validator rejects a new or unexplained root module. After W7 the
 review class is empty: every remaining module has an explicit evidence or replay
 reason.
 

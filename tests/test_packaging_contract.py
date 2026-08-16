@@ -119,6 +119,7 @@ def test_runtime_and_entry_modules_are_shipped_in_the_wheel() -> None:
         "f5v2_judge",
         "h3_b3_manifest",
         "h3_title_anchor_falsifier",
+        "hypergraph",
         "hswm_artifact_layout",
         "hswm_cellular_live_probe",
         "hswm_cellular_openai",
@@ -194,6 +195,20 @@ def test_cellular_compatibility_imports_resolve_to_canonical_objects() -> None:
     assert compatibility_openai.urlrequest is openai.urlrequest
     assert compatibility_probe.run_probe is live_probe.run_probe
     assert (REPO_ROOT / "src/hswm_cellular_live_probe/__main__.py").is_file()
+
+
+def test_hypergraph_compatibility_import_is_the_canonical_module() -> None:
+    import hypergraph as compatibility
+    from hswm.substrate import hypergraph as canonical
+
+    assert compatibility is canonical
+    assert compatibility.Hypergraph is canonical.Hypergraph
+    assert Path(compatibility.__file__).resolve() == (
+        REPO_ROOT / "src/hswm/substrate/hypergraph.py"
+    ).resolve()
+    assert hashlib.sha256(Path(compatibility.__file__).read_bytes()).hexdigest() == (
+        "3b72f7948196a4c865d5e35e78a2ac1ff9447b205bb07096fe9472a6462e8c34"
+    )
 
 
 def test_default_pytest_surface_includes_public_research() -> None:

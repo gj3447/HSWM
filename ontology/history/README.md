@@ -23,6 +23,11 @@ pin the exact commit from which its old paths were removed. They are also the
 single path registry consumed by `hswm-legacy-replay`; no second alias map can
 silently drift from the migration evidence.
 
+W4 moves the isolated OSS extraction comparison program into the existing
+`_research.material_extraction` namespace. Its historical root path and exact
+bytes remain reproducible from the source-pinned
+[`W4 manifest`](PYTHON_ROOT_MIGRATIONS.W4.v2.json).
+
 ```bash
 uv run hswm-legacy-replay list
 uv run hswm-legacy-replay verify OLD_ROOT_FILE.py
@@ -36,7 +41,7 @@ receipt binds the selected source commit, tree, old paths, and source hashes.
 [`PYTHON_ROOT_CLASSIFICATION.v1.json`](PYTHON_ROOT_CLASSIFICATION.v1.json)
 partitions every remaining root Python file into `SHA_LOCKED`,
 `REPLAY_HISTORY_LOCKED`, or `REVIEW_REQUIRED`. The partition is exhaustive and
-disjoint; the validator rejects a new or unexplained root module. After W3 the
+disjoint; the validator rejects a new or unexplained root module. After W4 the
 review class is empty: every remaining module has an explicit evidence or replay
 reason.
 

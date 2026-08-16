@@ -227,8 +227,8 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | `evidence/`, `prereg/`, `manifests/`, `results/`, `receipts/` | typed research artifacts and direct measurements |
 | `docs/research/`, `docs/assets/` | narrative research material and public visual assets |
 
-The root Python count is now **83**, down from 148. The remaining files are an
-explicit compatibility surface: 73 are byte-bound by checked-in SHA evidence and
+The root Python count is now **82**, down from 148. The remaining files are an
+explicit compatibility surface: 72 are byte-bound by checked-in SHA evidence and
 10 belong to replay clusters that still share current root-relative topology.
 There are no unexplained review candidates. The exact disjoint partition is
 machine-readable in
@@ -246,8 +246,10 @@ Completed Python moves are source-pinned in
 [`PYTHON_ROOT_MIGRATIONS.v1.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.v1.json)
 and
 [`PYTHON_ROOT_MIGRATIONS.W2.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W2.v2.json),
-with the replay-backed third wave in
-[`PYTHON_ROOT_MIGRATIONS.W3.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W3.v2.json).
+with later replay-backed waves in
+[`PYTHON_ROOT_MIGRATIONS.W3.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W3.v2.json)
+and
+[`PYTHON_ROOT_MIGRATIONS.W4.v2.json`](ontology/history/PYTHON_ROOT_MIGRATIONS.W4.v2.json).
 **New Python modules or research artifacts must not be added to the root.** New
 code goes under `src/hswm/`; artifacts are routed by kind according to
 [`docs/research/ARTIFACT_LAYOUT.md`](docs/research/ARTIFACT_LAYOUT.md).

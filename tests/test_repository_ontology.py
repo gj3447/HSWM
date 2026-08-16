@@ -67,9 +67,9 @@ def test_root_compatibility_surface_and_catalog_are_current() -> None:
 def test_python_root_migrations_are_pinned_and_root_count_only_decreases() -> None:
     data = load_repository_ontology()
     result = validate_checkout(data)
-    assert result["python_root_migrations"] == 65
-    assert len(list(ROOT.glob("*.py"))) == 83
-    assert result["root_python_sha_locked"] == 73
+    assert result["python_root_migrations"] == 66
+    assert len(list(ROOT.glob("*.py"))) == 82
+    assert result["root_python_sha_locked"] == 72
     assert result["root_python_replay_locked"] == 10
     assert result["root_python_review_required"] == 0
 
@@ -83,8 +83,8 @@ def test_python_root_migrations_are_pinned_and_root_count_only_decreases() -> No
         (ROOT / data["python_root_classification"]).read_text(encoding="utf-8")
     )
     assert classification["baseline_root_python_count"] == 144
-    assert classification["observed_root_python_count"] == 83
-    assert classification["counts"]["partition_total"] == 83
+    assert classification["observed_root_python_count"] == 82
+    assert classification["counts"]["partition_total"] == 82
 
     replay = data["legacy_replay"]
     assert replay["source_of_truth"] == "python_root_migrations"

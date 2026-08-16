@@ -1,6 +1,6 @@
 import json
 
-from oss_extraction_compare import compare
+from _research.material_extraction.oss_extraction_compare import compare
 
 
 def test_compare_aligns_exact_material_and_separates_coverage_from_evidence(tmp_path):

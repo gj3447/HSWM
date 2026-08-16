@@ -72,7 +72,7 @@ T0-T3/H3는 그 treatment의 검증이다.
 
 공개 [HippoRAG MuSiQue OpenIE 출력](https://github.com/OSU-NLP-Group/HippoRAG/tree/main/outputs/musique)을
 받아 frozen V5 journal과 exact material intersection에서 직접 비교했다.
-비교기는 `oss_extraction_compare.py`, 결과 정본은
+비교기는 `_research/material_extraction/oss_extraction_compare.py`, 결과 정본은
 `evidence/WORLD_COMPILER_V2_HIPPORAG_COMPARISON_2026-07-21.json`이다. 새 model call이나
 remote compute는 사용하지 않았다.
 
@@ -564,7 +564,7 @@ curl -L --fail --silent --show-error \
   -o "$tmp_dir/hippo.json" \
   https://raw.githubusercontent.com/OSU-NLP-Group/HippoRAG/main/outputs/musique/openie_results_ner_gpt-4o-mini.json
 
-uv run python oss_extraction_compare.py \
+uv run python -m _research.material_extraction.oss_extraction_compare \
   --hipporag-json "$tmp_dir/hippo.json" \
   --v5-journal "$HSWM_V5_JOURNAL"
 ```
@@ -585,7 +585,8 @@ Expected input digests:
   source lock;
 - `evidence/WORLD_COMPILER_V2_HIPPORAG_COMPARISON_2026-07-21.json` — direct comparison
   receipt;
-- `oss_extraction_compare.py` — deterministic comparison tool;
+- `_research/material_extraction/oss_extraction_compare.py` — deterministic
+  comparison tool;
 - `tests/test_oss_extraction_compare.py` — synthetic contract test.
 
 This research pass performed no new model installation, remote GPU job, or

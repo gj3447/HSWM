@@ -83,14 +83,14 @@ from .continual import (
 LIVE_PROTOCOL = "hswm-continual-live/v1"
 AUTHOR_ID = "agent:continual-memory-author"
 CAPABILITY = "nonce_graph_lookup"
-COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v4"
+COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v5"
 INDEXED_AUTHORING_VIEW_SCHEMA = "hswm-indexed-authoring-view/v1"
 MUTATION_EXPRESSIVITY = "compact-adapter-subset"
 PUBLIC_SCHEMA_GATE_FIXTURE_DOMAIN = "hswm-public-schema-gate/v3"
 PUBLIC_SCHEMA_GATE_FIXTURE_COMPACT_PATCH_SCHEMA = (
     "hswm-compact-structure-patch/v3"
 )
-PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v5"
+PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v6"
 PUBLIC_SCHEMA_GATE_EPISODE = "public-schema-gate-never-evaluation"
 PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS = 32_768
 PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING = 6144
@@ -102,7 +102,6 @@ STRUCTURED_OUTPUT_MODE = "openai-response-format-json-schema/v1"
 TOKEN_PREFLIGHT_MODE = "vllm-tokenize-chat/v1"
 TOKEN_PREFLIGHT_SCHEMA = "hswm-token-preflight-receipt/v1"
 MAX_AUTHORED_CELLS = 16
-MAX_CELL_MEMORY_REFERENCES = 64
 MAX_CELL_EDGES = 8
 MAX_RELATED_MEMORY_IDS = 8
 MAX_CELL_ID_CHARS = 64
@@ -1452,7 +1451,7 @@ def _compact_patch_response_schema(
             "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
         }
     )
-    return JSONSchemaContract.make("hswm_compact_patch_v4", schema)
+    return JSONSchemaContract.make("hswm_compact_patch_v5", schema)
 
 
 def _plain_memory_response_schema() -> JSONSchemaContract:
@@ -2629,19 +2628,6 @@ def _parse_structure_proposal(
         expected_length=len(source_tokens),
         allow_delete=False,
     )
-    for cell_index in range(cell_count):
-        existing_assigned_count = sum(
-            assignment == cell_index for assignment in existing_assignments
-        )
-        new_assigned_count = sum(
-            assignment == cell_index for assignment in new_assignments
-        )
-        if (
-            existing_assigned_count + new_assigned_count
-            > MAX_CELL_MEMORY_REFERENCES
-        ):
-            raise ContinualLiveError("compact cell exceeds the memory assignment bound")
-
     delete_ids = tuple(
         active_ids[index]
         for index, assignment in enumerate(existing_assignments)
@@ -2809,11 +2795,14 @@ def _structure_update_payload(
             "target MemoryRecord IDs: choose only a surviving existing memory_id or a "
             "distinct new public token's suggested_memory_id. Never put a cell index, "
             "token index, cell_id, or source memory's own suggested_memory_id in a "
+            "relation. OUTGOING rule: A.related_memory_ids contains B only when "
+            "A.content.target == B.content.source. A predecessor P satisfying "
+            "P.content.target == A.content.source is not an outgoing target. A shared "
+            "relation label and a cell assignment are forbidden evidence for a memory "
             "relation. Cell-assignment vectors do not define memory relations. Use [] "
-            "where no target is justified. A directed "
-            "composition is valid only when source.content.target equals target.content."
-            "source. Batches may be shuffled: never infer relations from index, "
-            "adjacency, or order. Do not reproduce HSWM, MemoryRecord, or token JSON as "
+            "rather than guess. Batches may be shuffled: never infer "
+            "relations from index, adjacency, or order. Do not reproduce HSWM, "
+            "MemoryRecord, or token JSON as "
             "a substitute for vectors; a bounded cell instruction may name public "
             "identifiers needed for routing. The indexed read-only view is a lossless "
             "projection of HSWM itself, not a separate plan or harness document."
@@ -2835,13 +2824,12 @@ def _structure_update_payload(
             "cell_id_max_chars": MAX_CELL_ID_CHARS,
             "cell_instruction_max_chars": MAX_CELL_INSTRUCTION_CHARS,
             "cells_max": MAX_AUTHORED_CELLS,
-            "memory_assignments_max_per_cell": MAX_CELL_MEMORY_REFERENCES,
             "memory_relations_max_per_memory": MAX_RELATED_MEMORY_IDS,
             "new_memory_relation_semantics": (
-                "relation array position is source; related_memory_ids are direct "
-                "surviving existing memory_id or distinct new suggested_memory_id "
-                "targets; never cell/token indices; content.target-to-content.source "
-                "composition only; self-reference forbidden; [] means no target"
+                "relation array position is source A; related_memory_ids contains "
+                "target B only when A.content.target == B.content.source; predecessor, "
+                "shared-label, cell-assignment, and cell/token-index evidence are "
+                "forbidden; self-reference forbidden; [] means no justified target"
             ),
             "next_cells_max_per_cell": MAX_CELL_EDGES,
             "rationale_max_chars": MAX_RATIONALE_CHARS,
@@ -2975,9 +2963,14 @@ class StructuredHSWMArm(_ModelArm):
                 "omission or default. new_memory_relations array position i makes public "
                 "token i the SOURCE; related_memory_ids must be direct target "
                 "MemoryRecord IDs, never cell or token indices, and must not contain "
-                "the source token's suggested_memory_id. Assignment vectors never "
-                "define relations. Relations "
-                "are content-composable only, never inferred from shuffled index/order. "
+                "the source token's suggested_memory_id. OUTGOING rule: "
+                "A.related_memory_ids contains B only when A.content.target == "
+                "B.content.source. A predecessor P satisfying P.content.target == "
+                "A.content.source is not an outgoing target. A shared relation label "
+                "and a cell assignment are forbidden evidence for a memory relation. "
+                "Cell-assignment vectors do not define memory relations. Use [] rather "
+                "than guess. Relations are never inferred from shuffled "
+                "index/order. "
                 "The read-only active HSWM uses canonical memory and cell indices while "
                 "preserving content, provenance, relations, assignments, and topology. "
                 "Do not return IDs where indices are required, memory/token JSON, a "

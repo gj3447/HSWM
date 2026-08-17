@@ -36,7 +36,7 @@ from hswm.experiments.continual_live import (
     run_removal_restore_probes,
     schema_gate_main,
 )
-from hswm.selfmod.contracts import canonical_json_bytes
+from hswm.selfmod.contracts import SelfModelContractError, canonical_json_bytes
 
 
 TOKEN_PREFLIGHT_SUCCESS_EVENTS = [
@@ -172,17 +172,9 @@ class ScriptedRelationalBackend:
                     "related_memory_ids": related_existing + related_new,
                 }
             )
-        cell_width = live.MAX_CELL_MEMORY_REFERENCES
-        existing_cell_indices = [
-            index // cell_width for index in range(len(existing))
-        ]
-        new_cell_indices = [
-            (len(existing) + index) // cell_width
-            for index in range(len(source_tokens))
-        ]
-        cell_count = max(
-            1, (len(existing) + len(source_tokens) + cell_width - 1) // cell_width
-        )
+        existing_cell_indices = [0] * len(existing)
+        new_cell_indices = [0] * len(source_tokens)
+        cell_count = 1
         cell_ids = [f"cell:lookup:{index}" for index in range(cell_count)]
         cells = []
         for index in range(cell_count):
@@ -1129,45 +1121,78 @@ def test_compact_patch_fails_closed_on_coverage_references_and_reachability(
     assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
 
 
-def test_compact_patch_rejects_assignment_vector_cell_capacity(
+def test_compact_patch_relies_on_global_memory_policy_for_concentrated_cell(
     tmp_path: Path,
 ) -> None:
-    class OverloadedCellBackend(ScriptedRelationalBackend):
-        @staticmethod
-        def _author(payload: Mapping[str, Any]) -> str:
-            value = json.loads(ScriptedRelationalBackend._author(payload))
-            value["cells"] = [
-                {
-                    "capability": "nonce_graph_lookup",
-                    "cell_id": "cell:overloaded",
-                    "executor_agent_id": None,
-                    "instruction": "This cell is intentionally over capacity.",
-                    "next_cell_indices": [],
-                }
-            ]
-            value["new_memory_cell_indices"] = [0] * len(
-                value["new_memory_cell_indices"]
-            )
-            return json.dumps(value, sort_keys=True, separators=(",", ":"))
-
     arm = StructuredHSWMArm(
-        backend=OverloadedCellBackend(),
-        budget=_budget(),
-        isolation_id="overloaded-assignment-vector",
+        backend=ScriptedRelationalBackend(),
+        budget=replace(_budget(), max_memories=64),
+        isolation_id="global-memory-policy-bound",
         store_path=tmp_path / "state.sqlite3",
     )
     batch = LearningBatch(
-        episode_id="episode-overloaded-assignment-vector",
+        episode_id="episode-global-memory-policy-bound",
         after_step=0,
         chosen=None,
         correct=False,
         learning_tokens=tuple(
             PublicLearningToken(f"node-{index}", "rel", f"target-{index}")
-            for index in range(live.MAX_CELL_MEMORY_REFERENCES + 1)
+            for index in range(65)
         ),
     )
-    with pytest.raises(ContinualLiveError, match="memory assignment bound"):
+    with pytest.raises(SelfModelContractError, match="memory-count budget"):
         arm.update(batch)
+    assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
+
+
+def test_compact_patch_prompt_rejects_predecessor_as_outgoing_relation(
+    tmp_path: Path,
+) -> None:
+    class PredecessorBackend(ScriptedRelationalBackend):
+        @staticmethod
+        def _author(payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            value["new_memory_relations"][0]["related_memory_ids"] = [
+                payload["public_source_tokens"][1]["suggested_memory_id"]
+            ]
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    backend = PredecessorBackend()
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id="predecessor-is-not-outgoing",
+        store_path=tmp_path / "predecessor.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="not content-composable"):
+        arm.update(
+            LearningBatch(
+                episode_id="episode-predecessor-is-not-outgoing",
+                after_step=0,
+                chosen=None,
+                correct=False,
+                learning_tokens=(
+                    PublicLearningToken("node-b", "rel", "node-c"),
+                    PublicLearningToken("node-a", "rel", "node-b"),
+                ),
+            )
+        )
+    combined_prompt = (
+        backend.requests[0]["system"]
+        + " "
+        + backend.requests[0]["payload"]["instruction"]
+    )
+    assert (
+        "A.related_memory_ids contains B only when A.content.target == "
+        "B.content.source"
+    ) in combined_prompt
+    assert (
+        "P.content.target == A.content.source is not an outgoing target"
+        in combined_prompt
+    )
+    assert "shared relation label" in combined_prompt
+    assert "cell assignment are forbidden evidence" in combined_prompt
+    assert "Use [] rather than guess" in combined_prompt
     assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
 
 
@@ -1670,8 +1695,8 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         state_dir=tmp_path / "gate-state",
     )
     assert result["valid"] is True
-    assert result["adapter_schema"] == "hswm-compact-structure-patch/v4"
-    assert result["protocol"] == "hswm-public-schema-gate/v5"
+    assert result["adapter_schema"] == "hswm-compact-structure-patch/v5"
+    assert result["protocol"] == "hswm-public-schema-gate/v6"
     assert result["indexed_authoring_view_schema"] == (
         "hswm-indexed-authoring-view/v1"
     )
@@ -1700,6 +1725,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         if item["operation"] == "update"
     ) <= 6144
     assert result["final_memory_count"] == 144
+    assert result["final_cell_count"] == 1
     assert result["probe_choice"] == live.public_schema_gate_fixture()["probe_answer"]
     assert result["before_probe_state_sha256"] == result["after_probe_state_sha256"]
     assert result["denylisted_from_evaluation"] is True
@@ -1800,7 +1826,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         item["response_schema_name"]
         for item in structured_events
         if item["event"] == "intent"
-    ] == ["hswm_compact_patch_v4", "hswm_compact_patch_v4", "hswm_choice_v1"]
+    ] == ["hswm_compact_patch_v5", "hswm_compact_patch_v5", "hswm_choice_v1"]
     assert [
         item["response_schema_name"]
         for item in plain_events
@@ -1886,6 +1912,14 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
             set(relation) == {"related_memory_ids"}
             for relation in completion_value["new_memory_relations"]
         )
+    structured_update_values = [
+        json.loads(item["completion"]["text"])
+        for item in structured_events
+        if item["event"] == "completed" and item["operation"] == "update"
+    ]
+    assert len(structured_update_values[1]["cells"]) == 1
+    assert structured_update_values[1]["existing_memory_cell_indices"] == [0] * 140
+    assert structured_update_values[1]["new_memory_cell_indices"] == [0] * 4
     first_intent = structured_intents[0]
     first_payload = json.loads(first_intent["request_payload_json"])
     assert first_payload["mutation_expressivity"] == "compact-adapter-subset"
@@ -1905,6 +1939,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     assert "memory_assignments_max_per_cell_field" not in first_payload[
         "output_bounds"
     ]
+    assert "memory_assignments_max_per_cell" not in first_payload["output_bounds"]
     second_payload = json.loads(structured_intents[1]["request_payload_json"])
     second_projection = second_payload["current_hswm_indexed_read_only"]
     expanded_second = live._expand_indexed_authoring_projection(second_projection)
@@ -2005,6 +2040,18 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         first_intent["system_message"] + " " + first_payload["instruction"]
     )
     assert "direct target MemoryRecord IDs" in combined_instruction
+    assert "OUTGOING rule" in combined_instruction
+    assert (
+        "A.related_memory_ids contains B only when A.content.target == "
+        "B.content.source"
+    ) in combined_instruction
+    assert (
+        "P.content.target == A.content.source is not an outgoing target"
+        in combined_instruction
+    )
+    assert "shared relation label" in combined_instruction
+    assert "cell assignment are forbidden evidence" in combined_instruction
+    assert "Use [] rather than guess" in combined_instruction
     assert "Cell-assignment vectors do not define memory relations" in (
         combined_instruction
     )
@@ -3567,7 +3614,7 @@ def test_public_schema_gate_cli_has_no_seed_path_and_binds_artifacts(
     assert result["outbound_http_requests_observed"] == 8
     prereg = json.loads((output / "gate_preregistration.json").read_text())
     assert prereg["no_precommit_or_seed_path"] is True
-    assert prereg["protocol"] == "hswm-public-schema-gate/v5"
+    assert prereg["protocol"] == "hswm-public-schema-gate/v6"
     assert prereg["indexed_authoring_view_schema"] == (
         "hswm-indexed-authoring-view/v1"
     )

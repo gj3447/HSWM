@@ -81,14 +81,13 @@ from .continual import (
 LIVE_PROTOCOL = "hswm-continual-live/v1"
 AUTHOR_ID = "agent:continual-memory-author"
 CAPABILITY = "nonce_graph_lookup"
-COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v2"
-PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v2"
+COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v3"
+PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v3"
 PUBLIC_SCHEMA_GATE_EPISODE = "public-schema-gate-never-evaluation"
 PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING = 6144
 STRUCTURED_OUTPUT_MODE = "openai-response-format-json-schema/v1"
 MAX_AUTHORED_CELLS = 16
 MAX_CELL_MEMORY_REFERENCES = 64
-MAX_CELL_MEMORY_REFERENCES_PER_FIELD = 32
 MAX_CELL_EDGES = 8
 MAX_RELATED_MEMORY_IDS = 8
 MAX_CELL_ID_CHARS = 64
@@ -806,13 +805,6 @@ def _string_schema(*, max_length: int, min_length: int = 1) -> dict[str, Any]:
     }
 
 
-def _id_item_schema(ids: Sequence[str]) -> dict[str, Any]:
-    if ids:
-        return {"enum": list(ids), "type": "string"}
-    # ``maxItems: 0`` on the containing array makes this item shape unreachable.
-    return {"maxLength": MAX_CELL_ID_CHARS, "type": "string"}
-
-
 def _index_item_schema(count: int) -> dict[str, Any]:
     if count <= 0:
         raise ContinualLiveError("response schema requires a non-empty public batch")
@@ -827,11 +819,20 @@ def _compact_patch_response_schema(
     source_count = len(source_tokens)
     if source_count <= 0:
         raise ContinualLiveError("compact response schema requires public tokens")
-    active_ids = tuple(memory.memory_id for memory in active.memories)
-    id_items = _id_item_schema(active_ids)
-    index_items = _index_item_schema(source_count)
-    string_array = {
-        "items": _string_schema(max_length=MAX_CELL_ID_CHARS),
+    active_count = len(active.memories)
+    new_index_items = _index_item_schema(source_count)
+    cell_index_items = {
+        "maximum": min(policy.max_cells, MAX_AUTHORED_CELLS) - 1,
+        "minimum": 0,
+        "type": "integer",
+    }
+    existing_relation_index_items = (
+        _index_item_schema(active_count)
+        if active_count
+        else {"maximum": 0, "minimum": 0, "type": "integer"}
+    )
+    cell_edge_array = {
+        "items": cell_index_items,
         "maxItems": MAX_CELL_EDGES,
         "type": "array",
     }
@@ -840,39 +841,24 @@ def _compact_patch_response_schema(
             "capability": {"const": CAPABILITY, "type": "string"},
             "cell_id": _string_schema(max_length=MAX_CELL_ID_CHARS),
             "executor_agent_id": {"type": "null"},
-            "existing_memory_ids": {
-                "items": id_items,
-                "maxItems": min(
-                    len(active_ids), MAX_CELL_MEMORY_REFERENCES_PER_FIELD
-                ),
-                "type": "array",
-            },
             "instruction": _string_schema(
                 max_length=MAX_CELL_INSTRUCTION_CHARS
             ),
-            "new_token_indices": {
-                "items": index_items,
-                "maxItems": min(
-                    source_count, MAX_CELL_MEMORY_REFERENCES_PER_FIELD
-                ),
-                "type": "array",
-            },
-            "next_cell_ids": string_array,
+            "next_cell_indices": cell_edge_array,
         }
     )
-    memory_link = _strict_json_object(
+    memory_relation = _strict_json_object(
         {
-            "related_existing_memory_ids": {
-                "items": id_items,
-                "maxItems": min(len(active_ids), MAX_RELATED_MEMORY_IDS),
+            "related_existing_memory_indices": {
+                "items": existing_relation_index_items,
+                "maxItems": min(active_count, MAX_RELATED_MEMORY_IDS),
                 "type": "array",
             },
             "related_other_new_token_indices": {
-                "items": index_items,
+                "items": new_index_items,
                 "maxItems": min(max(source_count - 1, 0), MAX_RELATED_MEMORY_IDS),
                 "type": "array",
             },
-            "token_index": index_items,
         }
     )
     schema = _strict_json_object(
@@ -883,14 +869,25 @@ def _compact_patch_response_schema(
                 "minItems": 1,
                 "type": "array",
             },
-            "delete_memory_ids": {
-                "items": id_items,
-                "maxItems": len(active_ids),
+            "entry_cell_index": cell_index_items,
+            "existing_memory_cell_indices": {
+                "items": {
+                    "maximum": cell_index_items["maximum"],
+                    "minimum": -1,
+                    "type": "integer",
+                },
+                "maxItems": active_count,
+                "minItems": active_count,
                 "type": "array",
             },
-            "entry_cell_id": _string_schema(max_length=MAX_CELL_ID_CHARS),
-            "new_memory_links": {
-                "items": memory_link,
+            "new_memory_cell_indices": {
+                "items": cell_index_items,
+                "maxItems": source_count,
+                "minItems": source_count,
+                "type": "array",
+            },
+            "new_memory_relations": {
+                "items": memory_relation,
                 "maxItems": source_count,
                 "minItems": source_count,
                 "type": "array",
@@ -898,7 +895,7 @@ def _compact_patch_response_schema(
             "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
         }
     )
-    return JSONSchemaContract.make("hswm_compact_patch_v2", schema)
+    return JSONSchemaContract.make("hswm_compact_patch_v3", schema)
 
 
 def _plain_memory_response_schema() -> JSONSchemaContract:
@@ -1387,164 +1384,76 @@ def _parse_structure_proposal(
     source_tokens: Sequence[Mapping[str, Any]],
     generation: int,
     policy: SelfModelPolicy,
-) -> Any:
+) -> MutationProposal:
     value = _strict_object(text)
     if set(value) != {
         "cells",
-        "delete_memory_ids",
-        "entry_cell_id",
-        "new_memory_links",
+        "entry_cell_index",
+        "existing_memory_cell_indices",
+        "new_memory_cell_indices",
+        "new_memory_relations",
         "rationale",
     }:
         raise ContinualLiveError("compact structured update field set is invalid")
+    if not all(
+        isinstance(value[item], list)
+        for item in (
+            "cells",
+            "existing_memory_cell_indices",
+            "new_memory_cell_indices",
+            "new_memory_relations",
+        )
+    ):
+        raise ContinualLiveError("compact structured update list field is invalid")
+    _compact_patch_response_schema(active, source_tokens, policy).validate_instance(
+        value
+    )
     if (
         not isinstance(value["rationale"], str)
         or not value["rationale"].strip()
         or len(value["rationale"]) > MAX_RATIONALE_CHARS
     ):
         raise ContinualLiveError("structured update requires a rationale")
-    if not all(
-        isinstance(value[item], list)
-        for item in ("cells", "delete_memory_ids", "new_memory_links")
-    ):
-        raise ContinualLiveError("compact structured update list field is invalid")
-    if len(value["cells"]) > min(policy.max_cells, MAX_AUTHORED_CELLS):
+    cell_count = len(value["cells"])
+    if not 1 <= cell_count <= min(policy.max_cells, MAX_AUTHORED_CELLS):
         raise ContinualLiveError("compact patch exceeds the authored cell bound")
     source_ids = tuple(str(item["token_id"]) for item in source_tokens)
     if not source_ids or len(source_ids) != len(set(source_ids)):
         raise ContinualLiveError("public source token ids must be non-empty and unique")
-    active_ids = {memory.memory_id for memory in active.memories}
+    active_memories = tuple(active.memories)
+    active_ids = tuple(memory.memory_id for memory in active_memories)
     new_ids = tuple(str(item["suggested_memory_id"]) for item in source_tokens)
-    if len(new_ids) != len(set(new_ids)) or set(new_ids) & active_ids:
+    if len(new_ids) != len(set(new_ids)) or set(new_ids) & set(active_ids):
         raise ContinualLiveError("new deterministic memory ids collide with HSWM state")
 
-    delete_ids = value["delete_memory_ids"]
-    if (
-        any(not isinstance(item, str) or not item for item in delete_ids)
-        or len(delete_ids) != len(set(delete_ids))
-        or not set(delete_ids) <= active_ids
-    ):
-        raise ContinualLiveError("delete_memory_ids is invalid")
-    surviving_ids = active_ids - set(delete_ids)
-
-    def index_list(items: object, label: str) -> tuple[int, ...]:
+    def index_list(
+        items: object,
+        label: str,
+        *,
+        upper_bound: int,
+    ) -> tuple[int, ...]:
         if not isinstance(items, list) or any(
             isinstance(item, bool) or not isinstance(item, int) for item in items
         ):
-            raise ContinualLiveError(f"{label} must contain integer token indexes")
+            raise ContinualLiveError(f"{label} must contain integer indexes")
         indexes = tuple(items)
         if len(indexes) != len(set(indexes)) or any(
-            item < 0 or item >= len(source_tokens) for item in indexes
+            item < 0 or item >= upper_bound for item in indexes
         ):
             raise ContinualLiveError(f"{label} contains duplicate or unknown indexes")
         return indexes
-
-    def id_list(items: object, label: str) -> tuple[str, ...]:
-        if not isinstance(items, list) or any(
-            not isinstance(item, str) or not item for item in items
-        ):
-            raise ContinualLiveError(f"{label} must contain non-empty ids")
-        ids = tuple(items)
-        if len(ids) != len(set(ids)):
-            raise ContinualLiveError(f"{label} contains duplicate ids")
-        return ids
-
-    links_by_index: dict[int, Mapping[str, Any]] = {}
-    for item in value["new_memory_links"]:
-        if not isinstance(item, Mapping) or set(item) != {
-            "related_existing_memory_ids",
-            "related_other_new_token_indices",
-            "token_index",
-        }:
-            raise ContinualLiveError("new_memory_links item field set is invalid")
-        token_index = item["token_index"]
-        if (
-            isinstance(token_index, bool)
-            or not isinstance(token_index, int)
-            or token_index < 0
-            or token_index >= len(source_tokens)
-            or token_index in links_by_index
-        ):
-            raise ContinualLiveError("new_memory_links token coverage is invalid")
-        existing_related = id_list(
-            item["related_existing_memory_ids"],
-            "related_existing_memory_ids",
-        )
-        if not set(existing_related) <= surviving_ids:
-            raise ContinualLiveError("new memory relation cites unknown existing state")
-        related_other_new = index_list(
-            item["related_other_new_token_indices"],
-            "related_other_new_token_indices",
-        )
-        if (
-            len(existing_related) > MAX_RELATED_MEMORY_IDS
-            or len(related_other_new) > MAX_RELATED_MEMORY_IDS
-        ):
-            raise ContinualLiveError("new memory relation exceeds the bounded degree")
-        if token_index in related_other_new:
-            raise ContinualLiveError(
-                "related_other_new_token_indices cannot contain its source token_index"
-            )
-        links_by_index[token_index] = item
-    if set(links_by_index) != set(range(len(source_tokens))):
-        raise ContinualLiveError(
-            "new_memory_links must cover every public token exactly once"
-        )
-
-    memories = tuple(
-        MemoryRecord(
-            memory_id=new_ids[token_index],
-            kind="atomic_relation",
-            content=source_token["content"],
-            source_token_ids=(source_ids[token_index],),
-            related_memory_ids=(
-                tuple(links_by_index[token_index]["related_existing_memory_ids"])
-                + tuple(
-                    new_ids[index]
-                    for index in links_by_index[token_index][
-                        "related_other_new_token_indices"
-                    ]
-                )
-            ),
-            labels=("agent-organized",),
-        )
-        for token_index, source_token in enumerate(source_tokens)
-    )
 
     cell_fields = {
         "capability",
         "cell_id",
         "executor_agent_id",
-        "existing_memory_ids",
         "instruction",
-        "new_token_indices",
-        "next_cell_ids",
+        "next_cell_indices",
     }
-    cells: list[CellRecord] = []
-    referenced_existing: set[str] = set()
-    referenced_new_indexes: set[int] = set()
+    cell_specs: list[tuple[str, str, tuple[int, ...]]] = []
     for item in value["cells"]:
         if not isinstance(item, Mapping) or set(item) != cell_fields:
             raise ContinualLiveError("compact cell field set is invalid")
-        existing_memory_ids = id_list(
-            item["existing_memory_ids"], "cell existing_memory_ids"
-        )
-        if not set(existing_memory_ids) <= surviving_ids:
-            raise ContinualLiveError("cell cites unknown existing memory")
-        new_token_indexes = index_list(
-            item["new_token_indices"], "cell new_token_indices"
-        )
-        if (
-            len(existing_memory_ids) > MAX_CELL_MEMORY_REFERENCES_PER_FIELD
-            or len(new_token_indexes) > MAX_CELL_MEMORY_REFERENCES_PER_FIELD
-            or len(existing_memory_ids) + len(new_token_indexes)
-            > MAX_CELL_MEMORY_REFERENCES
-        ):
-            raise ContinualLiveError("compact cell exceeds the memory assignment bound")
-        if referenced_existing & set(existing_memory_ids):
-            raise ContinualLiveError("existing memory is assigned to multiple cells")
-        if referenced_new_indexes & set(new_token_indexes):
-            raise ContinualLiveError("new memory is assigned to multiple cells")
         if (
             not isinstance(item["cell_id"], str)
             or not item["cell_id"]
@@ -1557,55 +1466,192 @@ def _parse_structure_proposal(
             raise ContinualLiveError("compact cell text or capability is invalid")
         if item["executor_agent_id"] is not None:
             raise ContinualLiveError("compact cells cannot delegate hidden execution")
-        next_cell_ids = id_list(item["next_cell_ids"], "cell next_cell_ids")
-        if len(next_cell_ids) > MAX_CELL_EDGES or any(
-            len(cell_id) > MAX_CELL_ID_CHARS for cell_id in next_cell_ids
-        ):
-            raise ContinualLiveError("compact cell edge list exceeds its bound")
-        cells.append(
-            CellRecord(
-                cell_id=item["cell_id"],
-                capability=item["capability"],
-                instruction=item["instruction"],
-                memory_ids=existing_memory_ids
-                + tuple(new_ids[index] for index in new_token_indexes),
-                next_cell_ids=next_cell_ids,
-                executor_agent_id=None,
-            )
+        next_cell_indices = index_list(
+            item["next_cell_indices"],
+            "cell next_cell_indices",
+            upper_bound=cell_count,
         )
-        referenced_existing.update(existing_memory_ids)
-        referenced_new_indexes.update(new_token_indexes)
+        if len(next_cell_indices) > MAX_CELL_EDGES:
+            raise ContinualLiveError("compact cell edge list exceeds its bound")
+        cell_specs.append(
+            (item["cell_id"], item["instruction"], next_cell_indices)
+        )
+    cell_ids = tuple(item[0] for item in cell_specs)
+    if len(cell_ids) != len(set(cell_ids)):
+        raise ContinualLiveError("compact cell ids must be unique")
+    entry_cell_index = value["entry_cell_index"]
     if (
-        not cells
-        or not isinstance(value["entry_cell_id"], str)
-        or not value["entry_cell_id"]
-        or len(value["entry_cell_id"]) > MAX_CELL_ID_CHARS
+        isinstance(entry_cell_index, bool)
+        or not isinstance(entry_cell_index, int)
+        or entry_cell_index < 0
+        or entry_cell_index >= cell_count
     ):
-        raise ContinualLiveError("agent did not author a compact cell topology")
-    if referenced_existing != surviving_ids:
-        raise ContinualLiveError("compact cells must cover every surviving memory")
-    if referenced_new_indexes != set(range(len(source_tokens))):
-        raise ContinualLiveError("compact cells must cover every new public token")
-    cells_by_id = {cell.cell_id: cell for cell in cells}
-    if len(cells_by_id) != len(cells) or value["entry_cell_id"] not in cells_by_id:
-        raise ContinualLiveError("compact cell ids or entry cell are invalid")
-    reachable: set[str] = set()
-    queue = [value["entry_cell_id"]]
-    while queue:
-        cell_id = queue.pop(0)
-        if cell_id in reachable:
-            continue
-        cell = cells_by_id.get(cell_id)
-        if cell is None:
-            raise ContinualLiveError("compact cell edge cites unknown cell")
-        reachable.add(cell_id)
-        queue.extend(cell.next_cell_ids)
-    if reachable != set(cells_by_id):
-        raise ContinualLiveError("every compact cell must be reachable from entry")
+        raise ContinualLiveError("entry_cell_index cites an unknown cell")
 
-    _compact_patch_response_schema(active, source_tokens, policy).validate_instance(
-        value
+    def assignment_vector(
+        items: object,
+        label: str,
+        *,
+        expected_length: int,
+        allow_delete: bool,
+    ) -> tuple[int, ...]:
+        if (
+            not isinstance(items, list)
+            or len(items) != expected_length
+            or any(isinstance(item, bool) or not isinstance(item, int) for item in items)
+        ):
+            raise ContinualLiveError(f"{label} must have its exact aligned length")
+        assignments = tuple(items)
+        minimum = -1 if allow_delete else 0
+        if any(item < minimum or item >= cell_count for item in assignments):
+            raise ContinualLiveError(f"{label} cites an unknown cell")
+        return assignments
+
+    existing_assignments = assignment_vector(
+        value["existing_memory_cell_indices"],
+        "existing_memory_cell_indices",
+        expected_length=len(active_memories),
+        allow_delete=True,
     )
+    new_assignments = assignment_vector(
+        value["new_memory_cell_indices"],
+        "new_memory_cell_indices",
+        expected_length=len(source_tokens),
+        allow_delete=False,
+    )
+    for cell_index in range(cell_count):
+        existing_assigned_count = sum(
+            assignment == cell_index for assignment in existing_assignments
+        )
+        new_assigned_count = sum(
+            assignment == cell_index for assignment in new_assignments
+        )
+        if (
+            existing_assigned_count + new_assigned_count
+            > MAX_CELL_MEMORY_REFERENCES
+        ):
+            raise ContinualLiveError("compact cell exceeds the memory assignment bound")
+
+    delete_ids = tuple(
+        active_ids[index]
+        for index, assignment in enumerate(existing_assignments)
+        if assignment == -1
+    )
+    deleted_ids = set(delete_ids)
+    for index, memory in enumerate(active_memories):
+        if existing_assignments[index] != -1 and (
+            set(memory.related_memory_ids) & deleted_ids
+        ):
+            raise ContinualLiveError(
+                "cannot delete an existing memory still referenced by surviving state"
+            )
+
+    relation_fields = {
+        "related_existing_memory_indices",
+        "related_other_new_token_indices",
+    }
+    if len(value["new_memory_relations"]) != len(source_tokens):
+        raise ContinualLiveError(
+            "new_memory_relations must have one ordered item per public token"
+        )
+    parsed_relations: list[tuple[tuple[int, ...], tuple[int, ...]]] = []
+    for source_index, item in enumerate(value["new_memory_relations"]):
+        if not isinstance(item, Mapping) or set(item) != relation_fields:
+            raise ContinualLiveError("new_memory_relations item field set is invalid")
+        related_existing = index_list(
+            item["related_existing_memory_indices"],
+            "related_existing_memory_indices",
+            upper_bound=len(active_memories),
+        )
+        related_other_new = index_list(
+            item["related_other_new_token_indices"],
+            "related_other_new_token_indices",
+            upper_bound=len(source_tokens),
+        )
+        if (
+            len(related_existing) > MAX_RELATED_MEMORY_IDS
+            or len(related_other_new) > MAX_RELATED_MEMORY_IDS
+        ):
+            raise ContinualLiveError("new memory relation exceeds the bounded degree")
+        if source_index in related_other_new:
+            raise ContinualLiveError(
+                "related_other_new_token_indices cannot contain its source array index"
+            )
+        source_content = source_tokens[source_index]["content"]
+        if not isinstance(source_content, Mapping):
+            raise ContinualLiveError("public relation content is not an object")
+        source_target = source_content.get("target")
+        for existing_index in related_existing:
+            if existing_assignments[existing_index] == -1:
+                raise ContinualLiveError("new relation targets a deleted existing memory")
+            target_content = active_memories[existing_index].content
+            if (
+                not isinstance(target_content, Mapping)
+                or source_target != target_content.get("source")
+            ):
+                raise ContinualLiveError(
+                    "new-to-existing relation is not content-composable"
+                )
+        for target_index in related_other_new:
+            target_content = source_tokens[target_index]["content"]
+            if (
+                not isinstance(target_content, Mapping)
+                or source_target != target_content.get("source")
+            ):
+                raise ContinualLiveError(
+                    "new-to-new relation is not content-composable"
+                )
+        parsed_relations.append((related_existing, related_other_new))
+
+    memories = tuple(
+        MemoryRecord(
+            memory_id=new_ids[source_index],
+            kind="atomic_relation",
+            content=source_token["content"],
+            source_token_ids=(source_ids[source_index],),
+            related_memory_ids=(
+                tuple(active_ids[index] for index in parsed_relations[source_index][0])
+                + tuple(new_ids[index] for index in parsed_relations[source_index][1])
+            ),
+            labels=("agent-organized",),
+        )
+        for source_index, source_token in enumerate(source_tokens)
+    )
+    cells = tuple(
+        CellRecord(
+            cell_id=cell_ids[cell_index],
+            capability=CAPABILITY,
+            instruction=cell_specs[cell_index][1],
+            memory_ids=(
+                tuple(
+                    active_ids[index]
+                    for index, assignment in enumerate(existing_assignments)
+                    if assignment == cell_index
+                )
+                + tuple(
+                    new_ids[index]
+                    for index, assignment in enumerate(new_assignments)
+                    if assignment == cell_index
+                )
+            ),
+            next_cell_ids=tuple(
+                cell_ids[index] for index in cell_specs[cell_index][2]
+            ),
+            executor_agent_id=None,
+        )
+        for cell_index in range(cell_count)
+    )
+
+    reachable: set[int] = set()
+    queue = [entry_cell_index]
+    while queue:
+        cell_index = queue.pop(0)
+        if cell_index in reachable:
+            continue
+        reachable.add(cell_index)
+        queue.extend(cell_specs[cell_index][2])
+    if reachable != set(range(cell_count)):
+        raise ContinualLiveError("every compact cell must be reachable from entry")
 
     proposal = make_mutation(
         base_snapshot_id=active.snapshot_id,
@@ -1615,8 +1661,8 @@ def _parse_structure_proposal(
         upsert_memories=memories,
         delete_memory_ids=tuple(delete_ids),
         cell_topology_mode=CellTopologyMode.REPLACE,
-        cells=tuple(cells),
-        entry_cell_id=value["entry_cell_id"],
+        cells=cells,
+        entry_cell_id=cell_ids[entry_cell_index],
         rationale=value["rationale"],
     )
     # H/R/N all run the same materialization, contract, and policy check.
@@ -1634,33 +1680,44 @@ def _structure_update_payload(
             "Author only the compact HSWM organization patch. The adapter copies each "
             "public token's fixed content, id, and provenance into a MemoryRecord; you "
             "must author every memory relation and the complete reachable cell routing "
-            "topology. In each new_memory_links item, token_index is the SOURCE memory "
-            "and related_other_new_token_indices contains only distinct OTHER TARGET "
-            "memories; related_existing_memory_ids contains surviving TARGET memories. "
-            "Neither field is ownership or cell assignment. The other-new list must "
-            "never contain its own token_index, and both lists must be [] when no target "
-            "is justified. Assign memories only with cells[].new_token_indices. A "
-            "directed composition may point from source token i to a distinct new token "
-            "j, or an existing memory, only when i.content.target equals the target "
-            "memory's content.source. The batch may be shuffled: never infer a relation "
-            "from token index, adjacency, or order. "
-            "Never echo the current HSWM, MemoryRecord content, or a separate plan "
-            "document."
+            "topology. The cells array order defines cell indices; entry_cell_index and "
+            "next_cell_indices refer only to that returned array. The exact-length "
+            "existing_memory_cell_indices vector aligns with the canonical "
+            "current_hswm_read_only.memories order: -1 deletes that memory and every "
+            "other value is its chosen cell index. The exact-length "
+            "new_memory_cell_indices vector aligns with public_source_tokens order and "
+            "never permits -1. The new_memory_relations item at array position i has "
+            "public_source_tokens[i] as its SOURCE. related_existing_memory_indices "
+            "targets the canonical existing-memory order; "
+            "related_other_new_token_indices targets distinct OTHER public tokens and "
+            "must never contain i. Use [] where no target is justified. A directed "
+            "composition is valid only when source.content.target equals target.content."
+            "source. Batches may be shuffled: never infer relations from index, "
+            "adjacency, or order. Do not reproduce HSWM, MemoryRecord, or token JSON as "
+            "a substitute for vectors; a bounded cell instruction may name public "
+            "identifiers needed for routing. Never return a separate plan document."
         ),
+        "index_alignment": {
+            "cell_indices": "returned cells array order",
+            "existing_memory_count": len(active.memories),
+            "existing_memory_indices": (
+                "current_hswm_read_only.memories canonical array order"
+            ),
+            "new_memory_count": len(source_tokens),
+            "new_memory_indices": "public_source_tokens array order",
+            "relation_source": "new_memory_relations array position",
+        },
         "output_bounds": {
             "cell_id_max_chars": MAX_CELL_ID_CHARS,
             "cell_instruction_max_chars": MAX_CELL_INSTRUCTION_CHARS,
             "cells_max": MAX_AUTHORED_CELLS,
             "memory_assignments_max_per_cell": MAX_CELL_MEMORY_REFERENCES,
-            "memory_assignments_max_per_cell_field": (
-                MAX_CELL_MEMORY_REFERENCES_PER_FIELD
-            ),
             "memory_relations_max_per_kind": MAX_RELATED_MEMORY_IDS,
             "new_memory_relation_semantics": (
-                "token_index is source; related_other_new_token_indices are distinct "
-                "other new targets and related_existing_memory_ids are surviving "
-                "targets; content.target-to-content.source composition only; "
-                "self-reference forbidden; [] means no target; order is irrelevant"
+                "relation array position is source; related_other_new_token_indices "
+                "are distinct other new targets and related_existing_memory_indices "
+                "are surviving existing targets; content.target-to-content.source "
+                "composition only; self-reference forbidden; [] means no target"
             ),
             "next_cells_max_per_cell": MAX_CELL_EDGES,
             "rationale_max_chars": MAX_RATIONALE_CHARS,
@@ -1673,29 +1730,35 @@ def _structure_update_payload(
             for index, item in enumerate(source_tokens)
         ],
         "response_contract": {
-            "cells": [
-                {
-                    "capability": CAPABILITY,
-                    "cell_id": "agent-chosen id",
-                    "executor_agent_id": None,
-                    "existing_memory_ids": ["id from current_hswm_read_only"],
-                    "instruction": "agent-authored retrieval/routing instruction",
-                    "new_token_indices": [0],
-                    "next_cell_ids": ["cell id"],
-                }
+            "cells_item_fields": [
+                "capability",
+                "cell_id",
+                "executor_agent_id",
+                "instruction",
+                "next_cell_indices",
             ],
-            "delete_memory_ids": ["obsolete existing memory id"],
-            "entry_cell_id": "one returned cell id",
-            "new_memory_links": [
-                {
-                    "related_existing_memory_ids": [
-                        "id from current_hswm_read_only"
-                    ],
-                    "related_other_new_token_indices": [],
-                    "token_index": 0,
-                }
+            "existing_memory_cell_indices": {
+                "exact_length": len(active.memories),
+                "item_domain": "-1 or a valid returned-cell index",
+                "source_order": "current_hswm_read_only.memories",
+            },
+            "new_memory_cell_indices": {
+                "exact_length": len(source_tokens),
+                "item_domain": "a valid returned-cell index; -1 forbidden",
+                "source_order": "public_source_tokens",
+            },
+            "new_memory_relations": {
+                "exact_length": len(source_tokens),
+                "source_order": "public_source_tokens",
+            },
+            "top_level_fields": [
+                "cells",
+                "entry_cell_index",
+                "existing_memory_cell_indices",
+                "new_memory_cell_indices",
+                "new_memory_relations",
+                "rationale",
             ],
-            "rationale": "non-empty string",
         },
     }
 
@@ -1717,7 +1780,7 @@ class StructuredHSWMArm(_ModelArm):
         reset_after_commit: bool = False,
         completion_validator: Callable[[CallLedgerEntry], object] | None = None,
         proposal_validator: Callable[
-            [MutationProposal, Sequence[Mapping[str, Any]]], object
+            [MutationProposal, Sequence[Mapping[str, Any]], SelfModelSnapshot], object
         ]
         | None = None,
     ) -> None:
@@ -1766,20 +1829,21 @@ class StructuredHSWMArm(_ModelArm):
             operation="update",
             max_output_tokens=self.budget.update_max_output_tokens,
             system=(
-                "Return exactly the five-key JSON object in response_contract. Author "
-                "compact memory links, cells, and routing directly in HSWM. Do not "
-                "return active_hswm, memories, upsert_memories, token content, a plan, "
-                "or any prose. For every new_memory_links item, token_index is the "
-                "SOURCE; related_other_new_token_indices are distinct OTHER TARGETS, "
-                "and related_existing_memory_ids are surviving TARGETS. Neither is "
-                "ownership or assignment, and the other-new list must not contain that "
-                "token_index. Use [] when there is no target. Cell assignment exists "
-                "only in cells[].new_token_indices. A directed composition may point "
-                "from source i to a distinct new j or existing memory only when "
-                "i.content.target equals the target memory's content.source. Batches may "
-                "be shuffled: never infer relations from index, adjacency, or order. "
-                "Assign each surviving/new memory to "
-                "exactly one cell. Use only public tokens; never infer a gold answer."
+                "Return exactly the six-key JSON object described by response_contract. "
+                "Author "
+                "cells, assignment vectors, relations, and routing directly in HSWM. "
+                "The cells array defines the only valid cell indices. Entry and next "
+                "indices must cite returned cells. existing_memory_cell_indices aligns "
+                "with canonical existing-memory order and alone may use -1 to delete; "
+                "new_memory_cell_indices aligns with public-token order and never uses "
+                "-1. Both vectors must have their exact requested lengths, with no "
+                "omission or default. new_memory_relations array position i makes public "
+                "token i the SOURCE; its other-new targets must not contain i. Relations "
+                "are content-composable only, never inferred from shuffled index/order. "
+                "Do not return IDs where indices are required, memory/token JSON, a "
+                "separate plan, or prose outside the six fields. Short cell instructions "
+                "may name public routing identifiers. Use only public tokens; never "
+                "infer a gold answer."
             ),
             payload=_structure_update_payload(prompt_snapshot, source_tokens),
             response_schema=_compact_patch_response_schema(
@@ -1796,7 +1860,7 @@ class StructuredHSWMArm(_ModelArm):
             policy=self.policy,
         )
         if self.proposal_validator is not None:
-            self.proposal_validator(proposal, source_tokens)
+            self.proposal_validator(proposal, source_tokens, prompt_snapshot)
         activation_id: str | None = None
         reset_activation_id: str | None = None
         if self.commit_updates:
@@ -2595,12 +2659,24 @@ def _public_gate_tokens(start: int, count: int) -> tuple[PublicLearningToken, ..
     )
 
 
+def _public_gate_incremental_tokens() -> tuple[PublicLearningToken, ...]:
+    """Exercise new-to-new and canonical-index new-to-existing relations."""
+
+    tokens = list(_public_gate_tokens(140, 4))
+    tokens[1] = PublicLearningToken(
+        source=_public_gate_nonce("node", 141, prefix="n"),
+        relation=_public_gate_nonce("relation", 1, prefix="r"),
+        target=_public_gate_nonce("node", 100, prefix="n"),
+    )
+    return tuple(tokens)
+
+
 def public_schema_gate_fixture() -> dict[str, Any]:
     """Return the fixed public fixture, which is never eligible for evaluation."""
 
     warmup = _public_gate_tokens(0, 64)
     synthetic_extension = _public_gate_tokens(64, 76)
-    incremental = _public_gate_tokens(140, 4)
+    incremental = _public_gate_incremental_tokens()
     probe = PublicProbe(
         step=1,
         source=_public_gate_nonce("node", 0, prefix="n"),
@@ -2631,6 +2707,7 @@ def public_schema_gate_fixture() -> dict[str, Any]:
 def _validate_public_gate_agent_relations(
     proposal: MutationProposal,
     source_tokens: Sequence[Mapping[str, Any]],
+    active: SelfModelSnapshot,
 ) -> dict[str, Any]:
     """Require the public fixture's content-derived directed memory graph.
 
@@ -2639,6 +2716,10 @@ def _validate_public_gate_agent_relations(
     rejects the proposal while the durable store remains at its prior state.
     """
 
+    if proposal.delete_memory_ids:
+        raise ContinualLiveError(
+            "public gate compact patch cannot delete existing fixture memories"
+        )
     expected_memory_ids = {
         str(item["suggested_memory_id"]) for item in source_tokens
     }
@@ -2647,7 +2728,7 @@ def _validate_public_gate_agent_relations(
         raise ContinualLiveError(
             "public gate relation check lacks the exact deterministic memories"
         )
-    expected_edges = sorted(
+    expected_new_edges = sorted(
         {
             (
                 str(source["suggested_memory_id"]),
@@ -2660,6 +2741,15 @@ def _validate_public_gate_agent_relations(
             == target["content"].get("source")
         }
     )
+    expected_existing_edges = sorted(
+        {
+            (str(source["suggested_memory_id"]), target.memory_id)
+            for source in source_tokens
+            for target in active.memories
+            if source["content"].get("target") == target.content.get("source")
+        }
+    )
+    expected_edges = sorted(expected_new_edges + expected_existing_edges)
     observed_edges = sorted(
         (memory.memory_id, related_memory_id)
         for memory in proposal.upsert_memories
@@ -2678,11 +2768,42 @@ def _validate_public_gate_agent_relations(
             "public gate agent-authored relations differ from the exact "
             "content-derived directed composition graph"
         )
+    new_ids = set(expected_memory_ids)
+    active_ids = {memory.memory_id for memory in active.memories}
+    observed_new_edges = sorted(edge for edge in observed_edges if edge[1] in new_ids)
+    observed_existing_edges = sorted(
+        edge for edge in observed_edges if edge[1] in active_ids
+    )
+    if len(observed_new_edges) + len(observed_existing_edges) != len(observed_edges):
+        raise ContinualLiveError("public gate relation targets unknown memory state")
+
+    def relation_values(edges: Sequence[tuple[str, str]]) -> list[dict[str, str]]:
+        return [
+            {"source_memory_id": source, "target_memory_id": target}
+            for source, target in edges
+        ]
+
     return {
         "author": AUTHOR_ID,
         "exact_match": True,
+        "expected_existing_relation_count": len(expected_existing_edges),
+        "expected_existing_relations_sha256": canonical_sha256(
+            relation_values(expected_existing_edges)
+        ),
+        "expected_new_relation_count": len(expected_new_edges),
+        "expected_new_relations_sha256": canonical_sha256(
+            relation_values(expected_new_edges)
+        ),
         "expected_relation_count": len(expected_edges),
         "expected_relations_sha256": canonical_sha256(expected_values),
+        "observed_existing_relation_count": len(observed_existing_edges),
+        "observed_existing_relations_sha256": canonical_sha256(
+            relation_values(observed_existing_edges)
+        ),
+        "observed_new_relation_count": len(observed_new_edges),
+        "observed_new_relations_sha256": canonical_sha256(
+            relation_values(observed_new_edges)
+        ),
         "observed_relation_count": len(observed_edges),
         "observed_relations_sha256": canonical_sha256(observed_values),
         "source_token_count": len(source_tokens),
@@ -2838,9 +2959,10 @@ def run_public_schema_gate(
     def accept_gate_proposal(
         proposal: MutationProposal,
         source_tokens: Sequence[Mapping[str, Any]],
+        active: SelfModelSnapshot,
     ) -> None:
         agent_relation_checks.append(
-            _validate_public_gate_agent_relations(proposal, source_tokens)
+            _validate_public_gate_agent_relations(proposal, source_tokens, active)
         )
 
     structured = StructuredHSWMArm(
@@ -2862,7 +2984,7 @@ def run_public_schema_gate(
     )
     fixture = public_schema_gate_fixture()
     warmup_tokens = _public_gate_tokens(0, 64)
-    incremental_tokens = _public_gate_tokens(140, 4)
+    incremental_tokens = _public_gate_incremental_tokens()
     warmup = LearningBatch(
         episode_id=PUBLIC_SCHEMA_GATE_EPISODE,
         after_step=0,

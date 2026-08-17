@@ -96,44 +96,39 @@ class ScriptedRelationalBackend:
     @staticmethod
     def _author(payload: Mapping[str, Any]) -> str:
         active = payload["current_hswm_read_only"]
-        existing = {item["memory_id"]: item for item in active["memories"]}
+        existing = list(active["memories"])
         source_tokens = payload["public_source_tokens"]
-        new_links: list[dict[str, Any]] = []
+        new_relations: list[dict[str, Any]] = []
         for source_token in payload["public_source_tokens"]:
             content = source_token["content"]
-            related_existing = sorted(
-                item["memory_id"]
-                for item in existing.values()
+            related_existing = [
+                index
+                for index, item in enumerate(existing)
                 if item["content"].get("source") == content["target"]
-            )
+            ]
             related_new = sorted(
                 other["token_index"]
                 for other in source_tokens
                 if other["content"].get("source") == content["target"]
                 and other["token_index"] != source_token["token_index"]
             )
-            new_links.append(
+            new_relations.append(
                 {
-                    "related_existing_memory_ids": related_existing,
+                    "related_existing_memory_indices": related_existing,
                     "related_other_new_token_indices": related_new,
-                    "token_index": source_token["token_index"],
                 }
             )
-        existing_ids = sorted(existing)
-        new_indexes = list(range(len(source_tokens)))
-        existing_chunks = [
-            existing_ids[index : index + live.MAX_CELL_MEMORY_REFERENCES_PER_FIELD]
-            for index in range(
-                0, len(existing_ids), live.MAX_CELL_MEMORY_REFERENCES_PER_FIELD
-            )
+        cell_width = live.MAX_CELL_MEMORY_REFERENCES
+        existing_cell_indices = [
+            index // cell_width for index in range(len(existing))
         ]
-        new_chunks = [
-            new_indexes[index : index + live.MAX_CELL_MEMORY_REFERENCES_PER_FIELD]
-            for index in range(
-                0, len(new_indexes), live.MAX_CELL_MEMORY_REFERENCES_PER_FIELD
-            )
+        new_cell_indices = [
+            (len(existing) + index) // cell_width
+            for index in range(len(source_tokens))
         ]
-        cell_count = max(len(existing_chunks), len(new_chunks))
+        cell_count = max(
+            1, (len(existing) + len(source_tokens) + cell_width - 1) // cell_width
+        )
         cell_ids = [f"cell:lookup:{index}" for index in range(cell_count)]
         cells = []
         for index in range(cell_count):
@@ -142,23 +137,18 @@ class ScriptedRelationalBackend:
                     "capability": "nonce_graph_lookup",
                     "cell_id": cell_ids[index],
                     "executor_agent_id": None,
-                    "existing_memory_ids": (
-                        existing_chunks[index]
-                        if index < len(existing_chunks)
-                        else []
-                    ),
                     "instruction": "Traverse the absorbed atomic relations.",
-                    "new_token_indices": (
-                        new_chunks[index] if index < len(new_chunks) else []
+                    "next_cell_indices": (
+                        [index + 1] if index + 1 < cell_count else []
                     ),
-                    "next_cell_ids": cell_ids[index + 1 : index + 2],
                 }
             )
         response = {
             "cells": cells,
-            "delete_memory_ids": [],
-            "entry_cell_id": cell_ids[0],
-            "new_memory_links": new_links,
+            "entry_cell_index": 0,
+            "existing_memory_cell_indices": existing_cell_indices,
+            "new_memory_cell_indices": new_cell_indices,
+            "new_memory_relations": new_relations,
             "rationale": "Absorb each public atomic relation into the HSWM cells.",
         }
         return json.dumps(response, sort_keys=True, separators=(",", ":"))
@@ -927,9 +917,9 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
         @staticmethod
         def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            value["new_memory_links"][0]["related_existing_memory_ids"] = [
-                "hidden-gold-memory"
-            ]
+            value["new_memory_relations"][0][
+                "related_existing_memory_indices"
+            ] = [0]
             return json.dumps(value)
 
     arm = StructuredHSWMArm(
@@ -955,12 +945,12 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
     ("mutation", "error_match"),
     [
         (
-            lambda value: value["new_memory_links"].pop(),
+            lambda value: value["new_memory_relations"].pop(),
             "array bound",
         ),
         (
-            lambda value: value["cells"][0].update({"new_token_indices": []}),
-            "cover every new public token",
+            lambda value: value["new_memory_cell_indices"].pop(),
+            "array bound",
         ),
         (
             lambda value: value["cells"].append(
@@ -968,36 +958,59 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
                     "capability": "nonce_graph_lookup",
                     "cell_id": "cell:unreachable",
                     "executor_agent_id": None,
-                    "existing_memory_ids": [],
                     "instruction": "A deliberately unreachable cell.",
-                    "new_token_indices": [],
-                    "next_cell_ids": [],
+                    "next_cell_indices": [],
                 }
             ),
             "reachable from entry",
         ),
         (
-            lambda value: value["new_memory_links"][0].update(
+            lambda value: value["new_memory_relations"][0].update(
                 {"related_other_new_token_indices": [99]}
             ),
             "array bound",
         ),
         (
-            lambda value: (
-                value["cells"][0]["next_cell_ids"].append("cell:duplicate"),
-                value["cells"].append(
-                    {
-                        "capability": "nonce_graph_lookup",
-                        "cell_id": "cell:duplicate",
-                        "executor_agent_id": None,
-                        "existing_memory_ids": [],
-                        "instruction": "Duplicate placement must fail.",
-                        "new_token_indices": [0],
-                        "next_cell_ids": [],
-                    }
-                ),
+            lambda value: value.update({"entry_cell_index": 1}),
+            "entry_cell_index cites an unknown cell",
+        ),
+        (
+            lambda value: value["new_memory_cell_indices"].__setitem__(0, 1),
+            "new_memory_cell_indices cites an unknown cell",
+        ),
+        (
+            lambda value: value["new_memory_cell_indices"].__setitem__(0, True),
+            "integer bound",
+        ),
+        (
+            lambda value: value["new_memory_cell_indices"].__setitem__(0, -1),
+            "integer bound",
+        ),
+        (
+            lambda value: value["new_memory_cell_indices"].__setitem__(
+                0, live.MAX_AUTHORED_CELLS
             ),
-            "assigned to multiple cells",
+            "integer bound",
+        ),
+        (
+            lambda value: value["cells"][0].update({"next_cell_indices": [1]}),
+            "cell next_cell_indices contains duplicate or unknown indexes",
+        ),
+        (
+            lambda value: value["cells"].append(
+                {
+                    "capability": "nonce_graph_lookup",
+                    "cell_id": value["cells"][0]["cell_id"],
+                    "executor_agent_id": None,
+                    "instruction": "Duplicate cell ids must fail.",
+                    "next_cell_indices": [],
+                }
+            ),
+            "compact cell ids must be unique",
+        ),
+        (
+            lambda value: value.update({"delete_memory_ids": []}),
+            "object schema",
         ),
         (
             lambda value: value["cells"][0].update(
@@ -1035,6 +1048,48 @@ def test_compact_patch_fails_closed_on_coverage_references_and_reachability(
                 learning_tokens=(PublicLearningToken("a", "r", "b"),),
             )
         )
+    assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
+
+
+def test_compact_patch_rejects_assignment_vector_cell_capacity(
+    tmp_path: Path,
+) -> None:
+    class OverloadedCellBackend(ScriptedRelationalBackend):
+        @staticmethod
+        def _author(payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            value["cells"] = [
+                {
+                    "capability": "nonce_graph_lookup",
+                    "cell_id": "cell:overloaded",
+                    "executor_agent_id": None,
+                    "instruction": "This cell is intentionally over capacity.",
+                    "next_cell_indices": [],
+                }
+            ]
+            value["new_memory_cell_indices"] = [0] * len(
+                value["new_memory_cell_indices"]
+            )
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    arm = StructuredHSWMArm(
+        backend=OverloadedCellBackend(),
+        budget=_budget(),
+        isolation_id="overloaded-assignment-vector",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    batch = LearningBatch(
+        episode_id="episode-overloaded-assignment-vector",
+        after_step=0,
+        chosen=None,
+        correct=False,
+        learning_tokens=tuple(
+            PublicLearningToken(f"node-{index}", "rel", f"target-{index}")
+            for index in range(live.MAX_CELL_MEMORY_REFERENCES + 1)
+        ),
+    )
+    with pytest.raises(ContinualLiveError, match="memory assignment bound"):
+        arm.update(batch)
     assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
 
 
@@ -1081,12 +1136,200 @@ def test_compact_patch_materializes_public_content_without_echoing_records(
     }
 
 
+def test_existing_assignment_minus_one_is_the_only_delete_encoding(
+    tmp_path: Path,
+) -> None:
+    class DeleteUnreferencedSourceBackend(ScriptedRelationalBackend):
+        def __init__(self) -> None:
+            super().__init__()
+            self.author_calls = 0
+
+        def _author(self, payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            self.author_calls += 1
+            if self.author_calls == 2:
+                memories = payload["current_hswm_read_only"]["memories"]
+                delete_index = next(
+                    index
+                    for index, memory in enumerate(memories)
+                    if memory["content"]["source"] == "node-a"
+                )
+                value["existing_memory_cell_indices"][delete_index] = -1
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    arm = StructuredHSWMArm(
+        backend=DeleteUnreferencedSourceBackend(),
+        budget=_budget(),
+        isolation_id="valid-vector-delete",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    arm.update(
+        LearningBatch(
+            episode_id="valid-vector-delete",
+            after_step=0,
+            chosen=None,
+            correct=False,
+            learning_tokens=(
+                PublicLearningToken("node-a", "rel", "node-b"),
+                PublicLearningToken("node-b", "rel", "node-c"),
+            ),
+        )
+    )
+    arm.update(
+        LearningBatch(
+            episode_id="valid-vector-delete",
+            after_step=1,
+            chosen=None,
+            correct=False,
+            learning_tokens=(PublicLearningToken("node-c", "rel", "node-d"),),
+        )
+    )
+    snapshot = arm.store.active_snapshot().snapshot
+    assert {memory.content["source"] for memory in snapshot.memories} == {
+        "node-b",
+        "node-c",
+    }
+    assigned_ids = [memory_id for cell in snapshot.cells for memory_id in cell.memory_ids]
+    assert sorted(assigned_ids) == sorted(
+        memory.memory_id for memory in snapshot.memories
+    )
+    second_value = json.loads(arm.ledger[1].completion.text)
+    assert second_value["existing_memory_cell_indices"].count(-1) == 1
+    assert "delete_memory_ids" not in second_value
+
+
+def test_relation_to_minus_one_deleted_existing_memory_is_rejected_precommit(
+    tmp_path: Path,
+) -> None:
+    class DeleteRelationTargetBackend(ScriptedRelationalBackend):
+        def __init__(self) -> None:
+            super().__init__()
+            self.author_calls = 0
+
+        def _author(self, payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            self.author_calls += 1
+            if self.author_calls == 2:
+                memories = payload["current_hswm_read_only"]["memories"]
+                delete_index = next(
+                    index
+                    for index, memory in enumerate(memories)
+                    if memory["content"]["source"] == "node-a"
+                )
+                assert value["new_memory_relations"][0][
+                    "related_existing_memory_indices"
+                ] == [delete_index]
+                value["existing_memory_cell_indices"][delete_index] = -1
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    arm = StructuredHSWMArm(
+        backend=DeleteRelationTargetBackend(),
+        budget=_budget(),
+        isolation_id="invalid-vector-delete-target",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    arm.update(
+        LearningBatch(
+            episode_id="invalid-vector-delete-target",
+            after_step=0,
+            chosen=None,
+            correct=False,
+            learning_tokens=(
+                PublicLearningToken("node-a", "rel", "node-b"),
+                PublicLearningToken("node-b", "rel", "node-c"),
+            ),
+        )
+    )
+    before = arm.store.active_snapshot()
+    with pytest.raises(
+        ContinualLiveError, match="new relation targets a deleted existing memory"
+    ):
+        arm.update(
+            LearningBatch(
+                episode_id="invalid-vector-delete-target",
+                after_step=1,
+                chosen=None,
+                correct=False,
+                learning_tokens=(
+                    PublicLearningToken("node-x", "rel", "node-a"),
+                ),
+            )
+        )
+    after = arm.store.active_snapshot()
+    assert after.generation == before.generation == 1
+    assert after.snapshot.canonical() == before.snapshot.canonical()
+    assert arm.store.token_count() == 2
+
+
+def test_deletion_referenced_by_surviving_memory_is_rejected_precommit(
+    tmp_path: Path,
+) -> None:
+    class DeleteReferencedExistingBackend(ScriptedRelationalBackend):
+        def __init__(self) -> None:
+            super().__init__()
+            self.author_calls = 0
+
+        def _author(self, payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            self.author_calls += 1
+            if self.author_calls == 2:
+                memories = payload["current_hswm_read_only"]["memories"]
+                delete_index = next(
+                    index
+                    for index, memory in enumerate(memories)
+                    if memory["content"]["source"] == "node-b"
+                )
+                value["existing_memory_cell_indices"][delete_index] = -1
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    arm = StructuredHSWMArm(
+        backend=DeleteReferencedExistingBackend(),
+        budget=_budget(),
+        isolation_id="invalid-surviving-reference-delete",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    arm.update(
+        LearningBatch(
+            episode_id="invalid-surviving-reference-delete",
+            after_step=0,
+            chosen=None,
+            correct=False,
+            learning_tokens=(
+                PublicLearningToken("node-a", "rel", "node-b"),
+                PublicLearningToken("node-b", "rel", "node-c"),
+            ),
+        )
+    )
+    before = arm.store.active_snapshot()
+    with pytest.raises(
+        ContinualLiveError,
+        match="cannot delete an existing memory still referenced by surviving state",
+    ):
+        arm.update(
+            LearningBatch(
+                episode_id="invalid-surviving-reference-delete",
+                after_step=1,
+                chosen=None,
+                correct=False,
+                learning_tokens=(
+                    PublicLearningToken("node-c", "rel", "node-d"),
+                ),
+            )
+        )
+    after = arm.store.active_snapshot()
+    assert after.generation == before.generation == 1
+    assert after.snapshot.canonical() == before.snapshot.canonical()
+    assert arm.store.token_count() == 2
+
+
 def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None:
     result = run_public_schema_gate(
         backend_factory=ScriptedRelationalBackend,
         state_dir=tmp_path / "gate-state",
     )
     assert result["valid"] is True
+    assert result["adapter_schema"] == "hswm-compact-structure-patch/v3"
+    assert result["protocol"] == "hswm-public-schema-gate/v3"
     assert result["calls_observed"] == 4
     assert [item["operation"] for item in result["calls"]] == [
         "update",
@@ -1110,11 +1353,27 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         item["expected_relation_count"]
         for item in result["agent_relation_checks"]
     ] == [63, 3]
+    assert [
+        item["expected_existing_relation_count"]
+        for item in result["agent_relation_checks"]
+    ] == [0, 1]
+    assert [
+        item["expected_new_relation_count"]
+        for item in result["agent_relation_checks"]
+    ] == [63, 2]
     assert all(
         item["exact_match"]
         and item["expected_relation_count"] == item["observed_relation_count"]
         and item["expected_relations_sha256"]
         == item["observed_relations_sha256"]
+        and item["expected_existing_relation_count"]
+        == item["observed_existing_relation_count"]
+        and item["expected_existing_relations_sha256"]
+        == item["observed_existing_relations_sha256"]
+        and item["expected_new_relation_count"]
+        == item["observed_new_relation_count"]
+        and item["expected_new_relations_sha256"]
+        == item["observed_new_relations_sha256"]
         for item in result["agent_relation_checks"]
     )
     assert result["extension"]["relation_author"] == (
@@ -1183,39 +1442,96 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         item["response_schema_name"]
         for item in structured_events
         if item["event"] == "intent"
-    ] == ["hswm_compact_patch_v2", "hswm_compact_patch_v2", "hswm_choice_v1"]
+    ] == ["hswm_compact_patch_v3", "hswm_compact_patch_v3", "hswm_choice_v1"]
     assert [
         item["response_schema_name"]
         for item in plain_events
         if item["event"] == "intent"
     ] == ["hswm_plain_memory_v1"]
-    first_schema = json.loads(
-        next(
-            item["response_schema_json"]
-            for item in structured_events
-            if item["event"] == "intent"
-        )
-    )
+    structured_intents = [
+        item for item in structured_events if item["event"] == "intent"
+    ]
+    first_schema = json.loads(structured_intents[0]["response_schema_json"])
     cell_properties = first_schema["properties"]["cells"]["items"]["properties"]
-    link_properties = first_schema["properties"]["new_memory_links"]["items"][
+    relation_properties = first_schema["properties"]["new_memory_relations"]["items"][
         "properties"
     ]
     assert first_schema["properties"]["cells"]["maxItems"] == 16
-    assert cell_properties["existing_memory_ids"]["maxItems"] == 0
-    assert cell_properties["new_token_indices"]["maxItems"] == 32
+    assert cell_properties["next_cell_indices"]["maxItems"] == live.MAX_CELL_EDGES
     assert cell_properties["instruction"]["maxLength"] == 256
-    assert "related_other_new_token_indices" in link_properties
-    assert "related_new_token_indices" not in link_properties
+    assert first_schema["properties"]["existing_memory_cell_indices"][
+        "minItems"
+    ] == 0
+    assert first_schema["properties"]["existing_memory_cell_indices"][
+        "maxItems"
+    ] == 0
+    assert first_schema["properties"]["new_memory_cell_indices"]["minItems"] == 64
+    assert first_schema["properties"]["new_memory_cell_indices"]["maxItems"] == 64
+    assert first_schema["properties"]["new_memory_relations"]["minItems"] == 64
+    assert first_schema["properties"]["new_memory_relations"]["maxItems"] == 64
+    assert "related_other_new_token_indices" in relation_properties
+    assert "related_existing_memory_indices" in relation_properties
+    assert "token_index" not in relation_properties
+    assert "new_memory_links" not in first_schema["properties"]
+    assert "delete_memory_ids" not in first_schema["properties"]
     assert first_schema["properties"]["rationale"]["maxLength"] == 512
-    first_intent = next(
-        item for item in structured_events if item["event"] == "intent"
-    )
+    second_schema = json.loads(structured_intents[1]["response_schema_json"])
+    assert second_schema["properties"]["existing_memory_cell_indices"][
+        "minItems"
+    ] == 140
+    assert second_schema["properties"]["existing_memory_cell_indices"][
+        "maxItems"
+    ] == 140
+    assert second_schema["properties"]["new_memory_cell_indices"]["minItems"] == 4
+    assert second_schema["properties"]["new_memory_cell_indices"]["maxItems"] == 4
+    assert second_schema["properties"]["new_memory_relations"]["minItems"] == 4
+    assert second_schema["properties"]["new_memory_relations"]["maxItems"] == 4
+    for completion_event in (
+        item for item in structured_events if item["event"] == "completed"
+    ):
+        if completion_event["operation"] != "update":
+            continue
+        completion_value = json.loads(completion_event["completion"]["text"])
+        assert set(completion_value) == {
+            "cells",
+            "entry_cell_index",
+            "existing_memory_cell_indices",
+            "new_memory_cell_indices",
+            "new_memory_relations",
+            "rationale",
+        }
+        assert not {
+            "delete_memory_ids",
+            "new_memory_links",
+            "token_index",
+        } & set(completion_value)
+    first_intent = structured_intents[0]
     first_payload = json.loads(first_intent["request_payload_json"])
+    first_contract = first_payload["response_contract"]
+    assert first_contract["existing_memory_cell_indices"]["exact_length"] == 0
+    assert first_contract["new_memory_cell_indices"]["exact_length"] == 64
+    assert first_contract["new_memory_relations"]["exact_length"] == 64
+    assert "memory_assignments_max_per_cell_field" not in first_payload[
+        "output_bounds"
+    ]
+    second_payload = json.loads(structured_intents[1]["request_payload_json"])
+    second_contract = second_payload["response_contract"]
+    assert second_contract["existing_memory_cell_indices"]["exact_length"] == 140
+    assert second_contract["new_memory_cell_indices"]["exact_length"] == 4
+    assert second_contract["new_memory_relations"]["exact_length"] == 4
+    assert first_contract["top_level_fields"] == [
+        "cells",
+        "entry_cell_index",
+        "existing_memory_cell_indices",
+        "new_memory_cell_indices",
+        "new_memory_relations",
+        "rationale",
+    ]
     combined_instruction = (
         first_intent["system_message"] + " " + first_payload["instruction"]
     )
-    assert "distinct OTHER TARGET" in combined_instruction
-    assert "must not contain that token_index" in combined_instruction
+    assert "distinct OTHER public tokens" in combined_instruction
+    assert "must never contain i" in combined_instruction
     assert "never infer relations from index, adjacency, or order" in (
         combined_instruction
     )
@@ -1226,8 +1542,8 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
 @pytest.mark.parametrize(
     ("violation", "message"),
     [
-        ("self", "cannot contain its source token_index"),
-        ("wrong-other", "content-derived directed composition graph"),
+        ("self", "cannot contain its source array index"),
+        ("wrong-other", "new-to-new relation is not content-composable"),
     ],
 )
 def test_public_gate_relation_failure_stops_before_commit_at_genesis(
@@ -1237,10 +1553,9 @@ def test_public_gate_relation_failure_stops_before_commit_at_genesis(
         @staticmethod
         def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            source_index = value["new_memory_links"][0]["token_index"]
-            value["new_memory_links"][0][
+            value["new_memory_relations"][0][
                 "related_other_new_token_indices"
-            ] = [source_index if violation == "self" else 2]
+            ] = [0 if violation == "self" else 2]
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
     backends: list[InvalidRelationBackend] = []
@@ -1272,14 +1587,149 @@ def test_public_gate_relation_failure_stops_before_commit_at_genesis(
         store.close()
 
 
+def test_public_gate_rejects_incremental_delete_before_mutating_active_140(
+    tmp_path: Path,
+) -> None:
+    class IncrementalDeleteBackend(ScriptedRelationalBackend):
+        def __init__(self) -> None:
+            super().__init__()
+            self.author_calls = 0
+            self.pre_incremental_state: dict[str, Any] | None = None
+
+        def _author(self, payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            self.author_calls += 1
+            if self.author_calls == 2:
+                active = payload["current_hswm_read_only"]
+                self.pre_incremental_state = dict(active)
+                referenced = {
+                    related_id
+                    for memory in active["memories"]
+                    for related_id in memory["related_memory_ids"]
+                }
+                delete_index = next(
+                    index
+                    for index, memory in enumerate(active["memories"])
+                    if memory["memory_id"] not in referenced
+                )
+                value["existing_memory_cell_indices"][delete_index] = -1
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    backends: list[IncrementalDeleteBackend] = []
+
+    def backend_factory() -> IncrementalDeleteBackend:
+        backend = IncrementalDeleteBackend()
+        backends.append(backend)
+        return backend
+
+    state_dir = tmp_path / "incremental-delete"
+    with pytest.raises(
+        ContinualLiveError,
+        match="public gate compact patch cannot delete existing fixture memories",
+    ):
+        run_public_schema_gate(
+            backend_factory=backend_factory,
+            state_dir=state_dir,
+        )
+    structured_backend = backends[0]
+    assert structured_backend.author_calls == 2
+    assert structured_backend.pre_incremental_state is not None
+    store = live.SQLiteSelfModelStore(
+        state_dir / "structured" / "state.sqlite3",
+        policy=live._proposal_policy(_budget()),
+    )
+    try:
+        active = store.active_snapshot()
+        assert active.generation == 2
+        assert active.snapshot.canonical() == structured_backend.pre_incremental_state
+        assert len(active.snapshot.memories) == 140
+        assert store.token_count() == 140
+        assert store.activation_count() == 2
+    finally:
+        store.close()
+
+
+def test_public_gate_rejects_wrong_existing_index_before_mutating_active_140(
+    tmp_path: Path,
+) -> None:
+    class WrongExistingIndexBackend(ScriptedRelationalBackend):
+        def __init__(self) -> None:
+            super().__init__()
+            self.author_calls = 0
+            self.pre_incremental_state: dict[str, Any] | None = None
+
+        def _author(self, payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            self.author_calls += 1
+            if self.author_calls == 2:
+                active = payload["current_hswm_read_only"]
+                self.pre_incremental_state = dict(active)
+                relation_index = next(
+                    index
+                    for index, relation in enumerate(value["new_memory_relations"])
+                    if relation["related_existing_memory_indices"]
+                )
+                correct_index = value["new_memory_relations"][relation_index][
+                    "related_existing_memory_indices"
+                ][0]
+                wrong_index = next(
+                    index
+                    for index in range(len(active["memories"]))
+                    if index != correct_index
+                )
+                value["new_memory_relations"][relation_index][
+                    "related_existing_memory_indices"
+                ] = [wrong_index]
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    backends: list[WrongExistingIndexBackend] = []
+
+    def backend_factory() -> WrongExistingIndexBackend:
+        backend = WrongExistingIndexBackend()
+        backends.append(backend)
+        return backend
+
+    state_dir = tmp_path / "wrong-existing-index"
+    with pytest.raises(
+        ContinualLiveError,
+        match="new-to-existing relation is not content-composable",
+    ):
+        run_public_schema_gate(
+            backend_factory=backend_factory,
+            state_dir=state_dir,
+        )
+    structured_backend = backends[0]
+    assert structured_backend.author_calls == 2
+    assert structured_backend.pre_incremental_state is not None
+    store = live.SQLiteSelfModelStore(
+        state_dir / "structured" / "state.sqlite3",
+        policy=live._proposal_policy(_budget()),
+    )
+    try:
+        active = store.active_snapshot()
+        assert active.generation == 2
+        assert active.snapshot.canonical() == structured_backend.pre_incremental_state
+        assert len(active.snapshot.memories) == 140
+        assert store.token_count() == 140
+        assert store.activation_count() == 2
+    finally:
+        store.close()
+
+
 def test_public_relation_validator_uses_content_not_shuffled_index_order(
     tmp_path: Path,
 ) -> None:
     summaries: list[dict[str, Any]] = []
 
-    def validate(proposal: Any, source_tokens: Sequence[Mapping[str, Any]]) -> None:
+    def validate(
+        proposal: Any,
+        source_tokens: Sequence[Mapping[str, Any]],
+        active: Any,
+    ) -> None:
         summaries.append(
-            live._validate_public_gate_agent_relations(proposal, source_tokens)
+            live._validate_public_gate_agent_relations(
+                proposal, source_tokens, active
+            )
         )
 
     arm = StructuredHSWMArm(

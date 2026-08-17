@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import base64
+from copy import deepcopy
 from dataclasses import replace
 from hashlib import sha256
 import io
 import json
 from pathlib import Path
+import sqlite3
 import tarfile
 from typing import Any, Callable, Mapping, Sequence
 
@@ -687,6 +689,377 @@ def _write_test_recovery_precommit(
         live, "FROZEN_RECOVERY_PRECOMMIT_SHA256", value["precommit_sha256"]
     )
     return commitments
+
+
+_CONSUMED_V2_V3_COMMITMENTS = (
+    "14c7dcac559dcd68e6faf6ce1a557a6785bab9a9240fc674063757d6d4c74370",
+    "b9e2573fdc9efaf25da9371c7d30d1eb6b0558bdf2a986a414f243de678e5ebc",
+    "a8a8760cd50a37b6e7eba373dc9f4aa40a3a791b3ebcae2d6c9419f7d113889b",
+    "db6710fc7826b13a11cd4341219ac9d2147cec7cabf627b786478c4bcbecfa2a",
+)
+
+
+def _fresh_v4_commitments() -> tuple[str, ...]:
+    return tuple(
+        sha256(f"fresh-v4-pilot-seed-{index}".encode("ascii")).hexdigest()
+        for index in range(4)
+    )
+
+
+def _build_test_v4_precommit() -> dict[str, Any]:
+    return live.build_pilot_precommit_v4(
+        _fresh_v4_commitments(),
+        planned_outer_run_id="test-v4-primary-r1",
+        planned_output_relative_path="outputs/pilot",
+        precommit_builder_source_revision="c" * 40,
+        precommit_builder_source_tree="d" * 40,
+    )
+
+
+def _rehash_v4_precommit(value: dict[str, Any]) -> bytes:
+    value.pop("precommit_sha256", None)
+    value["precommit_sha256"] = live.canonical_sha256(value)
+    return canonical_json_bytes(value)
+
+
+def _write_test_v4_precommit_seal(
+    tmp_path: Path,
+    *,
+    loose_precommit_raw: bytes,
+    sealed_precommit_raw: bytes | None = None,
+    member_name: str = "outputs/pilot_precommit.canonical.json",
+    source_commit: str = "c" * 40,
+    extra_member: tuple[str, bytes] | None = None,
+    special_member_name: str | None = None,
+) -> tuple[Path, Path]:
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    tar_path = tmp_path / "pilot-precommit-artifacts.tar"
+    sealed_raw = (
+        loose_precommit_raw
+        if sealed_precommit_raw is None
+        else sealed_precommit_raw
+    )
+    with tarfile.open(tar_path, "w") as archive:
+        member = tarfile.TarInfo(member_name)
+        member.size = len(sealed_raw)
+        member.mode = 0o644
+        archive.addfile(member, io.BytesIO(sealed_raw))
+        if extra_member is not None:
+            extra_name, extra_raw = extra_member
+            extra = tarfile.TarInfo(extra_name)
+            extra.size = len(extra_raw)
+            extra.mode = 0o644
+            archive.addfile(extra, io.BytesIO(extra_raw))
+        if special_member_name is not None:
+            special = tarfile.TarInfo(special_member_name)
+            special.type = tarfile.FIFOTYPE
+            special.mode = 0o644
+            archive.addfile(special)
+    tar_raw = tar_path.read_bytes()
+    receipt = {
+        "artifact": {
+            "bytes": len(tar_raw),
+            "name": "artifacts.tar",
+            "sha256": sha256(tar_raw).hexdigest(),
+        },
+        "command_sha256": "a" * 64,
+        "durable_tier": "test",
+        "execution_tier": "test",
+        "exit_code": 0,
+        "finished_at": "2026-08-17T00:00:01Z",
+        "run_id": "test-v4-precommit-seal",
+        "schema": "bhgman-hswm-run/v1",
+        "source_commit": source_commit,
+        "source_root": "/test/source",
+        "started_at": "2026-08-17T00:00:00Z",
+        "status": "success",
+    }
+    receipt_path = tmp_path / "pilot-precommit-outer-receipt.json"
+    receipt_path.write_bytes(canonical_json_bytes(receipt))
+    return tar_path, receipt_path
+
+
+def _write_test_public_gate_bundle(
+    tmp_path: Path,
+    *,
+    omit_member: str | None = None,
+    service_source_revision: str | None = None,
+    drift_after_service: bool = False,
+) -> tuple[Path, Path, dict[str, Any]]:
+    """Build a small self-consistent gate archive for validator boundary tests."""
+
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    expected = deepcopy(live._expected_public_gate_binding())
+
+    snapshot = {
+        "cells": [{"index": index} for index in range(16)],
+        "memories": [{"index": index} for index in range(144)],
+    }
+    snapshot_raw = canonical_json_bytes(snapshot)
+    connection = sqlite3.connect(":memory:")
+    try:
+        connection.execute(
+            "CREATE TABLE active_self_model(snapshot_id TEXT,generation INTEGER)"
+        )
+        connection.execute(
+            "CREATE TABLE self_model_snapshots("
+            "snapshot_id TEXT,snapshot_json BLOB,snapshot_sha256 TEXT)"
+        )
+        connection.execute(
+            "INSERT INTO active_self_model VALUES(?,?)", ("snapshot:test", 3)
+        )
+        connection.execute(
+            "INSERT INTO self_model_snapshots VALUES(?,?,?)",
+            ("snapshot:test", snapshot_raw, sha256(snapshot_raw).hexdigest()),
+        )
+        connection.commit()
+        sqlite_raw = connection.serialize()
+    finally:
+        connection.close()
+
+    def self_hashed(
+        unsigned: Mapping[str, Any], digest_field: str
+    ) -> tuple[dict[str, Any], bytes]:
+        value = {**unsigned, digest_field: live.canonical_sha256(unsigned)}
+        return value, canonical_json_bytes(value)
+
+    def journal(schema_names: Sequence[str], arm: str) -> bytes:
+        events = (
+            "intent",
+            "tokenize_intent",
+            "tokenize_raw_response_received",
+            "tokenize_accepted",
+            "generation_dispatch_intent",
+            "raw_response_received",
+            "response_received",
+            "completed",
+        )
+        rows: list[bytes] = []
+        for ordinal, schema_name in enumerate(schema_names):
+            common = {
+                "arm": arm,
+                "operation": "test",
+                "ordinal": ordinal,
+                "request_id": f"{arm}-{ordinal}",
+            }
+            for event_index, event in enumerate(events):
+                row: dict[str, Any] = {**common, "event": event}
+                if event_index == 0:
+                    row["response_schema_name"] = schema_name
+                if event_index == 2:
+                    row.update(
+                        {
+                            "http_status": 200,
+                            "prepared_request_match": True,
+                            "response_complete": True,
+                            "response_truncated": False,
+                        }
+                    )
+                if event_index == 5:
+                    row["prepared_request_match"] = True
+                rows.append(canonical_json_bytes(row) + b"\n")
+        return b"".join(rows)
+
+    structured_journal = journal(
+        (
+            "hswm_full_author_patch_v2",
+            "hswm_keep_routing_append_patch_v2",
+            "hswm_choice_v1",
+        ),
+        "structured",
+    )
+    plain_journal = journal(("hswm_plain_memory_v1",), "plain")
+    wrapper_script = b"# deterministic test wrapper\n"
+
+    result, result_raw = self_hashed(
+        {
+            "adapter_schema": expected["adapter_schema"],
+            "final_cell_count": 16,
+            "final_generation": 3,
+            "final_memory_count": 144,
+            "fixture_sha256": expected["fixture_sha256"],
+            "model_generation_calls_observed": 4,
+            "outbound_http_requests_observed": 8,
+            "protocol": expected["protocol"],
+            "token_preflight_calls_observed": 4,
+            "valid": True,
+        },
+        "result_sha256",
+    )
+    prereg, prereg_raw = self_hashed(
+        {
+            "adapter_schema": expected["adapter_schema"],
+            "protocol": expected["protocol"],
+            "service_binding": "sha256:" + expected["service_identity_sha256"],
+            "source_revision": expected["source_revision"],
+        },
+        "prereg_sha256",
+    )
+
+    identity = {
+        "container": {"image_id": expected["container_digest"]},
+        "source": {
+            "clean": True,
+            "remote_revision": (
+                service_source_revision or expected["source_revision"]
+            ),
+            "revision": service_source_revision or expected["source_revision"],
+            "tree": expected["source_tree"],
+        },
+    }
+    identity_sha256 = live.canonical_sha256(identity)
+    expected["service_identity_sha256"] = identity_sha256
+    prereg, prereg_raw = self_hashed(
+        {
+            "adapter_schema": expected["adapter_schema"],
+            "protocol": expected["protocol"],
+            "service_binding": "sha256:" + identity_sha256,
+            "source_revision": expected["source_revision"],
+        },
+        "prereg_sha256",
+    )
+    before_raw = canonical_json_bytes(
+        {
+            "identity": identity,
+            "identity_sha256": identity_sha256,
+            "phase": "before",
+        }
+    )
+    after_identity = (
+        {**identity, "unexpected_runtime_change": True}
+        if drift_after_service
+        else identity
+    )
+    after_raw = canonical_json_bytes(
+        {
+            "identity": after_identity,
+            "identity_sha256": live.canonical_sha256(after_identity),
+            "phase": "after",
+        }
+    )
+
+    sqlite_sha256 = sha256(sqlite_raw).hexdigest()
+    expected["state_sqlite_sha256"] = sqlite_sha256
+    expected["wrapper_script_sha256"] = sha256(wrapper_script).hexdigest()
+    wrapper, wrapper_raw = self_hashed(
+        {
+            "after_identity_sha256": identity_sha256,
+            "artifact_validation": {"schema_gate_passed": True},
+            "before_identity_sha256": identity_sha256,
+            "gate_exit_code": 0,
+            "generation_calls_observed": 4,
+            "identity_unchanged": True,
+            "outbound_http_requests_observed": 8,
+            "response_schema_names": {
+                "state/plain/calls.jsonl": ["hswm_plain_memory_v1"],
+                "state/structured/calls.jsonl": [
+                    "hswm_full_author_patch_v2",
+                    "hswm_keep_routing_append_patch_v2",
+                    "hswm_choice_v1",
+                ],
+            },
+            "retry_or_resume_allowed": False,
+            "state": {
+                "active_generation": 3,
+                "cell_count": 16,
+                "memory_count": 144,
+                "sha256": sqlite_sha256,
+            },
+            "token_preflight_calls_observed": 4,
+            "validations_passed": True,
+            "wrapper_sha256": expected["wrapper_script_sha256"],
+        },
+        "wrapper_terminal_receipt_sha256",
+    )
+
+    gate_files = {
+        "gate_result.json": result_raw,
+        "gate_preregistration.json": prereg_raw,
+        "state/plain/calls.jsonl": plain_journal,
+        "state/structured/calls.jsonl": structured_journal,
+        "state/structured/state.sqlite3": sqlite_raw,
+    }
+    terminal, terminal_raw = self_hashed(
+        {
+            "artifact_sha256s": {
+                path: sha256(raw).hexdigest() for path, raw in gate_files.items()
+            },
+            "checkpointed_sqlite_artifacts": [
+                "state/structured/state.sqlite3"
+            ],
+            "generation_calls_expected": 4,
+            "outbound_http_requests_expected": 8,
+            "protocol": expected["protocol"],
+            "schema_gate_passed": True,
+            "status": "success",
+            "token_preflight_calls_expected": 4,
+        },
+        "receipt_sha256",
+    )
+    del terminal, result, prereg, wrapper
+
+    archive_files = {
+        "outputs/gate/terminal_receipt.json": terminal_raw,
+        "outputs/gate/gate_result.json": result_raw,
+        "outputs/gate/gate_preregistration.json": prereg_raw,
+        "outputs/ops/wrapper_terminal.canonical.json": wrapper_raw,
+        "outputs/ops/runtime_wrapper.py": wrapper_script,
+        "outputs/ops/service.before.canonical.json": before_raw,
+        "outputs/ops/service.after.canonical.json": after_raw,
+        "outputs/gate/state/structured/calls.jsonl": structured_journal,
+        "outputs/gate/state/plain/calls.jsonl": plain_journal,
+        "outputs/gate/state/structured/state.sqlite3": sqlite_raw,
+    }
+    expected.update(
+        {
+            "prereg_file_sha256": sha256(prereg_raw).hexdigest(),
+            "prereg_sha256": json.loads(prereg_raw)["prereg_sha256"],
+            "result_file_sha256": sha256(result_raw).hexdigest(),
+            "result_sha256": json.loads(result_raw)["result_sha256"],
+            "terminal_file_sha256": sha256(terminal_raw).hexdigest(),
+            "terminal_receipt_sha256": json.loads(terminal_raw)[
+                "receipt_sha256"
+            ],
+            "wrapper_terminal_file_sha256": sha256(wrapper_raw).hexdigest(),
+            "wrapper_terminal_receipt_sha256": json.loads(wrapper_raw)[
+                "wrapper_terminal_receipt_sha256"
+            ],
+        }
+    )
+    tar_path = tmp_path / "public-gate-artifacts.tar"
+    with tarfile.open(tar_path, "w") as archive:
+        for name, raw in sorted(archive_files.items()):
+            if name == omit_member:
+                continue
+            member = tarfile.TarInfo(name)
+            member.size = len(raw)
+            member.mode = 0o644
+            archive.addfile(member, io.BytesIO(raw))
+    tar_raw = tar_path.read_bytes()
+    expected["artifacts_tar_sha256"] = sha256(tar_raw).hexdigest()
+    outer = {
+        "artifact": {
+            "bytes": len(tar_raw),
+            "name": "artifacts.tar",
+            "sha256": expected["artifacts_tar_sha256"],
+        },
+        "command_sha256": "a" * 64,
+        "durable_tier": "test",
+        "execution_tier": "test",
+        "exit_code": 0,
+        "finished_at": "2026-08-17T00:00:01Z",
+        "run_id": expected["run_id"],
+        "schema": "bhgman-hswm-run/v1",
+        "source_commit": expected["source_revision"],
+        "source_root": "/test/source",
+        "started_at": "2026-08-17T00:00:00Z",
+        "status": "success",
+    }
+    receipt_path = tmp_path / "public-gate-outer-receipt.json"
+    receipt_raw = canonical_json_bytes(outer)
+    receipt_path.write_bytes(receipt_raw)
+    expected["outer_receipt_sha256"] = sha256(receipt_raw).hexdigest()
+    return tar_path, receipt_path, expected
 
 
 def _all_keys(value: Any) -> set[str]:
@@ -4105,6 +4478,1038 @@ def test_exact_frozen_recovery_precommit_fixture() -> None:
     assert value["recovery_execution"]["per_call_timeout_seconds"] == 600.0
 
 
+def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
+    commitments = _fresh_v4_commitments()
+    value = _build_test_v4_precommit()
+    raw = canonical_json_bytes(value)
+    assert set(value) == {
+        "assignment_document",
+        "assignment_sha256",
+        "commitment_document",
+        "commitment_set_sha256",
+        "confirmatory_denylist",
+        "confirmatory_eligible",
+        "engineering_only",
+        "execution_authority",
+        "frozen_before_pilot_completion_calls",
+        "intended_provider",
+        "old_seed_commitment_denylist",
+        "pilot_execution",
+        "planned_outer_run_id",
+        "planned_output_relative_path",
+        "precommit_builder_source_revision",
+        "precommit_builder_source_tree",
+        "precommit_sha256",
+        "preimages_revealed",
+        "primary_seed_indices",
+        "protocol",
+        "public_gate_binding",
+        "public_gate_binding_sha256",
+        "reserve_seed_indices",
+        "schema",
+        "seed_preimage_encoding",
+        "selected_seed_indices",
+        "validated_adapter_source_revision",
+        "validated_adapter_source_tree",
+    }
+    assert live._validate_pilot_precommit_v4(raw) == value
+    assert value["schema"] == "hswm-continual-pilot-precommit/v4"
+    assert value["engineering_only"] is True
+    assert value["confirmatory_eligible"] is False
+    assert value["preimages_revealed"] is False
+    assert value["frozen_before_pilot_completion_calls"] is True
+    assert value["commitment_document"]["commitments"] == list(commitments)
+    assert value["assignment_document"]["primary"] == list(commitments[:2])
+    assert value["assignment_document"]["reserve"] == list(commitments[2:])
+    assert value["primary_seed_indices"] == [0, 1]
+    assert value["reserve_seed_indices"] == [2, 3]
+    assert value["selected_seed_indices"] == [0, 1]
+    assert value["old_seed_commitment_denylist"] == list(
+        _CONSUMED_V2_V3_COMMITMENTS
+    )
+    assert value["confirmatory_denylist"] == [
+        *_CONSUMED_V2_V3_COMMITMENTS,
+        *commitments,
+    ]
+    assert value["validated_adapter_source_revision"] == (
+        "a1c3f81b26d7e07d6ed9fb68033876d078d84e1b"
+    )
+    assert value["validated_adapter_source_tree"] == (
+        "c80b8cb6604d904b32a9204bb51a23ea93312777"
+    )
+    assert value["execution_authority"] == {
+        "runtime_authority_source_revision": None,
+        "runtime_authority_source_tree": None,
+        "status": "unanchored_execution_authority",
+    }
+    assert value["planned_outer_run_id"] == "test-v4-primary-r1"
+    assert value["planned_output_relative_path"] == "outputs/pilot"
+    assert value["pilot_execution"] == {
+        "answer_max_tokens": 128,
+        "arms": ["hswm", "reset", "no_write", "plain"],
+        "base_generation_calls_per_stream": 164,
+        "choice_count": 4,
+        "delay": 4,
+        "generation_call_budget_total": 358,
+        "generation_calls_per_stream": 179,
+        "horizon": 20,
+        "max_input_bytes": 2_000_000,
+        "max_state_bytes": 1_000_000,
+        "one_shot_enforcement": (
+            "outer-wrapper-must-own-unique-durable-run-id-and-prove-"
+            "prelaunch-path-absence"
+        ),
+        "outbound_http_request_budget_total": 716,
+        "outbound_http_requests_per_stream": 358,
+        "per_call_timeout_seconds": 600.0,
+        "removal_restore": True,
+        "removal_restore_extra_generation_calls_per_stream": 15,
+        "removal_restore_probes_per_stream": 5,
+        "resume_allowed": False,
+        "retry_limit": 0,
+        "streams": 2,
+        "token_preflight_call_budget_total": 358,
+        "token_preflight_calls_per_stream": 179,
+        "update_max_tokens": 6144,
+    }
+    unsigned = {key: item for key, item in value.items() if key != "precommit_sha256"}
+    assert value["precommit_sha256"] == live.canonical_sha256(unsigned)
+
+
+@pytest.mark.parametrize(
+    "commitments,match",
+    [
+        (
+            lambda: (
+                _CONSUMED_V2_V3_COMMITMENTS[0],
+                *_fresh_v4_commitments()[1:],
+            ),
+            "old|consumed|fresh",
+        ),
+        (
+            lambda: (
+                _fresh_v4_commitments()[0],
+                _fresh_v4_commitments()[0],
+                *_fresh_v4_commitments()[2:],
+            ),
+            "unique|duplicate",
+        ),
+    ],
+)
+def test_v4_precommit_builder_rejects_consumed_or_duplicate_commitments(
+    commitments: Callable[[], tuple[str, ...]], match: str
+) -> None:
+    with pytest.raises(ContinualLiveError, match=match):
+        live.build_pilot_precommit_v4(
+            commitments(),
+            planned_outer_run_id="test-v4-primary-r1",
+            planned_output_relative_path="outputs/pilot",
+            precommit_builder_source_revision="c" * 40,
+            precommit_builder_source_tree="d" * 40,
+        )
+
+
+@pytest.mark.parametrize(
+    "revision,tree",
+    [
+        ("not-a-revision", "d" * 40),
+        ("c" * 40, "not-a-tree"),
+        ("a1c3f81b26d7e07d6ed9fb68033876d078d84e1b", "d" * 40),
+        ("c" * 40, "c80b8cb6604d904b32a9204bb51a23ea93312777"),
+    ],
+)
+def test_v4_precommit_builder_source_is_valid_and_distinct_from_adapter(
+    revision: str, tree: str
+) -> None:
+    with pytest.raises(ContinualLiveError, match="builder|source|adapter"):
+        live.build_pilot_precommit_v4(
+            _fresh_v4_commitments(),
+            planned_outer_run_id="test-v4-primary-r1",
+            planned_output_relative_path="outputs/pilot",
+            precommit_builder_source_revision=revision,
+            precommit_builder_source_tree=tree,
+        )
+
+
+@pytest.mark.parametrize(
+    "run_id,output_path",
+    [
+        ("../pilot", "outputs/pilot"),
+        ("Pilot With Spaces", "outputs/pilot"),
+        ("test-v4-primary-r1", "/outputs/pilot"),
+        ("test-v4-primary-r1", "outputs/../pilot"),
+        ("test-v4-primary-r1", "outputs\\pilot"),
+        ("test-v4-primary-r1", "pilot"),
+    ],
+)
+def test_v4_precommit_builder_rejects_unsafe_planned_run_identity(
+    run_id: str, output_path: str
+) -> None:
+    with pytest.raises(ContinualLiveError, match="run_id|output path"):
+        live.build_pilot_precommit_v4(
+            _fresh_v4_commitments(),
+            planned_outer_run_id=run_id,
+            planned_output_relative_path=output_path,
+            precommit_builder_source_revision="c" * 40,
+            precommit_builder_source_tree="d" * 40,
+        )
+
+
+def test_v4_precommit_rejects_noncanonical_extra_and_bad_self_hash() -> None:
+    value = _build_test_v4_precommit()
+    with pytest.raises(ContinualLiveError, match="canonical"):
+        live._validate_pilot_precommit_v4(canonical_json_bytes(value) + b"\n")
+
+    extra = deepcopy(value)
+    extra["not_frozen"] = True
+    with pytest.raises(ContinualLiveError, match="field set|frozen v4"):
+        live._validate_pilot_precommit_v4(_rehash_v4_precommit(extra))
+
+    bad_hash = deepcopy(value)
+    bad_hash["precommit_sha256"] = "0" * 64
+    with pytest.raises(ContinualLiveError, match="self-hash"):
+        live._validate_pilot_precommit_v4(canonical_json_bytes(bad_hash))
+
+
+def test_pilot_precommit_reader_accepts_only_the_strict_v4_object(
+    tmp_path: Path,
+) -> None:
+    value = _build_test_v4_precommit()
+    raw = canonical_json_bytes(value)
+    path = tmp_path / "pilot-v4.canonical.json"
+    path.write_bytes(raw)
+    observed, observed_raw = live._read_pilot_precommit(path)
+    assert observed == value
+    assert observed_raw == raw
+
+    loose = deepcopy(value)
+    loose["caller_extension"] = "not-authority"
+    path.write_bytes(_rehash_v4_precommit(loose))
+    with pytest.raises(ContinualLiveError, match="field set"):
+        live._read_pilot_precommit(path)
+
+
+def test_v4_precommit_seal_requires_exact_member_and_reports_b1_unanchored(
+    tmp_path: Path,
+) -> None:
+    raw = canonical_json_bytes(_build_test_v4_precommit())
+    tar_path, receipt_path = _write_test_v4_precommit_seal(
+        tmp_path,
+        loose_precommit_raw=raw,
+    )
+    validation = live._validate_pilot_precommit_seal(
+        tar_path,
+        receipt_path,
+        precommit_raw=raw,
+    )
+    assert validation["external_anchor_status"] == "unanchored_execution_authority"
+    assert validation["precommit_artifact_path"] == (
+        "outputs/pilot_precommit.canonical.json"
+    )
+    assert validation["precommit_artifact_sha256"] == sha256(raw).hexdigest()
+    unsigned = {
+        key: item
+        for key, item in validation.items()
+        if key != "validation_sha256"
+    }
+    assert validation["validation_sha256"] == live.canonical_sha256(unsigned)
+
+
+def test_v4_precommit_seal_rejects_missing_member_loose_drift_and_source_drift(
+    tmp_path: Path,
+) -> None:
+    raw = canonical_json_bytes(_build_test_v4_precommit())
+
+    missing_tar, missing_receipt = _write_test_v4_precommit_seal(
+        tmp_path / "missing",
+        loose_precommit_raw=raw,
+        member_name="outputs/not-the-precommit.json",
+    )
+    with pytest.raises(
+        ContinualLiveError, match="missing.*pilot_precommit|member set is not exact"
+    ):
+        live._validate_pilot_precommit_seal(
+            missing_tar,
+            missing_receipt,
+            precommit_raw=raw,
+        )
+
+    extra_tar, extra_receipt = _write_test_v4_precommit_seal(
+        tmp_path / "extra",
+        loose_precommit_raw=raw,
+        extra_member=("outputs/unbound-note.txt", b"not part of the seal"),
+    )
+    with pytest.raises(ContinualLiveError, match="sole regular member|exact.*member"):
+        live._validate_pilot_precommit_seal(
+            extra_tar,
+            extra_receipt,
+            precommit_raw=raw,
+        )
+
+    fifo_tar, fifo_receipt = _write_test_v4_precommit_seal(
+        tmp_path / "fifo",
+        loose_precommit_raw=raw,
+        special_member_name="outputs/unbound-fifo",
+    )
+    with pytest.raises(ContinualLiveError, match="special|regular file|FIFO"):
+        live._validate_pilot_precommit_seal(
+            fifo_tar,
+            fifo_receipt,
+            precommit_raw=raw,
+        )
+
+    other = live.build_pilot_precommit_v4(
+        tuple(
+            sha256(f"other-fresh-v4-seed-{index}".encode("ascii")).hexdigest()
+            for index in range(4)
+        ),
+        planned_outer_run_id="test-v4-primary-r1",
+        planned_output_relative_path="outputs/pilot",
+        precommit_builder_source_revision="c" * 40,
+        precommit_builder_source_tree="d" * 40,
+    )
+    drift_tar, drift_receipt = _write_test_v4_precommit_seal(
+        tmp_path / "loose-drift",
+        loose_precommit_raw=raw,
+        sealed_precommit_raw=canonical_json_bytes(other),
+    )
+    with pytest.raises(ContinualLiveError, match="loose.*differs|durable seal"):
+        live._validate_pilot_precommit_seal(
+            drift_tar,
+            drift_receipt,
+            precommit_raw=raw,
+        )
+
+    source_tar, source_receipt = _write_test_v4_precommit_seal(
+        tmp_path / "source-drift",
+        loose_precommit_raw=raw,
+        source_commit="e" * 40,
+    )
+    with pytest.raises(ContinualLiveError, match="outer receipt"):
+        live._validate_pilot_precommit_seal(
+            source_tar,
+            source_receipt,
+            precommit_raw=raw,
+        )
+
+
+def test_v4_precommit_seal_rejects_partial_future_b2_anchors(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    raw = canonical_json_bytes(_build_test_v4_precommit())
+    tar_path, receipt_path = _write_test_v4_precommit_seal(
+        tmp_path,
+        loose_precommit_raw=raw,
+    )
+    monkeypatch.setattr(
+        live, "FROZEN_V4_PRECOMMIT_RAW_SHA256", sha256(raw).hexdigest()
+    )
+    with pytest.raises(ContinualLiveError, match="partially set"):
+        live._validate_pilot_precommit_seal(
+            tar_path,
+            receipt_path,
+            precommit_raw=raw,
+        )
+
+
+def test_public_gate_artifact_validator_checks_full_success_bundle(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    tar_path, receipt_path, expected = _write_test_public_gate_bundle(tmp_path)
+    monkeypatch.setattr(
+        live, "_expected_public_gate_binding", lambda: deepcopy(expected)
+    )
+    validation = live._validate_public_gate_artifacts(tar_path, receipt_path)
+    assert validation["schema_gate_passed"] is True
+    assert validation["generation_calls_observed"] == 4
+    assert validation["token_preflight_calls_observed"] == 4
+    assert validation["outbound_http_requests_observed"] == 8
+    assert validation["final_generation"] == 3
+    assert validation["final_memory_count"] == 144
+    assert validation["final_cell_count"] == 16
+    assert validation["public_gate_binding_sha256"] == live.canonical_sha256(
+        expected
+    )
+
+
+def test_public_gate_artifact_validator_rejects_tar_receipt_and_member_tampering(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    tar_path, receipt_path, expected = _write_test_public_gate_bundle(
+        tmp_path / "valid"
+    )
+    monkeypatch.setattr(
+        live, "_expected_public_gate_binding", lambda: deepcopy(expected)
+    )
+    tar_raw = tar_path.read_bytes()
+    tar_path.write_bytes(tar_raw + b"tamper")
+    with pytest.raises(ContinualLiveError, match="tar or outer receipt"):
+        live._validate_public_gate_artifacts(tar_path, receipt_path)
+    tar_path.write_bytes(tar_raw)
+    receipt_raw = receipt_path.read_bytes()
+    receipt_path.write_bytes(receipt_raw + b"tamper")
+    with pytest.raises(ContinualLiveError, match="tar or outer receipt"):
+        live._validate_public_gate_artifacts(tar_path, receipt_path)
+
+    missing_tar, missing_receipt, missing_expected = (
+        _write_test_public_gate_bundle(
+            tmp_path / "missing-member",
+            omit_member="outputs/gate/gate_result.json",
+        )
+    )
+    monkeypatch.setattr(
+        live,
+        "_expected_public_gate_binding",
+        lambda: deepcopy(missing_expected),
+    )
+    with pytest.raises(ContinualLiveError, match="missing.*gate_result"):
+        live._validate_public_gate_artifacts(missing_tar, missing_receipt)
+
+
+@pytest.mark.parametrize(
+    "source_revision,drift_after,match",
+    [
+        ("f" * 40, False, "source or container"),
+        (None, True, "service identity changed"),
+    ],
+)
+def test_public_gate_artifact_validator_rejects_source_or_service_drift(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    source_revision: str | None,
+    drift_after: bool,
+    match: str,
+) -> None:
+    tar_path, receipt_path, expected = _write_test_public_gate_bundle(
+        tmp_path,
+        service_source_revision=source_revision,
+        drift_after_service=drift_after,
+    )
+    monkeypatch.setattr(
+        live, "_expected_public_gate_binding", lambda: deepcopy(expected)
+    )
+    with pytest.raises(ContinualLiveError, match=match):
+        live._validate_public_gate_artifacts(tar_path, receipt_path)
+
+
+def test_v4_b1_cli_refuses_unanchored_authority_before_seed_or_model_calls(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    value = _build_test_v4_precommit()
+    raw = canonical_json_bytes(value)
+    precommit_path = tmp_path / "pilot-v4.canonical.json"
+    precommit_path.write_bytes(raw)
+    seal_tar, seal_receipt = _write_test_v4_precommit_seal(
+        tmp_path / "seal",
+        loose_precommit_raw=raw,
+    )
+    gate_tar = tmp_path / "gate.tar"
+    gate_receipt = tmp_path / "gate-receipt.json"
+    gate_tar.write_bytes(b"validated by test double")
+    gate_receipt.write_bytes(b"validated by test double")
+    gate_validation = {
+        "public_gate_binding_sha256": value["public_gate_binding_sha256"],
+        "validation_sha256": "a" * 64,
+    }
+
+    def validate_gate(artifacts: Path, receipt: Path) -> dict[str, Any]:
+        assert (artifacts, receipt) == (gate_tar, gate_receipt)
+        return gate_validation
+
+    monkeypatch.setattr(live, "_validate_public_gate_artifacts", validate_gate)
+
+    def fail_seed_read(*args: Any, **kwargs: Any) -> tuple[bytes, ...]:
+        del args, kwargs
+        raise AssertionError("B1 must refuse before reading seed preimages")
+
+    def fail_model_call(self: Any, **kwargs: Any) -> ModelCompletion:
+        del self, kwargs
+        raise AssertionError("B1 must refuse before any model call")
+
+    monkeypatch.setattr(live, "_read_secret_seeds", fail_seed_read)
+    monkeypatch.setattr(OpenAICompatibleBackend, "complete", fail_model_call)
+    output = tmp_path / "outputs" / "pilot"
+    gate_binding = value["public_gate_binding"]
+    with pytest.raises(
+        ContinualLiveError, match="unanchored_execution_authority"
+    ):
+        main(
+            [
+                "--endpoint",
+                value["intended_provider"]["endpoint"],
+                "--model",
+                value["intended_provider"]["served_model"],
+                "--seed-file",
+                str(tmp_path / "must-not-read-seeds.json"),
+                "--precommit-file",
+                str(precommit_path),
+                "--public-gate-artifacts-tar",
+                str(gate_tar),
+                "--public-gate-receipt",
+                str(gate_receipt),
+                "--pilot-precommit-artifacts-tar",
+                str(seal_tar),
+                "--pilot-precommit-receipt",
+                str(seal_receipt),
+                "--outer-run-id",
+                "test-v4-primary-r1",
+                "--output-dir",
+                str(output),
+                "--source-revision",
+                "e" * 40,
+                "--source-tree",
+                "f" * 40,
+                "--container-digest",
+                gate_binding["container_digest"],
+                "--service-binding",
+                "sha256:" + gate_binding["service_identity_sha256"],
+                "--removal-restore",
+            ]
+        )
+    assert not output.exists()
+
+
+@pytest.mark.parametrize(
+    "runtime_revision,runtime_tree",
+    [
+        ("a1c3f81b26d7e07d6ed9fb68033876d078d84e1b", "f" * 40),
+        ("e" * 40, "c80b8cb6604d904b32a9204bb51a23ea93312777"),
+    ],
+)
+def test_v4_runtime_authority_cannot_reuse_validated_adapter_source(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    runtime_revision: str,
+    runtime_tree: str,
+) -> None:
+    value = _build_test_v4_precommit()
+    raw = canonical_json_bytes(value)
+    precommit_path = tmp_path / "pilot-v4.canonical.json"
+    precommit_path.write_bytes(raw)
+    seal_tar, seal_receipt = _write_test_v4_precommit_seal(
+        tmp_path / "seal",
+        loose_precommit_raw=raw,
+    )
+    for name, observed in (
+        ("FROZEN_V4_PRECOMMIT_RAW_SHA256", sha256(raw).hexdigest()),
+        (
+            "FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256",
+            sha256(seal_tar.read_bytes()).hexdigest(),
+        ),
+        (
+            "FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256",
+            sha256(seal_receipt.read_bytes()).hexdigest(),
+        ),
+        (
+            "FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION",
+            value["precommit_builder_source_revision"],
+        ),
+        (
+            "FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE",
+            value["precommit_builder_source_tree"],
+        ),
+    ):
+        monkeypatch.setattr(live, name, observed)
+    gate_tar = tmp_path / "gate.tar"
+    gate_receipt = tmp_path / "gate-receipt.json"
+    gate_tar.write_bytes(b"validated by test double")
+    gate_receipt.write_bytes(b"validated by test double")
+    monkeypatch.setattr(
+        live,
+        "_validate_public_gate_artifacts",
+        lambda artifacts, receipt: {
+            "public_gate_binding_sha256": value["public_gate_binding_sha256"],
+            "validation_sha256": "a" * 64,
+        },
+    )
+
+    def fail_seed_read(*args: Any, **kwargs: Any) -> tuple[bytes, ...]:
+        del args, kwargs
+        raise AssertionError("source conflation must fail before seed reads")
+
+    monkeypatch.setattr(live, "_read_secret_seeds", fail_seed_read)
+    gate_binding = value["public_gate_binding"]
+    output = tmp_path / "outputs" / "pilot"
+    with pytest.raises(ContinualLiveError, match="validated adapter|runtime authority"):
+        main(
+            [
+                "--endpoint",
+                value["intended_provider"]["endpoint"],
+                "--model",
+                value["intended_provider"]["served_model"],
+                "--seed-file",
+                str(tmp_path / "must-not-read.json"),
+                "--precommit-file",
+                str(precommit_path),
+                "--public-gate-artifacts-tar",
+                str(gate_tar),
+                "--public-gate-receipt",
+                str(gate_receipt),
+                "--pilot-precommit-artifacts-tar",
+                str(seal_tar),
+                "--pilot-precommit-receipt",
+                str(seal_receipt),
+                "--outer-run-id",
+                "test-v4-primary-r1",
+                "--output-dir",
+                str(output),
+                "--source-revision",
+                runtime_revision,
+                "--source-tree",
+                runtime_tree,
+                "--container-digest",
+                gate_binding["container_digest"],
+                "--service-binding",
+                "sha256:" + gate_binding["service_identity_sha256"],
+                "--removal-restore",
+            ]
+        )
+    assert not output.exists()
+
+
+def test_v4_failure_reveals_only_selected_primary_preimages(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    primary_seeds = (b"\x11" * 32, b"\x22" * 32)
+    reserve_seeds = (b"\x33" * 32, b"\x44" * 32)
+    commitments = tuple(
+        sha256(seed).hexdigest() for seed in (*primary_seeds, *reserve_seeds)
+    )
+    value = live.build_pilot_precommit_v4(
+        commitments,
+        planned_outer_run_id="test-v4-primary-r1",
+        planned_output_relative_path="outputs/pilot",
+        precommit_builder_source_revision="c" * 40,
+        precommit_builder_source_tree="d" * 40,
+    )
+    raw = canonical_json_bytes(value)
+    precommit_path = tmp_path / "pilot-v4.canonical.json"
+    precommit_path.write_bytes(raw)
+    seed_path = tmp_path / "selected-primary-seeds.json"
+    seed_path.write_text(
+        json.dumps([seed.hex() for seed in primary_seeds]),
+        encoding="ascii",
+    )
+    seed_path.chmod(0o600)
+    seal_tar, seal_receipt = _write_test_v4_precommit_seal(
+        tmp_path / "seal",
+        loose_precommit_raw=raw,
+    )
+    monkeypatch.setattr(
+        live, "FROZEN_V4_PRECOMMIT_RAW_SHA256", sha256(raw).hexdigest()
+    )
+    monkeypatch.setattr(
+        live,
+        "FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256",
+        sha256(seal_tar.read_bytes()).hexdigest(),
+    )
+    monkeypatch.setattr(
+        live,
+        "FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256",
+        sha256(seal_receipt.read_bytes()).hexdigest(),
+    )
+    monkeypatch.setattr(
+        live,
+        "FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION",
+        value["precommit_builder_source_revision"],
+    )
+    monkeypatch.setattr(
+        live,
+        "FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE",
+        value["precommit_builder_source_tree"],
+    )
+    gate_tar = tmp_path / "gate.tar"
+    gate_receipt = tmp_path / "gate-receipt.json"
+    gate_tar.write_bytes(b"validated by test double")
+    gate_receipt.write_bytes(b"validated by test double")
+
+    def validate_gate(artifacts: Path, receipt: Path) -> dict[str, Any]:
+        assert (artifacts, receipt) == (gate_tar, gate_receipt)
+        unsigned = {
+            "public_gate_binding_sha256": value["public_gate_binding_sha256"],
+            "schema": "test-public-gate-validation/v1",
+        }
+        return {**unsigned, "validation_sha256": live.canonical_sha256(unsigned)}
+
+    def stop_at_first_token_preflight(self: Any, **kwargs: Any) -> Any:
+        del self, kwargs
+        raise ContinualLiveError("forced primary failure")
+
+    def fail_model_call(self: Any, **kwargs: Any) -> ModelCompletion:
+        del self, kwargs
+        raise AssertionError("token preflight failure must precede generation")
+
+    monkeypatch.setattr(live, "_validate_public_gate_artifacts", validate_gate)
+    monkeypatch.setattr(OpenAICompatibleBackend, "tokenize", stop_at_first_token_preflight)
+    monkeypatch.setattr(OpenAICompatibleBackend, "complete", fail_model_call)
+    output = tmp_path / "outputs" / "pilot"
+    gate_binding = value["public_gate_binding"]
+    with pytest.raises(ContinualLiveError, match="forced primary failure"):
+        main(
+            [
+                "--endpoint",
+                value["intended_provider"]["endpoint"],
+                "--model",
+                value["intended_provider"]["served_model"],
+                "--seed-file",
+                str(seed_path),
+                "--precommit-file",
+                str(precommit_path),
+                "--public-gate-artifacts-tar",
+                str(gate_tar),
+                "--public-gate-receipt",
+                str(gate_receipt),
+                "--pilot-precommit-artifacts-tar",
+                str(seal_tar),
+                "--pilot-precommit-receipt",
+                str(seal_receipt),
+                "--outer-run-id",
+                "test-v4-primary-r1",
+                "--output-dir",
+                str(output),
+                "--source-revision",
+                "e" * 40,
+                "--source-tree",
+                "f" * 40,
+                "--container-digest",
+                gate_binding["container_digest"],
+                "--service-binding",
+                "sha256:" + gate_binding["service_identity_sha256"],
+                "--removal-restore",
+            ]
+        )
+    reveal_raw = (output / "seed_reveal.json").read_bytes()
+    reveal = json.loads(reveal_raw)
+    assert reveal["selected_seed_indices"] == [0, 1]
+    assert reveal["used_seeds"] == [
+        {"frozen_index": 0, "seed_hex": primary_seeds[0].hex()},
+        {"frozen_index": 1, "seed_hex": primary_seeds[1].hex()},
+    ]
+    assert all(seed.hex().encode("ascii") not in reveal_raw for seed in reserve_seeds)
+    post_reveal = json.loads((output / "post_reveal_validation.json").read_bytes())
+    assert post_reveal["selected_primary_reveal_match"] is True
+
+
+def test_v4_successful_two_stream_stub_still_fails_when_post_reveal_is_false(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    primary_seeds = (b"\x51" * 32, b"\x52" * 32)
+    commitments = tuple(
+        sha256(seed).hexdigest()
+        for seed in (*primary_seeds, b"\x53" * 32, b"\x54" * 32)
+    )
+    value = live.build_pilot_precommit_v4(
+        commitments,
+        planned_outer_run_id="test-v4-primary-r1",
+        planned_output_relative_path="outputs/pilot",
+        precommit_builder_source_revision="c" * 40,
+        precommit_builder_source_tree="d" * 40,
+    )
+    raw = canonical_json_bytes(value)
+    precommit_path = tmp_path / "pilot-v4.canonical.json"
+    precommit_path.write_bytes(raw)
+    seed_path = tmp_path / "selected-primary-seeds.json"
+    seed_path.write_text(
+        json.dumps([seed.hex() for seed in primary_seeds]), encoding="ascii"
+    )
+    seed_path.chmod(0o600)
+    seal_tar, seal_receipt = _write_test_v4_precommit_seal(
+        tmp_path / "seal", loose_precommit_raw=raw
+    )
+    for name, observed in (
+        ("FROZEN_V4_PRECOMMIT_RAW_SHA256", sha256(raw).hexdigest()),
+        (
+            "FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256",
+            sha256(seal_tar.read_bytes()).hexdigest(),
+        ),
+        (
+            "FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256",
+            sha256(seal_receipt.read_bytes()).hexdigest(),
+        ),
+        (
+            "FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION",
+            value["precommit_builder_source_revision"],
+        ),
+        (
+            "FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE",
+            value["precommit_builder_source_tree"],
+        ),
+    ):
+        monkeypatch.setattr(live, name, observed)
+    gate_tar = tmp_path / "gate.tar"
+    gate_receipt = tmp_path / "gate-receipt.json"
+    gate_tar.write_bytes(b"validated by test double")
+    gate_receipt.write_bytes(b"validated by test double")
+    monkeypatch.setattr(
+        live,
+        "_validate_public_gate_artifacts",
+        lambda artifacts, receipt: {
+            "public_gate_binding_sha256": value["public_gate_binding_sha256"],
+            "validation_sha256": "a" * 64,
+        },
+    )
+
+    class StubArtifact:
+        def __init__(self, kind: str) -> None:
+            self.kind = kind
+            self.primary_call_counts = (41, 41, 41, 41)
+            self.removal_mediation_gate_passed = True
+            self.results: tuple[Any, ...] = ()
+
+        def canonical(self) -> dict[str, Any]:
+            return {"kind": self.kind}
+
+    def stub_run(*args: Any, **kwargs: Any) -> tuple[Any, Any, tuple[Any, ...]]:
+        del args, kwargs
+        return (
+            StubArtifact("run"),
+            StubArtifact("audit"),
+            (object(), object(), object(), object()),
+        )
+
+    def stub_removal(*args: Any, **kwargs: Any) -> Any:
+        del args, kwargs
+        return StubArtifact("removal")
+
+    def stub_ledgers(*args: Any, **kwargs: Any) -> dict[str, Any]:
+        del args, kwargs
+        entry = {"token_preflight": {"valid": True}}
+        return {
+            "primary": {
+                arm: [entry] * 41
+                for arm in ("hswm", "reset", "no_write", "plain")
+            },
+            "mediation": {"hswm": [entry] * 15},
+        }
+
+    original_validate = live.validate_stream_set
+    validation_calls = 0
+
+    def fail_only_post_reveal(*args: Any, **kwargs: Any) -> Any:
+        nonlocal validation_calls
+        validation_calls += 1
+        if validation_calls == 2:
+            raise ContinualLiveError("forced post-reveal predicate failure")
+        return original_validate(*args, **kwargs)
+
+    def fail_model_call(self: Any, **kwargs: Any) -> ModelCompletion:
+        del self, kwargs
+        raise AssertionError("stubbed run must not call the model")
+
+    monkeypatch.setattr(live, "run_four_arm_stream", stub_run)
+    monkeypatch.setattr(live, "run_removal_restore_probes", stub_removal)
+    monkeypatch.setattr(live, "scoped_call_ledgers", stub_ledgers)
+    monkeypatch.setattr(live, "validate_stream_set", fail_only_post_reveal)
+    monkeypatch.setattr(OpenAICompatibleBackend, "complete", fail_model_call)
+    gate_binding = value["public_gate_binding"]
+    output = tmp_path / "outputs" / "pilot"
+    with pytest.raises(
+        ContinualLiveError, match="post-reveal regeneration or regrade failed"
+    ):
+        main(
+            [
+                "--endpoint",
+                value["intended_provider"]["endpoint"],
+                "--model",
+                value["intended_provider"]["served_model"],
+                "--seed-file",
+                str(seed_path),
+                "--precommit-file",
+                str(precommit_path),
+                "--public-gate-artifacts-tar",
+                str(gate_tar),
+                "--public-gate-receipt",
+                str(gate_receipt),
+                "--pilot-precommit-artifacts-tar",
+                str(seal_tar),
+                "--pilot-precommit-receipt",
+                str(seal_receipt),
+                "--outer-run-id",
+                "test-v4-primary-r1",
+                "--output-dir",
+                str(output),
+                "--source-revision",
+                "e" * 40,
+                "--source-tree",
+                "f" * 40,
+                "--container-digest",
+                gate_binding["container_digest"],
+                "--service-binding",
+                "sha256:" + gate_binding["service_identity_sha256"],
+                "--removal-restore",
+            ]
+        )
+    assert validation_calls == 2
+    post_reveal = json.loads((output / "post_reveal_validation.json").read_bytes())
+    terminal = json.loads((output / "terminal_receipt.json").read_bytes())
+    assert post_reveal["valid"] is False
+    assert "forced post-reveal predicate failure" in post_reveal["error"]
+    assert terminal["status"] == "failed"
+
+
+def test_v4_cli_requires_durable_artifacts_and_forbids_old_recovery_args(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    raw = canonical_json_bytes(_build_test_v4_precommit())
+    precommit_path = tmp_path / "pilot-v4.canonical.json"
+    precommit_path.write_bytes(raw)
+
+    def fail_after_precommit(*args: Any, **kwargs: Any) -> Any:
+        del args, kwargs
+        raise AssertionError("v4 argument rejection must precede artifacts and seeds")
+
+    monkeypatch.setattr(live, "_validate_public_gate_artifacts", fail_after_precommit)
+    monkeypatch.setattr(live, "_validate_pilot_precommit_seal", fail_after_precommit)
+    monkeypatch.setattr(live, "_read_secret_seeds", fail_after_precommit)
+    base = [
+        "--endpoint",
+        "http://model.invalid",
+        "--model",
+        "fixture-model",
+        "--seed-file",
+        str(tmp_path / "must-not-read.json"),
+        "--precommit-file",
+        str(precommit_path),
+        "--outer-run-id",
+        "test-v4-primary-r1",
+        "--output-dir",
+        str(tmp_path / "outputs" / "pilot"),
+        "--source-revision",
+        "e" * 40,
+        "--source-tree",
+        "f" * 40,
+        "--container-digest",
+        "sha256:" + "d" * 64,
+        "--service-binding",
+        "sha256:" + "e" * 64,
+    ]
+    with pytest.raises(ContinualLiveError, match="requires durable artifacts"):
+        main(base)
+    with pytest.raises(ContinualLiveError, match="obsolete failed-run"):
+        main(
+            [
+                *base,
+                "--failed-run-artifacts-tar",
+                str(tmp_path / "old.tar"),
+                "--failed-run-receipt",
+                str(tmp_path / "old-receipt.json"),
+            ]
+        )
+
+
+@pytest.mark.parametrize(
+    "outer_run_id,output_suffix,match",
+    [
+        ("different-run", ("outputs", "pilot"), "run_id"),
+        ("test-v4-primary-r1", ("outputs", "other"), "output path"),
+    ],
+)
+def test_v4_cli_rejects_planned_run_or_output_mismatch_before_artifacts_and_seeds(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    outer_run_id: str,
+    output_suffix: tuple[str, str],
+    match: str,
+) -> None:
+    precommit_path = tmp_path / "pilot-v4.canonical.json"
+    precommit_path.write_bytes(canonical_json_bytes(_build_test_v4_precommit()))
+
+    def fail_later(*args: Any, **kwargs: Any) -> Any:
+        del args, kwargs
+        raise AssertionError("planned identity mismatch must fail first")
+
+    monkeypatch.setattr(live, "_validate_public_gate_artifacts", fail_later)
+    monkeypatch.setattr(live, "_validate_pilot_precommit_seal", fail_later)
+    monkeypatch.setattr(live, "_read_secret_seeds", fail_later)
+    output = tmp_path.joinpath(*output_suffix)
+    with pytest.raises(ContinualLiveError, match=match):
+        main(
+            [
+                "--endpoint",
+                "http://model.invalid",
+                "--model",
+                "fixture-model",
+                "--seed-file",
+                str(tmp_path / "must-not-read.json"),
+                "--precommit-file",
+                str(precommit_path),
+                "--outer-run-id",
+                outer_run_id,
+                "--output-dir",
+                str(output),
+                "--source-revision",
+                "e" * 40,
+                "--source-tree",
+                "f" * 40,
+                "--container-digest",
+                "sha256:" + "d" * 64,
+                "--service-binding",
+                "sha256:" + "e" * 64,
+            ]
+        )
+    assert not output.exists()
+
+
+@pytest.mark.parametrize(
+    "mutation,match",
+    [
+        ("assignment", "assignment"),
+        ("selected", "authority|primary|selected"),
+        ("boolean_indices", "authority|indices|primary|selected"),
+        ("authority", "unanchored|authority"),
+        ("adapter_revision", "adapter|revision"),
+        ("gate_binding", "gate|binding"),
+        ("gate_source", "gate|binding"),
+        ("gate_service", "gate|binding"),
+        ("gate_tar", "gate|binding"),
+        ("denylist", "denylist"),
+        ("budget", "execution|budget"),
+        ("retry", "execution|retry"),
+    ],
+)
+def test_v4_precommit_rejects_rehashed_semantic_tampering(
+    mutation: str, match: str
+) -> None:
+    value = _build_test_v4_precommit()
+    if mutation == "assignment":
+        value["assignment_document"]["primary"] = list(
+            reversed(value["assignment_document"]["primary"])
+        )
+        value["assignment_sha256"] = live.canonical_sha256(
+            value["assignment_document"]
+        )
+    elif mutation == "selected":
+        value["selected_seed_indices"] = [2, 3]
+    elif mutation == "boolean_indices":
+        value["primary_seed_indices"] = [False, True]
+        value["selected_seed_indices"] = [False, True]
+    elif mutation == "authority":
+        value["execution_authority"]["status"] = "ready"
+    elif mutation == "adapter_revision":
+        value["validated_adapter_source_revision"] = "f" * 40
+    elif mutation in {"gate_binding", "gate_source", "gate_service", "gate_tar"}:
+        binding_key = {
+            "gate_binding": "result_file_sha256",
+            "gate_source": "source_revision",
+            "gate_service": "service_identity_sha256",
+            "gate_tar": "artifacts_tar_sha256",
+        }[mutation]
+        value["public_gate_binding"][binding_key] = "f" * 64
+        value["public_gate_binding_sha256"] = live.canonical_sha256(
+            value["public_gate_binding"]
+        )
+    elif mutation == "denylist":
+        value["confirmatory_denylist"] = value["confirmatory_denylist"][1:]
+    elif mutation == "budget":
+        value["pilot_execution"]["choice_count"] = 8
+    elif mutation == "retry":
+        value["pilot_execution"]["retry_limit"] = 1
+    else:  # pragma: no cover - parametrization guard
+        raise AssertionError(mutation)
+    with pytest.raises(ContinualLiveError, match=match):
+        live._validate_pilot_precommit_v4(_rehash_v4_precommit(value))
+
+
 def test_cli_rejects_consumed_v3_even_with_exact_failure_binding(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -4167,7 +5572,7 @@ def test_cli_rejects_consumed_v3_even_with_exact_failure_binding(
     with pytest.raises(ContinualLiveError, match="permanently prohibited"):
         main(argv)
     assert calls == 0
-    assert not any(output.iterdir())
+    assert not output.exists()
 
 
 def test_recovery_rejects_tampered_failed_run_tar_and_receipt(
@@ -4235,6 +5640,48 @@ def test_cli_rejects_consumed_v2_primary_authority(
                 "sha256:" + "e" * 64,
             ]
         )
+
+
+def test_cli_rejects_nonempty_output_before_authority_or_seed_reads(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    output = tmp_path / "existing-output"
+    output.mkdir()
+    marker = output / "do-not-overwrite"
+    marker.write_text("preserve", encoding="ascii")
+
+    def fail_precommit(*args: Any, **kwargs: Any) -> tuple[dict[str, Any], bytes]:
+        del args, kwargs
+        raise AssertionError("nonempty output must fail before authority reads")
+
+    def fail_seeds(*args: Any, **kwargs: Any) -> tuple[bytes, ...]:
+        del args, kwargs
+        raise AssertionError("nonempty output must fail before seed reads")
+
+    monkeypatch.setattr(live, "_read_pilot_precommit", fail_precommit)
+    monkeypatch.setattr(live, "_read_secret_seeds", fail_seeds)
+    with pytest.raises(ContinualLiveError, match="absent or empty|no resume"):
+        main(
+            [
+                "--endpoint",
+                "http://model.invalid",
+                "--model",
+                "fixture-model",
+                "--seed-file",
+                str(tmp_path / "must-not-read-seeds.json"),
+                "--precommit-file",
+                str(tmp_path / "must-not-read-precommit.json"),
+                "--output-dir",
+                str(output),
+                "--source-revision",
+                "c" * 40,
+                "--container-digest",
+                "sha256:" + "d" * 64,
+                "--service-binding",
+                "sha256:" + "e" * 64,
+            ]
+        )
+    assert marker.read_text(encoding="ascii") == "preserve"
 
 
 def test_recovery_precommit_rejects_primary_indices(

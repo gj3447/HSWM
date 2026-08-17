@@ -103,6 +103,27 @@ PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS = (
     PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS
     - PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING
 )
+PILOT_PRECOMMIT_V4_SCHEMA = "hswm-continual-pilot-precommit/v4"
+PILOT_PRECOMMIT_V4_SEAL_MEMBER = "outputs/pilot_precommit.canonical.json"
+PILOT_PRECOMMIT_V4_AUTHORITY_STATUS = "unanchored_execution_authority"
+VALIDATED_ADAPTER_SOURCE_REVISION = "a1c3f81b26d7e07d6ed9fb68033876d078d84e1b"
+VALIDATED_ADAPTER_SOURCE_TREE = "c80b8cb6604d904b32a9204bb51a23ea93312777"
+OLD_PILOT_SEED_COMMITMENT_DENYLIST = (
+    "14c7dcac559dcd68e6faf6ce1a557a6785bab9a9240fc674063757d6d4c74370",
+    "b9e2573fdc9efaf25da9371c7d30d1eb6b0558bdf2a986a414f243de678e5ebc",
+    "a8a8760cd50a37b6e7eba373dc9f4aa40a3a791b3ebcae2d6c9419f7d113889b",
+    "db6710fc7826b13a11cd4341219ac9d2147cec7cabf627b786478c4bcbecfa2a",
+)
+
+# B1 deliberately leaves these external anchors empty.  A later, separately
+# observed B2 source revision must replace all five with the exact durable seal
+# values before v4 execution can become reachable.  The v4 precommit itself
+# cannot truthfully predict or claim the future B2 source identity.
+FROZEN_V4_PRECOMMIT_RAW_SHA256: str | None = None
+FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256: str | None = None
+FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256: str | None = None
+FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION: str | None = None
+FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE: str | None = None
 STRUCTURED_OUTPUT_MODE = "openai-response-format-json-schema/v1"
 TOKEN_PREFLIGHT_MODE = "vllm-tokenize-chat/v1"
 TOKEN_PREFLIGHT_SCHEMA = "hswm-token-preflight-receipt/v1"
@@ -5263,6 +5284,412 @@ def _read_commitments(path: Path) -> tuple[str, ...]:
     return tuple(result)
 
 
+_PILOT_PRECOMMIT_V4_FIELDS = {
+    "assignment_document",
+    "assignment_sha256",
+    "commitment_document",
+    "commitment_set_sha256",
+    "confirmatory_denylist",
+    "confirmatory_eligible",
+    "engineering_only",
+    "execution_authority",
+    "frozen_before_pilot_completion_calls",
+    "intended_provider",
+    "old_seed_commitment_denylist",
+    "pilot_execution",
+    "planned_outer_run_id",
+    "planned_output_relative_path",
+    "precommit_builder_source_revision",
+    "precommit_builder_source_tree",
+    "precommit_sha256",
+    "preimages_revealed",
+    "primary_seed_indices",
+    "protocol",
+    "public_gate_binding",
+    "public_gate_binding_sha256",
+    "reserve_seed_indices",
+    "schema",
+    "seed_preimage_encoding",
+    "selected_seed_indices",
+    "validated_adapter_source_revision",
+    "validated_adapter_source_tree",
+}
+
+_PILOT_V4_EXECUTION = {
+    "answer_max_tokens": 128,
+    "arms": ["hswm", "reset", "no_write", "plain"],
+    "base_generation_calls_per_stream": 164,
+    "choice_count": 4,
+    "delay": 4,
+    "generation_call_budget_total": 358,
+    "generation_calls_per_stream": 179,
+    "horizon": 20,
+    "max_input_bytes": 2_000_000,
+    "max_state_bytes": 1_000_000,
+    "one_shot_enforcement": (
+        "outer-wrapper-must-own-unique-durable-run-id-and-prove-"
+        "prelaunch-path-absence"
+    ),
+    "outbound_http_request_budget_total": 716,
+    "outbound_http_requests_per_stream": 358,
+    "per_call_timeout_seconds": 600.0,
+    "removal_restore": True,
+    "removal_restore_extra_generation_calls_per_stream": 15,
+    "removal_restore_probes_per_stream": 5,
+    "resume_allowed": False,
+    "retry_limit": 0,
+    "streams": 2,
+    "token_preflight_call_budget_total": 358,
+    "token_preflight_calls_per_stream": 179,
+    "update_max_tokens": 6144,
+}
+
+_PILOT_V4_INTENDED_PROVIDER = {
+    "enable_thinking": False,
+    "endpoint": "http://127.0.0.1:8000",
+    "expected_max_model_len": 32_768,
+    "model_revision": "95a723d08a9490559dae23d0cff1d9466213d989",
+    "model_root": "Qwen/Qwen3.6-35B-A3B-FP8",
+    "provider_seed": 0,
+    "response_format_mode": STRUCTURED_OUTPUT_MODE,
+    "served_model": "qwen3.6-35b-a3b",
+    "temperature": 0.0,
+    "token_preflight_mode": TOKEN_PREFLIGHT_MODE,
+    "top_p": 1.0,
+    "vllm_version": "0.25.1",
+}
+
+
+def _expected_public_gate_binding() -> dict[str, Any]:
+    return {
+        "adapter_schema": "hswm-compact-structure-patch/v7",
+        "artifacts_tar_sha256": (
+            "cf1706201c3af35877b1cf8f1e709219609aa0cd53bddc4a7afc66aa08a62644"
+        ),
+        "container_digest": (
+            "sha256:30a38a1d74a17365eca400e83ffd885b250e0c8c0d3c5b508afa8c412d2ddf95"
+        ),
+        "final_cell_count": 16,
+        "final_generation": 3,
+        "final_memory_count": 144,
+        "fixture_sha256": (
+            "2a798b518c712551792400477411f89767755062b926a569dcec6afb9cda3bd6"
+        ),
+        "generation_calls_observed": 4,
+        "outer_receipt_sha256": (
+            "3cba87f8a16f55d6578b305aeb6b3c7cbeee2a71d31a77a77e6bbfbe67c69791"
+        ),
+        "outbound_http_requests_observed": 8,
+        "prereg_file_sha256": (
+            "32f287d59097b620e5d6b81a8aa1919622c3dfc2e7172373941b6101e29dcb6f"
+        ),
+        "prereg_sha256": (
+            "0ae514823b9f114742861c92d1cf4684d731dae61ac72372ba4aa43617cf376e"
+        ),
+        "protocol": "hswm-public-schema-gate/v8",
+        "response_schema_names": [
+            "hswm_choice_v1",
+            "hswm_full_author_patch_v2",
+            "hswm_keep_routing_append_patch_v2",
+            "hswm_plain_memory_v1",
+        ],
+        "result_file_sha256": (
+            "c1c216b55adfddee0e9d77bc308da632bfc88618a7279c5a0cac734a6e894fe2"
+        ),
+        "result_sha256": (
+            "5aa03b72674ba676a732f833bfd6a39693a9c87866318f646ed3f4bd2347ad1d"
+        ),
+        "run_id": "hswm-v49-self-diagnostic-public-qwen36-r1-20260817",
+        "schema": "hswm-public-gate-authority-binding/v1",
+        "schema_gate_passed": True,
+        "service_identity_sha256": (
+            "0663590fe03874d2a9cd11059b5fe03c8fc1fc804bef73574adc3b1d5497acbe"
+        ),
+        "source_revision": VALIDATED_ADAPTER_SOURCE_REVISION,
+        "source_tree": VALIDATED_ADAPTER_SOURCE_TREE,
+        "state_sqlite_sha256": (
+            "7834dd193d99fa3129f4b195594738ab61edabf4111b9dcf78396f11a8055d07"
+        ),
+        "terminal_file_sha256": (
+            "27978904cc87e1b973e56a07e3196bd6a6ad059cb7d6e3678ffe2e0eed837ff2"
+        ),
+        "terminal_receipt_sha256": (
+            "8054bce36fae95d6b120dfcf9ad3cb37dc90826a69616f939ba552d34bfe9ff2"
+        ),
+        "terminal_status": "success",
+        "token_preflight_calls_observed": 4,
+        "wrapper_script_sha256": (
+            "2617020eec9d94769019f28aae563b134311b6a042291d5328d4c7d4da531c88"
+        ),
+        "wrapper_terminal_file_sha256": (
+            "cb817b7b21fd0abf9a42f683f3802591cdd71fc094a05ba366f12b1c262f7350"
+        ),
+        "wrapper_terminal_receipt_sha256": (
+            "cba5168c6662737bfec50ee81e8c693a95a7b7312f0f2f65290b0d310dec1763"
+        ),
+    }
+
+
+def _pilot_v4_commitment_documents(
+    commitments: Sequence[str],
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    normalized: list[str] = []
+    if (
+        isinstance(commitments, (str, bytes, bytearray))
+        or not isinstance(commitments, Sequence)
+        or len(commitments) != 4
+    ):
+        raise ContinualLiveError("v4 pilot requires exactly four fresh commitments")
+    for index, item in enumerate(commitments):
+        normalized_item = _require_sha256(item, f"commitment[{index}]")
+        if item != normalized_item:
+            raise ContinualLiveError("v4 commitments must use lowercase hex")
+        normalized.append(normalized_item)
+    if len(set(normalized)) != 4:
+        raise ContinualLiveError("v4 pilot commitments must be unique")
+    if set(normalized) & set(OLD_PILOT_SEED_COMMITMENT_DENYLIST):
+        raise ContinualLiveError("v4 pilot commitment overlaps the consumed old denylist")
+    commitment_document = {
+        "commitments": normalized,
+        "protocol": PROTOCOL,
+        "purpose": "engineering-pilot-only-never-confirmatory",
+        "schema": "hswm-continual-pilot-seed-commitments/v1",
+    }
+    assignment_document = {
+        "primary": normalized[:2],
+        "protocol": PROTOCOL,
+        "purpose": "engineering-pilot-only-never-confirmatory",
+        "reserve": normalized[2:],
+        "reserve_rule": (
+            "mechanical infrastructure invalidity only; never outcome-conditioned"
+        ),
+        "resume_rule": "no retry or resume with a revealed preimage",
+        "schema": "hswm-continual-pilot-seed-assignment/v1",
+    }
+    return commitment_document, assignment_document
+
+
+def _validate_planned_v4_run_identity(
+    planned_outer_run_id: object,
+    planned_output_relative_path: object,
+) -> tuple[str, tuple[str, ...]]:
+    if (
+        not isinstance(planned_outer_run_id, str)
+        or re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,127}", planned_outer_run_id)
+        is None
+    ):
+        raise ContinualLiveError("v4 planned outer run_id is not a safe slug")
+    if (
+        not isinstance(planned_output_relative_path, str)
+        or not planned_output_relative_path
+        or planned_output_relative_path.startswith("/")
+        or "\\" in planned_output_relative_path
+    ):
+        raise ContinualLiveError("v4 planned output path must be relative")
+    parts = tuple(planned_output_relative_path.split("/"))
+    if (
+        len(parts) < 2
+        or parts[0] != "outputs"
+        or any(
+            part in {"", ".", ".."}
+            or re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,127}", part) is None
+            for part in parts
+        )
+    ):
+        raise ContinualLiveError(
+            "v4 planned output path must be a safe outputs/... relative path"
+        )
+    return planned_outer_run_id, parts
+
+
+def build_pilot_precommit_v4(
+    commitments: Sequence[str],
+    *,
+    planned_outer_run_id: str,
+    planned_output_relative_path: str,
+    precommit_builder_source_revision: str,
+    precommit_builder_source_tree: str,
+) -> dict[str, Any]:
+    """Build the canonical, deliberately unanchored B1 v4 authority object."""
+
+    if (
+        not isinstance(precommit_builder_source_revision, str)
+        or re.fullmatch(r"[0-9a-f]{40}", precommit_builder_source_revision) is None
+        or not isinstance(precommit_builder_source_tree, str)
+        or re.fullmatch(r"[0-9a-f]{40}", precommit_builder_source_tree) is None
+    ):
+        raise ContinualLiveError("v4 precommit builder source identity is invalid")
+    if (
+        precommit_builder_source_revision == VALIDATED_ADAPTER_SOURCE_REVISION
+        or precommit_builder_source_tree == VALIDATED_ADAPTER_SOURCE_TREE
+    ):
+        raise ContinualLiveError(
+            "v4 precommit builder must be distinct from the validated adapter source"
+        )
+    _validate_planned_v4_run_identity(
+        planned_outer_run_id,
+        planned_output_relative_path,
+    )
+    commitment_document, assignment_document = _pilot_v4_commitment_documents(
+        commitments
+    )
+    public_gate_binding = _expected_public_gate_binding()
+    unsigned = {
+        "assignment_document": assignment_document,
+        "assignment_sha256": canonical_sha256(assignment_document),
+        "commitment_document": commitment_document,
+        "commitment_set_sha256": canonical_sha256(commitment_document),
+        "confirmatory_denylist": [
+            *OLD_PILOT_SEED_COMMITMENT_DENYLIST,
+            *commitment_document["commitments"],
+        ],
+        "confirmatory_eligible": False,
+        "engineering_only": True,
+        "execution_authority": {
+            "runtime_authority_source_revision": None,
+            "runtime_authority_source_tree": None,
+            "status": PILOT_PRECOMMIT_V4_AUTHORITY_STATUS,
+        },
+        "frozen_before_pilot_completion_calls": True,
+        "intended_provider": dict(_PILOT_V4_INTENDED_PROVIDER),
+        "old_seed_commitment_denylist": list(
+            OLD_PILOT_SEED_COMMITMENT_DENYLIST
+        ),
+        "pilot_execution": dict(_PILOT_V4_EXECUTION),
+        "planned_outer_run_id": planned_outer_run_id,
+        "planned_output_relative_path": planned_output_relative_path,
+        "precommit_builder_source_revision": precommit_builder_source_revision,
+        "precommit_builder_source_tree": precommit_builder_source_tree,
+        "preimages_revealed": False,
+        "primary_seed_indices": [0, 1],
+        "protocol": PROTOCOL,
+        "public_gate_binding": public_gate_binding,
+        "public_gate_binding_sha256": canonical_sha256(public_gate_binding),
+        "reserve_seed_indices": [2, 3],
+        "schema": PILOT_PRECOMMIT_V4_SCHEMA,
+        "seed_preimage_encoding": "32 raw bytes; commitment=sha256(raw bytes)",
+        "selected_seed_indices": [0, 1],
+        "validated_adapter_source_revision": VALIDATED_ADAPTER_SOURCE_REVISION,
+        "validated_adapter_source_tree": VALIDATED_ADAPTER_SOURCE_TREE,
+    }
+    value = {**unsigned, "precommit_sha256": canonical_sha256(unsigned)}
+    # Builder and parser share one authority contract; a builder regression must
+    # fail here rather than leave an invalid artifact for the durable wrapper.
+    _validate_pilot_precommit_v4(canonical_json_bytes(value))
+    return value
+
+
+def _validate_pilot_precommit_v4(raw: bytes) -> dict[str, Any]:
+    try:
+        value = _strict_object(raw.decode("utf-8"))
+    except (UnicodeDecodeError, ContinualLiveError) as error:
+        raise ContinualLiveError(f"invalid v4 pilot precommit JSON: {error}") from error
+    if set(value) != _PILOT_PRECOMMIT_V4_FIELDS:
+        raise ContinualLiveError("v4 pilot precommit field set is invalid")
+    if canonical_json_bytes(value) != raw:
+        raise ContinualLiveError(
+            "v4 pilot precommit must be exact canonical JSON with no trailing newline"
+        )
+    unsigned = dict(value)
+    precommit_sha256 = unsigned.pop("precommit_sha256")
+    if (
+        _require_sha256(precommit_sha256, "precommit_sha256")
+        != precommit_sha256
+        or precommit_sha256 != canonical_sha256(unsigned)
+    ):
+        raise ContinualLiveError("v4 pilot precommit self-hash mismatch")
+    if (
+        value["schema"] != PILOT_PRECOMMIT_V4_SCHEMA
+        or value["protocol"] != PROTOCOL
+        or value["engineering_only"] is not True
+        or value["confirmatory_eligible"] is not False
+        or value["frozen_before_pilot_completion_calls"] is not True
+        or value["preimages_revealed"] is not False
+        or canonical_json_bytes(value["primary_seed_indices"]) != b"[0,1]"
+        or canonical_json_bytes(value["reserve_seed_indices"]) != b"[2,3]"
+        or canonical_json_bytes(value["selected_seed_indices"]) != b"[0,1]"
+        or value["seed_preimage_encoding"]
+        != "32 raw bytes; commitment=sha256(raw bytes)"
+    ):
+        raise ContinualLiveError("v4 pilot authority flags are invalid")
+    commitment_document, assignment_document = _pilot_v4_commitment_documents(
+        value["commitment_document"].get("commitments", [])
+        if isinstance(value["commitment_document"], Mapping)
+        else []
+    )
+    if (
+        canonical_json_bytes(value["commitment_document"])
+        != canonical_json_bytes(commitment_document)
+        or value["commitment_set_sha256"]
+        != canonical_sha256(commitment_document)
+        or canonical_json_bytes(value["assignment_document"])
+        != canonical_json_bytes(assignment_document)
+        or value["assignment_sha256"] != canonical_sha256(assignment_document)
+    ):
+        raise ContinualLiveError("v4 commitment or assignment document drifted")
+    commitments = commitment_document["commitments"]
+    if (
+        value["old_seed_commitment_denylist"]
+        != list(OLD_PILOT_SEED_COMMITMENT_DENYLIST)
+        or value["confirmatory_denylist"]
+        != [*OLD_PILOT_SEED_COMMITMENT_DENYLIST, *commitments]
+    ):
+        raise ContinualLiveError("v4 confirmatory or old-seed denylist drifted")
+    if canonical_json_bytes(value["pilot_execution"]) != canonical_json_bytes(
+        _PILOT_V4_EXECUTION
+    ):
+        raise ContinualLiveError("v4 pilot execution budget drifted")
+    if canonical_json_bytes(value["intended_provider"]) != canonical_json_bytes(
+        _PILOT_V4_INTENDED_PROVIDER
+    ):
+        raise ContinualLiveError("v4 intended provider drifted")
+    public_gate_binding = _expected_public_gate_binding()
+    if (
+        canonical_json_bytes(value["public_gate_binding"])
+        != canonical_json_bytes(public_gate_binding)
+        or value["public_gate_binding_sha256"]
+        != canonical_sha256(public_gate_binding)
+    ):
+        raise ContinualLiveError("v4 public gate binding drifted")
+    if (
+        value["validated_adapter_source_revision"]
+        != VALIDATED_ADAPTER_SOURCE_REVISION
+        or value["validated_adapter_source_tree"] != VALIDATED_ADAPTER_SOURCE_TREE
+    ):
+        raise ContinualLiveError("v4 validated adapter source binding drifted")
+    for field in (
+        "precommit_builder_source_revision",
+        "precommit_builder_source_tree",
+    ):
+        if (
+            not isinstance(value[field], str)
+            or re.fullmatch(r"[0-9a-f]{40}", value[field]) is None
+        ):
+            raise ContinualLiveError("v4 precommit builder source identity is invalid")
+    if (
+        value["precommit_builder_source_revision"]
+        == VALIDATED_ADAPTER_SOURCE_REVISION
+        or value["precommit_builder_source_tree"] == VALIDATED_ADAPTER_SOURCE_TREE
+    ):
+        raise ContinualLiveError(
+            "v4 builder source is not distinct from the validated adapter"
+        )
+    _validate_planned_v4_run_identity(
+        value["planned_outer_run_id"],
+        value["planned_output_relative_path"],
+    )
+    expected_execution_authority = {
+        "runtime_authority_source_revision": None,
+        "runtime_authority_source_tree": None,
+        "status": PILOT_PRECOMMIT_V4_AUTHORITY_STATUS,
+    }
+    if canonical_json_bytes(value["execution_authority"]) != canonical_json_bytes(
+        expected_execution_authority
+    ):
+        raise ContinualLiveError("v4 precommit falsely claims runtime authority")
+    return value
+
+
 _PRECOMMIT_FIELDS = {
     "assignment_document",
     "assignment_sha256",
@@ -5522,8 +5949,14 @@ def _read_pilot_precommit(path: Path) -> tuple[dict[str, Any], bytes]:
     if artifact_sha256 == FROZEN_RECOVERY_PRECOMMIT_ARTIFACT_SHA256:
         return _validate_recovery_precommit(raw), raw
     if artifact_sha256 != FROZEN_PILOT_PRECOMMIT_ARTIFACT_SHA256:
+        try:
+            candidate = _strict_object(raw.decode("utf-8"))
+        except (UnicodeDecodeError, ContinualLiveError):
+            candidate = {}
+        if candidate.get("schema") == PILOT_PRECOMMIT_V4_SCHEMA:
+            return _validate_pilot_precommit_v4(raw), raw
         raise ContinualLiveError(
-            "precommit is neither the exact frozen v2 nor reserve-recovery v3 artifact"
+            "precommit is neither exact frozen v2/v3 history nor canonical v4"
         )
     try:
         value = json.loads(raw.decode("utf-8"))
@@ -5691,8 +6124,12 @@ def _tar_regular_members(archive: tarfile.TarFile) -> dict[str, tarfile.TarInfo]
             raise ContinualLiveError("failed-run tar contains an unsafe member path")
         if member.issym() or member.islnk():
             raise ContinualLiveError("failed-run tar must not contain links")
-        if not member.isfile():
+        if member.isdir():
             continue
+        if not member.isfile():
+            raise ContinualLiveError(
+                "failed-run tar must not contain device or special members"
+            )
         if member.name in result:
             raise ContinualLiveError("failed-run tar contains duplicate file members")
         result[member.name] = member
@@ -5736,6 +6173,511 @@ def _tar_member_sha256(
     if observed != member.size:
         raise ContinualLiveError(f"failed-run tar member {member.name} is truncated")
     return digest.hexdigest()
+
+
+def _validate_self_hashed_object(
+    value: Mapping[str, Any], *, digest_field: str, label: str
+) -> str:
+    unsigned = dict(value)
+    digest = unsigned.pop(digest_field, None)
+    if (
+        _require_sha256(digest, f"{label}.{digest_field}") != digest
+        or digest != canonical_sha256(unsigned)
+    ):
+        raise ContinualLiveError(f"{label} self-hash mismatch")
+    return digest
+
+
+def _validate_public_gate_artifacts(
+    artifacts_tar: Path,
+    outer_receipt_path: Path,
+) -> dict[str, Any]:
+    """Validate the exact successful v4.9 public gate without extracting it."""
+
+    expected = _expected_public_gate_binding()
+    tar_sha256 = _sha256_file(artifacts_tar)
+    try:
+        outer_raw = outer_receipt_path.read_bytes()
+    except OSError as error:
+        raise ContinualLiveError(f"cannot read public-gate outer receipt: {error}") from error
+    outer_sha256 = _digest_bytes(outer_raw)
+    if (
+        tar_sha256 != expected["artifacts_tar_sha256"]
+        or outer_sha256 != expected["outer_receipt_sha256"]
+    ):
+        raise ContinualLiveError("public gate tar or outer receipt differs from v4.9")
+    outer = _strict_object(outer_raw.decode("utf-8"))
+    outer_fields = {
+        "artifact",
+        "command_sha256",
+        "durable_tier",
+        "execution_tier",
+        "exit_code",
+        "finished_at",
+        "run_id",
+        "schema",
+        "source_commit",
+        "source_root",
+        "started_at",
+        "status",
+    }
+    artifact = outer.get("artifact")
+    if (
+        set(outer) != outer_fields
+        or outer.get("schema") != "bhgman-hswm-run/v1"
+        or outer.get("run_id") != expected["run_id"]
+        or outer.get("status") != "success"
+        or outer.get("exit_code") != 0
+        or outer.get("source_commit") != expected["source_revision"]
+        or not isinstance(artifact, Mapping)
+        or set(artifact) != {"bytes", "name", "sha256"}
+        or artifact.get("name") != "artifacts.tar"
+        or artifact.get("sha256") != tar_sha256
+        or isinstance(artifact.get("bytes"), bool)
+        or not isinstance(artifact.get("bytes"), int)
+        or artifact.get("bytes") != artifacts_tar.stat().st_size
+    ):
+        raise ContinualLiveError("public gate outer receipt is not the exact success run")
+    _require_sha256(outer.get("command_sha256"), "public gate command_sha256")
+
+    try:
+        archive_context = tarfile.open(artifacts_tar, "r:*")
+    except (OSError, tarfile.TarError) as error:
+        raise ContinualLiveError(f"cannot open public gate artifacts: {error}") from error
+    with archive_context as archive:
+        members = _tar_regular_members(archive)
+        paths = {
+            "terminal": "outputs/gate/terminal_receipt.json",
+            "result": "outputs/gate/gate_result.json",
+            "prereg": "outputs/gate/gate_preregistration.json",
+            "wrapper": "outputs/ops/wrapper_terminal.canonical.json",
+            "wrapper_script": "outputs/ops/runtime_wrapper.py",
+            "service_before": "outputs/ops/service.before.canonical.json",
+            "service_after": "outputs/ops/service.after.canonical.json",
+            "structured_journal": "outputs/gate/state/structured/calls.jsonl",
+            "plain_journal": "outputs/gate/state/plain/calls.jsonl",
+            "sqlite": "outputs/gate/state/structured/state.sqlite3",
+        }
+        raw = {
+            key: _tar_member_bytes(
+                archive,
+                members,
+                path,
+                max_bytes=16_000_000,
+            )
+            for key, path in paths.items()
+        }
+        raw_hash_expectations = {
+            "terminal": expected["terminal_file_sha256"],
+            "result": expected["result_file_sha256"],
+            "prereg": expected["prereg_file_sha256"],
+            "wrapper": expected["wrapper_terminal_file_sha256"],
+            "wrapper_script": expected["wrapper_script_sha256"],
+            "sqlite": expected["state_sqlite_sha256"],
+        }
+        if any(
+            _digest_bytes(raw[key]) != digest
+            for key, digest in raw_hash_expectations.items()
+        ):
+            raise ContinualLiveError("public gate bound member hash mismatch")
+        terminal = _strict_object(raw["terminal"].decode("utf-8"))
+        result = _strict_object(raw["result"].decode("utf-8"))
+        prereg = _strict_object(raw["prereg"].decode("utf-8"))
+        wrapper = _strict_object(raw["wrapper"].decode("utf-8"))
+        before = _strict_object(raw["service_before"].decode("utf-8"))
+        after = _strict_object(raw["service_after"].decode("utf-8"))
+        if (
+            _validate_self_hashed_object(
+                terminal,
+                digest_field="receipt_sha256",
+                label="public gate terminal",
+            )
+            != expected["terminal_receipt_sha256"]
+            or _validate_self_hashed_object(
+                result,
+                digest_field="result_sha256",
+                label="public gate result",
+            )
+            != expected["result_sha256"]
+            or _validate_self_hashed_object(
+                prereg,
+                digest_field="prereg_sha256",
+                label="public gate preregistration",
+            )
+            != expected["prereg_sha256"]
+            or _validate_self_hashed_object(
+                wrapper,
+                digest_field="wrapper_terminal_receipt_sha256",
+                label="public gate wrapper terminal",
+            )
+            != expected["wrapper_terminal_receipt_sha256"]
+        ):
+            raise ContinualLiveError("public gate inner self-hash binding mismatch")
+
+        gate_prefix = "outputs/gate/"
+        terminal_path = paths["terminal"]
+        actual_gate_tree = {
+            path[len(gate_prefix) :]: _tar_member_sha256(archive, member)
+            for path, member in members.items()
+            if path.startswith(gate_prefix) and path != terminal_path
+        }
+        if (
+            terminal.get("artifact_sha256s") != actual_gate_tree
+            or any(
+                path.endswith(("-wal", "-shm", "-journal"))
+                for path in actual_gate_tree
+            )
+            or terminal.get("checkpointed_sqlite_artifacts")
+            != ["state/structured/state.sqlite3"]
+        ):
+            raise ContinualLiveError("public gate terminal tree binding mismatch")
+
+        for phase, service in (("before", before), ("after", after)):
+            identity = service.get("identity")
+            if (
+                service.get("phase") != phase
+                or not isinstance(identity, Mapping)
+                or service.get("identity_sha256") != canonical_sha256(identity)
+            ):
+                raise ContinualLiveError("public gate service identity is invalid")
+        if (
+            before["identity"] != after["identity"]
+            or before["identity_sha256"] != expected["service_identity_sha256"]
+            or after["identity_sha256"] != expected["service_identity_sha256"]
+        ):
+            raise ContinualLiveError("public gate service identity changed")
+        identity = before["identity"]
+        try:
+            identity_source = identity["source"]
+            identity_container = identity["container"]
+        except (KeyError, TypeError) as error:
+            raise ContinualLiveError("public gate service binding is incomplete") from error
+        if (
+            identity_source.get("revision") != expected["source_revision"]
+            or identity_source.get("remote_revision") != expected["source_revision"]
+            or identity_source.get("tree") != expected["source_tree"]
+            or identity_source.get("clean") is not True
+            or identity_container.get("image_id") != expected["container_digest"]
+        ):
+            raise ContinualLiveError("public gate source or container binding drifted")
+
+        artifact_validation = wrapper.get("artifact_validation")
+        wrapper_state = wrapper.get("state")
+        expected_response_schema_names = {
+            "state/plain/calls.jsonl": ["hswm_plain_memory_v1"],
+            "state/structured/calls.jsonl": [
+                "hswm_full_author_patch_v2",
+                "hswm_keep_routing_append_patch_v2",
+                "hswm_choice_v1",
+            ],
+        }
+        if (
+            wrapper.get("gate_exit_code") != 0
+            or wrapper.get("validations_passed") is not True
+            or wrapper.get("identity_unchanged") is not True
+            or wrapper.get("before_identity_sha256")
+            != expected["service_identity_sha256"]
+            or wrapper.get("after_identity_sha256")
+            != expected["service_identity_sha256"]
+            or wrapper.get("generation_calls_observed") != 4
+            or wrapper.get("token_preflight_calls_observed") != 4
+            or wrapper.get("outbound_http_requests_observed") != 8
+            or wrapper.get("retry_or_resume_allowed") is not False
+            or wrapper.get("response_schema_names")
+            != expected_response_schema_names
+            or wrapper.get("wrapper_sha256") != expected["wrapper_script_sha256"]
+            or not isinstance(artifact_validation, Mapping)
+            or artifact_validation.get("schema_gate_passed") is not True
+            or not isinstance(wrapper_state, Mapping)
+            or wrapper_state.get("active_generation") != 3
+            or wrapper_state.get("memory_count") != 144
+            or wrapper_state.get("cell_count") != 16
+            or wrapper_state.get("sha256") != expected["state_sqlite_sha256"]
+        ):
+            raise ContinualLiveError("public gate wrapper success evidence drifted")
+
+        if (
+            terminal.get("status") != "success"
+            or terminal.get("schema_gate_passed") is not True
+            or terminal.get("protocol") != expected["protocol"]
+            or terminal.get("generation_calls_expected") != 4
+            or terminal.get("token_preflight_calls_expected") != 4
+            or terminal.get("outbound_http_requests_expected") != 8
+            or result.get("valid") is not True
+            or result.get("protocol") != expected["protocol"]
+            or result.get("adapter_schema") != expected["adapter_schema"]
+            or result.get("fixture_sha256") != expected["fixture_sha256"]
+            or result.get("model_generation_calls_observed") != 4
+            or result.get("token_preflight_calls_observed") != 4
+            or result.get("outbound_http_requests_observed") != 8
+            or result.get("final_memory_count") != 144
+            or result.get("final_cell_count") != 16
+            or prereg.get("protocol") != expected["protocol"]
+            or prereg.get("adapter_schema") != expected["adapter_schema"]
+            or prereg.get("source_revision") != expected["source_revision"]
+            or prereg.get("service_binding")
+            != "sha256:" + expected["service_identity_sha256"]
+        ):
+            raise ContinualLiveError("public gate inner success contract drifted")
+
+        event_sequence = [
+            "intent",
+            "tokenize_intent",
+            "tokenize_raw_response_received",
+            "tokenize_accepted",
+            "generation_dispatch_intent",
+            "raw_response_received",
+            "response_received",
+            "completed",
+        ]
+        generation_calls = 0
+        token_preflight_calls = 0
+        observed_schema_names: set[str] = set()
+        for key, expected_events in (("structured_journal", 24), ("plain_journal", 8)):
+            try:
+                rows = [
+                    _strict_object(line)
+                    for line in raw[key].decode("utf-8").splitlines()
+                ]
+            except UnicodeDecodeError as error:
+                raise ContinualLiveError("public gate journal is not UTF-8") from error
+            if len(rows) != expected_events or len(rows) % 8:
+                raise ContinualLiveError("public gate journal cardinality drifted")
+            for offset in range(0, len(rows), 8):
+                group = rows[offset : offset + 8]
+                if [item.get("event") for item in group] != event_sequence:
+                    raise ContinualLiveError("public gate journal event sequence drifted")
+                identity_tuple = {
+                    (
+                        item.get("request_id"),
+                        item.get("arm"),
+                        item.get("operation"),
+                        item.get("ordinal"),
+                    )
+                    for item in group
+                }
+                if len(identity_tuple) != 1:
+                    raise ContinualLiveError("public gate call identity drifted")
+                if (
+                    group[2].get("http_status") != 200
+                    or group[2].get("response_complete") is not True
+                    or group[2].get("response_truncated") is not False
+                    or group[2].get("prepared_request_match") is not True
+                    or group[5].get("prepared_request_match") is not True
+                ):
+                    raise ContinualLiveError("public gate transport receipt drifted")
+                generation_calls += 1
+                token_preflight_calls += 1
+                schema_name = group[0].get("response_schema_name")
+                if not isinstance(schema_name, str):
+                    raise ContinualLiveError("public gate response schema name is missing")
+                observed_schema_names.add(schema_name)
+        if (
+            generation_calls != 4
+            or token_preflight_calls != 4
+            or sorted(observed_schema_names) != expected["response_schema_names"]
+        ):
+            raise ContinualLiveError("public gate call or schema count drifted")
+
+        sqlite_raw = raw["sqlite"]
+        connection = sqlite3.connect(":memory:")
+        try:
+            connection.deserialize(sqlite_raw)
+            if connection.execute("PRAGMA integrity_check").fetchone() != ("ok",):
+                raise ContinualLiveError("public gate SQLite integrity check failed")
+            if connection.execute("PRAGMA foreign_key_check").fetchall():
+                raise ContinualLiveError("public gate SQLite foreign key check failed")
+            active_row = connection.execute(
+                "SELECT snapshot_id,generation FROM active_self_model"
+            ).fetchone()
+            if active_row is None:
+                raise ContinualLiveError("public gate SQLite lacks active state")
+            snapshot_row = connection.execute(
+                "SELECT snapshot_json,snapshot_sha256 FROM self_model_snapshots "
+                "WHERE snapshot_id=?",
+                (active_row[0],),
+            ).fetchone()
+            if snapshot_row is None:
+                raise ContinualLiveError("public gate active snapshot is missing")
+            snapshot_raw = bytes(snapshot_row[0])
+            snapshot = _strict_object(snapshot_raw.decode("utf-8"))
+            if (
+                active_row[1] != 3
+                or snapshot_raw != canonical_json_bytes(snapshot)
+                or _digest_bytes(snapshot_raw) != snapshot_row[1]
+                or len(snapshot.get("memories", [])) != 144
+                or len(snapshot.get("cells", [])) != 16
+            ):
+                raise ContinualLiveError("public gate final SQLite state drifted")
+        finally:
+            connection.close()
+
+    unsigned = {
+        "adapter_schema": expected["adapter_schema"],
+        "artifacts_tar_sha256": tar_sha256,
+        "final_cell_count": 16,
+        "final_generation": 3,
+        "final_memory_count": 144,
+        "generation_calls_observed": 4,
+        "outer_receipt_sha256": outer_sha256,
+        "outbound_http_requests_observed": 8,
+        "protocol": expected["protocol"],
+        "public_gate_binding_sha256": canonical_sha256(expected),
+        "run_id": expected["run_id"],
+        "schema": "hswm-public-gate-artifact-validation/v1",
+        "schema_gate_passed": True,
+        "service_identity_sha256": expected["service_identity_sha256"],
+        "source_revision": expected["source_revision"],
+        "source_tree": expected["source_tree"],
+        "terminal_receipt_sha256": expected["terminal_receipt_sha256"],
+        "token_preflight_calls_observed": 4,
+    }
+    return {**unsigned, "validation_sha256": canonical_sha256(unsigned)}
+
+
+def _validate_pilot_precommit_seal(
+    artifacts_tar: Path,
+    outer_receipt_path: Path,
+    *,
+    precommit_raw: bytes,
+) -> dict[str, Any]:
+    """Validate a durable v4 seal; B1 truthfully reports that it is unanchored."""
+
+    loose_precommit = _validate_pilot_precommit_v4(precommit_raw)
+    tar_sha256 = _sha256_file(artifacts_tar)
+    try:
+        outer_raw = outer_receipt_path.read_bytes()
+    except OSError as error:
+        raise ContinualLiveError(f"cannot read v4 precommit outer receipt: {error}") from error
+    outer_sha256 = _digest_bytes(outer_raw)
+    outer = _strict_object(outer_raw.decode("utf-8"))
+    outer_fields = {
+        "artifact",
+        "command_sha256",
+        "durable_tier",
+        "execution_tier",
+        "exit_code",
+        "finished_at",
+        "run_id",
+        "schema",
+        "source_commit",
+        "source_root",
+        "started_at",
+        "status",
+    }
+    artifact = outer.get("artifact")
+    exact_outer_text_fields = (
+        "durable_tier",
+        "execution_tier",
+        "finished_at",
+        "run_id",
+        "source_root",
+        "started_at",
+    )
+    if (
+        set(outer) != outer_fields
+        or outer.get("schema") != "bhgman-hswm-run/v1"
+        or outer.get("status") != "success"
+        or type(outer.get("exit_code")) is not int
+        or outer["exit_code"] != 0
+        or any(
+            not isinstance(outer.get(field), str) or not outer[field]
+            for field in exact_outer_text_fields
+        )
+        or outer.get("source_commit")
+        != loose_precommit["precommit_builder_source_revision"]
+        or not isinstance(artifact, Mapping)
+        or set(artifact) != {"bytes", "name", "sha256"}
+        or artifact.get("name") != "artifacts.tar"
+        or artifact.get("sha256") != tar_sha256
+        or isinstance(artifact.get("bytes"), bool)
+        or not isinstance(artifact.get("bytes"), int)
+        or artifact.get("bytes") != artifacts_tar.stat().st_size
+    ):
+        raise ContinualLiveError("v4 precommit outer receipt is invalid")
+    if (
+        _require_sha256(
+            outer.get("command_sha256"), "v4 precommit command_sha256"
+        )
+        != outer["command_sha256"]
+    ):
+        raise ContinualLiveError("v4 precommit command_sha256 is not canonical")
+
+    try:
+        archive_context = tarfile.open(artifacts_tar, "r:*")
+    except (OSError, tarfile.TarError) as error:
+        raise ContinualLiveError(f"cannot open v4 precommit seal: {error}") from error
+    with archive_context as archive:
+        members = _tar_regular_members(archive)
+        if PILOT_PRECOMMIT_V4_SEAL_MEMBER not in members:
+            raise ContinualLiveError(
+                f"v4 precommit seal is missing {PILOT_PRECOMMIT_V4_SEAL_MEMBER}"
+            )
+        if set(members) != {PILOT_PRECOMMIT_V4_SEAL_MEMBER}:
+            raise ContinualLiveError(
+                "v4 precommit seal exact regular-member set drifted"
+            )
+        sealed_raw = _tar_member_bytes(
+            archive,
+            members,
+            PILOT_PRECOMMIT_V4_SEAL_MEMBER,
+            max_bytes=1_000_000,
+        )
+    sealed_precommit = _validate_pilot_precommit_v4(sealed_raw)
+    if sealed_raw != precommit_raw or sealed_precommit != loose_precommit:
+        raise ContinualLiveError("loose v4 precommit differs from its durable seal")
+
+    anchors = (
+        FROZEN_V4_PRECOMMIT_RAW_SHA256,
+        FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256,
+        FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256,
+        FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION,
+        FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE,
+    )
+    if any(item is None for item in anchors) and any(
+        item is not None for item in anchors
+    ):
+        raise ContinualLiveError("v4 external anchor constants are only partially set")
+    externally_anchored = all(item is not None for item in anchors)
+    if externally_anchored and (
+        _digest_bytes(sealed_raw) != FROZEN_V4_PRECOMMIT_RAW_SHA256
+        or tar_sha256 != FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256
+        or outer_sha256 != FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256
+        or sealed_precommit["precommit_builder_source_revision"]
+        != FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION
+        or sealed_precommit["precommit_builder_source_tree"]
+        != FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE
+    ):
+        raise ContinualLiveError("v4 durable seal differs from the B2 external anchors")
+
+    anchor_status = (
+        "anchored_by_execution_source"
+        if externally_anchored
+        else PILOT_PRECOMMIT_V4_AUTHORITY_STATUS
+    )
+    builder_tree_evidence = (
+        "b2-hardcoded-builder-commit-and-tree"
+        if externally_anchored
+        else "self-asserted-precommit-only-not-execution-authority"
+    )
+    unsigned = {
+        "artifacts_tar_sha256": tar_sha256,
+        "builder_tree_evidence": builder_tree_evidence,
+        "external_anchor_status": anchor_status,
+        "outer_receipt_sha256": outer_sha256,
+        "outer_run_id": outer["run_id"],
+        "precommit_artifact_path": PILOT_PRECOMMIT_V4_SEAL_MEMBER,
+        "precommit_artifact_sha256": _digest_bytes(sealed_raw),
+        "precommit_builder_source_revision": sealed_precommit[
+            "precommit_builder_source_revision"
+        ],
+        "precommit_builder_source_tree": sealed_precommit[
+            "precommit_builder_source_tree"
+        ],
+        "precommit_sha256": sealed_precommit["precommit_sha256"],
+        "schema": "hswm-pilot-precommit-seal-validation/v1",
+    }
+    return {**unsigned, "validation_sha256": canonical_sha256(unsigned)}
 
 
 def _validate_failed_primary_artifacts(
@@ -6013,6 +6955,74 @@ def _validate_failed_primary_artifacts(
     }
 
 
+def _pilot_precommit_builder_cli_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Build the canonical B1 v4 pilot precommit from public commitment "
+            "digests after validating the exact successful public gate."
+        )
+    )
+    parser.add_argument("--commitments-file", type=Path, required=True)
+    parser.add_argument("--planned-outer-run-id", required=True)
+    parser.add_argument("--planned-output-relative-path", required=True)
+    parser.add_argument("--precommit-builder-source-revision", required=True)
+    parser.add_argument("--precommit-builder-source-tree", required=True)
+    parser.add_argument("--public-gate-artifacts-tar", type=Path, required=True)
+    parser.add_argument("--public-gate-receipt", type=Path, required=True)
+    parser.add_argument("--output-file", type=Path, required=True)
+    return parser
+
+
+def pilot_precommit_builder_main(argv: Sequence[str] | None = None) -> int:
+    args = _pilot_precommit_builder_cli_parser().parse_args(argv)
+    if args.output_file.exists():
+        raise ContinualLiveError("v4 precommit output file must not already exist")
+    gate_validation = _validate_public_gate_artifacts(
+        args.public_gate_artifacts_tar,
+        args.public_gate_receipt,
+    )
+    commitments = _read_commitments(args.commitments_file)
+    value = build_pilot_precommit_v4(
+        commitments,
+        planned_outer_run_id=args.planned_outer_run_id,
+        planned_output_relative_path=args.planned_output_relative_path,
+        precommit_builder_source_revision=(
+            args.precommit_builder_source_revision
+        ),
+        precommit_builder_source_tree=args.precommit_builder_source_tree,
+    )
+    if (
+        value["public_gate_binding_sha256"]
+        != gate_validation["public_gate_binding_sha256"]
+    ):
+        raise ContinualLiveError("builder public gate validation binding drifted")
+    raw = canonical_json_bytes(value)
+    _write_bytes_atomic(args.output_file, raw)
+    print(
+        json.dumps(
+            {
+                "authority_status": PILOT_PRECOMMIT_V4_AUTHORITY_STATUS,
+                "output_file": str(args.output_file),
+                "planned_outer_run_id": value["planned_outer_run_id"],
+                "planned_output_relative_path": value[
+                    "planned_output_relative_path"
+                ],
+                "precommit_artifact_sha256": _digest_bytes(raw),
+                "precommit_sha256": value["precommit_sha256"],
+                "public_gate_validation_sha256": gate_validation[
+                    "validation_sha256"
+                ],
+                "schema": PILOT_PRECOMMIT_V4_SCHEMA,
+            },
+            ensure_ascii=False,
+            allow_nan=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+    )
+    return 0
+
+
 def _cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Run the engineering-only HSWM continual-learning pilot."
@@ -6024,19 +7034,25 @@ def _cli_parser() -> argparse.ArgumentParser:
     parser.add_argument("--precommit-file", type=Path, required=True)
     parser.add_argument("--failed-run-artifacts-tar", type=Path)
     parser.add_argument("--failed-run-receipt", type=Path)
+    parser.add_argument("--public-gate-artifacts-tar", type=Path)
+    parser.add_argument("--public-gate-receipt", type=Path)
+    parser.add_argument("--pilot-precommit-artifacts-tar", type=Path)
+    parser.add_argument("--pilot-precommit-receipt", type=Path)
+    parser.add_argument("--outer-run-id")
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--api-key-env", default="OPENAI_API_KEY")
     parser.add_argument("--answer-max-tokens", type=int, default=128)
-    parser.add_argument("--update-max-tokens", type=int, default=8192)
+    parser.add_argument("--update-max-tokens", type=int, default=6144)
     parser.add_argument("--max-input-bytes", type=int, default=2_000_000)
     parser.add_argument("--max-state-bytes", type=int, default=1_000_000)
-    parser.add_argument("--timeout", type=float, default=120.0)
+    parser.add_argument("--timeout", type=float, default=600.0)
     parser.add_argument(
         "--removal-restore",
         action="store_true",
         help="run five unused sealed probes in active/remove/restart/restore order",
     )
     parser.add_argument("--source-revision", required=True)
+    parser.add_argument("--source-tree")
     parser.add_argument("--container-digest", required=True)
     parser.add_argument("--service-binding", required=True)
     return parser
@@ -6049,7 +7065,6 @@ def main(argv: Sequence[str] | None = None) -> int:
     output = args.output_dir
     if output.exists() and any(output.iterdir()):
         raise ContinualLiveError("output directory must be absent or empty; no resume")
-    output.mkdir(parents=True, exist_ok=True)
     precommit, precommit_raw = _read_pilot_precommit(args.precommit_file)
     if precommit["schema"] in {
         "hswm-continual-pilot-precommit/v2",
@@ -6059,40 +7074,55 @@ def main(argv: Sequence[str] | None = None) -> int:
             "v2 and v3 execution authorities are consumed; all four old seed "
             "commitments are permanently prohibited"
         )
-    if args.failed_run_artifacts_tar is None or args.failed_run_receipt is None:
+    if precommit["schema"] != PILOT_PRECOMMIT_V4_SCHEMA:
+        raise ContinualLiveError("unsupported pilot execution authority")
+    _, planned_output_parts = _validate_planned_v4_run_identity(
+        precommit["planned_outer_run_id"],
+        precommit["planned_output_relative_path"],
+    )
+    if args.outer_run_id != precommit["planned_outer_run_id"]:
+        raise ContinualLiveError("v4 outer run_id differs from the frozen plan")
+    if (
+        len(output.parts) < len(planned_output_parts)
+        or tuple(output.parts[-len(planned_output_parts) :])
+        != planned_output_parts
+    ):
+        raise ContinualLiveError("v4 output path differs from the frozen relative layout")
+    if args.failed_run_artifacts_tar is not None or args.failed_run_receipt is not None:
         raise ContinualLiveError(
-            "reserve recovery requires the exact failed-run tar and outer receipt"
+            "v4 pilot rejects obsolete failed-run recovery arguments"
         )
-    frozen_seeds = _read_secret_seeds(args.seed_file)
-    commitments = tuple(precommit["commitment_document"]["commitments"])
-    if len(frozen_seeds) != 4:
-        raise ContinualLiveError("pilot requires exactly 4 frozen seed preimages")
-    for index, (seed, commitment) in enumerate(zip(frozen_seeds, commitments, strict=True)):
-        if _digest_bytes(seed) != commitment:
-            raise ContinualLiveError(f"seed commitment mismatch at frozen index {index}")
-    seed_indices = tuple(precommit["selected_seed_indices"])
-    selected_seeds = tuple(frozen_seeds[index] for index in seed_indices)
+    required_v4_artifacts = {
+        "public gate artifacts tar": args.public_gate_artifacts_tar,
+        "public gate outer receipt": args.public_gate_receipt,
+        "pilot precommit artifacts tar": args.pilot_precommit_artifacts_tar,
+        "pilot precommit outer receipt": args.pilot_precommit_receipt,
+    }
+    missing_v4_artifacts = [
+        label for label, path in required_v4_artifacts.items() if path is None
+    ]
+    if missing_v4_artifacts:
+        raise ContinualLiveError(
+            "v4 pilot requires durable artifacts before seed access: "
+            + ", ".join(missing_v4_artifacts)
+        )
+    public_gate_validation = _validate_public_gate_artifacts(
+        args.public_gate_artifacts_tar,
+        args.public_gate_receipt,
+    )
+    precommit_seal_validation = _validate_pilot_precommit_seal(
+        args.pilot_precommit_artifacts_tar,
+        args.pilot_precommit_receipt,
+        precommit_raw=precommit_raw,
+    )
+    execution = precommit["pilot_execution"]
+    provider = precommit["intended_provider"]
     budget = ArmBudget(
         answer_max_output_tokens=args.answer_max_tokens,
         update_max_output_tokens=args.update_max_tokens,
         max_input_bytes=args.max_input_bytes,
         max_state_bytes=args.max_state_bytes,
     )
-    backend_config = OpenAIBackendConfig(
-        endpoint=args.endpoint,
-        model=args.model,
-        api_key=os.environ.get(args.api_key_env),
-        timeout_seconds=args.timeout,
-    )
-    if (
-        backend_config.public_identity()["token_preflight_transport_trust"]
-        != "loopback-without-api-key-middleware"
-    ):
-        raise ContinualLiveError(
-            "audited token preflight requires a loopback-trusted vLLM endpoint"
-        )
-    execution = precommit["recovery_execution"]
-    provider = precommit["intended_provider"]
     if (
         args.endpoint.rstrip("/") != str(provider["endpoint"]).rstrip("/")
         or args.model != provider["served_model"]
@@ -6106,43 +7136,133 @@ def main(argv: Sequence[str] | None = None) -> int:
         raise ContinualLiveError("CLI arguments conflict with the durable pilot precommit")
     if not re.fullmatch(r"[0-9a-f]{40}", args.source_revision):
         raise ContinualLiveError("source_revision must be a 40-hex Git revision")
+    if (
+        not isinstance(args.source_tree, str)
+        or re.fullmatch(r"[0-9a-f]{40}", args.source_tree) is None
+    ):
+        raise ContinualLiveError("v4 source_tree must be a 40-hex Git tree")
+    if (
+        args.source_revision
+        in {
+            VALIDATED_ADAPTER_SOURCE_REVISION,
+            precommit["precommit_builder_source_revision"],
+        }
+        or args.source_tree
+        in {
+            VALIDATED_ADAPTER_SOURCE_TREE,
+            precommit["precommit_builder_source_tree"],
+        }
+    ):
+        raise ContinualLiveError(
+            "runtime authority must be observed separately from both the "
+            "validated adapter and B1 builder"
+        )
     if not re.fullmatch(r"sha256:[0-9a-f]{64}", args.container_digest):
         raise ContinualLiveError("container_digest must be sha256:<64 hex>")
     if not re.fullmatch(r"sha256:[0-9a-f]{64}", args.service_binding):
         raise ContinualLiveError("service_binding must be sha256:<64 hex>")
-    failed_primary_validation = _validate_failed_primary_artifacts(
-        args.failed_run_artifacts_tar,
-        args.failed_run_receipt,
-        precommit=precommit,
+    gate_binding = precommit["public_gate_binding"]
+    if (
+        args.container_digest != gate_binding["container_digest"]
+        or args.service_binding
+        != "sha256:" + gate_binding["service_identity_sha256"]
+    ):
+        raise ContinualLiveError("runtime service differs from the validated public gate")
+    if (
+        public_gate_validation["public_gate_binding_sha256"]
+        != precommit["public_gate_binding_sha256"]
+    ):
+        raise ContinualLiveError("public gate validation differs from v4 precommit")
+    if (
+        precommit_seal_validation["external_anchor_status"]
+        != "anchored_by_execution_source"
+    ):
+        # B1 terminal condition: the seed file has not been read, the output
+        # directory has not been created, and no backend exists or was called.
+        raise ContinualLiveError(PILOT_PRECOMMIT_V4_AUTHORITY_STATUS)
+
+    # This branch is intentionally unreachable in B1.  B2 may reach it only by
+    # replacing every frozen seal constant with externally observed exact bytes.
+    backend_config = OpenAIBackendConfig(
+        endpoint=args.endpoint,
+        model=args.model,
+        api_key=os.environ.get(args.api_key_env),
+        timeout_seconds=args.timeout,
     )
+    if (
+        backend_config.public_identity()["token_preflight_transport_trust"]
+        != "loopback-without-api-key-middleware"
+    ):
+        raise ContinualLiveError(
+            "audited token preflight requires a loopback-trusted vLLM endpoint"
+        )
+    output.mkdir(parents=True, exist_ok=True)
     _write_bytes_atomic(output / "frozen_precommit.canonical.json", precommit_raw)
     _write_json_atomic(
-        output / "failed_primary_validation.json", failed_primary_validation
+        output / "public_gate_validation.json", public_gate_validation
     )
+    _write_json_atomic(
+        output / "pilot_precommit_seal_validation.json",
+        precommit_seal_validation,
+    )
+    frozen_seeds = _read_secret_seeds(args.seed_file)
+    commitments = tuple(precommit["commitment_document"]["commitments"])
+    seed_indices = tuple(precommit["selected_seed_indices"])
+    if len(frozen_seeds) != len(seed_indices):
+        raise ContinualLiveError(
+            "v4 seed file must contain only the two selected primary preimages"
+        )
+    for stream, (seed, index) in enumerate(
+        zip(frozen_seeds, seed_indices, strict=True)
+    ):
+        if _digest_bytes(seed) != commitments[index]:
+            raise ContinualLiveError(
+                f"seed commitment mismatch at selected stream {stream} index {index}"
+            )
+    selected_seeds = frozen_seeds
     prereg = {
         "backend": backend_config.public_identity(),
         "budget": budget.canonical(),
         "container_digest": args.container_digest,
         "engineering_only": True,
-        "failed_primary_binding_sha256": failed_primary_validation[
-            "failed_primary_binding_sha256"
+        "execution_authority_observation": {
+            "precommit_claim": PILOT_PRECOMMIT_V4_AUTHORITY_STATUS,
+            "runtime_source_revision": args.source_revision,
+            "runtime_source_tree": args.source_tree,
+            "seal_anchor_status": precommit_seal_validation[
+                "external_anchor_status"
+            ],
+        },
+        "generation_call_budget_total": execution[
+            "generation_call_budget_total"
         ],
-        "generation_call_budget_total": execution["endpoint_call_budget_total"],
-        "mode": "engineering-pilot-reserve-recovery-only",
-        "outbound_http_request_budget_total": (
-            execution["endpoint_call_budget_total"] * 2
-        ),
+        "mode": "engineering-pilot-v4-primary-only",
+        "one_shot_enforcement": execution["one_shot_enforcement"],
+        "outbound_http_request_budget_total": execution[
+            "outbound_http_request_budget_total"
+        ],
+        "pilot_precommit_seal_validation_sha256": precommit_seal_validation[
+            "validation_sha256"
+        ],
         "protocol": LIVE_PROTOCOL,
+        "public_gate_validation_sha256": public_gate_validation[
+            "validation_sha256"
+        ],
         "removal_restore_requested": args.removal_restore,
         "ordered_seed_commitments": list(commitments),
+        "planned_outer_run_id": precommit["planned_outer_run_id"],
+        "planned_output_relative_path": precommit[
+            "planned_output_relative_path"
+        ],
         "precommit_artifact_sha256": _digest_bytes(precommit_raw),
         "precommit_sha256": precommit["precommit_sha256"],
         "selected_seed_indices": list(seed_indices),
         "service_binding": args.service_binding,
         "source_revision": args.source_revision,
+        "source_tree": args.source_tree,
         "stream_count": args.streams,
         "token_preflight_call_budget_total": execution[
-            "endpoint_call_budget_total"
+            "token_preflight_call_budget_total"
         ],
         "token_preflight_mode": TOKEN_PREFLIGHT_MODE,
         "token_preflight_transport_trust": backend_config.public_identity()[
@@ -6168,10 +7288,19 @@ def main(argv: Sequence[str] | None = None) -> int:
             manifest = generate_stream(
                 stream,
                 seed_preimage=selected_seeds[stream],
+                horizon=execution["horizon"],
+                delay=execution["delay"],
+                choice_count=execution["choice_count"],
             )
             manifests.append(manifest)
             sealed_packs.append(make_sealed_probe_pack(manifest))
-        validation = validate_stream_set(manifests, expected_count=args.streams)
+        validation = validate_stream_set(
+            manifests,
+            expected_count=args.streams,
+            expected_horizon=execution["horizon"],
+            expected_delay=execution["delay"],
+            expected_choice_count=execution["choice_count"],
+        )
         _write_json_atomic(
             output / "sealed_manifest_commitments.json",
             {
@@ -6210,6 +7339,36 @@ def main(argv: Sequence[str] | None = None) -> int:
                     arms, audit, mediation_enabled=args.removal_restore
                 )
             )
+            primary_generation_calls = sum(
+                len(entries) for entries in ledgers[-1]["primary"].values()
+            )
+            mediation_generation_calls = sum(
+                len(entries) for entries in ledgers[-1]["mediation"].values()
+            )
+            per_stream_token_preflights = sum(
+                1
+                for scope in ("primary", "mediation")
+                for entries in ledgers[-1][scope].values()
+                for entry in entries
+                if isinstance(entry.get("token_preflight"), Mapping)
+            )
+            if (
+                primary_generation_calls
+                != execution["base_generation_calls_per_stream"]
+                or mediation_generation_calls
+                != execution["removal_restore_extra_generation_calls_per_stream"]
+                or primary_generation_calls + mediation_generation_calls
+                != execution["generation_calls_per_stream"]
+                or per_stream_token_preflights
+                != execution["token_preflight_calls_per_stream"]
+                or primary_generation_calls
+                + mediation_generation_calls
+                + per_stream_token_preflights
+                != execution["outbound_http_requests_per_stream"]
+            ):
+                raise ContinualLiveError(
+                    "per-stream generation, token preflight, or outbound budget drifted"
+                )
             status["completed_streams"] = stream + 1
             _write_json_atomic(output / "status.json", status)
         observed_generation_calls = sum(
@@ -6218,9 +7377,29 @@ def main(argv: Sequence[str] | None = None) -> int:
             for scope in ("primary", "mediation")
             for entries in stream_ledger[scope].values()
         )
-        if observed_generation_calls != execution["endpoint_call_budget_total"]:
+        observed_token_preflight_calls = sum(
+            1
+            for stream_ledger in ledgers
+            for scope in ("primary", "mediation")
+            for entries in stream_ledger[scope].values()
+            for entry in entries
+            if isinstance(entry.get("token_preflight"), Mapping)
+        )
+        observed_outbound_http_requests = (
+            observed_generation_calls + observed_token_preflight_calls
+        )
+        if observed_generation_calls != execution["generation_call_budget_total"]:
             raise ContinualLiveError(
-                "observed generation calls differ from frozen legacy endpoint budget"
+                "observed generation calls differ from frozen v4 budget"
+            )
+        if (
+            observed_token_preflight_calls
+            != execution["token_preflight_call_budget_total"]
+            or observed_outbound_http_requests
+            != execution["outbound_http_request_budget_total"]
+        ):
+            raise ContinualLiveError(
+                "observed token preflights or outbound requests differ from v4 budget"
             )
         status["status"] = "success"
     except BaseException as error:
@@ -6243,17 +7422,34 @@ def main(argv: Sequence[str] | None = None) -> int:
         post_reveal: dict[str, Any] = {
             "artifact_cardinality_match": False,
             "call_preimage_revalidation_match": False,
+            "generation_call_cardinality_match": False,
             "manifest_regeneration_match": False,
+            "outbound_http_request_cardinality_match": False,
+            "per_stream_call_cardinality_match": False,
             "programmatic_regrade_match": False,
             "removal_mediation_revalidation_match": False,
+            "selected_primary_reveal_match": False,
             "sealed_probe_regeneration_match": False,
+            "token_preflight_call_cardinality_match": False,
         }
         try:
             regenerated = tuple(
-                generate_stream(stream, seed_preimage=selected_seeds[stream])
+                generate_stream(
+                    stream,
+                    seed_preimage=selected_seeds[stream],
+                    horizon=execution["horizon"],
+                    delay=execution["delay"],
+                    choice_count=execution["choice_count"],
+                )
                 for stream in range(args.streams)
             )
-            validate_stream_set(regenerated, expected_count=args.streams)
+            validate_stream_set(
+                regenerated,
+                expected_count=args.streams,
+                expected_horizon=execution["horizon"],
+                expected_delay=execution["delay"],
+                expected_choice_count=execution["choice_count"],
+            )
             post_reveal["manifest_regeneration_match"] = (
                 [item.manifest_sha256 for item in regenerated]
                 == [item.manifest_sha256 for item in manifests]
@@ -6276,6 +7472,67 @@ def main(argv: Sequence[str] | None = None) -> int:
                 )
             )
             post_reveal["artifact_cardinality_match"] = cardinality_ok
+            persisted_generation_calls = sum(
+                len(entries)
+                for stream_ledger in ledgers
+                for scope in ("primary", "mediation")
+                for entries in stream_ledger[scope].values()
+            )
+            persisted_token_preflights = sum(
+                1
+                for stream_ledger in ledgers
+                for scope in ("primary", "mediation")
+                for entries in stream_ledger[scope].values()
+                for entry in entries
+                if isinstance(entry.get("token_preflight"), Mapping)
+            )
+            post_reveal["generation_call_cardinality_match"] = (
+                persisted_generation_calls
+                == execution["generation_call_budget_total"]
+            )
+            post_reveal["token_preflight_call_cardinality_match"] = (
+                persisted_token_preflights
+                == execution["token_preflight_call_budget_total"]
+            )
+            post_reveal["outbound_http_request_cardinality_match"] = (
+                persisted_generation_calls + persisted_token_preflights
+                == execution["outbound_http_request_budget_total"]
+            )
+            post_reveal["per_stream_call_cardinality_match"] = (
+                len(ledgers) == args.streams
+                and all(
+                    sum(
+                        len(entries)
+                        for scope in ("primary", "mediation")
+                        for entries in stream_ledger[scope].values()
+                    )
+                    == execution["generation_calls_per_stream"]
+                    and sum(
+                        1
+                        for scope in ("primary", "mediation")
+                        for entries in stream_ledger[scope].values()
+                        for entry in entries
+                        if isinstance(entry.get("token_preflight"), Mapping)
+                    )
+                    == execution["token_preflight_calls_per_stream"]
+                    for stream_ledger in ledgers
+                )
+            )
+            post_reveal["selected_primary_reveal_match"] = (
+                len(reveal["used_seeds"]) == len(seed_indices) == 2
+                and [item["frozen_index"] for item in reveal["used_seeds"]]
+                == list(seed_indices)
+                and list(seed_indices) == [0, 1]
+                and all(
+                    _digest_bytes(bytes.fromhex(item["seed_hex"]))
+                    == commitments[item["frozen_index"]]
+                    for item in reveal["used_seeds"]
+                )
+                and not any(
+                    item["frozen_index"] in precommit["reserve_seed_indices"]
+                    for item in reveal["used_seeds"]
+                )
+            )
             regrade_ok = cardinality_ok
             for manifest, run in zip(regenerated, runs, strict=cardinality_ok):
                 queries = {query.step: query for query in manifest.queries}
@@ -6565,8 +7822,13 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "manifest_regeneration_match",
                 "programmatic_regrade_match",
                 "artifact_cardinality_match",
+                "generation_call_cardinality_match",
                 "removal_mediation_revalidation_match",
+                "outbound_http_request_cardinality_match",
+                "per_stream_call_cardinality_match",
+                "selected_primary_reveal_match",
                 "sealed_probe_regeneration_match",
+                "token_preflight_call_cardinality_match",
                 "call_preimage_revalidation_match",
             )
         )
@@ -6607,7 +7869,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             "completed_streams": status["completed_streams"],
             "engineering_only": True,
             "error": status["error"],
-            "generation_calls_expected": execution["endpoint_call_budget_total"],
+            "generation_calls_expected": execution[
+                "generation_call_budget_total"
+            ],
             "removal_mediation_gate_passed": (
                 all(item.removal_mediation_gate_passed for item in removal_results)
                 if args.removal_restore and removal_results
@@ -6615,16 +7879,25 @@ def main(argv: Sequence[str] | None = None) -> int:
             ),
             "protocol": LIVE_PROTOCOL,
             "status": status["status"],
-            "outbound_http_requests_expected": (
-                execution["endpoint_call_budget_total"] * 2
-            ),
+            "outbound_http_requests_expected": execution[
+                "outbound_http_request_budget_total"
+            ],
+            "one_shot_enforcement": execution["one_shot_enforcement"],
+            "planned_outer_run_id": precommit["planned_outer_run_id"],
+            "planned_output_relative_path": precommit[
+                "planned_output_relative_path"
+            ],
             "token_preflight_calls_expected": execution[
-                "endpoint_call_budget_total"
+                "token_preflight_call_budget_total"
             ],
             "token_preflight_mode": TOKEN_PREFLIGHT_MODE,
         }
         terminal["receipt_sha256"] = canonical_sha256(terminal)
         _write_json_atomic(output / "terminal_receipt.json", terminal)
+    if status["status"] != "success":
+        raise ContinualLiveError(
+            status["error"] or "v4 pilot terminal status is failed"
+        )
     return 0
 
 
@@ -6779,6 +8052,7 @@ __all__ = [
     "TOKEN_PREFLIGHT_SCHEMA",
     "TokenPreflightReceipt",
     "audit_parity",
+    "build_pilot_precommit_v4",
     "build_four_arms",
     "main",
     "make_sealed_probe_pack",
@@ -6787,6 +8061,7 @@ __all__ = [
     "run_public_schema_gate",
     "run_removal_restore_probes",
     "sealed_probe_pack_sha256",
+    "pilot_precommit_builder_main",
     "schema_gate_main",
 ]
 

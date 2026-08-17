@@ -23,6 +23,7 @@ from .contracts import (
     ActiveSnapshot,
     ActivationReceipt,
     CognitiveToken,
+    ExecutorAuthority,
     HarnessDocument,
     HarnessMode,
     MemoryRecord,
@@ -71,6 +72,7 @@ def _validate_proposal_scope(
     *,
     active: ActiveSnapshot,
     tokens: Sequence[CognitiveToken],
+    agent_registry: Sequence[ExecutorAuthority] = (),
 ) -> None:
     if (
         proposal.base_snapshot_id != active.snapshot.snapshot_id
@@ -85,6 +87,27 @@ def _validate_proposal_scope(
             raise SelfModRuntimeError(
                 "memory provenance exceeds the proposal source scope"
             )
+    harness = proposal.harness
+    if harness is not None:
+        bound_nodes = tuple(
+            node for node in harness.nodes if node.executor_agent_id is not None
+        )
+        if bound_nodes:
+            registry = {item.agent_id: item for item in agent_registry}
+            if not registry:
+                raise SelfModRuntimeError(
+                    "an executor-bound harness requires a frozen agent registry"
+                )
+            for node in bound_nodes:
+                authority = registry.get(node.executor_agent_id)
+                if authority is None:
+                    raise SelfModRuntimeError(
+                        "harness executor is outside the authoring registry"
+                    )
+                if node.capability not in authority.allowed_capabilities:
+                    raise SelfModRuntimeError(
+                        "harness capability exceeds its executor authority"
+                    )
 
 
 def _string_tuple(
@@ -154,10 +177,22 @@ class ExecutionRequest:
 class AuthoringRequest:
     active: ActiveSnapshot
     tokens: tuple[CognitiveToken, ...]
+    agent_registry: tuple[ExecutorAuthority, ...] = ()
 
     def __post_init__(self) -> None:
         if not self.tokens:
             raise SelfModRuntimeError("self-authoring requires at least one token")
+        ordered = tuple(sorted(self.agent_registry, key=lambda item: item.agent_id))
+        if len(ordered) != len({item.agent_id for item in ordered}):
+            raise SelfModRuntimeError("agent registry identities must be unique")
+        for authority in ordered:
+            if not set(authority.allowed_capabilities) <= set(
+                self.active.policy.allowed_capabilities
+            ):
+                raise SelfModRuntimeError(
+                    "agent registry exceeds the active capability policy"
+                )
+        object.__setattr__(self, "agent_registry", ordered)
         _validate_frozen_request(self.active, self.tokens)
 
 
@@ -290,6 +325,7 @@ def validate_agent_decision(
     *,
     request: ExecutionRequest,
     decision: AgentDecision,
+    agent_id: str | None = None,
 ) -> None:
     """Prove that the selected route stayed inside state and authority bounds."""
 
@@ -325,6 +361,12 @@ def validate_agent_decision(
         if nodes[node_id].capability not in allowed:
             raise SelfModRuntimeError(
                 "harness trace invokes a capability outside the episode authority"
+            )
+        executor = nodes[node_id].executor_agent_id
+        if executor is not None and executor != agent_id:
+            raise SelfModRuntimeError(
+                "executor-bound harness nodes require their bound agent; "
+                "use MultiAgentHSWM for a multi-agent route"
             )
     if len(followed) > request.budget:
         raise SelfModRuntimeError("harness trace exceeds the episode budget")
@@ -415,6 +457,7 @@ class SelfModifyingHSWM:
         tokens: Sequence[CognitiveToken],
         *,
         agent: SelfModifyingAgent,
+        agent_registry: Sequence[ExecutorAuthority] = (),
     ) -> ActivationReceipt | None:
         """Let typed tokens become agent-authored memory without an outcome gate."""
 
@@ -424,14 +467,23 @@ class SelfModifyingHSWM:
         _require_text("agent.agent_id", agent.agent_id)
         self.store.append_tokens(ordered)
         active = self.store.active_snapshot()
-        authoring = AuthoringRequest(active=active, tokens=ordered)
+        authoring = AuthoringRequest(
+            active=active,
+            tokens=ordered,
+            agent_registry=tuple(agent_registry),
+        )
         proposal = agent.author(authoring)
         _validate_frozen_request(active, ordered)
         if proposal is None:
             return None
         if proposal.author_id != agent.agent_id:
             raise SelfModRuntimeError("proposal author differs from executing agent")
-        _validate_proposal_scope(proposal, active=active, tokens=ordered)
+        _validate_proposal_scope(
+            proposal,
+            active=active,
+            tokens=ordered,
+            agent_registry=authoring.agent_registry,
+        )
         return self.store.commit(proposal)
 
     def run_episode(
@@ -443,6 +495,7 @@ class SelfModifyingHSWM:
         capabilities: Sequence[str],
         budget: int,
         learn_after: bool = True,
+        agent_registry: Sequence[ExecutorAuthority] = (),
     ) -> EpisodeReceipt:
         """Run with a frozen snapshot and optionally commit the agent's rewrite."""
 
@@ -459,7 +512,11 @@ class SelfModifyingHSWM:
         self.store.append_tokens(ordered)
         decision = agent.decide(request)
         _validate_frozen_request(active, ordered)
-        validate_agent_decision(request=request, decision=decision)
+        validate_agent_decision(
+            request=request,
+            decision=decision,
+            agent_id=agent.agent_id,
+        )
 
         output_position = max(token.position for token in ordered) + 1
         output_provenance = {
@@ -490,7 +547,11 @@ class SelfModifyingHSWM:
         activation: ActivationReceipt | None = None
         if learn_after:
             authoring_tokens = (*ordered, output_token)
-            authoring = AuthoringRequest(active=active, tokens=authoring_tokens)
+            authoring = AuthoringRequest(
+                active=active,
+                tokens=authoring_tokens,
+                agent_registry=tuple(agent_registry),
+            )
             proposal = agent.author(authoring)
             _validate_frozen_request(active, authoring_tokens)
             if proposal is not None:
@@ -502,6 +563,7 @@ class SelfModifyingHSWM:
                     proposal,
                     active=active,
                     tokens=authoring_tokens,
+                    agent_registry=authoring.agent_registry,
                 )
                 activation = self.store.commit(proposal)
 
@@ -657,6 +719,7 @@ class JsonSelfModifyingAgent:
                         "nodes": [
                             {
                                 "node_id": "string",
+                                "executor_agent_id": "registered agent id or null",
                                 "capability": "authorized capability",
                                 "instruction": "agent-authored instruction",
                                 "memory_ids": ["memory id"],
@@ -668,6 +731,10 @@ class JsonSelfModifyingAgent:
                 "allowed_capabilities": sorted(
                     request.active.policy.allowed_capabilities
                 ),
+                "agent_registry": [
+                    authority.canonical()
+                    for authority in request.agent_registry
+                ],
                 "snapshot": _snapshot_prompt_value(request.active.snapshot),
                 "tokens": [token.canonical() for token in request.tokens],
             },

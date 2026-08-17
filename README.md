@@ -355,19 +355,31 @@ The JSON bridge works through the existing typed `CellPort`, so the fixed kernel
 defines representation and authority while the agent supplies every cognitive
 instruction and route.
 
+The companion multi-agent slice executes every reachable node of one frozen,
+agent-authored DAG through its declared logical-agent deployment. It performs
+real per-node port calls, typed fan-out/fan-in, deterministic aggregation,
+direct-delivery input scoping, step and byte budgets, and deployment-bound
+receipts. A SQLite execution journal reserves each external call before dispatch,
+returns an already completed receipt on exact replay, and refuses to guess after
+an ambiguous in-flight outcome. Agent-written executor bindings are checked
+against the frozen agent/capability registry before activation; this is an
+executable coordination substrate, not evidence that more agents improve a task.
+
 This is engineering evidence for durable self-modification, not evidence that
-the resulting memory is useful or continually improves. The slice has no live
-model measurement, general outcome/credit optimizer, or episode-wide
-crash-resumable decision journal. The wider tree still has reusable but partly
-disconnected pieces: a one-cell event runtime and focused durable call replay,
-a fixed typed `QF → BF → AF` workflow, content-addressed receipt contracts, one
-bounded scalar P1 outcome/eligibility/update loop, structural composition, and
-separate evaluation mechanisms. It has no general live token/cell trainer that
-joins a recurrent scheduler, replayable decision dataset, live outcome
-adapters, causal credit, and one atomic active bundle for explicit memory,
-`W`, learned routing, and later `H`. P1 ran its engineering path end to end, but
-activated no candidate and produced zero measured top-10 order or membership
-changes across 456 diagnostic cells; it remains scientific RED.
+the resulting memory or coordination is useful or continually improves. There
+is no checked-in live multi-agent quality result, general outcome/credit
+optimizer, recurrent scheduler, or automatic reconciliation service for a
+process killed during an external call; the journal deliberately leaves such an
+outcome unresolved instead of repeating it. The wider tree still has reusable
+but partly disconnected pieces: a one-cell event runtime and focused durable
+call replay, a fixed typed `QF → BF → AF` workflow, content-addressed receipt
+contracts, one bounded scalar P1 outcome/eligibility/update loop, structural
+composition, and separate evaluation mechanisms. It has no general live
+token/cell trainer that joins these pieces with a replayable decision dataset,
+live outcome adapters, causal credit, and one atomic active bundle for explicit
+memory, `W`, learned routing, and later `H`. P1 ran its engineering path end to
+end, but activated no candidate and produced zero measured top-10 order or
+membership changes across 456 diagnostic cells; it remains scientific RED.
 
 The committed next component experiment remains the parity-controlled typed
 text-lesson baseline. It is a precursor and comparison arm, not a substitute
@@ -489,7 +501,7 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | `src/hswm/prototypes/` | bounded early learning and synthetic-world prototypes |
 | `src/hswm/substrate/` | canonical hypergraph, document/world construction, immutable field cuts, certified readout, and convergence substrate |
 | `src/hswm/learning/` | token-learning contracts and learning diagnostics |
-| `src/hswm/selfmod/` | empty-genesis typed tokens, agent-authored memory/harness snapshots, durable CAS activation, and exact restoration |
+| `src/hswm/selfmod/` | empty-genesis agent-authored memory/harness snapshots, durable CAS activation, exact restoration, and journaled multi-agent DAG execution |
 | `src/hswm/evaluation/`, `_research/` | falsification code and source-only experiment programs |
 | `_research/root_compat/` | source-pinned root-era compatibility cluster; closed to new work |
 | `_research/root_compat/world_ir.py`, `_research/root_compat/world_compiler.py` | flat compatibility modules for the immutable evidence model and deterministic world compilation |

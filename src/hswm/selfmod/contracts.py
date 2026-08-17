@@ -223,11 +223,14 @@ class HarnessNode:
     instruction: str
     memory_ids: tuple[str, ...] = ()
     next_node_ids: tuple[str, ...] = ()
+    executor_agent_id: str | None = None
 
     def __post_init__(self) -> None:
         _text(self.node_id, "node_id")
         _text(self.capability, "capability")
         _text(self.instruction, "instruction")
+        if self.executor_agent_id is not None:
+            _text(self.executor_agent_id, "executor_agent_id")
         object.__setattr__(
             self, "memory_ids", _texts(self.memory_ids, "memory_ids")
         )
@@ -236,29 +239,39 @@ class HarnessNode:
         )
 
     def canonical(self) -> dict[str, Any]:
-        return {
+        value = {
             "node_id": self.node_id,
             "capability": self.capability,
             "instruction": self.instruction,
             "memory_ids": list(self.memory_ids),
             "next_node_ids": list(self.next_node_ids),
         }
+        # Omit the new field for legacy single-agent nodes so their canonical
+        # bytes and content-addressed identities remain exactly stable.
+        if self.executor_agent_id is not None:
+            value["executor_agent_id"] = self.executor_agent_id
+        return value
 
 
 def _node_from_mapping(value: Mapping[str, Any]) -> HarnessNode:
     if not isinstance(value, Mapping):
         raise SelfModelContractError("harness node must be an object")
-    _field_set(
-        value,
-        {"node_id", "capability", "instruction", "memory_ids", "next_node_ids"},
-        "harness node",
-    )
+    legacy_fields = {
+        "node_id",
+        "capability",
+        "instruction",
+        "memory_ids",
+        "next_node_ids",
+    }
+    if set(value) not in (legacy_fields, legacy_fields | {"executor_agent_id"}):
+        raise SelfModelContractError("harness node field set is invalid")
     return HarnessNode(
         node_id=value["node_id"],
         capability=value["capability"],
         instruction=value["instruction"],
         memory_ids=tuple(_array(value["memory_ids"], "memory_ids")),
         next_node_ids=tuple(_array(value["next_node_ids"], "next_node_ids")),
+        executor_agent_id=value.get("executor_agent_id"),
     )
 
 
@@ -462,6 +475,30 @@ class HarnessMode(str, Enum):
     KEEP = "KEEP"
     REPLACE = "REPLACE"
     CLEAR = "CLEAR"
+
+
+@dataclass(frozen=True, slots=True)
+class ExecutorAuthority:
+    """Frozen executor identity visible to a self-authoring agent."""
+
+    agent_id: str
+    allowed_capabilities: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        _text(self.agent_id, "agent_id")
+        object.__setattr__(
+            self,
+            "allowed_capabilities",
+            _texts(self.allowed_capabilities, "allowed_capabilities"),
+        )
+        if not self.allowed_capabilities:
+            raise SelfModelContractError("executor authority requires capabilities")
+
+    def canonical(self) -> dict[str, Any]:
+        return {
+            "agent_id": self.agent_id,
+            "allowed_capabilities": list(self.allowed_capabilities),
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -802,6 +839,7 @@ __all__ = [
     "ActiveSnapshot",
     "ActivationReceipt",
     "CognitiveToken",
+    "ExecutorAuthority",
     "HarnessDocument",
     "HarnessMode",
     "HarnessNode",

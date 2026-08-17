@@ -13,6 +13,7 @@ import pytest
 
 from hswm.cells.runtime import make_packet
 from hswm.selfmod.contracts import (
+    ExecutorAuthority,
     HarnessMode,
     HarnessNode,
     MemoryRecord,
@@ -137,13 +138,19 @@ class JsonBridgePort:
         source_token_id: str,
         bad_execute_packet_type: bool = False,
         bad_execute_payload_digest: bool = False,
+        author_executor_agent_id: str | None = None,
     ):
         self.source_token_id = source_token_id
         self.bad_execute_packet_type = bad_execute_packet_type
         self.bad_execute_payload_digest = bad_execute_payload_digest
+        self.author_executor_agent_id = author_executor_agent_id
         self.calls: list[str] = []
+        self.request_values: list[dict[str, object]] = []
 
     def invoke(self, effect):
+        self.request_values.append(
+            json.loads(effect.input.payload["messages"][1]["content"])
+        )
         operation = (
             "author"
             if effect.expected_output_type == "hswm-selfmod-author-response/v1"
@@ -172,6 +179,7 @@ class JsonBridgePort:
                     "nodes": [
                         {
                             "node_id": "node:json-bridge",
+                            "executor_agent_id": self.author_executor_agent_id,
                             "capability": RIGHT,
                             "instruction": "Use the absorbed self-authored route.",
                             "memory_ids": ["memory:json-bridge"],
@@ -383,6 +391,71 @@ def test_json_cell_port_bridge_authors_and_executes_state_and_checks_packet_type
             )
         assert store.active_snapshot() == active
         assert store.activation_count() == 1
+
+
+def test_json_author_registry_scopes_bound_harness_and_legacy_runtime_rejects_it(
+    tmp_path,
+) -> None:
+    worker_id = "agent:bound-worker"
+    absorbed = _input_token("episode:json-bound-author")
+    port = JsonBridgePort(
+        source_token_id=absorbed.token_id,
+        author_executor_agent_id=worker_id,
+    )
+    agent = JsonSelfModifyingAgent(agent_id=AGENT_ID, port=port)
+    registry = (ExecutorAuthority(worker_id, (RIGHT,)),)
+
+    with SQLiteSelfModelStore(
+        tmp_path / "json-bound-author.sqlite3", policy=_policy()
+    ) as store:
+        runtime = SelfModifyingHSWM(store)
+        activation = runtime.absorb(
+            (absorbed,), agent=agent, agent_registry=registry
+        )
+
+        assert activation is not None
+        assert port.request_values[0]["agent_registry"] == [
+            {
+                "agent_id": worker_id,
+                "allowed_capabilities": [RIGHT],
+            }
+        ]
+        active = store.active_snapshot()
+        assert active.snapshot.harness is not None
+        assert active.snapshot.harness.nodes[0].executor_agent_id == worker_id
+
+        episode_id = "episode:legacy-cannot-run-bound-worker"
+        with pytest.raises(
+            SelfModRuntimeError,
+            match="executor-bound harness nodes require their bound agent",
+        ):
+            runtime.run_episode(
+                episode_id=episode_id,
+                tokens=(_input_token(episode_id),),
+                agent=agent,
+                capabilities=(LEFT, RIGHT),
+                budget=1,
+                learn_after=False,
+            )
+
+    rejected = _input_token("episode:json-bound-rejected")
+    rejected_port = JsonBridgePort(
+        source_token_id=rejected.token_id,
+        author_executor_agent_id=worker_id,
+    )
+    with SQLiteSelfModelStore(
+        tmp_path / "json-bound-rejected.sqlite3", policy=_policy()
+    ) as store:
+        with pytest.raises(SelfModRuntimeError, match="outside the authoring registry"):
+            SelfModifyingHSWM(store).absorb(
+                (rejected,),
+                agent=JsonSelfModifyingAgent(
+                    agent_id=AGENT_ID,
+                    port=rejected_port,
+                ),
+                agent_registry=(ExecutorAuthority("agent:someone-else", (RIGHT,)),),
+            )
+        assert store.activation_count() == 0
 
 
 def test_process_restart_removal_and_exact_restore_prove_state_mediation(

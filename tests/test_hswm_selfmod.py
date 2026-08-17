@@ -14,14 +14,14 @@ import pytest
 from hswm.cells.runtime import make_packet
 from hswm.selfmod.contracts import (
     ExecutorAuthority,
-    HarnessMode,
-    HarnessNode,
+    CellTopologyMode,
+    CellRecord,
     MemoryRecord,
     SelfModelContractError,
     SelfModelPolicy,
     canonical_json_bytes,
+    canonical_sha256,
     make_snapshot,
-    make_harness,
     make_mutation,
     make_token,
     memory_from_mapping,
@@ -75,16 +75,12 @@ def _right_route_proposal(request: AuthoringRequest):
         source_token_ids=source_ids,
         labels=("agent-authored", "routing"),
     )
-    harness = make_harness(
-        purpose="Use the route induced by the preceding episode.",
-        entry_node_id="node:route-right",
-        nodes=(
-            HarnessNode(
-                node_id="node:route-right",
-                capability=RIGHT,
-                instruction="Select the right capability for this cue.",
-                memory_ids=(memory.memory_id,),
-            ),
+    cells = (
+        CellRecord(
+            cell_id="cell:route-right",
+            capability=RIGHT,
+            instruction="Select the right capability for this cue.",
+            memory_ids=(memory.memory_id,),
         ),
     )
     return make_mutation(
@@ -93,38 +89,39 @@ def _right_route_proposal(request: AuthoringRequest):
         author_id=AGENT_ID,
         source_token_ids=source_ids,
         upsert_memories=(memory,),
-        harness_mode=HarnessMode.REPLACE,
-        harness=harness,
+        cell_topology_mode=CellTopologyMode.REPLACE,
+        cells=cells,
+        entry_cell_id="cell:route-right",
         rationale="The agent authored a future route from its own sealed episode.",
     )
 
 
-class HarnessFollowingAgent:
+class CellFollowingAgent:
     """Stateless fixture: all behavioral variation comes from the active snapshot."""
 
     agent_id = AGENT_ID
 
-    def __init__(self, *, author_harness: bool = False) -> None:
-        self.author_harness = author_harness
+    def __init__(self, *, author_cells: bool = False) -> None:
+        self.author_cells = author_cells
 
     def decide(self, request: ExecutionRequest) -> AgentDecision:
-        harness = request.active.snapshot.harness
-        if harness is None:
+        cells = request.active.snapshot.cells
+        if not cells:
             return AgentDecision(
                 selected_capability=LEFT,
                 output={"selected": LEFT},
             )
-        node_by_id = {node.node_id: node for node in harness.nodes}
-        node = node_by_id[harness.entry_node_id]
+        cell_by_id = {cell.cell_id: cell for cell in cells}
+        cell = cell_by_id[request.active.snapshot.entry_cell_id]
         return AgentDecision(
-            selected_capability=node.capability,
-            output={"selected": node.capability},
-            used_memory_ids=node.memory_ids,
-            followed_node_ids=(node.node_id,),
+            selected_capability=cell.capability,
+            output={"selected": cell.capability},
+            used_memory_ids=cell.memory_ids,
+            followed_cell_ids=(cell.cell_id,),
         )
 
     def author(self, request: AuthoringRequest):
-        if not self.author_harness or request.active.snapshot.harness is not None:
+        if not self.author_cells or request.active.snapshot.cells:
             return None
         return _right_route_proposal(request)
 
@@ -153,7 +150,7 @@ class JsonBridgePort:
         )
         operation = (
             "author"
-            if effect.expected_output_type == "hswm-selfmod-author-response/v1"
+            if effect.expected_output_type == "hswm-selfmod-author-response/v2"
             else "execute"
         )
         self.calls.append(operation)
@@ -172,32 +169,29 @@ class JsonBridgePort:
                     }
                 ],
                 "delete_memory_ids": [],
-                "harness_mode": "REPLACE",
-                "harness": {
-                    "purpose": "Execute the route authored through the CellPort.",
-                    "entry_node_id": "node:json-bridge",
-                    "nodes": [
-                        {
-                            "node_id": "node:json-bridge",
-                            "executor_agent_id": self.author_executor_agent_id,
-                            "capability": RIGHT,
-                            "instruction": "Use the absorbed self-authored route.",
-                            "memory_ids": ["memory:json-bridge"],
-                            "next_node_ids": [],
-                        }
-                    ],
-                },
+                "cell_topology_mode": "REPLACE",
+                "entry_cell_id": "cell:json-bridge",
+                "cells": [
+                    {
+                        "cell_id": "cell:json-bridge",
+                        "executor_agent_id": self.author_executor_agent_id,
+                        "capability": RIGHT,
+                        "instruction": "Use the absorbed self-authored route.",
+                        "memory_ids": ["memory:json-bridge"],
+                        "next_cell_ids": [],
+                    }
+                ],
             }
         else:
             response = {
                 "selected_capability": RIGHT,
                 "output": {"selected": RIGHT},
                 "used_memory_ids": ["memory:json-bridge"],
-                "followed_node_ids": ["node:json-bridge"],
+                "followed_cell_ids": ["cell:json-bridge"],
             }
         packet_type = effect.expected_output_type
         if operation == "execute" and self.bad_execute_packet_type:
-            packet_type = "hswm-selfmod-wrong-response/v1"
+            packet_type = "hswm-selfmod-wrong-response/v2"
         packet = make_packet(
             packet_id=f"response:{len(self.calls)}",
             packet_type=packet_type,
@@ -213,13 +207,13 @@ def _run(
     runtime: SelfModifyingHSWM,
     episode_id: str,
     *,
-    author_harness: bool = False,
+    author_cells: bool = False,
     learn_after: bool = False,
 ):
     return runtime.run_episode(
         episode_id=episode_id,
         tokens=(_input_token(episode_id),),
-        agent=HarnessFollowingAgent(author_harness=author_harness),
+        agent=CellFollowingAgent(author_cells=author_cells),
         capabilities=(LEFT, RIGHT),
         budget=1,
         learn_after=learn_after,
@@ -246,7 +240,12 @@ def test_fresh_store_is_empty_and_does_not_preload_legacy_material(
     assert active_a.generation == active_b.generation == 0
     assert active_a.snapshot.snapshot_id == active_b.snapshot.snapshot_id
     assert active_a.snapshot.memories == ()
-    assert active_a.snapshot.harness is None
+    assert active_a.snapshot.cells == ()
+    assert active_a.snapshot.entry_cell_id is None
+    canonical = active_a.snapshot.canonical()
+    assert "harness" not in canonical
+    assert "plan" not in canonical
+    assert "plan_id" not in canonical
     assert marker.encode() not in canonical_json_bytes(active_a.snapshot.canonical())
 
     # This package must remain executable without the historical compatibility
@@ -258,22 +257,22 @@ def test_fresh_store_is_empty_and_does_not_preload_legacy_material(
         assert "hswm.infrastructure.legacy_replay" not in text
 
 
-def test_agent_authored_harness_only_changes_the_next_episode(tmp_path) -> None:
+def test_agent_authored_cells_only_change_the_next_episode(tmp_path) -> None:
     path = tmp_path / "selfmod.sqlite3"
     with SQLiteSelfModelStore(path, policy=_policy()) as store:
         runtime = SelfModifyingHSWM(store)
         genesis = store.active_snapshot()
-        first = _run(runtime, "episode:1", author_harness=True, learn_after=True)
+        first = _run(runtime, "episode:1", author_cells=True, learn_after=True)
         learned = store.active_snapshot()
 
         assert first.selected_capability == LEFT
         assert first.used_snapshot_id == genesis.snapshot.snapshot_id
         assert first.used_generation == 0
-        assert first.harness_id is None
+        assert first.plan_id is None
         assert first.activation is not None
         assert first.activation.active_snapshot_id == learned.snapshot.snapshot_id
         assert learned.generation == 1
-        assert learned.snapshot.harness is not None
+        assert learned.snapshot.cells
         assert learned.snapshot.memories[0].content == {"preferred_capability": RIGHT}
 
         # A fresh, stateless agent sees the same external task.  Only committed
@@ -282,8 +281,16 @@ def test_agent_authored_harness_only_changes_the_next_episode(tmp_path) -> None:
         assert second.selected_capability == RIGHT
         assert second.used_snapshot_id == learned.snapshot.snapshot_id
         assert second.used_generation == 1
-        assert second.harness_id == learned.snapshot.harness.harness_id
-        assert second.followed_node_ids == ("node:route-right",)
+        assert second.plan_id == canonical_sha256(
+            {
+                "schema_version": "hswm-execution-plan/v1",
+                "engine": "single-agent-trace/v1",
+                "snapshot_id": learned.snapshot.snapshot_id,
+                "route_cell_ids": ["cell:route-right"],
+            }
+        )
+        assert "plan_id" not in learned.snapshot.canonical()
+        assert second.followed_cell_ids == ("cell:route-right",)
         assert second.used_memory_ids == ("memory:route-right",)
         assert second.input_content_sha256 == first.input_content_sha256
         assert second.capability_set_sha256 == first.capability_set_sha256
@@ -297,7 +304,7 @@ def test_absorb_alone_can_author_state_that_changes_a_later_read_only_episode(
 ) -> None:
     path = tmp_path / "absorb-selfmod.sqlite3"
 
-    class AbsorbOnlyAuthor(HarnessFollowingAgent):
+    class AbsorbOnlyAuthor(CellFollowingAgent):
         def decide(self, request: ExecutionRequest) -> AgentDecision:
             raise AssertionError("absorb must not execute an episode decision")
 
@@ -306,7 +313,7 @@ def test_absorb_alone_can_author_state_that_changes_a_later_read_only_episode(
         genesis = store.active_snapshot()
         absorbed = _input_token("episode:absorbed-observation")
         activation = runtime.absorb(
-            (absorbed,), agent=AbsorbOnlyAuthor(author_harness=True)
+            (absorbed,), agent=AbsorbOnlyAuthor(author_cells=True)
         )
 
         assert activation is not None
@@ -314,7 +321,7 @@ def test_absorb_alone_can_author_state_that_changes_a_later_read_only_episode(
         assert activation.active_generation == 1
         assert store.token_count() == 1
         authored = store.active_snapshot()
-        assert authored.snapshot.harness is not None
+        assert authored.snapshot.cells
         assert authored.snapshot.memories[0].source_token_ids == (absorbed.token_id,)
 
         later = _run(runtime, "episode:after-absorb", learn_after=False)
@@ -340,8 +347,8 @@ def test_json_cell_port_bridge_authors_and_executes_state_and_checks_packet_type
         assert port.calls == ["author"]
         active = store.active_snapshot()
         assert active.snapshot.memories[0].memory_id == "memory:json-bridge"
-        assert active.snapshot.harness is not None
-        assert active.snapshot.harness.entry_node_id == "node:json-bridge"
+        assert active.snapshot.entry_cell_id == "cell:json-bridge"
+        assert active.snapshot.cells[0].cell_id == "cell:json-bridge"
 
         episode_id = "episode:json-execute"
         executed = runtime.run_episode(
@@ -356,7 +363,7 @@ def test_json_cell_port_bridge_authors_and_executes_state_and_checks_packet_type
         assert executed.selected_capability == RIGHT
         assert executed.used_snapshot_id == active.snapshot.snapshot_id
         assert executed.used_memory_ids == ("memory:json-bridge",)
-        assert executed.followed_node_ids == ("node:json-bridge",)
+        assert executed.followed_cell_ids == ("cell:json-bridge",)
 
         bad_port = JsonBridgePort(
             source_token_id=absorbed.token_id, bad_execute_packet_type=True
@@ -393,7 +400,7 @@ def test_json_cell_port_bridge_authors_and_executes_state_and_checks_packet_type
         assert store.activation_count() == 1
 
 
-def test_json_author_registry_scopes_bound_harness_and_legacy_runtime_rejects_it(
+def test_json_author_registry_scopes_bound_cells_and_legacy_runtime_rejects_them(
     tmp_path,
 ) -> None:
     worker_id = "agent:bound-worker"
@@ -421,13 +428,13 @@ def test_json_author_registry_scopes_bound_harness_and_legacy_runtime_rejects_it
             }
         ]
         active = store.active_snapshot()
-        assert active.snapshot.harness is not None
-        assert active.snapshot.harness.nodes[0].executor_agent_id == worker_id
+        assert active.snapshot.cells
+        assert active.snapshot.cells[0].executor_agent_id == worker_id
 
         episode_id = "episode:legacy-cannot-run-bound-worker"
         with pytest.raises(
             SelfModRuntimeError,
-            match="executor-bound harness nodes require their bound agent",
+            match="executor-bound cells require their bound agent",
         ):
             runtime.run_episode(
                 episode_id=episode_id,
@@ -465,7 +472,7 @@ def test_process_restart_removal_and_exact_restore_prove_state_mediation(
     with SQLiteSelfModelStore(path, policy=_policy()) as store:
         runtime = SelfModifyingHSWM(store)
         genesis = store.active_snapshot()
-        first = _run(runtime, "episode:learn", author_harness=True, learn_after=True)
+        first = _run(runtime, "episode:learn", author_cells=True, learn_after=True)
         learned = store.active_snapshot()
         assert first.activation is not None
 
@@ -489,16 +496,16 @@ def test_process_restart_removal_and_exact_restore_prove_state_mediation(
             agent_id = {AGENT_ID!r}
 
             def decide(self, request):
-                harness = request.active.snapshot.harness
-                if harness is None:
+                cells = request.active.snapshot.cells
+                if not cells:
                     return AgentDecision(LEFT, {{"selected": LEFT}})
-                nodes = {{node.node_id: node for node in harness.nodes}}
-                node = nodes[harness.entry_node_id]
+                cell_by_id = {{cell.cell_id: cell for cell in cells}}
+                cell = cell_by_id[request.active.snapshot.entry_cell_id]
                 return AgentDecision(
-                    node.capability,
-                    {{"selected": node.capability}},
-                    used_memory_ids=node.memory_ids,
-                    followed_node_ids=(node.node_id,),
+                    cell.capability,
+                    {{"selected": cell.capability}},
+                    used_memory_ids=cell.memory_ids,
+                    followed_cell_ids=(cell.cell_id,),
                 )
 
             def author(self, request):
@@ -602,15 +609,11 @@ def test_failed_mutation_and_stale_writers_leave_the_active_pointer_atomic(
         first.append_tokens((token,))
         base = first.active_snapshot()
 
-        unauthorized_harness = make_harness(
-            purpose="This proposal must fail closed.",
-            entry_node_id="node:forbidden",
-            nodes=(
-                HarnessNode(
-                    node_id="node:forbidden",
-                    capability="capability:not-authorized",
-                    instruction="Attempt an unauthorized route.",
-                ),
+        unauthorized_cells = (
+            CellRecord(
+                cell_id="cell:forbidden",
+                capability="capability:not-authorized",
+                instruction="Attempt an unauthorized route.",
             ),
         )
         unauthorized = make_mutation(
@@ -618,8 +621,9 @@ def test_failed_mutation_and_stale_writers_leave_the_active_pointer_atomic(
             expected_generation=base.generation,
             author_id=AGENT_ID,
             source_token_ids=(token.token_id,),
-            harness_mode=HarnessMode.REPLACE,
-            harness=unauthorized_harness,
+            cell_topology_mode=CellTopologyMode.REPLACE,
+            cells=unauthorized_cells,
+            entry_cell_id="cell:forbidden",
             rationale="Exercise the fixed authority boundary.",
         )
         with pytest.raises(SelfModelContractError, match="unauthorized"):
@@ -633,15 +637,11 @@ def test_failed_mutation_and_stale_writers_leave_the_active_pointer_atomic(
         active_after_winner = first.active_snapshot()
         assert winner.active_snapshot_id == active_after_winner.snapshot.snapshot_id
 
-        losing_harness = make_harness(
-            purpose="Competing stale route.",
-            entry_node_id="node:route-left",
-            nodes=(
-                HarnessNode(
-                    node_id="node:route-left",
-                    capability=LEFT,
-                    instruction="A stale writer tries to select left.",
-                ),
+        losing_cells = (
+            CellRecord(
+                cell_id="cell:route-left",
+                capability=LEFT,
+                instruction="A stale writer tries to select left.",
             ),
         )
         losing = make_mutation(
@@ -649,8 +649,9 @@ def test_failed_mutation_and_stale_writers_leave_the_active_pointer_atomic(
             expected_generation=base.generation,
             author_id="agent:competing-writer",
             source_token_ids=(token.token_id,),
-            harness_mode=HarnessMode.REPLACE,
-            harness=losing_harness,
+            cell_topology_mode=CellTopologyMode.REPLACE,
+            cells=losing_cells,
+            entry_cell_id="cell:route-left",
             rationale="Lose the active-generation CAS.",
         )
         with pytest.raises(StaleGenerationError, match="active-state CAS"):
@@ -769,38 +770,33 @@ def test_mutation_requires_every_cited_source_token_to_exist(tmp_path) -> None:
         assert store.snapshot_count() == 1
 
 
-def test_harness_rejects_missing_references_but_permits_recurrent_cycles(
+def test_cell_topology_rejects_missing_references_but_permits_recurrent_cycles(
     tmp_path,
 ) -> None:
-    with pytest.raises(SelfModelContractError, match="unknown node"):
-        make_harness(
-            purpose="Dangling topology must fail.",
-            entry_node_id="node:only",
-            nodes=(
-                HarnessNode(
-                    node_id="node:only",
+    with pytest.raises(SelfModelContractError, match="cell edge targets missing state"):
+        make_snapshot(
+            cells=(
+                CellRecord(
+                    cell_id="cell:only",
                     capability=LEFT,
                     instruction="Attempt to leave the known graph.",
-                    next_node_ids=("node:missing",),
+                    next_cell_ids=("cell:missing",),
                 ),
             ),
+            entry_cell_id="cell:only",
         )
 
-    path = tmp_path / "recurrent-harness.sqlite3"
+    path = tmp_path / "recurrent-cells.sqlite3"
     with SQLiteSelfModelStore(path, policy=_policy()) as store:
         token = _input_token("episode:recurrent")
         store.append_tokens((token,))
         base = store.active_snapshot()
-        missing_memory_harness = make_harness(
-            purpose="A missing memory reference must fail.",
-            entry_node_id="node:missing-memory",
-            nodes=(
-                HarnessNode(
-                    node_id="node:missing-memory",
-                    capability=LEFT,
-                    instruction="Try to use state that does not exist.",
-                    memory_ids=("memory:missing",),
-                ),
+        missing_memory_cells = (
+            CellRecord(
+                cell_id="cell:missing-memory",
+                capability=LEFT,
+                instruction="Try to use state that does not exist.",
+                memory_ids=("memory:missing",),
             ),
         )
         missing_memory = make_mutation(
@@ -808,30 +804,27 @@ def test_harness_rejects_missing_references_but_permits_recurrent_cycles(
             expected_generation=base.generation,
             author_id=AGENT_ID,
             source_token_ids=(token.token_id,),
-            harness_mode=HarnessMode.REPLACE,
-            harness=missing_memory_harness,
+            cell_topology_mode=CellTopologyMode.REPLACE,
+            cells=missing_memory_cells,
+            entry_cell_id="cell:missing-memory",
             rationale="Exercise referential integrity.",
         )
         with pytest.raises(SelfModelContractError, match="missing memory"):
             store.commit(missing_memory)
         assert store.active_snapshot() == base
 
-        recurrent = make_harness(
-            purpose="Permit a bounded execution trace through a recurrent graph.",
-            entry_node_id="node:a",
-            nodes=(
-                HarnessNode(
-                    node_id="node:a",
-                    capability=LEFT,
-                    instruction="Move from A to B.",
-                    next_node_ids=("node:b",),
-                ),
-                HarnessNode(
-                    node_id="node:b",
-                    capability=RIGHT,
-                    instruction="The learned circuit may return from B to A.",
-                    next_node_ids=("node:a",),
-                ),
+        recurrent = (
+            CellRecord(
+                cell_id="cell:a",
+                capability=LEFT,
+                instruction="Move from A to B.",
+                next_cell_ids=("cell:b",),
+            ),
+            CellRecord(
+                cell_id="cell:b",
+                capability=RIGHT,
+                instruction="The learned circuit may return from B to A.",
+                next_cell_ids=("cell:a",),
             ),
         )
         recurrent_proposal = make_mutation(
@@ -839,16 +832,17 @@ def test_harness_rejects_missing_references_but_permits_recurrent_cycles(
             expected_generation=base.generation,
             author_id=AGENT_ID,
             source_token_ids=(token.token_id,),
-            harness_mode=HarnessMode.REPLACE,
-            harness=recurrent,
+            cell_topology_mode=CellTopologyMode.REPLACE,
+            cells=recurrent,
+            entry_cell_id="cell:a",
             rationale="Install a recurrent, rather than dangling, circuit.",
         )
         receipt = store.commit(recurrent_proposal)
         active = store.active_snapshot()
         assert receipt.active_snapshot_id == active.snapshot.snapshot_id
-        assert active.snapshot.harness == recurrent
-        assert active.snapshot.harness.nodes[0].next_node_ids == ("node:b",)
-        assert active.snapshot.harness.nodes[1].next_node_ids == ("node:a",)
+        assert active.snapshot.cells == recurrent
+        assert active.snapshot.cells[0].next_cell_ids == ("cell:b",)
+        assert active.snapshot.cells[1].next_cell_ids == ("cell:a",)
 
 
 def test_noop_mutation_is_rejected_without_creating_state(tmp_path) -> None:
@@ -872,7 +866,7 @@ def test_noop_mutation_is_rejected_without_creating_state(tmp_path) -> None:
         assert store.snapshot_count() == 1
 
 
-def test_agent_authored_delete_and_harness_clear_return_to_empty_content(
+def test_agent_authored_delete_and_cell_clear_return_to_empty_content(
     tmp_path,
 ) -> None:
     path = tmp_path / "delete-and-clear.sqlite3"
@@ -887,7 +881,7 @@ def test_agent_authored_delete_and_harness_clear_return_to_empty_content(
         learned = store.active_snapshot()
         assert learned.snapshot.snapshot_id != genesis.snapshot.snapshot_id
         assert learned.snapshot.memories
-        assert learned.snapshot.harness is not None
+        assert learned.snapshot.cells
 
         clear_source = _input_token("episode:agent-clear")
         store.append_tokens((clear_source,))
@@ -899,8 +893,8 @@ def test_agent_authored_delete_and_harness_clear_return_to_empty_content(
             delete_memory_ids=tuple(
                 memory.memory_id for memory in learned.snapshot.memories
             ),
-            harness_mode=HarnessMode.CLEAR,
-            rationale="The agent deletes its memory and clears its future harness.",
+            cell_topology_mode=CellTopologyMode.CLEAR,
+            rationale="The agent deletes its memory and clears its future cells.",
         )
         receipt = store.commit(clear)
         emptied = store.active_snapshot()
@@ -960,11 +954,11 @@ def test_mutated_token_and_proposal_payloads_are_rejected_before_persistence(
         assert store.snapshot_count() == 1
 
 
-def test_mapping_parsers_reject_wrong_union_and_list_shapes() -> None:
+def test_mapping_parsers_reject_wrong_cell_and_list_shapes() -> None:
     empty = make_snapshot()
     bad_snapshot = empty.canonical()
-    bad_snapshot["harness"] = "silently-droppable-string"
-    with pytest.raises(SelfModelContractError, match="harness"):
+    bad_snapshot["cells"] = "silently-droppable-string"
+    with pytest.raises(SelfModelContractError, match="cells"):
         snapshot_from_mapping(bad_snapshot)
 
     mutation = make_mutation(
@@ -975,8 +969,8 @@ def test_mapping_parsers_reject_wrong_union_and_list_shapes() -> None:
         rationale="Parser shape fixture.",
     )
     bad_mutation = mutation.canonical()
-    bad_mutation["harness"] = "silently-droppable-string"
-    with pytest.raises(SelfModelContractError, match="harness"):
+    bad_mutation["cells"] = "silently-droppable-string"
+    with pytest.raises(SelfModelContractError, match="cells"):
         mutation_from_mapping(bad_mutation)
 
     memory = MemoryRecord(

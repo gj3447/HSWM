@@ -10,8 +10,8 @@ from typing import Any, Iterable, Mapping, Sequence
 
 
 TOKEN_SCHEMA_VERSION = "hswm-selfmod-token/v1"
-SNAPSHOT_SCHEMA_VERSION = "hswm-selfmod-snapshot/v1"
-MUTATION_SCHEMA_VERSION = "hswm-selfmod-mutation/v1"
+SNAPSHOT_SCHEMA_VERSION = "hswm-selfmod-snapshot/v2"
+MUTATION_SCHEMA_VERSION = "hswm-selfmod-mutation/v2"
 ACTIVATION_SCHEMA_VERSION = "hswm-selfmod-activation/v1"
 
 
@@ -217,16 +217,23 @@ def memory_from_mapping(value: Mapping[str, Any]) -> MemoryRecord:
 
 
 @dataclass(frozen=True, slots=True)
-class HarnessNode:
-    node_id: str
+class CellRecord:
+    """One persistent cell in the HSWM structure.
+
+    Cells, memory references, and ``next_cell_ids`` are state.  A runtime may
+    project them into an execution plan, but no separate plan document is
+    stored or authored.
+    """
+
+    cell_id: str
     capability: str
     instruction: str
     memory_ids: tuple[str, ...] = ()
-    next_node_ids: tuple[str, ...] = ()
+    next_cell_ids: tuple[str, ...] = ()
     executor_agent_id: str | None = None
 
     def __post_init__(self) -> None:
-        _text(self.node_id, "node_id")
+        _text(self.cell_id, "cell_id")
         _text(self.capability, "capability")
         _text(self.instruction, "instruction")
         if self.executor_agent_id is not None:
@@ -235,123 +242,51 @@ class HarnessNode:
             self, "memory_ids", _texts(self.memory_ids, "memory_ids")
         )
         object.__setattr__(
-            self, "next_node_ids", _texts(self.next_node_ids, "next_node_ids")
+            self, "next_cell_ids", _texts(self.next_cell_ids, "next_cell_ids")
         )
 
     def canonical(self) -> dict[str, Any]:
-        value = {
-            "node_id": self.node_id,
+        return {
+            "cell_id": self.cell_id,
             "capability": self.capability,
             "instruction": self.instruction,
             "memory_ids": list(self.memory_ids),
-            "next_node_ids": list(self.next_node_ids),
+            "next_cell_ids": list(self.next_cell_ids),
+            "executor_agent_id": self.executor_agent_id,
         }
-        # Omit the new field for legacy single-agent nodes so their canonical
-        # bytes and content-addressed identities remain exactly stable.
-        if self.executor_agent_id is not None:
-            value["executor_agent_id"] = self.executor_agent_id
-        return value
 
 
-def _node_from_mapping(value: Mapping[str, Any]) -> HarnessNode:
+def cell_from_mapping(value: Mapping[str, Any]) -> CellRecord:
     if not isinstance(value, Mapping):
-        raise SelfModelContractError("harness node must be an object")
-    legacy_fields = {
-        "node_id",
-        "capability",
-        "instruction",
-        "memory_ids",
-        "next_node_ids",
-    }
-    if set(value) not in (legacy_fields, legacy_fields | {"executor_agent_id"}):
-        raise SelfModelContractError("harness node field set is invalid")
-    return HarnessNode(
-        node_id=value["node_id"],
+        raise SelfModelContractError("cell must be an object")
+    _field_set(
+        value,
+        {
+            "cell_id",
+            "capability",
+            "instruction",
+            "memory_ids",
+            "next_cell_ids",
+            "executor_agent_id",
+        },
+        "cell",
+    )
+    return CellRecord(
+        cell_id=value["cell_id"],
         capability=value["capability"],
         instruction=value["instruction"],
         memory_ids=tuple(_array(value["memory_ids"], "memory_ids")),
-        next_node_ids=tuple(_array(value["next_node_ids"], "next_node_ids")),
-        executor_agent_id=value.get("executor_agent_id"),
+        next_cell_ids=tuple(_array(value["next_cell_ids"], "next_cell_ids")),
+        executor_agent_id=value["executor_agent_id"],
     )
-
-
-@dataclass(frozen=True, slots=True)
-class HarnessDocument:
-    harness_id: str
-    purpose: str
-    entry_node_id: str
-    nodes: tuple[HarnessNode, ...]
-
-    def __post_init__(self) -> None:
-        _text(self.harness_id, "harness_id")
-        _text(self.purpose, "purpose")
-        _text(self.entry_node_id, "entry_node_id")
-        if not self.nodes:
-            raise SelfModelContractError("harness requires at least one node")
-        ordered = tuple(sorted(self.nodes, key=lambda node: node.node_id))
-        if len(ordered) != len({node.node_id for node in ordered}):
-            raise SelfModelContractError("harness node ids must be unique")
-        object.__setattr__(self, "nodes", ordered)
-        node_ids = {node.node_id for node in ordered}
-        if self.entry_node_id not in node_ids:
-            raise SelfModelContractError("harness entry node is missing")
-        for node in ordered:
-            if not set(node.next_node_ids) <= node_ids:
-                raise SelfModelContractError("harness edge targets an unknown node")
-        if canonical_sha256(self.unsigned()) != self.harness_id:
-            raise SelfModelContractError("harness id digest mismatch")
-
-    def unsigned(self) -> dict[str, Any]:
-        return {
-            "purpose": self.purpose,
-            "entry_node_id": self.entry_node_id,
-            "nodes": [node.canonical() for node in self.nodes],
-        }
-
-    def canonical(self) -> dict[str, Any]:
-        return {**self.unsigned(), "harness_id": self.harness_id}
-
-
-def make_harness(
-    *, purpose: str, entry_node_id: str, nodes: Sequence[HarnessNode]
-) -> HarnessDocument:
-    ordered = tuple(sorted(nodes, key=lambda node: node.node_id))
-    unsigned = {
-        "purpose": purpose,
-        "entry_node_id": entry_node_id,
-        "nodes": [node.canonical() for node in ordered],
-    }
-    return HarnessDocument(
-        harness_id=canonical_sha256(unsigned),
-        purpose=purpose,
-        entry_node_id=entry_node_id,
-        nodes=ordered,
-    )
-
-
-def harness_from_mapping(value: Mapping[str, Any]) -> HarnessDocument:
-    if not isinstance(value, Mapping):
-        raise SelfModelContractError("harness must be an object")
-    allowed = {"purpose", "entry_node_id", "nodes", "harness_id"}
-    if set(value) not in (allowed, allowed - {"harness_id"}):
-        raise SelfModelContractError("harness field set is invalid")
-    harness = make_harness(
-        purpose=value["purpose"],
-        entry_node_id=value["entry_node_id"],
-        nodes=tuple(
-            _node_from_mapping(node) for node in _array(value["nodes"], "nodes")
-        ),
-    )
-    if "harness_id" in value and value["harness_id"] != harness.harness_id:
-        raise SelfModelContractError("stored harness id mismatch")
-    return harness
 
 
 @dataclass(frozen=True, slots=True)
 class SelfModelSnapshot:
     snapshot_id: str
     memories: tuple[MemoryRecord, ...] = ()
-    harness: HarnessDocument | None = None
+    cells: tuple[CellRecord, ...] = ()
+    entry_cell_id: str | None = None
     schema_version: str = SNAPSHOT_SCHEMA_VERSION
 
     def __post_init__(self) -> None:
@@ -362,6 +297,28 @@ class SelfModelSnapshot:
         if len(ordered) != len({memory.memory_id for memory in ordered}):
             raise SelfModelContractError("snapshot memory ids must be unique")
         object.__setattr__(self, "memories", ordered)
+        memory_ids = {memory.memory_id for memory in ordered}
+        for memory in ordered:
+            if not set(memory.related_memory_ids) <= memory_ids:
+                raise SelfModelContractError("memory relation targets missing state")
+        cells = tuple(sorted(self.cells, key=lambda cell: cell.cell_id))
+        if len(cells) != len({cell.cell_id for cell in cells}):
+            raise SelfModelContractError("snapshot cell ids must be unique")
+        object.__setattr__(self, "cells", cells)
+        if bool(cells) != (self.entry_cell_id is not None):
+            raise SelfModelContractError(
+                "cell topology and entry_cell_id must be present together"
+            )
+        if self.entry_cell_id is not None:
+            _text(self.entry_cell_id, "entry_cell_id")
+        cell_ids = {cell.cell_id for cell in cells}
+        if self.entry_cell_id is not None and self.entry_cell_id not in cell_ids:
+            raise SelfModelContractError("entry cell is missing from state")
+        for cell in cells:
+            if not set(cell.next_cell_ids) <= cell_ids:
+                raise SelfModelContractError("cell edge targets missing state")
+            if not set(cell.memory_ids) <= memory_ids:
+                raise SelfModelContractError("cell references missing memory")
         if canonical_sha256(self.unsigned()) != self.snapshot_id:
             raise SelfModelContractError("snapshot id digest mismatch")
 
@@ -369,7 +326,8 @@ class SelfModelSnapshot:
         return {
             "schema_version": self.schema_version,
             "memories": [memory.canonical() for memory in self.memories],
-            "harness": self.harness.canonical() if self.harness is not None else None,
+            "cells": [cell.canonical() for cell in self.cells],
+            "entry_cell_id": self.entry_cell_id,
         }
 
     def canonical(self) -> dict[str, Any]:
@@ -378,38 +336,42 @@ class SelfModelSnapshot:
 
 def make_snapshot(
     memories: Sequence[MemoryRecord] = (),
-    harness: HarnessDocument | None = None,
+    *,
+    cells: Sequence[CellRecord] = (),
+    entry_cell_id: str | None = None,
 ) -> SelfModelSnapshot:
     ordered = tuple(sorted(memories, key=lambda memory: memory.memory_id))
+    ordered_cells = tuple(sorted(cells, key=lambda cell: cell.cell_id))
     unsigned = {
         "schema_version": SNAPSHOT_SCHEMA_VERSION,
         "memories": [memory.canonical() for memory in ordered],
-        "harness": harness.canonical() if harness is not None else None,
+        "cells": [cell.canonical() for cell in ordered_cells],
+        "entry_cell_id": entry_cell_id,
     }
     return SelfModelSnapshot(
-        snapshot_id=canonical_sha256(unsigned), memories=ordered, harness=harness
+        snapshot_id=canonical_sha256(unsigned),
+        memories=ordered,
+        cells=ordered_cells,
+        entry_cell_id=entry_cell_id,
     )
 
 
 def snapshot_from_mapping(value: Mapping[str, Any]) -> SelfModelSnapshot:
     _field_set(
         value,
-        {"schema_version", "snapshot_id", "memories", "harness"},
+        {"schema_version", "snapshot_id", "memories", "cells", "entry_cell_id"},
         "snapshot",
     )
-    harness_value = value["harness"]
-    if harness_value is not None and not isinstance(harness_value, Mapping):
-        raise SelfModelContractError("snapshot harness must be an object or null")
     snapshot = make_snapshot(
         memories=tuple(
             memory_from_mapping(item)
             for item in _array(value["memories"], "memories")
         ),
-        harness=(
-            harness_from_mapping(harness_value)
-            if isinstance(harness_value, Mapping)
-            else None
+        cells=tuple(
+            cell_from_mapping(item)
+            for item in _array(value["cells"], "cells")
         ),
+        entry_cell_id=value["entry_cell_id"],
     )
     if value["schema_version"] != SNAPSHOT_SCHEMA_VERSION:
         raise SelfModelContractError("unsupported snapshot schema")
@@ -423,7 +385,7 @@ class SelfModelPolicy:
     allowed_capabilities: frozenset[str]
     max_token_bytes: int = 262_144
     max_memories: int = 512
-    max_harness_nodes: int = 128
+    max_cells: int = 128
     max_snapshot_bytes: int = 4_194_304
     max_mutation_bytes: int = 1_048_576
 
@@ -438,7 +400,7 @@ class SelfModelPolicy:
         for field in (
             "max_token_bytes",
             "max_memories",
-            "max_harness_nodes",
+            "max_cells",
             "max_snapshot_bytes",
             "max_mutation_bytes",
         ):
@@ -451,7 +413,7 @@ class SelfModelPolicy:
             "allowed_capabilities": sorted(self.allowed_capabilities),
             "max_token_bytes": self.max_token_bytes,
             "max_memories": self.max_memories,
-            "max_harness_nodes": self.max_harness_nodes,
+            "max_cells": self.max_cells,
             "max_snapshot_bytes": self.max_snapshot_bytes,
             "max_mutation_bytes": self.max_mutation_bytes,
         }
@@ -471,7 +433,7 @@ class ActiveSnapshot:
         _nonnegative_int(self.generation, "generation")
 
 
-class HarnessMode(str, Enum):
+class CellTopologyMode(str, Enum):
     KEEP = "KEEP"
     REPLACE = "REPLACE"
     CLEAR = "CLEAR"
@@ -510,8 +472,9 @@ class MutationProposal:
     source_token_ids: tuple[str, ...]
     upsert_memories: tuple[MemoryRecord, ...]
     delete_memory_ids: tuple[str, ...]
-    harness_mode: HarnessMode
-    harness: HarnessDocument | None
+    cell_topology_mode: CellTopologyMode
+    cells: tuple[CellRecord, ...]
+    entry_cell_id: str | None
     rationale: str
     schema_version: str = MUTATION_SCHEMA_VERSION
 
@@ -541,10 +504,30 @@ class MutationProposal:
         )
         if {memory.memory_id for memory in ordered} & set(self.delete_memory_ids):
             raise SelfModelContractError("mutation cannot upsert and delete one memory")
-        if self.harness_mode is HarnessMode.REPLACE and self.harness is None:
-            raise SelfModelContractError("REPLACE requires a harness")
-        if self.harness_mode is not HarnessMode.REPLACE and self.harness is not None:
-            raise SelfModelContractError("KEEP/CLEAR cannot carry a harness")
+        cells = tuple(sorted(self.cells, key=lambda cell: cell.cell_id))
+        if len(cells) != len({cell.cell_id for cell in cells}):
+            raise SelfModelContractError("mutation cell ids must be unique")
+        object.__setattr__(self, "cells", cells)
+        if not isinstance(self.cell_topology_mode, CellTopologyMode):
+            raise SelfModelContractError("cell_topology_mode is invalid")
+        if self.cell_topology_mode is CellTopologyMode.REPLACE:
+            if not cells or self.entry_cell_id is None:
+                raise SelfModelContractError(
+                    "REPLACE requires cells and an entry_cell_id"
+                )
+            _text(self.entry_cell_id, "entry_cell_id")
+            cell_ids = {cell.cell_id for cell in cells}
+            if self.entry_cell_id not in cell_ids:
+                raise SelfModelContractError("mutation entry cell is missing")
+            for cell in cells:
+                if not set(cell.next_cell_ids) <= cell_ids:
+                    raise SelfModelContractError(
+                        "mutation cell edge targets missing state"
+                    )
+        elif cells or self.entry_cell_id is not None:
+            raise SelfModelContractError(
+                "KEEP/CLEAR cannot carry cell topology state"
+            )
         if canonical_sha256(self.unsigned()) != self.mutation_id:
             raise SelfModelContractError("mutation id digest mismatch")
 
@@ -557,8 +540,9 @@ class MutationProposal:
             "source_token_ids": list(self.source_token_ids),
             "upsert_memories": [memory.canonical() for memory in self.upsert_memories],
             "delete_memory_ids": list(self.delete_memory_ids),
-            "harness_mode": self.harness_mode.value,
-            "harness": self.harness.canonical() if self.harness is not None else None,
+            "cell_topology_mode": self.cell_topology_mode.value,
+            "cells": [cell.canonical() for cell in self.cells],
+            "entry_cell_id": self.entry_cell_id,
             "rationale": self.rationale,
         }
 
@@ -574,13 +558,15 @@ def make_mutation(
     source_token_ids: Sequence[str],
     upsert_memories: Sequence[MemoryRecord] = (),
     delete_memory_ids: Sequence[str] = (),
-    harness_mode: HarnessMode = HarnessMode.KEEP,
-    harness: HarnessDocument | None = None,
+    cell_topology_mode: CellTopologyMode = CellTopologyMode.KEEP,
+    cells: Sequence[CellRecord] = (),
+    entry_cell_id: str | None = None,
     rationale: str,
 ) -> MutationProposal:
     source_ids = tuple(sorted(source_token_ids))
     upserts = tuple(sorted(upsert_memories, key=lambda memory: memory.memory_id))
     delete_ids = tuple(sorted(delete_memory_ids))
+    ordered_cells = tuple(sorted(cells, key=lambda cell: cell.cell_id))
     unsigned = {
         "schema_version": MUTATION_SCHEMA_VERSION,
         "base_snapshot_id": base_snapshot_id,
@@ -589,8 +575,9 @@ def make_mutation(
         "source_token_ids": list(source_ids),
         "upsert_memories": [memory.canonical() for memory in upserts],
         "delete_memory_ids": list(delete_ids),
-        "harness_mode": harness_mode.value,
-        "harness": harness.canonical() if harness is not None else None,
+        "cell_topology_mode": cell_topology_mode.value,
+        "cells": [cell.canonical() for cell in ordered_cells],
+        "entry_cell_id": entry_cell_id,
         "rationale": rationale,
     }
     return MutationProposal(
@@ -601,8 +588,9 @@ def make_mutation(
         source_token_ids=source_ids,
         upsert_memories=upserts,
         delete_memory_ids=delete_ids,
-        harness_mode=harness_mode,
-        harness=harness,
+        cell_topology_mode=cell_topology_mode,
+        cells=ordered_cells,
+        entry_cell_id=entry_cell_id,
         rationale=rationale,
     )
 
@@ -619,19 +607,17 @@ def mutation_from_mapping(value: Mapping[str, Any]) -> MutationProposal:
             "source_token_ids",
             "upsert_memories",
             "delete_memory_ids",
-            "harness_mode",
-            "harness",
+            "cell_topology_mode",
+            "cells",
+            "entry_cell_id",
             "rationale",
         },
         "mutation",
     )
     try:
-        mode = HarnessMode(value["harness_mode"])
+        mode = CellTopologyMode(value["cell_topology_mode"])
     except (TypeError, ValueError) as error:
-        raise SelfModelContractError("unknown harness mode") from error
-    harness_value = value["harness"]
-    if harness_value is not None and not isinstance(harness_value, Mapping):
-        raise SelfModelContractError("mutation harness must be an object or null")
+        raise SelfModelContractError("unknown cell topology mode") from error
     proposal = make_mutation(
         base_snapshot_id=value["base_snapshot_id"],
         expected_generation=value["expected_generation"],
@@ -646,12 +632,12 @@ def mutation_from_mapping(value: Mapping[str, Any]) -> MutationProposal:
         delete_memory_ids=tuple(
             _array(value["delete_memory_ids"], "delete_memory_ids")
         ),
-        harness_mode=mode,
-        harness=(
-            harness_from_mapping(harness_value)
-            if isinstance(harness_value, Mapping)
-            else None
+        cell_topology_mode=mode,
+        cells=tuple(
+            cell_from_mapping(item)
+            for item in _array(value["cells"], "cells")
         ),
+        entry_cell_id=value["entry_cell_id"],
         rationale=value["rationale"],
     )
     if value["schema_version"] != MUTATION_SCHEMA_VERSION:
@@ -804,29 +790,29 @@ def apply_mutation(
     for memory in proposal.upsert_memories:
         memories[memory.memory_id] = memory
 
-    if proposal.harness_mode is HarnessMode.KEEP:
-        harness = snapshot.harness
-    elif proposal.harness_mode is HarnessMode.REPLACE:
-        harness = proposal.harness
+    if proposal.cell_topology_mode is CellTopologyMode.KEEP:
+        cells = snapshot.cells
+        entry_cell_id = snapshot.entry_cell_id
+    elif proposal.cell_topology_mode is CellTopologyMode.REPLACE:
+        cells = proposal.cells
+        entry_cell_id = proposal.entry_cell_id
     else:
-        harness = None
+        cells = ()
+        entry_cell_id = None
 
     if len(memories) > policy.max_memories:
         raise SelfModelContractError("snapshot exceeds memory-count budget")
-    memory_ids = set(memories)
-    for memory in memories.values():
-        if not set(memory.related_memory_ids) <= memory_ids:
-            raise SelfModelContractError("memory relation targets missing state")
-    if harness is not None:
-        if len(harness.nodes) > policy.max_harness_nodes:
-            raise SelfModelContractError("harness exceeds node-count budget")
-        for node in harness.nodes:
-            if node.capability not in policy.allowed_capabilities:
-                raise SelfModelContractError("harness requests unauthorized capability")
-            if not set(node.memory_ids) <= memory_ids:
-                raise SelfModelContractError("harness references missing memory")
+    if len(cells) > policy.max_cells:
+        raise SelfModelContractError("snapshot exceeds cell-count budget")
+    for cell in cells:
+        if cell.capability not in policy.allowed_capabilities:
+            raise SelfModelContractError("cell requests unauthorized capability")
 
-    result = make_snapshot(tuple(memories.values()), harness)
+    result = make_snapshot(
+        tuple(memories.values()),
+        cells=cells,
+        entry_cell_id=entry_cell_id,
+    )
     if len(canonical_json_bytes(result.canonical())) > policy.max_snapshot_bytes:
         raise SelfModelContractError("snapshot exceeds byte budget")
     if result.snapshot_id == snapshot.snapshot_id:
@@ -840,9 +826,8 @@ __all__ = [
     "ActivationReceipt",
     "CognitiveToken",
     "ExecutorAuthority",
-    "HarnessDocument",
-    "HarnessMode",
-    "HarnessNode",
+    "CellRecord",
+    "CellTopologyMode",
     "MemoryRecord",
     "MutationProposal",
     "SNAPSHOT_SCHEMA_VERSION",
@@ -854,9 +839,8 @@ __all__ = [
     "apply_mutation",
     "canonical_json_bytes",
     "canonical_sha256",
-    "harness_from_mapping",
+    "cell_from_mapping",
     "make_activation_receipt",
-    "make_harness",
     "make_mutation",
     "make_snapshot",
     "make_token",

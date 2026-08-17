@@ -1,4 +1,4 @@
-"""Durable idempotency journal for multi-agent harness execution.
+"""Durable idempotency journal for structural HSWM execution.
 
 The self-model database remains responsible only for tokens and snapshots.
 This sibling journal reserves an episode before external effects, records each
@@ -20,7 +20,7 @@ from hswm.cells.runtime import InvokeCellEffect, PacketEnvelope
 from .contracts import canonical_json_bytes, canonical_sha256
 
 
-JOURNAL_SCHEMA_VERSION = 1
+JOURNAL_SCHEMA_VERSION = 2
 
 
 class MultiAgentJournalError(RuntimeError):
@@ -72,7 +72,7 @@ class ExecutionRecord:
 class JournalStepRecord:
     episode_id: str
     sequence: int
-    node_id: str
+    cell_id: str
     effect_sha256: str
     status: JournalStepStatus
     attempts: int
@@ -196,7 +196,7 @@ class SQLiteMultiAgentJournal:
                 CREATE TABLE IF NOT EXISTS steps (
                     episode_id TEXT NOT NULL,
                     sequence INTEGER NOT NULL CHECK(sequence > 0),
-                    node_id TEXT NOT NULL,
+                    cell_id TEXT NOT NULL,
                     effect_json BLOB NOT NULL,
                     effect_sha256 TEXT NOT NULL,
                     status TEXT NOT NULL CHECK(status IN (
@@ -304,7 +304,7 @@ class SQLiteMultiAgentJournal:
         return JournalStepRecord(
             episode_id=row["episode_id"],
             sequence=row["sequence"],
-            node_id=row["node_id"],
+            cell_id=row["cell_id"],
             effect_sha256=row["effect_sha256"],
             status=status,
             attempts=row["attempts"],
@@ -318,7 +318,7 @@ class SQLiteMultiAgentJournal:
         *,
         episode_id: str,
         sequence: int,
-        node_id: str,
+        cell_id: str,
         effect: InvokeCellEffect,
     ) -> JournalStepRecord:
         effect_value = _effect_value(effect)
@@ -346,14 +346,14 @@ class SQLiteMultiAgentJournal:
                 connection.execute(
                     """
                     INSERT INTO steps(
-                        episode_id,sequence,node_id,effect_json,effect_sha256,
+                        episode_id,sequence,cell_id,effect_json,effect_sha256,
                         status,attempts
                     ) VALUES(?,?,?,?,?,?,0)
                     """,
                     (
                         episode_id,
                         sequence,
-                        node_id,
+                        cell_id,
                         raw,
                         digest,
                         JournalStepStatus.PENDING.value,
@@ -367,7 +367,7 @@ class SQLiteMultiAgentJournal:
                 return self._step_record(row)
             _decode(bytes(row["effect_json"]), row["effect_sha256"], "step effect")
             if (
-                row["node_id"] != node_id
+                row["cell_id"] != cell_id
                 or row["effect_sha256"] != digest
                 or bytes(row["effect_json"]) != raw
             ):

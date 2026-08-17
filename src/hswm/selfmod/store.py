@@ -25,7 +25,7 @@ from .contracts import (
 )
 
 
-STORE_SCHEMA_VERSION = 1
+STORE_SCHEMA_VERSION = 2
 
 
 class SelfModelStoreError(RuntimeError):

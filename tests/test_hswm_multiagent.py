@@ -14,8 +14,8 @@ from hswm.selfmod import (
     ExecutionBudget,
     ExecutionIntentConflict,
     ExecutorAuthority,
-    HarnessMode,
-    HarnessNode,
+    CellTopologyMode,
+    CellRecord,
     JsonMultiAgentCellPort,
     JournalStepStatus,
     MultiAgentHSWM,
@@ -26,7 +26,6 @@ from hswm.selfmod import (
     SQLiteSelfModelStore,
     SQLiteMultiAgentJournal,
     TokenVisibility,
-    make_harness,
     make_mutation,
     make_token,
     multiagent_receipt_from_mapping,
@@ -53,47 +52,44 @@ def _policy() -> SelfModelPolicy:
     )
 
 
-def _harness():
-    return make_harness(
-        purpose="Fan out private observations and join agent-authored work.",
-        entry_node_id="node:root",
-        nodes=(
-            HarnessNode(
-                node_id="node:root",
-                executor_agent_id=AGENT_A,
-                capability=OBSERVE,
-                instruction="Read A's observation and open two declared branches.",
-                next_node_ids=("node:left", "node:right"),
-            ),
-            HarnessNode(
-                node_id="node:left",
-                executor_agent_id=AGENT_A,
-                capability=BRANCH,
-                instruction="Develop the left branch.",
-                next_node_ids=("node:join",),
-            ),
-            HarnessNode(
-                node_id="node:right",
-                executor_agent_id=AGENT_B,
-                capability=BRANCH,
-                instruction="Combine B's private observation with the handoff.",
-                next_node_ids=("node:join",),
-            ),
-            HarnessNode(
-                node_id="node:join",
-                executor_agent_id=AGENT_B,
-                capability=JOIN,
-                instruction="Join the two predecessor messages.",
-            ),
+def _cells():
+    return (
+        CellRecord(
+            cell_id="cell:root",
+            executor_agent_id=AGENT_A,
+            capability=OBSERVE,
+            instruction="Read A's observation and open two declared branches.",
+            next_cell_ids=("cell:left", "cell:right"),
+        ),
+        CellRecord(
+            cell_id="cell:left",
+            executor_agent_id=AGENT_A,
+            capability=BRANCH,
+            instruction="Develop the left branch.",
+            next_cell_ids=("cell:join",),
+        ),
+        CellRecord(
+            cell_id="cell:right",
+            executor_agent_id=AGENT_B,
+            capability=BRANCH,
+            instruction="Combine B's private observation with the handoff.",
+            next_cell_ids=("cell:join",),
+        ),
+        CellRecord(
+            cell_id="cell:join",
+            executor_agent_id=AGENT_B,
+            capability=JOIN,
+            instruction="Join the two predecessor messages.",
         ),
     )
 
 
-class HarnessAuthor:
+class CellAuthor:
     agent_id = ARCHITECT
 
-    def __init__(self, harness) -> None:
-        self.harness = harness
+    def __init__(self, cells, entry_cell_id) -> None:
+        self.cells = tuple(cells)
+        self.entry_cell_id = entry_cell_id
 
     def decide(self, request):
         raise AssertionError("absorb must not ask the author to execute")
@@ -104,8 +100,9 @@ class HarnessAuthor:
             expected_generation=request.active.generation,
             author_id=self.agent_id,
             source_token_ids=tuple(token.token_id for token in request.tokens),
-            harness_mode=HarnessMode.REPLACE,
-            harness=self.harness,
+            cell_topology_mode=CellTopologyMode.REPLACE,
+            cells=self.cells,
+            entry_cell_id=self.entry_cell_id,
             rationale="Author the executable multi-agent topology from this token.",
         )
 
@@ -126,13 +123,13 @@ class ScriptedPort:
         )
         observed = {
             "agent_id": self.agent_id,
-            "node_id": payload["node"]["node_id"],
+            "cell_id": payload["cell"]["cell_id"],
             "visible_token_ids": [
                 token["token_id"] for token in payload["visible_tokens"]
             ],
             "inbound": [
                 {
-                    "source_node_id": message["source_node_id"],
+                    "source_cell_id": message["source_cell_id"],
                     "sender_agent_id": message["sender_agent_id"],
                     "recipient_agent_id": message["recipient_agent_id"],
                 }
@@ -144,7 +141,7 @@ class ScriptedPort:
             packet_id=f"response:{effect.activation_id}",
             packet_type=effect.expected_output_type,
             payload={"output": observed},
-            provenance={"agent_id": self.agent_id, "node_id": observed["node_id"]},
+            provenance={"agent_id": self.agent_id, "cell_id": observed["cell_id"]},
         )
 
 
@@ -284,7 +281,7 @@ class LargeOutputPort:
             packet_type=effect.expected_output_type,
             payload={
                 "output": {
-                    "node_id": effect.input.payload["node"]["node_id"],
+                    "cell_id": effect.input.payload["cell"]["cell_id"],
                     "value": "x" * self.size,
                 }
             },
@@ -309,7 +306,7 @@ def _json_bridge_effect(payload=None):
     value = (
         {
             "episode_id": "episode:json-bridge",
-            "node": {"node_id": "node:json"},
+            "cell": {"cell_id": "cell:json"},
             "visible_tokens": [],
             "inbound_messages": [],
         }
@@ -345,26 +342,32 @@ def _rehash_episode(receipt):
     receipt["receipt_id"] = canonical_sha256(unsigned)
 
 
-def _author_harness(store: SQLiteSelfModelStore, harness=None) -> None:
-    harness = _harness() if harness is None else harness
+def _author_cells(store: SQLiteSelfModelStore, cells=None) -> None:
+    cells = _cells() if cells is None else tuple(cells)
+    entry_cell_id = cells[0].cell_id
     token = make_token(
-        token_id="token:authored-harness",
-        episode_id="episode:author-harness",
+        token_id="token:authored-cells",
+        episode_id="episode:author-cells",
         position=0,
         role="observation",
-        content={"instruction": "create a multi-agent execution harness"},
+        content={"instruction": "create persistent multi-agent cells and routing"},
         provenance={"source": "scripted-author-fixture"},
     )
     activation = SelfModifyingHSWM(store).absorb(
         (token,),
-        agent=HarnessAuthor(harness),
+        agent=CellAuthor(cells, entry_cell_id),
         agent_registry=(
             ExecutorAuthority(AGENT_A, (OBSERVE, BRANCH)),
             ExecutorAuthority(AGENT_B, (BRANCH, JOIN)),
         ),
     )
     assert activation is not None
-    assert store.active_snapshot().snapshot.harness == harness
+    snapshot = store.active_snapshot().snapshot
+    assert snapshot.cells == tuple(sorted(cells, key=lambda cell: cell.cell_id))
+    assert snapshot.entry_cell_id == entry_cell_id
+    assert "harness" not in snapshot.canonical()
+    assert "plan" not in snapshot.canonical()
+    assert "plan_id" not in snapshot.canonical()
 
 
 def _episode_inputs(episode_id: str):
@@ -448,7 +451,7 @@ def test_agent_authored_dag_invokes_two_ports_with_fan_out_fan_in_and_scopes(
     tmp_path,
 ) -> None:
     with SQLiteSelfModelStore(tmp_path / "multiagent.sqlite3", policy=_policy()) as store:
-        _author_harness(store)
+        _author_cells(store)
         active = store.active_snapshot()
         port_a = ScriptedPort(AGENT_A)
         port_b = ScriptedPort(AGENT_B)
@@ -463,14 +466,16 @@ def test_agent_authored_dag_invokes_two_ports_with_fan_out_fan_in_and_scopes(
 
         assert receipt.used_snapshot_id == active.snapshot.snapshot_id
         assert receipt.used_generation == active.generation
-        assert receipt.harness_id == active.snapshot.harness.harness_id
-        assert receipt.route_node_ids == (
-            "node:root",
-            "node:left",
-            "node:right",
-            "node:join",
+        assert len(receipt.plan_id) == 64
+        assert all(character in "0123456789abcdef" for character in receipt.plan_id)
+        assert "plan_id" not in active.snapshot.canonical()
+        assert receipt.route_cell_ids == (
+            "cell:root",
+            "cell:left",
+            "cell:right",
+            "cell:join",
         )
-        assert receipt.leaf_node_ids == ("node:join",)
+        assert receipt.leaf_cell_ids == ("cell:join",)
         assert receipt.executed_agent_ids == (AGENT_A, AGENT_B)
         assert receipt.budget.step_budget == receipt.usage.steps == 4
         assert len(port_a.calls) == len(port_b.calls) == 2
@@ -492,44 +497,44 @@ def test_agent_authored_dag_invokes_two_ports_with_fan_out_fan_in_and_scopes(
         assert len(receipt.messages) == 4
         message_edges = {
             (
-                message.source_node_id,
-                message.target_node_id,
+                message.source_cell_id,
+                message.target_cell_id,
                 message.sender_agent_id,
                 message.recipient_agent_id,
             )
             for message in receipt.messages
         }
         assert message_edges == {
-            ("node:root", "node:left", AGENT_A, AGENT_A),
-            ("node:root", "node:right", AGENT_A, AGENT_B),
-            ("node:left", "node:join", AGENT_A, AGENT_B),
-            ("node:right", "node:join", AGENT_B, AGENT_B),
+            ("cell:root", "cell:left", AGENT_A, AGENT_A),
+            ("cell:root", "cell:right", AGENT_A, AGENT_B),
+            ("cell:left", "cell:join", AGENT_A, AGENT_B),
+            ("cell:right", "cell:join", AGENT_B, AGENT_B),
         }
         # DIRECT_ONLY is a raw-input audience, not a secrecy label.  A's port
         # may deliberately communicate derived content to B over a typed edge.
         a_to_b = next(
             message
             for message in receipt.messages
-            if message.source_node_id == "node:left"
+            if message.source_cell_id == "cell:left"
         )
         assert private_a_id in a_to_b.payload["visible_token_ids"]
         join_call = next(
-            call for call in port_b.calls if call["node"]["node_id"] == "node:join"
+            call for call in port_b.calls if call["cell"]["cell_id"] == "cell:join"
         )
         assert [
-            message["source_node_id"]
+            message["source_cell_id"]
             for message in join_call["inbound_messages"]
-        ] == ["node:left", "node:right"]
+        ] == ["cell:left", "cell:right"]
         assert store.active_snapshot() == active
 
 
-def test_json_cell_port_runs_openai_shaped_ports_through_the_full_harness(
+def test_json_cell_port_runs_openai_shaped_ports_through_the_full_cell_route(
     tmp_path,
 ) -> None:
     with SQLiteSelfModelStore(
         tmp_path / "multiagent-json.sqlite3", policy=_policy()
     ) as store:
-        _author_harness(store)
+        _author_cells(store)
         raw_a = OpenAIShapedPort(
             '{"output":{"agent":"a","status":"ok"}}'
         )
@@ -563,7 +568,7 @@ def test_json_cell_port_runs_openai_shaped_ports_through_the_full_harness(
             assert request_value["episode_id"] == episode_id
         assert receipt.output_token.content["leaf_outputs"] == [
             {
-                "node_id": "node:join",
+                "cell_id": "cell:join",
                 "agent_id": AGENT_B,
                 "output": {"agent": "b", "status": "ok"},
             }
@@ -647,7 +652,7 @@ def test_aggregate_budget_rejects_the_whole_route_before_any_port_call(
     tmp_path,
 ) -> None:
     with SQLiteSelfModelStore(tmp_path / "budget.sqlite3", policy=_policy()) as store:
-        _author_harness(store)
+        _author_cells(store)
         before_tokens = store.token_count()
         port_a = ScriptedPort(AGENT_A)
         port_b = ScriptedPort(AGENT_B)
@@ -661,11 +666,11 @@ def test_aggregate_budget_rejects_the_whole_route_before_any_port_call(
         assert store.token_count() == before_tokens
 
 
-def test_unauthorized_executor_node_fails_closed_before_dispatch(tmp_path) -> None:
+def test_unauthorized_executor_cell_fails_closed_before_dispatch(tmp_path) -> None:
     with SQLiteSelfModelStore(
         tmp_path / "unauthorized.sqlite3", policy=_policy()
     ) as store:
-        _author_harness(store)
+        _author_cells(store)
         port_a = ScriptedPort(AGENT_A)
         port_b = ScriptedPort(AGENT_B)
         with pytest.raises(MultiAgentRuntimeError, match="unauthorized"):
@@ -687,7 +692,7 @@ def test_exact_execution_and_content_addressed_receipt_are_replay_deterministic(
 ) -> None:
     with SQLiteSelfModelStore(tmp_path / "replay.sqlite3", policy=_policy()) as store:
         genesis = store.active_snapshot()
-        _author_harness(store)
+        _author_cells(store)
         port_a = ScriptedPort(AGENT_A)
         port_b = ScriptedPort(AGENT_B)
         runtime = _runtime(store, port_a, port_b)
@@ -704,7 +709,7 @@ def test_exact_execution_and_content_addressed_receipt_are_replay_deterministic(
             genesis.snapshot.snapshot_id,
             expected_generation=1,
             author_id="evaluator:evolve-after-execution",
-            source_token_ids=("token:authored-harness",),
+            source_token_ids=("token:authored-cells",),
             reason="exercise-pinned-execution-replay",
         )
         replayed = runtime.run_episode(
@@ -728,7 +733,7 @@ def test_mid_run_unknown_outcome_is_durable_and_never_blindly_retried(
     tmp_path,
 ) -> None:
     with SQLiteSelfModelStore(tmp_path / "unknown.sqlite3", policy=_policy()) as store:
-        _author_harness(store)
+        _author_cells(store)
         port_a = ScriptedPort(AGENT_A)
         port_b = FailingAfterDispatchPort()
         runtime = _runtime(store, port_a, port_b)
@@ -762,7 +767,7 @@ def test_mid_run_unknown_outcome_is_durable_and_never_blindly_retried(
 
 def test_safe_before_send_resumes_without_repeating_completed_steps(tmp_path) -> None:
     with SQLiteSelfModelStore(tmp_path / "safe-retry.sqlite3", policy=_policy()) as store:
-        _author_harness(store)
+        _author_cells(store)
         port_a = ScriptedPort(AGENT_A)
         port_b = SafeOncePort(AGENT_B)
         runtime = _runtime(store, port_a, port_b)
@@ -791,7 +796,7 @@ def test_inflight_crash_state_blocks_redispatch_until_reconciliation(tmp_path) -
     journal_path = tmp_path / "crash-journal.sqlite3"
     crashing = CrashAfterClaimJournal(journal_path)
     with SQLiteSelfModelStore(tmp_path / "crash.sqlite3", policy=_policy()) as store:
-        _author_harness(store)
+        _author_cells(store)
         port_a = ScriptedPort(AGENT_A)
         port_b = ScriptedPort(AGENT_B)
         episode_id = "episode:crash-after-claim"
@@ -835,7 +840,7 @@ def test_aggregate_byte_budgets_fail_permanently_without_redispatch(
         tmp_path / f"bytes-{expected_calls}-{budget.context_byte_budget}.sqlite3",
         policy=_policy(),
     ) as store:
-        _author_harness(store)
+        _author_cells(store)
         port_a = ScriptedPort(AGENT_A)
         port_b = ScriptedPort(AGENT_B)
         runtime = _runtime(store, port_a, port_b)
@@ -860,36 +865,32 @@ def test_aggregate_byte_budgets_fail_permanently_without_redispatch(
 def test_aggregate_leaf_token_store_limit_fails_permanently_without_redispatch(
     tmp_path,
 ) -> None:
-    two_leaves = make_harness(
-        purpose="Produce two individually bounded leaf outputs.",
-        entry_node_id="node:root",
-        nodes=(
-            HarnessNode(
-                node_id="node:root",
-                executor_agent_id=AGENT_A,
-                capability=OBSERVE,
-                instruction="Fan out.",
-                next_node_ids=("node:left", "node:right"),
-            ),
-            HarnessNode(
-                node_id="node:left",
-                executor_agent_id=AGENT_A,
-                capability=BRANCH,
-                instruction="Return the left leaf.",
-            ),
-            HarnessNode(
-                node_id="node:right",
-                executor_agent_id=AGENT_B,
-                capability=BRANCH,
-                instruction="Return the right leaf.",
-            ),
+    two_leaves = (
+        CellRecord(
+            cell_id="cell:root",
+            executor_agent_id=AGENT_A,
+            capability=OBSERVE,
+            instruction="Fan out.",
+            next_cell_ids=("cell:left", "cell:right"),
+        ),
+        CellRecord(
+            cell_id="cell:left",
+            executor_agent_id=AGENT_A,
+            capability=BRANCH,
+            instruction="Return the left leaf.",
+        ),
+        CellRecord(
+            cell_id="cell:right",
+            executor_agent_id=AGENT_B,
+            capability=BRANCH,
+            instruction="Return the right leaf.",
         ),
     )
     policy = replace(_policy(), max_token_bytes=5_000)
     with SQLiteSelfModelStore(
         tmp_path / "aggregate-token-limit.sqlite3", policy=policy
     ) as store:
-        _author_harness(store, two_leaves)
+        _author_cells(store, two_leaves)
         port_a = LargeOutputPort(2_800)
         port_b = LargeOutputPort(2_800)
         runtime = _runtime(store, port_a, port_b)
@@ -919,7 +920,7 @@ def test_input_persistence_failure_is_permanent_before_any_dispatch(tmp_path) ->
     with SQLiteSelfModelStore(
         tmp_path / "input-token-limit.sqlite3", policy=policy
     ) as store:
-        _author_harness(store)
+        _author_cells(store)
         port_a = ScriptedPort(AGENT_A)
         port_b = ScriptedPort(AGENT_B)
         runtime = _runtime(store, port_a, port_b)
@@ -954,7 +955,7 @@ def test_input_persistence_failure_is_permanent_before_any_dispatch(tmp_path) ->
 
 def test_port_cannot_mutate_caller_token_even_when_it_raises(tmp_path) -> None:
     with SQLiteSelfModelStore(tmp_path / "mutation.sqlite3", policy=_policy()) as store:
-        _author_harness(store)
+        _author_cells(store)
         episode_id = "episode:mutation"
         inputs = _episode_inputs(episode_id)
         before = tuple(scoped.token.canonical() for scoped in inputs)
@@ -973,7 +974,7 @@ def test_port_cannot_redigest_a_mutated_detached_request(tmp_path) -> None:
     with SQLiteSelfModelStore(
         tmp_path / "redigest-mutation.sqlite3", policy=_policy()
     ) as store:
-        _author_harness(store)
+        _author_cells(store)
         episode_id = "episode:redigest-mutation"
         inputs = _episode_inputs(episode_id)
         before = tuple(scoped.token.canonical() for scoped in inputs)
@@ -1000,7 +1001,7 @@ def test_malformed_output_provenance_fails_closed(tmp_path) -> None:
     with SQLiteSelfModelStore(
         tmp_path / "malformed-provenance.sqlite3", policy=_policy()
     ) as store:
-        _author_harness(store)
+        _author_cells(store)
         runtime = _runtime(
             store,
             MalformedProvenancePort(AGENT_A),
@@ -1021,7 +1022,7 @@ def test_duplicate_output_packet_id_fails_permanently_without_redispatch(
     with SQLiteSelfModelStore(
         tmp_path / "duplicate-output-id.sqlite3", policy=_policy()
     ) as store:
-        _author_harness(store)
+        _author_cells(store)
         port_a = DuplicatePacketIdPort(AGENT_A)
         port_b = DuplicatePacketIdPort(AGENT_B)
         runtime = _runtime(store, port_a, port_b)
@@ -1049,7 +1050,7 @@ def test_duplicate_output_packet_id_fails_permanently_without_redispatch(
 
 def test_deployment_revision_is_part_of_execution_identity(tmp_path) -> None:
     with SQLiteSelfModelStore(tmp_path / "deployment.sqlite3", policy=_policy()) as store:
-        _author_harness(store)
+        _author_cells(store)
         episode_id = "episode:deployment"
         inputs = _episode_inputs(episode_id)
         first_a = ScriptedPort(AGENT_A)
@@ -1079,7 +1080,7 @@ def test_receipt_parser_rejects_backward_edges_scope_leaks_and_fake_output(
     tmp_path,
 ) -> None:
     with SQLiteSelfModelStore(tmp_path / "receipt-teeth.sqlite3", policy=_policy()) as store:
-        _author_harness(store)
+        _author_cells(store)
         episode_id = "episode:receipt-teeth"
         receipt = _runtime(
             store, ScriptedPort(AGENT_A), ScriptedPort(AGENT_B)
@@ -1090,22 +1091,22 @@ def test_receipt_parser_rejects_backward_edges_scope_leaks_and_fake_output(
         )
 
     backward = deepcopy(receipt.canonical())
-    steps = {step["node_id"]: step for step in backward["step_receipts"]}
+    steps = {step["cell_id"]: step for step in backward["step_receipts"]}
     message = next(
         item
         for item in backward["messages"]
-        if item["source_node_id"] == "node:root"
-        and item["target_node_id"] == "node:left"
+        if item["source_cell_id"] == "cell:root"
+        and item["target_cell_id"] == "cell:left"
     )
     old_id = message["message_id"]
-    message["source_node_id"] = "node:right"
+    message["source_cell_id"] = "cell:right"
     message["sender_agent_id"] = AGENT_B
-    message["payload"] = deepcopy(steps["node:right"]["output"])
+    message["payload"] = deepcopy(steps["cell:right"]["output"])
     _rehash_message(message)
     new_id = message["message_id"]
-    steps["node:root"]["outbound_message_ids"].remove(old_id)
-    steps["node:right"]["outbound_message_ids"].append(new_id)
-    steps["node:left"]["inbound_message_ids"] = [new_id]
+    steps["cell:root"]["outbound_message_ids"].remove(old_id)
+    steps["cell:right"]["outbound_message_ids"].append(new_id)
+    steps["cell:left"]["inbound_message_ids"] = [new_id]
     message_by_id = {item["message_id"]: item for item in backward["messages"]}
     for step in steps.values():
         step["message_bytes"] = sum(
@@ -1168,28 +1169,24 @@ def test_receipt_parser_rejects_backward_edges_scope_leaks_and_fake_output(
 def test_multiagent_execution_rejects_a_reachable_cycle_before_dispatch(
     tmp_path,
 ) -> None:
-    recurrent = make_harness(
-        purpose="The single-agent engine may bound this; the DAG engine cannot.",
-        entry_node_id="node:a",
-        nodes=(
-            HarnessNode(
-                node_id="node:a",
-                executor_agent_id=AGENT_A,
-                capability=OBSERVE,
-                instruction="Go to B.",
-                next_node_ids=("node:b",),
-            ),
-            HarnessNode(
-                node_id="node:b",
-                executor_agent_id=AGENT_B,
-                capability=BRANCH,
-                instruction="Return to A.",
-                next_node_ids=("node:a",),
-            ),
+    recurrent = (
+        CellRecord(
+            cell_id="cell:a",
+            executor_agent_id=AGENT_A,
+            capability=OBSERVE,
+            instruction="Go to B.",
+            next_cell_ids=("cell:b",),
+        ),
+        CellRecord(
+            cell_id="cell:b",
+            executor_agent_id=AGENT_B,
+            capability=BRANCH,
+            instruction="Return to A.",
+            next_cell_ids=("cell:a",),
         ),
     )
     with SQLiteSelfModelStore(tmp_path / "cycle.sqlite3", policy=_policy()) as store:
-        _author_harness(store, recurrent)
+        _author_cells(store, recurrent)
         port_a = ScriptedPort(AGENT_A)
         port_b = ScriptedPort(AGENT_B)
         with pytest.raises(MultiAgentRuntimeError, match="acyclic"):

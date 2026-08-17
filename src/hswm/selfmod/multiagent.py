@@ -1,9 +1,11 @@
-"""Deterministic execution of an agent-authored HSWM harness DAG.
+"""Deterministic execution of the persistent HSWM cell topology.
 
-The self-modification contracts persist what an agent chose to remember and
-which harness it authored.  This module is the narrow execution bridge: a
-frozen harness node is bound to a logical agent, the matching ``CellPort`` is
-actually invoked, and typed messages carry outputs across declared edges.
+The self-modification contracts persist memories, relations, cells, and their
+routing edges as the HSWM itself.  This module projects that frozen structural
+state into an ephemeral deterministic execution plan, binds each cell to a
+logical agent, invokes the matching ``CellPort``, and carries typed messages
+across declared edges.  The plan is execution evidence, never authored or
+persisted as part of the HSWM snapshot.
 
 It intentionally does not claim that several calls improve task quality.  It
 provides auditable mechanics with which that causal claim can be tested.
@@ -21,9 +23,8 @@ from hswm.cells.runtime import CellPort, InvokeCellEffect, PacketEnvelope, make_
 
 from .contracts import (
     ActiveSnapshot,
+    CellRecord,
     CognitiveToken,
-    HarnessDocument,
-    HarnessNode,
     MemoryRecord,
     SelfModelSnapshot,
     canonical_json_bytes,
@@ -40,18 +41,18 @@ from .multiagent_journal import (
 from .store import SQLiteSelfModelStore, SelfModelStoreError
 
 
-MULTIAGENT_EXECUTION_SCHEMA_VERSION = "hswm-multiagent-execution/v1"
-MULTIAGENT_MESSAGE_SCHEMA_VERSION = "hswm-multiagent-message/v1"
-MULTIAGENT_STEP_SCHEMA_VERSION = "hswm-multiagent-step/v1"
-MULTIAGENT_STEP_REQUEST_TYPE = "hswm-multiagent-step-request/v1"
-MULTIAGENT_STEP_RESPONSE_TYPE = "hswm-multiagent-step-response/v1"
-MULTIAGENT_JSON_REQUEST_TYPE = "hswm-multiagent-json-request/v1"
-MULTIAGENT_JSON_RESPONSE_TYPE = "hswm-multiagent-json-response/v1"
-MULTIAGENT_JSON_ADAPTER_VERSION = "hswm-multiagent-json-adapter/v1"
+MULTIAGENT_EXECUTION_SCHEMA_VERSION = "hswm-multiagent-execution/v2"
+MULTIAGENT_MESSAGE_SCHEMA_VERSION = "hswm-multiagent-message/v2"
+MULTIAGENT_STEP_SCHEMA_VERSION = "hswm-multiagent-step/v2"
+MULTIAGENT_STEP_REQUEST_TYPE = "hswm-multiagent-step-request/v2"
+MULTIAGENT_STEP_RESPONSE_TYPE = "hswm-multiagent-step-response/v2"
+MULTIAGENT_JSON_REQUEST_TYPE = "hswm-multiagent-json-request/v2"
+MULTIAGENT_JSON_RESPONSE_TYPE = "hswm-multiagent-json-response/v2"
+MULTIAGENT_JSON_ADAPTER_VERSION = "hswm-multiagent-json-adapter/v2"
 
 
 class MultiAgentRuntimeError(RuntimeError):
-    """A harness cannot cross the fixed multi-agent execution boundary."""
+    """Structural HSWM execution crossed a fixed runtime boundary."""
 
 
 def _text(value: object, label: str) -> str:
@@ -186,7 +187,7 @@ class ScopedToken:
 
     ``DIRECT_ONLY`` prevents the raw token from being supplied to other agent
     ports.  It is deliberately not an information-flow secrecy claim: an
-    authorized owner may communicate derived output over a harness edge.
+    authorized owner may communicate derived output over a cell edge.
     """
 
     token: CognitiveToken
@@ -365,7 +366,7 @@ def _is_sha256(value: object) -> bool:
 
 
 class JsonMultiAgentCellPort:
-    """Bridge structured harness steps through a text-generating ``CellPort``.
+    """Bridge structured HSWM cell steps through a text ``CellPort``.
 
     ``OpenAICompatibleCellPort`` consumes chat messages and returns a packet with
     text plus model/usage metadata.  ``MultiAgentHSWM`` instead consumes and
@@ -424,7 +425,7 @@ class JsonMultiAgentCellPort:
                     {
                         "role": "system",
                         "content": (
-                            "Execute the frozen HSWM harness node described by the "
+                            "Execute the frozen HSWM structural cell described by the "
                             "user JSON. Use only its visible tokens, memories, and "
                             "inbound messages. Return exactly one JSON object with "
                             "the single key output. Do not use markdown."
@@ -545,9 +546,9 @@ class JsonMultiAgentCellPort:
 class AgentMessage:
     message_id: str
     episode_id: str
-    harness_id: str
-    source_node_id: str
-    target_node_id: str
+    plan_id: str
+    source_cell_id: str
+    target_cell_id: str
     sender_agent_id: str
     recipient_agent_id: str
     payload: Any
@@ -558,14 +559,20 @@ class AgentMessage:
         for field in (
             "message_id",
             "episode_id",
-            "harness_id",
-            "source_node_id",
-            "target_node_id",
+            "plan_id",
+            "source_cell_id",
+            "target_cell_id",
             "sender_agent_id",
             "recipient_agent_id",
             "payload_sha256",
         ):
             _text(getattr(self, field), field)
+        if not _is_sha256(self.message_id) or not _is_sha256(self.plan_id):
+            raise MultiAgentRuntimeError(
+                "message_id and plan_id must be canonical sha256 values"
+            )
+        if not _is_sha256(self.payload_sha256):
+            raise MultiAgentRuntimeError("payload_sha256 must be a canonical sha256")
         if self.schema_version != MULTIAGENT_MESSAGE_SCHEMA_VERSION:
             raise MultiAgentRuntimeError("unsupported message schema")
         if canonical_sha256(self.payload) != self.payload_sha256:
@@ -577,9 +584,9 @@ class AgentMessage:
         return {
             "schema_version": self.schema_version,
             "episode_id": self.episode_id,
-            "harness_id": self.harness_id,
-            "source_node_id": self.source_node_id,
-            "target_node_id": self.target_node_id,
+            "plan_id": self.plan_id,
+            "source_cell_id": self.source_cell_id,
+            "target_cell_id": self.target_cell_id,
             "sender_agent_id": self.sender_agent_id,
             "recipient_agent_id": self.recipient_agent_id,
             "payload": self.payload,
@@ -593,9 +600,9 @@ class AgentMessage:
 def _make_message(
     *,
     episode_id: str,
-    harness_id: str,
-    source_node_id: str,
-    target_node_id: str,
+    plan_id: str,
+    source_cell_id: str,
+    target_cell_id: str,
     sender_agent_id: str,
     recipient_agent_id: str,
     payload: Any,
@@ -604,9 +611,9 @@ def _make_message(
     unsigned = {
         "schema_version": MULTIAGENT_MESSAGE_SCHEMA_VERSION,
         "episode_id": episode_id,
-        "harness_id": harness_id,
-        "source_node_id": source_node_id,
-        "target_node_id": target_node_id,
+        "plan_id": plan_id,
+        "source_cell_id": source_cell_id,
+        "target_cell_id": target_cell_id,
         "sender_agent_id": sender_agent_id,
         "recipient_agent_id": recipient_agent_id,
         "payload": payload,
@@ -616,10 +623,10 @@ def _make_message(
 
 
 @dataclass(frozen=True, slots=True)
-class NodeStepReceipt:
+class CellStepReceipt:
     receipt_id: str
     sequence: int
-    node_id: str
+    cell_id: str
     agent_id: str
     capability: str
     input_packet_id: str
@@ -646,7 +653,7 @@ class NodeStepReceipt:
             raise MultiAgentRuntimeError("step sequence must be positive")
         for field in (
             "receipt_id",
-            "node_id",
+            "cell_id",
             "agent_id",
             "capability",
             "input_packet_id",
@@ -656,6 +663,8 @@ class NodeStepReceipt:
             "output_provenance_sha256",
         ):
             _text(getattr(self, field), field)
+        if not _is_sha256(self.receipt_id):
+            raise MultiAgentRuntimeError("receipt_id must be a canonical sha256")
         for field in (
             "input_payload_sha256",
             "output_payload_sha256",
@@ -693,7 +702,7 @@ class NodeStepReceipt:
         return {
             "schema_version": self.schema_version,
             "sequence": self.sequence,
-            "node_id": self.node_id,
+            "cell_id": self.cell_id,
             "agent_id": self.agent_id,
             "capability": self.capability,
             "input_packet_id": self.input_packet_id,
@@ -715,9 +724,9 @@ class NodeStepReceipt:
         return {**self.unsigned(), "receipt_id": self.receipt_id}
 
 
-def _make_step_receipt(**fields: Any) -> NodeStepReceipt:
+def _make_step_receipt(**fields: Any) -> CellStepReceipt:
     unsigned = {"schema_version": MULTIAGENT_STEP_SCHEMA_VERSION, **fields}
-    return NodeStepReceipt(receipt_id=canonical_sha256(unsigned), **unsigned)
+    return CellStepReceipt(receipt_id=canonical_sha256(unsigned), **unsigned)
 
 
 @dataclass(frozen=True, slots=True)
@@ -726,16 +735,16 @@ class MultiAgentEpisodeReceipt:
     episode_id: str
     used_snapshot_id: str
     used_generation: int
-    harness_id: str
+    plan_id: str
     agent_registry: tuple[AgentDeploymentRecord, ...]
     agent_registry_sha256: str
     input_token_ids: tuple[str, ...]
     input_scopes: tuple[InputScopeManifest, ...]
     input_scope_sha256: str
-    route_node_ids: tuple[str, ...]
-    leaf_node_ids: tuple[str, ...]
+    route_cell_ids: tuple[str, ...]
+    leaf_cell_ids: tuple[str, ...]
     executed_agent_ids: tuple[str, ...]
-    step_receipts: tuple[NodeStepReceipt, ...]
+    step_receipts: tuple[CellStepReceipt, ...]
     messages: tuple[AgentMessage, ...]
     output_token: CognitiveToken
     budget: ExecutionBudget
@@ -747,15 +756,24 @@ class MultiAgentEpisodeReceipt:
             "receipt_id",
             "episode_id",
             "used_snapshot_id",
-            "harness_id",
+            "plan_id",
             "agent_registry_sha256",
             "input_scope_sha256",
         ):
             _text(getattr(self, field), field)
         for field in (
+            "receipt_id",
+            "used_snapshot_id",
+            "plan_id",
+            "agent_registry_sha256",
+            "input_scope_sha256",
+        ):
+            if not _is_sha256(getattr(self, field)):
+                raise MultiAgentRuntimeError(f"{field} must be a canonical sha256")
+        for field in (
             "input_token_ids",
-            "route_node_ids",
-            "leaf_node_ids",
+            "route_cell_ids",
+            "leaf_cell_ids",
             "executed_agent_ids",
         ):
             values = _strings(getattr(self, field), field)
@@ -795,7 +813,7 @@ class MultiAgentEpisodeReceipt:
             raise MultiAgentRuntimeError("unsupported multi-agent receipt schema")
         if self.output_token.episode_id != self.episode_id:
             raise MultiAgentRuntimeError("aggregate output belongs to another episode")
-        if not self.input_token_ids or not self.route_node_ids:
+        if not self.input_token_ids or not self.route_cell_ids:
             raise MultiAgentRuntimeError("receipt input and route must be non-empty")
         registry_ids = tuple(item.identity.agent_id for item in self.agent_registry)
         if len(registry_ids) != len(set(registry_ids)):
@@ -818,10 +836,10 @@ class MultiAgentEpisodeReceipt:
             range(1, len(self.step_receipts) + 1)
         ):
             raise MultiAgentRuntimeError("step receipts are not in execution order")
-        if tuple(step.node_id for step in self.step_receipts) != self.route_node_ids:
+        if tuple(step.cell_id for step in self.step_receipts) != self.route_cell_ids:
             raise MultiAgentRuntimeError("step receipts differ from the frozen route")
-        if set(self.leaf_node_ids) - set(self.route_node_ids):
-            raise MultiAgentRuntimeError("leaf nodes must belong to the route")
+        if set(self.leaf_cell_ids) - set(self.route_cell_ids):
+            raise MultiAgentRuntimeError("leaf cells must belong to the route")
         actual_agents = tuple(sorted({step.agent_id for step in self.step_receipts}))
         if tuple(sorted(self.executed_agent_ids)) != actual_agents:
             raise MultiAgentRuntimeError("executed agent identity set is invalid")
@@ -834,9 +852,9 @@ class MultiAgentEpisodeReceipt:
         message_by_id = {message.message_id: message for message in self.messages}
         if len(message_by_id) != len(self.messages):
             raise MultiAgentRuntimeError("message identities must be unique")
-        step_by_node = {step.node_id: step for step in self.step_receipts}
-        if len(step_by_node) != len(self.step_receipts):
-            raise MultiAgentRuntimeError("route node identities must be unique")
+        step_by_cell = {step.cell_id: step for step in self.step_receipts}
+        if len(step_by_cell) != len(self.step_receipts):
+            raise MultiAgentRuntimeError("route cell identities must be unique")
         inbound_references: list[str] = []
         outbound_references: list[str] = []
         for message in self.messages:
@@ -844,11 +862,11 @@ class MultiAgentEpisodeReceipt:
                 raise MultiAgentRuntimeError("nested message identity mismatch")
             if (
                 message.episode_id != self.episode_id
-                or message.harness_id != self.harness_id
+                or message.plan_id != self.plan_id
             ):
                 raise MultiAgentRuntimeError("message belongs to another execution")
-            source = step_by_node.get(message.source_node_id)
-            target = step_by_node.get(message.target_node_id)
+            source = step_by_cell.get(message.source_cell_id)
+            target = step_by_cell.get(message.target_cell_id)
             if source is None or target is None:
                 raise MultiAgentRuntimeError("message crosses outside the frozen route")
             if source.sequence >= target.sequence:
@@ -857,7 +875,7 @@ class MultiAgentEpisodeReceipt:
                 source.agent_id != message.sender_agent_id
                 or target.agent_id != message.recipient_agent_id
             ):
-                raise MultiAgentRuntimeError("message identity differs from node bindings")
+                raise MultiAgentRuntimeError("message identity differs from cell bindings")
             if (
                 message.message_id not in source.outbound_message_ids
                 or message.message_id not in target.inbound_message_ids
@@ -906,25 +924,62 @@ class MultiAgentEpisodeReceipt:
                     "step message byte accounting is invalid"
                 )
         actual_leaves = tuple(
-            step.node_id for step in self.step_receipts if not step.outbound_message_ids
+            step.cell_id for step in self.step_receipts if not step.outbound_message_ids
         )
-        if self.leaf_node_ids != actual_leaves:
-            raise MultiAgentRuntimeError("receipt leaf nodes differ from message topology")
+        if self.leaf_cell_ids != actual_leaves:
+            raise MultiAgentRuntimeError("receipt leaf cells differ from message topology")
+        predecessor_ids = {
+            cell_id: tuple(
+                sorted(
+                    message.source_cell_id
+                    for message in self.messages
+                    if message.target_cell_id == cell_id
+                )
+            )
+            for cell_id in self.route_cell_ids
+        }
+        expected_plan_id = canonical_sha256(
+            _execution_plan_preimage(
+                snapshot_id=self.used_snapshot_id,
+                entry_cell_id=self.route_cell_ids[0],
+                route_cell_ids=self.route_cell_ids,
+                predecessor_ids=predecessor_ids,
+                leaf_cell_ids=self.leaf_cell_ids,
+            )
+        )
+        if self.plan_id != expected_plan_id:
+            raise MultiAgentRuntimeError(
+                "execution plan identity differs from the receipt topology"
+            )
         expected_output = {
             "leaf_outputs": [
                 {
-                    "node_id": step.node_id,
+                    "cell_id": step.cell_id,
                     "agent_id": step.agent_id,
                     "output": step.output,
                 }
                 for step in self.step_receipts
-                if step.node_id in self.leaf_node_ids
+                if step.cell_id in self.leaf_cell_ids
             ]
         }
         if canonical_json_bytes(self.output_token.content) != canonical_json_bytes(
             expected_output
         ):
             raise MultiAgentRuntimeError("aggregate output is not linked to leaf outputs")
+        expected_output_provenance = {
+            "protocol": MULTIAGENT_EXECUTION_SCHEMA_VERSION,
+            "snapshot_id": self.used_snapshot_id,
+            "generation": self.used_generation,
+            "plan_id": self.plan_id,
+            "route_cell_ids": list(self.route_cell_ids),
+            "executed_agent_ids": sorted(self.executed_agent_ids),
+        }
+        if self.output_token.provenance_sha256 != canonical_sha256(
+            expected_output_provenance
+        ):
+            raise MultiAgentRuntimeError(
+                "aggregate output provenance is not linked to the execution plan"
+            )
         if canonical_sha256(self.unsigned()) != self.receipt_id:
             raise MultiAgentRuntimeError("multi-agent episode receipt digest mismatch")
 
@@ -934,14 +989,14 @@ class MultiAgentEpisodeReceipt:
             "episode_id": self.episode_id,
             "used_snapshot_id": self.used_snapshot_id,
             "used_generation": self.used_generation,
-            "harness_id": self.harness_id,
+            "plan_id": self.plan_id,
             "agent_registry": [item.canonical() for item in self.agent_registry],
             "agent_registry_sha256": self.agent_registry_sha256,
             "input_token_ids": list(self.input_token_ids),
             "input_scopes": [scope.canonical() for scope in self.input_scopes],
             "input_scope_sha256": self.input_scope_sha256,
-            "route_node_ids": list(self.route_node_ids),
-            "leaf_node_ids": list(self.leaf_node_ids),
+            "route_cell_ids": list(self.route_cell_ids),
+            "leaf_cell_ids": list(self.leaf_cell_ids),
             "executed_agent_ids": list(self.executed_agent_ids),
             "step_receipts": [step.canonical() for step in self.step_receipts],
             "messages": [message.canonical() for message in self.messages],
@@ -956,45 +1011,70 @@ class MultiAgentEpisodeReceipt:
 
 @dataclass(frozen=True, slots=True)
 class _ExecutionPlan:
-    snapshot: SelfModelSnapshot
-    harness: HarnessDocument
-    node_by_id: Mapping[str, HarnessNode]
-    route_node_ids: tuple[str, ...]
+    plan_id: str
+    cell_by_id: Mapping[str, CellRecord]
+    route_cell_ids: tuple[str, ...]
     predecessor_ids: Mapping[str, tuple[str, ...]]
-    leaf_node_ids: tuple[str, ...]
+    leaf_cell_ids: tuple[str, ...]
 
 
-def _plan_harness(snapshot: SelfModelSnapshot) -> _ExecutionPlan:
-    harness = snapshot.harness
-    if harness is None:
-        raise MultiAgentRuntimeError("multi-agent execution requires an active harness")
-    node_by_id = {node.node_id: node for node in harness.nodes}
+def _execution_plan_preimage(
+    *,
+    snapshot_id: str,
+    entry_cell_id: str,
+    route_cell_ids: Sequence[str],
+    predecessor_ids: Mapping[str, Sequence[str]],
+    leaf_cell_ids: Sequence[str],
+) -> dict[str, Any]:
+    return {
+        "schema_version": "hswm-execution-plan/v1",
+        "engine": "multiagent-dag/v1",
+        "snapshot_id": snapshot_id,
+        "entry_cell_id": entry_cell_id,
+        "route_cell_ids": list(route_cell_ids),
+        "predecessor_cell_ids": [
+            {
+                "cell_id": cell_id,
+                "predecessor_cell_ids": list(predecessor_ids[cell_id]),
+            }
+            for cell_id in route_cell_ids
+        ],
+        "leaf_cell_ids": list(leaf_cell_ids),
+    }
+
+
+def _project_execution_plan(snapshot: SelfModelSnapshot) -> _ExecutionPlan:
+    if not snapshot.cells or snapshot.entry_cell_id is None:
+        raise MultiAgentRuntimeError(
+            "multi-agent execution requires an active HSWM cell topology"
+        )
+    cell_by_id = {cell.cell_id: cell for cell in snapshot.cells}
     reachable: set[str] = set()
-    stack = [harness.entry_node_id]
+    stack = [snapshot.entry_cell_id]
     while stack:
-        node_id = stack.pop()
-        if node_id in reachable:
+        cell_id = stack.pop()
+        if cell_id in reachable:
             continue
-        reachable.add(node_id)
-        stack.extend(reversed(node_by_id[node_id].next_node_ids))
+        reachable.add(cell_id)
+        stack.extend(reversed(cell_by_id[cell_id].next_cell_ids))
 
-    predecessor_sets: dict[str, set[str]] = {node_id: set() for node_id in reachable}
+    predecessor_sets: dict[str, set[str]] = {cell_id: set() for cell_id in reachable}
     for source_id in reachable:
-        for target_id in node_by_id[source_id].next_node_ids:
+        for target_id in cell_by_id[source_id].next_cell_ids:
             if target_id in reachable:
                 predecessor_sets[target_id].add(source_id)
 
     indegrees = {
-        node_id: len(predecessors)
-        for node_id, predecessors in predecessor_sets.items()
+        cell_id: len(predecessors)
+        for cell_id, predecessors in predecessor_sets.items()
     }
-    ready = [node_id for node_id, degree in indegrees.items() if degree == 0]
+    ready = [cell_id for cell_id, degree in indegrees.items() if degree == 0]
     heapq.heapify(ready)
     ordered: list[str] = []
     while ready:
         source_id = heapq.heappop(ready)
         ordered.append(source_id)
-        for target_id in node_by_id[source_id].next_node_ids:
+        for target_id in cell_by_id[source_id].next_cell_ids:
             if target_id not in indegrees:
                 continue
             indegrees[target_id] -= 1
@@ -1002,30 +1082,37 @@ def _plan_harness(snapshot: SelfModelSnapshot) -> _ExecutionPlan:
                 heapq.heappush(ready, target_id)
     if len(ordered) != len(reachable):
         raise MultiAgentRuntimeError(
-            "multi-agent fan-out/fan-in execution requires an acyclic reachable harness"
+            "multi-agent fan-out/fan-in execution requires an acyclic cell topology"
         )
-    if not ordered or ordered[0] != harness.entry_node_id:
-        raise MultiAgentRuntimeError("the harness entry is not a valid DAG root")
+    if not ordered or ordered[0] != snapshot.entry_cell_id:
+        raise MultiAgentRuntimeError("the entry cell is not a valid DAG root")
     leaves = tuple(
-        node_id
-        for node_id in ordered
-        if not any(target in reachable for target in node_by_id[node_id].next_node_ids)
+        cell_id
+        for cell_id in ordered
+        if not any(target in reachable for target in cell_by_id[cell_id].next_cell_ids)
+    )
+    predecessor_ids = {
+        cell_id: tuple(sorted(predecessors))
+        for cell_id, predecessors in predecessor_sets.items()
+    }
+    plan_preimage = _execution_plan_preimage(
+        snapshot_id=snapshot.snapshot_id,
+        entry_cell_id=snapshot.entry_cell_id,
+        route_cell_ids=ordered,
+        predecessor_ids=predecessor_ids,
+        leaf_cell_ids=leaves,
     )
     return _ExecutionPlan(
-        snapshot=snapshot,
-        harness=harness,
-        node_by_id=node_by_id,
-        route_node_ids=tuple(ordered),
-        predecessor_ids={
-            node_id: tuple(sorted(predecessors))
-            for node_id, predecessors in predecessor_sets.items()
-        },
-        leaf_node_ids=leaves,
+        plan_id=canonical_sha256(plan_preimage),
+        cell_by_id=cell_by_id,
+        route_cell_ids=tuple(ordered),
+        predecessor_ids=predecessor_ids,
+        leaf_cell_ids=leaves,
     )
 
 
 class MultiAgentHSWM:
-    """Execute one frozen agent-authored DAG through durable step reservations."""
+    """Execute a deterministic projection of frozen structural HSWM state."""
 
     def __init__(
         self,
@@ -1122,35 +1209,35 @@ class MultiAgentHSWM:
             generation=loaded.generation,
             policy=loaded.policy,
         )
-        plan = _plan_harness(snapshot)
-        if len(plan.route_node_ids) > budget.step_budget:
+        plan = _project_execution_plan(snapshot)
+        if len(plan.route_cell_ids) > budget.step_budget:
             raise MultiAgentRuntimeError(
-                "frozen harness route exceeds the aggregate step budget"
+                "frozen cell route exceeds the aggregate step budget"
             )
 
         memory_ids = {memory.memory_id for memory in snapshot.memories}
-        for node_id in plan.route_node_ids:
-            node = plan.node_by_id[node_id]
-            if node.executor_agent_id is None:
+        for cell_id in plan.route_cell_ids:
+            cell = plan.cell_by_id[cell_id]
+            if cell.executor_agent_id is None:
                 raise MultiAgentRuntimeError(
-                    f"harness node {node_id!r} has no executor binding"
+                    f"structural cell {cell_id!r} has no executor binding"
                 )
-            binding = self._bindings.get(node.executor_agent_id)
+            binding = self._bindings.get(cell.executor_agent_id)
             if binding is None:
                 raise MultiAgentRuntimeError(
-                    f"harness node {node_id!r} names an unknown executor"
+                    f"structural cell {cell_id!r} names an unknown executor"
                 )
-            if node.capability not in active.policy.allowed_capabilities:
+            if cell.capability not in active.policy.allowed_capabilities:
                 raise MultiAgentRuntimeError(
-                    f"harness node {node_id!r} exceeds store capability authority"
+                    f"structural cell {cell_id!r} exceeds store capability authority"
                 )
-            if node.capability not in binding.identity.allowed_capabilities:
+            if cell.capability not in binding.identity.allowed_capabilities:
                 raise MultiAgentRuntimeError(
-                    f"harness node {node_id!r} is unauthorized for its executor"
+                    f"structural cell {cell_id!r} is unauthorized for its executor"
                 )
-            if not set(node.memory_ids) <= memory_ids:
+            if not set(cell.memory_ids) <= memory_ids:
                 raise MultiAgentRuntimeError(
-                    f"harness node {node_id!r} references missing memory"
+                    f"structural cell {cell_id!r} references missing memory"
                 )
         return active, tuple(frozen_inputs), plan
 
@@ -1209,7 +1296,7 @@ class MultiAgentHSWM:
         inputs: Sequence[ScopedToken],
         budget: ExecutionBudget,
     ) -> MultiAgentEpisodeReceipt:
-        """Run or resume a DAG without blindly repeating an external effect."""
+        """Run or resume the projected cell DAG without repeating an effect."""
 
         existing = self.journal.execution_record(episode_id=episode_id)
         active, frozen_inputs, plan = self._preflight(
@@ -1225,10 +1312,10 @@ class MultiAgentHSWM:
             "episode_id": episode_id,
             "snapshot_id": active.snapshot.snapshot_id,
             "generation": active.generation,
-            "harness_id": plan.harness.harness_id,
+            "plan_id": plan.plan_id,
             "agent_registry": [item.canonical() for item in registry],
             "input_scopes": [scope.canonical() for scope in scopes],
-            "route_node_ids": list(plan.route_node_ids),
+            "route_cell_ids": list(plan.route_cell_ids),
             "budget": budget.canonical(),
         }
         execution = self.journal.reserve_execution(
@@ -1252,22 +1339,22 @@ class MultiAgentHSWM:
         memory_by_id: dict[str, MemoryRecord] = {
             memory.memory_id: memory for memory in active.snapshot.memories
         }
-        inbound_by_node: dict[str, list[AgentMessage]] = {
-            node_id: [] for node_id in plan.route_node_ids
+        inbound_by_cell: dict[str, list[AgentMessage]] = {
+            cell_id: [] for cell_id in plan.route_cell_ids
         }
         outputs: dict[str, Any] = {}
         messages: list[AgentMessage] = []
-        step_receipts: list[NodeStepReceipt] = []
+        step_receipts: list[CellStepReceipt] = []
         output_packet_ids: set[str] = set()
         context_bytes_used = 0
         response_bytes_used = 0
         message_bytes_used = 0
 
-        for sequence, node_id in enumerate(plan.route_node_ids, start=1):
-            node = plan.node_by_id[node_id]
-            agent_id = node.executor_agent_id
+        for sequence, cell_id in enumerate(plan.route_cell_ids, start=1):
+            cell = plan.cell_by_id[cell_id]
+            agent_id = cell.executor_agent_id
             if agent_id is None:  # The complete route was checked before side effects.
-                raise MultiAgentRuntimeError("frozen node lost its executor binding")
+                raise MultiAgentRuntimeError("frozen cell lost its executor binding")
             binding = self._bindings[agent_id]
             visible = tuple(
                 scoped.token
@@ -1277,29 +1364,29 @@ class MultiAgentHSWM:
             )
             inbound = tuple(
                 sorted(
-                    inbound_by_node[node_id],
+                    inbound_by_cell[cell_id],
                     key=lambda message: (
-                        message.source_node_id,
+                        message.source_cell_id,
                         message.sender_agent_id,
                         message.message_id,
                     ),
                 )
             )
-            expected_predecessors = plan.predecessor_ids[node_id]
-            if tuple(message.source_node_id for message in inbound) != expected_predecessors:
+            expected_predecessors = plan.predecessor_ids[cell_id]
+            if tuple(message.source_cell_id for message in inbound) != expected_predecessors:
                 raise MultiAgentRuntimeError("fan-in is missing a predecessor message")
             request_payload = _json_copy({
                 "protocol": MULTIAGENT_EXECUTION_SCHEMA_VERSION,
                 "episode_id": episode_id,
                 "snapshot_id": active.snapshot.snapshot_id,
                 "generation": active.generation,
-                "harness_id": plan.harness.harness_id,
-                "node": node.canonical(),
+                "plan_id": plan.plan_id,
+                "cell": cell.canonical(),
                 "agent": binding.manifest().canonical(),
                 "visible_tokens": [token.canonical() for token in visible],
                 "memories": [
                     memory_by_id[memory_id].canonical()
-                    for memory_id in node.memory_ids
+                    for memory_id in cell.memory_ids
                 ],
                 "inbound_messages": [message.canonical() for message in inbound],
             })
@@ -1312,8 +1399,8 @@ class MultiAgentHSWM:
             activation_seed = {
                 "episode_id": episode_id,
                 "snapshot_id": active.snapshot.snapshot_id,
-                "harness_id": plan.harness.harness_id,
-                "node_id": node_id,
+                "plan_id": plan.plan_id,
+                "structural_cell_id": cell_id,
                 "agent_id": agent_id,
                 "deployment": binding.manifest().canonical(),
                 "registry_sha256": self._registry_digest(),
@@ -1336,7 +1423,7 @@ class MultiAgentHSWM:
             step = self.journal.reserve_step(
                 episode_id=episode_id,
                 sequence=sequence,
-                node_id=node_id,
+                cell_id=cell_id,
                 effect=effect,
             )
             freshly_dispatched = False
@@ -1391,7 +1478,7 @@ class MultiAgentHSWM:
                     if isinstance(error, MultiAgentRuntimeError):
                         raise
                     raise MultiAgentRuntimeError(
-                        f"agent {agent_id!r} failed at node {node_id!r}; "
+                        f"agent {agent_id!r} failed at cell {cell_id!r}; "
                         "outcome requires reconciliation"
                     ) from error
                 self.journal.complete_step(
@@ -1429,26 +1516,26 @@ class MultiAgentHSWM:
                 self.journal.fail_execution(episode_id=episode_id, reason=reason)
                 raise MultiAgentRuntimeError(reason)
             output = _json_copy(output_packet.payload["output"])
-            outputs[node_id] = output
+            outputs[cell_id] = output
 
             outbound: list[AgentMessage] = []
             step_message_bytes = 0
-            for target_node_id in node.next_node_ids:
-                if target_node_id not in inbound_by_node:
+            for target_cell_id in cell.next_cell_ids:
+                if target_cell_id not in inbound_by_cell:
                     continue
-                recipient_id = plan.node_by_id[target_node_id].executor_agent_id
+                recipient_id = plan.cell_by_id[target_cell_id].executor_agent_id
                 if recipient_id is None:
-                    raise MultiAgentRuntimeError("target node lost its executor binding")
+                    raise MultiAgentRuntimeError("target cell lost its executor binding")
                 message = _make_message(
                     episode_id=episode_id,
-                    harness_id=plan.harness.harness_id,
-                    source_node_id=node_id,
-                    target_node_id=target_node_id,
+                    plan_id=plan.plan_id,
+                    source_cell_id=cell_id,
+                    target_cell_id=target_cell_id,
                     sender_agent_id=agent_id,
                     recipient_agent_id=recipient_id,
                     payload=output,
                 )
-                inbound_by_node[target_node_id].append(message)
+                inbound_by_cell[target_cell_id].append(message)
                 messages.append(message)
                 outbound.append(message)
                 encoded_message_bytes = len(canonical_json_bytes(message.canonical()))
@@ -1462,9 +1549,9 @@ class MultiAgentHSWM:
             step_receipts.append(
                 _make_step_receipt(
                     sequence=sequence,
-                    node_id=node_id,
+                    cell_id=cell_id,
                     agent_id=agent_id,
-                    capability=node.capability,
+                    capability=cell.capability,
                     input_packet_id=input_packet.packet_id,
                     input_payload_sha256=input_packet.payload_sha256,
                     output_packet_id=output_packet.packet_id,
@@ -1475,7 +1562,7 @@ class MultiAgentHSWM:
                     response_bytes=step_response_bytes,
                     message_bytes=step_message_bytes,
                     visible_token_ids=tuple(token.token_id for token in visible),
-                    used_memory_ids=node.memory_ids,
+                    used_memory_ids=cell.memory_ids,
                     inbound_message_ids=tuple(message.message_id for message in inbound),
                     outbound_message_ids=tuple(
                         message.message_id for message in outbound
@@ -1486,11 +1573,11 @@ class MultiAgentHSWM:
         aggregate_output = {
             "leaf_outputs": [
                 {
-                    "node_id": node_id,
-                    "agent_id": plan.node_by_id[node_id].executor_agent_id,
-                    "output": outputs[node_id],
+                    "cell_id": cell_id,
+                    "agent_id": plan.cell_by_id[cell_id].executor_agent_id,
+                    "output": outputs[cell_id],
                 }
-                for node_id in plan.leaf_node_ids
+                for cell_id in plan.leaf_cell_ids
             ]
         }
         output_position = max(scoped.token.position for scoped in frozen_inputs) + 1
@@ -1498,12 +1585,12 @@ class MultiAgentHSWM:
             "protocol": MULTIAGENT_EXECUTION_SCHEMA_VERSION,
             "snapshot_id": active.snapshot.snapshot_id,
             "generation": active.generation,
-            "harness_id": plan.harness.harness_id,
-            "route_node_ids": list(plan.route_node_ids),
+            "plan_id": plan.plan_id,
+            "route_cell_ids": list(plan.route_cell_ids),
             "executed_agent_ids": sorted(
                 {
-                    plan.node_by_id[node_id].executor_agent_id
-                    for node_id in plan.route_node_ids
+                    plan.cell_by_id[cell_id].executor_agent_id
+                    for cell_id in plan.route_cell_ids
                 }
             ),
         }
@@ -1544,7 +1631,7 @@ class MultiAgentHSWM:
             "episode_id": episode_id,
             "used_snapshot_id": active.snapshot.snapshot_id,
             "used_generation": active.generation,
-            "harness_id": plan.harness.harness_id,
+            "plan_id": plan.plan_id,
             "agent_registry": [item.canonical() for item in registry],
             "agent_registry_sha256": self._registry_digest(),
             "input_token_ids": [scoped.token.token_id for scoped in frozen_inputs],
@@ -1552,8 +1639,8 @@ class MultiAgentHSWM:
             "input_scope_sha256": canonical_sha256(
                 [scope.canonical() for scope in scopes]
             ),
-            "route_node_ids": list(plan.route_node_ids),
-            "leaf_node_ids": list(plan.leaf_node_ids),
+            "route_cell_ids": list(plan.route_cell_ids),
+            "leaf_cell_ids": list(plan.leaf_cell_ids),
             "executed_agent_ids": sorted(
                 {step.agent_id for step in step_receipts}
             ),
@@ -1568,14 +1655,14 @@ class MultiAgentHSWM:
             episode_id=episode_id,
             used_snapshot_id=active.snapshot.snapshot_id,
             used_generation=active.generation,
-            harness_id=plan.harness.harness_id,
+            plan_id=plan.plan_id,
             agent_registry=registry,
             agent_registry_sha256=unsigned["agent_registry_sha256"],
             input_token_ids=tuple(unsigned["input_token_ids"]),
             input_scopes=scopes,
             input_scope_sha256=unsigned["input_scope_sha256"],
-            route_node_ids=plan.route_node_ids,
-            leaf_node_ids=plan.leaf_node_ids,
+            route_cell_ids=plan.route_cell_ids,
+            leaf_cell_ids=plan.leaf_cell_ids,
             executed_agent_ids=tuple(unsigned["executed_agent_ids"]),
             step_receipts=tuple(step_receipts),
             messages=tuple(messages),
@@ -1595,9 +1682,9 @@ def _message_from_mapping(value: Mapping[str, Any]) -> AgentMessage:
         "schema_version",
         "message_id",
         "episode_id",
-        "harness_id",
-        "source_node_id",
-        "target_node_id",
+        "plan_id",
+        "source_cell_id",
+        "target_cell_id",
         "sender_agent_id",
         "recipient_agent_id",
         "payload",
@@ -1607,12 +1694,12 @@ def _message_from_mapping(value: Mapping[str, Any]) -> AgentMessage:
     return AgentMessage(**value)
 
 
-def _step_from_mapping(value: Mapping[str, Any]) -> NodeStepReceipt:
+def _step_from_mapping(value: Mapping[str, Any]) -> CellStepReceipt:
     expected = {
         "schema_version",
         "receipt_id",
         "sequence",
-        "node_id",
+        "cell_id",
         "agent_id",
         "capability",
         "input_packet_id",
@@ -1630,10 +1717,10 @@ def _step_from_mapping(value: Mapping[str, Any]) -> NodeStepReceipt:
         "outbound_message_ids",
     }
     _fields(value, expected, "step receipt")
-    return NodeStepReceipt(
+    return CellStepReceipt(
         receipt_id=value["receipt_id"],
         sequence=value["sequence"],
-        node_id=value["node_id"],
+        cell_id=value["cell_id"],
         agent_id=value["agent_id"],
         capability=value["capability"],
         input_packet_id=value["input_packet_id"],
@@ -1725,14 +1812,14 @@ def multiagent_receipt_from_mapping(
         "episode_id",
         "used_snapshot_id",
         "used_generation",
-        "harness_id",
+        "plan_id",
         "agent_registry",
         "agent_registry_sha256",
         "input_token_ids",
         "input_scopes",
         "input_scope_sha256",
-        "route_node_ids",
-        "leaf_node_ids",
+        "route_cell_ids",
+        "leaf_cell_ids",
         "executed_agent_ids",
         "step_receipts",
         "messages",
@@ -1761,7 +1848,7 @@ def multiagent_receipt_from_mapping(
         episode_id=value["episode_id"],
         used_snapshot_id=value["used_snapshot_id"],
         used_generation=value["used_generation"],
-        harness_id=value["harness_id"],
+        plan_id=value["plan_id"],
         agent_registry=tuple(
             _deployment_from_mapping(item) for item in raw_registry
         ),
@@ -1769,8 +1856,8 @@ def multiagent_receipt_from_mapping(
         input_token_ids=_strings(value["input_token_ids"], "input_token_ids"),
         input_scopes=tuple(_scope_from_mapping(item) for item in raw_scopes),
         input_scope_sha256=value["input_scope_sha256"],
-        route_node_ids=_strings(value["route_node_ids"], "route_node_ids"),
-        leaf_node_ids=_strings(value["leaf_node_ids"], "leaf_node_ids"),
+        route_cell_ids=_strings(value["route_cell_ids"], "route_cell_ids"),
+        leaf_cell_ids=_strings(value["leaf_cell_ids"], "leaf_cell_ids"),
         executed_agent_ids=_strings(value["executed_agent_ids"], "executed_agent_ids"),
         step_receipts=tuple(_step_from_mapping(item) for item in raw_steps),
         messages=tuple(_message_from_mapping(item) for item in raw_messages),
@@ -1801,7 +1888,7 @@ __all__ = [
     "MultiAgentEpisodeReceipt",
     "MultiAgentHSWM",
     "MultiAgentRuntimeError",
-    "NodeStepReceipt",
+    "CellStepReceipt",
     "ScopedToken",
     "TokenVisibility",
     "multiagent_receipt_from_mapping",

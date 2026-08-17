@@ -14,7 +14,7 @@ workflow rules.
 > contains a tested world/evidence substrate, deterministic field and runtime
 > components, narrow measured results, and several failed or unfinished
 > plasticity experiments. It now also contains a minimal empty-genesis
-> token-to-agent-authored-memory/harness runtime with durable snapshot
+> token-to-agent-organized-HSWM runtime with durable structural snapshots,
 > activation, removal, and exact restoration. It does not yet include an
 > integrated, scaled macro-training runtime. No checked-in run has yet produced
 > a `CAUSALLY_VALIDATED` outcome → credit → durable `ΔW/ΔH` → changed-behavior
@@ -28,10 +28,11 @@ workflow rules.
 
 <p align="center"><em>Conceptual illustration of a living semantic-weight field—not an architecture diagram or experimental result.</em></p>
 
-> **Target intuition:** an agent may turn typed experience into a bounded
-> self-authored memory/harness snapshot. Independently measured outcomes are
-> still required to establish usefulness and validate slow plasticity. Only an
-> activated snapshot conditions later behavior.
+> **Target intuition:** an agent may turn typed experience into a bounded HSWM
+> snapshot of memories, relations, cells, and routing. That state itself is the
+> harness; there is no separately authored harness document. Independently
+> measured outcomes are still required to establish usefulness and validate
+> slow plasticity. Only an activated snapshot conditions later behavior.
 
 ## Why HSWM
 
@@ -61,9 +62,9 @@ model's internal parameters.
 
 The distinction matters: placing tokens in a transformer's context window does
 not train it. In HSWM, the foundation agent must semantically organize the typed
-stream into its own durable memory and harness; copying tokens into a database
-is not that operation. This direct self-write does not require a reward, but a
-claim that continued use improves the system does. A credible integrated
+stream into durable memory, relations, cells, and routing; copying tokens into a
+database is not that operation. This direct self-write does not require a reward,
+but a claim that continued use improves the system does. A credible integrated
 macro-training claim therefore requires a learning curve over diverse held-out
 episodes, independent outcomes, matched controls, and removal/restoration—not
 isolated post-hoc edits. The needed data, compute, and stability regime remains
@@ -73,20 +74,23 @@ This repository calls that hypothesized failure mode **LX3 Ragnarok**: stronger
 models spend an increasing share of their reasoning budget interpreting and
 obeying a growing static harness. HSWM's research bet is that successful and
 failed trajectories can instead supply evidence for bounded semantic-weight,
-routing, and connectivity candidates; only independently validated candidates
-become persistent. This is a direction under test, not a demonstrated
-uniqueness or production claim.
+routing, and connectivity candidates. Outcome-bound slow `W/H` candidates
+require independent validation before activation. Direct explicit memory/cell
+rewrites may persist after kernel checks, but they earn no usefulness claim
+until later controlled tests. This is a direction under test, not a
+demonstrated uniqueness or production claim.
 
-### HSWM as a learning harness
+### HSWM is the learning harness
 
 A conventional harness fixes which model function, tool, memory, or verifier
 runs; what context it receives; in what order or coalition it runs; and how
-handoff, failure, retry, and stopping work. HSWM treats that cognitive
-coordination as agent-authored macro-state. The agent writes and rewrites its
-own memory records, harness instructions, and route graph from experience; the
-harness used for one episode is a bounded projection of that current state.
-HSWM is the larger persistent runtime and learner that executes the projection,
-observes what follows, and carries the rewritten state into later episodes.
+handoff, failure, retry, and stopping work. HSWM makes that cognitive
+coordination persistent state. The agent writes and rewrites memory records,
+relations, cells, and routing/topology from experience. Those structures are
+the harness—not inputs to a second harness document. At episode start the
+runtime freezes the active HSWM snapshot and derives a bounded execution view
+or trace; it does not author another cognitive workflow. HSWM then carries the
+rewritten structure into later episodes.
 
 The external learning payload is a stream of typed tokens. The pretrained
 agent supplies the semantic intelligence that interprets those tokens and
@@ -154,7 +158,7 @@ The hero image compresses the idea into one continuous field disturbed by a
 single activation trajectory. It is deliberately a mental image, not a
 one-to-one rendering of discrete hypergraph incidence or a learning claim.
 
-## Target token-to-memory architecture
+## Target token-to-HSWM architecture
 
 This is the target integrated architecture. The direct self-write path now has
 a minimal executable vertical slice in
@@ -171,13 +175,13 @@ self-similar kernel.
 ```mermaid
 flowchart TB
   TOK["typed token stream<br/>text · observations · actions"] --> RUN
-  STATE["active HSWM memory snapshot<br/>agent-organized content · H · W · routing · epoch"] --> HARNESS
-  HARNESS["compile a bounded episode harness"] --> RUN["LLM / agent intelligence<br/>interpret · retrieve · coordinate · act"]
+  STATE["target active HSWM snapshot = harness<br/>memory · relations · cells · W · routing · generation"] --> PROJECT
+  PROJECT["freeze and project a bounded<br/>execution view or trace"] --> RUN["LLM / agent intelligence<br/>interpret · retrieve · coordinate · act"]
   RUN --> SEALED["seal trajectory and output<br/>before the outcome"]
 
   SEALED --> EVIDENCE["content-addressed episode evidence<br/>audit and replay; not default prompt context"]
   SEALED --> INDUCE["agent semantic induction<br/>episode cue · concept · procedure"]
-  INDUCE --> SELFWRITE["agent-authored self-modification<br/>memory records · harness document · route graph"]
+  INDUCE --> SELFWRITE["agent-authored HSWM mutation<br/>memory · relations · cells · routing edges"]
   SELFWRITE --> SELFCAS["schema / authority / budget check<br/>versioned CAS commit"]
   SELFCAS --> STATE
 
@@ -199,15 +203,15 @@ flowchart TB
 ```
 
 The two write paths are deliberately different. Typed tokens alone can become
-agent-organized episodic, semantic, or procedural memory and an agent-authored
-harness for the next episode. The agent may add, edit, delete, replace, or clear
-those records and routes without waiting for an external reward. The fixed
-kernel checks only representation, capability authority, budgets, atomicity,
+agent-organized episodic, semantic, or procedural memory and can change the
+HSWM relations, cells, and routes used by the next episode. The agent may add,
+edit, delete, replace, or clear that structure without waiting for an external
+reward. The fixed kernel checks only representation, capability authority, budgets, atomicity,
 and rollback—including exact restoration of an earlier snapshot; it does not
 write the cognitive route. This immediate self-modification is a capability,
 not proof that the modification is useful.
 Outcome-bound changes to latent semantic weight or slow consolidated
-coordination—and any scientific claim that a self-written harness improved
+coordination—and any scientific claim that the changed HSWM structure improved
 behavior—use the separate causal-credit and evaluation path. Neither path
 imports a hand-authored answer.
 Raw episode evidence stays available for audit and exact replay, but replaying
@@ -219,7 +223,7 @@ unsafe effects but does not prescribe the cognitive route.
 ## What counts as learning
 
 Putting more tokens in a database is storage. Reinjecting them is retrieval. A
-sealed observation can become agent-organized memory and a rewritten harness
+sealed observation can become agent-organized memory and rewritten HSWM structure
 without an external reward; self-manipulation is part of the cognitive entity,
 not something an external rule author must do for it. That alone still does not
 show useful continual learning. HSWM counts a claimed beneficial behavioral
@@ -228,7 +232,7 @@ change as causally learned only when it also closes an evidence loop:
 ```text
 token / action / tool trajectory
   → sealed episode evidence
-  → agent-authored memory / harness snapshot
+  → agent-authored HSWM memory / relation / cell snapshot
   → atomic versioned activation
   → changed future behavior
   → independent outcomes plus fresh / retention / canary evaluation
@@ -237,7 +241,7 @@ token / action / tool trajectory
 
 Outcome-based eligibility and credit may additionally propose bounded `ΔW`,
 learned-preference, or consolidation changes, but they do not replace the
-agent's direct ability to rewrite its explicit memory and harness.
+agent's direct ability to rewrite its explicit HSWM state.
 
 The executable receipt contract
 [`token_learning_contract.py`](src/hswm/learning/token_learning_contract.py)
@@ -346,18 +350,20 @@ modes that an HSWM experiment must beat.
 
 The new [`hswm.selfmod`](src/hswm/selfmod/) slice starts from a deterministic
 empty snapshot. It admits typed tokens, lets the agent directly add/edit/delete
-memory records and replace or clear its harness graph, activates the immutable
-successor with a monotonic compare-and-swap generation, then supplies that
-exact snapshot to the next episode and validates the selected route against it.
+memory records and replace or clear its cell topology, activates the immutable
+successor with a monotonic compare-and-swap generation, then supplies that exact
+HSWM snapshot to the next episode and validates the selected route against it.
 Tests demonstrate a changed selected capability, process-restart persistence,
 concurrent-writer rejection, targeted removal, and exact restore.
 The JSON bridge works through the existing typed `CellPort`, so the fixed kernel
 defines representation and authority while the agent supplies every cognitive
 instruction and route.
 
-The companion multi-agent slice executes every reachable node of one frozen,
-agent-authored DAG through its declared logical-agent deployment. It performs
-real per-node port calls, typed fan-out/fan-in, deterministic aggregation,
+The companion multi-agent slice executes every reachable cell of one frozen
+HSWM snapshot through its declared logical-agent deployment. The execution-plan
+object is an ephemeral deterministic projection; its ID, route, effects, and
+receipts remain auditable in the journal. It performs one typed `CellPort`
+invocation per reachable cell, typed fan-out/fan-in, deterministic aggregation,
 direct-delivery input scoping, step and byte budgets, and deployment-bound
 receipts. A SQLite execution journal reserves each external call before dispatch,
 returns an already completed receipt on exact replay, and refuses to guess after
@@ -384,7 +390,7 @@ membership changes across 456 diagnostic cells; it remains scientific RED.
 The committed next component experiment remains the parity-controlled typed
 text-lesson baseline. It is a precursor and comparison arm, not a substitute
 for the empty-memory continual-use protocol above. Separately, one candidate
-engineering track for the integrated harness is to freeze the LLM, tools, cell
+engineering track for the integrated HSWM is to freeze the LLM, tools, cell
 registry, and topology and learn only a small routing policy in a task with
 genuine coordination headroom. It must not reuse the
 [rejected B2.1 `A/B/MERGED` action space](prom_search_hswm/docs/B21_LEARNED_ROUTER_RESULTS_2026-07-23.md).
@@ -401,7 +407,7 @@ The target integrated design separates four explicit clocks:
 | clock | durable-state rule | permitted durable result |
 |---|---|---|
 | activation | memory content, `H/W`, and routing frozen for the episode | sealed decision trajectory only |
-| agent self-authoring | current episode snapshot remains frozen | one bounded versioned memory-and-harness successor for a later episode |
+| agent self-authoring | current episode snapshot remains frozen | one bounded versioned HSWM structural successor for a later episode |
 | plasticity | explicit snapshot remains fixed while outcome credit is evaluated | one validated slow preference or `W` candidate |
 | consolidation / morphogenesis | changed only at a later episode boundary | repeated effects promoted to slow `W`, then one bounded `H` mutation class |
 
@@ -440,7 +446,7 @@ and [`ontology/field/sheaf/HSWM_SHEAF_ONTOLOGY.v1.json`](ontology/field/sheaf/HS
 
 ## Current evidence boundary
 
-Repository state as of 2026-08-16:
+Repository state as of 2026-08-17:
 
 | area | honest status |
 |---|---|
@@ -449,7 +455,7 @@ Repository state as of 2026-08-16:
 | scalar slow-weight P1 | **scientific RED**: 12 staged candidates, 0 fresh-gate passes/activations, and 0/456 measured top-10 rank changes |
 | typed-policy P1v3/P1v4 | narrow local `n=6` L0 observation; not durable `ΔW`, transfer, or topology learning |
 | token-driven durable macro-learning | trajectory/eligibility/activation receipt binding implemented; no integrated causal optimizer or causally validated macro-update demonstrated |
-| agent-induced token-to-memory/harness architecture | minimal empty-genesis runtime implemented: agent-authored memory and route graph alter a later episode, persist across restart, and pass removal/exact-restore tests; no usefulness or continual-learning result |
+| agent-induced token-to-HSWM architecture | minimal empty-genesis runtime implemented: agent-authored memory and cell topology/routing alter a later fixture episode, persist across restart, and pass removal/exact-restore tests; relation-specific causal usefulness and continual learning remain unmeasured |
 | continual-use macro-learning and scale | no preregistered sequential learning curve, retention/forgetting result, or controlled scaling result demonstrated |
 | cross-agent transfer, learned topology, and consolidation | incomplete or unmeasured |
 
@@ -483,7 +489,7 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | How do the fragmented identity, mathematics, runtime, learning, and evidence meanings fit together? | [`HSWM unified meaning map`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md) |
 | Why replace static agent glue, and what is token learning? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) |
 | What exactly are `H`, `W`, `A`, and the LLM functions? | [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](docs/canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) |
-| What should the harness learn, and what must remain deterministic? | [`DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md`](docs/canon/DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md) |
+| What should HSWM's structure learn, and what must remain deterministic? | [`DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md`](docs/canon/DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md) |
 | What is implemented, rejected, or still open? | [`EFFICACY.md`](EFFICACY.md) |
 | What is the broader world-memory purpose? | [`THE_WORLD_REMEMBERS.md`](docs/canon/THE_WORLD_REMEMBERS.md) |
 | Where is the full research chronology? | [`INDEX.md`](INDEX.md) |
@@ -501,7 +507,7 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | `src/hswm/prototypes/` | bounded early learning and synthetic-world prototypes |
 | `src/hswm/substrate/` | canonical hypergraph, document/world construction, immutable field cuts, certified readout, and convergence substrate |
 | `src/hswm/learning/` | token-learning contracts and learning diagnostics |
-| `src/hswm/selfmod/` | empty-genesis agent-authored memory/harness snapshots, durable CAS activation, exact restoration, and journaled multi-agent DAG execution |
+| `src/hswm/selfmod/` | empty-genesis agent-authored HSWM snapshots, durable CAS activation, exact restoration, and journaled multi-agent cell execution |
 | `src/hswm/evaluation/`, `_research/` | falsification code and source-only experiment programs |
 | `_research/root_compat/` | source-pinned root-era compatibility cluster; closed to new work |
 | `_research/root_compat/world_ir.py`, `_research/root_compat/world_compiler.py` | flat compatibility modules for the immutable evidence model and deterministic world compilation |

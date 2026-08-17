@@ -1,7 +1,7 @@
 """Token-native, agent-authored self-modification runtime for HSWM.
 
-The foundation agent, not this module, writes the durable memory records and
-the episode harness.  This runtime owns only the constitutional mechanics:
+The foundation agent writes the durable HSWM structure itself: memories,
+relations, cells, and routing edges.  This runtime owns only the mechanics:
 typed token admission, authority/budget checks, immutable snapshot selection,
 execution receipts, and compare-and-swap activation of an agent proposal.
 
@@ -22,16 +22,16 @@ from hswm.cells.runtime import CellPort, InvokeCellEffect, make_packet
 from .contracts import (
     ActiveSnapshot,
     ActivationReceipt,
+    CellRecord,
+    CellTopologyMode,
     CognitiveToken,
     ExecutorAuthority,
-    HarnessDocument,
-    HarnessMode,
     MemoryRecord,
     MutationProposal,
     SelfModelSnapshot,
     canonical_json_bytes,
     canonical_sha256,
-    harness_from_mapping,
+    cell_from_mapping,
     make_mutation,
     make_token,
     memory_from_mapping,
@@ -41,8 +41,8 @@ from .contracts import (
 from .store import SQLiteSelfModelStore
 
 
-EXECUTION_SCHEMA_VERSION = "hswm-selfmod-execution/v1"
-AUTHORING_SCHEMA_VERSION = "hswm-selfmod-authoring/v1"
+EXECUTION_SCHEMA_VERSION = "hswm-selfmod-execution/v2"
+AUTHORING_SCHEMA_VERSION = "hswm-selfmod-authoring/v2"
 
 
 class SelfModRuntimeError(RuntimeError):
@@ -87,26 +87,25 @@ def _validate_proposal_scope(
             raise SelfModRuntimeError(
                 "memory provenance exceeds the proposal source scope"
             )
-    harness = proposal.harness
-    if harness is not None:
-        bound_nodes = tuple(
-            node for node in harness.nodes if node.executor_agent_id is not None
+    if proposal.cell_topology_mode is CellTopologyMode.REPLACE:
+        bound_cells = tuple(
+            cell for cell in proposal.cells if cell.executor_agent_id is not None
         )
-        if bound_nodes:
+        if bound_cells:
             registry = {item.agent_id: item for item in agent_registry}
             if not registry:
                 raise SelfModRuntimeError(
-                    "an executor-bound harness requires a frozen agent registry"
+                    "executor-bound cells require a frozen agent registry"
                 )
-            for node in bound_nodes:
-                authority = registry.get(node.executor_agent_id)
+            for cell in bound_cells:
+                authority = registry.get(cell.executor_agent_id)
                 if authority is None:
                     raise SelfModRuntimeError(
-                        "harness executor is outside the authoring registry"
+                        "cell executor is outside the authoring registry"
                     )
-                if node.capability not in authority.allowed_capabilities:
+                if cell.capability not in authority.allowed_capabilities:
                     raise SelfModRuntimeError(
-                        "harness capability exceeds its executor authority"
+                        "cell capability exceeds its executor authority"
                     )
 
 
@@ -143,7 +142,7 @@ def _strict_json_object(text: str) -> dict[str, Any]:
 
 @dataclass(frozen=True, slots=True)
 class ExecutionRequest:
-    """One frozen episode view; ``budget`` bounds traversed harness nodes."""
+    """One frozen episode view; ``budget`` bounds traversed structural cells."""
 
     episode_id: str
     active: ActiveSnapshot
@@ -201,14 +200,14 @@ class AgentDecision:
     selected_capability: str
     output: Any
     used_memory_ids: tuple[str, ...] = ()
-    followed_node_ids: tuple[str, ...] = ()
+    followed_cell_ids: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         _require_text("selected_capability", self.selected_capability)
         canonical_json_bytes(self.output)
         for label, values in (
             ("used_memory_ids", self.used_memory_ids),
-            ("followed_node_ids", self.followed_node_ids),
+            ("followed_cell_ids", self.followed_cell_ids),
         ):
             if isinstance(values, (str, bytes)):
                 raise SelfModRuntimeError(f"{label} must be a sequence")
@@ -220,7 +219,7 @@ class AgentDecision:
 
 
 class SelfModifyingAgent(Protocol):
-    """An intelligent agent that executes and rewrites its own HSWM harness."""
+    """An intelligent agent that executes and rewrites its HSWM structure."""
 
     agent_id: str
 
@@ -238,13 +237,13 @@ class EpisodeReceipt:
     agent_id: str
     used_snapshot_id: str
     used_generation: int
-    harness_id: str | None
+    plan_id: str | None
     input_token_ids: tuple[str, ...]
     input_content_sha256: str
     output_token: CognitiveToken
     selected_capability: str
     used_memory_ids: tuple[str, ...]
-    followed_node_ids: tuple[str, ...]
+    followed_cell_ids: tuple[str, ...]
     capability_set_sha256: str
     budget: int
     activation: ActivationReceipt | None
@@ -261,8 +260,12 @@ class EpisodeReceipt:
             "capability_set_sha256",
         ):
             _require_text(field, getattr(self, field))
-        if self.harness_id is not None:
-            _require_text("harness_id", self.harness_id)
+        if self.plan_id is not None:
+            _require_text("plan_id", self.plan_id)
+            if len(self.plan_id) != 64 or any(
+                character not in "0123456789abcdef" for character in self.plan_id
+            ):
+                raise SelfModRuntimeError("plan_id must be a canonical sha256")
         if (
             isinstance(self.used_generation, bool)
             or not isinstance(self.used_generation, int)
@@ -295,13 +298,13 @@ class EpisodeReceipt:
             "agent_id": self.agent_id,
             "used_snapshot_id": self.used_snapshot_id,
             "used_generation": self.used_generation,
-            "harness_id": self.harness_id,
+            "plan_id": self.plan_id,
             "input_token_ids": list(self.input_token_ids),
             "input_content_sha256": self.input_content_sha256,
             "output_token": self.output_token.canonical(),
             "selected_capability": self.selected_capability,
             "used_memory_ids": list(self.used_memory_ids),
-            "followed_node_ids": list(self.followed_node_ids),
+            "followed_cell_ids": list(self.followed_cell_ids),
             "capability_set_sha256": self.capability_set_sha256,
             "budget": self.budget,
             "activation": (
@@ -317,8 +320,26 @@ def _memory_map(snapshot: SelfModelSnapshot) -> dict[str, MemoryRecord]:
     return {memory.memory_id: memory for memory in snapshot.memories}
 
 
-def _harness_map(harness: HarnessDocument) -> dict[str, Any]:
-    return {node.node_id: node for node in harness.nodes}
+def _cell_map(snapshot: SelfModelSnapshot) -> dict[str, CellRecord]:
+    return {cell.cell_id: cell for cell in snapshot.cells}
+
+
+def _project_plan_id(
+    snapshot: SelfModelSnapshot,
+    followed_cell_ids: Sequence[str],
+) -> str | None:
+    """Hash an ephemeral deterministic view; never persist a plan document."""
+
+    if not snapshot.cells:
+        return None
+    return canonical_sha256(
+        {
+            "schema_version": "hswm-execution-plan/v1",
+            "engine": "single-agent-trace/v1",
+            "snapshot_id": snapshot.snapshot_id,
+            "route_cell_ids": list(followed_cell_ids),
+        }
+    )
 
 
 def validate_agent_decision(
@@ -341,50 +362,49 @@ def validate_agent_decision(
     if any(memory_id not in memories for memory_id in decision.used_memory_ids):
         raise SelfModRuntimeError("agent claimed a memory absent from the snapshot")
 
-    harness = snapshot.harness
-    if harness is None:
-        if decision.followed_node_ids:
-            raise SelfModRuntimeError("agent claimed harness nodes in an empty harness")
+    if not snapshot.cells:
+        if decision.followed_cell_ids:
+            raise SelfModRuntimeError("agent claimed cells in empty structural state")
         if request.budget < 1:
             raise SelfModRuntimeError("episode action exceeds its budget")
         return
 
-    nodes = _harness_map(harness)
-    followed = decision.followed_node_ids
+    cells = _cell_map(snapshot)
+    followed = decision.followed_cell_ids
     if not followed:
-        raise SelfModRuntimeError("an active harness requires an explicit node trace")
-    if followed[0] != harness.entry_node_id:
-        raise SelfModRuntimeError("harness trace must begin at its entry node")
-    for node_id in followed:
-        if node_id not in nodes:
-            raise SelfModRuntimeError("harness trace names an unknown node")
-        if nodes[node_id].capability not in allowed:
+        raise SelfModRuntimeError("structural cells require an explicit cell trace")
+    if followed[0] != snapshot.entry_cell_id:
+        raise SelfModRuntimeError("cell trace must begin at the structural entry")
+    for cell_id in followed:
+        if cell_id not in cells:
+            raise SelfModRuntimeError("cell trace names an unknown cell")
+        if cells[cell_id].capability not in allowed:
             raise SelfModRuntimeError(
-                "harness trace invokes a capability outside the episode authority"
+                "cell trace invokes a capability outside the episode authority"
             )
-        executor = nodes[node_id].executor_agent_id
+        executor = cells[cell_id].executor_agent_id
         if executor is not None and executor != agent_id:
             raise SelfModRuntimeError(
-                "executor-bound harness nodes require their bound agent; "
+                "executor-bound cells require their bound agent; "
                 "use MultiAgentHSWM for a multi-agent route"
             )
     if len(followed) > request.budget:
-        raise SelfModRuntimeError("harness trace exceeds the episode budget")
+        raise SelfModRuntimeError("cell trace exceeds the episode budget")
     for left, right in zip(followed, followed[1:]):
-        if right not in nodes[left].next_node_ids:
-            raise SelfModRuntimeError("harness trace crosses an undeclared edge")
-    if nodes[followed[-1]].capability != decision.selected_capability:
+        if right not in cells[left].next_cell_ids:
+            raise SelfModRuntimeError("cell trace crosses an undeclared edge")
+    if cells[followed[-1]].capability != decision.selected_capability:
         raise SelfModRuntimeError(
-            "selected capability differs from the final harness node"
+            "selected capability differs from the final cell"
         )
     reachable_memory_ids = {
         memory_id
-        for node_id in followed
-        for memory_id in nodes[node_id].memory_ids
+        for cell_id in followed
+        for memory_id in cells[cell_id].memory_ids
     }
     if not set(decision.used_memory_ids) <= reachable_memory_ids:
         raise SelfModRuntimeError(
-            "agent used memory not admitted by the followed harness route"
+            "agent used memory not admitted by the followed cell route"
         )
 
 
@@ -409,20 +429,23 @@ def _make_episode_receipt(
     output_token: CognitiveToken,
     activation: ActivationReceipt | None,
 ) -> EpisodeReceipt:
-    harness = request.active.snapshot.harness
+    plan_id = _project_plan_id(
+        request.active.snapshot,
+        decision.followed_cell_ids,
+    )
     unsigned = {
         "schema_version": EXECUTION_SCHEMA_VERSION,
         "episode_id": request.episode_id,
         "agent_id": agent_id,
         "used_snapshot_id": request.active.snapshot.snapshot_id,
         "used_generation": request.active.generation,
-        "harness_id": harness.harness_id if harness is not None else None,
+        "plan_id": plan_id,
         "input_token_ids": [token.token_id for token in request.tokens],
         "input_content_sha256": _input_content_sha256(request.tokens),
         "output_token": output_token.canonical(),
         "selected_capability": decision.selected_capability,
         "used_memory_ids": list(decision.used_memory_ids),
-        "followed_node_ids": list(decision.followed_node_ids),
+        "followed_cell_ids": list(decision.followed_cell_ids),
         "capability_set_sha256": canonical_sha256(list(request.capabilities)),
         "budget": request.budget,
         "activation": activation.canonical() if activation is not None else None,
@@ -433,13 +456,13 @@ def _make_episode_receipt(
         agent_id=agent_id,
         used_snapshot_id=request.active.snapshot.snapshot_id,
         used_generation=request.active.generation,
-        harness_id=harness.harness_id if harness is not None else None,
+        plan_id=plan_id,
         input_token_ids=tuple(token.token_id for token in request.tokens),
         input_content_sha256=unsigned["input_content_sha256"],
         output_token=output_token,
         selected_capability=decision.selected_capability,
         used_memory_ids=decision.used_memory_ids,
-        followed_node_ids=decision.followed_node_ids,
+        followed_cell_ids=decision.followed_cell_ids,
         capability_set_sha256=unsigned["capability_set_sha256"],
         budget=request.budget,
         activation=activation,
@@ -524,9 +547,13 @@ class SelfModifyingHSWM:
             "agent_id": agent.agent_id,
             "used_snapshot_id": active.snapshot.snapshot_id,
             "used_generation": active.generation,
+            "plan_id": _project_plan_id(
+                active.snapshot,
+                decision.followed_cell_ids,
+            ),
             "selected_capability": decision.selected_capability,
             "used_memory_ids": list(decision.used_memory_ids),
-            "followed_node_ids": list(decision.followed_node_ids),
+            "followed_cell_ids": list(decision.followed_cell_ids),
         }
         output_seed = {
             "episode_id": episode_id,
@@ -608,7 +635,7 @@ class JsonSelfModifyingAgent:
             cell_id=self.agent_id,
             input=make_packet(
                 packet_id=f"packet-{activation_id}",
-                packet_type=f"hswm-selfmod-{operation}-request/v1",
+                packet_type=f"hswm-selfmod-{operation}-request/v2",
                 payload={
                     "messages": [
                         {
@@ -630,7 +657,7 @@ class JsonSelfModifyingAgent:
                     "agent_id": self.agent_id,
                 },
             ),
-            expected_output_type=f"hswm-selfmod-{operation}-response/v1",
+            expected_output_type=f"hswm-selfmod-{operation}-response/v2",
         )
         packet = self.port.invoke(effect)
         if packet.packet_type != effect.expected_output_type:
@@ -654,14 +681,14 @@ class JsonSelfModifyingAgent:
             value={
                 "protocol": EXECUTION_SCHEMA_VERSION,
                 "instruction": (
-                    "Use the active self-authored memory and harness. Select one "
-                    "authorized capability and report the exact harness path."
+                    "Use the active HSWM memories, relations, cells, and routing. "
+                    "Select one authorized capability and report the cell path."
                 ),
                 "response_contract": {
                     "selected_capability": "non-empty string",
                     "output": "any JSON value",
                     "used_memory_ids": ["memory id"],
-                    "followed_node_ids": ["node id in traversal order"],
+                    "followed_cell_ids": ["cell id in traversal order"],
                 },
                 "episode_id": request.episode_id,
                 "budget": request.budget,
@@ -674,7 +701,7 @@ class JsonSelfModifyingAgent:
             "selected_capability",
             "output",
             "used_memory_ids",
-            "followed_node_ids",
+            "followed_cell_ids",
         }
         if set(value) != required:
             raise SelfModRuntimeError("execute response field set is invalid")
@@ -682,8 +709,8 @@ class JsonSelfModifyingAgent:
             selected_capability=value["selected_capability"],
             output=value["output"],
             used_memory_ids=_string_tuple(value["used_memory_ids"], "used_memory_ids"),
-            followed_node_ids=_string_tuple(
-                value["followed_node_ids"], "followed_node_ids", unique=False
+            followed_cell_ids=_string_tuple(
+                value["followed_cell_ids"], "followed_cell_ids", unique=False
             ),
         )
 
@@ -694,9 +721,10 @@ class JsonSelfModifyingAgent:
             value={
                 "protocol": AUTHORING_SCHEMA_VERSION,
                 "instruction": (
-                    "Rewrite your own HSWM memory and future episode harness from "
-                    "the supplied tokens. You may add, edit, delete, replace, or "
-                    "clear state. Do not copy a hidden rulebook."
+                    "Rewrite the HSWM persistent structure itself from the supplied "
+                    "tokens: memories, relations, cells, and routing edges. There is "
+                    "no separate harness or plan document; execution plans are "
+                    "derived later by the runtime."
                 ),
                 "response_contract": {
                     "noop": "boolean",
@@ -712,21 +740,18 @@ class JsonSelfModifyingAgent:
                         }
                     ],
                     "delete_memory_ids": ["memory id"],
-                    "harness_mode": "KEEP | REPLACE | CLEAR",
-                    "harness": {
-                        "purpose": "string",
-                        "entry_node_id": "node id",
-                        "nodes": [
-                            {
-                                "node_id": "string",
-                                "executor_agent_id": "registered agent id or null",
-                                "capability": "authorized capability",
-                                "instruction": "agent-authored instruction",
-                                "memory_ids": ["memory id"],
-                                "next_node_ids": ["node id"],
-                            }
-                        ],
-                    },
+                    "cell_topology_mode": "KEEP | REPLACE | CLEAR",
+                    "entry_cell_id": "entry cell id for REPLACE, otherwise null",
+                    "cells": [
+                        {
+                            "cell_id": "string",
+                            "executor_agent_id": "registered agent id or null",
+                            "capability": "authorized capability",
+                            "instruction": "agent-authored instruction",
+                            "memory_ids": ["memory id"],
+                            "next_cell_ids": ["cell id"],
+                        }
+                    ],
                 },
                 "allowed_capabilities": sorted(
                     request.active.policy.allowed_capabilities
@@ -744,8 +769,9 @@ class JsonSelfModifyingAgent:
             "rationale",
             "upsert_memories",
             "delete_memory_ids",
-            "harness_mode",
-            "harness",
+            "cell_topology_mode",
+            "entry_cell_id",
+            "cells",
         }
         if set(value) != required:
             raise SelfModRuntimeError("author response field set is invalid")
@@ -763,19 +789,20 @@ class JsonSelfModifyingAgent:
             value["delete_memory_ids"], "delete_memory_ids"
         )
         try:
-            harness_mode = HarnessMode(value["harness_mode"])
+            topology_mode = CellTopologyMode(value["cell_topology_mode"])
         except (TypeError, ValueError) as error:
-            raise SelfModRuntimeError("unknown harness_mode") from error
-        harness_value = value["harness"]
-        harness: HarnessDocument | None
-        if harness_mode is HarnessMode.REPLACE:
-            if not isinstance(harness_value, Mapping):
-                raise SelfModRuntimeError("REPLACE requires a harness object")
-            harness = harness_from_mapping(harness_value)
+            raise SelfModRuntimeError("unknown cell_topology_mode") from error
+        if not isinstance(value["cells"], list):
+            raise SelfModRuntimeError("cells must be a list")
+        cells = tuple(cell_from_mapping(item) for item in value["cells"])
+        entry_cell_id = value["entry_cell_id"]
+        if topology_mode is CellTopologyMode.REPLACE:
+            _require_text("entry_cell_id", entry_cell_id)
         else:
-            if harness_value is not None:
-                raise SelfModRuntimeError("KEEP/CLEAR requires harness=null")
-            harness = None
+            if cells or entry_cell_id is not None:
+                raise SelfModRuntimeError(
+                    "KEEP/CLEAR requires cells=[] and entry_cell_id=null"
+                )
         return make_mutation(
             base_snapshot_id=request.active.snapshot.snapshot_id,
             expected_generation=request.active.generation,
@@ -783,8 +810,9 @@ class JsonSelfModifyingAgent:
             source_token_ids=tuple(token.token_id for token in request.tokens),
             upsert_memories=memories,
             delete_memory_ids=delete_ids,
-            harness_mode=harness_mode,
-            harness=harness,
+            cell_topology_mode=topology_mode,
+            cells=cells,
+            entry_cell_id=entry_cell_id,
             rationale=value["rationale"],
         )
 

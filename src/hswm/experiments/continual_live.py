@@ -36,6 +36,7 @@ from pathlib import Path
 import re
 import socket
 import stat
+import tarfile
 import tempfile
 import time
 from typing import Any, Callable, Mapping, Protocol, Sequence
@@ -84,6 +85,18 @@ FROZEN_PILOT_PRECOMMIT_ARTIFACT_SHA256 = (
 )
 FROZEN_PILOT_PRECOMMIT_SHA256 = (
     "a7b9a157b12246568663bb34c466d7cf806e8fb899fd99ae3a6d83d67c7f608d"
+)
+FROZEN_RECOVERY_PRECOMMIT_ARTIFACT_SHA256 = (
+    "5cbcac7399d48ad3436fb382781572e5daefbf1cb0b55473cf33af7171eafc86"
+)
+FROZEN_RECOVERY_PRECOMMIT_SHA256 = (
+    "4aeb7d82a6624e2e47496b5ea66354e95d8cf81e7c501e6961c70070938e8c1e"
+)
+FAILED_SERVICE_BEFORE_ARTIFACT_SHA256 = (
+    "6ebb35cc8b8cd8f04c1a9541fa708131cfd95890ed6b93e25f4cb0c6d0e6d90f"
+)
+FAILED_SERVICE_AFTER_ARTIFACT_SHA256 = (
+    "24e6f31de6a42dfd82ecccc19e68dbe52ea5cf9d80185bf351349138ee7724ab"
 )
 
 
@@ -1772,6 +1785,57 @@ _PRECOMMIT_FIELDS = {
     "supersession_reason",
 }
 
+_RECOVERY_PRECOMMIT_FIELDS = {
+    "assignment_document",
+    "assignment_sha256",
+    "commitment_document",
+    "commitment_set_sha256",
+    "confirmatory_denylist",
+    "confirmatory_eligible",
+    "engineering_only",
+    "failed_primary_binding",
+    "frozen_before_recovery_completion_calls",
+    "intended_provider",
+    "precommit_sha256",
+    "primary_preimages_revealed",
+    "primary_seed_commitment_denylist",
+    "primary_seed_indices_prohibited",
+    "protocol",
+    "recovery_execution",
+    "reserve_preimages_revealed",
+    "schema",
+    "seed_preimage_encoding",
+    "selected_seed_indices",
+    "supersedes_canonical_artifact_sha256",
+    "supersession_reason",
+}
+
+_FAILED_PRIMARY_BINDING_FIELDS = {
+    "artifacts_tar_sha256",
+    "completed_model_responses",
+    "completed_streams",
+    "endpoint_calls_observed",
+    "failed_call_journal_sha256",
+    "failed_run_id",
+    "failed_source_revision",
+    "failure_class",
+    "frozen_v2_precommit_artifact_sha256",
+    "outer_receipt_sha256",
+    "output_terminal_file_sha256",
+    "post_reveal_file_sha256",
+    "post_reveal_validation_sha256",
+    "preregistration_file_sha256",
+    "preregistration_sha256",
+    "retry_permitted",
+    "score_artifacts_written",
+    "seed_reveal_file_sha256",
+    "service_identity_sha256",
+    "status_file_sha256",
+    "terminal_receipt_sha256",
+    "usable_model_responses",
+    "wrapper_terminal_file_sha256",
+}
+
 
 def _require_sha256(value: object, label: str) -> str:
     if not isinstance(value, str) or len(value) != 64:
@@ -1783,10 +1847,184 @@ def _require_sha256(value: object, label: str) -> str:
     return value.lower()
 
 
+def _validate_recovery_precommit(raw: bytes) -> dict[str, Any]:
+    try:
+        value = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise ContinualLiveError(f"invalid recovery precommit JSON: {error}") from error
+    if not isinstance(value, dict) or set(value) != _RECOVERY_PRECOMMIT_FIELDS:
+        raise ContinualLiveError("recovery precommit field set is not frozen v3")
+    if canonical_json_bytes(value) != raw:
+        raise ContinualLiveError(
+            "recovery precommit must be exact canonical JSON with no trailing newline"
+        )
+    unsigned = {key: item for key, item in value.items() if key != "precommit_sha256"}
+    if (
+        _require_sha256(value["precommit_sha256"], "precommit_sha256")
+        != FROZEN_RECOVERY_PRECOMMIT_SHA256
+        or value["precommit_sha256"] != canonical_sha256(unsigned)
+    ):
+        raise ContinualLiveError("recovery precommit self-hash mismatch")
+    if (
+        value["schema"] != "hswm-continual-pilot-recovery-precommit/v3"
+        or value["protocol"] != PROTOCOL
+        or value["engineering_only"] is not True
+        or value["confirmatory_eligible"] is not False
+        or value["frozen_before_recovery_completion_calls"] is not True
+        or value["primary_preimages_revealed"] is not True
+        or value["reserve_preimages_revealed"] is not False
+        or value["primary_seed_indices_prohibited"] != [0, 1]
+        or value["selected_seed_indices"] != [2, 3]
+        or value["seed_preimage_encoding"]
+        != "32 raw bytes; commitment=sha256(raw bytes)"
+    ):
+        raise ContinualLiveError(
+            "recovery authority must prohibit primary indices and select reserve [2, 3]"
+        )
+    commitment_document = value["commitment_document"]
+    if not isinstance(commitment_document, dict) or set(commitment_document) != {
+        "commitments",
+        "protocol",
+        "purpose",
+        "schema",
+    }:
+        raise ContinualLiveError("recovery commitment_document is invalid")
+    commitments = commitment_document["commitments"]
+    if (
+        commitment_document["schema"]
+        != "hswm-continual-pilot-seed-commitments/v1"
+        or commitment_document["protocol"] != PROTOCOL
+        or commitment_document["purpose"]
+        != "engineering-pilot-only-never-confirmatory"
+        or not isinstance(commitments, list)
+        or len(commitments) != 4
+        or len(set(commitments)) != 4
+    ):
+        raise ContinualLiveError("recovery commitment_document values are invalid")
+    for index, commitment in enumerate(commitments):
+        _require_sha256(commitment, f"commitment[{index}]")
+    if (
+        _require_sha256(value["commitment_set_sha256"], "commitment_set_sha256")
+        != canonical_sha256(commitment_document)
+    ):
+        raise ContinualLiveError("recovery commitment document hash mismatch")
+    assignment = value["assignment_document"]
+    if not isinstance(assignment, dict) or set(assignment) != {
+        "primary",
+        "protocol",
+        "purpose",
+        "reserve",
+        "reserve_rule",
+        "resume_rule",
+        "schema",
+    }:
+        raise ContinualLiveError("recovery assignment_document is invalid")
+    if (
+        assignment["schema"] != "hswm-continual-pilot-seed-assignment/v1"
+        or assignment["protocol"] != PROTOCOL
+        or assignment["purpose"] != "engineering-pilot-only-never-confirmatory"
+        or assignment["primary"] != commitments[:2]
+        or assignment["reserve"] != commitments[2:]
+        or assignment["reserve_rule"]
+        != "mechanical infrastructure invalidity only; never outcome-conditioned"
+        or assignment["resume_rule"]
+        != "no retry or resume with a revealed preimage"
+    ):
+        raise ContinualLiveError("recovery assignment_document values are invalid")
+    if (
+        _require_sha256(value["assignment_sha256"], "assignment_sha256")
+        != canonical_sha256(assignment)
+        or value["confirmatory_denylist"] != commitments
+        or value["primary_seed_commitment_denylist"] != commitments[:2]
+    ):
+        raise ContinualLiveError("recovery assignment or denylist mismatch")
+    expected_execution = {
+        "answer_max_tokens": 128,
+        "arms": ["hswm", "reset", "no_write", "plain"],
+        "base_endpoint_calls_per_stream": 164,
+        "choice_count": 8,
+        "delay": 4,
+        "endpoint_call_budget_total": 358,
+        "endpoint_calls_per_stream": 179,
+        "horizon": 20,
+        "max_input_bytes": 2_000_000,
+        "max_state_bytes": 1_000_000,
+        "per_call_timeout_seconds": 600.0,
+        "removal_restore": True,
+        "removal_restore_extra_calls_per_stream": 15,
+        "removal_restore_probes_per_stream": 5,
+        "resume_allowed": False,
+        "retry_limit": 0,
+        "streams": 2,
+        "update_max_tokens": 8192,
+    }
+    if value["recovery_execution"] != expected_execution:
+        raise ContinualLiveError("recovery execution differs from frozen v3")
+    provider = value["intended_provider"]
+    if not isinstance(provider, dict) or set(provider) != {
+        "enable_thinking",
+        "endpoint",
+        "model_revision",
+        "model_root",
+        "served_model",
+        "temperature",
+        "vllm_version",
+    }:
+        raise ContinualLiveError("recovery intended_provider field set is invalid")
+    if (
+        provider["enable_thinking"] is not False
+        or provider["temperature"] != 0.0
+        or not isinstance(provider["endpoint"], str)
+        or not provider["endpoint"].startswith(("http://", "https://"))
+        or not isinstance(provider["served_model"], str)
+        or not provider["served_model"]
+        or not isinstance(provider["model_root"], str)
+        or not provider["model_root"]
+        or not re.fullmatch(r"[0-9a-f]{40}", str(provider["model_revision"]))
+        or not isinstance(provider["vllm_version"], str)
+        or not provider["vllm_version"]
+    ):
+        raise ContinualLiveError("recovery intended_provider values are invalid")
+    binding = value["failed_primary_binding"]
+    if not isinstance(binding, dict) or set(binding) != _FAILED_PRIMARY_BINDING_FIELDS:
+        raise ContinualLiveError("failed primary binding field set is invalid")
+    for key in binding:
+        if key.endswith("_sha256"):
+            _require_sha256(binding[key], f"failed_primary_binding.{key}")
+    if (
+        binding["completed_model_responses"] != 0
+        or binding["completed_streams"] != 0
+        or binding["endpoint_calls_observed"] != 1
+        or binding["failure_class"] != "mechanical_timeout_before_response"
+        or binding["retry_permitted"] is not False
+        or binding["score_artifacts_written"] is not False
+        or binding["usable_model_responses"] != 0
+        or binding["frozen_v2_precommit_artifact_sha256"]
+        != FROZEN_PILOT_PRECOMMIT_ARTIFACT_SHA256
+        or not isinstance(binding["failed_run_id"], str)
+        or not binding["failed_run_id"]
+        or not re.fullmatch(r"[0-9a-f]{40}", str(binding["failed_source_revision"]))
+    ):
+        raise ContinualLiveError("failed primary binding does not prove no-score timeout")
+    if (
+        value["supersedes_canonical_artifact_sha256"]
+        != FROZEN_PILOT_PRECOMMIT_ARTIFACT_SHA256
+        or "timed out" not in value["supersession_reason"]
+        or "120 to 600" not in value["supersession_reason"]
+    ):
+        raise ContinualLiveError("recovery supersession does not bind the consumed v2")
+    return value
+
+
 def _read_pilot_precommit(path: Path) -> tuple[dict[str, Any], bytes]:
     raw = path.read_bytes()
-    if _digest_bytes(raw) != FROZEN_PILOT_PRECOMMIT_ARTIFACT_SHA256:
-        raise ContinualLiveError("pilot precommit is not the exact frozen v2 artifact")
+    artifact_sha256 = _digest_bytes(raw)
+    if artifact_sha256 == FROZEN_RECOVERY_PRECOMMIT_ARTIFACT_SHA256:
+        return _validate_recovery_precommit(raw), raw
+    if artifact_sha256 != FROZEN_PILOT_PRECOMMIT_ARTIFACT_SHA256:
+        raise ContinualLiveError(
+            "precommit is neither the exact frozen v2 nor reserve-recovery v3 artifact"
+        )
     try:
         value = json.loads(raw.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as error:
@@ -1925,6 +2163,356 @@ def _read_pilot_precommit(path: Path) -> tuple[dict[str, Any], bytes]:
     return value, raw
 
 
+def _sha256_file(path: Path) -> str:
+    digest = sha256()
+    try:
+        with path.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(chunk)
+    except OSError as error:
+        raise ContinualLiveError(f"cannot read bound artifact {path}: {error}") from error
+    return digest.hexdigest()
+
+
+def _json_bytes(raw: bytes, label: str) -> dict[str, Any]:
+    try:
+        value = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise ContinualLiveError(f"{label} is not valid JSON: {error}") from error
+    if not isinstance(value, dict):
+        raise ContinualLiveError(f"{label} must be one JSON object")
+    return value
+
+
+def _tar_regular_members(archive: tarfile.TarFile) -> dict[str, tarfile.TarInfo]:
+    result: dict[str, tarfile.TarInfo] = {}
+    for member in archive.getmembers():
+        if member.name.startswith("/") or ".." in Path(member.name).parts:
+            raise ContinualLiveError("failed-run tar contains an unsafe member path")
+        if member.issym() or member.islnk():
+            raise ContinualLiveError("failed-run tar must not contain links")
+        if not member.isfile():
+            continue
+        if member.name in result:
+            raise ContinualLiveError("failed-run tar contains duplicate file members")
+        result[member.name] = member
+    if not result or len(result) > 512:
+        raise ContinualLiveError("failed-run tar file cardinality is invalid")
+    return result
+
+
+def _tar_member_bytes(
+    archive: tarfile.TarFile,
+    members: Mapping[str, tarfile.TarInfo],
+    name: str,
+    *,
+    max_bytes: int = 16_000_000,
+) -> bytes:
+    member = members.get(name)
+    if member is None:
+        raise ContinualLiveError(f"failed-run tar is missing {name}")
+    if member.size > max_bytes:
+        raise ContinualLiveError(f"failed-run tar member {name} exceeds its byte bound")
+    handle = archive.extractfile(member)
+    if handle is None:
+        raise ContinualLiveError(f"failed-run tar member {name} is unreadable")
+    raw = handle.read(max_bytes + 1)
+    if len(raw) != member.size or len(raw) > max_bytes:
+        raise ContinualLiveError(f"failed-run tar member {name} is truncated or oversized")
+    return raw
+
+
+def _tar_member_sha256(
+    archive: tarfile.TarFile, member: tarfile.TarInfo
+) -> str:
+    handle = archive.extractfile(member)
+    if handle is None:
+        raise ContinualLiveError(f"failed-run tar member {member.name} is unreadable")
+    digest = sha256()
+    observed = 0
+    for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+        observed += len(chunk)
+        digest.update(chunk)
+    if observed != member.size:
+        raise ContinualLiveError(f"failed-run tar member {member.name} is truncated")
+    return digest.hexdigest()
+
+
+def _validate_failed_primary_artifacts(
+    artifacts_tar: Path,
+    outer_receipt_path: Path,
+    *,
+    precommit: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Prove that reserve activation follows the exact no-score r2 timeout."""
+
+    binding = precommit["failed_primary_binding"]
+    tar_sha256 = _sha256_file(artifacts_tar)
+    receipt_raw = outer_receipt_path.read_bytes()
+    receipt_sha256 = _digest_bytes(receipt_raw)
+    if tar_sha256 != binding["artifacts_tar_sha256"]:
+        raise ContinualLiveError("failed-run artifacts.tar differs from frozen v3")
+    if receipt_sha256 != binding["outer_receipt_sha256"]:
+        raise ContinualLiveError("failed-run outer receipt differs from frozen v3")
+    outer_receipt = _json_bytes(receipt_raw, "failed-run outer receipt")
+    if set(outer_receipt) != {
+        "artifact",
+        "command_sha256",
+        "durable_tier",
+        "execution_tier",
+        "exit_code",
+        "finished_at",
+        "run_id",
+        "schema",
+        "source_commit",
+        "source_root",
+        "started_at",
+        "status",
+    }:
+        raise ContinualLiveError("failed-run outer receipt field set is invalid")
+    artifact = outer_receipt["artifact"]
+    if (
+        outer_receipt["schema"] != "bhgman-hswm-run/v1"
+        or outer_receipt["run_id"] != binding["failed_run_id"]
+        or outer_receipt["source_commit"] != binding["failed_source_revision"]
+        or outer_receipt["status"] != "failed"
+        or outer_receipt["exit_code"] != 1
+        or outer_receipt["execution_tier"] != "dgx-nvme"
+        or outer_receipt["durable_tier"] != "data01-4tb-nfs"
+        or not isinstance(artifact, dict)
+        or artifact
+        != {
+            "bytes": artifacts_tar.stat().st_size,
+            "name": "artifacts.tar",
+            "sha256": tar_sha256,
+        }
+    ):
+        raise ContinualLiveError("failed-run outer receipt does not bind the r2 artifact")
+
+    pilot_prefix = "outputs/pilot/"
+    required = {
+        "journal": pilot_prefix + "state/stream-00/hswm/calls.jsonl",
+        "post_reveal": pilot_prefix + "post_reveal_validation.json",
+        "precommit": pilot_prefix + "frozen_precommit.canonical.json",
+        "prereg": pilot_prefix + "preregistration.json",
+        "seed_reveal": pilot_prefix + "seed_reveal.json",
+        "status": pilot_prefix + "status.json",
+        "terminal": pilot_prefix + "terminal_receipt.json",
+        "service_before": "outputs/ops/service.before.canonical.json",
+        "service_after": "outputs/ops/service.after.canonical.json",
+        "wrapper": "outputs/ops/wrapper_terminal.canonical.json",
+    }
+    try:
+        archive_context = tarfile.open(artifacts_tar, mode="r:*")
+    except (OSError, tarfile.TarError) as error:
+        raise ContinualLiveError(f"failed-run artifact is not a readable tar: {error}") from error
+    with archive_context as archive:
+        members = _tar_regular_members(archive)
+        raw = {
+            key: _tar_member_bytes(archive, members, name)
+            for key, name in required.items()
+        }
+        expected_member_hashes = {
+            "journal": binding["failed_call_journal_sha256"],
+            "post_reveal": binding["post_reveal_file_sha256"],
+            "precommit": binding["frozen_v2_precommit_artifact_sha256"],
+            "prereg": binding["preregistration_file_sha256"],
+            "seed_reveal": binding["seed_reveal_file_sha256"],
+            "status": binding["status_file_sha256"],
+            "terminal": binding["output_terminal_file_sha256"],
+            "service_before": FAILED_SERVICE_BEFORE_ARTIFACT_SHA256,
+            "service_after": FAILED_SERVICE_AFTER_ARTIFACT_SHA256,
+            "wrapper": binding["wrapper_terminal_file_sha256"],
+        }
+        for key, expected in expected_member_hashes.items():
+            if _digest_bytes(raw[key]) != expected:
+                raise ContinualLiveError(
+                    f"failed-run tar member {required[key]} differs from frozen evidence"
+                )
+
+        terminal = _json_bytes(raw["terminal"], "failed-run terminal receipt")
+        terminal_unsigned = {
+            key: item for key, item in terminal.items() if key != "receipt_sha256"
+        }
+        if (
+            terminal.get("receipt_sha256") != canonical_sha256(terminal_unsigned)
+            or terminal.get("receipt_sha256") != binding["terminal_receipt_sha256"]
+            or terminal.get("status") != "failed"
+            or terminal.get("completed_streams") != 0
+            or terminal.get("removal_mediation_gate_passed") is not None
+        ):
+            raise ContinualLiveError("failed-run terminal does not prove zero completion")
+        artifact_hashes = terminal.get("artifact_sha256s")
+        if not isinstance(artifact_hashes, dict):
+            raise ContinualLiveError("failed-run terminal lacks its artifact hash map")
+        actual_pilot_hashes = {
+            name.removeprefix(pilot_prefix): _tar_member_sha256(archive, member)
+            for name, member in members.items()
+            if name.startswith(pilot_prefix)
+            and name != required["terminal"]
+        }
+        if actual_pilot_hashes != artifact_hashes:
+            raise ContinualLiveError("failed-run terminal artifact map is not exact")
+
+        status = _json_bytes(raw["status"], "failed-run status")
+        if (
+            set(status) != {"completed_streams", "error", "status"}
+            or status["status"] != "failed"
+            or status["completed_streams"] != 0
+            or status["error"] != terminal.get("error")
+        ):
+            raise ContinualLiveError("failed-run status differs from terminal receipt")
+        journal_lines = [line for line in raw["journal"].splitlines() if line]
+        if len(journal_lines) != 2:
+            raise ContinualLiveError("failed-run journal is not exactly intent+failed")
+        events = [
+            _json_bytes(line, f"failed-run journal event {index}")
+            for index, line in enumerate(journal_lines)
+        ]
+        intent, failed = events
+        if (
+            intent.get("event") != "intent"
+            or failed.get("event") != "failed"
+            or intent.get("arm") != failed.get("arm")
+            or intent.get("arm") != "hswm"
+            or intent.get("operation") != failed.get("operation")
+            or intent.get("operation") != "update"
+            or intent.get("ordinal") != failed.get("ordinal")
+            or intent.get("ordinal") != 0
+            or intent.get("request_id") != failed.get("request_id")
+            or intent.get("max_output_tokens") != 8192
+            or intent.get("backend", {}).get("timeout_seconds") != 120.0
+            or failed.get("outcome") != "unknown"
+            or failed.get("retry_permitted") is not False
+            or "timed out" not in str(failed.get("error", "")).lower()
+            or any("completion" in event for event in events)
+        ):
+            raise ContinualLiveError("failed-run journal is not a first-call timeout")
+        journal_names = sorted(
+            name for name in members if name.startswith(pilot_prefix) and name.endswith("calls.jsonl")
+        )
+        if journal_names != [required["journal"]]:
+            raise ContinualLiveError("failed-run contains calls beyond the first HSWM intent")
+
+        forbidden_score_files = {
+            pilot_prefix + name
+            for name in (
+                "call_ledgers.json",
+                "parity_audits.json",
+                "removal_restore.json",
+                "runs.json",
+            )
+        }
+        if forbidden_score_files & set(members):
+            raise ContinualLiveError("failed-run contains score or completed-call artifacts")
+        post_reveal = _json_bytes(raw["post_reveal"], "failed-run post-reveal")
+        post_reveal_unsigned = {
+            key: item for key, item in post_reveal.items()
+            if key != "validation_sha256"
+        }
+        if (
+            post_reveal.get("validation_sha256")
+            != binding["post_reveal_validation_sha256"]
+            or post_reveal.get("validation_sha256")
+            != canonical_sha256(post_reveal_unsigned)
+            or post_reveal.get("valid") is not False
+        ):
+            raise ContinualLiveError("failed-run post-reveal record is not invalid/no-score")
+        prior_precommit = _json_bytes(raw["precommit"], "failed-run v2 precommit")
+        if prior_precommit.get("schema") != "hswm-continual-pilot-precommit/v2":
+            raise ContinualLiveError("failed-run does not contain the consumed v2 authority")
+        prereg = _json_bytes(raw["prereg"], "failed-run preregistration")
+        prereg_unsigned = {
+            key: item for key, item in prereg.items() if key != "prereg_sha256"
+        }
+        if (
+            prereg.get("prereg_sha256") != canonical_sha256(prereg_unsigned)
+            or prereg.get("prereg_sha256") != binding["preregistration_sha256"]
+            or prereg.get("selected_seed_indices") != [0, 1]
+            or prereg.get("precommit_artifact_sha256")
+            != binding["frozen_v2_precommit_artifact_sha256"]
+        ):
+            raise ContinualLiveError("failed-run preregistration is not consumed primary v2")
+        seed_reveal = _json_bytes(raw["seed_reveal"], "failed-run seed reveal")
+        reveal_unsigned = {
+            key: item for key, item in seed_reveal.items() if key != "reveal_sha256"
+        }
+        commitments = list(precommit["commitment_document"]["commitments"])
+        used = seed_reveal.get("used_seeds")
+        if (
+            seed_reveal.get("reveal_sha256") != canonical_sha256(reveal_unsigned)
+            or seed_reveal.get("selected_seed_indices") != [0, 1]
+            or seed_reveal.get("ordered_seed_commitments") != commitments
+            or not isinstance(used, list)
+            or len(used) != 2
+        ):
+            raise ContinualLiveError("failed-run seed reveal does not consume primary only")
+        for index, item in enumerate(used):
+            if (
+                not isinstance(item, dict)
+                or item.get("frozen_index") != index
+                or not isinstance(item.get("seed_hex"), str)
+            ):
+                raise ContinualLiveError("failed-run primary seed reveal is malformed")
+            try:
+                seed = bytes.fromhex(item["seed_hex"])
+            except ValueError as error:
+                raise ContinualLiveError("failed-run primary seed reveal is malformed") from error
+            if len(seed) != 32 or _digest_bytes(seed) != commitments[index]:
+                raise ContinualLiveError("failed-run primary seed reveal mismatches commitment")
+
+        service_before = _json_bytes(raw["service_before"], "service before")
+        service_after = _json_bytes(raw["service_after"], "service after")
+        for phase, service in (("before", service_before), ("after", service_after)):
+            if (
+                set(service) != {"identity", "identity_sha256", "phase"}
+                or service["phase"] != phase
+                or service["identity_sha256"]
+                != canonical_sha256(service["identity"])
+                or service["identity_sha256"] != binding["service_identity_sha256"]
+            ):
+                raise ContinualLiveError(f"failed-run service {phase} binding is invalid")
+        if service_before["identity"] != service_after["identity"]:
+            raise ContinualLiveError("failed-run service identity changed during timeout")
+        wrapper = _json_bytes(raw["wrapper"], "failed-run wrapper terminal")
+        if (
+            set(wrapper)
+            != {
+                "after_capture_exit_code",
+                "after_identity_sha256",
+                "before_identity_sha256",
+                "identity_unchanged",
+                "pilot_exit_code",
+                "schema",
+            }
+            or wrapper["schema"] != "hswm-continual-live-ops-wrapper/v1"
+            or wrapper["before_identity_sha256"]
+            != binding["service_identity_sha256"]
+            or wrapper["after_identity_sha256"]
+            != binding["service_identity_sha256"]
+            or wrapper["identity_unchanged"] is not True
+            or wrapper["pilot_exit_code"] != 1
+            or wrapper["after_capture_exit_code"] != 0
+        ):
+            raise ContinualLiveError("failed-run wrapper terminal is invalid")
+
+    return {
+        "artifacts_tar_sha256": tar_sha256,
+        "completed_model_responses": 0,
+        "completed_streams": 0,
+        "failed_call_journal_sha256": binding["failed_call_journal_sha256"],
+        "failed_primary_binding_sha256": canonical_sha256(binding),
+        "failure_class": "mechanical_timeout_before_response",
+        "no_score_proof": True,
+        "outer_receipt_sha256": receipt_sha256,
+        "primary_seed_indices_consumed": [0, 1],
+        "reserve_seed_indices_authorized": [2, 3],
+        "service_identity_sha256": binding["service_identity_sha256"],
+        "terminal_receipt_sha256": binding["terminal_receipt_sha256"],
+        "wrapper": wrapper,
+    }
+
+
 def _cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Run the engineering-only HSWM continual-learning pilot."
@@ -1934,6 +2522,8 @@ def _cli_parser() -> argparse.ArgumentParser:
     parser.add_argument("--streams", type=int, default=2)
     parser.add_argument("--seed-file", type=Path, required=True)
     parser.add_argument("--precommit-file", type=Path, required=True)
+    parser.add_argument("--failed-run-artifacts-tar", type=Path)
+    parser.add_argument("--failed-run-receipt", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--api-key-env", default="OPENAI_API_KEY")
     parser.add_argument("--answer-max-tokens", type=int, default=128)
@@ -1961,7 +2551,15 @@ def main(argv: Sequence[str] | None = None) -> int:
         raise ContinualLiveError("output directory must be absent or empty; no resume")
     output.mkdir(parents=True, exist_ok=True)
     precommit, precommit_raw = _read_pilot_precommit(args.precommit_file)
-    _write_bytes_atomic(output / "frozen_precommit.canonical.json", precommit_raw)
+    if precommit["schema"] == "hswm-continual-pilot-precommit/v2":
+        raise ContinualLiveError(
+            "primary v2 execution authority is consumed and superseded; "
+            "indices [0, 1] must never be reused"
+        )
+    if args.failed_run_artifacts_tar is None or args.failed_run_receipt is None:
+        raise ContinualLiveError(
+            "reserve recovery requires the exact failed-run tar and outer receipt"
+        )
     frozen_seeds = _read_secret_seeds(args.seed_file)
     commitments = tuple(precommit["commitment_document"]["commitments"])
     if len(frozen_seeds) != 4:
@@ -1969,7 +2567,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     for index, (seed, commitment) in enumerate(zip(frozen_seeds, commitments, strict=True)):
         if _digest_bytes(seed) != commitment:
             raise ContinualLiveError(f"seed commitment mismatch at frozen index {index}")
-    seed_indices = tuple(precommit["primary_seed_indices"])
+    seed_indices = tuple(precommit["selected_seed_indices"])
     selected_seeds = tuple(frozen_seeds[index] for index in seed_indices)
     budget = ArmBudget(
         answer_max_output_tokens=args.answer_max_tokens,
@@ -1983,7 +2581,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         api_key=os.environ.get(args.api_key_env),
         timeout_seconds=args.timeout,
     )
-    execution = precommit["primary_execution"]
+    execution = precommit["recovery_execution"]
     provider = precommit["intended_provider"]
     if (
         args.endpoint.rstrip("/") != str(provider["endpoint"]).rstrip("/")
@@ -2002,12 +2600,24 @@ def main(argv: Sequence[str] | None = None) -> int:
         raise ContinualLiveError("container_digest must be sha256:<64 hex>")
     if not re.fullmatch(r"sha256:[0-9a-f]{64}", args.service_binding):
         raise ContinualLiveError("service_binding must be sha256:<64 hex>")
+    failed_primary_validation = _validate_failed_primary_artifacts(
+        args.failed_run_artifacts_tar,
+        args.failed_run_receipt,
+        precommit=precommit,
+    )
+    _write_bytes_atomic(output / "frozen_precommit.canonical.json", precommit_raw)
+    _write_json_atomic(
+        output / "failed_primary_validation.json", failed_primary_validation
+    )
     prereg = {
         "backend": backend_config.public_identity(),
         "budget": budget.canonical(),
         "container_digest": args.container_digest,
         "engineering_only": True,
-        "mode": "engineering-pilot-only",
+        "failed_primary_binding_sha256": failed_primary_validation[
+            "failed_primary_binding_sha256"
+        ],
+        "mode": "engineering-pilot-reserve-recovery-only",
         "protocol": LIVE_PROTOCOL,
         "removal_restore_requested": args.removal_restore,
         "ordered_seed_commitments": list(commitments),

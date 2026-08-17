@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import base64
 from hashlib import sha256
+import io
 import json
 from pathlib import Path
+import tarfile
 from typing import Any, Callable, Mapping, Sequence
 
 import pytest
@@ -314,6 +316,232 @@ def _write_test_precommit(
     )
     monkeypatch.setattr(
         live, "FROZEN_PILOT_PRECOMMIT_SHA256", value["precommit_sha256"]
+    )
+    return commitments
+
+
+def _json_artifact(value: Mapping[str, Any]) -> bytes:
+    return canonical_json_bytes(value) + b"\n"
+
+
+def _write_failed_primary_fixture(
+    tmp_path: Path,
+    *,
+    seeds: Sequence[bytes],
+    v2_precommit_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> tuple[Path, Path, dict[str, Any]]:
+    commitments = [sha256(seed).hexdigest() for seed in seeds]
+    v2_raw = v2_precommit_path.read_bytes()
+    prereg: dict[str, Any] = {
+        "precommit_artifact_sha256": sha256(v2_raw).hexdigest(),
+        "selected_seed_indices": [0, 1],
+    }
+    prereg["prereg_sha256"] = live.canonical_sha256(prereg)
+    reveal: dict[str, Any] = {
+        "ordered_seed_commitments": commitments,
+        "selected_seed_indices": [0, 1],
+        "used_seeds": [
+            {"frozen_index": index, "seed_hex": seeds[index].hex()}
+            for index in (0, 1)
+        ],
+    }
+    reveal["reveal_sha256"] = live.canonical_sha256(reveal)
+    post_reveal: dict[str, Any] = {"valid": False}
+    post_reveal["validation_sha256"] = live.canonical_sha256(post_reveal)
+    timeout_error = (
+        "ContinualLiveError: model call outcome unknown; no retry: timed out"
+    )
+    status = {
+        "completed_streams": 0,
+        "error": timeout_error,
+        "status": "failed",
+    }
+    request_id = "cl-first-timeout"
+    journal = b"".join(
+        _json_artifact(event)
+        for event in (
+            {
+                "arm": "hswm",
+                "backend": {"timeout_seconds": 120.0},
+                "event": "intent",
+                "max_output_tokens": 8192,
+                "operation": "update",
+                "ordinal": 0,
+                "request_id": request_id,
+            },
+            {
+                "arm": "hswm",
+                "error": timeout_error,
+                "event": "failed",
+                "operation": "update",
+                "ordinal": 0,
+                "outcome": "unknown",
+                "request_id": request_id,
+                "retry_permitted": False,
+            },
+        )
+    )
+    pilot_files = {
+        "frozen_precommit.canonical.json": v2_raw,
+        "post_reveal_validation.json": _json_artifact(post_reveal),
+        "preregistration.json": _json_artifact(prereg),
+        "seed_reveal.json": _json_artifact(reveal),
+        "state/stream-00/hswm/calls.jsonl": journal,
+        "status.json": _json_artifact(status),
+    }
+    terminal: dict[str, Any] = {
+        "artifact_sha256s": {
+            name: sha256(raw).hexdigest() for name, raw in pilot_files.items()
+        },
+        "completed_streams": 0,
+        "engineering_only": True,
+        "error": timeout_error,
+        "removal_mediation_gate_passed": None,
+        "protocol": live.LIVE_PROTOCOL,
+        "status": "failed",
+    }
+    terminal["receipt_sha256"] = live.canonical_sha256(terminal)
+    terminal_raw = _json_artifact(terminal)
+    pilot_files["terminal_receipt.json"] = terminal_raw
+
+    identity = {"endpoint": "http://model.invalid", "model": "fixture-model"}
+    identity_sha256 = live.canonical_sha256(identity)
+    before = {
+        "identity": identity,
+        "identity_sha256": identity_sha256,
+        "phase": "before",
+    }
+    after = {**before, "phase": "after"}
+    before_raw = canonical_json_bytes(before)
+    after_raw = canonical_json_bytes(after)
+    monkeypatch.setattr(
+        live, "FAILED_SERVICE_BEFORE_ARTIFACT_SHA256", sha256(before_raw).hexdigest()
+    )
+    monkeypatch.setattr(
+        live, "FAILED_SERVICE_AFTER_ARTIFACT_SHA256", sha256(after_raw).hexdigest()
+    )
+    wrapper = {
+        "after_capture_exit_code": 0,
+        "after_identity_sha256": identity_sha256,
+        "before_identity_sha256": identity_sha256,
+        "identity_unchanged": True,
+        "pilot_exit_code": 1,
+        "schema": "hswm-continual-live-ops-wrapper/v1",
+    }
+    wrapper_raw = canonical_json_bytes(wrapper)
+
+    archive_path = tmp_path / "failed-artifacts.tar"
+    all_files = {
+        **{f"outputs/pilot/{name}": raw for name, raw in pilot_files.items()},
+        "outputs/ops/service.before.canonical.json": before_raw,
+        "outputs/ops/service.after.canonical.json": after_raw,
+        "outputs/ops/wrapper_terminal.canonical.json": wrapper_raw,
+    }
+    with tarfile.open(archive_path, "w") as archive:
+        for name, raw in sorted(all_files.items()):
+            info = tarfile.TarInfo(name)
+            info.size = len(raw)
+            info.mtime = 0
+            archive.addfile(info, io.BytesIO(raw))
+
+    tar_sha256 = sha256(archive_path.read_bytes()).hexdigest()
+    outer_receipt = {
+        "artifact": {
+            "bytes": archive_path.stat().st_size,
+            "name": "artifacts.tar",
+            "sha256": tar_sha256,
+        },
+        "command_sha256": "f" * 64,
+        "durable_tier": "data01-4tb-nfs",
+        "execution_tier": "dgx-nvme",
+        "exit_code": 1,
+        "finished_at": "2026-08-17T16:16:14Z",
+        "run_id": "fixture-r2-timeout",
+        "schema": "bhgman-hswm-run/v1",
+        "source_commit": "c" * 40,
+        "source_root": "/fixture/source",
+        "started_at": "2026-08-17T16:14:13Z",
+        "status": "failed",
+    }
+    receipt_path = tmp_path / "failed-receipt.json"
+    receipt_raw = _json_artifact(outer_receipt)
+    receipt_path.write_bytes(receipt_raw)
+    binding = {
+        "artifacts_tar_sha256": tar_sha256,
+        "completed_model_responses": 0,
+        "completed_streams": 0,
+        "endpoint_calls_observed": 1,
+        "failed_call_journal_sha256": sha256(journal).hexdigest(),
+        "failed_run_id": "fixture-r2-timeout",
+        "failed_source_revision": "c" * 40,
+        "failure_class": "mechanical_timeout_before_response",
+        "frozen_v2_precommit_artifact_sha256": sha256(v2_raw).hexdigest(),
+        "outer_receipt_sha256": sha256(receipt_raw).hexdigest(),
+        "output_terminal_file_sha256": sha256(terminal_raw).hexdigest(),
+        "post_reveal_file_sha256": sha256(pilot_files["post_reveal_validation.json"]).hexdigest(),
+        "post_reveal_validation_sha256": post_reveal["validation_sha256"],
+        "preregistration_file_sha256": sha256(pilot_files["preregistration.json"]).hexdigest(),
+        "preregistration_sha256": prereg["prereg_sha256"],
+        "retry_permitted": False,
+        "score_artifacts_written": False,
+        "seed_reveal_file_sha256": sha256(pilot_files["seed_reveal.json"]).hexdigest(),
+        "service_identity_sha256": identity_sha256,
+        "status_file_sha256": sha256(pilot_files["status.json"]).hexdigest(),
+        "terminal_receipt_sha256": terminal["receipt_sha256"],
+        "usable_model_responses": 0,
+        "wrapper_terminal_file_sha256": sha256(wrapper_raw).hexdigest(),
+    }
+    return archive_path, receipt_path, binding
+
+
+def _write_test_recovery_precommit(
+    path: Path,
+    *,
+    seeds: Sequence[bytes],
+    binding: Mapping[str, Any],
+    monkeypatch: pytest.MonkeyPatch,
+    selected_seed_indices: Sequence[int] = (2, 3),
+) -> tuple[str, ...]:
+    fixture = (
+        Path(__file__).parent
+        / "fixtures"
+        / "pilot_recovery_precommit_v3.canonical.json"
+    )
+    value = json.loads(fixture.read_bytes())
+    commitments = tuple(sha256(seed).hexdigest() for seed in seeds)
+    value["commitment_document"]["commitments"] = list(commitments)
+    value["commitment_set_sha256"] = live.canonical_sha256(
+        value["commitment_document"]
+    )
+    value["assignment_document"]["primary"] = list(commitments[:2])
+    value["assignment_document"]["reserve"] = list(commitments[2:])
+    value["assignment_sha256"] = live.canonical_sha256(value["assignment_document"])
+    value["confirmatory_denylist"] = list(commitments)
+    value["primary_seed_commitment_denylist"] = list(commitments[:2])
+    value["selected_seed_indices"] = list(selected_seed_indices)
+    value["failed_primary_binding"] = dict(binding)
+    value["supersedes_canonical_artifact_sha256"] = binding[
+        "frozen_v2_precommit_artifact_sha256"
+    ]
+    value["intended_provider"] = {
+        "enable_thinking": False,
+        "endpoint": "http://model.invalid",
+        "model_revision": "a" * 40,
+        "model_root": "fixture/root",
+        "served_model": "fixture-model",
+        "temperature": 0.0,
+        "vllm_version": "test",
+    }
+    value.pop("precommit_sha256")
+    value["precommit_sha256"] = live.canonical_sha256(value)
+    raw = canonical_json_bytes(value)
+    path.write_bytes(raw)
+    monkeypatch.setattr(
+        live, "FROZEN_RECOVERY_PRECOMMIT_ARTIFACT_SHA256", sha256(raw).hexdigest()
+    )
+    monkeypatch.setattr(
+        live, "FROZEN_RECOVERY_PRECOMMIT_SHA256", value["precommit_sha256"]
     )
     return commitments
 
@@ -648,16 +876,46 @@ def test_sealed_probe_pack_is_deterministic_and_unused() -> None:
         assert probe.step > manifest.horizon
 
 
-def test_cli_binds_four_exact_seeds_retains_failure_and_forbids_resume(
+def test_exact_frozen_recovery_precommit_fixture() -> None:
+    path = (
+        Path(__file__).parent
+        / "fixtures"
+        / "pilot_recovery_precommit_v3.canonical.json"
+    )
+    raw = path.read_bytes()
+    assert len(raw) == 4934
+    assert raw[-1:] == b"}"
+    assert sha256(raw).hexdigest() == live.FROZEN_RECOVERY_PRECOMMIT_ARTIFACT_SHA256
+    value, observed = live._read_pilot_precommit(path)
+    assert observed == raw
+    unsigned = {key: item for key, item in value.items() if key != "precommit_sha256"}
+    assert live.canonical_sha256(unsigned) == live.FROZEN_RECOVERY_PRECOMMIT_SHA256
+    assert value["selected_seed_indices"] == [2, 3]
+    assert value["recovery_execution"]["per_call_timeout_seconds"] == 600.0
+
+
+def test_cli_uses_reserve_only_after_bound_no_score_timeout(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     seeds = tuple(bytes([index + 1]) * 32 for index in range(4))
-    commitments = tuple(sha256(seed).hexdigest() for seed in seeds)
     seed_path = tmp_path / "seeds.json"
     seed_path.write_text(json.dumps([seed.hex() for seed in seeds]), encoding="ascii")
     seed_path.chmod(0o600)
-    precommit_path = tmp_path / "precommit.json"
-    commitments = _write_test_precommit(precommit_path, seeds, monkeypatch)
+    v2_path = tmp_path / "v2-precommit.json"
+    _write_test_precommit(v2_path, seeds, monkeypatch)
+    archive_path, receipt_path, binding = _write_failed_primary_fixture(
+        tmp_path,
+        seeds=seeds,
+        v2_precommit_path=v2_path,
+        monkeypatch=monkeypatch,
+    )
+    precommit_path = tmp_path / "v3-precommit.json"
+    commitments = _write_test_recovery_precommit(
+        precommit_path,
+        seeds=seeds,
+        binding=binding,
+        monkeypatch=monkeypatch,
+    )
     output = tmp_path / "output"
 
     def fail_call(self: Any, **kwargs: Any) -> ModelCompletion:
@@ -675,6 +933,10 @@ def test_cli_binds_four_exact_seeds_retains_failure_and_forbids_resume(
         str(seed_path),
         "--precommit-file",
         str(precommit_path),
+        "--failed-run-artifacts-tar",
+        str(archive_path),
+        "--failed-run-receipt",
+        str(receipt_path),
         "--output-dir",
         str(output),
         "--source-revision",
@@ -683,6 +945,8 @@ def test_cli_binds_four_exact_seeds_retains_failure_and_forbids_resume(
         "sha256:" + "d" * 64,
         "--service-binding",
         "sha256:" + "e" * 64,
+        "--timeout",
+        "600",
         "--removal-restore",
     ]
     with pytest.raises(ContinualLiveError, match="partial-call"):
@@ -690,14 +954,21 @@ def test_cli_binds_four_exact_seeds_retains_failure_and_forbids_resume(
 
     prereg = json.loads((output / "preregistration.json").read_text())
     assert prereg["ordered_seed_commitments"] == list(commitments)
-    assert prereg["selected_seed_indices"] == [0, 1]
+    assert prereg["selected_seed_indices"] == [2, 3]
+    failure_proof = json.loads(
+        (output / "failed_primary_validation.json").read_text()
+    )
+    assert failure_proof["no_score_proof"] is True
+    assert failure_proof["primary_seed_indices_consumed"] == [0, 1]
+    assert failure_proof["reserve_seed_indices_authorized"] == [2, 3]
     assert (output / "frozen_precommit.canonical.json").read_bytes() == precommit_path.read_bytes()
     reveal = json.loads((output / "seed_reveal.json").read_text())
     assert reveal["used_seeds"] == [
-        {"frozen_index": 0, "seed_hex": seeds[0].hex()},
-        {"frozen_index": 1, "seed_hex": seeds[1].hex()},
+        {"frozen_index": 2, "seed_hex": seeds[2].hex()},
+        {"frozen_index": 3, "seed_hex": seeds[3].hex()},
     ]
-    assert seeds[2].hex() not in json.dumps(reveal)
+    assert seeds[0].hex() not in json.dumps(reveal)
+    assert seeds[1].hex() not in json.dumps(reveal)
     terminal = json.loads((output / "terminal_receipt.json").read_text())
     assert terminal["status"] == "failed"
     journal = output / "state" / "stream-00" / "hswm" / "calls.jsonl"
@@ -709,17 +980,146 @@ def test_cli_binds_four_exact_seeds_retains_failure_and_forbids_resume(
         main(argv)
 
 
+def test_recovery_rejects_tampered_failed_run_tar_and_receipt(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    seeds = tuple(bytes([index + 21]) * 32 for index in range(4))
+    v2_path = tmp_path / "v2.json"
+    _write_test_precommit(v2_path, seeds, monkeypatch)
+    archive_path, receipt_path, binding = _write_failed_primary_fixture(
+        tmp_path,
+        seeds=seeds,
+        v2_precommit_path=v2_path,
+        monkeypatch=monkeypatch,
+    )
+    v3_path = tmp_path / "v3.json"
+    _write_test_recovery_precommit(
+        v3_path,
+        seeds=seeds,
+        binding=binding,
+        monkeypatch=monkeypatch,
+    )
+    precommit, _ = live._read_pilot_precommit(v3_path)
+    for target, match in (
+        (archive_path, "artifacts.tar"),
+        (receipt_path, "outer receipt"),
+    ):
+        original = target.read_bytes()
+        target.write_bytes(original + b"tamper")
+        with pytest.raises(ContinualLiveError, match=match):
+            live._validate_failed_primary_artifacts(
+                archive_path,
+                receipt_path,
+                precommit=precommit,
+            )
+        target.write_bytes(original)
+
+
+def test_cli_rejects_consumed_v2_primary_authority(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    seeds = tuple(bytes([index + 31]) * 32 for index in range(4))
+    seed_path = tmp_path / "primary-seeds.json"
+    seed_path.write_text(json.dumps([seed.hex() for seed in seeds]), encoding="ascii")
+    seed_path.chmod(0o600)
+    precommit_path = tmp_path / "consumed-v2.json"
+    _write_test_precommit(precommit_path, seeds, monkeypatch)
+    with pytest.raises(ContinualLiveError, match="consumed and superseded"):
+        main(
+            [
+                "--endpoint",
+                "http://model.invalid",
+                "--model",
+                "fixture-model",
+                "--seed-file",
+                str(seed_path),
+                "--precommit-file",
+                str(precommit_path),
+                "--output-dir",
+                str(tmp_path / "primary-reuse"),
+                "--source-revision",
+                "c" * 40,
+                "--container-digest",
+                "sha256:" + "d" * 64,
+                "--service-binding",
+                "sha256:" + "e" * 64,
+            ]
+        )
+
+
+def test_recovery_precommit_rejects_primary_indices(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fixture = (
+        Path(__file__).parent
+        / "fixtures"
+        / "pilot_recovery_precommit_v3.canonical.json"
+    )
+    value = json.loads(fixture.read_bytes())
+    value["selected_seed_indices"] = [0, 1]
+    value.pop("precommit_sha256")
+    value["precommit_sha256"] = live.canonical_sha256(value)
+    raw = canonical_json_bytes(value)
+    path = tmp_path / "primary-as-recovery.json"
+    path.write_bytes(raw)
+    monkeypatch.setattr(
+        live, "FROZEN_RECOVERY_PRECOMMIT_ARTIFACT_SHA256", sha256(raw).hexdigest()
+    )
+    monkeypatch.setattr(
+        live, "FROZEN_RECOVERY_PRECOMMIT_SHA256", value["precommit_sha256"]
+    )
+    with pytest.raises(ContinualLiveError, match=r"reserve \[2, 3\]"):
+        live._read_pilot_precommit(path)
+
+
+def test_recovery_requires_failed_run_binding_inputs(tmp_path: Path) -> None:
+    seed_path = tmp_path / "seeds.json"
+    seed_path.write_text(json.dumps([("01" * 32)] * 4), encoding="ascii")
+    seed_path.chmod(0o600)
+    fixture = (
+        Path(__file__).parent
+        / "fixtures"
+        / "pilot_recovery_precommit_v3.canonical.json"
+    )
+    with pytest.raises(ContinualLiveError, match="exact failed-run tar"):
+        main(
+            [
+                "--endpoint",
+                "http://127.0.0.1:8000",
+                "--model",
+                "qwen3.6-35b-a3b",
+                "--seed-file",
+                str(seed_path),
+                "--precommit-file",
+                str(fixture),
+                "--output-dir",
+                str(tmp_path / "missing-binding"),
+                "--source-revision",
+                "c" * 40,
+                "--container-digest",
+                "sha256:" + "d" * 64,
+                "--service-binding",
+                "sha256:" + "e" * 64,
+                "--timeout",
+                "600",
+                "--removal-restore",
+            ]
+        )
+
+
 @pytest.mark.parametrize("seed_count", [3, 5])
-def test_pilot_rejects_any_frozen_seed_count_other_than_four(
-    tmp_path: Path, seed_count: int, monkeypatch: pytest.MonkeyPatch
+def test_recovery_rejects_any_frozen_seed_count_other_than_four(
+    tmp_path: Path, seed_count: int
 ) -> None:
     seeds = tuple(bytes([index + 1]) * 32 for index in range(seed_count))
     seed_path = tmp_path / f"seeds-{seed_count}.json"
     seed_path.write_text(json.dumps([seed.hex() for seed in seeds]), encoding="ascii")
     seed_path.chmod(0o600)
-    authority_seeds = tuple(bytes([index + 11]) * 32 for index in range(4))
-    precommit_path = tmp_path / f"precommit-{seed_count}.json"
-    _write_test_precommit(precommit_path, authority_seeds, monkeypatch)
+    precommit_path = (
+        Path(__file__).parent
+        / "fixtures"
+        / "pilot_recovery_precommit_v3.canonical.json"
+    )
     argv = [
         "--endpoint",
         "http://model.invalid",
@@ -731,6 +1131,10 @@ def test_pilot_rejects_any_frozen_seed_count_other_than_four(
         str(seed_path),
         "--precommit-file",
         str(precommit_path),
+        "--failed-run-artifacts-tar",
+        str(tmp_path / "not-read.tar"),
+        "--failed-run-receipt",
+        str(tmp_path / "not-read.json"),
         "--output-dir",
         str(tmp_path / f"output-{seed_count}"),
         "--source-revision",
@@ -739,6 +1143,8 @@ def test_pilot_rejects_any_frozen_seed_count_other_than_four(
         "sha256:" + "d" * 64,
         "--service-binding",
         "sha256:" + "e" * 64,
+        "--timeout",
+        "600",
         "--removal-restore",
     ]
     with pytest.raises(ContinualLiveError, match="exactly 4"):

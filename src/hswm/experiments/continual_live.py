@@ -4,9 +4,10 @@ This module is intentionally narrower than a general agent framework.  It
 binds four stateless-chat conditions to :func:`continual.run_prequential`:
 
 ``hswm``
-    The model authors memories, memory relations, cells, and routing edges in
-    an empty-genesis :class:`SQLiteSelfModelStore`.  The committed HSWM
-    structure is itself the persistent execution substrate.
+    The adapter materializes fixed public-token content and provenance while
+    the model authors memory relations, cells, and routing edges in an
+    empty-genesis :class:`SQLiteSelfModelStore`.  The committed HSWM structure
+    is itself the persistent execution substrate.
 ``reset``
     The same structured proposal is parsed and checked, then discarded.  The
     active snapshot is exact genesis at every probe.
@@ -51,11 +52,9 @@ from hswm.selfmod.contracts import (
     SelfModelSnapshot,
     apply_mutation,
     canonical_json_bytes,
-    cell_from_mapping,
     make_mutation,
     make_snapshot,
     make_token,
-    memory_from_mapping,
 )
 from hswm.selfmod.store import SQLiteSelfModelStore
 
@@ -79,6 +78,10 @@ from .continual import (
 LIVE_PROTOCOL = "hswm-continual-live/v1"
 AUTHOR_ID = "agent:continual-memory-author"
 CAPABILITY = "nonce_graph_lookup"
+COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v1"
+PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v1"
+PUBLIC_SCHEMA_GATE_EPISODE = "public-schema-gate-never-evaluation"
+PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING = 6144
 GENESIS = make_snapshot()
 FROZEN_PILOT_PRECOMMIT_ARTIFACT_SHA256 = (
     "e5f98257a199e70f4e648344f89bd3b59edd6661cbc6dd717b86aaf74fff4324"
@@ -503,6 +506,7 @@ class _ModelArm:
         budget: ArmBudget,
         isolation_id: str,
         journal_path: Path,
+        completion_validator: Callable[[CallLedgerEntry], object] | None = None,
     ) -> None:
         if not name or not isolation_id:
             raise ValueError("arm name and isolation id are required")
@@ -511,6 +515,7 @@ class _ModelArm:
         self.budget = budget
         self.isolation_id = isolation_id
         self.journal_path = Path(journal_path)
+        self.completion_validator = completion_validator
         if self.journal_path.exists():
             raise ContinualLiveError("arm call journal must be fresh")
         self.journal_path.parent.mkdir(parents=True, exist_ok=True)
@@ -641,6 +646,10 @@ class _ModelArm:
                 system_message=system,
                 completion=completion,
             )
+            if self.completion_validator is not None:
+                # Gate-specific acceptance happens before an update response can
+                # be parsed, committed, or followed by another provider call.
+                self.completion_validator(ledger_entry)
         except BaseException as error:
             self._journal(
                 {
@@ -776,48 +785,191 @@ def _parse_structure_proposal(
     policy: SelfModelPolicy,
 ) -> Any:
     value = _strict_object(text)
-    expected = {
+    if set(value) != {
         "cells",
         "delete_memory_ids",
         "entry_cell_id",
+        "new_memory_links",
         "rationale",
-        "upsert_memories",
-    }
-    if set(value) != expected:
-        raise ContinualLiveError("structured update response field set is invalid")
+    }:
+        raise ContinualLiveError("compact structured update field set is invalid")
     if not isinstance(value["rationale"], str) or not value["rationale"].strip():
         raise ContinualLiveError("structured update requires a rationale")
-    if not all(isinstance(value[item], list) for item in ("cells", "delete_memory_ids", "upsert_memories")):
-        raise ContinualLiveError("structured update list field is invalid")
-    memories = tuple(memory_from_mapping(item) for item in value["upsert_memories"])
-    cells = tuple(cell_from_mapping(item) for item in value["cells"])
+    if not all(
+        isinstance(value[item], list)
+        for item in ("cells", "delete_memory_ids", "new_memory_links")
+    ):
+        raise ContinualLiveError("compact structured update list field is invalid")
     source_ids = tuple(str(item["token_id"]) for item in source_tokens)
-    if not source_ids:
-        raise ContinualLiveError("empty learning batch cannot author state")
-    if not memories:
-        raise ContinualLiveError("agent did not author memory from the public tokens")
-    if set(source_ids) != {
-        token_id for memory in memories for token_id in memory.source_token_ids
-    }:
-        raise ContinualLiveError("new memory provenance must cover exactly this public batch")
-    if not cells or not isinstance(value["entry_cell_id"], str):
-        raise ContinualLiveError("agent did not author a cell topology")
-    if any(not isinstance(item, str) or not item for item in value["delete_memory_ids"]):
+    if not source_ids or len(source_ids) != len(set(source_ids)):
+        raise ContinualLiveError("public source token ids must be non-empty and unique")
+    active_ids = {memory.memory_id for memory in active.memories}
+    new_ids = tuple(str(item["suggested_memory_id"]) for item in source_tokens)
+    if len(new_ids) != len(set(new_ids)) or set(new_ids) & active_ids:
+        raise ContinualLiveError("new deterministic memory ids collide with HSWM state")
+
+    delete_ids = value["delete_memory_ids"]
+    if (
+        any(not isinstance(item, str) or not item for item in delete_ids)
+        or len(delete_ids) != len(set(delete_ids))
+        or not set(delete_ids) <= active_ids
+    ):
         raise ContinualLiveError("delete_memory_ids is invalid")
+    surviving_ids = active_ids - set(delete_ids)
+
+    def index_list(items: object, label: str) -> tuple[int, ...]:
+        if not isinstance(items, list) or any(
+            isinstance(item, bool) or not isinstance(item, int) for item in items
+        ):
+            raise ContinualLiveError(f"{label} must contain integer token indexes")
+        indexes = tuple(items)
+        if len(indexes) != len(set(indexes)) or any(
+            item < 0 or item >= len(source_tokens) for item in indexes
+        ):
+            raise ContinualLiveError(f"{label} contains duplicate or unknown indexes")
+        return indexes
+
+    def id_list(items: object, label: str) -> tuple[str, ...]:
+        if not isinstance(items, list) or any(
+            not isinstance(item, str) or not item for item in items
+        ):
+            raise ContinualLiveError(f"{label} must contain non-empty ids")
+        ids = tuple(items)
+        if len(ids) != len(set(ids)):
+            raise ContinualLiveError(f"{label} contains duplicate ids")
+        return ids
+
+    links_by_index: dict[int, Mapping[str, Any]] = {}
+    for item in value["new_memory_links"]:
+        if not isinstance(item, Mapping) or set(item) != {
+            "related_existing_memory_ids",
+            "related_new_token_indices",
+            "token_index",
+        }:
+            raise ContinualLiveError("new_memory_links item field set is invalid")
+        token_index = item["token_index"]
+        if (
+            isinstance(token_index, bool)
+            or not isinstance(token_index, int)
+            or token_index < 0
+            or token_index >= len(source_tokens)
+            or token_index in links_by_index
+        ):
+            raise ContinualLiveError("new_memory_links token coverage is invalid")
+        existing_related = id_list(
+            item["related_existing_memory_ids"],
+            "related_existing_memory_ids",
+        )
+        if not set(existing_related) <= surviving_ids:
+            raise ContinualLiveError("new memory relation cites unknown existing state")
+        related_new = index_list(
+            item["related_new_token_indices"],
+            "related_new_token_indices",
+        )
+        if token_index in related_new:
+            raise ContinualLiveError("new memory cannot relate to itself")
+        links_by_index[token_index] = item
+    if set(links_by_index) != set(range(len(source_tokens))):
+        raise ContinualLiveError(
+            "new_memory_links must cover every public token exactly once"
+        )
+
+    memories = tuple(
+        MemoryRecord(
+            memory_id=new_ids[token_index],
+            kind="atomic_relation",
+            content=source_token["content"],
+            source_token_ids=(source_ids[token_index],),
+            related_memory_ids=(
+                tuple(links_by_index[token_index]["related_existing_memory_ids"])
+                + tuple(
+                    new_ids[index]
+                    for index in links_by_index[token_index][
+                        "related_new_token_indices"
+                    ]
+                )
+            ),
+            labels=("agent-organized",),
+        )
+        for token_index, source_token in enumerate(source_tokens)
+    )
+
+    cell_fields = {
+        "capability",
+        "cell_id",
+        "executor_agent_id",
+        "existing_memory_ids",
+        "instruction",
+        "new_token_indices",
+        "next_cell_ids",
+    }
+    cells: list[CellRecord] = []
+    referenced_existing: set[str] = set()
+    referenced_new_indexes: set[int] = set()
+    for item in value["cells"]:
+        if not isinstance(item, Mapping) or set(item) != cell_fields:
+            raise ContinualLiveError("compact cell field set is invalid")
+        existing_memory_ids = id_list(
+            item["existing_memory_ids"], "cell existing_memory_ids"
+        )
+        if not set(existing_memory_ids) <= surviving_ids:
+            raise ContinualLiveError("cell cites unknown existing memory")
+        new_token_indexes = index_list(
+            item["new_token_indices"], "cell new_token_indices"
+        )
+        if item["executor_agent_id"] is not None:
+            raise ContinualLiveError("compact cells cannot delegate hidden execution")
+        cells.append(
+            CellRecord(
+                cell_id=item["cell_id"],
+                capability=item["capability"],
+                instruction=item["instruction"],
+                memory_ids=existing_memory_ids
+                + tuple(new_ids[index] for index in new_token_indexes),
+                next_cell_ids=id_list(
+                    item["next_cell_ids"], "cell next_cell_ids"
+                ),
+                executor_agent_id=None,
+            )
+        )
+        referenced_existing.update(existing_memory_ids)
+        referenced_new_indexes.update(new_token_indexes)
+    if not cells or not isinstance(value["entry_cell_id"], str):
+        raise ContinualLiveError("agent did not author a compact cell topology")
+    if referenced_existing != surviving_ids:
+        raise ContinualLiveError("compact cells must cover every surviving memory")
+    if referenced_new_indexes != set(range(len(source_tokens))):
+        raise ContinualLiveError("compact cells must cover every new public token")
+    cells_by_id = {cell.cell_id: cell for cell in cells}
+    if len(cells_by_id) != len(cells) or value["entry_cell_id"] not in cells_by_id:
+        raise ContinualLiveError("compact cell ids or entry cell are invalid")
+    reachable: set[str] = set()
+    queue = [value["entry_cell_id"]]
+    while queue:
+        cell_id = queue.pop(0)
+        if cell_id in reachable:
+            continue
+        cell = cells_by_id.get(cell_id)
+        if cell is None:
+            raise ContinualLiveError("compact cell edge cites unknown cell")
+        reachable.add(cell_id)
+        queue.extend(cell.next_cell_ids)
+    if reachable != set(cells_by_id):
+        raise ContinualLiveError("every compact cell must be reachable from entry")
+
     proposal = make_mutation(
         base_snapshot_id=active.snapshot_id,
         expected_generation=generation,
         author_id=AUTHOR_ID,
         source_token_ids=source_ids,
         upsert_memories=memories,
-        delete_memory_ids=tuple(value["delete_memory_ids"]),
+        delete_memory_ids=tuple(delete_ids),
         cell_topology_mode=CellTopologyMode.REPLACE,
-        cells=cells,
+        cells=tuple(cells),
         entry_cell_id=value["entry_cell_id"],
         rationale=value["rationale"],
     )
-    # Controls discard the result, but proposal/check must still mean a full
-    # contract and policy check rather than merely parsing plausible JSON.
+    # H/R/N all run the same materialization, contract, and policy check.
     apply_mutation(active, proposal, policy)
     return proposal
 
@@ -826,45 +978,45 @@ def _structure_update_payload(
     active: SelfModelSnapshot, source_tokens: Sequence[Mapping[str, Any]]
 ) -> dict[str, Any]:
     return {
-        "active_hswm": active.canonical(),
+        "compact_patch_schema": COMPACT_PATCH_SCHEMA,
+        "current_hswm_read_only": active.canonical(),
         "instruction": (
-            "Absorb every public atomic relation by authoring the persistent HSWM "
-            "structure itself. Return new or replacement MemoryRecords, explicit "
-            "related_memory_ids, and a complete CellRecord routing topology. Cells "
-            "must reference every memory needed for later graph traversal. There is "
-            "no separate plan document. Preserve useful existing state."
+            "Author only the compact HSWM organization patch. The adapter copies each "
+            "public token's fixed content, id, and provenance into a MemoryRecord; you "
+            "must author every memory relation and the complete reachable cell routing "
+            "topology. Reference new tokens only by token_index. Never echo the current "
+            "HSWM, MemoryRecord content, or a separate plan document."
         ),
-        "operation": "author_hswm_state",
+        "operation": "author_hswm_compact_patch",
         "protocol": LIVE_PROTOCOL,
-        "public_source_tokens": list(source_tokens),
+        "public_source_tokens": [
+            {**dict(item), "token_index": index}
+            for index, item in enumerate(source_tokens)
+        ],
         "response_contract": {
             "cells": [
                 {
                     "capability": CAPABILITY,
                     "cell_id": "agent-chosen id",
                     "executor_agent_id": None,
+                    "existing_memory_ids": ["id from current_hswm_read_only"],
                     "instruction": "agent-authored retrieval/routing instruction",
-                    "memory_ids": ["existing or new memory id"],
+                    "new_token_indices": [0],
                     "next_cell_ids": ["cell id"],
                 }
             ],
-            "delete_memory_ids": ["obsolete memory id"],
+            "delete_memory_ids": ["obsolete existing memory id"],
             "entry_cell_id": "one returned cell id",
-            "rationale": "non-empty string",
-            "upsert_memories": [
+            "new_memory_links": [
                 {
-                    "content": {
-                        "relation": "opaque relation",
-                        "source": "opaque source",
-                        "target": "opaque target",
-                    },
-                    "kind": "atomic_relation",
-                    "labels": ["agent-authored"],
-                    "memory_id": "prefer supplied suggested_memory_id",
-                    "related_memory_ids": ["memory id"],
-                    "source_token_ids": ["supplied token_id"],
+                    "related_existing_memory_ids": [
+                        "id from current_hswm_read_only"
+                    ],
+                    "related_new_token_indices": [1],
+                    "token_index": 0,
                 }
             ],
+            "rationale": "non-empty string",
         },
     }
 
@@ -884,6 +1036,7 @@ class StructuredHSWMArm(_ModelArm):
         commit_updates: bool = True,
         read_history: bool = True,
         reset_after_commit: bool = False,
+        completion_validator: Callable[[CallLedgerEntry], object] | None = None,
     ) -> None:
         super().__init__(
             name=name,
@@ -891,6 +1044,7 @@ class StructuredHSWMArm(_ModelArm):
             budget=budget,
             isolation_id=isolation_id,
             journal_path=journal_path or Path(store_path).with_suffix(".calls.jsonl"),
+            completion_validator=completion_validator,
         )
         self.commit_updates = commit_updates
         self.read_history = read_history
@@ -928,9 +1082,10 @@ class StructuredHSWMArm(_ModelArm):
             operation="update",
             max_output_tokens=self.budget.update_max_output_tokens,
             system=(
-                "Return exactly one JSON object matching response_contract. "
-                "Author memories, relations, cells, and routing directly in HSWM. "
-                "Use only the supplied public source tokens; do not infer a gold answer."
+                "Return exactly the five-key JSON object in response_contract. Author "
+                "compact memory links, cells, and routing directly in HSWM. Do not "
+                "return active_hswm, memories, upsert_memories, token content, a plan, "
+                "or any prose. Use only public tokens; never infer a gold answer."
             ),
             payload=_structure_update_payload(prompt_snapshot, source_tokens),
         )
@@ -1094,6 +1249,7 @@ class PlainTextArm(_ModelArm):
         isolation_id: str,
         state_path: Path,
         journal_path: Path | None = None,
+        completion_validator: Callable[[CallLedgerEntry], object] | None = None,
     ) -> None:
         super().__init__(
             name="plain",
@@ -1101,6 +1257,7 @@ class PlainTextArm(_ModelArm):
             budget=budget,
             isolation_id=isolation_id,
             journal_path=journal_path or Path(state_path).with_suffix(".calls.jsonl"),
+            completion_validator=completion_validator,
         )
         self.state_path = Path(state_path)
         if self.state_path.exists():
@@ -1713,6 +1870,308 @@ def run_four_arm_stream(
         qualifier = "confirmatory " if confirmatory else ""
         raise ContinualLiveError(f"{qualifier}call/token parity audit failed")
     return run, audit, arms
+
+
+def _public_gate_nonce(domain: str, index: int, *, prefix: str) -> str:
+    raw = (
+        f"{PUBLIC_SCHEMA_GATE_PROTOCOL}|public-denylisted|{domain}|{index}"
+    ).encode("ascii")
+    return f"{prefix}_{sha256(raw).hexdigest()[:12]}"
+
+
+def _public_gate_tokens(start: int, count: int) -> tuple[PublicLearningToken, ...]:
+    return tuple(
+        PublicLearningToken(
+            source=_public_gate_nonce("node", index, prefix="n"),
+            relation=_public_gate_nonce("relation", index % 7, prefix="r"),
+            target=_public_gate_nonce("node", index + 1, prefix="n"),
+        )
+        for index in range(start, start + count)
+    )
+
+
+def public_schema_gate_fixture() -> dict[str, Any]:
+    """Return the fixed public fixture, which is never eligible for evaluation."""
+
+    warmup = _public_gate_tokens(0, 64)
+    synthetic_extension = _public_gate_tokens(64, 76)
+    incremental = _public_gate_tokens(140, 4)
+    probe = PublicProbe(
+        step=1,
+        source=_public_gate_nonce("node", 0, prefix="n"),
+        relations=(_public_gate_nonce("relation", 0, prefix="r"),),
+        choices=(
+            _public_gate_nonce("decoy", 1, prefix="n"),
+            _public_gate_nonce("node", 1, prefix="n"),
+            _public_gate_nonce("decoy", 2, prefix="n"),
+            _public_gate_nonce("decoy", 3, prefix="n"),
+        ),
+    )
+    value = {
+        "compact_patch_schema": COMPACT_PATCH_SCHEMA,
+        "denylisted_from_evaluation": True,
+        "episode_id": PUBLIC_SCHEMA_GATE_EPISODE,
+        "incremental_tokens": [item.canonical() for item in incremental],
+        "probe": probe.canonical(),
+        "probe_answer": _public_gate_nonce("node", 1, prefix="n"),
+        "protocol": PUBLIC_SCHEMA_GATE_PROTOCOL,
+        "synthetic_extension_tokens": [
+            item.canonical() for item in synthetic_extension
+        ],
+        "warmup_tokens": [item.canonical() for item in warmup],
+    }
+    return {**value, "fixture_sha256": canonical_sha256(value)}
+
+
+def _install_public_gate_extension(
+    arm: StructuredHSWMArm,
+    tokens: Sequence[PublicLearningToken],
+) -> dict[str, Any]:
+    """Grow a public dry-run state to 140 memories without another model call."""
+
+    batch = LearningBatch(
+        episode_id=PUBLIC_SCHEMA_GATE_EPISODE,
+        after_step=1,
+        chosen=None,
+        correct=False,
+        learning_tokens=tuple(tokens),
+    )
+    source_tokens = _public_source_tokens(batch)
+    active = arm.store.active_snapshot()
+    if len(active.snapshot.memories) != 64 or not active.snapshot.cells:
+        raise ContinualLiveError("public gate extension requires the committed 64-state")
+    new_ids = tuple(str(item["suggested_memory_id"]) for item in source_tokens)
+    if set(new_ids) & {memory.memory_id for memory in active.snapshot.memories}:
+        raise ContinualLiveError("public gate extension memory id collision")
+    memories = tuple(
+        MemoryRecord(
+            memory_id=new_ids[index],
+            kind="atomic_relation",
+            content=item["content"],
+            source_token_ids=(str(item["token_id"]),),
+            related_memory_ids=(new_ids[index + 1],)
+            if index + 1 < len(new_ids)
+            else (),
+            labels=("public-gate-fixture",),
+        )
+        for index, item in enumerate(source_tokens)
+    )
+    cells = tuple(
+        CellRecord(
+            cell_id=cell.cell_id,
+            capability=cell.capability,
+            instruction=cell.instruction,
+            memory_ids=cell.memory_ids
+            + (new_ids if cell.cell_id == active.snapshot.entry_cell_id else ()),
+            next_cell_ids=cell.next_cell_ids,
+            executor_agent_id=cell.executor_agent_id,
+        )
+        for cell in active.snapshot.cells
+    )
+    cognitive_tokens = tuple(
+        make_token(
+            token_id=str(item["token_id"]),
+            episode_id=PUBLIC_SCHEMA_GATE_EPISODE,
+            position=100_000 + index,
+            role="environment",
+            content=item["content"],
+            provenance={
+                "denylisted_from_evaluation": True,
+                "protocol": PUBLIC_SCHEMA_GATE_PROTOCOL,
+            },
+        )
+        for index, item in enumerate(source_tokens)
+    )
+    proposal = make_mutation(
+        base_snapshot_id=active.snapshot.snapshot_id,
+        expected_generation=active.generation,
+        author_id="evaluator:public-schema-gate-fixture",
+        source_token_ids=tuple(token.token_id for token in cognitive_tokens),
+        upsert_memories=memories,
+        cell_topology_mode=CellTopologyMode.REPLACE,
+        cells=cells,
+        entry_cell_id=active.snapshot.entry_cell_id,
+        rationale="PUBLIC_SCHEMA_GATE_SYNTHETIC_WORST_STATE_ONLY",
+    )
+    arm.store.append_tokens(cognitive_tokens)
+    receipt = arm.store.commit(proposal)
+    arm._source_token_ids.extend(token.token_id for token in cognitive_tokens)
+    after = arm.store.active_snapshot().snapshot
+    if len(after.memories) != 140:
+        raise ContinualLiveError("public gate extension did not create 140 memories")
+    return {
+        "activation_id": receipt.activation_id,
+        "after_state_sha256": _digest_bytes(canonical_json_bytes(after.canonical())),
+        "before_state_sha256": _digest_bytes(
+            canonical_json_bytes(active.snapshot.canonical())
+        ),
+        "memory_count": len(after.memories),
+        "mutation_sha256": canonical_sha256(proposal.canonical()),
+    }
+
+
+def _public_gate_call_summary(entry: CallLedgerEntry) -> dict[str, Any]:
+    try:
+        raw_response = json.loads(entry.completion.raw_response_json)
+        finish_reason = raw_response["choices"][0]["finish_reason"]
+    except (json.JSONDecodeError, KeyError, IndexError, TypeError) as error:
+        raise ContinualLiveError("public gate response lacks finish_reason") from error
+    if finish_reason != "stop":
+        raise ContinualLiveError(
+            f"public gate model call did not stop cleanly: {finish_reason!r}"
+        )
+    if not entry.completion.usage_reported:
+        raise ContinualLiveError("public gate requires provider token usage")
+    if (
+        entry.operation == "update"
+        and entry.completion.output_tokens > PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING
+    ):
+        raise ContinualLiveError("public gate update lacks frozen output headroom")
+    return {
+        "arm": entry.arm,
+        "finish_reason": finish_reason,
+        "input_tokens": entry.completion.input_tokens,
+        "operation": entry.operation,
+        "ordinal": entry.ordinal,
+        "output_tokens": entry.completion.output_tokens,
+        "request_sha256": entry.completion.request_sha256,
+        "response_sha256": entry.completion.response_sha256,
+    }
+
+
+def run_public_schema_gate(
+    *,
+    backend_factory: Callable[[], ChatBackend],
+    state_dir: Path,
+) -> dict[str, Any]:
+    """Run exactly four public, non-evaluation calls through the v4 adapter."""
+
+    state_dir = Path(state_dir)
+    state_dir.mkdir(parents=True, exist_ok=False)
+    budget = ArmBudget(
+        answer_max_output_tokens=128,
+        update_max_output_tokens=8192,
+        max_input_bytes=2_000_000,
+        max_state_bytes=1_000_000,
+    )
+    accepted_model: list[str] = []
+
+    def accept_gate_completion(entry: CallLedgerEntry) -> None:
+        _public_gate_call_summary(entry)
+        if accepted_model and entry.completion.model != accepted_model[0]:
+            raise ContinualLiveError("public gate returned model identity drift")
+        if not accepted_model:
+            accepted_model.append(entry.completion.model)
+
+    structured = StructuredHSWMArm(
+        backend=backend_factory(),
+        budget=budget,
+        isolation_id="public-schema-gate:structured",
+        store_path=state_dir / "structured" / "state.sqlite3",
+        journal_path=state_dir / "structured" / "calls.jsonl",
+        completion_validator=accept_gate_completion,
+    )
+    plain = PlainTextArm(
+        backend=backend_factory(),
+        budget=budget,
+        isolation_id="public-schema-gate:plain",
+        state_path=state_dir / "plain" / "state.json",
+        journal_path=state_dir / "plain" / "calls.jsonl",
+        completion_validator=accept_gate_completion,
+    )
+    fixture = public_schema_gate_fixture()
+    warmup_tokens = _public_gate_tokens(0, 64)
+    incremental_tokens = _public_gate_tokens(140, 4)
+    warmup = LearningBatch(
+        episode_id=PUBLIC_SCHEMA_GATE_EPISODE,
+        after_step=0,
+        chosen=None,
+        correct=False,
+        learning_tokens=warmup_tokens,
+    )
+    incremental = LearningBatch(
+        episode_id=PUBLIC_SCHEMA_GATE_EPISODE,
+        after_step=2,
+        chosen=None,
+        correct=False,
+        learning_tokens=incremental_tokens,
+    )
+    try:
+        genesis_sha256 = _digest_bytes(structured.state_canonical_bytes())
+        warmup_update = structured.update(warmup)
+        after_warmup = structured.store.active_snapshot().snapshot
+        if len(after_warmup.memories) != 64:
+            raise ContinualLiveError("public gate warmup did not materialize 64 memories")
+        extension = _install_public_gate_extension(
+            structured, _public_gate_tokens(64, 76)
+        )
+        incremental_update = structured.update(incremental)
+        after_incremental = structured.store.active_snapshot().snapshot
+        if len(after_incremental.memories) != 144:
+            raise ContinualLiveError(
+                "public gate incremental patch did not materialize 144 memories"
+            )
+        plain_update = plain.update(warmup)
+        before_probe_sha256 = _digest_bytes(structured.state_canonical_bytes())
+        probe = PublicProbe(
+            step=1,
+            source=_public_gate_nonce("node", 0, prefix="n"),
+            relations=(_public_gate_nonce("relation", 0, prefix="r"),),
+            choices=(
+                _public_gate_nonce("decoy", 1, prefix="n"),
+                _public_gate_nonce("node", 1, prefix="n"),
+                _public_gate_nonce("decoy", 2, prefix="n"),
+                _public_gate_nonce("decoy", 3, prefix="n"),
+            ),
+        )
+        answer = structured.answer(probe)
+        chosen = parse_choice(answer.response_text, choices=probe.choices)
+        after_probe_sha256 = _digest_bytes(structured.state_canonical_bytes())
+        if chosen != fixture["probe_answer"]:
+            raise ContinualLiveError("public gate read-only probe was incorrect")
+        if before_probe_sha256 != after_probe_sha256:
+            raise ContinualLiveError("public gate probe mutated HSWM state")
+        if len(structured.ledger) != 3 or len(plain.ledger) != 1:
+            raise ContinualLiveError("public gate must make exactly four model calls")
+        call_entries = (
+            structured.ledger[0],
+            structured.ledger[1],
+            plain.ledger[0],
+            structured.ledger[2],
+        )
+        call_summaries = tuple(_public_gate_call_summary(item) for item in call_entries)
+        if len({item.completion.model for item in call_entries}) != 1:
+            raise ContinualLiveError("public gate returned model identity drift")
+        result = {
+            "adapter_schema": COMPACT_PATCH_SCHEMA,
+            "after_incremental_state_sha256": _digest_bytes(
+                canonical_json_bytes(after_incremental.canonical())
+            ),
+            "after_probe_state_sha256": after_probe_sha256,
+            "after_warmup_state_sha256": _digest_bytes(
+                canonical_json_bytes(after_warmup.canonical())
+            ),
+            "before_probe_state_sha256": before_probe_sha256,
+            "calls": list(call_summaries),
+            "calls_observed": len(call_summaries),
+            "denylisted_from_evaluation": True,
+            "extension": extension,
+            "final_cell_count": len(after_incremental.cells),
+            "final_memory_count": len(after_incremental.memories),
+            "fixture_sha256": fixture["fixture_sha256"],
+            "genesis_state_sha256": genesis_sha256,
+            "incremental_update_receipt_sha256": incremental_update.receipt_sha256,
+            "output_token_ceiling": PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING,
+            "plain_update_receipt_sha256": plain_update.receipt_sha256,
+            "probe_answer_receipt_sha256": answer.receipt_sha256,
+            "probe_choice": chosen,
+            "protocol": PUBLIC_SCHEMA_GATE_PROTOCOL,
+            "valid": True,
+            "warmup_update_receipt_sha256": warmup_update.receipt_sha256,
+        }
+        return {**result, "result_sha256": canonical_sha256(result)}
+    finally:
+        structured.store.close()
 
 
 def _read_secret_seeds(path: Path) -> tuple[bytes, ...]:
@@ -2551,10 +3010,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         raise ContinualLiveError("output directory must be absent or empty; no resume")
     output.mkdir(parents=True, exist_ok=True)
     precommit, precommit_raw = _read_pilot_precommit(args.precommit_file)
-    if precommit["schema"] == "hswm-continual-pilot-precommit/v2":
+    if precommit["schema"] in {
+        "hswm-continual-pilot-precommit/v2",
+        "hswm-continual-pilot-recovery-precommit/v3",
+    }:
         raise ContinualLiveError(
-            "primary v2 execution authority is consumed and superseded; "
-            "indices [0, 1] must never be reused"
+            "v2 and v3 execution authorities are consumed; all four old seed "
+            "commitments are permanently prohibited"
         )
     if args.failed_run_artifacts_tar is None or args.failed_run_receipt is None:
         raise ContinualLiveError(
@@ -3008,11 +3470,110 @@ def main(argv: Sequence[str] | None = None) -> int:
     return 0
 
 
+def _schema_gate_cli_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Run the four-call public HSWM compact-schema gate. This command has "
+            "no seed or evaluation path."
+        )
+    )
+    parser.add_argument("--endpoint", required=True)
+    parser.add_argument("--model", required=True)
+    parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--api-key-env", default="OPENAI_API_KEY")
+    parser.add_argument("--timeout", type=float, default=600.0)
+    parser.add_argument("--source-revision", required=True)
+    parser.add_argument("--container-digest", required=True)
+    parser.add_argument("--service-binding", required=True)
+    return parser
+
+
+def schema_gate_main(argv: Sequence[str] | None = None) -> int:
+    """CLI for the public gate; deliberately cannot accept or derive seed material."""
+
+    args = _schema_gate_cli_parser().parse_args(argv)
+    if args.timeout != 600.0:
+        raise ContinualLiveError("public schema gate timeout is frozen at 600 seconds")
+    if not re.fullmatch(r"[0-9a-f]{40}", args.source_revision):
+        raise ContinualLiveError("source_revision must be a 40-hex Git revision")
+    if not re.fullmatch(r"sha256:[0-9a-f]{64}", args.container_digest):
+        raise ContinualLiveError("container_digest must be sha256:<64 hex>")
+    if not re.fullmatch(r"sha256:[0-9a-f]{64}", args.service_binding):
+        raise ContinualLiveError("service_binding must be sha256:<64 hex>")
+    output = args.output_dir
+    if output.exists() and any(output.iterdir()):
+        raise ContinualLiveError("schema gate output must be absent or empty; no resume")
+    output.mkdir(parents=True, exist_ok=True)
+    backend_config = OpenAIBackendConfig(
+        endpoint=args.endpoint,
+        model=args.model,
+        api_key=os.environ.get(args.api_key_env),
+        timeout_seconds=args.timeout,
+    )
+    fixture = public_schema_gate_fixture()
+    _write_json_atomic(output / "public_fixture.json", fixture)
+    prereg = {
+        "adapter_schema": COMPACT_PATCH_SCHEMA,
+        "answer_max_tokens": 128,
+        "backend": backend_config.public_identity(),
+        "call_budget": 4,
+        "container_digest": args.container_digest,
+        "denylisted_from_evaluation": True,
+        "fixture_sha256": fixture["fixture_sha256"],
+        "max_input_bytes": 2_000_000,
+        "max_state_bytes": 1_000_000,
+        "no_precommit_or_seed_path": True,
+        "output_token_ceiling": PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING,
+        "protocol": PUBLIC_SCHEMA_GATE_PROTOCOL,
+        "retry_limit": 0,
+        "service_binding": args.service_binding,
+        "source_revision": args.source_revision,
+        "update_max_tokens": 8192,
+    }
+    prereg["prereg_sha256"] = canonical_sha256(prereg)
+    _write_json_atomic(output / "gate_preregistration.json", prereg)
+    status: dict[str, Any] = {"error": None, "status": "running"}
+    try:
+        result = run_public_schema_gate(
+            backend_factory=lambda: OpenAICompatibleBackend(backend_config),
+            state_dir=output / "state",
+        )
+        _write_json_atomic(output / "gate_result.json", result)
+        status["status"] = "success"
+    except BaseException as error:
+        status["status"] = "failed"
+        status["error"] = f"{type(error).__name__}: {error}"
+        raise
+    finally:
+        _write_json_atomic(output / "status.json", status)
+        artifact_hashes = {
+            path.relative_to(output).as_posix(): _digest_bytes(path.read_bytes())
+            for path in sorted(output.rglob("*"))
+            if path.is_file()
+            and path.name != "terminal_receipt.json"
+            and not path.name.startswith(".tmp")
+        }
+        terminal = {
+            "artifact_sha256s": artifact_hashes,
+            "calls_expected": 4,
+            "denylisted_from_evaluation": True,
+            "error": status["error"],
+            "no_precommit_or_seed_path": True,
+            "protocol": PUBLIC_SCHEMA_GATE_PROTOCOL,
+            "schema_gate_passed": status["status"] == "success",
+            "status": status["status"],
+        }
+        terminal["receipt_sha256"] = canonical_sha256(terminal)
+        _write_json_atomic(output / "terminal_receipt.json", terminal)
+    return 0
+
+
 __all__ = [
     "ArmBudget",
     "CallLedgerEntry",
     "CAPABILITY",
     "ChatBackend",
+    "COMPACT_PATCH_SCHEMA",
     "ContinualLiveError",
     "GENESIS",
     "LIVE_PROTOCOL",
@@ -3022,6 +3583,7 @@ __all__ = [
     "OpenAICompatibleBackend",
     "ParityAudit",
     "PlainTextArm",
+    "PUBLIC_SCHEMA_GATE_PROTOCOL",
     "RemovalRestoreResult",
     "ResetArm",
     "SnapshotCheckpoint",
@@ -3031,9 +3593,12 @@ __all__ = [
     "build_four_arms",
     "main",
     "make_sealed_probe_pack",
+    "public_schema_gate_fixture",
     "run_four_arm_stream",
+    "run_public_schema_gate",
     "run_removal_restore_probes",
     "sealed_probe_pack_sha256",
+    "schema_gate_main",
 ]
 
 

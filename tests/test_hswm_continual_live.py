@@ -31,7 +31,9 @@ from hswm.experiments.continual_live import (
     main,
     make_sealed_probe_pack,
     run_four_arm_stream,
+    run_public_schema_gate,
     run_removal_restore_probes,
+    schema_gate_main,
 )
 from hswm.selfmod.contracts import canonical_json_bytes
 
@@ -91,50 +93,46 @@ class ScriptedRelationalBackend:
 
     @staticmethod
     def _author(payload: Mapping[str, Any]) -> str:
-        active = payload["active_hswm"]
+        active = payload["current_hswm_read_only"]
         existing = {item["memory_id"]: item for item in active["memories"]}
-        new_memories: list[dict[str, Any]] = []
+        source_tokens = payload["public_source_tokens"]
+        new_links: list[dict[str, Any]] = []
         for source_token in payload["public_source_tokens"]:
             content = source_token["content"]
-            new_memories.append(
+            related_existing = sorted(
+                item["memory_id"]
+                for item in existing.values()
+                if item["content"].get("source") == content["target"]
+            )
+            related_new = sorted(
+                other["token_index"]
+                for other in source_tokens
+                if other["content"].get("source") == content["target"]
+                and other["token_index"] != source_token["token_index"]
+            )
+            new_links.append(
                 {
-                    "content": {
-                        "relation": content["relation"],
-                        "source": content["source"],
-                        "target": content["target"],
-                    },
-                    "kind": "atomic_relation",
-                    "labels": ["agent-authored"],
-                    "memory_id": source_token["suggested_memory_id"],
-                    "related_memory_ids": [],
-                    "source_token_ids": [source_token["token_id"]],
+                    "related_existing_memory_ids": related_existing,
+                    "related_new_token_indices": related_new,
+                    "token_index": source_token["token_index"],
                 }
             )
-        all_memories = {**existing, **{item["memory_id"]: item for item in new_memories}}
-        for memory in new_memories:
-            target = memory["content"]["target"]
-            memory["related_memory_ids"] = sorted(
-                item["memory_id"]
-                for item in all_memories.values()
-                if item["content"].get("source") == target
-                and item["memory_id"] != memory["memory_id"]
-            )
-        memory_ids = sorted(all_memories)
         response = {
             "cells": [
                 {
                     "capability": "nonce_graph_lookup",
                     "cell_id": "cell:lookup",
                     "executor_agent_id": None,
+                    "existing_memory_ids": sorted(existing),
                     "instruction": "Traverse the absorbed atomic relations.",
-                    "memory_ids": memory_ids,
+                    "new_token_indices": list(range(len(source_tokens))),
                     "next_cell_ids": [],
                 }
             ],
             "delete_memory_ids": [],
             "entry_cell_id": "cell:lookup",
+            "new_memory_links": new_links,
             "rationale": "Absorb each public atomic relation into the HSWM cells.",
-            "upsert_memories": new_memories,
         }
         return json.dumps(response, sort_keys=True, separators=(",", ":"))
 
@@ -173,7 +171,7 @@ class ScriptedRelationalBackend:
         operation = payload["operation"]
         if operation == "answer":
             text = self._answer(payload)
-        elif operation == "author_hswm_state":
+        elif operation == "author_hswm_compact_patch":
             text = self._author(payload)
         elif operation == "update_plain_memory":
             text = self._plain(payload)
@@ -194,7 +192,9 @@ class ScriptedRelationalBackend:
         output_tokens = max(1, len(text.encode()) // 4)
         raw_response = canonical_json_bytes(
             {
-                "choices": [{"message": {"content": text}}],
+                "choices": [
+                    {"finish_reason": "stop", "message": {"content": text}}
+                ],
                 "model": "deterministic-fixture",
                 "usage": {
                     "completion_tokens": output_tokens,
@@ -213,6 +213,56 @@ class ScriptedRelationalBackend:
             input_tokens=input_tokens,
             output_tokens=output_tokens,
             latency_ms=0,
+            usage_reported=True,
+        )
+
+
+class FirstResponseGateViolationBackend(ScriptedRelationalBackend):
+    """Return a valid compact body with one frozen gate-envelope violation."""
+
+    def __init__(self, violation: str) -> None:
+        super().__init__()
+        self.violation = violation
+
+    def complete(
+        self,
+        *,
+        messages: Sequence[Mapping[str, str]],
+        max_output_tokens: int,
+        request_id: str,
+        response_observer: Callable[[bytes, bytes], None],
+    ) -> ModelCompletion:
+        observed: list[tuple[bytes, bytes]] = []
+        completion = super().complete(
+            messages=messages,
+            max_output_tokens=max_output_tokens,
+            request_id=request_id,
+            response_observer=lambda request, response: observed.append(
+                (request, response)
+            ),
+        )
+        raw_request, raw_response = observed[0]
+        envelope = json.loads(raw_response)
+        if self.violation == "length":
+            envelope["choices"][0]["finish_reason"] = "length"
+            output_tokens = completion.output_tokens
+        elif self.violation == "headroom":
+            output_tokens = 7000
+            envelope["usage"]["completion_tokens"] = output_tokens
+        else:  # pragma: no cover - test construction guard
+            raise AssertionError(self.violation)
+        changed_response = canonical_json_bytes(envelope)
+        response_observer(raw_request, changed_response)
+        return ModelCompletion(
+            text=completion.text,
+            raw_request_json=raw_request.decode("utf-8"),
+            raw_response_json=changed_response.decode("utf-8"),
+            request_sha256=sha256(raw_request).hexdigest(),
+            response_sha256=sha256(changed_response).hexdigest(),
+            model=completion.model,
+            input_tokens=completion.input_tokens,
+            output_tokens=output_tokens,
+            latency_ms=completion.latency_ms,
             usage_reported=True,
         )
 
@@ -594,7 +644,10 @@ def test_four_arms_use_isolated_states_and_public_only_requests(tmp_path: Path) 
             assert "support_reveal_steps" not in keys
 
     first_entry = arms[0].ledger[0]
-    assert json.loads(first_entry.request_payload_json)["operation"] == "author_hswm_state"
+    assert (
+        json.loads(first_entry.request_payload_json)["operation"]
+        == "author_hswm_compact_patch"
+    )
     assert first_entry.canonical()["completion"]["text"] == first_entry.completion.text
 
 
@@ -841,7 +894,9 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
         @staticmethod
         def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            value["upsert_memories"][0]["source_token_ids"] = ["hidden-gold-token"]
+            value["new_memory_links"][0]["related_existing_memory_ids"] = [
+                "hidden-gold-memory"
+            ]
             return json.dumps(value)
 
     arm = StructuredHSWMArm(
@@ -850,7 +905,7 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
         isolation_id="bad-source",
         store_path=tmp_path / "state.sqlite3",
     )
-    with pytest.raises(ContinualLiveError, match="provenance"):
+    with pytest.raises(ContinualLiveError, match="unknown existing"):
         arm.update(
             LearningBatch(
                 episode_id="episode-bad",
@@ -861,6 +916,253 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
             )
         )
     assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
+
+
+@pytest.mark.parametrize(
+    ("mutation", "error_match"),
+    [
+        (
+            lambda value: value["new_memory_links"].pop(),
+            "cover every public token exactly once",
+        ),
+        (
+            lambda value: value["cells"][0].update({"new_token_indices": []}),
+            "cover every new public token",
+        ),
+        (
+            lambda value: value["cells"].append(
+                {
+                    "capability": "nonce_graph_lookup",
+                    "cell_id": "cell:unreachable",
+                    "executor_agent_id": None,
+                    "existing_memory_ids": [],
+                    "instruction": "A deliberately unreachable cell.",
+                    "new_token_indices": [],
+                    "next_cell_ids": [],
+                }
+            ),
+            "reachable from entry",
+        ),
+        (
+            lambda value: value["new_memory_links"][0].update(
+                {"related_new_token_indices": [99]}
+            ),
+            "unknown indexes",
+        ),
+    ],
+)
+def test_compact_patch_fails_closed_on_coverage_references_and_reachability(
+    tmp_path: Path,
+    mutation: Callable[[dict[str, Any]], Any],
+    error_match: str,
+) -> None:
+    class InvalidCompactBackend(ScriptedRelationalBackend):
+        @staticmethod
+        def _author(payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            mutation(value)
+            return json.dumps(value)
+
+    arm = StructuredHSWMArm(
+        backend=InvalidCompactBackend(),
+        budget=_budget(),
+        isolation_id=f"invalid-compact-{error_match}",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match=error_match):
+        arm.update(
+            LearningBatch(
+                episode_id="episode-invalid-compact",
+                after_step=0,
+                chosen=None,
+                correct=False,
+                learning_tokens=(PublicLearningToken("a", "r", "b"),),
+            )
+        )
+    assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
+
+
+def test_compact_patch_materializes_public_content_without_echoing_records(
+    tmp_path: Path,
+) -> None:
+    backend = ScriptedRelationalBackend()
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id="compact-materialization",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    arm.update(
+        LearningBatch(
+            episode_id="episode-compact-materialization",
+            after_step=0,
+            chosen=None,
+            correct=False,
+            learning_tokens=(
+                PublicLearningToken("node-a", "rel-x", "node-b"),
+                PublicLearningToken("node-b", "rel-y", "node-c"),
+            ),
+        )
+    )
+    snapshot = arm.store.active_snapshot().snapshot
+    by_source = {memory.content["source"]: memory for memory in snapshot.memories}
+    assert by_source["node-a"].content == {
+        "kind": "atomic_relation",
+        "relation": "rel-x",
+        "source": "node-a",
+        "target": "node-b",
+    }
+    assert by_source["node-a"].labels == ("agent-organized",)
+    assert by_source["node-a"].related_memory_ids == (
+        by_source["node-b"].memory_id,
+    )
+    completion_value = json.loads(arm.ledger[0].completion.text)
+    assert "upsert_memories" not in completion_value
+    assert "memories" not in completion_value
+    assert "node-a" not in arm.ledger[0].completion.text
+    assert set(snapshot.cells[0].memory_ids) == {
+        memory.memory_id for memory in snapshot.memories
+    }
+
+
+def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None:
+    result = run_public_schema_gate(
+        backend_factory=ScriptedRelationalBackend,
+        state_dir=tmp_path / "gate-state",
+    )
+    assert result["valid"] is True
+    assert result["calls_observed"] == 4
+    assert [item["operation"] for item in result["calls"]] == [
+        "update",
+        "update",
+        "update",
+        "answer",
+    ]
+    assert all(item["finish_reason"] == "stop" for item in result["calls"])
+    assert max(
+        item["output_tokens"]
+        for item in result["calls"]
+        if item["operation"] == "update"
+    ) <= 6144
+    assert result["final_memory_count"] == 144
+    assert result["probe_choice"] == live.public_schema_gate_fixture()["probe_answer"]
+    assert result["before_probe_state_sha256"] == result["after_probe_state_sha256"]
+    assert result["denylisted_from_evaluation"] is True
+    structured_events = [
+        json.loads(line)
+        for line in (
+            tmp_path / "gate-state" / "structured" / "calls.jsonl"
+        ).read_text().splitlines()
+    ]
+    plain_events = [
+        json.loads(line)
+        for line in (
+            tmp_path / "gate-state" / "plain" / "calls.jsonl"
+        ).read_text().splitlines()
+    ]
+    assert [item["event"] for item in structured_events] == [
+        "intent",
+        "raw_response_received",
+        "response_received",
+        "completed",
+    ] * 3
+    assert [item["event"] for item in plain_events] == [
+        "intent",
+        "raw_response_received",
+        "response_received",
+        "completed",
+    ]
+    assert "seed" not in live.public_schema_gate_fixture()
+
+
+@pytest.mark.parametrize(
+    ("violation", "message"),
+    [
+        ("length", "did not stop cleanly"),
+        ("headroom", "lacks frozen output headroom"),
+    ],
+)
+def test_public_schema_gate_rejects_first_invalid_completion_before_state_change(
+    tmp_path: Path, violation: str, message: str
+) -> None:
+    backends: list[FirstResponseGateViolationBackend] = []
+
+    def backend_factory() -> FirstResponseGateViolationBackend:
+        backend = FirstResponseGateViolationBackend(violation)
+        backends.append(backend)
+        return backend
+
+    state_dir = tmp_path / f"gate-{violation}"
+    with pytest.raises(ContinualLiveError, match=message):
+        run_public_schema_gate(
+            backend_factory=backend_factory,
+            state_dir=state_dir,
+        )
+    assert sum(len(backend.requests) for backend in backends) == 1
+    events = [
+        json.loads(line)
+        for line in (state_dir / "structured" / "calls.jsonl").read_text().splitlines()
+    ]
+    assert [event["event"] for event in events] == [
+        "intent",
+        "raw_response_received",
+        "response_received",
+        "rejected_response",
+    ]
+    assert sum(event["event"] == "intent" for event in events) == 1
+    assert not (state_dir / "plain" / "calls.jsonl").exists()
+    store = live.SQLiteSelfModelStore(
+        state_dir / "structured" / "state.sqlite3",
+        policy=live._proposal_policy(_budget()),
+    )
+    try:
+        assert store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+        assert store.active_snapshot().generation == 0
+    finally:
+        store.close()
+
+
+def test_public_schema_gate_cli_has_no_seed_path_and_binds_artifacts(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    scripted = ScriptedRelationalBackend()
+
+    def scripted_complete(self: Any, **kwargs: Any) -> ModelCompletion:
+        return scripted.complete(**kwargs)
+
+    monkeypatch.setattr(OpenAICompatibleBackend, "complete", scripted_complete)
+    output = tmp_path / "gate-output"
+    argv = [
+        "--endpoint",
+        "http://model.invalid",
+        "--model",
+        "deterministic-fixture",
+        "--output-dir",
+        str(output),
+        "--timeout",
+        "600",
+        "--source-revision",
+        "c" * 40,
+        "--container-digest",
+        "sha256:" + "d" * 64,
+        "--service-binding",
+        "sha256:" + "e" * 64,
+    ]
+    assert schema_gate_main(argv) == 0
+    result = json.loads((output / "gate_result.json").read_text())
+    assert result["valid"] is True and result["calls_observed"] == 4
+    prereg = json.loads((output / "gate_preregistration.json").read_text())
+    assert prereg["no_precommit_or_seed_path"] is True
+    terminal = json.loads((output / "terminal_receipt.json").read_text())
+    assert terminal["schema_gate_passed"] is True
+    assert terminal["status"] == "success"
+    assert "gate_result.json" in terminal["artifact_sha256s"]
+    assert "state/structured/calls.jsonl" in terminal["artifact_sha256s"]
+    assert all("seed" not in path for path in terminal["artifact_sha256s"])
+    with pytest.raises(ContinualLiveError, match="no resume"):
+        schema_gate_main(argv)
+    with pytest.raises(SystemExit):
+        schema_gate_main([*argv, "--seed-file", str(tmp_path / "forbidden")])
 
 
 def test_sealed_probe_pack_is_deterministic_and_unused() -> None:
@@ -894,7 +1196,7 @@ def test_exact_frozen_recovery_precommit_fixture() -> None:
     assert value["recovery_execution"]["per_call_timeout_seconds"] == 600.0
 
 
-def test_cli_uses_reserve_only_after_bound_no_score_timeout(
+def test_cli_rejects_consumed_v3_even_with_exact_failure_binding(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     seeds = tuple(bytes([index + 1]) * 32 for index in range(4))
@@ -910,7 +1212,7 @@ def test_cli_uses_reserve_only_after_bound_no_score_timeout(
         monkeypatch=monkeypatch,
     )
     precommit_path = tmp_path / "v3-precommit.json"
-    commitments = _write_test_recovery_precommit(
+    _write_test_recovery_precommit(
         precommit_path,
         seeds=seeds,
         binding=binding,
@@ -918,8 +1220,12 @@ def test_cli_uses_reserve_only_after_bound_no_score_timeout(
     )
     output = tmp_path / "output"
 
+    calls = 0
+
     def fail_call(self: Any, **kwargs: Any) -> ModelCompletion:
-        raise ContinualLiveError("synthetic partial-call outcome")
+        nonlocal calls
+        calls += 1
+        raise AssertionError("consumed v3 must fail before any model call")
 
     monkeypatch.setattr(OpenAICompatibleBackend, "complete", fail_call)
     argv = [
@@ -949,35 +1255,10 @@ def test_cli_uses_reserve_only_after_bound_no_score_timeout(
         "600",
         "--removal-restore",
     ]
-    with pytest.raises(ContinualLiveError, match="partial-call"):
+    with pytest.raises(ContinualLiveError, match="permanently prohibited"):
         main(argv)
-
-    prereg = json.loads((output / "preregistration.json").read_text())
-    assert prereg["ordered_seed_commitments"] == list(commitments)
-    assert prereg["selected_seed_indices"] == [2, 3]
-    failure_proof = json.loads(
-        (output / "failed_primary_validation.json").read_text()
-    )
-    assert failure_proof["no_score_proof"] is True
-    assert failure_proof["primary_seed_indices_consumed"] == [0, 1]
-    assert failure_proof["reserve_seed_indices_authorized"] == [2, 3]
-    assert (output / "frozen_precommit.canonical.json").read_bytes() == precommit_path.read_bytes()
-    reveal = json.loads((output / "seed_reveal.json").read_text())
-    assert reveal["used_seeds"] == [
-        {"frozen_index": 2, "seed_hex": seeds[2].hex()},
-        {"frozen_index": 3, "seed_hex": seeds[3].hex()},
-    ]
-    assert seeds[0].hex() not in json.dumps(reveal)
-    assert seeds[1].hex() not in json.dumps(reveal)
-    terminal = json.loads((output / "terminal_receipt.json").read_text())
-    assert terminal["status"] == "failed"
-    journal = output / "state" / "stream-00" / "hswm" / "calls.jsonl"
-    events = [json.loads(line) for line in journal.read_text().splitlines()]
-    assert [item["event"] for item in events] == ["intent", "failed"]
-    assert "state/stream-00/hswm/calls.jsonl" in terminal["artifact_sha256s"]
-
-    with pytest.raises(ContinualLiveError, match="no resume"):
-        main(argv)
+    assert calls == 0
+    assert not any(output.iterdir())
 
 
 def test_recovery_rejects_tampered_failed_run_tar_and_receipt(
@@ -1024,7 +1305,7 @@ def test_cli_rejects_consumed_v2_primary_authority(
     seed_path.chmod(0o600)
     precommit_path = tmp_path / "consumed-v2.json"
     _write_test_precommit(precommit_path, seeds, monkeypatch)
-    with pytest.raises(ContinualLiveError, match="consumed and superseded"):
+    with pytest.raises(ContinualLiveError, match="permanently prohibited"):
         main(
             [
                 "--endpoint",
@@ -1072,7 +1353,7 @@ def test_recovery_precommit_rejects_primary_indices(
         live._read_pilot_precommit(path)
 
 
-def test_recovery_requires_failed_run_binding_inputs(tmp_path: Path) -> None:
+def test_consumed_v3_is_rejected_before_old_failure_inputs(tmp_path: Path) -> None:
     seed_path = tmp_path / "seeds.json"
     seed_path.write_text(json.dumps([("01" * 32)] * 4), encoding="ascii")
     seed_path.chmod(0o600)
@@ -1081,7 +1362,7 @@ def test_recovery_requires_failed_run_binding_inputs(tmp_path: Path) -> None:
         / "fixtures"
         / "pilot_recovery_precommit_v3.canonical.json"
     )
-    with pytest.raises(ContinualLiveError, match="exact failed-run tar"):
+    with pytest.raises(ContinualLiveError, match="permanently prohibited"):
         main(
             [
                 "--endpoint",
@@ -1108,7 +1389,7 @@ def test_recovery_requires_failed_run_binding_inputs(tmp_path: Path) -> None:
 
 
 @pytest.mark.parametrize("seed_count", [3, 5])
-def test_recovery_rejects_any_frozen_seed_count_other_than_four(
+def test_consumed_v3_is_rejected_before_reading_any_old_seed_count(
     tmp_path: Path, seed_count: int
 ) -> None:
     seeds = tuple(bytes([index + 1]) * 32 for index in range(seed_count))
@@ -1147,5 +1428,5 @@ def test_recovery_rejects_any_frozen_seed_count_other_than_four(
         "600",
         "--removal-restore",
     ]
-    with pytest.raises(ContinualLiveError, match="exactly 4"):
+    with pytest.raises(ContinualLiveError, match="permanently prohibited"):
         main(argv)

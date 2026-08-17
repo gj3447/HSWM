@@ -1250,6 +1250,176 @@ def test_compact_patch_binds_nonlexical_wrong_relations_without_add_or_drop(
     ]
 
 
+def test_full_author_persists_self_relation_as_diagnostic_false_positive(
+    tmp_path: Path,
+) -> None:
+    class SelfRelationBackend(ScriptedRelationalBackend):
+        @staticmethod
+        def _author(payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            own_id = payload["public_source_tokens"][0]["suggested_memory_id"]
+            value["new_memory_relations"][0]["related_memory_ids"] = [own_id]
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    diagnostics: list[dict[str, Any]] = []
+
+    def diagnose(proposal: Any, source_tokens: Any, active: Any) -> dict[str, Any]:
+        result = live._public_gate_relation_quality_diagnostic(
+            proposal,
+            source_tokens,
+            active,
+            update_ordinal=len(diagnostics),
+        )
+        diagnostics.append(result)
+        return result
+
+    backend = SelfRelationBackend()
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id="full-author-self-relation",
+        store_path=tmp_path / "state.sqlite3",
+        proposal_validator=diagnose,
+    )
+    arm.update(_one_token_batch())
+    response_schema = json.loads(
+        backend.requests[0]["response_schema"]["schema_json"]
+    )
+    relation_ids_schema = response_schema["properties"]["new_memory_relations"][
+        "items"
+    ]["properties"]["related_memory_ids"]
+    assert relation_ids_schema["maxItems"] == 1
+    assert "source memory itself is structurally allowed" in (
+        backend.requests[0]["system"]
+        + " "
+        + backend.requests[0]["payload"]["instruction"]
+    )
+    memory = arm.store.active_snapshot().snapshot.memories[0]
+    assert memory.related_memory_ids == (memory.memory_id,)
+    diagnostic = diagnostics[0]
+    assert (
+        diagnostic["true_positive_count"],
+        diagnostic["false_positive_count"],
+        diagnostic["false_negative_count"],
+    ) == (0, 1, 0)
+    assert diagnostic["precision"] == {
+        "denominator": 1,
+        "numerator": 0,
+        "value": 0.0,
+    }
+    assert diagnostic["recall"] == {
+        "denominator": 0,
+        "numerator": 0,
+        "value": None,
+    }
+    receipt = arm.structure_compilation_receipts[0]
+    authored = [
+        {
+            "memory_id": memory.memory_id,
+            "related_memory_ids": [memory.memory_id],
+        }
+    ]
+    assert receipt["logical_mode"] == live.FULL_AUTHOR_MODE
+    assert receipt["authored_relation_count"] == receipt["stored_relation_count"] == 1
+    assert receipt["authored_relation_sequence_sha256"] == live.canonical_sha256(
+        authored
+    )
+    assert (
+        receipt["authored_relation_canonical_set_sha256"]
+        == receipt["stored_relation_canonical_set_sha256"]
+    )
+    assert receipt["proposal_validation_sha256"] == live.canonical_sha256(
+        diagnostic
+    )
+
+
+def test_keep_routing_persists_self_relation_without_rewriting_prior_state(
+    tmp_path: Path,
+) -> None:
+    class KeepSelfRelationBackend(ScriptedRelationalBackend):
+        @staticmethod
+        def _author(payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            if payload["authoring_mode"] == live.KEEP_ROUTING_APPEND_MODE:
+                own_id = payload["public_source_tokens"][0]["suggested_memory_id"]
+                value["new_memory_relations"][0]["related_memory_ids"] = [own_id]
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    arm = StructuredHSWMArm(
+        backend=KeepSelfRelationBackend(),
+        budget=_budget(),
+        isolation_id="keep-self-relation",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    arm.update(_one_token_batch())
+    before = arm.store.active_snapshot().snapshot
+    before_ids = {memory.memory_id for memory in before.memories}
+    arm.update(
+        LearningBatch(
+            episode_id="keep-self-relation",
+            after_step=1,
+            chosen=None,
+            correct=False,
+            learning_tokens=(PublicLearningToken("node-x", "rel", "node-y"),),
+        )
+    )
+    after = arm.store.active_snapshot().snapshot
+    new_memory = next(
+        memory for memory in after.memories if memory.memory_id not in before_ids
+    )
+    assert new_memory.related_memory_ids == (new_memory.memory_id,)
+    assert [
+        memory.canonical() for memory in after.memories if memory.memory_id in before_ids
+    ] == [memory.canonical() for memory in before.memories]
+    receipt = arm.structure_compilation_receipts[1]
+    assert receipt["logical_mode"] == live.KEEP_ROUTING_APPEND_MODE
+    assert receipt["routing_preserved"] is True
+    assert receipt["memberships_preserved"] is True
+    assert receipt["append_only_membership"] is True
+    assert receipt["authored_relation_count"] == receipt["stored_relation_count"] == 1
+    assert (
+        receipt["authored_relation_canonical_set_sha256"]
+        == receipt["stored_relation_canonical_set_sha256"]
+    )
+
+
+def test_related_memory_bound_still_fails_closed_when_self_is_allowed(
+    tmp_path: Path,
+) -> None:
+    class TooManyRelationsBackend(ScriptedRelationalBackend):
+        @staticmethod
+        def _author(payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            value["new_memory_relations"][0]["related_memory_ids"] = [
+                item["suggested_memory_id"]
+                for item in payload["public_source_tokens"][
+                    : live.MAX_RELATED_MEMORY_IDS + 1
+                ]
+            ]
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    arm = StructuredHSWMArm(
+        backend=TooManyRelationsBackend(),
+        budget=_budget(),
+        isolation_id="self-allowed-relation-bound",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    batch = LearningBatch(
+        episode_id="self-allowed-relation-bound",
+        after_step=0,
+        chosen=None,
+        correct=False,
+        learning_tokens=tuple(
+            PublicLearningToken(f"node-{index}", "rel", f"target-{index}")
+            for index in range(live.MAX_RELATED_MEMORY_IDS + 1)
+        ),
+    )
+    with pytest.raises(ContinualLiveError, match="array bound"):
+        arm.update(batch)
+    assert arm.store.active_snapshot().generation == 0
+    assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
+
+
 def _projection_test_snapshot() -> Any:
     memories = (
         live.MemoryRecord(
@@ -1707,8 +1877,8 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         state_dir=tmp_path / "gate-state",
     )
     assert result["valid"] is True
-    assert result["adapter_schema"] == "hswm-compact-structure-patch/v6"
-    assert result["protocol"] == "hswm-public-schema-gate/v7"
+    assert result["adapter_schema"] == "hswm-compact-structure-patch/v7"
+    assert result["protocol"] == "hswm-public-schema-gate/v8"
     assert result["indexed_authoring_view_schema"] == (
         "hswm-indexed-authoring-view/v1"
     )
@@ -1851,8 +2021,8 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         for item in structured_events
         if item["event"] == "intent"
     ] == [
-        "hswm_full_author_patch_v1",
-        "hswm_keep_routing_append_patch_v1",
+        "hswm_full_author_patch_v2",
+        "hswm_keep_routing_append_patch_v2",
         "hswm_choice_v1",
     ]
     assert [
@@ -2121,7 +2291,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     assert "seed" not in live.public_schema_gate_fixture()
 
 
-def test_public_gate_self_relation_failure_stops_before_commit_at_genesis(
+def test_public_gate_self_relation_is_persisted_and_scored_without_gating(
     tmp_path: Path,
 ) -> None:
     class InvalidRelationBackend(ScriptedRelationalBackend):
@@ -2142,25 +2312,39 @@ def test_public_gate_self_relation_failure_stops_before_commit_at_genesis(
         return backend
 
     state_dir = tmp_path / "relation-self"
-    with pytest.raises(
-        ContinualLiveError, match="cannot contain the source memory id"
-    ):
-        run_public_schema_gate(
-            backend_factory=backend_factory,
-            state_dir=state_dir,
+    result = run_public_schema_gate(
+        backend_factory=backend_factory,
+        state_dir=state_dir,
+    )
+    assert result["valid"] is True
+    assert [
+        (
+            item["true_positive_count"],
+            item["false_positive_count"],
+            item["false_negative_count"],
         )
-    assert sum(len(backend.requests) for backend in backends) == 1
+        for item in result["relation_quality_diagnostics"]
+    ] == [(62, 1, 1), (2, 1, 1)]
+    assert all(
+        item["diagnostic_only"] is True
+        and item["relation_quality_gate"] is False
+        for item in result["relation_quality_diagnostics"]
+    )
+    assert sum(len(backend.requests) for backend in backends) == 4
     store = live.SQLiteSelfModelStore(
         state_dir / "structured" / "state.sqlite3",
         policy=live._proposal_policy(_budget()),
     )
     try:
         active = store.active_snapshot()
-        assert active.snapshot.canonical() == GENESIS.canonical()
-        assert active.generation == 0
-        assert store.token_count() == 0
-        assert store.activation_count() == 0
-        assert store.snapshot_count() == 1
+        assert active.generation == 3
+        assert len(active.snapshot.memories) == 144
+        assert sum(
+            memory.memory_id in memory.related_memory_ids
+            for memory in active.snapshot.memories
+        ) == 2
+        assert store.token_count() == 144
+        assert store.activation_count() == 3
     finally:
         store.close()
 
@@ -3832,7 +4016,7 @@ def test_public_schema_gate_cli_has_no_seed_path_and_binds_artifacts(
     assert result["outbound_http_requests_observed"] == 8
     prereg = json.loads((output / "gate_preregistration.json").read_text())
     assert prereg["no_precommit_or_seed_path"] is True
-    assert prereg["protocol"] == "hswm-public-schema-gate/v7"
+    assert prereg["protocol"] == "hswm-public-schema-gate/v8"
     assert prereg["indexed_authoring_view_schema"] == (
         "hswm-indexed-authoring-view/v1"
     )

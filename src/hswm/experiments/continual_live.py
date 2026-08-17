@@ -84,7 +84,7 @@ from .continual import (
 LIVE_PROTOCOL = "hswm-continual-live/v1"
 AUTHOR_ID = "agent:continual-memory-author"
 CAPABILITY = "nonce_graph_lookup"
-COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v6"
+COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v7"
 INDEXED_AUTHORING_VIEW_SCHEMA = "hswm-indexed-authoring-view/v1"
 MUTATION_EXPRESSIVITY = "full-author-then-keep-routing-append/v1"
 FULL_AUTHOR_MODE = "FULL_AUTHOR"
@@ -95,7 +95,7 @@ PUBLIC_SCHEMA_GATE_FIXTURE_DOMAIN = "hswm-public-schema-gate/v3"
 PUBLIC_SCHEMA_GATE_FIXTURE_COMPACT_PATCH_SCHEMA = (
     "hswm-compact-structure-patch/v3"
 )
-PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v7"
+PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v8"
 PUBLIC_SCHEMA_GATE_EPISODE = "public-schema-gate-never-evaluation"
 PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS = 32_768
 PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING = 6144
@@ -1409,7 +1409,7 @@ def _compact_patch_response_schema(
                     "type": "string",
                 },
                 "maxItems": min(
-                    max(len(relation_target_ids) - 1, 0),
+                    len(relation_target_ids),
                     MAX_RELATED_MEMORY_IDS,
                 ),
                 "type": "array",
@@ -1478,7 +1478,7 @@ def _compact_patch_response_schema(
                 "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
             }
         )
-        return JSONSchemaContract.make("hswm_full_author_patch_v1", schema)
+        return JSONSchemaContract.make("hswm_full_author_patch_v2", schema)
 
     active_cell_ids = tuple(cell.cell_id for cell in active.cells)
     if len(active_cell_ids) != len(set(active_cell_ids)):
@@ -1497,7 +1497,7 @@ def _compact_patch_response_schema(
             "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
         }
     )
-    return JSONSchemaContract.make("hswm_keep_routing_append_patch_v1", schema)
+    return JSONSchemaContract.make("hswm_keep_routing_append_patch_v2", schema)
 
 
 def _plain_memory_response_schema() -> JSONSchemaContract:
@@ -2596,10 +2596,6 @@ def _parse_structure_proposal(
             raise ContinualLiveError(
                 "related_memory_ids contains duplicate or unknown memory ids"
             )
-        if new_ids[source_index] in related_memory_ids:
-            raise ContinualLiveError(
-                "related_memory_ids cannot contain the source memory id"
-            )
         parsed_relations.append(related_memory_ids)
 
     memories = tuple(
@@ -2858,8 +2854,9 @@ def _structure_update_payload(
             "Author only the bounded HSWM mutation described below. The adapter copies "
             "each public token's fixed content, deterministic ID, and provenance into "
             "one MemoryRecord. You author the ordered related_memory_ids for every new "
-            "memory. Relation targets must be known direct memory IDs, unique, bounded, "
-            "and never the source memory itself; semantic quality is not repaired or "
+            "memory. Relation targets must be known direct memory IDs, unique, and "
+            "bounded; the source memory itself is structurally allowed and scored only "
+            "as a diagnostic relation choice; semantic quality is not repaired or "
             "used to accept, retry, prompt, or select a seed. Cell IDs and numeric "
             "indices are never memory relation IDs. "
             + instruction

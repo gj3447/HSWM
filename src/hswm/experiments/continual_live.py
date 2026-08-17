@@ -29,12 +29,14 @@ from __future__ import annotations
 import argparse
 import base64
 from dataclasses import dataclass
+import gc
 from hashlib import sha256
 import itertools
 import json
 import os
 from pathlib import Path
 import re
+import sqlite3
 import socket
 import stat
 import tarfile
@@ -48,6 +50,7 @@ from hswm.selfmod.contracts import (
     CellRecord,
     CellTopologyMode,
     MemoryRecord,
+    MutationProposal,
     SelfModelPolicy,
     SelfModelSnapshot,
     apply_mutation,
@@ -78,8 +81,8 @@ from .continual import (
 LIVE_PROTOCOL = "hswm-continual-live/v1"
 AUTHOR_ID = "agent:continual-memory-author"
 CAPABILITY = "nonce_graph_lookup"
-COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v1"
-PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v1"
+COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v2"
+PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v2"
 PUBLIC_SCHEMA_GATE_EPISODE = "public-schema-gate-never-evaluation"
 PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING = 6144
 STRUCTURED_OUTPUT_MODE = "openai-response-format-json-schema/v1"
@@ -146,7 +149,9 @@ def _digest_bytes(value: bytes) -> str:
 def _write_json_atomic(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     raw = canonical_json_bytes(value) + b"\n"
-    with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        dir=path.parent, prefix=".tmp-", delete=False
+    ) as handle:
         temporary = Path(handle.name)
         handle.write(raw)
         handle.flush()
@@ -156,12 +161,87 @@ def _write_json_atomic(path: Path, value: Any) -> None:
 
 def _write_bytes_atomic(path: Path, raw: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as handle:
+    with tempfile.NamedTemporaryFile(
+        dir=path.parent, prefix=".tmp-", delete=False
+    ) as handle:
         temporary = Path(handle.name)
         handle.write(raw)
         handle.flush()
         os.fsync(handle.fileno())
     os.replace(temporary, path)
+
+
+def _checkpoint_sqlite_artifacts(root: Path) -> tuple[str, ...]:
+    """Seal every runner-owned SQLite database into one persistent main file."""
+
+    root = Path(root)
+    # sqlite3 context managers commit/rollback but do not close their connection.
+    # The store uses short-lived per-operation connections, so collect any finished
+    # connection cycles before requiring an exclusive WAL-mode transition.
+    gc.collect()
+    finalized: list[str] = []
+    for path in sorted(root.rglob("*.sqlite3")):
+        if not path.is_file() or path.is_symlink():
+            raise ContinualLiveError("SQLite artifact path is not a regular file")
+        connection = sqlite3.connect(path, timeout=10.0, isolation_level=None)
+        try:
+            connection.execute("PRAGMA busy_timeout=10000")
+            journal_mode = str(
+                connection.execute("PRAGMA journal_mode").fetchone()[0]
+            ).lower()
+            if journal_mode == "wal":
+                checkpoint = connection.execute(
+                    "PRAGMA wal_checkpoint(TRUNCATE)"
+                ).fetchone()
+                if checkpoint is None or int(checkpoint[0]) != 0:
+                    raise ContinualLiveError(
+                        "SQLite WAL checkpoint was busy before artifact hashing"
+                    )
+                journal_mode = str(
+                    connection.execute("PRAGMA journal_mode=DELETE").fetchone()[0]
+                ).lower()
+            if journal_mode != "delete":
+                raise ContinualLiveError(
+                    "SQLite artifact did not enter sealed DELETE journal mode"
+                )
+            integrity = connection.execute("PRAGMA quick_check").fetchone()
+            if integrity is None or integrity[0] != "ok":
+                raise ContinualLiveError("SQLite artifact failed quick_check")
+        finally:
+            connection.close()
+        finalized.append(path.relative_to(root).as_posix())
+    gc.collect()
+    dangling = sorted(
+        path.relative_to(root).as_posix()
+        for path in root.rglob("*")
+        if path.is_file() and path.name.endswith(("-wal", "-shm", "-journal"))
+    )
+    if dangling:
+        raise ContinualLiveError(
+            "SQLite sidecar remains after final checkpoint: " + ", ".join(dangling)
+        )
+    return tuple(finalized)
+
+
+def _final_artifact_sha256s(root: Path) -> dict[str, str]:
+    """Hash the exact persistent regular-file tree except its terminal receipt."""
+
+    root = Path(root)
+    terminal = root / "terminal_receipt.json"
+    result: dict[str, str] = {}
+    for path in sorted(root.rglob("*")):
+        if path.is_symlink():
+            raise ContinualLiveError("artifact tree cannot contain symbolic links")
+        if not path.is_file():
+            continue
+        if path == terminal:
+            continue
+        if path.name.startswith(".tmp-"):
+            raise ContinualLiveError("artifact tree contains an unfinished atomic write")
+        if path.name.endswith(("-wal", "-shm", "-journal")):
+            raise ContinualLiveError("artifact tree contains an unsealed SQLite sidecar")
+        result[path.relative_to(root).as_posix()] = _digest_bytes(path.read_bytes())
+    return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -787,7 +867,7 @@ def _compact_patch_response_schema(
                 "maxItems": min(len(active_ids), MAX_RELATED_MEMORY_IDS),
                 "type": "array",
             },
-            "related_new_token_indices": {
+            "related_other_new_token_indices": {
                 "items": index_items,
                 "maxItems": min(max(source_count - 1, 0), MAX_RELATED_MEMORY_IDS),
                 "type": "array",
@@ -818,7 +898,7 @@ def _compact_patch_response_schema(
             "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
         }
     )
-    return JSONSchemaContract.make("hswm_compact_patch_v1", schema)
+    return JSONSchemaContract.make("hswm_compact_patch_v2", schema)
 
 
 def _plain_memory_response_schema() -> JSONSchemaContract:
@@ -1373,7 +1453,7 @@ def _parse_structure_proposal(
     for item in value["new_memory_links"]:
         if not isinstance(item, Mapping) or set(item) != {
             "related_existing_memory_ids",
-            "related_new_token_indices",
+            "related_other_new_token_indices",
             "token_index",
         }:
             raise ContinualLiveError("new_memory_links item field set is invalid")
@@ -1392,17 +1472,19 @@ def _parse_structure_proposal(
         )
         if not set(existing_related) <= surviving_ids:
             raise ContinualLiveError("new memory relation cites unknown existing state")
-        related_new = index_list(
-            item["related_new_token_indices"],
-            "related_new_token_indices",
+        related_other_new = index_list(
+            item["related_other_new_token_indices"],
+            "related_other_new_token_indices",
         )
         if (
             len(existing_related) > MAX_RELATED_MEMORY_IDS
-            or len(related_new) > MAX_RELATED_MEMORY_IDS
+            or len(related_other_new) > MAX_RELATED_MEMORY_IDS
         ):
             raise ContinualLiveError("new memory relation exceeds the bounded degree")
-        if token_index in related_new:
-            raise ContinualLiveError("new memory cannot relate to itself")
+        if token_index in related_other_new:
+            raise ContinualLiveError(
+                "related_other_new_token_indices cannot contain its source token_index"
+            )
         links_by_index[token_index] = item
     if set(links_by_index) != set(range(len(source_tokens))):
         raise ContinualLiveError(
@@ -1420,7 +1502,7 @@ def _parse_structure_proposal(
                 + tuple(
                     new_ids[index]
                     for index in links_by_index[token_index][
-                        "related_new_token_indices"
+                        "related_other_new_token_indices"
                     ]
                 )
             ),
@@ -1552,8 +1634,18 @@ def _structure_update_payload(
             "Author only the compact HSWM organization patch. The adapter copies each "
             "public token's fixed content, id, and provenance into a MemoryRecord; you "
             "must author every memory relation and the complete reachable cell routing "
-            "topology. Reference new tokens only by token_index. Never echo the current "
-            "HSWM, MemoryRecord content, or a separate plan document."
+            "topology. In each new_memory_links item, token_index is the SOURCE memory "
+            "and related_other_new_token_indices contains only distinct OTHER TARGET "
+            "memories; related_existing_memory_ids contains surviving TARGET memories. "
+            "Neither field is ownership or cell assignment. The other-new list must "
+            "never contain its own token_index, and both lists must be [] when no target "
+            "is justified. Assign memories only with cells[].new_token_indices. A "
+            "directed composition may point from source token i to a distinct new token "
+            "j, or an existing memory, only when i.content.target equals the target "
+            "memory's content.source. The batch may be shuffled: never infer a relation "
+            "from token index, adjacency, or order. "
+            "Never echo the current HSWM, MemoryRecord content, or a separate plan "
+            "document."
         ),
         "output_bounds": {
             "cell_id_max_chars": MAX_CELL_ID_CHARS,
@@ -1564,6 +1656,12 @@ def _structure_update_payload(
                 MAX_CELL_MEMORY_REFERENCES_PER_FIELD
             ),
             "memory_relations_max_per_kind": MAX_RELATED_MEMORY_IDS,
+            "new_memory_relation_semantics": (
+                "token_index is source; related_other_new_token_indices are distinct "
+                "other new targets and related_existing_memory_ids are surviving "
+                "targets; content.target-to-content.source composition only; "
+                "self-reference forbidden; [] means no target; order is irrelevant"
+            ),
             "next_cells_max_per_cell": MAX_CELL_EDGES,
             "rationale_max_chars": MAX_RATIONALE_CHARS,
             "single_cell_assignment_per_memory": True,
@@ -1593,7 +1691,7 @@ def _structure_update_payload(
                     "related_existing_memory_ids": [
                         "id from current_hswm_read_only"
                     ],
-                    "related_new_token_indices": [1],
+                    "related_other_new_token_indices": [],
                     "token_index": 0,
                 }
             ],
@@ -1618,6 +1716,10 @@ class StructuredHSWMArm(_ModelArm):
         read_history: bool = True,
         reset_after_commit: bool = False,
         completion_validator: Callable[[CallLedgerEntry], object] | None = None,
+        proposal_validator: Callable[
+            [MutationProposal, Sequence[Mapping[str, Any]]], object
+        ]
+        | None = None,
     ) -> None:
         super().__init__(
             name=name,
@@ -1630,6 +1732,7 @@ class StructuredHSWMArm(_ModelArm):
         self.commit_updates = commit_updates
         self.read_history = read_history
         self.reset_after_commit = reset_after_commit
+        self.proposal_validator = proposal_validator
         if reset_after_commit and not commit_updates:
             raise ValueError("reset_after_commit requires committed proposals")
         self.store_path = Path(store_path)
@@ -1666,8 +1769,17 @@ class StructuredHSWMArm(_ModelArm):
                 "Return exactly the five-key JSON object in response_contract. Author "
                 "compact memory links, cells, and routing directly in HSWM. Do not "
                 "return active_hswm, memories, upsert_memories, token content, a plan, "
-                "or any prose. Assign each surviving/new memory to exactly one cell. "
-                "Use only public tokens; never infer a gold answer."
+                "or any prose. For every new_memory_links item, token_index is the "
+                "SOURCE; related_other_new_token_indices are distinct OTHER TARGETS, "
+                "and related_existing_memory_ids are surviving TARGETS. Neither is "
+                "ownership or assignment, and the other-new list must not contain that "
+                "token_index. Use [] when there is no target. Cell assignment exists "
+                "only in cells[].new_token_indices. A directed composition may point "
+                "from source i to a distinct new j or existing memory only when "
+                "i.content.target equals the target memory's content.source. Batches may "
+                "be shuffled: never infer relations from index, adjacency, or order. "
+                "Assign each surviving/new memory to "
+                "exactly one cell. Use only public tokens; never infer a gold answer."
             ),
             payload=_structure_update_payload(prompt_snapshot, source_tokens),
             response_schema=_compact_patch_response_schema(
@@ -1683,6 +1795,8 @@ class StructuredHSWMArm(_ModelArm):
             generation=active_record.generation if self.commit_updates else 0,
             policy=self.policy,
         )
+        if self.proposal_validator is not None:
+            self.proposal_validator(proposal, source_tokens)
         activation_id: str | None = None
         reset_activation_id: str | None = None
         if self.commit_updates:
@@ -2514,6 +2628,67 @@ def public_schema_gate_fixture() -> dict[str, Any]:
     return {**value, "fixture_sha256": canonical_sha256(value)}
 
 
+def _validate_public_gate_agent_relations(
+    proposal: MutationProposal,
+    source_tokens: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Require the public fixture's content-derived directed memory graph.
+
+    This is a pre-commit schema-gate predicate, not a repair step.  The model
+    must author the edges itself; a missing, extra, reversed, or self edge
+    rejects the proposal while the durable store remains at its prior state.
+    """
+
+    expected_memory_ids = {
+        str(item["suggested_memory_id"]) for item in source_tokens
+    }
+    memories = {memory.memory_id: memory for memory in proposal.upsert_memories}
+    if set(memories) != expected_memory_ids:
+        raise ContinualLiveError(
+            "public gate relation check lacks the exact deterministic memories"
+        )
+    expected_edges = sorted(
+        {
+            (
+                str(source["suggested_memory_id"]),
+                str(target["suggested_memory_id"]),
+            )
+            for source_index, source in enumerate(source_tokens)
+            for target_index, target in enumerate(source_tokens)
+            if source_index != target_index
+            and source["content"].get("target")
+            == target["content"].get("source")
+        }
+    )
+    observed_edges = sorted(
+        (memory.memory_id, related_memory_id)
+        for memory in proposal.upsert_memories
+        for related_memory_id in memory.related_memory_ids
+    )
+    expected_values = [
+        {"source_memory_id": source, "target_memory_id": target}
+        for source, target in expected_edges
+    ]
+    observed_values = [
+        {"source_memory_id": source, "target_memory_id": target}
+        for source, target in observed_edges
+    ]
+    if observed_edges != expected_edges:
+        raise ContinualLiveError(
+            "public gate agent-authored relations differ from the exact "
+            "content-derived directed composition graph"
+        )
+    return {
+        "author": AUTHOR_ID,
+        "exact_match": True,
+        "expected_relation_count": len(expected_edges),
+        "expected_relations_sha256": canonical_sha256(expected_values),
+        "observed_relation_count": len(observed_edges),
+        "observed_relations_sha256": canonical_sha256(observed_values),
+        "source_token_count": len(source_tokens),
+    }
+
+
 def _install_public_gate_extension(
     arm: StructuredHSWMArm,
     tokens: Sequence[PublicLearningToken],
@@ -2596,8 +2771,13 @@ def _install_public_gate_extension(
         "before_state_sha256": _digest_bytes(
             canonical_json_bytes(active.snapshot.canonical())
         ),
+        "evaluator_authored_memory_count": len(memories),
+        "evaluator_authored_relation_count": sum(
+            len(memory.related_memory_ids) for memory in memories
+        ),
         "memory_count": len(after.memories),
         "mutation_sha256": canonical_sha256(proposal.canonical()),
+        "relation_author": "evaluator:public-schema-gate-fixture",
     }
 
 
@@ -2646,6 +2826,7 @@ def run_public_schema_gate(
         max_state_bytes=1_000_000,
     )
     accepted_model: list[str] = []
+    agent_relation_checks: list[dict[str, Any]] = []
 
     def accept_gate_completion(entry: CallLedgerEntry) -> None:
         _public_gate_call_summary(entry)
@@ -2654,6 +2835,14 @@ def run_public_schema_gate(
         if not accepted_model:
             accepted_model.append(entry.completion.model)
 
+    def accept_gate_proposal(
+        proposal: MutationProposal,
+        source_tokens: Sequence[Mapping[str, Any]],
+    ) -> None:
+        agent_relation_checks.append(
+            _validate_public_gate_agent_relations(proposal, source_tokens)
+        )
+
     structured = StructuredHSWMArm(
         backend=backend_factory(),
         budget=budget,
@@ -2661,6 +2850,7 @@ def run_public_schema_gate(
         store_path=state_dir / "structured" / "state.sqlite3",
         journal_path=state_dir / "structured" / "calls.jsonl",
         completion_validator=accept_gate_completion,
+        proposal_validator=accept_gate_proposal,
     )
     plain = PlainTextArm(
         backend=backend_factory(),
@@ -2702,6 +2892,16 @@ def run_public_schema_gate(
             raise ContinualLiveError(
                 "public gate incremental patch did not materialize 144 memories"
             )
+        if (
+            len(agent_relation_checks) != 2
+            or [item["source_token_count"] for item in agent_relation_checks]
+            != [64, 4]
+            or [item["expected_relation_count"] for item in agent_relation_checks]
+            != [63, 3]
+        ):
+            raise ContinualLiveError(
+                "public gate did not verify both exact agent-authored relation chains"
+            )
         plain_update = plain.update(warmup)
         before_probe_sha256 = _digest_bytes(structured.state_canonical_bytes())
         probe = PublicProbe(
@@ -2735,6 +2935,7 @@ def run_public_schema_gate(
             raise ContinualLiveError("public gate returned model identity drift")
         result = {
             "adapter_schema": COMPACT_PATCH_SCHEMA,
+            "agent_relation_checks": agent_relation_checks,
             "after_incremental_state_sha256": _digest_bytes(
                 canonical_json_bytes(after_incremental.canonical())
             ),
@@ -2756,6 +2957,7 @@ def run_public_schema_gate(
             "plain_update_receipt_sha256": plain_update.receipt_sha256,
             "probe_answer_receipt_sha256": answer.receipt_sha256,
             "probe_choice": chosen,
+            "probe_mechanism_attribution": "not-attested-by-this-public-gate",
             "protocol": PUBLIC_SCHEMA_GATE_PROTOCOL,
             "provider_structured_output_backend_attested": False,
             "semantic_acceptance": "local-strict-parser-after-provider-json-schema",
@@ -4095,15 +4297,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
         if ledgers:
             _write_json_atomic(output / "call_ledgers.json", {"streams": ledgers})
-        artifact_hashes = {
-            path.relative_to(output).as_posix(): _digest_bytes(path.read_bytes())
-            for path in sorted(output.rglob("*"))
-            if path.is_file()
-            and path.name != "terminal_receipt.json"
-            and not path.name.startswith(".tmp")
-        }
+        checkpointed_sqlite_artifacts = _checkpoint_sqlite_artifacts(output)
+        artifact_hashes = _final_artifact_sha256s(output)
         terminal = {
             "artifact_sha256s": artifact_hashes,
+            "checkpointed_sqlite_artifacts": list(
+                checkpointed_sqlite_artifacts
+            ),
             "completed_streams": status["completed_streams"],
             "engineering_only": True,
             "error": status["error"],
@@ -4198,16 +4398,14 @@ def schema_gate_main(argv: Sequence[str] | None = None) -> int:
         raise
     finally:
         _write_json_atomic(output / "status.json", status)
-        artifact_hashes = {
-            path.relative_to(output).as_posix(): _digest_bytes(path.read_bytes())
-            for path in sorted(output.rglob("*"))
-            if path.is_file()
-            and path.name != "terminal_receipt.json"
-            and not path.name.startswith(".tmp")
-        }
+        checkpointed_sqlite_artifacts = _checkpoint_sqlite_artifacts(output)
+        artifact_hashes = _final_artifact_sha256s(output)
         terminal = {
             "artifact_sha256s": artifact_hashes,
             "calls_expected": 4,
+            "checkpointed_sqlite_artifacts": list(
+                checkpointed_sqlite_artifacts
+            ),
             "denylisted_from_evaluation": True,
             "error": status["error"],
             "no_precommit_or_seed_path": True,

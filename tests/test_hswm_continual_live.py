@@ -115,7 +115,7 @@ class ScriptedRelationalBackend:
             new_links.append(
                 {
                     "related_existing_memory_ids": related_existing,
-                    "related_new_token_indices": related_new,
+                    "related_other_new_token_indices": related_new,
                     "token_index": source_token["token_index"],
                 }
             )
@@ -978,7 +978,7 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
         ),
         (
             lambda value: value["new_memory_links"][0].update(
-                {"related_new_token_indices": [99]}
+                {"related_other_new_token_indices": [99]}
             ),
             "array bound",
         ),
@@ -1105,6 +1105,23 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     assert result["before_probe_state_sha256"] == result["after_probe_state_sha256"]
     assert result["denylisted_from_evaluation"] is True
     assert result["provider_structured_output_backend_attested"] is False
+    assert result["probe_mechanism_attribution"] == "not-attested-by-this-public-gate"
+    assert [
+        item["expected_relation_count"]
+        for item in result["agent_relation_checks"]
+    ] == [63, 3]
+    assert all(
+        item["exact_match"]
+        and item["expected_relation_count"] == item["observed_relation_count"]
+        and item["expected_relations_sha256"]
+        == item["observed_relations_sha256"]
+        for item in result["agent_relation_checks"]
+    )
+    assert result["extension"]["relation_author"] == (
+        "evaluator:public-schema-gate-fixture"
+    )
+    assert result["extension"]["evaluator_authored_memory_count"] == 76
+    assert result["extension"]["evaluator_authored_relation_count"] == 75
     structured_events = [
         json.loads(line)
         for line in (
@@ -1166,7 +1183,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         item["response_schema_name"]
         for item in structured_events
         if item["event"] == "intent"
-    ] == ["hswm_compact_patch_v1", "hswm_compact_patch_v1", "hswm_choice_v1"]
+    ] == ["hswm_compact_patch_v2", "hswm_compact_patch_v2", "hswm_choice_v1"]
     assert [
         item["response_schema_name"]
         for item in plain_events
@@ -1180,12 +1197,123 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         )
     )
     cell_properties = first_schema["properties"]["cells"]["items"]["properties"]
+    link_properties = first_schema["properties"]["new_memory_links"]["items"][
+        "properties"
+    ]
     assert first_schema["properties"]["cells"]["maxItems"] == 16
     assert cell_properties["existing_memory_ids"]["maxItems"] == 0
     assert cell_properties["new_token_indices"]["maxItems"] == 32
     assert cell_properties["instruction"]["maxLength"] == 256
+    assert "related_other_new_token_indices" in link_properties
+    assert "related_new_token_indices" not in link_properties
     assert first_schema["properties"]["rationale"]["maxLength"] == 512
+    first_intent = next(
+        item for item in structured_events if item["event"] == "intent"
+    )
+    first_payload = json.loads(first_intent["request_payload_json"])
+    combined_instruction = (
+        first_intent["system_message"] + " " + first_payload["instruction"]
+    )
+    assert "distinct OTHER TARGET" in combined_instruction
+    assert "must not contain that token_index" in combined_instruction
+    assert "never infer relations from index, adjacency, or order" in (
+        combined_instruction
+    )
+    assert "i+1" not in combined_instruction
     assert "seed" not in live.public_schema_gate_fixture()
+
+
+@pytest.mark.parametrize(
+    ("violation", "message"),
+    [
+        ("self", "cannot contain its source token_index"),
+        ("wrong-other", "content-derived directed composition graph"),
+    ],
+)
+def test_public_gate_relation_failure_stops_before_commit_at_genesis(
+    tmp_path: Path, violation: str, message: str
+) -> None:
+    class InvalidRelationBackend(ScriptedRelationalBackend):
+        @staticmethod
+        def _author(payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            source_index = value["new_memory_links"][0]["token_index"]
+            value["new_memory_links"][0][
+                "related_other_new_token_indices"
+            ] = [source_index if violation == "self" else 2]
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    backends: list[InvalidRelationBackend] = []
+
+    def backend_factory() -> InvalidRelationBackend:
+        backend = InvalidRelationBackend()
+        backends.append(backend)
+        return backend
+
+    state_dir = tmp_path / f"relation-{violation}"
+    with pytest.raises(ContinualLiveError, match=message):
+        run_public_schema_gate(
+            backend_factory=backend_factory,
+            state_dir=state_dir,
+        )
+    assert sum(len(backend.requests) for backend in backends) == 1
+    store = live.SQLiteSelfModelStore(
+        state_dir / "structured" / "state.sqlite3",
+        policy=live._proposal_policy(_budget()),
+    )
+    try:
+        active = store.active_snapshot()
+        assert active.snapshot.canonical() == GENESIS.canonical()
+        assert active.generation == 0
+        assert store.token_count() == 0
+        assert store.activation_count() == 0
+        assert store.snapshot_count() == 1
+    finally:
+        store.close()
+
+
+def test_public_relation_validator_uses_content_not_shuffled_index_order(
+    tmp_path: Path,
+) -> None:
+    summaries: list[dict[str, Any]] = []
+
+    def validate(proposal: Any, source_tokens: Sequence[Mapping[str, Any]]) -> None:
+        summaries.append(
+            live._validate_public_gate_agent_relations(proposal, source_tokens)
+        )
+
+    arm = StructuredHSWMArm(
+        backend=ScriptedRelationalBackend(),
+        budget=_budget(),
+        isolation_id="shuffled-content-relations",
+        store_path=tmp_path / "state.sqlite3",
+        proposal_validator=validate,
+    )
+    arm.update(
+        LearningBatch(
+            episode_id="shuffled-content-relations",
+            after_step=0,
+            chosen=None,
+            correct=False,
+            learning_tokens=(
+                PublicLearningToken("node-b", "rel", "node-c"),
+                PublicLearningToken("node-x", "rel", "node-a"),
+                PublicLearningToken("node-a", "rel", "node-b"),
+            ),
+        )
+    )
+    assert len(summaries) == 1
+    assert summaries[0]["expected_relation_count"] == 2
+    assert summaries[0]["observed_relation_count"] == 2
+    snapshot = arm.store.active_snapshot().snapshot
+    by_source = {memory.content["source"]: memory for memory in snapshot.memories}
+    assert by_source["node-x"].related_memory_ids == (
+        by_source["node-a"].memory_id,
+    )
+    assert by_source["node-a"].related_memory_ids == (
+        by_source["node-b"].memory_id,
+    )
+    assert by_source["node-b"].related_memory_ids == ()
 
 
 @pytest.mark.parametrize(
@@ -1627,6 +1755,35 @@ def test_public_schema_gate_cli_has_no_seed_path_and_binds_artifacts(
     assert "gate_result.json" in terminal["artifact_sha256s"]
     assert "state/structured/calls.jsonl" in terminal["artifact_sha256s"]
     assert all("seed" not in path for path in terminal["artifact_sha256s"])
+    persistent_files = {
+        path.relative_to(output).as_posix()
+        for path in output.rglob("*")
+        if path.is_file()
+    }
+    assert set(terminal["artifact_sha256s"]) == persistent_files - {
+        "terminal_receipt.json"
+    }
+    assert all(
+        terminal["artifact_sha256s"][relative]
+        == sha256((output / relative).read_bytes()).hexdigest()
+        for relative in terminal["artifact_sha256s"]
+    )
+    assert terminal["checkpointed_sqlite_artifacts"] == [
+        "state/structured/state.sqlite3"
+    ]
+    assert not list(output.rglob("*-wal"))
+    assert not list(output.rglob("*-shm"))
+    assert not list(output.rglob("*-journal"))
+    reopened = live.SQLiteSelfModelStore(
+        output / "state" / "structured" / "state.sqlite3",
+        policy=live._proposal_policy(_budget()),
+    )
+    try:
+        active = reopened.active_snapshot()
+        assert len(active.snapshot.memories) == 144
+        assert active.generation == 3
+    finally:
+        reopened.close()
     with pytest.raises(ContinualLiveError, match="no resume"):
         schema_gate_main(argv)
     with pytest.raises(SystemExit):

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+from dataclasses import replace
 from hashlib import sha256
 import io
 import json
@@ -50,6 +51,7 @@ class ScriptedRelationalBackend:
             "adapter": "scripted-relational/v1",
             "enable_thinking": False,
             "model": "deterministic-fixture",
+            "response_format_mode": live.STRUCTURED_OUTPUT_MODE,
             "seed": 0,
             "temperature": 0.0,
             "top_p": 1.0,
@@ -117,20 +119,45 @@ class ScriptedRelationalBackend:
                     "token_index": source_token["token_index"],
                 }
             )
-        response = {
-            "cells": [
+        existing_ids = sorted(existing)
+        new_indexes = list(range(len(source_tokens)))
+        existing_chunks = [
+            existing_ids[index : index + live.MAX_CELL_MEMORY_REFERENCES_PER_FIELD]
+            for index in range(
+                0, len(existing_ids), live.MAX_CELL_MEMORY_REFERENCES_PER_FIELD
+            )
+        ]
+        new_chunks = [
+            new_indexes[index : index + live.MAX_CELL_MEMORY_REFERENCES_PER_FIELD]
+            for index in range(
+                0, len(new_indexes), live.MAX_CELL_MEMORY_REFERENCES_PER_FIELD
+            )
+        ]
+        cell_count = max(len(existing_chunks), len(new_chunks))
+        cell_ids = [f"cell:lookup:{index}" for index in range(cell_count)]
+        cells = []
+        for index in range(cell_count):
+            cells.append(
                 {
                     "capability": "nonce_graph_lookup",
-                    "cell_id": "cell:lookup",
+                    "cell_id": cell_ids[index],
                     "executor_agent_id": None,
-                    "existing_memory_ids": sorted(existing),
+                    "existing_memory_ids": (
+                        existing_chunks[index]
+                        if index < len(existing_chunks)
+                        else []
+                    ),
                     "instruction": "Traverse the absorbed atomic relations.",
-                    "new_token_indices": list(range(len(source_tokens))),
-                    "next_cell_ids": [],
+                    "new_token_indices": (
+                        new_chunks[index] if index < len(new_chunks) else []
+                    ),
+                    "next_cell_ids": cell_ids[index + 1 : index + 2],
                 }
-            ],
+            )
+        response = {
+            "cells": cells,
             "delete_memory_ids": [],
-            "entry_cell_id": "cell:lookup",
+            "entry_cell_id": cell_ids[0],
             "new_memory_links": new_links,
             "rationale": "Absorb each public atomic relation into the HSWM cells.",
         }
@@ -154,17 +181,26 @@ class ScriptedRelationalBackend:
     def complete(
         self,
         *,
-        messages: Sequence[Mapping[str, str]],
-        max_output_tokens: int,
+        raw_request: bytes,
         request_id: str,
         response_observer: Callable[[bytes, bytes], None],
     ) -> ModelCompletion:
+        request_value = json.loads(raw_request)
+        messages = request_value["messages"]
+        max_output_tokens = request_value["max_tokens"]
+        response_format = request_value["response_format"]
+        response_schema = live.JSONSchemaContract.make(
+            response_format["json_schema"]["name"],
+            response_format["json_schema"]["schema"],
+        )
+        assert response_format == response_schema.response_format()
         payload = json.loads(messages[-1]["content"])
         self.requests.append(
             {
                 "max_output_tokens": max_output_tokens,
                 "payload": payload,
                 "request_id": request_id,
+                "response_schema": response_schema.canonical(),
                 "system": messages[0]["content"],
             }
         )
@@ -177,17 +213,6 @@ class ScriptedRelationalBackend:
             text = self._plain(payload)
         else:
             raise AssertionError(operation)
-        raw_request = canonical_json_bytes(
-            {
-                "chat_template_kwargs": {"enable_thinking": False},
-                "max_tokens": max_output_tokens,
-                "messages": list(messages),
-                "model": "deterministic-fixture",
-                "seed": 0,
-                "temperature": 0.0,
-                "top_p": 1.0,
-            }
-        )
         input_tokens = max(1, len(raw_request) // 4)
         output_tokens = max(1, len(text.encode()) // 4)
         raw_response = canonical_json_bytes(
@@ -227,15 +252,13 @@ class FirstResponseGateViolationBackend(ScriptedRelationalBackend):
     def complete(
         self,
         *,
-        messages: Sequence[Mapping[str, str]],
-        max_output_tokens: int,
+        raw_request: bytes,
         request_id: str,
         response_observer: Callable[[bytes, bytes], None],
     ) -> ModelCompletion:
         observed: list[tuple[bytes, bytes]] = []
         completion = super().complete(
-            messages=messages,
-            max_output_tokens=max_output_tokens,
+            raw_request=raw_request,
             request_id=request_id,
             response_observer=lambda request, response: observed.append(
                 (request, response)
@@ -273,6 +296,16 @@ def _budget() -> ArmBudget:
         update_max_output_tokens=8192,
         max_input_bytes=2_000_000,
         max_state_bytes=1_000_000,
+    )
+
+
+def _one_token_batch() -> LearningBatch:
+    return LearningBatch(
+        episode_id="episode-one-token",
+        after_step=0,
+        chosen=None,
+        correct=False,
+        learning_tokens=(PublicLearningToken("node-a", "rel-x", "node-b"),),
     )
 
 
@@ -905,7 +938,7 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
         isolation_id="bad-source",
         store_path=tmp_path / "state.sqlite3",
     )
-    with pytest.raises(ContinualLiveError, match="unknown existing"):
+    with pytest.raises(ContinualLiveError, match="array bound"):
         arm.update(
             LearningBatch(
                 episode_id="episode-bad",
@@ -923,7 +956,7 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
     [
         (
             lambda value: value["new_memory_links"].pop(),
-            "cover every public token exactly once",
+            "array bound",
         ),
         (
             lambda value: value["cells"][0].update({"new_token_indices": []}),
@@ -947,7 +980,30 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
             lambda value: value["new_memory_links"][0].update(
                 {"related_new_token_indices": [99]}
             ),
-            "unknown indexes",
+            "array bound",
+        ),
+        (
+            lambda value: (
+                value["cells"][0]["next_cell_ids"].append("cell:duplicate"),
+                value["cells"].append(
+                    {
+                        "capability": "nonce_graph_lookup",
+                        "cell_id": "cell:duplicate",
+                        "executor_agent_id": None,
+                        "existing_memory_ids": [],
+                        "instruction": "Duplicate placement must fail.",
+                        "new_token_indices": [0],
+                        "next_cell_ids": [],
+                    }
+                ),
+            ),
+            "assigned to multiple cells",
+        ),
+        (
+            lambda value: value["cells"][0].update(
+                {"instruction": "x" * (live.MAX_CELL_INSTRUCTION_CHARS + 1)}
+            ),
+            "string bound",
         ),
     ],
 )
@@ -1048,6 +1104,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     assert result["probe_choice"] == live.public_schema_gate_fixture()["probe_answer"]
     assert result["before_probe_state_sha256"] == result["after_probe_state_sha256"]
     assert result["denylisted_from_evaluation"] is True
+    assert result["provider_structured_output_backend_attested"] is False
     structured_events = [
         json.loads(line)
         for line in (
@@ -1072,6 +1129,62 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         "response_received",
         "completed",
     ]
+    for events in (structured_events, plain_events):
+        intents = [item for item in events if item["event"] == "intent"]
+        completed = [item for item in events if item["event"] == "completed"]
+        for intent, completion_event in zip(intents, completed, strict=True):
+            contract = live.JSONSchemaContract(
+                name=intent["response_schema_name"],
+                schema_json=intent["response_schema_json"],
+                schema_sha256=intent["response_schema_sha256"],
+            )
+            raw_request = json.loads(intent["raw_request_json"])
+            assert set(raw_request) == {
+                "chat_template_kwargs",
+                "max_tokens",
+                "messages",
+                "model",
+                "response_format",
+                "seed",
+                "temperature",
+                "top_p",
+            }
+            assert raw_request["response_format"] == contract.response_format()
+            assert raw_request["response_format"]["json_schema"]["strict"] is True
+            assert "structured_outputs" not in raw_request
+            assert "guided_json" not in raw_request
+            assert intent["raw_request_sha256"] == sha256(
+                intent["raw_request_json"].encode()
+            ).hexdigest()
+            assert intent["raw_request_bytes"] == len(
+                intent["raw_request_json"].encode()
+            )
+            contract.validate_instance(
+                json.loads(completion_event["completion"]["text"])
+            )
+    assert [
+        item["response_schema_name"]
+        for item in structured_events
+        if item["event"] == "intent"
+    ] == ["hswm_compact_patch_v1", "hswm_compact_patch_v1", "hswm_choice_v1"]
+    assert [
+        item["response_schema_name"]
+        for item in plain_events
+        if item["event"] == "intent"
+    ] == ["hswm_plain_memory_v1"]
+    first_schema = json.loads(
+        next(
+            item["response_schema_json"]
+            for item in structured_events
+            if item["event"] == "intent"
+        )
+    )
+    cell_properties = first_schema["properties"]["cells"]["items"]["properties"]
+    assert first_schema["properties"]["cells"]["maxItems"] == 16
+    assert cell_properties["existing_memory_ids"]["maxItems"] == 0
+    assert cell_properties["new_token_indices"]["maxItems"] == 32
+    assert cell_properties["instruction"]["maxLength"] == 256
+    assert first_schema["properties"]["rationale"]["maxLength"] == 512
     assert "seed" not in live.public_schema_gate_fixture()
 
 
@@ -1120,6 +1233,361 @@ def test_public_schema_gate_rejects_first_invalid_completion_before_state_change
         assert store.active_snapshot().generation == 0
     finally:
         store.close()
+
+
+@pytest.mark.parametrize("outcome", ["timeout", "http400"])
+def test_exact_raw_request_is_fsynced_before_transport_failure(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    outcome: str,
+) -> None:
+    observed_requests: list[bytes] = []
+
+    def fail_transport(request: Any, *, timeout: float) -> Any:
+        del timeout
+        observed_requests.append(request.data)
+        if outcome == "timeout":
+            raise TimeoutError("fixture timeout before response")
+        raise live.urlerror.HTTPError(
+            request.full_url,
+            400,
+            "bad request",
+            {},
+            io.BytesIO(b'{"error":"fixture bad request"}'),
+        )
+
+    monkeypatch.setattr(live.urlrequest, "urlopen", fail_transport)
+    config = live.OpenAIBackendConfig(
+        endpoint="http://model.invalid",
+        model="fixture-model",
+    )
+    arm = StructuredHSWMArm(
+        backend=OpenAICompatibleBackend(config),
+        budget=_budget(),
+        isolation_id=f"prepared-request-{outcome}",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="no retry"):
+        arm.update(_one_token_batch())
+    assert len(observed_requests) == 1
+    events = [
+        json.loads(line)
+        for line in arm.journal_path.read_text().splitlines()
+    ]
+    intent = events[0]
+    assert intent["event"] == "intent"
+    assert intent["raw_request_json"].encode() == observed_requests[0]
+    assert intent["raw_request_sha256"] == sha256(observed_requests[0]).hexdigest()
+    assert intent["raw_request_bytes"] == len(observed_requests[0])
+    response_format = json.loads(intent["raw_request_json"])["response_format"]
+    assert response_format["type"] == "json_schema"
+    assert response_format["json_schema"]["strict"] is True
+    assert sum(item["event"] == "intent" for item in events) == 1
+    assert events[-1]["event"] == "failed"
+    assert not any(item["event"] == "completed" for item in events)
+    if outcome == "timeout":
+        assert [item["event"] for item in events] == ["intent", "failed"]
+    else:
+        assert [item["event"] for item in events] == [
+            "intent",
+            "raw_response_received",
+            "failed",
+        ]
+        assert events[1]["prepared_request_match"] is True
+    assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("reasoning", "hidden reasoning"),
+        ("reasoning_content", "hidden reasoning"),
+        ("refusal", "hidden refusal"),
+        ("tool_calls", [{"id": "hidden-tool"}]),
+    ],
+)
+def test_response_side_channels_fail_before_state_change(
+    tmp_path: Path, field: str, value: Any
+) -> None:
+    class SideChannelBackend(ScriptedRelationalBackend):
+        def complete(self, **kwargs: Any) -> ModelCompletion:
+            observer = kwargs.pop("response_observer")
+            observed: list[tuple[bytes, bytes]] = []
+            completion = super().complete(
+                **kwargs,
+                response_observer=lambda request, response: observed.append(
+                    (request, response)
+                ),
+            )
+            raw_request, raw_response = observed[0]
+            envelope = json.loads(raw_response)
+            envelope["choices"][0]["message"][field] = value
+            changed = canonical_json_bytes(envelope)
+            observer(raw_request, changed)
+            return replace(
+                completion,
+                raw_response_json=changed.decode(),
+                response_sha256=sha256(changed).hexdigest(),
+            )
+
+    arm = StructuredHSWMArm(
+        backend=SideChannelBackend(),
+        budget=_budget(),
+        isolation_id=f"side-channel-{field}",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="non-content side channel"):
+        arm.update(_one_token_batch())
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert [item["event"] for item in events] == [
+        "intent",
+        "raw_response_received",
+        "failed",
+    ]
+    assert events[-1]["outcome"] == "received_invalid"
+    assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+def test_schema_invalid_completion_is_rejected_before_completed_or_commit(
+    tmp_path: Path,
+) -> None:
+    class InvalidSchemaBodyBackend(ScriptedRelationalBackend):
+        def complete(self, **kwargs: Any) -> ModelCompletion:
+            observer = kwargs.pop("response_observer")
+            observed: list[tuple[bytes, bytes]] = []
+            completion = super().complete(
+                **kwargs,
+                response_observer=lambda request, response: observed.append(
+                    (request, response)
+                ),
+            )
+            raw_request, raw_response = observed[0]
+            envelope = json.loads(raw_response)
+            text = '{"bad":1}'
+            envelope["choices"][0]["message"]["content"] = text
+            envelope["usage"]["completion_tokens"] = 3
+            changed = canonical_json_bytes(envelope)
+            observer(raw_request, changed)
+            return replace(
+                completion,
+                text=text,
+                raw_response_json=changed.decode(),
+                response_sha256=sha256(changed).hexdigest(),
+                output_tokens=3,
+            )
+
+    arm = StructuredHSWMArm(
+        backend=InvalidSchemaBodyBackend(),
+        budget=_budget(),
+        isolation_id="invalid-schema-body",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="object schema"):
+        arm.update(_one_token_batch())
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert [item["event"] for item in events] == [
+        "intent",
+        "raw_response_received",
+        "response_received",
+        "rejected_response",
+    ]
+    assert arm.ledger == []
+    assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+@pytest.mark.parametrize("observer_mode", ["silent", "mismatch", "duplicate"])
+def test_response_observer_is_exactly_once_and_matches_completion(
+    tmp_path: Path, observer_mode: str
+) -> None:
+    class ObserverViolationBackend(ScriptedRelationalBackend):
+        def complete(self, **kwargs: Any) -> ModelCompletion:
+            observer = kwargs.pop("response_observer")
+            observed: list[tuple[bytes, bytes]] = []
+            completion = super().complete(
+                **kwargs,
+                response_observer=lambda request, response: observed.append(
+                    (request, response)
+                ),
+            )
+            raw_request, raw_response = observed[0]
+            if observer_mode == "mismatch":
+                observer(raw_request, b'{"different":"raw response"}')
+            elif observer_mode == "duplicate":
+                observer(raw_request, raw_response)
+                observer(raw_request, raw_response)
+            return completion
+
+    arm = StructuredHSWMArm(
+        backend=ObserverViolationBackend(),
+        budget=_budget(),
+        isolation_id=f"observer-{observer_mode}",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="raw response|exactly one"):
+        arm.update(_one_token_batch())
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert sum(item["event"] == "intent" for item in events) == 1
+    assert events[-1]["event"] == "rejected_response"
+    assert not any(item["event"] == "completed" for item in events)
+    assert arm.ledger == []
+    assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+def test_thinking_must_be_explicitly_disabled_before_any_call(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="enable_thinking=false"):
+        live.OpenAIBackendConfig(
+            endpoint="http://model.invalid",
+            model="fixture-model",
+            enable_thinking=True,
+        )
+
+    class MissingThinkingIdentityBackend(ScriptedRelationalBackend):
+        @property
+        def identity(self) -> Mapping[str, Any]:
+            return {
+                key: value
+                for key, value in super().identity.items()
+                if key != "enable_thinking"
+            }
+
+    backend = MissingThinkingIdentityBackend()
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id="missing-thinking-identity",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="explicitly disable thinking"):
+        arm.update(_one_token_batch())
+    assert backend.requests == []
+    assert not arm.journal_path.exists()
+    assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+def test_reported_answer_usage_cannot_exceed_request_budget(tmp_path: Path) -> None:
+    class OverBudgetAnswerBackend(ScriptedRelationalBackend):
+        def complete(self, **kwargs: Any) -> ModelCompletion:
+            observer = kwargs.pop("response_observer")
+            observed: list[tuple[bytes, bytes]] = []
+            completion = super().complete(
+                **kwargs,
+                response_observer=lambda request, response: observed.append(
+                    (request, response)
+                ),
+            )
+            raw_request, raw_response = observed[0]
+            envelope = json.loads(raw_response)
+            envelope["usage"]["completion_tokens"] = 129
+            changed = canonical_json_bytes(envelope)
+            observer(raw_request, changed)
+            return replace(
+                completion,
+                raw_response_json=changed.decode(),
+                response_sha256=sha256(changed).hexdigest(),
+                output_tokens=129,
+            )
+
+    arm = StructuredHSWMArm(
+        backend=OverBudgetAnswerBackend(),
+        budget=_budget(),
+        isolation_id="over-budget-answer",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    probe = PublicProbe(
+        step=0,
+        source="node-a",
+        relations=("rel-x",),
+        choices=("node-b", "node-c"),
+    )
+    with pytest.raises(ContinualLiveError, match="exceeds the request budget"):
+        arm.answer(probe)
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert events[-1]["event"] == "rejected_response"
+    assert not any(item["event"] == "completed" for item in events)
+    assert arm.ledger == []
+
+
+@pytest.mark.parametrize(
+    "unsupported",
+    [
+        "uniqueItems",
+        "contains",
+        "minContains",
+        "maxContains",
+        "multipleOf",
+        "patternProperties",
+        "propertyNames",
+        "format",
+    ],
+)
+def test_unsupported_json_schema_keyword_fails_before_call(
+    unsupported: str,
+) -> None:
+    backend = ScriptedRelationalBackend()
+    schema = live._strict_json_object(
+        {"value": {"maxLength": 8, "type": "string"}}
+    )
+    schema[unsupported] = True
+    with pytest.raises(ContinualLiveError, match="unsupported keywords"):
+        live.JSONSchemaContract.make("unsupported_schema", schema)
+    assert backend.requests == []
+
+
+def test_schema_and_raw_envelope_tampering_are_rejected(tmp_path: Path) -> None:
+    arm = StructuredHSWMArm(
+        backend=ScriptedRelationalBackend(),
+        budget=_budget(),
+        isolation_id="schema-tamper",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    arm.update(_one_token_batch())
+    entry = arm.ledger[0]
+    with pytest.raises(ContinualLiveError, match="schema digest mismatch"):
+        replace(entry, response_schema_sha256="0" * 64)
+
+    request_value = json.loads(entry.completion.raw_request_json)
+    request_value["response_format"]["json_schema"]["strict"] = False
+    changed_request = canonical_json_bytes(request_value)
+    changed_completion = replace(
+        entry.completion,
+        raw_request_json=changed_request.decode(),
+        request_sha256=sha256(changed_request).hexdigest(),
+    )
+    with pytest.raises(ContinualLiveError, match="raw request parameters"):
+        replace(
+            entry,
+            completion=changed_completion,
+            raw_request_bytes=len(changed_request),
+        )
+
+
+def test_schema_and_completion_text_hard_byte_caps() -> None:
+    oversized_schema = live._strict_json_object(
+        {"value": {"enum": ["x" * live.MAX_RESPONSE_SCHEMA_BYTES], "type": "string"}}
+    )
+    with pytest.raises(ContinualLiveError, match="schema exceeds"):
+        live.JSONSchemaContract.make("oversized_schema", oversized_schema)
+    with pytest.raises(ContinualLiveError, match="completion text exceeds"):
+        ModelCompletion(
+            text="x" * (live.MAX_COMPLETION_TEXT_BYTES + 1),
+            raw_request_json="{}",
+            raw_response_json="{}",
+            request_sha256="0" * 64,
+            response_sha256="0" * 64,
+            model="fixture",
+            input_tokens=0,
+            output_tokens=0,
+            latency_ms=0,
+            usage_reported=False,
+        )
+    with pytest.raises(ContinualLiveError, match="string bound"):
+        live._plain_memory_response_schema().validate_instance(
+            {"memory": "x" * (live.MAX_PLAIN_MEMORY_CHARS + 1)}
+        )
+    with pytest.raises(ContinualLiveError, match="schema enum"):
+        live._choice_response_schema(("left", "right")).validate_instance(
+            {"choice": "outside"}
+        )
 
 
 def test_public_schema_gate_cli_has_no_seed_path_and_binds_artifacts(

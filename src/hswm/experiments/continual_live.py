@@ -82,6 +82,19 @@ COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v1"
 PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v1"
 PUBLIC_SCHEMA_GATE_EPISODE = "public-schema-gate-never-evaluation"
 PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING = 6144
+STRUCTURED_OUTPUT_MODE = "openai-response-format-json-schema/v1"
+MAX_AUTHORED_CELLS = 16
+MAX_CELL_MEMORY_REFERENCES = 64
+MAX_CELL_MEMORY_REFERENCES_PER_FIELD = 32
+MAX_CELL_EDGES = 8
+MAX_RELATED_MEMORY_IDS = 8
+MAX_CELL_ID_CHARS = 64
+MAX_CELL_INSTRUCTION_CHARS = 256
+MAX_RATIONALE_CHARS = 512
+MAX_PLAIN_MEMORY_CHARS = 16_384
+MAX_RESPONSE_SCHEMA_BYTES = 131_072
+MAX_RAW_REQUEST_BYTES = 2_000_000
+MAX_COMPLETION_TEXT_BYTES = 1_000_000
 GENESIS = make_snapshot()
 FROZEN_PILOT_PRECOMMIT_ARTIFACT_SHA256 = (
     "e5f98257a199e70f4e648344f89bd3b59edd6661cbc6dd717b86aaf74fff4324"
@@ -167,6 +180,8 @@ class ModelCompletion:
     def __post_init__(self) -> None:
         if not self.text:
             raise ContinualLiveError("empty model completion")
+        if len(self.text.encode("utf-8")) > MAX_COMPLETION_TEXT_BYTES:
+            raise ContinualLiveError("model completion text exceeds its hard byte bound")
         for label, raw, digest in (
             ("request", self.raw_request_json, self.request_sha256),
             ("response", self.raw_response_json, self.response_sha256),
@@ -186,12 +201,28 @@ class ModelCompletion:
                 ) from error
             if label == "response":
                 try:
-                    returned_text = parsed["choices"][0]["message"]["content"]
+                    choices = parsed["choices"]
+                    if not isinstance(choices, list) or len(choices) != 1:
+                        raise TypeError("response must contain exactly one choice")
+                    message = choices[0]["message"]
+                    if not isinstance(message, Mapping):
+                        raise TypeError("response message is not an object")
+                    returned_text = message["content"]
                     returned_model = parsed["model"]
                 except (KeyError, IndexError, TypeError) as error:
                     raise ContinualLiveError(
                         "raw response lacks the OpenAI completion envelope"
                     ) from error
+                if (
+                    message.get("reasoning_content") not in (None, "")
+                    or message.get("reasoning") not in (None, "")
+                    or message.get("refusal") not in (None, "")
+                    or message.get("tool_calls") not in (None, [])
+                    or message.get("function_call") is not None
+                ):
+                    raise ContinualLiveError(
+                        "raw response used a non-content side channel"
+                    )
                 if returned_text != self.text or returned_model != self.model:
                     raise ContinualLiveError(
                         "raw response text/model differs from stored completion"
@@ -221,9 +252,248 @@ class ModelCompletion:
             "request_sha256": self.request_sha256,
             "response_sha256": self.response_sha256,
             "text": self.text,
+            "text_bytes": len(self.text.encode("utf-8")),
             "text_sha256": _digest_bytes(self.text.encode("utf-8")),
             "usage_reported": self.usage_reported,
         }
+
+
+_SUPPORTED_JSON_SCHEMA_KEYS = frozenset(
+    {
+        "additionalProperties",
+        "const",
+        "enum",
+        "items",
+        "maxItems",
+        "maximum",
+        "maxLength",
+        "minItems",
+        "minimum",
+        "minLength",
+        "properties",
+        "required",
+        "type",
+    }
+)
+
+
+def _validate_bounded_json_schema(node: object, *, path: str = "$") -> None:
+    if not isinstance(node, Mapping):
+        raise ContinualLiveError(f"response schema node {path} must be an object")
+    unsupported = set(node) - _SUPPORTED_JSON_SCHEMA_KEYS
+    if unsupported:
+        raise ContinualLiveError(
+            f"response schema uses unsupported keywords at {path}: {sorted(unsupported)}"
+        )
+    node_type = node.get("type")
+    if node_type not in {"array", "integer", "null", "object", "string"}:
+        raise ContinualLiveError(f"response schema type at {path} is unsupported")
+    if "enum" in node:
+        enum = node["enum"]
+        if not isinstance(enum, list) or not enum:
+            raise ContinualLiveError(f"response schema enum at {path} is invalid")
+        encoded = [canonical_json_bytes(item) for item in enum]
+        if len(encoded) != len(set(encoded)):
+            raise ContinualLiveError(f"response schema enum at {path} is duplicated")
+    if node_type == "object":
+        properties = node.get("properties")
+        required = node.get("required")
+        if (
+            not isinstance(properties, Mapping)
+            or not properties
+            or node.get("additionalProperties") is not False
+            or not isinstance(required, list)
+            or any(not isinstance(item, str) for item in required)
+            or set(required) != set(properties)
+            or len(required) != len(set(required))
+        ):
+            raise ContinualLiveError(
+                f"response schema object at {path} is not exact and fully required"
+            )
+        for name, child in properties.items():
+            if not isinstance(name, str) or not name:
+                raise ContinualLiveError(f"response schema property at {path} is invalid")
+            _validate_bounded_json_schema(child, path=f"{path}.properties.{name}")
+    elif node_type == "array":
+        maximum = node.get("maxItems")
+        minimum = node.get("minItems", 0)
+        if (
+            isinstance(maximum, bool)
+            or not isinstance(maximum, int)
+            or isinstance(minimum, bool)
+            or not isinstance(minimum, int)
+            or minimum < 0
+            or maximum < minimum
+            or "items" not in node
+        ):
+            raise ContinualLiveError(f"response schema array at {path} is unbounded")
+        _validate_bounded_json_schema(node["items"], path=f"{path}.items")
+    elif node_type == "string" and "enum" not in node and "const" not in node:
+        maximum = node.get("maxLength")
+        minimum = node.get("minLength", 0)
+        if (
+            isinstance(maximum, bool)
+            or not isinstance(maximum, int)
+            or isinstance(minimum, bool)
+            or not isinstance(minimum, int)
+            or minimum < 0
+            or maximum < minimum
+        ):
+            raise ContinualLiveError(f"response schema string at {path} is unbounded")
+    elif node_type == "integer":
+        minimum = node.get("minimum")
+        maximum = node.get("maximum")
+        if (
+            isinstance(minimum, bool)
+            or not isinstance(minimum, int)
+            or isinstance(maximum, bool)
+            or not isinstance(maximum, int)
+            or maximum < minimum
+        ):
+            raise ContinualLiveError(f"response schema integer at {path} is unbounded")
+
+
+def _validate_json_schema_instance(
+    value: object, schema: Mapping[str, Any], *, path: str = "$"
+) -> None:
+    if "const" in schema and value != schema["const"]:
+        raise ContinualLiveError(f"model response violates schema const at {path}")
+    if "enum" in schema and value not in schema["enum"]:
+        raise ContinualLiveError(f"model response violates schema enum at {path}")
+    node_type = schema["type"]
+    if node_type == "object":
+        if not isinstance(value, dict) or set(value) != set(schema["required"]):
+            raise ContinualLiveError(f"model response violates object schema at {path}")
+        for name, child in schema["properties"].items():
+            _validate_json_schema_instance(value[name], child, path=f"{path}.{name}")
+    elif node_type == "array":
+        if not isinstance(value, list) or not (
+            schema.get("minItems", 0) <= len(value) <= schema["maxItems"]
+        ):
+            raise ContinualLiveError(f"model response violates array bound at {path}")
+        for index, item in enumerate(value):
+            _validate_json_schema_instance(
+                item, schema["items"], path=f"{path}[{index}]"
+            )
+    elif node_type == "string":
+        if not isinstance(value, str) or not (
+            schema.get("minLength", 0)
+            <= len(value)
+            <= schema.get("maxLength", len(value))
+        ):
+            raise ContinualLiveError(f"model response violates string bound at {path}")
+    elif node_type == "integer":
+        if isinstance(value, bool) or not isinstance(value, int) or not (
+            schema["minimum"] <= value <= schema["maximum"]
+        ):
+            raise ContinualLiveError(f"model response violates integer bound at {path}")
+    elif node_type == "null" and value is not None:
+        raise ContinualLiveError(f"model response violates null schema at {path}")
+
+
+@dataclass(frozen=True, slots=True)
+class JSONSchemaContract:
+    """Canonical OpenAI ``response_format`` JSON Schema identity."""
+
+    name: str
+    schema_json: str
+    schema_sha256: str
+
+    def __post_init__(self) -> None:
+        if not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", self.name):
+            raise ContinualLiveError("response schema name is invalid")
+        try:
+            schema = json.loads(self.schema_json)
+        except json.JSONDecodeError as error:
+            raise ContinualLiveError("response schema preimage is not JSON") from error
+        if not isinstance(schema, dict) or schema.get("type") != "object":
+            raise ContinualLiveError("response schema must describe one JSON object")
+        canonical = canonical_json_bytes(schema)
+        if len(canonical) > MAX_RESPONSE_SCHEMA_BYTES:
+            raise ContinualLiveError("response schema exceeds its byte bound")
+        if canonical.decode("utf-8") != self.schema_json:
+            raise ContinualLiveError("response schema preimage is not canonical")
+        if _digest_bytes(canonical) != self.schema_sha256:
+            raise ContinualLiveError("response schema digest mismatch")
+        _validate_bounded_json_schema(schema)
+
+    @classmethod
+    def make(cls, name: str, schema: Mapping[str, Any]) -> "JSONSchemaContract":
+        raw = canonical_json_bytes(schema)
+        return cls(
+            name=name,
+            schema_json=raw.decode("utf-8"),
+            schema_sha256=_digest_bytes(raw),
+        )
+
+    def schema(self) -> dict[str, Any]:
+        value = json.loads(self.schema_json)
+        if not isinstance(value, dict):  # guarded by __post_init__
+            raise AssertionError("validated schema changed type")
+        return value
+
+    def response_format(self) -> dict[str, Any]:
+        return {
+            "json_schema": {
+                "name": self.name,
+                "schema": self.schema(),
+                "strict": True,
+            },
+            "type": "json_schema",
+        }
+
+    def validate_instance(self, value: object) -> None:
+        _validate_json_schema_instance(value, self.schema())
+
+    def canonical(self) -> dict[str, str]:
+        return {
+            "name": self.name,
+            "schema_json": self.schema_json,
+            "schema_sha256": self.schema_sha256,
+        }
+
+
+def _prepare_chat_request(
+    *,
+    backend_identity: Mapping[str, Any],
+    messages: Sequence[Mapping[str, str]],
+    max_output_tokens: int,
+    response_schema: JSONSchemaContract,
+) -> bytes:
+    if max_output_tokens <= 0:
+        raise ContinualLiveError("max_output_tokens must be positive")
+    if backend_identity.get("response_format_mode") != STRUCTURED_OUTPUT_MODE:
+        raise ContinualLiveError("backend does not bind strict JSON Schema requests")
+    if backend_identity.get("enable_thinking") is not False:
+        raise ContinualLiveError("backend must explicitly disable thinking")
+    normalized = [
+        {"role": str(item["role"]), "content": str(item["content"])}
+        for item in messages
+    ]
+    if not normalized or any(
+        item["role"] not in {"system", "user", "assistant"}
+        for item in normalized
+    ):
+        raise ContinualLiveError("invalid chat messages")
+    model = backend_identity.get("model")
+    if not isinstance(model, str) or not model:
+        raise ContinualLiveError("backend identity lacks a model")
+    request_value = {
+        "chat_template_kwargs": {
+            "enable_thinking": False
+        },
+        "max_tokens": max_output_tokens,
+        "messages": normalized,
+        "model": model,
+        "response_format": response_schema.response_format(),
+        "seed": backend_identity.get("seed"),
+        "temperature": 0.0,
+        "top_p": backend_identity.get("top_p"),
+    }
+    raw = canonical_json_bytes(request_value)
+    if len(raw) > MAX_RAW_REQUEST_BYTES:
+        raise ContinualLiveError("prepared chat request exceeds its hard byte bound")
+    return raw
 
 
 class ChatBackend(Protocol):
@@ -235,8 +505,7 @@ class ChatBackend(Protocol):
     def complete(
         self,
         *,
-        messages: Sequence[Mapping[str, str]],
-        max_output_tokens: int,
+        raw_request: bytes,
         request_id: str,
         response_observer: Callable[[bytes, bytes], None],
     ) -> ModelCompletion: ...
@@ -263,6 +532,8 @@ class OpenAIBackendConfig:
             raise ValueError("timeout and response bound must be positive")
         if self.temperature != 0.0:
             raise ValueError("the frozen benchmark requires greedy temperature=0")
+        if self.enable_thinking is not False:
+            raise ValueError("the frozen benchmark requires enable_thinking=false")
         if self.top_p != 1.0 or self.seed != 0:
             raise ValueError("the frozen benchmark requires top_p=1 and seed=0")
 
@@ -274,6 +545,7 @@ class OpenAIBackendConfig:
             "max_response_bytes": self.max_response_bytes,
             "model": self.model,
             "retry_count": 0,
+            "response_format_mode": STRUCTURED_OUTPUT_MODE,
             "seed": self.seed,
             "temperature": self.temperature,
             "timeout_seconds": self.timeout_seconds,
@@ -294,34 +566,46 @@ class OpenAICompatibleBackend:
     def complete(
         self,
         *,
-        messages: Sequence[Mapping[str, str]],
-        max_output_tokens: int,
+        raw_request: bytes,
         request_id: str,
         response_observer: Callable[[bytes, bytes], None],
     ) -> ModelCompletion:
-        if max_output_tokens <= 0:
-            raise ContinualLiveError("max_output_tokens must be positive")
-        normalized = [
-            {"role": str(item["role"]), "content": str(item["content"])}
-            for item in messages
-        ]
-        if not normalized or any(
-            item["role"] not in {"system", "user", "assistant"}
-            for item in normalized
+        if len(raw_request) > MAX_RAW_REQUEST_BYTES:
+            raise ContinualLiveError("prepared chat request exceeds its hard byte bound")
+        try:
+            request_value = json.loads(raw_request)
+            response_format = request_value["response_format"]
+            json_schema = response_format["json_schema"]
+            contract = JSONSchemaContract.make(
+                json_schema["name"], json_schema["schema"]
+            )
+        except (UnicodeDecodeError, json.JSONDecodeError, KeyError, TypeError) as error:
+            raise ContinualLiveError("prepared chat request is invalid") from error
+        if (
+            canonical_json_bytes(request_value) != raw_request
+            or set(request_value)
+            != {
+                "chat_template_kwargs",
+                "max_tokens",
+                "messages",
+                "model",
+                "response_format",
+                "seed",
+                "temperature",
+                "top_p",
+            }
+            or response_format != contract.response_format()
+            or request_value["model"] != self.config.model
+            or request_value["seed"] != self.config.seed
+            or request_value["temperature"] != 0.0
+            or request_value["top_p"] != self.config.top_p
+            or request_value["chat_template_kwargs"]
+            != {"enable_thinking": self.config.enable_thinking}
+            or isinstance(request_value["max_tokens"], bool)
+            or not isinstance(request_value["max_tokens"], int)
+            or request_value["max_tokens"] <= 0
         ):
-            raise ContinualLiveError("invalid chat messages")
-        request_value = {
-            "chat_template_kwargs": {
-                "enable_thinking": self.config.enable_thinking
-            },
-            "max_tokens": max_output_tokens,
-            "messages": normalized,
-            "model": self.config.model,
-            "seed": self.config.seed,
-            "temperature": 0.0,
-            "top_p": self.config.top_p,
-        }
-        raw_request = canonical_json_bytes(request_value)
+            raise ContinualLiveError("prepared chat request differs from backend config")
         headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -425,15 +709,163 @@ def _proposal_policy(budget: ArmBudget) -> SelfModelPolicy:
     )
 
 
+def _strict_json_object(properties: Mapping[str, Any]) -> dict[str, Any]:
+    return {
+        "additionalProperties": False,
+        "properties": dict(properties),
+        "required": list(properties),
+        "type": "object",
+    }
+
+
+def _string_schema(*, max_length: int, min_length: int = 1) -> dict[str, Any]:
+    return {
+        "maxLength": max_length,
+        "minLength": min_length,
+        "type": "string",
+    }
+
+
+def _id_item_schema(ids: Sequence[str]) -> dict[str, Any]:
+    if ids:
+        return {"enum": list(ids), "type": "string"}
+    # ``maxItems: 0`` on the containing array makes this item shape unreachable.
+    return {"maxLength": MAX_CELL_ID_CHARS, "type": "string"}
+
+
+def _index_item_schema(count: int) -> dict[str, Any]:
+    if count <= 0:
+        raise ContinualLiveError("response schema requires a non-empty public batch")
+    return {"maximum": count - 1, "minimum": 0, "type": "integer"}
+
+
+def _compact_patch_response_schema(
+    active: SelfModelSnapshot,
+    source_tokens: Sequence[Mapping[str, Any]],
+    policy: SelfModelPolicy,
+) -> JSONSchemaContract:
+    source_count = len(source_tokens)
+    if source_count <= 0:
+        raise ContinualLiveError("compact response schema requires public tokens")
+    active_ids = tuple(memory.memory_id for memory in active.memories)
+    id_items = _id_item_schema(active_ids)
+    index_items = _index_item_schema(source_count)
+    string_array = {
+        "items": _string_schema(max_length=MAX_CELL_ID_CHARS),
+        "maxItems": MAX_CELL_EDGES,
+        "type": "array",
+    }
+    cell = _strict_json_object(
+        {
+            "capability": {"const": CAPABILITY, "type": "string"},
+            "cell_id": _string_schema(max_length=MAX_CELL_ID_CHARS),
+            "executor_agent_id": {"type": "null"},
+            "existing_memory_ids": {
+                "items": id_items,
+                "maxItems": min(
+                    len(active_ids), MAX_CELL_MEMORY_REFERENCES_PER_FIELD
+                ),
+                "type": "array",
+            },
+            "instruction": _string_schema(
+                max_length=MAX_CELL_INSTRUCTION_CHARS
+            ),
+            "new_token_indices": {
+                "items": index_items,
+                "maxItems": min(
+                    source_count, MAX_CELL_MEMORY_REFERENCES_PER_FIELD
+                ),
+                "type": "array",
+            },
+            "next_cell_ids": string_array,
+        }
+    )
+    memory_link = _strict_json_object(
+        {
+            "related_existing_memory_ids": {
+                "items": id_items,
+                "maxItems": min(len(active_ids), MAX_RELATED_MEMORY_IDS),
+                "type": "array",
+            },
+            "related_new_token_indices": {
+                "items": index_items,
+                "maxItems": min(max(source_count - 1, 0), MAX_RELATED_MEMORY_IDS),
+                "type": "array",
+            },
+            "token_index": index_items,
+        }
+    )
+    schema = _strict_json_object(
+        {
+            "cells": {
+                "items": cell,
+                "maxItems": min(policy.max_cells, MAX_AUTHORED_CELLS),
+                "minItems": 1,
+                "type": "array",
+            },
+            "delete_memory_ids": {
+                "items": id_items,
+                "maxItems": len(active_ids),
+                "type": "array",
+            },
+            "entry_cell_id": _string_schema(max_length=MAX_CELL_ID_CHARS),
+            "new_memory_links": {
+                "items": memory_link,
+                "maxItems": source_count,
+                "minItems": source_count,
+                "type": "array",
+            },
+            "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
+        }
+    )
+    return JSONSchemaContract.make("hswm_compact_patch_v1", schema)
+
+
+def _plain_memory_response_schema() -> JSONSchemaContract:
+    return JSONSchemaContract.make(
+        "hswm_plain_memory_v1",
+        _strict_json_object(
+            {
+                "memory": _string_schema(
+                    max_length=MAX_PLAIN_MEMORY_CHARS,
+                    min_length=0,
+                )
+            }
+        ),
+    )
+
+
+def _choice_response_schema(choices: Sequence[str]) -> JSONSchemaContract:
+    frozen = tuple(choices)
+    if not frozen or len(frozen) != len(set(frozen)) or any(
+        not isinstance(item, str) or not item for item in frozen
+    ):
+        raise ContinualLiveError("choice response schema requires unique choices")
+    return JSONSchemaContract.make(
+        "hswm_choice_v1",
+        _strict_json_object(
+            {"choice": {"enum": list(frozen), "type": "string"}}
+        ),
+    )
+
+
 @dataclass(frozen=True, slots=True)
 class CallLedgerEntry:
     arm: str
+    completion_text_bytes: int
     operation: str
     ordinal: int
     max_output_tokens: int
+    messages_bytes: int
     backend_identity_json: str
+    raw_request_bytes: int
     request_payload_json: str
+    request_payload_bytes: int
     request_payload_sha256: str
+    response_schema_bytes: int
+    response_schema_json: str
+    response_schema_name: str
+    response_schema_sha256: str
     system_message: str
     completion: ModelCompletion
 
@@ -449,15 +881,42 @@ class CallLedgerEntry:
             raise ContinualLiveError("ledger request payload is not canonical")
         if _digest_bytes(canonical) != self.request_payload_sha256:
             raise ContinualLiveError("ledger request payload digest mismatch")
+        expected_messages = canonical_json_bytes(
+            [
+                {"role": "system", "content": self.system_message},
+                {"role": "user", "content": self.request_payload_json},
+            ]
+        )
+        if (
+            self.request_payload_bytes != len(canonical)
+            or self.messages_bytes != len(expected_messages)
+            or self.response_schema_bytes
+            != len(self.response_schema_json.encode("utf-8"))
+            or self.raw_request_bytes
+            != len(self.completion.raw_request_json.encode("utf-8"))
+            or self.completion_text_bytes
+            != len(self.completion.text.encode("utf-8"))
+        ):
+            raise ContinualLiveError("ledger byte counts differ from their preimages")
         if not self.system_message:
             raise ContinualLiveError("ledger system message is empty")
+        if not self.completion.usage_reported:
+            raise ContinualLiveError("live model call requires provider token usage")
+        if self.completion.output_tokens > self.max_output_tokens:
+            raise ContinualLiveError("provider output usage exceeds the request budget")
         if canonical_json_bytes(backend_identity).decode("utf-8") != self.backend_identity_json:
             raise ContinualLiveError("ledger backend identity is not canonical")
+        response_schema = JSONSchemaContract(
+            name=self.response_schema_name,
+            schema_json=self.response_schema_json,
+            schema_sha256=self.response_schema_sha256,
+        )
         expected_request_fields = {
             "chat_template_kwargs",
             "max_tokens",
             "messages",
             "model",
+            "response_format",
             "seed",
             "temperature",
             "top_p",
@@ -478,6 +937,9 @@ class CallLedgerEntry:
             or raw_request["top_p"] != backend_identity.get("top_p")
             or raw_request["model"] != backend_identity.get("model")
             or raw_request["model"] != self.completion.model
+            or raw_request["response_format"] != response_schema.response_format()
+            or backend_identity.get("response_format_mode")
+            != STRUCTURED_OUTPUT_MODE
             or raw_request["chat_template_kwargs"]
             != {"enable_thinking": backend_identity.get("enable_thinking", False)}
         ):
@@ -488,11 +950,19 @@ class CallLedgerEntry:
             "arm": self.arm,
             "backend_identity_json": self.backend_identity_json,
             "completion": self.completion.canonical(),
+            "completion_text_bytes": self.completion_text_bytes,
             "max_output_tokens": self.max_output_tokens,
+            "messages_bytes": self.messages_bytes,
             "operation": self.operation,
             "ordinal": self.ordinal,
+            "raw_request_bytes": self.raw_request_bytes,
             "request_payload_json": self.request_payload_json,
+            "request_payload_bytes": self.request_payload_bytes,
             "request_payload_sha256": self.request_payload_sha256,
+            "response_schema_bytes": self.response_schema_bytes,
+            "response_schema_json": self.response_schema_json,
+            "response_schema_name": self.response_schema_name,
+            "response_schema_sha256": self.response_schema_sha256,
             "system_message": self.system_message,
         }
 
@@ -536,6 +1006,7 @@ class _ModelArm:
             "proposal_policy": policy.canonical(),
             "proposal_policy_sha256": policy.policy_sha256,
             "protocol": LIVE_PROTOCOL,
+            "structured_output_mode": STRUCTURED_OUTPUT_MODE,
         }
 
     def _call(
@@ -545,14 +1016,22 @@ class _ModelArm:
         system: str,
         payload: Mapping[str, Any],
         max_output_tokens: int,
+        response_schema: JSONSchemaContract,
     ) -> ModelCompletion:
         payload_raw = canonical_json_bytes(payload)
         messages = (
             {"role": "system", "content": system},
             {"role": "user", "content": payload_raw.decode("utf-8")},
         )
-        message_bytes = canonical_json_bytes(messages)
-        if len(message_bytes) > self.budget.max_input_bytes:
+        messages_raw = canonical_json_bytes(messages)
+        backend_identity = dict(self.backend.identity)
+        raw_request = _prepare_chat_request(
+            backend_identity=backend_identity,
+            messages=messages,
+            max_output_tokens=max_output_tokens,
+            response_schema=response_schema,
+        )
+        if len(raw_request) > self.budget.max_input_bytes:
             raise ContinualLiveError(
                 f"{self.name} {operation} input exceeds the common byte envelope"
             )
@@ -564,45 +1043,66 @@ class _ModelArm:
                 "operation": operation,
                 "ordinal": ordinal,
                 "payload_sha256": _digest_bytes(payload_raw),
+                "raw_request_sha256": _digest_bytes(raw_request),
+                "response_schema_sha256": response_schema.schema_sha256,
             }
         )[:32]
         intent = {
             "arm": self.name,
-            "backend": dict(self.backend.identity),
+            "backend": backend_identity,
             "event": "intent",
             "isolation_id": self.isolation_id,
             "max_output_tokens": max_output_tokens,
+            "messages_bytes": len(messages_raw),
             "operation": operation,
             "ordinal": ordinal,
+            "raw_request_bytes": len(raw_request),
+            "raw_request_json": raw_request.decode("utf-8"),
+            "raw_request_sha256": _digest_bytes(raw_request),
             "request_id": request_id,
+            "request_payload_bytes": len(payload_raw),
             "request_payload_json": payload_raw.decode("utf-8"),
             "request_payload_sha256": _digest_bytes(payload_raw),
+            "response_schema_bytes": len(response_schema.schema_json.encode("utf-8")),
+            "response_schema_json": response_schema.schema_json,
+            "response_schema_name": response_schema.name,
+            "response_schema_sha256": response_schema.schema_sha256,
             "system_message": system,
         }
         self._journal(intent)
         response_was_received = False
+        observer_calls = 0
+        observed_response: bytes | None = None
         try:
-            def observe_response(raw_request: bytes, raw_response: bytes) -> None:
-                nonlocal response_was_received
+            def observe_response(observed_request: bytes, raw_response: bytes) -> None:
+                nonlocal observer_calls, observed_response, response_was_received
+                observer_calls += 1
+                observed_response = raw_response
+                prepared_request_match = observed_request == raw_request
                 self._journal(
                     {
                         "arm": self.name,
                         "event": "raw_response_received",
                         "operation": operation,
                         "ordinal": ordinal,
-                        "raw_request_base64": base64.b64encode(raw_request).decode("ascii"),
-                        "raw_request_sha256": _digest_bytes(raw_request),
+                        "prepared_request_match": prepared_request_match,
+                        "raw_request_base64": base64.b64encode(observed_request).decode("ascii"),
+                        "raw_request_sha256": _digest_bytes(observed_request),
                         "raw_response_base64": base64.b64encode(raw_response).decode("ascii"),
                         "raw_response_sha256": _digest_bytes(raw_response),
                         "request_id": request_id,
+                        "response_schema_sha256": response_schema.schema_sha256,
                         "response_bytes": len(raw_response),
                     }
                 )
                 response_was_received = True
+                if not prepared_request_match:
+                    raise ContinualLiveError(
+                        "backend observed request differs from prepared preimage"
+                    )
 
             completion = self.backend.complete(
-                messages=messages,
-                max_output_tokens=max_output_tokens,
+                raw_request=raw_request,
                 request_id=request_id,
                 response_observer=observe_response,
             )
@@ -618,6 +1118,7 @@ class _ModelArm:
                         "received_invalid" if response_was_received else "unknown"
                     ),
                     "request_id": request_id,
+                    "response_schema_sha256": response_schema.schema_sha256,
                     "retry_permitted": False,
                 }
             )
@@ -630,22 +1131,40 @@ class _ModelArm:
                 "operation": operation,
                 "ordinal": ordinal,
                 "request_id": request_id,
+                "response_schema_sha256": response_schema.schema_sha256,
             }
         )
         try:
+            if observer_calls != 1:
+                raise ContinualLiveError(
+                    "backend must report exactly one raw response observation"
+                )
+            if observed_response != completion.raw_response_json.encode("utf-8"):
+                raise ContinualLiveError(
+                    "observed raw response differs from returned completion"
+                )
             ledger_entry = CallLedgerEntry(
                 arm=self.name,
+                completion_text_bytes=len(completion.text.encode("utf-8")),
                 operation=operation,
                 ordinal=ordinal,
                 max_output_tokens=max_output_tokens,
-                backend_identity_json=canonical_json_bytes(
-                    dict(self.backend.identity)
-                ).decode("utf-8"),
+                messages_bytes=len(messages_raw),
+                backend_identity_json=canonical_json_bytes(backend_identity).decode(
+                    "utf-8"
+                ),
+                raw_request_bytes=len(raw_request),
                 request_payload_json=payload_raw.decode("utf-8"),
+                request_payload_bytes=len(payload_raw),
                 request_payload_sha256=_digest_bytes(payload_raw),
+                response_schema_bytes=len(response_schema.schema_json.encode("utf-8")),
+                response_schema_json=response_schema.schema_json,
+                response_schema_name=response_schema.name,
+                response_schema_sha256=response_schema.schema_sha256,
                 system_message=system,
                 completion=completion,
             )
+            response_schema.validate_instance(_strict_object(completion.text))
             if self.completion_validator is not None:
                 # Gate-specific acceptance happens before an update response can
                 # be parsed, committed, or followed by another provider call.
@@ -661,6 +1180,7 @@ class _ModelArm:
                     "ordinal": ordinal,
                     "outcome": "received_invalid",
                     "request_id": request_id,
+                    "response_schema_sha256": response_schema.schema_sha256,
                     "retry_permitted": False,
                 }
             )
@@ -674,6 +1194,7 @@ class _ModelArm:
                 "operation": operation,
                 "ordinal": ordinal,
                 "request_id": request_id,
+                "response_schema_sha256": response_schema.schema_sha256,
             }
         )
         return completion
@@ -681,6 +1202,7 @@ class _ModelArm:
     def _answer(
         self, probe: PublicProbe, *, state_kind: str, state: Any
     ) -> ArmAnswer:
+        response_schema = _choice_response_schema(probe.choices)
         completion = self._call(
             operation="answer",
             max_output_tokens=self.budget.answer_max_output_tokens,
@@ -697,7 +1219,9 @@ class _ModelArm:
                 "state": state,
                 "state_kind": state_kind,
             },
+            response_schema=response_schema,
         )
+        response_schema.validate_instance(_strict_object(completion.text))
         receipt = canonical_sha256(
             {"arm": self.name, "operation": "answer", **completion.canonical()}
         )
@@ -793,13 +1317,19 @@ def _parse_structure_proposal(
         "rationale",
     }:
         raise ContinualLiveError("compact structured update field set is invalid")
-    if not isinstance(value["rationale"], str) or not value["rationale"].strip():
+    if (
+        not isinstance(value["rationale"], str)
+        or not value["rationale"].strip()
+        or len(value["rationale"]) > MAX_RATIONALE_CHARS
+    ):
         raise ContinualLiveError("structured update requires a rationale")
     if not all(
         isinstance(value[item], list)
         for item in ("cells", "delete_memory_ids", "new_memory_links")
     ):
         raise ContinualLiveError("compact structured update list field is invalid")
+    if len(value["cells"]) > min(policy.max_cells, MAX_AUTHORED_CELLS):
+        raise ContinualLiveError("compact patch exceeds the authored cell bound")
     source_ids = tuple(str(item["token_id"]) for item in source_tokens)
     if not source_ids or len(source_ids) != len(set(source_ids)):
         raise ContinualLiveError("public source token ids must be non-empty and unique")
@@ -866,6 +1396,11 @@ def _parse_structure_proposal(
             item["related_new_token_indices"],
             "related_new_token_indices",
         )
+        if (
+            len(existing_related) > MAX_RELATED_MEMORY_IDS
+            or len(related_new) > MAX_RELATED_MEMORY_IDS
+        ):
+            raise ContinualLiveError("new memory relation exceeds the bounded degree")
         if token_index in related_new:
             raise ContinualLiveError("new memory cannot relate to itself")
         links_by_index[token_index] = item
@@ -917,8 +1452,34 @@ def _parse_structure_proposal(
         new_token_indexes = index_list(
             item["new_token_indices"], "cell new_token_indices"
         )
+        if (
+            len(existing_memory_ids) > MAX_CELL_MEMORY_REFERENCES_PER_FIELD
+            or len(new_token_indexes) > MAX_CELL_MEMORY_REFERENCES_PER_FIELD
+            or len(existing_memory_ids) + len(new_token_indexes)
+            > MAX_CELL_MEMORY_REFERENCES
+        ):
+            raise ContinualLiveError("compact cell exceeds the memory assignment bound")
+        if referenced_existing & set(existing_memory_ids):
+            raise ContinualLiveError("existing memory is assigned to multiple cells")
+        if referenced_new_indexes & set(new_token_indexes):
+            raise ContinualLiveError("new memory is assigned to multiple cells")
+        if (
+            not isinstance(item["cell_id"], str)
+            or not item["cell_id"]
+            or len(item["cell_id"]) > MAX_CELL_ID_CHARS
+            or item["capability"] != CAPABILITY
+            or not isinstance(item["instruction"], str)
+            or not item["instruction"]
+            or len(item["instruction"]) > MAX_CELL_INSTRUCTION_CHARS
+        ):
+            raise ContinualLiveError("compact cell text or capability is invalid")
         if item["executor_agent_id"] is not None:
             raise ContinualLiveError("compact cells cannot delegate hidden execution")
+        next_cell_ids = id_list(item["next_cell_ids"], "cell next_cell_ids")
+        if len(next_cell_ids) > MAX_CELL_EDGES or any(
+            len(cell_id) > MAX_CELL_ID_CHARS for cell_id in next_cell_ids
+        ):
+            raise ContinualLiveError("compact cell edge list exceeds its bound")
         cells.append(
             CellRecord(
                 cell_id=item["cell_id"],
@@ -926,15 +1487,18 @@ def _parse_structure_proposal(
                 instruction=item["instruction"],
                 memory_ids=existing_memory_ids
                 + tuple(new_ids[index] for index in new_token_indexes),
-                next_cell_ids=id_list(
-                    item["next_cell_ids"], "cell next_cell_ids"
-                ),
+                next_cell_ids=next_cell_ids,
                 executor_agent_id=None,
             )
         )
         referenced_existing.update(existing_memory_ids)
         referenced_new_indexes.update(new_token_indexes)
-    if not cells or not isinstance(value["entry_cell_id"], str):
+    if (
+        not cells
+        or not isinstance(value["entry_cell_id"], str)
+        or not value["entry_cell_id"]
+        or len(value["entry_cell_id"]) > MAX_CELL_ID_CHARS
+    ):
         raise ContinualLiveError("agent did not author a compact cell topology")
     if referenced_existing != surviving_ids:
         raise ContinualLiveError("compact cells must cover every surviving memory")
@@ -956,6 +1520,10 @@ def _parse_structure_proposal(
         queue.extend(cell.next_cell_ids)
     if reachable != set(cells_by_id):
         raise ContinualLiveError("every compact cell must be reachable from entry")
+
+    _compact_patch_response_schema(active, source_tokens, policy).validate_instance(
+        value
+    )
 
     proposal = make_mutation(
         base_snapshot_id=active.snapshot_id,
@@ -987,6 +1555,19 @@ def _structure_update_payload(
             "topology. Reference new tokens only by token_index. Never echo the current "
             "HSWM, MemoryRecord content, or a separate plan document."
         ),
+        "output_bounds": {
+            "cell_id_max_chars": MAX_CELL_ID_CHARS,
+            "cell_instruction_max_chars": MAX_CELL_INSTRUCTION_CHARS,
+            "cells_max": MAX_AUTHORED_CELLS,
+            "memory_assignments_max_per_cell": MAX_CELL_MEMORY_REFERENCES,
+            "memory_assignments_max_per_cell_field": (
+                MAX_CELL_MEMORY_REFERENCES_PER_FIELD
+            ),
+            "memory_relations_max_per_kind": MAX_RELATED_MEMORY_IDS,
+            "next_cells_max_per_cell": MAX_CELL_EDGES,
+            "rationale_max_chars": MAX_RATIONALE_CHARS,
+            "single_cell_assignment_per_memory": True,
+        },
         "operation": "author_hswm_compact_patch",
         "protocol": LIVE_PROTOCOL,
         "public_source_tokens": [
@@ -1085,9 +1666,15 @@ class StructuredHSWMArm(_ModelArm):
                 "Return exactly the five-key JSON object in response_contract. Author "
                 "compact memory links, cells, and routing directly in HSWM. Do not "
                 "return active_hswm, memories, upsert_memories, token content, a plan, "
-                "or any prose. Use only public tokens; never infer a gold answer."
+                "or any prose. Assign each surviving/new memory to exactly one cell. "
+                "Use only public tokens; never infer a gold answer."
             ),
             payload=_structure_update_payload(prompt_snapshot, source_tokens),
+            response_schema=_compact_patch_response_schema(
+                prompt_snapshot,
+                source_tokens,
+                self.policy,
+            ),
         )
         proposal = _parse_structure_proposal(
             completion.text,
@@ -1304,10 +1891,14 @@ class PlainTextArm(_ModelArm):
                 "public_learning_tokens": [item["content"] for item in source_tokens],
                 "response_contract": {"memory": "one linear plain-text note"},
             },
+            response_schema=_plain_memory_response_schema(),
         )
         value = _strict_object(completion.text)
+        _plain_memory_response_schema().validate_instance(value)
         if set(value) != {"memory"} or not isinstance(value["memory"], str):
             raise ContinualLiveError("plain update response field set is invalid")
+        if len(value["memory"]) > MAX_PLAIN_MEMORY_CHARS:
+            raise ContinualLiveError("plain state exceeds the structured-output bound")
         if len(value["memory"].encode("utf-8")) > self.budget.max_state_bytes:
             raise ContinualLiveError("plain state exceeds the common byte envelope")
         self._memory = value["memory"]
@@ -2166,6 +2757,8 @@ def run_public_schema_gate(
             "probe_answer_receipt_sha256": answer.receipt_sha256,
             "probe_choice": chosen,
             "protocol": PUBLIC_SCHEMA_GATE_PROTOCOL,
+            "provider_structured_output_backend_attested": False,
+            "semantic_acceptance": "local-strict-parser-after-provider-json-schema",
             "valid": True,
             "warmup_update_receipt_sha256": warmup_update.receipt_sha256,
         }
@@ -3330,7 +3923,20 @@ def main(argv: Sequence[str] | None = None) -> int:
                                 backend_identity = json.loads(
                                     entry["backend_identity_json"]
                                 )
-                            except (KeyError, TypeError, json.JSONDecodeError):
+                                response_schema = JSONSchemaContract(
+                                    name=entry["response_schema_name"],
+                                    schema_json=entry["response_schema_json"],
+                                    schema_sha256=entry["response_schema_sha256"],
+                                )
+                                response_schema.validate_instance(
+                                    _strict_object(completion["text"])
+                                )
+                            except (
+                                KeyError,
+                                TypeError,
+                                json.JSONDecodeError,
+                                ContinualLiveError,
+                            ):
                                 preimages_ok = False
                                 continue
                             if (
@@ -3338,19 +3944,52 @@ def main(argv: Sequence[str] | None = None) -> int:
                                     completion["raw_request_json"].encode("utf-8")
                                 )
                                 != completion["request_sha256"]
+                                or canonical_json_bytes(raw_request_value).decode(
+                                    "utf-8"
+                                )
+                                != completion["raw_request_json"]
                                 or _digest_bytes(
                                     completion["raw_response_json"].encode("utf-8")
                                 )
                                 != completion["response_sha256"]
                                 or _digest_bytes(completion["text"].encode("utf-8"))
                                 != completion["text_sha256"]
+                                or len(completion["text"].encode("utf-8"))
+                                != completion["text_bytes"]
+                                or len(completion["text"].encode("utf-8"))
+                                != entry["completion_text_bytes"]
+                                or len(completion["raw_request_json"].encode("utf-8"))
+                                != entry["raw_request_bytes"]
+                                or len(entry["request_payload_json"].encode("utf-8"))
+                                != entry["request_payload_bytes"]
+                                or len(entry["response_schema_json"].encode("utf-8"))
+                                != entry["response_schema_bytes"]
+                                or len(
+                                    canonical_json_bytes(
+                                        [
+                                            {
+                                                "role": "system",
+                                                "content": entry["system_message"],
+                                            },
+                                            {
+                                                "role": "user",
+                                                "content": entry[
+                                                    "request_payload_json"
+                                                ],
+                                            },
+                                        ]
+                                    )
+                                )
+                                != entry["messages_bytes"]
                             ):
                                 preimages_ok = False
                                 continue
                             try:
-                                returned_text = raw_response_value["choices"][0][
-                                    "message"
-                                ]["content"]
+                                choices = raw_response_value["choices"]
+                                if not isinstance(choices, list) or len(choices) != 1:
+                                    raise TypeError("response choice count changed")
+                                returned_message = choices[0]["message"]
+                                returned_text = returned_message["content"]
                                 returned_model = raw_response_value["model"]
                                 usage = raw_response_value["usage"]
                             except (KeyError, IndexError, TypeError):
@@ -3363,6 +4002,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                                     "max_tokens",
                                     "messages",
                                     "model",
+                                    "response_format",
                                     "seed",
                                     "temperature",
                                     "top_p",
@@ -3388,6 +4028,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                                 or raw_request_value["model"]
                                 != backend_identity.get("model")
                                 or raw_request_value["model"] != completion["model"]
+                                or raw_request_value["response_format"]
+                                != response_schema.response_format()
+                                or backend_identity.get("response_format_mode")
+                                != STRUCTURED_OUTPUT_MODE
                                 or raw_request_value["chat_template_kwargs"]
                                 != {
                                     "enable_thinking": backend_identity.get(
@@ -3396,6 +4040,12 @@ def main(argv: Sequence[str] | None = None) -> int:
                                 }
                                 or returned_text != completion["text"]
                                 or returned_model != completion["model"]
+                                or returned_message.get("reasoning_content")
+                                not in (None, "")
+                                or returned_message.get("reasoning") not in (None, "")
+                                or returned_message.get("refusal") not in (None, "")
+                                or returned_message.get("tool_calls") not in (None, [])
+                                or returned_message.get("function_call") is not None
                                 or usage.get("prompt_tokens")
                                 != completion["input_tokens"]
                                 or usage.get("completion_tokens")
@@ -3528,6 +4178,8 @@ def schema_gate_main(argv: Sequence[str] | None = None) -> int:
         "retry_limit": 0,
         "service_binding": args.service_binding,
         "source_revision": args.source_revision,
+        "structured_output_backend": "provider-auto-not-attested",
+        "structured_output_mode": STRUCTURED_OUTPUT_MODE,
         "update_max_tokens": 8192,
     }
     prereg["prereg_sha256"] = canonical_sha256(prereg)
@@ -3576,6 +4228,7 @@ __all__ = [
     "COMPACT_PATCH_SCHEMA",
     "ContinualLiveError",
     "GENESIS",
+    "JSONSchemaContract",
     "LIVE_PROTOCOL",
     "ModelCompletion",
     "NoWriteArm",
@@ -3589,6 +4242,7 @@ __all__ = [
     "SnapshotCheckpoint",
     "StateTransitionReceipt",
     "StructuredHSWMArm",
+    "STRUCTURED_OUTPUT_MODE",
     "audit_parity",
     "build_four_arms",
     "main",

@@ -169,34 +169,54 @@ class ScriptedRelationalBackend:
             )
             new_relations.append(
                 {
-                    "related_memory_ids": related_existing + related_new,
+                    "related_memory_ids": sorted(related_existing + related_new),
                 }
             )
-        existing_cell_indices = [0] * len(existing)
-        new_cell_indices = [0] * len(source_tokens)
-        cell_count = 1
-        cell_ids = [f"cell:lookup:{index}" for index in range(cell_count)]
-        cells = []
-        for index in range(cell_count):
-            cells.append(
-                {
-                    "capability": "nonce_graph_lookup",
-                    "cell_id": cell_ids[index],
-                    "executor_agent_id": None,
-                    "instruction": "Traverse the absorbed atomic relations.",
-                    "next_cell_indices": (
-                        [index + 1] if index + 1 < cell_count else []
-                    ),
-                }
-            )
-        response = {
-            "cells": cells,
-            "entry_cell_index": 0,
-            "existing_memory_cell_indices": existing_cell_indices,
-            "new_memory_cell_indices": new_cell_indices,
+        common = {
+            "base_generation": active["active_generation"],
+            "base_snapshot_id": active["snapshot_id"],
+            "mode": payload["authoring_mode"],
             "new_memory_relations": new_relations,
-            "rationale": "Absorb each public atomic relation into the HSWM cells.",
+            "rationale": "Absorb each public atomic relation into persistent HSWM.",
         }
+        if payload["authoring_mode"] == live.FULL_AUTHOR_MODE:
+            cell_ids = [
+                f"cell:lookup:{index}"
+                for index in range(live.MAX_AUTHORED_CELLS)
+            ]
+            response = {
+                **common,
+                "cells": [
+                    {
+                        "capability": "nonce_graph_lookup",
+                        "cell_id": cell_id,
+                        "executor_agent_id": None,
+                        "instruction": "Traverse the absorbed atomic relations.",
+                        "next_cell_indices": (
+                            [index + 1]
+                            if index + 1 < live.MAX_AUTHORED_CELLS
+                            else []
+                        ),
+                    }
+                    for index, cell_id in enumerate(cell_ids)
+                ],
+                "entry_cell_index": 0,
+                "new_memory_cell_indices": [
+                    index % live.MAX_AUTHORED_CELLS
+                    for index in range(len(source_tokens))
+                ],
+            }
+        elif payload["authoring_mode"] == live.KEEP_ROUTING_APPEND_MODE:
+            cell_ids = [cell["cell_id"] for cell in active["cells"]]
+            response = {
+                **common,
+                "new_memory_cell_ids": [
+                    cell_ids[index % len(cell_ids)]
+                    for index in range(len(source_tokens))
+                ],
+            }
+        else:  # pragma: no cover - fixture construction guard
+            raise AssertionError(payload["authoring_mode"])
         return json.dumps(response, sort_keys=True, separators=(",", ":"))
 
     @staticmethod
@@ -1020,15 +1040,15 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
             "array bound",
         ),
         (
-            lambda value: value["cells"].append(
-                {
-                    "capability": "nonce_graph_lookup",
-                    "cell_id": "cell:unreachable",
-                    "executor_agent_id": None,
-                    "instruction": "A deliberately unreachable cell.",
-                    "next_cell_indices": [],
-                }
-            ),
+            lambda value: value["cells"].pop(),
+            "array bound",
+        ),
+        (
+            lambda value: value["cells"].append(dict(value["cells"][-1])),
+            "array bound",
+        ),
+        (
+            lambda value: value["cells"][0].update({"next_cell_indices": []}),
             "reachable from entry",
         ),
         (
@@ -1038,12 +1058,16 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
             "schema enum",
         ),
         (
-            lambda value: value.update({"entry_cell_index": 1}),
-            "entry_cell_index cites an unknown cell",
+            lambda value: value.update(
+                {"entry_cell_index": live.MAX_AUTHORED_CELLS}
+            ),
+            "integer bound",
         ),
         (
-            lambda value: value["new_memory_cell_indices"].__setitem__(0, 1),
-            "new_memory_cell_indices cites an unknown cell",
+            lambda value: value["new_memory_cell_indices"].__setitem__(
+                0, live.MAX_AUTHORED_CELLS
+            ),
+            "integer bound",
         ),
         (
             lambda value: value["new_memory_cell_indices"].__setitem__(0, True),
@@ -1060,18 +1084,14 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
             "integer bound",
         ),
         (
-            lambda value: value["cells"][0].update({"next_cell_indices": [1]}),
-            "cell next_cell_indices contains duplicate or unknown indexes",
+            lambda value: value["cells"][0].update(
+                {"next_cell_indices": [live.MAX_AUTHORED_CELLS]}
+            ),
+            "integer bound",
         ),
         (
-            lambda value: value["cells"].append(
-                {
-                    "capability": "nonce_graph_lookup",
-                    "cell_id": value["cells"][0]["cell_id"],
-                    "executor_agent_id": None,
-                    "instruction": "Duplicate cell ids must fail.",
-                    "next_cell_indices": [],
-                }
+            lambda value: value["cells"][1].update(
+                {"cell_id": value["cells"][0]["cell_id"]}
             ),
             "compact cell ids must be unique",
         ),
@@ -1145,55 +1165,89 @@ def test_compact_patch_relies_on_global_memory_policy_for_concentrated_cell(
     assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
 
 
-def test_compact_patch_prompt_rejects_predecessor_as_outgoing_relation(
+def test_compact_patch_binds_nonlexical_wrong_relations_without_add_or_drop(
     tmp_path: Path,
 ) -> None:
-    class PredecessorBackend(ScriptedRelationalBackend):
+    class WrongRelationBackend(ScriptedRelationalBackend):
         @staticmethod
         def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            value["new_memory_relations"][0]["related_memory_ids"] = [
-                payload["public_source_tokens"][1]["suggested_memory_id"]
-            ]
+            for relation in value["new_memory_relations"]:
+                relation["related_memory_ids"] = []
+            value["new_memory_relations"][0]["related_memory_ids"] = sorted(
+                [
+                    payload["public_source_tokens"][2]["suggested_memory_id"],
+                    payload["public_source_tokens"][1]["suggested_memory_id"],
+                ],
+                reverse=True,
+            )
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
-    backend = PredecessorBackend()
+    backend = WrongRelationBackend()
     arm = StructuredHSWMArm(
         backend=backend,
         budget=_budget(),
-        isolation_id="predecessor-is-not-outgoing",
-        store_path=tmp_path / "predecessor.sqlite3",
+        isolation_id="wrong-relations-persist",
+        store_path=tmp_path / "wrong-relations.sqlite3",
     )
-    with pytest.raises(ContinualLiveError, match="not content-composable"):
-        arm.update(
-            LearningBatch(
-                episode_id="episode-predecessor-is-not-outgoing",
-                after_step=0,
-                chosen=None,
-                correct=False,
-                learning_tokens=(
-                    PublicLearningToken("node-b", "rel", "node-c"),
-                    PublicLearningToken("node-a", "rel", "node-b"),
-                ),
-            )
+    arm.update(
+        LearningBatch(
+            episode_id="episode-wrong-relations-persist",
+            after_step=0,
+            chosen=None,
+            correct=False,
+            learning_tokens=(
+                PublicLearningToken("node-b", "rel", "node-c"),
+                PublicLearningToken("node-a", "rel", "node-b"),
+                PublicLearningToken("node-x", "rel", "node-y"),
+            ),
         )
-    combined_prompt = (
-        backend.requests[0]["system"]
-        + " "
-        + backend.requests[0]["payload"]["instruction"]
     )
-    assert (
-        "A.related_memory_ids contains B only when A.content.target == "
-        "B.content.source"
-    ) in combined_prompt
-    assert (
-        "P.content.target == A.content.source is not an outgoing target"
-        in combined_prompt
+    source_tokens = backend.requests[0]["payload"]["public_source_tokens"]
+    raw_related = sorted(
+        [
+            source_tokens[2]["suggested_memory_id"],
+            source_tokens[1]["suggested_memory_id"],
+        ],
+        reverse=True,
     )
-    assert "shared relation label" in combined_prompt
-    assert "cell assignment are forbidden evidence" in combined_prompt
-    assert "Use [] rather than guess" in combined_prompt
-    assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
+    assert raw_related != sorted(raw_related)
+    expected = tuple(sorted(raw_related))
+    raw_authored = [
+        {
+            "memory_id": source_token["suggested_memory_id"],
+            "related_memory_ids": raw_related if index == 0 else [],
+        }
+        for index, source_token in enumerate(source_tokens)
+    ]
+    canonical_sets = [
+        {
+            "memory_id": item["memory_id"],
+            "related_memory_ids": sorted(item["related_memory_ids"]),
+        }
+        for item in raw_authored
+    ]
+    snapshot = arm.store.active_snapshot()
+    by_source = {
+        memory.content["source"]: memory for memory in snapshot.snapshot.memories
+    }
+    assert snapshot.generation == 1
+    assert by_source["node-b"].related_memory_ids == expected
+    receipt = arm.structure_compilation_receipts[0]
+    assert receipt["authored_relation_count"] == 2
+    assert receipt["stored_relation_count"] == 2
+    assert receipt["authored_relation_sequence_sha256"] == live.canonical_sha256(
+        raw_authored
+    )
+    assert receipt["authored_relation_canonical_set_sha256"] == (
+        live.canonical_sha256(canonical_sets)
+    )
+    assert receipt["authored_relation_canonical_set_sha256"] == receipt[
+        "stored_relation_canonical_set_sha256"
+    ]
+    assert receipt["authored_relation_sequence_sha256"] != receipt[
+        "authored_relation_canonical_set_sha256"
+    ]
 
 
 def _projection_test_snapshot() -> Any:
@@ -1449,9 +1503,13 @@ def test_compact_patch_materializes_public_content_without_echoing_records(
         )
         for relation in completion_value["new_memory_relations"]
     )
-    assert set(snapshot.cells[0].memory_ids) == {
+    assigned_ids = [
+        memory_id for cell in snapshot.cells for memory_id in cell.memory_ids
+    ]
+    assert len(snapshot.cells) == live.MAX_AUTHORED_CELLS
+    assert sorted(assigned_ids) == sorted(
         memory.memory_id for memory in snapshot.memories
-    }
+    )
 
 
 def test_direct_memory_relations_reject_duplicate_and_cell_index_namespaces(
@@ -1503,190 +1561,144 @@ def test_direct_memory_relations_reject_duplicate_and_cell_index_namespaces(
         )
 
 
-def test_existing_assignment_minus_one_is_the_only_delete_encoding(
+@pytest.mark.parametrize(
+    ("forbidden_field", "forbidden_value"),
+    [
+        ("cells", []),
+        ("entry_cell_index", 0),
+        ("existing_memory_cell_indices", []),
+        ("new_memory_cell_indices", [0]),
+        ("delete_memory_ids", []),
+    ],
+)
+def test_keep_routing_schema_rejects_legacy_mutation_fields_without_commit(
     tmp_path: Path,
+    forbidden_field: str,
+    forbidden_value: Any,
 ) -> None:
-    class DeleteUnreferencedSourceBackend(ScriptedRelationalBackend):
-        def __init__(self) -> None:
-            super().__init__()
-            self.author_calls = 0
-
-        def _author(self, payload: Mapping[str, Any]) -> str:
+    class ForbiddenKeepFieldBackend(ScriptedRelationalBackend):
+        @staticmethod
+        def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            self.author_calls += 1
-            if self.author_calls == 2:
-                memories = payload["current_hswm_indexed_read_only"]["memories"]
-                delete_index = next(
-                    index
-                    for index, memory in enumerate(memories)
-                    if memory["content"]["source"] == "node-a"
-                )
-                value["existing_memory_cell_indices"][delete_index] = -1
+            if payload["authoring_mode"] == live.KEEP_ROUTING_APPEND_MODE:
+                value[forbidden_field] = forbidden_value
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
     arm = StructuredHSWMArm(
-        backend=DeleteUnreferencedSourceBackend(),
+        backend=ForbiddenKeepFieldBackend(),
         budget=_budget(),
-        isolation_id="valid-vector-delete",
+        isolation_id=f"keep-forbidden-{forbidden_field}",
+        store_path=tmp_path / forbidden_field / "state.sqlite3",
+    )
+    arm.update(_one_token_batch())
+    before = arm.store.active_snapshot()
+    with pytest.raises(ContinualLiveError, match="object schema"):
+        arm.update(
+            LearningBatch(
+                episode_id="keep-forbidden-field",
+                after_step=1,
+                chosen=None,
+                correct=False,
+                learning_tokens=(PublicLearningToken("node-b", "rel", "node-c"),),
+            )
+        )
+    after = arm.store.active_snapshot()
+    assert after.generation == before.generation == 1
+    assert after.snapshot.canonical() == before.snapshot.canonical()
+
+
+def test_keep_routing_rejects_unknown_cell_id_without_commit(tmp_path: Path) -> None:
+    class UnknownCellBackend(ScriptedRelationalBackend):
+        @staticmethod
+        def _author(payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            if payload["authoring_mode"] == live.KEEP_ROUTING_APPEND_MODE:
+                value["new_memory_cell_ids"][0] = "cell:unknown"
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    arm = StructuredHSWMArm(
+        backend=UnknownCellBackend(),
+        budget=_budget(),
+        isolation_id="keep-unknown-cell",
         store_path=tmp_path / "state.sqlite3",
     )
-    arm.update(
-        LearningBatch(
-            episode_id="valid-vector-delete",
-            after_step=0,
-            chosen=None,
-            correct=False,
-            learning_tokens=(
-                PublicLearningToken("node-a", "rel", "node-b"),
-                PublicLearningToken("node-b", "rel", "node-c"),
-            ),
+    arm.update(_one_token_batch())
+    before = arm.store.active_snapshot()
+    with pytest.raises(ContinualLiveError, match="schema enum"):
+        arm.update(
+            LearningBatch(
+                episode_id="keep-unknown-cell",
+                after_step=1,
+                chosen=None,
+                correct=False,
+                learning_tokens=(PublicLearningToken("node-b", "rel", "node-c"),),
+            )
         )
+    after = arm.store.active_snapshot()
+    assert after.generation == before.generation == 1
+    assert after.snapshot.canonical() == before.snapshot.canonical()
+
+
+def test_keep_routing_preserves_topology_and_old_memberships_byte_exact(
+    tmp_path: Path,
+) -> None:
+    backend = ScriptedRelationalBackend()
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id="keep-preserves-routing",
+        store_path=tmp_path / "state.sqlite3",
     )
+    arm.update(_one_token_batch())
+    before = arm.store.active_snapshot().snapshot
     arm.update(
         LearningBatch(
-            episode_id="valid-vector-delete",
+            episode_id="keep-preserves-routing",
             after_step=1,
             chosen=None,
             correct=False,
-            learning_tokens=(PublicLearningToken("node-c", "rel", "node-d"),),
+            learning_tokens=(
+                PublicLearningToken("node-b", "rel", "node-c"),
+                PublicLearningToken("node-x", "rel", "node-y"),
+            ),
         )
     )
-    snapshot = arm.store.active_snapshot().snapshot
-    assert {memory.content["source"] for memory in snapshot.memories} == {
-        "node-b",
-        "node-c",
+    after = arm.store.active_snapshot().snapshot
+    response = json.loads(arm.ledger[1].completion.text)
+    assert response["mode"] == live.KEEP_ROUTING_APPEND_MODE
+    assert set(response) == {
+        "base_generation",
+        "base_snapshot_id",
+        "mode",
+        "new_memory_cell_ids",
+        "new_memory_relations",
+        "rationale",
     }
-    assigned_ids = [memory_id for cell in snapshot.cells for memory_id in cell.memory_ids]
-    assert sorted(assigned_ids) == sorted(
-        memory.memory_id for memory in snapshot.memories
-    )
-    second_value = json.loads(arm.ledger[1].completion.text)
-    assert second_value["existing_memory_cell_indices"].count(-1) == 1
-    assert "delete_memory_ids" not in second_value
-
-
-def test_relation_to_minus_one_deleted_existing_memory_is_rejected_precommit(
-    tmp_path: Path,
-) -> None:
-    class DeleteRelationTargetBackend(ScriptedRelationalBackend):
-        def __init__(self) -> None:
-            super().__init__()
-            self.author_calls = 0
-
-        def _author(self, payload: Mapping[str, Any]) -> str:
-            value = json.loads(ScriptedRelationalBackend._author(payload))
-            self.author_calls += 1
-            if self.author_calls == 2:
-                memories = payload["current_hswm_indexed_read_only"]["memories"]
-                delete_index = next(
-                    index
-                    for index, memory in enumerate(memories)
-                    if memory["content"]["source"] == "node-a"
-                )
-                assert value["new_memory_relations"][0]["related_memory_ids"] == [
-                    memories[delete_index]["memory_id"]
-                ]
-                value["existing_memory_cell_indices"][delete_index] = -1
-            return json.dumps(value, sort_keys=True, separators=(",", ":"))
-
-    arm = StructuredHSWMArm(
-        backend=DeleteRelationTargetBackend(),
-        budget=_budget(),
-        isolation_id="invalid-vector-delete-target",
-        store_path=tmp_path / "state.sqlite3",
-    )
-    arm.update(
-        LearningBatch(
-            episode_id="invalid-vector-delete-target",
-            after_step=0,
-            chosen=None,
-            correct=False,
-            learning_tokens=(
-                PublicLearningToken("node-a", "rel", "node-b"),
-                PublicLearningToken("node-b", "rel", "node-c"),
-            ),
+    assert after.entry_cell_id == before.entry_cell_id
+    before_by_id = {cell.cell_id: cell for cell in before.cells}
+    after_by_id = {cell.cell_id: cell for cell in after.cells}
+    assert set(after_by_id) == set(before_by_id)
+    old_memory_ids = {memory.memory_id for memory in before.memories}
+    for cell_id, old_cell in before_by_id.items():
+        new_cell = after_by_id[cell_id]
+        assert (
+            new_cell.cell_id,
+            new_cell.capability,
+            new_cell.instruction,
+            new_cell.next_cell_ids,
+            new_cell.executor_agent_id,
+        ) == (
+            old_cell.cell_id,
+            old_cell.capability,
+            old_cell.instruction,
+            old_cell.next_cell_ids,
+            old_cell.executor_agent_id,
         )
-    )
-    before = arm.store.active_snapshot()
-    with pytest.raises(
-        ContinualLiveError, match="new relation targets a deleted existing memory"
-    ):
-        arm.update(
-            LearningBatch(
-                episode_id="invalid-vector-delete-target",
-                after_step=1,
-                chosen=None,
-                correct=False,
-                learning_tokens=(
-                    PublicLearningToken("node-x", "rel", "node-a"),
-                ),
-            )
-        )
-    after = arm.store.active_snapshot()
-    assert after.generation == before.generation == 1
-    assert after.snapshot.canonical() == before.snapshot.canonical()
-    assert arm.store.token_count() == 2
-
-
-def test_deletion_referenced_by_surviving_memory_is_rejected_precommit(
-    tmp_path: Path,
-) -> None:
-    class DeleteReferencedExistingBackend(ScriptedRelationalBackend):
-        def __init__(self) -> None:
-            super().__init__()
-            self.author_calls = 0
-
-        def _author(self, payload: Mapping[str, Any]) -> str:
-            value = json.loads(ScriptedRelationalBackend._author(payload))
-            self.author_calls += 1
-            if self.author_calls == 2:
-                memories = payload["current_hswm_indexed_read_only"]["memories"]
-                delete_index = next(
-                    index
-                    for index, memory in enumerate(memories)
-                    if memory["content"]["source"] == "node-b"
-                )
-                value["existing_memory_cell_indices"][delete_index] = -1
-            return json.dumps(value, sort_keys=True, separators=(",", ":"))
-
-    arm = StructuredHSWMArm(
-        backend=DeleteReferencedExistingBackend(),
-        budget=_budget(),
-        isolation_id="invalid-surviving-reference-delete",
-        store_path=tmp_path / "state.sqlite3",
-    )
-    arm.update(
-        LearningBatch(
-            episode_id="invalid-surviving-reference-delete",
-            after_step=0,
-            chosen=None,
-            correct=False,
-            learning_tokens=(
-                PublicLearningToken("node-a", "rel", "node-b"),
-                PublicLearningToken("node-b", "rel", "node-c"),
-            ),
-        )
-    )
-    before = arm.store.active_snapshot()
-    with pytest.raises(
-        ContinualLiveError,
-        match="cannot delete an existing memory still referenced by surviving state",
-    ):
-        arm.update(
-            LearningBatch(
-                episode_id="invalid-surviving-reference-delete",
-                after_step=1,
-                chosen=None,
-                correct=False,
-                learning_tokens=(
-                    PublicLearningToken("node-c", "rel", "node-d"),
-                ),
-            )
-        )
-    after = arm.store.active_snapshot()
-    assert after.generation == before.generation == 1
-    assert after.snapshot.canonical() == before.snapshot.canonical()
-    assert arm.store.token_count() == 2
+        assert tuple(
+            memory_id
+            for memory_id in new_cell.memory_ids
+            if memory_id in old_memory_ids
+        ) == old_cell.memory_ids
 
 
 def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None:
@@ -1695,12 +1707,14 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         state_dir=tmp_path / "gate-state",
     )
     assert result["valid"] is True
-    assert result["adapter_schema"] == "hswm-compact-structure-patch/v5"
-    assert result["protocol"] == "hswm-public-schema-gate/v6"
+    assert result["adapter_schema"] == "hswm-compact-structure-patch/v6"
+    assert result["protocol"] == "hswm-public-schema-gate/v7"
     assert result["indexed_authoring_view_schema"] == (
         "hswm-indexed-authoring-view/v1"
     )
-    assert result["mutation_expressivity"] == "compact-adapter-subset"
+    assert result["mutation_expressivity"] == (
+        "full-author-then-keep-routing-append/v1"
+    )
     assert result["provider_context_window_tokens"] == 32768
     assert result["input_token_ceiling"] == 26624
     fixture = live.public_schema_gate_fixture()
@@ -1725,39 +1739,49 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         if item["operation"] == "update"
     ) <= 6144
     assert result["final_memory_count"] == 144
-    assert result["final_cell_count"] == 1
+    assert result["final_cell_count"] == 16
     assert result["probe_choice"] == live.public_schema_gate_fixture()["probe_answer"]
+    assert result["probe_correct"] is True
+    assert result["probe_correctness_diagnostic_only"] is True
     assert result["before_probe_state_sha256"] == result["after_probe_state_sha256"]
     assert result["denylisted_from_evaluation"] is True
     assert result["provider_structured_output_backend_attested"] is False
     assert result["probe_mechanism_attribution"] == "not-attested-by-this-public-gate"
-    assert [
-        item["expected_relation_count"]
-        for item in result["agent_relation_checks"]
-    ] == [63, 3]
-    assert [
-        item["expected_existing_relation_count"]
-        for item in result["agent_relation_checks"]
-    ] == [0, 1]
-    assert [
-        item["expected_new_relation_count"]
-        for item in result["agent_relation_checks"]
-    ] == [63, 2]
+    assert result["relation_quality_gate"] is False
+    relation_diagnostics = result["relation_quality_diagnostics"]
+    assert [item["expected_relation_count"] for item in relation_diagnostics] == [
+        63,
+        3,
+    ]
+    assert [item["source_token_count"] for item in relation_diagnostics] == [64, 4]
     assert all(
-        item["exact_match"]
+        item["diagnostic_only"]
+        and item["acceptance_effect"] is False
+        and item["exact_match"]
         and item["expected_relation_count"] == item["observed_relation_count"]
-        and item["expected_relations_sha256"]
-        == item["observed_relations_sha256"]
-        and item["expected_existing_relation_count"]
-        == item["observed_existing_relation_count"]
-        and item["expected_existing_relations_sha256"]
-        == item["observed_existing_relations_sha256"]
-        and item["expected_new_relation_count"]
-        == item["observed_new_relation_count"]
-        and item["expected_new_relations_sha256"]
-        == item["observed_new_relations_sha256"]
-        for item in result["agent_relation_checks"]
+        and item["false_positive_count"] == 0
+        and item["false_negative_count"] == 0
+        for item in relation_diagnostics
     )
+    structure_receipts = result["structure_compilation_receipts"]
+    assert [item["logical_mode"] for item in structure_receipts] == [
+        live.FULL_AUTHOR_MODE,
+        live.KEEP_ROUTING_APPEND_MODE,
+    ]
+    assert all(
+        item["core_mode"] == "REPLACE"
+        and item["independent_store_reread_verified"]
+        and item["independent_reread_snapshot_sha256"]
+        == item["target_snapshot_sha256"]
+        and len(item["receipt_sha256"]) == 64
+        for item in structure_receipts
+    )
+    assert structure_receipts[0]["routing_preserved"] is None
+    assert structure_receipts[0]["memberships_preserved"] is None
+    assert structure_receipts[0]["append_only_membership"] is None
+    assert structure_receipts[1]["routing_preserved"] is True
+    assert structure_receipts[1]["memberships_preserved"] is True
+    assert structure_receipts[1]["append_only_membership"] is True
     assert result["extension"]["relation_author"] == (
         "evaluator:public-schema-gate-fixture"
     )
@@ -1826,7 +1850,11 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         item["response_schema_name"]
         for item in structured_events
         if item["event"] == "intent"
-    ] == ["hswm_compact_patch_v5", "hswm_compact_patch_v5", "hswm_choice_v1"]
+    ] == [
+        "hswm_full_author_patch_v1",
+        "hswm_keep_routing_append_patch_v1",
+        "hswm_choice_v1",
+    ]
     assert [
         item["response_schema_name"]
         for item in plain_events
@@ -1850,14 +1878,14 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         "properties"
     ]
     assert first_schema["properties"]["cells"]["maxItems"] == 16
+    assert first_schema["properties"]["cells"]["minItems"] == 16
     assert cell_properties["next_cell_indices"]["maxItems"] == live.MAX_CELL_EDGES
     assert cell_properties["instruction"]["maxLength"] == 256
-    assert first_schema["properties"]["existing_memory_cell_indices"][
-        "minItems"
-    ] == 0
-    assert first_schema["properties"]["existing_memory_cell_indices"][
-        "maxItems"
-    ] == 0
+    assert first_schema["properties"]["mode"]["const"] == live.FULL_AUTHOR_MODE
+    assert first_schema["properties"]["base_generation"]["const"] == 0
+    assert first_schema["properties"]["base_snapshot_id"]["const"] == (
+        GENESIS.snapshot_id
+    )
     assert first_schema["properties"]["new_memory_cell_indices"]["minItems"] == 64
     assert first_schema["properties"]["new_memory_cell_indices"]["maxItems"] == 64
     assert first_schema["properties"]["new_memory_relations"]["minItems"] == 64
@@ -1873,16 +1901,25 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     )
     assert "new_memory_links" not in first_schema["properties"]
     assert "delete_memory_ids" not in first_schema["properties"]
+    assert "existing_memory_cell_indices" not in first_schema["properties"]
     assert first_schema["properties"]["rationale"]["maxLength"] == 512
     second_schema = json.loads(structured_intents[1]["response_schema_json"])
-    assert second_schema["properties"]["existing_memory_cell_indices"][
-        "minItems"
-    ] == 140
-    assert second_schema["properties"]["existing_memory_cell_indices"][
-        "maxItems"
-    ] == 140
-    assert second_schema["properties"]["new_memory_cell_indices"]["minItems"] == 4
-    assert second_schema["properties"]["new_memory_cell_indices"]["maxItems"] == 4
+    assert set(second_schema["properties"]) == {
+        "base_generation",
+        "base_snapshot_id",
+        "mode",
+        "new_memory_cell_ids",
+        "new_memory_relations",
+        "rationale",
+    }
+    assert second_schema["properties"]["mode"]["const"] == (
+        live.KEEP_ROUTING_APPEND_MODE
+    )
+    assert second_schema["properties"]["new_memory_cell_ids"]["minItems"] == 4
+    assert second_schema["properties"]["new_memory_cell_ids"]["maxItems"] == 4
+    assert len(
+        second_schema["properties"]["new_memory_cell_ids"]["items"]["enum"]
+    ) == live.MAX_AUTHORED_CELLS
     assert second_schema["properties"]["new_memory_relations"]["minItems"] == 4
     assert second_schema["properties"]["new_memory_relations"]["maxItems"] == 4
     second_relation_ids = second_schema["properties"]["new_memory_relations"][
@@ -1895,14 +1932,28 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         if completion_event["operation"] != "update":
             continue
         completion_value = json.loads(completion_event["completion"]["text"])
-        assert set(completion_value) == {
-            "cells",
-            "entry_cell_index",
-            "existing_memory_cell_indices",
-            "new_memory_cell_indices",
-            "new_memory_relations",
-            "rationale",
-        }
+        expected_fields = (
+            {
+                "base_generation",
+                "base_snapshot_id",
+                "cells",
+                "entry_cell_index",
+                "mode",
+                "new_memory_cell_indices",
+                "new_memory_relations",
+                "rationale",
+            }
+            if completion_value["mode"] == live.FULL_AUTHOR_MODE
+            else {
+                "base_generation",
+                "base_snapshot_id",
+                "mode",
+                "new_memory_cell_ids",
+                "new_memory_relations",
+                "rationale",
+            }
+        )
+        assert set(completion_value) == expected_fields
         assert not {
             "delete_memory_ids",
             "new_memory_links",
@@ -1917,12 +1968,19 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         for item in structured_events
         if item["event"] == "completed" and item["operation"] == "update"
     ]
-    assert len(structured_update_values[1]["cells"]) == 1
-    assert structured_update_values[1]["existing_memory_cell_indices"] == [0] * 140
-    assert structured_update_values[1]["new_memory_cell_indices"] == [0] * 4
+    assert len(structured_update_values[0]["cells"]) == 16
+    assert len(structured_update_values[0]["new_memory_cell_indices"]) == 64
+    assert len(structured_update_values[1]["new_memory_cell_ids"]) == 4
+    assert "cells" not in structured_update_values[1]
+    assert "entry_cell_index" not in structured_update_values[1]
     first_intent = structured_intents[0]
     first_payload = json.loads(first_intent["request_payload_json"])
-    assert first_payload["mutation_expressivity"] == "compact-adapter-subset"
+    assert first_payload["mutation_expressivity"] == (
+        "full-author-then-keep-routing-append/v1"
+    )
+    assert first_payload["authoring_mode"] == live.FULL_AUTHOR_MODE
+    assert first_payload["base_generation"] == 0
+    assert first_payload["base_snapshot_id"] == GENESIS.snapshot_id
     assert "current_hswm_read_only" not in first_payload
     first_projection = first_payload["current_hswm_indexed_read_only"]
     assert first_projection["schema"] == "hswm-indexed-authoring-view/v1"
@@ -1930,7 +1988,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         GENESIS.canonical()
     )
     first_contract = first_payload["response_contract"]
-    assert first_contract["existing_memory_cell_indices"]["exact_length"] == 0
+    assert first_contract["cells"]["exact_length"] == 16
     assert first_contract["new_memory_cell_indices"]["exact_length"] == 64
     assert first_contract["new_memory_relations"]["exact_length"] == 64
     assert first_contract["new_memory_relations"]["item_fields"] == [
@@ -1941,6 +1999,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     ]
     assert "memory_assignments_max_per_cell" not in first_payload["output_bounds"]
     second_payload = json.loads(structured_intents[1]["request_payload_json"])
+    assert second_payload["authoring_mode"] == live.KEEP_ROUTING_APPEND_MODE
     second_projection = second_payload["current_hswm_indexed_read_only"]
     expanded_second = live._expand_indexed_authoring_projection(second_projection)
     second_update_completion = json.loads(
@@ -2021,57 +2080,49 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     ]
     assert all(
         item["projection_schema"] == "hswm-indexed-authoring-view/v1"
-        and item["mutation_expressivity"] == "compact-adapter-subset"
+        and item["mutation_expressivity"]
+        == "full-author-then-keep-routing-append/v1"
         for item in bindings
     )
     second_contract = second_payload["response_contract"]
-    assert second_contract["existing_memory_cell_indices"]["exact_length"] == 140
-    assert second_contract["new_memory_cell_indices"]["exact_length"] == 4
+    assert second_contract["new_memory_cell_ids"]["exact_length"] == 4
     assert second_contract["new_memory_relations"]["exact_length"] == 4
     assert first_contract["top_level_fields"] == [
+        "base_generation",
+        "base_snapshot_id",
         "cells",
         "entry_cell_index",
-        "existing_memory_cell_indices",
+        "mode",
         "new_memory_cell_indices",
+        "new_memory_relations",
+        "rationale",
+    ]
+    assert second_contract["top_level_fields"] == [
+        "base_generation",
+        "base_snapshot_id",
+        "mode",
+        "new_memory_cell_ids",
         "new_memory_relations",
         "rationale",
     ]
     combined_instruction = (
         first_intent["system_message"] + " " + first_payload["instruction"]
     )
-    assert "direct target MemoryRecord IDs" in combined_instruction
-    assert "OUTGOING rule" in combined_instruction
-    assert (
-        "A.related_memory_ids contains B only when A.content.target == "
-        "B.content.source"
-    ) in combined_instruction
-    assert (
-        "P.content.target == A.content.source is not an outgoing target"
-        in combined_instruction
+    assert "exactly sixteen reachable HSWM cells" in combined_instruction
+    assert "semantic quality is not repaired" in combined_instruction
+    second_instruction = (
+        structured_intents[1]["system_message"]
+        + " "
+        + second_payload["instruction"]
     )
-    assert "shared relation label" in combined_instruction
-    assert "cell assignment are forbidden evidence" in combined_instruction
-    assert "Use [] rather than guess" in combined_instruction
-    assert "Cell-assignment vectors do not define memory relations" in (
-        combined_instruction
-    )
-    assert "never cell or token indices" in combined_instruction
-    assert "never infer relations from index, adjacency, or order" in (
-        combined_instruction
-    )
-    assert "i+1" not in combined_instruction
+    assert "KEEP_ROUTING_APPEND_MEMBERSHIP" in second_instruction
+    assert "Do not return cells, entry, routing" in second_instruction
+    assert "Deletion is forbidden" in second_instruction
     assert "seed" not in live.public_schema_gate_fixture()
 
 
-@pytest.mark.parametrize(
-    ("violation", "message"),
-    [
-        ("self", "cannot contain the source memory id"),
-        ("wrong-other", "new relation is not content-composable"),
-    ],
-)
-def test_public_gate_relation_failure_stops_before_commit_at_genesis(
-    tmp_path: Path, violation: str, message: str
+def test_public_gate_self_relation_failure_stops_before_commit_at_genesis(
+    tmp_path: Path,
 ) -> None:
     class InvalidRelationBackend(ScriptedRelationalBackend):
         @staticmethod
@@ -2079,9 +2130,7 @@ def test_public_gate_relation_failure_stops_before_commit_at_genesis(
             value = json.loads(ScriptedRelationalBackend._author(payload))
             source_tokens = payload["public_source_tokens"]
             value["new_memory_relations"][0]["related_memory_ids"] = [
-                source_tokens[0 if violation == "self" else 2][
-                    "suggested_memory_id"
-                ]
+                source_tokens[0]["suggested_memory_id"]
             ]
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
@@ -2092,8 +2141,10 @@ def test_public_gate_relation_failure_stops_before_commit_at_genesis(
         backends.append(backend)
         return backend
 
-    state_dir = tmp_path / f"relation-{violation}"
-    with pytest.raises(ContinualLiveError, match=message):
+    state_dir = tmp_path / "relation-self"
+    with pytest.raises(
+        ContinualLiveError, match="cannot contain the source memory id"
+    ):
         run_public_schema_gate(
             backend_factory=backend_factory,
             state_dir=state_dir,
@@ -2114,7 +2165,7 @@ def test_public_gate_relation_failure_stops_before_commit_at_genesis(
         store.close()
 
 
-def test_public_gate_rejects_incremental_delete_before_mutating_active_140(
+def test_public_gate_keep_schema_rejects_delete_field_before_mutating_active_140(
     tmp_path: Path,
 ) -> None:
     class IncrementalDeleteBackend(ScriptedRelationalBackend):
@@ -2131,17 +2182,7 @@ def test_public_gate_rejects_incremental_delete_before_mutating_active_140(
                 self.pre_incremental_state = live._expand_indexed_authoring_projection(
                     active
                 )
-                referenced = {
-                    related_index
-                    for memory in active["memories"]
-                    for related_index in memory["related_memory_indices"]
-                }
-                delete_index = next(
-                    index
-                    for index in range(len(active["memories"]))
-                    if index not in referenced
-                )
-                value["existing_memory_cell_indices"][delete_index] = -1
+                value["delete_memory_ids"] = []
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
     backends: list[IncrementalDeleteBackend] = []
@@ -2154,7 +2195,7 @@ def test_public_gate_rejects_incremental_delete_before_mutating_active_140(
     state_dir = tmp_path / "incremental-delete"
     with pytest.raises(
         ContinualLiveError,
-        match="public gate compact patch cannot delete existing fixture memories",
+        match="object schema",
     ):
         run_public_schema_gate(
             backend_factory=backend_factory,
@@ -2178,7 +2219,7 @@ def test_public_gate_rejects_incremental_delete_before_mutating_active_140(
         store.close()
 
 
-def test_public_gate_rejects_wrong_existing_index_before_mutating_active_140(
+def test_public_gate_wrong_known_relation_is_diagnostic_only_and_commits(
     tmp_path: Path,
 ) -> None:
     class WrongExistingIndexBackend(ScriptedRelationalBackend):
@@ -2225,14 +2266,17 @@ def test_public_gate_rejects_wrong_existing_index_before_mutating_active_140(
         return backend
 
     state_dir = tmp_path / "wrong-existing-index"
-    with pytest.raises(
-        ContinualLiveError,
-        match="new relation is not content-composable",
-    ):
-        run_public_schema_gate(
-            backend_factory=backend_factory,
-            state_dir=state_dir,
-        )
+    result = run_public_schema_gate(
+        backend_factory=backend_factory,
+        state_dir=state_dir,
+    )
+    assert result["valid"] is True
+    diagnostic = result["relation_quality_diagnostics"][1]
+    assert diagnostic["diagnostic_only"] is True
+    assert diagnostic["acceptance_effect"] is False
+    assert diagnostic["exact_match"] is False
+    assert diagnostic["false_positive_count"] > 0
+    assert diagnostic["false_negative_count"] > 0
     structured_backend = backends[0]
     assert structured_backend.author_calls == 2
     assert structured_backend.pre_incremental_state is not None
@@ -2242,16 +2286,144 @@ def test_public_gate_rejects_wrong_existing_index_before_mutating_active_140(
     )
     try:
         active = store.active_snapshot()
-        assert active.generation == 2
-        assert active.snapshot.canonical() == structured_backend.pre_incremental_state
-        assert len(active.snapshot.memories) == 140
-        assert store.token_count() == 140
-        assert store.activation_count() == 2
+        assert active.generation == 3
+        assert active.snapshot.canonical() != structured_backend.pre_incremental_state
+        assert len(active.snapshot.memories) == 144
+        assert store.token_count() == 144
+        assert store.activation_count() == 3
     finally:
         store.close()
 
 
-def test_public_relation_validator_uses_content_not_shuffled_index_order(
+def test_public_gate_wrong_valid_probe_choice_is_diagnostic_only(
+    tmp_path: Path,
+) -> None:
+    class WrongProbeBackend(ScriptedRelationalBackend):
+        @staticmethod
+        def _answer(payload: Mapping[str, Any]) -> str:
+            return json.dumps(
+                {"choice": payload["probe"]["choices"][0]},
+                sort_keys=True,
+                separators=(",", ":"),
+            )
+
+    result = run_public_schema_gate(
+        backend_factory=WrongProbeBackend,
+        state_dir=tmp_path / "wrong-probe",
+    )
+    assert result["valid"] is True
+    assert result["probe_correct"] is False
+    assert result["probe_correctness_diagnostic_only"] is True
+    assert result["probe_choice"] != live.public_schema_gate_fixture()[
+        "probe_answer"
+    ]
+    assert result["before_probe_state_sha256"] == result[
+        "after_probe_state_sha256"
+    ]
+
+
+def test_public_gate_diagnostic_binding_swap_is_rejected_even_when_rehashed(
+    tmp_path: Path,
+) -> None:
+    result = run_public_schema_gate(
+        backend_factory=ScriptedRelationalBackend,
+        state_dir=tmp_path / "swapped-diagnostic-binding",
+    )
+    diagnostics = json.loads(json.dumps(result["relation_quality_diagnostics"]))
+    bindings = [diagnostic["update_binding"] for diagnostic in diagnostics]
+    diagnostics[0]["update_binding"] = bindings[1]
+    diagnostics[1]["update_binding"] = bindings[0]
+    for diagnostic in diagnostics:
+        unsigned = dict(diagnostic)
+        unsigned.pop("bound_diagnostic_sha256")
+        diagnostic["bound_diagnostic_sha256"] = live.canonical_sha256(unsigned)
+    with pytest.raises(
+        ContinualLiveError,
+        match="update ordinal drifted|update pairing drifted",
+    ):
+        live._validate_public_gate_diagnostic_pairing(
+            diagnostics,
+            result["structure_compilation_receipts"],
+            (
+                result["warmup_update_receipt_sha256"],
+                result["incremental_update_receipt_sha256"],
+            ),
+        )
+
+
+def test_rehashed_structure_receipt_semantic_tamper_is_rejected(
+    tmp_path: Path,
+) -> None:
+    result = run_public_schema_gate(
+        backend_factory=ScriptedRelationalBackend,
+        state_dir=tmp_path / "receipt-semantic-tamper",
+    )
+    keep_receipt = result["structure_compilation_receipts"][1]
+
+    def rehash(value: Mapping[str, Any]) -> dict[str, Any]:
+        unsigned = dict(value)
+        unsigned.pop("receipt_sha256", None)
+        return {**unsigned, "receipt_sha256": live.canonical_sha256(unsigned)}
+
+    routing_tamper = rehash({**keep_receipt, "routing_preserved": False})
+    with pytest.raises(ContinualLiveError, match="preservation invariant drifted"):
+        live._validate_structure_compilation_receipt(routing_tamper)
+
+    count_tamper = rehash(
+        {
+            **keep_receipt,
+            "stored_relation_count": keep_receipt["stored_relation_count"] + 1,
+        }
+    )
+    with pytest.raises(ContinualLiveError, match="core mode drifted"):
+        live._validate_structure_compilation_receipt(count_tamper)
+
+    hash_tamper = rehash(
+        {**keep_receipt, "stored_relation_canonical_set_sha256": "0" * 64}
+    )
+    with pytest.raises(ContinualLiveError, match="core mode drifted"):
+        live._validate_structure_compilation_receipt(hash_tamper)
+
+
+def test_rehashed_relation_diagnostic_arithmetic_tamper_is_rejected(
+    tmp_path: Path,
+) -> None:
+    result = run_public_schema_gate(
+        backend_factory=ScriptedRelationalBackend,
+        state_dir=tmp_path / "diagnostic-arithmetic-tamper",
+    )
+    original = result["relation_quality_diagnostics"][0]
+
+    def rehash(value: Mapping[str, Any]) -> dict[str, Any]:
+        working = json.loads(json.dumps(value))
+        binding = working.pop("update_binding")
+        working.pop("bound_diagnostic_sha256")
+        working.pop("diagnostic_sha256")
+        working["diagnostic_sha256"] = live.canonical_sha256(working)
+        working["update_binding"] = binding
+        unsigned_bound = dict(working)
+        return {
+            **working,
+            "bound_diagnostic_sha256": live.canonical_sha256(unsigned_bound),
+        }
+
+    count_value = json.loads(json.dumps(original))
+    count_value["true_positive_count"] += 1
+    with pytest.raises(ContinualLiveError, match="confusion counts drifted"):
+        live._validate_relation_quality_diagnostic(rehash(count_value))
+
+    ratio_value = json.loads(json.dumps(original))
+    ratio_value["precision"]["value"] = None
+    with pytest.raises(ContinualLiveError, match="ratio arithmetic drifted"):
+        live._validate_relation_quality_diagnostic(rehash(ratio_value))
+
+    exact_value = json.loads(json.dumps(original))
+    exact_value["exact_match"] = False
+    with pytest.raises(ContinualLiveError, match="confusion counts drifted"):
+        live._validate_relation_quality_diagnostic(rehash(exact_value))
+
+
+def test_public_relation_diagnostic_uses_content_not_shuffled_index_order(
     tmp_path: Path,
 ) -> None:
     summaries: list[dict[str, Any]] = []
@@ -2262,7 +2434,7 @@ def test_public_relation_validator_uses_content_not_shuffled_index_order(
         active: Any,
     ) -> None:
         summaries.append(
-            live._validate_public_gate_agent_relations(
+            live._public_gate_relation_quality_diagnostic(
                 proposal, source_tokens, active
             )
         )
@@ -2288,8 +2460,14 @@ def test_public_relation_validator_uses_content_not_shuffled_index_order(
         )
     )
     assert len(summaries) == 1
+    assert summaries[0]["diagnostic_only"] is True
+    assert summaries[0]["acceptance_effect"] is False
     assert summaries[0]["expected_relation_count"] == 2
     assert summaries[0]["observed_relation_count"] == 2
+    live._validate_relation_quality_diagnostic(summaries[0])
+    tampered = {**summaries[0], "diagnostic_sha256": "0" * 64}
+    with pytest.raises(ContinualLiveError, match="diagnostic digest mismatch"):
+        live._validate_relation_quality_diagnostic(tampered)
     snapshot = arm.store.active_snapshot().snapshot
     by_source = {memory.content["source"]: memory for memory in snapshot.memories}
     assert by_source["node-x"].related_memory_ids == (
@@ -2299,6 +2477,46 @@ def test_public_relation_validator_uses_content_not_shuffled_index_order(
         by_source["node-b"].memory_id,
     )
     assert by_source["node-b"].related_memory_ids == ()
+
+
+def test_public_relation_diagnostic_uses_null_for_zero_denominators(
+    tmp_path: Path,
+) -> None:
+    diagnostics: list[dict[str, Any]] = []
+
+    def record(
+        proposal: Any,
+        source_tokens: Sequence[Mapping[str, Any]],
+        active: Any,
+    ) -> None:
+        diagnostics.append(
+            live._public_gate_relation_quality_diagnostic(
+                proposal, source_tokens, active
+            )
+        )
+
+    arm = StructuredHSWMArm(
+        backend=ScriptedRelationalBackend(),
+        budget=_budget(),
+        isolation_id="zero-relation-denominators",
+        store_path=tmp_path / "state.sqlite3",
+        proposal_validator=record,
+    )
+    arm.update(_one_token_batch())
+    assert len(diagnostics) == 1
+    diagnostic = diagnostics[0]
+    assert diagnostic["expected_relation_count"] == 0
+    assert diagnostic["observed_relation_count"] == 0
+    assert diagnostic["precision"] == {
+        "denominator": 0,
+        "numerator": 0,
+        "value": None,
+    }
+    assert diagnostic["recall"] == {
+        "denominator": 0,
+        "numerator": 0,
+        "value": None,
+    }
 
 
 @pytest.mark.parametrize(
@@ -3614,11 +3832,13 @@ def test_public_schema_gate_cli_has_no_seed_path_and_binds_artifacts(
     assert result["outbound_http_requests_observed"] == 8
     prereg = json.loads((output / "gate_preregistration.json").read_text())
     assert prereg["no_precommit_or_seed_path"] is True
-    assert prereg["protocol"] == "hswm-public-schema-gate/v6"
+    assert prereg["protocol"] == "hswm-public-schema-gate/v7"
     assert prereg["indexed_authoring_view_schema"] == (
         "hswm-indexed-authoring-view/v1"
     )
-    assert prereg["mutation_expressivity"] == "compact-adapter-subset"
+    assert prereg["mutation_expressivity"] == (
+        "full-author-then-keep-routing-append/v1"
+    )
     assert prereg["provider_context_window_tokens"] == 32768
     assert prereg["max_update_input_tokens"] == 26624
     assert prereg["update_max_tokens"] == 6144

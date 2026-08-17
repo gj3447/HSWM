@@ -5,9 +5,10 @@ binds four stateless-chat conditions to :func:`continual.run_prequential`:
 
 ``hswm``
     The adapter materializes fixed public-token content and provenance while
-    the model authors memory relations, cells, and routing edges in an
-    empty-genesis :class:`SQLiteSelfModelStore`.  The committed HSWM structure
-    is itself the persistent execution substrate.
+    the model authors a fixed sixteen-cell topology at empty genesis, then
+    appends later memories to agent-selected persistent cells without rewriting
+    routing.  The committed HSWM structure is itself the persistent execution
+    substrate.
 ``reset``
     The same structured proposal is parsed and checked, then discarded.  The
     active snapshot is exact genesis at every probe.
@@ -83,14 +84,18 @@ from .continual import (
 LIVE_PROTOCOL = "hswm-continual-live/v1"
 AUTHOR_ID = "agent:continual-memory-author"
 CAPABILITY = "nonce_graph_lookup"
-COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v5"
+COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v6"
 INDEXED_AUTHORING_VIEW_SCHEMA = "hswm-indexed-authoring-view/v1"
-MUTATION_EXPRESSIVITY = "compact-adapter-subset"
+MUTATION_EXPRESSIVITY = "full-author-then-keep-routing-append/v1"
+FULL_AUTHOR_MODE = "FULL_AUTHOR"
+KEEP_ROUTING_APPEND_MODE = "KEEP_ROUTING_APPEND_MEMBERSHIP"
+STRUCTURE_COMPILATION_RECEIPT_SCHEMA = "hswm-structure-compilation-receipt/v1"
+RELATION_QUALITY_DIAGNOSTIC_SCHEMA = "hswm-relation-quality-diagnostic/v1"
 PUBLIC_SCHEMA_GATE_FIXTURE_DOMAIN = "hswm-public-schema-gate/v3"
 PUBLIC_SCHEMA_GATE_FIXTURE_COMPACT_PATCH_SCHEMA = (
     "hswm-compact-structure-patch/v3"
 )
-PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v6"
+PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v7"
 PUBLIC_SCHEMA_GATE_EPISODE = "public-schema-gate-never-evaluation"
 PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS = 32_768
 PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING = 6144
@@ -1357,15 +1362,30 @@ def _index_item_schema(count: int) -> dict[str, Any]:
     return {"maximum": count - 1, "minimum": 0, "type": "integer"}
 
 
+def _structure_authoring_mode(active: SelfModelSnapshot) -> str:
+    if active.snapshot_id == GENESIS.snapshot_id:
+        if active.memories or active.cells or active.entry_cell_id is not None:
+            raise ContinualLiveError("genesis identity carries non-empty HSWM state")
+        return FULL_AUTHOR_MODE
+    if not active.memories or not active.cells or active.entry_cell_id is None:
+        raise ContinualLiveError(
+            "non-genesis compact authoring requires persistent cells and memories"
+        )
+    return KEEP_ROUTING_APPEND_MODE
+
+
 def _compact_patch_response_schema(
     active: SelfModelSnapshot,
     source_tokens: Sequence[Mapping[str, Any]],
     policy: SelfModelPolicy,
+    *,
+    generation: int,
 ) -> JSONSchemaContract:
+    if isinstance(generation, bool) or not isinstance(generation, int) or generation < 0:
+        raise ContinualLiveError("compact response schema requires active generation")
     source_count = len(source_tokens)
     if source_count <= 0:
         raise ContinualLiveError("compact response schema requires public tokens")
-    active_count = len(active.memories)
     active_ids = tuple(memory.memory_id for memory in active.memories)
     try:
         new_ids = tuple(item["suggested_memory_id"] for item in source_tokens)
@@ -1381,27 +1401,6 @@ def _compact_patch_response_schema(
         raise ContinualLiveError(
             "compact response schema requires unique memory-id relation targets"
         )
-    cell_index_items = {
-        "maximum": min(policy.max_cells, MAX_AUTHORED_CELLS) - 1,
-        "minimum": 0,
-        "type": "integer",
-    }
-    cell_edge_array = {
-        "items": cell_index_items,
-        "maxItems": MAX_CELL_EDGES,
-        "type": "array",
-    }
-    cell = _strict_json_object(
-        {
-            "capability": {"const": CAPABILITY, "type": "string"},
-            "cell_id": _string_schema(max_length=MAX_CELL_ID_CHARS),
-            "executor_agent_id": {"type": "null"},
-            "instruction": _string_schema(
-                max_length=MAX_CELL_INSTRUCTION_CHARS
-            ),
-            "next_cell_indices": cell_edge_array,
-        }
-    )
     memory_relation = _strict_json_object(
         {
             "related_memory_ids": {
@@ -1417,41 +1416,88 @@ def _compact_patch_response_schema(
             },
         }
     )
+    common: dict[str, Any] = {
+        "base_generation": {
+            "const": generation,
+            "maximum": generation,
+            "minimum": generation,
+            "type": "integer",
+        },
+        "base_snapshot_id": {"const": active.snapshot_id, "type": "string"},
+    }
+    relation_vector = {
+        "items": memory_relation,
+        "maxItems": source_count,
+        "minItems": source_count,
+        "type": "array",
+    }
+    mode = _structure_authoring_mode(active)
+    if mode == FULL_AUTHOR_MODE:
+        if policy.max_cells < MAX_AUTHORED_CELLS:
+            raise ContinualLiveError(
+                "FULL_AUTHOR requires authority for exactly sixteen cells"
+            )
+        cell_index_items = {
+            "maximum": MAX_AUTHORED_CELLS - 1,
+            "minimum": 0,
+            "type": "integer",
+        }
+        cell = _strict_json_object(
+            {
+                "capability": {"const": CAPABILITY, "type": "string"},
+                "cell_id": _string_schema(max_length=MAX_CELL_ID_CHARS),
+                "executor_agent_id": {"type": "null"},
+                "instruction": _string_schema(
+                    max_length=MAX_CELL_INSTRUCTION_CHARS
+                ),
+                "next_cell_indices": {
+                    "items": cell_index_items,
+                    "maxItems": MAX_CELL_EDGES,
+                    "type": "array",
+                },
+            }
+        )
+        schema = _strict_json_object(
+            {
+                **common,
+                "cells": {
+                    "items": cell,
+                    "maxItems": MAX_AUTHORED_CELLS,
+                    "minItems": MAX_AUTHORED_CELLS,
+                    "type": "array",
+                },
+                "entry_cell_index": cell_index_items,
+                "mode": {"const": FULL_AUTHOR_MODE, "type": "string"},
+                "new_memory_cell_indices": {
+                    "items": cell_index_items,
+                    "maxItems": source_count,
+                    "minItems": source_count,
+                    "type": "array",
+                },
+                "new_memory_relations": relation_vector,
+                "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
+            }
+        )
+        return JSONSchemaContract.make("hswm_full_author_patch_v1", schema)
+
+    active_cell_ids = tuple(cell.cell_id for cell in active.cells)
+    if len(active_cell_ids) != len(set(active_cell_ids)):
+        raise ContinualLiveError("KEEP routing requires unique active cell ids")
     schema = _strict_json_object(
         {
-            "cells": {
-                "items": cell,
-                "maxItems": min(policy.max_cells, MAX_AUTHORED_CELLS),
-                "minItems": 1,
-                "type": "array",
-            },
-            "entry_cell_index": cell_index_items,
-            "existing_memory_cell_indices": {
-                "items": {
-                    "maximum": cell_index_items["maximum"],
-                    "minimum": -1,
-                    "type": "integer",
-                },
-                "maxItems": active_count,
-                "minItems": active_count,
-                "type": "array",
-            },
-            "new_memory_cell_indices": {
-                "items": cell_index_items,
+            **common,
+            "mode": {"const": KEEP_ROUTING_APPEND_MODE, "type": "string"},
+            "new_memory_cell_ids": {
+                "items": {"enum": list(active_cell_ids), "type": "string"},
                 "maxItems": source_count,
                 "minItems": source_count,
                 "type": "array",
             },
-            "new_memory_relations": {
-                "items": memory_relation,
-                "maxItems": source_count,
-                "minItems": source_count,
-                "type": "array",
-            },
+            "new_memory_relations": relation_vector,
             "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
         }
     )
-    return JSONSchemaContract.make("hswm_compact_patch_v5", schema)
+    return JSONSchemaContract.make("hswm_keep_routing_append_patch_v1", schema)
 
 
 def _plain_memory_response_schema() -> JSONSchemaContract:
@@ -2482,37 +2528,26 @@ def _parse_structure_proposal(
     policy: SelfModelPolicy,
 ) -> MutationProposal:
     value = _strict_object(text)
-    if set(value) != {
-        "cells",
-        "entry_cell_index",
-        "existing_memory_cell_indices",
-        "new_memory_cell_indices",
-        "new_memory_relations",
-        "rationale",
-    }:
-        raise ContinualLiveError("compact structured update field set is invalid")
-    if not all(
-        isinstance(value[item], list)
-        for item in (
-            "cells",
-            "existing_memory_cell_indices",
-            "new_memory_cell_indices",
-            "new_memory_relations",
-        )
+    mode = _structure_authoring_mode(active)
+    _compact_patch_response_schema(
+        active,
+        source_tokens,
+        policy,
+        generation=generation,
+    ).validate_instance(value)
+    if value.get("mode") != mode:
+        raise ContinualLiveError("compact structured update authoring mode drifted")
+    if (
+        value.get("base_snapshot_id") != active.snapshot_id
+        or value.get("base_generation") != generation
     ):
-        raise ContinualLiveError("compact structured update list field is invalid")
-    _compact_patch_response_schema(active, source_tokens, policy).validate_instance(
-        value
-    )
+        raise ContinualLiveError("compact structured update base binding drifted")
     if (
         not isinstance(value["rationale"], str)
         or not value["rationale"].strip()
         or len(value["rationale"]) > MAX_RATIONALE_CHARS
     ):
         raise ContinualLiveError("structured update requires a rationale")
-    cell_count = len(value["cells"])
-    if not 1 <= cell_count <= min(policy.max_cells, MAX_AUTHORED_CELLS):
-        raise ContinualLiveError("compact patch exceeds the authored cell bound")
     try:
         source_ids = tuple(item["token_id"] for item in source_tokens)
         new_ids = tuple(item["suggested_memory_id"] for item in source_tokens)
@@ -2535,6 +2570,50 @@ def _parse_structure_proposal(
     ):
         raise ContinualLiveError("new deterministic memory ids collide with HSWM state")
 
+    relation_fields = {"related_memory_ids"}
+    if not isinstance(value["new_memory_relations"], list) or len(
+        value["new_memory_relations"]
+    ) != len(source_tokens):
+        raise ContinualLiveError(
+            "new_memory_relations must have one ordered item per public token"
+        )
+    allowed_target_ids = set(active_ids) | set(new_ids)
+    parsed_relations: list[tuple[str, ...]] = []
+    for source_index, item in enumerate(value["new_memory_relations"]):
+        if not isinstance(item, Mapping) or set(item) != relation_fields:
+            raise ContinualLiveError("new_memory_relations item field set is invalid")
+        related_value = item["related_memory_ids"]
+        if not isinstance(related_value, list) or any(
+            not isinstance(memory_id, str) for memory_id in related_value
+        ):
+            raise ContinualLiveError("related_memory_ids must contain memory-id strings")
+        related_memory_ids = tuple(related_value)
+        if (
+            len(related_memory_ids) > MAX_RELATED_MEMORY_IDS
+            or len(related_memory_ids) != len(set(related_memory_ids))
+            or any(memory_id not in allowed_target_ids for memory_id in related_memory_ids)
+        ):
+            raise ContinualLiveError(
+                "related_memory_ids contains duplicate or unknown memory ids"
+            )
+        if new_ids[source_index] in related_memory_ids:
+            raise ContinualLiveError(
+                "related_memory_ids cannot contain the source memory id"
+            )
+        parsed_relations.append(related_memory_ids)
+
+    memories = tuple(
+        MemoryRecord(
+            memory_id=new_ids[source_index],
+            kind="atomic_relation",
+            content=source_token["content"],
+            source_token_ids=(source_ids[source_index],),
+            related_memory_ids=parsed_relations[source_index],
+            labels=("agent-organized",),
+        )
+        for source_index, source_token in enumerate(source_tokens)
+    )
+
     def index_list(
         items: object,
         label: str,
@@ -2552,200 +2631,120 @@ def _parse_structure_proposal(
             raise ContinualLiveError(f"{label} contains duplicate or unknown indexes")
         return indexes
 
-    cell_fields = {
-        "capability",
-        "cell_id",
-        "executor_agent_id",
-        "instruction",
-        "next_cell_indices",
-    }
-    cell_specs: list[tuple[str, str, tuple[int, ...]]] = []
-    for item in value["cells"]:
-        if not isinstance(item, Mapping) or set(item) != cell_fields:
-            raise ContinualLiveError("compact cell field set is invalid")
-        if (
-            not isinstance(item["cell_id"], str)
-            or not item["cell_id"]
-            or len(item["cell_id"]) > MAX_CELL_ID_CHARS
-            or item["capability"] != CAPABILITY
-            or not isinstance(item["instruction"], str)
-            or not item["instruction"]
-            or len(item["instruction"]) > MAX_CELL_INSTRUCTION_CHARS
-        ):
-            raise ContinualLiveError("compact cell text or capability is invalid")
-        if item["executor_agent_id"] is not None:
-            raise ContinualLiveError("compact cells cannot delegate hidden execution")
-        next_cell_indices = index_list(
-            item["next_cell_indices"],
-            "cell next_cell_indices",
-            upper_bound=cell_count,
-        )
-        if len(next_cell_indices) > MAX_CELL_EDGES:
-            raise ContinualLiveError("compact cell edge list exceeds its bound")
-        cell_specs.append(
-            (item["cell_id"], item["instruction"], next_cell_indices)
-        )
-    cell_ids = tuple(item[0] for item in cell_specs)
-    if len(cell_ids) != len(set(cell_ids)):
-        raise ContinualLiveError("compact cell ids must be unique")
-    entry_cell_index = value["entry_cell_index"]
-    if (
-        isinstance(entry_cell_index, bool)
-        or not isinstance(entry_cell_index, int)
-        or entry_cell_index < 0
-        or entry_cell_index >= cell_count
-    ):
-        raise ContinualLiveError("entry_cell_index cites an unknown cell")
-
-    def assignment_vector(
-        items: object,
-        label: str,
-        *,
-        expected_length: int,
-        allow_delete: bool,
-    ) -> tuple[int, ...]:
-        if (
-            not isinstance(items, list)
-            or len(items) != expected_length
-            or any(isinstance(item, bool) or not isinstance(item, int) for item in items)
-        ):
-            raise ContinualLiveError(f"{label} must have its exact aligned length")
-        assignments = tuple(items)
-        minimum = -1 if allow_delete else 0
-        if any(item < minimum or item >= cell_count for item in assignments):
-            raise ContinualLiveError(f"{label} cites an unknown cell")
-        return assignments
-
-    existing_assignments = assignment_vector(
-        value["existing_memory_cell_indices"],
-        "existing_memory_cell_indices",
-        expected_length=len(active_memories),
-        allow_delete=True,
-    )
-    new_assignments = assignment_vector(
-        value["new_memory_cell_indices"],
-        "new_memory_cell_indices",
-        expected_length=len(source_tokens),
-        allow_delete=False,
-    )
-    delete_ids = tuple(
-        active_ids[index]
-        for index, assignment in enumerate(existing_assignments)
-        if assignment == -1
-    )
-    deleted_ids = set(delete_ids)
-    for index, memory in enumerate(active_memories):
-        if existing_assignments[index] != -1 and (
-            set(memory.related_memory_ids) & deleted_ids
-        ):
-            raise ContinualLiveError(
-                "cannot delete an existing memory still referenced by surviving state"
-            )
-
-    relation_fields = {"related_memory_ids"}
-    if len(value["new_memory_relations"]) != len(source_tokens):
-        raise ContinualLiveError(
-            "new_memory_relations must have one ordered item per public token"
-        )
-    target_content_by_id: dict[str, Mapping[str, Any]] = {}
-    for memory in active_memories:
-        if not isinstance(memory.content, Mapping):
-            raise ContinualLiveError("existing relation content is not an object")
-        target_content_by_id[memory.memory_id] = memory.content
-    for memory_id, source_token in zip(new_ids, source_tokens, strict=True):
-        content = source_token.get("content")
-        if not isinstance(content, Mapping):
-            raise ContinualLiveError("public relation content is not an object")
-        target_content_by_id[memory_id] = content
-    allowed_target_ids = set(target_content_by_id)
-    parsed_relations: list[tuple[str, ...]] = []
-    for source_index, item in enumerate(value["new_memory_relations"]):
-        if not isinstance(item, Mapping) or set(item) != relation_fields:
-            raise ContinualLiveError("new_memory_relations item field set is invalid")
-        related_value = item["related_memory_ids"]
-        if (
-            not isinstance(related_value, list)
-            or any(not isinstance(memory_id, str) for memory_id in related_value)
-        ):
-            raise ContinualLiveError("related_memory_ids must contain memory-id strings")
-        related_memory_ids = tuple(related_value)
-        if (
-            len(related_memory_ids) > MAX_RELATED_MEMORY_IDS
-            or len(related_memory_ids) != len(set(related_memory_ids))
-            or any(
-                memory_id not in allowed_target_ids
-                for memory_id in related_memory_ids
-            )
-        ):
-            raise ContinualLiveError(
-                "related_memory_ids contains duplicate or unknown memory ids"
-            )
-        source_memory_id = new_ids[source_index]
-        if source_memory_id in related_memory_ids:
-            raise ContinualLiveError(
-                "related_memory_ids cannot contain the source memory id"
-            )
-        source_content = source_tokens[source_index]["content"]
-        if not isinstance(source_content, Mapping):
-            raise ContinualLiveError("public relation content is not an object")
-        source_target = source_content.get("target")
-        for target_memory_id in related_memory_ids:
-            if target_memory_id in deleted_ids:
-                raise ContinualLiveError("new relation targets a deleted existing memory")
-            target_content = target_content_by_id[target_memory_id]
+    if mode == FULL_AUTHOR_MODE:
+        cell_count = len(value["cells"])
+        if cell_count != MAX_AUTHORED_CELLS:
+            raise ContinualLiveError("FULL_AUTHOR requires exactly sixteen cells")
+        cell_fields = {
+            "capability",
+            "cell_id",
+            "executor_agent_id",
+            "instruction",
+            "next_cell_indices",
+        }
+        cell_specs: list[tuple[str, str, tuple[int, ...]]] = []
+        for item in value["cells"]:
+            if not isinstance(item, Mapping) or set(item) != cell_fields:
+                raise ContinualLiveError("compact cell field set is invalid")
             if (
-                not isinstance(target_content, Mapping)
-                or source_target != target_content.get("source")
+                not isinstance(item["cell_id"], str)
+                or not item["cell_id"]
+                or len(item["cell_id"]) > MAX_CELL_ID_CHARS
+                or item["capability"] != CAPABILITY
+                or not isinstance(item["instruction"], str)
+                or not item["instruction"]
+                or len(item["instruction"]) > MAX_CELL_INSTRUCTION_CHARS
             ):
-                raise ContinualLiveError("new relation is not content-composable")
-        parsed_relations.append(related_memory_ids)
-
-    memories = tuple(
-        MemoryRecord(
-            memory_id=new_ids[source_index],
-            kind="atomic_relation",
-            content=source_token["content"],
-            source_token_ids=(source_ids[source_index],),
-            related_memory_ids=parsed_relations[source_index],
-            labels=("agent-organized",),
-        )
-        for source_index, source_token in enumerate(source_tokens)
-    )
-    cells = tuple(
-        CellRecord(
-            cell_id=cell_ids[cell_index],
-            capability=CAPABILITY,
-            instruction=cell_specs[cell_index][1],
-            memory_ids=(
-                tuple(
-                    active_ids[index]
-                    for index, assignment in enumerate(existing_assignments)
+                raise ContinualLiveError("compact cell text or capability is invalid")
+            if item["executor_agent_id"] is not None:
+                raise ContinualLiveError("compact cells cannot delegate hidden execution")
+            next_indices = index_list(
+                item["next_cell_indices"],
+                "cell next_cell_indices",
+                upper_bound=cell_count,
+            )
+            if len(next_indices) > MAX_CELL_EDGES:
+                raise ContinualLiveError("compact cell edge list exceeds its bound")
+            cell_specs.append((item["cell_id"], item["instruction"], next_indices))
+        cell_ids = tuple(item[0] for item in cell_specs)
+        if len(cell_ids) != len(set(cell_ids)):
+            raise ContinualLiveError("compact cell ids must be unique")
+        entry_cell_index = value["entry_cell_index"]
+        if (
+            isinstance(entry_cell_index, bool)
+            or not isinstance(entry_cell_index, int)
+            or entry_cell_index < 0
+            or entry_cell_index >= cell_count
+        ):
+            raise ContinualLiveError("entry_cell_index cites an unknown cell")
+        assignments = value["new_memory_cell_indices"]
+        if (
+            not isinstance(assignments, list)
+            or len(assignments) != len(new_ids)
+            or any(isinstance(item, bool) or not isinstance(item, int) for item in assignments)
+            or any(item < 0 or item >= cell_count for item in assignments)
+        ):
+            raise ContinualLiveError(
+                "new_memory_cell_indices must have its exact aligned length"
+            )
+        cells = tuple(
+            CellRecord(
+                cell_id=cell_ids[cell_index],
+                capability=CAPABILITY,
+                instruction=cell_specs[cell_index][1],
+                memory_ids=tuple(
+                    new_ids[index]
+                    for index, assignment in enumerate(assignments)
                     if assignment == cell_index
-                )
+                ),
+                next_cell_ids=tuple(
+                    cell_ids[index] for index in cell_specs[cell_index][2]
+                ),
+                executor_agent_id=None,
+            )
+            for cell_index in range(cell_count)
+        )
+        reachable: set[int] = set()
+        queue = [entry_cell_index]
+        while queue:
+            cell_index = queue.pop(0)
+            if cell_index in reachable:
+                continue
+            reachable.add(cell_index)
+            queue.extend(cell_specs[cell_index][2])
+        if reachable != set(range(cell_count)):
+            raise ContinualLiveError("every compact cell must be reachable from entry")
+        entry_cell_id = cell_ids[entry_cell_index]
+    else:
+        placements = value["new_memory_cell_ids"]
+        if (
+            not isinstance(placements, list)
+            or len(placements) != len(new_ids)
+            or any(not isinstance(item, str) for item in placements)
+        ):
+            raise ContinualLiveError(
+                "new_memory_cell_ids must have its exact aligned length"
+            )
+        active_cell_ids = {cell.cell_id for cell in active.cells}
+        if any(cell_id not in active_cell_ids for cell_id in placements):
+            raise ContinualLiveError("new_memory_cell_ids cites an unknown active cell")
+        cells = tuple(
+            CellRecord(
+                cell_id=cell.cell_id,
+                capability=cell.capability,
+                instruction=cell.instruction,
+                memory_ids=cell.memory_ids
                 + tuple(
                     new_ids[index]
-                    for index, assignment in enumerate(new_assignments)
-                    if assignment == cell_index
-                )
-            ),
-            next_cell_ids=tuple(
-                cell_ids[index] for index in cell_specs[cell_index][2]
-            ),
-            executor_agent_id=None,
+                    for index, cell_id in enumerate(placements)
+                    if cell_id == cell.cell_id
+                ),
+                next_cell_ids=cell.next_cell_ids,
+                executor_agent_id=cell.executor_agent_id,
+            )
+            for cell in active.cells
         )
-        for cell_index in range(cell_count)
-    )
-
-    reachable: set[int] = set()
-    queue = [entry_cell_index]
-    while queue:
-        cell_index = queue.pop(0)
-        if cell_index in reachable:
-            continue
-        reachable.add(cell_index)
-        queue.extend(cell_specs[cell_index][2])
-    if reachable != set(range(cell_count)):
-        raise ContinualLiveError("every compact cell must be reachable from entry")
+        entry_cell_id = active.entry_cell_id
 
     proposal = make_mutation(
         base_snapshot_id=active.snapshot_id,
@@ -2753,10 +2752,10 @@ def _parse_structure_proposal(
         author_id=AUTHOR_ID,
         source_token_ids=source_ids,
         upsert_memories=memories,
-        delete_memory_ids=tuple(delete_ids),
+        delete_memory_ids=(),
         cell_topology_mode=CellTopologyMode.REPLACE,
         cells=cells,
-        entry_cell_id=cell_ids[entry_cell_index],
+        entry_cell_id=entry_cell_id,
         rationale=value["rationale"],
     )
     # H/R/N all run the same materialization, contract, and policy check.
@@ -2776,61 +2775,109 @@ def _structure_update_payload(
         active=active,
         generation=generation,
     )
+    mode = _structure_authoring_mode(active)
+    common_contract: dict[str, Any] = {
+        "base_generation": generation,
+        "base_snapshot_id": active.snapshot_id,
+        "mode": mode,
+        "new_memory_relations": {
+            "exact_length": len(source_tokens),
+            "item_fields": ["related_memory_ids"],
+            "source_order": "public_source_tokens",
+            "target_domain": "active memory_id or new suggested_memory_id strings",
+        },
+        "rationale": "non-empty bounded string",
+    }
+    if mode == FULL_AUTHOR_MODE:
+        instruction = (
+            "This is exact empty genesis. Author the initial HSWM as exactly sixteen "
+            "reachable cells. The returned cells array defines cell indices; entry and "
+            "next indices cite only that array. Assign every new memory exactly once via "
+            "new_memory_cell_indices aligned with public_source_tokens."
+        )
+        mode_contract = {
+            **common_contract,
+            "cells": {
+                "exact_length": MAX_AUTHORED_CELLS,
+                "item_fields": [
+                    "capability",
+                    "cell_id",
+                    "executor_agent_id",
+                    "instruction",
+                    "next_cell_indices",
+                ],
+            },
+            "entry_cell_index": f"integer in [0,{MAX_AUTHORED_CELLS - 1}]",
+            "new_memory_cell_indices": {
+                "exact_length": len(source_tokens),
+                "item_domain": f"integer in [0,{MAX_AUTHORED_CELLS - 1}]",
+            },
+            "top_level_fields": [
+                "base_generation",
+                "base_snapshot_id",
+                "cells",
+                "entry_cell_index",
+                "mode",
+                "new_memory_cell_indices",
+                "new_memory_relations",
+                "rationale",
+            ],
+        }
+    else:
+        instruction = (
+            "The persistent HSWM routing already exists. Keep its entry cell, every "
+            "cell id, capability, instruction, executor, routing edge, and every old "
+            "memory membership byte-for-byte. Do not return or rewrite those fields. "
+            "For each new public token choose exactly one existing active cell_id in "
+            "new_memory_cell_ids. The adapter appends only those new memory IDs to the "
+            "chosen cells and transparently compiles this logical KEEP operation to the "
+            "core REPLACE representation. Deletion is forbidden."
+        )
+        mode_contract = {
+            **common_contract,
+            "new_memory_cell_ids": {
+                "exact_length": len(source_tokens),
+                "item_domain": "one exact active cell_id string",
+            },
+            "top_level_fields": [
+                "base_generation",
+                "base_snapshot_id",
+                "mode",
+                "new_memory_cell_ids",
+                "new_memory_relations",
+                "rationale",
+            ],
+        }
     return {
+        "authoring_mode": mode,
+        "base_generation": generation,
+        "base_snapshot_id": active.snapshot_id,
         "compact_patch_schema": COMPACT_PATCH_SCHEMA,
         "current_hswm_indexed_read_only": indexed_view,
         "instruction": (
-            "Author only the compact HSWM organization patch. The adapter copies each "
-            "public token's fixed content, id, and provenance into a MemoryRecord; you "
-            "must author every memory relation and the complete reachable cell routing "
-            "topology. The cells array order defines cell indices; entry_cell_index and "
-            "next_cell_indices refer only to that returned array. The exact-length "
-            "existing_memory_cell_indices vector aligns with the canonical "
-            "current_hswm_indexed_read_only.memories order: -1 deletes that memory and "
-            "every "
-            "other value is its chosen cell index. The exact-length "
-            "new_memory_cell_indices vector aligns with public_source_tokens order and "
-            "never permits -1. The new_memory_relations item at array position i has "
-            "public_source_tokens[i] as its SOURCE. Its related_memory_ids are direct "
-            "target MemoryRecord IDs: choose only a surviving existing memory_id or a "
-            "distinct new public token's suggested_memory_id. Never put a cell index, "
-            "token index, cell_id, or source memory's own suggested_memory_id in a "
-            "relation. OUTGOING rule: A.related_memory_ids contains B only when "
-            "A.content.target == B.content.source. A predecessor P satisfying "
-            "P.content.target == A.content.source is not an outgoing target. A shared "
-            "relation label and a cell assignment are forbidden evidence for a memory "
-            "relation. Cell-assignment vectors do not define memory relations. Use [] "
-            "rather than guess. Batches may be shuffled: never infer "
-            "relations from index, adjacency, or order. Do not reproduce HSWM, "
-            "MemoryRecord, or token JSON as "
-            "a substitute for vectors; a bounded cell instruction may name public "
-            "identifiers needed for routing. The indexed read-only view is a lossless "
-            "projection of HSWM itself, not a separate plan or harness document."
+            "Author only the bounded HSWM mutation described below. The adapter copies "
+            "each public token's fixed content, deterministic ID, and provenance into "
+            "one MemoryRecord. You author the ordered related_memory_ids for every new "
+            "memory. Relation targets must be known direct memory IDs, unique, bounded, "
+            "and never the source memory itself; semantic quality is not repaired or "
+            "used to accept, retry, prompt, or select a seed. Cell IDs and numeric "
+            "indices are never memory relation IDs. "
+            + instruction
+            + " The indexed view is a lossless projection of HSWM itself, not a "
+            "separate plan or harness document."
         ),
         "index_alignment": {
-            "cell_indices": "returned cells array order",
             "existing_memory_count": len(active.memories),
-            "existing_memory_indices": (
-                "current_hswm_indexed_read_only.memories canonical active order"
-            ),
             "new_memory_count": len(source_tokens),
             "new_memory_indices": "public_source_tokens array order",
             "relation_source": "new_memory_relations array position",
-            "relation_targets": (
-                "direct existing memory_id or new suggested_memory_id strings"
-            ),
+            "relation_targets": "direct active or new memory-id strings",
         },
         "output_bounds": {
             "cell_id_max_chars": MAX_CELL_ID_CHARS,
             "cell_instruction_max_chars": MAX_CELL_INSTRUCTION_CHARS,
-            "cells_max": MAX_AUTHORED_CELLS,
+            "full_author_cell_count": MAX_AUTHORED_CELLS,
             "memory_relations_max_per_memory": MAX_RELATED_MEMORY_IDS,
-            "new_memory_relation_semantics": (
-                "relation array position is source A; related_memory_ids contains "
-                "target B only when A.content.target == B.content.source; predecessor, "
-                "shared-label, cell-assignment, and cell/token-index evidence are "
-                "forbidden; self-reference forbidden; [] means no justified target"
-            ),
             "next_cells_max_per_cell": MAX_CELL_EDGES,
             "rationale_max_chars": MAX_RATIONALE_CHARS,
             "single_cell_assignment_per_memory": True,
@@ -2842,42 +2889,428 @@ def _structure_update_payload(
             {**dict(item), "token_index": index}
             for index, item in enumerate(source_tokens)
         ],
-        "response_contract": {
-            "cells_item_fields": [
-                "capability",
-                "cell_id",
-                "executor_agent_id",
-                "instruction",
-                "next_cell_indices",
-            ],
-            "existing_memory_cell_indices": {
-                "exact_length": len(active.memories),
-                "item_domain": "-1 or a valid returned-cell index",
-                "source_order": "current_hswm_indexed_read_only.memories",
-            },
-            "new_memory_cell_indices": {
-                "exact_length": len(source_tokens),
-                "item_domain": "a valid returned-cell index; -1 forbidden",
-                "source_order": "public_source_tokens",
-            },
-            "new_memory_relations": {
-                "exact_length": len(source_tokens),
-                "item_fields": ["related_memory_ids"],
-                "source_order": "public_source_tokens",
-                "target_domain": (
-                    "existing memory_id or new suggested_memory_id strings"
-                ),
-            },
-            "top_level_fields": [
-                "cells",
-                "entry_cell_index",
-                "existing_memory_cell_indices",
-                "new_memory_cell_indices",
-                "new_memory_relations",
-                "rationale",
-            ],
-        },
+        "response_contract": mode_contract,
     }
+
+
+def _structure_update_system(mode: str) -> str:
+    if mode == FULL_AUTHOR_MODE:
+        return (
+            "Return only the strict FULL_AUTHOR JSON object described by "
+            "response_contract. It must author exactly sixteen reachable HSWM cells, "
+            "entry/routing, one cell assignment per new memory, and ordered direct-ID "
+            "relations. Use only public tokens and never infer a gold answer."
+        )
+    if mode == KEEP_ROUTING_APPEND_MODE:
+        return (
+            "Return only the strict KEEP_ROUTING_APPEND_MEMBERSHIP JSON object described "
+            "by response_contract. Do not return cells, entry, routing, existing-memory "
+            "assignments, or deletion fields. Choose one exact active cell_id per new "
+            "memory and author ordered direct-ID relations. Use only public tokens and "
+            "never infer a gold answer."
+        )
+    raise ContinualLiveError("unknown compact structure authoring mode")
+
+
+def _snapshot_sha256(snapshot: SelfModelSnapshot) -> str:
+    return _digest_bytes(canonical_json_bytes(snapshot.canonical()))
+
+
+def _routing_metadata(snapshot: SelfModelSnapshot) -> dict[str, Any]:
+    return {
+        "cells": [
+            {
+                "capability": cell.capability,
+                "cell_id": cell.cell_id,
+                "executor_agent_id": cell.executor_agent_id,
+                "instruction": cell.instruction,
+                "next_cell_ids": list(cell.next_cell_ids),
+            }
+            for cell in snapshot.cells
+        ],
+        "entry_cell_id": snapshot.entry_cell_id,
+    }
+
+
+def _existing_memberships(
+    snapshot: SelfModelSnapshot,
+    existing_ids: set[str],
+) -> list[dict[str, Any]]:
+    return [
+        {
+            "cell_id": cell.cell_id,
+            "memory_ids": [
+                memory_id for memory_id in cell.memory_ids if memory_id in existing_ids
+            ],
+        }
+        for cell in snapshot.cells
+    ]
+
+
+def _raw_authored_relation_sequences(
+    text: str,
+    source_tokens: Sequence[Mapping[str, Any]],
+) -> list[dict[str, Any]]:
+    value = _strict_object(text)
+    relations = value.get("new_memory_relations")
+    if not isinstance(relations, list) or len(relations) != len(source_tokens):
+        raise ContinualLiveError("raw authored relation vector drifted after parsing")
+    result: list[dict[str, Any]] = []
+    for source_token, item in zip(source_tokens, relations, strict=True):
+        if not isinstance(item, Mapping) or set(item) != {"related_memory_ids"}:
+            raise ContinualLiveError("raw authored relation item drifted after parsing")
+        related = item["related_memory_ids"]
+        if not isinstance(related, list) or any(
+            not isinstance(memory_id, str) for memory_id in related
+        ):
+            raise ContinualLiveError("raw authored relation sequence is invalid")
+        result.append(
+            {
+                "memory_id": str(source_token["suggested_memory_id"]),
+                "related_memory_ids": list(related),
+            }
+        )
+    return result
+
+
+def _raw_authored_placements(
+    text: str,
+    *,
+    active: SelfModelSnapshot,
+    source_tokens: Sequence[Mapping[str, Any]],
+) -> list[dict[str, str]]:
+    value = _strict_object(text)
+    mode = _structure_authoring_mode(active)
+    if mode == FULL_AUTHOR_MODE:
+        cells = value.get("cells")
+        assignments = value.get("new_memory_cell_indices")
+        if not isinstance(cells, list) or not isinstance(assignments, list):
+            raise ContinualLiveError("raw FULL_AUTHOR placement vector drifted")
+        try:
+            cell_ids = [str(item["cell_id"]) for item in cells]
+            selected = [cell_ids[index] for index in assignments]
+        except (KeyError, IndexError, TypeError) as error:
+            raise ContinualLiveError("raw FULL_AUTHOR placement is invalid") from error
+    else:
+        selected = value.get("new_memory_cell_ids")
+        if not isinstance(selected, list) or any(
+            not isinstance(cell_id, str) for cell_id in selected
+        ):
+            raise ContinualLiveError("raw KEEP placement vector drifted")
+    if len(selected) != len(source_tokens):
+        raise ContinualLiveError("raw authored placement length drifted")
+    return [
+        {
+            "cell_id": selected[index],
+            "memory_id": str(source_token["suggested_memory_id"]),
+        }
+        for index, source_token in enumerate(source_tokens)
+    ]
+
+
+def _structure_compilation_receipt(
+    *,
+    base: SelfModelSnapshot,
+    generation: int,
+    proposal: MutationProposal,
+    target: SelfModelSnapshot,
+    source_tokens: Sequence[Mapping[str, Any]],
+    completion_response_sha256: str,
+    raw_authored_placements: Sequence[Mapping[str, str]],
+    raw_authored_relations: Sequence[Mapping[str, Any]],
+    proposal_validation_sha256: str | None,
+    activation_id: str | None,
+    independent_reread: SelfModelSnapshot | None,
+) -> dict[str, Any]:
+    """Bind logical author choices to the exact core REPLACE snapshot."""
+
+    logical_mode = _structure_authoring_mode(base)
+    new_ids = tuple(str(item["suggested_memory_id"]) for item in source_tokens)
+    if proposal.cell_topology_mode is not CellTopologyMode.REPLACE:
+        raise ContinualLiveError("compact structure compilation must use core REPLACE")
+    if proposal.delete_memory_ids:
+        raise ContinualLiveError("compact structure compilation cannot delete memories")
+    if proposal.base_snapshot_id != base.snapshot_id:
+        raise ContinualLiveError("structure receipt proposal base drifted")
+    if proposal.expected_generation != generation:
+        raise ContinualLiveError("structure receipt proposal generation drifted")
+    base_memories = {memory.memory_id: memory.canonical() for memory in base.memories}
+    target_memories = {
+        memory.memory_id: memory.canonical() for memory in target.memories
+    }
+    if set(target_memories) != set(base_memories) | set(new_ids):
+        raise ContinualLiveError("compiled target memory identity set drifted")
+    if any(target_memories[memory_id] != value for memory_id, value in base_memories.items()):
+        raise ContinualLiveError("compiled target rewrote an existing memory")
+
+    target_cells = {cell.cell_id: cell for cell in target.cells}
+    placements: list[dict[str, str]] = []
+    for memory_id in new_ids:
+        assigned = [
+            cell.cell_id for cell in target.cells if memory_id in cell.memory_ids
+        ]
+        if len(assigned) != 1:
+            raise ContinualLiveError("compiled new memory lacks one exact cell placement")
+        placements.append({"cell_id": assigned[0], "memory_id": memory_id})
+    authored_placements = [dict(item) for item in raw_authored_placements]
+    if authored_placements != placements:
+        raise ContinualLiveError("compiled target changed an authored cell placement")
+
+    base_routing = _routing_metadata(base)
+    target_routing = _routing_metadata(target)
+    existing_ids = set(base_memories)
+    base_memberships = _existing_memberships(base, existing_ids)
+    target_memberships = _existing_memberships(target, existing_ids)
+    routing_preserved: bool | None = None
+    memberships_preserved: bool | None = None
+    append_only_membership: bool | None = None
+    if logical_mode == KEEP_ROUTING_APPEND_MODE:
+        routing_preserved = base_routing == target_routing
+        memberships_preserved = base_memberships == target_memberships
+        append_only_membership = True
+        if not routing_preserved:
+            raise ContinualLiveError("KEEP compilation changed persistent routing")
+        if not memberships_preserved:
+            raise ContinualLiveError("KEEP compilation changed old cell membership")
+        base_cells = {cell.cell_id: cell for cell in base.cells}
+        for cell_id, target_cell in target_cells.items():
+            base_cell = base_cells.get(cell_id)
+            if base_cell is None:
+                append_only_membership = False
+                break
+            expected_suffix = tuple(
+                item["memory_id"] for item in placements if item["cell_id"] == cell_id
+            )
+            if target_cell.memory_ids != tuple(
+                sorted(base_cell.memory_ids + expected_suffix)
+            ):
+                append_only_membership = False
+                break
+        if not append_only_membership:
+            raise ContinualLiveError("KEEP compilation was not append-only membership")
+    elif len(target.cells) != MAX_AUTHORED_CELLS:
+        raise ContinualLiveError("FULL_AUTHOR target does not contain sixteen cells")
+
+    authored_relations = [dict(item) for item in raw_authored_relations]
+    if [item.get("memory_id") for item in authored_relations] != list(new_ids):
+        raise ContinualLiveError("raw authored relation source order drifted")
+    stored_relations = [
+        {
+            "memory_id": memory_id,
+            "related_memory_ids": target_memories[memory_id]["related_memory_ids"],
+        }
+        for memory_id in new_ids
+    ]
+    authored_canonical_sets = [
+        {
+            "memory_id": item["memory_id"],
+            "related_memory_ids": sorted(item["related_memory_ids"]),
+        }
+        for item in authored_relations
+    ]
+    if authored_canonical_sets != stored_relations or any(
+        len(item["related_memory_ids"])
+        != len(set(item["related_memory_ids"]))
+        for item in authored_relations
+    ):
+        raise ContinualLiveError("compiled target added or dropped an authored relation")
+    target_sha256 = _snapshot_sha256(target)
+    reread_sha256 = (
+        _snapshot_sha256(independent_reread)
+        if independent_reread is not None
+        else None
+    )
+    if (
+        independent_reread is not None
+        and independent_reread.canonical() != target.canonical()
+    ):
+        raise ContinualLiveError("independent store reread differs from target")
+    unsigned = {
+        "activation_id": activation_id,
+        "append_only_membership": append_only_membership,
+        "authored_placement_sha256": canonical_sha256(authored_placements),
+        "authored_relation_canonical_set_sha256": canonical_sha256(
+            authored_canonical_sets
+        ),
+        "authored_relation_count": sum(
+            len(item["related_memory_ids"]) for item in authored_relations
+        ),
+        "authored_relation_sequence_sha256": canonical_sha256(authored_relations),
+        "base_cell_count": len(base.cells),
+        "base_generation": generation,
+        "base_memberships_sha256": canonical_sha256(base_memberships),
+        "base_routing_sha256": canonical_sha256(base_routing),
+        "base_snapshot_id": base.snapshot_id,
+        "base_snapshot_sha256": _snapshot_sha256(base),
+        "core_mode": CellTopologyMode.REPLACE.value,
+        "core_membership_order": "canonical-lexicographic",
+        "completion_response_sha256": completion_response_sha256,
+        "logical_mode": logical_mode,
+        "memberships_preserved": memberships_preserved,
+        "mutation_expressivity": MUTATION_EXPRESSIVITY,
+        "proposal_sha256": canonical_sha256(proposal.canonical()),
+        "proposal_validation_sha256": proposal_validation_sha256,
+        "independent_reread_snapshot_sha256": reread_sha256,
+        "independent_store_reread_verified": independent_reread is not None,
+        "routing_preserved": routing_preserved,
+        "schema": STRUCTURE_COMPILATION_RECEIPT_SCHEMA,
+        "stored_relation_canonical_set_sha256": canonical_sha256(stored_relations),
+        "stored_relation_count": sum(
+            len(item["related_memory_ids"]) for item in stored_relations
+        ),
+        "new_memory_count": len(new_ids),
+        "target_cell_count": len(target.cells),
+        "target_memberships_sha256": canonical_sha256(target_memberships),
+        "target_routing_sha256": canonical_sha256(target_routing),
+        "target_snapshot_id": target.snapshot_id,
+        "target_snapshot_sha256": target_sha256,
+    }
+    return {**unsigned, "receipt_sha256": canonical_sha256(unsigned)}
+
+
+def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
+    if (
+        not isinstance(value, Mapping)
+        or value.get("schema") != STRUCTURE_COMPILATION_RECEIPT_SCHEMA
+    ):
+        raise ContinualLiveError("structure compilation receipt schema is invalid")
+    unsigned = dict(value)
+    receipt_sha256 = unsigned.pop("receipt_sha256", None)
+    if receipt_sha256 != canonical_sha256(unsigned):
+        raise ContinualLiveError("structure compilation receipt digest mismatch")
+    expected_fields = {
+        "activation_id",
+        "append_only_membership",
+        "authored_placement_sha256",
+        "authored_relation_canonical_set_sha256",
+        "authored_relation_count",
+        "authored_relation_sequence_sha256",
+        "base_cell_count",
+        "base_generation",
+        "base_memberships_sha256",
+        "base_routing_sha256",
+        "base_snapshot_id",
+        "base_snapshot_sha256",
+        "completion_response_sha256",
+        "core_membership_order",
+        "core_mode",
+        "independent_reread_snapshot_sha256",
+        "independent_store_reread_verified",
+        "logical_mode",
+        "memberships_preserved",
+        "mutation_expressivity",
+        "new_memory_count",
+        "proposal_sha256",
+        "proposal_validation_sha256",
+        "receipt_sha256",
+        "routing_preserved",
+        "schema",
+        "stored_relation_canonical_set_sha256",
+        "stored_relation_count",
+        "target_memberships_sha256",
+        "target_cell_count",
+        "target_routing_sha256",
+        "target_snapshot_id",
+        "target_snapshot_sha256",
+    }
+    if set(value) != expected_fields:
+        raise ContinualLiveError("structure compilation receipt field set drifted")
+    required_hashes = (
+        "authored_placement_sha256",
+        "authored_relation_canonical_set_sha256",
+        "authored_relation_sequence_sha256",
+        "base_memberships_sha256",
+        "base_routing_sha256",
+        "base_snapshot_id",
+        "base_snapshot_sha256",
+        "completion_response_sha256",
+        "proposal_sha256",
+        "stored_relation_canonical_set_sha256",
+        "target_memberships_sha256",
+        "target_routing_sha256",
+        "target_snapshot_id",
+        "target_snapshot_sha256",
+    )
+    if any(
+        not isinstance(value.get(field), str)
+        or re.fullmatch(r"[0-9a-f]{64}", value[field]) is None
+        for field in required_hashes
+    ):
+        raise ContinualLiveError("structure compilation receipt digest field is invalid")
+    for optional in (
+        "activation_id",
+        "independent_reread_snapshot_sha256",
+        "proposal_validation_sha256",
+    ):
+        item = value.get(optional)
+        if item is not None and (
+            not isinstance(item, str)
+            or re.fullmatch(r"[0-9a-f]{64}", item) is None
+        ):
+            raise ContinualLiveError(
+                "structure compilation receipt optional digest is invalid"
+            )
+    for count_field in (
+        "authored_relation_count",
+        "base_cell_count",
+        "new_memory_count",
+        "stored_relation_count",
+        "target_cell_count",
+    ):
+        count = value.get(count_field)
+        if isinstance(count, bool) or not isinstance(count, int) or count < 0:
+            raise ContinualLiveError("structure compilation relation count is invalid")
+    generation = value.get("base_generation")
+    if isinstance(generation, bool) or not isinstance(generation, int) or generation < 0:
+        raise ContinualLiveError("structure compilation generation is invalid")
+    if (
+        value.get("core_mode") != CellTopologyMode.REPLACE.value
+        or value.get("core_membership_order") != "canonical-lexicographic"
+        or value.get("mutation_expressivity") != MUTATION_EXPRESSIVITY
+        or value.get("authored_relation_count") != value.get("stored_relation_count")
+        or value.get("authored_relation_canonical_set_sha256")
+        != value.get("stored_relation_canonical_set_sha256")
+    ):
+        raise ContinualLiveError("structure compilation receipt core mode drifted")
+    independent = value.get("independent_store_reread_verified")
+    if not isinstance(independent, bool):
+        raise ContinualLiveError("structure compilation reread flag is invalid")
+    if independent:
+        if (
+            value.get("activation_id") is None
+            or value.get("independent_reread_snapshot_sha256")
+            != value.get("target_snapshot_sha256")
+        ):
+            raise ContinualLiveError("independent store reread binding drifted")
+    elif (
+        value.get("activation_id") is not None
+        or value.get("independent_reread_snapshot_sha256") is not None
+    ):
+        raise ContinualLiveError("uncommitted structure receipt claims durable state")
+    logical_mode = value.get("logical_mode")
+    if logical_mode == KEEP_ROUTING_APPEND_MODE:
+        if (
+            value.get("routing_preserved") is not True
+            or value.get("memberships_preserved") is not True
+            or value.get("append_only_membership") is not True
+            or value.get("base_routing_sha256") != value.get("target_routing_sha256")
+            or value.get("base_memberships_sha256")
+            != value.get("target_memberships_sha256")
+            or value.get("base_cell_count") != value.get("target_cell_count")
+        ):
+            raise ContinualLiveError("KEEP compilation preservation invariant drifted")
+    elif logical_mode == FULL_AUTHOR_MODE:
+        if (
+            value.get("base_snapshot_id") != GENESIS.snapshot_id
+            or value.get("base_cell_count") != 0
+            or value.get("target_cell_count") != MAX_AUTHORED_CELLS
+            or value.get("routing_preserved") is not None
+            or value.get("memberships_preserved") is not None
+            or value.get("append_only_membership") is not None
+        ):
+            raise ContinualLiveError("FULL_AUTHOR compilation invariant drifted")
+    else:
+        raise ContinualLiveError("structure compilation receipt logical mode drifted")
 
 
 class StructuredHSWMArm(_ModelArm):
@@ -2927,6 +3360,7 @@ class StructuredHSWMArm(_ModelArm):
         if active.generation != 0 or active.snapshot.snapshot_id != GENESIS.snapshot_id:
             raise ContinualLiveError("arm store did not start from exact empty genesis")
         self._source_token_ids: list[str] = []
+        self.structure_compilation_receipts: list[dict[str, Any]] = []
 
     def state_canonical_bytes(self) -> bytes:
         # The evaluator reads the durable active snapshot itself; the model never
@@ -2948,36 +3382,11 @@ class StructuredHSWMArm(_ModelArm):
         active_record = self.store.active_snapshot()
         prompt_snapshot = active_record.snapshot if self.read_history else GENESIS
         _validate_compact_adapter_active_subset(prompt_snapshot)
+        authoring_mode = _structure_authoring_mode(prompt_snapshot)
         completion = self._call(
             operation="update",
             max_output_tokens=self.budget.update_max_output_tokens,
-            system=(
-                "Return exactly the six-key JSON object described by response_contract. "
-                "Author "
-                "cells, assignment vectors, relations, and routing directly in HSWM. "
-                "The cells array defines the only valid cell indices. Entry and next "
-                "indices must cite returned cells. existing_memory_cell_indices aligns "
-                "with canonical existing-memory order and alone may use -1 to delete; "
-                "new_memory_cell_indices aligns with public-token order and never uses "
-                "-1. Both vectors must have their exact requested lengths, with no "
-                "omission or default. new_memory_relations array position i makes public "
-                "token i the SOURCE; related_memory_ids must be direct target "
-                "MemoryRecord IDs, never cell or token indices, and must not contain "
-                "the source token's suggested_memory_id. OUTGOING rule: "
-                "A.related_memory_ids contains B only when A.content.target == "
-                "B.content.source. A predecessor P satisfying P.content.target == "
-                "A.content.source is not an outgoing target. A shared relation label "
-                "and a cell assignment are forbidden evidence for a memory relation. "
-                "Cell-assignment vectors do not define memory relations. Use [] rather "
-                "than guess. Relations are never inferred from shuffled "
-                "index/order. "
-                "The read-only active HSWM uses canonical memory and cell indices while "
-                "preserving content, provenance, relations, assignments, and topology. "
-                "Do not return IDs where indices are required, memory/token JSON, a "
-                "separate plan, or prose outside the six fields. Short cell instructions "
-                "may name public routing identifiers. Use only public tokens; never "
-                "infer a gold answer."
-            ),
+            system=_structure_update_system(authoring_mode),
             payload=_structure_update_payload(
                 prompt_snapshot,
                 source_tokens,
@@ -2987,6 +3396,7 @@ class StructuredHSWMArm(_ModelArm):
                 prompt_snapshot,
                 source_tokens,
                 self.policy,
+                generation=active_record.generation,
             ),
         )
         proposal = _parse_structure_proposal(
@@ -2996,10 +3406,29 @@ class StructuredHSWMArm(_ModelArm):
             generation=active_record.generation if self.commit_updates else 0,
             policy=self.policy,
         )
+        raw_authored_relations = _raw_authored_relation_sequences(
+            completion.text,
+            source_tokens,
+        )
+        raw_authored_placements = _raw_authored_placements(
+            completion.text,
+            active=prompt_snapshot,
+            source_tokens=source_tokens,
+        )
+        proposal_validation: object | None = None
         if self.proposal_validator is not None:
-            self.proposal_validator(proposal, source_tokens, prompt_snapshot)
+            proposal_validation = self.proposal_validator(
+                proposal, source_tokens, prompt_snapshot
+            )
+        proposal_validation_sha256 = (
+            canonical_sha256(proposal_validation)
+            if proposal_validation is not None
+            else None
+        )
+        predicted_target = apply_mutation(prompt_snapshot, proposal, self.policy)
         activation_id: str | None = None
         reset_activation_id: str | None = None
+        independent_reread: SelfModelSnapshot | None = None
         if self.commit_updates:
             cognitive_tokens = tuple(
                 make_token(
@@ -3018,6 +3447,18 @@ class StructuredHSWMArm(_ModelArm):
             self.store.append_tokens(cognitive_tokens)
             activation = self.store.commit(proposal)
             activation_id = activation.activation_id
+            if activation.active_snapshot_id != predicted_target.snapshot_id:
+                raise ContinualLiveError("committed structure target identity drifted")
+            verification_store = SQLiteSelfModelStore(
+                self.store_path,
+                policy=self.policy,
+            )
+            try:
+                independent_reread = verification_store.load_snapshot(
+                    predicted_target.snapshot_id
+                )
+            finally:
+                verification_store.close()
             self._source_token_ids.extend(token.token_id for token in cognitive_tokens)
             if self.reset_after_commit:
                 reset = self.store.activate_snapshot(
@@ -3034,6 +3475,21 @@ class StructuredHSWMArm(_ModelArm):
             self.store.active_snapshot().snapshot.snapshot_id != GENESIS.snapshot_id
         ):
             raise ContinualLiveError("reset control failed to reactivate exact genesis")
+        structure_receipt = _structure_compilation_receipt(
+            base=prompt_snapshot,
+            generation=proposal.expected_generation,
+            proposal=proposal,
+            target=predicted_target,
+            source_tokens=source_tokens,
+            completion_response_sha256=completion.response_sha256,
+            raw_authored_placements=raw_authored_placements,
+            raw_authored_relations=raw_authored_relations,
+            proposal_validation_sha256=proposal_validation_sha256,
+            activation_id=activation_id,
+            independent_reread=independent_reread,
+        )
+        _validate_structure_compilation_receipt(structure_receipt)
+        self.structure_compilation_receipts.append(structure_receipt)
         receipt = canonical_sha256(
             {
                 "activation_id": activation_id,
@@ -3042,6 +3498,9 @@ class StructuredHSWMArm(_ModelArm):
                 "completion": completion.canonical(),
                 "proposal_sha256": canonical_sha256(proposal.canonical()),
                 "reset_activation_id": reset_activation_id,
+                "structure_compilation_receipt_sha256": structure_receipt[
+                    "receipt_sha256"
+                ],
             }
         )
         return ArmUpdate(
@@ -3852,30 +4311,23 @@ def public_schema_gate_fixture() -> dict[str, Any]:
     return {**value, "fixture_sha256": canonical_sha256(value)}
 
 
-def _validate_public_gate_agent_relations(
+def _public_gate_relation_quality_diagnostic(
     proposal: MutationProposal,
     source_tokens: Sequence[Mapping[str, Any]],
     active: SelfModelSnapshot,
+    *,
+    update_ordinal: int = 0,
 ) -> dict[str, Any]:
-    """Require the public fixture's content-derived directed memory graph.
-
-    This is a pre-commit schema-gate predicate, not a repair step.  The model
-    must author the edges itself; a missing, extra, reversed, or self edge
-    rejects the proposal while the durable store remains at its prior state.
-    """
+    """Score authored relations without affecting acceptance or future prompts."""
 
     if proposal.delete_memory_ids:
-        raise ContinualLiveError(
-            "public gate compact patch cannot delete existing fixture memories"
-        )
+        raise ContinualLiveError("relation diagnostic received a deletion proposal")
     expected_memory_ids = {
         str(item["suggested_memory_id"]) for item in source_tokens
     }
     memories = {memory.memory_id: memory for memory in proposal.upsert_memories}
     if set(memories) != expected_memory_ids:
-        raise ContinualLiveError(
-            "public gate relation check lacks the exact deterministic memories"
-        )
+        raise ContinualLiveError("relation diagnostic lacks deterministic memories")
     expected_new_edges = sorted(
         {
             (
@@ -3911,11 +4363,6 @@ def _validate_public_gate_agent_relations(
         {"source_memory_id": source, "target_memory_id": target}
         for source, target in observed_edges
     ]
-    if observed_edges != expected_edges:
-        raise ContinualLiveError(
-            "public gate agent-authored relations differ from the exact "
-            "content-derived directed composition graph"
-        )
     new_ids = set(expected_memory_ids)
     active_ids = {memory.memory_id for memory in active.memories}
     observed_new_edges = sorted(edge for edge in observed_edges if edge[1] in new_ids)
@@ -3923,7 +4370,7 @@ def _validate_public_gate_agent_relations(
         edge for edge in observed_edges if edge[1] in active_ids
     )
     if len(observed_new_edges) + len(observed_existing_edges) != len(observed_edges):
-        raise ContinualLiveError("public gate relation targets unknown memory state")
+        raise ContinualLiveError("relation diagnostic observed an unknown target")
 
     def relation_values(edges: Sequence[tuple[str, str]]) -> list[dict[str, str]]:
         return [
@@ -3931,9 +4378,42 @@ def _validate_public_gate_agent_relations(
             for source, target in edges
         ]
 
-    return {
+    expected_set = set(expected_edges)
+    observed_set = set(observed_edges)
+    true_positive_edges = sorted(expected_set & observed_set)
+    false_positive_edges = sorted(observed_set - expected_set)
+    false_negative_edges = sorted(expected_set - observed_set)
+    visible_universe = [
+        {
+            "content": memory.content,
+            "memory_id": memory.memory_id,
+            "origin": "active",
+        }
+        for memory in active.memories
+    ] + [
+        {
+            "content": item["content"],
+            "memory_id": item["suggested_memory_id"],
+            "origin": "new",
+        }
+        for item in source_tokens
+    ]
+
+    def ratio(numerator: int, denominator: int) -> dict[str, Any]:
+        return {
+            "denominator": denominator,
+            "numerator": numerator,
+            "value": None if denominator == 0 else numerator / denominator,
+        }
+
+    unsigned = {
+        "acceptance_effect": False,
         "author": AUTHOR_ID,
-        "exact_match": True,
+        "base_generation": proposal.expected_generation,
+        "base_snapshot_id": active.snapshot_id,
+        "base_snapshot_sha256": _snapshot_sha256(active),
+        "diagnostic_only": True,
+        "exact_match": observed_edges == expected_edges,
         "expected_existing_relation_count": len(expected_existing_edges),
         "expected_existing_relations_sha256": canonical_sha256(
             relation_values(expected_existing_edges)
@@ -3944,6 +4424,15 @@ def _validate_public_gate_agent_relations(
         ),
         "expected_relation_count": len(expected_edges),
         "expected_relations_sha256": canonical_sha256(expected_values),
+        "false_negative_count": len(false_negative_edges),
+        "false_negative_relations_sha256": canonical_sha256(
+            relation_values(false_negative_edges)
+        ),
+        "false_positive_count": len(false_positive_edges),
+        "false_positive_relations_sha256": canonical_sha256(
+            relation_values(false_positive_edges)
+        ),
+        "fed_back_to_model": False,
         "observed_existing_relation_count": len(observed_existing_edges),
         "observed_existing_relations_sha256": canonical_sha256(
             relation_values(observed_existing_edges)
@@ -3954,8 +4443,311 @@ def _validate_public_gate_agent_relations(
         ),
         "observed_relation_count": len(observed_edges),
         "observed_relations_sha256": canonical_sha256(observed_values),
+        "precision": ratio(len(true_positive_edges), len(observed_edges)),
+        "proposal_sha256": canonical_sha256(proposal.canonical()),
+        "recall": ratio(len(true_positive_edges), len(expected_edges)),
+        "relation_quality_gate": False,
+        "schema": RELATION_QUALITY_DIAGNOSTIC_SCHEMA,
         "source_token_count": len(source_tokens),
+        "true_positive_count": len(true_positive_edges),
+        "true_positive_relations_sha256": canonical_sha256(
+            relation_values(true_positive_edges)
+        ),
+        "update_ordinal": update_ordinal,
+        "visible_universe_sha256": canonical_sha256(visible_universe),
     }
+    return {**unsigned, "diagnostic_sha256": canonical_sha256(unsigned)}
+
+
+def _validate_relation_quality_diagnostic(value: Mapping[str, Any]) -> None:
+    if not isinstance(value, Mapping):
+        raise ContinualLiveError("relation quality diagnostic is not an object")
+    base_unsigned = dict(value)
+    bound_digest = base_unsigned.pop("bound_diagnostic_sha256", None)
+    update_binding = base_unsigned.pop("update_binding", None)
+    digest = base_unsigned.pop("diagnostic_sha256", None)
+    if digest != canonical_sha256(base_unsigned):
+        raise ContinualLiveError("relation quality diagnostic digest mismatch")
+    required_fields = {
+        "acceptance_effect",
+        "author",
+        "base_generation",
+        "base_snapshot_id",
+        "base_snapshot_sha256",
+        "diagnostic_only",
+        "diagnostic_sha256",
+        "exact_match",
+        "expected_existing_relation_count",
+        "expected_existing_relations_sha256",
+        "expected_new_relation_count",
+        "expected_new_relations_sha256",
+        "expected_relation_count",
+        "expected_relations_sha256",
+        "false_negative_count",
+        "false_negative_relations_sha256",
+        "false_positive_count",
+        "false_positive_relations_sha256",
+        "fed_back_to_model",
+        "observed_existing_relation_count",
+        "observed_existing_relations_sha256",
+        "observed_new_relation_count",
+        "observed_new_relations_sha256",
+        "observed_relation_count",
+        "observed_relations_sha256",
+        "precision",
+        "proposal_sha256",
+        "recall",
+        "relation_quality_gate",
+        "schema",
+        "source_token_count",
+        "true_positive_count",
+        "true_positive_relations_sha256",
+        "update_ordinal",
+        "visible_universe_sha256",
+    }
+    if set(base_unsigned) | {"diagnostic_sha256"} != required_fields:
+        raise ContinualLiveError("relation quality diagnostic field set drifted")
+    if (
+        value.get("schema") != RELATION_QUALITY_DIAGNOSTIC_SCHEMA
+        or value.get("diagnostic_only") is not True
+        or value.get("acceptance_effect") is not False
+        or value.get("fed_back_to_model") is not False
+        or value.get("relation_quality_gate") is not False
+    ):
+        raise ContinualLiveError("relation quality diagnostic claim boundary drifted")
+    count_fields = (
+        "expected_existing_relation_count",
+        "expected_new_relation_count",
+        "expected_relation_count",
+        "false_negative_count",
+        "false_positive_count",
+        "observed_existing_relation_count",
+        "observed_new_relation_count",
+        "observed_relation_count",
+        "source_token_count",
+        "true_positive_count",
+        "update_ordinal",
+    )
+    if any(
+        isinstance(value.get(field), bool)
+        or not isinstance(value.get(field), int)
+        or value[field] < 0
+        for field in count_fields
+    ):
+        raise ContinualLiveError("relation quality diagnostic count is invalid")
+    generation = value.get("base_generation")
+    if isinstance(generation, bool) or not isinstance(generation, int) or generation < 0:
+        raise ContinualLiveError("relation quality diagnostic generation is invalid")
+    if (
+        value.get("author") != AUTHOR_ID
+        or value.get("source_token_count", 0) <= 0
+        or not isinstance(value.get("base_snapshot_id"), str)
+        or re.fullmatch(r"[0-9a-f]{64}", value["base_snapshot_id"]) is None
+    ):
+        raise ContinualLiveError("relation quality diagnostic source binding is invalid")
+    hash_fields = [
+        field
+        for field in required_fields
+        if field.endswith("_sha256") and field != "diagnostic_sha256"
+    ]
+    if any(
+        not isinstance(value.get(field), str)
+        or re.fullmatch(r"[0-9a-f]{64}", value[field]) is None
+        for field in hash_fields
+    ):
+        raise ContinualLiveError("relation quality diagnostic hash is invalid")
+    tp = value["true_positive_count"]
+    fp = value["false_positive_count"]
+    fn = value["false_negative_count"]
+    expected = value["expected_relation_count"]
+    observed = value["observed_relation_count"]
+    if (
+        value["expected_existing_relation_count"]
+        + value["expected_new_relation_count"]
+        != expected
+        or value["observed_existing_relation_count"]
+        + value["observed_new_relation_count"]
+        != observed
+        or tp + fp != observed
+        or tp + fn != expected
+        or not isinstance(value.get("exact_match"), bool)
+        or value["exact_match"] is not (fp == 0 and fn == 0)
+    ):
+        raise ContinualLiveError("relation quality diagnostic confusion counts drifted")
+    if value["exact_match"] and (
+        value["expected_relations_sha256"] != value["observed_relations_sha256"]
+    ):
+        raise ContinualLiveError("exact relation diagnostic hashes drifted")
+    empty_edges_sha256 = canonical_sha256([])
+    count_hash_pairs = (
+        ("expected_existing_relation_count", "expected_existing_relations_sha256"),
+        ("expected_new_relation_count", "expected_new_relations_sha256"),
+        ("expected_relation_count", "expected_relations_sha256"),
+        ("false_negative_count", "false_negative_relations_sha256"),
+        ("false_positive_count", "false_positive_relations_sha256"),
+        ("observed_existing_relation_count", "observed_existing_relations_sha256"),
+        ("observed_new_relation_count", "observed_new_relations_sha256"),
+        ("observed_relation_count", "observed_relations_sha256"),
+        ("true_positive_count", "true_positive_relations_sha256"),
+    )
+    if any(
+        value[count_field] == 0 and value[hash_field] != empty_edges_sha256
+        for count_field, hash_field in count_hash_pairs
+    ):
+        raise ContinualLiveError("empty relation diagnostic hash drifted")
+    if value["exact_match"] and (
+        value["false_positive_relations_sha256"] != empty_edges_sha256
+        or value["false_negative_relations_sha256"] != empty_edges_sha256
+        or value["true_positive_relations_sha256"]
+        != value["expected_relations_sha256"]
+    ):
+        raise ContinualLiveError("exact relation diagnostic partition drifted")
+
+    def validate_ratio(item: object, numerator: int, denominator: int) -> None:
+        if not isinstance(item, Mapping) or set(item) != {
+            "denominator",
+            "numerator",
+            "value",
+        }:
+            raise ContinualLiveError("relation quality ratio is malformed")
+        expected_value = None if denominator == 0 else numerator / denominator
+        actual_value = item["value"]
+        if (
+            isinstance(item["numerator"], bool)
+            or not isinstance(item["numerator"], int)
+            or isinstance(item["denominator"], bool)
+            or not isinstance(item["denominator"], int)
+            or item["numerator"] != numerator
+            or item["denominator"] != denominator
+            or actual_value != expected_value
+            or (
+                denominator == 0
+                and actual_value is not None
+            )
+            or (
+                denominator > 0
+                and (
+                    type(actual_value) is not float
+                    or not math.isfinite(actual_value)
+                )
+            )
+        ):
+            raise ContinualLiveError("relation quality ratio arithmetic drifted")
+
+    validate_ratio(value["precision"], tp, observed)
+    validate_ratio(value["recall"], tp, expected)
+    if update_binding is None:
+        if bound_digest is not None:
+            raise ContinualLiveError("unbound relation diagnostic carries bound digest")
+        return
+    if not isinstance(update_binding, Mapping) or set(update_binding) != {
+        "activation_id",
+        "structure_compilation_receipt_sha256",
+        "target_snapshot_id",
+        "target_snapshot_sha256",
+        "update_ordinal",
+        "update_receipt_sha256",
+    }:
+        raise ContinualLiveError("relation diagnostic update binding is malformed")
+    bound_unsigned = dict(value)
+    bound_unsigned.pop("bound_diagnostic_sha256", None)
+    if bound_digest != canonical_sha256(bound_unsigned):
+        raise ContinualLiveError("bound relation diagnostic digest mismatch")
+    if update_binding["update_ordinal"] != value["update_ordinal"]:
+        raise ContinualLiveError("relation diagnostic update ordinal drifted")
+    for field in (
+        "activation_id",
+        "structure_compilation_receipt_sha256",
+        "target_snapshot_id",
+        "target_snapshot_sha256",
+        "update_receipt_sha256",
+    ):
+        if (
+            not isinstance(update_binding[field], str)
+            or re.fullmatch(r"[0-9a-f]{64}", update_binding[field]) is None
+        ):
+            raise ContinualLiveError("relation diagnostic update hash is invalid")
+
+
+def _bind_relation_quality_diagnostic(
+    diagnostic: Mapping[str, Any],
+    *,
+    structure_receipt: Mapping[str, Any],
+    update_receipt_sha256: str,
+) -> dict[str, Any]:
+    _validate_relation_quality_diagnostic(diagnostic)
+    _validate_structure_compilation_receipt(structure_receipt)
+    if (
+        structure_receipt.get("proposal_validation_sha256")
+        != canonical_sha256(diagnostic)
+        or structure_receipt.get("base_snapshot_id")
+        != diagnostic.get("base_snapshot_id")
+        or structure_receipt.get("base_snapshot_sha256")
+        != diagnostic.get("base_snapshot_sha256")
+        or structure_receipt.get("base_generation")
+        != diagnostic.get("base_generation")
+        or structure_receipt.get("proposal_sha256")
+        != diagnostic.get("proposal_sha256")
+    ):
+        raise ContinualLiveError("relation diagnostic compilation linkage drifted")
+    if (
+        not isinstance(update_receipt_sha256, str)
+        or re.fullmatch(r"[0-9a-f]{64}", update_receipt_sha256) is None
+    ):
+        raise ContinualLiveError("relation diagnostic update receipt is invalid")
+    binding = {
+        "activation_id": structure_receipt["activation_id"],
+        "structure_compilation_receipt_sha256": structure_receipt["receipt_sha256"],
+        "target_snapshot_id": structure_receipt["target_snapshot_id"],
+        "target_snapshot_sha256": structure_receipt["target_snapshot_sha256"],
+        "update_ordinal": diagnostic["update_ordinal"],
+        "update_receipt_sha256": update_receipt_sha256,
+    }
+    if binding["activation_id"] is None:
+        raise ContinualLiveError("public relation diagnostic lacks a committed activation")
+    result = {**dict(diagnostic), "update_binding": binding}
+    return {**result, "bound_diagnostic_sha256": canonical_sha256(result)}
+
+
+def _validate_public_gate_diagnostic_pairing(
+    diagnostics: Sequence[Mapping[str, Any]],
+    structure_receipts: Sequence[Mapping[str, Any]],
+    update_receipt_sha256s: Sequence[str],
+) -> None:
+    if not (
+        len(diagnostics)
+        == len(structure_receipts)
+        == len(update_receipt_sha256s)
+    ):
+        raise ContinualLiveError("public relation diagnostic pairing length drifted")
+    for ordinal, (diagnostic, receipt, update_receipt_sha256) in enumerate(
+        zip(
+            diagnostics,
+            structure_receipts,
+            update_receipt_sha256s,
+            strict=True,
+        )
+    ):
+        _validate_relation_quality_diagnostic(diagnostic)
+        _validate_structure_compilation_receipt(receipt)
+        binding = diagnostic["update_binding"]
+        precommit = dict(diagnostic)
+        precommit.pop("bound_diagnostic_sha256")
+        precommit.pop("update_binding")
+        if (
+            diagnostic["update_ordinal"] != ordinal
+            or binding["update_ordinal"] != ordinal
+            or binding["structure_compilation_receipt_sha256"]
+            != receipt["receipt_sha256"]
+            or binding["activation_id"] != receipt["activation_id"]
+            or binding["target_snapshot_id"] != receipt["target_snapshot_id"]
+            or binding["target_snapshot_sha256"]
+            != receipt["target_snapshot_sha256"]
+            or binding["update_receipt_sha256"] != update_receipt_sha256
+            or receipt["proposal_validation_sha256"]
+            != canonical_sha256(precommit)
+        ):
+            raise ContinualLiveError("public relation diagnostic update pairing drifted")
 
 
 def _install_public_gate_extension(
@@ -4197,7 +4989,7 @@ def run_public_schema_gate(
     backend_factory: Callable[[], ChatBackend],
     state_dir: Path,
 ) -> dict[str, Any]:
-    """Run exactly four public, non-evaluation calls through the v5 gate."""
+    """Run four public calls through the structural, non-evaluation gate."""
 
     state_dir = Path(state_dir)
     state_dir.mkdir(parents=True, exist_ok=False)
@@ -4208,7 +5000,7 @@ def run_public_schema_gate(
         max_state_bytes=1_000_000,
     )
     accepted_model: list[str] = []
-    agent_relation_checks: list[dict[str, Any]] = []
+    relation_quality_diagnostics: list[dict[str, Any]] = []
 
     def accept_gate_completion(entry: CallLedgerEntry) -> None:
         _public_gate_call_summary(entry)
@@ -4221,10 +5013,16 @@ def run_public_schema_gate(
         proposal: MutationProposal,
         source_tokens: Sequence[Mapping[str, Any]],
         active: SelfModelSnapshot,
-    ) -> None:
-        agent_relation_checks.append(
-            _validate_public_gate_agent_relations(proposal, source_tokens, active)
+    ) -> dict[str, Any]:
+        diagnostic = _public_gate_relation_quality_diagnostic(
+            proposal,
+            source_tokens,
+            active,
+            update_ordinal=len(relation_quality_diagnostics),
         )
+        _validate_relation_quality_diagnostic(diagnostic)
+        relation_quality_diagnostics.append(diagnostic)
+        return diagnostic
 
     structured = StructuredHSWMArm(
         backend=backend_factory(),
@@ -4265,27 +5063,46 @@ def run_public_schema_gate(
     try:
         genesis_sha256 = _digest_bytes(structured.state_canonical_bytes())
         warmup_update = structured.update(warmup)
+        relation_quality_diagnostics[0] = _bind_relation_quality_diagnostic(
+            relation_quality_diagnostics[0],
+            structure_receipt=structured.structure_compilation_receipts[0],
+            update_receipt_sha256=warmup_update.receipt_sha256,
+        )
         after_warmup = structured.store.active_snapshot().snapshot
-        if len(after_warmup.memories) != 64:
+        if (
+            len(after_warmup.memories) != 64
+            or len(after_warmup.cells) != MAX_AUTHORED_CELLS
+        ):
             raise ContinualLiveError("public gate warmup did not materialize 64 memories")
         extension = _install_public_gate_extension(
             structured, _public_gate_tokens(64, 76)
         )
         incremental_update = structured.update(incremental)
+        relation_quality_diagnostics[1] = _bind_relation_quality_diagnostic(
+            relation_quality_diagnostics[1],
+            structure_receipt=structured.structure_compilation_receipts[1],
+            update_receipt_sha256=incremental_update.receipt_sha256,
+        )
         after_incremental = structured.store.active_snapshot().snapshot
-        if len(after_incremental.memories) != 144:
+        if (
+            len(after_incremental.memories) != 144
+            or len(after_incremental.cells) != MAX_AUTHORED_CELLS
+        ):
             raise ContinualLiveError(
                 "public gate incremental patch did not materialize 144 memories"
             )
         if (
-            len(agent_relation_checks) != 2
-            or [item["source_token_count"] for item in agent_relation_checks]
+            len(relation_quality_diagnostics) != 2
+            or [item["source_token_count"] for item in relation_quality_diagnostics]
             != [64, 4]
-            or [item["expected_relation_count"] for item in agent_relation_checks]
+            or [
+                item["expected_relation_count"]
+                for item in relation_quality_diagnostics
+            ]
             != [63, 3]
         ):
             raise ContinualLiveError(
-                "public gate did not verify both exact agent-authored relation chains"
+                "public gate relation diagnostics lack both frozen fixture slices"
             )
         plain_update = plain.update(warmup)
         before_probe_sha256 = _digest_bytes(structured.state_canonical_bytes())
@@ -4303,8 +5120,7 @@ def run_public_schema_gate(
         answer = structured.answer(probe)
         chosen = parse_choice(answer.response_text, choices=probe.choices)
         after_probe_sha256 = _digest_bytes(structured.state_canonical_bytes())
-        if chosen != fixture["probe_answer"]:
-            raise ContinualLiveError("public gate read-only probe was incorrect")
+        probe_correct = chosen == fixture["probe_answer"]
         if before_probe_sha256 != after_probe_sha256:
             raise ContinualLiveError("public gate probe mutated HSWM state")
         if len(structured.ledger) != 3 or len(plain.ledger) != 1:
@@ -4325,9 +5141,23 @@ def run_public_schema_gate(
         ]
         if len({item.completion.model for item in call_entries}) != 1:
             raise ContinualLiveError("public gate returned model identity drift")
+        if len(structured.structure_compilation_receipts) != 2:
+            raise ContinualLiveError(
+                "public gate lacks both structure compilation receipts"
+            )
+        for receipt in structured.structure_compilation_receipts:
+            _validate_structure_compilation_receipt(receipt)
+            if receipt["independent_store_reread_verified"] is not True:
+                raise ContinualLiveError(
+                    "public gate structure receipt lacks independent store reread"
+                )
+        _validate_public_gate_diagnostic_pairing(
+            relation_quality_diagnostics,
+            structured.structure_compilation_receipts,
+            (warmup_update.receipt_sha256, incremental_update.receipt_sha256),
+        )
         result = {
             "adapter_schema": COMPACT_PATCH_SCHEMA,
-            "agent_relation_checks": agent_relation_checks,
             "authoring_projection_bindings": projection_bindings,
             "after_incremental_state_sha256": _digest_bytes(
                 canonical_json_bytes(after_incremental.canonical())
@@ -4357,6 +5187,8 @@ def run_public_schema_gate(
             "plain_update_receipt_sha256": plain_update.receipt_sha256,
             "probe_answer_receipt_sha256": answer.receipt_sha256,
             "probe_choice": chosen,
+            "probe_correct": probe_correct,
+            "probe_correctness_diagnostic_only": True,
             "probe_mechanism_attribution": "not-attested-by-this-public-gate",
             "protocol": PUBLIC_SCHEMA_GATE_PROTOCOL,
             "provider_structured_output_backend_attested": False,
@@ -4364,6 +5196,11 @@ def run_public_schema_gate(
                 PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS
             ),
             "semantic_acceptance": "local-strict-parser-after-provider-json-schema",
+            "relation_quality_diagnostics": relation_quality_diagnostics,
+            "relation_quality_gate": False,
+            "structure_compilation_receipts": list(
+                structured.structure_compilation_receipts
+            ),
             "token_preflight_calls_observed": len(call_summaries),
             "token_preflight_latency_ms": sum(
                 item.token_preflight.latency_ms for item in call_entries
@@ -5851,15 +6688,20 @@ def schema_gate_main(argv: Sequence[str] | None = None) -> int:
         "container_digest": args.container_digest,
         "denylisted_from_evaluation": True,
         "fixture_sha256": fixture["fixture_sha256"],
+        "full_author_cell_count": MAX_AUTHORED_CELLS,
         "indexed_authoring_view_schema": INDEXED_AUTHORING_VIEW_SCHEMA,
         "max_input_bytes": 2_000_000,
         "max_state_bytes": 1_000_000,
         "max_update_input_tokens": PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS,
         "mutation_expressivity": MUTATION_EXPRESSIVITY,
+        "logical_modes": [FULL_AUTHOR_MODE, KEEP_ROUTING_APPEND_MODE],
+        "core_compilation_mode": CellTopologyMode.REPLACE.value,
         "no_precommit_or_seed_path": True,
         "output_token_ceiling": PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING,
         "protocol": PUBLIC_SCHEMA_GATE_PROTOCOL,
         "provider_context_window_tokens": PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS,
+        "probe_correctness_diagnostic_only": True,
+        "relation_quality_gate": False,
         "retry_limit": 0,
         "service_binding": args.service_binding,
         "source_revision": args.source_revision,
@@ -5917,8 +6759,10 @@ __all__ = [
     "COMPACT_PATCH_SCHEMA",
     "ContinualLiveError",
     "GENESIS",
+    "FULL_AUTHOR_MODE",
     "JSONSchemaContract",
     "LIVE_PROTOCOL",
+    "KEEP_ROUTING_APPEND_MODE",
     "ModelCompletion",
     "NoWriteArm",
     "OpenAIBackendConfig",
@@ -5926,12 +6770,14 @@ __all__ = [
     "ParityAudit",
     "PlainTextArm",
     "PUBLIC_SCHEMA_GATE_PROTOCOL",
+    "RELATION_QUALITY_DIAGNOSTIC_SCHEMA",
     "RemovalRestoreResult",
     "ResetArm",
     "SnapshotCheckpoint",
     "StateTransitionReceipt",
     "StructuredHSWMArm",
     "STRUCTURED_OUTPUT_MODE",
+    "STRUCTURE_COMPILATION_RECEIPT_SCHEMA",
     "TOKEN_PREFLIGHT_MODE",
     "TOKEN_PREFLIGHT_SCHEMA",
     "TokenPreflightReceipt",

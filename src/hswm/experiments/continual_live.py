@@ -82,9 +82,17 @@ LIVE_PROTOCOL = "hswm-continual-live/v1"
 AUTHOR_ID = "agent:continual-memory-author"
 CAPABILITY = "nonce_graph_lookup"
 COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v3"
-PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v3"
+INDEXED_AUTHORING_VIEW_SCHEMA = "hswm-indexed-authoring-view/v1"
+MUTATION_EXPRESSIVITY = "compact-adapter-subset"
+PUBLIC_SCHEMA_GATE_FIXTURE_DOMAIN = "hswm-public-schema-gate/v3"
+PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v4"
 PUBLIC_SCHEMA_GATE_EPISODE = "public-schema-gate-never-evaluation"
+PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS = 32_768
 PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING = 6144
+PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS = (
+    PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS
+    - PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING
+)
 STRUCTURED_OUTPUT_MODE = "openai-response-format-json-schema/v1"
 MAX_AUTHORED_CELLS = 16
 MAX_CELL_MEMORY_REFERENCES = 64
@@ -1080,6 +1088,8 @@ class _ModelArm:
         return {
             "backend": dict(self.backend.identity),
             "budget": self.budget.canonical(),
+            "indexed_authoring_view_schema": INDEXED_AUTHORING_VIEW_SCHEMA,
+            "mutation_expressivity": MUTATION_EXPRESSIVITY,
             "proposal_policy": policy.canonical(),
             "proposal_policy_sha256": policy.policy_sha256,
             "protocol": LIVE_PROTOCOL,
@@ -1339,6 +1349,320 @@ def _public_source_tokens(batch: LearningBatch) -> tuple[dict[str, Any], ...]:
             }
         )
     return tuple(result)
+
+
+def _projection_indices(
+    value: object,
+    *,
+    label: str,
+    upper_bound: int,
+) -> tuple[int, ...]:
+    """Validate index references without sorting, deduplicating, or repairing."""
+
+    if not isinstance(value, list):
+        raise ContinualLiveError(f"{label} must be an index array")
+    result = tuple(value)
+    if any(
+        isinstance(item, bool)
+        or not isinstance(item, int)
+        or item < 0
+        or item >= upper_bound
+        for item in result
+    ):
+        raise ContinualLiveError(f"{label} contains a bool, negative, or unknown index")
+    return result
+
+
+def _expand_indexed_authoring_projection(
+    projection: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Expand the lossless indexed view without invoking sorting constructors."""
+
+    fields = {
+        "active_generation",
+        "cells",
+        "entry_cell_index",
+        "memories",
+        "projection_sha256",
+        "schema",
+        "schema_version",
+        "snapshot_id",
+        "source_snapshot_sha256",
+    }
+    if not isinstance(projection, Mapping) or set(projection) != fields:
+        raise ContinualLiveError("indexed authoring projection field set is invalid")
+    body = {
+        key: value for key, value in projection.items() if key != "projection_sha256"
+    }
+    if (
+        projection["schema"] != INDEXED_AUTHORING_VIEW_SCHEMA
+        or not isinstance(projection["active_generation"], int)
+        or isinstance(projection["active_generation"], bool)
+        or projection["active_generation"] < 0
+        or not isinstance(projection["snapshot_id"], str)
+        or not isinstance(projection["schema_version"], str)
+        or not isinstance(projection["source_snapshot_sha256"], str)
+        or not isinstance(projection["projection_sha256"], str)
+        or projection["projection_sha256"] != canonical_sha256(body)
+    ):
+        raise ContinualLiveError("indexed authoring projection identity is invalid")
+    memories = projection["memories"]
+    cells = projection["cells"]
+    if not isinstance(memories, list) or not isinstance(cells, list):
+        raise ContinualLiveError("indexed authoring projection arrays are invalid")
+
+    memory_fields = {
+        "content",
+        "kind",
+        "labels",
+        "memory_id",
+        "related_memory_indices",
+        "source_token_ids",
+    }
+    memory_ids: list[str] = []
+    for item in memories:
+        if not isinstance(item, Mapping) or set(item) != memory_fields:
+            raise ContinualLiveError("indexed projection memory field set is invalid")
+        if (
+            not isinstance(item["memory_id"], str)
+            or not isinstance(item["kind"], str)
+            or not isinstance(item["source_token_ids"], list)
+            or not isinstance(item["labels"], list)
+        ):
+            raise ContinualLiveError("indexed projection memory metadata is invalid")
+        memory_ids.append(item["memory_id"])
+    if len(memory_ids) != len(set(memory_ids)):
+        raise ContinualLiveError("indexed projection memory ids are not unique")
+
+    cell_fields = {
+        "capability",
+        "cell_id",
+        "executor_agent_id",
+        "instruction",
+        "memory_indices",
+        "next_cell_indices",
+    }
+    cell_ids: list[str] = []
+    for item in cells:
+        if not isinstance(item, Mapping) or set(item) != cell_fields:
+            raise ContinualLiveError("indexed projection cell field set is invalid")
+        if (
+            not isinstance(item["cell_id"], str)
+            or not isinstance(item["capability"], str)
+            or not isinstance(item["instruction"], str)
+            or item["executor_agent_id"] is not None
+            and not isinstance(item["executor_agent_id"], str)
+        ):
+            raise ContinualLiveError("indexed projection cell metadata is invalid")
+        cell_ids.append(item["cell_id"])
+    if len(cell_ids) != len(set(cell_ids)):
+        raise ContinualLiveError("indexed projection cell ids are not unique")
+
+    expanded_memories = []
+    for index, item in enumerate(memories):
+        related_indices = _projection_indices(
+            item["related_memory_indices"],
+            label=f"projection memories[{index}].related_memory_indices",
+            upper_bound=len(memory_ids),
+        )
+        expanded_memories.append(
+            {
+                "content": item["content"],
+                "kind": item["kind"],
+                "labels": list(item["labels"]),
+                "memory_id": item["memory_id"],
+                "related_memory_ids": [memory_ids[item] for item in related_indices],
+                "source_token_ids": list(item["source_token_ids"]),
+            }
+        )
+    expanded_cells = []
+    for index, item in enumerate(cells):
+        memory_indices = _projection_indices(
+            item["memory_indices"],
+            label=f"projection cells[{index}].memory_indices",
+            upper_bound=len(memory_ids),
+        )
+        next_cell_indices = _projection_indices(
+            item["next_cell_indices"],
+            label=f"projection cells[{index}].next_cell_indices",
+            upper_bound=len(cell_ids),
+        )
+        expanded_cells.append(
+            {
+                "capability": item["capability"],
+                "cell_id": item["cell_id"],
+                "executor_agent_id": item["executor_agent_id"],
+                "instruction": item["instruction"],
+                "memory_ids": [memory_ids[item] for item in memory_indices],
+                "next_cell_ids": [cell_ids[item] for item in next_cell_indices],
+            }
+        )
+    entry = projection["entry_cell_index"]
+    if cell_ids:
+        entry_indices = _projection_indices(
+            [entry],
+            label="projection entry_cell_index",
+            upper_bound=len(cell_ids),
+        )
+        entry_cell_id: str | None = cell_ids[entry_indices[0]]
+    elif entry is None:
+        entry_cell_id = None
+    else:
+        raise ContinualLiveError("empty projection must have a null entry cell")
+    expanded = {
+        "cells": expanded_cells,
+        "entry_cell_id": entry_cell_id,
+        "memories": expanded_memories,
+        "schema_version": projection["schema_version"],
+        "snapshot_id": projection["snapshot_id"],
+    }
+    if _digest_bytes(canonical_json_bytes(expanded)) != projection[
+        "source_snapshot_sha256"
+    ]:
+        raise ContinualLiveError(
+            "indexed projection source snapshot digest does not match expansion"
+        )
+    return expanded
+
+
+def _indexed_authoring_projection(
+    active: SelfModelSnapshot,
+    *,
+    generation: int,
+) -> dict[str, Any]:
+    """Create a deterministic lossless view whose long references are indices."""
+
+    if isinstance(generation, bool) or not isinstance(generation, int) or generation < 0:
+        raise ContinualLiveError("active generation must be a non-negative integer")
+    active_raw = canonical_json_bytes(active.canonical())
+    memory_ids = tuple(memory.memory_id for memory in active.memories)
+    cell_ids = tuple(cell.cell_id for cell in active.cells)
+    if len(memory_ids) != len(set(memory_ids)) or len(cell_ids) != len(set(cell_ids)):
+        raise ContinualLiveError("active HSWM ids are not unique")
+    memory_index = {memory_id: index for index, memory_id in enumerate(memory_ids)}
+    cell_index = {cell_id: index for index, cell_id in enumerate(cell_ids)}
+
+    def lookup_many(
+        values: Sequence[str], indexes: Mapping[str, int], label: str
+    ) -> list[int]:
+        try:
+            return [indexes[value] for value in values]
+        except KeyError as error:
+            raise ContinualLiveError(
+                f"active HSWM {label} targets missing state"
+            ) from error
+
+    if active.entry_cell_id is None:
+        entry_cell_index: int | None = None
+    else:
+        try:
+            entry_cell_index = cell_index[active.entry_cell_id]
+        except KeyError as error:  # guarded by SelfModelSnapshot, retained fail-closed
+            raise ContinualLiveError("active HSWM entry cell is missing") from error
+    body = {
+        "active_generation": generation,
+        "cells": [
+            {
+                "capability": cell.capability,
+                "cell_id": cell.cell_id,
+                "executor_agent_id": cell.executor_agent_id,
+                "instruction": cell.instruction,
+                "memory_indices": lookup_many(
+                    cell.memory_ids, memory_index, "cell memory reference"
+                ),
+                "next_cell_indices": lookup_many(
+                    cell.next_cell_ids, cell_index, "cell edge"
+                ),
+            }
+            for cell in active.cells
+        ],
+        "entry_cell_index": entry_cell_index,
+        "memories": [
+            {
+                "content": memory.content,
+                "kind": memory.kind,
+                "labels": list(memory.labels),
+                "memory_id": memory.memory_id,
+                "related_memory_indices": lookup_many(
+                    memory.related_memory_ids, memory_index, "memory relation"
+                ),
+                "source_token_ids": list(memory.source_token_ids),
+            }
+            for memory in active.memories
+        ],
+        "schema": INDEXED_AUTHORING_VIEW_SCHEMA,
+        "schema_version": active.schema_version,
+        "snapshot_id": active.snapshot_id,
+        "source_snapshot_sha256": _digest_bytes(active_raw),
+    }
+    projection = {**body, "projection_sha256": canonical_sha256(body)}
+    expanded = _expand_indexed_authoring_projection(projection)
+    if canonical_json_bytes(expanded) != active_raw:
+        raise ContinualLiveError(
+            "indexed authoring projection does not losslessly expand to active HSWM"
+        )
+    return projection
+
+
+def _validate_indexed_authoring_projection(
+    projection: Mapping[str, Any],
+    *,
+    active: SelfModelSnapshot,
+    generation: int,
+) -> None:
+    """Bind an untrusted persisted view to one exact active snapshot/generation."""
+
+    expanded = _expand_indexed_authoring_projection(projection)
+    if canonical_json_bytes(expanded) != canonical_json_bytes(active.canonical()):
+        raise ContinualLiveError("indexed projection expands to a different HSWM state")
+    expected = _indexed_authoring_projection(active, generation=generation)
+    if canonical_json_bytes(projection) != canonical_json_bytes(expected):
+        raise ContinualLiveError("indexed projection is not the deterministic active view")
+
+
+def _validate_compact_adapter_active_subset(active: SelfModelSnapshot) -> None:
+    """Reject active structures the scalar assignment-vector patch cannot express."""
+
+    if not active.cells:
+        if active.entry_cell_id is not None or active.memories:
+            raise ContinualLiveError(
+                "compact adapter requires cells for every active memory"
+            )
+        return
+    if active.entry_cell_id is None:
+        raise ContinualLiveError("compact adapter active cells require an entry cell")
+    cells_by_id = {cell.cell_id: cell for cell in active.cells}
+    if len(cells_by_id) != len(active.cells):
+        raise ContinualLiveError("compact adapter active cell ids are not unique")
+    reachable: set[str] = set()
+    queue = [active.entry_cell_id]
+    while queue:
+        cell_id = queue.pop(0)
+        if cell_id in reachable:
+            continue
+        if cell_id not in cells_by_id:
+            raise ContinualLiveError("compact adapter active edge targets missing cell")
+        reachable.add(cell_id)
+        queue.extend(cells_by_id[cell_id].next_cell_ids)
+    if reachable != set(cells_by_id):
+        raise ContinualLiveError("compact adapter requires every active cell reachable")
+    memory_ids = {memory.memory_id for memory in active.memories}
+    reference_counts = {memory_id: 0 for memory_id in memory_ids}
+    for cell in active.cells:
+        if cell.capability != CAPABILITY:
+            raise ContinualLiveError("compact adapter active cell capability is unsupported")
+        if cell.executor_agent_id is not None:
+            raise ContinualLiveError("compact adapter cannot preserve delegated executors")
+        for memory_id in cell.memory_ids:
+            if memory_id not in reference_counts:
+                raise ContinualLiveError(
+                    "compact adapter active cell references missing memory"
+                )
+            reference_counts[memory_id] += 1
+    if any(count != 1 for count in reference_counts.values()):
+        raise ContinualLiveError(
+            "compact adapter requires every active memory in exactly one reachable cell"
+        )
 
 
 def _project_snapshot(snapshot: SelfModelSnapshot, budget: ArmBudget) -> dict[str, Any]:
@@ -1671,11 +1995,20 @@ def _parse_structure_proposal(
 
 
 def _structure_update_payload(
-    active: SelfModelSnapshot, source_tokens: Sequence[Mapping[str, Any]]
+    active: SelfModelSnapshot,
+    source_tokens: Sequence[Mapping[str, Any]],
+    *,
+    generation: int,
 ) -> dict[str, Any]:
+    indexed_view = _indexed_authoring_projection(active, generation=generation)
+    _validate_indexed_authoring_projection(
+        indexed_view,
+        active=active,
+        generation=generation,
+    )
     return {
         "compact_patch_schema": COMPACT_PATCH_SCHEMA,
-        "current_hswm_read_only": active.canonical(),
+        "current_hswm_indexed_read_only": indexed_view,
         "instruction": (
             "Author only the compact HSWM organization patch. The adapter copies each "
             "public token's fixed content, id, and provenance into a MemoryRecord; you "
@@ -1683,7 +2016,8 @@ def _structure_update_payload(
             "topology. The cells array order defines cell indices; entry_cell_index and "
             "next_cell_indices refer only to that returned array. The exact-length "
             "existing_memory_cell_indices vector aligns with the canonical "
-            "current_hswm_read_only.memories order: -1 deletes that memory and every "
+            "current_hswm_indexed_read_only.memories order: -1 deletes that memory and "
+            "every "
             "other value is its chosen cell index. The exact-length "
             "new_memory_cell_indices vector aligns with public_source_tokens order and "
             "never permits -1. The new_memory_relations item at array position i has "
@@ -1695,13 +2029,14 @@ def _structure_update_payload(
             "source. Batches may be shuffled: never infer relations from index, "
             "adjacency, or order. Do not reproduce HSWM, MemoryRecord, or token JSON as "
             "a substitute for vectors; a bounded cell instruction may name public "
-            "identifiers needed for routing. Never return a separate plan document."
+            "identifiers needed for routing. The indexed read-only view is a lossless "
+            "projection of HSWM itself, not a separate plan or harness document."
         ),
         "index_alignment": {
             "cell_indices": "returned cells array order",
             "existing_memory_count": len(active.memories),
             "existing_memory_indices": (
-                "current_hswm_read_only.memories canonical array order"
+                "current_hswm_indexed_read_only.memories canonical active order"
             ),
             "new_memory_count": len(source_tokens),
             "new_memory_indices": "public_source_tokens array order",
@@ -1723,6 +2058,7 @@ def _structure_update_payload(
             "rationale_max_chars": MAX_RATIONALE_CHARS,
             "single_cell_assignment_per_memory": True,
         },
+        "mutation_expressivity": MUTATION_EXPRESSIVITY,
         "operation": "author_hswm_compact_patch",
         "protocol": LIVE_PROTOCOL,
         "public_source_tokens": [
@@ -1740,7 +2076,7 @@ def _structure_update_payload(
             "existing_memory_cell_indices": {
                 "exact_length": len(active.memories),
                 "item_domain": "-1 or a valid returned-cell index",
-                "source_order": "current_hswm_read_only.memories",
+                "source_order": "current_hswm_indexed_read_only.memories",
             },
             "new_memory_cell_indices": {
                 "exact_length": len(source_tokens),
@@ -1825,6 +2161,7 @@ class StructuredHSWMArm(_ModelArm):
         source_tokens = _public_source_tokens(batch)
         active_record = self.store.active_snapshot()
         prompt_snapshot = active_record.snapshot if self.read_history else GENESIS
+        _validate_compact_adapter_active_subset(prompt_snapshot)
         completion = self._call(
             operation="update",
             max_output_tokens=self.budget.update_max_output_tokens,
@@ -1840,12 +2177,18 @@ class StructuredHSWMArm(_ModelArm):
                 "omission or default. new_memory_relations array position i makes public "
                 "token i the SOURCE; its other-new targets must not contain i. Relations "
                 "are content-composable only, never inferred from shuffled index/order. "
+                "The read-only active HSWM uses canonical memory and cell indices while "
+                "preserving content, provenance, relations, assignments, and topology. "
                 "Do not return IDs where indices are required, memory/token JSON, a "
                 "separate plan, or prose outside the six fields. Short cell instructions "
                 "may name public routing identifiers. Use only public tokens; never "
                 "infer a gold answer."
             ),
-            payload=_structure_update_payload(prompt_snapshot, source_tokens),
+            payload=_structure_update_payload(
+                prompt_snapshot,
+                source_tokens,
+                generation=active_record.generation,
+            ),
             response_schema=_compact_patch_response_schema(
                 prompt_snapshot,
                 source_tokens,
@@ -2643,7 +2986,7 @@ def run_four_arm_stream(
 
 def _public_gate_nonce(domain: str, index: int, *, prefix: str) -> str:
     raw = (
-        f"{PUBLIC_SCHEMA_GATE_PROTOCOL}|public-denylisted|{domain}|{index}"
+        f"{PUBLIC_SCHEMA_GATE_FIXTURE_DOMAIN}|public-denylisted|{domain}|{index}"
     ).encode("ascii")
     return f"{prefix}_{sha256(raw).hexdigest()[:12]}"
 
@@ -2695,7 +3038,7 @@ def public_schema_gate_fixture() -> dict[str, Any]:
         "incremental_tokens": [item.canonical() for item in incremental],
         "probe": probe.canonical(),
         "probe_answer": _public_gate_nonce("node", 1, prefix="n"),
-        "protocol": PUBLIC_SCHEMA_GATE_PROTOCOL,
+        "protocol": PUBLIC_SCHEMA_GATE_FIXTURE_DOMAIN,
         "synthetic_extension_tokens": [
             item.canonical() for item in synthetic_extension
         ],
@@ -2919,6 +3262,11 @@ def _public_gate_call_summary(entry: CallLedgerEntry) -> dict[str, Any]:
         and entry.completion.output_tokens > PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING
     ):
         raise ContinualLiveError("public gate update lacks frozen output headroom")
+    if (
+        entry.operation == "update"
+        and entry.completion.input_tokens > PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS
+    ):
+        raise ContinualLiveError("public gate update exceeds frozen input-token ceiling")
     return {
         "arm": entry.arm,
         "finish_reason": finish_reason,
@@ -2928,6 +3276,55 @@ def _public_gate_call_summary(entry: CallLedgerEntry) -> dict[str, Any]:
         "output_tokens": entry.completion.output_tokens,
         "request_sha256": entry.completion.request_sha256,
         "response_sha256": entry.completion.response_sha256,
+    }
+
+
+def _authoring_projection_binding(
+    entry: CallLedgerEntry,
+    *,
+    store: SQLiteSelfModelStore,
+) -> dict[str, Any]:
+    if entry.operation != "update":
+        raise ContinualLiveError("authoring projection binding requires an update call")
+    try:
+        payload = json.loads(entry.request_payload_json)
+        projection = payload["current_hswm_indexed_read_only"]
+    except (json.JSONDecodeError, KeyError, TypeError) as error:
+        raise ContinualLiveError("update ledger lacks indexed authoring projection") from error
+    if not isinstance(projection, Mapping):
+        raise ContinualLiveError("indexed authoring projection is not an object")
+    if payload.get("mutation_expressivity") != MUTATION_EXPRESSIVITY:
+        raise ContinualLiveError("update ledger lacks compact adapter scope binding")
+    generation = projection["active_generation"]
+    snapshot_id = projection["snapshot_id"]
+    historical = store.load_snapshot(snapshot_id)
+    if generation == 0:
+        if snapshot_id != GENESIS.snapshot_id:
+            raise ContinualLiveError("generation-zero projection is not exact genesis")
+    else:
+        matches = [
+            receipt
+            for receipt in store.activation_history()
+            if receipt.active_generation == generation
+            and receipt.active_snapshot_id == snapshot_id
+        ]
+        if len(matches) != 1:
+            raise ContinualLiveError(
+                "projection source is not one exact historical active state"
+            )
+    _validate_indexed_authoring_projection(
+        projection,
+        active=historical,
+        generation=generation,
+    )
+    return {
+        "active_generation": generation,
+        "mutation_expressivity": payload.get("mutation_expressivity"),
+        "projection_schema": projection["schema"],
+        "projection_sha256": projection["projection_sha256"],
+        "request_sha256": entry.completion.request_sha256,
+        "snapshot_id": snapshot_id,
+        "source_snapshot_sha256": projection["source_snapshot_sha256"],
     }
 
 
@@ -2942,7 +3339,7 @@ def run_public_schema_gate(
     state_dir.mkdir(parents=True, exist_ok=False)
     budget = ArmBudget(
         answer_max_output_tokens=128,
-        update_max_output_tokens=8192,
+        update_max_output_tokens=PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING,
         max_input_bytes=2_000_000,
         max_state_bytes=1_000_000,
     )
@@ -3053,11 +3450,19 @@ def run_public_schema_gate(
             structured.ledger[2],
         )
         call_summaries = tuple(_public_gate_call_summary(item) for item in call_entries)
+        projection_bindings = [
+            _authoring_projection_binding(
+                structured.ledger[index],
+                store=structured.store,
+            )
+            for index in (0, 1)
+        ]
         if len({item.completion.model for item in call_entries}) != 1:
             raise ContinualLiveError("public gate returned model identity drift")
         result = {
             "adapter_schema": COMPACT_PATCH_SCHEMA,
             "agent_relation_checks": agent_relation_checks,
+            "authoring_projection_bindings": projection_bindings,
             "after_incremental_state_sha256": _digest_bytes(
                 canonical_json_bytes(after_incremental.canonical())
             ),
@@ -3074,7 +3479,10 @@ def run_public_schema_gate(
             "final_memory_count": len(after_incremental.memories),
             "fixture_sha256": fixture["fixture_sha256"],
             "genesis_state_sha256": genesis_sha256,
+            "indexed_authoring_view_schema": INDEXED_AUTHORING_VIEW_SCHEMA,
+            "input_token_ceiling": PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS,
             "incremental_update_receipt_sha256": incremental_update.receipt_sha256,
+            "mutation_expressivity": MUTATION_EXPRESSIVITY,
             "output_token_ceiling": PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING,
             "plain_update_receipt_sha256": plain_update.receipt_sha256,
             "probe_answer_receipt_sha256": answer.receipt_sha256,
@@ -3082,6 +3490,9 @@ def run_public_schema_gate(
             "probe_mechanism_attribution": "not-attested-by-this-public-gate",
             "protocol": PUBLIC_SCHEMA_GATE_PROTOCOL,
             "provider_structured_output_backend_attested": False,
+            "provider_context_window_tokens": (
+                PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS
+            ),
             "semantic_acceptance": "local-strict-parser-after-provider-json-schema",
             "valid": True,
             "warmup_update_receipt_sha256": warmup_update.receipt_sha256,
@@ -4492,17 +4903,21 @@ def schema_gate_main(argv: Sequence[str] | None = None) -> int:
         "container_digest": args.container_digest,
         "denylisted_from_evaluation": True,
         "fixture_sha256": fixture["fixture_sha256"],
+        "indexed_authoring_view_schema": INDEXED_AUTHORING_VIEW_SCHEMA,
         "max_input_bytes": 2_000_000,
         "max_state_bytes": 1_000_000,
+        "max_update_input_tokens": PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS,
+        "mutation_expressivity": MUTATION_EXPRESSIVITY,
         "no_precommit_or_seed_path": True,
         "output_token_ceiling": PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING,
         "protocol": PUBLIC_SCHEMA_GATE_PROTOCOL,
+        "provider_context_window_tokens": PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS,
         "retry_limit": 0,
         "service_binding": args.service_binding,
         "source_revision": args.source_revision,
         "structured_output_backend": "provider-auto-not-attested",
         "structured_output_mode": STRUCTURED_OUTPUT_MODE,
-        "update_max_tokens": 8192,
+        "update_max_tokens": PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING,
     }
     prereg["prereg_sha256"] = canonical_sha256(prereg)
     _write_json_atomic(output / "gate_preregistration.json", prereg)

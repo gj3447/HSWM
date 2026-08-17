@@ -95,7 +95,7 @@ class ScriptedRelationalBackend:
 
     @staticmethod
     def _author(payload: Mapping[str, Any]) -> str:
-        active = payload["current_hswm_read_only"]
+        active = payload["current_hswm_indexed_read_only"]
         existing = list(active["memories"])
         source_tokens = payload["public_source_tokens"]
         new_relations: list[dict[str, Any]] = []
@@ -1093,6 +1093,210 @@ def test_compact_patch_rejects_assignment_vector_cell_capacity(
     assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
 
 
+def _projection_test_snapshot() -> Any:
+    memories = (
+        live.MemoryRecord(
+            memory_id="memory:a",
+            kind="atomic_relation",
+            content={
+                "kind": "atomic_relation",
+                "relation": "rel",
+                "source": "node-a",
+                "target": "node-b",
+            },
+            source_token_ids=("token:a",),
+            related_memory_ids=("memory:b",),
+            labels=("agent-organized",),
+        ),
+        live.MemoryRecord(
+            memory_id="memory:b",
+            kind="atomic_relation",
+            content={
+                "kind": "atomic_relation",
+                "relation": "rel",
+                "source": "node-b",
+                "target": "node-c",
+            },
+            source_token_ids=("token:b",),
+            labels=("agent-organized",),
+        ),
+    )
+    cells = (
+        live.CellRecord(
+            cell_id="cell:a",
+            capability=live.CAPABILITY,
+            instruction="Route from the first memory.",
+            memory_ids=("memory:a",),
+            next_cell_ids=("cell:b",),
+            executor_agent_id=None,
+        ),
+        live.CellRecord(
+            cell_id="cell:b",
+            capability=live.CAPABILITY,
+            instruction="Route from the second memory.",
+            memory_ids=("memory:b",),
+            executor_agent_id=None,
+        ),
+    )
+    return live.make_snapshot(memories, cells=cells, entry_cell_id="cell:a")
+
+
+def test_indexed_authoring_projection_roundtrips_exact_state_and_order() -> None:
+    active = _projection_test_snapshot()
+    projection = live._indexed_authoring_projection(active, generation=7)
+    assert projection["active_generation"] == 7
+    assert projection["snapshot_id"] == active.snapshot_id
+    assert [item["memory_id"] for item in projection["memories"]] == [
+        memory.memory_id for memory in active.memories
+    ]
+    assert [item["cell_id"] for item in projection["cells"]] == [
+        cell.cell_id for cell in active.cells
+    ]
+    assert projection["memories"][0]["related_memory_indices"] == [1]
+    assert projection["cells"][0]["memory_indices"] == [0]
+    assert projection["cells"][0]["next_cell_indices"] == [1]
+    assert projection["entry_cell_index"] == 0
+    assert live._expand_indexed_authoring_projection(projection) == active.canonical()
+    live._validate_indexed_authoring_projection(
+        projection,
+        active=active,
+        generation=7,
+    )
+
+
+@pytest.mark.parametrize("invalid_index", [True, -1, 2])
+def test_indexed_projection_rejects_bool_negative_and_oob_refs(
+    invalid_index: object,
+) -> None:
+    active = _projection_test_snapshot()
+    projection = live._indexed_authoring_projection(active, generation=3)
+    projection["memories"][0]["related_memory_indices"] = [invalid_index]
+    body = {
+        key: value for key, value in projection.items() if key != "projection_sha256"
+    }
+    projection["projection_sha256"] = live.canonical_sha256(body)
+    with pytest.raises(ContinualLiveError, match="bool, negative, or unknown index"):
+        live._expand_indexed_authoring_projection(projection)
+
+
+def test_indexed_projection_preserves_raw_reference_duplicates_and_order() -> None:
+    active = _projection_test_snapshot()
+    projection = live._indexed_authoring_projection(active, generation=3)
+    projection["memories"][0]["related_memory_indices"] = [1, 1]
+    projection["cells"][0]["memory_indices"] = [0, 0]
+    expanded = active.canonical()
+    expanded["memories"][0]["related_memory_ids"] = ["memory:b", "memory:b"]
+    expanded["cells"][0]["memory_ids"] = ["memory:a", "memory:a"]
+    projection["source_snapshot_sha256"] = sha256(
+        canonical_json_bytes(expanded)
+    ).hexdigest()
+    body = {
+        key: value for key, value in projection.items() if key != "projection_sha256"
+    }
+    projection["projection_sha256"] = live.canonical_sha256(body)
+    assert live._expand_indexed_authoring_projection(projection) == expanded
+
+
+def test_indexed_projection_rejects_rehashed_tamper_against_active() -> None:
+    active = _projection_test_snapshot()
+    projection = live._indexed_authoring_projection(active, generation=3)
+    projection["cells"][0]["instruction"] = "Tampered but self-consistent."
+    expanded = active.canonical()
+    expanded["cells"][0]["instruction"] = "Tampered but self-consistent."
+    projection["source_snapshot_sha256"] = sha256(
+        canonical_json_bytes(expanded)
+    ).hexdigest()
+    body = {
+        key: value for key, value in projection.items() if key != "projection_sha256"
+    }
+    projection["projection_sha256"] = live.canonical_sha256(body)
+    with pytest.raises(ContinualLiveError, match="different HSWM state"):
+        live._validate_indexed_authoring_projection(
+            projection,
+            active=active,
+            generation=3,
+        )
+
+
+@pytest.mark.parametrize(
+    ("violation", "message"),
+    [
+        ("zero", "exactly one reachable cell"),
+        ("multiple", "exactly one reachable cell"),
+        ("capability", "capability is unsupported"),
+        ("executor", "cannot preserve delegated executors"),
+    ],
+)
+def test_compact_subset_rejects_unrepresentable_active_state_before_intent(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    violation: str,
+    message: str,
+) -> None:
+    memory = live.MemoryRecord(
+        memory_id="memory:active",
+        kind="atomic_relation",
+        content={
+            "kind": "atomic_relation",
+            "relation": "rel",
+            "source": "node-a",
+            "target": "node-b",
+        },
+        source_token_ids=("token:active",),
+    )
+    if violation == "multiple":
+        cells = (
+            live.CellRecord(
+                cell_id="cell:a",
+                capability=live.CAPABILITY,
+                instruction="First duplicate assignment.",
+                memory_ids=(memory.memory_id,),
+                next_cell_ids=("cell:b",),
+            ),
+            live.CellRecord(
+                cell_id="cell:b",
+                capability=live.CAPABILITY,
+                instruction="Second duplicate assignment.",
+                memory_ids=(memory.memory_id,),
+            ),
+        )
+    else:
+        cells = (
+            live.CellRecord(
+                cell_id="cell:a",
+                capability=("unsupported" if violation == "capability" else live.CAPABILITY),
+                instruction="An intentionally unrepresentable active cell.",
+                memory_ids=() if violation == "zero" else (memory.memory_id,),
+                executor_agent_id="agent:delegate" if violation == "executor" else None,
+            ),
+        )
+    invalid = live.make_snapshot(
+        (memory,),
+        cells=cells,
+        entry_cell_id="cell:a",
+    )
+    backend = ScriptedRelationalBackend()
+    journal = tmp_path / "calls.jsonl"
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id=f"unrepresentable-{violation}",
+        store_path=tmp_path / "state.sqlite3",
+        journal_path=journal,
+    )
+    active_type = type(arm.store.active_snapshot())
+    monkeypatch.setattr(
+        arm.store,
+        "active_snapshot",
+        lambda: active_type(snapshot=invalid, generation=1, policy=arm.policy),
+    )
+    with pytest.raises(ContinualLiveError, match=message):
+        arm.update(_one_token_batch())
+    assert backend.requests == []
+    assert arm.ledger == []
+    assert not journal.exists()
+
+
 def test_compact_patch_materializes_public_content_without_echoing_records(
     tmp_path: Path,
 ) -> None:
@@ -1148,7 +1352,7 @@ def test_existing_assignment_minus_one_is_the_only_delete_encoding(
             value = json.loads(ScriptedRelationalBackend._author(payload))
             self.author_calls += 1
             if self.author_calls == 2:
-                memories = payload["current_hswm_read_only"]["memories"]
+                memories = payload["current_hswm_indexed_read_only"]["memories"]
                 delete_index = next(
                     index
                     for index, memory in enumerate(memories)
@@ -1210,7 +1414,7 @@ def test_relation_to_minus_one_deleted_existing_memory_is_rejected_precommit(
             value = json.loads(ScriptedRelationalBackend._author(payload))
             self.author_calls += 1
             if self.author_calls == 2:
-                memories = payload["current_hswm_read_only"]["memories"]
+                memories = payload["current_hswm_indexed_read_only"]["memories"]
                 delete_index = next(
                     index
                     for index, memory in enumerate(memories)
@@ -1273,7 +1477,7 @@ def test_deletion_referenced_by_surviving_memory_is_rejected_precommit(
             value = json.loads(ScriptedRelationalBackend._author(payload))
             self.author_calls += 1
             if self.author_calls == 2:
-                memories = payload["current_hswm_read_only"]["memories"]
+                memories = payload["current_hswm_indexed_read_only"]["memories"]
                 delete_index = next(
                     index
                     for index, memory in enumerate(memories)
@@ -1329,7 +1533,18 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     )
     assert result["valid"] is True
     assert result["adapter_schema"] == "hswm-compact-structure-patch/v3"
-    assert result["protocol"] == "hswm-public-schema-gate/v3"
+    assert result["protocol"] == "hswm-public-schema-gate/v4"
+    assert result["indexed_authoring_view_schema"] == (
+        "hswm-indexed-authoring-view/v1"
+    )
+    assert result["mutation_expressivity"] == "compact-adapter-subset"
+    assert result["provider_context_window_tokens"] == 32768
+    assert result["input_token_ceiling"] == 26624
+    fixture = live.public_schema_gate_fixture()
+    assert fixture["protocol"] == "hswm-public-schema-gate/v3"
+    assert fixture["fixture_sha256"] == (
+        "2a798b518c712551792400477411f89767755062b926a569dcec6afb9cda3bd6"
+    )
     assert result["calls_observed"] == 4
     assert [item["operation"] for item in result["calls"]] == [
         "update",
@@ -1425,6 +1640,13 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
                 "temperature",
                 "top_p",
             }
+            expected_max_tokens = (
+                128
+                if intent["operation"] == "answer"
+                else live.PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING
+            )
+            assert intent["max_output_tokens"] == expected_max_tokens
+            assert raw_request["max_tokens"] == expected_max_tokens
             assert raw_request["response_format"] == contract.response_format()
             assert raw_request["response_format"]["json_schema"]["strict"] is True
             assert "structured_outputs" not in raw_request
@@ -1451,6 +1673,15 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     structured_intents = [
         item for item in structured_events if item["event"] == "intent"
     ]
+    assert [item["max_output_tokens"] for item in structured_intents] == [
+        6144,
+        6144,
+        128,
+    ]
+    assert live.PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS == (
+        live.PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS
+        - live.PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING
+    )
     first_schema = json.loads(structured_intents[0]["response_schema_json"])
     cell_properties = first_schema["properties"]["cells"]["items"]["properties"]
     relation_properties = first_schema["properties"]["new_memory_relations"]["items"][
@@ -1507,6 +1738,13 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         } & set(completion_value)
     first_intent = structured_intents[0]
     first_payload = json.loads(first_intent["request_payload_json"])
+    assert first_payload["mutation_expressivity"] == "compact-adapter-subset"
+    assert "current_hswm_read_only" not in first_payload
+    first_projection = first_payload["current_hswm_indexed_read_only"]
+    assert first_projection["schema"] == "hswm-indexed-authoring-view/v1"
+    assert live._expand_indexed_authoring_projection(first_projection) == (
+        GENESIS.canonical()
+    )
     first_contract = first_payload["response_contract"]
     assert first_contract["existing_memory_cell_indices"]["exact_length"] == 0
     assert first_contract["new_memory_cell_indices"]["exact_length"] == 64
@@ -1515,6 +1753,67 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         "output_bounds"
     ]
     second_payload = json.loads(structured_intents[1]["request_payload_json"])
+    second_projection = second_payload["current_hswm_indexed_read_only"]
+    expanded_second = live._expand_indexed_authoring_projection(second_projection)
+    assert len(expanded_second["memories"]) == 140
+    assert len(expanded_second["cells"]) >= 1
+    assert second_projection["active_generation"] == 2
+    assert second_projection["source_snapshot_sha256"] == sha256(
+        canonical_json_bytes(expanded_second)
+    ).hexdigest()
+    projection_body = {
+        key: value
+        for key, value in second_projection.items()
+        if key != "projection_sha256"
+    }
+    assert second_projection["projection_sha256"] == live.canonical_sha256(
+        projection_body
+    )
+    assert set(second_projection["memories"][0]) == {
+        "content",
+        "kind",
+        "labels",
+        "memory_id",
+        "related_memory_indices",
+        "source_token_ids",
+    }
+    assert set(second_projection["cells"][0]) == {
+        "capability",
+        "cell_id",
+        "executor_agent_id",
+        "instruction",
+        "memory_indices",
+        "next_cell_indices",
+    }
+
+    def nested_keys(value: Any) -> set[str]:
+        if isinstance(value, Mapping):
+            return set(value) | {
+                key
+                for item in value.values()
+                for key in nested_keys(item)
+            }
+        if isinstance(value, list):
+            return {key for item in value for key in nested_keys(item)}
+        return set()
+
+    assert not {
+        "entry_cell_id",
+        "memory_ids",
+        "next_cell_ids",
+        "related_memory_ids",
+    } & nested_keys(second_projection)
+    bindings = result["authoring_projection_bindings"]
+    assert [item["active_generation"] for item in bindings] == [0, 2]
+    assert [item["request_sha256"] for item in bindings] == [
+        structured_intents[0]["raw_request_sha256"],
+        structured_intents[1]["raw_request_sha256"],
+    ]
+    assert all(
+        item["projection_schema"] == "hswm-indexed-authoring-view/v1"
+        and item["mutation_expressivity"] == "compact-adapter-subset"
+        for item in bindings
+    )
     second_contract = second_payload["response_contract"]
     assert second_contract["existing_memory_cell_indices"]["exact_length"] == 140
     assert second_contract["new_memory_cell_indices"]["exact_length"] == 4
@@ -1600,17 +1899,19 @@ def test_public_gate_rejects_incremental_delete_before_mutating_active_140(
             value = json.loads(ScriptedRelationalBackend._author(payload))
             self.author_calls += 1
             if self.author_calls == 2:
-                active = payload["current_hswm_read_only"]
-                self.pre_incremental_state = dict(active)
+                active = payload["current_hswm_indexed_read_only"]
+                self.pre_incremental_state = live._expand_indexed_authoring_projection(
+                    active
+                )
                 referenced = {
-                    related_id
+                    related_index
                     for memory in active["memories"]
-                    for related_id in memory["related_memory_ids"]
+                    for related_index in memory["related_memory_indices"]
                 }
                 delete_index = next(
                     index
-                    for index, memory in enumerate(active["memories"])
-                    if memory["memory_id"] not in referenced
+                    for index in range(len(active["memories"]))
+                    if index not in referenced
                 )
                 value["existing_memory_cell_indices"][delete_index] = -1
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
@@ -1662,8 +1963,10 @@ def test_public_gate_rejects_wrong_existing_index_before_mutating_active_140(
             value = json.loads(ScriptedRelationalBackend._author(payload))
             self.author_calls += 1
             if self.author_calls == 2:
-                active = payload["current_hswm_read_only"]
-                self.pre_incremental_state = dict(active)
+                active = payload["current_hswm_indexed_read_only"]
+                self.pre_incremental_state = live._expand_indexed_authoring_projection(
+                    active
+                )
                 relation_index = next(
                     index
                     for index, relation in enumerate(value["new_memory_relations"])
@@ -1770,7 +2073,7 @@ def test_public_relation_validator_uses_content_not_shuffled_index_order(
     ("violation", "message"),
     [
         ("length", "did not stop cleanly"),
-        ("headroom", "lacks frozen output headroom"),
+        ("headroom", "provider output usage exceeds the request budget"),
     ],
 )
 def test_public_schema_gate_rejects_first_invalid_completion_before_state_change(
@@ -2199,6 +2502,15 @@ def test_public_schema_gate_cli_has_no_seed_path_and_binds_artifacts(
     assert result["valid"] is True and result["calls_observed"] == 4
     prereg = json.loads((output / "gate_preregistration.json").read_text())
     assert prereg["no_precommit_or_seed_path"] is True
+    assert prereg["protocol"] == "hswm-public-schema-gate/v4"
+    assert prereg["indexed_authoring_view_schema"] == (
+        "hswm-indexed-authoring-view/v1"
+    )
+    assert prereg["mutation_expressivity"] == "compact-adapter-subset"
+    assert prereg["provider_context_window_tokens"] == 32768
+    assert prereg["max_update_input_tokens"] == 26624
+    assert prereg["update_max_tokens"] == 6144
+    assert prereg["update_max_tokens"] == prereg["output_token_ceiling"]
     terminal = json.loads((output / "terminal_receipt.json").read_text())
     assert terminal["schema_gate_passed"] is True
     assert terminal["status"] == "success"

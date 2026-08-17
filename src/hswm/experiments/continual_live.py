@@ -33,6 +33,7 @@ import gc
 from hashlib import sha256
 import itertools
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -44,6 +45,7 @@ import tempfile
 import time
 from typing import Any, Callable, Mapping, Protocol, Sequence
 from urllib import error as urlerror
+from urllib.parse import urlsplit
 from urllib import request as urlrequest
 
 from hswm.selfmod.contracts import (
@@ -94,6 +96,8 @@ PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS = (
     - PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING
 )
 STRUCTURED_OUTPUT_MODE = "openai-response-format-json-schema/v1"
+TOKEN_PREFLIGHT_MODE = "vllm-tokenize-chat/v1"
+TOKEN_PREFLIGHT_SCHEMA = "hswm-token-preflight-receipt/v1"
 MAX_AUTHORED_CELLS = 16
 MAX_CELL_MEMORY_REFERENCES = 64
 MAX_CELL_EDGES = 8
@@ -105,6 +109,9 @@ MAX_PLAIN_MEMORY_CHARS = 16_384
 MAX_RESPONSE_SCHEMA_BYTES = 131_072
 MAX_RAW_REQUEST_BYTES = 2_000_000
 MAX_COMPLETION_TEXT_BYTES = 1_000_000
+MAX_TOKEN_PREFLIGHT_TOKENS = 1_000_000
+MAX_TOKEN_PREFLIGHT_TOKEN_ID = 2_147_483_647
+MAX_TOKEN_PREFLIGHT_LATENCY_MS = 86_400_000
 GENESIS = make_snapshot()
 FROZEN_PILOT_PRECOMMIT_ARTIFACT_SHA256 = (
     "e5f98257a199e70f4e648344f89bd3b59edd6661cbc6dd717b86aaf74fff4324"
@@ -130,6 +137,24 @@ class ContinualLiveError(RuntimeError):
     """A live arm or its audit boundary failed closed."""
 
 
+class _NoRedirectHandler(urlrequest.HTTPRedirectHandler):
+    """Make one logical transport call exactly one outbound HTTP request."""
+
+    def redirect_request(self, *args: Any, **kwargs: Any) -> None:
+        del args, kwargs
+        return None
+
+
+def _urlopen_no_redirect(request: Any, *, timeout: float) -> Any:
+    # `/tokenize` is deliberately restricted to loopback for audited live runs.
+    # Do not let environment HTTP(S)_PROXY settings route that request elsewhere.
+    opener = urlrequest.build_opener(
+        urlrequest.ProxyHandler({}),
+        _NoRedirectHandler(),
+    )
+    return opener.open(request, timeout=timeout)
+
+
 def _strict_object(text: str) -> dict[str, Any]:
     def no_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
         result: dict[str, Any] = {}
@@ -139,8 +164,15 @@ def _strict_object(text: str) -> dict[str, Any]:
             result[key] = value
         return result
 
+    def no_nonfinite_constant(value: str) -> None:
+        raise ValueError(f"non-finite JSON constant {value!r}")
+
     try:
-        value = json.loads(text, object_pairs_hook=no_duplicates)
+        value = json.loads(
+            text,
+            object_pairs_hook=no_duplicates,
+            parse_constant=no_nonfinite_constant,
+        )
     except (json.JSONDecodeError, ValueError) as error:
         raise ContinualLiveError(f"model returned invalid JSON: {error}") from error
     if not isinstance(value, dict):
@@ -265,8 +297,12 @@ class ModelCompletion:
     usage_reported: bool
 
     def __post_init__(self) -> None:
-        if not self.text:
+        if not isinstance(self.text, str) or not self.text:
             raise ContinualLiveError("empty model completion")
+        if not isinstance(self.model, str) or not self.model:
+            raise ContinualLiveError("model completion identity is invalid")
+        if not isinstance(self.usage_reported, bool):
+            raise ContinualLiveError("usage_reported must be an exact boolean")
         if len(self.text.encode("utf-8")) > MAX_COMPLETION_TEXT_BYTES:
             raise ContinualLiveError("model completion text exceeds its hard byte bound")
         for label, raw, digest in (
@@ -281,16 +317,17 @@ class ModelCompletion:
             if _digest_bytes(raw.encode("utf-8")) != digest:
                 raise ContinualLiveError(f"raw {label} preimage digest mismatch")
             try:
-                parsed = json.loads(raw)
-            except json.JSONDecodeError as error:
+                parsed = _strict_object(raw)
+            except ContinualLiveError as error:
                 raise ContinualLiveError(
-                    f"raw {label} preimage is not valid JSON"
+                    f"raw {label} preimage is not strict JSON"
                 ) from error
             if label == "response":
                 try:
                     choices = parsed["choices"]
                     if not isinstance(choices, list) or len(choices) != 1:
                         raise TypeError("response must contain exactly one choice")
+                    finish_reason = choices[0]["finish_reason"]
                     message = choices[0]["message"]
                     if not isinstance(message, Mapping):
                         raise TypeError("response message is not an object")
@@ -300,6 +337,13 @@ class ModelCompletion:
                     raise ContinualLiveError(
                         "raw response lacks the OpenAI completion envelope"
                     ) from error
+                if (
+                    finish_reason != "stop"
+                    or not isinstance(finish_reason, str)
+                ):
+                    raise ContinualLiveError(
+                        "model completion finish_reason must be exact stop"
+                    )
                 if (
                     message.get("reasoning_content") not in (None, "")
                     or message.get("reasoning") not in (None, "")
@@ -316,17 +360,54 @@ class ModelCompletion:
                     )
                 usage = parsed.get("usage")
                 if self.usage_reported:
-                    if not isinstance(usage, Mapping) or (
-                        usage.get("prompt_tokens") != self.input_tokens
-                        or usage.get("completion_tokens") != self.output_tokens
+                    prompt_tokens = (
+                        usage.get("prompt_tokens")
+                        if isinstance(usage, Mapping)
+                        else None
+                    )
+                    completion_tokens = (
+                        usage.get("completion_tokens")
+                        if isinstance(usage, Mapping)
+                        else None
+                    )
+                    total_tokens = (
+                        usage.get("total_tokens")
+                        if isinstance(usage, Mapping)
+                        else None
+                    )
+                    if (
+                        not isinstance(usage, Mapping)
+                        or any(
+                            isinstance(item, bool)
+                            or not isinstance(item, int)
+                            or not 0 <= item <= MAX_TOKEN_PREFLIGHT_TOKENS
+                            for item in (
+                                prompt_tokens,
+                                completion_tokens,
+                                total_tokens,
+                            )
+                        )
+                        or prompt_tokens != self.input_tokens
+                        or completion_tokens != self.output_tokens
+                        or total_tokens != self.input_tokens + self.output_tokens
                     ):
                         raise ContinualLiveError(
                             "raw response usage differs from stored completion"
                         )
                 elif usage is not None:
                     raise ContinualLiveError("usage_reported is false but usage exists")
-        if min(self.input_tokens, self.output_tokens, self.latency_ms) < 0:
-            raise ContinualLiveError("negative model telemetry")
+        for label, value, maximum in (
+            ("input_tokens", self.input_tokens, MAX_TOKEN_PREFLIGHT_TOKENS),
+            ("output_tokens", self.output_tokens, MAX_TOKEN_PREFLIGHT_TOKENS),
+            ("latency_ms", self.latency_ms, MAX_TOKEN_PREFLIGHT_LATENCY_MS),
+        ):
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, int)
+                or value < 0
+                or value > maximum
+            ):
+                raise ContinualLiveError(f"model {label} telemetry is invalid")
 
     def canonical(self) -> dict[str, Any]:
         return {
@@ -343,6 +424,242 @@ class ModelCompletion:
             "text_sha256": _digest_bytes(self.text.encode("utf-8")),
             "usage_reported": self.usage_reported,
         }
+
+
+@dataclass(frozen=True, slots=True)
+class TokenPreflightReceipt:
+    """Exact vLLM ``/tokenize`` evidence for one prepared chat request."""
+
+    count: int
+    http_status: int
+    latency_ms: int
+    max_model_len: int
+    max_output_tokens: int
+    model: str
+    raw_request_bytes: int
+    raw_request_json: str
+    raw_response_bytes: int
+    raw_response_complete: bool
+    raw_response_json: str
+    receipt_sha256: str
+    request_sha256: str
+    response_sha256: str
+    schema: str
+    source_chat_request_sha256: str
+
+    def __post_init__(self) -> None:
+        if self.schema != TOKEN_PREFLIGHT_SCHEMA:
+            raise ContinualLiveError("token preflight receipt schema is invalid")
+        for label, value, allow_zero in (
+            ("count", self.count, True),
+            ("http_status", self.http_status, False),
+            ("latency_ms", self.latency_ms, True),
+            ("max_model_len", self.max_model_len, False),
+            ("max_output_tokens", self.max_output_tokens, False),
+            ("raw_request_bytes", self.raw_request_bytes, False),
+            ("raw_response_bytes", self.raw_response_bytes, False),
+        ):
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, int)
+                or value < (0 if allow_zero else 1)
+                or (
+                    label in {"count", "max_model_len", "max_output_tokens"}
+                    and value > MAX_TOKEN_PREFLIGHT_TOKENS
+                )
+                or (
+                    label == "latency_ms"
+                    and value > MAX_TOKEN_PREFLIGHT_LATENCY_MS
+                )
+                or (
+                    label in {"raw_request_bytes", "raw_response_bytes"}
+                    and value > MAX_RAW_REQUEST_BYTES * 2
+                )
+            ):
+                raise ContinualLiveError(
+                    f"token preflight {label} must be a bounded integer"
+                )
+        if self.http_status != 200:
+            raise ContinualLiveError("successful token preflight HTTP status is not 200")
+        if self.raw_response_complete is not True:
+            raise ContinualLiveError("successful token preflight response is incomplete")
+        if not isinstance(self.model, str) or not self.model:
+            raise ContinualLiveError("token preflight model is invalid")
+        for label, digest in (
+            ("request", self.request_sha256),
+            ("response", self.response_sha256),
+            ("source chat request", self.source_chat_request_sha256),
+            ("receipt", self.receipt_sha256),
+        ):
+            if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
+                raise ContinualLiveError(f"token preflight {label} digest is malformed")
+        if not isinstance(self.raw_request_json, str) or not isinstance(
+            self.raw_response_json, str
+        ):
+            raise ContinualLiveError("token preflight raw preimages must be text")
+        request_raw = self.raw_request_json.encode("utf-8")
+        response_raw = self.raw_response_json.encode("utf-8")
+        if (
+            len(request_raw) != self.raw_request_bytes
+            or len(response_raw) != self.raw_response_bytes
+            or _digest_bytes(request_raw) != self.request_sha256
+            or _digest_bytes(response_raw) != self.response_sha256
+        ):
+            raise ContinualLiveError("token preflight raw preimage binding is invalid")
+        try:
+            request_value = _strict_object(self.raw_request_json)
+            response_value = _strict_object(self.raw_response_json)
+        except ContinualLiveError as error:
+            raise ContinualLiveError(
+                "token preflight preimage is not strict JSON"
+            ) from error
+        if (
+            not isinstance(request_value, dict)
+            or set(request_value)
+            != {
+                "add_generation_prompt",
+                "add_special_tokens",
+                "continue_final_message",
+                "chat_template_kwargs",
+                "messages",
+                "model",
+                "return_token_strs",
+            }
+            or canonical_json_bytes(request_value) != request_raw
+            or request_value["add_generation_prompt"] is not True
+            or request_value["add_special_tokens"] is not False
+            or request_value["continue_final_message"] is not False
+            or request_value["return_token_strs"] is not False
+            or request_value["chat_template_kwargs"] != {"enable_thinking": False}
+            or request_value["model"] != self.model
+            or not isinstance(request_value["messages"], list)
+            or not request_value["messages"]
+        ):
+            raise ContinualLiveError("token preflight request contract is invalid")
+        if not isinstance(response_value, dict) or set(response_value) != {
+            "count",
+            "max_model_len",
+            "token_strs",
+            "tokens",
+        }:
+            raise ContinualLiveError("token preflight response field set is invalid")
+        tokens = response_value["tokens"]
+        response_count = response_value["count"]
+        response_max_model_len = response_value["max_model_len"]
+        if (
+            isinstance(response_count, bool)
+            or not isinstance(response_count, int)
+            or not 0 <= response_count <= MAX_TOKEN_PREFLIGHT_TOKENS
+            or isinstance(response_max_model_len, bool)
+            or not isinstance(response_max_model_len, int)
+            or not 1 <= response_max_model_len <= MAX_TOKEN_PREFLIGHT_TOKENS
+            or response_count != self.count
+            or response_max_model_len != self.max_model_len
+            or not isinstance(tokens, list)
+            or len(tokens) != self.count
+            or self.count > self.max_model_len
+            or any(
+                isinstance(token, bool)
+                or not isinstance(token, int)
+                or token < 0
+                or token > MAX_TOKEN_PREFLIGHT_TOKEN_ID
+                for token in tokens
+            )
+            or response_value["token_strs"] is not None
+        ):
+            raise ContinualLiveError("token preflight response content is invalid")
+        if canonical_sha256(self.unsigned()) != self.receipt_sha256:
+            raise ContinualLiveError("token preflight receipt digest mismatch")
+
+    @classmethod
+    def make(
+        cls,
+        *,
+        raw_request: bytes,
+        raw_response: bytes,
+        source_chat_request_sha256: str,
+        max_output_tokens: int,
+        http_status: int,
+        latency_ms: int,
+        raw_response_complete: bool,
+    ) -> "TokenPreflightReceipt":
+        try:
+            request_value = _strict_object(raw_request.decode("utf-8"))
+            response_value = _strict_object(raw_response.decode("utf-8"))
+            count = response_value["count"]
+            max_model_len = response_value["max_model_len"]
+            model = request_value["model"]
+        except (
+            UnicodeDecodeError,
+            ContinualLiveError,
+            KeyError,
+            TypeError,
+        ) as error:
+            raise ContinualLiveError("invalid token preflight envelope") from error
+        unsigned = {
+            "count": count,
+            "http_status": http_status,
+            "latency_ms": latency_ms,
+            "max_model_len": max_model_len,
+            "max_output_tokens": max_output_tokens,
+            "model": model,
+            "raw_request_bytes": len(raw_request),
+            "raw_request_json": raw_request.decode("utf-8"),
+            "raw_response_bytes": len(raw_response),
+            "raw_response_complete": raw_response_complete,
+            "raw_response_json": raw_response.decode("utf-8"),
+            "request_sha256": _digest_bytes(raw_request),
+            "response_sha256": _digest_bytes(raw_response),
+            "schema": TOKEN_PREFLIGHT_SCHEMA,
+            "source_chat_request_sha256": source_chat_request_sha256,
+        }
+        return cls(**unsigned, receipt_sha256=canonical_sha256(unsigned))
+
+    @classmethod
+    def from_mapping(cls, value: Mapping[str, Any]) -> "TokenPreflightReceipt":
+        fields = {
+            "count",
+            "http_status",
+            "latency_ms",
+            "max_model_len",
+            "max_output_tokens",
+            "model",
+            "raw_request_bytes",
+            "raw_request_json",
+            "raw_response_bytes",
+            "raw_response_complete",
+            "raw_response_json",
+            "receipt_sha256",
+            "request_sha256",
+            "response_sha256",
+            "schema",
+            "source_chat_request_sha256",
+        }
+        if not isinstance(value, Mapping) or set(value) != fields:
+            raise ContinualLiveError("token preflight receipt field set is invalid")
+        return cls(**{field: value[field] for field in fields})
+
+    def unsigned(self) -> dict[str, Any]:
+        return {
+            "count": self.count,
+            "http_status": self.http_status,
+            "latency_ms": self.latency_ms,
+            "max_model_len": self.max_model_len,
+            "max_output_tokens": self.max_output_tokens,
+            "model": self.model,
+            "raw_request_bytes": self.raw_request_bytes,
+            "raw_request_json": self.raw_request_json,
+            "raw_response_bytes": self.raw_response_bytes,
+            "raw_response_complete": self.raw_response_complete,
+            "raw_response_json": self.raw_response_json,
+            "request_sha256": self.request_sha256,
+            "response_sha256": self.response_sha256,
+            "schema": self.schema,
+            "source_chat_request_sha256": self.source_chat_request_sha256,
+        }
+
+    def canonical(self) -> dict[str, Any]:
+        return {**self.unsigned(), "receipt_sha256": self.receipt_sha256}
 
 
 _SUPPORTED_JSON_SCHEMA_KEYS = frozenset(
@@ -583,11 +900,61 @@ def _prepare_chat_request(
     return raw
 
 
+def _prepare_tokenize_request(
+    *,
+    backend_identity: Mapping[str, Any],
+    raw_chat_request: bytes,
+) -> bytes:
+    """Project one exact chat body into vLLM's chat-tokenization request."""
+
+    if backend_identity.get("token_preflight_mode") != TOKEN_PREFLIGHT_MODE:
+        raise ContinualLiveError("backend does not bind the token preflight protocol")
+    try:
+        chat = json.loads(raw_chat_request.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise ContinualLiveError("prepared chat request is not JSON") from error
+    if canonical_json_bytes(chat) != raw_chat_request:
+        raise ContinualLiveError("prepared chat request is not canonical")
+    try:
+        value = {
+            "add_generation_prompt": True,
+            "add_special_tokens": False,
+            "continue_final_message": False,
+            "chat_template_kwargs": chat["chat_template_kwargs"],
+            "messages": chat["messages"],
+            "model": chat["model"],
+            "return_token_strs": False,
+        }
+    except (KeyError, TypeError) as error:
+        raise ContinualLiveError("prepared chat request cannot be tokenized") from error
+    if (
+        value["model"] != backend_identity.get("model")
+        or value["chat_template_kwargs"] != {"enable_thinking": False}
+        or not isinstance(value["messages"], list)
+        or not value["messages"]
+    ):
+        raise ContinualLiveError("tokenize request differs from frozen chat config")
+    raw = canonical_json_bytes(value)
+    if len(raw) > MAX_RAW_REQUEST_BYTES:
+        raise ContinualLiveError("prepared tokenize request exceeds its hard byte bound")
+    return raw
+
+
 class ChatBackend(Protocol):
     """One stateless chat call; implementations must not retry."""
 
     @property
     def identity(self) -> Mapping[str, Any]: ...
+
+    def tokenize(
+        self,
+        *,
+        raw_request: bytes,
+        source_chat_request_sha256: str,
+        max_output_tokens: int,
+        request_id: str,
+        response_observer: Callable[[bytes, bytes, int | None, bool], None],
+    ) -> TokenPreflightReceipt: ...
 
     def complete(
         self,
@@ -608,20 +975,72 @@ class OpenAIBackendConfig:
     top_p: float = 1.0
     seed: int = 0
     enable_thinking: bool = False
+    expected_max_model_len: int = 32_768
     max_response_bytes: int = 4_000_000
 
     def __post_init__(self) -> None:
-        if not self.endpoint.startswith(("http://", "https://")):
-            raise ValueError("endpoint must use HTTP(S)")
-        if not self.model:
+        if not isinstance(self.endpoint, str) or not self.endpoint:
+            raise ValueError("endpoint must be a non-empty string")
+        endpoint = urlsplit(self.endpoint)
+        try:
+            endpoint.port
+        except ValueError as error:
+            raise ValueError("endpoint port is invalid") from error
+        if (
+            endpoint.scheme not in {"http", "https"}
+            or not endpoint.netloc
+            or not endpoint.hostname
+            or endpoint.username is not None
+            or endpoint.password is not None
+            or endpoint.path not in {"", "/"}
+            or endpoint.query
+            or endpoint.fragment
+            or "?" in self.endpoint
+            or "#" in self.endpoint
+        ):
+            raise ValueError("endpoint must be an HTTP(S) origin without userinfo")
+        if not isinstance(self.model, str) or not self.model.strip():
             raise ValueError("model must be non-empty")
-        if self.timeout_seconds <= 0 or self.max_response_bytes <= 0:
-            raise ValueError("timeout and response bound must be positive")
-        if self.temperature != 0.0:
+        if self.api_key is not None and (
+            not isinstance(self.api_key, str) or not self.api_key
+        ):
+            raise ValueError("api_key must be None or a non-empty string")
+        if (
+            isinstance(self.timeout_seconds, bool)
+            or not isinstance(self.timeout_seconds, (int, float))
+            or not math.isfinite(self.timeout_seconds)
+            or not 0 < self.timeout_seconds <= 86_400
+        ):
+            raise ValueError("timeout_seconds must be a bounded finite number")
+        if (
+            isinstance(self.max_response_bytes, bool)
+            or not isinstance(self.max_response_bytes, int)
+            or not 1 <= self.max_response_bytes <= MAX_RAW_REQUEST_BYTES * 2
+        ):
+            raise ValueError("max_response_bytes is outside the protocol bound")
+        if (
+            isinstance(self.expected_max_model_len, bool)
+            or not isinstance(self.expected_max_model_len, int)
+            or not 1 <= self.expected_max_model_len <= MAX_TOKEN_PREFLIGHT_TOKENS
+        ):
+            raise ValueError("expected_max_model_len is outside the protocol bound")
+        if (
+            type(self.temperature) is not float
+            or not math.isfinite(self.temperature)
+            or self.temperature != 0.0
+            or math.copysign(1.0, self.temperature) != 1.0
+        ):
             raise ValueError("the frozen benchmark requires greedy temperature=0")
         if self.enable_thinking is not False:
             raise ValueError("the frozen benchmark requires enable_thinking=false")
-        if self.top_p != 1.0 or self.seed != 0:
+        if (
+            type(self.top_p) is not float
+            or not math.isfinite(self.top_p)
+            or self.top_p != 1.0
+            or isinstance(self.seed, bool)
+            or not isinstance(self.seed, int)
+            or self.seed != 0
+        ):
             raise ValueError("the frozen benchmark requires top_p=1 and seed=0")
 
     def public_identity(self) -> dict[str, Any]:
@@ -629,6 +1048,7 @@ class OpenAIBackendConfig:
             "adapter": "openai-compatible-stateless/v1",
             "enable_thinking": self.enable_thinking,
             "endpoint": self.endpoint,
+            "expected_max_model_len": self.expected_max_model_len,
             "max_response_bytes": self.max_response_bytes,
             "model": self.model,
             "retry_count": 0,
@@ -636,6 +1056,12 @@ class OpenAIBackendConfig:
             "seed": self.seed,
             "temperature": self.temperature,
             "timeout_seconds": self.timeout_seconds,
+            "token_preflight_mode": TOKEN_PREFLIGHT_MODE,
+            "token_preflight_transport_trust": (
+                "loopback-without-api-key-middleware"
+                if urlsplit(self.endpoint).hostname in {"127.0.0.1", "localhost", "::1"}
+                else "non-loopback-unsupported-for-audited-live-use"
+            ),
             "top_p": self.top_p,
         }
 
@@ -649,6 +1075,104 @@ class OpenAICompatibleBackend:
     @property
     def identity(self) -> Mapping[str, Any]:
         return self.config.public_identity()
+
+    def tokenize(
+        self,
+        *,
+        raw_request: bytes,
+        source_chat_request_sha256: str,
+        max_output_tokens: int,
+        request_id: str,
+        response_observer: Callable[[bytes, bytes, int | None, bool], None],
+    ) -> TokenPreflightReceipt:
+        if len(raw_request) > MAX_RAW_REQUEST_BYTES:
+            raise ContinualLiveError("prepared tokenize request exceeds its hard byte bound")
+        try:
+            request_value = json.loads(raw_request)
+        except (UnicodeDecodeError, json.JSONDecodeError) as error:
+            raise ContinualLiveError("prepared tokenize request is invalid") from error
+        if (
+            canonical_json_bytes(request_value) != raw_request
+            or set(request_value)
+            != {
+                "add_generation_prompt",
+                "add_special_tokens",
+                "continue_final_message",
+                "chat_template_kwargs",
+                "messages",
+                "model",
+                "return_token_strs",
+            }
+            or request_value["model"] != self.config.model
+            or request_value["add_generation_prompt"] is not True
+            or request_value["add_special_tokens"] is not False
+            or request_value["continue_final_message"] is not False
+            or request_value["return_token_strs"] is not False
+            or request_value["chat_template_kwargs"]
+            != {"enable_thinking": self.config.enable_thinking}
+        ):
+            raise ContinualLiveError("prepared tokenize request differs from backend config")
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-Idempotency-Key": f"{request_id}:tokenize",
+        }
+        request = urlrequest.Request(
+            self.config.endpoint.rstrip("/") + "/tokenize",
+            data=raw_request,
+            headers=headers,
+            method="POST",
+        )
+        started = time.monotonic_ns()
+        try:
+            with _urlopen_no_redirect(
+                request, timeout=self.config.timeout_seconds
+            ) as response:
+                raw_response = response.read(self.config.max_response_bytes + 1)
+                status_value = getattr(response, "status", None)
+        except urlerror.HTTPError as error:
+            error_raw = error.read(self.config.max_response_bytes + 1)
+            response_complete = len(error_raw) <= self.config.max_response_bytes
+            response_observer(
+                raw_request,
+                error_raw,
+                error.code,
+                response_complete,
+            )
+            detail = error_raw.decode("utf-8", errors="replace")
+            raise ContinualLiveError(
+                f"token preflight HTTP outcome {error.code}; no retry: {detail[:500]}"
+            ) from error
+        except (urlerror.URLError, TimeoutError, socket.timeout, OSError) as error:
+            raise ContinualLiveError(
+                f"token preflight outcome unknown; no retry: {error}"
+            ) from error
+        latency_ms = (time.monotonic_ns() - started) // 1_000_000
+        response_complete = len(raw_response) <= self.config.max_response_bytes
+        http_status = (
+            status_value
+            if isinstance(status_value, int) and not isinstance(status_value, bool)
+            else None
+        )
+        response_observer(
+            raw_request,
+            raw_response,
+            http_status,
+            response_complete,
+        )
+        if len(raw_response) > self.config.max_response_bytes:
+            raise ContinualLiveError("token preflight response exceeds byte bound")
+        if http_status is None:
+            raise ContinualLiveError("token preflight response lacks an HTTP status")
+        return TokenPreflightReceipt.make(
+            raw_request=raw_request,
+            raw_response=raw_response,
+            source_chat_request_sha256=source_chat_request_sha256,
+            max_output_tokens=max_output_tokens,
+            http_status=http_status,
+            latency_ms=int(latency_ms),
+            raw_response_complete=response_complete,
+        )
 
     def complete(
         self,
@@ -708,7 +1232,7 @@ class OpenAICompatibleBackend:
         )
         started = time.monotonic_ns()
         try:
-            with urlrequest.urlopen(
+            with _urlopen_no_redirect(
                 request, timeout=self.config.timeout_seconds
             ) as response:
                 raw_response = response.read(self.config.max_response_bytes + 1)
@@ -736,11 +1260,23 @@ class OpenAICompatibleBackend:
             raise ContinualLiveError("model returned empty text")
         usage = value.get("usage")
         usage_reported = isinstance(usage, Mapping)
-        try:
-            input_tokens = int(usage["prompt_tokens"]) if usage_reported else 0
-            output_tokens = int(usage["completion_tokens"]) if usage_reported else 0
-        except (KeyError, TypeError, ValueError) as error:
-            raise ContinualLiveError("provider usage record is incomplete") from error
+        if usage_reported:
+            try:
+                input_tokens = usage["prompt_tokens"]
+                output_tokens = usage["completion_tokens"]
+            except KeyError as error:
+                raise ContinualLiveError("provider usage record is incomplete") from error
+            if any(
+                isinstance(item, bool)
+                or not isinstance(item, int)
+                or item < 0
+                or item > MAX_TOKEN_PREFLIGHT_TOKENS
+                for item in (input_tokens, output_tokens)
+            ):
+                raise ContinualLiveError("provider usage record is invalid")
+        else:
+            input_tokens = 0
+            output_tokens = 0
         return ModelCompletion(
             text=text,
             raw_request_json=raw_request.decode("utf-8"),
@@ -952,6 +1488,7 @@ class CallLedgerEntry:
     response_schema_name: str
     response_schema_sha256: str
     system_message: str
+    token_preflight: TokenPreflightReceipt
     completion: ModelCompletion
 
     def __post_init__(self) -> None:
@@ -989,6 +1526,28 @@ class CallLedgerEntry:
             raise ContinualLiveError("live model call requires provider token usage")
         if self.completion.output_tokens > self.max_output_tokens:
             raise ContinualLiveError("provider output usage exceeds the request budget")
+        expected_max_model_len = backend_identity.get("expected_max_model_len")
+        if (
+            isinstance(expected_max_model_len, bool)
+            or not isinstance(expected_max_model_len, int)
+            or not 1 <= expected_max_model_len <= MAX_TOKEN_PREFLIGHT_TOKENS
+        ):
+            raise ContinualLiveError(
+                "ledger backend identity lacks a bounded expected model length"
+            )
+        if (
+            self.token_preflight.source_chat_request_sha256
+            != self.completion.request_sha256
+            or self.token_preflight.max_output_tokens != self.max_output_tokens
+            or self.token_preflight.model != self.completion.model
+            or self.token_preflight.count != self.completion.input_tokens
+            or self.token_preflight.max_model_len != expected_max_model_len
+            or self.token_preflight.count + self.max_output_tokens
+            > self.token_preflight.max_model_len
+        ):
+            raise ContinualLiveError(
+                "token preflight differs from the completed chat request or usage"
+            )
         if canonical_json_bytes(backend_identity).decode("utf-8") != self.backend_identity_json:
             raise ContinualLiveError("ledger backend identity is not canonical")
         response_schema = JSONSchemaContract(
@@ -1010,6 +1569,21 @@ class CallLedgerEntry:
             raise ContinualLiveError("raw request body field set is not frozen")
         if canonical_json_bytes(raw_request).decode("utf-8") != self.completion.raw_request_json:
             raise ContinualLiveError("raw request body is not canonical")
+        tokenize_request = json.loads(self.token_preflight.raw_request_json)
+        if (
+            tokenize_request["messages"] != raw_request["messages"]
+            or tokenize_request["model"] != raw_request["model"]
+            or tokenize_request["chat_template_kwargs"]
+            != raw_request["chat_template_kwargs"]
+            or self.token_preflight.raw_request_json
+            != _prepare_tokenize_request(
+                backend_identity=backend_identity,
+                raw_chat_request=self.completion.raw_request_json.encode("utf-8"),
+            ).decode("utf-8")
+        ):
+            raise ContinualLiveError(
+                "token preflight request differs from the completed chat preimage"
+            )
         if raw_request["messages"] != [
             {"role": "system", "content": self.system_message},
             {"role": "user", "content": self.request_payload_json},
@@ -1049,6 +1623,7 @@ class CallLedgerEntry:
             "response_schema_name": self.response_schema_name,
             "response_schema_sha256": self.response_schema_sha256,
             "system_message": self.system_message,
+            "token_preflight": self.token_preflight.canonical(),
         }
 
 
@@ -1062,6 +1637,10 @@ class _ModelArm:
         isolation_id: str,
         journal_path: Path,
         completion_validator: Callable[[CallLedgerEntry], object] | None = None,
+        token_preflight_validator: Callable[
+            [TokenPreflightReceipt, str], object
+        ]
+        | None = None,
     ) -> None:
         if not name or not isolation_id:
             raise ValueError("arm name and isolation id are required")
@@ -1071,6 +1650,7 @@ class _ModelArm:
         self.isolation_id = isolation_id
         self.journal_path = Path(journal_path)
         self.completion_validator = completion_validator
+        self.token_preflight_validator = token_preflight_validator
         if self.journal_path.exists():
             raise ContinualLiveError("arm call journal must be fresh")
         self.journal_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1118,7 +1698,11 @@ class _ModelArm:
             max_output_tokens=max_output_tokens,
             response_schema=response_schema,
         )
-        if len(raw_request) > self.budget.max_input_bytes:
+        raw_tokenize_request = _prepare_tokenize_request(
+            backend_identity=backend_identity,
+            raw_chat_request=raw_request,
+        )
+        if max(len(raw_request), len(raw_tokenize_request)) > self.budget.max_input_bytes:
             raise ContinualLiveError(
                 f"{self.name} {operation} input exceeds the common byte envelope"
             )
@@ -1155,8 +1739,180 @@ class _ModelArm:
             "response_schema_name": response_schema.name,
             "response_schema_sha256": response_schema.schema_sha256,
             "system_message": system,
+            "token_preflight_mode": TOKEN_PREFLIGHT_MODE,
+            "tokenize_request_bytes": len(raw_tokenize_request),
+            "tokenize_request_json": raw_tokenize_request.decode("utf-8"),
+            "tokenize_request_sha256": _digest_bytes(raw_tokenize_request),
         }
         self._journal(intent)
+        self._journal(
+            {
+                "arm": self.name,
+                "event": "tokenize_intent",
+                "max_output_tokens": max_output_tokens,
+                "operation": operation,
+                "ordinal": ordinal,
+                "raw_request_bytes": len(raw_tokenize_request),
+                "raw_request_json": raw_tokenize_request.decode("utf-8"),
+                "raw_request_sha256": _digest_bytes(raw_tokenize_request),
+                "request_id": request_id,
+                "source_chat_request_sha256": _digest_bytes(raw_request),
+            }
+        )
+        tokenize_response_was_received = False
+        tokenize_observer_calls = 0
+        observed_tokenize_response: bytes | None = None
+        observed_tokenize_status: int | None = None
+        observed_tokenize_response_complete: bool | None = None
+        try:
+            def observe_tokenize_response(
+                observed_request: bytes,
+                raw_response: bytes,
+                http_status: int | None,
+                response_complete: bool,
+            ) -> None:
+                nonlocal tokenize_observer_calls, observed_tokenize_response
+                nonlocal observed_tokenize_status, tokenize_response_was_received
+                nonlocal observed_tokenize_response_complete
+                tokenize_observer_calls += 1
+                observed_tokenize_response = raw_response
+                observed_tokenize_status = http_status
+                observed_tokenize_response_complete = response_complete
+                prepared_request_match = observed_request == raw_tokenize_request
+                self._journal(
+                    {
+                        "arm": self.name,
+                        "event": "tokenize_raw_response_received",
+                        "http_status": http_status,
+                        "operation": operation,
+                        "ordinal": ordinal,
+                        "prepared_request_match": prepared_request_match,
+                        "raw_request_base64": base64.b64encode(observed_request).decode(
+                            "ascii"
+                        ),
+                        "raw_request_sha256": _digest_bytes(observed_request),
+                        "raw_response_base64": base64.b64encode(raw_response).decode(
+                            "ascii"
+                        ),
+                        "raw_response_sha256": _digest_bytes(raw_response),
+                        "request_id": request_id,
+                        "response_complete": response_complete,
+                        "response_bytes": len(raw_response),
+                        "response_truncated": not response_complete,
+                        "source_chat_request_sha256": _digest_bytes(raw_request),
+                    }
+                )
+                tokenize_response_was_received = True
+                if not prepared_request_match:
+                    raise ContinualLiveError(
+                        "backend observed tokenize request differs from prepared preimage"
+                    )
+
+            token_preflight = self.backend.tokenize(
+                raw_request=raw_tokenize_request,
+                source_chat_request_sha256=_digest_bytes(raw_request),
+                max_output_tokens=max_output_tokens,
+                request_id=request_id,
+                response_observer=observe_tokenize_response,
+            )
+            if tokenize_observer_calls != 1:
+                raise ContinualLiveError(
+                    "backend must report exactly one tokenize response observation"
+                )
+            if (
+                observed_tokenize_response
+                != token_preflight.raw_response_json.encode("utf-8")
+                or observed_tokenize_status != token_preflight.http_status
+                or observed_tokenize_response_complete
+                is not token_preflight.raw_response_complete
+                or token_preflight.raw_request_json
+                != raw_tokenize_request.decode("utf-8")
+                or token_preflight.source_chat_request_sha256
+                != _digest_bytes(raw_request)
+                or token_preflight.max_output_tokens != max_output_tokens
+            ):
+                raise ContinualLiveError(
+                    "token preflight receipt differs from observed request or response"
+                )
+        except BaseException as error:
+            self._journal(
+                {
+                    "arm": self.name,
+                    "error": f"{type(error).__name__}: {error}",
+                    "event": "tokenize_failed",
+                    "generation_dispatched": False,
+                    "operation": operation,
+                    "ordinal": ordinal,
+                    "outcome": (
+                        "received_invalid"
+                        if tokenize_response_was_received
+                        else "unknown"
+                    ),
+                    "request_id": request_id,
+                    "retry_permitted": False,
+                    "source_chat_request_sha256": _digest_bytes(raw_request),
+                }
+            )
+            raise
+        try:
+            expected_max_model_len = backend_identity.get("expected_max_model_len")
+            if (
+                isinstance(expected_max_model_len, bool)
+                or not isinstance(expected_max_model_len, int)
+                or token_preflight.max_model_len != expected_max_model_len
+            ):
+                raise ContinualLiveError(
+                    "token preflight max model length differs from frozen backend identity"
+                )
+            if self.token_preflight_validator is not None:
+                self.token_preflight_validator(token_preflight, operation)
+            if (
+                token_preflight.count + max_output_tokens
+                > token_preflight.max_model_len
+            ):
+                raise ContinualLiveError(
+                    "token preflight leaves insufficient model context for output budget"
+                )
+        except BaseException as error:
+            self._journal(
+                {
+                    "arm": self.name,
+                    "error": f"{type(error).__name__}: {error}",
+                    "event": "tokenize_rejected",
+                    "generation_dispatched": False,
+                    "operation": operation,
+                    "ordinal": ordinal,
+                    "outcome": "received_invalid",
+                    "request_id": request_id,
+                    "retry_permitted": False,
+                    "token_preflight": token_preflight.canonical(),
+                }
+            )
+            raise
+        self._journal(
+            {
+                "arm": self.name,
+                "event": "tokenize_accepted",
+                "operation": operation,
+                "ordinal": ordinal,
+                "request_id": request_id,
+                "token_preflight": token_preflight.canonical(),
+            }
+        )
+        self._journal(
+            {
+                "arm": self.name,
+                "event": "generation_dispatch_intent",
+                "operation": operation,
+                "ordinal": ordinal,
+                "raw_request_bytes": len(raw_request),
+                "raw_request_sha256": _digest_bytes(raw_request),
+                "request_id": request_id,
+                "token_preflight_receipt_sha256": (
+                    token_preflight.receipt_sha256
+                ),
+            }
+        )
         response_was_received = False
         observer_calls = 0
         observed_response: bytes | None = None
@@ -1199,6 +1955,7 @@ class _ModelArm:
                     "arm": self.name,
                     "error": f"{type(error).__name__}: {error}",
                     "event": "failed",
+                    "generation_dispatched": True,
                     "operation": operation,
                     "ordinal": ordinal,
                     "outcome": (
@@ -1249,6 +2006,7 @@ class _ModelArm:
                 response_schema_name=response_schema.name,
                 response_schema_sha256=response_schema.schema_sha256,
                 system_message=system,
+                token_preflight=token_preflight,
                 completion=completion,
             )
             response_schema.validate_instance(_strict_object(completion.text))
@@ -1318,7 +2076,9 @@ class _ModelArm:
             calls=1,
             input_tokens=completion.input_tokens,
             output_tokens=completion.output_tokens,
-            latency_ms=completion.latency_ms,
+            latency_ms=(
+                completion.latency_ms + self.ledger[-1].token_preflight.latency_ms
+            ),
         )
 
 
@@ -2115,6 +2875,10 @@ class StructuredHSWMArm(_ModelArm):
         read_history: bool = True,
         reset_after_commit: bool = False,
         completion_validator: Callable[[CallLedgerEntry], object] | None = None,
+        token_preflight_validator: Callable[
+            [TokenPreflightReceipt, str], object
+        ]
+        | None = None,
         proposal_validator: Callable[
             [MutationProposal, Sequence[Mapping[str, Any]], SelfModelSnapshot], object
         ]
@@ -2127,6 +2891,7 @@ class StructuredHSWMArm(_ModelArm):
             isolation_id=isolation_id,
             journal_path=journal_path or Path(store_path).with_suffix(".calls.jsonl"),
             completion_validator=completion_validator,
+            token_preflight_validator=token_preflight_validator,
         )
         self.commit_updates = commit_updates
         self.read_history = read_history
@@ -2255,7 +3020,9 @@ class StructuredHSWMArm(_ModelArm):
             calls=1,
             input_tokens=completion.input_tokens,
             output_tokens=completion.output_tokens,
-            latency_ms=completion.latency_ms,
+            latency_ms=(
+                completion.latency_ms + self.ledger[-1].token_preflight.latency_ms
+            ),
         )
 
     def checkpoint(self) -> "SnapshotCheckpoint":
@@ -2358,6 +3125,10 @@ class PlainTextArm(_ModelArm):
         state_path: Path,
         journal_path: Path | None = None,
         completion_validator: Callable[[CallLedgerEntry], object] | None = None,
+        token_preflight_validator: Callable[
+            [TokenPreflightReceipt, str], object
+        ]
+        | None = None,
     ) -> None:
         super().__init__(
             name="plain",
@@ -2366,6 +3137,7 @@ class PlainTextArm(_ModelArm):
             isolation_id=isolation_id,
             journal_path=journal_path or Path(state_path).with_suffix(".calls.jsonl"),
             completion_validator=completion_validator,
+            token_preflight_validator=token_preflight_validator,
         )
         self.state_path = Path(state_path)
         if self.state_path.exists():
@@ -2431,7 +3203,9 @@ class PlainTextArm(_ModelArm):
             calls=1,
             input_tokens=completion.input_tokens,
             output_tokens=completion.output_tokens,
-            latency_ms=completion.latency_ms,
+            latency_ms=(
+                completion.latency_ms + self.ledger[-1].token_preflight.latency_ms
+            ),
         )
 
 
@@ -3276,7 +4050,66 @@ def _public_gate_call_summary(entry: CallLedgerEntry) -> dict[str, Any]:
         "output_tokens": entry.completion.output_tokens,
         "request_sha256": entry.completion.request_sha256,
         "response_sha256": entry.completion.response_sha256,
+        "token_preflight_receipt_sha256": entry.token_preflight.receipt_sha256,
+        "token_preflight_request_sha256": entry.token_preflight.request_sha256,
+        "token_preflight_response_sha256": entry.token_preflight.response_sha256,
     }
+
+
+def _revalidate_token_preflight_ledger_entry(
+    entry: Mapping[str, Any],
+) -> TokenPreflightReceipt:
+    """Rebuild one persisted token receipt and bind it to its chat ledger."""
+
+    try:
+        completion = entry["completion"]
+        backend_identity = json.loads(entry["backend_identity_json"])
+        receipt = TokenPreflightReceipt.from_mapping(entry["token_preflight"])
+        raw_chat = completion["raw_request_json"].encode("utf-8")
+        expected_tokenize_request = _prepare_tokenize_request(
+            backend_identity=backend_identity,
+            raw_chat_request=raw_chat,
+        )
+    except (KeyError, TypeError, json.JSONDecodeError) as error:
+        raise ContinualLiveError("persisted token preflight binding is malformed") from error
+    expected_max_model_len = backend_identity.get("expected_max_model_len")
+    if (
+        isinstance(expected_max_model_len, bool)
+        or not isinstance(expected_max_model_len, int)
+        or not 1 <= expected_max_model_len <= MAX_TOKEN_PREFLIGHT_TOKENS
+    ):
+        raise ContinualLiveError(
+            "persisted backend identity lacks a bounded expected model length"
+        )
+    if (
+        receipt.raw_request_json.encode("utf-8") != expected_tokenize_request
+        or receipt.source_chat_request_sha256 != _digest_bytes(raw_chat)
+        or receipt.source_chat_request_sha256 != completion["request_sha256"]
+        or receipt.max_output_tokens != entry["max_output_tokens"]
+        or receipt.model != completion["model"]
+        or receipt.count != completion["input_tokens"]
+        or receipt.max_model_len != expected_max_model_len
+        or receipt.count + receipt.max_output_tokens > receipt.max_model_len
+    ):
+        raise ContinualLiveError(
+            "persisted token preflight differs from its chat ledger"
+        )
+    return receipt
+
+
+def _public_gate_token_preflight_validator(
+    receipt: TokenPreflightReceipt,
+    operation: str,
+) -> None:
+    if receipt.max_model_len != PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS:
+        raise ContinualLiveError("public gate token preflight model length drifted")
+    if (
+        operation == "update"
+        and receipt.count > PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS
+    ):
+        raise ContinualLiveError(
+            "public gate token preflight exceeds frozen update input ceiling"
+        )
 
 
 def _authoring_projection_binding(
@@ -3369,6 +4202,7 @@ def run_public_schema_gate(
         store_path=state_dir / "structured" / "state.sqlite3",
         journal_path=state_dir / "structured" / "calls.jsonl",
         completion_validator=accept_gate_completion,
+        token_preflight_validator=_public_gate_token_preflight_validator,
         proposal_validator=accept_gate_proposal,
     )
     plain = PlainTextArm(
@@ -3378,6 +4212,7 @@ def run_public_schema_gate(
         state_path=state_dir / "plain" / "state.json",
         journal_path=state_dir / "plain" / "calls.jsonl",
         completion_validator=accept_gate_completion,
+        token_preflight_validator=_public_gate_token_preflight_validator,
     )
     fixture = public_schema_gate_fixture()
     warmup_tokens = _public_gate_tokens(0, 64)
@@ -3472,7 +4307,10 @@ def run_public_schema_gate(
             ),
             "before_probe_state_sha256": before_probe_sha256,
             "calls": list(call_summaries),
-            "calls_observed": len(call_summaries),
+            "generation_latency_ms": sum(
+                item.completion.latency_ms for item in call_entries
+            ),
+            "model_generation_calls_observed": len(call_summaries),
             "denylisted_from_evaluation": True,
             "extension": extension,
             "final_cell_count": len(after_incremental.cells),
@@ -3484,6 +4322,7 @@ def run_public_schema_gate(
             "incremental_update_receipt_sha256": incremental_update.receipt_sha256,
             "mutation_expressivity": MUTATION_EXPRESSIVITY,
             "output_token_ceiling": PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING,
+            "outbound_http_requests_observed": len(call_summaries) * 2,
             "plain_update_receipt_sha256": plain_update.receipt_sha256,
             "probe_answer_receipt_sha256": answer.receipt_sha256,
             "probe_choice": chosen,
@@ -3494,6 +4333,15 @@ def run_public_schema_gate(
                 PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS
             ),
             "semantic_acceptance": "local-strict-parser-after-provider-json-schema",
+            "token_preflight_calls_observed": len(call_summaries),
+            "token_preflight_latency_ms": sum(
+                item.token_preflight.latency_ms for item in call_entries
+            ),
+            "token_preflight_mode": TOKEN_PREFLIGHT_MODE,
+            "total_transport_latency_ms": sum(
+                item.completion.latency_ms + item.token_preflight.latency_ms
+                for item in call_entries
+            ),
             "valid": True,
             "warmup_update_receipt_sha256": warmup_update.receipt_sha256,
         }
@@ -4371,6 +5219,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         api_key=os.environ.get(args.api_key_env),
         timeout_seconds=args.timeout,
     )
+    if (
+        backend_config.public_identity()["token_preflight_transport_trust"]
+        != "loopback-without-api-key-middleware"
+    ):
+        raise ContinualLiveError(
+            "audited token preflight requires a loopback-trusted vLLM endpoint"
+        )
     execution = precommit["recovery_execution"]
     provider = precommit["intended_provider"]
     if (
@@ -4407,7 +5262,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         "failed_primary_binding_sha256": failed_primary_validation[
             "failed_primary_binding_sha256"
         ],
+        "generation_call_budget_total": execution["endpoint_call_budget_total"],
         "mode": "engineering-pilot-reserve-recovery-only",
+        "outbound_http_request_budget_total": (
+            execution["endpoint_call_budget_total"] * 2
+        ),
         "protocol": LIVE_PROTOCOL,
         "removal_restore_requested": args.removal_restore,
         "ordered_seed_commitments": list(commitments),
@@ -4417,6 +5276,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         "service_binding": args.service_binding,
         "source_revision": args.source_revision,
         "stream_count": args.streams,
+        "token_preflight_call_budget_total": execution[
+            "endpoint_call_budget_total"
+        ],
+        "token_preflight_mode": TOKEN_PREFLIGHT_MODE,
+        "token_preflight_transport_trust": backend_config.public_identity()[
+            "token_preflight_transport_trust"
+        ],
     }
     prereg["prereg_sha256"] = canonical_sha256(prereg)
     _write_json_atomic(output / "preregistration.json", prereg)
@@ -4481,14 +5347,16 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
             status["completed_streams"] = stream + 1
             _write_json_atomic(output / "status.json", status)
-        observed_calls = sum(
+        observed_generation_calls = sum(
             len(entries)
             for stream_ledger in ledgers
             for scope in ("primary", "mediation")
             for entries in stream_ledger[scope].values()
         )
-        if observed_calls != execution["endpoint_call_budget_total"]:
-            raise ContinualLiveError("observed calls differ from frozen total budget")
+        if observed_generation_calls != execution["endpoint_call_budget_total"]:
+            raise ContinualLiveError(
+                "observed generation calls differ from frozen legacy endpoint budget"
+            )
         status["status"] = "success"
     except BaseException as error:
         status["status"] = "failed"
@@ -4663,6 +5531,25 @@ def main(argv: Sequence[str] | None = None) -> int:
                                     schema_json=entry["response_schema_json"],
                                     schema_sha256=entry["response_schema_sha256"],
                                 )
+                                token_preflight = (
+                                    _revalidate_token_preflight_ledger_entry(entry)
+                                )
+                                rebuilt_completion = ModelCompletion(
+                                    text=completion["text"],
+                                    raw_request_json=completion["raw_request_json"],
+                                    raw_response_json=completion["raw_response_json"],
+                                    request_sha256=completion["request_sha256"],
+                                    response_sha256=completion["response_sha256"],
+                                    model=completion["model"],
+                                    input_tokens=completion["input_tokens"],
+                                    output_tokens=completion["output_tokens"],
+                                    latency_ms=completion["latency_ms"],
+                                    usage_reported=completion["usage_reported"],
+                                )
+                                if rebuilt_completion.canonical() != completion:
+                                    raise ContinualLiveError(
+                                        "persisted completion canonical form changed"
+                                    )
                                 response_schema.validate_instance(
                                     _strict_object(completion["text"])
                                 )
@@ -4727,6 +5614,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                                 returned_text = returned_message["content"]
                                 returned_model = raw_response_value["model"]
                                 usage = raw_response_value["usage"]
+                                if not isinstance(usage, Mapping):
+                                    raise TypeError("response usage is not an object")
                             except (KeyError, IndexError, TypeError):
                                 preimages_ok = False
                                 continue
@@ -4781,10 +5670,23 @@ def main(argv: Sequence[str] | None = None) -> int:
                                 or returned_message.get("refusal") not in (None, "")
                                 or returned_message.get("tool_calls") not in (None, [])
                                 or returned_message.get("function_call") is not None
+                                or any(
+                                    isinstance(item, bool)
+                                    or not isinstance(item, int)
+                                    or not 0 <= item <= MAX_TOKEN_PREFLIGHT_TOKENS
+                                    for item in (
+                                        usage.get("prompt_tokens"),
+                                        usage.get("completion_tokens"),
+                                        usage.get("total_tokens"),
+                                    )
+                                )
                                 or usage.get("prompt_tokens")
                                 != completion["input_tokens"]
                                 or usage.get("completion_tokens")
                                 != completion["output_tokens"]
+                                or usage.get("total_tokens")
+                                != completion["input_tokens"]
+                                + completion["output_tokens"]
                             ):
                                 preimages_ok = False
             post_reveal["call_preimage_revalidation_match"] = preimages_ok
@@ -4840,6 +5742,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             "completed_streams": status["completed_streams"],
             "engineering_only": True,
             "error": status["error"],
+            "generation_calls_expected": execution["endpoint_call_budget_total"],
             "removal_mediation_gate_passed": (
                 all(item.removal_mediation_gate_passed for item in removal_results)
                 if args.removal_restore and removal_results
@@ -4847,6 +5750,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             ),
             "protocol": LIVE_PROTOCOL,
             "status": status["status"],
+            "outbound_http_requests_expected": (
+                execution["endpoint_call_budget_total"] * 2
+            ),
+            "token_preflight_calls_expected": execution[
+                "endpoint_call_budget_total"
+            ],
+            "token_preflight_mode": TOKEN_PREFLIGHT_MODE,
         }
         terminal["receipt_sha256"] = canonical_sha256(terminal)
         _write_json_atomic(output / "terminal_receipt.json", terminal)
@@ -4893,13 +5803,20 @@ def schema_gate_main(argv: Sequence[str] | None = None) -> int:
         api_key=os.environ.get(args.api_key_env),
         timeout_seconds=args.timeout,
     )
+    if (
+        backend_config.public_identity()["token_preflight_transport_trust"]
+        != "loopback-without-api-key-middleware"
+    ):
+        raise ContinualLiveError(
+            "public schema gate requires a loopback-trusted vLLM endpoint"
+        )
     fixture = public_schema_gate_fixture()
     _write_json_atomic(output / "public_fixture.json", fixture)
     prereg = {
         "adapter_schema": COMPACT_PATCH_SCHEMA,
         "answer_max_tokens": 128,
         "backend": backend_config.public_identity(),
-        "call_budget": 4,
+        "generation_call_budget": 4,
         "container_digest": args.container_digest,
         "denylisted_from_evaluation": True,
         "fixture_sha256": fixture["fixture_sha256"],
@@ -4917,6 +5834,9 @@ def schema_gate_main(argv: Sequence[str] | None = None) -> int:
         "source_revision": args.source_revision,
         "structured_output_backend": "provider-auto-not-attested",
         "structured_output_mode": STRUCTURED_OUTPUT_MODE,
+        "token_preflight_call_budget": 4,
+        "token_preflight_mode": TOKEN_PREFLIGHT_MODE,
+        "outbound_http_request_budget": 8,
         "update_max_tokens": PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING,
     }
     prereg["prereg_sha256"] = canonical_sha256(prereg)
@@ -4939,16 +5859,19 @@ def schema_gate_main(argv: Sequence[str] | None = None) -> int:
         artifact_hashes = _final_artifact_sha256s(output)
         terminal = {
             "artifact_sha256s": artifact_hashes,
-            "calls_expected": 4,
             "checkpointed_sqlite_artifacts": list(
                 checkpointed_sqlite_artifacts
             ),
             "denylisted_from_evaluation": True,
             "error": status["error"],
+            "generation_calls_expected": 4,
             "no_precommit_or_seed_path": True,
+            "outbound_http_requests_expected": 8,
             "protocol": PUBLIC_SCHEMA_GATE_PROTOCOL,
             "schema_gate_passed": status["status"] == "success",
             "status": status["status"],
+            "token_preflight_calls_expected": 4,
+            "token_preflight_mode": TOKEN_PREFLIGHT_MODE,
         }
         terminal["receipt_sha256"] = canonical_sha256(terminal)
         _write_json_atomic(output / "terminal_receipt.json", terminal)
@@ -4978,6 +5901,9 @@ __all__ = [
     "StateTransitionReceipt",
     "StructuredHSWMArm",
     "STRUCTURED_OUTPUT_MODE",
+    "TOKEN_PREFLIGHT_MODE",
+    "TOKEN_PREFLIGHT_SCHEMA",
+    "TokenPreflightReceipt",
     "audit_parity",
     "build_four_arms",
     "main",

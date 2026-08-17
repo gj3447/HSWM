@@ -39,23 +39,77 @@ from hswm.experiments.continual_live import (
 from hswm.selfmod.contracts import canonical_json_bytes
 
 
+TOKEN_PREFLIGHT_SUCCESS_EVENTS = [
+    "intent",
+    "tokenize_intent",
+    "tokenize_raw_response_received",
+    "tokenize_accepted",
+    "generation_dispatch_intent",
+]
+
+
 class ScriptedRelationalBackend:
     """Stateless fixture whose only input is the recorded chat request."""
 
     def __init__(self) -> None:
         self.requests: list[dict[str, Any]] = []
+        self.tokenize_requests: list[dict[str, Any]] = []
+        self._preflight_counts: dict[str, int] = {}
 
     @property
     def identity(self) -> Mapping[str, Any]:
         return {
             "adapter": "scripted-relational/v1",
             "enable_thinking": False,
+            "expected_max_model_len": 32768,
             "model": "deterministic-fixture",
             "response_format_mode": live.STRUCTURED_OUTPUT_MODE,
             "seed": 0,
             "temperature": 0.0,
+            "token_preflight_mode": live.TOKEN_PREFLIGHT_MODE,
+            "token_preflight_transport_trust": "scripted-test-double",
             "top_p": 1.0,
         }
+
+    def tokenize(
+        self,
+        *,
+        raw_request: bytes,
+        source_chat_request_sha256: str,
+        max_output_tokens: int,
+        request_id: str,
+        response_observer: Callable[[bytes, bytes, int | None, bool], None],
+    ) -> live.TokenPreflightReceipt:
+        request_value = json.loads(raw_request)
+        count = max(1, len(raw_request) // 64)
+        max_model_len = live.PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS
+        raw_response = canonical_json_bytes(
+            {
+                "count": count,
+                "max_model_len": max_model_len,
+                "token_strs": None,
+                "tokens": list(range(count)),
+            }
+        )
+        self.tokenize_requests.append(
+            {
+                "max_output_tokens": max_output_tokens,
+                "request": request_value,
+                "request_id": request_id,
+                "source_chat_request_sha256": source_chat_request_sha256,
+            }
+        )
+        self._preflight_counts[source_chat_request_sha256] = count
+        response_observer(raw_request, raw_response, 200, True)
+        return live.TokenPreflightReceipt.make(
+            raw_request=raw_request,
+            raw_response=raw_response,
+            source_chat_request_sha256=source_chat_request_sha256,
+            max_output_tokens=max_output_tokens,
+            http_status=200,
+            latency_ms=0,
+            raw_response_complete=True,
+        )
 
     @staticmethod
     def _edges_from_hswm(state: Mapping[str, Any]) -> dict[tuple[str, str], str]:
@@ -203,7 +257,7 @@ class ScriptedRelationalBackend:
             text = self._plain(payload)
         else:
             raise AssertionError(operation)
-        input_tokens = max(1, len(raw_request) // 4)
+        input_tokens = self._preflight_counts[sha256(raw_request).hexdigest()]
         output_tokens = max(1, len(text.encode()) // 4)
         raw_response = canonical_json_bytes(
             {
@@ -214,6 +268,7 @@ class ScriptedRelationalBackend:
                 "usage": {
                     "completion_tokens": output_tokens,
                     "prompt_tokens": input_tokens,
+                    "total_tokens": input_tokens + output_tokens,
                 },
             }
         )
@@ -262,6 +317,9 @@ class FirstResponseGateViolationBackend(ScriptedRelationalBackend):
         elif self.violation == "headroom":
             output_tokens = 7000
             envelope["usage"]["completion_tokens"] = output_tokens
+            envelope["usage"]["total_tokens"] = (
+                completion.input_tokens + output_tokens
+            )
         else:  # pragma: no cover - test construction guard
             raise AssertionError(self.violation)
         changed_response = canonical_json_bytes(envelope)
@@ -827,7 +885,7 @@ def test_post_response_ledger_rejection_retains_full_response(
         store_path=tmp_path / "state.sqlite3",
         journal_path=journal,
     )
-    with pytest.raises(ContinualLiveError, match="raw request parameters"):
+    with pytest.raises(ContinualLiveError, match="token preflight differs"):
         arm.update(
             LearningBatch(
                 episode_id="episode-rejected-response",
@@ -839,14 +897,13 @@ def test_post_response_ledger_rejection_retains_full_response(
         )
 
     events = [json.loads(line) for line in journal.read_text().splitlines()]
-    assert [event["event"] for event in events] == [
-        "intent",
+    assert [event["event"] for event in events] == TOKEN_PREFLIGHT_SUCCESS_EVENTS + [
         "raw_response_received",
         "response_received",
         "rejected_response",
     ]
-    raw_event = events[1]
-    completion = events[2]["completion"]
+    raw_event = events[-3]
+    completion = events[-2]["completion"]
     assert base64.b64decode(raw_event["raw_response_base64"]) == completion[
         "raw_response_json"
     ].encode("utf-8")
@@ -862,6 +919,10 @@ def test_invalid_provider_json_is_retained_before_parsing(
     raw_response = b"not-json-from-provider"
 
     class FakeResponse:
+        def __init__(self, body: bytes) -> None:
+            self.body = body
+            self.status = 200
+
         def __enter__(self) -> FakeResponse:
             return self
 
@@ -869,12 +930,24 @@ def test_invalid_provider_json_is_retained_before_parsing(
             return None
 
         def read(self, _limit: int) -> bytes:
-            return raw_response
+            return self.body
 
-    def fake_urlopen(*args: Any, **kwargs: Any) -> FakeResponse:
-        return FakeResponse()
+    def fake_urlopen(request: Any, **kwargs: Any) -> FakeResponse:
+        del kwargs
+        if request.full_url.endswith("/tokenize"):
+            return FakeResponse(
+                canonical_json_bytes(
+                    {
+                        "count": 3,
+                        "max_model_len": 32768,
+                        "token_strs": None,
+                        "tokens": [1, 2, 3],
+                    }
+                )
+            )
+        return FakeResponse(raw_response)
 
-    monkeypatch.setattr(live.urlrequest, "urlopen", fake_urlopen)
+    monkeypatch.setattr(live, "_urlopen_no_redirect", fake_urlopen)
     journal = tmp_path / "invalid-json.calls.jsonl"
     arm = StructuredHSWMArm(
         backend=OpenAICompatibleBackend(
@@ -900,13 +973,12 @@ def test_invalid_provider_json_is_retained_before_parsing(
         )
 
     events = [json.loads(line) for line in journal.read_text().splitlines()]
-    assert [event["event"] for event in events] == [
-        "intent",
+    assert [event["event"] for event in events] == TOKEN_PREFLIGHT_SUCCESS_EVENTS + [
         "raw_response_received",
         "failed",
     ]
-    assert base64.b64decode(events[1]["raw_response_base64"]) == raw_response
-    assert events[1]["raw_response_sha256"] == sha256(raw_response).hexdigest()
+    assert base64.b64decode(events[-2]["raw_response_base64"]) == raw_response
+    assert events[-2]["raw_response_sha256"] == sha256(raw_response).hexdigest()
     assert events[-1]["outcome"] == "received_invalid"
     assert events[-1]["retry_permitted"] is False
     assert arm.ledger == []
@@ -1545,7 +1617,9 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     assert fixture["fixture_sha256"] == (
         "2a798b518c712551792400477411f89767755062b926a569dcec6afb9cda3bd6"
     )
-    assert result["calls_observed"] == 4
+    assert result["model_generation_calls_observed"] == 4
+    assert result["token_preflight_calls_observed"] == 4
+    assert result["outbound_http_requests_observed"] == 8
     assert [item["operation"] for item in result["calls"]] == [
         "update",
         "update",
@@ -1608,18 +1682,13 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
             tmp_path / "gate-state" / "plain" / "calls.jsonl"
         ).read_text().splitlines()
     ]
-    assert [item["event"] for item in structured_events] == [
-        "intent",
-        "raw_response_received",
-        "response_received",
-        "completed",
-    ] * 3
-    assert [item["event"] for item in plain_events] == [
-        "intent",
+    accepted_call_events = TOKEN_PREFLIGHT_SUCCESS_EVENTS + [
         "raw_response_received",
         "response_received",
         "completed",
     ]
+    assert [item["event"] for item in structured_events] == accepted_call_events * 3
+    assert [item["event"] for item in plain_events] == accepted_call_events
     for events in (structured_events, plain_events):
         intents = [item for item in events if item["event"] == "intent"]
         completed = [item for item in events if item["event"] == "completed"]
@@ -2072,7 +2141,7 @@ def test_public_relation_validator_uses_content_not_shuffled_index_order(
 @pytest.mark.parametrize(
     ("violation", "message"),
     [
-        ("length", "did not stop cleanly"),
+        ("length", "finish_reason"),
         ("headroom", "provider output usage exceeds the request budget"),
     ],
 )
@@ -2097,12 +2166,14 @@ def test_public_schema_gate_rejects_first_invalid_completion_before_state_change
         json.loads(line)
         for line in (state_dir / "structured" / "calls.jsonl").read_text().splitlines()
     ]
-    assert [event["event"] for event in events] == [
-        "intent",
-        "raw_response_received",
-        "response_received",
-        "rejected_response",
-    ]
+    expected_tail = (
+        ["raw_response_received", "failed"]
+        if violation == "length"
+        else ["raw_response_received", "response_received", "rejected_response"]
+    )
+    assert [event["event"] for event in events] == (
+        TOKEN_PREFLIGHT_SUCCESS_EVENTS + expected_tail
+    )
     assert sum(event["event"] == "intent" for event in events) == 1
     assert not (state_dir / "plain" / "calls.jsonl").exists()
     store = live.SQLiteSelfModelStore(
@@ -2124,9 +2195,30 @@ def test_exact_raw_request_is_fsynced_before_transport_failure(
 ) -> None:
     observed_requests: list[bytes] = []
 
+    class TokenizeResponse:
+        status = 200
+
+        def __enter__(self) -> TokenizeResponse:
+            return self
+
+        def __exit__(self, *args: Any) -> None:
+            return None
+
+        def read(self, _limit: int) -> bytes:
+            return canonical_json_bytes(
+                {
+                    "count": 3,
+                    "max_model_len": 32768,
+                    "token_strs": None,
+                    "tokens": [1, 2, 3],
+                }
+            )
+
     def fail_transport(request: Any, *, timeout: float) -> Any:
         del timeout
         observed_requests.append(request.data)
+        if request.full_url.endswith("/tokenize"):
+            return TokenizeResponse()
         if outcome == "timeout":
             raise TimeoutError("fixture timeout before response")
         raise live.urlerror.HTTPError(
@@ -2137,7 +2229,7 @@ def test_exact_raw_request_is_fsynced_before_transport_failure(
             io.BytesIO(b'{"error":"fixture bad request"}'),
         )
 
-    monkeypatch.setattr(live.urlrequest, "urlopen", fail_transport)
+    monkeypatch.setattr(live, "_urlopen_no_redirect", fail_transport)
     config = live.OpenAIBackendConfig(
         endpoint="http://model.invalid",
         model="fixture-model",
@@ -2150,16 +2242,19 @@ def test_exact_raw_request_is_fsynced_before_transport_failure(
     )
     with pytest.raises(ContinualLiveError, match="no retry"):
         arm.update(_one_token_batch())
-    assert len(observed_requests) == 1
+    assert len(observed_requests) == 2
     events = [
         json.loads(line)
         for line in arm.journal_path.read_text().splitlines()
     ]
     intent = events[0]
     assert intent["event"] == "intent"
-    assert intent["raw_request_json"].encode() == observed_requests[0]
-    assert intent["raw_request_sha256"] == sha256(observed_requests[0]).hexdigest()
-    assert intent["raw_request_bytes"] == len(observed_requests[0])
+    assert intent["raw_request_json"].encode() == observed_requests[1]
+    assert intent["raw_request_sha256"] == sha256(observed_requests[1]).hexdigest()
+    assert intent["raw_request_bytes"] == len(observed_requests[1])
+    tokenize_intent = events[1]
+    assert tokenize_intent["event"] == "tokenize_intent"
+    assert tokenize_intent["raw_request_json"].encode() == observed_requests[0]
     response_format = json.loads(intent["raw_request_json"])["response_format"]
     assert response_format["type"] == "json_schema"
     assert response_format["json_schema"]["strict"] is True
@@ -2167,15 +2262,717 @@ def test_exact_raw_request_is_fsynced_before_transport_failure(
     assert events[-1]["event"] == "failed"
     assert not any(item["event"] == "completed" for item in events)
     if outcome == "timeout":
-        assert [item["event"] for item in events] == ["intent", "failed"]
+        assert [item["event"] for item in events] == TOKEN_PREFLIGHT_SUCCESS_EVENTS + [
+            "failed"
+        ]
     else:
-        assert [item["event"] for item in events] == [
-            "intent",
+        assert [item["event"] for item in events] == TOKEN_PREFLIGHT_SUCCESS_EVENTS + [
             "raw_response_received",
             "failed",
         ]
-        assert events[1]["prepared_request_match"] is True
+        assert events[-2]["prepared_request_match"] is True
     assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+def test_token_preflight_exactly_binds_the_prepared_chat_request(
+    tmp_path: Path,
+) -> None:
+    backend = ScriptedRelationalBackend()
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id="exact-token-preflight",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    arm.update(_one_token_batch())
+    entry = arm.ledger[0]
+    expected = live._prepare_tokenize_request(
+        backend_identity=backend.identity,
+        raw_chat_request=entry.completion.raw_request_json.encode("utf-8"),
+    )
+    receipt = entry.token_preflight
+    assert receipt.raw_request_json.encode("utf-8") == expected
+    assert receipt.source_chat_request_sha256 == entry.completion.request_sha256
+    assert receipt.count == entry.completion.input_tokens
+    assert receipt.max_output_tokens == entry.max_output_tokens
+    assert receipt.max_model_len == backend.identity["expected_max_model_len"]
+    request = json.loads(receipt.raw_request_json)
+    assert request["continue_final_message"] is False
+    assert request["add_generation_prompt"] is True
+    assert request["add_special_tokens"] is False
+    assert request["chat_template_kwargs"] == {"enable_thinking": False}
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert [item["event"] for item in events] == TOKEN_PREFLIGHT_SUCCESS_EVENTS + [
+        "raw_response_received",
+        "response_received",
+        "completed",
+    ]
+    assert events.index(
+        next(item for item in events if item["event"] == "tokenize_accepted")
+    ) < events.index(
+        next(item for item in events if item["event"] == "generation_dispatch_intent")
+    )
+
+
+@pytest.mark.parametrize(
+    "violation",
+    [
+        "extra-field",
+        "bool-count",
+        "negative-maxlen",
+        "float-maxlen",
+        "huge-count",
+        "huge-token-id",
+        "count-list-mismatch",
+        "duplicate-count",
+        "duplicate-maxlen",
+        "nan-count",
+        "invalid-json",
+    ],
+)
+def test_invalid_token_preflight_envelopes_never_dispatch_generation(
+    tmp_path: Path,
+    violation: str,
+) -> None:
+    class InvalidTokenizeBackend(ScriptedRelationalBackend):
+        def tokenize(self, **kwargs: Any) -> live.TokenPreflightReceipt:
+            observer = kwargs.pop("response_observer")
+            captured: list[tuple[bytes, bytes, int | None, bool]] = []
+            receipt = super().tokenize(
+                **kwargs,
+                response_observer=lambda *items: captured.append(items),
+            )
+            raw_request, raw_response, status, complete = captured[0]
+            if violation == "invalid-json":
+                changed = b"not-json"
+            else:
+                value = json.loads(raw_response)
+                if violation in {"duplicate-count", "duplicate-maxlen"}:
+                    field = (
+                        "count" if violation == "duplicate-count" else "max_model_len"
+                    )
+                    duplicate = canonical_json_bytes({field: value[field]})[1:-1]
+                    changed = b"{" + duplicate + b"," + raw_response[1:]
+                elif violation == "nan-count":
+                    changed = raw_response.replace(
+                        canonical_json_bytes(value["count"]), b"NaN", 1
+                    )
+                elif violation == "extra-field":
+                    value["extra"] = 1
+                elif violation == "bool-count":
+                    value["count"] = True
+                elif violation == "negative-maxlen":
+                    value["max_model_len"] = -1
+                elif violation == "float-maxlen":
+                    value["max_model_len"] = 32768.0
+                elif violation == "huge-count":
+                    value["count"] = live.MAX_TOKEN_PREFLIGHT_TOKENS + 1
+                elif violation == "huge-token-id":
+                    value["tokens"][0] = live.MAX_TOKEN_PREFLIGHT_TOKEN_ID + 1
+                elif violation == "count-list-mismatch":
+                    value["count"] += 1
+                else:  # pragma: no cover - parametrization guard
+                    raise AssertionError(violation)
+                if violation not in {
+                    "duplicate-count",
+                    "duplicate-maxlen",
+                    "nan-count",
+                }:
+                    changed = canonical_json_bytes(value)
+            observer(raw_request, changed, status, complete)
+            return live.TokenPreflightReceipt.make(
+                raw_request=raw_request,
+                raw_response=changed,
+                source_chat_request_sha256=kwargs["source_chat_request_sha256"],
+                max_output_tokens=kwargs["max_output_tokens"],
+                http_status=200,
+                latency_ms=0,
+                raw_response_complete=True,
+            )
+
+    backend = InvalidTokenizeBackend()
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id=f"invalid-tokenize-{violation}",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="token preflight"):
+        arm.update(_one_token_batch())
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert events[-1]["event"] == "tokenize_failed"
+    assert events[-1]["generation_dispatched"] is False
+    assert not any(item["event"] == "generation_dispatch_intent" for item in events)
+    assert backend.requests == []
+    assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+@pytest.mark.parametrize("observer_mode", ["silent", "duplicate", "request", "response"])
+def test_token_preflight_observer_is_exactly_once_and_exact(
+    tmp_path: Path,
+    observer_mode: str,
+) -> None:
+    class ObserverViolationBackend(ScriptedRelationalBackend):
+        def tokenize(self, **kwargs: Any) -> live.TokenPreflightReceipt:
+            observer = kwargs.pop("response_observer")
+            captured: list[tuple[bytes, bytes, int | None, bool]] = []
+            receipt = super().tokenize(
+                **kwargs,
+                response_observer=lambda *items: captured.append(items),
+            )
+            raw_request, raw_response, status, complete = captured[0]
+            if observer_mode == "duplicate":
+                observer(raw_request, raw_response, status, complete)
+                observer(raw_request, raw_response, status, complete)
+            elif observer_mode == "request":
+                observer(b"{}", raw_response, status, complete)
+            elif observer_mode == "response":
+                observer(raw_request, b"{}", status, complete)
+            return receipt
+
+    backend = ObserverViolationBackend()
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id=f"tokenize-observer-{observer_mode}",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="tokenize|preflight"):
+        arm.update(_one_token_batch())
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert events[-1]["event"] == "tokenize_failed"
+    assert not any(item["event"] == "generation_dispatch_intent" for item in events)
+    assert backend.requests == []
+    assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+@pytest.mark.parametrize("failure", ["timeout", "http-oversize", "invalid-json", "no-status"])
+def test_token_preflight_transport_failure_is_audited_without_generation(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    failure: str,
+) -> None:
+    max_bytes = 32
+    error_body = b"x" * 100
+
+    class FakeResponse:
+        def __init__(self, body: bytes, *, with_status: bool = True) -> None:
+            self.body = body
+            if with_status:
+                self.status = 200
+
+        def __enter__(self) -> FakeResponse:
+            return self
+
+        def __exit__(self, *args: Any) -> None:
+            return None
+
+        def read(self, limit: int) -> bytes:
+            return self.body[:limit]
+
+    def fake_urlopen(request: Any, *, timeout: float) -> FakeResponse:
+        del timeout
+        assert request.full_url.endswith("/tokenize")
+        if failure == "timeout":
+            raise TimeoutError("tokenizer timeout")
+        if failure == "http-oversize":
+            raise live.urlerror.HTTPError(
+                request.full_url,
+                400,
+                "bad tokenize request",
+                {},
+                io.BytesIO(error_body),
+            )
+        if failure == "invalid-json":
+            return FakeResponse(b"not-json")
+        return FakeResponse(b"{}", with_status=False)
+
+    monkeypatch.setattr(live, "_urlopen_no_redirect", fake_urlopen)
+    backend = OpenAICompatibleBackend(
+        live.OpenAIBackendConfig(
+            endpoint="http://model.invalid",
+            model="fixture-model",
+            max_response_bytes=max_bytes,
+        )
+    )
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id=f"tokenize-transport-{failure}",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="token preflight"):
+        arm.update(_one_token_batch())
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert events[-1]["event"] == "tokenize_failed"
+    assert events[-1]["generation_dispatched"] is False
+    assert not any(item["event"] == "generation_dispatch_intent" for item in events)
+    raw_events = [
+        item for item in events if item["event"] == "tokenize_raw_response_received"
+    ]
+    if failure == "timeout":
+        assert raw_events == []
+    else:
+        assert len(raw_events) == 1
+    if failure == "http-oversize":
+        assert raw_events[0]["http_status"] == 400
+        assert raw_events[0]["response_complete"] is False
+        assert raw_events[0]["response_truncated"] is True
+        assert base64.b64decode(raw_events[0]["raw_response_base64"]) == error_body[
+            : max_bytes + 1
+        ]
+    assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+def test_token_preflight_redirect_is_not_followed_or_generated(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    open_calls = 0
+
+    class RedirectingOpener:
+        def open(self, request: Any, *, timeout: float) -> Any:
+            nonlocal open_calls
+            del timeout
+            open_calls += 1
+            raise live.urlerror.HTTPError(
+                request.full_url,
+                302,
+                "redirect forbidden",
+                {"Location": "http://elsewhere.invalid/tokenize"},
+                io.BytesIO(b'{"error":"redirect forbidden"}'),
+            )
+
+    def fake_build_opener(*handlers: Any) -> RedirectingOpener:
+        assert len(handlers) == 2
+        assert isinstance(handlers[0], live.urlrequest.ProxyHandler)
+        assert handlers[0].proxies == {}
+        assert isinstance(handlers[1], live._NoRedirectHandler)
+        assert handlers[1].redirect_request(None) is None
+        return RedirectingOpener()
+
+    monkeypatch.setattr(live.urlrequest, "build_opener", fake_build_opener)
+    arm = StructuredHSWMArm(
+        backend=OpenAICompatibleBackend(
+            live.OpenAIBackendConfig(
+                endpoint="http://model.invalid",
+                model="fixture-model",
+            )
+        ),
+        budget=_budget(),
+        isolation_id="tokenize-no-redirect",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="HTTP outcome 302"):
+        arm.update(_one_token_batch())
+    assert open_calls == 1
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert events[-1]["event"] == "tokenize_failed"
+    assert events[-1]["generation_dispatched"] is False
+    assert not any(item["event"] == "generation_dispatch_intent" for item in events)
+    assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+def test_token_preflight_context_rejection_never_calls_generation(
+    tmp_path: Path,
+) -> None:
+    class ContextRejectBackend(ScriptedRelationalBackend):
+        @property
+        def identity(self) -> Mapping[str, Any]:
+            return {**super().identity, "expected_max_model_len": 100}
+
+        def tokenize(self, **kwargs: Any) -> live.TokenPreflightReceipt:
+            raw_request = kwargs["raw_request"]
+            raw_response = canonical_json_bytes(
+                {
+                    "count": 90,
+                    "max_model_len": 100,
+                    "token_strs": None,
+                    "tokens": list(range(90)),
+                }
+            )
+            kwargs["response_observer"](raw_request, raw_response, 200, True)
+            return live.TokenPreflightReceipt.make(
+                raw_request=raw_request,
+                raw_response=raw_response,
+                source_chat_request_sha256=kwargs["source_chat_request_sha256"],
+                max_output_tokens=kwargs["max_output_tokens"],
+                http_status=200,
+                latency_ms=0,
+                raw_response_complete=True,
+            )
+
+    backend = ContextRejectBackend()
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id="tokenize-context-reject",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="insufficient model context"):
+        arm.update(_one_token_batch())
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert events[-1]["event"] == "tokenize_rejected"
+    assert events[-1]["generation_dispatched"] is False
+    assert backend.requests == []
+    assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+def test_token_preflight_rejects_frozen_max_model_length_drift(
+    tmp_path: Path,
+) -> None:
+    class MaxlenDriftBackend(ScriptedRelationalBackend):
+        def tokenize(self, **kwargs: Any) -> live.TokenPreflightReceipt:
+            observer = kwargs.pop("response_observer")
+            captured: list[tuple[bytes, bytes, int | None, bool]] = []
+            super().tokenize(
+                **kwargs,
+                response_observer=lambda *items: captured.append(items),
+            )
+            raw_request, raw_response, status, complete = captured[0]
+            value = json.loads(raw_response)
+            value["max_model_len"] = 65_536
+            changed = canonical_json_bytes(value)
+            observer(raw_request, changed, status, complete)
+            return live.TokenPreflightReceipt.make(
+                raw_request=raw_request,
+                raw_response=changed,
+                source_chat_request_sha256=kwargs["source_chat_request_sha256"],
+                max_output_tokens=kwargs["max_output_tokens"],
+                http_status=200,
+                latency_ms=0,
+                raw_response_complete=True,
+            )
+
+    backend = MaxlenDriftBackend()
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id="tokenize-maxlen-drift",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="frozen backend identity"):
+        arm.update(_one_token_batch())
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert events[-1]["event"] == "tokenize_rejected"
+    assert events[-1]["generation_dispatched"] is False
+    assert backend.requests == []
+
+
+def test_missing_token_preflight_method_never_dispatches_generation(
+    tmp_path: Path,
+) -> None:
+    class MissingPreflightBackend(ScriptedRelationalBackend):
+        tokenize = None
+
+    backend = MissingPreflightBackend()
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id="missing-token-preflight",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(TypeError, match="not callable"):
+        arm.update(_one_token_batch())
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert [item["event"] for item in events] == [
+        "intent",
+        "tokenize_intent",
+        "tokenize_failed",
+    ]
+    assert events[-1]["generation_dispatched"] is False
+    assert backend.requests == []
+
+
+def test_completion_prompt_usage_must_equal_token_preflight_count(
+    tmp_path: Path,
+) -> None:
+    class UsageMismatchBackend(ScriptedRelationalBackend):
+        def complete(self, **kwargs: Any) -> ModelCompletion:
+            observer = kwargs.pop("response_observer")
+            captured: list[tuple[bytes, bytes]] = []
+            completion = super().complete(
+                **kwargs,
+                response_observer=lambda *items: captured.append(items),
+            )
+            raw_request, raw_response = captured[0]
+            value = json.loads(raw_response)
+            value["usage"]["prompt_tokens"] = completion.input_tokens + 1
+            value["usage"]["total_tokens"] = (
+                completion.input_tokens + 1 + completion.output_tokens
+            )
+            changed = canonical_json_bytes(value)
+            observer(raw_request, changed)
+            return replace(
+                completion,
+                raw_response_json=changed.decode("utf-8"),
+                response_sha256=sha256(changed).hexdigest(),
+                input_tokens=completion.input_tokens + 1,
+            )
+
+    arm = StructuredHSWMArm(
+        backend=UsageMismatchBackend(),
+        budget=_budget(),
+        isolation_id="preflight-usage-mismatch",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="token preflight differs"):
+        arm.update(_one_token_batch())
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert events[-1]["event"] == "rejected_response"
+    assert arm.ledger == []
+    assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+@pytest.mark.parametrize("usage_value", [True, 1.0])
+def test_completion_usage_rejects_bool_and_float_preimages(
+    usage_value: object,
+) -> None:
+    raw_request = canonical_json_bytes({"request": "fixture"})
+    text = '{"choice":"x"}'
+    raw_response = canonical_json_bytes(
+        {
+            "choices": [
+                {"finish_reason": "stop", "message": {"content": text}}
+            ],
+            "model": "fixture",
+            "usage": {
+                "completion_tokens": 1,
+                "prompt_tokens": usage_value,
+                "total_tokens": 2,
+            },
+        }
+    )
+    with pytest.raises(ContinualLiveError, match="raw response usage"):
+        ModelCompletion(
+            text=text,
+            raw_request_json=raw_request.decode("utf-8"),
+            raw_response_json=raw_response.decode("utf-8"),
+            request_sha256=sha256(raw_request).hexdigest(),
+            response_sha256=sha256(raw_response).hexdigest(),
+            model="fixture",
+            input_tokens=1,
+            output_tokens=1,
+            latency_ms=0,
+            usage_reported=True,
+        )
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("input_tokens", 1.0),
+        ("output_tokens", 1.0),
+        ("latency_ms", 0.0),
+        ("usage_reported", 1),
+    ],
+)
+def test_model_completion_persisted_telemetry_requires_exact_types(
+    field: str,
+    value: object,
+) -> None:
+    raw_request = canonical_json_bytes({"request": "fixture"})
+    text = '{"choice":"x"}'
+    raw_response = canonical_json_bytes(
+        {
+            "choices": [
+                {"finish_reason": "stop", "message": {"content": text}}
+            ],
+            "model": "fixture",
+            "usage": {
+                "completion_tokens": 1,
+                "prompt_tokens": 1,
+                "total_tokens": 2,
+            },
+        }
+    )
+    values: dict[str, Any] = {
+        "text": text,
+        "raw_request_json": raw_request.decode("utf-8"),
+        "raw_response_json": raw_response.decode("utf-8"),
+        "request_sha256": sha256(raw_request).hexdigest(),
+        "response_sha256": sha256(raw_response).hexdigest(),
+        "model": "fixture",
+        "input_tokens": 1,
+        "output_tokens": 1,
+        "latency_ms": 0,
+        "usage_reported": True,
+    }
+    values[field] = value
+    with pytest.raises(ContinualLiveError):
+        ModelCompletion(**values)
+
+
+def test_model_completion_rejects_wrong_total_tokens() -> None:
+    raw_request = canonical_json_bytes({"request": "fixture"})
+    text = '{"choice":"x"}'
+    raw_response = canonical_json_bytes(
+        {
+            "choices": [
+                {"finish_reason": "stop", "message": {"content": text}}
+            ],
+            "model": "fixture",
+            "usage": {
+                "completion_tokens": 1,
+                "prompt_tokens": 1,
+                "total_tokens": 3,
+            },
+        }
+    )
+    with pytest.raises(ContinualLiveError, match="raw response usage"):
+        ModelCompletion(
+            text=text,
+            raw_request_json=raw_request.decode("utf-8"),
+            raw_response_json=raw_response.decode("utf-8"),
+            request_sha256=sha256(raw_request).hexdigest(),
+            response_sha256=sha256(raw_response).hexdigest(),
+            model="fixture",
+            input_tokens=1,
+            output_tokens=1,
+            latency_ms=0,
+            usage_reported=True,
+        )
+
+
+def test_dynamic_second_public_preflight_rejection_preserves_generation_two(
+    tmp_path: Path,
+) -> None:
+    backends: list[ScriptedRelationalBackend] = []
+
+    class DynamicLimitBackend(ScriptedRelationalBackend):
+        def __init__(self) -> None:
+            super().__init__()
+            self.preflight_calls = 0
+
+        def tokenize(self, **kwargs: Any) -> live.TokenPreflightReceipt:
+            self.preflight_calls += 1
+            if self.preflight_calls != 2:
+                return super().tokenize(**kwargs)
+            count = live.PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS + 1
+            raw_request = kwargs["raw_request"]
+            raw_response = canonical_json_bytes(
+                {
+                    "count": count,
+                    "max_model_len": 32768,
+                    "token_strs": None,
+                    "tokens": list(range(count)),
+                }
+            )
+            kwargs["response_observer"](raw_request, raw_response, 200, True)
+            return live.TokenPreflightReceipt.make(
+                raw_request=raw_request,
+                raw_response=raw_response,
+                source_chat_request_sha256=kwargs["source_chat_request_sha256"],
+                max_output_tokens=kwargs["max_output_tokens"],
+                http_status=200,
+                latency_ms=0,
+                raw_response_complete=True,
+            )
+
+    def backend_factory() -> ScriptedRelationalBackend:
+        backend = DynamicLimitBackend()
+        backends.append(backend)
+        return backend
+
+    state_dir = tmp_path / "dynamic-public-limit"
+    with pytest.raises(ContinualLiveError, match="frozen update input ceiling"):
+        run_public_schema_gate(
+            backend_factory=backend_factory,
+            state_dir=state_dir,
+        )
+    structured_backend = backends[0]
+    assert isinstance(structured_backend, DynamicLimitBackend)
+    assert structured_backend.preflight_calls == 2
+    assert len(structured_backend.requests) == 1
+    events = [
+        json.loads(line)
+        for line in (state_dir / "structured" / "calls.jsonl").read_text().splitlines()
+    ]
+    assert sum(item["event"] == "generation_dispatch_intent" for item in events) == 1
+    assert events[-1]["event"] == "tokenize_rejected"
+    assert events[-1]["generation_dispatched"] is False
+    store = live.SQLiteSelfModelStore(
+        state_dir / "structured" / "state.sqlite3",
+        policy=live._proposal_policy(
+            ArmBudget(
+                answer_max_output_tokens=128,
+                update_max_output_tokens=6144,
+                max_input_bytes=2_000_000,
+                max_state_bytes=1_000_000,
+            )
+        ),
+    )
+    try:
+        active = store.active_snapshot()
+        assert active.generation == 2
+        assert len(active.snapshot.memories) == 140
+    finally:
+        store.close()
+
+
+def test_persisted_token_preflight_revalidation_rejects_rehashed_maxlen_tamper(
+    tmp_path: Path,
+) -> None:
+    arm = StructuredHSWMArm(
+        backend=ScriptedRelationalBackend(),
+        budget=_budget(),
+        isolation_id="persisted-token-preflight",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    arm.update(_one_token_batch())
+    persisted = arm.ledger[0].canonical()
+    assert live._revalidate_token_preflight_ledger_entry(persisted).count == (
+        arm.ledger[0].completion.input_tokens
+    )
+    tampered = json.loads(canonical_json_bytes(persisted))
+    receipt = tampered["token_preflight"]
+    raw_response = json.loads(receipt["raw_response_json"])
+    raw_response["max_model_len"] = 65_536
+    changed = canonical_json_bytes(raw_response)
+    receipt["max_model_len"] = 65_536
+    receipt["raw_response_json"] = changed.decode("utf-8")
+    receipt["raw_response_bytes"] = len(changed)
+    receipt["response_sha256"] = sha256(changed).hexdigest()
+    unsigned = dict(receipt)
+    unsigned.pop("receipt_sha256")
+    receipt["receipt_sha256"] = live.canonical_sha256(unsigned)
+    with pytest.raises(ContinualLiveError, match="differs from its chat ledger"):
+        live._revalidate_token_preflight_ledger_entry(tampered)
+
+
+@pytest.mark.parametrize(
+    ("field", "bad_value"),
+    [("count", True), ("max_model_len", 32768.0)],
+)
+def test_token_receipt_rejects_equal_noninteger_raw_response_fields(
+    tmp_path: Path,
+    field: str,
+    bad_value: object,
+) -> None:
+    arm = StructuredHSWMArm(
+        backend=ScriptedRelationalBackend(),
+        budget=_budget(),
+        isolation_id=f"raw-token-type-{field}",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    arm.update(_one_token_batch())
+    receipt = arm.ledger[0].token_preflight.canonical()
+    raw_response = json.loads(receipt["raw_response_json"])
+    if field == "count":
+        raw_response["count"] = bad_value
+        receipt["count"] = 1
+        raw_response["tokens"] = [0]
+    else:
+        raw_response["max_model_len"] = bad_value
+    changed = canonical_json_bytes(raw_response)
+    receipt["raw_response_json"] = changed.decode("utf-8")
+    receipt["raw_response_bytes"] = len(changed)
+    receipt["response_sha256"] = sha256(changed).hexdigest()
+    unsigned = dict(receipt)
+    unsigned.pop("receipt_sha256")
+    receipt["receipt_sha256"] = live.canonical_sha256(unsigned)
+    with pytest.raises(ContinualLiveError, match="response content"):
+        live.TokenPreflightReceipt.from_mapping(receipt)
 
 
 @pytest.mark.parametrize(
@@ -2220,12 +3017,107 @@ def test_response_side_channels_fail_before_state_change(
     with pytest.raises(ContinualLiveError, match="non-content side channel"):
         arm.update(_one_token_batch())
     events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
-    assert [item["event"] for item in events] == [
-        "intent",
+    assert [item["event"] for item in events] == TOKEN_PREFLIGHT_SUCCESS_EVENTS + [
         "raw_response_received",
         "failed",
     ]
     assert events[-1]["outcome"] == "received_invalid"
+    assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+@pytest.mark.parametrize("finish_reason", ["length", "tool_calls", "content_filter"])
+def test_nonstop_finish_reason_is_rejected_before_state_change(
+    tmp_path: Path,
+    finish_reason: str,
+) -> None:
+    class FinishReasonBackend(ScriptedRelationalBackend):
+        def complete(self, **kwargs: Any) -> ModelCompletion:
+            observer = kwargs.pop("response_observer")
+            captured: list[tuple[bytes, bytes]] = []
+            completion = super().complete(
+                **kwargs,
+                response_observer=lambda *items: captured.append(items),
+            )
+            raw_request, raw_response = captured[0]
+            value = json.loads(raw_response)
+            value["choices"][0]["finish_reason"] = finish_reason
+            changed = canonical_json_bytes(value)
+            observer(raw_request, changed)
+            return replace(
+                completion,
+                raw_response_json=changed.decode("utf-8"),
+                response_sha256=sha256(changed).hexdigest(),
+            )
+
+    arm = StructuredHSWMArm(
+        backend=FinishReasonBackend(),
+        budget=_budget(),
+        isolation_id=f"finish-{finish_reason}",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="finish_reason"):
+        arm.update(_one_token_batch())
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert events[-1]["event"] == "failed"
+    assert events[-1]["generation_dispatched"] is True
+    assert any(item["event"] == "raw_response_received" for item in events)
+    assert arm.ledger == []
+    assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
+
+
+@pytest.mark.parametrize(
+    ("field", "needle"),
+    [
+        ("choice", '"finish_reason":"stop"'),
+        ("usage", '"prompt_tokens":'),
+        ("nonfinite", ""),
+    ],
+)
+def test_non_strict_completion_envelopes_are_rejected_before_state_change(
+    tmp_path: Path,
+    field: str,
+    needle: str,
+) -> None:
+    class DuplicateEnvelopeBackend(ScriptedRelationalBackend):
+        def complete(self, **kwargs: Any) -> ModelCompletion:
+            observer = kwargs.pop("response_observer")
+            captured: list[tuple[bytes, bytes]] = []
+            completion = super().complete(
+                **kwargs,
+                response_observer=lambda *items: captured.append(items),
+            )
+            raw_request, raw_response = captured[0]
+            text = raw_response.decode("utf-8")
+            if field == "nonfinite":
+                changed_text = '{"nonfinite":NaN,' + text[1:]
+            elif field == "choice":
+                changed_text = text.replace(needle, f"{needle},{needle}", 1)
+            else:
+                start = text.index(needle) + len(needle)
+                end = text.index(",", start)
+                original = f"{needle}{text[start:end]}"
+                changed_text = text.replace(original, f"{original},{original}", 1)
+            changed = changed_text.encode("utf-8")
+            observer(raw_request, changed)
+            return replace(
+                completion,
+                raw_response_json=changed_text,
+                response_sha256=sha256(changed).hexdigest(),
+            )
+
+    arm = StructuredHSWMArm(
+        backend=DuplicateEnvelopeBackend(),
+        budget=_budget(),
+        isolation_id=f"duplicate-completion-{field}",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    with pytest.raises(ContinualLiveError, match="strict JSON"):
+        arm.update(_one_token_batch())
+    events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
+    assert events[-1]["event"] == "failed"
+    assert events[-1]["generation_dispatched"] is True
+    assert not any(item["event"] == "completed" for item in events)
+    assert arm.ledger == []
     assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
 
 
@@ -2247,6 +3139,7 @@ def test_schema_invalid_completion_is_rejected_before_completed_or_commit(
             text = '{"bad":1}'
             envelope["choices"][0]["message"]["content"] = text
             envelope["usage"]["completion_tokens"] = 3
+            envelope["usage"]["total_tokens"] = completion.input_tokens + 3
             changed = canonical_json_bytes(envelope)
             observer(raw_request, changed)
             return replace(
@@ -2266,8 +3159,7 @@ def test_schema_invalid_completion_is_rejected_before_completed_or_commit(
     with pytest.raises(ContinualLiveError, match="object schema"):
         arm.update(_one_token_batch())
     events = [json.loads(line) for line in arm.journal_path.read_text().splitlines()]
-    assert [item["event"] for item in events] == [
-        "intent",
+    assert [item["event"] for item in events] == TOKEN_PREFLIGHT_SUCCESS_EVENTS + [
         "raw_response_received",
         "response_received",
         "rejected_response",
@@ -2345,6 +3237,55 @@ def test_thinking_must_be_explicitly_disabled_before_any_call(tmp_path: Path) ->
     assert arm.store.active_snapshot().snapshot.canonical() == GENESIS.canonical()
 
 
+@pytest.mark.parametrize(
+    ("field", "bad_value"),
+    [
+        ("endpoint", None),
+        ("endpoint", "http://user:secret@127.0.0.1:8000"),
+        ("endpoint", "http://127.0.0.1:8000/v1"),
+        ("endpoint", "http://127.0.0.1:8000?query=1"),
+        ("endpoint", "http://127.0.0.1:8000#fragment"),
+        ("model", None),
+        ("model", ""),
+        ("api_key", False),
+        ("api_key", ""),
+        ("timeout_seconds", True),
+        ("timeout_seconds", float("nan")),
+        ("timeout_seconds", float("inf")),
+        ("timeout_seconds", 0),
+        ("timeout_seconds", 86_401),
+        ("temperature", False),
+        ("temperature", 0),
+        ("temperature", -0.0),
+        ("temperature", float("nan")),
+        ("temperature", float("inf")),
+        ("top_p", True),
+        ("top_p", 1),
+        ("top_p", float("nan")),
+        ("top_p", float("inf")),
+        ("seed", False),
+        ("seed", 0.0),
+        ("max_response_bytes", True),
+        ("max_response_bytes", 1.5),
+        ("max_response_bytes", 0),
+        ("max_response_bytes", live.MAX_RAW_REQUEST_BYTES * 2 + 1),
+        ("expected_max_model_len", True),
+        ("expected_max_model_len", 32768.0),
+    ],
+)
+def test_backend_config_rejects_ambiguous_or_unbounded_values(
+    field: str,
+    bad_value: object,
+) -> None:
+    values: dict[str, Any] = {
+        "endpoint": "http://127.0.0.1:8000",
+        "model": "fixture-model",
+    }
+    values[field] = bad_value
+    with pytest.raises(ValueError):
+        live.OpenAIBackendConfig(**values)
+
+
 def test_reported_answer_usage_cannot_exceed_request_budget(tmp_path: Path) -> None:
     class OverBudgetAnswerBackend(ScriptedRelationalBackend):
         def complete(self, **kwargs: Any) -> ModelCompletion:
@@ -2359,6 +3300,7 @@ def test_reported_answer_usage_cannot_exceed_request_budget(tmp_path: Path) -> N
             raw_request, raw_response = observed[0]
             envelope = json.loads(raw_response)
             envelope["usage"]["completion_tokens"] = 129
+            envelope["usage"]["total_tokens"] = completion.input_tokens + 129
             changed = canonical_json_bytes(envelope)
             observer(raw_request, changed)
             return replace(
@@ -2434,7 +3376,7 @@ def test_schema_and_raw_envelope_tampering_are_rejected(tmp_path: Path) -> None:
         raw_request_json=changed_request.decode(),
         request_sha256=sha256(changed_request).hexdigest(),
     )
-    with pytest.raises(ContinualLiveError, match="raw request parameters"):
+    with pytest.raises(ContinualLiveError, match="token preflight differs"):
         replace(
             entry,
             completion=changed_completion,
@@ -2479,11 +3421,15 @@ def test_public_schema_gate_cli_has_no_seed_path_and_binds_artifacts(
     def scripted_complete(self: Any, **kwargs: Any) -> ModelCompletion:
         return scripted.complete(**kwargs)
 
+    def scripted_tokenize(self: Any, **kwargs: Any) -> live.TokenPreflightReceipt:
+        return scripted.tokenize(**kwargs)
+
     monkeypatch.setattr(OpenAICompatibleBackend, "complete", scripted_complete)
+    monkeypatch.setattr(OpenAICompatibleBackend, "tokenize", scripted_tokenize)
     output = tmp_path / "gate-output"
     argv = [
         "--endpoint",
-        "http://model.invalid",
+        "http://127.0.0.1:8000",
         "--model",
         "deterministic-fixture",
         "--output-dir",
@@ -2499,7 +3445,10 @@ def test_public_schema_gate_cli_has_no_seed_path_and_binds_artifacts(
     ]
     assert schema_gate_main(argv) == 0
     result = json.loads((output / "gate_result.json").read_text())
-    assert result["valid"] is True and result["calls_observed"] == 4
+    assert result["valid"] is True
+    assert result["model_generation_calls_observed"] == 4
+    assert result["token_preflight_calls_observed"] == 4
+    assert result["outbound_http_requests_observed"] == 8
     prereg = json.loads((output / "gate_preregistration.json").read_text())
     assert prereg["no_precommit_or_seed_path"] is True
     assert prereg["protocol"] == "hswm-public-schema-gate/v4"
@@ -2511,9 +3460,15 @@ def test_public_schema_gate_cli_has_no_seed_path_and_binds_artifacts(
     assert prereg["max_update_input_tokens"] == 26624
     assert prereg["update_max_tokens"] == 6144
     assert prereg["update_max_tokens"] == prereg["output_token_ceiling"]
+    assert prereg["generation_call_budget"] == 4
+    assert prereg["token_preflight_call_budget"] == 4
+    assert prereg["outbound_http_request_budget"] == 8
     terminal = json.loads((output / "terminal_receipt.json").read_text())
     assert terminal["schema_gate_passed"] is True
     assert terminal["status"] == "success"
+    assert terminal["generation_calls_expected"] == 4
+    assert terminal["token_preflight_calls_expected"] == 4
+    assert terminal["outbound_http_requests_expected"] == 8
     assert "gate_result.json" in terminal["artifact_sha256s"]
     assert "state/structured/calls.jsonl" in terminal["artifact_sha256s"]
     assert all("seed" not in path for path in terminal["artifact_sha256s"])

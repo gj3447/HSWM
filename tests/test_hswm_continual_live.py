@@ -156,20 +156,20 @@ class ScriptedRelationalBackend:
         for source_token in payload["public_source_tokens"]:
             content = source_token["content"]
             related_existing = [
-                index
-                for index, item in enumerate(existing)
+                item["memory_id"]
+                for item in existing
                 if item["content"].get("source") == content["target"]
             ]
             related_new = sorted(
-                other["token_index"]
+                other["suggested_memory_id"]
                 for other in source_tokens
                 if other["content"].get("source") == content["target"]
-                and other["token_index"] != source_token["token_index"]
+                and other["suggested_memory_id"]
+                != source_token["suggested_memory_id"]
             )
             new_relations.append(
                 {
-                    "related_existing_memory_indices": related_existing,
-                    "related_other_new_token_indices": related_new,
+                    "related_memory_ids": related_existing + related_new,
                 }
             )
         cell_width = live.MAX_CELL_MEMORY_REFERENCES
@@ -989,9 +989,9 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
         @staticmethod
         def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            value["new_memory_relations"][0][
-                "related_existing_memory_indices"
-            ] = [0]
+            value["new_memory_relations"][0]["related_memory_ids"] = [
+                "memory:hidden-not-public"
+            ]
             return json.dumps(value)
 
     arm = StructuredHSWMArm(
@@ -1000,14 +1000,17 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
         isolation_id="bad-source",
         store_path=tmp_path / "state.sqlite3",
     )
-    with pytest.raises(ContinualLiveError, match="array bound"):
+    with pytest.raises(ContinualLiveError, match="schema enum"):
         arm.update(
             LearningBatch(
                 episode_id="episode-bad",
                 after_step=0,
                 chosen=None,
                 correct=False,
-                learning_tokens=(PublicLearningToken("a", "r", "b"),),
+                learning_tokens=(
+                    PublicLearningToken("a", "r", "b"),
+                    PublicLearningToken("b", "r", "c"),
+                ),
             )
         )
     assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
@@ -1038,9 +1041,9 @@ def test_rejects_model_authorship_that_cites_hidden_or_old_sources(tmp_path: Pat
         ),
         (
             lambda value: value["new_memory_relations"][0].update(
-                {"related_other_new_token_indices": [99]}
+                {"related_memory_ids": [0]}
             ),
-            "array bound",
+            "schema enum",
         ),
         (
             lambda value: value.update({"entry_cell_index": 1}),
@@ -1117,7 +1120,10 @@ def test_compact_patch_fails_closed_on_coverage_references_and_reachability(
                 after_step=0,
                 chosen=None,
                 correct=False,
-                learning_tokens=(PublicLearningToken("a", "r", "b"),),
+                learning_tokens=(
+                    PublicLearningToken("a", "r", "b"),
+                    PublicLearningToken("b", "r", "c"),
+                ),
             )
         )
     assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
@@ -1407,9 +1413,69 @@ def test_compact_patch_materializes_public_content_without_echoing_records(
     assert "upsert_memories" not in completion_value
     assert "memories" not in completion_value
     assert "node-a" not in arm.ledger[0].completion.text
+    assert completion_value["new_memory_relations"][0] == {
+        "related_memory_ids": [by_source["node-b"].memory_id]
+    }
+    assert all(
+        set(relation) == {"related_memory_ids"}
+        and all(
+            isinstance(memory_id, str)
+            for memory_id in relation["related_memory_ids"]
+        )
+        for relation in completion_value["new_memory_relations"]
+    )
     assert set(snapshot.cells[0].memory_ids) == {
         memory.memory_id for memory in snapshot.memories
     }
+
+
+def test_direct_memory_relations_reject_duplicate_and_cell_index_namespaces(
+    tmp_path: Path,
+) -> None:
+    class InvalidDirectRelationBackend(ScriptedRelationalBackend):
+        def __init__(self, violation: str) -> None:
+            super().__init__()
+            self.violation = violation
+
+        def _author(self, payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            relation = value["new_memory_relations"][0]
+            if self.violation == "duplicate":
+                target = relation["related_memory_ids"][0]
+                relation["related_memory_ids"] = [target, target]
+            else:
+                relation["related_memory_ids"] = [
+                    value["new_memory_cell_indices"][1]
+                ]
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    batch = LearningBatch(
+        episode_id="direct-relation-namespace",
+        after_step=0,
+        chosen=None,
+        correct=False,
+        learning_tokens=(
+            PublicLearningToken("node-a", "rel", "node-b"),
+            PublicLearningToken("node-b", "rel", "node-c"),
+            PublicLearningToken("node-c", "rel", "node-d"),
+        ),
+    )
+    for violation, message in (
+        ("duplicate", "duplicate or unknown memory ids"),
+        ("cell-index", "schema enum"),
+    ):
+        arm = StructuredHSWMArm(
+            backend=InvalidDirectRelationBackend(violation),
+            budget=_budget(),
+            isolation_id=f"direct-relation-{violation}",
+            store_path=tmp_path / violation / "state.sqlite3",
+        )
+        with pytest.raises(ContinualLiveError, match=message):
+            arm.update(batch)
+        assert arm.store.active_snapshot().generation == 0
+        assert arm.state_canonical_bytes() == canonical_json_bytes(
+            GENESIS.canonical()
+        )
 
 
 def test_existing_assignment_minus_one_is_the_only_delete_encoding(
@@ -1492,9 +1558,9 @@ def test_relation_to_minus_one_deleted_existing_memory_is_rejected_precommit(
                     for index, memory in enumerate(memories)
                     if memory["content"]["source"] == "node-a"
                 )
-                assert value["new_memory_relations"][0][
-                    "related_existing_memory_indices"
-                ] == [delete_index]
+                assert value["new_memory_relations"][0]["related_memory_ids"] == [
+                    memories[delete_index]["memory_id"]
+                ]
                 value["existing_memory_cell_indices"][delete_index] = -1
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
@@ -1604,8 +1670,8 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         state_dir=tmp_path / "gate-state",
     )
     assert result["valid"] is True
-    assert result["adapter_schema"] == "hswm-compact-structure-patch/v3"
-    assert result["protocol"] == "hswm-public-schema-gate/v4"
+    assert result["adapter_schema"] == "hswm-compact-structure-patch/v4"
+    assert result["protocol"] == "hswm-public-schema-gate/v5"
     assert result["indexed_authoring_view_schema"] == (
         "hswm-indexed-authoring-view/v1"
     )
@@ -1614,6 +1680,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     assert result["input_token_ceiling"] == 26624
     fixture = live.public_schema_gate_fixture()
     assert fixture["protocol"] == "hswm-public-schema-gate/v3"
+    assert fixture["compact_patch_schema"] == "hswm-compact-structure-patch/v3"
     assert fixture["fixture_sha256"] == (
         "2a798b518c712551792400477411f89767755062b926a569dcec6afb9cda3bd6"
     )
@@ -1733,7 +1800,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         item["response_schema_name"]
         for item in structured_events
         if item["event"] == "intent"
-    ] == ["hswm_compact_patch_v3", "hswm_compact_patch_v3", "hswm_choice_v1"]
+    ] == ["hswm_compact_patch_v4", "hswm_compact_patch_v4", "hswm_choice_v1"]
     assert [
         item["response_schema_name"]
         for item in plain_events
@@ -1769,9 +1836,15 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     assert first_schema["properties"]["new_memory_cell_indices"]["maxItems"] == 64
     assert first_schema["properties"]["new_memory_relations"]["minItems"] == 64
     assert first_schema["properties"]["new_memory_relations"]["maxItems"] == 64
-    assert "related_other_new_token_indices" in relation_properties
-    assert "related_existing_memory_indices" in relation_properties
-    assert "token_index" not in relation_properties
+    assert set(relation_properties) == {"related_memory_ids"}
+    first_relation_ids = relation_properties["related_memory_ids"]
+    assert first_relation_ids["maxItems"] == live.MAX_RELATED_MEMORY_IDS
+    assert first_relation_ids["items"]["type"] == "string"
+    assert len(first_relation_ids["items"]["enum"]) == 64
+    assert all(
+        isinstance(memory_id, str)
+        for memory_id in first_relation_ids["items"]["enum"]
+    )
     assert "new_memory_links" not in first_schema["properties"]
     assert "delete_memory_ids" not in first_schema["properties"]
     assert first_schema["properties"]["rationale"]["maxLength"] == 512
@@ -1786,6 +1859,10 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     assert second_schema["properties"]["new_memory_cell_indices"]["maxItems"] == 4
     assert second_schema["properties"]["new_memory_relations"]["minItems"] == 4
     assert second_schema["properties"]["new_memory_relations"]["maxItems"] == 4
+    second_relation_ids = second_schema["properties"]["new_memory_relations"][
+        "items"
+    ]["properties"]["related_memory_ids"]
+    assert len(second_relation_ids["items"]["enum"]) == 144
     for completion_event in (
         item for item in structured_events if item["event"] == "completed"
     ):
@@ -1805,6 +1882,10 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
             "new_memory_links",
             "token_index",
         } & set(completion_value)
+        assert all(
+            set(relation) == {"related_memory_ids"}
+            for relation in completion_value["new_memory_relations"]
+        )
     first_intent = structured_intents[0]
     first_payload = json.loads(first_intent["request_payload_json"])
     assert first_payload["mutation_expressivity"] == "compact-adapter-subset"
@@ -1818,12 +1899,37 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     assert first_contract["existing_memory_cell_indices"]["exact_length"] == 0
     assert first_contract["new_memory_cell_indices"]["exact_length"] == 64
     assert first_contract["new_memory_relations"]["exact_length"] == 64
+    assert first_contract["new_memory_relations"]["item_fields"] == [
+        "related_memory_ids"
+    ]
     assert "memory_assignments_max_per_cell_field" not in first_payload[
         "output_bounds"
     ]
     second_payload = json.loads(structured_intents[1]["request_payload_json"])
     second_projection = second_payload["current_hswm_indexed_read_only"]
     expanded_second = live._expand_indexed_authoring_projection(second_projection)
+    second_update_completion = json.loads(
+        [
+            item["completion"]["text"]
+            for item in structured_events
+            if item["event"] == "completed" and item["operation"] == "update"
+        ][1]
+    )
+    authored_target_ids = [
+        memory_id
+        for relation in second_update_completion["new_memory_relations"]
+        for memory_id in relation["related_memory_ids"]
+    ]
+    existing_target_ids = {
+        memory["memory_id"] for memory in expanded_second["memories"]
+    }
+    new_target_ids = {
+        token["suggested_memory_id"]
+        for token in second_payload["public_source_tokens"]
+    }
+    assert sum(item in existing_target_ids for item in authored_target_ids) == 1
+    assert sum(item in new_target_ids for item in authored_target_ids) == 2
+    assert all(isinstance(item, str) for item in authored_target_ids)
     assert len(expanded_second["memories"]) == 140
     assert len(expanded_second["cells"]) >= 1
     assert second_projection["active_generation"] == 2
@@ -1898,8 +2004,11 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     combined_instruction = (
         first_intent["system_message"] + " " + first_payload["instruction"]
     )
-    assert "distinct OTHER public tokens" in combined_instruction
-    assert "must never contain i" in combined_instruction
+    assert "direct target MemoryRecord IDs" in combined_instruction
+    assert "Cell-assignment vectors do not define memory relations" in (
+        combined_instruction
+    )
+    assert "never cell or token indices" in combined_instruction
     assert "never infer relations from index, adjacency, or order" in (
         combined_instruction
     )
@@ -1910,8 +2019,8 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
 @pytest.mark.parametrize(
     ("violation", "message"),
     [
-        ("self", "cannot contain its source array index"),
-        ("wrong-other", "new-to-new relation is not content-composable"),
+        ("self", "cannot contain the source memory id"),
+        ("wrong-other", "new relation is not content-composable"),
     ],
 )
 def test_public_gate_relation_failure_stops_before_commit_at_genesis(
@@ -1921,9 +2030,12 @@ def test_public_gate_relation_failure_stops_before_commit_at_genesis(
         @staticmethod
         def _author(payload: Mapping[str, Any]) -> str:
             value = json.loads(ScriptedRelationalBackend._author(payload))
-            value["new_memory_relations"][0][
-                "related_other_new_token_indices"
-            ] = [0 if violation == "self" else 2]
+            source_tokens = payload["public_source_tokens"]
+            value["new_memory_relations"][0]["related_memory_ids"] = [
+                source_tokens[0 if violation == "self" else 2][
+                    "suggested_memory_id"
+                ]
+            ]
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
     backends: list[InvalidRelationBackend] = []
@@ -2039,19 +2151,23 @@ def test_public_gate_rejects_wrong_existing_index_before_mutating_active_140(
                 relation_index = next(
                     index
                     for index, relation in enumerate(value["new_memory_relations"])
-                    if relation["related_existing_memory_indices"]
+                    if any(
+                        memory_id
+                        in {memory["memory_id"] for memory in active["memories"]}
+                        for memory_id in relation["related_memory_ids"]
+                    )
                 )
-                correct_index = value["new_memory_relations"][relation_index][
-                    "related_existing_memory_indices"
+                correct_id = value["new_memory_relations"][relation_index][
+                    "related_memory_ids"
                 ][0]
-                wrong_index = next(
-                    index
-                    for index in range(len(active["memories"]))
-                    if index != correct_index
+                wrong_id = next(
+                    memory["memory_id"]
+                    for memory in active["memories"]
+                    if memory["memory_id"] != correct_id
                 )
-                value["new_memory_relations"][relation_index][
-                    "related_existing_memory_indices"
-                ] = [wrong_index]
+                value["new_memory_relations"][relation_index]["related_memory_ids"] = [
+                    wrong_id
+                ]
             return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
     backends: list[WrongExistingIndexBackend] = []
@@ -2064,7 +2180,7 @@ def test_public_gate_rejects_wrong_existing_index_before_mutating_active_140(
     state_dir = tmp_path / "wrong-existing-index"
     with pytest.raises(
         ContinualLiveError,
-        match="new-to-existing relation is not content-composable",
+        match="new relation is not content-composable",
     ):
         run_public_schema_gate(
             backend_factory=backend_factory,
@@ -3451,7 +3567,7 @@ def test_public_schema_gate_cli_has_no_seed_path_and_binds_artifacts(
     assert result["outbound_http_requests_observed"] == 8
     prereg = json.loads((output / "gate_preregistration.json").read_text())
     assert prereg["no_precommit_or_seed_path"] is True
-    assert prereg["protocol"] == "hswm-public-schema-gate/v4"
+    assert prereg["protocol"] == "hswm-public-schema-gate/v5"
     assert prereg["indexed_authoring_view_schema"] == (
         "hswm-indexed-authoring-view/v1"
     )

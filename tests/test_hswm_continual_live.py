@@ -352,6 +352,17 @@ class FirstResponseGateViolationBackend(ScriptedRelationalBackend):
         )
 
 
+class UnreachableFullAuthorBackend(ScriptedRelationalBackend):
+    """Return a schema-valid FULL_AUTHOR graph with one unreachable suffix."""
+
+    @staticmethod
+    def _author(payload: Mapping[str, Any]) -> str:
+        value = json.loads(ScriptedRelationalBackend._author(payload))
+        if payload["authoring_mode"] == live.FULL_AUTHOR_MODE:
+            value["cells"][12]["next_cell_indices"] = []
+        return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+
 def _budget() -> ArmBudget:
     return ArmBudget(
         answer_max_output_tokens=128,
@@ -705,6 +716,13 @@ _CONSUMED_PRESEED_V4_COMMITMENTS = (
     "deac17cb612737cc41008900e76dfbc88922575429e2da71b3bff783b0beceb3",
 )
 
+_CONSUMED_V5_COMMITMENTS = (
+    "18adfc666e531c6821925ad42f5cd5afd7256d82f183504f17d305fa4e1bf28a",
+    "7edb126d41018ca96e5ca593e8c3b1b316b95500bda81559b21219455dffef54",
+    "143c2dee81d0b2d415b6e6673c3da799c94587514b1efab8a7181f701298f77c",
+    "b3abe671b0baaefcb9c918b7b570fa93a5d1da95888d87b6f2147b6c04ae6df5",
+)
+
 
 def _fresh_v4_commitments() -> tuple[str, ...]:
     return tuple(
@@ -740,22 +758,12 @@ def _clear_v4_precommit_anchors(monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setattr(live, name, None)
 
 
-def test_v5_b2_external_anchor_constants_are_exact() -> None:
-    assert live.FROZEN_V4_PRECOMMIT_RAW_SHA256 == (
-        "afac3cc3b018564610867873676a18ad01fc34272e507a7795b42fd1a1628f69"
-    )
-    assert live.FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256 == (
-        "febba4b34ab4f199e98dc6c5d3b7acfb820aa21967e8cb4b8abefdebc5b2fe6e"
-    )
-    assert live.FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256 == (
-        "8f6ccc54e77d6674db13c948f26fabbe2ae29d984c4b7296db4e826d69e97ad2"
-    )
-    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION == (
-        "05fb8feece09a1bad3b807d740b82c26282c7bc2"
-    )
-    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE == (
-        "40479982a521a135a9bae2fedd3496dbffcfa8d9"
-    )
+def test_v6_b1_external_anchor_constants_are_unset() -> None:
+    assert live.FROZEN_V4_PRECOMMIT_RAW_SHA256 is None
+    assert live.FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256 is None
+    assert live.FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256 is None
+    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION is None
+    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE is None
 
 
 def _write_test_v4_precommit_seal(
@@ -1178,6 +1186,137 @@ def test_four_arms_use_isolated_states_and_public_only_requests(tmp_path: Path) 
         == "author_hswm_compact_patch"
     )
     assert first_entry.canonical()["completion"]["text"] == first_entry.completion.text
+    no_write_diagnostics = arms[2].no_write_structure_diagnostics
+    assert len(no_write_diagnostics) == 5
+    assert all(item["semantic_valid"] is True for item in no_write_diagnostics)
+    scoped = live.scoped_call_ledgers(arms, audit, mediation_enabled=False)
+    assert scoped["no_write_structure_policy"] == live.NO_WRITE_STRUCTURE_POLICY
+    assert scoped["no_write_structure_diagnostics"]["no_write"] == (
+        no_write_diagnostics
+    )
+    assert all(
+        not scoped["no_write_structure_diagnostics"][name]
+        for name in ("hswm", "reset", "plain")
+    )
+    live._validate_scoped_no_write_structure_diagnostics(scoped)
+    tampered = deepcopy(scoped)
+    tampered_diagnostic = tampered["no_write_structure_diagnostics"][
+        "no_write"
+    ][0]
+    tampered_diagnostic["completion_response_sha256"] = "f" * 64
+    diagnostic_unsigned = dict(tampered_diagnostic)
+    diagnostic_unsigned.pop("diagnostic_sha256")
+    tampered_diagnostic["diagnostic_sha256"] = live.canonical_sha256(
+        diagnostic_unsigned
+    )
+    scoped_unsigned = dict(tampered)
+    scoped_unsigned.pop("scoped_ledger_sha256")
+    tampered["scoped_ledger_sha256"] = live.canonical_sha256(scoped_unsigned)
+    with pytest.raises(
+        ContinualLiveError,
+        match="scoped no-write diagnostic differs from its persisted call",
+    ):
+        live._validate_scoped_no_write_structure_diagnostics(tampered)
+
+
+def test_no_write_structure_semantics_are_diagnostic_only(tmp_path: Path) -> None:
+    arm = live.NoWriteArm(
+        backend=UnreachableFullAuthorBackend(),
+        budget=_budget(),
+        isolation_id="no-write-unreachable",
+        store_path=tmp_path / "no-write.sqlite3",
+    )
+
+    update = arm.update(_one_token_batch())
+
+    assert update.calls == 1
+    assert len(arm.ledger) == 1
+    assert not arm.structure_compilation_receipts
+    assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
+    active = arm.store.active_snapshot()
+    assert active.generation == 0
+    assert active.snapshot.snapshot_id == GENESIS.snapshot_id
+    diagnostic = arm.no_write_structure_diagnostics[0]
+    live._validate_no_write_structure_diagnostic(diagnostic)
+    assert diagnostic["semantic_valid"] is False
+    assert diagnostic["semantic_error_type"] == "ContinualLiveError"
+    assert diagnostic["semantic_error_message"] == (
+        "every compact cell must be reachable from entry"
+    )
+    assert diagnostic["committed"] is False
+    assert diagnostic["feedback_to_model"] is False
+    assert diagnostic["retry_permitted"] is False
+    assert diagnostic["state_unchanged"] is True
+    assert diagnostic["proposal_sha256"] is None
+    assert diagnostic["structure_compilation_receipt_sha256"] is None
+
+    tampered = dict(diagnostic)
+    tampered["state_unchanged"] = False
+    unsigned = dict(tampered)
+    unsigned.pop("diagnostic_sha256")
+    tampered["diagnostic_sha256"] = live.canonical_sha256(unsigned)
+    with pytest.raises(
+        ContinualLiveError,
+        match="no-write diagnostic invariant drifted",
+    ):
+        live._validate_no_write_structure_diagnostic(tampered)
+
+
+def test_persistent_structure_still_rejects_unreachable_cells(tmp_path: Path) -> None:
+    arm = StructuredHSWMArm(
+        backend=UnreachableFullAuthorBackend(),
+        budget=_budget(),
+        isolation_id="hswm-unreachable",
+        store_path=tmp_path / "hswm.sqlite3",
+    )
+
+    with pytest.raises(
+        ContinualLiveError,
+        match="every compact cell must be reachable from entry",
+    ):
+        arm.update(_one_token_batch())
+
+    assert len(arm.ledger) == 1
+    assert not arm.no_write_structure_diagnostics
+    assert arm.store.active_snapshot().generation == 0
+    assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
+
+
+def test_prequential_run_continues_through_discarded_no_write_semantics(
+    tmp_path: Path,
+) -> None:
+    backends: list[ScriptedRelationalBackend] = []
+
+    def factory() -> ScriptedRelationalBackend:
+        backend: ScriptedRelationalBackend
+        if len(backends) == 2:
+            backend = UnreachableFullAuthorBackend()
+        else:
+            backend = ScriptedRelationalBackend()
+        backends.append(backend)
+        return backend
+
+    run, audit, arms = run_four_arm_stream(
+        _small_stream(),
+        backend_factory=factory,
+        budget=_budget(),
+        state_dir=tmp_path / "states",
+    )
+
+    assert audit.valid
+    assert len(run.results) == 16
+    assert [len(arm.ledger) for arm in arms] == [9, 9, 9, 9]
+    diagnostics = arms[2].no_write_structure_diagnostics
+    assert len(diagnostics) == 5
+    assert all(item["semantic_valid"] is False for item in diagnostics)
+    assert all(
+        item["semantic_error_message"]
+        == "every compact cell must be reachable from entry"
+        for item in diagnostics
+    )
+    assert arms[2].store.active_snapshot().generation == 0
+    scoped = live.scoped_call_ledgers(arms, audit, mediation_enabled=False)
+    live._validate_scoped_no_write_structure_diagnostics(scoped)
 
 
 def test_prequential_answers_are_read_only_and_sqlite_cas_advances(tmp_path: Path) -> None:
@@ -4560,6 +4699,8 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
         "pilot_execution",
         "planned_outer_run_id",
         "planned_output_relative_path",
+        "prior_failed_pilot_binding",
+        "prior_failed_pilot_binding_sha256",
         "prior_no_model_abort_binding",
         "prior_no_model_abort_binding_sha256",
         "precommit_builder_source_revision",
@@ -4578,7 +4719,7 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
         "validated_adapter_source_tree",
     }
     assert live._validate_pilot_precommit_v4(raw) == value
-    assert value["schema"] == "hswm-continual-pilot-precommit/v5"
+    assert value["schema"] == "hswm-continual-pilot-precommit/v6"
     assert value["engineering_only"] is True
     assert value["confirmatory_eligible"] is False
     assert value["preimages_revealed"] is False
@@ -4590,11 +4731,16 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
     assert value["reserve_seed_indices"] == [2, 3]
     assert value["selected_seed_indices"] == [0, 1]
     assert value["old_seed_commitment_denylist"] == list(
-        (*_CONSUMED_V2_V3_COMMITMENTS, *_CONSUMED_PRESEED_V4_COMMITMENTS)
+        (
+            *_CONSUMED_V2_V3_COMMITMENTS,
+            *_CONSUMED_PRESEED_V4_COMMITMENTS,
+            *_CONSUMED_V5_COMMITMENTS,
+        )
     )
     assert value["confirmatory_denylist"] == [
         *_CONSUMED_V2_V3_COMMITMENTS,
         *_CONSUMED_PRESEED_V4_COMMITMENTS,
+        *_CONSUMED_V5_COMMITMENTS,
         *commitments,
     ]
     assert value["prior_no_model_abort_binding"] == (
@@ -4602,6 +4748,12 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
     )
     assert value["prior_no_model_abort_binding_sha256"] == live.canonical_sha256(
         value["prior_no_model_abort_binding"]
+    )
+    assert value["prior_failed_pilot_binding"] == (
+        live._expected_prior_failed_pilot_binding()
+    )
+    assert value["prior_failed_pilot_binding_sha256"] == live.canonical_sha256(
+        value["prior_failed_pilot_binding"]
     )
     assert value["validated_adapter_source_revision"] == (
         "a1c3f81b26d7e07d6ed9fb68033876d078d84e1b"
@@ -4627,6 +4779,7 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
         "horizon": 20,
         "max_input_bytes": 2_000_000,
         "max_state_bytes": 1_000_000,
+        "no_write_structure_policy": live.NO_WRITE_STRUCTURE_POLICY,
         "one_shot_enforcement": (
             "outer-wrapper-must-own-unique-durable-run-id-and-prove-"
             "prelaunch-path-absence"
@@ -4661,6 +4814,13 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
         (
             lambda: (
                 _CONSUMED_PRESEED_V4_COMMITMENTS[0],
+                *_fresh_v4_commitments()[1:],
+            ),
+            "old|consumed|fresh",
+        ),
+        (
+            lambda: (
+                _CONSUMED_V5_COMMITMENTS[0],
                 *_fresh_v4_commitments()[1:],
             ),
             "old|consumed|fresh",
@@ -5545,6 +5705,7 @@ def test_v4_cli_rejects_planned_run_or_output_mismatch_before_artifacts_and_seed
         ("gate_service", "gate|binding"),
         ("gate_tar", "gate|binding"),
         ("prior_abort", "prior|abort|binding"),
+        ("prior_failed", "prior|failed|binding"),
         ("denylist", "denylist"),
         ("budget", "execution|budget"),
         ("retry", "execution|retry"),
@@ -5585,6 +5746,11 @@ def test_v4_precommit_rejects_rehashed_semantic_tampering(
         value["prior_no_model_abort_binding"]["model_http_post_count"] = 1
         value["prior_no_model_abort_binding_sha256"] = live.canonical_sha256(
             value["prior_no_model_abort_binding"]
+        )
+    elif mutation == "prior_failed":
+        value["prior_failed_pilot_binding"]["completed_generation_calls"] = 12
+        value["prior_failed_pilot_binding_sha256"] = live.canonical_sha256(
+            value["prior_failed_pilot_binding"]
         )
     elif mutation == "denylist":
         value["confirmatory_denylist"] = value["confirmatory_denylist"][1:]

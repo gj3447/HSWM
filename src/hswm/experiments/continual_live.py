@@ -91,6 +91,10 @@ FULL_AUTHOR_MODE = "FULL_AUTHOR"
 KEEP_ROUTING_APPEND_MODE = "KEEP_ROUTING_APPEND_MEMBERSHIP"
 STRUCTURE_COMPILATION_RECEIPT_SCHEMA = "hswm-structure-compilation-receipt/v1"
 RELATION_QUALITY_DIAGNOSTIC_SCHEMA = "hswm-relation-quality-diagnostic/v1"
+NO_WRITE_STRUCTURE_DIAGNOSTIC_SCHEMA = "hswm-no-write-structure-diagnostic/v1"
+NO_WRITE_STRUCTURE_POLICY = (
+    "transport-and-schema-gated-structure-semantics-diagnostic-only/v1"
+)
 PUBLIC_SCHEMA_GATE_FIXTURE_DOMAIN = "hswm-public-schema-gate/v3"
 PUBLIC_SCHEMA_GATE_FIXTURE_COMPACT_PATCH_SCHEMA = (
     "hswm-compact-structure-patch/v3"
@@ -104,9 +108,10 @@ PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS = (
     - PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING
 )
 # The internal V4 symbol names are retained to minimize churn in the already
-# audited parser.  The externally serialized authority is v5 because it retires
-# the four commitments from the no-model mechanical abort and binds that abort.
-PILOT_PRECOMMIT_V4_SCHEMA = "hswm-continual-pilot-precommit/v5"
+# audited parser.  The externally serialized authority is v6 because it retires
+# the four commitments from the completed-but-failed v5 pilot, binds that
+# failure, and freezes no-write structure semantics as diagnostic-only.
+PILOT_PRECOMMIT_V4_SCHEMA = "hswm-continual-pilot-precommit/v6"
 PILOT_PRECOMMIT_V4_SEAL_MEMBER = "outputs/pilot_precommit.canonical.json"
 PILOT_PRECOMMIT_V4_SEAL_REGULAR_MEMBERS = frozenset(
     {
@@ -132,27 +137,23 @@ OLD_PILOT_SEED_COMMITMENT_DENYLIST = (
     "9ca2940211fa513b0badaf02744a6b2793bd2e40a3b5de3e012b99fb5741443e",
     "b224feed770a051bcecf4ec09fae1df9ea1bb8434ee6342f6ab30ac6df22fad8",
     "deac17cb612737cc41008900e76dfbc88922575429e2da71b3bff783b0beceb3",
+    # Permanently retired after the 2026-08-18 v5 primary pilot completed 11
+    # tokenize/chat pairs and then failed on a discarded no-write topology.
+    "18adfc666e531c6821925ad42f5cd5afd7256d82f183504f17d305fa4e1bf28a",
+    "7edb126d41018ca96e5ca593e8c3b1b316b95500bda81559b21219455dffef54",
+    "143c2dee81d0b2d415b6e6673c3da799c94587514b1efab8a7181f701298f77c",
+    "b3abe671b0baaefcb9c918b7b570fa93a5d1da95888d87b6f2147b6c04ae6df5",
 )
 
 # B1 deliberately leaves these external anchors empty.  A later, separately
 # observed B2 source revision must replace all five with the exact durable seal
 # values before v4 execution can become reachable.  The v4 precommit itself
 # cannot truthfully predict or claim the future B2 source identity.
-FROZEN_V4_PRECOMMIT_RAW_SHA256: str | None = (
-    "afac3cc3b018564610867873676a18ad01fc34272e507a7795b42fd1a1628f69"
-)
-FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256: str | None = (
-    "febba4b34ab4f199e98dc6c5d3b7acfb820aa21967e8cb4b8abefdebc5b2fe6e"
-)
-FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256: str | None = (
-    "8f6ccc54e77d6674db13c948f26fabbe2ae29d984c4b7296db4e826d69e97ad2"
-)
-FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION: str | None = (
-    "05fb8feece09a1bad3b807d740b82c26282c7bc2"
-)
-FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE: str | None = (
-    "40479982a521a135a9bae2fedd3496dbffcfa8d9"
-)
+FROZEN_V4_PRECOMMIT_RAW_SHA256: str | None = None
+FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256: str | None = None
+FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256: str | None = None
+FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION: str | None = None
+FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE: str | None = None
 STRUCTURED_OUTPUT_MODE = "openai-response-format-json-schema/v1"
 TOKEN_PREFLIGHT_MODE = "vllm-tokenize-chat/v1"
 TOKEN_PREFLIGHT_SCHEMA = "hswm-token-preflight-receipt/v1"
@@ -3360,6 +3361,198 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         raise ContinualLiveError("structure compilation receipt logical mode drifted")
 
 
+def _no_write_structure_diagnostic(
+    *,
+    base: SelfModelSnapshot,
+    generation: int,
+    ledger_entry: CallLedgerEntry,
+    semantic_error: ContinualLiveError | None,
+    proposal: MutationProposal | None,
+    structure_receipt: Mapping[str, Any] | None,
+    state_after: SelfModelSnapshot,
+) -> dict[str, Any]:
+    """Bind discarded no-write structure semantics without making them a gate."""
+
+    if ledger_entry.arm != "no_write" or ledger_entry.operation != "update":
+        raise ContinualLiveError("no-write diagnostic requires one no-write update call")
+    if (
+        base.snapshot_id != GENESIS.snapshot_id
+        or state_after.snapshot_id != base.snapshot_id
+    ):
+        raise ContinualLiveError("no-write diagnostic state is not exact unchanged genesis")
+    if generation != 0:
+        raise ContinualLiveError("no-write diagnostic generation must remain zero")
+    semantic_valid = semantic_error is None
+    if semantic_valid:
+        if proposal is None or structure_receipt is None:
+            raise ContinualLiveError("valid no-write diagnostic lacks parsed structure")
+        _validate_structure_compilation_receipt(structure_receipt)
+        proposal_sha256: str | None = canonical_sha256(proposal.canonical())
+        structure_receipt_sha256: str | None = str(
+            structure_receipt["receipt_sha256"]
+        )
+        error_type: str | None = None
+        error_message: str | None = None
+        error_sha256: str | None = None
+    else:
+        if proposal is not None or structure_receipt is not None:
+            raise ContinualLiveError("invalid no-write diagnostic claims parsed structure")
+        error_type = type(semantic_error).__name__
+        error_message = str(semantic_error)
+        if not error_message or len(error_message.encode("utf-8")) > 1024:
+            raise ContinualLiveError("no-write diagnostic error message is invalid")
+        error_sha256 = _digest_bytes(error_message.encode("utf-8"))
+        proposal_sha256 = None
+        structure_receipt_sha256 = None
+    state_sha256 = _snapshot_sha256(base)
+    unsigned = {
+        "arm": "no_write",
+        "base_generation": generation,
+        "base_snapshot_id": base.snapshot_id,
+        "base_snapshot_sha256": state_sha256,
+        "committed": False,
+        "completion_request_sha256": ledger_entry.completion.request_sha256,
+        "completion_response_sha256": ledger_entry.completion.response_sha256,
+        "completion_text_sha256": _digest_bytes(
+            ledger_entry.completion.text.encode("utf-8")
+        ),
+        "feedback_to_model": False,
+        "ledger_ordinal": ledger_entry.ordinal,
+        "operation": "update",
+        "policy": NO_WRITE_STRUCTURE_POLICY,
+        "proposal_sha256": proposal_sha256,
+        "response_schema_name": ledger_entry.response_schema_name,
+        "response_schema_sha256": ledger_entry.response_schema_sha256,
+        "retry_permitted": False,
+        "schema": NO_WRITE_STRUCTURE_DIAGNOSTIC_SCHEMA,
+        "semantic_error_message": error_message,
+        "semantic_error_sha256": error_sha256,
+        "semantic_error_type": error_type,
+        "semantic_valid": semantic_valid,
+        "state_after_sha256": _snapshot_sha256(state_after),
+        "state_before_sha256": state_sha256,
+        "state_unchanged": True,
+        "structure_compilation_receipt_sha256": structure_receipt_sha256,
+    }
+    value = {**unsigned, "diagnostic_sha256": canonical_sha256(unsigned)}
+    _validate_no_write_structure_diagnostic(value)
+    return value
+
+
+def _validate_no_write_structure_diagnostic(value: Mapping[str, Any]) -> None:
+    expected_fields = {
+        "arm",
+        "base_generation",
+        "base_snapshot_id",
+        "base_snapshot_sha256",
+        "committed",
+        "completion_request_sha256",
+        "completion_response_sha256",
+        "completion_text_sha256",
+        "diagnostic_sha256",
+        "feedback_to_model",
+        "ledger_ordinal",
+        "operation",
+        "policy",
+        "proposal_sha256",
+        "response_schema_name",
+        "response_schema_sha256",
+        "retry_permitted",
+        "schema",
+        "semantic_error_message",
+        "semantic_error_sha256",
+        "semantic_error_type",
+        "semantic_valid",
+        "state_after_sha256",
+        "state_before_sha256",
+        "state_unchanged",
+        "structure_compilation_receipt_sha256",
+    }
+    if not isinstance(value, Mapping) or set(value) != expected_fields:
+        raise ContinualLiveError("no-write diagnostic field set is invalid")
+    unsigned = dict(value)
+    diagnostic_sha256 = unsigned.pop("diagnostic_sha256")
+    if diagnostic_sha256 != canonical_sha256(unsigned):
+        raise ContinualLiveError("no-write diagnostic digest mismatch")
+    if (
+        value.get("schema") != NO_WRITE_STRUCTURE_DIAGNOSTIC_SCHEMA
+        or value.get("policy") != NO_WRITE_STRUCTURE_POLICY
+        or value.get("arm") != "no_write"
+        or value.get("operation") != "update"
+        or value.get("committed") is not False
+        or value.get("feedback_to_model") is not False
+        or value.get("retry_permitted") is not False
+        or value.get("state_unchanged") is not True
+        or value.get("base_generation") != 0
+        or value.get("base_snapshot_id") != GENESIS.snapshot_id
+        or value.get("state_before_sha256") != value.get("base_snapshot_sha256")
+        or value.get("state_after_sha256") != value.get("base_snapshot_sha256")
+    ):
+        raise ContinualLiveError("no-write diagnostic invariant drifted")
+    ordinal = value.get("ledger_ordinal")
+    if isinstance(ordinal, bool) or not isinstance(ordinal, int) or ordinal < 0:
+        raise ContinualLiveError("no-write diagnostic ordinal is invalid")
+    if (
+        not isinstance(value.get("response_schema_name"), str)
+        or not value["response_schema_name"]
+    ):
+        raise ContinualLiveError("no-write diagnostic schema name is invalid")
+    required_hashes = (
+        "base_snapshot_id",
+        "base_snapshot_sha256",
+        "completion_request_sha256",
+        "completion_response_sha256",
+        "completion_text_sha256",
+        "diagnostic_sha256",
+        "response_schema_sha256",
+        "state_after_sha256",
+        "state_before_sha256",
+    )
+    if any(
+        not isinstance(value.get(field), str)
+        or re.fullmatch(r"[0-9a-f]{64}", value[field]) is None
+        for field in required_hashes
+    ):
+        raise ContinualLiveError("no-write diagnostic digest field is invalid")
+    semantic_valid = value.get("semantic_valid")
+    if not isinstance(semantic_valid, bool):
+        raise ContinualLiveError("no-write diagnostic semantic flag is invalid")
+    if semantic_valid:
+        if any(
+            value.get(field) is not None
+            for field in (
+                "semantic_error_message",
+                "semantic_error_sha256",
+                "semantic_error_type",
+            )
+        ):
+            raise ContinualLiveError("valid no-write diagnostic claims an error")
+        for field in (
+            "proposal_sha256",
+            "structure_compilation_receipt_sha256",
+        ):
+            if (
+                not isinstance(value.get(field), str)
+                or re.fullmatch(r"[0-9a-f]{64}", value[field]) is None
+            ):
+                raise ContinualLiveError(
+                    "valid no-write diagnostic lacks a structure digest"
+                )
+    else:
+        if (
+            value.get("proposal_sha256") is not None
+            or value.get("structure_compilation_receipt_sha256") is not None
+            or not isinstance(value.get("semantic_error_type"), str)
+            or not value["semantic_error_type"]
+            or not isinstance(value.get("semantic_error_message"), str)
+            or not value["semantic_error_message"]
+            or len(value["semantic_error_message"].encode("utf-8")) > 1024
+            or value.get("semantic_error_sha256")
+            != _digest_bytes(value["semantic_error_message"].encode("utf-8"))
+        ):
+            raise ContinualLiveError("invalid no-write diagnostic error binding drifted")
+
+
 class StructuredHSWMArm(_ModelArm):
     """Persistent HSWM arm backed by the audited SQLite CAS store."""
 
@@ -3408,6 +3601,7 @@ class StructuredHSWMArm(_ModelArm):
             raise ContinualLiveError("arm store did not start from exact empty genesis")
         self._source_token_ids: list[str] = []
         self.structure_compilation_receipts: list[dict[str, Any]] = []
+        self.no_write_structure_diagnostics: list[dict[str, Any]] = []
 
     def state_canonical_bytes(self) -> bytes:
         # The evaluator reads the durable active snapshot itself; the model never
@@ -3446,13 +3640,60 @@ class StructuredHSWMArm(_ModelArm):
                 generation=active_record.generation,
             ),
         )
-        proposal = _parse_structure_proposal(
-            completion.text,
-            active=prompt_snapshot,
-            source_tokens=source_tokens,
-            generation=active_record.generation if self.commit_updates else 0,
-            policy=self.policy,
-        )
+        proposal_generation = active_record.generation if self.commit_updates else 0
+        try:
+            proposal = _parse_structure_proposal(
+                completion.text,
+                active=prompt_snapshot,
+                source_tokens=source_tokens,
+                generation=proposal_generation,
+                policy=self.policy,
+            )
+        except ContinualLiveError as semantic_error:
+            if self.name != "no_write" or self.commit_updates or self.read_history:
+                raise
+            active_after = self.store.active_snapshot()
+            if (
+                active_after.generation != 0
+                or active_after.snapshot.snapshot_id != GENESIS.snapshot_id
+            ):
+                raise ContinualLiveError(
+                    "no-write semantic diagnostic observed mutated state"
+                ) from semantic_error
+            diagnostic = _no_write_structure_diagnostic(
+                base=prompt_snapshot,
+                generation=proposal_generation,
+                ledger_entry=self.ledger[-1],
+                semantic_error=semantic_error,
+                proposal=None,
+                structure_receipt=None,
+                state_after=active_after.snapshot,
+            )
+            self.no_write_structure_diagnostics.append(diagnostic)
+            receipt = canonical_sha256(
+                {
+                    "activation_id": None,
+                    "arm": self.name,
+                    "committed": False,
+                    "completion": completion.canonical(),
+                    "no_write_structure_diagnostic_sha256": diagnostic[
+                        "diagnostic_sha256"
+                    ],
+                    "proposal_sha256": None,
+                    "reset_activation_id": None,
+                    "structure_compilation_receipt_sha256": None,
+                }
+            )
+            return ArmUpdate(
+                receipt_sha256=receipt,
+                calls=1,
+                input_tokens=completion.input_tokens,
+                output_tokens=completion.output_tokens,
+                latency_ms=(
+                    completion.latency_ms
+                    + self.ledger[-1].token_preflight.latency_ms
+                ),
+            )
         raw_authored_relations = _raw_authored_relation_sequences(
             completion.text,
             source_tokens,
@@ -3537,12 +3778,34 @@ class StructuredHSWMArm(_ModelArm):
         )
         _validate_structure_compilation_receipt(structure_receipt)
         self.structure_compilation_receipts.append(structure_receipt)
+        no_write_diagnostic_sha256: str | None = None
+        if self.name == "no_write":
+            state_after = self.store.active_snapshot()
+            if (
+                state_after.generation != 0
+                or state_after.snapshot.snapshot_id != GENESIS.snapshot_id
+            ):
+                raise ContinualLiveError("valid no-write update changed durable state")
+            diagnostic = _no_write_structure_diagnostic(
+                base=prompt_snapshot,
+                generation=proposal_generation,
+                ledger_entry=self.ledger[-1],
+                semantic_error=None,
+                proposal=proposal,
+                structure_receipt=structure_receipt,
+                state_after=state_after.snapshot,
+            )
+            self.no_write_structure_diagnostics.append(diagnostic)
+            no_write_diagnostic_sha256 = diagnostic["diagnostic_sha256"]
         receipt = canonical_sha256(
             {
                 "activation_id": activation_id,
                 "arm": self.name,
                 "committed": self.commit_updates,
                 "completion": completion.canonical(),
+                "no_write_structure_diagnostic_sha256": (
+                    no_write_diagnostic_sha256
+                ),
                 "proposal_sha256": canonical_sha256(proposal.canonical()),
                 "reset_activation_id": reset_activation_id,
                 "structure_compilation_receipt_sha256": structure_receipt[
@@ -4200,6 +4463,7 @@ def scoped_call_ledgers(
         raise ContinualLiveError("ledger arms differ from the parity snapshot")
     primary: dict[str, list[dict[str, Any]]] = {}
     mediation: dict[str, list[dict[str, Any]]] = {}
+    no_write_structure_diagnostics: dict[str, list[dict[str, Any]]] = {}
     for index, arm in enumerate(arms):
         prefix_count = audit.primary_call_counts[index]
         prefix = arm.ledger[:prefix_count]
@@ -4214,6 +4478,36 @@ def scoped_call_ledgers(
             raise ContinualLiveError("primary operation sequence changed after audit")
         primary[arm.name] = [entry.canonical() for entry in prefix]
         mediation[arm.name] = [entry.canonical() for entry in suffix]
+        diagnostics = list(getattr(arm, "no_write_structure_diagnostics", ()))
+        if arm.name == "no_write":
+            update_entries = [entry for entry in prefix if entry.operation == "update"]
+            if len(diagnostics) != len(update_entries):
+                raise ContinualLiveError(
+                    "no-write structure diagnostic count differs from update calls"
+                )
+            for diagnostic, entry in zip(diagnostics, update_entries, strict=True):
+                _validate_no_write_structure_diagnostic(diagnostic)
+                if (
+                    diagnostic["ledger_ordinal"] != entry.ordinal
+                    or diagnostic["completion_request_sha256"]
+                    != entry.completion.request_sha256
+                    or diagnostic["completion_response_sha256"]
+                    != entry.completion.response_sha256
+                    or diagnostic["completion_text_sha256"]
+                    != _digest_bytes(entry.completion.text.encode("utf-8"))
+                    or diagnostic["response_schema_name"]
+                    != entry.response_schema_name
+                    or diagnostic["response_schema_sha256"]
+                    != entry.response_schema_sha256
+                ):
+                    raise ContinualLiveError(
+                        "no-write structure diagnostic differs from its call ledger"
+                    )
+        elif diagnostics:
+            raise ContinualLiveError(
+                "non-no-write arm unexpectedly emitted a discard diagnostic"
+            )
+        no_write_structure_diagnostics[arm.name] = diagnostics
     expected_h_suffix = 15 if mediation_enabled else 0
     if len(mediation["hswm"]) != expected_h_suffix or any(
         mediation[name] for name in ("reset", "no_write", "plain")
@@ -4224,10 +4518,83 @@ def scoped_call_ledgers(
     unsigned = {
         "mediation": mediation,
         "mediation_enabled": mediation_enabled,
+        "no_write_structure_diagnostics": no_write_structure_diagnostics,
+        "no_write_structure_policy": NO_WRITE_STRUCTURE_POLICY,
         "parity_audit_sha256": audit.audit_sha256,
         "primary": primary,
     }
     return {**unsigned, "scoped_ledger_sha256": canonical_sha256(unsigned)}
+
+
+def _validate_scoped_no_write_structure_diagnostics(
+    value: Mapping[str, Any],
+) -> None:
+    expected_fields = {
+        "mediation",
+        "mediation_enabled",
+        "no_write_structure_diagnostics",
+        "no_write_structure_policy",
+        "parity_audit_sha256",
+        "primary",
+        "scoped_ledger_sha256",
+    }
+    if not isinstance(value, Mapping) or set(value) != expected_fields:
+        raise ContinualLiveError("scoped ledger field set drifted")
+    unsigned = dict(value)
+    scoped_sha256 = unsigned.pop("scoped_ledger_sha256")
+    if scoped_sha256 != canonical_sha256(unsigned):
+        raise ContinualLiveError("scoped ledger digest mismatch")
+    if value.get("no_write_structure_policy") != NO_WRITE_STRUCTURE_POLICY:
+        raise ContinualLiveError("scoped no-write structure policy drifted")
+    primary = value.get("primary")
+    diagnostics_by_arm = value.get("no_write_structure_diagnostics")
+    expected_arms = {"hswm", "reset", "no_write", "plain"}
+    if (
+        not isinstance(primary, Mapping)
+        or set(primary) != expected_arms
+        or not isinstance(diagnostics_by_arm, Mapping)
+        or set(diagnostics_by_arm) != expected_arms
+        or any(diagnostics_by_arm[name] for name in ("hswm", "reset", "plain"))
+    ):
+        raise ContinualLiveError("scoped no-write diagnostic arm map drifted")
+    no_write_entries = primary["no_write"]
+    diagnostics = diagnostics_by_arm["no_write"]
+    if not isinstance(no_write_entries, list) or not isinstance(diagnostics, list):
+        raise ContinualLiveError("scoped no-write diagnostic lists are invalid")
+    update_entries = [
+        entry
+        for entry in no_write_entries
+        if isinstance(entry, Mapping) and entry.get("operation") == "update"
+    ]
+    if len(update_entries) != len(diagnostics):
+        raise ContinualLiveError(
+            "scoped no-write diagnostic count differs from update calls"
+        )
+    for diagnostic, entry in zip(diagnostics, update_entries, strict=True):
+        _validate_no_write_structure_diagnostic(diagnostic)
+        try:
+            completion = entry["completion"]
+            ordinal = entry["ordinal"]
+            response_schema_name = entry["response_schema_name"]
+            response_schema_sha256 = entry["response_schema_sha256"]
+        except (KeyError, TypeError) as error:
+            raise ContinualLiveError(
+                "scoped no-write call entry is malformed"
+            ) from error
+        if (
+            diagnostic["ledger_ordinal"] != ordinal
+            or diagnostic["completion_request_sha256"]
+            != completion.get("request_sha256")
+            or diagnostic["completion_response_sha256"]
+            != completion.get("response_sha256")
+            or diagnostic["completion_text_sha256"]
+            != completion.get("text_sha256")
+            or diagnostic["response_schema_name"] != response_schema_name
+            or diagnostic["response_schema_sha256"] != response_schema_sha256
+        ):
+            raise ContinualLiveError(
+                "scoped no-write diagnostic differs from its persisted call"
+            )
 
 
 def build_four_arms(
@@ -5328,6 +5695,8 @@ _PILOT_PRECOMMIT_V4_FIELDS = {
     "pilot_execution",
     "planned_outer_run_id",
     "planned_output_relative_path",
+    "prior_failed_pilot_binding",
+    "prior_failed_pilot_binding_sha256",
     "prior_no_model_abort_binding",
     "prior_no_model_abort_binding_sha256",
     "precommit_builder_source_revision",
@@ -5357,6 +5726,7 @@ _PILOT_V4_EXECUTION = {
     "horizon": 20,
     "max_input_bytes": 2_000_000,
     "max_state_bytes": 1_000_000,
+    "no_write_structure_policy": NO_WRITE_STRUCTURE_POLICY,
     "one_shot_enforcement": (
         "outer-wrapper-must-own-unique-durable-run-id-and-prove-"
         "prelaunch-path-absence"
@@ -5417,6 +5787,65 @@ def _expected_prior_no_model_abort_binding() -> dict[str, Any]:
         "run_id": "hswm-continual-v4-primary-s2-r1-20260818",
         "schema": "hswm-prior-no-model-abort-binding/v1",
         "source_revision": "864798b9c1c955daf6e5aa37899891e90df114f4",
+    }
+
+
+def _expected_prior_failed_pilot_binding() -> dict[str, Any]:
+    """Bind the consumed v5 pilot and its outcome-conditioned v6 correction."""
+
+    return {
+        "artifacts_tar_sha256": (
+            "848053e3ad976e09f7a0af2862dae9c35d73430de7aac9c97a7180a6580d81d7"
+        ),
+        "command_sha256": (
+            "b1a498ea05f362c34c8d39820d5831677fbc33652b56e0bb3e69377d149f93b1"
+        ),
+        "completed_generation_calls": 11,
+        "completed_streams": 0,
+        "completed_token_preflight_calls": 11,
+        "disposition": "permanently-consumed-no-retry",
+        "failure": {
+            "arm": "no_write",
+            "cell_count": 16,
+            "error": "every compact cell must be reachable from entry",
+            "ledger_ordinal": 2,
+            "reachable_cell_count": 13,
+            "request_sha256": (
+                "82f70545f0b759ed3f863e96c6d1505ca213bcf01aad9c12d268422dbb060cad"
+            ),
+            "response_sha256": (
+                "410555fd0801bb811d378917d8e1676e87b8f62042340c30561e70aeba18465d"
+            ),
+            "text_sha256": (
+                "706f71ac9f70cd47647a8183851d2a6264a65210012a6540117489e995051bb6"
+            ),
+            "unreachable_cell_indices": [13, 14, 15],
+        },
+        "first_comparable_query_correct": {
+            "hswm": True,
+            "no_write": False,
+            "plain": True,
+            "reset": False,
+        },
+        "first_comparable_query_rows": 1,
+        "no_write_journal_sha256": (
+            "bba879397ac5ff9db26ef42713e7b7fac6210051ff3cf721c87de9a761072553"
+        ),
+        "outbound_http_requests": 22,
+        "outcome_conditioned_protocol_revision": True,
+        "outer_receipt_sha256": (
+            "a959caa96953b476ca0908848b0585e6ea732d59ae2eecf87e2c55b28c922fdd"
+        ),
+        "post_reveal_valid": False,
+        "reserve_secret_encoding_hits": 0,
+        "run_id": "hswm-continual-v5-primary-s2-r1-20260818",
+        "schema": "hswm-prior-failed-pilot-binding/v1",
+        "selected_primary_preimages_revealed": True,
+        "source_revision": "63f36bdc48cf5051a47183fc8c73740a7ba5b52e",
+        "source_tree": "022a2d6c663ebbdd16d297649876bf47689b3df5",
+        "wrapper_terminal_sha256": (
+            "5745cb7cd0d6b394ea0e814af541652679044d77bed5b3e708b3fa1b1ce98817"
+        ),
     }
 
 
@@ -5595,6 +6024,7 @@ def build_pilot_precommit_v4(
     )
     public_gate_binding = _expected_public_gate_binding()
     prior_abort_binding = _expected_prior_no_model_abort_binding()
+    prior_failed_pilot_binding = _expected_prior_failed_pilot_binding()
     unsigned = {
         "assignment_document": assignment_document,
         "assignment_sha256": canonical_sha256(assignment_document),
@@ -5619,6 +6049,10 @@ def build_pilot_precommit_v4(
         "pilot_execution": dict(_PILOT_V4_EXECUTION),
         "planned_outer_run_id": planned_outer_run_id,
         "planned_output_relative_path": planned_output_relative_path,
+        "prior_failed_pilot_binding": prior_failed_pilot_binding,
+        "prior_failed_pilot_binding_sha256": canonical_sha256(
+            prior_failed_pilot_binding
+        ),
         "prior_no_model_abort_binding": prior_abort_binding,
         "prior_no_model_abort_binding_sha256": canonical_sha256(
             prior_abort_binding
@@ -5723,7 +6157,15 @@ def _validate_pilot_precommit_v4(raw: bytes) -> dict[str, Any]:
         or value["prior_no_model_abort_binding_sha256"]
         != canonical_sha256(prior_abort_binding)
     ):
-        raise ContinualLiveError("v5 prior no-model abort binding drifted")
+        raise ContinualLiveError("v6 prior no-model abort binding drifted")
+    prior_failed_pilot_binding = _expected_prior_failed_pilot_binding()
+    if (
+        canonical_json_bytes(value["prior_failed_pilot_binding"])
+        != canonical_json_bytes(prior_failed_pilot_binding)
+        or value["prior_failed_pilot_binding_sha256"]
+        != canonical_sha256(prior_failed_pilot_binding)
+    ):
+        raise ContinualLiveError("v6 prior failed-pilot binding drifted")
     if (
         value["validated_adapter_source_revision"]
         != VALIDATED_ADAPTER_SOURCE_REVISION
@@ -7394,8 +7836,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         "generation_call_budget_total": execution[
             "generation_call_budget_total"
         ],
-        "mode": "engineering-pilot-v5-primary-only",
+        "mode": "engineering-pilot-v6-primary-only-outcome-conditioned",
+        "no_write_structure_policy": execution["no_write_structure_policy"],
         "one_shot_enforcement": execution["one_shot_enforcement"],
+        "outcome_conditioned_protocol_revision": True,
         "outbound_http_request_budget_total": execution[
             "outbound_http_request_budget_total"
         ],
@@ -7792,6 +8236,12 @@ def main(argv: Sequence[str] | None = None) -> int:
             post_reveal["removal_mediation_revalidation_match"] = removal_ok
             preimages_ok = True
             for stream_ledger in ledgers:
+                try:
+                    _validate_scoped_no_write_structure_diagnostics(
+                        stream_ledger
+                    )
+                except ContinualLiveError:
+                    preimages_ok = False
                 for scope in ("primary", "mediation"):
                     for entries in stream_ledger[scope].values():
                         for entry in entries:

@@ -10,11 +10,14 @@ binds four stateless-chat conditions to :func:`continual.run_prequential`:
     routing.  The committed HSWM structure is itself the persistent execution
     substrate.
 ``reset``
-    The same structured proposal is parsed and checked, then discarded.  The
-    active snapshot is exact genesis at every probe.
+    Schema-valid proposals use the same authoring call.  Semantically valid
+    structures are committed and immediately reset to exact genesis;
+    semantically invalid structures are recorded as non-gating diagnostics
+    because neither form is visible at a probe.
 ``no_write``
     The proposal/check call is made without reading prior learned state and is
-    discarded.  Its active snapshot is always exact genesis.
+    always discarded.  Its structure semantics are diagnostic-only and its
+    active snapshot is always exact genesis.
 ``plain``
     The model maintains one bounded linear text value, without graph relations
     or cell topology.
@@ -91,10 +94,22 @@ FULL_AUTHOR_MODE = "FULL_AUTHOR"
 KEEP_ROUTING_APPEND_MODE = "KEEP_ROUTING_APPEND_MEMBERSHIP"
 STRUCTURE_COMPILATION_RECEIPT_SCHEMA = "hswm-structure-compilation-receipt/v1"
 RELATION_QUALITY_DIAGNOSTIC_SCHEMA = "hswm-relation-quality-diagnostic/v1"
-NO_WRITE_STRUCTURE_DIAGNOSTIC_SCHEMA = "hswm-no-write-structure-diagnostic/v1"
-NO_WRITE_STRUCTURE_POLICY = (
-    "transport-and-schema-gated-structure-semantics-diagnostic-only/v1"
+DISCARDED_CONTROL_STRUCTURE_DIAGNOSTIC_SCHEMA = (
+    "hswm-discarded-control-structure-diagnostic/v1"
 )
+DISCARDED_CONTROL_STRUCTURE_POLICY = (
+    "transport-and-schema-gated-discarded-control-structure-semantics-"
+    "diagnostic-only/v1"
+)
+DISCARDED_CONTROL_STRUCTURE_RULES = {
+    "arms": ["reset", "no_write"],
+    "invalid_semantics": (
+        "record-diagnostic-no-commit-no-reset-no-feedback-no-retry"
+    ),
+    "no_write_valid_semantics": "record-diagnostic-never-commit-exact-genesis",
+    "persistent_hswm_semantics": "semantic-invalidity-remains-fail-closed",
+    "reset_valid_semantics": "commit-then-reactivate-exact-genesis",
+}
 PUBLIC_SCHEMA_GATE_FIXTURE_DOMAIN = "hswm-public-schema-gate/v3"
 PUBLIC_SCHEMA_GATE_FIXTURE_COMPACT_PATCH_SCHEMA = (
     "hswm-compact-structure-patch/v3"
@@ -108,10 +123,11 @@ PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS = (
     - PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING
 )
 # The internal V4 symbol names are retained to minimize churn in the already
-# audited parser.  The externally serialized authority is v6 because it retires
-# the four commitments from the completed-but-failed v5 pilot, binds that
-# failure, and freezes no-write structure semantics as diagnostic-only.
-PILOT_PRECOMMIT_V4_SCHEMA = "hswm-continual-pilot-precommit/v6"
+# audited parser.  The externally serialized authority is v7 because it retires
+# the four commitments from the completed-but-failed v6 pilot, binds that
+# failure, and freezes both discarded controls' structure semantics as
+# diagnostic-only.
+PILOT_PRECOMMIT_V4_SCHEMA = "hswm-continual-pilot-precommit/v7"
 PILOT_PRECOMMIT_V4_SEAL_MEMBER = "outputs/pilot_precommit.canonical.json"
 PILOT_PRECOMMIT_V4_SEAL_REGULAR_MEMBERS = frozenset(
     {
@@ -143,27 +159,23 @@ OLD_PILOT_SEED_COMMITMENT_DENYLIST = (
     "7edb126d41018ca96e5ca593e8c3b1b316b95500bda81559b21219455dffef54",
     "143c2dee81d0b2d415b6e6673c3da799c94587514b1efab8a7181f701298f77c",
     "b3abe671b0baaefcb9c918b7b570fa93a5d1da95888d87b6f2147b6c04ae6df5",
+    # Permanently retired after the 2026-08-18 v6 primary pilot completed 10
+    # tokenize/chat pairs and then failed on a discarded reset topology.
+    "c912b01e4925961406d3649cc3cf76a4ee959c4b4161cf14846436ef64d1c10a",
+    "32f633ecad132bde638c66542c38800a06379360f93cdc71d13d8cd1f361db22",
+    "1588cd19e16db7840deb25ffeb120ac5c3ca135e1a807efaf16eae87234ae106",
+    "97cddc2ff6dce48bd95bce66faa1092d114d837a29ade9c29d6a413619f6202d",
 )
 
 # B1 deliberately leaves these external anchors empty.  A later, separately
 # observed B2 source revision must replace all five with the exact durable seal
 # values before v4 execution can become reachable.  The v4 precommit itself
 # cannot truthfully predict or claim the future B2 source identity.
-FROZEN_V4_PRECOMMIT_RAW_SHA256: str | None = (
-    "3825757deded0425033d6b91037d8860c22e25265dd0a27fb331ddd3db7998d0"
-)
-FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256: str | None = (
-    "22927c9ced7b94541016b2eca09ba277864a9c5da91eb5df28e0f33fdda14ac6"
-)
-FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256: str | None = (
-    "6dc8355f9bf7bfa20b5ebde50cf269d0f462981f55aeefe97af8fbe0d7b9f1d6"
-)
-FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION: str | None = (
-    "ebb747abc7c04c51e0fd51e54741fe951736bc70"
-)
-FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE: str | None = (
-    "7e063e68e3e11056715699fda1df5ac098f47a54"
-)
+FROZEN_V4_PRECOMMIT_RAW_SHA256: str | None = None
+FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256: str | None = None
+FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256: str | None = None
+FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION: str | None = None
+FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE: str | None = None
 STRUCTURED_OUTPUT_MODE = "openai-response-format-json-schema/v1"
 TOKEN_PREFLIGHT_MODE = "vllm-tokenize-chat/v1"
 TOKEN_PREFLIGHT_SCHEMA = "hswm-token-preflight-receipt/v1"
@@ -3371,8 +3383,9 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         raise ContinualLiveError("structure compilation receipt logical mode drifted")
 
 
-def _no_write_structure_diagnostic(
+def _discarded_control_structure_diagnostic(
     *,
+    arm: str,
     base: SelfModelSnapshot,
     generation: int,
     ledger_entry: CallLedgerEntry,
@@ -3380,22 +3393,40 @@ def _no_write_structure_diagnostic(
     proposal: MutationProposal | None,
     structure_receipt: Mapping[str, Any] | None,
     state_after: SelfModelSnapshot,
+    state_after_generation: int,
+    activation_id: str | None,
+    reset_activation_id: str | None,
 ) -> dict[str, Any]:
-    """Bind discarded no-write structure semantics without making them a gate."""
+    """Bind discarded reset/no-write structure semantics without gating scores."""
 
-    if ledger_entry.arm != "no_write" or ledger_entry.operation != "update":
-        raise ContinualLiveError("no-write diagnostic requires one no-write update call")
+    if arm not in {"reset", "no_write"}:
+        raise ContinualLiveError("discarded-control diagnostic arm is invalid")
+    if ledger_entry.arm != arm or ledger_entry.operation != "update":
+        raise ContinualLiveError(
+            "discarded-control diagnostic requires its own update call"
+        )
     if (
         base.snapshot_id != GENESIS.snapshot_id
         or state_after.snapshot_id != base.snapshot_id
     ):
-        raise ContinualLiveError("no-write diagnostic state is not exact unchanged genesis")
-    if generation != 0:
-        raise ContinualLiveError("no-write diagnostic generation must remain zero")
+        raise ContinualLiveError(
+            "discarded-control diagnostic state is not exact unchanged genesis"
+        )
+    if (
+        isinstance(generation, bool)
+        or not isinstance(generation, int)
+        or generation < 0
+        or isinstance(state_after_generation, bool)
+        or not isinstance(state_after_generation, int)
+        or state_after_generation < 0
+    ):
+        raise ContinualLiveError("discarded-control diagnostic generation is invalid")
     semantic_valid = semantic_error is None
     if semantic_valid:
         if proposal is None or structure_receipt is None:
-            raise ContinualLiveError("valid no-write diagnostic lacks parsed structure")
+            raise ContinualLiveError(
+                "valid discarded-control diagnostic lacks parsed structure"
+            )
         _validate_structure_compilation_receipt(structure_receipt)
         proposal_sha256: str | None = canonical_sha256(proposal.canonical())
         structure_receipt_sha256: str | None = str(
@@ -3406,21 +3437,29 @@ def _no_write_structure_diagnostic(
         error_sha256: str | None = None
     else:
         if proposal is not None or structure_receipt is not None:
-            raise ContinualLiveError("invalid no-write diagnostic claims parsed structure")
+            raise ContinualLiveError(
+                "invalid discarded-control diagnostic claims parsed structure"
+            )
         error_type = type(semantic_error).__name__
         error_message = str(semantic_error)
         if not error_message or len(error_message.encode("utf-8")) > 1024:
-            raise ContinualLiveError("no-write diagnostic error message is invalid")
+            raise ContinualLiveError(
+                "discarded-control diagnostic error message is invalid"
+            )
         error_sha256 = _digest_bytes(error_message.encode("utf-8"))
         proposal_sha256 = None
         structure_receipt_sha256 = None
+    commit_then_reset_applied = arm == "reset" and semantic_valid
+    committed = commit_then_reset_applied
     state_sha256 = _snapshot_sha256(base)
     unsigned = {
-        "arm": "no_write",
+        "activation_id": activation_id,
+        "arm": arm,
         "base_generation": generation,
         "base_snapshot_id": base.snapshot_id,
         "base_snapshot_sha256": state_sha256,
-        "committed": False,
+        "commit_then_reset_applied": commit_then_reset_applied,
+        "committed": committed,
         "completion_request_sha256": ledger_entry.completion.request_sha256,
         "completion_response_sha256": ledger_entry.completion.response_sha256,
         "completion_text_sha256": _digest_bytes(
@@ -3429,32 +3468,38 @@ def _no_write_structure_diagnostic(
         "feedback_to_model": False,
         "ledger_ordinal": ledger_entry.ordinal,
         "operation": "update",
-        "policy": NO_WRITE_STRUCTURE_POLICY,
+        "policy": DISCARDED_CONTROL_STRUCTURE_POLICY,
         "proposal_sha256": proposal_sha256,
+        "reset_activation_id": reset_activation_id,
         "response_schema_name": ledger_entry.response_schema_name,
         "response_schema_sha256": ledger_entry.response_schema_sha256,
         "retry_permitted": False,
-        "schema": NO_WRITE_STRUCTURE_DIAGNOSTIC_SCHEMA,
+        "schema": DISCARDED_CONTROL_STRUCTURE_DIAGNOSTIC_SCHEMA,
         "semantic_error_message": error_message,
         "semantic_error_sha256": error_sha256,
         "semantic_error_type": error_type,
         "semantic_valid": semantic_valid,
+        "state_after_generation": state_after_generation,
         "state_after_sha256": _snapshot_sha256(state_after),
         "state_before_sha256": state_sha256,
         "state_unchanged": True,
         "structure_compilation_receipt_sha256": structure_receipt_sha256,
     }
     value = {**unsigned, "diagnostic_sha256": canonical_sha256(unsigned)}
-    _validate_no_write_structure_diagnostic(value)
+    _validate_discarded_control_structure_diagnostic(value)
     return value
 
 
-def _validate_no_write_structure_diagnostic(value: Mapping[str, Any]) -> None:
+def _validate_discarded_control_structure_diagnostic(
+    value: Mapping[str, Any],
+) -> None:
     expected_fields = {
+        "activation_id",
         "arm",
         "base_generation",
         "base_snapshot_id",
         "base_snapshot_sha256",
+        "commit_then_reset_applied",
         "committed",
         "completion_request_sha256",
         "completion_response_sha256",
@@ -3465,6 +3510,7 @@ def _validate_no_write_structure_diagnostic(value: Mapping[str, Any]) -> None:
         "operation",
         "policy",
         "proposal_sha256",
+        "reset_activation_id",
         "response_schema_name",
         "response_schema_sha256",
         "retry_permitted",
@@ -3473,40 +3519,53 @@ def _validate_no_write_structure_diagnostic(value: Mapping[str, Any]) -> None:
         "semantic_error_sha256",
         "semantic_error_type",
         "semantic_valid",
+        "state_after_generation",
         "state_after_sha256",
         "state_before_sha256",
         "state_unchanged",
         "structure_compilation_receipt_sha256",
     }
     if not isinstance(value, Mapping) or set(value) != expected_fields:
-        raise ContinualLiveError("no-write diagnostic field set is invalid")
+        raise ContinualLiveError(
+            "discarded-control diagnostic field set is invalid"
+        )
     unsigned = dict(value)
     diagnostic_sha256 = unsigned.pop("diagnostic_sha256")
     if diagnostic_sha256 != canonical_sha256(unsigned):
-        raise ContinualLiveError("no-write diagnostic digest mismatch")
+        raise ContinualLiveError("discarded-control diagnostic digest mismatch")
+    arm = value.get("arm")
     if (
-        value.get("schema") != NO_WRITE_STRUCTURE_DIAGNOSTIC_SCHEMA
-        or value.get("policy") != NO_WRITE_STRUCTURE_POLICY
-        or value.get("arm") != "no_write"
+        value.get("schema") != DISCARDED_CONTROL_STRUCTURE_DIAGNOSTIC_SCHEMA
+        or value.get("policy") != DISCARDED_CONTROL_STRUCTURE_POLICY
+        or arm not in {"reset", "no_write"}
         or value.get("operation") != "update"
-        or value.get("committed") is not False
         or value.get("feedback_to_model") is not False
         or value.get("retry_permitted") is not False
         or value.get("state_unchanged") is not True
-        or value.get("base_generation") != 0
         or value.get("base_snapshot_id") != GENESIS.snapshot_id
         or value.get("state_before_sha256") != value.get("base_snapshot_sha256")
         or value.get("state_after_sha256") != value.get("base_snapshot_sha256")
     ):
-        raise ContinualLiveError("no-write diagnostic invariant drifted")
+        raise ContinualLiveError("discarded-control diagnostic invariant drifted")
+    base_generation = value.get("base_generation")
+    state_after_generation = value.get("state_after_generation")
+    if any(
+        isinstance(item, bool) or not isinstance(item, int) or item < 0
+        for item in (base_generation, state_after_generation)
+    ):
+        raise ContinualLiveError(
+            "discarded-control diagnostic generation is invalid"
+        )
     ordinal = value.get("ledger_ordinal")
     if isinstance(ordinal, bool) or not isinstance(ordinal, int) or ordinal < 0:
-        raise ContinualLiveError("no-write diagnostic ordinal is invalid")
+        raise ContinualLiveError("discarded-control diagnostic ordinal is invalid")
     if (
         not isinstance(value.get("response_schema_name"), str)
         or not value["response_schema_name"]
     ):
-        raise ContinualLiveError("no-write diagnostic schema name is invalid")
+        raise ContinualLiveError(
+            "discarded-control diagnostic schema name is invalid"
+        )
     required_hashes = (
         "base_snapshot_id",
         "base_snapshot_sha256",
@@ -3523,10 +3582,14 @@ def _validate_no_write_structure_diagnostic(value: Mapping[str, Any]) -> None:
         or re.fullmatch(r"[0-9a-f]{64}", value[field]) is None
         for field in required_hashes
     ):
-        raise ContinualLiveError("no-write diagnostic digest field is invalid")
+        raise ContinualLiveError(
+            "discarded-control diagnostic digest field is invalid"
+        )
     semantic_valid = value.get("semantic_valid")
     if not isinstance(semantic_valid, bool):
-        raise ContinualLiveError("no-write diagnostic semantic flag is invalid")
+        raise ContinualLiveError(
+            "discarded-control diagnostic semantic flag is invalid"
+        )
     if semantic_valid:
         if any(
             value.get(field) is not None
@@ -3536,7 +3599,9 @@ def _validate_no_write_structure_diagnostic(value: Mapping[str, Any]) -> None:
                 "semantic_error_type",
             )
         ):
-            raise ContinualLiveError("valid no-write diagnostic claims an error")
+            raise ContinualLiveError(
+                "valid discarded-control diagnostic claims an error"
+            )
         for field in (
             "proposal_sha256",
             "structure_compilation_receipt_sha256",
@@ -3546,7 +3611,7 @@ def _validate_no_write_structure_diagnostic(value: Mapping[str, Any]) -> None:
                 or re.fullmatch(r"[0-9a-f]{64}", value[field]) is None
             ):
                 raise ContinualLiveError(
-                    "valid no-write diagnostic lacks a structure digest"
+                    "valid discarded-control diagnostic lacks a structure digest"
                 )
     else:
         if (
@@ -3560,7 +3625,51 @@ def _validate_no_write_structure_diagnostic(value: Mapping[str, Any]) -> None:
             or value.get("semantic_error_sha256")
             != _digest_bytes(value["semantic_error_message"].encode("utf-8"))
         ):
-            raise ContinualLiveError("invalid no-write diagnostic error binding drifted")
+            raise ContinualLiveError(
+                "invalid discarded-control diagnostic error binding drifted"
+            )
+    optional_ids = (value.get("activation_id"), value.get("reset_activation_id"))
+    if any(
+        item is not None
+        and (
+            not isinstance(item, str)
+            or re.fullmatch(r"[0-9a-f]{64}", item) is None
+        )
+        for item in optional_ids
+    ):
+        raise ContinualLiveError(
+            "discarded-control diagnostic activation binding is invalid"
+        )
+    if arm == "no_write":
+        if (
+            base_generation != 0
+            or state_after_generation != 0
+            or value.get("committed") is not False
+            or value.get("commit_then_reset_applied") is not False
+            or any(item is not None for item in optional_ids)
+        ):
+            raise ContinualLiveError(
+                "no-write discarded-control invariant drifted"
+            )
+    elif semantic_valid:
+        if (
+            state_after_generation != base_generation + 2
+            or value.get("committed") is not True
+            or value.get("commit_then_reset_applied") is not True
+            or any(item is None for item in optional_ids)
+        ):
+            raise ContinualLiveError(
+                "valid reset discarded-control invariant drifted"
+            )
+    elif (
+        state_after_generation != base_generation
+        or value.get("committed") is not False
+        or value.get("commit_then_reset_applied") is not False
+        or any(item is not None for item in optional_ids)
+    ):
+        raise ContinualLiveError(
+            "invalid reset discarded-control invariant drifted"
+        )
 
 
 class StructuredHSWMArm(_ModelArm):
@@ -3611,7 +3720,7 @@ class StructuredHSWMArm(_ModelArm):
             raise ContinualLiveError("arm store did not start from exact empty genesis")
         self._source_token_ids: list[str] = []
         self.structure_compilation_receipts: list[dict[str, Any]] = []
-        self.no_write_structure_diagnostics: list[dict[str, Any]] = []
+        self.discarded_control_structure_diagnostics: list[dict[str, Any]] = []
 
     def state_canonical_bytes(self) -> bytes:
         # The evaluator reads the durable active snapshot itself; the model never
@@ -3660,17 +3769,18 @@ class StructuredHSWMArm(_ModelArm):
                 policy=self.policy,
             )
         except ContinualLiveError as semantic_error:
-            if self.name != "no_write" or self.commit_updates or self.read_history:
+            if self.name not in {"reset", "no_write"} or self.read_history:
                 raise
             active_after = self.store.active_snapshot()
             if (
-                active_after.generation != 0
+                active_after.generation != active_record.generation
                 or active_after.snapshot.snapshot_id != GENESIS.snapshot_id
             ):
                 raise ContinualLiveError(
-                    "no-write semantic diagnostic observed mutated state"
+                    "discarded-control semantic diagnostic observed mutated state"
                 ) from semantic_error
-            diagnostic = _no_write_structure_diagnostic(
+            diagnostic = _discarded_control_structure_diagnostic(
+                arm=self.name,
                 base=prompt_snapshot,
                 generation=proposal_generation,
                 ledger_entry=self.ledger[-1],
@@ -3678,15 +3788,18 @@ class StructuredHSWMArm(_ModelArm):
                 proposal=None,
                 structure_receipt=None,
                 state_after=active_after.snapshot,
+                state_after_generation=active_after.generation,
+                activation_id=None,
+                reset_activation_id=None,
             )
-            self.no_write_structure_diagnostics.append(diagnostic)
+            self.discarded_control_structure_diagnostics.append(diagnostic)
             receipt = canonical_sha256(
                 {
                     "activation_id": None,
                     "arm": self.name,
                     "committed": False,
                     "completion": completion.canonical(),
-                    "no_write_structure_diagnostic_sha256": diagnostic[
+                    "discarded_control_structure_diagnostic_sha256": diagnostic[
                         "diagnostic_sha256"
                     ],
                     "proposal_sha256": None,
@@ -3788,15 +3901,21 @@ class StructuredHSWMArm(_ModelArm):
         )
         _validate_structure_compilation_receipt(structure_receipt)
         self.structure_compilation_receipts.append(structure_receipt)
-        no_write_diagnostic_sha256: str | None = None
-        if self.name == "no_write":
+        discarded_diagnostic_sha256: str | None = None
+        if self.name in {"reset", "no_write"}:
             state_after = self.store.active_snapshot()
             if (
-                state_after.generation != 0
-                or state_after.snapshot.snapshot_id != GENESIS.snapshot_id
+                state_after.snapshot.snapshot_id != GENESIS.snapshot_id
+                or (
+                    self.name == "no_write"
+                    and state_after.generation != 0
+                )
             ):
-                raise ContinualLiveError("valid no-write update changed durable state")
-            diagnostic = _no_write_structure_diagnostic(
+                raise ContinualLiveError(
+                    "valid discarded-control update changed visible state"
+                )
+            diagnostic = _discarded_control_structure_diagnostic(
+                arm=self.name,
                 base=prompt_snapshot,
                 generation=proposal_generation,
                 ledger_entry=self.ledger[-1],
@@ -3804,17 +3923,20 @@ class StructuredHSWMArm(_ModelArm):
                 proposal=proposal,
                 structure_receipt=structure_receipt,
                 state_after=state_after.snapshot,
+                state_after_generation=state_after.generation,
+                activation_id=activation_id,
+                reset_activation_id=reset_activation_id,
             )
-            self.no_write_structure_diagnostics.append(diagnostic)
-            no_write_diagnostic_sha256 = diagnostic["diagnostic_sha256"]
+            self.discarded_control_structure_diagnostics.append(diagnostic)
+            discarded_diagnostic_sha256 = diagnostic["diagnostic_sha256"]
         receipt = canonical_sha256(
             {
                 "activation_id": activation_id,
                 "arm": self.name,
                 "committed": self.commit_updates,
                 "completion": completion.canonical(),
-                "no_write_structure_diagnostic_sha256": (
-                    no_write_diagnostic_sha256
+                "discarded_control_structure_diagnostic_sha256": (
+                    discarded_diagnostic_sha256
                 ),
                 "proposal_sha256": canonical_sha256(proposal.canonical()),
                 "reset_activation_id": reset_activation_id,
@@ -4473,7 +4595,9 @@ def scoped_call_ledgers(
         raise ContinualLiveError("ledger arms differ from the parity snapshot")
     primary: dict[str, list[dict[str, Any]]] = {}
     mediation: dict[str, list[dict[str, Any]]] = {}
-    no_write_structure_diagnostics: dict[str, list[dict[str, Any]]] = {}
+    discarded_control_structure_diagnostics: dict[
+        str, list[dict[str, Any]]
+    ] = {}
     for index, arm in enumerate(arms):
         prefix_count = audit.primary_call_counts[index]
         prefix = arm.ledger[:prefix_count]
@@ -4488,15 +4612,17 @@ def scoped_call_ledgers(
             raise ContinualLiveError("primary operation sequence changed after audit")
         primary[arm.name] = [entry.canonical() for entry in prefix]
         mediation[arm.name] = [entry.canonical() for entry in suffix]
-        diagnostics = list(getattr(arm, "no_write_structure_diagnostics", ()))
-        if arm.name == "no_write":
+        diagnostics = list(
+            getattr(arm, "discarded_control_structure_diagnostics", ())
+        )
+        if arm.name in {"reset", "no_write"}:
             update_entries = [entry for entry in prefix if entry.operation == "update"]
             if len(diagnostics) != len(update_entries):
                 raise ContinualLiveError(
-                    "no-write structure diagnostic count differs from update calls"
+                    "discarded-control diagnostic count differs from update calls"
                 )
             for diagnostic, entry in zip(diagnostics, update_entries, strict=True):
-                _validate_no_write_structure_diagnostic(diagnostic)
+                _validate_discarded_control_structure_diagnostic(diagnostic)
                 if (
                     diagnostic["ledger_ordinal"] != entry.ordinal
                     or diagnostic["completion_request_sha256"]
@@ -4511,13 +4637,13 @@ def scoped_call_ledgers(
                     != entry.response_schema_sha256
                 ):
                     raise ContinualLiveError(
-                        "no-write structure diagnostic differs from its call ledger"
+                        "discarded-control diagnostic differs from its call ledger"
                     )
         elif diagnostics:
             raise ContinualLiveError(
-                "non-no-write arm unexpectedly emitted a discard diagnostic"
+                "non-discarded arm unexpectedly emitted a discard diagnostic"
             )
-        no_write_structure_diagnostics[arm.name] = diagnostics
+        discarded_control_structure_diagnostics[arm.name] = diagnostics
     expected_h_suffix = 15 if mediation_enabled else 0
     if len(mediation["hswm"]) != expected_h_suffix or any(
         mediation[name] for name in ("reset", "no_write", "plain")
@@ -4528,22 +4654,24 @@ def scoped_call_ledgers(
     unsigned = {
         "mediation": mediation,
         "mediation_enabled": mediation_enabled,
-        "no_write_structure_diagnostics": no_write_structure_diagnostics,
-        "no_write_structure_policy": NO_WRITE_STRUCTURE_POLICY,
+        "discarded_control_structure_diagnostics": (
+            discarded_control_structure_diagnostics
+        ),
+        "discarded_control_structure_policy": DISCARDED_CONTROL_STRUCTURE_POLICY,
         "parity_audit_sha256": audit.audit_sha256,
         "primary": primary,
     }
     return {**unsigned, "scoped_ledger_sha256": canonical_sha256(unsigned)}
 
 
-def _validate_scoped_no_write_structure_diagnostics(
+def _validate_scoped_discarded_control_structure_diagnostics(
     value: Mapping[str, Any],
 ) -> None:
     expected_fields = {
+        "discarded_control_structure_diagnostics",
+        "discarded_control_structure_policy",
         "mediation",
         "mediation_enabled",
-        "no_write_structure_diagnostics",
-        "no_write_structure_policy",
         "parity_audit_sha256",
         "primary",
         "scoped_ledger_sha256",
@@ -4554,57 +4682,122 @@ def _validate_scoped_no_write_structure_diagnostics(
     scoped_sha256 = unsigned.pop("scoped_ledger_sha256")
     if scoped_sha256 != canonical_sha256(unsigned):
         raise ContinualLiveError("scoped ledger digest mismatch")
-    if value.get("no_write_structure_policy") != NO_WRITE_STRUCTURE_POLICY:
-        raise ContinualLiveError("scoped no-write structure policy drifted")
+    if (
+        value.get("discarded_control_structure_policy")
+        != DISCARDED_CONTROL_STRUCTURE_POLICY
+    ):
+        raise ContinualLiveError(
+            "scoped discarded-control structure policy drifted"
+        )
     primary = value.get("primary")
-    diagnostics_by_arm = value.get("no_write_structure_diagnostics")
+    diagnostics_by_arm = value.get("discarded_control_structure_diagnostics")
     expected_arms = {"hswm", "reset", "no_write", "plain"}
     if (
         not isinstance(primary, Mapping)
         or set(primary) != expected_arms
         or not isinstance(diagnostics_by_arm, Mapping)
         or set(diagnostics_by_arm) != expected_arms
-        or any(diagnostics_by_arm[name] for name in ("hswm", "reset", "plain"))
+        or any(diagnostics_by_arm[name] for name in ("hswm", "plain"))
     ):
-        raise ContinualLiveError("scoped no-write diagnostic arm map drifted")
-    no_write_entries = primary["no_write"]
-    diagnostics = diagnostics_by_arm["no_write"]
-    if not isinstance(no_write_entries, list) or not isinstance(diagnostics, list):
-        raise ContinualLiveError("scoped no-write diagnostic lists are invalid")
-    update_entries = [
-        entry
-        for entry in no_write_entries
-        if isinstance(entry, Mapping) and entry.get("operation") == "update"
-    ]
-    if len(update_entries) != len(diagnostics):
         raise ContinualLiveError(
-            "scoped no-write diagnostic count differs from update calls"
+            "scoped discarded-control diagnostic arm map drifted"
         )
-    for diagnostic, entry in zip(diagnostics, update_entries, strict=True):
-        _validate_no_write_structure_diagnostic(diagnostic)
-        try:
-            completion = entry["completion"]
-            ordinal = entry["ordinal"]
-            response_schema_name = entry["response_schema_name"]
-            response_schema_sha256 = entry["response_schema_sha256"]
-        except (KeyError, TypeError) as error:
+    for arm_name in ("reset", "no_write"):
+        entries = primary[arm_name]
+        diagnostics = diagnostics_by_arm[arm_name]
+        if not isinstance(entries, list) or not isinstance(diagnostics, list):
             raise ContinualLiveError(
-                "scoped no-write call entry is malformed"
-            ) from error
-        if (
-            diagnostic["ledger_ordinal"] != ordinal
-            or diagnostic["completion_request_sha256"]
-            != completion.get("request_sha256")
-            or diagnostic["completion_response_sha256"]
-            != completion.get("response_sha256")
-            or diagnostic["completion_text_sha256"]
-            != completion.get("text_sha256")
-            or diagnostic["response_schema_name"] != response_schema_name
-            or diagnostic["response_schema_sha256"] != response_schema_sha256
-        ):
-            raise ContinualLiveError(
-                "scoped no-write diagnostic differs from its persisted call"
+                "scoped discarded-control diagnostic lists are invalid"
             )
+        update_entries = [
+            entry
+            for entry in entries
+            if isinstance(entry, Mapping) and entry.get("operation") == "update"
+        ]
+        if len(update_entries) != len(diagnostics):
+            raise ContinualLiveError(
+                "scoped discarded-control diagnostic count differs from update calls"
+            )
+        for diagnostic, entry in zip(diagnostics, update_entries, strict=True):
+            _validate_discarded_control_structure_diagnostic(diagnostic)
+            try:
+                completion = entry["completion"]
+                ordinal = entry["ordinal"]
+                response_schema_name = entry["response_schema_name"]
+                response_schema_sha256 = entry["response_schema_sha256"]
+            except (KeyError, TypeError) as error:
+                raise ContinualLiveError(
+                    "scoped discarded-control call entry is malformed"
+                ) from error
+            if (
+                diagnostic["arm"] != arm_name
+                or diagnostic["ledger_ordinal"] != ordinal
+                or diagnostic["completion_request_sha256"]
+                != completion.get("request_sha256")
+                or diagnostic["completion_response_sha256"]
+                != completion.get("response_sha256")
+                or diagnostic["completion_text_sha256"]
+                != completion.get("text_sha256")
+                or diagnostic["response_schema_name"] != response_schema_name
+                or diagnostic["response_schema_sha256"] != response_schema_sha256
+            ):
+                raise ContinualLiveError(
+                    "scoped discarded-control diagnostic differs from its persisted call"
+                )
+            try:
+                raw_request = _strict_object(completion["raw_request_json"])
+                messages = raw_request["messages"]
+                payload = _strict_object(messages[-1]["content"])
+                source_tokens = payload["public_source_tokens"]
+            except (KeyError, IndexError, TypeError, ContinualLiveError) as error:
+                raise ContinualLiveError(
+                    "discarded-control diagnostic request cannot be reconstructed"
+                ) from error
+            if (
+                not isinstance(messages, list)
+                or len(messages) != 2
+                or payload.get("base_generation")
+                != diagnostic["base_generation"]
+                or payload.get("base_snapshot_id")
+                != diagnostic["base_snapshot_id"]
+                or not isinstance(source_tokens, list)
+            ):
+                raise ContinualLiveError(
+                    "discarded-control diagnostic request binding drifted"
+                )
+            try:
+                proposal = _parse_structure_proposal(
+                    completion["text"],
+                    active=GENESIS,
+                    source_tokens=source_tokens,
+                    generation=diagnostic["base_generation"],
+                    policy=_proposal_policy(ArmBudget()),
+                )
+            except ContinualLiveError as semantic_error:
+                if (
+                    diagnostic["semantic_valid"] is not False
+                    or diagnostic["proposal_sha256"] is not None
+                    or diagnostic["semantic_error_type"]
+                    != type(semantic_error).__name__
+                    or diagnostic["semantic_error_message"] != str(semantic_error)
+                    or diagnostic["semantic_error_sha256"]
+                    != _digest_bytes(str(semantic_error).encode("utf-8"))
+                ):
+                    raise ContinualLiveError(
+                        "discarded-control semantic diagnostic cannot be reproduced"
+                    ) from semantic_error
+            else:
+                if (
+                    diagnostic["semantic_valid"] is not True
+                    or diagnostic["proposal_sha256"]
+                    != canonical_sha256(proposal.canonical())
+                    or diagnostic["semantic_error_type"] is not None
+                    or diagnostic["semantic_error_message"] is not None
+                    or diagnostic["semantic_error_sha256"] is not None
+                ):
+                    raise ContinualLiveError(
+                        "discarded-control semantic diagnostic cannot be reproduced"
+                    )
 
 
 def build_four_arms(
@@ -5736,7 +5929,10 @@ _PILOT_V4_EXECUTION = {
     "horizon": 20,
     "max_input_bytes": 2_000_000,
     "max_state_bytes": 1_000_000,
-    "no_write_structure_policy": NO_WRITE_STRUCTURE_POLICY,
+    "discarded_control_structure_policy": DISCARDED_CONTROL_STRUCTURE_POLICY,
+    "discarded_control_structure_rules": dict(
+        DISCARDED_CONTROL_STRUCTURE_RULES
+    ),
     "one_shot_enforcement": (
         "outer-wrapper-must-own-unique-durable-run-id-and-prove-"
         "prelaunch-path-absence"
@@ -5801,35 +5997,36 @@ def _expected_prior_no_model_abort_binding() -> dict[str, Any]:
 
 
 def _expected_prior_failed_pilot_binding() -> dict[str, Any]:
-    """Bind the consumed v5 pilot and its outcome-conditioned v6 correction."""
+    """Bind the consumed v6 pilot and its outcome-conditioned v7 correction."""
 
     return {
         "artifacts_tar_sha256": (
-            "848053e3ad976e09f7a0af2862dae9c35d73430de7aac9c97a7180a6580d81d7"
+            "7d1feddbf0868833b30dea24f0e79b142a41cd2c669cf6d4590bd6641b5ad4f7"
         ),
         "command_sha256": (
-            "b1a498ea05f362c34c8d39820d5831677fbc33652b56e0bb3e69377d149f93b1"
+            "01e60787098b46c488fc9f994be1a4713df68b54ba6aea92911839ae31b2e1ed"
         ),
-        "completed_generation_calls": 11,
+        "completed_generation_calls": 10,
         "completed_streams": 0,
-        "completed_token_preflight_calls": 11,
+        "completed_token_preflight_calls": 10,
         "disposition": "permanently-consumed-no-retry",
         "failure": {
-            "arm": "no_write",
+            "arm": "reset",
+            "base_generation": 2,
             "cell_count": 16,
             "error": "every compact cell must be reachable from entry",
             "ledger_ordinal": 2,
-            "reachable_cell_count": 13,
+            "reachable_cell_count": 10,
             "request_sha256": (
-                "82f70545f0b759ed3f863e96c6d1505ca213bcf01aad9c12d268422dbb060cad"
+                "a4d63707fbd2039123d7c6c7e27954cdf2aa684bebed516a471eebc17bc890b8"
             ),
             "response_sha256": (
-                "410555fd0801bb811d378917d8e1676e87b8f62042340c30561e70aeba18465d"
+                "2c8b411abf446eb124f43bb151667986d97e84a02c172a06848471eb6d52820b"
             ),
             "text_sha256": (
-                "706f71ac9f70cd47647a8183851d2a6264a65210012a6540117489e995051bb6"
+                "85070754584f7c08a2001a4f19a8763df559ca646fbae591d7dd838ecbb8de39"
             ),
-            "unreachable_cell_indices": [13, 14, 15],
+            "unreachable_cell_indices": [10, 11, 12, 13, 14, 15],
         },
         "first_comparable_query_correct": {
             "hswm": True,
@@ -5838,23 +6035,23 @@ def _expected_prior_failed_pilot_binding() -> dict[str, Any]:
             "reset": False,
         },
         "first_comparable_query_rows": 1,
-        "no_write_journal_sha256": (
-            "bba879397ac5ff9db26ef42713e7b7fac6210051ff3cf721c87de9a761072553"
+        "reset_journal_sha256": (
+            "6bdfe20a689220de00def49525116ff4d528f79472380620b9d28b75742d0aa7"
         ),
-        "outbound_http_requests": 22,
+        "outbound_http_requests": 20,
         "outcome_conditioned_protocol_revision": True,
         "outer_receipt_sha256": (
-            "a959caa96953b476ca0908848b0585e6ea732d59ae2eecf87e2c55b28c922fdd"
+            "f64d07e6c45fe97c118147a4ea620ae612c8c1c6015806d1ec5a28a670bbfa64"
         ),
         "post_reveal_valid": False,
         "reserve_secret_encoding_hits": 0,
-        "run_id": "hswm-continual-v5-primary-s2-r1-20260818",
+        "run_id": "hswm-continual-v6-primary-s2-r1-20260818",
         "schema": "hswm-prior-failed-pilot-binding/v1",
         "selected_primary_preimages_revealed": True,
-        "source_revision": "63f36bdc48cf5051a47183fc8c73740a7ba5b52e",
-        "source_tree": "022a2d6c663ebbdd16d297649876bf47689b3df5",
+        "source_revision": "108b44e90a1dc95f51e4dee0549f0723c045cff0",
+        "source_tree": "d7ded7c3cd4427307de3330208dfda19db4e78ff",
         "wrapper_terminal_sha256": (
-            "5745cb7cd0d6b394ea0e814af541652679044d77bed5b3e708b3fa1b1ce98817"
+            "78435706799df5d428f018ac874e7c7911be4a19401bd57ef98c66f706b645a8"
         ),
     }
 
@@ -6167,7 +6364,7 @@ def _validate_pilot_precommit_v4(raw: bytes) -> dict[str, Any]:
         or value["prior_no_model_abort_binding_sha256"]
         != canonical_sha256(prior_abort_binding)
     ):
-        raise ContinualLiveError("v6 prior no-model abort binding drifted")
+        raise ContinualLiveError("v7 prior no-model abort binding drifted")
     prior_failed_pilot_binding = _expected_prior_failed_pilot_binding()
     if (
         canonical_json_bytes(value["prior_failed_pilot_binding"])
@@ -6175,7 +6372,7 @@ def _validate_pilot_precommit_v4(raw: bytes) -> dict[str, Any]:
         or value["prior_failed_pilot_binding_sha256"]
         != canonical_sha256(prior_failed_pilot_binding)
     ):
-        raise ContinualLiveError("v6 prior failed-pilot binding drifted")
+        raise ContinualLiveError("v7 prior failed-pilot binding drifted")
     if (
         value["validated_adapter_source_revision"]
         != VALIDATED_ADAPTER_SOURCE_REVISION
@@ -7846,8 +8043,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         "generation_call_budget_total": execution[
             "generation_call_budget_total"
         ],
-        "mode": "engineering-pilot-v6-primary-only-outcome-conditioned",
-        "no_write_structure_policy": execution["no_write_structure_policy"],
+        "mode": "engineering-pilot-v7-primary-only-outcome-conditioned",
+        "discarded_control_structure_policy": execution[
+            "discarded_control_structure_policy"
+        ],
+        "discarded_control_structure_rules": execution[
+            "discarded_control_structure_rules"
+        ],
         "one_shot_enforcement": execution["one_shot_enforcement"],
         "outcome_conditioned_protocol_revision": True,
         "outbound_http_request_budget_total": execution[
@@ -8247,7 +8449,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             preimages_ok = True
             for stream_ledger in ledgers:
                 try:
-                    _validate_scoped_no_write_structure_diagnostics(
+                    _validate_scoped_discarded_control_structure_diagnostics(
                         stream_ledger
                     )
                 except ContinualLiveError:

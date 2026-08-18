@@ -363,6 +363,24 @@ class UnreachableFullAuthorBackend(ScriptedRelationalBackend):
         return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
 
+class FirstValidThenUnreachableFullAuthorBackend(ScriptedRelationalBackend):
+    """Match the live reset failure: one valid reset, then invalid topology."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.author_calls = 0
+
+    def _author(self, payload: Mapping[str, Any]) -> str:
+        value = json.loads(ScriptedRelationalBackend._author(payload))
+        if (
+            self.author_calls > 0
+            and payload["authoring_mode"] == live.FULL_AUTHOR_MODE
+        ):
+            value["cells"][12]["next_cell_indices"] = []
+        self.author_calls += 1
+        return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+
 def _budget() -> ArmBudget:
     return ArmBudget(
         answer_max_output_tokens=128,
@@ -723,6 +741,13 @@ _CONSUMED_V5_COMMITMENTS = (
     "b3abe671b0baaefcb9c918b7b570fa93a5d1da95888d87b6f2147b6c04ae6df5",
 )
 
+_CONSUMED_V6_COMMITMENTS = (
+    "c912b01e4925961406d3649cc3cf76a4ee959c4b4161cf14846436ef64d1c10a",
+    "32f633ecad132bde638c66542c38800a06379360f93cdc71d13d8cd1f361db22",
+    "1588cd19e16db7840deb25ffeb120ac5c3ca135e1a807efaf16eae87234ae106",
+    "97cddc2ff6dce48bd95bce66faa1092d114d837a29ade9c29d6a413619f6202d",
+)
+
 
 def _fresh_v4_commitments() -> tuple[str, ...]:
     return tuple(
@@ -758,22 +783,12 @@ def _clear_v4_precommit_anchors(monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setattr(live, name, None)
 
 
-def test_v6_b2_external_anchor_constants_are_exact() -> None:
-    assert live.FROZEN_V4_PRECOMMIT_RAW_SHA256 == (
-        "3825757deded0425033d6b91037d8860c22e25265dd0a27fb331ddd3db7998d0"
-    )
-    assert live.FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256 == (
-        "22927c9ced7b94541016b2eca09ba277864a9c5da91eb5df28e0f33fdda14ac6"
-    )
-    assert live.FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256 == (
-        "6dc8355f9bf7bfa20b5ebde50cf269d0f462981f55aeefe97af8fbe0d7b9f1d6"
-    )
-    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION == (
-        "ebb747abc7c04c51e0fd51e54741fe951736bc70"
-    )
-    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE == (
-        "7e063e68e3e11056715699fda1df5ac098f47a54"
-    )
+def test_v7_b1_external_anchor_constants_are_unfilled() -> None:
+    assert live.FROZEN_V4_PRECOMMIT_RAW_SHA256 is None
+    assert live.FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256 is None
+    assert live.FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256 is None
+    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION is None
+    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE is None
 
 
 def _write_test_v4_precommit_seal(
@@ -1196,22 +1211,36 @@ def test_four_arms_use_isolated_states_and_public_only_requests(tmp_path: Path) 
         == "author_hswm_compact_patch"
     )
     assert first_entry.canonical()["completion"]["text"] == first_entry.completion.text
-    no_write_diagnostics = arms[2].no_write_structure_diagnostics
-    assert len(no_write_diagnostics) == 5
+    reset_diagnostics = arms[1].discarded_control_structure_diagnostics
+    no_write_diagnostics = arms[2].discarded_control_structure_diagnostics
+    assert len(reset_diagnostics) == len(no_write_diagnostics) == 5
+    assert all(item["semantic_valid"] is True for item in reset_diagnostics)
     assert all(item["semantic_valid"] is True for item in no_write_diagnostics)
+    assert all(item["commit_then_reset_applied"] is True for item in reset_diagnostics)
+    assert all(
+        item["commit_then_reset_applied"] is False
+        for item in no_write_diagnostics
+    )
     scoped = live.scoped_call_ledgers(arms, audit, mediation_enabled=False)
-    assert scoped["no_write_structure_policy"] == live.NO_WRITE_STRUCTURE_POLICY
-    assert scoped["no_write_structure_diagnostics"]["no_write"] == (
+    assert scoped["discarded_control_structure_policy"] == (
+        live.DISCARDED_CONTROL_STRUCTURE_POLICY
+    )
+    assert scoped["discarded_control_structure_diagnostics"]["reset"] == (
+        reset_diagnostics
+    )
+    assert scoped["discarded_control_structure_diagnostics"]["no_write"] == (
         no_write_diagnostics
     )
     assert all(
-        not scoped["no_write_structure_diagnostics"][name]
-        for name in ("hswm", "reset", "plain")
+        not scoped["discarded_control_structure_diagnostics"][name]
+        for name in ("hswm", "plain")
     )
-    live._validate_scoped_no_write_structure_diagnostics(scoped)
+    live._validate_scoped_discarded_control_structure_diagnostics(scoped)
     tampered = deepcopy(scoped)
-    tampered_diagnostic = tampered["no_write_structure_diagnostics"][
-        "no_write"
+    tampered_diagnostic = tampered[
+        "discarded_control_structure_diagnostics"
+    ][
+        "reset"
     ][0]
     tampered_diagnostic["completion_response_sha256"] = "f" * 64
     diagnostic_unsigned = dict(tampered_diagnostic)
@@ -1224,9 +1253,9 @@ def test_four_arms_use_isolated_states_and_public_only_requests(tmp_path: Path) 
     tampered["scoped_ledger_sha256"] = live.canonical_sha256(scoped_unsigned)
     with pytest.raises(
         ContinualLiveError,
-        match="scoped no-write diagnostic differs from its persisted call",
+        match="scoped discarded-control diagnostic differs from its persisted call",
     ):
-        live._validate_scoped_no_write_structure_diagnostics(tampered)
+        live._validate_scoped_discarded_control_structure_diagnostics(tampered)
 
 
 def test_no_write_structure_semantics_are_diagnostic_only(tmp_path: Path) -> None:
@@ -1246,14 +1275,15 @@ def test_no_write_structure_semantics_are_diagnostic_only(tmp_path: Path) -> Non
     active = arm.store.active_snapshot()
     assert active.generation == 0
     assert active.snapshot.snapshot_id == GENESIS.snapshot_id
-    diagnostic = arm.no_write_structure_diagnostics[0]
-    live._validate_no_write_structure_diagnostic(diagnostic)
+    diagnostic = arm.discarded_control_structure_diagnostics[0]
+    live._validate_discarded_control_structure_diagnostic(diagnostic)
     assert diagnostic["semantic_valid"] is False
     assert diagnostic["semantic_error_type"] == "ContinualLiveError"
     assert diagnostic["semantic_error_message"] == (
         "every compact cell must be reachable from entry"
     )
     assert diagnostic["committed"] is False
+    assert diagnostic["commit_then_reset_applied"] is False
     assert diagnostic["feedback_to_model"] is False
     assert diagnostic["retry_permitted"] is False
     assert diagnostic["state_unchanged"] is True
@@ -1267,9 +1297,9 @@ def test_no_write_structure_semantics_are_diagnostic_only(tmp_path: Path) -> Non
     tampered["diagnostic_sha256"] = live.canonical_sha256(unsigned)
     with pytest.raises(
         ContinualLiveError,
-        match="no-write diagnostic invariant drifted",
+        match="discarded-control diagnostic invariant drifted",
     ):
-        live._validate_no_write_structure_diagnostic(tampered)
+        live._validate_discarded_control_structure_diagnostic(tampered)
 
 
 def test_persistent_structure_still_rejects_unreachable_cells(tmp_path: Path) -> None:
@@ -1287,7 +1317,7 @@ def test_persistent_structure_still_rejects_unreachable_cells(tmp_path: Path) ->
         arm.update(_one_token_batch())
 
     assert len(arm.ledger) == 1
-    assert not arm.no_write_structure_diagnostics
+    assert not arm.discarded_control_structure_diagnostics
     assert arm.store.active_snapshot().generation == 0
     assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
 
@@ -1316,7 +1346,7 @@ def test_prequential_run_continues_through_discarded_no_write_semantics(
     assert audit.valid
     assert len(run.results) == 16
     assert [len(arm.ledger) for arm in arms] == [9, 9, 9, 9]
-    diagnostics = arms[2].no_write_structure_diagnostics
+    diagnostics = arms[2].discarded_control_structure_diagnostics
     assert len(diagnostics) == 5
     assert all(item["semantic_valid"] is False for item in diagnostics)
     assert all(
@@ -1326,7 +1356,122 @@ def test_prequential_run_continues_through_discarded_no_write_semantics(
     )
     assert arms[2].store.active_snapshot().generation == 0
     scoped = live.scoped_call_ledgers(arms, audit, mediation_enabled=False)
-    live._validate_scoped_no_write_structure_diagnostics(scoped)
+    live._validate_scoped_discarded_control_structure_diagnostics(scoped)
+
+
+def test_prequential_run_continues_through_discarded_reset_semantics(
+    tmp_path: Path,
+) -> None:
+    backends: list[ScriptedRelationalBackend] = []
+
+    def factory() -> ScriptedRelationalBackend:
+        backend: ScriptedRelationalBackend
+        if len(backends) == 1:
+            backend = UnreachableFullAuthorBackend()
+        else:
+            backend = ScriptedRelationalBackend()
+        backends.append(backend)
+        return backend
+
+    run, audit, arms = run_four_arm_stream(
+        _small_stream(),
+        backend_factory=factory,
+        budget=_budget(),
+        state_dir=tmp_path / "states",
+    )
+
+    assert audit.valid
+    assert len(run.results) == 16
+    assert [len(arm.ledger) for arm in arms] == [9, 9, 9, 9]
+    diagnostics = arms[1].discarded_control_structure_diagnostics
+    assert len(diagnostics) == 5
+    assert all(item["arm"] == "reset" for item in diagnostics)
+    assert all(item["semantic_valid"] is False for item in diagnostics)
+    assert all(item["committed"] is False for item in diagnostics)
+    assert all(item["state_after_generation"] == 0 for item in diagnostics)
+    assert all(
+        item["semantic_error_message"]
+        == "every compact cell must be reachable from entry"
+        for item in diagnostics
+    )
+    active = arms[1].store.active_snapshot()
+    assert active.generation == 0
+    assert active.snapshot.snapshot_id == GENESIS.snapshot_id
+    scoped = live.scoped_call_ledgers(arms, audit, mediation_enabled=False)
+    live._validate_scoped_discarded_control_structure_diagnostics(scoped)
+    tampered = deepcopy(scoped)
+    forged = tampered["discarded_control_structure_diagnostics"]["reset"][0]
+    forged["semantic_valid"] = True
+    forged["semantic_error_type"] = None
+    forged["semantic_error_message"] = None
+    forged["semantic_error_sha256"] = None
+    forged["proposal_sha256"] = "a" * 64
+    forged["structure_compilation_receipt_sha256"] = "b" * 64
+    forged["committed"] = True
+    forged["commit_then_reset_applied"] = True
+    forged["activation_id"] = "c" * 64
+    forged["reset_activation_id"] = "d" * 64
+    forged["state_after_generation"] = 2
+    diagnostic_unsigned = dict(forged)
+    diagnostic_unsigned.pop("diagnostic_sha256")
+    forged["diagnostic_sha256"] = live.canonical_sha256(diagnostic_unsigned)
+    scoped_unsigned = dict(tampered)
+    scoped_unsigned.pop("scoped_ledger_sha256")
+    tampered["scoped_ledger_sha256"] = live.canonical_sha256(scoped_unsigned)
+    with pytest.raises(
+        ContinualLiveError,
+        match="semantic diagnostic cannot be reproduced",
+    ):
+        live._validate_scoped_discarded_control_structure_diagnostics(tampered)
+
+
+def test_reset_diagnostic_preserves_generation_after_prior_valid_reset(
+    tmp_path: Path,
+) -> None:
+    arm = live.ResetArm(
+        backend=FirstValidThenUnreachableFullAuthorBackend(),
+        budget=_budget(),
+        isolation_id="reset-valid-then-unreachable",
+        store_path=tmp_path / "reset.sqlite3",
+    )
+
+    first = arm.update(_one_token_batch())
+    second = arm.update(
+        LearningBatch(
+            episode_id="episode-one-token",
+            after_step=1,
+            chosen=None,
+            correct=False,
+            learning_tokens=(
+                PublicLearningToken("node-b", "rel-y", "node-c"),
+            ),
+        )
+    )
+
+    assert first.calls == second.calls == 1
+    assert len(arm.ledger) == 2
+    assert len(arm.structure_compilation_receipts) == 1
+    first_diagnostic, second_diagnostic = (
+        arm.discarded_control_structure_diagnostics
+    )
+    assert first_diagnostic["semantic_valid"] is True
+    assert first_diagnostic["base_generation"] == 0
+    assert first_diagnostic["state_after_generation"] == 2
+    assert first_diagnostic["committed"] is True
+    assert first_diagnostic["commit_then_reset_applied"] is True
+    assert second_diagnostic["semantic_valid"] is False
+    assert second_diagnostic["base_generation"] == 2
+    assert second_diagnostic["state_after_generation"] == 2
+    assert second_diagnostic["committed"] is False
+    assert second_diagnostic["commit_then_reset_applied"] is False
+    assert second_diagnostic["semantic_error_message"] == (
+        "every compact cell must be reachable from entry"
+    )
+    for diagnostic in (first_diagnostic, second_diagnostic):
+        live._validate_discarded_control_structure_diagnostic(diagnostic)
+    active = arm.store.active_snapshot()
+    assert active.generation == 2
+    assert active.snapshot.snapshot_id == GENESIS.snapshot_id
 
 
 def test_prequential_answers_are_read_only_and_sqlite_cas_advances(tmp_path: Path) -> None:
@@ -4729,7 +4874,7 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
         "validated_adapter_source_tree",
     }
     assert live._validate_pilot_precommit_v4(raw) == value
-    assert value["schema"] == "hswm-continual-pilot-precommit/v6"
+    assert value["schema"] == "hswm-continual-pilot-precommit/v7"
     assert value["engineering_only"] is True
     assert value["confirmatory_eligible"] is False
     assert value["preimages_revealed"] is False
@@ -4745,12 +4890,14 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
             *_CONSUMED_V2_V3_COMMITMENTS,
             *_CONSUMED_PRESEED_V4_COMMITMENTS,
             *_CONSUMED_V5_COMMITMENTS,
+            *_CONSUMED_V6_COMMITMENTS,
         )
     )
     assert value["confirmatory_denylist"] == [
         *_CONSUMED_V2_V3_COMMITMENTS,
         *_CONSUMED_PRESEED_V4_COMMITMENTS,
         *_CONSUMED_V5_COMMITMENTS,
+        *_CONSUMED_V6_COMMITMENTS,
         *commitments,
     ]
     assert value["prior_no_model_abort_binding"] == (
@@ -4765,6 +4912,43 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
     assert value["prior_failed_pilot_binding_sha256"] == live.canonical_sha256(
         value["prior_failed_pilot_binding"]
     )
+    prior_failure = value["prior_failed_pilot_binding"]
+    assert prior_failure["run_id"] == (
+        "hswm-continual-v6-primary-s2-r1-20260818"
+    )
+    assert prior_failure["source_revision"] == (
+        "108b44e90a1dc95f51e4dee0549f0723c045cff0"
+    )
+    assert prior_failure["source_tree"] == (
+        "d7ded7c3cd4427307de3330208dfda19db4e78ff"
+    )
+    assert prior_failure["artifacts_tar_sha256"] == (
+        "7d1feddbf0868833b30dea24f0e79b142a41cd2c669cf6d4590bd6641b5ad4f7"
+    )
+    assert prior_failure["outer_receipt_sha256"] == (
+        "f64d07e6c45fe97c118147a4ea620ae612c8c1c6015806d1ec5a28a670bbfa64"
+    )
+    assert prior_failure["completed_generation_calls"] == 10
+    assert prior_failure["completed_token_preflight_calls"] == 10
+    assert prior_failure["outbound_http_requests"] == 20
+    assert prior_failure["failure"] == {
+        "arm": "reset",
+        "base_generation": 2,
+        "cell_count": 16,
+        "error": "every compact cell must be reachable from entry",
+        "ledger_ordinal": 2,
+        "reachable_cell_count": 10,
+        "request_sha256": (
+            "a4d63707fbd2039123d7c6c7e27954cdf2aa684bebed516a471eebc17bc890b8"
+        ),
+        "response_sha256": (
+            "2c8b411abf446eb124f43bb151667986d97e84a02c172a06848471eb6d52820b"
+        ),
+        "text_sha256": (
+            "85070754584f7c08a2001a4f19a8763df559ca646fbae591d7dd838ecbb8de39"
+        ),
+        "unreachable_cell_indices": [10, 11, 12, 13, 14, 15],
+    }
     assert value["validated_adapter_source_revision"] == (
         "a1c3f81b26d7e07d6ed9fb68033876d078d84e1b"
     )
@@ -4789,7 +4973,24 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
         "horizon": 20,
         "max_input_bytes": 2_000_000,
         "max_state_bytes": 1_000_000,
-        "no_write_structure_policy": live.NO_WRITE_STRUCTURE_POLICY,
+            "discarded_control_structure_policy": (
+                live.DISCARDED_CONTROL_STRUCTURE_POLICY
+            ),
+            "discarded_control_structure_rules": {
+                "arms": ["reset", "no_write"],
+                "invalid_semantics": (
+                    "record-diagnostic-no-commit-no-reset-no-feedback-no-retry"
+                ),
+                "no_write_valid_semantics": (
+                    "record-diagnostic-never-commit-exact-genesis"
+                ),
+                "persistent_hswm_semantics": (
+                    "semantic-invalidity-remains-fail-closed"
+                ),
+                "reset_valid_semantics": (
+                    "commit-then-reactivate-exact-genesis"
+                ),
+            },
         "one_shot_enforcement": (
             "outer-wrapper-must-own-unique-durable-run-id-and-prove-"
             "prelaunch-path-absence"
@@ -4831,6 +5032,13 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
         (
             lambda: (
                 _CONSUMED_V5_COMMITMENTS[0],
+                *_fresh_v4_commitments()[1:],
+            ),
+            "old|consumed|fresh",
+        ),
+        (
+            lambda: (
+                _CONSUMED_V6_COMMITMENTS[0],
                 *_fresh_v4_commitments()[1:],
             ),
             "old|consumed|fresh",

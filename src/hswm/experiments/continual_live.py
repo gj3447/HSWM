@@ -149,11 +149,21 @@ OLD_PILOT_SEED_COMMITMENT_DENYLIST = (
 # observed B2 source revision must replace all five with the exact durable seal
 # values before v4 execution can become reachable.  The v4 precommit itself
 # cannot truthfully predict or claim the future B2 source identity.
-FROZEN_V4_PRECOMMIT_RAW_SHA256: str | None = None
-FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256: str | None = None
-FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256: str | None = None
-FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION: str | None = None
-FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE: str | None = None
+FROZEN_V4_PRECOMMIT_RAW_SHA256: str | None = (
+    "3825757deded0425033d6b91037d8860c22e25265dd0a27fb331ddd3db7998d0"
+)
+FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256: str | None = (
+    "22927c9ced7b94541016b2eca09ba277864a9c5da91eb5df28e0f33fdda14ac6"
+)
+FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256: str | None = (
+    "6dc8355f9bf7bfa20b5ebde50cf269d0f462981f55aeefe97af8fbe0d7b9f1d6"
+)
+FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION: str | None = (
+    "ebb747abc7c04c51e0fd51e54741fe951736bc70"
+)
+FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE: str | None = (
+    "7e063e68e3e11056715699fda1df5ac098f47a54"
+)
 STRUCTURED_OUTPUT_MODE = "openai-response-format-json-schema/v1"
 TOKEN_PREFLIGHT_MODE = "vllm-tokenize-chat/v1"
 TOKEN_PREFLIGHT_SCHEMA = "hswm-token-preflight-receipt/v1"

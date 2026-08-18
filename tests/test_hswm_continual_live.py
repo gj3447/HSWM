@@ -739,11 +739,38 @@ def _write_test_v4_precommit_seal(
         if sealed_precommit_raw is None
         else sealed_precommit_raw
     )
+    command_sha = "a" * 64
+    started_at = "2026-08-17T00:00:00Z"
+    precommit = live._validate_pilot_precommit_v4(loose_precommit_raw)
+    console = {
+        "authority_status": live.PILOT_PRECOMMIT_V4_AUTHORITY_STATUS,
+        "output_file": "/scratch/outputs/pilot_precommit.canonical.json",
+        "planned_outer_run_id": precommit["planned_outer_run_id"],
+        "planned_output_relative_path": precommit[
+            "planned_output_relative_path"
+        ],
+        "precommit_artifact_sha256": sha256(sealed_raw).hexdigest(),
+        "precommit_sha256": precommit["precommit_sha256"],
+        "public_gate_validation_sha256": "b" * 64,
+        "schema": live.PILOT_PRECOMMIT_V4_SCHEMA,
+    }
+    envelope_members = {
+        "logs/console.log": canonical_json_bytes(console) + b"\n",
+        "metadata/command.sha256": (command_sha + "\n").encode("ascii"),
+        "metadata/exit_code": b"0\n",
+        "metadata/launcher.pid": b"12345\n",
+        "metadata/started_at": (started_at + "\n").encode("ascii"),
+    }
     with tarfile.open(tar_path, "w") as archive:
         member = tarfile.TarInfo(member_name)
         member.size = len(sealed_raw)
         member.mode = 0o644
         archive.addfile(member, io.BytesIO(sealed_raw))
+        for envelope_name, envelope_raw in envelope_members.items():
+            envelope = tarfile.TarInfo(envelope_name)
+            envelope.size = len(envelope_raw)
+            envelope.mode = 0o644
+            archive.addfile(envelope, io.BytesIO(envelope_raw))
         if extra_member is not None:
             extra_name, extra_raw = extra_member
             extra = tarfile.TarInfo(extra_name)
@@ -762,7 +789,7 @@ def _write_test_v4_precommit_seal(
             "name": "artifacts.tar",
             "sha256": sha256(tar_raw).hexdigest(),
         },
-        "command_sha256": "a" * 64,
+        "command_sha256": command_sha,
         "durable_tier": "test",
         "execution_tier": "test",
         "exit_code": 0,
@@ -771,7 +798,7 @@ def _write_test_v4_precommit_seal(
         "schema": "bhgman-hswm-run/v1",
         "source_commit": source_commit,
         "source_root": "/test/source",
-        "started_at": "2026-08-17T00:00:00Z",
+        "started_at": started_at,
         "status": "success",
     }
     receipt_path = tmp_path / "pilot-precommit-outer-receipt.json"

@@ -105,6 +105,16 @@ PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS = (
 )
 PILOT_PRECOMMIT_V4_SCHEMA = "hswm-continual-pilot-precommit/v4"
 PILOT_PRECOMMIT_V4_SEAL_MEMBER = "outputs/pilot_precommit.canonical.json"
+PILOT_PRECOMMIT_V4_SEAL_REGULAR_MEMBERS = frozenset(
+    {
+        PILOT_PRECOMMIT_V4_SEAL_MEMBER,
+        "logs/console.log",
+        "metadata/command.sha256",
+        "metadata/exit_code",
+        "metadata/launcher.pid",
+        "metadata/started_at",
+    }
+)
 PILOT_PRECOMMIT_V4_AUTHORITY_STATUS = "unanchored_execution_authority"
 VALIDATED_ADAPTER_SOURCE_REVISION = "a1c3f81b26d7e07d6ed9fb68033876d078d84e1b"
 VALIDATED_ADAPTER_SOURCE_TREE = "c80b8cb6604d904b32a9204bb51a23ea93312777"
@@ -6613,9 +6623,9 @@ def _validate_pilot_precommit_seal(
             raise ContinualLiveError(
                 f"v4 precommit seal is missing {PILOT_PRECOMMIT_V4_SEAL_MEMBER}"
             )
-        if set(members) != {PILOT_PRECOMMIT_V4_SEAL_MEMBER}:
+        if set(members) != PILOT_PRECOMMIT_V4_SEAL_REGULAR_MEMBERS:
             raise ContinualLiveError(
-                "v4 precommit seal exact regular-member set drifted"
+                "v4 precommit seal exact hswm-run member set drifted"
             )
         sealed_raw = _tar_member_bytes(
             archive,
@@ -6623,6 +6633,91 @@ def _validate_pilot_precommit_seal(
             PILOT_PRECOMMIT_V4_SEAL_MEMBER,
             max_bytes=1_000_000,
         )
+        command_sha_raw = _tar_member_bytes(
+            archive,
+            members,
+            "metadata/command.sha256",
+            max_bytes=128,
+        )
+        exit_code_raw = _tar_member_bytes(
+            archive,
+            members,
+            "metadata/exit_code",
+            max_bytes=32,
+        )
+        launcher_pid_raw = _tar_member_bytes(
+            archive,
+            members,
+            "metadata/launcher.pid",
+            max_bytes=32,
+        )
+        started_at_raw = _tar_member_bytes(
+            archive,
+            members,
+            "metadata/started_at",
+            max_bytes=128,
+        )
+        console_raw = _tar_member_bytes(
+            archive,
+            members,
+            "logs/console.log",
+            max_bytes=64_000,
+        )
+    expected_command_sha_raw = (outer["command_sha256"] + "\n").encode("ascii")
+    expected_started_at_raw = (outer["started_at"] + "\n").encode("utf-8")
+    try:
+        launcher_pid_text = launcher_pid_raw.decode("ascii")
+        console_text = console_raw.decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise ContinualLiveError("v4 precommit hswm-run envelope is not text") from error
+    if (
+        command_sha_raw != expected_command_sha_raw
+        or exit_code_raw != b"0\n"
+        or started_at_raw != expected_started_at_raw
+        or not launcher_pid_text.endswith("\n")
+        or not launcher_pid_text[:-1].isdigit()
+        or int(launcher_pid_text[:-1]) <= 0
+        or not console_text.endswith("\n")
+        or "\x00" in console_text
+    ):
+        raise ContinualLiveError("v4 precommit hswm-run envelope is invalid")
+    console_lines = console_text.splitlines()
+    if len(console_lines) != 1:
+        raise ContinualLiveError("v4 precommit builder console is not one canonical line")
+    console = _strict_object(console_lines[0])
+    console_fields = {
+        "authority_status",
+        "output_file",
+        "planned_outer_run_id",
+        "planned_output_relative_path",
+        "precommit_artifact_sha256",
+        "precommit_sha256",
+        "public_gate_validation_sha256",
+        "schema",
+    }
+    if (
+        set(console) != console_fields
+        or canonical_json_bytes(console) != console_lines[0].encode("utf-8")
+        or console.get("authority_status") != PILOT_PRECOMMIT_V4_AUTHORITY_STATUS
+        or console.get("schema") != PILOT_PRECOMMIT_V4_SCHEMA
+        or not isinstance(console.get("output_file"), str)
+        or not console["output_file"].endswith(
+            "/" + PILOT_PRECOMMIT_V4_SEAL_MEMBER
+        )
+        or console.get("precommit_artifact_sha256") != _digest_bytes(sealed_raw)
+        or console.get("precommit_sha256")
+        != loose_precommit["precommit_sha256"]
+        or console.get("planned_outer_run_id")
+        != loose_precommit["planned_outer_run_id"]
+        or console.get("planned_output_relative_path")
+        != loose_precommit["planned_output_relative_path"]
+        or _require_sha256(
+            console.get("public_gate_validation_sha256"),
+            "v4 precommit public gate validation SHA",
+        )
+        != console["public_gate_validation_sha256"]
+    ):
+        raise ContinualLiveError("v4 precommit builder console is invalid")
     sealed_precommit = _validate_pilot_precommit_v4(sealed_raw)
     if sealed_raw != precommit_raw or sealed_precommit != loose_precommit:
         raise ContinualLiveError("loose v4 precommit differs from its durable seal")

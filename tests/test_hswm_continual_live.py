@@ -783,12 +783,22 @@ def _clear_v4_precommit_anchors(monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setattr(live, name, None)
 
 
-def test_v7_b1_external_anchor_constants_are_unfilled() -> None:
-    assert live.FROZEN_V4_PRECOMMIT_RAW_SHA256 is None
-    assert live.FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256 is None
-    assert live.FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256 is None
-    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION is None
-    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE is None
+def test_v7_b2_external_anchor_constants_are_exact() -> None:
+    assert live.FROZEN_V4_PRECOMMIT_RAW_SHA256 == (
+        "ab27628458ee58daf9415e412e057f1287436fde7419814d6b3d5140549c6fd1"
+    )
+    assert live.FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256 == (
+        "d1cc38028702ce2ce7d1f6c244ba95f82027f7d981a12b72b7923a26d55a4724"
+    )
+    assert live.FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256 == (
+        "89ac54d673543fc41b6c27d416cdb23809b740a1cd2232a0a4c82fec4e6e6eb3"
+    )
+    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION == (
+        "eb9aef905c235266d31e5820119bc60e5084b1dc"
+    )
+    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE == (
+        "dc986a11a0fb53e806088ca43e136fcafc0f6f57"
+    )
 
 
 def _write_test_v4_precommit_seal(

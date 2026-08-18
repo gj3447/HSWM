@@ -722,6 +722,35 @@ def _rehash_v4_precommit(value: dict[str, Any]) -> bytes:
     return canonical_json_bytes(value)
 
 
+def _clear_v4_precommit_anchors(monkeypatch: pytest.MonkeyPatch) -> None:
+    for name in (
+        "FROZEN_V4_PRECOMMIT_RAW_SHA256",
+        "FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256",
+        "FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256",
+        "FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION",
+        "FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE",
+    ):
+        monkeypatch.setattr(live, name, None)
+
+
+def test_v4_b2_external_anchor_constants_are_exact() -> None:
+    assert live.FROZEN_V4_PRECOMMIT_RAW_SHA256 == (
+        "dee5a4578652e5affcb3628d7b7f797f77e242894e1a8b7410d148f7e0747a1b"
+    )
+    assert live.FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256 == (
+        "82572d9beb52f297e21861611c57af3e0aad325d65f980a0d047b15163160bc0"
+    )
+    assert live.FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256 == (
+        "763ed2451bd1be5efa8e8a7d8c2b6674c78488944275f18d5c0d5093e47a3673"
+    )
+    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION == (
+        "f7d946ec243458b8537b8c466eb9a9493847e7f2"
+    )
+    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE == (
+        "48f52fdf729bde8f32b8ff353bcf2c78256529c4"
+    )
+
+
 def _write_test_v4_precommit_seal(
     tmp_path: Path,
     *,
@@ -4717,8 +4746,9 @@ def test_pilot_precommit_reader_accepts_only_the_strict_v4_object(
 
 
 def test_v4_precommit_seal_requires_exact_member_and_reports_b1_unanchored(
-    tmp_path: Path,
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    _clear_v4_precommit_anchors(monkeypatch)
     raw = canonical_json_bytes(_build_test_v4_precommit())
     tar_path, receipt_path = _write_test_v4_precommit_seal(
         tmp_path,
@@ -4823,6 +4853,7 @@ def test_v4_precommit_seal_rejects_missing_member_loose_drift_and_source_drift(
 def test_v4_precommit_seal_rejects_partial_future_b2_anchors(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    _clear_v4_precommit_anchors(monkeypatch)
     raw = canonical_json_bytes(_build_test_v4_precommit())
     tar_path, receipt_path = _write_test_v4_precommit_seal(
         tmp_path,
@@ -4922,6 +4953,7 @@ def test_public_gate_artifact_validator_rejects_source_or_service_drift(
 def test_v4_b1_cli_refuses_unanchored_authority_before_seed_or_model_calls(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    _clear_v4_precommit_anchors(monkeypatch)
     value = _build_test_v4_precommit()
     raw = canonical_json_bytes(value)
     precommit_path = tmp_path / "pilot-v4.canonical.json"

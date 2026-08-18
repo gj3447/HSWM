@@ -2044,6 +2044,7 @@ def test_full_author_persists_self_relation_as_diagnostic_false_positive(
         "items"
     ]["properties"]["related_memory_handles"]
     assert relation_ids_schema["maxItems"] == 1
+    assert relation_ids_schema["uniqueItems"] is True
     assert "source memory itself is structurally allowed" in (
         backend.requests[0]["system"]
         + " "
@@ -2177,6 +2178,60 @@ def test_related_memory_bound_still_fails_closed_when_self_is_allowed(
         arm.update(batch)
     assert arm.store.active_snapshot().generation == 0
     assert arm.state_canonical_bytes() == canonical_json_bytes(GENESIS.canonical())
+
+
+def test_eight_unique_relation_handles_are_schema_valid_and_persisted(
+    tmp_path: Path,
+) -> None:
+    class EightUniqueRelationsBackend(ScriptedRelationalBackend):
+        @staticmethod
+        def _author(payload: Mapping[str, Any]) -> str:
+            value = json.loads(ScriptedRelationalBackend._author(payload))
+            value["new_memory_relations"][0]["related_memory_handles"] = [
+                f"N{index:03d}" for index in range(live.MAX_RELATED_MEMORY_IDS)
+            ]
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+    backend = EightUniqueRelationsBackend()
+    arm = StructuredHSWMArm(
+        backend=backend,
+        budget=_budget(),
+        isolation_id="eight-unique-relation-handles",
+        store_path=tmp_path / "state.sqlite3",
+    )
+    arm.update(
+        LearningBatch(
+            episode_id="eight-unique-relation-handles",
+            after_step=0,
+            chosen=None,
+            correct=False,
+            learning_tokens=tuple(
+                PublicLearningToken(f"node-{index}", "rel", f"target-{index}")
+                for index in range(live.MAX_RELATED_MEMORY_IDS)
+            ),
+        )
+    )
+    payload = backend.requests[0]["payload"]
+    expected_ids = {
+        item["suggested_memory_id"] for item in payload["public_source_tokens"]
+    }
+    source_memory_id = payload["public_source_tokens"][0]["suggested_memory_id"]
+    source_memory = next(
+        memory
+        for memory in arm.store.active_snapshot().snapshot.memories
+        if memory.memory_id == source_memory_id
+    )
+    assert len(source_memory.related_memory_ids) == live.MAX_RELATED_MEMORY_IDS
+    assert set(source_memory.related_memory_ids) == expected_ids
+    schema = json.loads(backend.requests[0]["response_schema"]["schema_json"])
+    relation_schema = schema["properties"]["new_memory_relations"]["items"][
+        "properties"
+    ]["related_memory_handles"]
+    assert relation_schema["maxItems"] == live.MAX_RELATED_MEMORY_IDS
+    assert relation_schema["uniqueItems"] is True
+    receipt = arm.structure_compilation_receipts[0]
+    assert receipt["authored_relation_count"] == live.MAX_RELATED_MEMORY_IDS
+    assert receipt["stored_relation_count"] == live.MAX_RELATED_MEMORY_IDS
 
 
 def _projection_test_snapshot() -> Any:
@@ -2473,7 +2528,7 @@ def test_direct_memory_relations_reject_duplicate_and_cell_index_namespaces(
         ),
     )
     for violation, message in (
-        ("duplicate", "duplicate or unknown handles"),
+        ("duplicate", "unique array items"),
         ("cell-index", "schema enum"),
     ):
         arm = StructuredHSWMArm(
@@ -2488,6 +2543,14 @@ def test_direct_memory_relations_reject_duplicate_and_cell_index_namespaces(
         assert arm.state_canonical_bytes() == canonical_json_bytes(
             GENESIS.canonical()
         )
+        if violation == "duplicate":
+            events = [
+                json.loads(line)
+                for line in arm.journal_path.read_text().splitlines()
+            ]
+            assert events[-1]["event"] == "rejected_response"
+            assert not any(item["event"] == "completed" for item in events)
+            assert arm.structure_compilation_receipts == []
 
 
 def test_relation_handle_namespaces_fail_closed_without_reinterpretation(
@@ -2909,8 +2972,8 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
         state_dir=tmp_path / "gate-state",
     )
     assert result["valid"] is True
-    assert result["adapter_schema"] == "hswm-compact-structure-patch/v8"
-    assert result["protocol"] == "hswm-public-schema-gate/v9"
+    assert result["adapter_schema"] == "hswm-compact-structure-patch/v9"
+    assert result["protocol"] == "hswm-public-schema-gate/v10"
     assert result["indexed_authoring_view_schema"] == (
         "hswm-indexed-authoring-view/v1"
     )
@@ -3045,16 +3108,30 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
             assert intent["raw_request_bytes"] == len(
                 intent["raw_request_json"].encode()
             )
-            contract.validate_instance(
-                json.loads(completion_event["completion"]["text"])
-            )
+            completion_value = json.loads(completion_event["completion"]["text"])
+            contract.validate_instance(completion_value)
+            contract_schema = contract.schema()
+            if "new_memory_relations" in contract_schema["properties"]:
+                duplicate_value = deepcopy(completion_value)
+                relation_schema = contract_schema["properties"][
+                    "new_memory_relations"
+                ]["items"]["properties"]["related_memory_handles"]
+                duplicate_handle = relation_schema["items"]["enum"][0]
+                duplicate_value["new_memory_relations"][0][
+                    "related_memory_handles"
+                ] = [duplicate_handle, duplicate_handle]
+                with pytest.raises(
+                    ContinualLiveError,
+                    match="unique array items",
+                ):
+                    contract.validate_instance(duplicate_value)
     assert [
         item["response_schema_name"]
         for item in structured_events
         if item["event"] == "intent"
     ] == [
-        "hswm_full_author_patch_v3",
-        "hswm_keep_routing_append_patch_v3",
+        "hswm_full_author_patch_v4",
+        "hswm_keep_routing_append_patch_v4",
         "hswm_choice_v1",
     ]
     assert [
@@ -3095,6 +3172,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     assert set(relation_properties) == {"related_memory_handles"}
     first_relation_ids = relation_properties["related_memory_handles"]
     assert first_relation_ids["maxItems"] == live.MAX_RELATED_MEMORY_IDS
+    assert first_relation_ids["uniqueItems"] is True
     assert first_relation_ids["items"]["type"] == "string"
     assert len(first_relation_ids["items"]["enum"]) == 64
     assert all(
@@ -3127,6 +3205,7 @@ def test_public_schema_gate_is_exactly_four_public_calls(tmp_path: Path) -> None
     second_relation_ids = second_schema["properties"]["new_memory_relations"][
         "items"
     ]["properties"]["related_memory_handles"]
+    assert second_relation_ids["uniqueItems"] is True
     assert len(second_relation_ids["items"]["enum"]) == 144
     for completion_event in (
         item for item in structured_events if item["event"] == "completed"
@@ -4925,7 +5004,6 @@ def test_reported_answer_usage_cannot_exceed_request_budget(tmp_path: Path) -> N
 @pytest.mark.parametrize(
     "unsupported",
     [
-        "uniqueItems",
         "contains",
         "minContains",
         "maxContains",
@@ -5043,7 +5121,7 @@ def test_public_schema_gate_cli_has_no_seed_path_and_binds_artifacts(
     assert result["outbound_http_requests_observed"] == 8
     prereg = json.loads((output / "gate_preregistration.json").read_text())
     assert prereg["no_precommit_or_seed_path"] is True
-    assert prereg["protocol"] == "hswm-public-schema-gate/v9"
+    assert prereg["protocol"] == "hswm-public-schema-gate/v10"
     assert prereg["indexed_authoring_view_schema"] == (
         "hswm-indexed-authoring-view/v1"
     )

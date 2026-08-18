@@ -90,7 +90,7 @@ from .continual import (
 LIVE_PROTOCOL = "hswm-continual-live/v1"
 AUTHOR_ID = "agent:continual-memory-author"
 CAPABILITY = "nonce_graph_lookup"
-COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v8"
+COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v9"
 INDEXED_AUTHORING_VIEW_SCHEMA = "hswm-indexed-authoring-view/v1"
 RELATION_HANDLE_TABLE_SCHEMA = "hswm-relation-handle-table/v1"
 RELATION_HANDLE_WIDTH = 3
@@ -119,7 +119,7 @@ PUBLIC_SCHEMA_GATE_FIXTURE_DOMAIN = "hswm-public-schema-gate/v3"
 PUBLIC_SCHEMA_GATE_FIXTURE_COMPACT_PATCH_SCHEMA = (
     "hswm-compact-structure-patch/v3"
 )
-PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v9"
+PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v10"
 PUBLIC_SCHEMA_GATE_EPISODE = "public-schema-gate-never-evaluation"
 PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS = 32_768
 PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING = 6144
@@ -772,6 +772,7 @@ _SUPPORTED_JSON_SCHEMA_KEYS = frozenset(
         "properties",
         "required",
         "type",
+        "uniqueItems",
     }
 )
 
@@ -787,6 +788,12 @@ def _validate_bounded_json_schema(node: object, *, path: str = "$") -> None:
     node_type = node.get("type")
     if node_type not in {"array", "integer", "null", "object", "string"}:
         raise ContinualLiveError(f"response schema type at {path} is unsupported")
+    if "uniqueItems" in node and (
+        node_type != "array" or node["uniqueItems"] is not True
+    ):
+        raise ContinualLiveError(
+            f"response schema uniqueItems at {path} must be exact true on an array"
+        )
     if "enum" in node:
         enum = node["enum"]
         if not isinstance(enum, list) or not enum:
@@ -870,6 +877,12 @@ def _validate_json_schema_instance(
             schema.get("minItems", 0) <= len(value) <= schema["maxItems"]
         ):
             raise ContinualLiveError(f"model response violates array bound at {path}")
+        if schema.get("uniqueItems") is True:
+            encoded = [canonical_json_bytes(item) for item in value]
+            if len(encoded) != len(set(encoded)):
+                raise ContinualLiveError(
+                    f"model response violates unique array items at {path}"
+                )
         for index, item in enumerate(value):
             _validate_json_schema_instance(
                 item, schema["items"], path=f"{path}[{index}]"
@@ -1604,6 +1617,7 @@ def _compact_patch_response_schema(
                     MAX_RELATED_MEMORY_IDS,
                 ),
                 "type": "array",
+                "uniqueItems": True,
             },
         }
     )
@@ -1669,7 +1683,7 @@ def _compact_patch_response_schema(
                 "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
             }
         )
-        return JSONSchemaContract.make("hswm_full_author_patch_v3", schema)
+        return JSONSchemaContract.make("hswm_full_author_patch_v4", schema)
 
     active_cell_ids = tuple(cell.cell_id for cell in active.cells)
     if len(active_cell_ids) != len(set(active_cell_ids)):
@@ -1688,7 +1702,7 @@ def _compact_patch_response_schema(
             "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
         }
     )
-    return JSONSchemaContract.make("hswm_keep_routing_append_patch_v3", schema)
+    return JSONSchemaContract.make("hswm_keep_routing_append_patch_v4", schema)
 
 
 def _plain_memory_response_schema() -> JSONSchemaContract:

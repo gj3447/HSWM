@@ -57,6 +57,7 @@ from hswm.selfmod.contracts import (
     CellTopologyMode,
     MemoryRecord,
     MutationProposal,
+    SelfModelContractError,
     SelfModelPolicy,
     SelfModelSnapshot,
     apply_mutation,
@@ -64,6 +65,7 @@ from hswm.selfmod.contracts import (
     make_mutation,
     make_snapshot,
     make_token,
+    snapshot_from_mapping,
 )
 from hswm.selfmod.store import SQLiteSelfModelStore
 
@@ -87,12 +89,14 @@ from .continual import (
 LIVE_PROTOCOL = "hswm-continual-live/v1"
 AUTHOR_ID = "agent:continual-memory-author"
 CAPABILITY = "nonce_graph_lookup"
-COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v7"
+COMPACT_PATCH_SCHEMA = "hswm-compact-structure-patch/v8"
 INDEXED_AUTHORING_VIEW_SCHEMA = "hswm-indexed-authoring-view/v1"
+RELATION_HANDLE_TABLE_SCHEMA = "hswm-relation-handle-table/v1"
+RELATION_HANDLE_WIDTH = 3
 MUTATION_EXPRESSIVITY = "full-author-then-keep-routing-append/v1"
 FULL_AUTHOR_MODE = "FULL_AUTHOR"
 KEEP_ROUTING_APPEND_MODE = "KEEP_ROUTING_APPEND_MEMBERSHIP"
-STRUCTURE_COMPILATION_RECEIPT_SCHEMA = "hswm-structure-compilation-receipt/v1"
+STRUCTURE_COMPILATION_RECEIPT_SCHEMA = "hswm-structure-compilation-receipt/v2"
 RELATION_QUALITY_DIAGNOSTIC_SCHEMA = "hswm-relation-quality-diagnostic/v1"
 DISCARDED_CONTROL_STRUCTURE_DIAGNOSTIC_SCHEMA = (
     "hswm-discarded-control-structure-diagnostic/v1"
@@ -114,7 +118,7 @@ PUBLIC_SCHEMA_GATE_FIXTURE_DOMAIN = "hswm-public-schema-gate/v3"
 PUBLIC_SCHEMA_GATE_FIXTURE_COMPACT_PATCH_SCHEMA = (
     "hswm-compact-structure-patch/v3"
 )
-PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v8"
+PUBLIC_SCHEMA_GATE_PROTOCOL = "hswm-public-schema-gate/v9"
 PUBLIC_SCHEMA_GATE_EPISODE = "public-schema-gate-never-evaluation"
 PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS = 32_768
 PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING = 6144
@@ -1457,6 +1461,122 @@ def _structure_authoring_mode(active: SelfModelSnapshot) -> str:
     return KEEP_ROUTING_APPEND_MODE
 
 
+def _relation_handle_table(
+    active: SelfModelSnapshot,
+    source_tokens: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Materialize the deterministic, namespaced relation-handle mapping."""
+
+    existing_ids = tuple(memory.memory_id for memory in active.memories)
+    try:
+        new_ids = tuple(item["suggested_memory_id"] for item in source_tokens)
+    except (KeyError, TypeError) as error:
+        raise ContinualLiveError(
+            "relation handles require deterministic new memory ids"
+        ) from error
+    if (
+        len(existing_ids) >= 10**RELATION_HANDLE_WIDTH
+        or len(new_ids) >= 10**RELATION_HANDLE_WIDTH
+        or any(
+            not isinstance(memory_id, str) or not memory_id
+            for memory_id in existing_ids + new_ids
+        )
+        or len(existing_ids) != len(set(existing_ids))
+        or len(new_ids) != len(set(new_ids))
+        or set(existing_ids) & set(new_ids)
+    ):
+        raise ContinualLiveError(
+            "relation handle table requires bounded unique memory ids"
+        )
+
+    def entries(namespace: str, memory_ids: Sequence[str]) -> list[dict[str, Any]]:
+        return [
+            {
+                "handle": f"{namespace}{index:0{RELATION_HANDLE_WIDTH}d}",
+                "memory_id": memory_id,
+                "ordinal": index,
+            }
+            for index, memory_id in enumerate(memory_ids)
+        ]
+
+    body = {
+        "existing": entries("E", existing_ids),
+        "new": entries("N", new_ids),
+        "schema": RELATION_HANDLE_TABLE_SCHEMA,
+        "width": RELATION_HANDLE_WIDTH,
+    }
+    return {**body, "table_sha256": canonical_sha256(body)}
+
+
+def _validate_relation_handle_table(value: Mapping[str, Any]) -> None:
+    expected_fields = {"existing", "new", "schema", "table_sha256", "width"}
+    if not isinstance(value, Mapping) or set(value) != expected_fields:
+        raise ContinualLiveError("relation handle table field set is invalid")
+    if (
+        value.get("schema") != RELATION_HANDLE_TABLE_SCHEMA
+        or value.get("width") != RELATION_HANDLE_WIDTH
+        or not isinstance(value.get("existing"), list)
+        or not isinstance(value.get("new"), list)
+    ):
+        raise ContinualLiveError("relation handle table identity is invalid")
+    body = {key: item for key, item in value.items() if key != "table_sha256"}
+    if value.get("table_sha256") != canonical_sha256(body):
+        raise ContinualLiveError("relation handle table digest mismatch")
+    observed_handles: list[str] = []
+    observed_ids: list[str] = []
+    entry_fields = {"handle", "memory_id", "ordinal"}
+    for namespace, entries in (("E", value["existing"]), ("N", value["new"])):
+        for expected_ordinal, item in enumerate(entries):
+            if not isinstance(item, Mapping) or set(item) != entry_fields:
+                raise ContinualLiveError("relation handle table entry is invalid")
+            expected_handle = (
+                f"{namespace}{expected_ordinal:0{RELATION_HANDLE_WIDTH}d}"
+            )
+            if (
+                item.get("handle") != expected_handle
+                or isinstance(item.get("ordinal"), bool)
+                or item.get("ordinal") != expected_ordinal
+                or not isinstance(item.get("memory_id"), str)
+                or not item["memory_id"]
+            ):
+                raise ContinualLiveError("relation handle table ordering drifted")
+            observed_handles.append(item["handle"])
+            observed_ids.append(item["memory_id"])
+    if (
+        len(observed_handles) != len(set(observed_handles))
+        or len(observed_ids) != len(set(observed_ids))
+    ):
+        raise ContinualLiveError("relation handle table is not one-to-one")
+
+
+def _relation_handle_contract(table: Mapping[str, Any]) -> dict[str, Any]:
+    _validate_relation_handle_table(table)
+    return {
+        "existing": {
+            "count": len(table["existing"]),
+            "memory_id_order": "current_hswm_indexed_read_only.memories",
+            "prefix": "E",
+        },
+        "new": {
+            "count": len(table["new"]),
+            "memory_id_order": "public_source_tokens",
+            "prefix": "N",
+        },
+        "schema": RELATION_HANDLE_TABLE_SCHEMA,
+        "table_sha256": table["table_sha256"],
+        "width": RELATION_HANDLE_WIDTH,
+    }
+
+
+def _relation_handle_lookup(table: Mapping[str, Any]) -> dict[str, str]:
+    _validate_relation_handle_table(table)
+    return {
+        str(item["handle"]): str(item["memory_id"])
+        for namespace in ("existing", "new")
+        for item in table[namespace]
+    }
+
+
 def _compact_patch_response_schema(
     active: SelfModelSnapshot,
     source_tokens: Sequence[Mapping[str, Any]],
@@ -1469,30 +1589,17 @@ def _compact_patch_response_schema(
     source_count = len(source_tokens)
     if source_count <= 0:
         raise ContinualLiveError("compact response schema requires public tokens")
-    active_ids = tuple(memory.memory_id for memory in active.memories)
-    try:
-        new_ids = tuple(item["suggested_memory_id"] for item in source_tokens)
-    except (KeyError, TypeError) as error:
-        raise ContinualLiveError(
-            "compact response schema requires deterministic new memory ids"
-        ) from error
-    relation_target_ids = active_ids + new_ids
-    if (
-        any(not isinstance(item, str) or not item for item in relation_target_ids)
-        or len(relation_target_ids) != len(set(relation_target_ids))
-    ):
-        raise ContinualLiveError(
-            "compact response schema requires unique memory-id relation targets"
-        )
+    relation_table = _relation_handle_table(active, source_tokens)
+    relation_handles = tuple(_relation_handle_lookup(relation_table))
     memory_relation = _strict_json_object(
         {
-            "related_memory_ids": {
+            "related_memory_handles": {
                 "items": {
-                    "enum": list(relation_target_ids),
+                    "enum": list(relation_handles),
                     "type": "string",
                 },
                 "maxItems": min(
-                    len(relation_target_ids),
+                    len(relation_handles),
                     MAX_RELATED_MEMORY_IDS,
                 ),
                 "type": "array",
@@ -1561,7 +1668,7 @@ def _compact_patch_response_schema(
                 "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
             }
         )
-        return JSONSchemaContract.make("hswm_full_author_patch_v2", schema)
+        return JSONSchemaContract.make("hswm_full_author_patch_v3", schema)
 
     active_cell_ids = tuple(cell.cell_id for cell in active.cells)
     if len(active_cell_ids) != len(set(active_cell_ids)):
@@ -1580,7 +1687,7 @@ def _compact_patch_response_schema(
             "rationale": _string_schema(max_length=MAX_RATIONALE_CHARS),
         }
     )
-    return JSONSchemaContract.make("hswm_keep_routing_append_patch_v2", schema)
+    return JSONSchemaContract.make("hswm_keep_routing_append_patch_v3", schema)
 
 
 def _plain_memory_response_schema() -> JSONSchemaContract:
@@ -2653,33 +2760,38 @@ def _parse_structure_proposal(
     ):
         raise ContinualLiveError("new deterministic memory ids collide with HSWM state")
 
-    relation_fields = {"related_memory_ids"}
+    relation_table = _relation_handle_table(active, source_tokens)
+    relation_lookup = _relation_handle_lookup(relation_table)
+    relation_fields = {"related_memory_handles"}
     if not isinstance(value["new_memory_relations"], list) or len(
         value["new_memory_relations"]
     ) != len(source_tokens):
         raise ContinualLiveError(
             "new_memory_relations must have one ordered item per public token"
         )
-    allowed_target_ids = set(active_ids) | set(new_ids)
     parsed_relations: list[tuple[str, ...]] = []
     for source_index, item in enumerate(value["new_memory_relations"]):
         if not isinstance(item, Mapping) or set(item) != relation_fields:
             raise ContinualLiveError("new_memory_relations item field set is invalid")
-        related_value = item["related_memory_ids"]
+        related_value = item["related_memory_handles"]
         if not isinstance(related_value, list) or any(
-            not isinstance(memory_id, str) for memory_id in related_value
-        ):
-            raise ContinualLiveError("related_memory_ids must contain memory-id strings")
-        related_memory_ids = tuple(related_value)
-        if (
-            len(related_memory_ids) > MAX_RELATED_MEMORY_IDS
-            or len(related_memory_ids) != len(set(related_memory_ids))
-            or any(memory_id not in allowed_target_ids for memory_id in related_memory_ids)
+            not isinstance(handle, str) for handle in related_value
         ):
             raise ContinualLiveError(
-                "related_memory_ids contains duplicate or unknown memory ids"
+                "related_memory_handles must contain namespaced strings"
             )
-        parsed_relations.append(related_memory_ids)
+        related_handles = tuple(related_value)
+        if (
+            len(related_handles) > MAX_RELATED_MEMORY_IDS
+            or len(related_handles) != len(set(related_handles))
+            or any(handle not in relation_lookup for handle in related_handles)
+        ):
+            raise ContinualLiveError(
+                "related_memory_handles contains duplicate or unknown handles"
+            )
+        parsed_relations.append(
+            tuple(relation_lookup[handle] for handle in related_handles)
+        )
 
     memories = tuple(
         MemoryRecord(
@@ -2855,15 +2967,16 @@ def _structure_update_payload(
         generation=generation,
     )
     mode = _structure_authoring_mode(active)
+    relation_table = _relation_handle_table(active, source_tokens)
     common_contract: dict[str, Any] = {
         "base_generation": generation,
         "base_snapshot_id": active.snapshot_id,
         "mode": mode,
         "new_memory_relations": {
             "exact_length": len(source_tokens),
-            "item_fields": ["related_memory_ids"],
+            "item_fields": ["related_memory_handles"],
             "source_order": "public_source_tokens",
-            "target_domain": "active memory_id or new suggested_memory_id strings",
+            "target_domain": "E### or N### handles from relation_handle_contract",
         },
         "rationale": "non-empty bounded string",
     }
@@ -2936,8 +3049,11 @@ def _structure_update_payload(
         "instruction": (
             "Author only the bounded HSWM mutation described below. The adapter copies "
             "each public token's fixed content, deterministic ID, and provenance into "
-            "one MemoryRecord. You author the ordered related_memory_ids for every new "
-            "memory. Relation targets must be known direct memory IDs, unique, and "
+            "one MemoryRecord. You author the ordered related_memory_handles for every "
+            "new memory. E### handles cite existing memories in exact indexed-view "
+            "memory order; N### handles cite this batch's new memories in exact public "
+            "token order. Handles are opaque memory references, never cell IDs or cell "
+            "indices. Relation targets must be known handles, unique, and "
             "bounded; the source memory itself is structurally allowed and scored only "
             "as a diagnostic relation choice; semantic quality is not repaired or "
             "used to accept, retry, prompt, or select a seed. Cell IDs and numeric "
@@ -2951,7 +3067,7 @@ def _structure_update_payload(
             "new_memory_count": len(source_tokens),
             "new_memory_indices": "public_source_tokens array order",
             "relation_source": "new_memory_relations array position",
-            "relation_targets": "direct active or new memory-id strings",
+            "relation_targets": "namespaced handles expanded one-to-one to memory IDs",
         },
         "output_bounds": {
             "cell_id_max_chars": MAX_CELL_ID_CHARS,
@@ -2969,6 +3085,7 @@ def _structure_update_payload(
             {**dict(item), "token_index": index}
             for index, item in enumerate(source_tokens)
         ],
+        "relation_handle_contract": _relation_handle_contract(relation_table),
         "response_contract": mode_contract,
     }
 
@@ -2978,15 +3095,17 @@ def _structure_update_system(mode: str) -> str:
         return (
             "Return only the strict FULL_AUTHOR JSON object described by "
             "response_contract. It must author exactly sixteen reachable HSWM cells, "
-            "entry/routing, one cell assignment per new memory, and ordered direct-ID "
-            "relations. Use only public tokens and never infer a gold answer."
+            "entry/routing, one cell assignment per new memory, and ordered namespaced "
+            "memory-handle relations. E### and N### are memory handles, never cell "
+            "indices. Use only public tokens and never infer a gold answer."
         )
     if mode == KEEP_ROUTING_APPEND_MODE:
         return (
             "Return only the strict KEEP_ROUTING_APPEND_MEMBERSHIP JSON object described "
             "by response_contract. Do not return cells, entry, routing, existing-memory "
             "assignments, or deletion fields. Choose one exact active cell_id per new "
-            "memory and author ordered direct-ID relations. Use only public tokens and "
+            "memory and author ordered namespaced memory-handle relations. E### and "
+            "N### are memory handles, never cell indices. Use only public tokens and "
             "never infer a gold answer."
         )
     raise ContinualLiveError("unknown compact structure authoring mode")
@@ -3029,25 +3148,37 @@ def _existing_memberships(
 
 def _raw_authored_relation_sequences(
     text: str,
+    active: SelfModelSnapshot,
     source_tokens: Sequence[Mapping[str, Any]],
 ) -> list[dict[str, Any]]:
     value = _strict_object(text)
+    relation_table = _relation_handle_table(active, source_tokens)
+    relation_lookup = _relation_handle_lookup(relation_table)
     relations = value.get("new_memory_relations")
     if not isinstance(relations, list) or len(relations) != len(source_tokens):
         raise ContinualLiveError("raw authored relation vector drifted after parsing")
     result: list[dict[str, Any]] = []
     for source_token, item in zip(source_tokens, relations, strict=True):
-        if not isinstance(item, Mapping) or set(item) != {"related_memory_ids"}:
+        if not isinstance(item, Mapping) or set(item) != {"related_memory_handles"}:
             raise ContinualLiveError("raw authored relation item drifted after parsing")
-        related = item["related_memory_ids"]
+        related = item["related_memory_handles"]
         if not isinstance(related, list) or any(
-            not isinstance(memory_id, str) for memory_id in related
+            not isinstance(handle, str) for handle in related
         ):
             raise ContinualLiveError("raw authored relation sequence is invalid")
+        if (
+            len(related) > MAX_RELATED_MEMORY_IDS
+            or len(related) != len(set(related))
+            or any(handle not in relation_lookup for handle in related)
+        ):
+            raise ContinualLiveError("raw authored relation handles drifted after parsing")
         result.append(
             {
                 "memory_id": str(source_token["suggested_memory_id"]),
-                "related_memory_ids": list(related),
+                "related_memory_handles": list(related),
+                "expanded_related_memory_ids": [
+                    relation_lookup[handle] for handle in related
+                ],
             }
         )
     return result
@@ -3095,6 +3226,8 @@ def _structure_compilation_receipt(
     proposal: MutationProposal,
     target: SelfModelSnapshot,
     source_tokens: Sequence[Mapping[str, Any]],
+    ledger_ordinal: int,
+    completion_request_sha256: str,
     completion_response_sha256: str,
     raw_authored_placements: Sequence[Mapping[str, str]],
     raw_authored_relations: Sequence[Mapping[str, Any]],
@@ -3103,6 +3236,9 @@ def _structure_compilation_receipt(
     independent_reread: SelfModelSnapshot | None,
 ) -> dict[str, Any]:
     """Bind logical author choices to the exact core REPLACE snapshot."""
+
+    if isinstance(ledger_ordinal, bool) or not isinstance(ledger_ordinal, int) or ledger_ordinal < 0:
+        raise ContinualLiveError("structure receipt ledger ordinal is invalid")
 
     logical_mode = _structure_authoring_mode(base)
     new_ids = tuple(str(item["suggested_memory_id"]) for item in source_tokens)
@@ -3171,9 +3307,34 @@ def _structure_compilation_receipt(
     elif len(target.cells) != MAX_AUTHORED_CELLS:
         raise ContinualLiveError("FULL_AUTHOR target does not contain sixteen cells")
 
+    relation_table = _relation_handle_table(base, source_tokens)
     authored_relations = [dict(item) for item in raw_authored_relations]
     if [item.get("memory_id") for item in authored_relations] != list(new_ids):
         raise ContinualLiveError("raw authored relation source order drifted")
+    if any(
+        set(item)
+        != {
+            "expanded_related_memory_ids",
+            "memory_id",
+            "related_memory_handles",
+        }
+        for item in authored_relations
+    ):
+        raise ContinualLiveError("raw authored relation evidence field set drifted")
+    authored_handle_sequences = [
+        {
+            "memory_id": item["memory_id"],
+            "related_memory_handles": list(item["related_memory_handles"]),
+        }
+        for item in authored_relations
+    ]
+    expanded_relations = [
+        {
+            "memory_id": item["memory_id"],
+            "related_memory_ids": list(item["expanded_related_memory_ids"]),
+        }
+        for item in authored_relations
+    ]
     stored_relations = [
         {
             "memory_id": memory_id,
@@ -3186,14 +3347,19 @@ def _structure_compilation_receipt(
             "memory_id": item["memory_id"],
             "related_memory_ids": sorted(item["related_memory_ids"]),
         }
-        for item in authored_relations
+        for item in expanded_relations
     ]
     if authored_canonical_sets != stored_relations or any(
-        len(item["related_memory_ids"])
-        != len(set(item["related_memory_ids"]))
+        len(item["related_memory_handles"])
+        != len(set(item["related_memory_handles"]))
+        or len(item["expanded_related_memory_ids"])
+        != len(set(item["expanded_related_memory_ids"]))
         for item in authored_relations
     ):
         raise ContinualLiveError("compiled target added or dropped an authored relation")
+    authored_relation_count = sum(
+        len(item["related_memory_handles"]) for item in authored_relations
+    )
     target_sha256 = _snapshot_sha256(target)
     reread_sha256 = (
         _snapshot_sha256(independent_reread)
@@ -3209,13 +3375,16 @@ def _structure_compilation_receipt(
         "activation_id": activation_id,
         "append_only_membership": append_only_membership,
         "authored_placement_sha256": canonical_sha256(authored_placements),
+        "authored_relation_handle_count": authored_relation_count,
+        "authored_relation_handle_sequences": authored_handle_sequences,
+        "authored_relation_handle_sequence_sha256": canonical_sha256(
+            authored_handle_sequences
+        ),
         "authored_relation_canonical_set_sha256": canonical_sha256(
             authored_canonical_sets
         ),
-        "authored_relation_count": sum(
-            len(item["related_memory_ids"]) for item in authored_relations
-        ),
-        "authored_relation_sequence_sha256": canonical_sha256(authored_relations),
+        "authored_relation_count": authored_relation_count,
+        "authored_relation_sequence_sha256": canonical_sha256(expanded_relations),
         "base_cell_count": len(base.cells),
         "base_generation": generation,
         "base_memberships_sha256": canonical_sha256(base_memberships),
@@ -3225,14 +3394,26 @@ def _structure_compilation_receipt(
         "core_mode": CellTopologyMode.REPLACE.value,
         "core_membership_order": "canonical-lexicographic",
         "completion_response_sha256": completion_response_sha256,
+        "completion_request_sha256": completion_request_sha256,
         "logical_mode": logical_mode,
+        "ledger_ordinal": ledger_ordinal,
         "memberships_preserved": memberships_preserved,
         "mutation_expressivity": MUTATION_EXPRESSIVITY,
+        "expanded_relation_canonical_set_sha256": canonical_sha256(
+            authored_canonical_sets
+        ),
+        "expanded_relation_count": authored_relation_count,
+        "expanded_relation_sequences": expanded_relations,
+        "expanded_relation_sequence_sha256": canonical_sha256(
+            expanded_relations
+        ),
         "proposal_sha256": canonical_sha256(proposal.canonical()),
         "proposal_validation_sha256": proposal_validation_sha256,
         "independent_reread_snapshot_sha256": reread_sha256,
         "independent_store_reread_verified": independent_reread is not None,
         "routing_preserved": routing_preserved,
+        "relation_handle_table": relation_table,
+        "relation_handle_table_sha256": relation_table["table_sha256"],
         "schema": STRUCTURE_COMPILATION_RECEIPT_SCHEMA,
         "stored_relation_canonical_set_sha256": canonical_sha256(stored_relations),
         "stored_relation_count": sum(
@@ -3262,6 +3443,9 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         "activation_id",
         "append_only_membership",
         "authored_placement_sha256",
+        "authored_relation_handle_count",
+        "authored_relation_handle_sequences",
+        "authored_relation_handle_sequence_sha256",
         "authored_relation_canonical_set_sha256",
         "authored_relation_count",
         "authored_relation_sequence_sha256",
@@ -3272,17 +3456,25 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         "base_snapshot_id",
         "base_snapshot_sha256",
         "completion_response_sha256",
+        "completion_request_sha256",
         "core_membership_order",
         "core_mode",
         "independent_reread_snapshot_sha256",
         "independent_store_reread_verified",
         "logical_mode",
+        "ledger_ordinal",
         "memberships_preserved",
         "mutation_expressivity",
+        "expanded_relation_canonical_set_sha256",
+        "expanded_relation_count",
+        "expanded_relation_sequences",
+        "expanded_relation_sequence_sha256",
         "new_memory_count",
         "proposal_sha256",
         "proposal_validation_sha256",
         "receipt_sha256",
+        "relation_handle_table",
+        "relation_handle_table_sha256",
         "routing_preserved",
         "schema",
         "stored_relation_canonical_set_sha256",
@@ -3297,6 +3489,7 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         raise ContinualLiveError("structure compilation receipt field set drifted")
     required_hashes = (
         "authored_placement_sha256",
+        "authored_relation_handle_sequence_sha256",
         "authored_relation_canonical_set_sha256",
         "authored_relation_sequence_sha256",
         "base_memberships_sha256",
@@ -3304,7 +3497,11 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         "base_snapshot_id",
         "base_snapshot_sha256",
         "completion_response_sha256",
+        "completion_request_sha256",
+        "expanded_relation_canonical_set_sha256",
+        "expanded_relation_sequence_sha256",
         "proposal_sha256",
+        "relation_handle_table_sha256",
         "stored_relation_canonical_set_sha256",
         "target_memberships_sha256",
         "target_routing_sha256",
@@ -3331,8 +3528,10 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
                 "structure compilation receipt optional digest is invalid"
             )
     for count_field in (
+        "authored_relation_handle_count",
         "authored_relation_count",
         "base_cell_count",
+        "expanded_relation_count",
         "new_memory_count",
         "stored_relation_count",
         "target_cell_count",
@@ -3343,15 +3542,93 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
     generation = value.get("base_generation")
     if isinstance(generation, bool) or not isinstance(generation, int) or generation < 0:
         raise ContinualLiveError("structure compilation generation is invalid")
+    ordinal = value.get("ledger_ordinal")
+    if isinstance(ordinal, bool) or not isinstance(ordinal, int) or ordinal < 0:
+        raise ContinualLiveError("structure compilation ledger ordinal is invalid")
     if (
         value.get("core_mode") != CellTopologyMode.REPLACE.value
         or value.get("core_membership_order") != "canonical-lexicographic"
         or value.get("mutation_expressivity") != MUTATION_EXPRESSIVITY
         or value.get("authored_relation_count") != value.get("stored_relation_count")
+        or value.get("authored_relation_handle_count")
+        != value.get("expanded_relation_count")
+        or value.get("expanded_relation_count")
+        != value.get("stored_relation_count")
+        or value.get("authored_relation_sequence_sha256")
+        != value.get("expanded_relation_sequence_sha256")
         or value.get("authored_relation_canonical_set_sha256")
+        != value.get("expanded_relation_canonical_set_sha256")
+        or value.get("expanded_relation_canonical_set_sha256")
         != value.get("stored_relation_canonical_set_sha256")
     ):
         raise ContinualLiveError("structure compilation receipt core mode drifted")
+    relation_table = value.get("relation_handle_table")
+    if not isinstance(relation_table, Mapping):
+        raise ContinualLiveError("structure compilation relation handle table is invalid")
+    _validate_relation_handle_table(relation_table)
+    if (
+        relation_table.get("table_sha256")
+        != value.get("relation_handle_table_sha256")
+        or len(relation_table.get("new", ())) != value.get("new_memory_count")
+    ):
+        raise ContinualLiveError("structure compilation relation handle binding drifted")
+    handle_sequences = value.get("authored_relation_handle_sequences")
+    expanded_sequences = value.get("expanded_relation_sequences")
+    if not isinstance(handle_sequences, list) or not isinstance(expanded_sequences, list):
+        raise ContinualLiveError("structure compilation relation sequences are invalid")
+    new_entries = relation_table["new"]
+    if (
+        len(handle_sequences) != len(new_entries)
+        or len(expanded_sequences) != len(new_entries)
+        or value.get("authored_relation_handle_sequence_sha256")
+        != canonical_sha256(handle_sequences)
+        or value.get("expanded_relation_sequence_sha256")
+        != canonical_sha256(expanded_sequences)
+    ):
+        raise ContinualLiveError("structure compilation relation sequence binding drifted")
+    handle_lookup = _relation_handle_lookup(relation_table)
+    rebuilt_expanded: list[dict[str, Any]] = []
+    for new_entry, handle_item in zip(new_entries, handle_sequences, strict=True):
+        if (
+            not isinstance(handle_item, Mapping)
+            or set(handle_item) != {"memory_id", "related_memory_handles"}
+            or handle_item.get("memory_id") != new_entry["memory_id"]
+            or not isinstance(handle_item.get("related_memory_handles"), list)
+            or any(
+                not isinstance(handle, str) or handle not in handle_lookup
+                for handle in handle_item["related_memory_handles"]
+            )
+            or len(handle_item["related_memory_handles"]) > MAX_RELATED_MEMORY_IDS
+            or len(handle_item["related_memory_handles"])
+            != len(set(handle_item["related_memory_handles"]))
+        ):
+            raise ContinualLiveError("structure compilation authored handles are invalid")
+        rebuilt_expanded.append(
+            {
+                "memory_id": new_entry["memory_id"],
+                "related_memory_ids": [
+                    handle_lookup[handle]
+                    for handle in handle_item["related_memory_handles"]
+                ],
+            }
+        )
+    if rebuilt_expanded != expanded_sequences:
+        raise ContinualLiveError("structure compilation handle expansion drifted")
+    rebuilt_sets = [
+        {
+            "memory_id": item["memory_id"],
+            "related_memory_ids": sorted(item["related_memory_ids"]),
+        }
+        for item in rebuilt_expanded
+    ]
+    rebuilt_count = sum(len(item["related_memory_ids"]) for item in rebuilt_expanded)
+    if (
+        rebuilt_count != value.get("authored_relation_handle_count")
+        or rebuilt_count != value.get("expanded_relation_count")
+        or canonical_sha256(rebuilt_sets)
+        != value.get("expanded_relation_canonical_set_sha256")
+    ):
+        raise ContinualLiveError("structure compilation expanded relation evidence drifted")
     independent = value.get("independent_store_reread_verified")
     if not isinstance(independent, bool):
         raise ContinualLiveError("structure compilation reread flag is invalid")
@@ -3391,6 +3668,93 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
             raise ContinualLiveError("FULL_AUTHOR compilation invariant drifted")
     else:
         raise ContinualLiveError("structure compilation receipt logical mode drifted")
+
+
+def _replay_structure_compilation_receipt(
+    entry: Mapping[str, Any],
+    receipt: Mapping[str, Any],
+) -> None:
+    """Rebuild handle expansion and core target from one persisted update call."""
+
+    _validate_structure_compilation_receipt(receipt)
+    try:
+        completion = entry["completion"]
+        payload = _strict_object(entry["request_payload_json"])
+        projection = payload["current_hswm_indexed_read_only"]
+        source_tokens = payload["public_source_tokens"]
+        expanded_base = _expand_indexed_authoring_projection(projection)
+        base = snapshot_from_mapping(expanded_base)
+        generation = payload["base_generation"]
+    except (KeyError, TypeError, SelfModelContractError) as error:
+        raise ContinualLiveError(
+            "structure compilation replay input is malformed"
+        ) from error
+    if not isinstance(source_tokens, list) or not isinstance(projection, Mapping):
+        raise ContinualLiveError("structure compilation replay arrays are invalid")
+    _validate_indexed_authoring_projection(
+        projection,
+        active=base,
+        generation=generation,
+    )
+    relation_table = _relation_handle_table(base, source_tokens)
+    if (
+        payload.get("relation_handle_contract")
+        != _relation_handle_contract(relation_table)
+        or receipt.get("relation_handle_table") != relation_table
+        or receipt.get("relation_handle_table_sha256")
+        != relation_table["table_sha256"]
+    ):
+        raise ContinualLiveError("structure compilation replay handle table drifted")
+    policy = _proposal_policy(ArmBudget())
+    expected_schema = _compact_patch_response_schema(
+        base,
+        source_tokens,
+        policy,
+        generation=generation,
+    )
+    if (
+        entry.get("response_schema_name") != expected_schema.name
+        or entry.get("response_schema_json") != expected_schema.schema_json
+        or entry.get("response_schema_sha256") != expected_schema.schema_sha256
+    ):
+        raise ContinualLiveError("structure compilation replay schema drifted")
+    proposal = _parse_structure_proposal(
+        completion["text"],
+        active=base,
+        source_tokens=source_tokens,
+        generation=generation,
+        policy=policy,
+    )
+    target = apply_mutation(base, proposal, policy)
+    raw_relations = _raw_authored_relation_sequences(
+        completion["text"],
+        base,
+        source_tokens,
+    )
+    raw_placements = _raw_authored_placements(
+        completion["text"],
+        active=base,
+        source_tokens=source_tokens,
+    )
+    rebuilt = _structure_compilation_receipt(
+        base=base,
+        generation=generation,
+        proposal=proposal,
+        target=target,
+        source_tokens=source_tokens,
+        ledger_ordinal=entry["ordinal"],
+        completion_request_sha256=completion["request_sha256"],
+        completion_response_sha256=completion["response_sha256"],
+        raw_authored_placements=raw_placements,
+        raw_authored_relations=raw_relations,
+        proposal_validation_sha256=receipt["proposal_validation_sha256"],
+        activation_id=receipt["activation_id"],
+        independent_reread=(
+            target if receipt["independent_store_reread_verified"] else None
+        ),
+    )
+    if canonical_json_bytes(rebuilt) != canonical_json_bytes(receipt):
+        raise ContinualLiveError("structure compilation receipt replay mismatch")
 
 
 def _discarded_control_structure_diagnostic(
@@ -3829,6 +4193,7 @@ class StructuredHSWMArm(_ModelArm):
             )
         raw_authored_relations = _raw_authored_relation_sequences(
             completion.text,
+            prompt_snapshot,
             source_tokens,
         )
         raw_authored_placements = _raw_authored_placements(
@@ -3902,6 +4267,8 @@ class StructuredHSWMArm(_ModelArm):
             proposal=proposal,
             target=predicted_target,
             source_tokens=source_tokens,
+            ledger_ordinal=self.ledger[-1].ordinal,
+            completion_request_sha256=completion.request_sha256,
             completion_response_sha256=completion.response_sha256,
             raw_authored_placements=raw_authored_placements,
             raw_authored_relations=raw_authored_relations,
@@ -4608,6 +4975,7 @@ def scoped_call_ledgers(
     discarded_control_structure_diagnostics: dict[
         str, list[dict[str, Any]]
     ] = {}
+    structure_compilation_receipts: dict[str, list[dict[str, Any]]] = {}
     for index, arm in enumerate(arms):
         prefix_count = audit.primary_call_counts[index]
         prefix = arm.ledger[:prefix_count]
@@ -4625,6 +4993,26 @@ def scoped_call_ledgers(
         diagnostics = list(
             getattr(arm, "discarded_control_structure_diagnostics", ())
         )
+        receipts = list(getattr(arm, "structure_compilation_receipts", ()))
+        update_entries_by_ordinal = {
+            entry.ordinal: entry for entry in prefix if entry.operation == "update"
+        }
+        for receipt in receipts:
+            _validate_structure_compilation_receipt(receipt)
+            entry = update_entries_by_ordinal.get(receipt["ledger_ordinal"])
+            if (
+                entry is None
+                or receipt["completion_request_sha256"]
+                != entry.completion.request_sha256
+                or receipt["completion_response_sha256"]
+                != entry.completion.response_sha256
+            ):
+                raise ContinualLiveError(
+                    "structure compilation receipt differs from its update ledger"
+                )
+        if len({receipt["ledger_ordinal"] for receipt in receipts}) != len(receipts):
+            raise ContinualLiveError("structure compilation receipt ordinal is duplicated")
+        structure_compilation_receipts[arm.name] = receipts
         if arm.name in {"reset", "no_write"}:
             update_entries = [entry for entry in prefix if entry.operation == "update"]
             if len(diagnostics) != len(update_entries):
@@ -4653,6 +5041,40 @@ def scoped_call_ledgers(
             raise ContinualLiveError(
                 "non-discarded arm unexpectedly emitted a discard diagnostic"
             )
+        expected_receipt_ordinals = (
+            set(update_entries_by_ordinal)
+            if arm.name == "hswm"
+            else {
+                diagnostic["ledger_ordinal"]
+                for diagnostic in diagnostics
+                if diagnostic["semantic_valid"] is True
+            }
+            if arm.name in {"reset", "no_write"}
+            else set()
+        )
+        receipts_by_ordinal = {
+            receipt["ledger_ordinal"]: receipt for receipt in receipts
+        }
+        if set(receipts_by_ordinal) != expected_receipt_ordinals:
+            raise ContinualLiveError(
+                "structure compilation receipts do not cover valid update calls"
+            )
+        if arm.name in {"reset", "no_write"}:
+            for diagnostic in diagnostics:
+                expected_sha = (
+                    receipts_by_ordinal[diagnostic["ledger_ordinal"]][
+                        "receipt_sha256"
+                    ]
+                    if diagnostic["semantic_valid"] is True
+                    else None
+                )
+                if (
+                    diagnostic["structure_compilation_receipt_sha256"]
+                    != expected_sha
+                ):
+                    raise ContinualLiveError(
+                        "discarded-control diagnostic receipt linkage drifted"
+                    )
         discarded_control_structure_diagnostics[arm.name] = diagnostics
     expected_h_suffix = 15 if mediation_enabled else 0
     if len(mediation["hswm"]) != expected_h_suffix or any(
@@ -4670,12 +5092,15 @@ def scoped_call_ledgers(
         "discarded_control_structure_policy": DISCARDED_CONTROL_STRUCTURE_POLICY,
         "parity_audit_sha256": audit.audit_sha256,
         "primary": primary,
+        "structure_compilation_receipts": structure_compilation_receipts,
     }
     return {**unsigned, "scoped_ledger_sha256": canonical_sha256(unsigned)}
 
 
 def _validate_scoped_discarded_control_structure_diagnostics(
     value: Mapping[str, Any],
+    *,
+    state_dir: Path | None = None,
 ) -> None:
     expected_fields = {
         "discarded_control_structure_diagnostics",
@@ -4684,6 +5109,7 @@ def _validate_scoped_discarded_control_structure_diagnostics(
         "mediation_enabled",
         "parity_audit_sha256",
         "primary",
+        "structure_compilation_receipts",
         "scoped_ledger_sha256",
     }
     if not isinstance(value, Mapping) or set(value) != expected_fields:
@@ -4701,17 +5127,109 @@ def _validate_scoped_discarded_control_structure_diagnostics(
         )
     primary = value.get("primary")
     diagnostics_by_arm = value.get("discarded_control_structure_diagnostics")
+    receipts_by_arm = value.get("structure_compilation_receipts")
     expected_arms = {"hswm", "reset", "no_write", "plain"}
     if (
         not isinstance(primary, Mapping)
         or set(primary) != expected_arms
         or not isinstance(diagnostics_by_arm, Mapping)
         or set(diagnostics_by_arm) != expected_arms
+        or not isinstance(receipts_by_arm, Mapping)
+        or set(receipts_by_arm) != expected_arms
+        or receipts_by_arm["plain"] != []
         or any(diagnostics_by_arm[name] for name in ("hswm", "plain"))
     ):
         raise ContinualLiveError(
             "scoped discarded-control diagnostic arm map drifted"
         )
+    for arm_name in ("hswm", "reset", "no_write"):
+        entries = primary[arm_name]
+        receipts = receipts_by_arm[arm_name]
+        if not isinstance(entries, list) or not isinstance(receipts, list):
+            raise ContinualLiveError("scoped structure receipt lists are invalid")
+        entries_by_ordinal = {
+            entry.get("ordinal"): entry
+            for entry in entries
+            if isinstance(entry, Mapping) and entry.get("operation") == "update"
+        }
+        for receipt in receipts:
+            _validate_structure_compilation_receipt(receipt)
+            entry = entries_by_ordinal.get(receipt["ledger_ordinal"])
+            if (
+                not isinstance(entry, Mapping)
+                or receipt["completion_request_sha256"]
+                != entry.get("completion", {}).get("request_sha256")
+                or receipt["completion_response_sha256"]
+                != entry.get("completion", {}).get("response_sha256")
+            ):
+                raise ContinualLiveError(
+                    "scoped structure receipt differs from its persisted call"
+                )
+            _replay_structure_compilation_receipt(entry, receipt)
+        if len({receipt["ledger_ordinal"] for receipt in receipts}) != len(receipts):
+            raise ContinualLiveError("scoped structure receipt ordinal is duplicated")
+        update_ordinals = {
+            entry.get("ordinal")
+            for entry in entries
+            if isinstance(entry, Mapping) and entry.get("operation") == "update"
+        }
+        diagnostics = diagnostics_by_arm[arm_name]
+        expected_receipt_ordinals = (
+            update_ordinals
+            if arm_name == "hswm"
+            else {
+                diagnostic["ledger_ordinal"]
+                for diagnostic in diagnostics
+                if diagnostic.get("semantic_valid") is True
+            }
+        )
+        receipts_by_ordinal = {
+            receipt["ledger_ordinal"]: receipt for receipt in receipts
+        }
+        if set(receipts_by_ordinal) != expected_receipt_ordinals:
+            raise ContinualLiveError(
+                "scoped structure receipts do not cover valid update calls"
+            )
+        if arm_name in {"reset", "no_write"}:
+            for diagnostic in diagnostics:
+                expected_sha = (
+                    receipts_by_ordinal[diagnostic["ledger_ordinal"]][
+                        "receipt_sha256"
+                    ]
+                    if diagnostic.get("semantic_valid") is True
+                    else None
+                )
+                if diagnostic.get("structure_compilation_receipt_sha256") != expected_sha:
+                    raise ContinualLiveError(
+                        "scoped discarded-control receipt linkage drifted"
+                    )
+        if state_dir is not None and receipts:
+            store = SQLiteSelfModelStore(
+                Path(state_dir) / arm_name / "state.sqlite3",
+                policy=_proposal_policy(ArmBudget()),
+            )
+            try:
+                history = {
+                    activation.activation_id: activation
+                    for activation in store.activation_history()
+                }
+                for receipt in receipts:
+                    if receipt["independent_store_reread_verified"] is not True:
+                        continue
+                    stored = store.load_snapshot(receipt["target_snapshot_id"])
+                    activation = history.get(receipt["activation_id"])
+                    if (
+                        _snapshot_sha256(stored)
+                        != receipt["target_snapshot_sha256"]
+                        or activation is None
+                        or activation.active_snapshot_id
+                        != receipt["target_snapshot_id"]
+                    ):
+                        raise ContinualLiveError(
+                            "scoped structure receipt differs from durable store history"
+                        )
+            finally:
+                store.close()
     for arm_name in ("reset", "no_write"):
         entries = primary[arm_name]
         diagnostics = diagnostics_by_arm[arm_name]
@@ -8457,10 +8975,11 @@ def main(argv: Sequence[str] | None = None) -> int:
                 removal_ok = not removal_results
             post_reveal["removal_mediation_revalidation_match"] = removal_ok
             preimages_ok = True
-            for stream_ledger in ledgers:
+            for stream_index, stream_ledger in enumerate(ledgers):
                 try:
                     _validate_scoped_discarded_control_structure_diagnostics(
-                        stream_ledger
+                        stream_ledger,
+                        state_dir=output / "state" / f"stream-{stream_index:02d}",
                     )
                 except ContinualLiveError:
                     preimages_ok = False

@@ -2628,6 +2628,95 @@ def test_scoped_ledgers_require_every_structured_update_receipt(
         live._validate_scoped_discarded_control_structure_diagnostics(tampered)
 
 
+def test_post_reveal_rejects_swapped_same_target_reset_activations(
+    tmp_path: Path,
+) -> None:
+    state_dir = tmp_path / "states"
+    reset = live.ResetArm(
+        backend=ScriptedRelationalBackend(),
+        budget=_budget(),
+        isolation_id="same-target-reset-activation-swap",
+        store_path=state_dir / "reset" / "state.sqlite3",
+        journal_path=state_dir / "reset" / "calls.jsonl",
+    )
+    batch = _one_token_batch()
+    reset.update(batch)
+    reset.update(batch)
+    receipts = deepcopy(reset.structure_compilation_receipts)
+    assert len(receipts) == 2
+    assert receipts[0]["target_snapshot_id"] == receipts[1]["target_snapshot_id"]
+    assert receipts[0]["base_generation"] == 0
+    assert receipts[1]["base_generation"] == 2
+    primary = {
+        "hswm": [],
+        "reset": [entry.canonical() for entry in reset.ledger],
+        "no_write": [],
+        "plain": [],
+    }
+    unsigned = {
+        "discarded_control_structure_diagnostics": {
+            "hswm": [],
+            "reset": deepcopy(reset.discarded_control_structure_diagnostics),
+            "no_write": [],
+            "plain": [],
+        },
+        "discarded_control_structure_policy": (
+            live.DISCARDED_CONTROL_STRUCTURE_POLICY
+        ),
+        "mediation": {name: [] for name in primary},
+        "mediation_enabled": False,
+        "parity_audit_sha256": "a" * 64,
+        "primary": primary,
+        "structure_compilation_receipts": {
+            "hswm": [],
+            "reset": receipts,
+            "no_write": [],
+            "plain": [],
+        },
+    }
+    scoped = {**unsigned, "scoped_ledger_sha256": live.canonical_sha256(unsigned)}
+    live._validate_scoped_discarded_control_structure_diagnostics(
+        scoped,
+        state_dir=state_dir,
+    )
+
+    swapped = deepcopy(scoped)
+    swapped_receipts = swapped["structure_compilation_receipts"]["reset"]
+    activation_ids = [item["activation_id"] for item in swapped_receipts]
+    for index, receipt in enumerate(swapped_receipts):
+        receipt["activation_id"] = activation_ids[1 - index]
+        receipt_unsigned = {
+            key: value for key, value in receipt.items() if key != "receipt_sha256"
+        }
+        receipt["receipt_sha256"] = live.canonical_sha256(receipt_unsigned)
+    diagnostics = swapped["discarded_control_structure_diagnostics"]["reset"]
+    for diagnostic, receipt in zip(diagnostics, swapped_receipts, strict=True):
+        diagnostic["activation_id"] = receipt["activation_id"]
+        diagnostic["structure_compilation_receipt_sha256"] = receipt[
+            "receipt_sha256"
+        ]
+        diagnostic_unsigned = {
+            key: value
+            for key, value in diagnostic.items()
+            if key != "diagnostic_sha256"
+        }
+        diagnostic["diagnostic_sha256"] = live.canonical_sha256(
+            diagnostic_unsigned
+        )
+    swapped_unsigned = {
+        key: value for key, value in swapped.items() if key != "scoped_ledger_sha256"
+    }
+    swapped["scoped_ledger_sha256"] = live.canonical_sha256(swapped_unsigned)
+    with pytest.raises(
+        ContinualLiveError,
+        match="durable store history",
+    ):
+        live._validate_scoped_discarded_control_structure_diagnostics(
+            swapped,
+            state_dir=state_dir,
+        )
+
+
 def test_dense_sixty_four_by_three_handle_response_is_compact_and_valid() -> None:
     batch = LearningBatch(
         episode_id="dense-relation-handle-response",

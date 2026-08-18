@@ -65,6 +65,7 @@ from hswm.selfmod.contracts import (
     make_mutation,
     make_snapshot,
     make_token,
+    mutation_from_mapping,
     snapshot_from_mapping,
 )
 from hswm.selfmod.store import SQLiteSelfModelStore
@@ -3408,6 +3409,7 @@ def _structure_compilation_receipt(
             expanded_relations
         ),
         "proposal_sha256": canonical_sha256(proposal.canonical()),
+        "proposal_mutation_id": proposal.mutation_id,
         "proposal_validation_sha256": proposal_validation_sha256,
         "independent_reread_snapshot_sha256": reread_sha256,
         "independent_store_reread_verified": independent_reread is not None,
@@ -3471,6 +3473,7 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         "expanded_relation_sequence_sha256",
         "new_memory_count",
         "proposal_sha256",
+        "proposal_mutation_id",
         "proposal_validation_sha256",
         "receipt_sha256",
         "relation_handle_table",
@@ -3501,6 +3504,7 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
         "expanded_relation_canonical_set_sha256",
         "expanded_relation_sequence_sha256",
         "proposal_sha256",
+        "proposal_mutation_id",
         "relation_handle_table_sha256",
         "stored_relation_canonical_set_sha256",
         "target_memberships_sha256",
@@ -3673,7 +3677,7 @@ def _validate_structure_compilation_receipt(value: Mapping[str, Any]) -> None:
 def _replay_structure_compilation_receipt(
     entry: Mapping[str, Any],
     receipt: Mapping[str, Any],
-) -> None:
+) -> MutationProposal:
     """Rebuild handle expansion and core target from one persisted update call."""
 
     _validate_structure_compilation_receipt(receipt)
@@ -3755,6 +3759,7 @@ def _replay_structure_compilation_receipt(
     )
     if canonical_json_bytes(rebuilt) != canonical_json_bytes(receipt):
         raise ContinualLiveError("structure compilation receipt replay mismatch")
+    return proposal
 
 
 def _discarded_control_structure_diagnostic(
@@ -5097,6 +5102,46 @@ def scoped_call_ledgers(
     return {**unsigned, "scoped_ledger_sha256": canonical_sha256(unsigned)}
 
 
+def _read_durable_mutation_binding(
+    store_path: Path,
+    mutation_id: str,
+) -> tuple[MutationProposal, str, str]:
+    """Read one exact committed mutation without granting write authority."""
+
+    database_uri = f"{Path(store_path).resolve().as_uri()}?mode=ro"
+    try:
+        with sqlite3.connect(database_uri, uri=True) as connection:
+            connection.row_factory = sqlite3.Row
+            row = connection.execute(
+                """
+                SELECT mutation_json, mutation_sha256, target_snapshot_id,
+                       activation_id
+                FROM self_mutations
+                WHERE mutation_id=?
+                """,
+                (mutation_id,),
+            ).fetchone()
+    except sqlite3.Error as error:
+        raise ContinualLiveError(
+            f"cannot read durable structure mutation: {error}"
+        ) from error
+    if row is None:
+        raise ContinualLiveError("durable activation lacks its structure mutation")
+    raw = bytes(row["mutation_json"])
+    try:
+        value = _strict_object(raw.decode("utf-8"))
+        proposal = mutation_from_mapping(value)
+    except (UnicodeDecodeError, SelfModelContractError) as error:
+        raise ContinualLiveError("durable structure mutation is invalid") from error
+    if (
+        canonical_json_bytes(value) != raw
+        or row["mutation_sha256"] != canonical_sha256(value)
+        or proposal.mutation_id != mutation_id
+    ):
+        raise ContinualLiveError("durable structure mutation binding drifted")
+    return proposal, str(row["target_snapshot_id"]), str(row["activation_id"])
+
+
 def _validate_scoped_discarded_control_structure_diagnostics(
     value: Mapping[str, Any],
     *,
@@ -5145,6 +5190,7 @@ def _validate_scoped_discarded_control_structure_diagnostics(
     for arm_name in ("hswm", "reset", "no_write"):
         entries = primary[arm_name]
         receipts = receipts_by_arm[arm_name]
+        replayed_proposals: dict[int, MutationProposal] = {}
         if not isinstance(entries, list) or not isinstance(receipts, list):
             raise ContinualLiveError("scoped structure receipt lists are invalid")
         entries_by_ordinal = {
@@ -5165,7 +5211,9 @@ def _validate_scoped_discarded_control_structure_diagnostics(
                 raise ContinualLiveError(
                     "scoped structure receipt differs from its persisted call"
                 )
-            _replay_structure_compilation_receipt(entry, receipt)
+            replayed_proposals[receipt["ledger_ordinal"]] = (
+                _replay_structure_compilation_receipt(entry, receipt)
+            )
         if len({receipt["ledger_ordinal"] for receipt in receipts}) != len(receipts):
             raise ContinualLiveError("scoped structure receipt ordinal is duplicated")
         update_ordinals = {
@@ -5218,12 +5266,42 @@ def _validate_scoped_discarded_control_structure_diagnostics(
                         continue
                     stored = store.load_snapshot(receipt["target_snapshot_id"])
                     activation = history.get(receipt["activation_id"])
+                    replayed_proposal = replayed_proposals[
+                        receipt["ledger_ordinal"]
+                    ]
+                    durable_proposal, durable_target_id, durable_activation_id = (
+                        _read_durable_mutation_binding(
+                            Path(state_dir) / arm_name / "state.sqlite3",
+                            receipt["proposal_mutation_id"],
+                        )
+                    )
                     if (
                         _snapshot_sha256(stored)
                         != receipt["target_snapshot_sha256"]
                         or activation is None
+                        or activation.reason != "SELF_AUTHORED_MUTATION"
+                        or activation.base_snapshot_id
+                        != receipt["base_snapshot_id"]
+                        or activation.base_generation
+                        != receipt["base_generation"]
                         or activation.active_snapshot_id
                         != receipt["target_snapshot_id"]
+                        or activation.active_generation
+                        != receipt["base_generation"] + 1
+                        or activation.mutation_id
+                        != receipt["proposal_mutation_id"]
+                        or activation.mutation_id
+                        != replayed_proposal.mutation_id
+                        or activation.author_id != replayed_proposal.author_id
+                        or activation.author_id != AUTHOR_ID
+                        or activation.source_token_ids
+                        != replayed_proposal.source_token_ids
+                        or canonical_json_bytes(durable_proposal.canonical())
+                        != canonical_json_bytes(replayed_proposal.canonical())
+                        or canonical_sha256(durable_proposal.canonical())
+                        != receipt["proposal_sha256"]
+                        or durable_target_id != receipt["target_snapshot_id"]
+                        or durable_activation_id != receipt["activation_id"]
                     ):
                         raise ContinualLiveError(
                             "scoped structure receipt differs from durable store history"

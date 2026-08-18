@@ -698,6 +698,13 @@ _CONSUMED_V2_V3_COMMITMENTS = (
     "db6710fc7826b13a11cd4341219ac9d2147cec7cabf627b786478c4bcbecfa2a",
 )
 
+_CONSUMED_PRESEED_V4_COMMITMENTS = (
+    "b7d2ac0956a925b01a9ff06863062ce67f7c7337f1b856952d1585e74562ce3b",
+    "9ca2940211fa513b0badaf02744a6b2793bd2e40a3b5de3e012b99fb5741443e",
+    "b224feed770a051bcecf4ec09fae1df9ea1bb8434ee6342f6ab30ac6df22fad8",
+    "deac17cb612737cc41008900e76dfbc88922575429e2da71b3bff783b0beceb3",
+)
+
 
 def _fresh_v4_commitments() -> tuple[str, ...]:
     return tuple(
@@ -733,22 +740,12 @@ def _clear_v4_precommit_anchors(monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setattr(live, name, None)
 
 
-def test_v4_b2_external_anchor_constants_are_exact() -> None:
-    assert live.FROZEN_V4_PRECOMMIT_RAW_SHA256 == (
-        "dee5a4578652e5affcb3628d7b7f797f77e242894e1a8b7410d148f7e0747a1b"
-    )
-    assert live.FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256 == (
-        "82572d9beb52f297e21861611c57af3e0aad325d65f980a0d047b15163160bc0"
-    )
-    assert live.FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256 == (
-        "763ed2451bd1be5efa8e8a7d8c2b6674c78488944275f18d5c0d5093e47a3673"
-    )
-    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION == (
-        "f7d946ec243458b8537b8c466eb9a9493847e7f2"
-    )
-    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE == (
-        "48f52fdf729bde8f32b8ff353bcf2c78256529c4"
-    )
+def test_v5_b1_external_anchor_constants_are_deliberately_empty() -> None:
+    assert live.FROZEN_V4_PRECOMMIT_RAW_SHA256 is None
+    assert live.FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256 is None
+    assert live.FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256 is None
+    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION is None
+    assert live.FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE is None
 
 
 def _write_test_v4_precommit_seal(
@@ -4553,6 +4550,8 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
         "pilot_execution",
         "planned_outer_run_id",
         "planned_output_relative_path",
+        "prior_no_model_abort_binding",
+        "prior_no_model_abort_binding_sha256",
         "precommit_builder_source_revision",
         "precommit_builder_source_tree",
         "precommit_sha256",
@@ -4569,7 +4568,7 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
         "validated_adapter_source_tree",
     }
     assert live._validate_pilot_precommit_v4(raw) == value
-    assert value["schema"] == "hswm-continual-pilot-precommit/v4"
+    assert value["schema"] == "hswm-continual-pilot-precommit/v5"
     assert value["engineering_only"] is True
     assert value["confirmatory_eligible"] is False
     assert value["preimages_revealed"] is False
@@ -4581,12 +4580,19 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
     assert value["reserve_seed_indices"] == [2, 3]
     assert value["selected_seed_indices"] == [0, 1]
     assert value["old_seed_commitment_denylist"] == list(
-        _CONSUMED_V2_V3_COMMITMENTS
+        (*_CONSUMED_V2_V3_COMMITMENTS, *_CONSUMED_PRESEED_V4_COMMITMENTS)
     )
     assert value["confirmatory_denylist"] == [
         *_CONSUMED_V2_V3_COMMITMENTS,
+        *_CONSUMED_PRESEED_V4_COMMITMENTS,
         *commitments,
     ]
+    assert value["prior_no_model_abort_binding"] == (
+        live._expected_prior_no_model_abort_binding()
+    )
+    assert value["prior_no_model_abort_binding_sha256"] == live.canonical_sha256(
+        value["prior_no_model_abort_binding"]
+    )
     assert value["validated_adapter_source_revision"] == (
         "a1c3f81b26d7e07d6ed9fb68033876d078d84e1b"
     )
@@ -4638,6 +4644,13 @@ def test_v4_precommit_builder_is_canonical_fresh_and_unanchored() -> None:
         (
             lambda: (
                 _CONSUMED_V2_V3_COMMITMENTS[0],
+                *_fresh_v4_commitments()[1:],
+            ),
+            "old|consumed|fresh",
+        ),
+        (
+            lambda: (
+                _CONSUMED_PRESEED_V4_COMMITMENTS[0],
                 *_fresh_v4_commitments()[1:],
             ),
             "old|consumed|fresh",
@@ -5521,6 +5534,7 @@ def test_v4_cli_rejects_planned_run_or_output_mismatch_before_artifacts_and_seed
         ("gate_source", "gate|binding"),
         ("gate_service", "gate|binding"),
         ("gate_tar", "gate|binding"),
+        ("prior_abort", "prior|abort|binding"),
         ("denylist", "denylist"),
         ("budget", "execution|budget"),
         ("retry", "execution|retry"),
@@ -5556,6 +5570,11 @@ def test_v4_precommit_rejects_rehashed_semantic_tampering(
         value["public_gate_binding"][binding_key] = "f" * 64
         value["public_gate_binding_sha256"] = live.canonical_sha256(
             value["public_gate_binding"]
+        )
+    elif mutation == "prior_abort":
+        value["prior_no_model_abort_binding"]["model_http_post_count"] = 1
+        value["prior_no_model_abort_binding_sha256"] = live.canonical_sha256(
+            value["prior_no_model_abort_binding"]
         )
     elif mutation == "denylist":
         value["confirmatory_denylist"] = value["confirmatory_denylist"][1:]

@@ -103,7 +103,10 @@ PUBLIC_SCHEMA_GATE_MAX_UPDATE_INPUT_TOKENS = (
     PUBLIC_SCHEMA_GATE_CONTEXT_WINDOW_TOKENS
     - PUBLIC_SCHEMA_GATE_OUTPUT_TOKEN_CEILING
 )
-PILOT_PRECOMMIT_V4_SCHEMA = "hswm-continual-pilot-precommit/v4"
+# The internal V4 symbol names are retained to minimize churn in the already
+# audited parser.  The externally serialized authority is v5 because it retires
+# the four commitments from the no-model mechanical abort and binds that abort.
+PILOT_PRECOMMIT_V4_SCHEMA = "hswm-continual-pilot-precommit/v5"
 PILOT_PRECOMMIT_V4_SEAL_MEMBER = "outputs/pilot_precommit.canonical.json"
 PILOT_PRECOMMIT_V4_SEAL_REGULAR_MEMBERS = frozenset(
     {
@@ -123,27 +126,23 @@ OLD_PILOT_SEED_COMMITMENT_DENYLIST = (
     "b9e2573fdc9efaf25da9371c7d30d1eb6b0558bdf2a986a414f243de678e5ebc",
     "a8a8760cd50a37b6e7eba373dc9f4aa40a3a791b3ebcae2d6c9419f7d113889b",
     "db6710fc7826b13a11cd4341219ac9d2147cec7cabf627b786478c4bcbecfa2a",
+    # Permanently retired after the 2026-08-18 outer-wrapper interpreter check
+    # failed before output creation, seed reads, tokenization, or generation.
+    "b7d2ac0956a925b01a9ff06863062ce67f7c7337f1b856952d1585e74562ce3b",
+    "9ca2940211fa513b0badaf02744a6b2793bd2e40a3b5de3e012b99fb5741443e",
+    "b224feed770a051bcecf4ec09fae1df9ea1bb8434ee6342f6ab30ac6df22fad8",
+    "deac17cb612737cc41008900e76dfbc88922575429e2da71b3bff783b0beceb3",
 )
 
 # B1 deliberately leaves these external anchors empty.  A later, separately
 # observed B2 source revision must replace all five with the exact durable seal
 # values before v4 execution can become reachable.  The v4 precommit itself
 # cannot truthfully predict or claim the future B2 source identity.
-FROZEN_V4_PRECOMMIT_RAW_SHA256: str | None = (
-    "dee5a4578652e5affcb3628d7b7f797f77e242894e1a8b7410d148f7e0747a1b"
-)
-FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256: str | None = (
-    "82572d9beb52f297e21861611c57af3e0aad325d65f980a0d047b15163160bc0"
-)
-FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256: str | None = (
-    "763ed2451bd1be5efa8e8a7d8c2b6674c78488944275f18d5c0d5093e47a3673"
-)
-FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION: str | None = (
-    "f7d946ec243458b8537b8c466eb9a9493847e7f2"
-)
-FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE: str | None = (
-    "48f52fdf729bde8f32b8ff353bcf2c78256529c4"
-)
+FROZEN_V4_PRECOMMIT_RAW_SHA256: str | None = None
+FROZEN_V4_PRECOMMIT_ARTIFACT_SHA256: str | None = None
+FROZEN_V4_PRECOMMIT_OUTER_RECEIPT_SHA256: str | None = None
+FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_REVISION: str | None = None
+FROZEN_V4_PRECOMMIT_BUILDER_SOURCE_TREE: str | None = None
 STRUCTURED_OUTPUT_MODE = "openai-response-format-json-schema/v1"
 TOKEN_PREFLIGHT_MODE = "vllm-tokenize-chat/v1"
 TOKEN_PREFLIGHT_SCHEMA = "hswm-token-preflight-receipt/v1"
@@ -5319,6 +5318,8 @@ _PILOT_PRECOMMIT_V4_FIELDS = {
     "pilot_execution",
     "planned_outer_run_id",
     "planned_output_relative_path",
+    "prior_no_model_abort_binding",
+    "prior_no_model_abort_binding_sha256",
     "precommit_builder_source_revision",
     "precommit_builder_source_tree",
     "precommit_sha256",
@@ -5378,6 +5379,35 @@ _PILOT_V4_INTENDED_PROVIDER = {
     "top_p": 1.0,
     "vllm_version": "0.25.1",
 }
+
+
+def _expected_prior_no_model_abort_binding() -> dict[str, Any]:
+    """Bind the consumed one-shot whose wrapper stopped before any seed read."""
+
+    return {
+        "artifacts_tar_sha256": (
+            "e8b2119aa8e022726b903ec7c84056bb73083b942d6cfd73ea5cf0aac336b00f"
+        ),
+        "command_sha256": (
+            "9872a75b86524d3cfa5ef16c22b8e9964797ddd57bcb11a1ad9a5731089dab9a"
+        ),
+        "console_sha256": (
+            "bba9e50e50e53250b38c8872e6f4ad362318487601292269ff35f93a5c0b787a"
+        ),
+        "disposition": "permanently-consumed-no-retry",
+        "failure_stage": (
+            "outer-wrapper-interpreter-identity-before-output-seed-backend"
+        ),
+        "model_http_post_count": 0,
+        "outer_receipt_sha256": (
+            "68e7cc481faf9cf9fe2a4249f9115349686fbfc91722171102a3e53930e33f7c"
+        ),
+        "pilot_output_member_count": 0,
+        "raw_seed_encoding_hits": 0,
+        "run_id": "hswm-continual-v4-primary-s2-r1-20260818",
+        "schema": "hswm-prior-no-model-abort-binding/v1",
+        "source_revision": "864798b9c1c955daf6e5aa37899891e90df114f4",
+    }
 
 
 def _expected_public_gate_binding() -> dict[str, Any]:
@@ -5554,6 +5584,7 @@ def build_pilot_precommit_v4(
         commitments
     )
     public_gate_binding = _expected_public_gate_binding()
+    prior_abort_binding = _expected_prior_no_model_abort_binding()
     unsigned = {
         "assignment_document": assignment_document,
         "assignment_sha256": canonical_sha256(assignment_document),
@@ -5578,6 +5609,10 @@ def build_pilot_precommit_v4(
         "pilot_execution": dict(_PILOT_V4_EXECUTION),
         "planned_outer_run_id": planned_outer_run_id,
         "planned_output_relative_path": planned_output_relative_path,
+        "prior_no_model_abort_binding": prior_abort_binding,
+        "prior_no_model_abort_binding_sha256": canonical_sha256(
+            prior_abort_binding
+        ),
         "precommit_builder_source_revision": precommit_builder_source_revision,
         "precommit_builder_source_tree": precommit_builder_source_tree,
         "preimages_revealed": False,
@@ -5671,6 +5706,14 @@ def _validate_pilot_precommit_v4(raw: bytes) -> dict[str, Any]:
         != canonical_sha256(public_gate_binding)
     ):
         raise ContinualLiveError("v4 public gate binding drifted")
+    prior_abort_binding = _expected_prior_no_model_abort_binding()
+    if (
+        canonical_json_bytes(value["prior_no_model_abort_binding"])
+        != canonical_json_bytes(prior_abort_binding)
+        or value["prior_no_model_abort_binding_sha256"]
+        != canonical_sha256(prior_abort_binding)
+    ):
+        raise ContinualLiveError("v5 prior no-model abort binding drifted")
     if (
         value["validated_adapter_source_revision"]
         != VALIDATED_ADAPTER_SOURCE_REVISION
@@ -7341,7 +7384,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         "generation_call_budget_total": execution[
             "generation_call_budget_total"
         ],
-        "mode": "engineering-pilot-v4-primary-only",
+        "mode": "engineering-pilot-v5-primary-only",
         "one_shot_enforcement": execution["one_shot_enforcement"],
         "outbound_http_request_budget_total": execution[
             "outbound_http_request_budget_total"

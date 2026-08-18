@@ -1,4 +1,4 @@
-"""Deterministic, generation-free builder for the v4 pilot precommit."""
+"""Deterministic, generation-free builder for the v5 pilot precommit."""
 
 from .continual_live import pilot_precommit_builder_main
 

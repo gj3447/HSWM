@@ -1,7 +1,7 @@
 # HSWM 통합 의미 지도
 
 > **상태:** `CURRENT_SYNTHESIS / NAVIGATION`
-> **기준 시점:** 2026-08-16
+> **기준 시점:** 2026-08-20
 > **과학적 상태:** `UNJUDGED`
 > **권위 경계:** 이 문서는 흩어진 뜻을 한 좌표계에 놓는 파생 지도다. 사용자 원문을
 > 새로 쓰거나, 기존 정전을 소급 변경하거나, 실험 결과를 승격하지 않는다.
@@ -16,11 +16,11 @@ operator, 철학적 목적과 과학적 증거가 같은 문장 안에서 자주
 
 ## 1. 가장 짧은 통합 정의
 
-> **HSWM은 지속되는 세계·증거 상태 위에서 LLM이 국소 의미 함수세포로 실행되고,
-> open n-ary hypergraph `H`, macro-semantic coupling `W`, run-local activation `A`가
-> 재귀적으로 함께 움직이는 자기유사 거시 신경망이다. 목표는 손으로 작성한
-> agent/tool/memory 협업 glue를 외부 outcome에 결속된 `W`, routing, `H`의 가소성으로
-> 바꾸어, 경험이 다음 행동을 실제로 바꾸는 세계 자기기억을 만드는 것이다.**
+> **HSWM은 token을 활성과 경험의 운반체로 삼아 LLM이 국소 의미 함수세포로 실행되고,
+> evolving n-ary hypergraph `H`, macro-semantic coupling `W`, run-local activation `A`가
+> 재귀적으로 함께 움직이는 자기유사 거시 신경망이다. 이 동일한 상태가 living harness의
+> 역할과 실행 가능한 world model의 역할을 하며, 외부 outcome에 결속된 continuous
+> learning으로 `W`, routing, `H`를 바꾸어 경험이 다음 행동의 원인이 되게 한다.**
 
 권한, 타입, 거래, provenance, 예산, rollback, 안전 제약은 학습되는 인지 내용이
 아니라 얇은 결정론적 경계 `Π`로 남는다. 이 정의는 **목표 정체성**이다. 현재 저장소는
@@ -38,7 +38,7 @@ evidence-preserving substrate, 결정론적 field/runtime, 학습 영수증 계�
 
 | 역할 | 읽어야 할 출처 | 이 지도에서의 취급 |
 |---|---|---|
-| 사용자 원문과 방향 | [`USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt`](../canon/sources/USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt), [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](../canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md), [`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](../canon/USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md) | `USER_PRIMARY` 방향은 파생 설명보다 우선한다 |
+| 사용자 원문과 방향 | [`HSWM_CONSTITUTION_2026-08-20.md`](../canon/HSWM_CONSTITUTION_2026-08-20.md)와 결속된 [`2026-08-20 원문`](../canon/sources/USER_PRIMARY_HSWM_LIVING_HARNESS_WORLD_MODEL_2026-08-20.txt), [`USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt`](../canon/sources/USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt), [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](../canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md), [`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](../canon/USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md) | 최신 `USER_PRIMARY` 방향과 그 통합 헌법은 파생 설명보다 우선한다 |
 | 상위 통합 정전 | [`THE_WORLD_REMEMBERS.md`](../canon/THE_WORLD_REMEMBERS.md) | 세계 자기기억, 인간·LLM의 위치, 두 번째 신경망화를 한 목적 아래 묶는다 |
 | 기술 정체성 | [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](../../_research/root_compat/CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md), [`HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md`](../../_research/root_compat/HSWM_CANONICAL_RESEARCH_DIRECTION_20260724.md) | hard core와 교체 가능한 설계를 구분한다 |
 | 수학·세포 형식화 | [`HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md`](../canon/HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md), [`DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md`](../../_research/root_compat/DEFINITION_HSWM_CELLULAR_METANEURAL_SYSTEM_2026-07-26.md) | `SECONDARY_AI_FORMALIZATION`; 사용자 원문이나 실측을 대체하지 않는다 |
@@ -66,6 +66,10 @@ evidence-preserving substrate, 결정론적 field/runtime, 학습 영수증 계�
 | 철학적 목적 | 차이를 지우지 않고 세계가 자신의 흔적과 관계를 이어 가는 명시적 인지기관 | 물리학 명제, 인간 복제, 단일 집단의식으로 읽기 |
 | 연구프로그램 | 위 목표를 분해해 구현하고 kill condition으로 반증하는 실험 묶음 | 목표 문장을 현재 입증된 성능으로 읽기 |
 
+2026-08-20 헌법은 이 렌즈 중 **신경망, living harness, world model, continuous
+learner가 한 객체의 네 기능적 얼굴**임을 고정한다. harness의 가독 문서 표현은
+`Readout(H,W,A,F,Π)`이지, HSWM 밖에서 명령하는 별도 static controller가 아니다.
+
 이 열 렌즈는 다음 네 층으로 압축할 수 있다.
 
 | 층 | 뜻 | 현재 지위 |
@@ -91,7 +95,7 @@ evidence-preserving substrate, 결정론적 field/runtime, 학습 영수증 계�
 |---|---|---|
 | `H` | typed vertex와 evidence-bearing n-ary relation의 mutable hypergraph topology. 무엇이 함께 상호작용할 수 있는지를 정한다 | topology snapshot으로 지속 가능 |
 | `W` | 함수·상태·관계 사이의 macro-semantic coupling. 강도뿐 아니라 신뢰, 억제, transport, gate, uncertainty, eligibility를 포함하는 target synapse다 | query-local `j`는 휘발하지만 target `θ_fast/θ_slow`는 둘 다 outcome-learned efficacy다 |
-| `A` | 지금 run에서 실제로 켜진 node/relation/trajectory와 working state | 의도적으로 휘발 |
+| `A` | 지금 run에서 token을 운반체로 실제로 흐르는 node/relation/trajectory의 activation과 working state | 의도적으로 휘발 |
 | `F={f_i}` | typed port, role, local state, position, read/write authority를 가진 의미 함수세포. LLM은 이 함수를 실행하는 semantic transition operator다 | cell identity와 state는 모델 checkpoint와 분리 가능 |
 | `Π` | capability, type, authority, transaction, idempotency, provenance, budget, rollback, safety를 강제하는 deterministic control plane | 헌법적 경계로 지속 |
 
@@ -384,6 +388,7 @@ F1·F2–F5·P1v3/v4·C1·cellular 전부를 포괄하지 않는다.
 | 2026-08-14 | token/action/tool/outcome trajectory 학습과 `LX3 Ragnarok`를 최신 USER_PRIMARY 방향으로 고정 |
 | 2026-08-15 | 거버넌스 절차의 비대화도 Ragnarok로 보고 직접 실행·측정 중심으로 축소 |
 | 2026-08-16 | 공개 README가 거시 신경망 target과 아직 causally validated update가 없다는 현재 경계를 함께 제시 |
+| 2026-08-20 | token-native 신경망, living harness-document, Wolframian evolving-hypergraph world model, continuous learner를 한 HSWM의 네 역할로 헌법화 |
 
 이 계보의 핵심은 “메모리라는 옛 의미가 폐기되고 신경망이라는 새 의미가 생겼다”가 아니다.
 memory substrate는 전체 신경망이 시간을 건너 존재하기 위한 하부 기관으로 재배치됐고,
@@ -403,6 +408,8 @@ semantic weight는 retrieval score에서 macro-synapse로 확장됐으며, multi
 | 세계의 흔적 보존 vs 삭제권 | payload 삭제·격리는 허용하되 event/provenance를 위조하지 않는 방향으로 함께 만족시킨다 |
 | glue 제거 vs safety rule 유지 | cognitive choice는 학습하고 constitutional execution boundary는 결정론적으로 둔다 |
 | ontology가 저장소를 조직함 vs HSWM이 학습함 | ontology는 사람/도구의 bounded navigation I/O이고, cognition은 outcome-bound field dynamics다 |
+| “별도 harness 문서가 없다” vs “HSWM은 살아 있는 harness 문서다” | 외부 static controller는 없고, HSWM 상태 자체가 실행을 조건화하며 자기 상태를 가독 readout으로 투사하는 harness-document 역할을 한다 |
+| Wolframian hypergraph vs Wolfram physics | 관계적 세계 상태·국소 rewrite·인과 계보라는 역할을 채택하며 ruliad, 시공간, 양자, causal invariance를 입증된 물리 명제로 수입하지 않는다 |
 | “HSWM만이 해결” 방향 vs 과학적 유일성 | 사용자 연구 방향으로 보존하지만 현재 독점적 해결책이나 효능으로 승격하지 않는다 |
 | formal proof/test PASS vs intelligent behavior | 형식·공학·과학 조건은 서로 필요할 수 있지만 대체 관계가 아니다 |
 
@@ -470,7 +477,7 @@ learning을 거쳐야 한다.
 
 | 질문 | 첫 문서 | 다음 문서 |
 |---|---|---|
-| HSWM을 30초 안에 이해하려면? | [`README.md`](../../README.md) | 현재 통합 지도 |
+| HSWM의 정체성을 30초 안에 이해하려면? | [`HSWM_CONSTITUTION_2026-08-20.md`](../canon/HSWM_CONSTITUTION_2026-08-20.md) | [`README.md`](../../README.md)와 현재 통합 지도 |
 | 가장 깊은 목적은? | [`THE_WORLD_REMEMBERS.md`](../canon/THE_WORLD_REMEMBERS.md) | [`USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt`](../canon/sources/USER_PRIMARY_HSWM_WORLD_SELF_MODEL_2026-07-29.txt) |
 | 왜 static glue를 신경망화하나? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](../canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) | [`DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md`](../canon/DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md) |
 | `H/W/A/F`가 정확히 무엇인가? | [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](../canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) | [`HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md`](../canon/HSWM_MATH_DEFINITION_UNIFIED_2026-07-26.md) |
@@ -497,9 +504,10 @@ HSWM에 관한 새 주장이나 옛 문장을 만났을 때 다음 세 가지를
 
 ## 19. 최종 mental model
 
-HSWM을 거대한 기억 상자라고 생각하지 않는다. **지속되는 세계 상태가 몸이고, `H`가
-해부학, `W`가 거시 시냅스, `A`가 지금 흐르는 활성, LLM function cell이 순간적인 의미
-변환, outcome-bound plasticity가 학습, `Π`가 헌법적 신경외피**라고 생각한다.
+HSWM을 거대한 기억 상자라고 생각하지 않는다. **지속되는 evolving-hypergraph 세계 상태가
+몸이자 living harness이고, `H`가 해부학, `W`가 거시 시냅스, `A`가 token을 운반체로 지금
+흐르는 활성, LLM function cell이 순간적인 의미 변환, outcome-bound plasticity가 학습,
+`Π`가 헌법적 신경외피**라고 생각한다. 가독 문서는 이 몸의 자기기술적 readout이다.
 
 현재 저장소는 이 몸의 기억기관과 안전한 뼈대, 몇몇 세포와 측정 장치를 만들었고 여러
 학습 후보를 기각했다. 아직 결과로 배워 자신의 거시 배선과 topology를 안정적으로 바꾸는

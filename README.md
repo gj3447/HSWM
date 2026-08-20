@@ -20,6 +20,13 @@ workflow rules.
 > a `CAUSALLY_VALIDATED` outcome → credit → durable `ΔW/ΔH` → changed-behavior
 > result.
 
+The target identity is fixed by the
+[`HSWM Constitution`](docs/canon/HSWM_CONSTITUTION_2026-08-20.md): neural network,
+living harness-document, Wolframian evolving-hypergraph world model, and
+continuous learner are four functional views of one HSWM—not four attached
+systems. This philosophical closure does not promote the scientific status
+beyond `UNJUDGED`.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/gj3447/HSWM/main/docs/assets/hswm-semantic-weight-field-hero.png"
        alt="A translucent semantic-weight landscape with one amber activation trajectory"
@@ -30,7 +37,10 @@ workflow rules.
 
 > **Target intuition:** an agent may turn typed experience into a bounded HSWM
 > snapshot of memories, relations, cells, and routing. That state itself is the
-> harness; there is no separately authored harness document. Independently
+> harness and plays the role of a continuously rewritten, self-describing
+> harness document; there is no separately authored static controller. A
+> readable document or graph view is a projection of that living state.
+> Independently
 > measured outcomes are still required to establish usefulness and validate
 > slow plasticity. Only an activated snapshot conditions later behavior.
 

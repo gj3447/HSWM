@@ -1,5 +1,19 @@
 # HSWM working rules
 
+## HSWM identity and research order
+
+- Read `docs/canon/HSWM_CONSTITUTION_2026-08-20.md` as the target-identity
+  entrypoint. HSWM is one token-native LLM-function macro-neural network whose
+  evolving hypergraph plays the roles of living harness, world model, and
+  continuous learner; these are not separate subsystems.
+- For philosophy, research direction, or architecture work, establish the
+  canonical role, separate target identity from current evidence, and state the
+  conceptual delta before implementing. Do not default to code or tests.
+- Map implementation to `H/W/A/F/Π` and the outcome-bound causal-learning loop.
+  Tests are evidence instruments, not HSWM progress by themselves.
+- Treat repository ontology and MCPs as bounded projections and interfaces, not
+  as HSWM cognition, routing, or learning.
+
 - Put new implementation in `src/hswm/`, tests in `tests/`, research programs in
   `_research/`, and documents or artifacts in their typed directories. Do not add
   new implementation or generated artifacts to the repository root. Move ordinary

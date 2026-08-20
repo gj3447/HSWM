@@ -3,6 +3,12 @@
 > HSWM = Hypergraph Semantic Weight Map. 지향 정체성은 함수 단위가 LLM으로 실행되는 하이퍼그래프 시멘틱 신경망이다. 현재 측정으로 방어 가능한 범위는 **evidence-preserving memory substrate + 좁은 L0 typed-policy actuation 재현**까지이며, durable weight/topology learning은 아직 미폐쇄다. 이 인덱스는 공개 저장소의 코드·설계·실험
 > 영수증만 가리킨다.
 
+HSWM의 최상위 목표 정체성은
+[`HSWM Constitution — 살아 있는 토큰 신경 월드모델`](docs/canon/HSWM_CONSTITUTION_2026-08-20.md)에
+고정한다. 신경망, living harness-document, Wolframian hypergraph world model,
+continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 얼굴이다. 이 정전은
+철학적 정의를 닫지만 현재 효능을 승격하지 않는다.
+
 정체성, 수학, cellular runtime, 학습, 세계 자기기억, 실제 증거가 문서마다 달라 보이는
 이유와 현재의 한 통합 해석은
 [`HSWM 통합 의미 지도`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md)에 있다. 이 지도는
@@ -24,7 +30,8 @@ source-pinned한다. 새 코드와 산출물은 typed directory를 사용하며,
 정확한 재현은 [`migration/replay history`](ontology/history/README.md)를 통해 분리된
 checkout에서만 수행한다.
 
-이 온톨로지는 저장소의 의미 지도이지 HSWM의 인지 규칙이 아니다. AI 행동은 문서 경로가
+이 온톨로지는 저장소의 의미 지도이자 HSWM 상태의 bounded readout이지 HSWM의 인지 규칙
+그 자체가 아니다. AI 행동은 문서 경로가
 아니라 outcome에 결속된 token/action/tool trajectory가 durable `W/H/routing`을 바꾸고
 다음 행동을 바꿀 때 학습된다.
 

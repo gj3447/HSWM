@@ -9,6 +9,15 @@ recursive-include tests *.py
 exclude tests/test_hswm_swm0r_ontology.py
 # Frozen test receipts are read directly by source-distribution tests.
 recursive-include tests/fixtures *.json
+# SWM-0W's repository-only cryptographic verifier is required by its source
+# distribution conformance tests. node_modules remains an install-time input.
+include tools/swm0w_drand/.gitignore
+include tools/swm0w_drand/.npmrc
+include tools/swm0w_drand/README.md
+include tools/swm0w_drand/package.json
+include tools/swm0w_drand/package-lock.json
+include tools/swm0w_drand/verify-beacon.mjs
+recursive-include tools/swm0w_drand/fixtures *.json
 # scripts/ is an implicit-namespace package imported by contract tests.
 # research/ and schemas/ contain the corresponding data contracts.
 recursive-include scripts *.py *.sh

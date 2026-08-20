@@ -1,0 +1,15 @@
+{
+  "name": "hswm-swm0w-drand-verifier",
+  "version": "0.0.0-private",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "verify:offline": "node verify-beacon.mjs offline --expected-round 1000 --pulse-file fixtures/quicknet-round-1000.json"
+  },
+  "dependencies": {
+    "drand-client": "1.4.2"
+  }
+}

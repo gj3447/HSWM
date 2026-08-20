@@ -569,6 +569,21 @@ def invoke_node_verifier(
         or timeout_seconds <= 0
     ):
         raise SWM0WBeaconError("timeout_seconds must be finite and positive")
+    selected_fixture: Path | None = None
+    if mode == "offline":
+        selected_fixture = (
+            DEFAULT_OFFLINE_FIXTURE if pulse_file is None else Path(pulse_file)
+        )
+        try:
+            fixture_stat = selected_fixture.stat()
+        except OSError as exc:
+            raise SWM0WBeaconError("offline pulse fixture is unavailable") from exc
+        if not selected_fixture.is_file() or fixture_stat.st_size > MAX_OFFLINE_FIXTURE_BYTES:
+            raise SWM0WBeaconError(
+                "offline pulse fixture must be a bounded regular file"
+            )
+    elif pulse_file is not None:
+        raise SWM0WBeaconError("online mode cannot accept a pulse fixture")
     _verify_local_dependency_bytes()
     binary = shutil.which("node")
     if binary is None:
@@ -581,20 +596,8 @@ def invoke_node_verifier(
         "--expected-round",
         str(commitment.round),
     ]
-    selected_fixture: Path | None = None
-    if mode == "offline":
-        selected_fixture = DEFAULT_OFFLINE_FIXTURE if pulse_file is None else Path(pulse_file)
-        try:
-            fixture_stat = selected_fixture.stat()
-        except OSError as exc:
-            raise SWM0WBeaconError("offline pulse fixture is unavailable") from exc
-        if not selected_fixture.is_file() or fixture_stat.st_size > MAX_OFFLINE_FIXTURE_BYTES:
-            raise SWM0WBeaconError(
-                "offline pulse fixture must be a bounded regular file"
-            )
+    if selected_fixture is not None:
         command.extend(("--pulse-file", str(selected_fixture)))
-    elif pulse_file is not None:
-        raise SWM0WBeaconError("online mode cannot accept a pulse fixture")
     try:
         verifier_environment = os.environ.copy()
         verifier_environment.pop("NODE_OPTIONS", None)

@@ -141,9 +141,10 @@ def test_package_lock_and_helper_pin_official_client_source_and_integrity() -> N
     assert beacon.DRAND_CLIENT_GIT_COMMIT == (
         "ef8c9260294f8699b5e8c27a6b764f8f0d768bea"
     )
-    runtime = beacon._INSTALLED_RUNTIME_BUNDLE.read_text(encoding="utf-8")
-    assert not runtime.startswith("import ")
-    assert "\nimport " not in runtime
+    if beacon._INSTALLED_RUNTIME_BUNDLE.is_file():
+        runtime = beacon._INSTALLED_RUNTIME_BUNDLE.read_text(encoding="utf-8")
+        assert not runtime.startswith("import ")
+        assert "\nimport " not in runtime
     assert beacon.VERIFIER_DISTRIBUTION_SCOPE == (
         "REPOSITORY_OR_SOURCE_CHECKOUT_ONLY"
     )

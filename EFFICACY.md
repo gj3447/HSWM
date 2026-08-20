@@ -1,9 +1,10 @@
 # HSWM efficacy status
 
-Last reconciled: 2026-08-20 (SWM-0R representation-conformance receipt added;
-no historical metric was recomputed).
+Last reconciled: 2026-08-20 (SWM-0W scalar-gate candidate and independent
+adjudication receipt added; no historical metric was recomputed).
 
-> **Current state lives in checked-in measurements, not an external verdict service.**
+> **Current state lives in checked-in measurements and their explicit provenance
+> boundaries, not a standing external verdict service.**
 > This document covers the retrieval-substrate ladder and links the evidence used for each
 > claim. The programme `scientific_status` remains `UNJUDGED`: topology mediation has
 > exploratory support, while the tested weight-transfer and consolidation variants were
@@ -51,32 +52,33 @@ OpenBLAS `SkylakeX` path. Portable CI instead requires exact equality of every
 non-BLAS-derived field; floating model-state and prediction digests are
 environment-bound and are not presented as cross-hardware identities.
 
-An executable SWM-0W development core now learns a continuous third-order
-scalar compatibility from three singleton role incidences and includes
-lower-order, roleless, flat-MLP, and role-aware DeepSets controls plus exact
-learned-channel removal/restore. This is an engineering precursor only. The
-streamed task-family core derives distinct finite targets and held-out cuts
-from externally supplied seeds, while the frozen `hswm-swm0w-protocol/v2` in
-commit `6187ac3` binds nine arms, seven head interventions, 20 tasks, and one
-shared 10,000-resample bootstrap. The reducer is candidate-only: it cannot emit
-an authoritative scientific PASS/KILL/INCONCLUSIVE without the separate
-future-beacon evidence adjudicator. The implemented three-job adjudicator
-requires a sole surviving same-head GitHub run, a post-pulse candidate artifact,
-and a fresh offline BLS replay. This is operational evidence under trust in
-GitHub's hosted runner/control plane and in the repository owner not deleting
-matching runs; it is not an absolute cryptographic timestamp. No future round,
-preregistration, confirmatory run, or adjudicated result exists in this
-source-freeze phase; a later registration commit is constrained to add only
-its preregistration. The scalar output is still not recipient-conditioned
-set-to-set `W`, and the diagnostic capacity/compute comparisons do not
-establish architecture-independent superiority.
+The preregistered SWM-0W confirmatory run now supplies narrow positive evidence
+for a continuous third-order scalar compatibility mechanism over exactly three
+singleton role incidences. Source commit A `130d226` froze the nine-arm
+`hswm-swm0w-protocol/v2`, seven head interventions, streamed task family, and
+shared 20-task/10,000-resample bootstrap; direct child B `ec19a74` added only
+the future-Quicknet preregistration. Run
+[`32406084883`](https://github.com/gj3447/HSWM/actions/runs/32406084883)
+first emitted only `CANDIDATE_PASS_AWAITING_BUNDLE`. The independent adjudicator
+then replayed the sole surviving same-head GitHub run, exact post-pulse artifact,
+pinned-Node BLS verification, all beacon-derived tasks and receipts, and the
+frozen reducer before issuing evidence verdict `PASS`. The candidate file alone
+has no authority. This operational chronology trusts GitHub's hosted
+runner/control plane and that the repository owner did not delete matching
+runs; it is not an absolute cryptographic timestamp. The supported scientific
+claim is therefore only the fixed-three-singleton-role scalar precursor,
+classified **`SUPPORTED_NARROW`**. It is not recipient-conditioned multi-member
+set-to-set `W`, and the nominal-capacity wording gate does not establish
+architecture-independent or compute-matched superiority. See the bounded
+[result](results/SWM0W_SCALAR_GATE_RESULTS_2026-08-20.md) and
+[adjudication receipt](evidence/EVIDENCE_SWM0W_SCALAR_GATE_ADJUDICATION_2026-08-20.json).
 
-The broader claims do not pass:
+The exact claim boundaries are:
 
 | claim | current verdict | evidence boundary |
 |---|---|---|
 | SWM-0R role-bearing n-ary representation | **engineering conformance PASS; scientific UNJUDGED** | frozen finite `q=3` construction, 9 semantic worlds repeated across 20 UID/order seeds; hard-coded constructive decoder, not learned `W` |
-| SWM-0W learned scalar compatibility precursor | **implemented; scientific UNJUDGED** | fixed arity 3 with one incidence per role; deterministic optimizer, nine protocol arms, typed-star parity, seven head interventions, streamed seed-derived tasks, candidate-only 20-task reduction, and conditional GitHub operational adjudication; source-freeze has no follow-up preregistration, no run/adjudication exists, and there is no canonical set-to-set operator |
+| SWM-0W learned scalar compatibility precursor | **scientific `SUPPORTED_NARROW`** | preregistered fixed arity 3 with one incidence per role; 20 tasks and shared bootstrap; candidate-only protocol result promoted to `PASS` only by separate GitHub/artifact/BLS/task/reducer adjudication; no canonical multi-member recipient-specific set-to-set operator |
 | static retrieval substrate | **measured positive, budget caveat** | 300 evaluation rows across three checked-in runs |
 | cognitive uplift over direct LLM reranking | **preregistered cross-dataset claim failed** | two negative MuSiQue runs; one small, non-significant positive 2Wiki run |
 | P1 outcome→credit→slow-weight loop | **engineering complete; scientific RED; HSWM_LOCAL_RECORD unjudged** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations. Historical measurement self-wrote `FAIL`, so no valid server-owned kernel verdict exists |
@@ -422,7 +424,7 @@ receipts.
 - no deployable reasoning uplift from the supplied heterogeneous semantic program;
 - no state-of-the-art retrieval comparison;
 - no production durability, external trust, or cryptographic certificate claim;
-- no adjudicated SWM-0W scalar verdict;
+- no SWM-0W support beyond the fixed-three-singleton-role scalar precursor;
 - no canonical recipient-conditioned set-to-set semantic-weight operator;
 - no passed recurrent/deep HSWM gate or causal `ΔW/ΔH` gate;
 - no evidence for a distributed Human Universal Body.

@@ -7,6 +7,7 @@ recursive-include tests *.py
 # This repository-publication test deliberately requires the Git object
 # database and historical commits; those do not exist inside an sdist.
 exclude tests/test_hswm_swm0r_ontology.py
+exclude tests/test_hswm_swm0w_ontology.py
 # Frozen test receipts are read directly by source-distribution tests.
 recursive-include tests/fixtures *.json
 # SWM-0W's repository-only cryptographic verifier is required by its source

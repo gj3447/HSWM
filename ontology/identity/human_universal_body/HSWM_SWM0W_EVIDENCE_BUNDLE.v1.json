@@ -1,0 +1,528 @@
+{
+  "schema_version": "hswm-swm0w-evidence-ontology/v1",
+  "bundle_uid": "sym:AbstractNode:hswm-swm0w-evidence-bundle-2026-08-20",
+  "status": "SECONDARY_AI_SWM0W_NARROW_PASS_EVIDENCE",
+  "artifact_set_sha256": "b451ede9811c345e989389664b6cb3d41bad97f6580904a0ab53703fab4adea1",
+  "internal_bindings": {
+    "admission_receipt_sha256": "291e50baa27b2c3efc56269fba7c84d1c35d70e1c9c9f546c2de3533b2a29c05",
+    "bls_replay_fixture_sha256": "3ac9580b711555fcbb29b5fcbeaece069f45ce63bee74f8374ebb30e474a2038",
+    "bls_replay_ordered_task_seed_binding_sha256": "5f82818fd2c8f55f58252a0501628b04d15b5318877f480696c53c31bec569fe",
+    "bls_replay_stable_projection_sha256": "6724ecbb6fde2d24e805ab8dfb1a12cc528a3a5974d0cd60db1a15f20e17ad44",
+    "candidate_archive_sha256": "9b0072ec6a8eb553e1190b8c5d2e152919becdd0b853974a18339ea0d561b249",
+    "candidate_bundle_sha256": "9342ac179f822473fd51a1a38e5c8fae4fd9ddfc11e2222bbc31f1d345643d04",
+    "candidate_file_sha256": "52478e8fc0e5ea2a74f9103068860474318776668142cd46588e068c947fdbf7",
+    "candidate_protocol_receipt_sha256": "0ec1428a0ea59db3449fb27c5bd9cc34c65f23789a3f6f71aea01c4edf3829d0",
+    "commitment_sha256": "58724d8bb96a7b3ac4015fd81a3cd0b5c3fcc279d9c04fc56f1a6675a968aa33",
+    "evidence_adjudication_receipt_sha256": "4333ef0bcf06c96600309d884877cafcffdca26d206c3961db8e5dd346a6cdf6",
+    "github_chronology_receipt_sha256": "3c817ecc7f81402028c08f9d9b8fc7ff695e36b74f66844dc1724316bf94dc1a",
+    "prereg_file_sha256": "ff34a45c978ceabcc9e62fe2d1328006aa87ea2b02a7097fd530ca56407ef021",
+    "preregistration_sha256": "a365ef47f47f1cb2ab0d540c819c6ec80b249f74d144a7f9757e1e039161a00e",
+    "protocol_contract_sha256": "e0331bb172e914223cf579c4c16ec1d9c90793e8ea82b8211bdd006fb2408fb6",
+    "registration_carrier_sha256": "619780f54863e4a434a703f9cc4d332f61829a14b08e9dff4307c7195e2e6c08",
+    "registration_commit_b": "ec19a74cbcde409add819c8b566627c49582ea9a",
+    "registration_core_sha256": "06d9fde91beacc392395b4e339c213fe482a80917c06921487fc0650968d7c2f",
+    "source_commit_a": "130d2265befeeb0bb6542bdec1eb962b48c6c346",
+    "task_seed_binding_sha256": "5f82818fd2c8f55f58252a0501628b04d15b5318877f480696c53c31bec569fe",
+    "workflow_run_uniqueness_sha256": "00a1506d876baeb46ad914c44ac9fe66ada282b112b20850d071d491ebc15f3b"
+  },
+  "artifact_bindings": [
+    {
+      "path": "tools/swm0w_drand/package-lock.json",
+      "role": "BLS_VERIFIER_SOURCE",
+      "sha256": "ca0acb4a88ab7e1ade131e9e2f2fecc7d716b8cfb788922c172f4dbcd9eb4be6"
+    },
+    {
+      "path": "tools/swm0w_drand/package.json",
+      "role": "BLS_VERIFIER_SOURCE",
+      "sha256": "128b8bb80d427414497ef513808103e395da1abcedd6be7264275d78a81e798d"
+    },
+    {
+      "path": "tools/swm0w_drand/verify-beacon.mjs",
+      "role": "BLS_VERIFIER_SOURCE",
+      "sha256": "0f0643c67cb18ec0e760c087d0b6a95d5f5b3fcc063686fec42e0a03d6390fc6"
+    },
+    {
+      "path": "results/raw/swm0w_scalar_gate_candidate_2026-08-20.json",
+      "role": "CANDIDATE_RESULT",
+      "sha256": "52478e8fc0e5ea2a74f9103068860474318776668142cd46588e068c947fdbf7"
+    },
+    {
+      "path": ".github/workflows/swm0w-confirmatory.yml",
+      "role": "CONFIRMATORY_WORKFLOW",
+      "sha256": "14b7c664f9445989a359b1a6c2bad0164ed2760c82bb1b7092b3369cdd9ad8a2"
+    },
+    {
+      "path": "evidence/EVIDENCE_SWM0W_SCALAR_GATE_ADJUDICATION_2026-08-20.json",
+      "role": "EVIDENCE_ADJUDICATION",
+      "sha256": "4fabe3c74c059ce36b2b90f692c40c640ecba8ea8324268222cbf1d4f65c4744"
+    },
+    {
+      "path": "scripts/upsert_hswm_swm0w_evidence.py",
+      "role": "KG_PUBLISHER",
+      "sha256": "1f49d11a592a11c02de6bd45705d82c433b86ab6f7d7e01ff85554fb3ff67da1"
+    },
+    {
+      "path": "tests/test_hswm_swm0w_ontology.py",
+      "role": "KG_PUBLISHER_TEST",
+      "sha256": "7aee1c2265accbac36b585cb4ec190e2cd72f3a7f639997380f1dce3bae7dfad"
+    },
+    {
+      "path": "prereg/PREREG_SWM0W_SCALAR_GATE_V1.json",
+      "role": "PREREGISTRATION",
+      "sha256": "ff34a45c978ceabcc9e62fe2d1328006aa87ea2b02a7097fd530ca56407ef021"
+    },
+    {
+      "path": "uv.lock",
+      "role": "PYTHON_LOCKFILE",
+      "sha256": "6b05d72b97246fd19c99adeb36120dc030bdb52c869fb49e6be210d3b2783bfd"
+    },
+    {
+      "path": "results/SWM0W_SCALAR_GATE_RESULTS_2026-08-20.md",
+      "role": "RESULT_REPORT",
+      "sha256": "afbf30749dace987685fab53def422da23ea783f1ee441cbcd2e7acbf7a71951"
+    },
+    {
+      "path": "src/hswm/experiments/swm0w_beacon.py",
+      "role": "RUNTIME_SOURCE",
+      "sha256": "6d78011944ba3c156e2e8bad5152de08e56f3d09ad95e0fd89ea4f53876ee77d"
+    },
+    {
+      "path": "src/hswm/experiments/swm0w_confirmatory.py",
+      "role": "RUNTIME_SOURCE",
+      "sha256": "9cf4be62a3f5e083c4c35815a4f3a37acb9061f2cfb421bcf7bbd4b2bc45509b"
+    },
+    {
+      "path": "src/hswm/experiments/swm0w_operator.py",
+      "role": "RUNTIME_SOURCE",
+      "sha256": "356e5446c5a30cfada24266774d824c89c97afd6aa4cbc40989028e3596da00b"
+    },
+    {
+      "path": "src/hswm/experiments/swm0w_protocol.py",
+      "role": "RUNTIME_SOURCE",
+      "sha256": "13827d97fcc36dbea0ba3b0ee814abf987612cf2b654070fee14fb8dfaa00a31"
+    },
+    {
+      "path": "src/hswm/experiments/swm0w_task_family.py",
+      "role": "RUNTIME_SOURCE",
+      "sha256": "32461befbec02790bdcc8aff3a3a965c1c7aac6ca9ce78b0fc8057901fc0addb"
+    },
+    {
+      "path": "src/hswm/experiments/swm0w_worlds.py",
+      "role": "RUNTIME_SOURCE",
+      "sha256": "9c2e9a1547be67843b1b5dd2712ecbfaece64443fa5ac2f5a039fe18d6680a0c"
+    }
+  ],
+  "anchors": [
+    {
+      "uid": "sym:ImplementationPlan:hswm-swm0-nary-witness",
+      "labels": [
+        "Plan",
+        "ImplementationPlan"
+      ],
+      "properties": {
+        "name": "SWM-0 — n-ary non-collapse witness",
+        "authority_class": "SECONDARY_AI",
+        "implementation_stage": "SWM-0"
+      },
+      "read_only": true
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:AbstractNode:hswm-swm0w-evidence-bundle-2026-08-20",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact"
+      ],
+      "properties": {
+        "name": "HSWM SWM-0W additive PASS evidence bundle 2026-08-20",
+        "description": "SWM-0W의 preregistration, source/runtime, candidate, live-evidence adjudication receipt를 exact hash와 offline replay로 결속하는 추가형 KG 번들.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "ENGINEERING",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": [
+          "ADDITIVE_EVIDENCE_BUNDLE",
+          "CONTENT_HASH_BINDING",
+          "AUTHORITY_BOUNDARY"
+        ],
+        "source_sha256": "b451ede9811c345e989389664b6cb3d41bad97f6580904a0ab53703fab4adea1",
+        "status": "ACTIVE",
+        "artifact_set_sha256": "b451ede9811c345e989389664b6cb3d41bad97f6580904a0ab53703fab4adea1",
+        "claim_scope": "FIXED_THREE_SINGLETON_ROLE_SCALAR_PRECURSOR_ONLY",
+        "scientific_status": "UNJUDGED",
+        "learned_operator_claim": false,
+        "canonical_set_to_set_w_claim": false,
+        "claim_boundary": "Only the adjudication Evidence node owns PASS and EVIDENCE_FOR; this bundle does not broaden the fixed-three singleton-role scalar precursor claim."
+      }
+    },
+    {
+      "uid": "sym:Experiment:hswm-swm0w-scalar-gate-2026-08-20",
+      "labels": [
+        "AbstractNode",
+        "Experiment"
+      ],
+      "properties": {
+        "name": "SWM-0W scalar gate confirmatory run 2026-08-20",
+        "description": "Future-round drand seed로 고정한 20개 task에서 role-triple scalar precursor와 registered controls를 비교한 confirmatory run.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "ENGINEERING",
+        "ontology_kind": "ACTIVITY",
+        "ontology_plane": "INQUIRY",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": [
+          "CONFIRMATORY_EXPERIMENT",
+          "SCALAR_PRECURSOR_GATE",
+          "FALSIFICATION_GATE"
+        ],
+        "source_sha256": "52478e8fc0e5ea2a74f9103068860474318776668142cd46588e068c947fdbf7",
+        "status": "COMPLETED",
+        "source_path": "results/raw/swm0w_scalar_gate_candidate_2026-08-20.json",
+        "source_commit_a": "130d2265befeeb0bb6542bdec1eb962b48c6c346",
+        "registration_commit_b": "ec19a74cbcde409add819c8b566627c49582ea9a",
+        "future_round": 31484160,
+        "task_count": 20,
+        "scientific_status": "UNJUDGED",
+        "learned_operator_claim": false,
+        "canonical_set_to_set_w_claim": false,
+        "claim_scope": "FIXED_THREE_SINGLETON_ROLE_SCALAR_PRECURSOR_ONLY"
+      }
+    },
+    {
+      "uid": "sym:Artifact:hswm-swm0w-code-runtime-binding-2026-08-20",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact",
+        "Artifact"
+      ],
+      "properties": {
+        "name": "SWM-0W source, workflow, verifier, and runtime binding 2026-08-20",
+        "description": "Commit A의 workflow, six Python sources, pinned drand verifier sources, uv lock와 hosted-runner Node runtime receipt의 exact binding.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "ENGINEERING",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "NOT_APPLICABLE",
+        "review_required": false,
+        "semantic_roles": [
+          "CODE_BINDING",
+          "RUNTIME_BINDING",
+          "BLS_VERIFIER_BINDING"
+        ],
+        "source_sha256": "c7662be0a14d8c628608907a3a39a31977b3d384f3cfa039cb2f720ce40df709",
+        "status": "FROZEN_AT_SOURCE_COMMIT_A",
+        "source_commit_a": "130d2265befeeb0bb6542bdec1eb962b48c6c346",
+        "source_tree_oid": "1d59d4f6a8abdc88ec305ae4ad110e256863c265",
+        "tracked_bytes_manifest_sha256": "788d91d239ffab1a9ff3be5b82cf7084a290dbdfc342f38466a6b8fa21ed1ac9",
+        "tracked_file_count": 1464,
+        "measurement_source_set_sha256": "c7662be0a14d8c628608907a3a39a31977b3d384f3cfa039cb2f720ce40df709",
+        "measurement_source_paths": [
+          ".github/workflows/swm0w-confirmatory.yml",
+          "src/hswm/experiments/swm0w_beacon.py",
+          "src/hswm/experiments/swm0w_confirmatory.py",
+          "src/hswm/experiments/swm0w_operator.py",
+          "src/hswm/experiments/swm0w_protocol.py",
+          "src/hswm/experiments/swm0w_task_family.py",
+          "src/hswm/experiments/swm0w_worlds.py",
+          "tools/swm0w_drand/package-lock.json",
+          "tools/swm0w_drand/package.json",
+          "tools/swm0w_drand/verify-beacon.mjs",
+          "uv.lock"
+        ],
+        "measurement_source_sha256s": [
+          "14b7c664f9445989a359b1a6c2bad0164ed2760c82bb1b7092b3369cdd9ad8a2",
+          "6d78011944ba3c156e2e8bad5152de08e56f3d09ad95e0fd89ea4f53876ee77d",
+          "9cf4be62a3f5e083c4c35815a4f3a37acb9061f2cfb421bcf7bbd4b2bc45509b",
+          "356e5446c5a30cfada24266774d824c89c97afd6aa4cbc40989028e3596da00b",
+          "13827d97fcc36dbea0ba3b0ee814abf987612cf2b654070fee14fb8dfaa00a31",
+          "32461befbec02790bdcc8aff3a3a965c1c7aac6ca9ce78b0fc8057901fc0addb",
+          "9c2e9a1547be67843b1b5dd2712ecbfaece64443fa5ac2f5a039fe18d6680a0c",
+          "ca0acb4a88ab7e1ade131e9e2f2fecc7d716b8cfb788922c172f4dbcd9eb4be6",
+          "128b8bb80d427414497ef513808103e395da1abcedd6be7264275d78a81e798d",
+          "0f0643c67cb18ec0e760c087d0b6a95d5f5b3fcc063686fec42e0a03d6390fc6",
+          "6b05d72b97246fd19c99adeb36120dc030bdb52c869fb49e6be210d3b2783bfd"
+        ],
+        "runner": "ubuntu-24.04",
+        "runner_os": "Linux",
+        "runner_arch": "X64",
+        "node_version": "v24.13.0",
+        "node_archive_sha256": "e798599612f4bb71333a3397ab0d095fd62214e115aea45aa858a145fc72d67e",
+        "node_executable_sha256": "53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc",
+        "runtime_trust_status": "TRUSTED_GITHUB_HOSTED_OS_AND_PINNED_NODE_RUNTIME_REQUIRED",
+        "drand_client_version": "1.4.2",
+        "drand_client_git_commit": "ef8c9260294f8699b5e8c27a6b764f8f0d768bea",
+        "drand_client_runtime_bundle_sha256": "c5f6eff0d5692efd8f2e19953a49713d17554739016f9d0f3235380aab9ea904",
+        "verifier_runtime_exec_sha256": "53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc",
+        "scientific_status": "NOT_APPLICABLE",
+        "learned_operator_claim": false
+      }
+    },
+    {
+      "uid": "sym:Artifact:hswm-swm0w-preregistration-2026-08-20",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact",
+        "Artifact"
+      ],
+      "properties": {
+        "name": "SWM-0W scalar gate preregistration 2026-08-20",
+        "description": "Commit B가 source commit A의 direct-child add-only registration임을 고정하고 future drand round, protocol, scope를 measurement 전에 봉인한 preregistration.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "ENGINEERING",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "NOT_APPLICABLE",
+        "review_required": false,
+        "semantic_roles": [
+          "PREREGISTRATION",
+          "FUTURE_ROUND_COMMITMENT",
+          "CHRONOLOGY_BINDING"
+        ],
+        "source_sha256": "ff34a45c978ceabcc9e62fe2d1328006aa87ea2b02a7097fd530ca56407ef021",
+        "status": "REGISTERED_BEFORE_PULSE",
+        "source_path": "prereg/PREREG_SWM0W_SCALAR_GATE_V1.json",
+        "source_commit_a": "130d2265befeeb0bb6542bdec1eb962b48c6c346",
+        "registration_commit_b": "ec19a74cbcde409add819c8b566627c49582ea9a",
+        "preregistration_sha256": "a365ef47f47f1cb2ab0d540c819c6ec80b249f74d144a7f9757e1e039161a00e",
+        "registration_core_sha256": "06d9fde91beacc392395b4e339c213fe482a80917c06921487fc0650968d7c2f",
+        "protocol_contract_sha256": "e0331bb172e914223cf579c4c16ec1d9c90793e8ea82b8211bdd006fb2408fb6",
+        "commitment_sha256": "58724d8bb96a7b3ac4015fd81a3cd0b5c3fcc279d9c04fc56f1a6675a968aa33",
+        "future_round": 31484160,
+        "chronology_claim_allowed": false,
+        "scientific_status": "NOT_APPLICABLE",
+        "learned_operator_claim": false
+      }
+    },
+    {
+      "uid": "sym:Result:hswm-swm0w-candidate-result-2026-08-20",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact",
+        "Result"
+      ],
+      "properties": {
+        "name": "SWM-0W scalar gate candidate result 2026-08-20",
+        "description": "Twenty task receipts와 deterministic reducer가 생성한 candidate outcome; 외부 evidence adjudication 전에는 독립 증거가 아니다.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "ENGINEERING",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": [
+          "CANDIDATE_RESULT",
+          "DETERMINISTIC_REDUCER_OUTPUT",
+          "NO_EVIDENCE_AUTHORITY"
+        ],
+        "source_sha256": "52478e8fc0e5ea2a74f9103068860474318776668142cd46588e068c947fdbf7",
+        "status": "CANDIDATE_ONLY",
+        "source_path": "results/raw/swm0w_scalar_gate_candidate_2026-08-20.json",
+        "candidate_bundle_sha256": "9342ac179f822473fd51a1a38e5c8fae4fd9ddfc11e2222bbc31f1d345643d04",
+        "candidate_protocol_receipt_sha256": "0ec1428a0ea59db3449fb27c5bd9cc34c65f23789a3f6f71aea01c4edf3829d0",
+        "candidate_protocol_outcome": "CANDIDATE_PASS_AWAITING_BUNDLE",
+        "task_seed_binding_sha256": "5f82818fd2c8f55f58252a0501628b04d15b5318877f480696c53c31bec569fe",
+        "task_count": 20,
+        "scientific_status": "UNJUDGED",
+        "learned_operator_claim": false,
+        "canonical_set_to_set_w_claim": false,
+        "claim_scope": "FIXED_THREE_SINGLETON_ROLE_SCALAR_PRECURSOR_ONLY",
+        "claim_boundary": "Candidate reducer output awaits evidence adjudication and is not evidence by itself.",
+        "report_path": "results/SWM0W_SCALAR_GATE_RESULTS_2026-08-20.md",
+        "report_sha256": "afbf30749dace987685fab53def422da23ea783f1ee441cbcd2e7acbf7a71951"
+      }
+    },
+    {
+      "uid": "sym:Evidence:hswm-swm0w-pass-adjudication-2026-08-20",
+      "labels": [
+        "AbstractNode",
+        "ResearchArtifact",
+        "Evidence"
+      ],
+      "properties": {
+        "name": "SWM-0W scalar gate evidence adjudication PASS 2026-08-20",
+        "description": "Fresh GitHub operational evidence and immutable artifacts were adjudicated, then source/time/seed/protocol receipts and pinned Node BLS were replayed into the sole narrow PASS authority.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "ENGINEERING",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "ASSESSED",
+        "review_required": true,
+        "semantic_roles": [
+          "EVIDENCE_ADJUDICATION",
+          "LIVE_EVIDENCE_BINDING",
+          "OFFLINE_BLS_REPLAY"
+        ],
+        "source_sha256": "4fabe3c74c059ce36b2b90f692c40c640ecba8ea8324268222cbf1d4f65c4744",
+        "status": "EVIDENCE_PASS",
+        "source_path": "evidence/EVIDENCE_SWM0W_SCALAR_GATE_ADJUDICATION_2026-08-20.json",
+        "evidence_adjudication_receipt_sha256": "4333ef0bcf06c96600309d884877cafcffdca26d206c3961db8e5dd346a6cdf6",
+        "candidate_file_sha256": "52478e8fc0e5ea2a74f9103068860474318776668142cd46588e068c947fdbf7",
+        "candidate_bundle_sha256": "9342ac179f822473fd51a1a38e5c8fae4fd9ddfc11e2222bbc31f1d345643d04",
+        "candidate_archive_sha256": "9b0072ec6a8eb553e1190b8c5d2e152919becdd0b853974a18339ea0d561b249",
+        "candidate_artifact_digest": "9b0072ec6a8eb553e1190b8c5d2e152919becdd0b853974a18339ea0d561b249",
+        "candidate_artifact_api_sha256": "93824eb89b67092775feeeff643f529b2646143a6dc5352a6651b9fe870162ba",
+        "confirm_job_api_sha256": "01c65ac01cd4669d9aa43a5239386ed9e2fb913004edb232a9ab3e547c89c371",
+        "github_chronology_receipt_sha256": "3c817ecc7f81402028c08f9d9b8fc7ff695e36b74f66844dc1724316bf94dc1a",
+        "workflow_run_uniqueness_sha256": "00a1506d876baeb46ad914c44ac9fe66ada282b112b20850d071d491ebc15f3b",
+        "admission_receipt_sha256": "291e50baa27b2c3efc56269fba7c84d1c35d70e1c9c9f546c2de3533b2a29c05",
+        "bls_replay_fixture_sha256": "3ac9580b711555fcbb29b5fcbeaece069f45ce63bee74f8374ebb30e474a2038",
+        "bls_replay_stable_projection_sha256": "6724ecbb6fde2d24e805ab8dfb1a12cc528a3a5974d0cd60db1a15f20e17ad44",
+        "task_seed_binding_sha256": "5f82818fd2c8f55f58252a0501628b04d15b5318877f480696c53c31bec569fe",
+        "evidence_verdict": "PASS",
+        "validated": true,
+        "reason_codes": [
+          "CANDIDATE_ALL_ESSENTIAL_GATES_PASS"
+        ],
+        "capacity_independent_phrase_allowed": true,
+        "trust_boundary": "GITHUB_OPERATIONAL_CHRONOLOGY_REPLAYED;PINNED_NODE_BLS_RECEIPT_REPLAYED;SOLE_SURVIVING_MATCHING_WORKFLOW_RUN_REPLAYED;REPOSITORY_OWNER_HAS_NOT_DELETED_MATCHING_RUNS;HOSTED_RUNNER_GITHUB_CONTROL_PLANE_TLS_AND_LOCAL_PYTHON_REMAIN_TRUSTED;NOT_AN_ABSOLUTE_CRYPTOGRAPHIC_TIMESTAMP",
+        "scientific_status": "SUPPORTED_NARROW",
+        "learned_operator_claim": false,
+        "canonical_set_to_set_w_claim": false,
+        "claim_scope": "FIXED_THREE_SINGLETON_ROLE_SCALAR_PRECURSOR_ONLY",
+        "claim_boundary": "PASS supports only a fixed-three singleton-role scalar precursor; it does not establish canonical recipient-conditioned multi-member set-to-set W, learned recurrence, causal delta-W, HSWM-wide efficacy, cognition, novelty, or Human Universal Body completion.",
+        "report_path": "results/SWM0W_SCALAR_GATE_RESULTS_2026-08-20.md",
+        "report_sha256": "afbf30749dace987685fab53def422da23ea783f1ee441cbcd2e7acbf7a71951"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:AbstractNode:hswm-swm0w-evidence-bundle-2026-08-20",
+      "type": "CONTAINS",
+      "to_uid": "sym:Experiment:hswm-swm0w-scalar-gate-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-swm0w-evidence-bundle-2026-08-20",
+      "type": "CONTAINS",
+      "to_uid": "sym:Artifact:hswm-swm0w-code-runtime-binding-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-swm0w-evidence-bundle-2026-08-20",
+      "type": "CONTAINS",
+      "to_uid": "sym:Artifact:hswm-swm0w-preregistration-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-swm0w-evidence-bundle-2026-08-20",
+      "type": "CONTAINS",
+      "to_uid": "sym:Result:hswm-swm0w-candidate-result-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-swm0w-evidence-bundle-2026-08-20",
+      "type": "CONTAINS",
+      "to_uid": "sym:Evidence:hswm-swm0w-pass-adjudication-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:AbstractNode:hswm-swm0w-evidence-bundle-2026-08-20",
+      "type": "TARGETS",
+      "to_uid": "sym:ImplementationPlan:hswm-swm0-nary-witness",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "claim_scope": "FIXED_THREE_SINGLETON_ROLE_SCALAR_PRECURSOR_ONLY"
+    },
+    {
+      "from_uid": "sym:Experiment:hswm-swm0w-scalar-gate-2026-08-20",
+      "type": "TARGETS",
+      "to_uid": "sym:ImplementationPlan:hswm-swm0-nary-witness",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "claim_scope": "FIXED_THREE_SINGLETON_ROLE_SCALAR_PRECURSOR_ONLY"
+    },
+    {
+      "from_uid": "sym:Experiment:hswm-swm0w-scalar-gate-2026-08-20",
+      "type": "REQUIRES",
+      "to_uid": "sym:Artifact:hswm-swm0w-code-runtime-binding-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:Experiment:hswm-swm0w-scalar-gate-2026-08-20",
+      "type": "REQUIRES",
+      "to_uid": "sym:Artifact:hswm-swm0w-preregistration-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:Result:hswm-swm0w-candidate-result-2026-08-20",
+      "type": "PRODUCED_BY",
+      "to_uid": "sym:Experiment:hswm-swm0w-scalar-gate-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:Result:hswm-swm0w-candidate-result-2026-08-20",
+      "type": "DERIVED_FROM",
+      "to_uid": "sym:Artifact:hswm-swm0w-code-runtime-binding-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:Result:hswm-swm0w-candidate-result-2026-08-20",
+      "type": "DERIVED_FROM",
+      "to_uid": "sym:Artifact:hswm-swm0w-preregistration-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:Evidence:hswm-swm0w-pass-adjudication-2026-08-20",
+      "type": "BINDS",
+      "to_uid": "sym:Artifact:hswm-swm0w-code-runtime-binding-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:Evidence:hswm-swm0w-pass-adjudication-2026-08-20",
+      "type": "BINDS",
+      "to_uid": "sym:Artifact:hswm-swm0w-preregistration-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:Evidence:hswm-swm0w-pass-adjudication-2026-08-20",
+      "type": "BINDS",
+      "to_uid": "sym:Result:hswm-swm0w-candidate-result-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE"
+    },
+    {
+      "from_uid": "sym:Evidence:hswm-swm0w-pass-adjudication-2026-08-20",
+      "type": "VALIDATES",
+      "to_uid": "sym:Result:hswm-swm0w-candidate-result-2026-08-20",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ACTIVE",
+      "validation_scope": "EXACT_BYTES_SOURCE_TIME_SEED_PROTOCOL_AND_OFFLINE_BLS_REPLAY"
+    },
+    {
+      "from_uid": "sym:Evidence:hswm-swm0w-pass-adjudication-2026-08-20",
+      "type": "EVIDENCE_FOR",
+      "to_uid": "sym:ImplementationPlan:hswm-swm0-nary-witness",
+      "authority_class": "SECONDARY_AI",
+      "status": "ACTIVE",
+      "claim_scope": "FIXED_THREE_SINGLETON_ROLE_SCALAR_PRECURSOR_ONLY"
+    }
+  ]
+}

@@ -77,6 +77,7 @@ RAW_RESULT_NAMES = frozenset({
     "qkv_routing_result.json",
     "semantic_2wiki_oracle_result.json",
     "semantic_layer_result.json",
+    "swm0w_scalar_gate_candidate_2026-08-20.json",
     "stale_poisoning_2wiki_result.json",
     "stale_poisoning_musique_result.json",
     "substrate_bench_results.json",

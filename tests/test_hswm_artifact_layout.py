@@ -34,6 +34,10 @@ def test_classify_artifact_kinds():
     assert layout.classify_artifact("B1_X_RESULTS_2026-01-01.md") == "results"
     assert layout.classify_artifact("substrate_bench_results.json") == "raw_result"
     assert layout.classify_artifact("ab_p5_full_musique_s7.json") == "raw_result"
+    assert (
+        layout.classify_artifact("swm0w_scalar_gate_candidate_2026-08-20.json")
+        == "raw_result"
+    )
     assert layout.classify_artifact("stale_poisoning_fixture_result.json") is None
     assert layout.classify_artifact("README.md") is None
 

@@ -1,6 +1,6 @@
 # HSWM — public repository index
 
-> HSWM = Hypergraph Semantic Weight Map. 지향 정체성은 함수 단위가 LLM으로 실행되는 하이퍼그래프 시멘틱 신경망이다. 현재 측정으로 방어 가능한 범위는 **evidence-preserving memory substrate + SWM-0R finite representation engineering witness + 좁은 L0 typed-policy actuation 재현**까지다. SWM-0W에는 fixed-three-singleton scalar precursor와 candidate-only protocol이 있으나 adjudicated scientific verdict는 없고, durable weight/topology learning은 아직 미폐쇄다. 이 인덱스는 공개 저장소의 코드·설계·실험
+> HSWM = Hypergraph Semantic Weight Map. 지향 정체성은 함수 단위가 LLM으로 실행되는 하이퍼그래프 시멘틱 신경망이다. 현재 측정으로 방어 가능한 범위는 **evidence-preserving memory substrate + SWM-0R finite representation engineering witness + SWM-0W fixed-three-singleton scalar precursor `SUPPORTED_NARROW` + 좁은 L0 typed-policy actuation 재현**까지다. SWM-0W의 candidate-only 결과는 별도 GitHub/BLS/task/reducer adjudication 뒤에만 `PASS`로 승격됐으며, canonical set-to-set `W`와 durable weight/topology learning은 아직 미폐쇄다. 이 인덱스는 공개 저장소의 코드·설계·실험
 > 영수증만 가리킨다.
 
 HSWM의 최상위 목표 정체성은
@@ -37,15 +37,17 @@ checkout에서만 수행한다.
 
 ## 2026-08-15 — 실행 정본과 직접 측정 기록
 
-이 인덱스는 체크인 코드·테스트·측정물의 카탈로그다. 현재 상태는 외부 판정 서비스나
-개인 거버넌스 계층이 아니라 각 행에 연결된 로컬 증거에서만 읽는다. 활성 기계 정책은
+이 인덱스는 체크인 코드·테스트·측정물의 카탈로그다. 현재 상태는 상시 외부 판정
+서비스나 개인 거버넌스 계층이 아니라 각 행의 체크인 증거와 명시된 외부 provenance
+경계에서 읽는다. SWM-0W receipt의 독립 권위는 live GitHub evidence 재조회가
+필요하다. 활성 기계 정책은
 [`research/HSWM_MINIMAL_GOVERNANCE.v1.json`](research/HSWM_MINIMAL_GOVERNANCE.v1.json)이며,
 삭제된 판정·감사·오케스트레이션 도구의 기록에는 현재 권위가 없다.
 
 | 가설 (`hypothesis_id`) | 현재 상태 | 직접 증거·경계 |
 |---|---|---|
 | `swm-0r-representation-conformance` | `engineering_pass / scientific_unjudged` | finite `q=3` constructive representation witness; 독립 native/star 경로와 제거/복원은 통과했지만 learned `W/Θ/R` 증거가 아니다 |
-| `swm-0w-scalar-compatibility` | `implemented / scientific_unjudged` | fixed-three-singleton scalar learner, streamed task family, nine-arm candidate-only protocol frozen at `6187ac3`, and conditional GitHub operational adjudicator; source-freeze has no follow-up preregistration, and no confirmatory run or evidence verdict exists |
+| `swm-0w-scalar-compatibility` | `implemented / supported_narrow` | [confirmatory result](results/SWM0W_SCALAR_GATE_RESULTS_2026-08-20.md): preregistered fixed-three-singleton scalar learner over 20 beacon-derived tasks; candidate-only `CANDIDATE_PASS_AWAITING_BUNDLE` gained evidence verdict `PASS` only through the separate GitHub chronology/artifact, pinned-Node BLS, task-rebuild, receipt, and reducer adjudicator; canonical multi-member recipient-specific set-to-set `W` remains unimplemented and unjudged |
 | `F1-larger-ai-baselines-and-retention` | `running` | [checked-in historical prereg note](prom_search_hswm/evidence/PREREG_F1_sealed_typed_function_network_20260728_amend4_output_caps.json)는 r3의 목표 1500 calls 중 access-log HTTP 200 response 721건 뒤 `REFUSED`와 r4의 435/1500 output-cap `VOID`를 기록하지만 raw access/spool artifact는 현재 tracked tree에 없다. [durable transport](prom_search_hswm/docs/F1_DURABLE_TRANSPORT_CONTRACT_20260727.md)의 [target probe receipt](receipts/HSWM_F1_TARGET_DEPLOYMENT_PROBE_20260728.json)는 actual-upstream disconnect와 SIGKILL process-crash를 공학적으로 통과했지만 power loss는 미시험이다. 현재 tracked sealed-r5에는 manifest/gold만 있고 suite·judgment가 없으므로 과학적 observation은 여전히 0건이다 |
 | `durable-cell-runtime` | `engineering_validated` | SQLite event store·outbox·typed CellPort·replay. 인프라이며 효능 증거가 아니다 |
 | `semantic-weight-metric-contract` | `engineering_validated` | [contract](research/HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT.v1.json). scalar slow-W 한정이고 operator-valued W 는 미구현이다 |
@@ -149,11 +151,13 @@ role-partitioned Deep-Set symmetry와 철학적 함의는 `SECONDARY_AI_PROPOSED
 현재 구현은 boolean incidence와 mean/sum/max pooling baseline을 넘는 통합 deep
 runtime을 아직 입증하지 않았다. 별도의 SWM-0 경로에서 fixed-three-singleton
 scalar compatibility learner와 streamed seed-derived task family는 구현됐고,
-`hswm-swm0w-protocol/v2`는 20-task 결과를 candidate-only로 환원한다. 이는
+`hswm-swm0w-protocol/v2`는 20-task 결과를 candidate-only로 환원한다. 미래 Quicknet
+round를 source-freeze 뒤 preregister한 단일 GitHub run은
+`CANDIDATE_PASS_AWAITING_BUNDLE`을 냈고, 별도 adjudicator가 GitHub chronology와 exact
+artifact, pinned-Node BLS, 20개 task/receipt/reducer를 재검증한 뒤에만 evidence `PASS`로
+승격했다. 따라서 fixed-three-singleton scalar precursor만 `SUPPORTED_NARROW`다. 이는
 multi-member set aggregation, recipient-specific set-to-set transport, recurrent
-depth, causal `ΔW`, 또는 HSWM 전체 효능의 구현·증거가 아니다. 미래 round 선택,
-preregistration은 source-freeze와 분리된 후속 등록 단계이며, confirmatory execution과
-external adjudication은 아직 수행되지 않았다.
+depth, causal `ΔW`, 또는 HSWM 전체 효능의 구현·증거가 아니다.
 
 ## 2026-08-15 — Sheaf 연구 온톨로지
 
@@ -299,8 +303,8 @@ claim boundary를 따로 확인해야 한다.
 
 ## 다음 frontier
 
-1. 3-job future-beacon 경계에서 SWM-0W scalar candidate를 sole-surviving same-head GitHub run 조건 아래 한 번 실행하고 외부 provenance로 adjudicate한다. `PASS/KILL/INCONCLUSIVE/VOID` 어느 결과도 그대로 보존하며, GitHub control plane과 matching-run 미삭제는 명시적 운영 신뢰 경계다.
-2. 좁은 scalar `PASS`일 때만 multi-member, recipient-specific set-to-set `W`를 구현·시험한다. `KILL/INCONCLUSIVE/VOID`면 해당 gate를 닫고 원인을 분리한다.
+1. 완료: 3-job future-beacon 경계의 SWM-0W scalar candidate를 sole-surviving same-head GitHub run으로 실행하고 외부 provenance로 adjudicate했다. candidate-only 결과는 별도 replay 뒤 `PASS`, bounded claim은 `SUPPORTED_NARROW`로 보존했다. GitHub control plane과 matching-run 미삭제는 여전히 명시적 운영 신뢰 경계다.
+2. 이제 multi-member, recipient-specific set-to-set `W`를 구현하고 새 matched gate로 시험한다. 현재 scalar `PASS`를 그 canonical operator의 성공으로 재사용하지 않는다.
 3. canonical set-to-set `W`가 자체 matched gate를 통과한 뒤에만 weight-tied bounded recurrence와 locality-sensitive SWM-1을 연다.
 4. recurrence 뒤에만 typed LLM function loop, outcome-bound fast `ΔW`, slow consolidation/`ΔH`, 분산 합성을 순서대로 연다. 인류보편체는 이 사다리의 현재 성과가 아니라 장기 USER_PRIMARY 목표다.
 5. 병렬 보조축에서는 Dell guarded path의 B2.2 reproduction/full-2Wiki/full-MuSiQue pack을 만들고 lock→accept하여 실 Gate-0 receipt를 확보한다.

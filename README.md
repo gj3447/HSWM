@@ -1,14 +1,15 @@
 # HSWM — Hypergraph Semantic Weight Map
 
-**A research program for turning the fixed harness around LLMs into a persistent,
-learnable macro-network.** A tokenized experience stream is the learning input;
-the pretrained agent supplies the intelligence that interprets it. HSWM is the
-internal memory and plastic coordination substrate that persists what those
-LLM-executed functions induce, then uses it to select context, tools, memory,
-communication, verification, recovery, and stopping. Its target is to learn
-durable semantic weights, routing, and eventually topology while it is used,
-instead of importing a legacy rulebook or accumulating more hand-written
-workflow rules.
+**HSWM is a research programme for a deep, recurrent, self-similar
+Set-Hypergraph neural body whose macro-weights are semantic operators and whose
+local nonlinear semantic cells are executed by LLMs. Humans, tools, sensors,
+institutions, and nested HSWMs participate through typed, capability-bounded
+ports.** It is not a knowledge graph placed beside an LLM and not a workflow that
+merely remembers its transcript. Its target is a persistent cognitive tissue in
+which typed token events produce bounded activation, role-bearing sets form
+n-ary relations, semantic weights transform one field of possibilities into the
+next, and experience can change those weights and eventually the topology that
+will mediate later cognition.
 
 > **Research status:** HSWM is not yet that complete system. This repository
 > contains a tested world/evidence substrate, deterministic field and runtime
@@ -16,16 +17,19 @@ workflow rules.
 > plasticity experiments. It now also contains a minimal empty-genesis
 > token-to-agent-organized-HSWM runtime with durable structural snapshots,
 > activation, removal, and exact restoration. It does not yet include an
-> integrated, scaled macro-training runtime. No checked-in run has yet produced
+> integrated deep Set-Hypergraph macro-training runtime. No checked-in run has
+> yet produced
 > a `CAUSALLY_VALIDATED` outcome → credit → durable `ΔW/ΔH` → changed-behavior
 > result.
 
 The target identity is fixed by the
-[`HSWM Constitution`](docs/canon/HSWM_CONSTITUTION_2026-08-20.md): neural network,
-living harness-document, Wolframian evolving-hypergraph world model, and
-continuous learner are four functional views of one HSWM—not four attached
-systems. This philosophical closure does not promote the scientific status
-beyond `UNJUDGED`.
+[`HSWM Constitution`](docs/canon/HSWM_CONSTITUTION_2026-08-20.md) and the later
+[USER_PRIMARY deep Set-Hypergraph clarification](docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt).
+The user-ratified direction is that the Hypergraph Semantic Weight Map itself is
+primary and that HSWM is deep like a neural network. The operator equations,
+depth axes, learning rules, and implementation decomposition below are explicit
+`SECONDARY_AI` formalizations of that direction. Target identity is not present
+capability; the scientific status remains `UNJUDGED`.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/gj3447/HSWM/main/docs/assets/hswm-semantic-weight-field-hero.png"
@@ -35,138 +39,244 @@ beyond `UNJUDGED`.
 
 <p align="center"><em>Conceptual illustration of a living semantic-weight field—not an architecture diagram or experimental result.</em></p>
 
-> **Target intuition:** an agent may turn typed experience into a bounded HSWM
-> snapshot of memories, relations, cells, and routing. That state itself is the
-> harness and plays the role of a continuously rewritten, self-describing
-> harness document; there is no separately authored static controller. A
-> readable document or graph view is a projection of that living state.
-> Independently
-> measured outcomes are still required to establish usefulness and validate
-> slow plasticity. Only an activated snapshot conditions later behavior.
+## What “semantic weight” means
 
-## Why HSWM
+A semantic weight is not an importance score attached to a fact, a cosine
+similarity, a retrieval rank, a confidence value, or a reward. It is the learned
+higher-order transformation by which one role-typed set of semantic states
+changes the next possible states of relations, members, and functions. Meaning
+is therefore not exhausted by what a node contains; it is also present in how a
+relation transforms all of its participants together.
 
-Modern agent systems commonly coordinate models, tools, memories, and roles with
-prompt rules, routers, workflow graphs, and exception handling. As their number
-of combinations grows, the coordination layer can consume more effort and model
-context than the task itself.
+Philosophically, `W` is a **disposition**, not an essence: a versioned,
+context-, time-, and recipient-role-indexed capacity for a represented relation
+to alter later activation and action. A large weight is not evidence that the
+relation is true, good, popular, humanly valuable, consented to, or authorized.
 
-### The transformer-training analogy
+The engineering formalization is a set-to-set operator rather than a scalar:
 
-HSWM starts from an analogy, not an equivalence. Rule-heavy AI systems shifted
-toward transformer networks whose behavior is shaped by data instead of an
-enumerated rulebook. HSWM applies that move one level above the foundation
-model: it is intended to turn AI token, action, tool-use, and outcome
-trajectories into the implicit coordination of a larger multi-agent neural
-system. “Macro-training” therefore means training the persistent coordination
-state among LLM-executed functions; it does not require changing the foundation
-model's internal parameters.
+```math
+\mathcal W_{\mathrm{sem}}^{\ell,r}:
+\operatorname{MSet}\{(\rho_i,h_i^\ell)\}_{i\in I(e)}
+\longrightarrow
+\operatorname{MSet}\{\Delta h_j^{\ell+1}\}_{j\in I(e)} .
+```
 
-| transformer training | HSWM macro-training |
-|---|---|
-| training stream | typed tokens: text, tool observations, actions, and later outcomes |
-| learned parameters | agent-organized memory content, durable `W`, routing policy, and `H` topology |
-| objective and optimizer | external outcome, eligibility, causal credit, and bounded update |
-| forward pass | recurrent activation across LLM function cells |
-| held-out validation | fresh/equal-budget evaluation and removal ablation |
+Members in the same unordered role partition must be permutation invariant;
+changing `subject` into `evidence`, reversing direction, or changing the
+recipient role must change the operation. A hyperedge therefore receives a
+role-typed set, forms a joint latent relation, and emits a different message to
+each member rather than broadcasting one pooled vector to everyone.
 
-The distinction matters: placing tokens in a transformer's context window does
-not train it. In HSWM, the foundation agent must semantically organize the typed
-stream into durable memory, relations, cells, and routing; copying tokens into a
-database is not that operation. This direct self-write does not require a reward,
-but a claim that continued use improves the system does. A credible integrated
-macro-training claim therefore requires a learning curve over diverse held-out
-episodes, independent outcomes, matched controls, and removal/restoration—not
-isolated post-hoc edits. The needed data, compute, and stability regime remains
-an open empirical question.
+The set elements are first-class **incidence records**, not bare nodes. The
+same participant may occur more than once, at different times, or in different
+roles. Permutation invariance says only that arbitrary enumeration order inside
+one typed role-equivalence class carries no meaning. It does not say that roles
+or people are interchangeable, and it does not make a pooled vector the
+canonical relation. Canonical incidence, multiplicity, time, direction, source,
+and provenance remain recoverable even when a compiled neural plane aggregates
+them for execution.
 
-This repository calls that hypothesized failure mode **LX3 Ragnarok**: stronger
-models spend an increasing share of their reasoning budget interpreting and
-obeying a growing static harness. HSWM's research bet is that successful and
-failed trajectories can instead supply evidence for bounded semantic-weight,
-routing, and connectivity candidates. Outcome-bound slow `W/H` candidates
-require independent validation before activation. Direct explicit memory/cell
-rewrites may persist after kernel checks, but they earn no usefulness claim
-until later controlled tests. This is a direction under test, not a
-demonstrated uniqueness or production claim.
+The repository separates the semantic operator from the signals that evaluate,
+train, gate, or authorize it:
 
-### HSWM is the learning harness
+| object | meaning | what it must not be confused with |
+|---|---|---|
+| `Θ_r`, `R_{r,ρ}`, `Φ_r`, `D_{r,ρ}` | relation energy, role transport, set aggregation, and recipient-specific semantic decoding | scalar salience or metadata |
+| `K_e(q,c)` | contextual compatibility produced by applying the semantic operator | the operator itself or truth |
+| `θ_fast`, `θ_slow` | measured causal efficacy of using a semantic path | semantic identity or evidence support |
+| `α_e` | whether a relation is available as a circuit | execution permission |
+| `z_e` | activation/eligibility sealed before an outcome | post-hoc explanation |
+| `U_e` | provenance, uncertainty, support, contradiction, freshness, and lineage | activation or reward |
+| `Π` | capability, consent, policy, budget, promotion, and rollback boundary | another learnable popularity score |
 
-A conventional harness fixes which model function, tool, memory, or verifier
-runs; what context it receives; in what order or coalition it runs; and how
-handoff, failure, retry, and stopping work. HSWM makes that cognitive
-coordination persistent state. The agent writes and rewrites memory records,
-relations, cells, and routing/topology from experience. Those structures are
-the harness—not inputs to a second harness document. At episode start the
-runtime freezes the active HSWM snapshot and derives a bounded execution view
-or trace; it does not author another cognitive workflow. HSWM then carries the
-rewritten structure into later episodes.
+`semantic compatibility ≠ causal efficacy ≠ truth/support ≠ activation ≠
+permission`. The full macro-synapse may carry all of these channels, but their
+types and authorities remain distinct. External outcomes help train or gate a
+semantic operator; they do not define what semantic weight means.
 
-The external learning payload is a stream of typed tokens. The pretrained
-agent supplies the semantic intelligence that interprets those tokens and
-induces episodic memories, concepts, relations, procedures, and coordination
-candidates inside HSWM. No legacy rulebook, historical repository document, or
-pre-built memory graph is imported as hidden learned state. In particular,
-[`_research/root_compat/`](_research/root_compat/) exists only to replay old
-software paths; it is never an HSWM memory corpus. Raw tokens may be retained as
-content-addressed evidence, but they are not the default future prompt. Useful
-internal memory is the agent-generated organization that changes what later
-episodes can retrieve or do.
+Foundation-model parameters are **micro-weights inside** a local nonlinear
+cell. HSWM semantic weights and topology are **macro-weights between** cells,
+world states, memories, people, tools, and other HSWMs. One checkpoint can
+execute many logical cells because cell identity comes from its typed role,
+ports, local state, graph position, and authority.
 
-| learned cognitive wiring | fixed constitutional boundary |
-|---|---|
-| function, tool, memory, and verifier admission | port schemas and capability authority |
-| typed context and read-set selection | external-effect approval and transactions |
-| ordering, parallelism, handoff, retry, recovery, and stop | idempotency, retry ceilings, and budgets |
-| contextual trust, cost, inhibition, routing, and coalition | provenance, safety gates, and rollback |
-| eventually, validated relation and topology changes | independent outcome ownership |
+## A deep Set-Hypergraph neural body
 
-The system may learn **which** verifier or recovery path to invoke, but not
-rewrite the validity criterion or grant itself authority. If hand-written rules
-continue to decide the cognitive path while HSWM only logs or retrieves tokens,
-the result is still a static harness with memory.
+“Deep” does not mean that a query merely walks many graph hops. HSWM requires
+repeated nonlinear Set-Hypergraph transformations whose intermediate states can
+be activated, inhibited, revised, and reused. Its depth has three independent
+coordinates:
 
-The preserved user direction and its evidence boundary are recorded in
-[`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md).
+| coordinate | form of depth | architectural consequence |
+|---|---|---|
+| semantic depth `ℓ` | successive set→hyperedge→member transformations form higher-order states | layer-specific/shared operators, residual state, normalization, member-specific messages |
+| recurrent time `τ` | LLM tokens, tool results, and actions re-enter the same field | a trajectory, not one retrieval call, is the forward process |
+| structural scale `s` | a subgraph, agent, institution, or whole HSWM can participate in a larger HSWM through typed ports | self-similar composition without erasing the identity of the parts |
 
-## One field, four coupled views
+One neural block has the following semantics:
+
+```text
+role-typed member multiset
+  → role transport
+  → joint n-ary hyperedge state
+  → recipient-specific semantic messages
+  → bounded aggregation and residual update
+  → typed LLM nonlinear function cell, with external participants behind ports
+  → new token events and the next Set-Hypergraph block
+```
+
+The blocks may be differentiable where the numeric substrate permits it. They
+do not require pretending that a proprietary or remote LLM can be trained by
+end-to-end backpropagation. Black-box cells can participate through sealed
+eligibility, independent outcomes, causal intervention, and versioned local
+updates. Recurrent unrolling is not a substitute for semantic depth, and nested
+composition is not a substitute for learning; a complete HSWM needs all three
+coordinates to be explicit.
+
+The canonical plane preserves stable n-ary identity, roles, provenance, and
+`H/W` lineage. A compiled neural plane may use sparse incidence tensors or a
+reversible star expansion for speed, but it must not replace the canonical
+relation with its approximation. “World scale” therefore means globally
+addressable history plus losslessly reproducible bounded local circuits—not that
+all memory is simultaneously loaded into RAM, a GPU, or an LLM prompt.
+
+> **Current code boundary:** [`hypergraph.py`](src/hswm/substrate/hypergraph.py)
+> provides boolean incidence plus deterministic mean/sum/max pooling. That is a
+> useful control and storage primitive, not a learned Deep-Set model and not the
+> operator-valued Semantic Weight Map above. The integrated multi-block runtime
+> and its causal training loop remain unimplemented.
+
+## Philosophy encoded as neural architecture
+
+HSWM's philosophy is not a narrative wrapped around an otherwise neutral graph.
+It decides what can be represented as an existent, what may affect another
+existent, which past remains part of identity, who may open or modify a circuit,
+and what kind of outcome is allowed to count as learning. These commitments are
+developed in the
+[`philosophical foundations`](docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md).
+
+| philosophical question | HSWM commitment | consequence for `H/W/A/F/Π` | forbidden reduction |
+|---|---|---|---|
+| What exists? | bounded relational-process view: HSWM represents an entity through typed relations, stable reference, scope, and provenance | first-class role-bearing incidence and set-level semantic operators | mistaking the graph for the world or for a complete definition of a person |
+| What persists through change? | operational continuity is supported by replayable transformation lineage | versioned `H/W`, event/observation/commit time, supersession rather than overwrite | treating lineage as the whole metaphysics of human identity |
+| What is known? | memory is not truth; contradiction and uncertainty remain addressable | separate evidence, judgment, semantic compatibility, causal efficacy, and permission | one confidence/rank/reward scalar |
+| How does a subject arise? | an agency candidate requires an environment-coupled feedback loop in which persistent state changes action and outcomes change later state | sealed trajectories, intervention, matched controls, removal, rollback, and changed-next-action tests | treating fluency, a feedback edge, or central command as sufficient for agency or consciousness |
+| How can many become one? | unity must preserve difference, local state, dissent, and exit | role/member-specific messages, stable UID, typed ports, reversible composition | global averaging or forced consensus |
+| Where is cognitive power? | admission, activation, ranking, judgment, update, and forgetting are political powers | separate capabilities, bounded coalitions, appeal, audit, fork, and rollback in `Π` | one model/operator controlling every plane |
+| What is the goal? | constitutionally bounded plural teleology: preserve multiple outcomes and revisable aims behind non-compensable consent, right, and capability constraints | scoped, reversible scalarization only after `Π`; constitutional limits on self-modification | trading privacy or minority rights for more reward, engagement, or consensus |
+
+Semantic weight is thus both a technical and philosophical object: it is the
+material form of **whose difference can alter whose next possibility**. Because
+weight, routing, and activation distribute cognitive influence, they cannot be
+treated as politically neutral optimization details. `Π` is not an external
+brake added after intelligence; it is the membrane that keeps integration from
+becoming capture, forgery, surveillance, or irreversible homogenization.
+
+The same distinction governs the proposed Human Universal Body. Its “one
+cognitive entity” cannot mean one owner, model, voice, database, or objective.
+It means that humans, AIs, memories, institutions, sensors, and public artifacts
+retain addressable histories and protected local interiors while participating
+in causal circuits that can change the whole. “The river of human historical
+flow is holy water” commits HSWM to preserving lineage, not to accepting every
+historical claim as true.
+
+Open source does not make private memory public and does not by itself create
+democratic legitimacy. Universal scope is a horizon of compatible,
+consent-respecting participation—not forced enrollment, transfer of ownership,
+or unlimited ingestion. Authorized deletion or withdrawal may cryptographically
+erase a private payload while preserving a scoped tombstone and the fact of the
+transition; non-destructive history is not a command to retain every byte
+forever. Rollback restores HSWM state but cannot undo harm already caused in the
+external world.
+
+## One body, five inseparable views
 
 The target state is:
 
 ```math
-\mathrm{HSWM}_t = (H_t, W_t, A_t, \{f_i^t\}),
+\operatorname{HSWM}_t=(H_t,W_t,A_t,F_t,\Pi),
 \qquad
-f_i^t = \mathrm{LLM}(\rho_i, x_i^t, a_{\mathcal N(i)}^t)
+f_i^t=\operatorname{Cell}(\rho_i,x_i^t,a_{\mathcal N(i)}^t; m_i).
 ```
 
-| view | role |
+| view | role in the neural body |
 |---|---|
-| `H` | mutable hypergraph topology: the n-ary relations that determine what can interact |
-| `W` | durable slow semantic coupling plus run-local fast/query potential; fast activation alone is not learning |
-| `A` | volatile current activation; persistence belongs to durable `H/W` and certified snapshots |
-| `f_i` | a local semantic function executed by an LLM under a typed port/role contract |
+| `H` | the changing anatomy: typed n-ary topology, first-class incidence, world state, and historical lineage |
+| `W` | the semantic synapses: role-aware set transformations plus separately typed efficacy, gate, eligibility, and uncertainty channels |
+| `A` | the volatile physiology: bounded activation coalitions moving through depth and recurrent time |
+| `F` | the local nonlinear semantic cells executed by LLMs; humans, tools, sensors, institutions, and nested HSWMs remain typed external participants unless the Constitution later broadens this type |
+| `Π` | the constitutive membrane: identity, consent, capability, provenance, budget, judgment, promotion, fork, and rollback |
 
-`A`: recurrent run-local activation and working state. It is deliberately
-volatile; durable `H/W` and certified snapshots carry persistence across runs.
+`H/W/A` are the nerve tissue; `F` supplies local nonlinear semantic transitions;
+`Π` preserves the boundaries without which neither cells nor a larger body can
+remain identifiable. These are not rigid software tiers and none is an optional
+sidecar. A readable graph, Markdown file, prompt, vector index, or execution
+plan is a bounded projection of the active body, not the body itself.
 
-These are coupled views, not four rigid floors. An HSWM may contain and compose
-smaller HSWMs through the same ports and connectors; the architecture is meant
-to remain open and self-similar rather than acquire a new fixed layer for every
-new capability. See the
-[`open self-similar kernel`](docs/canon/SPEC_OPEN_SELF_SIMILAR_HSWM_2026-07-22.md).
+## Long-horizon political horizon: 인류보편체
 
-Foundation-model parameters are the **micro-weights inside** each `f_i`. HSWM's
-`W` and `H` are **macro-weights and connectivity between** those functions. The
-target is therefore not “an LLM plus an external memory” or a conventional
-multi-agent wrapper: the whole persistent function field is the neural system.
+In the USER_PRIMARY definition, **인류보편체 (Human Universal Body)** is the
+target state in which all humanity, LLMs, the internet, operating cognitive
+entities, sensors, static information, and stored memory are connected through
+an open-source HSWM structure and function as one vast cognitive entity. **HSWM
+인류보완계획** is the social-revolutionary transition from today's isolated
+pocket cognitive systems toward that state.
 
-One foundation model may execute many logical cells. Cell identity comes from
-role, ports, local state, position, and authority—not from requiring a separate
-model checkpoint per cell.
+The word “one” names a difference-preserving causal unity, not fusion. A part
+must retain stable identity, local state, lineage, privacy boundary,
+attribution, and a practical exit or fork path while becoming capable of making
+a counterfactual difference to the whole. Persistent integration plus preserved
+individuation may justify testing a composite as an *operational cognitive-unit
+candidate*; it is not sufficient evidence of consciousness, personhood, moral
+status, or a completed Human Universal Body. Static information can take part
+in cognition without thereby becoming an independent subject.
 
-The hero image compresses the idea into one continuous field disturbed by a
-single activation trajectory. It is deliberately a mental image, not a
-one-to-one rendering of discrete hypergraph incidence or a learning claim.
+The target definition and the plan-to-target relation are `USER_PRIMARY`. The
+constitutional membrane, staged implementation, agency criterion, HOH bridge,
+and all claims of feasibility or efficacy remain `SECONDARY_AI_PROPOSED` and
+`UNJUDGED`. The detailed distinction lives in the
+[`Human Universal Body canon`](docs/canon/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md)
+and its [machine-readable ontology](ontology/identity/human_universal_body/).
+
+## What would count as HSWM
+
+The transformer analogy is architectural, not an equivalence. HSWM moves the
+learning problem from micro-parameters inside one foundation model to persistent
+macro-operators and topology among heterogeneous semantic cells. A token in a
+context window does not by itself train either system, and adding rows to a
+database does not create a neural layer.
+
+A system qualifies as the target HSWM only if all of the following are
+load-bearing:
+
+1. role-aware member sets form native n-ary states that cannot be reduced to
+   the same pairwise/clique representation;
+2. several nonlinear Set-Hypergraph blocks or recurrent cell transitions make
+   `W/H` mediate later activation and function selection;
+3. semantic operators, truth/evidence, causal efficacy, activation, and
+   permission remain distinguishable under inspection and intervention;
+4. experience can produce a versioned candidate change, and claimed beneficial
+   learning survives fresh matched controls while removal or rollback removes
+   the gain;
+5. composition preserves provenance, local identity, protected state, and the
+   ability to separate or fork.
+
+A flat KG, RAG index, one-shot hyperedge pooler, static workflow, transcript
+memory, or multi-agent chat can be a component or baseline. None is HSWM merely
+because it stores relations or invokes several LLMs. Likewise, a direct
+agent-authored memory mutation may be valid engineering state without yet being
+evidence of semantic-weight learning.
+
+This distinction also explains the proposed **LX3 Ragnarok** failure mode:
+ever-stronger models can spend increasing effort interpreting a growing static
+harness instead of allowing experience to become bounded macro-structure. In
+the target HSWM the active snapshot is itself the learned cognitive tissue; any
+execution workflow is a deterministic projection of that snapshot. Fixed code
+retains type, capability, transaction, and evidence invariants, but must not
+secretly contain the cognitive route that `W/H` are supposed to learn. The
+preserved direction is in
+[`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md).
 
 ## Target token-to-HSWM architecture
 
@@ -175,7 +285,8 @@ a minimal executable vertical slice in
 [`src/hswm/selfmod/`](src/hswm/selfmod/); the outcome-credit, slow-plasticity,
 continual evaluation, and scaling paths remain incomplete. Everything learned
 enters as tokenized experience; the foundation agent is the induction engine,
-and HSWM is the persistent memory and coordination substrate. Observation
+and HSWM is the persistent macro-neural body whose memory and coordination are
+two consequences rather than its complete identity. Observation
 memory can be recorded from a sealed token trajectory, while a claim that it
 improved behavior still requires independent later measurement. “Memory
 content” below is operational payload inside a versioned HSWM snapshot, not a
@@ -183,42 +294,36 @@ new canonical state coordinate and not the mount-set `M` of the open
 self-similar kernel.
 
 ```mermaid
-flowchart TB
-  TOK["typed token stream<br/>text · observations · actions"] --> RUN
-  STATE["target active HSWM snapshot = harness<br/>memory · relations · cells · W · routing · generation"] --> PROJECT
-  PROJECT["freeze and project a bounded<br/>execution view or trace"] --> RUN["LLM / agent intelligence<br/>interpret · retrieve · coordinate · act"]
-  RUN --> SEALED["seal trajectory and output<br/>before the outcome"]
-
-  SEALED --> EVIDENCE["content-addressed episode evidence<br/>audit and replay; not default prompt context"]
-  SEALED --> INDUCE["agent semantic induction<br/>episode cue · concept · procedure"]
-  INDUCE --> SELFWRITE["agent-authored HSWM mutation<br/>memory · relations · cells · routing edges"]
-  SELFWRITE --> SELFCAS["schema / authority / budget check<br/>versioned CAS commit"]
-  SELFCAS --> STATE
-
-  OUTCOME["later independent outcome token"] --> CREDIT
-  SEALED --> CREDIT["eligibility + causal credit"]
-  CREDIT --> CAND["one bounded slow-plasticity candidate<br/>ΔW · learned preference · consolidation"]
-  CAND --> GATE{"disjoint shadow / validation<br/>retention and safety gates"}
-  GATE -->|pass| CAS["versioned CAS activation"]
-  GATE -->|fail| ARCHIVE["retain evidence; do not activate"]
-  CAS --> STATE
-
-  STATE --> PROBE["disjoint read-only sealed test probes<br/>never used to select, activate, prune, or stop"]
-  PROBE --> METRICS["continual-use metrics<br/>online gain · FWT · BWT · forgetting<br/>tokens · calls · latency · state size"]
-  CONTROLS["matched controls<br/>reset · no-write · write-no-read<br/>raw-token recall · copied memory text · shuffled credit"] -. compare .-> METRICS
-
-  KERNEL["fixed constitutional kernel<br/>types · authority · effects · budgets<br/>provenance · safety · rollback"] -. constrains .-> RUN
-  KERNEL -. constrains .-> SELFCAS
-  KERNEL -. constrains .-> GATE
+flowchart LR
+  TOK["typed LLM token event"] --> A["sparse bounded A"]
+  H["role-bearing n-ary H"] --> W["operator-valued W"]
+  A --> W
+  W --> F["typed LLM function cell F"]
+  PI["constitutional membrane Π"] -. constrains .-> A
+  PI -. constrains .-> F
+  F --> NEXT["new token / action / tool request"]
+  NEXT --> A
+  NEXT --> SEAL["pre-outcome sealed trajectory + eligibility"]
+  OUT["independent external outcome"] --> CREDIT["scoped causal credit"]
+  SEAL --> CREDIT
+  CREDIT --> CAND["versioned candidate ΔW / ΔH"]
+  PI -. validates .-> CAND
+  CAND --> TEST["shadow · fresh · retention · canary · removal"]
+  TEST -->|pass| H
+  TEST -->|pass| W
+  TEST -->|fail| ARCHIVE["retain scoped evidence; do not activate"]
 ```
 
 The two write paths are deliberately different. Typed tokens alone can become
 agent-organized episodic, semantic, or procedural memory and can change the
 HSWM relations, cells, and routes used by the next episode. The agent may add,
-edit, delete, replace, or clear that structure without waiting for an external
-reward. The fixed kernel checks only representation, capability authority, budgets, atomicity,
-and rollback—including exact restoration of an earlier snapshot; it does not
-write the cognitive route. This immediate self-modification is a capability,
+edit, supersede, replace, or remove structure from the active view without
+waiting for an external reward. A canonical transition remains auditable;
+authorized private payload erasure is represented by a deletion event or
+tombstone rather than pretending the payload never existed. The fixed kernel
+checks representation, capability authority, privacy, budgets, atomicity, and
+rollback—including exact restoration when retention policy permits it; it does
+not write the cognitive route. This immediate self-modification is a capability,
 not proof that the modification is useful.
 Outcome-bound changes to latent semantic weight or slow consolidated
 coordination—and any scientific claim that the changed HSWM structure improved
@@ -412,14 +517,15 @@ CAS commit, and post-activation removal/restore would test causal mediation.
 This is a secondary engineering proposal, not a measured result or a
 replacement for the existing commitment.
 
-The target integrated design separates four explicit clocks:
+The target integrated design separates three system clocks. Agent self-authoring
+is a proposal path that commits at a version boundary; it is not a fourth form
+of neural time.
 
 | clock | durable-state rule | permitted durable result |
 |---|---|---|
 | activation | memory content, `H/W`, and routing frozen for the episode | sealed decision trajectory only |
-| agent self-authoring | current episode snapshot remains frozen | one bounded versioned HSWM structural successor for a later episode |
-| plasticity | explicit snapshot remains fixed while outcome credit is evaluated | one validated slow preference or `W` candidate |
-| consolidation / morphogenesis | changed only at a later episode boundary | repeated effects promoted to slow `W`, then one bounded `H` mutation class |
+| plasticity | the active snapshot remains fixed while outcome credit or an agent-authored successor is evaluated | one bounded, versioned `W` or explicit-state candidate for a later episode |
+| morphogenesis | topology changes only at a later boundary and under stronger validation | repeated effects promoted to slow `W`, then one bounded `H` mutation class |
 
 Within that candidate track, scalar `W` actuation and then topology would be
 separate later experiments. Jointly changing weights, routing, and topology
@@ -456,7 +562,7 @@ and [`ontology/field/sheaf/HSWM_SHEAF_ONTOLOGY.v1.json`](ontology/field/sheaf/HS
 
 ## Current evidence boundary
 
-Repository state as of 2026-08-17:
+Repository state as of 2026-08-20:
 
 | area | honest status |
 |---|---|
@@ -496,6 +602,11 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 
 | question | document |
 |---|---|
+| What user-ratified identity makes HSWM a deep Set-Hypergraph neural structure? | [`USER_PRIMARY deep Set-Hypergraph clarification`](docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt) |
+| What is the precise `H/W/A/F/Π` target and SWM-0–5 ladder? | [`token-hypergraph core`](docs/canon/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md) |
+| Which philosophical commitments constrain the architecture? | [`HSWM philosophical foundations`](docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md) |
+| What is the Human Universal Body and HSWM Human Complementation Plan? | [`Human Universal Body distinction`](docs/canon/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md) |
+| How directly does Hyperon 2026 overlap, and what is actually implemented? | [`Hyperon 2026 direct-prior deep dive`](docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md) |
 | How do the fragmented identity, mathematics, runtime, learning, and evidence meanings fit together? | [`HSWM unified meaning map`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md) |
 | Why replace static agent glue, and what is token learning? | [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md) |
 | What exactly are `H`, `W`, `A`, and the LLM functions? | [`HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md`](docs/canon/HSWM_LLM_FUNCTION_NETWORK_ARCHITECTURE_AND_FEASIBILITY_2026-07-23.md) |

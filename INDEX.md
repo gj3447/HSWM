@@ -82,8 +82,9 @@ engineering PASS 단독으로 과학적 효능을 선언하지 않는다.
 
 목표 아키텍처의 범주도 고정했다. **HSWM = Hypergraph Semantic Weight Map**이며, 신경망적
 함수 단위가 LLM으로 동작하는 하이퍼그래프 기반의 거대 시멘틱 신경망이다. hypergraph \(H\)가
-함수·상태의 n-ary 연결 구조를, Semantic Weight Map \(W\)가 그 사이의 거시 가중치·활성·
-routing을 이룬다. HSWM 전체가 persistent recurrent state, credit, acceptance,
+함수·상태의 n-ary 연결 구조를, Semantic Weight Map \(W\)가 role-aware set-to-set
+거시 연산자와 별도 causal-efficacy channel을, \(A\)가 현재의 휘발성 activation을 이룬다.
+HSWM 전체가 persistent recurrent state, credit, acceptance,
 weight/topology rewrite를 소유한다. 이는 목표 정체성이며 현재 효능 주장이 아니다.
 정본은
 [`CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md`](_research/root_compat/CANON_DIRECTION_NEURAL_COGNITIVE_ENTITY_2026-07-23.md)다.
@@ -136,6 +137,15 @@ Hyperon 2026을 가장 강한 직접 선행으로 포함한 1차 자료 비교�
 있고, 백서의 page-level 성숙도·공개 코드·실행 smoke test·HSWM `H/W/A/F/Π` 경계는
 [`HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md`](docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md)에
 분리했다. 개별 부품의 최초성을 주장하지 않으며, 전체 폐루프는 아직 `UNJUDGED`다.
+
+이후 USER_PRIMARY clarification은 HSWM을 **딥러닝 신경망처럼 깊은 neural
+Set-Hypergraph 구조**로 명시하고 Semantic Weight 개념의 정확한 반영을 요구했다.
+이 target identity의 exact source는
+[`USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt`](docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt)에
+보존한다. semantic/recurrent/compositional depth, dispositional operator `W`,
+role-partitioned Deep-Set symmetry와 철학적 함의는 `SECONDARY_AI_PROPOSED`이며,
+현재 구현은 boolean incidence와 mean/sum/max pooling baseline을 넘는 통합 deep
+runtime을 아직 입증하지 않았다.
 
 ## 2026-08-15 — Sheaf 연구 온톨로지
 

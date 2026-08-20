@@ -19,12 +19,12 @@ jobs:
           - name: core-tests
             python-version: "3.11"
             command: uv run --locked --extra dev pytest -q tests --ignore=tests/test_hswm_swm0r_ontology.py
-          # SWM-0R's byte-exact historical receipt was measured with CPython
-          # 3.12.  Keep ordinary compatibility coverage on 3.11, and replay the
-          # environment-scoped repository evidence with its measured runtime.
-          - name: swm0r-evidence-replay
+          # SWM-0R's historical byte receipt used CPython 3.12 and OpenBLAS's
+          # SkylakeX kernel.  The portable job checks every non-BLAS-derived
+          # field; an AVX-512 runner additionally checks the original bytes.
+          - name: swm0r-evidence-portable-replay
             python-version: "3.12"
-            command: uv run --locked --extra dev pytest -q tests/test_hswm_swm0r_ontology.py
+            command: uv run --locked --extra dev pytest -q tests/test_hswm_swm0r_ontology.py -k 'not live_bundle_validates_all_bytes_and_exact_replay and not validation_output_is_json_serializable'
           - name: prom-and-research-tests
             python-version: "3.11"
             command: uv run --locked --extra dev pytest -q prom_search_hswm _research/shared_field_hypothesis
@@ -38,18 +38,41 @@ jobs:
       - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
           python-version: ${{ matrix.python-version }}
-      - if: matrix.name != 'swm0r-evidence-replay'
+      - if: matrix.name != 'swm0r-evidence-portable-replay'
         run: ${{ matrix.command }}
-      # The historical SWM-0R byte receipt was solved on OpenBLAS's SkylakeX
-      # kernel.  np.linalg is numerically equivalent but not byte-identical
-      # across dynamic CPU kernels, so bind the replay to the measured kernel
-      # and one BLAS thread instead of depending on runner hardware.
-      - if: matrix.name == 'swm0r-evidence-replay'
+      - if: matrix.name == 'swm0r-evidence-portable-replay'
         run: ${{ matrix.command }}
-        env:
-          OPENBLAS_CORETYPE: SkylakeX
-          OPENBLAS_NUM_THREADS: "1"
-          OMP_NUM_THREADS: "1"
+      - if: matrix.name == 'swm0r-evidence-portable-replay'
+        name: Replay every portable SWM-0R field
+        run: |
+          replay_root=$(mktemp -d)
+          git clone --shared --no-checkout --quiet . "$replay_root/repository"
+          git -C "$replay_root/repository" sparse-checkout set src/hswm prereg
+          git -C "$replay_root/repository" checkout --detach 981517840e55f999a9b5cc2adee8cb39fda24af7
+          (
+            cd "$replay_root/repository"
+            PYTHONPATH="$replay_root/repository/src" "$GITHUB_WORKSPACE/.venv/bin/python" \
+              -m hswm.experiments.swm0_protocol \
+              --mode confirmatory \
+              --prereg-path prereg/PREREG_SWM0R_REPRESENTATION_CONFORMANCE_2026-08-20.json \
+              --prereg-sha256 7e8ee52b551a810f590a1c7d5da718f85e3f32b9755c9340b317cc2e4103074a
+          ) > "$RUNNER_TEMP/swm0r-replay.json"
+          jq -S 'del(.bundle_sha256, .result.result_sha256) | walk(if type == "object" then del(.state_sha256, .prediction_sha256) else . end)' \
+            results/raw/swm0r_representation_conformance_2026-08-20.json \
+            > "$RUNNER_TEMP/swm0r-expected-portable.json"
+          jq -S 'del(.bundle_sha256, .result.result_sha256) | walk(if type == "object" then del(.state_sha256, .prediction_sha256) else . end)' \
+            "$RUNNER_TEMP/swm0r-replay.json" \
+            > "$RUNNER_TEMP/swm0r-actual-portable.json"
+          cmp "$RUNNER_TEMP/swm0r-expected-portable.json" "$RUNNER_TEMP/swm0r-actual-portable.json"
+      - if: matrix.name == 'swm0r-evidence-portable-replay'
+        name: Replay original bytes when the measured CPU kernel is available
+        run: |
+          if grep -q -m1 -w avx512f /proc/cpuinfo; then
+            OPENBLAS_CORETYPE=SkylakeX OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
+              uv run --locked --extra dev pytest -q tests/test_hswm_swm0r_ontology.py
+          else
+            echo 'AVX-512 unavailable; portable field replay above is authoritative for this runner.'
+          fi
 
   source-distribution:
     name: source-distribution

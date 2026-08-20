@@ -12,10 +12,12 @@
 > **현재 구현:** [finite world](../../src/hswm/experiments/swm0w_s2s_worlds.py) ·
 > [seed-varying V2 family](../../src/hswm/experiments/swm0w_s2s_family.py) ·
 > [one-sweep operator](../../src/hswm/experiments/swm0w_s2s_operator.py) ·
+> [deterministic training](../../src/hswm/experiments/swm0w_s2s_training.py) ·
 > [world tests](../../tests/test_hswm_swm0w_s2s_worlds.py) ·
 > [family tests](../../tests/test_hswm_swm0w_s2s_family.py) ·
-> [operator tests](../../tests/test_hswm_swm0w_s2s_operator.py), 모두 engineering-only;
-> optimizer·동결 protocol·효능 판정 없음
+> [operator tests](../../tests/test_hswm_swm0w_s2s_operator.py) ·
+> [training tests](../../tests/test_hswm_swm0w_s2s_training.py), 모두 engineering-only;
+> 동결 optimizer configuration·protocol·효능 판정 없음
 > **상위 문서:** [헌법](../canon/HSWM_CONSTITUTION_2026-08-20.md) ·
 > [token-hypergraph core](../canon/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md) ·
 > [철학층](../canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md) ·
@@ -222,6 +224,33 @@ DS870은 T16보다 MAC/tanh 비용이 더 크므로 exact parameter와 update bu
 equal-compute control은 아니다. 그 차이를 receipt에 기록하고 `C`는 보수적인
 matched-parameter 비교로만 읽는다.
 
+### 구현된 학습 경로의 경계
+
+세 arm은 별도 training module에서 complete train `6,250` worlds와 dev `3,125`
+worlds만 받는다. 입력 순서는 lexicographic raw-value order로 정규화하고, world의
+12개 output은 한 full-batch unit에 남는다. test case는 fit API가 받지 않는다.
+
+role/channel별 train target population variance를 `V_(r,c)`라 할 때 목적함수는
+
+```math
+L=\frac{1}{6}\sum_{r,c}\frac{\operatorname{MSE}_{r,c}}{V_{r,c}}.
+```
+
+`V_(r,c)`는 integer target numerator의 exact sum과 sum-of-squares에서 계산하며,
+dev checkpoint 선택에도 같은 train-derived weight만 쓴다. 초기화는 task와 무관하다.
+T16/P_CAP18의 `phi/psi`, DS870의 internal feature tensors만 seeded Xavier로 시작하고
+모든 output head와 output bias는 exact positive zero다. 학습은 float64 full-batch
+Adam, global norm clipping, epoch-0 eligibility, strict `min_delta`, earliest tie와
+exact best-state restore를 구현한다.
+
+`fitted`는 optimizer artifact가 만들어졌다는 뜻이고, `learned`는 선택된 best update가
+0보다 크며 parameter bytes가 initializer와 다를 때만 참이다. receipt는 complete
+train/dev hashes, exact loss, architecture, typed full history와 best state를 묶지만
+self-hash 자체는 실행 provenance가 아니다. 별도 deterministic replay가 같은 task와
+configuration에서 history·receipt·모든 parameter byte를 다시 만들어야 증거 계층이
+이를 받아들일 수 있다. 현재 configuration은 protocol로 동결되지 않았고 이 경로를
+통과한 admissible efficacy artifact도 없다.
+
 ## 5. frozen T16에 대한 세 intervention
 
 학습을 다시 하지 않고 같은 frozen checkpoint에 다음을 적용한다.
@@ -301,9 +330,10 @@ within-role broadcast damage가 최소
 `broadcast>2/5`, `cycle>4/5`를 증명한다. 따라서 제안된 `B,R ≥ 0.10`은
 target construction 자체가 불가능하게 만드는 threshold가 아니다.
 
-V2 family와 task-bound constructive witness는 이제 **engineering implemented**다.
-남은 `PRE_FREEZE_BLOCKER`는 학습 initializer/optimizer, train-only loss,
-update·시간 budget, conditional task-bootstrap rule, future-public seed 결속과
+V2 family, task-bound constructive witness와 deterministic train/dev optimizer는 이제
+**engineering implemented**다. 남은 `PRE_FREEZE_BLOCKER`는 disclosed timing/convergence
+pilot로 정할 arm별 learning rate와 공통 update·patience·시간 budget,
+conditional task-bootstrap rule, future-public seed 결속과
 candidate-only→adjudication protocol이다. V2 draw들은 한 고정 feature frame에서 나온
 coefficient/split law이므로 bootstrap 해석도 이 명시된 generator에 조건부이며,
 독립 mechanism 표본으로 승격하지 않는다.

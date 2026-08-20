@@ -4,6 +4,7 @@ import ast
 from dataclasses import replace
 import hashlib
 import inspect
+import itertools
 import math
 from pathlib import Path
 
@@ -66,6 +67,21 @@ def _reidentify(
             )
         )
     return tuple(reversed(result))
+
+
+def _permute_worlds(
+    cases: tuple[worlds.EvaluatorCaseV1, ...],
+) -> tuple[worlds.EvaluatorCaseV1, ...]:
+    permutations = tuple(itertools.permutations(range(len(worlds.ROLES))))
+    return tuple(
+        replace(
+            case,
+            world=worlds.ModelWorldV1(
+                tuple(case.world.incidences[index] for index in permutations[position % 6])
+            ),
+        )
+        for position, case in enumerate(cases)
+    )
 
 
 def test_native_and_independently_compiled_typed_star_inputs_match(bundle) -> None:
@@ -203,6 +219,27 @@ def test_case_order_and_evaluator_uids_cannot_change_training(
     )
     for name in learned_triple.parameters:
         assert np.array_equal(replay.parameters[name], learned_triple.parameters[name])
+
+
+def test_all_incidence_permutations_preserve_scores_and_training(
+    learned_triple, smoke_cases
+) -> None:
+    train, dev, test = smoke_cases
+    case = test[0]
+    scores = {
+        learned_triple.score(
+            worlds.ModelWorldV1(tuple(case.world.incidences[index] for index in order))
+        )
+        for order in itertools.permutations(range(len(worlds.ROLES)))
+    }
+    assert scores == {learned_triple.score(case.world)}
+
+    replay = operator.fit_operator(
+        _permute_worlds(train),
+        _permute_worlds(dev),
+        config=SMOKE_CONFIG,
+    )
+    assert replay.state_sha256 == learned_triple.state_sha256
 
 
 def test_typed_star_and_native_training_have_exact_parameter_parity(smoke_cases) -> None:

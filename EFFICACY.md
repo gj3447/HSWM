@@ -73,12 +73,25 @@ architecture-independent or compute-matched superiority. See the bounded
 [result](results/SWM0W_SCALAR_GATE_RESULTS_2026-08-20.md) and
 [adjudication receipt](evidence/EVIDENCE_SWM0W_SCALAR_GATE_ADJUDICATION_2026-08-20.json).
 
+The next multi-member bridge now has an executable engineering core, not an
+efficacy result. Its fixed `Z₅⁶` world enumerates three roles with two members
+each; T16, its no-Q P_CAP18 control, and the information-complete DS870 control
+each contain exactly 870 parameters. A constructive evaluator-only Q witness
+reproduces the fixed target over the full finite domain, and symmetry,
+broadcast, role-cycle, Q removal/restore, and worst-stratum R² contracts are
+tested. Nothing is learned in that witness. The external seed currently changes
+only manifest identity, so repeated seeds are aliases rather than independent
+tasks; no task bootstrap, optimizer, preregistration, or S2S verdict is valid
+yet. See the
+[SWM-0W-S2S design](docs/research/HSWM_SWM0W_S2S_GATE_2026-08-20.md).
+
 The exact claim boundaries are:
 
 | claim | current verdict | evidence boundary |
 |---|---|---|
 | SWM-0R role-bearing n-ary representation | **engineering conformance PASS; scientific UNJUDGED** | frozen finite `q=3` construction, 9 semantic worlds repeated across 20 UID/order seeds; hard-coded constructive decoder, not learned `W` |
-| SWM-0W learned scalar compatibility precursor | **scientific `SUPPORTED_NARROW`** | preregistered fixed arity 3 with one incidence per role; 20 tasks and shared bootstrap; candidate-only protocol result promoted to `PASS` only by separate GitHub/artifact/BLS/task/reducer adjudication; no canonical multi-member recipient-specific set-to-set operator |
+| SWM-0W learned scalar compatibility precursor | **scientific `SUPPORTED_NARROW`** | preregistered fixed arity 3 with one incidence per role; 20 tasks and shared bootstrap; candidate-only protocol result promoted to `PASS` only by separate GitHub/artifact/BLS/task/reducer adjudication; no learned or adjudicated multi-member recipient-specific set-to-set result |
+| SWM-0W-S2S multi-member operator engineering | **implemented; scientific `UNJUDGED`** | one fixed three-role/two-member finite task, exact 870-parameter T16/P_CAP18/DS870 forward paths and interventions; constructive nonlearned Q witness only, with no independent task family, optimizer, or admissible verdict |
 | static retrieval substrate | **measured positive, budget caveat** | 300 evaluation rows across three checked-in runs |
 | cognitive uplift over direct LLM reranking | **preregistered cross-dataset claim failed** | two negative MuSiQue runs; one small, non-significant positive 2Wiki run |
 | P1 outcome→credit→slow-weight loop | **engineering complete; scientific RED; HSWM_LOCAL_RECORD unjudged** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations. Historical measurement self-wrote `FAIL`, so no valid server-owned kernel verdict exists |

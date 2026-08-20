@@ -9,6 +9,11 @@
 > 한 번의 비재귀 numeric sweep
 > **비범위:** SWM-1 recurrent depth, LLM function cell, outcome-bound `ΔW`,
 > `ΔH`, 실제 세계 효능
+> **현재 구현:** [finite world](../../src/hswm/experiments/swm0w_s2s_worlds.py) ·
+> [one-sweep operator](../../src/hswm/experiments/swm0w_s2s_operator.py) ·
+> [world tests](../../tests/test_hswm_swm0w_s2s_worlds.py) ·
+> [operator tests](../../tests/test_hswm_swm0w_s2s_operator.py), 모두 engineering-only;
+> optimizer·독립 task family·효능 판정 없음
 > **상위 문서:** [헌법](../canon/HSWM_CONSTITUTION_2026-08-20.md) ·
 > [token-hypergraph core](../canon/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md) ·
 > [철학층](../canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md) ·

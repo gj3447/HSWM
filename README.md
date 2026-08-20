@@ -539,8 +539,12 @@ flowchart TB
 > **`SUPPORTED_NARROW`**. The chronology claim remains conditional on GitHub's
 > hosted runner/control plane and on the repository owner not deleting matching
 > runs; it is not an absolute cryptographic timestamp. The precursor is not the
-> canonical recipient-conditioned, multi-member set-to-set `W`, so that gate is
-> still the next experiment.
+> canonical recipient-conditioned, multi-member set-to-set `W`. The next-gate
+> [SWM-0W-S2S design](docs/research/HSWM_SWM0W_S2S_GATE_2026-08-20.md), exact
+> `3 roles × 2 members` finite world, and nontraining 870-parameter T16/P_CAP18/
+> DS870 operator core are now executable and tested, but the task family,
+> optimizer, frozen protocol, and admissible efficacy result do not yet exist.
+> This is `IMPLEMENTED / UNJUDGED` engineering, not a second PASS.
 > The repository has not passed the `SWM-1` deep numeric core or a successful
 > outcome-bound `ΔW/ΔH` gate. It is therefore not at M2 or beyond and is not a
 > partial-completion claim for the Human Universal Body. No canonical
@@ -581,7 +585,7 @@ not rescue an earlier failed premise.
 | stage | build | promotion gate | present boundary |
 |---|---|---|---|
 | **SWM-0R — representation non-collapse** | finite worlds whose exact grouping and incidence roles are jointly necessary | independent native/star paths retain the relation; registered lossy views stay at their exact ceiling; relevant removal and exact restore mediate the output | **engineering PASS** on constructive `q=3` fixture; `IMPLEMENTED / UNJUDGED`; not learned `W` |
-| **SWM-0W — learned n-ary operator** | raw role-incidence features and held-out third-order configurations with matched unary/pair marginals | learned role-conditioned set operator beats lower-order/roleless controls and is non-inferior to strong information-complete controls; learned channel removal mediates gain | **`SUPPORTED_NARROW`** for the preregistered fixed-three-singleton-role scalar precursor: 20-task candidate promoted to evidence `PASS` only by the separate adjudicator; canonical multi-member recipient-specific set-to-set `W` remains unimplemented and `UNJUDGED` |
+| **SWM-0W — learned n-ary operator** | raw role-incidence features and held-out higher-order configurations with matched lower-order marginals | learned role-conditioned set operator beats the registered lower-order controls; member broadcast, role cycles, and learned-channel removal mediate the gain | **`SUPPORTED_NARROW`** only for the preregistered fixed-three-singleton-role scalar precursor. A separate multi-member recipient-specific S2S finite world and exact 870-parameter nontraining operator core are `IMPLEMENTED / UNJUDGED`; no learned S2S checkpoint or admissible S2S verdict exists |
 | **SWM-1 — sparse recurrent numeric core** | first-class incidence, local `V→E→V`, member-specific decoding, residual bounded recurrence | role/incidence shuffle and edge ablation destroy the learned advantage under equal compute | not implemented; current core is boolean incidence plus mean/sum/max pooling |
 | **SWM-2 — LLM token function loop** | one frozen LLM executes at least three typed semantic-cell roles inside the active field | weighted HSWM beats fixed workflow and transcript/vector-memory controls under equal calls, tokens, and latency | `CellPort` and self-modification components exist; no integrated operator-`W` loop |
 | **SWM-3 — outcome-bound fast `W`** | pre-outcome eligibility, independent outcome, fast causal efficacy, versioned receipt | correct credit changes the next route; shuffled credit/time, uniform credit, and rollback remove the gain | receipt and scalar precursors exist; no successful active macro-route change |
@@ -986,6 +990,7 @@ Repository state as of 2026-08-20:
 |---|---|
 | SWM-0R finite n-ary representation witness | **engineering PASS / scientific `UNJUDGED`**: constructive `q=3` representation conformance with independent native/star paths, not learned `W/Θ/R` |
 | SWM-0W scalar compatibility precursor | **`SUPPORTED_NARROW`**: the preregistered 20-task run's candidate-only reducer emitted `CANDIDATE_PASS_AWAITING_BUNDLE`, and the separate live-evidence adjudicator promoted it to `PASS` after GitHub chronology/artifact, pinned-Node BLS, seed/task, receipt, and reducer replay; canonical set-to-set `W` and whole HSWM remain `UNJUDGED` |
+| SWM-0W-S2S multi-member operator core | **engineering `IMPLEMENTED / UNJUDGED`**: exact `Z₅⁶` fixture, `S₂³`-equivariant recipient outputs, three exact 870-parameter arms, constructive Q expressivity witness, Q remove/restore, broadcast/role-cycle interventions, and worst-stratum R² instrumentation; the only current task is fixed and seed aliases are not independent samples, and there is no optimizer, frozen protocol, or efficacy verdict |
 | evidence-preserving world compiler, stable IDs, immutable cuts, and fail-closed readout | implemented and locally tested |
 | static additive semantic field | narrow positive checked-in retrieval measurement with an asymmetric budget: 100 offline LLM judgments for HSWM and zero for cosine/BM25/PPR/RRF; not continual learning |
 | scalar slow-weight P1 | **scientific RED**: 12 staged candidates, 0 fresh-gate passes/activations, and 0/456 measured top-10 rank changes |

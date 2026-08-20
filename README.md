@@ -518,14 +518,17 @@ flowchart TB
 
 <p align="center"><em>The arrows are proposed promotion dependencies, not historical inevitability. Rights and evidence gates begin at M0; they are never postponed until scale.</em></p>
 
-> **Current position — 2026-08-20:** the repository has part of the M0
-> engineering substrate and the P0 publication, plus narrow components relevant
-> to P1/P2. It has not passed the target `SWM-0` n-ary witness, the `SWM-1`
-> deep numeric core, or a successful
+> **Current position — 2026-08-20:** the repository has passed the preregistered
+> **SWM-0R engineering representation-conformance gate** on its finite `q=3`
+> construction and has the P0 publication, plus narrow components relevant to
+> P1/P2. SWM-0R uses a constructive decoder, not learned `Θ/R/W`; therefore
+> scientific status remains `UNJUDGED`, and the learned **SWM-0W** gate is still
+> closed. It has not passed the `SWM-1` deep numeric core or a successful
 > outcome-bound `ΔW/ΔH` gate. It is therefore not at M2 or beyond and is not a
 > partial-completion claim for the Human Universal Body. No exact `SWM-0~5`
 > scientific exit criterion has passed; engineering components implemented
-> ahead of a gate do not count as that gate's success.
+> ahead of a gate do not count as that gate's success. See the bounded
+> [SWM-0R result](results/SWM0R_REPRESENTATION_CONFORMANCE_RESULTS_2026-08-20.md).
 
 Roadmap status always has two axes:
 
@@ -550,7 +553,8 @@ not rescue an earlier failed premise.
 
 | stage | build | promotion gate | present boundary |
 |---|---|---|---|
-| **SWM-0 — n-ary non-collapse** | paired worlds with identical pairwise/clique digest but different role-bound ternary meaning | role-aware `Θ/R` beats cosine, clique-GNN, scalar-hyperedge, and pairwise-sum controls | planned target witness; not demonstrated |
+| **SWM-0R — representation non-collapse** | finite worlds whose exact grouping and incidence roles are jointly necessary | independent native/star paths retain the relation; registered lossy views stay at their exact ceiling; relevant removal and exact restore mediate the output | **engineering PASS** on constructive `q=3` fixture; `IMPLEMENTED / UNJUDGED`; not learned `W` |
+| **SWM-0W — learned n-ary operator** | raw role-incidence features and held-out third-order configurations with matched unary/pair marginals | learned role-conditioned set operator beats lower-order/roleless controls and is non-inferior to strong information-complete controls; learned channel removal mediates gain | next gate; not implemented or measured |
 | **SWM-1 — sparse recurrent numeric core** | first-class incidence, local `V→E→V`, member-specific decoding, residual bounded recurrence | role/incidence shuffle and edge ablation destroy the learned advantage under equal compute | not implemented; current core is boolean incidence plus mean/sum/max pooling |
 | **SWM-2 — LLM token function loop** | one frozen LLM executes at least three typed semantic-cell roles inside the active field | weighted HSWM beats fixed workflow and transcript/vector-memory controls under equal calls, tokens, and latency | `CellPort` and self-modification components exist; no integrated operator-`W` loop |
 | **SWM-3 — outcome-bound fast `W`** | pre-outcome eligibility, independent outcome, fast causal efficacy, versioned receipt | correct credit changes the next route; shuffled credit/time, uniform credit, and rollback remove the gain | receipt and scalar precursors exist; no successful active macro-route change |

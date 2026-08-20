@@ -4,6 +4,8 @@ include *.py
 include COPYRIGHT
 include uv.lock
 recursive-include tests *.py
+# Frozen test receipts are read directly by source-distribution tests.
+recursive-include tests/fixtures *.json
 # scripts/ is an implicit-namespace package imported by contract tests.
 # research/ and schemas/ contain the corresponding data contracts.
 recursive-include scripts *.py *.sh

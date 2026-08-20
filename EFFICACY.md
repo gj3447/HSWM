@@ -1,7 +1,7 @@
 # HSWM efficacy status
 
-Last reconciled: 2026-08-16 (status and evidence-inventory reconciliation; no
-historical metric was recomputed).
+Last reconciled: 2026-08-20 (SWM-0R representation-conformance receipt added;
+no historical metric was recomputed).
 
 > **Current state lives in checked-in measurements, not an external verdict service.**
 > This document covers the retrieval-substrate ladder and links the evidence used for each
@@ -39,10 +39,19 @@ The P1 closed macro-weight loop is now an engineering result, not an efficacy
 result: it executed end to end, but all 12 staged candidates were rejected and
 the learned active state never changed.
 
+The preregistered SWM-0R finite representation witness is also an engineering
+result, not efficacy evidence. Its constructive native and independent
+typed-star paths score `1.0`, seven registered lossy projections score exactly
+`1/3`, targeted role-edge removal erases the result, irrelevant removal does
+nothing, and exact restore recovers it. Because the encoder knows the finite
+`F₃` fixture and only a ridge lookup is fitted, learned `W/Θ/R` remains
+unimplemented and the programme remains `UNJUDGED`.
+
 The broader claims do not pass:
 
 | claim | current verdict | evidence boundary |
 |---|---|---|
+| SWM-0R role-bearing n-ary representation | **engineering conformance PASS; scientific UNJUDGED** | frozen finite `q=3` construction, 9 semantic worlds repeated across 20 UID/order seeds; hard-coded constructive decoder, not learned `W` |
 | static retrieval substrate | **measured positive, budget caveat** | 300 evaluation rows across three checked-in runs |
 | cognitive uplift over direct LLM reranking | **preregistered cross-dataset claim failed** | two negative MuSiQue runs; one small, non-significant positive 2Wiki run |
 | P1 outcome→credit→slow-weight loop | **engineering complete; scientific RED; HSWM_LOCAL_RECORD unjudged** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations. Historical measurement self-wrote `FAIL`, so no valid server-owned kernel verdict exists |

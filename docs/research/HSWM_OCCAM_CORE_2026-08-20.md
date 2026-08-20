@@ -222,11 +222,14 @@ HSWM도 제목만 빌려서는 안 된다. 대응되는 scientific burden은 다
 
 최소 HSWM의 중심 가설은 다음 실험 하나에 생사를 걸 수 있다.
 
-1. pairwise/clique digest는 같지만 role assignment가 다른 n-ary paired worlds를 만든다.
-2. encoder, readout, parameter/FLOP budget, seed를 맞춘다.
-3. role-aware `W`를 pairwise/clique, no-role pooling, role-embedding Deep Sets,
-   role-partitioned AllSet, role-conditioned ED-HNN과 equal-budget으로 비교한다.
-4. target relation version만 remove하고 exact restore한다.
+1. train/dev/test의 full role triple은 겹치지 않되 unary와 role-conditioned pair
+   marginal은 동일한 third-order worlds를 만든다.
+2. 모델에는 raw incidence role/value만 주고 target 공식, split latent, UID, oracle
+   parameter를 숨긴다.
+3. 학습된 role-aware `W`를 pairwise/additive/no-role pooling뿐 아니라
+   role-embedding Deep Sets, role-partitioned AllSet, role-conditioned ED-HNN,
+   information-complete flat MLP와 matched-budget으로 비교한다.
+4. frozen model의 learned third-order relation channel만 remove하고 exact restore한다.
 5. 사전 등록 utility에서 다음을 측정한다.
 
 ```math
@@ -248,25 +251,40 @@ exact restore → gain returns
 
 ## 8. 공학적 Occam cut
 
-### M0a / SWM-0 — n-ary noncollapse만 증명
+### M0a / SWM-0R — representation noncollapse를 먼저 확인
 
 LLM, recurrence, graph database, agent swarm, self-modification 없이 시작한다.
+현재 저장소는 `q=3`의 아홉 의미 세계에서 다음 공학 prerequisite를 통과했다.
 
 - immutable role-bearing incidence schema
-- sparse tensorizer
-- 단 한 번의 role별 Deep-Set aggregation, joint relation transform, recipient decoder
-- paired noncollapse generator
-- clique, pairwise, scalar, role-embedding Deep Sets, role-partitioned AllSet,
-  role-conditioned ED-HNN equal-cost baselines
-- seed, preregistration, artifact/receipt, removal/restore
+- 서로 독립적으로 구현된 native n-ary / typed-star constructive traversal
+- exact ceiling이 `1/3`인 scalar, pairwise, role/grouping-erased, flat, ID controls
+- preregistration을 먼저 commit/push한 뒤 연 confirmatory seed `100..119`
+- relevant edge removal, irrelevant edge control, exact restore, byte-exact replay
 
-role-blind baseline만 이겼다면 새 operator를 증명한 것이 아니라 role metadata가
-필요했음을 보인 것이다. entity-ID memorization, role-label leakage, arity와 enumeration
-artifact도 split에서 차단해야 한다.
+결과는 target/star `1.0`, 모든 lossy arm `1/3`, removal fraction `1.0`의
+**engineering PASS**다. 그러나 encoder가 유한 `F₃` 구성을 알고 있고 ridge lookup만
+fit하므로 `Θ/R/W` 학습 증거가 아니다. seed 반복도 같은 아홉 의미 세계의 UID/order만
+바꾼다. 따라서 `IMPLEMENTED / UNJUDGED`이며 다음 gate만 연다.
 
-### M0b / SWM-1 — depth만 추가
+### M0b / SWM-0W — learned n-ary operator를 분리해 증명
 
-SWM-0가 통과한 뒤 동일한 operator를 weight-tied `2–4`회 bounded residual sweep로
+SWM-0R 뒤에는 recurrence를 붙이지 않는다. 먼저 raw role-incidence feature만 받는
+작은 operator가 held-out third-order 구조에 일반화하는지 시험한다.
+
+- role별 learned encoder와 unary/pair/triple interaction
+- full tuple split은 disjoint, unary·role-pair marginals는 matched
+- additive/pairwise/roleless와 information-complete strong controls
+- permutation/UID/oracle leakage checks와 matched optimization budget
+- learned triple channel의 frozen removal/restore mediation
+
+role-blind arm만 이겼다면 role metadata의 필요성만 보인 것이다. role-simple·strong
+information-complete controls와 구분되지 않으면 HSWM 고유 operator 우위를 주장하지
+않는다. 이 gate가 통과해야만 depth 실험으로 간다.
+
+### M0c / SWM-1 — depth만 추가
+
+SWM-0W가 통과한 뒤 동일한 operator를 weight-tied `2–4`회 bounded residual sweep로
 반복한다. locality상 여러 hop이 필요한 task에서 `T=1`보다 이득이 없거나 cut-edge
 뒤에도 이득이 남으면 deep/recurrent 주장을 제거한다.
 
@@ -306,15 +324,18 @@ SWM-2가 통과한 뒤에만 다음을 붙인다.
 
 ## 9. 현재 저장소에 대한 판정
 
-현재 substrate의 hypergraph core는 boolean incidence와 mean/sum/max pooling을
-제공한다. 이는 M0의 representation control이지 role-bearing learned operator가
-아니다. 기존 P1 macro-weight loop는 공학 경로를 실행했지만 `12` candidate 중
+현재 substrate의 기존 hypergraph core는 boolean incidence와 mean/sum/max pooling을
+제공한다. 새 SWM-0R 경로는 first-class role incidence, lossless native/star compilation,
+removal/restore와 frozen protocol을 구현해 finite representation-conformance gate를
+통과했다. 하지만 이는 constructive decoder이며 role-bearing learned operator가 아니다.
+기존 P1 macro-weight loop는 공학 경로를 실행했지만 `12` candidate 중
 fresh pass와 active publication이 `0`, `456` candidate/query replay 중 top-10 변화가
 `0`이었다. 따라서 현재 증거는 다음 문장을 허용한다.
 
-> **Occam core는 구현 가능한 부품 조합이지만, 이 저장소에서 아직 구현·실증되지
-> 않았다. 기존 실패는 더 큰 구조를 붙일 이유가 아니라, 더 작은 mediation
-> 실험으로 돌아갈 이유다.**
+> **Occam core의 representation prerequisite는 구현·공학 검증됐다. 그러나 learned
+> semantic operator, recurrent depth, causal `ΔW`는 아직 구현·실증되지 않았다.
+> 기존 실패와 SWM-0R의 제한은 더 큰 구조를 붙일 이유가 아니라, 다음 최소 gate인
+> SWM-0W를 격리해 시험할 이유다.**
 
 상세 증거는 [`EFFICACY.md`](../../EFFICACY.md)와
 [`HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md`](./HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md)에 있다.

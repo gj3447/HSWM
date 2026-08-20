@@ -38,7 +38,18 @@ jobs:
       - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
           python-version: ${{ matrix.python-version }}
-      - run: ${{ matrix.command }}
+      - if: matrix.name != 'swm0r-evidence-replay'
+        run: ${{ matrix.command }}
+      # The historical SWM-0R byte receipt was solved on OpenBLAS's SkylakeX
+      # kernel.  np.linalg is numerically equivalent but not byte-identical
+      # across dynamic CPU kernels, so bind the replay to the measured kernel
+      # and one BLAS thread instead of depending on runner hardware.
+      - if: matrix.name == 'swm0r-evidence-replay'
+        run: ${{ matrix.command }}
+        env:
+          OPENBLAS_CORETYPE: SkylakeX
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
 
   source-distribution:
     name: source-distribution

@@ -102,11 +102,14 @@ jobs:
       - name: Install the byte-pinned drand verifier without lifecycle scripts
         working-directory: tools/swm0w_drand
         run: npm ci --ignore-scripts
-      - name: Require the cryptographic dependency and run every beacon test
+      - name: Require the dependency and run the cryptographic integration surface
         run: |
           uv run --locked --extra dev python -c \
             'from hswm.experiments.swm0w_beacon import verifier_dependency_available; assert verifier_dependency_available()'
-          uv run --locked --extra dev pytest -q tests/test_hswm_swm0w_beacon.py
+          uv run --locked --extra dev pytest -q \
+            tests/test_hswm_swm0w_beacon.py \
+            tests/test_hswm_swm0w_protocol.py \
+            tests/test_hswm_swm0w_confirmatory.py
 
   wheel-install:
     name: wheel-install

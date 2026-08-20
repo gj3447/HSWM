@@ -18,6 +18,12 @@ from hswm.experiments import swm0w_task_family as task_family
 from hswm.experiments import swm0w_worlds as worlds
 
 
+requires_drand_verifier = pytest.mark.skipif(
+    not beacon.verifier_dependency_available(),
+    reason="requires the byte-pinned installed drand-client verifier",
+)
+
+
 def _git(root: Path, *args: str) -> str:
     completed = subprocess.run(
         ["git", "-C", str(root), *args], check=True, capture_output=True, text=True
@@ -587,6 +593,7 @@ def test_wait_is_bounded_and_network_refusal_precedes_verifier(
     assert called is False
 
 
+@requires_drand_verifier
 def test_offline_quicknet_vector_binds_exact_order_but_cannot_admit(
     registration: RegistrationFixture,
 ) -> None:
@@ -620,6 +627,7 @@ def test_offline_quicknet_vector_binds_exact_order_but_cannot_admit(
         )
 
 
+@requires_drand_verifier
 def test_candidate_only_becomes_pass_after_server_bound_no_training_replay(
     registration: RegistrationFixture,
     monkeypatch: pytest.MonkeyPatch,
@@ -937,9 +945,14 @@ def test_operational_failure_can_only_record_void(
 
 
 def test_workflow_is_three_job_attempt_one_and_has_no_rerun_surface() -> None:
-    workflow = (
+    workflow_path = (
         Path(__file__).parents[1] / ".github/workflows/swm0w-confirmatory.yml"
-    ).read_text(encoding="utf-8")
+    )
+    if not workflow_path.is_file():
+        pytest.skip(
+            "repository-only workflow is not shipped in the source distribution"
+        )
+    workflow = workflow_path.read_text(encoding="utf-8")
     assert "workflow_dispatch:" not in workflow
     assert "schedule:" not in workflow
     assert "matrix:" not in workflow

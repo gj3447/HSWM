@@ -178,18 +178,23 @@ class TrainingConfig:
             value = getattr(self, name)
             if type(value) is not int or value <= 0:
                 raise SWM0WOperatorError(f"{name} must be a positive integer")
-        finite_positive = (
+        for name in (
             "learning_rate",
+            "beta1",
+            "beta2",
             "epsilon",
             "gradient_clip",
-        )
-        for name in finite_positive:
+            "min_delta",
+        ):
             value = getattr(self, name)
-            if not math.isfinite(value) or value <= 0.0:
+            if type(value) is not float or not math.isfinite(value):
+                raise SWM0WOperatorError(f"{name} must be an exact finite float")
+        for name in ("learning_rate", "epsilon", "gradient_clip"):
+            if getattr(self, name) <= 0.0:
                 raise SWM0WOperatorError(f"{name} must be finite and positive")
         if not 0.0 < self.beta1 < 1.0 or not 0.0 < self.beta2 < 1.0:
             raise SWM0WOperatorError("Adam beta values must lie in (0, 1)")
-        if not math.isfinite(self.min_delta) or self.min_delta < 0.0:
+        if self.min_delta < 0.0:
             raise SWM0WOperatorError("min_delta must be finite and non-negative")
 
     def canonical(self) -> dict[str, Any]:

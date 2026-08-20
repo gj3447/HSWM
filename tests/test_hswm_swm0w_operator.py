@@ -740,3 +740,13 @@ def test_scope_and_default_budget_are_explicit_and_bounded() -> None:
         operator.TrainingConfig(width=0)
     with pytest.raises(operator.SWM0WOperatorError):
         operator.TrainingConfig(epochs=0)
+    for field, value in (
+        ("learning_rate", True),
+        ("beta1", 1),
+        ("beta2", False),
+        ("epsilon", True),
+        ("gradient_clip", 5),
+        ("min_delta", False),
+    ):
+        with pytest.raises(operator.SWM0WOperatorError, match="exact finite float"):
+            operator.TrainingConfig(**{field: value})

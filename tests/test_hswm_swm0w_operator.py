@@ -12,10 +12,12 @@ import numpy as np
 import pytest
 
 from hswm.experiments import swm0w_operator as operator
+from hswm.experiments import swm0w_task_family as task_core
 from hswm.experiments import swm0w_worlds as worlds
 
 
 SEED = b"swm0w-learned-operator-tests-v1"
+TASK_SEED = b"swm0w-operator-task-adapter-tests-v1-" + b"T" * 40
 SMOKE_CONFIG = operator.TrainingConfig(
     width=16,
     seed=7,
@@ -45,6 +47,20 @@ def learned_triple(smoke_cases) -> operator.LearnedSWM0WOperator:
     return operator.fit_operator(train, dev, config=SMOKE_CONFIG)
 
 
+@pytest.fixture(scope="module")
+def streamed_task() -> task_core.StreamedTaskV1:
+    return task_core.build_task_from_external_seed(TASK_SEED)
+
+
+@pytest.fixture(scope="module")
+def streamed_cases(streamed_task):
+    return (
+        task_core.evaluator_cases_from_split(streamed_task, "train")[:96],
+        task_core.evaluator_cases_from_split(streamed_task, "dev")[:48],
+        task_core.evaluator_cases_from_split(streamed_task, "test")[:48],
+    )
+
+
 def _uid(prefix: str, index: int, domain: str) -> str:
     digest = hashlib.sha256(f"{index}:{domain}".encode("ascii")).hexdigest()[:24]
     return f"swm0w_{prefix}_{digest}"
@@ -64,6 +80,24 @@ def _reidentify(
                     (role, _uid("inc", index, f"incidence:{role}"))
                     for role in worlds.ROLES
                 ),
+            )
+        )
+    return tuple(reversed(result))
+
+
+def _reidentify_streamed_cases(cases):
+    result = []
+    for index, case in enumerate(cases):
+        digest = hashlib.sha256(
+            f"{case.split}:{index}:streamed-case".encode("ascii")
+        ).hexdigest()[:24]
+        unsigned = case.unsigned_canonical()
+        unsigned["case_uid"] = f"swm0wt_case_{digest}"
+        result.append(
+            replace(
+                case,
+                case_uid=unsigned["case_uid"],
+                receipt_sha256=task_core.canonical_sha256(unsigned),
             )
         )
     return tuple(reversed(result))
@@ -115,6 +149,7 @@ def test_operator_imports_only_public_model_api_and_has_no_modulo_or_oracle() ->
     assert len(world_imports) == 1
     names = {alias.name for alias in world_imports[0].names}
     assert names == {
+        "CASE_SCHEMA",
         "ROLES",
         "EvaluatorCaseV1",
         "ModelWorldV1",
@@ -122,6 +157,16 @@ def test_operator_imports_only_public_model_api_and_has_no_modulo_or_oracle() ->
         "cases_from_split",
     }
     assert not any(name.startswith("_") for name in names)
+    task_imports = [
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.ImportFrom)
+        and node.module == "hswm.experiments.swm0w_task_family"
+    ]
+    assert len(task_imports) == 1
+    task_names = {alias.name for alias in task_imports[0].names}
+    assert task_names == {"CASE_SCHEMA", "TaskEvaluatorCaseV1"}
+    assert not any(name.startswith("_") for name in task_names)
     assert not any(isinstance(node, ast.Mod) for node in ast.walk(tree))
     for forbidden in ("evaluate_hidden", "constructive_target", "target_table"):
         assert forbidden not in source
@@ -134,7 +179,7 @@ def test_operator_imports_only_public_model_api_and_has_no_modulo_or_oracle() ->
 @pytest.mark.parametrize("arm", tuple(operator.SWM0WArm))
 def test_manual_gradients_match_central_differences(arm) -> None:
     rng = np.random.Generator(np.random.PCG64(9137))
-    parameters = operator._initial_parameters(arm, 2, rng)
+    parameters = operator._initial_parameters(arm, 2, 9137)
     inputs = rng.normal(0.0, 0.35, size=(4, len(worlds.ROLES), 2))
     targets = rng.uniform(-0.7, 0.7, size=4)
     _, cache = operator._forward(arm, parameters, inputs)
@@ -157,6 +202,45 @@ def test_manual_gradients_match_central_differences(arm) -> None:
         assert np.allclose(gradients[name], numerical, rtol=2.0e-5, atol=2.0e-7)
 
 
+def test_named_initialization_is_nested_arm_matched_and_schema_independent(
+    monkeypatch,
+) -> None:
+    arms = (
+        operator.SWM0WArm.ADDITIVE,
+        operator.SWM0WArm.LOWER_ORDER_PAIR,
+        operator.SWM0WArm.ROLE_TRIPLE,
+        operator.SWM0WArm.TYPED_STAR_TRIPLE,
+    )
+    initialized = {
+        arm: operator._initial_parameters(arm, 5, 23) for arm in arms
+    }
+    for name in ("encoder_w", "encoder_b", "unary_w", "out_b"):
+        assert all(
+            np.array_equal(initialized[arms[0]][name], initialized[arm][name])
+            for arm in arms[1:]
+        )
+    assert np.array_equal(
+        initialized[operator.SWM0WArm.LOWER_ORDER_PAIR]["pair_w"],
+        initialized[operator.SWM0WArm.ROLE_TRIPLE]["pair_w"],
+    )
+    assert all(
+        np.array_equal(
+            initialized[operator.SWM0WArm.ROLE_TRIPLE][name],
+            initialized[operator.SWM0WArm.TYPED_STAR_TRIPLE][name],
+        )
+        for name in initialized[operator.SWM0WArm.ROLE_TRIPLE]
+    )
+
+    baseline = operator._initial_parameters(
+        operator.SWM0WArm.ROLE_TRIPLE, 5, 23
+    )
+    monkeypatch.setattr(operator, "OPERATOR_VERSION", "metadata-only-test/v999")
+    replay = operator._initial_parameters(
+        operator.SWM0WArm.ROLE_TRIPLE, 5, 23
+    )
+    assert all(np.array_equal(baseline[name], replay[name]) for name in baseline)
+
+
 def test_small_learning_smoke_is_continuous_deterministic_and_receipted(
     learned_triple, smoke_cases
 ) -> None:
@@ -170,6 +254,16 @@ def test_small_learning_smoke_is_continuous_deterministic_and_receipted(
     assert model.optimization.receipt_sha256 == operator.canonical_sha256(
         model.optimization.unsigned()
     )
+    assert model.optimization.unsigned()["schema_version"] == (
+        operator.OPTIMIZATION_RECEIPT_VERSION
+    )
+    assert model.optimization.unsigned()["initialization_domain"] == (
+        operator.INITIALIZATION_DOMAIN
+    )
+    assert model.optimization.unsigned()["training_order_domain"] == (
+        operator.TRAINING_ORDER_DOMAIN
+    )
+    assert len(model.optimization.evaluator_binding_sha256) == 64
     baseline = float(
         np.mean(
             (
@@ -318,6 +412,14 @@ def test_all_controls_train_and_report_honest_non_equal_compute_counts(
     assert comparison.receipt_sha256 == operator.canonical_sha256(
         comparison.unsigned()
     )
+    assert set(dict(comparison.model_state_sha256_by_arm)) == {
+        "ROLE_TRIPLE",
+        "FLAT_MLP",
+        "ROLE_AWARE_DEEPSETS",
+    }
+    assert len(comparison.evaluation_dataset_sha256) == 64
+    assert len(comparison.evaluator_binding_sha256) == 64
+    assert comparison.tie_tolerance == 1.0e-12
     assert "No novelty claim" in comparison.interpretation
 
 
@@ -328,7 +430,7 @@ def test_frozen_triple_head_remove_restore_is_bit_exact(
     base_scores = np.asarray([learned_triple.score(case.world) for case in test])
     removed, receipt = operator.remove_triple_head(learned_triple)
     removed_scores = np.asarray([removed.score(case.world) for case in test])
-    assert removed.intervention == "TRIPLE_HEAD_REMOVED"
+    assert removed.intervention == operator.InteractionHeadV1(worlds.ROLES)
     assert removed.state_sha256 != learned_triple.state_sha256
     assert np.all(removed.parameters["triple_w"] == 0.0)
     assert not np.array_equal(base_scores, removed_scores)
@@ -349,7 +451,241 @@ def test_frozen_triple_head_remove_restore_is_bit_exact(
         np.asarray([restored.score(case.world) for case in test]),
     )
     with pytest.raises(operator.SWM0WOperatorError, match="receipt hash"):
-        replace(receipt, triple_head_hex=("0x0.0p+0",) * 16)
+        replace(receipt, removed_values_hex=("0x0.0p+0",) * 16)
+
+
+@pytest.mark.parametrize(
+    "roles",
+    (
+        ("r0",),
+        ("r1",),
+        ("r2",),
+        ("r0", "r1"),
+        ("r0", "r2"),
+        ("r1", "r2"),
+        ("r0", "r1", "r2"),
+    ),
+)
+def test_generic_head_removal_is_one_equal_width_slice_and_restores_exactly(
+    learned_triple, roles
+) -> None:
+    head = operator.InteractionHeadV1(roles)
+    expected = {
+        name: np.asarray(value).copy()
+        for name, value in learned_triple.parameters.items()
+    }
+    parameter_name, row = operator._head_location(head)
+    selected = expected[parameter_name] if row is None else expected[parameter_name][row]
+    selected.fill(0.0)
+
+    removed, receipt = operator.remove_interaction_head(learned_triple, head)
+    assert removed.intervention == head
+    assert removed.parameter_count == learned_triple.parameter_count
+    assert removed.operation_estimate() == learned_triple.operation_estimate()
+    assert receipt.head == head
+    assert receipt.width == learned_triple.config.width
+    assert receipt.removed_value_count == learned_triple.config.width
+    assert all(
+        np.array_equal(expected[name], removed.parameters[name])
+        for name in expected
+    )
+    restored = operator.restore_interaction_head(removed, receipt)
+    assert restored.state_sha256 == learned_triple.state_sha256
+    assert all(
+        np.array_equal(
+            restored.parameters[name], learned_triple.parameters[name]
+        )
+        for name in learned_triple.parameters
+    )
+
+
+def test_head_selectors_and_receipts_fail_closed(
+    learned_triple, smoke_cases
+) -> None:
+    for roles in ((), ("r0", "r0"), ("r1", "r0"), ("bad",)):
+        with pytest.raises(operator.SWM0WOperatorError):
+            operator.InteractionHeadV1(roles)
+
+    removed, receipt = operator.remove_interaction_head(
+        learned_triple, operator.InteractionHeadV1(("r0",))
+    )
+    with pytest.raises(operator.SWM0WOperatorError, match="already"):
+        operator.remove_interaction_head(
+            removed, operator.InteractionHeadV1(("r1",))
+        )
+    other_removed, _ = operator.remove_interaction_head(
+        learned_triple, operator.InteractionHeadV1(("r1",))
+    )
+    with pytest.raises(operator.SWM0WOperatorError, match="does not bind"):
+        operator.restore_interaction_head(other_removed, receipt)
+    with pytest.raises(operator.SWM0WOperatorError, match="width-vector"):
+        replace(receipt, removed_values_hex=list(receipt.removed_values_hex))
+    with pytest.raises(operator.SWM0WOperatorError, match="canonical"):
+        replace(
+            receipt,
+            removed_values_hex=("0x0p+0",) * receipt.width,
+            receipt_sha256=operator.canonical_sha256(
+                {
+                    **receipt.unsigned(),
+                    "removed_values_hex": ["0x0p+0"] * receipt.width,
+                }
+            ),
+        )
+    with pytest.raises(operator.SWM0WOperatorError, match="all roles"):
+        operator.restore_triple_head(removed, receipt)
+
+    train, dev, _ = smoke_cases
+    additive = operator.fit_operator(
+        train[:16],
+        dev[:8],
+        operator.SWM0WArm.ADDITIVE,
+        config=operator.TrainingConfig(
+            width=2, seed=4, epochs=1, batch_size=8, patience=1
+        ),
+    )
+    with pytest.raises(operator.SWM0WOperatorError, match="unavailable"):
+        operator.remove_interaction_head(
+            additive, operator.InteractionHeadV1(("r0", "r1"))
+        )
+
+    class HostileOperator(operator.LearnedSWM0WOperator):
+        @property
+        def state_sha256(self):
+            return "0" * 64
+
+    hostile = HostileOperator(
+        arm=learned_triple.arm,
+        config=learned_triple.config,
+        normalizer=learned_triple.normalizer,
+        parameters=learned_triple.parameters,
+        optimization=learned_triple.optimization,
+    )
+    with pytest.raises(operator.SWM0WOperatorError, match="learned operator"):
+        operator.remove_interaction_head(
+            hostile, operator.InteractionHeadV1(("r0",))
+        )
+    hostile_removed = HostileOperator(
+        arm=removed.arm,
+        config=removed.config,
+        normalizer=removed.normalizer,
+        parameters=removed.parameters,
+        optimization=removed.optimization,
+        intervention=removed.intervention,
+    )
+    with pytest.raises(operator.SWM0WOperatorError, match="exact receipt"):
+        operator.restore_interaction_head(hostile_removed, receipt)
+    with pytest.raises(operator.SWM0WOperatorError, match="does not match"):
+        operator.compare_models(
+            {operator.SWM0WArm.ROLE_TRIPLE: hostile}, smoke_cases[2][:2]
+        )
+
+
+def test_streamed_task_envelopes_train_evaluate_and_never_enter_model(
+    streamed_cases, monkeypatch
+) -> None:
+    train, dev, test = streamed_cases
+    seen_worlds = []
+    original_compiler = operator.native_role_input
+
+    def guarded_compiler(world):
+        result = original_compiler(world)
+        assert type(world) is worlds.ModelWorldV1
+        seen_worlds.append(world)
+        return result
+
+    monkeypatch.setattr(operator, "native_role_input", guarded_compiler)
+    config = operator.TrainingConfig(
+        width=3, seed=29, epochs=2, batch_size=32, patience=2
+    )
+    model = operator.fit_operator(train, dev, config=config)
+    assert seen_worlds
+    assert all(type(world) is worlds.ModelWorldV1 for world in seen_worlds)
+    assert math.isfinite(model.mean_squared_error(test))
+    with pytest.raises(operator.SWM0WOperatorError, match="ModelWorldV1"):
+        model.score(test[0])
+
+    comparison = operator.compare_models(
+        {operator.SWM0WArm.ROLE_TRIPLE: model}, test
+    )
+    reversed_test = tuple(reversed(test))
+    assert model.mean_squared_error(test) == model.mean_squared_error(
+        reversed_test
+    )
+    assert comparison.receipt_sha256 == operator.compare_models(
+        {operator.SWM0WArm.ROLE_TRIPLE: model}, reversed_test
+    ).receipt_sha256
+    assert dict(comparison.model_state_sha256_by_arm) == {
+        "ROLE_TRIPLE": model.state_sha256
+    }
+    assert comparison.evaluator_binding_sha256 != (
+        model.optimization.evaluator_binding_sha256
+    )
+    replay = operator.fit_operator(
+        tuple(reversed(train)), tuple(reversed(dev)), config=config
+    )
+    assert replay.state_sha256 == model.state_sha256
+    assert replay.optimization.receipt_sha256 == (
+        model.optimization.receipt_sha256
+    )
+    reidentified = operator.fit_operator(
+        _reidentify_streamed_cases(train),
+        _reidentify_streamed_cases(dev),
+        config=config,
+    )
+    assert all(
+        np.array_equal(model.parameters[name], reidentified.parameters[name])
+        for name in model.parameters
+    )
+    assert reidentified.optimization.evaluator_binding_sha256 != (
+        model.optimization.evaluator_binding_sha256
+    )
+    assert reidentified.state_sha256 != model.state_sha256
+
+
+def test_evaluator_adapter_rejects_ducks_subclasses_mixing_and_task_mismatch(
+    learned_triple, smoke_cases, streamed_cases
+) -> None:
+    legacy_train, legacy_dev, _ = smoke_cases
+    task_train, task_dev, task_test = streamed_cases
+    tiny = operator.TrainingConfig(
+        width=2, seed=2, epochs=1, batch_size=8, patience=1
+    )
+
+    with pytest.raises(operator.SWM0WOperatorError, match="mix"):
+        operator.fit_operator(
+            (legacy_train[0], task_train[0]), task_dev[:2], config=tiny
+        )
+    with pytest.raises(operator.SWM0WOperatorError, match="same evaluator"):
+        operator.fit_operator(legacy_train[:2], task_dev[:2], config=tiny)
+
+    changed_unsigned = task_dev[0].unsigned_canonical()
+    changed_unsigned["task_uid"] = "swm0wt_" + "a" * 24
+    changed_task = replace(
+        task_dev[0],
+        task_uid=changed_unsigned["task_uid"],
+        receipt_sha256=task_core.canonical_sha256(changed_unsigned),
+    )
+    with pytest.raises(operator.SWM0WOperatorError, match="same streamed task"):
+        operator.fit_operator(task_train[:2], (changed_task,), config=tiny)
+
+    class DuckEvaluator:
+        split = "test"
+        target = float("nan")
+        world = task_test[0].world
+
+    with pytest.raises(operator.SWM0WOperatorError, match="supported evaluator"):
+        learned_triple.mean_squared_error((DuckEvaluator(),))
+
+    class LeakyWorld(worlds.ModelWorldV1):
+        def feature_matrix(self):
+            return super().feature_matrix()
+
+    leaky_world = LeakyWorld(task_test[0].world.incidences)
+    with pytest.raises(operator.SWM0WOperatorError, match="exact ModelWorldV1"):
+        learned_triple.score(leaky_world)
+    leaky_case = replace(task_test[0], world=leaky_world)
+    with pytest.raises(operator.SWM0WOperatorError, match="exact ModelWorldV1"):
+        learned_triple.mean_squared_error((leaky_case,))
 
 
 def test_split_contract_and_comparison_labels_fail_closed(
@@ -374,8 +710,19 @@ def test_split_contract_and_comparison_labels_fail_closed(
     comparison = operator.compare_models(
         {operator.SWM0WArm.ROLE_TRIPLE: learned_triple}, dev[:8]
     )
-    with pytest.raises(operator.SWM0WOperatorError, match="receipt hash"):
+    with pytest.raises(operator.SWM0WOperatorError, match="interpretation disagrees"):
         replace(comparison, interpretation="tampered")
+    with pytest.raises(operator.SWM0WOperatorError, match="at least one"):
+        replace(
+            comparison,
+            mean_squared_error_by_arm=(),
+            model_state_sha256_by_arm=(),
+        )
+    with pytest.raises(operator.SWM0WOperatorError, match="finite MSE"):
+        replace(
+            comparison,
+            mean_squared_error_by_arm=(("ROLE_TRIPLE", False),),
+        )
 
 
 def test_scope_and_default_budget_are_explicit_and_bounded() -> None:

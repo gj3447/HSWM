@@ -116,6 +116,14 @@ engineering contract이며 현재 효능·과학적 유일성 주장이 아니�
 검증·idempotent KG publisher는
 [`upsert_human_universal_body_ontology.py`](scripts/upsert_human_universal_body_ontology.py)다.
 
+같은 날 사용자는 코드 구현보다 HSWM의 철학적 함의를 먼저 설정하라고 지시했다. 관계적
+존재론, 계보적 시간론, 기억–진리 분리, 오류의 생산성, 차이 보존적 통일, 인과적 행위성,
+참여와 존엄, 공개 외부·보호 내부, 인지주권·보충성과 열린 목적론을 구현 제약으로 내린
+provisional charter는
+[`HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md`](docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md)에
+있다. 철학 우선 방향만 `USER_PRIMARY`이고 개별 원리의 정식화는 비준 전
+`SECONDARY_AI_PROPOSED`다.
+
 ## 2026-08-15 — Sheaf 연구 온톨로지
 
 Sheaf의 local-to-global 구조를 HSWM에 곧바로 정답으로 선언하지 않고, 수학 정본과 HSWM

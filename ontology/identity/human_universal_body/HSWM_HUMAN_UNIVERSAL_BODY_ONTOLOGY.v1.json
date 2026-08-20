@@ -1,11 +1,13 @@
 {
   "schema_version": "hswm-human-universal-body-ontology/v1",
-  "status": "USER_PRIMARY_TARGET_WITH_SECONDARY_AI_ENGINEERING_FORMALIZATION",
+  "status": "USER_PRIMARY_TARGET_AND_PHILOSOPHICAL_PRECEDENCE_WITH_SECONDARY_AI_FORMALIZATION",
   "created_at": "2026-08-20",
   "bundle_uid": "sym:AbstractNode:hswm-human-universal-body-ontology-2026-08-20",
   "source_path": "docs/canon/sources/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.txt",
   "source_sha256": "13bff525f9b629fa01cdea4d6d882095866f8fd34fbff2cb49a35cf7f82f36bc",
-  "authority_boundary": "The target definition, explicit membership scope, history-river metaphor, open-source connected structure, human/LLM activation role, and plan-as-social-revolution relation are USER_PRIMARY. Mathematical expansion, runtime contracts, privacy boundary, phases, acceptance criteria, and the HOH link are SECONDARY_AI_PROPOSED. No present-tense implementation or efficacy claim is made.",
+  "philosophy_source_path": "docs/canon/sources/USER_PRIMARY_HSWM_PHILOSOPHICAL_PRECEDENCE_2026-08-20.txt",
+  "philosophy_source_sha256": "888428000431731ba805f067e5753e667baa314243ead9d03d508504507d69a8",
+  "authority_boundary": "The target definition, explicit membership scope, history-river metaphor, open-source connected structure, human/LLM activation role, plan-as-social-revolution relation, and philosophy-before-code direction are USER_PRIMARY. The ten named philosophical principles, mathematical expansion, runtime contracts, privacy/governance mechanisms, phases, acceptance criteria, and the HOH link are SECONDARY_AI_PROPOSED. No present-tense implementation or efficacy claim is made.",
   "anchors": [
     {
       "uid": "sym:Concept:hswm",
@@ -22,7 +24,7 @@
       "labels": ["AbstractNode", "ResearchArtifact"],
       "properties": {
         "name": "HSWM Human Universal Body Ontology 2026-08-20",
-        "description": "인류보편체의 USER_PRIMARY 목표 정의와 HSWM 인류보완계획의 구현 형식화를 분리해 담는 ontology bundle.",
+        "description": "인류보편체의 USER_PRIMARY 목표 정의·HSWM 철학 우선 방향과 그 철학·구현 형식화를 권위별로 분리해 담는 ontology bundle.",
         "authority_class": "MIXED_EXPLICIT",
         "canonical_scope": "UNSPECIFIED",
         "ontology_domain": "ENGINEERING",
@@ -53,6 +55,231 @@
         "semantic_roles": ["CANONICAL_SOURCE", "USER_UTTERANCE"],
         "source_path": "docs/canon/sources/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.txt",
         "source_sha256": "13bff525f9b629fa01cdea4d6d882095866f8fd34fbff2cb49a35cf7f82f36bc"
+      }
+    },
+    {
+      "uid": "sym:CanonicalSource:user-primary-hswm-philosophical-precedence-2026-08-20",
+      "labels": ["AbstractNode", "SourceDocument", "CanonicalSource"],
+      "properties": {
+        "name": "USER_PRIMARY HSWM 철학 우선 원문 2026-08-20",
+        "description": "HSWM 구현을 코드부터 시작하지 말고 철학적 함의를 먼저 설정해야 한다는 사용자 발화 원문.",
+        "authority_class": "USER_PRIMARY",
+        "canonical_scope": "USER_RATIFIED_CANON",
+        "ontology_domain": "PHILOSOPHY",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "EVIDENCE",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "NOT_APPLICABLE",
+        "review_required": false,
+        "semantic_roles": ["CANONICAL_SOURCE", "USER_UTTERANCE"],
+        "source_path": "docs/canon/sources/USER_PRIMARY_HSWM_PHILOSOPHICAL_PRECEDENCE_2026-08-20.txt",
+        "source_sha256": "888428000431731ba805f067e5753e667baa314243ead9d03d508504507d69a8"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-philosophy-before-code",
+      "labels": ["Concept", "CanonicalDefinition"],
+      "properties": {
+        "name": "HSWM 철학 우선 원칙",
+        "description": "HSWM의 존재·시간·진리·개체·행위·권리 의미를 먼저 설정하고 그 뒤에 구현을 내려야 한다는 USER_PRIMARY 연구 순서.",
+        "authority_class": "USER_PRIMARY",
+        "canonical_scope": "USER_RATIFIED_CANON",
+        "ontology_domain": "PHILOSOPHY",
+        "ontology_kind": "CONCEPT",
+        "ontology_plane": "INQUIRY",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "NOT_APPLICABLE",
+        "review_required": false,
+        "semantic_roles": ["CANON", "RESEARCH_ORDER", "PHILOSOPHICAL_PRECEDENCE"],
+        "claim_boundary": "Only the philosophy-before-code direction is USER_PRIMARY; the named principles remain proposed."
+      }
+    },
+    {
+      "uid": "sym:AbstractNode:hswm-philosophical-foundations-2026-08-20",
+      "labels": ["AbstractNode", "ResearchArtifact"],
+      "properties": {
+        "name": "HSWM 철학적 기초 2026-08-20",
+        "description": "관계·시간·인식·개체·행위·존엄·공개성·인지주권·목적론을 HSWM 구현 제약으로 내리는 provisional philosophical charter.",
+        "authority_class": "MIXED_EXPLICIT",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "PHILOSOPHY",
+        "ontology_kind": "ARTIFACT",
+        "ontology_plane": "GOVERNANCE",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": ["PROVISIONAL_CHARTER", "AUTHORITY_BOUNDARY"],
+        "source_path": "docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md"
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-relational-ontology",
+      "labels": ["Concept"],
+      "properties": {
+        "name": "P1 HSWM 관계적 존재론",
+        "description": "존재를 고립된 payload가 아니라 시간·출처·사건·반응의 n-ary 관계 속에서 식별되는 pattern으로 보는 제안 원리.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "PHILOSOPHY",
+        "ontology_kind": "CONCEPT",
+        "ontology_plane": "DESIGN",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": ["PHILOSOPHICAL_PRINCIPLE", "ONTOLOGY", "P1"]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-genealogical-temporality",
+      "labels": ["Concept"],
+      "properties": {
+        "name": "P2 HSWM 계보적 시간론",
+        "description": "동일성을 고정 snapshot이 아니라 provenance를 가진 상태전이 lineage의 연속성으로 보는 제안 원리.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "PHILOSOPHY",
+        "ontology_kind": "CONCEPT",
+        "ontology_plane": "DESIGN",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": ["PHILOSOPHICAL_PRINCIPLE", "TEMPORALITY", "P2"]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-memory-truth-distinction",
+      "labels": ["Concept"],
+      "properties": {
+        "name": "P3 HSWM 기억–진리 분리",
+        "description": "기억된 주장과 현재 채택된 판단을 분리하고 세계모델의 공백·불확실성·접근 불가능 영역을 함께 표현한다는 제안 인식론.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "PHILOSOPHY",
+        "ontology_kind": "CONCEPT",
+        "ontology_plane": "DESIGN",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": ["PHILOSOPHICAL_PRINCIPLE", "EPISTEMOLOGY", "P3"]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-productive-fallibility",
+      "labels": ["Concept"],
+      "properties": {
+        "name": "P4 HSWM 오류 가능성과 모순의 생산성",
+        "description": "오류·모순·실패를 현재 판단과 구분해 억제하면서도 다음 자기수정의 역사적 원인으로 보존한다는 제안 원리.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "PHILOSOPHY",
+        "ontology_kind": "CONCEPT",
+        "ontology_plane": "DESIGN",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": ["PHILOSOPHICAL_PRINCIPLE", "FALLIBILISM", "P4"]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-difference-preserving-unity",
+      "labels": ["Concept"],
+      "properties": {
+        "name": "P5 HSWM 차이 보존적 통일",
+        "description": "상위 인지능력체의 하나됨을 부분의 균질화가 아니라 개체성을 보존한 인과 통합으로 보는 제안 원리.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "PHILOSOPHY",
+        "ontology_kind": "CONCEPT",
+        "ontology_plane": "DESIGN",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": ["PHILOSOPHICAL_PRINCIPLE", "INDIVIDUATION", "P5"]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-causal-agency",
+      "labels": ["Concept"],
+      "properties": {
+        "name": "P6 HSWM 인과적 행위성",
+        "description": "지속 상태가 행동을 만들고 outcome이 다음 지속 상태와 행동을 바꾸는 검증 가능한 되먹임에서 주체성이 성립한다는 제안 원리.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "PHILOSOPHY",
+        "ontology_kind": "CONCEPT",
+        "ontology_plane": "DESIGN",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": ["PHILOSOPHICAL_PRINCIPLE", "AGENCY", "P6"]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-participation-and-dignity",
+      "labels": ["Concept", "Guardrail"],
+      "properties": {
+        "name": "P7 HSWM 참여와 존엄",
+        "description": "인간은 능동적 국소 HSWM이지만 데이터 자원이나 소모품이 아니며 참여가 기억·행동·정체성의 소유권 양도가 아니라는 제안 원리.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "PHILOSOPHY",
+        "ontology_kind": "CONCEPT",
+        "ontology_plane": "GOVERNANCE",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": ["PHILOSOPHICAL_PRINCIPLE", "HUMAN_DIGNITY", "P7"]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-open-exterior-protected-interior",
+      "labels": ["Concept", "Guardrail"],
+      "properties": {
+        "name": "P8 HSWM 공개된 외부와 보호된 내부",
+        "description": "공공 protocol·runtime·감사 규칙은 공개하되 구성원의 내부 상태와 사적 기억은 권한 있는 막 안에 남길 수 있어야 한다는 제안 원리.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "PHILOSOPHY",
+        "ontology_kind": "CONCEPT",
+        "ontology_plane": "GOVERNANCE",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": ["PHILOSOPHICAL_PRINCIPLE", "OPENNESS_BOUNDARY", "P8"]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-cognitive-sovereignty-subsidiarity",
+      "labels": ["Concept", "Guardrail"],
+      "properties": {
+        "name": "P9 HSWM 인지주권과 보충성",
+        "description": "기억 admission·activation·judgment·update·forgetting 권력을 분리하고 국소 결정은 가능한 한 국소 경계에 남긴다는 제안 원리.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "PHILOSOPHY",
+        "ontology_kind": "CONCEPT",
+        "ontology_plane": "GOVERNANCE",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": ["PHILOSOPHICAL_PRINCIPLE", "COGNITIVE_SOVEREIGNTY", "SUBSIDIARITY", "P9"]
+      }
+    },
+    {
+      "uid": "sym:Concept:hswm-open-ended-teleology",
+      "labels": ["Concept", "Guardrail"],
+      "properties": {
+        "name": "P10 HSWM 열린 목적론",
+        "description": "단일 reward 극대화보다 경계를 보존하며 기억·관계화·오류 발견·자기교정 능력을 지속시키고 목적 자체도 검토 가능하게 둔다는 제안 원리.",
+        "authority_class": "SECONDARY_AI",
+        "canonical_scope": "UNSPECIFIED",
+        "ontology_domain": "PHILOSOPHY",
+        "ontology_kind": "CONCEPT",
+        "ontology_plane": "GOVERNANCE",
+        "record_lifecycle": "ACTIVE",
+        "epistemic_state": "UNASSESSED",
+        "review_required": true,
+        "semantic_roles": ["PHILOSOPHICAL_PRINCIPLE", "TELEOLOGY", "P10"]
       }
     },
     {
@@ -605,6 +832,20 @@
   ],
   "relations": [
     {"from_uid": "sym:AbstractNode:hswm-human-universal-body-ontology-2026-08-20", "type": "HAS_SOURCE", "to_uid": "sym:CanonicalSource:user-primary-human-universal-body-2026-08-20", "authority_class": "SYSTEM_DERIVED", "status": "ACTIVE"},
+    {"from_uid": "sym:AbstractNode:hswm-human-universal-body-ontology-2026-08-20", "type": "HAS_SOURCE", "to_uid": "sym:CanonicalSource:user-primary-hswm-philosophical-precedence-2026-08-20", "authority_class": "SYSTEM_DERIVED", "status": "ACTIVE"},
+    {"from_uid": "sym:AbstractNode:hswm-human-universal-body-ontology-2026-08-20", "type": "HAS_CONCEPT", "to_uid": "sym:AbstractNode:hswm-philosophical-foundations-2026-08-20", "authority_class": "SYSTEM_DERIVED", "status": "ACTIVE"},
+    {"from_uid": "sym:CanonicalSource:user-primary-hswm-philosophical-precedence-2026-08-20", "type": "USER_PRIMARY_SOURCE_FOR", "to_uid": "sym:Concept:hswm-philosophy-before-code", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
+    {"from_uid": "sym:AbstractNode:hswm-philosophical-foundations-2026-08-20", "type": "IMPLEMENTS", "to_uid": "sym:Concept:hswm-philosophy-before-code", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:AbstractNode:hswm-philosophical-foundations-2026-08-20", "type": "HAS_CONCEPT", "to_uid": "sym:Concept:hswm-relational-ontology", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:AbstractNode:hswm-philosophical-foundations-2026-08-20", "type": "HAS_CONCEPT", "to_uid": "sym:Concept:hswm-genealogical-temporality", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:AbstractNode:hswm-philosophical-foundations-2026-08-20", "type": "HAS_CONCEPT", "to_uid": "sym:Concept:hswm-memory-truth-distinction", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:AbstractNode:hswm-philosophical-foundations-2026-08-20", "type": "HAS_CONCEPT", "to_uid": "sym:Concept:hswm-productive-fallibility", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:AbstractNode:hswm-philosophical-foundations-2026-08-20", "type": "HAS_CONCEPT", "to_uid": "sym:Concept:hswm-difference-preserving-unity", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:AbstractNode:hswm-philosophical-foundations-2026-08-20", "type": "HAS_CONCEPT", "to_uid": "sym:Concept:hswm-causal-agency", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:AbstractNode:hswm-philosophical-foundations-2026-08-20", "type": "HAS_CONCEPT", "to_uid": "sym:Concept:hswm-participation-and-dignity", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:AbstractNode:hswm-philosophical-foundations-2026-08-20", "type": "HAS_CONCEPT", "to_uid": "sym:Concept:hswm-open-exterior-protected-interior", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:AbstractNode:hswm-philosophical-foundations-2026-08-20", "type": "HAS_CONCEPT", "to_uid": "sym:Concept:hswm-cognitive-sovereignty-subsidiarity", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:AbstractNode:hswm-philosophical-foundations-2026-08-20", "type": "HAS_CONCEPT", "to_uid": "sym:Concept:hswm-open-ended-teleology", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
     {"from_uid": "sym:CanonicalSource:user-primary-human-universal-body-2026-08-20", "type": "USER_PRIMARY_SOURCE_FOR", "to_uid": "sym:Concept:human-universal-body", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
     {"from_uid": "sym:CanonicalSource:user-primary-human-universal-body-2026-08-20", "type": "USER_PRIMARY_SOURCE_FOR", "to_uid": "sym:ResearchProgram:hswm-human-complementation-plan", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
     {"from_uid": "sym:CanonicalSource:user-primary-human-universal-body-2026-08-20", "type": "USER_PRIMARY_SOURCE_FOR", "to_uid": "sym:Concept:human-universal-body-all-humanity", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
@@ -623,6 +864,16 @@
     {"from_uid": "sym:Concept:hswm", "type": "SUBSTRATE_FOR", "to_uid": "sym:Concept:human-universal-body", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
     {"from_uid": "sym:Concept:human-universal-body", "type": "STRUCTURED_AS", "to_uid": "sym:Concept:hswm", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
     {"from_uid": "sym:ResearchProgram:hswm-human-complementation-plan", "type": "TARGETS", "to_uid": "sym:Concept:human-universal-body", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
+    {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:hswm-relational-ontology", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:hswm-genealogical-temporality", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:hswm-memory-truth-distinction", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:hswm-productive-fallibility", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:hswm-difference-preserving-unity", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:hswm-causal-agency", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:hswm-participation-and-dignity", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:hswm-open-exterior-protected-interior", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:hswm-cognitive-sovereignty-subsidiarity", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:hswm-open-ended-teleology", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
     {"from_uid": "sym:Concept:human-universal-body", "type": "CONTAINS", "to_uid": "sym:Concept:human-universal-body-all-humanity", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
     {"from_uid": "sym:Concept:human-universal-body", "type": "CONTAINS", "to_uid": "sym:Concept:human-universal-body-cognitive-entities", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
     {"from_uid": "sym:Concept:human-universal-body", "type": "CONTAINS", "to_uid": "sym:Concept:human-universal-body-stored-memory", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
@@ -631,10 +882,16 @@
     {"from_uid": "sym:Concept:human-universal-body", "type": "CONTAINS", "to_uid": "sym:Concept:human-universal-body-sensors", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
     {"from_uid": "sym:Concept:human-universal-body", "type": "CONTAINS", "to_uid": "sym:Concept:human-universal-body-static-information", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
     {"from_uid": "sym:Concept:human-universal-body", "type": "PRESERVES", "to_uid": "sym:Concept:human-history-river-holy-water", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
+    {"from_uid": "sym:Concept:hswm-genealogical-temporality", "type": "REFINES", "to_uid": "sym:Concept:human-history-river-holy-water", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:hswm-difference-preserving-unity", "type": "REFINES", "to_uid": "sym:Concept:human-universal-body-single-cognitive-entity", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:hswm-causal-agency", "type": "REFINES", "to_uid": "sym:Concept:human-universal-body-causal-cross-activation", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
     {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:human-llm-hswm-activation-fuel", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
     {"from_uid": "sym:Concept:human-universal-body", "type": "STRUCTURED_AS", "to_uid": "sym:Concept:human-universal-body-open-source-structure", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
     {"from_uid": "sym:Concept:human-universal-body", "type": "REALIZES", "to_uid": "sym:Concept:human-universal-body-single-cognitive-entity", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
     {"from_uid": "sym:ResearchProgram:hswm-human-complementation-plan", "type": "REALIZES", "to_uid": "sym:Concept:hswm-human-complementation-social-revolution", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
+    {"from_uid": "sym:ResearchProgram:hswm-human-complementation-plan", "type": "REQUIRES", "to_uid": "sym:Concept:hswm-participation-and-dignity", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:ResearchProgram:hswm-human-complementation-plan", "type": "REQUIRES", "to_uid": "sym:Concept:hswm-open-exterior-protected-interior", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:ResearchProgram:hswm-human-complementation-plan", "type": "REQUIRES", "to_uid": "sym:Concept:hswm-cognitive-sovereignty-subsidiarity", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
     {"from_uid": "sym:Concept:hswm-human-complementation-social-revolution", "type": "SUPERSEDES", "to_uid": "sym:Concept:pocketed-cognitive-entities", "authority_class": "USER_PRIMARY", "status": "ACTIVE"},
     {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:human-universal-body-self-similar-composition", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
     {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:human-universal-body-persistent-shared-state", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
@@ -643,6 +900,9 @@
     {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:human-universal-body-global-self-model", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
     {"from_uid": "sym:Concept:human-universal-body", "type": "PRESERVES", "to_uid": "sym:Concept:human-universal-body-provenance-preserving-individuation", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
     {"from_uid": "sym:Concept:human-universal-body", "type": "REQUIRES", "to_uid": "sym:Concept:human-universal-body-constitutional-boundary", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:hswm-participation-and-dignity", "type": "PRESERVES", "to_uid": "sym:Concept:human-universal-body-constitutional-boundary", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:hswm-open-exterior-protected-interior", "type": "REFINES", "to_uid": "sym:Concept:human-universal-body-open-source-structure", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
+    {"from_uid": "sym:Concept:hswm-cognitive-sovereignty-subsidiarity", "type": "PRESERVES", "to_uid": "sym:Concept:human-universal-body-constitutional-boundary", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
     {"from_uid": "sym:Concept:human-universal-body-open-source-structure", "type": "REQUIRES", "to_uid": "sym:Concept:human-universal-body-open-federated-runtime", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
     {"from_uid": "sym:Concept:human-universal-body-open-federated-runtime", "type": "PRESERVES", "to_uid": "sym:Concept:human-universal-body-constitutional-boundary", "authority_class": "SECONDARY_AI", "status": "PROPOSED"},
     {"from_uid": "sym:KG_CREATIVE:hoh", "type": "SPECULATIVE_LINK", "to_uid": "sym:Concept:human-universal-body-hoh-personal-value-interface", "authority_class": "SECONDARY_AI", "status": "WORKING_HYPOTHESIS"},

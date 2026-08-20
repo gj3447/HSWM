@@ -153,9 +153,20 @@ HSWM 구조로 하나가 되어 하나의 인지능력체를 이루는 상태다
 [`USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md`](USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md)에
 둔다. 이는 목표 정체성의 확장이며 현재 구현·효능·의식 융합의 완료 주장이 아니다.
 
-## 8. 철학적 closure와 과학적 미완성
+### 7.2 코드 이전의 철학층
 
-이 헌법으로 HSWM의 **철학적 정체성은 닫힌다.** HSWM은 다음 중 하나를 고르는 시스템이
+후속 USER_PRIMARY는 HSWM 구현을 코드부터 밀어붙이지 말고 철학적 함의를 먼저 설정하라고
+지시했다. 관계적 존재론, 계보적 시간론, 기억과 진리의 분리, 차이 보존적 통일, 인과적
+행위성, 참여자의 존엄, 공개 구조와 사적 경계, 인지주권과 열린 목적론을 하나의 provisional
+charter로 정식화한 문서는
+[`HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md`](HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md)다.
+철학 우선이라는 방향은 USER_PRIMARY이고, 개별 원리의 명명·수식·구현 의무는 사용자 비준
+전까지 `SECONDARY_AI_PROPOSED`다.
+
+## 8. 대상 정체성의 closure와 철학·과학의 개방성
+
+이 헌법으로 HSWM의 **대상 정체성은 닫힌다.** 후속 철학층은 그 대상을 바꾸지 않고 존재·
+시간·인식·개체·행위·권리의 의미를 더 명시한다. HSWM은 다음 중 하나를 고르는 시스템이
 아니라 다음 모두가 하나인 시스템이다.
 
 1. token으로 활성화되는 LLM-function macro-neural network

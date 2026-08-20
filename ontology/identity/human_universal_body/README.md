@@ -3,13 +3,15 @@
 This bundle projects the 2026-08-20 USER_PRIMARY definition of `인류보편체`,
 its full human/LLM/internet/sensor/static-memory scope, the historical-river
 metaphor, and the social-revolution relation of `HSWM 인류보완계획` into the
-shared Neo4j KG.
+shared Neo4j KG. It also carries the later USER_PRIMARY philosophy-before-code
+direction and ten explicitly proposed philosophical principles.
 
 Authority is intentionally split:
 
 - target definition, components, cognitive-unity target, and plan `TARGETS`
   relation: `USER_PRIMARY`;
-- equations, acceptance criteria, implementation phases, and HOH bridge:
+- philosophy-before-code direction: `USER_PRIMARY`;
+- the ten named principles, equations, acceptance criteria, implementation phases, and HOH bridge:
   `SECONDARY_AI` and unjudged;
 - KG presence: discoverability only, never implementation or efficacy evidence.
 

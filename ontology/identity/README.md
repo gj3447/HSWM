@@ -16,3 +16,7 @@ all humanity, all LLMs, the internet, active cognitive entities, sensors, static
 information, and stored memory forming one higher-order open HSWM cognitive entity.
 Its machine-readable bundle and explicit KG publisher
 live in [`human_universal_body/`](human_universal_body/).
+The philosophy-before-code layer is stated separately in
+[`HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md`](../../docs/canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md):
+the direction is USER_PRIMARY, while the ten named principles remain an explicit
+SECONDARY_AI provisional charter.

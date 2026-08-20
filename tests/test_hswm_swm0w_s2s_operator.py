@@ -9,11 +9,13 @@ import math
 import numpy as np
 import pytest
 
+from hswm.experiments import swm0w_s2s_family as family
 from hswm.experiments import swm0w_s2s_operator as operator
 from hswm.experiments import swm0w_s2s_worlds as worlds
 
 
 SEED = b"swm0w-s2s-operator-focused-public-seed-v1"
+V2_SEED = b"swm0w-s2s-v2-family-smoke-seed-000000000000"
 
 
 @pytest.fixture(scope="module")
@@ -26,6 +28,19 @@ def domain(task: worlds.TaskSpecV1):
     cases = tuple(task.iter_cases())
     presweep = operator.compile_model_worlds(tuple(case.world for case in cases))
     targets = operator.compile_case_target_batch(cases)
+    return cases, presweep, targets
+
+
+@pytest.fixture(scope="module")
+def v2_task() -> family.TaskSpecV2:
+    return family.generate_task(external_seed=V2_SEED, draw_index=0)
+
+
+@pytest.fixture(scope="module")
+def v2_domain(v2_task: family.TaskSpecV2):
+    cases = tuple(v2_task.iter_cases())
+    presweep = operator.compile_model_worlds(tuple(case.world for case in cases))
+    targets = operator.compile_case_target_batch_v2(cases)
     return cases, presweep, targets
 
 
@@ -229,6 +244,130 @@ def test_constructive_q_witness_is_exact_on_all_15625_worlds(task, domain) -> No
     assert np.count_nonzero(witness.parameters["q_w"]) == 12
     assert np.count_nonzero(witness.parameters["phi_w"][:, :, 4:]) == 0
     assert np.count_nonzero(witness.parameters["psi_w"][:, :, 4:]) == 0
+
+
+def test_v2_target_compilers_are_exact_scaled_and_immutable(v2_task) -> None:
+    cases = (
+        v2_task.case((0, 4, 1, 3, 2, 4)),
+        v2_task.case((4, 0, 3, 1, 2, 4)),
+    )
+    single = operator.compile_case_targets_v2(cases[0])
+    batch = operator.compile_case_target_batch_v2(cases)
+    expected = np.asarray(cases[0].target_numerators, dtype=np.float64).reshape(3, 2, 2)
+    expected /= 2**19
+    assert np.array_equal(single, expected)
+    assert np.array_equal(batch[0], single)
+    assert np.array_equal(batch[1], operator.compile_case_targets_v2(cases[1]))
+    assert single.shape == (3, 2, 2) and batch.shape == (2, 3, 2, 2)
+    assert single.dtype == batch.dtype == np.float64
+    assert not single.flags.writeable and not batch.flags.writeable
+
+
+def test_v2_task_bound_q_witness_is_exact_on_all_15625_worlds(
+    v2_task, v2_domain
+) -> None:
+    cases, presweep, targets = v2_domain
+    assert len(cases) == 5**6 == 15_625
+    witness = operator.construct_task_bound_q_witness_v2(v2_task)
+    assert np.array_equal(witness.forward(presweep), targets)
+    assert witness.structural_target_sha256 == v2_task.structural_target_sha256
+    assert witness.family_definition_sha256 == family.FAMILY_DEFINITION_SHA256
+    assert witness.rank_gains == v2_task.rank_gains
+    assert witness.parameter_count == 870
+    assert witness.learned is False
+    assert witness.operator.origin is operator.ParameterOrigin.EXTERNAL_UNTRAINED
+    assert witness.operator.intervention is None
+
+    # Gain lives only in q_w; phi=P, psi=T and all lower heads remain unchanged.
+    v1 = operator.construct_q_witness(
+        worlds.generate_task(external_seed=SEED)
+    )
+    assert witness.parameters["phi_w"].tobytes() == v1.parameters["phi_w"].tobytes()
+    assert witness.parameters["psi_w"].tobytes() == v1.parameters["psi_w"].tobytes()
+    assert np.count_nonzero(witness.parameters["unary_w"]) == 0
+    assert np.count_nonzero(witness.parameters["pair_w"]) == 0
+    assert np.count_nonzero(witness.parameters["out_b"]) == 0
+    assert np.count_nonzero(witness.parameters["q_w"]) == 12
+    for index, (role, channel, rank) in enumerate(family.GAIN_ORDER):
+        active = 2 * channel + rank
+        assert witness.parameters["q_w"][role, channel, active] == (
+            v2_task.rank_gains[index] * 2**-19
+        )
+
+
+def test_v2_wrapper_binds_target_law_not_split_or_seed_provenance(v2_task) -> None:
+    alternate_split = family.SPLIT_ALLOCATIONS[1]
+    split_variant = family._build_task(
+        seed_commitment_sha256=v2_task.seed_commitment_sha256,
+        draw_index=v2_task.draw_index,
+        rank_gains=v2_task.rank_gains,
+        split_coefficients=v2_task.split_coefficients,
+        split_residues=alternate_split,
+    )
+    provenance_variant = family._build_task(
+        seed_commitment_sha256="0" * 64,
+        draw_index=1,
+        rank_gains=v2_task.rank_gains,
+        split_coefficients=v2_task.split_coefficients,
+        split_residues=v2_task.split_residues,
+    )
+    baseline = operator.construct_task_bound_q_witness_v2(v2_task)
+    split_bound = operator.construct_task_bound_q_witness_v2(split_variant)
+    provenance_bound = operator.construct_task_bound_q_witness_v2(provenance_variant)
+    assert split_variant.structural_target_sha256 == v2_task.structural_target_sha256
+    assert provenance_variant.structural_target_sha256 == v2_task.structural_target_sha256
+    assert baseline.state_sha256 == split_bound.state_sha256 == provenance_bound.state_sha256
+    assert (
+        baseline.parameters_sha256
+        == split_bound.parameters_sha256
+        == provenance_bound.parameters_sha256
+    )
+    encoded = json.dumps(baseline.canonical(), sort_keys=True)
+    assert all(
+        token not in encoded
+        for token in ("seed", "manifest", "split", "draw_index", "structural_task")
+    )
+    assert all(
+        not hasattr(baseline, name)
+        for name in (
+            "seed_commitment_sha256",
+            "manifest_sha256",
+            "split_coefficients",
+            "split_residues",
+            "structural_task_sha256",
+            "task",
+        )
+    )
+    different = operator.construct_task_bound_q_witness_v2(
+        family.generate_task(external_seed=V2_SEED, draw_index=1)
+    )
+    assert different.structural_target_sha256 != baseline.structural_target_sha256
+    assert different.state_sha256 != baseline.state_sha256
+
+
+def test_v2_wrapper_reconstructs_bytes_and_rejects_target_forgery(v2_task) -> None:
+    witness = operator.construct_task_bound_q_witness_v2(v2_task)
+    forged_parameters = {
+        name: value.copy() for name, value in witness.operator.parameters.items()
+    }
+    forged_parameters["q_w"][0, 0, 0] += 2**-19
+    forged_core = operator.S2SOperator(operator.S2SArm.T16, forged_parameters)
+    with pytest.raises(operator.SWM0WS2SOperatorError, match="contradicts"):
+        replace(witness, operator=forged_core)
+
+    gains = list(witness.rank_gains)
+    gains[-1] = 8 if gains[-1] != 8 else 9
+    with pytest.raises(operator.SWM0WS2SOperatorError, match="structural target"):
+        replace(witness, rank_gains=tuple(gains))
+    with pytest.raises(operator.SWM0WS2SOperatorError, match="structural target"):
+        replace(witness, structural_target_sha256="0" * 64)
+    with pytest.raises(operator.SWM0WS2SOperatorError, match="family definition"):
+        replace(witness, family_definition_sha256="0" * 64)
+    with pytest.raises(operator.SWM0WS2SOperatorError, match="unbound"):
+        replace(
+            witness,
+            operator=operator.initialize_operator(operator.S2SArm.T16, seed=3),
+        )
 
 
 @pytest.mark.parametrize("arm", tuple(operator.S2SArm))
@@ -463,6 +602,31 @@ def test_constructive_origin_rejects_arbitrary_finite_parameter_forgery(task) ->
         replace(witness, parameters=forged)
 
 
+def test_v2_adapter_preserves_frozen_v1_content_and_receipt_hashes(task) -> None:
+    initialized = operator.initialize_operator(operator.S2SArm.T16, seed=73)
+    fixed = operator.construct_q_witness(task)
+    assert initialized.parameters_sha256 == (
+        "478c6e2375e32ca5fca862088534f3d0a7e6e579247368bedfbf82a0e44d3ae4"
+    )
+    assert initialized.state_sha256 == (
+        "ecfb5b8089832732019e62c03cca9ef2492dfb878291aa34d2ff49e8b6ab5ed5"
+    )
+    assert fixed.parameters_sha256 == (
+        "7caa8a95ac529d2e346ac7a954ca1d2d74b97f31dafc4680b525618c9dafff1d"
+    )
+    assert fixed.state_sha256 == (
+        "d2d84213be90e47aabb6569658d9714ef013fa995053afadfe9e757cbc098b5c"
+    )
+    assert tuple(
+        operator.architecture_receipt(arm).receipt_sha256
+        for arm in operator.ALL_ARMS
+    ) == (
+        "65e6e27379793a7f483e8c34292ba060b60b89824822167e7483e03f7415ad29",
+        "52bbfd8bcc1a2c6c420b0673c323d81da82e4475222a132d9bbabe8de3288001",
+        "bff3df025fd4b8bc4e022334b105b63f2833d45a56fac11aeb4b1d0d6282831d",
+    )
+
+
 def test_exact_type_dtype_shape_nan_and_receipt_failures(task) -> None:
     model = operator.initialize_operator(operator.S2SArm.T16, seed=1)
     presweep = operator.compile_model_world(worlds.ModelWorldV1((0, 1, 2, 3, 4, 0)))
@@ -515,6 +679,40 @@ def test_exact_type_dtype_shape_nan_and_receipt_failures(task) -> None:
         replace(receipt, parameter_schema=tuple(aliased_schema))
     with pytest.raises(FrozenInstanceError):
         operator.architecture_receipt(operator.S2SArm.T16).parameter_count = 869
+
+
+def test_v2_exact_nominal_type_boundaries_reject_v1_and_subclasses(v2_task) -> None:
+    case = v2_task.case((0, 1, 2, 3, 4, 0))
+
+    class ForgedV2Task(family.TaskSpecV2):
+        pass
+
+    class ForgedV2Case(family.EvaluatorCaseV2):
+        pass
+
+    forged_task = ForgedV2Task(
+        v2_task.seed_commitment_sha256,
+        v2_task.draw_index,
+        v2_task.rank_gains,
+        v2_task.split_coefficients,
+        v2_task.split_residues,
+        v2_task.family_definition_sha256,
+        v2_task.family_certificate_sha256,
+        v2_task.structural_target_sha256,
+        v2_task.structural_task_sha256,
+        v2_task.manifest_sha256,
+    )
+    forged_case = ForgedV2Case(case.task, case.world, case.split, case.target_numerators)
+    with pytest.raises(operator.SWM0WS2SOperatorError, match="exact TaskSpecV2"):
+        operator.construct_task_bound_q_witness_v2(forged_task)
+    with pytest.raises(operator.SWM0WS2SOperatorError, match="exact EvaluatorCaseV2"):
+        operator.compile_case_targets_v2(forged_case)
+    with pytest.raises(operator.SWM0WS2SOperatorError, match="V2"):
+        operator.compile_case_targets_v2(
+            worlds.generate_task(external_seed=SEED).case((0, 1, 2, 3, 4, 0))
+        )
+    with pytest.raises(operator.SWM0WS2SOperatorError, match="immutable tuple"):
+        operator.compile_case_target_batch_v2([case])
 
 
 def test_r2_and_cycle_boundaries_reject_invalid_inputs() -> None:

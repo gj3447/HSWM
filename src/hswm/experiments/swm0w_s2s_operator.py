@@ -31,6 +31,15 @@ from typing import Any, Mapping, Sequence
 
 import numpy as np
 
+from hswm.experiments.swm0w_s2s_family import (
+    FAMILY_DEFINITION_SHA256 as V2_FAMILY_DEFINITION_SHA256,
+    GAIN_LEVELS as V2_GAIN_LEVELS,
+    GAIN_ORDER as V2_GAIN_ORDER,
+    REFERENCE_GAIN as V2_REFERENCE_GAIN,
+    TARGET_SCALE_EXPONENT as V2_TARGET_SCALE_EXPONENT,
+    EvaluatorCaseV2,
+    TaskSpecV2,
+)
 from hswm.experiments.swm0w_s2s_worlds import (
     CHANNELS,
     FIXED_FACTOR_TABLES,
@@ -49,6 +58,8 @@ OPERATOR_VERSION = "hswm-swm0w-s2s-operator/v1"
 ARCHITECTURE_RECEIPT_VERSION = "hswm-swm0w-s2s-architecture-receipt/v1"
 Q_REMOVAL_RECEIPT_VERSION = "hswm-swm0w-s2s-q-removal/v1"
 R2_RECEIPT_VERSION = "hswm-swm0w-s2s-stratified-r2/v1"
+TASK_BOUND_Q_WITNESS_V2_VERSION = "hswm-swm0w-s2s-task-bound-q-witness/v2"
+STRUCTURAL_TARGET_V2_VERSION = "hswm-swm0w-s2s-structural-target/v2"
 INITIALIZATION_DOMAIN = "hswm-swm0w-s2s-tensor-local-initialization/v1"
 PARAMETER_HASH_DOMAIN = b"hswm-swm0w-s2s-parameters/v1\x00"
 
@@ -569,6 +580,57 @@ def _fixed_q_witness_parameters() -> dict[str, np.ndarray]:
     return parameters
 
 
+def _require_v2_rank_gains(rank_gains: object) -> tuple[int, ...]:
+    if (
+        type(rank_gains) is not tuple
+        or len(rank_gains) != len(V2_GAIN_ORDER)
+        or any(type(gain) is not int for gain in rank_gains)
+        or rank_gains[0] != V2_REFERENCE_GAIN
+        or any(gain not in V2_GAIN_LEVELS for gain in rank_gains[1:])
+    ):
+        raise SWM0WS2SOperatorError("V2 rank gains violate the fixed family domain")
+    return rank_gains
+
+
+def _v2_structural_target_sha256(rank_gains: tuple[int, ...]) -> str:
+    gains = _require_v2_rank_gains(rank_gains)
+    return canonical_sha256(
+        {
+            "family_definition_sha256": V2_FAMILY_DEFINITION_SHA256,
+            "rank_gains": [
+                {
+                    "channel": CHANNELS[channel],
+                    "gain": gains[index],
+                    "rank": rank,
+                    "role": ROLES[role],
+                }
+                for index, (role, channel, rank) in enumerate(V2_GAIN_ORDER)
+            ],
+            "schema_version": STRUCTURAL_TARGET_V2_VERSION,
+        }
+    )
+
+
+def _task_bound_q_parameters_v2(rank_gains: tuple[int, ...]) -> dict[str, np.ndarray]:
+    gains = _require_v2_rank_gains(rank_gains)
+    parameters = {
+        name: np.zeros(shape, dtype=np.float64)
+        for name, shape in _PARAMETER_SCHEMAS[S2SArm.T16]
+    }
+    factors = dict(FIXED_FACTOR_TABLES)
+    scale = float(2**-V2_TARGET_SCALE_EXPONENT)
+    for index, (role, channel, rank) in enumerate(V2_GAIN_ORDER):
+        active = 2 * channel + rank
+        parameters["phi_w"][role, :, active] = factors[
+            f"P:r{role}:c{channel}:k{rank}"
+        ][:4]
+        parameters["psi_w"][role, :, active] = factors[
+            f"T:r{role}:c{channel}:k{rank}"
+        ][:4]
+        parameters["q_w"][role, channel, active] = gains[index] * scale
+    return parameters
+
+
 def _origin_parameters(
     arm: S2SArm, origin: ParameterOrigin, seed: int | None
 ) -> dict[str, np.ndarray]:
@@ -633,6 +695,26 @@ def compile_case_target_batch(cases: Sequence[EvaluatorCaseV1]) -> np.ndarray:
         raise SWM0WS2SOperatorError("case batch requires exact EvaluatorCaseV1 entries")
     return _immutable_float64(
         np.stack([compile_case_targets(case) for case in cases], axis=0)
+    )
+
+
+def compile_case_targets_v2(case: EvaluatorCaseV2) -> np.ndarray:
+    """Compile one exact V2 evaluator target without exposing it to the core."""
+
+    if type(case) is not EvaluatorCaseV2:
+        raise SWM0WS2SOperatorError("V2 target compiler requires exact EvaluatorCaseV2")
+    values = np.asarray(case.target_numerators, dtype=np.float64).reshape(3, 2, 2)
+    values /= float(2**V2_TARGET_SCALE_EXPONENT)
+    return _immutable_float64(values)
+
+
+def compile_case_target_batch_v2(cases: Sequence[EvaluatorCaseV2]) -> np.ndarray:
+    if type(cases) is not tuple or not cases:
+        raise SWM0WS2SOperatorError("V2 case batch must be a non-empty immutable tuple")
+    if any(type(case) is not EvaluatorCaseV2 for case in cases):
+        raise SWM0WS2SOperatorError("V2 case batch requires exact EvaluatorCaseV2 entries")
+    return _immutable_float64(
+        np.stack([compile_case_targets_v2(case) for case in cases], axis=0)
     )
 
 
@@ -742,6 +824,94 @@ def construct_q_witness(task: TaskSpecV1) -> S2SOperator:
         S2SArm.T16,
         parameters,
         origin=ParameterOrigin.EVALUATOR_ONLY_CONSTRUCTIVE_Q_WITNESS,
+    )
+
+
+@dataclass(frozen=True, slots=True)
+class TaskBoundQWitnessV2:
+    """Exact nonlearned witness bound to a V2 target law, never its seed."""
+
+    structural_target_sha256: str
+    rank_gains: tuple[int, ...]
+    family_definition_sha256: str
+    operator: S2SOperator
+
+    def __post_init__(self) -> None:
+        _require_sha256(self.structural_target_sha256, "structural_target_sha256")
+        _require_sha256(self.family_definition_sha256, "family_definition_sha256")
+        gains = _require_v2_rank_gains(self.rank_gains)
+        if self.family_definition_sha256 != V2_FAMILY_DEFINITION_SHA256:
+            raise SWM0WS2SOperatorError("V2 witness family definition SHA drifted")
+        if self.structural_target_sha256 != _v2_structural_target_sha256(gains):
+            raise SWM0WS2SOperatorError("V2 witness structural target SHA drifted")
+        if (
+            type(self.operator) is not S2SOperator
+            or self.operator.arm is not S2SArm.T16
+            or self.operator.origin is not ParameterOrigin.EXTERNAL_UNTRAINED
+            or self.operator.initialization_seed is not None
+            or self.operator.intervention is not None
+        ):
+            raise SWM0WS2SOperatorError(
+                "V2 witness requires one unbound, unmodified external T16 core"
+            )
+        expected = _task_bound_q_parameters_v2(gains)
+        for name, value in expected.items():
+            if self.operator.parameters[name].tobytes(order="C") != value.tobytes(
+                order="C"
+            ):
+                raise SWM0WS2SOperatorError(
+                    f"V2 witness parameter {name!r} contradicts its structural target"
+                )
+
+    @property
+    def learned(self) -> bool:
+        return False
+
+    @property
+    def parameters(self) -> Mapping[str, np.ndarray]:
+        return self.operator.parameters
+
+    @property
+    def parameter_count(self) -> int:
+        return self.operator.parameter_count
+
+    @property
+    def parameters_sha256(self) -> str:
+        return self.operator.parameters_sha256
+
+    @property
+    def state_sha256(self) -> str:
+        return canonical_sha256(self.canonical())
+
+    def canonical(self) -> dict[str, Any]:
+        return {
+            "claim_boundary": "EVALUATOR_ONLY_CONSTRUCTIVE_NONLEARNED_NO_EFFICACY_VERDICT",
+            "family_definition_sha256": self.family_definition_sha256,
+            "learned": False,
+            "operator_state_sha256": self.operator.state_sha256,
+            "parameters_sha256": self.parameters_sha256,
+            "rank_gains": list(self.rank_gains),
+            "schema_version": TASK_BOUND_Q_WITNESS_V2_VERSION,
+            "scientific_status": SCIENTIFIC_STATUS,
+            "structural_target_sha256": self.structural_target_sha256,
+        }
+
+    def forward(self, presweep: np.ndarray) -> np.ndarray:
+        return self.operator.forward(presweep)
+
+    def predict_world(self, world: ModelWorldV1) -> np.ndarray:
+        return self.operator.predict_world(world)
+
+
+def construct_task_bound_q_witness_v2(task: TaskSpecV2) -> TaskBoundQWitnessV2:
+    if type(task) is not TaskSpecV2:
+        raise SWM0WS2SOperatorError("V2 Q witness requires exact TaskSpecV2")
+    core = S2SOperator(S2SArm.T16, _task_bound_q_parameters_v2(task.rank_gains))
+    return TaskBoundQWitnessV2(
+        structural_target_sha256=task.structural_target_sha256,
+        rank_gains=task.rank_gains,
+        family_definition_sha256=task.family_definition_sha256,
+        operator=core,
     )
 
 
@@ -1072,15 +1242,20 @@ __all__ = [
     "SWM0WS2SOperatorError",
     "S2SOperator",
     "StratifiedR2",
+    "TASK_BOUND_Q_WITNESS_V2_VERSION",
+    "TaskBoundQWitnessV2",
     "apply_physical_role_cycle",
     "architecture_receipt",
     "canonical_json",
     "canonical_sha256",
     "compile_case_target_batch",
+    "compile_case_target_batch_v2",
     "compile_case_targets",
+    "compile_case_targets_v2",
     "compile_model_world",
     "compile_model_worlds",
     "construct_q_witness",
+    "construct_task_bound_q_witness_v2",
     "ds_fixed_recipient_representation",
     "evaluate_both_role_cycles",
     "forward",

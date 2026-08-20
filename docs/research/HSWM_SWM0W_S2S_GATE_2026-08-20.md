@@ -10,10 +10,12 @@
 > **비범위:** SWM-1 recurrent depth, LLM function cell, outcome-bound `ΔW`,
 > `ΔH`, 실제 세계 효능
 > **현재 구현:** [finite world](../../src/hswm/experiments/swm0w_s2s_worlds.py) ·
+> [seed-varying V2 family](../../src/hswm/experiments/swm0w_s2s_family.py) ·
 > [one-sweep operator](../../src/hswm/experiments/swm0w_s2s_operator.py) ·
 > [world tests](../../tests/test_hswm_swm0w_s2s_worlds.py) ·
+> [family tests](../../tests/test_hswm_swm0w_s2s_family.py) ·
 > [operator tests](../../tests/test_hswm_swm0w_s2s_operator.py), 모두 engineering-only;
-> optimizer·독립 task family·효능 판정 없음
+> optimizer·동결 protocol·효능 판정 없음
 > **상위 문서:** [헌법](../canon/HSWM_CONSTITUTION_2026-08-20.md) ·
 > [token-hypergraph core](../canon/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md) ·
 > [철학층](../canon/HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md) ·
@@ -70,10 +72,19 @@ world 수는 각각 `6,250 / 3,125 / 6,250`이고 full six-coordinate world는 �
 `1..5`차 coordinate marginal은 정확히 uniform이고 split 사이에 동일하다.
 이는 integer histogram으로 전수 감사한다.
 
-external seed는 현재 manifest identity만 바꾸며 factor family와 split support는
-바꾸지 않는다. 그러므로 fixture v1은 하나의 고정 target과 하나의 고정 held-out
-shift에 대한 integrity 시험대다. task별 residue permutation, 여러 target family와
-여러 shift family는 현재 구현 범위가 아니다.
+fixture v1에서 external seed는 manifest identity만 바꾸며 factor family와 split
+support는 바꾸지 않는다. 따라서 v1 seed를 여러 task처럼 세는 것은 금지한다. 별도의
+V2 family는 이 역사적 fixture를 변경하지 않고, seed와 draw index로 rank gain과
+held-out split law를 domain-separated하게 생성한다. V2의 syndrome은
+`s_q(x)=Σ_r q_r(a_(r,0)+a_(r,1)) mod 5`, `q=(1,q1,q2)`,
+`q1,q2∈{1,2,3,4}`이고, 30개의 labeled `2/1/2` residue allocation 중 하나를
+사용한다. 이로써 정확히 480개의 서로 다른 split law가 생기며 어느 law에서도
+`1..5`차 normalized marginal은 동일하다.
+
+V2 draw는 한 고정 feature frame 위의 **indexed pseudorandom sampling with
+replacement**다. 구조적으로 같은 target이나 task가 다시 나오면 버리거나 재추첨하지
+않고 draw index와 함께 기록한다. 서로 다른 coefficient/split law이지 서로 독립인
+mechanism 또는 임의 relabeling 아래 non-isomorphic family라는 주장은 하지 않는다.
 
 모든 arm의 고정 입력 basis는 centered contrast
 `χ_q(a)=1[a=q]−1[a=4] (q=0,1,2,3)`다. `χ: Z_5 → R^4`는 injective이고, 어떤 centered lookup
@@ -113,6 +124,15 @@ h3 = ( 3, -3,  2, -7,  5)
 고정 family의 analytic numerator bound는 `19,208 < 2^15`, 실제 전수 최대는 `5,560`이므로
 target scale은 outcome을 보지 않고 `2^-15`로 고정한다. external seed는 현재
 **task identity만 결속**하며 factor나 split을 바꾸지 않는다.
+
+V2는 같은 `P/T` frame을 유지하면서 각 rank 항에 `g_(r,c,k)`를 곱한다.
+`g_(0,0,0)=8`을 고정하고 나머지 11개 gain은 각각 `{8,...,15}`에서 뽑으므로
+구조 target 공간은 `8^11=2^33`이다. scale은 `2^-19`이고 outcome과 무관한
+느슨한 정수 numerator bound는 `15×19,208=288,120<2^19`다. 과제의
+constructive T16 witness는 이 gain을
+`Q_r[c,2c+k]=g_(r,c,k)2^-19`에만 결속한다. seed commitment, draw index,
+split, manifest는 operator state에 넣지 않는다. 같은 구조 target은 같은 operator를
+가져야 하기 때문이다.
 
 곱을 전개한 각 항은 recipient, co-member, 다른 두 role에서 하나씩 고른 member,
 즉 **네 coordinate**에만 의존한다. 이것은 role-set을 factorize한 rank `K` target이지
@@ -272,15 +292,21 @@ DeepSets 차이 `C_t=Q_t(T16)−Q_t(DeepSets)`에서
 선택적 문구를 허용한다. 이는 essential PASS gate가 아니며 T16의 보편적 우월성,
 novelty 또는 architecture-independence를 허용하지 않는다.
 
-고정 frame의 exact oracle floor는 모든 split/role/channel에서 within-role broadcast
-damage가 최소 `5187851/10706138 ≈ 0.484568`이다. 두 role cycle의 최소 damage도 각각
-`21660571/18632331 ≈ 1.162526`, `85553/73855 ≈ 1.158391`이다. 따라서 제안된
-`B,R ≥ 0.10`은 target construction 자체가 불가능하게 만드는 threshold가 아니다.
+V2 family의 exact universal floor는 모든 허용 gain/split/role/channel에서
+within-role broadcast damage가 최소
+`2027528/4509001 ≈ 0.449662`이다. 두 role cycle의 최소도 각각
+`420960389/416884981 ≈ 1.009776`,
+`17109007/16617375 ≈ 1.029585`다. 4,320개의 관련 정수 행렬에 대해
+`5N−4D ≻ 0`을 exact Sylvester/Bareiss 검사하여 더 보수적인
+`broadcast>2/5`, `cycle>4/5`를 증명한다. 따라서 제안된 `B,R ≥ 0.10`은
+target construction 자체가 불가능하게 만드는 threshold가 아니다.
 
-남은 **`PRE_FREEZE_BLOCKER`**는 독립 task family다. fixture v1은 다른 external seed도
-같은 factor와 split을 쓰고 manifest identity만 바꾼다. 그런 alias를 여러 task처럼
-bootstrap하면 pseudo-replication이다. confirmatory 전에 여러 pre-proven non-equivalent
-frame 또는 명시적 isomorphism family와 그 독립 표본 단위를 먼저 고정해야 한다.
+V2 family와 task-bound constructive witness는 이제 **engineering implemented**다.
+남은 `PRE_FREEZE_BLOCKER`는 학습 initializer/optimizer, train-only loss,
+update·시간 budget, conditional task-bootstrap rule, future-public seed 결속과
+candidate-only→adjudication protocol이다. V2 draw들은 한 고정 feature frame에서 나온
+coefficient/split law이므로 bootstrap 해석도 이 명시된 generator에 조건부이며,
+독립 mechanism 표본으로 승격하지 않는다.
 
 ## 8. pilot, freeze, confirmatory 순서
 
@@ -291,7 +317,8 @@ target scale, acceptance threshold나 task acceptance를 정하면 안 된다.
 
 그 다음 하나의 preregistration에 다음을 모두 고정한다.
 
-- 독립 task family, task 수, 고정 `K=2`, coefficient/scale generator, analytic
+- V2 with-replacement task generator, task 수와 duplicate 처리, 고정 `K=2`,
+  coefficient/split/scale generator, conditional bootstrap 단위, analytic
   member-specificity floor와 future-public randomness binding;
 - 세 arm의 exact architecture, initialization, optimizer, learning rate, world-batch size,
   loss, gradient clipping, max updates와 dev-only early-stop/tie-break;

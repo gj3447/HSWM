@@ -99,6 +99,16 @@ jobs:
       - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
           python-version: "3.11"
+      - name: Install the evidence-pinned Node runtime
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "24.13.0"
+      - name: Verify the pinned Node executable
+        run: |
+          test "$(node --version)" = "v24.13.0"
+          printf '%s  %s\n' \
+            '53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc' \
+            "$(command -v node)" | sha256sum --check --strict
       - name: Install the byte-pinned drand verifier without lifecycle scripts
         working-directory: tools/swm0w_drand
         run: npm ci --ignore-scripts

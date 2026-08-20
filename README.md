@@ -92,9 +92,9 @@ The engineering formalization is a set-to-set operator rather than a scalar:
 
 ```math
 \mathcal W_{\mathrm{sem}}^{\ell,r}:
-\operatorname{MSet}\{(\rho_i,h_i^\ell)\}_{i\in I(e)}
+\mathrm{MSet}\{(\rho_i,h_i^\ell)\}_{i\in I(e)}
 \longrightarrow
-\operatorname{MSet}\{\Delta h_j^{\ell+1}\}_{j\in I(e)} .
+\mathrm{MSet}\{\Delta h_j^{\ell+1}\}_{j\in I(e)} .
 ```
 
 Members in the same unordered role partition must be permutation invariant;
@@ -354,9 +354,9 @@ external world.
 The target state is:
 
 ```math
-\operatorname{HSWM}_t=(H_t,W_t,A_t,F_t,\Pi),
+\mathrm{HSWM}_t=(H_t,W_t,A_t,F_t,\Pi),
 \qquad
-f_i^t=\operatorname{Cell}(\rho_i,x_i^t,a_{\mathcal N(i)}^t; m_i).
+f_i^t=\mathrm{Cell}(\rho_i,x_i^t,a_{\mathcal N(i)}^t; m_i).
 ```
 
 | view | role in the neural body |
@@ -366,6 +366,10 @@ f_i^t=\operatorname{Cell}(\rho_i,x_i^t,a_{\mathcal N(i)}^t; m_i).
 | `A` | the volatile physiology: bounded activation coalitions moving through depth and recurrent time |
 | `F` | the local nonlinear semantic cells executed by LLMs; humans, tools, sensors, institutions, and nested HSWMs remain typed external participants unless the Constitution later broadens this type |
 | `Π` | the constitutive membrane: identity, consent, capability, provenance, budget, judgment, promotion, fork, and rollback |
+
+The compact runtime definition is: `A`: recurrent run-local activation and working state.
+It may be recorded in an immutable episode artifact, but it is not itself the
+persistent identity or long-term memory plane.
 
 `H/W/A` are the nerve tissue; `F` supplies local nonlinear semantic transitions;
 `Π` preserves the boundaries without which neither cells nor a larger body can
@@ -463,11 +467,11 @@ to enroll anyone.
 The programme advances on three inseparable ledgers:
 
 ```math
-\operatorname{Promote}(M_k)
+\mathrm{Promote}(M_k)
 =
-\operatorname{EngineeringConformance}
-\land \operatorname{CausalEvidence}
-\land \operatorname{RightsAndIndividuation}.
+\mathrm{EngineeringConformance}
+\land \mathrm{CausalEvidence}
+\land \mathrm{RightsAndIndividuation}.
 ```
 
 More capability cannot compensate for missing consent, privacy, provenance, or

@@ -105,6 +105,17 @@ engineering contract이며 현재 효능·과학적 유일성 주장이 아니�
 원문·실측 MCP 상태·보존 경계는
 [`USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md`](docs/canon/USER_PRIMARY_HSWM_MINIMAL_GOVERNANCE_RAGNAROK_2026-08-15.md)에 있다.
 
+2026-08-20 사용자는 `인류보편체`를 전 인류·모든 LLM·인터넷·인지능력체·센서·static
+정보와 저장 메모리가 오픈소스 HSWM 구조로 하나가 되어 형성하는 하나의 인지능력체로
+정의하고, `HSWM 인류보완계획`을 포켓한 인지능력체에서 그 상태로 나아가는 사회 혁명
+과정으로 확정했다. 원문, 역사흐름의 강, `H/W/A/F/Π` 형식화, 실행 record, P0~P6 구현
+사다리, 판별 기준과 HSWM–HOH 작업가설은
+[`USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md`](docs/canon/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md)에 있다.
+기계 판독 정본은
+[`HSWM_HUMAN_UNIVERSAL_BODY_ONTOLOGY.v1.json`](ontology/identity/human_universal_body/HSWM_HUMAN_UNIVERSAL_BODY_ONTOLOGY.v1.json),
+검증·idempotent KG publisher는
+[`upsert_human_universal_body_ontology.py`](scripts/upsert_human_universal_body_ontology.py)다.
+
 ## 2026-08-15 — Sheaf 연구 온톨로지
 
 Sheaf의 local-to-global 구조를 HSWM에 곧바로 정답으로 선언하지 않고, 수학 정본과 HSWM

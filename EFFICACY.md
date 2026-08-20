@@ -45,13 +45,23 @@ typed-star paths score `1.0`, seven registered lossy projections score exactly
 `1/3`, targeted role-edge removal erases the result, irrelevant removal does
 nothing, and exact restore recovers it. Because the encoder knows the finite
 `F₃` fixture and only a ridge lookup is fitted, learned `W/Θ/R` remains
-unimplemented and the programme remains `UNJUDGED`.
+unimplemented in that experiment and the programme remains `UNJUDGED`.
+
+An executable SWM-0W development core now learns a continuous third-order
+scalar compatibility from three singleton role incidences and includes
+lower-order, roleless, flat-MLP, and role-aware DeepSets controls plus exact
+learned-channel removal/restore. This is an engineering precursor only. Its
+single target function and test cut have already been inspected, task seeds
+change identities rather than target semantics, capacities are unmatched, and
+the scalar output is not recipient-conditioned set-to-set `W`. No
+preregistration or sealed task-family verdict exists.
 
 The broader claims do not pass:
 
 | claim | current verdict | evidence boundary |
 |---|---|---|
 | SWM-0R role-bearing n-ary representation | **engineering conformance PASS; scientific UNJUDGED** | frozen finite `q=3` construction, 9 semantic worlds repeated across 20 UID/order seeds; hard-coded constructive decoder, not learned `W` |
+| SWM-0W learned scalar compatibility precursor | **implemented; scientific UNJUDGED** | fixed arity 3 with one incidence per role; deterministic optimizer, seven arms, typed-star parity and remove/restore tests; inspected single target function, no sealed independent task family, no canonical set-to-set operator |
 | static retrieval substrate | **measured positive, budget caveat** | 300 evaluation rows across three checked-in runs |
 | cognitive uplift over direct LLM reranking | **preregistered cross-dataset claim failed** | two negative MuSiQue runs; one small, non-significant positive 2Wiki run |
 | P1 outcome→credit→slow-weight loop | **engineering complete; scientific RED; HSWM_LOCAL_RECORD unjudged** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations. Historical measurement self-wrote `FAIL`, so no valid server-owned kernel verdict exists |

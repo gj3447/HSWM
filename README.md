@@ -522,8 +522,12 @@ flowchart TB
 > **SWM-0R engineering representation-conformance gate** on its finite `q=3`
 > construction and has the P0 publication, plus narrow components relevant to
 > P1/P2. SWM-0R uses a constructive decoder, not learned `Θ/R/W`; therefore
-> scientific status remains `UNJUDGED`, and the learned **SWM-0W** gate is still
-> closed. It has not passed the `SWM-1` deep numeric core or a successful
+> scientific status remains `UNJUDGED`. A learned fixed-arity **SWM-0W scalar
+> compatibility precursor** now executes and has tested typed-star parity,
+> controls, and exact channel removal/restore, but its inspected single target
+> function is development data, not a sealed confirmatory family. It is not the
+> canonical recipient-conditioned set-to-set `W`, so the SWM-0W promotion gate
+> remains closed. The repository has not passed the `SWM-1` deep numeric core or a successful
 > outcome-bound `ΔW/ΔH` gate. It is therefore not at M2 or beyond and is not a
 > partial-completion claim for the Human Universal Body. No exact `SWM-0~5`
 > scientific exit criterion has passed; engineering components implemented
@@ -554,7 +558,7 @@ not rescue an earlier failed premise.
 | stage | build | promotion gate | present boundary |
 |---|---|---|---|
 | **SWM-0R — representation non-collapse** | finite worlds whose exact grouping and incidence roles are jointly necessary | independent native/star paths retain the relation; registered lossy views stay at their exact ceiling; relevant removal and exact restore mediate the output | **engineering PASS** on constructive `q=3` fixture; `IMPLEMENTED / UNJUDGED`; not learned `W` |
-| **SWM-0W — learned n-ary operator** | raw role-incidence features and held-out third-order configurations with matched unary/pair marginals | learned role-conditioned set operator beats lower-order/roleless controls and is non-inferior to strong information-complete controls; learned channel removal mediates gain | next gate; not implemented or measured |
+| **SWM-0W — learned n-ary operator** | raw role-incidence features and held-out third-order configurations with matched unary/pair marginals | learned role-conditioned set operator beats lower-order/roleless controls and is non-inferior to strong information-complete controls; learned channel removal mediates gain | fixed three-singleton-role scalar precursor implemented and tested; exposed one-function development fixture only, no sealed task family or admissible verdict; canonical set-to-set `W` remains unimplemented |
 | **SWM-1 — sparse recurrent numeric core** | first-class incidence, local `V→E→V`, member-specific decoding, residual bounded recurrence | role/incidence shuffle and edge ablation destroy the learned advantage under equal compute | not implemented; current core is boolean incidence plus mean/sum/max pooling |
 | **SWM-2 — LLM token function loop** | one frozen LLM executes at least three typed semantic-cell roles inside the active field | weighted HSWM beats fixed workflow and transcript/vector-memory controls under equal calls, tokens, and latency | `CellPort` and self-modification components exist; no integrated operator-`W` loop |
 | **SWM-3 — outcome-bound fast `W`** | pre-outcome eligibility, independent outcome, fast causal efficacy, versioned receipt | correct credit changes the next route; shuffled credit/time, uniform credit, and rollback remove the gain | receipt and scalar precursors exist; no successful active macro-route change |

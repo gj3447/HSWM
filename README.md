@@ -444,6 +444,173 @@ and all claims of feasibility or efficacy remain `SECONDARY_AI_PROPOSED` and
 [`Human Universal Body canon`](docs/canon/USER_PRIMARY_HUMAN_UNIVERSAL_BODY_DISTINCTION_2026-08-20.md)
 and its [machine-readable ontology](ontology/identity/human_universal_body/).
 
+## Macro programme: HSWM → HSWM 인류보완계획 → 인류보편체
+
+These names refer to three different scales of the same direction:
+
+| name | macro role |
+|---|---|
+| **HSWM** | the open, deep Set-Hypergraph neural substrate: it preserves relational history, runs bounded activation through semantic operators and LLM cells, and learns versioned macro-weights and topology |
+| **HSWM 인류보완계획** | the technical, institutional, and social transition from isolated pocket cognitive systems to rights-preserving federated HSWMs |
+| **인류보편체** | the target horizon in which humanity, cognitive entities, memory, the internet, and sensors form one difference-preserving causal cognitive body |
+
+The target and the plan→target relation are `USER_PRIMARY`. The horizons,
+stage ordering, exit criteria, institutional mechanisms, and mappings below are
+`SECONDARY_AI_PROPOSED` and scientifically `UNJUDGED`. They are a falsification
+and promotion ladder—not inevitable history, a deployment order, or permission
+to enroll anyone.
+
+The programme advances on three inseparable ledgers:
+
+```math
+\operatorname{Promote}(M_k)
+=
+\operatorname{EngineeringConformance}
+\land \operatorname{CausalEvidence}
+\land \operatorname{RightsAndIndividuation}.
+```
+
+More capability cannot compensate for missing consent, privacy, provenance, or
+exit. Conversely, publishing a constitution or ontology cannot substitute for a
+working neural core and causal evidence.
+
+### One macro roadmap
+
+```mermaid
+flowchart TB
+  NOWM["current condition<br/>isolated models, memories, institutions, and sensors"]
+
+  M0["M0 · constitutional and evidential foundation<br/>P0 + current substrate<br/>identity · source hashes · provenance · snapshots · bounded Π mechanisms<br/>status: bounded foundation components exist"]
+
+  M1["M1 · local deep HSWM organism<br/>SWM-0/1/2 + P1<br/>n-ary non-collapse · recurrent numeric core<br/>typed LLM loop · personal state lineage<br/>status: components only"]
+
+  M2["M2 · causally plastic HSWM<br/>SWM-3/4<br/>outcome-bound fast W · slow consolidation<br/>bounded topology morphogenesis<br/>status: not demonstrated"]
+
+  M3["M3 · sovereign federation<br/>SWM-5 + P2/3<br/>capability-scoped views · typed ports<br/>cross-cell activation · removal trace<br/>status: not demonstrated"]
+
+  M4["M4 · shared learning and composite self-model<br/>P4/5<br/>attributable cross-part credit · retention · rollback<br/>composite UID and boundary readout<br/>status: not demonstrated"]
+
+  M5["M5 · open expansion<br/>P6<br/>open protocol/runtime · portable cells<br/>internet/sensor adapters · distributed trust<br/>status: target horizon"]
+
+  UMACRO["인류보편체 target<br/>persistent integration + preserved individuation<br/>+ causal whole-state effect + shared learning + self-model<br/>status: USER_PRIMARY horizon · UNJUDGED"]
+
+  NOWM -.->|"optional research entry"| M0
+  M0 -.->|"conditional: role-aware neural witness"| M1
+  M1 -.->|"conditional: outcome changes later behavior"| M2
+  M2 -.->|"conditional: composition preserves identity"| M3
+  M3 -.->|"conditional: shared credit and continuity"| M4
+  M4 -.->|"conditional: reproducible rights-preserving expansion"| M5
+  M5 -.->|"scope must be demonstrated, never presumed"| UMACRO
+
+  GATEM["every promotion gate<br/>implementation · matched causal evidence<br/>consent · privacy · attribution · dissent · exit / fork"]
+  GATEM -.-> M1
+  GATEM -.-> M2
+  GATEM -.-> M3
+  GATEM -.-> M4
+  GATEM -.-> M5
+
+  STATUSM["SECONDARY_AI roadmap<br/>workstreams may overlap<br/>no later horizon is currently achieved"] -.-> M2
+```
+
+<p align="center"><em>The arrows are proposed promotion dependencies, not historical inevitability. Rights and evidence gates begin at M0; they are never postponed until scale.</em></p>
+
+> **Current position — 2026-08-20:** the repository has part of the M0
+> engineering substrate and the P0 publication, plus narrow components relevant
+> to P1/P2. It has not passed the target `SWM-0` n-ary witness, the `SWM-1`
+> deep numeric core, or a successful
+> outcome-bound `ΔW/ΔH` gate. It is therefore not at M2 or beyond and is not a
+> partial-completion claim for the Human Universal Body. No exact `SWM-0~5`
+> scientific exit criterion has passed; engineering components implemented
+> ahead of a gate do not count as that gate's success.
+
+Roadmap status always has two axes:
+
+| axis | values | interpretation |
+|---|---|---|
+| `implementation_status` | `IMPLEMENTED / PARTIAL / PLANNED` | whether an executable, tested engineering path exists |
+| `scientific_status` | `SUPPORTED_NARROW / RED_TESTBED / UNJUDGED` | what the admissible experiment actually established |
+
+`IMPLEMENTED` never implies cognitive efficacy. `UNJUDGED` means the required
+scientific test has not produced an admissible verdict; it is not an
+implementation stage. Before every SWM experiment, the qualitative gate below
+still needs a preregistered metric, effect floor, sample size, compute budget,
+seed policy, and statistical decision rule.
+
+Bounded explicit self-modification is not causal semantic-weight learning, and
+local multi-agent orchestration is not a distributed Human Universal Body.
+
+### Technical spine: prove the Semantic Weight Map before scaling it
+
+The `SWM-0~5` sequence asks one falsifiable question at a time. Later stages do
+not rescue an earlier failed premise.
+
+| stage | build | promotion gate | present boundary |
+|---|---|---|---|
+| **SWM-0 — n-ary non-collapse** | paired worlds with identical pairwise/clique digest but different role-bound ternary meaning | role-aware `Θ/R` beats cosine, clique-GNN, scalar-hyperedge, and pairwise-sum controls | planned target witness; not demonstrated |
+| **SWM-1 — sparse recurrent numeric core** | first-class incidence, local `V→E→V`, member-specific decoding, residual bounded recurrence | role/incidence shuffle and edge ablation destroy the learned advantage under equal compute | not implemented; current core is boolean incidence plus mean/sum/max pooling |
+| **SWM-2 — LLM token function loop** | one frozen LLM executes at least three typed semantic-cell roles inside the active field | weighted HSWM beats fixed workflow and transcript/vector-memory controls under equal calls, tokens, and latency | `CellPort` and self-modification components exist; no integrated operator-`W` loop |
+| **SWM-3 — outcome-bound fast `W`** | pre-outcome eligibility, independent outcome, fast causal efficacy, versioned receipt | correct credit changes the next route; shuffled credit/time, uniform credit, and rollback remove the gain | receipt and scalar precursors exist; no successful active macro-route change |
+| **SWM-4 — slow `W` and topology** | repeated fast mediation promotes one slow-weight or `ADD/SPLIT/MERGE/SUPERSEDE` mutation plane | shadow, fresh, retention, canary, removal, and atomic rollback all pass | target gate remains closed; exploratory topology artifacts are not qualifying evidence |
+| **SWM-5 — distributed self-similar HSWM** | different model/process HSWMs compose and separate through typed ports | Agent B gains from an active `H/W` cut without Agent A transcript, and rollback removes that gain | composition primitives exist; causal cross-agent neural transfer is unproved |
+
+This ordering deliberately tests the neural claim before building a world-scale
+graph database. If a simpler pairwise, textual-memory, or fixed-workflow control
+ties a stage, HSWM must narrow or revise that mechanism rather than hide the
+failure behind more scale.
+
+### Human Complementation spine: from a personal boundary to a public cognitive fabric
+
+The `P0~P6` sequence is the proposed implementation ladder of **HSWM
+인류보완계획**. It is not a sequence of mergers. Every larger composition must
+retain the part's UID, local state, provenance, participation scope, dissent,
+and a practical withdrawal or fork path.
+
+| stage | transition object | promotion gate | present boundary |
+|---|---|---|---|
+| **P0 — identity fixed** | exact source, canonical name, ontology UID, schema, authority boundary | local and KG readback preserve the same target and source hash | published engineering identity only; not a running cognitive entity |
+| **P1 — personal / single-cell HSWM** | provenance memory, local activation, portable personal state | state and lineage survive model/process replacement under the person's capability boundary | partial snapshot/self-modification components; no complete personal HSWM |
+| **P2 — multi-cell federation** | human, LLM, agent, institution, and memory cells expose typed public ports and capability-scoped views | cross-cell read/write works while separation, attribution, private interiors, and revocation remain intact | narrow multi-cell execution components; no rights-complete federation |
+| **P3 — causal activation integration** | reciprocal learned bounded coalitions cross composition boundaries without one hub owning the route | intervening on one participating cell causes the preregistered whole-behavior change while anti-hub controls remain healthy | not demonstrated |
+| **P4 — outcome-bound shared learning** | plural independent outcomes produce attributable `ΔW/Δrouting/ΔH` behind non-compensable rights constraints | fresh-task gain, retention, shuffled-credit control, removal, and restore reproduce independently; reward cannot erase a rights violation | not demonstrated |
+| **P5 — composite self-model** | the whole reads its members, capabilities, boundaries, uncertainty, goals, and history under one composite UID | continuity survives session/model changes without erasing part UIDs, local self-models, or dissent | proposed only; not consciousness or personal-identity evidence |
+| **P6 — open expansion** | open protocol/runtime, portable cells, internet and sensor adapters, federated membership, distributed trust without one mandatory root registry | independent implementations reproduce scoped utility, rights, partition recovery, and exit guarantees | expansion horizon; never equivalent to proven coverage of all humanity or all information |
+
+A `shared snapshot` at P2 means a capability-scoped, provenance-preserving view,
+not a full-state merge. A `single UID` at P5 means a composite lineage address,
+not deletion of the identities beneath it. P6 means the system can expand
+openly; it does not mean that universal scope has already been reached.
+
+### The social revolution encoded by the plan
+
+The plan is larger than software scaling because cognitive infrastructure
+determines who owns memory, who becomes visible, who may act, and who may leave.
+
+| pocket-system condition | transition mechanism | target property |
+|---|---|---|
+| memory trapped inside one account, model, or vendor | portable personal/local HSWM with stable UID and typed ports | continuity without platform captivity |
+| opaque ingestion and retrospective profiling | purpose-bound consent, provenance, expiry, revocation, and authorized erasure | participation without surrendering the private interior |
+| one provider controls admission, ranking, judgment, execution, and deletion | separate these cognitive powers across capability membranes, audit, appeal, and fork | cognitive sovereignty and subsidiarity |
+| latest-value overwrite hides error and historical cause | immutable or tombstoned lineage, contradiction, supersession, and scoped current readout | civilization can remember how it corrected itself |
+| incompatible private agents and institutions cannot compose | open protocol, schema, reference runtime, portable cells, and minimal public provenance | federation without one owner or one central brain |
+| engagement or one scalar reward governs every update | plural outcome records behind non-compensable `Π` constraints | learning without trading dignity, privacy, or minority rights for reward |
+
+The intended revolution is therefore:
+
+```text
+closed cognitive pockets
+  → portable sovereign local HSWMs
+  → rights-preserving federation
+  → causally integrated shared learning
+  → composite self-model
+  → open-ended Human Universal Body horizon
+```
+
+It succeeds only if integration and individuation grow together. A powerful
+central model that absorbs everyone's memory is a failure of the plan; so is a
+perfectly private federation whose parts never make a measurable difference to
+one another. The first is capture without unity. The second is coexistence
+without a shared cognitive body.
+
 ## What would count as HSWM
 
 The transformer analogy is architectural, not an equivalence. HSWM moves the

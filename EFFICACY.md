@@ -54,18 +54,29 @@ environment-bound and are not presented as cross-hardware identities.
 An executable SWM-0W development core now learns a continuous third-order
 scalar compatibility from three singleton role incidences and includes
 lower-order, roleless, flat-MLP, and role-aware DeepSets controls plus exact
-learned-channel removal/restore. This is an engineering precursor only. Its
-single target function and test cut have already been inspected, task seeds
-change identities rather than target semantics, capacities are unmatched, and
-the scalar output is not recipient-conditioned set-to-set `W`. No
-preregistration or sealed task-family verdict exists.
+learned-channel removal/restore. This is an engineering precursor only. The
+streamed task-family core derives distinct finite targets and held-out cuts
+from externally supplied seeds, while the frozen `hswm-swm0w-protocol/v2` in
+commit `6187ac3` binds nine arms, seven head interventions, 20 tasks, and one
+shared 10,000-resample bootstrap. The reducer is candidate-only: it cannot emit
+an authoritative scientific PASS/KILL/INCONCLUSIVE without the separate
+future-beacon evidence adjudicator. The implemented three-job adjudicator
+requires a sole surviving same-head GitHub run, a post-pulse candidate artifact,
+and a fresh offline BLS replay. This is operational evidence under trust in
+GitHub's hosted runner/control plane and in the repository owner not deleting
+matching runs; it is not an absolute cryptographic timestamp. No future round,
+preregistration, confirmatory run, or adjudicated result exists in this
+source-freeze phase; a later registration commit is constrained to add only
+its preregistration. The scalar output is still not recipient-conditioned
+set-to-set `W`, and the diagnostic capacity/compute comparisons do not
+establish architecture-independent superiority.
 
 The broader claims do not pass:
 
 | claim | current verdict | evidence boundary |
 |---|---|---|
 | SWM-0R role-bearing n-ary representation | **engineering conformance PASS; scientific UNJUDGED** | frozen finite `q=3` construction, 9 semantic worlds repeated across 20 UID/order seeds; hard-coded constructive decoder, not learned `W` |
-| SWM-0W learned scalar compatibility precursor | **implemented; scientific UNJUDGED** | fixed arity 3 with one incidence per role; deterministic optimizer, seven arms, typed-star parity and remove/restore tests; inspected single target function, no sealed independent task family, no canonical set-to-set operator |
+| SWM-0W learned scalar compatibility precursor | **implemented; scientific UNJUDGED** | fixed arity 3 with one incidence per role; deterministic optimizer, nine protocol arms, typed-star parity, seven head interventions, streamed seed-derived tasks, candidate-only 20-task reduction, and conditional GitHub operational adjudication; source-freeze has no follow-up preregistration, no run/adjudication exists, and there is no canonical set-to-set operator |
 | static retrieval substrate | **measured positive, budget caveat** | 300 evaluation rows across three checked-in runs |
 | cognitive uplift over direct LLM reranking | **preregistered cross-dataset claim failed** | two negative MuSiQue runs; one small, non-significant positive 2Wiki run |
 | P1 outcome→credit→slow-weight loop | **engineering complete; scientific RED; HSWM_LOCAL_RECORD unjudged** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations. Historical measurement self-wrote `FAIL`, so no valid server-owned kernel verdict exists |
@@ -410,4 +421,8 @@ receipts.
 - no real-data reasoning uplift from the current QKV-style recurrent query state;
 - no deployable reasoning uplift from the supplied heterogeneous semantic program;
 - no state-of-the-art retrieval comparison;
-- no production durability, external trust, or cryptographic certificate claim.
+- no production durability, external trust, or cryptographic certificate claim;
+- no adjudicated SWM-0W scalar verdict;
+- no canonical recipient-conditioned set-to-set semantic-weight operator;
+- no passed recurrent/deep HSWM gate or causal `ΔW/ΔH` gate;
+- no evidence for a distributed Human Universal Body.

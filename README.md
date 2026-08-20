@@ -524,11 +524,21 @@ flowchart TB
 > P1/P2. SWM-0R uses a constructive decoder, not learned `Θ/R/W`; therefore
 > scientific status remains `UNJUDGED`. A learned fixed-arity **SWM-0W scalar
 > compatibility precursor** now executes over seed-derived finite task
-> families, with tested typed-star parity, nine registered arms, seven
+> families, with tested typed-star parity, nine protocol-frozen arms, seven
 > equal-width channel interventions, and exact restore. Two disclosed
 > three-task diagnostics show a strong n-ary signal but also one task where an
-> information-complete flat MLP wins. The untouched 20-task future-beacon test
-> has not run, so there is no admissible SWM-0W verdict. It is not the canonical
+> information-complete flat MLP wins. The `hswm-swm0w-protocol/v2` reducer is
+> frozen in commit `6187ac3`: it binds 20 tasks, a shared 10,000-resample
+> bootstrap, and only emits `CANDIDATE_*`, `DIAGNOSTIC_ONLY`, or `VOID`.
+> Candidate output is deliberately non-authoritative; only the separate
+> register→confirm→adjudicate evidence boundary may promote it. That three-job
+> boundary is implemented with a sole-surviving same-head-run check, post-pulse
+> artifact admission, and independent offline BLS replay. Its chronology claim
+> remains conditional on GitHub's hosted runner/control plane and on the
+> repository owner not deleting matching runs. The source-freeze phase contains
+> no future-round preregistration; a follow-up registration commit may add only
+> that artifact. The untouched 20-task test has not run, so there is no
+> admissible SWM-0W verdict. It is not the canonical
 > recipient-conditioned set-to-set `W`, and the promotion gate remains closed.
 > The repository has not passed the `SWM-1` deep numeric core or a successful
 > outcome-bound `ΔW/ΔH` gate. It is therefore not at M2 or beyond and is not a
@@ -567,7 +577,7 @@ not rescue an earlier failed premise.
 | stage | build | promotion gate | present boundary |
 |---|---|---|---|
 | **SWM-0R — representation non-collapse** | finite worlds whose exact grouping and incidence roles are jointly necessary | independent native/star paths retain the relation; registered lossy views stay at their exact ceiling; relevant removal and exact restore mediate the output | **engineering PASS** on constructive `q=3` fixture; `IMPLEMENTED / UNJUDGED`; not learned `W` |
-| **SWM-0W — learned n-ary operator** | raw role-incidence features and held-out third-order configurations with matched unary/pair marginals | learned role-conditioned set operator beats lower-order/roleless controls and is non-inferior to strong information-complete controls; learned channel removal mediates gain | fixed three-singleton-role scalar precursor and deterministic seed-derived task families implemented; two disclosed diagnostics only, future-beacon 20-task verdict not run; canonical set-to-set `W` remains unimplemented |
+| **SWM-0W — learned n-ary operator** | raw role-incidence features and held-out third-order configurations with matched unary/pair marginals | learned role-conditioned set operator beats lower-order/roleless controls and is non-inferior to strong information-complete controls; learned channel removal mediates gain | fixed three-singleton-role scalar precursor, streamed task family, and candidate-only 20-task protocol implemented; two disclosed diagnostics only; source-freeze has no preregistration and no run/adjudicated verdict exists; canonical set-to-set `W` remains unimplemented |
 | **SWM-1 — sparse recurrent numeric core** | first-class incidence, local `V→E→V`, member-specific decoding, residual bounded recurrence | role/incidence shuffle and edge ablation destroy the learned advantage under equal compute | not implemented; current core is boolean incidence plus mean/sum/max pooling |
 | **SWM-2 — LLM token function loop** | one frozen LLM executes at least three typed semantic-cell roles inside the active field | weighted HSWM beats fixed workflow and transcript/vector-memory controls under equal calls, tokens, and latency | `CellPort` and self-modification components exist; no integrated operator-`W` loop |
 | **SWM-3 — outcome-bound fast `W`** | pre-outcome eligibility, independent outcome, fast causal efficacy, versioned receipt | correct credit changes the next route; shuffled credit/time, uniform credit, and rollback remove the gain | receipt and scalar precursors exist; no successful active macro-route change |
@@ -970,6 +980,8 @@ Repository state as of 2026-08-20:
 
 | area | honest status |
 |---|---|
+| SWM-0R finite n-ary representation witness | **engineering PASS / scientific `UNJUDGED`**: constructive `q=3` representation conformance with independent native/star paths, not learned `W/Θ/R` |
+| SWM-0W scalar compatibility precursor | fixed three-singleton-role learner, streamed task family, nine-arm candidate-only protocol, exact interventions, and conditional GitHub operational adjudication implemented; diagnostics disclosed, but the source-freeze has no follow-up preregistration and no run/adjudication or evidence verdict exists |
 | evidence-preserving world compiler, stable IDs, immutable cuts, and fail-closed readout | implemented and locally tested |
 | static additive semantic field | narrow positive checked-in retrieval measurement with an asymmetric budget: 100 offline LLM judgments for HSWM and zero for cosine/BM25/PPR/RRF; not continual learning |
 | scalar slow-weight P1 | **scientific RED**: 12 staged candidates, 0 fresh-gate passes/activations, and 0/456 measured top-10 rank changes |
@@ -1032,6 +1044,7 @@ evidence; when invoked from an installed wheel outside that checkout, pass
 | `src/hswm/prototypes/` | bounded early learning and synthetic-world prototypes |
 | `src/hswm/substrate/` | canonical hypergraph, document/world construction, immutable field cuts, certified readout, and convergence substrate |
 | `src/hswm/learning/` | token-learning contracts and learning diagnostics |
+| `src/hswm/experiments/` | isolated falsification kernels and evidence protocols; these are not the canonical HSWM runtime |
 | `src/hswm/selfmod/` | empty-genesis agent-authored HSWM snapshots, durable CAS activation, exact restoration, and journaled multi-agent cell execution |
 | `src/hswm/evaluation/`, `_research/` | falsification code and source-only experiment programs |
 | `_research/root_compat/` | source-pinned root-era compatibility cluster; closed to new work |

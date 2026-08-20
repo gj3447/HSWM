@@ -1,0 +1,605 @@
+name: SWM-0W confirmatory chronology
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - prereg/PREREG_SWM0W_SCALAR_GATE_V1.json
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: swm0w-confirmatory-${{ github.sha }}
+  cancel-in-progress: false
+
+env:
+  UV_VERSION: "0.12.3"
+  PYTHON_VERSION: "3.12.13"
+  NODE_VERSION: "24.13.0"
+  NODE_ARCHIVE_SHA256: e798599612f4bb71333a3397ab0d095fd62214e115aea45aa858a145fc72d67e
+  NODE_EXECUTABLE_SHA256: 53fb205ae78805130177e24bcb459a69a1518c8d98f8965f31d85aae7ea840fc
+  OPENBLAS_NUM_THREADS: "1"
+  OMP_NUM_THREADS: "1"
+  MKL_NUM_THREADS: "1"
+  PYTHONHASHSEED: "0"
+
+jobs:
+  register:
+    name: register
+    if: >-
+      ${{ github.run_attempt == 1 &&
+          github.repository == 'gj3447/HSWM' &&
+          github.ref == 'refs/heads/main' &&
+          github.event_name == 'push' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    outputs:
+      artifact_id: ${{ steps.upload.outputs.artifact-id }}
+      artifact_digest: ${{ steps.upload.outputs.artifact-digest }}
+      artifact_name: ${{ steps.metadata.outputs.artifact_name }}
+    steps:
+      - name: Check out exact registration commit B
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Install frozen Python and uv
+        uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: false
+
+      - name: Fail closed on runner and attempt drift
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+          test "$RUNNER_OS" = "Linux"
+          test "$RUNNER_ARCH" = "X64"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+
+      - name: Capture server run record
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/registration"
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
+            --output "$RUNNER_TEMP/registration/github_run.json"
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/workflows/swm0w-confirmatory.yml/runs?branch=main&event=push&head_sha=$GITHUB_SHA&per_page=100" \
+            --output "$RUNNER_TEMP/registration/github_workflow_runs.json"
+
+      - name: Validate A to B and seal registration carrier
+        shell: bash
+        run: |
+          set -euo pipefail
+          uv run --locked python -m hswm.experiments.swm0w_confirmatory \
+            register-carrier \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --prereg "$GITHUB_WORKSPACE/prereg/PREREG_SWM0W_SCALAR_GATE_V1.json" \
+            --registration-commit "$GITHUB_SHA" \
+            --run-json "$RUNNER_TEMP/registration/github_run.json" \
+            --workflow-runs-json "$RUNNER_TEMP/registration/github_workflow_runs.json" \
+            --run-id "$GITHUB_RUN_ID" \
+            --output "$RUNNER_TEMP/registration/registration_carrier.json"
+
+      - name: Derive deterministic artifact name
+        id: metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          uv run --locked python - "$RUNNER_TEMP/registration/registration_carrier.json" "$GITHUB_OUTPUT" <<'PY'
+          import pathlib
+          import sys
+          from hswm.experiments import swm0w_confirmatory as chronology
+
+          carrier = chronology.parse_registration_carrier(
+              chronology.parse_canonical_json_object_bytes(
+                  pathlib.Path(sys.argv[1]).read_bytes(), name="registration carrier"
+              )
+          )
+          with pathlib.Path(sys.argv[2]).open("a", encoding="utf-8") as stream:
+              stream.write(f"artifact_name={chronology.registration_artifact_name(carrier)}\n")
+          PY
+
+      - name: Upload pre-pulse registration archive
+        id: upload
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ${{ steps.metadata.outputs.artifact_name }}
+          path: ${{ runner.temp }}/registration
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+          overwrite: false
+          include-hidden-files: false
+
+      - name: Read back exact GitHub archive before pulse
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_ID: ${{ steps.upload.outputs.artifact-id }}
+          ARTIFACT_DIGEST: ${{ steps.upload.outputs.artifact-digest }}
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/artifacts/$ARTIFACT_ID" \
+            --output "$RUNNER_TEMP/registration_artifact.json"
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/artifacts/$ARTIFACT_ID/zip" \
+            --output "$RUNNER_TEMP/registration.zip"
+          printf '%s  %s\n' "$ARTIFACT_DIGEST" "$RUNNER_TEMP/registration.zip" | sha256sum --check --strict
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
+            --output "$RUNNER_TEMP/live_run.json"
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/workflows/swm0w-confirmatory.yml/runs?branch=main&event=push&head_sha=$GITHUB_SHA&per_page=100" \
+            --output "$RUNNER_TEMP/live_workflow_runs.json"
+          uv run --locked python -m hswm.experiments.swm0w_confirmatory \
+            validate-register-artifact \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --prereg "$GITHUB_WORKSPACE/prereg/PREREG_SWM0W_SCALAR_GATE_V1.json" \
+            --registration-archive "$RUNNER_TEMP/registration.zip" \
+            --run-json "$RUNNER_TEMP/live_run.json" \
+            --workflow-runs-json "$RUNNER_TEMP/live_workflow_runs.json" \
+            --registration-artifact-json "$RUNNER_TEMP/registration_artifact.json" \
+            --registration-artifact-id "$ARTIFACT_ID" \
+            --registration-artifact-digest "$ARTIFACT_DIGEST"
+
+  confirm:
+    name: confirm
+    needs: register
+    if: >-
+      ${{ needs.register.result == 'success' &&
+          github.run_attempt == 1 &&
+          github.repository == 'gj3447/HSWM' &&
+          github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    outputs:
+      artifact_id: ${{ steps.upload.outputs.artifact-id }}
+      artifact_digest: ${{ steps.upload.outputs.artifact-digest }}
+      artifact_name: ${{ steps.metadata.outputs.artifact_name }}
+    steps:
+      - name: Check out exact registration commit B
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Install frozen Python and uv
+        uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: false
+
+      - name: Install pinned Node runtime
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Verify runner and both Node hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+          test "$RUNNER_OS" = "Linux"
+          test "$RUNNER_ARCH" = "X64"
+          test "$(node --version)" = "v$NODE_VERSION"
+          printf '%s  %s\n' "$NODE_EXECUTABLE_SHA256" "$(command -v node)" | sha256sum --check --strict
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
+            --output "$RUNNER_TEMP/node.tar.xz"
+          printf '%s  %s\n' "$NODE_ARCHIVE_SHA256" "$RUNNER_TEMP/node.tar.xz" | sha256sum --check --strict
+          npm ci --ignore-scripts --no-audit --no-fund --prefix tools/swm0w_drand
+
+      - name: Download exact registration archive and live API records
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REGISTER_ID: ${{ needs.register.outputs.artifact_id }}
+          REGISTER_DIGEST: ${{ needs.register.outputs.artifact_digest }}
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/artifacts/$REGISTER_ID/zip" \
+            --output "$RUNNER_TEMP/registration.zip"
+          printf '%s  %s\n' "$REGISTER_DIGEST" "$RUNNER_TEMP/registration.zip" | sha256sum --check --strict
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/artifacts/$REGISTER_ID" \
+            --output "$RUNNER_TEMP/registration_artifact.json"
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
+            --output "$RUNNER_TEMP/run.json"
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/workflows/swm0w-confirmatory.yml/runs?branch=main&event=push&head_sha=$GITHUB_SHA&per_page=100" \
+            --output "$RUNNER_TEMP/workflow_runs.json"
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?filter=latest&per_page=100" \
+            --output "$RUNNER_TEMP/jobs.json"
+
+      - name: Wait, verify exact future pulse, and run all 20 tasks once
+        shell: bash
+        env:
+          REGISTER_ID: ${{ needs.register.outputs.artifact_id }}
+          REGISTER_DIGEST: ${{ needs.register.outputs.artifact_digest }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/candidate"
+          uv run --locked python -m hswm.experiments.swm0w_confirmatory \
+            confirm \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --prereg "$GITHUB_WORKSPACE/prereg/PREREG_SWM0W_SCALAR_GATE_V1.json" \
+            --registration-archive "$RUNNER_TEMP/registration.zip" \
+            --run-json "$RUNNER_TEMP/run.json" \
+            --workflow-runs-json "$RUNNER_TEMP/workflow_runs.json" \
+            --jobs-json "$RUNNER_TEMP/jobs.json" \
+            --registration-artifact-json "$RUNNER_TEMP/registration_artifact.json" \
+            --registration-artifact-id "$REGISTER_ID" \
+            --registration-artifact-digest "$REGISTER_DIGEST" \
+            --allow-online-beacon \
+            --output "$RUNNER_TEMP/candidate/candidate_bundle.json"
+
+      - name: Derive deterministic candidate artifact name
+        id: metadata
+        shell: bash
+        env:
+          REGISTER_DIGEST: ${{ needs.register.outputs.artifact_digest }}
+        run: |
+          set -euo pipefail
+          uv run --locked python - "$RUNNER_TEMP/registration.zip" "$REGISTER_DIGEST" "$GITHUB_OUTPUT" <<'PY'
+          import pathlib
+          import sys
+          from hswm.experiments import swm0w_confirmatory as chronology
+
+          carrier, _, _ = chronology.parse_registration_archive(
+              pathlib.Path(sys.argv[1]).read_bytes(), expected_digest=sys.argv[2]
+          )
+          with pathlib.Path(sys.argv[3]).open("a", encoding="utf-8") as stream:
+              stream.write(f"artifact_name={chronology.candidate_artifact_name(carrier)}\n")
+          PY
+
+      - name: Upload candidate result without an evidence verdict
+        id: upload
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ${{ steps.metadata.outputs.artifact_name }}
+          path: ${{ runner.temp }}/candidate
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+          overwrite: false
+          include-hidden-files: false
+
+      - name: Read back candidate archive bytes
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CANDIDATE_ID: ${{ steps.upload.outputs.artifact-id }}
+          CANDIDATE_DIGEST: ${{ steps.upload.outputs.artifact-digest }}
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/artifacts/$CANDIDATE_ID/zip" \
+            --output "$RUNNER_TEMP/candidate.zip"
+          printf '%s  %s\n' "$CANDIDATE_DIGEST" "$RUNNER_TEMP/candidate.zip" | sha256sum --check --strict
+          uv run --locked python - "$RUNNER_TEMP/candidate.zip" "$CANDIDATE_DIGEST" <<'PY'
+          import pathlib
+          import sys
+          from hswm.experiments import swm0w_confirmatory as chronology
+
+          chronology.validate_artifact_archive(
+              pathlib.Path(sys.argv[1]).read_bytes(),
+              expected_digest=sys.argv[2],
+              expected_members=chronology.CANDIDATE_ARCHIVE_MEMBERS,
+              maximum_bytes=chronology.MAX_CANDIDATE_ARCHIVE_BYTES,
+          )
+          PY
+
+  adjudicate:
+    name: adjudicate
+    needs:
+      - register
+      - confirm
+    if: >-
+      ${{ always() &&
+          github.run_attempt == 1 &&
+          github.repository == 'gj3447/HSWM' &&
+          github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out exact registration commit B
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Install frozen Python and uv
+        uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: false
+
+      - name: Initialize fail-closed VOID marker
+        id: fail_closed_marker
+        if: ${{ always() }}
+        shell: bash
+        env:
+          CONFIRM_RESULT: ${{ needs.confirm.result }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/adjudication"
+          printf '{"head_sha":"%s","id":%s,"run_attempt":1}\n' \
+            "$GITHUB_SHA" "$GITHUB_RUN_ID" > "$RUNNER_TEMP/run.json"
+          printf '{"jobs":[]}\n' > "$RUNNER_TEMP/jobs.json"
+          printf '{"total_count":0,"workflow_runs":[]}\n' \
+            > "$RUNNER_TEMP/workflow_runs.json"
+          uv run --locked python -m hswm.experiments.swm0w_confirmatory \
+            operational-void \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --prereg "$GITHUB_WORKSPACE/prereg/PREREG_SWM0W_SCALAR_GATE_V1.json" \
+            --registration-commit "$GITHUB_SHA" \
+            --run-id "$GITHUB_RUN_ID" \
+            --run-json "$RUNNER_TEMP/run.json" \
+            --workflow-runs-json "$RUNNER_TEMP/workflow_runs.json" \
+            --jobs-json "$RUNNER_TEMP/jobs.json" \
+            --confirm-needs-result "$CONFIRM_RESULT" \
+            --reason-code "ADJUDICATION_INTEGRITY_FAILURE" \
+            --output "$RUNNER_TEMP/adjudication/adjudication_receipt.json"
+
+      - name: Install pinned Node runtime for independent BLS replay
+        id: node_setup
+        if: >-
+          ${{ always() &&
+              steps.fail_closed_marker.outcome == 'success' &&
+              needs.register.result == 'success' &&
+              needs.confirm.result == 'success' }}
+        continue-on-error: true
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Verify adjudicator runner, Node, and drand bytes
+        id: replay_preflight
+        if: >-
+          ${{ always() &&
+              steps.node_setup.outcome == 'success' &&
+              needs.register.result == 'success' &&
+              needs.confirm.result == 'success' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_RUN_ATTEMPT" = "1"
+          test "$RUNNER_OS" = "Linux"
+          test "$RUNNER_ARCH" = "X64"
+          test "$(node --version)" = "v$NODE_VERSION"
+          printf '%s  %s\n' "$NODE_EXECUTABLE_SHA256" "$(command -v node)" | sha256sum --check --strict
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
+            --output "$RUNNER_TEMP/node-adjudicate.tar.xz"
+          printf '%s  %s\n' "$NODE_ARCHIVE_SHA256" "$RUNNER_TEMP/node-adjudicate.tar.xz" | sha256sum --check --strict
+          npm ci --ignore-scripts --no-audit --no-fund --prefix tools/swm0w_drand
+
+      - name: Query live GitHub control-plane evidence
+        id: control_plane
+        if: ${{ always() }}
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -uo pipefail
+          query_status=0
+          if curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
+            --output "$RUNNER_TEMP/run.live.json"; then
+            mv -f "$RUNNER_TEMP/run.live.json" "$RUNNER_TEMP/run.json"
+          else
+            query_status=1
+          fi
+          if curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/workflows/swm0w-confirmatory.yml/runs?branch=main&event=push&head_sha=$GITHUB_SHA&per_page=100" \
+            --output "$RUNNER_TEMP/workflow_runs.live.json"; then
+            mv -f "$RUNNER_TEMP/workflow_runs.live.json" "$RUNNER_TEMP/workflow_runs.json"
+          else
+            query_status=1
+          fi
+          if curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?filter=latest&per_page=100" \
+            --output "$RUNNER_TEMP/jobs.live.json"; then
+            mv -f "$RUNNER_TEMP/jobs.live.json" "$RUNNER_TEMP/jobs.json"
+          else
+            query_status=1
+          fi
+          exit "$query_status"
+
+      - name: Replay immutable candidate and adjudicate
+        id: strong_adjudication
+        if: >-
+          ${{ always() &&
+              needs.register.result == 'success' &&
+              needs.confirm.result == 'success' &&
+              steps.fail_closed_marker.outcome == 'success' &&
+              steps.node_setup.outcome == 'success' &&
+              steps.replay_preflight.outcome == 'success' &&
+              steps.control_plane.outcome == 'success' }}
+        continue-on-error: true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REGISTER_ID: ${{ needs.register.outputs.artifact_id }}
+          REGISTER_DIGEST: ${{ needs.register.outputs.artifact_digest }}
+          CANDIDATE_ID: ${{ needs.confirm.outputs.artifact_id }}
+          CANDIDATE_DIGEST: ${{ needs.confirm.outputs.artifact_digest }}
+        run: |
+          set -euo pipefail
+          for artifact_id in "$REGISTER_ID" "$CANDIDATE_ID"; do
+            test -n "$artifact_id"
+            curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact_id" \
+              --output "$RUNNER_TEMP/artifact-$artifact_id.json"
+            curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact_id/zip" \
+              --output "$RUNNER_TEMP/artifact-$artifact_id.zip"
+          done
+          printf '%s  %s\n' "$REGISTER_DIGEST" "$RUNNER_TEMP/artifact-$REGISTER_ID.zip" | sha256sum --check --strict
+          printf '%s  %s\n' "$CANDIDATE_DIGEST" "$RUNNER_TEMP/artifact-$CANDIDATE_ID.zip" | sha256sum --check --strict
+          uv run --locked python -m hswm.experiments.swm0w_confirmatory \
+            adjudicate \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --prereg "$GITHUB_WORKSPACE/prereg/PREREG_SWM0W_SCALAR_GATE_V1.json" \
+            --registration-archive "$RUNNER_TEMP/artifact-$REGISTER_ID.zip" \
+            --run-json "$RUNNER_TEMP/run.json" \
+            --workflow-runs-json "$RUNNER_TEMP/workflow_runs.json" \
+            --jobs-json "$RUNNER_TEMP/jobs.json" \
+            --registration-artifact-json "$RUNNER_TEMP/artifact-$REGISTER_ID.json" \
+            --registration-artifact-id "$REGISTER_ID" \
+            --registration-artifact-digest "$REGISTER_DIGEST" \
+            --candidate-artifact-json "$RUNNER_TEMP/artifact-$CANDIDATE_ID.json" \
+            --candidate-archive "$RUNNER_TEMP/artifact-$CANDIDATE_ID.zip" \
+            --candidate-artifact-id "$CANDIDATE_ID" \
+            --candidate-artifact-digest "$CANDIDATE_DIGEST" \
+            --output "$RUNNER_TEMP/strong_adjudication_receipt.json"
+          mv -f "$RUNNER_TEMP/strong_adjudication_receipt.json" \
+            "$RUNNER_TEMP/adjudication/adjudication_receipt.json"
+
+      - name: Convert any missing or invalid candidate to VOID
+        if: >-
+          ${{ always() &&
+              (needs.register.result != 'success' ||
+              needs.confirm.result != 'success' ||
+              steps.fail_closed_marker.outcome != 'success' ||
+              steps.node_setup.outcome != 'success' ||
+              steps.replay_preflight.outcome != 'success' ||
+              steps.control_plane.outcome != 'success' ||
+              steps.strong_adjudication.outcome != 'success') }}
+        shell: bash
+        env:
+          REGISTER_RESULT: ${{ needs.register.result }}
+          CONFIRM_RESULT: ${{ needs.confirm.result }}
+        run: |
+          set -euo pipefail
+          if test "$REGISTER_RESULT" != "success"; then
+            reason="REGISTER_JOB_DID_NOT_COMPLETE_SUCCESSFULLY"
+          elif test "$CONFIRM_RESULT" != "success"; then
+            reason="CONFIRM_JOB_DID_NOT_COMPLETE_SUCCESSFULLY"
+          else
+            reason="ADJUDICATION_INTEGRITY_FAILURE"
+          fi
+          uv run --locked python -m hswm.experiments.swm0w_confirmatory \
+            operational-void \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --prereg "$GITHUB_WORKSPACE/prereg/PREREG_SWM0W_SCALAR_GATE_V1.json" \
+            --registration-commit "$GITHUB_SHA" \
+            --run-id "$GITHUB_RUN_ID" \
+            --run-json "$RUNNER_TEMP/run.json" \
+            --workflow-runs-json "$RUNNER_TEMP/workflow_runs.json" \
+            --jobs-json "$RUNNER_TEMP/jobs.json" \
+            --confirm-needs-result "$CONFIRM_RESULT" \
+            --reason-code "$reason" \
+            --output "$RUNNER_TEMP/replacement_void_receipt.json"
+          mv -f "$RUNNER_TEMP/replacement_void_receipt.json" \
+            "$RUNNER_TEMP/adjudication/adjudication_receipt.json"
+
+      - name: Upload adjudication receipt
+        id: upload
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: swm0w-adjudication-${{ github.sha }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/adjudication
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+          overwrite: false
+          include-hidden-files: false
+
+      - name: Read back adjudication artifact
+        if: ${{ always() && steps.upload.outcome == 'success' }}
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ADJUDICATION_ID: ${{ steps.upload.outputs.artifact-id }}
+          ADJUDICATION_DIGEST: ${{ steps.upload.outputs.artifact-digest }}
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/artifacts/$ADJUDICATION_ID/zip" \
+            --output "$RUNNER_TEMP/adjudication.zip"
+          printf '%s  %s\n' "$ADJUDICATION_DIGEST" "$RUNNER_TEMP/adjudication.zip" | sha256sum --check --strict
+          uv run --locked python - "$RUNNER_TEMP/adjudication.zip" "$ADJUDICATION_DIGEST" <<'PY'
+          import pathlib
+          import sys
+          from hswm.experiments import swm0w_confirmatory as chronology
+
+          members = chronology.validate_artifact_archive(
+              pathlib.Path(sys.argv[1]).read_bytes(),
+              expected_digest=sys.argv[2],
+              expected_members=("adjudication_receipt.json",),
+              maximum_bytes=4 * 1024 * 1024,
+          )
+          value = chronology.parse_canonical_json_object_bytes(
+              members["adjudication_receipt.json"], name="adjudication receipt"
+          )
+          if value.get("schema_version") == chronology.ADJUDICATION_SCHEMA:
+              chronology.parse_evidence_adjudication(value)
+          else:
+              chronology.validate_operational_void_receipt(value)
+          PY

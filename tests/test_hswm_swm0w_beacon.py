@@ -50,6 +50,14 @@ def _rehash_receipt(value: dict) -> dict:
     return value
 
 
+def _rehash_commitment(value: dict) -> dict:
+    unsigned = {
+        key: item for key, item in value.items() if key != "commitment_sha256"
+    }
+    value["commitment_sha256"] = beacon.canonical_sha256(unsigned)
+    return value
+
+
 def test_quicknet_constants_and_round_time_are_exact() -> None:
     assert beacon.QUICKNET_CHAIN_HASH == (
         "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
@@ -100,8 +108,27 @@ def test_commitment_rejects_semantic_tampering(
 ) -> None:
     value = commitment().canonical()
     value[field] = replacement
-    unsigned = {key: item for key, item in value.items() if key != "commitment_sha256"}
-    value["commitment_sha256"] = beacon.canonical_sha256(unsigned)
+    _rehash_commitment(value)
+    with pytest.raises(beacon.SWM0WBeaconError, match=message):
+        beacon.parse_future_round_commitment(value)
+
+
+@pytest.mark.parametrize(
+    ("field", "replacement", "message"),
+    (
+        ("registered_at_unix", float(ROUND_TIME - 1), "must be an integer"),
+        ("round", float(ROUND), "must be an integer"),
+        ("round_time_unix", float(ROUND_TIME), "must be an integer"),
+        ("task_count", float(beacon.TASK_COUNT), "must be an integer"),
+        ("chronology_claim_allowed", 0, "cannot claim chronology"),
+    ),
+)
+def test_commitment_rejects_rehashed_json_type_aliases(
+    field: str, replacement, message: str
+) -> None:
+    value = commitment().canonical()
+    value[field] = replacement
+    _rehash_commitment(value)
     with pytest.raises(beacon.SWM0WBeaconError, match=message):
         beacon.parse_future_round_commitment(value)
 
@@ -271,6 +298,118 @@ def test_receipt_rejects_rehashed_verifier_or_acceptance_forgery(
     _rehash_receipt(boolean_substitute)
     with pytest.raises(beacon.SWM0WBeaconError, match="cryptographic verifier"):
         beacon.validate_verifier_receipt(boolean_substitute, selected)
+
+
+@pytest.mark.parametrize(
+    ("path", "replacement", "message"),
+    (
+        (("pulse", "round"), float(ROUND), "pulse.round must be an integer"),
+        (
+            ("pulse", "round_time_unix"),
+            float(ROUND_TIME),
+            "pulse.round_time_unix must be an integer",
+        ),
+        (
+            ("chain", "genesis_time"),
+            float(beacon.QUICKNET_GENESIS_TIME),
+            "Quicknet chain mismatch",
+        ),
+        (
+            ("chain", "period"),
+            float(beacon.QUICKNET_PERIOD_SECONDS),
+            "Quicknet chain mismatch",
+        ),
+        (("chronology_claim_allowed",), 0, "cannot claim chronology"),
+    ),
+)
+def test_verifier_receipt_rejects_rehashed_json_type_aliases(
+    verified_bundle,
+    path: tuple[str, ...],
+    replacement,
+    message: str,
+) -> None:
+    selected, receipt, _ = verified_bundle
+    changed = deepcopy(receipt)
+    target = changed
+    for key in path[:-1]:
+        target = target[key]
+    target[path[-1]] = replacement
+    _rehash_receipt(changed)
+    with pytest.raises(beacon.SWM0WBeaconError, match=message):
+        beacon.validate_verifier_receipt(changed, selected)
+
+
+def test_verifier_receipt_rejects_non_string_runtime_version_cleanly(
+    verified_bundle,
+) -> None:
+    selected, receipt, _ = verified_bundle
+    changed = deepcopy(receipt)
+    changed["verifier"]["runtime_version"] = True
+    _rehash_receipt(changed)
+    with pytest.raises(beacon.SWM0WBeaconError, match="version must be a string"):
+        beacon.validate_verifier_receipt(changed, selected)
+
+
+@pytest.mark.parametrize(
+    ("field", "replacement", "message"),
+    (
+        ("round", float(ROUND), "must be an integer"),
+        ("chronology_claim_allowed", 0, "cannot claim chronology"),
+    ),
+)
+def test_task_seed_binding_rejects_json_type_aliases(
+    verified_bundle,
+    field: str,
+    replacement,
+    message: str,
+) -> None:
+    _, _, binding = verified_bundle
+    values = {
+        "commitment_sha256": binding.commitment_sha256,
+        "verifier_receipt_sha256": binding.verifier_receipt_sha256,
+        "chain_hash": binding.chain_hash,
+        "round": binding.round,
+        "randomness": binding.randomness,
+        "seed_domain": binding.seed_domain,
+        "task_seed_hex": binding.task_seed_hex,
+        "chronology_status": binding.chronology_status,
+        "chronology_claim_allowed": binding.chronology_claim_allowed,
+    }
+    values[field] = replacement
+    unsigned = {
+        "chain_hash": values["chain_hash"],
+        "chronology_claim_allowed": values["chronology_claim_allowed"],
+        "chronology_status": values["chronology_status"],
+        "commitment_sha256": values["commitment_sha256"],
+        "randomness": values["randomness"],
+        "round": values["round"],
+        "schema_version": beacon.BINDING_SCHEMA,
+        "seed_domain": values["seed_domain"],
+        "task_seed_hex": list(values["task_seed_hex"]),
+        "verifier_receipt_sha256": values["verifier_receipt_sha256"],
+    }
+    with pytest.raises(beacon.SWM0WBeaconError, match=message):
+        beacon.TaskSeedBindingV1(
+            **values,
+            binding_sha256=beacon.canonical_sha256(unsigned),
+        )
+
+
+def test_task_seed_binding_requires_exact_seed_count(verified_bundle) -> None:
+    _, _, binding = verified_bundle
+    with pytest.raises(beacon.SWM0WBeaconError, match="exactly 20 task seeds"):
+        beacon.TaskSeedBindingV1(
+            commitment_sha256=binding.commitment_sha256,
+            verifier_receipt_sha256=binding.verifier_receipt_sha256,
+            chain_hash=binding.chain_hash,
+            round=binding.round,
+            randomness=binding.randomness,
+            seed_domain=binding.seed_domain,
+            task_seed_hex=binding.task_seed_hex[:-1],
+            chronology_status=binding.chronology_status,
+            chronology_claim_allowed=False,
+            binding_sha256=binding.binding_sha256,
+        )
 
 
 def test_offline_client_rejects_bls_invalid_signature_even_with_matching_randomness(

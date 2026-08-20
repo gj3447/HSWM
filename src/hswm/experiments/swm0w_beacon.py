@@ -195,6 +195,30 @@ def _require_exact_keys(
     return value
 
 
+def _exact_json_value_equal(actual: Any, expected: Any) -> bool:
+    """Compare a frozen JSON template without Python's bool/int/float aliases."""
+
+    if isinstance(expected, Mapping):
+        return (
+            isinstance(actual, Mapping)
+            and set(actual) == set(expected)
+            and all(
+                _exact_json_value_equal(actual[key], expected[key])
+                for key in expected
+            )
+        )
+    if type(expected) is list:
+        return (
+            type(actual) is list
+            and len(actual) == len(expected)
+            and all(
+                _exact_json_value_equal(actual_item, expected_item)
+                for actual_item, expected_item in zip(actual, expected, strict=True)
+            )
+        )
+    return type(actual) is type(expected) and actual == expected
+
+
 def quicknet_round_time(round_number: int) -> int:
     selected = _require_int(
         round_number,
@@ -244,13 +268,24 @@ class FutureRoundCommitmentV1:
             minimum=1,
             maximum=MAX_QUICKNET_ROUND,
         )
+        committed_time = _require_int(
+            self.round_time_unix,
+            "round_time_unix",
+            minimum=QUICKNET_GENESIS_TIME,
+        )
+        _require_int(
+            self.task_count,
+            "task_count",
+            minimum=TASK_COUNT,
+            maximum=TASK_COUNT,
+        )
         if self.chain_hash != QUICKNET_CHAIN_HASH:
             raise SWM0WBeaconError("commitment must use the pinned Quicknet chain")
-        if self.round_time_unix != quicknet_round_time(selected_round):
+        if committed_time != quicknet_round_time(selected_round):
             raise SWM0WBeaconError("commitment round/time mismatch")
-        if self.round_time_unix <= registered:
+        if committed_time <= registered:
             raise SWM0WBeaconError("committed pulse must be strictly after registration time")
-        if self.task_count != TASK_COUNT or self.seed_domain != TASK_SEED_DOMAIN:
+        if self.seed_domain != TASK_SEED_DOMAIN:
             raise SWM0WBeaconError("commitment task count/domain mismatch")
         if self.chronology_claim_allowed is not False:
             raise SWM0WBeaconError("same-party commitment cannot claim chronology")
@@ -408,9 +443,11 @@ def _validate_verifier_provenance(value: Any) -> None:
     fixed_actual = dict(data)
     _require_sha256(fixed_actual.pop("runtime_exec_sha256", None), "runtime_exec_sha256")
     runtime_version = fixed_actual.pop("runtime_version", None)
-    if fixed_actual != fixed_expected:
+    if not _exact_json_value_equal(fixed_actual, fixed_expected):
         raise SWM0WBeaconError("verifier source/version/integrity mismatch")
-    match = re.fullmatch(r"v([0-9]+)\.([0-9]+)\.([0-9]+)", runtime_version or "")
+    if type(runtime_version) is not str:
+        raise SWM0WBeaconError("verifier runtime version must be a string")
+    match = re.fullmatch(r"v([0-9]+)\.([0-9]+)\.([0-9]+)", runtime_version)
     if match is None or int(match.group(1)) < 18:
         raise SWM0WBeaconError("verifier requires a recorded Node.js >=18 runtime")
 
@@ -452,16 +489,28 @@ def validate_verifier_receipt(
         raise SWM0WBeaconError("verifier receipt cannot claim chronology")
     if data["mode"] not in {"offline", "online"}:
         raise SWM0WBeaconError("unsupported verifier mode")
-    if dict(_require_exact_keys(data["chain"], _expected_chain(), "chain")) != _expected_chain():
+    chain = _require_exact_keys(data["chain"], _expected_chain(), "chain")
+    if not _exact_json_value_equal(chain, _expected_chain()):
         raise SWM0WBeaconError("verifier receipt Quicknet chain mismatch")
     pulse = _require_exact_keys(
         data["pulse"],
         ("randomness", "round", "round_time_unix", "signature"),
         "pulse",
     )
-    if pulse["round"] != commitment.round:
+    pulse_round = _require_int(
+        pulse["round"],
+        "pulse.round",
+        minimum=1,
+        maximum=MAX_QUICKNET_ROUND,
+    )
+    pulse_time = _require_int(
+        pulse["round_time_unix"],
+        "pulse.round_time_unix",
+        minimum=QUICKNET_GENESIS_TIME,
+    )
+    if pulse_round != commitment.round:
         raise SWM0WBeaconError("verified pulse round does not match commitment")
-    if pulse["round_time_unix"] != commitment.round_time_unix:
+    if pulse_time != commitment.round_time_unix:
         raise SWM0WBeaconError("verified pulse time does not match commitment")
     randomness = _require_hex(pulse["randomness"], 32, "pulse.randomness")
     signature = _require_hex(pulse["signature"], 48, "pulse.signature")
@@ -500,7 +549,7 @@ def validate_verifier_receipt(
         "randomness_derivation": "SHA256(raw_signature_bytes)",
         "signature_scheme": QUICKNET_SCHEME_ID,
     }
-    if dict(verification) != expected_verification:
+    if not _exact_json_value_equal(verification, expected_verification):
         raise SWM0WBeaconError("receipt lacks the exact cryptographic verifier evidence")
     _validate_verifier_provenance(data["verifier"])
     verified_at = _require_int(data["verified_at_unix"], "verified_at_unix")
@@ -666,6 +715,8 @@ class TaskSeedBindingV1:
         _require_hex(self.randomness, 32, "randomness")
         if self.seed_domain != TASK_SEED_DOMAIN:
             raise SWM0WBeaconError("seed binding domain mismatch")
+        if type(self.task_seed_hex) is not tuple:
+            raise SWM0WBeaconError("task seeds must be an ordered tuple")
         if len(self.task_seed_hex) != TASK_COUNT:
             raise SWM0WBeaconError("seed binding must contain exactly 20 task seeds")
         for index, value in enumerate(self.task_seed_hex):

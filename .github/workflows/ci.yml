@@ -17,10 +17,19 @@ jobs:
       matrix:
         include:
           - name: core-tests
-            command: uv run --locked --extra dev pytest -q tests
+            python-version: "3.11"
+            command: uv run --locked --extra dev pytest -q tests --ignore=tests/test_hswm_swm0r_ontology.py
+          # SWM-0R's byte-exact historical receipt was measured with CPython
+          # 3.12.  Keep ordinary compatibility coverage on 3.11, and replay the
+          # environment-scoped repository evidence with its measured runtime.
+          - name: swm0r-evidence-replay
+            python-version: "3.12"
+            command: uv run --locked --extra dev pytest -q tests/test_hswm_swm0r_ontology.py
           - name: prom-and-research-tests
+            python-version: "3.11"
             command: uv run --locked --extra dev pytest -q prom_search_hswm _research/shared_field_hypothesis
           - name: efficacy-ledger
+            python-version: "3.11"
             command: uv run --locked hswm-verify-efficacy --pretty
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -28,7 +37,7 @@ jobs:
           fetch-depth: 0
       - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
       - run: ${{ matrix.command }}
 
   source-distribution:

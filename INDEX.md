@@ -133,7 +133,9 @@ canonical/compiled dual plane과 `SWM-0~5` 반증 사다리는
 [`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md)에,
 Hyperon 2026을 가장 강한 직접 선행으로 포함한 1차 자료 비교는
 [`HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md`](docs/research/HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md)에
-있다. 개별 부품의 최초성을 주장하지 않으며, 전체 폐루프는 아직 `UNJUDGED`다.
+있고, 백서의 page-level 성숙도·공개 코드·실행 smoke test·HSWM `H/W/A/F/Π` 경계는
+[`HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md`](docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md)에
+분리했다. 개별 부품의 최초성을 주장하지 않으며, 전체 폐루프는 아직 `UNJUDGED`다.
 
 ## 2026-08-15 — Sheaf 연구 온톨로지
 

@@ -44,6 +44,11 @@ matched-budget 비교, causal ablation, scale/stability로 자신을 증명해�
 | [MeTTa reflective metagraph rewriting](https://arxiv.org/abs/2112.08272) | 타입, 변수, pattern matching, program과 rewrite rule 자체를 metagraph로 표현하는 자기기술 구조 | 외부 outcome이 n-ary semantic macro-synapse를 학습시키는 계약은 별개 |
 | [Hyperon Deep-Dive 2026](https://hyperon.dev/__l5e/assets-v1/ed61e255-d234-4af2-b22b-da96a4548a4d/HyperonWhitepaper2026.pdf) | LLM을 external/bridge/native route로 통합; transformer token-position hidden state에서 AtomSpace read; neural state의 typed graph candidate write; source-token provenance, validation/promotion/permission; predictive-coding local learning; evaluator-minted attention fuel; individual/shared AtomSpace; rollback | HSWM의 가장 강한 competitor/conceptual prior. 문서의 상당 부분은 연구 program/hypothesis이므로 통합 구현·효능을 별도로 확인해야 함 |
 
+백서의 page-level claim audit, 공식 공개 코드 범위, HSWM `H/W/A/F/Π` 대응과
+직접 비교 실험은
+[`HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md`](./HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md)에
+분리했다.
+
 ### 1.1 반드시 피할 token 용어 충돌
 
 Hyperon의 `TECAN token`은 LLM subword token이 아니라 cognitive operation을 지급하는

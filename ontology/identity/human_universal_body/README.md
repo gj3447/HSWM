@@ -6,7 +6,10 @@ metaphor, and the social-revolution relation of `HSWM 인류보완계획` into t
 shared Neo4j KG. It also carries the later USER_PRIMARY philosophy-before-code
 direction, the USER_PRIMARY priority of the LLM-token-operated Hypergraph Semantic
 Weight Map itself, and their explicitly proposed philosophical and technical
-formalizations.
+formalizations. The machine-readable bundle also links the page-level
+[Hyperon 2026 direct-prior audit](../../../docs/research/HYPERON_2026_DIRECT_PRIOR_DEEP_DIVE_2026-08-20.md),
+including its claim-maturity, public-code, and TECAN/LLM-token separation
+guardrails.
 
 Authority is intentionally split:
 

@@ -46,6 +46,10 @@ typed-star paths score `1.0`, seven registered lossy projections score exactly
 nothing, and exact restore recovers it. Because the encoder knows the finite
 `F₃` fixture and only a ridge lookup is fitted, learned `W/Θ/R` remains
 unimplemented in that experiment and the programme remains `UNJUDGED`.
+Its raw JSON byte receipt is reproducible on the measured CPython 3.12 /
+OpenBLAS `SkylakeX` path. Portable CI instead requires exact equality of every
+non-BLAS-derived field; floating model-state and prediction digests are
+environment-bound and are not presented as cross-hardware identities.
 
 An executable SWM-0W development core now learns a continuous third-order
 scalar compatibility from three singleton role incidences and includes

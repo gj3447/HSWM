@@ -533,6 +533,10 @@ flowchart TB
 > scientific exit criterion has passed; engineering components implemented
 > ahead of a gate do not count as that gate's success. See the bounded
 > [SWM-0R result](results/SWM0R_REPRESENTATION_CONFORMANCE_RESULTS_2026-08-20.md).
+> SWM-0R's byte-exact receipt is additionally scoped to its measured CPython
+> 3.12/OpenBLAS `SkylakeX` path; portable CI compares every non-BLAS-derived
+> field exactly rather than pretending floating-point state hashes are
+> hardware-independent.
 
 Roadmap status always has two axes:
 

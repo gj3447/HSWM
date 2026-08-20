@@ -124,6 +124,17 @@ provisional charter는
 있다. 철학 우선 방향만 `USER_PRIMARY`이고 개별 원리의 정식화는 비준 전
 `SECONDARY_AI_PROPOSED`다.
 
+같은 날 사용자는 **Hypergraph Semantic Weight Map 자체와 LLM token으로 작동하는 거대
+hypergraph 학습구조**를 최우선 중심으로 다시 고정했다. 이에 따라 본체를
+`token event → sparse role-aware n-ary activation → LLM function cell → external outcome
+→ causal credit → versioned ΔW/ΔH → changed next activation`의 폐루프로 형식화했다.
+role-bearing incidence, operator-valued `W`, fast/slow weight, topology morphogenesis,
+canonical/compiled dual plane과 `SWM-0~5` 반증 사다리는
+[`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md`](docs/canon/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md)에,
+Hyperon 2026을 가장 강한 직접 선행으로 포함한 1차 자료 비교는
+[`HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md`](docs/research/HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md)에
+있다. 개별 부품의 최초성을 주장하지 않으며, 전체 폐루프는 아직 `UNJUDGED`다.
+
 ## 2026-08-15 — Sheaf 연구 온톨로지
 
 Sheaf의 local-to-global 구조를 HSWM에 곧바로 정답으로 선언하지 않고, 수학 정본과 HSWM

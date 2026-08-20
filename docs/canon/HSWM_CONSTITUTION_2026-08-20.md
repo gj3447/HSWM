@@ -13,6 +13,9 @@
 
 - 원문: [`USER_PRIMARY_HSWM_LIVING_HARNESS_WORLD_MODEL_2026-08-20.txt`](sources/USER_PRIMARY_HSWM_LIVING_HARNESS_WORLD_MODEL_2026-08-20.txt)
 - SHA-256: `35c911a13e7fb17ddcea19ba73303ec800296f25fb585b92300bb4977892a42e`
+- 핵심 우선순위 원문:
+  [`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.txt`](sources/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.txt)
+- SHA-256: `03ddd83fae4b98f8e1ee7cfa5e139d3bc98a7614cae7e33e0e55899651506c8c`
 - 선행 정전: [`THE_WORLD_REMEMBERS.md`](THE_WORLD_REMEMBERS.md),
   [`USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md`](USER_PRIMARY_HSWM_TOKEN_LEARNING_RAGNAROK_2026-08-14.md)
 
@@ -58,6 +61,29 @@ HSWM은 token으로 “저장된 데이터베이스”가 아니라 token으로 
 따라서 token은 활성과 경험의 운반체이지 곧바로 weight, truth, credit은 아니다. transcript를
 보존하거나 prompt에 다시 넣는 것은 memory/retrieval일 수 있지만 continuous learning의
 충분조건은 아니다.
+
+### 3.1 중심축 — Hypergraph Semantic Weight Map 그 자체
+
+2026-08-20 USER_PRIMARY는 여러 주변 구현보다 **LLM token으로 작동하는 거대
+Hypergraph Semantic Weight Map 학습구조 자체**가 가장 중요하다고 우선순위를
+확정했다. 이는 새 subsystem을 더하는 말이 아니라 `H/W/A`를 신경조직의 본체로,
+`F`를 LLM으로 실행되는 국소 비선형 세포로, `Π`를 그 가소성의 구성적 막으로 읽으라는
+뜻이다.
+
+기술적 판별선은 다음 폐루프다.
+
+```text
+LLM token event → sparse role-aware n-ary activation → typed LLM function
+→ external outcome → causal credit → versioned ΔW/ΔH → changed next activation
+```
+
+따라서 KG, RAG, ontology, prompt, agent workflow와 graph database는 저장·projection·I/O
+부품일 수 있지만, 이 폐루프를 대신하지 못한다. role-bearing incidence, operator-valued
+semantic weight, fast/slow plasticity, topology morphogenesis, canonical/compiled dual plane과
+반증 단계는
+[`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md`](USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md)에,
+기존 구현과의 비교는
+[`HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md`](../research/HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md)에 둔다.
 
 ## 4. Living harness-document의 역할
 

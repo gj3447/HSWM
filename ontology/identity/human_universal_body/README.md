@@ -4,14 +4,18 @@ This bundle projects the 2026-08-20 USER_PRIMARY definition of `인류보편체`
 its full human/LLM/internet/sensor/static-memory scope, the historical-river
 metaphor, and the social-revolution relation of `HSWM 인류보완계획` into the
 shared Neo4j KG. It also carries the later USER_PRIMARY philosophy-before-code
-direction and ten explicitly proposed philosophical principles.
+direction, the USER_PRIMARY priority of the LLM-token-operated Hypergraph Semantic
+Weight Map itself, and their explicitly proposed philosophical and technical
+formalizations.
 
 Authority is intentionally split:
 
 - target definition, components, cognitive-unity target, and plan `TARGETS`
   relation: `USER_PRIMARY`;
 - philosophy-before-code direction: `USER_PRIMARY`;
-- the ten named principles, equations, acceptance criteria, implementation phases, and HOH bridge:
+- token-hypergraph Semantic Weight Map core priority: `USER_PRIMARY`;
+- the ten named principles, operator-valued weight design, equations, acceptance criteria,
+  implementation phases, prior-art gap inference, and HOH bridge:
   `SECONDARY_AI` and unjudged;
 - KG presence: discoverability only, never implementation or efficacy evidence.
 

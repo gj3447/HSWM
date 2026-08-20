@@ -96,14 +96,20 @@ def validate_data(data: dict[str, Any], repo_root: Path) -> None:
         raise ValueError(f"duplicate relations: {duplicate_relations}")
     require_safe(relation_types, "relationship types", SAFE_RELATION)
 
-    source_path = repo_root / data["source_path"]
-    if not source_path.is_file():
-        raise ValueError(f"source_path does not exist: {source_path}")
-    source_sha256 = hashlib.sha256(source_path.read_bytes()).hexdigest()
-    if source_sha256 != data["source_sha256"]:
-        raise ValueError(
-            f"source hash mismatch: payload={data['source_sha256']} actual={source_sha256}"
-        )
+    source_pairs = (
+        ("source_path", "source_sha256"),
+        ("philosophy_source_path", "philosophy_source_sha256"),
+        ("token_hypergraph_source_path", "token_hypergraph_source_sha256"),
+    )
+    for path_key, hash_key in source_pairs:
+        source_path = repo_root / data[path_key]
+        if not source_path.is_file():
+            raise ValueError(f"{path_key} does not exist: {source_path}")
+        source_sha256 = hashlib.sha256(source_path.read_bytes()).hexdigest()
+        if source_sha256 != data[hash_key]:
+            raise ValueError(
+                f"{hash_key} mismatch: payload={data[hash_key]} actual={source_sha256}"
+            )
 
 
 def _find_unique_nodes(tx: Any, uids: list[str]) -> dict[str, str]:

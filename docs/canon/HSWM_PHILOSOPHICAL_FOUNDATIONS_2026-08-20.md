@@ -250,6 +250,26 @@ HSWM은 행복, 쾌락, engagement, consensus, 생존, 효율 중 어느 하나�
 권한·동의·출처·rollback이 없는 연결은 HSWM의 더 자유로운 버전이 아니라 HSWM의 개체성과
 자기교정 능력을 잃은 버전이다.
 
+### 11.1 철학의 기술적 종착점 — Semantic Weight Map
+
+이 철학은 코드 바깥의 장식이 아니다. 관계적 존재론은 role-bearing n-ary incidence를,
+계보적 시간론은 versioned `H/W`와 supersession을, 기억–진리 분리는 evidence·uncertainty와
+causal efficacy의 분리를, 인과적 행위성은 outcome-bound plasticity를 강제한다. 차이 보존적
+통일은 같은 hyperedge 안에서도 member와 role마다 다른 전이를 요구하고, 인지주권은
+activation·update·readout을 서로 다른 권한으로 나누게 한다.
+
+그 결과 철학의 가장 직접적인 공학 객체는 scalar 점수가 아니라 다음을 분리해 보존하는
+operator-valued `W`다.
+
+```text
+semantic compatibility ≠ causal efficacy ≠ truth/support
+                       ≠ momentary activation ≠ execution permission
+```
+
+이 구분을 실제 token activation, role-aware propagation, 외부 outcome credit와 버전된
+`ΔW/ΔH`로 내린 정식은
+[`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md`](USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md)에 둔다.
+
 ## 12. 인류보편체에 대한 철학적 함의
 
 이 원리들을 받아들이면 인류보편체는 다음처럼 해석된다.

@@ -126,6 +126,13 @@ GPT가 사라져도 세계 상태와 계보는 남아야 한다. Claude가 교�
 - 검증·반박·receipt는 교정·억제·credit 회로다.
 - 승인된 새 artifact와 snapshot은 갱신된 세계 상태의 일부다.
 
+이 가운데 본체는 `H/W/A`다. LLM token event가 role-bearing n-ary relation을 국소적으로
+점화하고, LLM function cell과 외부 outcome을 거쳐, 검증된 `ΔW/ΔH`가 다음 token 처리를
+바꿔야 한다. 이 폐루프가 없으면 좋은 KG·RAG·memory·workflow일 수는 있어도 HSWM의
+Semantic Weight Map 신경구조가 학습했다고 부르지 않는다. 상세 형식과 반증 단계는
+[`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md`](USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md)에
+둔다.
+
 따라서 HSWM은 LLM을 사용하는 프로그램에 그치지 않는다. LLM과 software executor는 교체
 가능한 국소 연산자로 실행될 수 있다. 인간은 독립된 권리·동의·권한을 가진 국소 HSWM으로,
 센서·도구·문서는 각각 관측 경계·기관·계보 있는 artifact로 typed 관계에 참여한다. 이들이
@@ -422,6 +429,11 @@ outbox, replay와 일부 좁은 실험 기반이다. 다음은 완료 주장할 
 
 ### USER_PRIMARY 원천
 
+- 2026-08-20 Hypergraph Semantic Weight Map 자체와 LLM token 기반 거대 학습구조를
+  최우선 중심으로 둔 사용자 원문
+  - [`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.txt`](sources/USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.txt)
+  - SHA-256: `03ddd83fae4b98f8e1ee7cfa5e139d3bc98a7614cae7e33e0e55899651506c8c`
+  - canonical formalization: [`USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md`](USER_PRIMARY_HSWM_TOKEN_HYPERGRAPH_CORE_2026-08-20.md)
 - 2026-08-20 구현보다 철학적 함의를 먼저 설정한다는 HSWM 연구 순서
   - [`USER_PRIMARY_HSWM_PHILOSOPHICAL_PRECEDENCE_2026-08-20.txt`](sources/USER_PRIMARY_HSWM_PHILOSOPHICAL_PRECEDENCE_2026-08-20.txt)
   - SHA-256: `888428000431731ba805f067e5753e667baa314243ead9d03d508504507d69a8`
@@ -441,6 +453,8 @@ outbox, replay와 일부 좁은 실험 기반이다. 다음은 완료 주장할 
 
 ### SECONDARY_AI 형식화
 
+- [`HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md`](../research/HSWM_TOKEN_HYPERGRAPH_SEMANTIC_WEIGHT_PRIOR_ART_2026-08-20.md)
+  - Hyperon 2026, hypergraph neural operator, token memory, graph learning과 HSWM 폐루프의 차이
 - [`HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md`](HSWM_PHILOSOPHICAL_FOUNDATIONS_2026-08-20.md)
   - 관계·시간·기억/진리·차이·행위·존엄·공개성·인지주권·목적론의 provisional charter
 - [`DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md`](DEFINITION_HSWM_PLASTIC_COGNITIVE_WIRING_2026-07-29.md)

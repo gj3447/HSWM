@@ -21,15 +21,19 @@ KG.
 | layer | authority | what it contains |
 |---|---|---|
 | exact utterance artifacts | `USER_PRIMARY` | immutable source bytes and SHA-256 |
-| target identity | `USER_PRIMARY` | Human Universal Body scope, plan→target relation, philosophy-before-code priority, token-hypergraph priority, deep Set-Hypergraph identity |
+| target identity and research direction | `USER_PRIMARY` | Human Universal Body scope, plan→target relation, philosophy-before-code priority, token-hypergraph priority, deep Set-Hypergraph identity, Occam-minimization and KG-publication direction |
 | philosophical and technical decomposition | `SECONDARY_AI_PROPOSED` | dispositional `W`, typed Deep-Set symmetry, depth axes, agency criteria, governance, equations, phases |
 | KG publication | `SYSTEM_DERIVED` | discoverability and typed relations only |
 | present implementation or efficacy | direct evidence only | not established by ontology presence |
 
-The latest exact source is
-[`USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt`](../../../docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt).
-Its hash is bound at both bundle and `CanonicalSource` level. The publisher
-validates that hash before any remote write.
+The latest exact sources are the
+[`deep Set-Hypergraph identity`](../../../docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt)
+and the
+[`Occam-core research direction`](../../../docs/canon/sources/USER_PRIMARY_HSWM_OCCAM_CORE_DIRECTION_2026-08-20.txt).
+Their hashes, plus the hash of the resulting
+[`Occam-core research artifact`](../../../docs/research/HSWM_OCCAM_CORE_2026-08-20.md),
+are bound in the bundle. The publisher validates every bound path/hash pair
+before any remote write.
 
 The resulting graph spine is:
 
@@ -44,8 +48,39 @@ exact USER_PRIMARY source
       → routing as distributed cognitive power
       → constitutionally bounded plural teleology
   → existing token-hypergraph H/W/A/F/Π core
+  → USER_PRIMARY Occam-minimization direction
+      → SECONDARY Counterfactual Continuation Axiom
+      → computation / constitution two-irreducible boundary
+      → remove / restore membership test and critical-path cut
   → 인류보편체 and HSWM 인류보완계획
 ```
+
+## Occam core: relations that make a difference
+
+The proposed research title is **Relations That Make a Difference**. Its compact
+engineering thesis is:
+
+> **Semantic Weight = learned, role-conditioned causal difference.**
+
+This does not replace the canonical `H/W/A/F/Π` identity. It removes duplicated
+ontology around it: `H` addresses and preserves the relation, `W` is the
+relation's recipient-sensitive disposition, `A` is its current finite
+application, `F` realizes the local transition, and `Π` independently decides
+what may be read, activated, learned, executed, or rolled back.
+
+The KG therefore records a **Counterfactual Continuation Axiom** and one deletion
+test: a mechanism belongs to the HSWM cognitive core only if matched
+remove/restore changes later behavior and outcome-valid plasticity changes the
+next episode. `W`, causal-efficacy evidence, truth support, activation, reward,
+and permission remain separate channels. A measured effect never grants its own
+legitimacy.
+
+The proposed critical path is gate-relative: single-sweep n-ary noncollapse
+(`SWM-0`) → bounded recurrent depth (`SWM-1`) → frozen typed LLM loop (`SWM-2`)
+→ outcome-bound fast `W` (`SWM-3`) → only then slow `W`, `ΔH`, and federation.
+Neo4j, Hyperon, self-modification, multi-agent orchestration, internet/sensor
+federation, and the Human Universal Body runtime remain outside the first causal
+path. They are deferred, not rejected.
 
 ## Semantic Weight is an operator, not a score
 

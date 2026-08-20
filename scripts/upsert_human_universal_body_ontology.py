@@ -101,6 +101,8 @@ def validate_data(data: dict[str, Any], repo_root: Path) -> None:
         ("philosophy_source_path", "philosophy_source_sha256"),
         ("token_hypergraph_source_path", "token_hypergraph_source_sha256"),
         ("deep_set_hypergraph_source_path", "deep_set_hypergraph_source_sha256"),
+        ("occam_direction_source_path", "occam_direction_source_sha256"),
+        ("occam_research_path", "occam_research_sha256"),
     )
     for path_key, hash_key in source_pairs:
         source_path = repo_root / data[path_key]

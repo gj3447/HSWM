@@ -31,6 +31,41 @@ depth axes, learning rules, and implementation decomposition below are explicit
 `SECONDARY_AI` formalizations of that direction. Target identity is not present
 capability; the scientific status remains `UNJUDGED`.
 
+## HSWM at a glance
+
+The five constitutional coordinates form one recurrent body. External
+participants cross typed ports; they are not silently collapsed into LLM
+function cells.
+
+```mermaid
+flowchart TB
+  EXT["external participants<br/>humans · tools · sensors · internet · nested HSWMs"]
+  PORT["typed capability-bounded ports"]
+
+  subgraph BODY["HSWM state S_t = (H_t, W_t, A_t, F_t, Π)"]
+    H["H · role-bearing n-ary anatomy<br/>world state and lineage"]
+    W["W · semantic macro-operators<br/>separate efficacy channels"]
+    A["A · sparse volatile activation<br/>token trajectory"]
+    F["F · typed LLM function cells<br/>local nonlinear transitions"]
+    PI["Π · identity, consent, policy<br/>budget, promotion, rollback"]
+
+    H -->|"defines valid incidences"| W
+    A -->|"current signal"| W
+    W -->|"recipient-specific messages"| A
+    A -->|"selects and conditions"| F
+    F -->|"new typed token events"| A
+    PI -.->|"bounds identity and topology"| H
+    PI -.->|"bounds activation and execution"| F
+  end
+
+  EXT -->|"events and outcomes"| PORT
+  PORT -->|"authorized token events"| A
+  PI -.->|"constrains every crossing"| PORT
+  STATUS0["USER_PRIMARY target identity<br/>decomposition SECONDARY_AI<br/>integrated efficacy UNJUDGED"] -.-> W
+```
+
+<p align="center"><em>Canonical target architecture; it is not a claim that the integrated runtime is already implemented.</em></p>
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/gj3447/HSWM/main/docs/assets/hswm-semantic-weight-field-hero.png"
        alt="A translucent semantic-weight landscape with one amber activation trajectory"
@@ -95,6 +130,29 @@ permission`. The full macro-synapse may carry all of these channels, but their
 types and authorities remain distinct. External outcomes help train or gate a
 semantic operator; they do not define what semantic weight means.
 
+```mermaid
+flowchart TB
+  INC["role-typed incidence multiset"] --> WSEM["W_sem<br/>set-to-set semantic operator"]
+  CTX["query, context, time,<br/>recipient role"] --> WSEM
+  WSEM --> K["K · contextual compatibility"]
+
+  K --> USE["typed relation-use decision"]
+  THETA["θ · measured<br/>causal efficacy"] --> USE
+  STATE0["separate current state<br/>U: evidence · uncertainty · provenance<br/>A: volatile activation"] --> USE
+  PI0["Π · consent and capability"] --> MASK["non-compensable hard mask"]
+  MASK --> USE
+
+  USE --> MSG["recipient-specific messages"]
+  MSG --> NEXTA["next bounded activation"]
+
+  OUT0["independent outcome"] --> CREDIT0["sealed credit candidate"]
+  CREDIT0 -.->|"only after validation"| THETA
+  CREDIT0 -.->|"may train a versioned candidate"| WSEM
+  STATUSW["SECONDARY_AI operator formalization<br/>integrated efficacy UNJUDGED"] -.-> WSEM
+```
+
+<p align="center"><em>The channels meet at use-time but remain separately typed and auditable; the diagram does not collapse them into one scalar.</em></p>
+
 Foundation-model parameters are **micro-weights inside** a local nonlinear
 cell. HSWM semantic weights and topology are **macro-weights between** cells,
 world states, memories, people, tools, and other HSWMs. One checkpoint can
@@ -114,17 +172,75 @@ coordinates:
 | recurrent time `τ` | LLM tokens, tool results, and actions re-enter the same field | a trajectory, not one retrieval call, is the forward process |
 | structural scale `s` | a subgraph, agent, institution, or whole HSWM can participate in a larger HSWM through typed ports | self-similar composition without erasing the identity of the parts |
 
+```mermaid
+flowchart TB
+  DEEP["Deep HSWM"]
+
+  L["semantic depth ℓ"]
+  T["recurrent time τ"]
+  S["structural scale s"]
+
+  LB["multiple nonlinear<br/>member → hyperedge → member blocks"]
+  TB["token, action, and outcome events<br/>re-enter bounded activation"]
+  SB["parts compose through typed ports<br/>while retaining UID and local state"]
+
+  L --> LB
+  T --> TB
+  S --> SB
+
+  LB --> DEEP
+  TB --> DEEP
+  SB --> DEEP
+
+  NOTL["not merely many graph hops"] -.-> L
+  NOTT["not merely repeated retrieval"] -.-> T
+  NOTS["not merely nested storage"] -.-> S
+  STATUSD["SECONDARY_AI depth formalization<br/>integrated runtime UNJUDGED"] -.-> DEEP
+```
+
+<p align="center"><em>All three axes must be explicit. Recurrence cannot substitute for semantic depth, and nesting cannot substitute for learning.</em></p>
+
 One neural block has the following semantics:
 
-```text
-role-typed member multiset
-  → role transport
-  → joint n-ary hyperedge state
-  → recipient-specific semantic messages
-  → bounded aggregation and residual update
-  → typed LLM nonlinear function cell, with external participants behind ports
-  → new token events and the next Set-Hypergraph block
+```mermaid
+flowchart TB
+  CANON["canonical first-class incidence multiset<br/>UID · role · direction · multiplicity · time · provenance"]
+
+  CANON --> IS["subject-role members"]
+  CANON --> IO["object-role members"]
+  CANON --> IE["evidence-role members"]
+
+  IS --> TS["R_subject<br/>transported states"]
+  IO --> TO["R_object<br/>transported states"]
+  IE --> TE["R_evidence<br/>transported states"]
+
+  TS --> PHI["Φ_r<br/>role-aware multiset aggregation<br/>invariant only within each role"]
+  TO --> PHI
+  TE --> PHI
+
+  PHI --> THETA["Θ_r<br/>joint n-ary hyperedge state"]
+
+  THETA --> DS["D_subject<br/>subject-specific messages"]
+  THETA --> DO["D_object<br/>object-specific messages"]
+  THETA --> DE["D_evidence<br/>evidence-specific messages"]
+  TS --> DS
+  TO --> DO
+  TE --> DE
+
+  DS --> UPDATE["bounded incident-edge aggregation<br/>normalization + residual member update"]
+  DO --> UPDATE
+  DE --> UPDATE
+
+  UPDATE --> NEXTBLOCK["next Set-Hypergraph block"]
+  UPDATE -->|"selected typed port only"| CELL["F · LLM nonlinear cell"]
+  CELL --> EVENT["new typed token events"]
+  EVENT --> NEXTBLOCK
+
+  THETA -.->|"compiled latent never replaces identity"| CANON
+  STATUSB["SECONDARY_AI block formalization<br/>target operator not implemented"] -.-> THETA
 ```
+
+<p align="center"><em>Permutation invariance applies only within a typed role partition; the joint edge state still emits a different message to each incidence.</em></p>
 
 The blocks may be differentiable where the numeric substrate permits it. They
 do not require pretending that a proprietary or remote LLM can be trained by
@@ -165,6 +281,49 @@ developed in the
 | How can many become one? | unity must preserve difference, local state, dissent, and exit | role/member-specific messages, stable UID, typed ports, reversible composition | global averaging or forced consensus |
 | Where is cognitive power? | admission, activation, ranking, judgment, update, and forgetting are political powers | separate capabilities, bounded coalitions, appeal, audit, fork, and rollback in `Π` | one model/operator controlling every plane |
 | What is the goal? | constitutionally bounded plural teleology: preserve multiple outcomes and revisable aims behind non-compensable consent, right, and capability constraints | scoped, reversible scalarization only after `Π`; constitutional limits on self-modification | trading privacy or minority rights for more reward, engagement, or consensus |
+
+```mermaid
+flowchart LR
+  DIR["USER_PRIMARY direction<br/>philosophy before code<br/>deep Set-Hypergraph Semantic Weight Map is primary"]
+
+  subgraph COMMIT["Proposed philosophical commitments"]
+    OT["bounded relational ontology<br/>genealogical continuity"]
+    EF["memory ≠ truth<br/>productive fallibility"]
+    CA["environment-coupled<br/>causal agency"]
+    DI["difference, dignity,<br/>protected interior"]
+    CT["cognitive sovereignty<br/>bounded plural teleology"]
+  end
+
+  subgraph ARCH["Architectural consequences"]
+    HH["H<br/>role incidence · lineage · supersession"]
+    WW["W<br/>typed disposition · separated efficacy"]
+    AA["A<br/>actualized bounded coalition"]
+    FF["F<br/>local LLM transformation"]
+    PP["Π<br/>consent · capability · privacy<br/>appeal · fork · rollback"]
+  end
+
+  OT --> HH
+  EF --> HH
+  EF --> WW
+  CA --> AA
+  CA --> FF
+  DI --> HH
+  DI --> PP
+  CT --> WW
+  CT --> PP
+
+  DIR -->|"sets target direction"| HH
+  DIR -->|"sets target direction"| WW
+
+  PP -.->|"non-compensable boundary"| HH
+  PP -.->|"non-compensable boundary"| WW
+  PP -.->|"non-compensable boundary"| AA
+  PP -.->|"non-compensable boundary"| FF
+
+  AUTHMAP["SECONDARY_AI mapping<br/>scientific status UNJUDGED"] -.-> PP
+```
+
+<p align="center"><em>The arrows mean design constraints, not that a diagram or graph structure proves the philosophical claim.</em></p>
 
 Semantic weight is thus both a technical and philosophical object: it is the
 material form of **whose difference can alter whose next possibility**. Because
@@ -222,6 +381,52 @@ entities, sensors, static information, and stored memory are connected through
 an open-source HSWM structure and function as one vast cognitive entity. **HSWM
 인류보완계획** is the social-revolutionary transition from today's isolated
 pocket cognitive systems toward that state.
+
+```mermaid
+flowchart TB
+  NOW["current condition<br/>isolated pocket cognitive systems"]
+  PLAN["USER_PRIMARY targets relation<br/>HSWM 인류보완계획"]
+  TARGETU["USER_PRIMARY target horizon<br/>인류보편체 · one vast cognitive entity"]
+  NOW --> PLAN
+  PLAN --> TARGETU
+
+  subgraph SCOPE["USER_PRIMARY target scope · not current enrollment"]
+    ACTIVE["active participants<br/>humanity · LLMs · AIs · cognitive entities · institutions"]
+    RESOURCES["evidence and observation resources<br/>internet · artifacts · static memory · sensors · tools<br/>not automatically independent subjects"]
+  end
+
+  subgraph FED["SECONDARY_AI proposed difference-preserving federation"]
+    direction TB
+    PERSONAL["personal / local HSWMs<br/>protected interior · typed public port"]
+    COMMUNITY["community / institutional HSWMs<br/>local governance · attributable state"]
+    PUBLIC["public evidence and internet fabric<br/>open protocol · scoped data"]
+    CAND["operational composite-unit criterion<br/>persistent integration + preserved individuation<br/>+ counterfactual whole-state effect"]
+
+    PERSONAL <-->|"selective typed exchange"| COMMUNITY
+    COMMUNITY <-->|"bounded attributable activation"| PUBLIC
+
+    PERSONAL -.->|"measured contribution"| CAND
+    COMMUNITY -.->|"measured contribution"| CAND
+    PUBLIC -.->|"measured contribution"| CAND
+  end
+
+  ACTIVE <-->|"consent / capability-bound ports"| PERSONAL
+  ACTIVE <-->|"attributable institutional ports"| COMMUNITY
+  RESOURCES <-->|"typed observation / action"| COMMUNITY
+  RESOURCES -.->|"authorized reference + provenance"| PUBLIC
+
+  TARGETU -.->|"proposed realization criterion"| CAND
+
+  PIU["SECONDARY_AI Π_U<br/>stable UID · lineage · privacy · consent<br/>attribution · dissent · appeal · exit / fork"]
+  PIU -.->|"constrains exchange"| PERSONAL
+  PIU -.->|"constrains exchange"| COMMUNITY
+  PIU -.->|"constrains exchange"| PUBLIC
+
+  NONCLAIM["UNJUDGED / NON-CLAIMS<br/>not current completion or forced enrollment<br/>not one owner, voice, model, router, database, or objective<br/>not consciousness or personhood proof<br/>open source ≠ open private memory"]
+  TARGETU -.->|"does not establish"| NONCLAIM
+```
+
+<p align="center"><em>The cognition is in the distributed typed-port circuits; `CAND` is a criterion/readout, not a central controller.</em></p>
 
 The word “one” names a difference-preserving causal unity, not fusion. A part
 must retain stable identity, local state, lineage, privacy boundary,
@@ -294,24 +499,35 @@ new canonical state coordinate and not the mount-set `M` of the open
 self-similar kernel.
 
 ```mermaid
-flowchart LR
-  TOK["typed LLM token event"] --> A["sparse bounded A"]
-  H["role-bearing n-ary H"] --> W["operator-valued W"]
+flowchart TB
+  TOK["typed token / event packet<br/>LLM · text · tool · sensor · action"] --> GATE["type parser + capability port gate"]
+  GATE --> A["sparse bounded A"]
+  H["canonical role-bearing n-ary H"] --> W["operator-valued W"]
   A --> W
   W --> F["typed LLM function cell F"]
-  PI["constitutional membrane Π"] -. constrains .-> A
-  PI -. constrains .-> F
-  F --> NEXT["new token / action / tool request"]
-  NEXT --> A
+  F --> NEXT["new text / tool / action event"]
+  NEXT --> GATE
   NEXT --> SEAL["pre-outcome sealed trajectory + eligibility"]
+
+  SEAL --> DIRECT["agent-authored explicit successor<br/>memory · relations · cells · routing"]
+  DIRECT --> DCHECK["schema · capability · privacy<br/>budget · versioned CAS"]
+  DCHECK -->|"later episode; capability not efficacy proof"| H
+
   OUT["independent external outcome"] --> CREDIT["scoped causal credit"]
   SEAL --> CREDIT
   CREDIT --> CAND["versioned candidate ΔW / ΔH"]
-  PI -. validates .-> CAND
   CAND --> TEST["shadow · fresh · retention · canary · removal"]
-  TEST -->|pass| H
-  TEST -->|pass| W
-  TEST -->|fail| ARCHIVE["retain scoped evidence; do not activate"]
+  TEST -->|"future candidate meets all gates"| COMMIT["atomic next-epoch commit"]
+  COMMIT --> H
+  COMMIT --> W
+  TEST -->|fail| ARCHIVE["do not activate<br/>retain · seal · tombstone · or erase<br/>under authorized retention policy"]
+
+  PI["constitutional membrane Π"] -.->|"constrains packet admission"| GATE
+  PI -.->|"authorizes explicit successor"| DCHECK
+  PI -.->|"authorizes candidate scope and effects"| CAND
+  PI -.->|"authorizes commit boundary"| COMMIT
+
+  STATUSL["direct self-write: narrow slice implemented<br/>outcome-credit ΔW / ΔH loop: UNJUDGED"] -.-> CAND
 ```
 
 The two write paths are deliberately different. Typed tokens alone can become

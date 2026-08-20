@@ -553,8 +553,8 @@ def _build_audit(
     full_sets = {
         split.split: {case.six_tuple for case in split.cases} for split in splits
     }
-    uid_sets = {
-        split.split: {
+    uid_sequences = {
+        split.split: tuple(
             uid
             for case in split.cases
             for uid in (
@@ -562,8 +562,11 @@ def _build_audit(
                 case.world_uid,
                 *(uid for _, uid in case.incidence_uids),
             )
-        }
+        )
         for split in splits
+    }
+    uid_sets = {
+        split: set(identifiers) for split, identifiers in uid_sequences.items()
     }
     unary = tuple(
         (split.split, _probability_digest(split.cases, 1)) for split in splits
@@ -589,7 +592,7 @@ def _build_audit(
         ),
         (
             "opaque_ids_globally_unique",
-            sum(len(values) for values in uid_sets.values())
+            sum(len(values) for values in uid_sequences.values())
             == len(set().union(*uid_sets.values())),
         ),
         ("unary_marginals_exactly_matched", len({digest for _, digest in unary}) == 1),

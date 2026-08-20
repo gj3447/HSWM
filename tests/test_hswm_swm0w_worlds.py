@@ -113,6 +113,19 @@ def test_opaque_identifiers_are_unique_and_split_disjoint(bundle) -> None:
     }
 
 
+def test_generator_audit_rejects_within_split_identifier_collision(monkeypatch) -> None:
+    original = worlds._opaque_uid
+
+    def colliding_uid(prefix, seed_preimage, split, six_tuple, domain):
+        if prefix == "case":
+            return "swm0w_case_" + "0" * 24
+        return original(prefix, seed_preimage, split, six_tuple, domain)
+
+    monkeypatch.setattr(worlds, "_opaque_uid", colliding_uid)
+    with pytest.raises(worlds.SWM0WWorldError, match="generator audit failed"):
+        worlds.generate_bundle(seed_preimage=b"swm0w-collision-attack-test-v1")
+
+
 def test_canonical_world_hash_is_incidence_permutation_invariant(bundle) -> None:
     case = bundle.for_split("test").cases[0]
     reversed_world = worlds.ModelWorldV1(tuple(reversed(case.world.incidences)))

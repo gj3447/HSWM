@@ -903,9 +903,20 @@ def test_repository_manual_workflow_is_fixed_and_dispatch_only() -> None:
     assert "pull_request:" not in workflow
     assert "timeout-minutes: 180" in workflow
     assert 'PYTHON_VERSION: "3.11.15"' in workflow
+    assert "Materialize the exact pilot Python" in workflow
+    assert 'uv python install --managed-python "$PYTHON_VERSION"' in workflow
+    assert workflow.index(
+        'uv python install --managed-python "$PYTHON_VERSION"'
+    ) < workflow.index(
+        'pilot_python="$(uv python find --managed-python "$PYTHON_VERSION")"'
+    )
     assert "Reject duplicate dispatches for this commit" in workflow
     assert "head_sha=$GITHUB_SHA" in workflow
-    assert "uv sync --locked" in workflow
-    assert "uv run --locked python -m hswm.experiments.swm0w_s2s_pilot" in workflow
+    assert 'uv sync --locked --managed-python --python "$PYTHON_VERSION"' in workflow
+    assert (
+        'uv run --locked --managed-python --python "$PYTHON_VERSION"'
+        in workflow
+    )
+    assert "python -m hswm.experiments.swm0w_s2s_pilot" in workflow
     assert "if: ${{ always() }}" in workflow
     assert "test" not in workflow.lower()

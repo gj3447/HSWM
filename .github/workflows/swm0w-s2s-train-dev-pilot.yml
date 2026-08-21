@@ -56,6 +56,12 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           enable-cache: false
 
+      - name: Materialize the exact pilot Python
+        shell: bash
+        run: |
+          set -euo pipefail
+          uv python install --managed-python "$PYTHON_VERSION"
+
       - name: Reject duplicate dispatches for this commit
         shell: bash
         env:
@@ -80,15 +86,15 @@ jobs:
           [[ "$RUNNER_ARCH" == "X64" ]]
           [[ "$(git rev-parse HEAD)" == "$GITHUB_SHA" ]]
           [[ "$(uv --version)" == "uv $UV_VERSION "* ]]
-          pilot_python="$(uv python find "$PYTHON_VERSION")"
+          pilot_python="$(uv python find --managed-python "$PYTHON_VERSION")"
           [[ "$("$pilot_python" --version)" == "Python $PYTHON_VERSION" ]]
 
       - name: Install exactly the lockfile environment
         shell: bash
         run: |
           set -euo pipefail
-          uv sync --locked
-          [[ "$(uv run --locked python --version)" == "Python $PYTHON_VERSION" ]]
+          uv sync --locked --managed-python --python "$PYTHON_VERSION"
+          [[ "$(uv run --locked --managed-python --python "$PYTHON_VERSION" python --version)" == "Python $PYTHON_VERSION" ]]
 
       - name: Run the fixed fit-and-replay roster
         id: run_pilot
@@ -97,7 +103,8 @@ jobs:
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=30s 10200s \
-            uv run --locked python -m hswm.experiments.swm0w_s2s_pilot \
+            uv run --locked --managed-python --python "$PYTHON_VERSION" \
+              python -m hswm.experiments.swm0w_s2s_pilot \
               --output "$RUNNER_TEMP/swm0w-s2s-pilot/pilot.json"
 
       - name: Upload the development artifact

@@ -22,6 +22,14 @@ will mediate later cognition.
 > a `CAUSALLY_VALIDATED` outcome → credit → durable `ΔW/ΔH` → changed-behavior
 > result.
 
+The long-term production-runtime direction is now explicitly **TypeScript +
+Effect**, while the existing Python/NumPy experiment code remains an independent
+numeric and evidence oracle during staged migration. The first private Effect
+v3 package implements only a strict, atomic, capability-port-gated trajectory-credit
+transaction over existing `H/F/A`; it is not a new efficacy claim. The exact
+boundary and migration gates are documented in
+[`HSWM TypeScript + Effect runtime boundary`](docs/research/HSWM_TYPESCRIPT_EFFECT_RUNTIME_2026-08-21.md).
+
 The target identity is fixed by the
 [`HSWM Constitution`](docs/canon/HSWM_CONSTITUTION_2026-08-20.md) and the later
 [USER_PRIMARY deep Set-Hypergraph clarification](docs/canon/sources/USER_PRIMARY_HSWM_DEEP_SET_HYPERGRAPH_SEMANTIC_WEIGHT_2026-08-20.txt).

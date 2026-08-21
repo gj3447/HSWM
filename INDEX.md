@@ -9,6 +9,14 @@ HSWM의 최상위 목표 정체성은
 continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 얼굴이다. 이 정전은
 철학적 정의를 닫지만 현재 효능을 승격하지 않는다.
 
+2026-08-21 USER_PRIMARY는 대규모 장기 런타임을 TypeScript + Effect 기반의 함수형
+구조로 개발하라고 확정했다. 현재 첫 Effect v3 패키지는 기존 `H/F`와 eligible `A`를
+전제로 한 원자적 `W/A` credit transaction만 제공하며 `ENGINEERING_SCAFFOLD /
+SCIENTIFIC_UNJUDGED`다. Python/NumPy 실험은 독립 수치·evidence oracle로 보존한다.
+정확한 경계와 단계적 전환 gate는
+[`HSWM TypeScript + Effect runtime boundary`](docs/research/HSWM_TYPESCRIPT_EFFECT_RUNTIME_2026-08-21.md)에
+있다.
+
 정체성, 수학, cellular runtime, 학습, 세계 자기기억, 실제 증거가 문서마다 달라 보이는
 이유와 현재의 한 통합 해석은
 [`HSWM 통합 의미 지도`](docs/research/HSWM_UNIFIED_MEANING_MAP_2026-08-16.md)에 있다. 이 지도는

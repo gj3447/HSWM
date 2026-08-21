@@ -86,10 +86,17 @@ duplicate draws, and constructs an exact task-bound nonlearned Q witness. These
 are coefficient/split laws sampled with replacement from one fixed feature
 frame, not independent mechanisms. A deterministic engineering optimizer now
 fits complete train/dev partitions with analytic gradients, train-only
-six-stratum normalization, typed history, exact best restore, and replay. Its
-learning rates, update budget, task bootstrap and future-seed protocol are not
-frozen; no S2S efficacy result is valid yet. See the
-[SWM-0W-S2S design](docs/research/HSWM_SWM0W_S2S_GATE_2026-08-20.md).
+six-stratum normalization, typed history, exact best restore, and replay. A
+disclosed 27-cell public pilot and exact five-file adoption bundle selected T16
+`0.003`, P_CAP18 `0.001`, and DS870 `0.001` under the frozen fixed-budget rule.
+The pilot opened no confirmatory test or future beacon and supplies no efficacy
+verdict. P_CAP18 and DS870 both restored epoch zero in every pilot cell; the
+former matches the analytic pair-null control, while the latter makes the
+optional DS-derived compact-competitive phrase inadmissible for this protocol.
+The confirmatory resource policy, preregistration, future seed, and
+adjudication remain open. See the
+[pilot adoption result](results/SWM0W_S2S_TRAIN_DEV_PILOT_ADOPTION_RESULTS_2026-08-21.md)
+and [SWM-0W-S2S design](docs/research/HSWM_SWM0W_S2S_GATE_2026-08-20.md).
 
 The exact claim boundaries are:
 
@@ -97,7 +104,7 @@ The exact claim boundaries are:
 |---|---|---|
 | SWM-0R role-bearing n-ary representation | **engineering conformance PASS; scientific UNJUDGED** | frozen finite `q=3` construction, 9 semantic worlds repeated across 20 UID/order seeds; hard-coded constructive decoder, not learned `W` |
 | SWM-0W learned scalar compatibility precursor | **scientific `SUPPORTED_NARROW`** | preregistered fixed arity 3 with one incidence per role; 20 tasks and shared bootstrap; candidate-only protocol result promoted to `PASS` only by separate GitHub/artifact/BLS/task/reducer adjudication; no learned or adjudicated multi-member recipient-specific set-to-set result |
-| SWM-0W-S2S multi-member operator engineering | **implemented; scientific `UNJUDGED`** | fixed-frame three-role/two-member finite world, exact 870-parameter T16/P_CAP18/DS870 paths, V2 with-replacement task generator, task-bound constructive Q witness, and deterministic train/dev optimizer with exact replay; no frozen/adjudicated checkpoint or admissible verdict |
+| SWM-0W-S2S multi-member operator engineering | **implemented and pilot-adopted; scientific `UNJUDGED`** | fixed-frame three-role/two-member finite world, exact 870-parameter T16/P_CAP18/DS870 paths, V2 with-replacement task generator, task-bound constructive Q witness, deterministic train/dev optimizer, and exact 27-cell public-pilot replay. Selected configs are frozen in a five-file adoption bundle, but resource policy/prereg/future task/adjudication are absent; DS stayed at epoch zero, so no compact-competitive wording is allowed |
 | static retrieval substrate | **measured positive, budget caveat** | 300 evaluation rows across three checked-in runs |
 | cognitive uplift over direct LLM reranking | **preregistered cross-dataset claim failed** | two negative MuSiQue runs; one small, non-significant positive 2Wiki run |
 | P1 outcome→credit→slow-weight loop | **engineering complete; scientific RED; HSWM_LOCAL_RECORD unjudged** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations. Historical measurement self-wrote `FAIL`, so no valid server-owned kernel verdict exists |

@@ -14,6 +14,7 @@ findable.
 | Receipt                  | `RECEIPTS_*.json`       | `receipts/`      |
 | Results narrative        | `*_RESULTS_*.md`        | `results/`       |
 | Raw checked-in result    | registered `*.json`    | `results/raw/`   |
+| Replay evidence bundle   | exact API projections, receipts, and source archives | `artifacts/<experiment>/<kind>/<run-id>/` |
 | Narrative research doc   | dated research `*.md`   | `docs/research/` |
 | Canon/identity document  | ratified direction or definition | `docs/canon/` |
 | Preserved user source    | immutable canon preimage `*.txt` | `docs/canon/sources/` |
@@ -23,6 +24,12 @@ findable.
 Repository-wide semantic navigation lives in `ontology/`. Ontology files
 organize meaning; they are not a mandatory per-path ledger, an HSWM cognitive
 rule, or evidence of learned behavior.
+
+Replay bundles are exceptional, bounded directories rather than a generic
+dump location. Each bundle must have a strict public parser, exact file hashes,
+one documented evidence role, and an sdist/isolated-checkout replay test. Raw
+archives remain non-authoritative until their independently supplied metadata
+and receipt reconstruct together.
 
 ## Helper
 

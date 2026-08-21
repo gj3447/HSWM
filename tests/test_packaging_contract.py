@@ -402,3 +402,10 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
     # 포함할 수 있으므로 source distribution의 공용 표면에서 제외한다.
     root_sh = [n for n in inner if "/" not in n and n.endswith(".sh")]
     assert not root_sh, f"루트 셸 스크립트가 배포물에 실렸다(호스트명 유출): {root_sh}"
+    effect_runtime = [
+        n for n in inner if n.startswith("src/hswm/effect-runtime/")
+    ]
+    assert not effect_runtime, (
+        "별도 npm artifact인 Effect runtime이 Python sdist에 섞였다: "
+        f"{effect_runtime[:10]}"
+    )

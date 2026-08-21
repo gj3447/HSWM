@@ -359,6 +359,19 @@ target scale, acceptance threshold나 task acceptance를 정하면 안 된다.
 confirmatory task를 일부 본 뒤 task 수나 update budget을 연장하지 않는다. 변경이
 필요하면 기존 run을 닫고 새 preregistration과 새 future randomness로 시작한다.
 
+### 2026-08-21 disclosed train/dev adoption
+
+The fixed 27-cell public roster completed with exact replay and selected T16
+`0.003`, P_CAP18 `0.001`, and DS870 `0.001`. The last two selections were exact
+epoch-zero ties resolved by the predeclared smaller-rate rule. P_CAP18 is the
+intended analytic pair-null control; DS870 did not establish a useful optimized
+comparison. Therefore the essential `Q/B/R` gate remains the only scientific
+promotion path and the optional compact-competitive phrase is disabled. The
+five-file provenance bundle and bounded report are linked from
+[`SWM0W_S2S_TRAIN_DEV_PILOT_ADOPTION_RESULTS_2026-08-21.md`](../../results/SWM0W_S2S_TRAIN_DEV_PILOT_ADOPTION_RESULTS_2026-08-21.md).
+No future seed or confirmatory test was opened. Resource policy and
+preregistration still precede any confirmatory run.
+
 ## 9. 판정 경계
 
 - **PASS / `SUPPORTED_NARROW`:** 모든 integrity gate가 유효하고 세 essential LCB가

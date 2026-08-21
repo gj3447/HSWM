@@ -556,8 +556,13 @@ flowchart TB
 > exact nonlearned T16 witness. A separate deterministic full-batch training
 > module now fits all three arms on complete train/dev partitions with analytic
 > gradients, train-only six-stratum normalization, typed history, exact best
-> restore, and replay. Its configuration is not frozen and no admissible
-> efficacy result exists.
+> restore, and replay. A disclosed 27-cell train/dev pilot subsequently selected
+> T16 `.003`, P_CAP18 `.001`, and DS870 `.001`; the exact GitHub ZIP, API
+> projections, and adoption receipt are preserved in a five-file replay bundle.
+> This is configuration adoption only: no future beacon or confirmatory test was
+> opened, the resource policy/preregistration remain pending, and no admissible
+> efficacy result exists. DS870 never beat epoch zero in the pilot, so the
+> optional compact-competitive phrase is disabled for this protocol.
 > This is `IMPLEMENTED / UNJUDGED` engineering, not a second PASS.
 > The repository has not passed the `SWM-1` deep numeric core or a successful
 > outcome-bound `ΔW/ΔH` gate. It is therefore not at M2 or beyond and is not a
@@ -599,7 +604,7 @@ not rescue an earlier failed premise.
 | stage | build | promotion gate | present boundary |
 |---|---|---|---|
 | **SWM-0R — representation non-collapse** | finite worlds whose exact grouping and incidence roles are jointly necessary | independent native/star paths retain the relation; registered lossy views stay at their exact ceiling; relevant removal and exact restore mediate the output | **engineering PASS** on constructive `q=3` fixture; `IMPLEMENTED / UNJUDGED`; not learned `W` |
-| **SWM-0W — learned n-ary operator** | raw role-incidence features and held-out higher-order configurations with matched lower-order marginals | learned role-conditioned set operator beats the registered lower-order controls; member broadcast, role cycles, and learned-channel removal mediate the gain | **`SUPPORTED_NARROW`** only for the preregistered fixed-three-singleton-role scalar precursor. A separate multi-member S2S finite world, exact 870-parameter core, V2 task generator, and deterministic train/dev optimizer are `IMPLEMENTED / UNJUDGED`; no frozen or adjudicated S2S checkpoint exists |
+| **SWM-0W — learned n-ary operator** | raw role-incidence features and held-out higher-order configurations with matched lower-order marginals | learned role-conditioned set operator beats the registered lower-order controls; member broadcast, role cycles, and learned-channel removal mediate the gain | **`SUPPORTED_NARROW`** only for the preregistered fixed-three-singleton-role scalar precursor. The separate multi-member S2S core is `IMPLEMENTED / PILOT-ADOPTED / UNJUDGED`: exact configs are frozen from train/dev, while resource policy, prereg, future tasks, adjudication, and efficacy verdict remain absent |
 | **SWM-1 — sparse recurrent numeric core** | first-class incidence, local `V→E→V`, member-specific decoding, residual bounded recurrence | role/incidence shuffle and edge ablation destroy the learned advantage under equal compute | not implemented; current core is boolean incidence plus mean/sum/max pooling |
 | **SWM-2 — LLM token function loop** | one frozen LLM executes at least three typed semantic-cell roles inside the active field | weighted HSWM beats fixed workflow and transcript/vector-memory controls under equal calls, tokens, and latency | `CellPort` and self-modification components exist; no integrated operator-`W` loop |
 | **SWM-3 — outcome-bound fast `W`** | pre-outcome eligibility, independent outcome, fast causal efficacy, versioned receipt | correct credit changes the next route; shuffled credit/time, uniform credit, and rollback remove the gain | receipt and scalar precursors exist; no successful active macro-route change |
@@ -998,13 +1003,13 @@ and [`ontology/field/sheaf/HSWM_SHEAF_ONTOLOGY.v1.json`](ontology/field/sheaf/HS
 
 ## Current evidence boundary
 
-Repository state as of 2026-08-20:
+Repository state as of 2026-08-21:
 
 | area | honest status |
 |---|---|
 | SWM-0R finite n-ary representation witness | **engineering PASS / scientific `UNJUDGED`**: constructive `q=3` representation conformance with independent native/star paths, not learned `W/Θ/R` |
 | SWM-0W scalar compatibility precursor | **`SUPPORTED_NARROW`**: the preregistered 20-task run's candidate-only reducer emitted `CANDIDATE_PASS_AWAITING_BUNDLE`, and the separate live-evidence adjudicator promoted it to `PASS` after GitHub chronology/artifact, pinned-Node BLS, seed/task, receipt, and reducer replay; canonical set-to-set `W` and whole HSWM remain `UNJUDGED` |
-| SWM-0W-S2S multi-member operator core | **engineering `IMPLEMENTED / UNJUDGED`**: exact `Z₅⁶` fixture, `S₂³`-equivariant recipient outputs, three exact 870-parameter arms, additive V2 coefficient/split generator, task-bound constructive Q witness, deterministic full-batch analytic-gradient optimizer, exact history/replay, interventions, and worst-stratum R² instrumentation; V2 draws come with replacement from one fixed feature frame and are not independent mechanisms, and there is no frozen protocol or efficacy verdict |
+| SWM-0W-S2S multi-member operator core | **engineering `IMPLEMENTED / PILOT-ADOPTED / UNJUDGED`**: exact `Z₅⁶` fixture, `S₂³`-equivariant recipient outputs, three exact 870-parameter arms, additive V2 coefficient/split generator, task-bound constructive Q witness, deterministic analytic-gradient optimizer, history/replay, interventions, and worst-stratum R² instrumentation. A 27-cell train/dev run fixed T16 `.003`, P_CAP18/DS870 `.001` in an exact adoption bundle; DS stayed at epoch zero, so no compact-competitive wording is allowed. V2 draws share one fixed frame, and resource policy/prereg/future tasks/adjudication remain absent |
 | evidence-preserving world compiler, stable IDs, immutable cuts, and fail-closed readout | implemented and locally tested |
 | static additive semantic field | narrow positive checked-in retrieval measurement with an asymmetric budget: 100 offline LLM judgments for HSWM and zero for cosine/BM25/PPR/RRF; not continual learning |
 | scalar slow-weight P1 | **scientific RED**: 12 staged candidates, 0 fresh-gate passes/activations, and 0/456 measured top-10 rank changes |

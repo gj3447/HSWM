@@ -23,6 +23,9 @@ recursive-include tools/swm0w_drand/fixtures *.json
 # research/ and schemas/ contain the corresponding data contracts.
 recursive-include scripts *.py *.sh
 recursive-include src *.py *.md
+# The TypeScript/Effect runtime is a separate locked npm artifact. Never let a
+# maintainer's local node_modules or its source maps leak into the Python sdist.
+prune src/hswm/effect-runtime
 recursive-include research *.json
 recursive-include ontology *.json *.md
 recursive-include schemas *.json
@@ -35,6 +38,10 @@ recursive-include verification *.py *.json *.md
 recursive-include results *.md *.log *.json
 recursive-include manifests *.json
 recursive-include receipts *.py *.json
+# The S2S pilot adoption is a five-file replay bundle. The raw ZIP stays
+# byte-exact so an sdist can reconstruct the selected protocol configuration
+# after the GitHub-hosted copy expires.
+recursive-include artifacts/swm0w_s2s/pilot_adoption *.json *.zip
 recursive-include prom_search_hswm *.py *.json *.md *.mmd *.sh
 recursive-exclude prom_search_hswm/data *
 include prom_search_hswm/data/README.md

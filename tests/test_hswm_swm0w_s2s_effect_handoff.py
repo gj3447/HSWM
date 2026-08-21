@@ -34,6 +34,7 @@ def test_effect_handoff_is_a_closed_non_evidentiary_kg_projection() -> None:
 
     assert payload["schema_version"] == "hswm-engineering-handoff-kg/v1"
     assert payload["status"] == "BLOCKED_PRE_PREREG"
+    assert payload["control_core_status"] == "EXACT_BYTE_AUDIT_CLEAR"
     assert payload["scientific_status"] == "UNJUDGED"
     assert payload["remote_kg_publication_status"] == "NOT_ATTEMPTED"
     assert payload["future_beacon_selected"] is False
@@ -52,12 +53,21 @@ def test_effect_handoff_is_a_closed_non_evidentiary_kg_projection() -> None:
     assert all(relation["from_uid"] in uid_set for relation in relations)
     assert all(relation["to_uid"] in uid_set for relation in relations)
 
-    blockers = [
-        node
-        for node in nodes
-        if node.get("kind") == "BLOCKER" and node.get("status") == "OPEN"
-    ]
-    assert len(blockers) == 6
+    blockers = [node for node in nodes if node.get("kind") == "BLOCKER"]
+    resolved = [node for node in blockers if node.get("status") == "RESOLVED"]
+    open_blockers = [node for node in blockers if node.get("status") == "OPEN"]
+    assert {node["uid"] for node in resolved} == {
+        "sym:Blocker:hswm-s2s-source-a-commit-type",
+        "sym:Blocker:hswm-s2s-prereg-path-absent-at-a",
+        "sym:Blocker:hswm-s2s-prereg-immutable-byte-snapshot",
+        "sym:Blocker:hswm-s2s-pulse-cross-event-chronology",
+        "sym:Blocker:hswm-s2s-confirm-command-slack",
+        "sym:Blocker:hswm-s2s-positive-artifact-bytes",
+    }
+    assert {node["uid"] for node in open_blockers} == {
+        "sym:Blocker:hswm-s2s-live-effect-adapters",
+        "sym:Blocker:hswm-s2s-three-job-chronology",
+    }
     assert all(blocker.get("severity") == "P0" for blocker in blockers)
     assert all(type(blocker.get("blocking_gate")) is str for blocker in blockers)
     assert all(type(blocker.get("failure_mode")) is str for blocker in blockers)
@@ -65,6 +75,20 @@ def test_effect_handoff_is_a_closed_non_evidentiary_kg_projection() -> None:
     assert all(type(blocker.get("acceptance_tests")) is list for blocker in blockers)
     assert all(node.get("scientific_status") != "PASS" for node in nodes)
     assert not any(relation["type"] == "EVIDENCE_FOR" for relation in relations)
+
+    checkpoint_uid = payload["bundle_uid"]
+    for blocker in resolved:
+        assert {
+            "from_uid": checkpoint_uid,
+            "type": "CONTAINS",
+            "to_uid": blocker["uid"],
+        } in relations
+    for blocker in open_blockers:
+        assert {
+            "from_uid": blocker["uid"],
+            "type": "BLOCKS",
+            "to_uid": checkpoint_uid,
+        } in relations
 
     authority_classes = {
         "USER_PRIMARY",
@@ -128,3 +152,13 @@ def test_effect_handoff_paths_and_source_hashes_are_exact() -> None:
         assert path.is_file()
         assert not path.is_symlink()
         assert hashlib.sha256(path.read_bytes()).hexdigest() == expected
+
+    blockers = [node for node in nodes if node.get("kind") == "BLOCKER"]
+    for blocker in blockers:
+        target_paths = blocker["target_paths"]
+        assert type(target_paths) is list
+        for relative in target_paths:
+            assert type(relative) is str
+            assert relative == Path(relative).as_posix()
+            assert not relative.startswith("/")
+            assert ".." not in Path(relative).parts

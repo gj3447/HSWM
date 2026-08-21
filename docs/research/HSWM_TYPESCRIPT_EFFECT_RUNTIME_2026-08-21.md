@@ -128,11 +128,14 @@ versioned ports and replay contracts.
 ## Current SWM-0W-S2S control-plane checkpoint
 
 The first S2S `Π` control/evidence slice and opaque Python numeric-oracle
-boundary now exist in the working implementation, but independent review found
-six pre-preregistration blockers. The slice therefore remains
-`BLOCKED_PRE_PREREG / SCIENTIFIC_UNJUDGED`; no future pulse or confirmatory run
-is authorized. Exact hashes, attack reproductions, protected files, verification
-commands, and the ordered repair path are frozen in the
+boundary now exist in the working implementation. Six independently reproduced
+source, chronology, accounting, and artifact-boundary blockers—and follow-on
+Git replace/graft/environment identity bypasses found during repair—are closed
+on exact audited bytes. The slice nevertheless remains
+`BLOCKED_PRE_PREREG / SCIENTIFIC_UNJUDGED` because live adapters and the
+three-job chronology do not yet exist; no future pulse or confirmatory run is
+authorized. Exact hashes, resolved regressions, protected files, verification
+commands, and the ordered continuation path are frozen in the
 [`next-session handoff`](../operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-21.md).
 Its companion
 [`local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v1.json)

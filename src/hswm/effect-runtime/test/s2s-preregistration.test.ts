@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process"
 import {
+  chmodSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -11,8 +12,10 @@ import { tmpdir } from "node:os"
 
 import { expect, it } from "@effect/vitest"
 import { Deferred, Effect, Either, Fiber, TestClock } from "effect"
+import { vi } from "vitest"
 
 import {
+  S2S_PREREG_ANCESTRY_MAX_COMMITS,
   S2S_PREREG_GIT_COMMAND_TIMEOUT_MILLIS,
   S2S_PREREG_NUMERIC_PATHS,
   S2S_PREREG_PILOT_ADOPTION_RECEIPT_SHA256,
@@ -30,13 +33,16 @@ import {
   s2sPreregSha256Bytes,
   validateS2SRegistrationCommitB,
   verifyS2SNumericContinuity,
-  type BuiltS2SPreregistration
+  type BuiltS2SPreregistration,
+  type S2SGitCommand,
+  type S2SGitCommandResult
 } from "../src/s2s-preregistration.js"
 
 const WORKSPACE_ROOT = resolve(process.cwd(), "../../..")
 const UTF8_ENCODER = new TextEncoder()
 const UTF8_DECODER = new TextDecoder("utf-8", { fatal: true })
 const GIT_MAX_BUFFER = 32 * 1_048_576
+const GIT_COMMAND_MAX_BUFFER = 129 * 1_048_576
 
 interface GitFixture {
   readonly root: string
@@ -82,6 +88,21 @@ const makeGitFixture = (numericDrift = false): GitFixture => {
   }
 }
 
+const makeIsolatedGitFixture = (): GitFixture => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), "hswm-s2s-git-decoy-"))
+  const root = join(temporaryRoot, "repository")
+  mkdirSync(root)
+  runGit(root, ["init", "--quiet"])
+  runGit(root, ["config", "user.email", "s2s-decoy@example.invalid"])
+  runGit(root, ["config", "user.name", "S2S decoy repository"])
+  runGit(root, ["commit", "--allow-empty", "--quiet", "-m", "decoy root"])
+  return {
+    root,
+    sourceCommitA: runGit(root, ["rev-parse", "HEAD"]),
+    cleanup: () => rmSync(temporaryRoot, { force: true, recursive: true })
+  }
+}
+
 const buildInput = (sourceCommitA: string) => ({
   experimentId: "SWM0W-S2S-GATE-V1",
   resourcePolicySha256: S2S_PREREG_RESOURCE_POLICY_SHA256,
@@ -105,6 +126,103 @@ const decodeObject = (bytes: Uint8Array): Record<string, unknown> => {
     throw new Error("expected a JSON object")
   }
   return value
+}
+
+const requiredRecord = (
+  parent: Record<string, unknown>,
+  key: string
+): Record<string, unknown> => {
+  const value = parent[key]
+  if (!isRecord(value)) throw new Error(`expected object at ${key}`)
+  return value
+}
+
+const canonicalShaOrThrow = (value: unknown): string => {
+  const digest = s2sPreregCanonicalSha256(value)
+  if (Either.isLeft(digest)) throw digest.left
+  return digest.right
+}
+
+const selfHash = (
+  value: Record<string, unknown>,
+  hashField: string
+): string => {
+  const unsigned: Record<string, unknown> = {}
+  for (const [key, item] of Object.entries(value)) {
+    if (key !== hashField) unsigned[key] = item
+  }
+  return canonicalShaOrThrow(unsigned)
+}
+
+const rehashPreregistrationDocument = (
+  root: Record<string, unknown>
+): void => {
+  const core = requiredRecord(root, "registration_core")
+  const sourceFreeze = requiredRecord(core, "source_freeze")
+  const manifest = requiredRecord(sourceFreeze, "tracked_bytes_manifest")
+  const futureRound = requiredRecord(root, "future_round_commitment")
+  manifest["manifest_sha256"] = selfHash(manifest, "manifest_sha256")
+  sourceFreeze["receipt_sha256"] = selfHash(sourceFreeze, "receipt_sha256")
+  const coreSha256 = canonicalShaOrThrow(core)
+  root["registration_core_sha256"] = coreSha256
+  futureRound["registration_evidence_sha256"] = coreSha256
+  futureRound["commitment_sha256"] = selfHash(
+    futureRound,
+    "commitment_sha256"
+  )
+  root["preregistration_sha256"] = selfHash(
+    root,
+    "preregistration_sha256"
+  )
+}
+
+const executeGitCommand = (
+  root: string,
+  command: S2SGitCommand
+): S2SGitCommandResult => {
+  const stdout =
+    command.stdin === null
+      ? execFileSync("git", ["-C", root, ...command.arguments], {
+          maxBuffer: GIT_COMMAND_MAX_BUFFER
+        })
+      : execFileSync("git", ["-C", root, ...command.arguments], {
+          input: command.stdin,
+          maxBuffer: GIT_COMMAND_MAX_BUFFER
+        })
+  return {
+    exitCode: 0,
+    stdout: new Uint8Array(stdout),
+    stderr: new Uint8Array()
+  }
+}
+
+const encodeRawCommitBatch = (
+  oid: string,
+  parents: ReadonlyArray<string>
+): Uint8Array => {
+  const parentHeaders = parents.map((parent) => `parent ${parent}\n`).join("")
+  const payload = UTF8_ENCODER.encode(
+    `tree ${"b".repeat(40)}\n${parentHeaders}` +
+      "author Cycle Test <cycle@example.invalid> 1 +0000\n" +
+      "committer Cycle Test <cycle@example.invalid> 1 +0000\n\n" +
+      "synthetic commit\n"
+  )
+  return new Uint8Array([
+    ...UTF8_ENCODER.encode(`${oid} commit ${payload.length}\n`),
+    ...payload,
+    10
+  ])
+}
+
+const writeGraft = (
+  fixture: GitFixture,
+  commit: string,
+  parents: ReadonlyArray<string>
+): void => {
+  const graftPath = join(fixture.root, ".git", "info", "grafts")
+  mkdirSync(dirname(graftPath), { recursive: true })
+  runGit(fixture.root, ["config", "advice.graftFileDeprecated", "false"])
+  writeFileSync(graftPath, `${commit} ${parents.join(" ")}\n`, "utf8")
 }
 
 const writeRegistration = (
@@ -229,6 +347,23 @@ it.effect(
         { expectedResourcePolicySha256: S2S_PREREG_RESOURCE_POLICY_SHA256 }
       )
       expect(validated.fileSha256).toBe(built.fileSha256)
+      const exposedRepositoryBinding =
+        validated.preregistration.registration_core.repository_binding
+      expect(Object.isFrozen(exposedRepositoryBinding)).toBe(true)
+      expect(
+        Reflect.set(
+          exposedRepositoryBinding,
+          "source_commit_a",
+          "0".repeat(40)
+        )
+      ).toBe(false)
+      expect(exposedRepositoryBinding.source_commit_a).toBe(fixture.sourceCommitA)
+
+      const exposedBytes = validated.canonicalBytes
+      exposedBytes.fill(0)
+      expect(s2sPreregSha256Bytes(validated.canonicalBytes)).toBe(
+        built.fileSha256
+      )
 
       const registrationCommitB = writeRegistration(
         fixture,
@@ -295,10 +430,381 @@ it.effect(
         })
       }
 
+      const hashInvalidRoot = decodeObject(built.canonicalBytes)
+      hashInvalidRoot["preregistration_sha256"] = "0".repeat(64)
+      const hashInvalidCommit = writeRegistration(
+        fixture,
+        "registration-hash-invalid",
+        encodeCanonicalDocument(hashInvalidRoot)
+      )
+      const hashInvalid = yield* validateS2SRegistrationCommitB(
+        validated,
+        hashInvalidCommit
+      ).pipe(Effect.either)
+      expect(Either.isLeft(hashInvalid)).toBe(true)
+      if (Either.isLeft(hashInvalid)) {
+        expect(hashInvalid.left).toMatchObject({
+          reason: "PREREGISTRATION_BYTES_DRIFT"
+        })
+      }
+
       yield* assertStrictParserRejections(built)
     }).pipe(Effect.provide(layer), Effect.ensuring(Effect.sync(fixture.cleanup)))
   }
 )
+
+it.effect("rejects an annotated-tag object as source A", () => {
+  const fixture = makeGitFixture()
+  runGit(fixture.root, [
+    "tag",
+    "-a",
+    "source-a-annotated",
+    "-m",
+    "annotated source A",
+    fixture.sourceCommitA
+  ])
+  const annotatedTagOid = runGit(fixture.root, [
+    "rev-parse",
+    "refs/tags/source-a-annotated^{tag}"
+  ])
+  expect(runGit(fixture.root, ["cat-file", "-t", annotatedTagOid])).toBe("tag")
+  const layer = makeS2SPreregGitRepositoryProcessLayer(fixture.root)
+  return Effect.gen(function* () {
+    const result = yield* buildS2SPreregistration(
+      buildInput(annotatedTagOid)
+    ).pipe(Effect.either)
+    expect(Either.isLeft(result)).toBe(true)
+    if (Either.isLeft(result)) {
+      expect(result.left).toMatchObject({ reason: "INVALID_GIT_IDENTITY" })
+    }
+  }).pipe(Effect.provide(layer), Effect.ensuring(Effect.sync(fixture.cleanup)))
+})
+
+it.effect("ignores a replacement ref that maps an annotated tag to a commit", () => {
+  const fixture = makeGitFixture()
+  runGit(fixture.root, [
+    "tag",
+    "-a",
+    "source-a-replaced",
+    "-m",
+    "replacement attack source A",
+    fixture.sourceCommitA
+  ])
+  const annotatedTagOid = runGit(fixture.root, [
+    "rev-parse",
+    "refs/tags/source-a-replaced^{tag}"
+  ])
+  runGit(fixture.root, [
+    "update-ref",
+    `refs/replace/${annotatedTagOid}`,
+    fixture.sourceCommitA
+  ])
+  expect(runGit(fixture.root, ["cat-file", "-t", annotatedTagOid])).toBe(
+    "commit"
+  )
+  expect(
+    runGit(fixture.root, [
+      "--no-replace-objects",
+      "cat-file",
+      "-t",
+      annotatedTagOid
+    ])
+  ).toBe("tag")
+  const layer = makeS2SPreregGitRepositoryProcessLayer(fixture.root)
+  return Effect.gen(function* () {
+    const result = yield* buildS2SPreregistration(
+      buildInput(annotatedTagOid)
+    ).pipe(Effect.either)
+    expect(Either.isLeft(result)).toBe(true)
+    if (Either.isLeft(result)) {
+      expect(result.left).toMatchObject({ reason: "INVALID_GIT_IDENTITY" })
+    }
+  }).pipe(Effect.provide(layer), Effect.ensuring(Effect.sync(fixture.cleanup)))
+})
+
+it.effect("ignores an inherited GIT_DIR that points at another repository", () => {
+  const fixture = makeGitFixture()
+  const decoy = makeIsolatedGitFixture()
+  expect(decoy.sourceCommitA).not.toBe(fixture.sourceCommitA)
+  const layer = makeS2SPreregGitRepositoryProcessLayer(fixture.root)
+  const restoreGitDir = (previous: string | undefined): void => {
+    if (previous === undefined) {
+      delete process.env["GIT_DIR"]
+    } else {
+      process.env["GIT_DIR"] = previous
+    }
+  }
+  return Effect.acquireUseRelease(
+    Effect.sync(() => {
+      const previous = process.env["GIT_DIR"]
+      process.env["GIT_DIR"] = join(decoy.root, ".git")
+      return previous
+    }),
+    () =>
+      Effect.gen(function* () {
+        const built = yield* buildS2SPreregistration(
+          buildInput(fixture.sourceCommitA)
+        )
+        expect(
+          built.preregistration.registration_core.repository_binding
+            .source_commit_a
+        ).toBe(fixture.sourceCommitA)
+        expect(
+          built.preregistration.registration_core.source_freeze
+            .tracked_bytes_manifest.commit
+        ).toBe(fixture.sourceCommitA)
+      }),
+    (previous) => Effect.sync(() => restoreGitDir(previous))
+  ).pipe(
+    Effect.provide(layer),
+    Effect.ensuring(
+      Effect.sync(() => {
+        fixture.cleanup()
+        decoy.cleanup()
+      })
+    )
+  )
+})
+
+it.effect("ignores a fake git executable injected ahead of the pinned PATH", () => {
+  const fixture = makeGitFixture()
+  const fakeBin = join(fixture.root, "fake-bin")
+  const fakeGit = join(fakeBin, "git")
+  mkdirSync(fakeBin)
+  writeFileSync(fakeGit, "#!/bin/sh\nexit 97\n", "utf8")
+  chmodSync(fakeGit, 0o755)
+  return Effect.acquireUseRelease(
+    Effect.sync(() => {
+      const previous = process.env["PATH"]
+      process.env["PATH"] = `${fakeBin}:/usr/bin:/bin`
+      vi.resetModules()
+      return previous
+    }),
+    () =>
+      Effect.gen(function* () {
+        const isolated = yield* Effect.promise(
+          () => import("../src/s2s-preregistration.js")
+        )
+        const layer = isolated.makeS2SPreregGitRepositoryProcessLayer(
+          fixture.root
+        )
+        const built = yield* isolated.buildS2SPreregistration(
+          buildInput(fixture.sourceCommitA)
+        ).pipe(Effect.provide(layer))
+        expect(
+          built.preregistration.registration_core.repository_binding
+            .source_commit_a
+        ).toBe(fixture.sourceCommitA)
+      }),
+    (previous) =>
+      Effect.sync(() => {
+        if (previous === undefined) {
+          delete process.env["PATH"]
+        } else {
+          process.env["PATH"] = previous
+        }
+      })
+  ).pipe(Effect.ensuring(Effect.sync(fixture.cleanup)))
+})
+
+it.effect("rejects ancestry forged only through .git/info/grafts", () => {
+  const fixture = makeGitFixture()
+  const sourceTree = runGit(fixture.root, [
+    "rev-parse",
+    `${fixture.sourceCommitA}^{tree}`
+  ])
+  const unrelatedSourceA = runGit(fixture.root, [
+    "commit-tree",
+    sourceTree,
+    "-m",
+    "unrelated source A"
+  ])
+  writeGraft(fixture, unrelatedSourceA, [S2S_PREREG_PILOT_SOURCE_COMMIT])
+  expect(
+    runGit(fixture.root, [
+      "--no-replace-objects",
+      "merge-base",
+      "--is-ancestor",
+      S2S_PREREG_PILOT_SOURCE_COMMIT,
+      unrelatedSourceA
+    ])
+  ).toBe("")
+  const layer = makeS2SPreregGitRepositoryProcessLayer(fixture.root)
+  return Effect.gen(function* () {
+    const continuity = yield* verifyS2SNumericContinuity(
+      unrelatedSourceA
+    ).pipe(Effect.either)
+    expect(Either.isLeft(continuity)).toBe(true)
+    if (Either.isLeft(continuity)) {
+      expect(continuity.left).toMatchObject({ reason: "PILOT_NOT_ANCESTOR" })
+    }
+
+    const built = yield* buildS2SPreregistration(
+      buildInput(unrelatedSourceA)
+    ).pipe(Effect.either)
+    expect(Either.isLeft(built)).toBe(true)
+    if (Either.isLeft(built)) {
+      expect(built.left).toMatchObject({ reason: "PILOT_NOT_ANCESTOR" })
+    }
+  }).pipe(Effect.provide(layer), Effect.ensuring(Effect.sync(fixture.cleanup)))
+})
+
+it.effect("rejects source A when it already tracks the preregistration path", () => {
+  const fixture = makeGitFixture()
+  const preregistrationPath = join(fixture.root, S2S_PREREGISTRATION_PATH)
+  mkdirSync(dirname(preregistrationPath), { recursive: true })
+  writeFileSync(preregistrationPath, "{}\n", "utf8")
+  runGit(fixture.root, ["add", "--", S2S_PREREGISTRATION_PATH])
+  runGit(fixture.root, [
+    "commit",
+    "--quiet",
+    "-m",
+    "adversarial preexisting preregistration"
+  ])
+  const sourceWithPreregistration = runGit(fixture.root, ["rev-parse", "HEAD"])
+  const layer = makeS2SPreregGitRepositoryProcessLayer(fixture.root)
+  return Effect.gen(function* () {
+    const result = yield* buildS2SPreregistration(
+      buildInput(sourceWithPreregistration)
+    ).pipe(Effect.either)
+    expect(Either.isLeft(result)).toBe(true)
+    if (Either.isLeft(result)) {
+      expect(result.left).toMatchObject({
+        reason: "PREREGISTRATION_PATH_PRESENT"
+      })
+    }
+  }).pipe(Effect.provide(layer), Effect.ensuring(Effect.sync(fixture.cleanup)))
+})
+
+it.effect("rejects a structurally forged validation snapshot before Git I/O", () => {
+  let calls = 0
+  const layer = makeS2SPreregGitRepositoryTestLayer(() => {
+    calls += 1
+    return Effect.die("Git must not be called for a forged validation snapshot")
+  })
+  const forged = {
+    preregistration: {},
+    canonicalBytes: UTF8_ENCODER.encode("{}\n"),
+    fileSha256: "0".repeat(64)
+  }
+  return Effect.gen(function* () {
+    // @ts-expect-error The missing private brand is the compile-time half of this test.
+    const validation = validateS2SRegistrationCommitB(forged, "0".repeat(40))
+    const result = yield* validation.pipe(Effect.either)
+    expect(Either.isLeft(result)).toBe(true)
+    if (Either.isLeft(result)) {
+      expect(result.left).toMatchObject({
+        reason: "INVALID_VALIDATION_SNAPSHOT"
+      })
+    }
+    expect(calls).toBe(0)
+  }).pipe(Effect.provide(layer))
+})
+
+it.effect("snapshots input bytes before asynchronous Git revalidation", () => {
+  const fixture = makeGitFixture()
+  const processLayer = makeS2SPreregGitRepositoryProcessLayer(fixture.root)
+  return Effect.gen(function* () {
+    const built = yield* buildS2SPreregistration(
+      buildInput(fixture.sourceCommitA)
+    ).pipe(Effect.provide(processLayer))
+    const callerBytes = new Uint8Array(built.canonicalBytes)
+    const started = yield* Deferred.make<void>()
+    const release = yield* Deferred.make<void>()
+    let delayed = false
+    const delayedLayer = makeS2SPreregGitRepositoryTestLayer((command) => {
+      const execute = Effect.sync(() => executeGitCommand(fixture.root, command))
+      if (delayed) return execute
+      delayed = true
+      return Deferred.succeed(started, undefined).pipe(
+        Effect.zipRight(Deferred.await(release)),
+        Effect.zipRight(execute)
+      )
+    })
+    const fiber = yield* parseAndValidateS2SPreregistration(callerBytes, {
+      expectedResourcePolicySha256: S2S_PREREG_RESOURCE_POLICY_SHA256
+    }).pipe(Effect.provide(delayedLayer), Effect.fork)
+    yield* Deferred.await(started)
+    callerBytes.fill(0)
+    yield* Deferred.succeed(release, undefined)
+    const validated = yield* Fiber.join(fiber)
+    expect(validated.fileSha256).toBe(built.fileSha256)
+    expect(validated.canonicalBytes).toEqual(built.canonicalBytes)
+
+    const registrationCommitB = writeRegistration(
+      fixture,
+      "registration-concurrent-input-mutation",
+      built.canonicalBytes
+    )
+    expect(
+      yield* validateS2SRegistrationCommitB(
+        validated,
+        registrationCommitB
+      ).pipe(Effect.provide(processLayer))
+    ).toBe(registrationCommitB)
+  }).pipe(Effect.ensuring(Effect.sync(fixture.cleanup)))
+})
+
+it.effect("rejects registration parentage forged only through grafts", () => {
+  const fixture = makeGitFixture()
+  const layer = makeS2SPreregGitRepositoryProcessLayer(fixture.root)
+  return Effect.gen(function* () {
+    const built = yield* buildS2SPreregistration(
+      buildInput(fixture.sourceCommitA)
+    )
+    const validated = yield* parseAndValidateS2SPreregistration(
+      built.canonicalBytes,
+      { expectedResourcePolicySha256: S2S_PREREG_RESOURCE_POLICY_SHA256 }
+    )
+    const ordinaryB = writeRegistration(
+      fixture,
+      "registration-graft-preimage",
+      built.canonicalBytes
+    )
+    const sourceTree = runGit(fixture.root, [
+      "rev-parse",
+      `${fixture.sourceCommitA}^{tree}`
+    ])
+    const unrelatedParent = runGit(fixture.root, [
+      "commit-tree",
+      sourceTree,
+      "-m",
+      "unrelated B parent"
+    ])
+    const registrationTree = runGit(fixture.root, [
+      "rev-parse",
+      `${ordinaryB}^{tree}`
+    ])
+    const forgedB = runGit(fixture.root, [
+      "commit-tree",
+      registrationTree,
+      "-p",
+      unrelatedParent,
+      "-m",
+      "graft-forged registration B"
+    ])
+    writeGraft(fixture, forgedB, [fixture.sourceCommitA])
+    expect(
+      runGit(fixture.root, [
+        "--no-replace-objects",
+        "rev-list",
+        "--parents",
+        "-n",
+        "1",
+        forgedB
+      ])
+    ).toBe(`${forgedB} ${fixture.sourceCommitA}`)
+
+    const result = yield* validateS2SRegistrationCommitB(
+      validated,
+      forgedB
+    ).pipe(Effect.either)
+    expect(Either.isLeft(result)).toBe(true)
+    if (Either.isLeft(result)) {
+      expect(result.left).toMatchObject({ reason: "NOT_DIRECT_CHILD" })
+    }
+  }).pipe(Effect.provide(layer), Effect.ensuring(Effect.sync(fixture.cleanup)))
+})
 
 const assertStrictParserRejections = (
   built: BuiltS2SPreregistration
@@ -354,6 +860,41 @@ const assertStrictParserRejections = (
       })
     }
 
+    const preregPathRoot = decodeObject(built.canonicalBytes)
+    const preregPathCore = requiredRecord(preregPathRoot, "registration_core")
+    const preregPathFreeze = requiredRecord(preregPathCore, "source_freeze")
+    const preregPathManifest = requiredRecord(
+      preregPathFreeze,
+      "tracked_bytes_manifest"
+    )
+    const preregPathRows = preregPathManifest["rows"]
+    if (!Array.isArray(preregPathRows)) throw new Error("manifest rows missing")
+    const fixtureRow = preregPathRows.find(
+      (row) => isRecord(row) && row["path"] === "s2s-control-fixture.txt"
+    )
+    if (!isRecord(fixtureRow)) throw new Error("fixture manifest row missing")
+    fixtureRow["path"] = S2S_PREREGISTRATION_PATH
+    preregPathRows.sort((left, right) => {
+      if (!isRecord(left) || !isRecord(right)) {
+        throw new Error("manifest row is not an object")
+      }
+      const leftPath = left["path"]
+      const rightPath = right["path"]
+      if (typeof leftPath !== "string" || typeof rightPath !== "string") {
+        throw new Error("manifest row path is not a string")
+      }
+      return leftPath < rightPath ? -1 : leftPath > rightPath ? 1 : 0
+    })
+    rehashPreregistrationDocument(preregPathRoot)
+    const preregPathResult = yield* parseAndValidateS2SPreregistration(
+      encodeCanonicalDocument(preregPathRoot),
+      { expectedResourcePolicySha256: S2S_PREREG_RESOURCE_POLICY_SHA256 }
+    ).pipe(Effect.either)
+    expect(Either.isLeft(preregPathResult)).toBe(true)
+    if (Either.isLeft(preregPathResult)) {
+      expect(preregPathResult.left).toMatchObject({ reason: "FIXED_BINDING_DRIFT" })
+    }
+
     const wrongPolicy = yield* parseAndValidateS2SPreregistration(
       built.canonicalBytes,
       { expectedResourcePolicySha256: "0".repeat(64) }
@@ -384,6 +925,73 @@ it.effect("rejects P-to-A numeric byte drift before preregistration emission", (
       expect(preregistration.left).toMatchObject({ reason: "NUMERIC_BYTES_DRIFT" })
     }
   }).pipe(Effect.provide(layer), Effect.ensuring(Effect.sync(fixture.cleanup)))
+})
+
+it.effect("rejects a cycle in the raw commit-parent traversal", () => {
+  const cyclicOid = "a".repeat(40)
+  const layer = makeS2SPreregGitRepositoryTestLayer((command) => {
+    if (command.operation === "verify source commit object type") {
+      return Effect.succeed({
+        exitCode: 0,
+        stdout: UTF8_ENCODER.encode("commit\n"),
+        stderr: new Uint8Array()
+      })
+    }
+    if (command.operation === `read raw ancestry commit ${cyclicOid}`) {
+      return Effect.succeed({
+        exitCode: 0,
+        stdout: encodeRawCommitBatch(cyclicOid, [cyclicOid]),
+        stderr: new Uint8Array()
+      })
+    }
+    return Effect.die(`unexpected Git operation: ${command.operation}`)
+  })
+  return Effect.gen(function* () {
+    const result = yield* verifyS2SNumericContinuity(cyclicOid).pipe(
+      Effect.either
+    )
+    expect(Either.isLeft(result)).toBe(true)
+    if (Either.isLeft(result)) {
+      expect(result.left).toMatchObject({ reason: "ANCESTRY_CYCLE" })
+    }
+  }).pipe(Effect.provide(layer))
+})
+
+it.effect("fails closed at the raw ancestry unique-commit bound", () => {
+  const oidAt = (index: number): string => index.toString(16).padStart(40, "0")
+  const sourceOid = oidAt(1)
+  let rawReads = 0
+  const layer = makeS2SPreregGitRepositoryTestLayer((command) => {
+    if (command.operation === "verify source commit object type") {
+      return Effect.succeed({
+        exitCode: 0,
+        stdout: UTF8_ENCODER.encode("commit\n"),
+        stderr: new Uint8Array()
+      })
+    }
+    const prefix = "read raw ancestry commit "
+    if (command.operation.startsWith(prefix)) {
+      rawReads += 1
+      const oid = command.operation.slice(prefix.length)
+      const index = Number.parseInt(oid, 16)
+      return Effect.succeed({
+        exitCode: 0,
+        stdout: encodeRawCommitBatch(oid, [oidAt(index + 1)]),
+        stderr: new Uint8Array()
+      })
+    }
+    return Effect.die(`unexpected Git operation: ${command.operation}`)
+  })
+  return Effect.gen(function* () {
+    const result = yield* verifyS2SNumericContinuity(sourceOid).pipe(
+      Effect.either
+    )
+    expect(Either.isLeft(result)).toBe(true)
+    if (Either.isLeft(result)) {
+      expect(result.left).toMatchObject({ reason: "ANCESTRY_LIMIT_EXCEEDED" })
+    }
+    expect(rawReads).toBe(S2S_PREREG_ANCESTRY_MAX_COMMITS)
+  }).pipe(Effect.provide(layer))
 })
 
 it.effect("rejects a caller-injected structural source freeze at the build boundary", () => {

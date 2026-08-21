@@ -40,9 +40,10 @@ future-seeded gate. Raw transition, store, adapter, and generic-submit
 capabilities are intentionally absent from the package root export until a
 production orchestrator owns all provenance checks end to end.
 
-Independent review has left this slice `BLOCKED_PRE_PREREG` on six reproduced
-invariants: three source-A/registration-byte checks and three pulse/resource/
-artifact checks. Resume from the repository
+Independent exact-byte review has cleared the repaired source-A/B, pulse,
+resource-accounting, and artifact-size invariants. The slice remains
+`BLOCKED_PRE_PREREG` because live Git/GitHub/drand/Python/artifact adapters and
+the durable three-job chronology are still absent. Resume from the repository
 [`next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-21.md)
 before adding live adapters or selecting a future round.
 

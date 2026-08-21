@@ -1,11 +1,23 @@
 import { spawn } from "node:child_process"
 import { createHash } from "node:crypto"
+import { devNull } from "node:os"
 import { resolve } from "node:path"
 import { TextDecoder, TextEncoder } from "node:util"
 
 import { Context, Data, Effect, Either, Layer, Schema } from "effect"
 
+import {
+  S2S_QUICKNET_CHAIN_HASH,
+  S2S_QUICKNET_GENESIS_TIME,
+  s2sQuicknetRoundTimeUnix
+} from "./s2s-quicknet.js"
 import { S2S_EXTERNAL_SEED_DOMAIN } from "./s2s-seed.js"
+
+export {
+  S2S_QUICKNET_CHAIN_HASH,
+  S2S_QUICKNET_GENESIS_TIME,
+  S2S_QUICKNET_PERIOD_SECONDS
+} from "./s2s-quicknet.js"
 
 /**
  * Source-freeze and preregistration boundary for the SWM-0W-S2S gate.
@@ -64,16 +76,27 @@ export const S2S_REGISTRATION_CORE_SCHEMA_VERSION =
 export const S2S_PREREGISTRATION_SCHEMA_VERSION =
   "hswm-swm0w-s2s-preregistration/v1" as const
 
-export const S2S_QUICKNET_CHAIN_HASH =
-  "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971" as const
-export const S2S_QUICKNET_GENESIS_TIME = 1_692_803_367 as const
-export const S2S_QUICKNET_PERIOD_SECONDS = 3 as const
 export const S2S_PREREG_TASK_COUNT = 20 as const
 export const S2S_PREREG_GIT_COMMAND_TIMEOUT_MILLIS = 120_000 as const
+export const S2S_PREREG_ANCESTRY_MAX_COMMITS = 4_096 as const
+export const S2S_PREREG_ANCESTRY_MAX_COMMIT_BYTES = 4 * 1_048_576
+export const S2S_PREREG_ANCESTRY_MAX_PARENTS_PER_COMMIT = 64 as const
+export const S2S_PREREG_ANCESTRY_MAX_TOTAL_BYTES = 64 * 1_048_576
+export const S2S_PREREG_ANCESTRY_TIMEOUT_MILLIS = 120_000 as const
 
 const MAX_PREREGISTRATION_BYTES = 4 * 1_048_576
 const MAX_GIT_STDOUT_BYTES = 128 * 1_048_576
 const MAX_GIT_STDERR_BYTES = 65_536
+const PINNED_LINUX_GIT_EXECUTABLE = "/usr/bin/git"
+/** Linux is the pinned execution target; devNull keeps config null portable. */
+const GIT_PROCESS_ENVIRONMENT: NodeJS.ProcessEnv = Object.freeze({
+  PATH: "/usr/bin:/bin",
+  LANG: "C",
+  LC_ALL: "C",
+  GIT_CONFIG_NOSYSTEM: "1",
+  GIT_CONFIG_GLOBAL: devNull,
+  GIT_TERMINAL_PROMPT: "0"
+})
 const UTF8_ENCODER = new TextEncoder()
 const UTF8_DECODER = new TextDecoder("utf-8", { fatal: true })
 const ASCII_DECODER = new TextDecoder("ascii", { fatal: true })
@@ -112,8 +135,12 @@ export class S2SSourceFreezeError extends Data.TaggedError(
 )<{
   readonly reason:
     | "INVALID_GIT_IDENTITY"
+    | "PREREGISTRATION_PATH_PRESENT"
     | "UNSUPPORTED_GIT_ENTRY"
     | "MALFORMED_GIT_OUTPUT"
+    | "MALFORMED_COMMIT_OBJECT"
+    | "ANCESTRY_CYCLE"
+    | "ANCESTRY_LIMIT_EXCEEDED"
     | "PILOT_NOT_ANCESTOR"
     | "NUMERIC_PATH_MISSING"
     | "NUMERIC_BYTES_DRIFT"
@@ -124,6 +151,7 @@ export class S2SRegistrationCommitError extends Data.TaggedError(
   "S2SRegistrationCommitError"
 )<{
   readonly reason:
+    | "INVALID_VALIDATION_SNAPSHOT"
     | "INVALID_COMMIT"
     | "NOT_DIRECT_CHILD"
     | "DIFF_NOT_ADD_ONLY_PREREGISTRATION"
@@ -141,6 +169,13 @@ export class S2SGitRepositoryError extends Data.TaggedError(
     | "COMMAND_TIMED_OUT"
     | "COMMAND_FAILED"
   readonly exitCode: number | null
+  readonly detail: string
+}> {}
+
+class S2SRawCommitObjectError extends Data.TaggedError(
+  "S2SRawCommitObjectError"
+)<{
+  readonly reason: "INVALID_IDENTITY" | "MALFORMED" | "LIMIT_EXCEEDED"
   readonly detail: string
 }> {}
 
@@ -527,10 +562,15 @@ const collectGitProcess = (
     let stderrSize = 0
     const stdout: Array<Buffer> = []
     const stderr: Array<Buffer> = []
-    const child = spawn("git", ["-C", repoRoot, ...command.arguments], {
-      shell: false,
-      stdio: ["pipe", "pipe", "pipe"]
-    })
+    const child = spawn(
+      PINNED_LINUX_GIT_EXECUTABLE,
+      ["-C", repoRoot, ...command.arguments],
+      {
+        env: GIT_PROCESS_ENVIRONMENT,
+        shell: false,
+        stdio: ["pipe", "pipe", "pipe"]
+      }
+    )
 
     const finish = (
       effect: Effect.Effect<S2SGitCommandResult, S2SGitRepositoryError>
@@ -654,7 +694,7 @@ const runGit = (
     const result = yield* repository
       .execute({
         operation,
-        arguments: Object.freeze([...args]),
+        arguments: Object.freeze(["--no-replace-objects", ...args]),
         stdin
       })
       .pipe(
@@ -687,6 +727,74 @@ const runGit = (
   })
 
 const isGitSha = (value: string): boolean => GIT_SHA_PATTERN.test(value)
+
+const assertExactSourceCommitObject = (
+  sourceCommitA: string
+): Effect.Effect<
+  void,
+  S2SGitRepositoryError | S2SSourceFreezeError,
+  S2SPreregGitRepository
+> =>
+  Effect.gen(function* () {
+    if (!isGitSha(sourceCommitA)) {
+      return yield* new S2SSourceFreezeError({
+        reason: "INVALID_GIT_IDENTITY",
+        detail: "source commit A must be a lowercase 40-hex Git SHA"
+      })
+    }
+    const result = yield* runGit("verify source commit object type", [
+      "cat-file",
+      "-t",
+      sourceCommitA
+    ])
+    const objectType = yield* decodeAscii(
+      result.stdout,
+      "source A Git object type"
+    )
+    if (objectType === "commit\n") return
+    const knownNonCommit =
+      objectType === "tag\n" || objectType === "tree\n" || objectType === "blob\n"
+    return yield* new S2SSourceFreezeError({
+      reason: knownNonCommit ? "INVALID_GIT_IDENTITY" : "MALFORMED_GIT_OUTPUT",
+      detail: knownNonCommit
+        ? "source A must name an exact commit object, not a peeled or tag object"
+        : "source A Git object type output is malformed"
+    })
+  })
+
+const assertPreregistrationPathAbsentAtSource = (
+  sourceCommitA: string
+): Effect.Effect<
+  void,
+  S2SGitRepositoryError | S2SSourceFreezeError,
+  S2SPreregGitRepository
+> =>
+  Effect.gen(function* () {
+    const result = yield* runGit("verify preregistration path absence at source A", [
+      "ls-tree",
+      "--name-only",
+      "-z",
+      "--full-tree",
+      sourceCommitA,
+      "--",
+      S2S_PREREGISTRATION_PATH
+    ])
+    if (result.stdout.length === 0) return
+    const expected = UTF8_ENCODER.encode(`${S2S_PREREGISTRATION_PATH}\0`)
+    if (
+      result.stdout.length !== expected.length ||
+      !result.stdout.every((value, index) => value === expected[index])
+    ) {
+      return yield* new S2SSourceFreezeError({
+        reason: "MALFORMED_GIT_OUTPUT",
+        detail: "preregistration path absence query returned unexpected bytes"
+      })
+    }
+    return yield* new S2SSourceFreezeError({
+      reason: "PREREGISTRATION_PATH_PRESENT",
+      detail: "source A already tracks the preregistration path"
+    })
+  })
 
 interface GitTreeEntry {
   readonly mode: string
@@ -829,7 +937,375 @@ const parseCatFileBatch = (
     return output
   })
 
-export const buildS2STrackedBytesManifest = (
+interface RawCommitObject {
+  readonly parents: ReadonlyArray<string>
+  readonly byteLength: number
+}
+
+interface AncestryFrame {
+  readonly oid: string
+  parents: ReadonlyArray<string> | null
+  nextParentIndex: number
+}
+
+const strictAscii = (value: Uint8Array): string | null => {
+  let output = ""
+  for (const byte of value) {
+    if (byte > 0x7f) return null
+    output += String.fromCharCode(byte)
+  }
+  return output
+}
+
+const hasAsciiPrefix = (value: Uint8Array, prefix: string): boolean => {
+  if (value.length < prefix.length) return false
+  for (let index = 0; index < prefix.length; index += 1) {
+    if (value[index] !== prefix.charCodeAt(index)) return false
+  }
+  return true
+}
+
+const parseCommitOidHeader = (
+  line: Uint8Array,
+  keyword: "tree" | "parent"
+): string | null => {
+  const prefix = `${keyword} `
+  if (line.length !== prefix.length + 40 || !hasAsciiPrefix(line, prefix)) {
+    return null
+  }
+  const oid = strictAscii(line.slice(prefix.length))
+  return oid !== null && isGitSha(oid) ? oid : null
+}
+
+const splitRawCommitHeader = (
+  payload: Uint8Array
+): ReadonlyArray<Uint8Array> | null => {
+  let headerEnd = -1
+  for (let index = 0; index + 1 < payload.length; index += 1) {
+    if (payload[index] === 10 && payload[index + 1] === 10) {
+      headerEnd = index
+      break
+    }
+  }
+  if (headerEnd <= 0) return null
+  const lines: Array<Uint8Array> = []
+  let start = 0
+  for (let index = 0; index <= headerEnd; index += 1) {
+    if (index === headerEnd || payload[index] === 10) {
+      if (index === start) return null
+      lines.push(payload.slice(start, index))
+      start = index + 1
+    }
+  }
+  return lines
+}
+
+const hasForbiddenCommitHeaderByte = (line: Uint8Array): boolean =>
+  line.some((byte) => byte === 0 || byte === 13)
+
+const isAdditionalCommitHeader = (line: Uint8Array): boolean => {
+  const separator = line.indexOf(32)
+  if (separator <= 0 || separator === line.length - 1) return false
+  const key = strictAscii(line.slice(0, separator))
+  if (
+    key === null ||
+    !/^[a-z][a-z0-9-]*$/.test(key) ||
+    key === "tree" ||
+    key === "parent" ||
+    key === "author" ||
+    key === "committer"
+  ) {
+    return false
+  }
+  return true
+}
+
+const parseRawCommitPayload = (
+  payload: Uint8Array
+): Either.Either<RawCommitObject, S2SRawCommitObjectError> => {
+  const lines = splitRawCommitHeader(payload)
+  if (lines === null || lines.length < 3) {
+    return Either.left(
+      new S2SRawCommitObjectError({
+        reason: "MALFORMED",
+        detail: "raw commit lacks the required header/message boundary"
+      })
+    )
+  }
+  if (lines.some(hasForbiddenCommitHeaderByte)) {
+    return Either.left(
+      new S2SRawCommitObjectError({
+        reason: "MALFORMED",
+        detail: "raw commit header contains a forbidden byte"
+      })
+    )
+  }
+  const treeLine = lines[0]
+  if (treeLine === undefined || parseCommitOidHeader(treeLine, "tree") === null) {
+    return Either.left(
+      new S2SRawCommitObjectError({
+        reason: "MALFORMED",
+        detail: "raw commit must begin with one exact tree header"
+      })
+    )
+  }
+
+  const parents: Array<string> = []
+  const uniqueParents = new Set<string>()
+  let index = 1
+  while (index < lines.length) {
+    const line = lines[index]
+    if (line === undefined || !hasAsciiPrefix(line, "parent ")) break
+    const parent = parseCommitOidHeader(line, "parent")
+    if (parent === null || uniqueParents.has(parent)) {
+      return Either.left(
+        new S2SRawCommitObjectError({
+          reason: "MALFORMED",
+          detail: "raw commit parent headers are malformed or duplicated"
+        })
+      )
+    }
+    if (parents.length >= S2S_PREREG_ANCESTRY_MAX_PARENTS_PER_COMMIT) {
+      return Either.left(
+        new S2SRawCommitObjectError({
+          reason: "LIMIT_EXCEEDED",
+          detail: "raw commit parent count exceeds the fixed bound"
+        })
+      )
+    }
+    uniqueParents.add(parent)
+    parents.push(parent)
+    index += 1
+  }
+
+  const authorLine = lines[index]
+  const committerLine = lines[index + 1]
+  if (
+    authorLine === undefined ||
+    !hasAsciiPrefix(authorLine, "author ") ||
+    authorLine.length <= "author ".length ||
+    committerLine === undefined ||
+    !hasAsciiPrefix(committerLine, "committer ") ||
+    committerLine.length <= "committer ".length
+  ) {
+    return Either.left(
+      new S2SRawCommitObjectError({
+        reason: "MALFORMED",
+        detail: "raw commit author/committer headers are absent or out of order"
+      })
+    )
+  }
+  index += 2
+  let continuationAllowed = false
+  for (; index < lines.length; index += 1) {
+    const line = lines[index]
+    if (line === undefined) {
+      return Either.left(
+        new S2SRawCommitObjectError({
+          reason: "MALFORMED",
+          detail: "raw commit header indexing drifted"
+        })
+      )
+    }
+    if (line[0] === 32) {
+      if (!continuationAllowed) {
+        return Either.left(
+          new S2SRawCommitObjectError({
+            reason: "MALFORMED",
+            detail: "raw commit has an orphan continuation header"
+          })
+        )
+      }
+      continue
+    }
+    if (!isAdditionalCommitHeader(line)) {
+      return Either.left(
+        new S2SRawCommitObjectError({
+          reason: "MALFORMED",
+          detail: "raw commit has a duplicate, late, or malformed header"
+        })
+      )
+    }
+    continuationAllowed = true
+  }
+  return Either.right({ parents, byteLength: payload.length })
+}
+
+const parseSingleRawCommitBatch = (
+  value: Uint8Array,
+  expectedOid: string
+): Either.Either<RawCommitObject, S2SRawCommitObjectError> => {
+  const newline = value.indexOf(10)
+  if (newline <= 0) {
+    return Either.left(
+      new S2SRawCommitObjectError({
+        reason: "MALFORMED",
+        detail: "raw commit batch header is truncated"
+      })
+    )
+  }
+  const header = strictAscii(value.slice(0, newline))
+  const parts = header === null ? [] : header.split(" ")
+  const sizeText = parts[2]
+  const size =
+    sizeText !== undefined && /^(0|[1-9][0-9]*)$/.test(sizeText)
+      ? Number(sizeText)
+      : Number.NaN
+  if (
+    parts.length !== 3 ||
+    parts[0] !== expectedOid ||
+    parts[1] !== "commit" ||
+    !Number.isSafeInteger(size) ||
+    size < 0
+  ) {
+    return Either.left(
+      new S2SRawCommitObjectError({
+        reason:
+          parts.length === 3 && parts[0] === expectedOid && parts[1] !== "commit"
+            ? "INVALID_IDENTITY"
+            : "MALFORMED",
+        detail: "raw commit batch identity/type/size drifted"
+      })
+    )
+  }
+  if (size > S2S_PREREG_ANCESTRY_MAX_COMMIT_BYTES) {
+    return Either.left(
+      new S2SRawCommitObjectError({
+        reason: "LIMIT_EXCEEDED",
+        detail: "raw commit bytes exceed the fixed per-commit bound"
+      })
+    )
+  }
+  const start = newline + 1
+  const end = start + size
+  if (end + 1 !== value.length || value[end] !== 10) {
+    return Either.left(
+      new S2SRawCommitObjectError({
+        reason: "MALFORMED",
+        detail: "raw commit batch payload is truncated or has trailing bytes"
+      })
+    )
+  }
+  return parseRawCommitPayload(value.slice(start, end))
+}
+
+const readRawCommitObject = (
+  oid: string,
+  operation: string
+): Effect.Effect<
+  RawCommitObject,
+  S2SGitRepositoryError | S2SRawCommitObjectError,
+  S2SPreregGitRepository
+> =>
+  Effect.gen(function* () {
+    if (!isGitSha(oid)) {
+      return yield* new S2SRawCommitObjectError({
+        reason: "INVALID_IDENTITY",
+        detail: "raw commit OID must be a lowercase 40-hex Git SHA"
+      })
+    }
+    const result = yield* runGit(
+      operation,
+      ["cat-file", "--batch"],
+      UTF8_ENCODER.encode(`${oid}\n`)
+    )
+    return yield* effectFromEither(parseSingleRawCommitBatch(result.stdout, oid))
+  })
+
+const sourceRawCommitFailure = (
+  error: S2SRawCommitObjectError
+): S2SSourceFreezeError =>
+  new S2SSourceFreezeError({
+    reason:
+      error.reason === "LIMIT_EXCEEDED"
+        ? "ANCESTRY_LIMIT_EXCEEDED"
+        : "MALFORMED_COMMIT_OBJECT",
+    detail: error.detail
+  })
+
+const assertPilotIsRawAncestor = (
+  sourceCommitA: string
+): Effect.Effect<
+  void,
+  S2SGitRepositoryError | S2SSourceFreezeError,
+  S2SPreregGitRepository
+> => {
+  const traversal = Effect.gen(function* () {
+    const active = new Set<string>([sourceCommitA])
+    const completed = new Set<string>()
+    const stack: Array<AncestryFrame> = [
+      { oid: sourceCommitA, parents: null, nextParentIndex: 0 }
+    ]
+    let uniqueCommits = 0
+    let totalBytes = 0
+
+    while (stack.length > 0) {
+      const frame = stack[stack.length - 1]
+      if (frame === undefined) break
+      if (frame.parents === null) {
+        if (uniqueCommits >= S2S_PREREG_ANCESTRY_MAX_COMMITS) {
+          return yield* new S2SSourceFreezeError({
+            reason: "ANCESTRY_LIMIT_EXCEEDED",
+            detail: "raw ancestry unique-commit count exceeds the fixed bound"
+          })
+        }
+        const raw = yield* readRawCommitObject(
+          frame.oid,
+          `read raw ancestry commit ${frame.oid}`
+        ).pipe(
+          Effect.catchTag("S2SRawCommitObjectError", (error) =>
+            Effect.fail(sourceRawCommitFailure(error))
+          )
+        )
+        uniqueCommits += 1
+        totalBytes += raw.byteLength
+        if (totalBytes > S2S_PREREG_ANCESTRY_MAX_TOTAL_BYTES) {
+          return yield* new S2SSourceFreezeError({
+            reason: "ANCESTRY_LIMIT_EXCEEDED",
+            detail: "raw ancestry total bytes exceed the fixed bound"
+          })
+        }
+        frame.parents = raw.parents
+        if (frame.oid === S2S_PREREG_PILOT_SOURCE_COMMIT) return
+      }
+
+      const parent = frame.parents[frame.nextParentIndex]
+      if (parent === undefined) {
+        active.delete(frame.oid)
+        completed.add(frame.oid)
+        stack.pop()
+        continue
+      }
+      frame.nextParentIndex += 1
+      if (active.has(parent)) {
+        return yield* new S2SSourceFreezeError({
+          reason: "ANCESTRY_CYCLE",
+          detail: "raw ancestry contains a parent cycle"
+        })
+      }
+      if (completed.has(parent)) continue
+      active.add(parent)
+      stack.push({ oid: parent, parents: null, nextParentIndex: 0 })
+    }
+
+    return yield* new S2SSourceFreezeError({
+      reason: "PILOT_NOT_ANCESTOR",
+      detail: "the disclosed pilot source P is not a raw parent ancestor of source A"
+    })
+  })
+  return traversal.pipe(
+    Effect.timeoutFail({
+      duration: S2S_PREREG_ANCESTRY_TIMEOUT_MILLIS,
+      onTimeout: () =>
+        new S2SSourceFreezeError({
+          reason: "ANCESTRY_LIMIT_EXCEEDED",
+          detail: "raw ancestry traversal exceeded the fixed total deadline"
+        })
+    })
+  )
+}
+
+const buildS2STrackedBytesManifestUnchecked = (
   sourceCommitA: string
 ): Effect.Effect<
   S2STrackedBytesManifest,
@@ -837,12 +1313,6 @@ export const buildS2STrackedBytesManifest = (
   S2SPreregGitRepository
 > =>
   Effect.gen(function* () {
-    if (!isGitSha(sourceCommitA)) {
-      return yield* new S2SSourceFreezeError({
-        reason: "INVALID_GIT_IDENTITY",
-        detail: "source commit A must be a lowercase 40-hex Git SHA"
-      })
-    }
     const treeResult = yield* runGit("resolve source tree", [
       "rev-parse",
       `${sourceCommitA}^{tree}`
@@ -862,6 +1332,12 @@ export const buildS2STrackedBytesManifest = (
       sourceCommitA
     ])
     const entries = yield* parseTreeEntries(listing.stdout)
+    if (entries.some((entry) => entry.path === S2S_PREREGISTRATION_PATH)) {
+      return yield* new S2SSourceFreezeError({
+        reason: "PREREGISTRATION_PATH_PRESENT",
+        detail: "source A already tracks the preregistration path"
+      })
+    }
     if (entries.length === 0) {
       return yield* new S2SSourceFreezeError({
         reason: "MALFORMED_GIT_OUTPUT",
@@ -926,6 +1402,19 @@ export const buildS2STrackedBytesManifest = (
     }
   })
 
+export const buildS2STrackedBytesManifest = (
+  sourceCommitA: string
+): Effect.Effect<
+  S2STrackedBytesManifest,
+  S2SGitRepositoryError | S2SSourceFreezeError | S2SPreregCanonicalJsonError,
+  S2SPreregGitRepository
+> =>
+  Effect.gen(function* () {
+    yield* assertExactSourceCommitObject(sourceCommitA)
+    yield* assertPreregistrationPathAbsentAtSource(sourceCommitA)
+    return yield* buildS2STrackedBytesManifestUnchecked(sourceCommitA)
+  })
+
 const readPathAtCommit = (
   commit: string,
   path: string,
@@ -933,7 +1422,7 @@ const readPathAtCommit = (
 ): Effect.Effect<Uint8Array, S2SGitRepositoryError, S2SPreregGitRepository> =>
   Effect.map(runGit(operation, ["show", `${commit}:${path}`]), (result) => result.stdout)
 
-export const verifyS2SNumericContinuity = (
+const verifyS2SNumericContinuityUnchecked = (
   sourceCommitA: string
 ): Effect.Effect<
   S2SNumericContinuity,
@@ -941,29 +1430,7 @@ export const verifyS2SNumericContinuity = (
   S2SPreregGitRepository
 > =>
   Effect.gen(function* () {
-    if (!isGitSha(sourceCommitA)) {
-      return yield* new S2SSourceFreezeError({
-        reason: "INVALID_GIT_IDENTITY",
-        detail: "source commit A must be a lowercase 40-hex Git SHA"
-      })
-    }
-    const ancestry = yield* runGit(
-      "verify pilot ancestry",
-      [
-        "merge-base",
-        "--is-ancestor",
-        S2S_PREREG_PILOT_SOURCE_COMMIT,
-        sourceCommitA
-      ],
-      null,
-      [0, 1]
-    )
-    if (ancestry.exitCode !== 0) {
-      return yield* new S2SSourceFreezeError({
-        reason: "PILOT_NOT_ANCESTOR",
-        detail: "the disclosed pilot source P is not an ancestor of source A"
-      })
-    }
+    yield* assertPilotIsRawAncestor(sourceCommitA)
     const rows = yield* Effect.forEach(
       S2S_PREREG_NUMERIC_PATHS,
       (path) =>
@@ -1027,6 +1494,18 @@ export const verifyS2SNumericContinuity = (
     }
   })
 
+export const verifyS2SNumericContinuity = (
+  sourceCommitA: string
+): Effect.Effect<
+  S2SNumericContinuity,
+  S2SGitRepositoryError | S2SSourceFreezeError | S2SPreregCanonicalJsonError,
+  S2SPreregGitRepository
+> =>
+  Effect.gen(function* () {
+    yield* assertExactSourceCommitObject(sourceCommitA)
+    return yield* verifyS2SNumericContinuityUnchecked(sourceCommitA)
+  })
+
 export const buildS2SSourceFreeze = (
   sourceCommitA: string
 ): Effect.Effect<
@@ -1035,10 +1514,12 @@ export const buildS2SSourceFreeze = (
   S2SPreregGitRepository
 > =>
   Effect.gen(function* () {
+    yield* assertExactSourceCommitObject(sourceCommitA)
+    yield* assertPreregistrationPathAbsentAtSource(sourceCommitA)
     const [trackedBytesManifest, numericContinuity] = yield* Effect.all(
       [
-        buildS2STrackedBytesManifest(sourceCommitA),
-        verifyS2SNumericContinuity(sourceCommitA)
+        buildS2STrackedBytesManifestUnchecked(sourceCommitA),
+        verifyS2SNumericContinuityUnchecked(sourceCommitA)
       ],
       { concurrency: 2 }
     )
@@ -1064,8 +1545,8 @@ export const s2sQuicknetRoundTime = (
       })
     )
   }
-  const value = S2S_QUICKNET_GENESIS_TIME + (round - 1) * S2S_QUICKNET_PERIOD_SECONDS
-  return Number.isSafeInteger(value)
+  const value = s2sQuicknetRoundTimeUnix(round)
+  return value !== null
     ? Either.right(value)
     : Either.left(
         new S2SPreregistrationValidationError({
@@ -1211,10 +1692,45 @@ export interface ParseS2SPreregistrationOptions {
   readonly expectedResourcePolicySha256: string
 }
 
+const VALIDATED_S2S_PREREGISTRATION_BRAND: unique symbol = Symbol(
+  "hswm/ValidatedS2SPreregistration"
+)
+
 export interface ValidatedS2SPreregistration {
+  readonly [VALIDATED_S2S_PREREGISTRATION_BRAND]: true
   readonly preregistration: S2SPreregistration
   readonly canonicalBytes: Uint8Array
   readonly fileSha256: string
+}
+
+interface ValidatedS2SPreregistrationSnapshot {
+  readonly preregistration: S2SPreregistration
+  readonly canonicalBytes: Uint8Array
+  readonly fileSha256: string
+  readonly sourceCommitA: string
+}
+
+const VALIDATED_S2S_PREREGISTRATION_SNAPSHOTS = new WeakMap<
+  object,
+  ValidatedS2SPreregistrationSnapshot
+>()
+
+const deepFreezePreregistrationSnapshot = (
+  value: S2SPreregistration
+): S2SPreregistration => {
+  const seen = new Set<object>()
+  const freeze = (current: unknown): void => {
+    if (current === null || typeof current !== "object" || seen.has(current)) return
+    seen.add(current)
+    for (const descriptor of Object.values(
+      Object.getOwnPropertyDescriptors(current)
+    )) {
+      if ("value" in descriptor) freeze(descriptor.value)
+    }
+    Object.freeze(current)
+  }
+  freeze(value)
+  return value
 }
 
 const validationFailure = (
@@ -1336,6 +1852,14 @@ const validateSourceFreezeSemantics = (
         "source-freeze numeric continuity bindings drifted"
       )
     }
+    if (
+      manifest.rows.some((row) => row.path === S2S_PREREGISTRATION_PATH)
+    ) {
+      return yield* validationFailure(
+        "FIXED_BINDING_DRIFT",
+        "source A manifest must not contain the preregistration path"
+      )
+    }
     const sortedPaths = manifest.rows
       .map((row) => row.path)
       .slice()
@@ -1447,7 +1971,8 @@ export const parseAndValidateS2SPreregistration = (
   S2SPreregGitRepository
 > =>
   Effect.gen(function* () {
-    const root = yield* parseCanonicalRoot(bytes)
+    const originalBytes = new Uint8Array(bytes)
+    const root = yield* parseCanonicalRoot(originalBytes)
     const decoded = yield* decodePreregistration(root)
     yield* validateDecodedSemantics(
       decoded,
@@ -1466,49 +1991,83 @@ export const parseAndValidateS2SPreregistration = (
         "source A no longer reproduces the registered source freeze"
       )
     }
-    return {
-      preregistration: decoded,
-      canonicalBytes: new Uint8Array(bytes),
-      fileSha256: s2sPreregSha256Bytes(bytes)
-    }
+    const canonicalBytes = originalBytes
+    const fileSha256 = s2sPreregSha256Bytes(canonicalBytes)
+    const preregistration = deepFreezePreregistrationSnapshot(decoded)
+    const validated: ValidatedS2SPreregistration = Object.freeze({
+      [VALIDATED_S2S_PREREGISTRATION_BRAND]: true as const,
+      get preregistration(): S2SPreregistration {
+        return preregistration
+      },
+      get canonicalBytes(): Uint8Array {
+        return new Uint8Array(canonicalBytes)
+      },
+      fileSha256
+    })
+    VALIDATED_S2S_PREREGISTRATION_SNAPSHOTS.set(validated, {
+      preregistration,
+      canonicalBytes,
+      fileSha256,
+      sourceCommitA:
+        preregistration.registration_core.repository_binding.source_commit_a
+    })
+    return validated
   })
+
+const validatedSnapshot = (
+  value: unknown
+): ValidatedS2SPreregistrationSnapshot | undefined => {
+  if (value === null || typeof value !== "object") return undefined
+  return VALIDATED_S2S_PREREGISTRATION_SNAPSHOTS.get(value)
+}
+
+const sameBytes = (left: Uint8Array, right: Uint8Array): boolean => {
+  if (left.length !== right.length) return false
+  for (let index = 0; index < left.length; index += 1) {
+    if (left[index] !== right[index]) return false
+  }
+  return true
+}
 
 export const validateS2SRegistrationCommitB = (
   validated: ValidatedS2SPreregistration,
   registrationCommitB: string
 ): Effect.Effect<
   string,
-  | S2SRegistrationCommitError
-  | S2SGitRepositoryError
-  | S2SSourceFreezeError
-  | S2SPreregCanonicalJsonError,
+  S2SRegistrationCommitError | S2SGitRepositoryError | S2SSourceFreezeError,
   S2SPreregGitRepository
 > =>
   Effect.gen(function* () {
+    const snapshot = validatedSnapshot(validated)
+    if (snapshot === undefined) {
+      return yield* new S2SRegistrationCommitError({
+        reason: "INVALID_VALIDATION_SNAPSHOT",
+        detail: "registration validation requires an authentic parsed snapshot"
+      })
+    }
     if (!isGitSha(registrationCommitB)) {
       return yield* new S2SRegistrationCommitError({
         reason: "INVALID_COMMIT",
         detail: "registration commit B must be a lowercase 40-hex Git SHA"
       })
     }
-    const sourceCommitA =
-      validated.preregistration.registration_core.repository_binding.source_commit_a
-    const parentsResult = yield* runGit("validate registration parents", [
-      "rev-list",
-      "--parents",
-      "-n",
-      "1",
-      registrationCommitB
-    ])
-    const parentLine = (yield* decodeAscii(
-      parentsResult.stdout,
-      "registration parent line"
-    )).trim()
-    const parentTokens = parentLine.split(/\s+/)
+    const sourceCommitA = snapshot.sourceCommitA
+    const rawRegistrationCommit = yield* readRawCommitObject(
+      registrationCommitB,
+      "read raw registration commit"
+    ).pipe(
+      Effect.catchTag("S2SRawCommitObjectError", (error) =>
+        Effect.fail(
+          new S2SRegistrationCommitError({
+            reason: "INVALID_COMMIT",
+            detail: `registration commit object is invalid: ${error.detail}`
+          })
+        )
+      )
+    )
     if (
-      parentTokens.length !== 2 ||
-      parentTokens[0] !== registrationCommitB ||
-      parentTokens[1] !== sourceCommitA
+      rawRegistrationCommit.parents.length !== 1 ||
+      rawRegistrationCommit.parents[0] !== sourceCommitA
     ) {
       return yield* new S2SRegistrationCommitError({
         reason: "NOT_DIRECT_CHILD",
@@ -1543,13 +2102,7 @@ export const validateS2SRegistrationCommitB = (
       S2S_PREREGISTRATION_PATH,
       "read committed preregistration"
     )
-    const expected = yield* effectFromEither(
-      canonicalBytesWithLf(validated.preregistration)
-    )
-    if (
-      committed.length !== expected.length ||
-      !committed.every((value, index) => value === expected[index])
-    ) {
+    if (!sameBytes(committed, snapshot.canonicalBytes)) {
       return yield* new S2SRegistrationCommitError({
         reason: "PREREGISTRATION_BYTES_DRIFT",
         detail: "commit B preregistration bytes differ from validated bytes"

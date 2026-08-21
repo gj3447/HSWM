@@ -1,6 +1,10 @@
 import { Data, Either, Schema } from "effect"
 
 import { canonicalS2SControlSha256 } from "./s2s-canonical.js"
+import {
+  S2S_QUICKNET_CHAIN_HASH,
+  s2sQuicknetRoundTimeUnix
+} from "./s2s-quicknet.js"
 import { deriveS2SExternalSeed, S2S_EXTERNAL_SEED_DOMAIN } from "./s2s-seed.js"
 
 /**
@@ -189,6 +193,7 @@ const PositiveSafeIntegerSchema = Schema.Number.pipe(
 )
 
 const ByteCountSchema = SafeIntegerSchema.pipe(Schema.brand("S2SByteCount"))
+const PositiveByteCountSchema = ByteCountSchema.pipe(Schema.greaterThan(0))
 const SecondsSchema = SafeIntegerSchema.pipe(Schema.brand("S2SSeconds"))
 const NanosecondsSchema = SafeIntegerSchema.pipe(
   Schema.brand("S2SNanoseconds")
@@ -270,8 +275,8 @@ const ArtifactEvidenceSchema = Schema.Struct({
   artifactName: GitHubArtifactNameSchema,
   artifactId: ArtifactIdSchema,
   artifactCount: PositiveSafeIntegerSchema,
-  archiveSizeBytes: ByteCountSchema,
-  largestMemberSizeBytes: ByteCountSchema,
+  archiveSizeBytes: PositiveByteCountSchema,
+  largestMemberSizeBytes: PositiveByteCountSchema,
   compressionLevel: SafeIntegerSchema,
   retentionDays: PositiveSafeIntegerSchema,
   overwrite: Schema.Boolean,
@@ -359,6 +364,7 @@ const AcceptVerifiedPulseSchema = Schema.Struct({
   beaconChainHashHex: Sha256TextSchema,
   beaconRound: BeaconRoundSchema,
   roundTimeUnixSeconds: UnixSecondsSchema,
+  pulseWaitStartedAtUnixSeconds: UnixSecondsSchema,
   verifiedAtUnixSeconds: UnixSecondsSchema,
   pulseWaitElapsedSeconds: SecondsSchema,
   verifiedRandomnessHex: Sha256TextSchema,
@@ -766,6 +772,8 @@ const artifactMatchesPolicy = (
   memberMaximumBytes: number
 ): boolean =>
   artifact.artifactCount === S2S_CONFIRMATORY_POLICY.archive.artifactCountPerJob &&
+  artifact.archiveSizeBytes > 0 &&
+  artifact.largestMemberSizeBytes > 0 &&
   artifact.archiveSizeBytes <= archiveMaximumBytes &&
   artifact.largestMemberSizeBytes <= memberMaximumBytes &&
   artifact.largestMemberSizeBytes <= artifact.archiveSizeBytes &&
@@ -884,9 +892,19 @@ const validateBeginRegistration = (
   ) {
     return policyViolation("RUN_BINDING_MISMATCH")
   }
+  const roundTime = s2sQuicknetRoundTimeUnix(event.futureBeaconRound)
+  if (
+    event.beaconChainHashHex !== S2S_QUICKNET_CHAIN_HASH ||
+    roundTime === null ||
+    roundTime <= event.workflowCreatedAtUnixSeconds ||
+    event.declaredPulseLeadSeconds !==
+      roundTime - event.workflowCreatedAtUnixSeconds
+  ) {
+    return policyViolation("PULSE_BINDING_MISMATCH")
+  }
   if (
     event.declaredPulseLeadSeconds >
-    S2S_CONFIRMATORY_POLICY.deadlines.maximumDeclaredPulseLeadSeconds
+      S2S_CONFIRMATORY_POLICY.deadlines.maximumDeclaredPulseLeadSeconds
   ) {
     return policyViolation("DEADLINE_EXCEEDED")
   }
@@ -897,6 +915,9 @@ const validateRegistrationEvidence = (
   state: RegisteringState,
   event: VerifyRegistration
 ): Either.Either<void, S2SOperationalPolicyViolation> => {
+  const roundTime = s2sQuicknetRoundTimeUnix(
+    state.registration.futureBeaconRound
+  )
   if (
     event.workflowRunId !== state.registration.workflowRunId ||
     event.registrationJobId !== state.registration.registrationJobId ||
@@ -906,6 +927,12 @@ const validateRegistrationEvidence = (
       state.registration.registrationJobStartedAtUnixSeconds
   ) {
     return policyViolation("RUN_BINDING_MISMATCH")
+  }
+  if (
+    roundTime === null ||
+    event.registrationJobCompletedAtUnixSeconds >= roundTime
+  ) {
+    return policyViolation("CONFIRM_ORDERING_VIOLATION")
   }
   if (
     !event.sourceIsAncestorOfPreregistration ||
@@ -969,11 +996,21 @@ const validatePulse = (
   if (event.confirmJobId !== state.confirm.confirmJobId) {
     return policyViolation("RUN_BINDING_MISMATCH")
   }
+  const roundTime = s2sQuicknetRoundTimeUnix(
+    state.registration.futureBeaconRound
+  )
   if (
+    roundTime === null ||
     event.beaconId !== state.registration.beaconId ||
     event.beaconChainHashHex !== state.registration.beaconChainHashHex ||
     event.beaconRound !== state.registration.futureBeaconRound ||
-    event.verifiedAtUnixSeconds < event.roundTimeUnixSeconds
+    event.roundTimeUnixSeconds !== roundTime ||
+    event.pulseWaitStartedAtUnixSeconds <
+      state.confirm.confirmJobStartedAtUnixSeconds ||
+    event.verifiedAtUnixSeconds < event.pulseWaitStartedAtUnixSeconds ||
+    event.verifiedAtUnixSeconds < roundTime ||
+    event.pulseWaitElapsedSeconds !==
+      event.verifiedAtUnixSeconds - event.pulseWaitStartedAtUnixSeconds
   ) {
     return policyViolation("PULSE_BINDING_MISMATCH")
   }
@@ -998,6 +1035,15 @@ const validatePulse = (
   }
   return Either.right(undefined)
 }
+
+/**
+ * Command telemetry is recorded in whole seconds while post-seed work is
+ * measured in integer nanoseconds. A positive fractional second therefore
+ * consumes the next whole command second; exact multiples do not.
+ */
+const nanosecondsToCeilingSeconds = (nanoseconds: number): number =>
+  Math.floor(nanoseconds / 1_000_000_000) +
+  (nanoseconds % 1_000_000_000 === 0 ? 0 : 1)
 
 const validateCandidate = (
   state: ConfirmRunningState,
@@ -1039,15 +1085,19 @@ const validateCandidate = (
   ) {
     return policyViolation("RESOURCE_LIMIT_EXCEEDED")
   }
+  const accountedCommandSeconds =
+    state.pulse.pulseWaitElapsedSeconds +
+    nanosecondsToCeilingSeconds(event.postSeedWorkElapsedNanoseconds)
   if (
     event.commandElapsedSeconds >
       S2S_CONFIRMATORY_POLICY.deadlines.confirmCommandTimeoutSeconds ||
     event.jobElapsedSeconds >
       S2S_CONFIRMATORY_POLICY.deadlines.confirmJobTimeoutSeconds ||
     event.commandElapsedSeconds > event.jobElapsedSeconds ||
-    state.pulse.pulseWaitElapsedSeconds * 1_000_000_000 +
-        event.postSeedWorkElapsedNanoseconds >
-      event.commandElapsedSeconds * 1_000_000_000
+    event.commandElapsedSeconds < accountedCommandSeconds ||
+    event.commandElapsedSeconds >
+      accountedCommandSeconds +
+        S2S_CONFIRMATORY_POLICY.deadlines.confirmCommandSlackSeconds
   ) {
     return policyViolation("DEADLINE_EXCEEDED")
   }

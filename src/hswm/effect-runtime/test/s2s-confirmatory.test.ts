@@ -33,6 +33,12 @@ import {
   projectOpaqueNumericAdjudication,
   makeS2SConfirmatoryControlPlaneMemoryForTest
 } from "../src/s2s-orchestration.js"
+import {
+  S2S_QUICKNET_CHAIN_HASH,
+  S2S_QUICKNET_GENESIS_TIME,
+  S2S_QUICKNET_PERIOD_SECONDS,
+  s2sQuicknetRoundTimeUnix
+} from "../src/s2s-quicknet.js"
 
 const SOURCE_A = "a".repeat(40)
 const REGISTRATION_B = "b".repeat(40)
@@ -50,6 +56,23 @@ const WORKFLOW_RUN_ID = 101
 const REGISTER_JOB_ID = 201
 const CONFIRM_JOB_ID = 202
 const ADJUDICATION_JOB_ID = 203
+const FUTURE_BEACON_ROUND = 1_000
+// Quicknet: 1_692_803_367 + (round - 1) * 3.
+const FUTURE_ROUND_TIME_UNIX_SECONDS = 1_692_806_364
+const WORKFLOW_CREATED_AT_UNIX_SECONDS =
+  FUTURE_ROUND_TIME_UNIX_SECONDS - 200
+const REGISTRATION_STARTED_AT_UNIX_SECONDS =
+  FUTURE_ROUND_TIME_UNIX_SECONDS - 190
+const REGISTRATION_COMPLETED_AT_UNIX_SECONDS =
+  FUTURE_ROUND_TIME_UNIX_SECONDS - 90
+const CONFIRM_STARTED_AT_UNIX_SECONDS =
+  FUTURE_ROUND_TIME_UNIX_SECONDS - 80
+const CONFIRM_COMPLETED_AT_UNIX_SECONDS =
+  CONFIRM_STARTED_AT_UNIX_SECONDS + 200
+const ADJUDICATION_STARTED_AT_UNIX_SECONDS =
+  CONFIRM_COMPLETED_AT_UNIX_SECONDS + 10
+const ADJUDICATION_COMPLETED_AT_UNIX_SECONDS =
+  ADJUDICATION_STARTED_AT_UNIX_SECONDS + 700
 
 const decodeEvent = Schema.decodeUnknownSync(S2SConfirmatoryEventSchema, {
   onExcessProperty: "error"
@@ -109,13 +132,13 @@ const beginRegistration = (predecessor: string) => ({
   registrationJobId: REGISTER_JOB_ID,
   workflowRunAttempt: 1,
   workflowHeadSha: REGISTRATION_B,
-  workflowCreatedAtUnixSeconds: 100,
-  registrationJobStartedAtUnixSeconds: 110,
+  workflowCreatedAtUnixSeconds: WORKFLOW_CREATED_AT_UNIX_SECONDS,
+  registrationJobStartedAtUnixSeconds: REGISTRATION_STARTED_AT_UNIX_SECONDS,
   sourceCommitSha: SOURCE_A,
   preregistrationCommitSha: REGISTRATION_B,
   beaconId: "quicknet",
   beaconChainHashHex: CHAIN_HASH,
-  futureBeaconRound: 1_000,
+  futureBeaconRound: FUTURE_BEACON_ROUND,
   futureRoundCommitmentSelfHashSha256: FUTURE_COMMITMENT,
   declaredPulseLeadSeconds: 200
 })
@@ -128,7 +151,7 @@ const verifyRegistration = (predecessor: string) => ({
   registrationJobId: REGISTER_JOB_ID,
   workflowRunAttempt: 1,
   workflowHeadSha: REGISTRATION_B,
-  registrationJobCompletedAtUnixSeconds: 210,
+  registrationJobCompletedAtUnixSeconds: REGISTRATION_COMPLETED_AT_UNIX_SECONDS,
   sourceIsAncestorOfPreregistration: true,
   preregistrationIsDirectChildOfSource: true,
   numericContinuityManifestSha256AtSource: "e".repeat(64),
@@ -146,7 +169,7 @@ const beginConfirm = (predecessor: string) => ({
   confirmJobId: CONFIRM_JOB_ID,
   workflowRunAttempt: 1,
   workflowHeadSha: REGISTRATION_B,
-  confirmJobStartedAtUnixSeconds: 220,
+  confirmJobStartedAtUnixSeconds: CONFIRM_STARTED_AT_UNIX_SECONDS,
   attempt: attempt()
 })
 
@@ -158,9 +181,10 @@ const acceptPulse = (predecessor: string) => ({
   confirmJobId: CONFIRM_JOB_ID,
   beaconId: "quicknet",
   beaconChainHashHex: CHAIN_HASH,
-  beaconRound: 1_000,
-  roundTimeUnixSeconds: 300,
-  verifiedAtUnixSeconds: 300,
+  beaconRound: FUTURE_BEACON_ROUND,
+  roundTimeUnixSeconds: FUTURE_ROUND_TIME_UNIX_SECONDS,
+  pulseWaitStartedAtUnixSeconds: CONFIRM_STARTED_AT_UNIX_SECONDS,
+  verifiedAtUnixSeconds: FUTURE_ROUND_TIME_UNIX_SECONDS,
   pulseWaitElapsedSeconds: 80,
   verifiedRandomnessHex: RANDOMNESS,
   externalSeedHex: EXTERNAL_SEED,
@@ -217,7 +241,7 @@ const verifyCandidateArtifact = (predecessor: string) => ({
   binding: binding(predecessor),
   workflowRunId: WORKFLOW_RUN_ID,
   confirmJobId: CONFIRM_JOB_ID,
-  confirmJobCompletedAtUnixSeconds: 420,
+  confirmJobCompletedAtUnixSeconds: CONFIRM_COMPLETED_AT_UNIX_SECONDS,
   numericCandidateBytesSha256: "3".repeat(64),
   artifact: artifact("s2s-candidate", 302, "4"),
   archiveMembers: ["control_receipt.json", "numeric_candidate.json"],
@@ -232,7 +256,7 @@ const beginAdjudication = (predecessor: string) => ({
   adjudicationJobId: ADJUDICATION_JOB_ID,
   workflowRunAttempt: 1,
   workflowHeadSha: REGISTRATION_B,
-  adjudicationJobStartedAtUnixSeconds: 430,
+  adjudicationJobStartedAtUnixSeconds: ADJUDICATION_STARTED_AT_UNIX_SECONDS,
   attempt: attempt(),
   candidateArtifactId: 302,
   expectedCandidateArchiveSha256: "4".repeat(64),
@@ -284,7 +308,7 @@ const verifyEvidenceArtifact = (predecessor: string) => ({
   binding: binding(predecessor),
   workflowRunId: WORKFLOW_RUN_ID,
   adjudicationJobId: ADJUDICATION_JOB_ID,
-  adjudicationJobCompletedAtUnixSeconds: 1_130,
+  adjudicationJobCompletedAtUnixSeconds: ADJUDICATION_COMPLETED_AT_UNIX_SECONDS,
   numericAdjudicationBytesSha256: "5".repeat(64),
   artifact: artifact("s2s-adjudication", 303, "6"),
   readbackContainsCanonicalAdjudication: true,
@@ -300,11 +324,15 @@ const advance = (
   return result.right
 }
 
-const throughConfirmRunning = (): S2SConfirmatoryState => {
+const throughConfirmWaiting = (): S2SConfirmatoryState => {
   let state: S2SConfirmatoryState = initialS2SConfirmatoryState()
   state = advance(state, beginRegistration(state.latestControlReceiptSha256))
   state = advance(state, verifyRegistration(state.latestControlReceiptSha256))
-  state = advance(state, beginConfirm(state.latestControlReceiptSha256))
+  return advance(state, beginConfirm(state.latestControlReceiptSha256))
+}
+
+const throughConfirmRunning = (): S2SConfirmatoryState => {
+  let state = throughConfirmWaiting()
   state = advance(state, acceptPulse(state.latestControlReceiptSha256))
   return advance(state, beginNumericConfirm(state.latestControlReceiptSha256))
 }
@@ -364,6 +392,241 @@ it("matches the external-seed raw-byte golden vector", () => {
       "00" + FUTURE_COMMITMENT
   )
   expect(result.right.externalSeedHex).toBe(EXTERNAL_SEED)
+})
+
+it("binds pulse chronology to the independently derived Quicknet round", () => {
+  expect(S2S_QUICKNET_CHAIN_HASH).toBe(CHAIN_HASH)
+  expect(
+    S2S_QUICKNET_GENESIS_TIME +
+      (FUTURE_BEACON_ROUND - 1) * S2S_QUICKNET_PERIOD_SECONDS
+  ).toBe(FUTURE_ROUND_TIME_UNIX_SECONDS)
+  expect(s2sQuicknetRoundTimeUnix(FUTURE_BEACON_ROUND)).toBe(
+    FUTURE_ROUND_TIME_UNIX_SECONDS
+  )
+
+  const initial = initialS2SConfirmatoryState()
+
+  const mismatchedLead = advanceS2SConfirmatory(
+    initial,
+    decodeEvent({
+      ...beginRegistration(initial.latestControlReceiptSha256),
+      declaredPulseLeadSeconds: 199
+    })
+  )
+  expect(Either.isLeft(mismatchedLead)).toBe(true)
+
+  const wrongQuicknetChain = advanceS2SConfirmatory(
+    initial,
+    decodeEvent({
+      ...beginRegistration(initial.latestControlReceiptSha256),
+      beaconChainHashHex: "f".repeat(64)
+    })
+  )
+  expect(Either.isLeft(wrongQuicknetChain)).toBe(true)
+
+  const nonfutureRound = advanceS2SConfirmatory(
+    initial,
+    decodeEvent({
+      ...beginRegistration(initial.latestControlReceiptSha256),
+      workflowCreatedAtUnixSeconds: FUTURE_ROUND_TIME_UNIX_SECONDS,
+      registrationJobStartedAtUnixSeconds: FUTURE_ROUND_TIME_UNIX_SECONDS,
+      declaredPulseLeadSeconds: 0
+    })
+  )
+  expect(Either.isLeft(nonfutureRound)).toBe(true)
+
+  const maximumLead = advanceS2SConfirmatory(
+    initial,
+    decodeEvent({
+      ...beginRegistration(initial.latestControlReceiptSha256),
+      workflowCreatedAtUnixSeconds:
+        FUTURE_ROUND_TIME_UNIX_SECONDS -
+        S2S_CONFIRMATORY_POLICY.deadlines.maximumDeclaredPulseLeadSeconds,
+      declaredPulseLeadSeconds:
+        S2S_CONFIRMATORY_POLICY.deadlines.maximumDeclaredPulseLeadSeconds
+    })
+  )
+  expect(Either.isRight(maximumLead)).toBe(true)
+
+  let state = advance(
+    initial,
+    beginRegistration(initial.latestControlReceiptSha256)
+  )
+  for (const completedAt of [
+    FUTURE_ROUND_TIME_UNIX_SECONDS,
+    FUTURE_ROUND_TIME_UNIX_SECONDS + 1
+  ]) {
+    const registrationAtOrAfterPulse = advanceS2SConfirmatory(
+      state,
+      decodeEvent({
+        ...verifyRegistration(state.latestControlReceiptSha256),
+        registrationJobCompletedAtUnixSeconds: completedAt,
+        jobElapsedSeconds:
+          completedAt - REGISTRATION_STARTED_AT_UNIX_SECONDS
+      })
+    )
+    expect(Either.isLeft(registrationAtOrAfterPulse)).toBe(true)
+  }
+
+  state = advance(state, verifyRegistration(state.latestControlReceiptSha256))
+  state = advance(state, beginConfirm(state.latestControlReceiptSha256))
+
+  const preWorkflowPulse = advanceS2SConfirmatory(
+    state,
+    decodeEvent({
+      ...acceptPulse(state.latestControlReceiptSha256),
+      roundTimeUnixSeconds: 1,
+      pulseWaitStartedAtUnixSeconds: 1,
+      verifiedAtUnixSeconds: 1,
+      pulseWaitElapsedSeconds: 0
+    })
+  )
+  expect(Either.isLeft(preWorkflowPulse)).toBe(true)
+
+  const wrongRoundTime = advanceS2SConfirmatory(
+    state,
+    decodeEvent({
+      ...acceptPulse(state.latestControlReceiptSha256),
+      roundTimeUnixSeconds: FUTURE_ROUND_TIME_UNIX_SECONDS - 1
+    })
+  )
+  expect(Either.isLeft(wrongRoundTime)).toBe(true)
+
+  const waitBeforeConfirm = advanceS2SConfirmatory(
+    state,
+    decodeEvent({
+      ...acceptPulse(state.latestControlReceiptSha256),
+      pulseWaitStartedAtUnixSeconds: CONFIRM_STARTED_AT_UNIX_SECONDS - 1,
+      pulseWaitElapsedSeconds: 81
+    })
+  )
+  expect(Either.isLeft(waitBeforeConfirm)).toBe(true)
+
+  const verificationBeforeRound = advanceS2SConfirmatory(
+    state,
+    decodeEvent({
+      ...acceptPulse(state.latestControlReceiptSha256),
+      verifiedAtUnixSeconds: FUTURE_ROUND_TIME_UNIX_SECONDS - 1,
+      pulseWaitElapsedSeconds: 79
+    })
+  )
+  expect(Either.isLeft(verificationBeforeRound)).toBe(true)
+
+  const mismatchedWait = advanceS2SConfirmatory(
+    state,
+    decodeEvent({
+      ...acceptPulse(state.latestControlReceiptSha256),
+      pulseWaitElapsedSeconds: 79
+    })
+  )
+  expect(Either.isLeft(mismatchedWait)).toBe(true)
+
+  const maximumWait = advanceS2SConfirmatory(
+    state,
+    decodeEvent({
+      ...acceptPulse(state.latestControlReceiptSha256),
+      pulseWaitStartedAtUnixSeconds: FUTURE_ROUND_TIME_UNIX_SECONDS,
+      verifiedAtUnixSeconds:
+        FUTURE_ROUND_TIME_UNIX_SECONDS +
+        S2S_CONFIRMATORY_POLICY.deadlines.confirmWaitBudgetSeconds,
+      pulseWaitElapsedSeconds:
+        S2S_CONFIRMATORY_POLICY.deadlines.confirmWaitBudgetSeconds
+    })
+  )
+  expect(Either.isRight(maximumWait)).toBe(true)
+
+  const excessiveWait = advanceS2SConfirmatory(
+    state,
+    decodeEvent({
+      ...acceptPulse(state.latestControlReceiptSha256),
+      pulseWaitStartedAtUnixSeconds: FUTURE_ROUND_TIME_UNIX_SECONDS,
+      verifiedAtUnixSeconds:
+        FUTURE_ROUND_TIME_UNIX_SECONDS +
+        S2S_CONFIRMATORY_POLICY.deadlines.confirmWaitBudgetSeconds +
+        1,
+      pulseWaitElapsedSeconds:
+        S2S_CONFIRMATORY_POLICY.deadlines.confirmWaitBudgetSeconds + 1
+    })
+  )
+  expect(Either.isLeft(excessiveWait)).toBe(true)
+
+  state = advance(state, acceptPulse(state.latestControlReceiptSha256))
+  expect(state._tag).toBe("PulseEligible")
+})
+
+it("permits a confirm wait that starts after the committed pulse", () => {
+  let state: S2SConfirmatoryState = initialS2SConfirmatoryState()
+  state = advance(state, beginRegistration(state.latestControlReceiptSha256))
+  state = advance(state, verifyRegistration(state.latestControlReceiptSha256))
+  state = advance(
+    state,
+    {
+      ...beginConfirm(state.latestControlReceiptSha256),
+      confirmJobStartedAtUnixSeconds: FUTURE_ROUND_TIME_UNIX_SECONDS + 10
+    }
+  )
+  state = advance(
+    state,
+    {
+      ...acceptPulse(state.latestControlReceiptSha256),
+      pulseWaitStartedAtUnixSeconds: FUTURE_ROUND_TIME_UNIX_SECONDS + 10,
+      verifiedAtUnixSeconds: FUTURE_ROUND_TIME_UNIX_SECONDS + 10,
+      pulseWaitElapsedSeconds: 0
+    }
+  )
+  expect(state._tag).toBe("PulseEligible")
+})
+
+it("accounts confirm command time with ceiling seconds and exactly 300 seconds of slack", () => {
+  const state = throughConfirmRunning()
+  const result = (
+    postSeedWorkElapsedNanoseconds: number,
+    commandElapsedSeconds: number
+  ) =>
+    advanceS2SConfirmatory(
+      state,
+      decodeEvent({
+        ...recordCandidate(state.latestControlReceiptSha256),
+        postSeedWorkElapsedNanoseconds,
+        commandElapsedSeconds,
+        jobElapsedSeconds: 1_000
+      })
+    )
+
+  expect(Either.isRight(result(0, 80))).toBe(true)
+  expect(Either.isRight(result(0, 380))).toBe(true)
+  expect(Either.isLeft(result(0, 381))).toBe(true)
+
+  expect(Either.isLeft(result(1_000_000_000, 80))).toBe(true)
+  expect(Either.isRight(result(1_000_000_000, 81))).toBe(true)
+
+  expect(Either.isLeft(result(1_000_000_001, 81))).toBe(true)
+  expect(Either.isRight(result(1_000_000_001, 82))).toBe(true)
+  expect(Either.isRight(result(1_000_000_001, 382))).toBe(true)
+  expect(Either.isLeft(result(1_000_000_001, 383))).toBe(true)
+})
+
+it("rejects empty archives and largest members for every artifact role", () => {
+  const predecessor = initialS2SConfirmatoryState().latestControlReceiptSha256
+  const roleEvents = [
+    verifyRegistration(predecessor),
+    verifyCandidateArtifact(predecessor),
+    verifyEvidenceArtifact(predecessor)
+  ]
+
+  for (const event of roleEvents) {
+    for (const field of [
+      "archiveSizeBytes",
+      "largestMemberSizeBytes"
+    ] as const) {
+      expect(() =>
+        decodeEvent({
+          ...event,
+          artifact: { ...event.artifact, [field]: 0 }
+        })
+      ).toThrow()
+    }
+  }
 })
 
 it("uses the same float-free canonical JSON surface as the Python boundary", () => {

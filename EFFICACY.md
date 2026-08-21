@@ -1,7 +1,8 @@
 # HSWM efficacy status
 
-Last reconciled: 2026-08-20 (SWM-0W scalar-gate candidate and independent
-adjudication receipt added; no historical metric was recomputed).
+Last reconciled: 2026-08-21 (SWM-0W-S2S pilot adoption and repaired
+TypeScript/Effect control-core boundary added; no historical metric was
+recomputed).
 
 > **Current state lives in checked-in measurements and their explicit provenance
 > boundaries, not a standing external verdict service.**
@@ -94,10 +95,11 @@ verdict. P_CAP18 and DS870 both restored epoch zero in every pilot cell; the
 former matches the analytic pair-null control, while the latter makes the
 optional DS-derived compact-competitive phrase inadmissible for this protocol.
 An outcome-independent confirmatory resource policy and TypeScript/Effect
-control/evidence scaffold now exist, but remain `BLOCKED_PRE_PREREG` on six
-reproduced source-byte, chronology, accounting, and artifact-admission
-invariants. Live adapters, preregistration, future seed, and adjudication remain
-open. See the
+control/evidence scaffold now exist. Independent exact-byte review cleared the
+repaired source-byte, chronology, accounting, artifact-admission, and raw-Git
+identity invariants. The gate remains `BLOCKED_PRE_PREREG` because live adapters
+and durable three-job chronology are absent; preregistration, future seed, and
+adjudication remain open. See the
 [pilot adoption result](results/SWM0W_S2S_TRAIN_DEV_PILOT_ADOPTION_RESULTS_2026-08-21.md)
 and [next-session handoff](docs/operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-21.md).
 
@@ -107,7 +109,7 @@ The exact claim boundaries are:
 |---|---|---|
 | SWM-0R role-bearing n-ary representation | **engineering conformance PASS; scientific UNJUDGED** | frozen finite `q=3` construction, 9 semantic worlds repeated across 20 UID/order seeds; hard-coded constructive decoder, not learned `W` |
 | SWM-0W learned scalar compatibility precursor | **scientific `SUPPORTED_NARROW`** | preregistered fixed arity 3 with one incidence per role; 20 tasks and shared bootstrap; candidate-only protocol result promoted to `PASS` only by separate GitHub/artifact/BLS/task/reducer adjudication; no learned or adjudicated multi-member recipient-specific set-to-set result |
-| SWM-0W-S2S multi-member operator engineering | **implemented and pilot-adopted; scientific `UNJUDGED`** | fixed-frame three-role/two-member finite world, exact 870-parameter T16/P_CAP18/DS870 paths, V2 with-replacement task generator, task-bound constructive Q witness, deterministic train/dev optimizer, and exact 27-cell public-pilot replay. Selected configs are frozen in a five-file adoption bundle. A resource policy and TypeScript/Effect control scaffold exist but are `BLOCKED_PRE_PREREG` on six independently reproduced invariants; live adapters, prereg, future tasks, and adjudication are absent. DS stayed at epoch zero, so no compact-competitive wording is allowed |
+| SWM-0W-S2S multi-member operator engineering | **implemented and pilot-adopted; scientific `UNJUDGED`** | fixed-frame three-role/two-member finite world, exact 870-parameter T16/P_CAP18/DS870 paths, V2 with-replacement task generator, task-bound constructive Q witness, deterministic train/dev optimizer, and exact 27-cell public-pilot replay. Selected configs are frozen in a five-file adoption bundle. A resource policy and repaired TypeScript/Effect pure control core are audit-clear, but the gate remains `BLOCKED_PRE_PREREG` because live adapters and durable three-job chronology are absent; prereg, future tasks, and adjudication are absent. DS stayed at epoch zero, so no compact-competitive wording is allowed |
 | static retrieval substrate | **measured positive, budget caveat** | 300 evaluation rows across three checked-in runs |
 | cognitive uplift over direct LLM reranking | **preregistered cross-dataset claim failed** | two negative MuSiQue runs; one small, non-significant positive 2Wiki run |
 | P1 outcome→credit→slow-weight loop | **engineering complete; scientific RED; HSWM_LOCAL_RECORD unjudged** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations. Historical measurement self-wrote `FAIL`, so no valid server-owned kernel verdict exists |

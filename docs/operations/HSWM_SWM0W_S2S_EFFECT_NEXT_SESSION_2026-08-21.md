@@ -1,10 +1,11 @@
 # HSWM SWM-0W-S2S TypeScript/Effect next-session handoff
 
 Date: 2026-08-21
-Workspace base: `a4bff3b47c64854b424b2dc8a00db07745d6cf9e`
+Repair base: `94eca74cb9d2d3fb4d0738d6d3ab12ddd637019c`
 Authority: the TypeScript/Effect direction is `USER_PRIMARY`; the implementation
 split and repair plan are `SECONDARY_AI_PROPOSED`.
-Checkpoint: `BLOCKED_PRE_PREREG / ENGINEERING_ONLY / SCIENTIFIC_UNJUDGED`.
+Checkpoint: `BLOCKED_PRE_PREREG / CONTROL_CORE_AUDIT_CLEAR / ENGINEERING_ONLY /
+SCIENTIFIC_UNJUDGED`.
 
 This is an operational checkpoint, not a preregistration, result, or authority
 to choose a future beacon round. Its machine-readable local-KG projection is
@@ -33,17 +34,22 @@ contracts. No Effect v4 API is mixed in.
 
 ## Present implementation checkpoint
 
-The working tree contains the following not-yet-authorized S2S control slice.
-The hashes identify the exact pre-repair bytes to resume from; they are not
-approval hashes.
+The following hashes identify the repaired S2S control-core bytes. Independent
+read-only review replayed the reproduced source, chronology, accounting, and
+artifact-boundary failures against these exact bytes and returned `CLEAR`.
+This is engineering clearance for the pure control core, not authorization to
+preregister, dispatch, or make an efficacy claim.
 
 | path | SHA-256 | audit status |
 |---|---|---|
 | `src/hswm/effect-runtime/src/s2s-canonical.ts` | `c3d8f36853124ad0387cc68b9373571f8d45b888472fc20581e3b7993dacb257` | clear within reviewed scope |
 | `src/hswm/effect-runtime/src/s2s-seed.ts` | `bfbdce6f09360c10c989a145c441fbd8bf00d51a607dfc7719170d42820cef2c` | cross-language golden clear |
-| `src/hswm/effect-runtime/src/s2s-confirmatory.ts` | `bdada1b126e0d450e36db409c47fd9c77bd64f9bb203f61c2ea7fb79165f20bf` | blocked by three control invariants below |
+| `src/hswm/effect-runtime/src/s2s-confirmatory.ts` | `eb7e59bb48bb60b71a79e64d0c3e2f10af6e89d2c39be33382d645bf96a08167` | independent exact-byte audit clear |
 | `src/hswm/effect-runtime/src/s2s-orchestration.ts` | `d9bbaa35bc8c91576ef5c121699c201c06807da47270e0c63002987d35f7a9c8` | typed ports only; no live adapters |
-| `src/hswm/effect-runtime/src/s2s-preregistration.ts` | `9941f46d51a0c4cf99281229bddee057bbb64b50b0eaa0332b3ac6d0cdd9b6d3` | blocked by three source/B invariants below |
+| `src/hswm/effect-runtime/src/s2s-preregistration.ts` | `7a818b97b749cc72d56ede942b911c8a116ef7358180d75e8df8256f1678855f` | independent exact-byte audit clear |
+| `src/hswm/effect-runtime/src/s2s-quicknet.ts` | `a78cb00e11815cc047a069f49a674a6d45f6a9e0947c5685a67d50eec82e21ec` | pure shared Quicknet identity/time arithmetic |
+| `src/hswm/effect-runtime/test/s2s-confirmatory.test.ts` | `066ffa96ed40a6561504d5bbf11d14cd040dc066e9cb799422346789206fcadc` | 16 focused tests pass |
+| `src/hswm/effect-runtime/test/s2s-preregistration.test.ts` | `bd8c7e93d2de684cafc74ec359b4e5fbb824bd38ccf9dbc46d58d75017539a13` | 17 focused tests pass |
 | `src/hswm/experiments/swm0w_s2s_numeric_oracle.py` | `27854351f642727dc21ec63e987bf3ae67a205f4664f5e0ad448eb3b7a8c570b` | independent adversarial audit clear |
 | `tests/test_hswm_swm0w_s2s_numeric_oracle.py` | `e1921acce5b012d4030602dae57d2a5611ba395346e460cdfd468489694617ca` | 16 focused tests pass |
 
@@ -54,61 +60,78 @@ The adopted pilot receipt file is
 its file SHA-256 is
 `fb34e5e9533409810f616815edc8565b244b5067a9bb70f643eb42d8bd044a78`.
 
-## Six blockers to close first
+## Repaired control invariants
 
 ### Preregistration/source boundary
 
-1. **Source A must be a commit.** An annotated-tag object currently passes the
-   Git checks even though it cannot be the direct parent of B. Require
-   `git cat-file -t <A>` to return exactly `commit` before source-freeze work.
-2. **The prereg path must be absent from A.** Reject A if
-   `prereg/PREREG_SWM0W_S2S_GATE_V1.json` is already tracked; otherwise the
-   required add-only A→B transition is impossible.
-3. **B must bind the originally validated bytes.** The parsed preregistration is
-   currently mutable and B validation reserializes it. Retain a private
-   immutable byte snapshot (or stable original file hash), compare B against
-   that snapshot, and reject structurally forged validation objects.
+1. **Source A is an exact raw commit object.** The process adapter uses the
+   pinned Ubuntu `/usr/bin/git`, a minimal fixed environment, and
+   `--no-replace-objects`. P→A ancestry is proved by bounded traversal of raw
+   commit parent headers, not `merge-base`; replacement refs, grafts, inherited
+   Git identity variables, and `PATH` wrappers cannot redefine the graph.
+2. **The prereg path is absent from A.** Both source construction and parsed
+   source-freeze semantics reject an A that already tracks
+   `prereg/PREREG_SWM0W_S2S_GATE_V1.json`.
+3. **B binds the originally validated bytes.** A private `WeakMap` capability,
+   entry-time byte copy, deep-frozen decoded view, defensive byte getter, raw
+   single-parent check, and exact private-byte comparison close structural
+   forgery, post-parse mutation, and asynchronous input-buffer TOCTOU.
 
-Required regressions: annotated-tag A; preexisting prereg path; nested mutation
-after parse; mutation of an exposed byte-array copy; mutated/hash-invalid B;
-unchanged canonical B.
+The raw traversal is fail-closed at 4,096 unique commits, 64 parents per commit,
+4 MiB per commit, 64 MiB total, and 120 seconds. Regressions cover annotated
+tags, replace refs, grafted ancestry and B parentage, redirected `GIT_DIR`, fake
+`PATH`, cycles, bounds, preexisting prereg paths, nested/byte-copy mutation,
+hash-invalid B, and unchanged canonical A/B.
 
 ### Confirmatory control/evidence boundary
 
-4. **Pulse chronology must be cross-event exact.** Derive Quicknet round time
-   from the committed round, require it after workflow creation and registration
-   completion, bind declared lead to those timestamps, and bind pulse-wait
-   telemetry to an explicitly defined wait-start timestamp. A pulse from time 1
-   must not advance a run created at time 100.
-5. **The frozen 300-second command slack must be enforced.** In addition to the
-   lower accounting bound, require command elapsed time not to exceed wait plus
-   post-seed work plus the declared slack, with an explicit integer-second
-   rounding rule.
-6. **Archives and members must be nonempty.** Registration, candidate, and
-   adjudication artifact evidence must reject zero-byte archives and zero-byte
-   largest members before digest/readback promotion.
+4. **Pulse chronology is cross-event exact.** The shared pure Quicknet module
+   derives round time from the official chain/genesis/period; workflow creation,
+   registration completion, explicit wait start, verification, declared lead,
+   and wait telemetry are checked on one integer-second timeline.
+5. **The frozen 300-second command slack is enforced.** Command accounting uses
+   `wait + ceil(postSeedNanoseconds / 1e9)` as its lower bound and that value plus
+   exactly 300 seconds as its inclusive upper bound.
+6. **Archives and largest members are nonempty.** Registration, candidate, and
+   adjudication evidence rejects zero-byte archives and zero-byte largest
+   members at both decoding and policy validation.
 
-Required regressions: pre-run pulse; mismatched lead; mismatched wait;
-registration at/after committed pulse; excessive unaccounted command time; and
-zero-byte evidence for all three artifact roles.
+Regressions cover the pre-run pulse, wrong chain/time/lead/wait, wait budget
+3,900/3,901, confirm-after-pulse zero wait, nanosecond ceiling and slack
+boundaries, and zero-byte evidence for all three artifact roles.
+
+## Remaining blockers before preregistration
+
+1. **Live adapters and durable cross-job receipts are absent.** Implement the
+   bounded Git/GitHub evidence adapters, isolated pinned drand subprocess,
+   fixed-argv Python oracle process, immutable ZIP/API digest/readback gateway,
+   and durable receipt reconstruction. The live ZIP adapter must verify every
+   exact member is nonempty—not only the largest member—and reject duplicates,
+   traversal paths, symlinks, size drift, and digest drift.
+2. **The three-job chronology is absent.** Implement and independently audit the
+   exact `register -> confirm -> adjudicate` workflow, one-shot run binding,
+   failure/unknown-outcome paths, always-upload operational VOID, and final
+   artifact readback. The in-memory Effect `Ref` remains test-only and cannot be
+   treated as state shared by those jobs.
 
 ## Resume order
 
 1. Verify the protected user changes listed below are still untouched.
-2. Patch the six blockers and only their focused tests.
-3. Run `npm run verify` in `src/hswm/effect-runtime` and re-run an independent
-   read-only adversarial audit on the new exact hashes.
-4. Re-run the numeric-oracle focused tests and cross-language golden tests.
-5. Implement live adapters only after both prereg and control audits are clear:
+2. Reconfirm the frozen hashes and `npm run verify` result before extending the
+   control plane; do not weaken or bypass the repaired raw-Git and chronology
+   boundaries.
+3. Re-run the numeric-oracle focused tests and cross-language golden tests.
+4. Implement the live adapters:
    Git/GitHub evidence, isolated pinned drand subprocess, bounded Python process,
    artifact ZIP/readback, and durable cross-job receipts.
-6. Add the three-job `register -> confirm -> adjudicate` workflow and audit every
+5. Add the three-job `register -> confirm -> adjudicate` workflow and audit every
    failure path. Do not select a future pulse yet.
-7. Only then freeze source A, create the direct-child add-only B
+6. Only then freeze source A, create the direct-child add-only B
    preregistration, and proceed to future-seeded measurement.
 
-The next session must not skip directly to preregistration because the current
-green test suite does not cover the six reproduced attacks.
+The next session must not skip directly to preregistration: the pure core is
+clear, but no live adapter or cross-job chronology yet establishes the required
+external evidence boundary.
 
 ## Verification commands
 
@@ -130,7 +153,8 @@ uv run pytest -q \
   tests/test_hswm_swm0w_s2s_numeric_oracle.py
 ```
 
-Last observed results before this handoff were `28/28` Effect-package tests and
+Current repaired-core results are `43/43` Effect-package tests plus strict
+TypeScript, build, and npm-pack checks. The unchanged numerical side last passed
 `205/205` relevant Python S2S tests. Passing counts are engineering checks, not
 an efficacy verdict.
 

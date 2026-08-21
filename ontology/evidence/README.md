@@ -13,6 +13,7 @@ field, learning, runtime, or evaluation concept in the repository ontology.
 The
 [`SWM-0W-S2S TypeScript/Effect handoff`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v1.json)
 is a local, machine-readable engineering checkpoint. It records the
-user-directed TypeScript/Effect boundary, six open pre-preregistration blockers,
-and the next-session plan. It is explicitly not a preregistration, scientific
+user-directed TypeScript/Effect boundary, six resolved control-core blockers,
+the still-open live-adapter and three-job-chronology gates, and the next-session
+plan. It is explicitly not a preregistration, scientific
 evidence verdict, HSWM runtime graph, or remote Neo4j publication.

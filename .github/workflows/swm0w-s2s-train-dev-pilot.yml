@@ -1,0 +1,120 @@
+name: SWM-0W-S2S train-dev development pilot
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: swm0w-s2s-train-dev-pilot-${{ github.sha }}
+  cancel-in-progress: false
+
+env:
+  UV_VERSION: "0.12.3"
+  PYTHON_VERSION: "3.11.15"
+  PYTHONHASHSEED: "0"
+  OPENBLAS_CORETYPE: "Haswell"
+  OPENBLAS_NUM_THREADS: "1"
+  OMP_NUM_THREADS: "1"
+  MKL_NUM_THREADS: "1"
+  NUMEXPR_NUM_THREADS: "1"
+  HSWM_PILOT_SOURCE_COMMIT: ${{ github.sha }}
+
+jobs:
+  pilot:
+    name: fixed development roster
+    if: >-
+      ${{ github.run_attempt == 1 &&
+          github.repository == 'gj3447/HSWM' &&
+          github.ref == 'refs/heads/main' &&
+          github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - name: Check out the dispatched commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Initialize fail-closed development artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/swm0w-s2s-pilot"
+          PYTHONPATH="$GITHUB_WORKSPACE/src" python3 -m hswm.experiments.swm0w_s2s_pilot \
+            --initialize-void \
+            --output "$RUNNER_TEMP/swm0w-s2s-pilot/pilot.json"
+
+      - name: Install frozen Python and uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: false
+
+      - name: Reject duplicate dispatches for this commit
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --location --retry 2 --retry-all-errors --retry-delay 2 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/workflows/swm0w-s2s-train-dev-pilot.yml/runs?branch=main&event=workflow_dispatch&head_sha=$GITHUB_SHA&per_page=100" \
+            --output "$RUNNER_TEMP/swm0w-s2s-pilot/workflow-runs.json"
+          [[ "$(jq -r '.total_count' "$RUNNER_TEMP/swm0w-s2s-pilot/workflow-runs.json")" == "1" ]]
+          [[ "$(jq -r '.workflow_runs[0].id' "$RUNNER_TEMP/swm0w-s2s-pilot/workflow-runs.json")" == "$GITHUB_RUN_ID" ]]
+
+      - name: Verify the fixed runner envelope
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_RUN_ATTEMPT" == "1" ]]
+          [[ "$RUNNER_OS" == "Linux" ]]
+          [[ "$RUNNER_ARCH" == "X64" ]]
+          [[ "$(git rev-parse HEAD)" == "$GITHUB_SHA" ]]
+          [[ "$(uv --version)" == "uv $UV_VERSION "* ]]
+          pilot_python="$(uv python find "$PYTHON_VERSION")"
+          [[ "$("$pilot_python" --version)" == "Python $PYTHON_VERSION" ]]
+
+      - name: Install exactly the lockfile environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          uv sync --locked
+          [[ "$(uv run --locked python --version)" == "Python $PYTHON_VERSION" ]]
+
+      - name: Run the fixed fit-and-replay roster
+        id: run_pilot
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=30s 10200s \
+            uv run --locked python -m hswm.experiments.swm0w_s2s_pilot \
+              --output "$RUNNER_TEMP/swm0w-s2s-pilot/pilot.json"
+
+      - name: Upload the development artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: swm0w-s2s-train-dev-pilot-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/swm0w-s2s-pilot/pilot.json
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+          overwrite: false
+          include-hidden-files: false
+
+      - name: Preserve the runner outcome after artifact upload
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "${{ steps.run_pilot.outcome }}" == "success" ]]

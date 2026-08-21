@@ -14,6 +14,14 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect("PythonNumericOracle" in PublicApi).toBe(false)
   expect("ConfirmatoryArtifactStore" in PublicApi).toBe(false)
   expect("RunEvidenceStore" in PublicApi).toBe(false)
+  expect("runS2SBoundedProcess" in PublicApi).toBe(false)
+  expect("S2SPythonGoldenVerifier" in PublicApi).toBe(false)
+  expect("S2SDurableJournalFileStore" in PublicApi).toBe(false)
+  expect("validateS2SArtifactZip" in PublicApi).toBe(false)
+  expect("prepareS2SRegistrationCarrier" in PublicApi).toBe(false)
+  expect("prepareS2SCandidateCarrier" in PublicApi).toBe(false)
+  expect("prepareS2SAdjudicationCarrier" in PublicApi).toBe(false)
+  expect("finalizeS2SEvidenceReadback" in PublicApi).toBe(false)
   expect("makeS2SConfirmatoryControlPlaneMemoryForTest" in PublicApi).toBe(
     false
   )

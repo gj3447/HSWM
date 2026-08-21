@@ -1,6 +1,19 @@
 import { expect, it } from "@effect/vitest"
-import { Effect, Either, Exit, Schema } from "effect"
-import { readFileSync } from "node:fs"
+import { Effect, Either, Exit, Option, Schema } from "effect"
+import {
+  constants,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  symlinkSync,
+  writeFileSync
+} from "node:fs"
+import { open } from "node:fs/promises"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import { vi } from "vitest"
 
 import {
   canonicalS2SControlJson,
@@ -21,8 +34,19 @@ import {
   S2SSha256Schema,
   advanceS2SConfirmatory,
   initialS2SConfirmatoryState,
-  type S2SConfirmatoryState
+  type S2SConfirmatoryEvent,
+  type S2SConfirmatoryState,
+  type S2SOperationalVoidReason
 } from "../src/s2s-confirmatory.js"
+import {
+  buildS2SDurableJournal,
+  reconstructS2SDurableJournalChain
+} from "../src/s2s-durable.js"
+import {
+  S2S_DURABLE_JOURNAL_MAX_FILE_BYTES,
+  S2SDurableJournalFileStore,
+  makeS2SDurableJournalFileStoreLayer
+} from "../src/s2s-durable-file.js"
 import {
   S2SConfirmatoryControlPlane,
   S2S_GOLDEN_CONFIRM_REQUEST_DOCUMENT_SHA256,
@@ -158,7 +182,8 @@ const verifyRegistration = (predecessor: string) => ({
   numericContinuityManifestSha256AtPreregistration: "e".repeat(64),
   numericContinuityPathsByteEqual: true,
   jobElapsedSeconds: 100,
-  artifact: artifact("s2s-registration", 301, "1")
+  artifact: artifact("s2s-registration", 301, "1"),
+  archiveMembers: ["control_receipt.json"]
 })
 
 const beginConfirm = (predecessor: string) => ({
@@ -221,7 +246,6 @@ const recordCandidate = (predecessor: string) => ({
   allFitReplayCompletedBeforeAnyTestMaterialization: true,
   postSeedWorkElapsedNanoseconds: 100_000_000_000,
   commandElapsedSeconds: 180,
-  jobElapsedSeconds: 200,
   rss: {
     api: "getrusage",
     subject: "RUSAGE_SELF",
@@ -242,6 +266,7 @@ const verifyCandidateArtifact = (predecessor: string) => ({
   workflowRunId: WORKFLOW_RUN_ID,
   confirmJobId: CONFIRM_JOB_ID,
   confirmJobCompletedAtUnixSeconds: CONFIRM_COMPLETED_AT_UNIX_SECONDS,
+  jobElapsedSeconds: 200,
   numericCandidateBytesSha256: "3".repeat(64),
   artifact: artifact("s2s-candidate", 302, "4"),
   archiveMembers: ["control_receipt.json", "numeric_candidate.json"],
@@ -290,7 +315,6 @@ const recordAdjudication = (predecessor: string) => ({
   numericAdjudicationReceiptSha256: "a".repeat(64),
   numericCandidateOutcome: "CANDIDATE_PASS_AWAITING_BUNDLE",
   commandElapsedSeconds: 600,
-  jobElapsedSeconds: 700,
   rss: {
     api: "getrusage",
     subject: "RUSAGE_SELF",
@@ -309,10 +333,27 @@ const verifyEvidenceArtifact = (predecessor: string) => ({
   workflowRunId: WORKFLOW_RUN_ID,
   adjudicationJobId: ADJUDICATION_JOB_ID,
   adjudicationJobCompletedAtUnixSeconds: ADJUDICATION_COMPLETED_AT_UNIX_SECONDS,
+  jobElapsedSeconds: 700,
   numericAdjudicationBytesSha256: "5".repeat(64),
   artifact: artifact("s2s-adjudication", 303, "6"),
+  archiveMembers: ["control_receipt.json", "numeric_adjudication.json"],
   readbackContainsCanonicalAdjudication: true,
   compactCompetitivePhraseAllowed: false
+})
+
+const operationalVoid = (
+  predecessor: string,
+  workflowJobId: number,
+  reason: S2SOperationalVoidReason
+) => ({
+  schemaVersion: S2S_CONFIRMATORY_EVENT_SCHEMA_VERSION,
+  _tag: "RecordOperationalVoid",
+  binding: binding(predecessor),
+  workflowRunId: WORKFLOW_RUN_ID,
+  workflowJobId,
+  workflowRunAttempt: 1,
+  reason,
+  evidenceSha256: "7".repeat(64)
 })
 
 const advance = (
@@ -340,6 +381,68 @@ const throughConfirmRunning = (): S2SConfirmatoryState => {
 const throughCandidateProduced = (): S2SConfirmatoryState => {
   const running = throughConfirmRunning()
   return advance(running, recordCandidate(running.latestControlReceiptSha256))
+}
+
+const healthyEventSequence = (): ReadonlyArray<S2SConfirmatoryEvent> => {
+  let state = initialS2SConfirmatoryState()
+  const events: Array<S2SConfirmatoryEvent> = []
+  const append = (input: unknown): void => {
+    const event = decodeEvent(input)
+    const result = advanceS2SConfirmatory(state, event)
+    if (Either.isLeft(result)) throw result.left
+    events.push(event)
+    state = result.right
+  }
+
+  append(beginRegistration(state.latestControlReceiptSha256))
+  append(verifyRegistration(state.latestControlReceiptSha256))
+  append(beginConfirm(state.latestControlReceiptSha256))
+  append(acceptPulse(state.latestControlReceiptSha256))
+  append(beginNumericConfirm(state.latestControlReceiptSha256))
+  append(recordCandidate(state.latestControlReceiptSha256))
+  append(verifyCandidateArtifact(state.latestControlReceiptSha256))
+  append(beginAdjudication(state.latestControlReceiptSha256))
+  append(recordAdjudication(state.latestControlReceiptSha256))
+  append(verifyEvidenceArtifact(state.latestControlReceiptSha256))
+  return Object.freeze(events.slice())
+}
+
+const rightOrThrow = <A, E>(either: Either.Either<A, E>): A => {
+  if (Either.isLeft(either)) throw either.left
+  return either.right
+}
+
+const healthyDurableChain = () => {
+  const events = healthyEventSequence()
+  const registration = rightOrThrow(
+    buildS2SDurableJournal("REGISTRATION_CARRIER", [], events.slice(0, 1))
+  )
+  const candidate = rightOrThrow(
+    buildS2SDurableJournal(
+      "CANDIDATE_CARRIER",
+      [registration.canonicalBytes],
+      events.slice(1, 6)
+    )
+  )
+  const adjudication = rightOrThrow(
+    buildS2SDurableJournal(
+      "ADJUDICATION_CARRIER",
+      [registration.canonicalBytes, candidate.canonicalBytes],
+      events.slice(6, 9)
+    )
+  )
+  const finalReadback = rightOrThrow(
+    buildS2SDurableJournal(
+      "FINAL_READBACK",
+      [
+        registration.canonicalBytes,
+        candidate.canonicalBytes,
+        adjudication.canonicalBytes
+      ],
+      events.slice(9)
+    )
+  )
+  return { registration, candidate, adjudication, finalReadback }
 }
 
 it("freezes the adopted resource policy and disables the DS-derived phrase", () => {
@@ -588,8 +691,7 @@ it("accounts confirm command time with ceiling seconds and exactly 300 seconds o
       decodeEvent({
         ...recordCandidate(state.latestControlReceiptSha256),
         postSeedWorkElapsedNanoseconds,
-        commandElapsedSeconds,
-        jobElapsedSeconds: 1_000
+        commandElapsedSeconds
       })
     )
 
@@ -909,6 +1011,438 @@ it("advances monotonically and exposes a verdict only after final readback", () 
   )
 })
 
+it("reconstructs the exact four-file durable chronology through external final readback", () => {
+  const { registration, candidate, adjudication, finalReadback } =
+    healthyDurableChain()
+
+  expect(registration.document.final_phase).toBe("Registering")
+  expect(candidate.document.final_phase).toBe("CandidateProduced")
+  expect(adjudication.document.final_phase).toBe("AdjudicationProduced")
+  expect(finalReadback.document.final_phase).toBe(
+    "EvidenceArtifactVerified"
+  )
+  expect([
+    registration.document.event_count,
+    candidate.document.event_count,
+    adjudication.document.event_count,
+    finalReadback.document.event_count
+  ]).toEqual([1, 6, 9, 10])
+
+  const reconstructed = rightOrThrow(
+    reconstructS2SDurableJournalChain([
+      registration.canonicalBytes,
+      candidate.canonicalBytes,
+      adjudication.canonicalBytes,
+      finalReadback.canonicalBytes
+    ])
+  )
+  expect(reconstructed.fileSha256).toBe(finalReadback.fileSha256)
+  expect(reconstructed.state._tag).toBe("EvidenceArtifactVerified")
+  if (reconstructed.state._tag === "EvidenceArtifactVerified") {
+    expect(reconstructed.state.verdict).toBe("PASS")
+  }
+})
+
+it("returns defensive durable snapshots and rejects oversized journal input", () => {
+  const { registration } = healthyDurableChain()
+  const exposedBytes = registration.canonicalBytes
+  const exposedDocument = registration.document as unknown as {
+    event_count: number
+  }
+  const exposedState = registration.state as unknown as { _tag: string }
+
+  exposedBytes.fill(0)
+  exposedDocument.event_count = 99
+  exposedState._tag = "Voided"
+
+  expect(rawS2SFileSha256(registration.canonicalBytes)).toBe(
+    registration.fileSha256
+  )
+  expect(registration.document.event_count).toBe(1)
+  expect(registration.state._tag).toBe("Registering")
+
+  const oversized = reconstructS2SDurableJournalChain([
+    new Uint8Array(S2S_DURABLE_JOURNAL_MAX_FILE_BYTES + 1)
+  ])
+  expect(Either.isLeft(oversized)).toBe(true)
+  if (Either.isLeft(oversized)) {
+    expect(oversized.left.reason).toBe("FILE_SIZE_INVALID")
+  }
+})
+
+it("rejects detached descendants, valid predecessor forks, and self-hash drift", () => {
+  const { registration, candidate } = healthyDurableChain()
+
+  const detached = reconstructS2SDurableJournalChain([
+    candidate.canonicalBytes
+  ])
+  expect(Either.isLeft(detached)).toBe(true)
+  if (Either.isLeft(detached)) {
+    expect(detached.left.reason).toBe("ROLE_ORDER_INVALID")
+  }
+
+  const events = healthyEventSequence()
+  const forkedRegistration = rightOrThrow(
+    buildS2SDurableJournal(
+      "REGISTRATION_CARRIER",
+      [],
+      [
+        {
+          ...events[0],
+          registrationJobId: REGISTER_JOB_ID + 1
+        }
+      ]
+    )
+  )
+  const forkedChain = reconstructS2SDurableJournalChain([
+    forkedRegistration.canonicalBytes,
+    candidate.canonicalBytes
+  ])
+  expect(Either.isLeft(forkedChain)).toBe(true)
+  if (Either.isLeft(forkedChain)) {
+    expect(forkedChain.left.reason).toBe("PREDECESSOR_HASH_MISMATCH")
+  }
+
+  const wrongSelfHash = canonicalS2SControlJsonBytes({
+    ...candidate.document,
+    journal_sha256: "f".repeat(64)
+  })
+  expect(Either.isRight(wrongSelfHash)).toBe(true)
+  if (Either.isLeft(wrongSelfHash)) return
+  const selfHashDrift = reconstructS2SDurableJournalChain([
+    registration.canonicalBytes,
+    wrongSelfHash.right
+  ])
+  expect(Either.isLeft(selfHashDrift)).toBe(true)
+  if (Either.isLeft(selfHashDrift)) {
+    expect(selfHashDrift.left.reason).toBe("SELF_HASH_MISMATCH")
+  }
+})
+
+it("keeps job completion evidence outside the artifacts produced by that job", () => {
+  const { candidate, adjudication, finalReadback } = healthyDurableChain()
+
+  expect(candidate.document.events.at(-1)?._tag).toBe(
+    "RecordCandidateProduced"
+  )
+  expect(adjudication.document.events.at(-1)?._tag).toBe(
+    "RecordAdjudicationProduced"
+  )
+  expect(finalReadback.document.events.at(-1)?._tag).toBe(
+    "VerifyEvidenceArtifact"
+  )
+
+  const candidateProduced = candidate.document.events.at(-1)
+  const adjudicationProduced = adjudication.document.events.at(-1)
+  expect(
+    candidateProduced !== undefined &&
+      "jobElapsedSeconds" in candidateProduced
+  ).toBe(false)
+  expect(
+    adjudicationProduced !== undefined &&
+      "jobElapsedSeconds" in adjudicationProduced
+  ).toBe(false)
+})
+
+it.effect("publishes immutable slots and recovers the exact chain after layer restart", () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), "hswm-s2s-durable-"))
+  const storeRoot = join(temporaryRoot, "journal")
+  const { registration, candidate, adjudication, finalReadback } =
+    healthyDurableChain()
+
+  const program = Effect.gen(function* () {
+    const publications = yield* Effect.gen(function* () {
+      const store = yield* S2SDurableJournalFileStore
+      const empty = yield* store.recover
+      expect(empty.exactJournals).toEqual([])
+      expect(Option.isNone(empty.latest)).toBe(true)
+
+      const copiedAtCallBoundary = Uint8Array.from(
+        registration.canonicalBytes
+      )
+      const firstEffect = store.publishNext(copiedAtCallBoundary)
+      copiedAtCallBoundary.fill(0)
+      const first = yield* firstEffect
+      const duplicate = yield* store.publishNext(
+        registration.canonicalBytes
+      )
+      const second = yield* store.publishNext(candidate.canonicalBytes)
+      const third = yield* store.publishNext(adjudication.canonicalBytes)
+      const fourth = yield* store.publishNext(finalReadback.canonicalBytes)
+      return { first, duplicate, second, third, fourth }
+    }).pipe(Effect.provide(makeS2SDurableJournalFileStoreLayer(storeRoot)))
+
+    expect(publications.first._tag).toBe("Published")
+    expect(publications.duplicate._tag).toBe("AlreadyPresent")
+    expect([
+      publications.first.slot,
+      publications.second.slot,
+      publications.third.slot,
+      publications.fourth.slot
+    ]).toEqual([1, 2, 3, 4])
+
+    const recovered = yield* Effect.gen(function* () {
+      const store = yield* S2SDurableJournalFileStore
+      return yield* store.recover
+    }).pipe(Effect.provide(makeS2SDurableJournalFileStoreLayer(storeRoot)))
+    expect(recovered.exactJournals).toHaveLength(4)
+    const exposedFirstJournal = recovered.exactJournals[0]
+    expect(exposedFirstJournal).toBeDefined()
+    exposedFirstJournal?.fill(0)
+    const defensiveFirstJournal = recovered.exactJournals[0]
+    expect(defensiveFirstJournal).toBeDefined()
+    if (defensiveFirstJournal !== undefined) {
+      expect(rawS2SFileSha256(defensiveFirstJournal)).toBe(
+        registration.fileSha256
+      )
+    }
+    expect(Option.isSome(recovered.latest)).toBe(true)
+    if (Option.isSome(recovered.latest)) {
+      expect(recovered.latest.value.fileSha256).toBe(
+        finalReadback.fileSha256
+      )
+      expect(recovered.latest.value.state._tag).toBe(
+        "EvidenceArtifactVerified"
+      )
+    }
+    for (let slot = 1; slot <= 4; slot += 1) {
+      const mode = statSync(
+        join(storeRoot, `control-journal-0${slot}.json`)
+      ).mode
+      expect(mode & 0o777).toBe(0o400)
+    }
+  })
+
+  return program.pipe(
+    Effect.ensuring(
+      Effect.sync(() => rmSync(temporaryRoot, { force: true, recursive: true }))
+    )
+  )
+})
+
+it.effect("rejects oversized publication at the call boundary", () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), "hswm-s2s-publish-bound-"))
+  const storeRoot = join(temporaryRoot, "journal")
+  const program = Effect.gen(function* () {
+    const result = yield* Effect.gen(function* () {
+      const store = yield* S2SDurableJournalFileStore
+      return yield* store
+        .publishNext(
+          new Uint8Array(S2S_DURABLE_JOURNAL_MAX_FILE_BYTES + 1)
+        )
+        .pipe(Effect.either)
+    }).pipe(Effect.provide(makeS2SDurableJournalFileStoreLayer(storeRoot)))
+    expect(Either.isLeft(result)).toBe(true)
+    if (Either.isLeft(result)) {
+      expect(result.left._tag).toBe("S2SDurableJournalFileStoreError")
+      if (result.left._tag === "S2SDurableJournalFileStoreError") {
+        expect(result.left.reason).toBe("FILE_TOO_LARGE")
+      }
+    }
+  })
+  return program.pipe(
+    Effect.ensuring(
+      Effect.sync(() => rmSync(temporaryRoot, { force: true, recursive: true }))
+    )
+  )
+})
+
+it.effect("does not promote an existing slot when directory sync stays unsupported", () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), "hswm-s2s-resync-"))
+  const storeRoot = join(temporaryRoot, "journal")
+  const { registration } = healthyDurableChain()
+
+  const program = Effect.gen(function* () {
+    const store = yield* S2SDurableJournalFileStore
+    const first = yield* store.publishNext(registration.canonicalBytes)
+    expect(first._tag).toBe("Published")
+
+    const directoryHandle = yield* Effect.promise(() =>
+      open(storeRoot, constants.O_RDONLY)
+    )
+    const fileHandlePrototype = Object.getPrototypeOf(directoryHandle) as {
+      sync: () => Promise<void>
+    }
+    yield* Effect.promise(() => directoryHandle.close())
+    const unsupported = Object.assign(new Error("synthetic fsync rejection"), {
+      code: "ENOTSUP"
+    })
+    const syncSpy = vi
+      .spyOn(fileHandlePrototype, "sync")
+      .mockRejectedValue(unsupported)
+    try {
+      const duplicate = yield* store
+        .publishNext(registration.canonicalBytes)
+        .pipe(Effect.either)
+      expect(Either.isLeft(duplicate)).toBe(true)
+      if (
+        Either.isLeft(duplicate) &&
+        duplicate.left._tag === "S2SDurableJournalFileStoreError"
+      ) {
+        expect(duplicate.left.reason).toBe("ATOMIC_PUBLICATION_UNSUPPORTED")
+      }
+    } finally {
+      syncSpy.mockRestore()
+    }
+  }).pipe(Effect.provide(makeS2SDurableJournalFileStoreLayer(storeRoot)))
+
+  return program.pipe(
+    Effect.ensuring(
+      Effect.sync(() => rmSync(temporaryRoot, { force: true, recursive: true }))
+    )
+  )
+})
+
+it.effect("reconciles identical concurrent publication and rejects a valid fork", () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), "hswm-s2s-cas-"))
+  const identicalRoot = join(temporaryRoot, "identical")
+  const forkRoot = join(temporaryRoot, "fork")
+  const { registration } = healthyDurableChain()
+  const events = healthyEventSequence()
+  const forkedRegistration = rightOrThrow(
+    buildS2SDurableJournal(
+      "REGISTRATION_CARRIER",
+      [],
+      [{ ...events[0], registrationJobId: REGISTER_JOB_ID + 1 }]
+    )
+  )
+
+  const program = Effect.gen(function* () {
+    const identical = yield* Effect.gen(function* () {
+      const store = yield* S2SDurableJournalFileStore
+      return yield* Effect.all(
+        [
+          store.publishNext(registration.canonicalBytes),
+          store.publishNext(registration.canonicalBytes)
+        ],
+        { concurrency: 2 }
+      )
+    }).pipe(
+      Effect.provide(makeS2SDurableJournalFileStoreLayer(identicalRoot))
+    )
+    expect(identical.map(({ _tag }) => _tag).sort()).toEqual([
+      "AlreadyPresent",
+      "Published"
+    ])
+
+    const divergent = yield* Effect.gen(function* () {
+      const store = yield* S2SDurableJournalFileStore
+      const outcomes = yield* Effect.all(
+        [
+          store.publishNext(registration.canonicalBytes).pipe(Effect.either),
+          store
+            .publishNext(forkedRegistration.canonicalBytes)
+            .pipe(Effect.either)
+        ],
+        { concurrency: 2 }
+      )
+      const recovery = yield* store.recover
+      return { outcomes, recovery }
+    }).pipe(Effect.provide(makeS2SDurableJournalFileStoreLayer(forkRoot)))
+    expect(divergent.outcomes.filter(Either.isRight)).toHaveLength(1)
+    expect(divergent.outcomes.filter(Either.isLeft)).toHaveLength(1)
+    const rejected = divergent.outcomes.find(Either.isLeft)
+    expect(rejected?.left._tag).toBe("S2SDurableJournalFileStoreError")
+    if (
+      rejected !== undefined &&
+      rejected.left._tag === "S2SDurableJournalFileStoreError"
+    ) {
+      expect(rejected.left.reason).toBe(
+        "CONCURRENT_PUBLICATION_CONFLICT"
+      )
+    }
+    expect(divergent.recovery.exactJournals).toHaveLength(1)
+  })
+
+  return program.pipe(
+    Effect.ensuring(
+      Effect.sync(() => rmSync(temporaryRoot, { force: true, recursive: true }))
+    )
+  )
+})
+
+it.effect("rejects symlink, gap, oversized, truncated, and relative-root recovery", () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), "hswm-s2s-recover-"))
+  const { registration } = healthyDurableChain()
+  const makeRoot = (name: string): string => {
+    const root = join(temporaryRoot, name)
+    mkdirSync(root, { mode: 0o700 })
+    return root
+  }
+  const symlinkRoot = makeRoot("symlink")
+  const externalPath = join(temporaryRoot, "external.txt")
+  writeFileSync(externalPath, "unchanged\n", { mode: 0o600 })
+  symlinkSync(externalPath, join(symlinkRoot, "control-journal-01.json"))
+
+  const gapRoot = makeRoot("gap")
+  writeFileSync(
+    join(gapRoot, "control-journal-02.json"),
+    registration.canonicalBytes,
+    { mode: 0o400 }
+  )
+  const oversizedRoot = makeRoot("oversized")
+  writeFileSync(
+    join(oversizedRoot, "control-journal-01.json"),
+    Buffer.alloc(S2S_DURABLE_JOURNAL_MAX_FILE_BYTES + 1),
+    { mode: 0o400 }
+  )
+  const truncatedRoot = makeRoot("truncated")
+  writeFileSync(
+    join(truncatedRoot, "control-journal-01.json"),
+    registration.canonicalBytes.subarray(
+      0,
+      registration.canonicalBytes.byteLength - 1
+    ),
+    { mode: 0o400 }
+  )
+
+  const recover = (root: string) =>
+    Effect.gen(function* () {
+      const store = yield* S2SDurableJournalFileStore
+      return yield* store.recover
+    }).pipe(
+      Effect.provide(makeS2SDurableJournalFileStoreLayer(root)),
+      Effect.either
+    )
+
+  const program = Effect.gen(function* () {
+    const symlinked = yield* recover(symlinkRoot)
+    const gap = yield* recover(gapRoot)
+    const oversized = yield* recover(oversizedRoot)
+    const truncated = yield* recover(truncatedRoot)
+    const relative = yield* recover("relative-journal-root")
+
+    expect(Either.isLeft(symlinked)).toBe(true)
+    expect(Either.isLeft(gap)).toBe(true)
+    expect(Either.isLeft(oversized)).toBe(true)
+    expect(Either.isLeft(truncated)).toBe(true)
+    expect(Either.isLeft(relative)).toBe(true)
+    if (Either.isLeft(symlinked)) {
+      expect(symlinked.left._tag).toBe(
+        "S2SDurableJournalFileStoreError"
+      )
+      expect(symlinked.left.reason).toBe("FILE_TYPE_INVALID")
+    }
+    if (Either.isLeft(gap)) expect(gap.left.reason).toBe("SLOT_GAP")
+    if (Either.isLeft(oversized)) {
+      expect(oversized.left.reason).toBe("FILE_TOO_LARGE")
+    }
+    if (Either.isLeft(truncated)) {
+      expect(truncated.left.reason).toBe("CANONICAL_BYTES_DRIFT")
+    }
+    if (Either.isLeft(relative)) {
+      expect(relative.left.reason).toBe("ROOT_UNSAFE")
+    }
+    expect(readFileSync(externalPath, "utf8")).toBe("unchanged\n")
+  })
+
+  return program.pipe(
+    Effect.ensuring(
+      Effect.sync(() => rmSync(temporaryRoot, { force: true, recursive: true }))
+    )
+  )
+})
+
 it("fails closed on predecessor, workload, and artifact-readback drift", () => {
   const initial = initialS2SConfirmatoryState()
   const wrongPredecessor = decodeEvent(beginRegistration("f".repeat(64)))
@@ -947,27 +1481,245 @@ it("maps a run-bound failure to terminal VOID with no retry path", () => {
   const running = throughConfirmRunning()
   const voided = advance(
     running,
-    {
-      schemaVersion: S2S_CONFIRMATORY_EVENT_SCHEMA_VERSION,
-      _tag: "RecordOperationalVoid",
-      binding: binding(running.latestControlReceiptSha256),
-      workflowRunId: WORKFLOW_RUN_ID,
-      workflowJobId: CONFIRM_JOB_ID,
-      workflowRunAttempt: 1,
-      reason: "CONFIRM_JOB_DID_NOT_COMPLETE_SUCCESSFULLY",
-      evidenceSha256: "7".repeat(64)
-    }
+    operationalVoid(
+      running.latestControlReceiptSha256,
+      CONFIRM_JOB_ID,
+      "CONFIRM_JOB_DID_NOT_COMPLETE_SUCCESSFULLY"
+    )
   )
   expect(voided._tag).toBe("Voided")
   if (voided._tag !== "Voided") return
   expect(voided.retryAllowed).toBe(false)
   expect(voided.candidateConsumable).toBe(false)
+  expect(voided.lastAcceptedPhase).toBe("ConfirmRunning")
+  expect(voided.failedJob).toBe("CONFIRM")
+  expect(voided.workflowJobId).toBe(CONFIRM_JOB_ID)
 
   const retry = advanceS2SConfirmatory(
     voided,
     decodeEvent(recordCandidate(voided.latestControlReceiptSha256))
   )
   expect(Either.isLeft(retry)).toBe(true)
+})
+
+it("records a caller-supplied root VOID without inventing BeginRegistration", () => {
+  const initial = initialS2SConfirmatoryState()
+  const rootVoidEvent = decodeEvent(
+    operationalVoid(
+      initial.latestControlReceiptSha256,
+      REGISTER_JOB_ID,
+      "REGISTER_JOB_DID_NOT_COMPLETE_SUCCESSFULLY"
+    )
+  )
+  const rootVoid = rightOrThrow(
+    buildS2SDurableJournal("OPERATIONAL_VOID", [], [rootVoidEvent])
+  )
+  expect(rootVoid.document.event_count).toBe(1)
+  expect(rootVoid.document.events[0]?._tag).toBe("RecordOperationalVoid")
+  expect(rootVoid.state._tag).toBe("Voided")
+  if (rootVoid.state._tag !== "Voided") return
+  expect(rootVoid.state.lastAcceptedPhase).toBe("Prepared")
+  expect(rootVoid.state.failedJob).toBe("REGISTER")
+
+  const wrongReason = advanceS2SConfirmatory(
+    initial,
+    decodeEvent(
+      operationalVoid(
+        initial.latestControlReceiptSha256,
+        REGISTER_JOB_ID,
+        "REGISTRATION_ARTIFACT_UNAVAILABLE"
+      )
+    )
+  )
+  expect(Either.isLeft(wrongReason)).toBe(true)
+
+  const began = advance(
+    initial,
+    beginRegistration(initial.latestControlReceiptSha256)
+  )
+  const synthetic = buildS2SDurableJournal(
+    "OPERATIONAL_VOID",
+    [],
+    [
+      beginRegistration(initial.latestControlReceiptSha256),
+      operationalVoid(
+        began.latestControlReceiptSha256,
+        REGISTER_JOB_ID,
+        "REGISTER_JOB_DID_NOT_COMPLETE_SUCCESSFULLY"
+      )
+    ]
+  )
+  expect(Either.isLeft(synthetic)).toBe(true)
+
+  const successor = buildS2SDurableJournal(
+    "REGISTRATION_CARRIER",
+    [rootVoid.canonicalBytes],
+    [beginRegistration(rootVoid.state.latestControlReceiptSha256)]
+  )
+  expect(Either.isLeft(successor)).toBe(true)
+})
+
+it("binds caller-supplied stage VOID reasons to the declared failed job", () => {
+  const candidateProduced = throughCandidateProduced()
+  const confirmFailed = advance(
+    candidateProduced,
+    operationalVoid(
+      candidateProduced.latestControlReceiptSha256,
+      CONFIRM_JOB_ID,
+      "CONFIRM_JOB_DID_NOT_COMPLETE_SUCCESSFULLY"
+    )
+  )
+  expect(confirmFailed._tag).toBe("Voided")
+
+  let candidateVerified = candidateProduced
+  candidateVerified = advance(
+    candidateVerified,
+    verifyCandidateArtifact(candidateVerified.latestControlReceiptSha256)
+  )
+  const beforeAdjudication = advance(
+    candidateVerified,
+    operationalVoid(
+      candidateVerified.latestControlReceiptSha256,
+      ADJUDICATION_JOB_ID,
+      "ADJUDICATION_JOB_DID_NOT_COMPLETE_SUCCESSFULLY"
+    )
+  )
+  expect(beforeAdjudication._tag).toBe("Voided")
+  if (beforeAdjudication._tag === "Voided") {
+    expect(beforeAdjudication.lastAcceptedPhase).toBe(
+      "CandidateArtifactVerified"
+    )
+    expect(beforeAdjudication.failedJob).toBe("ADJUDICATE")
+  }
+
+  let adjudicating = candidateVerified
+  adjudicating = advance(
+    adjudicating,
+    beginAdjudication(adjudicating.latestControlReceiptSha256)
+  )
+  const prematureUnavailable = advanceS2SConfirmatory(
+    adjudicating,
+    decodeEvent(
+      operationalVoid(
+        adjudicating.latestControlReceiptSha256,
+        ADJUDICATION_JOB_ID,
+        "ADJUDICATION_ARTIFACT_UNAVAILABLE"
+      )
+    )
+  )
+  expect(Either.isLeft(prematureUnavailable)).toBe(true)
+})
+
+it("reconstructs VOID only after the exact durable prefix that existed", () => {
+  const events = healthyEventSequence()
+  const registration = rightOrThrow(
+    buildS2SDurableJournal("REGISTRATION_CARRIER", [], events.slice(0, 1))
+  )
+  const registrationVoidEvent = operationalVoid(
+    registration.state.latestControlReceiptSha256,
+    REGISTER_JOB_ID,
+    "REGISTRATION_ARTIFACT_UNAVAILABLE"
+  )
+  const registrationVoid = rightOrThrow(
+    buildS2SDurableJournal(
+      "OPERATIONAL_VOID",
+      [registration.canonicalBytes],
+      [registrationVoidEvent]
+    )
+  )
+  expect(
+    Either.isRight(
+      reconstructS2SDurableJournalChain([
+        registration.canonicalBytes,
+        registrationVoid.canonicalBytes
+      ])
+    )
+  ).toBe(true)
+
+  const candidate = rightOrThrow(
+    buildS2SDurableJournal(
+      "CANDIDATE_CARRIER",
+      [registration.canonicalBytes],
+      events.slice(1, 6)
+    )
+  )
+  const candidateVoid = rightOrThrow(
+    buildS2SDurableJournal(
+      "OPERATIONAL_VOID",
+      [registration.canonicalBytes, candidate.canonicalBytes],
+      [
+        operationalVoid(
+          candidate.state.latestControlReceiptSha256,
+          CONFIRM_JOB_ID,
+          "CONFIRM_JOB_DID_NOT_COMPLETE_SUCCESSFULLY"
+        )
+      ]
+    )
+  )
+  expect(candidateVoid.document.event_count).toBe(7)
+
+  const adjudication = rightOrThrow(
+    buildS2SDurableJournal(
+      "ADJUDICATION_CARRIER",
+      [registration.canonicalBytes, candidate.canonicalBytes],
+      events.slice(6, 9)
+    )
+  )
+  const adjudicationVoid = rightOrThrow(
+    buildS2SDurableJournal(
+      "OPERATIONAL_VOID",
+      [
+        registration.canonicalBytes,
+        candidate.canonicalBytes,
+        adjudication.canonicalBytes
+      ],
+      [
+        operationalVoid(
+          adjudication.state.latestControlReceiptSha256,
+          ADJUDICATION_JOB_ID,
+          "ADJUDICATION_JOB_DID_NOT_COMPLETE_SUCCESSFULLY"
+        )
+      ]
+    )
+  )
+  expect(adjudicationVoid.document.event_count).toBe(10)
+  expect(
+    Either.isRight(
+      reconstructS2SDurableJournalChain([
+        registration.canonicalBytes,
+        candidate.canonicalBytes,
+        adjudication.canonicalBytes,
+        adjudicationVoid.canonicalBytes
+      ])
+    )
+  ).toBe(true)
+})
+
+it("rejects a VOID journal that skips a required candidate carrier", () => {
+  const events = healthyEventSequence()
+  const registration = rightOrThrow(
+    buildS2SDurableJournal("REGISTRATION_CARRIER", [], events.slice(0, 1))
+  )
+  let state = initialS2SConfirmatoryState()
+  for (const event of events.slice(0, 7)) state = advance(state, event)
+  expect(state._tag).toBe("CandidateArtifactVerified")
+
+  const skippedCandidate = buildS2SDurableJournal(
+    "OPERATIONAL_VOID",
+    [registration.canonicalBytes],
+    [
+      ...events.slice(1, 7),
+      operationalVoid(
+        state.latestControlReceiptSha256,
+        ADJUDICATION_JOB_ID,
+        "ADJUDICATION_JOB_DID_NOT_COMPLETE_SUCCESSFULLY"
+      )
+    ]
+  )
+  expect(Either.isLeft(skippedCandidate)).toBe(true)
+  if (Either.isLeft(skippedCandidate)) {
+    expect(skippedCandidate.left.reason).toBe("ROLE_ORDER_INVALID")
+  }
 })
 
 it("keeps opaque Python bytes distinct and rejects transport drift", () => {

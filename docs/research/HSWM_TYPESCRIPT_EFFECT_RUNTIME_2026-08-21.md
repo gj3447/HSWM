@@ -127,17 +127,65 @@ versioned ports and replay contracts.
 
 ## Current SWM-0W-S2S control-plane checkpoint
 
-The first S2S `Π` control/evidence slice and opaque Python numeric-oracle
-boundary now exist in the working implementation. Six independently reproduced
-source, chronology, accounting, and artifact-boundary blockers—and follow-on
-Git replace/graft/environment identity bypasses found during repair—are closed
-on exact audited bytes. The slice nevertheless remains
-`BLOCKED_PRE_PREREG / SCIENTIFIC_UNJUDGED` because live adapters and the
-three-job chronology do not yet exist; no future pulse or confirmatory run is
-authorized. Exact hashes, resolved regressions, protected files, verification
-commands, and the ordered continuation path are frozen in the
+The present delta is entirely in `Π`. It does not change `H`, `W`, `A`, or `F`,
+does not close the outcome-bound causal-learning loop, and is therefore not HSWM
+scientific progress by itself. It makes the future S2S measurement boundary more
+faithful to the target identity by preventing transport, chronology, or caller
+assertions from being mistaken for a learned-world-model result.
+
+The working implementation now adds five bounded engineering pieces:
+
+1. confirmatory event schema v2 and operational-policy v2 separate a job's own
+   candidate/adjudication production from later job-completion and artifact
+   readback evidence; the policy's seven VOID reasons and Schema literal are
+   derived from one tuple and bind resource-policy SHA-256
+   `7e4d7252962e53d70f4e74b5117338ced55a645c431e9173256de9f514043ad9`;
+2. canonical predecessor-linked journals and a private POSIX file store recover
+   exact prefixes after restart, use create-only compare-and-set publication,
+   require directory-durability confirmation even on byte-equal retries, reject
+   symlinks, gaps, forks, truncation, and oversize files, and return defensive
+   snapshots;
+3. a shell-free bounded subprocess runner snapshots data inputs once and kills
+   and reaps the whole process group on timeout, cancellation, or output-limit
+   failure; the first Python layer invokes a rehashed open executable FD,
+   preserves its reviewed venv `argv0`, uses a private scoped bytecode-cache
+   root, and remains limited to the oracle-source/runtime-import/frozen-golden
+   preflight;
+4. a strict seekable ZIP reader validates the exact stored-entry dialect used by
+   the pinned `actions/upload-artifact` v4.6.2 producer, including central/local
+   agreement, signed data descriptors, CRCs, Unix regular-file metadata, exact
+   member rosters, and byte caps; and
+5. a pure structural job-sequence boundary reconstructs isolated registration,
+   candidate, and adjudication carriers at event counts `1 -> 6 -> 9`, validating
+   every predecessor ZIP and member binding before emitting the next upload
+   plan.
+
+The sequence deliberately stops at event 9. A review demonstrated that an
+arbitrary ASCII candidate plus a caller-authored, self-consistent adjudication
+document could otherwise reach event 10 and expose `PASS` without the real
+Python replay or authoritative GitHub observations. Consequently there is no
+production finalizer or verdict-bearing composition function. The event-10
+transition remains only in the closed target-state model for a later trusted
+composition root.
+
+This checkpoint still proves no candidate numerics. The golden verifier is a
+runtime/source compatibility preflight, not evidence that `confirm` or
+`adjudicate` ran on a particular candidate, and it does not yet pin the full
+imported dependency closure. Direct pre-stage VOID job IDs and their evidence
+digests are also caller-supplied observations in the pure model; they are not
+authoritative GitHub evidence. Likewise, one supplied candidate readback cannot
+prove that a later requery and redownload independently occurred.
+
+The slice therefore remains
+`BLOCKED_PRE_PREREG / ENGINEERING_ONLY / SCIENTIFIC_UNJUDGED`. The remaining
+authority work is a single Effect composition root that directly owns GitHub
+run/job/artifact observations, independent readbacks, verified future-pulse
+input, and fixed `confirm`/`adjudicate` Python executions before an external
+finalizer may append event 10. No future pulse was selected and no confirmatory
+run was dispatched. Exact continuation order and current verification evidence
+are recorded in the
 [`next-session handoff`](../operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-21.md).
-Its companion
-[`local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v1.json)
-records the same boundary without promoting an efficacy claim or implying a
-remote KG write.
+The existing
+[`v1 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v1.json)
+is retained as a hash-bound historical checkpoint rather than rewritten to
+describe this later engineering slice.

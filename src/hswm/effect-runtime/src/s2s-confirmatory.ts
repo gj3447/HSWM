@@ -16,10 +16,10 @@ export const S2S_PILOT_ADOPTION_RECEIPT_SHA256 =
   "97a752fea5ae45a311a2e8cf2376b391d76a8269dbab20f60688f543bcc5dea1" as const
 
 export const S2S_CONFIRMATORY_POLICY_SCHEMA_VERSION =
-  "hswm-swm0w-s2s-confirmatory-operational-policy/v1" as const
+  "hswm-swm0w-s2s-confirmatory-operational-policy/v2" as const
 
 export const S2S_CONFIRMATORY_EVENT_SCHEMA_VERSION =
-  "hswm-swm0w-s2s-confirmatory-control-event/v1" as const
+  "hswm-swm0w-s2s-confirmatory-control-event/v2" as const
 
 export const S2S_CONFIRMATORY_EXPERIMENT_ID =
   "hswm-swm0w-s2s-confirmatory-v1" as const
@@ -32,7 +32,7 @@ export const S2S_PROTOCOL_CONFIG_DOCUMENT_SHA256 =
 
 /** SHA-256 of canonical float-free JSON for S2S_CONFIRMATORY_POLICY. */
 export const S2S_CONFIRMATORY_RESOURCE_POLICY_SHA256 =
-  "d6a0c679f9ff9c72773f8a3713bffe1f3ac5d2b6f5e53e653603b30204d9c7eb" as const
+  "7e4d7252962e53d70f4e74b5117338ced55a645c431e9173256de9f514043ad9" as const
 
 export const S2S_NUMERIC_CONTINUITY_PATHS = Object.freeze([
   "pyproject.toml",
@@ -43,6 +43,16 @@ export const S2S_NUMERIC_CONTINUITY_PATHS = Object.freeze([
   "src/hswm/experiments/swm0w_s2s_protocol.py",
   "src/hswm/experiments/swm0w_s2s_pilot.py",
   "uv.lock"
+] as const)
+
+export const S2S_OPERATIONAL_VOID_REASONS = Object.freeze([
+  "REGISTER_JOB_DID_NOT_COMPLETE_SUCCESSFULLY",
+  "REGISTRATION_ARTIFACT_UNAVAILABLE",
+  "CONFIRM_JOB_DID_NOT_COMPLETE_SUCCESSFULLY",
+  "CANDIDATE_ARTIFACT_UNAVAILABLE",
+  "ADJUDICATION_JOB_DID_NOT_COMPLETE_SUCCESSFULLY",
+  "ADJUDICATION_INTEGRITY_FAILURE",
+  "ADJUDICATION_ARTIFACT_UNAVAILABLE"
 ] as const)
 
 const MEBIBYTE = 1_048_576
@@ -162,13 +172,7 @@ export const S2S_CONFIRMATORY_POLICY = Object.freeze({
     candidateLabel: "NUMERIC_REPLAY_VALIDATED_CANDIDATE_ONLY" as const,
     typescriptNeverReserializesNumericFiles: true
   }),
-  operationalVoidReasons: Object.freeze([
-    "REGISTER_JOB_DID_NOT_COMPLETE_SUCCESSFULLY",
-    "CONFIRM_JOB_DID_NOT_COMPLETE_SUCCESSFULLY",
-    "CANDIDATE_ARTIFACT_UNAVAILABLE",
-    "ADJUDICATION_INTEGRITY_FAILURE",
-    "ADJUDICATION_ARTIFACT_UNAVAILABLE"
-  ] as const),
+  operationalVoidReasons: S2S_OPERATIONAL_VOID_REASONS,
   numericContinuityPaths: S2S_NUMERIC_CONTINUITY_PATHS
 })
 
@@ -339,7 +343,8 @@ const VerifyRegistrationSchema = Schema.Struct({
   numericContinuityManifestSha256AtPreregistration: Sha256TextSchema,
   numericContinuityPathsByteEqual: Schema.Literal(true),
   jobElapsedSeconds: SecondsSchema,
-  artifact: ArtifactEvidenceSchema
+  artifact: ArtifactEvidenceSchema,
+  archiveMembers: Schema.Tuple(Schema.Literal("control_receipt.json"))
 })
 
 const BeginConfirmSchema = Schema.Struct({
@@ -402,7 +407,6 @@ const RecordCandidateProducedSchema = Schema.Struct({
   allFitReplayCompletedBeforeAnyTestMaterialization: Schema.Literal(true),
   postSeedWorkElapsedNanoseconds: NanosecondsSchema,
   commandElapsedSeconds: SecondsSchema,
-  jobElapsedSeconds: SecondsSchema,
   rss: RssEvidenceSchema,
   numericCandidateBytesSha256: Sha256TextSchema,
   numericConfirmRequestSha256: Sha256TextSchema,
@@ -419,6 +423,7 @@ const VerifyCandidateArtifactSchema = Schema.Struct({
   workflowRunId: WorkflowRunIdSchema,
   confirmJobId: WorkflowJobIdSchema,
   confirmJobCompletedAtUnixSeconds: UnixSecondsSchema,
+  jobElapsedSeconds: SecondsSchema,
   numericCandidateBytesSha256: Sha256TextSchema,
   artifact: ArtifactEvidenceSchema,
   archiveMembers: Schema.Tuple(
@@ -474,7 +479,6 @@ const RecordAdjudicationProducedSchema = Schema.Struct({
     "CANDIDATE_INCONCLUSIVE_AWAITING_BUNDLE"
   ),
   commandElapsedSeconds: SecondsSchema,
-  jobElapsedSeconds: SecondsSchema,
   rss: RssEvidenceSchema,
   numericAdjudicationBytesSha256: Sha256TextSchema,
   candidateOnly: Schema.Literal(true)
@@ -487,18 +491,19 @@ const VerifyEvidenceArtifactSchema = Schema.Struct({
   workflowRunId: WorkflowRunIdSchema,
   adjudicationJobId: WorkflowJobIdSchema,
   adjudicationJobCompletedAtUnixSeconds: UnixSecondsSchema,
+  jobElapsedSeconds: SecondsSchema,
   numericAdjudicationBytesSha256: Sha256TextSchema,
   artifact: ArtifactEvidenceSchema,
+  archiveMembers: Schema.Tuple(
+    Schema.Literal("control_receipt.json"),
+    Schema.Literal("numeric_adjudication.json")
+  ),
   readbackContainsCanonicalAdjudication: Schema.Literal(true),
   compactCompetitivePhraseAllowed: Schema.Literal(false)
 })
 
 export const S2SOperationalVoidReasonSchema = Schema.Literal(
-  "REGISTER_JOB_DID_NOT_COMPLETE_SUCCESSFULLY",
-  "CONFIRM_JOB_DID_NOT_COMPLETE_SUCCESSFULLY",
-  "CANDIDATE_ARTIFACT_UNAVAILABLE",
-  "ADJUDICATION_INTEGRITY_FAILURE",
-  "ADJUDICATION_ARTIFACT_UNAVAILABLE"
+  ...S2S_OPERATIONAL_VOID_REASONS
 )
 
 export type S2SOperationalVoidReason = Schema.Schema.Type<
@@ -670,8 +675,10 @@ interface VoidedState {
   readonly latestControlReceiptSha256: S2SSha256
   readonly compactCompetitivePhraseAllowed: false
   readonly binding: S2SLifecycleBinding
-  readonly failedPhase: Exclude<S2SConfirmatoryPhase, "Voided">
+  readonly lastAcceptedPhase: Exclude<S2SConfirmatoryPhase, "Voided">
+  readonly failedJob: "REGISTER" | "CONFIRM" | "ADJUDICATE"
   readonly workflowRunId: S2SWorkflowRunId
+  readonly workflowJobId: S2SWorkflowJobId
   readonly workflowRunAttempt: 1
   readonly reason: S2SOperationalVoidReason
   readonly evidenceSha256: S2SSha256
@@ -741,6 +748,14 @@ export const initialS2SConfirmatoryState = (): S2SConfirmatoryState =>
     ),
     compactCompetitivePhraseAllowed: false
   })
+
+export const S2S_REGISTRATION_ARCHIVE_EXACT_MEMBERS = Object.freeze(
+  ["control_receipt.json"] as const
+)
+
+export const S2S_ADJUDICATION_ARCHIVE_EXACT_MEMBERS = Object.freeze(
+  ["control_receipt.json", "numeric_adjudication.json"] as const
+)
 
 const policyViolation = (
   reason: S2SOperationalPolicyViolation["reason"]
@@ -964,6 +979,12 @@ const validateRegistrationEvidence = (
   if (!artifactReadbackMatches(event.artifact)) {
     return policyViolation("ARTIFACT_READBACK_MISMATCH")
   }
+  if (
+    event.archiveMembers[0] !==
+    S2S_REGISTRATION_ARCHIVE_EXACT_MEMBERS[0]
+  ) {
+    return policyViolation("ARCHIVE_POLICY_MISMATCH")
+  }
   return Either.right(undefined)
 }
 
@@ -1091,9 +1112,6 @@ const validateCandidate = (
   if (
     event.commandElapsedSeconds >
       S2S_CONFIRMATORY_POLICY.deadlines.confirmCommandTimeoutSeconds ||
-    event.jobElapsedSeconds >
-      S2S_CONFIRMATORY_POLICY.deadlines.confirmJobTimeoutSeconds ||
-    event.commandElapsedSeconds > event.jobElapsedSeconds ||
     event.commandElapsedSeconds < accountedCommandSeconds ||
     event.commandElapsedSeconds >
       accountedCommandSeconds +
@@ -1135,7 +1153,10 @@ const validateCandidateArtifact = (
       S2S_CONFIRMATORY_POLICY.candidateArchive.exactMembers[1] ||
     event.confirmJobCompletedAtUnixSeconds <
       state.confirm.confirmJobStartedAtUnixSeconds ||
-    state.candidate.jobElapsedSeconds !==
+    event.jobElapsedSeconds >
+      S2S_CONFIRMATORY_POLICY.deadlines.confirmJobTimeoutSeconds ||
+    state.candidate.commandElapsedSeconds > event.jobElapsedSeconds ||
+    event.jobElapsedSeconds !==
       event.confirmJobCompletedAtUnixSeconds -
         state.confirm.confirmJobStartedAtUnixSeconds
   ) {
@@ -1218,10 +1239,7 @@ const validateAdjudication = (
   }
   if (
     event.commandElapsedSeconds >
-      S2S_CONFIRMATORY_POLICY.deadlines.adjudicationCommandTimeoutSeconds ||
-    event.jobElapsedSeconds >
-      S2S_CONFIRMATORY_POLICY.deadlines.adjudicationJobTimeoutSeconds ||
-    event.commandElapsedSeconds > event.jobElapsedSeconds
+      S2S_CONFIRMATORY_POLICY.deadlines.adjudicationCommandTimeoutSeconds
   ) {
     return policyViolation("DEADLINE_EXCEEDED")
   }
@@ -1272,9 +1290,20 @@ const validateEvidenceArtifact = (
     return policyViolation("ARTIFACT_READBACK_MISMATCH")
   }
   if (
+    event.archiveMembers[0] !==
+      S2S_ADJUDICATION_ARCHIVE_EXACT_MEMBERS[0] ||
+    event.archiveMembers[1] !==
+      S2S_ADJUDICATION_ARCHIVE_EXACT_MEMBERS[1]
+  ) {
+    return policyViolation("ARCHIVE_POLICY_MISMATCH")
+  }
+  if (
     event.adjudicationJobCompletedAtUnixSeconds <
       state.adjudication.adjudicationJobStartedAtUnixSeconds ||
-    state.adjudicationCandidate.jobElapsedSeconds !==
+    event.jobElapsedSeconds >
+      S2S_CONFIRMATORY_POLICY.deadlines.adjudicationJobTimeoutSeconds ||
+    state.adjudicationCandidate.commandElapsedSeconds > event.jobElapsedSeconds ||
+    event.jobElapsedSeconds !==
       event.adjudicationJobCompletedAtUnixSeconds -
         state.adjudication.adjudicationJobStartedAtUnixSeconds
   ) {
@@ -1283,73 +1312,112 @@ const validateEvidenceArtifact = (
   return Either.right(undefined)
 }
 
-const activeRunId = (
-  state: Exclude<
-    S2SConfirmatoryState,
-    PreparedState | RegistrationVerifiedState | EvidenceArtifactVerifiedState | VoidedState
-  >
-): S2SWorkflowRunId => {
-  switch (state._tag) {
-    case "Registering":
-      return state.registration.workflowRunId
-    case "ConfirmWaiting":
-    case "PulseEligible":
-    case "ConfirmRunning":
-    case "CandidateProduced":
-      return state.confirm.workflowRunId
-    case "CandidateArtifactVerified":
-      return state.confirm.workflowRunId
-    case "Adjudicating":
-    case "AdjudicationProduced":
-      return state.adjudication.workflowRunId
-  }
-}
-
-const activeJobId = (
-  state: Exclude<
-    S2SConfirmatoryState,
-    PreparedState | RegistrationVerifiedState | CandidateArtifactVerifiedState | EvidenceArtifactVerifiedState | VoidedState
-  >
-): S2SWorkflowJobId => {
-  switch (state._tag) {
-    case "Registering":
-      return state.registration.registrationJobId
-    case "ConfirmWaiting":
-    case "PulseEligible":
-    case "ConfirmRunning":
-    case "CandidateProduced":
-      return state.confirm.confirmJobId
-    case "Adjudicating":
-    case "AdjudicationProduced":
-      return state.adjudication.adjudicationJobId
-  }
-}
-
 const expectedVoidReasons = (
   phase: S2SConfirmatoryPhase
 ): ReadonlyArray<S2SOperationalVoidReason> => {
   switch (phase) {
-    case "Registering":
+    case "Prepared":
       return ["REGISTER_JOB_DID_NOT_COMPLETE_SUCCESSFULLY"]
+    case "Registering":
+      return [
+        "REGISTER_JOB_DID_NOT_COMPLETE_SUCCESSFULLY",
+        "REGISTRATION_ARTIFACT_UNAVAILABLE"
+      ]
+    case "RegistrationVerified":
     case "ConfirmWaiting":
     case "PulseEligible":
     case "ConfirmRunning":
       return ["CONFIRM_JOB_DID_NOT_COMPLETE_SUCCESSFULLY"]
     case "CandidateProduced":
-      return ["CANDIDATE_ARTIFACT_UNAVAILABLE"]
+      return [
+        "CONFIRM_JOB_DID_NOT_COMPLETE_SUCCESSFULLY",
+        "CANDIDATE_ARTIFACT_UNAVAILABLE"
+      ]
+    case "CandidateArtifactVerified":
+      return ["ADJUDICATION_JOB_DID_NOT_COMPLETE_SUCCESSFULLY"]
     case "Adjudicating":
       return [
+        "ADJUDICATION_JOB_DID_NOT_COMPLETE_SUCCESSFULLY",
+        "ADJUDICATION_INTEGRITY_FAILURE"
+      ]
+    case "AdjudicationProduced":
+      return [
+        "ADJUDICATION_JOB_DID_NOT_COMPLETE_SUCCESSFULLY",
         "ADJUDICATION_INTEGRITY_FAILURE",
         "ADJUDICATION_ARTIFACT_UNAVAILABLE"
       ]
-    case "AdjudicationProduced":
-      return ["ADJUDICATION_ARTIFACT_UNAVAILABLE"]
-    case "Prepared":
-    case "RegistrationVerified":
-    case "CandidateArtifactVerified":
     case "EvidenceArtifactVerified":
     case "Voided":
       return []
+  }
+}
+
+const voidJobForReason = (
+  reason: S2SOperationalVoidReason
+): VoidedState["failedJob"] => {
+  switch (reason) {
+    case "REGISTER_JOB_DID_NOT_COMPLETE_SUCCESSFULLY":
+    case "REGISTRATION_ARTIFACT_UNAVAILABLE":
+      return "REGISTER"
+    case "CONFIRM_JOB_DID_NOT_COMPLETE_SUCCESSFULLY":
+    case "CANDIDATE_ARTIFACT_UNAVAILABLE":
+      return "CONFIRM"
+    case "ADJUDICATION_JOB_DID_NOT_COMPLETE_SUCCESSFULLY":
+    case "ADJUDICATION_INTEGRITY_FAILURE":
+    case "ADJUDICATION_ARTIFACT_UNAVAILABLE":
+      return "ADJUDICATE"
+  }
+}
+
+const voidRunAndJobMatch = (
+  state: Exclude<
+    S2SConfirmatoryState,
+    EvidenceArtifactVerifiedState | VoidedState
+  >,
+  event: RecordOperationalVoid
+): boolean => {
+  // This pure transition checks only the supplied observation's internal
+  // sequencing. Prepared and pre-stage job identities are not GitHub-authority
+  // evidence; a live composition root must bind them before publishing VOID.
+  if (
+    event.workflowRunAttempt !== 1 ||
+    event.workflowRunId !== event.binding.workflowRunId
+  ) {
+    return false
+  }
+  switch (state._tag) {
+    case "Prepared":
+      return true
+    case "Registering":
+      return (
+        event.workflowRunId === state.registration.workflowRunId &&
+        event.workflowJobId === state.registration.registrationJobId
+      )
+    case "RegistrationVerified":
+      return (
+        event.workflowRunId === state.registration.workflowRunId &&
+        event.workflowJobId !== state.registration.registrationJobId
+      )
+    case "ConfirmWaiting":
+    case "PulseEligible":
+    case "ConfirmRunning":
+    case "CandidateProduced":
+      return (
+        event.workflowRunId === state.confirm.workflowRunId &&
+        event.workflowJobId === state.confirm.confirmJobId
+      )
+    case "CandidateArtifactVerified":
+      return (
+        event.workflowRunId === state.confirm.workflowRunId &&
+        event.workflowJobId !== state.registration.registrationJobId &&
+        event.workflowJobId !== state.confirm.confirmJobId
+      )
+    case "Adjudicating":
+    case "AdjudicationProduced":
+      return (
+        event.workflowRunId === state.adjudication.workflowRunId &&
+        event.workflowJobId === state.adjudication.adjudicationJobId
+      )
   }
 }
 
@@ -1359,19 +1427,12 @@ const recordVoid = (
   latestControlReceiptSha256: S2SSha256
 ): Either.Either<VoidedState, S2SConfirmatoryTransitionError> => {
   if (
-    state._tag === "Prepared" ||
-    state._tag === "RegistrationVerified" ||
-    state._tag === "CandidateArtifactVerified" ||
     state._tag === "EvidenceArtifactVerified" ||
     state._tag === "Voided"
   ) {
     return invalidTransition(state, event)
   }
-  if (
-    event.workflowRunId !== activeRunId(state) ||
-    event.workflowJobId !== activeJobId(state) ||
-    event.workflowRunAttempt !== 1
-  ) {
+  if (!voidRunAndJobMatch(state, event)) {
     return policyViolation("RUN_BINDING_MISMATCH")
   }
   if (!expectedVoidReasons(state._tag).includes(event.reason)) {
@@ -1388,8 +1449,10 @@ const recordVoid = (
       latestControlReceiptSha256,
       compactCompetitivePhraseAllowed: false,
       binding: event.binding,
-      failedPhase: state._tag,
+      lastAcceptedPhase: state._tag,
+      failedJob: voidJobForReason(event.reason),
       workflowRunId: event.workflowRunId,
+      workflowJobId: event.workflowJobId,
       workflowRunAttempt: 1,
       reason: event.reason,
       evidenceSha256: event.evidenceSha256,

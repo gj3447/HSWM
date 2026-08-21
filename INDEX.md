@@ -15,7 +15,12 @@ continuous learner는 네 부품이 아니라 동일한 HSWM의 네 기능적 �
 SCIENTIFIC_UNJUDGED`다. Python/NumPy 실험은 독립 수치·evidence oracle로 보존한다.
 정확한 경계와 단계적 전환 gate는
 [`HSWM TypeScript + Effect runtime boundary`](docs/research/HSWM_TYPESCRIPT_EFFECT_RUNTIME_2026-08-21.md)에
-있다.
+있다. 현재 S2S 제어면의 exact 작업 바이트, 독립 감사에서 재현된 6개
+pre-prereg blocker, 보호 파일과 다음 실행 순서는
+[`다음 세션 handoff`](docs/operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-21.md)와
+동일 내용을 담은
+[`local KG projection`](ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v1.json)에
+기록했다. 이 checkpoint는 `BLOCKED_PRE_PREREG`이며 future pulse 선택이나 효능 승격이 아니다.
 
 정체성, 수학, cellular runtime, 학습, 세계 자기기억, 실제 증거가 문서마다 달라 보이는
 이유와 현재의 한 통합 해석은
@@ -56,7 +61,7 @@ checkout에서만 수행한다.
 |---|---|---|
 | `swm-0r-representation-conformance` | `engineering_pass / scientific_unjudged` | finite `q=3` constructive representation witness; 독립 native/star 경로와 제거/복원은 통과했지만 learned `W/Θ/R` 증거가 아니다 |
 | `swm-0w-scalar-compatibility` | `implemented / supported_narrow` | [confirmatory result](results/SWM0W_SCALAR_GATE_RESULTS_2026-08-20.md): preregistered fixed-three-singleton scalar learner over 20 beacon-derived tasks; candidate-only `CANDIDATE_PASS_AWAITING_BUNDLE` gained evidence verdict `PASS` only through the separate GitHub chronology/artifact, pinned-Node BLS, task-rebuild, receipt, and reducer adjudicator; it supplies no learned or adjudicated multi-member set-to-set result |
-| `swm-0w-s2s-recipient-transport` | `engineering_pilot_adopted / scientific_unjudged` | [pilot adoption](results/SWM0W_S2S_TRAIN_DEV_PILOT_ADOPTION_RESULTS_2026-08-21.md) and [gate design](docs/research/HSWM_SWM0W_S2S_GATE_2026-08-20.md): exact three-role/two-member finite world, three 870-parameter arms, V2 with-replacement generator, task-bound Q witness, deterministic optimizer/history/replay, and interventions. The 27-cell train/dev roster selected T16 `.003`, P_CAP18/DS870 `.001`; confirmatory resource policy, prereg, future seed, matched adjudication, and efficacy verdict remain absent. DS never beat epoch zero, so optional compact-competitive wording is disabled |
+| `swm-0w-s2s-recipient-transport` | `engineering_pilot_adopted / scientific_unjudged` | [pilot adoption](results/SWM0W_S2S_TRAIN_DEV_PILOT_ADOPTION_RESULTS_2026-08-21.md), [gate design](docs/research/HSWM_SWM0W_S2S_GATE_2026-08-20.md), and [Effect handoff](docs/operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-21.md): exact three-role/two-member finite world, three 870-parameter arms, V2 with-replacement generator, task-bound Q witness, deterministic optimizer/history/replay, and interventions. The 27-cell train/dev roster selected T16 `.003`, P_CAP18/DS870 `.001`. A resource policy and TypeScript/Effect control scaffold exist but are `BLOCKED_PRE_PREREG` on six audited invariants; live adapters, prereg, future seed, matched adjudication, and efficacy verdict remain absent. DS never beat epoch zero, so optional compact-competitive wording is disabled |
 | `F1-larger-ai-baselines-and-retention` | `running` | [checked-in historical prereg note](prom_search_hswm/evidence/PREREG_F1_sealed_typed_function_network_20260728_amend4_output_caps.json)는 r3의 목표 1500 calls 중 access-log HTTP 200 response 721건 뒤 `REFUSED`와 r4의 435/1500 output-cap `VOID`를 기록하지만 raw access/spool artifact는 현재 tracked tree에 없다. [durable transport](prom_search_hswm/docs/F1_DURABLE_TRANSPORT_CONTRACT_20260727.md)의 [target probe receipt](receipts/HSWM_F1_TARGET_DEPLOYMENT_PROBE_20260728.json)는 actual-upstream disconnect와 SIGKILL process-crash를 공학적으로 통과했지만 power loss는 미시험이다. 현재 tracked sealed-r5에는 manifest/gold만 있고 suite·judgment가 없으므로 과학적 observation은 여전히 0건이다 |
 | `durable-cell-runtime` | `engineering_validated` | SQLite event store·outbox·typed CellPort·replay. 인프라이며 효능 증거가 아니다 |
 | `semantic-weight-metric-contract` | `engineering_validated` | [contract](research/HSWM_SEMANTIC_WEIGHT_METRIC_CONTRACT.v1.json). 이 계약은 scalar slow-W 한정이다. 별도 operator-valued W numeric core는 생겼지만 learned/durable contract는 미구현이다 |

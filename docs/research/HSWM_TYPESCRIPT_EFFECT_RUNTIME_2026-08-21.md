@@ -124,3 +124,17 @@ strict TypeScript checking—not Effect-specific compiler diagnostics.
 The TypeScript package is a deliberate npm artifact and is not silently placed
 inside the Python wheel or sdist. The two artifacts will meet only through
 versioned ports and replay contracts.
+
+## Current SWM-0W-S2S control-plane checkpoint
+
+The first S2S `Π` control/evidence slice and opaque Python numeric-oracle
+boundary now exist in the working implementation, but independent review found
+six pre-preregistration blockers. The slice therefore remains
+`BLOCKED_PRE_PREREG / SCIENTIFIC_UNJUDGED`; no future pulse or confirmatory run
+is authorized. Exact hashes, attack reproductions, protected files, verification
+commands, and the ordered repair path are frozen in the
+[`next-session handoff`](../operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-21.md).
+Its companion
+[`local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v1.json)
+records the same boundary without promoting an efficacy claim or implying a
+remote KG write.

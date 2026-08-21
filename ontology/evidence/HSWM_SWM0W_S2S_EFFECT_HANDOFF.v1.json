@@ -1,0 +1,307 @@
+{
+  "schema_version": "hswm-engineering-handoff-kg/v1",
+  "bundle_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-21",
+  "status": "BLOCKED_PRE_PREREG",
+  "updated_at": "2026-08-21",
+  "authority": {
+    "runtime_direction": "USER_PRIMARY",
+    "architecture_and_repair_plan": "SECONDARY_AI_PROPOSED",
+    "publication_projection": "SYSTEM_DERIVED_LOCAL_ONLY"
+  },
+  "workspace_base_commit": "a4bff3b47c64854b424b2dc8a00db07745d6cf9e",
+  "handoff_path": "docs/operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-21.md",
+  "remote_kg_publication_status": "NOT_ATTEMPTED",
+  "scientific_status": "UNJUDGED",
+  "future_beacon_selected": false,
+  "confirmatory_dispatched": false,
+  "artifact_bindings": [
+    {
+      "path": "docs/operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-21.md",
+      "role": "NEXT_SESSION_HANDOFF",
+      "sha256": "b831c79b8fda472f872241fd4662f535551a24bdcc06748aff86917dd9e9ce8d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-canonical.ts",
+      "role": "TS_CANONICAL_BOUNDARY",
+      "sha256": "c3d8f36853124ad0387cc68b9373571f8d45b888472fc20581e3b7993dacb257"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-seed.ts",
+      "role": "TS_EXTERNAL_SEED_BOUNDARY",
+      "sha256": "bfbdce6f09360c10c989a145c441fbd8bf00d51a607dfc7719170d42820cef2c"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-confirmatory.ts",
+      "role": "TS_CONFIRMATORY_CONTROL",
+      "sha256": "bdada1b126e0d450e36db409c47fd9c77bd64f9bb203f61c2ea7fb79165f20bf"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-orchestration.ts",
+      "role": "TS_EFFECT_ORCHESTRATION",
+      "sha256": "d9bbaa35bc8c91576ef5c121699c201c06807da47270e0c63002987d35f7a9c8"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-preregistration.ts",
+      "role": "TS_SOURCE_PREREG_BOUNDARY",
+      "sha256": "9941f46d51a0c4cf99281229bddee057bbb64b50b0eaa0332b3ac6d0cdd9b6d3"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/s2s-confirmatory.test.ts",
+      "role": "TS_CONFIRMATORY_TEST",
+      "sha256": "c699c2936b483d56b267327f553ddce682674e1190405cf34cd1f2f9dfed3f1d"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/s2s-preregistration.test.ts",
+      "role": "TS_PREREGISTRATION_TEST",
+      "sha256": "7b75abb1451b1b80031327133a6006d8dabb0134c52c573409b23d13d8b61420"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/fixtures/adopted-protocol-config.json",
+      "role": "CROSS_LANGUAGE_CONFIG_FIXTURE",
+      "sha256": "315dad65a8882c4b7c5fb73d295df28b58b0696e25b1b790a342b40ced8d10c4"
+    },
+    {
+      "path": "src/hswm/experiments/swm0w_s2s_numeric_oracle.py",
+      "role": "PYTHON_NUMERIC_ORACLE",
+      "sha256": "27854351f642727dc21ec63e987bf3ae67a205f4664f5e0ad448eb3b7a8c570b"
+    },
+    {
+      "path": "tests/test_hswm_swm0w_s2s_numeric_oracle.py",
+      "role": "PYTHON_NUMERIC_ORACLE_TEST",
+      "sha256": "e1921acce5b012d4030602dae57d2a5611ba395346e460cdfd468489694617ca"
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:UserDirection:hswm-typescript-effect-runtime-2026-08-21",
+      "kind": "USER_DIRECTION",
+      "authority_class": "USER_PRIMARY",
+      "status": "ACTIVE",
+      "name": "TypeScript-first Effect functional runtime",
+      "source_path": "docs/canon/sources/USER_PRIMARY_HSWM_TYPESCRIPT_EFFECT_RUNTIME_2026-08-21.txt",
+      "source_sha256": "3342e97705b2a65632996f05df72452993b62cf64c3bbdbed9c925c33cfeac54"
+    },
+    {
+      "uid": "sym:ArchitectureBoundary:hswm-swm0w-s2s-ts-control-python-oracle-v1",
+      "kind": "ARCHITECTURE_BOUNDARY",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "ENGINEERING_SCAFFOLD",
+      "name": "TypeScript Effect Pi control plane and opaque Python numeric oracle",
+      "claim_boundary": "TypeScript owns control and evidence; Python owns deterministic numerics; neither boundary establishes S2S efficacy."
+    },
+    {
+      "uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-21",
+      "kind": "ENGINEERING_CHECKPOINT",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "BLOCKED_PRE_PREREG",
+      "name": "SWM-0W-S2S Effect control-plane handoff",
+      "effect_version": "3.22.1",
+      "resource_policy_sha256": "d6a0c679f9ff9c72773f8a3713bffe1f3ac5d2b6f5e53e653603b30204d9c7eb",
+      "scientific_status": "UNJUDGED",
+      "live_adapter_status": "ABSENT",
+      "future_measurement_status": "NOT_STARTED"
+    },
+    {
+      "uid": "sym:NumericOracle:hswm-swm0w-s2s-python-v1",
+      "kind": "NUMERIC_ORACLE",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "ADVERSARIAL_AUDIT_CLEAR",
+      "name": "Opaque deterministic Python S2S numeric oracle",
+      "source_path": "src/hswm/experiments/swm0w_s2s_numeric_oracle.py",
+      "source_sha256": "27854351f642727dc21ec63e987bf3ae67a205f4664f5e0ad448eb3b7a8c570b",
+      "claim_boundary": "Candidate-only numerical replay; no Git, GitHub, drand, chronology, resource authority, or final verdict."
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-source-a-commit-type",
+      "kind": "BLOCKER",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "OPEN",
+      "name": "Require source A to be an exact Git commit object",
+      "severity": "P0",
+      "blocking_gate": "SOURCE_A_PREREGISTRATION_FREEZE",
+      "target_paths": [
+        "src/hswm/effect-runtime/src/s2s-preregistration.ts",
+        "src/hswm/effect-runtime/test/s2s-preregistration.test.ts"
+      ],
+      "failure_mode": "An annotated-tag object is accepted as A although Git cannot use it as B's direct parent.",
+      "acceptance_tests": [
+        "annotated-tag object A is rejected with INVALID_GIT_IDENTITY",
+        "ordinary exact commit A remains accepted"
+      ]
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-prereg-path-absent-at-a",
+      "kind": "BLOCKER",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "OPEN",
+      "name": "Require preregistration path to be absent from source A",
+      "severity": "P0",
+      "blocking_gate": "SOURCE_A_PREREGISTRATION_FREEZE",
+      "target_paths": [
+        "src/hswm/effect-runtime/src/s2s-preregistration.ts",
+        "src/hswm/effect-runtime/test/s2s-preregistration.test.ts"
+      ],
+      "failure_mode": "A may already track the preregistration path, making the required add-only A-to-B diff impossible.",
+      "acceptance_tests": [
+        "A with the exact preregistration path is rejected before emission",
+        "A with an unrelated additive file remains accepted"
+      ]
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-prereg-immutable-byte-snapshot",
+      "kind": "BLOCKER",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "OPEN",
+      "name": "Bind registration B to the immutable originally validated preregistration bytes",
+      "severity": "P0",
+      "blocking_gate": "SOURCE_A_PREREGISTRATION_FREEZE",
+      "target_paths": [
+        "src/hswm/effect-runtime/src/s2s-preregistration.ts",
+        "src/hswm/effect-runtime/test/s2s-preregistration.test.ts"
+      ],
+      "failure_mode": "Post-parse mutation changes the bytes that B validation accepts while bypassing the original validated self-hash.",
+      "acceptance_tests": [
+        "nested mutation after parse cannot alter accepted B bytes",
+        "mutation of an exposed byte-array copy cannot alter accepted B bytes",
+        "mutated or hash-invalid B bytes are rejected",
+        "the original canonical B remains accepted"
+      ]
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-pulse-cross-event-chronology",
+      "kind": "BLOCKER",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "OPEN",
+      "name": "Bind pulse chronology and telemetry to workflow, registration, and confirm timestamps",
+      "severity": "P0",
+      "blocking_gate": "CONFIRMATORY_CONTROL_FREEZE",
+      "target_paths": [
+        "src/hswm/effect-runtime/src/s2s-confirmatory.ts",
+        "src/hswm/effect-runtime/test/s2s-confirmatory.test.ts"
+      ],
+      "failure_mode": "An impossible pulse predating workflow creation, registration completion, and confirm start can advance to PulseEligible.",
+      "acceptance_tests": [
+        "pre-workflow or pre-registration pulse is rejected",
+        "declared lead mismatch is rejected",
+        "pulse wait telemetry mismatch is rejected",
+        "independently derived Quicknet round time is required"
+      ]
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-confirm-command-slack",
+      "kind": "BLOCKER",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "OPEN",
+      "name": "Enforce the frozen confirm-command accounting slack",
+      "severity": "P0",
+      "blocking_gate": "CONFIRMATORY_CONTROL_FREEZE",
+      "target_paths": [
+        "src/hswm/effect-runtime/src/s2s-confirmatory.ts",
+        "src/hswm/effect-runtime/test/s2s-confirmatory.test.ts"
+      ],
+      "failure_mode": "Command elapsed time can contain more unaccounted time than the frozen 300-second slack.",
+      "acceptance_tests": [
+        "command time above wait plus post-seed work plus slack is rejected",
+        "the integer-second rounding rule is explicit and boundary-tested"
+      ]
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-positive-artifact-bytes",
+      "kind": "BLOCKER",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "OPEN",
+      "name": "Reject zero-byte registration, candidate, and adjudication artifacts",
+      "severity": "P0",
+      "blocking_gate": "CONFIRMATORY_CONTROL_FREEZE",
+      "target_paths": [
+        "src/hswm/effect-runtime/src/s2s-confirmatory.ts",
+        "src/hswm/effect-runtime/test/s2s-confirmatory.test.ts"
+      ],
+      "failure_mode": "Zero-byte archives and largest members satisfy the current nonnegative byte-count boundary.",
+      "acceptance_tests": [
+        "zero-byte registration evidence is rejected",
+        "zero-byte candidate evidence is rejected",
+        "zero-byte adjudication evidence is rejected"
+      ]
+    },
+    {
+      "uid": "sym:Plan:hswm-swm0w-s2s-effect-next-session",
+      "kind": "IMPLEMENTATION_PLAN",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "NEXT",
+      "name": "Close six blockers, re-audit, then implement live adapters and three-job chronology",
+      "plan_path": "docs/operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-21.md"
+    },
+    {
+      "uid": "sym:Claim:learned-s2s-efficacy",
+      "kind": "SCIENTIFIC_CLAIM",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "UNJUDGED",
+      "name": "Learned multi-member recipient-specific set-to-set efficacy",
+      "claim_boundary": "No present Effect-control or numeric-oracle engineering checkpoint establishes this claim."
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:UserDirection:hswm-typescript-effect-runtime-2026-08-21",
+      "type": "GOVERNS_DIRECTION_OF",
+      "to_uid": "sym:ArchitectureBoundary:hswm-swm0w-s2s-ts-control-python-oracle-v1"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-21",
+      "type": "IMPLEMENTS",
+      "to_uid": "sym:ArchitectureBoundary:hswm-swm0w-s2s-ts-control-python-oracle-v1"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-21",
+      "type": "USES_OPAQUE_ORACLE",
+      "to_uid": "sym:NumericOracle:hswm-swm0w-s2s-python-v1"
+    },
+    {
+      "from_uid": "sym:Plan:hswm-swm0w-s2s-effect-next-session",
+      "type": "RESUMES_FROM",
+      "to_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-21"
+    },
+    {
+      "from_uid": "sym:Blocker:hswm-s2s-source-a-commit-type",
+      "type": "BLOCKS",
+      "to_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-21"
+    },
+    {
+      "from_uid": "sym:Blocker:hswm-s2s-prereg-path-absent-at-a",
+      "type": "BLOCKS",
+      "to_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-21"
+    },
+    {
+      "from_uid": "sym:Blocker:hswm-s2s-prereg-immutable-byte-snapshot",
+      "type": "BLOCKS",
+      "to_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-21"
+    },
+    {
+      "from_uid": "sym:Blocker:hswm-s2s-pulse-cross-event-chronology",
+      "type": "BLOCKS",
+      "to_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-21"
+    },
+    {
+      "from_uid": "sym:Blocker:hswm-s2s-confirm-command-slack",
+      "type": "BLOCKS",
+      "to_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-21"
+    },
+    {
+      "from_uid": "sym:Blocker:hswm-s2s-positive-artifact-bytes",
+      "type": "BLOCKS",
+      "to_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-21"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-21",
+      "type": "DOES_NOT_ESTABLISH",
+      "to_uid": "sym:Claim:learned-s2s-efficacy"
+    }
+  ],
+  "nonclaims": [
+    "This local KG projection is not a remote Neo4j publication.",
+    "This checkpoint is not a preregistration or a future-beacon commitment.",
+    "Green engineering tests do not establish learned set-to-set efficacy.",
+    "The in-memory Effect Layer is not durable cross-job state or exactly-once execution."
+  ]
+}

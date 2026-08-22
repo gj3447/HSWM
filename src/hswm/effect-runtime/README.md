@@ -85,7 +85,7 @@ carrier boundaries, with regression coverage on the resulting bytes. The slice
 remains `BLOCKED_PRE_PREREG`: the bounded adapters are present, but no
 current-run/dispatch-authorized composition root, workflow, durable evidence
 envelope, or external event-10 finalizer exists. Resume from the repository
-[`next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-22.md)
+[`current next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_OBSERVATION_AUTHORITY_DESIGN_NEXT_SESSION_2026-08-22.md)
 before composing the adapters or selecting a future round.
 
 The in-memory Layer's static capability-ID allowlist is configuration for tests

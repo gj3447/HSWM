@@ -214,3 +214,15 @@ and
 It advances only the `Π` control boundary. The actual workflow bytes and
 source-manifest hash, unique current-run observation, run/stage capability,
 durable envelope, finalizer, and scientific verdict remain open.
+
+The next implementation contract is frozen, without claiming implementation,
+in the
+[`observation-authority design handoff`](../operations/HSWM_SWM0W_S2S_OBSERVATION_AUTHORITY_DESIGN_NEXT_SESSION_2026-08-22.md)
+and
+[`v5 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v5.json).
+It keeps the user-directed strict TypeScript/Effect v3 functional runtime,
+specifies raw-byte observation recomputation and the bounded
+workflow-runs-for-head query, and separates internal receipt consistency from
+GitHub origin and unique-run authority. It changes no `H/W/A/F`, does not close
+the outcome-bound causal-learning loop, and leaves production issuance
+fail-closed while workflow source bytes are absent.

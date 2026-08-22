@@ -22,13 +22,19 @@ engineering checkpoints:
   records request-distinct GitHub receipts, the runtime-authentic
   registration-B capability, and the still-open current-run,
   composition/workflow/evidence-envelope/finalizer gates.
-- [`v4 current invocation-authority checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v4.json)
+- [`v4 historical invocation-authority checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v4.json)
   records the exact workflow identity/stage contract, strict process-local
   current-invocation authority, conditional source-workflow-row inspector, and
   the still-open workflow-source, unique-run, run/stage, envelope, and
   finalizer gates.
+- [`v5 current observation-authority design checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v5.json)
+  freezes the next strict TypeScript/Effect implementation contract for
+  standalone raw-byte observation recomputation, the exact bounded
+  workflow-runs-for-head query, and the separation between multiplicity
+  observation, GitHub origin, and unique-run authority. The design remains
+  unimplemented and all production authority gates remain fail-closed.
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v4 supersedes v3 only as the
-next-session entrypoint; v1 through v3 remain immutable historical
+runtime graphs, or remote Neo4j publications. v5 supersedes v4 only as the
+next-session entrypoint; v1 through v4 remain immutable historical
 projections.

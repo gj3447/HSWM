@@ -27,6 +27,12 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect("S2SArtifactAuthority" in PublicApi).toBe(false)
   expect("validateS2SRegistrationCommitB" in PublicApi).toBe(false)
   expect("inspectS2SRegistrationCommitAuthority" in PublicApi).toBe(false)
+  expect("S2S_CONFIRMATORY_WORKFLOW_CONTRACT" in PublicApi).toBe(false)
+  expect("S2SCurrentInvocation" in PublicApi).toBe(false)
+  expect("S2SCurrentInvocationLive" in PublicApi).toBe(false)
+  expect("inspectS2SCurrentInvocationAuthority" in PublicApi).toBe(false)
+  expect("makeS2SCurrentInvocationTestLayer" in PublicApi).toBe(false)
+  expect("validateS2SCurrentInvocation" in PublicApi).toBe(false)
   expect("makeS2SConfirmatoryControlPlaneMemoryForTest" in PublicApi).toBe(
     false
   )

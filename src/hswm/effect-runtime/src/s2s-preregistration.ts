@@ -12,6 +12,12 @@ import {
   s2sQuicknetRoundTimeUnix
 } from "./s2s-quicknet.js"
 import { S2S_EXTERNAL_SEED_DOMAIN } from "./s2s-seed.js"
+import {
+  S2S_CONFIRMATORY_PREREGISTRATION_PATH,
+  S2S_CONFIRMATORY_REF,
+  S2S_CONFIRMATORY_REPOSITORY,
+  S2S_CONFIRMATORY_WORKFLOW_PATH
+} from "./s2s-workflow-contract.js"
 
 export {
   S2S_QUICKNET_CHAIN_HASH,
@@ -44,10 +50,10 @@ export const S2S_PREREG_PROTOCOL_CONFIG_SHA256 =
 export const S2S_PREREG_RESOURCE_POLICY_SHA256 =
   "b2c631ff80922800d06ac7e31c0632e02e1b560a31759cd0d11ae0a39c374351" as const
 
-export const S2S_PREREG_REPOSITORY = "gj3447/HSWM" as const
-export const S2S_PREREG_REF = "refs/heads/main" as const
+export const S2S_PREREG_REPOSITORY = S2S_CONFIRMATORY_REPOSITORY
+export const S2S_PREREG_REF = S2S_CONFIRMATORY_REF
 export const S2S_PREREGISTRATION_PATH =
-  "prereg/PREREG_SWM0W_S2S_GATE_V1.json" as const
+  S2S_CONFIRMATORY_PREREGISTRATION_PATH
 export const S2S_PREREGISTRATION_COMMIT_RULE = "DIRECT_CHILD_ADD_ONLY" as const
 export const S2S_PREREG_CLAIM_SCOPE =
   "SYNTHETIC_SET_TO_SET_CANDIDATE_GATE_ONLY" as const
@@ -161,6 +167,7 @@ export class S2SRegistrationCommitError extends Data.TaggedError(
     | "PREREGISTRATION_ENTRY_INVALID"
     | "PREREGISTRATION_BYTES_DRIFT"
     | "AUTHORITY_EVIDENCE_NOT_CANONICAL"
+    | "WORKFLOW_MANIFEST_BINDING_INVALID"
   readonly detail: string
 }> {}
 
@@ -1786,9 +1793,22 @@ export interface S2SRegistrationCommitAuthorityEvidence {
   readonly receiptSha256: string
 }
 
+export interface S2SRegistrationWorkflowManifestBinding {
+  readonly workflowPath: typeof S2S_CONFIRMATORY_WORKFLOW_PATH
+  readonly mode: "100644"
+  readonly objectType: "blob"
+  readonly workflowFileSha256: string
+  readonly trackedBytesManifestSha256: string
+}
+
 const S2S_REGISTRATION_COMMIT_AUTHORITY_EVIDENCE = new WeakMap<
   object,
   S2SRegistrationCommitAuthorityEvidence
+>()
+
+const S2S_REGISTRATION_WORKFLOW_MANIFEST_BINDINGS = new WeakMap<
+  object,
+  S2SRegistrationWorkflowManifestBinding | null
 >()
 
 export const inspectS2SRegistrationCommitAuthority = (
@@ -1820,6 +1840,48 @@ export const inspectS2SRegistrationCommitAuthority = (
       new S2SRegistrationCommitError({
         reason: "INVALID_REGISTRATION_AUTHORITY",
         detail: "registration authority inspection failed closed"
+      })
+    )
+  }
+}
+
+export const inspectS2SRegistrationWorkflowManifestBinding = (
+  input: unknown
+): Either.Either<
+  S2SRegistrationWorkflowManifestBinding,
+  S2SRegistrationCommitError
+> => {
+  try {
+    if (input === null || typeof input !== "object") {
+      return Either.left(
+        new S2SRegistrationCommitError({
+          reason: "INVALID_REGISTRATION_AUTHORITY",
+          detail: "registration authority is not an issued object"
+        })
+      )
+    }
+    const binding = S2S_REGISTRATION_WORKFLOW_MANIFEST_BINDINGS.get(input)
+    return binding === undefined
+      ? Either.left(
+          new S2SRegistrationCommitError({
+            reason: "INVALID_REGISTRATION_AUTHORITY",
+            detail: "registration authority was not issued by this module"
+          })
+        )
+      : binding === null
+        ? Either.left(
+            new S2SRegistrationCommitError({
+              reason: "WORKFLOW_MANIFEST_BINDING_INVALID",
+              detail:
+                "source A manifest lacks one exact 100644 blob workflow row"
+            })
+          )
+        : Either.right(binding)
+  } catch {
+    return Either.left(
+      new S2SRegistrationCommitError({
+        reason: "INVALID_REGISTRATION_AUTHORITY",
+        detail: "registration workflow binding inspection failed closed"
       })
     )
   }
@@ -2255,5 +2317,29 @@ export const validateS2SRegistrationCommitB = (
       [S2S_REGISTRATION_COMMIT_AUTHORITY_BRAND]: true as const
     })
     S2S_REGISTRATION_COMMIT_AUTHORITY_EVIDENCE.set(authority, evidence)
+    const workflowRows = preregistration.registration_core.source_freeze
+      .tracked_bytes_manifest.rows.filter(
+        (row) => row.path === S2S_CONFIRMATORY_WORKFLOW_PATH
+      )
+    const workflowRow = workflowRows[0]
+    const workflowBinding =
+      workflowRows.length === 1 &&
+      workflowRow !== undefined &&
+      workflowRow.mode === "100644" &&
+      workflowRow.object_type === "blob"
+        ? Object.freeze({
+            workflowPath: S2S_CONFIRMATORY_WORKFLOW_PATH,
+            mode: "100644" as const,
+            objectType: "blob" as const,
+            workflowFileSha256: workflowRow.sha256,
+            trackedBytesManifestSha256:
+              preregistration.registration_core.source_freeze
+                .tracked_bytes_manifest.manifest_sha256
+          })
+        : null
+    S2S_REGISTRATION_WORKFLOW_MANIFEST_BINDINGS.set(
+      authority,
+      workflowBinding
+    )
     return authority
   })

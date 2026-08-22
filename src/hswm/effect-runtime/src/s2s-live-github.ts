@@ -5,9 +5,10 @@ import {
   rawS2SFileSha256
 } from "./s2s-canonical.js"
 import { parseS2SJsonBytes, type S2SJson } from "./s2s-json.js"
+import { S2S_CONFIRMATORY_REPOSITORY } from "./s2s-workflow-contract.js"
 
 export const S2S_GITHUB_API_VERSION = "2022-11-28" as const
-export const S2S_GITHUB_REPOSITORY = "gj3447/HSWM" as const
+export const S2S_GITHUB_REPOSITORY = S2S_CONFIRMATORY_REPOSITORY
 export const S2S_GITHUB_OBSERVATION_SCHEMA_VERSION =
   "hswm-swm0w-s2s-github-observation-receipt/v2" as const
 export const S2S_GITHUB_JSON_MAX_BYTES = 8 * 1_048_576

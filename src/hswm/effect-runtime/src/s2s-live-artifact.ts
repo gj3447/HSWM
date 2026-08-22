@@ -2,11 +2,8 @@ import { Context, Data, Effect, Either, Layer, Schema } from "effect"
 
 import { canonicalS2SControlSha256 } from "./s2s-canonical.js"
 import {
-  S2S_ADJUDICATION_ARTIFACT_NAME,
   S2SArtifactEvidenceSchema,
-  S2S_CANDIDATE_ARTIFACT_NAME,
   S2S_CONFIRMATORY_POLICY,
-  S2S_REGISTRATION_ARTIFACT_NAME,
   S2SSha256Schema,
   type S2SArtifactEvidence
 } from "./s2s-confirmatory.js"
@@ -23,16 +20,23 @@ import {
   type S2SGitHubWorkflowRunProjection
 } from "./s2s-live-github.js"
 import {
+  S2S_CONFIRMATORY_ARTIFACT_ROLES,
+  S2S_CONFIRMATORY_BRANCH,
+  S2S_CONFIRMATORY_EVENT,
+  S2S_CONFIRMATORY_REPOSITORY,
+  S2S_CONFIRMATORY_STAGE_CONTRACTS,
+  S2S_CONFIRMATORY_WORKFLOW_NAME,
+  S2S_CONFIRMATORY_WORKFLOW_PATH,
+  type S2SConfirmatoryArtifactRole
+} from "./s2s-workflow-contract.js"
+import {
   validateS2SArtifactZip,
   type S2SArtifactZipValidationError,
   type S2SExpectedZipMember,
   type S2SValidatedArtifactZip
 } from "./s2s-zip.js"
 
-export type S2SArtifactRole =
-  | "REGISTRATION"
-  | "CANDIDATE"
-  | "ADJUDICATION"
+export type S2SArtifactRole = S2SConfirmatoryArtifactRole
 
 interface RolePolicy {
   readonly jobName: string
@@ -44,8 +48,9 @@ interface RolePolicy {
 
 const ROLE_POLICY: Readonly<Record<S2SArtifactRole, RolePolicy>> = Object.freeze({
   REGISTRATION: Object.freeze({
-    jobName: "register",
-    artifactName: S2S_REGISTRATION_ARTIFACT_NAME,
+    jobName: S2S_CONFIRMATORY_STAGE_CONTRACTS.REGISTER.jobName,
+    artifactName:
+      S2S_CONFIRMATORY_STAGE_CONTRACTS.REGISTER.producesArtifactName,
     maximumArchiveBytes:
       S2S_CONFIRMATORY_POLICY.archive.registrationArchiveMaximumBytes,
     maximumExpandedBytes:
@@ -55,8 +60,9 @@ const ROLE_POLICY: Readonly<Record<S2SArtifactRole, RolePolicy>> = Object.freeze
     ])
   }),
   CANDIDATE: Object.freeze({
-    jobName: "confirm",
-    artifactName: S2S_CANDIDATE_ARTIFACT_NAME,
+    jobName: S2S_CONFIRMATORY_STAGE_CONTRACTS.CONFIRM.jobName,
+    artifactName:
+      S2S_CONFIRMATORY_STAGE_CONTRACTS.CONFIRM.producesArtifactName,
     maximumArchiveBytes:
       S2S_CONFIRMATORY_POLICY.archive.candidateArchiveMaximumBytes,
     maximumExpandedBytes:
@@ -70,8 +76,9 @@ const ROLE_POLICY: Readonly<Record<S2SArtifactRole, RolePolicy>> = Object.freeze
     ])
   }),
   ADJUDICATION: Object.freeze({
-    jobName: "adjudicate",
-    artifactName: S2S_ADJUDICATION_ARTIFACT_NAME,
+    jobName: S2S_CONFIRMATORY_STAGE_CONTRACTS.ADJUDICATE.jobName,
+    artifactName:
+      S2S_CONFIRMATORY_STAGE_CONTRACTS.ADJUDICATE.producesArtifactName,
     maximumArchiveBytes:
       S2S_CONFIRMATORY_POLICY.archive.adjudicationArchiveMaximumBytes,
     maximumExpandedBytes:
@@ -254,9 +261,6 @@ export class S2SArtifactAuthority extends Context.Tag(
 >() {}
 
 const GIT_SHA_PATTERN = /^[0-9a-f]{40}$/
-const S2S_CONFIRMATORY_WORKFLOW_NAME = "SWM-0W-S2S confirmatory"
-const S2S_CONFIRMATORY_WORKFLOW_PATH =
-  ".github/workflows/swm0w-s2s-confirmatory.yml"
 const S2S_ARTIFACT_ABSENCE_OBSERVATION_COUNT = 3 as const
 const S2S_ARTIFACT_ABSENCE_SETTLE_MILLIS = 10_000 as const
 const S2S_ARTIFACT_ABSENCE_MINIMUM_GAP_SECONDS = 10 as const
@@ -302,13 +306,13 @@ const hasExpectedWorkflowIdentity = (
 ): boolean =>
   projection.id === workflowRunId &&
   projection.runAttempt === 1 &&
-  projection.repository === "gj3447/HSWM" &&
-  projection.headRepository === "gj3447/HSWM" &&
+  projection.repository === S2S_CONFIRMATORY_REPOSITORY &&
+  projection.headRepository === S2S_CONFIRMATORY_REPOSITORY &&
   projection.headSha === expectedHeadSha &&
   projection.name === S2S_CONFIRMATORY_WORKFLOW_NAME &&
   projection.path === S2S_CONFIRMATORY_WORKFLOW_PATH &&
-  projection.event === "push" &&
-  projection.headBranch === "main"
+  projection.event === S2S_CONFIRMATORY_EVENT &&
+  projection.headBranch === S2S_CONFIRMATORY_BRANCH
 
 const sameWorkflowIdentity = (
   left: S2SGitHubWorkflowRunProjection,
@@ -901,7 +905,9 @@ const makeS2SArtifactAuthorityLayer = (
         observeRoleArtifact: (workflowRunId, expectedHeadSha, role) => {
           if (
             typeof role !== "string" ||
-            !Object.hasOwn(ROLE_POLICY, role)
+            !S2S_CONFIRMATORY_ARTIFACT_ROLES.includes(
+              role as S2SArtifactRole
+            )
           ) {
             return Effect.succeed(
               Object.freeze({

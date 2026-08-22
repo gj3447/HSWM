@@ -30,6 +30,7 @@ import {
   makeS2SPreregGitRepositoryTestLayer,
   parseAndValidateS2SPreregistration,
   inspectS2SRegistrationCommitAuthority,
+  inspectS2SRegistrationWorkflowManifestBinding,
   s2sPreregCanonicalJson,
   s2sPreregCanonicalSha256,
   s2sPreregSha256Bytes,
@@ -39,12 +40,16 @@ import {
   type S2SGitCommand,
   type S2SGitCommandResult
 } from "../src/s2s-preregistration.js"
+import { S2S_CONFIRMATORY_WORKFLOW_PATH } from "../src/s2s-workflow-contract.js"
 
 const WORKSPACE_ROOT = resolve(process.cwd(), "../../..")
 const UTF8_ENCODER = new TextEncoder()
 const UTF8_DECODER = new TextDecoder("utf-8", { fatal: true })
 const GIT_MAX_BUFFER = 32 * 1_048_576
 const GIT_COMMAND_MAX_BUFFER = 129 * 1_048_576
+const WORKFLOW_FIXTURE_BYTES = UTF8_ENCODER.encode(
+  "name: SWM-0W-S2S confirmatory\n"
+)
 
 interface GitFixture {
   readonly root: string
@@ -58,7 +63,10 @@ const runGit = (root: string, arguments_: ReadonlyArray<string>): string =>
     maxBuffer: GIT_MAX_BUFFER
   }).trim()
 
-const makeGitFixture = (numericDrift = false): GitFixture => {
+const makeGitFixture = (
+  numericDrift = false,
+  workflowMode: "100644" | "100755" | "absent" = "100644"
+): GitFixture => {
   const temporaryRoot = mkdtempSync(join(tmpdir(), "hswm-s2s-prereg-"))
   const root = join(temporaryRoot, "repository")
   execFileSync(
@@ -80,6 +88,13 @@ const makeGitFixture = (numericDrift = false): GitFixture => {
   } else {
     writeFileSync(join(root, "s2s-control-fixture.txt"), "source A\n", "utf8")
     runGit(root, ["add", "--", "s2s-control-fixture.txt"])
+  }
+  if (workflowMode !== "absent") {
+    const workflowPath = join(root, S2S_CONFIRMATORY_WORKFLOW_PATH)
+    mkdirSync(dirname(workflowPath), { recursive: true })
+    writeFileSync(workflowPath, WORKFLOW_FIXTURE_BYTES)
+    if (workflowMode === "100755") chmodSync(workflowPath, 0o755)
+    runGit(root, ["add", "--", S2S_CONFIRMATORY_WORKFLOW_PATH])
   }
   runGit(root, ["commit", "--quiet", "-m", "create source A fixture"])
   const sourceCommitA = runGit(root, ["rev-parse", "HEAD"])
@@ -437,6 +452,22 @@ it.effect(
         const { receiptSha256, ...evidenceCore } = registrationEvidence.right
         expect(canonicalShaOrThrow(evidenceCore)).toBe(receiptSha256)
       }
+      const workflowBinding = inspectS2SRegistrationWorkflowManifestBinding(
+        registrationAuthority
+      )
+      expect(Either.isRight(workflowBinding)).toBe(true)
+      if (Either.isRight(workflowBinding)) {
+        expect(workflowBinding.right).toEqual({
+          workflowPath: S2S_CONFIRMATORY_WORKFLOW_PATH,
+          mode: "100644",
+          objectType: "blob",
+          workflowFileSha256: s2sPreregSha256Bytes(WORKFLOW_FIXTURE_BYTES),
+          trackedBytesManifestSha256:
+            preregistration.registration_core.source_freeze
+              .tracked_bytes_manifest.manifest_sha256
+        })
+        expect(Object.isFrozen(workflowBinding.right)).toBe(true)
+      }
       const hostileValidate = validateS2SRegistrationCommitB as unknown as (
         snapshot: typeof validated,
         registrationCommit: unknown
@@ -528,6 +559,44 @@ it.effect(
     }).pipe(Effect.provide(layer), Effect.ensuring(Effect.sync(fixture.cleanup)))
   }
 )
+
+for (const workflowMode of ["absent", "100755"] as const) {
+  it.effect(
+    `withholds workflow manifest binding for ${workflowMode} source entry`,
+    () => {
+      const fixture = makeGitFixture(false, workflowMode)
+      const layer = makeS2SPreregGitRepositoryProcessLayer(fixture.root)
+      return Effect.gen(function* () {
+        const built = yield* buildS2SPreregistration(
+          buildInput(fixture.sourceCommitA)
+        )
+        const validated = yield* parseAndValidateS2SPreregistration(
+          built.canonicalBytes,
+          { expectedResourcePolicySha256: S2S_PREREG_RESOURCE_POLICY_SHA256 }
+        )
+        const registrationCommitB = writeRegistration(
+          fixture,
+          `registration-workflow-${workflowMode}`,
+          built.canonicalBytes
+        )
+        const authority = yield* validateS2SRegistrationCommitB(
+          validated,
+          registrationCommitB
+        )
+        const binding = inspectS2SRegistrationWorkflowManifestBinding(authority)
+        expect(Either.isLeft(binding)).toBe(true)
+        if (Either.isLeft(binding)) {
+          expect(binding.left).toMatchObject({
+            reason: "WORKFLOW_MANIFEST_BINDING_INVALID"
+          })
+        }
+      }).pipe(
+        Effect.provide(layer),
+        Effect.ensuring(Effect.sync(fixture.cleanup))
+      )
+    }
+  )
+}
 
 it.effect("rejects executable, symlink, and gitlink preregistration entries", () => {
   const fixture = makeGitFixture()

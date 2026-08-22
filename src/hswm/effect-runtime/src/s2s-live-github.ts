@@ -1,11 +1,16 @@
-import { Context, Data, Effect, Either, Layer } from "effect"
+import { Clock, Context, Data, Effect, Either, Layer } from "effect"
 
 import {
   canonicalS2SControlSha256,
   rawS2SFileSha256
 } from "./s2s-canonical.js"
 import { parseS2SJsonBytes, type S2SJson } from "./s2s-json.js"
-import { S2S_CONFIRMATORY_REPOSITORY } from "./s2s-workflow-contract.js"
+import {
+  S2S_CONFIRMATORY_BRANCH,
+  S2S_CONFIRMATORY_EVENT,
+  S2S_CONFIRMATORY_REPOSITORY,
+  S2S_CONFIRMATORY_WORKFLOW_ID
+} from "./s2s-workflow-contract.js"
 
 export const S2S_GITHUB_API_VERSION = "2022-11-28" as const
 export const S2S_GITHUB_REPOSITORY = S2S_CONFIRMATORY_REPOSITORY
@@ -30,6 +35,24 @@ const WORKFLOW_PATH_PATTERN =
   /^\.github\/workflows\/[A-Za-z0-9._/-]{1,220}(?:@[A-Za-z0-9._/@-]{1,220})?$/
 const RFC3339_UTC_SECONDS_PATTERN =
   /^\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\dZ$/
+
+const SHARED_ARRAY_BUFFER_BYTE_LENGTH_GETTER =
+  typeof SharedArrayBuffer === "undefined"
+    ? undefined
+    : Object.getOwnPropertyDescriptor(
+        SharedArrayBuffer.prototype,
+        "byteLength"
+      )?.get
+
+const isSharedArrayBuffer = (input: unknown): boolean => {
+  if (SHARED_ARRAY_BUFFER_BYTE_LENGTH_GETTER === undefined) return false
+  try {
+    Reflect.apply(SHARED_ARRAY_BUFFER_BYTE_LENGTH_GETTER, input, [])
+    return true
+  } catch {
+    return false
+  }
+}
 
 export type S2SGitHubRunStatus =
   | "queued"
@@ -87,6 +110,11 @@ export interface S2SGitHubWorkflowJobsProjection {
   readonly jobs: ReadonlyArray<S2SGitHubWorkflowJobProjection>
 }
 
+export interface S2SGitHubWorkflowRunsProjection {
+  readonly totalCount: number
+  readonly workflowRuns: ReadonlyArray<S2SGitHubWorkflowRunProjection>
+}
+
 export interface S2SGitHubArtifactProjection {
   readonly id: number
   readonly name: string
@@ -108,12 +136,14 @@ export interface S2SGitHubArtifactsProjection {
 
 export type S2SGitHubProjection =
   | S2SGitHubWorkflowRunProjection
+  | S2SGitHubWorkflowRunsProjection
   | S2SGitHubWorkflowJobsProjection
   | S2SGitHubArtifactProjection
   | S2SGitHubArtifactsProjection
 
 export type S2SGitHubObservationKind =
   | "WORKFLOW_RUN"
+  | "WORKFLOW_RUNS_FOR_HEAD"
   | "WORKFLOW_ATTEMPT_JOBS"
   | "RUN_ARTIFACTS"
   | "ARTIFACT"
@@ -155,6 +185,22 @@ export class S2SGitHubObservationError extends Data.TaggedError(
     | "PROVENANCE_REJECTED"
     | "PROJECTION_NOT_CANONICAL"
     | "PROJECTION_REJECTED"
+  readonly path: string
+  readonly detail: string
+}> {}
+
+export class S2SGitHubObservationValidationError extends Data.TaggedError(
+  "S2SGitHubObservationValidationError"
+)<{
+  readonly reason:
+    | "INVALID_ARGUMENT"
+    | "WRAPPER_REJECTED"
+    | "RECEIPT_REJECTED"
+    | "RAW_BODY_REJECTED"
+    | "RAW_BODY_DRIFT"
+    | "RECOMPUTATION_REJECTED"
+    | "RECEIPT_SELF_HASH_MISMATCH"
+    | "RECEIPT_MISMATCH"
   readonly path: string
   readonly detail: string
 }> {}
@@ -273,6 +319,12 @@ export class S2SGitHubObserver extends Context.Tag("hswm/S2S/GitHubObserver")<
       workflowRunId: number
     ) => Effect.Effect<
       S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>,
+      S2SGitHubObserverError
+    >
+    readonly observeWorkflowRunsForHead: (
+      headSha: string
+    ) => Effect.Effect<
+      S2SGitHubObservation<S2SGitHubWorkflowRunsProjection>,
       S2SGitHubObserverError
     >
     readonly observeRunArtifacts: (
@@ -444,39 +496,91 @@ const parseRoot = (rawBody: Uint8Array): S2SJson => {
 }
 
 const parseWorkflowRunProjection = (
-  root: S2SJson
+  root: S2SJson,
+  path: string = "$"
 ): S2SGitHubWorkflowRunProjection => {
-  const run = asRecord(root, "$")
-  const created = parseUtcSeconds(required(run, "created_at", "$"), "$.created_at")
+  const run = asRecord(root, path)
+  const created = parseUtcSeconds(
+    required(run, "created_at", path),
+    `${path}.created_at`
+  )
   return Object.freeze({
-    id: asInteger(required(run, "id", "$"), "$.id", 1),
-    runAttempt: asInteger(required(run, "run_attempt", "$"), "$.run_attempt", 1),
-    name: asAsciiString(required(run, "name", "$"), "$.name", 256),
+    id: asInteger(required(run, "id", path), `${path}.id`, 1),
+    runAttempt: asInteger(
+      required(run, "run_attempt", path),
+      `${path}.run_attempt`,
+      1
+    ),
+    name: asAsciiString(required(run, "name", path), `${path}.name`, 256),
     path: asAsciiString(
-      required(run, "path", "$"),
-      "$.path",
+      required(run, "path", path),
+      `${path}.path`,
       512,
       WORKFLOW_PATH_PATTERN
     ),
-    event: asAsciiString(required(run, "event", "$"), "$.event", 64),
+    event: asAsciiString(required(run, "event", path), `${path}.event`, 64),
     headBranch: asAsciiString(
-      required(run, "head_branch", "$"),
-      "$.head_branch",
+      required(run, "head_branch", path),
+      `${path}.head_branch`,
       256
     ),
-    headSha: asGitSha(required(run, "head_sha", "$"), "$.head_sha"),
+    headSha: asGitSha(
+      required(run, "head_sha", path),
+      `${path}.head_sha`
+    ),
     repository: parseRepositoryFullName(
-      required(run, "repository", "$"),
-      "$.repository"
+      required(run, "repository", path),
+      `${path}.repository`
     ),
     headRepository: parseRepositoryFullName(
-      required(run, "head_repository", "$"),
-      "$.head_repository"
+      required(run, "head_repository", path),
+      `${path}.head_repository`
     ),
-    status: asRunStatus(required(run, "status", "$"), "$.status"),
-    conclusion: asConclusion(required(run, "conclusion", "$"), "$.conclusion"),
+    status: asRunStatus(required(run, "status", path), `${path}.status`),
+    conclusion: asConclusion(
+      required(run, "conclusion", path),
+      `${path}.conclusion`
+    ),
     createdAt: created[0],
     createdAtUnixSeconds: created[1]
+  })
+}
+
+const parseWorkflowRunsProjection = (
+  root: S2SJson
+): S2SGitHubWorkflowRunsProjection => {
+  const response = asRecord(root, "$")
+  const totalCount = asInteger(
+    required(response, "total_count", "$"),
+    "$.total_count"
+  )
+  const values = asArray(
+    required(response, "workflow_runs", "$"),
+    "$.workflow_runs"
+  )
+  if (totalCount !== values.length || totalCount > S2S_GITHUB_PAGE_SIZE) {
+    return failProjection(
+      "$.total_count",
+      "single-page workflow-run observation must be complete and within the fixed roster bound"
+    )
+  }
+  const workflowRuns = values.map((value, index) =>
+    parseWorkflowRunProjection(value, `$.workflow_runs[${index}]`)
+  )
+  workflowRuns.sort((left, right) => left.id - right.id)
+  if (
+    workflowRuns.some(
+      (run, index) => index > 0 && run.id === workflowRuns[index - 1]?.id
+    )
+  ) {
+    return failProjection(
+      "$.workflow_runs",
+      "workflow runs contain a duplicate id"
+    )
+  }
+  return Object.freeze({
+    totalCount,
+    workflowRuns: Object.freeze(workflowRuns)
   })
 }
 
@@ -629,9 +733,10 @@ const snapshotRawBody = (input: unknown): Uint8Array => {
     !(input instanceof Uint8Array) ||
     Object.getPrototypeOf(input) !== Uint8Array.prototype ||
     Object.getOwnPropertySymbols(input).length !== 0 ||
+    Object.getOwnPropertyDescriptor(input, "byteLength") !== undefined ||
+    Object.getOwnPropertyDescriptor(input, "buffer") !== undefined ||
     input.byteLength > S2S_GITHUB_JSON_MAX_BYTES ||
-    (typeof SharedArrayBuffer !== "undefined" &&
-      input.buffer instanceof SharedArrayBuffer)
+    isSharedArrayBuffer(input.buffer)
   ) {
     throw observationError(
       "INVALID_ARGUMENT",
@@ -826,6 +931,11 @@ const makeObservation = <Projection extends S2SGitHubProjection>(
 const repositoryEndpoint = (suffix: string): string =>
   `/repos/${S2S_GITHUB_REPOSITORY}${suffix}`
 
+const workflowRunsForHeadEndpoint = (headSha: string): string =>
+  repositoryEndpoint(
+    `/actions/workflows/${S2S_CONFIRMATORY_WORKFLOW_ID}/runs?branch=${S2S_CONFIRMATORY_BRANCH}&event=${S2S_CONFIRMATORY_EVENT}&head_sha=${headSha}&per_page=${S2S_GITHUB_PAGE_SIZE}`
+  )
+
 export const observeS2SGitHubWorkflowRun = (
   rawBody: unknown,
   workflowRunId: number,
@@ -852,6 +962,46 @@ export const observeS2SGitHubWorkflowRun = (
       projection.runAttempt === 1 &&
       projection.repository === S2S_GITHUB_REPOSITORY &&
       projection.headRepository === S2S_GITHUB_REPOSITORY
+  )
+}
+
+export const observeS2SGitHubWorkflowRunsForHead = (
+  rawBody: unknown,
+  headSha: string,
+  observedAtUnixSeconds: number,
+  provenance: unknown
+): Either.Either<
+  S2SGitHubObservation<S2SGitHubWorkflowRunsProjection>,
+  S2SGitHubObservationError
+> => {
+  if (
+    typeof headSha !== "string" ||
+    !GIT_SHA_PATTERN.test(headSha) ||
+    !Number.isSafeInteger(observedAtUnixSeconds) ||
+    observedAtUnixSeconds < 0
+  ) {
+    return Either.left(
+      observationError(
+        "INVALID_ARGUMENT",
+        "$metadata",
+        "head SHA and timestamp must be canonical bounded values"
+      )
+    )
+  }
+  return makeObservation(
+    rawBody,
+    "WORKFLOW_RUNS_FOR_HEAD",
+    workflowRunsForHeadEndpoint(headSha),
+    observedAtUnixSeconds,
+    provenance,
+    parseWorkflowRunsProjection,
+    (projection) =>
+      projection.workflowRuns.every(
+        (run) =>
+          run.headSha === headSha &&
+          run.repository === S2S_GITHUB_REPOSITORY &&
+          run.headRepository === S2S_GITHUB_REPOSITORY
+      )
   )
 }
 
@@ -1003,6 +1153,10 @@ const snapshotLiveTransportConfig = (
 
 const validateEndpoint = (endpointPathAndQuery: string): void => {
   const repositoryPrefix = `/repos/${S2S_GITHUB_REPOSITORY}`
+  const workflowIdPattern = S2S_CONFIRMATORY_WORKFLOW_ID.replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&"
+  )
   const allowed = [
     new RegExp(`^${repositoryPrefix}/actions/runs/[1-9][0-9]*$`),
     new RegExp(
@@ -1010,6 +1164,9 @@ const validateEndpoint = (endpointPathAndQuery: string): void => {
     ),
     new RegExp(
       `^${repositoryPrefix}/actions/runs/[1-9][0-9]*/artifacts\\?per_page=${S2S_GITHUB_PAGE_SIZE}$`
+    ),
+    new RegExp(
+      `^${repositoryPrefix}/actions/workflows/${workflowIdPattern}/runs\\?branch=${S2S_CONFIRMATORY_BRANCH}&event=${S2S_CONFIRMATORY_EVENT}&head_sha=[0-9a-f]{40}&per_page=${S2S_GITHUB_PAGE_SIZE}$`
     ),
     new RegExp(`^${repositoryPrefix}/actions/artifacts/[1-9][0-9]*$`),
     new RegExp(`^${repositoryPrefix}/actions/artifacts/[1-9][0-9]*/zip$`)
@@ -1468,6 +1625,368 @@ const exactDataRecord = (
   }
 }
 
+const OBSERVATION_RECEIPT_KEYS = Object.freeze([
+  "apiVersion",
+  "endpointPathAndQuery",
+  "githubApiVersionSelected",
+  "githubRequestId",
+  "httpStatus",
+  "kind",
+  "observedAtUnixSeconds",
+  "projection",
+  "projectionSha256",
+  "rawBodyByteLength",
+  "rawBodySha256",
+  "receiptSha256",
+  "repository",
+  "responseEtag",
+  "schemaVersion"
+] as const)
+
+const observationValidationError = (
+  reason: S2SGitHubObservationValidationError["reason"],
+  path: string,
+  detail: string
+): S2SGitHubObservationValidationError =>
+  new S2SGitHubObservationValidationError({ reason, path, detail })
+
+const failObservationValidation = (
+  reason: S2SGitHubObservationValidationError["reason"],
+  path: string,
+  detail: string
+): never => {
+  throw observationValidationError(reason, path, detail)
+}
+
+const exactCanonicalDataEqual = (input: unknown, expected: unknown): boolean => {
+  try {
+    if (expected === null || typeof expected !== "object") {
+      return Object.is(input, expected)
+    }
+    if (Array.isArray(expected)) {
+      if (
+        !Array.isArray(input) ||
+        Object.getPrototypeOf(input) !== Array.prototype
+      ) {
+        return false
+      }
+      const inputKeys = Reflect.ownKeys(input)
+      if (
+        inputKeys.length !== expected.length + 1 ||
+        inputKeys.some((key) => typeof key !== "string")
+      ) {
+        return false
+      }
+      const expectedKeys = [
+        ...expected.map((_value, index) => String(index)),
+        "length"
+      ]
+      const sortedInputKeys = inputKeys
+        .filter((key): key is string => typeof key === "string")
+        .sort()
+      const sortedExpectedKeys = expectedKeys.sort()
+      if (
+        !sortedInputKeys.every(
+          (key, index) => key === sortedExpectedKeys[index]
+        )
+      ) {
+        return false
+      }
+      const lengthDescriptor = Object.getOwnPropertyDescriptor(input, "length")
+      if (
+        lengthDescriptor === undefined ||
+        lengthDescriptor.enumerable !== false ||
+        lengthDescriptor.configurable !== false ||
+        !("value" in lengthDescriptor) ||
+        lengthDescriptor.value !== expected.length
+      ) {
+        return false
+      }
+      for (let index = 0; index < expected.length; index += 1) {
+        const descriptor = Object.getOwnPropertyDescriptor(input, String(index))
+        if (
+          descriptor === undefined ||
+          descriptor.enumerable !== true ||
+          !("value" in descriptor) ||
+          !exactCanonicalDataEqual(descriptor.value, expected[index])
+        ) {
+          return false
+        }
+      }
+      return true
+    }
+    if (
+      input === null ||
+      typeof input !== "object" ||
+      Array.isArray(input)
+    ) {
+      return false
+    }
+    const prototype = Object.getPrototypeOf(input)
+    if (prototype !== Object.prototype && prototype !== null) return false
+    const inputKeys = Reflect.ownKeys(input)
+    const expectedKeys = Reflect.ownKeys(expected)
+    if (
+      inputKeys.length !== expectedKeys.length ||
+      inputKeys.some((key) => typeof key !== "string") ||
+      expectedKeys.some((key) => typeof key !== "string")
+    ) {
+      return false
+    }
+    const sortedInputKeys = inputKeys
+      .filter((key): key is string => typeof key === "string")
+      .sort()
+    const sortedExpectedKeys = expectedKeys
+      .filter((key): key is string => typeof key === "string")
+      .sort()
+    if (
+      !sortedInputKeys.every(
+        (key, index) => key === sortedExpectedKeys[index]
+      )
+    ) {
+      return false
+    }
+    for (const key of sortedExpectedKeys) {
+      const descriptor = Object.getOwnPropertyDescriptor(input, key)
+      const expectedDescriptor = Object.getOwnPropertyDescriptor(expected, key)
+      if (
+        descriptor === undefined ||
+        expectedDescriptor === undefined ||
+        descriptor.enumerable !== true ||
+        !("value" in descriptor) ||
+        !("value" in expectedDescriptor) ||
+        !exactCanonicalDataEqual(
+          descriptor.value,
+          expectedDescriptor.value
+        )
+      ) {
+        return false
+      }
+    }
+    return true
+  } catch {
+    return false
+  }
+}
+
+type ObservationRecomputation<Projection extends S2SGitHubProjection> = (
+  rawBody: Uint8Array,
+  observedAtUnixSeconds: number,
+  provenance: unknown
+) => Either.Either<
+  S2SGitHubObservation<Projection>,
+  S2SGitHubObservationError
+>
+
+const recomputeS2SGitHubObservationAfterSnapshot = <
+  Projection extends S2SGitHubProjection
+>(
+  rawBody: Uint8Array,
+  receipt: Readonly<Record<string, unknown>>,
+  recompute: ObservationRecomputation<Projection>
+): Either.Either<
+  S2SGitHubObservation<Projection>,
+  S2SGitHubObservationValidationError
+> => {
+  if (
+    receipt["rawBodyByteLength"] !== rawBody.byteLength ||
+    receipt["rawBodySha256"] !== rawS2SFileSha256(rawBody)
+  ) {
+    return Either.left(
+      observationValidationError(
+        "RAW_BODY_DRIFT",
+        "$.receipt.rawBodySha256",
+        "retained raw body does not match its receipt"
+      )
+    )
+  }
+  const observedAtUnixSeconds = receipt["observedAtUnixSeconds"]
+  if (
+    typeof observedAtUnixSeconds !== "number" ||
+    !Number.isSafeInteger(observedAtUnixSeconds) ||
+    observedAtUnixSeconds < 0
+  ) {
+    return Either.left(
+      observationValidationError(
+        "RECEIPT_REJECTED",
+        "$.receipt.observedAtUnixSeconds",
+        "observation timestamp is not canonical"
+      )
+    )
+  }
+  const provenance = Object.freeze({
+    githubRequestId: receipt["githubRequestId"],
+    githubApiVersionSelected: receipt["githubApiVersionSelected"],
+    responseEtag: receipt["responseEtag"]
+  })
+  const outcome = recompute(rawBody, observedAtUnixSeconds, provenance)
+  if (Either.isLeft(outcome)) {
+    return Either.left(
+      observationValidationError(
+        "RECOMPUTATION_REJECTED",
+        "$.receipt",
+        "raw observation could not be reconstructed for the expected identity"
+      )
+    )
+  }
+  if (receipt["receiptSha256"] !== outcome.right.receipt.receiptSha256) {
+    return Either.left(
+      observationValidationError(
+        "RECEIPT_SELF_HASH_MISMATCH",
+        "$.receipt.receiptSha256",
+        "receipt self-hash does not match trusted recomputation"
+      )
+    )
+  }
+  return Either.right(outcome.right)
+}
+
+const validateS2SGitHubObservation = <
+  Projection extends S2SGitHubProjection
+>(
+  input: unknown,
+  expectedArgumentIsCanonical: () => boolean,
+  recompute: ObservationRecomputation<Projection>
+): Effect.Effect<
+  S2SGitHubObservation<Projection>,
+  S2SGitHubObservationValidationError
+> =>
+  Effect.try({
+    try: () => {
+      if (!expectedArgumentIsCanonical()) {
+        return failObservationValidation(
+          "INVALID_ARGUMENT",
+          "$expectedIdentity",
+          "expected observation identity is not canonical"
+        )
+      }
+      const root = exactDataRecord(input, ["readRawBody", "receipt"])
+      if (root === null || typeof root["readRawBody"] !== "function") {
+        return failObservationValidation(
+          "WRAPPER_REJECTED",
+          "$",
+          "observation wrapper must be one exact plain data record"
+        )
+      }
+      const receipt = exactDataRecord(
+        root["receipt"],
+        OBSERVATION_RECEIPT_KEYS
+      )
+      if (receipt === null) {
+        return failObservationValidation(
+          "RECEIPT_REJECTED",
+          "$.receipt",
+          "observation receipt must be one exact plain data record"
+        )
+      }
+      let rawInput: unknown
+      try {
+        rawInput = Reflect.apply(root["readRawBody"], undefined, [])
+      } catch {
+        return failObservationValidation(
+          "RAW_BODY_REJECTED",
+          "$.readRawBody",
+          "raw body reader failed closed"
+        )
+      }
+      let rawBody: Uint8Array
+      try {
+        rawBody = snapshotRawBody(rawInput)
+      } catch {
+        return failObservationValidation(
+          "RAW_BODY_REJECTED",
+          "$.readRawBody",
+          "raw body reader did not return canonical bounded bytes"
+        )
+      }
+      const recomputed = recomputeS2SGitHubObservationAfterSnapshot(
+        rawBody,
+        receipt,
+        recompute
+      )
+      if (Either.isLeft(recomputed)) {
+        throw recomputed.left
+      }
+      const trusted = recomputed.right
+      if (!exactCanonicalDataEqual(receipt, trusted.receipt)) {
+        return failObservationValidation(
+          "RECEIPT_MISMATCH",
+          "$.receipt",
+          "receipt differs from trusted recomputation"
+        )
+      }
+      return trusted
+    },
+    catch: (error: unknown) =>
+      error instanceof S2SGitHubObservationValidationError
+        ? error
+        : observationValidationError(
+            "WRAPPER_REJECTED",
+            "$",
+            "observation validation failed closed"
+          )
+  })
+
+export const validateS2SGitHubWorkflowRunObservation = (
+  input: unknown,
+  expectedRunId: number
+): Effect.Effect<
+  S2SGitHubObservation<S2SGitHubWorkflowRunProjection>,
+  S2SGitHubObservationValidationError
+> =>
+  validateS2SGitHubObservation(
+    input,
+    () => Number.isSafeInteger(expectedRunId) && expectedRunId > 0,
+    (rawBody, observedAtUnixSeconds, provenance) =>
+      observeS2SGitHubWorkflowRun(
+        rawBody,
+        expectedRunId,
+        observedAtUnixSeconds,
+        provenance
+      )
+  )
+
+export const validateS2SGitHubWorkflowAttemptJobsObservation = (
+  input: unknown,
+  expectedRunId: number
+): Effect.Effect<
+  S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>,
+  S2SGitHubObservationValidationError
+> =>
+  validateS2SGitHubObservation(
+    input,
+    () => Number.isSafeInteger(expectedRunId) && expectedRunId > 0,
+    (rawBody, observedAtUnixSeconds, provenance) =>
+      observeS2SGitHubWorkflowAttemptJobs(
+        rawBody,
+        expectedRunId,
+        1,
+        observedAtUnixSeconds,
+        provenance
+      )
+  )
+
+export const validateS2SGitHubWorkflowRunsForHeadObservation = (
+  input: unknown,
+  expectedHeadSha: string
+): Effect.Effect<
+  S2SGitHubObservation<S2SGitHubWorkflowRunsProjection>,
+  S2SGitHubObservationValidationError
+> =>
+  validateS2SGitHubObservation(
+    input,
+    () =>
+      typeof expectedHeadSha === "string" &&
+      GIT_SHA_PATTERN.test(expectedHeadSha),
+    (rawBody, observedAtUnixSeconds, provenance) =>
+      observeS2SGitHubWorkflowRunsForHead(
+        rawBody,
+        expectedHeadSha,
+        observedAtUnixSeconds,
+        provenance
+      )
+  )
+
 export const validateS2SGitHubArtifactDownload = (
   input: unknown,
   expectedArtifactId: number,
@@ -1607,8 +2126,7 @@ export const validateS2SGitHubArtifactDownload = (
       Object.getOwnPropertySymbols(archive).length !== 0 ||
       Object.getOwnPropertyDescriptor(archive, "byteLength") !== undefined ||
       Object.getOwnPropertyDescriptor(archive, "buffer") !== undefined ||
-      (typeof SharedArrayBuffer !== "undefined" &&
-        archive.buffer instanceof SharedArrayBuffer) ||
+      isSharedArrayBuffer(archive.buffer) ||
       archive.byteLength !== archiveByteLength ||
       rawS2SFileSha256(archive) !== receipt["downloadedArchiveSha256"]
     ) {
@@ -1800,7 +2318,9 @@ const fromObservation = <Projection extends S2SGitHubProjection>(
   S2SGitHubObservationError
 > => (Either.isLeft(outcome) ? Effect.fail(outcome.left) : Effect.succeed(outcome.right))
 
-const currentUnixSeconds = (): number => Math.floor(Date.now() / 1_000)
+const currentUnixSeconds = Clock.currentTimeMillis.pipe(
+  Effect.map((milliseconds) => Math.floor(milliseconds / 1_000))
+)
 
 const observationProvenanceFromResponse = (
   response: S2SGitHubValidatedJsonResponse
@@ -1824,11 +2344,12 @@ export const S2SGitHubObserverLive = Layer.effect(
             untrustedResponse,
             "OBSERVE_WORKFLOW_RUN"
           )
+          const observedAtUnixSeconds = yield* currentUnixSeconds
           return yield* fromObservation(
             observeS2SGitHubWorkflowRun(
               response.body,
               workflowRunId,
-              currentUnixSeconds(),
+              observedAtUnixSeconds,
               observationProvenanceFromResponse(response)
             )
           )
@@ -1843,12 +2364,40 @@ export const S2SGitHubObserverLive = Layer.effect(
             untrustedResponse,
             "OBSERVE_WORKFLOW_ATTEMPT_JOBS"
           )
+          const observedAtUnixSeconds = yield* currentUnixSeconds
           return yield* fromObservation(
             observeS2SGitHubWorkflowAttemptJobs(
               response.body,
               workflowRunId,
               1,
-              currentUnixSeconds(),
+              observedAtUnixSeconds,
+              observationProvenanceFromResponse(response)
+            )
+          )
+        }),
+      observeWorkflowRunsForHead: (headSha) =>
+        Effect.gen(function* () {
+          if (typeof headSha !== "string" || !GIT_SHA_PATTERN.test(headSha)) {
+            return yield* Effect.fail(
+              observationError(
+                "INVALID_ARGUMENT",
+                "$headSha",
+                "head SHA must be exactly 40 lowercase hexadecimal characters"
+              )
+            )
+          }
+          const endpoint = workflowRunsForHeadEndpoint(headSha)
+          const untrustedResponse = yield* transport.getJson(endpoint)
+          const response = yield* requireJsonResponse(
+            untrustedResponse,
+            "OBSERVE_WORKFLOW_RUNS_FOR_HEAD"
+          )
+          const observedAtUnixSeconds = yield* currentUnixSeconds
+          return yield* fromObservation(
+            observeS2SGitHubWorkflowRunsForHead(
+              response.body,
+              headSha,
+              observedAtUnixSeconds,
               observationProvenanceFromResponse(response)
             )
           )
@@ -1863,11 +2412,12 @@ export const S2SGitHubObserverLive = Layer.effect(
             untrustedResponse,
             "OBSERVE_RUN_ARTIFACTS"
           )
+          const observedAtUnixSeconds = yield* currentUnixSeconds
           return yield* fromObservation(
             observeS2SGitHubRunArtifacts(
               response.body,
               workflowRunId,
-              currentUnixSeconds(),
+              observedAtUnixSeconds,
               observationProvenanceFromResponse(response)
             )
           )
@@ -1880,11 +2430,12 @@ export const S2SGitHubObserverLive = Layer.effect(
             untrustedResponse,
             "OBSERVE_ARTIFACT"
           )
+          const observedAtUnixSeconds = yield* currentUnixSeconds
           return yield* fromObservation(
             observeS2SGitHubArtifact(
               response.body,
               artifactId,
-              currentUnixSeconds(),
+              observedAtUnixSeconds,
               observationProvenanceFromResponse(response)
             )
           )

@@ -26,7 +26,8 @@ import {
   type S2SGitHubArtifactsProjection,
   type S2SGitHubObservation,
   type S2SGitHubWorkflowJobsProjection,
-  type S2SGitHubWorkflowRunProjection
+  type S2SGitHubWorkflowRunProjection,
+  type S2SGitHubWorkflowRunsProjection
 } from "../src/s2s-live-github.js"
 
 const RUN_ID = 32_442_437_970
@@ -305,6 +306,7 @@ const makeAuthorityLayer = (fixture: ReturnType<typeof makeFixture>) => {
         return Effect.succeed(observation)
       },
       observeWorkflowAttemptJobs: () => Effect.succeed(fixture.jobs),
+      observeWorkflowRunsForHead: () => Effect.dieMessage("not used"),
       observeRunArtifacts: () => {
         const observation =
           fixture.artifactObservations[
@@ -890,6 +892,7 @@ it.effect("surfaces observer failure as unavailable without retrying", () => {
           detail: "fixture"
         }))
       },
+      observeWorkflowRunsForHead: () => Effect.dieMessage("not used"),
       observeRunArtifacts: () => Effect.dieMessage("must not run"),
       observeArtifact: () => Effect.dieMessage("not used"),
       downloadArtifactArchive: () => Effect.dieMessage("not used")
@@ -916,8 +919,9 @@ it.effect("surfaces observer failure as unavailable without retrying", () => {
 // port. They prevent accidental widening to unknown in this authority test.
 const _observationTypeAnchors: readonly [
   S2SGitHubObservation<S2SGitHubWorkflowRunProjection> | null,
+  S2SGitHubObservation<S2SGitHubWorkflowRunsProjection> | null,
   S2SGitHubObservation<S2SGitHubWorkflowJobsProjection> | null,
   S2SGitHubObservation<S2SGitHubArtifactsProjection> | null,
   S2SGitHubObservation<S2SGitHubArtifactProjection> | null
-] = [null, null, null, null]
+] = [null, null, null, null, null]
 void _observationTypeAnchors

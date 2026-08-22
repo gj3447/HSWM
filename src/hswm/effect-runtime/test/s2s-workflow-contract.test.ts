@@ -8,6 +8,8 @@ import {
   S2S_CONFIRMATORY_JOB_STAGES,
   S2S_CONFIRMATORY_STAGE_CONTRACTS,
   S2S_CONFIRMATORY_WORKFLOW_CONTRACT,
+  S2S_CONFIRMATORY_WORKFLOW_ID,
+  S2S_CONFIRMATORY_WORKFLOW_PATH,
   S2S_CONFIRMATORY_WORKFLOW_REF,
   s2sArtifactReadContract,
   s2sArtifactRoleMayBeConsumedByStage,
@@ -33,6 +35,12 @@ it("closes one exact three-stage workflow identity and role mapping", () => {
   ])
   expect(S2S_CONFIRMATORY_WORKFLOW_REF).toBe(
     "gj3447/HSWM/.github/workflows/swm0w-s2s-confirmatory.yml@refs/heads/main"
+  )
+  expect(S2S_CONFIRMATORY_WORKFLOW_ID).toBe(
+    "swm0w-s2s-confirmatory.yml"
+  )
+  expect(S2S_CONFIRMATORY_WORKFLOW_PATH).toBe(
+    `.github/workflows/${S2S_CONFIRMATORY_WORKFLOW_ID}`
   )
   expect(
     S2S_CONFIRMATORY_JOB_STAGES.map(

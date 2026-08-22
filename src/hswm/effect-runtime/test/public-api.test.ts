@@ -24,13 +24,29 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect("finalizeS2SEvidenceReadback" in PublicApi).toBe(false)
   expect("S2SGitHubHttpTransport" in PublicApi).toBe(false)
   expect("S2SGitHubObserver" in PublicApi).toBe(false)
+  expect("S2SGitHubObserverLive" in PublicApi).toBe(false)
+  expect("S2SGitHubObservationValidationError" in PublicApi).toBe(false)
+  expect("makeS2SGitHubHttpTransportLiveLayer" in PublicApi).toBe(false)
+  expect("observeS2SGitHubWorkflowRunsForHead" in PublicApi).toBe(false)
+  expect("validateS2SGitHubWorkflowRunObservation" in PublicApi).toBe(false)
+  expect(
+    "validateS2SGitHubWorkflowAttemptJobsObservation" in PublicApi
+  ).toBe(false)
+  expect(
+    "validateS2SGitHubWorkflowRunsForHeadObservation" in PublicApi
+  ).toBe(false)
   expect("S2SArtifactAuthority" in PublicApi).toBe(false)
   expect("validateS2SRegistrationCommitB" in PublicApi).toBe(false)
   expect("inspectS2SRegistrationCommitAuthority" in PublicApi).toBe(false)
+  expect("inspectS2SRegistrationWorkflowManifestBinding" in PublicApi).toBe(
+    false
+  )
   expect("S2S_CONFIRMATORY_WORKFLOW_CONTRACT" in PublicApi).toBe(false)
+  expect("S2S_CONFIRMATORY_WORKFLOW_ID" in PublicApi).toBe(false)
   expect("S2SCurrentInvocation" in PublicApi).toBe(false)
   expect("S2SCurrentInvocationLive" in PublicApi).toBe(false)
   expect("inspectS2SCurrentInvocationAuthority" in PublicApi).toBe(false)
+  expect("readS2SCurrentInvocationEventBytes" in PublicApi).toBe(false)
   expect("makeS2SCurrentInvocationTestLayer" in PublicApi).toBe(false)
   expect("validateS2SCurrentInvocation" in PublicApi).toBe(false)
   expect("makeS2SConfirmatoryControlPlaneMemoryForTest" in PublicApi).toBe(

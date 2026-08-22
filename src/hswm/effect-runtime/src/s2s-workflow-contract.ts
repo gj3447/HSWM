@@ -20,8 +20,10 @@ export const S2S_CONFIRMATORY_BRANCH = "main" as const
 export const S2S_CONFIRMATORY_EVENT = "push" as const
 export const S2S_CONFIRMATORY_WORKFLOW_NAME =
   "SWM-0W-S2S confirmatory" as const
+export const S2S_CONFIRMATORY_WORKFLOW_ID =
+  "swm0w-s2s-confirmatory.yml" as const
 export const S2S_CONFIRMATORY_WORKFLOW_PATH =
-  ".github/workflows/swm0w-s2s-confirmatory.yml" as const
+  `.github/workflows/${S2S_CONFIRMATORY_WORKFLOW_ID}` as const
 export const S2S_CONFIRMATORY_PREREGISTRATION_PATH =
   "prereg/PREREG_SWM0W_S2S_GATE_V1.json" as const
 export const S2S_CONFIRMATORY_WORKFLOW_REF =

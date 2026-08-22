@@ -1,0 +1,457 @@
+{
+  "schema_version": "hswm-engineering-handoff-kg/v6",
+  "bundle_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-observation-authority-implemented-2026-08-22",
+  "status": "BLOCKED_PRE_PREREG",
+  "design_status": "V5_FROZEN_DESIGN_IMPLEMENTED",
+  "implementation_status": "OBSERVATION_SLICE_ENGINEERING_CLEAR",
+  "structural_status": "STRUCTURAL_1_6_9_CLEAR",
+  "functional_runtime_status": "USER_PRIMARY_TYPESCRIPT_EFFECT_V3_ACTIVE",
+  "effect_skill_application_status": "APPLIED_TO_IMPLEMENTATION_AND_VERIFICATION_NOT_A_RUNTIME_DEPENDENCY",
+  "github_provenance_status": "REQUEST_DISTINCT_ENGINEERING_CLEAR_ORIGIN_COMPOSITION_OPEN",
+  "registration_authority_status": "SOURCE_PREREGISTRATION_THROUGH_B_CLEAR",
+  "workflow_contract_status": "IDENTITY_AND_STAGE_CONTRACT_V1_ENGINEERING_CLEAR_SOURCE_BYTES_OPEN",
+  "current_invocation_authority_status": "ENGINEERING_CLEAR_PROCESS_LOCAL",
+  "workflow_source_bytes_status": "OPEN",
+  "observation_revalidation_status": "ENGINEERING_CLEAR_INTERNAL_CONSISTENCY_NOT_ORIGIN",
+  "workflow_runs_for_head_status": "ENGINEERING_CLEAR_MULTIPLICITY_PRESERVING",
+  "current_run_authority_status": "OPEN",
+  "scientific_status": "UNJUDGED",
+  "updated_at": "2026-08-22",
+  "authority": {
+    "runtime_direction": "USER_PRIMARY",
+    "implementation_and_resume_boundary": "SECONDARY_AI_PROPOSED_ADVERSARIALLY_VERIFIED_ENGINEERING",
+    "publication_projection": "SYSTEM_DERIVED_LOCAL_ONLY"
+  },
+  "supersedes_bundle_uid_for_continuation": "sym:EngineeringDesignCheckpoint:hswm-swm0w-s2s-observation-authority-design-2026-08-22",
+  "workspace_parent_commit": "1e620fba8e8eaf147f81a95c0bf05b8553e23d9c",
+  "workspace_code_commit": "98f9e7c14933cad4ccccc352e94aeb904f035ade",
+  "handoff_path": "docs/operations/HSWM_SWM0W_S2S_OBSERVATION_AUTHORITY_IMPLEMENTED_NEXT_SESSION_2026-08-22.md",
+  "remote_kg_publication_status": "NOT_ATTEMPTED",
+  "future_beacon_selected": false,
+  "preregistration_created": false,
+  "confirmatory_dispatched": false,
+  "candidate_produced": false,
+  "event_10_composed": false,
+  "architecture_projection": {
+    "H": "TARGET_IDENTITY_UNCHANGED_NO_NEW_COGNITION_EVIDENCE",
+    "W": "NO_LEARNED_WEIGHT_RESULT",
+    "A": "NO_ACTIVATION_READOUT_EFFICACY_RESULT",
+    "F": "NO_CONFIRMATORY_FUNCTION_OR_NUMERIC_RESULT",
+    "Pi": "RETAINED_OBSERVATION_INTERNAL_CONSISTENCY_AND_MULTIPLICITY_PRESERVING_HEAD_QUERY_IMPLEMENTED_GITHUB_ORIGIN_WORKFLOW_SOURCE_BYTES_AND_CURRENT_RUN_AUTHORITY_OPEN",
+    "outcome_bound_causal_learning_loop": "NOT_ADVANCED"
+  },
+  "frozen_versions": {
+    "effect": "3.22.1",
+    "typescript": "5.9.3",
+    "node": "24.13.0",
+    "github_api_selected": "2022-11-28",
+    "github_observation_schema": "hswm-swm0w-s2s-github-observation-receipt/v2",
+    "workflow_contract_schema": "hswm-swm0w-s2s-workflow-contract/v1",
+    "workflow_contract_sha256": "45e14e0e3d2a0ca0b652c2d39741b264968d4ecdb2d0ff5b74eabd0aa8904050",
+    "workflow_file_sha256_status": "OPEN_UNTIL_REVIEWED_WORKFLOW_BYTES_EXIST"
+  },
+  "implemented_boundaries": {
+    "observation_revalidation": {
+      "status": "ENGINEERING_CLEAR_INTERNAL_CONSISTENCY_NOT_ORIGIN",
+      "entrypoints": [
+        "validateS2SGitHubWorkflowRunObservation",
+        "validateS2SGitHubWorkflowAttemptJobsObservation",
+        "validateS2SGitHubWorkflowRunsForHeadObservation"
+      ],
+      "return_shape": "Effect.Effect<TrustedObservation,S2SGitHubObservationValidationError>",
+      "execution_model": "LAZY_EFFECT_WITH_NO_SERVICE_REQUIREMENT",
+      "pure_kernel": "POST_SNAPSHOT_RECOMPUTATION_THROUGH_EXISTING_EITHER_CONSTRUCTORS",
+      "jobs_attempt": 1,
+      "wrapper_exact_keys": [
+        "readRawBody",
+        "receipt"
+      ],
+      "receipt_exact_keys": [
+        "apiVersion",
+        "endpointPathAndQuery",
+        "githubApiVersionSelected",
+        "githubRequestId",
+        "httpStatus",
+        "kind",
+        "observedAtUnixSeconds",
+        "projection",
+        "projectionSha256",
+        "rawBodyByteLength",
+        "rawBodySha256",
+        "receiptSha256",
+        "repository",
+        "responseEtag",
+        "schemaVersion"
+      ],
+      "raw_reader_calls_per_execution": 1,
+      "raw_reader_invocation": "DETACHED",
+      "raw_body_max_bytes": 8388608,
+      "raw_body_shape": "UNSHARED_BASE_UINT8ARRAY_NO_OWN_BUFFER_OR_BYTELENGTH_DESCRIPTOR",
+      "shared_backing_policy": "REJECT_SAME_AND_CROSS_REALM_SHARED_ARRAY_BUFFER_BY_INTRINSIC_BRAND",
+      "expected_identity_source": "INDEPENDENT_VALIDATOR_ARGUMENT",
+      "recomputation_source": "EXISTING_PURE_OBSERVATION_CONSTRUCTORS",
+      "deep_comparison": "TRUSTED_RECOMPUTED_SHAPE_DRIVEN_EXACT_DATA_DESCRIPTOR_WALK",
+      "array_rejects": [
+        "HOLES",
+        "EXTRA_PROPERTIES",
+        "SYMBOLS",
+        "ACCESSORS",
+        "CUSTOM_PROTOTYPES"
+      ],
+      "universal_proxy_detection_claimed": false,
+      "returns_caller_object": false,
+      "error_reasons": [
+        "INVALID_ARGUMENT",
+        "WRAPPER_REJECTED",
+        "RECEIPT_REJECTED",
+        "RAW_BODY_REJECTED",
+        "RAW_BODY_DRIFT",
+        "RECOMPUTATION_REJECTED",
+        "RECEIPT_SELF_HASH_MISMATCH",
+        "RECEIPT_MISMATCH"
+      ],
+      "establishes_internal_byte_receipt_consistency": true,
+      "establishes_github_origin": false,
+      "self_consistent_fabrication_is_accepted": true,
+      "origin_requirement": "A private production composition root must fix the approved Live observer or consume an equivalent module-authentic origin capability."
+    },
+    "workflow_runs_for_head": {
+      "status": "ENGINEERING_CLEAR_MULTIPLICITY_PRESERVING",
+      "observation_schema_version": "hswm-swm0w-s2s-github-observation-receipt/v2",
+      "kind": "WORKFLOW_RUNS_FOR_HEAD",
+      "workflow_id": "swm0w-s2s-confirmatory.yml",
+      "endpoint_template": "/repos/gj3447/HSWM/actions/workflows/swm0w-s2s-confirmatory.yml/runs?branch=main&event=push&head_sha=<lowercase-40-hex>&per_page=100",
+      "projection": {
+        "totalCount": "NONNEGATIVE_SAFE_INTEGER",
+        "workflowRuns": "READONLY_SORTED_DEEPLY_FROZEN_RUN_PROJECTIONS"
+      },
+      "total_count_rule": "total_count === workflow_runs.length <= 100",
+      "accepted_multiplicities": [
+        0,
+        1,
+        "N_UP_TO_100"
+      ],
+      "sort_key": "RUN_ID_ASCENDING",
+      "duplicate_run_ids": "REJECT",
+      "row_identity": [
+        "REQUESTED_HEAD_SHA",
+        "REPOSITORY_GJ3447_HSWM",
+        "HEAD_REPOSITORY_GJ3447_HSWM"
+      ],
+      "observer_decides_uniqueness": false,
+      "query_canonicalization": "LOCAL_STRICT_RECEIPT_POLICY_NOT_GITHUB_SEMANTICS",
+      "single_page_closure": "LOCAL_POLICY_TOTAL_COUNT_EQUALS_RETURNED_LENGTH_AT_MOST_100",
+      "timestamp_source": "Effect.Clock_FOR_ALL_FIVE_JSON_OBSERVATION_LIVE_METHODS",
+      "zip_download_clock_migrated": false,
+      "workflow_filename_constant": "S2S_CONFIRMATORY_WORKFLOW_ID",
+      "workflow_filename_derivation": "ONE_INTERNAL_LITERAL_BASENAME_DERIVES_EXISTING_PATH",
+      "workflow_contract_hash_changed": false,
+      "observed_path_suffix_at_main_accepted": true,
+      "path_representation_authority_decided": false
+    }
+  },
+  "remaining_run_authority": {
+    "status": "OPEN",
+    "acquisition_bracket": [
+      "RUN_START",
+      "ATTEMPT_ONE_JOBS",
+      "WORKFLOW_RUNS_FOR_B",
+      "RUN_END"
+    ],
+    "requires_exactly_one_run": true,
+    "requires_current_invocation_run_id": true,
+    "requires_attempt_one": true,
+    "requires_distinct_request_ids": true,
+    "requires_identity_stability": true,
+    "requires_terminal_reobservation_before_future_commit": true,
+    "requires_rerun_invalidation_policy": true,
+    "requires_authentic_registration_b": true,
+    "requires_authentic_current_invocation": true,
+    "requires_reviewed_workflow_source_binding": true,
+    "required_production_issuance_policy": "FAIL_CLOSED_WHILE_WORKFLOW_SOURCE_BYTES_OPEN",
+    "positive_pre_workflow_test_authority": "TEST_ONLY_SEALED_NOT_ROOT_EXPORTED"
+  },
+  "next_session_order": [
+    "IMPLEMENT_PRIVATE_REQUEST_DISTINCT_RUN_AUTHORITY",
+    "CONSUME_AUTHENTIC_REGISTRATION_B_AND_CURRENT_INVOCATION_CAPABILITIES",
+    "REQUIRE_EXACTLY_ONE_MATCHING_RUN_AND_FULL_IDENTITY_STABILITY",
+    "REOBSERVE_BEFORE_FUTURE_DURABLE_AUTHORITY_COMMIT_AND_DEFINE_RERUN_INVALIDATION",
+    "KEEP_PRODUCTION_POSITIVE_ISSUANCE_CLOSED_WHILE_WORKFLOW_BYTES_OPEN",
+    "THEN_IMPLEMENT_ATOMIC_STAGE_PERMITS_AND_DURABLE_EXTERNAL_EVIDENCE"
+  ],
+  "verification": {
+    "effect_command": "cd src/hswm/effect-runtime && proxmox-scratch run hswm-effect-observation-verify --timeout 7200 -- npm run verify",
+    "effect_tests": "179/179 PASS",
+    "effect_test_suites": "15/15 PASS",
+    "focused_tests": "50/50 PASS",
+    "focused_test_suites": "4/4 PASS",
+    "typescript": "STRICT_CHECK_PASS",
+    "build": "PASS",
+    "pack_dry_run": "PASS",
+    "diff_check": "PASS",
+    "independent_audits": "TWO_READ_ONLY_AUDITS_NO_REMAINING_IMPLEMENTATION_BLOCKER",
+    "cross_realm_shared_memory_regression": "PASS_AFTER_ADVERSARIAL_REPAIR",
+    "claim_boundary": "Engineering consistency and multiplicity verification only; no GitHub-origin or efficacy verdict."
+  },
+  "resolved_gates": [
+    {
+      "uid": "sym:Gate:hswm-s2s-request-distinct-github-receipts",
+      "status": "ENGINEERING_CLEAR"
+    },
+    {
+      "uid": "sym:Gate:hswm-s2s-registration-b-runtime-authority",
+      "status": "ENGINEERING_CLEAR"
+    },
+    {
+      "uid": "sym:Gate:hswm-s2s-workflow-identity-contract-v1",
+      "status": "ENGINEERING_CLEAR"
+    },
+    {
+      "uid": "sym:Gate:hswm-s2s-current-invocation-runtime-authority",
+      "status": "ENGINEERING_CLEAR"
+    },
+    {
+      "uid": "sym:Gate:hswm-s2s-observation-revalidation-internal-consistency",
+      "status": "ENGINEERING_CLEAR_INTERNAL_CONSISTENCY_NOT_ORIGIN"
+    },
+    {
+      "uid": "sym:Gate:hswm-s2s-workflow-runs-for-head",
+      "status": "ENGINEERING_CLEAR_MULTIPLICITY_PRESERVING"
+    }
+  ],
+  "open_gates": [
+    {
+      "uid": "sym:Blocker:hswm-s2s-workflow-source-bytes-manifest-binding",
+      "severity": "P0",
+      "failure_mode": "The reviewed workflow bytes, literal file hash, and matching source-A manifest row do not exist."
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-trusted-current-run-observation",
+      "severity": "P0",
+      "failure_mode": "Standalone validators establish retained-byte consistency but admit fully self-consistent fabrication; no private module-authentic GitHub-origin composition has issued a trusted current-run observation."
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-current-run-stage-authority",
+      "severity": "P0",
+      "failure_mode": "No private Layer combines authentic B and invocation capabilities with request-distinct Live-origin observations, unique-run policy, and reviewed workflow bytes."
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-stage-specific-artifact-permits",
+      "severity": "P0",
+      "failure_mode": "Artifact reads still accept caller-selected identity instead of atomically consumed stage permits."
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-durable-external-evidence-envelope",
+      "severity": "P0",
+      "failure_mode": "No create-only content-addressed external evidence envelope stores the replay closure."
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-composition-workflow-finalizer",
+      "severity": "P0",
+      "failure_mode": "No closed stage composition, reviewed workflow, terminal rerun-safe finalizer, complete VOID matrix, or event-10 authority exists."
+    }
+  ],
+  "artifact_bindings": [
+    {
+      "path": "docs/operations/HSWM_SWM0W_S2S_OBSERVATION_AUTHORITY_IMPLEMENTED_NEXT_SESSION_2026-08-22.md",
+      "role": "NEXT_SESSION_OBSERVATION_IMPLEMENTATION_HANDOFF",
+      "sha256": "ed4f60761403eebe53a0a17665ec45b8b7aa26915b607db5a3f3bf887898f240"
+    },
+    {
+      "path": "ontology/evidence/README.md",
+      "role": "LOCAL_KG_CURRENT_CONTINUATION_INDEX_V6",
+      "sha256": "13be4f2c0066fbbe298f2132440ab2524b5ef58616f3fa3dfd8aee6322e4c552"
+    },
+    {
+      "path": "docs/research/HSWM_TYPESCRIPT_EFFECT_RUNTIME_2026-08-21.md",
+      "role": "TYPESCRIPT_EFFECT_RESEARCH_CONTINUATION_INDEX_V6",
+      "sha256": "c347cd299756cce02b7d9902c558f932064287ac12381a39a8fa60c17009f095"
+    },
+    {
+      "path": "src/hswm/effect-runtime/README.md",
+      "role": "EFFECT_RUNTIME_CURRENT_CONTINUATION_INDEX_V6",
+      "sha256": "ce950b59100236163fca89558df01591049b8699d9375f6cb49507d3e4fe0055"
+    },
+    {
+      "path": "tests/test_hswm_swm0w_s2s_effect_handoff_v6.py",
+      "role": "LOCAL_KG_V6_CLOSURE_REGRESSIONS",
+      "sha256": "9a69c73d14fe71075b9fc31df800f4e6f2f6ce959dc11b9d6db3da22b6dca94e"
+    },
+    {
+      "path": "docs/operations/HSWM_SWM0W_S2S_OBSERVATION_AUTHORITY_DESIGN_NEXT_SESSION_2026-08-22.md",
+      "role": "IMMUTABLE_V5_DESIGN_HANDOFF_PREDECESSOR",
+      "sha256": "c961441d51d000910b99a3c17360d127c1b4ba3786acfdbea6ea02b55c78feaf"
+    },
+    {
+      "path": "ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v5.json",
+      "role": "IMMUTABLE_V5_KG_PREDECESSOR",
+      "sha256": "bce57edb7179cf7ee91ad0a581a39dcecede8c29451f1200acf213b07527de26"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-live-github.ts",
+      "role": "OBSERVATION_REVALIDATION_AND_RUN_ROSTER_IMPLEMENTATION",
+      "sha256": "0f2aa61d4beae0f5a11f2c57422b2b9532a40b4656c1beb30327ee829dd3d4bb"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-workflow-contract.ts",
+      "role": "WORKFLOW_FILENAME_DERIVATION_IMPLEMENTATION",
+      "sha256": "40a498cb004bc9ed5992a4e3bb127acc49827abacf5bd08797697c7366e9be68"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/s2s-live-github.test.ts",
+      "role": "OBSERVATION_HOSTILE_MULTIPLICITY_AND_TRANSPORT_REGRESSIONS",
+      "sha256": "21e4e84bbc244e899101a756c4eae63f8adb151ad28be8022f405bc12ef60cea"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/s2s-workflow-contract.test.ts",
+      "role": "WORKFLOW_FILENAME_AND_FIXED_DIGEST_REGRESSIONS",
+      "sha256": "1b9a80a655a552bb4a0cb2be063ce51f216f75d6f1b6a957823065740a1722b4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/s2s-live-artifact.test.ts",
+      "role": "OBSERVER_PORT_MOCK_COMPATIBILITY_REGRESSIONS",
+      "sha256": "a093924e5a712322f089ba920943dea60f0fd431b246cf33ce2a774ed2a3bcd0"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/public-api.test.ts",
+      "role": "PRIVILEGED_EXPORT_CONTAINMENT_REGRESSION_V6",
+      "sha256": "d34d68bfa739490e29c1ead866d8264668cc0e2b29ab35d68c3f8cea06006cd5"
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:UserDirection:hswm-typescript-effect-runtime-2026-08-21",
+      "kind": "USER_DIRECTION",
+      "authority_class": "USER_PRIMARY",
+      "status": "ACTIVE",
+      "name": "TypeScript-first Effect functional runtime"
+    },
+    {
+      "uid": "sym:ArchitectureBoundary:hswm-swm0w-s2s-ts-control-python-oracle-v1",
+      "kind": "ARCHITECTURE_BOUNDARY",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "ACTIVE_ENGINEERING_DIRECTION",
+      "name": "TypeScript Effect Pi control plane and opaque Python numeric oracle",
+      "claim_boundary": "The boundary does not divide HSWM target cognition into subsystems or establish efficacy."
+    },
+    {
+      "uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-observation-authority-implemented-2026-08-22",
+      "kind": "ENGINEERING_CHECKPOINT",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "IMPLEMENTED_ADVERSARIALLY_VERIFIED",
+      "name": "Retained observation consistency and multiplicity-preserving head-SHA roster",
+      "plan_path": "docs/operations/HSWM_SWM0W_S2S_OBSERVATION_AUTHORITY_IMPLEMENTED_NEXT_SESSION_2026-08-22.md",
+      "scientific_status": "UNJUDGED"
+    },
+    {
+      "uid": "sym:EngineeringDesignCheckpoint:hswm-swm0w-s2s-observation-authority-design-2026-08-22",
+      "kind": "HISTORICAL_ENGINEERING_DESIGN_CHECKPOINT",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "SUPERSEDED_FOR_CONTINUATION_ONLY",
+      "name": "Immutable v5 observation-authority design",
+      "source_path": "ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v5.json",
+      "scientific_status": "UNJUDGED"
+    },
+    {
+      "uid": "sym:Boundary:hswm-s2s-standalone-observation-revalidation-v1",
+      "kind": "IMPLEMENTED_BOUNDARY",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "ENGINEERING_CLEAR_INTERNAL_CONSISTENCY_NOT_ORIGIN",
+      "name": "Raw-byte-driven exact observation recomputation"
+    },
+    {
+      "uid": "sym:Boundary:hswm-s2s-workflow-runs-for-head-v1",
+      "kind": "IMPLEMENTED_BOUNDARY",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "ENGINEERING_CLEAR_MULTIPLICITY_PRESERVING",
+      "name": "Bounded workflow runs for exact head SHA observation"
+    },
+    {
+      "uid": "sym:Boundary:hswm-s2s-private-github-live-origin",
+      "kind": "AUTHORITY_BOUNDARY",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "OPEN",
+      "name": "Private production Live composition required for GitHub origin"
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-current-run-stage-authority",
+      "kind": "BLOCKER",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "OPEN",
+      "name": "Authentic request-distinct unique current-run and stage authority"
+    },
+    {
+      "uid": "sym:Claim:learned-s2s-efficacy",
+      "kind": "SCIENTIFIC_CLAIM",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "UNJUDGED",
+      "name": "Learned set-to-set macro-weight efficacy",
+      "scientific_status": "UNJUDGED"
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-observation-authority-implemented-2026-08-22",
+      "type": "SUPERSEDES_FOR_CONTINUATION",
+      "to_uid": "sym:EngineeringDesignCheckpoint:hswm-swm0w-s2s-observation-authority-design-2026-08-22"
+    },
+    {
+      "from_uid": "sym:UserDirection:hswm-typescript-effect-runtime-2026-08-21",
+      "type": "GOVERNS_DIRECTION_OF",
+      "to_uid": "sym:ArchitectureBoundary:hswm-swm0w-s2s-ts-control-python-oracle-v1"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-observation-authority-implemented-2026-08-22",
+      "type": "IMPLEMENTS_PART_OF",
+      "to_uid": "sym:ArchitectureBoundary:hswm-swm0w-s2s-ts-control-python-oracle-v1"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-observation-authority-implemented-2026-08-22",
+      "type": "IMPLEMENTS",
+      "to_uid": "sym:Boundary:hswm-s2s-standalone-observation-revalidation-v1"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-observation-authority-implemented-2026-08-22",
+      "type": "IMPLEMENTS",
+      "to_uid": "sym:Boundary:hswm-s2s-workflow-runs-for-head-v1"
+    },
+    {
+      "from_uid": "sym:Boundary:hswm-s2s-standalone-observation-revalidation-v1",
+      "type": "DOES_NOT_REPLACE",
+      "to_uid": "sym:Boundary:hswm-s2s-private-github-live-origin"
+    },
+    {
+      "from_uid": "sym:Blocker:hswm-s2s-current-run-stage-authority",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:Boundary:hswm-s2s-standalone-observation-revalidation-v1"
+    },
+    {
+      "from_uid": "sym:Blocker:hswm-s2s-current-run-stage-authority",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:Boundary:hswm-s2s-workflow-runs-for-head-v1"
+    },
+    {
+      "from_uid": "sym:Blocker:hswm-s2s-current-run-stage-authority",
+      "type": "DEPENDS_ON",
+      "to_uid": "sym:Boundary:hswm-s2s-private-github-live-origin"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-observation-authority-implemented-2026-08-22",
+      "type": "DOES_NOT_ESTABLISH",
+      "to_uid": "sym:Claim:learned-s2s-efficacy"
+    }
+  ],
+  "protected_unrelated_paths": [
+    "src/hswm/experiments/continual_live.py",
+    "tests/test_hswm_continual_live.py"
+  ],
+  "nonclaims": [
+    "Standalone observation revalidation does not authenticate GitHub origin.",
+    "Multiplicity-preserving observation does not establish unique current-run authority.",
+    "This local KG projection is not a remote Neo4j or canonical KG publication.",
+    "This checkpoint is not a preregistration, future-beacon commitment, or workflow dispatch.",
+    "The workflow contract digest is not a workflow-file hash and workflow source bytes remain OPEN.",
+    "Green engineering tests do not establish learned set-to-set efficacy.",
+    "There is no event-10 verdict, learned-weight update, or outcome-bound causal-learning advance."
+  ]
+}

@@ -27,14 +27,19 @@ engineering checkpoints:
   current-invocation authority, conditional source-workflow-row inspector, and
   the still-open workflow-source, unique-run, run/stage, envelope, and
   finalizer gates.
-- [`v5 current observation-authority design checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v5.json)
+- [`v5 historical observation-authority design checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v5.json)
   freezes the next strict TypeScript/Effect implementation contract for
   standalone raw-byte observation recomputation, the exact bounded
   workflow-runs-for-head query, and the separation between multiplicity
-  observation, GitHub origin, and unique-run authority. The design remains
-  unimplemented and all production authority gates remain fail-closed.
+  observation, GitHub origin, and unique-run authority.
+- [`v6 current observation implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v6.json)
+  records lazy run/jobs/list revalidation and the exact multiplicity-preserving
+  workflow-runs-for-head observation as engineering-clear for retained-byte
+  consistency. It explicitly does not establish GitHub origin or unique
+  current-run authority, and production issuance remains fail-closed while
+  workflow source bytes are absent.
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v5 supersedes v4 only as the
-next-session entrypoint; v1 through v4 remain immutable historical
+runtime graphs, or remote Neo4j publications. v6 supersedes v5 only as the
+next-session entrypoint; v1 through v5 remain immutable historical
 projections.

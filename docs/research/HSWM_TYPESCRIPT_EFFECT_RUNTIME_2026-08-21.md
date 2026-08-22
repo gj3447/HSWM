@@ -226,3 +226,16 @@ workflow-runs-for-head query, and separates internal receipt consistency from
 GitHub origin and unique-run authority. It changes no `H/W/A/F`, does not close
 the outcome-bound causal-learning loop, and leaves production issuance
 fail-closed while workflow source bytes are absent.
+
+That v5 contract is now implemented and adversarially verified at code
+checkpoint `98f9e7c` as recorded in the
+[`observation implementation handoff`](../operations/HSWM_SWM0W_S2S_OBSERVATION_AUTHORITY_IMPLEMENTED_NEXT_SESSION_2026-08-22.md)
+and
+[`v6 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v6.json).
+The private validators lazily reconstruct run, attempt-one jobs, and
+workflow-runs-for-head observations from retained bytes, while the new exact
+head-SHA endpoint preserves zero/one/multiple rows. This advances only `Pi` and
+establishes internal byte/receipt consistency, not GitHub origin, unique
+current-run authority, learned `W`, or scientific efficacy. The next bounded
+slice is the private request-distinct run-authority Layer, with positive
+issuance still closed while workflow source bytes remain OPEN.

@@ -47,6 +47,14 @@ pre-dispatch engineering:
   complete receipt objects needed by a later durable envelope. Three
   empty-list observations produce only an explicitly non-probative
   reconciled-absence record.
+- The GitHub module also implements lazy standalone run, attempt-one jobs, and
+  workflow-runs-for-head revalidation. It snapshots retained bytes once,
+  recomputes through the pure constructors, exact-compares nested data, and
+  returns only frozen reconstructed observations. The exact head-SHA endpoint
+  preserves zero, one, or multiple rows; it does not decide unique-run
+  authority. These validators prove internal receipt consistency, not GitHub
+  origin, so the future production composition must still fix the private Live
+  observer.
 - `s2s-preregistration.ts` keeps the validated preregistration and direct-child
   registration-commit lineage runtime-authentic. Commit-B validation now
   returns a module-issued, WeakMap-backed capability with self-hashed immutable
@@ -85,7 +93,7 @@ carrier boundaries, with regression coverage on the resulting bytes. The slice
 remains `BLOCKED_PRE_PREREG`: the bounded adapters are present, but no
 current-run/dispatch-authorized composition root, workflow, durable evidence
 envelope, or external event-10 finalizer exists. Resume from the repository
-[`current next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_OBSERVATION_AUTHORITY_DESIGN_NEXT_SESSION_2026-08-22.md)
+[`current next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_OBSERVATION_AUTHORITY_IMPLEMENTED_NEXT_SESSION_2026-08-22.md)
 before composing the adapters or selecting a future round.
 
 The in-memory Layer's static capability-ID allowlist is configuration for tests

@@ -15,10 +15,14 @@ engineering checkpoints:
 
 - [`v1 historical control-core checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v1.json)
   records the user-directed runtime boundary and the pre-adapter state.
-- [`v2 current continuation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v2.json)
+- [`v2 historical bounded-adapter checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v2.json)
   records the bounded GitHub, artifact, exact-round drand, and Python execution
   adapters plus the still-open provenance/composition/workflow/finalizer gates.
+- [`v3 current authority checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v3.json)
+  records request-distinct GitHub receipts, the runtime-authentic
+  registration-B capability, and the still-open current-run,
+  composition/workflow/evidence-envelope/finalizer gates.
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v2 supersedes v1 only as the
-next-session entrypoint; v1 remains an immutable historical projection.
+runtime graphs, or remote Neo4j publications. v3 supersedes v2 only as the
+next-session entrypoint; v1 and v2 remain immutable historical projections.

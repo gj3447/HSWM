@@ -1,0 +1,268 @@
+{
+  "schema_version": "hswm-engineering-handoff-kg/v3",
+  "bundle_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-authority-handoff-2026-08-22",
+  "status": "BLOCKED_PRE_PREREG",
+  "structural_status": "STRUCTURAL_1_6_9_CLEAR",
+  "github_provenance_status": "REQUEST_DISTINCT_ENGINEERING_CLEAR",
+  "registration_authority_status": "SOURCE_PREREGISTRATION_THROUGH_B_CLEAR",
+  "current_run_authority_status": "OPEN",
+  "scientific_status": "UNJUDGED",
+  "updated_at": "2026-08-22",
+  "authority": {
+    "runtime_direction": "USER_PRIMARY",
+    "provenance_capability_and_resume_plan": "SECONDARY_AI_PROPOSED",
+    "publication_projection": "SYSTEM_DERIVED_LOCAL_ONLY"
+  },
+  "supersedes_bundle_uid_for_continuation": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-22",
+  "workspace_code_commit": "4da46051f697fada418f52c681834e5d4ea91fdc",
+  "workspace_parent_commit": "e8cf3ee80c76f2fc57f804b64f38e8bdefd58580",
+  "handoff_path": "docs/operations/HSWM_SWM0W_S2S_EFFECT_AUTHORITY_NEXT_SESSION_2026-08-22.md",
+  "remote_kg_publication_status": "NOT_ATTEMPTED",
+  "future_beacon_selected": false,
+  "preregistration_created": false,
+  "confirmatory_dispatched": false,
+  "candidate_produced": false,
+  "event_10_composed": false,
+  "architecture_projection": {
+    "H": "TARGET_IDENTITY_UNCHANGED_NO_NEW_COGNITION_EVIDENCE",
+    "W": "NO_LEARNED_WEIGHT_RESULT",
+    "A": "NO_ACTIVATION_READOUT_EFFICACY_RESULT",
+    "F": "PINNED_NUMERIC_ORACLE_BOUNDARY_ONLY_NO_VALID_CONFIRMATORY_EXECUTION",
+    "Pi": "REQUEST_DISTINCT_GITHUB_EVIDENCE_AND_RUNTIME_AUTHENTIC_REGISTRATION_B_CAPABILITY_IMPLEMENTED_CURRENT_RUN_AUTHORITY_OPEN",
+    "outcome_bound_causal_learning_loop": "NOT_ADVANCED"
+  },
+  "frozen_contracts": {
+    "effect_version": "3.22.1",
+    "typescript_version": "5.9.3",
+    "node_version": "24.13.0",
+    "confirmatory_policy_schema_version": "hswm-swm0w-s2s-confirmatory-operational-policy/v4",
+    "confirmatory_event_schema_version": "hswm-swm0w-s2s-confirmatory-control-event/v4",
+    "github_observation_schema_version": "hswm-swm0w-s2s-github-observation-receipt/v2",
+    "github_download_schema_version": "hswm-swm0w-s2s-github-artifact-download-receipt/v2",
+    "registration_commit_authority_evidence_schema_version": "hswm-swm0w-s2s-registration-commit-authority-evidence/v1",
+    "resource_policy_sha256": "b2c631ff80922800d06ac7e31c0632e02e1b560a31759cd0d11ae0a39c374351"
+  },
+  "verification": {
+    "effect_command": "cd src/hswm/effect-runtime && npm run verify",
+    "effect_tests": "151/151 PASS",
+    "effect_test_suites": "13/13 PASS",
+    "typescript": "STRICT_CHECK_PASS",
+    "build": "PASS",
+    "pack_dry_run": "PASS",
+    "diff_check": "PASS",
+    "python_s2s_tests_this_slice": "NOT_RERUN",
+    "claim_boundary": "Engineering verification only; no efficacy verdict."
+  },
+  "resolved_gates": [
+    {
+      "uid": "sym:Gate:hswm-s2s-request-distinct-github-receipts",
+      "status": "ENGINEERING_CLEAR",
+      "resolution": "Metadata receipts require and hash-bind GitHub request ID, selected API version, and ETag; download receipts bind redirect and signed-object response provenance.",
+      "adversarial_coverage": [
+        "same endpoint, body, ETag, and integer second with different request IDs yields different receipts",
+        "missing, malformed, hidden-extra, accessor-backed, overlong, and tampered provenance is rejected",
+        "issuance, absence polling, readback, and download reject reused request IDs"
+      ]
+    },
+    {
+      "uid": "sym:Gate:hswm-s2s-registration-b-runtime-authority",
+      "status": "ENGINEERING_CLEAR",
+      "resolution": "Direct-child B validation returns a module-issued WeakMap-backed capability with immutable self-hashed evidence instead of a raw SHA string.",
+      "adversarial_coverage": [
+        "forged and hostile capability objects are rejected",
+        "B must add only the exact preregistration path",
+        "B tree entry must be exactly one 100644 blob",
+        "executable, symlink, gitlink, parentage, and byte-drift variants are rejected"
+      ]
+    }
+  ],
+  "open_gates": [
+    {
+      "uid": "sym:Blocker:hswm-s2s-current-invocation-evidence",
+      "severity": "P0",
+      "failure_mode": "GitHub Actions event and environment values are not yet strictly decoded into one self-hashed immutable invocation receipt."
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-current-run-stage-authority",
+      "severity": "P0",
+      "failure_mode": "The internal artifact service still accepts caller-selected run ID, head SHA, and role instead of a capability derived from B, current invocation, and fresh GitHub observation."
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-exact-workflow-contract",
+      "severity": "P0",
+      "failure_mode": "The expected confirmatory workflow file is absent and therefore cannot yet be source-manifest or invocation bound."
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-durable-external-evidence-envelope",
+      "severity": "P0",
+      "failure_mode": "Complete immutable observations exist in memory but no create-only durable envelope stores their replay closure."
+    },
+    {
+      "uid": "sym:Blocker:hswm-s2s-composition-workflow-finalizer",
+      "severity": "P0",
+      "failure_mode": "No closed Effect composition root, mandatory-upload workflow, terminal rerun-safe finalizer, complete VOID matrix, or event-10 authority exists."
+    }
+  ],
+  "artifact_bindings": [
+    {
+      "path": "docs/operations/HSWM_SWM0W_S2S_EFFECT_AUTHORITY_NEXT_SESSION_2026-08-22.md",
+      "role": "NEXT_SESSION_AUTHORITY_HANDOFF",
+      "sha256": "eea918b1f2e2f8ebc774410cea6de2c06d9aa63bc7235dbccac4620170fd44f4"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-confirmatory.ts",
+      "role": "POLICY_EVENT_V4_AND_GITHUB_RECEIPT_V2_PINS",
+      "sha256": "37461b7d8f6e3a8c73f2fe1aee7342441e564697669bbaf87e97e11a22d5ad0f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-preregistration.ts",
+      "role": "REGISTRATION_B_RUNTIME_CAPABILITY",
+      "sha256": "2c1ef25b00c11bbcd486830e6fd4daac28ffc9c152e6c50d3a3653a343b90f89"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-live-github.ts",
+      "role": "REQUEST_DISTINCT_GITHUB_OBSERVER",
+      "sha256": "7e050c2a8dbf5ce91ed991ddf7e18e2cffbed5ecbb60be68a5e1e8e9cb4c42c6"
+    },
+    {
+      "path": "src/hswm/effect-runtime/src/s2s-live-artifact.ts",
+      "role": "REQUEST_INDEPENDENT_ARTIFACT_AUTHORITY",
+      "sha256": "eb800d68824568fd7053d18ebe8c519c6d7ec7269d1e3cce76bcd733a8382947"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/s2s-live-github.test.ts",
+      "role": "GITHUB_PROVENANCE_TAMPER_REGRESSIONS",
+      "sha256": "efb36858043cd5f8ae4b8a63e5d57686e095859eac1b0c4818ad8ddbade0bf6f"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/s2s-live-artifact.test.ts",
+      "role": "REQUEST_REUSE_REGRESSIONS",
+      "sha256": "a9fc9a63d6e76ed815d148bf4cdc5b62a8a9991bcc31cc2d018309d403791c03"
+    },
+    {
+      "path": "src/hswm/effect-runtime/test/s2s-preregistration.test.ts",
+      "role": "REGISTRATION_CAPABILITY_AND_TREE_MODE_REGRESSIONS",
+      "sha256": "c97e8be959d23389980531a7fb776b5e0a305fb48bd2fab070c3e305eb6cb42c"
+    },
+    {
+      "path": "tests/test_hswm_swm0w_s2s_effect_handoff_v3.py",
+      "role": "LOCAL_KG_CLOSURE_AND_ARTIFACT_BINDING_REGRESSIONS",
+      "sha256": "524a826dd3bb432b51936f92da4a205f55467053bb135704d4f3f4ab18a02676"
+    }
+  ],
+  "nodes": [
+    {
+      "uid": "sym:UserDirection:hswm-typescript-effect-runtime-2026-08-21",
+      "kind": "USER_DIRECTION",
+      "authority_class": "USER_PRIMARY",
+      "status": "ACTIVE",
+      "name": "TypeScript-first Effect functional runtime"
+    },
+    {
+      "uid": "sym:ArchitectureBoundary:hswm-swm0w-s2s-ts-control-python-oracle-v1",
+      "kind": "ARCHITECTURE_BOUNDARY",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "ACTIVE_ENGINEERING_DIRECTION",
+      "name": "TypeScript Effect Pi control plane and opaque Python numeric oracle",
+      "claim_boundary": "This split does not divide HSWM target cognition into subsystems or establish S2S efficacy."
+    },
+    {
+      "uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-authority-handoff-2026-08-22",
+      "kind": "ENGINEERING_CHECKPOINT",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "BLOCKED_PRE_PREREG",
+      "name": "Request-distinct GitHub and registration-B capability checkpoint",
+      "scientific_status": "UNJUDGED"
+    },
+    {
+      "uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-22",
+      "kind": "HISTORICAL_ENGINEERING_CHECKPOINT",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "SUPERSEDED_FOR_CONTINUATION_ONLY",
+      "name": "Historical bounded live-adapter checkpoint",
+      "source_path": "ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v2.json",
+      "scientific_status": "UNJUDGED"
+    },
+    {
+      "uid": "sym:AdapterBoundary:hswm-s2s-github-observer-v2",
+      "kind": "ADAPTER_BOUNDARY",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "REQUEST_DISTINCT_ENGINEERING_CLEAR_NOT_RUN_AUTHORITY",
+      "name": "Exact-endpoint request-distinct GitHub observation and download receipts"
+    },
+    {
+      "uid": "sym:CapabilityBoundary:hswm-s2s-registration-b-v1",
+      "kind": "CAPABILITY_BOUNDARY",
+      "authority_class": "SYSTEM_DERIVED",
+      "status": "ENGINEERING_CLEAR_PROCESS_LOCAL",
+      "name": "Runtime-authentic source/preregistration/direct-child-B capability",
+      "claim_boundary": "Authenticates validated lineage through B only; not dispatch, current run, or stage authority."
+    },
+    {
+      "uid": "sym:Plan:hswm-swm0w-s2s-run-authority-next-2026-08-22",
+      "kind": "IMPLEMENTATION_PLAN",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "NEXT",
+      "name": "Exact workflow contract, current invocation evidence, and Layer-local run/stage authority",
+      "plan_path": "docs/operations/HSWM_SWM0W_S2S_EFFECT_AUTHORITY_NEXT_SESSION_2026-08-22.md"
+    },
+    {
+      "uid": "sym:Claim:learned-s2s-efficacy",
+      "kind": "SCIENTIFIC_CLAIM",
+      "authority_class": "SECONDARY_AI_PROPOSED",
+      "status": "UNJUDGED",
+      "name": "Learned multi-member recipient-specific set-to-set efficacy",
+      "claim_boundary": "No present adapter, capability, test, or numeric-oracle checkpoint establishes this claim."
+    }
+  ],
+  "relations": [
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-authority-handoff-2026-08-22",
+      "type": "SUPERSEDES_FOR_CONTINUATION",
+      "to_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-handoff-2026-08-22"
+    },
+    {
+      "from_uid": "sym:UserDirection:hswm-typescript-effect-runtime-2026-08-21",
+      "type": "GOVERNS_DIRECTION_OF",
+      "to_uid": "sym:ArchitectureBoundary:hswm-swm0w-s2s-ts-control-python-oracle-v1"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-authority-handoff-2026-08-22",
+      "type": "IMPLEMENTS_PART_OF",
+      "to_uid": "sym:ArchitectureBoundary:hswm-swm0w-s2s-ts-control-python-oracle-v1"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-authority-handoff-2026-08-22",
+      "type": "CONTAINS",
+      "to_uid": "sym:AdapterBoundary:hswm-s2s-github-observer-v2"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-authority-handoff-2026-08-22",
+      "type": "CONTAINS",
+      "to_uid": "sym:CapabilityBoundary:hswm-s2s-registration-b-v1"
+    },
+    {
+      "from_uid": "sym:Plan:hswm-swm0w-s2s-run-authority-next-2026-08-22",
+      "type": "RESUMES_FROM",
+      "to_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-authority-handoff-2026-08-22"
+    },
+    {
+      "from_uid": "sym:EngineeringCheckpoint:hswm-swm0w-s2s-effect-authority-handoff-2026-08-22",
+      "type": "DOES_NOT_ESTABLISH",
+      "to_uid": "sym:Claim:learned-s2s-efficacy"
+    }
+  ],
+  "protected_unrelated_paths": [
+    "src/hswm/experiments/continual_live.py",
+    "tests/test_hswm_continual_live.py"
+  ],
+  "nonclaims": [
+    "This local KG projection is not a remote Neo4j or canonical KG publication.",
+    "This checkpoint is not a preregistration or future-beacon commitment.",
+    "Request-distinct receipts are not current-run or dispatch authority.",
+    "A process-local registration-B capability is not serializable proof or cross-job authority.",
+    "Three empty artifact observations are reconciled absence, not proof of nonproduction.",
+    "Green engineering tests do not establish learned set-to-set efficacy.",
+    "No event-10 verdict, learned-weight update, or outcome-bound causal-learning advance occurred."
+  ]
+}

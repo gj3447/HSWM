@@ -197,3 +197,11 @@ and
 [`v2 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v2.json).
 Those artifacts remain `ENGINEERING_ONLY / SCIENTIFIC_UNJUDGED` and do not
 authorize preregistration, future-beacon selection, dispatch, or event 10.
+
+The subsequent request-provenance and registration-B capability checkpoint is
+recorded in the
+[`authority continuation handoff`](../operations/HSWM_SWM0W_S2S_EFFECT_AUTHORITY_NEXT_SESSION_2026-08-22.md)
+and
+[`v3 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v3.json).
+It preserves the same scientific nonclaims: current-run/dispatch authority,
+workflow composition, durable external evidence, and event 10 remain open.

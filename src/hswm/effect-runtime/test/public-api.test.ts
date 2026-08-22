@@ -22,6 +22,11 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect("prepareS2SCandidateCarrier" in PublicApi).toBe(false)
   expect("prepareS2SAdjudicationCarrier" in PublicApi).toBe(false)
   expect("finalizeS2SEvidenceReadback" in PublicApi).toBe(false)
+  expect("S2SGitHubHttpTransport" in PublicApi).toBe(false)
+  expect("S2SGitHubObserver" in PublicApi).toBe(false)
+  expect("S2SArtifactAuthority" in PublicApi).toBe(false)
+  expect("validateS2SRegistrationCommitB" in PublicApi).toBe(false)
+  expect("inspectS2SRegistrationCommitAuthority" in PublicApi).toBe(false)
   expect("makeS2SConfirmatoryControlPlaneMemoryForTest" in PublicApi).toBe(
     false
   )

@@ -94,6 +94,7 @@ export type S2SArtifactLookupAmbiguity =
   | "DUPLICATE_PRODUCER_JOB_NAME"
   | "HEAD_SHA_MISMATCH"
   | "OBSERVATION_ORDER_INVALID"
+  | "OBSERVATION_REQUEST_IDS_NOT_DISTINCT"
   | "OBSERVATION_PRECEDES_JOB_COMPLETION"
   | "PRODUCER_JOB_NOT_COMPLETED"
   | "PRODUCER_JOB_NOT_FOUND"
@@ -323,6 +324,21 @@ const sameWorkflowIdentity = (
   left.event === right.event &&
   left.headBranch === right.headBranch
 
+interface GitHubRequestIdentified {
+  readonly receipt: {
+    readonly githubRequestId: string
+  }
+}
+
+const distinctGitHubRequestIds = (
+  observations: ReadonlyArray<GitHubRequestIdentified>
+): boolean => {
+  const requestIds = observations.map(
+    (observation) => observation.receipt.githubRequestId
+  )
+  return new Set(requestIds).size === requestIds.length
+}
+
 const classifyArtifact = (
   workflowRunId: number,
   expectedHeadSha: string,
@@ -335,6 +351,15 @@ const classifyArtifact = (
 ): S2SArtifactLookupOutcome => {
   const policy = ROLE_POLICY[role]
   const runProjection = run.receipt.projection
+  if (!distinctGitHubRequestIds([initialRun, jobs, artifacts, run])) {
+    return ambiguous(
+      role,
+      "OBSERVATION_REQUEST_IDS_NOT_DISTINCT",
+      run,
+      jobs,
+      artifacts
+    )
+  }
   if (
     initialRun.receipt.observedAtUnixSeconds >
       jobs.receipt.observedAtUnixSeconds ||
@@ -554,6 +579,21 @@ const readbackArtifact = (
         "WORKFLOW_IDENTITY_DRIFT_BEFORE_READBACK"
       )
     }
+    if (
+      !distinctGitHubRequestIds([
+        authority.initialWorkflowRunObservation,
+        authority.workflowRunObservation,
+        authority.workflowJobsObservation,
+        authority.artifactsObservation,
+        readbackStartRun
+      ])
+    ) {
+      return yield* readbackError(
+        "OBSERVATION_ORDER_INVALID",
+        "S2SGitHubObservationReceipt",
+        "GITHUB_REQUEST_ID_REUSED_BEFORE_READBACK"
+      )
+    }
     const requery = yield* github.observeArtifact(authority.artifact.id).pipe(
       Effect.mapError((error) =>
         readbackError(
@@ -569,7 +609,15 @@ const readbackArtifact = (
       requery.receipt.observedAtUnixSeconds <
         authority.artifactsObservation.receipt.observedAtUnixSeconds ||
       requery.receipt.receiptSha256 ===
-        authority.artifactsObservation.receipt.receiptSha256
+        authority.artifactsObservation.receipt.receiptSha256 ||
+      !distinctGitHubRequestIds([
+        authority.initialWorkflowRunObservation,
+        authority.workflowRunObservation,
+        authority.workflowJobsObservation,
+        authority.artifactsObservation,
+        readbackStartRun,
+        requery
+      ])
     ) {
       return yield* readbackError(
         "OBSERVATION_ORDER_INVALID",
@@ -612,7 +660,16 @@ const readbackArtifact = (
         authority.artifact.digestSha256 ||
       trustedDownload.receipt.receiptSha256 === requery.receipt.receiptSha256 ||
       trustedDownload.receipt.receiptSha256 ===
-        authority.artifactsObservation.receipt.receiptSha256
+        authority.artifactsObservation.receipt.receiptSha256 ||
+      new Set([
+        authority.initialWorkflowRunObservation.receipt.githubRequestId,
+        authority.workflowRunObservation.receipt.githubRequestId,
+        authority.workflowJobsObservation.receipt.githubRequestId,
+        authority.artifactsObservation.receipt.githubRequestId,
+        readbackStartRun.receipt.githubRequestId,
+        requery.receipt.githubRequestId,
+        trustedDownload.receipt.redirectGitHubRequestId
+      ]).size !== 7
     ) {
       return yield* readbackError(
         "DOWNLOAD_MISMATCH",
@@ -681,7 +738,17 @@ const readbackArtifact = (
       !sameWorkflowIdentity(
         readbackStartRun.receipt.projection,
         readbackFinalRun.receipt.projection
-      )
+      ) ||
+      new Set([
+        authority.initialWorkflowRunObservation.receipt.githubRequestId,
+        authority.workflowRunObservation.receipt.githubRequestId,
+        authority.workflowJobsObservation.receipt.githubRequestId,
+        authority.artifactsObservation.receipt.githubRequestId,
+        readbackStartRun.receipt.githubRequestId,
+        requery.receipt.githubRequestId,
+        trustedDownload.receipt.redirectGitHubRequestId,
+        readbackFinalRun.receipt.githubRequestId
+      ]).size !== 8
     ) {
       return yield* readbackError(
         "RUN_REQUERY_MISMATCH",
@@ -725,11 +792,19 @@ const makeAbsenceOutcome = (
     observations[1].receipt.receiptSha256,
     observations[2].receipt.receiptSha256
   ]) as readonly [string, string, string]
+  const requestIds = Object.freeze([
+    observations[0].receipt.githubRequestId,
+    observations[1].receipt.githubRequestId,
+    observations[2].receipt.githubRequestId
+  ])
   const finalObservation = observations[2]
   const producer = jobs.receipt.projection.jobs.find(
     (job) => job.name === ROLE_POLICY[role].jobName
   )
-  if (new Set(hashes).size !== S2S_ARTIFACT_ABSENCE_OBSERVATION_COUNT) {
+  if (
+    new Set(hashes).size !== S2S_ARTIFACT_ABSENCE_OBSERVATION_COUNT ||
+    new Set(requestIds).size !== S2S_ARTIFACT_ABSENCE_OBSERVATION_COUNT
+  ) {
     return ambiguous(
       role,
       "ABSENCE_OBSERVATIONS_NOT_DISTINCT",
@@ -870,6 +945,11 @@ const makeS2SArtifactAuthorityLayer = (
             const absenceObservations: Array<
               S2SGitHubObservation<S2SGitHubArtifactsProjection>
             > = []
+            const seenRequestIds = new Set([
+              runOutcome.right.receipt.githubRequestId,
+              jobsOutcome.right.receipt.githubRequestId
+            ])
+            const initialRequestIdsDistinct = seenRequestIds.size === 2
             let latestRun = runOutcome.right
             for (
               let index = 0;
@@ -893,6 +973,28 @@ const makeS2SArtifactAuthorityLayer = (
                 return unavailable(role, "OBSERVE_RUN", currentRunOutcome.left)
               }
               latestRun = currentRunOutcome.right
+              const currentRequestIds = [
+                artifactsOutcome.right.receipt.githubRequestId,
+                latestRun.receipt.githubRequestId
+              ]
+              if (
+                !initialRequestIdsDistinct ||
+                currentRequestIds[0] === currentRequestIds[1] ||
+                currentRequestIds.some((requestId) =>
+                  seenRequestIds.has(requestId)
+                )
+              ) {
+                return ambiguous(
+                  role,
+                  "OBSERVATION_REQUEST_IDS_NOT_DISTINCT",
+                  latestRun,
+                  jobsOutcome.right,
+                  artifactsOutcome.right
+                )
+              }
+              for (const requestId of currentRequestIds) {
+                seenRequestIds.add(requestId)
+              }
               const classified = classifyArtifact(
                 workflowRunId,
                 expectedHeadSha,

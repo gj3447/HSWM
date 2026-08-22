@@ -28,6 +28,15 @@ const HEAD_SHA = "75686549b1f6c65aea87ebd0f912a6e62909445a"
 const DIGEST = "b5a29cab118737f48083613f45a34212ae73f15a1321a597947d838c077f63c5"
 const OBSERVED_AT = 1_787_280_000
 const encoder = new TextEncoder()
+const RESPONSE_ETAG = `W/"${"e".repeat(64)}"`
+
+const responseProvenance = (
+  githubRequestId = "A1B2:C3D4:E5F6:7890"
+) => Object.freeze({
+  githubRequestId,
+  githubApiVersionSelected: S2S_GITHUB_API_VERSION,
+  responseEtag: RESPONSE_ETAG
+})
 
 const jsonBytes = (value: unknown): Uint8Array =>
   encoder.encode(`${JSON.stringify(value)}\n`)
@@ -74,7 +83,12 @@ const artifactFixture = (): Record<string, unknown> => ({
 
 it("binds the exact run API body and normalized run projection", () => {
   const raw = jsonBytes(runFixture())
-  const outcome = observeS2SGitHubWorkflowRun(raw, RUN_ID, OBSERVED_AT)
+  const outcome = observeS2SGitHubWorkflowRun(
+    raw,
+    RUN_ID,
+    OBSERVED_AT,
+    responseProvenance()
+  )
   raw.fill(0)
   expect(Either.isRight(outcome)).toBe(true)
   if (Either.isRight(outcome)) {
@@ -98,6 +112,125 @@ it("binds the exact run API body and normalized run projection", () => {
   }
 })
 
+it("binds request-distinct response provenance into same-second receipts", () => {
+  const raw = jsonBytes(runFixture())
+  const first = observeS2SGitHubWorkflowRun(
+    raw,
+    RUN_ID,
+    OBSERVED_AT,
+    responseProvenance("A1B2:C3D4:E5F6:FIRST")
+  )
+  const second = observeS2SGitHubWorkflowRun(
+    raw,
+    RUN_ID,
+    OBSERVED_AT,
+    responseProvenance("A1B2:C3D4:E5F6:SECOND")
+  )
+  expect(Either.isRight(first)).toBe(true)
+  expect(Either.isRight(second)).toBe(true)
+  if (Either.isRight(first) && Either.isRight(second)) {
+    expect(first.right.receipt.rawBodySha256).toBe(
+      second.right.receipt.rawBodySha256
+    )
+    expect(first.right.receipt.projectionSha256).toBe(
+      second.right.receipt.projectionSha256
+    )
+    expect(first.right.receipt.receiptSha256).not.toBe(
+      second.right.receipt.receiptSha256
+    )
+    const { receiptSha256, ...receiptCore } = first.right.receipt
+    const recomputed = canonicalS2SControlSha256(receiptCore)
+    expect(Either.isRight(recomputed)).toBe(true)
+    if (Either.isRight(recomputed)) expect(recomputed.right).toBe(receiptSha256)
+    const tampered = canonicalS2SControlSha256({
+      ...receiptCore,
+      githubRequestId: "A1B2:C3D4:E5F6:TAMPERED"
+    })
+    expect(Either.isRight(tampered)).toBe(true)
+    if (Either.isRight(tampered)) expect(tampered.right).not.toBe(receiptSha256)
+  }
+})
+
+it("rejects absent, malformed, version-drifted, and accessor provenance", () => {
+  let accessorRead = false
+  const accessor = {
+    githubApiVersionSelected: S2S_GITHUB_API_VERSION,
+    responseEtag: RESPONSE_ETAG
+  }
+  Object.defineProperty(accessor, "githubRequestId", {
+    enumerable: true,
+    get: () => {
+      accessorRead = true
+      return "A1B2:C3D4:E5F6:ACCESSOR"
+    }
+  })
+  const hiddenExtra = { ...responseProvenance() }
+  Object.defineProperty(hiddenExtra, "hidden", {
+    enumerable: false,
+    value: "must be rejected"
+  })
+  const outcomes = [
+    observeS2SGitHubWorkflowRun(
+      jsonBytes(runFixture()),
+      RUN_ID,
+      OBSERVED_AT,
+      null
+    ),
+    observeS2SGitHubWorkflowRun(
+      jsonBytes(runFixture()),
+      RUN_ID,
+      OBSERVED_AT,
+      responseProvenance("contains whitespace")
+    ),
+    observeS2SGitHubWorkflowRun(
+      jsonBytes(runFixture()),
+      RUN_ID,
+      OBSERVED_AT,
+      {
+        ...responseProvenance(),
+        githubApiVersionSelected: "2099-01-01"
+      }
+    ),
+    observeS2SGitHubWorkflowRun(
+      jsonBytes(runFixture()),
+      RUN_ID,
+      OBSERVED_AT,
+      { ...responseProvenance(), responseEtag: "not-an-etag" }
+    ),
+    observeS2SGitHubWorkflowRun(
+      jsonBytes(runFixture()),
+      RUN_ID,
+      OBSERVED_AT,
+      { ...responseProvenance(), responseEtag: null }
+    ),
+    observeS2SGitHubWorkflowRun(
+      jsonBytes(runFixture()),
+      RUN_ID,
+      OBSERVED_AT,
+      responseProvenance("x".repeat(257))
+    ),
+    observeS2SGitHubWorkflowRun(
+      jsonBytes(runFixture()),
+      RUN_ID,
+      OBSERVED_AT,
+      accessor
+    ),
+    observeS2SGitHubWorkflowRun(
+      jsonBytes(runFixture()),
+      RUN_ID,
+      OBSERVED_AT,
+      hiddenExtra
+    )
+  ]
+  expect(outcomes.every(Either.isLeft)).toBe(true)
+  for (const outcome of outcomes) {
+    if (Either.isLeft(outcome)) {
+      expect(outcome.left.reason).toBe("PROVENANCE_REJECTED")
+    }
+  }
+  expect(accessorRead).toBe(false)
+})
+
 it("normalizes a complete attempt-specific job page", () => {
   const second = {
     ...jobFixture(),
@@ -112,7 +245,8 @@ it("normalizes a complete attempt-specific job page", () => {
     jsonBytes({ total_count: 2, jobs: [second, jobFixture()] }),
     RUN_ID,
     1,
-    OBSERVED_AT
+    OBSERVED_AT,
+    responseProvenance()
   )
   expect(Either.isRight(outcome)).toBe(true)
   if (Either.isRight(outcome)) {
@@ -131,12 +265,14 @@ it("binds both list and individual artifact projections", () => {
   const listed = observeS2SGitHubRunArtifacts(
     jsonBytes({ total_count: 1, artifacts: [artifactFixture()] }),
     RUN_ID,
-    OBSERVED_AT
+    OBSERVED_AT,
+    responseProvenance()
   )
   const individual = observeS2SGitHubArtifact(
     jsonBytes(artifactFixture()),
     ARTIFACT_ID,
-    OBSERVED_AT + 1
+    OBSERVED_AT + 1,
+    responseProvenance("A1B2:C3D4:E5F6:7891")
   )
   expect(Either.isRight(listed)).toBe(true)
   expect(Either.isRight(individual)).toBe(true)
@@ -155,17 +291,20 @@ it("rejects incomplete pagination and requested-identity mismatches", () => {
     jsonBytes({ total_count: 2, jobs: [jobFixture()] }),
     RUN_ID,
     1,
-    OBSERVED_AT
+    OBSERVED_AT,
+    responseProvenance()
   )
   const wrongRun = observeS2SGitHubWorkflowRun(
     jsonBytes(runFixture()),
     RUN_ID + 1,
-    OBSERVED_AT
+    OBSERVED_AT,
+    responseProvenance()
   )
   const wrongArtifactRun = observeS2SGitHubRunArtifacts(
     jsonBytes({ total_count: 1, artifacts: [artifactFixture()] }),
     RUN_ID + 1,
-    OBSERVED_AT
+    OBSERVED_AT,
+    responseProvenance()
   )
   expect(Either.isLeft(incomplete)).toBe(true)
   expect(Either.isLeft(wrongRun)).toBe(true)
@@ -181,7 +320,12 @@ it("rejects duplicate raw keys before a projection can hide them", () => {
       `"id":${RUN_ID},"id":${RUN_ID}`
     )}\n`
   )
-  const outcome = observeS2SGitHubWorkflowRun(raw, RUN_ID, OBSERVED_AT)
+  const outcome = observeS2SGitHubWorkflowRun(
+    raw,
+    RUN_ID,
+    OBSERVED_AT,
+    responseProvenance()
+  )
   expect(Either.isLeft(outcome)).toBe(true)
   if (Either.isLeft(outcome)) expect(outcome.left.reason).toBe("JSON_REJECTED")
 })
@@ -193,29 +337,34 @@ it("rejects malformed digests, timestamps, duplicate labels, and reruns", () => 
   const artifactOutcome = observeS2SGitHubArtifact(
     jsonBytes(malformedArtifact),
     ARTIFACT_ID,
-    OBSERVED_AT
+    OBSERVED_AT,
+    responseProvenance()
   )
   const runOutcome = observeS2SGitHubWorkflowRun(
     jsonBytes(invalidTimestamp),
     RUN_ID,
-    OBSERVED_AT
+    OBSERVED_AT,
+    responseProvenance()
   )
   const jobsOutcome = observeS2SGitHubWorkflowAttemptJobs(
     jsonBytes({ total_count: 1, jobs: [duplicateLabels] }),
     RUN_ID,
     1,
-    OBSERVED_AT
+    OBSERVED_AT,
+    responseProvenance()
   )
   const rerunOutcome = observeS2SGitHubWorkflowAttemptJobs(
     jsonBytes({ total_count: 0, jobs: [] }),
     RUN_ID,
     2,
-    OBSERVED_AT
+    OBSERVED_AT,
+    responseProvenance()
   )
   const rerunPayload = observeS2SGitHubWorkflowRun(
     jsonBytes({ ...runFixture(), run_attempt: 2 }),
     RUN_ID,
-    OBSERVED_AT
+    OBSERVED_AT,
+    responseProvenance()
   )
   expect([
     Either.isLeft(artifactOutcome),
@@ -245,6 +394,9 @@ it.effect("composes the Effect observer over a narrow read-only transport port",
             status: 200,
             contentType: "application/json",
             location: null,
+            githubRequestId: `A1B2:C3D4:E5F6:${requested.length}`,
+            githubApiVersionSelected: S2S_GITHUB_API_VERSION,
+            etag: RESPONSE_ETAG,
             body
           })
         )
@@ -317,7 +469,9 @@ it.effect("strips authorization across the manual artifact redirect", () => {
       return new Response("redirecting", {
         status: 302,
         headers: {
-          location: "https://objects.example.invalid/signed/artifact.zip?sig=private"
+          location: "https://objects.example.invalid/signed/artifact.zip?sig=private",
+          "x-github-request-id": "A1B2:C3D4:E5F6:REDIRECT",
+          "x-github-api-version-selected": S2S_GITHUB_API_VERSION
         }
       })
     }
@@ -325,7 +479,8 @@ it.effect("strips authorization across the manual artifact redirect", () => {
       status: 200,
       headers: {
         "content-length": "4",
-        "content-type": "application/zip"
+        "content-type": "application/zip",
+        etag: `"${"a".repeat(64)}"`
       }
     })
   }) as typeof fetch
@@ -344,6 +499,14 @@ it.effect("strips authorization across the manual artifact redirect", () => {
     )
     expect(result.receipt.downloadedArchiveSha256).toMatch(/^[0-9a-f]{64}$/)
     expect(result.receipt.receiptSha256).toMatch(/^[0-9a-f]{64}$/)
+    expect(result.receipt).toMatchObject({
+      redirectHttpStatus: 302,
+      redirectGitHubRequestId: "A1B2:C3D4:E5F6:REDIRECT",
+      redirectGitHubApiVersionSelected: S2S_GITHUB_API_VERSION,
+      archiveHttpStatus: 200,
+      archiveMediaType: "application/zip",
+      archiveResponseEtag: `"${"a".repeat(64)}"`
+    })
     expect(invocations).toHaveLength(2)
     expect(invocations[0]).toMatchObject({
       url: `https://api.github.com/repos/gj3447/HSWM/actions/artifacts/${ARTIFACT_ID}/zip`,
@@ -375,7 +538,11 @@ it.effect("rejects local and IP-literal artifact redirect targets", () => {
     if (invocations > 1) throw new Error("redirect target must not be fetched")
     return new Response("redirecting", {
       status: 302,
-      headers: { location: "https://127.0.0.1/signed/artifact.zip" }
+      headers: {
+        location: "https://127.0.0.1/signed/artifact.zip",
+        "x-github-request-id": "A1B2:C3D4:E5F6:LOCAL",
+        "x-github-api-version-selected": S2S_GITHUB_API_VERSION
+      }
     })
   }) as typeof fetch
   return Effect.gen(function* () {
@@ -409,6 +576,9 @@ it.effect("refuses a non-200 response from an alternate transport Layer", () => 
           status: 503,
           contentType: "application/json",
           location: null,
+          githubRequestId: null,
+          githubApiVersionSelected: null,
+          etag: null,
           body: jsonBytes(runFixture())
         }),
       downloadArtifactArchive: () => Effect.dieMessage("not used")
@@ -425,6 +595,34 @@ it.effect("refuses a non-200 response from an alternate transport Layer", () => 
         expect(outcome.left.reason).toBe("HTTP_STATUS_UNEXPECTED")
         expect(outcome.left.httpStatus).toBe(503)
       }
+    }
+  }).pipe(Effect.provide(observerLayer))
+})
+
+it.effect("refuses metadata without request identity, selected version, or ETag", () => {
+  const transport = Layer.succeed(
+    S2SGitHubHttpTransport,
+    S2SGitHubHttpTransport.of({
+      getJson: () =>
+        Effect.succeed({
+          status: 200,
+          contentType: "application/json",
+          location: null,
+          githubRequestId: null,
+          githubApiVersionSelected: null,
+          etag: null,
+          body: jsonBytes(runFixture())
+        }),
+      downloadArtifactArchive: () => Effect.dieMessage("not used")
+    })
+  )
+  const observerLayer = S2SGitHubObserverLive.pipe(Layer.provide(transport))
+  return Effect.gen(function* () {
+    const observer = yield* S2SGitHubObserver
+    const outcome = yield* observer.observeWorkflowRun(RUN_ID).pipe(Effect.either)
+    expect(Either.isLeft(outcome)).toBe(true)
+    if (Either.isLeft(outcome) && outcome.left._tag === "S2SGitHubTransportError") {
+      expect(outcome.left.reason).toBe("RESPONSE_HEADERS_REJECTED")
     }
   }).pipe(Effect.provide(observerLayer))
 })
@@ -568,14 +766,49 @@ it("returns typed download validation errors for hostile proxies and byte access
     artifactId: ARTIFACT_ID,
     endpointPathAndQuery: `/repos/${S2S_GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip`,
     downloadedAtUnixSeconds: OBSERVED_AT,
+    redirectHttpStatus: 302,
+    redirectGitHubRequestId: "A1B2:C3D4:E5F6:DOWNLOAD",
+    redirectGitHubApiVersionSelected: S2S_GITHUB_API_VERSION,
+    redirectResponseEtag: null,
     redirectUrlSha256: "a".repeat(64),
     redirectOrigin: "https://objects.example.invalid",
+    archiveHttpStatus: 200,
+    archiveMediaType: "application/zip",
+    archiveResponseEtag: `"${"a".repeat(64)}"`,
     archiveByteLength: archive.byteLength,
     downloadedArchiveSha256: rawS2SFileSha256(archive)
   })
   const receiptHash = canonicalS2SControlSha256(receiptCore)
   expect(Either.isRight(receiptHash)).toBe(true)
   if (Either.isLeft(receiptHash)) return
+  const validDownload = Object.freeze({
+    receipt: Object.freeze({
+      ...receiptCore,
+      receiptSha256: receiptHash.right
+    }),
+    readArchiveBytes: () => new Uint8Array(archive)
+  })
+  const validOutcome = validateS2SGitHubArtifactDownload(
+    validDownload,
+    ARTIFACT_ID,
+    1_024
+  )
+  expect(Either.isRight(validOutcome)).toBe(true)
+  const tamperedOutcome = validateS2SGitHubArtifactDownload(
+    Object.freeze({
+      ...validDownload,
+      receipt: Object.freeze({
+        ...validDownload.receipt,
+        redirectGitHubRequestId: "A1B2:C3D4:E5F6:TAMPERED"
+      })
+    }),
+    ARTIFACT_ID,
+    1_024
+  )
+  expect(Either.isLeft(tamperedOutcome)).toBe(true)
+  if (Either.isLeft(tamperedOutcome)) {
+    expect(tamperedOutcome.left.reason).toBe("RECEIPT_SELF_HASH_MISMATCH")
+  }
   const hostileArchive = new Proxy(archive, {})
   const archiveOutcome = validateS2SGitHubArtifactDownload(
     Object.freeze({

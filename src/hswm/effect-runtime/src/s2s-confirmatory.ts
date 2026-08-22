@@ -19,10 +19,10 @@ export const S2S_PILOT_ADOPTION_RECEIPT_SHA256 =
   "97a752fea5ae45a311a2e8cf2376b391d76a8269dbab20f60688f543bcc5dea1" as const
 
 export const S2S_CONFIRMATORY_POLICY_SCHEMA_VERSION =
-  "hswm-swm0w-s2s-confirmatory-operational-policy/v3" as const
+  "hswm-swm0w-s2s-confirmatory-operational-policy/v4" as const
 
 export const S2S_CONFIRMATORY_EVENT_SCHEMA_VERSION =
-  "hswm-swm0w-s2s-confirmatory-control-event/v3" as const
+  "hswm-swm0w-s2s-confirmatory-control-event/v4" as const
 
 export const S2S_CONFIRMATORY_EXPERIMENT_ID =
   "hswm-swm0w-s2s-confirmatory-v1" as const
@@ -35,16 +35,16 @@ export const S2S_PROTOCOL_CONFIG_DOCUMENT_SHA256 =
 
 /** SHA-256 of canonical float-free JSON for S2S_CONFIRMATORY_POLICY. */
 export const S2S_CONFIRMATORY_RESOURCE_POLICY_SHA256 =
-  "5d51316d2aebc8cfa6a7135adba9f167948e096895e3f94caf1defb024a0667d" as const
+  "b2c631ff80922800d06ac7e31c0632e02e1b560a31759cd0d11ae0a39c374351" as const
 
 export const S2S_REGISTRATION_ARTIFACT_NAME = "s2s-registration" as const
 export const S2S_CANDIDATE_ARTIFACT_NAME = "s2s-candidate" as const
 export const S2S_ADJUDICATION_ARTIFACT_NAME = "s2s-adjudication" as const
 
 export const S2S_GITHUB_OBSERVATION_RECEIPT_SCHEMA_VERSION =
-  "hswm-swm0w-s2s-github-observation-receipt/v1" as const
+  "hswm-swm0w-s2s-github-observation-receipt/v2" as const
 export const S2S_GITHUB_ARTIFACT_DOWNLOAD_RECEIPT_SCHEMA_VERSION =
-  "hswm-swm0w-s2s-github-artifact-download-receipt/v1" as const
+  "hswm-swm0w-s2s-github-artifact-download-receipt/v2" as const
 export const S2S_DRAND_STABLE_PROJECTION_SCHEMA_VERSION =
   "hswm-swm0w-s2s-drand-stable-verifier-projection/v1" as const
 export const S2S_PYTHON_EXECUTION_EVIDENCE_SCHEMA_VERSION =
@@ -203,6 +203,11 @@ export const S2S_CONFIRMATORY_POLICY = Object.freeze({
     distinctArtifactApiAndDownloadObservationsRequired: true,
     distinctCandidateInitialAndRequeryObservationsRequired: true,
     freshCompletedRunAndJobObservationsRequiredForFinalization: true,
+    githubRequestIdRequired: true,
+    githubSelectedApiVersionRequired: true,
+    githubMetadataEtagRequired: true,
+    githubRedirectEtagRequired: false,
+    artifactObjectEtagRequired: false,
     drandStableProjectionSchemaVersion:
       S2S_DRAND_STABLE_PROJECTION_SCHEMA_VERSION,
     drandSignatureByteLength: 48,

@@ -577,13 +577,13 @@ const healthyDurableChain = () => {
 
 it("freezes the adopted resource policy and disables the DS-derived phrase", () => {
   expect(S2S_CONFIRMATORY_POLICY_SCHEMA_VERSION).toBe(
-    "hswm-swm0w-s2s-confirmatory-operational-policy/v3"
+    "hswm-swm0w-s2s-confirmatory-operational-policy/v4"
   )
   expect(S2S_CONFIRMATORY_EVENT_SCHEMA_VERSION).toBe(
-    "hswm-swm0w-s2s-confirmatory-control-event/v3"
+    "hswm-swm0w-s2s-confirmatory-control-event/v4"
   )
   expect(S2S_CONFIRMATORY_RESOURCE_POLICY_SHA256).toBe(
-    "5d51316d2aebc8cfa6a7135adba9f167948e096895e3f94caf1defb024a0667d"
+    "b2c631ff80922800d06ac7e31c0632e02e1b560a31759cd0d11ae0a39c374351"
   )
   expect(S2S_CONFIRMATORY_POLICY.adoptionReceiptSha256).toBe(
     S2S_PILOT_ADOPTION_RECEIPT_SHA256

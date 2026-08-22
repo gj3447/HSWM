@@ -9,7 +9,7 @@ import { parseS2SJsonBytes, type S2SJson } from "./s2s-json.js"
 export const S2S_GITHUB_API_VERSION = "2022-11-28" as const
 export const S2S_GITHUB_REPOSITORY = "gj3447/HSWM" as const
 export const S2S_GITHUB_OBSERVATION_SCHEMA_VERSION =
-  "hswm-swm0w-s2s-github-observation-receipt/v1" as const
+  "hswm-swm0w-s2s-github-observation-receipt/v2" as const
 export const S2S_GITHUB_JSON_MAX_BYTES = 8 * 1_048_576
 export const S2S_GITHUB_PAGE_SIZE = 100 as const
 export const S2S_GITHUB_METADATA_TIMEOUT_MILLIS = 120_000 as const
@@ -17,11 +17,13 @@ export const S2S_GITHUB_ARCHIVE_TIMEOUT_MILLIS = 300_000 as const
 export const S2S_GITHUB_REDIRECT_BODY_MAX_BYTES = 4_096 as const
 export const S2S_GITHUB_ARTIFACT_ARCHIVE_MAX_BYTES = 64 * 1_048_576
 export const S2S_GITHUB_ARTIFACT_DOWNLOAD_SCHEMA_VERSION =
-  "hswm-swm0w-s2s-github-artifact-download-receipt/v1" as const
+  "hswm-swm0w-s2s-github-artifact-download-receipt/v2" as const
 
 const SHA256_PATTERN = /^[0-9a-f]{64}$/
 const GIT_SHA_PATTERN = /^[0-9a-f]{40}$/
 const ASCII_TEXT_PATTERN = /^[\u0020-\u007e]*$/
+const GITHUB_REQUEST_ID_PATTERN = /^[\u0021-\u007e]{1,256}$/
+const HTTP_ETAG_PATTERN = /^(?:W\/)?"[\u0021\u0023-\u007e]{0,508}"$/
 const REPOSITORY_PATTERN = /^[A-Za-z0-9_.-]{1,100}\/[A-Za-z0-9_.-]{1,100}$/
 const WORKFLOW_PATH_PATTERN =
   /^\.github\/workflows\/[A-Za-z0-9._/-]{1,220}(?:@[A-Za-z0-9._/@-]{1,220})?$/
@@ -125,6 +127,9 @@ export interface S2SGitHubObservationReceipt<
   readonly endpointPathAndQuery: string
   readonly observedAtUnixSeconds: number
   readonly httpStatus: 200
+  readonly githubRequestId: string
+  readonly githubApiVersionSelected: typeof S2S_GITHUB_API_VERSION
+  readonly responseEtag: string
   readonly rawBodyByteLength: number
   readonly rawBodySha256: string
   readonly projection: Projection
@@ -146,6 +151,7 @@ export class S2SGitHubObservationError extends Data.TaggedError(
     | "IDENTITY_MISMATCH"
     | "INVALID_ARGUMENT"
     | "JSON_REJECTED"
+    | "PROVENANCE_REJECTED"
     | "PROJECTION_NOT_CANONICAL"
     | "PROJECTION_REJECTED"
   readonly path: string
@@ -156,7 +162,16 @@ export interface S2SGitHubHttpResponse {
   readonly status: number
   readonly contentType: string | null
   readonly location: string | null
+  readonly githubRequestId: string | null
+  readonly githubApiVersionSelected: string | null
+  readonly etag: string | null
   readonly body: Uint8Array
+}
+
+export interface S2SGitHubApiResponseProvenance {
+  readonly githubRequestId: string
+  readonly githubApiVersionSelected: typeof S2S_GITHUB_API_VERSION
+  readonly responseEtag: string
 }
 
 export class S2SGitHubTransportError extends Data.TaggedError(
@@ -169,6 +184,7 @@ export class S2SGitHubTransportError extends Data.TaggedError(
     | "HTTP_STATUS_UNEXPECTED"
     | "REDIRECT_REJECTED"
     | "REQUEST_FAILED"
+    | "RESPONSE_HEADERS_REJECTED"
     | "RESPONSE_LIMIT_EXCEEDED"
     | "TIMED_OUT"
   readonly operation: string
@@ -177,6 +193,11 @@ export class S2SGitHubTransportError extends Data.TaggedError(
   readonly detail: string
 }> {}
 
+export type S2SGitHubArchiveMediaType =
+  | "application/octet-stream"
+  | "application/zip"
+  | "binary/octet-stream"
+
 export interface S2SGitHubArtifactDownloadReceipt {
   readonly schemaVersion: typeof S2S_GITHUB_ARTIFACT_DOWNLOAD_SCHEMA_VERSION
   readonly apiVersion: typeof S2S_GITHUB_API_VERSION
@@ -184,8 +205,15 @@ export interface S2SGitHubArtifactDownloadReceipt {
   readonly artifactId: number
   readonly endpointPathAndQuery: string
   readonly downloadedAtUnixSeconds: number
+  readonly redirectHttpStatus: 302
+  readonly redirectGitHubRequestId: string
+  readonly redirectGitHubApiVersionSelected: typeof S2S_GITHUB_API_VERSION
+  readonly redirectResponseEtag: string | null
   readonly redirectUrlSha256: string
   readonly redirectOrigin: string
+  readonly archiveHttpStatus: 200
+  readonly archiveMediaType: S2SGitHubArchiveMediaType
+  readonly archiveResponseEtag: string | null
   readonly archiveByteLength: number
   readonly downloadedArchiveSha256: string
   readonly receiptSha256: string
@@ -631,16 +659,107 @@ const validateObservationArguments = (
   }
 }
 
+const snapshotObservationProvenance = (
+  input: unknown
+): S2SGitHubApiResponseProvenance => {
+  try {
+    if (input === null || typeof input !== "object") {
+      throw observationError(
+        "PROVENANCE_REJECTED",
+        "$provenance",
+        "response provenance must be one exact plain data record"
+      )
+    }
+    const prototype = Object.getPrototypeOf(input)
+    if (prototype !== Object.prototype && prototype !== null) {
+      throw observationError(
+        "PROVENANCE_REJECTED",
+        "$provenance",
+        "response provenance must be one exact plain data record"
+      )
+    }
+    const ownKeys = Reflect.ownKeys(input)
+    if (ownKeys.some((key) => typeof key !== "string")) {
+      throw observationError(
+        "PROVENANCE_REJECTED",
+        "$provenance",
+        "response provenance has an unexpected shape"
+      )
+    }
+    const keys = ownKeys
+      .filter((key): key is string => typeof key === "string")
+      .sort()
+    if (
+      keys.length !== 3 ||
+      keys[0] !== "githubApiVersionSelected" ||
+      keys[1] !== "githubRequestId" ||
+      keys[2] !== "responseEtag"
+    ) {
+      throw observationError(
+        "PROVENANCE_REJECTED",
+        "$provenance",
+        "response provenance has an unexpected shape"
+      )
+    }
+    const record = input as Readonly<Record<string, unknown>>
+    const requestIdDescriptor = Object.getOwnPropertyDescriptor(
+      record,
+      "githubRequestId"
+    )
+    const versionDescriptor = Object.getOwnPropertyDescriptor(
+      record,
+      "githubApiVersionSelected"
+    )
+    const etagDescriptor = Object.getOwnPropertyDescriptor(record, "responseEtag")
+    if (
+      requestIdDescriptor === undefined ||
+      requestIdDescriptor.enumerable !== true ||
+      !("value" in requestIdDescriptor) ||
+      typeof requestIdDescriptor.value !== "string" ||
+      !GITHUB_REQUEST_ID_PATTERN.test(requestIdDescriptor.value) ||
+      versionDescriptor === undefined ||
+      versionDescriptor.enumerable !== true ||
+      !("value" in versionDescriptor) ||
+      versionDescriptor.value !== S2S_GITHUB_API_VERSION ||
+      etagDescriptor === undefined ||
+      etagDescriptor.enumerable !== true ||
+      !("value" in etagDescriptor) ||
+      typeof etagDescriptor.value !== "string" ||
+      !HTTP_ETAG_PATTERN.test(etagDescriptor.value)
+    ) {
+      throw observationError(
+        "PROVENANCE_REJECTED",
+        "$provenance",
+        "response provenance headers are absent or noncanonical"
+      )
+    }
+    return Object.freeze({
+      githubRequestId: requestIdDescriptor.value,
+      githubApiVersionSelected: S2S_GITHUB_API_VERSION,
+      responseEtag: etagDescriptor.value
+    })
+  } catch (error: unknown) {
+    if (error instanceof S2SGitHubObservationError) throw error
+    throw observationError(
+      "PROVENANCE_REJECTED",
+      "$provenance",
+      "response provenance inspection failed closed"
+    )
+  }
+}
+
 const makeObservation = <Projection extends S2SGitHubProjection>(
   rawInput: unknown,
   kind: S2SGitHubObservationKind,
   endpointPathAndQuery: string,
   observedAtUnixSeconds: number,
+  provenanceInput: unknown,
   parseProjection: (root: S2SJson) => Projection,
   identityCheck: (projection: Projection) => boolean
 ): Either.Either<S2SGitHubObservation<Projection>, S2SGitHubObservationError> => {
   try {
     const rawBody = snapshotRawBody(rawInput)
+    const provenance = snapshotObservationProvenance(provenanceInput)
     const projection = parseProjection(parseRoot(rawBody))
     if (!identityCheck(projection)) {
       throw observationError(
@@ -665,6 +784,9 @@ const makeObservation = <Projection extends S2SGitHubProjection>(
       endpointPathAndQuery,
       observedAtUnixSeconds,
       httpStatus: 200 as const,
+      githubRequestId: provenance.githubRequestId,
+      githubApiVersionSelected: provenance.githubApiVersionSelected,
+      responseEtag: provenance.responseEtag,
       rawBodyByteLength: rawBody.byteLength,
       rawBodySha256: rawS2SFileSha256(rawBody),
       projection,
@@ -706,7 +828,8 @@ const repositoryEndpoint = (suffix: string): string =>
 export const observeS2SGitHubWorkflowRun = (
   rawBody: unknown,
   workflowRunId: number,
-  observedAtUnixSeconds: number
+  observedAtUnixSeconds: number,
+  provenance: unknown
 ): Either.Either<
   S2SGitHubObservation<S2SGitHubWorkflowRunProjection>,
   S2SGitHubObservationError
@@ -721,6 +844,7 @@ export const observeS2SGitHubWorkflowRun = (
     "WORKFLOW_RUN",
     repositoryEndpoint(`/actions/runs/${workflowRunId}`),
     observedAtUnixSeconds,
+    provenance,
     parseWorkflowRunProjection,
     (projection) =>
       projection.id === workflowRunId &&
@@ -734,7 +858,8 @@ export const observeS2SGitHubWorkflowAttemptJobs = (
   rawBody: unknown,
   workflowRunId: number,
   workflowRunAttempt: number,
-  observedAtUnixSeconds: number
+  observedAtUnixSeconds: number,
+  provenance: unknown
 ): Either.Either<
   S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>,
   S2SGitHubObservationError
@@ -758,6 +883,7 @@ export const observeS2SGitHubWorkflowAttemptJobs = (
       `/actions/runs/${workflowRunId}/attempts/${workflowRunAttempt}/jobs?per_page=${S2S_GITHUB_PAGE_SIZE}`
     ),
     observedAtUnixSeconds,
+    provenance,
     parseWorkflowJobsProjection,
     (projection) =>
       projection.jobs.every(
@@ -770,7 +896,8 @@ export const observeS2SGitHubWorkflowAttemptJobs = (
 export const observeS2SGitHubRunArtifacts = (
   rawBody: unknown,
   workflowRunId: number,
-  observedAtUnixSeconds: number
+  observedAtUnixSeconds: number,
+  provenance: unknown
 ): Either.Either<
   S2SGitHubObservation<S2SGitHubArtifactsProjection>,
   S2SGitHubObservationError
@@ -787,6 +914,7 @@ export const observeS2SGitHubRunArtifacts = (
       `/actions/runs/${workflowRunId}/artifacts?per_page=${S2S_GITHUB_PAGE_SIZE}`
     ),
     observedAtUnixSeconds,
+    provenance,
     parseArtifactsProjection,
     (projection) =>
       projection.artifacts.every(
@@ -798,7 +926,8 @@ export const observeS2SGitHubRunArtifacts = (
 export const observeS2SGitHubArtifact = (
   rawBody: unknown,
   artifactId: number,
-  observedAtUnixSeconds: number
+  observedAtUnixSeconds: number,
+  provenance: unknown
 ): Either.Either<
   S2SGitHubObservation<S2SGitHubArtifactProjection>,
   S2SGitHubObservationError
@@ -813,6 +942,7 @@ export const observeS2SGitHubArtifact = (
     "ARTIFACT",
     repositoryEndpoint(`/actions/artifacts/${artifactId}`),
     observedAtUnixSeconds,
+    provenance,
     (root) => parseArtifactProjection(root, "$"),
     (projection) => projection.id === artifactId
   )
@@ -1025,6 +1155,11 @@ const performBoundedFetch = async (
         status: response.status,
         contentType: response.headers.get("content-type"),
         location: response.headers.get("location"),
+        githubRequestId: response.headers.get("x-github-request-id"),
+        githubApiVersionSelected: response.headers.get(
+          "x-github-api-version-selected"
+        ),
+        etag: response.headers.get("etag"),
         body
       })
     })()
@@ -1055,10 +1190,75 @@ const performBoundedFetch = async (
   }
 }
 
+interface ValidatedGitHubApiHeaders {
+  readonly githubRequestId: string
+  readonly githubApiVersionSelected: typeof S2S_GITHUB_API_VERSION
+  readonly etag: string | null
+}
+
+const validateOptionalEtag = (
+  value: string | null,
+  operation: string,
+  httpStatus: number
+): string | null => {
+  if (value !== null && !HTTP_ETAG_PATTERN.test(value)) {
+    throw transportError(
+      "RESPONSE_HEADERS_REJECTED",
+      operation,
+      "response ETag is not a bounded canonical HTTP entity tag",
+      httpStatus
+    )
+  }
+  return value
+}
+
+const validateGitHubApiHeaders = (
+  response: S2SGitHubHttpResponse,
+  operation: string,
+  etagRequired: boolean
+): ValidatedGitHubApiHeaders => {
+  if (
+    response.githubRequestId === null ||
+    !GITHUB_REQUEST_ID_PATTERN.test(response.githubRequestId) ||
+    response.githubApiVersionSelected !== S2S_GITHUB_API_VERSION
+  ) {
+    throw transportError(
+      "RESPONSE_HEADERS_REJECTED",
+      operation,
+      "GitHub request identity or selected API version is absent or noncanonical",
+      response.status,
+      rawS2SFileSha256(response.body)
+    )
+  }
+  const etag = validateOptionalEtag(response.etag, operation, response.status)
+  if (etagRequired && etag === null) {
+    throw transportError(
+      "RESPONSE_HEADERS_REJECTED",
+      operation,
+      "GitHub metadata response does not carry the required ETag validator",
+      response.status,
+      rawS2SFileSha256(response.body)
+    )
+  }
+  return Object.freeze({
+    githubRequestId: response.githubRequestId,
+    githubApiVersionSelected: S2S_GITHUB_API_VERSION,
+    etag
+  })
+}
+
+interface S2SGitHubValidatedJsonResponse extends S2SGitHubHttpResponse {
+  readonly status: 200
+  readonly location: null
+  readonly githubRequestId: string
+  readonly githubApiVersionSelected: typeof S2S_GITHUB_API_VERSION
+  readonly etag: string
+}
+
 const ensureJsonResponse = (
   response: S2SGitHubHttpResponse,
   operation: string
-): S2SGitHubHttpResponse => {
+): S2SGitHubValidatedJsonResponse => {
   if (response.status !== 200) {
     throw transportError(
       "HTTP_STATUS_UNEXPECTED",
@@ -1087,13 +1287,31 @@ const ensureJsonResponse = (
       rawS2SFileSha256(response.body)
     )
   }
-  return response
+  const headers = validateGitHubApiHeaders(response, operation, true)
+  if (headers.etag === null) {
+    throw transportError(
+      "RESPONSE_HEADERS_REJECTED",
+      operation,
+      "GitHub metadata response ETag validation failed closed",
+      response.status,
+      rawS2SFileSha256(response.body)
+    )
+  }
+  return Object.freeze({
+    status: 200,
+    contentType: response.contentType,
+    location: null,
+    githubRequestId: headers.githubRequestId,
+    githubApiVersionSelected: headers.githubApiVersionSelected,
+    etag: headers.etag,
+    body: response.body
+  })
 }
 
 const requireJsonResponse = (
   response: S2SGitHubHttpResponse,
   operation: string
-): Effect.Effect<S2SGitHubHttpResponse, S2SGitHubTransportError> =>
+): Effect.Effect<S2SGitHubValidatedJsonResponse, S2SGitHubTransportError> =>
   Effect.try({
     try: () => ensureJsonResponse(response, operation),
     catch: (error: unknown) =>
@@ -1160,7 +1378,10 @@ const makeArtifactDownload = (
   artifactId: number,
   redirect: URL,
   archive: Uint8Array,
-  downloadedAtUnixSeconds: number
+  downloadedAtUnixSeconds: number,
+  redirectHeaders: ValidatedGitHubApiHeaders,
+  archiveMediaType: S2SGitHubArchiveMediaType,
+  archiveResponseEtag: string | null
 ): S2SGitHubArtifactDownload => {
   const endpointPathAndQuery = repositoryEndpoint(
     `/actions/artifacts/${artifactId}/zip`
@@ -1172,10 +1393,18 @@ const makeArtifactDownload = (
     artifactId,
     endpointPathAndQuery,
     downloadedAtUnixSeconds,
+    redirectHttpStatus: 302 as const,
+    redirectGitHubRequestId: redirectHeaders.githubRequestId,
+    redirectGitHubApiVersionSelected:
+      redirectHeaders.githubApiVersionSelected,
+    redirectResponseEtag: redirectHeaders.etag,
     redirectUrlSha256: rawS2SFileSha256(
       new TextEncoder().encode(redirect.toString())
     ),
     redirectOrigin: redirect.origin,
+    archiveHttpStatus: 200 as const,
+    archiveMediaType,
+    archiveResponseEtag,
     archiveByteLength: archive.byteLength,
     downloadedArchiveSha256: rawS2SFileSha256(archive)
   })
@@ -1203,14 +1432,11 @@ const exactDataRecord = (
   expectedKeys: ReadonlyArray<string>
 ): Readonly<Record<string, unknown>> | null => {
   try {
-    if (
-      input === null ||
-      typeof input !== "object" ||
-      (Object.getPrototypeOf(input) !== Object.prototype &&
-        Object.getPrototypeOf(input) !== null)
-    ) {
+    if (input === null || typeof input !== "object") {
       return null
     }
+    const prototype = Object.getPrototypeOf(input)
+    if (prototype !== Object.prototype && prototype !== null) return null
     const keys = Reflect.ownKeys(input)
     if (
       keys.some((key) => typeof key !== "string") ||
@@ -1253,12 +1479,19 @@ export const validateS2SGitHubArtifactDownload = (
   const receipt = exactDataRecord(root?.["receipt"], [
     "apiVersion",
     "archiveByteLength",
+    "archiveHttpStatus",
+    "archiveMediaType",
+    "archiveResponseEtag",
     "artifactId",
     "downloadedArchiveSha256",
     "downloadedAtUnixSeconds",
     "endpointPathAndQuery",
     "receiptSha256",
+    "redirectGitHubApiVersionSelected",
+    "redirectGitHubRequestId",
+    "redirectHttpStatus",
     "redirectOrigin",
+    "redirectResponseEtag",
     "redirectUrlSha256",
     "repository",
     "schemaVersion"
@@ -1286,6 +1519,20 @@ export const validateS2SGitHubArtifactDownload = (
     receipt["repository"] !== S2S_GITHUB_REPOSITORY ||
     receipt["artifactId"] !== expectedArtifactId ||
     receipt["endpointPathAndQuery"] !== expectedEndpoint ||
+    receipt["redirectHttpStatus"] !== 302 ||
+    typeof receipt["redirectGitHubRequestId"] !== "string" ||
+    !GITHUB_REQUEST_ID_PATTERN.test(receipt["redirectGitHubRequestId"]) ||
+    receipt["redirectGitHubApiVersionSelected"] !== S2S_GITHUB_API_VERSION ||
+    (receipt["redirectResponseEtag"] !== null &&
+      (typeof receipt["redirectResponseEtag"] !== "string" ||
+        !HTTP_ETAG_PATTERN.test(receipt["redirectResponseEtag"]))) ||
+    receipt["archiveHttpStatus"] !== 200 ||
+    (receipt["archiveMediaType"] !== "application/octet-stream" &&
+      receipt["archiveMediaType"] !== "application/zip" &&
+      receipt["archiveMediaType"] !== "binary/octet-stream") ||
+    (receipt["archiveResponseEtag"] !== null &&
+      (typeof receipt["archiveResponseEtag"] !== "string" ||
+        !HTTP_ETAG_PATTERN.test(receipt["archiveResponseEtag"]))) ||
     !Number.isSafeInteger(downloadedAtUnixSeconds) ||
     typeof downloadedAtUnixSeconds !== "number" ||
     downloadedAtUnixSeconds < 0 ||
@@ -1330,8 +1577,16 @@ export const validateS2SGitHubArtifactDownload = (
     artifactId: receipt["artifactId"],
     endpointPathAndQuery: receipt["endpointPathAndQuery"],
     downloadedAtUnixSeconds,
+    redirectHttpStatus: receipt["redirectHttpStatus"],
+    redirectGitHubRequestId: receipt["redirectGitHubRequestId"],
+    redirectGitHubApiVersionSelected:
+      receipt["redirectGitHubApiVersionSelected"],
+    redirectResponseEtag: receipt["redirectResponseEtag"],
     redirectUrlSha256: receipt["redirectUrlSha256"],
     redirectOrigin: receipt["redirectOrigin"],
+    archiveHttpStatus: receipt["archiveHttpStatus"],
+    archiveMediaType: receipt["archiveMediaType"],
+    archiveResponseEtag: receipt["archiveResponseEtag"],
     archiveByteLength,
     downloadedArchiveSha256: receipt["downloadedArchiveSha256"]
   })
@@ -1460,6 +1715,11 @@ export const makeS2SGitHubHttpTransportLiveLayer = (
                   rawS2SFileSha256(redirectResponse.body)
                 )
               }
+              const redirectHeaders = validateGitHubApiHeaders(
+                redirectResponse,
+                "DOWNLOAD_ARTIFACT_REDIRECT",
+                false
+              )
               const redirect = validateDownloadRedirect(redirectResponse.location)
               // Deliberately omit Authorization and every GitHub API header on
               // the cross-origin signed-object request.
@@ -1501,11 +1761,19 @@ export const makeS2SGitHubHttpTransportLiveLayer = (
                   rawS2SFileSha256(archiveResponse.body)
                 )
               }
+              const archiveResponseEtag = validateOptionalEtag(
+                archiveResponse.etag,
+                "DOWNLOAD_ARTIFACT_ARCHIVE",
+                archiveResponse.status
+              )
               return makeArtifactDownload(
                 artifactId,
                 redirect,
                 archiveResponse.body,
-                Math.floor(Date.now() / 1_000)
+                Math.floor(Date.now() / 1_000),
+                redirectHeaders,
+                mediaType,
+                archiveResponseEtag
               )
             },
             catch: (error: unknown) =>
@@ -1533,6 +1801,15 @@ const fromObservation = <Projection extends S2SGitHubProjection>(
 
 const currentUnixSeconds = (): number => Math.floor(Date.now() / 1_000)
 
+const observationProvenanceFromResponse = (
+  response: S2SGitHubValidatedJsonResponse
+): S2SGitHubApiResponseProvenance =>
+  Object.freeze({
+    githubRequestId: response.githubRequestId,
+    githubApiVersionSelected: response.githubApiVersionSelected,
+    responseEtag: response.etag
+  })
+
 export const S2SGitHubObserverLive = Layer.effect(
   S2SGitHubObserver,
   Effect.gen(function* () {
@@ -1550,7 +1827,8 @@ export const S2SGitHubObserverLive = Layer.effect(
             observeS2SGitHubWorkflowRun(
               response.body,
               workflowRunId,
-              currentUnixSeconds()
+              currentUnixSeconds(),
+              observationProvenanceFromResponse(response)
             )
           )
         }),
@@ -1569,7 +1847,8 @@ export const S2SGitHubObserverLive = Layer.effect(
               response.body,
               workflowRunId,
               1,
-              currentUnixSeconds()
+              currentUnixSeconds(),
+              observationProvenanceFromResponse(response)
             )
           )
         }),
@@ -1587,7 +1866,8 @@ export const S2SGitHubObserverLive = Layer.effect(
             observeS2SGitHubRunArtifacts(
               response.body,
               workflowRunId,
-              currentUnixSeconds()
+              currentUnixSeconds(),
+              observationProvenanceFromResponse(response)
             )
           )
         }),
@@ -1603,7 +1883,8 @@ export const S2SGitHubObserverLive = Layer.effect(
             observeS2SGitHubArtifact(
               response.body,
               artifactId,
-              currentUnixSeconds()
+              currentUnixSeconds(),
+              observationProvenanceFromResponse(response)
             )
           )
         }),

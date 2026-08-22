@@ -42,7 +42,7 @@ export const S2S_PREREG_PROTOCOL_CONFIG_SHA256 =
  * Kept as a literal to avoid a preregistration/control-state import cycle.
  */
 export const S2S_PREREG_RESOURCE_POLICY_SHA256 =
-  "5d51316d2aebc8cfa6a7135adba9f167948e096895e3f94caf1defb024a0667d" as const
+  "b2c631ff80922800d06ac7e31c0632e02e1b560a31759cd0d11ae0a39c374351" as const
 
 export const S2S_PREREG_REPOSITORY = "gj3447/HSWM" as const
 export const S2S_PREREG_REF = "refs/heads/main" as const
@@ -75,6 +75,8 @@ export const S2S_REGISTRATION_CORE_SCHEMA_VERSION =
   "hswm-swm0w-s2s-registration-core/v1" as const
 export const S2S_PREREGISTRATION_SCHEMA_VERSION =
   "hswm-swm0w-s2s-preregistration/v1" as const
+export const S2S_REGISTRATION_COMMIT_AUTHORITY_EVIDENCE_SCHEMA_VERSION =
+  "hswm-swm0w-s2s-registration-commit-authority-evidence/v1" as const
 
 export const S2S_PREREG_TASK_COUNT = 20 as const
 export const S2S_PREREG_GIT_COMMAND_TIMEOUT_MILLIS = 120_000 as const
@@ -152,10 +154,13 @@ export class S2SRegistrationCommitError extends Data.TaggedError(
 )<{
   readonly reason:
     | "INVALID_VALIDATION_SNAPSHOT"
+    | "INVALID_REGISTRATION_AUTHORITY"
     | "INVALID_COMMIT"
     | "NOT_DIRECT_CHILD"
     | "DIFF_NOT_ADD_ONLY_PREREGISTRATION"
+    | "PREREGISTRATION_ENTRY_INVALID"
     | "PREREGISTRATION_BYTES_DRIFT"
+    | "AUTHORITY_EVIDENCE_NOT_CANONICAL"
   readonly detail: string
 }> {}
 
@@ -726,7 +731,8 @@ const runGit = (
     return result
   })
 
-const isGitSha = (value: string): boolean => GIT_SHA_PATTERN.test(value)
+const isGitSha = (value: unknown): value is string =>
+  typeof value === "string" && GIT_SHA_PATTERN.test(value)
 
 const assertExactSourceCommitObject = (
   sourceCommitA: string
@@ -1422,6 +1428,46 @@ const readPathAtCommit = (
 ): Effect.Effect<Uint8Array, S2SGitRepositoryError, S2SPreregGitRepository> =>
   Effect.map(runGit(operation, ["show", `${commit}:${path}`]), (result) => result.stdout)
 
+const validateRegistrationPreregistrationEntry = (
+  registrationCommitB: string
+): Effect.Effect<
+  void,
+  S2SRegistrationCommitError | S2SGitRepositoryError,
+  S2SPreregGitRepository
+> =>
+  Effect.gen(function* () {
+    const listing = yield* runGit("verify registration preregistration entry", [
+      "ls-tree",
+      "-z",
+      "--full-tree",
+      registrationCommitB,
+      "--",
+      S2S_PREREGISTRATION_PATH
+    ])
+    const entries = yield* parseTreeEntries(listing.stdout).pipe(
+      Effect.mapError(
+        (error) =>
+          new S2SRegistrationCommitError({
+            reason: "PREREGISTRATION_ENTRY_INVALID",
+            detail: `registration preregistration entry is malformed: ${error.detail}`
+          })
+      )
+    )
+    const entry = entries[0]
+    if (
+      entries.length !== 1 ||
+      entry === undefined ||
+      entry.path !== S2S_PREREGISTRATION_PATH ||
+      entry.mode !== "100644" ||
+      entry.objectType !== "blob"
+    ) {
+      return yield* new S2SRegistrationCommitError({
+        reason: "PREREGISTRATION_ENTRY_INVALID",
+        detail: "registration preregistration entry must be one exact 100644 blob"
+      })
+    }
+  })
+
 const verifyS2SNumericContinuityUnchecked = (
   sourceCommitA: string
 ): Effect.Effect<
@@ -1714,6 +1760,70 @@ const VALIDATED_S2S_PREREGISTRATION_SNAPSHOTS = new WeakMap<
   object,
   ValidatedS2SPreregistrationSnapshot
 >()
+
+const S2S_REGISTRATION_COMMIT_AUTHORITY_BRAND: unique symbol = Symbol(
+  "hswm/S2SRegistrationCommitAuthority"
+)
+
+export interface S2SRegistrationCommitAuthority {
+  readonly [S2S_REGISTRATION_COMMIT_AUTHORITY_BRAND]: true
+}
+
+export interface S2SRegistrationCommitAuthorityEvidence {
+  readonly schemaVersion:
+    typeof S2S_REGISTRATION_COMMIT_AUTHORITY_EVIDENCE_SCHEMA_VERSION
+  readonly sourceCommitA: string
+  readonly registrationCommitB: string
+  readonly preregistrationSha256: string
+  readonly preregistrationFileSha256: string
+  readonly registrationCoreSha256: string
+  readonly sourceFreezeReceiptSha256: string
+  readonly trackedBytesManifestSha256: string
+  readonly resourcePolicySha256: typeof S2S_PREREG_RESOURCE_POLICY_SHA256
+  readonly registeredAtUnixSeconds: number
+  readonly futureRound: number
+  readonly futureRoundCommitmentSha256: string
+  readonly receiptSha256: string
+}
+
+const S2S_REGISTRATION_COMMIT_AUTHORITY_EVIDENCE = new WeakMap<
+  object,
+  S2SRegistrationCommitAuthorityEvidence
+>()
+
+export const inspectS2SRegistrationCommitAuthority = (
+  input: unknown
+): Either.Either<
+  S2SRegistrationCommitAuthorityEvidence,
+  S2SRegistrationCommitError
+> => {
+  try {
+    if (input === null || typeof input !== "object") {
+      return Either.left(
+        new S2SRegistrationCommitError({
+          reason: "INVALID_REGISTRATION_AUTHORITY",
+          detail: "registration authority is not an issued object"
+        })
+      )
+    }
+    const evidence = S2S_REGISTRATION_COMMIT_AUTHORITY_EVIDENCE.get(input)
+    return evidence === undefined
+      ? Either.left(
+          new S2SRegistrationCommitError({
+            reason: "INVALID_REGISTRATION_AUTHORITY",
+            detail: "registration authority was not issued by this module"
+          })
+        )
+      : Either.right(evidence)
+  } catch {
+    return Either.left(
+      new S2SRegistrationCommitError({
+        reason: "INVALID_REGISTRATION_AUTHORITY",
+        detail: "registration authority inspection failed closed"
+      })
+    )
+  }
+}
 
 const deepFreezePreregistrationSnapshot = (
   value: S2SPreregistration
@@ -2033,7 +2143,7 @@ export const validateS2SRegistrationCommitB = (
   validated: ValidatedS2SPreregistration,
   registrationCommitB: string
 ): Effect.Effect<
-  string,
+  S2SRegistrationCommitAuthority,
   S2SRegistrationCommitError | S2SGitRepositoryError | S2SSourceFreezeError,
   S2SPreregGitRepository
 > =>
@@ -2097,6 +2207,7 @@ export const validateS2SRegistrationCommitB = (
         detail: "registration commit must add only the exact preregistration path"
       })
     }
+    yield* validateRegistrationPreregistrationEntry(registrationCommitB)
     const committed = yield* readPathAtCommit(
       registrationCommitB,
       S2S_PREREGISTRATION_PATH,
@@ -2108,5 +2219,41 @@ export const validateS2SRegistrationCommitB = (
         detail: "commit B preregistration bytes differ from validated bytes"
       })
     }
-    return registrationCommitB
+    const preregistration = snapshot.preregistration
+    const authorityEvidenceCore = Object.freeze({
+      schemaVersion:
+        S2S_REGISTRATION_COMMIT_AUTHORITY_EVIDENCE_SCHEMA_VERSION,
+      sourceCommitA,
+      registrationCommitB,
+      preregistrationSha256: preregistration.preregistration_sha256,
+      preregistrationFileSha256: snapshot.fileSha256,
+      registrationCoreSha256: preregistration.registration_core_sha256,
+      sourceFreezeReceiptSha256:
+        preregistration.registration_core.source_freeze.receipt_sha256,
+      trackedBytesManifestSha256:
+        preregistration.registration_core.source_freeze.tracked_bytes_manifest
+          .manifest_sha256,
+      resourcePolicySha256: S2S_PREREG_RESOURCE_POLICY_SHA256,
+      registeredAtUnixSeconds:
+        preregistration.future_round_commitment.registered_at_unix,
+      futureRound: preregistration.future_round_commitment.round,
+      futureRoundCommitmentSha256:
+        preregistration.future_round_commitment.commitment_sha256
+    })
+    const evidenceHash = s2sPreregCanonicalSha256(authorityEvidenceCore)
+    if (Either.isLeft(evidenceHash)) {
+      return yield* new S2SRegistrationCommitError({
+        reason: "AUTHORITY_EVIDENCE_NOT_CANONICAL",
+        detail: "registration authority evidence is not canonical"
+      })
+    }
+    const evidence: S2SRegistrationCommitAuthorityEvidence = Object.freeze({
+      ...authorityEvidenceCore,
+      receiptSha256: evidenceHash.right
+    })
+    const authority: S2SRegistrationCommitAuthority = Object.freeze({
+      [S2S_REGISTRATION_COMMIT_AUTHORITY_BRAND]: true as const
+    })
+    S2S_REGISTRATION_COMMIT_AUTHORITY_EVIDENCE.set(authority, evidence)
+    return authority
   })

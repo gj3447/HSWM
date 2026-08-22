@@ -38,11 +38,20 @@ pre-dispatch engineering:
 - `s2s-json.ts` supplies bounded duplicate-aware integer-only JSON decoding.
   `s2s-live-github.ts` implements a read-only, exact-endpoint GitHub observer
   with bounded transport, strict projections, immutable raw-body/download
-  snapshots, and self-hashed observation receipts. `s2s-live-artifact.ts`
-  derives Layer-scoped producer/artifact authority, rechecks workflow-attempt
-  identity around lookup and readback, and retains the complete receipt objects
-  needed by a later durable envelope. Three empty-list observations produce
-  only an explicitly non-probative reconciled-absence record.
+  snapshots, and request-distinct self-hashed observation receipts. Metadata
+  receipts require and bind GitHub's request ID, selected API version, and
+  ETag; download receipts separately bind the API redirect and signed-object
+  response provenance. `s2s-live-artifact.ts` derives Layer-scoped
+  producer/artifact authority, rejects reused request IDs, rechecks
+  workflow-attempt identity around lookup and readback, and retains the
+  complete receipt objects needed by a later durable envelope. Three
+  empty-list observations produce only an explicitly non-probative
+  reconciled-absence record.
+- `s2s-preregistration.ts` keeps the validated preregistration and direct-child
+  registration-commit lineage runtime-authentic. Commit-B validation now
+  returns a module-issued, WeakMap-backed capability with self-hashed immutable
+  evidence instead of degrading the verified lineage back to a caller-usable
+  SHA string. Current-run and dispatch authority are not yet implemented.
 - `s2s-live-drand.ts` verifies only a preregistered Quicknet round through the
   pinned local helper. `s2s-live-drand-http.ts` can fetch only that exact
   chain-specific historical/committed URL with one bounded unauthenticated GET;
@@ -74,9 +83,8 @@ Independent exact-byte reviews drove repairs across the source-A/B, pulse,
 resource-accounting, artifact-size, journal, process, ZIP, and structural
 carrier boundaries, with regression coverage on the resulting bytes. The slice
 remains `BLOCKED_PRE_PREREG`: the bounded adapters are present, but no
-source/preregistration/dispatch-authorized composition root, request-distinct
-GitHub receipt binding, workflow, durable evidence envelope, or external
-event-10 finalizer exists. Resume from the repository
+current-run/dispatch-authorized composition root, workflow, durable evidence
+envelope, or external event-10 finalizer exists. Resume from the repository
 [`next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-22.md)
 before composing the adapters or selecting a future round.
 

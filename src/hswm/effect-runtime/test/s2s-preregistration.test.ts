@@ -23,11 +23,13 @@ import {
   S2S_PREREG_PROTOCOL_CONFIG_SHA256,
   S2S_PREREG_RESOURCE_POLICY_SHA256,
   S2S_PREREGISTRATION_PATH,
+  S2S_REGISTRATION_COMMIT_AUTHORITY_EVIDENCE_SCHEMA_VERSION,
   buildS2SPreregistration,
   buildS2STrackedBytesManifest,
   makeS2SPreregGitRepositoryProcessLayer,
   makeS2SPreregGitRepositoryTestLayer,
   parseAndValidateS2SPreregistration,
+  inspectS2SRegistrationCommitAuthority,
   s2sPreregCanonicalJson,
   s2sPreregCanonicalSha256,
   s2sPreregSha256Bytes,
@@ -250,6 +252,43 @@ const writeRegistration = (
   return runGit(fixture.root, ["rev-parse", "HEAD"])
 }
 
+const writeRegistrationWithMode = (
+  fixture: GitFixture,
+  branch: string,
+  bytes: Uint8Array,
+  mode: "100755" | "120000" | "160000"
+): string => {
+  const preregistrationPath = join(fixture.root, S2S_PREREGISTRATION_PATH)
+  rmSync(preregistrationPath, { force: true })
+  runGit(fixture.root, [
+    "checkout",
+    "--quiet",
+    "-B",
+    branch,
+    fixture.sourceCommitA
+  ])
+  mkdirSync(dirname(preregistrationPath), { recursive: true })
+  writeFileSync(preregistrationPath, bytes)
+  const objectId =
+    mode === "160000"
+      ? fixture.sourceCommitA
+      : execFileSync(
+          "git",
+          ["-C", fixture.root, "hash-object", "-w", "--stdin"],
+          { encoding: "utf8", input: bytes, maxBuffer: GIT_MAX_BUFFER }
+        ).trim()
+  runGit(fixture.root, [
+    "update-index",
+    "--add",
+    "--cacheinfo",
+    mode,
+    objectId,
+    S2S_PREREGISTRATION_PATH
+  ])
+  runGit(fixture.root, ["commit", "--quiet", "-m", `create ${branch}`])
+  return runGit(fixture.root, ["rev-parse", "HEAD"])
+}
+
 it("canonicalizes UTF-8 prereg values and rejects non-canonical JS values", () => {
   const canonical = s2sPreregCanonicalJson({ b: 2, a: "한글" })
   expect(Either.isRight(canonical)).toBe(true)
@@ -323,7 +362,7 @@ it.effect(
         preregistration.registration_core.evidence_binding.resource_policy_sha256
       ).toBe(S2S_PREREG_RESOURCE_POLICY_SHA256)
       expect(S2S_PREREG_RESOURCE_POLICY_SHA256).toBe(
-        "5d51316d2aebc8cfa6a7135adba9f167948e096895e3f94caf1defb024a0667d"
+        "b2c631ff80922800d06ac7e31c0632e02e1b560a31759cd0d11ae0a39c374351"
       )
       expect(
         preregistration.future_round_commitment.registration_evidence_sha256
@@ -373,9 +412,43 @@ it.effect(
         "registration-valid",
         built.canonicalBytes
       )
-      expect(
-        yield* validateS2SRegistrationCommitB(validated, registrationCommitB)
-      ).toBe(registrationCommitB)
+      const registrationAuthority = yield* validateS2SRegistrationCommitB(
+        validated,
+        registrationCommitB
+      )
+      expect(Object.isFrozen(registrationAuthority)).toBe(true)
+      const registrationEvidence = inspectS2SRegistrationCommitAuthority(
+        registrationAuthority
+      )
+      expect(Either.isRight(registrationEvidence)).toBe(true)
+      if (Either.isRight(registrationEvidence)) {
+        expect(registrationEvidence.right).toMatchObject({
+          schemaVersion:
+            S2S_REGISTRATION_COMMIT_AUTHORITY_EVIDENCE_SCHEMA_VERSION,
+          sourceCommitA: fixture.sourceCommitA,
+          registrationCommitB,
+          preregistrationSha256: preregistration.preregistration_sha256,
+          preregistrationFileSha256: built.fileSha256,
+          registrationCoreSha256: preregistration.registration_core_sha256,
+          resourcePolicySha256: S2S_PREREG_RESOURCE_POLICY_SHA256,
+          registeredAtUnixSeconds: 1_692_806_000,
+          futureRound: 1_000
+        })
+        const { receiptSha256, ...evidenceCore } = registrationEvidence.right
+        expect(canonicalShaOrThrow(evidenceCore)).toBe(receiptSha256)
+      }
+      const hostileValidate = validateS2SRegistrationCommitB as unknown as (
+        snapshot: typeof validated,
+        registrationCommit: unknown
+      ) => ReturnType<typeof validateS2SRegistrationCommitB>
+      const hostileIdentity = yield* hostileValidate(
+        validated,
+        Symbol("registration-commit")
+      ).pipe(Effect.either)
+      expect(Either.isLeft(hostileIdentity)).toBe(true)
+      if (Either.isLeft(hostileIdentity)) {
+        expect(hostileIdentity.left).toMatchObject({ reason: "INVALID_COMMIT" })
+      }
 
       const childCommit = runGit(fixture.root, [
         "commit",
@@ -455,6 +528,38 @@ it.effect(
     }).pipe(Effect.provide(layer), Effect.ensuring(Effect.sync(fixture.cleanup)))
   }
 )
+
+it.effect("rejects executable, symlink, and gitlink preregistration entries", () => {
+  const fixture = makeGitFixture()
+  const layer = makeS2SPreregGitRepositoryProcessLayer(fixture.root)
+  return Effect.gen(function* () {
+    const built = yield* buildS2SPreregistration(
+      buildInput(fixture.sourceCommitA)
+    )
+    const validated = yield* parseAndValidateS2SPreregistration(
+      built.canonicalBytes,
+      { expectedResourcePolicySha256: S2S_PREREG_RESOURCE_POLICY_SHA256 }
+    )
+    for (const mode of ["100755", "120000", "160000"] as const) {
+      const registrationCommitB = writeRegistrationWithMode(
+        fixture,
+        `registration-mode-${mode}`,
+        built.canonicalBytes,
+        mode
+      )
+      const outcome = yield* validateS2SRegistrationCommitB(
+        validated,
+        registrationCommitB
+      ).pipe(Effect.either)
+      expect(Either.isLeft(outcome)).toBe(true)
+      if (Either.isLeft(outcome)) {
+        expect(outcome.left).toMatchObject({
+          reason: "PREREGISTRATION_ENTRY_INVALID"
+        })
+      }
+    }
+  }).pipe(Effect.provide(layer), Effect.ensuring(Effect.sync(fixture.cleanup)))
+})
 
 it.effect("rejects an annotated-tag object as source A", () => {
   const fixture = makeGitFixture()
@@ -704,6 +809,27 @@ it.effect("rejects a structurally forged validation snapshot before Git I/O", ()
   }).pipe(Effect.provide(layer))
 })
 
+it("rejects forged and hostile registration commit authorities", () => {
+  const hostile = new Proxy({}, {
+    getPrototypeOf: () => {
+      throw new Error("authority inspection must not traverse the object")
+    },
+    ownKeys: () => {
+      throw new Error("authority inspection must not enumerate the object")
+    }
+  })
+  const plain = inspectS2SRegistrationCommitAuthority(Object.freeze({}))
+  const hostileOutcome = inspectS2SRegistrationCommitAuthority(hostile)
+  expect(Either.isLeft(plain)).toBe(true)
+  expect(Either.isLeft(hostileOutcome)).toBe(true)
+  if (Either.isLeft(plain)) {
+    expect(plain.left.reason).toBe("INVALID_REGISTRATION_AUTHORITY")
+  }
+  if (Either.isLeft(hostileOutcome)) {
+    expect(hostileOutcome.left.reason).toBe("INVALID_REGISTRATION_AUTHORITY")
+  }
+})
+
 it.effect("snapshots input bytes before asynchronous Git revalidation", () => {
   const fixture = makeGitFixture()
   const processLayer = makeS2SPreregGitRepositoryProcessLayer(fixture.root)
@@ -739,12 +865,15 @@ it.effect("snapshots input bytes before asynchronous Git revalidation", () => {
       "registration-concurrent-input-mutation",
       built.canonicalBytes
     )
-    expect(
-      yield* validateS2SRegistrationCommitB(
-        validated,
-        registrationCommitB
-      ).pipe(Effect.provide(processLayer))
-    ).toBe(registrationCommitB)
+    const authority = yield* validateS2SRegistrationCommitB(
+      validated,
+      registrationCommitB
+    ).pipe(Effect.provide(processLayer))
+    const evidence = inspectS2SRegistrationCommitAuthority(authority)
+    expect(Either.isRight(evidence)).toBe(true)
+    if (Either.isRight(evidence)) {
+      expect(evidence.right.registrationCommitB).toBe(registrationCommitB)
+    }
   }).pipe(Effect.ensuring(Effect.sync(fixture.cleanup)))
 })
 

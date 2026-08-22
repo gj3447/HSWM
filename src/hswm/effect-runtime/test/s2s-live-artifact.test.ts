@@ -36,6 +36,12 @@ const HEAD_SHA = "75686549b1f6c65aea87ebd0f912a6e62909445a"
 const OBSERVED_AT = 1_787_283_300
 const encoder = new TextEncoder()
 
+const responseProvenance = (suffix: number | string) => Object.freeze({
+  githubRequestId: `A1B2:C3D4:E5F6:${suffix}`,
+  githubApiVersionSelected: S2S_GITHUB_API_VERSION,
+  responseEtag: `W/"${"e".repeat(64)}"`
+})
+
 interface ZipMember {
   readonly name: string
   readonly bytes: Uint8Array
@@ -201,7 +207,8 @@ const makeFixture = (options: FixtureOptions = {}) => {
       observeS2SGitHubWorkflowRun(
         jsonBytes(runJson(options.runOverrides)),
         RUN_ID,
-        OBSERVED_AT + offset
+        OBSERVED_AT + offset,
+        responseProvenance(`run-${offset}`)
       )
     )
   )
@@ -215,7 +222,8 @@ const makeFixture = (options: FixtureOptions = {}) => {
       }),
       RUN_ID,
       1,
-      OBSERVED_AT
+      OBSERVED_AT,
+      responseProvenance("jobs")
     )
   )
   const artifactObservations = [1, 11, 21].map((offset) =>
@@ -223,7 +231,8 @@ const makeFixture = (options: FixtureOptions = {}) => {
       observeS2SGitHubRunArtifacts(
         jsonBytes({ total_count: artifactRows.length, artifacts: artifactRows }),
         RUN_ID,
-        OBSERVED_AT + offset
+        OBSERVED_AT + offset,
+        responseProvenance(`artifacts-${offset}`)
       )
     )
   )
@@ -233,7 +242,8 @@ const makeFixture = (options: FixtureOptions = {}) => {
     observeS2SGitHubArtifact(
       jsonBytes({ ...canonicalArtifact, ...options.requeryOverrides }),
       ARTIFACT_ID,
-      OBSERVED_AT + 4
+      OBSERVED_AT + 4,
+      responseProvenance("artifact-requery")
     )
   )
   const receiptCore: Omit<
@@ -246,8 +256,15 @@ const makeFixture = (options: FixtureOptions = {}) => {
     artifactId: ARTIFACT_ID,
     endpointPathAndQuery: `/repos/${S2S_GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip`,
     downloadedAtUnixSeconds: OBSERVED_AT + 5,
+    redirectHttpStatus: 302,
+    redirectGitHubRequestId: "A1B2:C3D4:E5F6:DOWNLOAD",
+    redirectGitHubApiVersionSelected: S2S_GITHUB_API_VERSION,
+    redirectResponseEtag: null,
     redirectUrlSha256: "a".repeat(64),
     redirectOrigin: "https://objects.example.invalid",
+    archiveHttpStatus: 200,
+    archiveMediaType: "application/zip",
+    archiveResponseEtag: `"${"a".repeat(64)}"`,
     archiveByteLength: archive.byteLength,
     downloadedArchiveSha256:
       options.downloadHashOverride ?? rawS2SFileSha256(archive)
@@ -546,6 +563,7 @@ it.effect("rejects rerun-attempt metadata before issuing authority", () => {
     receipt: Object.freeze({
       ...fixture.run.receipt,
       observedAtUnixSeconds: OBSERVED_AT + 2,
+      githubRequestId: "A1B2:C3D4:E5F6:RERUN",
       projection: Object.freeze({
         ...fixture.run.receipt.projection,
         runAttempt: 2
@@ -640,6 +658,53 @@ it.effect("rechecks rerun identity when spending artifact authority", () => {
   }).pipe(Effect.provide(makeAuthorityLayer(rerunFixture)))
 })
 
+it.effect("rejects a readback run query that reuses an issuance request id", () => {
+  const fixture = makeFixture()
+  const issuedRun = fixture.runObservations[1] ?? fixture.run
+  const reusedReadbackRun = right(
+    observeS2SGitHubWorkflowRun(
+      jsonBytes(runJson()),
+      RUN_ID,
+      OBSERVED_AT + 3,
+      Object.freeze({
+        githubRequestId: issuedRun.receipt.githubRequestId,
+        githubApiVersionSelected: S2S_GITHUB_API_VERSION,
+        responseEtag: `W/"${"e".repeat(64)}"`
+      })
+    )
+  )
+  expect(reusedReadbackRun.receipt.receiptSha256).not.toBe(
+    issuedRun.receipt.receiptSha256
+  )
+  const reusedFixture = {
+    ...fixture,
+    runObservations: [
+      fixture.run,
+      issuedRun,
+      reusedReadbackRun,
+      fixture.runObservations[3] ?? fixture.run
+    ]
+  }
+  return Effect.gen(function* () {
+    const service = yield* S2SArtifactAuthority
+    const lookup = yield* service.observeRoleArtifact(
+      RUN_ID,
+      HEAD_SHA,
+      "REGISTRATION"
+    )
+    expect(lookup._tag).toBe("Observed")
+    if (lookup._tag !== "Observed") return
+    const outcome = yield* service.readback(lookup).pipe(Effect.either)
+    expect(Either.isLeft(outcome)).toBe(true)
+    if (Either.isLeft(outcome)) {
+      expect(outcome.left.reason).toBe("OBSERVATION_ORDER_INVALID")
+      expect(outcome.left.causeReason).toBe(
+        "GITHUB_REQUEST_ID_REUSED_BEFORE_READBACK"
+      )
+    }
+  }).pipe(Effect.provide(makeAuthorityLayer(reusedFixture)))
+})
+
 it.effect("does not call repeated identical empty lists reconciled absence", () => {
   const fixture = makeFixture({ artifactRows: [] })
   const repeatedFixture = {
@@ -659,9 +724,85 @@ it.effect("does not call repeated identical empty lists reconciled absence", () 
     )
     expect(lookup).toMatchObject({
       _tag: "Ambiguous",
-      reason: "ABSENCE_OBSERVATIONS_NOT_DISTINCT"
+      reason: "OBSERVATION_REQUEST_IDS_NOT_DISTINCT"
     })
   }).pipe(Effect.provide(makeAuthorityLayer(repeatedFixture)))
+})
+
+it.effect("rejects timestamp-distinct absence receipts that reuse a request id", () => {
+  const fixture = makeFixture({ artifactRows: [] })
+  const reusedRequestArtifacts = [1, 11, 21].map((offset) =>
+    right(
+      observeS2SGitHubRunArtifacts(
+        jsonBytes({ total_count: 0, artifacts: [] }),
+        RUN_ID,
+        OBSERVED_AT + offset,
+        responseProvenance("REUSED-ABSENCE-REQUEST")
+      )
+    )
+  )
+  expect(
+    new Set(
+      reusedRequestArtifacts.map(
+        (observation) => observation.receipt.receiptSha256
+      )
+    ).size
+  ).toBe(3)
+  const reusedFixture = {
+    ...fixture,
+    artifacts: reusedRequestArtifacts[0] ?? fixture.artifacts,
+    artifactObservations: reusedRequestArtifacts
+  }
+  return Effect.gen(function* () {
+    const service = yield* S2SArtifactAuthority
+    const lookup = yield* service.observeRoleArtifact(
+      RUN_ID,
+      HEAD_SHA,
+      "REGISTRATION"
+    )
+    expect(lookup).toMatchObject({
+      _tag: "Ambiguous",
+      reason: "OBSERVATION_REQUEST_IDS_NOT_DISTINCT"
+    })
+  }).pipe(Effect.provide(makeAuthorityLayer(reusedFixture)))
+})
+
+it.effect("rejects absence polling when successive run brackets reuse a request id", () => {
+  const fixture = makeFixture({ artifactRows: [] })
+  const runObservations = [-1, 2, 12, 22].map((offset, index) =>
+    right(
+      observeS2SGitHubWorkflowRun(
+        jsonBytes(runJson()),
+        RUN_ID,
+        OBSERVED_AT + offset,
+        responseProvenance(
+          index === 0 ? "INITIAL-RUN" : "REUSED-RUN-BRACKET"
+        )
+      )
+    )
+  )
+  expect(
+    new Set(
+      runObservations.map((observation) => observation.receipt.receiptSha256)
+    ).size
+  ).toBe(4)
+  const reusedFixture = {
+    ...fixture,
+    run: runObservations[0] ?? fixture.run,
+    runObservations
+  }
+  return Effect.gen(function* () {
+    const service = yield* S2SArtifactAuthority
+    const lookup = yield* service.observeRoleArtifact(
+      RUN_ID,
+      HEAD_SHA,
+      "REGISTRATION"
+    )
+    expect(lookup).toMatchObject({
+      _tag: "Ambiguous",
+      reason: "OBSERVATION_REQUEST_IDS_NOT_DISTINCT"
+    })
+  }).pipe(Effect.provide(makeAuthorityLayer(reusedFixture)))
 })
 
 it.effect("requires the frozen minimum gaps for absence reconciliation", () => {
@@ -671,7 +812,8 @@ it.effect("requires the frozen minimum gaps for absence reconciliation", () => {
       observeS2SGitHubRunArtifacts(
         jsonBytes({ total_count: 0, artifacts: [] }),
         RUN_ID,
-        OBSERVED_AT + offset
+        OBSERVED_AT + offset,
+        responseProvenance(`close-artifacts-${offset}`)
       )
     )
   )
@@ -680,7 +822,8 @@ it.effect("requires the frozen minimum gaps for absence reconciliation", () => {
       observeS2SGitHubWorkflowRun(
         jsonBytes(runJson()),
         RUN_ID,
-        OBSERVED_AT + offset
+        OBSERVED_AT + offset,
+        responseProvenance(`close-run-${offset}`)
       )
     )
   )
@@ -711,7 +854,8 @@ it.effect("requires run observations to bracket job and artifact observations", 
     observeS2SGitHubWorkflowRun(
       jsonBytes(runJson()),
       RUN_ID,
-      OBSERVED_AT
+      OBSERVED_AT,
+      responseProvenance("stale-final-run")
     )
   )
   const staleFixture = {

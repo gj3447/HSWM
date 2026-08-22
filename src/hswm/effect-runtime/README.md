@@ -41,9 +41,9 @@ pre-dispatch engineering:
   snapshots, and request-distinct self-hashed observation receipts. Metadata
   receipts require and bind GitHub's request ID, selected API version, and
   ETag; download receipts separately bind the API redirect and signed-object
-  response provenance. `s2s-live-artifact.ts` derives Layer-scoped
-  producer/artifact authority, rejects reused request IDs, rechecks
-  workflow-attempt identity around lookup and readback, and retains the
+  response provenance. `s2s-live-artifact.ts` derives process-local,
+  single-module producer/artifact authority, rejects reused request IDs,
+  rechecks workflow-attempt identity around lookup and readback, and retains the
   complete receipt objects needed by a later durable envelope. Three
   empty-list observations produce only an explicitly non-probative
   reconciled-absence record.
@@ -64,6 +64,14 @@ pre-dispatch engineering:
   path under an injected observer but cannot call the issuer. Production exits
   with `WORKFLOW_SOURCE_BYTES_OPEN` before GitHub configuration or calls, so no
   current-run capability or GitHub-origin observation has been issued.
+- `s2s-stage-artifact-permits.ts` derives the fixed stage-read identity from the
+  exact current-run bearer, atomically spends finite ordered permits, and carries
+  all four bracket receipts into one bounded non-evicting request/receipt
+  ledger. `s2s-live-artifact.ts` exposes only lazy zero-identity stage Effects
+  and independently rereads the candidate. The one-use claim is limited to one
+  trusted process/module identity slot; it is not Layer-lifetime or durable
+  replay prevention, and the production graph remains dormant while workflow
+  bytes are OPEN.
 - `s2s-preregistration.ts` keeps the validated preregistration and direct-child
   registration-commit lineage runtime-authentic. Commit-B validation now
   returns a module-issued, WeakMap-backed capability with self-hashed immutable
@@ -104,8 +112,11 @@ remains `BLOCKED_PRE_PREREG`: the bounded adapters and closed current-run Layer
 graph are present, but no issued current-run/dispatch authority, workflow,
 durable evidence envelope, or external event-10 finalizer exists. Resume from
 the repository
-[`current next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_RUN_AUTHORITY_IMPLEMENTED_NEXT_SESSION_2026-08-22.md)
-before composing the adapters or selecting a future round.
+[`current next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_STAGE_ARTIFACT_PERMITS_IMPLEMENTED_NEXT_SESSION_2026-08-22.md)
+before composing the durable envelope, stage programs, workflow, or future
+round. The fixed stage-artifact Effects and process/module-slot-scoped permits
+are implemented, but production remains dormant while workflow bytes and API
+path selection are OPEN.
 
 The in-memory Layer's static capability-ID allowlist is configuration for tests
 and local scaffolding, not identity authentication. This slice is not evidence

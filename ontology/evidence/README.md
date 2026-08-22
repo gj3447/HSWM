@@ -38,15 +38,21 @@ engineering checkpoints:
   consistency. It explicitly does not establish GitHub origin or unique
   current-run authority, and production issuance remains fail-closed while
   workflow source bytes are absent.
-- [`v7 current run-authority implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v7.json)
+- [`v7 historical run-authority implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v7.json)
   records authentic registration/invocation cross-binding, the exact four-read
   current-run acquisition/revalidation path, stage/job policy, capability
   containment, and a closed production Layer graph. Positive verification is
   non-authorizing under an injected observer; production issuance remains
   closed while workflow bytes and API path policy are OPEN, so GitHub origin and
   a genuine current-run capability are not claimed.
+- [`v8 current stage-artifact permit implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v8.json)
+  records fixed zero-identity stage Effects, authority-derived atomically spent
+  permits, one seeded bounded request/receipt ledger, fresh run/job/artifact
+  validation, and independent candidate reread. Production remains dormant
+  while workflow bytes and API path policy are OPEN; its one-use claim is only
+  for one trusted process/module identity slot, not durable replay prevention.
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v7 supersedes v6 only as the
-next-session entrypoint; v1 through v6 remain immutable historical
+runtime graphs, or remote Neo4j publications. v8 supersedes v7 only as the
+next-session entrypoint; v1 through v7 remain immutable historical
 projections.

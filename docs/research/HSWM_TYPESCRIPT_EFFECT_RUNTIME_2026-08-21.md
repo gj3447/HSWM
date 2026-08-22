@@ -254,3 +254,16 @@ and never invokes the capability issuer, while production stays
 `Pi`: it does not prove GitHub origin, issue a genuine current-run capability,
 select the production API path representation, create durable replay
 protection, or establish learned `W` or scientific efficacy.
+
+The following finite stage-artifact permit slice is implemented at code
+checkpoint `01b96ae` and recorded in the
+[`stage-artifact permit implementation handoff`](../operations/HSWM_SWM0W_S2S_STAGE_ARTIFACT_PERMITS_IMPLEMENTED_NEXT_SESSION_2026-08-22.md)
+and
+[`v8 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v8.json).
+It replaces caller-selected artifact identity with fixed lazy Effect values,
+derives atomically spent permits from the current-run authority, carries the
+four bracket receipts into one bounded non-evicting ledger, and independently
+rereads the candidate. Its production claim is limited to one trusted
+process/module identity slot and remains dormant while workflow bytes and API
+path selection are OPEN. This advances only `Π`; it is not durable replay
+protection, GitHub-origin evidence, learned `W`, or scientific efficacy.

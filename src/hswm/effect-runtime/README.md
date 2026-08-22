@@ -53,13 +53,23 @@ pre-dispatch engineering:
   returns only frozen reconstructed observations. The exact head-SHA endpoint
   preserves zero, one, or multiple rows; it does not decide unique-run
   authority. These validators prove internal receipt consistency, not GitHub
-  origin, so the future production composition must still fix the private Live
-  observer.
+  origin. The dormant current-run production graph now fixes the private Live
+  observer, but it has not executed while workflow source bytes remain OPEN.
+- `s2s-run-authority.ts` now binds authentic registration-B and Live invocation
+  capabilities, then defines the exact request-distinct bracket
+  `run-start -> jobs -> runs-for-B -> run-end`, immediate byte revalidation,
+  unique-roster and fixed-stage/job policy, a self-hashed process-local
+  stage-entry capability shape, and a closed Live Layer graph. A root-private
+  non-authorizing `Effect<void>` probe verifies the shared acquisition/policy
+  path under an injected observer but cannot call the issuer. Production exits
+  with `WORKFLOW_SOURCE_BYTES_OPEN` before GitHub configuration or calls, so no
+  current-run capability or GitHub-origin observation has been issued.
 - `s2s-preregistration.ts` keeps the validated preregistration and direct-child
   registration-commit lineage runtime-authentic. Commit-B validation now
   returns a module-issued, WeakMap-backed capability with self-hashed immutable
   evidence instead of degrading the verified lineage back to a caller-usable
-  SHA string. Current-run and dispatch authority are not yet implemented.
+  SHA string. The current-run acquisition and policy implementation is present,
+  but production issuance and dispatch authority remain closed.
 - `s2s-live-drand.ts` verifies only a preregistered Quicknet round through the
   pinned local helper. `s2s-live-drand-http.ts` can fetch only that exact
   chain-specific historical/committed URL with one bounded unauthenticated GET;
@@ -90,10 +100,11 @@ production orchestrator owns all provenance checks end to end.
 Independent exact-byte reviews drove repairs across the source-A/B, pulse,
 resource-accounting, artifact-size, journal, process, ZIP, and structural
 carrier boundaries, with regression coverage on the resulting bytes. The slice
-remains `BLOCKED_PRE_PREREG`: the bounded adapters are present, but no
-current-run/dispatch-authorized composition root, workflow, durable evidence
-envelope, or external event-10 finalizer exists. Resume from the repository
-[`current next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_OBSERVATION_AUTHORITY_IMPLEMENTED_NEXT_SESSION_2026-08-22.md)
+remains `BLOCKED_PRE_PREREG`: the bounded adapters and closed current-run Layer
+graph are present, but no issued current-run/dispatch authority, workflow,
+durable evidence envelope, or external event-10 finalizer exists. Resume from
+the repository
+[`current next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_RUN_AUTHORITY_IMPLEMENTED_NEXT_SESSION_2026-08-22.md)
 before composing the adapters or selecting a future round.
 
 The in-memory Layer's static capability-ID allowlist is configuration for tests

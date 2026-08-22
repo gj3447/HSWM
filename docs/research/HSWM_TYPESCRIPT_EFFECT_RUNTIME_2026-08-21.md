@@ -239,3 +239,18 @@ establishes internal byte/receipt consistency, not GitHub origin, unique
 current-run authority, learned `W`, or scientific efficacy. The next bounded
 slice is the private request-distinct run-authority Layer, with positive
 issuance still closed while workflow source bytes remain OPEN.
+
+The next current-run acquisition and policy slice is implemented at code
+checkpoint `dd381f3` and recorded in the
+[`current-run authority implementation handoff`](../operations/HSWM_SWM0W_S2S_RUN_AUTHORITY_IMPLEMENTED_NEXT_SESSION_2026-08-22.md)
+and
+[`v7 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v7.json).
+It cross-binds genuine process-local registration and invocation capabilities,
+performs the sequential request-distinct run/jobs/head-roster/run bracket with
+immediate retained-byte revalidation, and enforces the fixed three-stage job
+policy in a closed Effect Layer graph. The positive probe returns only `void`
+and never invokes the capability issuer, while production stays
+`WORKFLOW_SOURCE_BYTES_OPEN` and performs no GitHub calls. This advances only
+`Pi`: it does not prove GitHub origin, issue a genuine current-run capability,
+select the production API path representation, create durable replay
+protection, or establish learned `W` or scientific efficacy.

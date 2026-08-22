@@ -32,14 +32,21 @@ engineering checkpoints:
   standalone raw-byte observation recomputation, the exact bounded
   workflow-runs-for-head query, and the separation between multiplicity
   observation, GitHub origin, and unique-run authority.
-- [`v6 current observation implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v6.json)
+- [`v6 historical observation implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v6.json)
   records lazy run/jobs/list revalidation and the exact multiplicity-preserving
   workflow-runs-for-head observation as engineering-clear for retained-byte
   consistency. It explicitly does not establish GitHub origin or unique
   current-run authority, and production issuance remains fail-closed while
   workflow source bytes are absent.
+- [`v7 current run-authority implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v7.json)
+  records authentic registration/invocation cross-binding, the exact four-read
+  current-run acquisition/revalidation path, stage/job policy, capability
+  containment, and a closed production Layer graph. Positive verification is
+  non-authorizing under an injected observer; production issuance remains
+  closed while workflow bytes and API path policy are OPEN, so GitHub origin and
+  a genuine current-run capability are not claimed.
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v6 supersedes v5 only as the
-next-session entrypoint; v1 through v5 remain immutable historical
+runtime graphs, or remote Neo4j publications. v7 supersedes v6 only as the
+next-session entrypoint; v1 through v6 remain immutable historical
 projections.

@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 HANDOFF_PATH = (
     ROOT / "ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v1.json"
 )
+HANDOFF_GLOB = "HSWM_SWM0W_S2S_EFFECT_HANDOFF.v*.json"
 
 
 def _reject_duplicate_pairs(pairs: list[tuple[str, object]]) -> dict[str, object]:
@@ -20,13 +21,59 @@ def _reject_duplicate_pairs(pairs: list[tuple[str, object]]) -> dict[str, object
     return result
 
 
-def _load_handoff() -> dict[str, object]:
+def _load_json(path: Path) -> dict[str, object]:
     payload = json.loads(
-        HANDOFF_PATH.read_text(encoding="utf-8"),
+        path.read_text(encoding="utf-8"),
         object_pairs_hook=_reject_duplicate_pairs,
     )
     assert type(payload) is dict
     return payload
+
+
+def _load_handoff() -> dict[str, object]:
+    return _load_json(HANDOFF_PATH)
+
+
+def _successor_chain(payload: dict[str, object]) -> list[dict[str, object]]:
+    candidates = [
+        _load_json(path)
+        for path in sorted(HANDOFF_PATH.parent.glob(HANDOFF_GLOB))
+        if path != HANDOFF_PATH
+    ]
+    by_predecessor: dict[object, list[dict[str, object]]] = {}
+    for candidate in candidates:
+        predecessor = candidate.get("supersedes_bundle_uid_for_continuation")
+        if predecessor is not None:
+            by_predecessor.setdefault(predecessor, []).append(candidate)
+
+    chain: list[dict[str, object]] = []
+    current_uid = payload["bundle_uid"]
+    seen = {current_uid}
+    while current_uid in by_predecessor:
+        successors = by_predecessor[current_uid]
+        assert len(successors) == 1
+        successor = successors[0]
+        successor_uid = successor["bundle_uid"]
+        assert successor_uid not in seen
+        chain.append(successor)
+        seen.add(successor_uid)
+        current_uid = successor_uid
+    return chain
+
+
+def _latest_binding_hashes(payload: dict[str, object]) -> dict[str, str]:
+    bindings: dict[str, str] = {}
+    for checkpoint in [payload, *_successor_chain(payload)]:
+        entries = checkpoint.get("artifact_bindings", [])
+        assert type(entries) is list
+        for entry in entries:
+            assert type(entry) is dict
+            path = entry["path"]
+            digest = entry["sha256"]
+            assert type(path) is str
+            assert type(digest) is str
+            bindings[path] = digest
+    return bindings
 
 
 def test_effect_handoff_is_a_closed_non_evidentiary_kg_projection() -> None:
@@ -98,8 +145,11 @@ def test_effect_handoff_is_a_closed_non_evidentiary_kg_projection() -> None:
     assert all(node["authority_class"] in authority_classes for node in nodes)
 
 
-def test_effect_handoff_paths_and_source_hashes_are_exact() -> None:
+def test_effect_handoff_paths_and_hashes_are_exact_or_successor_bound() -> None:
     payload = _load_handoff()
+    successor_chain = _successor_chain(payload)
+    latest_bindings = _latest_binding_hashes(payload)
+    assert successor_chain
     nodes = payload["nodes"]
     assert type(nodes) is list
 
@@ -124,9 +174,11 @@ def test_effect_handoff_paths_and_source_hashes_are_exact() -> None:
         source_sha256 = node["source_sha256"]
         assert type(source_path) is str
         assert type(source_sha256) is str
-        assert hashlib.sha256((ROOT / source_path).read_bytes()).hexdigest() == (
-            source_sha256
-        )
+        current_sha256 = hashlib.sha256(
+            (ROOT / source_path).read_bytes()
+        ).hexdigest()
+        if current_sha256 != source_sha256:
+            assert latest_bindings[source_path] == current_sha256
 
     bindings = payload["artifact_bindings"]
     assert type(bindings) is list
@@ -151,7 +203,9 @@ def test_effect_handoff_paths_and_source_hashes_are_exact() -> None:
             continue
         assert path.is_file()
         assert not path.is_symlink()
-        assert hashlib.sha256(path.read_bytes()).hexdigest() == expected
+        current_sha256 = hashlib.sha256(path.read_bytes()).hexdigest()
+        if current_sha256 != expected:
+            assert latest_bindings[relative] == current_sha256
 
     blockers = [node for node in nodes if node.get("kind") == "BLOCKER"]
     for blocker in blockers:

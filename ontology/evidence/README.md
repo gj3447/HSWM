@@ -18,11 +18,17 @@ engineering checkpoints:
 - [`v2 historical bounded-adapter checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v2.json)
   records the bounded GitHub, artifact, exact-round drand, and Python execution
   adapters plus the still-open provenance/composition/workflow/finalizer gates.
-- [`v3 current authority checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v3.json)
+- [`v3 historical authority checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v3.json)
   records request-distinct GitHub receipts, the runtime-authentic
   registration-B capability, and the still-open current-run,
   composition/workflow/evidence-envelope/finalizer gates.
+- [`v4 current invocation-authority checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v4.json)
+  records the exact workflow identity/stage contract, strict process-local
+  current-invocation authority, conditional source-workflow-row inspector, and
+  the still-open workflow-source, unique-run, run/stage, envelope, and
+  finalizer gates.
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v3 supersedes v2 only as the
-next-session entrypoint; v1 and v2 remain immutable historical projections.
+runtime graphs, or remote Neo4j publications. v4 supersedes v3 only as the
+next-session entrypoint; v1 through v3 remain immutable historical
+projections.

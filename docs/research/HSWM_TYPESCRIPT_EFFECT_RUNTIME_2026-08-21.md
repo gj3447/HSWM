@@ -205,3 +205,12 @@ and
 [`v3 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v3.json).
 It preserves the same scientific nonclaims: current-run/dispatch authority,
 workflow composition, durable external evidence, and event 10 remain open.
+
+The subsequent workflow-identity and process-local invocation-authority
+checkpoint is recorded in the
+[`invocation-authority continuation handoff`](../operations/HSWM_SWM0W_S2S_INVOCATION_AUTHORITY_NEXT_SESSION_2026-08-22.md)
+and
+[`v4 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v4.json).
+It advances only the `Π` control boundary. The actual workflow bytes and
+source-manifest hash, unique current-run observation, run/stage capability,
+durable envelope, finalizer, and scientific verdict remain open.

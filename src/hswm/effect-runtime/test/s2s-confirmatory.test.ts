@@ -24,11 +24,17 @@ import {
 } from "../src/index.js"
 import {
   S2SConfirmatoryEventSchema,
+  S2S_DRAND_STABLE_PROJECTION_SCHEMA_VERSION,
   S2S_CONFIRMATORY_EVENT_SCHEMA_VERSION,
   S2S_CONFIRMATORY_EXPERIMENT_ID,
   S2S_CONFIRMATORY_POLICY,
+  S2S_CONFIRMATORY_POLICY_SCHEMA_VERSION,
   S2S_CONFIRMATORY_RESOURCE_POLICY_SHA256,
+  S2S_GITHUB_ARTIFACT_DOWNLOAD_RECEIPT_SCHEMA_VERSION,
+  S2S_GITHUB_OBSERVATION_RECEIPT_SCHEMA_VERSION,
+  S2S_NUMERIC_ORACLE_SOURCE_SHA256,
   S2S_PILOT_ADOPTION_RECEIPT_SHA256,
+  S2S_PYTHON_EXECUTION_EVIDENCE_SCHEMA_VERSION,
   S2S_PROTOCOL_CONFIG_DOCUMENT_SHA256,
   S2S_PROTOCOL_CONFIG_RECEIPT_SHA256,
   S2SSha256Schema,
@@ -72,6 +78,8 @@ const CHAIN_HASH =
   "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
 const RANDOMNESS =
   "fe290beca10872ef2fb164d2aa4442de4566183ec51c56ff3cd603d930e54fdd"
+const SIGNATURE =
+  "b44679b9a59af2ec876b1a6b1ad52ea9b1615fc3982b19576350f93447cb1125e342b73a8dd2bacbe47e4b6b63ed5e39"
 const FUTURE_COMMITMENT =
   "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
 const EXTERNAL_SEED =
@@ -102,6 +110,30 @@ const decodeEvent = Schema.decodeUnknownSync(S2SConfirmatoryEventSchema, {
   onExcessProperty: "error"
 })
 
+const evidenceHash = (label: string): string =>
+  rawS2SFileSha256(new TextEncoder().encode(label))
+
+const pythonExecution = (input: {
+  readonly operation: "confirm" | "adjudicate"
+  readonly inputRawBytesSha256: string
+  readonly outputRawBytesSha256: string
+  readonly requestDocumentSha256: string
+  readonly requestSelfSha256: string
+  readonly elapsedNanoseconds: number
+}) => {
+  const unsigned = {
+    schemaVersion: S2S_PYTHON_EXECUTION_EVIDENCE_SCHEMA_VERSION,
+    ...input,
+    numericOracleSourceSha256: S2S_NUMERIC_ORACLE_SOURCE_SHA256,
+    pythonRuntimeIdentitySha256: evidenceHash("python-runtime-identity"),
+    invocationIdentitySha256: evidenceHash(`invocation-${input.operation}`),
+    exitCode: 0 as const
+  }
+  const receipt = canonicalS2SControlSha256(unsigned)
+  if (Either.isLeft(receipt)) throw receipt.left
+  return { ...unsigned, receiptSha256: receipt.right }
+}
+
 const binding = (predecessorControlReceiptSha256: string) => ({
   experimentId: S2S_CONFIRMATORY_EXPERIMENT_ID,
   sourceCommitA: SOURCE_A,
@@ -113,6 +145,10 @@ const binding = (predecessorControlReceiptSha256: string) => ({
   preregistrationSha256: PREREGISTRATION_SHA256,
   resourcePolicySha256: S2S_CONFIRMATORY_RESOURCE_POLICY_SHA256,
   protocolConfigSha256: S2S_PROTOCOL_CONFIG_RECEIPT_SHA256,
+  githubObservationSchemaVersion:
+    S2S_GITHUB_OBSERVATION_RECEIPT_SCHEMA_VERSION,
+  githubArtifactDownloadSchemaVersion:
+    S2S_GITHUB_ARTIFACT_DOWNLOAD_RECEIPT_SCHEMA_VERSION,
   predecessorControlReceiptSha256
 })
 
@@ -158,6 +194,10 @@ const beginRegistration = (predecessor: string) => ({
   workflowHeadSha: REGISTRATION_B,
   workflowCreatedAtUnixSeconds: WORKFLOW_CREATED_AT_UNIX_SECONDS,
   registrationJobStartedAtUnixSeconds: REGISTRATION_STARTED_AT_UNIX_SECONDS,
+  workflowRunObservationReceiptSha256: evidenceHash("run-register-start"),
+  workflowJobsObservationReceiptSha256: evidenceHash("jobs-register-start"),
+  workflowRunStatus: "in_progress",
+  registrationJobStatus: "in_progress",
   sourceCommitSha: SOURCE_A,
   preregistrationCommitSha: REGISTRATION_B,
   beaconId: "quicknet",
@@ -176,6 +216,17 @@ const verifyRegistration = (predecessor: string) => ({
   workflowRunAttempt: 1,
   workflowHeadSha: REGISTRATION_B,
   registrationJobCompletedAtUnixSeconds: REGISTRATION_COMPLETED_AT_UNIX_SECONDS,
+  workflowRunObservationReceiptSha256: evidenceHash("run-register-complete"),
+  workflowJobsObservationReceiptSha256: evidenceHash("jobs-register-complete"),
+  workflowRunStatus: "in_progress",
+  registrationJobStatus: "completed",
+  registrationJobConclusion: "success",
+  registrationArtifactApiObservationReceiptSha256: evidenceHash(
+    "artifact-registration-api"
+  ),
+  registrationArtifactDownloadObservationReceiptSha256: evidenceHash(
+    "artifact-registration-download"
+  ),
   sourceIsAncestorOfPreregistration: true,
   preregistrationIsDirectChildOfSource: true,
   numericContinuityManifestSha256AtSource: "e".repeat(64),
@@ -195,6 +246,10 @@ const beginConfirm = (predecessor: string) => ({
   workflowRunAttempt: 1,
   workflowHeadSha: REGISTRATION_B,
   confirmJobStartedAtUnixSeconds: CONFIRM_STARTED_AT_UNIX_SECONDS,
+  workflowRunObservationReceiptSha256: evidenceHash("run-confirm-start"),
+  workflowJobsObservationReceiptSha256: evidenceHash("jobs-confirm-start"),
+  workflowRunStatus: "in_progress",
+  confirmJobStatus: "in_progress",
   attempt: attempt()
 })
 
@@ -211,9 +266,13 @@ const acceptPulse = (predecessor: string) => ({
   pulseWaitStartedAtUnixSeconds: CONFIRM_STARTED_AT_UNIX_SECONDS,
   verifiedAtUnixSeconds: FUTURE_ROUND_TIME_UNIX_SECONDS,
   pulseWaitElapsedSeconds: 80,
+  verifiedSignatureHex: SIGNATURE,
   verifiedRandomnessHex: RANDOMNESS,
   externalSeedHex: EXTERNAL_SEED,
   verifierReceiptSha256: "2".repeat(64),
+  verifierStableProjectionSchemaVersion:
+    S2S_DRAND_STABLE_PROJECTION_SCHEMA_VERSION,
+  verifierStableProjectionSha256: evidenceHash("drand-stable-projection"),
   verificationAccepted: true
 })
 
@@ -255,6 +314,17 @@ const recordCandidate = (predecessor: string) => ({
   },
   numericCandidateBytesSha256: "3".repeat(64),
   numericConfirmRequestSha256: "9".repeat(64),
+  numericConfirmRequestDocumentSha256: evidenceHash(
+    "numeric-confirm-request-raw"
+  ),
+  pythonExecution: pythonExecution({
+    operation: "confirm",
+    inputRawBytesSha256: evidenceHash("numeric-confirm-request-raw"),
+    outputRawBytesSha256: "3".repeat(64),
+    requestDocumentSha256: evidenceHash("numeric-confirm-request-raw"),
+    requestSelfSha256: "9".repeat(64),
+    elapsedNanoseconds: 90_000_000_000
+  }),
   numericCandidateLabel: "NUMERIC_REPLAY_VALIDATED_CANDIDATE_ONLY",
   candidateOnly: true
 })
@@ -267,6 +337,17 @@ const verifyCandidateArtifact = (predecessor: string) => ({
   confirmJobId: CONFIRM_JOB_ID,
   confirmJobCompletedAtUnixSeconds: CONFIRM_COMPLETED_AT_UNIX_SECONDS,
   jobElapsedSeconds: 200,
+  workflowRunObservationReceiptSha256: evidenceHash("run-confirm-complete"),
+  workflowJobsObservationReceiptSha256: evidenceHash("jobs-confirm-complete"),
+  workflowRunStatus: "in_progress",
+  confirmJobStatus: "completed",
+  confirmJobConclusion: "success",
+  candidateArtifactFirstApiObservationReceiptSha256: evidenceHash(
+    "artifact-candidate-first-api"
+  ),
+  candidateArtifactFirstDownloadObservationReceiptSha256: evidenceHash(
+    "artifact-candidate-first-download"
+  ),
   numericCandidateBytesSha256: "3".repeat(64),
   artifact: artifact("s2s-candidate", 302, "4"),
   archiveMembers: ["control_receipt.json", "numeric_candidate.json"],
@@ -282,11 +363,23 @@ const beginAdjudication = (predecessor: string) => ({
   workflowRunAttempt: 1,
   workflowHeadSha: REGISTRATION_B,
   adjudicationJobStartedAtUnixSeconds: ADJUDICATION_STARTED_AT_UNIX_SECONDS,
+  workflowRunObservationReceiptSha256: evidenceHash("run-adjudication-start"),
+  workflowJobsObservationReceiptSha256: evidenceHash(
+    "jobs-adjudication-start"
+  ),
+  workflowRunStatus: "in_progress",
+  adjudicationJobStatus: "in_progress",
   attempt: attempt(),
   candidateArtifactId: 302,
   expectedCandidateArchiveSha256: "4".repeat(64),
   requeriedApiDigestSha256: "4".repeat(64),
-  redownloadedCandidateArchiveSha256: "4".repeat(64)
+  redownloadedCandidateArchiveSha256: "4".repeat(64),
+  candidateArtifactRequeryObservationReceiptSha256: evidenceHash(
+    "artifact-candidate-requery-api"
+  ),
+  candidateArtifactRedownloadObservationReceiptSha256: evidenceHash(
+    "artifact-candidate-redownload"
+  )
 })
 
 const recordAdjudication = (predecessor: string) => ({
@@ -305,6 +398,11 @@ const recordAdjudication = (predecessor: string) => ({
   domainWorldCount: 15_625,
   optimizerExecutionCount: 0,
   blsVerificationRerun: true,
+  drandReplayReceiptSha256: evidenceHash("drand-independent-replay"),
+  drandReplayFixtureSha256: evidenceHash("drand-replay-fixture"),
+  drandReplayStableProjectionSchemaVersion:
+    S2S_DRAND_STABLE_PROJECTION_SCHEMA_VERSION,
+  drandReplayStableProjectionSha256: evidenceHash("drand-stable-projection"),
   taskBatchRerun: true,
   testEvaluationRerun: true,
   integrityReducerRerun: true,
@@ -323,6 +421,14 @@ const recordAdjudication = (predecessor: string) => ({
     oomObserved: false
   },
   numericAdjudicationBytesSha256: "5".repeat(64),
+  pythonExecution: pythonExecution({
+    operation: "adjudicate",
+    inputRawBytesSha256: "3".repeat(64),
+    outputRawBytesSha256: "5".repeat(64),
+    requestDocumentSha256: "3".repeat(64),
+    requestSelfSha256: "8".repeat(64),
+    elapsedNanoseconds: 590_000_000_000
+  }),
   candidateOnly: true
 })
 
@@ -334,6 +440,28 @@ const verifyEvidenceArtifact = (predecessor: string) => ({
   adjudicationJobId: ADJUDICATION_JOB_ID,
   adjudicationJobCompletedAtUnixSeconds: ADJUDICATION_COMPLETED_AT_UNIX_SECONDS,
   jobElapsedSeconds: 700,
+  workflowRunCompletedAtUnixSeconds: ADJUDICATION_COMPLETED_AT_UNIX_SECONDS + 1,
+  finalizerObservedAtUnixSeconds: ADJUDICATION_COMPLETED_AT_UNIX_SECONDS + 2,
+  workflowRunCompletedObservationReceiptSha256: evidenceHash(
+    "run-final-completed"
+  ),
+  workflowJobsCompletedObservationReceiptSha256: evidenceHash(
+    "jobs-final-completed"
+  ),
+  workflowRunStatus: "completed",
+  workflowRunConclusion: "success",
+  registrationJobStatus: "completed",
+  registrationJobConclusion: "success",
+  confirmJobStatus: "completed",
+  confirmJobConclusion: "success",
+  adjudicationJobStatus: "completed",
+  adjudicationJobConclusion: "success",
+  adjudicationArtifactApiObservationReceiptSha256: evidenceHash(
+    "artifact-adjudication-api"
+  ),
+  adjudicationArtifactDownloadObservationReceiptSha256: evidenceHash(
+    "artifact-adjudication-download"
+  ),
   numericAdjudicationBytesSha256: "5".repeat(64),
   artifact: artifact("s2s-adjudication", 303, "6"),
   archiveMembers: ["control_receipt.json", "numeric_adjudication.json"],
@@ -353,7 +481,9 @@ const operationalVoid = (
   workflowJobId,
   workflowRunAttempt: 1,
   reason,
-  evidenceSha256: "7".repeat(64)
+  evidenceSha256: "7".repeat(64),
+  workflowRunObservationReceiptSha256: evidenceHash("void-run-observation"),
+  workflowJobsObservationReceiptSha256: evidenceHash("void-jobs-observation")
 })
 
 const advance = (
@@ -446,6 +576,15 @@ const healthyDurableChain = () => {
 }
 
 it("freezes the adopted resource policy and disables the DS-derived phrase", () => {
+  expect(S2S_CONFIRMATORY_POLICY_SCHEMA_VERSION).toBe(
+    "hswm-swm0w-s2s-confirmatory-operational-policy/v3"
+  )
+  expect(S2S_CONFIRMATORY_EVENT_SCHEMA_VERSION).toBe(
+    "hswm-swm0w-s2s-confirmatory-control-event/v3"
+  )
+  expect(S2S_CONFIRMATORY_RESOURCE_POLICY_SHA256).toBe(
+    "5d51316d2aebc8cfa6a7135adba9f167948e096895e3f94caf1defb024a0667d"
+  )
   expect(S2S_CONFIRMATORY_POLICY.adoptionReceiptSha256).toBe(
     S2S_PILOT_ADOPTION_RECEIPT_SHA256
   )
@@ -691,13 +830,22 @@ it("accounts confirm command time with ceiling seconds and exactly 300 seconds o
       decodeEvent({
         ...recordCandidate(state.latestControlReceiptSha256),
         postSeedWorkElapsedNanoseconds,
-        commandElapsedSeconds
+        commandElapsedSeconds,
+        pythonExecution: pythonExecution({
+          operation: "confirm",
+          inputRawBytesSha256: evidenceHash("numeric-confirm-request-raw"),
+          outputRawBytesSha256: "3".repeat(64),
+          requestDocumentSha256: evidenceHash("numeric-confirm-request-raw"),
+          requestSelfSha256: "9".repeat(64),
+          elapsedNanoseconds: postSeedWorkElapsedNanoseconds
+        })
       })
     )
 
-  expect(Either.isRight(result(0, 80))).toBe(true)
-  expect(Either.isRight(result(0, 380))).toBe(true)
-  expect(Either.isLeft(result(0, 381))).toBe(true)
+  expect(Either.isLeft(result(1, 80))).toBe(true)
+  expect(Either.isRight(result(1, 81))).toBe(true)
+  expect(Either.isRight(result(1, 381))).toBe(true)
+  expect(Either.isLeft(result(1, 382))).toBe(true)
 
   expect(Either.isLeft(result(1_000_000_000, 80))).toBe(true)
   expect(Either.isRight(result(1_000_000_000, 81))).toBe(true)
@@ -954,6 +1102,18 @@ it("strictly decodes events and rejects excess fields and enabled compact claims
     decodeEvent({
       ...beginRegistration(initial.latestControlReceiptSha256),
       unexpected: true
+    })
+  ).toThrow()
+  expect(() =>
+    decodeEvent({
+      ...beginRegistration(initial.latestControlReceiptSha256),
+      schemaVersion: "hswm-swm0w-s2s-confirmatory-control-event/v2"
+    })
+  ).toThrow()
+  expect(() =>
+    decodeEvent({
+      ...beginRegistration(initial.latestControlReceiptSha256),
+      workflowRunObservationReceiptSha256: undefined
     })
   ).toThrow()
 
@@ -1475,6 +1635,131 @@ it("fails closed on predecessor, workload, and artifact-readback drift", () => {
     })
   )
   expect(Either.isLeft(readbackResult)).toBe(true)
+})
+
+it("rejects forged authority receipts, replay drift, and Python evidence drift", () => {
+  const waiting = throughConfirmWaiting()
+  const signatureDrift = advanceS2SConfirmatory(
+    waiting,
+    decodeEvent({
+      ...acceptPulse(waiting.latestControlReceiptSha256),
+      verifiedSignatureHex: `${SIGNATURE.slice(0, -1)}8`
+    })
+  )
+  expect(Either.isLeft(signatureDrift)).toBe(true)
+  if (Either.isLeft(signatureDrift)) {
+    expect(signatureDrift.left._tag).toBe("S2SOperationalPolicyViolation")
+    if (signatureDrift.left._tag === "S2SOperationalPolicyViolation") {
+      expect(signatureDrift.left.reason).toBe("PULSE_BINDING_MISMATCH")
+    }
+  }
+
+  const running = throughConfirmRunning()
+  const candidate = recordCandidate(running.latestControlReceiptSha256)
+  const pythonDrift = advanceS2SConfirmatory(
+    running,
+    decodeEvent({
+      ...candidate,
+      pythonExecution: pythonExecution({
+        operation: "confirm",
+        inputRawBytesSha256: evidenceHash("numeric-confirm-request-raw"),
+        outputRawBytesSha256: "6".repeat(64),
+        requestDocumentSha256: evidenceHash("numeric-confirm-request-raw"),
+        requestSelfSha256: "9".repeat(64),
+        elapsedNanoseconds: 90_000_000_000
+      })
+    })
+  )
+  expect(Either.isLeft(pythonDrift)).toBe(true)
+  if (
+    Either.isLeft(pythonDrift) &&
+    pythonDrift.left._tag === "S2SOperationalPolicyViolation"
+  ) {
+    expect(pythonDrift.left.reason).toBe(
+      "PYTHON_EXECUTION_EVIDENCE_MISMATCH"
+    )
+  }
+
+  let state = throughCandidateProduced()
+  const candidateEvidence = verifyCandidateArtifact(
+    state.latestControlReceiptSha256
+  )
+  const wrongName = advanceS2SConfirmatory(
+    state,
+    decodeEvent({
+      ...candidateEvidence,
+      artifact: { ...candidateEvidence.artifact, artifactName: "candidate" }
+    })
+  )
+  expect(Either.isLeft(wrongName)).toBe(true)
+  if (
+    Either.isLeft(wrongName) &&
+    wrongName.left._tag === "S2SOperationalPolicyViolation"
+  ) {
+    expect(wrongName.left.reason).toBe("ARCHIVE_POLICY_MISMATCH")
+  }
+
+  state = advance(state, candidateEvidence)
+  if (state._tag !== "CandidateArtifactVerified") return
+  const adjudicationStart = beginAdjudication(
+    state.latestControlReceiptSha256
+  )
+  const reusedReadback = advanceS2SConfirmatory(
+    state,
+    decodeEvent({
+      ...adjudicationStart,
+      candidateArtifactRequeryObservationReceiptSha256:
+        state.candidateArtifact
+          .candidateArtifactFirstApiObservationReceiptSha256
+    })
+  )
+  expect(Either.isLeft(reusedReadback)).toBe(true)
+  if (
+    Either.isLeft(reusedReadback) &&
+    reusedReadback.left._tag === "S2SOperationalPolicyViolation"
+  ) {
+    expect(reusedReadback.left.reason).toBe("GITHUB_OBSERVATION_MISMATCH")
+  }
+
+  state = advance(state, adjudicationStart)
+  if (state._tag !== "Adjudicating") return
+  const adjudication = recordAdjudication(state.latestControlReceiptSha256)
+  const replayDrift = advanceS2SConfirmatory(
+    state,
+    decodeEvent({
+      ...adjudication,
+      drandReplayStableProjectionSha256: evidenceHash(
+        "different-drand-stable-projection"
+      )
+    })
+  )
+  expect(Either.isLeft(replayDrift)).toBe(true)
+  if (
+    Either.isLeft(replayDrift) &&
+    replayDrift.left._tag === "S2SOperationalPolicyViolation"
+  ) {
+    expect(replayDrift.left.reason).toBe("DRAND_REPLAY_MISMATCH")
+  }
+
+  state = advance(state, adjudication)
+  if (state._tag !== "AdjudicationProduced") return
+  const staleFinalization = advanceS2SConfirmatory(
+    state,
+    decodeEvent({
+      ...verifyEvidenceArtifact(state.latestControlReceiptSha256),
+      workflowRunCompletedObservationReceiptSha256:
+        state.adjudication.workflowRunObservationReceiptSha256
+    })
+  )
+  expect(Either.isLeft(staleFinalization)).toBe(true)
+  if (
+    Either.isLeft(staleFinalization) &&
+    staleFinalization.left._tag === "S2SOperationalPolicyViolation"
+  ) {
+    expect(staleFinalization.left.reason).toBe(
+      "FINALIZATION_OBSERVATION_MISMATCH"
+    )
+  }
 })
 
 it("maps a run-bound failure to terminal VOID with no retry path", () => {

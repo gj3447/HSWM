@@ -16,18 +16,60 @@ import {
   runS2SBoundedProcess,
   type S2SBoundedProcessSpec
 } from "../src/s2s-bounded-process.js"
-import { rawS2SFileSha256 } from "../src/s2s-canonical.js"
 import {
+  canonicalS2SControlJsonBytes,
+  canonicalS2SControlSha256,
+  rawS2SFileSha256
+} from "../src/s2s-canonical.js"
+import { S2SSha256Schema } from "../src/s2s-confirmatory.js"
+import * as PublicApi from "../src/index.js"
+import {
+  S2S_NUMERIC_ADJUDICATE_ARGUMENTS,
+  S2S_NUMERIC_ADJUDICATE_TIMEOUT_MILLIS,
+  S2S_NUMERIC_ADJUDICATION_MAX_BYTES,
+  S2S_NUMERIC_CANDIDATE_MAX_BYTES,
+  S2S_NUMERIC_CONFIRM_ARGUMENTS,
+  S2S_NUMERIC_CONFIRM_TIMEOUT_MILLIS,
   S2S_NUMERIC_GOLDEN_VECTOR_BYTE_LENGTH,
   S2S_NUMERIC_GOLDEN_VECTOR_DOCUMENT_SHA256,
   S2S_NUMERIC_GOLDEN_VECTOR_RECEIPT_SHA256,
+  S2S_NUMERIC_LOCAL_SOURCE_CLOSURE,
+  S2S_NUMERIC_STDERR_MAX_BYTES,
   S2SPythonGoldenVerifier,
-  makeS2SPythonGoldenVerifierProcessLayer
+  S2SPythonNumericExecutor,
+  interpretS2SPythonNumericProcessResult,
+  makeS2SPythonGoldenVerifierProcessLayer,
+  makeS2SPythonNumericExecutorProcessLayer
 } from "../src/s2s-live-python.js"
 
 const PACKAGE_ROOT = process.cwd()
 const REPOSITORY_ROOT = resolve(PACKAGE_ROOT, "../../..")
 const PINNED_VENV_PYTHON = join(REPOSITORY_ROOT, ".venv/bin/python")
+const textEncoder = new TextEncoder()
+const TEST_IDENTITY_SHA256 = S2SSha256Schema.make("0".repeat(64))
+
+const numericErrorBytes = (
+  operation: "confirm" | "adjudicate",
+  errorCode = "INVALID_CANONICAL_DOCUMENT",
+  stage = "CANONICAL_DOCUMENT"
+): Uint8Array => {
+  const unsigned = {
+    canonical_encoding: "ASCII_CANONICAL_UTF8_JSON_PLUS_SINGLE_LF",
+    error_code: errorCode,
+    operation,
+    schema_version: "hswm-swm0w-s2s-numeric-error/v1",
+    stage,
+    status: "NUMERIC_ORACLE_REJECTED_NO_PARTIAL_OUTPUT"
+  }
+  const receipt = canonicalS2SControlSha256(unsigned)
+  if (Either.isLeft(receipt)) throw receipt.left
+  const bytes = canonicalS2SControlJsonBytes({
+    ...unsigned,
+    receipt_sha256: receipt.right
+  })
+  if (Either.isLeft(bytes)) throw bytes.left
+  return bytes.right
+}
 
 const baseSpec = (
   overrides: Partial<S2SBoundedProcessSpec> = {}
@@ -425,6 +467,195 @@ it.effect("surfaces process-group observation denial as an interruption defect",
   )
 })
 
+it("freezes the confirm and adjudicate process contracts", () => {
+  expect("S2SPythonNumericExecutor" in PublicApi).toBe(false)
+  expect("makeS2SPythonNumericExecutorProcessLayer" in PublicApi).toBe(false)
+  expect([...S2S_NUMERIC_CONFIRM_ARGUMENTS]).toEqual([
+    "-B",
+    "-P",
+    "-s",
+    "-m",
+    "hswm.experiments.swm0w_s2s_numeric_oracle",
+    "confirm"
+  ])
+  expect([...S2S_NUMERIC_ADJUDICATE_ARGUMENTS]).toEqual([
+    "-B",
+    "-P",
+    "-s",
+    "-m",
+    "hswm.experiments.swm0w_s2s_numeric_oracle",
+    "adjudicate"
+  ])
+  expect(S2S_NUMERIC_CONFIRM_TIMEOUT_MILLIS).toBe(7_200_000)
+  expect(S2S_NUMERIC_ADJUDICATE_TIMEOUT_MILLIS).toBe(1_200_000)
+  expect(S2S_NUMERIC_CANDIDATE_MAX_BYTES).toBe(60 * 1_048_576)
+  expect(S2S_NUMERIC_ADJUDICATION_MAX_BYTES).toBe(4 * 1_048_576)
+  expect(S2S_NUMERIC_STDERR_MAX_BYTES).toBe(8_192)
+})
+
+it.effect("rejects an accessor-bearing Python configuration without reading it", () => {
+  let invoked = false
+  const config: Record<string, string> = {
+    expectedNumpyVersion: "2.5.2",
+    expectedPythonExecutableSha256: "0".repeat(64),
+    expectedPythonVersion: "3.12.13",
+    pythonExecutable: "/not/read",
+    repositoryRoot: "/not/read"
+  }
+  Object.defineProperty(config, "repositoryRoot", {
+    enumerable: true,
+    get: () => {
+      invoked = true
+      return REPOSITORY_ROOT
+    }
+  })
+  const layer = makeS2SPythonNumericExecutorProcessLayer(
+    config as unknown as Parameters<
+      typeof makeS2SPythonNumericExecutorProcessLayer
+    >[0]
+  )
+  return Effect.gen(function* () {
+    const outcome = yield* Effect.gen(function* () {
+      return yield* S2SPythonNumericExecutor
+    }).pipe(Effect.provide(layer), Effect.either)
+    expect(Either.isLeft(outcome)).toBe(true)
+    if (Either.isLeft(outcome)) {
+      expect(outcome.left.reason).toBe("CONFIGURATION_INVALID")
+    }
+    expect(invoked).toBe(false)
+  })
+})
+
+it("decodes canonical exit-2 errors and rejects partial stdout first", () => {
+  const input = textEncoder.encode("{}\n")
+  const stderr = numericErrorBytes("confirm")
+  const rejected = interpretS2SPythonNumericProcessResult(
+    "CONFIRM",
+    input,
+    TEST_IDENTITY_SHA256,
+    {
+      exitCode: 2,
+      stdout: new Uint8Array(),
+      stderr,
+      elapsedNanoseconds: 10
+    }
+  )
+  expect(Either.isLeft(rejected)).toBe(true)
+  if (Either.isLeft(rejected)) {
+    expect(rejected.left.reason).toBe("NUMERIC_ORACLE_REJECTED")
+    expect(rejected.left.oracleErrorCode).toBe("INVALID_CANONICAL_DOCUMENT")
+    expect(rejected.left.oracleStage).toBe("CANONICAL_DOCUMENT")
+    expect(rejected.left.oracleReceiptSha256).toMatch(/^[0-9a-f]{64}$/)
+  }
+
+  const partial = interpretS2SPythonNumericProcessResult(
+    "CONFIRM",
+    input,
+    TEST_IDENTITY_SHA256,
+    {
+      exitCode: 2,
+      stdout: textEncoder.encode("{\"partial\":true}\n"),
+      stderr,
+      elapsedNanoseconds: 10
+    }
+  )
+  expect(Either.isLeft(partial)).toBe(true)
+  if (Either.isLeft(partial)) {
+    expect(partial.left.reason).toBe("PARTIAL_STDOUT_OBSERVED")
+  }
+})
+
+it("validates opaque float-bearing output and returns defensive byte copies", () => {
+  const input = textEncoder.encode("{}\n")
+  const stdout = textEncoder.encode('{"metric":1.25}\n')
+  const outcome = interpretS2SPythonNumericProcessResult(
+    "CONFIRM",
+    input,
+    TEST_IDENTITY_SHA256,
+    {
+      exitCode: 0,
+      stdout,
+      stderr: new Uint8Array(),
+      elapsedNanoseconds: 10
+    }
+  )
+  expect(Either.isRight(outcome)).toBe(true)
+  if (Either.isRight(outcome)) {
+    stdout[0] = 0x78
+    const first = outcome.right.readCanonicalBytes()
+    expect(new TextDecoder().decode(first)).toBe('{"metric":1.25}\n')
+    first[0] = 0x78
+    expect(new TextDecoder().decode(outcome.right.readCanonicalBytes())).toBe(
+      '{"metric":1.25}\n'
+    )
+  }
+
+  const stderrOutcome = interpretS2SPythonNumericProcessResult(
+    "ADJUDICATE",
+    input,
+    TEST_IDENTITY_SHA256,
+    {
+      exitCode: 0,
+      stdout: textEncoder.encode("{}\n"),
+      stderr: textEncoder.encode("unexpected"),
+      elapsedNanoseconds: 10
+    }
+  )
+  expect(Either.isLeft(stderrOutcome)).toBe(true)
+  if (Either.isLeft(stderrOutcome)) {
+    expect(stderrOutcome.left.reason).toBe("STDERR_CONTRACT_REJECTED")
+  }
+})
+
+it("rejects malformed canonical numeric error receipts", () => {
+  const errorBytes = numericErrorBytes("adjudicate")
+  const errorText = new TextDecoder().decode(errorBytes)
+  const receiptOffset =
+    errorText.indexOf('"receipt_sha256":"') +
+    Buffer.byteLength('"receipt_sha256":"')
+  errorBytes[receiptOffset] = errorBytes[receiptOffset] === 0x30 ? 0x31 : 0x30
+  const outcome = interpretS2SPythonNumericProcessResult(
+    "ADJUDICATE",
+    textEncoder.encode("{}\n"),
+    TEST_IDENTITY_SHA256,
+    {
+      exitCode: 3,
+      stdout: new Uint8Array(),
+      stderr: errorBytes,
+      elapsedNanoseconds: 10
+    }
+  )
+  expect(Either.isLeft(outcome)).toBe(true)
+  if (Either.isLeft(outcome)) {
+    expect(outcome.left.reason).toBe("ERROR_DOCUMENT_REJECTED")
+    expect(outcome.left.exitCode).toBe(3)
+  }
+
+  const validExitThree = interpretS2SPythonNumericProcessResult(
+    "ADJUDICATE",
+    textEncoder.encode("{}\n"),
+    TEST_IDENTITY_SHA256,
+    {
+      exitCode: 3,
+      stdout: new Uint8Array(),
+      stderr: numericErrorBytes(
+        "adjudicate",
+        "INTERNAL_NUMERIC_FAILURE",
+        "PROCESS_ADAPTER"
+      ),
+      elapsedNanoseconds: 10
+    }
+  )
+  expect(Either.isLeft(validExitThree)).toBe(true)
+  if (Either.isLeft(validExitThree)) {
+    expect(validExitThree.left.reason).toBe("NUMERIC_ORACLE_REJECTED")
+    expect(validExitThree.left.exitCode).toBe(3)
+    expect(validExitThree.left.oracleErrorCode).toBe(
+      "INTERNAL_NUMERIC_FAILURE"
+    )
+  }
+})
+
 it.effect.skipIf(!existsSync(PINNED_VENV_PYTHON))(
   "runs the pinned golden-only Python boundary and returns an immutable receipt",
   () => {
@@ -434,6 +665,7 @@ it.effect.skipIf(!existsSync(PINNED_VENV_PYTHON))(
     )
     return Effect.gen(function* () {
       const verifier = yield* S2SPythonGoldenVerifier
+      const identity = verifier.runtimeSourceIdentity
       const receipt = yield* verifier.verify
       expect(receipt.documentByteLength).toBe(
         S2S_NUMERIC_GOLDEN_VECTOR_BYTE_LENGTH
@@ -445,14 +677,124 @@ it.effect.skipIf(!existsSync(PINNED_VENV_PYTHON))(
         S2S_NUMERIC_GOLDEN_VECTOR_RECEIPT_SHA256
       )
       expect(receipt.commandElapsedNanoseconds).toBeGreaterThan(0)
+      expect(receipt.runtimeSourceIdentityReceiptSha256).toBe(
+        identity.receiptSha256
+      )
       expect("canonicalUtf8WithLf" in receipt).toBe(false)
+      expect(identity.sourceClosure).toHaveLength(10)
+      expect(
+        identity.sourceClosure.map((entry) => ({
+          path: entry.path,
+          sha256: entry.rawBytesSha256
+        }))
+      ).toEqual([...S2S_NUMERIC_LOCAL_SOURCE_CLOSURE])
+      expect(identity.processEnvironmentContract).toEqual({
+        BLIS_NUM_THREADS: "1",
+        LANG: "C",
+        LC_ALL: "C",
+        MKL_NUM_THREADS: "1",
+        NUMEXPR_NUM_THREADS: "1",
+        OMP_NUM_THREADS: "1",
+        OPENBLAS_CORETYPE: "Haswell",
+        OPENBLAS_NUM_THREADS: "1",
+        PATH: "/usr/bin:/bin",
+        PYTHONDONTWRITEBYTECODE: "1",
+        PYTHONHASHSEED: "0",
+        PYTHONNOUSERSITE: "1",
+        PYTHONPYCACHEPREFIX: "SCOPED_PRIVATE_DIRECTORY",
+        PYTHONUTF8: "1",
+        TZ: "UTC",
+        VECLIB_MAXIMUM_THREADS: "1"
+      })
+      const identityBytes = identity.readCanonicalBytes()
+      const identityDocument = JSON.parse(
+        new TextDecoder().decode(identityBytes)
+      ) as Record<string, unknown>
+      expect(identityDocument["process_contract"]).toEqual({
+        argv0: PINNED_VENV_PYTHON,
+        cwd: REPOSITORY_ROOT,
+        executable_transport: "PINNED_PROC_SELF_FILE_DESCRIPTOR",
+        retry_count: 0,
+        success_stderr_byte_length: 0
+      })
+      expect(identityDocument["invocation_contracts"]).toMatchObject({
+        adjudicate: {
+          arguments: [...S2S_NUMERIC_ADJUDICATE_ARGUMENTS],
+          stdin_contract:
+            "SNAPSHOTTED_OPAQUE_CANONICAL_NUMERIC_CANDIDATE_BYTES",
+          stderr_limit_bytes: 8_192,
+          stdout_limit_bytes: 4 * 1_048_576,
+          timeout_millis: 1_200_000
+        },
+        confirm: {
+          arguments: [...S2S_NUMERIC_CONFIRM_ARGUMENTS],
+          stdin_contract:
+            "SNAPSHOTTED_OPAQUE_CANONICAL_CONFIRM_REQUEST_BYTES",
+          stderr_limit_bytes: 8_192,
+          stdout_limit_bytes: 60 * 1_048_576,
+          timeout_millis: 7_200_000
+        }
+      })
+      const receiptSha256 = identityDocument["receipt_sha256"]
+      delete identityDocument["receipt_sha256"]
+      const recomputed = canonicalS2SControlSha256(identityDocument)
+      expect(Either.isRight(recomputed)).toBe(true)
+      if (Either.isRight(recomputed)) {
+        expect(recomputed.right).toBe(receiptSha256)
+      }
+      identityBytes[0] = 0x78
+      expect(identity.readCanonicalBytes()[0]).toBe(0x7b)
     }).pipe(
       Effect.provide(
         makeS2SPythonGoldenVerifierProcessLayer({
           repositoryRoot: REPOSITORY_ROOT,
           pythonExecutable: PINNED_VENV_PYTHON,
           expectedPythonExecutableSha256: executableSha256,
-          expectedPythonVersion: "3.12.13"
+          expectedPythonVersion: "3.12.13",
+          expectedNumpyVersion: "2.5.2"
+        })
+      )
+    )
+  }
+)
+
+it.effect.skipIf(!existsSync(PINNED_VENV_PYTHON))(
+  "runs only invalid confirm/adjudicate inputs through the fixed production CLI",
+  () => {
+    const resolvedPython = realpathSync(PINNED_VENV_PYTHON)
+    const executableSha256 = rawS2SFileSha256(readFileSync(resolvedPython))
+    return Effect.gen(function* () {
+      const executor = yield* S2SPythonNumericExecutor
+      const confirmInput = textEncoder.encode("{}\n")
+      const confirmEffect = executor.confirm(confirmInput)
+      confirmInput[0] = 0xff
+      const confirm = yield* confirmEffect.pipe(Effect.either)
+      expect(Either.isLeft(confirm)).toBe(true)
+      if (Either.isLeft(confirm)) {
+        expect(confirm.left.reason).toBe("NUMERIC_ORACLE_REJECTED")
+        expect(confirm.left.exitCode).toBe(2)
+        expect(confirm.left.oracleErrorCode).toBe("INVALID_CONFIRM_REQUEST")
+      }
+
+      const adjudicate = yield* executor
+        .adjudicate(textEncoder.encode("{}\n"))
+        .pipe(Effect.either)
+      expect(Either.isLeft(adjudicate)).toBe(true)
+      if (Either.isLeft(adjudicate)) {
+        expect(adjudicate.left.reason).toBe("NUMERIC_ORACLE_REJECTED")
+        expect(adjudicate.left.exitCode).toBe(2)
+        expect(adjudicate.left.oracleErrorCode).toBe(
+          "INVALID_NUMERIC_CANDIDATE"
+        )
+      }
+    }).pipe(
+      Effect.provide(
+        makeS2SPythonNumericExecutorProcessLayer({
+          repositoryRoot: REPOSITORY_ROOT,
+          pythonExecutable: PINNED_VENV_PYTHON,
+          expectedPythonExecutableSha256: executableSha256,
+          expectedPythonVersion: "3.12.13",
+          expectedNumpyVersion: "2.5.2"
         })
       )
     )

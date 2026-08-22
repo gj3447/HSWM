@@ -1,6 +1,9 @@
 import { Data, Either, Schema } from "effect"
 
-import { canonicalS2SControlSha256 } from "./s2s-canonical.js"
+import {
+  canonicalS2SControlSha256,
+  rawS2SFileSha256
+} from "./s2s-canonical.js"
 import {
   S2S_QUICKNET_CHAIN_HASH,
   s2sQuicknetRoundTimeUnix
@@ -16,10 +19,10 @@ export const S2S_PILOT_ADOPTION_RECEIPT_SHA256 =
   "97a752fea5ae45a311a2e8cf2376b391d76a8269dbab20f60688f543bcc5dea1" as const
 
 export const S2S_CONFIRMATORY_POLICY_SCHEMA_VERSION =
-  "hswm-swm0w-s2s-confirmatory-operational-policy/v2" as const
+  "hswm-swm0w-s2s-confirmatory-operational-policy/v3" as const
 
 export const S2S_CONFIRMATORY_EVENT_SCHEMA_VERSION =
-  "hswm-swm0w-s2s-confirmatory-control-event/v2" as const
+  "hswm-swm0w-s2s-confirmatory-control-event/v3" as const
 
 export const S2S_CONFIRMATORY_EXPERIMENT_ID =
   "hswm-swm0w-s2s-confirmatory-v1" as const
@@ -32,7 +35,22 @@ export const S2S_PROTOCOL_CONFIG_DOCUMENT_SHA256 =
 
 /** SHA-256 of canonical float-free JSON for S2S_CONFIRMATORY_POLICY. */
 export const S2S_CONFIRMATORY_RESOURCE_POLICY_SHA256 =
-  "7e4d7252962e53d70f4e74b5117338ced55a645c431e9173256de9f514043ad9" as const
+  "5d51316d2aebc8cfa6a7135adba9f167948e096895e3f94caf1defb024a0667d" as const
+
+export const S2S_REGISTRATION_ARTIFACT_NAME = "s2s-registration" as const
+export const S2S_CANDIDATE_ARTIFACT_NAME = "s2s-candidate" as const
+export const S2S_ADJUDICATION_ARTIFACT_NAME = "s2s-adjudication" as const
+
+export const S2S_GITHUB_OBSERVATION_RECEIPT_SCHEMA_VERSION =
+  "hswm-swm0w-s2s-github-observation-receipt/v1" as const
+export const S2S_GITHUB_ARTIFACT_DOWNLOAD_RECEIPT_SCHEMA_VERSION =
+  "hswm-swm0w-s2s-github-artifact-download-receipt/v1" as const
+export const S2S_DRAND_STABLE_PROJECTION_SCHEMA_VERSION =
+  "hswm-swm0w-s2s-drand-stable-verifier-projection/v1" as const
+export const S2S_PYTHON_EXECUTION_EVIDENCE_SCHEMA_VERSION =
+  "hswm-swm0w-s2s-python-execution-evidence/v1" as const
+export const S2S_NUMERIC_ORACLE_SOURCE_SHA256 =
+  "27854351f642727dc21ec63e987bf3ae67a205f4664f5e0ad448eb3b7a8c570b" as const
 
 export const S2S_NUMERIC_CONTINUITY_PATHS = Object.freeze([
   "pyproject.toml",
@@ -172,6 +190,29 @@ export const S2S_CONFIRMATORY_POLICY = Object.freeze({
     candidateLabel: "NUMERIC_REPLAY_VALIDATED_CANDIDATE_ONLY" as const,
     typescriptNeverReserializesNumericFiles: true
   }),
+  authorityEvidence: Object.freeze({
+    githubObservationReceiptSchemaVersion:
+      S2S_GITHUB_OBSERVATION_RECEIPT_SCHEMA_VERSION,
+    githubArtifactDownloadReceiptSchemaVersion:
+      S2S_GITHUB_ARTIFACT_DOWNLOAD_RECEIPT_SCHEMA_VERSION,
+    exactArtifactNames: Object.freeze({
+      registration: S2S_REGISTRATION_ARTIFACT_NAME,
+      candidate: S2S_CANDIDATE_ARTIFACT_NAME,
+      adjudication: S2S_ADJUDICATION_ARTIFACT_NAME
+    }),
+    distinctArtifactApiAndDownloadObservationsRequired: true,
+    distinctCandidateInitialAndRequeryObservationsRequired: true,
+    freshCompletedRunAndJobObservationsRequiredForFinalization: true,
+    drandStableProjectionSchemaVersion:
+      S2S_DRAND_STABLE_PROJECTION_SCHEMA_VERSION,
+    drandSignatureByteLength: 48,
+    independentDrandReplayRequired: true,
+    pythonExecutionEvidenceSchemaVersion:
+      S2S_PYTHON_EXECUTION_EVIDENCE_SCHEMA_VERSION,
+    numericOracleSourceSha256: S2S_NUMERIC_ORACLE_SOURCE_SHA256,
+    pythonExitCode: 0,
+    pythonOperations: Object.freeze(["confirm", "adjudicate"] as const)
+  }),
   operationalVoidReasons: S2S_OPERATIONAL_VOID_REASONS,
   numericContinuityPaths: S2S_NUMERIC_CONTINUITY_PATHS
 })
@@ -252,6 +293,12 @@ const LifecycleBindingSchema = Schema.Struct({
     S2S_CONFIRMATORY_RESOURCE_POLICY_SHA256
   ),
   protocolConfigSha256: Schema.Literal(S2S_PROTOCOL_CONFIG_RECEIPT_SHA256),
+  githubObservationSchemaVersion: Schema.Literal(
+    S2S_GITHUB_OBSERVATION_RECEIPT_SCHEMA_VERSION
+  ),
+  githubArtifactDownloadSchemaVersion: Schema.Literal(
+    S2S_GITHUB_ARTIFACT_DOWNLOAD_RECEIPT_SCHEMA_VERSION
+  ),
   predecessorControlReceiptSha256: Sha256TextSchema
 })
 
@@ -291,6 +338,35 @@ const ArtifactEvidenceSchema = Schema.Struct({
 export type S2SArtifactEvidence = Schema.Schema.Type<
   typeof ArtifactEvidenceSchema
 >
+export const S2SArtifactEvidenceSchema = ArtifactEvidenceSchema
+
+const PythonExecutionEvidenceSchema = Schema.Struct({
+  schemaVersion: Schema.Literal(
+    S2S_PYTHON_EXECUTION_EVIDENCE_SCHEMA_VERSION
+  ),
+  operation: Schema.Literal("confirm", "adjudicate"),
+  inputRawBytesSha256: Sha256TextSchema,
+  outputRawBytesSha256: Sha256TextSchema,
+  requestDocumentSha256: Sha256TextSchema,
+  requestSelfSha256: Sha256TextSchema,
+  numericOracleSourceSha256: Schema.Literal(
+    S2S_NUMERIC_ORACLE_SOURCE_SHA256
+  ),
+  pythonRuntimeIdentitySha256: Sha256TextSchema,
+  invocationIdentitySha256: Sha256TextSchema,
+  exitCode: Schema.Literal(0),
+  elapsedNanoseconds: NanosecondsSchema,
+  receiptSha256: Sha256TextSchema
+})
+
+export type S2SPythonExecutionEvidence = Schema.Schema.Type<
+  typeof PythonExecutionEvidenceSchema
+>
+
+const DrandSignatureHexSchema = Schema.String.pipe(
+  Schema.pattern(/^[0-9a-f]{96}$/),
+  Schema.brand("S2SDrandSignatureHex")
+)
 
 const RssEvidenceSchema = Schema.Struct({
   api: Schema.Literal("getrusage"),
@@ -319,6 +395,10 @@ const BeginRegistrationSchema = Schema.Struct({
   workflowHeadSha: GitCommitShaSchema,
   workflowCreatedAtUnixSeconds: UnixSecondsSchema,
   registrationJobStartedAtUnixSeconds: UnixSecondsSchema,
+  workflowRunObservationReceiptSha256: Sha256TextSchema,
+  workflowJobsObservationReceiptSha256: Sha256TextSchema,
+  workflowRunStatus: Schema.Literal("in_progress"),
+  registrationJobStatus: Schema.Literal("in_progress"),
   sourceCommitSha: GitCommitShaSchema,
   preregistrationCommitSha: GitCommitShaSchema,
   beaconId: Schema.Literal("quicknet"),
@@ -337,6 +417,13 @@ const VerifyRegistrationSchema = Schema.Struct({
   workflowRunAttempt: Schema.Literal(1),
   workflowHeadSha: GitCommitShaSchema,
   registrationJobCompletedAtUnixSeconds: UnixSecondsSchema,
+  workflowRunObservationReceiptSha256: Sha256TextSchema,
+  workflowJobsObservationReceiptSha256: Sha256TextSchema,
+  workflowRunStatus: Schema.Literal("in_progress"),
+  registrationJobStatus: Schema.Literal("completed"),
+  registrationJobConclusion: Schema.Literal("success"),
+  registrationArtifactApiObservationReceiptSha256: Sha256TextSchema,
+  registrationArtifactDownloadObservationReceiptSha256: Sha256TextSchema,
   sourceIsAncestorOfPreregistration: Schema.Literal(true),
   preregistrationIsDirectChildOfSource: Schema.Literal(true),
   numericContinuityManifestSha256AtSource: Sha256TextSchema,
@@ -356,6 +443,10 @@ const BeginConfirmSchema = Schema.Struct({
   workflowRunAttempt: Schema.Literal(1),
   workflowHeadSha: GitCommitShaSchema,
   confirmJobStartedAtUnixSeconds: UnixSecondsSchema,
+  workflowRunObservationReceiptSha256: Sha256TextSchema,
+  workflowJobsObservationReceiptSha256: Sha256TextSchema,
+  workflowRunStatus: Schema.Literal("in_progress"),
+  confirmJobStatus: Schema.Literal("in_progress"),
   attempt: AttemptEvidenceSchema
 })
 
@@ -372,9 +463,14 @@ const AcceptVerifiedPulseSchema = Schema.Struct({
   pulseWaitStartedAtUnixSeconds: UnixSecondsSchema,
   verifiedAtUnixSeconds: UnixSecondsSchema,
   pulseWaitElapsedSeconds: SecondsSchema,
+  verifiedSignatureHex: DrandSignatureHexSchema,
   verifiedRandomnessHex: Sha256TextSchema,
   externalSeedHex: Sha256TextSchema,
   verifierReceiptSha256: Sha256TextSchema,
+  verifierStableProjectionSchemaVersion: Schema.Literal(
+    S2S_DRAND_STABLE_PROJECTION_SCHEMA_VERSION
+  ),
+  verifierStableProjectionSha256: Sha256TextSchema,
   verificationAccepted: Schema.Literal(true)
 })
 
@@ -410,6 +506,8 @@ const RecordCandidateProducedSchema = Schema.Struct({
   rss: RssEvidenceSchema,
   numericCandidateBytesSha256: Sha256TextSchema,
   numericConfirmRequestSha256: Sha256TextSchema,
+  numericConfirmRequestDocumentSha256: Sha256TextSchema,
+  pythonExecution: PythonExecutionEvidenceSchema,
   numericCandidateLabel: Schema.Literal(
     "NUMERIC_REPLAY_VALIDATED_CANDIDATE_ONLY"
   ),
@@ -424,6 +522,13 @@ const VerifyCandidateArtifactSchema = Schema.Struct({
   confirmJobId: WorkflowJobIdSchema,
   confirmJobCompletedAtUnixSeconds: UnixSecondsSchema,
   jobElapsedSeconds: SecondsSchema,
+  workflowRunObservationReceiptSha256: Sha256TextSchema,
+  workflowJobsObservationReceiptSha256: Sha256TextSchema,
+  workflowRunStatus: Schema.Literal("in_progress"),
+  confirmJobStatus: Schema.Literal("completed"),
+  confirmJobConclusion: Schema.Literal("success"),
+  candidateArtifactFirstApiObservationReceiptSha256: Sha256TextSchema,
+  candidateArtifactFirstDownloadObservationReceiptSha256: Sha256TextSchema,
   numericCandidateBytesSha256: Sha256TextSchema,
   artifact: ArtifactEvidenceSchema,
   archiveMembers: Schema.Tuple(
@@ -442,11 +547,17 @@ const BeginAdjudicationSchema = Schema.Struct({
   workflowRunAttempt: Schema.Literal(1),
   workflowHeadSha: GitCommitShaSchema,
   adjudicationJobStartedAtUnixSeconds: UnixSecondsSchema,
+  workflowRunObservationReceiptSha256: Sha256TextSchema,
+  workflowJobsObservationReceiptSha256: Sha256TextSchema,
+  workflowRunStatus: Schema.Literal("in_progress"),
+  adjudicationJobStatus: Schema.Literal("in_progress"),
   attempt: AttemptEvidenceSchema,
   candidateArtifactId: ArtifactIdSchema,
   expectedCandidateArchiveSha256: Sha256TextSchema,
   requeriedApiDigestSha256: Sha256TextSchema,
-  redownloadedCandidateArchiveSha256: Sha256TextSchema
+  redownloadedCandidateArchiveSha256: Sha256TextSchema,
+  candidateArtifactRequeryObservationReceiptSha256: Sha256TextSchema,
+  candidateArtifactRedownloadObservationReceiptSha256: Sha256TextSchema
 })
 
 const RecordAdjudicationProducedSchema = Schema.Struct({
@@ -465,6 +576,12 @@ const RecordAdjudicationProducedSchema = Schema.Struct({
   domainWorldCount: PositiveSafeIntegerSchema,
   optimizerExecutionCount: SafeIntegerSchema,
   blsVerificationRerun: Schema.Literal(true),
+  drandReplayReceiptSha256: Sha256TextSchema,
+  drandReplayFixtureSha256: Sha256TextSchema,
+  drandReplayStableProjectionSchemaVersion: Schema.Literal(
+    S2S_DRAND_STABLE_PROJECTION_SCHEMA_VERSION
+  ),
+  drandReplayStableProjectionSha256: Sha256TextSchema,
   taskBatchRerun: Schema.Literal(true),
   testEvaluationRerun: Schema.Literal(true),
   integrityReducerRerun: Schema.Literal(true),
@@ -481,6 +598,7 @@ const RecordAdjudicationProducedSchema = Schema.Struct({
   commandElapsedSeconds: SecondsSchema,
   rss: RssEvidenceSchema,
   numericAdjudicationBytesSha256: Sha256TextSchema,
+  pythonExecution: PythonExecutionEvidenceSchema,
   candidateOnly: Schema.Literal(true)
 })
 
@@ -492,6 +610,20 @@ const VerifyEvidenceArtifactSchema = Schema.Struct({
   adjudicationJobId: WorkflowJobIdSchema,
   adjudicationJobCompletedAtUnixSeconds: UnixSecondsSchema,
   jobElapsedSeconds: SecondsSchema,
+  workflowRunCompletedAtUnixSeconds: UnixSecondsSchema,
+  finalizerObservedAtUnixSeconds: UnixSecondsSchema,
+  workflowRunCompletedObservationReceiptSha256: Sha256TextSchema,
+  workflowJobsCompletedObservationReceiptSha256: Sha256TextSchema,
+  workflowRunStatus: Schema.Literal("completed"),
+  workflowRunConclusion: Schema.Literal("success"),
+  registrationJobStatus: Schema.Literal("completed"),
+  registrationJobConclusion: Schema.Literal("success"),
+  confirmJobStatus: Schema.Literal("completed"),
+  confirmJobConclusion: Schema.Literal("success"),
+  adjudicationJobStatus: Schema.Literal("completed"),
+  adjudicationJobConclusion: Schema.Literal("success"),
+  adjudicationArtifactApiObservationReceiptSha256: Sha256TextSchema,
+  adjudicationArtifactDownloadObservationReceiptSha256: Sha256TextSchema,
   numericAdjudicationBytesSha256: Sha256TextSchema,
   artifact: ArtifactEvidenceSchema,
   archiveMembers: Schema.Tuple(
@@ -518,7 +650,9 @@ const RecordOperationalVoidSchema = Schema.Struct({
   workflowJobId: WorkflowJobIdSchema,
   workflowRunAttempt: Schema.Literal(1),
   reason: S2SOperationalVoidReasonSchema,
-  evidenceSha256: Sha256TextSchema
+  evidenceSha256: Sha256TextSchema,
+  workflowRunObservationReceiptSha256: Sha256TextSchema,
+  workflowJobsObservationReceiptSha256: Sha256TextSchema
 })
 
 export const S2SConfirmatoryEventSchema = Schema.Union(
@@ -722,7 +856,11 @@ export class S2SOperationalPolicyViolation extends Data.TaggedError(
     | "CONTROL_RECEIPT_CHAIN_MISMATCH"
     | "CONTROL_RECEIPT_NONCANONICAL"
     | "DEADLINE_EXCEEDED"
+    | "DRAND_REPLAY_MISMATCH"
+    | "FINALIZATION_OBSERVATION_MISMATCH"
+    | "GITHUB_OBSERVATION_MISMATCH"
     | "OPTIONAL_CLAIM_DISABLED"
+    | "PYTHON_EXECUTION_EVIDENCE_MISMATCH"
     | "PROTOCOL_CONTINUITY_UNPROVEN"
     | "PULSE_BINDING_MISMATCH"
     | "RESOURCE_LIMIT_EXCEEDED"
@@ -783,9 +921,11 @@ const sameAttemptPolicy = (attempt: S2SAttemptEvidence): boolean =>
 
 const artifactMatchesPolicy = (
   artifact: S2SArtifactEvidence,
+  expectedArtifactName: string,
   archiveMaximumBytes: number,
   memberMaximumBytes: number
 ): boolean =>
+  artifact.artifactName === expectedArtifactName &&
   artifact.artifactCount === S2S_CONFIRMATORY_POLICY.archive.artifactCountPerJob &&
   artifact.archiveSizeBytes > 0 &&
   artifact.largestMemberSizeBytes > 0 &&
@@ -798,6 +938,59 @@ const artifactMatchesPolicy = (
 
 const artifactReadbackMatches = (artifact: S2SArtifactEvidence): boolean =>
   artifact.apiDigestSha256 === artifact.downloadedArchiveSha256
+
+const allReceiptsDistinct = (
+  receipts: ReadonlyArray<string>
+): boolean => new Set<string>(receipts).size === receipts.length
+
+const signatureRandomnessSha256 = (signatureHex: string): string => {
+  const bytes = new Uint8Array(signatureHex.length / 2)
+  for (let index = 0; index < bytes.length; index += 1) {
+    bytes[index] = Number.parseInt(signatureHex.slice(index * 2, index * 2 + 2), 16)
+  }
+  return rawS2SFileSha256(bytes)
+}
+
+const pythonExecutionUnsigned = (evidence: S2SPythonExecutionEvidence) => ({
+  schemaVersion: evidence.schemaVersion,
+  operation: evidence.operation,
+  inputRawBytesSha256: evidence.inputRawBytesSha256,
+  outputRawBytesSha256: evidence.outputRawBytesSha256,
+  requestDocumentSha256: evidence.requestDocumentSha256,
+  requestSelfSha256: evidence.requestSelfSha256,
+  numericOracleSourceSha256: evidence.numericOracleSourceSha256,
+  pythonRuntimeIdentitySha256: evidence.pythonRuntimeIdentitySha256,
+  invocationIdentitySha256: evidence.invocationIdentitySha256,
+  exitCode: evidence.exitCode,
+  elapsedNanoseconds: evidence.elapsedNanoseconds
+})
+
+const pythonExecutionMatches = (
+  evidence: S2SPythonExecutionEvidence,
+  expected: {
+    readonly operation: S2SPythonExecutionEvidence["operation"]
+    readonly inputRawBytesSha256: S2SSha256
+    readonly outputRawBytesSha256: S2SSha256
+    readonly requestDocumentSha256: S2SSha256
+    readonly requestSelfSha256: S2SSha256
+  }
+): boolean => {
+  const receipt = canonicalS2SControlSha256(pythonExecutionUnsigned(evidence))
+  return (
+    Either.isRight(receipt) &&
+    receipt.right === evidence.receiptSha256 &&
+    allReceiptsDistinct([
+      evidence.numericOracleSourceSha256,
+      evidence.pythonRuntimeIdentitySha256,
+      evidence.invocationIdentitySha256
+    ]) &&
+    evidence.operation === expected.operation &&
+    evidence.inputRawBytesSha256 === expected.inputRawBytesSha256 &&
+    evidence.outputRawBytesSha256 === expected.outputRawBytesSha256 &&
+    evidence.requestDocumentSha256 === expected.requestDocumentSha256 &&
+    evidence.requestSelfSha256 === expected.requestSelfSha256
+  )
+}
 
 const makeNumericCandidatePlan = (
   pulse: AcceptVerifiedPulse
@@ -850,7 +1043,11 @@ const sameLifecycleIdentity = (
   left.workflowSha256 === right.workflowSha256 &&
   left.preregistrationSha256 === right.preregistrationSha256 &&
   left.resourcePolicySha256 === right.resourcePolicySha256 &&
-  left.protocolConfigSha256 === right.protocolConfigSha256
+  left.protocolConfigSha256 === right.protocolConfigSha256 &&
+  left.githubObservationSchemaVersion ===
+    right.githubObservationSchemaVersion &&
+  left.githubArtifactDownloadSchemaVersion ===
+    right.githubArtifactDownloadSchemaVersion
 
 const validateLifecycleBinding = (
   state: S2SConfirmatoryState,
@@ -864,7 +1061,11 @@ const validateLifecycleBinding = (
     binding.sourceCommitA === binding.registrationCommitB ||
     binding.resourcePolicySha256 !==
       S2S_CONFIRMATORY_RESOURCE_POLICY_SHA256 ||
-    binding.protocolConfigSha256 !== S2S_PROTOCOL_CONFIG_RECEIPT_SHA256
+    binding.protocolConfigSha256 !== S2S_PROTOCOL_CONFIG_RECEIPT_SHA256 ||
+    binding.githubObservationSchemaVersion !==
+      S2S_GITHUB_OBSERVATION_RECEIPT_SCHEMA_VERSION ||
+    binding.githubArtifactDownloadSchemaVersion !==
+      S2S_GITHUB_ARTIFACT_DOWNLOAD_RECEIPT_SCHEMA_VERSION
   ) {
     return policyViolation("RUN_BINDING_MISMATCH")
   }
@@ -893,6 +1094,14 @@ const validateBeginRegistration = (
 ): Either.Either<void, S2SOperationalPolicyViolation> => {
   if (event.adoptionReceiptSha256 !== S2S_PILOT_ADOPTION_RECEIPT_SHA256) {
     return policyViolation("ADOPTION_RECEIPT_MISMATCH")
+  }
+  if (
+    !allReceiptsDistinct([
+      event.workflowRunObservationReceiptSha256,
+      event.workflowJobsObservationReceiptSha256
+    ])
+  ) {
+    return policyViolation("GITHUB_OBSERVATION_MISMATCH")
   }
   if (
     event.workflowRunAttempt !== 1 ||
@@ -944,6 +1153,18 @@ const validateRegistrationEvidence = (
     return policyViolation("RUN_BINDING_MISMATCH")
   }
   if (
+    !allReceiptsDistinct([
+      state.registration.workflowRunObservationReceiptSha256,
+      state.registration.workflowJobsObservationReceiptSha256,
+      event.workflowRunObservationReceiptSha256,
+      event.workflowJobsObservationReceiptSha256,
+      event.registrationArtifactApiObservationReceiptSha256,
+      event.registrationArtifactDownloadObservationReceiptSha256
+    ])
+  ) {
+    return policyViolation("GITHUB_OBSERVATION_MISMATCH")
+  }
+  if (
     roundTime === null ||
     event.registrationJobCompletedAtUnixSeconds >= roundTime
   ) {
@@ -970,6 +1191,7 @@ const validateRegistrationEvidence = (
   if (
     !artifactMatchesPolicy(
       event.artifact,
+      S2S_REGISTRATION_ARTIFACT_NAME,
       S2S_CONFIRMATORY_POLICY.archive.registrationArchiveMaximumBytes,
       S2S_CONFIRMATORY_POLICY.archive.registrationArchiveMaximumBytes
     )
@@ -1000,6 +1222,20 @@ const validateBeginConfirm = (
       state.registrationEvidence.registrationJobCompletedAtUnixSeconds
   ) {
     return policyViolation("RUN_BINDING_MISMATCH")
+  }
+  if (
+    !allReceiptsDistinct([
+      state.registration.workflowRunObservationReceiptSha256,
+      state.registration.workflowJobsObservationReceiptSha256,
+      state.registrationEvidence.workflowRunObservationReceiptSha256,
+      state.registrationEvidence.workflowJobsObservationReceiptSha256,
+      state.registrationEvidence.registrationArtifactApiObservationReceiptSha256,
+      state.registrationEvidence.registrationArtifactDownloadObservationReceiptSha256,
+      event.workflowRunObservationReceiptSha256,
+      event.workflowJobsObservationReceiptSha256
+    ])
+  ) {
+    return policyViolation("GITHUB_OBSERVATION_MISMATCH")
   }
   if (!sameAttemptPolicy(event.attempt)) {
     return policyViolation("ATTEMPT_POLICY_MISMATCH")
@@ -1032,6 +1268,13 @@ const validatePulse = (
     event.verifiedAtUnixSeconds < roundTime ||
     event.pulseWaitElapsedSeconds !==
       event.verifiedAtUnixSeconds - event.pulseWaitStartedAtUnixSeconds
+  ) {
+    return policyViolation("PULSE_BINDING_MISMATCH")
+  }
+  if (
+    signatureRandomnessSha256(event.verifiedSignatureHex) !==
+      event.verifiedRandomnessHex ||
+    event.verifierReceiptSha256 === event.verifierStableProjectionSha256
   ) {
     return policyViolation("PULSE_BINDING_MISMATCH")
   }
@@ -1082,6 +1325,19 @@ const validateCandidate = (
   }
   if (!sameAttemptPolicy(event.attempt)) {
     return policyViolation("ATTEMPT_POLICY_MISMATCH")
+  }
+  if (
+    !pythonExecutionMatches(event.pythonExecution, {
+      operation: "confirm",
+      inputRawBytesSha256: event.numericConfirmRequestDocumentSha256,
+      outputRawBytesSha256: event.numericCandidateBytesSha256,
+      requestDocumentSha256: event.numericConfirmRequestDocumentSha256,
+      requestSelfSha256: event.numericConfirmRequestSha256
+    }) ||
+    event.pythonExecution.elapsedNanoseconds >
+      event.postSeedWorkElapsedNanoseconds
+  ) {
+    return policyViolation("PYTHON_EXECUTION_EVIDENCE_MISMATCH")
   }
   const workload = S2S_CONFIRMATORY_POLICY.workload
   if (
@@ -1137,6 +1393,7 @@ const validateCandidateArtifact = (
   if (
     !artifactMatchesPolicy(
       event.artifact,
+      S2S_CANDIDATE_ARTIFACT_NAME,
       S2S_CONFIRMATORY_POLICY.archive.candidateArchiveMaximumBytes,
       S2S_CONFIRMATORY_POLICY.archive.candidateMemberMaximumBytes
     )
@@ -1145,6 +1402,18 @@ const validateCandidateArtifact = (
   }
   if (!artifactReadbackMatches(event.artifact)) {
     return policyViolation("ARTIFACT_READBACK_MISMATCH")
+  }
+  if (
+    !allReceiptsDistinct([
+      state.confirm.workflowRunObservationReceiptSha256,
+      state.confirm.workflowJobsObservationReceiptSha256,
+      event.workflowRunObservationReceiptSha256,
+      event.workflowJobsObservationReceiptSha256,
+      event.candidateArtifactFirstApiObservationReceiptSha256,
+      event.candidateArtifactFirstDownloadObservationReceiptSha256
+    ])
+  ) {
+    return policyViolation("GITHUB_OBSERVATION_MISMATCH")
   }
   if (
     event.archiveMembers[0] !==
@@ -1184,6 +1453,20 @@ const validateBeginAdjudication = (
     return policyViolation("ATTEMPT_POLICY_MISMATCH")
   }
   if (
+    !allReceiptsDistinct([
+      state.candidateArtifact.workflowRunObservationReceiptSha256,
+      state.candidateArtifact.workflowJobsObservationReceiptSha256,
+      state.candidateArtifact.candidateArtifactFirstApiObservationReceiptSha256,
+      state.candidateArtifact.candidateArtifactFirstDownloadObservationReceiptSha256,
+      event.workflowRunObservationReceiptSha256,
+      event.workflowJobsObservationReceiptSha256,
+      event.candidateArtifactRequeryObservationReceiptSha256,
+      event.candidateArtifactRedownloadObservationReceiptSha256
+    ])
+  ) {
+    return policyViolation("GITHUB_OBSERVATION_MISMATCH")
+  }
+  if (
     event.candidateArtifactId !== candidateArtifact.artifactId ||
     event.expectedCandidateArchiveSha256 !==
       candidateArtifact.downloadedArchiveSha256 ||
@@ -1218,6 +1501,26 @@ const validateAdjudication = (
   }
   if (!sameAttemptPolicy(event.attempt)) {
     return policyViolation("ATTEMPT_POLICY_MISMATCH")
+  }
+  if (
+    event.drandReplayReceiptSha256 === state.pulse.verifierReceiptSha256 ||
+    event.drandReplayStableProjectionSha256 !==
+      state.pulse.verifierStableProjectionSha256
+  ) {
+    return policyViolation("DRAND_REPLAY_MISMATCH")
+  }
+  if (
+    !pythonExecutionMatches(event.pythonExecution, {
+      operation: "adjudicate",
+      inputRawBytesSha256: event.numericCandidateDocumentSha256,
+      outputRawBytesSha256: event.numericAdjudicationBytesSha256,
+      requestDocumentSha256: event.numericCandidateDocumentSha256,
+      requestSelfSha256: event.numericCandidateReceiptSha256
+    }) ||
+    nanosecondsToCeilingSeconds(event.pythonExecution.elapsedNanoseconds) >
+      event.commandElapsedSeconds
+  ) {
+    return policyViolation("PYTHON_EXECUTION_EVIDENCE_MISMATCH")
   }
   const workload = S2S_CONFIRMATORY_POLICY.workload
   if (
@@ -1280,6 +1583,7 @@ const validateEvidenceArtifact = (
   if (
     !artifactMatchesPolicy(
       event.artifact,
+      S2S_ADJUDICATION_ARTIFACT_NAME,
       S2S_CONFIRMATORY_POLICY.archive.adjudicationArchiveMaximumBytes,
       S2S_CONFIRMATORY_POLICY.archive.adjudicationArchiveMaximumBytes
     )
@@ -1308,6 +1612,36 @@ const validateEvidenceArtifact = (
         state.adjudication.adjudicationJobStartedAtUnixSeconds
   ) {
     return policyViolation("DEADLINE_EXCEEDED")
+  }
+  if (
+    event.workflowRunCompletedAtUnixSeconds <
+      event.adjudicationJobCompletedAtUnixSeconds ||
+    event.finalizerObservedAtUnixSeconds <
+      event.workflowRunCompletedAtUnixSeconds ||
+    !allReceiptsDistinct([
+      state.registration.workflowRunObservationReceiptSha256,
+      state.registration.workflowJobsObservationReceiptSha256,
+      state.registrationEvidence.workflowRunObservationReceiptSha256,
+      state.registrationEvidence.workflowJobsObservationReceiptSha256,
+      state.registrationEvidence.registrationArtifactApiObservationReceiptSha256,
+      state.registrationEvidence.registrationArtifactDownloadObservationReceiptSha256,
+      state.confirm.workflowRunObservationReceiptSha256,
+      state.confirm.workflowJobsObservationReceiptSha256,
+      state.candidateArtifact.workflowRunObservationReceiptSha256,
+      state.candidateArtifact.workflowJobsObservationReceiptSha256,
+      state.candidateArtifact.candidateArtifactFirstApiObservationReceiptSha256,
+      state.candidateArtifact.candidateArtifactFirstDownloadObservationReceiptSha256,
+      state.adjudication.workflowRunObservationReceiptSha256,
+      state.adjudication.workflowJobsObservationReceiptSha256,
+      state.adjudication.candidateArtifactRequeryObservationReceiptSha256,
+      state.adjudication.candidateArtifactRedownloadObservationReceiptSha256,
+      event.workflowRunCompletedObservationReceiptSha256,
+      event.workflowJobsCompletedObservationReceiptSha256,
+      event.adjudicationArtifactApiObservationReceiptSha256,
+      event.adjudicationArtifactDownloadObservationReceiptSha256
+    ])
+  ) {
+    return policyViolation("FINALIZATION_OBSERVATION_MISMATCH")
   }
   return Either.right(undefined)
 }
@@ -1437,6 +1771,15 @@ const recordVoid = (
   }
   if (!expectedVoidReasons(state._tag).includes(event.reason)) {
     return policyViolation("VOID_REASON_MISMATCH")
+  }
+  if (
+    !allReceiptsDistinct([
+      event.workflowRunObservationReceiptSha256,
+      event.workflowJobsObservationReceiptSha256,
+      event.evidenceSha256
+    ])
+  ) {
+    return policyViolation("GITHUB_OBSERVATION_MISMATCH")
   }
   return Either.right(
     Object.freeze({

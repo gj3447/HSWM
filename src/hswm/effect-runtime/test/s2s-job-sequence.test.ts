@@ -8,10 +8,17 @@ import {
 } from "../src/s2s-canonical.js"
 import {
   S2SConfirmatoryEventSchema,
+  S2S_CANDIDATE_ARTIFACT_NAME,
+  S2S_DRAND_STABLE_PROJECTION_SCHEMA_VERSION,
   S2S_CONFIRMATORY_EVENT_SCHEMA_VERSION,
   S2S_CONFIRMATORY_EXPERIMENT_ID,
   S2S_CONFIRMATORY_RESOURCE_POLICY_SHA256,
+  S2S_GITHUB_ARTIFACT_DOWNLOAD_RECEIPT_SCHEMA_VERSION,
+  S2S_GITHUB_OBSERVATION_RECEIPT_SCHEMA_VERSION,
+  S2S_NUMERIC_ORACLE_SOURCE_SHA256,
   S2S_PILOT_ADOPTION_RECEIPT_SHA256,
+  S2S_PYTHON_EXECUTION_EVIDENCE_SCHEMA_VERSION,
+  S2S_REGISTRATION_ARTIFACT_NAME,
   S2S_PROTOCOL_CONFIG_RECEIPT_SHA256,
   S2SSha256Schema,
   advanceS2SConfirmatory,
@@ -40,6 +47,8 @@ const CHAIN_HASH =
   "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
 const RANDOMNESS =
   "fe290beca10872ef2fb164d2aa4442de4566183ec51c56ff3cd603d930e54fdd"
+const SIGNATURE =
+  "b44679b9a59af2ec876b1a6b1ad52ea9b1615fc3982b19576350f93447cb1125e342b73a8dd2bacbe47e4b6b63ed5e39"
 const FUTURE_COMMITMENT =
   "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
 const EXTERNAL_SEED =
@@ -65,6 +74,13 @@ const NUMERIC_CONFIRM_REQUEST_SHA256 = "9".repeat(64)
 const NUMERIC_CANDIDATE_RECEIPT_SHA256 = "8".repeat(64)
 const encoder = new TextEncoder()
 
+const evidenceHash = (label: string): string =>
+  rawS2SFileSha256(encoder.encode(label))
+
+const NUMERIC_CONFIRM_REQUEST_DOCUMENT_SHA256 = evidenceHash(
+  "numeric-confirm-request-raw"
+)
+
 const decodeEvent = Schema.decodeUnknownSync(S2SConfirmatoryEventSchema, {
   onExcessProperty: "error"
 })
@@ -74,6 +90,28 @@ const requireRight = <Value, Error>(
 ): Value => {
   if (Either.isLeft(either)) throw either.left
   return either.right
+}
+
+const pythonExecution = (input: {
+  readonly operation: "confirm" | "adjudicate"
+  readonly inputRawBytesSha256: string
+  readonly outputRawBytesSha256: string
+  readonly requestDocumentSha256: string
+  readonly requestSelfSha256: string
+  readonly elapsedNanoseconds: number
+}) => {
+  const unsigned = {
+    schemaVersion: S2S_PYTHON_EXECUTION_EVIDENCE_SCHEMA_VERSION,
+    ...input,
+    numericOracleSourceSha256: S2S_NUMERIC_ORACLE_SOURCE_SHA256,
+    pythonRuntimeIdentitySha256: evidenceHash("python-runtime-identity"),
+    invocationIdentitySha256: evidenceHash(`invocation-${input.operation}`),
+    exitCode: 0
+  }
+  return {
+    ...unsigned,
+    receiptSha256: requireRight(canonicalS2SControlSha256(unsigned))
+  }
 }
 
 const binding = (predecessorControlReceiptSha256: string) => ({
@@ -87,6 +125,10 @@ const binding = (predecessorControlReceiptSha256: string) => ({
   preregistrationSha256: PREREGISTRATION_SHA256,
   resourcePolicySha256: S2S_CONFIRMATORY_RESOURCE_POLICY_SHA256,
   protocolConfigSha256: S2S_PROTOCOL_CONFIG_RECEIPT_SHA256,
+  githubObservationSchemaVersion:
+    S2S_GITHUB_OBSERVATION_RECEIPT_SCHEMA_VERSION,
+  githubArtifactDownloadSchemaVersion:
+    S2S_GITHUB_ARTIFACT_DOWNLOAD_RECEIPT_SCHEMA_VERSION,
   predecessorControlReceiptSha256
 })
 
@@ -120,6 +162,10 @@ const beginRegistration = (predecessor: string) => {
     workflowHeadSha: REGISTRATION_B,
     workflowCreatedAtUnixSeconds: WORKFLOW_CREATED_AT_UNIX_SECONDS,
     registrationJobStartedAtUnixSeconds: REGISTRATION_STARTED_AT_UNIX_SECONDS,
+    workflowRunObservationReceiptSha256: evidenceHash("run-register-start"),
+    workflowJobsObservationReceiptSha256: evidenceHash("jobs-register-start"),
+    workflowRunStatus: "in_progress",
+    registrationJobStatus: "in_progress",
     sourceCommitSha: SOURCE_A,
     preregistrationCommitSha: REGISTRATION_B,
     beaconId: "quicknet",
@@ -145,6 +191,21 @@ const verifyRegistration = (
     workflowRunAttempt: 1,
     workflowHeadSha: REGISTRATION_B,
     registrationJobCompletedAtUnixSeconds: REGISTRATION_COMPLETED_AT_UNIX_SECONDS,
+    workflowRunObservationReceiptSha256: evidenceHash(
+      "run-register-complete"
+    ),
+    workflowJobsObservationReceiptSha256: evidenceHash(
+      "jobs-register-complete"
+    ),
+    workflowRunStatus: "in_progress",
+    registrationJobStatus: "completed",
+    registrationJobConclusion: "success",
+    registrationArtifactApiObservationReceiptSha256: evidenceHash(
+      "artifact-registration-api"
+    ),
+    registrationArtifactDownloadObservationReceiptSha256: evidenceHash(
+      "artifact-registration-download"
+    ),
     sourceIsAncestorOfPreregistration: true,
     preregistrationIsDirectChildOfSource: true,
     numericContinuityManifestSha256AtSource: "e".repeat(64),
@@ -168,6 +229,10 @@ const beginConfirm = (predecessor: string) => {
     workflowRunAttempt: 1,
     workflowHeadSha: REGISTRATION_B,
     confirmJobStartedAtUnixSeconds: CONFIRM_STARTED_AT_UNIX_SECONDS,
+    workflowRunObservationReceiptSha256: evidenceHash("run-confirm-start"),
+    workflowJobsObservationReceiptSha256: evidenceHash("jobs-confirm-start"),
+    workflowRunStatus: "in_progress",
+    confirmJobStatus: "in_progress",
     attempt: attempt()
   })
   if (event._tag !== "BeginConfirm") throw new Error("wrong event")
@@ -188,9 +253,13 @@ const acceptPulse = (predecessor: string) => {
     pulseWaitStartedAtUnixSeconds: CONFIRM_STARTED_AT_UNIX_SECONDS,
     verifiedAtUnixSeconds: FUTURE_ROUND_TIME_UNIX_SECONDS,
     pulseWaitElapsedSeconds: 80,
+    verifiedSignatureHex: SIGNATURE,
     verifiedRandomnessHex: RANDOMNESS,
     externalSeedHex: EXTERNAL_SEED,
     verifierReceiptSha256: "2".repeat(64),
+    verifierStableProjectionSchemaVersion:
+      S2S_DRAND_STABLE_PROJECTION_SCHEMA_VERSION,
+    verifierStableProjectionSha256: evidenceHash("drand-stable-projection"),
     verificationAccepted: true
   })
   if (event._tag !== "AcceptVerifiedPulse") throw new Error("wrong event")
@@ -240,6 +309,16 @@ const recordCandidate = (predecessor: string, candidateSha256: string) => {
     },
     numericCandidateBytesSha256: candidateSha256,
     numericConfirmRequestSha256: NUMERIC_CONFIRM_REQUEST_SHA256,
+    numericConfirmRequestDocumentSha256:
+      NUMERIC_CONFIRM_REQUEST_DOCUMENT_SHA256,
+    pythonExecution: pythonExecution({
+      operation: "confirm",
+      inputRawBytesSha256: NUMERIC_CONFIRM_REQUEST_DOCUMENT_SHA256,
+      outputRawBytesSha256: candidateSha256,
+      requestDocumentSha256: NUMERIC_CONFIRM_REQUEST_DOCUMENT_SHA256,
+      requestSelfSha256: NUMERIC_CONFIRM_REQUEST_SHA256,
+      elapsedNanoseconds: 90_000_000_000
+    }),
     numericCandidateLabel: "NUMERIC_REPLAY_VALIDATED_CANDIDATE_ONLY",
     candidateOnly: true
   })
@@ -260,6 +339,21 @@ const verifyCandidate = (
     confirmJobId: CONFIRM_JOB_ID,
     confirmJobCompletedAtUnixSeconds: CONFIRM_COMPLETED_AT_UNIX_SECONDS,
     jobElapsedSeconds: 200,
+    workflowRunObservationReceiptSha256: evidenceHash(
+      "run-confirm-complete"
+    ),
+    workflowJobsObservationReceiptSha256: evidenceHash(
+      "jobs-confirm-complete"
+    ),
+    workflowRunStatus: "in_progress",
+    confirmJobStatus: "completed",
+    confirmJobConclusion: "success",
+    candidateArtifactFirstApiObservationReceiptSha256: evidenceHash(
+      "artifact-candidate-first-api"
+    ),
+    candidateArtifactFirstDownloadObservationReceiptSha256: evidenceHash(
+      "artifact-candidate-first-download"
+    ),
     numericCandidateBytesSha256: candidateSha256,
     artifact,
     archiveMembers: ["control_receipt.json", "numeric_candidate.json"],
@@ -282,12 +376,26 @@ const beginAdjudication = (
     workflowRunAttempt: 1,
     workflowHeadSha: REGISTRATION_B,
     adjudicationJobStartedAtUnixSeconds: ADJUDICATION_STARTED_AT_UNIX_SECONDS,
+    workflowRunObservationReceiptSha256: evidenceHash(
+      "run-adjudication-start"
+    ),
+    workflowJobsObservationReceiptSha256: evidenceHash(
+      "jobs-adjudication-start"
+    ),
+    workflowRunStatus: "in_progress",
+    adjudicationJobStatus: "in_progress",
     attempt: attempt(),
     candidateArtifactId: candidateArtifact.artifactId,
     expectedCandidateArchiveSha256: candidateArtifact.downloadedArchiveSha256,
     requeriedApiDigestSha256: candidateArtifact.apiDigestSha256,
     redownloadedCandidateArchiveSha256:
-      candidateArtifact.downloadedArchiveSha256
+      candidateArtifact.downloadedArchiveSha256,
+    candidateArtifactRequeryObservationReceiptSha256: evidenceHash(
+      "artifact-candidate-requery-api"
+    ),
+    candidateArtifactRedownloadObservationReceiptSha256: evidenceHash(
+      "artifact-candidate-redownload"
+    )
   })
   if (event._tag !== "BeginAdjudication") throw new Error("wrong event")
   return event
@@ -352,6 +460,13 @@ const recordAdjudication = (
     domainWorldCount: 15_625,
     optimizerExecutionCount: 0,
     blsVerificationRerun: true,
+    drandReplayReceiptSha256: evidenceHash("drand-independent-replay"),
+    drandReplayFixtureSha256: evidenceHash("drand-replay-fixture"),
+    drandReplayStableProjectionSchemaVersion:
+      S2S_DRAND_STABLE_PROJECTION_SCHEMA_VERSION,
+    drandReplayStableProjectionSha256: evidenceHash(
+      "drand-stable-projection"
+    ),
     taskBatchRerun: true,
     testEvaluationRerun: true,
     integrityReducerRerun: true,
@@ -370,6 +485,14 @@ const recordAdjudication = (
       oomObserved: false
     },
     numericAdjudicationBytesSha256: rawS2SFileSha256(adjudicationBytes),
+    pythonExecution: pythonExecution({
+      operation: "adjudicate",
+      inputRawBytesSha256: candidateSha256,
+      outputRawBytesSha256: rawS2SFileSha256(adjudicationBytes),
+      requestDocumentSha256: candidateSha256,
+      requestSelfSha256: NUMERIC_CANDIDATE_RECEIPT_SHA256,
+      elapsedNanoseconds: 590_000_000_000
+    }),
     candidateOnly: true
   })
   if (event._tag !== "RecordAdjudicationProduced") {
@@ -397,6 +520,21 @@ const artifactFromArchive = (
     workflowRunAttempt: 1,
     workflowHeadSha: REGISTRATION_B,
     registrationJobCompletedAtUnixSeconds: REGISTRATION_COMPLETED_AT_UNIX_SECONDS,
+    workflowRunObservationReceiptSha256: evidenceHash(
+      "artifact-helper-run-register-complete"
+    ),
+    workflowJobsObservationReceiptSha256: evidenceHash(
+      "artifact-helper-jobs-register-complete"
+    ),
+    workflowRunStatus: "in_progress",
+    registrationJobStatus: "completed",
+    registrationJobConclusion: "success",
+    registrationArtifactApiObservationReceiptSha256: evidenceHash(
+      "artifact-helper-registration-api"
+    ),
+    registrationArtifactDownloadObservationReceiptSha256: evidenceHash(
+      "artifact-helper-registration-download"
+    ),
     sourceIsAncestorOfPreregistration: true,
     preregistrationIsDirectChildOfSource: true,
     numericContinuityManifestSha256AtSource: "e".repeat(64),
@@ -438,7 +576,7 @@ const makeHealthyScenario = () => {
     zipMembers(registration.members)
   )
   const registrationArtifact = artifactFromArchive(
-    "s2s-registration",
+    S2S_REGISTRATION_ARTIFACT_NAME,
     1,
     registrationArchive,
     registration.members
@@ -482,7 +620,7 @@ const makeHealthyScenario = () => {
   state = candidate.carrier.state
   const candidateArchive = buildS2STestActionZip(zipMembers(candidate.members))
   const candidateArtifact = artifactFromArchive(
-    "s2s-candidate",
+    S2S_CANDIDATE_ARTIFACT_NAME,
     2,
     candidateArchive,
     candidate.members
@@ -593,7 +731,7 @@ it("rejects a replaced control member even when the replacement ZIP is hash-boun
     }
   ])
   const replacementArtifact = artifactFromArchive(
-    "s2s-candidate-replaced",
+    S2S_CANDIDATE_ARTIFACT_NAME,
     4,
     replacementArchive,
     [

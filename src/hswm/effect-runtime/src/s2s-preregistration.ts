@@ -42,7 +42,7 @@ export const S2S_PREREG_PROTOCOL_CONFIG_SHA256 =
  * Kept as a literal to avoid a preregistration/control-state import cycle.
  */
 export const S2S_PREREG_RESOURCE_POLICY_SHA256 =
-  "7e4d7252962e53d70f4e74b5117338ced55a645c431e9173256de9f514043ad9" as const
+  "5d51316d2aebc8cfa6a7135adba9f167948e096895e3f94caf1defb024a0667d" as const
 
 export const S2S_PREREG_REPOSITORY = "gj3447/HSWM" as const
 export const S2S_PREREG_REF = "refs/heads/main" as const

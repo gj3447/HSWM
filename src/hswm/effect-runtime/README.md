@@ -29,10 +29,24 @@ pre-dispatch engineering:
   retries must re-establish directory durability before reporting success.
 - `s2s-bounded-process.ts` supplies the shell-free, process-group-bounded runner.
   `s2s-live-python.ts` rehashes and invokes an open executable FD, preserves the
-  reviewed venv path as `argv0`, and owns a private scoped bytecode-cache root.
-  It currently uses that boundary only for a Python/source/runtime golden
-  preflight; it does not run `confirm` or `adjudicate`, nor pin the complete
-  imported dependency closure.
+  reviewed venv path as `argv0`, owns a private scoped bytecode-cache root, and
+  exposes fixed `confirm` and `adjudicate` operations over an exact ten-file
+  source closure. `s2s-python-evidence.ts` binds the executor request, runtime,
+  source identity, invocation, and exact output bytes without reserializing the
+  Python receipt tree. Golden and invalid-input paths are exercised; no valid
+  confirmatory candidate has been run.
+- `s2s-json.ts` supplies bounded duplicate-aware integer-only JSON decoding.
+  `s2s-live-github.ts` implements a read-only, exact-endpoint GitHub observer
+  with bounded transport, strict projections, immutable raw-body/download
+  snapshots, and self-hashed observation receipts. `s2s-live-artifact.ts`
+  derives Layer-scoped producer/artifact authority, rechecks workflow-attempt
+  identity around lookup and readback, and retains the complete receipt objects
+  needed by a later durable envelope. Three empty-list observations produce
+  only an explicitly non-probative reconciled-absence record.
+- `s2s-live-drand.ts` verifies only a preregistered Quicknet round through the
+  pinned local helper. `s2s-live-drand-http.ts` can fetch only that exact
+  chain-specific historical/committed URL with one bounded unauthenticated GET;
+  it has no `latest`, selection, retry, or fallback path.
 - `s2s-zip.ts` validates one exact stored-entry GitHub Actions artifact dialect.
   `s2s-job-sequence.ts` composes isolated registration, candidate, and
   adjudication carriers at event counts `1 -> 6 -> 9`.
@@ -59,11 +73,12 @@ production orchestrator owns all provenance checks end to end.
 Independent exact-byte reviews drove repairs across the source-A/B, pulse,
 resource-accounting, artifact-size, journal, process, ZIP, and structural
 carrier boundaries, with regression coverage on the resulting bytes. The slice
-remains `BLOCKED_PRE_PREREG` because authoritative
-GitHub/drand adapters, actual Python confirm/adjudicate execution, the workflow,
-and the external event-10 finalizer are still absent. Resume from the repository
-[`next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-21.md)
-before adding live adapters or selecting a future round.
+remains `BLOCKED_PRE_PREREG`: the bounded adapters are present, but no
+source/preregistration/dispatch-authorized composition root, request-distinct
+GitHub receipt binding, workflow, durable evidence envelope, or external
+event-10 finalizer exists. Resume from the repository
+[`next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-22.md)
+before composing the adapters or selecting a future round.
 
 The in-memory Layer's static capability-ID allowlist is configuration for tests
 and local scaffolding, not identity authentication. This slice is not evidence

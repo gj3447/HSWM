@@ -322,6 +322,9 @@ it.effect(
       expect(
         preregistration.registration_core.evidence_binding.resource_policy_sha256
       ).toBe(S2S_PREREG_RESOURCE_POLICY_SHA256)
+      expect(S2S_PREREG_RESOURCE_POLICY_SHA256).toBe(
+        "5d51316d2aebc8cfa6a7135adba9f167948e096895e3f94caf1defb024a0667d"
+      )
       expect(
         preregistration.future_round_commitment.registration_evidence_sha256
       ).toBe(preregistration.registration_core_sha256)

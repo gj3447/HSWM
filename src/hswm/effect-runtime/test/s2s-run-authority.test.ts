@@ -29,6 +29,7 @@ import {
   type S2SGitHubWorkflowRunProjection,
   type S2SGitHubWorkflowRunsProjection
 } from "../src/s2s-live-github.js"
+import { makeS2SStageArtifactReadsLiveLayer } from "../src/s2s-live-artifact.js"
 import {
   S2SCurrentInvocation,
   inspectS2SCurrentInvocationAuthority,
@@ -101,6 +102,17 @@ const PRODUCTION_LAYER_IS_CLOSED: [ProductionLayerRequirements] extends [never]
   : false = true
 const PRODUCTION_CONSTRUCTOR_HAS_TWO_PARAMETERS: Parameters<
   typeof makeS2SCurrentRunStageAuthorityLiveLayer
+>["length"] extends 2
+  ? true
+  : false = true
+type ArtifactLayerRequirements = LayerRequirements<
+  ReturnType<typeof makeS2SStageArtifactReadsLiveLayer>
+>
+const ARTIFACT_LAYER_IS_CLOSED: [ArtifactLayerRequirements] extends [never]
+  ? true
+  : false = true
+const ARTIFACT_CONSTRUCTOR_HAS_TWO_PARAMETERS: Parameters<
+  typeof makeS2SStageArtifactReadsLiveLayer
 >["length"] extends 2
   ? true
   : false = true
@@ -1217,6 +1229,42 @@ it("keeps production issuance closed before GitHub I/O while source bytes are OP
   }
 }, 30_000)
 
+it("keeps production stage artifact reads closed before artifact configuration or I/O", async () => {
+  const temporaryRoot = mkdtempSync(join(tmpdir(), "hswm-s2s-live-artifact-"))
+  const eventPath = join(temporaryRoot, "event.json")
+  writeFileSync(eventPath, jsonBytes(invocationEvent()))
+  const fetchSpy = vi.fn(() => Promise.reject(new Error("unexpected fetch")))
+  try {
+    const environment = invocationEnvironment("CONFIRM")
+    for (const [key, value] of Object.entries(environment)) {
+      vi.stubEnv(key, String(value))
+    }
+    vi.stubEnv("GITHUB_EVENT_PATH", eventPath)
+    vi.stubGlobal("fetch", fetchSpy)
+    const outcome = await Effect.runPromise(
+      Layer.build(
+        makeS2SStageArtifactReadsLiveLayer(
+          registrationFixture.registrationAuthority,
+          { token: "" }
+        )
+      ).pipe(Effect.either, Effect.scoped)
+    )
+    expect(Either.isLeft(outcome)).toBe(true)
+    if (Either.isLeft(outcome)) {
+      expect(outcome.left).toMatchObject({
+        _tag: "S2SCurrentRunInputError",
+        reason: "WORKFLOW_SOURCE_BYTES_OPEN"
+      })
+    }
+    expect(fetchSpy).not.toHaveBeenCalled()
+    expect(makeS2SStageArtifactReadsLiveLayer.length).toBe(2)
+  } finally {
+    vi.unstubAllGlobals()
+    vi.unstubAllEnvs()
+    rmSync(temporaryRoot, { force: true, recursive: true })
+  }
+}, 30_000)
+
 it("rejects authentic but cross-mismatched invocation A/B before GitHub I/O", async () => {
   const temporaryRoot = mkdtempSync(join(tmpdir(), "hswm-s2s-live-mismatch-"))
   const eventPath = join(temporaryRoot, "event.json")
@@ -1281,7 +1329,11 @@ it("keeps every current-run authority surface out of the package root", async ()
     "S2SCurrentRunStageAuthority",
     "inspectS2SCurrentRunStageAuthority",
     "makeS2SCurrentRunStageAuthorityLiveLayer",
-    "probeS2SRunAuthorityAcquisitionForTest"
+    "probeS2SRunAuthorityAcquisitionForTest",
+    "S2SStageArtifactReads",
+    "S2SStageArtifactPermitError",
+    "makeS2SStageArtifactReadsLiveLayer",
+    "probeS2SStageArtifactReadMechanicsForTest"
   ]) {
     expect(key in publicApi).toBe(false)
   }
@@ -1315,9 +1367,14 @@ it("defines an observer-shaped decoy without creating a production override seam
   expect(decoy).toBeDefined()
   expect(PRODUCTION_LAYER_IS_CLOSED).toBe(true)
   expect(PRODUCTION_CONSTRUCTOR_HAS_TWO_PARAMETERS).toBe(true)
+  expect(ARTIFACT_LAYER_IS_CLOSED).toBe(true)
+  expect(ARTIFACT_CONSTRUCTOR_HAS_TWO_PARAMETERS).toBe(true)
   expect(makeS2SCurrentRunStageAuthorityLiveLayer.length).toBe(2)
+  expect(makeS2SStageArtifactReadsLiveLayer.length).toBe(2)
   if (false) {
     // @ts-expect-error production has no Observer or policy override parameter
     makeS2SCurrentRunStageAuthorityLiveLayer({}, { token: "" }, decoy)
+    // @ts-expect-error production has no Observer or policy override parameter
+    makeS2SStageArtifactReadsLiveLayer({}, { token: "" }, decoy)
   }
 })

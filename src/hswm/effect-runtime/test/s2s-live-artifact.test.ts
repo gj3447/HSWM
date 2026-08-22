@@ -1,14 +1,23 @@
 import { expect, it } from "@effect/vitest"
-import { Effect, Either, Layer } from "effect"
+import {
+  Cause,
+  Deferred,
+  Effect,
+  Either,
+  Exit,
+  Fiber
+} from "effect"
 
 import {
   canonicalS2SControlSha256,
   rawS2SFileSha256
 } from "../src/s2s-canonical.js"
 import {
-  S2SArtifactAuthority,
-  makeS2SArtifactAuthorityTestLayer,
-  type S2SObservedArtifactAuthority
+  S2SStageArtifactReadError,
+  probeS2SStageArtifactReadMechanicsForTest,
+  type S2SAdjudicateStageArtifactReads,
+  type S2SConfirmStageArtifactReads,
+  type S2SStageArtifactReadsService
 } from "../src/s2s-live-artifact.js"
 import {
   S2S_GITHUB_API_VERSION,
@@ -21,27 +30,29 @@ import {
   observeS2SGitHubWorkflowAttemptJobs,
   observeS2SGitHubWorkflowRun,
   type S2SGitHubArtifactDownload,
-  type S2SGitHubArtifactDownloadReceipt,
-  type S2SGitHubArtifactProjection,
-  type S2SGitHubArtifactsProjection,
-  type S2SGitHubObservation,
-  type S2SGitHubWorkflowJobsProjection,
-  type S2SGitHubWorkflowRunProjection,
-  type S2SGitHubWorkflowRunsProjection
+  type S2SGitHubArtifactDownloadReceipt
 } from "../src/s2s-live-github.js"
+import type { S2SConfirmatoryJobStage } from "../src/s2s-workflow-contract.js"
+import {
+  appendS2SStageArtifactLedgerEntry,
+  makeS2SStageArtifactPermitTestScope,
+  useS2SStageArtifactPermit
+} from "../src/s2s-stage-artifact-permits.js"
 
 const RUN_ID = 32_442_437_970
-const JOB_ID = 96_655_652_099
-const ARTIFACT_ID = 9_433_344_546
+const REGISTER_JOB_ID = 96_655_652_099
+const CONFIRM_JOB_ID = 96_655_652_100
+const ADJUDICATE_JOB_ID = 96_655_652_101
+const REGISTRATION_ARTIFACT_ID = 9_433_344_546
+const CANDIDATE_ARTIFACT_ID = 9_433_344_547
 const HEAD_SHA = "75686549b1f6c65aea87ebd0f912a6e62909445a"
-const OBSERVED_AT = 1_787_283_300
-const encoder = new TextEncoder()
+const WORKFLOW_PATH = ".github/workflows/swm0w-s2s-confirmatory.yml"
+const CREATED_AT = "2026-08-21T03:10:32Z"
+const CREATED_AT_UNIX_SECONDS = Date.parse(CREATED_AT) / 1_000
+const OBSERVED_AT = CREATED_AT_UNIX_SECONDS + 2_000
+const ENCODER = new TextEncoder()
 
-const responseProvenance = (suffix: number | string) => Object.freeze({
-  githubRequestId: `A1B2:C3D4:E5F6:${suffix}`,
-  githubApiVersionSelected: S2S_GITHUB_API_VERSION,
-  responseEtag: `W/"${"e".repeat(64)}"`
-})
+type ArtifactRole = "REGISTRATION" | "CANDIDATE"
 
 interface ZipMember {
   readonly name: string
@@ -79,7 +90,7 @@ const buildStoredArtifactZip = (
   const offsets: Array<number> = []
   let cursor = 0
   for (const member of members) {
-    const name = encoder.encode(member.name)
+    const name = ENCODER.encode(member.name)
     const checksum = crc32(member.bytes)
     const header = Buffer.alloc(30)
     header.writeUInt32LE(0x04034b50, 0)
@@ -98,11 +109,10 @@ const buildStoredArtifactZip = (
     localChunks.push(header, name, member.bytes, descriptor)
     cursor += header.byteLength + name.byteLength + member.bytes.byteLength + 16
   }
-
   const centralOffset = cursor
   const centralChunks: Array<Uint8Array> = []
   members.forEach((member, index) => {
-    const name = encoder.encode(member.name)
+    const name = ENCODER.encode(member.name)
     const header = Buffer.alloc(46)
     header.writeUInt32LE(0x02014b50, 0)
     header.writeUInt16LE(0x032d, 4)
@@ -116,13 +126,12 @@ const buildStoredArtifactZip = (
     header.writeUInt32LE(member.bytes.byteLength, 24)
     header.writeUInt16LE(name.byteLength, 28)
     header.writeUInt32LE((((0o100000 | 0o644) << 16) | 0x20) >>> 0, 38)
-    const localOffset = offsets[index]
-    if (localOffset === undefined) throw new Error("ZIP offset missing")
-    header.writeUInt32LE(localOffset, 42)
+    const offset = offsets[index]
+    if (offset === undefined) throw new Error("ZIP offset missing")
+    header.writeUInt32LE(offset, 42)
     centralChunks.push(header, name)
     cursor += header.byteLength + name.byteLength
   })
-
   const end = Buffer.alloc(22)
   end.writeUInt32LE(0x06054b50, 0)
   end.writeUInt16LE(members.length, 8)
@@ -134,33 +143,103 @@ const buildStoredArtifactZip = (
   )
 }
 
+const registrationArchive = () =>
+  buildStoredArtifactZip([
+    {
+      name: "control_receipt.json",
+      bytes: ENCODER.encode('{"control":"registration"}\n')
+    }
+  ])
+
+const candidateArchive = (value = 1) =>
+  buildStoredArtifactZip([
+    {
+      name: "control_receipt.json",
+      bytes: ENCODER.encode('{"control":"candidate"}\n')
+    },
+    {
+      name: "numeric_candidate.json",
+      bytes: ENCODER.encode(`${JSON.stringify({ value })}\n`)
+    }
+  ])
+
 const jsonBytes = (value: unknown): Uint8Array =>
-  encoder.encode(`${JSON.stringify(value)}\n`)
+  ENCODER.encode(`${JSON.stringify(value)}\n`)
 
 const right = <A, E>(outcome: Either.Either<A, E>): A => {
   if (Either.isLeft(outcome)) throw outcome.left
   return outcome.right
 }
 
-const jobJson = (overrides: Record<string, unknown> = {}) => ({
-  id: JOB_ID,
-  run_id: RUN_ID,
-  run_attempt: 1,
-  name: "register",
-  head_sha: HEAD_SHA,
-  status: "completed",
-  conclusion: "success",
-  started_at: "2026-08-21T03:10:34Z",
-  completed_at: "2026-08-21T03:33:15Z",
-  labels: ["ubuntu-24.04"],
-  ...overrides
-})
+const currentJobId = (stage: S2SConfirmatoryJobStage): number =>
+  stage === "REGISTER"
+    ? REGISTER_JOB_ID
+    : stage === "CONFIRM"
+      ? CONFIRM_JOB_ID
+      : ADJUDICATE_JOB_ID
 
-const runJson = (overrides: Record<string, unknown> = {}) => ({
+const predecessorJobIds = (
+  stage: S2SConfirmatoryJobStage
+): ReadonlyArray<number> =>
+  stage === "REGISTER"
+    ? []
+    : stage === "CONFIRM"
+      ? [REGISTER_JOB_ID]
+      : [REGISTER_JOB_ID, CONFIRM_JOB_ID]
+
+const makeSeed = (
+  stage: S2SConfirmatoryJobStage,
+  workflowApiPath = WORKFLOW_PATH
+) =>
+  Object.freeze({
+    classification: "TEST_ONLY_NON_AUTHORIZING" as const,
+    workflowRunId: RUN_ID,
+    registrationCommitB: HEAD_SHA,
+    workflowApiPath,
+    workflowRunCreatedAt: CREATED_AT,
+    workflowRunCreatedAtUnixSeconds: CREATED_AT_UNIX_SECONDS,
+    stage,
+    currentJobDatabaseId: currentJobId(stage),
+    predecessorJobDatabaseIds: Object.freeze([...predecessorJobIds(stage)]),
+    observations: Object.freeze({
+      runStart: Object.freeze({
+        receiptSha256: "1".repeat(64),
+        githubRequestId: "SEED:RUN-START",
+        observedAtUnixSeconds: OBSERVED_AT - 40
+      }),
+      jobs: Object.freeze({
+        receiptSha256: "2".repeat(64),
+        githubRequestId: "SEED:JOBS",
+        observedAtUnixSeconds: OBSERVED_AT - 30
+      }),
+      runsForHead: Object.freeze({
+        receiptSha256: "3".repeat(64),
+        githubRequestId: "SEED:RUNS-FOR-HEAD",
+        observedAtUnixSeconds: OBSERVED_AT - 20
+      }),
+      runEnd: Object.freeze({
+        receiptSha256: "4".repeat(64),
+        githubRequestId: "SEED:RUN-END",
+        observedAtUnixSeconds: OBSERVED_AT - 10
+      })
+    })
+  })
+
+const responseProvenance = (githubRequestId: string) =>
+  Object.freeze({
+    githubRequestId,
+    githubApiVersionSelected: S2S_GITHUB_API_VERSION,
+    responseEtag: `W/"${"e".repeat(64)}"`
+  })
+
+const runJson = (
+  workflowApiPath: string,
+  overrides: Readonly<Record<string, unknown>> = {}
+) => ({
   id: RUN_ID,
   run_attempt: 1,
   name: "SWM-0W-S2S confirmatory",
-  path: ".github/workflows/swm0w-s2s-confirmatory.yml",
+  path: workflowApiPath,
   event: "push",
   head_branch: "main",
   head_sha: HEAD_SHA,
@@ -168,760 +247,892 @@ const runJson = (overrides: Record<string, unknown> = {}) => ({
   head_repository: { full_name: "gj3447/HSWM" },
   status: "in_progress",
   conclusion: null,
-  created_at: "2026-08-21T03:10:32Z",
+  created_at: CREATED_AT,
   ...overrides
 })
 
-const artifactJson = (
-  archive: Uint8Array,
-  overrides: Record<string, unknown> = {}
+const jobJson = (
+  id: number,
+  name: "register" | "confirm" | "adjudicate",
+  status: "queued" | "in_progress" | "completed",
+  startedAt: string,
+  completedAt: string | null,
+  overrides: Readonly<Record<string, unknown>> = {}
 ) => ({
-  id: ARTIFACT_ID,
-  name: "s2s-registration",
+  id,
+  run_id: RUN_ID,
+  run_attempt: 1,
+  name,
+  head_sha: HEAD_SHA,
+  status,
+  conclusion: status === "completed" ? "success" : null,
+  started_at: startedAt,
+  completed_at: completedAt,
+  labels: ["ubuntu-24.04"],
+  ...overrides
+})
+
+const jobsJson = (
+  stage: S2SConfirmatoryJobStage,
+  idOverrides: Readonly<Partial<Record<"register" | "confirm" | "adjudicate", number>>> = {}
+) => {
+  const register =
+    stage === "REGISTER"
+      ? jobJson(
+          idOverrides.register ?? REGISTER_JOB_ID,
+          "register",
+          "in_progress",
+          "2026-08-21T03:10:34Z",
+          null
+        )
+      : jobJson(
+          idOverrides.register ?? REGISTER_JOB_ID,
+          "register",
+          "completed",
+          "2026-08-21T03:10:34Z",
+          "2026-08-21T03:20:00Z"
+        )
+  const confirm =
+    stage === "REGISTER"
+      ? jobJson(
+          idOverrides.confirm ?? CONFIRM_JOB_ID,
+          "confirm",
+          "queued",
+          "2026-08-21T03:10:35Z",
+          null
+        )
+      : stage === "CONFIRM"
+        ? jobJson(
+            idOverrides.confirm ?? CONFIRM_JOB_ID,
+            "confirm",
+            "in_progress",
+            "2026-08-21T03:20:01Z",
+            null
+          )
+        : jobJson(
+            idOverrides.confirm ?? CONFIRM_JOB_ID,
+            "confirm",
+            "completed",
+            "2026-08-21T03:20:01Z",
+            "2026-08-21T03:30:00Z"
+          )
+  const adjudicate =
+    stage === "ADJUDICATE"
+      ? jobJson(
+          idOverrides.adjudicate ?? ADJUDICATE_JOB_ID,
+          "adjudicate",
+          "in_progress",
+          "2026-08-21T03:30:01Z",
+          null
+        )
+      : jobJson(
+          idOverrides.adjudicate ?? ADJUDICATE_JOB_ID,
+          "adjudicate",
+          "queued",
+          stage === "REGISTER"
+            ? "2026-08-21T03:10:36Z"
+            : "2026-08-21T03:20:02Z",
+          null
+        )
+  return { total_count: 3, jobs: [register, confirm, adjudicate] }
+}
+
+const artifactJson = (role: ArtifactRole, archive: Uint8Array) => ({
+  id:
+    role === "REGISTRATION"
+      ? REGISTRATION_ARTIFACT_ID
+      : CANDIDATE_ARTIFACT_ID,
+  name: role === "REGISTRATION" ? "s2s-registration" : "s2s-candidate",
   size_in_bytes: archive.byteLength,
   digest: `sha256:${rawS2SFileSha256(archive)}`,
   expired: false,
-  created_at: "2026-08-21T03:33:12Z",
+  created_at:
+    role === "REGISTRATION"
+      ? "2026-08-21T03:19:59Z"
+      : "2026-08-21T03:29:59Z",
   expires_at: "2026-11-19T03:10:32Z",
-  workflow_run: { id: RUN_ID, head_sha: HEAD_SHA },
-  ...overrides
+  workflow_run: { id: RUN_ID, head_sha: HEAD_SHA }
 })
 
-interface FixtureOptions {
-  readonly runOverrides?: Record<string, unknown>
-  readonly jobOverrides?: Record<string, unknown>
-  readonly artifactRows?: ReadonlyArray<Record<string, unknown>>
-  readonly requeryOverrides?: Record<string, unknown>
-  readonly downloadHashOverride?: string
+interface ArtifactPlan {
+  readonly role: ArtifactRole
+  readonly archive: Uint8Array
+  readonly positivePoll: 1 | 3 | null
 }
 
-const makeFixture = (options: FixtureOptions = {}) => {
-  const controlBytes = encoder.encode('{"control":"receipt"}\n')
-  const archive = buildStoredArtifactZip([
-    { name: "control_receipt.json", bytes: controlBytes }
-  ])
-  const canonicalArtifact = artifactJson(archive)
-  const artifactRows = options.artifactRows ?? [canonicalArtifact]
-  const runOffsets = artifactRows.length === 0 ? [-1, 2, 12, 22] : [-1, 2, 3, 6]
-  const runObservations = runOffsets.map((offset) =>
-    right(
-      observeS2SGitHubWorkflowRun(
-        jsonBytes(runJson(options.runOverrides)),
-        RUN_ID,
-        OBSERVED_AT + offset,
-        responseProvenance(`run-${offset}`)
-      )
-    )
-  )
-  const run = runObservations[0]
-  if (run === undefined) throw new Error("workflow run observation missing")
-  const jobs = right(
-    observeS2SGitHubWorkflowAttemptJobs(
-      jsonBytes({
-        total_count: 1,
-        jobs: [jobJson(options.jobOverrides)]
-      }),
-      RUN_ID,
-      1,
-      OBSERVED_AT,
-      responseProvenance("jobs")
-    )
-  )
-  const artifactObservations = [1, 11, 21].map((offset) =>
-    right(
-      observeS2SGitHubRunArtifacts(
-        jsonBytes({ total_count: artifactRows.length, artifacts: artifactRows }),
-        RUN_ID,
-        OBSERVED_AT + offset,
-        responseProvenance(`artifacts-${offset}`)
-      )
-    )
-  )
-  const artifacts = artifactObservations[0]
-  if (artifacts === undefined) throw new Error("artifact observation missing")
-  const requery = right(
-    observeS2SGitHubArtifact(
-      jsonBytes({ ...canonicalArtifact, ...options.requeryOverrides }),
-      ARTIFACT_ID,
-      OBSERVED_AT + 4,
-      responseProvenance("artifact-requery")
-    )
-  )
-  const receiptCore: Omit<
-    S2SGitHubArtifactDownloadReceipt,
-    "receiptSha256"
-  > = Object.freeze({
-    schemaVersion: S2S_GITHUB_ARTIFACT_DOWNLOAD_SCHEMA_VERSION,
-    apiVersion: S2S_GITHUB_API_VERSION,
-    repository: S2S_GITHUB_REPOSITORY,
-    artifactId: ARTIFACT_ID,
-    endpointPathAndQuery: `/repos/${S2S_GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip`,
-    downloadedAtUnixSeconds: OBSERVED_AT + 5,
-    redirectHttpStatus: 302,
-    redirectGitHubRequestId: "A1B2:C3D4:E5F6:DOWNLOAD",
-    redirectGitHubApiVersionSelected: S2S_GITHUB_API_VERSION,
-    redirectResponseEtag: null,
-    redirectUrlSha256: "a".repeat(64),
-    redirectOrigin: "https://objects.example.invalid",
-    archiveHttpStatus: 200,
-    archiveMediaType: "application/zip",
-    archiveResponseEtag: `"${"a".repeat(64)}"`,
-    archiveByteLength: archive.byteLength,
-    downloadedArchiveSha256:
-      options.downloadHashOverride ?? rawS2SFileSha256(archive)
-  })
-  const receiptSha256 = right(canonicalS2SControlSha256(receiptCore))
-  const download: S2SGitHubArtifactDownload = Object.freeze({
-    receipt: Object.freeze({ ...receiptCore, receiptSha256 }),
-    readArchiveBytes: () => new Uint8Array(archive)
-  })
-  return {
-    archive,
-    controlBytes,
-    run,
-    runObservations,
-    jobs,
-    artifacts,
-    artifactObservations,
-    requery,
-    download
-  }
+interface ScenarioOptions {
+  readonly stage: S2SConfirmatoryJobStage
+  readonly positivePoll?: 1 | 3 | null
+  readonly candidateRereadArchive?: Uint8Array
+  readonly requestIdOverrides?: Readonly<Record<number, string>>
+  readonly jobIdOverrides?: Readonly<
+    Partial<Record<"register" | "confirm" | "adjudicate", number>>
+  >
+  readonly workflowApiPath?: string
+  readonly runOverrides?: Readonly<Record<string, unknown>>
 }
 
-const makeAuthorityLayer = (fixture: ReturnType<typeof makeFixture>) => {
-  let runObservationIndex = 0
-  let artifactObservationIndex = 0
-  const github = Layer.succeed(
-    S2SGitHubObserver,
-    S2SGitHubObserver.of({
-      observeWorkflowRun: () => {
-        const observation =
-          fixture.runObservations[
-            Math.min(
-              runObservationIndex,
-              fixture.runObservations.length - 1
-            )
-          ] ?? fixture.run
-        runObservationIndex += 1
-        return Effect.succeed(observation)
-      },
-      observeWorkflowAttemptJobs: () => Effect.succeed(fixture.jobs),
-      observeWorkflowRunsForHead: () => Effect.dieMessage("not used"),
-      observeRunArtifacts: () => {
-        const observation =
-          fixture.artifactObservations[
-            Math.min(
-              artifactObservationIndex,
-              fixture.artifactObservations.length - 1
-            )
-          ] ?? fixture.artifacts
-        artifactObservationIndex += 1
-        return Effect.succeed(observation)
-      },
-      observeArtifact: () => Effect.succeed(fixture.requery),
-      downloadArtifactArchive: () => Effect.succeed(fixture.download)
-    })
-  )
-  return makeS2SArtifactAuthorityTestLayer().pipe(Layer.provide(github))
-}
-
-it.effect("issues nominal authority and validates a distinct exact ZIP readback", () => {
-  const fixture = makeFixture()
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
-    )
-    expect(lookup._tag).toBe("Observed")
-    if (lookup._tag !== "Observed") return
-    const readback = yield* service.readback(lookup)
-    expect(readback.validatedArchive.archiveSha256).toBe(
-      rawS2SFileSha256(fixture.archive)
-    )
-    expect(readback.validatedArchive.members).toHaveLength(1)
-    expect(readback.validatedArchive.members[0]?.readBytes()).toEqual(
-      fixture.controlBytes
-    )
-    expect(readback.requeryObservationReceiptSha256).not.toBe(
-      lookup.artifactsObservation.receipt.receiptSha256
-    )
-    expect(readback.artifactRequeryObservation.receipt.receiptSha256).toBe(
-      readback.requeryObservationReceiptSha256
-    )
-    expect(readback.artifactDownload.receipt.receiptSha256).toBe(
-      readback.downloadObservationReceiptSha256
-    )
-    expect(readback.readbackStartRunObservation.receipt.receiptSha256).toBe(
-      readback.readbackStartRunObservationReceiptSha256
-    )
-    expect(readback.readbackFinalRunObservation.receipt.receiptSha256).toBe(
-      readback.readbackFinalRunObservationReceiptSha256
-    )
-    expect(Object.isFrozen(readback.artifactEvidence)).toBe(true)
-    const mutableEvidence = readback.artifactEvidence as unknown as {
-      artifactId: number
+const makeScenario = (options: ScenarioOptions) => {
+  const registration = registrationArchive()
+  const candidate = candidateArchive()
+  const positivePoll =
+    options.positivePoll === undefined ? 1 : options.positivePoll
+  const plans: ReadonlyArray<ArtifactPlan> =
+    options.stage === "REGISTER"
+      ? []
+      : options.stage === "CONFIRM"
+        ? [{ role: "REGISTRATION", archive: registration, positivePoll }]
+        : [
+            { role: "REGISTRATION", archive: registration, positivePoll },
+            { role: "CANDIDATE", archive: candidate, positivePoll },
+            {
+              role: "CANDIDATE",
+              archive: options.candidateRereadArchive ?? candidate,
+              positivePoll
+            }
+          ]
+  const calls: Array<string> = []
+  let requestIndex = 0
+  let planIndex = -1
+  let artifactPoll = 0
+  let activePlan: ArtifactPlan | undefined
+  const nextMetadata = (label: string) => {
+    const index = requestIndex
+    requestIndex += 1
+    calls.push(label)
+    return {
+      observedAtUnixSeconds: OBSERVED_AT + index * 10,
+      githubRequestId:
+        options.requestIdOverrides?.[index] ?? `REQ:${index}:${label}`
     }
-    expect(() => {
-      mutableEvidence.artifactId = 1
-    }).toThrow()
-    expect(readback.artifactEvidence.artifactId).toBe(ARTIFACT_ID)
-    const mutableDownload = readback.artifactDownload.readArchiveBytes()
-    mutableDownload.fill(0)
-    expect(
-      rawS2SFileSha256(readback.artifactDownload.readArchiveBytes())
-    ).toBe(rawS2SFileSha256(fixture.archive))
-    const mutableRead = readback.readArchiveBytes()
-    mutableRead.fill(0)
-    expect(rawS2SFileSha256(readback.readArchiveBytes())).toBe(
-      rawS2SFileSha256(fixture.archive)
-    )
-  }).pipe(Effect.provide(makeAuthorityLayer(fixture)))
-})
-
-it.effect("reconciles bounded absence only after a successful completed producer", () => {
-  const fixture = makeFixture({ artifactRows: [] })
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
-    )
-    expect(lookup).toMatchObject({
-      _tag: "ReconciledAbsentAfterProducerCompleted",
-      role: "REGISTRATION",
-      producerJobId: JOB_ID,
-      expectedArtifactName: "s2s-registration"
-    })
-    if (lookup._tag === "ReconciledAbsentAfterProducerCompleted") {
-      expect(new Set(lookup.absenceObservationReceiptSha256s).size).toBe(3)
-      expect(lookup.reconciliationReceiptSha256).toMatch(/^[0-9a-f]{64}$/)
-      const { receiptSha256, ...receiptCore } = lookup.reconciliationReceipt
-      expect(right(canonicalS2SControlSha256(receiptCore))).toBe(receiptSha256)
-      expect(
-        lookup.absenceObservations.map(
-          (observation) => observation.receipt.receiptSha256
-        )
-      ).toEqual(lookup.absenceObservationReceiptSha256s)
-      expect(
-        lookup.initialWorkflowRunObservation.receipt.receiptSha256
-      ).toBe(lookup.initialWorkflowRunObservationReceiptSha256)
-      expect(lookup.workflowRunObservation.receipt.receiptSha256).toBe(
-        lookup.workflowRunObservationReceiptSha256
-      )
-      expect(lookup.workflowJobsObservation.receipt.receiptSha256).toBe(
-        lookup.workflowJobsObservationReceiptSha256
-      )
-      expect(() =>
-        (
-          lookup.absenceObservationReceiptSha256s as unknown as Array<string>
-        ).fill("0".repeat(64))
-      ).toThrow()
-      expect(
+  }
+  const observer = S2SGitHubObserver.of({
+    observeWorkflowRun: () => {
+      const metadata = nextMetadata("run")
+      return Effect.succeed(
         right(
-          canonicalS2SControlSha256({
-            ...receiptCore,
-            expectedHeadSha: "f".repeat(40)
-          })
+          observeS2SGitHubWorkflowRun(
+            jsonBytes(
+              runJson(
+                options.workflowApiPath ?? WORKFLOW_PATH,
+                options.runOverrides
+              )
+            ),
+            RUN_ID,
+            metadata.observedAtUnixSeconds,
+            responseProvenance(metadata.githubRequestId)
+          )
         )
-      ).not.toBe(receiptSha256)
-    }
-  }).pipe(Effect.provide(makeAuthorityLayer(fixture)))
-})
-
-it.effect("separates failed producers and ambiguous duplicate artifacts", () => {
-  const failed = makeFixture({
-    runOverrides: { status: "completed", conclusion: "failure" },
-    jobOverrides: { conclusion: "failure" },
-    artifactRows: []
-  })
-  const downstreamFailed = makeFixture({
-    runOverrides: { status: "completed", conclusion: "failure" }
-  })
-  const duplicateArchive = failed.archive
-  const duplicate = makeFixture({
-    artifactRows: [
-      artifactJson(duplicateArchive),
-      artifactJson(duplicateArchive, { id: ARTIFACT_ID + 1 })
-    ]
-  })
-  const inspect = (layer: ReturnType<typeof makeAuthorityLayer>) =>
-    Effect.gen(function* () {
-      const service = yield* S2SArtifactAuthority
-      return yield* service.observeRoleArtifact(
-        RUN_ID,
-        HEAD_SHA,
-        "REGISTRATION"
       )
-    }).pipe(Effect.provide(layer))
-  return Effect.gen(function* () {
-    const failedOutcome = yield* inspect(makeAuthorityLayer(failed))
-    const duplicateOutcome = yield* inspect(makeAuthorityLayer(duplicate))
-    const downstreamFailedOutcome = yield* inspect(
-      makeAuthorityLayer(downstreamFailed)
-    )
-    expect(failedOutcome._tag).toBe("ProducerDidNotCompleteSuccessfully")
-    expect(duplicateOutcome).toMatchObject({
-      _tag: "Ambiguous",
-      reason: "DUPLICATE_ARTIFACT_NAME"
-    })
-    expect(downstreamFailedOutcome).toMatchObject({
-      _tag: "Ambiguous",
-      reason: "WORKFLOW_RUN_DID_NOT_SUCCEED"
-    })
-  })
-})
-
-it.effect("rejects counterfeit authority and download identity drift", () => {
-  const fixture = makeFixture({ downloadHashOverride: "c".repeat(64) })
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
-    )
-    expect(lookup._tag).toBe("Observed")
-    if (lookup._tag !== "Observed") return
-    const counterfeit = Object.freeze({ ...lookup }) as S2SObservedArtifactAuthority
-    const counterfeitResult = yield* service.readback(counterfeit).pipe(Effect.either)
-    const driftResult = yield* service.readback(lookup).pipe(Effect.either)
-    expect(Either.isLeft(counterfeitResult)).toBe(true)
-    expect(Either.isLeft(driftResult)).toBe(true)
-    if (Either.isLeft(counterfeitResult)) {
-      expect(counterfeitResult.left.reason).toBe("INVALID_AUTHORITY")
-    }
-    if (Either.isLeft(driftResult)) {
-      expect(driftResult.left.reason).toBe("DOWNLOAD_MISMATCH")
-    }
-  }).pipe(Effect.provide(makeAuthorityLayer(fixture)))
-})
-
-it.effect("rejects an artifact download with a counterfeit receipt self-hash", () => {
-  const fixture = makeFixture()
-  const counterfeitFixture = {
-    ...fixture,
-    download: Object.freeze({
-      ...fixture.download,
-      receipt: Object.freeze({
-        ...fixture.download.receipt,
-        receiptSha256: "b".repeat(64)
+    },
+    observeWorkflowAttemptJobs: () => {
+      planIndex += 1
+      activePlan = plans[planIndex]
+      artifactPoll = 0
+      const metadata = nextMetadata("jobs")
+      return Effect.succeed(
+        right(
+          observeS2SGitHubWorkflowAttemptJobs(
+            jsonBytes(jobsJson(options.stage, options.jobIdOverrides)),
+            RUN_ID,
+            1,
+            metadata.observedAtUnixSeconds,
+            responseProvenance(metadata.githubRequestId)
+          )
+        )
+      )
+    },
+    observeWorkflowRunsForHead: () =>
+      Effect.dieMessage("artifact mechanics must not query runs-for-head"),
+    observeRunArtifacts: () => {
+      const plan = activePlan
+      if (plan === undefined) {
+        return Effect.dieMessage("artifact plan was not selected by fresh jobs")
+      }
+      artifactPoll += 1
+      const present =
+        plan.positivePoll !== null && artifactPoll >= plan.positivePoll
+      const rows = present ? [artifactJson(plan.role, plan.archive)] : []
+      const metadata = nextMetadata("artifacts")
+      return Effect.succeed(
+        right(
+          observeS2SGitHubRunArtifacts(
+            jsonBytes({ total_count: rows.length, artifacts: rows }),
+            RUN_ID,
+            metadata.observedAtUnixSeconds,
+            responseProvenance(metadata.githubRequestId)
+          )
+        )
+      )
+    },
+    observeArtifact: (artifactId) => {
+      const plan = activePlan
+      if (plan === undefined) {
+        return Effect.dieMessage("artifact requery has no active plan")
+      }
+      const metadata = nextMetadata("artifact")
+      return Effect.succeed(
+        right(
+          observeS2SGitHubArtifact(
+            jsonBytes(artifactJson(plan.role, plan.archive)),
+            artifactId,
+            metadata.observedAtUnixSeconds,
+            responseProvenance(metadata.githubRequestId)
+          )
+        )
+      )
+    },
+    downloadArtifactArchive: (artifactId) => {
+      const plan = activePlan
+      if (plan === undefined) {
+        return Effect.dieMessage("artifact download has no active plan")
+      }
+      const metadata = nextMetadata("download")
+      const core: Omit<S2SGitHubArtifactDownloadReceipt, "receiptSha256"> =
+        Object.freeze({
+          schemaVersion: S2S_GITHUB_ARTIFACT_DOWNLOAD_SCHEMA_VERSION,
+          apiVersion: S2S_GITHUB_API_VERSION,
+          repository: S2S_GITHUB_REPOSITORY,
+          artifactId,
+          endpointPathAndQuery: `/repos/${S2S_GITHUB_REPOSITORY}/actions/artifacts/${artifactId}/zip`,
+          downloadedAtUnixSeconds: metadata.observedAtUnixSeconds,
+          redirectHttpStatus: 302,
+          redirectGitHubRequestId: metadata.githubRequestId,
+          redirectGitHubApiVersionSelected: S2S_GITHUB_API_VERSION,
+          redirectResponseEtag: null,
+          redirectUrlSha256: "a".repeat(64),
+          redirectOrigin: "https://objects.example.invalid",
+          archiveHttpStatus: 200,
+          archiveMediaType: "application/zip",
+          archiveResponseEtag: `"${"a".repeat(64)}"`,
+          archiveByteLength: plan.archive.byteLength,
+          downloadedArchiveSha256: rawS2SFileSha256(plan.archive)
+        })
+      const download: S2SGitHubArtifactDownload = Object.freeze({
+        receipt: Object.freeze({
+          ...core,
+          receiptSha256: right(canonicalS2SControlSha256(core))
+        }),
+        readArchiveBytes: () => new Uint8Array(plan.archive)
       })
-    })
+      return Effect.succeed(download)
+    }
+  })
+  return { observer, calls, plans }
+}
+
+const confirmationReads = (
+  reads: S2SStageArtifactReadsService
+): S2SConfirmStageArtifactReads => {
+  if (reads.stage !== "CONFIRM") {
+    throw new Error("expected CONFIRM fixed read surface")
   }
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
+  return reads
+}
+
+const adjudicationReads = (
+  reads: S2SStageArtifactReadsService
+): S2SAdjudicateStageArtifactReads => {
+  if (reads.stage !== "ADJUDICATE") {
+    throw new Error("expected ADJUDICATE fixed read surface")
+  }
+  return reads
+}
+
+it.effect("exposes only lazy fixed zero-identity stage Effects", () => {
+  const confirm = makeScenario({ stage: "CONFIRM" })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("CONFIRM"),
+    confirm.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const fixed = confirmationReads(reads)
+        expect(Object.keys(fixed).sort()).toEqual([
+          "confirmReadRegistration",
+          "stage"
+        ])
+        expect(typeof fixed.confirmReadRegistration).not.toBe("function")
+        expect("observeRoleArtifact" in fixed).toBe(false)
+        expect("readback" in fixed).toBe(false)
+        expect(confirm.calls).toHaveLength(0)
+        const result = yield* fixed.confirmReadRegistration
+        expect(result._tag).toBe("ValidatedStageArtifactRead")
+        expect(result.operation).toBe("CONFIRM_READ_REGISTRATION")
+        expect(result.role).toBe("REGISTRATION")
+        expect(result.permitEvidence.authorityScope).toBe(
+          "TEST_ONLY_NON_AUTHORIZING"
+        )
+        expect(result.permitEvidence.authorizationClaimed).toBe(false)
+        expect(result.permitEvidence.ledgerEntries).toHaveLength(12)
+        const { receiptSha256, ...permitCore } = result.permitEvidence
+        expect(right(canonicalS2SControlSha256(permitCore))).toBe(
+          receiptSha256
+        )
+        expect(result.validatedArchive.archiveSha256).toBe(
+          rawS2SFileSha256(result.readArchiveBytes())
+        )
+        if (false) {
+          // @ts-expect-error fixed operation is an Effect property, not a method
+          fixed.confirmReadRegistration(RUN_ID, HEAD_SHA, "REGISTRATION")
+        }
+      })
+  )
+})
+
+it.effect("REGISTER exposes no artifact operation", () => {
+  const scenario = makeScenario({ stage: "REGISTER" })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("REGISTER"),
+    scenario.observer,
+    (reads) =>
+      Effect.sync(() => {
+        expect(reads).toEqual({ stage: "REGISTER" })
+        expect(Object.keys(reads)).toEqual(["stage"])
+        expect(scenario.calls).toHaveLength(0)
+      })
+  )
+})
+
+it.effect("spends a successful permit once without replenishment", () => {
+  const scenario = makeScenario({ stage: "CONFIRM" })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("CONFIRM"),
+    scenario.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const fixed = confirmationReads(reads)
+        yield* fixed.confirmReadRegistration
+        const callsAfterSuccess = scenario.calls.length
+        const second = yield* fixed.confirmReadRegistration.pipe(Effect.either)
+        expect(Either.isLeft(second)).toBe(true)
+        if (Either.isLeft(second)) {
+          expect(second.left).toMatchObject({
+            _tag: "S2SStageArtifactPermitError",
+            reason: "PERMIT_ALREADY_SPENT"
+          })
+        }
+        expect(scenario.calls).toHaveLength(callsAfterSuccess)
+      })
+  )
+})
+
+it.effect("atomically admits only one parallel use", () => {
+  const scenario = makeScenario({ stage: "CONFIRM" })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("CONFIRM"),
+    scenario.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const effect = confirmationReads(reads).confirmReadRegistration
+        const outcomes = yield* Effect.all(
+          [effect.pipe(Effect.either), effect.pipe(Effect.either)],
+          { concurrency: "unbounded" }
+        )
+        expect(outcomes.filter(Either.isRight)).toHaveLength(1)
+        expect(outcomes.filter(Either.isLeft)).toHaveLength(1)
+        expect(scenario.calls).toHaveLength(8)
+      })
+  )
+})
+
+it.effect("rejects wrong ordinal with zero I/O and leaves the next permit valid", () => {
+  const scenario = makeScenario({ stage: "ADJUDICATE" })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("ADJUDICATE"),
+    scenario.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const fixed = adjudicationReads(reads)
+        const wrong = yield* fixed.adjudicateReadCandidateFirst.pipe(
+          Effect.either
+        )
+        expect(Either.isLeft(wrong)).toBe(true)
+        if (Either.isLeft(wrong)) {
+          expect(wrong.left).toMatchObject({ reason: "PERMIT_OUT_OF_ORDER" })
+        }
+        expect(scenario.calls).toHaveLength(0)
+        const valid = yield* fixed.adjudicateReadRegistration
+        expect(valid.operation).toBe("ADJUDICATE_READ_REGISTRATION")
+        expect(scenario.calls).toHaveLength(8)
+      })
+  )
+})
+
+it.effect("burns a typed observer failure and performs no retry I/O", () => {
+  const base = makeScenario({ stage: "CONFIRM" })
+  let calls = 0
+  const observer = S2SGitHubObserver.of({
+    ...base.observer,
+    observeWorkflowRun: () => {
+      calls += 1
+      return Effect.fail(
+        new S2SGitHubObservationError({
+          reason: "INVALID_ARGUMENT",
+          path: "$fixture",
+          detail: "typed failure"
+        })
+      )
+    }
+  })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("CONFIRM"),
+    observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const effect = confirmationReads(reads).confirmReadRegistration
+        const first = yield* effect.pipe(Effect.either)
+        const second = yield* effect.pipe(Effect.either)
+        expect(Either.isLeft(first)).toBe(true)
+        expect(Either.isLeft(second)).toBe(true)
+        if (Either.isLeft(second)) {
+          expect(second.left).toMatchObject({ reason: "STAGE_VOID" })
+        }
+        expect(calls).toBe(1)
+      })
+  )
+})
+
+it.effect("preserves defects while burning the permit", () => {
+  const base = makeScenario({ stage: "CONFIRM" })
+  let calls = 0
+  const observer = S2SGitHubObserver.of({
+    ...base.observer,
+    observeWorkflowRun: () => {
+      calls += 1
+      return Effect.dieMessage("observer defect")
+    }
+  })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("CONFIRM"),
+    observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const effect = confirmationReads(reads).confirmReadRegistration
+        const first = yield* Effect.exit(effect)
+        expect(Exit.isFailure(first)).toBe(true)
+        if (Exit.isFailure(first)) expect(Cause.isDieType(first.cause)).toBe(true)
+        const retry = yield* effect.pipe(Effect.either)
+        expect(Either.isLeft(retry)).toBe(true)
+        if (Either.isLeft(retry)) {
+          expect(retry.left).toMatchObject({ reason: "STAGE_VOID" })
+        }
+        expect(calls).toBe(1)
+      })
+  )
+})
+
+it.effect("preserves interruption while burning the permit", () =>
+  Effect.gen(function* () {
+    const base = makeScenario({ stage: "CONFIRM" })
+    const started = yield* Deferred.make<void>()
+    let calls = 0
+    const observer = S2SGitHubObserver.of({
+      ...base.observer,
+      observeWorkflowRun: () => {
+        calls += 1
+        return Deferred.succeed(started, undefined).pipe(
+          Effect.zipRight(Effect.never)
+        )
+      }
+    })
+    return yield* probeS2SStageArtifactReadMechanicsForTest(
+      makeSeed("CONFIRM"),
+      observer,
+      (reads) =>
+        Effect.gen(function* () {
+          const effect = confirmationReads(reads).confirmReadRegistration
+          const fiber = yield* effect.pipe(Effect.fork)
+          yield* Deferred.await(started)
+          const interrupted = yield* Fiber.interrupt(fiber)
+          expect(Exit.isFailure(interrupted)).toBe(true)
+          if (Exit.isFailure(interrupted)) {
+            expect(Cause.isInterruptedOnly(interrupted.cause)).toBe(true)
+          }
+          const retry = yield* effect.pipe(Effect.either)
+          expect(Either.isLeft(retry)).toBe(true)
+          if (Either.isLeft(retry)) {
+            expect(retry.left).toMatchObject({ reason: "STAGE_VOID" })
+          }
+          expect(calls).toBe(1)
+        })
     )
-    expect(lookup._tag).toBe("Observed")
-    if (lookup._tag !== "Observed") return
-    const outcome = yield* service.readback(lookup).pipe(Effect.either)
+  })
+)
+
+it.effect("rejects collisions with each current-run seed ID", () =>
+  Effect.gen(function* () {
+    const seedIds = [
+      "SEED:RUN-START",
+      "SEED:JOBS",
+      "SEED:RUNS-FOR-HEAD",
+      "SEED:RUN-END"
+    ]
+    for (const seedId of seedIds) {
+      const scenario = makeScenario({
+        stage: "CONFIRM",
+        requestIdOverrides: { 0: seedId }
+      })
+      yield* probeS2SStageArtifactReadMechanicsForTest(
+        makeSeed("CONFIRM"),
+        scenario.observer,
+        (reads) =>
+          Effect.gen(function* () {
+            const outcome = yield* confirmationReads(
+              reads
+            ).confirmReadRegistration.pipe(Effect.either)
+            expect(Either.isLeft(outcome)).toBe(true)
+            if (Either.isLeft(outcome)) {
+              expect(outcome.left).toMatchObject({ reason: "REQUEST_ID_REUSED" })
+            }
+            expect(scenario.calls).toHaveLength(1)
+          })
+      )
+    }
+  })
+)
+
+it.effect("treats GitHub request IDs as case-sensitive", () => {
+  const scenario = makeScenario({
+    stage: "CONFIRM",
+    requestIdOverrides: { 0: "seed:run-start" }
+  })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("CONFIRM"),
+    scenario.observer,
+    (reads) =>
+      Effect.asVoid(confirmationReads(reads).confirmReadRegistration)
+  )
+})
+
+it.effect("carries request-ID reuse detection across adjudication operations", () => {
+  const scenario = makeScenario({
+    stage: "ADJUDICATE",
+    requestIdOverrides: { 8: "REQ:0:run" }
+  })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("ADJUDICATE"),
+    scenario.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const fixed = adjudicationReads(reads)
+        yield* fixed.adjudicateReadRegistration
+        const second = yield* fixed.adjudicateReadCandidateFirst.pipe(
+          Effect.either
+        )
+        expect(Either.isLeft(second)).toBe(true)
+        if (Either.isLeft(second)) {
+          expect(second.left).toMatchObject({ reason: "REQUEST_ID_REUSED" })
+        }
+        expect(scenario.calls).toHaveLength(9)
+      })
+  )
+})
+
+it.effect("rejects an intermediate empty-poll collision before the paired run read", () => {
+  const scenario = makeScenario({
+    stage: "CONFIRM",
+    positivePoll: 3,
+    requestIdOverrides: { 4: "REQ:2:artifacts" }
+  })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("CONFIRM"),
+    scenario.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const outcome = yield* confirmationReads(
+          reads
+        ).confirmReadRegistration.pipe(Effect.either)
+        expect(Either.isLeft(outcome)).toBe(true)
+        if (Either.isLeft(outcome)) {
+          expect(outcome.left).toMatchObject({ reason: "REQUEST_ID_REUSED" })
+        }
+        expect(scenario.calls).toEqual([
+          "run",
+          "jobs",
+          "artifacts",
+          "run",
+          "artifacts"
+        ])
+      })
+  )
+})
+
+it.effect("rejects a download redirect collision before the final run read", () => {
+  const scenario = makeScenario({
+    stage: "CONFIRM",
+    requestIdOverrides: { 6: "REQ:2:artifacts" }
+  })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("CONFIRM"),
+    scenario.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const outcome = yield* confirmationReads(
+          reads
+        ).confirmReadRegistration.pipe(Effect.either)
+        expect(Either.isLeft(outcome)).toBe(true)
+        if (Either.isLeft(outcome)) {
+          expect(outcome.left).toMatchObject({ reason: "REQUEST_ID_REUSED" })
+        }
+        expect(scenario.calls).toEqual([
+          "run",
+          "jobs",
+          "artifacts",
+          "run",
+          "run",
+          "artifact",
+          "download"
+        ])
+      })
+  )
+})
+
+it.effect("makes ledger phase topology a permit-core invariant", () => {
+  const scope = right(
+    makeS2SStageArtifactPermitTestScope(makeSeed("CONFIRM"))
+  )
+  const malformed = useS2SStageArtifactPermit(
+    scope,
+    "CONFIRM_READ_REGISTRATION",
+    () =>
+      appendS2SStageArtifactLedgerEntry(
+        scope,
+        "CONFIRM_READ_REGISTRATION",
+        "LOOKUP_JOBS",
+        "REQ:MALFORMED:PHASE",
+        "5".repeat(64),
+        OBSERVED_AT
+      )
+  )
+  return Effect.gen(function* () {
+    const outcome = yield* malformed.pipe(Effect.either)
     expect(Either.isLeft(outcome)).toBe(true)
     if (Either.isLeft(outcome)) {
       expect(outcome.left).toMatchObject({
-        reason: "DOWNLOAD_MISMATCH",
-        causeReason: "RECEIPT_SELF_HASH_MISMATCH"
+        reason: "LEDGER_ENTRY_REJECTED"
       })
-    }
-  }).pipe(Effect.provide(makeAuthorityLayer(counterfeitFixture)))
-})
-
-it.effect("scopes nominal authority to one Layer instance", () => {
-  const fixture = makeFixture()
-  const issue = Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
-    )
-    if (lookup._tag !== "Observed") {
-      return yield* Effect.dieMessage("fixture did not issue authority")
-    }
-    return lookup
-  }).pipe(Effect.provide(makeAuthorityLayer(fixture)))
-  return Effect.gen(function* () {
-    const foreignAuthority = yield* issue
-    const outcome = yield* Effect.gen(function* () {
-      const service = yield* S2SArtifactAuthority
-      return yield* service.readback(foreignAuthority).pipe(Effect.either)
-    }).pipe(Effect.provide(makeAuthorityLayer(makeFixture())))
-    expect(Either.isLeft(outcome)).toBe(true)
-    if (Either.isLeft(outcome)) {
-      expect(outcome.left.reason).toBe("INVALID_AUTHORITY")
     }
   })
 })
 
-it.effect("rejects rerun-attempt metadata before issuing authority", () => {
-  const fixture = makeFixture()
-  const rerunObservation = Object.freeze({
-    ...fixture.run,
-    receipt: Object.freeze({
-      ...fixture.run.receipt,
-      observedAtUnixSeconds: OBSERVED_AT + 2,
-      githubRequestId: "A1B2:C3D4:E5F6:RERUN",
-      projection: Object.freeze({
-        ...fixture.run.receipt.projection,
-        runAttempt: 2
-      })
-    })
-  })
-  const rerunFixture = {
-    ...fixture,
-    runObservations: [fixture.run, rerunObservation]
-  }
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
-    )
-    expect(lookup).toMatchObject({
-      _tag: "Ambiguous",
-      reason: "HEAD_SHA_MISMATCH"
-    })
-  }).pipe(Effect.provide(makeAuthorityLayer(rerunFixture)))
-})
-
-it.effect("rejects unknown and inherited role names before observation", () => {
-  const fixture = makeFixture()
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    for (const hostileRole of ["UNKNOWN", "__proto__", "toString"]) {
-      const lookup = yield* service.observeRoleArtifact(
-        RUN_ID,
-        HEAD_SHA,
-        hostileRole as "REGISTRATION"
-      )
-      expect(lookup).toEqual({
-        _tag: "InvalidRequest",
-        reason: "INVALID_ROLE"
-      })
-    }
-    const hostileCall = service.observeRoleArtifact as unknown as (
-      workflowRunId: number,
-      expectedHeadSha: unknown,
-      role: "REGISTRATION"
-    ) => Effect.Effect<unknown>
-    const hostileHead = yield* hostileCall(
-      RUN_ID,
-      Symbol("head-sha"),
-      "REGISTRATION"
-    )
-    expect(hostileHead).toEqual({
-      _tag: "InvalidRequest",
-      reason: "INVALID_HEAD_SHA"
-    })
-  }).pipe(Effect.provide(makeAuthorityLayer(fixture)))
-})
-
-it.effect("rechecks rerun identity when spending artifact authority", () => {
-  const fixture = makeFixture()
-  const rerunObservation = Object.freeze({
-    ...fixture.run,
-    receipt: Object.freeze({
-      ...fixture.run.receipt,
-      observedAtUnixSeconds: OBSERVED_AT + 6,
-      projection: Object.freeze({
-        ...fixture.run.receipt.projection,
-        runAttempt: 2
-      })
-    })
-  })
-  const rerunFixture = {
-    ...fixture,
-    runObservations: [
-      fixture.run,
-      fixture.runObservations[1] ?? fixture.run,
-      rerunObservation
-    ]
-  }
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
-    )
-    expect(lookup._tag).toBe("Observed")
-    if (lookup._tag !== "Observed") return
-    const outcome = yield* service.readback(lookup).pipe(Effect.either)
-    expect(Either.isLeft(outcome)).toBe(true)
-    if (Either.isLeft(outcome)) {
-      expect(outcome.left.reason).toBe("RUN_REQUERY_MISMATCH")
-    }
-  }).pipe(Effect.provide(makeAuthorityLayer(rerunFixture)))
-})
-
-it.effect("rejects a readback run query that reuses an issuance request id", () => {
-  const fixture = makeFixture()
-  const issuedRun = fixture.runObservations[1] ?? fixture.run
-  const reusedReadbackRun = right(
-    observeS2SGitHubWorkflowRun(
-      jsonBytes(runJson()),
-      RUN_ID,
-      OBSERVED_AT + 3,
-      Object.freeze({
-        githubRequestId: issuedRun.receipt.githubRequestId,
-        githubApiVersionSelected: S2S_GITHUB_API_VERSION,
-        responseEtag: `W/"${"e".repeat(64)}"`
-      })
-    )
-  )
-  expect(reusedReadbackRun.receipt.receiptSha256).not.toBe(
-    issuedRun.receipt.receiptSha256
-  )
-  const reusedFixture = {
-    ...fixture,
-    runObservations: [
-      fixture.run,
-      issuedRun,
-      reusedReadbackRun,
-      fixture.runObservations[3] ?? fixture.run
-    ]
-  }
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
-    )
-    expect(lookup._tag).toBe("Observed")
-    if (lookup._tag !== "Observed") return
-    const outcome = yield* service.readback(lookup).pipe(Effect.either)
-    expect(Either.isLeft(outcome)).toBe(true)
-    if (Either.isLeft(outcome)) {
-      expect(outcome.left.reason).toBe("OBSERVATION_ORDER_INVALID")
-      expect(outcome.left.causeReason).toBe(
-        "GITHUB_REQUEST_ID_REUSED_BEFORE_READBACK"
-      )
-    }
-  }).pipe(Effect.provide(makeAuthorityLayer(reusedFixture)))
-})
-
-it.effect("does not call repeated identical empty lists reconciled absence", () => {
-  const fixture = makeFixture({ artifactRows: [] })
-  const repeatedFixture = {
-    ...fixture,
-    artifactObservations: [
-      fixture.artifacts,
-      fixture.artifacts,
-      fixture.artifacts
-    ]
-  }
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
-    )
-    expect(lookup).toMatchObject({
-      _tag: "Ambiguous",
-      reason: "OBSERVATION_REQUEST_IDS_NOT_DISTINCT"
-    })
-  }).pipe(Effect.provide(makeAuthorityLayer(repeatedFixture)))
-})
-
-it.effect("rejects timestamp-distinct absence receipts that reuse a request id", () => {
-  const fixture = makeFixture({ artifactRows: [] })
-  const reusedRequestArtifacts = [1, 11, 21].map((offset) =>
-    right(
-      observeS2SGitHubRunArtifacts(
-        jsonBytes({ total_count: 0, artifacts: [] }),
-        RUN_ID,
-        OBSERVED_AT + offset,
-        responseProvenance("REUSED-ABSENCE-REQUEST")
-      )
-    )
-  )
-  expect(
-    new Set(
-      reusedRequestArtifacts.map(
-        (observation) => observation.receipt.receiptSha256
-      )
-    ).size
-  ).toBe(3)
-  const reusedFixture = {
-    ...fixture,
-    artifacts: reusedRequestArtifacts[0] ?? fixture.artifacts,
-    artifactObservations: reusedRequestArtifacts
-  }
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
-    )
-    expect(lookup).toMatchObject({
-      _tag: "Ambiguous",
-      reason: "OBSERVATION_REQUEST_IDS_NOT_DISTINCT"
-    })
-  }).pipe(Effect.provide(makeAuthorityLayer(reusedFixture)))
-})
-
-it.effect("rejects absence polling when successive run brackets reuse a request id", () => {
-  const fixture = makeFixture({ artifactRows: [] })
-  const runObservations = [-1, 2, 12, 22].map((offset, index) =>
-    right(
-      observeS2SGitHubWorkflowRun(
-        jsonBytes(runJson()),
-        RUN_ID,
-        OBSERVED_AT + offset,
-        responseProvenance(
-          index === 0 ? "INITIAL-RUN" : "REUSED-RUN-BRACKET"
+it.effect("fills the exact 16-entry CONFIRM ledger on a third-poll hit", () => {
+  const scenario = makeScenario({ stage: "CONFIRM", positivePoll: 3 })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("CONFIRM"),
+    scenario.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const result = yield* confirmationReads(reads).confirmReadRegistration
+        expect(result.permitEvidence.ledgerCapacity).toBe(16)
+        expect(result.permitEvidence.ledgerEntries).toHaveLength(16)
+        expect(result.permitEvidence.ledgerEntries[0]?.githubRequestId).toBe(
+          "SEED:RUN-START"
         )
+        expect(scenario.calls).toHaveLength(12)
+      })
+  )
+})
+
+it.effect("fills the exact shared 40-entry ADJUDICATE ledger without eviction", () => {
+  const scenario = makeScenario({ stage: "ADJUDICATE", positivePoll: 3 })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("ADJUDICATE"),
+    scenario.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const fixed = adjudicationReads(reads)
+        yield* fixed.adjudicateReadRegistration
+        yield* fixed.adjudicateReadCandidateFirst
+        const result = yield* fixed.adjudicateRereadCandidate
+        expect(result.permitEvidence.ledgerCapacity).toBe(40)
+        expect(result.permitEvidence.ledgerEntries).toHaveLength(40)
+        expect(result.permitEvidence.ledgerEntries.slice(0, 4).map(
+          (entry) => entry.githubRequestId
+        )).toEqual([
+          "SEED:RUN-START",
+          "SEED:JOBS",
+          "SEED:RUNS-FOR-HEAD",
+          "SEED:RUN-END"
+        ])
+        expect(scenario.calls).toHaveLength(36)
+      })
+  )
+})
+
+it.effect("rejects fresh current and predecessor numeric job-ID drift", () =>
+  Effect.gen(function* () {
+    for (const jobIdOverrides of [
+      { confirm: CONFIRM_JOB_ID + 100 },
+      { register: REGISTER_JOB_ID + 100 }
+    ]) {
+      const scenario = makeScenario({
+        stage: "CONFIRM",
+        jobIdOverrides
+      })
+      yield* probeS2SStageArtifactReadMechanicsForTest(
+        makeSeed("CONFIRM"),
+        scenario.observer,
+        (reads) =>
+          Effect.gen(function* () {
+            const outcome = yield* confirmationReads(
+              reads
+            ).confirmReadRegistration.pipe(Effect.either)
+            expect(Either.isLeft(outcome)).toBe(true)
+            if (Either.isLeft(outcome)) {
+              expect(outcome.left).toMatchObject({
+                _tag: "S2SStageArtifactReadError",
+                reason: "FRESH_JOB_BINDING_DRIFT"
+              })
+            }
+            expect(scenario.calls).toHaveLength(2)
+          })
       )
-    )
+    }
+  })
+)
+
+it.effect("rejects fresh run/head drift before jobs I/O", () => {
+  const scenario = makeScenario({
+    stage: "CONFIRM",
+    runOverrides: { head_sha: "a".repeat(40) }
+  })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("CONFIRM"),
+    scenario.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const outcome = yield* confirmationReads(
+          reads
+        ).confirmReadRegistration.pipe(Effect.either)
+        expect(Either.isLeft(outcome)).toBe(true)
+        if (Either.isLeft(outcome)) {
+          expect(outcome.left).toMatchObject({
+            _tag: "S2SStageArtifactReadError",
+            reason: "LOOKUP_REJECTED",
+            phase: "LOOKUP_RUN_START"
+          })
+        }
+        expect(scenario.calls).toEqual(["run"])
+      })
   )
-  expect(
-    new Set(
-      runObservations.map((observation) => observation.receipt.receiptSha256)
-    ).size
-  ).toBe(4)
-  const reusedFixture = {
-    ...fixture,
-    run: runObservations[0] ?? fixture.run,
-    runObservations
-  }
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
-    )
-    expect(lookup).toMatchObject({
-      _tag: "Ambiguous",
-      reason: "OBSERVATION_REQUEST_IDS_NOT_DISTINCT"
-    })
-  }).pipe(Effect.provide(makeAuthorityLayer(reusedFixture)))
 })
 
-it.effect("requires the frozen minimum gaps for absence reconciliation", () => {
-  const fixture = makeFixture({ artifactRows: [] })
-  const closeArtifacts = [1, 2, 3].map((offset) =>
-    right(
-      observeS2SGitHubRunArtifacts(
-        jsonBytes({ total_count: 0, artifacts: [] }),
-        RUN_ID,
-        OBSERVED_AT + offset,
-        responseProvenance(`close-artifacts-${offset}`)
-      )
-    )
+it.effect("performs an independent candidate reread and voids on byte drift", () => {
+  const scenario = makeScenario({
+    stage: "ADJUDICATE",
+    candidateRereadArchive: candidateArchive(2)
+  })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("ADJUDICATE"),
+    scenario.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const fixed = adjudicationReads(reads)
+        yield* fixed.adjudicateReadRegistration
+        yield* fixed.adjudicateReadCandidateFirst
+        const reread = yield* fixed.adjudicateRereadCandidate.pipe(
+          Effect.either
+        )
+        expect(Either.isLeft(reread)).toBe(true)
+        if (Either.isLeft(reread)) {
+          expect(reread.left).toMatchObject({
+            _tag: "S2SStageArtifactPermitError",
+            reason: "CANDIDATE_REREAD_MISMATCH"
+          })
+        }
+        expect(scenario.calls).toHaveLength(24)
+      })
   )
-  const closeRuns = [-1, 2, 3, 4].map((offset) =>
-    right(
-      observeS2SGitHubWorkflowRun(
-        jsonBytes(runJson()),
-        RUN_ID,
-        OBSERVED_AT + offset,
-        responseProvenance(`close-run-${offset}`)
-      )
-    )
-  )
-  const closeFixture = {
-    ...fixture,
-    artifactObservations: closeArtifacts,
-    artifacts: closeArtifacts[0] ?? fixture.artifacts,
-    run: closeRuns[0] ?? fixture.run,
-    runObservations: closeRuns
-  }
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
-    )
-    expect(lookup).toMatchObject({
-      _tag: "Ambiguous",
-      reason: "ABSENCE_OBSERVATIONS_TOO_CLOSE"
-    })
-  }).pipe(Effect.provide(makeAuthorityLayer(closeFixture)))
 })
 
-it.effect("requires run observations to bracket job and artifact observations", () => {
-  const fixture = makeFixture()
-  const staleFinalRun = right(
-    observeS2SGitHubWorkflowRun(
-      jsonBytes(runJson()),
-      RUN_ID,
-      OBSERVED_AT,
-      responseProvenance("stale-final-run")
-    )
+it.effect("retains all three artifact/run absence pairs in the typed rejection", () => {
+  const scenario = makeScenario({ stage: "CONFIRM", positivePoll: null })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("CONFIRM"),
+    scenario.observer,
+    (reads) =>
+      Effect.gen(function* () {
+        const outcome = yield* confirmationReads(
+          reads
+        ).confirmReadRegistration.pipe(Effect.either)
+        expect(Either.isLeft(outcome)).toBe(true)
+        if (
+          Either.isLeft(outcome) &&
+          outcome.left instanceof S2SStageArtifactReadError
+        ) {
+          expect(outcome.left.reason).toBe("LOOKUP_REJECTED")
+          expect(outcome.left.outcome?._tag).toBe(
+            "ReconciledAbsentAfterProducerCompleted"
+          )
+          if (
+            outcome.left.outcome?._tag ===
+            "ReconciledAbsentAfterProducerCompleted"
+          ) {
+            expect(outcome.left.outcome.absenceObservationPairs).toHaveLength(3)
+            expect(
+              new Set(
+                outcome.left.outcome.absenceObservationPairs.flatMap((pair) => [
+                  pair.artifactsObservation.receipt.receiptSha256,
+                  pair.workflowRunObservation.receipt.receiptSha256
+                ])
+              ).size
+            ).toBe(6)
+          }
+        }
+        expect(scenario.calls).toHaveLength(8)
+      })
   )
-  const staleFixture = {
-    ...fixture,
-    runObservations: [fixture.run, staleFinalRun]
-  }
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
-    )
-    expect(lookup).toMatchObject({
-      _tag: "Ambiguous",
-      reason: "OBSERVATION_ORDER_INVALID"
-    })
-  }).pipe(Effect.provide(makeAuthorityLayer(staleFixture)))
 })
 
-it.effect("surfaces observer failure as unavailable without retrying", () => {
-  let attempts = 0
-  const github = Layer.succeed(
-    S2SGitHubObserver,
-    S2SGitHubObserver.of({
-      observeWorkflowRun: () => Effect.succeed(makeFixture().run),
-      observeWorkflowAttemptJobs: () => {
-        attempts += 1
-        return Effect.fail(new S2SGitHubObservationError({
-          reason: "JSON_REJECTED",
-          path: "$",
-          detail: "fixture"
-        }))
-      },
-      observeWorkflowRunsForHead: () => Effect.dieMessage("not used"),
-      observeRunArtifacts: () => Effect.dieMessage("must not run"),
-      observeArtifact: () => Effect.dieMessage("not used"),
-      downloadArtifactArchive: () => Effect.dieMessage("not used")
-    })
+it.effect("accepts the authority-bound @main workflow API representation", () => {
+  const workflowApiPath = `${WORKFLOW_PATH}@main`
+  const scenario = makeScenario({
+    stage: "CONFIRM",
+    workflowApiPath
+  })
+  return probeS2SStageArtifactReadMechanicsForTest(
+    makeSeed("CONFIRM", workflowApiPath),
+    scenario.observer,
+    (reads) => Effect.asVoid(confirmationReads(reads).confirmReadRegistration)
   )
-  const layer = makeS2SArtifactAuthorityTestLayer().pipe(Layer.provide(github))
-  return Effect.gen(function* () {
-    const service = yield* S2SArtifactAuthority
-    const lookup = yield* service.observeRoleArtifact(
-      RUN_ID,
-      HEAD_SHA,
-      "REGISTRATION"
-    )
-    expect(lookup).toMatchObject({
-      _tag: "ObservationUnavailable",
-      operation: "OBSERVE_JOBS",
-      errorReason: "JSON_REJECTED"
-    })
-    expect(attempts).toBe(1)
-  }).pipe(Effect.provide(layer))
 })
 
-// Compile-time anchors for the generic observation shapes used by the fake
-// port. They prevent accidental widening to unknown in this authority test.
-const _observationTypeAnchors: readonly [
-  S2SGitHubObservation<S2SGitHubWorkflowRunProjection> | null,
-  S2SGitHubObservation<S2SGitHubWorkflowRunsProjection> | null,
-  S2SGitHubObservation<S2SGitHubWorkflowJobsProjection> | null,
-  S2SGitHubObservation<S2SGitHubArtifactsProjection> | null,
-  S2SGitHubObservation<S2SGitHubArtifactProjection> | null
-] = [null, null, null, null, null]
-void _observationTypeAnchors
+it.effect("closes captured test drivers and never replenishes the same fixture", () =>
+  Effect.gen(function* () {
+    const seed = makeSeed("CONFIRM")
+    const scenario = makeScenario({ stage: "CONFIRM" })
+    let captured: S2SConfirmStageArtifactReads | undefined
+    yield* probeS2SStageArtifactReadMechanicsForTest(
+      seed,
+      scenario.observer,
+      (reads) =>
+        Effect.sync(() => {
+          captured = confirmationReads(reads)
+        })
+    )
+    if (captured === undefined) {
+      return yield* Effect.dieMessage("test driver was not captured")
+    }
+    const closed = yield* captured.confirmReadRegistration.pipe(Effect.either)
+    expect(Either.isLeft(closed)).toBe(true)
+    if (Either.isLeft(closed)) {
+      expect(closed.left).toMatchObject({ reason: "SCOPE_CLOSED" })
+    }
+    expect(scenario.calls).toHaveLength(0)
+    yield* probeS2SStageArtifactReadMechanicsForTest(
+      seed,
+      scenario.observer,
+      (reads) =>
+        Effect.gen(function* () {
+          const reused = yield* confirmationReads(
+            reads
+          ).confirmReadRegistration.pipe(Effect.either)
+          expect(Either.isLeft(reused)).toBe(true)
+          if (Either.isLeft(reused)) {
+            expect(reused.left).toMatchObject({ reason: "SCOPE_CLOSED" })
+          }
+        })
+    )
+    expect(scenario.calls).toHaveLength(0)
+  })
+)

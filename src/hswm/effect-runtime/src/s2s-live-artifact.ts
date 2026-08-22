@@ -9,25 +9,49 @@ import {
 } from "./s2s-confirmatory.js"
 import {
   S2SGitHubObserver,
+  S2SGitHubObserverLive,
+  makeS2SGitHubHttpTransportLiveLayer,
   validateS2SGitHubArtifactDownload,
+  validateS2SGitHubArtifactObservation,
+  validateS2SGitHubRunArtifactsObservation,
+  validateS2SGitHubWorkflowAttemptJobsObservation,
+  validateS2SGitHubWorkflowRunObservation,
   type S2SGitHubArtifactDownload,
   type S2SGitHubArtifactProjection,
   type S2SGitHubArtifactsProjection,
+  type S2SGitHubLiveTransportConfig,
   type S2SGitHubObservation,
-  type S2SGitHubObserverError,
   type S2SGitHubWorkflowJobProjection,
   type S2SGitHubWorkflowJobsProjection,
   type S2SGitHubWorkflowRunProjection
 } from "./s2s-live-github.js"
 import {
-  S2S_CONFIRMATORY_ARTIFACT_ROLES,
+  S2SCurrentRunStage,
+  makeS2SCurrentRunStageAuthorityLiveLayer
+} from "./s2s-run-authority.js"
+import {
+  appendS2SStageArtifactLedgerEntry,
+  claimS2SStageArtifactPermitScope,
+  closeS2SStageArtifactPermitScope,
+  makeS2SStageArtifactPermitTestScope,
+  snapshotS2SStageArtifactPermitEvidence,
+  useS2SStageArtifactPermit,
+  type S2SStageArtifactLedgerPhase,
+  type S2SStageArtifactPermitEvidence,
+  type S2SStageArtifactPermitIdentity,
+  type S2SStageArtifactPermitScope,
+  type S2SStageArtifactPermitTestSeed
+} from "./s2s-stage-artifact-permits.js"
+import {
   S2S_CONFIRMATORY_BRANCH,
   S2S_CONFIRMATORY_EVENT,
+  S2S_CONFIRMATORY_JOB_STAGES,
   S2S_CONFIRMATORY_REPOSITORY,
   S2S_CONFIRMATORY_STAGE_CONTRACTS,
   S2S_CONFIRMATORY_WORKFLOW_NAME,
-  S2S_CONFIRMATORY_WORKFLOW_PATH,
-  type S2SConfirmatoryArtifactRole
+  type S2SConfirmatoryArtifactReadOperation,
+  type S2SConfirmatoryArtifactRole,
+  type S2SConfirmatoryJobStage
 } from "./s2s-workflow-contract.js"
 import {
   validateS2SArtifactZip,
@@ -35,6 +59,8 @@ import {
   type S2SExpectedZipMember,
   type S2SValidatedArtifactZip
 } from "./s2s-zip.js"
+
+export { S2SStageArtifactPermitError } from "./s2s-stage-artifact-permits.js"
 
 export type S2SArtifactRole = S2SConfirmatoryArtifactRole
 
@@ -61,8 +87,7 @@ const ROLE_POLICY: Readonly<Record<S2SArtifactRole, RolePolicy>> = Object.freeze
   }),
   CANDIDATE: Object.freeze({
     jobName: S2S_CONFIRMATORY_STAGE_CONTRACTS.CONFIRM.jobName,
-    artifactName:
-      S2S_CONFIRMATORY_STAGE_CONTRACTS.CONFIRM.producesArtifactName,
+    artifactName: S2S_CONFIRMATORY_STAGE_CONTRACTS.CONFIRM.producesArtifactName,
     maximumArchiveBytes:
       S2S_CONFIRMATORY_POLICY.archive.candidateArchiveMaximumBytes,
     maximumExpandedBytes:
@@ -98,29 +123,26 @@ export type S2SArtifactLookupAmbiguity =
   | "ARTIFACT_EXPIRED"
   | "ARTIFACT_OUTSIDE_PRODUCER_INTERVAL"
   | "DUPLICATE_ARTIFACT_NAME"
-  | "DUPLICATE_PRODUCER_JOB_NAME"
   | "HEAD_SHA_MISMATCH"
   | "OBSERVATION_ORDER_INVALID"
-  | "OBSERVATION_REQUEST_IDS_NOT_DISTINCT"
   | "OBSERVATION_PRECEDES_JOB_COMPLETION"
   | "PRODUCER_JOB_NOT_COMPLETED"
   | "PRODUCER_JOB_NOT_FOUND"
+  | "PRODUCER_JOB_IDENTITY_DRIFT"
   | "WORKFLOW_RUN_DID_NOT_SUCCEED"
 
 export interface S2SArtifactObservationUnavailable {
   readonly _tag: "ObservationUnavailable"
   readonly role: S2SArtifactRole
-  readonly operation: "OBSERVE_RUN" | "OBSERVE_JOBS" | "OBSERVE_ARTIFACTS"
-  readonly errorTag: S2SGitHubObserverError["_tag"]
+  readonly operation:
+    | "OBSERVE_RUN"
+    | "OBSERVE_JOBS"
+    | "OBSERVE_ARTIFACTS"
+    | "REVALIDATE_RUN"
+    | "REVALIDATE_JOBS"
+    | "REVALIDATE_ARTIFACTS"
+  readonly errorTag: string
   readonly errorReason: string
-}
-
-export interface S2SArtifactInvalidRequest {
-  readonly _tag: "InvalidRequest"
-  readonly reason:
-    | "INVALID_WORKFLOW_RUN_ID"
-    | "INVALID_HEAD_SHA"
-    | "INVALID_ROLE"
 }
 
 export interface S2SArtifactProducerDidNotSucceed {
@@ -133,9 +155,28 @@ export interface S2SArtifactProducerDidNotSucceed {
   readonly workflowRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
   readonly workflowJobsObservation: S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>
   readonly artifactsObservation: S2SGitHubObservation<S2SGitHubArtifactsProjection>
+}
+
+export interface S2SArtifactAbsenceObservationPair {
+  readonly artifactsObservation: S2SGitHubObservation<S2SGitHubArtifactsProjection>
+  readonly workflowRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
+}
+
+export interface S2SArtifactAbsenceReconciliationReceipt {
+  readonly schemaVersion: "hswm-swm0w-s2s-artifact-absence-reconciliation/v3"
+  readonly classification: "RECONCILED_ABSENCE_NOT_PROOF"
+  readonly observationCount: 3
+  readonly minimumGapSeconds: 10
+  readonly role: S2SArtifactRole
+  readonly workflowRunId: number
+  readonly expectedHeadSha: string
+  readonly producerJobId: number
+  readonly expectedArtifactName: string
+  readonly initialWorkflowRunObservationReceiptSha256: string
   readonly workflowJobsObservationReceiptSha256: string
-  readonly workflowRunObservationReceiptSha256: string
-  readonly artifactsObservationReceiptSha256: string
+  readonly absenceArtifactObservationReceiptSha256s: readonly [string, string, string]
+  readonly absenceRunObservationReceiptSha256s: readonly [string, string, string]
+  readonly receiptSha256: string
 }
 
 export interface S2SArtifactReconciledAbsence {
@@ -146,37 +187,14 @@ export interface S2SArtifactReconciledAbsence {
   readonly producerCompletedAtUnixSeconds: number
   readonly observedAtUnixSeconds: number
   readonly initialWorkflowRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
-  readonly workflowRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
   readonly workflowJobsObservation: S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>
-  readonly absenceObservations: readonly [
-    S2SGitHubObservation<S2SGitHubArtifactsProjection>,
-    S2SGitHubObservation<S2SGitHubArtifactsProjection>,
-    S2SGitHubObservation<S2SGitHubArtifactsProjection>
+  readonly absenceObservationPairs: readonly [
+    S2SArtifactAbsenceObservationPair,
+    S2SArtifactAbsenceObservationPair,
+    S2SArtifactAbsenceObservationPair
   ]
-  readonly absenceObservationReceiptSha256s: readonly [string, string, string]
   readonly reconciliationReceipt: S2SArtifactAbsenceReconciliationReceipt
   readonly reconciliationReceiptSha256: string
-  readonly initialWorkflowRunObservationReceiptSha256: string
-  readonly workflowRunObservationReceiptSha256: string
-  readonly workflowJobsObservationReceiptSha256: string
-  readonly artifactsObservationReceiptSha256: string
-}
-
-export interface S2SArtifactAbsenceReconciliationReceipt {
-  readonly schemaVersion: "hswm-swm0w-s2s-artifact-absence-reconciliation/v2"
-  readonly classification: "RECONCILED_ABSENCE_NOT_PROOF"
-  readonly observationCount: 3
-  readonly minimumGapSeconds: 10
-  readonly role: S2SArtifactRole
-  readonly workflowRunId: number
-  readonly expectedHeadSha: string
-  readonly producerJobId: number
-  readonly expectedArtifactName: string
-  readonly initialWorkflowRunObservationReceiptSha256: string
-  readonly workflowRunObservationReceiptSha256: string
-  readonly workflowJobsObservationReceiptSha256: string
-  readonly absenceObservationReceiptSha256s: readonly [string, string, string]
-  readonly receiptSha256: string
 }
 
 export interface S2SArtifactAmbiguous {
@@ -188,10 +206,13 @@ export interface S2SArtifactAmbiguous {
   readonly artifactsObservationReceiptSha256: string
 }
 
-declare const observedArtifactAuthorityBrand: unique symbol
+export type S2SArtifactNegativeOutcome =
+  | S2SArtifactObservationUnavailable
+  | S2SArtifactProducerDidNotSucceed
+  | S2SArtifactReconciledAbsence
+  | S2SArtifactAmbiguous
 
-export interface S2SObservedArtifactAuthority {
-  readonly [observedArtifactAuthorityBrand]: true
+interface S2SObservedArtifact {
   readonly _tag: "Observed"
   readonly role: S2SArtifactRole
   readonly workflowRunId: number
@@ -204,28 +225,39 @@ export interface S2SObservedArtifactAuthority {
   readonly artifactsObservation: S2SGitHubObservation<S2SGitHubArtifactsProjection>
 }
 
-export type S2SArtifactLookupOutcome =
-  | S2SArtifactInvalidRequest
-  | S2SArtifactObservationUnavailable
-  | S2SArtifactProducerDidNotSucceed
-  | S2SArtifactReconciledAbsence
-  | S2SArtifactAmbiguous
-  | S2SObservedArtifactAuthority
-
-export interface S2SValidatedArtifactReadback {
-  readonly authority: S2SObservedArtifactAuthority
+export interface S2SValidatedStageArtifactRead {
+  readonly _tag: "ValidatedStageArtifactRead"
+  readonly stage: "CONFIRM" | "ADJUDICATE"
+  readonly operation: S2SConfirmatoryArtifactReadOperation
+  readonly role: "REGISTRATION" | "CANDIDATE"
+  readonly producerJob: S2SGitHubWorkflowJobProjection
+  readonly artifact: S2SGitHubArtifactProjection
+  readonly initialWorkflowRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
+  readonly workflowRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
+  readonly workflowJobsObservation: S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>
+  readonly artifactsObservation: S2SGitHubObservation<S2SGitHubArtifactsProjection>
   readonly readbackStartRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
   readonly artifactRequeryObservation: S2SGitHubObservation<S2SGitHubArtifactProjection>
   readonly artifactDownload: S2SGitHubArtifactDownload
   readonly readbackFinalRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
-  readonly readbackStartRunObservationReceiptSha256: string
-  readonly readbackFinalRunObservationReceiptSha256: string
-  readonly requeryObservationReceiptSha256: string
-  readonly downloadObservationReceiptSha256: string
   readonly artifactEvidence: S2SArtifactEvidence
   readonly validatedArchive: S2SValidatedArtifactZip
+  readonly permitEvidence: S2SStageArtifactPermitEvidence
   readonly readArchiveBytes: () => Uint8Array
 }
+
+export class S2SStageArtifactReadError extends Data.TaggedError(
+  "S2SStageArtifactReadError"
+)<{
+  readonly reason:
+    | "OBSERVATION_UNAVAILABLE"
+    | "OBSERVATION_REVALIDATION_FAILED"
+    | "FRESH_JOB_BINDING_DRIFT"
+    | "LOOKUP_REJECTED"
+  readonly phase: string
+  readonly detail: string
+  readonly outcome: S2SArtifactNegativeOutcome | null
+}> {}
 
 export class S2SArtifactReadbackError extends Data.TaggedError(
   "S2SArtifactReadbackError"
@@ -235,7 +267,7 @@ export class S2SArtifactReadbackError extends Data.TaggedError(
     | "API_REQUERY_MISMATCH"
     | "DOWNLOAD_FAILED"
     | "DOWNLOAD_MISMATCH"
-    | "INVALID_AUTHORITY"
+    | "EVIDENCE_NOT_CANONICAL"
     | "OBSERVATION_ORDER_INVALID"
     | "RUN_REQUERY_FAILED"
     | "RUN_REQUERY_MISMATCH"
@@ -244,42 +276,103 @@ export class S2SArtifactReadbackError extends Data.TaggedError(
   readonly causeReason: string
 }> {}
 
-export class S2SArtifactAuthority extends Context.Tag(
-  "hswm/S2S/ArtifactAuthority"
-)<
-  S2SArtifactAuthority,
-  {
-    readonly observeRoleArtifact: (
-      workflowRunId: number,
-      expectedHeadSha: string,
-      role: S2SArtifactRole
-    ) => Effect.Effect<S2SArtifactLookupOutcome>
-    readonly readback: (
-      authority: S2SObservedArtifactAuthority
-    ) => Effect.Effect<S2SValidatedArtifactReadback, S2SArtifactReadbackError>
-  }
->() {}
+export type S2SStageArtifactReadFailure =
+  | import("./s2s-stage-artifact-permits.js").S2SStageArtifactPermitError
+  | S2SStageArtifactReadError
+  | S2SArtifactReadbackError
 
-const GIT_SHA_PATTERN = /^[0-9a-f]{40}$/
+export interface S2SRegisterStageArtifactReads {
+  readonly stage: "REGISTER"
+}
+
+export interface S2SConfirmStageArtifactReads {
+  readonly stage: "CONFIRM"
+  readonly confirmReadRegistration: Effect.Effect<
+    S2SValidatedStageArtifactRead,
+    S2SStageArtifactReadFailure
+  >
+}
+
+export interface S2SAdjudicateStageArtifactReads {
+  readonly stage: "ADJUDICATE"
+  readonly adjudicateReadRegistration: Effect.Effect<
+    S2SValidatedStageArtifactRead,
+    S2SStageArtifactReadFailure
+  >
+  readonly adjudicateReadCandidateFirst: Effect.Effect<
+    S2SValidatedStageArtifactRead,
+    S2SStageArtifactReadFailure
+  >
+  readonly adjudicateRereadCandidate: Effect.Effect<
+    S2SValidatedStageArtifactRead,
+    S2SStageArtifactReadFailure
+  >
+}
+
+export type S2SStageArtifactReadsService =
+  | S2SRegisterStageArtifactReads
+  | S2SConfirmStageArtifactReads
+  | S2SAdjudicateStageArtifactReads
+
+/**
+ * Root-private fixed stage surface. No operation accepts caller-selected run,
+ * head, job, role, artifact, operation, or capability identity.
+ */
+export class S2SStageArtifactReads extends Context.Tag(
+  "hswm/S2S/StageArtifactReads"
+)<S2SStageArtifactReads, S2SStageArtifactReadsService>() {}
+
 const S2S_ARTIFACT_ABSENCE_OBSERVATION_COUNT = 3 as const
 const S2S_ARTIFACT_ABSENCE_SETTLE_MILLIS = 10_000 as const
 const S2S_ARTIFACT_ABSENCE_MINIMUM_GAP_SECONDS = 10 as const
+const NOT_STARTED_JOB_STATUSES = new Set([
+  "queued",
+  "waiting",
+  "pending",
+  "requested"
+])
 
-const observerFailureReason = (error: S2SGitHubObserverError): string =>
-  "reason" in error && typeof error.reason === "string"
+const observerFailureReason = (error: unknown): string =>
+  error !== null &&
+  typeof error === "object" &&
+  "reason" in error &&
+  typeof error.reason === "string"
     ? error.reason
     : "UNKNOWN_OBSERVATION_FAILURE"
+
+const observerFailureTag = (error: unknown): string =>
+  error !== null &&
+  typeof error === "object" &&
+  "_tag" in error &&
+  typeof error._tag === "string"
+    ? error._tag
+    : "UnknownObservationFailure"
+
+const stageReadError = (
+  reason: S2SStageArtifactReadError["reason"],
+  phase: string,
+  detail: string,
+  outcome: S2SArtifactNegativeOutcome | null = null
+): S2SStageArtifactReadError =>
+  new S2SStageArtifactReadError({ reason, phase, detail, outcome })
+
+const readbackError = (
+  reason: S2SArtifactReadbackError["reason"],
+  causeTag: string,
+  causeReason: string
+): S2SArtifactReadbackError =>
+  new S2SArtifactReadbackError({ reason, causeTag, causeReason })
 
 const unavailable = (
   role: S2SArtifactRole,
   operation: S2SArtifactObservationUnavailable["operation"],
-  error: S2SGitHubObserverError
+  error: unknown
 ): S2SArtifactObservationUnavailable =>
   Object.freeze({
-    _tag: "ObservationUnavailable",
+    _tag: "ObservationUnavailable" as const,
     role,
     operation,
-    errorTag: error._tag,
+    errorTag: observerFailureTag(error),
     errorReason: observerFailureReason(error)
   })
 
@@ -291,7 +384,7 @@ const ambiguous = (
   artifacts: S2SGitHubObservation<S2SGitHubArtifactsProjection>
 ): S2SArtifactAmbiguous =>
   Object.freeze({
-    _tag: "Ambiguous",
+    _tag: "Ambiguous" as const,
     role,
     reason,
     workflowRunObservationReceiptSha256: run.receipt.receiptSha256,
@@ -301,18 +394,22 @@ const ambiguous = (
 
 const hasExpectedWorkflowIdentity = (
   projection: S2SGitHubWorkflowRunProjection,
-  workflowRunId: number,
-  expectedHeadSha: string
+  identity: S2SStageArtifactPermitIdentity
 ): boolean =>
-  projection.id === workflowRunId &&
-  projection.runAttempt === 1 &&
+  projection.id === identity.workflowRunId &&
+  projection.runAttempt === identity.workflowRunAttempt &&
   projection.repository === S2S_CONFIRMATORY_REPOSITORY &&
   projection.headRepository === S2S_CONFIRMATORY_REPOSITORY &&
-  projection.headSha === expectedHeadSha &&
+  projection.headSha === identity.registrationCommitB &&
   projection.name === S2S_CONFIRMATORY_WORKFLOW_NAME &&
-  projection.path === S2S_CONFIRMATORY_WORKFLOW_PATH &&
+  projection.path === identity.workflowApiPath &&
   projection.event === S2S_CONFIRMATORY_EVENT &&
-  projection.headBranch === S2S_CONFIRMATORY_BRANCH
+  projection.headBranch === S2S_CONFIRMATORY_BRANCH &&
+  projection.createdAt === identity.workflowRunCreatedAt &&
+  projection.createdAtUnixSeconds ===
+    identity.workflowRunCreatedAtUnixSeconds &&
+  projection.status === "in_progress" &&
+  projection.conclusion === null
 
 const sameWorkflowIdentity = (
   left: S2SGitHubWorkflowRunProjection,
@@ -328,42 +425,117 @@ const sameWorkflowIdentity = (
   left.event === right.event &&
   left.headBranch === right.headBranch
 
-interface GitHubRequestIdentified {
-  readonly receipt: {
-    readonly githubRequestId: string
-  }
-}
+const expectedProducerJobId = (
+  identity: S2SStageArtifactPermitIdentity,
+  role: "REGISTRATION" | "CANDIDATE"
+): number | undefined =>
+  role === "REGISTRATION"
+    ? identity.predecessorJobDatabaseIds[0]
+    : identity.predecessorJobDatabaseIds[1]
 
-const distinctGitHubRequestIds = (
-  observations: ReadonlyArray<GitHubRequestIdentified>
+const freshJobsMatchPermit = (
+  identity: S2SStageArtifactPermitIdentity,
+  run: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>,
+  jobs: S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>
 ): boolean => {
-  const requestIds = observations.map(
-    (observation) => observation.receipt.githubRequestId
-  )
-  return new Set(requestIds).size === requestIds.length
+  const projection = jobs.receipt.projection
+  if (
+    projection.totalCount !== S2S_CONFIRMATORY_JOB_STAGES.length ||
+    projection.jobs.length !== S2S_CONFIRMATORY_JOB_STAGES.length
+  ) {
+    return false
+  }
+  const jobsByStage = new Map<
+    S2SConfirmatoryJobStage,
+    S2SGitHubWorkflowJobProjection
+  >()
+  for (const stage of S2S_CONFIRMATORY_JOB_STAGES) {
+    const name = S2S_CONFIRMATORY_STAGE_CONTRACTS[stage].jobName
+    const matches = projection.jobs.filter((job) => job.name === name)
+    if (matches.length !== 1 || matches[0] === undefined) return false
+    jobsByStage.set(stage, matches[0])
+  }
+  if (
+    projection.jobs.some(
+      (job) =>
+        job.runId !== identity.workflowRunId ||
+        job.runAttempt !== identity.workflowRunAttempt ||
+        job.headSha !== identity.registrationCommitB ||
+        job.startedAtUnixSeconds < run.receipt.projection.createdAtUnixSeconds ||
+        job.startedAtUnixSeconds > jobs.receipt.observedAtUnixSeconds
+    )
+  ) {
+    return false
+  }
+  const stageIndex = S2S_CONFIRMATORY_JOB_STAGES.indexOf(identity.stage)
+  const current = jobsByStage.get(identity.stage)
+  if (
+    stageIndex < 0 ||
+    current === undefined ||
+    current.id !== identity.currentJobDatabaseId ||
+    current.name !== S2S_CONFIRMATORY_STAGE_CONTRACTS[identity.stage].jobName ||
+    current.status !== "in_progress" ||
+    current.conclusion !== null ||
+    current.completedAt !== null ||
+    current.completedAtUnixSeconds !== null
+  ) {
+    return false
+  }
+  const predecessorIds: Array<number> = []
+  let previousCompletion = run.receipt.projection.createdAtUnixSeconds
+  for (let index = 0; index < stageIndex; index += 1) {
+    const predecessorStage = S2S_CONFIRMATORY_JOB_STAGES[index]
+    const predecessor =
+      predecessorStage === undefined ? undefined : jobsByStage.get(predecessorStage)
+    if (
+      predecessor === undefined ||
+      predecessor.status !== "completed" ||
+      predecessor.conclusion !== "success" ||
+      predecessor.completedAt === null ||
+      predecessor.completedAtUnixSeconds === null ||
+      predecessor.startedAtUnixSeconds < previousCompletion ||
+      predecessor.completedAtUnixSeconds < predecessor.startedAtUnixSeconds ||
+      predecessor.completedAtUnixSeconds > current.startedAtUnixSeconds ||
+      predecessor.completedAtUnixSeconds > jobs.receipt.observedAtUnixSeconds
+    ) {
+      return false
+    }
+    predecessorIds.push(predecessor.id)
+    previousCompletion = predecessor.completedAtUnixSeconds
+  }
+  if (
+    predecessorIds.length !== identity.predecessorJobDatabaseIds.length ||
+    predecessorIds.some(
+      (jobId, index) => jobId !== identity.predecessorJobDatabaseIds[index]
+    )
+  ) {
+    return false
+  }
+  for (let index = stageIndex + 1; index < S2S_CONFIRMATORY_JOB_STAGES.length; index += 1) {
+    const laterStage = S2S_CONFIRMATORY_JOB_STAGES[index]
+    const later = laterStage === undefined ? undefined : jobsByStage.get(laterStage)
+    if (
+      later === undefined ||
+      !NOT_STARTED_JOB_STATUSES.has(later.status) ||
+      later.conclusion !== null ||
+      later.completedAt !== null ||
+      later.completedAtUnixSeconds !== null
+    ) {
+      return false
+    }
+  }
+  return true
 }
 
 const classifyArtifact = (
-  workflowRunId: number,
-  expectedHeadSha: string,
-  role: S2SArtifactRole,
+  identity: S2SStageArtifactPermitIdentity,
+  role: "REGISTRATION" | "CANDIDATE",
   initialRun: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>,
   run: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>,
   jobs: S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>,
-  artifacts: S2SGitHubObservation<S2SGitHubArtifactsProjection>,
-  issuedAuthorities: WeakSet<object>
-): S2SArtifactLookupOutcome => {
+  artifacts: S2SGitHubObservation<S2SGitHubArtifactsProjection>
+): S2SObservedArtifact | S2SArtifactNegativeOutcome => {
   const policy = ROLE_POLICY[role]
-  const runProjection = run.receipt.projection
-  if (!distinctGitHubRequestIds([initialRun, jobs, artifacts, run])) {
-    return ambiguous(
-      role,
-      "OBSERVATION_REQUEST_IDS_NOT_DISTINCT",
-      run,
-      jobs,
-      artifacts
-    )
-  }
   if (
     initialRun.receipt.observedAtUnixSeconds >
       jobs.receipt.observedAtUnixSeconds ||
@@ -374,47 +546,34 @@ const classifyArtifact = (
     return ambiguous(role, "OBSERVATION_ORDER_INVALID", run, jobs, artifacts)
   }
   if (
-    !hasExpectedWorkflowIdentity(
+    !hasExpectedWorkflowIdentity(initialRun.receipt.projection, identity) ||
+    !hasExpectedWorkflowIdentity(run.receipt.projection, identity) ||
+    !sameWorkflowIdentity(
       initialRun.receipt.projection,
-      workflowRunId,
-      expectedHeadSha
-    ) ||
-    !hasExpectedWorkflowIdentity(
-      runProjection,
-      workflowRunId,
-      expectedHeadSha
-    ) ||
-    !sameWorkflowIdentity(initialRun.receipt.projection, runProjection)
+      run.receipt.projection
+    )
   ) {
     return ambiguous(role, "HEAD_SHA_MISMATCH", run, jobs, artifacts)
   }
+  const expectedProducerId = expectedProducerJobId(identity, role)
   const producers = jobs.receipt.projection.jobs.filter(
     (job) => job.name === policy.jobName
   )
-  if (producers.length < 1) {
+  const producer = producers.length === 1 ? producers[0] : undefined
+  if (producer === undefined || expectedProducerId === undefined) {
     return ambiguous(role, "PRODUCER_JOB_NOT_FOUND", run, jobs, artifacts)
   }
-  if (producers.length > 1) {
-    return ambiguous(
-      role,
-      "DUPLICATE_PRODUCER_JOB_NAME",
-      run,
-      jobs,
-      artifacts
-    )
-  }
-  const producer = producers[0]
-  if (producer === undefined) {
-    return ambiguous(role, "PRODUCER_JOB_NOT_FOUND", run, jobs, artifacts)
+  if (producer.id !== expectedProducerId) {
+    return ambiguous(role, "PRODUCER_JOB_IDENTITY_DRIFT", run, jobs, artifacts)
   }
   if (
-    producer.runId !== workflowRunId ||
-    producer.runAttempt !== 1 ||
-    producer.headSha !== expectedHeadSha ||
+    producer.runId !== identity.workflowRunId ||
+    producer.runAttempt !== identity.workflowRunAttempt ||
+    producer.headSha !== identity.registrationCommitB ||
     artifacts.receipt.projection.artifacts.some(
       (artifact) =>
-        artifact.workflowRunId !== workflowRunId ||
-        artifact.workflowHeadSha !== expectedHeadSha
+        artifact.workflowRunId !== identity.workflowRunId ||
+        artifact.workflowHeadSha !== identity.registrationCommitB
     )
   ) {
     return ambiguous(role, "HEAD_SHA_MISMATCH", run, jobs, artifacts)
@@ -424,7 +583,7 @@ const classifyArtifact = (
   }
   if (producer.conclusion !== "success") {
     return Object.freeze({
-      _tag: "ProducerDidNotCompleteSuccessfully",
+      _tag: "ProducerDidNotCompleteSuccessfully" as const,
       role,
       producerJobId: producer.id,
       status: producer.status,
@@ -432,25 +591,16 @@ const classifyArtifact = (
       initialWorkflowRunObservation: initialRun,
       workflowRunObservation: run,
       workflowJobsObservation: jobs,
-      artifactsObservation: artifacts,
-      workflowRunObservationReceiptSha256: run.receipt.receiptSha256,
-      workflowJobsObservationReceiptSha256: jobs.receipt.receiptSha256,
-      artifactsObservationReceiptSha256: artifacts.receipt.receiptSha256
+      artifactsObservation: artifacts
     })
   }
   if (
     (initialRun.receipt.projection.status === "completed" &&
       initialRun.receipt.projection.conclusion !== "success") ||
-    (runProjection.status === "completed" &&
-      runProjection.conclusion !== "success")
+    (run.receipt.projection.status === "completed" &&
+      run.receipt.projection.conclusion !== "success")
   ) {
-    return ambiguous(
-      role,
-      "WORKFLOW_RUN_DID_NOT_SUCCEED",
-      run,
-      jobs,
-      artifacts
-    )
+    return ambiguous(role, "WORKFLOW_RUN_DID_NOT_SUCCEED", run, jobs, artifacts)
   }
   if (artifacts.receipt.observedAtUnixSeconds < producer.completedAtUnixSeconds) {
     return ambiguous(
@@ -467,13 +617,10 @@ const classifyArtifact = (
   if (matching.length < 1) {
     return ambiguous(role, "ARTIFACT_NOT_OBSERVED", run, jobs, artifacts)
   }
-  if (matching.length > 1) {
+  if (matching.length > 1 || matching[0] === undefined) {
     return ambiguous(role, "DUPLICATE_ARTIFACT_NAME", run, jobs, artifacts)
   }
   const artifact = matching[0]
-  if (artifact === undefined) {
-    return ambiguous(role, "DUPLICATE_ARTIFACT_NAME", run, jobs, artifacts)
-  }
   if (artifact.expired) {
     return ambiguous(role, "ARTIFACT_EXPIRED", run, jobs, artifacts)
   }
@@ -489,20 +636,18 @@ const classifyArtifact = (
       artifacts
     )
   }
-  const authority = Object.freeze({
+  return Object.freeze({
     _tag: "Observed" as const,
     role,
-    workflowRunId,
-    expectedHeadSha,
+    workflowRunId: identity.workflowRunId,
+    expectedHeadSha: identity.registrationCommitB,
     producerJob: producer,
     artifact,
     initialWorkflowRunObservation: initialRun,
     workflowRunObservation: run,
     workflowJobsObservation: jobs,
     artifactsObservation: artifacts
-  }) as S2SObservedArtifactAuthority
-  issuedAuthorities.add(authority)
-  return authority
+  })
 }
 
 const sameArtifactProjection = (
@@ -518,134 +663,475 @@ const sameArtifactProjection = (
   )
 }
 
-const runObservationMatchesAuthority = (
-  authority: S2SObservedArtifactAuthority,
+const runObservationMatches = (
+  observed: S2SObservedArtifact,
+  identity: S2SStageArtifactPermitIdentity,
   observation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
 ): boolean =>
   observation.receipt.observedAtUnixSeconds >=
-    authority.workflowRunObservation.receipt.observedAtUnixSeconds &&
-  hasExpectedWorkflowIdentity(
-    observation.receipt.projection,
-    authority.workflowRunId,
-    authority.expectedHeadSha
-  ) &&
-  !(
-    observation.receipt.projection.status === "completed" &&
-    observation.receipt.projection.conclusion !== "success"
-  ) &&
+    observed.workflowRunObservation.receipt.observedAtUnixSeconds &&
+  hasExpectedWorkflowIdentity(observation.receipt.projection, identity) &&
   sameWorkflowIdentity(
-    authority.workflowRunObservation.receipt.projection,
+    observed.workflowRunObservation.receipt.projection,
     observation.receipt.projection
   )
 
-const readbackError = (
-  reason: S2SArtifactReadbackError["reason"],
-  causeTag: string,
-  causeReason: string
-): S2SArtifactReadbackError =>
-  new S2SArtifactReadbackError({ reason, causeTag, causeReason })
+const recordObservation = (
+  scope: S2SStageArtifactPermitScope,
+  operation: S2SConfirmatoryArtifactReadOperation,
+  phase: S2SStageArtifactLedgerPhase,
+  observation: S2SGitHubObservation
+) =>
+  appendS2SStageArtifactLedgerEntry(
+    scope,
+    operation,
+    phase,
+    observation.receipt.githubRequestId,
+    observation.receipt.receiptSha256,
+    observation.receipt.observedAtUnixSeconds
+  )
+
+const observeValidatedRun = (
+  github: S2SGitHubObserver["Type"],
+  scope: S2SStageArtifactPermitScope,
+  operation: S2SConfirmatoryArtifactReadOperation,
+  phase: S2SStageArtifactLedgerPhase,
+  role: "REGISTRATION" | "CANDIDATE"
+) =>
+  github.observeWorkflowRun(scope.identity.workflowRunId).pipe(
+    Effect.mapError((error) =>
+      stageReadError(
+        "OBSERVATION_UNAVAILABLE",
+        phase,
+        observerFailureReason(error),
+        unavailable(role, "OBSERVE_RUN", error)
+      )
+    ),
+    Effect.flatMap((observation) =>
+      validateS2SGitHubWorkflowRunObservation(
+        observation,
+        scope.identity.workflowRunId
+      ).pipe(
+        Effect.mapError((error) =>
+          stageReadError(
+            "OBSERVATION_REVALIDATION_FAILED",
+            phase,
+            error.reason,
+            unavailable(role, "REVALIDATE_RUN", error)
+          )
+        )
+      )
+    ),
+    Effect.tap((observation) =>
+      recordObservation(scope, operation, phase, observation)
+    )
+  )
+
+const observeValidatedJobs = (
+  github: S2SGitHubObserver["Type"],
+  scope: S2SStageArtifactPermitScope,
+  operation: S2SConfirmatoryArtifactReadOperation,
+  role: "REGISTRATION" | "CANDIDATE"
+) =>
+  github.observeWorkflowAttemptJobs(scope.identity.workflowRunId).pipe(
+    Effect.mapError((error) =>
+      stageReadError(
+        "OBSERVATION_UNAVAILABLE",
+        "LOOKUP_JOBS",
+        observerFailureReason(error),
+        unavailable(role, "OBSERVE_JOBS", error)
+      )
+    ),
+    Effect.flatMap((observation) =>
+      validateS2SGitHubWorkflowAttemptJobsObservation(
+        observation,
+        scope.identity.workflowRunId
+      ).pipe(
+        Effect.mapError((error) =>
+          stageReadError(
+            "OBSERVATION_REVALIDATION_FAILED",
+            "LOOKUP_JOBS",
+            error.reason,
+            unavailable(role, "REVALIDATE_JOBS", error)
+          )
+        )
+      )
+    ),
+    Effect.tap((observation) =>
+      recordObservation(scope, operation, "LOOKUP_JOBS", observation)
+    )
+  )
+
+const observeValidatedArtifacts = (
+  github: S2SGitHubObserver["Type"],
+  scope: S2SStageArtifactPermitScope,
+  operation: S2SConfirmatoryArtifactReadOperation,
+  phase: Extract<S2SStageArtifactLedgerPhase, `LOOKUP_ARTIFACTS_${number}`>,
+  role: "REGISTRATION" | "CANDIDATE"
+) =>
+  github.observeRunArtifacts(scope.identity.workflowRunId).pipe(
+    Effect.mapError((error) =>
+      stageReadError(
+        "OBSERVATION_UNAVAILABLE",
+        phase,
+        observerFailureReason(error),
+        unavailable(role, "OBSERVE_ARTIFACTS", error)
+      )
+    ),
+    Effect.flatMap((observation) =>
+      validateS2SGitHubRunArtifactsObservation(
+        observation,
+        scope.identity.workflowRunId
+      ).pipe(
+        Effect.mapError((error) =>
+          stageReadError(
+            "OBSERVATION_REVALIDATION_FAILED",
+            phase,
+            error.reason,
+            unavailable(role, "REVALIDATE_ARTIFACTS", error)
+          )
+        )
+      )
+    ),
+    Effect.tap((observation) =>
+      recordObservation(scope, operation, phase, observation)
+    )
+  )
+
+const makeAbsenceOutcome = (
+  identity: S2SStageArtifactPermitIdentity,
+  role: "REGISTRATION" | "CANDIDATE",
+  initialRun: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>,
+  jobs: S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>,
+  pairs: readonly [
+    S2SArtifactAbsenceObservationPair,
+    S2SArtifactAbsenceObservationPair,
+    S2SArtifactAbsenceObservationPair
+  ]
+): S2SArtifactReconciledAbsence | S2SArtifactAmbiguous => {
+  const artifactHashes = Object.freeze([
+    pairs[0].artifactsObservation.receipt.receiptSha256,
+    pairs[1].artifactsObservation.receipt.receiptSha256,
+    pairs[2].artifactsObservation.receipt.receiptSha256
+  ] as const)
+  const runHashes = Object.freeze([
+    pairs[0].workflowRunObservation.receipt.receiptSha256,
+    pairs[1].workflowRunObservation.receipt.receiptSha256,
+    pairs[2].workflowRunObservation.receipt.receiptSha256
+  ] as const)
+  const allHashes = [...artifactHashes, ...runHashes]
+  const latest = pairs[2]
+  const producerId = expectedProducerJobId(identity, role)
+  const producer = jobs.receipt.projection.jobs.find(
+    (job) => job.id === producerId && job.name === ROLE_POLICY[role].jobName
+  )
+  if (new Set(allHashes).size !== allHashes.length) {
+    return ambiguous(
+      role,
+      "ABSENCE_OBSERVATIONS_NOT_DISTINCT",
+      latest.workflowRunObservation,
+      jobs,
+      latest.artifactsObservation
+    )
+  }
+  if (
+    pairs[1].artifactsObservation.receipt.observedAtUnixSeconds -
+        pairs[0].artifactsObservation.receipt.observedAtUnixSeconds <
+      S2S_ARTIFACT_ABSENCE_MINIMUM_GAP_SECONDS ||
+    pairs[2].artifactsObservation.receipt.observedAtUnixSeconds -
+        pairs[1].artifactsObservation.receipt.observedAtUnixSeconds <
+      S2S_ARTIFACT_ABSENCE_MINIMUM_GAP_SECONDS
+  ) {
+    return ambiguous(
+      role,
+      "ABSENCE_OBSERVATIONS_TOO_CLOSE",
+      latest.workflowRunObservation,
+      jobs,
+      latest.artifactsObservation
+    )
+  }
+  if (producer === undefined || producer.completedAtUnixSeconds === null) {
+    return ambiguous(
+      role,
+      "PRODUCER_JOB_NOT_COMPLETED",
+      latest.workflowRunObservation,
+      jobs,
+      latest.artifactsObservation
+    )
+  }
+  const core = Object.freeze({
+    schemaVersion: "hswm-swm0w-s2s-artifact-absence-reconciliation/v3" as const,
+    classification: "RECONCILED_ABSENCE_NOT_PROOF" as const,
+    observationCount: 3 as const,
+    minimumGapSeconds: 10 as const,
+    role,
+    workflowRunId: identity.workflowRunId,
+    expectedHeadSha: identity.registrationCommitB,
+    producerJobId: producer.id,
+    expectedArtifactName: ROLE_POLICY[role].artifactName,
+    initialWorkflowRunObservationReceiptSha256:
+      initialRun.receipt.receiptSha256,
+    workflowJobsObservationReceiptSha256: jobs.receipt.receiptSha256,
+    absenceArtifactObservationReceiptSha256s: artifactHashes,
+    absenceRunObservationReceiptSha256s: runHashes
+  })
+  const hash = canonicalS2SControlSha256(core)
+  if (Either.isLeft(hash)) {
+    return ambiguous(
+      role,
+      "ABSENCE_RECONCILIATION_NOT_CANONICAL",
+      latest.workflowRunObservation,
+      jobs,
+      latest.artifactsObservation
+    )
+  }
+  const reconciliationReceipt: S2SArtifactAbsenceReconciliationReceipt =
+    Object.freeze({ ...core, receiptSha256: hash.right })
+  return Object.freeze({
+    _tag: "ReconciledAbsentAfterProducerCompleted" as const,
+    role,
+    producerJobId: producer.id,
+    expectedArtifactName: ROLE_POLICY[role].artifactName,
+    producerCompletedAtUnixSeconds: producer.completedAtUnixSeconds,
+    observedAtUnixSeconds:
+      latest.workflowRunObservation.receipt.observedAtUnixSeconds,
+    initialWorkflowRunObservation: initialRun,
+    workflowJobsObservation: jobs,
+    absenceObservationPairs: Object.freeze([
+      pairs[0],
+      pairs[1],
+      pairs[2]
+    ] as const),
+    reconciliationReceipt,
+    reconciliationReceiptSha256: hash.right
+  })
+}
+
+const lookupArtifact = (
+  github: S2SGitHubObserver["Type"],
+  scope: S2SStageArtifactPermitScope,
+  operation: S2SConfirmatoryArtifactReadOperation,
+  role: "REGISTRATION" | "CANDIDATE",
+  settleBetweenAbsenceObservations: Effect.Effect<void>
+): Effect.Effect<
+  S2SObservedArtifact,
+  | S2SStageArtifactReadError
+  | import("./s2s-stage-artifact-permits.js").S2SStageArtifactPermitError
+> =>
+  Effect.gen(function* () {
+    const initialRun = yield* observeValidatedRun(
+      github,
+      scope,
+      operation,
+      "LOOKUP_RUN_START",
+      role
+    )
+    if (!hasExpectedWorkflowIdentity(initialRun.receipt.projection, scope.identity)) {
+      return yield* stageReadError(
+        "LOOKUP_REJECTED",
+        "LOOKUP_RUN_START",
+        "fresh run identity differs from the authority-bound current run"
+      )
+    }
+    const jobs = yield* observeValidatedJobs(github, scope, operation, role)
+    if (!freshJobsMatchPermit(scope.identity, initialRun, jobs)) {
+      return yield* stageReadError(
+        "FRESH_JOB_BINDING_DRIFT",
+        "LOOKUP_JOBS",
+        "fresh attempt-one roster differs from the authority-bound current and predecessor numeric jobs"
+      )
+    }
+    const pairs: Array<S2SArtifactAbsenceObservationPair> = []
+    for (
+      let index = 0;
+      index < S2S_ARTIFACT_ABSENCE_OBSERVATION_COUNT;
+      index += 1
+    ) {
+      const ordinal = index + 1
+      const artifactsPhase = `LOOKUP_ARTIFACTS_${ordinal}` as Extract<
+        S2SStageArtifactLedgerPhase,
+        `LOOKUP_ARTIFACTS_${number}`
+      >
+      const runPhase = `LOOKUP_RUN_END_${ordinal}` as Extract<
+        S2SStageArtifactLedgerPhase,
+        `LOOKUP_RUN_END_${number}`
+      >
+      const artifacts = yield* observeValidatedArtifacts(
+        github,
+        scope,
+        operation,
+        artifactsPhase,
+        role
+      )
+      if (
+        artifacts.receipt.projection.artifacts.some(
+          (artifact) =>
+            artifact.workflowRunId !== scope.identity.workflowRunId ||
+            artifact.workflowHeadSha !== scope.identity.registrationCommitB
+        )
+      ) {
+        return yield* stageReadError(
+          "LOOKUP_REJECTED",
+          artifactsPhase,
+          "fresh artifact roster differs from the authority-bound run/head"
+        )
+      }
+      const run = yield* observeValidatedRun(
+        github,
+        scope,
+        operation,
+        runPhase,
+        role
+      )
+      const classified = classifyArtifact(
+        scope.identity,
+        role,
+        initialRun,
+        run,
+        jobs,
+        artifacts
+      )
+      if (classified._tag === "Observed") return classified
+      if (classified._tag !== "Ambiguous" || classified.reason !== "ARTIFACT_NOT_OBSERVED") {
+        return yield* stageReadError(
+          "LOOKUP_REJECTED",
+          artifactsPhase,
+          classified._tag,
+          classified
+        )
+      }
+      pairs.push(
+        Object.freeze({
+          artifactsObservation: artifacts,
+          workflowRunObservation: run
+        })
+      )
+      if (ordinal < S2S_ARTIFACT_ABSENCE_OBSERVATION_COUNT) {
+        yield* settleBetweenAbsenceObservations
+      }
+    }
+    const [first, second, third] = pairs
+    if (first === undefined || second === undefined || third === undefined) {
+      return yield* Effect.dieMessage(
+        "bounded artifact absence observation invariant violated"
+      )
+    }
+    const absence = makeAbsenceOutcome(
+      scope.identity,
+      role,
+      initialRun,
+      jobs,
+      [first, second, third]
+    )
+    return yield* stageReadError(
+      "LOOKUP_REJECTED",
+      "LOOKUP_ARTIFACTS_3",
+      absence._tag,
+      absence
+    )
+  })
+
+interface ValidatedReadbackCore {
+  readonly observed: S2SObservedArtifact
+  readonly readbackStartRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
+  readonly artifactRequeryObservation: S2SGitHubObservation<S2SGitHubArtifactProjection>
+  readonly artifactDownload: S2SGitHubArtifactDownload
+  readonly readbackFinalRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
+  readonly artifactEvidence: S2SArtifactEvidence
+  readonly validatedArchive: S2SValidatedArtifactZip
+  readonly readArchiveBytes: () => Uint8Array
+}
 
 const readbackArtifact = (
   github: S2SGitHubObserver["Type"],
-  authority: S2SObservedArtifactAuthority,
-  issuedAuthorities: WeakSet<object>
-): Effect.Effect<S2SValidatedArtifactReadback, S2SArtifactReadbackError> => {
-  if (
-    !issuedAuthorities.has(authority) ||
-    authority._tag !== "Observed" ||
-    !GIT_SHA_PATTERN.test(authority.expectedHeadSha)
-  ) {
-    return Effect.fail(
-      readbackError(
-        "INVALID_AUTHORITY",
-        "S2SObservedArtifactAuthority",
-        "UNISSUED"
-      )
-    )
-  }
-  const policy = ROLE_POLICY[authority.role]
+  scope: S2SStageArtifactPermitScope,
+  operation: S2SConfirmatoryArtifactReadOperation,
+  observed: S2SObservedArtifact
+): Effect.Effect<
+  ValidatedReadbackCore,
+  | S2SArtifactReadbackError
+  | import("./s2s-stage-artifact-permits.js").S2SStageArtifactPermitError
+> => {
+  const policy = ROLE_POLICY[observed.role]
   return Effect.gen(function* () {
-    const readbackStartRun = yield* github
-      .observeWorkflowRun(authority.workflowRunId)
+    const readbackStartRaw = yield* github
+      .observeWorkflowRun(observed.workflowRunId)
       .pipe(
         Effect.mapError((error) =>
           readbackError(
             "RUN_REQUERY_FAILED",
-            error._tag,
+            observerFailureTag(error),
             observerFailureReason(error)
           )
         )
       )
-    if (!runObservationMatchesAuthority(authority, readbackStartRun)) {
+    const readbackStartRun = yield* validateS2SGitHubWorkflowRunObservation(
+      readbackStartRaw,
+      observed.workflowRunId
+    ).pipe(
+      Effect.mapError((error) =>
+        readbackError("RUN_REQUERY_FAILED", error._tag, error.reason)
+      )
+    )
+    yield* recordObservation(
+      scope,
+      operation,
+      "READBACK_RUN_START",
+      readbackStartRun
+    )
+    if (!runObservationMatches(observed, scope.identity, readbackStartRun)) {
       return yield* readbackError(
         "RUN_REQUERY_MISMATCH",
         "S2SGitHubWorkflowRunProjection",
         "WORKFLOW_IDENTITY_DRIFT_BEFORE_READBACK"
       )
     }
-    if (
-      !distinctGitHubRequestIds([
-        authority.initialWorkflowRunObservation,
-        authority.workflowRunObservation,
-        authority.workflowJobsObservation,
-        authority.artifactsObservation,
-        readbackStartRun
-      ])
-    ) {
-      return yield* readbackError(
-        "OBSERVATION_ORDER_INVALID",
-        "S2SGitHubObservationReceipt",
-        "GITHUB_REQUEST_ID_REUSED_BEFORE_READBACK"
-      )
-    }
-    const requery = yield* github.observeArtifact(authority.artifact.id).pipe(
+    const requeryRaw = yield* github.observeArtifact(observed.artifact.id).pipe(
       Effect.mapError((error) =>
         readbackError(
           "API_REQUERY_FAILED",
-          error._tag,
+          observerFailureTag(error),
           observerFailureReason(error)
         )
       )
+    )
+    const requery = yield* validateS2SGitHubArtifactObservation(
+      requeryRaw,
+      observed.artifact.id
+    ).pipe(
+      Effect.mapError((error) =>
+        readbackError("API_REQUERY_FAILED", error._tag, error.reason)
+      )
+    )
+    yield* recordObservation(
+      scope,
+      operation,
+      "READBACK_ARTIFACT",
+      requery
     )
     if (
       requery.receipt.observedAtUnixSeconds <
         readbackStartRun.receipt.observedAtUnixSeconds ||
       requery.receipt.observedAtUnixSeconds <
-        authority.artifactsObservation.receipt.observedAtUnixSeconds ||
-      requery.receipt.receiptSha256 ===
-        authority.artifactsObservation.receipt.receiptSha256 ||
-      !distinctGitHubRequestIds([
-        authority.initialWorkflowRunObservation,
-        authority.workflowRunObservation,
-        authority.workflowJobsObservation,
-        authority.artifactsObservation,
-        readbackStartRun,
-        requery
-      ])
+        observed.artifactsObservation.receipt.observedAtUnixSeconds ||
+      !sameArtifactProjection(observed.artifact, requery.receipt.projection)
     ) {
-      return yield* readbackError(
-        "OBSERVATION_ORDER_INVALID",
-        "S2SGitHubObservationReceipt",
-        "REQUERY_NOT_DISTINCT_OR_LATER"
-      )
-    }
-    if (!sameArtifactProjection(authority.artifact, requery.receipt.projection)) {
       return yield* readbackError(
         "API_REQUERY_MISMATCH",
         "S2SGitHubArtifactProjection",
-        "PROJECTION_DRIFT"
+        "PROJECTION_OR_OBSERVATION_ORDER_DRIFT"
       )
     }
-    const download = yield* github
-      .downloadArtifactArchive(authority.artifact.id, policy.maximumArchiveBytes)
+    const downloadRaw = yield* github
+      .downloadArtifactArchive(observed.artifact.id, policy.maximumArchiveBytes)
       .pipe(
         Effect.mapError((error) =>
           readbackError("DOWNLOAD_FAILED", error._tag, error.reason)
         )
       )
     const validatedDownload = validateS2SGitHubArtifactDownload(
-      download,
-      authority.artifact.id,
+      downloadRaw,
+      observed.artifact.id,
       policy.maximumArchiveBytes
     )
     if (Either.isLeft(validatedDownload)) {
@@ -655,25 +1141,21 @@ const readbackArtifact = (
         validatedDownload.left.reason
       )
     }
-    const trustedDownload = validatedDownload.right
+    const download = validatedDownload.right
+    yield* appendS2SStageArtifactLedgerEntry(
+      scope,
+      operation,
+      "READBACK_DOWNLOAD_REDIRECT",
+      download.receipt.redirectGitHubRequestId,
+      download.receipt.receiptSha256,
+      download.receipt.downloadedAtUnixSeconds
+    )
     if (
-      trustedDownload.receipt.downloadedAtUnixSeconds <
+      download.receipt.downloadedAtUnixSeconds <
         requery.receipt.observedAtUnixSeconds ||
-      trustedDownload.receipt.archiveByteLength !== authority.artifact.sizeInBytes ||
-      trustedDownload.receipt.downloadedArchiveSha256 !==
-        authority.artifact.digestSha256 ||
-      trustedDownload.receipt.receiptSha256 === requery.receipt.receiptSha256 ||
-      trustedDownload.receipt.receiptSha256 ===
-        authority.artifactsObservation.receipt.receiptSha256 ||
-      new Set([
-        authority.initialWorkflowRunObservation.receipt.githubRequestId,
-        authority.workflowRunObservation.receipt.githubRequestId,
-        authority.workflowJobsObservation.receipt.githubRequestId,
-        authority.artifactsObservation.receipt.githubRequestId,
-        readbackStartRun.receipt.githubRequestId,
-        requery.receipt.githubRequestId,
-        trustedDownload.receipt.redirectGitHubRequestId
-      ]).size !== 7
+      download.receipt.archiveByteLength !== observed.artifact.sizeInBytes ||
+      download.receipt.downloadedArchiveSha256 !==
+        observed.artifact.digestSha256
     ) {
       return yield* readbackError(
         "DOWNLOAD_MISMATCH",
@@ -681,78 +1163,77 @@ const readbackArtifact = (
         "ARCHIVE_IDENTITY_OR_OBSERVATION_DRIFT"
       )
     }
-    const archiveBytes = trustedDownload.readArchiveBytes()
-    const validated = validateS2SArtifactZip(archiveBytes, {
+    const archiveBytes = download.readArchiveBytes()
+    const validatedArchive = validateS2SArtifactZip(archiveBytes, {
       expectedArchiveSha256: S2SSha256Schema.make(
-        authority.artifact.digestSha256
+        observed.artifact.digestSha256
       ),
-      expectedArchiveByteLength: authority.artifact.sizeInBytes,
+      expectedArchiveByteLength: observed.artifact.sizeInBytes,
       expectedMembers: policy.expectedMembers,
       maximumArchiveBytes: policy.maximumArchiveBytes,
       maximumExpandedBytes: policy.maximumExpandedBytes
     })
-    if (Either.isLeft(validated)) {
-      const zipError: S2SArtifactZipValidationError = validated.left
-      return yield* readbackError(
-        "ZIP_REJECTED",
-        zipError._tag,
-        zipError.reason
-      )
+    if (Either.isLeft(validatedArchive)) {
+      const zipError: S2SArtifactZipValidationError = validatedArchive.left
+      return yield* readbackError("ZIP_REJECTED", zipError._tag, zipError.reason)
     }
-    const artifactEvidence = Schema.decodeUnknownEither(
+    const evidence = Schema.decodeUnknownEither(
       S2SArtifactEvidenceSchema,
       { onExcessProperty: "error" }
     )({
-      artifactName: authority.artifact.name,
-      artifactId: authority.artifact.id,
+      artifactName: observed.artifact.name,
+      artifactId: observed.artifact.id,
       artifactCount: 1,
-      archiveSizeBytes: authority.artifact.sizeInBytes,
-      largestMemberSizeBytes: validated.right.largestMemberByteLength,
+      archiveSizeBytes: observed.artifact.sizeInBytes,
+      largestMemberSizeBytes: validatedArchive.right.largestMemberByteLength,
       compressionLevel: S2S_CONFIRMATORY_POLICY.archive.compressionLevel,
       retentionDays: S2S_CONFIRMATORY_POLICY.archive.retentionDays,
       overwrite: S2S_CONFIRMATORY_POLICY.archive.overwrite,
-      apiDigestSha256: authority.artifact.digestSha256,
-      downloadedArchiveSha256: trustedDownload.receipt.downloadedArchiveSha256
+      apiDigestSha256: observed.artifact.digestSha256,
+      downloadedArchiveSha256: download.receipt.downloadedArchiveSha256
     })
-    if (Either.isLeft(artifactEvidence)) {
+    if (Either.isLeft(evidence)) {
       return yield* readbackError(
         "DOWNLOAD_MISMATCH",
         "S2SArtifactEvidence",
         "VALIDATED_READBACK_CANNOT_FORM_EVENT_EVIDENCE"
       )
     }
-    const artifactEvidenceSnapshot = Object.freeze({ ...artifactEvidence.right })
-    const readbackFinalRun = yield* github
-      .observeWorkflowRun(authority.workflowRunId)
+    const finalRunRaw = yield* github
+      .observeWorkflowRun(observed.workflowRunId)
       .pipe(
         Effect.mapError((error) =>
           readbackError(
             "RUN_REQUERY_FAILED",
-            error._tag,
+            observerFailureTag(error),
             observerFailureReason(error)
           )
         )
       )
+    const finalRun = yield* validateS2SGitHubWorkflowRunObservation(
+      finalRunRaw,
+      observed.workflowRunId
+    ).pipe(
+      Effect.mapError((error) =>
+        readbackError("RUN_REQUERY_FAILED", error._tag, error.reason)
+      )
+    )
+    yield* recordObservation(
+      scope,
+      operation,
+      "READBACK_RUN_END",
+      finalRun
+    )
     if (
-      !runObservationMatchesAuthority(authority, readbackFinalRun) ||
-      readbackFinalRun.receipt.observedAtUnixSeconds <
+      !runObservationMatches(observed, scope.identity, finalRun) ||
+      finalRun.receipt.observedAtUnixSeconds <
         readbackStartRun.receipt.observedAtUnixSeconds ||
-      readbackFinalRun.receipt.observedAtUnixSeconds <
-        trustedDownload.receipt.downloadedAtUnixSeconds ||
+      finalRun.receipt.observedAtUnixSeconds <
+        download.receipt.downloadedAtUnixSeconds ||
       !sameWorkflowIdentity(
         readbackStartRun.receipt.projection,
-        readbackFinalRun.receipt.projection
-      ) ||
-      new Set([
-        authority.initialWorkflowRunObservation.receipt.githubRequestId,
-        authority.workflowRunObservation.receipt.githubRequestId,
-        authority.workflowJobsObservation.receipt.githubRequestId,
-        authority.artifactsObservation.receipt.githubRequestId,
-        readbackStartRun.receipt.githubRequestId,
-        requery.receipt.githubRequestId,
-        trustedDownload.receipt.redirectGitHubRequestId,
-        readbackFinalRun.receipt.githubRequestId
-      ]).size !== 8
+        finalRun.receipt.projection
+      )
     ) {
       return yield* readbackError(
         "RUN_REQUERY_MISMATCH",
@@ -762,290 +1243,223 @@ const readbackArtifact = (
     }
     const archiveSnapshot = new Uint8Array(archiveBytes)
     return Object.freeze({
-      authority,
+      observed,
       readbackStartRunObservation: readbackStartRun,
       artifactRequeryObservation: requery,
-      artifactDownload: trustedDownload,
-      readbackFinalRunObservation: readbackFinalRun,
-      readbackStartRunObservationReceiptSha256:
-        readbackStartRun.receipt.receiptSha256,
-      readbackFinalRunObservationReceiptSha256:
-        readbackFinalRun.receipt.receiptSha256,
-      requeryObservationReceiptSha256: requery.receipt.receiptSha256,
-      downloadObservationReceiptSha256: trustedDownload.receipt.receiptSha256,
-      artifactEvidence: artifactEvidenceSnapshot,
-      validatedArchive: validated.right,
+      artifactDownload: download,
+      readbackFinalRunObservation: finalRun,
+      artifactEvidence: Object.freeze({ ...evidence.right }),
+      validatedArchive: validatedArchive.right,
       readArchiveBytes: () => new Uint8Array(archiveSnapshot)
     })
   })
 }
 
-const makeAbsenceOutcome = (
-  role: S2SArtifactRole,
-  initialRun: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>,
-  run: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>,
-  jobs: S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>,
-  observations: readonly [
-    S2SGitHubObservation<S2SGitHubArtifactsProjection>,
-    S2SGitHubObservation<S2SGitHubArtifactsProjection>,
-    S2SGitHubObservation<S2SGitHubArtifactsProjection>
-  ]
-): S2SArtifactLookupOutcome => {
-  const hashes = Object.freeze([
-    observations[0].receipt.receiptSha256,
-    observations[1].receipt.receiptSha256,
-    observations[2].receipt.receiptSha256
-  ]) as readonly [string, string, string]
-  const requestIds = Object.freeze([
-    observations[0].receipt.githubRequestId,
-    observations[1].receipt.githubRequestId,
-    observations[2].receipt.githubRequestId
-  ])
-  const finalObservation = observations[2]
-  const producer = jobs.receipt.projection.jobs.find(
-    (job) => job.name === ROLE_POLICY[role].jobName
-  )
-  if (
-    new Set(hashes).size !== S2S_ARTIFACT_ABSENCE_OBSERVATION_COUNT ||
-    new Set(requestIds).size !== S2S_ARTIFACT_ABSENCE_OBSERVATION_COUNT
-  ) {
-    return ambiguous(
-      role,
-      "ABSENCE_OBSERVATIONS_NOT_DISTINCT",
-      run,
-      jobs,
-      finalObservation
-    )
+const validatedRead = (
+  scope: S2SStageArtifactPermitScope,
+  operation: S2SConfirmatoryArtifactReadOperation,
+  core: ValidatedReadbackCore,
+  permitEvidence: S2SStageArtifactPermitEvidence
+): S2SValidatedStageArtifactRead => {
+  const stage = scope.identity.stage
+  const role = core.observed.role
+  if (stage === "REGISTER" || role === "ADJUDICATION") {
+    throw new Error("validated stage artifact read contract invariant violated")
   }
-  if (
-    observations[1].receipt.observedAtUnixSeconds -
-        observations[0].receipt.observedAtUnixSeconds <
-      S2S_ARTIFACT_ABSENCE_MINIMUM_GAP_SECONDS ||
-    observations[2].receipt.observedAtUnixSeconds -
-        observations[1].receipt.observedAtUnixSeconds <
-      S2S_ARTIFACT_ABSENCE_MINIMUM_GAP_SECONDS
-  ) {
-    return ambiguous(
-      role,
-      "ABSENCE_OBSERVATIONS_TOO_CLOSE",
-      run,
-      jobs,
-      finalObservation
-    )
-  }
-  if (producer === undefined || producer.completedAtUnixSeconds === null) {
-    return ambiguous(role, "PRODUCER_JOB_NOT_COMPLETED", run, jobs, finalObservation)
-  }
-  const reconciliationCore = Object.freeze({
-    schemaVersion: "hswm-swm0w-s2s-artifact-absence-reconciliation/v2",
-    classification: "RECONCILED_ABSENCE_NOT_PROOF",
-    observationCount: S2S_ARTIFACT_ABSENCE_OBSERVATION_COUNT,
-    minimumGapSeconds: S2S_ARTIFACT_ABSENCE_MINIMUM_GAP_SECONDS,
-    role,
-    workflowRunId: run.receipt.projection.id,
-    expectedHeadSha: run.receipt.projection.headSha,
-    producerJobId: producer.id,
-    expectedArtifactName: ROLE_POLICY[role].artifactName,
-    initialWorkflowRunObservationReceiptSha256:
-      initialRun.receipt.receiptSha256,
-    workflowRunObservationReceiptSha256: run.receipt.receiptSha256,
-    workflowJobsObservationReceiptSha256: jobs.receipt.receiptSha256,
-    absenceObservationReceiptSha256s: hashes
-  })
-  const reconciliationHash = canonicalS2SControlSha256(reconciliationCore)
-  if (Either.isLeft(reconciliationHash)) {
-    return ambiguous(
-      role,
-      "ABSENCE_RECONCILIATION_NOT_CANONICAL",
-      run,
-      jobs,
-      finalObservation
-    )
-  }
-  const reconciliationReceipt = Object.freeze({
-    ...reconciliationCore,
-    receiptSha256: reconciliationHash.right
-  })
-  const frozenObservations = Object.freeze([
-    observations[0],
-    observations[1],
-    observations[2]
-  ]) as unknown as S2SArtifactReconciledAbsence["absenceObservations"]
   return Object.freeze({
-    _tag: "ReconciledAbsentAfterProducerCompleted" as const,
+    _tag: "ValidatedStageArtifactRead" as const,
+    stage,
+    operation,
     role,
-    producerJobId: producer.id,
-    expectedArtifactName: ROLE_POLICY[role].artifactName,
-    producerCompletedAtUnixSeconds: producer.completedAtUnixSeconds,
-    observedAtUnixSeconds: finalObservation.receipt.observedAtUnixSeconds,
-    initialWorkflowRunObservation: initialRun,
-    workflowRunObservation: run,
-    workflowJobsObservation: jobs,
-    absenceObservations: frozenObservations,
-    absenceObservationReceiptSha256s: hashes,
-    reconciliationReceipt,
-    reconciliationReceiptSha256: reconciliationHash.right,
-    initialWorkflowRunObservationReceiptSha256:
-      initialRun.receipt.receiptSha256,
-    workflowRunObservationReceiptSha256: run.receipt.receiptSha256,
-    workflowJobsObservationReceiptSha256: jobs.receipt.receiptSha256,
-    artifactsObservationReceiptSha256: finalObservation.receipt.receiptSha256
+    producerJob: core.observed.producerJob,
+    artifact: core.observed.artifact,
+    initialWorkflowRunObservation: core.observed.initialWorkflowRunObservation,
+    workflowRunObservation: core.observed.workflowRunObservation,
+    workflowJobsObservation: core.observed.workflowJobsObservation,
+    artifactsObservation: core.observed.artifactsObservation,
+    readbackStartRunObservation: core.readbackStartRunObservation,
+    artifactRequeryObservation: core.artifactRequeryObservation,
+    artifactDownload: core.artifactDownload,
+    readbackFinalRunObservation: core.readbackFinalRunObservation,
+    artifactEvidence: core.artifactEvidence,
+    validatedArchive: core.validatedArchive,
+    permitEvidence,
+    readArchiveBytes: core.readArchiveBytes
   })
 }
 
-const makeS2SArtifactAuthorityLayer = (
+const performStageRead = (
+  github: S2SGitHubObserver["Type"],
+  scope: S2SStageArtifactPermitScope,
+  operation: S2SConfirmatoryArtifactReadOperation,
   settleBetweenAbsenceObservations: Effect.Effect<void>
+): Effect.Effect<S2SValidatedStageArtifactRead, S2SStageArtifactReadFailure> => {
+  const contract = S2S_CONFIRMATORY_STAGE_CONTRACTS[
+    scope.identity.stage
+  ].artifactReadOperations.find((entry) => entry.operation === operation)
+  if (contract === undefined) {
+    return Effect.dieMessage("fixed stage operation contract invariant violated")
+  }
+  const role = contract.artifactRole
+  return Effect.gen(function* () {
+    const observed = yield* lookupArtifact(
+      github,
+      scope,
+      operation,
+      role,
+      settleBetweenAbsenceObservations
+    )
+    const readback = yield* readbackArtifact(
+      github,
+      scope,
+      operation,
+      observed
+    )
+    const permitEvidence = yield* snapshotS2SStageArtifactPermitEvidence(
+      scope,
+      operation
+    )
+    return validatedRead(scope, operation, readback, permitEvidence)
+  })
+}
+
+const candidateReadFingerprint = (
+  value: S2SValidatedStageArtifactRead
+): Either.Either<string, S2SArtifactReadbackError> => {
+  const fingerprint = canonicalS2SControlSha256(
+    Object.freeze({
+      artifactId: value.artifact.id,
+      artifactName: value.artifact.name,
+      artifactSizeInBytes: value.artifact.sizeInBytes,
+      apiDigestSha256: value.artifact.digestSha256,
+      downloadedArchiveSha256:
+        value.artifactDownload.receipt.downloadedArchiveSha256,
+      validatedArchiveSha256: value.validatedArchive.archiveSha256
+    })
+  )
+  return Either.isLeft(fingerprint)
+    ? Either.left(
+        readbackError(
+          "EVIDENCE_NOT_CANONICAL",
+          "S2SCandidateArtifactFingerprint",
+          "candidate fingerprint cannot be canonically hashed"
+        )
+      )
+    : Either.right(fingerprint.right)
+}
+
+const makeStageArtifactReads = (
+  github: S2SGitHubObserver["Type"],
+  scope: S2SStageArtifactPermitScope,
+  settleBetweenAbsenceObservations: Effect.Effect<void>
+): S2SStageArtifactReadsService => {
+  const read = (operation: S2SConfirmatoryArtifactReadOperation) =>
+    useS2SStageArtifactPermit(
+      scope,
+      operation,
+      () =>
+        performStageRead(
+          github,
+          scope,
+          operation,
+          settleBetweenAbsenceObservations
+        ),
+      operation === "ADJUDICATE_READ_CANDIDATE_FIRST" ||
+        operation === "ADJUDICATE_REREAD_CANDIDATE"
+        ? candidateReadFingerprint
+        : undefined
+    )
+  if (scope.identity.stage === "REGISTER") {
+    return Object.freeze({ stage: "REGISTER" as const })
+  }
+  if (scope.identity.stage === "CONFIRM") {
+    return Object.freeze({
+      stage: "CONFIRM" as const,
+      confirmReadRegistration: read("CONFIRM_READ_REGISTRATION")
+    })
+  }
+  return Object.freeze({
+    stage: "ADJUDICATE" as const,
+    adjudicateReadRegistration: read("ADJUDICATE_READ_REGISTRATION"),
+    adjudicateReadCandidateFirst: read(
+      "ADJUDICATE_READ_CANDIDATE_FIRST"
+    ),
+    adjudicateRereadCandidate: read("ADJUDICATE_REREAD_CANDIDATE")
+  })
+}
+
+const fromEither = <A, E>(either: Either.Either<A, E>): Effect.Effect<A, E> =>
+  Either.isLeft(either) ? Effect.fail(either.left) : Effect.succeed(either.right)
+
+/**
+ * Closed production composition root. Current-run issuance and inspection must
+ * succeed before GitHub artifact transport configuration is evaluated. While
+ * workflow bytes remain OPEN, this fails with zero artifact configuration or
+ * artifact I/O and no permit-scope attachment.
+ */
+export const makeS2SStageArtifactReadsLiveLayer = (
+  registrationAuthority: unknown,
+  githubConfig: S2SGitHubLiveTransportConfig
 ) =>
   Layer.effect(
-    S2SArtifactAuthority,
+    S2SStageArtifactReads,
     Effect.gen(function* () {
-      const github = yield* S2SGitHubObserver
-      const issuedAuthorities = new WeakSet<object>()
-      return S2SArtifactAuthority.of({
-        observeRoleArtifact: (workflowRunId, expectedHeadSha, role) => {
-          if (
-            typeof role !== "string" ||
-            !S2S_CONFIRMATORY_ARTIFACT_ROLES.includes(
-              role as S2SArtifactRole
-            )
-          ) {
-            return Effect.succeed(
-              Object.freeze({
-                _tag: "InvalidRequest" as const,
-                reason: "INVALID_ROLE" as const
-              })
-            )
-          }
-          if (!Number.isSafeInteger(workflowRunId) || workflowRunId < 1) {
-            return Effect.succeed(
-              Object.freeze({
-                _tag: "InvalidRequest" as const,
-                reason: "INVALID_WORKFLOW_RUN_ID" as const
-              })
-            )
-          }
-          if (
-            typeof expectedHeadSha !== "string" ||
-            !GIT_SHA_PATTERN.test(expectedHeadSha)
-          ) {
-            return Effect.succeed(
-              Object.freeze({
-                _tag: "InvalidRequest" as const,
-                reason: "INVALID_HEAD_SHA" as const
-              })
-            )
-          }
-          return Effect.gen(function* () {
-            const runOutcome = yield* github
-              .observeWorkflowRun(workflowRunId)
-              .pipe(Effect.either)
-            if (Either.isLeft(runOutcome)) {
-              return unavailable(role, "OBSERVE_RUN", runOutcome.left)
-            }
-            const jobsOutcome = yield* github
-              .observeWorkflowAttemptJobs(workflowRunId)
-              .pipe(Effect.either)
-            if (Either.isLeft(jobsOutcome)) {
-              return unavailable(role, "OBSERVE_JOBS", jobsOutcome.left)
-            }
-            const absenceObservations: Array<
-              S2SGitHubObservation<S2SGitHubArtifactsProjection>
-            > = []
-            const seenRequestIds = new Set([
-              runOutcome.right.receipt.githubRequestId,
-              jobsOutcome.right.receipt.githubRequestId
-            ])
-            const initialRequestIdsDistinct = seenRequestIds.size === 2
-            let latestRun = runOutcome.right
-            for (
-              let index = 0;
-              index < S2S_ARTIFACT_ABSENCE_OBSERVATION_COUNT;
-              index += 1
-            ) {
-              const artifactsOutcome = yield* github
-                .observeRunArtifacts(workflowRunId)
-                .pipe(Effect.either)
-              if (Either.isLeft(artifactsOutcome)) {
-                return unavailable(
-                  role,
-                  "OBSERVE_ARTIFACTS",
-                  artifactsOutcome.left
-                )
-              }
-              const currentRunOutcome = yield* github
-                .observeWorkflowRun(workflowRunId)
-                .pipe(Effect.either)
-              if (Either.isLeft(currentRunOutcome)) {
-                return unavailable(role, "OBSERVE_RUN", currentRunOutcome.left)
-              }
-              latestRun = currentRunOutcome.right
-              const currentRequestIds = [
-                artifactsOutcome.right.receipt.githubRequestId,
-                latestRun.receipt.githubRequestId
-              ]
-              if (
-                !initialRequestIdsDistinct ||
-                currentRequestIds[0] === currentRequestIds[1] ||
-                currentRequestIds.some((requestId) =>
-                  seenRequestIds.has(requestId)
-                )
-              ) {
-                return ambiguous(
-                  role,
-                  "OBSERVATION_REQUEST_IDS_NOT_DISTINCT",
-                  latestRun,
-                  jobsOutcome.right,
-                  artifactsOutcome.right
-                )
-              }
-              for (const requestId of currentRequestIds) {
-                seenRequestIds.add(requestId)
-              }
-              const classified = classifyArtifact(
-                workflowRunId,
-                expectedHeadSha,
-                role,
-                runOutcome.right,
-                latestRun,
-                jobsOutcome.right,
-                artifactsOutcome.right,
-                issuedAuthorities
-              )
-              if (
-                classified._tag !== "Ambiguous" ||
-                classified.reason !== "ARTIFACT_NOT_OBSERVED"
-              ) {
-                return classified
-              }
-              absenceObservations.push(artifactsOutcome.right)
-              if (index + 1 < S2S_ARTIFACT_ABSENCE_OBSERVATION_COUNT) {
-                yield* settleBetweenAbsenceObservations
-              }
-            }
-            const [first, second, third] = absenceObservations
-            if (first === undefined || second === undefined || third === undefined) {
-              return yield* Effect.dieMessage(
-                "bounded artifact absence observation invariant violated"
-              )
-            }
-            return makeAbsenceOutcome(
-              role,
-              runOutcome.right,
-              latestRun,
-              jobsOutcome.right,
-              [first, second, third]
-            )
-          })
-        },
-        readback: (authority) =>
-          readbackArtifact(github, authority, issuedAuthorities)
-      })
+      const current = yield* S2SCurrentRunStage.pipe(
+        Effect.provide(
+          makeS2SCurrentRunStageAuthorityLiveLayer(
+            registrationAuthority,
+            githubConfig
+          )
+        )
+      )
+      const scope = yield* fromEither(
+        claimS2SStageArtifactPermitScope(current.authority)
+      )
+      const observerLive = S2SGitHubObserverLive.pipe(
+        Layer.provide(makeS2SGitHubHttpTransportLiveLayer(githubConfig))
+      )
+      const github = yield* S2SGitHubObserver.pipe(
+        Effect.provide(observerLive)
+      )
+      return makeStageArtifactReads(
+        github,
+        scope,
+        Effect.sleep(S2S_ARTIFACT_ABSENCE_SETTLE_MILLIS)
+      )
     })
   )
 
-export const S2SArtifactAuthorityLive = makeS2SArtifactAuthorityLayer(
-  Effect.sleep(S2S_ARTIFACT_ABSENCE_SETTLE_MILLIS)
-)
-
-export const makeS2SArtifactAuthorityTestLayer = () =>
-  makeS2SArtifactAuthorityLayer(Effect.yieldNow())
+/**
+ * @internal TEST-ONLY, NON-AUTHORIZING.
+ *
+ * Exercises the exact fixed-operation mechanics against a strict synthetic
+ * seed and caller-supplied observer. It never inspects or issues current-run
+ * authority, never touches production registries, returns only `void`, and
+ * closes the ephemeral driver when the callback exits.
+ */
+export const probeS2SStageArtifactReadMechanicsForTest = <E, R>(
+  fixture: S2SStageArtifactPermitTestSeed | unknown,
+  github: S2SGitHubObserver["Type"],
+  use: (
+    reads: S2SStageArtifactReadsService
+  ) => Effect.Effect<unknown, E, R>
+): Effect.Effect<
+  void,
+  E | S2SStageArtifactReadFailure,
+  R
+> =>
+  Effect.suspend(() => {
+    return fromEither(makeS2SStageArtifactPermitTestScope(fixture)).pipe(
+      Effect.flatMap((scope) => {
+        const reads = makeStageArtifactReads(
+          github,
+          scope,
+          Effect.yieldNow()
+        )
+        return Effect.suspend(() => use(reads)).pipe(
+          Effect.onExit(() => closeS2SStageArtifactPermitScope(scope)),
+          Effect.asVoid
+        )
+      })
+    )
+  })

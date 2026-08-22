@@ -20,7 +20,9 @@ import {
   observeS2SGitHubWorkflowAttemptJobs,
   observeS2SGitHubWorkflowRun,
   observeS2SGitHubWorkflowRunsForHead,
+  validateS2SGitHubArtifactObservation,
   validateS2SGitHubArtifactDownload,
+  validateS2SGitHubRunArtifactsObservation,
   validateS2SGitHubWorkflowAttemptJobsObservation,
   validateS2SGitHubWorkflowRunObservation,
   validateS2SGitHubWorkflowRunsForHeadObservation
@@ -1234,6 +1236,286 @@ it("binds both list and individual artifact projections", () => {
       workflowHeadSha: HEAD_SHA
     })
   }
+})
+
+it.effect("lazily reconstructs trusted artifact observations from one raw read", () => {
+  const listedOutcome = observeS2SGitHubRunArtifacts(
+    jsonBytes({ total_count: 1, artifacts: [artifactFixture()] }),
+    RUN_ID,
+    OBSERVED_AT,
+    responseProvenance("A1B2:C3D4:E5F6:ARTIFACTS")
+  )
+  const artifactOutcome = observeS2SGitHubArtifact(
+    jsonBytes(artifactFixture()),
+    ARTIFACT_ID,
+    OBSERVED_AT + 1,
+    responseProvenance("A1B2:C3D4:E5F6:ARTIFACT")
+  )
+  if (Either.isLeft(listedOutcome) || Either.isLeft(artifactOutcome)) {
+    return Effect.dieMessage("valid artifact observation fixture was rejected")
+  }
+  let listedReads = 0
+  let artifactReads = 0
+  let listedReaderThis: unknown = "not-called"
+  const wrappedListed = Object.freeze({
+    receipt: listedOutcome.right.receipt,
+    readRawBody: function (this: unknown) {
+      listedReaderThis = this
+      listedReads += 1
+      return listedOutcome.right.readRawBody()
+    }
+  })
+  const wrappedArtifact = Object.freeze({
+    receipt: artifactOutcome.right.receipt,
+    readRawBody: () => {
+      artifactReads += 1
+      return artifactOutcome.right.readRawBody()
+    }
+  })
+  const listedValidation = validateS2SGitHubRunArtifactsObservation(
+    wrappedListed,
+    RUN_ID
+  )
+  const artifactValidation = validateS2SGitHubArtifactObservation(
+    wrappedArtifact,
+    ARTIFACT_ID
+  )
+  expect([listedReads, artifactReads]).toEqual([0, 0])
+
+  return Effect.gen(function* () {
+    const listed = yield* listedValidation
+    const artifact = yield* artifactValidation
+    expect([listedReads, artifactReads]).toEqual([1, 1])
+    expect(listedReaderThis).toBeUndefined()
+    expect(listed).not.toBe(wrappedListed)
+    expect(artifact).not.toBe(wrappedArtifact)
+    expect(listed.receipt).not.toBe(wrappedListed.receipt)
+    expect(artifact.receipt).not.toBe(wrappedArtifact.receipt)
+    expect(listed.receipt).toEqual(wrappedListed.receipt)
+    expect(artifact.receipt).toEqual(wrappedArtifact.receipt)
+    expect(listed.receipt.projection).not.toBe(
+      wrappedListed.receipt.projection
+    )
+    expect(listed.receipt.projection.artifacts).not.toBe(
+      wrappedListed.receipt.projection.artifacts
+    )
+    expect(artifact.receipt.projection).not.toBe(
+      wrappedArtifact.receipt.projection
+    )
+    expect(Object.isFrozen(listed)).toBe(true)
+    expect(Object.isFrozen(listed.receipt.projection.artifacts)).toBe(true)
+    expect(Object.isFrozen(artifact)).toBe(true)
+    const retained = artifact.readRawBody()
+    retained.fill(0)
+    expect(artifact.readRawBody()[0]).toBe(0x7b)
+  })
+})
+
+it.effect("rejects hostile, counterfeit, and identity-drifted artifact observations", () => {
+  const listed = observeS2SGitHubRunArtifacts(
+    jsonBytes({ total_count: 1, artifacts: [artifactFixture()] }),
+    RUN_ID,
+    OBSERVED_AT,
+    responseProvenance()
+  )
+  const artifact = observeS2SGitHubArtifact(
+    jsonBytes(artifactFixture()),
+    ARTIFACT_ID,
+    OBSERVED_AT + 1,
+    responseProvenance("A1B2:C3D4:E5F6:7891")
+  )
+  if (Either.isLeft(listed) || Either.isLeft(artifact)) {
+    return Effect.dieMessage("valid artifact observation fixture was rejected")
+  }
+
+  let rejectedReceiptReads = 0
+  const hostileRoot = new Proxy({}, {
+    ownKeys: () => {
+      throw new Error("hostile artifact wrapper trap")
+    }
+  })
+  const hostileReceipt = {
+    receipt: new Proxy({}, {
+      ownKeys: () => {
+        throw new Error("hostile artifact receipt trap")
+      }
+    }),
+    readRawBody: () => {
+      rejectedReceiptReads += 1
+      return artifact.right.readRawBody()
+    }
+  }
+  const hostileProjection = new Proxy(
+    { ...artifact.right.receipt.projection },
+    {
+      ownKeys: () => {
+        throw new Error("hostile artifact projection trap")
+      }
+    }
+  )
+
+  const listedArtifact = listed.right.receipt.projection.artifacts[0]
+  if (listedArtifact === undefined) {
+    return Effect.dieMessage("artifact-list fixture is absent")
+  }
+  const counterfeitProjection = {
+    ...listed.right.receipt.projection,
+    artifacts: [{ ...listedArtifact, name: "counterfeit" }]
+  }
+  const counterfeitProjectionHash = canonicalS2SControlSha256(
+    counterfeitProjection
+  )
+  if (Either.isLeft(counterfeitProjectionHash)) {
+    return Effect.dieMessage("counterfeit projection was unexpectedly noncanonical")
+  }
+  const {
+    receiptSha256: _originalReceiptHash,
+    ...listedReceiptCore
+  } = listed.right.receipt
+  const counterfeitReceiptCore = {
+    ...listedReceiptCore,
+    projection: counterfeitProjection,
+    projectionSha256: counterfeitProjectionHash.right
+  }
+  const counterfeitReceiptHash = canonicalS2SControlSha256(
+    counterfeitReceiptCore
+  )
+  if (Either.isLeft(counterfeitReceiptHash)) {
+    return Effect.dieMessage("counterfeit receipt was unexpectedly noncanonical")
+  }
+  const counterfeitListed = {
+    receipt: {
+      ...counterfeitReceiptCore,
+      receiptSha256: counterfeitReceiptHash.right
+    },
+    readRawBody: listed.right.readRawBody
+  }
+
+  const artifactRaw = artifact.right.readRawBody()
+  const driftedRaw = new Uint8Array(artifactRaw)
+  driftedRaw[0] = 0x5b
+  let rawProxyReads = 0
+  let rawDriftReads = 0
+  let semanticDriftReads = 0
+  let invalidIdentityReads = 0
+
+  return Effect.gen(function* () {
+    const hostileRootOutcome = yield*
+      validateS2SGitHubRunArtifactsObservation(hostileRoot, RUN_ID).pipe(
+        Effect.either
+      )
+    const hostileReceiptOutcome = yield*
+      validateS2SGitHubArtifactObservation(
+        hostileReceipt,
+        ARTIFACT_ID
+      ).pipe(Effect.either)
+    const hostileProjectionOutcome = yield*
+      validateS2SGitHubArtifactObservation(
+        {
+          receipt: {
+            ...artifact.right.receipt,
+            projection: hostileProjection
+          },
+          readRawBody: artifact.right.readRawBody
+        },
+        ARTIFACT_ID
+      ).pipe(Effect.either)
+    const rawProxyOutcome = yield* validateS2SGitHubArtifactObservation(
+      {
+        receipt: artifact.right.receipt,
+        readRawBody: () => {
+          rawProxyReads += 1
+          return new Proxy(artifactRaw, {})
+        }
+      },
+      ARTIFACT_ID
+    ).pipe(Effect.either)
+    const rawDriftOutcome = yield* validateS2SGitHubArtifactObservation(
+      {
+        receipt: artifact.right.receipt,
+        readRawBody: () => {
+          rawDriftReads += 1
+          return driftedRaw
+        }
+      },
+      ARTIFACT_ID
+    ).pipe(Effect.either)
+    const counterfeitOutcome = yield*
+      validateS2SGitHubRunArtifactsObservation(
+        counterfeitListed,
+        RUN_ID
+      ).pipe(Effect.either)
+    const listIdentityDrift = yield*
+      validateS2SGitHubRunArtifactsObservation(
+        {
+          receipt: listed.right.receipt,
+          readRawBody: () => {
+            semanticDriftReads += 1
+            return listed.right.readRawBody()
+          }
+        },
+        RUN_ID + 1
+      ).pipe(Effect.either)
+    const artifactIdentityDrift = yield*
+      validateS2SGitHubArtifactObservation(
+        artifact.right,
+        ARTIFACT_ID + 1
+      ).pipe(Effect.either)
+    const crossKindDrift = yield* validateS2SGitHubArtifactObservation(
+      listed.right,
+      ARTIFACT_ID
+    ).pipe(Effect.either)
+    const invalidIdentity = yield*
+      validateS2SGitHubRunArtifactsObservation(
+        {
+          receipt: listed.right.receipt,
+          readRawBody: () => {
+            invalidIdentityReads += 1
+            return listed.right.readRawBody()
+          }
+        },
+        0
+      ).pipe(Effect.either)
+
+    expect(
+      Either.isLeft(hostileRootOutcome) && hostileRootOutcome.left.reason
+    ).toBe("WRAPPER_REJECTED")
+    expect(
+      Either.isLeft(hostileReceiptOutcome) && hostileReceiptOutcome.left.reason
+    ).toBe("RECEIPT_REJECTED")
+    expect(
+      Either.isLeft(hostileProjectionOutcome) &&
+        hostileProjectionOutcome.left.reason
+    ).toBe("RECEIPT_MISMATCH")
+    expect(
+      Either.isLeft(rawProxyOutcome) && rawProxyOutcome.left.reason
+    ).toBe("RAW_BODY_REJECTED")
+    expect(
+      Either.isLeft(rawDriftOutcome) && rawDriftOutcome.left.reason
+    ).toBe("RAW_BODY_DRIFT")
+    expect(
+      Either.isLeft(counterfeitOutcome) && counterfeitOutcome.left.reason
+    ).toBe("RECEIPT_SELF_HASH_MISMATCH")
+    expect(
+      Either.isLeft(listIdentityDrift) && listIdentityDrift.left.reason
+    ).toBe("RECOMPUTATION_REJECTED")
+    expect(
+      Either.isLeft(artifactIdentityDrift) && artifactIdentityDrift.left.reason
+    ).toBe("RECOMPUTATION_REJECTED")
+    expect(Either.isLeft(crossKindDrift) && crossKindDrift.left.reason).toBe(
+      "RECOMPUTATION_REJECTED"
+    )
+    expect(Either.isLeft(invalidIdentity) && invalidIdentity.left.reason).toBe(
+      "INVALID_ARGUMENT"
+    )
+    expect([
+      rejectedReceiptReads,
+      rawProxyReads,
+      rawDriftReads,
+      semanticDriftReads,
+      invalidIdentityReads
+    ]).toEqual([0, 1, 1, 1, 0])
+  })
 })
 
 it("rejects incomplete pagination and requested-identity mismatches", () => {

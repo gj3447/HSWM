@@ -35,7 +35,13 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect(
     "validateS2SGitHubWorkflowRunsForHeadObservation" in PublicApi
   ).toBe(false)
+  expect("validateS2SGitHubRunArtifactsObservation" in PublicApi).toBe(false)
+  expect("validateS2SGitHubArtifactObservation" in PublicApi).toBe(false)
   expect("S2SArtifactAuthority" in PublicApi).toBe(false)
+  expect("S2SStageArtifactReads" in PublicApi).toBe(false)
+  expect("S2SStageArtifactPermitError" in PublicApi).toBe(false)
+  expect("makeS2SStageArtifactReadsLiveLayer" in PublicApi).toBe(false)
+  expect("probeS2SStageArtifactReadMechanicsForTest" in PublicApi).toBe(false)
   expect("validateS2SRegistrationCommitB" in PublicApi).toBe(false)
   expect("inspectS2SRegistrationCommitAuthority" in PublicApi).toBe(false)
   expect("inspectS2SRegistrationWorkflowManifestBinding" in PublicApi).toBe(
@@ -52,4 +58,16 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect("makeS2SConfirmatoryControlPlaneMemoryForTest" in PublicApi).toBe(
     false
   )
+})
+
+it("keeps stage artifact capability and permit types root-private", () => {
+  // @ts-expect-error stage read service types are deliberately root-private
+  type ForbiddenReads = import("../src/index.js").S2SStageArtifactReadsService
+  // @ts-expect-error permit evidence types are deliberately root-private
+  type ForbiddenPermit = import("../src/index.js").S2SStageArtifactPermitEvidence
+  const absent: readonly [
+    ForbiddenReads | undefined,
+    ForbiddenPermit | undefined
+  ] = [undefined, undefined]
+  expect(absent).toEqual([undefined, undefined])
 })

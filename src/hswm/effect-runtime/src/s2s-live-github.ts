@@ -1987,6 +1987,44 @@ export const validateS2SGitHubWorkflowRunsForHeadObservation = (
       )
   )
 
+export const validateS2SGitHubRunArtifactsObservation = (
+  input: unknown,
+  expectedRunId: number
+): Effect.Effect<
+  S2SGitHubObservation<S2SGitHubArtifactsProjection>,
+  S2SGitHubObservationValidationError
+> =>
+  validateS2SGitHubObservation(
+    input,
+    () => Number.isSafeInteger(expectedRunId) && expectedRunId > 0,
+    (rawBody, observedAtUnixSeconds, provenance) =>
+      observeS2SGitHubRunArtifacts(
+        rawBody,
+        expectedRunId,
+        observedAtUnixSeconds,
+        provenance
+      )
+  )
+
+export const validateS2SGitHubArtifactObservation = (
+  input: unknown,
+  expectedArtifactId: number
+): Effect.Effect<
+  S2SGitHubObservation<S2SGitHubArtifactProjection>,
+  S2SGitHubObservationValidationError
+> =>
+  validateS2SGitHubObservation(
+    input,
+    () => Number.isSafeInteger(expectedArtifactId) && expectedArtifactId > 0,
+    (rawBody, observedAtUnixSeconds, provenance) =>
+      observeS2SGitHubArtifact(
+        rawBody,
+        expectedArtifactId,
+        observedAtUnixSeconds,
+        provenance
+      )
+  )
+
 export const validateS2SGitHubArtifactDownload = (
   input: unknown,
   expectedArtifactId: number,

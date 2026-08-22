@@ -189,3 +189,11 @@ The existing
 [`v1 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v1.json)
 is retained as a hash-bound historical checkpoint rather than rewritten to
 describe this later engineering slice.
+
+The subsequent bounded-adapter implementation and its remaining authority
+gates are recorded without changing that history in the
+[`2026-08-22 continuation handoff`](../operations/HSWM_SWM0W_S2S_EFFECT_NEXT_SESSION_2026-08-22.md)
+and
+[`v2 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v2.json).
+Those artifacts remain `ENGINEERING_ONLY / SCIENTIFIC_UNJUDGED` and do not
+authorize preregistration, future-beacon selection, dispatch, or event 10.

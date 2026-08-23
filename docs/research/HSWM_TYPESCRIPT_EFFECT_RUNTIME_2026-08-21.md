@@ -461,3 +461,14 @@ The next session starts with the unresolved workflow process-continuity
 topology decision, then shared-POSIX feasibility and one complete stage-profile
 commit/recovery. This remains a `Pi` engineering advance only; `H/W/A/F` and
 the outcome-bound causal-learning loop did not advance.
+
+The subsequent
+[`v22 Occam-core/process-topology decision`](../operations/HSWM_SWM0_OCCAM_CORE_AND_S2S_PROCESS_TOPOLOGY_DECISION_NEXT_SESSION_2026-08-23.md)
+and
+[`v22 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v22.json)
+select a background Effect root plus authenticated one-shot IPC for the future
+GitHub evidence branch without claiming implementation. More importantly, the
+audit separates that `Pi` occurrence machinery from the immediate Occam
+critical path: the next code slice is a pure TypeScript port/capsule of the
+frozen role-aware T16 one-sweep operator, with strict Effect decoding and
+independent Python parity. This is design-only; no `H/W/A/F` result changed.

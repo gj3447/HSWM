@@ -167,7 +167,7 @@ engineering checkpoints:
   ownership, Effect lifecycle/Clock boundaries, opaque completion issuance,
   and the hostile test matrix. Continue from
   [`HSWM_SWM0W_S2S_ASSERTION_SHELL_ARCHITECTURE_AUDIT_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_ARCHITECTURE_AUDIT_NEXT_SESSION_2026-08-23.md).
-- [`v21 current assertion-shell implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v21.json)
+- [`v21 historical assertion-shell implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v21.json)
   records code commit `0fe7791`. It implements the root-private selector-free
   Effect v3 assertion service, exact scoped claim/lease ownership, the fixed
   1/2/3-attempt live-observation topology, strict download/ZIP/member
@@ -179,12 +179,22 @@ engineering checkpoints:
   commit/recovery, GitHub origin, and scientific judgment remain open. Continue
   from
   [`HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
+- [`v22 current Occam-core/process-topology decision checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v22.json)
+  selects a background TypeScript/Effect root plus authenticated one-shot IPC
+  for the future GitHub evidence branch while preserving the exact v16 pinned
+  upload action. Selection does not close process continuity: IPC, hosted-runner
+  survival, timing, shared durability, workflow bytes, and production execution
+  remain open. The same audit restores the immediate Occam critical path to a
+  reusable TypeScript role-aware T16 capsule joining explicit `H`, learned
+  recipient-conditioned operator `W`, and one-sweep `A`. This checkpoint is
+  design-only and changes no runtime or scientific result. Continue from
+  [`HSWM_SWM0_OCCAM_CORE_AND_S2S_PROCESS_TOPOLOGY_DECISION_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0_OCCAM_CORE_AND_S2S_PROCESS_TOPOLOGY_DECISION_NEXT_SESSION_2026-08-23.md).
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v21 supersedes v20 only as the
-latest continuation entrypoint; v1 through v20 remain immutable historical
+runtime graphs, or remote Neo4j publications. v22 supersedes v21 only as the
+latest continuation entrypoint; v1 through v21 remain immutable historical
 projections. The TypeScript/Effect runtime owns control and evidence while the
-pinned Python/NumPy oracle remains a bounded deterministic numeric function
-cell. V21 implements and test-only falsifies the audited local `Π` assertion
-shell boundary; it records no production occurrence and changes no scientific
+pinned Python/NumPy oracle remains the bounded numeric source oracle. V22
+selects but does not implement the evidence-branch topology and makes the
+role-aware TypeScript Occam core the next code target; it changes no scientific
 `H/W/A/F` result or outcome-bound causal-learning loop.

@@ -144,6 +144,17 @@ finalizer exists. Resume from the repository
 and its
 [`v21 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v21.json).
 
+The current continuation entrypoint is the
+[`v22 Occam-core/process-topology decision`](../../../docs/operations/HSWM_SWM0_OCCAM_CORE_AND_S2S_PROCESS_TOPOLOGY_DECISION_NEXT_SESSION_2026-08-23.md)
+and its
+[`v22 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v22.json).
+It selects a background Effect root plus authenticated one-shot IPC for the
+future evidence workflow but leaves both production gates closed. The immediate
+implementation target is instead a pure TypeScript T16 capsule that joins
+explicit role-bearing incidences, learned recipient-conditioned transport, and
+one-sweep activation, with Effect at the strict decode/composition boundary and
+independent Python parity. No runtime code or scientific result changed in v22.
+
 One deeply frozen, root-private `S2S_STAGE_ARTIFACT_SPECS` value now owns the
 fixed REGISTER, CONFIRM, and ADJUDICATE artifact mappings used by live
 predecessor reads and replay source references. Stage-specific literals remain

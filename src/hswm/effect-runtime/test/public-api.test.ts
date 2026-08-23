@@ -137,6 +137,13 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect("makeS2SConfirmatoryControlPlaneMemoryForTest" in PublicApi).toBe(
     false
   )
+  expect("SWM0RoleAwareT16ParameterArchiveSchema" in PublicApi).toBe(false)
+  expect("makeSWM0RoleAwareT16Operator" in PublicApi).toBe(false)
+  expect("evaluateSWM0RoleAwareT16" in PublicApi).toBe(false)
+  expect("removeSWM0RoleAwareT16Q" in PublicApi).toBe(false)
+  expect("restoreSWM0RoleAwareT16Q" in PublicApi).toBe(false)
+  expect("broadcastSWM0RoleAwareT16Result" in PublicApi).toBe(false)
+  expect("evaluateSWM0RoleAwareT16RoleCycles" in PublicApi).toBe(false)
 })
 
 it("keeps stage artifact capability and permit types root-private", () => {
@@ -200,4 +207,16 @@ it("keeps stage artifact capability and permit types root-private", () => {
     undefined,
     undefined
   ])
+})
+
+it("keeps the first T16 parity capsule package-root private", () => {
+  // @ts-expect-error package publication is deferred until a separate review
+  type ForbiddenOperator = import("../src/index.js").SWM0RoleAwareT16Operator
+  // @ts-expect-error package publication is deferred until a separate review
+  type ForbiddenResult = import("../src/index.js").SWM0RoleAwareT16Result
+  const absent: readonly [
+    ForbiddenOperator | undefined,
+    ForbiddenResult | undefined
+  ] = [undefined, undefined]
+  expect(absent).toEqual([undefined, undefined])
 })

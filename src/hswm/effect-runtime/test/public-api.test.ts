@@ -71,6 +71,7 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect("buildS2SStageArtifactReadReplayEffect" in PublicApi).toBe(false)
   expect("validateS2SStageArtifactReadReplay" in PublicApi).toBe(false)
   expect("validateS2SStageArtifactReadReplayEffect" in PublicApi).toBe(false)
+  expect("inspectS2SStageArtifactReadReplaySnapshot" in PublicApi).toBe(false)
   expect(
     "validateS2SCurrentRunStageEvidenceForArtifactReplay" in PublicApi
   ).toBe(false)
@@ -80,6 +81,38 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect("reconstructS2SStageUploadPostcondition" in PublicApi).toBe(false)
   expect("validateS2SStageUploadPostcondition" in PublicApi).toBe(false)
   expect("validateS2SStageUploadPostconditionEffect" in PublicApi).toBe(false)
+  expect("S2S_PREPARED_STAGE_CARRIER_SCHEMA_VERSION" in PublicApi).toBe(
+    false
+  )
+  expect("S2SPreparedStageCarrierError" in PublicApi).toBe(false)
+  expect("prepareS2SCurrentStageCarrier" in PublicApi).toBe(false)
+  expect("inspectS2SPreparedStageCarrierCapability" in PublicApi).toBe(false)
+  expect("makeS2SPreparedStageCarrierTestCapability" in PublicApi).toBe(
+    false
+  )
+  expect("inspectS2SPreparedStageCarrierTestCapability" in PublicApi).toBe(
+    false
+  )
+  expect("S2S_STAGE_UPLOAD_OUTCOME_LITERALS" in PublicApi).toBe(false)
+  expect("S2SStageUploadOutcomeSchema" in PublicApi).toBe(false)
+  expect("decodeS2SStageUploadOutcome" in PublicApi).toBe(false)
+  expect("classifyS2SStageUploadOutcome" in PublicApi).toBe(false)
+  expect("S2SStageUploadAssertionPermitError" in PublicApi).toBe(false)
+  expect("claimS2SStageUploadAssertionPermitScope" in PublicApi).toBe(false)
+  expect("makeS2SStageUploadAssertionPermitTestScope" in PublicApi).toBe(
+    false
+  )
+  expect(
+    "appendS2SStageUploadAssertionLedgerEntryForTest" in PublicApi
+  ).toBe(false)
+  expect("useS2SStageUploadAssertionPermitForTest" in PublicApi).toBe(false)
+  expect(
+    "snapshotS2SStageUploadAssertionPermitEvidenceForTest" in PublicApi
+  ).toBe(false)
+  expect("closeS2SStageUploadAssertionPermitScope" in PublicApi).toBe(false)
+  expect("probeS2SStageUploadAssertionMechanicsForTest" in PublicApi).toBe(
+    false
+  )
   expect("validateS2SCandidateReadReplayPair" in PublicApi).toBe(false)
   expect("validateS2SCandidateReadReplayPairEffect" in PublicApi).toBe(false)
   expect(
@@ -119,6 +152,12 @@ it("keeps stage artifact capability and permit types root-private", () => {
   type ForbiddenReplay = import("../src/index.js").S2SStageArtifactReadReplaySnapshot
   // @ts-expect-error upload postcondition types are deliberately root-private
   type ForbiddenUploadPostcondition = import("../src/index.js").S2SStageUploadPostconditionSnapshot
+  // @ts-expect-error prepared carrier bearers are deliberately root-private
+  type ForbiddenPreparedCarrier = import("../src/index.js").S2SPreparedStageCarrierCapability
+  // @ts-expect-error assertion permit bearers are deliberately root-private
+  type ForbiddenUploadAssertion = import("../src/index.js").S2SStageUploadAssertionPermitScope
+  // @ts-expect-error upload outcome classifications are deliberately root-private
+  type ForbiddenUploadOutcome = import("../src/index.js").S2SStageUploadOutcomeClassification
   // @ts-expect-error durable recovery types are deliberately root-private
   type ForbiddenRecovery = import("../src/index.js").S2SDurableEvidenceRecovery
   // @ts-expect-error durable replay-profile types are deliberately root-private
@@ -130,6 +169,9 @@ it("keeps stage artifact capability and permit types root-private", () => {
     ForbiddenLookupTrace | undefined,
     ForbiddenReplay | undefined,
     ForbiddenUploadPostcondition | undefined,
+    ForbiddenPreparedCarrier | undefined,
+    ForbiddenUploadAssertion | undefined,
+    ForbiddenUploadOutcome | undefined,
     ForbiddenRecovery | undefined,
     ForbiddenReplayPublication | undefined
   ] = [
@@ -140,9 +182,15 @@ it("keeps stage artifact capability and permit types root-private", () => {
     undefined,
     undefined,
     undefined,
+    undefined,
+    undefined,
+    undefined,
     undefined
   ]
   expect(absent).toEqual([
+    undefined,
+    undefined,
+    undefined,
     undefined,
     undefined,
     undefined,

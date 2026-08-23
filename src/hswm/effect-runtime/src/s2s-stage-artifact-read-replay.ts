@@ -1881,6 +1881,43 @@ const validateReplaySemantics = (
 
 const AUTHENTIC_REPLAY_SNAPSHOTS = new WeakSet<object>()
 
+/**
+ * Root-private runtime authenticity check for a freshly validated predecessor
+ * replay. A structurally valid or serialized replay is evidence data, not this
+ * process-local bearer.
+ */
+export const inspectS2SStageArtifactReadReplaySnapshot = (
+  input: unknown
+): Either.Either<
+  S2SStageArtifactReadReplaySnapshot,
+  S2SStageArtifactReadReplayError
+> => {
+  try {
+    if (
+      input === null ||
+      typeof input !== "object" ||
+      !AUTHENTIC_REPLAY_SNAPSHOTS.has(input)
+    ) {
+      return Either.left(
+        replayError(
+          "INPUT_INVALID",
+          "AUTHENTIC_REPLAY",
+          "predecessor replay was not issued by this module instance"
+        )
+      )
+    }
+    return Either.right(input as S2SStageArtifactReadReplaySnapshot)
+  } catch {
+    return Either.left(
+      replayError(
+        "INPUT_INVALID",
+        "AUTHENTIC_REPLAY",
+        "predecessor replay authenticity inspection failed closed"
+      )
+    )
+  }
+}
+
 const makeReplaySnapshot = (
   carrier: DecodedReplayCarrier,
   semantics: ValidatedReplaySemantics

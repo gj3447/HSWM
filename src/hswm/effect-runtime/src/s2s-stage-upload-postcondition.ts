@@ -43,6 +43,8 @@ import {
 } from "./s2s-stage-artifact-read-replay.js"
 import { S2S_STAGE_ARTIFACT_SPECS } from "./s2s-stage-artifact-spec.js"
 import {
+  S2S_STAGE_UPLOAD_ASSERTION_OPERATION,
+  S2S_STAGE_UPLOAD_ASSERTION_PERMIT_EVIDENCE_SCHEMA_VERSION,
   S2S_STAGE_UPLOAD_POSTCONDITION_MANIFEST_MAX_BYTES,
   S2S_STAGE_UPLOAD_POSTCONDITION_MANIFEST_MEMBER_NAME,
   S2S_STAGE_UPLOAD_POSTCONDITION_MAX_BYTES,
@@ -77,10 +79,10 @@ const HTTP_ETAG_PATTERN = /^(?:W\/)?"[\u0021\u0023-\u007e]{0,508}"$/
 const RFC3339_UTC_SECONDS_PATTERN =
   /^\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\dZ$/
 
-export const S2S_STAGE_UPLOAD_ASSERTION_PERMIT_EVIDENCE_SCHEMA_VERSION =
-  "hswm-swm0w-s2s-stage-upload-assertion-permit-evidence/v1" as const
-export const S2S_STAGE_UPLOAD_ASSERTION_OPERATION =
-  "ASSERT_AND_RECOVER_CURRENT_STAGE_ARTIFACT" as const
+export {
+  S2S_STAGE_UPLOAD_ASSERTION_OPERATION,
+  S2S_STAGE_UPLOAD_ASSERTION_PERMIT_EVIDENCE_SCHEMA_VERSION
+} from "./s2s-stage-upload-postcondition-contract.js"
 
 const PositiveSafeIntegerSchema = Schema.Number.pipe(
   Schema.int(),

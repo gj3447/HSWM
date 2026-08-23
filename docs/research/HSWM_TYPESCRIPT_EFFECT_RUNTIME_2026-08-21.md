@@ -306,3 +306,20 @@ current-run service node. This advances only `Π`. It is not durable replay
 evidence or live bearer issuance. Before a stage-read replay schema is
 implemented, its byte model must resolve the 75 MiB worst-case candidate read
 against the current 16 MiB profile and 64 MiB per-attachment envelope limits.
+
+The bounded stage-read replay core is implemented at code checkpoint `955beb0`
+and recorded in the
+[`stage-read replay-core handoff`](../operations/HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and
+[`v12 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v12.json).
+It resolves the prior byte contradiction by retaining the downloaded archive
+as one revalidated content-addressed predecessor reference and encoding exactly
+`manifest.json` plus `observations.bin` in a deterministic stored ZIP capped at
+12,583,176 bytes. A strict unknown-input `Either` core and lazy typed Effect
+shell reconstruct all retained observations, revalidate the source chain,
+archive, members, download and permit receipts, and bind candidate FIRST/REREAD
+through one current-run receipt and an exact permit-ledger prefix. This advances
+only `Π`. Recovered getters and attachment readers remain an unbranded callable
+boundary; the aggregate hostile/every-phase matrix, production stage emission,
+external durable root, GitHub origin, genuine capabilities, and all scientific
+claims remain OPEN.

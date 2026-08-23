@@ -64,7 +64,7 @@ engineering checkpoints:
   healthy-success rosters. Nested replay semantics, complete source/read
   snapshots, failure/VOID profiles, closed stage programs, upload
   postconditions, external storage, and the finalizer remain OPEN.
-- [`v11 current lookup-trace/shared-Layer checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v11.json)
+- [`v11 historical lookup-trace/shared-Layer checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v11.json)
   records complete bounded raw observation retention for successful poll-one,
   poll-two, and poll-three artifact lookup, plus one closed Effect Layer graph
   that, within one build, shares a single current-run service between replay
@@ -72,8 +72,16 @@ engineering checkpoints:
   durable stage-read replay is still OPEN: its 16 MiB profile and 64 MiB
   envelope cap cannot contain the 75 MiB worst-case candidate read before
   framing.
+- [`v12 current stage-read replay-core checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v12.json)
+  records the frozen two-member stored-ZIP representation, exact
+  12,583,176-byte profile cap, strict unknown-input reconstruction, source-chain
+  and permit cross-bindings, and candidate FIRST/REREAD current-receipt plus
+  ledger-prefix validation. This is a bounded structural core only: recovered
+  getters/readers, the full hostile and every-phase matrix, production stage
+  emission, external durability, and GitHub origin remain OPEN. Continue from
+  [`HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v11 supersedes v10 only as the
-next-session entrypoint; v1 through v10 remain immutable historical
+runtime graphs, or remote Neo4j publications. v12 supersedes v11 only as the
+next-session entrypoint; v1 through v11 remain immutable historical
 projections.

@@ -75,9 +75,20 @@ pre-dispatch engineering:
   and fixed reads within one build, while the legacy read-only Layer signature
   remains unchanged. The one-use claim is limited to one trusted process/module
   identity slot; it is not Layer-lifetime or durable replay prevention, and the
-  production graph remains dormant while workflow bytes are OPEN. No durable
-  stage-read replay is implemented: its current 16 MiB profile cannot contain
-  the 75 MiB worst-case candidate raw components before framing.
+  production graph remains dormant while workflow bytes are OPEN.
+- `s2s-stage-artifact-read-replay-contract.ts` and
+  `s2s-stage-artifact-read-replay.ts` implement the root-private bounded
+  structural stage-read replay core. It writes one deterministic stored ZIP
+  containing canonical `manifest.json` and the exact concatenated
+  `observations.bin`, capped at 12,583,176 bytes, while content-addressing and
+  revalidating the already durable predecessor archive instead of duplicating
+  up to 64 MiB. The strict unknown-input core returns `Either`; lazy typed
+  wrappers use `Effect.suspend`. Source envelopes, claims, archive bytes,
+  observation receipts, permits, and candidate FIRST/REREAD ledger continuity
+  are independently revalidated. Builders accept only module-issued validated
+  reads. This is not yet production attachment emission or durable integration:
+  recovered getters/readers and the full hostile/every-phase matrix remain
+  OPEN.
 - `s2s-preregistration.ts` keeps the validated preregistration and direct-child
   registration-commit lineage runtime-authentic. Commit-B validation now
   returns a module-issued, WeakMap-backed capability with self-hashed immutable
@@ -118,18 +129,24 @@ remains `BLOCKED_PRE_PREREG`: the bounded adapters and closed current-run Layer
 graph are present, but no issued current-run/dispatch authority, workflow,
 complete replay-closed durable evidence deployment, or external event-10
 finalizer exists. Resume from the repository
-[`current next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_LOOKUP_TRACE_SHARED_LAYER_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+[`current stage-read replay-core handoff`](../../../docs/operations/HSWM_SWM0W_S2S_STAGE_READ_REPLAY_CORE_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and its
+[`v12 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v12.json)
+before composing stage programs, workflow, or a future round. The preceding
+[`v11 lookup-trace/shared-Layer handoff`](../../../docs/operations/HSWM_SWM0W_S2S_LOOKUP_TRACE_SHARED_LAYER_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and
 [`v11 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v11.json)
-before composing stage programs, workflow, or a future round. The canonical
+remain immutable historical checkpoints. The canonical
 predecessor-linked envelope and create-only shared-POSIX B/stage claim substrate
 are implemented. The replay prerequisites and top-level healthy-success
 attachment rosters are also fixed. Successful artifact lookup traces are now
-complete in memory, but the durable stage-read replay format/caps, full
-registration source snapshot, nested replay semantics, failure/VOID profiles,
-closed stage programs, mandatory-upload postconditions, external storage
-wiring, and the terminal finalizer remain OPEN. Production remains dormant
-while workflow bytes and one literal API path selection are OPEN.
+complete in memory, and the bounded stage-read representation, structural
+validator/builder, and profile caps are implemented. Durable stage integration,
+the complete hostile/phase matrix, full registration source snapshot, nested
+replay semantics, failure/VOID profiles, closed stage programs,
+mandatory-upload postconditions, external storage wiring, and the terminal
+finalizer remain OPEN. Production remains dormant while workflow bytes and one
+literal API path selection are OPEN.
 
 The in-memory Layer's static capability-ID allowlist is configuration for tests
 and local scaffolding, not identity authentication. This slice is not evidence

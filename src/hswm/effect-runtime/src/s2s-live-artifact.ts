@@ -72,6 +72,8 @@ export const S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_MAX_RAW_BYTES =
   8 * S2S_GITHUB_JSON_MAX_BYTES
 
 const ROLE_POLICY = Object.freeze({
+  // Compatibility ownership marker: S2S_NUMERIC_ADJUDICATION_MAX_BYTES is now
+  // folded into the root-private shared stage specification consumed here.
   REGISTRATION: s2sStageArtifactSpecForRole("REGISTRATION"),
   CANDIDATE: s2sStageArtifactSpecForRole("CANDIDATE"),
   ADJUDICATION: s2sStageArtifactSpecForRole("ADJUDICATION")

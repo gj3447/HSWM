@@ -45,8 +45,25 @@ it("does not export privileged store or authorizer capabilities", () => {
   expect("S2SArtifactAuthority" in PublicApi).toBe(false)
   expect("S2SStageArtifactReads" in PublicApi).toBe(false)
   expect("S2SStageArtifactPermitError" in PublicApi).toBe(false)
+  expect("S2SStageArtifactReadError" in PublicApi).toBe(false)
+  expect("S2SArtifactReadbackError" in PublicApi).toBe(false)
+  expect(
+    "S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_SCHEMA_VERSION" in PublicApi
+  ).toBe(false)
+  expect(
+    "S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_MAX_RAW_BYTES" in PublicApi
+  ).toBe(false)
+  expect(
+    "makeS2SCurrentRunAndStageArtifactReadsLiveLayer" in PublicApi
+  ).toBe(false)
   expect("makeS2SStageArtifactReadsLiveLayer" in PublicApi).toBe(false)
   expect("probeS2SStageArtifactReadMechanicsForTest" in PublicApi).toBe(false)
+  expect("claimS2SStageArtifactPermitScope" in PublicApi).toBe(false)
+  expect("makeS2SStageArtifactPermitTestScope" in PublicApi).toBe(false)
+  expect("appendS2SStageArtifactLedgerEntry" in PublicApi).toBe(false)
+  expect("useS2SStageArtifactPermit" in PublicApi).toBe(false)
+  expect("snapshotS2SStageArtifactPermitEvidence" in PublicApi).toBe(false)
+  expect("closeS2SStageArtifactPermitScope" in PublicApi).toBe(false)
   expect("validateS2SRegistrationCommitB" in PublicApi).toBe(false)
   expect("inspectS2SRegistrationCommitAuthority" in PublicApi).toBe(false)
   expect("inspectS2SRegistrationReplaySnapshot" in PublicApi).toBe(false)
@@ -71,9 +88,15 @@ it("keeps stage artifact capability and permit types root-private", () => {
   type ForbiddenReads = import("../src/index.js").S2SStageArtifactReadsService
   // @ts-expect-error permit evidence types are deliberately root-private
   type ForbiddenPermit = import("../src/index.js").S2SStageArtifactPermitEvidence
+  // @ts-expect-error validated stage read types are deliberately root-private
+  type ForbiddenValidatedRead = import("../src/index.js").S2SValidatedStageArtifactRead
+  // @ts-expect-error raw lookup trace types are deliberately root-private
+  type ForbiddenLookupTrace = import("../src/index.js").S2SArtifactSuccessfulLookupTrace
   const absent: readonly [
     ForbiddenReads | undefined,
-    ForbiddenPermit | undefined
-  ] = [undefined, undefined]
-  expect(absent).toEqual([undefined, undefined])
+    ForbiddenPermit | undefined,
+    ForbiddenValidatedRead | undefined,
+    ForbiddenLookupTrace | undefined
+  ] = [undefined, undefined, undefined, undefined]
+  expect(absent).toEqual([undefined, undefined, undefined, undefined])
 })

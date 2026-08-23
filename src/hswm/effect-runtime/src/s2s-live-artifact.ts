@@ -8,6 +8,7 @@ import {
   type S2SArtifactEvidence
 } from "./s2s-confirmatory.js"
 import {
+  S2S_GITHUB_JSON_MAX_BYTES,
   S2SGitHubObserver,
   S2SGitHubObserverLive,
   makeS2SGitHubHttpTransportLiveLayer,
@@ -64,6 +65,12 @@ import {
 export { S2SStageArtifactPermitError } from "./s2s-stage-artifact-permits.js"
 
 export type S2SArtifactRole = S2SConfirmatoryArtifactRole
+
+export const S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_SCHEMA_VERSION =
+  "hswm-swm0w-s2s-artifact-successful-lookup-trace/v1" as const
+/** Initial run + jobs + at most three artifacts/run observation pairs. */
+export const S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_MAX_RAW_BYTES =
+  8 * S2S_GITHUB_JSON_MAX_BYTES
 
 interface RolePolicy {
   readonly jobName: string
@@ -166,6 +173,48 @@ export interface S2SArtifactAbsenceObservationPair {
   readonly workflowRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
 }
 
+export interface S2SArtifactLookupAttempt<
+  Ordinal extends 1 | 2 | 3 = 1 | 2 | 3,
+  Classification extends
+    | "ARTIFACT_NOT_OBSERVED"
+    | "ARTIFACT_OBSERVED" = "ARTIFACT_NOT_OBSERVED" | "ARTIFACT_OBSERVED"
+> {
+  readonly ordinal: Ordinal
+  readonly classification: Classification
+  readonly artifactsObservation: S2SGitHubObservation<S2SGitHubArtifactsProjection>
+  readonly workflowRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
+}
+
+interface S2SArtifactSuccessfulLookupTraceBase {
+  readonly schemaVersion: typeof S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_SCHEMA_VERSION
+  readonly initialWorkflowRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
+  readonly workflowJobsObservation: S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>
+  readonly totalRawBodyByteLength: number
+}
+
+export type S2SArtifactSuccessfulLookupTrace =
+  | (S2SArtifactSuccessfulLookupTraceBase & {
+      readonly successfulAttemptOrdinal: 1
+      readonly attempts: readonly [
+        S2SArtifactLookupAttempt<1, "ARTIFACT_OBSERVED">
+      ]
+    })
+  | (S2SArtifactSuccessfulLookupTraceBase & {
+      readonly successfulAttemptOrdinal: 2
+      readonly attempts: readonly [
+        S2SArtifactLookupAttempt<1, "ARTIFACT_NOT_OBSERVED">,
+        S2SArtifactLookupAttempt<2, "ARTIFACT_OBSERVED">
+      ]
+    })
+  | (S2SArtifactSuccessfulLookupTraceBase & {
+      readonly successfulAttemptOrdinal: 3
+      readonly attempts: readonly [
+        S2SArtifactLookupAttempt<1, "ARTIFACT_NOT_OBSERVED">,
+        S2SArtifactLookupAttempt<2, "ARTIFACT_NOT_OBSERVED">,
+        S2SArtifactLookupAttempt<3, "ARTIFACT_OBSERVED">
+      ]
+    })
+
 export interface S2SArtifactAbsenceReconciliationReceipt {
   readonly schemaVersion: "hswm-swm0w-s2s-artifact-absence-reconciliation/v3"
   readonly classification: "RECONCILED_ABSENCE_NOT_PROOF"
@@ -216,7 +265,7 @@ export type S2SArtifactNegativeOutcome =
   | S2SArtifactReconciledAbsence
   | S2SArtifactAmbiguous
 
-interface S2SObservedArtifact {
+interface S2SClassifiedObservedArtifact {
   readonly _tag: "Observed"
   readonly role: S2SArtifactRole
   readonly workflowRunId: number
@@ -227,6 +276,10 @@ interface S2SObservedArtifact {
   readonly workflowRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
   readonly workflowJobsObservation: S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>
   readonly artifactsObservation: S2SGitHubObservation<S2SGitHubArtifactsProjection>
+}
+
+interface S2SObservedArtifact extends S2SClassifiedObservedArtifact {
+  readonly successfulLookupTrace: S2SArtifactSuccessfulLookupTrace
 }
 
 export interface S2SValidatedStageArtifactRead {
@@ -240,6 +293,7 @@ export interface S2SValidatedStageArtifactRead {
   readonly workflowRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
   readonly workflowJobsObservation: S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>
   readonly artifactsObservation: S2SGitHubObservation<S2SGitHubArtifactsProjection>
+  readonly successfulLookupTrace: S2SArtifactSuccessfulLookupTrace
   readonly readbackStartRunObservation: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>
   readonly artifactRequeryObservation: S2SGitHubObservation<S2SGitHubArtifactProjection>
   readonly artifactDownload: S2SGitHubArtifactDownload
@@ -538,7 +592,7 @@ const classifyArtifact = (
   run: S2SGitHubObservation<S2SGitHubWorkflowRunProjection>,
   jobs: S2SGitHubObservation<S2SGitHubWorkflowJobsProjection>,
   artifacts: S2SGitHubObservation<S2SGitHubArtifactsProjection>
-): S2SObservedArtifact | S2SArtifactNegativeOutcome => {
+): S2SClassifiedObservedArtifact | S2SArtifactNegativeOutcome => {
   const policy = ROLE_POLICY[role]
   if (
     initialRun.receipt.observedAtUnixSeconds >
@@ -651,6 +705,104 @@ const classifyArtifact = (
     workflowRunObservation: run,
     workflowJobsObservation: jobs,
     artifactsObservation: artifacts
+  })
+}
+
+const lookupAttempt = <
+  const Ordinal extends 1 | 2 | 3,
+  const Classification extends
+    | "ARTIFACT_NOT_OBSERVED"
+    | "ARTIFACT_OBSERVED"
+>(
+  ordinal: Ordinal,
+  classification: Classification,
+  pair: S2SArtifactAbsenceObservationPair
+): S2SArtifactLookupAttempt<Ordinal, Classification> =>
+  Object.freeze({
+    ordinal,
+    classification,
+    artifactsObservation: pair.artifactsObservation,
+    workflowRunObservation: pair.workflowRunObservation
+  })
+
+const successfulLookupTraceBase = (
+  observed: S2SClassifiedObservedArtifact,
+  attempts: ReadonlyArray<S2SArtifactLookupAttempt>
+): S2SArtifactSuccessfulLookupTraceBase => {
+  const totalRawBodyByteLength =
+    observed.initialWorkflowRunObservation.receipt.rawBodyByteLength +
+    observed.workflowJobsObservation.receipt.rawBodyByteLength +
+    attempts.reduce(
+      (total, attempt) =>
+        total +
+        attempt.artifactsObservation.receipt.rawBodyByteLength +
+        attempt.workflowRunObservation.receipt.rawBodyByteLength,
+      0
+    )
+  if (
+    !Number.isSafeInteger(totalRawBodyByteLength) ||
+    totalRawBodyByteLength < 0 ||
+    totalRawBodyByteLength >
+      S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_MAX_RAW_BYTES
+  ) {
+    throw new Error(
+      "successful artifact lookup raw-byte budget invariant violated"
+    )
+  }
+  return Object.freeze({
+    schemaVersion: S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_SCHEMA_VERSION,
+    initialWorkflowRunObservation: observed.initialWorkflowRunObservation,
+    workflowJobsObservation: observed.workflowJobsObservation,
+    totalRawBodyByteLength
+  })
+}
+
+const makeSuccessfulLookupTrace = (
+  priorAbsencePairs: ReadonlyArray<S2SArtifactAbsenceObservationPair>,
+  observed: S2SClassifiedObservedArtifact
+): S2SArtifactSuccessfulLookupTrace => {
+  const successfulPair: S2SArtifactAbsenceObservationPair = Object.freeze({
+    artifactsObservation: observed.artifactsObservation,
+    workflowRunObservation: observed.workflowRunObservation
+  })
+  if (priorAbsencePairs.length === 0) {
+    const attempts = Object.freeze([
+      lookupAttempt(1, "ARTIFACT_OBSERVED", successfulPair)
+    ] as const)
+    return Object.freeze({
+      ...successfulLookupTraceBase(observed, attempts),
+      successfulAttemptOrdinal: 1 as const,
+      attempts
+    })
+  }
+  const first = priorAbsencePairs[0]
+  if (first === undefined) {
+    throw new Error("successful artifact lookup trace invariant violated")
+  }
+  if (priorAbsencePairs.length === 1) {
+    const attempts = Object.freeze([
+      lookupAttempt(1, "ARTIFACT_NOT_OBSERVED", first),
+      lookupAttempt(2, "ARTIFACT_OBSERVED", successfulPair)
+    ] as const)
+    return Object.freeze({
+      ...successfulLookupTraceBase(observed, attempts),
+      successfulAttemptOrdinal: 2 as const,
+      attempts
+    })
+  }
+  const second = priorAbsencePairs[1]
+  if (priorAbsencePairs.length !== 2 || second === undefined) {
+    throw new Error("successful artifact lookup trace invariant violated")
+  }
+  const attempts = Object.freeze([
+    lookupAttempt(1, "ARTIFACT_NOT_OBSERVED", first),
+    lookupAttempt(2, "ARTIFACT_NOT_OBSERVED", second),
+    lookupAttempt(3, "ARTIFACT_OBSERVED", successfulPair)
+  ] as const)
+  return Object.freeze({
+    ...successfulLookupTraceBase(observed, attempts),
+    successfulAttemptOrdinal: 3 as const,
+    attempts
   })
 }
 
@@ -995,7 +1147,12 @@ const lookupArtifact = (
         jobs,
         artifacts
       )
-      if (classified._tag === "Observed") return classified
+      if (classified._tag === "Observed") {
+        return Object.freeze({
+          ...classified,
+          successfulLookupTrace: makeSuccessfulLookupTrace(pairs, classified)
+        })
+      }
       if (classified._tag !== "Ambiguous" || classified.reason !== "ARTIFACT_NOT_OBSERVED") {
         return yield* stageReadError(
           "LOOKUP_REJECTED",
@@ -1281,6 +1438,7 @@ const validatedRead = (
     workflowRunObservation: core.observed.workflowRunObservation,
     workflowJobsObservation: core.observed.workflowJobsObservation,
     artifactsObservation: core.observed.artifactsObservation,
+    successfulLookupTrace: core.observed.successfulLookupTrace,
     readbackStartRunObservation: core.readbackStartRunObservation,
     artifactRequeryObservation: core.artifactRequeryObservation,
     artifactDownload: core.artifactDownload,
@@ -1395,27 +1553,13 @@ const makeStageArtifactReads = (
 const fromEither = <A, E>(either: Either.Either<A, E>): Effect.Effect<A, E> =>
   Either.isLeft(either) ? Effect.fail(either.left) : Effect.succeed(either.right)
 
-/**
- * Closed production composition root. Current-run issuance and inspection must
- * succeed before GitHub artifact transport configuration is evaluated. While
- * workflow bytes remain OPEN, this fails with zero artifact configuration or
- * artifact I/O and no permit-scope attachment.
- */
-export const makeS2SStageArtifactReadsLiveLayer = (
-  registrationAuthority: unknown,
+const makeS2SStageArtifactReadsFromCurrentRunLiveLayer = (
   githubConfig: S2SGitHubLiveTransportConfig
 ) =>
   Layer.effect(
     S2SStageArtifactReads,
     Effect.gen(function* () {
-      const current = yield* S2SCurrentRunStage.pipe(
-        Effect.provide(
-          makeS2SCurrentRunStageAuthorityLiveLayer(
-            registrationAuthority,
-            githubConfig
-          )
-        )
-      )
+      const current = yield* S2SCurrentRunStage
       const scope = yield* fromEither(
         claimS2SStageArtifactPermitScope(current.authority)
       )
@@ -1432,6 +1576,45 @@ export const makeS2SStageArtifactReadsLiveLayer = (
       )
     })
   )
+
+/**
+ * Closed production composition root for programs that need both the exact
+ * current-run replay source and fixed artifact reads. One current-run Layer
+ * node is sequentially provided to the read Layer and retained for the whole
+ * program, so both consumers share one authority bearer and one acquisition.
+ */
+export const makeS2SCurrentRunAndStageArtifactReadsLiveLayer = (
+  registrationAuthority: unknown,
+  githubConfig: S2SGitHubLiveTransportConfig
+) => {
+  const currentRunLive = makeS2SCurrentRunStageAuthorityLiveLayer(
+    registrationAuthority,
+    githubConfig
+  )
+  const artifactReadsAfterCurrent =
+    makeS2SStageArtifactReadsFromCurrentRunLiveLayer(githubConfig)
+  return artifactReadsAfterCurrent.pipe(Layer.provideMerge(currentRunLive))
+}
+
+/**
+ * Compatibility projection for consumers that only need fixed artifact reads.
+ * Current-run issuance and inspection must succeed before GitHub artifact
+ * transport configuration is evaluated. While workflow bytes remain OPEN,
+ * this fails with zero artifact configuration or artifact I/O and no
+ * permit-scope attachment.
+ */
+export const makeS2SStageArtifactReadsLiveLayer = (
+  registrationAuthority: unknown,
+  githubConfig: S2SGitHubLiveTransportConfig
+) => {
+  const currentRunLive = makeS2SCurrentRunStageAuthorityLiveLayer(
+    registrationAuthority,
+    githubConfig
+  )
+  return makeS2SStageArtifactReadsFromCurrentRunLiveLayer(githubConfig).pipe(
+    Layer.provide(currentRunLive)
+  )
+}
 
 /**
  * @internal TEST-ONLY, NON-AUTHORIZING.

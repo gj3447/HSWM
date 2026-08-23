@@ -29,7 +29,11 @@ import {
   type S2SGitHubWorkflowRunProjection,
   type S2SGitHubWorkflowRunsProjection
 } from "../src/s2s-live-github.js"
-import { makeS2SStageArtifactReadsLiveLayer } from "../src/s2s-live-artifact.js"
+import {
+  S2SStageArtifactReads,
+  makeS2SCurrentRunAndStageArtifactReadsLiveLayer,
+  makeS2SStageArtifactReadsLiveLayer
+} from "../src/s2s-live-artifact.js"
 import {
   S2SCurrentInvocation,
   inspectS2SCurrentInvocationAuthority,
@@ -97,6 +101,13 @@ type LayerRequirements<Value> = Value extends Layer.Layer<
 >
   ? Requirements
   : unknown
+type LayerSuccess<Value> = Value extends Layer.Layer<
+  infer Success,
+  infer _Failure,
+  infer _Requirements
+>
+  ? Success
+  : unknown
 type ProductionLayerRequirements = LayerRequirements<
   ReturnType<typeof makeS2SCurrentRunStageAuthorityLiveLayer>
 >
@@ -118,6 +129,40 @@ const ARTIFACT_CONSTRUCTOR_HAS_TWO_PARAMETERS: Parameters<
   typeof makeS2SStageArtifactReadsLiveLayer
 >["length"] extends 2
   ? true
+  : false = true
+type ArtifactLayerSuccess = LayerSuccess<
+  ReturnType<typeof makeS2SStageArtifactReadsLiveLayer>
+>
+const ARTIFACT_LAYER_OUTPUT_IS_COMPATIBLE: [ArtifactLayerSuccess] extends [
+  S2SStageArtifactReads
+]
+  ? [S2SStageArtifactReads] extends [ArtifactLayerSuccess]
+    ? true
+    : false
+  : false = true
+type SharedStageLayerRequirements = LayerRequirements<
+  ReturnType<typeof makeS2SCurrentRunAndStageArtifactReadsLiveLayer>
+>
+const SHARED_STAGE_LAYER_IS_CLOSED: [SharedStageLayerRequirements] extends [never]
+  ? true
+  : false = true
+const SHARED_STAGE_CONSTRUCTOR_HAS_TWO_PARAMETERS: Parameters<
+  typeof makeS2SCurrentRunAndStageArtifactReadsLiveLayer
+>["length"] extends 2
+  ? true
+  : false = true
+type SharedStageLayerSuccess = LayerSuccess<
+  ReturnType<typeof makeS2SCurrentRunAndStageArtifactReadsLiveLayer>
+>
+type ExpectedSharedStageLayerSuccess =
+  | S2SCurrentRunStage
+  | S2SStageArtifactReads
+const SHARED_STAGE_LAYER_OUTPUT_IS_EXACT: [SharedStageLayerSuccess] extends [
+  ExpectedSharedStageLayerSuccess
+]
+  ? [ExpectedSharedStageLayerSuccess] extends [SharedStageLayerSuccess]
+    ? true
+    : false
   : false = true
 type ReviewedFixture = {
   readonly workflowApiPath: string
@@ -1261,7 +1306,7 @@ it("keeps production issuance closed before GitHub I/O while source bytes are OP
   }
 }, 30_000)
 
-it("keeps production stage artifact reads closed before artifact configuration or I/O", async () => {
+it("keeps legacy and shared production artifact graphs closed before artifact I/O", async () => {
   const temporaryRoot = mkdtempSync(join(tmpdir(), "hswm-s2s-live-artifact-"))
   const eventPath = join(temporaryRoot, "event.json")
   writeFileSync(eventPath, jsonBytes(invocationEvent()))
@@ -1290,6 +1335,30 @@ it("keeps production stage artifact reads closed before artifact configuration o
     }
     expect(fetchSpy).not.toHaveBeenCalled()
     expect(makeS2SStageArtifactReadsLiveLayer.length).toBe(2)
+    const sharedOutcome = await Effect.runPromise(
+      Effect.gen(function* () {
+        const replay = yield* snapshotS2SCurrentRunReplay
+        const reads = yield* S2SStageArtifactReads
+        return [replay.totalRawByteLength, reads.stage] as const
+      }).pipe(
+        Effect.provide(
+          makeS2SCurrentRunAndStageArtifactReadsLiveLayer(
+            registrationFixture.registrationAuthority,
+            { token: "" }
+          )
+        ),
+        Effect.either
+      )
+    )
+    expect(Either.isLeft(sharedOutcome)).toBe(true)
+    if (Either.isLeft(sharedOutcome)) {
+      expect(sharedOutcome.left).toMatchObject({
+        _tag: "S2SCurrentRunInputError",
+        reason: "WORKFLOW_SOURCE_BYTES_OPEN"
+      })
+    }
+    expect(fetchSpy).not.toHaveBeenCalled()
+    expect(makeS2SCurrentRunAndStageArtifactReadsLiveLayer.length).toBe(2)
   } finally {
     vi.unstubAllGlobals()
     vi.unstubAllEnvs()
@@ -1366,6 +1435,9 @@ it("keeps every current-run authority surface out of the package root", async ()
     "probeS2SRunAuthorityAcquisitionForTest",
     "S2SStageArtifactReads",
     "S2SStageArtifactPermitError",
+    "S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_SCHEMA_VERSION",
+    "S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_MAX_RAW_BYTES",
+    "makeS2SCurrentRunAndStageArtifactReadsLiveLayer",
     "makeS2SStageArtifactReadsLiveLayer",
     "probeS2SStageArtifactReadMechanicsForTest"
   ]) {
@@ -1403,12 +1475,19 @@ it("defines an observer-shaped decoy without creating a production override seam
   expect(PRODUCTION_CONSTRUCTOR_HAS_TWO_PARAMETERS).toBe(true)
   expect(ARTIFACT_LAYER_IS_CLOSED).toBe(true)
   expect(ARTIFACT_CONSTRUCTOR_HAS_TWO_PARAMETERS).toBe(true)
+  expect(ARTIFACT_LAYER_OUTPUT_IS_COMPATIBLE).toBe(true)
+  expect(SHARED_STAGE_LAYER_IS_CLOSED).toBe(true)
+  expect(SHARED_STAGE_CONSTRUCTOR_HAS_TWO_PARAMETERS).toBe(true)
+  expect(SHARED_STAGE_LAYER_OUTPUT_IS_EXACT).toBe(true)
   expect(makeS2SCurrentRunStageAuthorityLiveLayer.length).toBe(2)
   expect(makeS2SStageArtifactReadsLiveLayer.length).toBe(2)
+  expect(makeS2SCurrentRunAndStageArtifactReadsLiveLayer.length).toBe(2)
   if (false) {
     // @ts-expect-error production has no Observer or policy override parameter
     makeS2SCurrentRunStageAuthorityLiveLayer({}, { token: "" }, decoy)
     // @ts-expect-error production has no Observer or policy override parameter
     makeS2SStageArtifactReadsLiveLayer({}, { token: "" }, decoy)
+    // @ts-expect-error shared production has no Observer or policy override parameter
+    makeS2SCurrentRunAndStageArtifactReadsLiveLayer({}, { token: "" }, decoy)
   }
 })

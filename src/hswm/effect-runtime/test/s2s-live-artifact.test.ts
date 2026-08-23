@@ -13,6 +13,8 @@ import {
   rawS2SFileSha256
 } from "../src/s2s-canonical.js"
 import {
+  S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_MAX_RAW_BYTES,
+  S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_SCHEMA_VERSION,
   S2SStageArtifactReadError,
   probeS2SStageArtifactReadMechanicsForTest,
   type S2SAdjudicateStageArtifactReads,
@@ -22,6 +24,7 @@ import {
 import {
   S2S_GITHUB_API_VERSION,
   S2S_GITHUB_ARTIFACT_DOWNLOAD_SCHEMA_VERSION,
+  S2S_GITHUB_JSON_MAX_BYTES,
   S2S_GITHUB_REPOSITORY,
   S2SGitHubObservationError,
   S2SGitHubObserver,
@@ -357,12 +360,12 @@ const artifactJson = (role: ArtifactRole, archive: Uint8Array) => ({
 interface ArtifactPlan {
   readonly role: ArtifactRole
   readonly archive: Uint8Array
-  readonly positivePoll: 1 | 3 | null
+  readonly positivePoll: 1 | 2 | 3 | null
 }
 
 interface ScenarioOptions {
   readonly stage: S2SConfirmatoryJobStage
-  readonly positivePoll?: 1 | 3 | null
+  readonly positivePoll?: 1 | 2 | 3 | null
   readonly candidateRereadArchive?: Uint8Array
   readonly requestIdOverrides?: Readonly<Record<number, string>>
   readonly jobIdOverrides?: Readonly<
@@ -578,6 +581,110 @@ it.effect("exposes only lazy fixed zero-identity stage Effects", () => {
       })
   )
 })
+
+it.effect("retains the complete bounded raw lookup trace on poll one, two, and three", () =>
+  Effect.gen(function* () {
+    expect(S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_MAX_RAW_BYTES).toBe(
+      8 * S2S_GITHUB_JSON_MAX_BYTES
+    )
+    for (const positivePoll of [1, 2, 3] as const) {
+      const scenario = makeScenario({ stage: "CONFIRM", positivePoll })
+      yield* probeS2SStageArtifactReadMechanicsForTest(
+        makeSeed("CONFIRM"),
+        scenario.observer,
+        (reads) =>
+          Effect.gen(function* () {
+            const result = yield* confirmationReads(
+              reads
+            ).confirmReadRegistration
+            const trace = result.successfulLookupTrace
+            expect(trace.schemaVersion).toBe(
+              S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_SCHEMA_VERSION
+            )
+            expect(trace.successfulAttemptOrdinal).toBe(positivePoll)
+            expect(trace.attempts).toHaveLength(positivePoll)
+            expect(trace.attempts.map((attempt) => attempt.ordinal)).toEqual(
+              Array.from({ length: positivePoll }, (_, index) => index + 1)
+            )
+            expect(
+              trace.attempts.map((attempt) => attempt.classification)
+            ).toEqual([
+              ...Array.from(
+                { length: positivePoll - 1 },
+                () => "ARTIFACT_NOT_OBSERVED"
+              ),
+              "ARTIFACT_OBSERVED"
+            ])
+            const observations = [
+              trace.initialWorkflowRunObservation,
+              trace.workflowJobsObservation,
+              ...trace.attempts.flatMap((attempt) => [
+                attempt.artifactsObservation,
+                attempt.workflowRunObservation
+              ])
+            ]
+            expect(
+              new Set(
+                observations.map(
+                  (observation) => observation.receipt.githubRequestId
+                )
+              ).size
+            ).toBe(2 + 2 * positivePoll)
+            expect(trace.totalRawBodyByteLength).toBe(
+              observations.reduce(
+                (total, observation) =>
+                  total + observation.receipt.rawBodyByteLength,
+                0
+              )
+            )
+            expect(trace.totalRawBodyByteLength).toBeLessThanOrEqual(
+              (2 + 2 * positivePoll) * S2S_GITHUB_JSON_MAX_BYTES
+            )
+            expect(trace.totalRawBodyByteLength).toBeLessThanOrEqual(
+              S2S_ARTIFACT_SUCCESSFUL_LOOKUP_TRACE_MAX_RAW_BYTES
+            )
+            expect(result.permitEvidence.ledgerEntries).toHaveLength(
+              10 + 2 * positivePoll
+            )
+            expect(result.permitEvidence.ledgerEntries.slice(4)).toHaveLength(
+              6 + 2 * positivePoll
+            )
+            for (const observation of observations) {
+              const original = observation.readRawBody()
+              expect(rawS2SFileSha256(original)).toBe(
+                observation.receipt.rawBodySha256
+              )
+              const callerCopy = observation.readRawBody()
+              callerCopy[0] = (callerCopy[0] ?? 0) ^ 0xff
+              expect(observation.readRawBody()).toEqual(original)
+            }
+            const successfulAttempt = trace.attempts.find(
+              (attempt) => attempt.classification === "ARTIFACT_OBSERVED"
+            )
+            expect(
+              successfulAttempt?.artifactsObservation.receipt.receiptSha256
+            ).toBe(result.artifactsObservation.receipt.receiptSha256)
+            expect(
+              successfulAttempt?.workflowRunObservation.receipt.receiptSha256
+            ).toBe(result.workflowRunObservation.receipt.receiptSha256)
+            expect(trace.initialWorkflowRunObservation.receipt.receiptSha256).toBe(
+              result.initialWorkflowRunObservation.receipt.receiptSha256
+            )
+            expect(trace.workflowJobsObservation.receipt.receiptSha256).toBe(
+              result.workflowJobsObservation.receipt.receiptSha256
+            )
+            expect(Object.isFrozen(trace)).toBe(true)
+            expect(Object.isFrozen(trace.attempts)).toBe(true)
+            expect(trace.attempts.every(Object.isFrozen)).toBe(true)
+            expect(
+              Reflect.set(trace.attempts, 0, trace.attempts[0])
+            ).toBe(false)
+            expect(scenario.calls).toHaveLength(6 + 2 * positivePoll)
+          })
+      )
+    }
+  })
+)
 
 it.effect("REGISTER exposes no artifact operation", () => {
   const scenario = makeScenario({ stage: "REGISTER" })

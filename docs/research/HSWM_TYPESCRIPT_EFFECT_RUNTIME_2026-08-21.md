@@ -417,3 +417,20 @@ profile occurrence, complete-stage durable commit/recovery, reviewed workflow
 authority, GitHub-origin evidence, external shared durability,
 independent-process recovery, preregistration, future randomness, dispatch,
 event 10, or scientific verdict.
+
+That process-local mechanics gate is now implemented at code checkpoint
+`36b4c9b` and recorded in the
+[`v19 implementation handoff`](../operations/HSWM_SWM0W_S2S_PREPARED_CARRIER_ASSERTION_MECHANICS_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and
+[`v19 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v19.json).
+The new root-private modules provide disjoint authentic/test prepared-carrier
+registries, one anti-replenishing production identity slot, atomic one-use
+permit mechanics with burn-on-failure/defect/interruption, the exact bounded
+observation topology, and a pure seven-literal outcome classifier. Positive
+end-to-end execution remains a separately named
+`TEST_ONLY_NON_AUTHORIZING` fake-observer probe. Production observation
+admission, permit use, and evidence sealing fail closed until the module-local
+live Effect assertion shell exists; no genuine production bearer was issued.
+This advances only `Pi`. The next code target is the live shell and replay
+snapshot, followed by the bounded shared-POSIX feasibility gate before a
+complete stage-profile commit/recovery path.

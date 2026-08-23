@@ -140,9 +140,9 @@ remains `BLOCKED_PRE_PREREG`: the bounded adapters and closed current-run Layer
 graph are present, but no issued current-run/dispatch authority, workflow,
 complete replay-closed durable evidence deployment, or external event-10
 finalizer exists. Resume from the repository
-[`current stage-upload postcondition codec handoff`](../../../docs/operations/HSWM_SWM0W_S2S_STAGE_UPLOAD_POSTCONDITION_CODEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+[`current prepared-carrier and assertion-mechanics handoff`](../../../docs/operations/HSWM_SWM0W_S2S_PREPARED_CARRIER_ASSERTION_MECHANICS_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and its
-[`v18 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v18.json).
+[`v19 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v19.json).
 
 One deeply frozen, root-private `S2S_STAGE_ARTIFACT_SPECS` value now owns the
 fixed REGISTER, CONFIRM, and ADJUDICATE artifact mappings used by live
@@ -158,6 +158,18 @@ download/archive/prepared-member cross-binding. Builders accept only
 explicitly non-authorizing even when it rechecks a serialized trusted scope.
 The 19 focused tests and 310 full package tests close only this strict
 codec/reconstruction falsification gate.
+
+At code checkpoint `36b4c9b`, `s2s-prepared-stage-carrier.ts` adds disjoint
+module-authentic production and test registries, internal stage/role/job/member
+derivation, exact predecessor replay binding, idempotent same-byte preparation,
+conflict rejection, and one anti-replenishing production semantic slot.
+`s2s-stage-upload-assertion.ts` adds the fixed 1/2/3-attempt ledger topology,
+atomic `Ref.modify` reservation, and `Effect.acquireUseRelease` burn semantics.
+`s2s-stage-upload-outcome.ts` admits only the seven frozen v16 outcomes and
+never authorizes retry or external exactly-once claims. The positive probe and
+all generic append/use/seal mechanics are explicitly test-only; production
+paths fail with `PRODUCTION_ASSERTION_SHELL_OPEN`. The 33 new focused tests and
+343 full package tests close only this process-local mechanics gate.
 
 The reviewed ownership and gate order remain in the immutable
 [`v16 stage-upload assertion design handoff`](../../../docs/operations/HSWM_SWM0W_S2S_STAGE_UPLOAD_ASSERTION_DESIGN_NEXT_SESSION_2026-08-23.md)
@@ -184,10 +196,10 @@ and the
 and
 [`v12 KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v12.json).
 
-The immediate next gate is a module-authentic prepared-current-stage carrier
-capability plus a genuinely one-use same-stage permit and pure classifier.
-There is still no production assertion shell, filled upload-postcondition
-profile occurrence, complete-stage durable commit/recovery, reviewed workflow
+The immediate next gate is the root-private production Effect assertion shell
+and replay snapshot. There is still no live production assertion, genuine
+issued production bearer, filled upload-postcondition profile occurrence,
+complete-stage durable commit/recovery, reviewed workflow
 authority, GitHub-origin evidence, external shared durability,
 independent-process recovery, preregistration, future randomness, dispatch,
 event 10, or scientific verdict. This checkpoint changes only `Pi`; `H`, `W`,

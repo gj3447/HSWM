@@ -127,7 +127,7 @@ engineering checkpoints:
   strict codec/reconstruction, same-stage assertion, complete stage recovery,
   workflow authority, and every scientific claim remain OPEN. Continue from
   [`HSWM_SWM0W_S2S_SHARED_STAGE_ARTIFACT_SPEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_SHARED_STAGE_ARTIFACT_SPEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
-- [`v18 current stage-upload postcondition codec and reconstruction checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v18.json)
+- [`v18 historical stage-upload postcondition codec and reconstruction checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v18.json)
   records code commit `1f45f4b` and closes the root-private, non-authorizing
   codec/reconstruction slice for the production-intended `REGISTER`, `CONFIRM`,
   and `ADJUDICATE` stage-upload postcondition. Exact stage-correlated manifests,
@@ -145,11 +145,23 @@ engineering checkpoints:
   non-authorizing probe. The root-private Effect assertion shell follows; the
   bounded shared-POSIX feasibility proof remains required before one complete
   stage-profile commit and recovery path.
+- [`v19 current prepared-carrier and assertion-mechanics checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v19.json)
+  records code commit `36b4c9b`. It closes the process-local mechanics gate with
+  disjoint module-authentic prepared-carrier registries, one anti-replenishing
+  production semantic slot, atomic `Ref.modify` permit reservation,
+  `Effect.acquireUseRelease` burn semantics, the exact 1/2/3-attempt ledger
+  topology, a seven-literal non-authorizing outcome classifier, and a separately
+  named fake-observer probe. The positive probe remains
+  `TEST_ONLY_NON_AUTHORIZING`; production observation admission, permit use,
+  and evidence sealing fail with `PRODUCTION_ASSERTION_SHELL_OPEN`. No genuine
+  production bearer was issued, no profile occurrence was filled, and no
+  GitHub or scientific result is claimed. Continue from
+  [`HSWM_SWM0W_S2S_PREPARED_CARRIER_ASSERTION_MECHANICS_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_PREPARED_CARRIER_ASSERTION_MECHANICS_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v18 supersedes v17 only as the
-latest continuation entrypoint; v1 through v17 remain immutable historical
+runtime graphs, or remote Neo4j publications. v19 supersedes v18 only as the
+latest continuation entrypoint; v1 through v18 remain immutable historical
 projections. The TypeScript/Effect runtime owns control and evidence while the
 pinned Python/NumPy oracle remains a bounded deterministic numeric function
-cell. V18 advances only the local `Π` engineering boundary; it changes no
+cell. V19 advances only the local `Π` engineering boundary; it changes no
 scientific `H/W/A/F` result or outcome-bound causal-learning loop.

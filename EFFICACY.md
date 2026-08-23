@@ -1,8 +1,7 @@
 # HSWM efficacy status
 
-Last reconciled: 2026-08-21 (SWM-0W-S2S pilot adoption and repaired
-TypeScript/Effect control-core boundary added; no historical metric was
-recomputed).
+Last reconciled: 2026-08-23 (P1v2→P1v4 typed-policy lineage and verifier
+scope made explicit; no historical metric was recomputed).
 
 > **Current state lives in checked-in measurements and their explicit provenance
 > boundaries, not a standing external verdict service.**
@@ -40,6 +39,14 @@ strong late-interaction or production graph-retrieval baseline was tested.
 The P1 closed macro-weight loop is now an engineering result, not an efficacy
 result: it executed end to end, but all 12 staged candidates were rejected and
 the learned active state never changed.
+
+The P1 follow-on does not reverse that result. P1v2 ended `KILL` on its frozen
+six-case Type-6 cut: no-memory was already exact on 6/6, typed actuation was
+0/6, and all four arms were identical under a baseline-ceiling/intervention-
+inert failure mode. P1v3 and P1v4 passed only their preregistered synthetic
+six-case L0 policy-actuation gates against no-memory (6/6 and 4/6 typed
+improvements, respectively). The proposed L1 causal-lesson experiment remains
+`DRAFT_NOT_REGISTERED`, unauthorized, unimplemented, and unmeasured.
 
 The preregistered SWM-0R finite representation witness is also an engineering
 result, not efficacy evidence. Its constructive native and independent
@@ -117,6 +124,7 @@ The exact claim boundaries are:
 | static retrieval substrate | **measured positive, budget caveat** | 300 evaluation rows across three checked-in runs |
 | cognitive uplift over direct LLM reranking | **preregistered cross-dataset claim failed** | two negative MuSiQue runs; one small, non-significant positive 2Wiki run |
 | P1 outcome→credit→slow-weight loop | **engineering complete; scientific RED; HSWM_LOCAL_RECORD unjudged** | A1−A2 recall@10 gain `0.0`; 12 staged candidates, 0 fresh-gate passes, 0 activations. Historical measurement self-wrote `FAIL`, so no valid server-owned kernel verdict exists |
+| P1v2→P1v4 typed-policy follow-on | **P1v2 `KILL`; P1v3/P1v4 narrow synthetic L0 `PASS`; L1 unjudged** | P1v2: no-memory 6/6, typed actuation 0/6, all arms identical 6/6. P1v3/P1v4: typed improvements over no-memory 6/6 and 4/6. No learned-compiler, transfer, `ΔW`, topology, consolidation, or L1 causal-learning claim; the L1 file is `DRAFT_NOT_REGISTERED` and no module exists |
 | query-time graph traversal | **real-data certificate OFF; separate synthetic sparse regime narrowly positive** | `mu=0` on both real datasets and all nine registered hop-drop grid settings worse than static; PhantomWiki large+sparse walk−flat `+0.0111`, LCB `+0.00085`, but no real-data answer uplift |
 | graded supersession | **pointwise capability survives; architectural novelty retracted** | stale suppression succeeds, but an external graded revision arm is bit-exact |
 | long-document advantage | **synthetic mechanism only; 4-book PRELUDE did not establish advantage** | no real NoCha/QASPER/NarrativeQA confirmatory result; C1 HSWM−clique `-2.00pp`, HSWM−dense `+3.16pp` with a CI crossing zero |
@@ -128,7 +136,11 @@ The exact claim boundaries are:
 Run `hswm-verify-efficacy --pretty` to reconstruct the selected
 machine-readable headline from the checked-in JSON receipts. The command fails
 closed if one of its declared metrics or claim boundaries drifts; qualitative
-non-claims still require this document and the linked receipts.
+non-claims still require this document and the linked receipts. Exit zero means
+only that the declared selected snapshot matches those receipts; the output
+states `kind: SELECTED_HEADLINE_ONLY` and
+`whole_ledger_completeness_pass: false`, so it is not a whole-ledger efficacy
+`PASS`.
 
 ## 1. Static retrieval substrate: positive within the tested ladder
 
@@ -240,6 +252,32 @@ Sources: `prereg/PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json`,
 `evidence/P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json`. The causal analysis and
 next falsifier are in `RESEARCH_P1_FAILURE_HSWM_LOCAL_RECORD` and
 `prereg/PREREG_P1V2_TYPED_VERDICT_LESSON_2026-07-24.json`.
+
+### P1v2→P1v4 typed-policy follow-on
+
+| stage | checked-in result | exact boundary |
+|---|---|---|
+| P1v2 frozen Type-6 L0 | **`KILL`** | 6 valid cases; no-memory exact 6, typed actuation 0, typed-over-raw 0, all four arms identical 6; `BASELINE_CEILING_AND_INTERVENTION_INERT`; same-environment reuse forbidden |
+| P1v3 policy actuation | **`PASS`** | synthetic PhantomWiki L0, n=6; typed exact 6, no-memory exact 0, typed improvements vs no-memory 6; preregistered pass gate ≥3/6 |
+| P1v4 fresh replication | **`PASS`** | synthetic PhantomWiki L0, n=6; typed exact 6, no-memory exact 2, typed improvements vs no-memory 4; preregistered pass gate ≥3/6 |
+| proposed L1 causal lesson | **unmeasured / unjudged** | `DRAFT_NOT_REGISTERED`; measurement authorization `NONE_UNTIL_REGISTERED`; L1 modules do not exist |
+
+The P1v3/P1v4 preregistrations explicitly exclude learned-compiler superiority
+over raw transcript, Agent A→B transfer, parameter `ΔW` learning, topology
+rewiring, and long-term consolidation. Their passes satisfy only an L0
+precondition for a possible future L1 test.
+
+The unregistered L1 draft is not a complete transitive provenance ledger: its
+`file_sha256` references for the P1v2 closeout and diagnosis do not match the
+current checked-in file bytes. This does not change either L0 result, but those
+references must be repaired and rechecked before any L1 registration.
+
+Sources: `receipts/p1v2_l0_r2_512_closeout_20260724.json`,
+`prereg/PREREG_P1V3_POLICY_ACTUATION_2026-07-24.json`,
+`receipts/p1v3_policy_heldout_judge_seed3_20260724.json`,
+`prereg/PREREG_P1V4_FRESH_POLICY_REPLICATION_2026-07-24.json`,
+`receipts/p1v4_policy_heldout_judge_seed5_r2_20260724.json`, and
+`prereg/PREREG_P1V3V4_L1_CAUSAL_LESSON_2026-07-25.json`.
 
 ## 4. Traversal and relational composition
 
@@ -462,4 +500,5 @@ receipts.
 - no SWM-0W support beyond the fixed-three-singleton-role scalar precursor;
 - no canonical recipient-conditioned set-to-set semantic-weight operator;
 - no passed recurrent/deep HSWM gate or causal `ΔW/ΔH` gate;
+- no registered, implemented, or measured P1 L1 causal typed-lesson result;
 - no evidence for a distributed Human Universal Body.

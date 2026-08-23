@@ -8,6 +8,11 @@ recursive-include tests *.py
 # database and historical commits; those do not exist inside an sdist.
 exclude tests/test_hswm_swm0r_ontology.py
 exclude tests/test_hswm_swm0w_ontology.py
+# These checkpoint tests bind repository-only TypeScript sources, workflows,
+# and Git history.  The separate Effect npm artifact is deliberately pruned
+# below, so transporting these tests in the Python sdist creates an impossible
+# test surface rather than validating the published Python package.
+recursive-exclude tests test_hswm_swm0w_s2s_effect_handoff_v*.py
 # Frozen test receipts are read directly by source-distribution tests.
 recursive-include tests/fixtures *.json
 # SWM-0W's repository-only cryptographic verifier is required by its source

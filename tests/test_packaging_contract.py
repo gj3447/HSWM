@@ -284,6 +284,10 @@ def test_source_distribution_carries_the_default_test_surface() -> None:
     assert "include *.py" in manifest
     assert "recursive-exclude prom_search_hswm/data *" in manifest
     assert "include prom_search_hswm/data/gold_badiou24.json" in manifest
+    assert (
+        "recursive-exclude tests "
+        "test_hswm_swm0w_s2s_effect_handoff_v*.py"
+    ) in manifest
 
     # Patterns are asserted as a subset so that widening a line (adding *.sh, say)
     # is not a test failure, while dropping a pattern still is.
@@ -408,4 +412,17 @@ def test_the_sdist_itself_is_checked_not_just_the_manifest_text():
     assert not effect_runtime, (
         "별도 npm artifact인 Effect runtime이 Python sdist에 섞였다: "
         f"{effect_runtime[:10]}"
+    )
+    assert "tests/test_hswm_swm0w_s2s_effect_handoff.py" in inner, (
+        "sdist용 Effect handoff fallback test가 배포물에서 누락됐다"
+    )
+    repository_only_handoffs = [
+        n
+        for n in inner
+        if n.startswith("tests/test_hswm_swm0w_s2s_effect_handoff_v")
+        and n.endswith(".py")
+    ]
+    assert not repository_only_handoffs, (
+        "Python sdist가 제외한 Effect/workflow bytes를 요구하는 repository-only "
+        f"handoff tests를 운송한다: {repository_only_handoffs[:10]}"
     )

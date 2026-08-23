@@ -27,7 +27,12 @@ def test_installed_verifier_requires_explicit_source_root() -> None:
 def test_checked_in_efficacy_snapshot_matches_public_claims() -> None:
     snapshot = efficacy.build_snapshot(REPO_ROOT)
 
-    assert snapshot["schema_version"] == "hswm-efficacy-snapshot/v3"
+    assert snapshot["schema_version"] == "hswm-efficacy-snapshot/v4"
+    assert snapshot["verification_scope"] == {
+        "kind": "SELECTED_HEADLINE_ONLY",
+        "whole_ledger_completeness_pass": False,
+        "exit_zero": "SELECTED_CLAIMS_MATCH_CHECKED_IN_RECEIPTS",
+    }
     assert snapshot["retrieval_substrate"]["status"] == (
         "MEASURED_POSITIVE_WITH_BUDGET_CAVEAT"
     )
@@ -91,6 +96,39 @@ def test_checked_in_efficacy_snapshot_matches_public_claims() -> None:
             "The checked-in evidence self-recorded FAIL; no removed "
             "external-tool verdict is retained as authority."
         ),
+    }
+    lineage = snapshot["p1_typed_policy_lineage"]
+    assert lineage["status"] == (
+        "P1V2_KILL_P1V3_P1V4_NARROW_L0_PASS_"
+        "L1_DRAFT_NOT_REGISTERED_NOT_IMPLEMENTED"
+    )
+    assert lineage["p1v2_type6_oracle_actuation"] == {
+        "verdict": "KILL",
+        "claim_status": "NO_TYPED_LESSON_ACTUATION_ON_FROZEN_TYPE6_CUT",
+        "valid_cases": 6,
+        "no_memory_exact_set_matches": 6,
+        "typed_actuation_cases": 0,
+        "all_four_arms_identical_answers": 6,
+        "failure_mode": "BASELINE_CEILING_AND_INTERVENTION_INERT",
+        "same_environment_reuse_allowed": False,
+    }
+    assert lineage["p1v3_policy_actuation"]["scope"] == (
+        "SYNTHETIC_PHANTOMWIKI_L0_POLICY_ACTUATION_N6"
+    )
+    assert lineage["p1v3_policy_actuation"]["typed_improvements_vs_no_memory"] == 6
+    assert lineage["p1v4_fresh_policy_replication"][
+        "typed_improvements_vs_no_memory"
+    ] == 4
+    assert lineage["l1_causal_lesson"] == {
+        "registration_state": "DRAFT_NOT_REGISTERED",
+        "measurement_authorized_for_stage": "NONE_UNTIL_REGISTERED",
+        "implementation_status": "NOT_IMPLEMENTED",
+        "scientific_status": "UNMEASURED_UNJUDGED",
+        "transitive_provenance_complete": False,
+        "stale_file_sha256_references": [
+            "receipts/p1v2_l0_r2_512_closeout_20260724.json",
+            "receipts/p1v2_l0_diagnosis_r2_512_20260724.json",
+        ],
     }
     assert snapshot["graded_supersession"][
         "wrong_write_primary_recall_cost_points"
@@ -160,12 +198,20 @@ def test_headline_drift_fails_closed(tmp_path: Path) -> None:
         "P1_GATE_DIAGNOSTIC_R2_2026-07-23.json",
         "P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json",
         "PREREG_P1_CLOSED_LEARNING_LOOP_2026-07-23.json",
+        "receipts/p1v2_l0_r2_512_closeout_20260724.json",
+        "prereg/PREREG_P1V3_POLICY_ACTUATION_2026-07-24.json",
+        "receipts/p1v3_policy_heldout_judge_seed3_20260724.json",
+        "prereg/PREREG_P1V4_FRESH_POLICY_REPLICATION_2026-07-24.json",
+        "receipts/p1v4_policy_heldout_judge_seed5_r2_20260724.json",
+        "prereg/PREREG_P1V3V4_L1_CAUSAL_LESSON_2026-07-25.json",
     )
     for name in names:
         source = efficacy.resolve_artifact_path(
             name, root=REPO_ROOT, must_exist=False,
         )
-        (tmp_path / name).write_bytes(source.read_bytes())
+        target = tmp_path / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(source.read_bytes())
 
     path = tmp_path / "substrate_bench_results.json"
     value = json.loads(path.read_text(encoding="utf-8"))
@@ -174,3 +220,18 @@ def test_headline_drift_fails_closed(tmp_path: Path) -> None:
 
     with pytest.raises(efficacy.EfficacyClaimError, match="nDCG@10 drifted"):
         efficacy.build_snapshot(tmp_path)
+
+
+def test_p1v2_kill_drift_fails_closed(monkeypatch) -> None:
+    original_load = efficacy._load
+
+    def drifted_load(root: Path, name: str):
+        value = original_load(root, name)
+        if name == "receipts/p1v2_l0_r2_512_closeout_20260724.json":
+            value["scientific_outcome"] = "PASS"
+        return value
+
+    monkeypatch.setattr(efficacy, "_load", drifted_load)
+
+    with pytest.raises(efficacy.EfficacyClaimError, match="self-hash drifted"):
+        efficacy.build_snapshot(REPO_ROOT)

@@ -28,7 +28,7 @@ jobs:
           - name: prom-and-research-tests
             python-version: "3.11"
             command: uv run --locked --extra dev pytest -q prom_search_hswm _research/shared_field_hypothesis
-          - name: efficacy-ledger
+          - name: selected-efficacy-claim-snapshot
             python-version: "3.11"
             command: uv run --locked hswm-verify-efficacy --pretty
     steps:
@@ -113,6 +113,9 @@ jobs:
             "$(command -v node)" | sha256sum --check --strict
       - name: Install the locked Effect dependency graph
         working-directory: src/hswm/effect-runtime
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Install the byte-pinned offline drand verifier
+        working-directory: tools/swm0w_drand
         run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Typecheck, test, build, and inspect the npm artifact
         working-directory: src/hswm/effect-runtime

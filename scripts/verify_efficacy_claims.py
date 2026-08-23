@@ -3,7 +3,9 @@
 This is a read-only selected claim ledger.  It does not rerun an
 LLM, rebuild embeddings, or promote an experimental result.  It fails closed
 when a headline number or a claim boundary drifts away from the checked-in JSON
-artifacts used by ``EFFICACY.md``.
+artifacts used by ``EFFICACY.md``.  Successful execution verifies only the
+declared snapshot; it does not assert that the repository's entire efficacy
+ledger is complete.
 """
 from __future__ import annotations
 
@@ -17,7 +19,7 @@ from typing import Any, Mapping, Sequence
 from hswm.artifacts.layout import resolve_artifact_path
 
 
-SCHEMA_VERSION = "hswm-efficacy-snapshot/v3"
+SCHEMA_VERSION = "hswm-efficacy-snapshot/v4"
 _REPOSITORY_MARKERS = (
     "pyproject.toml",
     "ontology/HSWM_REPOSITORY_ONTOLOGY.v1.json",
@@ -58,14 +60,16 @@ def _file_sha256(path: Path, *, label: str) -> str:
         raise EfficacyClaimError(f"cannot read {label}: {exc}") from exc
 
 
-def _verify_result_self_hash(value: Mapping[str, Any], *, label: str) -> None:
-    declared = value.get("result_sha256")
+def _verify_result_self_hash(
+    value: Mapping[str, Any], *, label: str, field: str = "result_sha256",
+) -> None:
+    declared = value.get(field)
     payload = dict(value)
-    payload.pop("result_sha256", None)
+    payload.pop(field, None)
     actual = sha256(json.dumps(
         payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"),
     ).encode("utf-8")).hexdigest()
-    _require(declared == actual, f"{label} result self-hash drifted")
+    _require(declared == actual, f"{label} self-hash drifted")
 
 
 def _verify_source_bindings(
@@ -158,6 +162,24 @@ def build_snapshot(root: str | Path | None = DEFAULT_ROOT) -> dict[str, Any]:
     p1 = _load(repo, "EVIDENCE_P1_CLOSED_LEARNING_LOOP_2026-07-23.json")
     p1_gate = _load(repo, "P1_GATE_DIAGNOSTIC_R2_2026-07-23.json")
     p1_rank = _load(repo, "P1_RANK_INVARIANCE_DIAGNOSTIC_R2_2026-07-23.json")
+    p1v2_closeout = _load(
+        repo, "receipts/p1v2_l0_r2_512_closeout_20260724.json"
+    )
+    p1v3_prereg = _load(
+        repo, "prereg/PREREG_P1V3_POLICY_ACTUATION_2026-07-24.json"
+    )
+    p1v3_judge = _load(
+        repo, "receipts/p1v3_policy_heldout_judge_seed3_20260724.json"
+    )
+    p1v4_prereg = _load(
+        repo, "prereg/PREREG_P1V4_FRESH_POLICY_REPLICATION_2026-07-24.json"
+    )
+    p1v4_judge = _load(
+        repo, "receipts/p1v4_policy_heldout_judge_seed5_r2_20260724.json"
+    )
+    p1_l1_draft = _load(
+        repo, "prereg/PREREG_P1V3V4_L1_CAUSAL_LESSON_2026-07-25.json"
+    )
 
     overall = substrate.get("aggregate", {}).get("overall", {})
     downstream = substrate.get("downstream_f1", {}).get("aggregate_f1_em", {})
@@ -691,8 +713,111 @@ def build_snapshot(root: str | Path | None = DEFAULT_ROOT) -> dict[str, Any]:
         abs_tol=1e-12,
     )
 
+    _verify_result_self_hash(
+        p1v2_closeout,
+        field="closeout_receipt_sha256",
+        label="P1v2 L0 closeout",
+    )
+    p1v2_criteria = p1v2_closeout.get("measured_criteria", {})
+    p1v2_root_cause = p1v2_closeout.get("root_cause", {})
+    _require(
+        p1v2_closeout.get("schema_version") == "hswm-p1v2-l0-closeout/v1"
+        and p1v2_closeout.get("scientific_outcome") == "KILL"
+        and p1v2_closeout.get("claim_status")
+        == "NO_TYPED_LESSON_ACTUATION_ON_FROZEN_TYPE6_CUT"
+        and p1v2_criteria.get("valid_case_count") == 6
+        and p1v2_criteria.get("no_memory_exact_set_match_count") == 6
+        and p1v2_criteria.get("typed_actuation_case_count") == 0
+        and p1v2_criteria.get("typed_beats_raw_transcript_case_count") == 0
+        and p1v2_criteria.get("all_four_arms_identical_answer_count") == 6
+        and p1v2_root_cause.get("observed_failure_mode")
+        == "BASELINE_CEILING_AND_INTERVENTION_INERT"
+        and p1v2_root_cause.get("same_environment_reuse_allowed") is False,
+        "P1v2 Type-6 KILL boundary drifted",
+    )
+
+    expected_policy_exclusions = [
+        "learned compiler efficacy over raw transcript",
+        "Agent A to Agent B transfer",
+        "parameter delta-W learning",
+        "topology rewiring",
+        "long-term consolidation",
+    ]
+    policy_summaries: dict[str, dict[str, Any]] = {}
+    for label, prereg, judge, no_memory, improvement in (
+        ("p1v3", p1v3_prereg, p1v3_judge, 0, 6),
+        ("p1v4", p1v4_prereg, p1v4_judge, 2, 4),
+    ):
+        _verify_result_self_hash(
+            judge,
+            field="judge_receipt_sha256",
+            label=f"{label.upper()} heldout judge",
+        )
+        metrics = judge.get("metrics", {})
+        _require(
+            prereg.get("registration_state")
+            == "SERVER_REGISTERED_FROZEN_UNRUN"
+            and prereg.get("claim_boundary", {}).get("excluded")
+            == expected_policy_exclusions
+            and judge.get("verdict") == "PASS"
+            and judge.get("primary_metric")
+            == "typed_improvement_count_vs_no_memory"
+            and judge.get("minimum_typed_improvements_for_pass") == 3
+            and metrics.get("valid_case_count") == 6
+            and metrics.get("typed_exact_set_match_count") == 6
+            and metrics.get("no_memory_exact_set_match_count") == no_memory
+            and metrics.get("typed_improvement_count_vs_no_memory") == improvement,
+            f"{label.upper()} heldout PASS receipt drifted",
+        )
+        policy_summaries[label] = {
+            "verdict": "PASS",
+            "scope": "SYNTHETIC_PHANTOMWIKI_L0_POLICY_ACTUATION_N6",
+            "valid_cases": 6,
+            "typed_improvements_vs_no_memory": improvement,
+        }
+
+    l1_module_status = str(p1_l1_draft.get("module_sha256", {}).get("status", ""))
+    l1_status_note = str(p1_l1_draft.get("status_note", ""))
+    l1_precondition = p1_l1_draft.get("l0_precondition", {})
+    _require(
+        p1_l1_draft.get("registration_state") == "DRAFT_NOT_REGISTERED"
+        and p1_l1_draft.get("measurement_authorized_for_stage")
+        == "NONE_UNTIL_REGISTERED"
+        and "registers nothing, freezes nothing, and authorizes nothing"
+        in l1_status_note
+        and "no module implementing L1 exists yet" in l1_status_note
+        and "do not exist yet" in l1_module_status,
+        "P1v3/v4 L1 draft registration or implementation boundary drifted",
+    )
+    l1_p1v2_paths = {
+        "closeout_file_sha256": (
+            "receipts/p1v2_l0_r2_512_closeout_20260724.json"
+        ),
+        "diagnosis_file_sha256": (
+            "receipts/p1v2_l0_diagnosis_r2_512_20260724.json"
+        ),
+    }
+    stale_l1_p1v2_file_hashes = []
+    for field, expected_path in l1_p1v2_paths.items():
+        path_field = field.removesuffix("_file_sha256") + "_receipt"
+        _require(
+            l1_precondition.get(path_field) == expected_path,
+            f"P1 L1 draft {path_field} drifted",
+        )
+        actual = _file_sha256(
+            resolve_artifact_path(expected_path, root=repo, must_exist=False),
+            label=f"P1 L1 draft reference {expected_path}",
+        )
+        if l1_precondition.get(field) != actual:
+            stale_l1_p1v2_file_hashes.append(expected_path)
+
     return {
         "schema_version": SCHEMA_VERSION,
+        "verification_scope": {
+            "kind": "SELECTED_HEADLINE_ONLY",
+            "whole_ledger_completeness_pass": False,
+            "exit_zero": "SELECTED_CLAIMS_MATCH_CHECKED_IN_RECEIPTS",
+        },
         "retrieval_substrate": {
             "status": "MEASURED_POSITIVE_WITH_BUDGET_CAVEAT",
             "n_queries": n_queries,
@@ -776,6 +901,41 @@ def build_snapshot(root: str | Path | None = DEFAULT_ROOT) -> dict[str, Any]:
                 "The checked-in evidence self-recorded FAIL; no removed "
                 "external-tool verdict is retained as authority."
             ),
+        },
+        "p1_typed_policy_lineage": {
+            "status": (
+                "P1V2_KILL_P1V3_P1V4_NARROW_L0_PASS_"
+                "L1_DRAFT_NOT_REGISTERED_NOT_IMPLEMENTED"
+            ),
+            "p1v2_type6_oracle_actuation": {
+                "verdict": "KILL",
+                "claim_status": (
+                    "NO_TYPED_LESSON_ACTUATION_ON_FROZEN_TYPE6_CUT"
+                ),
+                "valid_cases": p1v2_criteria["valid_case_count"],
+                "no_memory_exact_set_matches": p1v2_criteria[
+                    "no_memory_exact_set_match_count"
+                ],
+                "typed_actuation_cases": p1v2_criteria[
+                    "typed_actuation_case_count"
+                ],
+                "all_four_arms_identical_answers": p1v2_criteria[
+                    "all_four_arms_identical_answer_count"
+                ],
+                "failure_mode": "BASELINE_CEILING_AND_INTERVENTION_INERT",
+                "same_environment_reuse_allowed": False,
+            },
+            "p1v3_policy_actuation": policy_summaries["p1v3"],
+            "p1v4_fresh_policy_replication": policy_summaries["p1v4"],
+            "p1v3_p1v4_not_supported": expected_policy_exclusions,
+            "l1_causal_lesson": {
+                "registration_state": "DRAFT_NOT_REGISTERED",
+                "measurement_authorized_for_stage": "NONE_UNTIL_REGISTERED",
+                "implementation_status": "NOT_IMPLEMENTED",
+                "scientific_status": "UNMEASURED_UNJUDGED",
+                "transitive_provenance_complete": not stale_l1_p1v2_file_hashes,
+                "stale_file_sha256_references": stale_l1_p1v2_file_hashes,
+            },
         },
         "graded_supersession": {
             "status": "POINTWISE_CAPABILITY_SURVIVES_ONE_FIELD_NOVELTY_RETRACTED",

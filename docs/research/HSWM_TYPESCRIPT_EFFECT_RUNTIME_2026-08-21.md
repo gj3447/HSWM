@@ -393,3 +393,27 @@ engineering slice: the postcondition file contains only representation and
 budget constants, not an Effect schema or codec. Reconstruction, same-stage
 assertion, complete profile recovery, external durability, GitHub authority,
 preregistration, event 10, and scientific judgment remain OPEN.
+
+The v18 codec/reconstruction slice is implemented at code checkpoint
+`1f45f4b` and recorded in the
+[`v18 implementation handoff`](../operations/HSWM_SWM0W_S2S_STAGE_UPLOAD_POSTCONDITION_CODEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and
+[`v18 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v18.json).
+The root-private stage-upload postcondition core now provides exact
+correlated Effect schemas, a canonical 37-key self-receipted manifest,
+deterministic two-member stored-ZIP build and validation, retained raw GitHub
+observation reconstruction, and download/archive/prepared-member
+cross-binding. Its builder accepts only `TEST_ONLY_NON_AUTHORIZING` permit
+evidence; structural recovery may recheck either serialized scope but always
+returns an explicitly non-authorizing snapshot. The 19 focused tests and 310
+full package tests close only the strict non-authorizing codec/reconstruction
+falsification gate. This advances `Pi` only: `H`, `W`, `A`, and `F` are
+unchanged, and the outcome-bound causal-learning loop did not advance.
+
+The immediate next gate is a module-authentic prepared-current-stage carrier
+capability plus a genuinely one-use same-stage permit and pure classifier.
+There is still no production assertion shell, filled upload-postcondition
+profile occurrence, complete-stage durable commit/recovery, reviewed workflow
+authority, GitHub-origin evidence, external shared durability,
+independent-process recovery, preregistration, future randomness, dispatch,
+event 10, or scientific verdict.

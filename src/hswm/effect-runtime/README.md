@@ -140,18 +140,24 @@ remains `BLOCKED_PRE_PREREG`: the bounded adapters and closed current-run Layer
 graph are present, but no issued current-run/dispatch authority, workflow,
 complete replay-closed durable evidence deployment, or external event-10
 finalizer exists. Resume from the repository
-[`current shared stage-artifact specification handoff`](../../../docs/operations/HSWM_SWM0W_S2S_SHARED_STAGE_ARTIFACT_SPEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+[`current stage-upload postcondition codec handoff`](../../../docs/operations/HSWM_SWM0W_S2S_STAGE_UPLOAD_POSTCONDITION_CODEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
 and its
-[`v17 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v17.json).
+[`v18 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v18.json).
 
 One deeply frozen, root-private `S2S_STAGE_ARTIFACT_SPECS` value now owns the
 fixed REGISTER, CONFIRM, and ADJUDICATE artifact mappings used by live
 predecessor reads and replay source references. Stage-specific literals remain
 correlated in TypeScript. The production-intended upload-postcondition
 representation and byte-budget skeleton also separates its exact
-12,583,176-byte carrier ceiling from the 16 MiB profile slot. These constants
-are not an Effect schema or codec, and none of the three production profile
-occurrences is filled.
+12,583,176-byte carrier ceiling from the 16 MiB profile slot. At code checkpoint
+`1f45f4b`, the root-private postcondition core adds exact correlated Effect
+schemas, a canonical 37-key self-receipted manifest, deterministic two-member
+stored-ZIP build/validation, retained raw-observation reconstruction, and
+download/archive/prepared-member cross-binding. Builders accept only
+`TEST_ONLY_NON_AUTHORIZING` permit evidence; structural recovery remains
+explicitly non-authorizing even when it rechecks a serialized trusted scope.
+The 19 focused tests and 310 full package tests close only this strict
+codec/reconstruction falsification gate.
 
 The reviewed ownership and gate order remain in the immutable
 [`v16 stage-upload assertion design handoff`](../../../docs/operations/HSWM_SWM0W_S2S_STAGE_UPLOAD_ASSERTION_DESIGN_NEXT_SESSION_2026-08-23.md)
@@ -178,14 +184,16 @@ and the
 and
 [`v12 KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v12.json).
 
-The next claim-critical step is the strict functional upload-postcondition
-codec: exact Effect schemas, deterministic two-member ZIP construction,
-unknown-input reconstruction, self-receipt validation, and archive/prepared
-member cross-binding with hostile mutation tests. Only after that core closes
-should a prepared-carrier capability and one-use same-stage assertion permit be
-added. Run the bounded external shared-POSIX feasibility proof before broad
-complete-stage program expansion. Workflow freeze, preregistration, dispatch,
-event 10, and scientific judgment remain downstream.
+The immediate next gate is a module-authentic prepared-current-stage carrier
+capability plus a genuinely one-use same-stage permit and pure classifier.
+There is still no production assertion shell, filled upload-postcondition
+profile occurrence, complete-stage durable commit/recovery, reviewed workflow
+authority, GitHub-origin evidence, external shared durability,
+independent-process recovery, preregistration, future randomness, dispatch,
+event 10, or scientific verdict. This checkpoint changes only `Pi`; `H`, `W`,
+`A`, and `F` remain unchanged, and the outcome-bound causal-learning loop did
+not advance. Run the bounded external shared-POSIX feasibility proof before
+broad complete-stage program expansion.
 
 The earlier
 [`v11 lookup-trace/shared-Layer handoff`](../../../docs/operations/HSWM_SWM0W_S2S_LOOKUP_TRACE_SHARED_LAYER_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)

@@ -119,7 +119,7 @@ engineering checkpoints:
   gate. It is design-only and adds no runtime codec, authority, upload,
   postcondition occurrence, or scientific evidence. Continue from
   [`HSWM_SWM0W_S2S_STAGE_UPLOAD_ASSERTION_DESIGN_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_STAGE_UPLOAD_ASSERTION_DESIGN_NEXT_SESSION_2026-08-23.md).
-- [`v17 current shared stage-artifact specification implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v17.json)
+- [`v17 historical shared stage-artifact specification implementation checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v17.json)
   records one root-private stage-indexed policy value, literal-safe consumers
   for live predecessor reads and replay references, and the distinct
   12,583,176-byte postcondition carrier versus 16 MiB profile-slot ceilings.
@@ -127,11 +127,29 @@ engineering checkpoints:
   strict codec/reconstruction, same-stage assertion, complete stage recovery,
   workflow authority, and every scientific claim remain OPEN. Continue from
   [`HSWM_SWM0W_S2S_SHARED_STAGE_ARTIFACT_SPEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_SHARED_STAGE_ARTIFACT_SPEC_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
+- [`v18 current stage-upload postcondition codec and reconstruction checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v18.json)
+  records code commit `1f45f4b` and closes the root-private, non-authorizing
+  codec/reconstruction slice for the production-intended `REGISTER`, `CONFIRM`,
+  and `ADJUDICATE` stage-upload postcondition. Exact stage-correlated manifests,
+  canonical self-hashes, deterministic two-member stored ZIPs, raw GitHub-body
+  replay, and current-run/archive/prepared-member/permit cross-bindings are
+  covered by 19 focused tests and 310 full Effect tests. Remote KG publication
+  is `NOT_ATTEMPTED`. Structural recovery still returns only
+  `ValidatedNonAuthorizingStageUploadPostcondition`: no upload, authentic
+  prepared-carrier or assertion-permit issuance, publisher-return evidence,
+  historical uniqueness, external exactly-once behavior, cross-process or
+  durable replay prevention, complete stage-profile commit, workflow authority,
+  GitHub origin, or scientific verdict is claimed. The next gate is the
+  module-authentic prepared-carrier capability, genuinely one-use same-stage
+  assertion permit, pure outcome classifier, and separately named fake-observer
+  non-authorizing probe. The root-private Effect assertion shell follows; the
+  bounded shared-POSIX feasibility proof remains required before one complete
+  stage-profile commit and recovery path.
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v17 supersedes v16 only as the
-next-session entrypoint; v1 through v16 remain immutable historical
+runtime graphs, or remote Neo4j publications. v18 supersedes v17 only as the
+latest continuation entrypoint; v1 through v17 remain immutable historical
 projections. The TypeScript/Effect runtime owns control and evidence while the
 pinned Python/NumPy oracle remains a bounded deterministic numeric function
-cell. V17 advances only the local `Π` engineering boundary; it changes no
+cell. V18 advances only the local `Π` engineering boundary; it changes no
 scientific `H/W/A/F` result or outcome-bound causal-learning loop.

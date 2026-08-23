@@ -434,3 +434,15 @@ live Effect assertion shell exists; no genuine production bearer was issued.
 This advances only `Pi`. The next code target is the live shell and replay
 snapshot, followed by the bounded shared-POSIX feasibility gate before a
 complete stage-profile commit/recovery path.
+
+The current continuation entrypoint is the subsequent read-only
+[`v20 assertion-shell architecture audit`](../operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_ARCHITECTURE_AUDIT_NEXT_SESSION_2026-08-23.md)
+and
+[`v20 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v20.json).
+It preserves code checkpoint `36b4c9b` and adds no scientific or runtime
+result. It freezes the root-private Effect v3 ownership/lifecycle/Clock and
+opaque-completion contract, plus the unresolved process-continuity prerequisite:
+ordinary workflow step processes cannot carry the same module-private object
+bearer. A reviewed same-process root or independently authenticated
+reacquisition protocol must be selected before workflow wiring; serialized
+capabilities never restore authority.

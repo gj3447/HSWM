@@ -157,11 +157,22 @@ engineering checkpoints:
   production bearer was issued, no profile occurrence was filled, and no
   GitHub or scientific result is claimed. Continue from
   [`HSWM_SWM0W_S2S_PREPARED_CARRIER_ASSERTION_MECHANICS_IMPLEMENTED_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_PREPARED_CARRIER_ASSERTION_MECHANICS_IMPLEMENTED_NEXT_SESSION_2026-08-23.md).
+- [`v20 current assertion-shell architecture-audit checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v20.json)
+  preserves code checkpoint `36b4c9b` and records the next root-private Effect
+  v3 shell contract without claiming implementation. It makes the workflow
+  process-continuity gate explicit: module-private `WeakMap` bearers cannot be
+  serialized across ordinary GitHub Actions step processes. The workflow must
+  choose a reviewed same-process root or an independently authenticated
+  deterministic reacquisition protocol before wiring. It also freezes shell
+  ownership, Effect lifecycle/Clock boundaries, opaque completion issuance,
+  and the hostile test matrix. Continue from
+  [`HSWM_SWM0W_S2S_ASSERTION_SHELL_ARCHITECTURE_AUDIT_NEXT_SESSION_2026-08-23.md`](../../docs/operations/HSWM_SWM0W_S2S_ASSERTION_SHELL_ARCHITECTURE_AUDIT_NEXT_SESSION_2026-08-23.md).
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v19 supersedes v18 only as the
-latest continuation entrypoint; v1 through v18 remain immutable historical
+runtime graphs, or remote Neo4j publications. v20 supersedes v19 only as the
+latest continuation entrypoint; v1 through v19 remain immutable historical
 projections. The TypeScript/Effect runtime owns control and evidence while the
 pinned Python/NumPy oracle remains a bounded deterministic numeric function
-cell. V19 advances only the local `Π` engineering boundary; it changes no
-scientific `H/W/A/F` result or outcome-bound causal-learning loop.
+cell. V20 adds no implementation; it sharpens only the open local `Π`
+engineering boundary and changes no scientific `H/W/A/F` result or
+outcome-bound causal-learning loop.

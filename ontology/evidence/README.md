@@ -57,15 +57,23 @@ engineering checkpoints:
   shared POSIX root. It is structural durability only: complete replay
   attachment profiles, closed stage programs, upload postconditions, external
   storage wiring, and the terminal finalizer remain OPEN.
-- [`v10 current replay-prerequisite checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v10.json)
+- [`v10 historical replay-prerequisite checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v10.json)
   records the pinned production protocol asset, selector-free current-run and
   partial registration replay projections, exact drand-pulse retention, Python
   peak-RSS telemetry, coherent response/output caps, and the exact top-level
   healthy-success rosters. Nested replay semantics, complete source/read
   snapshots, failure/VOID profiles, closed stage programs, upload
   postconditions, external storage, and the finalizer remain OPEN.
+- [`v11 current lookup-trace/shared-Layer checkpoint`](HSWM_SWM0W_S2S_EFFECT_HANDOFF.v11.json)
+  records complete bounded raw observation retention for successful poll-one,
+  poll-two, and poll-three artifact lookup, plus one closed Effect Layer graph
+  that, within one build, shares a single current-run service between replay
+  and fixed reads while preserving the legacy read-only Layer signature. A
+  durable stage-read replay is still OPEN: its 16 MiB profile and 64 MiB
+  envelope cap cannot contain the 75 MiB worst-case candidate read before
+  framing.
 
 They are explicitly not preregistrations, scientific evidence verdicts, HSWM
-runtime graphs, or remote Neo4j publications. v10 supersedes v9 only as the
-next-session entrypoint; v1 through v9 remain immutable historical
+runtime graphs, or remote Neo4j publications. v11 supersedes v10 only as the
+next-session entrypoint; v1 through v10 remain immutable historical
 projections.

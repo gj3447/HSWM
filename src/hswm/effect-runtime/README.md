@@ -68,10 +68,16 @@ pre-dispatch engineering:
   exact current-run bearer, atomically spends finite ordered permits, and carries
   all four bracket receipts into one bounded non-evicting request/receipt
   ledger. `s2s-live-artifact.ts` exposes only lazy zero-identity stage Effects
-  and independently rereads the candidate. The one-use claim is limited to one
-  trusted process/module identity slot; it is not Layer-lifetime or durable
-  replay prevention, and the production graph remains dormant while workflow
-  bytes are OPEN.
+  and independently rereads the candidate. Successful first-, second-, and
+  third-poll lookup now retains the exact initial run, jobs, and every
+  artifacts/run pair in one frozen trace capped at eight 1 MiB raw bodies. A
+  root-private combined Layer shares one current-run service node with replay
+  and fixed reads within one build, while the legacy read-only Layer signature
+  remains unchanged. The one-use claim is limited to one trusted process/module
+  identity slot; it is not Layer-lifetime or durable replay prevention, and the
+  production graph remains dormant while workflow bytes are OPEN. No durable
+  stage-read replay is implemented: its current 16 MiB profile cannot contain
+  the 75 MiB worst-case candidate raw components before framing.
 - `s2s-preregistration.ts` keeps the validated preregistration and direct-child
   registration-commit lineage runtime-authentic. Commit-B validation now
   returns a module-issued, WeakMap-backed capability with self-hashed immutable
@@ -112,15 +118,18 @@ remains `BLOCKED_PRE_PREREG`: the bounded adapters and closed current-run Layer
 graph are present, but no issued current-run/dispatch authority, workflow,
 complete replay-closed durable evidence deployment, or external event-10
 finalizer exists. Resume from the repository
-[`current next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_REPLAY_PREREQUISITES_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+[`current next-session handoff`](../../../docs/operations/HSWM_SWM0W_S2S_LOOKUP_TRACE_SHARED_LAYER_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and its
+[`v11 local KG projection`](../../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v11.json)
 before composing stage programs, workflow, or a future round. The canonical
 predecessor-linked envelope and create-only shared-POSIX B/stage claim substrate
 are implemented. The replay prerequisites and top-level healthy-success
-attachment rosters are also fixed, but complete artifact lookup traces, the
-full registration source snapshot, nested replay semantics, failure/VOID
-profiles, closed stage programs, mandatory-upload postconditions, external
-storage wiring, and the terminal finalizer remain OPEN. Production remains
-dormant while workflow bytes and one literal API path selection are OPEN.
+attachment rosters are also fixed. Successful artifact lookup traces are now
+complete in memory, but the durable stage-read replay format/caps, full
+registration source snapshot, nested replay semantics, failure/VOID profiles,
+closed stage programs, mandatory-upload postconditions, external storage
+wiring, and the terminal finalizer remain OPEN. Production remains dormant
+while workflow bytes and one literal API path selection are OPEN.
 
 The in-memory Layer's static capability-ID allowlist is configuration for tests
 and local scaffolding, not identity authentication. This slice is not evidence

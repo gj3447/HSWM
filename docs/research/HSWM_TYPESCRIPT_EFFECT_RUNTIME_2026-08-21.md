@@ -293,3 +293,16 @@ evidence until artifact lookup traces, the full registration source snapshot,
 nested schemas and cross-bindings, failure/VOID profiles, closed stage
 programs, mandatory upload postconditions, external storage, and the terminal
 finalizer are implemented.
+
+The bounded successful-lookup trace and shared current-run Layer slice is
+implemented at code checkpoint `91b1153` and recorded in the
+[`lookup-trace/shared-Layer handoff`](../operations/HSWM_SWM0W_S2S_LOOKUP_TRACE_SHARED_LAYER_IMPLEMENTED_NEXT_SESSION_2026-08-23.md)
+and
+[`v11 local KG projection`](../../ontology/evidence/HSWM_SWM0W_S2S_EFFECT_HANDOFF.v11.json).
+Poll-one, poll-two, and poll-three success now preserve every raw lookup
+observation used by classification, and a root-private combined Effect Layer
+can, within one build, supply replay plus fixed artifact reads from one
+current-run service node. This advances only `Π`. It is not durable replay
+evidence or live bearer issuance. Before a stage-read replay schema is
+implemented, its byte model must resolve the 75 MiB worst-case candidate read
+against the current 16 MiB profile and 64 MiB per-attachment envelope limits.
